@@ -42,8 +42,8 @@ feature -- Basic operations
 			replace_tokens (cmd, <<Port_number_specifier>>,
 				<<window.port_number>>, Token_start_delimiter,
 				Token_end_delimiter)
-print ("(SESSION_COMMAND - " + name + ") Attempting to execute:%N'" +
-cmd + "'%N")
+--print ("(SESSION_COMMAND - " + name + ") Attempting to execute:%N'" +
+--cmd + "'%N")
 			env.launch (cmd)
 			if not window.is_destroyed then
 				window.show

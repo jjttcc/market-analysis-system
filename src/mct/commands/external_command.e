@@ -62,8 +62,8 @@ feature -- Basic operations
 		local
 			env: expanded EXECUTION_ENVIRONMENT
 		do
-print ("(EXTCMD - " + name + ") Attempting to execute:%N'" +
-command_string + "'%N")
+--print ("(EXTCMD - " + name + ") Attempting to execute:%N'" +
+--command_string + "'%N")
 			env.launch (command_string)
 		end
 
