@@ -47,7 +47,9 @@ feature {NONE}
 		do
 			if session.caching_on then
 				t := cached_tradable (market_symbol, trading_period_type)
-				tuple_list := t.tuple_list (trading_period_type.name)
+				if t /= Void then
+					tuple_list := t.tuple_list (trading_period_type.name)
+				end
 			else
 				tuple_list := tradables.tuple_list (market_symbol,
 					trading_period_type)
