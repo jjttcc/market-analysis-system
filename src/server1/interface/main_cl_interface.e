@@ -16,8 +16,8 @@ class MAIN_CL_INTERFACE inherit
 		end
 
 	MAS_COMMAND_LINE_UTILITIES
-		export
-			{NONE} all
+		redefine
+			set_console, set_no_console
 		end
 
 	PRINTING
@@ -147,6 +147,21 @@ feature -- Status setting
 			registrar_out_set: event_registrar.output_device = arg
 		end
 
+	set_console is
+		do
+			Precursor
+			event_generator_builder.set_console
+			function_builder.set_console
+			event_registrar.set_console
+		end
+
+	set_no_console is
+		do
+			Precursor
+			event_generator_builder.set_no_console
+			function_builder.set_no_console
+			event_registrar.set_no_console
+		end
 
 feature -- Basic operations
 
@@ -210,8 +225,7 @@ feature -- Basic operations
 				when '%/5/' then -- ^E, for exit
 					exit_server := True
 				when '!' then
-					print ("Type exit to return to main program.%N")
-					system ("")
+					execute_shell_command
 				else
 					print ("Invalid selection%N")
 				end
@@ -290,8 +304,7 @@ feature {NONE} -- Implementation
 				when '%/5/' then -- ^E, for exit
 					exit_server := True; finished := True
 				when '!' then
-					print ("Type exit to return to main program.%N")
-					system ("")
+					execute_shell_command
 				when '-' then
 					finished := True
 				else
@@ -369,8 +382,7 @@ feature {NONE} -- Implementation
 				when '%/5/' then -- ^E, for exit
 					exit_server := True; finished := True
 				when '!' then
-					print ("Type exit to return to main program.%N")
-					system ("")
+					execute_shell_command
 				when '-' then
 					finished := True
 				else

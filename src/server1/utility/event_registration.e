@@ -47,7 +47,6 @@ class EVENT_REGISTRATION inherit
 		rename
 			print_message as show_message
 		export
-			{NONE} all
 			{ANY} input_device, output_device
 		end
 
@@ -144,8 +143,7 @@ feature {NONE} -- Implementation
 				when 'h', 'H' then
 					print (help @ help.Edit_event_registrants)
 				when '!' then
-					print ("Type exit to return to main program.%N")
-					system ("")
+					execute_shell_command
 				when '-' then
 					finished := True
 				else
@@ -182,8 +180,7 @@ feature {NONE} -- Implementation
 				when 'h', 'H' then
 					print (help @ help.Add_registrants)
 				when '!' then
-					print ("Type exit to return to main program.%N")
-					system ("")
+					execute_shell_command
 				when '-' then
 					finished := True
 				else
@@ -481,8 +478,7 @@ feature {NONE} -- Implementation
 				when 'h', 'H' then
 					print (help @ help.Edit_registrant)
 				when '!' then
-					print ("Type exit to return to main program.%N")
-					system ("")
+					execute_shell_command
 				when '-' then
 					finished := True
 				else

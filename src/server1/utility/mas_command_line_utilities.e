@@ -28,7 +28,37 @@ class MAS_COMMAND_LINE_UTILITIES inherit
 			print
 		end
 
-feature -- Access
+	EXECUTION_ENVIRONMENT
+		export {NONE}
+			all
+		undefine
+			print
+		end
+
+feature -- Status report
+
+	is_console: BOOLEAN
+			-- Is the command-line being run directly from a console?
+
+feature -- Status setting
+
+	set_console is
+			-- Set `is_console' to `True'.
+		do
+			is_console := True
+		ensure
+			is_console: is_console
+		end
+
+	set_no_console is
+			-- Set `is_console' to `False'.
+		do
+			is_console := False
+		ensure
+			is_console: not is_console
+		end
+
+feature {NONE} -- Implementation - Access
 
 	date_time_selection (msg: STRING): DATE_TIME is
 			-- Obtain the date and time to begin market analysis from the
@@ -74,8 +104,6 @@ feature -- Access
 							Result.out, "%N">>)
 		end
 
-feature {NONE} -- Implementation
-
 	eom: STRING is
 			-- End of message indicator - "<Ctl>G" for stream socket,
 			-- "" (empty string) for files (including stdin) and other types
@@ -102,6 +130,36 @@ feature {NONE} -- Implementation
 	output_date_field_separator: STRING is "/"
 
 	output_time_field_separator: STRING is ":"
+
+feature {NONE} -- Implementation - utility routines
+
+	execute_shell_command is
+			-- If NOT `is_console', print an error message.
+			-- Otherwise: [Execute `last_string' after removing an
+			-- initial '!' if there is one.  If last_string is empty
+			-- or is "!", simply start the default shell.]
+		local
+			cmd: STRING
+		do
+			if is_console then
+				if last_string = Void then
+					cmd := ""
+				elseif last_string.count > 0 and last_string @ 1 = '!' then
+					cmd := last_string.substring (2, last_string.count)
+				else
+					cmd := clone (last_string)
+				end
+				check
+					cmd_exists: cmd /= Void
+				end
+				if cmd.is_empty then
+					print ("Type exit to return to main program.%N")
+				end
+				system (cmd)
+			else
+				print ("Invalid selection%N")
+			end
+		end
 
 feature {NONE} -- Implementation - date-related routines
 

@@ -14,7 +14,6 @@ class CL_BASED_MEG_EDITING_INTERFACE inherit
 		rename
 			print_message as show_message
 		export
-			{NONE} all
 			{ANY} input_device, output_device
 		end
 
@@ -153,8 +152,7 @@ feature {NONE} -- Implementation
 						Result := Save_value
 					end
 				when '!' then
-					print ("Type exit to return to main program.%N")
-					system ("")
+					execute_shell_command
 				when '-' then
 					Result := Exit_value
 				else
