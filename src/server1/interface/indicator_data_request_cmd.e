@@ -39,9 +39,9 @@ feature {NONE}
 			-- ID of the indicator requested by the user
 
 	send_response is
-			-- Obtain the market corresponding to `market_symbol' and
+			-- Obtain the tradable corresponding to `market_symbol' and
 			-- dispatch the data for the indicator specified by
-			-- `indicatorID' for that market for `trading_period_type'
+			-- `indicatorID' for that tradable for `trading_period_type'
 			-- to the client.
 		require
 			tpt_ms_not_void:
@@ -49,11 +49,11 @@ feature {NONE}
 			-- indicatorID is valid
 		local
 			indicator: MARKET_FUNCTION
-			market: TRADABLE [BASIC_MARKET_TUPLE]
+			tradable: TRADABLE [BASIC_MARKET_TUPLE]
 		do
-			market := tradables.tradable (market_symbol,
+			tradable := tradables.tradable (market_symbol,
 				trading_period_type)
-			if market = Void then
+			if tradable = Void then
 				if not tradables.symbols.has (market_symbol) then
 					report_error (Invalid_symbol, <<"Symbol not in database.">>)
 				elseif server_error then
@@ -62,12 +62,12 @@ feature {NONE}
 					report_error (Error, <<"Invalid period type">>)
 				end
 			elseif
-				indicatorID < 1 or indicatorID > market.indicators.count
+				indicatorID < 1 or indicatorID > tradable.indicators.count
 			then
 				report_error (Error, <<"Invalid indicator ID">>)
 			else
-				market.set_target_period_type (trading_period_type)
-				indicator := market.indicators @ indicatorID
+				tradable.set_target_period_type (trading_period_type)
+				indicator := tradable.indicators @ indicatorID
 				if not indicator.processed then
 					indicator.process
 				end
