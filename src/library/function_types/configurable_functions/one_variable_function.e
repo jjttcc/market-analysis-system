@@ -143,9 +143,7 @@ feature {FACTORY} -- Status setting
 			output.wipe_out
 		end
 
-feature {NONE} -- Implementation
-
-	input: MARKET_FUNCTION
+feature {MARKET_FUNCTION_EDITOR} -- Implementation
 
 	set_input (in: like input) is
 		require
@@ -160,6 +158,10 @@ feature {NONE} -- Implementation
 			parameter_list_void: parameter_list = Void
 			not_processed: not processed
 		end
+
+feature {NONE} -- Implementation
+
+	input: MARKET_FUNCTION
 
 	make_output is
 		do

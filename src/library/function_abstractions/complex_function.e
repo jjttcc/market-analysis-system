@@ -44,7 +44,7 @@ feature -- Basic operations
 			end
 		end
 
-feature {FACTORY} -- Status setting
+feature {MARKET_FUNCTION_EDITOR} -- Status setting
 
 	set_operator (op: like operator) is
 		require

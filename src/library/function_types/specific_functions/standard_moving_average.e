@@ -89,7 +89,7 @@ feature {NONE} -- Basic operations
 			end
 		end
 
-feature {FACTORY}
+feature {MARKET_FUNCTION_EDITOR}
 
 	set_input (in: MARKET_FUNCTION) is
 		do

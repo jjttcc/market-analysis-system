@@ -76,7 +76,7 @@ feature {FACTORY} -- Status setting
 			effective_offset_set: effective_offset = arg
 		end
 
-feature {N_RECORD_FUNCTION_PARAMETER} -- Status setting
+feature {N_RECORD_FUNCTION_PARAMETER, MARKET_FUNCTION_EDITOR} -- Status setting
 
 	set_n (value: INTEGER) is
 		do

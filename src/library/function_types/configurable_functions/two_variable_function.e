@@ -149,9 +149,7 @@ feature {FACTORY} -- Status setting
 			output.wipe_out
 		end
 
-feature {NONE}
-
-	input1, input2: COMPLEX_FUNCTION
+feature {MARKET_FUNCTION_EDITOR}
 
 	set_input1 (in: like input1) is
 		require
@@ -184,6 +182,10 @@ feature {NONE}
 			parameter_list_void: parameter_list = Void
 			not_processed: not processed
 		end
+
+feature {NONE}
+
+	input1, input2: COMPLEX_FUNCTION
 
 invariant
 
