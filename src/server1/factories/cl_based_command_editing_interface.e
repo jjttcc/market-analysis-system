@@ -9,15 +9,15 @@ indexing
 
 class CL_BASED_COMMAND_EDITING_INTERFACE inherit
 
-	COMMAND_LINE_UTILITIES [COMMAND]
+	MAS_COMMAND_LINE_UTILITIES
 		rename
-			print_object_tree as print_command_tree,
-			print_component_trees as print_operand_trees,
+--			print_object_tree as print_command_tree,
+--			print_component_trees as print_operand_trees,
 			print_message as show_message
 		export
 			{NONE} all
 		redefine
-			print_operand_trees
+--			print_operand_trees
 		end
 
 	COMMAND_EDITING_INTERFACE
@@ -39,6 +39,29 @@ feature -- Initialization
 			editor_exists: editor /= Void
 			mfsa_set:
 				use_market_function_selection = use_mktfnc_selection
+		end
+
+feature -- Basic operations
+
+	print_command_tree (o: COMMAND; level: INTEGER) is
+			-- Print the type name of `o' and, recursively, that of all
+			-- of its operands.
+		local
+			i: INTEGER
+		do
+			from
+				i := 1
+			until
+				i = level
+			loop
+				print ("  ")
+				i := i + 1
+			end
+			print_list (<<o.generator, "%N">>)
+			debug ("object_editing")
+				print_list (<<"(", o.out, ")%N">>)
+			end
+			print_operand_trees (o, level + 1)
 		end
 
 feature -- Status setting

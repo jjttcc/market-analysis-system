@@ -10,7 +10,7 @@ indexing
 
 class CL_BASED_FUNCTION_EDITING_INTERFACE inherit
 
-	COMMAND_LINE_UTILITIES [MARKET_FUNCTION]
+	MAS_COMMAND_LINE_UTILITIES
 		rename
 			print_message as show_message
 		export

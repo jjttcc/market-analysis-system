@@ -15,7 +15,7 @@ class MAIN_CL_INTERFACE inherit
 			print
 		end
 
-	COMMAND_LINE_UTILITIES [ANY]
+	MAS_COMMAND_LINE_UTILITIES
 		export
 			{NONE} all
 		end

@@ -43,7 +43,7 @@ class EVENT_REGISTRATION inherit
 			print
 		end
 
-	COMMAND_LINE_UTILITIES [MARKET_EVENT_GENERATOR]
+	MAS_COMMAND_LINE_UTILITIES
 		rename
 			print_message as show_message
 		export
