@@ -373,7 +373,8 @@ feature {NONE} -- Hard-coded market function building procedures
 			p1.set_x_y_date (earlier.day, 1, earlier)
 			!!p2.make
 			p2.set_x_y_date (later.day, 1, later)
-			!!Result.make (p1, p2, period_types @ (period_type_names @ Daily))
+			!!Result.make_from_2_points (p1, p2,
+				period_types @ (period_type_names @ Daily))
 			Result.set_name (name)
 		end
 
