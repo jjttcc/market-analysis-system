@@ -350,7 +350,7 @@ feature {NONE}
 				until
 					parameters.after
 				loop
-					print_list (<<i, ") ", parameters.item.function.name,
+					print_list (<<i, ") ", parameters.item.name,
 								" (value: ", parameters.item.current_value,
 								")%N">>)
 					parameters.forth
