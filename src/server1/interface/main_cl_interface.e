@@ -26,6 +26,8 @@ class MAIN_CL_INTERFACE inherit
 		end
 
 	PRINTING
+		rename
+			output_medium as output_device
 		export
 			{NONE} all
 		undefine
