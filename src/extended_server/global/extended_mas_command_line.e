@@ -31,16 +31,21 @@ feature -- Access
 
 feature -- Access -- settings
 
+	polling_timeout_milliseconds: INTEGER
+			-- Polling timeout value, in milliseconds
+
 feature {NONE} -- Implementation
 
-	placeholder_setup_procedure is
+	set_polling_timeout_milliseconds is
 		do
+			-- @@Hard code as 20 seconds for new - make it configurable later.
+			polling_timeout_milliseconds := 20000
 		end
 
 	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]] is
 		do
 			Result := Precursor
-			Result.extend (agent placeholder_setup_procedure)
+			Result.extend (agent set_polling_timeout_milliseconds)
 		end
 
 invariant
