@@ -112,7 +112,7 @@ public class TimeDrawer extends TemporalDrawer {
 			}
 		}
 
-		if (hours.length > 1 && _x_values.length > 1 &&
+		if (hi > 1 && _x_values.length > 1 &&
 			hours[0] != null && hours[1] != null &&
 			hours[0].right() >= 0 && hours[1].right() >= 0) {
 			// Set the hour x offset according to the distance between
