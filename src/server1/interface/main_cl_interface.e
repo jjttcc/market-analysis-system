@@ -236,7 +236,8 @@ feature -- Basic operations
 						tradable_list_handler.clear_caches
 						current_tradable := 
 						tradable_list_handler.tradable (current_tradable.symbol,
-							current_period_type)
+							--@@@Check if 'update' (False) should be True:
+							current_period_type, False)
 					end
 				when 'm', 'M' then
 					event_generator_builder.edit_event_generator_menu
@@ -449,7 +450,8 @@ feature {NONE} -- Implementation
 					symbol_in_list: tradable_list_handler.symbols.has (symbol)
 				end
 				current_tradable := tradable_list_handler.tradable (symbol,
-					current_period_type)
+					--@@@Check if 'update' (True) should be False:
+					current_period_type, True)
 				if
 					tradable_list_handler.error_occurred or
 					current_tradable = Void
@@ -468,7 +470,8 @@ feature {NONE} -- Implementation
 						current_period_type := closest_valid_period_type (
 							symbol, current_period_type)
 						current_tradable := tradable_list_handler.tradable (
-							symbol, current_period_type)
+							--@@@Check if 'update' (True) should be False:
+							symbol, current_period_type, True)
 						err := err + "Using " + current_period_type.name +
 							" instead.%N"
 						if tradable_list_handler.error_occurred then
@@ -536,7 +539,8 @@ feature {NONE} -- Implementation
 						-- Set `t' to the appropriate tradable according to
 						-- `per_type_choice', intraday or non-intraday.
 						t := tradable_list_handler.tradable (t.symbol,
-							per_type_choice)
+							--@@@Check if 'update' (False) should be true:
+							per_type_choice, False)
 					end
 				end
 				if t = Void then
@@ -617,7 +621,8 @@ feature {NONE} -- Implementation - utilities
 			else
 				tradable_list_handler.start
 				current_tradable :=
-					tradable_list_handler.item (current_period_type)
+					--@@@Check if 'update' (False) should be True:
+					tradable_list_handler.item (current_period_type, False)
 				if tradable_list_handler.error_occurred then
 					log_errors (<<tradable_list_handler.last_error, "%N">>)
 					terminate (Error_exit_status)
@@ -628,7 +633,8 @@ feature {NONE} -- Implementation - utilities
 							tradable_list_handler.period_type_names_for (
 								tradable_list_handler.current_symbol) @ 1)
 						current_tradable := tradable_list_handler.item (
-							current_period_type)
+							--@@@Check if 'update' (False) should be True:
+							current_period_type, False)
 					end
 				end
 			end

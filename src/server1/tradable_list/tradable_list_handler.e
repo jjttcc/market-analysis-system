@@ -56,24 +56,38 @@ feature -- Access
 			end
 		end
 
-	tradable (symbol: STRING; period_type: TIME_PERIOD_TYPE):
+	tradable (symbol: STRING; period_type: TIME_PERIOD_TYPE; update: BOOLEAN):
 				TRADABLE [BASIC_MARKET_TUPLE] is
 		local
 			l: TRADABLE_LIST
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 		do
+--!!!:
+print ("TLH.tradable called, update: " + update.out + "%N")
 			last_tradable := Void
 			reset_error_state
 			l := list_for (period_type)
 			if l /= Void then
 				if l.symbols.has (symbol) then
+					--@@With MT version, thread-safe action may be needed
+					--here - ensure there is no conflict re. `t'.
 					l.search_by_symbol (symbol)
 					if not l.fatal_error then
+--!!!!!!!!! Prevent unwanted side effects re. updated data:
+--l.disable_data_updates
 						t := l.item
+--l.enable_data_updates
 						if
 							t /= Void and then
 							t.valid_period_type (period_type)
 						then
+							check
+								t_is_item: t = l.item
+							end
+							if update then
+								-- Ensure `t' contains the latest data.
+								l.update_item
+							end
 							Result := t
 							last_tradable := t
 						end
@@ -120,7 +134,10 @@ feature -- Access
 			if intraday_market_list /= Void then
 				intraday_market_list.search_by_symbol (symbol)
 				if not intraday_market_list.fatal_error then
+--!!!!!!!!! Prevent unwanted side effects re. updated data:
+--intraday_market_list.disable_data_updates
 					t := intraday_market_list.item
+--intraday_market_list.enable_data_updates
 				end
 				if not intraday_market_list.fatal_error then
 					target_set.fill (t.period_types.linear_representation)
@@ -144,7 +161,10 @@ feature -- Access
 			if not error_occurred and daily_market_list /= Void then
 				daily_market_list.search_by_symbol (symbol)
 				if not daily_market_list.fatal_error then
+--!!!!!!!!! Prevent unwanted side effects re. updated data:
+--daily_market_list.disable_data_updates
 					t := daily_market_list.item
+--daily_market_list.enable_data_updates
 				end
 				if not daily_market_list.fatal_error then
 					target_set.fill (t.period_types.linear_representation)

@@ -20,15 +20,15 @@ class EXTENDED_HTTP_LOADING_FILE_TRADABLE_LIST inherit
 		undefine
 			load_target_tradable
 		redefine
-			target_tradable_out_of_date
+			target_tradable_out_of_date_implementation
 		select
-			target_tradable_out_of_date
+			target_tradable_out_of_date_implementation
 		end
 
 	HTTP_LOADING_FILE_TRADABLE_LIST
 		rename
 			make as http_make,
-			target_tradable_out_of_date as http_out_of_date
+			target_tradable_out_of_date_implementation as http_out_of_date
 		undefine
 			start, finish, back, forth, turn_caching_off, clear_cache,
 			add_to_cache, setup_input_medium, close_input_medium,
@@ -60,7 +60,7 @@ feature -- Access
 
 feature {NONE} -- Hook routine implementations
 
-	target_tradable_out_of_date: BOOLEAN is
+	target_tradable_out_of_date_implementation: BOOLEAN is
 		do
 			Result := http_out_of_date and then
 				{EXTENDED_FILE_BASED_TRADABLE_LIST} Precursor

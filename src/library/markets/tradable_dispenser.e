@@ -11,18 +11,23 @@ deferred class TRADABLE_DISPENSER
 
 feature -- Access
 
-	item (period_type: TIME_PERIOD_TYPE): TRADABLE [BASIC_MARKET_TUPLE] is
+	item (period_type: TIME_PERIOD_TYPE; update: BOOLEAN):
+		TRADABLE [BASIC_MARKET_TUPLE] is
 			-- The tradable at the current cursor position - Void if
-			-- `period_type' is not a valid type for the current symbol
+			-- `period_type' is not a valid type for the current symbol;
+			-- updated with the latest data if `update'.
 		require
 			type_not_void: period_type /= Void
 			cursor_valid: not off
 		do
 			if valid_period_type (current_symbol, period_type) then
-				Result := tradable (current_symbol, period_type)
+--!!!:
+print ("TD.item calling tradable with update: " + update.out + "%N")
+				Result := tradable (current_symbol, period_type, update)
 			end
 		ensure
-			result_definition: Result = tradable (current_symbol, period_type)
+			result_definition: Result =
+				tradable (current_symbol, period_type, update)
 			last_tradable_set: last_tradable = Result
 			void_if_not_valid: not valid_period_type (
 				current_symbol, period_type) implies Result = Void
@@ -33,11 +38,12 @@ feature -- Access
 		deferred
 		end
 
-	tradable (symbol: STRING; period_type: TIME_PERIOD_TYPE):
+	tradable (symbol: STRING; period_type: TIME_PERIOD_TYPE; update: BOOLEAN):
 				TRADABLE [BASIC_MARKET_TUPLE] is
 			-- The tradable for `period_type' associated with `symbol' -
 			-- Void if the tradable for `symbol' is not found or if
-			-- `period_type' is not a valid type for `symbol'
+			-- `period_type' is not a valid type for `symbol'; updated with
+			-- the latest data if `update'
 		require
 			not_empty: not is_empty
 			not_void: symbol /= Void and period_type /= Void
@@ -54,11 +60,12 @@ feature -- Access
 				implies Result = Void
 		end
 
-	tuple_list (symbol: STRING; period_type: TIME_PERIOD_TYPE):
+	tuple_list (symbol: STRING; period_type: TIME_PERIOD_TYPE; update: BOOLEAN):
 				SIMPLE_FUNCTION [BASIC_MARKET_TUPLE] is
 			-- Tuple list for `period_type' for tradable with `symbol' - Void
 			-- if the tradable for `symbol' is not found or if `period_type'
-			-- is not a valid type for `symbol'.  `last_tradable' will be set
+			-- is not a valid type for `symbol'; updated with
+			-- the latest data if `update'.  `last_tradable' will be set
 			-- to `tradable (symbol, period_type)'.
 		require
 			not_empty: not is_empty
@@ -67,7 +74,9 @@ feature -- Access
 		local
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 		do
-			t := tradable (symbol, period_type)
+--!!!:
+print ("TD.tuple_list calling tradable" + "%N")
+			t := tradable (symbol, period_type, update)
 			if t /= Void then
 				Result := t.tuple_list (period_type.name)
 			end

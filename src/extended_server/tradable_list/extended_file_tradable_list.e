@@ -31,7 +31,8 @@ class EXTENDED_FILE_TRADABLE_LIST inherit
 		undefine
 			start, finish, back, forth, turn_caching_off, clear_cache,
 			add_to_cache, setup_input_medium, close_input_medium,
-			remove_current_item, target_tradable_out_of_date, append_new_data
+			remove_current_item, target_tradable_out_of_date_implementation,
+			append_new_data
 		end
 
 creation

@@ -18,7 +18,8 @@ class HTTP_LOADING_FILE_TRADABLE_LIST inherit
 		rename
 			make as fbtl_make
 		redefine
-			load_target_tradable, target_tradable_out_of_date, append_new_data
+			load_target_tradable, target_tradable_out_of_date_implementation,
+			append_new_data
 		end
 
 	HTTP_DATA_RETRIEVAL
@@ -138,7 +139,7 @@ feature {NONE} -- Hook routine implementations
 
 	use_day_after_latest_date_as_start_date: BOOLEAN
 
-	target_tradable_out_of_date: BOOLEAN is
+	target_tradable_out_of_date_implementation: BOOLEAN is
 		do
 			parameters.set_symbol (current_symbol)
 			use_day_after_latest_date_as_start_date := True

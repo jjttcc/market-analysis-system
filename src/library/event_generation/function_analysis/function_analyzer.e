@@ -76,7 +76,8 @@ feature -- Status setting
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 		do
 			current_tradable := Void
-			t := d.item (period_type)
+			--@@@Check if 'update' (True) should be False:
+			t := d.item (period_type, True)
 			if t = Void then
 				if d.error_occurred then
 					s := concatenation (<<

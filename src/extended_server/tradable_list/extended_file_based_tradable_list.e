@@ -11,8 +11,8 @@ deferred class EXTENDED_FILE_BASED_TRADABLE_LIST inherit
 
 	FILE_BASED_TRADABLE_LIST
 		redefine
-			target_tradable_out_of_date, append_new_data, turn_caching_off,
-			add_to_cache, clear_cache
+			target_tradable_out_of_date_implementation,
+			append_new_data, turn_caching_off, add_to_cache, clear_cache
 		end
 
 	TIMING_SERVICES
@@ -96,7 +96,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Hook routine implementations
 
-	target_tradable_out_of_date: BOOLEAN is
+	target_tradable_out_of_date_implementation: BOOLEAN is
 		local
 			current_file_status: TRADABLE_FILE_STATUS
 		do
@@ -118,6 +118,7 @@ feature {NONE} -- Hook routine implementations
 					current_file_status.last_modification_time and
 					status_work_file.count > current_file_status.file_size
 			end
+--!!!:
 if Result then
 print ("tgt is out of date%N")
 else
@@ -129,6 +130,7 @@ end
 		local
 			current_file_status: TRADABLE_FILE_STATUS
 		do
+print ("append_new_data called" + "%N")
 			current_file_status := file_status_cache @ index
 			setup_input_medium
 			check
@@ -146,7 +148,7 @@ end
 				-- Advance the file cursor to the beginning of the new
 				-- data.  Note: file position numbering starts a 0.
 --!!!:
-print ("app new d - before - tt count: " + target_tradable.count.out + "%N")
+print ("app new d - before - tgttr count: " + target_tradable.count.out + "%N")
 				current_input_file.position_cursor (
 					current_file_status.file_size)
 				tradable_factory.set_product (target_tradable)
@@ -159,7 +161,13 @@ print ("app new d - before - tt count: " + target_tradable.count.out + "%N")
 						fatal_error := True
 					end
 				end
-print ("app new d - after - tt count: " + target_tradable.count.out + "%N")
+--!!!:
+print ("app new d - after - tgttr count: " + target_tradable.count.out + "%N")
+print ("tgttr period type: " + target_tradable.trading_period_type.name + "%N")
+print ("tgttr target period type: " + target_tradable.target_period_type.name + "%N")
+if equal(target_tradable.trading_period_type.name, "hourly") then
+	print ("tgt trdble's trading period type is HOURLY." + "%N")
+ end
 				tradable_factory.turn_start_input_from_beginning_on
 				close_input_medium
 			else

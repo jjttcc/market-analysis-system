@@ -2,6 +2,8 @@ indexing
 	description: "An iterable list of tradables"
 	author: "Jim Cochrane"
 	date: "$Date$";
+	note: "@@@When multi-threading is added, some logic may need to be %
+		%added for that in this class."
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
@@ -66,7 +68,79 @@ feature -- Access
 		end
 
 	item: TRADABLE [BASIC_MARKET_TUPLE] is
-			-- Current tradable.  `fatal_error' will be True if an error
+			-- The current tradable.  `fatal_error' will be True if an error
+			-- occurs.
+		do
+			fatal_error := False
+			if index = old_index and cache.count > 0 then
+				check
+					target_tradable_exists: target_tradable /= Void
+				end
+			else
+				check
+					cursor_location_changed: index /= old_index or
+						cache.count = 0
+				end
+				target_tradable := cached_item (index)
+				if target_tradable = Void then
+					load_target_tradable
+				end
+				old_index := index
+			end
+			Result := target_tradable
+			if Result = Void then
+				fatal_error := True
+			end
+		ensure then
+			good_if_no_error: not fatal_error = (Result /= Void)
+			target_exists_if_no_error: not fatal_error implies
+				(target_tradable /= Void)
+			old_index_updated: index = old_index
+		end
+
+	item2: TRADABLE [BASIC_MARKET_TUPLE] is
+			-- The current tradable.  `fatal_error' will be True if an error
+			-- occurs.
+		do
+			fatal_error := False
+			if index = old_index and cache.count > 0 then
+				check
+					target_tradable_exists: target_tradable /= Void
+				end
+				if
+					cached_item (index) /= Void and then
+					target_tradable_out_of_date
+				then
+					append_new_data
+				end
+			else
+				check
+					cursor_location_changed: index /= old_index
+				end
+				target_tradable := cached_item (index)
+				if target_tradable = Void then
+					load_target_tradable
+				else
+					if target_tradable_out_of_date then
+						append_new_data
+					end
+					target_tradable.flush_indicators
+				end
+				old_index := index
+			end
+			Result := target_tradable
+			if Result = Void then
+				fatal_error := True
+			end
+		ensure then
+			good_if_no_error: not fatal_error = (Result /= Void)
+			target_exists_if_no_error: not fatal_error implies
+				(target_tradable /= Void)
+			old_index_updated: index = old_index
+		end
+
+	old_item: TRADABLE [BASIC_MARKET_TUPLE] is
+			-- The current tradable.  `fatal_error' will be True if an error
 			-- occurs.
 		do
 			fatal_error := False
@@ -116,6 +190,7 @@ feature -- Access
 	changeable_comparison_criterion: BOOLEAN is False
 
 	cache_size: INTEGER
+			-- The size of the cache of tradables
 
 feature -- Status report
 
@@ -149,7 +224,7 @@ feature -- Status report
 feature -- Status setting
 
 	turn_caching_on is
-			-- Turn caching on if cache_size > 0.
+			-- Turn tradable caching on if cache_size > 0.
 		do
 			if not caching_on then
 				cache_index_queue.make (cache_size)
@@ -159,7 +234,7 @@ feature -- Status setting
 		end
 
 	turn_caching_off is
-			-- Turn caching off.
+			-- Turn tradable caching off.
 		do
 			if caching_on then
 				cache.clear_all
@@ -229,8 +304,38 @@ feature -- Basic operations
 				not after implies item.symbol.is_equal (s)
 		end
 
+--!!!:
+	update_item is
+			-- If new data is available for `item' (the current tradable),
+			-- load the new data into `item'.
+		local
+			t: TRADABLE [BASIC_MARKET_TUPLE]
+		do
+print ("update_item was called" + "%N")
+			--@@@Note: Synchronization may be needed here in MT version.
+			t := item -- Force `item' and `target_tradable' to be "up to date".
+			if not fatal_error then
+if target_tradable /= Void then
+print ("update_item state is OK" + "%N")
+else
+print ("update_item - something went wrong - tgttrd is void." + "%N")
+end
+				check
+					target_exists: target_tradable /= Void
+				end
+				if target_tradable_out_of_date then
+print ("update_item data was out of date, appending new data.%N")
+					append_new_data
+else
+print ("update_item data was NOT out of date, NOT appending.%N")
+				end
+--!!!!!Check whether this should always be called here:
+				target_tradable.flush_indicators
+			end
+		end
+
 	clear_cache is
-			-- Empty the cache.
+			-- Empty the tradable cache.
 		do
 			cache.clear_all
 			cache_index_queue.wipe_out
@@ -246,6 +351,41 @@ feature {FACTORY} -- Access
 
 	tradable_factory: TRADABLE_FACTORY
 			-- Manufacturers of tradables
+
+feature {TRADABLE_LIST_HANDLER} -- Status report
+
+--!!!!Remove - no longer needed.
+	data_updates_disabled: BOOLEAN
+			-- Is dynamic updating of tradable data disabled?
+
+feature {TRADABLE_LIST_HANDLER} -- Status setting
+
+--!!!!Remove - no longer needed.
+	disable_data_updates is
+			-- Set `data_updates_disabled' to `True'.
+		do
+			data_updates_disabled := True
+		ensure
+			data_updates_disabled: data_updates_disabled
+		end
+
+--!!!!Remove - no longer needed.
+	enable_data_updates is
+			-- Set `data_updates_disabled' to `False'.
+		do
+			data_updates_disabled := False
+		ensure
+			data_updates_enabled: not data_updates_disabled
+		end
+
+--!!!!Remove - no longer needed.
+	set_data_updates_disabled (arg: BOOLEAN) is
+			-- Set `data_updates_disabled' to `arg'.
+		do
+			data_updates_disabled := arg
+		ensure
+			data_updates_disabled_set: data_updates_disabled = arg
+		end
 
 feature {NONE} -- Implementation
 
@@ -417,12 +557,27 @@ feature {NONE} -- Implementation
 			Result := gsf.global_configuration.tradable_cache_size
 		end
 
-feature {NONE} -- Hook routines
-
 	target_tradable_out_of_date: BOOLEAN is
 			-- Have new data become available for `target_tradable' since
 			-- `target_tradable' was last updated?
 		require
+			target_tradable_exists: target_tradable /= Void
+			current_item_is_cached_if_caching_on: caching_on implies
+				cached_item (index) /= Void
+		do
+--!!!!Fix ...disabled...
+			Result := not data_updates_disabled and
+				target_tradable_out_of_date_implementation
+		end
+
+feature {NONE} -- Hook routines
+
+	target_tradable_out_of_date_implementation: BOOLEAN is
+			-- Have new data become available for `target_tradable' since
+			-- `target_tradable' was last updated?
+		require
+--!!!!Fix ...disabled...
+			updates_enabled: not data_updates_disabled
 			target_tradable_exists: target_tradable /= Void
 			current_item_is_cached_if_caching_on: caching_on implies
 				cached_item (index) /= Void

@@ -297,9 +297,11 @@ feature {NONE}
 			TRADABLE [BASIC_MARKET_TUPLE]] is
 		do
 			create Result.make (tradables.tradable (symbol,
-				period_types @ (period_type_names @ Hourly)),
+				--@@@Check if 'update' (False) should be true:
+				period_types @ (period_type_names @ Hourly), False),
 				tradables.tradable (symbol,
-				period_types @ (period_type_names @ Daily)))
+				--@@@Check if 'update' (False) should be true:
+				period_types @ (period_type_names @ Daily), False))
 		ensure
 			not_void: Result /= Void
 		end

@@ -17,17 +17,23 @@ class TIME_DELIMITED_MARKET_DATA_REQUEST_CMD inherit
 			additional_post_parse_constraints_fulfilled,
 			additional_field_constraints_msg, ignore_tradable_cache
 		redefine
-			expected_field_count
+			expected_field_count, update_retrieved_tradable
 		end
 
 	TIME_DELIMITED_DATA_REQUEST_CMD
 		undefine
-			create_and_send_response
+			create_and_send_response, update_retrieved_tradable
+--!!!Temporary debugging item:
+,setup_correct_number_of_records_test
 		end
 
 creation
 
 	make
+
+feature {NONE} -- Hook routine implementations
+
+	update_retrieved_tradable: BOOLEAN is True
 
 feature {NONE} -- Redefined routines
 
