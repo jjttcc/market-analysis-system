@@ -76,9 +76,13 @@ feature -- Basic operations
 				io.print ("Terminating the server.%N")
 			end
 			if not no_cleanup then
-				io.print ("Cleaning up ...%N")
+				debug ("persist")
+					io.print ("Cleaning up ...%N")
+				end
 				termination_cleanup
-				io.print ("Finished cleaning up.%N")
+				debug ("persist")
+					io.print ("Finished cleaning up.%N")
+				end
 			end
 			die (status)
 		rescue
