@@ -19,7 +19,7 @@ TBD
 
 =head1 DESCRIPTION
 
-Environmental settings for the tasks application - See description
+Environmental settings for the 'data-supplier' application - See description
 in the parent, EnvironmentSettings, for instructions on how to use
 this class.
 
