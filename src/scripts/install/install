@@ -235,7 +235,7 @@ show_config_information() {
 	indfile=$libdir/indicators_persist
 	mkanafile=$libdir/generators_persist
 	echo -e "\nNOTE: If you set your MAS_DIRECTORY environment variable \c" >&2
-	echo -e "to some other\ndirectory than $libdir, you will want to \c" >&2
+	echo -e "to some\nother directory than $libdir, you will want\nto \c" >&2
 	echo -e "move the configuration files:\n$indfile and $mkanafile\c" >&2
 	echo -e "\nto this directory.\n" >&2
 }
