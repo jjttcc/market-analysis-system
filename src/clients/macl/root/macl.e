@@ -51,26 +51,18 @@ feature {NONE} -- Initialization
 			loop
 				print (connection.server_response)
 				processor.process_server_msg (connection.server_response)
-				if processor.error then
-					if
-						processor.fatal_error or command_line.input_from_file
-					then
-						abort (Invalid_input_message)
-					end
-				end
+				handle_error (processor)
 				processor.process_request (user_response)
 				connection.send_message (processor.product)
+				-- Save the recorded input as it is entered to ensure the
+				-- output has been saved if an unrecoverable exception occurs.
+				output_current_input_record (processor)
 			end
 			if not connection.last_communication_succeeded then
 				print (connection.error_report + "%N")
 			end
 			connection.close
-			if processor.record then
-				print ("Saving recorded input to file " +
-					command_line.output_file.name + ".%N")
-				command_line.output_file.put_string (processor.input_record)
-				command_line.output_file.close
-			end
+			close_output_file (processor)
 		rescue
 			handle_fatal_exception
 		end
@@ -180,6 +172,51 @@ feature {NONE} -- Utilities
 		rescue
 			retried := True
 			retry
+		end
+
+	handle_error (processor: COMMAND_PROCESSOR) is
+			-- If `processor.error', take appropriate action.
+		do
+			if processor.error then
+				if
+					processor.fatal_error or
+					(command_line.terminate_on_error and
+					command_line.input_from_file)
+				then
+					abort (Invalid_input_message)
+				end
+			end
+		end
+
+	output_current_input_record (processor: COMMAND_PROCESSOR) is
+			-- If `processor.record', output `processor.input_record' to
+			-- `command_line.output_file'.
+		require
+			processor_exists: processor /= Void
+		do
+			if processor.record then
+				command_line.output_file.put_string (processor.input_record)
+				command_line.output_file.flush
+				processor.input_record.clear_all
+			end
+		ensure
+			input_saved_and_cleared: processor.record implies
+				processor.input_record.is_empty
+		end
+
+	close_output_file (processor: COMMAND_PROCESSOR) is
+			-- If `processor.record', close `command_line.output_file'.
+		require
+			no_more_output: processor.record implies
+				processor.input_record.is_empty
+			output_file_open: processor.record implies
+				not command_line.output_file.is_closed
+		do
+			if processor.record then
+				print ("Saved recorded input to file " +
+					command_line.output_file.name + ".%N")
+				command_line.output_file.close
+			end
 		end
 
 feature {NONE} -- Attribute redefinitions
