@@ -1,0 +1,22 @@
+#!/bin/bash
+# First, start the mas server; then run this script in this directory to
+# create a complete set of indicators.
+
+usage() {
+	echo "Usage: $(basename $0) port_number [macl-options]"
+}
+
+if [ $# -lt 1 ]; then usage; exit 1; fi
+
+port=$1
+shift
+
+for file in indicators ../../hold/finance-private/ADX slope_of_ema_of_adx \
+parabolic-sar market_analyzers \
+../../hold/private/slope_of_slope_of_macd_signal_trend_ADX_analyzers \
+macd_buy-sell_anlyzers_with_ema_gt_10; do
+	if ! macl -i $file $port $*; then
+		echo "'macl -i $file $port' failed - Aborting."
+		exit 1
+	fi
+done
