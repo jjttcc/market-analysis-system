@@ -30,6 +30,7 @@ feature {NONE} -- Initialization
 			in_not_void: in /= Void
 			op_not_void_if_used: operator_used implies op /= Void
 			in_output_not_void: in.output /= Void
+			in_ptype_not_void: in.trading_period_type /= Void
 		do
 			set_input (in)
 			if op /= Void then
@@ -148,6 +149,7 @@ feature {MARKET_FUNCTION_EDITOR}
 	set_input (in: like input) is
 		require
 			in_not_void: in /= Void and in.output /= Void
+			ptype_not_void: in.trading_period_type /= Void
 		do
 			input := in
 			set_target (input.output)

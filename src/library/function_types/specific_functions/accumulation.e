@@ -78,6 +78,7 @@ feature {NONE} -- Initialization
 			not_void: in /= Void and op /= Void and prev_op /= Void and
 				fop /= Void
 			left_operand_is_prev_op: op.operand1 = prev_op
+			in_ptype_not_void: in.trading_period_type /= Void
 		do
 			check operator_used end
 			ovf_make (in, op)

@@ -38,6 +38,7 @@ feature -- Initialization
 		require
 			not_void: p1 /= Void and in /= Void
 			p1_x_is_1: p1.x.floor = 1
+			in_ptype_not_void: in.trading_period_type /= Void
 		do
 			make_from_slope (p1, sl)
 			ovf_make (in, Void)

@@ -42,6 +42,7 @@ feature {NONE} -- Initialization
 		require
 			args_not_void: in /= Void and e /= Void and op /= Void
 			i_gt_0: i > 0
+			in_ptype_not_void: in.trading_period_type /= Void
 		do
 			check operator_used end
 			sma_make (in, op, i)

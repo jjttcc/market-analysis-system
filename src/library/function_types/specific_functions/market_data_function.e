@@ -72,6 +72,7 @@ feature {MARKET_FUNCTION_EDITOR}
 	set_input, make, set_innermost_input (in: like input) is
 		require else
 			in_not_void: in /= Void
+			in_ptype_not_void: in.trading_period_type /= Void
 		do
 			input := in
 			output := input

@@ -31,6 +31,7 @@ feature {NONE} -- Initialization
 			not_void:
 				in /= Void and ctf /= Void and time_period_type /= Void and
 				date /= Void
+			in_ptype_not_void: in.trading_period_type /= Void
 			duration_gt_in_duration_if_regular:
 				not time_period_type.irregular implies
 				time_period_type.duration > in.trading_period_type.duration

@@ -31,6 +31,7 @@ feature {NONE} -- Initialization
 			in_not_void: in /= Void
 			op_not_void_if_used: operator_used implies op /= Void
 			i_gt_0: i > 0
+			in_ptype_not_void: in.trading_period_type /= Void
 		do
 			n := i
 			ovf_make (in, op)

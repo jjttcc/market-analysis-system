@@ -30,6 +30,10 @@ feature {NONE} -- Initialization
 			args_not_void: in1 /= Void and in2 /= Void
 			op_not_void: op /= Void
 			in_output_not_void: in1.output /= Void and in2.output /= Void
+			ptypes_not_void: in1.trading_period_type /= Void and
+				in2.trading_period_type /= Void
+			period_types_equal:
+				in1.trading_period_type.is_equal (in2.trading_period_type)
 		do
 			create output.make (in1.output.count)
 			set_input1 (in1)
@@ -158,6 +162,7 @@ feature {MARKET_FUNCTION_EDITOR}
 			period_types_equal:
 				input2 /= Void implies in.trading_period_type.is_equal (
 					input2.trading_period_type)
+			ptype_not_void: in.trading_period_type /= Void
 		do
 			do_set_input1 (in)
 		ensure
@@ -174,6 +179,7 @@ feature {MARKET_FUNCTION_EDITOR}
 			period_types_equal:
 				input1 /= Void implies in.trading_period_type.is_equal (
 					input1.trading_period_type)
+			ptype_not_void: in.trading_period_type /= Void
 		do
 			do_set_input2 (in)
 		ensure
@@ -188,6 +194,8 @@ feature {MARKET_FUNCTION_EDITOR}
 		require
 			not_void: in1 /= Void and in2 /= Void
 			output_not_void: in1.output /= Void and in2.output /= Void
+			ptypes_not_void: in1.trading_period_type /= Void and
+				in2.trading_period_type /= Void
 			period_types_equal:
 				in1.trading_period_type.is_equal (in2.trading_period_type)
 		do
