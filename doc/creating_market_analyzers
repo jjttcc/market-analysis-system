@@ -90,7 +90,7 @@ The system will then ask for the right component.  Choose the stochastic
 %D crossover analyzer that you created above.  It will then ask if you
 want to specify a time extension to match events from the left analyzer
 that occur before events from the right analyzer.  Since you want to
-know if the MACD corssover occurs before the stochastic oversold signal,
+know if the MACD crossover occurs before the stochastic oversold signal,
 you need to answer yes.  Choose an appropriate amount of time for
 the left signal to be included if it occurs before the right signal.
 You can choose to enter days, months, and/or years.  In my system,
@@ -117,7 +117,7 @@ the analyzer.
 
 You will probably want to also create a market analyzer for the reverse
 signal - weekly MACD difference line crossing below the weekly MACD signal
-line and stochstac %D crossing above the 65% line.  Using the above example,
+line and stochastic %D crossing above the 65% line.  Using the above example,
 you should find this a straightforward process.
 
 Note that if you decide you want to change the 35% crossover value of the
@@ -139,17 +139,18 @@ This example shows the creation of a market analyzer that will produce
 a signal if the daily volume is more than 3 times greater than for the
 previous day.
 
-From the main menu, choose 'm' (Edit market analyzers), then choose 'c'
-(Create a new market analyzer) to create a new market analyzer.
+To get to the market analyzer creation menu, from the main menu,
+choose 'm' (Edit market analyzers), then choose 'c' (Create a new market
+analyzer) to create a new market analyzer.
 
 When creating a market analyzer, it often helps to think about what the
 analyzer needs to do and then draw a picture of it before creating it.
 We will do this in this example.
 
-First, since the analyzer will be processing only one attribute of the
-market data, volume, it will need to be both a simple (non-compound)
-analyzer and it will analyze one indicator, rather than two.
-Second, an operator will be needed for this analyzer, since the expression
+First, since the analyzer will be processing only one stream of data -
+market volume - it will need to be both a simple (non-compound)
+analyzer and it will analyze one indicator, rather than two.  Second,
+an operator will be needed for this analyzer, since the expression
 "volume > last_period_volume * 3" needs to be evaluated for each period.
 This will require a composite operator that can be drawn as a tree:
 
@@ -167,7 +168,76 @@ operation needed to express "volume > last_period_volume * 3".  VOLUME
 obtains the volume for the current period as GT_OPERATOR's left operand.
 MULTIPLICATION, GT_OPERATOR's right operand, provides the multiplication
 operation for "last_period_volume * 3".  SETTABLE_OFFSET_COMMAND,
-MULTIPLICATION's left operand, will be used to obtain the volume of
-the previous period.  SETTABLE_OFFSET_COMMAND's operand, VOLUME, will
+MULTIPLICATION's left operand, will be used to access the previous
+period's data.  SETTABLE_OFFSET_COMMAND's operand, VOLUME, will
 extract the volume from the record from the previous period.  CONSTANT,
 MULTIPLICATION's right operand, provides the 3 in "last_period_volume * 3".
+
+Now that we have a picture of what we need to create, we can proceed to
+build our market analyzer.  After choosing 'c' (Create a new market analyzer),
+as instructed above, the system asks whether we want a simple or compound
+analyzer.  Since we determined that a simple analyzer is needed, choose 's'
+(Simple).  Then choose the number of indicators the analyzer will use - One.
+
+The system then displays a list of the existing technical indicators.
+Since the type of data we want to analyze here is volume, which is a field
+of the raw market data, rather than a function, like moving average,
+we need to choose the "Market Data" indicator, which, unlike the other
+indicators, simply provides the market data for each period for analysis.
+
+The system then asks for the object to use as the market analyzer's root
+operator.  Referring to the diagram of the operator hierarchy we drew above,
+we see that the root, or top level, operator will be the GT_OPERATOR.
+Select that operator.  For the GT_OPERATOR's left operand, according to our
+diagram, we need to select VOLUME.  For the GT_OPERATOR's right operand
+we need MULTIPLICATION.
+
+For MULTIPLICATION's left operand, according to the diagram, choose
+SETTABLE_OFFSET_COMMAND.  For SETTABLE_OFFSET_COMMAND's operand, we
+see that VOLUME is needed.
+
+In this case, you can choose the volume object from the first list
+(labeled "Valid objects from current tree").  This tells the system that
+the same VOLUME object should be shared by both the GT_OPERATOR and the
+SETTABLE_OFFSET_COMMAND.  This is acceptable because the VOLUME operator
+simply extracts the volume field from the record given to it by its
+owner (GT_OPERATOR and SETTABLE_OFFSET_COMMAND).  It doesn't hold any
+information itself, so sharing the same VOLUME object will not cause
+any problems.  (This is also true of the OPENING_PRICE, HIGH_PRICE,
+LOW_PRICE, CLOSING_PRICE, and OPEN_INTEREST operators, each of which
+retrieves its respective field from the record given to it by its owner.)
+Sharing an object saves a small amount of memory.  This can improve system
+performance - in particular, when there are a large number of market
+analyzers with operator hierarchies, if a substantial number of objects
+are shared, the system will use noticeably less memory and may run faster.
+
+The system then asks for the left offset value for the
+SETTABLE_OFFSET_COMMAND.  Since the SETTABLE_OFFSET_COMMAND is being used
+to access the previous period data - one period to the left - enter 1.
+
+For MULTIPLICATION's right operand, according to the diagram, choose the
+CONSTANT object.  For its value (since we want to multiply the previous
+period's volume by 3), enter 3.
+
+The system then asks for the type of trading period.  Since we want to
+check for volume spikes on a daily basis, choose "daily".  Choose a good
+descriptive name for the analyzer, such as "Volume spike".  Since the
+name is short, you might want to include the criteria for the spike in
+parentheses as part of the name, such as:
+
+Volume spike (volume > 3 * previous volume)
+
+That concludes the creation of the volume spike market analyzer.
+You may wish to test the analyzer by choosing a data file that has no
+existing volume spikes (or editing one so that it has no spikes) and
+then changing the volume field of one or more records of the file to be
+more than 3 times greater than the previous day's volume.  Then you can
+run the market analysis, making sure that the start date for processing
+is set to a date that is before the dates of the records you changed;
+you should receive a signal for each of the records you changed.
+(Don't forget that you need to set up an event registrant - 'r' from
+the main menu - before you can receive signals for this new event.)
+
+Whenever you add a new market analyzer, you should do some testing on it
+to make sure that it does what you intended it to do.  This is also true
+for new technical indicators.
