@@ -250,7 +250,7 @@ ONE_VARIABLE_FUNCTION
 c
 # Will be -1 if true, otherwise 0
 # Name:
-Slope of MACD Signal Line Less Than or Equal to -0.175
+Slope of MACD Signal Line Less Than or Equal to {Limit}
 Slope of MACD Signal Line
 y
 BOOLEAN_NUMERIC_CLIENT
@@ -262,13 +262,19 @@ c
 Slope of MACD Signal Line
 y
 CONSTANT
-c
+e
+Limit
+y
 -0.175
 CONSTANT
-c
+e
+True result
+y
 -1
 CONSTANT
-c
+e
+False result
+y
 0
 s
 c
@@ -277,7 +283,7 @@ ONE_VARIABLE_FUNCTION
 c
 # Will be 1 if true, otherwise 0
 # Name:
-Slope of MACD Signal Line Greater Than or Equal to 0.175
+Slope of MACD Signal Line Greater Than or Equal to {Limit}
 Slope of MACD Signal Line
 y
 BOOLEAN_NUMERIC_CLIENT
@@ -289,13 +295,19 @@ c
 Slope of MACD Signal Line
 y
 CONSTANT
-c
+e
+Limit
+y
 0.175
 CONSTANT
-c
+e
+True result
+y
 1
 CONSTANT
-c
+e
+False result
+y
 0
 s
 c
@@ -304,19 +316,19 @@ TWO_VARIABLE_FUNCTION
 c
 # Name:
 Slope of MACD Signal Line Trend
-Slope of MACD Signal Line Less Than or Equal to -0.175
+Slope of MACD Signal Line Less Than or Equal to {Limit}
 y
-Slope of MACD Signal Line Greater Than or Equal to 0.175
+Slope of MACD Signal Line Greater Than or Equal to {Limit}
 y
 ADDITION
 c
 BASIC_LINEAR_COMMAND
 c
-Slope of MACD Signal Line Less Than or Equal to -0.175
+Slope of MACD Signal Line Less Than or Equal to {Limit}
 y
 BASIC_LINEAR_COMMAND
 c
-Slope of MACD Signal Line Greater Than or Equal to 0.175
+Slope of MACD Signal Line Greater Than or Equal to {Limit}
 y
 s
 c
@@ -358,7 +370,9 @@ c
 LOW_PRICE
 c
 CONSTANT
-c
+e
+Two
+n
 2
 s
 c
@@ -398,8 +412,9 @@ c
 Standard Deviation
 y
 CONSTANT
-n
+e
 Number of standard deviations
+y
 2
 # Lower band:
 c
@@ -424,8 +439,9 @@ c
 Standard Deviation
 y
 CONSTANT
-n
+e
 Number of standard deviations
+y
 2
 # Set n values to 20
 e
