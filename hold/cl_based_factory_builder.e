@@ -2,7 +2,9 @@ indexing
 	description:
 		"FACTORY_BUILDER that produces factories for a command-line-based %
 		%application"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others - %
+		%see file forum.txt"
+	status2: "Obsolete"
 	date: "$Date$";
 	revision: "$Revision$"
 
