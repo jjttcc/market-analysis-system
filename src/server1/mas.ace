@@ -5,13 +5,9 @@ root
 	MA_SERVER: make
 
 default
-	assertion (check)
-	assertion (require)
-	assertion (ensure)
-	assertion (loop)
-	assertion (invariant)
-	arguments ("-o -f , sunw.txt  4002")
+	assertion (all)
 	arguments ("-o -f , sunw.txt  4001")
+	arguments ("-o -f , sunw.txt  4002")
 	arguments ("-o -f , sunw.txt 2223")
 	arguments ("-o -f , sunw.txt 2224")
 	arguments ("-o -f , sunw.txt 2225")
