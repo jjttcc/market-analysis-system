@@ -86,7 +86,7 @@ feature -- Agent keys
 
 	Sma_key: STRING is "Simple moving average"
 
-	Standard_deviation_key: STRING is "standard deviation"
+	Standard_deviation_key: STRING is "Standard deviation"
 
 feature {NONE} -- Algorithm implementations used by agents
 
