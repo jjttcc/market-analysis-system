@@ -8,7 +8,7 @@ indexing
 
 class TRADABLE_TYPE inherit
 
-	ENUMERATED
+	ENUMERATED [INTEGER]
 
 	TRADABLE_TYPE_VALUES
 
@@ -23,21 +23,25 @@ create {ENUMERATED}
 feature {NONE} -- Initialization
 
 	make_stock is
+			-- Make as a `stock' type
 		do
-			value_index := stock
+			make (stock)
 		end
 
 	make_derivative is
+			-- Make as a `derivative' type
 		do
-			value_index := derivative
+			make (derivative)
 		end
 
 feature -- Access
 
-	value_set: INTEGER_INTERVAL is
+	value_set: LINKED_SET [INTEGER] is
 			-- Allowable values
 		once
-			create Result.make (stock, derivative)
+			create Result.make
+			Result.extend (stock)
+			Result.extend (derivative)
 		end
 
 	name_set: ARRAY [STRING] is
