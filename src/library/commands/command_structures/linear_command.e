@@ -15,7 +15,7 @@ deferred class LINEAR_COMMAND inherit
 			execute, initialize
 		end
 
-	LINEAR_ANALYZER
+	SETTABLE_LINEAR_ANALYZER
 		export
 			{NONE} all
 			{COMMAND_EDITOR, MARKET_FUNCTION_EDITOR} set

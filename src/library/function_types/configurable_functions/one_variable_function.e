@@ -14,7 +14,7 @@ class ONE_VARIABLE_FUNCTION inherit
 			set_innermost_input, reset_parameters
 		end
 
-	LINEAR_ANALYZER
+	SETTABLE_LINEAR_ANALYZER
 		export {NONE}
 			set
 		redefine

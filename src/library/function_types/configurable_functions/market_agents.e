@@ -7,13 +7,15 @@ indexing
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class
+class MARKET_AGENTS inherit
 
-	MARKET_AGENTS
+	GENERAL_UTILITIES
+
+	MARKET_FUNCTION_EDITOR
 
 feature -- Access
 
-	infix "@" (key: INTEGER): PROCEDURE [ANY, TUPLE [AGENT_BASED_FUNCTION]] is
+	infix "@" (key: STRING): PROCEDURE [ANY, TUPLE [AGENT_BASED_FUNCTION]] is
 			-- Current.agents @ key, for convenience
 		do
 			Result := agents @ key
@@ -21,10 +23,75 @@ feature -- Access
 			definition: Result = agents @ key
 		end
 
-feature -- Access
+	keys: ARRAY [STRING] is
+			-- Available agent keys
+		once
+			Result := <<Sma_key, Standard_deviation_key>>
+			Result.compare_objects
+		ensure
+			object_comparison: Result.object_comparison
+		end
 
+	parameters_for (key: STRING): LINKED_SET [FUNCTION_PARAMETER] is
+			-- Function parameters associated with `key'
+		require
+			valid_key: key /= Void and then keys.has (key)
+		do
+			Result := agent_parameter_map @ key
+		ensure
+			result_exists: Result /= Void
+		end
+
+	agent_parameter_map: HASH_TABLE [LINKED_SET [FUNCTION_PARAMETER], STRING] is
+			-- Mapping of each agent key to its associated
+			-- FUNCTION_PARAMETER set
+		local
+			fp_set: LINKED_SET [FUNCTION_PARAMETER]
+		once
+			create Result.make (0)
+			create fp_set.make
+			fp_set.extend (create {INTEGER_FUNCTION_PARAMETER}.make (
+				Sma_fp_default))
+			Result.put (fp_set, Sma_key)
+			create fp_set.make
+			fp_set.extend (create {INTEGER_FUNCTION_PARAMETER}.make (
+				Standard_deviation_fp_default))
+			Result.put (fp_set, Standard_deviation_key)
+		ensure
+			result_exists: Result /= Void
+		end
+
+feature -- Agents
+
+	two_argument_procedure (f: AGENT_BASED_FUNCTION) is
+		require
+			f_output_empty: f.output /= Void and f.output.is_empty
+		local
+--!!!			ml: LIST [MARKET_TUPLE]
+--!!!			extraction_operator: RESULT_COMMAND [REAL]
+--!!!			current_value, latest_extracted_value, initial_value: DOUBLE
+--!!!			values: ARRAYED_LIST [DOUBLE]
+			analyzer: TWO_VARIABLE_LINEAR_ANALYZER
+		do
+--			create values.make (0); initial_value := 0
+			-- @@Note: initial_value needs to be made configurable.
+			check_objects (<<f.inputs>>, <<"indicator">>,
+				agent has_elements (?, 2), agent handle_invalid_state, Void,
+				"Has less than two input functions")
+			check_objects (<<f.inputs.first, f.inputs.i_th (2)>>,
+				<<"input function 1", "input function 2">>,
+				agent output_not_empty, agent handle_invalid_state,
+				Void, "is empty")
+			create analyzer
+			-- Ensure that f.inputs.first.output and f.inputs.i_th (2).output,
+			-- which will be used as input, start at the same record.
+			analyzer.line_up (f.inputs.first.output, f.inputs.i_th (2).output)
+		end
+
+--!!!!!!!!!!!@@@@@@@@@Each procedure should be mapped to the parameters it
+--uses.
 	sma (f: AGENT_BASED_FUNCTION) is
-			-- Standard moving average
+			-- Simple moving average
 		require
 			f_output_empty: f.output /= Void and f.output.is_empty
 		do
@@ -42,98 +109,13 @@ feature -- Access
 				subtraction_operator)
 		end
 
--- !!!Original implementation - make it obsolete (or remove it) if the
---version using n_based_accumulation becomes the final version.
-	original_sma (f: AGENT_BASED_FUNCTION) is
-			-- Standard moving average
-		require
-			f_output_empty: f.output /= Void and f.output.is_empty
-		do
-			sma_based_calculation (f, agent sum_divided_by_n)
-		end
+feature -- Agent keys
 
--- !!!Original implementation - make it obsolete (or remove it) if the
---version using n_based_accumulation becomes the final version.
-	original_standard_deviation (f: AGENT_BASED_FUNCTION) is
-			-- Standard deviation
-		require
-			f_output_empty: f.output /= Void and f.output.is_empty
-		do
-			sma_based_calculation (f, agent sum_of_squares_of_avg_divided_by_n)
-		end
+	Sma_key: STRING is "Simple moving average"
 
--- !!!May be replaced by n_based_accumulation - If so, make it obsolete
--- (or remove it).
-	sma_based_calculation (f: AGENT_BASED_FUNCTION; calculation: FUNCTION [
-		ANY, TUPLE [DOUBLE, INTEGER, ARRAYED_LIST [DOUBLE]], DOUBLE]) is
-			-- Calculation that follows the pattern of a
-			-- standard moving average calculation, using an agent to
-			-- allow some degree of configuration
-		require
-			f_output_empty: f.output /= Void and f.output.is_empty
-		local
-			ml: LIST [MARKET_TUPLE]
-			op: RESULT_COMMAND [REAL]
-			sum, latest_value: DOUBLE
-			n: INTEGER
-			values: ARRAYED_LIST [DOUBLE]
-		do
-			create values.make (0)
-			if f.inputs.is_empty or else f.inputs.first.output.is_empty then
-				if f.inputs.is_empty then
-					-- !!! Report error condition.
-				end
-			else
-				n := integer_parameter_value (f, 10)
-				ml := f.inputs.first.output
-				if f.operator /= Void then
-					op := f.operator
-				else
-					create {BASIC_NUMERIC_COMMAND} op
-				end
-				from
-					from
-						ml.start
-						sum := 0
-					invariant
-						values_ml_index_relation1: values.count + 1 = ml.index
-					until
-						ml.index = n or ml.exhausted
-					loop
-						op.execute (ml.item)
-						sum := sum + op.value
-						values.extend (op.value)
-						ml.forth
-					end
-					if not ml.exhausted then
-						op.execute (ml.item)
-						sum := sum + op.value
-						values.extend (op.value)
-						f.output.extend (create {SIMPLE_TUPLE}.make (
-							ml.item.date_time, ml.item.end_date,
-							calculation.item ([sum, n, values])))
-						ml.forth
-						check
-							values_ml_index_relation2:
-								values.count + 1 = ml.index
-						end
-					end
-				invariant
-					values_ml_index_relation3: values.count + 1 = ml.index
-				until
-					ml.exhausted
-				loop
-					op.execute (ml.item)
-					latest_value := op.value
-					sum := sum - values.i_th (ml.index - n) + latest_value
-					values.extend (latest_value)
-					f.output.extend (create {SIMPLE_TUPLE}.make (
-						ml.item.date_time, ml.item.end_date,
-						calculation.item ([sum, n, values])))
-					ml.forth
-				end
-			end
-		end
+	Standard_deviation_key: STRING is "standard deviation"
+
+feature {NONE} -- Algorithm implementations used by agents
 
 --@@Put this operation into its own class (N_BASED_ACCUMULATION)
 --with settable parameters, similar to INTEGRAL or SUM under
@@ -171,88 +153,68 @@ feature -- Access
 		do
 			create values.make (0); initial_value := 0
 			-- @@Note: initial_value needs to be made configurable.
-			if
-				f.inputs.is_empty or else f.inputs.first.output.is_empty or
-				n <= 1
-			then
-				if f.inputs.is_empty then
-					-- !!! Report error condition.
-				end
-				if n <= 1 then
-					-- !!! Report error condition.
-				end
+			check_objects (<<f.inputs>>, <<"indicator">>,
+				agent has_elements (?, 1), agent handle_invalid_state, Void,
+				"has no input function")
+			check_objects (<<f.inputs.first>>, <<"input function">>,
+				agent output_not_empty, agent handle_invalid_state,
+				Void, "is empty")
+			check_objects (<<n>>, <<"n value">>,
+				agent greater_than (?, 1), agent handle_invalid_state,
+				Void, "is not greater than 1")
+			ml := f.inputs.first.output
+			if f.operator /= Void then
+				extraction_operator := f.operator
 			else
---!!!Get the n-value here, or leave the passed-in `n' argument??:
---				n := integer_parameter_value (f, 10)
-				ml := f.inputs.first.output
-				if f.operator /= Void then
-					extraction_operator := f.operator
-				else
-					create {BASIC_NUMERIC_COMMAND} extraction_operator
-				end
+				create {BASIC_NUMERIC_COMMAND} extraction_operator
+			end
+			from
 				from
-					from
-						ml.start
-						current_value := initial_value
-					invariant
-						values_ml_index_relation1: values.count + 1 = ml.index
-					until
-						ml.index = n or ml.exhausted
-					loop
-						extraction_operator.execute (ml.item)
-						current_value := binary_double_operation (accum_op,
-							current_value, extraction_operator.value)
-						values.extend (extraction_operator.value)
-						ml.forth
-					end
-					if not ml.exhausted then
-						extraction_operator.execute (ml.item)
-						current_value := binary_double_operation (accum_op,
-							current_value, extraction_operator.value)
-						values.extend (extraction_operator.value)
-						f.output.extend (create {SIMPLE_TUPLE}.make (
-							ml.item.date_time, ml.item.end_date,
-							calculation.item ([current_value, n, values])))
-						ml.forth
-						check
-							values_ml_index_relation2:
-								values.count + 1 = ml.index
-						end
-					end
+					ml.start
+					current_value := initial_value
 				invariant
-					values_ml_index_relation3: values.count + 1 = ml.index
+					values_ml_index_relation1: values.count + 1 = ml.index
 				until
-					ml.exhausted
+					ml.index = n or ml.exhausted
 				loop
 					extraction_operator.execute (ml.item)
-					latest_extracted_value := extraction_operator.value
 					current_value := binary_double_operation (accum_op,
-						current_value, latest_extracted_value)
-					current_value := binary_double_operation (drop_off_op,
-						current_value, values.i_th (ml.index - n))
-					values.extend (latest_extracted_value)
+						current_value, extraction_operator.value)
+					values.extend (extraction_operator.value)
+					ml.forth
+				end
+				if not ml.exhausted then
+					extraction_operator.execute (ml.item)
+					current_value := binary_double_operation (accum_op,
+						current_value, extraction_operator.value)
+					values.extend (extraction_operator.value)
 					f.output.extend (create {SIMPLE_TUPLE}.make (
 						ml.item.date_time, ml.item.end_date,
 						calculation.item ([current_value, n, values])))
 					ml.forth
+					check
+						values_ml_index_relation2:
+							values.count + 1 = ml.index
+					end
 				end
+			invariant
+				values_ml_index_relation3: values.count + 1 = ml.index
+			until
+				ml.exhausted
+			loop
+				extraction_operator.execute (ml.item)
+				latest_extracted_value := extraction_operator.value
+				current_value := binary_double_operation (accum_op,
+					current_value, latest_extracted_value)
+				current_value := binary_double_operation (drop_off_op,
+					current_value, values.i_th (ml.index - n))
+				values.extend (latest_extracted_value)
+				f.output.extend (create {SIMPLE_TUPLE}.make (
+					ml.item.date_time, ml.item.end_date,
+					calculation.item ([current_value, n, values])))
+				ml.forth
 			end
 		end
-
-feature {NONE} -- Implementation
-
-	agents: HASH_TABLE [PROCEDURE [ANY, TUPLE [AGENT_BASED_FUNCTION]],
-		INTEGER] is
-			-- Table of available "market-agents"
-		once
-			create Result.make (0)
-			Result.put (agent sma, Sma_key)
-			Result.put (agent standard_deviation, Standard_deviation_key)
-		end
-
-feature -- Agent keys
-
-	Sma_key, Standard_deviation_key: INTEGER is unique
 
 feature {NONE} -- COMMAND-based utility routines
 
@@ -311,6 +273,17 @@ feature {NONE} -- COMMAND-based utility routines
 
 	subtraction_operator_implementation: SUBTRACTION
 
+feature {NONE} -- Implementation
+
+	agents: HASH_TABLE [PROCEDURE [ANY, TUPLE [AGENT_BASED_FUNCTION]],
+		STRING] is
+			-- Table of available "market-agents"
+		once
+			create Result.make (0)
+			Result.put (agent sma, Sma_key)
+			Result.put (agent standard_deviation, Standard_deviation_key)
+		end
+
 feature {NONE} -- Utilities
 
 --@@These can perhaps go into a separate class (perhaps MARKET_UTILITIES).
@@ -354,7 +327,7 @@ feature {NONE} -- Utilities
 	integer_parameter_value (f: AGENT_BASED_FUNCTION; deflt: INTEGER):
 		INTEGER is
 			-- f's first parameter value if it exists and is an integer -
-			-- otherwise, deflt
+			-- otherwise, `deflt'
 		do
 			if
 				not f.parameters.is_empty and
@@ -366,10 +339,46 @@ feature {NONE} -- Utilities
 			end
 		end
 
+	has_elements (l: LIST [MARKET_FUNCTION]; n: INTEGER): BOOLEAN is
+			-- Does `l' have at least `n' elements?
+		do
+			Result := l /= Void and then l.count >= n
+		end
+
+	output_not_empty (f: MARKET_FUNCTION): BOOLEAN is
+			-- Is `f.output' not empty?
+		do
+			Result := not f.output.is_empty
+		end
+
+	greater_than (target, n: INTEGER): BOOLEAN is
+			-- Is `target' greater than `n'?
+		do
+			Result := target > n
+		end
+
+	handle_invalid_state (l: LIST [STRING]; arg: ANY; info: STRING) is
+			-- Handle an invalid state that occurred during processing.
+		local
+			ex_srv: expanded EXCEPTION_SERVICES
+		do
+			ex_srv.last_exception_status.set_fatal (True)
+			ex_srv.handle_exception (info)
+		end
+
+feature {NONE} -- Constants
+
+	Sma_fp_default: INTEGER is 13
+			-- Default function-parameter value for the `sma' agent
+
+	Standard_deviation_fp_default: INTEGER is 5
+			-- Default function-parameter value for the
+			-- `standard_deviation' agent
+
 feature {NONE} -- Old, out-of-date features that should soon be removed!!!
 
 	old_sma (f: AGENT_BASED_FUNCTION): MARKET_TUPLE_LIST [MARKET_TUPLE] is
-			-- Standard moving average
+			-- Simple moving average
 		local
 			ml: LIST [MARKET_TUPLE]
 			l: LIST [MARKET_FUNCTION]
@@ -477,6 +486,99 @@ feature {NONE} -- Old, out-of-date features that should soon be removed!!!
 					Result.extend (create {SIMPLE_TUPLE}.make (
 						ml.item.date_time, ml.item.end_date,
 						math.sqrt (sos / n)))
+					ml.forth
+				end
+			end
+		end
+
+-- !!!Original implementation - make it obsolete (or remove it) if the
+--version using n_based_accumulation becomes the final version.
+	original_sma (f: AGENT_BASED_FUNCTION) is
+			-- Simple moving average
+		require
+			f_output_empty: f.output /= Void and f.output.is_empty
+		do
+			sma_based_calculation (f, agent sum_divided_by_n)
+		end
+
+-- !!!Original implementation - make it obsolete (or remove it) if the
+--version using n_based_accumulation becomes the final version.
+	original_standard_deviation (f: AGENT_BASED_FUNCTION) is
+			-- Standard deviation
+		require
+			f_output_empty: f.output /= Void and f.output.is_empty
+		do
+			sma_based_calculation (f, agent sum_of_squares_of_avg_divided_by_n)
+		end
+
+-- !!!May be replaced by n_based_accumulation - If so, make it obsolete
+-- (or remove it).
+	sma_based_calculation (f: AGENT_BASED_FUNCTION; calculation: FUNCTION [
+		ANY, TUPLE [DOUBLE, INTEGER, ARRAYED_LIST [DOUBLE]], DOUBLE]) is
+			-- Calculation that follows the pattern of a
+			-- Simple moving average calculation, using an agent to
+			-- allow some degree of configuration
+		require
+			f_output_empty: f.output /= Void and f.output.is_empty
+		local
+			ml: LIST [MARKET_TUPLE]
+			op: RESULT_COMMAND [REAL]
+			sum, latest_value: DOUBLE
+			n: INTEGER
+			values: ARRAYED_LIST [DOUBLE]
+		do
+			create values.make (0)
+			if f.inputs.is_empty or else f.inputs.first.output.is_empty then
+				if f.inputs.is_empty then
+					-- !!! Report error condition.
+				end
+			else
+				n := integer_parameter_value (f, 10)
+				ml := f.inputs.first.output
+				if f.operator /= Void then
+					op := f.operator
+				else
+					create {BASIC_NUMERIC_COMMAND} op
+				end
+				from
+					from
+						ml.start
+						sum := 0
+					invariant
+						values_ml_index_relation1: values.count + 1 = ml.index
+					until
+						ml.index = n or ml.exhausted
+					loop
+						op.execute (ml.item)
+						sum := sum + op.value
+						values.extend (op.value)
+						ml.forth
+					end
+					if not ml.exhausted then
+						op.execute (ml.item)
+						sum := sum + op.value
+						values.extend (op.value)
+						f.output.extend (create {SIMPLE_TUPLE}.make (
+							ml.item.date_time, ml.item.end_date,
+							calculation.item ([sum, n, values])))
+						ml.forth
+						check
+							values_ml_index_relation2:
+								values.count + 1 = ml.index
+						end
+					end
+				invariant
+					values_ml_index_relation3: values.count + 1 = ml.index
+				until
+					ml.exhausted
+				loop
+					op.execute (ml.item)
+					latest_value := op.value
+					sum := sum - values.i_th (ml.index - n) + latest_value
+					values.extend (latest_value)
+					f.output.extend (create {SIMPLE_TUPLE}.make (
+						ml.item.date_time, ml.item.end_date,
+						calculation.item ([sum, n, values])))
 					ml.forth
 				end
 			end

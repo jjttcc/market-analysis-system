@@ -628,6 +628,7 @@ feature {NONE} -- Implementation
 			l: LINKED_SET [COMPLEX_FUNCTION]
 			ovf: ONE_VARIABLE_FUNCTION
 			tvf: TWO_VARIABLE_FUNCTION
+			abf: AGENT_BASED_FUNCTION
 			mfl: MARKET_FUNCTION_LINE
 			chosen_functions: LINKED_SET [MARKET_FUNCTION]
 			operators: LINKED_SET [COMMAND]
@@ -684,9 +685,17 @@ feature {NONE} -- Implementation
 							editor.last_selected_right_tvf_input)
 						f_changed := True
 					else
-						-- l.item is a MARKET_DATA_FUNCTION, which does
-						-- not need its input function set.
-						show_message (l.item.name + no_function_msg)
+						abf ?= l.item
+						if abf /= Void then
+							editor.set_abf_input (abf)
+							chosen_functions.extend (
+								editor.last_selected_abf_input)
+							f_changed := True
+						else
+							-- l.item is a MARKET_DATA_FUNCTION, which does
+							-- not need its input function set.
+							show_message (l.item.name + no_function_msg)
+						end
 					end
 				end
 				l.forth

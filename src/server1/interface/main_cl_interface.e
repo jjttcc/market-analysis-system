@@ -383,7 +383,6 @@ feature {NONE} -- Implementation
 			-- Menu for viewing market function data
 		local
 			finished: BOOLEAN
-			gs: expanded GLOBAL_SERVER_FACILITIES
 		do
 			from
 			until

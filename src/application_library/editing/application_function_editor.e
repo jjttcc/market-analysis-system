@@ -59,6 +59,9 @@ feature -- Access
 	last_selected_ovf_input: MARKET_FUNCTION
 			-- Last input function chosen in `set_ovf_input'
 
+	last_selected_abf_input: MARKET_FUNCTION
+			-- Last input function chosen in `set_abf_input'
+
 	last_selected_left_tvf_input: MARKET_FUNCTION
 			-- Last left input function chosen in `set_tvf_input'
 
@@ -308,7 +311,7 @@ feature -- Basic operations
 		local
 			cmd: RESULT_COMMAND [REAL]
 		do
---!!!			set_abf_input (f)
+			set_abf_input (f)
 			operator_maker.reset
 			cmd ?= operator_maker.command_selection_from_type (
 						operator_maker.Real_result_command,
@@ -341,6 +344,34 @@ feature -- Basic operations
 			f.set_inputs (i1, i2)
 			last_selected_left_tvf_input := i1
 			last_selected_right_tvf_input := i2
+		end
+
+	set_abf_input (f: AGENT_BASED_FUNCTION) is
+			-- Set the input function for the AGENT_BASED_FUNCTION `f'.
+		local
+			key_selection: LINKED_LIST [PAIR [STRING, BOOLEAN]]
+			keys: LINEAR [STRING]
+			key_choices: LIST [STRING]
+		do
+			last_selected_abf_input :=
+				user_interface.market_function_selection (
+				concatenation (<<f.name, "'s (", f.generator,
+				") input function">>), Void)
+			f.clear_inputs
+			f.add_input (last_selected_abf_input)
+			create key_selection.make
+			keys := f.agent_table.keys.linear_representation
+			keys.do_all (agent append_string_boolean_pair (key_selection, ?,
+				False))
+			from until key_choices /= Void and then key_choices.count = 1 loop
+				user_interface.choice ("Select a procedure for the %
+					%function calculation.", key_selection, 1)
+				key_choices := user_interface.choices_from (key_selection)
+				if key_choices.count = 0 then
+					user_interface.show_message ("Please choose a procedure.")
+				end
+			end
+			f.set_calculator_key (key_choices @ 1)
 		end
 
 feature {NONE} -- Implementation

@@ -10,7 +10,7 @@ indexing
 
 deferred class ONE_VARIABLE_LINEAR_ANALYZER inherit
 
-	LINEAR_ANALYZER
+	SETTABLE_LINEAR_ANALYZER
 		redefine
 			start
 		end

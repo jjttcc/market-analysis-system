@@ -16,6 +16,8 @@ class AGENT_BASED_FUNCTION inherit
 			immediate_direct_parameters
 		end
 
+	LINEAR_ANALYZER
+
 creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 	make
@@ -26,17 +28,17 @@ feature {NONE} -- Initialization
 		require
 			key_exists: key /= Void
 		do
+			if ins = Void then
+				create {LINKED_LIST [MARKET_FUNCTION]} inputs.make
+			else
+				inputs := ins
+			end
 			if op /= Void then
 				set_operator (op)
 				operator.initialize (Current)
 			end
 			create output.make (0)
 			calculator_key := key
-			if ins = Void then
-				create {LINKED_LIST [MARKET_FUNCTION]} inputs.make
-			else
-				inputs := ins
-			end
 			create immediate_direct_parameters.make
 		ensure
 			set: operator = op and calculator_key = key and
@@ -60,7 +62,7 @@ feature -- Access
 			Result := agent_table @ calculator_key
 		end
 
-	calculator_key: INTEGER
+	calculator_key: STRING
 			-- Key to Current's calculator
 
 	trading_period_type: TIME_PERIOD_TYPE is
@@ -145,6 +147,15 @@ feature -- Access
 				not inputs.is_empty implies Result /= Void
 		end
 
+	target: CHAIN [MARKET_TUPLE] is
+		do
+			if not inputs.is_empty then
+				Result := inputs.first.output
+			else
+				Result := default_target
+			end
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is
@@ -159,6 +170,7 @@ feature -- Status report
 			Result := operator /= Void
 		end
 
+--!!!!!!!Obsolete?:
 	operator_needs_initializing: BOOLEAN
 			-- Does `operator' need initializing when `set_innermost_input'
 			-- is called?
@@ -168,11 +180,19 @@ feature {NONE}
 	do_process is
 			-- Execute the `calculator'.
 		do
+			check
+				innermost_input_set: inputs.count > 0 and
+					innermost_input /= Void
+			end
 			calculator.call ([Current])
 		end
 
 	pre_process is
 		do
+			check
+				innermost_input_set: inputs.count > 0 and
+					innermost_input /= Void
+			end
 			from inputs.start until inputs.exhausted loop
 				if not inputs.item.processed then
 					inputs.item.process
@@ -181,7 +201,7 @@ feature {NONE}
 			end
 		end
 
-feature {FACTORY} -- Status setting
+feature {FACTORY} -- Element change
 
 	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
 		do
@@ -198,7 +218,7 @@ feature {FACTORY} -- Status setting
 					inputs.forth
 				end
 			end
-			if operator /= Void and operator_needs_initializing then
+			if operator /= Void then
 				-- !!!Check if the operator_needs_initializing
 				-- construct is adequate or if it's even needed.
 				operator.initialize (Current)
@@ -206,7 +226,25 @@ feature {FACTORY} -- Status setting
 			output.wipe_out
 		end
 
-feature {MARKET_FUNCTION_EDITOR}
+feature {MARKET_FUNCTION_EDITOR} -- Element change
+
+	set_calculator_key (arg: STRING) is
+			-- Set `calculator_key' to `arg' and add the associated `params'.
+		require
+			arg_not_void: arg /= Void
+			valid_key: agent_table.keys.has (arg)
+		local
+			params: LINEAR [FUNCTION_PARAMETER]
+		do
+			calculator_key := arg
+			immediate_direct_parameters.wipe_out
+			params := agent_table.parameters_for (calculator_key)
+			params.do_all (agent add_parameter)
+		ensure
+			calculator_key_set: calculator_key = arg and calculator_key /= Void
+			associated_parameters_added: immediate_direct_parameters.count = 
+				agent_table.parameters_for (calculator_key).count
+		end
 
 	reset_parameters is
 		do
@@ -219,6 +257,18 @@ feature {MARKET_FUNCTION_EDITOR}
 			immediate_direct_parameters.extend (p)
 		end
 
+	add_input (f: MARKET_FUNCTION) is
+			-- Add `f' to `inputs'.
+		require
+			f_exists: f /= Void
+		do
+			inputs.extend (f)
+		ensure
+			one_more: inputs.count = old inputs.count + 1
+			added: inputs.last = f
+		end
+
+--!!!!!!!Obsolete?:
 	set_operator_needs_initializing (arg: BOOLEAN) is
 			-- Set `operator_needs_initializing' to `arg'.
 		require
@@ -233,6 +283,14 @@ feature {MARKET_FUNCTION_EDITOR, MARKET_AGENTS}
 
 	inputs: LIST [MARKET_FUNCTION]
 			-- All inputs to be used for processing
+
+feature {MARKET_FUNCTION_EDITOR} -- Removal
+
+	clear_inputs is
+			-- Remove all elements of `inputs'.
+		do
+			inputs.wipe_out
+		end
 
 feature {NONE} -- Implementation
 
@@ -251,12 +309,20 @@ feature {NONE} -- Implementation
 			mf.reset_parameters
 		end
 
+	default_target: CHAIN [MARKET_TUPLE] is
+		once
+			create {LINKED_LIST [MARKET_TUPLE]} Result.make
+		end
+
 invariant
 
 	inputs_exist: inputs /= Void
 	has_inputs_count_children: children.count = inputs.count
+	at_least_one_input_when_innermost_input_set:
+		innermost_input /= Void implies inputs.count > 0
 	operator_used_definition: operator_used = (operator /= Void)
 	calculator_exists: calculator /= Void
 	calculator_definition: calculator = agent_table @ calculator_key
+	immediate_direct_parameters_exist: immediate_direct_parameters /= Void
 
 end

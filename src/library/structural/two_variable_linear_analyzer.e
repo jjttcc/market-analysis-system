@@ -9,29 +9,31 @@ indexing
 
 class TWO_VARIABLE_LINEAR_ANALYZER inherit
 
-	LINEAR_ANALYZER
+	SETTABLE_LINEAR_ANALYZER
 		rename
 			target as target1, -- x in "z = f(x, y)"
 			set as set_unused
-		export {NONE}
-			set_unused
+		export
+			{MARKET_FUNCTION_EDITOR} all
+			{NONE} set_unused
 		redefine
 			forth, start
 		select
 			target1
 		end
 
-	LINEAR_ANALYZER
+	SETTABLE_LINEAR_ANALYZER
 		rename
 			target as target2, -- y in "z = f(x, y)"
 			set as set_unused
-		export {NONE}
-			set_unused
+		export
+			{MARKET_FUNCTION_EDITOR} all
+			{NONE} set_unused
 		redefine
 			forth, start
 		end
 
-feature {NONE} -- Hook routines
+feature {MARKET_FUNCTION_EDITOR} -- Hook routines
 
 	forth is
 		do
@@ -52,7 +54,7 @@ feature {NONE} -- Hook routines
 					target1.item.date_time.is_equal (target2.item.date_time)
 		end
 
-feature {NONE} -- Implementation
+feature {MARKET_FUNCTION_EDITOR} -- Implementation
 
 	set1 (t: like target1) is
 			-- Replacement for `set' - set `target1'.
@@ -66,7 +68,7 @@ feature {NONE} -- Implementation
 			target2 := t
 		end
 
-feature {NONE} -- Utility routines
+feature {MARKET_FUNCTION_EDITOR} -- Utility routines
 
 	missing_periods (l1, l2: LINEAR [MARKET_TUPLE]): BOOLEAN is
 			-- Are there missing periods in l1 and l2 with
