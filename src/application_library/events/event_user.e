@@ -11,7 +11,7 @@ class EVENT_USER inherit
 			make as u_make
 		end
 
-	EVENT_REGISTRANT_WITH_HISTORY
+	MARKET_EVENT_REGISTRANT
 		rename
 			make as er_make
 		end
@@ -34,8 +34,9 @@ creation
 
 feature -- Initialization
 
-	make is
+	make (event_history_file_name: STRING) is
 		do
+			hfile_name := event_history_file_name
 			u_make
 			er_make
 		end

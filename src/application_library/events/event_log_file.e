@@ -14,7 +14,7 @@ class EVENT_LOG_FILE inherit
 			all
 		end
 
-	EVENT_REGISTRANT_WITH_HISTORY
+	MARKET_EVENT_REGISTRANT
 		rename
 			make as er_make
 		end
@@ -32,10 +32,11 @@ creation
 
 feature -- Initialization
 
-	make (fname: STRING) is
+	make (fname, event_history_file_name: STRING) is
 		require
 			not_void_and_not_empty: fname /= Void and not fname.empty
 		do
+			hfile_name := event_history_file_name
 			make_open_append (fname)
 			er_make
 		end
