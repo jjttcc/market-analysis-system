@@ -267,7 +267,8 @@ invariant
 
 	read_implication: readonly implies not ok_to_save and not abort_edit
 	save_implication: ok_to_save implies not readonly and not abort_edit
-	not_locked_when_readonly: readonly implies lock /= Void and not lock.locked
+	not_locked_when_readonly: readonly implies
+		(lock /= Void implies not lock.locked)
 	abort_rules: abort_edit implies not dirty and
 		(lock /= Void implies not lock.locked)
 
