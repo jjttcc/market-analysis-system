@@ -5,7 +5,6 @@ replacestart
 {data_dir}<mas_lib_dir>/data
 {mas_directory_setting}<mas_lib_dir>
 xterm -e *
-{mas_version}1.6.6g
 {macl_shell}cmd ~/c start "macl" cmd ~/c 
 {browse_docs_cmd}cmd ~/c start <doc_dir>/index.html
 {browse_intro_command}cmd ~/c start <doc_dir>/mct_introduction.html

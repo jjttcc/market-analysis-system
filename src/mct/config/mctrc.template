@@ -23,7 +23,7 @@
 # that follow by surrounding it with <>, e.g.: <var1>/<var2>.
 
 # The main mas directory
-define	main_mas_dir:{main_mas_dir}{mas_version}
+define	main_mas_dir:{main_mas_dir}
 
 # The mas 'lib' directory
 define	mas_lib_dir:<main_mas_dir>/lib
