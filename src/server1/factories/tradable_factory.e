@@ -331,12 +331,12 @@ feature {NONE} -- Implementation
 		local
 			flst: LIST [MARKET_FUNCTION]
 		do
-			flst := function_library
 			if open_interest then
 				-- t is a derivative instrument - all functions are valid,
-				-- so leave flst set to `function_library'.
+				-- so set flst to `function_library'.
+				flst := function_library
 			else
-				-- t is a stock - use valid stock functions.
+				-- t is a stock - use only valid stock functions.
 				flst := stock_function_library
 			end
 			check flst /= Void end
