@@ -1,5 +1,5 @@
 indexing
-	description: "Command that simply give as their `value', the value of %
+	description: "Commands that simply give as their `value', the value of %
 		%their `n' feature";
 	author: "Jim Cochrane"
 	date: "$Date$";
