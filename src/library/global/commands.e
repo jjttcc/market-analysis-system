@@ -127,7 +127,8 @@ feature -- Access
 			-- Create a pair for the BASIC_NUMERIC_COMMAND instance
 			-- (bnc_dummy) and add it to the list.
 			create pair.make (bnc_dummy,
-				"Operator that processes data for the current trading period")
+				"Operator that obtains the numeric value for the current %
+				%trading period")
 			Result.extend (pair)
 			create {HIGHEST_VALUE} cmd.make (default_market_tuple_list,
 				bnc_dummy, 1)
