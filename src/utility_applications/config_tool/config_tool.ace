@@ -39,12 +39,13 @@ default
 cluster
 	config_tool:		"$MAS/src/utility_applications/config_tool"
 
-
 	root_cluster (config_tool):		"$/root"
 
 	support (config_tool):		"$/support"
 
 	configuration (config_tool):		"$/configuration"
+
+	commands (config_tool):		"$/commands"
 
 	eiflib:		"$MAS/src/eiffel_library"
 

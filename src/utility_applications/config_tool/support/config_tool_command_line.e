@@ -49,33 +49,28 @@ feature -- Access
 
 feature -- Access -- settings
 
-	command_file: STRING
+	command_file_path: STRING
 			-- Path of the file from which instructions (commands) will be read
 
-	target_file: STRING
+	target_file_path: STRING
 			-- Path of the file to be modified
-
-	incaseneeded: PLAIN_TEXT_FILE
-			-- The input file when `input_from_file'
-
-feature {NONE} -- Implementation - Hook routine implementations
 
 feature {NONE} -- Implementation
 
-	set_command_file is
-			-- Set `command_file' and remove its settings from `contents'.
+	set_command_file_path is
+			-- Set `command_file_path' and remove its settings from `contents'.
 		do
 			if option_in_contents ('c') then
 				if contents.item.count > 2 then
-					create command_file.make (contents.item.count - 2)
-					command_file.append (contents.item.substring (
+					create command_file_path.make (contents.item.count - 2)
+					command_file_path.append (contents.item.substring (
 						3, contents.item.count))
 					contents.remove
 				else
 					contents.remove
 					if not contents.exhausted then
-						create command_file.make (contents.item.count)
-						command_file.append (contents.item)
+						create command_file_path.make (contents.item.count)
+						command_file_path.append (contents.item)
 						contents.remove
 					else
 						error_occurred := True
@@ -85,24 +80,24 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_target_file is
-			-- Set `target_file' and remove its settings from `contents'.
+	set_target_file_path is
+			-- Set `target_file_path' and remove its settings from `contents'.
 		do
 			if option_in_contents ('f') then
 				if contents.item.count > 2 then
-					create target_file.make (contents.item.count - 2)
-					target_file.append (contents.item.substring (
+					create target_file_path.make (contents.item.count - 2)
+					target_file_path.append (contents.item.substring (
 						3, contents.item.count))
 					contents.remove
 				else
 					contents.remove
 					if not contents.exhausted then
-						create target_file.make (contents.item.count)
-						target_file.append (contents.item)
+						create target_file_path.make (contents.item.count)
+						target_file_path.append (contents.item)
 						contents.remove
 					else
 						error_occurred := True
-						log_errors (<<Command_file_error>>)
+						log_errors (<<Target_file_error>>)
 					end
 				end
 			end
@@ -115,8 +110,8 @@ feature {NONE} -- Implementation queries
 			-- unconditionally - for convenience
 		once
 			create Result.make
-			Result.extend (agent set_command_file)
-			Result.extend (agent set_target_file)
+			Result.extend (agent set_command_file_path)
+			Result.extend (agent set_target_file_path)
 		end
 
 	initialization_complete: BOOLEAN

@@ -46,6 +46,8 @@ cluster
 
 	configuration (config_tool):		"$/configuration"
 
+	commands (config_tool):		"$/commands"
+
 	eiflib:		"$MAS/src/eiffel_library"
 
 	libarch (eiflib):		"$/architectural"

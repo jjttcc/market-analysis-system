@@ -14,12 +14,13 @@ class CONFIGURATION inherit
 		export
 			{NONE} all
 		redefine
---			post_process_settings, use_customized_setting,
 			use_customized_setting, do_customized_setting, field_separator
---			do_customized_setting, config_file, log_error
 		end
 
 	CONFIGURATION_PROPERTIES
+		export
+			{NONE} all
+		end
 
 create
 
@@ -37,9 +38,6 @@ feature {NONE} -- Initialization
 		do
 			create replacement_specifications.make (0)
 			create settings.make (0)
-
---!!!!This is probably obsolete:
-			settings.extend ("", Replacement_specifier)
 		end
 
 feature -- Access
@@ -51,8 +49,6 @@ feature -- Status report
 	fatal_error_status: BOOLEAN
 			-- Did a fatal configuration error occur?
 
-feature -- Status setting
-
 feature -- Basic operations
 
 feature {NONE} -- Implementation - Hook routine implementations
@@ -62,10 +58,6 @@ feature {NONE} -- Implementation - Hook routine implementations
 	value_index: INTEGER is 2
 
 	configuration_type: STRING is "Configuration Tool"
-
---	post_process_settings is
---		do
---		end
 
 	check_results is
 		do
@@ -88,7 +80,8 @@ feature {NONE} -- Implementation - Hook routine implementations
 				elseif equal (value, End_specifier) then
 					in_replace_block := False
 				else
-					log_error ("Appropriate error message goes here!!!")
+					log_error ("Invalid token for " + key + ": " + value +
+						"%N(on line " + current_line.out + ")%N")
 				end
 			elseif in_replace_block then
 				replacement_specifications.force (value, key)

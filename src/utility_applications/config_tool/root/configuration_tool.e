@@ -1,7 +1,9 @@
 indexing
 	description:
-		"Root class for the MAS Control Terminal, an application to control %
-		%the MAS server, charting client, and other MAS components"
+		"Root class for the Configuration Tool, a program that allows %
+		%configuration actions to be carried out without the need of %
+		%external tools, such as Perl, that may not be available %
+		%during installation on a Windows platform"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -15,6 +17,11 @@ class CONFIGURATION_TOOL inherit
 			{NONE} all
 		redefine
 			application_name
+		end
+
+	ERROR_SUBSCRIBER
+		export
+			{NONE} all
 		end
 
 create
@@ -34,7 +41,7 @@ feature {NONE} -- Initialization
 				print (options.usage)
 				exit (0)
 			end
-			if options.command_file /= Void then
+			if options.command_file_path /= Void then
 				process_commands
 			end
         end
@@ -48,19 +55,20 @@ feature {NONE} -- Implementation
 
 	process_commands is
 		local
-			configuration: CONFIGURATION
+			file_changer: FILE_PROCESSOR
 		do
---          Check that configuration.target_file exists.
-			create configuration.make (options.command_file)
-			print ("cmd file is: " + options.command_file + "%N")
---			for each specification s in
---			  configuration.replacement_specifications:
---			    perform the substitution specified by s on
---				  configuration.target_file (as a regular expression)
+			create file_changer.make
+			file_changer.add_error_subscriber (Current)
+			file_changer.execute (options)
 		end
 
 feature {NONE} -- Implementation - hook routine implementations
 
 	application_name: STRING is "application"
+
+	notify (s: STRING) is
+		do
+			print (s)
+		end
 
 end
