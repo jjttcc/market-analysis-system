@@ -13,11 +13,12 @@ indexing
 		%to add a factory reference to tradable_factories for each element %
 		%of file_names (although they will still need to add the Void %
 		%elements)."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others - %
+		%see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
-class VIRTUAL_TRADABLE_LIST inherit
+class FILE_TRADABLE_LIST inherit
 
 	TRADABLE_LIST
 		redefine
@@ -38,7 +39,7 @@ feature -- Initialization
 		do
 			file_names := filenames
 			tradable_factories := factories
-			object_comparison := true
+			object_comparison := True
 			file_names.start; tradable_factories.start
 			!HASH_TABLE [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]!
 				cache.make (cache_size)
@@ -86,6 +87,68 @@ feature -- Access
 			Result := last_tradable
 		end
 
+	file_names: LINEAR [STRING]
+
+	symbols: LIST [STRING] is
+			-- The symbol of each tradable, extracted from `file_names'
+		local
+			fnames: LINEAR [STRING]
+		do
+			fnames := file_names
+			!LINKED_LIST [STRING]!Result.make
+			from fnames.start until fnames.exhausted loop
+				Result.extend (symbol_from_file_name (fnames.item))
+				fnames.forth
+			end
+		ensure then
+			-- Result.count = file_names.count
+			-- The contents of Result are in the same order as the
+			-- corresponding contents of `file_names'.
+		end
+
+	cache_size: INTEGER is 10
+
+feature -- Status report
+
+	after: BOOLEAN is
+		do
+			Result := file_names.after
+		end
+
+	empty: BOOLEAN is
+		do
+			Result := file_names.empty
+		end
+
+	changeable_comparison_criterion: BOOLEAN is False
+
+feature -- Cursor movement
+
+	start is
+		do
+			file_names.start
+			tradable_factories.start
+		end
+
+	finish is
+		do
+			file_names.finish
+			tradable_factories.finish
+		end
+
+	forth is
+		do
+			file_names.forth
+			tradable_factories.forth
+		end
+
+feature {FACTORY} -- Access
+
+	tradable_factories: LINEAR [TRADABLE_FACTORY]
+			-- Manufacturers of tradables - one for each element of filenames
+
+feature {NONE} -- Implementation
+
 	search_by_file_name (name: STRING) is
 		do
 			from
@@ -119,50 +182,25 @@ feature -- Access
 			--	file_names.item corresponds to `s'
 		end
 
-	file_names: LINEAR [STRING]
-
-	cache_size: INTEGER is 10
-
-feature -- Status report
-
-	after: BOOLEAN is
+	symbol_from_file_name (fname: STRING): STRING is
+			-- Tradable symbol extracted from `fname' - directory component
+			-- and suffix ('.' and all characters that follow it) of the
+			-- file name are removed.  `fname' is not changed.
+		local
+			i, last_sep_index: INTEGER
+			strutil: STRING_UTILITIES
 		do
-			Result := file_names.after
+			!!strutil.make (clone (fname))
+			if strutil.target.has (Directory_separator) then
+				-- Strip directory path from the file name:
+				strutil.tail (Directory_separator)
+			end
+			if strutil.target.has ('.') then
+				-- Strip off "suffix":
+				strutil.head ('.')
+			end
+			Result := strutil.target
 		end
-
-	empty: BOOLEAN is
-		do
-			Result := file_names.empty
-		end
-
-	changeable_comparison_criterion: BOOLEAN is false
-
-feature -- Cursor movement
-
-	start is
-		do
-			file_names.start
-			tradable_factories.start
-		end
-
-	finish is
-		do
-			file_names.finish
-			tradable_factories.finish
-		end
-
-	forth is
-		do
-			file_names.forth
-			tradable_factories.forth
-		end
-
-feature {FACTORY} -- Access
-
-	tradable_factories: LINEAR [TRADABLE_FACTORY]
-			-- Manufacturers of tradables - one for each element of filenames
-
-feature {NONE} -- Implementation
 
 	print_errors (t: TRADABLE [BASIC_MARKET_TUPLE]; l: LIST [STRING]) is
 		do
@@ -233,8 +271,8 @@ feature {NONE} -- Inapplicable
 invariant
 
 	fn_tf_not_void: file_names /= Void and tradable_factories /= Void
-	always_compare_objects: object_comparison = true
+	always_compare_objects: object_comparison = True
 	index_definition: index = file_names.index
 	cache_not_too_large: cache.count <= cache_size
 
-end -- class VIRTUAL_TRADABLE_LIST
+end -- class FILE_TRADABLE_LIST
