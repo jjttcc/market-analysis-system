@@ -67,28 +67,31 @@ print ("param was set to " + n.out + "%N")
 print ("test_function end%N")
 		end
 
-	sma (f: AGENT_BASED_FUNCTION): MARKET_TUPLE_LIST [MARKET_TUPLE] is
+	sma (f: AGENT_BASED_FUNCTION) is
 			-- Standard moving average
+		require
+			f_output_empty: f.output /= Void and f.output.is_empty
 		do
 print ("sma called%N")
-			Result := sma_based_calculation (f, agent sum_divided_by_n)
+			sma_based_calculation (f, agent sum_divided_by_n)
 		end
 
-	standard_deviation (f: AGENT_BASED_FUNCTION):
-		MARKET_TUPLE_LIST [MARKET_TUPLE] is
+	standard_deviation (f: AGENT_BASED_FUNCTION) is
 			-- Standard deviation
+		require
+			f_output_empty: f.output /= Void and f.output.is_empty
 		do
 print ("standard_deviation called%N")
-			Result := sma_based_calculation (f,
-				agent sum_of_squares_of_avg_divided_by_n)
+			sma_based_calculation (f, agent sum_of_squares_of_avg_divided_by_n)
 		end
 
-	sma_based_calculation (f: AGENT_BASED_FUNCTION; calculation:
-		FUNCTION [ANY, TUPLE [DOUBLE, INTEGER, ARRAYED_LIST [DOUBLE]],
-		DOUBLE]): MARKET_TUPLE_LIST [MARKET_TUPLE] is
+	sma_based_calculation (f: AGENT_BASED_FUNCTION; calculation: FUNCTION [
+		ANY, TUPLE [DOUBLE, INTEGER, ARRAYED_LIST [DOUBLE]], DOUBLE]) is
 			-- Calculation that follows the pattern of a
 			-- standard moving average calculation, using an agent to
 			-- allow some degree of configuration
+		require
+			f_output_empty: f.output /= Void and f.output.is_empty
 		local
 			ml: LIST [MARKET_TUPLE]
 			op: RESULT_COMMAND [REAL]
@@ -97,7 +100,6 @@ print ("standard_deviation called%N")
 			values: ARRAYED_LIST [DOUBLE]
 		do
 print ("sma_based_calculation start%N")
-			create Result.make (0)
 			create values.make (0)
 			if f.inputs.is_empty or else f.inputs.first.output.is_empty then
 				if f.inputs.is_empty then
@@ -125,15 +127,18 @@ print ("sma_based_calculation start%N")
 						values.extend (op.value)
 						ml.forth
 					end
-					op.execute (ml.item)
-					sum := sum + op.value
-					values.extend (op.value)
-					Result.extend (create {SIMPLE_TUPLE}.make (
-						ml.item.date_time, ml.item.end_date,
-						calculation.item ([sum, n, values])))
-					if not ml.exhausted then ml.forth end
-					check
-						values_ml_index_relation2: values.count + 1 = ml.index
+					if not ml.exhausted then
+						op.execute (ml.item)
+						sum := sum + op.value
+						values.extend (op.value)
+						f.output.extend (create {SIMPLE_TUPLE}.make (
+							ml.item.date_time, ml.item.end_date,
+							calculation.item ([sum, n, values])))
+						ml.forth
+						check
+							values_ml_index_relation2:
+								values.count + 1 = ml.index
+						end
 					end
 				invariant
 					values_ml_index_relation3: values.count + 1 = ml.index
@@ -144,7 +149,7 @@ print ("sma_based_calculation start%N")
 					latest_value := op.value
 					sum := sum - values.i_th (ml.index - n) + latest_value
 					values.extend (latest_value)
-					Result.extend (create {SIMPLE_TUPLE}.make (
+					f.output.extend (create {SIMPLE_TUPLE}.make (
 						ml.item.date_time, ml.item.end_date,
 						calculation.item ([sum, n, values])))
 					ml.forth
@@ -218,22 +223,21 @@ print ("standard_deviation start%N")
 print ("standard_deviation end%N")
 		end
 
-	functions: HASH_TABLE [FUNCTION [ANY, TUPLE [AGENT_BASED_FUNCTION],
-		MARKET_TUPLE_LIST [MARKET_TUPLE]], INTEGER] is
-			-- Table of available "market-agent" functions
+	agents: HASH_TABLE [PROCEDURE [ANY, TUPLE [AGENT_BASED_FUNCTION]],
+		INTEGER] is
+			-- Table of available "market-agents"
 		once
 			create Result.make (0)
 			Result.put (agent sma, Sma_key)
 			Result.put (agent standard_deviation, Standard_deviation_key)
 		end
 
-	infix "@" (key: INTEGER): FUNCTION [ANY, TUPLE [AGENT_BASED_FUNCTION],
-		MARKET_TUPLE_LIST [MARKET_TUPLE]] is
-			-- Current.functions @ key, for convenience
+	infix "@" (key: INTEGER): PROCEDURE [ANY, TUPLE [AGENT_BASED_FUNCTION]] is
+			-- Current.agents @ key, for convenience
 		do
-			Result := functions @ key
+			Result := agents @ key
 		ensure
-			definition: Result = functions @ key
+			definition: Result = agents @ key
 		end
 
 feature -- Agent keys
@@ -303,6 +307,6 @@ print ("Using default parameter%N")
 
 invariant
 
-	functions_exist: functions /= Void
+	agents_exist: agents /= Void
 
 end

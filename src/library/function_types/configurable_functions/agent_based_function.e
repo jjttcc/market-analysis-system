@@ -22,26 +22,26 @@ creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 feature {NONE} -- Initialization
 
-	make (fkey: like function_key; op: like operator; ins: like inputs) is
+	make (key: like calculator_key; op: like operator; ins: like inputs) is
 		require
-			f_exists: fkey /= Void
+			f_exists: key /= Void
 		do
 			if op /= Void then
 				set_operator (op)
 				operator.initialize (Current)
 			end
 			create output.make (0)
-			function_key := fkey
+			calculator_key := key
 			if ins = Void then
 				create {LINKED_LIST [MARKET_FUNCTION]} inputs.make
 			else
 				inputs := ins
 			end
 			create immediate_parameters.make
-print ("function was set to: " + function.out + "%N")
+print ("calculator was set to: " + calculator.out + "%N")
 print ("inputs.count: " + inputs.count.out + "%N")
 		ensure
-			set: operator = op and function_key = fkey and
+			set: operator = op and calculator_key = key and
 				(ins /= Void implies inputs = ins)
 			no_op_init: not operator_needs_initializing
 		end
@@ -49,20 +49,19 @@ print ("inputs.count: " + inputs.count.out + "%N")
 feature -- Access
 
 	agent_table: MARKET_AGENTS is
-			-- Table of available "market-agent" functions
+			-- Table of available "market-agents"
 		once
 			create Result
 		end
 
-	function: FUNCTION [ANY, TUPLE [like Current],
-		MARKET_TUPLE_LIST [MARKET_TUPLE]] is
+	calculator: PROCEDURE [ANY, TUPLE [like Current]] is
 			-- Agent to be used for processing
 		do
-			Result := agent_table @ function_key
+			Result := agent_table @ calculator_key
 		end
 
-	function_key: INTEGER
-			-- Key to Current's function
+	calculator_key: INTEGER
+			-- Key to Current's calculator
 
 	trading_period_type: TIME_PERIOD_TYPE is
 		local
@@ -82,12 +81,21 @@ feature -- Access
 
 	short_description: STRING is
 		do
-			Result := "!!!!To be specified"
+			Result := "Indicator that operates on a configurable number %
+				%of data sequences%Nwith a configurable calculation procecure"
 		end
 
 	full_description: STRING is
 		do
-			Result := "!!!!To be specified"
+			Result := short_description + ":%N"
+			if not inputs.is_empty then
+				inputs.start
+				Result := Result + inputs.item.full_description
+				from inputs.forth until inputs.exhausted loop
+					Result := Result + ",%N" + inputs.item.full_description
+					inputs.forth
+				end
+			end
 		end
 
 	parameters: LIST [FUNCTION_PARAMETER] is
@@ -185,10 +193,10 @@ feature -- Status report
 feature {NONE}
 
 	do_process is
-			-- Execute the function.
+			-- Execute the `calculator'.
 		do
-print ("do_process start - function: " + function.out + "%N")
-			output := function.item ([Current])
+print ("do_process start - calculator: " + calculator.out + "%N")
+			calculator.call ([Current])
 print ("do_process end%N")
 		end
 
@@ -223,6 +231,8 @@ print ("is_complex: " + inputs.item.is_complex.out + "%N")
 			end
 print ("set_innermost_input - inputs.count: " + inputs.count.out + "%N")
 			if operator /= Void and operator_needs_initializing then
+				-- !!!Check if the operator_needs_initializing
+				-- construct is adequate.
 				operator.initialize (Current)
 			end
 			output.wipe_out
@@ -281,7 +291,7 @@ invariant
 	inputs_exist: inputs /= Void
 	has_inputs_count_children: children.count = inputs.count
 	operator_used_definition: operator_used = (operator /= Void)
-	function_exists: function /= Void
-	function_definition: function = agent_table @ function_key
+	calculator_exists: calculator /= Void
+	calculator_definition: calculator = agent_table @ calculator_key
 
 end
