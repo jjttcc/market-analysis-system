@@ -69,13 +69,12 @@ feature {NONE} -- Implementation
 		local
 			global_server: expanded GLOBAL_SERVER
 			mds: MAS_DB_SERVICES
-			gs: expanded GLOBAL_SERVER
 		do
 			input_sequence.close
 			if input_sequence.error_occurred then
 				log_error (input_sequence.error_string)
 			end
-			if not gs.command_line_options.keep_db_connection then
+			if not global_server.command_line_options.keep_db_connection then
 				mds := global_server.database_services
 				mds.disconnect
 				if mds.fatal_error then
