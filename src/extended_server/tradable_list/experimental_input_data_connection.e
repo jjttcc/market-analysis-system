@@ -23,13 +23,18 @@ feature -- Initialization
 			server_response := ""
 		end
 
-feature -- Basic operations
+feature {NONE} -- Hook routine implementations
 
 	connect_to_supplier is
 			-- Create `socket' and use it to connect to the data supplier
 			-- as the first step in querying for new data.
 		do
 			make_connected (target_socket_hostname, target_socket_port_number)
+		end
+
+	data_request_for (requester: TRADABLE_LIST): STRING is
+		do
+			Result := requester.symbols.item
 		end
 
 feature {NONE} -- Implementation

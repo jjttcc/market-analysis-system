@@ -24,15 +24,32 @@ feature -- Access
 
 feature -- Basic operations
 
-	connect_to_supplier is
-			-- Create `socket' and use it to connect to the data supplier
-			-- as the first step in querying for new data.
-		deferred
+	request_data (requester: TRADABLE_LIST) is
+			-- Request data for `requester's current tradable.
+		do
+			connect_to_supplier
+			if last_communication_succeeded then
+				send_request (data_request_for (requester), False)
+			end
 		ensure
 			socket_exists_if_no_error:
 				last_communication_succeeded implies socket /= Void
 			socket_connected_iff_no_error:
 				last_communication_succeeded = connected
+		end
+
+feature {NONE} -- Hook routines
+
+	connect_to_supplier is
+			-- Create `socket' and use it to connect to the data supplier
+			-- as the first step in querying for new data.
+		deferred
+		end
+
+	data_request_for (requester: TRADABLE_LIST): STRING is
+			-- Request string to send to data-supplier server for the
+			-- data for `requester's current tradable.
+		deferred
 		end
 
 feature {NONE} -- Hook routine implementations

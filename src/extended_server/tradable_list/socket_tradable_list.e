@@ -48,7 +48,7 @@ feature {NONE} -- Implementation
 
 	initialized_input_medium: INPUT_SOCKET is
 		do
-			connection.connect_to_supplier
+			connection.request_data (Current)
 			if not connection.last_communication_succeeded then
 				fatal_error := True
 --!!!!Where/when should this error be reported?:
