@@ -21,7 +21,7 @@ class ACCUMULATION inherit
 		export
 			{NONE} set_operator
 		redefine
-			operator, action, forth, start, short_description
+			operator, forth, start, short_description
 		end
 
 	COMMAND_EDITOR -- To allow editing of `previous_operator'
@@ -125,26 +125,6 @@ feature {NONE}
 		ensure then
 			output_at_last: output.islast
 			output_one_less_than_target: target.index = output.index + 1
-		end
-
-	action is
-		local
-			t: SIMPLE_TUPLE
-		do
-			check
-				output.islast
-			end
-			-- `operator' (a binary operator) will first execute its left
-			-- operand (previous_operator), which will retrieve (and possibly
-			-- change) the current (last) item of `output'.  Then `operator'
-			-- will execute its right operand and operate on these two
-			-- results.
-			operator.execute (target.item)
-			!!t.make (target.item.date_time, target.item.end_date,
-						operator.value)
-			output.extend (t)
-		ensure then
-			output.count = old output.count + 1
 		end
 
 invariant
