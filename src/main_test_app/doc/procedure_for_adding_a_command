@@ -28,3 +28,5 @@ command conforms to and add an entry to each list for which the command's
 type conforms, using the name of the command (as with the existing entries).
 Be careful to identify all lists (all elements of the hash table) for which
 the command's type conforms.
+
+Apply basically the same procedure for adding new MARKET_FUNCTIONs.
