@@ -1,0 +1,118 @@
+# Format: 'keyword<tab>f1<tab>f2...'
+# Daily start and end date settings (use 'now' for the current date)
+#start_date	daily	1999/12/01
+start_date	daily	now - 9 months
+end_date	daily	now
+#start_date	hourly	now - 2 months
+#start_date	30-minute	now - 55 days
+#start_date	15-minute	now - 2 months
+start_date	hourly	2000/07/01
+start_date	30-minute	2000/08/01
+#start_date	20-minute	2000/08/14
+start_date	15-minute	2000/08/14
+start_date	10-minute	2000/08/14
+start_date	5-minute	2000/08/14
+# Weekly start and end date settings
+#start_date	weekly	1996/12/01
+# Specify which indicators to include in the selection list, the order
+# in which to display them, whether to draw them in the upper or the lower
+# graph, and, optionally, each one's color.
+upper_indicator	Simple Moving Average	darkGreen
+upper_indicator	Exponential Moving Average	darkBlue
+lower_indicator	MACD Difference	red
+lower_indicator	MACD Signal Line (EMA of MACD Difference)	lightBlue
+lower_indicator	MACD Histogram	black
+lower_indicator	Slope of MACD Signal Line	darkGreen
+lower_indicator	Slope of Slope of MACD Signal Line	oliveGreen
+lower_indicator	Stochastic %D
+lower_indicator	Slow Stochastic %D	magenta
+lower_indicator	Stochastic %K	gray
+lower_indicator	Volume
+lower_indicator	On Balance Volume	darkBlue
+lower_indicator	Accumulation/Distribution	red
+lower_indicator	EMA of Volume	darkGray
+lower_indicator	Momentum	oliveGreen
+lower_indicator	Rate of Change	darkGray
+lower_indicator	Williams %R	yellow
+lower_indicator	Relative Strength Index	red
+lower_indicator	No lower indicator
+lower_indicator	No upper indicator
+# Horizontal and vertical line configurations - specifies horizontal
+# (indicator_line_h) and vertical (indicator_line_v) reference lines for
+# indicator graph.  Format:
+#indicator_line_h<tab>indicator name<tab>starty endy
+#indicator_line_v<tab>indicator name<tab>startx endx
+# where 'indicator name' specifies the indicator the line is to be drawn
+# for.
+indicator_line_h	Stochastic %K	80 80
+indicator_line_h	Stochastic %K	20 20
+indicator_line_h	Stochastic %D	80 80
+indicator_line_h	Stochastic %D	20 20
+indicator_line_h	Slow Stochastic %D	80 80
+indicator_line_h	Slow Stochastic %D	20 20
+indicator_line_h	MACD Difference	0 0
+indicator_line_h	Slope of MACD Difference	0 0
+indicator_line_h	Slope of Slope of MACD Difference	0 0
+indicator_line_h	Slope of Slope of Slope of MACD Difference	0 0
+indicator_line_h	Slope of EMA	0 0
+indicator_line_h	Slope of Slope of EMA	0 0
+indicator_line_h	Slope of Slope of Slope of EMA	0 0
+indicator_line_h	Slope of Slope of Slope of Slope of EMA	0 0
+indicator_line_h	MACD Signal Line (EMA of MACD Difference)	0 0
+indicator_line_h	MACD Histogram	0 0
+indicator_line_h	Slope of MACD Signal Line	0 0
+indicator_line_h	Slope of Slope of MACD Signal Line	0 0
+indicator_line_h	Slope of Price	0 0
+indicator_line_h	Slope of Slope of Price	0 0
+indicator_line_h	Slope of Slope of Slope of Price	0 0
+indicator_line_h	Slope of Slope of Slope of Slope of Price	0 0
+indicator_line_h	Momentum	0 0
+indicator_line_h	Rate of Change	1 1
+indicator_line_h	Relative Strength Index	30 30
+indicator_line_h	Relative Strength Index	70 70
+# indicator_line_v	Indicator name	50 50
+# color settings - Valid colors are:
+# white, lightGray, gray, darkGray, black, red, pink, orange, yellow, green,
+# magenta, cyan, blue, darkGreen, oliveGreen, lightBlue, darkBlue, purple,
+# softBlue, softRed, softGreen
+# Note: A good color combination, both for the screen and for black & white
+# printing, consists of a light background (cyan, pink, or yellow),
+# black candle color of red, white candle color of oliveGreen, and a dark
+# color for stick, line, text, and bar (black, darkGreen, darkBlue, darkGray).
+background_color	pink
+black_candle_color	red
+white_candle_color	oliveGreen
+stick_color	black
+#stick_color	red
+bar_color	darkGreen
+line_color	darkBlue
+text_color	black
+# Color for reference line - price, value, and date lines; a soft color
+# seems to work best.
+reference_line_color	softBlue
+# The drawing style for the main graph (options: candle, regular) -
+# regular means standard price bars.
+main_graph_style	candle
+#main_graph_style	regular
+
+# Indicator groups - Indicators in the same group will be displayed in the
+# same scale so that, for example, a 0 line will be drawn in the same
+# location when more than one indicator is displayed.  (The keyword
+# indicator_group begins a group definition and end_block ends the
+# definition.)
+indicator_group
+MACD Difference
+MACD Signal Line (EMA of MACD Difference)
+MACD Histogram
+Slope of MACD Signal Line
+Slope of Slope of MACD Signal Line
+end_block
+indicator_group
+EMA of Volume
+Volume
+end_block
+indicator_group
+Stochastic %K
+Stochastic %D
+Slow Stochastic %D
+end_block
