@@ -27,7 +27,7 @@ import java.util.*;
 **    along with this program; if not, write to the Free Software
 **    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 **************************************************************************
-**    Modified June, 1999 by Jim Cochrane
+**    Modified by Jim Cochrane
 **    Changed name from G2Dint.
 **************************************************************************
 **
