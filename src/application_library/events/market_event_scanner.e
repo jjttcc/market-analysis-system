@@ -12,7 +12,7 @@ class MARKET_EVENT_SCANNER inherit
 		export {NONE}
 			data_scanner_make
 		redefine
-			product, parser, make_tuple, skip_record_separator
+			product, parser, make_tuple, advance_to_next_record
 		end
 
 	EXCEPTIONS
@@ -63,14 +63,14 @@ feature {NONE} -- Hook method implementations
 			exception_raised: BOOLEAN
 		do
 			if exception_raised then
-				scanning_error_occurred := true
+				scanning_error_occurred := True
 				if parser.error_occurred then
 					error_list.extend (parser.last_error)
 				elseif parser.product.error_occurred then
 					error_list.extend (parser.product.last_error)
 				end
 			else
-				scanning_error_occurred := false
+				scanning_error_occurred := False
 				-- Execute parser to make the appropriate kind of factory
 				-- according to the type spec. in the input.
 				parser.execute
@@ -80,14 +80,11 @@ feature {NONE} -- Hook method implementations
 				product.extend (parser.product.product)
 			end
 		rescue
-			exception_raised := true
+			exception_raised := True
 			retry
 		end
 
-	skip_record_separator is
-			-- Skip over the record separator in the input.
-			-- Can be overridden in a descendant for more sophisticated
-			-- behavior.
+	advance_to_next_record is
 		local
 			i: INTEGER
 		do
