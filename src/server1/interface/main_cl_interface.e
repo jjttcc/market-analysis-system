@@ -169,6 +169,12 @@ feature -- Basic operations
 					view_menu
 				when 'e', 'E' then
 					function_builder.edit_indicator_menu
+					if function_builder.changed then
+						market_list_handler.clear_caches
+						current_tradable := 
+						market_list_handler.tradable (current_tradable.symbol,
+							current_period_type)
+					end
 				when 'm', 'M' then
 					event_generator_builder.edit_event_generator_menu
 				when 'r', 'R' then
