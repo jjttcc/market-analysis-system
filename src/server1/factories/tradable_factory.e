@@ -214,8 +214,8 @@ feature -- Basic operations
 					period_types @ (period_type_names @ Daily)
 			end
 			product.set_trading_period_type (time_period_type)
-			add_indicators (product, indicators)
 			product.finish_loading
+			add_indicators (product, indicators)
 		ensure then
 			product_not_void: product /= Void
 			product_type_set: product.trading_period_type = time_period_type
