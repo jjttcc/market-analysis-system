@@ -9,10 +9,15 @@ eiffel_protocol_files ()
 
 proto_files=$(eiffel_protocol_files)
 awk 'BEGIN {
+	print "package common;\n"
 	print "/** Constants specifying the components of the TA network \n\
 communication protocol */"
 	print "public interface NetworkProtocol\n{"
 }
+
+# Ignore deferred features.
+/is  *\<deferred\>/ { next }
+
 /^feature/ {
 	sub (/.*-- */, "")
 	print "\n\t// " $0
