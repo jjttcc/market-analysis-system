@@ -602,11 +602,30 @@ feature {NONE} -- Implementation - utilities
 			if env.app_directory = Void then
 				Result.append (concatenation(<<"Application directory ",
 					"variable (", vnames.application_directory_name,
-					") is not set.">>))
+					") is not set.%N">>))
 			else
 				Result.append (concatenation(<<"Application directory ",
 					"(", vnames.application_directory_name,
-					") is ", env.app_directory>>))
+					"): ", env.app_directory, "%N">>))
+			end
+			if env.current_working_directory /= Void then
+				Result.append (concatenation(<<"Current working directory:%N",
+					env.current_working_directory, "%N">>))
+			else
+				Result.append ("Current working directory is not available.%N")
+			end
+			if env.mailer /= Void then
+				Result.append (concatenation(<<"Mailer: ", env.mailer, "%N">>))
+			else
+				Result.append (concatenation(<<"Mailer: ",
+					constants.Default_mailer, "%N">>))
+			end
+			if env.mailer_subject_flag /= Void then
+				Result.append (concatenation(<<"Mailer subject flag: ",
+					env.mailer_subject_flag, "%N">>))
+			else
+				Result.append (concatenation(<<"Mailer subject flag: ",
+					constants.Default_mailer_subject_flag, "%N">>))
 			end
 		end
 
