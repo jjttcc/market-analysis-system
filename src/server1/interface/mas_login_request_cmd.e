@@ -55,7 +55,7 @@ feature {NONE} -- Hook routine implementations
 
 	process (message: STRING) is
 		local
-			setting_type, error_msg: STRING
+			setting_type: STRING
 			tokens: LIST [STRING]
 		do
 			sutil.set_target (message)
@@ -73,11 +73,11 @@ feature {NONE} -- Hook routine implementations
 				tokens.forth
 				if tokens.exhausted then
 					error_occurred := True
-					error_msg := "Missing value for setting: "
-					error_msg.append (setting_type)
+					last_error := "Missing value for setting: "
+					last_error.append (setting_type)
 				else
-					error_msg := change_setting (setting_type, tokens)
-					if error_msg = Void then
+					last_error := change_setting (setting_type, tokens)
+					if last_error = Void then
 						tokens.forth
 					else
 						error_occurred := True
