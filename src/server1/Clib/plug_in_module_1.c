@@ -20,10 +20,15 @@
 
 
 struct input_sequence_plug_in {
+	char* working_directory;
 	char* symbol_file_name;
 	char* data_file_name;
 	char* errorbuffer;
 	int symbol_file_size;
+};
+
+enum {
+	Maximum_symbol_length = 30
 };
 
 enum Error_type {
@@ -35,6 +40,8 @@ enum Error_type {
 
 const char* symbol_file_name = "symbols.mas";
 const char* data_file_name = "data.mas";
+const char* Data_retrieval_command = "perl ./mas_external_retrieve.pl ";
+
 const char* common_errors[] = {
 	"(None)",
 	"Memory allocation failed",
@@ -122,11 +129,19 @@ char** directories(const char* paths, int* count) {
 /* A new heap-allocated string with all `count' elements of the array `a'
  * copied to it
  * Precondition: a != 0 && count > 0 */
-char* concatenation(const char** a, int count) {
+char* concatenation(const char** a, const int count) {
 	int i, totalsize;
-	int sizes[count];
+	enum {Arrsz = 20};
+	int sizes_buffer[Arrsz];
+	int* sizes;
 	char* result = 0;
 
+	if (count > Arrsz) {
+		/* sizes_buffer is too small, so use the heap. */
+		sizes = malloc(count * sizeof(int));
+	} else {
+		sizes = sizes_buffer;
+	}
 	assert(a != 0 && count > 0);
 	for (i = 0, totalsize = 0; i < count; ++i) {
 		sizes[i] = strlen(a[i]);
@@ -144,6 +159,10 @@ char* concatenation(const char** a, int count) {
 		}
 		result[totalsize] = '\0';
 	}
+	if (count > Arrsz) {
+		free(sizes);
+	}
+
 	return result;
 }
 
@@ -157,6 +176,7 @@ char* concat2strings(const char* s1, const char* s2) {
 
 void close_handle(struct input_sequence_plug_in* handle) {
 	assert(handle != 0);
+	free(handle->working_directory);
 	free(handle->symbol_file_name);
 	free(handle->data_file_name);
 	free(handle->errorbuffer);
@@ -242,10 +262,11 @@ struct input_sequence_plug_in* new_input_sequence_plug_in_handle(
 		if (result != 0) {
 			result->symbol_file_name = concat2strings(dir, symbol_file_name);
 			result->data_file_name = concat2strings(dir, data_file_name);
-			free(dir);
+			result->working_directory = dir;
 			result->symbol_file_size = symfile_size;
 			result->errorbuffer = 0;
 			if (result->symbol_file_name == 0 || result->data_file_name == 0) {
+				free(result->working_directory);
 				free(result->symbol_file_name);
 				free(result->data_file_name);
 				free(result);
@@ -268,6 +289,41 @@ struct input_sequence_plug_in* new_input_sequence_plug_in_handle(
 		error_buffer[buffer_size - 1] = '\0';
 	}
 	return result;
+}
+
+/* Obtain the data for `symbol' and put it into handle->data_file_name.
+ * If is_intraday, obtain intraday data, else obtain daily data.
+ * If an error occurs, put a description of the error into errorbuffer
+ * and return a non-zero value.  If no error occurs, return 0.
+*/
+int obtain_data(struct input_sequence_plug_in* handle,
+		char* symbol, int is_intraday) {
+	char cmd[BUFSIZ];
+	int cmdresult;
+
+printf("obtain_data - symbol: '%s'\n", cmd);
+/*!!!Add use of is_intraday.*/
+	if (strlen(symbol) > Maximum_symbol_length) {
+		handle->errorbuffer = concat2strings("Symbol name is too long: ",
+			symbol);
+		cmdresult = -1;
+	} else {
+		strcpy(cmd, Data_retrieval_command);
+		if (is_intraday) {
+			strcat(cmd, "-i ");
+		}
+		strcat(cmd, handle->working_directory);
+		strcat(cmd, " ");
+		strcat(cmd, handle->data_file_name);
+		strcat(cmd, " ");
+		strcat(cmd, symbol);
+printf("executing %s (currend dir: %s)\n", cmd, getcwd(0, 0));
+		cmdresult = system(cmd);
+printf("result: %d (currend dir: %s)\n", cmdresult, getcwd(0, 0));
+/*!!!Need error msg if cmd fails.*/
+	}
+
+	return cmdresult;
 }
 
 char* last_error(struct input_sequence_plug_in* handle) {
@@ -343,34 +399,36 @@ char* tradable_data(struct input_sequence_plug_in* handle,
 	handle->errorbuffer = 0;
 	slist[0] = "Failed to read data file ";
 	slist[1] = handle->data_file_name;
-	file_size = file_length(handle->data_file_name);
-	if (file_size == -1) {
-		slist[2] = ": ";
-		slist[3] = strerror(errno);
-		handle->errorbuffer = concatenation(slist, 4);
-	} else if (access(handle->data_file_name, R_OK) != 0) {
-		slist[2] = ": ";
-		slist[3] = strerror(errno);
-		handle->errorbuffer = concatenation(slist, 4);
-	} else {
-		result = malloc(file_size + 1);
-		if (result == 0) {
-			slist[0] = strerror(errno);
-			handle->errorbuffer = concatenation(slist, 1);
-		}
-	}
-	if (result != 0) {
-		FILE* f = fopen(handle->data_file_name, "r");
-		if (f == 0) {
-			slist[0] = strerror(errno);
-			handle->errorbuffer = concatenation(slist, 1);
+	if (obtain_data(handle, symbol, is_intraday) == 0) {
+		file_size = file_length(handle->data_file_name);
+		if (file_size == -1) {
+			slist[2] = ": ";
+			slist[3] = strerror(errno);
+			handle->errorbuffer = concatenation(slist, 4);
+		} else if (access(handle->data_file_name, R_OK) != 0) {
+			slist[2] = ": ";
+			slist[3] = strerror(errno);
+			handle->errorbuffer = concatenation(slist, 4);
 		} else {
-			if (fread(result, 1, file_size, f) != file_size) {
-				handle->errorbuffer = concatenation(slist, 2);
-			} else {
-				*size = file_size;
+			result = malloc(file_size + 1);
+			if (result == 0) {
+				slist[0] = strerror(errno);
+				handle->errorbuffer = concatenation(slist, 1);
 			}
-			fclose(f);
+		}
+		if (result != 0) {
+			FILE* f = fopen(handle->data_file_name, "r");
+			if (f == 0) {
+				slist[0] = strerror(errno);
+				handle->errorbuffer = concatenation(slist, 1);
+			} else {
+				if (fread(result, 1, file_size, f) != file_size) {
+					handle->errorbuffer = concatenation(slist, 2);
+				} else {
+					*size = file_size;
+				}
+				fclose(f);
+			}
 		}
 	}
 
