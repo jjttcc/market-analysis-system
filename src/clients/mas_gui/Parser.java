@@ -40,7 +40,6 @@ class Parser {
 	public void parse(String s, Drawer drawer) throws Exception {
 		int float_index = 0, volume_index = 0, oi_index = 0, rec_count;
 		is_intraday = contains_time_field(s);
-System.out.println("intraday: " + is_intraday);
 		StringTokenizer recs = new StringTokenizer(s, _record_separator, false);
 		rec_count = recs.countTokens();
 		clear_vectors();
@@ -91,11 +90,9 @@ System.out.println("intraday: " + is_intraday);
 				}
 				}
 				catch (Exception e) {
-					System.err.println("Error occurred for parsetype " +
-						parsetype[j] + ", last date: " +
+					System.err.println("Last record processed was dated " +
 						dates.elementAt(dates.size() - 1));
-					System.err.println("Fatal error - exiting ...");
-					System.exit(-3);
+					throw e;
 				}
 			}
 		}
@@ -133,7 +130,7 @@ System.out.println("intraday: " + is_intraday);
 			result = Float.valueOf(s).floatValue();
 		}
 		catch (Exception e) {
-			if (s.equals("NaN")) {
+			if (s.equals("NaN") || s.equals("nan")) {
 				System.err.println("NaN encountered - substituting 0.");
 				result = 0;
 			}
@@ -183,14 +180,15 @@ System.out.println("intraday: " + is_intraday);
 				volume_data = new DataSet(volumes, volumes.length,
 											volume_drawer);
 				if (has_dates) volume_data.set_dates(date_array);
+				if (has_times) volume_data.set_times(time_array);
 			}
 			if (open_interest_drawer != null && open_interests != null &&
 					open_interests.length > 0) {
 				oi_data = new DataSet(open_interests,
 					open_interests.length, open_interest_drawer);
 				if (has_dates) oi_data.set_dates(date_array);
+				if (has_times) oi_data.set_times(time_array);
 			}
-System.out.println("dates, times: " + dates.size() + ", " + times.size());
 		}
 		catch (Exception e) {
 			System.err.println("DataSet constructor failed - " + e);
@@ -238,8 +236,6 @@ System.out.println("dates, times: " + dates.size() + ", " + times.size());
 			StringTokenizer fields = new StringTokenizer(recs.nextToken(),
 				_field_separator, false);
 
-System.out.println("fields, ptlength: " + fields.countTokens() + ", "+
-parsetype.length);
 			// If the number of fields in a record is greater than the number of
 			// parse types, a time field is included.
 			result = fields.countTokens() > parsetype.length;
