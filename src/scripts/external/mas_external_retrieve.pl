@@ -24,23 +24,21 @@ if (@ARGV < 3) {
 }
 
 setup();
-#print "intraday, outfile, symbol: ",
-#	$intraday, ", ", $output_file, ", ", $symbol, "\n";
 if ($intraday) {
-	print "Intraday data is not currently supported.\n";
+	warn "Intraday data is not currently supported.\n";
 	exit 1;
 }
 if (backup_file_exists()) {
 	use File::Copy;
-	print "Using backup data for $symbol\n";
-	my $datafile;
+print "Using backup data for $symbol\n";
 	copy $backup_file => $output_file or
 			warn "can't copy $backup_file to $output_file:\n$!" and exit 1;
-	open($datafile, "< " . $output_file);
-	my @lastdate = lastdate($datafile);
-	print "last date:", join(', ', @lastdate), "\n";
+	my $datafile = new FileHandle $output_file, 'r';
+	my @lastdate = "";
+	@lastdate = lastdate($datafile);
+print "last date:", join(', ', @lastdate), "\n";
 	if (out_of_date(@lastdate)) {
-		print "Updating data ...";
+print "Updating data ...";
 		# Note: All data is retrieved - need to optimize to just append
 		# the last day (or whatever is missing).
 		my @nowdate = date_from_localtime(now());
@@ -50,10 +48,10 @@ if (backup_file_exists()) {
 			save_data();
 		}
 	} else {
-		print "Data is up to date.";
+print "Data is up to date.";
 	}
 } else {
-	print "Retrieving data for $symbol\n";
+print "Retrieving data for $symbol\n";
 	my @nowdate = date_from_localtime(now());
 	$mer_result = retrieve_data(adjusted_start_date(@nowdate), @nowdate);
 	if ($mer_result == 0) {
@@ -77,6 +75,9 @@ sub retrieve_command {
 sub lastdate {
 	my $dt = $_[0];
 	my @lines = <$dt>;
+	if (@lines == 0) {
+		return (0, 0, 0);
+	}
 	my $last = $lines[@lines - 1];
 	$last =~ s/,.*//;
 	my $y = substr($last, 0, 4);
@@ -96,38 +97,26 @@ sub out_of_date {
 	my $year = year(@now);
 	my $hour = hour(@now);
 	my $minutes = minutes(@now);
-print "ood - month, day, year:  $m, $d, $y\n";
-print "now: ", join(',', @now), "\n";
-print "now6: $now[6]\n";
-print "week day is ", week_day(@now), "\n";
 	my $current_wd = week_day(@now);
 	if ($current_wd == $Sun || $current_wd == $Sat) {
-print "A\n";
 		if ($year == $y && $month == $m) {
-print "B\n";
-print "cwd, day - d: ", $current_wd, $day - $d, "\n";
 			if (($current_wd == $Sun && $day - $d > 2) ||
 					($current_wd == $Sat && $day - $d > 1)) {
 				$result = 1;
-print "x\n";
 			}
 		} else {
 			# Different months and/or years - don't bother to figure out
 			# how many days ago the date is.
 			$result = 1;
-print "y\n";
 		}
 	} elsif (! dates_equal($year, $month, $day, $y, $m, $d)) {
 		my @yesterday = before(1);
 		if (! dates_equal(year(@yesterday), month(@yesterday),
 				day(@yesterday), $y, $m, $d)) {
 			$result = 1;
-print "z\n";
 		} elsif (after_close_time(@now)) {
-			print "Z\n";
 			$result = 1;
 		}
-else {print "Y\n";}#!!!DEbug
 	}
 	return $result;
 }
@@ -151,10 +140,9 @@ sub save_data {
 # Expected arguments:
 #    (startyear, startmonth, startday, endyear, endmonth, endday)
 sub retrieve_data {
-print "retrdata received: $_[0], $_[1], etc.\n";
 	my $startdate = squished_date($_[0], $_[1], $_[2]);
 	my $enddate = squished_date($_[3], $_[4], $_[5]);
-print "retrdata - start/end dates: $startdate, $enddate\n";
+#print "retrdata - start/end dates: $startdate, $enddate\n";
 	my @cmd = retrieve_command($startdate, $enddate);
 	return system(@cmd);
 }
@@ -162,13 +150,14 @@ print "retrdata - start/end dates: $startdate, $enddate\n";
 # Copy the data in $input_file to $output_file, filtering out
 # "^SYMBOL," at the beginning of each line using $output_filter.
 sub copy_data_to_output_file {
+print "a\n";
 	my $ifile; my $ofile;
 	my $i; my $l;
-	$ofile = new FileHandle $output_file, 'w';
 	$ifile = new FileHandle $input_file, 'r';
+	$ofile = new FileHandle $output_file, 'w';
 	my @lines = <$ifile>;
 	my $filter = "\$l =~ " . $output_filter;
-	if (input_error($lines[0])) {
+	if (@lines == 0 || input_error($lines[0])) {
 		warn "Error encountered retrieving data: $lines[0].\n"; exit 1
 	}
 	foreach $i (0 .. @lines - 1) {
@@ -182,20 +171,25 @@ sub copy_data_to_output_file {
 
 # Copy the data in $input_file to $output_file.
 sub append_data_to_output_file {
+print "b\n";
 	my $ifile; my $ofile; my $i; my $l;
-	open($ifile, "< " . $input_file);
-	open($ofile, ">> " . $output_file);
+	$ifile = new FileHandle $input_file, 'r';
+	$ofile = new FileHandle $output_file, 'a';
 	my @lines = <$ifile>;
 	my $filter = "\$l =~ " . $output_filter;
-	if (input_error($lines[0])) {
-		warn "Error encountered retrieving data: $lines[0].\n"; exit 1
+	if (@lines == 0 || input_error($lines[0])) {
+		my $msg = "Error encountered retrieving data\n";
+		if (@lines > 0) {
+			$msg += ": $lines[0].\n";
+		} else {
+			$msg .= ".\n";
+		}
+		warn $msg;
+		exit 1;
 	}
-print "filter: $filter\n";
 	foreach $i (1 .. @lines - 1) {
 		$l = $lines[$i];
-print "before l: $l\n";
 		eval $filter;
-print "after l: $l\n";
 		print $ofile $l;
 	}
 	close($ifile);
@@ -258,22 +252,11 @@ sub setup {
 	parse_args();
 	$backup_file = $symbol . ".mas";
 	set_plug_in_values();
-#	require "pwd.pl";
-#	&pwd::initpwd;
 	chdir($working_directory);
 	my $symfile = new FileHandle $symbol_file, 'w';
 	print $symfile $symbol . "\n";
 	close($symfile);
 }
-#  sub mySub ($) {
-#    my $fileName = shift;
-#    my $input = new FileHandle $fileName, 'r';
-#    my $line;
-#
-#    while (defined ($line = $input->getline)) {
-#      print ">>$line";
-#    }
-#  }
 
 sub usage {
 	print "Usage: $0 [-i] working_directory data_output_file symbol\n",
@@ -281,11 +264,17 @@ sub usage {
 		"  -i      retrieve intraday data (default is daily)\n";
 }
 
-# Check for an error in the record ($_[0]) and, if there is one, print an
-# error message and exit with error status; otherwise, do nothing.
+# Is there an error in the record ($_[0])?
 sub input_error {
+print "c\n";
+	if (@_ == 0) {
+		# Empty args are regarded as an error.
+print "d\n";
+		return 1;
+	}
+print "e\n";
 	my $expr = "\$_[0] =~ $error_regex";
-	if (eval $expr) {
+	if (eval "$expr") {
 		return 1;
 	} else {
 		return 0;
@@ -303,7 +292,6 @@ sub adjusted_start_date {
 
 # Date converted from (y, m, d) to yyyymmdd
 sub squished_date {
-print "squished date received:  $_[0], $_[1], $_[2]\n";
 	return sprintf "%u%02u%02u", $_[0], $_[1], $_[2];
 }
 
@@ -345,7 +333,6 @@ sub date_from_localtime {
 
 # Does date1 equal date2 (y1, m1, d1, y2, m2, d2)?
 sub dates_equal {
-print "dtseq -  @_\n";
 	return $_[0] == $_[3] && $_[1] == $_[4] && $_[2] == $_[5];
 }
 
@@ -354,14 +341,7 @@ sub now {
 	if ($current_date_time == -1) {
 		$current_date_time = time();
 	}
-#$current_date_time += 864000;#!!!Test
-#$current_date_time += 259200;#!!!Test
-#$current_date_time += 345600;#!!!Test
-	print "now: $current_date_time\n";
 	my @t = localtime $current_date_time;
-my $date = sprintf "%02u/%02u/%02u %02u:%02u:%02u", $t[4] + 1, $t[3],
-	$t[5] % 100, $t[2], $t[1], $t[0];
-print "date: $date\n";
 	return @t;
 }
 
@@ -373,18 +353,13 @@ sub before {
 	}
 	my $before_time = $current_date_time - ($days_before * 86400);
 	my @t = localtime $before_time;
-my $date = sprintf "%02u/%02u/%02u %02u:%02u:%02u", $t[4] + 1, $t[3],
-	$t[5] % 100, $t[2], $t[1], $t[0];
-print "before date: $date\n";
 	return @t;
 }
 
 # retrieve_command implementation that uses quotemonster
 sub qm_based_retrieve_command {
-	print "qm_based_retrieve_command called with @_\n";
 	my $startdt = substr($_[0], 2, 6);
 	my $enddt = substr($_[1], 2, 6);
 	my @result = ("qm", $startdt, $enddt);
-	print "qm-based ... - result:  @result\n";
 	return @result;
 }
