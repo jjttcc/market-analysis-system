@@ -1,6 +1,6 @@
 indexing
 	description:
-		"Builder of a list of market functions"
+		"Builder of a list of market event generators"
 	note:
 		"Hard-coded for testing for now, but may evolve into a legitimate %
 		%class"
@@ -171,16 +171,38 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 
 	slow_stochastic_analyzer (name: STRING; slope_up: BOOLEAN):
 				ONE_VARIABLE_FUNCTION_ANALYZER is
-			-- Analyzer of slow stochastic %D
+			-- Analyzer of that detects slope changes in slow stochastic %D
+			-- slope_up = true specifies to check for - to + slope change.
+			-- slope_up = false specifies to check for + to - slope change.
 		local
 			l: LIST [MARKET_FUNCTION]
 			f: MARKET_FUNCTION
+				-- slope_analyzer is used to provide the slope of the value
+				-- at the current cursor position of the target data.
 			slope_analyzer: SLOPE_ANALYZER
-			sign_analyzer: SIGN_ANALYZER
+				-- previous_cmd is used to obtain the value just to the
+				-- left of the cursor (of the target data) so that it can
+				-- be compared to the value at the cursor.
 			previous_cmd: SETTABLE_OFFSET_COMMAND
+				-- sign_analyzer looks for a sign change between the previous
+				-- slope (obtained from previous_cmd) and the current slope
+				-- of the target data.
+			sign_analyzer: SIGN_ANALYZER
+				-- blc is used by relation to retrieve the value of the
+				-- target data at the current cursor.
 			blc: BASIC_LINEAR_COMMAND
+				-- boundary provides a constant value that relation will
+				-- compare with the value of the target data at the current
+				-- cursor.
 			boundary: CONSTANT
+				-- relation will check whether the value at the current
+				-- cursor is < (slope_up = true) or > (slope_up = false)
+				-- boundary.
 			relation: BINARY_OPERATOR [BOOLEAN, REAL]
+				-- and_op will evaluate to true (at each cursor position) if
+				-- sign_analyzer and relation evaluate to true - that is,
+				-- if there was a slope change of the specified kind and
+				-- the current target data value was beyond boundary.
 			and_op: AND_OPERATOR
 		do
 			l := function_library
@@ -214,17 +236,19 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 				set_slope_spec (sign_analyzer, Pos_to_neg)
 			end
 			!!and_op.make (sign_analyzer, relation)
+			-- Create a ONE_VARIABLE_FUNCTION_ANALYZER that will analyze
+			-- daily data from f.
 			!!Result.make (f, and_op, name, period_types @ "daily")
 			-- Set offset such that the cursor position used by previous_cmd,
 			-- which has a negative offset, will always be valid.
 			Result.set_offset (Previous_slope_offset.abs)
-			--!!!!!!!!!!!!!!Remember that Result's start_date_time needs
-			--!!!!!!!!to be set to a reasonable value!!!!!!!!!!
 		end
 
 	stochastic_pctD_analyzer (name: STRING; slope_up: BOOLEAN):
 				ONE_VARIABLE_FUNCTION_ANALYZER is
-			-- Analyzer of (fast) stochastic %D
+			-- Analyzer of that detects slope changes in (fast) stochastic %D
+			-- slope_up = true specifies to check for - to + slope change.
+			-- slope_up = false specifies to check for + to - slope change.
 		local
 			l: LIST [MARKET_FUNCTION]
 			f: MARKET_FUNCTION
@@ -271,13 +295,13 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			-- Set offset such that the cursor position used by previous_cmd,
 			-- which has a negative offset, will always be valid.
 			Result.set_offset (Previous_slope_offset.abs)
-			--!!!!!!!!!!!!!!Remember that Result's start_date_time needs
-			--!!!!!!!!to be set to a reasonable value!!!!!!!!!!
 		end
 
 	stochastic_pctK_analyzer (name: STRING; slope_up: BOOLEAN):
 				ONE_VARIABLE_FUNCTION_ANALYZER is
-			-- Analyzer of (fast) stochastic %K
+			-- Analyzer of that detects slope changes in (fast) stochastic %K
+			-- slope_up = true specifies to check for - to + slope change.
+			-- slope_up = false specifies to check for + to - slope change.
 		local
 			l: LIST [MARKET_FUNCTION]
 			f: MARKET_FUNCTION
@@ -324,8 +348,6 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			-- Set offset such that the cursor position used by previous_cmd,
 			-- which has a negative offset, will always be valid.
 			Result.set_offset (Previous_slope_offset.abs)
-			--!!!!!!!!!!!!!!Remember that Result's start_date_time needs
-			--!!!!!!!!to be set to a reasonable value!!!!!!!!!!
 		end
 
 	macd_analyzer (name: STRING): TWO_VARIABLE_FUNCTION_ANALYZER is
@@ -360,9 +382,9 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			-- Clone the original because its innermost function may be
 			-- changed during processing; so the original won't be changed.
 			f2 := deep_clone (l.item)
+			-- Create a TWO_VARIABLE_FUNCTION_ANALYZER that will analyze
+			-- weekly data from f.
 			!!Result.make (f1, f2, name, period_types @ "weekly")
-			--!!!!!!!!!!!!!!Remember that Result's start_date_time needs
-			--!!!!!!!!to be set to a reasonable value!!!!!!!!!!
 		end
 
 	close_MA_analyzer: TWO_VARIABLE_FUNCTION_ANALYZER is
@@ -398,8 +420,6 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			!!Result.make (f1, f2,
 				"Closing Price/Moving Average crossover event",
 				period_types @ "daily")
-			--!!!!!!!!!!!!!!Remember that Result's start_date_time needs
-			--!!!!!!!!to be set to a reasonable value!!!!!!!!!!
 		end
 
 	compound_analyzer (left, right: MARKET_EVENT_GENERATOR; name: STRING;
