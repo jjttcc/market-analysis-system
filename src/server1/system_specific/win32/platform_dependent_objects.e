@@ -23,8 +23,14 @@ feature -- Access
 			create {DB_SERVICES_STUB} Result.make
 -- create {ODBC_SERVICES} Result.make
 			if Result.fatal_error then
-				log_errors (<<"Fatal database error: ",
-					Result.last_error, ".%N">>)
+				if
+					Result.last_error /= Void and not Result.last_error.empty
+				then
+					log_errors (<<"Fatal database error: ",
+						Result.last_error, ".%N">>)
+				else
+					log_error ("Fatal database error.%N")
+				end
 			end
 		end
 
