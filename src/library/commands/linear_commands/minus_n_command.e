@@ -9,8 +9,8 @@ indexing
 class MINUS_N_COMMAND inherit
 
 	N_RECORD_LINEAR_COMMAND
-		export {MARKET_FUNCTION}
-			set_n
+		--export {MARKET_FUNCTION}
+		--	set_n
 		redefine
 			execute
 		end
