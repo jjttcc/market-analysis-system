@@ -6,15 +6,16 @@ if %maketmp% == y md \tmp
 %comspec% /c start /min .\bash bash_init %1 %2 %3 %4 %5 %6 %7 %8 %9
 set n=1
 :loop
-if %n% == 5 goto end
-if exist finished goto end
+if %n% == 5 goto endloop
+if exist finished goto endloop
 .\sleep 3
 set /a n+=1
-rem If n is still 1, this is a pre-NT system, which can't terminate a loop.
+rem If n is still 1, this is a pre-NT system, which can't terminate a loop:
 if %n% == 1 goto end
 goto loop
-:end
+:endloop
 del bash.exe cp.exe cygwin1.dll mkdir.exe sed.exe repl_spec bash_init
 del sleep.exe config_tool.exe nt_repl_spec pre_nt_repl_spec
 if exist finished del finished
+:end
 if %maketmp% == y rmdir \tmp
