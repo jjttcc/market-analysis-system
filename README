@@ -13,9 +13,11 @@ Directory src contains the directories:
       library        - Directory structure for the TAL source code
 
 Directories basic_test_app and main_test_app contain Ace files for building
-the test applications for TAL.  The development system is Linux 2.0.28 using
-the ISE Eiffel 4.2f compiler and environment.  TAL has not yet been ported to
-other platforms.
+the test applications for TAL.  The environment variable FINANCE will need to
+be set to this directory in order to compile the test applications.
+
+The development system is Linux 2.0.28 using the ISE Eiffel 4.2f compiler
+and environment.  TAL has not yet been ported to other platforms.
 
 See the file intro in the doc directory for a brief introduction to TAL.
 
