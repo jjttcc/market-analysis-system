@@ -4,8 +4,8 @@ NOTES ABOUT THE WINDOWS RELEASE OF MAS VERSION 1.6.5
 The MAS Desktop Icons
 
 By default, the setup program will place four icons on the desktop:
-"Mas Server (web)", "MAS Charts", "MAS Command Line", and "MAS Server
-(files)".  "Mas Server (web)" starts the server so that it retrieves its
+"MAS Server (web)", "MAS Charts", "MAS Command Line", and "MAS Server
+(files)".  "MAS Server (web)" starts the server so that it retrieves its
 data from the yahoo finance site.  "MAS Charts" starts the GUI charting
 program, which gets its data from the server.  "MAS Command Line" starts
 a command-line interface to the server, which provides functionality
@@ -18,7 +18,7 @@ Viewing Charts with Data Obtained from Yahoo
 
 To view stock charts with data retrieved from yahoo, first make sure
 your computer is connected to the internet, then double-click on the
-"Mas Server (web)" icon to start the server; then double-click on the
+"MAS Server (web)" icon to start the server; then double-click on the
 "MAS Charts" icon to start the charting program.
 
 To add or remove symbols of stocks you wish to view, edit the file named
@@ -56,7 +56,7 @@ on the "MAS Charts" icon to start the charting program.
 Changing the Settings for Obtaining Data from Yahoo
 
 To change settings used for obtaining data from yahoo (when running
-the server via the "Mas Server (web)" icon), such as the start-date for
+the server via the "MAS Server (web)" icon), such as the start-date for
 the retrieved data (eod_start_date), or the time at which to retrieve
 end-of-day data for the current day (eod_turnover_time), edit the file
 "mas_httprc" in the {mas_dir}\lib directory (where {mas_dir} stands

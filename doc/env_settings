@@ -1,7 +1,6 @@
 Environment variables and configuration files for MAS
 
-The following environment variables should be set to run the market analysis
-server:
+The market analysis server uses the following environment variables:
 
 MAS_MAILER
 MAS_DIRECTORY
