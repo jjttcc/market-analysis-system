@@ -248,7 +248,7 @@ to this value, the year is interpreted as a year in the 2000s.
 %par
 Here's a complete example:
 %par
--date-spec:date-format=dd#month3#yy,year-partition=80,date_sep=-
+-date-spec:date-format=dd#month3#yy,year-partition=80,date-sep=-
 %par
 This example specifies a date of the form *^fontIdd-Mon-yy*^fontP
 (a three-letter
