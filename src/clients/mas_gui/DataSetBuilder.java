@@ -210,9 +210,9 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 
 	private Integer port_number() { return connection.port_number(); }
 
-	private Drawer new_main_drawer() {
+	private MarketDrawer new_main_drawer() {
 		Configuration c = Configuration.instance();
-		Drawer result;
+		MarketDrawer result;
 
 		switch (c.main_graph_drawer()) {
 			case c.Candle_graph: result = new CandleDrawer(); break;
@@ -222,7 +222,7 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 		return result;
 	}
 
-	private Drawer new_indicator_drawer() {
+	private IndicatorDrawer new_indicator_drawer() {
 		if (main_drawer == null) {
 			System.err.println("Code defect: main_drawer is null");
 			System.exit(-2);
@@ -276,7 +276,7 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 	private Vector _last_indicator_list;
 	private Parser data_parser;
 	private Parser indicator_parser;
-	private Drawer main_drawer;		// draws tuples in main graph
-	private Drawer volume_drawer;	// draws volume tuples
+	private MarketDrawer main_drawer;	// draws tuples in main graph
+	private IndicatorDrawer volume_drawer;	// draws volume tuples
 	private MAS_Options options_;	// command-line options
 }
