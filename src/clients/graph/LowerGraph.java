@@ -26,8 +26,17 @@ public class LowerGraph extends InteractiveGraph {
 			d.draw_data(g, r);
 		}
 		last_dataset.draw_data(g, r);
-		if (last_dataset.drawer().data_processed()) {
-			last_dataset.draw_dates(g, r);
+		// Call draw_dates on the last element of dataset that has dates:
+		for (i = dataset.size() - 1; i >= 0; --i) {
+			d = (DataSet) dataset.elementAt(i);
+			if (d.dates != null && d.drawer().data_processed()) {
+				d.draw_dates(g, r);
+				break;
+			}
+		}
+		if (i < 0) {
+			// No dataset with dates was found, so force dates to be drawn.
+			draw_as_empty(g, r);
 		}
 	}
 
