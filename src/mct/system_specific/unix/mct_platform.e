@@ -32,7 +32,7 @@ feature -- Access
 		once
 			Result := get ("HOME")
 			if Result /= Void then
-				Result := Result + "/.mas"
+				Result := Result + "/.mas/"
 			else
 				-- @@Handle unlikely error: $HOME is not set.
 			end

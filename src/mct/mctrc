@@ -20,11 +20,6 @@
 # value for the variable.  The variable can then be used in definitions
 # that follow by surrounding it with <>, e.g.: <var1>/<var2>.
 
-!!!!!!!Remove this platform stuff:
-# For platform-specific functionality - allowed values: unix, windows
-#platform	windows
-platform	unix
-
 # Directory where file-based data resides
 define	data_dir:/opt/mas/lib/data/tradables
 

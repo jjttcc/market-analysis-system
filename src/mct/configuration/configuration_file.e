@@ -43,9 +43,9 @@ feature {NONE} -- Initialization
 		require
 			args_exist: line_field_sep /= Void and platfm /= Void
 		do
+			platform := platfm
 			rf_make (Configuration_file_path)
 			line_field_separator := line_field_sep
-			platform := platfm
 		ensure
 			line_field_separator_set: line_field_separator = line_field_sep
 			platform_set: platform = platfm
@@ -59,15 +59,19 @@ feature -- Access
 
 	Configuration_file_path: STRING is
 			-- The full path of the MCT configuration file
+		require
+			platform_exists: platform /= Void
 		local
 			config_path: STRING
 			dir: DIRECTORY
+			env: expanded OPERATING_ENVIRONMENT
 		once
 			config_path := get (Mct_dir_env_var)
 			if config_path /= Void and then not config_path.is_empty then
 				create dir.make (config_path)
 				if dir.exists then
-					Result := config_path
+					Result := config_path + env.Directory_separator.out +
+						Configuration_file_name
 				end
 			end
 			if Result = Void then
