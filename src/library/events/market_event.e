@@ -11,13 +11,6 @@ deferred class MARKET_EVENT inherit
 
 	TYPED_EVENT
 
-	GLOBAL_SERVICES
-		export
-			{NONE} all
-		undefine
-			is_equal
-		end
-
 	GENERAL_UTILITIES
 		export
 			{NONE} all
