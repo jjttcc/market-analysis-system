@@ -34,7 +34,7 @@ feature -- Access
 			stock: STOCK
 		once
 			!!stock.make ("DUMMY",
-				period_types @ (period_type_names @ Daily), Void)
+				period_types @ (period_type_names @ Daily), Void, Void)
 			!!Result.make (0)
 			-- true_dummy serves as a dummy command instance, needed by
 			-- some of the creation routines for other commands.
