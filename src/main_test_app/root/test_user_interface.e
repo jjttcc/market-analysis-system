@@ -112,6 +112,10 @@ feature {NONE}
 					display_memory_values
 				when 'a', 'A' then
 					save_mklist_position
+					-- Important - update the coordinator with the current
+					-- active event generators:
+					event_coordinator.set_event_generators (
+						active_event_generators)
 					event_coordinator.execute
 					restore_mklist_position
 				when 'd', 'D' then
