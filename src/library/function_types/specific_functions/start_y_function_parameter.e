@@ -33,7 +33,7 @@ feature -- Access
 
 	current_value_equals (v: STRING): BOOLEAN is
 		do
-			Result := v.to_real - function.slope < .001
+			Result := v.to_real - function.start_y < .001
 		end
 
 feature -- Element change
