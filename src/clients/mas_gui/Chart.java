@@ -76,6 +76,7 @@ public class TA_Chart extends Frame
 
 	// Request data for the specified market and display it.
 	void request_data(String market) {
+		DataSet dataset;
 		// Don't redraw the data if it's for the same market as before.
 		if (period_type_change || ! market.equals(current_market)) {
 			Graph2D graph = main_pane.main_graph();
@@ -123,13 +124,43 @@ public class TA_Chart extends Frame
 					System.err.println("IO exception occurred, bye ...");
 					System.exit(-1);
 				}
-				graph.attachDataSet(connection.last_indicator_data());
+				dataset = connection.last_indicator_data();
+				add_indicator_lines(dataset);
+				graph.attachDataSet(dataset);
 				graph.repaint();
 			}
 		}
 	}
 
 // Implementation
+
+	// Add any extra lines to the indicator graph - specified in the
+	// configuration.
+	private void add_indicator_lines(DataSet dataset) {
+		if (current_lower_indicator == null ||
+			current_lower_indicator.equals(No_lower_indicator)) {
+			return;
+		}
+		Vector lines;
+		double d1, d2;
+		Configuration conf = Configuration.instance();
+		lines = conf.vertical_indicator_lines_at(current_lower_indicator);
+		if (lines != null && lines.size() > 0) {
+			for (int i = 0; i < lines.size(); i += 2) {
+				d1 = ((Float) lines.elementAt(i)).floatValue();
+				d2 = ((Float) lines.elementAt(i+1)).floatValue();
+				dataset.add_vline(new DoublePair(d1, d2));
+			}
+		}
+		lines = conf.horizontal_indicator_lines_at(current_lower_indicator);
+		if (lines != null && lines.size() > 0) {
+			for (int i = 0; i < lines.size(); i += 2) {
+				d1 = ((Float) lines.elementAt(i)).floatValue();
+				d2 = ((Float) lines.elementAt(i+1)).floatValue();
+				dataset.add_hline(new DoublePair(d1, d2));
+			}
+		}
+	}
 
 	private void initialize_GUI_components() {
 		// Create the main scroll pane, size it, and center it.
@@ -254,8 +285,7 @@ class IndicatorListener implements java.awt.event.ActionListener {
 	public void actionPerformed(java.awt.event.ActionEvent e) {
 		Graph2D graph;
 		String selection = e.getActionCommand();
-System.out.println("indicator " + selection + " was selected");
-System.out.println("Index: " + _indicators.get(selection));
+		DataSet dataset;
 		try {
 			String market = current_market;
 			if (market == null || selection.equals(current_upper_indicator) ||
@@ -307,7 +337,9 @@ System.out.println("Index: " + _indicators.get(selection));
 			graph = main_pane.indicator_graph();
 			graph.detachDataSets();
 			current_lower_indicator = selection;
-			graph.attachDataSet(connection.last_indicator_data());
+			dataset = connection.last_indicator_data();
+			add_indicator_lines(dataset);
+			graph.attachDataSet(dataset);
 		}
 		graph.repaint();
 	}

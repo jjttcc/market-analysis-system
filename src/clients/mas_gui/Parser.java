@@ -97,7 +97,7 @@ class TA_Parser {
 			int length = xy_data.length / 2;
 			if (length > 0)
 			{
-				processed_data = new DataSet(xy_data, xy_data.length / 2);
+				processed_data = new DataSet(xy_data, length);
 			}
 			else
 			{

@@ -27,7 +27,9 @@ public class TA_Connection implements NetworkProtocol
 		indicator_parser = new TA_Parser(field_specs, Output_record_separator,
 									Output_field_separator);
 		scanner = new DataInspector();
-		bar_drawer = new BarDrawer();
+		main_bar_drawer = new BarDrawer();
+		// When a LineDrawer exists, make this a LineDrawer:
+		indicator_bar_drawer = new BarDrawer();
 		//Process args for the host, port.
 		if (args.length > 0)
 		{
@@ -84,7 +86,7 @@ public class TA_Connection implements NetworkProtocol
 					period_type);
 		data_parser.parse(receive_msg().toString());
 		_last_market_data = data_parser.result();
-		_last_market_data.set_drawer(bar_drawer);
+		_last_market_data.set_drawer(main_bar_drawer);
 		close_connection();
 	}
 
@@ -98,7 +100,7 @@ public class TA_Connection implements NetworkProtocol
 					symbol + Input_field_separator + period_type);
 		indicator_parser.parse(receive_msg().toString());
 		_last_indicator_data = indicator_parser.result();
-		_last_indicator_data.set_drawer(bar_drawer);
+		_last_indicator_data.set_drawer(indicator_bar_drawer);
 		close_connection();
 	}
 
@@ -211,7 +213,7 @@ public class TA_Connection implements NetworkProtocol
 			// error (probably in the client), it is treated as fatal.
 			System.exit(-1);
 		}
-System.out.println(result.toString());
+//!!!System.out.println(result.toString());
 		return result;
 	}
 
@@ -278,5 +280,6 @@ System.out.println(result.toString());
 	private Vector _last_indicator_list;
 	private TA_Parser data_parser;
 	private TA_Parser indicator_parser;
-	private BarDrawer bar_drawer;	// draws bars in graph
+	private BarDrawer main_bar_drawer;	// draws bars in graph
+	private BarDrawer indicator_bar_drawer;	// draws bars in graph
 }

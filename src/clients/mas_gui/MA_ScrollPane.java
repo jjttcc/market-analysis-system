@@ -13,7 +13,6 @@ public class TA_ScrollPane extends ScrollPane
 		super(scrollbarDisplayPolicy);
 
 		chart = parent_chart;
-		drawer = new BarDrawer();
 		_main_graph = new G2Dint();
 		_indicator_graph = new IndicatorGraph();
 		period_type_choice = new Choice();
@@ -88,7 +87,6 @@ public class TA_ScrollPane extends ScrollPane
 	private G2Dint _main_graph;
 	private G2Dint _indicator_graph;
 	DataSet data;
-	BarDrawer drawer;
 	Choice period_type_choice;
 	TA_Chart chart;
 	String _last_period_type;
