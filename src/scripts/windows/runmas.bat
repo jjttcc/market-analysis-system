@@ -1,5 +1,5 @@
 rem Run mas with a hard-coded port number
 
-cd %mas_directory%\data
-mas -o -b -f , 18273 *.txt
-
+cd %MAS_DIRECTORY%
+echo Run "MAS Charts" to view market data charts
+mas -o -b -f , -w 18273

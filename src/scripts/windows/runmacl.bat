@@ -1,5 +1,5 @@
 rem Run the mas command-line client - connect to the server started with runmas
 
-cd %mas_directory%\classes
-java CL_Client "" 18273
-
+cd %MAS_DIRECTORY%
+cd classes
+java CL_Client localhost 18273
