@@ -150,9 +150,8 @@ feature {NONE} -- Implementation of hook methods
 			until
 				Result /= Null_value
 			loop
-				print (msg)
 				inspect
-					character_selection (Void)
+					character_enumeration_selection (msg, cr.all_members).item
 				when creat, creat_u then
 					Result := Create_new_value
 				when remove, remove_u then
@@ -172,7 +171,9 @@ feature {NONE} -- Implementation of hook methods
 				when previous then
 					Result := Exit_value
 				else
-					print ("%NInvalid selection%N")
+					check	-- Should never be reached.
+						selection_always_valid: False
+					end
 				end
 				print ("%N%N")
 			end
@@ -181,16 +182,17 @@ feature {NONE} -- Implementation of hook methods
 	accepted_by_user (c: MARKET_FUNCTION): BOOLEAN is
 		local
 			desc_chc, another_chc, choice_chc: FUNCTION_MENU_CHOICE
+			msg: STRING
 		do
 			create desc_chc.make_description; create another_chc.make_another;
 			create choice_chc.make_choice
-			print ("Select:%N     Print description of " + c.generator +
+			msg := "Select:%N     Print description of " + c.generator +
 				name_for (c) + "? (" + desc_chc.item.out + ")%N" +
 				"     Choose " + c.generator + name_for (c) + " (" +
 				choice_chc.item.out + ") Make another choice (" +
-				another_chc.item.out + ") " + eom)
+				another_chc.item.out + ") " + eom
 			inspect
-				character_selection (Void)
+				character_enumeration_selection (msg, desc_chc.all_members).item
 			when description, description_u then
 				print ("%N" + function_description (c) + "%N%NChoose " +
 					c.generator + name_for (c) + "? (y/n) " + eom)
@@ -206,8 +208,9 @@ feature {NONE} -- Implementation of hook methods
 			when another_choice, another_choice_u then
 				check Result = False end
 			else
-				print ("%NInvalid selection%N%N")
-				check Result = False end
+				check	-- Should never be reached.
+					selection_always_valid: False
+				end
 			end
 		end
 

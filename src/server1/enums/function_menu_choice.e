@@ -23,4 +23,11 @@ create {ENUMERATED}
 
 	make
 
+feature -- Access
+
+	new_instance (value: CHARACTER): FUNCTION_MENU_CHOICE is
+		do
+			create Result.make (value)
+		end
+
 end

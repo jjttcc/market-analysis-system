@@ -154,9 +154,8 @@ feature {NONE} -- Implementation
 			until
 				Result /= Null_value
 			loop
-				print (msg)
 				inspect
-					character_selection (Void)
+					character_enumeration_selection (msg, cr.all_members).item
 				when creat, creat_u then
 					Result := Create_new_value
 				when remove, remove_u then
@@ -176,7 +175,9 @@ feature {NONE} -- Implementation
 				when previous then
 					Result := Exit_value
 				else
-					print ("%NInvalid selection%N")
+					check	-- Should never be reached.
+						selection_always_valid: False
+					end
 				end
 				print ("%N%N")
 			end
@@ -402,18 +403,24 @@ feature {NONE} -- Implementation
 		local
 			finished, yes_selected: BOOLEAN
 			days, months, years: INTEGER
+			yes_choice: YES_NO_HELP_CHOICE
+			selection: ENUMERATED [CHARACTER]
+			msg: STRING
 		do
 			from
+				create yes_choice.make_yes
 			until
 				finished
 			loop
-				print ("Would you like to add a time extension " +
+				msg := "Would you like to add a time extension " +
 					"to match events from the left%Nanalyzer that occur " +
-					which + " the right analyzer? (y/n/h) " + eom)
+					which + " the right analyzer? (" +
+					yes_choice.abbreviation + ") " + eom
+				selection := character_enumeration_selection (msg,
+					yes_choice.all_members)
 				inspect
-					character_selection (Void)
+					selection.item
 				when yes, yes_u then
-					yes_selected := True
 					finished := True
 				when no, no_u then
 					finished := True
@@ -421,11 +428,13 @@ feature {NONE} -- Implementation
 					print (help @
 						help.Compound_event_generator_time_extensions)
 				else
-					print ("Invalid response.%N")
+					check	-- Should never be reached.
+						selection_always_valid: False
+					end
 				end
 			end
 			from
-				if yes_selected then
+				if selection.item = yes then
 					finished := False
 				end
 			until
@@ -454,7 +463,7 @@ feature {NONE} -- Implementation
 				print ("Current settings: " + days.out + " days, " +
 					months.out + " months, " + years.out + " years.%N")
 			end
-			if yes_selected then
+			if selection.item = yes then
 				create Result.make (years, months, days, 0, 0, 0)
 				print ("Time extension added.%N")
 			end
@@ -465,18 +474,23 @@ feature {NONE} -- Implementation
 			-- compound event generator
 		local
 			finished, yes_selected: BOOLEAN
+			yes_choice: YES_NO_HELP_CHOICE
+			selection: ENUMERATED [CHARACTER]
+			msg: STRING
 		do
 			from
+				create yes_choice.make_yes
 			until
 				finished
 			loop
-				print ("Would you like to specify an event type " +
-					"as target for the left analyzer's date/time? " +
-					" (y/n/h) " + eom)
+				msg := "Would you like to specify an event type " +
+					"as target for the left analyzer's date/time? (" +
+					yes_choice.abbreviation + ") " + eom
+				selection := character_enumeration_selection (msg,
+					yes_choice.all_members)
 				inspect
-					character_selection (Void)
+					selection.item
 				when yes, yes_u then
-					yes_selected := True
 					finished := True
 				when no, no_u then
 					finished := True
@@ -484,10 +498,12 @@ feature {NONE} -- Implementation
 					print (help @
 						help.Compound_event_generator_left_target_type)
 				else
-					print ("Invalid response.%N")
+					check	-- Should never be reached.
+						selection_always_valid: False
+					end
 				end
 			end
-			if yes_selected then
+			if selection.item = yes then
 				Result := event_types @ list_selection (
 					event_type_names, "Select an event type:")
 			end

@@ -95,11 +95,16 @@ feature {NONE} -- Hook methods
 	accepted_by_user (c: COMMAND): BOOLEAN is
 		local
 			editable: CONFIGURABLE_EDITABLE_COMMAND
+			msg: STRING
+			enum: ENUMERATED [CHARACTER]
+			msg_enum: PAIR [STRING, ENUMERATED [CHARACTER]]
 		do
-			print (display_for_accepted_by_user (c) + eom)
+			msg_enum := display_for_accepted_by_user (c)
+			msg := msg_enum.left + eom
+			enum := msg_enum.right
 			editable_state := False; editing_needed := False
 			inspect
-				character_selection (Void)
+				character_enumeration_selection (msg, enum.all_members).item
 			when description, description_u then
 				print ("%N" + command_description (c) + "%N%NChoose " +
 					c.generator + name_for (c) + "? (y/n) " + eom)
@@ -135,8 +140,9 @@ feature {NONE} -- Hook methods
 			when another_choice, another_choice_u then
 				check Result = False end
 			else
-				print ("%NInvalid selection%N%N")
-				check Result = False end
+				check	-- Should never be reached.
+					selection_always_valid: False
+				end
 			end
 		end
 
@@ -166,12 +172,16 @@ feature {NONE} -- Utility routines
 			end
 		end
 
-	display_for_accepted_by_user (c: COMMAND): STRING is
+	display_for_accepted_by_user (c: COMMAND):
+		PAIR [STRING, ENUMERATED [CHARACTER]] is
+			-- A menu-selection display based on `c' and an associated
+			-- ENUMERATED object to use for the selection
 		local
 			text: LINKED_LIST [STRING]
 			margin: STRING
 			line_length: INTEGER
 			desc_chc, edit_chc, another_chc, choice_chc: COMMAND_MENU_CHOICE
+			result_string: STRING
 		do
 			create desc_chc.make_description; create edit_chc.make_edit
 			create another_chc.make_another; create choice_chc.make_choice
@@ -184,25 +194,26 @@ feature {NONE} -- Utility routines
 				" (" + choice_chc.item.out + ")")
 			text.extend ("filler")
 			text.extend ("Make another choice (" + another_chc.item.out + ")")
-			Result := text @ 1
+			result_string := text @ 1
 			if do_clone then
 				text.put_i_th ("Choose " + c.generator +
 					" and edit its settings (" + edit_chc.item.out + ")", 3)
 				if (text @ 1).count + (text @ 2).count > line_length then
-					Result.append ("%N" + margin + text @ 2)
+					result_string.append ("%N" + margin + text @ 2)
 				else
-					Result.append (" " + text @ 2)
+					result_string.append (" " + text @ 2)
 				end
-				Result.append ("%N" + margin + text @ 3 + " " + "%N" + margin +
-					text @ 4 + " ")
+				result_string.append ("%N" + margin + text @ 3 + " " + "%N" +
+					margin + text @ 4 + " ")
 			else
 				if (text @ 1).count + (text @ 2).count > line_length then
-					Result.append ("%N" + margin + text @ 2)
+					result_string.append ("%N" + margin + text @ 2)
 				else
-					Result.append (" " + text @ 2)
+					result_string.append (" " + text @ 2)
 				end
-				Result.append ("%N" + margin + text @ 4 + " ")
+				result_string.append ("%N" + margin + text @ 4 + " ")
 			end
+			create Result.make (result_string, desc_chc)
 		end
 
 end -- CL_BASED_COMMAND_EDITING_INTERFACE

@@ -27,4 +27,9 @@ feature -- Access
 
 	object_name: STRING is "indicator"
 
+	new_instance (value: CHARACTER): INDICATOR_EDITING_CHOICE is
+		do
+			create Result.make (value)
+		end
+
 end
