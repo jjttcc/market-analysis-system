@@ -28,6 +28,12 @@ feature -- Access
 	Path_specifier: STRING is "path"
 			-- Specifier token for the path component of the http address
 
+	Proxy_address_specifier: STRING is "proxy_address"
+			-- Specifier token for the proxy address
+
+	Proxy_port_number_specifier: STRING is "proxy_port_number"
+			-- Specifier token for the proxy port number
+
 	Symbol_file_specifier: STRING is "symbol_file"
 			-- Specifier token for the file containing symbols of all
 			-- tradables to be retrieved

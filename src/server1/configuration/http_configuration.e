@@ -52,6 +52,8 @@ feature {NONE} -- Initialization
 			initialize_common_settings
 			settings.extend ("", Host_specifier)
 			settings.extend ("", Path_specifier)
+			settings.extend ("", Proxy_address_specifier)
+			settings.extend ("", Proxy_port_number_specifier)
 			settings.extend ("", Symbol_file_specifier)
 			settings.extend ("", Post_process_command_specifier)
 			settings.extend ("", Output_field_separator_specifier)
@@ -203,6 +205,16 @@ feature -- Access
 			Result := settings @ Host_specifier
 		end
 
+	proxy_address: STRING is
+		do
+			Result := settings @ Proxy_address_specifier
+		end
+
+	proxy_port_number: STRING is
+		do
+			Result := settings @ Proxy_port_number_specifier
+		end
+
 	original_path: STRING is
 		do
 			Result := settings @ Path_specifier
@@ -243,6 +255,12 @@ feature -- Status report
 		do
 			Result := ignored_days_of_week @ (
 				(create {DATE}.make_now).day_of_the_week)
+		end
+
+	proxy_used: BOOLEAN is
+			-- Has a proxy been specified?
+		do
+			Result := not proxy_address.is_empty
 		end
 
 feature -- Element change

@@ -37,6 +37,15 @@ feature {NONE} -- Initialization
 		do
 			create parameters.make
 			create url.http_make (parameters.host, "")
+			if parameters.proxy_used then
+				set_proxy
+			end
+if url.is_proxy_used then
+print (url.proxy_host + ", " + url.proxy_port.out + ", " +
+url.is_proxy_used.out + "%N")
+else
+print ("no proxy is being used for url.%N")
+ end
 			create http_request.make (url)
 			http_request.set_read_mode
 			file_extension := Default_file_extension
@@ -67,6 +76,12 @@ feature {NONE} -- Basic operations
 			retrieval_failed := False
 			append_to_output_file := False
 			http_request.reset_error
+if url.is_proxy_used then
+print (url.proxy_host + ", " + url.proxy_port.out + ", " +
+url.is_proxy_used.out + "%N")
+else
+print ("no proxy is being used for url.%N")
+ end
 			if
 				use_day_after_latest_date_as_start_date and
 				alternate_start_date /= Void
@@ -84,7 +99,19 @@ feature {NONE} -- Basic operations
 			debug ("http")
 				print ("url.path: " + url.path + "%N")
 			end
+if url.is_proxy_used then
+print (url.proxy_host + ", " + url.proxy_port.out + ", " +
+url.is_proxy_used.out + "%N")
+else
+print ("no proxy is being used for url.%N")
+ end
 			perform_http_retrieval
+if url.is_proxy_used then
+print (url.proxy_host + ", " + url.proxy_port.out + ", " +
+url.is_proxy_used.out + "%N")
+else
+print ("no proxy is being used for url.%N")
+ end
 		ensure
 			output_file_exists_if_successful: not retrieval_failed and
 				converted_result /= Void and then
@@ -376,6 +403,42 @@ feature {NONE} -- Implementation
 			if http_request.error then
 				ex.last_exception_status.set_description (
 					http_request.error_text (http_request.error_code))
+			end
+		end
+
+	set_proxy is
+			-- Set url's proxy
+		require
+			attributes_exist: url /= Void and parameters /= Void
+			proxy_used: parameters.proxy_used
+		local
+			port: INTEGER
+			ex: expanded EXCEPTION_SERVICES
+		do
+			if
+				url.proxy_host_ok (parameters.proxy_address) and
+				parameters.proxy_port_number.is_integer
+			then
+				port := parameters.proxy_port_number.to_integer
+				if port >= 0 then
+					url.set_proxy (parameters.proxy_address, port)
+				else
+					ex.last_exception_status.set_description (
+						"Proxy port number is less than 0: '" +
+						port.out + "'.")
+					ex.raise ("")
+				end
+			else
+				if url.proxy_host_ok (parameters.proxy_address) then
+					ex.last_exception_status.set_description (
+						"Proxy port number is not a number: '" +
+						parameters.proxy_port_number + "'.")
+				else
+					ex.last_exception_status.set_description (
+						"Proxy port address is invalid: " +
+						parameters.proxy_address + ".")
+				end
+				ex.raise ("")
 			end
 		end
 
