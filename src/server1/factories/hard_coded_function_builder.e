@@ -83,7 +83,7 @@ feature -- Basic operations
 			l.extend (simple_ma (l.last, StochasticD_n,
 											"Slow Stochastic %%D"))
 			l.extend (rsi (f, RSI_n, "Relative Strength Index"))
-			l.extend (market_close_data (f, "Market Close Data"))
+			l.extend (market_data (f, "Market Data"))
 			l.extend (market_function_line (f, "Line"))
 			product := l
 		end
@@ -348,15 +348,12 @@ feature {NONE} -- Hard-coded market function building procedures
 			initialized: Result /= Void and Result.name = name
 		end
 
-	market_close_data (f: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]; name: STRING):
-						ONE_VARIABLE_FUNCTION is
+	market_data (f: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]; name: STRING):
+						MARKET_DATA_FUNCTION is
 			-- Make a function that simply gives the closing price of
 			-- each tuple.
-		local
-			close_cmd: CLOSING_PRICE
 		do
-			!!close_cmd
-			!!Result.make (f, close_cmd)
+			!!Result.make (f)
 			Result.set_name (name)
 		ensure
 			initialized: Result /= Void and Result.name = name
