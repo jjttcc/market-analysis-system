@@ -187,6 +187,8 @@ FinishedLabel=Setup has finished installing [name] on your computer. The applica
 Filename: "{app}\lib\install\init.bat"; Parameters: "{app}"; Flags: shellexec
 ; Filename: "{app}\bin\runmas.bat"; Description: "Launch Market Analysis System"; Flags: nowait postinstall skipifsilent
 
+;!!!!!!!NOTE: These registry settings are probably no longer needed -
+;!!!!!!!mct (with the mctrc config. file) now takes care of this.
 [Registry]
 ;!!!With MCT, these env. settings are probably no longer needed - check!!!
 Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "MAS_DIRECTORY"; ValueData: "{app}\lib"
