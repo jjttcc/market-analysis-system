@@ -26,7 +26,11 @@ Analysis System client and server.
 
 Note that before running the Market Analysis Server for the first time,
 you will need to set up a few environment variables for it.  See the
-file env_settings for an explanation of these variables.
+file env_settings for an explanation of these variables.  Also,
+the current version of MAS supports any data format that includes
+volume.  Open interest is not supported in the current version.
+The expected order of fields, when opening price is included is:
+date,open,high,low,close,volume.
 
 There are currently two main ways to use MAS: by running the server
 and the GUI client to view charts of markets; and by running the server
@@ -39,7 +43,7 @@ files whose names follow the format *.txt:
 mas -o -f , *.txt -b 13579 &
 
 The -o tells the server that all data files include an opening price;
-the "-f ," tells the server that the character used to separate field
+the "-f ," tells the server that the character used to separate fields
 in the data file is ','.  (The default is tab.)  *.txt, of course,
 passes all file names in the current directory that end in .txt to
 the server and -b tells the server it is to be run in the background.
@@ -78,7 +82,7 @@ magc -h boston.com 13579
 
 when the server is running on a machine named boston.com.
 
-See the file README_GUI for more information on running the GUI client.
+See the file GUI_introduction for more information on running the GUI client.
 
 
 [1] For those not familiar with technical analysis, it is a set of
@@ -90,7 +94,7 @@ toward a variety of economic, monetary, political, and psychological
 forces." ["Technical Analysis Explained," by Martin J. Pring]
 
 [2] For example, I currently have my system configured to issue a
-buy signal if Stochastic %D changes slope from negative to postivie
+buy signal if Stochastic %D changes slope from negative to positive
 when below 30 and, no more than 28 days before that, the weekly MACD
 difference line crossed above the weekly MACD signal line.  I have it
 configured to issue a sell signal for the opposite event - Stochastic
