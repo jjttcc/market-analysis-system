@@ -264,33 +264,6 @@ feature -- Access
 				equal (Result.duration, d)
 		end
 
---!!REmove:
-	old_period_type_with_duration (d: DATE_TIME_DURATION): TIME_PERIOD_TYPE is
-			-- Period type whose duration matches `d' - Void if there
-			-- is no such period type.
-		require
-			d_exists: d /= Void
-			valid_duration: valid_duration (d)
-		local
-			types: LINEAR [TIME_PERIOD_TYPE]
-		do
-			if duration_is_intraday (d) then
-				types := intraday_period_types.linear_representation
-			else
-				types := non_intraday_period_types.linear_representation
-			end
-			from
-				types.start
-			until
-				Result /= Void or else types.exhausted
-			loop
-				if equal (types.item.duration, d) then
-					Result := types.item
-				end
-				types.forth
-			end
-		end
-
 	closest_period_type_for_duration (d: DATE_TIME_DURATION):
 		TIME_PERIOD_TYPE is
 			-- Period type whose duration is greater than or equal to,
