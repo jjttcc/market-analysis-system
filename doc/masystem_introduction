@@ -204,25 +204,39 @@ Then start the GUI the same way as before.
 %hdg2Mas Server Command-line Options
 The -h option to mas will give a full listing of the command-line options.
 %par
-The date-specification (the &lt;spec&gt; part of the -date-spec:&lt;spec&gt;
-option)
+#Need to also cover other tricky options, such as -i/-d.
+The format of the date-specification option, used to
+configure the server to read the
+date field of its data in formats other than the default yyyymmdd, is:
+%par
+*^fontI-date-spec:&lt;spec&gt;*^fontP
+%par
+The actual specification
+(the &lt;spec&gt; part of the option)
 is of the form:
+%par
 &lt;key1&gt;=&lt;value1&gt;[,&lt;key2&gt;=&lt;value2&gt;,...]
+%par
 where &lt;key#&gt; is one of:
 *^fontIdate-format*^fontP, *^fontIyear-partition*^fontP,
 or *^fontIdate-sep*^fontP.
-For the *^fontIdate-format*^fontP specification, the value gives the
-year/month/day format of the date in the input data.  For example:
+For the *^fontIdate-format*^fontP specification, the &lt;value#&gt;
+part gives the year/month/day format of the date in the input data
+(using the '#' character to separate the date components).
+For example:
 %par
-*^fontIdate-format=yyyy#mm#dd*^fontP specifies the order: year, month, day.
+*^fontIdate-format=yyyy#mm#dd*^fontP &nbsp;specifies the order:
+year, month, day.
 %par
-*^fontIdate-format=mm#dd#yyyy*^fontP specifies the order: month, day, year.
+*^fontIdate-format=mm#dd#yyyy*^fontP &nbsp;specifies the order:
+month, day, year.
 %par
-*^fontIdate-format=dd#mm#yy*^fontP specifies the order: day, month, year,
-with a two-digit year.
+*^fontIdate-format=dd#mm#yy*^fontP &nbsp;specifies the order:
+day, month, year, with a two-digit year.
 %par
-*^fontIdate-format=dd#month3#yy*^fontP specifies day, month, year, with a
-two-digit year and with a three-letter abbreviated month (Jan, Feb, etc.).
+*^fontIdate-format=dd#month3#yy*^fontP &nbsp;specifies day, month, year,
+with a two-digit year and with a three-letter abbreviated month
+(Jan, Feb, etc.).
 %par
 The *^fontIdate-sep*^fontP specification gives the field separator to use
 for the date.
@@ -238,7 +252,7 @@ Here's a complete example:
 This example specifies a date of the form *^fontIdd-Mon-yy*^fontP
 (a three-letter
 abbreviated month with a two-digit year), with 80 as the partition value.
-Thus the date:
+Thus the date
 *^fontI10-Jan-03*^fontP is interpreted as January 10, 2003 and the
 date *^fontI21-Oct-81*^fontP is interpreted as October 21, 1981.
 
