@@ -104,6 +104,7 @@ cluster
 											"$/data_scanning";
 	operators (eiffel_components):			"$/commands/operators";
 	event_library (eiffel_components):		"$/events";
+	component_server (eiffel_components):	"$/server";
 	eiffel_component_test (eiffel_components):	"$/test";
 
 		-- ISE library clusters
