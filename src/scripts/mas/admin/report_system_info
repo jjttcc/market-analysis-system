@@ -134,6 +134,8 @@ if setup; then
 	uname -a >>$reportfile 2>&1
 	echo -e "\n/proc/cpuinfo:\n" >>$reportfile
 	cat /proc/cpuinfo >>$reportfile
+	echo -e "\n/proc/meminfo:\n" >>$reportfile
+	cat /proc/meminfo >>$reportfile
 	get_window_system_info
 	send_report
 else
