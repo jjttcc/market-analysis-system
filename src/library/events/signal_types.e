@@ -26,6 +26,28 @@ feature -- Access
 	signal_type: INTEGER
 			-- Type of trading signal associated with this event
 
+	type_as_string: STRING is
+			-- Name for `signal_type'
+		do
+			Result := type_names @ signal_type
+		end
+
+	type_abbreviation: CHARACTER is
+			-- One-letter abbreviation for signal-type name
+		do
+			Result := character_codes @ signal_type
+		end
+
+	signal_value_as_string (value: INTEGER): STRING is
+			-- Name for signal associated with `value'
+		require
+			valid_value: value >= Buy_signal and value <= Other_signal
+		do
+			Result := type_names @ value
+		end
+
+feature -- Constants
+
 	Buy_signal: INTEGER is 1
 			-- Buy
 
@@ -37,19 +59,6 @@ feature -- Access
 
 	Other_signal: INTEGER is 4
 			-- Other
-
-	type_as_string: STRING is
-		do
-			Result := type_names @ signal_type
-		end
-
-	signal_value_as_string (value: INTEGER): STRING is
-			-- Name for signal associated with `value'
-		require
-			valid_value: value >= Buy_signal and value <= Other_signal
-		do
-			Result := type_names @ value
-		end
 
 	type_names: ARRAY [STRING] is
 			-- Names corresponding to the valid signal types
