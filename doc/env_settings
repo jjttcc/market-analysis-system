@@ -32,7 +32,7 @@ the current directory for this information.
 
 Also, in order to use macl, the MAS command-line client, you will need to
 have Python installed and will need to change the PYTHONPATH environment
-varialbe to include the directory where the python library files used by the
+variable to include the directory where the python library files used by the
 macl script are stored.  If you performed a normal installation, these
 files should reside in a sub-directory named "python", under the "lib"
 directory in which you chose to install the library files.  For example,
