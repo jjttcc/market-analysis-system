@@ -1,12 +1,21 @@
 indexing
-	description: "Top-level application interface - command-line driven"
+	description: "Interface to the GUI client"
 	author: "Jim Cochrane"
 	date: "$Date$";
+	note: "It is expected that, before `execute' is called, the first %
+		%character of the input of io_medium has been read."
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
 class MAIN_GUI_INTERFACE inherit
+
+	CLIENT_REQUEST_HANDLER
+		rename
+			command_argument as message_body
+		redefine
+			message_body, request_handlers
+		end
 
 	MAIN_APPLICATION_INTERFACE
 		rename
@@ -65,40 +74,51 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute is
-			-- Note: It is expected that the first character of the input
-			-- of io_medium has been read.
-		local
-			cmd: REQUEST_COMMAND
+--!!!Remove soon:
+--	execute is
+--			-- Note: It is expected that the first character of the input
+--			-- of io_medium has been read.
+--		local
+--			cmd: REQUEST_COMMAND
+--		do
+--			check
+--				medium_set: io_medium /= Void
+--			end
+--			tokenize_message
+--			if message_ID = Logout_request then
+--				-- Logout requests are handled specially - simply remove the
+--				-- client's session.
+--				sessions.remove (session_key)
+--			else
+--				cmd := request_handlers @ message_ID
+--				cmd.set_active_medium (io_medium)
+--				if
+--					message_ID /= Login_request and
+--					sessions.has (session_key)
+--					-- A session is not needed for the login request command,
+--					-- since it will create one.
+--				then
+--					cmd.set_session(sessions @ session_key)
+--				end
+--				cmd.execute (message_body)
+--			end
+--		end
+
+feature {NONE} -- Hook routine implementation
+
+	setup_command (cmd: MAS_REQUEST_COMMAND) is
 		do
-			check
-				medium_set: io_medium /= Void
-			end
-			tokenize_message
-			if message_ID = Logout_request then
-				-- Logout requests are handled specially - simply remove the
-				-- client's session.
-				sessions.remove (session_key)
-			else
-				cmd := request_handlers @ message_ID
 				cmd.set_active_medium (io_medium)
-				if
-					message_ID /= Login_request and
-					sessions.has (session_key)
-					-- A session is not needed for the login request command,
-					-- since it will create one.
-				then
-					cmd.set_session(sessions @ session_key)
-				end
-				cmd.execute (message_body)
-			end
 		end
 
-feature {NONE}
+	request_error: BOOLEAN is
+		do
+			Result := request_id = Error
+		end
 
-	tokenize_message is
+	process_request is
 			-- Input the next client request, blocking if necessary, and split
-			-- the received message into `message_ID', `session_key',
+			-- the received message into `request_id', `session_key',
 			-- and `message_body'.
 		local
 			s, number: STRING
@@ -118,36 +138,36 @@ feature {NONE}
 				i := s.substring_index (Input_field_separator, 1)
 			end
 			if i <= 1 then
-				message_ID := Error
+				request_id := Error
 				message_body := "Invalid message format: "
 				message_body.append(s)
 			elseif io_medium.last_character /= eom @ 1 then
 				s.extend (io_medium.last_character)
-				message_ID := Error
+				request_id := Error
 				message_body := "End of message string not received with:%N"
 				message_body.append(s)
 			else
-				-- Extract the message ID.
+				-- Extract the request ID.
 				number := s.substring (1, i - 1)
 				if not number.is_integer then
-					message_body := "Message ID is not a valid integer: "
+					message_body := "request ID is not a valid integer: "
 					message_body.append (number)
-					message_ID := Error
+					request_id := Error
 				elseif
 					not request_handlers.has (number.to_integer) and
 					number.to_integer /= Logout_request
 				then
-					message_body := "Invalid message ID: "
+					message_body := "Invalid request ID: "
 					message_body.append (number)
-					message_ID := Error
+					request_id := Error
 				else
-					message_ID := number.to_integer
+					request_id := number.to_integer
 					j := s.substring_index (Input_field_separator,
 							i + Input_field_separator.count)
 					if j = 0 then
 						message_body := "Invalid message format: "
 						message_body.append (s)
-						message_ID := Error
+						request_id := Error
 					else
 						-- Extract the session key.
 						number := s.substring (i + Input_field_separator.count,
@@ -156,15 +176,15 @@ feature {NONE}
 							message_body :=
 								"Session key is not a valid integer: "
 							message_body.append (number)
-							message_ID := Error
+							request_id := Error
 						else
 							session_key := number.to_integer
-							if not message_ID_and_key_valid then
+							if not request_id_and_key_valid then
 								message_body := "Invalid session key: "
 								message_body.append (number)
-								message_body.append (", for message ID: ")
-								message_body.append (message_ID.out)
-								message_ID := Error
+								message_body.append (", for request ID: ")
+								message_body.append (request_id.out)
+								request_id := Error
 							else
 								set_message_body (
 									s, j + Input_field_separator.count)
@@ -173,13 +193,28 @@ feature {NONE}
 					end
 				end
 			end
+			check
+				message_body_set: message_body /= Void
+			end
 		end
+
+	is_logout_request (id: INTEGER): BOOLEAN is
+		do
+			Result := id = Logout_request
+		end
+
+	is_login_request (id: INTEGER): BOOLEAN is
+		do
+			Result := id = Login_request
+		end
+
+feature {NONE} -- Implementation
 
 	make_request_handlers is
 			-- Create the request handlers.
 		local
-			cmd: REQUEST_COMMAND
-			rh: HASH_TABLE [REQUEST_COMMAND, INTEGER]
+			cmd: MAS_REQUEST_COMMAND
+			rh: HASH_TABLE [MAS_REQUEST_COMMAND, INTEGER]
 		do
 			create rh.make (0)
 			create {MARKET_DATA_REQUEST_CMD} cmd.make (market_list_handler)
@@ -213,19 +248,6 @@ feature {NONE}
 			make_request_handlers
 		end
 
-	message_ID_and_key_valid: BOOLEAN is
-			-- Is the combination of message_ID and session_key valid?
-		do
-			if
-				not sessions.has (session_key) and
-				message_ID /= Login_request
-			then
-				Result := false
-			else
-				Result := true
-			end
-		end
-	
 	set_message_body (s: STRING; index: INTEGER) is
 			-- Set `message_body' from string extracted from `s' @ `index'
 			-- and set io_medium's compression on if specified in `s'.
@@ -245,14 +267,8 @@ feature {NONE}
 
 feature {NONE}
 
-	request_handlers: HASH_TABLE [REQUEST_COMMAND, INTEGER]
+	request_handlers: HASH_TABLE [MAS_REQUEST_COMMAND, INTEGER]
 			-- Handlers of client requests received via io_medium
-
-	session_key: INTEGER
-			-- Session key for last client request
-
-	message_ID: INTEGER
-			-- ID of last client request
 
 	message_body: STRING
 			-- body of last client request
