@@ -35,15 +35,15 @@ feature -- Basic operations
 
 	execute (arg: ANY) is
 		local
-			original_cursor: CURSOR
+			old_i: INTEGER
 		do
-			original_cursor := target.cursor
+			old_i := target.index
 			target.move (offset)
 			check
 				target_not_off: not target.off
 			end
 			operate (arg)
-			target.go_to (original_cursor) -- Restore cursor.
+			target.go_i_th (old_i) -- Restore cursor.
 		end
 
 feature {NONE} -- Hook methods
