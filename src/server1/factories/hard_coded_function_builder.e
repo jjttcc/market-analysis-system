@@ -150,7 +150,7 @@ feature {NONE} -- Hard-coded market function building procedures
 				operator_type: STRING): N_RECORD_ONE_VARIABLE_FUNCTION is
 			-- A momentum function
 		local
-			operator: BINARY_NUMERIC_OPERATOR
+			operator: BINARY_OPERATOR [REAL, REAL]
 			close: CLOSING_PRICE
 			close_minus_n: MINUS_N_COMMAND
 		do
@@ -175,10 +175,10 @@ feature {NONE} -- Hard-coded market function building procedures
 		local
 			up_closes, down_closes: MINUS_N_COMMAND
 			up_adder, down_adder: LINEAR_SUM
-			up_boolclient, down_boolclient: BOOLEAN_CLIENT
+			up_boolclient, down_boolclient: BOOLEAN_NUMERIC_CLIENT
 			lt_op: LT_OPERATOR
 			gt_op: GT_OPERATOR
-			blc1, blc2: SETTABLE_OFFSET_COMMAND
+			offset1, offset2: SETTABLE_OFFSET_COMMAND
 			close: CLOSING_PRICE
 			zero, one_hundred, one, nconst: CONSTANT
 			upsub, downsub, outer_sub: SUBTRACTION
@@ -187,18 +187,18 @@ feature {NONE} -- Hard-coded market function building procedures
 		do
 			!!close; !!zero.make (0)
 			!!one_hundred.make (100); !!one.make (1); !!nconst.make (n)
-			!!blc1.make (f.output, close); !!blc2.make (f.output, close)
-			blc2.set_offset (1)
-			!!lt_op.make (blc1, blc2)
-			!!upsub.make (blc2, blc1)
+			!!offset1.make (f.output, close); !!offset2.make (f.output, close)
+			offset2.set_offset (1)
+			!!lt_op.make (offset1, offset2)
+			!!upsub.make (offset2, offset1)
 			!!up_boolclient.make (lt_op, upsub, zero)
 			!!up_adder.make (f.output, up_boolclient, n)
 			!!up_closes.make (f.output, up_adder, n)
 			!!upavg.make (up_closes, nconst)
 
-			!!gt_op.make (blc1, blc2)
+			!!gt_op.make (offset1, offset2)
 			-- Notice that order of arguments is different:
-			!!downsub.make (blc1, blc2)
+			!!downsub.make (offset1, offset2)
 			!!down_boolclient.make (gt_op, downsub, zero)
 			!!down_adder.make (f.output, down_boolclient, n)
 			!!down_closes.make (f.output, down_adder, n)
