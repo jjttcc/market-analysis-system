@@ -12,7 +12,7 @@ creation
 
 	make
 
-feature
+feature -- Access
 
 	open_interest: INTEGER
 			-- Number of existing contracts
