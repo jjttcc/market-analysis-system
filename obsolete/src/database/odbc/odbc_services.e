@@ -16,6 +16,26 @@ class ODBC_SERVICES inherit
 			all
 		end
 
+	EXCEPTIONS
+		export {NONE}
+			all
+		end
+
+creation
+
+	make
+
+feature -- Initialization
+
+	make is
+		do
+			load_stock_splits
+		ensure
+			splits_not_void_if_available:
+				not fatal_error and not db_info.stock_split_query.empty implies
+					stock_splits /= Void
+		end
+
 feature -- Access
 
 	symbols: LIST [STRING] is
@@ -46,6 +66,8 @@ feature -- Access
 				end
 			end
 		end
+
+	stock_splits: ODBC_STOCK_SPLITS
 
 	daily_stock_data (symbol: STRING): DB_INPUT_SEQUENCE is
 		do
@@ -129,6 +151,11 @@ feature {NONE} -- Implementation
 			fatal_error := false
 			result_list := db_mgr.retrieve (query)
 			create Result.make (result_list)
+		end
+
+	load_stock_splits is
+		do
+			-- Stub
 		end
 
 end -- class ODBC_SERVICES
