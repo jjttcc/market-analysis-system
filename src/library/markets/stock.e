@@ -152,7 +152,8 @@ feature {NONE} -- Implementation
 
 	do_split_adjustment is
 		require
-			lists_not_empty: not is_empty and splits /= Void and not splits.is_empty
+			lists_not_empty: not is_empty and splits /= Void and
+				not splits.is_empty
 			not_splits_off: not splits.off
 			splt_date_gt_first: splits.item.date > first.date_time.date
 			prev_splt_date_le_first: not splits.isfirst implies

@@ -97,9 +97,9 @@ feature -- Status report
 	processed: BOOLEAN is
 		do
 			Result := (input1.processed and input2.processed) and then
-					processed_date_time /= Void and then
-					processed_date_time >= input1.processed_date_time and then
-					processed_date_time >= input2.processed_date_time
+				processed_date_time /= Void and then
+				processed_date_time >= input1.processed_date_time and then
+				processed_date_time >= input2.processed_date_time
 		end
 
 	has_children: BOOLEAN is True
