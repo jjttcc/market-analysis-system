@@ -202,7 +202,6 @@ feature {NONE} -- Implementation
 		do
 			if meg_names.count = 0 then
 				finished := True
-				print ("There are currently no market analyzers.%N")
 			else
 				Result := market_event_generation_library @ list_selection (
 					meg_names, concatenation (
