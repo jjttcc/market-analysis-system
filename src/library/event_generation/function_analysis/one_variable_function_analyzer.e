@@ -47,11 +47,18 @@ feature -- Access
 	input: MARKET_FUNCTION
 
 	offset: INTEGER
-			-- Offset (used by `start') to set start position.
-			-- For example, if operator is binary and operand 1 processes
-			-- the current item of target and operand 2 processes the previous
-			-- item, the offset would need to be 1 so that after calling start
-			-- operand 2 would have a valid cursor position to process.
+			-- The largest offset used by an operator component to operate
+			-- on an element of the target data sequence (input.output)
+			-- before the current cursor position.  This is needed to ensure
+			-- that an invalid cursor position is never accessed.  For
+			-- example, if one of the operator components (the operator
+			-- itself or, recursively, one of its operands) will, in its
+			-- execute routine, access the position 5 elements before (to
+			-- the left of) the current cursor position and no other
+			-- component will access a position further left than this,
+			-- offset should be set to 5.  Note that access to the right
+			-- of the current cursor is not supported (offset cannot be
+			-- negative).
 
 	indicators: LIST [MARKET_FUNCTION] is
 		do
@@ -81,7 +88,7 @@ feature -- Status setting
 	set_offset (arg: INTEGER) is
 			-- Set offset to `arg'.
 		require
-			arg_not_void: arg /= Void
+			arg_not_negative: arg >= 0
 		do
 			offset := arg
 		ensure
@@ -115,7 +122,10 @@ feature {NONE} -- Hook routine implementation
 			loop
 				target.forth
 			end
-			if offset /= 0 then
+			if offset > 0 then
+				-- Adjust target cursor to the right `offset' positions
+				-- so that the left offset used by the operator will
+				-- not cause an invalid position to be accessed.
 				from
 					i := 0
 				until
