@@ -87,4 +87,3 @@ feature
 		end
 
 end -- class STREAM_READER
-
