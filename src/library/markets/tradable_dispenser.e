@@ -23,6 +23,7 @@ feature -- Access
 		ensure
 			result_definition: Result = tradable (current_symbol, period_type)
 			last_tradable_set: last_tradable = Result
+			not_void_if_no_error: not error_occurred implies Result /= Void
 		end
 
 	index: INTEGER is
@@ -42,6 +43,7 @@ feature -- Access
 			period_type_valid: Result /= Void implies
 				Result.period_types.has (period_type.name)
 			last_tradable_set: last_tradable = Result
+			not_void_if_no_error: not error_occurred implies Result /= Void
 		end
 
 	tuple_list (symbol: STRING; period_type: TIME_PERIOD_TYPE):
@@ -62,14 +64,15 @@ feature -- Access
 		ensure
 			same_period_type: Result /= Void implies
 				Result.trading_period_type.is_equal (period_type)
+			not_void_if_no_error: not error_occurred implies Result /= Void
 		end
 
 	symbols: LIST [STRING] is
 			-- The symbol of each tradable
 		deferred
 		ensure
-			result_exists: Result /= Void
 			object_comparison: Result.object_comparison
+			not_void_if_no_error: not error_occurred implies Result /= Void
 		end
 
 	period_types (symbol: STRING): ARRAYED_LIST [STRING] is
@@ -78,7 +81,10 @@ feature -- Access
 			-- Void if the tradable for `symbol' is not found
 		require
 			not_void: symbol /= Void
+			symbol_valid: symbols.has (symbol)
 		deferred
+		ensure
+			not_void_if_no_error: not error_occurred implies Result /= Void
 		end
 
 	current_symbol: STRING is
