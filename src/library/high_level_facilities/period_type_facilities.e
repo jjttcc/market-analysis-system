@@ -184,38 +184,6 @@ feature -- Access
 			exists: Result /= Void
 		end
 
---!!!remove:
-	old_remove_period_types_in_order: LIST [TIME_PERIOD_TYPE] is
-			-- All time period types sorted in ascending order by
-			-- duration such that: (Result @ one_minute) is the
-			-- one-minute period type .. (Result @ yearly) is the
-			-- yearly period type - Note: Any existing non-standard period
-			-- types are not included in the result.
-			-- @@Check if the above condition is acceptable to all clients.
-		local
-			type_names: ARRAY [STRING]
-			i: INTEGER
-			t: TIME_PERIOD_TYPE
-		once
-			create {LINKED_LIST [TIME_PERIOD_TYPE]} Result.make
-			type_names := period_type_names
-			from
-				i := 1
-			invariant
-				sorted: is_sorted_ascending (Result)
-			until
-				i = type_names.count + 1
-			loop
-				t := period_types @ (type_names @ i)
-				if (standard_period_type (t)) then
-					Result.extend (t)
-				end
-				i := i + 1
-			end
-		ensure
-			sorted: is_sorted_ascending (Result)
-		end
-
 	period_types_in_order: PART_SORTED_SET [TIME_PERIOD_TYPE] is
 			-- All time period types sorted in ascending order by
 			-- duration.
@@ -327,8 +295,6 @@ feature -- Access
 				end
 				types.forth
 			end
-print ("closest_period_type_for_duration for " + d.out + " found: " +
-Result.name + "%N")
 		ensure
 			exists_if_not_greater_than_largest_period_type:
 				period_type_at_index (yearly).duration <= d implies
@@ -450,8 +416,6 @@ feature -- Status report
 				until
 					not Result or else ns_types.exhausted
 				loop
---!!cleanthis
-print ("checking non-standard type: " + ns_types.item.name + "%N")
 					Result := non_standard_period_type_correct (ns_types.item)
 					ns_types.forth
 				end

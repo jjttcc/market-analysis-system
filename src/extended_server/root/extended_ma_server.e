@@ -31,9 +31,6 @@ feature {NONE} -- Initialization
 		do
 			-- Force the platform's command-line to be an "extended" one.
 			cl_dummy := platform.command_line_cell (extended_command_line).item
---!!!Clean up
-print ("allow non-std per types: " +
-extended_command_line.allow_non_standard_period_types.out + "%N")
 			mas_make
 		end
 

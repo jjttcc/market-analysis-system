@@ -45,13 +45,6 @@ feature {NONE} -- Implementation
 				if period_type = Void then
 					ptypes.add_non_standard_period_type (duration)
 					period_type := ptypes.period_type_with_duration (duration)
-print ("check_date_time - period type was non-standard: " +
-period_type.name + "%N")
---!!!Debugging - cleanup needed
-				else
---!!!Debugging - cleanup needed
-print ("check_date_time - period type with dur gave: " +
-period_type.name + "%N")
 				end
 				check
 					period_type_exists: period_type /= Void

@@ -34,10 +34,13 @@ feature {NONE} -- Initialization
 				implies daily_list.caching_on = intraday_list.caching_on
 			-- for_all i member_of 1 .. daily_list.count it_holds
 			--    (daily_list.symbols @ i).is_equal (intraday_list.symbols @ i)
+		local
+			ptypes: expanded PERIOD_TYPE_FACILITIES
 		do
 			daily_market_list := daily_list
 			intraday_market_list := intraday_list
 			indicators := inds
+			standard_period_types := ptypes.standard_period_types
 		ensure
 			lists_set: daily_market_list = daily_list and
 				intraday_market_list = intraday_list
@@ -104,76 +107,12 @@ feature -- Access
 					Result.count = intraday_market_list.count
 		end
 
---!!!!!remove:
-	old_remove_period_type_names_for (symbol: STRING): ARRAYED_LIST [STRING] is
-		local
-			l: LIST [TIME_PERIOD_TYPE]
-			t: TRADABLE [BASIC_MARKET_TUPLE]
-			tbl: HASH_TABLE [BOOLEAN, STRING]
-		do
-			reset_error_state
-			if daily_market_list /= Void then
-				daily_market_list.search_by_symbol (symbol)
-				if not daily_market_list.fatal_error then
-					t := daily_market_list.item
-				end
-				if not daily_market_list.fatal_error then
-					l := t.period_types.linear_representation
-					create tbl.make (l.count)
-					from
-						l.start
-					until
-						l.exhausted
-					loop
-						tbl.extend (True, l.item.name)
-						l.forth
-					end
-				else
-					error_occurred := True
-					last_error := concatenation (<<"Error occurred ",
-						"retrieving non-intraday period types for ", symbol>>)
-				end
-			end
-			if not error_occurred and intraday_market_list /= Void then
-				intraday_market_list.search_by_symbol (symbol)
-				if not intraday_market_list.fatal_error then
-					t := intraday_market_list.item
-				end
-				if not intraday_market_list.fatal_error then
-					l := t.period_types.linear_representation
-					if tbl = Void then
-						create tbl.make (l.count)
-					end
-					from
-						l.start
-					until
-						l.exhausted
-					loop
--- !!!!If non-standard ptypes are not allowed, and l.item is non-standard
--- don't insert it into the list.
-						tbl.extend (True, l.item.name)
-						l.forth
-					end
-				else
-					error_occurred := True
-					last_error := concatenation (<<"Error occurred ",
-						"retrieving intraday period types for ", symbol>>)
-				end
-			end
-			check tbl_check: not error_occurred implies tbl /= Void end
-			if tbl /= Void and not tbl.is_empty then
-				tbl.compare_objects
-				Result := period_types_sorted_by_duration (tbl)
-			end
-		end
-
 	period_type_names_for (symbol: STRING): ARRAYED_LIST [STRING] is
 		local
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 			target_set: PART_SORTED_SET [TIME_PERIOD_TYPE]
 			std_types: LINKED_SET [TIME_PERIOD_TYPE]
 			g: expanded GLOBAL_SERVER_FACILITIES
-			ptypes: expanded PERIOD_TYPE_FACILITIES
 		do
 			reset_error_state
 			create target_set.make
@@ -190,10 +129,10 @@ feature -- Access
 						g.command_line_options.allow_non_standard_period_types
 					then
 						create std_types.make
-						std_types.fill (ptypes.standard_period_types)
+						std_types.fill (standard_period_types)
 						-- Since "non-standard" period types are not allowed,
 						-- remove from `target_set' all period types that
-						-- do not occur in `ptypes.standard_period_types'.
+						-- do not occur in `standard_period_types'.
 						target_set.intersect (std_types)
 					end
 				else
@@ -331,6 +270,10 @@ feature {NONE} -- Implementation
 	symbol_list: LIST [STRING]
 			-- List of all tradable symbols - used for iteration
 
+	standard_period_types: LINKED_LIST [TIME_PERIOD_TYPE]
+			-- All "standard" period types (e.g., excluding 3-minute,
+			-- 4-minute, etc. types)
+
 	list_for (period_type: TIME_PERIOD_TYPE): TRADABLE_LIST is
 			-- The tradable list that holds data for `period_type'
 		do
@@ -355,31 +298,6 @@ feature {NONE} -- Implementation
 				not intraday_market_list.is_empty)
 		end
 
---!!!!!remove:
-	period_types_sorted_by_duration (t: HASH_TABLE [BOOLEAN, STRING]):
-		ARRAYED_LIST [STRING] is
-			-- The result of a sort by duration, ascending, of the
-			-- associated period type of each element of `t'
-		require
-			object_compare: t.object_comparison
-		local
-			l: LIST [TIME_PERIOD_TYPE]
-			gs: expanded GLOBAL_SERVICES
-		do
-			from
-				l := gs.period_types_in_order
-				create Result.make (l.count)
-				l.start
-			until
-				l.exhausted
-			loop
-				if t.has (l.item.name) then
-					Result.force (l.item.name)
-				end
-				l.forth
-			end
-		end
-
 	reset_error_state is
 			-- Reset internal error state to no errors.
 		do
@@ -401,6 +319,7 @@ invariant
 	consistent_caching: daily_market_list /= Void and
 		intraday_market_list /= Void implies
 		daily_market_list.caching_on = intraday_market_list.caching_on
+	standard_period_types_exists: standard_period_types /= Void
 	-- for_all i member_of 1 .. daily_market_list.count it_holds
 	--    (daily_market_list.symbols @ i).is_equal (
 	--       intraday_market_list.symbols @ i)
