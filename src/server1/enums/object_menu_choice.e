@@ -12,11 +12,6 @@ deferred class OBJECT_MENU_CHOICE inherit
 
 feature -- Access
 
-	value_set: LINKED_SET [CHARACTER] is
-		once
-			Result := value_set_implementation
-		end
-
 feature {NONE} -- Initialization
 
 	make_description is

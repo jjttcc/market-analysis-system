@@ -11,16 +11,22 @@ deferred class OBJECT_MENU_VALUES inherit
 feature -- Access
 
 	description: CHARACTER is 'd'
+		-- Constant for 'description' selection
 
-	description_upper: CHARACTER is 'D'
+	description_u: CHARACTER is 'D'
+		-- Constant for 'description' selection, uppercase
 
 	choose: CHARACTER is 'c'
+		-- Constant for 'choice' selection
 
-	choose_upper: CHARACTER is 'C'
+	choose_u: CHARACTER is 'C'
+		-- Constant for 'choice' selection, uppercase
 
 	another_choice: CHARACTER is 'a'
+		-- Constant for 'another choice' selection
 
-	another_choice_upper: CHARACTER is 'A'
+	another_choice_u: CHARACTER is 'A'
+		-- Constant for 'another choice' selection, uppercase
 
 	object_name: STRING is
 		deferred
@@ -28,27 +34,27 @@ feature -- Access
 
 feature {NONE} -- Implementation
 
-	allowable_values: ARRAY [CHARACTER] is
-		once
-			Result := <<description, description_upper, choose, choose_upper,
-				another_choice, another_choice_upper>>
+	initial_allowable_values: ARRAY [CHARACTER] is
+		do
+io.error.print ("initial_allowable_values called for OMV%N")
+			Result := <<description, description_u, choose, choose_u,
+				another_choice, another_choice_u>>
 		end
 
 	value_name_map: HASH_TABLE [STRING, CHARACTER] is
 		do
-			create Result.make (8)
+			create Result.make (6)
 			Result.put ("description of the " + object_name, description)
-			Result.put ("description of the " + object_name, description_upper)
+			Result.put ("description of the " + object_name, description_u)
 			Result.put ("Choose a " + object_name, choose)
-			Result.put ("Choose a " + object_name, choose_upper)
+			Result.put ("Choose a " + object_name, choose_u)
 			Result.put ("Choose another " + object_name, another_choice)
-			Result.put ("Choose another " + object_name, another_choice_upper)
+			Result.put ("Choose another " + object_name, another_choice_u)
 		end
 
 invariant
 
 	name_exists: object_name /= Void and then not object_name.is_empty
-	implementation_data_exist: allowable_values /= Void and
-		value_name_map /= Void
+	implementation_data_exist: value_name_map /= Void
 
 end

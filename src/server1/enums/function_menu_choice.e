@@ -11,6 +11,9 @@ class FUNCTION_MENU_CHOICE inherit
 	OBJECT_MENU_CHOICE
 
 	FUNCTION_MENU_VALUES
+		undefine
+			out
+		end
 
 create
 

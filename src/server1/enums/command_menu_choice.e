@@ -11,6 +11,9 @@ class COMMAND_MENU_CHOICE inherit
 	OBJECT_MENU_CHOICE
 
 	COMMAND_MENU_VALUES
+		undefine
+			out
+		end
 
 create
 
