@@ -41,76 +41,6 @@ feature -- Access
 	market_tuple_selector: MARKET_TUPLE_LIST_SELECTOR
 			-- Interface that provides selection of a market tuple list
 
-feature -- Constants
-
-	Boolean_result_command: STRING is "RESULT_COMMAND [BOOLEAN]"
-			-- Name of result command with a BOOLEAN generic parameter
-
-	Real_result_command: STRING is "RESULT_COMMAND [REAL]"
-			-- Name of result command with a REAL generic parameter
-
-	Binary_boolean_real_command: STRING is "BINARY_OPERATOR [BOOLEAN, REAL]"
-			-- Name of binary command with BOOLEAN, REAL generic parameters
-
-	Binary_real_real_command: STRING is "BINARY_OPERATOR [REAL, REAL]"
-			-- Name of binary command with REAL, REAL generic parameters
-
-	Basic_numeric_command: STRING is "BASIC_NUMERIC_COMMAND"
-			-- Name of BASIC_NUMERIC_COMMAND
-
-	N_based_calculation: STRING is "N_BASED_CALCULATION"
-			-- Name of N_BASED_CALCULATION
-
-	Linear_command: STRING is "LINEAR_COMMAND"
-			-- Name of LINEAR_COMMAND
-
-feature -- Status setting
-
-	set_left_offset (arg: INTEGER) is
-			-- Set left_offset to `arg'.
-		require
-			arg_not_negative: arg >= 0
-		do
-			left_offset := arg
-		ensure
-			left_offset_set: left_offset = arg and left_offset >= 0
-		end
-
-	set_market_function (arg: MARKET_FUNCTION) is
-			-- Set market_function to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			market_function := arg
-		ensure
-			market_function_set: market_function = arg and
-				market_function /= Void
-		end
-
-	set_market_tuple_selector (arg: MARKET_TUPLE_LIST_SELECTOR) is
-			-- Set market_tuple_selector to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			market_tuple_selector := arg
-		ensure
-			market_tuple_selector_set: market_tuple_selector = arg and
-				market_tuple_selector /= Void
-		end
-
-feature -- Miscellaneous
-
-	print_command_tree (cmd: COMMAND; level: INTEGER) is
-			-- Print the type name of `cmd' and, recursively, that of all
-			-- of its operands.
-        require
-            not_void: cmd /= Void
-            level_positive: level > 0
-		deferred
-		end
-
-feature {APPLICATION_COMMAND_EDITOR} -- Access
-
 	command_types: HASH_TABLE [ARRAYED_LIST [COMMAND], STRING] is
 			-- Hash table of lists of command instances - each list contains
 			-- instances of all classes whose type conforms to the Hash
@@ -210,7 +140,90 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 			l.extend (command_with_generator ("N_VALUE_COMMAND"))
 			l.extend (command_with_generator ("MA_EXPONENTIAL"))
 			l.extend (command_with_generator ("N_BASED_UNARY_OPERATOR"))
+
+			!!l.make (7)
+			Result.extend (l, N_record_command)
+			l.extend (command_with_generator ("LOWEST_VALUE"))
+			l.extend (command_with_generator ("LINEAR_SUM"))
+			l.extend (command_with_generator ("HIGHEST_VALUE"))
+			l.extend (command_with_generator ("MA_EXPONENTIAL"))
+			l.extend (command_with_generator ("N_VALUE_COMMAND"))
+			l.extend (command_with_generator ("N_BASED_UNARY_OPERATOR"))
+			l.extend (command_with_generator ("MINUS_N_COMMAND"))
 		end
+
+feature -- Constants
+
+	Boolean_result_command: STRING is "RESULT_COMMAND [BOOLEAN]"
+			-- Name of result command with a BOOLEAN generic parameter
+
+	Real_result_command: STRING is "RESULT_COMMAND [REAL]"
+			-- Name of result command with a REAL generic parameter
+
+	Binary_boolean_real_command: STRING is "BINARY_OPERATOR [BOOLEAN, REAL]"
+			-- Name of binary command with BOOLEAN, REAL generic parameters
+
+	Binary_real_real_command: STRING is "BINARY_OPERATOR [REAL, REAL]"
+			-- Name of binary command with REAL, REAL generic parameters
+
+	Basic_numeric_command: STRING is "BASIC_NUMERIC_COMMAND"
+			-- Name of BASIC_NUMERIC_COMMAND
+
+	N_based_calculation: STRING is "N_BASED_CALCULATION"
+			-- Name of N_BASED_CALCULATION
+
+	N_record_command: STRING is "N_RECORD_COMMAND"
+			-- Name of N_RECORD_COMMAND
+
+	Linear_command: STRING is "LINEAR_COMMAND"
+			-- Name of LINEAR_COMMAND
+
+feature -- Status setting
+
+	set_left_offset (arg: INTEGER) is
+			-- Set left_offset to `arg'.
+		require
+			arg_not_negative: arg >= 0
+		do
+			left_offset := arg
+		ensure
+			left_offset_set: left_offset = arg and left_offset >= 0
+		end
+
+	set_market_function (arg: MARKET_FUNCTION) is
+			-- Set market_function to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			market_function := arg
+		ensure
+			market_function_set: market_function = arg and
+				market_function /= Void
+		end
+
+	set_market_tuple_selector (arg: MARKET_TUPLE_LIST_SELECTOR) is
+			-- Set market_tuple_selector to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			market_tuple_selector := arg
+		ensure
+			market_tuple_selector_set: market_tuple_selector = arg and
+				market_tuple_selector /= Void
+		end
+
+feature -- Miscellaneous
+
+	print_command_tree (cmd: COMMAND; level: INTEGER) is
+			-- Print the type name of `cmd' and, recursively, that of all
+			-- of its operands.
+        require
+            not_void: cmd /= Void
+            level_positive: level > 0
+		deferred
+		end
+
+feature {APPLICATION_COMMAND_EDITOR} -- Access
 
 	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
 		do
@@ -558,8 +571,6 @@ feature -- Implementation
 		end
 
 feature -- Implementation - options
-
---!!!	initialization_needed: BOOLEAN is true
 
 	clone_needed: BOOLEAN is true
 
