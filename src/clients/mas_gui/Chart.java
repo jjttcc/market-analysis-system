@@ -119,8 +119,8 @@ public class Chart extends Frame implements Runnable {
 				dataset.set_y_min_max(main_dataset);
 				main_pane.add_main_data_set(dataset);
 			}
-			setTitle(market);
 			current_market = market;
+			set_window_title();
 			if (current_lower_indicator != null &&
 					! current_lower_indicator.equals(No_lower_indicator)) {
 				// Retrieve the indicator data for the newly selected market
@@ -276,6 +276,17 @@ public class Chart extends Frame implements Runnable {
 		data_builder.logout(true, status);
 	}
 
+	// Set the window title using current_market and current_lower_indicator.
+	private void set_window_title() {
+		if (current_lower_indicator != null &&
+				! current_lower_indicator.equals(No_lower_indicator)) {
+			setTitle(current_market + " - " + current_lower_indicator);
+		}
+		else {
+			setTitle(current_market);
+		}
+	}
+
 	private DataSetBuilder data_builder;
 
 	// # of open windows - so program can exit when last one is closed
@@ -370,10 +381,12 @@ class IndicatorListener implements java.awt.event.ActionListener {
 		else if (selection.equals(No_lower_indicator)) {
 			main_pane.clear_indicator_graph();
 			current_lower_indicator = selection;
+			set_window_title();
 		}
 		else {
 			main_pane.clear_indicator_graph();
 			current_lower_indicator = selection;
+			set_window_title();
 			if (selection.equals(Volume)) {
 				dataset = data_builder.last_volume();
 			} else {
