@@ -230,14 +230,14 @@ cluster
 
 	polling_implementation (net):		"$/polling/implementation"
 
+--!!!!NOTE: The following 6 clusters may not be needed - Remove them as soon as
+--!!!!you can verify that the project compiles without them.
 	store (ise):		"$/store"
 
 	estore_interface (store):		"$/interface"
 
 	estore_support (store):		"$/support"
 
---!!!!NOTE: These cluster may not be needed - Remove them as soon as
---!!!!you can verify that the project compiles without them.
 	dbms (store):		"$/dbms"
 
 	db_support (dbms):		"$/support"
