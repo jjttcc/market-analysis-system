@@ -65,10 +65,10 @@ feature -- Status report
 	processed: BOOLEAN is
 		do
 			Result := (input1.processed and input2.processed) and then
-				target1.empty or target2.empty or not output.empty
+				(target1.empty or target2.empty or not output.empty)
 		ensure then
 			Result = ((input1.processed and input2.processed) and then
-				target1.empty or target2.empty or not output.empty)
+				(target1.empty or target2.empty or not output.empty))
 		end
 
 	arg_used: BOOLEAN is false
