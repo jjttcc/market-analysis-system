@@ -8,7 +8,7 @@ indexing
 
 class LOGIN_REQUEST_CMD inherit
 
-	REQUEST_COMMAND
+	TRADABLE_REQUEST_COMMAND
 
 	GLOBAL_SERVER
 		export
@@ -28,6 +28,11 @@ creation
 
 	make
 
+feature -- Status report
+
+	error_occurred: BOOLEAN
+			-- Did an error occur the last time `execute' was called?
+
 feature -- Basic operations
 
 	execute (msg: STRING) is
@@ -39,11 +44,12 @@ feature -- Basic operations
 			-- of a session ID.
 		local
 			session_id, i, j: INTEGER
-			error_occurred, finished: BOOLEAN
+			finished: BOOLEAN
 			setting_type, error_msg: STRING
 			sutil: STRING_UTILITIES
 			tokens: LIST [STRING]
 		do
+			error_occurred := false
 			session_id := new_key
 			create sutil.make (msg)
 			create session.make
@@ -85,8 +91,10 @@ feature -- Basic operations
 				tradables.clear_caches
 			end
 		ensure then
-			one_more_session: sessions.count = old sessions.count + 1
-			new_session: session /= Void and sessions.has_item (session)
+			one_more_session: not error_occurred implies
+				sessions.count = old sessions.count + 1
+			new_session: not error_occurred implies
+				session /= Void and sessions.has_item (session)
 		end
 
 feature {NONE} -- Implementation
