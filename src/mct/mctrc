@@ -21,6 +21,9 @@ define	bin_dir:/opt/mas/bin
 # Directory where the documentation files reside
 define	doc_dir:/home/development/jtc/finance/doc
 
+# mas_directory environment variable setting
+define	mas_directory_setting:/suse_6_3/home2/finance/.mas/charting
+
 # Valid port numbers for use by the MAS server
 valid_portnumbers	10101,10102,10103,10104,20102,20103,20104,30101,30102,\
 30103,30104,30105,30106,30107,30108,30109
@@ -33,7 +36,8 @@ hostname	localhost
 
 # Detailed version of command to start the server: data from files
 begin	start_server_command
-command	<bin_dir>/mas -o -f , -b <portnumber> <data_dir>/*.txt
+command	MAS_DIRECTORY=<mas_directory_setting> <bin_dir>/mas -o -f , -b \
+<portnumber> <data_dir>/*.txt
 command_description	Get data from files
 command_name	File-based
 end
@@ -48,7 +52,8 @@ end
 
 # Detailed version of command to start the server: data from a database
 begin	start_server_command
-command	<bin_dir>/mas -o -b <portnumber> -p
+command	MAS_DIRECTORY=<mas_directory_setting> <bin_dir>/mas -o -b \
+<portnumber> -p
 command_description	Get data from database
 command_name	Database-based
 mark	default
@@ -56,7 +61,8 @@ end
 
 # Detailed version of command to start the server: data from the web
 begin	start_server_command
-command	<bin_dir>/mas -o -b <portnumber> -f , -w
+command	MAS_DIRECTORY=<mas_directory_setting> <bin_dir>/mas -o -b \
+<portnumber> -f , -w
 command_description	Get data from the web
 command_name	Web-based
 end
