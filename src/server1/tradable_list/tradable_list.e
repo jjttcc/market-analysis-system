@@ -33,8 +33,7 @@ feature -- Initialization
 			tradable_factories := factories
 			object_comparison := True
 			symbol_list.start; tradable_factories.start
-			!HASH_TABLE [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]! cache.make (
-				cache_size)
+			!! cache.make (Cache_size)
 		ensure
 			set: symbol_list = s_list and tradable_factories = factories
 			implementation_init: last_tradable = Void and old_index = 0
@@ -55,7 +54,9 @@ feature -- Access
 			end
 			-- Create a new tradable (or get it from the cache) only if the
 			-- cursor has moved since the last tradable creation.
-			if index /= old_index then
+			if
+				index /= old_index or Cache_size > 0 and cache.count = 0
+			then
 				old_index := 0
 				last_tradable := cached_item (index)
 				if last_tradable = Void then
@@ -97,7 +98,7 @@ feature -- Access
 
 	changeable_comparison_criterion: BOOLEAN is False
 
-	cache_size: INTEGER is 10
+	Cache_size: INTEGER is 10
 
 feature -- Status report
 
@@ -154,6 +155,12 @@ feature -- Basic operations
 			current_symbol_equals_s: item.symbol.is_equal (s)
 		end
 
+	clear_cache is
+			-- Empty the cache.
+		do
+			cache.clear_all
+		end
+
 feature {FACTORY} -- Access
 
 	tradable_factories: LINEAR [TRADABLE_FACTORY]
@@ -187,7 +194,7 @@ feature {NONE} -- Implementation
 		require
 			not_void: t /= Void
 		do
-			if cache.count = cache_size then
+			if cache.count = Cache_size then
 				cache.clear_all
 				check cache.count = 0 end
 			end
@@ -234,7 +241,8 @@ invariant
 
 	factories_not_void: tradable_factories /= Void
 	always_compare_objects: object_comparison = True
-	cache_not_too_large: cache.count <= cache_size
+	cache_exists: cache /= Void
+	cache_not_too_large: cache.count <= Cache_size
 	symbol_list_not_void: symbol_list /= Void
 	index_definition: index = symbol_list.index
 
