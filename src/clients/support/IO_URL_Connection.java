@@ -10,7 +10,7 @@ public class IO_URL_Connection extends IO_Connection
 {
 	// Precondition: srvaddr != null
 	public IO_URL_Connection(String srvaddr) throws MalformedURLException {
-		assert srvaddr != null;
+//		assert srvaddr != null;
 
 		server_address = srvaddr;
 		url = new URL(server_address);
@@ -38,7 +38,7 @@ System.out.println("IO_URL_Connection.close called");
 	}
 
 	public void open() throws IOException {
-		assert url != null;
+//		assert url != null;
 System.out.println("IO_URL_Connection.open called");
 System.out.println("(server_address: " + server_address + ")");
 

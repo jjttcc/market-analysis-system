@@ -13,10 +13,10 @@ public class Tokenizer {
 	// Precondition: r != null && r.ready()
 	// Postcondition: desc != null implies description().equals(desc)
 	public Tokenizer(Reader r, String desc) throws IOException {
-		assert r != null && r.ready(): "Precondition";
+//		assert r != null && r.ready(): "Precondition";
 		reader = r;
 		description_ = desc;
-		assert desc == null || description().equals(desc): "Postcondition";
+//		assert desc == null || description().equals(desc): "Postcondition";
 	}
 
 // Basic operations

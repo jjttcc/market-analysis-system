@@ -15,7 +15,7 @@ public class DataSetBuilder implements NetworkProtocol {
 
 	// Precondition: conn != null && opts != null
 	public DataSetBuilder(Connection conn, StartupOptions opts) {
-		assert conn != null && opts != null;
+//		assert conn != null && opts != null;
 		connection_ = conn;
 		options = opts;
 		try {

@@ -11,7 +11,7 @@ public class IO_SocketConnection extends IO_Connection
 
 	// Precondition: hostnm != null
 	public IO_SocketConnection(String hostnm, int portnum) {
-		assert hostnm != null;
+//		assert hostnm != null;
 		hostname = hostnm;
 		port_number = portnum;
 	}

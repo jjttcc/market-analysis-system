@@ -168,7 +168,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		} else {
 			result = new Hashtable();
 		}
-		assert result != null: "Postcondition violation";
+//		assert result != null: "Postcondition violation";
 		return _indicators;
 	}
 
@@ -540,7 +540,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	// Save persistent settings as a serialized file.
 	// Precondition: main_pane != null
 	protected void save_settings() {
-		assert main_pane != null: PRECONDITION;
+//		assert main_pane != null: PRECONDITION;
 		if (serialize_filename != null) {
 			try {
 				FileOutputStream chartfile =

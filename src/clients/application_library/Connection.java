@@ -14,7 +14,7 @@ public class Connection implements NetworkProtocol, Constants {
 
 	// Precondition: io_conn != null
 	public Connection(IO_Connection io_conn) {
-		assert io_conn != null;
+//		assert io_conn != null;
 
 		io_connection = io_conn;
 		scanner = new DataInspector();

@@ -18,7 +18,7 @@ public class MA_Client {
 	}
 
 	private static mas_gui.Connection connection() {
-		assert command_line_options != null;
+//		assert command_line_options != null;
 		mas_gui.Connection result;
 
 		String hostname = command_line_options.hostname();
