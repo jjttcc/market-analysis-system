@@ -77,7 +77,7 @@ feature -- Access
 			then
 				old_index := 0
 				last_tradable := cached_item (index)
-				if last_tradable = Void then
+				if last_tradable = Void or else ignore_cache then
 					setup_input_medium
 					if not fatal_error then
 						tradable_factory.set_symbol (current_symbol)
@@ -342,6 +342,16 @@ feature {NONE} -- Implementation
 	symbol_list: LIST [STRING]
 
 	symbol_list_clone: LIST [STRING]
+
+feature {NONE} -- Implementation
+
+	ignore_cache: BOOLEAN is
+			-- Should the data cache be ignored?
+		require
+			last_tradable_set: last_tradable /= Void
+		once
+			-- Default to False - redefine if needed.
+		end
 
 feature {NONE} -- Inapplicable
 
