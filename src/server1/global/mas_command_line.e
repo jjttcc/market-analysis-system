@@ -302,6 +302,7 @@ feature {NONE} -- Implementation
 		local
 			global_server: expanded GLOBAL_SERVER
 			db_services: MAS_DB_SERVICES
+			l: LIST [STRING]
 		do
 			db_services := global_server.database_services
 			if not db_services.fatal_error and not db_services.connected then
@@ -310,7 +311,17 @@ feature {NONE} -- Implementation
 			if db_services.fatal_error then
 				error_occurred := true
 			else
-				symbol_list := db_services.symbols
+				symbol_list := db_services.stock_symbols
+print_list (<<"stock symbol count, 1st stock symbol: ", symbol_list.count, ", ",
+symbol_list.first, "%N">>)
+				if not db_services.fatal_error then
+					l := db_services.derivative_symbols
+	print_list (<<"deriv symbol count, 1st deriv symbol: ", l.count, ", ",
+	l.first, "%N">>)
+					if l /= Void then
+						symbol_list.append (l)
+					end
+				end
 				if db_services.fatal_error then
 					error_occurred := true
 				elseif not keep_db_connection then
