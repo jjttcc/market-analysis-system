@@ -25,17 +25,18 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 			extend, count, first, last, empty, i_th
 		end
 
-creation {NONE}
+creation {FACTORY}
 
 	make
 
-feature -- {FACTORY} Initialization
+feature {NONE} -- Initialization
 
 	make (type: TIME_PERIOD_TYPE) is
 		require
 			not_void: type /= Void
 		do
 			trading_period_type := type
+			arrayed_list_make (300)
 		ensure
 			tpt_set: trading_period_type = type and trading_period_type /= Void
 		end
