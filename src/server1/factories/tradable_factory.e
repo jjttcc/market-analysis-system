@@ -36,7 +36,7 @@ feature -- Access
 	product: TRADABLE [BASIC_MARKET_TUPLE]
 			-- Result of execution
 
-	input: INPUT_SEQUENCE
+	input: INPUT_RECORD_SEQUENCE
 			-- Input sequence containing data to be scanned into tuples
 
 	symbol: STRING
