@@ -68,8 +68,8 @@ feature -- Basic operations
 					elist.forth
 				end
 				notify_by_email (msg, concatenation (<<elist.count,
-								" TA Events Received at ", current_date,
-								", ", current_time>>))
+					" TA Events Received at ", current_date, ", ",
+					current_time, " (Notification to ", name, ")">>))
 			else
 				if email_addresses.empty then
 					print (concatenation (<<"User ", name,
