@@ -194,6 +194,7 @@ System.out.println("sending request with " + symbol + ", " + period_type +
 	// Send a request for the list of indicators for tradable `symbol'.
 	public void send_indicator_list_request(String symbol,
 			String period_type) throws IOException {
+
 		StringBuffer mlist;
 		last_indicator_list = new Vector();
 		connection.send_request(Indicator_list_request, symbol +
