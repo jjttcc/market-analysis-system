@@ -77,6 +77,9 @@ feature -- Status report
 	error_list: LIST [STRING]
 			-- List of all errors if error_occurred
 
+	intraday: BOOLEAN
+			-- Is a tradable with intraday data being created?
+
 feature -- Status setting
 
 	set_no_open (arg: BOOLEAN) is
@@ -158,20 +161,36 @@ feature -- Status setting
 			strict_error_checking_set: strict_error_checking = arg
 		end
 
+	set_intraday (arg: BOOLEAN) is
+			-- Set intraday to `arg'.
+		do
+			intraday := arg
+		ensure
+			intraday_set: intraday = arg
+		end
+
 feature -- Basic operations
 
 	execute is
+			-- Note: Once `execute' is called, set_intraday will have no
+			-- effect - the tradable's data will be intraday according to
+			-- the value of `intraday' the first time that execute is called.
 		local
 			scanner: MARKET_TUPLE_DATA_SCANNER
+			intraday_scanner: INTRADAY_TUPLE_DATA_SCANNER
 		do
 			error_occurred := False
 			make_product
-			check value_setters.count > 0 end
-			create scanner.make (product, input, tuple_maker, value_setters)
+			if intraday then
+				create intraday_scanner.make (
+					product, input, tuple_maker, value_setters)
+				scanner := intraday_scanner
+			else
+				create scanner.make (product, input, tuple_maker, value_setters)
+			end
 			scanner.set_strict_error_checking (strict_error_checking)
 			-- Input data from input stream and stuff it into product.
 			scanner.execute
-			add_indicators (product, indicators)
 			check
 				product_set_to_scanner_result: product = scanner.product
 			end
@@ -180,6 +199,11 @@ feature -- Basic operations
 				error_occurred := True
 				last_error_fatal := scanner.last_error_fatal
 			end
+			if intraday then
+				time_period_type := intraday_scanner.period_type
+			end
+			product.set_trading_period_type (time_period_type)
+			add_indicators (product, indicators)
 			product.finish_loading
 		ensure then
 			product_not_void: product /= Void
@@ -199,12 +223,19 @@ feature {NONE} -- Implementation
 	index_vector: ARRAY [INTEGER] is
 			-- To be defined by descendants to specify desired field order.
 		deferred
+		ensure
+			at_least_one: Result.count > 0
 		end
 
 	value_setters: LINKED_LIST [VALUE_SETTER] is
-		once
-			create Result.make
-			add_value_setters (Result, index_vector)
+		do
+			if cached_value_setters = Void then
+				create cached_value_setters.make
+				add_value_setters (cached_value_setters, index_vector)
+			end
+			Result := cached_value_setters
+		ensure
+			at_least_one: Result.count > 0
 		end
 
 	add_value_setters (vs: LINKED_LIST [VALUE_SETTER];
@@ -264,6 +295,8 @@ feature {NONE} -- Implementation
 				flst.forth
 			end
 		end
+
+	cached_value_setters: LINKED_LIST [VALUE_SETTER]
 
 feature {NONE} -- Tuple field-key constants
 
