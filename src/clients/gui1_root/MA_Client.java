@@ -17,9 +17,9 @@ public class MA_Client {
 			command_line_options);
 	}
 
-	private static mas_gui.MA_Connection connection() {
+	private static mas_gui.Connection connection() {
 //		assert command_line_options != null;
-		mas_gui.MA_Connection result;
+		mas_gui.Connection result;
 
 		String hostname = command_line_options.hostname();
 		int port_number = command_line_options.port_number();
