@@ -194,11 +194,15 @@ public class DrawableDataSet extends BasicDataSet
 				yaxis.resetRange();
 			}
 		}
+		assert implies(d == null, size() == oldsize): POSTCONDITION;
+		assert implies(d != null, size() == oldsize + d.size()): POSTCONDITION;
+/*!!!!obsolete - remove:
 		if (d != null && ! (size() == oldsize + d.size())) {
 			throw new Error("append: postcondition 2 violated");
 		} else if (d == null && (size() != oldsize)) {
 			throw new Error("append: postcondition 1 violated");
 		}
+*/
 	}
 
 	public void set_drawer(BasicDrawer d) {
@@ -281,7 +285,8 @@ public class DrawableDataSet extends BasicDataSet
 // Class invariant
 
 	public boolean invariant() {
-		return drawer() != null;
+System.out.println("drawer() != null: " + drawer() != null);
+		return drawer() != null && super.invariant();
 	}
 
 // Implementation
@@ -373,10 +378,21 @@ public class DrawableDataSet extends BasicDataSet
 	* @precondition
 	*    drawer != null
 	*/
-	protected int stride() {
+//!!!:
+	protected int stride_old_remove_me() {
 		if (drawer == null) {
 			throw new Error("assertion violated in 'stride()': drawer != null");
 		}
+		return drawer.drawing_stride();
+	}
+
+	/**
+	* Number of components in a data tuple - for example, 2 (x, y) for
+	* a simple point
+	*/
+	protected int stride() {
+		assert invariant(): CLASS_INVARIANT;
+
 		return drawer.drawing_stride();
 	}
 
