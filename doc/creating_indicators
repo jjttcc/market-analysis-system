@@ -1,11 +1,11 @@
 Creating Technical Indicators with the Market Analysis Server
 
 This document provides a tutorial on creating technical indicators with
-the Market Analysis Server (MAS).  It consists of a brief introduction
-to the concepts used by the MAS command-line interface for creating
-technical indicators, as well as some specific examples of creating an
-indicator - Relative Strength Index indicator, Elder's Force Index
-indicator, and an Exponential Moving Average of Volume indicator.
+the Market Analysis Server (MAS).  It consists of a brief introduction to
+the concepts used by the MAS command-line interface for creating technical
+indicators, as well as some specific examples of creating an indicator -
+Relative Strength Index indicator, Elder's Force Index indicator, and
+an Exponential Moving Average of Volume indicator.
 
 The MAS command-line interface uses the concepts of data records
 (sometimes called tuples), functions (sometimes called market functions),
@@ -18,10 +18,10 @@ type of record used in a data sequence is that of standard market data -
 open, high, low, close, volume, and date.  Another type of data sequence
 record, which we will call a simple record, is that which results from
 processing a market data sequence - for example, applying a moving average
-to closing prices.  This type of record has only the two required fields -
-date and value.  Another useful concept is that of a trading period.
-Each data record can be said to be associated with a particular
-trading period.
+to closing prices.  This type of record has only the two required fields
+- date and value.  Another useful concept is that of a trading period,
+which is the time period with which each record is associated - for
+example, daily, weekly, monthly, etc.
 
 The reason for categorizing both standard market data records and simple
 records is to allow for the nesting or composition of functions to
@@ -46,11 +46,11 @@ The Relative Strength Index indicator example below gives a good example
 of how composite operators can be created to provide required behavior.
 
 Note that the behavior of the following operator types does not depend on
-the context in which they occur, meaning that a particular operator of
-one of these types can be safely shared (as opposed to using two different
+the context in which they occur, meaning that a particular operator of one
+of these types can be safely shared (as opposed to using two different
 instances of the same operator type) without affecting the resulting
-calculation: BASIC_NUMERIC_COMMAND, OPENING_PRICE, OPEN_INTEREST,
-VOLUME, LOW_PRICE, HIGH_PRICE, CLOSING_PRICE.
+calculation: BASIC_NUMERIC_COMMAND, OPENING_PRICE, OPEN_INTEREST, VOLUME,
+LOW_PRICE, HIGH_PRICE, CLOSING_PRICE.
 
 MAS provides the following basic types of functions:
 
@@ -73,6 +73,18 @@ specific behavior for an exponential moving average.
 
 ACCUMULATION - A function that accumulates values as it processes each
 record of a data sequence - example: Volume Accumulation.
+
+CONFIGURABLE_N_RECORD_FUNCTION - An "n-record" function that can be
+configured by choosing two extra operators: One that produces the first
+record of the function's output, and one that operates on the previously
+calculated output record.
+
+MARKET_FUNCTION_LINE - A function that produces data for a trend line.
+
+MARKET_DATA_FUNCTION - A function that takes standard market data
+(that is, with close, high, low, volume, etc. fields) as input and 
+whose output is simply its input.
+
 
 MAS currently provides about 35 operators.  These include arithmetic
 operators, such as "addition" and "subtraction"; boolean operators,
@@ -134,22 +146,28 @@ result of RSI will of course be the sequence that results from applying
 this calculation to each trading period.  The first value of the sequence
 is simply the n-period moving average of the first n closing prices.
 
-Our configuration of this indicator in MAS will be based on this
-formula.  The first step is to start the server.  (You can either add
-the new indicator by using the server directly - which can be done
-simply by typing mas at the command line, assuming it's in your path,
-or you can start the server in the background (with "-b port_number"
-as arguments) and use macl, the market analysis command-line client,
-to talk to the server using a network connection.)  To get to the
-add-indicator menu, first enter 'e' ("Edit indicators") and then 'c'
-("Create a new market-data indicator").  A list of the available market
-function (indicator) objects will be displayed from which you can start
-building your new indicator.  For RSI, we want to start by creating two
-exponential moving averages that will be used to calculate the P and N
-values from above.  Then we will create a two-variable function that
-will divide the P and N values to obtain the RS value and then apply
-the remainder of the formula:  100 - (100 / (1 + RS)).  First we will
-create the P function:
+Our configuration of this indicator in MAS will be based on this formula.
+The first step is to start the server.  (You can either add the new
+indicator by using the server directly - which can be done simply by
+typing mas at the command line, assuming it's in your path, or you can
+start the server in the background (with "-b port_number" as arguments)
+and use macl, the market analysis command-line client, to talk to
+the server using a network connection.)
+
+To get to the add-indicator menu, first enter 'e' ("Edit indicators")
+and then 'c' ("Create a new market-data indicator").  You will be asked
+to choose between using an existing indicator or a new object as the
+root function.  Enter 'n', to choose a new object.
+
+A list of the available market function (indicator) objects will be
+displayed from which you can start building your new indicator.  For RSI,
+we want to start by creating two exponential moving averages that will
+be used to calculate the P and N values from above.  Then we will create
+a two-variable function that will divide the P and N values to obtain
+the RS value and then apply the remainder of the formula:
+100 - (100 / (1 + RS)).
+
+First we will create the P function:
 
 Choose EXPONENTIAL_MOVING_AVERAGE from the menu.  The system will ask for
 verification of the choice; enter 'c' to choose the object you selected.
@@ -419,10 +437,12 @@ where V is volume for the current period, C is the close for the current
 period, and Cp is the close for the previous period.
 
 Get to the add-indicator menu, by entering 'e' ("Edit indicators")
-and then 'c' ("Create a new market-data indicator").  Choose
-N_RECORD_ONE_VARIABLE_FUNCTION.  Name it "Force Index".  Choose "No
-Input Function" for it's input function.  Choose MULTIPLICATION for
-its operator.  Choose VOLUME for its left operand and SUBTRACTION
+and then 'c' ("Create a new market-data indicator").  Then enter 'n',
+to choose a new object.
+
+Next, choose N_RECORD_ONE_VARIABLE_FUNCTION.  Name it "Force Index".
+Choose "No Input Function" for it's input function.  Choose MULTIPLICATION
+for its operator.  Choose VOLUME for its left operand and SUBTRACTION
 for its right operand.  Select CLOSING_PRICE for SUBTRACTION's
 left operand and SETTABLE_OFFSET_COMMAND for its right operand.
 For SETTABLE_OFFSET_COMMAND's operand, choose CLOSING_PRICE.  For
@@ -471,8 +491,10 @@ Example 3: Exponential Moving Average of Volume
 
 This example will show how to create an indicator that provides the
 exponential moving average of volume.  From the "Create a new market-data
-indicator" menu, select EXPONENTIAL_MOVING_AVERAGE as the root function.
-Choose an appropriate name for the function, such as "EMA of Volume".
+indicator" menu, when asked to choose between an existing indicator
+and a new object, enter 'n', to choose a new object.  Then select
+EXPONENTIAL_MOVING_AVERAGE as the root function.  Choose an appropriate
+name for the function, such as "EMA of Volume".
 
 You will be prompted for the input function for the EMA of Volume function.
 Since EMA of volume will operate directly on the market data, rather than
@@ -510,7 +532,7 @@ expression:
 This expression evaluates to the volume value that will be added to the
 previous OBV to obtain the current OBV.  If the current close is lower
 than the previous close, the expression within the [] pair will evaluate
-to negative one ( |x| means take the absolute value of x), which when
+to negative one (|x| means take the absolute value of x), which when
 multiplied by volume and added to the previous OBV is equivalent to
 subtracting the volume from the previous OBV.  When current close is
 higher than the previous close, the result, of course, will be that
@@ -571,6 +593,8 @@ Thus the VOLUME operator will be used here.
 
 Now, to actually create the OBV function.  From the main menu, select
 "Edit indicators"; then select "Create a new market-data indicator".
+Then enter 'n', to choose a new object.
+
 For the root function, select ACCUMULATION.  Choose an appropriate name
 for the function, such as "On Balance Volume".  Since the OBV function
 will take its input directly from the market data (close prices and
@@ -645,10 +669,11 @@ This function gives the slope of the MACD Signal Line, which can be
 used to determine if the MACD Signal Line changes slope from negative to
 positive or vice versa.
 
-From the indicator creation menu select ONE_VARIABLE_FUNCTION as the root
-function and choose an appropriate name.  For the function's input function,
-select "MACD Signal Line".  For ONE_VARIABLE_FUNCTION's operator, select
-SLOPE_ANALYZER.  For SLOPE_ANALYZER's input, select "MACD Signal Line".
+From the indicator creation menu, after entering 'n', to choose a new
+object, select ONE_VARIABLE_FUNCTION as the root function and choose an
+appropriate name.  For the function's input function, select "MACD Signal
+Line".  For ONE_VARIABLE_FUNCTION's operator, select SLOPE_ANALYZER.
+For SLOPE_ANALYZER's input, select "MACD Signal Line".
 
 This concludes the creation of Slope of MACD Signal Line.
 
@@ -658,11 +683,12 @@ Example 7: Slope of Slope of MACD Signal Line
 The slope of the slope of the MACD Signal Line can be used to detect
 short-term oversold and overbought conditions during a long-term trend.
 
-From the indicator creation menu select ONE_VARIABLE_FUNCTION as the
-root function and choose an appropriate name.  For the function's input
-function, select "Slope of MACD Signal Line".  For ONE_VARIABLE_FUNCTION's
-operator, select SLOPE_ANALYZER.  For SLOPE_ANALYZER's input, select
-"Slope of MACD Signal Line".
+From the indicator creation menu, after entering 'n', to choose a
+new object, select ONE_VARIABLE_FUNCTION as the root function and
+choose an appropriate name.  For the function's input function, select
+"Slope of MACD Signal Line".  For ONE_VARIABLE_FUNCTION's operator,
+select SLOPE_ANALYZER.  For SLOPE_ANALYZER's input, select "Slope of
+MACD Signal Line".
 
 
 Example 8: Slope of MACD Signal Line and Slope of Slope of MACD Signal Line
@@ -724,10 +750,11 @@ MACD Signal Line indicator):
       [SMSL]
 
 From the indicator editing menu, choose "Create a new market-data
-indicator".  Select ONE_VARIABLE_FUNCTION as the root function.
-Choose a good name, such as "Slope of MACD Signal Line Trend".  For the
-ONE_VARIABLE_FUNCTION's input function select Slope of MACD Signal Line.
-For the ONE_VARIABLE_FUNCTION's operator, select BOOLEAN_NUMERIC_CLIENT.
+indicator".  Then enter 'n', to choose a new object.  Next, select
+ONE_VARIABLE_FUNCTION as the root function.  Choose a good name, such as
+"Slope of MACD Signal Line Trend".  For the ONE_VARIABLE_FUNCTION's
+input function select Slope of MACD Signal Line.  For the
+ONE_VARIABLE_FUNCTION's operator, select BOOLEAN_NUMERIC_CLIENT.
 For BOOLEAN_NUMERIC_CLIENT's boolean operator, select GE_OPERATOR
 (greater-than-or-equal-to).  For GE_OPERATOR's left operand, choose
 BASIC_LINEAR_COMMAND.  For BASIC_LINEAR_COMMAND's input indicator, select,
