@@ -12,7 +12,7 @@ AppSupportURL=http://eiffel-mas.sf.net
 AppUpdatesURL=http://eiffel-mas.sf.net
 DefaultDirName=C:\Applications\mas1.6.5
 DefaultGroupName=Market Analysis System
-OutputBaseFilename=setup-mas1.6.5.exe
+OutputBaseFilename=setup-mas1.6.5
 AlwaysCreateUninstallIcon=yes
 ; uncomment the following line if you want your installation to run on NT 3.51 too.
 ; MinVersion=4,3.51
