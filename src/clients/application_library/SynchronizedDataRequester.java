@@ -114,19 +114,27 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 			request_result_id = data_builder.request_result_id();
 			if (request_result_id != Ok) {
 				request_failed = true;
+				//@@@Check if throwing an exception is appropriate here.
+				throw new Exception(main_request_failed_message);
 			} else {
 				// 'send_market_data_request' was successful.
 				tradable_result = data_builder.last_market_data();
 				volume_result = data_builder.last_volume();
 				open_interest_result = data_builder.last_open_interest();
 				latest_date_time = data_builder.last_latest_date_time();
+//!!!!!:
+if (latest_date_time == null) {
+System.out.println("SDR.exe tr req: latest date/time is null");
+} else {
+System.out.println("SDR.exe: latest date/time is: " + latest_date_time);
+}
 			}
 			data_builder.unlock(this);
 		} else {
 			request_failed = true;
 			// Lock attempts failed.
-			// !!!Produce an appropriate error msg and make it available via
-			// the class's interface.
+			//@@@Check if throwing an exception is appropriate here.
+			throw new Exception(main_request_failed_message);
 		}
 	}
 
@@ -143,6 +151,8 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 			request_result_id = data_builder.request_result_id();
 			if (request_result_id != Ok) {
 				request_failed = true;
+				//@@@Check if throwing an exception is appropriate here.
+				throw new Exception(indicator_request_failed_message);
 			} else {
 				indicator_result = data_builder.last_indicator_data();
 			}
@@ -150,8 +160,8 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 		} else {
 			request_failed = true;
 			// Lock attempts failed.
-			// !!!Produce an appropriate error msg and make it available via
-			// the class's interface.
+			//@@@Check if throwing an exception is appropriate here.
+			throw new Exception(indicator_request_failed_message);
 		}
 	}
 
@@ -167,6 +177,8 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 			request_result_id = data_builder.request_result_id();
 			if (request_result_id != Ok) {
 				request_failed = true;
+				//@@@Check if throwing an exception is appropriate here.
+				throw new Exception(indicator_list_request_failed_message);
 			} else {
 				indicator_list_result = data_builder.last_indicator_list();
 			}
@@ -174,8 +186,8 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 		} else {
 			request_failed = true;
 			// Lock attempts failed.
-			// !!!Produce an appropriate error msg and make it available via
-			// the class's interface.
+			//@@@Check if throwing an exception is appropriate here.
+			throw new Exception(indicator_list_request_failed_message);
 		}
 	}
 
@@ -215,4 +227,11 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 	private Vector indicator_list_result = null;
 	private Calendar latest_date_time = null;
 	private int request_result_id = -1;
+
+	private final String indicator_request_failed_message =
+		"Indicator request failed";
+	private final String main_request_failed_message =
+		"Main data request failed";
+	private final String indicator_list_request_failed_message =
+		"Indicator list request failed";
 }
