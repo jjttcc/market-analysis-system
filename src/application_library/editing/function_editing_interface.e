@@ -66,6 +66,7 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			l.extend (function_with_generator ("EXPONENTIAL_MOVING_AVERAGE"))
 			l.extend (function_with_generator ("ACCUMULATION"))
 			l.extend (function_with_generator ("MARKET_FUNCTION_LINE"))
+			l.extend (function_with_generator ("MARKET_DATA_FUNCTION"))
 			l.extend (function_with_generator ("STOCK"))
 			!!l.make (6)
 			Result.extend (l, Complex_function)
@@ -76,6 +77,7 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			l.extend (function_with_generator ("STANDARD_MOVING_AVERAGE"))
 			l.extend (function_with_generator ("EXPONENTIAL_MOVING_AVERAGE"))
 			l.extend (function_with_generator ("ACCUMULATION"))
+			l.extend (function_with_generator ("MARKET_DATA_FUNCTION"))
 		end
 
 	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
@@ -280,6 +282,11 @@ feature {NONE} -- Implementation
 				valid_name: function_names.has (name)
 			end
 			Result.extend (Mkt_fnctn_line, name)
+			name := "MARKET_DATA_FUNCTION"
+			check
+				valid_name: function_names.has (name)
+			end
+			Result.extend (Other, name)
 			name := "STOCK"
 			check
 				valid_name: function_names.has (name)
