@@ -1,11 +1,12 @@
 BNF Grammar for shared protocol components
 
 
-date_time_range             -> start_date_time [ ";" end_date_time ]
-start_date_time             -> date_time_spec | <null>
-end_date_time               -> date_time_spec
-date_time_spec              -> date_with_sep "," time_with_sep
-time_with_sep               -> hour ":" minute ":" second
+date_time_range   -> start_date_time [ ";" end_date_time ]
+start_date_time   -> date_time_spec | <null>
+end_date_time     -> date_time_spec
+date_time_spec    -> date_with_sep "," time_with_sep
+time_with_sep     -> hour ":" minute ":" second
+date_with_sep     -> year "/" month "/" day
 
 
 Regarding the 'date_time_range' construct:

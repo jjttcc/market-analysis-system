@@ -71,7 +71,6 @@ end_date        -> date_spec
 datetime        -> date [ "\t" time ]
 date            -> year<>month<>day
 time            -> hour<>minute [<>second ]
-date_with_sep   -> year "/" month "/" day
 year            -> digit digit digit digit
 month           -> digit digit
 day             -> digit digit
@@ -208,3 +207,5 @@ until it receives a request from the client.  Usually this will be a
 symbol_list_req, followed by a ind_list_req; but if the client is a new window
 (possibly in a new thread) in an existing process, it may already have a copy
 of the list of markets and of the list of indicators.
+
+See shared_protocol_grammar for the definition of 'date_with_sep'.
