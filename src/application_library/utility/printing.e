@@ -23,9 +23,32 @@ feature -- Access
 		deferred
 		end
 
-	date_field_separator: STRING is
+	output_date_field_separator: STRING is
 			-- Field separator used for output between date fields
 		deferred
+		end
+
+feature -- Status report
+
+	justification_on: BOOLEAN
+			-- Is justification to be used for printing?
+
+feature -- Status setting
+
+	justify is
+			-- Set justification on.
+		do
+			justification_on := true
+		ensure
+			justification_on = true
+		end
+
+	no_justify is
+			-- Set justification off.
+		do
+			justification_on := false
+		ensure
+			justification_on = false
 		end
 
 feature -- Basic operations
@@ -147,12 +170,10 @@ feature {NONE} -- Implementation
 
 	print_composite_tuples (l: MARKET_TUPLE_LIST [COMPOSITE_TUPLE]) is
 		local
-			real_formatter: FORMAT_DOUBLE
 			print_open: BOOLEAN
 			first, last, i: INTEGER
 			tuple: COMPOSITE_TUPLE
 		do
-			!!real_formatter.make (5, 5)
 			first := first_index (l)
 			last := last_index (l)
 			if last >= first then
@@ -176,14 +197,14 @@ feature {NONE} -- Implementation
 					print_date (tuple.end_date, 'y', 'm', 'd')
 					print (output_field_separator)
 					if print_open then
-						print (real_formatter.formatted(tuple.open.value))
+						print (tuple.open.value)
 						print (output_field_separator)
 					end
-					print (real_formatter.formatted(tuple.high.value))
+					print (tuple.high.value)
 					print (output_field_separator)
-					print (real_formatter.formatted(tuple.low.value))
+					print (tuple.low.value)
 					print (output_field_separator)
-					print (real_formatter.formatted(tuple.close.value))
+					print (tuple.close.value)
 					print (output_record_separator)
 					i := i + 1
 				end
@@ -192,12 +213,10 @@ feature {NONE} -- Implementation
 
 	print_basic_tuples (l: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]) is
 		local
-			real_formatter: FORMAT_DOUBLE
 			print_open: BOOLEAN
 			first, last, i: INTEGER
 			tuple: BASIC_MARKET_TUPLE
 		do
-			!!real_formatter.make (5, 5)
 			first := first_index (l)
 			last := last_index (l)
 			if last >= first then
@@ -221,14 +240,14 @@ feature {NONE} -- Implementation
 					print_date (tuple.end_date, 'y', 'm', 'd')
 					print (output_field_separator)
 					if print_open then
-						print (real_formatter.formatted(tuple.open.value))
+						print (tuple.open.value)
 						print (output_field_separator)
 					end
-					print (real_formatter.formatted(tuple.high.value))
+					print (tuple.high.value)
 					print (output_field_separator)
-					print (real_formatter.formatted(tuple.low.value))
+					print (tuple.low.value)
 					print (output_field_separator)
-					print (real_formatter.formatted(tuple.close.value))
+					print (tuple.close.value)
 					print (output_record_separator)
 					i := i + 1
 				end
@@ -237,15 +256,10 @@ feature {NONE} -- Implementation
 
 	print_volume_tuples (l: MARKET_TUPLE_LIST [VOLUME_TUPLE]) is
 		local
-			real_formatter: FORMAT_DOUBLE
-			int_formatter: FORMAT_INTEGER
 			print_open: BOOLEAN
 			first, last, i: INTEGER
 			tuple: VOLUME_TUPLE
 		do
-			!!real_formatter.make (5, 5)
-			!!int_formatter.make (5)
-			int_formatter.no_justify
 			first := first_index (l)
 			last := last_index (l)
 			if last >= first then
@@ -269,16 +283,16 @@ feature {NONE} -- Implementation
 					print_date (tuple.end_date, 'y', 'm', 'd')
 					print (output_field_separator)
 					if print_open then
-						print (real_formatter.formatted(tuple.open.value))
+						print (tuple.open.value)
 						print (output_field_separator)
 					end
-					print (real_formatter.formatted(tuple.high.value))
+					print (tuple.high.value)
 					print (output_field_separator)
-					print (real_formatter.formatted(tuple.low.value))
+					print (tuple.low.value)
 					print (output_field_separator)
-					print (real_formatter.formatted(tuple.close.value))
+					print (tuple.close.value)
 					print (output_field_separator)
-					print (int_formatter.formatted(tuple.volume))
+					print (tuple.volume)
 					print (output_record_separator)
 					i := i + 1
 				end
@@ -288,15 +302,10 @@ feature {NONE} -- Implementation
 	print_composite_volume_tuples (
 		l: MARKET_TUPLE_LIST [COMPOSITE_VOLUME_TUPLE]) is
 		local
-			real_formatter: FORMAT_DOUBLE
-			int_formatter: FORMAT_INTEGER
 			print_open: BOOLEAN
 			first, last, i: INTEGER
 			tuple: COMPOSITE_VOLUME_TUPLE
 		do
-			!!real_formatter.make (5, 5)
-			!!int_formatter.make (5)
-			int_formatter.no_justify
 			first := first_index (l)
 			last := last_index (l)
 			if last >= first then
@@ -320,16 +329,16 @@ feature {NONE} -- Implementation
 					print_date (tuple.end_date, 'y', 'm', 'd')
 					print (output_field_separator)
 					if print_open then
-						print (real_formatter.formatted(tuple.open.value))
+						print (tuple.open.value)
 						print (output_field_separator)
 					end
-					print (real_formatter.formatted(tuple.high.value))
+					print (tuple.high.value)
 					print (output_field_separator)
-					print (real_formatter.formatted(tuple.low.value))
+					print (tuple.low.value)
 					print (output_field_separator)
-					print (real_formatter.formatted(tuple.close.value))
+					print (tuple.close.value)
 					print (output_field_separator)
-					print (int_formatter.formatted(tuple.volume))
+					print (tuple.volume)
 					print (output_record_separator)
 					i := i + 1
 				end
@@ -338,11 +347,9 @@ feature {NONE} -- Implementation
 
 	print_market_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
 		local
-			real_formatter: FORMAT_DOUBLE
 			first, last, i: INTEGER
 			tuple: MARKET_TUPLE
 		do
-			!!real_formatter.make (5, 5)
 			first := first_index (l)
 			last := last_index (l)
 			if last >= first then
@@ -354,7 +361,7 @@ feature {NONE} -- Implementation
 					tuple := l @ i
 					print_date (tuple.end_date, 'y', 'm', 'd')
 					print (output_field_separator)
-					print (real_formatter.formatted(tuple.value))
+					print (tuple.value)
 					print (output_record_separator)
 					i := i + 1
 				end
@@ -402,9 +409,9 @@ feature {NONE} -- Implementation
 				i3 := date.day
 			end
 			print (fmtr.formatted (i1))
-			print (date_field_separator)
+			print (output_date_field_separator)
 			print (fmtr.formatted (i2))
-			print (date_field_separator)
+			print (output_date_field_separator)
 			print (fmtr.formatted (i3))
 		end
 
