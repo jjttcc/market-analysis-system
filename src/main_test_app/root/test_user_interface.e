@@ -7,6 +7,9 @@ indexing
 class TEST_USER_INTERFACE inherit
 
 	STD_FILES
+		export {NONE}
+			all
+		end
 
 	PRINTING
 		export {NONE}
@@ -84,19 +87,17 @@ feature {NONE}
 
 	tradable_menu is
 			-- Display the tradable menu and respond to the user's commands.
-		local
-			c: CHARACTER
-			cursor: CURSOR
 		do
 			from
 			until
 				end_program
 			loop
 				print_list (<<"Select action:%N", "     Select market (s) ",
-							"View data (v) Edit parameters (e)",
-							"%N     Run market analysis (r) ",
+							"View data (v) Edit indicators (e)",
+							"%N     Run market analysis (a) ",
 							"Set date for market analysis (d)%N",
-							"     Memory usage (m) Exit (x) ">>)
+							"     Edit event registrants (r) ",
+							"Memory usage (m) Exit (x) ">>)
 				inspect
 					selected_character
 				when 's', 'S' then
@@ -105,9 +106,11 @@ feature {NONE}
 					view_menu
 				when 'e', 'E' then
 					edit_menu
+				when 'r', 'R' then
+					registrant_menu
 				when 'm', 'M' then
 					display_memory_values
-				when 'r', 'R' then
+				when 'a', 'A' then
 					save_mklist_position
 					event_coordinator.execute
 					restore_mklist_position
@@ -175,6 +178,54 @@ feature {NONE}
 				end
 			end
 		end
+
+	registrant_menu is
+		local
+			done: BOOLEAN
+			registrar: EVENT_REGISTRATION
+		do
+			!!registrar.make (event_coordinator.dispatcher)
+			from
+			until
+				done or end_program
+			loop
+				print_list (<<"Select action:",
+					"%N     Add registrants (a) Remove registrants (r) %
+					%Edit registrants (e) %N     Exit (x) Previous (-) ">>)
+				inspect
+					selected_character
+				when 'a', 'A' then
+					registrar.add_registrants
+				when 'r', 'R' then
+					registrar.remove_registrants
+				when 'e', 'E' then
+					registrar.edit_registrants
+				when 'x', 'X' then
+					end_program := true
+				when '!' then
+					print ("Type exit to return to main program.%N")
+					system ("")
+				when '-' then
+					done := true
+				else
+					print ("Invalid selection%N")
+				end
+			end
+		end
+
+	add_registrants is
+		do
+			
+		end
+
+	edit_registrants is
+		do
+		end
+
+	remove_registrants is
+		do
+		end
+
 
 	view_menu is
 		local
