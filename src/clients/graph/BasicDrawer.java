@@ -257,38 +257,7 @@ abstract public class BasicDrawer extends Drawer {
 			display_reference_values(y_values, y_strings, g, main_bounds,
 				ref_bounds, lines_needed);
 		}
-//		for (int i = 0; i < y_strings.length; ++i) {
-//			d = (Double) y_values.elementAt(i);
-//			display_reference_value(d.doubleValue(),
-//				y_strings[i], g, main_bounds, ref_bounds, lines_needed);
-//		}
 		g.setFont(old_font);
-	}
-
-	// Display the value of the specified y coordinate at that y coordinate
-	// at the far left side of the graph and at the far right side.
-	protected void display_reference_value (double y, String ystr, Graphics g,
-			Rectangle main_bounds, Rectangle ref_bounds, boolean lines) {
-		final int Y_text_adjust = 3, margin = 5, margin_for_text = 8;
-		Configuration config = Configuration.instance();
-		int adjusted_y = (int) (ref_bounds.y + (1.0 - (y-ymin) / yrange) *
-								ref_bounds.height);
-
-		if (adjusted_y > ref_bounds.y + margin &&
-				adjusted_y < ref_bounds.y + ref_bounds.height - margin) {
-			if (lines) {
-				g.setColor(Color.black);
-				g.drawLine(main_bounds.x - X_left_line_adjust, adjusted_y,
-					main_bounds.x + main_bounds.width, adjusted_y);
-			}
-			if (adjusted_y > ref_bounds.y + margin_for_text && adjusted_y <
-					ref_bounds.y + ref_bounds.height - margin_for_text) {
-				g.setColor(config.text_color());
-				g.drawString(ystr,
-					ref_bounds.x + ref_bounds.width + Ref_text_offset,
-					adjusted_y + Y_text_adjust);
-			}
-		}
 	}
 
 	// Precondition: yvalues != null && yvalues.size() > 0 &&
