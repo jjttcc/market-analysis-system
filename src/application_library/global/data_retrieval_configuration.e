@@ -103,6 +103,11 @@ feature -- Access
 			Result.to_upper
 		end
 
+	additional_settings_report: STRING is
+		do
+			Result := ""
+		end
+
 feature -- Access
 
 	eod_start_date_string: STRING is
