@@ -38,6 +38,7 @@ cluster
 	database (server)		:	"$/database";
 	database_odbc (server)	:	"$/database/odbc";	
 	database_ecli (server)	:	"$/database/ecli";	
+	external_components (server):"$/external";
 	protocols (server):			"$/protocols";
 	tradable_list (server):		"$/tradable_list";
 	stock_splits (server):		"$/stock_splits";
@@ -190,6 +191,8 @@ external
 			"${EIFFEL4}/library/store/spec/$(PLATFORM)/lib/libsupport.a",
 			"$(ECLI)/src/spec/ise/linux/libecli_c.a",
 			"$(MAS)/src/eiffel_library/lib/utilities.o",
+			"$(MAS)/src/server1/lib/external_input_sequence.o",
+			"$(MAS)/src/server1/lib/ext_in_seq_plugin.o",
 			"$(MAS)/src/eiffel_library/lib/libz.a",
 			"-lodbc"; 
 
