@@ -7,7 +7,7 @@ root
 
 default
 
-	assertion (no);
+	assertion (all);
 	debug (yes);
 
 	precompiled ("$EIFFEL4/precomp/spec/$PLATFORM/base");
@@ -26,19 +26,21 @@ cluster
 
 		-- Technical Analysis Library
 	function_abstractions:
-					"$FINANCE/src/library/function_abstractions";
-	function_types:	"$FINANCE/src/library/function_types";
-	commands:		"$FINANCE/src/library/commands";
-	markets:		"$FINANCE/src/library/markets";
-	market_analysis:"$FINANCE/src/library/market_analysis";
-	structural:		"$FINANCE/src/library/structural";
-	tuple_types:	"$FINANCE/src/library/tuple_types";
-	data_scanning:	"$FINANCE/src/library/data_scanning";
-	events:			"$FINANCE/src/library/events";
-	tools:			"$FINANCE/src/library/tools";
-	global:			"$FINANCE/src/library/global";
+						"$FINANCE/src/library/function_abstractions";
+	function_types:		"$FINANCE/src/library/function_types";
+	commands:			"$FINANCE/src/library/commands";
+	markets:			"$FINANCE/src/library/markets";
+	structural:			"$FINANCE/src/library/structural";
+	tuple_types:		"$FINANCE/src/library/tuple_types";
+	data_scanning:		"$FINANCE/src/library/data_scanning";
+	events:				"$FINANCE/src/library/events";
+	tools:				"$FINANCE/src/library/tools";
+	global:				"$FINANCE/src/library/global";
+	event_generation:	"$FINANCE/src/library/event_generation";
+	market_analysis_tools:
+						"$FINANCE/src/library/market_analysis_tools";
 
-		-- Sub-clusters
+		-- TAL Sub-clusters
 	configuragle_functions (function_types):
 					"$/configurable_functions";
 	specific_functions (function_types):
@@ -57,6 +59,10 @@ cluster
 					"$/tuple_factories";
 	data_scanners (data_scanning):
 					"$/data_scanners";
+	event_generation_kernel (event_generation):
+					"$/event_generation_kernel/";
+	function_analysis (event_generation):
+					"$/function_analysis/";
 
 		-- Eiffel Component Library clusters
 	eiffel_components: "$EIFFEL_COMPONENT_LIBRARY";
