@@ -25,6 +25,13 @@ feature {NONE} -- Initialization
 feature -- Access
 
 	name: STRING
+			-- User name
+
+	mailer: STRING
+			-- Name of program to use for sending email
+
+	email_subject_flag: STRING
+			-- Flag to use with mailer to specify subject line
 
 	email_addresses: LINKED_LIST [STRING]
 			-- email addresses
@@ -58,33 +65,57 @@ feature -- Element change
 			name_set: name = arg and name /= Void
 		end
 
+	set_mailer (arg: STRING) is
+			-- Set mailer to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			mailer := arg
+		ensure
+			mailer_set: mailer = arg and mailer /= Void
+		end
+
+	set_email_subject_flag (arg: STRING) is
+			-- Set email_subject_flag to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			email_subject_flag := arg
+		ensure
+			email_subject_flag_set: email_subject_flag = arg and
+									email_subject_flag /= Void
+		end
+
 feature -- Basic operations
 
 	notify_by_email (s, subject: STRING) is
 			-- Send message `s' to the user by email with `subject' as the
-			-- subject.  If environment variable MAILER is not defined, no
-			-- action is taken.
+			-- subject.
 		require
 			s_not_void: s /= Void
 			at_least_one_address: not email_addresses.empty
+			mailer_not_void: mailer /= Void
 		local
 			msg_file: PLAIN_TEXT_FILE
-			mail_cmd, mailer: STRING
+			mail_cmd: STRING
 		do
-			mailer := get ("MAILER")
 			msg_file := temporary_file (email_addresses @ 1)
-			if not tmp_file_failed and mailer /= Void then
+			if not tmp_file_failed then
 				msg_file.put_string (s)
 				!!mail_cmd.make (25)
 				mail_cmd.append (mailer)
 				mail_cmd.extend (' ')
-				if subject /= Void and then not subject.empty then
-					mail_cmd.append (subject_flag)
+				if
+					email_subject_flag /= Void and then subject /= Void
+					and then not subject.empty
+				then
+					mail_cmd.append (email_subject_flag)
 					mail_cmd.append (" '")
 					mail_cmd.append (subject)
 					mail_cmd.append ("' ")
 				end
 				mail_cmd.append (email_addresses @ 1)
+				-- !!!OS-specific construct here:
 				mail_cmd.append (" <")
 				mail_cmd.append (msg_file.name)
 				msg_file.flush
@@ -94,10 +125,6 @@ feature -- Basic operations
 		end
 
 feature {NONE}
-
-	subject_flag: STRING is "-s"
-			-- Flag to use to specify subject with the user's mailer
-			-- Hard-coded for now - needs to be configurable.
 
 	temporary_file (s: STRING): PLAIN_TEXT_FILE is
 			-- Temporary file for writing - new file

@@ -47,7 +47,7 @@ feature -- Basic operations
 			msg: STRING
 			e: TYPED_EVENT
 		do
-			if not email_addresses.empty then
+			if not email_addresses.empty and mailer /= Void then
 				!!msg.make (elist.count * 120)
 				from
 					elist.start
@@ -64,6 +64,17 @@ feature -- Basic operations
 				notify_by_email (msg, concatenation (<<elist.count,
 								" TA Events Received at ", current_date,
 								", ", current_time>>))
+			else
+				if email_addresses.empty then
+					print (concatenation (<<"User ", name,
+							" has no email address set.%N">>))
+				else
+					check
+						mailer_void: mailer = Void
+					end
+					print (concatenation (<<"User ", name,
+							" has no mailer set.%N">>))
+				end
 			end
 		end
 
