@@ -22,8 +22,7 @@ feature {NONE} -- Implementation
 			mds: MAS_DB_SERVICES
 		do
 			create mds
-			create Result
-			Result.set_tuple_sequence(mds.market_data(current_symbol))
+			create Result.make (mds.market_data(current_symbol))
 		end
 
 	setup_input_medium is
