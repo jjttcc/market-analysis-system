@@ -59,12 +59,16 @@ c
 n
 ONE_VARIABLE_FUNCTION
 c
-Parabolic SAR 4
+Parabolic SAR
 No Input Function
 y
 NUMERIC_VALUED_COMMAND_WRAPPER
 e
 Root
+# This is the top-level command sequence, which includes an initialization
+# section, run only for the first period, a main body, three assignments to
+# update the previous AF, EP, and SAR, and the SAR value by itself to
+# provide the result of the calculation.
 COMMAND_SEQUENCE
 e
 Main sequence
@@ -92,9 +96,60 @@ n
 NUMERIC_VALUED_COMMAND_WRAPPER
 e
 Initialization
+# The Initialization sequence - only executed for the first period,
+# consisting of "variable" and "constant" initializations
 COMMAND_SEQUENCE
 e
 Initialization sequence
+y
+CONSTANT
+e
+Previous SAR value
+n
+0
+n
+y
+CONSTANT
+e
+Previous EP value
+n
+0
+n
+y
+CONSTANT
+e
+Previous AF value
+n
+0
+n
+y
+CONSTANT
+e
+short
+n
+-1
+n
+y
+CONSTANT
+e
+AF increment
+y
+.02
+n
+y
+CONSTANT
+e
+Maximum AF value
+y
+.1999
+n
+y
+CONSTANT
+e
+Null operation
+n
+0
+n
 y
 MANAGED_VALUE_COMMAND
 e
@@ -150,6 +205,8 @@ y
 .2
 n
 n
+# The main body, executed on periods 2 to the end of the data - Corresponds
+# to the 'execute' routine in the perl script.
 BOOLEAN_NUMERIC_CLIENT
 e
 Main body
@@ -160,6 +217,7 @@ shared CONSTANT ({tradestate})
 c
 shared CONSTANT ({long})
 c
+# Corresponds to the "long block" in the perl script.
 BOOLEAN_NUMERIC_CLIENT
 e
 Long block
@@ -172,13 +230,10 @@ shared EQ_OPERATOR (tradestate = long?)
 c
 LT_OPERATOR
 c
-12
+shared LOW_PRICE
 c
-CONSTANT
-e
-Previous SAR value
-n
-0
+shared CONSTANT ({Previous SAR value})
+c
 AND_OPERATOR
 c
 EQ_OPERATOR
@@ -186,20 +241,19 @@ e
 tradestate = short?
 shared CONSTANT ({tradestate})
 c
-CONSTANT
-e
-short
-n
--1
+shared CONSTANT ({short})
+c
 GT_OPERATOR
 c
-15
+shared HIGH_PRICE
 c
 shared CONSTANT ({Previous SAR value})
 c
 NUMERIC_VALUED_COMMAND_WRAPPER
 e
 Switch to short
+# This section orresponds to the 'switch_to_short' routine in the perl
+# script - executed when 'long' and 'Change direction?' is true.
 COMMAND_SEQUENCE
 e
 "Switch to short" sequence
@@ -209,11 +263,8 @@ e
 SAR := Previous EP value
 shared CONSTANT ({SAR})
 c
-CONSTANT
-e
-Previous EP value
-n
-0
+shared CONSTANT ({Previous EP value})
+c
 n
 y
 MANAGED_VALUE_COMMAND
@@ -221,11 +272,8 @@ e
 AF := AF increment
 shared CONSTANT ({AF})
 c
-CONSTANT
-e
-AF increment
-y
-.02
+shared CONSTANT ({AF increment})
+c
 n
 y
 MANAGED_VALUE_COMMAND
@@ -233,7 +281,7 @@ e
 EP := low
 shared CONSTANT ({EP})
 c
-12
+shared LOW_PRICE
 c
 n
 y
@@ -249,6 +297,8 @@ n
 NUMERIC_VALUED_COMMAND_WRAPPER
 e
 Remain long
+# This section corresponds to the "remain long" block in the perl script.
+# It updates SAR and, conditionally, updates AF and EP.
 COMMAND_SEQUENCE
 e
 "Remain long" sequence
@@ -269,11 +319,8 @@ shared CONSTANT ({Previous EP value})
 c
 shared CONSTANT ({Previous SAR value})
 c
-CONSTANT
-e
-Previous AF value
-n
-0
+shared CONSTANT ({Previous AF value})
+c
 shared CONSTANT ({Previous SAR value})
 c
 n
@@ -283,7 +330,7 @@ c
 GT_OPERATOR
 e
 High > Previous EP?
-15
+shared HIGH_PRICE
 c
 shared CONSTANT ({Previous EP value})
 c
@@ -300,11 +347,8 @@ e
 AF < Maximum AF value?
 shared CONSTANT ({AF})
 c
-CONSTANT
-e
-Maximum AF value
-y
-.1999
+shared CONSTANT ({Maximum AF value})
+c
 MANAGED_VALUE_COMMAND
 e
 Increment AF
@@ -317,11 +361,8 @@ shared CONSTANT ({AF})
 c
 shared CONSTANT ({AF increment})
 c
-CONSTANT
-e
-Null operation
-n
-0
+shared CONSTANT ({Null operation})
+c
 n
 y
 shared MANAGED_VALUE_COMMAND (EP := high)
@@ -332,6 +373,7 @@ shared CONSTANT ({Null operation})
 c
 n
 n
+# Corresponds to the "short block" section of the perl script.
 BOOLEAN_NUMERIC_CLIENT
 e
 Short block
@@ -340,6 +382,8 @@ c
 NUMERIC_VALUED_COMMAND_WRAPPER
 e
 Switch to long
+# This section orresponds to the 'switch_to_long' routine in the perl
+# script - executed when 'short' and 'Change direction?' is true.
 COMMAND_SEQUENCE
 e
 "Switch to long" sequence
@@ -363,6 +407,8 @@ n
 NUMERIC_VALUED_COMMAND_WRAPPER
 e
 Remain short
+# This section corresponds to the "remain short" block in the perl script.
+# It updates SAR and, conditionally, updates AF and EP.
 COMMAND_SEQUENCE
 e
 "Remain short" sequence
@@ -376,7 +422,7 @@ c
 LT_OPERATOR
 e
 Low < Previous EP?
-12
+shared LOW_PRICE
 c
 shared CONSTANT ({Previous EP value})
 c
@@ -399,6 +445,11 @@ n
 n
 n
 y
+# The three assignment constructs below are executed last for each
+# period.  They are equivalent to these lines from the perl script:
+#	$prev_sar = $sar;
+#	$prev_af = $af;
+#	$prev_ep = $ep;
 MANAGED_VALUE_COMMAND
 e
 Previous SAR := SAR
@@ -426,6 +477,8 @@ shared CONSTANT ({EP})
 c
 n
 y
+# This last sub-operator of the main command sequence is required in order
+# to provide the resulting value of the calculation for the period: SAR.
 shared CONSTANT ({SAR})
 c
 y
