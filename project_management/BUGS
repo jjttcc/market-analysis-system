@@ -1,0 +1,17 @@
+name: Division by 0
+description: Division by 0 is not checked for in class DIVISION.
+One solution is to simply check for a denominator of 0 in execute and
+throw an exception if the condition is true.  The caller will have to
+catch the exception and deal with it.  Another solution is to simply set
+the resulting value to 0, but, although it may work for the TAL, this may
+not work for other applications of the DIVISION class.  Another solution
+may be to just allow the bug to stay, since it will likely be rare for
+division by 0 to occur in real data.  With assertions turned off, the
+result will be a very strange value (very small or very large) in one
+of the fields (assuming floating point division never triggers hardware
+exceptions - true?).
+status: Fixed by catching the floating point exception in execute (defined in
+the parent, BINARY_OPERATOR) and calling the new feature,
+set_value_to_default, which is defined in DIVISION to set `value' to 0.
+notes: I may want to consider setting an error status when this exception is
+caught, so that the client can determine that an error occurred.
