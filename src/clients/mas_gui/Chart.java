@@ -427,13 +427,13 @@ System.out.println("FINISHED requesting " + requested_tradable);
 
 	public void update_start_date(AbstractDataSetBuilder b) {
 		latest_date_time = b.last_latest_date_time();
+//!!!:
 System.out.println("update st dt - latest is now: " + latest_date_time);
-//!!!REMOVE: main_pane.force_repaint_graphs();
 	}
 
 	public void notify_of_update() {
 System.out.println("I (" + this + ") was notified of an update!");
-		main_pane.force_repaint_graphs();
+		redraw_graphs();
 	}
 
 	public void notify_of_failure(Exception e) {
@@ -473,10 +473,88 @@ System.out.println("data request failed with code: " + result_id);
 		tradable_specification.set_symbol(t);
 	}
 
+// Package-level access
+
+	// Force all graphs contained in the chart window to be redrawn.
+	protected void redraw_graphs() {
+System.out.println("Chart.redraw_graphs called");
+		main_pane.force_repaint_graphs();
+	}
+
+	// Set the window title using current_tradable() and
+	// current_lower_indicators.
+	protected void set_window_title() {
+		if (! current_lower_indicators.isEmpty()) {
+			StringBuffer newtitle = new
+				StringBuffer (current_tradable().toUpperCase() + " - ");
+			int i;
+			for (i = 0; i < current_lower_indicators.size() - 1; ++i) {
+				newtitle.append(current_lower_indicators.elementAt(i));
+				newtitle.append(", ");
+			}
+			newtitle.append(current_lower_indicators.elementAt(i));
+			setTitle(newtitle.toString());
+		}
+		else {
+			setTitle(current_tradable().toUpperCase());
+		}
+	}
+
+	// Take action when notified that period type changed.
+	protected void notify_period_type_changed(String new_period_type) {
+		if (! current_period_type().equals(new_period_type)) {
+			set_current_period_type(new_period_type);
+			period_type_change = true;
+			if (current_tradable() != null) {
+				request_data(current_tradable());
+				//@@Replace with:
+				//send_data_request(current_tradable());
+				//if it turns out needing to not be threaded.
+			}
+		}
+	}
+
+	// Request data for the specified tradable and display it, using
+	// a thread for efficiency.
+	protected void request_data(String tradable) {
+		requested_tradable = tradable;
+		new Thread(this).start();
+	}
+
+	// Add any extra lines to the indicator graph - specified in the
+	// configuration.
+	protected void add_indicator_lines(DrawableDataSet dataset,
+			String indicator) {
+
+		if (current_lower_indicators.isEmpty()) {
+			return;
+		}
+
+		Vector lines;
+		double d1, d2;
+		MA_Configuration conf = MA_Configuration.application_instance();
+		lines = conf.vertical_indicator_lines_at(indicator);
+		if (lines != null && lines.size() > 0) {
+			for (int j = 0; j < lines.size(); j += 2) {
+				d1 = ((Float) lines.elementAt(j)).floatValue();
+				d2 = ((Float) lines.elementAt(j+1)).floatValue();
+				dataset.add_vline(new DoublePair(d1, d2));
+			}
+		}
+		lines = conf.horizontal_indicator_lines_at(indicator);
+		if (lines != null && lines.size() > 0) {
+			for (int j = 0; j < lines.size(); j += 2) {
+				d1 = ((Float) lines.elementAt(j)).floatValue();
+				d2 = ((Float) lines.elementAt(j+1)).floatValue();
+				dataset.add_hline(new DoublePair(d1, d2));
+			}
+		}
+	}
+
 // Implementation
 
 	// If the "indicator list" is out of date, rebuild it.
-	public void rebuild_indicators_if_needed() {
+	private void rebuild_indicators_if_needed() {
 		if (tradable_specification.all_indicator_specifications().size() == 0
 				|| new_indicators) {
 			new_indicators = false;
@@ -616,57 +694,6 @@ current_lower_indicators);
 		tradable_specification.select_indicators(current_lower_indicators);
 	}
 
-	// Take action when notified that period type changed.
-	void notify_period_type_changed(String new_period_type) {
-		if (! current_period_type().equals(new_period_type)) {
-			set_current_period_type(new_period_type);
-			period_type_change = true;
-			if (current_tradable() != null) {
-				request_data(current_tradable());
-				//@@Replace with:
-				//send_data_request(current_tradable());
-				//if it turns out needing to not be threaded.
-			}
-		}
-	}
-
-	// Request data for the specified tradable and display it, using
-	// a thread for efficiency.
-	void request_data(String tradable) {
-		requested_tradable = tradable;
-		new Thread(this).start();
-	}
-
-	// Add any extra lines to the indicator graph - specified in the
-	// configuration.
-	protected void add_indicator_lines(DrawableDataSet dataset,
-			String indicator) {
-
-		if (current_lower_indicators.isEmpty()) {
-			return;
-		}
-
-		Vector lines;
-		double d1, d2;
-		MA_Configuration conf = MA_Configuration.application_instance();
-		lines = conf.vertical_indicator_lines_at(indicator);
-		if (lines != null && lines.size() > 0) {
-			for (int j = 0; j < lines.size(); j += 2) {
-				d1 = ((Float) lines.elementAt(j)).floatValue();
-				d2 = ((Float) lines.elementAt(j+1)).floatValue();
-				dataset.add_vline(new DoublePair(d1, d2));
-			}
-		}
-		lines = conf.horizontal_indicator_lines_at(indicator);
-		if (lines != null && lines.size() > 0) {
-			for (int j = 0; j < lines.size(); j += 2) {
-				d1 = ((Float) lines.elementAt(j)).floatValue();
-				d2 = ((Float) lines.elementAt(j+1)).floatValue();
-				dataset.add_hline(new DoublePair(d1, d2));
-			}
-		}
-	}
-
 	// Initialize components and obtain and display data for `symbol' if
 	// it is not null, etc.
 	private void initialize_GUI_components(String symbol) {
@@ -737,25 +764,6 @@ System.out.println("Scheduling for refresh.");
 		if (auto_refresh_handler != null) {
 System.out.println("Unscheduling for refresh.");
 			auto_refresh_handler.unschedule();
-		}
-	}
-
-	// Set the window title using current_tradable() and
-	// current_lower_indicators.
-	protected void set_window_title() {
-		if (! current_lower_indicators.isEmpty()) {
-			StringBuffer newtitle = new
-				StringBuffer (current_tradable().toUpperCase() + " - ");
-			int i;
-			for (i = 0; i < current_lower_indicators.size() - 1; ++i) {
-				newtitle.append(current_lower_indicators.elementAt(i));
-				newtitle.append(", ");
-			}
-			newtitle.append(current_lower_indicators.elementAt(i));
-			setTitle(newtitle.toString());
-		}
-		else {
-			setTitle(current_tradable().toUpperCase());
 		}
 	}
 

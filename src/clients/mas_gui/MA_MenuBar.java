@@ -33,8 +33,11 @@ public class MA_MenuBar extends MenuBar {
 			new MenuShortcut(KeyEvent.VK_N)));
 		file_menu.add(close_window = new MenuItem("Close Window",
 			new MenuShortcut(KeyEvent.VK_W)));
-		file_menu.add(reload = new MenuItem("Reload settings",
-			new MenuShortcut(KeyEvent.VK_Z)));
+		reload = new MenuItem("Reload settings",
+			new MenuShortcut(KeyEvent.VK_Z));
+//@@@ Add the 'reload' item when/if implementation of reloading changed
+//    settings into 'chart' is implemented.
+//		file_menu.add(reload);
 		file_menu.addSeparator();
 		file_menu.add(mkt_selection = new MenuItem("Select Tradable",
 			new MenuShortcut(KeyEvent.VK_S)));
@@ -64,21 +67,8 @@ public class MA_MenuBar extends MenuBar {
 		});
 		reload.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//!!!!!
-System.out.println("reloaded");
-Calendar start_date = data_builder.last_latest_date_time();
-if (start_date == null) {
-start_date = chart.start_date();
-}
-start_date = protocol_util.one_second_later(start_date);
-System.out.println("start date: " + start_date);
-try {
-//data_builder.old_remove_send_time_delimited_market_data_request(chart.current_tradable(), chart.current_period_type(), start_date, null);
-// !!!Do something with the results - perhaps print it for now.
-// !!!Also - test the indicator request.
-} catch (Exception x) {
-}
 				MA_Configuration.application_instance().reload();
+				chart.redraw_graphs();
 			}
 		});
 		print_cmd.addActionListener(new ActionListener() {
