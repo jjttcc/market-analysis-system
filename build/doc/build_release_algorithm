@@ -1,0 +1,45 @@
+Algorithm for building a MAS release:
+
+Preliminary Tasks (in no particular order):
+
+Make sure the copyright dates are all up to date.
+Make sure all documentation is correct and up to date.
+Make sure the change logs are up to date for the new release.
+Update mas_product_info.e to contain current release date.
+Go through the steps from below needed to test the Linux and Windows
+   installs - make the release, create the mas*setup.exe file, etc., and
+   then do the installs and test that the result works as expected.
+
+Final Steps:
+
+1.  Make sure all files in the cvs tree are checked in.
+2.  Make sure the cvs tree is completely updated on both Linux and Windows.
+3.  Run build_mas on Linux.
+4.  Do a bit of testing on the built executables to catch any remaining
+    problems.  (Recommended, but not required.)
+5.  Make sure the current release directory is empty and run make_release.
+6.  If any problems occurred during the make_release run, fix them and
+    go back to step 1.
+7.  Do a test install of mas_linux*.tar.gz and make sure it installs
+    correctly.
+8.  Run build_rpm to make the mas rpm file and if any problems occur that
+    require it, go back to a previous step.
+9.  Copy the indicators_persist and generators_persist files created
+    in step 7. to the Windows machine to the correct directory.
+10. Copy mas_windows*.tar.gz to the Windows machine to the correct directory.
+11. Run prepare_windows_setup on Windows.
+12. Run Inno config. on the latest inno_config.iss file using the source
+    files set up by prepare_windows_setup.
+13. If any problems occurred during step 10. or 11. that require it (e.g.,
+    a CVS-ified file was changed and checked in), go back to step 1.
+14. Run a test install of the Windows setup-mas*.exe file on Windows and
+    of the mas-*.rpm on Linux.  Fix any problems that come up and, if
+	necessary, go back to a previous step.
+15. Do a cvs tag, using the current release number as a label.
+16. Create a new release-announcement file, perform any needed updates for
+    the new release on published files, such as the files accessible on
+	sf.net.  Do any needed backups.
+17. Put the files for the new release, from the current release directory,
+    onto the download section on sourceforge.  Post announcements to
+	sourceforge and the appropriate newsgroups - comp.os.linux.announce,
+	misc.invest.*, the windows groups, etc.
