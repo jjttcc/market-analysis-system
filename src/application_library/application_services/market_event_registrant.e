@@ -68,8 +68,8 @@ feature -- Basic operations
 
 	notify (e: TYPED_EVENT) is
 		do
-			{EVENT_REGISTRANT_WITH_HISTORY} Precursor (e)
 			{EVENT_REGISTRANT_WITH_CACHE} Precursor (e)
+			{EVENT_REGISTRANT_WITH_HISTORY} Precursor (e)
 		end
 
 	load_history is
