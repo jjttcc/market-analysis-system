@@ -39,7 +39,10 @@ feature {NONE}
 			operator.execute (target.item)
 			!!t
 			t.set_value (operator.value)
+			t.set_trading_period (target.item.trading_period)
 			output.extend (t)
+		ensure then
+			-- output.count = old (output.count) + 1
 		end
 
 	do_process is

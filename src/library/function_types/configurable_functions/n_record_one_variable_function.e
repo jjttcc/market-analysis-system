@@ -33,8 +33,6 @@ feature -- Basic operations
 
 	do_process is
 			-- Execute the function.
-		local
-			i: INTEGER
 		do
 			target.go_i_th (n)
 			continue_until

@@ -56,18 +56,28 @@ feature {NONE}
 
 	start is
 		do
-			target1.start
-			target2.start
+			line_up (target1, target2)
+			check
+				target1.item.trading_period.is_equal (
+					target2.item.trading_period)
+			end
 		end
 
 	action is
 		local
 			t: SIMPLE_TUPLE
 		do
-			operator.execute (Void)
+			operator.execute (Current)
 			!!t
 			t.set_value (operator.value)
+			check
+				target1.item.trading_period.is_equal (
+					target2.item.trading_period)
+			end
+			t.set_trading_period (target1.item.trading_period)
 			output.extend (t)
+		ensure then
+			-- output.count = old (output.count) + 1
 		end
 
 	do_process is
@@ -82,6 +92,60 @@ feature {NONE}
 	set_processed (b: BOOLEAN) is
 		do
 			processed := b
+		end
+
+	missing_periods (l1, l2: LINEAR [MARKET_TUPLE]): BOOLEAN is
+			-- Are there missing periods in l1 and l2 with
+			-- respect to each other?
+			--!!!Move this to a utility class?
+		require
+			both_void_or_both_not: (l1 = Void) = (l2 = Void)
+		do
+			if l1 /= Void then
+				check l2 /= Void end
+				from
+					line_up (l1, l2)
+				until
+					Result or l1.after or l2.after
+				loop
+					if
+						not l1.item.trading_period.is_equal (
+												l2.item.trading_period)
+					then
+						Result := true
+					end
+					l1.forth; l2.forth
+				end
+				if not Result and l1.after /= l2.after then
+					Result := true
+				end
+			else
+				check l1 = Void and l2 = Void and not Result end
+			end
+		ensure
+			void_gives_false: (l1 = Void and l2 = Void) implies (Result = false)
+		end
+
+	line_up (t1, t2: LINEAR [MARKET_TUPLE]) is
+			-- Line up t1 and t2 so that they start on the same time period.
+			--!!!Move this to a utility class?
+		local
+			l1, l2: LINEAR [MARKET_TUPLE]
+		do
+			t1.start; t2.start
+			from
+				if t1.item.trading_period < t2.item.trading_period then
+					l1 := t1
+					l2 := t2
+				else
+					l1 := t2
+					l2 := t1
+				end
+			until
+				not (l1.item.trading_period < l2.item.trading_period)
+			loop
+				l1.forth
+			end
 		end
 
 feature {TEST_FUNCTION_FACTORY} -- Element change (Export to test class for now.)
@@ -113,5 +177,6 @@ invariant
 	input_target_relation:
 		(input1 = Void or else input1.output = target1) and
 		(input2 = Void or else input2.output = target2)
+	no_missing_periods: not missing_periods (target1, target2)
 
 end -- class TWO_VARIABLE_FUNCTION
