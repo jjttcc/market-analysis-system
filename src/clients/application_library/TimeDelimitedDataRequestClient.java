@@ -11,7 +11,7 @@ public interface TimeDelimitedDataRequestClient {
 	public AbstractDataSetBuilder data_builder();
 
 	// Specification for the data request
-	public TradableDataSpecification specification();
+	public TradableSpecification specification();
 
 	// The start date-time of the data to be requested
 	// Precondition: ready_for_request()

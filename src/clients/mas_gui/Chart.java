@@ -67,7 +67,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		serialize_filename = sfname;
 
 		facilities = new ChartFacilities(this);
-		tradable_specification = new MA_TradableDataSpecification("", "");
+		tradable_specification = new MA_TradableSpecification("", "");
 		if (window_count == 1 && serialize_filename != null) {
 			ChartSettings settings = null;
 			try {
@@ -193,7 +193,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		return null;
 	}
 
-	public TradableDataSpecification specification() {
+	public TradableSpecification specification() {
 		return tradable_specification;
 	}
 
@@ -612,7 +612,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 				// Add valid indicators (from the server's point of view)
 				// to both the tradable spec. and `ordered_indicator_list'.
 				tradable_specification.add_indicator(new
-					IndicatorDataSpecification(((Integer)
+					IndicatorSpecification(((Integer)
 					valid_indicators.get(s)).intValue(), s));
 				ordered_indicator_list.addElement(s);
 			}
@@ -634,7 +634,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 			s = (String) special_indicators.elementAt(i);
 			if (tradable_specification.indicator_spec_for(s) == null) {
 				tradable_specification.add_special_indicator(new
-					IndicatorDataSpecification(tradable_specification.
+					IndicatorSpecification(tradable_specification.
 						all_indicator_specifications().size() + 1, s));
 				ordered_indicator_list.addElement(s);
 			}
@@ -945,7 +945,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 
 	private ChartFacilities facilities;
 
-	protected MA_TradableDataSpecification tradable_specification;
+	protected MA_TradableSpecification tradable_specification;
 
 	private static NetworkProtocolUtilities protocol_util =
 		new NetworkProtocolUtilities();

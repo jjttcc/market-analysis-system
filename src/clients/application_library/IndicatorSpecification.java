@@ -3,11 +3,11 @@ package application_library;
 import graph_library.DataSet;
 
 // Specification for an indicator data request to the server
-public class IndicatorDataSpecification {
+public class IndicatorSpecification {
 
 // Initialization
 
-	public IndicatorDataSpecification(int the_id, String the_name) {
+	public IndicatorSpecification(int the_id, String the_name) {
 		identifier = the_id;
 		name = the_name;
 	}
@@ -42,25 +42,25 @@ public class IndicatorDataSpecification {
 
 // Element change
 
-//@@@Consider creating a MA_IndicatorDataSpecification, moving this
+//@@@Consider creating a MA_IndicatorSpecification, moving this
 //procedure to it, and making it only package-accessible.  (See
-//MA_TradableDataSpecification.)
+//MA_TradableSpecification.)
 	// The data associated with the indicator
 	public void set_data(DataSet d) {
 		data = d;
 	}
 
-//@@@Consider creating a MA_IndicatorDataSpecification, moving this
+//@@@Consider creating a MA_IndicatorSpecification, moving this
 //procedure to it, and making it only package-accessible.  (See
-//MA_TradableDataSpecification.)
+//MA_TradableSpecification.)
 	// Set `selected' to true.
 	public void select() {
 		selected = true;
 	}
 
-//@@@Consider creating a MA_IndicatorDataSpecification, moving this
+//@@@Consider creating a MA_IndicatorSpecification, moving this
 //procedure to it, and making it only package-accessible.  (See
-//MA_TradableDataSpecification.)
+//MA_TradableSpecification.)
 	// Set `selected' to false.
 	public void unselect() {
 		selected = false;

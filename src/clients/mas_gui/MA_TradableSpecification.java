@@ -4,20 +4,20 @@ import application_library.*;
 import java.util.*;
 import graph_library.DataSet;
 
-// TradableDataSpecification with extensions for the open-source Market
+// TradableSpecification with extensions for the open-source Market
 // Analysis GUI client
-public class MA_TradableDataSpecification extends TradableDataSpecification {
+public class MA_TradableSpecification extends TradableSpecification {
 
 // Initialization
 
-	public MA_TradableDataSpecification(String sym, String pertype) {
+	public MA_TradableSpecification(String sym, String pertype) {
 		super(sym, pertype);
 		special_indicator_specs = new HashMap();
 	}
 
 // Access
 
-	// All 'IndicatorDataSpecification's, including
+	// All 'IndicatorSpecification's, including
 	// `special_indicator_specifications', valid for the assocaited tradable
 	public Collection all_indicator_specifications() {
 		Collection result = indicator_specifications();
@@ -25,18 +25,18 @@ public class MA_TradableDataSpecification extends TradableDataSpecification {
 		return result;
 	}
 
-	// The "special" 'IndicatorDataSpecification's
+	// The "special" 'IndicatorSpecification's
 	public Collection special_indicator_specifications() {
 		return special_indicator_specs.values();
 	}
 
 	// The indicator specification with indicator with name `indicator_name'
-	public IndicatorDataSpecification indicator_spec_for(
+	public IndicatorSpecification indicator_spec_for(
 			String indicator_name) {
-		IndicatorDataSpecification result = super.indicator_spec_for(	
+		IndicatorSpecification result = super.indicator_spec_for(	
 			indicator_name);
 		if (result == null) {
-			result = (IndicatorDataSpecification)
+			result = (IndicatorSpecification)
 				special_indicator_specs.get(indicator_name);
 		}
 		return result;
@@ -64,12 +64,12 @@ public class MA_TradableDataSpecification extends TradableDataSpecification {
 	// no action is taken.
 	void set_indicator_data(DataSet d, String indicator_name) {
 System.out.println("set ind data called for " + indicator_name + " with " + d);
-		IndicatorDataSpecification i = null;
+		IndicatorSpecification i = null;
 		if (indicator_specs.containsKey(indicator_name)) {
-			i = (IndicatorDataSpecification)
+			i = (IndicatorSpecification)
 				indicator_specs.get(indicator_name);
 		} else if (special_indicator_specs.containsKey(indicator_name)) {
-			i = (IndicatorDataSpecification)
+			i = (IndicatorSpecification)
 				special_indicator_specs.get(indicator_name);
 		}
 		if (i != null) {
@@ -80,14 +80,14 @@ else {System.out.println("indicator was NOT found: " + i);}
 	}
 
 	// Add indicator specification `i' to `indicator_specifications'.
-	void add_indicator(IndicatorDataSpecification i) {
+	void add_indicator(IndicatorSpecification i) {
 		indicator_specs.put(i.name(), i);
 	}
 
 
 	// Add "special" indicator specification `i' to
 	// `special_indicator_specifications'.
-	void add_special_indicator(IndicatorDataSpecification i) {
+	void add_special_indicator(IndicatorSpecification i) {
 		special_indicator_specs.put(i.name(), i);
 	}
 
@@ -95,9 +95,9 @@ else {System.out.println("indicator was NOT found: " + i);}
 	// data sets to null to free up no-longer-needed heap space.
 	void unselect_all_indicators() {
 		Iterator specs = indicator_specifications().iterator();
-		IndicatorDataSpecification i;
+		IndicatorSpecification i;
 		while (specs.hasNext()) {
-			i = (IndicatorDataSpecification) specs.next();
+			i = (IndicatorSpecification) specs.next();
 			i.unselect();
 			i.set_data(null);
 		}
@@ -105,7 +105,7 @@ else {System.out.println("indicator was NOT found: " + i);}
 
 	// Select indicator with name `name'.
 	void select_indicator(String name) {
-		IndicatorDataSpecification i = indicator_spec_for(name);
+		IndicatorSpecification i = indicator_spec_for(name);
 		if (i != null) {
 			i.select();
 		}
@@ -117,7 +117,7 @@ else {System.out.println("indicator was NOT found: " + i);}
 		String n;
 		while (i.hasNext()) {
 			n = (String) i.next();
-			IndicatorDataSpecification ind = indicator_spec_for(n);
+			IndicatorSpecification ind = indicator_spec_for(n);
 			if (ind != null) {
 System.out.println("selecting ind: " + ind);
 				ind.select();
@@ -128,7 +128,7 @@ System.out.println("selecting ind: " + ind);
 	// Unselect indicator with name `name' and set its data set to null
 	// to free up no-longer-needed heap space.
 	void unselect_indicator(String name) {
-		IndicatorDataSpecification i = indicator_spec_for(name);
+		IndicatorSpecification i = indicator_spec_for(name);
 		if (i != null) {
 			i.unselect();
 			i.set_data(null);
@@ -144,6 +144,6 @@ System.out.println("selecting ind: " + ind);
 
 // Implementation - attributes
 
-	// key: String (name), value: IndicatorDataSpecification:
+	// key: String (name), value: IndicatorSpecification:
 	private HashMap special_indicator_specs;
 }

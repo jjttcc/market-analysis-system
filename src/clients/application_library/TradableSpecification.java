@@ -4,11 +4,11 @@ import java.util.*;
 import graph_library.DataSet;
 
 // Specification for a data request to the server for data for a "tradable"
-public class TradableDataSpecification {
+public class TradableSpecification {
 
 // Initialization
 
-	public TradableDataSpecification(String sym, String pertype) {
+	public TradableSpecification(String sym, String pertype) {
 
 		symbol = sym;
 		period_type = pertype;
@@ -33,9 +33,9 @@ public class TradableDataSpecification {
 	}
 
 	// The indicator specification with indicator with name `indicator_name'
-	public IndicatorDataSpecification indicator_spec_for(
+	public IndicatorSpecification indicator_spec_for(
 			String indicator_name) {
-		return (IndicatorDataSpecification) indicator_specs.get(indicator_name);
+		return (IndicatorSpecification) indicator_specs.get(indicator_name);
 	}
 
 	// The indicator specifications
@@ -47,9 +47,9 @@ public class TradableDataSpecification {
 	public Collection selected_indicators() {
 		Iterator i = indicator_specs.values().iterator();
 		LinkedList result = new LinkedList();
-		IndicatorDataSpecification spec;
+		IndicatorSpecification spec;
 		while (i.hasNext()) {
-			spec = (IndicatorDataSpecification) i.next();
+			spec = (IndicatorSpecification) i.next();
 			if (spec.selected()) {
 				result.add(spec);
 			}
@@ -63,7 +63,7 @@ public class TradableDataSpecification {
 
 	protected String period_type;
 
-	// key: String (name), value: IndicatorDataSpecification:
+	// key: String (name), value: IndicatorSpecification:
 	protected HashMap indicator_specs;
 
 	protected DataSet main_data;

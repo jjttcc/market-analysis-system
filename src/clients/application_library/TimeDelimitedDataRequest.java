@@ -39,9 +39,9 @@ class TimeDelimitedDataRequest extends TimerTask {
 	private void perform_data_request() {
 		Iterator indicators;
 		if (client != null && client.ready_for_request()) {
-			TradableDataSpecification spec = client.specification();
+			TradableSpecification spec = client.specification();
 			AbstractDataSetBuilder builder = client.data_builder();
-			IndicatorDataSpecification i;
+			IndicatorSpecification i;
 			Calendar start_date, end_date;
 			try {
 				start_date = client.start_date();
@@ -62,7 +62,7 @@ class TimeDelimitedDataRequest extends TimerTask {
 					spec.main_data().append(builder.last_market_data());
 					indicators = spec.selected_indicators().iterator();
 					while (indicators.hasNext()) {
-						i = (IndicatorDataSpecification) indicators.next();
+						i = (IndicatorSpecification) indicators.next();
 						if (i.selected()) {
 							DataSet data = i.data();
 							builder.send_time_delimited_indicator_data_request(
@@ -76,7 +76,6 @@ class TimeDelimitedDataRequest extends TimerTask {
 							}
 						}
 					}
-//!!!!Change: If no data was received from the server, don't notify.
 					client.update_start_date(builder);
 					client.notify_of_update();
 				} else {
@@ -86,7 +85,7 @@ class TimeDelimitedDataRequest extends TimerTask {
 					} else {
 						// assert(builder.last_market_data().size() == 0);
 						// assert(builder.request_succeeded());
-						// Successful request with no data: Assume no new
+						// Successful request with no data - No new
 						// data is available from the server.
 					}
 				}
