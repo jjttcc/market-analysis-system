@@ -25,6 +25,11 @@ class TEST_USER_INTERFACE inherit
 			all
 		end
 
+	EXECUTION_ENVIRONMENT
+		export {NONE}
+			all
+		end
+
 feature -- Access
 
 	event_coordinator: EVENT_COORDINATOR
@@ -101,6 +106,9 @@ feature {NONE}
 					event_coordinator.execute
 				when 'x', 'X' then
 					end_program := true
+				when '!' then
+					print ("Type exit to return to main program.%N")
+					system ("")
 				else
 					print ("Invalid selection%N")
 				end
@@ -177,6 +185,9 @@ feature {NONE}
 					view_indicator_menu (indicator)
 				when 'x', 'X' then
 					end_program := true
+				when '!' then
+					print ("Type exit to return to main program.%N")
+					system ("")
 				when '-' then
 					done := true
 				else
@@ -219,6 +230,9 @@ feature {NONE}
 					print (indicator.full_description)
 				when 'x', 'X' then
 					end_program := true
+				when '!' then
+					print ("Type exit to return to main program.%N")
+					system ("")
 				when '-' then
 					done := true
 				else

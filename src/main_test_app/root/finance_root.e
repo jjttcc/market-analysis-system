@@ -32,19 +32,14 @@ feature -- Initialization
 			ui: TEST_USER_INTERFACE
 		do
 			!!ui
-			initialize (ui)
+			ui.set_output_field_separator ("%T")
+			ui.set_date_field_separator ("/")
 			print ("Test execution: "); print (current_date)
 			print (", "); print (current_time); print ("%N")
 			test_bool_operators
 			!!factory_builder.make (default_input_file_name)
 			ui.set_factory_builder (factory_builder)
 			ui.execute
-		end
-
-	initialize (ui: TEST_USER_INTERFACE) is
-		do
-			ui.set_output_field_separator ("%T")
-			ui.set_date_field_separator ("/")
 		end
 
 	test_bool_operators is
