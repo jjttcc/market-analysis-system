@@ -2,6 +2,7 @@
 
 package graph;
 
+import java.util.*;
 
 /**
  *  Drawer of market basic data - open, high, low, close, etc.
@@ -13,13 +14,13 @@ abstract public class MarketDrawer extends BasicDrawer {
 		return Stride;
 	}
 
-	public Object data() { return _data; }
+	public Vector data() { return data; }
 
 	// The dates associated with the principle (market) data
-	public String[] dates() { return _dates; }
+	public Vector dates() { return dates; }
 
 	// The times associated with the principle (market) data
-	public String[] times() { return _times; }
+	public Vector times() { return times; }
 
 	public MarketDrawer market_drawer() { return this; }
 
@@ -27,7 +28,7 @@ abstract public class MarketDrawer extends BasicDrawer {
 	public int data_length() {
 		int result;
 		if (data() != null) {
-			result = _data.length;
+			result = data.size();
 		} else {
 			result = 0;
 		}
@@ -35,20 +36,20 @@ abstract public class MarketDrawer extends BasicDrawer {
 	}
 
 	// Set the dates.
-	public void set_dates(String[] d) { _dates = d; }
+	public void set_dates(Vector d) { dates = d; }
 
 	// Set the times.
-	public void set_times(String[] t) { _times = t; }
+	public void set_times(Vector t) { times = t; }
 
 	// Set data to `d'.
-	public void set_data(Object d) { _data = (double[]) d; }
+	public void set_data(Vector d) { data = d; }
 
 	public void set_reference_values_needed(boolean b) {
 		ref_values_needed = b;
 	}
 
 	public int[] x_values() {
-		return _x_values;
+		return x_values;
 	}
 
 	protected int bar_width() {
@@ -63,11 +64,11 @@ abstract public class MarketDrawer extends BasicDrawer {
 		return true;
 	}
 
-	protected int _x_values[];
+	protected int x_values[];
 	protected int _bar_width;
-	protected double _data[];
-	protected String[] _dates;
-	protected String[] _times;
+	protected Vector data;		// double
+	protected Vector dates;		// String
+	protected Vector times;		// String
 	protected final int Stride = 4;
 	boolean ref_values_needed;
 }

@@ -2,6 +2,7 @@
 
 package graph;
 
+import java.util.*;
 import java.awt.*;
 
 /**
@@ -13,7 +14,7 @@ abstract public class Drawer {
 	public abstract int drawing_stride();
 
 	// The data to be drawn
-	public abstract Object data();
+	public abstract Vector data();
 
 	public abstract MarketDrawer market_drawer();
 
@@ -29,7 +30,7 @@ abstract public class Drawer {
 	abstract public int data_length();
 
 	// Set data to `d'.
-	public void set_data(Object d) {}
+	public void set_data(Vector d) {}
 
 	public void set_xaxis(Axis a) {
 		xaxis = a;

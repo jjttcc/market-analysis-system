@@ -3,6 +3,7 @@
 package graph;
 
 import java.awt.*;
+import java.util.*;
 import support.*;
 
 /**
@@ -17,13 +18,13 @@ public class DateDrawer extends TemporalDrawer {
 	}
 
 	// The data to be drawn
-	public Object data() { return _market_drawer.dates(); }
+	public Vector data() { return market_drawer.dates(); }
 
 	// 1 coordinate for each point - no x coordinate
 	public int drawing_stride() { return 1; }
 
 	public int[] x_values() {
-		return _market_drawer.x_values();
+		return market_drawer.x_values();
 	}
 
 	protected final static int Max_months = 360, Max_years = 30;
@@ -49,8 +50,8 @@ public class DateDrawer extends TemporalDrawer {
 		Rectangle bounds = b;
 		IntPair months[] = new IntPair[Max_months],
 			years[] = new IntPair[Max_years];
-		int[] _x_values = x_values();
-		String[] data = (String[]) data();
+		int[] x_values = x_values();
+		String[] data = (String[]) data().toArray();
 		if (data == null) return;
 
 		if (is_indicator()) {
@@ -109,18 +110,18 @@ public class DateDrawer extends TemporalDrawer {
 		}
 		++mi;
 
-		if (months.length > 1 && _x_values.length > 1 &&
+		if (months.length > 1 && x_values.length > 1 &&
 			months[0] != null && months[1] != null &&
 			months[0].right() >= 0 && months[1].right() >= 0) {
 			// Set the month name length and the month x offset according
 			// to the distance between the x-value for the first month and
 			// the x-value for the second month.
-			if (_x_values[months[1].right()] -
-					_x_values[months[0].right()] < 25) {
+			if (x_values[months[1].right()] -
+					x_values[months[0].right()] < 25) {
 				month_ln = 1;
 			}
-			Month_x_offset = label_x_value(_x_values[months[0].right()],
-				_x_values[months[1].right()]);
+			Month_x_offset = label_x_value(x_values[months[0].right()],
+				x_values[months[1].right()]);
 			Year_x_offset = Month_x_offset;
 		}
 		// Draw months and years.
@@ -134,7 +135,7 @@ public class DateDrawer extends TemporalDrawer {
 				if (months[i].right() < 0) {
 					months[i].set_right(0);
 				}
-				draw_month(g, bounds, months[i], _x_values);
+				draw_month(g, bounds, months[i], x_values);
 				++i;
 			}
 		}
@@ -142,11 +143,11 @@ public class DateDrawer extends TemporalDrawer {
 		i = 0;
 		while (i < yi) {
 			boolean short_years = do_months && mi >= Many_months;
-			if (is_indicator() && years[i].right() < _x_values.length) {
-				draw_year(g, bounds, years[i], ! do_months, true, _x_values,
+			if (is_indicator() && years[i].right() < x_values.length) {
+				draw_year(g, bounds, years[i], ! do_months, true, x_values,
 					short_years);
-			} else if (! do_months && years[i].right() < _x_values.length) {
-				draw_year(g, bounds, years[i], true, false, _x_values,
+			} else if (! do_months && years[i].right() < x_values.length) {
+				draw_year(g, bounds, years[i], true, false, x_values,
 					short_years);
 			}
 			++i;
@@ -173,13 +174,13 @@ public class DateDrawer extends TemporalDrawer {
 	//    p.left() specifies the month
 	//    p.right() specifies the index
 	protected void draw_month(Graphics g, Rectangle bounds, IntPair p,
-			int[] _x_values) {
+			int[] x_values) {
 		int x, month_x, month;
 		final int Line_offset = -2;
 		double width_factor;
 
 		width_factor = width_factor_value(bounds, data_length());
-		x = _x_values[p.right()];
+		x = x_values[p.right()];
 		month_x = x + Month_x_offset;
 		month = p.left();
 		// Don't draw the line if it's close to the left border.
@@ -199,13 +200,13 @@ public class DateDrawer extends TemporalDrawer {
 	//    p.left() specifies the year
 	//    p.right() specifies the index
 	protected void draw_year(Graphics g, Rectangle bounds, IntPair p,
-			boolean line, boolean year, int[] _x_values, boolean two_digit) {
+			boolean line, boolean year, int[] x_values, boolean two_digit) {
 		int year_x, x;
 		final int Line_offset = -3;
 		double width_factor;
 
 		width_factor = width_factor_value(bounds, data_length());
-		x = _x_values[p.right()];
+		x = x_values[p.right()];
 		year_x = x + Year_x_offset;
 		if (line && x > Too_far_left) {
 			g.setColor(conf.reference_line_color());

@@ -259,7 +259,7 @@ abstract public class InteractiveGraph extends Graph {
 			case 'd':
 				if (dpgin == null) dpgin = new Gin("Data Point");
 				dpgin.show();
-				double d[] = getClosestPoint(e.x, e.y);
+				double d[] = closest_point(e.x, e.y);
 				dpgin.setXlabel( d[0] );
 				dpgin.setYlabel( d[1] );
 				int ix = xaxis.getInteger(d[0]);
@@ -428,7 +428,7 @@ public boolean mouseMove(Event e, int x, int y) {
 /**
  *   Find the closest data point to the cursor
  */
-	protected double[] getClosestPoint(int ix, int iy) {
+	protected double[] closest_point(int ix, int iy) {
 		DrawableDataSet ds;
 		int   i;
 		double a[] = new double[3];
@@ -437,10 +437,10 @@ public boolean mouseMove(Event e, int x, int y) {
 		double x = xaxis.getDouble(ix);
 		double y = yaxis.getDouble(iy);
 
-//System.out.println("getClosestPoint: x="+x+", y="+y);
+//System.out.println("closest_point: x="+x+", y="+y);
 		for (i=0; i<dataset.size(); i++) {
 			ds = (DrawableDataSet)(dataset.elementAt(i));
-			a = ds.getClosestPoint(x,y);
+			a = ds.closest_point(x,y);
 			if ( distsq < 0.0 || distsq > a[2] ) {
 				data[0] = a[0];
 				data[1] = a[1];

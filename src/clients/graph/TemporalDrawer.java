@@ -13,17 +13,17 @@ abstract public class TemporalDrawer extends Drawer {
 	// mkd is the associated market drawer and is_ind specifies whether
 	// this DateDrawer is associated with indicator data.
 	TemporalDrawer(BasicDrawer d) {
-		_market_drawer = d.market_drawer();
+		market_drawer = d.market_drawer();
 		main_drawer = d;
 		conf = MA_Configuration.application_instance();
 	}
 
-	public MarketDrawer market_drawer() { return _market_drawer; }
+	public MarketDrawer market_drawer() { return market_drawer; }
 
 	public int data_length() {
 		int result = 0;
 		if (data() != null) {
-			result = ((String[]) data()).length;
+			result = data().size();
 		}
 		return result;
 	}
@@ -41,7 +41,7 @@ abstract public class TemporalDrawer extends Drawer {
 	public int drawing_stride() { return 1; }
 
 	public int[] x_values() {
-		return _market_drawer.x_values();
+		return market_drawer.x_values();
 	}
 
 	// Precondition: main_data_processed()
@@ -80,7 +80,7 @@ abstract public class TemporalDrawer extends Drawer {
 
 	protected MA_Configuration conf;
 
-	protected MarketDrawer _market_drawer;
+	protected MarketDrawer market_drawer;
 
 	protected BasicDrawer main_drawer;
 }

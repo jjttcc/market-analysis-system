@@ -393,13 +393,16 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	}
 
 	public void run() {
+System.out.println("Chart.run called");
 		//@@In the future, if needed, this routine can call one of a
 		//set of routines, based on a flag.
 		synchronized(requesting_data) {
 			if (! requesting_data.booleanValue()) {
 				Thread.yield();
 				requesting_data = Boolean.TRUE;
+System.out.println("requesting " + requested_tradable);
 				send_data_request(requested_tradable);
+System.out.println("FINISHED requesting " + requested_tradable);
 				requesting_data = Boolean.FALSE;
 			} else {
 			}

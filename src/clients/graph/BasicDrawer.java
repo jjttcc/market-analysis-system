@@ -13,10 +13,10 @@ import application_support.*;
 abstract public class BasicDrawer extends Drawer {
 
 	// The dates associated with the principle (market) data
-	public abstract String[] dates();
+	public abstract Vector dates();
 
 	// The times (if any) associated with the principle (market) data
-	public abstract String[] times();
+	public abstract Vector times();
 
 	public boolean data_processed() {
 		return x_values() != null && x_values().length > 0;
@@ -33,10 +33,10 @@ abstract public class BasicDrawer extends Drawer {
 	}
 
 	// Set the dates.
-	public void set_dates(String[] d) {}
+	public void set_dates(Vector d) {}
 
 	// Set the times.
-	public void set_times(String[] t) {}
+	public void set_times(Vector t) {}
 
 	// Number of tuples in the data
 	public int tuple_count() {

@@ -21,9 +21,9 @@ public class BarDrawer extends IndicatorDrawer {
 		int i, row;
 		int x, y;
 		int lngth = 0;
-		int[] _x_values = x_values();
-		if (_data != null) lngth = data_length();
-		if (lngth == 0 || _x_values == null) return;
+		int[] x_values = x_values();
+		if (data != null) lngth = data_length();
+		if (lngth == 0 || x_values == null) return;
 
 		int _bar_width = bar_width();
 		double height_factor;
@@ -33,7 +33,7 @@ public class BarDrawer extends IndicatorDrawer {
 
 		// Is there any data to draw? Sometimes the draw command will
 		// will be called before any data has been placed in the class.
-		if (_data == null || lngth < 1) return;
+		if (data == null || lngth < 1) return;
 
 		if (_bar_width <= 0) _bar_width = 1;
 		g.setColor(draw_color);
@@ -41,11 +41,12 @@ public class BarDrawer extends IndicatorDrawer {
 		row = first_row() - 1;
 		for (i = 0; row < lngth; ++i, ++row) {
 			// Prevent drawing bars for 0 values:
-			if (_data[i] == 0) continue;
+			if (((Double) data.elementAt(i)).doubleValue() == 0) continue;
 
-			x = _x_values[row] + 1;
-			y = (int)(bounds.height - (_data[i]-ymin) * height_factor +
-					bounds.y);
+			x = x_values[row] + 1;
+			y = (int)(bounds.height -
+				(((Double) data.elementAt(i)).doubleValue() - ymin) *
+				height_factor + bounds.y);
 			x_s[0] = x; x_s[1] = x + _bar_width;
 			x_s[2] = x_s[1]; x_s[3] = x_s[0];
 			y_s[0] = y; y_s[1] = y;

@@ -43,6 +43,12 @@ abstract public class DataSet {
 	// Set the color the data is to be drawn in - can be null
 	public void setColor(Color c) { color = c; }
 
+	/**
+	* Append a copy of `d' at end.
+	* @postcondition
+	*     count() == old count() + d.count() */
+	abstract public void append(DataSet d);
+
 // Implementation
 
 	// Color data is to be drawn in - can be null

@@ -29,18 +29,18 @@ public class TimeDrawer extends TemporalDrawer {
 	}
 
 	// The data to be drawn
-	public Object data() { return _market_drawer.times(); }
+	public Vector data() { return market_drawer.times(); }
 
 	// The dates associated with the principle (market) data
-	public String[] dates() { return _market_drawer.dates(); }
+	public Vector dates() { return market_drawer.dates(); }
 
 	// The dates associated with the principle (market) data
-	public String[] times() { return _market_drawer.times(); }
+	public Vector times() { return market_drawer.times(); }
 
 	public int data_length() {
 		int result;
 		if (times() != null) {
-			result = times().length;
+			result = times().size();
 		} else {
 			result = 0;
 		}
@@ -51,7 +51,7 @@ public class TimeDrawer extends TemporalDrawer {
 	public int drawing_stride() { return 1; }
 
 	public int[] x_values() {
-		return _market_drawer.x_values();
+		return market_drawer.x_values();
 	}
 
 	protected int Hour_y, Day_y;
@@ -73,13 +73,13 @@ public class TimeDrawer extends TemporalDrawer {
 		boolean draw_all_hours, draw_day_line;
 		FontManager fontmgr = new FontManager(g);
 		String old_hour_string;
-		int[] _x_values = x_values();
-		String[] times = times();
-		String[] dates = dates();
-		IntPair hours[] = new IntPair[times.length],
-			days[] = new IntPair[times.length];
+		int[] x_values = x_values();
+		Vector times = times();
+		Vector dates = dates();
+		IntPair hours[] = new IntPair[times.size()],
+			days[] = new IntPair[times.size()];
 
-		if (times == null || times.length == 0) return;
+		if (times == null || times.size() == 0) return;
 
 		if (is_indicator()) {
 			Hour_y = label_y_value(bounds);
@@ -87,18 +87,18 @@ public class TimeDrawer extends TemporalDrawer {
 		}
 		Hour_x_offset = 10;
 		// Determine the first hour in `times'.
-		String hour_string = times[0].substring(0,2);
-		String day_string = dates[0].substring(6,8);
+		String hour_string = ((String) times.elementAt(0)).substring(0,2);
+		String day_string = ((String) dates.elementAt(0)).substring(6,8);
 		hour = Integer.valueOf(hour_string).intValue();
-		day_of_week = week_day_for(dates[0]);
+		day_of_week = week_day_for((String) dates.elementAt(0));
 		hour_idx = 0; day_idx = 0;
 		hours[hour_idx] = new IntPair(hour, 0);
 		days[day_idx] = new IntPair(day_of_week, 0);
 		++hour_idx; ++day_idx;
 		old_hour_string = hour_string;
 		// Map out all hours (from times) and days (from dates) with IntPairs.
-		for (i = 1; i < times.length; ++i) {
-			hour_string = times[i].substring(0,2);
+		for (i = 1; i < times.size(); ++i) {
+			hour_string = ((String) times.elementAt(i)).substring(0,2);
 			if (! hour_string.equals(old_hour_string)) {
 				hour = Integer.valueOf(hour_string).intValue();
 				hours[hour_idx++] = new IntPair(hour, i);
@@ -106,20 +106,20 @@ public class TimeDrawer extends TemporalDrawer {
 				// If current hour is less than previous hour,
 				// a new day has begun.
 				if (hour < hours[hour_idx-2].left()) {
-					day_of_week = week_day_for(dates[i]);
+					day_of_week = week_day_for((String) dates.elementAt(i));
 					days[day_idx++] = new IntPair(day_of_week, i);
 				}
 			}
 		}
 
-		if (hour_idx > 1 && _x_values.length > 1 &&
+		if (hour_idx > 1 && x_values.length > 1 &&
 			hours[0] != null && hours[1] != null &&
 			hours[0].right() >= 0 && hours[1].right() >= 0) {
 			// Set the hour x offset according to the distance between
 			// the x-value for the first hour and the x-value for
 			// the second hour.
-			Hour_x_offset = label_x_value(_x_values[hours[0].right()],
-				_x_values[hours[1].right()]);
+			Hour_x_offset = label_x_value(x_values[hours[0].right()],
+				x_values[hours[1].right()]);
 			Day_x_offset = Hour_x_offset;
 		}
 		i = 0;
@@ -130,7 +130,7 @@ public class TimeDrawer extends TemporalDrawer {
 			// Draw hours.
 			while (i < hour_idx) {
 				if (drawable_hour(hours, hour_idx, i, draw_all_hours)) {
-					draw_hour(g, bounds, hours[i], _x_values, draw_hour_line);
+					draw_hour(g, bounds, hours[i], x_values, draw_hour_line);
 				}
 				++i;
 			}
@@ -139,7 +139,7 @@ public class TimeDrawer extends TemporalDrawer {
 		draw_day_line = day_idx <= Day_limit;
 		while (i < day_idx) {
 			fontmgr.set_new_font(fontmgr.MONOSPACED, Font.ITALIC, 12);
-			draw_day(g, bounds, days[i], _x_values, draw_day_line);
+			draw_day(g, bounds, days[i], x_values, draw_day_line);
 			++i;
 		}
 		fontmgr.restore_font();
@@ -154,7 +154,7 @@ public class TimeDrawer extends TemporalDrawer {
 		final int Line_offset = -2;
 		double width_factor;
 
-		width_factor = width_factor_value(bounds, dates().length);
+		width_factor = width_factor_value(bounds, dates().size());
 		x = x_values[p.right()];
 		hour_x = x + Hour_x_offset;
 		if (draw_line && x > Too_far_left) {
@@ -177,7 +177,7 @@ public class TimeDrawer extends TemporalDrawer {
 		final int Line_offset = -2;
 		double width_factor;
 
-		width_factor = width_factor_value(bounds, dates().length);
+		width_factor = width_factor_value(bounds, dates().size());
 		x = x_values[p.right()];
 		day_x = x + Day_x_offset;
 		if (draw_line && x > Too_far_left) {

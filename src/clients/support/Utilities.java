@@ -95,7 +95,7 @@ public class Utilities implements Constants
 	//	bottom >= 0;
 	//	top <= dates.length - 1;
 	//   `dates' is sorted in ascending order.
-	static public int index_at_date (String d, String dates[],
+	static public int index_at_date(String d, String dates[],
 			int search_spec, int bottom, int top) {
 		int i, comparison, result = -1;
 
@@ -113,13 +113,13 @@ public class Utilities implements Constants
 			else if (comparison < 0) top = i - 1;
 		}
 		if (result == -1 && search_spec != 0) {
-			if (search_spec < 0 && valid_index (dates, top)) {
+			if (search_spec < 0 && valid_index(dates, top)) {
 				// top is now the index of the first element whose
 				// date/time is earlier than `d', unless there is no
 				// element whose date/time is earlier than `d'
 				result = top;
 			}
-			else if (search_spec > 0 && valid_index (dates, bottom)) {
+			else if (search_spec > 0 && valid_index(dates, bottom)) {
 				// bottom is now the index of the first element whose
 				// date/time is later than `d', unless there is no element
 				// whose date/time is later than `d'
@@ -139,6 +139,59 @@ public class Utilities implements Constants
 	// 			dates[result + 1] > d
 	// 	spec_positive_previous_item_lt_d_if_valid:
 	// 		search_spec > 0 and valid_index (dates, result - 1) implies
+	// 			dates[result - 1] < d
+	// 	dates_match_if_has_d:
+	// 		dates.has(d) implies dates[result].is_equal (d)
+
+		return result;
+	}
+
+	// (See index_at_date(String d, String dates[], int search_spec,
+	//    int bottom, int top.)
+	static public int index_at_date(String d, Vector dates, int search_spec,
+			int bottom, int top) {
+		int i, comparison, result = -1;
+
+		// Perform a binary search.
+		// invariant:
+		//	must_be_in: in_range_or_not_in_array (d, dates, bottom, top)
+		// variant:
+		//	top_bottom_difference: top - bottom + 1
+		while (result == -1 && top >= bottom) {
+			i = (bottom + top) / 2;
+			// assert: i >= 0 and bottom <= i and i <= top
+			comparison = d.compareTo(dates.elementAt(i));
+			if (comparison == 0) result = i;
+			else if (comparison > 0) bottom = i + 1;
+			else if (comparison < 0) top = i - 1;
+		}
+		if (result == -1 && search_spec != 0) {
+			if (search_spec < 0 && valid_index(dates, top)) {
+				// top is now the index of the first element whose
+				// date/time is earlier than `d', unless there is no
+				// element whose date/time is earlier than `d'
+				result = top;
+			}
+			else if (search_spec > 0 && valid_index(dates, bottom)) {
+				// bottom is now the index of the first element whose
+				// date/time is later than `d', unless there is no element
+				// whose date/time is later than `d'
+				result = bottom;
+			}
+		}
+	// ensure:
+	// 	non_zero_implies_valid: result > -1 implies valid_index(dates, result)
+	// 	non_zero_spec_negative_implies_result_le_d:
+	// 		result > -1 and search_spec < 0 implies
+	// 			dates[result] <= (d)
+	// 	non_zero_spec_positive_implies_result_ge_d:
+	// 		result > -1 and search_spec > 0 implies
+	// 			dates[result] >= (d)
+	// 	spec_negative_next_item_gt_d_if_valid:
+	// 		search_spec < 0 and valid_index(dates, result + 1) implies
+	// 			dates[result + 1] > d
+	// 	spec_positive_previous_item_lt_d_if_valid:
+	// 		search_spec > 0 and valid_index(dates, result - 1) implies
 	// 			dates[result - 1] < d
 	// 	dates_match_if_has_d:
 	// 		dates.has(d) implies dates[result].is_equal (d)
@@ -174,8 +227,12 @@ public class Utilities implements Constants
 		months[11] = "Dec";
 	}
 
-	static protected boolean valid_index (String dates[], int i) {
+	static protected boolean valid_index(String dates[], int i) {
 		return i >= 0 && i < dates.length;
+	}
+
+	static protected boolean valid_index(Vector dates, int i) {
+		return i >= 0 && i < dates.size();
 	}
 
 	// double values formatted for display
