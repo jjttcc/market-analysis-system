@@ -106,7 +106,7 @@ public class GUI_Client implements NetworkProtocol
 	{
 		out.print(msgID);
 		out.print("\t" + msg);
-		out.print(eom);
+		out.print(Eom);
 		out.flush();
 	}
 
