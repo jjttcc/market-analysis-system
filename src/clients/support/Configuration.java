@@ -1,7 +1,10 @@
+package support;
+
 import java.util.*;
 import java.io.*;
 import common.*;
 import support.*;
+import java.awt.*;
 
 /** Global configuration settings - singleton */
 public class Configuration implements NetworkProtocol
@@ -52,6 +55,30 @@ public class Configuration implements NetworkProtocol
 		return (Vector) _horizontal_indicator_lines.get(indicator);
 	}
 
+	//!!!Note: These colors should be made configurable.
+
+	// Color to use for "black" candles
+	public Color black_candle_color() {
+		return Color.red;
+	}
+
+	// Color to use for "white" candles
+	public Color white_candle_color() {
+		return Color.green;
+	}
+
+	// Color to use for straight "sticks" (bar lines, etc.)
+	public Color stick_color() {
+		return Color.white;
+	}
+
+	// Color to use for connecting lines (indicators)
+	public Color line_color() {
+		return Color.cyan;
+	}
+
+
+	// The singleton instance
 	public static Configuration instance() {
 		if (_instance == null) {
 			_instance = new Configuration();
