@@ -126,6 +126,43 @@ feature -- Basic operations
 			f.set_required_operators (cmd, lc, rc)
 		end
 
+	edit_configurable_nrf (f: CONFIGURABLE_N_RECORD_FUNCTION) is
+			-- Edit a CONFIGURABLE_N_RECORD_FUNCTION function (which takes a
+			-- RESULT_COMMAND [REAL] and a LINEAR_COMMAND).
+		require
+			ui_set: user_interface /= Void
+			op_maker_set: operator_maker /= Void
+		local
+			mainop: RESULT_COMMAND [REAL]
+			prevop: LINEAR_COMMAND
+			firstop: RESULT_COMMAND [REAL]
+			response: STRING
+		do
+			operator_maker.reset
+			f.set_input (user_interface.market_function_selection (
+							concatenation (<<f.name, "'s (", f.generator,
+								") input function">>)))
+			mainop ?= operator_maker.command_selection_from_type (
+						operator_maker.Real_result_command,
+							concatenation (<<f.generator,
+								"'s main operator">>), false)
+			response := user_interface.string_selection(concatenation(<<
+				"Would you like to choose a previous operator for ",
+				f.name, "? ">>))
+			response.to_lower
+			if response @ 1 = 'y' then
+				prevop ?= operator_maker.command_selection_from_type (
+							operator_maker.Linear_command,
+								concatenation (<<f.generator,
+									"'s 'previous' operator">>), false)
+			end
+			firstop ?= operator_maker.command_selection_from_type (
+						operator_maker.Real_result_command,
+							concatenation (<<f.generator,
+								"'s first element operator">>), false)
+			f.set_operators (mainop, prevop, firstop)
+		end
+
 	edit_one_fn_op_n (f: N_RECORD_ONE_VARIABLE_FUNCTION) is
 			-- Edit a function that takes one market function, an operator,
 			-- and an n-value.
