@@ -29,4 +29,9 @@ feature -- Access
 			create {UNIX_FILE_NAME_EXPANDER} Result
 		end
 
+	file_lock (file_name: STRING): FILE_LOCK is
+		do
+			create {BASIC_FILE_LOCK} Result.make (file_name)
+		end
+
 end -- class PLATFORM_DEPENDENT_OBJECTS
