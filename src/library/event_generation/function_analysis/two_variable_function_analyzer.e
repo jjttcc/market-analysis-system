@@ -141,17 +141,9 @@ feature -- Status setting
 feature -- Basic operations
 
 	execute is
-		local
-			t: TRADABLE [BASIC_MARKET_TUPLE]
-			s: STRING
 		do
-			check
-				tradables_not_void: tradables /= Void
-			end
 			create {LINKED_LIST [MARKET_EVENT]} product.make
-			t := tradables.item (period_type)
-			if t /= Void and not tradables.error_occurred then
-				set_tradable (t)
+			if current_tradable /= Void then
 				if operator /= Void then set_operator_target end
 				if not input1.processed then
 					input1.process
@@ -162,17 +154,6 @@ feature -- Basic operations
 				if not target1.empty and not target2.empty then
 					do_all
 				end
-			else
-				if tradables.error_occurred then
-					s := concatenation (<<
-						"Error occurred during event processing: ",
-						tradables.last_error, ".%N">>)
-				else
-					s := concatenation (<< "Error occurred during event ",
-						"processing - failed to process item # ",
-						tradables.index, ".%N">>)
-				end
-				log_error (s)
 			end
 		end
 
@@ -327,7 +308,7 @@ feature {MARKET_FUNCTION_EDITOR}
 			target1 := input1.output
 			target2 := input2.output
 			product := Void
-			tradable := Void
+			current_tradable := Void
 		end
 
 feature -- Implementation
