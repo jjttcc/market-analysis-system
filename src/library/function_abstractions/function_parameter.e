@@ -8,7 +8,9 @@ indexing
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
-deferred class FUNCTION_PARAMETER
+deferred class FUNCTION_PARAMETER inherit
+
+	PART_COMPARABLE
 
 feature {NONE} -- Initialization
 
@@ -36,6 +38,15 @@ feature -- Access
 		deferred
 		end
 
+	description: STRING is
+			-- `name' + " - " + `function.name'
+		do
+			create Result.make (0)
+			Result.append (name)
+			Result.append (" - ")
+			Result.append (function.name)
+		end
+
 	value_type_description: STRING is
 			-- Description of the type needed by `current_value'.
 		deferred
@@ -45,6 +56,13 @@ feature -- Access
 			-- Does `v' match the current value according to the
 			-- internal type of the value?
 		deferred
+		end
+
+feature -- Comparison
+
+	infix "<" (other: like Current): BOOLEAN is
+		do
+			Result := description < other.description
 		end
 
 feature -- Element change
@@ -64,5 +82,9 @@ feature -- Basic operations
 			-- Is `i' a valid value for this parameter?
 		deferred
 		end
+
+invariant
+
+	function_not_void: function /= Void
 
 end -- class FUNCTION_PARAMETER
