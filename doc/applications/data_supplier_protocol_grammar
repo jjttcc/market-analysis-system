@@ -41,8 +41,8 @@ ta_string       -> +(ta_char)
 ta_char         -> Any character other than tab or newline
 <null>          -> Empty string (0-length contents)
 status_id       -> ok_id | error_id
-ok_id           -> '1'
-error_id        -> '2'
+ok_id           -> '101'
+error_id        -> '102'
 sym_list_id     -> '1'
 data_id         -> '2'
 
