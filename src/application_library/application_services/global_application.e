@@ -4,9 +4,17 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class
+class GLOBAL_APPLICATION inherit
 
-	GLOBAL_APPLICATION
+	EXCEPTIONS
+		export
+			{NONE} all
+		end
+
+	PRINTING
+		export
+			{NONE} all
+		end
 
 feature -- Utility
 
@@ -82,7 +90,7 @@ feature -- Access
 			eg_maker.execute
 			market_event_generation_library.extend (eg_maker.product)
 		ensure
-			one_more_eg: market_event_generation_library.count = 
+			one_more_eg: market_event_generation_library.count =
 				old market_event_generation_library.count + 1
 			product_in_library: eg_maker.product /= Void and
 				market_event_generation_library.has (eg_maker.product)
@@ -93,16 +101,31 @@ feature -- Access
 		local
 			storable: STORABLE
 			mflist: STORABLE_LIST [MARKET_FUNCTION]
+			retrieval_failed: BOOLEAN
 		once
-			!!storable
-			mflist ?= storable.retrieve_by_name (indicators_file_name)
-			if mflist = Void then
-				!STORABLE_MARKET_FUNCTION_LIST!mflist.make (
-					indicators_file_name)
+			if retrieval_failed then
+				if exception = Retrieve_exception then
+					print_list (<<"Retrieval of function library file ",
+								indicators_file_name, " failed%N">>)
+				else
+					print_list (<<"Error occurred while retrieving function %
+									%library: ", meaning(exception), "%N">>)
+				end
+				die (-1)
+			else
+				!!storable
+				mflist ?= storable.retrieve_by_name (indicators_file_name)
+				if mflist = Void then
+					!STORABLE_MARKET_FUNCTION_LIST!mflist.make (
+						indicators_file_name)
+				end
+				-- Ensure that the list will be saved when the process ends.
+				register_for_termination (mflist)
+				Result := mflist
 			end
-			-- Ensure that the list will be saved when the process ends.
-			register_for_termination (mflist)
-			Result := mflist
+		rescue
+			retrieval_failed := true
+			retry
 		end
 
 	market_event_generation_library: LIST [MARKET_EVENT_GENERATOR] is
@@ -110,16 +133,31 @@ feature -- Access
 		local
 			storable: STORABLE
 			meg_list: STORABLE_LIST [MARKET_EVENT_GENERATOR]
+			retrieval_failed: BOOLEAN
 		once
-			!!storable
-			meg_list ?= storable.retrieve_by_name (generators_file_name)
-			if meg_list = Void then
-				!STORABLE_EVENT_GENERATOR_LIST!meg_list.make (
-					generators_file_name)
+			if retrieval_failed then
+				if exception = Retrieve_exception then
+					print_list (<<"Retrieval of market analysis library%
+								% file ", indicators_file_name, " failed%N">>)
+				else
+					print_list (<<"Error occurred while retrieving market %
+							%analysis library: ", meaning(exception), "%N">>)
+				end
+				die (-1)
+			else
+				!!storable
+				meg_list ?= storable.retrieve_by_name (generators_file_name)
+				if meg_list = Void then
+					!STORABLE_EVENT_GENERATOR_LIST!meg_list.make (
+						generators_file_name)
+				end
+				-- Ensure that the list will be saved when the process ends.
+				register_for_termination (meg_list)
+				Result := meg_list
 			end
-			-- Ensure that the list will be saved when the process ends.
-			register_for_termination (meg_list)
-			Result := meg_list
+		rescue
+			retrieval_failed := true
+			retry
 		end
 
 	active_event_generators: LIST [MARKET_EVENT_GENERATOR] is
@@ -164,32 +202,47 @@ feature -- Access
 		local
 			storable: STORABLE
 			reg_list: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
+			retrieval_failed: BOOLEAN
 		once
-			!!storable
-			reg_list ?= storable.retrieve_by_name (registrants_file_name)
-			if reg_list = Void then
-				!!reg_list.make (registrants_file_name)
+			if retrieval_failed then
+				if exception = Retrieve_exception then
+					print_list (<<"Retrieval of event registrants file ",
+								indicators_file_name, " failed%N">>)
+				else
+					print_list (<<"Error occurred while retrieving event %
+								%registrants: ", meaning(exception), "%N">>)
+				end
+				die (-1)
+			else
+				!!storable
+				reg_list ?= storable.retrieve_by_name (registrants_file_name)
+				if reg_list = Void then
+					!!reg_list.make (registrants_file_name)
+				end
+				Result := reg_list
+				-- The registrants themselves also need to be registered for
+				-- termination/cleanup when the process ends; and they need
+				-- to load their (event) histories, which are stored in
+				-- a separate file.
+				from
+					Result.start
+				until
+					Result.exhausted
+				loop
+					Result.item.load_history
+					register_for_termination (Result.item)
+					Result.forth
+				end
+				-- Ensure that the list will be saved when the process ends.
+				-- This is done after registering the contents of the list
+				-- because the MERs need to be cleaned up before being saved
+				-- as elements of reg_list (since cleanup is done for each
+				-- termination registrant in the order it was registered).
+				register_for_termination (reg_list)
 			end
-			Result := reg_list
-			-- The registrants themselves also need to be registered for
-			-- termination/cleanup when the process ends; and they need
-			-- to load their (event) histories, which are stored in
-			-- a separate file.
-			from
-				Result.start
-			until
-				Result.exhausted
-			loop
-				Result.item.load_history
-				register_for_termination (Result.item)
-				Result.forth
-			end
-			-- Ensure that the list will be saved when the process ends.
-			-- This is done after registering the contents of the list
-			-- because the MERs need to be cleaned up before being saved
-			-- as elements of reg_list (since cleanup is done for each
-			-- termination registrant in the order it was registered).
-			register_for_termination (reg_list)
+		rescue
+			retrieval_failed := true
+			retry
 		end
 
 	meg_names: ARRAYED_LIST [STRING] is
@@ -283,6 +336,13 @@ feature {NONE} -- Implementation
 			!!Result.make (name, market_event_generation_library.count + 1)
 		ensure
 			not event_types.has (Result)
+		end
+
+	output_field_separator, output_date_field_separator,
+	output_record_separator: STRING is
+			-- Inherited from PRINTING
+		once
+			Result := ""
 		end
 
 end -- GLOBAL_APPLICATION
