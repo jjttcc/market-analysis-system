@@ -144,6 +144,11 @@ feature -- Access
 			create {NOT_OPERATOR} cmd.make (true_dummy)
 			create pair.make (cmd, "Logical negation operator")
 			Result.extend (pair)
+			create {INDEX_EXTRACTOR} cmd.make (Void)
+			create pair.make (cmd,
+				"Operator that extracts the current index value from %
+				%an indexed operator")
+			Result.extend (pair)
 			----------------- Create/insert MAL COMMANDs -----------------
 			create bnc_dummy -- Fulfills requirement for type
 							 -- RESULT_COMMAND [REAL].
