@@ -69,12 +69,22 @@ feature {NONE} -- Implementation
 			-- Set `application_dir' and remove its settings from `contents'.
 		do
 			from
+				application_dir := ""
 				contents.start
-			until
-				not application_dir.is_empty or else contents.exhausted
-			loop
 				if not contents.item.is_empty then
-					application_dir := clone (contents.item)
+					application_dir := contents.item
+					contents.remove
+				else
+					contents.forth
+				end
+			until
+				contents.exhausted
+			loop
+				-- Assume that if there are two or more arguments, the
+				-- cause is a path with spaces being passed as an argument
+				-- and try to duplicate the original path.
+				if not contents.item.is_empty then
+					application_dir := application_dir + " " + contents.item
 					contents.remove
 				else
 					contents.forth
