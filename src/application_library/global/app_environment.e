@@ -52,10 +52,6 @@ feature -- Access
 				Result.append (app_directory)
 				Result.extend (Directory_separator)
 			end
-			debug ("persist")
-				print("file_name_with_app_directory: fname: ");
-				print (fname); print ("%N")
-			end
 			Result.append (fname)
 		end
 
