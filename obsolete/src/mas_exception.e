@@ -49,7 +49,7 @@ feature -- Basic operations
 				else
 					error_msg := meaning (exception)
 				end
-				log_errors (<<"Error encounted in ", routine_description,
+				log_errors (<<"Error encountered in ", routine_description,
 							": ", error_msg, "%N">>)
 			else
 				log_errors (<<"%NCaught signal in ", routine_description,
