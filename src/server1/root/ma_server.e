@@ -16,6 +16,8 @@ class MA_SERVER inherit
 			{NONE} all
 		end
 
+GLOBAL_SERVICES
+
 creation
 
 	make
@@ -30,6 +32,7 @@ feature -- Initialization
 			factory_builder: FACTORY_BUILDER
 			version: expanded PRODUCT_INFO
 		do
+testmfline
 			if command_line_options.help then
 				command_line_options.usage
 			elseif command_line_options.version_request then
@@ -100,4 +103,27 @@ feature {NONE}
 
 	current_sockets: LIST [SOCKET]
 
+testmfline is
+local
+	date1, date2: DATE_TIME
+	startp, endp, p: MARKET_POINT
+	line: MARKET_FUNCTION_LINE
+	i: INTEGER
+do
+	!!date1.make (1999, 2, 2, 0, 0, 0); !!date2.make (1999, 2, 8, 0, 0, 0)
+	!!startp.make; !!endp.make
+	startp.set_x_y_date (51, 50, date1); endp.set_x_y_date (57, 61, date2)
+	!!line.make (startp, endp, period_types @ "daily")
+	from
+		line.output.start
+		i := 1
+	until
+		i = 3000
+	loop
+		p := line.output.item
+print_list (<<"i: ", i, ", p.x: ", p.x, ", p.y: ", p.y, ", p.date", p.date_time, "%N">>)
+		i := i + 1
+		line.output.forth
+	end
+ end
 end -- MA_SERVER
