@@ -197,8 +197,8 @@ src/scripts/windows/runmasgui.bat bin/ mas_windows1.3
 # (Server executables)
 lib/binaries/mas_no_assert_v1.3 bin/mas mas_linux1.3
 lib/binaries/mas_assert_v1.3 bin/mas_assert mas_linux1.3
-# No Windows server executable in release 1.3
-#lib/binaries/mas_v1.3.exe bin/mas.exe mas_windows1.3
+# No new Windows server executable in release 1.3 - use 1.2 version:
+lib/binaries/mas_v1.2.exe bin/mas.exe mas_windows1.3
 # (MAS Documentation)
 doc/GUI_introduction . mas_linux1.3 mac1.3
 doc/masystem_introduction . mas_linux1.3 mac1.3
