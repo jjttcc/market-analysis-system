@@ -12,16 +12,16 @@ Go through the steps from below needed to test the Linux and Windows
 
 Final Steps:
 
-1.  Make sure all files in the cvs tree are checked in.
-2.  Make sure the cvs tree is completely updated on both Linux and Windows.
+1.  On Linux, make sure all files in the cvs tree are checked in.
+2.  Make sure the cvs tree is completely updated on Linux.
 3.  Run build_mas on Linux.
 4.  Do a bit of testing on the built executables to catch any remaining
     problems.  (Recommended, but not required.)
 5.  Run make_doc in the doc directory.
-6.  Make sure the current release directory is empty and run make_release 
+6.  Make sure the current release directory is empty and run make_release.
 7.  If any problems occurred during the make_release run, fix them and
     go back to step 1.
-8.  Do a test install of mas_linux* tar gz and make sure it installs
+8.  Do a test install of mas_linux*.tar.gz and make sure it installs
     correctly.
 9.  Run build_rpm to make the mas rpm file and if any problems occur that
     require it, go back to a previous step.
@@ -29,20 +29,23 @@ Final Steps:
     generators_persist files are checked in (in build/config).
     (Use the ones created in step 7 if needed).  And check them out on
     the Windows machine.
-11. Copy mas_windows* tar gz to the Windows machine to the correct directory 
-12. Run prepare_windows_setup on Windows 
-13. Run Inno config  on the latest inno_config iss file using the source
+11. Make sure the cvs tree is completely updated on Windows.
+12. Copy mas_windows*.tar.gz to the Windows machine to the correct directory.
+13. Run build_windows_mas on the Windows machine.
+14. Make sure all the up-to-date "source" files needed for creating setup-mas*
+    are in place and run prepare_windows_setup on Windows.
+15. Run Inno config  on the latest inno_config iss file using the source
     files set up by prepare_windows_setup.
-14. If any problems occurred during step 10  or 11  that require it (e g ,
+16. If any problems occurred during step 10. or 11. that require it (e.g.,
     a CVS-ified file was changed and checked in), go back to step 1.
-15. Run a test install of the Windows setup-mas* exe file on Windows and
+17. Run a test install of the Windows setup-mas* exe file on Windows and
     of the mas-*.rpm on Linux.  Fix any problems that come up and, if
     necessary, go back to a previous step.
-16. Do a cvs tag, using the current release number as a label 
-17. Create a new release-announcement file, perform any needed updates for
+18. Do a cvs tag, using the current release number as a label.
+19. Create a new release-announcement file, perform any needed updates for
     the new release on published files, such as the files accessible on
     sf.net.  Do any needed backups.
-18. Put the files for the new release, from the current release directory,
+20. Put the files for the new release, from the current release directory,
     onto the download section on sourceforge.  Post announcements to
     sourceforge and the appropriate newsgroups - comp.os.linux.announce,
     misc.invest.*, the windows groups, etc.
