@@ -59,7 +59,7 @@ class EVENT_REGISTRATION inherit
 		undefine
 			print
 		redefine
-			end_save
+			--end_save
 		end
 
 creation
@@ -68,25 +68,22 @@ creation
 
 feature -- Initialization
 
-	make (disp: EVENT_DISPATCHER; in_dev, out_dev: IO_MEDIUM) is
+	make (in_dev, out_dev: IO_MEDIUM) is
 		require
-			not_void: disp /= Void and in_dev /= Void and out_dev /= Void
+			not_void: in_dev /= Void and out_dev /= Void
 		do
-			dispatcher := disp
 			input_device := in_dev
 			output_device := out_dev
 			create help.make
 			-- Satisfy invariant (editor is currently not used.)
 			create editor
-			create pending_registrants.make
+--			create pending_registrants.make
 		ensure
-			set: dispatcher = disp
 			iodev_set: input_device = in_dev and output_device = out_dev
 		end
 
 feature -- Access
 
-	dispatcher: EVENT_DISPATCHER
 
 feature -- Basic operations
 
@@ -175,7 +172,7 @@ feature {NONE} -- Implementation
 				if new_registrant /= Void then
 					add_event_types (new_registrant)
 					working_event_registrants.extend (new_registrant)
-					pending_registrants.extend (new_registrant)
+--					pending_registrants.extend (new_registrant)
 					changed := true
 					print_list (<<new_registrant.name,
 						" added as a new event registrant.%N">>)
@@ -495,7 +492,7 @@ feature {NONE} -- Implementation
 
 	working_event_registrants: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
 
-	pending_registrants: LINKED_LIST [MARKET_EVENT_REGISTRANT]
+--	pending_registrants: LINKED_LIST [MARKET_EVENT_REGISTRANT]
 			-- Newly created event registrants pending registration with
 			-- `dispatcher'
 
@@ -528,27 +525,27 @@ feature {NONE} -- Implementation
 			error_occurred := false
 		end
 
-	end_save is
-		do
-			from
-				pending_registrants.start
-			until
-				pending_registrants.exhausted
-			loop
-				dispatcher.register (pending_registrants.item)
-				pending_registrants.forth
-			end
-			pending_registrants.wipe_out
-		ensure then
-			none_pending: pending_registrants.empty
-		end
+--	end_save is
+--		do
+--			from
+--				pending_registrants.start
+--			until
+--				pending_registrants.exhausted
+--			loop
+--				dispatcher.register (pending_registrants.item)
+--				pending_registrants.forth
+--			end
+--			pending_registrants.wipe_out
+--		ensure then
+--			none_pending: pending_registrants.empty
+--		end
 
 feature {NONE} -- Implementation of hook routines
 
 	initialize_lock is
 		do
 			lock := file_lock (file_name_with_app_directory (
-				market_event_registrants.persistent_file_name))
+				registrants_file_name))
 		end
 
 end -- class EVENT_REGISTRATION
