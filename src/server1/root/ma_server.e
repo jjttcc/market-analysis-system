@@ -32,6 +32,13 @@ feature {NONE} -- Hook routines
 		do
 		end
 
+--@@@Note: Consider adding a CL option (perhaps not documented) such as:
+--
+--mas -p -b 1234 --report_back 9999
+--
+--To tell it to, as a client, report back to the MCT on port 9999 that is has
+--started succesfully.  It would use CLIENT_CONNECTION for this.
+
 	prepare_for_listening is
 		local
 			socket: COMPRESSED_SOCKET

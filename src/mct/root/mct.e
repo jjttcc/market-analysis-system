@@ -27,6 +27,13 @@ create
 
 feature {NONE} -- Initialization
 
+--@@@Note: Consider adding a CL option to the server (perhaps not documented)
+--such as:
+--
+--mas -p -b 1234 --report_back 9999
+--
+--To tell it to, as a client, report back to the MCT on port 9999 that is has
+--started succesfully.  The MCT would respond as a server in this case.
 	make is
         do
 			setup_application
