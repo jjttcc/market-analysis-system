@@ -14,7 +14,8 @@ class MAIN_GUI_INTERFACE inherit
 		rename
 			command_argument as message_body
 		redefine
-			message_body, request_handlers, setup_command, cleanup_session
+			message_body, request_handlers, setup_command, cleanup_session,
+			session
 		end
 
 	MAIN_APPLICATION_INTERFACE
