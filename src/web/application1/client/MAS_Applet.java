@@ -17,7 +17,7 @@ public class MAS_Applet extends Applet {
 
 	public void init() {
 		log("init: Starting ...");
-		log("Compiled at Mon Feb 17 18:38:21 MST 2003");
+		log("Compiled at Mon Feb 17 23:59:50 MST 2003");
 		try {
 			Configuration.set_ignore_termination(true);
 			StartupOptions options = new AppletOptions();
