@@ -3,7 +3,7 @@ package pct;
 import java.util.Vector;
 import java.lang.reflect.*;
 import pct.ProgramControlTerminal;
-import pct.application.*;
+import application.*;
 
 // ProgramControlTerminal Component
 class PCT_Component {

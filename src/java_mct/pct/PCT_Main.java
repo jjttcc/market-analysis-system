@@ -14,7 +14,7 @@ package pct;
 
 import pct.ProgramControlTerminal;
 import pct.ApplicationInitialization;
-import pct.application.*;
+import application.*;
 
 public class PCT_Main {
 
