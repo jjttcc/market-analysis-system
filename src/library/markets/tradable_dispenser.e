@@ -84,7 +84,7 @@ feature -- Access
 			not_void_if_no_error: not error_occurred implies Result /= Void
 		end
 
-	period_types (symbol: STRING): ARRAYED_LIST [STRING] is
+	period_type_names_for (symbol: STRING): ARRAYED_LIST [STRING] is
 			-- Names of all period types available for `symbol', sorted in
 			-- ascending order according to period-type duration -
 			-- Void if the tradable for `symbol' is not found
@@ -95,6 +95,35 @@ feature -- Access
 		deferred
 		ensure
 			not_void_if_no_error: not error_occurred implies Result /= Void
+		end
+
+	period_types_for (symbol: STRING): LIST [TIME_PERIOD_TYPE] is
+			-- All period types available for `symbol', sorted in
+			-- ascending order according to period-type duration -
+			-- Void if the tradable for `symbol' is not found
+		require
+			not_empty: not is_empty
+			not_void: symbol /= Void
+			symbol_valid: symbols.has (symbol)
+		local
+			names: LIST [STRING]
+			gs: expanded GLOBAL_SERVICES
+		do
+			create {LINKED_LIST [TIME_PERIOD_TYPE]} Result.make
+			names := period_type_names_for (symbol)
+			if names /= Void then
+				from
+					names.start
+				until
+					names.exhausted
+				loop
+					Result.extend (gs.period_types @ names.item)
+					names.forth
+				end
+			end
+		ensure
+			not_void_if_no_error: not error_occurred implies Result /= Void
+			all_valid: Result.for_all (agent valid_period_type (symbol, ?))
 		end
 
 	indicators: SEQUENCE [MARKET_FUNCTION] is
@@ -164,7 +193,7 @@ feature -- Status report
 			error := error_occurred
 			error_occurred := False
 			if symbols.has (symbol) then
-				ptypes := period_types (symbol)
+				ptypes := period_type_names_for (symbol)
 				if ptypes /= Void then
 					if not ptypes.object_comparison then
 						change_back := True
