@@ -1,5 +1,5 @@
 indexing
-	description: "Abstraction for a trade"
+	description: "Pair of an opening trade with a matching closing trade"
 	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -10,13 +10,6 @@ class TRADE_MATCH inherit
 		export
 			{NONE} all
 			{ANY} epsilon, rabs
-		undefine
-			out
-		end
-
-	ANY
-		redefine
-			out
 		end
 
 creation
@@ -25,55 +18,86 @@ creation
 
 feature -- Initialization
 
-	make (nm, sym: STRING; sdate: DATE; price: REAL; u: INTEGER
-			is_short: BOOLEAN) is
+	make (trade: TRADE) is
 		require
-			sym_not_void: sym /= Void
-			sdate_not_void: sdate /= Void
-			price_not_void: price /= Void
-			u_gt_0: u > 0
+			trade_not_void: trade /= Void
+			trade_open: trade.is_open
 		do
-			symbol := sym
-			name := nm
-			start_date := sdate
-			short := is_short
-			opening_price := price
-			last_price := price
-			units := u
+			opening_trade := trade
 		ensure
-			symbol_date_short_set: symbol = sym and start_date = sdate and
-				short = is_short
-			entry_price_set:
-				not short implies buy_price - price < epsilon and
-				short implies sell_price - price < epsilon
-			not_closed: not closed
-			last_price_set: last_price - price < epsilon
-			open_set: opening_price - price < epsilon
-			units_set: units = u
+			opening_trade_set: opening_trade = trade
+			not_closed: not is_closed
 		end
 
 feature -- Access
 
+	opening_trade: TRADE
+			-- Opening trade of the match
+
+	closing_trade: TRADE
+			-- Closing trade that matches the `opening_trade'
+
 	name: STRING
 			-- Name of the traded item
 
-	symbol: STRING
+	symbol: STRING is
 			-- Symbol of the traded item
+		do
+			Result := opening_trade.symbol
+		end
 
-	start_date: DATE
+	start_date: DATE is
 			-- Date the trade was entered
+		do
+			Result := opening_trade.date
+		ensure
+			Result = opening_trade.date
+		end
 
-	end_date: DATE
+	end_date: DATE is
 			-- Date the trade was closed
+		do
+			if closing_trade /= Void then
+				Result := closing_trade.date
+			end
+		ensure
+			is_closed implies Result = closing_trade.date
+		end
 
-	short: BOOLEAN
+	short: BOOLEAN is
 			-- Is this a short trade?
+		do
+			Result := opening_trade.is_sell
+		end
 
-	closed: BOOLEAN
+	is_closed: BOOLEAN is
 			-- Has the trade been closed?
+		do
+			Result := closing_trade /= Void
+		end
 
-	units: INTEGER
+	partial: BOOLEAN is
+			-- Have not all units of the opening trade been closed?
+		do
+			Result := is_closed and units < opening_trade.units
+		ensure
+			Result = is_closed and units < opening_trade.units
+		end
+
+	units: INTEGER is
 			-- Number of units traded
+		do
+			if is_closed then
+				Result := closing_trade.units
+			else
+				Result := opening_trade.units
+			end
+		ensure
+			close_units_when_closed:
+				is_closed implies Result = closing_trade.units
+			open_units_when_not_closed:
+				not is_closed implies Result = opening_trade.units
+		end
 
 	buy_price: REAL is
 			-- Buy price, per unit
@@ -95,8 +119,11 @@ feature -- Access
 			end
 		end
 
-	opening_price: REAL
+	opening_price: REAL is
 			-- Price per unit at which the trade opened
+		do
+			Result := opening_trade.price
+		end
 
 	closing_price: REAL is
 			-- Price per unit at which the trade closed
@@ -104,8 +131,15 @@ feature -- Access
 			Result := last_price
 		end
 
-	last_price: REAL
+	last_price: REAL is
 			-- Last price, per unit
+		do
+			if is_closed then
+				Result := closing_trade.price
+			else
+				Result := last_price_field
+			end
+		end
 
 	balance_per_unit: REAL is
 			-- Amount made or lost per unit
@@ -117,9 +151,12 @@ feature -- Access
 		end
 
 	balance: REAL is
-			-- Amount made or lost on the trade
+			-- Amount made or lost on the trade, including commissions
 		do
-			Result := balance_per_unit * units
+			Result := balance_per_unit * units - opening_trade.commission
+			if closing_trade /= Void then
+				Result := Result - closing_trade.commission
+			end
 		end
 
 	percent_gain_or_loss: REAL is
@@ -128,7 +165,7 @@ feature -- Access
 			Result := balance_per_unit / opening_price * 100
 		end
 
-	out: STRING is
+	report: STRING is
 		local
 			usymbol: STRING
 		do
@@ -140,14 +177,14 @@ feature -- Access
 				Result.append (" (")
 				Result.append (name); Result.append(")")
 			end
-			if not closed and short then
+			if not is_closed and short then
 				Result.append (", last price: ")
 				Result.append (last_price.out)
 			else
 				Result.append (", buy price: ")
 				Result.append (buy_price.out)
 			end
-			if not closed and not short then
+			if not is_closed and not short then
 				Result.append (", last price: ")
 				Result.append (last_price.out)
 			else
@@ -164,7 +201,7 @@ feature -- Access
 			Result.append (balance.out)
 			Result.append (".  Trade opened on ")
 			Result.append (start_date.out)
-			if closed then
+			if is_closed then
 				Result.append (". Trade closed on ")
 				Result.append (end_date.out)
 				Result.append (".%N")
@@ -178,30 +215,32 @@ feature -- Access
 
 feature -- Status setting
 
-	close (exit_price: REAL; close_date: DATE) is
+	set_closing_trade (trade: TRADE) is
 			-- Set the exit price.
+		require
+			trade_not_void: trade /= Void
+			symbol_valid: trade.symbol.is_equal (opening_trade.symbol)
+			units_le_opening_units: trade.units <= opening_trade.units
 		do
-			last_price := exit_price
-			closed := true
-			end_date := close_date
+			closing_trade := trade
 		ensure
-			buy_price_set_if_short: short implies
-				rabs (buy_price - exit_price) < epsilon
-			sell_price_set_if_short: not short implies
-				rabs (sell_price - exit_price) < epsilon
-			closed: closed
-			end_date_set: end_date = close_date
+			closed: is_closed
+			closing_trade_set: closing_trade = trade
 		end
 
 	set_last_price (p: REAL) is
-			-- Set `last_price'.
+			-- Set the last price.
 		require
-			not_closed: not closed
+			not_closed: not is_closed
 		do
-			last_price := p
+			last_price_field := p
 		ensure
 			set: rabs (last_price - p) < epsilon
 		end
+
+feature {NONE} -- Implementation
+
+	last_price_field: REAL
 
 invariant
 
@@ -209,12 +248,6 @@ invariant
 		short implies rabs (last_price - buy_price) < epsilon
 	last_price_is_sell_price_if_long:
 		not short implies rabs (last_price - sell_price) < epsilon
-	balance_when_short:
-		short implies
-			rabs (balance - (sell_price - last_price) * units) < epsilon
-	balance_when_long:
-		not short implies
-			rabs (balance - (last_price - buy_price) * units) < epsilon
 	units_greater_than_0: units > 0
 	symbol_not_void: symbol /= Void
 	open_eq_sell_price_if_short:
@@ -226,5 +259,6 @@ invariant
 	close_eq_sell_price_if_long:
 		not short implies closing_price - sell_price < epsilon
 	closing_pirce_equals_last_price: closing_price - last_price < epsilon
+	opening_trade_not_void: opening_trade /= Void
 
 end -- TRADE_MATCH

@@ -19,12 +19,11 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (field_sep, record_sep: STRING; in: INPUT_SEQUENCE) is
+	make (field_sep: STRING; in: INPUT_SEQUENCE) is
 		require
 			in_not_void: in /= Void
-			separators_not_void: field_sep /= Void and record_sep /= Void
+			separators_not_void: field_sep /= Void
 		do
-			--Do something with fsep, rsep....
 			input := in
 			field_separator := field_sep
 			create tuple_maker

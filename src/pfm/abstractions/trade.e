@@ -10,9 +10,14 @@ class TRADE inherit
 		export
 			{NONE} all
 			{ANY} epsilon
+		undefine
+			is_equal
 		end
 
-	PORTFOLIO_MANAGEMENT_CONSTANTS
+	COMPARABLE
+		redefine
+			is_equal
+		end
 
 creation
 
@@ -22,11 +27,9 @@ feature {NONE} -- Initialization
 
 	make is
 		do
-			buy_or_sell := Buy
-			open_or_close := Open
 		ensure
-			buy: buy_or_sell = Buy
-			open: open_or_close = Open
+			buy: is_buy
+			open: is_open
 		end
 
 feature -- Access
@@ -34,12 +37,23 @@ feature -- Access
 	date: DATE
 			-- Date the trade was entered
 
-	buy_or_sell: INTEGER
-			-- Type of order - buy or sell
+	is_buy: BOOLEAN is
+			-- Is the type of order for this trade a buy?
+		do
+			Result := not is_sell
+		end
 
-	open_or_close: INTEGER
-			-- Specification of whether the trade opens a new position
-			-- or closes an existing one
+	is_sell: BOOLEAN
+			-- Is the type of order for this trade a sell?
+
+	is_open: BOOLEAN is
+			-- Is this an opening trade?
+		do
+			Result := not is_close
+		end
+
+	is_close: BOOLEAN
+			-- Is this a closing trade?
 
 	symbol: STRING
 			-- Symbol of the traded item
@@ -50,6 +64,28 @@ feature -- Access
 	price: REAL
 
 	commission: REAL
+
+feature -- Comparison
+
+	infix "<" (other: like Current): BOOLEAN is
+		do
+			if other = Current then
+				Result := false
+			elseif date = Void or other = Void then
+				Result := date = Void and other /= Void
+			else
+				Result := date < other.date
+			end
+		end
+
+	is_equal (other: like Current): BOOLEAN is
+		do
+			if date = Void or other.date = Void then
+				Result := date = Void and other.date = Void
+			else
+				Result := {COMPARABLE} Precursor (other)
+			end
+		end
 
 feature -- Status setting
 
@@ -63,24 +99,36 @@ feature -- Status setting
 			date_set: date = arg and date /= Void
 		end
 
-	set_buy_or_sell (arg: INTEGER) is
-			-- Set buy_or_sell to `arg'.
-		require
-			b_or_s: arg = Buy or arg = Sell
+	set_to_buy is
+			-- Set to a buy.
 		do
-			buy_or_sell := arg
+			is_sell := false
 		ensure
-			buy_or_sell_set: buy_or_sell = arg
+			is_buy
 		end
 
-	set_open_or_close (arg: INTEGER) is
-			-- Set open_or_close to `arg'.
-		require
-			o_or_c: arg = Open or arg = Close
+	set_to_sell is
+			-- Set to a sell.
 		do
-			open_or_close := arg
+			is_sell := true
 		ensure
-			open_or_close_set: open_or_close = arg
+			is_sell
+		end
+
+	set_to_open is
+			-- Set to an opening trade.
+		do
+			is_close := false
+		ensure
+			is_open
+		end
+
+	set_to_close is
+			-- Set to a closing trade.
+		do
+			is_close := true
+		ensure
+			is_close
 		end
 
 	set_symbol (arg: STRING) is
@@ -119,8 +167,7 @@ feature -- Status setting
 
 invariant
 
-	open_or_close_value: open_or_close = Open or open_or_close = Close
-
-	buy_or_sell_value: buy_or_sell = Buy or buy_or_sell = Sell
+	buy_sell_exclusive: is_buy = not is_sell
+	open_close_exclusive: is_open = not is_close
 
 end -- TRADE
