@@ -9,9 +9,6 @@ indexing
 class STOCK_FACTORY inherit
 
 	TRADABLE_FACTORY
-		redefine
-			product
-		end
 
 	OPERATING_ENVIRONMENT
 		export
@@ -39,12 +36,10 @@ creation
 
 feature -- Access
 
-	product: STOCK
-
-	tuple_maker: BASIC_TUPLE_FACTORY is
-		do
-			create {VOLUME_TUPLE_FACTORY} Result
-		end
+--!!!	tuple_maker: BASIC_TUPLE_FACTORY is
+--		do
+--			create {VOLUME_TUPLE_FACTORY} Result
+--		end
 
 feature {NONE} -- Implementation
 
@@ -52,27 +47,52 @@ feature {NONE} -- Implementation
 		local
 			i, last_sep_index: INTEGER
 		do
-			create product.make (symbol, stock_splits @ symbol, stock_data)
+			if open_interest then
+				create {DERIVATIVE_INSTRUMENT} product.make (symbol, Void)
+			else
+				create {STOCK} product.make (symbol, stock_splits @ symbol,
+					stock_data)
+			end
 		end
 
 	index_vector: ARRAY [INTEGER] is
 		do
-			create Result.make (1, 6)
-			if no_open then
-				if intraday then
-					Result := << Date_index, Time_index, High_index, Low_index,
-						CLose_index, Volume_index >>
+			if open_interest then
+				if no_open then
+					if intraday then
+						Result := << Date_index, Time_index, High_index,
+							Low_index, CLose_index, Volume_index, OI_index >>
+					else
+						Result := << Date_index, High_index, Low_index,
+							CLose_index, Volume_index, OI_index >>
+					end
 				else
-					Result := << Date_index, High_index, Low_index,
-						CLose_index, Volume_index >>
+					if intraday then
+						Result := << Date_index, Time_index, Open_index,
+							High_index, Low_index, Close_index, Volume_index,
+							OI_index >>
+					else
+						Result := << Date_index, Open_index, High_index,
+							Low_index, Close_index, Volume_index, OI_index >>
+					end
 				end
-			else
-				if intraday then
-					Result := << Date_index, Time_index, Open_index,
-						High_index, Low_index, Close_index, Volume_index >>
+			else -- not open_interest
+				if no_open then
+					if intraday then
+						Result := << Date_index, Time_index, High_index,
+							Low_index, CLose_index, Volume_index >>
+					else
+						Result := << Date_index, High_index, Low_index,
+							CLose_index, Volume_index >>
+					end
 				else
-					Result := << Date_index, Open_index, High_index, Low_index,
-						Close_index, Volume_index >>
+					if intraday then
+						Result := << Date_index, Time_index, Open_index,
+							High_index, Low_index, Close_index, Volume_index >>
+					else
+						Result := << Date_index, Open_index, High_index,
+							Low_index, Close_index, Volume_index >>
+					end
 				end
 			end
 		end

@@ -48,10 +48,8 @@ feature -- Access
 	symbol: STRING
 			-- Symbol to give the newly created tradable
 
-	tuple_maker: BASIC_TUPLE_FACTORY is
+	tuple_maker: BASIC_TUPLE_FACTORY
 			-- Factory to create the appropriate type of tuples
-		deferred
-		end
 
 	field_separator: STRING
 			-- Field separator to expect while scanning input
@@ -188,6 +186,7 @@ feature -- Basic operations
 			check_for_open_interest
 print_list (<<"tradable factory - has open interest: ", open_interest, "%N">>)
 			make_product
+			make_tuple_maker
 			if intraday then
 				create intraday_scanner.make (
 					product, input, tuple_maker, value_setters)
@@ -236,6 +235,17 @@ feature {NONE}
 
 feature {NONE} -- Implementation
 
+	make_tuple_maker is
+		do
+			if open_interest then
+				create {OI_TUPLE_FACTORY} tuple_maker
+			else
+				create {VOLUME_TUPLE_FACTORY} tuple_maker
+			end
+		ensure
+			tm_not_void: tuple_maker /= Void
+		end
+
 	index_vector: ARRAY [INTEGER] is
 			-- To be defined by descendants to specify desired field order.
 		deferred
@@ -245,7 +255,11 @@ feature {NONE} -- Implementation
 
 	value_setters: LINKED_LIST [VALUE_SETTER] is
 		do
-			if cached_value_setters = Void then
+			if
+				cached_value_setters = Void or
+				old_open_interest_setting /= open_interest
+			then
+				old_open_interest_setting := open_interest
 				create cached_value_setters.make
 				add_value_setters (cached_value_setters, index_vector)
 			end
@@ -296,6 +310,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
+--!!!This will probably need modifying re. derivative stuff:
 	add_indicators (t: TRADABLE [BASIC_MARKET_TUPLE];
 					flst: LIST [MARKET_FUNCTION]) is
 			-- Add `flst' to `t'.
@@ -336,6 +351,9 @@ expected_fields, ", ", input.field_count, "%N">>)
 	open_interest: BOOLEAN
 			-- Is there an open interest field in the input?
 
+	old_open_interest_setting: BOOLEAN
+			-- Previous state of `open_interest'
+
 feature {NONE} -- Tuple field-key constants
 
 	Date_index: INTEGER is 1
@@ -353,7 +371,7 @@ invariant
 	these_fields_not_void:
 		field_separator /= Void and
 		record_separator /= Void and
-		tuple_maker /= Void and time_period_type /= Void
+		time_period_type /= Void
 	error_constraint:
 		error_occurred implies error_list /= Void and not error_list.empty
 
