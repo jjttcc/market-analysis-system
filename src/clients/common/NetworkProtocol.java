@@ -28,6 +28,7 @@ public interface NetworkProtocol
 
 	// Field separators
 	String output_date_field_separator = "";
+	String output_time_field_separator = "";
 
 	// String constants
 	String Eom = "";
@@ -35,8 +36,8 @@ public interface NetworkProtocol
 	String Output_field_separator = "\t";
 	String Output_record_separator = "\n";
 	String date_field_separator = "/";
+	String time_field_separator = ":";
 
-	// Currently, only daily and weekly period types are supported.
+	// daily period type is needed for initialization.
 	String daily_period_type = "daily";
-	String weekly_period_type = "weekly";
 }
