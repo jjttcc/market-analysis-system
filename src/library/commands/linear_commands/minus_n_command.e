@@ -63,7 +63,7 @@ feature -- Initialization
 		local
 			l: LINEAR_ANALYZER
 		do
-			Precursor (arg)
+			{N_RECORD_COMMAND} Precursor (arg)
 			uo_initialize (arg)
 			l ?= arg
 			check

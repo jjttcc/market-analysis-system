@@ -45,7 +45,7 @@ feature -- Initialization
 
 	initialize (arg: N_RECORD_STRUCTURE) is
 		do
-			Precursor (arg)
+			{N_RECORD_LINEAR_COMMAND} Precursor (arg)
 			uo_initialize (arg)
 		end
 

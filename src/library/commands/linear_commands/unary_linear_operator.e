@@ -42,7 +42,7 @@ feature -- Initialization
 
 	initialize (arg: LINEAR_ANALYZER) is
 		do
-			Precursor (arg)
+			{LINEAR_COMMAND} Precursor (arg)
 			uo_initialize (arg)
 		end
 

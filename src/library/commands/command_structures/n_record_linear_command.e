@@ -53,7 +53,7 @@ feature {MARKET_FUNCTION} -- Initialization
 		local
 			l: LINEAR_ANALYZER
 		do
-			Precursor (arg)
+			{N_RECORD_COMMAND} Precursor (arg)
 			l ?= arg
 			check
 				arg_conforms_to_linear_analyzer: l /= Void
