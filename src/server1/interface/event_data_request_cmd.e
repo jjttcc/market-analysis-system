@@ -28,13 +28,13 @@ class EVENT_DATA_REQUEST_CMD inherit
 			{NONE} all
 		end
 
-	MARKET_EVENT_REGISTRANT
+	EVENT_REGISTRANT_WITH_CACHE
 		rename
 			make as mer_make
 		export
 			{NONE} all
 		redefine
-			event_cache, is_interested_in
+			event_cache
 		end
 
 creation
@@ -49,8 +49,6 @@ feature {NONE} -- Initialization
 		do
 			trc_make (dispenser)
 			mer_make
-			field_separator := constants.event_history_field_separator
-			record_separator := constants.event_history_record_separator
 		end
 
 feature -- Basic operations
@@ -218,13 +216,6 @@ feature {NONE}
 					Output_field_separator,
 					event_cache.item.type_abbreviation>>))
 			end
-		end
-
-	is_interested_in (e: TYPED_EVENT): BOOLEAN is
-		once
-			-- This class is structured such that it is interested in all
-			-- generated events.
-			Result := true
 		end
 
 	initialize_event_coordinator is
