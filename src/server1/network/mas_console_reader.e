@@ -4,7 +4,8 @@ indexing
 		"Command executed by the polling server when data is available %
 		%for reading on the console";
 
-	status: "See notice at end of class";
+	status:
+		"Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

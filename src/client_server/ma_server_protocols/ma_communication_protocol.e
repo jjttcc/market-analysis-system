@@ -3,7 +3,8 @@ indexing
 	description:
 		"Constants specifying the basic components of the TA server %
 		%communication protocol"
-	status: "See notice at end of class";
+	status:
+		"Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

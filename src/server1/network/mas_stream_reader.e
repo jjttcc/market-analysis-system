@@ -3,7 +3,8 @@ indexing
 	description:
 		"Command executed by the polling server when data is available %
 		%for reading on the socket";
-	status: "See notice at end of class";
+	status:
+		"Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

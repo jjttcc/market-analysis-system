@@ -2,7 +2,8 @@ indexing
 
 	description:
 		"A poll command specialized for the Market Analysis server"
-	status: "See notice at end of class";
+	status:
+		"Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
