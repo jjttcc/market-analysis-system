@@ -16,7 +16,7 @@ deferred class N_RECORD_COMMAND inherit
 
 	NUMERIC_COMMAND
 		redefine
-			initialize
+			initialize, execute_precondition
 		end
 
 	N_RECORD_STRUCTURE

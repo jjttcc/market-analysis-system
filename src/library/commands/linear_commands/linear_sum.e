@@ -7,7 +7,7 @@ class LINEAR_SUM inherit
 
 	NUMERIC_COMMAND
 		redefine
-			initialize
+			initialize, execute_precondition
 		end
 
 	LINEAR_ANALYZER

@@ -8,7 +8,7 @@ deferred class N_BASED_CALCULATION inherit
 
 	NUMERIC_COMMAND
 		redefine
-			initialize
+			initialize, execute_precondition
 		end
 
 	N_RECORD_STRUCTURE

@@ -8,6 +8,9 @@ indexing
 class BASIC_LINEAR_COMMAND inherit
 
 	NUMERIC_COMMAND
+		redefine
+			execute_precondition
+		end
 
 	LINEAR_ANALYZER
 

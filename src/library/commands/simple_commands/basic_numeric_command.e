@@ -27,11 +27,4 @@ feature -- Status report
 			used: Result = true
 		end
 
-	execute_precondition: BOOLEAN is
-		do
-			Result := true
-		ensure then
-			is_true: Result = true
-		end
-
 end -- class BASIC_NUMERIC_COMMAND
