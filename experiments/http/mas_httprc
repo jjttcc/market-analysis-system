@@ -5,7 +5,7 @@ end_date	now
 # The host component of the http URL used to retrieve market data
 host	chart.yahoo.com
 # The path component of the http URL used to retrieve market data
-path	table.csv?s=<symbol>&a=<month>&b=<day>&c=<year>&d=<month>&e=<day>&f=<year>&g=d&q=q&y=0&z=<symbol>&x=.csv
+path	table.csv?s=<symbol>&a=<startmonth>&b=<startday>&c=<startyear>&d=<endmonth>&e=<endday>&f=<endyear>&g=d&q=q&y=0&z=<symbol>&x=.csv
 symbol_file	symbols
 
 # The format of the resulting end-of-day data sent back from the http data-
