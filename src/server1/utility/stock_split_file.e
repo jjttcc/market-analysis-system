@@ -15,7 +15,7 @@ class STOCK_SPLIT_FILE inherit
 
 	STOCK_SPLIT_SEQUENCE
 		rename
-			make as sss_make, name as file_name
+			make as sss_make_unused, name as file_name
 		select
 			last_error_fatal
 		end
@@ -49,8 +49,11 @@ feature {NONE} -- Initialization
 			file_name := input_file_name
 			open_file (file_name)
 			create product.make (100)
+			create tuple_maker
+			make_value_setters
 			if is_open_read then
-				sss_make
+				input := Current
+				execute
 				close
 			end
 		ensure
@@ -67,8 +70,6 @@ feature {NONE} -- Initialization
 
 	open_file (fname: STRING) is
 			-- Open file safely - if it fails, is_open_read is false.
-		local
-			open_failed: BOOLEAN
 		do
 			ptf_make (file_name)
 			if exists then
