@@ -78,8 +78,12 @@ feature -- Access
 					add_to_cache (last_tradable, index)
 					if tradable_factories.item.error_occurred then
 						report_errors (last_tradable,
-										tradable_factories.item.error_list)
+							tradable_factories.item.error_list)
+						if tradable_factories.item.last_error_fatal then
+							fatal_error := true
+						end
 					end
+					close_input_medium
 				else
 					last_tradable.flush_indicators
 				end
@@ -122,6 +126,9 @@ feature -- Status report
 		do
 			Result := symbol_list.empty
 		end
+
+	fatal_error: BOOLEAN
+			-- Did an unrecoverable error occur?
 
 feature -- Cursor movement
 
@@ -226,6 +233,11 @@ feature {NONE} -- Implementation
 			-- input medium, if it exists.
 		require
 			tf_index_current: index = tradable_factories.index
+		do
+		end
+
+	close_input_medium is
+			-- Perform any required cleanup of the input medium, if it exists.
 		do
 		end
 
