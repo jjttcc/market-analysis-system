@@ -18,7 +18,7 @@ cluster
 		-- Application (test) clusters
 	root_cluster: 	"$FINANCE/src/main_test_app/root";
 	factories:		"$FINANCE/src/main_test_app/factories";
-	tools:			"$FINANCE/src/main_test_app/tools";
+	app_tools:			"$FINANCE/src/main_test_app/tools";
 	app_library:	"$FINANCE/src/main_test_app/app_library";
 
 		-- Technical Analysis Library
@@ -32,6 +32,7 @@ cluster
 	tuple_types:	"$FINANCE/src/library/tuple_types";
 	data_scanning:	"$FINANCE/src/library/data_scanning";
 	events:			"$FINANCE/src/library/events";
+	tools:			"$FINANCE/src/library/tools";
 	global:			"$FINANCE/src/library/global";
 
 		-- Sub-clusters
