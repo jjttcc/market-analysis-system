@@ -10,9 +10,10 @@ class CONFIGURATION_FILE inherit
 
 	FILE_READER
 		rename
-			make as rf_make
+			make as rf_make, tokens as records
 		export
 			{NONE} rf_make
+			{ANY} records
 		redefine
 			tokenize, forth
 		end
@@ -40,8 +41,132 @@ feature {NONE} -- Initialization
 			rf_make (configuration_file_name)
 			line_field_separator := line_field_sep
 			line_field_separator := line_field_sep
-			line_separator := line_sep
+		ensure
+			line_field_separator_set: line_field_separator = line_field_sep
 		end
+
+feature -- Access
+
+	matching_block_boundaries (begin_value: STRING;
+		target_list: LIST [STRING]): LIST [INTEGER_INTERVAL] is
+			-- Begin/end indices of all blocks in `target_list'
+			-- whose "begin-value" matches `begin_value'
+		require
+			args_exist: begin_value /= Void and target_list /= Void
+		local
+			begin_rec: STRING
+			starti: INTEGER
+		do
+			create {LINKED_LIST [INTEGER_INTERVAL]} Result.make
+			begin_rec := begin_record (begin_value)
+			from
+				target_list.start
+			until
+				target_list.exhausted
+			loop
+				if equal (target_list.item, begin_rec) then
+					-- Beginning of a target block
+					from
+						starti := target_list.index
+					until
+						target_list.exhausted or
+						is_end_of_block (target_list.item)
+					loop
+						target_list.forth
+					end
+					if not target_list.exhausted then
+						Result.extend (create {INTEGER_INTERVAL}.make (
+							starti, target_list.index))
+					else
+						-- The end of `target_list' was reached and
+						-- no end block was found - regard the last
+						-- record as the end of the current block.
+						Result.extend (create {INTEGER_INTERVAL}.make (
+							starti, target_list.count))
+					end
+				end
+				if not target_list.exhausted then
+					target_list.forth
+				end
+			end
+		ensure
+			Result_exists: Result /= Void
+		end
+
+	matching_indices (intervals: LIST [INTEGER_INTERVAL];
+		target_list: LIST [STRING]; tgt: STRING): LIST [INTEGER] is
+			-- For each block, b, in `target_list' whose
+			-- begin-end indices are specified in `intervals':
+			--   The indices, if any, of the records in b matching `tgt'
+		require
+			args_exist: intervals /= Void and target_list /= Void and
+				tgt /= Void
+			intervals_valid: intervals.for_all (agent within_range (?,
+				target_list))
+		do
+			create {ARRAYED_LIST [INTEGER]} Result.make (0)
+			from
+				intervals.start
+			until
+				intervals.exhausted
+			loop
+				-- For each index, i, within the block designated by
+				-- `intervals.item' for which `equal (target_list @ i, tgt)':
+				-- add i to `Result'.
+				from
+					target_list.go_i_th (intervals.item.lower)
+				until
+					target_list.index = intervals.item.upper + 1
+				loop
+					if equal (target_list.item, tgt) then
+						Result.extend (target_list.index)
+					end
+					target_list.forth
+				end
+				intervals.forth
+			end
+		ensure
+			Result_exists: Result /= Void
+		end
+
+	intervals_containing_target (intervals: LIST [INTEGER_INTERVAL];
+		target_list: LIST [STRING]; tgt: STRING): LIST [INTEGER_INTERVAL] is
+			-- All elements of `intervals' that represent a block in
+			-- `target_list' that contains the record `tgt'
+		require
+			args_exist: intervals /= Void and target_list /= Void and
+				tgt /= Void
+		local
+			match: BOOLEAN
+		do
+			create {LINKED_LIST [INTEGER_INTERVAL]} Result.make
+			from
+				intervals.start
+			until
+				intervals.exhausted
+			loop
+				match := False
+				from
+					target_list.go_i_th (intervals.item.lower)
+				until
+					match or target_list.index = intervals.item.upper + 1
+				loop
+					if equal (target_list.item, tgt) then
+						Result.extend (intervals.item)
+						match := True
+					end
+					target_list.forth
+				end
+				intervals.forth
+			end
+			Result.compare_objects
+		ensure
+			Result_exists: Result /= Void
+			object_comparison: Result.object_comparison
+		end
+
+	line_field_separator: STRING
+			-- Separator used to delimit fields in a line (record)
 
 feature -- Status report
 
@@ -61,6 +186,18 @@ feature -- Status report
 	mark_as_default_failure_reason: STRING
 			-- Reason the last call to `mark_block_as_default' failed.
 
+	within_range (index_range: INTEGER_INTERVAL;
+		target_list: LIST [STRING]): BOOLEAN is
+			-- Is the specified pair of indices within the valid index
+			-- range of `target_list'?
+		require
+			args_exist: index_range /= Void and target_list /= Void
+		do
+			Result := index_range.lower <= index_range.upper and
+				1 <= index_range.lower and
+				target_list.count >= index_range.upper
+		end
+
 feature -- Cursor movement
 
 	forth is
@@ -74,10 +211,9 @@ feature -- Element change
 	mark_block_as_default (tag, value, begin_value: STRING) is
 			-- Mark the block containing `tag + line_field_separator + value'
 			-- whose begin-value matches `begin_value' as a default block by
-			-- inserting the string
-			-- `Mark_specifier + line_field_separator + Default_mark' before
-			-- the end of the block and deleting this string from any
-			-- other block whose begin-value matches `begin_value.
+			-- inserting the string `Default_record' before the end of the
+			-- block and deleting `Default_record' from any other block
+			-- whose begin-value matches `begin_value'.
 		require
 			has_been_tokenized: contents /= Void
 		local
@@ -86,8 +222,16 @@ feature -- Element change
 		do
 			if not exception_occurred then
 				mark_as_default_failed := False
-				remove_default_marks (tag, begin_value)
-				insert_default_mark (tag, value, begin_value)
+				remove_default_marks (begin_value)
+				-- Insert the "default mark" only if the specified
+				-- block exists:
+				if
+					matching_indices (matching_block_boundaries (
+					begin_value, records), records,
+					tag + line_field_separator + value).count > 0
+				then
+					insert_default_mark (tag, value, begin_value)
+				end
 			else
 				mark_as_default_failed := True
 				exc.set_verbose_reporting_off
@@ -99,109 +243,6 @@ feature -- Element change
 			retry
 		end
 
-	remove_default_marks (tag, begin_value: STRING) is
-			-- Remove the "default marks" from all blocks whose begin-value
-			-- matches `begin_value'.
-		local
-			begin_record, default_record: STRING
-			in_targeted_block, removed: BOOLEAN
-		do
-			from
-				begin_record := Begin_tag + line_field_separator + begin_value
-				default_record := Mark_specifier + line_field_separator +
-					Default_mark
-				exhausted := False
-				tokens.start
-				item := tokens.item
-				-- Since `forth' was not used to initialize the loop, make
-				-- sure the "block-state" is correct by running post_process.
-				post_process
-			until
-				exhausted
-			loop
-				removed := False
-				-- If this is the beginning of a block from which the
-				-- default mark is to be removed:
-				if equal (item, begin_record) then
-					-- Mark the block.
-					in_targeted_block := True
-				elseif in_block then
-					-- If this is a block from which the default mark is
-					-- to be removed and `item' is the default mark:
-					if in_targeted_block and equal (item, default_record) then
-						-- Remove the default mark.
-						tokens.remove
-						item := tokens.item
-						removed := True
-						if is_end_of_block (item) then
-							-- Since forth will not be called for this
-							-- iteration, make sure that the correct
-							-- "block-state" is maintained.
-							at_end_of_block := True
-							-- Maintain the class invariant:
-							in_block := False
-						end
-					end
-				elseif at_end_of_block then
-					in_targeted_block := False
-				end
-				if not removed then
-					forth
-				end
-			end
-		end
-
-	insert_default_mark (tag, value, begin_value: STRING) is
-			-- Mark the block whose begin-value matches `begin_value' and
-			-- that contains `tag + line_field_separator + value' as
-			-- the "default block".
-		local
-			begin_record, sought_value, default_record: STRING
-			block_found, in_candidate_block: BOOLEAN
-		do
-			from
-				begin_record := Begin_tag + line_field_separator + begin_value
-				default_record := Mark_specifier + line_field_separator +
-					Default_mark
-				sought_value := tag + line_field_separator + value
-				exhausted := False
-				tokens.start
-				item := tokens.item
-				-- Since `forth' was not used to initialize the loop, make
-				-- sure the "block-state" is correct by running post_process.
-				post_process
-			until
-				block_found or exhausted
-			loop
-				-- If this is the beginning of a block whose begin-value
-				-- matches `begin_value':
-				if equal (item, begin_record) then
-					-- Mark the block as a candidate.
-					in_candidate_block := True
-				elseif in_block then
-					-- If this is the new default block:
-					if in_candidate_block and equal (item, sought_value) then
-						-- Insert the default mark, move the tokens
-						-- cursor to skip over the inserted item,
-						-- and note as found.
-						tokens.put_right (default_record)
-						tokens.forth
-						block_found := True
-					end
-				elseif at_end_of_block then
-					in_candidate_block := False
-				end
-				if not block_found then
-					forth
-				end
-			end
-			if block_found then
-				target.open_write
-				tokens.do_if (agent write_line, agent not_last)
-				target.close
-			end
-		end
-
 feature -- Basic operations
 
 	tokenize (separator: STRING) is
@@ -211,6 +252,92 @@ feature -- Basic operations
 		end
 
 feature {NONE} -- Implementation
+
+	remove_default_marks (begin_value: STRING) is
+			-- Remove the "default marks" from all blocks whose begin-value
+			-- matches `begin_value'.
+		local
+			new_records: ARRAYED_LIST [STRING]
+			-- begin-end indices of all targeted blocks:
+			block_boundaries: LIST [INTEGER_INTERVAL]
+			-- indices of all `Default-record' records to be removed
+			default_indices: LIST [INTEGER]
+		do
+			create new_records.make (0)
+			block_boundaries := matching_block_boundaries (begin_value,
+				records)
+			default_indices := matching_indices (block_boundaries, records,
+				Default_record)
+			from
+				records.start
+			invariant
+				no_default_records: matching_indices (
+					matching_block_boundaries (begin_value, new_records),
+					new_records, Default_record).count = 0;
+				records_count_minus_default_count:
+					new_records.count <= records.count - default_indices.count
+			variant
+				records.count - records.index + 1
+			until
+				records.exhausted
+			loop
+				if not default_indices.has (records.index) then
+					new_records.extend (records.item)
+				end
+				records.forth
+			end
+			check
+				no_default_records: matching_indices (
+					matching_block_boundaries (begin_value, new_records),
+					new_records, Default_record).count = 0
+				records_count_minus_default_count:
+					new_records.count = records.count - default_indices.count
+			end
+			records := new_records
+		ensure
+			no_more_default_records: matching_indices (
+				matching_block_boundaries (begin_value, records),
+				records, Default_record).count = 0
+		end
+
+	insert_default_mark (tag, value, begin_value: STRING) is
+			-- Mark the first block, b, that satisfies: (b's begin-value
+			-- matches `begin_value' and b contains `tag +
+			-- line_field_separator + value') as the "default block".
+		require
+			at_least_one_target: matching_indices (
+				matching_block_boundaries (begin_value, records),
+				records, tag + line_field_separator + value).count > 0
+		local
+			-- begin-end indices of "candidate" blocks
+			candidate_block_boundaries: LIST [INTEGER_INTERVAL]
+			-- indices of all `Default-record' records to be removed
+			target_indices: LIST [INTEGER]
+			sought_value: STRING
+		do
+			candidate_block_boundaries := matching_block_boundaries (
+				begin_value, records)
+			sought_value := tag + line_field_separator + value
+			target_indices := matching_indices (candidate_block_boundaries,
+				records, sought_value)
+			check
+				at_least_one: target_indices.count > 0
+			end
+			records.go_i_th (target_indices @ 1)
+			records.put_right (Default_record)
+			target.open_write
+			records.do_if (agent write_line, agent not_last)
+			target.close
+		ensure
+			exactly_one_matching_default_block: matching_indices (
+				matching_block_boundaries (begin_value, records),
+				records, Default_record).count = 1
+			first_default_block_equals_first_targeted_block:
+			intervals_containing_target (matching_block_boundaries (begin_value,
+				records), records, Default_record).i_th (1).is_equal (
+			intervals_containing_target (matching_block_boundaries (begin_value,
+				records), records, tag + line_field_separator + value).i_th (1))
+		end
 
 	post_process is
 			-- Do application-specific processing
@@ -247,6 +374,8 @@ feature {NONE} -- Implementation
 				at_end_of_block
 		end
 
+feature {NONE} -- Implementation - utilities
+
 	write_line (s: STRING) is
 			-- Write `s' appended with '%N' to `target'.
 		do
@@ -263,9 +392,9 @@ feature {NONE} -- Implementation
 
 	not_last (s: STRING): BOOLEAN is
 		do
-			Result := not tokens.islast
+			Result := not records.islast
 		ensure
-			not_last: Result = not tokens.islast
+			not_last: Result = not records.islast
 		end
 
 	is_beginning_of_block (s: STRING): BOOLEAN is
@@ -282,11 +411,13 @@ feature {NONE} -- Implementation
 				equal (s.substring (1, End_tag.count), End_tag)
 		end
 
-feature {NONE} -- Implementation - attributes
-
-	line_field_separator: STRING
-
-	line_separator: STRING
+	begin_record (begin_value: STRING): STRING is
+		once
+			Result := Begin_tag + line_field_separator + begin_value
+		ensure
+			definition: Result.is_equal (Begin_tag + line_field_separator +
+				begin_value)
+		end
 
 feature {NONE} -- Implementation - constants
 
@@ -298,12 +429,20 @@ feature {NONE} -- Implementation - constants
 				configuration_file_name
 		end
 
+	Default_record: STRING is
+		once
+			Result := Mark_specifier + line_field_separator + Default_mark
+		ensure
+			definition: Result.is_equal (Mark_specifier +
+				line_field_separator + Default_mark)
+		end
+
 invariant
 
 	end_of_block_vs_in_block: at_end_of_block implies not in_block
 	in_block_vs_end_of_block: in_block implies not at_end_of_block
 	in_block_constraint: (item /= Void and
 		is_beginning_of_block (item)) implies in_block
-	separators_exist: line_field_separator /= Void and line_separator /= Void
+	separator_exists: line_field_separator /= Void
 
 end
