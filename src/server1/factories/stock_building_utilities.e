@@ -63,14 +63,17 @@ feature {NONE}
 			constants: expanded APPLICATION_CONSTANTS
 		once
 			create {STOCK_SPLIT_FILE} Result.make (
-				constants.stock_split_field_separator,
-				constants.stock_split_record_separator, stock_split_file)
+				constants.Stock_split_field_separator,
+				constants.Stock_split_record_separator, stock_split_file)
 		end
 
 	stock_split_file: STRING is
+		local
+			constants: expanded APPLICATION_CONSTANTS
 		once
 			if stock_split_file_name = Void then
-				Result := "ma_stock_splits"
+				Result := file_name_with_app_directory (
+					constants.Default_stock_split_file_name)
 			else
 				Result := file_name_with_app_directory (stock_split_file_name)
 			end
