@@ -22,7 +22,7 @@ deferred class MEG_EDITING_INTERFACE inherit
 		rename
 			real_list as market_event_generation_library,
 			working_list as working_meg_library,
-			retrieve_persistent_list as force_function_library_retrieval,
+			retrieve_persistent_list as force_meg_library_retrieval,
 			prompt_for_char as character_choice
 		export
 			{NONE} all
