@@ -51,6 +51,9 @@ feature -- Access
 	working_directory: STRING
 			-- Directory in which the command is to be executed
 
+	last_process: EPX_EXEC_PROCESS
+			-- The last process executed by `execute'
+
 feature -- Element change
 
 	set_working_directory (arg: STRING) is
@@ -68,8 +71,6 @@ feature -- Basic operations
 
 	execute (arg: ANY) is
 		do
---print ("(EXTCMD - " + name + ") Attempting to execute:%N'" +
---command_string + "'%N")
 			launch (program, arguments)
 		end
 
@@ -77,22 +78,19 @@ feature -- Basic operations
 			-- "Launch" the command.
 		local
 			env: expanded EXECUTION_ENVIRONMENT
-			proc: EPX_EXEC_PROCESS
-gu: expanded GENERAL_UTILITIES
 			previous_directory: STRING
+			gu: expanded GENERAL_UTILITIES
 		do
 			if working_directory /= Void then
 				previous_directory := env.current_working_directory
 				env.change_working_directory (working_directory)
 			end
---print ("Executing: '" + cmd + "'%N")
---			env.launch (cmd)
-print ("Executing:%N" + prog + "%N")
-gu.print_list (args)
-print ("%N")
-			create proc.make_capture_output (prog, args)
-			proc.execute
---env.launch ("sleep 8")
+			debug
+				print ("Executing:%N" + prog + "%N")
+				gu.print_list (args); print ("%N")
+			end
+			create last_process.make_capture_output (prog, args)
+			last_process.execute
 			if working_directory /= Void then
 				env.change_working_directory (previous_directory)
 			end

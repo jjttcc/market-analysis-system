@@ -38,6 +38,11 @@ feature -- Basic operations
 			args: ARRAY [STRING]
 		do
 			args := deep_clone (arguments)
+			-- Work with a deep-clone of `arguments' to prevent side-effects:
+			-- `arguments' needs to keep its original "tokens", which are
+			-- replaced here dynamically in the cloned array to "configure" the
+			-- arguments for the `launch' call with the current settings
+			-- (e.g., window.port_number).
 			args.linear_representation.do_all (agent replace_tokens (?,
 				<<Port_number_specifier, Hostname_specifier>>,
 				<<window.port_number, window.host_name>>,
