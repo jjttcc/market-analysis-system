@@ -94,7 +94,7 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 			connection = new Connection(hostname, port_number);
 		}
 		initialize();
-		connection.login(Login_request);
+		connection.login();
 	}
 
 	public DataSetBuilder(DataSetBuilder dsb) {
@@ -106,7 +106,7 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 			connection = new Connection(dsb.hostname(), dsb.port_number());
 		}
 		initialize();
-		connection.login(Login_request);
+		connection.login();
 	}
 
 	// Options passed in via the command line
@@ -117,7 +117,7 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 	// Send a logout request to the server to end the current session
 	// and, if `exit' is true, exit with `status'.
 	public void logout(boolean exit, int status) {
-		connection.logout(Logout_request);
+		connection.logout();
 		if (exit) System.exit(status);
 	}
 
