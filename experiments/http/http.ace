@@ -10,12 +10,14 @@ default
 	assertion (ensure)
 	assertion (loop)
 	assertion (invariant)
+	arguments (" ")
+	arguments (" ibm rhat")
 	arguments ("20010201 ibm rhat")
 	arguments ("ibm rhat")
-	arguments (" ")
 	arguments ("-o -f , aa.txt 2345")
 	arguments ("-o -f , aa.txt")
 	disabled_debug (yes)
+	disabled_debug ("persist")
 	line_generation (no)
 	profile (no)
 	trace (no)
@@ -32,19 +34,19 @@ default
 
 
 --	debug (no)
+--!!!!!!Change this when date_parsing_util... is put in the right place:
+--!!!!!!Change this when file_reader is put in the right place:
 
 cluster
-
 	http:		"$MAS/experiments/http"
+
 
 	app_library:		"$MAS/src/application_library"
 
 	app_global (app_library):		"$/global"
 
-	--!!!!!!Change this when date_parsing_util... is put in the right place:
 	temporary_intrf:		"$MAS/src/server1/interface"
 
-	--!!!!!!Change this when file_reader is put in the right place:
 	temporary_glob:		"$MAS/src/server1/global"
 
 	eiffel_components:		"$MAS/src/eiffel_library"
