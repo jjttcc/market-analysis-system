@@ -23,8 +23,6 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 			all
 				{FACTORY}
 			extend
-				{ANY}
-			sorted_by_date_time
 		end
 
 creation {FACTORY}
