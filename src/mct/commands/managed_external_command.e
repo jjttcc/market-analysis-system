@@ -81,9 +81,10 @@ feature {NONE} -- Implementation
 			env: expanded EXECUTION_ENVIRONMENT
 		do
 			if debugging_on then
-				print ("executing: " + program + " " + field_concatenation (
-					args.linear_representation, " ") + "%N(current " +
-					"directory: " + env.current_working_directory + ")%N")
+				print ("executing [MEC]: " + program + " " +
+					field_concatenation (args.linear_representation, " ") +
+					"%N(current " + "directory: " +
+					env.current_working_directory + ")%N")
 			end
 			create last_process.make_capture_output (prog, args)
 			add_process (last_process, window.host_name, window.port_number)

@@ -25,7 +25,7 @@ feature {NONE} -- Implementation
 			env: expanded EXECUTION_ENVIRONMENT
 		do
 			if debugging_on then
-				print ("executing: " + command_string + "%N(current " +
+				print ("executing [UEC]: " + command_string + "%N(current " +
 				"directory: " + env.current_working_directory + ")%N")
 			end
 			env.launch (command_string)
