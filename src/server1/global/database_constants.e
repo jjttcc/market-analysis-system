@@ -142,4 +142,4 @@ feature -- Access
 	Intraday_derivative_query_tail_specifier: STRING is
 		"intraday derivative query tail"
 
-end -- DATABASE_CONSTANTS
+end
