@@ -137,7 +137,6 @@ feature -- Status report
 			Result := symbol_list.after
 		end
 
---!!!!!!!!Check both is_emptys here: Are they correct?
 	is_empty: BOOLEAN is
 		do
 			Result := symbol_list.is_empty
