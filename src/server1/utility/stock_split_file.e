@@ -5,7 +5,7 @@ indexing
 		"It is assumed that the for each symbol that occurs in the input %
 		%file, the splits in the file for that symbol are sorted by %
 		%date ascending"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -28,6 +28,13 @@ class STOCK_SPLIT_FILE inherit
 			{NONE} all
 		redefine
 			close_tuple, product, tuple_maker, add_tuple
+		end
+
+	BILINEAR_INPUT_SEQUENCE
+		rename
+			index as position, name as file_name
+		undefine
+			off
 		end
 
 creation
@@ -58,13 +65,13 @@ feature {NONE} -- Initialization
 			!!tuple_maker
 			make_value_setters
 			if is_open_read then
-				input_file := Current
+				input := Current
 				execute
 			end
 		ensure
 			fs_set: field_separator.is_equal (field_sep)
 			fname_set: file_name = input_file_name
-			input_file_set_if_open: is_open_read implies input_file = Current
+			input_file_set_if_open: is_open_read implies input = Current
 			value_setters_made: value_setters /= Void
 			prod_tpmkr_made: product /= Void and tuple_maker /= Void
 			rec_sep_is_newline: record_separator.is_equal ("%N")
