@@ -144,29 +144,32 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	event_information (e: TYPED_EVENT): STRING is
+	event_information (e: MARKET_EVENT): STRING is
 			-- Reporting information extracted from `e'
+		require
+			e_not_void: e /= Void
+		local
+			tag: STRING
 		do
+			tag := clone (e.tag)
+			tag.to_upper
+			Result := concatenation (<<"Event for: ", tag>>)
 			if
 				-- Don't print the time if it's midnight - non-intraday
 				-- trading period.
 				e.time /= Void and then not (e.time.hour = 0 and
 					e.time.minute = 0)
 			then
-				Result := concatenation (<<"Event name: ", e.name, ", date: ",
-										e.date, ", time: ", e.time,
-										", type: ", e.type.name,
-										"%Ndescription: ", e.description>>)
+				Result.append (concatenation (<<", date: ", e.date,
+					", time: ", e.time>>))
 			elseif e.date /= Void then
-				Result := concatenation (<<"Event name: ", e.name, ", date: ",
-										e.date, ", type: ", e.type.name,
-										"%Ndescription: ", e.description>>)
+				Result.append (concatenation (<<", date: ", e.date>>))
 			else
-				Result := concatenation (<<"Event name: ", e.name,
-										", time stamp: ", e.time_stamp,
-										", type: ", e.type.name,
-										"%Ndescription: ", e.description>>)
+				Result.append (concatenation (<<", time stamp: ",
+					e.time_stamp>>))
 			end
+			Result.append (concatenation (<<", type: ", e.type.name,
+				"%Ndescription: ", e.description>>))
 		end
 
 
