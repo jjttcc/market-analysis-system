@@ -3,6 +3,7 @@
 
 Progname=$(basename $0)
 Mas_root_dir=<mas_root_dir>
+Mctrc_path=$HOME/.mas/mctrc
 
 fatal() {
 	if [ ! -z "$*" ]; then
@@ -25,6 +26,14 @@ help() {
 	echo "directory to modify his or her own MAS configuration files."
 }
 
+copy_mctrc_file() {
+	mctrc_dir=$(dirname $Mctrc_path)
+	if [ ! -d $mctrc_dir ]; then
+		mkdir $mctrc_dir || fatal "Failed to create directory $mctrc_dir"
+	fi
+	cp $Mas_root_dir/lib/mctrc $Mctrc_path
+}
+
 # Copy the configuration files to $1.
 copy_config_files() {
 	if [ ! -e "$config_dir" ]; then
@@ -40,16 +49,16 @@ copy_config_files() {
 	cp $Mas_root_dir/lib/mas_dbrc .
 	cp $Mas_root_dir/lib/mas_httprc .
 	cp $Mas_root_dir/lib/symbols .
-	cp $Mas_root_dir/lib/mctrc .
 	for f in $Mas_root_dir/lib/*; do if [ -d $f ]; then ln -s $f . ; fi; done
 }
 
 configure_mct() {
+	copy_mctrc_file
 	specfile=/tmp/mas-config-specs.$$
 	echo "replacestart">$specfile
 	echo "<user_mas_dir>$PWD">>$specfile
 	echo "replaceend">>$specfile
-	$Mas_root_dir/bin/config_tool -c $specfile -f mctrc
+	$Mas_root_dir/bin/config_tool -c $specfile -f $Mctrc_path
 	rm -f $specfile
 }
 
