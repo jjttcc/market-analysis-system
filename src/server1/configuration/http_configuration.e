@@ -7,11 +7,13 @@ indexing
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-deferred class HTTP_CONFIGURATION inherit
+class HTTP_CONFIGURATION inherit
 
 	CONFIGURATION_UTILITIES
 		export
 			{NONE} all
+		redefine
+			use_customized_setting, do_customized_setting
 		end
 
 	APP_ENVIRONMENT
@@ -39,7 +41,11 @@ deferred class HTTP_CONFIGURATION inherit
 			{NONE} all
 		end
 
-feature -- Initialization
+create
+
+	make
+
+feature {NONE} -- Initialization
 
 	initialize_settings_table is
 		do
@@ -49,8 +55,11 @@ feature -- Initialization
 			settings.extend ("", Host_specifier)
 			settings.extend ("", Path_specifier)
 			settings.extend ("", Symbol_file_specifier)
-			settings.extend ("", post_process_command_specifier)
+			settings.extend ("", Post_process_command_specifier)
+			settings.extend ("", Output_field_separator_specifier)
+			settings.extend ("", Ignore_weekday_specifier)
 			settings.extend ("", EOD_turnover_time_specifier)
+			create ignored_weekdays.make (0)
 		end
 
 feature -- Access
@@ -71,7 +80,6 @@ feature -- Access
 					end_date.month.out, end_date.year.out>>)
 			end
 			Result := cached_path
-print ("Current path: " + Result + "%N")
 		end
 
 	replace_tokens (target: STRING; tokens: ARRAY [STRING];
@@ -134,23 +142,34 @@ print ("Current path: " + Result + "%N")
 
 	post_processing_routine: FUNCTION [ANY, TUPLE [STRING], STRING] is
 			-- Routine to be used to post process the retrieved data -
-			-- Void if no post processing is needed or if the
-			-- post-processing specification is invalid
+			-- Void if the post-processing specification is invalid
 		local
 			conversion_functions: expanded TRADABLE_DATA_CONVERSION
 		do
 			if
 				post_process_command /= Void and then 
-				not post_process_command.is_empty
+				not post_process_command.is_empty and
+				conversion_functions.routine_table.has (post_process_command)
 			then
+				if output_field_separator /= '%U' then
+					conversion_functions.set_output_field_separator (
+						output_field_separator)
+				end
 				Result := conversion_functions.routine_for (
 					post_process_command)
+			elseif
+				post_process_command /= Void and then
+				not post_process_command.is_empty
+			then
+				log_error ("Invalid post-process command " +
+					"specification: " + post_process_command + "%N")
+			else
+				Result := conversion_functions.null_conversion_routine
 			end
-		ensure
-			no_result_if_no_post_process_command:
-				(post_process_command = Void or else
-				post_process_command.is_empty) implies Result = Void
 		end
+
+	ignored_weekdays: ARRAYED_LIST [INTEGER]
+			-- Days of the week during which data retrieval should not be done
 
 feature -- Access
 
@@ -181,12 +200,35 @@ feature -- Access
 
 	post_process_command: STRING is
 		do
-			Result := settings @ post_process_command_specifier
+			Result := settings @ Post_process_command_specifier
+		end
+
+	output_field_separator: CHARACTER is
+		local
+			fs: STRING
+		do
+			Result := '%U'
+			fs := settings @ Output_field_separator_specifier
+			if not fs.is_empty then
+				Result := fs @ 1
+			end
 		end
 
 	eod_turnover_time_value: STRING is
 		do
 			Result := settings @ EOD_turnover_time_specifier
+		end
+
+feature -- Status report
+
+	ignore_today: BOOLEAN is
+			-- Should data retrieval not be done today becuase it is
+			-- specified as a day of the week to ignore?
+		local
+			today: DATE
+		do
+			create today.make_now
+			Result := ignored_weekdays.has (today.day_of_the_week)
 		end
 
 feature -- Element change
@@ -229,8 +271,32 @@ feature {NONE} -- Implementation - Hook routine implementations
 				Default_http_config_file_name)
 		end
 
+	check_results is
+		do
+		end
+
+	use_customized_setting (key_token, value_token: STRING): BOOLEAN is
+		do
+			-- Default to always true - redefine if needed.
+			Result := key_token.is_equal (Ignore_weekday_specifier)
+		end
+
+	do_customized_setting (key_token, value_token: STRING) is
+		do
+			-- Default to null procedure - redefine if needed.
+			if
+				key_token /= Void and then key_token.is_equal (
+				Ignore_weekday_specifier)
+			then
+				add_ignored_weekday (value_token)
+			end
+		end
+
+feature {NONE} -- Implementation
+
 	check_for_missing_specs (ftbl: ARRAY[ANY]) is
 --!!!Can this be moved to CONFIGURATION_UTILITIES?
+--!!!!Note: This is currently not called - probably it should be - or delete it.
 			-- Check for missing http field specs in `ftbl'.   Expected
 			-- types of ftbl's contents are: <<BOOLEAN, STRING,
 			-- BOOLEAN, STRING, ...>>.
@@ -266,11 +332,25 @@ feature {NONE} -- Implementation - Hook routine implementations
 			end
 		end
 
-	check_results is
+	add_ignored_weekday (wday: STRING) is
+		local
+			d: STRING
+			time_util: expanded DATE_TIME_SERVICES
 		do
+			if
+				wday /= Void and then not wday.is_empty and wday.count >= 3
+			then
+				d := wday.substring (1, 3)
+				d.to_lower
+				d.put ((d @ 1).upper, 1)
+				if time_util.weekday_table.has (d) then
+					ignored_weekdays.extend (
+						time_util.weekday_from_3_letter_abbreviation (d))
+				end
+			end
 		end
 
-feature {NONE} -- Implementation
+feature {NONE} -- Implementation - attributes
 
 	cached_start_date: DATE
 

@@ -23,27 +23,25 @@ feature {NONE} -- Initialization
 
 	make is
 		do
+			create timer.make
+			create data_retrieved_table.make (0)
+			create parameters.make
+			create url.http_make (parameters.host, "")
+			create http_request.make (url)
+			http_request.set_read_mode
 			from
-				create parameters.make
-print ("Turnover time: " + eod_turnover_time_string + "%N")
-if parameters.post_process_command /= Void then
-print ("post-processing command: " + parameters.post_process_command + "%N")
-else
-print ("No post-processing command%N")
- end
-die (0)
 				initialize_symbols
 				symbols.start
 			until
 				symbols.exhausted
 			loop
-				print ("%N" + symbols.item + ":%N%N")
 				parameters.set_symbol (symbols.item)
-				test_http
-				print ("host: " + parameters.host + ", path: " +
-					parameters.path + "%N")
+				if data_retrieval_needed then
+					retrieve_data
+				end
 				symbols.forth
 			end
+			print (timing_information)
 		end
 
 	initialize_symbols is
@@ -63,20 +61,27 @@ die (0)
 
 feature {NONE} -- Implementation
 
-	parameters: YAHOO_HTTP_PARAMETERS
+	parameters: HTTP_CONFIGURATION
 
-	test_http is
+	timer: TIMER
+
+	timing_information: STRING is
+		once
+			Result := ""
+		end
+
+	url: SETTABLE_HTTP_URL
+
+	http_request: HTTP_PROTOCOL
+
+	retrieve_data is
+			-- Retrieve data for `parameters.symbol'.
 		local
-			url: SETTABLE_HTTP_URL
-			http_request: HTTP_PROTOCOL
 			result_string: STRING
 		do
-print ("parameters start date: " + parameters.start_date.out + "%N")
-print ("parameters end date: " + parameters.end_date.out + "%N")
 			create result_string.make (0)
-			create url.http_make (parameters.host, parameters.path)
-			create http_request.make (url)
-			http_request.set_read_mode
+			url.set_path (parameters.path)
+			timer.start
 			if not http_request.error then
 				http_request.open
 				if not http_request.error then
@@ -93,6 +98,8 @@ print ("parameters end date: " + parameters.end_date.out + "%N")
 						print ("Error occurred initiating transfer: " +
 							http_request.error_text (http_request.error_code) +
 							"%N")
+					else
+						data_retrieved_table.force (True, parameters.symbol)
 					end
 				else
 					print ("Error occurred opening http request: " +
@@ -100,24 +107,14 @@ print ("parameters end date: " + parameters.end_date.out + "%N")
 						"%N")
 				end
 				http_request.close
-				io.put_string (result_string)
+				add_timing_data ("retrieving data for " + parameters.symbol)
+				convert_and_save_result (result_string)
 			else
 				print ("Error occurred initializing http request: " +
 					http_request.error_text (http_request.error_code) +
 					"%N")
 			end
 		end
-
-	initialize_symbol (i: INTEGER) is
-		require
-			valid_arg_index: i >= 1 and i <= argument_count
-		do
-			symbol := argument (i)
-		end
-
-	host: STRING is "chart.yahoo.com"
-
-	symbol: STRING
 
 	date_from_numeric_string (s: STRING): DATE is
 		require
@@ -173,6 +170,65 @@ print ("parameters end date: " + parameters.end_date.out + "%N")
 				Result := "Invalid time specified: " +
 					parameters.eod_turnover_time_value
 			end
+		end
+
+	current_output_file_name: STRING is
+		do
+			Result := parameters.symbol + ".txt"
+		end
+
+	convert_and_save_result (s: STRING) is
+			-- Convert the retrieved data in `s' to MAS format and save the
+			-- result to a file named parameters.symbol".txt".
+		require
+			symbol_valid: parameters /= Void and then parameters.symbol /=
+				Void and then not parameters.symbol.is_empty
+		local
+			file: PLAIN_TEXT_FILE
+			output: STRING
+		do
+			timer.start
+			if
+				s /= Void and then
+				parameters.post_processing_routine /= Void
+			then
+				create file.make_open_write (current_output_file_name)
+				add_timing_data ("opening file for " + parameters.symbol)
+				timer.start
+				output := parameters.post_processing_routine.item ([s])
+				add_timing_data ("converting data for " + parameters.symbol)
+				timer.start
+				file.put_string (output)
+				add_timing_data ("writing data to " + file.name)
+			end
+		end
+
+	data_retrieval_needed: BOOLEAN is
+		local
+			outputfile: PLAIN_TEXT_FILE
+		do
+			create outputfile.make (current_output_file_name)
+			Result := not outputfile.exists or (
+				create {TIME}.make_now > parameters.eod_turnover_time and
+				not parameters.ignore_today and
+				not current_data_have_been_retrieved)
+		end
+
+	current_data_have_been_retrieved: BOOLEAN is
+			-- Have up-to-date data for the current symbol been retrived?
+		do
+			Result := data_retrieved_table.has (parameters.symbol) and then
+				data_retrieved_table @ parameters.symbol
+		end
+
+	data_retrieved_table: HASH_TABLE [BOOLEAN, STRING]
+			-- Mapping of symbols to the boolean state of whether the
+			-- data for that symbol have been retrieved
+
+	add_timing_data (msg: STRING) is
+		do
+			timing_information.append ("Time taken for " + msg + ":%N" +
+				timer.elapsed_time.time.fine_seconds_count.out + "%N")
 		end
 
 end
