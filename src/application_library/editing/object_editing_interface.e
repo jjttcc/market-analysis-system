@@ -67,6 +67,11 @@ feature -- Access
 		do
 		end
 
+	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
+			-- User-selected list of market tuples
+		deferred
+		end
+
 feature {NONE} -- Implementation
 
 	user_object_selection (objects: LIST [G]; msg: STRING): G is

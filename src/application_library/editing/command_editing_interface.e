@@ -156,20 +156,12 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 			l.extend (command_with_generator ("OPEN_INTEREST"))
 		end
 
---!!!!Question: Should any of these queries be moved up to the parent???
-	integer_selection (msg: STRING): INTEGER is
-			-- User-selected integer value
-		deferred
-		end
-
 	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
-			-- User-selected list of market tuples
-		deferred
-		end
-
-	real_selection (msg: STRING): REAL is
-			-- User-selected real value
-		deferred
+		do
+			check
+				mf_not_void: market_function /= Void
+			end
+			Result := market_function.output
 		end
 
 feature {NONE} -- Implementation

@@ -27,7 +27,7 @@ feature -- Status setting
 			editor_set: editor = arg and editor /= Void
 		end
 
-feature {APPLICATION_EDITOR} -- Access
+feature -- Access
 
 	show_message (msg: STRING) is
 			-- Display `msg' to user -for example, as an error, warning, or
@@ -61,7 +61,17 @@ feature {APPLICATION_EDITOR} -- Access
 			-- member of all other elements of `choices' is false.
 		end
 
-feature {NONE} -- Implementation
+	integer_selection (msg: STRING): INTEGER is
+			-- User-selected integer value
+		deferred
+		end
+
+	real_selection (msg: STRING): REAL is
+			-- User-selected real value
+		deferred
+		end
+
+feature {NONE} -- Implementation - Hook methods
 
 	do_choice (descr: STRING; choices: LIST [PAIR [STRING, BOOLEAN]];
 				allowed_selections: INTEGER) is
