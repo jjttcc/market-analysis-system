@@ -15,6 +15,11 @@ deferred class FILE_BASED_TRADABLE_LIST inherit
 			back, remove_current_item
 		end
 
+	TIMING_SERVICES
+		export
+			{NONE} all
+		end
+
 feature -- Access
 
 	file_names: LIST [STRING] is
@@ -55,6 +60,7 @@ feature {NONE} -- Implementation
 			-- If the open fails with an exception, log the error,
 			-- set Result to Void, and allow the exception to propogate.
 		do
+			start_timer
 			create Result.make (file_names.item)
 			if Result.exists then
 				Result.open_read
@@ -82,6 +88,9 @@ feature {NONE} -- Implementation
 			if not current_input_file.is_closed then
 				current_input_file.close
 			end
+			add_timing_data ("Opening, reading, and closing data for " +
+				symbol_list.item)
+			report_timing
 		end
 
 	remove_current_item is
@@ -94,6 +103,9 @@ feature {NONE} -- Implementation
 		end
 
 	current_input_file: INPUT_FILE
+
+timing_on: BOOLEAN is once Result := True end
+		-- !!!!Needs to become a settable attribute.
 
 invariant
 
