@@ -1,0 +1,12 @@
+# Specification for "check_dep" dependencies between the GUI and the
+# application
+
+actions/abstractions	11
+gui/support				6
+gui/application			15
+gui/components			8
+gui/abstractions		6
+configuration			3
+#commands				11
+session					15
+support					3
