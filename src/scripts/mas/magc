@@ -7,9 +7,10 @@ classdir=$basedir/lib/classes
 cmd=java
 
 usage() {
-	echo "Usage: $pname [-cl] [-no_cd] [-h hostname] port_number -s symbol ..."
-	echo "where:"
+	echo "Usage: $pname port_number [options]"
+	echo "Options:"
 	echo "   -cl              Run command-line client instead of GUI."
+	echo "   -c               Use data compression."
 	echo "   -no_cd           \
 Use the configuration files in the current directory."
 	echo "   -s symbol ...    \
@@ -42,7 +43,8 @@ args=
 main=MA_Client
 while [ $# -gt 0 ]; do
 	case $1 in
-		-c*) main=CL_Client; shift ;;
+		-cl*) main=CL_Client; shift ;;
+		-c) args="$args $1"; shift ;;
 		-n*) no_cd=true; shift ;;
 		-h) shift; host=$1; shift ;;
 		-s)
