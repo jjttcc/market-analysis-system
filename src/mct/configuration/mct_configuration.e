@@ -242,17 +242,17 @@ feature {NONE} -- Implementation - Hook routine implementations
 				termination_command := new_termination_command
 			end
 			if settings.has (Browse_docs_cmd_specifier) then
-				browse_documentation_command := new_external_command (
+				browse_documentation_command := new_unmanaged_command (
 					Browse_docs_cmd_specifier,
 					settings @ Browse_docs_cmd_specifier)
 			end
 			if settings.has (Browse_intro_cmd_specifier) then
-				browse_intro_command := new_external_command (
+				browse_intro_command := new_unmanaged_command (
 					Browse_intro_cmd_specifier,
 					settings @ Browse_intro_cmd_specifier)
 			end
 			if settings.has (Browse_faq_cmd_specifier) then
-				browse_faq_command := new_external_command (
+				browse_faq_command := new_unmanaged_command (
 					Browse_faq_cmd_specifier,
 					settings @ Browse_faq_cmd_specifier)
 			end
@@ -620,10 +620,16 @@ feature {NONE} -- Implementation - Utilities
 			then
 				create {TERMINATE_SERVER_COMMAND} Result.make (
 					Termination_cmd_specifier)
+				if command_line.is_debug then
+					Result.set_debugging_on (True)
+				end
 			else
 				Result := new_session_command (Termination_cmd_specifier,
 					term_cmd_value)
 			end
+		ensure
+			debugging_state: command_line.is_debug implies
+				Result.debugging_on
 		end
 
 	new_session_command (cmd_id, cmd_string: STRING): SESSION_COMMAND is
@@ -640,6 +646,9 @@ feature {NONE} -- Implementation - Utilities
 			if workdir /= Void then
 				Result.set_working_directory (workdir)
 			end
+		ensure
+			debugging_state: command_line.is_debug implies
+				Result.debugging_on
 		end
 
 	new_external_command (cmd_id, cmd_string: STRING): EXTERNAL_COMMAND is
@@ -656,6 +665,30 @@ feature {NONE} -- Implementation - Utilities
 			if workdir /= Void then
 				Result.set_working_directory (workdir)
 			end
+		ensure
+			debugging_state: command_line.is_debug implies
+				Result.debugging_on
+		end
+
+--!!!!!!!Refactoring needed!!!!!!!!!!
+	new_unmanaged_command (cmd_id, cmd_string: STRING):
+		UNMANAGED_EXTERNAL_COMMAND is
+			-- A new UNMANAGED_EXTERNAL_COMMAND, with the work_directory set,
+			-- if specified in `cmd_string'
+		local
+			workdir: STRING
+		do
+			workdir := command_working_directory (cmd_string)
+			create Result.make (cmd_id, cmd_string)
+			if command_line.is_debug then
+				Result.set_debugging_on (True)
+			end
+			if workdir /= Void then
+				Result.set_working_directory (workdir)
+			end
+		ensure
+			debugging_state: command_line.is_debug implies
+				Result.debugging_on
 		end
 
 feature {NONE} -- Implementation

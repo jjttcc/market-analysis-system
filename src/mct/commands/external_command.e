@@ -9,10 +9,19 @@ indexing
 class EXTERNAL_COMMAND inherit
 
 	MCT_COMMAND
+		redefine
+			arg_mandatory
+		end
 
 	GENERAL_UTILITIES
 		export
 			{NONE} all
+		end
+
+	GLOBAL_APPLICATION_FACILITIES
+		export
+			{NONE} all
+			{ANY} has_process
 		end
 
 create
@@ -54,6 +63,13 @@ feature -- Access
 	last_process: EPX_EXEC_PROCESS
 			-- The last process executed by `execute'
 
+	session_window: SESSION_WINDOW
+			-- Session window, if any, used in last call to `execute'
+
+feature -- Status report
+
+	arg_mandatory: BOOLEAN is True
+
 feature -- Element change
 
 	set_working_directory (arg: STRING) is
@@ -69,17 +85,22 @@ feature -- Element change
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (window: EV_WINDOW) is
 		do
+			session_window ?= window
 			if program = Void then
 				process_components
 			end
-			launch (program, arguments)
+			launch (program, arguments, session_window)
+		ensure
+			process_managed_if_session_window: (session_window /= Void) implies
+				has_process (session_window.host_name,
+				session_window.port_number)
 		end
 
 feature {NONE} -- Implementation
 
-	launch (prog: STRING; args: ARRAY [STRING]) is
+	launch (prog: STRING; args: ARRAY [STRING]; window: SESSION_WINDOW) is
 			-- "Launch" the command.
 		local
 			env: expanded EXECUTION_ENVIRONMENT
@@ -95,6 +116,9 @@ feature {NONE} -- Implementation
 				gu.print_list (args); print ("%N")
 			end
 			create last_process.make_capture_output (prog, args)
+			if session_window /= Void then
+				add_process (last_process, window.host_name, window.port_number)
+			end
 			if debugging_on then
 				print ("executing: " + program + " " + field_concatenation (
 					args.linear_representation, " ") + "%N")
@@ -103,6 +127,10 @@ feature {NONE} -- Implementation
 			if working_directory /= Void then
 				env.change_working_directory (previous_directory)
 			end
+		ensure
+			process_managed_if_session_window: session_window /= Void implies
+				has_process (session_window.host_name,
+				session_window.port_number)
 		end
 
 	process_components is

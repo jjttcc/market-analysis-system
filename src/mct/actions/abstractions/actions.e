@@ -81,21 +81,21 @@ feature -- Actions
 			-- Display the main MCT documentation.
 		do
 			external_commands.item (
-				configuration.Browse_docs_cmd_specifier).execute (Void)
+				configuration.Browse_docs_cmd_specifier).execute (owner_window)
 		end
 
 	show_introduction is
 			-- Display the "MCT Introduction".
 		do
 			external_commands.item (
-				configuration.Browse_intro_cmd_specifier).execute (Void)
+				configuration.Browse_intro_cmd_specifier).execute (owner_window)
 		end
 
 	show_faq is
 			-- Display the FAQ.
 		do
 			external_commands.item (
-				configuration.Browse_faq_cmd_specifier).execute (Void)
+				configuration.Browse_faq_cmd_specifier).execute (owner_window)
 		end
 
 feature {NONE} -- Initialization

@@ -10,7 +10,7 @@ class SESSION_COMMAND inherit
 
 	EXTERNAL_COMMAND
 		redefine
-			arg_mandatory, execute
+			execute
 		end
 
 	MCT_CONFIGURATION_PROPERTIES
@@ -22,16 +22,13 @@ create
 
 	make
 
-feature -- Status report
-
-	arg_mandatory: BOOLEAN is True
-
 feature -- Basic operations
 
 	execute (window: SESSION_WINDOW) is
 		local
 			args: ARRAY [STRING]
 		do
+session_window ?= window
 			if program = Void then
 				process_components
 			end
@@ -45,7 +42,7 @@ feature -- Basic operations
 				<<Port_number_specifier, Hostname_specifier>>,
 				<<window.port_number, window.host_name>>,
 				Token_start_delimiter, Token_end_delimiter))
-			launch (program, args)
+			launch (program, args, window)
 		end
 
 end

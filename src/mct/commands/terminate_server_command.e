@@ -15,6 +15,11 @@ class TERMINATE_SERVER_COMMAND inherit
 			execute
 		end
 
+	GLOBAL_APPLICATION_FACILITIES
+		export
+			{NONE} all
+		end
+
 create
 
 	make
@@ -36,10 +41,55 @@ feature -- Basic operations
 	execute (window: SESSION_WINDOW) is
 		local
 			connection: CONNECTION
+			proc: EPX_EXEC_PROCESS
 		do
 			create connection.start_conversation (
 				window.host_name, window.port_number.to_integer)
+			if debugging_on then
+				if connection.last_communication_succeeded then
+					print ("Connected with server.%N")
+				else
+					-- @@This error should probably be displayed in a
+					-- windows as part of the normal flow so that the
+					-- user knows something went wrong.
+					print ("Server connection failed.%N")
+					print (connection.error_report)
+				end
+			end
 			connection.send_termination_request (False)
+			if debugging_on then
+				if connection.last_communication_succeeded then
+					print ("Termination request succeeded.%N")
+				else
+					-- @@This error should probably be displayed in a
+					-- windows as part of the normal flow so that the
+					-- user knows something went wrong.
+					print ("Termination request failed.%N")
+					print (connection.error_report)
+				end
+			end
+			proc := associated_process (window)
+			check
+				process_is_ready_for_termination:
+					proc.is_pid_valid and not proc.is_terminated
+			end
+			proc.wait_for (True)
+			remove_process (window.host_name, window.port_number)
+		ensure
+			process_removed:
+				not has_process (window.host_name, window.port_number)
+		end
+
+feature {NONE} -- Implementation
+
+	associated_process (window: SESSION_WINDOW): EPX_EXEC_PROCESS is
+			-- The process associated with Current
+		require
+			window_exists: window /= Void
+		do
+			Result := process_at (window.host_name, window.port_number)
+		ensure
+			exists: Result /= Void
 		end
 
 end
