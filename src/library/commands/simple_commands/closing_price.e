@@ -22,6 +22,8 @@ feature -- Basic operations
 				io.put_real (value)
 				io.put_string ("%N")
 			end
+		ensure then
+			value = arg.close.value
 		end
 
 end -- class CLOSING_PRICE

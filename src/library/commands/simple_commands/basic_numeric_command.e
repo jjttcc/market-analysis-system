@@ -12,7 +12,7 @@ class BASIC_NUMERIC_COMMAND inherit
 feature -- Basic operations
 
 	execute (arg: MARKET_TUPLE) is
-				-- Can be redefined by ancestors.
+			-- Can be redefined by ancestors.
 		do
 			value := arg.value
 		end
