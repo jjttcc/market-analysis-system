@@ -6,7 +6,7 @@ indexing
 
 class TRADE_MATCH inherit
 
-	MATH_CONSTANTS
+	PFM_MATH_CONSTANTS
 		export
 			{NONE} all
 			{ANY} epsilon, rabs
@@ -157,12 +157,22 @@ feature -- Access
 			if closing_trade /= Void then
 				Result := Result - closing_trade.commission
 			end
+		ensure
+			result_when_closed: is_closed implies
+				Result - (balance_per_unit * units -
+				(opening_trade.commission + closing_trade.commission)) < epsilon
+			result_when_open: not is_closed implies
+				Result - (balance_per_unit * units -
+				opening_trade.commission) < epsilon
 		end
 
 	percent_gain_or_loss: REAL is
 			-- Percent gain or loss on the trade
 		do
-			Result := balance_per_unit / opening_price * 100
+			Result := balance / (opening_price * units) * 100
+		ensure
+			pct_gain_loss:
+				Result - (balance / (opening_price * units) * 100) < epsilon
 		end
 
 	report: STRING is
@@ -260,5 +270,6 @@ invariant
 		not short implies closing_price - sell_price < epsilon
 	closing_pirce_equals_last_price: closing_price - last_price < epsilon
 	opening_trade_not_void: opening_trade /= Void
+	closed_definition: is_closed = (closing_trade /= Void)
 
 end -- TRADE_MATCH
