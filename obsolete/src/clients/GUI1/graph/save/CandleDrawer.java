@@ -19,10 +19,11 @@ public class CandleDrawer extends Drawer {
 	protected void draw_tuples(Graphics g, Rectangle bounds) {
 		int i, row;
 		int openy, highy, lowy, closey;
+		final int w_margin = 6;
 		int x, middle_x;
 		int x_s[] = new int[4], y_s[] = new int[4];
 		int lngth = data.length;
-		int candlewidth = bounds.width / lngth + 5;
+		int candlewidth = bounds.width / lngth * 3 + 1;
 		Configuration conf = Configuration.instance();
 		Color black = conf.black_candle_color();
 		Color white = conf.white_candle_color();
@@ -32,7 +33,7 @@ public class CandleDrawer extends Drawer {
 
 		if (data == null || lngth < Stride) return;
 
-		width_factor = bounds.width / xrange;
+		width_factor = (bounds.width - w_margin) / xrange;
 		height_factor = bounds.height / yrange;
 		for (i = 0, row = 1; i < lngth; i += Stride, ++row) {
 			openy = (int) (bounds.height - (data[i] - ymin) * height_factor +
