@@ -16,14 +16,6 @@ inherit
 			target
 		end
 
-feature -- Status report
-
-	target_set: BOOLEAN is
-			-- Has the target to be analyzed been set?
-		do
-			Result := target /= Void
-		end
-
 feature {FACTORY} -- Element change
 
 	set_target (in: LINEAR [MARKET_TUPLE]) is
@@ -32,12 +24,15 @@ feature {FACTORY} -- Element change
 		do
 			target := in
 		ensure then
-			target_set: target = in
-			target_set: target_set
+			target_set: target = in and target /= Void
 		end
 
 feature {NONE}
 
 	target: LINEAR [MARKET_TUPLE]
+
+invariant
+
+	target_not_void: target /= Void
 
 end -- class LINEAR_ANALYZER

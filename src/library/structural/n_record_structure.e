@@ -12,14 +12,6 @@ feature
 	n: INTEGER
 			-- The length of the sub-list to be analyzed
 
-feature -- Status report
-
-	n_set: BOOLEAN is
-			-- Has n been set?
-		do
-			Result := n > 0
-		end
-
 feature {FACTORY} -- Element change
 
 	set_n (value: INTEGER) is
@@ -30,11 +22,10 @@ feature {FACTORY} -- Element change
 			n := value
 		ensure
 			n_set_to_value: n = value
-			n_set: n_set
 		end
 
 invariant
 
-	n_positive_if_set: n_set = (n > 0)
+	n_positive: n > 0
 
 end -- class N_RECORD_ANALYZER
