@@ -85,10 +85,7 @@ feature -- Basic operations
 			-- daily, and intraday data, this will simply be the date
 			-- of the tuple's date_time:
 			event.set_date (tuple.end_date)
-			-- Time is only needed for intraday data.
-			if tuple.is_intraday then
-				event.set_time (tuple.date_time.time)
-			end
+			event.set_time (tuple.date_time.time)
 			s := concatenation (<<"Event for market ", tradable.name, ": ">>)
 			description.prepend (s)
 			event.set_description (description)
