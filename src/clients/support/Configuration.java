@@ -276,7 +276,7 @@ public class Configuration implements NetworkProtocol
 
 	private Vector start_date_settings;
 	private Vector end_date_settings;
-	private final String configuration_file = ".ta_clientrc";
+	private final String configuration_file = ".ma_clientrc";
 	private Hashtable _upper_indicators;
 	private Hashtable _vertical_indicator_lines;
 	private Hashtable _horizontal_indicator_lines;
