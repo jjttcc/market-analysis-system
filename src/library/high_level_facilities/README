@@ -1,0 +1,3 @@
+Classes that provide high-level facilities - that is, that only depend on
+clusters that contain classes that depend on a minimal set of other
+high-level classes
