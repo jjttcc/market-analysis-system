@@ -51,10 +51,8 @@ of data files - one for each market - you will need to obtain files with
 historic data for the markets you are interested in tracking; and you
 will need some method of updating these files each trading day with the
 current end-of-day data.  (If you don't currently have a good data source,
-http://www.msodata.com/ appears to be a reliable, cheap source of daily
-market data.  They have a two-week free trial period, which I have taken
-advantage of, and I am satisfied enough with their service that I have
-decided to subscribe when the trial period ends.)
+I have found http://www.msodata.com/ to be a reliable, cheap source of daily
+market data.)
 
 Currently MAS handles data with the fields date, open, high, low, close,
 volume (in that order), which provides for stock and index data (with
@@ -72,9 +70,10 @@ MAS is intended to be run as a server, servicing requests via a socket.
 To do this, you will need to start the mas executable from the command
 line, giving it the port number you wish to use for the socket connection,
 as well as a list of market data files for it to process.  (You can give
-it any number above 1023.)  You can then start one or more client programs
-to use mas's services.  See the file masystem_introduction, in the doc
-directory, for more information on how to start the server and the client.
+it any port number above 1023.)  You can then start one or more client
+programs to use mas's services.  See the file masystem_introduction,
+in the doc directory, for more information on how to start the server
+and the client.
 
 To access the MAS functionality for creating new indicators or new event
 generators, you can either run mas at a terminal and use its command-line
