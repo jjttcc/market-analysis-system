@@ -30,10 +30,10 @@ feature {NONE} -- Initialization
 				set_operator (op)
 				operator.initialize (Current)
 			end
-			make_output
+			create output.make (0)
 			function_key := fkey
 			if ins = Void then
-				create inputs.make (0)
+				create {LINKED_LIST [MARKET_FUNCTION]} inputs.make
 			else
 				inputs := ins
 			end
@@ -43,6 +43,7 @@ print ("inputs.count: " + inputs.count.out + "%N")
 		ensure
 			set: operator = op and function_key = fkey and
 				(ins /= Void implies inputs = ins)
+			no_op_init: not operator_needs_initializing
 		end
 
 feature -- Access
@@ -90,13 +91,26 @@ feature -- Access
 		end
 
 	parameters: LIST [FUNCTION_PARAMETER] is
+		local
+			parameter_set: LINKED_SET [FUNCTION_PARAMETER]
 		do
-			-- Stub !!!!Implementation to be determined
- if parameter_list = Void then
-	create parameter_list.make
-	parameter_list := immediate_parameters	--!!!temporary
- end
- Result := parameter_list
+			if parameter_list = Void then
+				create parameter_list.make
+				create parameter_set.make
+				if immediate_parameters /= Void then
+					parameter_set.fill (immediate_parameters)
+				end
+				from inputs.start until inputs.exhausted loop
+					check
+						input_parameters_not_void:
+							inputs.item.parameters /= Void
+					end
+					parameter_set.fill (inputs.item.parameters)
+					inputs.forth
+				end
+				parameter_list.append (parameter_set)
+			end
+			Result := parameter_list
 		end
 
 	children: LIST [MARKET_FUNCTION] is
@@ -154,7 +168,7 @@ feature -- Status report
 	processed: BOOLEAN is
 		do
 			Result := processed_date_time /= Void
-			--!!!!!Stub
+			--!!!!!Check if this implementation is adequate.
 		end
 
 	has_children: BOOLEAN is true
@@ -163,6 +177,10 @@ feature -- Status report
 		do
 			Result := operator /= Void
 		end
+
+	operator_needs_initializing: BOOLEAN
+			-- Does `operator' need initializing when `set_innermost_input'
+			-- is called?
 
 feature {NONE}
 
@@ -176,12 +194,12 @@ print ("do_process end%N")
 
 	pre_process is
 		do
-			if not output.is_empty then
-				--!!!!This may not be needed:
-				output.wipe_out
+			from inputs.start until inputs.exhausted loop
+				if not inputs.item.processed then
+					inputs.item.process
+				end
+				inputs.forth
 			end
-			--!!!!!For each i in inputs: if not i.processed then i.process end
-			--!!!!Anything else?
 		end
 
 feature {FACTORY} -- Status setting
@@ -189,24 +207,24 @@ feature {FACTORY} -- Status setting
 	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
 		do
 print ("set_innermost_input called with in.count: " + in.count.out + "%N")
-processed_date_time := Void
-			-- !!!!Stub - Look at set_innermost_input implentation in
-			-- ONE_VARIABLE_FUNCTION and decide if that logic applies here.
---!!!For experimentation/testing - may be appropriate in final implementation
---inside of a guard:
-if
-	inputs.is_empty or else inputs.count = 1 and not inputs.first.is_complex
-then
-	inputs.wipe_out
-	inputs.extend (in)
-else
-	from inputs.start until inputs.exhausted loop
-		inputs.item.set_innermost_input (in)
-		print ("is_complex: " + inputs.item.is_complex.out + "%N")
-		inputs.forth
-	end
- end
+			processed_date_time := Void
+			if
+				inputs.is_empty or else (inputs.count = 1 and
+				not inputs.first.is_complex)
+			then
+				inputs.wipe_out
+				inputs.extend (in)
+			else
+				from inputs.start until inputs.exhausted loop
+					inputs.item.set_innermost_input (in)
+print ("is_complex: " + inputs.item.is_complex.out + "%N")
+					inputs.forth
+				end
+			end
 print ("set_innermost_input - inputs.count: " + inputs.count.out + "%N")
+			if operator /= Void and operator_needs_initializing then
+				operator.initialize (Current)
+			end
 			output.wipe_out
 		end
 
@@ -215,27 +233,33 @@ feature {MARKET_FUNCTION_EDITOR}
 	reset_parameters is
 		do
 			parameter_list := Void
-			-- !!!!! Call reset_parameters on all inputs.
+			inputs.do_all (agent reset_market_function_parameters)
 		end
 
 	add_parameter (p: FUNCTION_PARAMETER) is
 			-- Add `p' to `parameters'.
 		do
 			immediate_parameters.extend (p)
+			-- Force `parameters' to recreate `parameter_list':
+			parameter_list := Void
+		end
+
+	set_operator_needs_initializing (arg: BOOLEAN) is
+			-- Set `operator_needs_initializing' to `arg'.
+		require
+			op_exists: operator /= Void
+		do
+			operator_needs_initializing := arg
+		ensure
+			operator_needs_initializing_set: operator_needs_initializing = arg
 		end
 
 feature {MARKET_FUNCTION_EDITOR, MARKET_AGENTS}
 
-	inputs: ARRAYED_LIST [MARKET_FUNCTION]
+	inputs: LIST [MARKET_FUNCTION]
 			-- All inputs to be used for processing
 
 feature {NONE} -- Implementation
-
-	make_output is
-		do
-			-- !!!How many elements?
-			create output.make (0)
-		end
 
 	initialize_operators is
 			-- Initialize all operators that are not Void - default:
@@ -245,6 +269,11 @@ feature {NONE} -- Implementation
 				-- operator will set its target to new input.output.
 				operator.initialize (Current)
 			end
+		end
+
+	reset_market_function_parameters (mf: MARKET_FUNCTION) is
+		do
+			mf.reset_parameters
 		end
 
 invariant
