@@ -59,6 +59,7 @@ feature -- Cursor movement
 		do
 			tuple_sequence.start
 			field_index := 1
+			error_occurred := false
 		end
 
 feature -- Element change
