@@ -11,21 +11,24 @@ import javax.servlet.ServletException;
 import javax.servlet.GenericServlet;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import support.IO_SocketConnection;
 
 public final class MAS extends GenericServlet {
 
 	public void service(ServletRequest request,
 			ServletResponse response)
 			throws ServletException, IOException {
-		String client_msg = null;
+		String client_msg = null, server_response = null;
 		try {
-			log("Connected");
+			log("(Version 1.0) Connected");
 			log("Reading data...");
 			client_msg = input_string(request.getReader());
 			log("Finished reading.");
-			log("Received \"" + clientMsg + "\"");
-			log("[Complete.]");
-			send_response(response, "You said: " + client_msg);
+			log("Received \"" + client_msg + "\"");
+			log("Forwarding to mas server");
+			proxy().forward(client_msg);
+			server_response = proxy().response();
+			send_response(response, "mas answered: " + server_response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -58,4 +61,24 @@ public final class MAS extends GenericServlet {
 			e.printStackTrace();
 		}
 	}
+
+	private MAS_Proxy proxy() {
+		if (proxy_ == null) {
+			proxy_ = new MAS_Proxy(new IO_SocketConnection(
+				server_address().hostname(), server_address().port_number()));
+		}
+		return proxy_;
+	}
+
+	private ServerAddress server_address() {
+		if (server_address_ == null) {
+//!!!!Stubbed for now - change soon:
+			server_address_ = new ServerAddress("localhost", 2004);
+		}
+		return server_address_;
+	}
+
+	private MAS_Proxy proxy_;
+
+	private ServerAddress server_address_;
 }
