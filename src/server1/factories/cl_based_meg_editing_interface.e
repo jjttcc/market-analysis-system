@@ -323,6 +323,7 @@ feature -- Basic operations
 		do
 			--Ask the user for the name of the new event type.
 			!!names.make (event_types.count)
+			names.compare_objects
 			etypes := event_types.linear_representation
 			from
 				etypes.start
@@ -332,14 +333,26 @@ feature -- Basic operations
 				names.extend (etypes.item.name)
 				etypes.forth
 			end
-			--!!!Add to names the event types just created but not yet
-			-- !!!added to the global list.
-			print_names_in_1_column (names)
-			print ("Type a name for the new event that does not match %
-					%any of the above names: ")
-			read_line
-			!!Result.make (last_string.count)
-			Result.append (last_string)
+			from
+			until
+				Result /= Void
+			loop
+				if names.count > 0 then
+					print_names_in_1_column (names)
+					print ("Type a name for the new event that does not match %
+							%any of the above names: ")
+				else
+					print ("Type a name for the new event: ")
+				end
+				read_line
+				if names.has (last_string) then
+					print_list (<<"%"", last_string, "%" matches one of the %
+								%above names, please try again ...%N">>)
+				else
+					!!Result.make (last_string.count)
+					Result.append (last_string)
+				end
+			end
 		end
 
 	period_type_choice: TIME_PERIOD_TYPE is
