@@ -1,3 +1,11 @@
+SIGNIFICANT SERVER CHANGES IN RELEASE 1.7
+
+Added a new "agent-based" function that allows creation of some kinds
+of indicators not previously possible and that may allow even more
+flexibility in the future.  Used this new function to create a standard
+deviation indicator.  Used the standard deviation indicator to create
+a bollinger bands indicator.
+
 SIGNIFICANT SERVER CHANGES IN RELEASE 1.6.5
 
 Added the ability to retrieve market data from a web server using the http
