@@ -4,3 +4,4 @@ del mctrc
 del install\nt_repl_spec
 del install\pre_nt_repl_spec
 rd install
+del cleanup.bat
