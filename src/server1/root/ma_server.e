@@ -112,7 +112,7 @@ feature {NONE} -- Implementation
 		do
 			cl := command_line_options
 			if cl.report_back then
-				create connection.make (cl.host_name_for_startup_report,
+				create connection.make_tested (cl.host_name_for_startup_report,
 					cl.port_for_startup_report)
 				-- If `errs.is_empty', the startup process will assume
 				-- that this process started succefully.

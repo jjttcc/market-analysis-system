@@ -17,7 +17,7 @@ class SERVER_RESPONSE_CONNECTION inherit
 
 creation
 
-	make
+	make_tested
 
 feature -- Basic operations
 

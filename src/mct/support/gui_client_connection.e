@@ -22,7 +22,7 @@ class GUI_CLIENT_CONNECTION inherit
 
 creation
 
-	make
+	make_tested
 
 feature -- Access
 

@@ -70,7 +70,7 @@ feature -- Basic operations
 					Result := "Invalid port number: " + port
 				end
 				if Result = Void then
-					create connection.make (host, port.to_integer)
+					create connection.make_tested (host, port.to_integer)
 					if connection.last_communication_succeeded then
 						connection.ping_server
 						if not connection.last_communication_succeeded then
