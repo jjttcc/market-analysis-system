@@ -109,7 +109,7 @@ get_window_system_info() {
 		"you don't want\nto include this information."
 	read dtenv
 	if [ ! -z "$dtenv" ]; then
-		echo "Desktop environment: $dtenv" >>$reportfile
+		echo -e "\nDesktop environment: $dtenv" >>$reportfile
 	fi
 }
 
