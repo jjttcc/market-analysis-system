@@ -1,6 +1,6 @@
 # $Revision$ $Date$
 
-package TasksSettings;
+package DataSupplierSettings;
 $VERSION = 1.00;
 use strict;
 use warnings;
@@ -11,7 +11,7 @@ use File::Spec;
 
 =head1 NAME
 
-TasksSettings
+DataSupplierSettings
 
 =head1 SYNOPSIS
 
@@ -58,11 +58,8 @@ this class.
 		}
 		my @appdirs = (
 			File::Spec->catdir($srcdir, 'application_library', 'support'),
-			File::Spec->catdir($srcdir, 'application_library', 'tasks'),
-			File::Spec->catdir($srcdir, 'test_drivers'),
-			File::Spec->catdir($srcdir, 'application_library', 'commands'),
-			File::Spec->catdir($srcdir, 'application_library', 'database'),
-			File::Spec->catdir($srcdir, 'application1', 'utility'),
+			File::Spec->catdir($srcdir, 'application_library',
+				'main_abstractions'),
 		);
 		my @moddirs = $self->module_dirs;
 		my %result = (
@@ -74,7 +71,7 @@ this class.
 
 	sub app_var_name {
 		my ($self) = @_;
-		my $result = "TasksApplication";
+		my $result = "DataSupplierApplication";
 	}
 
 }

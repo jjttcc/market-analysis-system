@@ -7,15 +7,9 @@ use File::Basename;
 use File::Spec::Functions;
 
 BEGIN {
-	my $app_path = catdir(dirname($0), '.');
+	my $app_path = catdir(dirname($0), '..');
 	my $config_path = catdir($app_path, 'lib', 'config');
-#	my $config_path2 = catdir($app_path, 'tasks', 'lib', 'config');
-print "$app_path\n";
-print "$config_path\n";
-#print "$config_path2\n";
 	push @INC, $config_path;
-print join ", ", @INC, "\n";
-#	push @INC, $config_path2;
 	my $g = 'global_settings';
 	require global_settings;
 	require DataSupplierSettings;

@@ -5,7 +5,6 @@ $VERSION = 1.00;
 use strict;
 use warnings;
 use Carp;
-use Task;
 use File::Spec::Functions;
 use FileHandle;
 use IO::Socket;
@@ -34,6 +33,16 @@ Fake socket-based data-supplier for the MAS server, for testing
 	# Wait for and service client requests.
 	sub execute {
 		my ($self) = @_;
+		my $socket = $self->field_value_for(qw(socket));
+print "I, $self, am executing\n";
+print "My socket is: $socket\n";
+if ($socket->connected) {
+print "Socket is connected.\n";
+} else {
+print "Socket is NOT connected.\n";
+}
+		$socket->listen;
+		my $active_socket = $socket->accept;
 	}
 
 # --------------- Non-public features ---------------
@@ -42,11 +51,12 @@ Fake socket-based data-supplier for the MAS server, for testing
 
 	sub initialize {
 		my ($self, %args) = @_;
-		$self->set_field(qw(socket), IO::Socket::INET->new(
+		my $new_socket = IO::Socket::INET->new(
 			LocalAddr => 'localhost', LocalPort => 39412, Proto => 'tcp',
-			Listen    => 5));
-		die "$!" unless $sock;
-print "Socket was created: " . $self->socket;
+			Listen => 5);
+		die "$!" unless $new_socket;
+		$self->set_field(qw(socket), $new_socket);
+print "Socket was created: ", $self->field_value_for(qw(socket)), "\n";
 		$self->SUPER::initialize(@_);
 	}
 
