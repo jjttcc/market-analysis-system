@@ -150,7 +150,6 @@ public class DataSet extends Object {
 
   /**
    * Drawer of price bars - e.g., tic bars or candles
-   * [Need to find a name for it and create the class.]
    */
 	protected BarDrawer drawer;
   /**
@@ -285,8 +284,6 @@ public class DataSet extends Object {
 //     Calculate the data range.
 
            range(stride);
-
-
       }
 
   /**

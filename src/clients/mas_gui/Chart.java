@@ -45,7 +45,8 @@ public class TA_Chart extends Frame
 		public void actionPerformed(ActionEvent e) { new TA_Chart(connection); }
 		});
 
-		ss.addActionListener(new StockSelection(this, connection));
+		ss.addActionListener(new StockSelection(this, connection,
+								pane.main_graph()));
 
 		closewin.addActionListener(new ActionListener() {// Close this window.
 		public void actionPerformed(ActionEvent e) { close(); }
@@ -63,12 +64,6 @@ public class TA_Chart extends Frame
 		// Set the window size and pop it up.
 		this.pack();
 		this.show();
-	}
-
-	public void execute()
-	{
-		System.out.println("Is execute needed or should we just wait for" +
-		"events?");
 	}
 
 // Implementation

@@ -3,11 +3,14 @@ import java.awt.event.ActionEvent;
 import java.awt.*;
 import java.util.*;
 import java.io.*;
+import graph.*;
 
 // Listener that allows user to select a stock to be displayed.
 class StockSelection implements ActionListener {
-	public StockSelection(Frame f, TA_Connection conn) {
+	public StockSelection(Frame f, TA_Connection conn, Graph2D g) {
 		connection = conn;
+		graph = g;
+		main_frame = f;
 		selection = new List();
 		dialog = new Dialog(f);
 		dialog.add(selection);
@@ -37,8 +40,11 @@ class StockSelection implements ActionListener {
 				System.out.println("IO exception occurred, bye ...");
 				System.exit(-1);
 			}
-			System.out.println(connection.last_market_data());
-			//!!!Need to find a way to plug the market data into the graph!!!
+			//Ensure that all graph's data sets are removed.  (May need to
+			//change later.)
+			graph.detachDataSets();
+			graph.attachDataSet(connection.last_market_data());
+			graph.repaint();
 		}});
 	}
 
@@ -49,4 +55,6 @@ class StockSelection implements ActionListener {
 	private List selection;
 	private Dialog dialog;
 	private TA_Connection connection;
+	private Graph2D graph;
+	private Frame main_frame;
 }

@@ -10,7 +10,7 @@ public class CL_Client
 		PrintWriter out = null;
 		BufferedReader in = null;
 		String hname = "jupiter.milkyway.org";
-		Integer port_number = new Integer(22227);
+		Integer port_number = new Integer(22228);
 		char c;
 
 		if (args.length > 0)

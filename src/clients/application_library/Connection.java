@@ -1,15 +1,26 @@
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import graph.*;
 
 /** Provides an interface for connecting and communicating with the server */
 public class TA_Connection implements NetworkProtocol
 {
 	TA_Connection(String[] args)
 	{
+		int field_specs[] = new int[6];
+		// Hard-code these for now:
+		field_specs[0] = TA_Parser.Date;
+		field_specs[1] = TA_Parser.Open;
+		field_specs[2] = TA_Parser.High;
+		field_specs[3] = TA_Parser.Low;
+		field_specs[4] = TA_Parser.Close;
+		field_specs[5] = TA_Parser.Volume;
+		data_parser = new TA_Parser(field_specs, Output_record_separator,
+									Output_field_separator);
 		scanner = new DataInspector();
+		bar_drawer = new BarDrawer();
 		//Process args for the host, port.
-		//!!This is probably not quite right:
 		if (args.length > 0)
 		{
 			hostname = args[0];
@@ -33,9 +44,9 @@ public class TA_Connection implements NetworkProtocol
 		// Send Market_data_request, with symbol - for weekly data.
 		send_msg(Market_data_request, symbol + Input_field_separator +
 					period_type);
-//!!!!Change: Use the new TA_Parser to parse this market data into
-//date/int/float/... for graph/display.
-		_last_market_data = receive_msg(in);
+		data_parser.parse(receive_msg().toString());
+		_last_market_data = data_parser.result();
+		_last_market_data.set_drawer(bar_drawer);
 		close_connection();
 	}
 
@@ -48,7 +59,9 @@ public class TA_Connection implements NetworkProtocol
 		// Send Indicator_data_request, for ind, symbol - for weekly data.
 		send_msg(Indicator_data_request, ind + Input_field_separator +
 					symbol + Input_field_separator + ptype);
-		_last_indicator_data = receive_msg(in);
+		data_parser.parse(receive_msg().toString());
+		_last_indicator_data = data_parser.result();
+		_last_indicator_data.set_drawer(bar_drawer);
 		close_connection();
 	}
 
@@ -60,7 +73,7 @@ public class TA_Connection implements NetworkProtocol
 		connect();
 		// Send Indicator_list_request for symbol.
 		send_msg(Indicator_list_request, symbol);
-		mlist = receive_msg(in);
+		mlist = receive_msg();
 		close_connection();
 		StringTokenizer t = new StringTokenizer(mlist.toString(),
 			Output_record_separator, false);
@@ -71,13 +84,13 @@ public class TA_Connection implements NetworkProtocol
 	}
 
 	// Data from last market data request
-	public StringBuffer last_market_data()
+	public DataSet last_market_data()
 	{
 		return _last_market_data;
 	}
 
 	// Data from last indicator data request
-	public StringBuffer last_indicator_data()
+	public DataSet last_indicator_data()
 	{
 		return _last_indicator_data;
 	}
@@ -100,7 +113,7 @@ public class TA_Connection implements NetworkProtocol
 			connect();
 			// Send Market_list_request (and empty message body).
 			send_msg (Market_list_request, "");
-			mlist = receive_msg(in);
+			mlist = receive_msg();
 			close_connection();
 			StringTokenizer t = new StringTokenizer(mlist.toString(),
 				Output_record_separator, false);
@@ -112,7 +125,9 @@ public class TA_Connection implements NetworkProtocol
 		return markets;
 	}
 
-	StringBuffer receive_msg (BufferedReader in) throws IOException
+// Implementation
+
+	StringBuffer receive_msg() throws IOException
 	{
 		char c;
 		StringBuffer result;
@@ -186,9 +201,11 @@ public class TA_Connection implements NetworkProtocol
 	private int last_rec_msgID;		// last message ID received from server
 	private Vector markets;		// Cached list of markets
 		// result of last market data request
-	private StringBuffer _last_market_data;
+	private DataSet _last_market_data;
 		// result of last indicator data request
-	private StringBuffer _last_indicator_data;
+	private DataSet _last_indicator_data;
 		// result of last indicator list request
 	private Vector _last_indicator_list;
+	private TA_Parser data_parser;
+	private BarDrawer bar_drawer;	// draws bars in graph
 }
