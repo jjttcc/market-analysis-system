@@ -35,8 +35,7 @@ feature -- Access
 		do
 			-- The file-locking mechanism for Windows is not yet
 			-- working, so use a "fake" lock for now.
-			create {NON_FUNCTIONING_FILE_LOCK} Result.make (
-				file_name)
+			create {BASIC_FILE_LOCK} Result.make (file_name)
 		end
 
 end -- class PLATFORM_DEPENDENT_OBJECTS
