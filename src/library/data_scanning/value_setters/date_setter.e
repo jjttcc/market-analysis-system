@@ -16,7 +16,6 @@ feature -- Initialization
 
 	make is
 		do
-			!!date.make_now
 		end
 
 feature {NONE}
@@ -26,28 +25,23 @@ feature {NONE}
 			-- Redefine in descendant for different formats.
 		local
 			date_time: DATE_TIME
-			y, m, d, value: INTEGER
+			date: DATE
+			time: TIME
 		do
-			value := stream.last_integer
-			y := value // 10000
-			m := value \\ 10000 // 100
-			d := value \\ 100
-			if
-				y < 0 or m < 1 or m > date.months_in_year or
-				d < 1 or d > date.days_in_i_th_month (m, y)
-			then
-				handle_input_error ("Date input value is invalid: ", value.out)
+			date := date_util.date_from_number (stream.last_integer)
+			if date = Void then -- stream.last_integer was invalid
 				!!date_time.make_now
-				tuple.set_date_time (date_time)
+				handle_input_error ("Date input value is invalid: ",
+									stream.last_integer.out)
 			else
-				!!date_time.make (y, m, d, 0, 0, 0)
-				tuple.set_date_time (date_time)
+				!!time.make (0, 0, 0)
+				!!date_time.make_by_date_time (date, time)
 			end
+			tuple.set_date_time (date_time)
 		end
 
 feature {NONE}
 
-	date: DATE
-			-- Used for validation checking on input.
+	date_util: expanded DATE_TIME_SERVICES
 
 end -- class DAY_DATE_SETTER
