@@ -171,7 +171,13 @@ html() && /\\fP/ {
 }
 
 /%hdg1/ {
-	printhdg1($2)
+	print_heading($2, 1)
+	date = ""
+	next
+}
+
+/%hdg2/ {
+	print_heading($2, 2)
 	date = ""
 	next
 }
@@ -274,10 +280,18 @@ function printheader(main, subt, sub_line_count) {
 	}
 }
 
-function printhdg1(hdg) {
+function print_heading(hdg, level) {
 	if (groff()) {
 		printf(".br\n.ne 7\n")
-		printf(".P\n\\fB")
+		if (level == 1) {
+			font = "\\fB"
+		} else if (level == 2) {
+			font = "\\fI"
+		} else {
+			warn("Cannot handle level " level " - skipping heading.")
+			return
+		}
+		printf(".P\n%s", font)
 		if (DATEFIRST)
 		{
 			if (date)
@@ -293,7 +307,15 @@ function printhdg1(hdg) {
 		}
 		printf("\\fP\n")
 	} else {
-		printf("<p>\n<h2>\n%s\n</h2>\n", hdg)
+		if (level == 1) {
+			hlvl = 2
+		} else if (level == 2) {
+			hlvl = 3
+		} else {
+			warn("Cannot handle level " level " - skipping heading.")
+			return
+		}
+		printf("<p>\n<h%d>\n%s\n</h%d>\n", hlvl, hdg, hlvl)
 	}
 }
 
@@ -309,5 +331,9 @@ function url(address, label) {
 
 function groff() {
 	return ! html()
+}
+
+function warn(s) {
+	system("echo " s)
 }
 ' $files
