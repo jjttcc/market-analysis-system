@@ -77,6 +77,18 @@ feature -- Actions
 			about_dialog.show_modal_to_window (owner_window)
 		end
 
+feature {NONE} -- Implementation - utilities
+
+	display_error (s: STRING) is
+			-- Display error message `s'.
+		local
+			dialog: EV_WIDGET
+			wbldr: expanded WIDGET_BUILDER
+		do
+			dialog := wbldr.new_error_dialog (s)
+			dialog.show
+		end
+
 feature {NONE} -- Implementation
 
 	external_commands: HASH_TABLE [EXTERNAL_COMMAND, STRING]
