@@ -85,7 +85,7 @@ feature {NONE}
 			create list_builder.make
 			list_builder.execute
 			market_list_handler := list_builder.product
-			create {MARKET_EVENT_COORDINATOR} event_coordinator.make (
+			create {TRADABLE_LIST_EVENT_COORDINATOR} event_coordinator.make (
 				market_list_handler)
 		end
 
