@@ -249,7 +249,11 @@ public class MA_MenuBar extends MenuBar {
 	private void next_market() {
 		List ind_list = chart.market_selections.selection_list;
 		int i = ind_list.getSelectedIndex();
-		if (i < 0 || ind_list.getItemCount() - 1 == i) {
+		if (i < 0) {
+			if (ind_list.getItemCount() >= 2) i = 1;
+			else i = 0;
+		}
+		else if (ind_list.getItemCount() - 1 <= i) {
 			i = 0;
 		} else {
 			++i;
