@@ -135,10 +135,16 @@ feature -- Access
 			end
 		end
 
+--@@It it probably better to put this operation into its own class
+--with settable parameters, similar to INTEGRAL or SUM under
+--work/experiments/sicp/integral.  If so, it may be a good idea to
+--add a 'filter' function that must be true before a value is used
+--in the accumulation.  (See
+--http://mitpress.mit.edu/sicp/full-text/book/book-Z-H-12.html#%_thm_1.33
 	n_based_accumulation (f: AGENT_BASED_FUNCTION; n: INTEGER;
 		calculation: FUNCTION [ANY, TUPLE [DOUBLE, INTEGER,
-		ARRAYED_LIST [DOUBLE]], DOUBLE]; accum_op,
-		drop_off_op: BINARY_OPERATOR [REAL, REAL]) is
+		ARRAYED_LIST [DOUBLE]], DOUBLE]; accum_op, drop_off_op:
+		BINARY_OPERATOR [REAL, REAL]) is
 			-- An "accumulation" - whose input is `f.inputs.first.output' -
 			-- based on applying the specified function, `calculation', to
 			-- n-sized subsets of the elements of the input (for example,
