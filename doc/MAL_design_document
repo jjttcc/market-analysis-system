@@ -1,5 +1,10 @@
                 Technical Analysis Library - Design Document
 
+INTRODUCTION
+
+This document contains a description of the clusters and classes of the
+Technical Analysis Library.
+
 CLUSTER function_abstractions
 
 The classes in this cluster form the principal abstractions supporting
@@ -19,23 +24,43 @@ trading periods, where each trading period has a date (and time, if
 it is intraday), and other values (such as open, close, high, low -
 descendant classes add these values).
 
-MARKET_TUPLE_LIST unites the above concept of a sequence or ordered list
-of tuples with a trading period type, such as hourly, daily, weekly,
-or monthly.
+MARKET_TUPLE_LIST inherits from ARRAYED_LIST (from the base library),
+adding the contraint that the generic argument must be of type
+MARKET_TUPLE and a class invariant that the elements of the list must be
+sorted by date/time.  This abstraction is used as the type of the output
+feature of MARKET_FUNCTION, thus the output for a MARKET_FUNCTION is
+constrained to being a date/time-sorted list of instances of MARKET_TUPLE.
+
+TIME_PERIOD_TYPE provides an abstraction for types of trading periods,
+each type having an associated time duration.  For example, a daily
+trading period will have a 24-hour duration; an hourly trading period
+will have a one-hour duration; a weekly (7-day week) trading period will
+have a 7-day duration.  Types for which query `irregular' is true are
+types such as monthly and yearly, whose durations vary.  duration for
+irregular types will be an approximate value (such as 30 days for a montly
+trading period).  Class MARKET_FUNCTION has a query, trading_period_type
+- of type TIME_PERIOD_TYPE, that identifies the type of trading period
+for each function instance.  Examples:  a STOCK (which inherits from
+SIMPLE_FUNCTION) instance will often have a trading period type with a
+duration of one day - a daily trading period.  For hourly data, STOCK
+instances will have an hourly trading period type.  A moving average
+whose input is a STOCK with a daily trading period will itself have
+a daily trading period type.  The trading period type is used in the
+construction of composite tuples, such as weekly tuples from daily tuples.
 
 SIMPLE_FUNCTION allows for a MARKET_TUPLE_LIST to be treated as
 a MARKET_FUNCTION (by inheriting from both).  It will serve as the
-innermost function in a composition of functions.  The main intent of
-this is to allow composite functions to be constructed by enclosing
-(one or more) function(s) within another function without the enclosing
-function needing to know the type of function it is containing (simple
-or composite, and various subtypes of composite).  The result is that
-very complex functions can be constructed without causing resulting
-complexity in the implementation of the function classes.
+innermost function in a composition of functions.  The main intent
+of this construct is to allow composite functions to be constructed
+by enclosing one or more functions within another function without the
+enclosing function needing to know the type of function it is containing
+(simple or composite, and various subtypes of composite).  The result
+is that arbitrarily complex functions can be constructed without causing
+resulting complexity in the implementation of the function classes.
 
 CLUSTER structural
 
-This cluster contain two classes that provide structural properties
+This cluster contains two classes that provide structural properties
 used by descendants of MARKET_FUNCTION and by some of the classes in
 the COMMAND cluster.  LINEAR_ANALYZER provides an important abstraction
 that will be used by all of the composite function classes (descendants
@@ -101,9 +126,8 @@ that allow a good deal of flexibility in how they can be configured -
 with the goal that a large number of arbritrarily complex technical
 indicators can be built using these functions.  This cluster includes
 the two main composite functions that inherit from MARKET_FUNCTION:
-ONE_VARIABLE_FUNCTION and TWO_VARIABLE_FUNCTION.  All other composite
-functions inherit from these functions.  (In the future there may
-be to a need to add a THREE_VARIABLE_FUNCTION.)  As the names imply
+ONE_VARIABLE_FUNCTION and TWO_VARIABLE_FUNCTION.  All other
+composite functions inherit from these functions.  As the names imply
 ONE_VARIABLE_FUNCTION is a function that takes one argument or variable
 and TWO_VARIABLE_FUNCTION takes two arguments.  An example of the use
 of the TWO_VARIABLE_FUNCTION is moving average convergence/divergence
@@ -140,3 +164,78 @@ and the standard tuple plus volume (VOLUME_TUPLE).  It also contains
 classes for composite tuples, tuples made from other tuples.  These are
 used by the COMPOSITE_TUPLE_BUILDER to construct, for example, monthly
 data from daily data.
+
+CLUSTER markets
+
+The classes in this cluster provide abstractions supporting the concept
+of market entities, such as stocks and options, that contain the actual
+market data that MARKET_FUNCTION instances will operate on.  The main
+abstraction in this cluster is TRADABLE, which serves as parent to STOCK
+and STOCK_INDEX.  (More descendants will be added in the future, such
+as FUTURES_CONTRACT and BOND.)  TRADABLE inherits from SIMPLE_FUNCTION,
+allowing its descendants to be used as the innermost function in a
+composite function as described above.  TRADABLE also has a feature
+`indicators', which is a list of all composite functions - technical
+indicators - that have been constructed to perform analysis on the
+tradable instance.  When used in an application, the user will be able to
+add technical indicators to stocks or other market entities in a flexible
+manner - for example, the user may add a set of indicators to just one
+stock or group of stocks, or may specify that a set of indicators be
+added to all market entities in the system.  TRADABLE has two other
+important features:
+
+   - composite_tuple_list, which provides a list of composite tuples made
+	 from the tradable's data.  The argument, period_type, specifies
+	 the kind of composite tuple - for example, weekly or monthly,
+	 when the tradable's trading_period_type is daily.
+
+   - indicator_groups, which contains all indicator groupings set up for a
+	 particular tradable instance.	This feature allows technical
+	 indicators to be conceptually grouped together (usually for
+	 presentation).  For example, a moving average crossover uses
+	 two moving averages for which a buy or sell signal is generated
+	 when one moving average crosses over the other.  This would
+	 form an indicator group consisting of the two moving averages.
+
+Class STOCK inherits from TRADABLE and adds the constraint that a STOCK
+contains tuples of type VOLUME_TUPLE (tuples with a volume field,
+in addition to open, high, low, close) as well as functionality
+to deal with stock splits.  It also redefines make_ctf to make a
+COMPOSITE_VOLUME_TUPLE_FACTORY, which is used by TRADABLE to make
+composite tuples for its composite_tuple_list feature.	STOCK_SPLIT is
+an abstraction for a stock split, with a value and a date, used by STOCK
+to adjust its prices for stock splits.
+
+CLUSTER data_scanning
+
+This cluster contains subclusters whose classes provide data-scanning
+functionality for the purpose of inputting market data and producing
+a list of MARKET_TUPLEs from that data.  They use the abstractions
+in the data_scanning cluster of the eiffel_library cluster, mainly
+via inheritance - specializing these abstractions to conform to the
+constraints needed to scan and create instances of descendants of
+MARKET_TUPLE.  The three subclusters in this cluster are data_scanners,
+tuple_factories, and value_setters.
+
+Cluster data_scanners contains MARKET_TUPLE_DATA_SCANNER, which
+specializes DATA_SCANNER from eiffel_library to scan for MARKET_TUPLEs.
+Cluster tuple_factories contains factory classes that are used by
+MARKET_TUPLE_DATA_SCANNER to create the appropriate type of MARKET_TUPLE.
+(In addition, COMPOSITE_TUPLE_FACTORY and COMPOSITE_VOLUME_TUPLE_FACTORY
+are used by class TRADABLE to create its composite tuple lists.)  Cluster
+value_setters contains classes that are used to set the appropriate fields
+of a tuple from the scanned data.  CLOSE_SETTERS sets the close field,
+HIGH_SETTER sets the high field and so on.  When the scanning process
+occurs, instances of these classes are arranged in a list whose order
+corresponds to the order of the fields expected in the data.  For example,
+a list would contain instances of DATE_SETTER, HIGH_SETTER, LOW_SETTER,
+CLOSE_SETTER, and VOLUME_SETTER, to scan an often used data format that
+excludes the opening price.
+
+CLUSTER global
+
+This cluster contains classes that provides services that need
+to be globally available.  It currently contains only one class,
+GLOBAL_SERVICES, which provides global services and globally available
+singletons (once functions).  In the future there may be a need to
+partition the global services into more than one class.
