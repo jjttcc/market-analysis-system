@@ -8,7 +8,7 @@ indexing
 
 class FUNCTION_MENU_CHOICE inherit
 
-	ENUMERATED [CHARACTER]
+	OBJECT_MENU_CHOICE
 
 	FUNCTION_MENU_VALUES
 
@@ -19,33 +19,5 @@ create
 create {ENUMERATED}
 
 	make
-
-feature -- Access
-
-	value_set: LINKED_SET [CHARACTER] is
-		once
-			Result := value_set_implementation
-		end
-
-feature {NONE} -- Initialization
-
-	make_description is
-		do
-			make ('d')
-		end
-
-	make_another is
-		do
-			make ('a')
-		end
-
-	make_choice is
-		do
-			make ('c')
-		end
-
-feature -- Access
-
-invariant
 
 end
