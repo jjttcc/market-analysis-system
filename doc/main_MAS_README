@@ -1,26 +1,40 @@
-INTRODUCTION
+%titleMarket Analysis System
+General Introduction and Usage Instructions
+%end_title
+%hdg1Introduction
 
 The Market Analysis System (MAS) is a software application that provides
-tools for analysis of financial markets using technical analysis. MAS
-provides facilities for stock charting, including price, volume, and a
-wide range of technical analysis indicators. MAS also allows automated
+tools for analysis of financial markets using technical analysis.
+MAS provides facilities for charting of stock and futures data,
+including price, volume, and a
+wide range of technical analysis indicators.
+MAS also allows automated
 processing of market data - applying technical analysis indicators with
 user-selected criteria to market data to automatically generate trading
 signals - and can be used as the main component of a sophisticated
-trading system. Some of the features of MAS are:
+trading system.
+Some of the features of MAS are:
 
-   - Exponential Moving Average, Stochastic, MACD, RSI, On Balance Volume,
-     Momentum, Rate of Change, etc.
-   - User can create new technical analysis indicators.
-   - User can configure simple and complex criteria for automated signal
-     generation.
-   - Creation of weekly, monthly, quarterly, and yearly data from daily data.
-   - Handles intraday data.
-   - Can be configured and run as a server that provides services for
-     several clients at a time running on remote machines.
+%startlist
+%listitem
+Exponential Moving Average, Stochastic, MACD, RSI, On Balance Volume,
+Momentum, Rate of Change, etc.
+%listitem
+Users can create new technical analysis indicators.
+%listitem
+Users can configure criteria for automated signal
+generation.
+%listitem
+Creation of weekly, monthly, quarterly, and yearly data from daily data.
+%listitem
+Handles intraday data.
+%listitem
+Can be configured and run as a server that provides services for
+several clients at a time running on remote machines.
+%endlist
 
-
-REPORTING MAS SYSTEM INFORMATION
+@begin:linux
+%hdg1Reporting MAS System Information
 
 Once you have successfully installed MAS and gotten it to run correctly,
 I would appreciate it if you would run the mas_dir/lib/report_system_info
@@ -42,119 +56,162 @@ spam filter.)  I will use this information to keep a record of what
 systems MAS has successfully been run on; your name and email address
 will not be included in this record.
 
+@end:linux
+@begin:windows
+%hdg1Feedback and Informal Support for MAS
+I am interested in hearing your comments and criticisms of the MAS package.
+I am hoping to improve the packaging of MAS for Windows to make it easier
+for people to use and your feedback will help me to determine what areas
+need work to accomplish this.
+%par
+Additionally, if you have a problem installing MAS or getting it to work
+the way you would like, you are welcome to send me an email describing the
+problem you are having.
+If you do this, please include as much background information as
+possible with your email, including, if possible, a precise description
+of what you were doing when the problem occurred.
+This will increase the chances that I have enough information to figure
+out what is going wrong and thus that I will be
+able to help you fix the problem.
+Since there is no charge for this support at this time, I cannot guarantee
+that I will be able to help with your problem, but I will try,
+so it is probably worthwhile for you to contact me.
+@end:windows
 
-DOWNLOADING THE CURRENT VERSION OF MAS
+%hdg1Downloading the Current Version of MAS
 
-As of July, 2000, the current version of MAS can be downloaded from:
+As of October, 2002, the current version of MAS can be downloaded from:
+%br
 http://eiffel-mas.sourceforge.net/
 
-
-MAIN DIRECTORIES IN THE MAS INSTALLATION
+%hdg1Main Directories in the MAS Installation
 
 The two main components of MAS are the Market Analysis System Server (also
 known as Market Analysis Server) and the Market Analysis GUI Client.
-
+%par
 The MAS installation includes the following directories:
 
-    bin - All executable files and shell scripts needed for running MAS
+%startlist
+%listitem
+bin - All executable files and shell scripts needed for running MAS
+%listitem
+lib - Java class files and other library files needed by MAS
+%listitem
+doc - Documentation of MAS features and how to use MAS
+%endlist
 
-    lib - Java class files and other library files needed by MAS
-
-    doc - Documentation of MAS features and how to use MAS
-
+@begin:linux
 The bin directory has the following executable files:
 
-    macl - MA command-line client - connects to the server over the network
-	       and uses its command-line interface - implemented in Python
-
-    maclj - MA command-line client - wapper script for Java implementation
-
-    magc - MA GUI Client - wrapper script for Java GUI client
-
-    mas - Market Analysis Server
-
-    mas_assert - Market Analysis Server with assertions
+%startlist
+%listitem
+macl - MA command-line client - connects to the server over the network
+and uses its command-line interface - implemented in Python
+%listitem
+maclj - MA command-line client - wapper script for Java implementation
+%listitem
+magc - MA GUI Client - wrapper script for Java GUI client
+%listitem
+mas - Market Analysis Server
+%listitem
+mas_assert - Market Analysis Server with assertions
+%endlist
 
 If you encounter a fatal error with mas, running mas_assert under the same
 conditions may give extra useful information to help pinpoint the problem.
 If you do this, please capture the results and email them to me at my
 email address at the end of this file.
+%par
+@end:linux
 
 The lib directory contains two subdirectories: classes, which contains
 the Java class files needed by the GUI client; and data, which contains
 some sample data files.
 
+%hdg1MAS Data Files and Format
 
-MAS DATA FILES AND FORMAT
-
-Since the current version of MAS expects to obtain its data from a set
-of data files - one for each market - you will need to obtain files with
-historic data for the markets you are interested in tracking; and you
+@windows\fBNote:\fP If you are using the "MAS Server (web)" icon to start
+@windowsthe server, you can ignore this section.
+@windows%par
+When the MAS server is run such that its data is obtained from files,
+you will need to obtain one file with
+historic data for each tradable you are interested in tracking; and you
 will need some method of updating these files each trading day with the
-current end-of-day data.  (If you don't currently have a good data source,
-I have found http://www.msodata.com/ to be a reliable, cheap source of daily
-market data.)  (Note: MAS can also obtain data from a database or from
-yahoo.com using the QuoteMonster script.  See masystem_introduction for
-directions on how to use these alternative data sources.)
-
+current end-of-day data.
+(Note: See the file masystem_introduction for
+directions on how to run MAS with alternative data sources.)
+%par
 Currently MAS handles data with the fields date, open, high, low, close,
 volume, and, optionally, open interest (in that order), which provides
 for stock and index data (with volume of 0), as well as futures data.
 It expects the date field to follow the format:  yyyymmdd.  For example,
 19990701, for July 1, 1999.
-
+%par
 There are some sample data files included in the correct format in lib/data
 so that you can try out MAS without having to obtain data files.
 
+%hdg1Running MAS
 
-RUNNING MAS
-
+@begin:windows
+\fBNote:\fP
+If you are using the "MAS Server (web)" icon to start the server,
+you can ignore this section.
+%par
+@end:windows
 MAS is intended to be run as a server, servicing requests via a socket.
-To do this, you will need to start the mas executable from the command
-line, giving it the port number you wish to use for the socket connection,
-as well as a list of market data files for it to process.  (You can give
+To do this, you will need to start the MAS executable from the command
+line, giving it the port number you wish to use for the socket connection
+(as well as a list of market data files for it to process, if you are
+running the server in the mode where it obtains its data from files).
+(You can give
 it any port number above 1023.)  You can then start one or more client
-programs to use mas's services.  See the file masystem_introduction,
+programs to use MAS's services.  See the file masystem_introduction,
 in the doc directory, for more information on how to start the server
 and the client.
-
-If you want to use MAS's capability to obtain data from the internet,
-using the popular QuoteMonster script, see the instructions on how to
-do this in the masystem_introduction file.
-
+%par
+@begin:linux
 To access the MAS functionality for creating new indicators or new event
-generators, you can either run mas at a terminal and use its command-line
+generators, you can either run MAS at a terminal and use its command-line
 interface directly or you can run the macl (if you have Python installed)
 or the maclj script.
+@end:linux
+@begin:windows
+To access the MAS functionality for creating new indicators or new event
+generators, you can use the command-line interface to the server by
+double-clicking on the "MAS Command Line" icon, after
+starting the server.
+@end:windows
 
-
-LICENSE
+%hdg1License
 
 The Market Analysis System is copyrighted free software, released under
 the Eiffel Forum License.  See the file forum.txt for the contents of
 the license.
-
+%par
 This software is OSI Certified Open Source Software.  OSI Certified is
 a certification mark of the Open Source Initiative.
-
+%par
 (A list of current OSI-approved licenses can be found at:
 http://www.opensource.org/licenses/index.html.)
-
+%par
 Note: This product includes EiffelBase software from Interactive Software
 Engineering, used according to the terms of the ISE Free Eiffel Library
 License (IFELL). See http//www.eiffel.com and, for the license terms,
 http://eiffel.com/products/base/license.html.
 
-CONTACT INFORMATION
+%hdg1Contact Information
 
 If you have problems or questions about MAS or want to give feedback or
 suggestions (requests for new features, etc.), you are welcome to email
 me at:
-
+%par
 jtc@dimensional.com
-
+%par
 Make sure you include mas or MAS in the subject line to get past my
-spam filter.  I will try my best to respond promptly.  If you do email
+spam filter.
+@begin:linux
+I will try my best to respond promptly.  If you do email
 me about a problem, please include as much background information as
 possible with your email, including, if possible, a precise description
 of what you were doing when the problem occurred.
+@end:linux
