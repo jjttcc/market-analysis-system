@@ -27,6 +27,7 @@ feature {NONE} -- Hook routines
 			readcmd: POLL_COMMAND
 			factory_builder: FACTORY_BUILDER
 		do
+--!!!!!!!!!!!!Remove soon:
 test_date
 			create poller.make_read_only
 			create factory_builder.make
@@ -56,6 +57,7 @@ test_date
 			end
 		end
 
+--!!!!!!!!!!!!Remove soon:
 test_date is
  local
 	 ds: expanded DATE_TIME_SERVICES
