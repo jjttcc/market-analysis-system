@@ -254,6 +254,23 @@ feature -- Access
 		require
 			d_exists: d /= Void
 			valid_duration: valid_duration (d)
+		do
+			Result := closest_period_type_for_duration (d)
+			if Result /= Void and then not equal (Result.duration, d) then
+				Result := Void
+			end
+		ensure
+			durations_match_if_found: Result /= Void implies
+				equal (Result.duration, d)
+		end
+
+--!!REmove:
+	old_period_type_with_duration (d: DATE_TIME_DURATION): TIME_PERIOD_TYPE is
+			-- Period type whose duration matches `d' - Void if there
+			-- is no such period type.
+		require
+			d_exists: d /= Void
+			valid_duration: valid_duration (d)
 		local
 			types: LINEAR [TIME_PERIOD_TYPE]
 		do
@@ -435,11 +452,8 @@ feature -- Basic operations
 			t: TIME_PERIOD_TYPE
 		do
 			create t.make (d)
-			-- Since these 'lists' are actually once functions, the
-			-- new datum needs to be appended as if they were attributes.
-			-- Note: period_types_in_order is not appended to because
-			-- its semantics don't allow for holding non-standard
-			-- period types.
+			-- Since these 'lists' are actually once functions, the new datum
+			-- needs to be appended to them as if they were attributes.
 			check
 				not intraday_period_types.has (t.name)
 			end
