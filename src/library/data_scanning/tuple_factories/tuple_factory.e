@@ -3,8 +3,9 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-deferred class 
-	TUPLE_FACTORY
+deferred class TUPLE_FACTORY inherit
+
+	FACTORY
 
 feature -- Access
 
@@ -12,7 +13,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	execute is
+	execute (arg: ANY) is
 			-- Manufacture a tuple
 		deferred
 		end
