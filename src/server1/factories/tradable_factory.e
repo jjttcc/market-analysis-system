@@ -1,7 +1,7 @@
 indexing
 	description: "Factory class that manufactures TRADABLEs"
-	note: "input_file must be set (non-Void) before execute is called."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	note: "input must be set (non-Void) before execute is called."
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -25,8 +25,8 @@ feature -- Initialization
 			field_separator := "%T"
 			time_period_type := period_types @ (period_type_names @ Daily)
 		ensure
-			daily_type: time_period_type.name.is_equal ((
-				period_type_names @ Daily))
+			daily_type: time_period_type.name.is_equal (
+				period_type_names @ Daily)
 			fs_tab: field_separator.is_equal ("%T")
 		end
 
@@ -35,8 +35,8 @@ feature -- Access
 	product: TRADABLE [BASIC_MARKET_TUPLE]
 			-- Result of execution
 
-	input_file: FILE
-			-- File containing data to be scanned into tuples
+	input: BILINEAR_INPUT_SEQUENCE
+			-- Input sequence containing data to be scanned into tuples
 
 	symbol: STRING
 			-- Symbol to give the newly created tradable
@@ -47,7 +47,7 @@ feature -- Access
 		end
 
 	field_separator: STRING
-			-- Field separator to expect while scanning input_file
+			-- Field separator to expect while scanning input
 
 	time_period_type: TIME_PERIOD_TYPE
 			-- The period type, such as daily, that will be assigned
@@ -76,11 +76,11 @@ feature -- Basic operations
 			error_occurred := false
 			make_product
 			check value_setters.count > 0 end
-			!!scanner.make (product, input_file, tuple_maker, value_setters)
+			!!scanner.make (product, input, tuple_maker, value_setters)
 			if not scanner.field_separator.is_equal (field_separator) then
 				scanner.set_field_separator (field_separator)
 			end
-			-- Input data from input_file and stuff it into product.
+			-- Input data from input and stuff it into product.
 			scanner.execute
 			add_indicators (product, indicators)
 			check
@@ -106,14 +106,14 @@ feature -- Status setting
 			no_open_set: no_open = arg
 		end
 
-	set_input_file (arg: FILE) is
-			-- Set input_file to `arg'.
+	set_input (arg: like input) is
+			-- Set input to `arg'.
 		require
-			open_for_reading: arg /= Void and arg.exists and arg.is_open_read
+			open_for_reading: arg /= Void
 		do
-			input_file := arg
+			input := arg
 		ensure
-			input_file_set: input_file = arg and input_file /= Void
+			input_set: input = arg and input /= Void
 		end
 
 	set_symbol (arg: STRING) is
