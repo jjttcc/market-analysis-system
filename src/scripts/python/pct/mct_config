@@ -1,0 +1,35 @@
+# MAS Control Terminal configuration settings
+separator=;
+terminal_name;MAS Control Panel
+# This terminal needs a quit button:
+quitbutton;
+# subterminal for mas server process
+begin subterminal
+# Python module import specification:
+import_module;mas_tools
+prompt;Start a MAS server
+# Command to start the subprocess:
+startup_cmd;start_server
+config_file_name;server_ct_config
+end subterminal
+# subterminal for connecting with a running MAS server
+begin subterminal
+import_module;mas_tools
+prompt;Connect to a running MAS server
+# Command to start the subprocess:
+startup_cmd;start_client
+end subterminal
+# subterminal for terminating a server
+begin subterminal
+import_module;mas_tools
+prompt;Terminate a Server
+# Command to start the subprocess:
+startup_cmd;terminate_server
+end subterminal
+# subterminal for mas GUI
+begin subterminal
+import_module;mas_tools
+prompt;Start a GUI
+# Command to start the subprocess:
+startup_cmd;start_gui
+end subterminal
