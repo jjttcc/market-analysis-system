@@ -26,7 +26,7 @@ feature -- Initialization
 
 	make is
 		do
-			!!output.make (100) -- !!What size to use here?
+			!!output.make (100) -- !!!What size to use here?
 		end
 
 feature -- Access
