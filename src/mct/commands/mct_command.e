@@ -18,6 +18,13 @@ feature -- Access
 	description: STRING
 			-- Description of the command
 
+	contents: STRING is
+			-- Contents of the command to be executed
+		deferred
+		ensure
+			exists: Result /= Void
+		end
+
 feature -- Status report
 
 	arg_mandatory: BOOLEAN is
