@@ -27,7 +27,7 @@ feature {NONE}
 
 	make_product is
 		do
-			!!product.make ("symbol goes here")
+			!!product.make ("symbol goes here", time_period_type)
 		end
 
 	index_vector: ARRAY [INTEGER] is

@@ -10,44 +10,43 @@ deferred class TRADABLE_FACTORY inherit
 			product
 		end
 
+	GLOBAL_SERVICES
+
 feature -- Initialization
 
 	make (in_file: FILE) is
 		require
-			not_void: in_file /= Void and in_file.exists and
-						in_file.is_open_read
+			open_for_reading: in_file /= Void and in_file.exists and
+								in_file.is_open_read
 		do
 			field_separator := "%T"
 			input_file := in_file
+			time_period_type := period_types @ "daily"
 		ensure
+			daily_type: time_period_type.name.is_equal ("daily")
 			fs_tab: field_separator.is_equal ("%T")
 			set: input_file = in_file and input_file /= Void
 		end
 
-feature -- Basic operations
+feature -- Access
 
-	execute (in_file: FILE) is
-			-- If in_file is not void and is open for reading, it will
-			-- be used for input instead of what passed to make.
-		local
-			scanner: MARKET_TUPLE_DATA_SCANNER
-		do
-			if
-				in_file /= Void and in_file.exists and in_file.is_open_read
-			then
-				input_file := in_file
-			end
-			make_product
-			check value_setters.count > 0 end
-			!!scanner.make (input_file, tuple_maker, value_setters,
-			 				field_separator, "%N")
-			-- Input data from input_file and stuff it into product.
-			scanner.set_product_instance (product)
-			scanner.execute (Void)
-			product := scanner.product
-			-- Create a bunch of market functions and insert them into product.
-			add_indicators (product)
+	product: TRADABLE [BASIC_MARKET_TUPLE]
+			-- Result of execution
+
+	input_file: FILE
+			-- File containing data to be scanned into tuples
+
+	tuple_maker: BASIC_TUPLE_FACTORY is
+			-- Factory to create the appropriate type of tuples
+		deferred
 		end
+
+	field_separator: STRING
+			-- Field separator to expect while scanning input_file
+
+	time_period_type: TIME_PERIOD_TYPE
+			-- The period type, such as daily, that will be assigned
+			-- to the manufactured tradable
 
 feature -- Status report
 
@@ -69,21 +68,36 @@ feature -- Status setting
 			no_open_set: no_open = arg and no_open /= Void
 		end
 
-feature -- Access
+feature -- Basic operations
 
-	product: TRADABLE [BASIC_MARKET_TUPLE]
-			-- Result of execution
-
-	input_file: FILE
-			-- File containing data to be scanned into tuples
-
-	tuple_maker: BASIC_TUPLE_FACTORY is
-			-- Factory to create the appropriate type of tuples
-		deferred
+	execute (in_file: FILE) is
+			-- If in_file is not void and is open for reading, it will
+			-- be used for input instead of what passed to make.
+		local
+			scanner: MARKET_TUPLE_DATA_SCANNER
+		do
+			if
+				in_file /= Void and in_file.exists and in_file.is_open_read
+			then
+				input_file := in_file
+			end
+			make_product
+			check value_setters.count > 0 end
+			!!scanner.make (product, input_file, tuple_maker, value_setters)
+			if not scanner.field_separator.is_equal (field_separator) then
+				scanner.set_field_separator (field_separator)
+			end
+			-- Input data from input_file and stuff it into product.
+			scanner.execute (Void)
+			check
+				product_set_to_scanner_result: product = scanner.product
+			end
+			-- Create a bunch of market functions and insert them into product.
+			add_indicators (product)
+		ensure then
+			product_not_void: product /= Void
+			product_type_set: product.trading_period_type = time_period_type
 		end
-
-	field_separator: STRING
-			-- Field separator to expect while scanning input_file
 
 feature -- Element change
 
@@ -95,6 +109,17 @@ feature -- Element change
 			input_file := arg
 		ensure
 			input_file_set: input_file = arg and input_file /= Void
+		end
+
+	set_time_period_type (arg: TIME_PERIOD_TYPE) is
+			-- Set time_period_type to `arg'.
+		require
+			arg /= Void
+		do
+			time_period_type := arg
+		ensure
+			time_period_type_set: time_period_type = arg and
+				time_period_type /= Void
 		end
 
 	set_field_separator (arg: STRING) is
