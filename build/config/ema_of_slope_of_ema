@@ -1,0 +1,31 @@
+# Slope of EMA and EMA of Slope of EMA indicators
+e
+c
+ONE_VARIABLE_FUNCTION
+c
+Slope of EMA
+Exponential Moving Average
+y
+SLOPE_ANALYZER
+d
+y
+Exponential Moving Average
+y
+s
+c
+EXPONENTIAL_MOVING_AVERAGE
+c
+EMA of Slope of EMA
+Slope of EMA
+y
+BASIC_LINEAR_COMMAND
+c
+Slope of EMA
+y
+MA_EXPONENTIAL
+c
+2
+7
+s
+-
+x

@@ -1,0 +1,77 @@
+# EMA of Slope of EMA Close to Zero indicator and two indicators used
+# to make it: EMA of Slope of EMA Greater Than -0.25 and
+# EMA of Slope of EMA Less Than 0.25
+# It adds the two indicators: when total is 0, EMA of Slope of EMA is
+# close to 0 (>-.25 and <.25); otherwise, the total is 1.
+e
+c
+ONE_VARIABLE_FUNCTION
+c
+# Will be 0 if true, otherwise 1
+EMA of Slope of EMA Greater Than -0.25
+EMA of Slope of EMA
+y
+BOOLEAN_NUMERIC_CLIENT
+c
+GT_OPERATOR
+c
+BASIC_LINEAR_COMMAND
+c
+EMA of Slope of EMA
+y
+CONSTANT
+c
+-0.25
+CONSTANT
+c
+0
+CONSTANT
+c
+1
+s
+c
+ONE_VARIABLE_FUNCTION
+c
+# Will be 0 if true, otherwise 1
+EMA of Slope of EMA Less Than 0.25
+EMA of Slope of EMA
+y
+BOOLEAN_NUMERIC_CLIENT
+c
+LT_OPERATOR
+c
+BASIC_LINEAR_COMMAND
+c
+EMA of Slope of EMA
+y
+CONSTANT
+c
+0.25
+CONSTANT
+c
+0
+CONSTANT
+c
+1
+s
+c
+TWO_VARIABLE_FUNCTION
+c
+EMA of Slope of EMA Close to Zero
+EMA of Slope of EMA Greater Than -0.25
+y
+EMA of Slope of EMA Less Than 0.25
+y
+ADDITION
+c
+BASIC_LINEAR_COMMAND
+c
+EMA of Slope of EMA Greater Than -0.25
+y
+BASIC_LINEAR_COMMAND
+c
+EMA of Slope of EMA Less Than 0.25
+y
+s
+-
+x

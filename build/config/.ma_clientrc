@@ -1,6 +1,6 @@
 # Format: 'keyword<tab>f1<tab>f2...'
 # Daily start and end date settings (use 'now' for the current date)
-#start_date	daily	1999/12/01
+#start_date	daily	2000/01/01
 start_date	daily	now - 9 months
 end_date	daily	now
 # Intraday start and end date settings (use 'now' for the current date)
@@ -36,6 +36,9 @@ lower_indicator	Momentum	oliveGreen
 lower_indicator	Rate of Change	darkGray
 lower_indicator	Williams %R	yellow
 lower_indicator	Relative Strength Index	red
+lower_indicator	Slope of MACD Signal Line Trend	green
+lower_indicator	Slope of Slope of MACD Signal Line Trend	blue
+lower_indicator	[Slope of MACD, Slope of Slope of MACD] Trend	red
 lower_indicator	No lower indicator
 lower_indicator	No upper indicator
 # Horizontal and vertical line configurations - specifies horizontal
@@ -71,6 +74,11 @@ indicator_line_h	Momentum	0 0
 indicator_line_h	Rate of Change	1 1
 indicator_line_h	Relative Strength Index	30 30
 indicator_line_h	Relative Strength Index	70 70
+indicator_line_h	[Slope of MACD, Slope of Slope of MACD] Trend	0 0
+indicator_line_h	[Slope of MACD, Slope of Slope of MACD] Trend	1 1
+indicator_line_h	[Slope of MACD, Slope of Slope of MACD] Trend	-1 -1
+indicator_line_h	Slope of MACD Signal Line Trend	0 0
+indicator_line_h	Slope of Slope of MACD Signal Line Trend	0 0
 # indicator_line_v	Indicator name	50 50
 # color settings - Valid colors are:
 # white, lightGray, gray, darkGray, black, red, pink, orange, yellow, green,
@@ -107,6 +115,9 @@ MACD Signal Line (EMA of MACD Difference)
 MACD Histogram
 Slope of MACD Signal Line
 Slope of Slope of MACD Signal Line
+Slope of MACD Signal Line Trend
+Slope of Slope of MACD Signal Line Trend
+[Slope of MACD, Slope of Slope of MACD] Trend
 end_block
 indicator_group
 EMA of Volume
