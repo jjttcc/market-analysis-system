@@ -1,0 +1,18 @@
+Tips for Constructing Technical Analysis Indicators
+
+
+When you are constructing the operator tree for an indicator and you want
+to use a COMMAND_SEQUENCE but it doesn't appear in the current command
+selection list, choose a NUMERIC_VALUED_COMMAND_WRAPPER.  You can then
+select a COMMAND_SEQUENCE as the NUMERIC_VALUED_COMMAND_WRAPPER's
+"operand".
+
+When you have attempted to construct an indicator with a complex operator
+tree and want to view the operator tree to make sure it looks right, run
+the mas server with the -debug option and execute the indicator on any
+tradable.  Start the server such that the stdout and stderr is captured
+into a file.  (On UNIX systems, the script command can be used for this.)
+The debugging output resulting from processing the indicator will include
+a report of the operator tree state for each period.  You can simply view
+the report for the first period, which prints the structure of the operator
+tree.
