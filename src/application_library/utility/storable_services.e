@@ -129,7 +129,7 @@ feature {NONE} -- Implementation
 					show_message ("Continuing - changes will not be saved.%N")
 				end
 			end
-			if not abort_edit then
+			if not abort_edit or working_list = Void then
 				retrieve_persistent_list
 				initialize_working_list
 			end
