@@ -43,16 +43,6 @@ feature -- Initialization
 
 feature -- Access
 
-    input_entity_names: LIST [STRING] is
-            -- List of all specified input data sources
-		do
-			if command_line_options.use_db then
-				Result := command_line_options.symbol_list
-			else
-				Result := command_line_options.file_names
-			end
-		end
-
 	market_list_handler: TRADABLE_LIST_HANDLER
 			-- Manager of all available market lists
 
@@ -62,72 +52,30 @@ feature -- Access
 feature {NONE}
 
 	set_up is
-			-- Build components and set up relationships, including
-			-- making a factory list for each market_list.  (For now, these
-			-- will all be STOCK_FACTORYs.)
-		local
-			i: INTEGER
-			tradable_factories: LINKED_LIST [TRADABLE_FACTORY]
-			tradable_factory: TRADABLE_FACTORY
+			-- Build components and set up relationships.
 		do
-			!STOCK_FACTORY!tradable_factory.make
-			tradable_factory.set_no_open (
-				not command_line_options.opening_price)
-			if command_line_options.field_separator /= Void then
-				tradable_factory.set_field_separator (
-					command_line_options.field_separator)
-			end
-			if command_line_options.record_separator /= Void then
-				tradable_factory.set_record_separator (
-					command_line_options.record_separator)
-			else
-				-- Default to newline.
-				tradable_factory.set_record_separator ("%N")
-			end
-			if command_line_options.strict then
-				tradable_factory.set_strict_error_checking (true)
-			end
 			check
 				flist_not_void: function_library /= Void
 			end
 			-- (If function_library does not contain the hard-coded functions,
 			-- make them and append them to function_library.)
 			append_hard_coded_functions_to_library
-			tradable_factory.set_indicators (function_library)
-			!!tradable_factories.make
-			-- Add a factory for each input entity.  Since some entities
-			-- may be for different types of markets, in the future,
-			-- different types of factories may be created and
-			-- added to the tradable_factories list.
-			from i := 1 until i = input_entity_names.count + 1 loop
-				tradable_factories.extend (tradable_factory)
-				i := i + 1
-			end
-			check
-				same_count: tradable_factories.count = input_entity_names.count
-			end
-			build_components (tradable_factories)
+			build_components
 		end
 
-	build_components (tradable_factories: LINKED_LIST [TRADABLE_FACTORY]) is
+	build_components is
 		local
 			dispatcher: EVENT_DISPATCHER
-			intraday_market_list: TRADABLE_LIST
-			daily_market_list: TRADABLE_LIST
+			list_builder: TRADABLE_LIST_BUILDER
 		do
-			if command_line_options.use_db then
-				create {DB_TRADABLE_LIST} daily_market_list.make (
-					input_entity_names, tradable_factories)
-			else
-				create {FILE_TRADABLE_LIST} daily_market_list.make (
-					input_entity_names, tradable_factories)
-			end
-			-- Intraday list is Void for now.
-			create market_list_handler.make (daily_market_list, Void)
+			create list_builder.make (function_library)
+			list_builder.execute
+			market_list_handler := list_builder.product
 			create dispatcher.make
 			register_event_registrants (dispatcher)
 			create {MARKET_EVENT_COORDINATOR} event_coordinator.make (
-				active_event_generators, daily_market_list, dispatcher)
+				active_event_generators,
+				market_list_handler.daily_market_list, dispatcher)
 		end
 
 	register_event_registrants (dispatcher: EVENT_DISPATCHER) is
@@ -159,7 +107,7 @@ feature {NONE} -- Administrative
 			then
 				-- !!!May need to lock this section (or whatever the mechanism
 				-- is) to protect `function_library' if threads are used.
-				!!hc_function_factory.make
+				create hc_function_factory.make
 				-- Create the list of technical indicators,
 				hc_function_factory.execute
 				from
@@ -216,7 +164,7 @@ feature {NONE} -- Administrative
 			fl: LINKED_LIST [MARKET_FUNCTION]
 			hc_function_factory: HARD_CODED_FUNCTION_BUILDER
 		do
-			!!hc_function_factory.make
+			create hc_function_factory.make
 			hc_function_factory.execute
 			from
 				l := hc_function_factory.product
