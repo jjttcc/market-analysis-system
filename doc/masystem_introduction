@@ -38,8 +38,10 @@ you will need to use MAS's stock-split adjustment facility to incorporate
 stock-split adjustments for each stock data-set processed by MAS.
 The MAS server can obtain the data it needs for stock splits either from
 a file or from a database.
+@begin:linux
 (See *^fontIUsing MAS with a Database Management System on Linux*^fontP
 for a description of how to use MAS with a database system.)
+@end:linux
 If you are not using MAS with a database
 system, you will probably want to create a file with the required stock
 split information.
