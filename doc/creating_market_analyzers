@@ -27,6 +27,8 @@ spikes.  This can be useful to detect stocks where a volume spike precedes
 a strong price breakout, which sometimes happens when knowledgeable
 investors act on news not yet readily available to the public.
 
+Note that after creating an indicator you will need to save (the s option)
+the indicator before exiting the market analyzer editing menu.
 
 Example 1:  Stochastic %D Cross-below 35%
 
@@ -276,3 +278,80 @@ the main menu - before you can receive signals for this new event.)
 Whenever you add a new market analyzer, you should do some testing on it
 to make sure that it does what you intended it to do.  This is also true
 for new technical indicators.
+
+
+Example 5:  [Slope of MACD, Slope of Slope of MACD] Trend Analyzers
+
+This set of market analyzers will use the indicator from Example 8 of the
+creating_indicators document, which combines the Slope of MACD Signal Line
+(SMSL) and the Slope of Slope of MACD Signal Line (SSMSL).  The basic logic
+is that when both the SMSL and the SSMSL are above 0, the market is trending
+upward; and when they are both below 0, the market is trending downward.
+When one is above and one below 0, the market is either going sideways or
+it is not trending as strongly and is filtered out.  (Since the SSMSL is more
+sensitive than the SMSL, when both indicators are above 0, the SSMSL will,
+when the trend starts to weaken, cross below 0 before the SMSL and thus
+cancel the Buy condition.  This is, of course, mirrored for sell conditions.
+This helps filter out trades that are mediocre because the trend is not
+strong or is weakening.)
+
+The indicator from Example 8 (which I currently call in my system the
+[Slope of MACD, Slope of Slope of MACD] Trend) can be used to detect when
+the SMSL and the SSMSL are above or below 0: when the [Slope of MACD,
+Slope of Slope of MACD] Trend is positive (2), both the SMSL and the SSMSL
+are above 0.  When it is negative (-2), both are below 0.  And when it
+is 0, SMSL and SSMSL oppose each other - one is negative and one positive.
+We can use the fact that the [Slope of MACD, Slope of Slope of MACD] Trend
+goes from -2 to 2 or from 0 to 2 (Buy) and from 2 to -2 or from 0 to -2
+(Sell) and from -2 to 0 or 2 to 0 (Sidelined) to create our signal by
+specifying that a buy signal is sent when the line crosses above 1 and a
+sell signal is sent when the line crosses below -1 and is sidelined when
+the line goes to 0.
+
+We will start with the Sell indicator - the [Slope of MACD, Slope of Slope
+of MACD] Trend crosses below -1.  Select "Simple" for the analyzer type.
+Specify that it will use two technical indicators.  For the left indicator
+pick [Slope of MACD, Slope of Slope of MACD] Trend (or whatever you
+named the indicator when you created it).  For the right indicator pick
+Line.  For Line's starting y value enter -1.  For Line's slope enter 0
+(it is horizontal).
+
+This is a long-term indicator (to be used in combination with a shorter-
+term indicator), so choose weekly as the period type (when your shorter-
+term indicator is daily).  Select "above-to-below" for the crossover
+specification.  (You want to know when the line crosses from above to
+below -1.)  No operator is needed.
+
+Choose a good name, such as "[Slope of MACD, Slope of Slope of MACD]
+Downtrend".
+
+To create the buy version of the market analyzer, simply repeat the same
+steps as above, except choose 1 as Line's starting y value and
+"below-to-above" for the crossover specification.
+
+We will need two market analyzers to signal when a market needs to be
+sidelined, one to detect when the indicator moves from 2 to 0 and one to
+detect when the indicator moves from -2 to 0.
+
+For the 2 to 0 analyzer, choose a simple analyzer.  Choose two indicators.
+Select [Slope of MACD, Slope of Slope of MACD] Trend as the left indicator.
+Choose Line as the right indicator.  For Line's y value select 1 and for
+the slope, choose 0.
+
+Select weekly as the trading period type.  Select above-to-below for the
+crossover specification.  You will need an operator to specify that when
+the line crosses below 1 it is greater than -1 (that is, it is 0).  When
+asked if the operator should operate on the left or right function, select
+the left function.  (We want to know if the [Slope of MACD, Slope of Slope
+of MACD] Trend, the left function, is greater than -1.)
+
+For the root operator, select GT_OPERATOR.  For the left operand, choose
+BASIC_NUMERIC_COMMAND, which will obtain the value of the underlying
+function for the current period.  For the right operand, select CONSTANT
+and give it the value -1.  Choose a good name, such as "[Slope of MACD,
+Slope of Slope of MACD] Sidelined - 2 to 0".
+
+For the -2 to 0 analyzer, follow the same steps as the 2 to 0 analyzer,
+but select -1 for the Line's y value, select below-to-above for the
+crossover detection, select LT_OPERATOR as the root operator, select
+1 for the CONSTANT's value, and choose an appropriate name.

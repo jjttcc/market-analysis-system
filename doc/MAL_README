@@ -4,7 +4,11 @@ the following files:
 
     README - This file
 
+    README_compile - Instructions on now to compile the MAS server
+
     MAL_design_document - Documentation of the design of MAL
+
+    MAS_design_document - Documentation of the design of the MAS server
 
     eiffel_library_document - Documentation of the Eiffel Component Library,
         used by MAL

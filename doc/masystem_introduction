@@ -1,4 +1,4 @@
-Brief Introduction to the Market Analysis System
+BRIEF INTRODUCTION TO THE MARKET ANALYSIS SYSTEM
 
 The Market Analysis System (MAS) is a client/server application that
 provides tools for analysis of financial markets, with the goal of
@@ -24,13 +24,21 @@ which includes UNIX, Windows, and Macintosh systems.
 See the file "feature_list" for list of features provided by the Market
 Analysis System client and server.
 
+Note: The term {mas_dir}, used below, stands for the directory into which
+you installed MAS.
+
+RUNNING MAS
+
 Note that before running the Market Analysis Server for the first time,
 you will need to set up a few environment variables for it.  See the
-file env_settings for an explanation of these variables.  Also,
+file environment for an explanation of these variables.  Also,
 the current version of MAS supports any data format that includes
 volume.  Open interest is not supported in the current version.
 The expected order of fields, when opening price is included is:
 date,open,high,low,close,volume.
+
+Note that there are some sample data files in {mas_dir}/lib/data that
+you can use to begin with.
 
 There are currently two main ways to use MAS: by running the server
 and the GUI client to view charts of markets; and by running the server
@@ -42,7 +50,7 @@ files whose names follow the format *.txt:
 
 mas -o -f , *.txt -b 13579 &
 
-The -o tells the server that all data files include an opening price;
+The -o tells the server that the data files include an opening price;
 the "-f ," tells the server that the character used to separate fields
 in the data file is ','.  (The default is tab.)  *.txt, of course,
 passes all file names in the current directory that end in .txt to
@@ -55,9 +63,6 @@ Once you have started the server, you can start a GUI client from the
 command line by changing the current directory to:
 
 {mas_dir}/lib/classes
-
-(where {mas_dir} stands for the directory into which you installed MAS)
-and issuing the command:
 
 java MA_Client hostname port_number
 
@@ -83,6 +88,16 @@ magc -h boston.com 13579
 when the server is running on a machine named boston.com.
 
 See the file GUI_introduction for more information on running the GUI client.
+
+You can also run the server on intraday data.  One intradata data file
+is included in {mas_dir}/lib/data: ibm.5-minute, 5-minute data for IBM.
+(Note that this is artificial - made-up - data, since real intraday data
+is expensive.)  You can run the server on the daily and intraday data
+for IBM with:
+
+mas -o -f , 2425 -b -d txt -i 5-minute ibm.* &
+
+Then start the GUI the same way as before.
 
 
 [1] For those not familiar with technical analysis, it is a set of

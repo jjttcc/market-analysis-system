@@ -51,6 +51,9 @@ directory.)  The following settings are configurable:
   - Specification of colors to be used for candles, sticks, bars, text,
     and lines.
 
+  - Groupings of indicators to allow a set of indicators to be displayed
+    in the same scale.
+
 The default .ma_clientrc file has comments (lines starting with #) that
 explain the different specifications and their format.
 

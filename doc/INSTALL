@@ -21,6 +21,21 @@ which to place the library files (including the Java class files for the
 MAS GUI).  Again, you can either accept the default choice by hitting
 <Enter>, or you can enter an absolute path of an appropriate directory.
 
+The script will also check if the dynamic libraries it needs can be
+found.  Any library it reports as not being found you will need to
+obtain and install.  MAS depends on an ODBC library, libodbc.so.1, that
+is not part of the standard Linux distribution.  If this library is
+reported missing, I have included a copy in the MAS distribution, which
+you will find in the lib directory you chose for MAS's library files.
+If this library does not work for you, for some reason, you may be able
+to find one that does work on your system at:
+  http://rpmfind.net/linux/rpm2html/search.php?query=libodbc.so.1
+(This site was alive and valid as of Jan. 18, 2001.)
+
+Note that if you have an older version of MAS installed in the same
+location you choose to install the new version, the old MAS files will
+be replaced by the new ones.
+
 If it is not already, you will need to make sure that the bin directory
 you installed to is included in your path.
 
@@ -74,6 +89,7 @@ configure it.)  Eirik has provided a short document, mas_odbc_usage.txt in
 the doc directory, with instructions on how to configure MAS to work with
 ODBC.
 
+
 GENERAL INSTALLATION INSTRUCTIONS
 
 After installation, you should read the file doc/environment for
@@ -103,3 +119,38 @@ some sample stock split data in the required format.
 To test that the installation succeeded, you can run mas on the example data
 files in lib/data.  (See the file doc/masystem_introduction for instructions
 on how to start mas.)
+
+
+USING MAS WITH A DATABASE MANAGEMENT SYSTEM ON LINUX
+
+If you have a DBMS with ODBC support, you may be able to store your data in
+a database and have MAS obtain its market data from there instead of from
+files.  I have MAS set up on my system to talk to a Postgres database using
+unixODBC, a package for Linux and UNIX systems.  unixODBC is available at
+http://www.unixodbc.org/.
+
+To configure MAS to connect to a database, you will first need to
+create a database and the necessary tables to store market data.
+(I have included some scripts I use to create tables in the scripts
+package (in the src/scripts/database/postgres directory), which you
+can use for suggestions as to needed table structures, if you wish.)
+And you will need to make sure that your ODBC libraries and drivers are
+installed and a data source name configured for the MAS database.
+
+Once the database is created and ODBC configured properly, you will need
+to create a database configuration file for MAS.  The default name for
+this file is mas_dbrc.  This file will need to reside in the directory
+specified by the MAS_DIRECTORY environment variable.
+
+The mas_dbrc file contains settings that tell MAS how to query for the
+data it needs.  For example, it tells MAS the name of the table in
+which daily stock data is stored.
+
+I have included the mas_dbrc file I use on my system in the MAS package.
+You will find it in the lib/database directory.  The file is commented and,
+hopefully, you will be able to figure out from the settings and
+comments in the file how to set it up for your particular system
+configuration.
+
+Once you have everything set up properly, you can start MAS and use the -p
+option to tell it to use the database for its data.

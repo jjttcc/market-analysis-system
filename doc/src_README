@@ -13,3 +13,6 @@ This directory contains the following subdirectories:
        Library and the Market Analysis Server
 
     eiffel_library - Eiffel component library
+
+For instructions on how to compile the MAS server, see the file
+./doc/README_compile.
