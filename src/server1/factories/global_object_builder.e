@@ -104,7 +104,7 @@ feature {NONE}
 			dispatcher: EVENT_DISPATCHER
 		do
 			if command_line_options.use_db then
-				create {DB_TRADABLE_LIST} market_list.make (
+				create {TRADABLE_LIST} market_list.make (
 					input_entity_names, tradable_factories)
 			else
 				create {FILE_TRADABLE_LIST} market_list.make (
