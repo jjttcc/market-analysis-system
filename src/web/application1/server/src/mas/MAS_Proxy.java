@@ -52,7 +52,7 @@ public class MAS_Proxy implements AssertionConstants {
 		assert r != null: PRECONDITION;
 		error_ = false;
 		response_ = "";
-		client_request = Utilities.input_string(r);
+		client_request = Utilities.input_string(r, false);
 		connection.open();
 		PrintWriter writer = null;
 		try {
@@ -82,7 +82,7 @@ public class MAS_Proxy implements AssertionConstants {
 		try {
 			reader = new BufferedReader(new InputStreamReader(
 				new BufferedInputStream(connection.input_stream())));
-			response_ = Utilities.input_string(reader);
+			response_ = Utilities.input_string(reader, false);
 			if (response_ == null || response_.length() == 0) {
 				response_ = "(Server returned empty message.)";
 			}
