@@ -138,7 +138,8 @@ feature {NONE} -- Hook routine implementation
 			if operator.value then
 				ev_desc := concatenation (<<"Event for ", period_type.name,
 					" trading period with indicator ",
-					input.name, ", value: ", target.item.value>>)
+					input.name, " (%N", input.full_description, ")%N",
+					", value: ", target.item.value>>)
 				generate_event (target.item.date_time,
 								"Single-indicator event", ev_desc)
 			end

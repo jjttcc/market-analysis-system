@@ -167,8 +167,10 @@ feature {NONE} -- Hook routine implementation
 						generate_event (target1.item.date_time, "crossover",
 							concatenation (<<"Crossover event for ",
 							period_type.name,
-							" trading period with indicators ", input1.name,
-							" and ", input2.name, ", values: ",
+							" trading period with indicators:%N", input1.name,
+							" (", input1.full_description, ") and%N",
+							input2.name, " (", input2.full_description, ")%N",
+							", values: ",
 							target1.item.value, ", ", target2.item.value>>))
 					end
 					target1_above := false
@@ -187,8 +189,10 @@ feature {NONE} -- Hook routine implementation
 						generate_event (target1.item.date_time, "crossover",
 							concatenation (<<"Crossover event for ",
 							period_type.name,
-							" trading period with indicators ", input1.name,
-							" and ", input2.name, ", values: ",
+							" trading period with indicators:%N", input1.name,
+							" (", input1.full_description, ") and%N",
+							input2.name, " (", input2.full_description, ")%N",
+							", values: ",
 							target1.item.value, ", ", target2.item.value>>))
 					end
 					target1_above := true
