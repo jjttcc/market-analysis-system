@@ -26,6 +26,7 @@ feature {FACTORY} -- Status setting
 			n := value
 		ensure
 			n_set_to_value: n = value
+			n_gt_0: n > 0
 		end
 
 invariant
