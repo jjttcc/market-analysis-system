@@ -116,7 +116,7 @@ feature -- Access
 				indicators_file_name)
 			if retrieval_failed then
 				if exception = Retrieve_exception then
-					log_errors (<<"Retrieval of function library file ",
+					log_errors (<<"Retrieval of indicator library file ",
 								full_path_name, " failed%N">>)
 				else
 					log_errors (<<"Error occurred while retrieving function %
