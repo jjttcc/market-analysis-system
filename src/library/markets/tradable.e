@@ -4,11 +4,12 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
+deferred class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 
 	SIMPLE_FUNCTION [G]
 		rename
-			make as sf_make
+			make as sf_make, name as function_name,
+			set_name as set_function_name
 		export {NONE}
 			sf_make
 		end
@@ -36,6 +37,11 @@ feature -- Access
 			-- Defaults to name.
 		do
 			Result := name
+		end
+
+	name: STRING is
+			-- The identifying name of the tradable
+		deferred
 		end
 
 	indicators: LIST [MARKET_FUNCTION]
