@@ -11,6 +11,7 @@ import java.util.*;
 import java.io.*;
 import mas_gui.*;
 import support.*;
+import application_support.*;
 
 // The Market Analysis System charting applet
 public class MAS_Applet extends JApplet {
