@@ -75,11 +75,36 @@ feature -- Access
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 		end
 
+	immediate_parameters: LIST [FUNCTION_PARAMETER] is
+		once
+			Result := parameters
+		end
+
 	processed_date_time: DATE_TIME is
 		once
 			-- Very early date
 			create Result.make (1, 1, 1, 0, 0, 0)
 		end
+
+	children: LIST [MARKET_FUNCTION] is
+		once
+			Result := Void
+		end
+
+feature -- Status report
+
+	processed: BOOLEAN is
+			-- Has this function been processed?
+		do
+			Result := true
+		ensure then
+			Result = true
+		end
+
+	loaded: BOOLEAN
+			-- Has `data' been loaded and post-processing completed?
+
+	has_children: BOOLEAN is false
 
 feature {FACTORY} -- Status setting
 
@@ -108,19 +133,6 @@ feature {FACTORY} -- Status setting
 			loaded: loaded
 		end
 
-feature -- Status report
-
-	processed: BOOLEAN is
-			-- Has this function been processed?
-		do
-			Result := true
-		ensure then
-			Result = true
-		end
-
-	loaded: BOOLEAN
-			-- Has `data' been loaded and post-processing completed?
-
 feature {MARKET_FUNCTION} -- Status report
 
 	is_complex: BOOLEAN is false
@@ -135,5 +147,6 @@ feature {NONE} -- Basic operations
 invariant
 
 	period_type_set_when_loaded: loaded implies (trading_period_type /= Void)
+	no_children: not has_children
 
 end -- class SIMPLE_FUNCTION
