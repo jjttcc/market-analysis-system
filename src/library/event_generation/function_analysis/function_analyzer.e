@@ -71,11 +71,6 @@ feature -- Basic operations
 			s: STRING
 			event: ATOMIC_MARKET_EVENT
 		do
-			--!!!Do we need another date/time field in the event, so
-			--!!!that the event generation time, as well as the time
-			--!!!of the tuple that caused the event, are stored?
-			--!!!Or maybe we need a descendant of TYPED_EVENT that also
-			--!!!stores the tuple??
 			!!event.make (name, tradable.symbol, time_stamp, event_type)
 			s := concatenation (<<"Event for market ", tradable.name, ": ">>)
 			description.prepend (s)
