@@ -127,8 +127,6 @@ cluster
 
 	server_global (server):		"$/global"
 
-	server_enums (server):		"$/enums"
-
 	system_specific (server):		"$/system_specific/unix"
 
 	configuration (server):		"$/configuration"
