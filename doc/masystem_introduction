@@ -36,15 +36,12 @@ directory into which you installed MAS.
 If the data you are using is not automatically adjusted for stock splits,
 you will need to use MAS's stock-split adjustment facility to incorporate
 stock-split adjustments for each stock data-set processed by MAS.
-The MAS server can obtain the data it needs for stock splits either from
-a file or from a database.
+If you are using MAS with a database system, the stock split data will
+come from a table in the database.
 @begin:linux
 (See *^fontIUsing MAS with a Database Management System on Linux*^fontP
 for a description of how to use MAS with a database system.)
 @end:linux
-If you are not using MAS with a database
-system, you will probably want to create a file with the required stock
-split information.
 @begin:windows
 %par
 *^fontBNote*^fontP:
@@ -53,7 +50,20 @@ supported feature for the Windows version.
 It may be available in the future.
 @end:windows
 %par
-The format of the stock split file is simple:
+If you are not using MAS with a database
+system, MAS will attempt to obtain the stock split data from a file.
+By default, the file is named mas_stock_splits and resides in
+@begin:linux
+$MAS_DIRECTORY/lib, or, if MAS_DIRECTORY is not set, in the directory
+from which you started the server.
+@end:linux
+@begin:windows
+the lib directory, under the directory into which you installed MAS.
+@end:windows
+If the stock-split data file does not exist, MAS will not perform
+stock-split adjustment.
+%par
+The format of the stock split file is:
 %par
 date[tab]symbol[tab]value
 %par
@@ -94,7 +104,7 @@ date[time],high,low,close,volume,open-interest
 %par
 There are some sample data files in
 @linux{mas_dir}/lib/data/tradables
-@windows{mas_dir}\lib\data\tradables
+@windows{mas_dir}\lib\data
 that you can use to try out MAS.
 %par
 @begin:windows
@@ -136,8 +146,8 @@ mas -o -f , -w -b 13579 &
 Once you have started the server, you can start a GUI client from the
 command line by changing the current directory to:
 %par
-@linux{mas_dir}/lib/data
-@windows{mas_dir}\lib\data
+@linux{mas_dir}/lib/classes
+@windows{mas_dir}\lib\classes
 %par
 and entering the command:
 %par
@@ -180,7 +190,7 @@ See the file GUI_introduction for more information on running the GUI client.
 %par
 You can also run the server on intraday data.  One intraday data file
 is included in
-@linux{mas_dir}/lib/data:
+@linux{mas_dir}/lib/data/tradables:
 @windows{mas_dir}\lib\data:
 ibm.5-minute, 5-minute data for IBM.
 (Note that this is artificial - made-up - data, since real intraday data
