@@ -14,6 +14,8 @@ class INDICATOR_DATA_REQUEST_CMD inherit
 			error_context, send_response_for_tradable, parse_remainder,
 			additional_field_constraints_fulfilled,
 			additional_field_constraints_msg
+--!!!Temporary debugging item:
+,setup_correct_number_of_records_test
 		end
 
 creation
@@ -51,7 +53,11 @@ feature {NONE} -- Hook routine implementations
 			else
 				t.set_target_period_type (trading_period_type)
 				indicator := t.indicators @ indicator_id
-				if not indicator.processed then
+print ("send resp ft - period type: " + trading_period_type.name + "%N")
+				if
+True or --!!!!For experimentation/testing - remove this line soon.
+					not indicator.processed then
+print ("send resp ft - calling 'indicator.process'" + "%N")
 					indicator.process
 				end
 				set_print_parameters
@@ -60,6 +66,11 @@ feature {NONE} -- Hook routine implementations
 				print_indicator (indicator)
 			end
 		end
+
+setup_correct_number_of_records_test (printer: MARKET_TUPLE_PRINTER) is
+do
+	printer.set_period_type_debug (trading_period_type)
+end
 
 	parse_remainder (fields: LIST [STRING]) is
 		do
