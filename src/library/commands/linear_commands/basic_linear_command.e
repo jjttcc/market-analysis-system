@@ -7,24 +7,11 @@ indexing
 
 class BASIC_LINEAR_COMMAND inherit
 
-	NUMERIC_COMMAND
-
-	LINEAR_ANALYZER
+	LINEAR_COMMAND
 
 creation
 
 	make
-
-feature -- Initialization
-
-	make (t: like target) is
-		require
-			t_not_void: t /= Void
-		do
-			set_target (t)
-		ensure
-			target_set: target = t
-		end
 
 feature -- Basic operations
 

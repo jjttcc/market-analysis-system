@@ -5,21 +5,15 @@ indexing
 
 class LINEAR_SUM inherit
 
-	NUMERIC_COMMAND
+	N_RECORD_LINEAR_COMMAND
+		rename
+			offset as internal_index, make as nrlc_make_unused
 		redefine
-			initialize
+			initialize, --!!!???
+			execute,
+			exhausted, action, forth, invariant_value,
+			start
 		end
-
-	LINEAR_ANALYZER
-		export {NONE}
-			all
-				{FACTORY}
-			set_target
-		redefine
-			test, action, forth, invariant_value
-		end
-
-	N_RECORD_STRUCTURE
 
 creation
 
@@ -59,15 +53,6 @@ feature -- Basic operations
 			target.index = old target.index + n
 			-- value = sum (target[old target.index .. old target.index+n-1])
 			int_index_eq_n: internal_index = n
-		end
-
-feature -- Status report
-
-	arg_used: BOOLEAN is
-		do
-			Result := false
-		ensure then
-			not_used: Result = false
 		end
 
 feature {NONE}
@@ -113,14 +98,16 @@ feature {NONE}
 			--   execute is called.
 		end
 
-	test: BOOLEAN is
+	exhausted: BOOLEAN is
 		do
 			Result := internal_index = n
 		end
 
-feature {NONE}
-
-	internal_index: INTEGER
+	start is
+			-- Should never be called.
+		do
+			check false end
+		end
 
 invariant
 

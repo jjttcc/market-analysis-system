@@ -6,26 +6,12 @@ indexing
 
 deferred class N_BASED_CALCULATION inherit
 
-	NUMERIC_COMMAND
+	N_RECORD_COMMAND
 		redefine
-			initialize
-		end
-
-	N_RECORD_STRUCTURE
-		redefine
-			set_n
+			initialize, set_n
 		end
 
 feature {FACTORY} -- Initialization --!!!Check export
-
-	make (i: like n) is
-		require
-			i_gt_0: i > 0
-		do
-			set_n (i)
-		ensure
-			n_set: n = i
-		end
 
 	initialize (s: N_RECORD_STRUCTURE) is
 			-- Initialize value with n from s

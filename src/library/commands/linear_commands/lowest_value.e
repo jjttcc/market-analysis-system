@@ -7,7 +7,7 @@ indexing
 
 class LOWEST_LOW inherit
 
-	N_RECORD_COMMAND
+	N_RECORD_LINEAR_COMMAND
 		redefine
 			start_init, sub_action, target
 		end
