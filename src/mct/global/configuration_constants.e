@@ -28,4 +28,20 @@ feature -- Access
 	End_tag: STRING is "end"
 			-- Tag denoting ending of a "block"
 
+	Windows_platform: STRING is "windows"
+			-- Windows platform indentifier
+
+	Unix_platform: STRING is "unix"
+			-- UNIX platform indentifier
+
+	Slash: STRING is "/"
+			-- Slash character
+
+	Backslash: STRING is "\"
+			-- Backslash character
+
+	Escape_character: STRING is "~"
+			-- "Escape" character - protects the following character from
+			-- being interpreted.
+
 end

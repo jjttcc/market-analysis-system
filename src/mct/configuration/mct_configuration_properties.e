@@ -14,11 +14,15 @@ class MCT_CONFIGURATION_PROPERTIES inherit
 			{NONE} all
 		end
 
-feature -- Constants
+feature -- Access
 
 	Valid_port_numbers_specifier: STRING is "valid_portnumbers"
 
+	Platform_specifier: STRING is "platform"
+
 	Hostname_specifier: STRING is "hostname"
+
+	Environment_variable_specifier: STRING is "environment_variable"
 
 	Port_number_specifier: STRING is "portnumber"
 
@@ -48,7 +52,7 @@ feature -- Constants
 
 	Valid_port_numbers_separator: CHARACTER is ','
 
-	User_definition_separator: CHARACTER is ':'
+	Sub_field_separator: CHARACTER is ':'
 
 	Default_mark: STRING is "default"
 

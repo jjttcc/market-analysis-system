@@ -16,7 +16,7 @@ class MCT_CONFIGURATION inherit
 			{NONE} all
 		redefine
 			post_process_settings, use_customized_setting,
-			do_customized_setting, config_file
+			do_customized_setting, config_file, log_error
 		end
 
 	MCT_CONFIGURATION_PROPERTIES
@@ -24,6 +24,8 @@ class MCT_CONFIGURATION inherit
 	ERROR_PUBLISHER
 		export
 			{NONE} all
+		undefine
+			log_error
 		end
 
 create
@@ -45,9 +47,12 @@ feature {NONE} -- Initialization
 		do
 			create settings.make (0)
 			create start_server_commands.make
+			create error_report.make (0);
 
 			settings.extend ("", Valid_port_numbers_specifier)
+			settings.extend ("", Platform_specifier)
 			settings.extend ("", Hostname_specifier)
+			settings.extend ("", Environment_variable_specifier)
 			settings.extend ("", Start_server_cmd_specifier)
 			settings.extend ("", Start_cl_client_cmd_specifier)
 			settings.extend ("", Chart_cmd_specifier)
@@ -75,6 +80,13 @@ feature -- Access
 	hostname: STRING is
 		do
 			Result := settings @ Hostname_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	platform: STRING is
+		do
+			Result := settings @ Platform_specifier
 		ensure
 			not_void: Result /= Void
 		end
@@ -155,6 +167,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	configuration_type: STRING is "MAS Control Terminal"
 
+
 	post_process_settings is
 		do
 			-- Replace all "non-dynamic" tokens in `user_defined_values'
@@ -210,13 +223,15 @@ feature {NONE} -- Implementation - Hook routine implementations
 			then
 				default_start_server_command := start_server_commands.first
 			end
+			do_platform_conversion
+			remove_escape_characters
 		end
 
 	check_results is
 		do
-			create error_report.make (0);
 			check_for_empty_fields (<<
 				Valid_port_numbers_specifier, Hostname_specifier,
+				Platform_specifier,
 				Start_cl_client_cmd_specifier, Chart_cmd_specifier,
 				Termination_cmd_specifier, Browse_docs_cmd_specifier,
 				Browse_intro_cmd_specifier, Browse_faq_cmd_specifier>>)
@@ -242,7 +257,8 @@ feature {NONE} -- Implementation - Hook routine implementations
 		do
 			if
 				config_file.in_block or config_file.at_end_of_block or
-				equal (key, User_definition_specifier)
+				equal (key, User_definition_specifier) or
+				equal (key, Environment_variable_specifier)
 			then
 				Result := True
 			end
@@ -252,12 +268,35 @@ feature {NONE} -- Implementation - Hook routine implementations
 		do
 			if equal (key, User_definition_specifier) then
 				process_user_definition (value)
+			elseif equal (key, Environment_variable_specifier) then
+				set_environment_variable (value)
 			else
 				check
 					in_or_at_end_of_block:
 						config_file.in_block xor config_file.at_end_of_block
 				end
 				process_block (key, value)
+			end
+		end
+
+	set_environment_variable (value: STRING) is
+			-- Use `Sub_field_separator' to split `value' in two and then
+			-- use the result to set the environment variable specified
+			-- by the left component..
+		local
+			components: CHAIN [STRING]
+			env: expanded EXECUTION_ENVIRONMENT
+		do
+			components := split_in_two (value, Sub_field_separator)
+			if components.count < 2 then
+				error_report.append ("Incorrect format for environment %
+					%variable specification: " + value + "%N(at line " +
+					current_line.out + ").%N")
+			else
+				if platform.is_equal (Windows_platform) then
+					convert_to_windows (components @ 2)
+				end
+				env.put (components @ 2, components @ 1)
 			end
 		end
 
@@ -274,7 +313,16 @@ feature {NONE} -- Implementation - Hook routine implementations
 						at_end_and_start_server: config_file.at_end_of_block
 						and config_file.current_block_is_start_server_cmd
 					end
-					make_start_server_cmd
+					if
+						current_cmd_string /= Void and then
+						not current_cmd_string.is_empty
+					then
+						make_start_server_cmd
+					else
+						error_report.append ("Missing command specifier ('" +
+							Command_specifier + "') in command definition %
+							%block at line " + current_line.out + ".%N")
+					end
 					current_cmd_is_default := False
 				end
 			end
@@ -336,6 +384,8 @@ feature {NONE} -- Implementation - Utilities
 			-- `start_server_commands'.
 		require
 			at_end_of_block: config_file.at_end_of_block
+			current_cmd_string_set: current_cmd_string /= Void and then
+				not current_cmd_string.is_empty
 		local
 			c: SESSION_COMMAND
 		do
@@ -352,18 +402,18 @@ feature {NONE} -- Implementation - Utilities
 	process_user_definition (value: STRING) is
 			-- Process a user-defined variable definition
 		local
-			i: INTEGER
+			components: CHAIN [STRING]
 		do
-			i := value.index_of (User_definition_separator, 1)
-			if i < 2 then
+			components := split_in_two (value, Sub_field_separator)
+			if components.count < 2 or components.first.is_empty then
 				error_report.append ("Incorrect format for user-defined %
-					%variable: " + value + "%N(at line " +
+					%variable specification: " + value + "%N(at line " +
 					current_line.out + ").%N")
 			else
-				user_defined_variables.force (value.substring (1, i - 1),
+				user_defined_variables.force (components @ 1,
 					user_defined_variables.upper + 1)
-				user_defined_values.force (value.substring (i + 1,
-					value.count), user_defined_values.upper + 1)
+				user_defined_values.force (components @ 2,
+					user_defined_values.upper + 1)
 				check
 					at_least_one: user_defined_variables.item (
 						user_defined_variables.upper).count > 0
@@ -468,6 +518,58 @@ feature {NONE} -- Implementation
 	user_defined_values: ARRAY [STRING]
 			-- User-defined values, one for each element
 			-- of `user_defined_variables'
+
+	do_platform_conversion is
+			-- Perform any needed platform conversion.
+		do
+			if platform.is_empty then
+				settings.force (clone (Unix_platform), Platform_specifier)
+			end
+			platform.to_lower
+			if platform.is_equal (Windows_platform) then
+				settings.linear_representation.do_all (agent convert_to_windows)
+				start_server_commands.linear_representation.do_all (
+					agent convert_command_to_windows)
+			end
+		end
+
+	remove_escape_characters is
+			-- Remove all occurrences of `Escape_character' in `settings'.
+		do
+			settings.linear_representation.do_all (
+				agent remove_character (?, Escape_character @ 1))
+		end
+
+	convert_to_windows (s: STRING) is
+			-- Apply Windows platform-related modifications to `s'.
+		local
+			regexp_tool: expanded REGULAR_EXPRESSION_UTILITIES
+			scopy: STRING
+		do
+			scopy := regexp_tool.gsub ("([^" + Escape_character + "])" +
+				Backslash + Slash, "\1" + Backslash + Backslash, s)
+			scopy := regexp_tool.sub ("^" + Backslash + Slash,
+				Backslash + Backslash, scopy)
+			s.copy (scopy)
+		end
+
+	convert_command_to_windows (cmd: SESSION_COMMAND) is
+			-- Call `convert_to_windows' on `cmd.command_string'.
+		do
+			convert_to_windows (cmd.command_string)
+		end
+
+	remove_character (s: STRING; c: CHARACTER) is
+			-- Remove all occurrences of `c' from `s'.
+		do
+			s.prune_all (c)
+		end
+
+	log_error (msg: STRING) is
+		do
+			Precursor (msg)
+			error_report.append (msg)
+		end
 
 invariant
 
