@@ -438,10 +438,13 @@ print ("Starting 'load_data' for " + current_symbol + "%N")
 
 	symbol_list_clone: LIST [STRING]
 
-	initial_cache_size: INTEGER is 10
+	initial_cache_size: INTEGER is
 			-- The initial size of the tradable cache
-			-- @@Note: This feature should be moved to a globally accessible
-			-- class and the value should be configurable by the user.
+		local
+			gsf: expanded GLOBAL_SERVER_FACILITIES
+		once
+			Result := gsf.global_configuration.tradable_cache_size
+		end
 
 feature {NONE} -- Hook routines
 
