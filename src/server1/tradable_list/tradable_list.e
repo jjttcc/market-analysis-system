@@ -36,13 +36,15 @@ feature -- Initialization
 		do
 			symbol_list := s_list
 			tradable_factory := factory
-			object_comparison := True
+			object_comparison := true
 			symbol_list.start
 			create cache.make (Cache_size)
+			caching_on := true
 		ensure
 			set: symbol_list = s_list and tradable_factory = factory
 			implementation_init: last_tradable = Void and old_index = 0
 			cache_initialized: cache /= Void
+			cache_on: caching_on
 		end
 
 feature -- Access
@@ -66,6 +68,7 @@ feature -- Access
 			-- Create a new tradable (or get it from the cache) only if the
 			-- cursor has moved since the last tradable creation.
 			if
+				not caching_on or
 				index /= old_index or Cache_size > 0 and cache.count = 0
 			then
 				old_index := 0
@@ -74,6 +77,7 @@ feature -- Access
 					setup_input_medium
 					if not fatal_error then
 						tradable_factory.set_symbol (current_symbol)
+print_list (<<"Obtaining input data for ", current_symbol, ".%N">>)
 						tradable_factory.execute
 						last_tradable := tradable_factory.product
 						add_to_cache (last_tradable, index)
@@ -117,7 +121,7 @@ feature -- Access
 			-- corresponding contents of `symbol_list'.
 		end
 
-	changeable_comparison_criterion: BOOLEAN is False
+	changeable_comparison_criterion: BOOLEAN is false
 
 	Cache_size: INTEGER is 10
 
@@ -135,6 +139,31 @@ feature -- Status report
 
 	fatal_error: BOOLEAN
 			-- Did an unrecoverable error occur?
+
+	caching_on: BOOLEAN
+			-- Is caching of tradable data turned on?
+
+feature -- Status setting
+
+	turn_caching_on is
+			-- Turn caching on.
+		do
+			if not caching_on then
+				caching_on := true
+			end
+		ensure
+			on: caching_on
+		end
+
+	turn_caching_off is
+			-- Turn caching off.
+		do
+			if caching_on then
+				caching_on := false
+			end
+		ensure
+			off: not caching_on
+		end
 
 feature -- Cursor movement
 
@@ -208,21 +237,28 @@ feature {NONE} -- Implementation
 		end
 
 	add_to_cache (t: TRADABLE [BASIC_MARKET_TUPLE]; idx: INTEGER) is
-			-- Add 't' with its 'idx' to the cache
+			-- Add 't' with its 'idx' to the cache if caching_on.  If not
+			-- caching_on do nothing.
 		require
 			not_void: t /= Void
 		do
-			if cache.count = Cache_size then
-				cache.clear_all
-				check cache.count = 0 end
+			if caching_on then
+				if cache.count = Cache_size then
+					cache.clear_all
+					check cache.count = 0 end
+				end
+				cache.put(t, idx)
 			end
-			cache.put(t, idx)
 		end
 
 	cached_item (i: INTEGER): TRADABLE [BASIC_MARKET_TUPLE] is
 			-- The cached item with index 'i' - Void if not in cache
 		do
-			Result := cache @ i
+			if caching_on then
+				Result := cache @ i
+			end
+		ensure
+			void_if_no_caching: not caching_on implies Result = Void
 		end
 
 	cache: HASH_TABLE [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]
@@ -264,7 +300,7 @@ feature {NONE} -- Inapplicable
 invariant
 
 	factory_not_void: tradable_factory /= Void
-	always_compare_objects: object_comparison = True
+	always_compare_objects: object_comparison = true
 	cache_exists: cache /= Void
 	cache_not_too_large: cache.count <= Cache_size
 	symbol_list_not_void: symbol_list /= Void
