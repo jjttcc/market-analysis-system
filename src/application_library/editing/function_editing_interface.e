@@ -576,7 +576,6 @@ feature {NONE} -- Implementation
 		require
 			f_is_complex: f.is_complex
 		local
-			input: MARKET_FUNCTION
 			complex_f: COMPLEX_FUNCTION
 			l: LINKED_SET [COMPLEX_FUNCTION]
 			ovf: ONE_VARIABLE_FUNCTION
