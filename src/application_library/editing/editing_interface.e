@@ -8,9 +8,12 @@ indexing
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
-deferred class
+deferred class EDITING_INTERFACE inherit
 
-	EDITING_INTERFACE
+	GENERAL_UTILITIES
+		export
+			{NONE} all
+		end
 
 feature -- Access
 
@@ -161,6 +164,56 @@ feature {NONE} -- Implementation - Hook methods
 		ensure
 			high_enough: Result >= 1
 			-- Result <= total number of elements in `lists'
+		end
+
+	distinguish_duplicates (l: LIST [STRING]) is
+			-- Distinguish each duplicate string in `l' by appending
+			-- " [#{n}]" to the duplicate, where {n} is the number of the
+			-- duplicate according to its reverse order in the list - from
+			-- end to beginning.
+		require
+			not_void: l /= Void
+		local
+			ht: HASH_TABLE [LINKED_LIST [CHARACTER], STRING]
+			i: INTEGER
+			ilst: LINKED_LIST [CHARACTER]
+			keys: ARRAY [STRING]
+		do
+			if not l.empty then
+				create ht.make (l.count)
+				from
+					l.start
+				until
+					l.exhausted
+				loop
+					ilst := ht @ l.item
+					if ilst = Void then
+						create ilst.make
+						ht.put (ilst, l.item)
+					end
+					ilst.extend ('x')
+					l.forth
+				end
+				from
+					i := 1; keys := ht.current_keys
+				until i > keys.count loop
+					(ht @ (keys @ i)).start
+					i := i + 1
+				end
+				from
+					l.finish
+				until
+					l.exhausted
+				loop
+					ilst := ht @ l.item
+					if ilst.count > 1 then
+						l.put (concatenation (<<l.item, " [#",
+							ilst.index, "]">>))
+						ilst.forth
+					end
+					l.back
+				end
+			end
 		end
 
 invariant
