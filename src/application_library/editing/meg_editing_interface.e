@@ -2,7 +2,7 @@ indexing
 	description:
 		"Abstraction that allows the user to build and remove %
 		%market event generators"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -371,7 +371,7 @@ feature {NONE} -- Implementation
 				"FUNCTION_BASED_COMMAND"))
 		end
 
-	help: HELP
+	help: APPLICATION_HELP
 
 	operator_maker: COMMAND_EDITING_INTERFACE
 

@@ -1,12 +1,12 @@
 indexing
 	description: "Help messages for user interface"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
 class HELP inherit
 
-	ARRAY [STRING]
+	APPLICATION_HELP
 		rename
 			make as arr_make
 		end
@@ -21,7 +21,8 @@ feature -- Initialization
 		local
 			s: STRING
 		do
-			arr_make (Main, Compound_event_generator_left_target_type)
+			arr_make (Edit_event_generators,
+				Compound_event_generator_left_target_type)
 			s :=
 "%NSelect market: Select a market out of the current list for viewing.%N%
 %View data: View the selected markets's data, or one or more technical%N%
@@ -100,10 +101,15 @@ feature -- Initialization
 
 feature -- Access
 
-	Main, View_data, Set_analysis_date, Edit_event_registrants,
-	Add_registrants, Edit_registrant, View_indicator, Edit_indicators,
-	Edit_event_generators, Compound_event_generator_time_extensions,
-	Compound_event_generator_left_target_type:
-		INTEGER is unique
+	Main: INTEGER is 2
+	View_data: INTEGER is 3
+	Set_analysis_date: INTEGER is 4
+	Edit_event_registrants: INTEGER is 5
+	Add_registrants: INTEGER is 6
+	Edit_registrant: INTEGER is 7
+	View_indicator: INTEGER is 8
+	Edit_indicators: INTEGER is 9
+	Compound_event_generator_time_extensions: INTEGER is 10
+	Compound_event_generator_left_target_type: INTEGER is 11
 
 end -- class HELP

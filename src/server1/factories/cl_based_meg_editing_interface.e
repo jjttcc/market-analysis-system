@@ -2,7 +2,7 @@ indexing
 	description:
 		"Builder/editor of MARKET_EVENT_GENERATORs using a command-line %
 		%interface"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -20,7 +20,7 @@ class CL_BASED_MEG_EDITING_INTERFACE inherit
 		undefine
 			print
 		redefine
-			operator_maker, function_editor
+			operator_maker, function_editor, help
 		end
 
 	EXECUTION_ENVIRONMENT
@@ -532,5 +532,7 @@ feature {NONE} -- Implementation
 		do
 			print (msg)
 		end
+
+	help: HELP
 
 end -- CL_BASED_MEG_EDITING_INTERFACE
