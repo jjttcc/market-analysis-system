@@ -1,0 +1,69 @@
+indexing
+	description:
+		"Factory class that manufactures ONE_VARIABLE_FUNCTION_ANALYZERs"
+	note: "Features function, period_type, operator, and event_type should %
+		%all be non-Void when execute is called."
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
+	date: "$Date$";
+	revision: "$Revision$"
+
+class OVFA_FACTORY inherit
+
+	EVENT_GENERATOR_FACTORY
+		redefine
+			product
+		end
+
+feature -- Access
+
+	product: ONE_VARIABLE_FUNCTION_ANALYZER
+
+	function: MARKET_FUNCTION
+			-- The function to be associated with the new OVFA
+
+	period_type: TIME_PERIOD_TYPE
+			-- The time period type to be associated with the new OVFA
+
+	operator: RESULT_COMMAND [BOOLEAN]
+			-- The operator to be associated with the new OVFA
+
+feature -- Status setting
+
+	set_function (arg: MARKET_FUNCTION) is
+			-- Set function to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			function := arg
+		ensure
+			function_set: function = arg and function /= Void
+		end
+
+	set_period_type (arg: TIME_PERIOD_TYPE) is
+			-- Set period_type to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			period_type := arg
+		ensure
+			period_type_set: period_type = arg and period_type /= Void
+		end
+
+	set_operator (arg: RESULT_COMMAND [BOOLEAN]) is
+			-- Set operator to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			operator := arg
+		ensure
+			operator_set: operator = arg and operator /= Void
+		end
+
+feature -- Basic operations
+
+	execute is
+		do
+			!!product.make (function, operator, event_type, period_type)
+		end
+
+end -- OVFA_FACTORY
