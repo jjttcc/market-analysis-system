@@ -17,6 +17,8 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 		end
 
 	MARKET_TUPLE_LIST [G]
+		rename
+			make as arrayed_list_make
 		export {NONE}
 			all
 				{FACTORY}
@@ -28,6 +30,17 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 creation {FACTORY}
 
 	make
+
+feature -- Initialization
+
+	make (type: TIME_PERIOD_TYPE) is
+		require
+			not_void: type /= Void
+		do
+			trading_period_type := type
+		ensure
+			tpt_set: trading_period_type = type and trading_period_type /= Void
+		end
 
 feature -- Access
 
