@@ -2,6 +2,7 @@ indexing
 	description:
 		"A numeric command that operates on a market tuple (passed in via %
 		%the execute feature)."
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

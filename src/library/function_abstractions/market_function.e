@@ -2,6 +2,7 @@ indexing
 	description:
 		"A function that outputs an array of market tuples.  Specifications %
 		%for function input are provided by descendant classes."
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

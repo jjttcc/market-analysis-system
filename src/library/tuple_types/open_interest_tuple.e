@@ -1,5 +1,6 @@
 indexing
 	description: "Volume tuple with open interest";
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

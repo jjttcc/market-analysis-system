@@ -2,6 +2,7 @@ indexing
 	description: 
 		"An abstraction for an n-record command that finds %
 		%the highest high value in the last n trading periods."
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -1,5 +1,6 @@
 indexing
 	description: "Abstraction of market tuple manufacturer";
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -2,6 +2,7 @@ indexing
 	description: 
 		"An abstraction that provides services for processing a sequential %
 		%structure of market tuples."
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -2,6 +2,7 @@ indexing
 	description: "A tradable market entity, such as a stock or commodity";
 	development_note: "!!!NOTE:  Make sure h_high and y_low are initialized %
 		%to 0.  Also, check on viability of calc_y_high_low.!!!"
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -1,6 +1,7 @@
 indexing
 	description: "Exponential moving average";
 	notes: "Formula taken from `Trading for a Living', by A. Elder"
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

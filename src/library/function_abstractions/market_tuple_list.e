@@ -2,6 +2,7 @@ indexing
 	description:
 		"A list of objects that conform to MARKET_TUPLE that supports the %
 		%concept of a type of trading period, such as daily, weekly, etc.";
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

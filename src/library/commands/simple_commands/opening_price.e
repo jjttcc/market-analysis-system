@@ -3,6 +3,7 @@ indexing
 		"An abstraction for a numeric command that produces the opening %
 		%price for the current trading period (extracted from the argument %
 		%to the execute routine)"
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

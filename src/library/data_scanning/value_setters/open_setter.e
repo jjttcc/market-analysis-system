@@ -1,5 +1,6 @@
 indexing
 	description: "Value setter that sets the open value of a tuple";
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

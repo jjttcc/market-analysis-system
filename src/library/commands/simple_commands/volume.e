@@ -2,6 +2,7 @@ indexing
 	description:
 		"A basic numeric command that produces the volume for the current %
 		%trading period."
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -6,6 +6,7 @@ indexing
 		%periods from the current period (that is, from the current %
 		%item - n + 1 to the current item.  Descendants may override this %
 		%behavior"
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

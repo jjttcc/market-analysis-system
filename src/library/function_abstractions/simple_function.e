@@ -4,6 +4,7 @@ indexing
 		%Its purpose is to act as the innermost function in a composition %
 		%of functions."
 	question: "!!!Design has changed - should processed definition be removed?"
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -1,5 +1,6 @@
 indexing
 	description: "Tuple factory that creates an OPEN_INTEREST_TUPLE";
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -1,6 +1,7 @@
 indexing
 	description: 
 		"A market function that takes one argument or variable"
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -1,6 +1,7 @@
 indexing
 	description:
 		"An numeric command that is also an n-record structure"
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

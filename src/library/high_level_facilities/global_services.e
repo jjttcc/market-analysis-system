@@ -1,5 +1,6 @@
 indexing
 	description: "Access to globally available singletons and other services"
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

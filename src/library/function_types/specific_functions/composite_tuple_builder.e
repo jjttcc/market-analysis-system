@@ -5,6 +5,7 @@ indexing
 		"This class builds a list of composite tuples from a list of %
 		%market tuples, using a duration to determine how many source %
 		%tuples to use to create a composite tuple."
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

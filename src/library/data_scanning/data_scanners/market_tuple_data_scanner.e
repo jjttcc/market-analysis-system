@@ -1,5 +1,6 @@
 indexing
 	description: "DATA_SCANNER that scans MARKET_TUPLE fields"
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

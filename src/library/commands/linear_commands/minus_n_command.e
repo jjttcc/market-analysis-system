@@ -2,6 +2,7 @@ indexing
 	description:
 		"An n-record linear command that simply retrieves the value at the %
 		%current position minus n of the input";
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

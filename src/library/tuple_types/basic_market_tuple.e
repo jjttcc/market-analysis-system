@@ -2,6 +2,7 @@ indexing
 	description: "Minimum data set needed for charting and analysis"
 	Note: "!!!Check whether it's appropriate for PRICE attributes %
 			%to be expanded!!!"
+	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
