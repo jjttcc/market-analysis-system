@@ -379,16 +379,20 @@ feature {NONE} -- Implementation
 							http_request.error_text (http_request.error_code) +
 							"%N")
 						retrieval_failed := True
+					else
+						convert_and_save_result (result_string)
 					end
+					http_request.close
 				else
 					print ("Error occurred opening http request: " +
 						http_request.error_text (http_request.error_code) +
 						"%N")
 					retrieval_failed := True
+					if http_request.is_open then
+						http_request.close
+					end
 				end
-				http_request.close
 				add_timing_data ("Retrieving data for " + parameters.symbol)
-				convert_and_save_result (result_string)
 			else
 				print ("Error occurred initializing http request: " +
 					http_request.error_text (http_request.error_code) +
