@@ -3,6 +3,7 @@ indexing
 		"A market function that is also an array of market tuples. %
 		%Its purpose is to act as the innermost function in a composition %
 		%of functions."
+	note: "Procedure process does nothing."
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -41,6 +42,8 @@ feature -- Status report
 			-- Has this function been processed?
 		do
 			Result := output /= Void
+		ensure then
+			Result = (output /= Void)
 		end
 
 	operator_used: BOOLEAN is

@@ -12,7 +12,7 @@ deferred class MARKET_FUNCTION inherit
 			product as output, execute as process,
 			execute_precondition as process_precondition
 		redefine
-			output
+			output, process_precondition
 		end
 
 feature -- Access
@@ -56,13 +56,19 @@ feature -- Status report
 		deferred
 		end
 
+	process_precondition: BOOLEAN is
+		do
+			Result := not processed and
+						(operator_used implies operator /= Void)
+		ensure then
+			not_processed_and_opset_if_opused:
+				not processed and (operator_used implies operator /= Void)
+		end
+
 feature -- Basic operations
 
 	process (arg: ANY) is
 			-- Process the output from the input.
-		require else -- !!!Fix this!
-			not_processed: not processed
-			opset_if_opused: operator_used implies operator /= Void
 		do
 			do_process
 			set_processed (true)
