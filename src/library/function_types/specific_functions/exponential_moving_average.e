@@ -61,7 +61,7 @@ feature {FACTORY} -- Status setting
 
 	set_n (value: integer) is
 		do
-			Precursor (i)
+			Precursor (value)
 			exp.set_n (n)
 		end
 

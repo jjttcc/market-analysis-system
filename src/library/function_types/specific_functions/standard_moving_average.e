@@ -95,8 +95,8 @@ feature {FACTORY}
 
 	set_n (value: INTEGER) is
 		do
-			Precursor (v)
-			check n = v end
+			Precursor (value)
+			check n = value end
 			sum.set_n (n)
 		end
 
