@@ -22,11 +22,11 @@ public class BarDrawer extends IndicatorDrawer {
 		int i, row;
 		int x, y;
 		int lngth = 0;
-		if (_data != null) lngth = _data.length;
+		if (_data != null) lngth = data_length();
 		if (lngth == 0) return;
 
-		int bar_width = bounds.width / lngth - 2;
-		double width_factor, height_factor;
+		int bar_width = (int) ((double) base_bar_width(bounds, lngth) * .6);
+		double height_factor;
 		int x_s[] = new int[4], y_s[] = new int[4];
 		Configuration conf = Configuration.instance();
 		int[] _x_values = x_values();
@@ -38,11 +38,10 @@ public class BarDrawer extends IndicatorDrawer {
 
 		if (bar_width <= 0) bar_width = 1;
 		g.setColor(draw_color);
-		width_factor = width_factor_value(bounds);
 		height_factor = height_factor_value(bounds);
 		row = first_row() - 1;
 		for (i = 0; i < lngth; ++i, ++row) {
-			x = _x_values[row];
+			 x = _x_values[row] + 1;
 			y = (int)(bounds.height - (_data[i]-ymin) * height_factor +
 					bounds.y);
 			x_s[0] = x; x_s[1] = x + bar_width;

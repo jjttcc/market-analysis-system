@@ -202,16 +202,23 @@ abstract public class Drawer {
 	}
 
 	// Calculation of width factor for drawing based on window width
-	// and xrange.
-	protected double width_factor_value(Rectangle bounds) {
+	// and record count.
+	protected double width_factor_value(Rectangle bounds, int record_count) {
 		final int w_margin = 6;
-		return (bounds.width - w_margin) / xrange;
+		final double adjustment_factor = 1.0015;
+		double result;
+		result = (bounds.width - w_margin) * adjustment_factor / record_count;
+		return result;
 	}
 
 	// Calculation of height factor for drawing based on window height
 	// and yrange.
 	protected double height_factor_value(Rectangle bounds) {
 		return bounds.height / yrange;
+	}
+
+	protected int base_bar_width(Rectangle bounds, int bar_count) {
+		return bounds.width / bar_count;
 	}
 
 	static protected RefSpec[] refvalue_specs;

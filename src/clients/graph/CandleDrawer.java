@@ -22,12 +22,14 @@ public class CandleDrawer extends MarketDrawer {
 		int i, row;
 		int openy, highy, lowy, closey;
 		int x, middle_x;
+		final int x_adjust = 0;
 		int x_s[] = new int[4], y_s[] = new int[4];
 		int lngth = 0;
 		if (_data != null) lngth = _data.length;
 		if (lngth == 0) return;
 
-		int candlewidth = bounds.width / lngth * 3 + 1;
+		int candlewidth = (int) (
+			(double) base_bar_width(bounds, lngth / 4) * .7);
 		Configuration conf = Configuration.instance();
 		Color black = conf.black_candle_color();
 		Color white = conf.white_candle_color();
@@ -38,7 +40,7 @@ public class CandleDrawer extends MarketDrawer {
 		if (_data == null || lngth < Stride) return;
 
 		_x_values = new int[tuple_count()];
-		width_factor = width_factor_value(bounds);
+		width_factor = width_factor_value(bounds, lngth / 4);
 		height_factor = height_factor_value(bounds);
 		row = first_row();
 		for (i = row - 1; i < lngth; i += Stride, ++row) {
@@ -50,7 +52,7 @@ public class CandleDrawer extends MarketDrawer {
 						bounds.y);
 			closey = (int)(bounds.height - (_data[i+3] - ymin) * height_factor +
 						bounds.y);
-			x = (int)((row - xmin) * width_factor + bounds.x);
+			x = (int)((row - xmin) * width_factor + bounds.x) + x_adjust;
 			middle_x = x + candlewidth / 2;
 			_x_values[row-1] = x;
 			// For candle color, relation is reversed (< -> >) because

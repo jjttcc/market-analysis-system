@@ -181,13 +181,15 @@ public class DateDrawer extends Drawer {
 	protected void draw_month(Graphics g, Rectangle bounds, IntPair p,
 			int[] _x_values) {
 		int x, month_x;
+		final int Line_offset = -2;
 		double width_factor;
 
-		width_factor = width_factor_value(bounds);
+		width_factor = width_factor_value(bounds, dates().length);
 		x = _x_values[p.right()];
 		month_x = x + Month_x_offset;
 		g.setColor(Color.black);
-		g.drawLine(x, bounds.y, x, bounds.y + bounds.height);
+		g.drawLine(x + Line_offset, bounds.y,
+			x + Line_offset, bounds.y + bounds.height);
 		g.setColor(conf.text_color());
 		if (! is_indicator) {
 			g.drawString(Utilities.month_at(p.left()).substring(0, month_ln),
@@ -204,7 +206,7 @@ public class DateDrawer extends Drawer {
 		final int Line_offset = -3;
 		double width_factor;
 
-		width_factor = width_factor_value(bounds);
+		width_factor = width_factor_value(bounds, dates().length);
 		x = (int)(p.right() * width_factor + bounds.x);
 		year_x = x + Year_x_offset;
 		g.setColor(conf.text_color());

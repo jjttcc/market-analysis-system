@@ -24,7 +24,7 @@ public class LineDrawer extends IndicatorDrawer {
 		int x1, y1;
 		int lngth = 0;
 		if (_data != null) lngth = _data.length;
-		double width_factor, height_factor;
+		double height_factor;
 		Configuration conf = Configuration.instance();
 		if (draw_color == null) {
 			draw_color = conf.line_color();
@@ -36,7 +36,6 @@ public class LineDrawer extends IndicatorDrawer {
 		if (_data == null || lngth < 1) return;
 
 		g.setColor(draw_color);
-		width_factor = width_factor_value(bounds);
 		height_factor = height_factor_value(bounds);
 		row = first_row() - 1;
 		x0 = _x_values[row];

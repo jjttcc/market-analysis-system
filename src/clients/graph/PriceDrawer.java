@@ -20,11 +20,13 @@ public class PriceDrawer extends MarketDrawer {
 		int i, row;
 		int openy, highy, lowy, closey;
 		int x;
+		final int x_adjust = 0;
 		int lngth = 0;
-		if (_data != null) lngth = _data.length;
+		if (_data != null) lngth = data_length();
 		if (lngth == 0) return;
 
-		int sidebar_length = bounds.width / lngth + 3;
+		int sidebar_length = (int) (
+			(double) base_bar_width(bounds, lngth / 4) * .75);
 		Configuration conf = Configuration.instance();
 		Color bar_color = conf.stick_color();
 		double width_factor, height_factor;
@@ -33,7 +35,7 @@ public class PriceDrawer extends MarketDrawer {
 
 		_x_values = new int[tuple_count()];
 		g.setColor(bar_color);
-		width_factor = width_factor_value(bounds);
+		width_factor = width_factor_value(bounds, lngth / 4);
 		height_factor = height_factor_value(bounds);
 		row = first_row();
 		for (i = row - 1; i < lngth; i += Stride, ++row) {
@@ -45,7 +47,7 @@ public class PriceDrawer extends MarketDrawer {
 						bounds.y);
 			closey = (int)(bounds.height - (_data[i+3] - ymin) * height_factor +
 						bounds.y);
-			x = (int)((row - xmin) * width_factor + bounds.x);
+			x = (int)((row - xmin) * width_factor + bounds.x) + x_adjust;
 			_x_values[row-1] = x;
 			// vertical low to high price line
 			g.drawLine(x, lowy, x, highy);
