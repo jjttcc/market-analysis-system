@@ -40,14 +40,11 @@ feature -- Status setting
 			set: tradable = f
 		end
 
-	set_start_date_time (arg: DATE_TIME) is
-			-- Set start_date_time to `arg'.
-		require
-			arg /= Void
+	set_start_date_time (d: DATE_TIME) is
 		do
-			start_date_time := arg
-		ensure
-			start_date_time_set: start_date_time = arg and
+			start_date_time := d
+		ensure then
+			start_date_time_set: start_date_time = d and
 									start_date_time /= Void
 		end
 

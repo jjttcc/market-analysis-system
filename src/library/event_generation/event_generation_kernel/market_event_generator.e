@@ -32,6 +32,13 @@ feature -- Status setting
 		deferred
 		end
 
+	set_start_date_time (d: DATE_TIME) is
+			-- Set the date and time to begin the analysis to `d'.
+		require
+			not_void: d /= Void
+		deferred
+		end
+
 feature {NONE} -- Implementation
 
 	set_event_type (name: STRING) is

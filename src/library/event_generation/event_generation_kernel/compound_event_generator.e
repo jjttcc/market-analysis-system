@@ -67,6 +67,12 @@ feature -- Status setting
 			right_analyzer.set_tradable (f)
 		end
 
+	set_start_date_time (d: DATE_TIME) is
+		do
+			left_analyzer.set_start_date_time (d)
+			right_analyzer.set_start_date_time (d)
+		end
+
 	set_before_extension (arg: DATE_TIME_DURATION) is
 			-- Set before_extension to -`arg'.
 		require

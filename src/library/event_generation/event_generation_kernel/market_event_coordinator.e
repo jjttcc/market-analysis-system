@@ -39,6 +39,22 @@ feature -- Access
 
 	market_list: LINEAR [TRADABLE [BASIC_MARKET_TUPLE]]
 
+feature -- Status setting
+
+	set_start_date_time (d: DATE_TIME) is
+			-- For each member of `event_generators', set the date and time
+			-- for which to begin analysis to `d'.
+		do
+			from
+				event_generators.start
+			until
+				event_generators.exhausted
+			loop
+				event_generators.item.set_start_date_time (d)
+				event_generators.forth
+			end
+		end
+
 feature {NONE} -- Implementation
 
 	initialize (g: MARKET_EVENT_GENERATOR) is
