@@ -28,6 +28,18 @@ if there is a later release available.  (Note: If you're a developer,
 The Java Development Kit (JDK) can be used in place of the JRE.)
 
 
+Starting Charting Application
+
+In order to start the charting application you first need to start the
+component called the MAS server.  (This is the component of MAS that
+does most of the calculations.)  This is done by double-clicking on the
+"MAS Server (web)" icon (if you wish to get data from the web) or the
+"MAS Server (files)" icon (if your data resides on files on your computer)
+to start the server.  After the server has started, double-click on the
+"MAS Charts" icon to start the charting application.  See "The MAS
+Desktop Icons", below, for more information about the MAS icons.
+
+
 Further Documentation
 
 Under the directory in which you installed MAS, in the doc directory, you
