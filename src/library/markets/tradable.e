@@ -9,11 +9,12 @@ deferred class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 	SIMPLE_FUNCTION [G]
 		rename
 			make as sf_make, name as function_name,
-			set_name as set_function_name
+			set_name as set_function_name, set_trading_period_type as
+			sf_set_trading_period_type
 		export {NONE}
 			sf_make
 		redefine
-			set_trading_period_type, finish_loading
+			sf_set_trading_period_type, finish_loading
 		end
 
 	MATH_CONSTANTS
@@ -202,11 +203,15 @@ feature -- Status setting
 feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 
 	set_trading_period_type (arg: TIME_PERIOD_TYPE) is
+		require
+			daily_if_not_intraday: not arg.intraday implies
+				arg.name.is_equal (arg.Daily)
 		do
 			trading_period_type := arg
 			target_period_type := trading_period_type
 		ensure then
 			target_type_set_to_tp: target_period_type = trading_period_type
+			tpt_set: trading_period_type = arg
 		end
 
 	finish_loading is
@@ -399,6 +404,12 @@ feature {NONE} -- Hook methods
 			-- a COMPOSITE_VOLUME_TUPLE_FACTORY
 		once
 			create Result
+		end
+
+feature {NONE} -- Inapplicable
+
+	sf_set_trading_period_type (arg: TIME_PERIOD_TYPE) is
+		do
 		end
 
 invariant
