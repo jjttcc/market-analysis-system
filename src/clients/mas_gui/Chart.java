@@ -141,8 +141,9 @@ public class TA_Chart extends Frame
 		});
 
 		// Set the window size and pop it up.
-		this.pack();
-		this.show();
+		setSize(610, 410);
+		pack();
+		show();
 	}
 
 	// Add a menu item for each indicator to `imenu'.

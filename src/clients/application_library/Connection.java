@@ -40,6 +40,11 @@ public class TA_Connection implements NetworkProtocol
 				port_number = new Integer(33333);
 			}
 		}
+		else
+		{
+			usage();
+			System.exit(1);
+		}
 	}
 
 	// Send a request for data for market `symbol' with `period_type'.
@@ -210,6 +215,11 @@ public class TA_Connection implements NetworkProtocol
 			System.err.println(hostname);
 			System.exit(1);
 		}
+	}
+
+	private void usage()
+	{
+		System.out.println("Usage: ta_server hostname port_number");
 	}
 
 	private String hostname;
