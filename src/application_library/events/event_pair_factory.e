@@ -47,6 +47,7 @@ feature -- Basic operations
 			-- is thrown and error_occurred is set to true.
 		local
 			left, right: MARKET_EVENT
+			st: expanded SIGNAL_TYPES
 		do
 			error_init
 			scan_event_type
@@ -55,7 +56,8 @@ feature -- Basic operations
 			skip_field_separator
 			right := next_event
 			create product.make (left, right, concatenation (<<left.name, ", ",
-							right.name>>), current_event_type)
+				right.name>>), current_event_type, st.Buy_signal)
+--!!!The above needs to be changed to set from a user-configured signal type.
 		end
 
 	next_event: MARKET_EVENT is
