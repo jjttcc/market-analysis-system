@@ -22,12 +22,15 @@ create
 feature {NONE} -- Initialization
 
 	make is
-		local
-			i: INTEGER
 		do
 			from
 				create parameters.make
 print ("Turnover time: " + eod_turnover_time_string + "%N")
+if parameters.post_process_command /= Void then
+print ("post-processing command: " + parameters.post_process_command + "%N")
+else
+print ("No post-processing command%N")
+ end
 die (0)
 				initialize_symbols
 				symbols.start

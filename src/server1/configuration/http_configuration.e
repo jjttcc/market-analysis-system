@@ -49,7 +49,7 @@ feature -- Initialization
 			settings.extend ("", Host_specifier)
 			settings.extend ("", Path_specifier)
 			settings.extend ("", Symbol_file_specifier)
-			settings.extend ("", EOD_result_format_specifier)
+			settings.extend ("", post_process_command_specifier)
 			settings.extend ("", EOD_turnover_time_specifier)
 		end
 
@@ -132,6 +132,26 @@ print ("Current path: " + Result + "%N")
 	symbol: STRING
 			-- The current symbol for which data is being retrieved
 
+	post_processing_routine: FUNCTION [ANY, TUPLE [STRING], STRING] is
+			-- Routine to be used to post process the retrieved data -
+			-- Void if no post processing is needed or if the
+			-- post-processing specification is invalid
+		local
+			conversion_functions: expanded TRADABLE_DATA_CONVERSION
+		do
+			if
+				post_process_command /= Void and then 
+				not post_process_command.is_empty
+			then
+				Result := conversion_functions.routine_for (
+					post_process_command)
+			end
+		ensure
+			no_result_if_no_post_process_command:
+				(post_process_command = Void or else
+				post_process_command.is_empty) implies Result = Void
+		end
+
 feature -- Access
 
 	start_date_string: STRING is
@@ -159,9 +179,9 @@ feature -- Access
 			Result := settings @ Symbol_file_specifier
 		end
 
-	eod_result_format: STRING is
+	post_process_command: STRING is
 		do
-			Result := settings @ EOD_result_format_specifier
+			Result := settings @ post_process_command_specifier
 		end
 
 	eod_turnover_time_value: STRING is
@@ -263,6 +283,8 @@ feature {NONE} -- Implementation
 	Date_field_separator: STRING is "/"
 
 	Time_field_separator: STRING is ":"
+
+	Specification_field_separator: STRING is ":"
 
 feature {NONE} -- Implementation - token-related constants
 
