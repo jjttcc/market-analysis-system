@@ -37,7 +37,7 @@ feature -- Status report
 feature -- Basic operations
 
 	do_execute (msg: STRING) is
-			-- Extract any settings from `msg', create a SESSION and add
+			-- Extract any settings from `msg', create a MAS_SESSION and add
 			-- it to `sessions', apply the settings from `msg', and send
 			-- a unique session ID to the requesting client.
 			-- If a protocol error is encountered in `msg', an error

@@ -12,7 +12,7 @@ class
 
 feature -- Access
 
-	sessions: HASH_TABLE [SESSION, INTEGER] is
+	sessions: HASH_TABLE [MAS_SESSION, INTEGER] is
 			-- Registered GUI Client sessions
 		once
 			create Result.make(1)
