@@ -16,29 +16,28 @@ import graph.*;
 import support.*;
 
 /** Market analysis GUI chart component */
-public class MA_Chart extends Frame {
-	public MA_Chart(MA_Connection conn) {
-		super("MA_Chart");		// Create the main window frame.
+public class Chart extends Frame {
+	public Chart(DataSetBuilder builder) {
+		super("Chart");		// Create the main window frame.
 		num_windows++;			// Count it.
-		connection = conn;
+		data_builder = builder;
 		Vector inds;
 
 		try {
-			session_key = connection.send_login_request();
 			if (_markets == null) {
-				_markets = connection.market_list(session_key);
+				_markets = data_builder.market_list();
 				if (! _markets.isEmpty()) {
 					// Each market has its own period type list; but for now,
 					// just retrieve the list for the first market and use
 					// it for all markets.
-					_period_types = connection.trading_period_type_list(
-						(String) _markets.elementAt(0), session_key);
+					_period_types = data_builder.trading_period_type_list(
+						(String) _markets.elementAt(0));
 					// Each market has its own indicator list; but for now,
 					// just retrieve the list for the first market and use
 					// it for all markets.
-					connection.send_indicator_list_request(
-						(String) _markets.elementAt(0), session_key);
-					inds = connection.last_indicator_list();
+					data_builder.send_indicator_list_request(
+						(String) _markets.elementAt(0));
+					inds = data_builder.last_indicator_list();
 					_indicators = new Hashtable(inds.size());
 					int i;
 					// Initialize _indicators table with each indicator name
@@ -82,8 +81,8 @@ public class MA_Chart extends Frame {
 		// Don't redraw the data if it's for the same market as before.
 		if (period_type_change || ! market.equals(current_market)) {
 			try {
-				connection.send_market_data_request(market,
-					current_period_type, session_key);
+				data_builder.send_market_data_request(market,
+					current_period_type);
 			}
 			catch (Exception e) {
 				System.err.println("Exception occurred: "+e+", bye ...");
@@ -93,7 +92,7 @@ public class MA_Chart extends Frame {
 			//Ensure that all graph's data sets are removed.  (May need to
 			//change later.)
 			main_pane.clear_main_graph();
-			main_dataset = connection.last_market_data();
+			main_dataset = data_builder.last_market_data();
 			main_pane.add_main_data_set(main_dataset);
 			if (current_upper_indicator != null &&
 					! current_upper_indicator.equals(No_upper_indicator)) {
@@ -101,16 +100,15 @@ public class MA_Chart extends Frame {
 				// upper indicator, add it to the upper graph and draw
 				// the new indicator data and the market data.
 				try {
-					connection.send_indicator_data_request(
+					data_builder.send_indicator_data_request(
 						((Integer) _indicators.get(current_upper_indicator)).
-							intValue(), market, current_period_type,
-							session_key);
+							intValue(), market, current_period_type);
 				} catch (Exception e) {
 					System.err.println("Exception occurred: "+e+", bye ...");
 					e.printStackTrace();
 					quit(-1);
 				}
-				dataset = connection.last_indicator_data();
+				dataset = data_builder.last_indicator_data();
 				dataset.set_dates_needed(false);
 				dataset.set_y_min_max(main_dataset);
 				main_pane.add_main_data_set(dataset);
@@ -124,20 +122,19 @@ public class MA_Chart extends Frame {
 				main_pane.clear_indicator_graph();
 				if (current_lower_indicator.equals(Volume)) {
 					// (Nothing to retrieve from server)
-					dataset = connection.last_volume();
+					dataset = data_builder.last_volume();
 				} else {
 					try {
-						connection.send_indicator_data_request(
+						data_builder.send_indicator_data_request(
 						((Integer) _indicators.get(current_lower_indicator)).
-								intValue(), market, current_period_type,
-								session_key);
+								intValue(), market, current_period_type);
 					} catch (Exception e) {
 						System.err.println(
 							"Exception occurred: "+e+", bye ...");
 						e.printStackTrace();
 						quit(-1);
 					}
-					dataset = connection.last_indicator_data();
+					dataset = data_builder.last_indicator_data();
 				}
 				add_indicator_lines(dataset);
 				main_pane.add_indicator_data_set(dataset);
@@ -208,10 +205,7 @@ public class MA_Chart extends Frame {
 		// Create and register action listener objects for the three menu items.
 		newwin.addActionListener(new ActionListener() {	// Open a new window
 		public void actionPerformed(ActionEvent e) {
-				String[] args = new String[2];
-				args[0] = connection.hostname();
-				args[1] = connection.port_number().toString();
-				new MA_Chart(new MA_Connection(args));
+				new Chart(new DataSetBuilder(data_builder));
 			}
 		});
 
@@ -258,10 +252,10 @@ public class MA_Chart extends Frame {
 	/** Close a window.  If this is the last open window, just quit. */
 	void close() {
 		if (--num_windows == 0) {
-			connection.logout(true, 0, session_key);
+			data_builder.logout(true, 0);
 		}
 		else {
-			connection.logout(false, 0, session_key);
+			data_builder.logout(false, 0);
 			this.dispose();
 		}
 	}
@@ -270,19 +264,16 @@ public class MA_Chart extends Frame {
 	void quit(int status) {
 		// Log out the corresponding session for all but one window.
 		for (int i = 0; i < num_windows - 1; ++i) {
-			connection.logout(false, 0, session_key);
+			data_builder.logout(false, 0);
 		}
 		// Log out the remaining window and exit with `status'.
-		connection.logout(true, status, session_key);
+		data_builder.logout(true, status);
 	}
 
-	private MA_Connection connection;
+	private DataSetBuilder data_builder;
 
 	// # of open windows - so program can exit when last one is closed
 	protected static int num_windows = 0;
-
-	// Key for the session associated with this window
-	protected int session_key;
 
 	// Main window pane
 	MA_ScrollPane main_pane;
@@ -335,9 +326,9 @@ class IndicatorListener implements java.awt.event.ActionListener {
 			if (! (selection.equals(No_upper_indicator) ||
 					selection.equals(No_lower_indicator) ||
 					selection.equals(Volume))) {
-				connection.send_indicator_data_request(
+				data_builder.send_indicator_data_request(
 					((Integer) _indicators.get(selection)).intValue(),
-					market, current_period_type, session_key);
+					market, current_period_type);
 			}
 		}
 		catch (Exception ex) {
@@ -349,7 +340,7 @@ class IndicatorListener implements java.awt.event.ActionListener {
 		// configured to go in the upper (main) or lower (indicator) graph.
 		if (Configuration.instance().upper_indicators().containsKey(selection))
 		{
-			main_dataset = connection.last_market_data();
+			main_dataset = data_builder.last_market_data();
 			if (current_upper_indicator != null) {
 				// Remove the old indicator data from the graph (and the
 				// market data).
@@ -358,7 +349,7 @@ class IndicatorListener implements java.awt.event.ActionListener {
 				main_pane.add_main_data_set(main_dataset);
 			}
 			current_upper_indicator = selection;
-			dataset = connection.last_indicator_data();
+			dataset = data_builder.last_indicator_data();
 			dataset.set_dates_needed(false);
 			dataset.set_y_min_max(main_dataset);
 			main_pane.add_main_data_set(dataset);
@@ -367,7 +358,7 @@ class IndicatorListener implements java.awt.event.ActionListener {
 			// Remove the old indicator and market data from the graph.
 			main_pane.clear_main_graph();
 			// Re-attach the market data without the indicator data.
-			main_pane.add_main_data_set(connection.last_market_data());
+			main_pane.add_main_data_set(data_builder.last_market_data());
 			current_upper_indicator = selection;
 		}
 		else if (selection.equals(No_lower_indicator)) {
@@ -378,9 +369,9 @@ class IndicatorListener implements java.awt.event.ActionListener {
 			main_pane.clear_indicator_graph();
 			current_lower_indicator = selection;
 			if (selection.equals(Volume)) {
-				dataset = connection.last_volume();
+				dataset = data_builder.last_volume();
 			} else {
-				dataset = connection.last_indicator_data();
+				dataset = data_builder.last_indicator_data();
 			}
 			add_indicator_lines(dataset);
 			main_pane.add_indicator_data_set(dataset);

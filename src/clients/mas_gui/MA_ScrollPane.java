@@ -10,7 +10,7 @@ import java.awt.event.ItemEvent;
 public class MA_ScrollPane extends ScrollPane
 {
 	public MA_ScrollPane(Vector period_types, int scrollbarDisplayPolicy,
-				MA_Chart parent_chart)
+				Chart parent_chart)
 	{
 		super(scrollbarDisplayPolicy);
 
@@ -148,6 +148,6 @@ public class MA_ScrollPane extends ScrollPane
 	// Did _indicator_graph change since it was last repainted?
 	boolean indicator_graph_changed;
 	Choice period_type_choice;
-	MA_Chart chart;
+	Chart chart;
 	String _last_period_type;
 }

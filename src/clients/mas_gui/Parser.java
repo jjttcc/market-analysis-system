@@ -6,13 +6,13 @@ import graph.*;
 
 /** Market Analysis Parser - parses market and indicator data sent from
 the Market Analysis server */
-class MA_Parser {
+class Parser {
 	public static final int Date = 1, Open = 2, High = 3, Low = 4, Close = 5,
 		Volume = 6, Open_interest = 7;
 
 	// Constructor - fieldspecs specifies the fields format of each tuple -
 	// e.g., date, high, low, close, volume.
-	MA_Parser(int fieldspecs[], String record_sep, String field_sep) {
+	Parser(int fieldspecs[], String record_sep, String field_sep) {
 		parsetype = fieldspecs;
 		_record_separator = record_sep;
 		_field_separator = field_sep;
