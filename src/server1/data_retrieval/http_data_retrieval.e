@@ -12,7 +12,7 @@ indexing
 		%retrieval from other external sources besides an http server."
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
+	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
 deferred class
@@ -38,7 +38,6 @@ feature {NONE} -- Initialization
 			create parameters.make
 			create url.http_make (parameters.host, "")
 			create http_request.make (url)
-			create retrieved_symbols.make (0)
 			http_request.set_read_mode
 			file_extension := Default_file_extension
 		ensure
@@ -60,9 +59,6 @@ feature {NONE} -- Attributes
 	Default_file_extension: STRING is "txt"
 			-- Default value for `file_extension'
 
-	retrieved_symbols: HASH_TABLE [BOOLEAN, STRING]
-			-- Symbols for which data has been retrieved
-
 feature {NONE} -- Basic operations
 
 	retrieve_data is
@@ -78,20 +74,15 @@ feature {NONE} -- Basic operations
 				url.set_path (parameters.path_with_alternate_start_date (
 					alternate_start_date))
 				append_to_output_file := True
-print ("Using alternate start date.%N")
 			else
 				url.set_path (parameters.path)
-print ("Using configured start date.%N")
 			end
 			-- Prevent a side effect re. alternate_start_date for the next
 			-- call to retrieve_data.
 			alternate_start_date := Void
 			start_timer
-print ("Using path: '" + url.path + "'%N")
+print ("url.path: " + url.path + "%N")
 			perform_http_retrieval
-			if not retrieval_failed then
-				mark_as_retrieved (parameters.symbol)
-			end
 		ensure
 			output_file_exists_if_successful: not retrieval_failed and
 				converted_result /= Void and then
@@ -117,22 +108,19 @@ print ("Using path: '" + url.path + "'%N")
 			eod_update_time := time_to_eod_update
 			latest_date := latest_date_for (parameters.symbol)
 			if latest_date /= Void then
-				if
-					not (retrieved_symbols @ parameters.symbol) and
-					(not eod_update_time or parameters.ignore_today)
-				then
+				if not eod_update_time or parameters.ignore_today then
 					-- This path catches the case where it's not time
-					-- to EOD-update (or it's a weekend), but the cached
+					-- to EOD-update or it's a weekend, but the cached
 					-- data is not up to date with the latest trading day
 					-- before today.
 					data_out_of_date := latest_date <
 						parameters.latest_tradable_date_before_today
-print ("latestdt, latest_tradable...: " + latest_date.out + ", " +
-parameters.latest_tradable_date_before_today.out + "%N")
 				else
-					data_out_of_date := eod_update_time and
-						not parameters.ignore_today and
-						create {DATE}.make_now > latest_date
+					check
+						update_time: eod_update_time and
+						not parameters.ignore_today
+					end
+					data_out_of_date := create {DATE}.make_now > latest_date
 				end
 				if data_out_of_date then
 					-- Set the alternate start date to the day after the
@@ -331,6 +319,7 @@ feature {NONE} -- Implementation
 	perform_http_retrieval is
 		local
 			result_string: STRING
+			ex: expanded EXCEPTION_SERVICES
 		do
 			if not http_request.error then
 				http_request.open
@@ -370,16 +359,11 @@ feature {NONE} -- Implementation
 			output_file_exists_if_successful: not retrieval_failed and
 				converted_result /= Void and then
 				not converted_result.is_empty implies output_file_exists
-		end
-
-	mark_as_retrieved (symbol: STRING) is
-			-- Ensure `retrieved_symbols @ symbol'
-		do
-			if not retrieved_symbols.has (symbol) then
-				retrieved_symbols.put (True, symbol)
+		rescue
+			if http_request.error then
+				ex.last_exception_status.set_description (
+					http_request.error_text (http_request.error_code))
 			end
-		ensure
-			symbol_marked: retrieved_symbols @ symbol
 		end
 
 end
