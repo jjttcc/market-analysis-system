@@ -26,7 +26,7 @@ feature -- Access
 			db_result: LINKED_LIST [DB_RESULT]
 		do
 			fatal_error := false
-			db_result := db_mgr.retrieve (db_info.symbol_select)
+			db_result := db_mgr.retrieve (db_info.stock_symbol_query)
 			if db_result /= Void then
 				create {LINKED_LIST [STRING]} Result.make
 				!!symbol.make (0)
