@@ -25,8 +25,8 @@ feature {NONE} -- Initialization
 		local
 			i: INTEGER
 		do
-			!!contents.make
-			!LINKED_LIST [INTEGER]!port_numbers.make
+			create contents.make
+			create {LINKED_LIST [INTEGER]} port_numbers.make
 			from
 				i := 1
 			until
@@ -118,14 +118,14 @@ feature {NONE} -- Implementation
 		do
 			if option_in_contents ('f') then
 				if contents.item.count > 2 then
-					!!field_separator.make (contents.item.count - 2)
+					create field_separator.make (contents.item.count - 2)
 					field_separator.append (contents.item.substring (
 						3, contents.item.count))
 					contents.remove
 				else
 					contents.remove
 					if not contents.exhausted then
-						!!field_separator.make (contents.item.count)
+						create field_separator.make (contents.item.count)
 						field_separator.append (contents.item)
 						contents.remove
 					end
@@ -223,7 +223,7 @@ feature {NONE} -- Implementation
 		require
 			use_db
 		local
-			db_services: MAS_DB_SERVICES
+			db_services: expanded MAS_DB_SERVICES
 		do
 			symbol_list := db_services.symbols
 		end
