@@ -115,8 +115,18 @@ feature -- Access
 			create pair.make (cmd,
 				"Division operator that handles division by zero safely")
 			Result.extend (pair)
+			create {POWER} cmd.make (real_dummy, real_dummy)
+			create pair.make (cmd, "Operator whose result is %
+				%its left operand to the power of its right operand")
+			Result.extend (pair)
 			create {ABSOLUTE_VALUE} cmd.make (real_dummy)
 			create pair.make (cmd, "Absolute value operator")
+			Result.extend (pair)
+			create {ROUNDED_VALUE} cmd.make (real_dummy)
+			create pair.make (cmd, "Rounded value operator")
+			Result.extend (pair)
+			create {SQUARE_ROOT} cmd.make (real_dummy)
+			create pair.make (cmd, "Square root operator")
 			Result.extend (pair)
 			create {NOT_OPERATOR} cmd.make (true_dummy)
 			create pair.make (cmd, "Logical negation operator")

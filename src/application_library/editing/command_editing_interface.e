@@ -73,6 +73,7 @@ feature -- Access
 			l.extend (command_with_generator ("DIVISION"))
 			l.extend (command_with_generator ("SAFE_DIVISION"))
 			l.extend (command_with_generator ("ADDITION"))
+			l.extend (command_with_generator ("POWER"))
 			l.extend (command_with_generator ("LOWEST_VALUE"))
 			l.extend (command_with_generator ("LINEAR_SUM"))
 			l.extend (command_with_generator ("HIGHEST_VALUE"))
@@ -93,6 +94,8 @@ feature -- Access
 			l.extend (command_with_generator ("SLOPE_ANALYZER"))
 			l.extend (command_with_generator ("UNARY_LINEAR_OPERATOR"))
 			l.extend (command_with_generator ("ABSOLUTE_VALUE"))
+			l.extend (command_with_generator ("ROUNDED_VALUE"))
+			l.extend (command_with_generator ("SQUARE_ROOT"))
 			l.extend (command_with_generator ("N_BASED_UNARY_OPERATOR"))
 			l.extend (command_with_generator ("FUNCTION_BASED_COMMAND"))
 
@@ -103,6 +106,7 @@ feature -- Access
 			l.extend (command_with_generator ("DIVISION"))
 			l.extend (command_with_generator ("SAFE_DIVISION"))
 			l.extend (command_with_generator ("ADDITION"))
+			l.extend (command_with_generator ("POWER"))
 
 			create l.make (6)
 			Result.extend (l, Binary_boolean_real_command)
@@ -364,6 +368,11 @@ feature {NONE} -- Implementation
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_real, name)
+			name := "POWER"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Binary_real, name)
 			name := "DIVISION"
 			check
 				valid_name: command_names.has (name)
@@ -405,6 +414,16 @@ feature {NONE} -- Implementation
 			end
 			Result.extend (Constant, name)
 			name := "ABSOLUTE_VALUE"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Unary_real, name)
+			name := "ROUNDED_VALUE"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Unary_real, name)
+			name := "SQUARE_ROOT"
 			check
 				valid_name: command_names.has (name)
 			end
