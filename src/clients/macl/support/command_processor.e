@@ -6,7 +6,10 @@ indexing
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class COMMAND_PROCESSOR
+class COMMAND_PROCESSOR inherit
+
+	REGULAR_EXPRESSION_UTILITIES
+		rename match as re_match end
 
 create
 
@@ -301,25 +304,15 @@ feature {NONE} -- Implementation - Regular expressions
 
 	match (pattern, s: STRING): BOOLEAN is
 			-- Does `s' match the regular expression `pattern'?
-		local
-			regexp: RX_PCRE_REGULAR_EXPRESSION
 		do
-			if last_regular_expression = Void then
-				create last_regular_expression.make
-				last_regular_expression.set_anchored (False)
-			end
-			regexp := last_regular_expression
-			regexp.compile (pattern)
-			if regexp.is_compiled then
-				regexp.set_anchored (False)
-				regexp.match (s)
-				Result :=  regexp.has_matched
-			else
+			Result := re_match (pattern, s)
+			if last_compile_failed then
 				io.error.print (
 					"Defect: regular expression compilation failed.%N")
-				io.error.print (regexp.error_message + "%N(position: " +
-					regexp.error_position.out + "%NPlease report this bug %
-					%bug to the MAS developers.%N")
+				io.error.print (last_regular_expression.error_message +
+					"%N(position: " +
+					last_regular_expression.error_position.out +
+					"%NPlease report this bug bug to the MAS developers.%N")
 				fatal_error := True
 				error := True
 			end
@@ -327,43 +320,11 @@ feature {NONE} -- Implementation - Regular expressions
 			last_regular_expression_exists: last_regular_expression /= Void
 		end
 
-	sub (pattern, replacement, target: STRING): STRING is
-			-- The result of replacing the first occurrence of
-			-- `pattern' in `target' by `replacement'.  `target' remains
-			-- unchanged.  If `pattern' is not found in `target' Result
-			-- is equal to target.
-		do
-			if match (pattern, target) then
-				Result := last_regular_expression.replace (replacement)
-			else
-				Result := target
-			end
-		ensure
-			result_is_target_if_no_match:
-				not match (pattern, target) implies Result = target
-		end
-
-	gsub (pattern, replacement, target: STRING): STRING is
-			-- The result of replacing all occurrence of
-			-- `pattern' in `target' by `replacement'.  `target' remains
-			-- unchanged.  If `pattern' is not found in `target' Result
-			-- is equal to target.
-		do
-			if match (pattern, target) then
-				Result := last_regular_expression.replace_all (replacement)
-			else
-				Result := target
-			end
-		ensure
-			result_is_target_if_no_match:
-				not match (pattern, target) implies Result = target
-		end
-
 	invalid_pattern_match (target: STRING): BOOLEAN is
 			-- Does `target' match an "invalid" pattern?
 		do
-			Result := invalid_patterns.linear_representation.there_exists (
-				agent match (?, target))
+			Result := one_pattern_matches (
+				invalid_patterns.linear_representation, target)
 		end
 
 feature {NONE} -- Implementation - Attributes
@@ -397,9 +358,6 @@ feature {NONE} -- Implementation - Attributes
 
 	shared_objects: HASH_TABLE [STRING, STRING]
 			-- Shared objects listed in the last "object-selection-list"
-
-	last_regular_expression: RX_PCRE_REGULAR_EXPRESSION
-			-- The last regular expression processed by `match'
 
 invariant
 
