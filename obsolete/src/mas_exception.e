@@ -72,6 +72,7 @@ feature -- Basic operations
 			if not no_cleanup then
 				io.print ("Cleaning up ...%N")
 				termination_cleanup
+				io.print ("Finished cleaning up.%N")
 			end
 			die (status)
 		rescue
