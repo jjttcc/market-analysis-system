@@ -1,31 +1,27 @@
 indexing
 	description:
-		"Abstraction for a persistent array that is automatically %
+		"Abstraction for a persistent LINKED_LIST that is automatically %
 		%stored at program termination using the mechanism provided by %
-		%parents TERMINABLE and STORABLE"
+		%parent TERMINABLE"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
-class STORABLE_ARRAY [G] inherit
+class STORABLE_LIST [G] inherit
 
 	TERMINABLE
 		export {NONE}
 			all
-		undefine
-			is_equal, copy, consistent, setup
 		end
 
-	ARRAY [G]
+	LINKED_LIST [G]
 		rename
-			make as arr_make
+			make as ll_make
 		end
 
 	STORABLE
 		export {NONE}
 			all
-		undefine
-			is_equal, copy, consistent, setup
 		end
 
 creation
@@ -34,13 +30,13 @@ creation
 
 feature -- Initialization
 
-	make (fname: STRING; minindex, maxindex: INTEGER) is
+	make (fname: STRING) is
 			-- Create the list with `fname' as the `persistent_file_name'.
 		require
 			not_void: fname /= Void
 		do
 			persistent_file_name := fname
-			arr_make (minindex, maxindex)
+			ll_make
 		ensure
 			persistent_file_name = fname
 		end
@@ -57,4 +53,4 @@ feature -- Utility
 			store_by_name (persistent_file_name)
 		end
 
-end -- STORABLE_ARRAY
+end -- STORABLE_LIST

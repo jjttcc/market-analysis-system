@@ -1,16 +1,17 @@
 indexing
 	description:
-		"A TERMINABLE list of MARKET_FUNCTIONs that sets each market %
-		%function's innermost input to a dummy in its cleanup operation"
+		"A storable list of MARKET_FUNCTIONs that wipes out each market %
+		%function before saving it to persistent store"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
-class TERMINABLE_MARKET_FUNCTION_LIST inherit
+class STORABLE_MARKET_FUNCTION_LIST inherit
 
-	TERMINABLE
-
-	LINKED_LIST [MARKET_FUNCTION]
+	STORABLE_LIST [MARKET_FUNCTION]
+		redefine
+			cleanup
+		end
 
 	MARKET_FUNCTION_EDITOR
 		export {NONE}
@@ -31,7 +32,7 @@ feature -- Utility
 	cleanup is
 			-- Ensure that the output data lists of each market function
 			-- are (recursively) cleared so that no extra data is stored
-			-- to the file.
+			-- to the file; then call precursor.
 		local
 			dummy_tradable: TRADABLE [BASIC_MARKET_TUPLE]
 		do
@@ -46,6 +47,7 @@ feature -- Utility
 				item.set_innermost_input (dummy_tradable)
 				forth
 			end
+			Precursor
 		end
 
-end -- TERMINABLE_MARKET_FUNCTION_LIST
+end -- STORABLE_MARKET_FUNCTION_LIST

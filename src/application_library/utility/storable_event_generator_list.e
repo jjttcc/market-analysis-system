@@ -1,16 +1,17 @@
 indexing
 	description:
-		"A list of MARKET_EVENT_GENERATORs that wipes out each %
-		%generator in its cleanup operation"
+		"A storable list of MARKET_EVENT_GENERATORs that wipes out each %
+		%generator before saving it to persistent store."
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
-class TERMINABLE_EVENT_GENERATOR_LIST inherit
+class STORABLE_EVENT_GENERATOR_LIST inherit
 
-	TERMINABLE
-
-	LINKED_LIST [MARKET_EVENT_GENERATOR]
+	STORABLE_LIST [MARKET_EVENT_GENERATOR]
+		redefine
+			cleanup
+		end
 
 	MARKET_FUNCTION_EDITOR
 		export {NONE}
@@ -25,7 +26,7 @@ feature -- Utility
 
 	cleanup is
 			-- Call wipe_out on each item to ensure that no extra data
-			-- is stored to the file.
+			-- is stored to the file; then call precursor.
 		do
 			from
 				start
@@ -35,6 +36,7 @@ feature -- Utility
 				item.wipe_out
 				forth
 			end
+			Precursor
 		end
 
-end -- TERMINABLE_EVENT_GENERATOR_LIST
+end -- STORABLE_EVENT_GENERATOR_LIST
