@@ -47,6 +47,8 @@ feature -- Access
 				Result.period_types.has (period_type.name)
 			last_tradable_set: last_tradable = Result
 			not_void_if_no_error: not error_occurred implies Result /= Void
+			intraday_correspondence: Result /= Void implies
+				period_type.intraday = Result.trading_period_type.intraday
 		end
 
 	tuple_list (symbol: STRING; period_type: TIME_PERIOD_TYPE):
