@@ -4,8 +4,10 @@ BNF grammar for the protocol between the server and a GUI client
 message         -> msgID "\t" msg end_of_message
 msg             -> client_req | server_response
 client_req      -> session_key "\t" client_req_spec | login_req
-client_req_spec -> mkt_data_req | ind_data_req | mkt_list_req | ind_list_req |
+client_req_spec -> [compress_flag] client_data_req
+client_data_rec -> mkt_data_req | ind_data_req | mkt_list_req | ind_list_req |
                      trad_pertyp_req | change_session_req | logout_req
+compress_flag   -> "<@z@>"
 mk_data_req     -> mkt_symbol "\t" trad_per_type
 ind_data_req    -> indID "\t" mkt_symbol "\t" trad_per_type
 trad_pertyp_req -> mkt_symbol
@@ -61,6 +63,10 @@ Notes:
 
 The construct "symbol1<>symbol2" means that there is no white space separating
 symbol1 and symbol2.
+
+The optional token compress_flag specifies that the data sent by the server
+in response to this particular request is to be compressed with the zlib
+compression library.
 
 All tokens are constructed from a stream of ASCII characters.
 
