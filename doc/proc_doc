@@ -81,9 +81,10 @@ groff() && /\\/ {
 	gsub(/\\/, "&&")
 }
 
-groff() && /\&[gl]t;/ {
+groff() && /\&[a-z][a-z]*;/ {
 	gsub(/\&lt;/, "<")
 	gsub(/\&gt;/, ">")
+	gsub(/\&nbsp;/, " ")
 }
 
 /\*\^font/ {
