@@ -80,7 +80,6 @@ public class TA_Chart extends Frame {
 		DataSet dataset;
 		// Don't redraw the data if it's for the same market as before.
 		if (period_type_change || ! market.equals(current_market)) {
-			TA_Graph graph = main_pane.main_graph();
 			try {
 				connection.send_market_data_request(market,
 					current_period_type, session_key);
@@ -91,8 +90,8 @@ public class TA_Chart extends Frame {
 			}
 			//Ensure that all graph's data sets are removed.  (May need to
 			//change later.)
-			graph.detachDataSets();
-			graph.attachDataSet(connection.last_market_data());
+			main_pane.clear_main_graph();
+			main_pane.add_main_data_set(connection.last_market_data());
 			if (current_upper_indicator != null &&
 					! current_upper_indicator.equals(No_upper_indicator)) {
 				// Retrieve the data for the newly selected market for the
@@ -107,17 +106,17 @@ public class TA_Chart extends Frame {
 					System.err.println("Exception occurred: "+e+", bye ...");
 					quit(-1);
 				}
-				graph.attachDataSet(connection.last_indicator_data());
+				dataset = connection.last_indicator_data();
+				dataset.set_dates_needed(false);
+				main_pane.add_main_data_set(dataset);
 			}
-			graph.repaint();
 			setTitle(market);
 			current_market = market;
 			if (current_lower_indicator != null &&
 					! current_lower_indicator.equals(No_lower_indicator)) {
 				// Retrieve the indicator data for the newly selected market
 				// for the lower indicator and draw it.
-				graph = main_pane.indicator_graph();
-				graph.detachDataSets();
+				main_pane.clear_indicator_graph();
 				try {
 					connection.send_indicator_data_request(
 						((Integer) _indicators.get(current_lower_indicator)).
@@ -129,9 +128,9 @@ public class TA_Chart extends Frame {
 				}
 				dataset = connection.last_indicator_data();
 				add_indicator_lines(dataset);
-				graph.attachDataSet(dataset);
-				graph.repaint();
+				main_pane.add_indicator_data_set(dataset);
 			}
+			main_pane.repaint_graphs();
 		}
 	}
 
@@ -304,7 +303,6 @@ public class TA_Chart extends Frame {
 /** Listener for indicator selection */
 class IndicatorListener implements java.awt.event.ActionListener {
 	public void actionPerformed(java.awt.event.ActionEvent e) {
-		TA_Graph graph;
 		String selection = e.getActionCommand();
 		DataSet dataset;
 		try {
@@ -326,43 +324,41 @@ class IndicatorListener implements java.awt.event.ActionListener {
 			System.err.println("Exception occurred: " + ex + ", bye ...");
 			quit(-1);
 		}
-		// Set graph according to whether the selected indicator is
+		// Set graph data according to whether the selected indicator is
 		// configured to go in the upper (main) or lower (indicator) graph.
 		if (Configuration.instance().upper_indicators().containsKey(selection))
 		{
-			graph = main_pane.main_graph();
 			if (current_upper_indicator != null) {
 				// Remove the old indicator data from the graph (and the
 				// market data).
-				graph.detachDataSets();
+				main_pane.clear_main_graph();
 				// Re-attach the market data.
-				graph.attachDataSet(connection.last_market_data());
+				main_pane.add_main_data_set(connection.last_market_data());
 			}
 			current_upper_indicator = selection;
-			graph.attachDataSet(connection.last_indicator_data());
+			dataset = connection.last_indicator_data();
+			dataset.set_dates_needed(false);
+			main_pane.add_main_data_set(dataset);
 		}
 		else if (selection.equals(No_upper_indicator)) {
-			graph = main_pane.main_graph();
 			// Remove the old indicator and market data from the graph.
-			graph.detachDataSets();
+			main_pane.clear_main_graph();
 			// Re-attach the market data without the indicator data.
-			graph.attachDataSet(connection.last_market_data());
+			main_pane.add_main_data_set(connection.last_market_data());
 			current_upper_indicator = selection;
 		}
 		else if (selection.equals(No_lower_indicator)) {
-			graph = main_pane.indicator_graph();
-			graph.detachDataSets();
+			main_pane.clear_indicator_graph();
 			current_lower_indicator = selection;
 		}
 		else {
-			graph = main_pane.indicator_graph();
-			graph.detachDataSets();
+			main_pane.clear_indicator_graph();
 			current_lower_indicator = selection;
 			dataset = connection.last_indicator_data();
 			add_indicator_lines(dataset);
-			graph.attachDataSet(dataset);
+			main_pane.add_indicator_data_set(dataset);
 		}
-		graph.repaint();
+		main_pane.repaint_graphs();
 	}
 }
 }

@@ -29,7 +29,7 @@ public class TA_Connection implements NetworkProtocol
 									Output_field_separator);
 		scanner = new DataInspector();
 		main_drawer = new_main_drawer();
-		indicator_drawer = new LineDrawer();
+		indicator_drawer = new LineDrawer(main_drawer);
 		//Process args for the host, port.
 		if (args.length > 0)
 		{
@@ -280,7 +280,6 @@ public class TA_Connection implements NetworkProtocol
 		switch (c.main_graph_drawer()) {
 			case c.Candle_graph: result = new CandleDrawer(); break;
 			case c.Regular_graph: result = new PriceDrawer(); break;
-			case c.Line_graph: result = new LineDrawer(); break;
 			default: result = new PriceDrawer(); break;
 		}
 		return result;

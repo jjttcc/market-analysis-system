@@ -62,8 +62,47 @@ public class TA_ScrollPane extends ScrollPane
 	}
 
 	// Current selected period type
-	String current_period_type() {
+	public String current_period_type() {
 		return period_type_choice.getSelectedItem();
+	}
+
+	// Delete all data from the main graph.
+	public void clear_main_graph() {
+		_main_graph.detachDataSets();
+		main_graph_changed = true;
+	}
+
+	// Delete all data from the indicator graph.
+	public void clear_indicator_graph() {
+		_indicator_graph.detachDataSets();
+		indicator_graph_changed = true;
+	}
+
+	// Add a data set to the main graph.
+	public void add_main_data_set(DataSet d) {
+		_main_graph.attachDataSet(d);
+		main_graph_changed = true;
+	}
+
+	// Add a data set to the indicator graph.
+	// Precondition: main_dates != null
+	public void add_indicator_data_set(DataSet d) {
+		_indicator_graph.attachDataSet(d);
+		indicator_graph_changed = true;
+	}
+
+	// Repaint the graphs.
+	public void repaint_graphs() {
+		// The order matters - first repaint the main graph, then
+		// the indicator graph.
+		if (main_graph_changed) {
+			_main_graph.repaint();
+			main_graph_changed = false;
+		}
+		if (indicator_graph_changed) {
+			_indicator_graph.repaint();
+			indicator_graph_changed = false;
+		}
 	}
 
 // Implementation
@@ -86,6 +125,10 @@ public class TA_ScrollPane extends ScrollPane
 
 	private TA_GraphInteractive _main_graph;
 	private TA_GraphInteractive _indicator_graph;
+	// Did _main_graph change since it was last repainted?
+	boolean main_graph_changed;
+	// Did _indicator_graph change since it was last repainted?
+	boolean indicator_graph_changed;
 	Choice period_type_choice;
 	TA_Chart chart;
 	String _last_period_type;
