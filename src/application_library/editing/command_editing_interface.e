@@ -9,9 +9,6 @@ indexing
 deferred class COMMAND_EDITING_INTERFACE inherit
 
 	COMMANDS
-		export
-			{NONE} all
-		end
 
 	OBJECT_EDITING_INTERFACE [COMMAND]
 		rename
@@ -36,7 +33,7 @@ feature -- Access
 			-- operator "tree".
 
 	market_function: MARKET_FUNCTION
-			-- Market function to use for those commands that need it
+			-- Default market function to use for those commands that need it
 
 	market_tuple_selector: MARKET_TUPLE_LIST_SELECTOR
 			-- Interface that provides selection of a market tuple list
@@ -67,7 +64,7 @@ feature -- Access
 			l.extend (command_with_generator ("FALSE_COMMAND"))
 			l.extend (command_with_generator ("SIGN_ANALYZER"))
 
-			!!l.make (26)
+			!!l.make (27)
 			Result.extend (l, Real_result_command)
 			l.extend (command_with_generator ("SUBTRACTION"))
 			l.extend (command_with_generator ("MULTIPLICATION"))
@@ -95,6 +92,7 @@ feature -- Access
 			l.extend (command_with_generator ("UNARY_LINEAR_OPERATOR"))
 			l.extend (command_with_generator ("ABSOLUTE_VALUE"))
 			l.extend (command_with_generator ("N_BASED_UNARY_OPERATOR"))
+			l.extend (command_with_generator ("FUNCTION_BASED_COMMAND"))
 
 			!!l.make (5)
 			Result.extend (l, Binary_real_real_command)
@@ -125,7 +123,7 @@ feature -- Access
 			l.extend (command_with_generator ("OPENING_PRICE"))
 			l.extend (command_with_generator ("OPEN_INTEREST"))
 
-			!!l.make (8)
+			!!l.make (9)
 			Result.extend (l, Linear_command)
 			l.extend (command_with_generator ("UNARY_LINEAR_OPERATOR"))
 			l.extend (command_with_generator ("SLOPE_ANALYZER"))
@@ -135,6 +133,7 @@ feature -- Access
 			l.extend (command_with_generator ("LINEAR_SUM"))
 			l.extend (command_with_generator ("HIGHEST_VALUE"))
 			l.extend (command_with_generator ("BASIC_LINEAR_COMMAND"))
+			l.extend (command_with_generator ("FUNCTION_BASED_COMMAND"))
 
 			!!l.make (2)
 			Result.extend (l, N_based_calculation)
@@ -179,6 +178,14 @@ feature -- Constants
 	Linear_command: STRING is "LINEAR_COMMAND"
 			-- Name of LINEAR_COMMAND
 
+feature -- Status report
+
+	use_market_function_selection: BOOLEAN
+			-- Will `market_function_selection' be used to ask the user
+			-- for a selection?  If (false or market_tuple_selector is
+			-- Void) and market_function is not Void,
+			-- `market_function' will be used.
+
 feature -- Status setting
 
 	set_left_offset (arg: INTEGER) is
@@ -213,6 +220,16 @@ feature -- Status setting
 				market_tuple_selector /= Void
 		end
 
+	set_use_market_function_selection (
+				arg: like use_market_function_selection) is
+			-- Set use_market_function_selection to `arg'.
+		do
+			use_market_function_selection := arg
+		ensure
+			use_market_function_selection:
+				use_market_function_selection = arg
+		end
+
 feature -- Miscellaneous
 
 	print_command_tree (cmd: COMMAND; level: INTEGER) is
@@ -232,7 +249,9 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 				mf_not_void: market_function /= Void or
 					market_tuple_selector /= Void
 			end
-			if market_tuple_selector /= Void then
+			if market_tuple_selector /= Void and
+				use_market_function_selection or market_function = Void
+			then
 				Result := market_tuple_selector.market_tuple_list_selection (
 							msg)
 			else
@@ -246,7 +265,10 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 				mf_not_void: market_function /= Void or
 					market_tuple_selector /= Void
 			end
-			if market_tuple_selector /= Void then
+			if
+				market_tuple_selector /= Void and
+				use_market_function_selection or market_function = Void
+			then
 				Result := market_tuple_selector.market_function_selection (
 							msg)
 			else
@@ -272,7 +294,8 @@ feature {NONE} -- Implementation
 						-- an n-value
 	Settable_offset,	-- SETTABLE_OFFSET_COMMAND
 	Sign_analyzer,		-- SIGN_ANALYZER
-	Boolean_num_client	-- BOOLEAN_NUMERIC_CLIENT
+	Boolean_num_client,	-- BOOLEAN_NUMERIC_CLIENT
+	Function_command    -- FUNCTION_BASED_COMMAND
 	:
 				INTEGER is unique
 			-- Constants identifying initialization routines required for
@@ -483,7 +506,11 @@ feature {NONE} -- Implementation
 			check
 				valid_name: command_names.has (name)
 			end
-			Result.extend (Mtlist, name)
+			name := "FUNCTION_BASED_COMMAND"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Function_command, name)
 		end
 
 	initialize_command (c: COMMAND) is
@@ -498,6 +525,7 @@ feature {NONE} -- Implementation
 			offset_cmd: SETTABLE_OFFSET_COMMAND
 			bnc: BOOLEAN_NUMERIC_CLIENT
 			sign_an: SIGN_ANALYZER
+			fcmd: FUNCTION_BASED_COMMAND
 		do
 			inspect
 				initialization_map @ c.generator
@@ -573,6 +601,12 @@ feature {NONE} -- Implementation
 					c_is_a_sign_analyzer: sign_an /= Void
 				end
 				editor.edit_sign_analyzer (sign_an)
+			when Function_command then
+				fcmd ?= c
+				check
+					c_is_a_function_based_command: fcmd /= Void
+				end
+				editor.edit_function_based_command (fcmd)
 			end
 		end
 
