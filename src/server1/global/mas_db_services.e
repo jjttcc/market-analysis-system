@@ -12,48 +12,62 @@ feature -- Access
 	symbols: LIST [STRING] is
 			-- All symbols available in the database
 		local
-			db_handle: MAS_ODBC_HANDLE
 			data	 : DATABASE_DATA[DATABASE]
 			symbol   : STRING
+			db_result: LINKED_LIST[DB_RESULT]
+			db_mgr: MAS_ODBC_HANDLE
 		do
 			--remember to make file name a constant
 			create db_info.make ("ms_dbsrvrc")
-			create db_handle.make(db_info.db_name, db_info.trades_tables.item)
-			db_handle.login(db_info.user_name, db_info.password)
-			db_handle.connect
-			if db_handle.connected then
-				db_handle.set_current_query(db_info.symbol_select)
-				db_handle.make_selection
-				if db_handle.last_result /= void then
+			create db_mgr
+			db_mgr.login(db_info.db_name, db_info.user_name, db_info.password)
+			db_mgr.connect
+			if db_mgr.connected then
+				db_result := db_mgr.retrieve(db_info.symbol_select)
+				if db_result /= void then
 					create {LINKED_LIST[STRING]} Result.make
 					!!symbol.make(0)
 					from
-						db_handle.last_result.start
+						db_result.start
 					until 
-						db_handle.last_result.after
+						db_result.after
 					loop
-						data ?= db_handle.last_result.item.data
+						data ?= db_result.item.data
 						if data /= void then
 							if data.item(data.count).conforms_to(symbol) then
 								symbol ?= data.item(data.count)
 								Result.extend(clone(symbol))
 							end	
 						end
-						db_handle.last_result.forth
+						db_result.forth
 					end
 				end
+				db_mgr.disconnect
 			else
-				db_handle.raise_error
+				db_mgr.raise_error
 			end
 		end
 
-	market_data (symbol: STRING): LINKED_LIST [DB_RESULT] is
-			-- Data for `symbol'
+	market_data(symbol: STRING): LINKED_LIST[DB_RESULT] is
+		-- market data for 'symbol'
+		local
+			db_mgr: MAS_ODBC_HANDLE
 		do
+			--remember to make file name a constant
+			create db_info.make ("ms_dbsrvrc")
+			create db_mgr
+			db_mgr.login(db_info.db_name, db_info.user_name, db_info.password)
+			db_mgr.connect
+			if db_mgr.connected then
+				db_mgr.set_argument(symbol, "symbol")
+			-- db_mgr.set_argument(??, "tday")
+				Result := db_mgr.retrieve(db_info.market_select)
+				db_mgr.disconnect
+			end
 		end
 
-feature {NONE} -- Implementation
+ feature {NONE} -- Implementation
 
 	db_info: MAS_DB_INFO
-
+	
 end -- class MAS_DB_SERVICES
