@@ -220,6 +220,11 @@
     <pathelement location="${foo.jar}"/>
 -->
 
+	<!-- !!!Use a directory path for now - may change to use a jar file
+		 in the future. -->
+
+    <pathelement location=".."/>
+
     <!-- Include all elements that Tomcat exposes to applications -->
     <pathelement location="${catalina.home}/common/classes"/>
     <fileset dir="${catalina.home}/common/endorsed">
@@ -298,7 +303,10 @@
       <fileset dir="${src.home}" excludes="**/*.java"/>
     </copy>
 	<exec executable="cp">
-	<arg line="${build.home}/WEB-INF/classes/mas/MAS.class srvlt_deployment"/>
+	<arg value="${build.home}/WEB-INF/classes/mas/MAS.class"/>
+	<arg value="${build.home}/WEB-INF/classes/mas/MAS_Proxy.class"/>
+	<arg value="${build.home}/WEB-INF/classes/mas/ServerAddress.class"/>
+	<arg value="srvlt_deployment"/>
 	</exec>
 
   </target>
