@@ -8,6 +8,7 @@ import support.*;
 // Listener that allows user to select a market to be displayed.
 class MarketSelection implements ActionListener {
 	public MarketSelection(Chart f) {
+		int window_width = f.main_pane.getSize().width / 10 - 4;
 		main_frame = f;
 		selection = new List();
 		dialog = new Dialog(f);
@@ -16,9 +17,13 @@ class MarketSelection implements ActionListener {
 		dialog.add(panel);
 		panel.add(selection, "Center");
 		panel.add(close_button, "South");
-		dialog.setSize(80, 373);
-		selection.setSize(80, 348);
-		close_button.setSize(80, 25);
+		dialog.setSize(window_width, 373);
+		selection.setSize(window_width, 348);
+		close_button.setSize(window_width, 25);
+		panel.setSize(window_width, 373);
+		Point location = dialog.getLocation();
+		location.setLocation(location.x, location.y + 135);
+		dialog.setLocation(location);
 		Vector ml = main_frame.markets();
 		for (int i = 0; i < ml.size(); ++i) {
 			selection.add((String) ml.elementAt(i));
