@@ -215,53 +215,6 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	registrant_menu is
---!!!Obsolete
-			-- Menu for adding, removing, editing, and viewing event
-			-- registrants
-		local
-			finished: BOOLEAN
-			registrar: EVENT_REGISTRATION
-		do
-			create registrar.make (event_coordinator.dispatcher,
-								input_device, output_device)
-			from
-			until
-				finished or end_client
-			loop
-				print_list (<<"Select action:",
-					"%N     Add registrants (a) Remove registrants (r) %
-					%View registrants (v) %
-					%%N     Edit registrants (e) Exit (x) Previous (-) %
-					%Help (h) ", eom>>)
-				inspect
-					character_selection (Void)
-				when 'a', 'A' then
-					registrar.add_registrants
-				when 'r', 'R' then
-					registrar.remove_registrants
-				when 'v', 'V' then
-					registrar.view_registrants
-				when 'e', 'E' then
-					registrar.edit_registrants
-				when 'x', 'X' then
-					end_client := True
-				when 'h', 'H' then
-					print (help @ help.Edit_event_registrants)
-				when '%/5/' then -- ^E, for exit
-					exit_server := True; finished := True
-				when '!' then
-					print ("Type exit to return to main program.%N")
-					system ("")
-				when '-' then
-					finished := True
-				else
-					print ("Invalid selection%N")
-				end
-				print ("%N%N")
-			end
-		end
-
 	view_menu is
 			-- Menu for viewing market and market function data
 		local
