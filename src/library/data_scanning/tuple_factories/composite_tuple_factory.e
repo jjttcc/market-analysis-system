@@ -61,8 +61,8 @@ feature {NONE}
 		do
 			o := tuples.first.open.value
 			c := tuples.last.close.value
-			high_finder.set_input (tuples)
-			low_finder.set_input (tuples)
+			high_finder.set_target (tuples)
+			low_finder.set_target (tuples)
 			-- Set to process all elements:
 			high_finder.set_n (tuples.count)
 			low_finder.set_n (tuples.count)

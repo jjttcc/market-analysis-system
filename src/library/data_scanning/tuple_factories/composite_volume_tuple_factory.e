@@ -38,12 +38,12 @@ feature {NONE}
 			-- Set product's volume to sum of all volumes in tuplelist.
 		local
 		do
-			volume_adder.set_input (tuples)
+			volume_adder.set_target (tuples)
 			volume_adder.set_n (tuples.count)
 			tuples.start
 			check
 				volume_adder.operator_set
-				volume_adder.input_set
+				volume_adder.target_set
 				volume_adder.n_set
 			end
 			volume_adder.execute (Void)
