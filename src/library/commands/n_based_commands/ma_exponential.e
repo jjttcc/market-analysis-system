@@ -7,7 +7,7 @@ class MA_EXPONENTIAL inherit
 
 	N_BASED_CALCULATION
 
-feature
+feature {NONE}
 
 	calculate (n: REAL): REAL is
 		do

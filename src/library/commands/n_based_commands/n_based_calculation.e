@@ -11,7 +11,7 @@ deferred class N_BASED_CALCULATION inherit
 			initialize
 		end
 
-feature -- Element change
+feature -- Initialization
 
 	initialize (s: n_record_structure) is
 			-- Initialize value with n from s
