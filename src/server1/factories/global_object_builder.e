@@ -62,7 +62,6 @@ feature {NONE}
 			-- will all be STOCK_FACTORYs.)
 		local
 			i: INTEGER
-			file: PLAIN_TEXT_FILE
 			tradable_factories: LINKED_LIST [TRADABLE_FACTORY]
 			tradable_factory: TRADABLE_FACTORY
 			hc_function_factory: HARD_CODED_FUNCTION_BUILDER
