@@ -52,14 +52,15 @@ feature -- Access
 
 	accumulation_operator: RESULT_COMMAND [REAL]
 			-- Operator used to "accumulate" the value of the current field
-			-- of the current tuple ....!!!
+			-- of the current tuple
 			--@@@There may be a need for each element of `components' to
 			--be associated with its own accumulation_operator, but
 			--probably, and hopefully, not.
 			--@@@Implementation note: The accumulation can probably be done
 			--with an appropriate command structure for 
 			--`operator_for_current_component'; it seems though that it
-			--may be better to keep the accumulation operator to separate
+			--may be better (in terms of code clarity/understandability)
+			--to keep the accumulation operator to separate
 			--"weighting" calculations from "accumulation" calculations.
 
 feature -- Status report
@@ -154,11 +155,13 @@ feature {NONE} -- Implementation
 		field_extractor: BASIC_NUMERIC_COMMAND) is
 			-- For each element, c, of `components', use the field obtained
 			-- by `field_extractor' of c's current tuple to calculate the
-			-- value to be used for the current output tuple.
+			-- resulting output value and put this value into the associated
+			-- field of `current_tuple'.
 		local
 			post_operator: RESULT_COMMAND [REAL]
 		do
 			post_operator := post_processing_operator (field_extractor.name)
+			initialize_accumulation_operator
 			from
 				components.start
 			until
@@ -191,8 +194,6 @@ feature {NONE} -- Implementation - Hook routines
 			work_tuple_exists: work_tuple /= Void
 		end
 
---!!!Check this and make_current_tuple and add comments/advice about
---using sequence commands
 	calculate_field (field_extractor: BASIC_NUMERIC_COMMAND) is
 			-- Calculate the value for `field_extractor' with
 			-- `components.item'.  The result will be stored in
@@ -224,6 +225,8 @@ feature {NONE} -- Implementation - Hook routines
 			-- Specialization on `field_extractor_name' will most likely
 			-- only occur for "volume", with the other field extractors
 			-- sharing the same operator.
+		ensure
+			result_exists: Result /= Void
 		end
 
 	variable_for_current_component (field_extractor_name: STRING):
@@ -232,8 +235,8 @@ feature {NONE} -- Implementation - Hook routines
 			-- possibly specialized with `field_extractor_name'
 		deferred
 		ensure
-			belongs_to_current_operator_or_current_volume_operator:
-				operator_for_current_component (
+			result_exists: Result /= Void
+			belongs_to_current_operator: operator_for_current_component (
 				field_extractor_name).descendants.has (Result)
 		end
 
@@ -246,6 +249,26 @@ feature {NONE} -- Implementation - Hook routines
 			-- Specialization on `field_extractor_name' will most likely
 			-- only occur for "volume", with the other field extractors
 			-- sharing the same operator.
+		ensure
+			result_exists: Result /= Void
+		end
+
+	initialize_accumulation_operator is
+			-- Initialize the 'result' variable of `accumulation_operator'
+			-- in preparation for starting the "accumulation" for the
+			-- current field of the current tuple.
+		local
+			accum_var: NUMERIC_VALUE_COMMAND
+		do
+			accum_var := accumulation_result_variable
+			if accum_var /= Void then
+				accum_var.set_value (0)
+			end
+		end
+
+	accumulation_result_variable: NUMERIC_VALUE_COMMAND is
+			-- The "variable" that will hold the result of the "accumulation"
+		deferred
 		end
 
 feature {NONE} -- Implementation - Utility queries
@@ -255,6 +278,8 @@ feature {NONE} -- Implementation - Utility queries
 			-- of `data'
 			--@@@Check on whether BASIC_VOLUME_TUPLE is the right type.
 
+--@@May want to make the choice of fields to be processed configurable,
+--either by means of inheritance, or status setting by the client.
 	open: OPENING_PRICE is
 			-- Operator used to extract the open price of the input
 			-- tuple currently being processed
