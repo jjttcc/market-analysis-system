@@ -171,3 +171,4 @@ done
 if [ "$dbrecords" = true ]; then
 	add_daily_stock_records <$db_datafile
 fi
+rm -f $db_datafile
