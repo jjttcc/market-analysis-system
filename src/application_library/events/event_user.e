@@ -63,26 +63,26 @@ feature -- Initialization
 
 feature -- Basic operations
 
-	perform_notify (elist: LIST [MARKET_EVENT]) is
-			-- Notify user of events in `elist' or log the error
+	perform_notify is
+			-- Notify user of events in `event_cache' or log the error
 			-- if notification failed.
 		local
 			msg: STRING
 			e: MARKET_EVENT
 		do
 			if not email_addresses.empty and mailer /= Void then
-				create msg.make (elist.count * 120)
+				create msg.make (event_cache.count * 120)
 				from
-					elist.start
+					event_cache.start
 				until
-					elist.exhausted
+					event_cache.exhausted
 				loop
-					e := elist.item
+					e := event_cache.item
 					msg.append (event_information (e))
 					msg.append ("%N%N")
-					elist.forth
+					event_cache.forth
 				end
-				notify_by_email (msg, concatenation (<<elist.count,
+				notify_by_email (msg, concatenation (<<event_cache.count,
 					" TA Events Received at ", current_date, ", ",
 					current_time, " (Notification to ", name, ")">>))
 			else

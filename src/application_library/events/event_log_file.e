@@ -74,19 +74,19 @@ feature -- Initialization
 
 feature -- Basic operations
 
-	perform_notify (elist: LIST [MARKET_EVENT]) is
+	perform_notify is
 		local
 			e: MARKET_EVENT
 		do
 			from
-				elist.start
+				event_cache.start
 			until
-				elist.exhausted
+				event_cache.exhausted
 			loop
-				e := elist.item
+				e := event_cache.item
 				put_string (event_information (e))
 				put_string ("%N")
-				elist.forth
+				event_cache.forth
 			end
 		end
 
