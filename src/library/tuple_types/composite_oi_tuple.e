@@ -27,12 +27,10 @@ feature {COMPOSITE_TUPLE_FACTORY} -- Status setting
 
 	set_open_interest (arg: REAL) is
 			-- Set open_interest to `arg'.
-		require
-			arg /= Void
 		do
 			open_interest := arg
 		ensure
-			open_interest_set: open_interest = arg and open_interest /= Void
+			open_interest_set: rabs (open_interest - arg) < Epsilon
 		end
 
 end -- class COMPOSITE_OI_TUPLE
