@@ -1,12 +1,12 @@
 indexing
-	description: "Interface to the GUI client"
+	description: "Extended interface to the GUI client"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	note: "It is expected that, before `execute' is called, the first %
 		%character of the input of io_medium has been read."
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
-		%Released under the Eiffel Forum License; see file forum.txt"
+		%License to be determined - will be non-public"
 
 class EXTENDED_MAIN_GUI_INTERFACE inherit
 

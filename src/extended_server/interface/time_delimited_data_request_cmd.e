@@ -1,12 +1,12 @@
 indexing
 	description:
-		"A command that responds to a client request for market data %
+		"A command that responds to a client request for data %
 		%delimited by a start date-time and an end date-time"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
-		%Released under the Eiffel Forum License; see file forum.txt"
+		%License to be determined - will be non-public"
 
 deferred class TIME_DELIMITED_DATA_REQUEST_CMD inherit
 

@@ -16,7 +16,6 @@ class INDICATOR_DATA_REQUEST_CMD inherit
 			additional_field_constraints_msg
 		end
 
-
 creation
 
 	make
