@@ -21,6 +21,12 @@ feature -- Access
 	left_generator, right_generator: MARKET_EVENT_GENERATOR
 			-- The left and right generators to be contained by the new CEG
 
+	left_target_type: EVENT_TYPE
+			-- The event type to assign to the new CEG's left_target_type
+
+	before_extension, after_extension: DATE_TIME_DURATION
+			-- The values for the new CEG's before and after extensions
+
 feature -- Status setting
 
 	set_generators (left, right: MARKET_EVENT_GENERATOR) is
@@ -34,11 +40,47 @@ feature -- Status setting
 			set: left_generator = left and right_generator = right
 		end
 
+	set_left_target_type (arg: EVENT_TYPE) is
+			-- Set left_target_type to `arg'.
+		do
+			left_target_type := arg
+		ensure
+			left_target_type_set: left_target_type = arg
+		end
+
+	set_before_extension (arg: DATE_TIME_DURATION) is
+			-- Set before_extension to `arg'.
+		do
+			before_extension := arg
+		ensure
+			before_extension_set: before_extension = arg
+		end
+
+	set_after_extension (arg: DATE_TIME_DURATION) is
+			-- Set after_extension to `arg'.
+		do
+			after_extension := arg
+		ensure
+			after_extension_set: after_extension = arg
+		end
+
 feature -- Basic operations
 
 	execute is
 		do
 			!!product.make (left_generator, right_generator, event_type)
+			if before_extension /= Void then
+				product.set_before_extension (before_extension)
+				print ("CGF: set before extension to:%N")
+				print (product.before_extension)
+				print ("%N")
+			end
+			if after_extension /= Void then
+				product.set_after_extension (after_extension)
+			end
+			if left_target_type /= Void then
+				product.set_left_target_type (left_target_type)
+			end
 		end
 
 end -- COMPOUND_GENERATOR_FACTORY
