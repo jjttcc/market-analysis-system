@@ -1,4 +1,5 @@
 /* Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt */
+test
 
 package support;
 
