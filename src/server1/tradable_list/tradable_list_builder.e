@@ -22,20 +22,13 @@ creation
 
 feature -- Initialization
 
-	make (fl: LIST [MARKET_FUNCTION]) is
-		require
-			fl_not_void: fl /= Void
+	make is
 		do
-			function_library := fl
-		ensure
-			function_library_set: function_library = fl
 		end
 
 feature -- Access
 
 	product: TRADABLE_DISPENSER
-
-	function_library: LIST [MARKET_FUNCTION]
 
 feature -- Basic operations
 
@@ -76,7 +69,7 @@ feature {NONE} -- Implementation
 
 	tradable_factory: TRADABLE_FACTORY is
 		do
-			create {STOCK_FACTORY} Result.make
+			create Result.make
 			Result.set_no_open (
 				not command_line_options.opening_price)
 			if command_line_options.field_separator /= Void then
@@ -93,10 +86,6 @@ feature {NONE} -- Implementation
 			if command_line_options.strict then
 				Result.set_strict_error_checking (true)
 			end
-			check
-				flist_not_void: function_library /= Void
-			end
-			Result.set_indicators (function_library)
 		end
 
     retrieve_input_entity_names is
@@ -112,7 +101,5 @@ feature {NONE} -- Implementation
     input_entity_names: LIST [STRING]
 
 invariant
-
-	function_library_not_void: function_library /= Void
 
 end -- class TRADABLE_LIST_BUILDER
