@@ -10,6 +10,9 @@ class BASIC_MARKET_TUPLE inherit
 	MARKET_TUPLE
 
 	MATH_CONSTANTS
+		export {NONE}
+			all
+		end
 
 creation
 
@@ -67,6 +70,15 @@ feature -- Status report
 	editing: BOOLEAN
 			-- Is this instance in the process of being edited?
 
+	price_relationships_correct: BOOLEAN is
+		do
+			Result := (low <= high and low <= close and close <= high) and
+						(open_available implies low <= open and open <= high)
+		ensure
+			Result = (low <= high and low <= close and close <= high) and
+						(open_available implies low <= open and open <= high)
+		end
+
 feature -- Status setting
 
 	begin_editing is
@@ -92,9 +104,7 @@ feature -- Status setting
 			editing := false
 		ensure
 			not_editing: not editing
-			prices_valid: 
-					(low <= high and low <= close and close <= high) and
-					(open_available implies low <= open and open <= high)
+			prices_valid: price_relationships_correct
 		end
 
 feature -- {WHO?} Element change
@@ -169,14 +179,29 @@ feature -- {WHO?} Element change
 			low_set: low.value = p
 		end
 
+	fix_price_relationships is
+			-- Change prices so that price_relationships_correct is
+			-- not violated.
+		do
+			if not price_relationships_correct then
+				if low > close then low := close end
+				if high < close then high := close end
+				if open_available then
+					if low > open then low := open end
+					if high < open then high := open end
+				end
+			end
+		ensure
+			price_relationships_correct: price_relationships_correct
+			close_open_not_changed: open = old open and close = old close
+		end
+
 invariant
 
 	prices_non_negative: close.value >= 0 and high.value >= 0 and
 							low.value >= 0 and
 							(open.value >= 0 or not open_available)
 	open_na_value: not open_available implies open.value < 0
-	price_relationships: not editing implies
-					(low <= high and low <= close and close <= high) and
-					(open_available implies low <= open and open <= high)
+	price_relationships: not editing implies price_relationships_correct
 
 end -- class BASIC_MARKET_TUPLE
