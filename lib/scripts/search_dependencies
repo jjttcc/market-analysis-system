@@ -1,0 +1,41 @@
+#!/bin/bash
+# Usage: search_dependencies clusterA clusterB
+# Search for dependencies of classes in clusterA upon classes in clusterB
+
+Progname=$(basename $0)
+usage() {
+	echo "Search for dependencies of clusterA upon clusterB."
+	echo "Usage: $Progname clusterA clusterB"
+}
+
+# A list of all eiffel (*.e) files within the specified directory
+eiffel_files() {
+	find $1 -name '*.e' -print
+}
+
+if [ $# -lt 2 ]; then
+	usage
+	exit -1
+fi
+clusterA=$1
+clusterB=$2
+if [ ! -d "$clusterA" -o ! -d "$clusterB" ]; then
+	echo $clusterA or $clusterB is not a directory, exiting ...
+	exit -1
+fi
+
+afiles="$(eiffel_files $clusterA)"
+bfiles="$(cd $clusterB/ >/dev/null; eiffel_files .)"
+#!!!for f in $( (cd $clusterB/ >/dev/null; ls *.e) )
+for f in $bfiles
+do
+	classname=$(basename $f .e|tr '[a-z]' '[A-Z]')
+	if
+#!!!		grep "\<$classname\>" $clusterA/*.e >/dev/null
+		grep "\<$classname\>" $afiles >/dev/null
+	then
+#!!!			echo -e classes: \"$(grep -l "\<$classname\>" $clusterA/*.e)\" "\c"
+			echo -e classes: \"$(grep -l "\<$classname\>" $afiles)\" "\c"
+			echo "depend on $clusterB/$f"
+	fi
+done
