@@ -24,8 +24,10 @@ public class AutoRefreshSetup {
 
 	// Unschedule `data_request_client' for data refresh actions
 	public void unschedule() {
-		timer.cancel();
-		timer = null;
+		if (timer != null) {
+			timer.cancel();
+			timer = null;
+		}
 	}
 
 	// Schedule `data_request_client' for data refresh actions - ignored
@@ -49,6 +51,6 @@ public class AutoRefreshSetup {
 	// Timer delay in milliseconds (@@Make configurable - check with Orest.)
 //	private static long refresh_delay = 1000 * 5;
 //	private static long refresh_delay = 100 * 7;
-private static long refresh_delay = 1000 * 3;
+private static long refresh_delay = 1000 * 2;
 //private static long refresh_delay = 1000 * 60;
 }
