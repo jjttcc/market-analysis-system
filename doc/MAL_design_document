@@ -13,14 +13,15 @@ sequence of values to be averaged.  This abstraction allows for easily
 building complex indicators as composite functions.
 
 Class MARKET_FUNCTION provides the main abstraction for TA indicators
-as functions.  Its main features are output, a list of market tuples, and
-process, a command to process the function's input and place the result
-in output.  MARKET_TUPLE is an abstraction for tuples processed by the
-TA functions, which has the features value and date_time.  MARKET_TUPLEs
-will be accessed and manipulated by the function classes as sequences of
-tuples, ordered by their date_time values.  This models trading periods -
-each trading period has a date (and time, if it is intraday), and other
-values (such as open, close, high, low - defined in descendant classes).
+as functions.  Its main features are `output', a list of market tuples,
+and `process', a command to process the function's input and place the
+result in `output'.  MARKET_TUPLE is an abstraction for tuples processed
+by the TA functions, whose main features are `value' and `date_time'.
+MARKET_TUPLEs will be accessed and manipulated by the function classes
+as sequences of tuples, ordered by their date_time values.  This models
+trading periods - each trading period has a date (and time, if it is
+intraday), and other values (such as open, close, high, low - defined
+in descendant classes).
 
 MARKET_TUPLE_LIST inherits from ARRAYED_LIST (from the base library),
 adding the contraint that the generic argument must be of type
@@ -52,6 +53,11 @@ enclosing function needing to know the type of function it is containing
 is that arbitrarily complex functions can be constructed without causing
 resulting complexity in the implementation of the function classes.
 
+COMPLEX_FUNCTION provides an abstraction of a MARKET_FUNCTION that gets
+its input from another MARKET_FUNCTION.  This provides the basis for the
+composition of functions, mentioned above.  It introduces an `operator'
+attribute, and some other features needed by descendants.
+
 CLUSTER structural
 
 This cluster contains two classes that provide structural properties
@@ -75,13 +81,13 @@ CLUSTER commands
 
 This is the top-level cluster for a set of subclusters that contain
 abstractions that are used mainly by the function classes as abstract
-operators.  Class MARKET_FUNCTION contains an attribute, operator (of
-type NUMERIC_COMMAND), whose run-time type will be one of the classes
-(in one of the subclusters) of this cluster.  This attribute will be
-used in the following manner:  When a function class is instantiated,
+operators.  Class COMPLEX_FUNCTION contains an attribute, operator
+(of type RESULT_COMMAND [REAL]), whose run-time type will be one of the
+classes (in one of the subclusters) of this cluster.  This attribute will
+be used in the following manner:  When a function class is instantiated,
 the routine that does the instantiating will create an instance of a
-descendant of NUMERIC_COMMAND, according to the required properties of
-the particular TA function being built, and pass this NUMERIC_COMMAND
+descendant of RESULT_COMMAND, according to the required properties of
+the particular TA function being built, and pass this RESULT_COMMAND
 instance to the creation routine used to create the function instance.
 (For example, a routine whose purpose is to build a moving average
 convergence/divergence (MACD) function, which takes the difference of
@@ -92,11 +98,11 @@ its work, it will call the execute function on its operator, allowing
 the dynamic binding mechanism to provide the appropriate operation on
 the current item or set of items (as in the above example, subtraction).
 
-All classes in the command cluster are descendants of NUMERIC_COMMAND,
+All classes in the command cluster are descendants of RESULT_COMMAND,
 which itself inherits from COMMAND.  As one might guess, COMMAND is an
-implementation of the command pattern.  NUMERIC_COMMAND adds an attribute
-of type REAL that will hold a value as a result of calling its execute
-procedure.  These two classes are stored in a separate library.
+implementation of the command pattern.  RESULT_COMMAND adds a `value'
+attribute that will contain the result of executing the command.
+These two classes are stored in a separate library.
 
 Subcluster command_structures contains classes that provide the principal
 command abstractions.  LINEAR_COMMAND inherits from LINEAR_ANALYZER
@@ -111,7 +117,7 @@ and thus provides the concept of a command that iterates over n tuples.
 CLUSTER function_types
 
 This cluster contains sublusters that contain various types of functions
-(descendants of MARKET_FUNCTION).
+(descendants of COMPLEX_FUNCTION).
 
 SUBCLUSTER configurable_functions (function_types)
 
@@ -119,7 +125,7 @@ This subcluster of function_types contains abstractions of functions
 that allow a good deal of flexibility in how they can be configured -
 with the goal that a large number of arbritrarily complex technical
 indicators can be built using these functions.  This cluster includes
-the two main composite functions that inherit from MARKET_FUNCTION:
+the two main composite functions that inherit from COMPLEX_FUNCTION:
 ONE_VARIABLE_FUNCTION and TWO_VARIABLE_FUNCTION.  All other
 composite functions inherit from these functions.  As the names imply
 ONE_VARIABLE_FUNCTION is a function that takes one argument or variable
@@ -132,12 +138,12 @@ the concept of a function that operates on an n-tuple subset of the input.
 
 SUBCLUSTER specific_functions
 
-This cluster contains descendants of MARKET_FUNCTION that hold more
-specific implementations than the configurable_functions.  For example,
-STANDARD_MOVING_AVERAGE specializes on calculating simple moving
-averages.  This capability could be constructed with one of the classes
-in configurable functions, but the implementation in that case would
-not be nearly as efficient as that of STANDARD_MOVING_AVERAGE, since
+This cluster contains descendants of COMPLEX_FUNCTION that hold
+more specific implementations than the configurable_functions.
+For example, STANDARD_MOVING_AVERAGE specializes on calculating simple
+moving averages.  This capability could be constructed with one of the
+classes in configurable functions, but the implementation in that case
+would not be as efficient as that of STANDARD_MOVING_AVERAGE, since
 its specialization allows it to be optimized for moving averages. Since
 moving averages occur quite frequently in technical analysis, it seems
 reasonable to include a class that provides this optimization.
@@ -145,6 +151,11 @@ reasonable to include a class that provides this optimization.
 EXPONENTIAL_MOVING_AVERAGE inherits from STANDARD_MOVING_AVERAGE and
 uses its features to implement the exponential moving average, adapting
 the algorithm to produce the slightly different EMA calculation.
+
+ACCUMULATION is a ONE_VARIABLE_FUNCTION that accumulates values
+as it traverses its sequence of market tuples.  This is a useful
+class used to implement such indicators as volume accumulation and
+accumulation/distribution.
 
 COMPOSITE_TUPLE_BUILDER provides the capability of deriving, from input
 data (market tuples), data whose trading periods have a larger duration
@@ -211,7 +222,7 @@ is defined by two points, the two MARKET_TUPLEs (actually, MARKET_POINTs,
 which descend from MARKET_TUPLEs).  Treating a MARKET_TUPLE as a point,
 its x value is its date/time and its y value is the price or indicator
 value (the `value' query).  A common use of MARKET_LINE is to approximate
-the slope (rate of change) or a market data set at a particular date/time.
+the slope (rate of change) of a market data set at a particular date/time.
 MARKET_FUNCTION_LINE is a MARKET_LINE that is also a SIMPLE_FUNCTION
 (which is a MARKET_FUNCTION), allowing lines to be incorporated into
 market function analysis.  For example, a MARKET_FUNCTION_LINE could be
