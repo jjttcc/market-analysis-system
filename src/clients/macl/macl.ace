@@ -1,0 +1,91 @@
+system
+	"macl"
+
+root
+	MACL: make
+
+default
+	assertion (check)
+	assertion (require)
+	assertion (ensure)
+	assertion (loop)
+	assertion (invariant)
+	arguments (" ")
+	disabled_debug (yes)
+	disabled_debug ("ev_gtk_c_object_dispose")
+	disabled_debug ("ev_gtk_creation")
+	disabled_debug ("ev_gtk_destroy")
+	disabled_debug ("ev_gtk_dispose")
+	disabled_debug ("persist")
+	debug (no)
+	line_generation (no)
+	profile (no)
+	trace (no)
+	check_vape (yes)
+	console_application (no)
+	address_expression (no)
+	array_optimization (no)
+	dead_code_removal (yes)
+	dynamic_runtime (no)
+	exception_trace (no)
+	inlining (no)
+	multithreaded (no)
+
+--	assertion (check)
+--	assertion (require)
+--	assertion (ensure)
+--	assertion (loop)
+--	assertion (invariant)
+
+cluster
+
+	macl:		"$MAS/src/clients/macl"
+
+	root_cluster (macl):		"$/root"
+
+	lib (macl):		"$/library"
+
+	support (macl):		"$/support"
+
+	eiflib:		"$MAS/src/eiffel_library"
+
+	libarch (eiflib):		"$/architectural"
+
+	libsupport (eiflib):		"$/support"
+
+	libserver (eiflib):		"$/server"
+
+	liberror (eiflib):		"$/error"
+
+	mas_server:		"$MAS/src/server1"
+
+	mas_server_util (mas_server):		"$/utility"
+
+	mas_server_protocols (mas_server):		"$/protocols"
+
+	ise:		"$ISE_EIFFEL/library"
+
+	all base (ise):		"$/base"
+		exclude
+			"table_eiffel3"; "desc"; "CVS"; 
+		end
+
+	date (ise):		"$/time"
+
+	date_format (date):		"$/format"
+
+	date_tools (date_format):		"$/english"
+
+	all net (ise):		"$/net"
+
+external
+
+	include_path:
+		"$ISE_EIFFEL/library/time/Clib"
+
+	object:
+		"/${MAS}/src/eiffel_library/lib/utilities.o",
+		"${ISE_EIFFEL}/library/time/spec/${ISE_PLATFORM}/lib/libdatetime.a",
+		"${ISE_EIFFEL}/library/net/spec/${ISE_PLATFORM}/lib/libnet.a", "-lz"
+
+end
