@@ -75,8 +75,19 @@ feature -- Actions
 
 	configure_server_startup is
 			-- Configure how the server is to be started up.
+		local
+			selected_command: EXTERNAL_COMMAND
 		do
 			print ("Configure server startup Stub!!!%N")
+			selected_command := selected_start_server_command
+			check
+				start_srvr_cmd_set: selected_command /= Void and
+				selected_command.identifier.is_equal (
+					configuration.Start_server_cmd_specifier) and
+				external_commands.has (selected_command.identifier)
+			end
+			external_commands.replace (selected_command,
+				selected_command.identifier)
 		end
 
 	edit_preferences is
@@ -187,6 +198,21 @@ feature {NONE} -- Implementation
 			-- !!!Check that host is valid.
 			-- !!!If valid, Connect/disconnect to the MAS server as a
 			-- client to test that it is running and reachable - report if not.
+		end
+
+	selected_start_server_command: EXTERNAL_COMMAND is
+			-- New "start-server" command obtained from the user.
+		local
+			cmds: LINEAR [EXTERNAL_COMMAND]
+		do
+			-- !!!Stub: Fake obtaining of the command from the user until
+			-- there's time to implement it.
+			cmds := configuration.start_server_commands
+			if cmds.off then
+				cmds.start
+			end
+			Result := cmds.item
+			cmds.forth
 		end
 
 feature {NONE} -- Implementation - constants
