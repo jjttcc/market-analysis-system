@@ -25,7 +25,7 @@ feature -- Access
 
 	file_name_expander: FILE_NAME_EXPANDER is
 		do
-			create {WINDOWS_FILENAME_EXPANDER} Result
+			create {WINDOWS_FILE_NAME_EXPANDER} Result
 		end
 
 end -- class PLATFORM_DEPENDENT_OBJECTS
