@@ -304,7 +304,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 					// respect to `market'.
 					data_builder.send_indicator_list_request(market,
 						current_period_type);
-					// Force call to `indicators()' to create new indicators:
+					// Force call to `indicators()' to create new indicator
+					// lists with the result of the above request.
 					new_indicators = true;
 					indicators();
 				}
@@ -315,7 +316,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 				}
 			}
 			catch (Exception e) {
-				fatal("Request to server failed", e);
+				fatal("Request to server failed: ", e);
 			}
 			//Ensure that all graph's data sets are removed.  (May need to
 			//change later.)
@@ -420,8 +421,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	// Initialize components and obtain and display data for `symbol' if
 	// it is not null, etc.
 	private void initialize_GUI_components(String symbol) {
-//!!!This variable appears to not be needed no mo', clean it up:
-		boolean clear_indicators = false;
 		// Create the main scroll pane, size it, and center it.
 		main_pane = new MA_ScrollPane(_period_types,
 			MA_ScrollPane.SCROLLBARS_NEVER, this, window_settings != null?
@@ -433,7 +432,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			current_upper_indicators = window_settings.upper_indicators();
 			current_lower_indicators = window_settings.lower_indicators();
 			replace_indicators = window_settings.replace_indicators();
-			clear_indicators = true;
 		} else {
 			main_pane.setSize(800, 460);
 			current_upper_indicators = new Vector();
@@ -447,14 +445,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			}
 			// Show the graph of the first symbol in the selection list.
 			request_data(symbol);
-//!!!!!Delete this or use it?:
-//			if (clear_indicators) {
-//				// Clear current_upper_indicators and current_lower_indicators
-//				// of indicators no longer available from the server by
-//				// forcing _indicators to be reinitialized.
-//				_indicators = null;
-//				indicators();
-//			}
 		}
 		market_selections = new MarketSelection(this);
 		ma_menu_bar = new MA_MenuBar(this, data_builder, _period_types);
