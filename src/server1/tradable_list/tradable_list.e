@@ -361,5 +361,6 @@ invariant
 	cache_not_too_large: cache.count <= Cache_size
 	symbols_not_void: symbols /= Void
 	index_definition: index = symbol_list.index
+	non_negative_count: count >= 0
 
 end -- class TRADABLE_LIST
