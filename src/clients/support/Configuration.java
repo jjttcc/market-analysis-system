@@ -60,6 +60,11 @@ public class Configuration implements NetworkProtocol
 		return (Vector) _horizontal_indicator_lines.get(indicator);
 	}
 
+	// Color to use for graph background
+	public Color background_color() {
+		return _background_color;
+	}
+
 	// Color to use for "black" candles
 	public Color black_candle_color() {
 		return _black_candle_color;
@@ -211,7 +216,10 @@ public class Configuration implements NetworkProtocol
 		String color = t.nextToken();
 		if (! _color_table.containsKey(color)) {
 			System.err.println("Invalid color setting for " + color_tag +
-								": " + color);
+								": '" + color + "'");
+		}
+		else if (color_tag.equals(Background_color)) {
+			_background_color = (Color) _color_table.get(color);
 		}
 		else if (color_tag.equals(Black_candle_color)) {
 			_black_candle_color = (Color) _color_table.get(color);
@@ -266,7 +274,18 @@ public class Configuration implements NetworkProtocol
 		_color_table.put("cyan", Color.cyan);
 		_color_table.put("blue", Color.blue);
 
+		float red = (float) 0.4875, green = (float) 0.5875,
+		blue = (float) 0.1875;
+		_color_table.put("oliveGreen", new Color(red, green, blue));
+		red = (float) 0.1875; green = (float) 0.4875; blue = (float) 0.1875;
+		_color_table.put("darkGreen", new Color(red, green, blue));
+		red = (float) 0.1875; green = (float) 0.1875; blue = (float) 0.45;
+		_color_table.put("darkBlue", new Color(red, green, blue));
+		red = (float) 0.425; green = (float) 0.425; blue = (float) 0.9;
+		_color_table.put("lightBlue", new Color(red, green, blue));
+
 		// Set default colors.
+		_background_color = Color.blue;
 		_black_candle_color = Color.red;
 		_white_candle_color = Color.green;
 		_stick_color = Color.white;
@@ -289,6 +308,7 @@ public class Configuration implements NetworkProtocol
 	private final String Horiz_indicator_line = "indicator_line_h";
 	private final String Vert_indicator_line = "indicator_line_v";
 	private final String Color_tag = "color";
+	private final String Background_color = "background_color";
 	private final String Black_candle_color = "black_candle_color";
 	private final String White_candle_color = "white_candle_color";
 	private final String Stick_color = "stick_color";
@@ -300,6 +320,7 @@ public class Configuration implements NetworkProtocol
 	private final String Regular_style = "regular";
 
 	// Color settings for graph components
+	private Color _background_color;
 	private Color _black_candle_color;
 	private Color _white_candle_color;
 	private Color _stick_color;
