@@ -112,6 +112,11 @@ feature -- Basic operations
 			msg_file: PLAIN_TEXT_FILE
 			mail_cmd: STRING
 		do
+			-- @@@Note: In the future it may be appropriate to replace the
+			-- mailing functionality here with a better, more sophisticated
+			-- "event-delivery" system of some kind, which would make it easier
+			-- to implement a working solution on Windows and to allow more
+			-- options for "event-message" delivery.
 			last_error := Void
 			msg_file := temporary_file (email_addresses @ 1)
 			if not tmp_file_failed then
