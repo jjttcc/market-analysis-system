@@ -58,7 +58,8 @@ feature {NONE}
 		do
 			-- !!!Usage situation needs to be worked on.
 			print (concatenation (<<"Usage: ", argument (0),
-				" [input_file ...] [-o] [-f field_separator]%N%
+				" [port_number] [-background]%
+				% [input_file ...] [-o] [-f field_separator]%N%
 				%    Where:%N        -o = data has an open field%N">>))
 		end
 
@@ -103,6 +104,8 @@ feature {NONE}
 				if argument (i) @ 1 = '-' and argument (i).count > 1 then
 					if argument (i) @ 2 = 'o' then
 						no_open := false
+					elseif argument (i) @ 2 = 'b' then
+						-- background flag - no action here
 					elseif
 						argument (i) @ 2 = 'f' and argument_count > i
 					then

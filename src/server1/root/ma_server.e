@@ -25,8 +25,6 @@ feature -- Initialization
 			-- all of them, including the socket port numbers, or should
 			-- a new class do all CL processing, or ??? - Perhaps use
 			-- one of the free Eiffel Forum CL parsing libraries.
-			!CONSOLE_READER!readcmd.make (factory_builder)
-			poller.put_read_command (readcmd)
 			-- Make a socket for each port number provided in the
 			-- command line, create a STREAM_READER to handle it,
 			-- and add it to the poller's list of read commands.
@@ -41,6 +39,12 @@ feature -- Initialization
 				!STREAM_READER!readcmd.make (socket, factory_builder)
 				poller.put_read_command (readcmd)
 				i := i + 1
+			end
+			-- If background is not specified, add a reader to respond to
+			-- console commands.
+			if i <= argv.upper and not (argv @ i).is_equal("-background") then
+				!CONSOLE_READER!readcmd.make (factory_builder)
+				poller.put_read_command (readcmd)
 			end
 			from
 			until
