@@ -20,7 +20,7 @@ body { background-color: #e9dcd5; }
     width: auto;
 	*/
 }
-.bannercenter, .bannerleft, .bannerright {
+.two_part, .left_part, .right_part {
 	/*
 	font-size: 90%;
 	font-style: italic;
@@ -29,11 +29,10 @@ body { background-color: #e9dcd5; }
 	/*
 	position: relative;
 	*/
-	text-align: center;
 }
 .left_part {
 	background-color: #e9dcd5;
-	font-size: 80%;
+	font-size: 70%;
 	float: left;
 	margin: 1em 0 0 1em;
 	height: 100%
@@ -41,7 +40,7 @@ body { background-color: #e9dcd5; }
 }
 .right_part {
 	background-color: #e9dcd5;
-	font-size: 90%;
+	font-size: 80%;
 	float: right;
 	margin: 1em 1em 0 0;
 	width: 74%;
@@ -60,7 +59,7 @@ h1 {
 	border-left: none; border-right: none; padding-top: 0.04cm;
 	padding-bottom: 0cm; padding-left: 0cm; padding-right: 0cm;
 	color: #000000; text-align: center; widows: 2; orphans: 2;
-	font-size: 150%
+	font-size: 140%
 }
 h2 {
 	font-family: "Times New Roman", serif; font-size: 110%; so-language: en-US;
