@@ -38,6 +38,7 @@ cluster
 	root_cluster (mct): "$/root"
 
 	actions (mct): "$/actions"
+	commands (mct): "$/commands"
 	abstract_actions (actions): "$/abstractions"
 	session_actions (actions): "$/session"
 	gui (mct): "$/gui"
