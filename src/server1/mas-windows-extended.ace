@@ -123,7 +123,9 @@ cluster
 
 	client_server:		"$MAS/src/client_server"
 
-	protocols (client_server):		"$/protocols"
+	shared_protocols (client_server):		"$/shared_protocols"
+
+	ma_server_protocols (client_server):		"$/ma_server_protocols"
 
 	extended_protocols (client_server):		"$/extended_protocols"
 
