@@ -1,8 +1,5 @@
 #!/bin/bash
 
-if [ ! -e "$ISE_PLATFORM" ]; then
-	mkdir $ISE_PLATFORM
-fi
 if [ ! -e ../spec/$ISE_PLATFORM/lib ]; then
 	mkdir -p ../spec/$ISE_PLATFORM/lib
 fi
