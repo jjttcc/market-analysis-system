@@ -230,6 +230,26 @@ feature -- Basic operations
 			symbol_list := Void
 		end
 
+	turn_caching_off is
+		do
+			if daily_market_list /= Void then
+				daily_market_list.turn_caching_off
+			end
+			if intraday_market_list /= Void then
+				intraday_market_list.turn_caching_off
+			end
+		end
+
+	turn_caching_on is
+		do
+			if daily_market_list /= Void then
+				daily_market_list.turn_caching_on
+			end
+			if intraday_market_list /= Void then
+				intraday_market_list.turn_caching_on
+			end
+		end
+
 feature {NONE} -- Implementation
 
 	daily_market_list: TRADABLE_LIST

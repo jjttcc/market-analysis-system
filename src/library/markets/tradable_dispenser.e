@@ -242,6 +242,16 @@ feature -- Basic operations
 		deferred
 		end
 
+	turn_caching_off is
+			-- Turn off caching of tradable data.
+		deferred
+		end
+
+	turn_caching_on is
+			-- Turn on caching of tradable data.
+		deferred
+		end
+
 invariant
 
 	after_constraint: after implies off
