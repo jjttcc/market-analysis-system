@@ -5,9 +5,11 @@ indexing
 		"This class builds a list of composite tuples from a list of %
 		%market tuples, using a duration to determine how many source %
 		%tuples to use to create a composite tuple."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class COMPOSITE_TUPLE_BUILDER inherit
 

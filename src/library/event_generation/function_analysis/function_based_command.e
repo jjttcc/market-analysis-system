@@ -1,9 +1,11 @@
 indexing
 	description: "A linear command that gets its input from a MARKET_FUNCTION"
 	note: "This class is used only by ONE_VARIABLE_FUNCTION_ANALYZER."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class FUNCTION_BASED_COMMAND inherit
 

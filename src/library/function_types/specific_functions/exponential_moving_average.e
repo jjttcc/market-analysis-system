@@ -5,9 +5,11 @@ indexing
 		%the constant result value from `exp', C is the current value, %
 		%and EMA[p] is the result from the previous tuple."
 	notes: "Formula taken from `Trading for a Living', by A. Elder"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class EXPONENTIAL_MOVING_AVERAGE inherit
 

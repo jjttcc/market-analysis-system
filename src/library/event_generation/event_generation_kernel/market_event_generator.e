@@ -3,9 +3,11 @@ indexing
 		"An abstraction for the generation of events based on analysis %
 		%of market data"
 	constraints: "`tradables' must be set before `execute' is called."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 deferred class MARKET_EVENT_GENERATOR inherit
 

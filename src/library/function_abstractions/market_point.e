@@ -1,9 +1,11 @@
 indexing
-	description: 
+	description:
 		"A MARKET_TUPLE that functions as a point in a line"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class MARKET_POINT inherit
 

@@ -1,9 +1,11 @@
 indexing
 	description: "Composite tuple factory that includes the sum of the %
 		%volume of all elements in the market tuple list";
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class COMPOSITE_VOLUME_TUPLE_FACTORY inherit
 

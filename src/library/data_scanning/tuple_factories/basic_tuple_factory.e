@@ -1,8 +1,10 @@
 indexing
 	description: "Tuple factory that produces a BASIC_MARKET_TUPLE";
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class BASIC_TUPLE_FACTORY inherit
 

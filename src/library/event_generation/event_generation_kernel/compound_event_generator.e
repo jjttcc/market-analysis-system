@@ -13,9 +13,11 @@ indexing
 		%with the interval formed from a right event, and setting the %
 		%MARKET_EVENT_PAIR's left and right components to the left and right %
 		%events that formed the intersection."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class COMPOUND_EVENT_GENERATOR inherit
 

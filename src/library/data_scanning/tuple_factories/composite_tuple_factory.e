@@ -2,9 +2,11 @@ indexing
 	description:
 		"Abstraction for objects that create a market tuple based on %
 		%the values in a list of market tuples";
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class COMPOSITE_TUPLE_FACTORY inherit
 

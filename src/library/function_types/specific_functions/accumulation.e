@@ -9,9 +9,11 @@ indexing
 		%type of the object that `previous_operator' is attached to must %
 		%be one that doesn't try to access a feature, such as `open' that %
 		%doesn't exist in SIMPLE_TUPLE."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class ACCUMULATION inherit
 

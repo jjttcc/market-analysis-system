@@ -1,9 +1,11 @@
 indexing
 	description:
 		"A list of objects that conform to MARKET_TUPLE"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class MARKET_TUPLE_LIST [G->MARKET_TUPLE] inherit
 

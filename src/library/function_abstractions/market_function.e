@@ -2,9 +2,11 @@ indexing
 	description:
 		"A function that outputs an array of market tuples.  Specifications %
 		%for function input are provided by descendant classes."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 deferred class MARKET_FUNCTION inherit
 

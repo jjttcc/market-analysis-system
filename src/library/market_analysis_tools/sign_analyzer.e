@@ -1,12 +1,14 @@
 indexing
-	description: 
+	description:
 		"A binary operator that analyzes the sign of the result of its %
 		%first operand as compared to that of its second operand. %
 		%Specifications of sign changes to be detected (- to +, - to 0, etc.) %
 		%are set by calling `add_sign_change_spec'."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class SIGN_ANALYZER inherit
 
