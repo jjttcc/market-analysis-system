@@ -571,6 +571,7 @@ feature {NONE} -- Implementation - indicator editing
 			selection: INTEGER
 			p: FUNCTION_PARAMETER
 			query: STRING
+			gs: expanded GENERIC_SORTING [STRING, STRING]
 		do
 			from
 				selection := Null_value
@@ -587,8 +588,8 @@ feature {NONE} -- Implementation - indicator editing
 			until
 				selection = Exit_value
 			loop
-				selection := list_selection_with_backout (
-					names_from_parameter_list (parameters, 'l'), query)
+				selection := list_selection_with_backout (gs.sorted_list (
+					names_from_parameter_list (parameters, 'l')), query)
 				if selection /= Exit_value then
 					p := parameters @ selection
 					edit_parameter (p)
@@ -694,23 +695,10 @@ feature {NONE} -- Implementation - indicator editing
 	duplicates (parameters: LIST [FUNCTION_PARAMETER]): BOOLEAN is
 			-- Are there any items with duplicate names in `parameters'?
 		local
-			tbl: HASH_TABLE [STRING, STRING]
-			pnames: LIST [STRING]
+			gs: expanded GENERIC_SORTING [STRING, STRING]
 		do
-			from
-				pnames := names_from_parameter_list (parameters, 's')
-				pnames.start
-				create tbl.make (pnames.count)
-			until
-				Result or pnames.exhausted
-			loop
-				if tbl.has (pnames.item) then
-					Result := true
-				else
-					tbl.put (pnames.item, pnames.item)
-					pnames.forth
-				end
-			end
+			Result := gs.duplicates (
+				names_from_parameter_list (parameters, 's'))
 		end
 
 invariant
