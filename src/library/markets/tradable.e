@@ -317,7 +317,12 @@ feature {NONE}
 			else
 				create start_date_time.make_now
 			end
-			create ctbuilder.make (Current, ctf, type, start_date_time)
+			if type.intraday then
+				create {INTRADAY_COMPOSITE_TUPLE_BUILDER} ctbuilder.make (
+					Current, ctf, type, start_date_time)
+			else
+				create ctbuilder.make (Current, ctf, type, start_date_time)
+			end
 			ctbuilder.process
 			Result := ctbuilder.output
 		end
