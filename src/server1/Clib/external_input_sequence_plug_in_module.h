@@ -3,8 +3,17 @@
 
 struct input_sequence_plug_in;
 
-/* A new handle for access to the input-sequence-plug-in interface */
-struct input_sequence_plug_in* new_input_sequence_plug_in_handle();
+/* A new handle for access to the input-sequence-plug-in interface -
+ * dir is a list of paths, separated by ':', in which to create temporary
+ * files; each path must end with the directory separator character
+ * (valid for the platform on * which the program is running).  The first
+ * path in which the needed input files (if any, according to the specific
+ * plug-in implementation being used) are found will be used - for the
+ * input files and any needed temporary files.
+ * Precondition: dir != 0
+*/
+struct input_sequence_plug_in* new_input_sequence_plug_in_handle(
+	const char* dir);
 
 /* Data for the tradable specified by `symbol' - intraday if `is_intraday',
  * otherwise, daily.  Returns 0 if an error occurs.

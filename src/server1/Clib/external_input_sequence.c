@@ -7,6 +7,7 @@
 		%Released under the Eiffel Forum License; see file forum.txt"
 **/
 
+#include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -31,12 +32,17 @@ static char* fs_char_table = 0;
 
 static char fs_char_table_contents[256];
 
-//struct input_sequence_plug_in* initialize_external_input_routines() {
-struct input_sequence_handle* initialize_external_input_routines() {
+int init_error = 0;
+
+struct input_sequence_handle* initialize_external_input_routines(char* dir) {
 	struct input_sequence_handle* result;
+	assert(dir != 0);
+printf("init external ...: dir, dir length: %s, %d\n", dir, strlen(dir));
+printf("dir[0..3]: %d, %d, %d, %d\n", dir[0], dir[1], dir[2], dir[3]);
+	init_error = 0;
 	result = malloc(sizeof(struct input_sequence_handle));
 	if (result != 0) {
-		result->plug_in_handle = new_input_sequence_plug_in_handle();
+		result->plug_in_handle = new_input_sequence_plug_in_handle(dir);
 		result->buffer = 0;
 		result->symbols = 0;
 		result->buffersize = 0;
@@ -45,6 +51,13 @@ struct input_sequence_handle* initialize_external_input_routines() {
 		result->field_separator = ',';	/* May be made configurable later */
 		result->error_occurred = 0;
 		result->error_msg = "";
+		if (result->plug_in_handle == 0) {
+			init_error = 1;
+			free(result);
+			result = 0;
+		}
+	} else {
+		init_error = 1;
 	}
 	return result;
 }
@@ -55,10 +68,12 @@ int is_open_implementation(struct input_sequence_handle* handle) {
 
 void external_dispose(struct input_sequence_handle* handle) {
 printf("starting external_dispose\n");
-	close_handle(handle->plug_in_handle);
-	free(handle->buffer);
-	free(handle->symbols);
-	free(handle);
+	if (handle != 0) {
+		close_handle(handle->plug_in_handle);
+		free(handle->buffer);
+		free(handle->symbols);
+		free(handle);
+	}
 printf("ending external_dispose\n");
 }
 
@@ -221,4 +236,12 @@ int intraday_data_available_implementation(
 		struct input_sequence_handle* handle) {
 /**!!!Stub */
 	return 0;
+}
+
+int initialization_error() {
+	return init_error;
+}
+
+char* initialization_error_reason() {
+	return "Memory allocation failed.";
 }
