@@ -191,13 +191,16 @@ feature {NONE}
 			loop
 				print_list (<<"Select action:",
 					"%N     Add registrants (a) Remove registrants (r) %
-					%Edit registrants (e) %N     Exit (x) Previous (-) ">>)
+					%View registrants (v) %
+					%%N     Edit registrants (e) Exit (x) Previous (-) ">>)
 				inspect
 					selected_character
 				when 'a', 'A' then
 					registrar.add_registrants
 				when 'r', 'R' then
 					registrar.remove_registrants
+				when 'v', 'V' then
+					registrar.view_registrants
 				when 'e', 'E' then
 					registrar.edit_registrants
 				when 'x', 'X' then
@@ -211,19 +214,6 @@ feature {NONE}
 					print ("Invalid selection%N")
 				end
 			end
-		end
-
-	add_registrants is
-		do
-			
-		end
-
-	edit_registrants is
-		do
-		end
-
-	remove_registrants is
-		do
 		end
 
 
