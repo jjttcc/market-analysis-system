@@ -108,7 +108,7 @@ feature -- Basic operations
 			db_mgr.connect
 			if db_mgr.connected then
 				debug ("database")
-					io.put_string ("Connected !!!%N")
+					io.put_string ("Connected.%N")
 				end
 			else
 				last_error := "Failed to connect to database."
@@ -126,7 +126,7 @@ feature -- Basic operations
 			db_mgr.disconnect
 			if not db_mgr.connected then
 				debug ("database")
-					io.put_string ("Disconnected!!!%N")
+					io.put_string ("Disconnected.%N")
 				end
 			else
 				last_error := "Failed to disconnect to database."

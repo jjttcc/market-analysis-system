@@ -161,7 +161,7 @@ feature -- Basic operations
 				session.connect
 				if session.is_connected then
 					debug ("database")
-						io.put_string ("Connected !!!%N")
+						io.put_string ("Connected.%N")
 					end
 				else
 					last_error := concatenation (<<
@@ -188,7 +188,7 @@ feature -- Basic operations
 			session.disconnect
 			if not session.is_connected then
 				debug ("database")
-					io.put_string ("Disconnected!!!%N")
+					io.put_string ("Disconnected.%N")
 				end
 			else
 				last_error := concatenation (<<
