@@ -1,0 +1,57 @@
+#!/bin/bash
+# Update eclipse work directory with the latest java source changes.
+
+base_srcdir=/home3/jtc/development/finance/src/clients/
+os_srcdir=$base_srcdir
+comm_srcdir=$base_srcdir/commercial_gui/mas-gui
+dest_commercial=/home3/jtc/development/eclipse/projects/commercial_gui
+dest_os=/home3/jtc/development/eclipse/projects/mas_gui1
+shared_dirs="applet application_library common support"
+
+# Open source GUI files
+os_files() {
+	cd $os_srcdir
+	find . -name '*java'|egrep -v 'commercial_gui/|CL_Client.java'
+}
+
+# Commercial GUI files
+commercial_files() {
+	cd $comm_srcdir
+	find . -name '*java'|
+		egrep -v '\./MA_Client.java|\./MAS_Applet.java|NewDataSetBuilder'
+}
+
+# Shared GUI files
+shared_files() {
+	cd $os_srcdir
+	find $shared_dirs -name '*java'
+}
+
+# For the specified destination directory and source directory, update
+# the specified GUI files.
+update_files() {
+	dest_dir=$1; shift; src_dir=$1; shift
+	cd $dest_dir
+	for f; do
+		if cmp -s $f $src_dir/$f; then
+			:
+		else
+			echo Updating $PWD/$f.
+			cp $src_dir/$f $f
+		fi
+	done
+}
+
+# Update commercial GUI files
+update_commercial_files() {
+	update_files $dest_commercial $comm_srcdir $(commercial_files)
+	update_files $dest_commercial $os_srcdir $(shared_files)
+}
+
+# Update open source GUI files
+update_os_files() {
+	update_files $dest_os $os_srcdir $(os_files)
+}
+
+update_os_files
+update_commercial_files
