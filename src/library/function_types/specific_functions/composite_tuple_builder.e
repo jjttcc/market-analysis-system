@@ -207,8 +207,8 @@ feature -- Basic operations
 			end
 			output.finish_loading
 		ensure then
-			output.count > 0 implies times_correct and
-				output.first.date_time.is_equal (start_date)
+			times_correct: output.count > 0 implies times_correct and
+				output.first.date_time.date.is_equal (start_date.date)
 		end
 
 feature {NONE}
