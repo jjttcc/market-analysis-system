@@ -52,12 +52,13 @@ log("MAS_Proxy() returning");
 
 // Basic operations
 
-	// Forward 'msg' to the server and obtain the response.
-	// Precondition: msg != null
+	// Forward the input string in 'r' to the server and obtain the response.
+	// Precondition: r != null
 	// Postcondition: response() != null
-	public void forward(String msg) throws IOException {
-		assert msg != null: "Precondition";
+	public void forward(Reader r) throws IOException {
+		assert r != null: "Precondition";
 		error_ = false;
+		String msg = Utilities.input_string(r);
 log("'forward' opening a connection");
 		connection.open();
 log("connection opened");

@@ -21,34 +21,20 @@ public final class MAS extends GenericServlet {
 			throws ServletException, IOException {
 		String client_msg = null, server_response = null;
 		try {
-			log("(Version 1.1) Connected");
-			log("Reading data...");
-			client_msg = input_string(request.getReader());
-			log("Finished reading.");
-			log("Received \"" + client_msg + "\"");
-			log("Forwarding to mas server");
-			proxy().forward(client_msg);
+			log("(Version 1.2) Connected");
+			log("Forwarding request to the server.");
+			proxy().forward(request.getReader());
+			log("Message forwarded.");
 			server_response = proxy().response();
+			log("Server responded with: " + server_response);
 			send_response(response, server_response);
 		} catch (Exception e) {
 			//!!!Make production-ready.
 			log("Exception caught in 'service':\n", e);
 			send_response(response,
-				ServerResponseUtilities.error_response_message(
+				ServerResponseUtilities.warning_response_message(
 				"Failed to connect to the server: " + e.getMessage()));
 		}
-	}
-
-//!!!!!Move this to a utility class:
-	String input_string(Reader r) throws IOException {
-		char[] buffer = new char[16384];
-		int c = 0, i = 0;
-		do {
-			c = r.read();
-			buffer[i] = (char) c;
-			++i;
-		} while (c != -1);
-		return new String(buffer, 0, i - 1);
 	}
 
 // Implementation
