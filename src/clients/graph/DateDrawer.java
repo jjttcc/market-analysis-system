@@ -105,7 +105,7 @@ public class DateDrawer extends TemporalDrawer {
 			Utilities.index_at_date(first_date_at(year, month), data, 1, 0,
 				data.length - 1));
 		if (month == 1) {
-			years[yi] = new IntPair(year, months[mi].left());
+			years[yi] = new IntPair(year, months[mi].right());
 			++yi;
 		}
 		++mi;
