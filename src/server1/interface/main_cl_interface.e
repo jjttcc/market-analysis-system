@@ -154,11 +154,16 @@ feature -- Basic operations
 				when 'r', 'R' then
 					registrant_menu
 				when 'a', 'A' then
-					-- Important - update the coordinator with the current
-					-- active event generators:
-					event_coordinator.set_event_generators (
-						active_event_generators)
-					event_coordinator.execute
+					if event_coordinator.start_date_time = Void then
+						print ("%NError: Start date must be set before %
+							%running analysis.%N")
+					else
+						-- Important - update the coordinator with the current
+						-- active event generators:
+						event_coordinator.set_event_generators (
+							active_event_generators)
+						event_coordinator.execute
+					end
 				when 'd', 'D' then
 					mkt_analysis_set_date_menu
 				when 'x', 'X' then
