@@ -26,6 +26,8 @@ class STANDARD_MOVING_AVERAGE inherit
 			action, do_process, short_description
 		end
 
+	COMMAND_EDITOR -- To allow editing of `sum'
+
 creation {FACTORY}
 
 	make
