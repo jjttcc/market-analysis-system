@@ -316,10 +316,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 							indicators().get(current_indicator)).
 								intValue(), market, current_period_type);
 					} catch (Exception e) {
-						System.err.println("Exception occurred: " + e +
-							" - Exiting ...");
-						e.printStackTrace();
-						quit(-1);
+						fatal("Exception occurred", e);
 					}
 					dataset = data_builder.last_indicator_data();
 					dataset.set_dates_needed(false);
@@ -344,14 +341,11 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 						dataset = data_builder.last_volume();
 					} else {
 						try {
-						data_builder.send_indicator_data_request(((Integer)
-							indicators().get(current_indicator)).
-								intValue(), market, current_period_type);
+							data_builder.send_indicator_data_request(((Integer)
+								indicators().get(current_indicator)).
+									intValue(), market, current_period_type);
 						} catch (Exception e) {
-						System.err.println(
-							"Exception occurred: " + e + "- Exiting ...");
-						e.printStackTrace();
-						quit(-1);
+							fatal("Exception occurred", e);
 						}
 						dataset = data_builder.last_indicator_data();
 					}
@@ -538,7 +532,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 	// Print fatal error and exit.
 	private void fatal(String s, Exception e) {
-		System.err.print("Fatal error: request to server failed. ");
+		System.err.println("Fatal error: request to server failed - " + s);
+		System.err.println("Current symbol is " + current_market);
 		if (e != null) {
 			System.err.println("(" + e + ")");
 			e.printStackTrace();
