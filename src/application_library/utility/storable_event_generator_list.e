@@ -1,14 +1,14 @@
 indexing
 	description:
-		"A storable list of MARKET_FUNCTIONs that wipes out each market %
-		%function before saving it to persistent store."
+		"A storable list of MARKET_EVENT_GENERATORs that wipes out each %
+		%generator before saving it to persistent store"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
-class STORABLE_MARKET_FUNCTION_LIST inherit
+class STORABLE_EVENT_GENERATOR_LIST inherit
 
-	STORABLE_LIST [MARKET_FUNCTION]
+	STORABLE_LIST [MARKET_EVENT_GENERATOR]
 		redefine
 			cleanup
 		end
@@ -39,4 +39,4 @@ feature -- Utility
 			Precursor
 		end
 
-end -- STORABLE_MARKET_FUNCTION_LIST
+end -- STORABLE_EVENT_GENERATOR_LIST
