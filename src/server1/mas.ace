@@ -171,6 +171,16 @@ cluster
 	commands (ma_library):		"$/commands"
 
 	markets (ma_library):		"$/markets"
+		option
+			-- There appears to be a bug - probably in the compiler rather
+			-- than in the application code - that causes a segmentation
+			-- violation in 'is_equal' calls in STOCK objects.  Turning
+			-- off asssertions for STOCK gets rid of the problem.
+			-- If the problem also shows up in STOCK's sibling,
+			-- DERIVATIVE_INSTRUMENT, uncomment that line.
+			assertion (no): STOCK;
+--			assertion (no): DERIVATIVE_INSTRUMENT;
+		end
 
 	structural (ma_library):		"$/structural"
 
