@@ -8,7 +8,7 @@ class COMMANDS inherit
 
 	CLASSES [COMMAND]
 		rename
-			instances as command_instances, names as command_names,
+			instances as command_instances,
 			description as command_description, 
 			instance_with_generator as command_with_generator
 		redefine
@@ -193,6 +193,15 @@ feature -- Access
 	command_instances: ARRAYED_LIST [COMMAND] is
 		once
 			Result := Precursor
+		end
+
+	command_names: ARRAYED_LIST [STRING] is
+		once
+			Result := names
+		ensure
+			object_comparison: Result.object_comparison
+			not_void: Result /= Void
+			Result.count = command_instances.count
 		end
 
 feature {NONE} -- Implementation

@@ -15,6 +15,7 @@ feature -- Access
 			-- that conforms to G
 		deferred
 		ensure
+			not_void: Result /= Void
 			one_of_each: one_of_each (Result)
 		end
 
@@ -30,27 +31,14 @@ feature -- Access
 				Result.extend (instances_and_descriptions.item.left)
 				instances_and_descriptions.forth
 			end
-		end
-
-	names: ARRAYED_LIST [STRING] is
-			-- The class name of each element of `instances'
-		once
-			!!Result.make (instances.count)
-			Result.compare_objects
-			from
-				instances.start
-			until
-				instances.exhausted
-			loop
-				Result.extend (instances.item.generator)
-				instances.forth
-			end
 		ensure
-			object_comparison: Result.object_comparison
+			not_void: Result /= Void
 		end
 
 	description (instance: G): STRING is
-			-- The description of the run-time type of `instance'
+			-- The description of the run-time type of `instance' -
+			-- Void if the type of `instance' does not match the type
+			-- of an element in `instances'
 		do
 			from
 				instances_and_descriptions.start
@@ -85,6 +73,25 @@ feature -- Access
 		end
 
 feature {NONE} -- Implementation
+
+	names: ARRAYED_LIST [STRING] is
+			-- The class name of each element of `instances'
+		do
+			!!Result.make (instances.count)
+			Result.compare_objects
+			from
+				instances.start
+			until
+				instances.exhausted
+			loop
+				Result.extend (instances.item.generator)
+				instances.forth
+			end
+		ensure
+			object_comparison: Result.object_comparison
+			not_void: Result /= Void
+			Result.count = instances.count
+		end
 
 	one_of_each (l: ARRAYED_LIST [PAIR [G, STRING]]): BOOLEAN is
 		local

@@ -10,7 +10,7 @@ class MARKET_FUNCTIONS inherit
 
 	CLASSES [MARKET_FUNCTION]
 		rename
-			instances as function_instances, names as function_names,
+			instances as function_instances,
 			description as function_description, 
 			instance_with_generator as function_with_generator
 		redefine
@@ -81,6 +81,15 @@ feature -- Access
 	function_instances: ARRAYED_LIST [MARKET_FUNCTION] is
 		once
 			Result := Precursor
+		end
+
+	function_names: ARRAYED_LIST [STRING] is
+		once
+			Result := names
+		ensure
+			object_comparison: Result.object_comparison
+			not_void: Result /= Void
+			Result.count = function_instances.count
 		end
 
 end -- MARKET_FUNCTIONS
