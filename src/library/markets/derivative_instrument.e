@@ -53,6 +53,10 @@ feature -- Access
 
 	short_description: STRING is "Derivative instrument"
 
+feature -- Status report
+
+	has_open_interest: BOOLEAN is true
+
 feature -- Basic operations
 
 	finish_loading is

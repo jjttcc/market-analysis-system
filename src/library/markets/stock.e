@@ -72,6 +72,8 @@ feature -- Status report
 			valid_for_stock: Result = valid_stock_function (f)
 		end
 
+	has_open_interest: BOOLEAN is false
+
 feature -- Basic operations
 
 	finish_loading is

@@ -139,6 +139,12 @@ feature -- Status report
 			end
 		end
 
+	has_open_interest: BOOLEAN is
+			-- Does the data returned by `data' and `tuple_list' contain
+			-- an open-interest field?
+		deferred
+		end
+
 	valid_period_type (t: TIME_PERIOD_TYPE): BOOLEAN is
 			-- Is `t' a valid period type for this tradable?
 		do
