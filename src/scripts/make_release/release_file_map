@@ -99,6 +99,7 @@ src/clients/GUI1/support/IndicatorGroups.java . clientsrc1.5
 src/clients/CL/CL_Client.java . clientsrc1.5
 src/clients/GUI1/Chart.java . clientsrc1.5
 src/clients/GUI1/MA_Client.java . clientsrc1.5
+src/clients/GUI1/CompressedConnection.java . clientsrc1.5
 src/clients/GUI1/Connection.java . clientsrc1.5
 src/clients/GUI1/Parser.java . clientsrc1.5
 src/clients/GUI1/MA_ScrollPane.java . clientsrc1.5
@@ -172,6 +173,7 @@ src/clients/GUI1/Chart\$1.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
 src/clients/GUI1/ChartSettings.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
 src/clients/GUI1/WindowSettings.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
 src/clients/GUI1/MA_Client.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
+src/clients/GUI1/CompressedConnection.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
 src/clients/GUI1/Connection.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
 src/clients/GUI1/Parser.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
 src/clients/GUI1/MA_ScrollPane.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
