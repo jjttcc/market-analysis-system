@@ -68,7 +68,7 @@ public class ChartFacilities {
 	// Same as `fatal' except `save_settings' is not called.
 	public void abort(String s, Exception e) {
 		System.err.println("Fatal error: " + s);
-		if (chart.current_tradable() != null) {
+		if (chart != null && chart.current_tradable() != null) {
 			System.err.println("Current symbol is " + chart.current_tradable());
 		}
 		if (e != null) {
