@@ -85,9 +85,15 @@ feature -- Cursor movement
 feature -- Basic operations
 
 	tokenize (field_separator: STRING) is
-			-- Tokenize based on field_separator.
+			-- Tokenize the file contents based on `field_separator'.
 		do
 			if contents /= Void then
+				if field_separator.is_equal ("%N") then
+					-- Tokenizing a file with DOS carriage returns and with
+					-- a newline as the field separator will not work, so
+					-- remove the DOS carriage returns.
+					contents.prune_all ('%R')
+				end
 				su.set_target (contents)
 				tokens := su.tokens (field_separator)
 				tokens.start
