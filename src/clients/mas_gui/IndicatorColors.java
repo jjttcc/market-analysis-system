@@ -3,13 +3,10 @@ import java.awt.event.*;
 import java.util.*;
 import support.*;
 
-public class IndicatorColors extends Dialog implements ActionListener {
+public class IndicatorColors extends MA_Dialog {
 
 	public IndicatorColors(Chart c) {
 		super(c);
-		chart = c;
-		dialog = this;
-		setTitle("Indicator Colors");
 		panel = new Panel();
 		gblayout = new GridBagLayout();
 		panel.setLayout(gblayout);
@@ -25,11 +22,7 @@ public class IndicatorColors extends Dialog implements ActionListener {
 					dialog.setVisible(false);
 				}
 		}});
-
-		// Event listener for close requests
-		addWindowListener(new WindowAdapter() {
-		public void windowClosing(WindowEvent e) { dialog.setVisible(false); }
-		});
+		add_close_listener();
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -82,9 +75,7 @@ public class IndicatorColors extends Dialog implements ActionListener {
 		}
 	}
 
-	public void disappear() {
-		setVisible(false);
-	}
+	protected String title() { return "Indicator Colors"; }
 
 	// Is indicator `s' in the list of currently selected indicators?
 	boolean is_in_current_indicator_list(String s) {
@@ -152,8 +143,6 @@ public class IndicatorColors extends Dialog implements ActionListener {
 	}
 
 	Panel panel;
-	Chart chart;
-	Dialog dialog;
 	Hashtable current_entries;
 	GridBagLayout gblayout;
 	// Needed for ugly kludge in actionPerformed:

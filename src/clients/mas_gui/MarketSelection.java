@@ -6,22 +6,14 @@ import java.util.*;
 import support.*;
 
 // Listener that allows user to select a market to be displayed.
-class MarketSelection implements ActionListener {
+class MarketSelection extends DialogSelection {
 	public MarketSelection(Chart f) {
+		super(f);
 		int window_width = f.main_pane.getSize().width / 10 - 4;
-		main_frame = f;
-		selection_list = new List();
-		dialog = new Dialog(f);
-		Panel panel = new Panel(new BorderLayout());
-		Button close_button = new Button("Close");
-		dialog.add(panel);
-		panel.add(selection_list, "Center");
-		panel.add(close_button, "South");
-		dialog.setSize(window_width, 373);
-		selection_list.setSize(window_width, 348);
-		close_button.setSize(window_width, 25);
-		panel.setSize(window_width, 373);
-		Vector ml = main_frame.markets();
+		if (! size_was_set) {
+			setSize(window_width, 373);
+		}
+		Vector ml = chart.markets();
 		for (int i = 0; i < ml.size(); ++i) {
 			selection_list.add((String) ml.elementAt(i));
 		}
@@ -29,60 +21,14 @@ class MarketSelection implements ActionListener {
 		// stock selection from list.
 		selection_list.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				main_frame.request_data(selection_list.getSelectedItem());
+				chart.request_data(selection_list.getSelectedItem());
 		}});
-		// Add action listener (anonymous class) to respond to
-		// pressing of close button.
-		close_button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dialog.setVisible(false);
-		}});
-		// Add a key listener to close the selection dialog if the
-		// escape key is pressed while the focus is in the selection list.
-		selection_list.addKeyListener(new KeyAdapter() {
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == e.VK_ESCAPE) {
-					dialog.setVisible(false);
-				}
-		}});
-		// Add a key listener to close the selection dialog if the
-		// escape key is pressed while the focus is in the close button.
-		close_button.addKeyListener(new KeyAdapter() {
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == e.VK_ESCAPE) {
-					dialog.setVisible(false);
-				}
-		}});
-	}
-
-	public void actionPerformed(ActionEvent e) {
-		GUI_Utilities.busy_cursor(true, main_frame);
-		Point location = main_frame.getLocation();
-		location.setLocation(location.x, location.y + 135);
-		dialog.setLocation(location);
-		dialog.show();
-		GUI_Utilities.busy_cursor(false, main_frame);
+		add_close_listener();
 	}
 
 	public String current_market() {
 		return selection_list.getSelectedItem();
 	}
 
-	public void remove_selection(String s) {
-		selection_list.remove(s);
-	}
-
-	// The selections - type String
-	public Vector selections() {
-		Vector result = new Vector();
-		int count = selection_list.getItemCount();
-		for (int i = 0; i < count; ++i) {
-			result.addElement(selection_list.getItem(i));
-		}
-		return result;
-	}
-
-	private List selection_list;
-	private Dialog dialog;
-	private Chart main_frame;
+	protected String title() { return "Symbols"; }
 }
