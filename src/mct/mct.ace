@@ -41,7 +41,6 @@ default
 cluster
 	mct:		"$MAS/src/mct"
 
-
 	root_cluster (mct):		"$/root"
 
 	actions (mct):		"$/actions"
