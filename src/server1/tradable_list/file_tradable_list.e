@@ -92,7 +92,6 @@ feature {NONE} -- Implementation
 
 	add_to_cache (t: TRADABLE [BASIC_MARKET_TUPLE]; idx: INTEGER) is
 		do
-print ("ftl add to cache called%N")
 			Precursor (t, idx)
 			if caching_on then
 				check
@@ -103,7 +102,6 @@ print ("ftl add to cache called%N")
 					clone (current_input_file.name), current_input_file.date,
 					current_input_file.count), idx)
 			end
-print ("ftl add to cache finished%N")
 		ensure then
 			status_added_if_caching_on: caching_on implies equal (
 				(file_status_cache @ idx).file_name, current_input_file.name)
@@ -153,7 +151,6 @@ feature {NONE} -- Hook routine implementations
 				-- Assume the cache is empty and thus there is no data
 				-- that can be out of date.
 				Result := False
-print ("no cache - NOT out of date%N")
 			else
 				if status_work_file = Void then
 					create {PLAIN_TEXT_FILE} status_work_file.make (
@@ -166,7 +163,6 @@ print ("no cache - NOT out of date%N")
 				Result := status_work_file.date >
 					current_file_status.last_modification_time and
 					status_work_file.count > current_file_status.file_size
-print ("out of date: " + Result.out + "%N")
 			end
 		end
 
@@ -174,8 +170,6 @@ print ("out of date: " + Result.out + "%N")
 		local
 			current_file_status: TRADABLE_FILE_STATUS
 		do
-print ("Started 'append_new_data' for " + target_tradable.symbol + "%N")
-print ("before: target_tradable.count: " + target_tradable.count.out + "%N")
 			current_file_status := file_status_cache @ index
 			setup_input_medium
 			check
@@ -192,18 +186,11 @@ print ("before: target_tradable.count: " + target_tradable.count.out + "%N")
 				-- Position current_input_file's "cursor" at the first
 				-- unread character (after the last character that was
 				-- previously read).
-print ("new input file date: " + current_input_file.date.out + ", old date: " +
-current_file_status.last_modification_time.out + "%Nnew size: " +
-current_input_file.count.out + ", old size: " +
-current_file_status.file_size.out + "%N")
 				-- Advance the file cursor to the beginning of the new
 				-- data.  Note: file position numbering starts a 0.
 				current_input_file.go (current_file_status.file_size)
-print ("new file position: " + current_input_file.position.out + "%N")
 				tradable_factory.set_product (target_tradable)
 				tradable_factory.execute
---!!!!This is NOT needed - remove:
---add_to_cache (target_tradable, index)
 				update_file_status_cache (index)
 				if tradable_factory.error_occurred then
 					report_errors (target_tradable.symbol,
@@ -213,7 +200,6 @@ print ("new file position: " + current_input_file.position.out + "%N")
 					end
 				end
 				close_input_medium
-print ("after: target_tradable.count: " + target_tradable.count.out + "%N")
 			else
 				-- A fatal error indicates that the current tradable
 				-- is invalid, or not readable, or etc., so ensure

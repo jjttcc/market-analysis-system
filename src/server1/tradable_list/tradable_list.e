@@ -308,7 +308,6 @@ feature {NONE} -- Implementation
 			-- source is up to date, and then load the data.
 		do
 			if target_tradable = Void then
-print ("Data for " + current_symbol + " not in cache - loading%N")
 				load_data
 			else
 				-- Ensure that old indicator data from the previous
@@ -526,14 +525,12 @@ Result := True
 		do
 			-- Default: Null procedure - Redefine in descendant (along with
 			-- `out_of_date') if update behavior is required.
-print ("forced append.new.data test for testing%N")
 		ensure
 			old_data_unchanged: (not target_tradable.data.is_empty implies
 				target_tradable.data.first = old target_tradable.data.first)
 				and then (old target_tradable.data.count > 1 implies
-				target_tradable.data @ (old target_tradable.data.count
--- Intentional boo-boo for testing:
-- 1) = old target_tradable.data.last)
+				target_tradable.data @ (old target_tradable.data.count) =
+				old target_tradable.data.last)
 			same_size_or_larger:
 				target_tradable.data.count >= old target_tradable.data.count
 		end
