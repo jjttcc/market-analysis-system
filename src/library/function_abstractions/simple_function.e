@@ -3,7 +3,7 @@ indexing
 		"A market function that is also an array of market tuples. %
 		%Its purpose is to act as the innermost function in a composition %
 		%of functions."
-	note: "Procedure process does nothing."
+	question: "!!!Design has changed - should processed definition be removed?"
 	date: "$Date$";
 	revision: "$Revision$"
 
