@@ -89,7 +89,7 @@ feature -- Status report
 			until
 				output_list.exhausted or not Result
 			loop
-				Result := time_diff_equals_duration (
+				Result := missing_data or time_diff_equals_duration (
 					output_list.item.date_time, previous.date_time)
 				previous := output_list.item
 				output_list.forth
@@ -108,7 +108,8 @@ feature -- Status report
 			end
 		ensure
 			-- for_all p member_of output [2 .. output.count]
-			--   it_holds p.date_time - previous (p).date_time equals duration
+			--   it_holds not missing_data implies
+			--      p.date_time - previous (p).date_time equals duration
 			-- for_all p member_of output it_holds
 			--   p.last.date_time < p.date_time + duration
 		end
@@ -161,40 +162,45 @@ feature -- Basic operations
 				check
 					output_empty: output /= Void and output.empty
 				end
+				missing_data := false
 				!!src_sublist.make (0)
 				source_list.start
 				current_date := start_date
 				check output.count = 0 end
 			invariant
 				outer_invariant:
-					output.count > 1 implies
+					output.count > 1 and not missing_data implies
 						time_diff_equals_duration (output.last.date_time,
 							output.i_th (output.count - 1).date_time)
 			until
 				source_list.after
 			loop
-				from
-					-- Remove all previously inserted items.
-					src_sublist.wipe_out
-					src_sublist.extend (source_list.item)
-					source_list.forth
-				invariant
-					inner_invariant:
-						src_sublist.last.date_time < current_date + duration
-					sublist_sorted: -- src_sublist is sorted by date_time
-				until
-					source_list.after or
-						source_list.item.date_time >=
+				if source_list.item.date_time < current_date + duration then
+					from
+						-- Remove all previously inserted items.
+						src_sublist.wipe_out
+						src_sublist.extend (source_list.item)
+						source_list.forth
+					invariant
+						inner_invariant: src_sublist.last.date_time <
 							current_date + duration
-				loop
-					src_sublist.extend (source_list.item)
-					source_list.forth
+						sublist_sorted: -- src_sublist is sorted by date_time
+					until
+						source_list.after or
+							source_list.item.date_time >=
+								current_date + duration
+					loop
+						src_sublist.extend (source_list.item)
+						source_list.forth
+					end
+					tuple_maker.set_tuplelist (src_sublist)
+					tuple_maker.execute
+					tuple_maker.product.set_date_time (current_date)
+					output.extend (tuple_maker.product)
+				else
+					missing_data := true
 				end
-				tuple_maker.set_tuplelist (src_sublist)
-				tuple_maker.execute
-				tuple_maker.product.set_date_time (current_date)
 				current_date := current_date + duration
-				output.extend (tuple_maker.product)
 			end
 		ensure then
 			output.count > 0 implies times_correct and
@@ -215,7 +221,9 @@ feature {NONE}
 		local
 			diff: DURATION
 			dt_diff: DATE_TIME_DURATION
+			max_qrtr_days, min_qrtr_days: INTEGER
 		do
+			max_qrtr_days := 92; min_qrtr_days := 88
 			diff := (d1 - d2).duration
 			if trading_period_type.irregular then
 				dt_diff ?= diff
@@ -235,11 +243,20 @@ feature {NONE}
 					else
 						Result := dt_diff.day = d2.Days_in_non_leap_year
 					end
+				elseif
+					trading_period_type.name.is_equal (
+					trading_period_type.Quarterly)
+				then
+					Result := dt_diff.day <= max_qrtr_days and
+						dt_diff.day >= min_qrtr_days
 				end
 			else
 				Result := diff.is_equal (duration)
 			end
 		end
+
+	missing_data: BOOLEAN
+			-- Are there missing records in the input data?
 
 invariant
 
