@@ -1,0 +1,77 @@
+Return-Path: <jtc@dimensional.com>
+Received: from flatland.dimensional.com (postfix@flatland.dimensional.com [206.124.0.24])
+	by supernova.dimensional.com (8.11.4/8.11.4) with ESMTP id fA4Ji9211693
+	for <jtc@dimensional.com>; Sun, 4 Nov 2001 12:44:10 -0700 (MST)
+Received: by flatland.dimensional.com (Postfix, from userid 2820)
+	id 7F9DD143CE; Sun,  4 Nov 2001 12:44:05 -0700 (MST)
+Subject: trading - ultimate oscillator formula
+To: jtc@dimensional.com (Jim Cochrane)
+Date: Sun, 4 Nov 2001 12:44:05 -0700 (MST)
+X-Mailer: ELM [version 2.5 PL6]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Message-Id: <20011104194405.7F9DD143CE@flatland.dimensional.com>
+From: jtc@dimensional.com (Jim Cochrane)
+Status:   
+
+Path: wormhole.dimensional.com!pulsar.dimensional.com!dimensional.com!newsfeed.frii.net!news-out.nuthinbutnews.com!propagator2-austin!propagator!feed2.newsfeeds.com!newsfeeds.com!news-in-austin.nuthinbutnews.com!news-spur1.maxwell.syr.edu!news.maxwell.syr.edu!wn4feed!worldnet.att.net!135.173.83.71!wnfilter1!worldnet-localpost!bgtnsc05-news.ops.worldnet.att.net.POSTED!not-for-mail
+Message-ID: <3BE48B28.7FE6249A@att.net>
+From: Bruno <p.rosinke@att.net>
+Reply-To: p.rosinke@worldnet.att.net
+Organization: X-No-Archive
+X-Mailer: Mozilla 4.78 [en] (Win98; U)
+X-Accept-Language: en
+MIME-Version: 1.0
+Newsgroups: misc.invest.technical
+Subject: Re: Ultimate Oscillator formula.
+References: <863721e2.0110201942.9b291@posting.google.com> <3BD2F614.1C57B7F0@att.net> <3BE1DDB8.59FA@XXXgiancarlo.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Lines: 40
+Date: Sun, 04 Nov 2001 03:42:27 GMT
+NNTP-Posting-Host: 12.88.96.140
+X-Complaints-To: abuse@worldnet.att.net
+X-Trace: bgtnsc05-news.ops.worldnet.att.net 1004845347 12.88.96.140 (Sun, 04 Nov 2001 03:42:27 GMT)
+NNTP-Posting-Date: Sun, 04 Nov 2001 03:42:27 GMT
+Xref: wormhole.dimensional.com misc.invest.technical:78556
+
+Giancarlo wrote:
+> 
+> Bruno wrote:
+> 
+> > Ultimate Oscillator
+> >
+> > Inputs:
+> >
+> > Name    Default Description
+> > Avg1Len 7       Length of Average 1
+> > Avg2Len 14      Length of Average 2
+> > Avg3Len 28      Length of Average 3
+> > Plot Names:
+> > Plot1= Ultimate Oscillator
+> 
+> Can you translate this is a simple algebric form
+> (or give a description of calculation with simple words)?
+> Is it a sum of 3 momenta?
+> Or are there moving averages in it?
+> 
+> (I don't use programs such as Metastock or Tradestation or whatever,
+> I use Excel!)
+> 
+> Thanks
+> 
+> Giancarlo
+
+Formula: =SUM((avg7),avg(14),avg(28))/3 
+That is the most primitive way ;-)
+
+You might square the individual averages,
+sum the totals, then take the square root.
+
+Consult any of the Excel newsgroups for better info!
+
+P.S.  I experimented with something like this when "VISICALC"
+was introduced (long time ago!) but the results proved
+not any better than simply buying new moon, selling full moon.
+Good luck, Bruno

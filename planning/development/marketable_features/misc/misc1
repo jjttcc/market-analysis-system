@@ -1,0 +1,96 @@
+Return-Path: <kevinc@dOink.COM>
+Received: from qiclab.scn.rain.com (postfix@qiclab.scn.rain.com [205.238.26.97])
+	by supernova.dimensional.com (8.11.6/8.11.6) with ESMTP id gA81faV18496
+	for <jtc@dim.com>; Thu, 7 Nov 2002 18:41:36 -0700 (MST)
+Received: by qiclab.scn.rain.com (Postfix, from userid 177)
+	id 29B2724E59D; Thu,  7 Nov 2002 17:41:35 -0800 (PST)
+>Received: by joseph.doink.com (Postfix, from userid 11334)
+	id D3DD22FF04; Thu,  7 Nov 2002 17:34:49 -0800 (PST)
+Received: from dOink.COM (localhost [127.0.0.1])
+	by joseph.doink.com (Postfix) with ESMTP id B1D014BE2A
+	for <jtc@dim.com>; Thu,  7 Nov 2002 17:34:49 -0800 (PST)
+X-Mailer: exmh version 2.5 07/13/2001 with nmh-1.0.4
+To: Jim Cochrane <jtc@dim.com>
+X-Message-Flag: After so many viruses, why are you still using Outlook?
+X-Priority: 3
+Subject: Re: MAS 1.6.5 on Mandrake Linux 8.0, a few problems 
+In-reply-to: <200211080054.gA80s3220446@jupiter.milkyway.org> 
+Mime-Version: 1.0
+Date: Thu, 07 Nov 2002 17:34:47 -0800
+From: Kevin Cosgrove <kevinc@dOink.COM>
+Message-Id: <20021108013449.D3DD22FF04@joseph.doink.com>
+Content-Type: text/plain; charset=us-ascii
+Status:   
+
+
+jc> Can you send me the blurb you would like me to include and
+jc> I'll insert it.  It'd probably also be good to have your name
+jc> in there - something like:
+jc>
+jc> Author: Kevin Cosgrove
+
+        How about:
+
+   Copyright (C) 2002 Kevin Cosgrove, and licensed under the GNU
+   General Public License, Version 2.
+
+
+jc> No, it doesn't - No, I'm being facetious - I think it may
+jc> be possible to get mas working with SmallEiffel (now called
+jc> SmartEiffel, by the way), but it would take a lot of work,
+jc> mainly because mas depends on a couple ISE libraries (such as
+jc> their networking library) that would need to be replaced to
+jc> get it to work with SmallEiffel.  There may be free libraries
+jc> available that could be used as replacements, but there would
+jc> still be a lot of work adapting mas to use the free libraries
+jc> instead of the ISE libraries.
+
+	I wonder if you had other developers working on this, whether 
+	the workload would be less per person.  If so, then having
+	an open sourced Eiffel would make it easier for other coders
+	to join the effort.  I understand the "a lot of work" comment 
+	all too well though.
+
+jc> I developed and released TAL first and then used it to
+jc> develop mas.  Although I don't refer to TAL these days, you
+jc> could say that the code in src/library in the source release
+jc> is TAL, the technical analysis library.  So TAL provides the
+jc> TA engine, you could say, for mas.
+
+	It was looking something like that to me given the dates
+	on TAL and MAS.  But, it's hard to tell w/o being more 
+	familiar with the source.
+
+jc> No problem with the questions.  I have the time and interest
+jc> right now to respond, and it's good to find someone
+jc> interested in mas - I do get occasional inquiries and
+jc> feedback, but, in general, not very much; so when I do get
+jc> feedback and questions, it lets me know that people are
+jc> actually using it; plus it often helps me to determine what
+jc> new features would be best to add.
+
+	Some features I'd like to see are:
+
+	- Some way to test (possibly fictitious) data against 
+	  indicators, analyzers and events.
+
+	- Visual indicators for events on the magc graphs.
+
+	- More access to the interactive (command line) commands
+	  through the magc interface.
+
+	- A more holistic set of documentation.  I might be able to 
+	  help with this one, once I understand the system better.
+
+jc> So don't worry about the questions; if there are too many
+jc> at some point, I'll say so or just not bother to answer :-)
+jc> However, your mailing list idea is also a good idea and I
+jc> think it would be good to get it going, so that mas users can
+jc> share their knowledge.
+
+	Yeeha.
+
+	Thanks for your patience with me.  Cheerio....
+
+
+

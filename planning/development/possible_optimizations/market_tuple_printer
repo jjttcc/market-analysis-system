@@ -1,0 +1,15 @@
+In the function:
+
+	last_date_time_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER is
+
+it is likely that the "print end date/time" will be close to the current
+time (re. the "time-delimited data request" feature).  To take advantage of
+that, it might be optimal to, before calling l.index_at_date_time, check if
+the print-end-date/time is recent and force the search to occur within the
+last n data records, so that the resulting binary search is shortened in
+terms of needed iterations.
+
+Note that in order to do this some way of forcing the search to occur
+beginning at a particular index (or, better, bounded by a start and end
+index), which implies changing index_at_date_time or adding a new routine
+with the bounds indexes.

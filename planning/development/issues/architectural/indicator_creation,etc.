@@ -1,0 +1,48 @@
+When MAS is used in an environment where many users are accessing the
+server over the internet (either with the web-based version or via socket
+connections), there are some issues to consider regarding allowing
+the users to create and edit indicators and analyzers.  If everyone
+is sharing indicators (the current design), this will not work because
+someone could change the parameters of an indicator someone else is using,
+which will not please the other user.  Also, unless there is some limit
+on the number and size of new indicators, allowing the users to create
+indicators would be a security vulnerability.  For example, a denial of
+service attack could be carried out by creating a very large number of
+new indicators, eventually causing the system to run out of disk space.
+
+Ideas that currently come to mind to address these issues are:
+
+  - Provide two versions - a personal version (where the client and server
+	run on the users's machine and that has no limits); and an "enterprise"
+	version, in which the above features can only be carried out from an
+	authorized administrative "login".
+
+  - Keep persistent user sessions in the server and include a user's
+	indicators and analyzers in his settings.  Since the indicators would
+	not be shared, changing their parameters will not affect other users.
+	Include some settable limits - number of indicators that can be
+	created, maximum persistent file size, etc.  (However, even with the
+	limits this solution could end up using a lot of disk space.  Some
+	analysis will need to be done here.)  With this design, a personal
+	version might only allow the existence of one "session", although it
+	may be desirable to allow the user to upgrade.
+
+  - Allow users to change indicator parameters but not to create new
+	indicators.  This could be done by keeping the user's indicator
+	settings on the server side and, when the user logs in, retrieving his
+	settings (from persistent store) and applying them to any indicators he
+	uses.  The implementation of this in the mas server would ensure that
+	all indicators are shared in persistent store - that is, users would
+	not have their own indicators stored on disk on the server machine.
+	When the user logs in, his settings will be retrieved and the shared
+	list of indicators will be retrieved, but copied - that is, within the
+	server process's memory each user will have his own copy of the
+	indicators.  The users settings - parameters - will be applied to his
+	copy of the indicators.
+
+  - Simiar to the 2nd solution, but instead of each user having his own
+	indicators, divide the users into groups.  Each group would have its
+	own indicators.  The settings and limits for each group could be
+	different.
+
+  - Some combination of the above solutions for maximum flexibility

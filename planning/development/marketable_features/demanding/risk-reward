@@ -1,0 +1,66 @@
+Return-Path: <jtc@dimensional.com>
+Received: from flatland.dimensional.com (postfix@flatland.dimensional.com [206.124.0.24])
+	by supernova.dimensional.com (8.11.4/8.11.4) with ESMTP id fA1JDiN05552
+	for <jtc@dimensional.com>; Thu, 1 Nov 2001 12:13:44 -0700 (MST)
+Received: by flatland.dimensional.com (Postfix, from userid 2820)
+	id 87159143CE; Thu,  1 Nov 2001 12:13:37 -0700 (MST)
+Subject: mas - applicable definitions
+To: jtc@dimensional.com (Jim Cochrane)
+Date: Thu, 1 Nov 2001 12:13:37 -0700 (MST)
+X-Mailer: ELM [version 2.5 PL6]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Message-Id: <20011101191337.87159143CE@flatland.dimensional.com>
+From: jtc@dimensional.com (Jim Cochrane)
+Status:   
+
+Path: wormhole.dimensional.com!pulsar.dimensional.com!dimensional.com!newshub1.wanet.net!newshub.sdsu.edu!csulb.edu!canoe.uoregon.edu!arclight.uoregon.edu!fr.usenet-edu.net!usenet-edu.net!freenix!fr.clara.net!heighliner.fr.clara.net!isdnet!news.internetia.pl!newsfeed.tpinternet.pl!news.onet.pl!not-for-mail
+From: "Marek Lewandowski" <marek555@poczta.wp.pl>
+Newsgroups: misc.invest.technical
+Subject: Odp: "Risk/reward" in a trading system?
+Date: Thu, 1 Nov 2001 12:53:52 -0600
+Organization: news.onet.pl
+Lines: 30
+Sender: mareckil@friko6.onet.pl@195.94.215.122
+Message-ID: <9rs5os$b0o$1@news.onet.pl>
+References: <3BE1DD0B.3DD7@XXXgiancarlo.com>
+NNTP-Posting-Host: 195.94.215.122
+X-Trace: news.onet.pl 1004640860 11288 195.94.215.122 (1 Nov 2001 18:54:20 GMT)
+X-Complaints-To: abuse@onet.pl
+NNTP-Posting-Date: 1 Nov 2001 18:54:20 GMT
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Newsreader: Microsoft Outlook Express 5.00.2417.2000
+X-MimeOLE: Produced By Microsoft MimeOLE V5.00.2314.1300
+Xref: wormhole.dimensional.com misc.invest.technical:78533
+
+> someone told me that his system has a
+> 99.4% "risk/reward". What does it mean?! (I guess he has Metastock).
+
+I suppose, he probably means the ratio of his average win to his average
+loss. Some call it a payoff ratio. Average win (loss) is the sum of all
+winning (losing) trades divided by the total # of wining (losing)  trades.
+
+> He also says that his "performance" is 84%
+
+"Performance"  is a percentage of winning trades that is: # of winnig trades
+divided by the total # of all trades (winning and  losing ones).
+
+>but I am not sure how I can transform this into a "profit factor"
+> (maybe: 84/16 ?)
+
+Profit factor is the gross profit divided by the gross loss, that is:
+(average win * # of winning trades)/(average loss * # of losing trades)
+which equals: payoff ratio * (# of winning trades/# of losing trades) . If
+you know only a payoff ratio and a percentage of winnig trades you have 3
+unknowns (# of winning trades, # of losing trades, profit factor) and only 2
+equations (for a percentage of winning trades and for a profit factor), that
+is there is unsufficient input data to solve that system of equations what
+means it is impossible to transform the data you have into a profit factor.
+
+Hope it helps,
+
+Marek
+
+

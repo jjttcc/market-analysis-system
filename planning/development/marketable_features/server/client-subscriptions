@@ -1,0 +1,8 @@
+"Enterprise" users could run the mas server on a powerful server machine
+and provide subscription services to many clients; the most typical
+example of this would be to dispatch trading signals (via email, IM,
+or other media) to the clients.  This could be in the context of web
+services, but should also include non-web media to allow immediate
+notification.  For example, for many users, a message to their cell phone
+or pager delivered via email or IM would reach them right away without
+their having to put effort into checking for signals with their browser.

@@ -1,0 +1,89 @@
+Return-Path: <jtc@dimensional.com>
+Received: from flatland.dimensional.com (postfix@flatland.dimensional.com [206.124.0.24])
+	by supernova.dimensional.com (8.11.4/8.11.4) with ESMTP id fA2F7ww02684
+	for <jtc@dimensional.com>; Fri, 2 Nov 2001 08:07:58 -0700 (MST)
+Received: by flatland.dimensional.com (Postfix, from userid 2820)
+	id CB90F143CE; Fri,  2 Nov 2001 08:07:53 -0700 (MST)
+Subject: mas - more definitions
+To: jtc@dimensional.com (Jim Cochrane)
+Date: Fri, 2 Nov 2001 08:07:53 -0700 (MST)
+X-Mailer: ELM [version 2.5 PL6]
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+Message-Id: <20011102150753.CB90F143CE@flatland.dimensional.com>
+From: jtc@dimensional.com (Jim Cochrane)
+Status:   
+
+Path: wormhole.dimensional.com!pulsar.dimensional.com!dimensional.com!newsfeed.frii.net!64.152.100.70.MISMATCH!sjcppf01.usenetserver.com!usenetserver.com!news-west.rr.com!lsnws01.we.mediaone.net!cyclone-LA3.rr.com!typhoon.we.rr.com.POSTED!not-for-mail
+Reply-To: "Jim Byrd" <jrbyrd@mediaone.netspamless>
+From: "Jim Byrd" <jrbyrd@mediaone.netspamless>
+Newsgroups: misc.invest.technical
+References: <3BE1DD0B.3DD7@XXXgiancarlo.com>
+Subject: Re: "Risk/reward" in a trading system?
+Lines: 53
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Newsreader: Microsoft Outlook Express 6.00.2600.0000
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2600.0000
+Message-ID: <zmiE7.48268$xe.12543896@typhoon.we.rr.com>
+Date: Thu, 01 Nov 2001 20:35:43 GMT
+NNTP-Posting-Host: 24.126.20.21
+X-Complaints-To: abuse@mediaone.net
+X-Trace: typhoon.we.rr.com 1004646943 24.126.20.21 (Thu, 01 Nov 2001 12:35:43 PST)
+NNTP-Posting-Date: Thu, 01 Nov 2001 12:35:43 PST
+Organization: Road Runner
+Xref: wormhole.dimensional.com misc.invest.technical:78534
+
+Hi Giancarlo - A Risk/Reward Ratio (RRR) is one form of RAR or Risk Adjusted
+Return.  Any RAR is essentially the ratio of the annualized return % divided
+by some % measure of risk.  The differences between any of them comes down
+in the end to how risk is defined and measured. The worth of any given
+trading system to an investor depends in large degree on the circumstances
+and trading style of the individual estimating that worth. Each person has
+his or her own unique objectives, resources, and risk tolerance, and no
+single estimate of Risk Adjusted Return is likely to satisfy everyone.
+
+Some Risk/Reward Ratios which have been suggested in the literature are: the
+Largest Loss Ratio or the largest loss divided by the net profit looking for
+a ratio of 0.1 or less, the Maximum Drawdown Ratio or the maximum adverse
+excursion (MAE) divided by the net profit looking for a ratio of 0.1 or
+less, and the Average Run-Up/Drawdown Ratio or the average of the maximum
+favorable excursion (MFE) figure for each trade divided by the average
+drawdown looking for a ratio of 1.5 or more.
+
+RRR's are also often given as Reward/Risk Ratios looking for larger numbers.
+In this view, your friends 99.4% would mean an RRR of .994 which isn't very
+good.  Some general "rules (read guidelines)" that have been around in
+futures trading for a very long time with regard to other Reward/Risk
+measures are that, given that preservation of capital is the principle
+driver, RRR's of less than 2 are generally not considered acceptable unless
+substantially offset by other risk mitigation techniques. Most professional
+traders whom I've seen comment on this subject prefer systems with RRR's of
+3 or better.  Some more sophisticated trading systems will make on-the-fly
+decisions about each individual trade as to whether to take a trade or not
+based on the computed RRR of the trade.  Those that I'm aware of this type
+all use RRR's of 3. or better for this purpose
+
+Perhaps this will help you a little.  Regards, Jim Byrd
+
+"Giancarlo" <giancarlo@XXXgiancarlo.com> wrote in message
+news:3BE1DD0B.3DD7@XXXgiancarlo.com...
+> Hello
+>
+> I know what a "profit factor" is (in a trading system):
+> overall, if I earn 1000 and I loose 200, my net earnings are 800
+> and profit factor is 1000/200, that is 5.00 (in this case).
+>
+> But I don't know what "risk/reward" is.
+> For example, someone told me that his system has a
+> 99.4% "risk/reward". What does it mean?! (I guess he has Metastock).
+>
+> He also says that his "performance" is 84% but I am not sure
+> how I can transform this into a "profit factor"
+> (maybe: 84/16 ?)
+>
+> Thanks!
+>
+> Giancarlo
+

@@ -1,0 +1,2 @@
+To allow MCT to start mas programs without the ugly command window, eposix
+can probably be used to portably "exec" a command without a shell.

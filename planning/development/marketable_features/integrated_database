@@ -1,0 +1,9 @@
+(From Pedro's email)
+
+I was also thinking of the possibiltiy of linking mas with a library based sql 
+database (mysql has one) that way if we have a standalone mas it could 
+directly connect to its own database and download from the websites into the 
+database without the user having to setup a complex external data source, of 
+course we could leave the user the possibility of linking to an external data 
+source but not obligate them to. Not sure if this is feasible in eiffel or 
+what you think of the idea?

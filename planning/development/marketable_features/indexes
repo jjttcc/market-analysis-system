@@ -1,0 +1,31 @@
+Capability to specify and calculate indexes
+
+Ideas for implementation
+
+It would probably need to somehow fit into the current scheme where the
+client asks for the data for an indicator/symbol/period-type or (for
+market data) symbol/period-type.  For an index, the client could ask for: 
+index_name/period-type.  The result of an index would probably be the same
+field set as the symbols used to construct it - e.g., date,o,h,l,c,v, so
+a request for an index could probably be classified as a "market data"
+request, rather than an "indicator data" request.  Indicators could, of
+course be applied to indexes.  This implies that in the server an index
+would be a descendant of TRADABLE.
+
+The index mechanism should be designed to be flexible and, perhaps, allow
+similar constructs that are not actually indexes.  It can probably be
+thought of
+
+If an index is a TRADABLE (It might be called something like
+COMPOSITE_TRADABLE), instead of its data being inserted by calling
+make_from_array (as happens to SIMPLE_FUNCTIONs in set_innermost_input of
+MARKET_DATA_FUNCTION), its data will be calculated based on its composite
+input.  Probably, the COMPOSITE_TRADABLE will know what symbols will be
+used to make its data and will be able to take the data for each symbol to
+produce its own data, using an operator (which in most cases will be:
+                    MULTIPLICATION
+     BASIC_NUMERIC_COMMAND   NUMERIC_VALUE_COMMAND
+
+but can be more complex).  The COMPOSITE_TRADABLE will probably have to have an
+operator for each of its components, because, for example, stock A might
+have a "weight" of 1.25, while stock B has a weight of 1.3.

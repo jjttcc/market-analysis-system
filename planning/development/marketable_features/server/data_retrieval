@@ -1,0 +1,36 @@
+Potential useful features related to data retrieval
+
+
+Send the server a list of tradables to use:
+
+  - In addition to its current list.
+  - Instead of its current list.
+
+
+Have the server obtain the latest data:
+
+  - On request from the user.
+  - At regular intervals (e.g., every minute)
+  - Whenever new data becomes available.
+
+[Implementation note: The above three items might all be best implemented
+via a "controller daemon" that requests that the server reread its data.
+For the first item it could, e.g., forward the request to the server; for
+the 2nd item it would use a timer to send the requests every n seconds;
+for the 3rd item it would either check for new data every n seconds or
+would be notified, via some kind of "notification interface", when new data
+is available.  When it's time to look at adding this feature, consider the
+advantages and the disadvantages vs. other designs, such as having the
+server do all of this work.  A main advantage is that the server would
+remain simple and flexible - flexible because different requirements or
+algorithms for determining when to get new data can be implemented in one
+or more controller clients; the server would just do what it's told.  It
+would respond promptly to any get-new-data request unless it was overloaded
+with GUI requests or was serving a macl session.]
+
+The data-retrieval requirements for an "enterprise server" version would
+probably be different than for an "individual" version.  For example,
+"On request from the user" may not be appropriate (although it could
+possibly be replaced with ""On request from the administrator".)  The other
+two may both be appropriate, although they will probably need to be
+configured by an administrator.

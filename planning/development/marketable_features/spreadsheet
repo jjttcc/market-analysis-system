@@ -1,0 +1,8 @@
+> A GUI-based tool and/or a programming language to make it MUCH easier for
+> the user to define indicators and market analyzers
+
+I was thinking after reading how metastock does it to do this with a 
+spreadsheet format as similar initially to metastocks (which I haven't seen) 
+rather than as a programming language which would be more difficult for us to 
+implement and for the end user to use, what do you think? That way anyone 
+could make an indicator in minutes :)

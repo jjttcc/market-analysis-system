@@ -1,0 +1,3 @@
+Places in the code that are good candidates for optimization (avoids
+polluting the code with comments like "Note: This section could be
+optimized by ...")

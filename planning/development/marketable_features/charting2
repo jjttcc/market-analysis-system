@@ -1,0 +1,147 @@
+Return-Path: <subbuk@cs6625163-86.austin.rr.com>
+Received: from cs6625163-86.austin.rr.com (cs6625163-86.austin.rr.com [66.25.163.86])
+	by supernova.dimensional.com (8.11.4/8.11.4) with ESMTP id g1M5jSG13809
+	for <jtc@dim.com>; Thu, 21 Feb 2002 22:45:29 -0700 (MST)
+Received: by cs6625163-86.austin.rr.com (Postfix, from userid 501)
+	id 161123A9AD; Thu, 21 Feb 2002 23:45:01 -0600 (CST)
+Date: Thu, 21 Feb 2002 23:45:01 -0600
+From: Subramanian Iyer <subbuk@cs6625163-86.austin.rr.com>
+To: Jim Cochrane <jtc@dim.com>
+Subject: Re: Followup to mail Re: MAS question+ python compatibility
+Message-ID: <20020221234501.A24387@cs6625163-86.austin.rr.com>
+Reply-To: subramanianiyer@yahoo.com
+References: <20020220090546.A10203@cs6625163-86.austin.rr.com> <200202212309.g1LN9aG12105@supernova.dimensional.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <200202212309.g1LN9aG12105@supernova.dimensional.com>
+User-Agent: Mutt/1.3.21i
+Status:   
+
+
+Thanks for your reply.. It wasn't too hard once I got the hang of it.
+
+Some things that would be really cool are -
+ toggle indicators on re-selection,
+ scripting interface to indicator/analyzer generator,
+ change time frames interactively rather than thru .clientrc
+
+If I get a bit of time, I might look into these [depending on how badly
+I need them!] in which case I'll mail in patches. :)
+
+Again Thx,
+SI
+	   
+> Hi Subramanian.
+> 
+> Thanks for the report and feedback.  I appreciate hearing from people using
+> MAS.
+> 
+> I'm glad you were able to get your indicator, etc. working.  I admit that
+> the user interface is a little difficult to use.
+> 
+> 
+> Regards,
+> Jim Cochrane
+> 
+> > Hi
+> > 
+> > I refer to my mail below. I got the indicator and the analyser working.
+> > My mistake being that I had the n-record-one-var-fn 's n-value set to 1
+> > rather than to the length of the breakout range.
+> > I was also able to add the indicator to the drop down menu.
+> > 
+> > Thanks for the excellent s/w, edited output of report_system_info attached.
+> > 
+> > Thanks,
+> > Subramanian
+> > 
+> > --Edited Output of mas/lib/report_system_info --
+> > 
+> > Market Analysis Server, Version 1.6, May 31, 2001
+> > 
+> > Linux distribution: Mandrake Linux release 8.1 (Vitamin) for i586
+> > 
+> > Linux cs6625163-86.austin.rr.com 2.4.8-26mdk #1 Sun Sep 23 17:06:39 CEST 2001
+>  i686 unknown
+> > 
+> > /proc/cpuinfo:
+> > 
+> > vendor_id	: AuthenticAMD
+> > cpu family	: 6
+> > model		: 4
+> > model name	: AMD Athlon(tm) Processor
+> > stepping	: 2
+> > cpu MHz		: 951.691
+> > cache size	: 256 KB
+> > bogomips	: 1900.54
+> > 
+> > 
+> > /proc/meminfo:
+> > 
+> > MemTotal:       126452 kB
+> > SwapTotal:      257000 kB
+> > 
+> > -- End of output --
+> > 
+> > 
+> > On Mon, Feb 18, 2002 at 07:50:29PM -0600, Subramanian Iyer wrote:
+> > > Date: Mon, 18 Feb 2002 19:50:29 -0600
+> > > From: Subramanian Iyer <subbuk>
+> > > To: jtc@dimensional.com
+> > > Subject: MAS question+ python compatibility
+> > > 
+> > > Hi Jim
+> > > 
+> > > Thanks for the wonderful s/w. I have been able to get it up and running
+> > > with respect to fetching quotes from yahoo through qm and plotting the
+> > > predefined indicators.
+> > > 
+> > > However I have trouble defining a new indicator/analyser -
+> > > 
+> > > What I want to do is this: Plot the graph of 52 period high in the upper
+> > > graph along with the price chart itself.
+> > > When the close price > this indicator, then there is a breakout signal.
+> > > 
+> > > For the indicator I tried to use N_RECORD_ONE_VARIABLE_FUNCTION, then
+> > > name as "Breakout 52 period"
+> > > input function as NoInputFunction
+> > > operator as Highest-Value with
+> > >             the n-value 52,
+> > > 	    no input function,
+> > >             HIGH_PRICE as operand.
+> > > N_RECORD_ONE_VARIABLE_FUNCTION's n-value as 1
+> > > 
+> > > Then I saved the changes.
+> > > 
+> > > I put a line in lib/.ma_clientrc reading
+> > >   "upper_indicator Breakout 52 period       darkBlue"
+> > > 
+> > > However when I now start magc, I do not see this indicator listed.
+> > > So the questions are - 
+> > >   1. Is the way I defined/configured it correct?
+> > >   2. How do I plot it?
+> > >   3. Once the indicator is in place, how do I define an analyser?
+> > >  (I did the following: define analyser, simple, two indicators -
+> > >  left is Breakout 52 period, right is Market Data. Define the timeframe
+> > >  as daily and the direction as above-to-below, no operator.
+> > >  But I have no way of checking its correctness until i can get the
+> > >  plot of the indicator working first. I should probably be using only
+> > >  one indicator but I could not see how to do this -- how do I compare
+> > >  the value of the indicator with the value of say, close? )
+> > > 
+> > > 
+> > > After I get this most elementary indicator working on the graph,
+> > > I'll try the complex examples from the doc/creating_indicators file!
+> > > 
+> > > 
+> > > Regarding compatibility with python 2.x, (You probably know this):
+> > > line 16 of /lib/python/ma_connection.py
+> > > needs another pair of parentheses:
+> > > ie the 2 argument connect(host, port)   is replaced by
+> > >    the 1 argument connect((host,port))  where the argument is a 2-tuple.
+> > > 
+> > > 
+> > > Thanks in advance,
+> > > 
+> > > Subramanian

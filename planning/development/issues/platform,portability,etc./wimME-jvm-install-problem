@@ -1,0 +1,16 @@
+[Report from Mauricio]
+
+> > Well. So I got a reminder why I am not a fan of Java and Sun. Since the
+> > JDK would not install on my WinME machine. I had to install it on my =
+> > Win2K machine.
+> 
+> You probably were trying to install the latest JDK.  Did you get the
+> impression that Sun's SDK will not install on any WinME machine, or do
+> you think it might have something to do with your particular configuration?
+> What happened when you tried to install it?
+
+It is supposed to install on WinME. But on my case even after doing a clean
+reboot and making sure nothing was running it would hang at 6% of the
+installation. I even left it over night without any luck. You would =
+figure they do better testing. It is only an install program. It is nothing
+cutting edge.

@@ -1,0 +1,8 @@
+Since macl hogs the server and power users and institutional users are
+likely to run into problems with that: e.g., a request is sent to the
+server to read its latest data, but the server does not respond because
+it's busy with macl, use of macl needs to be made asynchronous - either by
+means of threads or a fork, or (this is probably the easiest and may be
+adequate) marking a particular server process as for non-persistent
+connections only; no macl connections would be allowed.  A separate process
+could be run to services any needed macl connections.

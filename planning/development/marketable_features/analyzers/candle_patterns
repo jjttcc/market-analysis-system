@@ -1,0 +1,5 @@
+Allow creation of market analyzers to detect the candle patterns that are
+precise enough to be codeable.  The current version can probably already be
+used to detect some patterns.  Determine what codeable patterns cannot be
+created and make modifications to allow market analyzers for these
+patterns.
