@@ -73,7 +73,7 @@ feature {NONE} -- Utility
 	usage is
 		do
 			print ("Usage: "); print (argument (0))
-			print (" [input_file [what else!!!?]]%N")
+			print (" [input_file]%N")
 		end
 
 	add_indicators (t: TRADABLE [BASIC_MARKET_TUPLE];
