@@ -46,4 +46,3 @@ abstract public class IndicatorDrawer extends Drawer {
 	protected String[] _indicator_dates;
 	protected Drawer _market_drawer;
 }
-x
