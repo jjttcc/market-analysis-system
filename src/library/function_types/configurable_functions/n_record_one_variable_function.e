@@ -64,7 +64,7 @@ feature -- Access
 	effective_offset: INTEGER
 			-- Offset used to produce the effective_n value
 
-feature {FACTORY} -- Status setting
+feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 
 	set_effective_offset (arg: INTEGER) is
 			-- Set effective_offset to `arg'.
