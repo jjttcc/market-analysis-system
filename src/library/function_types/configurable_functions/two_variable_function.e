@@ -116,8 +116,6 @@ feature -- Status report
 					processed_date_time >= input2.processed_date_time
 		end
 
-	arg_mandatory: BOOLEAN is false
-
 	operator_used: BOOLEAN is true
 
 feature {NONE} -- Hook methods
@@ -175,10 +173,10 @@ feature {NONE} -- Hook methods
 				output.wipe_out
 			end
 			if not input1.processed then
-				input1.process (Void)
+				input1.process
 			end
 			if not input2.processed then
-				input2.process (Void)
+				input2.process
 			end
 		ensure then
 			inputs_processed: input1.processed and input2.processed

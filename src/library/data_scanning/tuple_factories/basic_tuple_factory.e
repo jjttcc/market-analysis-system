@@ -13,7 +13,7 @@ class BASIC_TUPLE_FACTORY inherit
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute is
 		do
 			!!product.make
 		end

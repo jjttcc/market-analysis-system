@@ -94,8 +94,6 @@ feature -- Status report
 						processed_date_time >= input.processed_date_time
 		end
 
-	arg_mandatory: BOOLEAN is false
-
 	operator_used: BOOLEAN is
 		once
 			Result := true
@@ -128,7 +126,7 @@ feature {NONE}
 				output.wipe_out
 			end
 			if not input.processed then
-				input.process (Void)
+				input.process
 			end
 		ensure then
 			input_processed: input.processed

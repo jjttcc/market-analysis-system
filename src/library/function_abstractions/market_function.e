@@ -10,9 +10,7 @@ deferred class MARKET_FUNCTION inherit
 
 	FACTORY
 		rename
-			product as output, execute as process, initialize as init_notused
-		export {NONE}
-			init_notused
+			product as output, execute as process
 		redefine
 			output
 		end
@@ -73,7 +71,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	process (arg: ANY) is
+	process is
 			-- Process the output from the input.
 		do
 			if not processed then

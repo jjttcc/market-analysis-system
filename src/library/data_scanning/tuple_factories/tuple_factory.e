@@ -14,13 +14,9 @@ feature -- Access
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute is
 			-- Manufacture a tuple
 		deferred
 		end
-
-feature -- Status report
-
-	arg_mandatory: BOOLEAN is false
 
 end -- class TUPLE_FACTORY

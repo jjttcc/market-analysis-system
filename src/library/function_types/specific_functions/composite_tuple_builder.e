@@ -187,7 +187,8 @@ feature -- Basic operations
 					src_sublist.extend (source_list.item)
 					source_list.forth
 				end
-				tuple_maker.execute (src_sublist)
+				tuple_maker.set_tuplelist (src_sublist)
+				tuple_maker.execute
 				tuple_maker.product.set_date_time (current_date)
 				--!!!When implemented, use the flyweight date_time table.
 				current_date := current_date + duration

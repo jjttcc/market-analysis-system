@@ -153,7 +153,7 @@ feature -- Basic operations
 				indicators.after
 			loop
 				if not indicators.item.processed then
-					indicators.item.process (Void)
+					indicators.item.process
 				end
 				check
 					processed: indicators.item.processed
@@ -285,7 +285,7 @@ feature {NONE}
 			else
 				!!ctbuilder.make (Current, ctf, type, start_date_time)
 			end
-			ctbuilder.process (Void)
+			ctbuilder.process
 			Result := ctbuilder.output
 		end
 

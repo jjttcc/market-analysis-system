@@ -15,7 +15,7 @@ class COMPOSITE_VOLUME_TUPLE_FACTORY inherit
 feature {NONE}
 
 	do_auxiliary_work (tuples: LIST [MARKET_TUPLE]) is
-			-- Set product's volume to sum of all volumes in tuplelist.
+			-- Set product's volume to sum of all volumes in `tuples'.
 		local
 			operator: VOLUME_COMMAND
 		do
