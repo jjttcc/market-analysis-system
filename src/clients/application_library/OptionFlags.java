@@ -7,5 +7,6 @@ public interface OptionFlags {
 	public final String symbol_option = "-s";
 	public final String compression_option = "-c";
 	public final String printall_option = "-print";
+	public final String debug_option = "-debug";
 	public final char flag_character = '-';
 }

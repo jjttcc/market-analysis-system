@@ -12,6 +12,9 @@ public class MA_Client {
 	public static void main(String[] args) {
 		initialize_configuration();
 		command_line_options = new CommandLineOptions(args);
+		if (command_line_options.debug()) {
+			Configuration.instance().set_debug(true);
+		}
 		mas_gui.DataSetBuilder data_builder =
 			new mas_gui.DataSetBuilder(connection(), command_line_options);
 		mas_gui.Chart chart;

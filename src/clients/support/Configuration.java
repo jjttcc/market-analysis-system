@@ -28,6 +28,11 @@ public class Configuration implements NetworkProtocol {
 		return ignore_termination_;
 	}
 
+	// Is "debugging" on?
+	public static boolean debug() {
+		return debug_;
+	}
+
 // Element change
 
 	// Set the input source to be used for configuration input.
@@ -44,9 +49,14 @@ public class Configuration implements NetworkProtocol {
 		_instance = instance;
 	}
 
-	// Should calls to 'terminate' be ignored?  (Defaults to false.)
+	// Set whether calls to 'terminate' should be ignored.
 	public static void set_ignore_termination(boolean value) {
 		ignore_termination_ = value;
+	}
+
+	// Set 'debug'.
+	public static void set_debug(boolean value) {
+		debug_ = value;
 	}
 
 // Basic operations
@@ -66,6 +76,7 @@ public class Configuration implements NetworkProtocol {
 // Implementation - attributes
 
 	protected static boolean ignore_termination_ = false;
+	protected static boolean debug_ = false;
 	protected static Configuration _instance;
 	protected static Tokenizer input_source;
 }

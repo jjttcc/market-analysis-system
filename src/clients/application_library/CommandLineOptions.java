@@ -29,6 +29,9 @@ public class CommandLineOptions extends StartupOptions {
 				if (i < args.length && args[i].equals(compression_option)) {
 					set_compression(true);
 				}
+				if (i < args.length && args[i].equals(debug_option)) {
+					set_debug(true);
+				}
 			}
 		} else {
 			usage();

@@ -17,6 +17,11 @@ abstract public class StartupOptions implements OptionFlags {
 		return compression_;
 	}
 
+	// Should debugging information be output?
+	public boolean debug() {
+		return debug_;
+	}
+
 	// All user-specified symbols (Vector of String) - null if none
 	// specified
 	public Vector symbols() {
@@ -31,9 +36,14 @@ abstract public class StartupOptions implements OptionFlags {
 		compression_ = v;
 	}
 
+	protected void set_debug(boolean v) {
+		debug_ = v;
+	}
+
 // Implementation
 
 	protected boolean print_on_startup_;
 	protected boolean compression_;
+	protected boolean debug_;
 	protected Vector symbols_;
 }

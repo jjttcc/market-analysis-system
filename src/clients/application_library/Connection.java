@@ -33,10 +33,9 @@ abstract public class Connection {
 	// Postcondition: logged_in() && session_state() != null
 	public void login() throws IOException {
 		String s = "";
-		Configuration conf = Configuration.instance();
 
 		connect();
-		send_msg(Login_request_code, conf.session_settings(), 0);
+		send_msg(Login_request_code, config.session_settings(), 0);
 		try {
 			s = receive_msg().toString();
 			if (error_occurred()) {
@@ -103,7 +102,7 @@ abstract public class Connection {
 		if (! valid_server_response(last_rec_msgID)) {
 			System.err.println("Fatal error: received invalid " +
 				"message ID from server: " + last_rec_msgID);
-			Configuration.terminate(-1);
+			config.terminate(-1);
 		} else {
 			request_result = new StringBuffer();
 		}
@@ -120,9 +119,11 @@ abstract public class Connection {
 			// This error means there is a problem with the protocol of the
 			// last request passed to the server.  Since this is a coding
 			// error (probably in the client), it is treated as fatal.
-			Configuration.terminate(-1);
+			config.terminate(-1);
 		}
-//System.out.println("Result: '"  + request_result.toString() + "'");
+		if (config.debug()) {
+			System.out.println("Result: '"  + request_result.toString() + "'");
+		}
 		return request_result;
 	}
 
@@ -162,7 +163,7 @@ abstract public class Connection {
 				new BufferedInputStream(io_connection.input_stream())));
 		} catch (IOException e) {
 			System.err.println("Failed to read from server (" + e + ")");
-			Configuration.terminate(1);
+			config.terminate(1);
 			throw e;
 		}
 		return result;
@@ -172,7 +173,7 @@ abstract public class Connection {
 	void message_too_large(int size) {
 		System.err.println("Message from server exceeded maximum " +
 			"buffer size of " + size + " - aborting");
-		Configuration.terminate(-1);
+		config.terminate(-1);
 	}
 
 	// Is `value' a valid server response?
@@ -201,6 +202,8 @@ abstract public class Connection {
 	protected abstract String eom_string();
 	protected abstract String msg_fld_sep();
 
+// Implementation - Attributes
+
 	protected SessionState _session_state;
 	protected boolean _logged_in = false;
 	protected String _hostname;
@@ -219,4 +222,5 @@ abstract public class Connection {
 	protected String Eom_string = eom_string();
 	protected String Message_field_separator_string = msg_fld_sep();
 	protected int Eom_char = Eom_string.charAt(0);
+	protected Configuration config = Configuration.instance();
 }
