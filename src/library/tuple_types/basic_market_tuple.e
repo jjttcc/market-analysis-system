@@ -23,6 +23,8 @@ feature -- Initialization
 		do
 			!!open; !!close; !!high; !!low
 			open.set_value (-1)
+		ensure
+			not open_available
 		end
 
 feature -- Access
@@ -69,6 +71,7 @@ feature -- {WHO?} Element change
 			-- Set the open, high, low, and close values.
 		require
 			make_sense: h >= l and l <= o and o <= h and l <= c and c <= h
+			non_negative: l.item >= 0
 		do
 			open.set_value (o.item)
 			high.set_value (h.item)
@@ -77,34 +80,52 @@ feature -- {WHO?} Element change
 		ensure
 			values_set: open.value = o; high.value = h; low.value = l;
 							close.value = c
+			open_available: open_available
 		end
 
 	set_open (p: REAL) is
+			-- Set open to `p'.
 		require
 			argument_valid: p >= low.value and p <= high.value
+			non_negative: p >= 0
 		do
 			open.set_value (p)
+		ensure
+			open_set: open.value = p
+			open_available: open_available
 		end
 
 	set_close (p: REAL) is
+			-- Set close to `p'.
 		require
 			argument_valid: p >= low.value and p <= high.value
+			non_negative: p >= 0
 		do
 			close.set_value (p)
+		ensure
+			close_set: close.value = p
 		end
 
 	set_high (p: REAL) is
+			-- Set high to `p'.
 		require
 			argument_valid: p >= close.value and p >= open.value
+			non_negative: p >= 0
 		do
 			high.set_value (p)
+		ensure
+			high_set: high.value = p
 		end
 
 	set_low (p: REAL) is
+			-- Set low to `p'.
 		require
 			argument_valid: p <= close.value and p <= open.value
+			non_negative: p >= 0
 		do
 			low.set_value (p)
+		ensure
+			low_set: low.value = p
 		end
 
 invariant
@@ -113,7 +134,6 @@ invariant
 							low.value >= 0 and
 							(open.value >= 0 or not open_available)
 	open_na_value: not open_available implies open.value < 0
-	value_definition: value = close.value
 	price_relationships: low <= high and low <= close and close <= high;
 						open_available implies open <= high and low <= open
 
