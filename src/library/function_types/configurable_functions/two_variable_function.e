@@ -113,7 +113,17 @@ feature {NONE}
 
 	do_process is
 		do
-			do_all
+			check
+				output_empty: output.empty
+			end
+			if target1.empty or target2.empty then
+				-- null statement
+			else
+				do_all
+			end
+		ensure then
+			output_empty_when_target_empty:
+				target1.empty or target2.empty implies output.empty
 		end
 
 	pre_process is
@@ -133,11 +143,10 @@ feature {NONE}
 	missing_periods (l1, l2: LINEAR [MARKET_TUPLE]): BOOLEAN is
 			-- Are there missing periods in l1 and l2 with
 			-- respect to each other?
-			--!!!Move this to a utility class?
 		require
 			both_void_or_both_not: (l1 = Void) = (l2 = Void)
 		do
-			if l1 /= Void then
+			if l1 /= Void and then not l1.empty and not l2.empty then
 				check l2 /= Void end
 				from
 					line_up (l1, l2)
@@ -156,7 +165,11 @@ feature {NONE}
 					Result := true
 				end
 			else
-				check l1 = Void and l2 = Void and not Result end
+				check
+					both_void_or_one_empty_and_false:
+						((l1 = Void and l2 = Void) or else
+							(l1.empty or l2.empty)) and not Result
+				end
 			end
 		ensure
 			void_gives_false: (l1 = Void and l2 = Void) implies (Result = false)
@@ -164,11 +177,11 @@ feature {NONE}
 
 	line_up (t1, t2: LINEAR [MARKET_TUPLE]) is
 			-- Line up t1 and t2 so that they start on the same time period.
-			--!!!Move this to a utility class?
+		require
+			not_empty: not t1.empty and not t2.empty
 		local
 			l1, l2: LINEAR [MARKET_TUPLE]
 		do
-			--!!!What if t1 or t2 is empty?
 			t1.start; t2.start
 			from
 				if t1.item.date_time < t2.item.date_time then
@@ -217,6 +230,6 @@ invariant
 	target2_not_void: target2 /= Void
 	input_target_relation:
 		input1.output = target1 and input2.output = target2
-	no_missing_periods: not missing_periods (target1, target2)
+	no_missing_periods: processed implies not missing_periods (target1, target2)
 
 end -- class TWO_VARIABLE_FUNCTION
