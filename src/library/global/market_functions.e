@@ -43,6 +43,8 @@ feature -- Access
 			pair: PAIR [MARKET_FUNCTION, STRING]
 			earlier, later: DATE_TIME
 			linear_cmd: BASIC_LINEAR_COMMAND
+			agents: expanded MARKET_AGENTS
+			flst: LIST [MARKET_FUNCTION]
 		once
 			create Result.make (0)
 			create exponential.make (1)
@@ -99,6 +101,14 @@ feature -- Access
 				point2, stock)
 			create pair.make (f,
 				"Market function that functions as a trend line")
+			Result.extend (pair)
+			create {LINKED_LIST [MARKET_FUNCTION]} flst.make
+			flst.extend (stock)
+			create {AGENT_BASED_FUNCTION} f.make (agents.Sma_key,
+				addition, flst)
+			create pair.make (f,
+				"Market function that uses a selectable procedure to do %
+				%its calculation")
 			Result.extend (pair)
 			create {MARKET_DATA_FUNCTION} f.make (stock)
 			create pair.make (f,

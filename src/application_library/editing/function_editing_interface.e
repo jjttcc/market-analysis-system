@@ -87,6 +87,7 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			l.extend (function_with_generator (
 				"CONFIGURABLE_N_RECORD_FUNCTION"))
 			l.extend (function_with_generator ("MARKET_FUNCTION_LINE"))
+			l.extend (function_with_generator ("AGENT_BASED_FUNCTION"))
 			l.extend (function_with_generator ("MARKET_DATA_FUNCTION"))
 			l.extend (function_with_generator ("STOCK"))
 			create l.make (6)
@@ -100,6 +101,10 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			l.extend (function_with_generator ("ACCUMULATION"))
 			l.extend (function_with_generator (
 				"CONFIGURABLE_N_RECORD_FUNCTION"))
+			-- @@Added this MARKET_FUNCTION_LINE here on 2003/05/17,
+			-- assuming it not being there was an oversight - check this.
+			l.extend (function_with_generator ("MARKET_FUNCTION_LINE"))
+			l.extend (function_with_generator ("AGENT_BASED_FUNCTION"))
 			l.extend (function_with_generator ("MARKET_DATA_FUNCTION"))
 		end
 
@@ -226,57 +231,64 @@ feature {EDITING_INTERFACE}
 			conf_nrf: CONFIGURABLE_N_RECORD_FUNCTION
 			nrovf: N_RECORD_ONE_VARIABLE_FUNCTION
 			tvf: TWO_VARIABLE_FUNCTION
+			agent_bf: AGENT_BASED_FUNCTION
 		do
 			inspect
 				initialization_map @ f.generator
 			when ema_function then
 				ema ?= f
 				check
-					c_is_a_exp_ma: ema /= Void
+					f_is_a_exp_ma: ema /= Void
 				end
 				editor.edit_ema (ema)
 			when One_fn_bnc_n then
 				sma ?= f
 				check
-					c_is_a_ma: sma /= Void
+					f_is_a_ma: sma /= Void
 				end
 				editor.edit_one_fn_bnc_n (sma)
 			when Mkt_fnctn_line then
 				mfl ?= f
 				check
-					c_is_a_line: mfl /= Void
+					f_is_a_line: mfl /= Void
 				end
 				editor.edit_market_function_line (mfl)
 			when One_fn_op_n then
 				nrovf ?= f
 				check
-					c_is_a_n_rec_1vf: nrovf /= Void
+					f_is_a_n_rec_1vf: nrovf /= Void
 				end
 				editor.edit_one_fn_op_n (nrovf)
 			when One_fn_op then
 				ovf ?= f
 				check
-					c_is_a_1vf: ovf /= Void
+					f_is_a_1vf: ovf /= Void
 				end
 				editor.edit_one_fn_op (ovf)
 			when Accumulation then
 				accum ?= f
 				check
-					c_is_an_accum: accum /= Void
+					f_is_an_accum: accum /= Void
 				end
 				editor.edit_accumulation (accum)
 			when Configurable_nrfn then
 				conf_nrf ?= f
 				check
-					c_is_an_accum: conf_nrf /= Void
+					f_is_an_accum: conf_nrf /= Void
 				end
 				editor.edit_configurable_nrf (conf_nrf)
 			when Two_cplx_fn_op then
 				tvf ?= f
 				check
-					c_is_a_2vf: tvf /= Void
+					f_is_a_2vf: tvf /= Void
 				end
 				editor.edit_two_cplx_fn_op (tvf)
+			when Agent_based_fn then
+				agent_bf ?= f
+				check
+					f_is_an_agent_based_function: agent_bf /= Void
+				end
+				editor.edit_agent_based_function (agent_bf)
 			when Other then
 				-- No initialization needed.
 			end
@@ -361,6 +373,7 @@ feature {NONE} -- Implementation
 						-- an N_BASED_CALCULATION, and an n-value.
 	Mkt_fnctn_line,		-- a MARKET_FUNCTION_LINE.
 	Configurable_nrfn,	-- CONFIGURABLE_N_RECORD_FUNCTION
+	Agent_based_fn,		-- AGENT_BASED_FUNCTION
 	Other				-- Classes that need no initialization
 	:
 				INTEGER is unique
@@ -419,6 +432,11 @@ feature {NONE} -- Implementation
 				valid_name: function_names.has (name)
 			end
 			Result.extend (Other, name)
+			name := "AGENT_BASED_FUNCTION"
+			check
+				valid_name: function_names.has (name)
+			end
+			Result.extend (Agent_based_fn, name)
 			name := "STOCK"
 			check
 				valid_name: function_names.has (name)
