@@ -160,6 +160,8 @@ feature {NONE} -- Implemenation
 	yahoo_field_separator: CHARACTER is ','
 
 	converted_yahoo_line (l: STRING): STRING is
+			-- Converted yahoo stock data record - example yahoo data:
+			-- 17-Jul-02,71.00,71.60,69.62,70.69,11537300
 		local
 			day, month, year: STRING
 			date: ARRAY [STRING]
@@ -179,10 +181,6 @@ feature {NONE} -- Implemenation
 				Result.replace_substring_all (yahoo_field_separator.out,
 					output_field_separator.out)
 			end
---Date,Open,High,Low,Close,Volume
---17-Jul-02,71.00,71.60,69.62,70.69,11537300
---16-Jul-02,69.51,71.39,68.48,69.01,10486800
---15-Jul-02,68.40,71.00,66.60,71.00,10420900
 		end
 
 end
