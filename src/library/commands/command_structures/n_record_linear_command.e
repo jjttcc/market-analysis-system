@@ -13,16 +13,15 @@ class N_RECORD_LINEAR_COMMAND inherit
 	N_RECORD_COMMAND
 		rename
 			make as nrc_make_unused
-		redefine
+		select
 			initialize
 		end
 
 	LINEAR_COMMAND
 		rename
-			make as lc_make_unused
+			make as lc_make_unused, initialize as initialize_unused
 		redefine
-			forth, action, start, exhausted, invariant_value, target,
-			initialize
+			forth, action, start, exhausted, invariant_value, target
 		end
 
 feature -- Initialization
@@ -68,10 +67,6 @@ feature {NONE} -- Implementation
 
 	start is
 		do
-			--!!!If these two lines are unecessary, owner can be removed.
-			if owner /= Void then
-				set_n (owner.n)
-			end
 			offset := n - 1
 			start_init
 		end
@@ -94,34 +89,12 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation
 
-	owner: N_RECORD_STRUCTURE
-
 	offset: INTEGER
 			-- Offset from current cursor/index
 
 	target: LIST [MARKET_TUPLE]
 
-feature {MARKET_FUNCTION}
-
-	initialize (arg: N_RECORD_STRUCTURE) is
-		do
-			set_n (arg.n)
-			set_owner (arg)
-		ensure then
-			n_set_to_argn: n = arg.n
-		end
-
 feature {NONE}
-
-	set_owner (o: N_RECORD_STRUCTURE) is
-			-- Set owner to o.
-		require
-			o /= Void
-		do
-			owner := o
-		ensure
-			owner = o and owner /= Void
-		end
 
 	start_init is
 			-- Extra initialization required by start
