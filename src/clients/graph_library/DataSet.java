@@ -2,21 +2,25 @@ package graph_library;
 
 import java.awt.*;
 import java.util.*;
-
+import java_library.support.*;
 
 
 /**
  *  Plottable data sets.
  */
-abstract public class DataSet {
+abstract public class DataSet extends BasicUtilities {
 
 // Access
 
-	// Number of records in this data set
+	/**
+	* Number of records in this data set
+	**/
 	abstract public int size();
 
-	// The name of the data set
-	// Postcondition: result != null
+	/**
+	* The name of the data set
+	* Postcondition: result != null
+	**/
 	public String name() {
 		return "";	// Redefine if needed.
 	}
@@ -41,7 +45,9 @@ abstract public class DataSet {
 	*/
 	abstract public double minimum_y();
 
-	// Color data is to be drawn in - can be null
+	/**
+	* Color data is to be drawn in - can be null
+	**/
 	public Color color() { return color; }
 
 	public String toString() {
@@ -54,11 +60,28 @@ abstract public class DataSet {
 		return result;
 	}
 
+// Status report
+
+	/**
+	* Does the last date and time of `this' match the first date and
+	* time of `d'?
+	**/
+	public abstract boolean last_date_time_matches_first(DataSet d);
+
+	/**
+	* Does the last tuple (e.g., o,h,l,c values) of `this' match the
+	* first tuple of `d'?
+	**/
+	public abstract boolean last_tuple_matches_first(DataSet d);
+
+	public abstract boolean need_a_name(DataSet d, int this_index, int d_index);
+
 // Element change
 
-	// Set the color the data is to be drawn in - can be null
-	public void setColor(Color c) { color = c; }
-
+	/**
+	* Set the color the data is to be drawn in - can be null
+	**/
+	public void setColor(Color c) { color = c; } 
 	/**
 	* Append a copy of `d' at end.
 	* @postcondition
@@ -73,6 +96,13 @@ abstract public class DataSet {
 	* @postcondition
 	*     size() == 0 */
 	abstract public void clear_all();
+
+	/**
+	* Remove the last record in this dataset.
+	* Precondition: size() > 0
+	* Postcondition: size() == old size() - 1
+	**/
+	public abstract void remove_last_record();
 
 // Implementation
 
