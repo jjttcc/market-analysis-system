@@ -1,0 +1,30 @@
+Procedure for adding a new COMMAND class:
+
+Add an instance of the new COMMAND class, with a description, to the list
+in the routine `commands_and_descriptions' in the COMMANDS class, following
+the same simple procedure used to add the existing COMMAND instances.
+
+Add the command's name in the `initialization_map' function in the
+COMMAND_EDITING_INTERFACE class:
+
+	- Choose an initialization classification from the constants defined
+	  above `initialization_map' according to how the command needs to
+	  be initialized (look at other commands for examples).  If the new
+	  command does not fit into any existing initialization classification,
+	  add a new constant for a new init. classification for the new command.
+	- Use the (chosen or newly added) initialization classification constant
+	  in the `extend' call to the hash table in `initialization_map', along
+	  with the name, to add the new class's name/classification to the table
+	  (just as the existing commands were added).
+
+If a new initialization classification was created for the command, add a when
+block in `initialize_command' to handle the initialization of that command
+type, using the existing when blocks as examples.  If necessary, create a new
+initialization/edit routine for that command in the `editor'
+(APPLICATION_COMMAND_EDITOR).
+
+Look at the `command_types' function and determine which types the new
+command conforms to and add an entry to each list for which the command's
+type conforms, using the name of the command (as with the existing entries).
+Be careful to identify all lists (all elements of the hash table) for which
+the command's type conforms.
