@@ -1,6 +1,6 @@
 indexing
 	description:
-		"An numeric command that is also an n-record command"
+		"An numeric command that is also an n-record structure"
 	date: "$Date$";
 	revision: "$Revision$"
 
