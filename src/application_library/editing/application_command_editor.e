@@ -392,8 +392,8 @@ feature -- Basic operations
 			choices.extend (pair)
 			create pair.make ("zero to positive", False)
 			choices.extend (pair)
-			user_interface.choice (concatenation (<<"slope specification for ",
-				cmd.generator>>), choices, choices.count)
+			user_interface.choice (concatenation (<<"Sign-change %
+				%specification for ", cmd.generator>>), choices, choices.count)
 			from
 				choices.start
 			until
