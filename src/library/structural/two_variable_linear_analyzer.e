@@ -29,7 +29,7 @@ class TWO_VARIABLE_LINEAR_ANALYZER inherit
 			forth, start
 		end
 
-feature {NONE} -- Hook methods
+feature {NONE} -- Hook routines
 
 	forth is
 		do
@@ -49,7 +49,7 @@ feature {NONE} -- Hook methods
 				target1.item.date_time.is_equal (target2.item.date_time)
 		end
 
-feature {NONE}
+feature {NONE} -- Utility routines
 
 	missing_periods (l1, l2: LINEAR [MARKET_TUPLE]): BOOLEAN is
 			-- Are there missing periods in l1 and l2 with
