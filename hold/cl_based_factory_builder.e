@@ -17,6 +17,11 @@ class FACTORY_BUILDER inherit
 			all
 		end
 
+	GLOBAL_SERVICES
+		export {NONE}
+			all
+		end
+
 creation
 
 	make
@@ -83,8 +88,17 @@ feature {NONE}
 		do
 			no_open := true
 			!STOCK_FACTORY!tradable_factory.make
+			-- Create the list of technical indicators,
 			function_list_factory.execute
-			tradable_factory.set_indicators (function_list_factory.product)
+			-- and copy them into the singleton list, function_library.
+			function_library.append (function_list_factory.product)
+			--!!!Will need to retrieve the function_library from persistent
+			--!!!store.  And it will need to be saved (if it changed) on program
+			--!!!termination - probably use the TERMINABLE cleanup facility.
+			--!!!Perhaps the retrieval of function_library should be done
+			--!!!by the function_library once function in GLOBAL_SERVICES.
+			--!!!In that case, the append above will need to change.
+			tradable_factory.set_indicators (function_library)
 			!!tradable_factories.make
 			from
 				i := 1
@@ -132,7 +146,7 @@ feature {NONE}
 		local
 			meg_builder: MARKET_EVENT_GENERATOR_BUILDER
 		do
-			!!meg_builder.make (function_list_factory.product)
+			!!meg_builder.make
 			!VIRTUAL_TRADABLE_LIST!market_list.make (input_file_names,
 														tradable_factories)
 			meg_builder.execute

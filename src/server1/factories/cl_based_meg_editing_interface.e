@@ -16,10 +16,10 @@ class MARKET_EVENT_GENERATOR_BUILDER inherit
 		end
 
 	GLOBAL_SERVICES
-		rename
-			function_library as flib_not_currently_used_but_may_be_later --!!!
 		export {NONE}
 			all
+				{ANY}
+			function_library
 		end
 
 creation
@@ -28,18 +28,20 @@ creation
 
 feature -- Initialization
 
-	make (l: LIST [MARKET_FUNCTION]) is
+	make is
 		require
-			not_void: l /= Void
+			flib_not_void: function_library /= Void
+			-- function_library has been initialized with the existing
+			-- indicators.
+			--!!!If the function_library once function is changed to read
+			--!!!in all indicators from persistent store, this precondition
+			--!!!(and probably the make routine) can be removed.
 		do
-			function_library := l
 		end
 
 feature -- Access
 
 	product: LIST [MARKET_EVENT_GENERATOR]
-
-	function_library: LIST [MARKET_FUNCTION]
 
 feature -- Basic operations
 
