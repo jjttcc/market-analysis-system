@@ -274,7 +274,6 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	use_customized_setting (key_token, value_token: STRING): BOOLEAN is
 		do
-			-- Default to always true - redefine if needed.
 			Result := key_token.is_equal (Ignore_day_of_week_specifier)
 		end
 
