@@ -338,11 +338,13 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 
 	// Use `data' to determine whether there is an open-interest field
 	// and, if necessary, set data_parser's field specs accordingly.
+	// Precondition: data != null
 	String setup_parser_fieldspecs(String data) {
 		String result = data;
 		boolean oi = false;
-		String firstrecord = data.substring(0, data.indexOf('\n'));
-		if (firstrecord.length() > 1) {
+		String firstrecord = "";
+		if (data.length() >= Open_interest_flag.length()) {
+			firstrecord = data.substring(0, Open_interest_flag.length());
 			if (firstrecord.substring(0, Open_interest_flag.length()).equals(
 					Open_interest_flag)) {
 				oi = true;
