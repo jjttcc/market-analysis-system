@@ -100,20 +100,24 @@ feature {NONE}
 			-- `first_element_operator'), put the result into `output' as its
 			-- first element, and increment `target' to the 2nd element.
 			target.start
-			first_element_operator.execute (target.item)
-			!!t.make (target.item.date_time, target.item.end_date,
-						first_element_operator.value)
-			output.extend (t)
-			-- Prepare output for use by previous_operator - set to
-			-- first item that was inserted above.
+			if not target.empty then
+				first_element_operator.execute (target.item)
+				!!t.make (target.item.date_time, target.item.end_date,
+							first_element_operator.value)
+				output.extend (t)
+				target.forth
+			end
+			-- Prepare output for use by previous_operator - set to first
+			-- item that was inserted above or `after' if target is empty.
 			output.start
 			-- Important - previous operator will operate on the current
 			-- item of `output', which will always be the last inserted item.
 			previous_operator.set_target (output)
-			target.forth
 		ensure then
-			output_at_last: output.islast
-			output_one_less_than_target: target.index = output.index + 1
+			empty_if_empty: target.empty = output.empty
+			output_at_last: not output.empty implies output.islast
+			output_one_less_than_target: not output.empty implies
+				target.index = output.index + 1
 		end
 
 	forth is
