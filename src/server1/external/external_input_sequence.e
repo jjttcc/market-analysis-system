@@ -363,13 +363,13 @@ feature {NONE} -- Implementation
 		end
 
 	lock_external is
-			-- When multi-threading is in place, this will lock the use
+			-- @@When/if multi-threading is in place, this will lock the use
 			-- of the external routines to prevent race conditions.
 		do
 		end
 
 	unlock_external is
-			-- When multi-threading is in place, this will unlock the use
+			-- @@When/if multi-threading is in place, this will unlock the use
 			-- of the external routines.
 		do
 		end
