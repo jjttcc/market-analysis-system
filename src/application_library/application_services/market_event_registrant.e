@@ -77,6 +77,12 @@ feature -- Basic operations
 				end
 				hfile.close
 			end
+			-- Clear the event cache and event history so that they won't
+			-- be stored if this instance is saved to persistent store,
+			-- since the history is stored separately (above) and the cache
+			-- does not need to be persistent.
+			event_cache.wipe_out
+			event_history.wipe_out
 		end
 
 feature {NONE} -- Implementation
