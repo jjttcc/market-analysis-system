@@ -1,0 +1,76 @@
+# macl input file to create market analyzers to detect if the
+# [Slope of MACD, Slope of Slope of MACD] Trend indicator moves to
+# 2 (Buy), to -2 (Sell), or to 0 (Sideline).  Long-term trend signal
+# based on weekly data.
+m
+c
+s
+t
+[Slope of MACD, Slope of Slope of MACD] Trend
+y
+Line
+y
+-1
+0
+weekly
+above-to-below
+n
+[Slope of MACD, Slope of Slope of MACD] Downtrend
+c
+s
+t
+[Slope of MACD, Slope of Slope of MACD] Trend
+y
+Line
+y
+1
+0
+weekly
+below-to-above
+n
+[Slope of MACD, Slope of Slope of MACD] Uptrend
+c
+s
+t
+[Slope of MACD, Slope of Slope of MACD] Trend
+y
+Line
+y
+1
+0
+weekly
+above-to-below
+y
+l
+GT_OPERATOR
+c
+BASIC_NUMERIC_COMMAND
+c
+CONSTANT
+c
+-1
+[Slope of MACD, Slope of Slope of MACD] Sidelined: 2 to 0
+c
+s
+t
+[Slope of MACD, Slope of Slope of MACD] Trend
+y
+Line
+y
+-1
+0
+weekly
+below-to-above
+y
+l
+LT_OPERATOR
+c
+BASIC_NUMERIC_COMMAND
+c
+CONSTANT
+c
+1
+[Slope of MACD, Slope of Slope of MACD] Sidelined: -2 to 0
+s
+-
+x
