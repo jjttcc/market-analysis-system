@@ -78,8 +78,134 @@ feature -- Element change
 			-- `Mark_specifier + line_field_separator + Default_mark' before
 			-- the end of the block and deleting this string from any
 			-- other block whose begin-value matches `begin_value.
+		require
+			has_been_tokenized: contents /= Void
 		local
-			begin_item, sought_value, default_record: STRING
+			exc: expanded EXCEPTION_SERVICES
+			exception_occurred: BOOLEAN
+		do
+			if not exception_occurred then
+				mark_as_default_failed := False
+				remove_default_marks (tag, begin_value)
+				insert_default_mark (tag, value, begin_value)
+			else
+				mark_as_default_failed := True
+				exc.set_verbose_reporting_off
+				mark_as_default_failure_reason := exc.error_information (
+					Write_error, False)
+			end
+		rescue
+			exception_occurred := True
+			retry
+		end
+
+	remove_default_marks (tag, begin_value: STRING) is
+			-- Remove the "default marks" from all blocks whose begin-value
+			-- matches `begin_value'.
+		local
+			begin_record, default_record: STRING
+			in_targeted_block, removed: BOOLEAN
+		do
+			from
+				begin_record := Begin_tag + line_field_separator + begin_value
+				default_record := Mark_specifier + line_field_separator +
+					Default_mark
+				exhausted := False
+				tokens.start
+				item := tokens.item
+				-- Since `forth' was not used to initialize the loop, make
+				-- sure the "block-state" is correct by running post_process.
+				post_process
+			until
+				exhausted
+			loop
+				removed := False
+				-- If this is the beginning of a block from which the
+				-- default mark is to be removed:
+				if equal (item, begin_record) then
+					-- Mark the block.
+					in_targeted_block := True
+				elseif in_block then
+					-- If this is a block from which the default mark is
+					-- to be removed and `item' is the default mark:
+					if in_targeted_block and equal (item, default_record) then
+						-- Remove the default mark.
+						tokens.remove
+						item := tokens.item
+						removed := True
+						if is_end_of_block (item) then
+							-- Since forth will not be called for this
+							-- iteration, make sure that the correct
+							-- "block-state" is maintained.
+							at_end_of_block := True
+							-- Maintain the class invariant:
+							in_block := False
+						end
+					end
+				elseif at_end_of_block then
+					in_targeted_block := False
+				end
+				if not removed then
+					forth
+				end
+			end
+		end
+
+	insert_default_mark (tag, value, begin_value: STRING) is
+			-- Mark the block whose begin-value matches `begin_value' and
+			-- that contains `tag + line_field_separator + value' as
+			-- the "default block".
+		local
+			begin_record, sought_value, default_record: STRING
+			block_found, in_candidate_block: BOOLEAN
+		do
+			from
+				begin_record := Begin_tag + line_field_separator + begin_value
+				default_record := Mark_specifier + line_field_separator +
+					Default_mark
+				sought_value := tag + line_field_separator + value
+				exhausted := False
+				tokens.start
+				item := tokens.item
+				-- Since `forth' was not used to initialize the loop, make
+				-- sure the "block-state" is correct by running post_process.
+				post_process
+			until
+				block_found or exhausted
+			loop
+				-- If this is the beginning of a block whose begin-value
+				-- matches `begin_value':
+				if equal (item, begin_record) then
+					-- Mark the block as a candidate.
+					in_candidate_block := True
+				elseif in_block then
+					-- If this is the new default block:
+					if in_candidate_block and equal (item, sought_value) then
+						-- Insert the default mark, move the tokens
+						-- cursor to skip over the inserted item,
+						-- and note as found.
+						tokens.put_right (default_record)
+						tokens.forth
+						block_found := True
+					end
+				elseif at_end_of_block then
+					in_candidate_block := False
+				end
+				if not block_found then
+					forth
+				end
+			end
+			if block_found then
+				target.open_write
+				tokens.do_if (agent write_line, agent not_last)
+				target.close
+			end
+		end
+
+--!!!!!!!!!Remove:
+	old_mark_block_as_default (tag, value, begin_value: STRING) is
+		local
+			begin_record, sought_value, default_record: STRING
 			in_old_default_block, block_found, removed: BOOLEAN
 			exception_occurred: BOOLEAN
 			exc: expanded EXCEPTION_SERVICES
@@ -87,7 +213,7 @@ feature -- Element change
 			if not exception_occurred then
 				mark_as_default_failed := False
 				sought_value := tag + line_field_separator + value
-				begin_item := Begin_tag + line_field_separator + begin_value
+				begin_record := Begin_tag + line_field_separator + begin_value
 				default_record := Mark_specifier + line_field_separator +
 					Default_mark
 				from
@@ -97,9 +223,12 @@ feature -- Element change
 					exhausted
 				loop
 					removed := False
+if tokens.item.count > 0 and tokens.item.substring_index ("dummy", 1) > 0 then
+	print (tokens.item + "%N")
+end
 					-- If this is the beginning of the block from which the
 					-- default mark is to be removed,
-					if equal (item, begin_item) then
+					if equal (item, begin_record) then
 						-- mark the block.
 						in_old_default_block := True
 					elseif in_block then
@@ -191,7 +320,10 @@ feature {NONE} -- Implementation
 	write_line (s: STRING) is
 			-- Write `s' appended with '%N' to `target'.
 		do
-			if is_end_of_block (s) then
+			if
+				is_end_of_block (s) and
+				s.item (s.count) = line_field_separator @ 1
+			then
 				-- Don't output the extra `line_field_separator'.
 				target.put_string (End_tag + "%N")
 			else
