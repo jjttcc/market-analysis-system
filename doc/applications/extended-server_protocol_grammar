@@ -5,7 +5,7 @@ Extended Server
 time_delimited_mkt_data_req -> mkt_symbol "\t" trad_per_type "\t" date_time_range
 time_delimited_ind_data_req ->
          indID "\t" mkt_symbol "\t" trad_per_type "\t" date_time_range
-date_time_range             -> start_date_time [ "\t" end_date_time ]
+date_time_range             -> start_date_time [ ";" end_date_time ]
 start_date_time             -> date_time_spec
 end_date_time               -> date_time_spec
 date_time_spec              -> date_with_sep "," time_with_sep
