@@ -18,6 +18,9 @@ class MARKET_FUNCTIONS inherit
 		end
 
 	GLOBAL_SERVICES
+		export
+			{NONE} all
+		end
 
 	MARKET_FUNCTION_EDITOR
 
