@@ -201,21 +201,71 @@ TRADABLE to make composite tuples for its composite_tuple_list feature.
 STOCK_SPLIT is an abstraction for a stock split, with a value and a date,
 used by STOCK to adjust its prices for stock splits.
 
-CLUSTER market_analysis
+CLUSTER market_analysis_tools
 
-This cluster hold classes used for analysis of market data, including
-the results of technical indicators (the output of a MARKET_FUNCTION).
-An example use of the classes in this cluster is to construct and execute
-a machine that will generate buy or sell signals based on conditions
-of one or more functions.  For example, an analysis of moving average
-crossover could generate a buy/sell signal when one average crossed
-above/below the other.  Class MARKET_LINE provides an abstraction for
-a line determined by two MARKET_TUPLEs.  As with a line in geometry,
-this line is defined by two points, the two MARKET_TUPLEs.  Treating a
-MARKET_TUPLE as a point, its x value is its date/time and its y value
-is the price or indicator value (the `value' query).  MARKET_LINEs are
-used in trend-line analysis and to approximate the slope (rate of change)
-or a market data set at a particular date/time.
+This cluster hold utility classes used for analysis of market data,
+including the results of technical indicators (the output of a
+MARKET_FUNCTION).  Class MARKET_LINE provides an abstraction for a line
+determined by two MARKET_TUPLEs.  As with a line in geometry, this line
+is defined by two points, the two MARKET_TUPLEs (actually, MARKET_POINTs,
+which descend from MARKET_TUPLEs).  Treating a MARKET_TUPLE as a point,
+its x value is its date/time and its y value is the price or indicator
+value (the `value' query).  A common use of MARKET_LINE is to approximate
+the slope (rate of change) or a market data set at a particular date/time.
+MARKET_FUNCTION_LINE is a MARKET_LINE that is also a SIMPLE_FUNCTION
+(which is a MARKET_FUNCTION), allowing lines to be incorporated into
+market function analysis.  For example, a MARKET_FUNCTION_LINE could be
+used to represent a trend line, which could be analyzed to determine if
+the price crosses this trend line.  SLOPE_ANALYZER and SIGN_ANALYZER are
+COMMANDs that, respectively, analyze market data to determine the slope
+of the data at a particular point in time and determine if the sign
+of one data points is different than the sign of another data point.
+One use of these two classes is in analysis to determine if the slope
+of a function changes from positive to negative and vice versa.
+
+CLUSTER events
+
+This cluster's classes provide abstractions for events based on analysis
+of market data, typically used as buy/sell signal notifications.
+ATOMIC_MARKET_EVENT is an abstraction for simple events and
+MARKET_EVENT_PAIR provides for pairs of events, allowing, by nesting
+MARKET_EVENT_PAIRs, for arbitrarily complex events.
+
+CLUSTER event_generation
+
+This cluster contains subclusters event_generation_kernel and
+function_analysis, with classes for event generation.
+
+SUBCLUSTER event_generation_kernel
+
+This cluster contains classes that provide basic abstractions
+for the generation of events based on market data analysis.
+MARKET_EVENT_GENERATOR, which inherits from EVENT_GENERATOR in the
+Eiffel Component Library (see eiffel_library_document), provides the
+main abstraction for generation of MARKET_EVENTs based on market
+data.  COMPOUND_EVENT_GENERATOR is a MARKET_EVENT_GENERATOR that
+uses two MARKET_EVENT_GENERATORs to generate pairs of market events
+(MARKET_EVENT_PAIRs) by determining if events from its left generator
+coincide with events from its right generator.  This facility allows
+for specifying an AND operation - that is, an event is generated
+only if conditions for the left and right events coincide.  By nesting
+COMPOUND_EVENT_GENERATORs, the conditions for event generation can be made
+arbitrarily complex.  MARKET_EVENT_COORDINATOR is an EVENT_COORDINATOR
+(see eiffel_library_document) that executes a set of event generators on
+a list of markets (TRADABLEs) and then dispatches the resulting events
+to an EVENT_DISPATCHER.
+
+SUBCLUSTER function_analysis
+
+This cluster contains classes that provide abstractions for market
+event generators that generate events based on analysis of one
+(ONE_VARIABLE_FUNCTION_ANALYZER) or two (TWO_VARIABLE_FUNCTION_ANALYZER)
+technical indicators - that is, MARKET_FUNCTIONs.  Typical example uses
+of these classes are for generating of buy signals when price crosses
+above a moving average (or sell signal when price crosses below MA)
+and generate a buy signal when stochastic changes slope from negative
+to positive while below 25 (or a sell signal for slope change positive
+to negative while above 75).
 
 CLUSTER data_scanning
 
