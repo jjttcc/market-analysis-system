@@ -233,24 +233,7 @@ src/scripts/windows/runmas.bat bin/ mas_windows1.4
 src/scripts/windows/runmacl.bat bin/ mas_windows1.4
 src/scripts/windows/runmasgui.bat bin/ mas_windows1.4
 # (macl configuration files)
-build/config/accumulation_distribution lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
-build/config/ema_of_volume lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
-build/config/force_index lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
-build/config/indicators lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
-build/config/obv lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
-build/config/slope_of_macd_sl lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
-build/config/slope_of_slope_of_macd_sl lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
-build/config/macd_diffsig_crossover lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
-build/config/macd_diffsigx_and_stoch_35 lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
-build/config/market_analyzers lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
-build/config/slope_of_macd_sl_cross0 lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
-build/config/slope_of_slope_of_macd_sl_cross0 lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
-build/config/stoch_pctD_cross lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
-build/config/volume_gt_1million lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
-build/config/volume_spike lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
-build/config/editind lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
-build/config/smsl_ssmsl_trend lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
-build/config/smsl_ssmsl_trend_analyzers lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config lib/ mas_linux1.4 mas_windows1.4 mac1.4
 # (Server executables and needed libraries)
 lib/binaries/mas_no_assert_v1.4 bin/mas mas_linux1.4
 lib/binaries/mas_assert_v1.4 bin/mas_assert mas_linux1.4
@@ -313,9 +296,8 @@ src/scripts/python/pmm src/scripts/ scripts
 /home2/finance/bin/extract_data src/scripts/ scripts
 /home2/finance/bin/loss src/scripts/ scripts
 /home2/finance/bin/process_mas_mail src/scripts/ scripts
-/home2/finance/lib/.marketenv src/scripts/lib/ scripts
-/home2/finance/lib/.mas_env src/scripts/lib/ scripts
-/home2/finance/lib/awk src/scripts/lib/ scripts
+src/scripts/mas/admin src/scripts/lib/ scripts
+src/scripts/mas/awk src/scripts/lib/ scripts
 doc/scripts_README ./src/scripts/README scripts
 /usr/local/bin/cnvrt_fromdos src/scripts/ scripts
 /usr/local/bin/fromdos src/scripts/ scripts
