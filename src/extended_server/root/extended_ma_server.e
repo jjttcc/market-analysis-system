@@ -31,6 +31,9 @@ feature {NONE} -- Initialization
 		do
 			-- Force the platform's command-line to be an "extended" one.
 			cl_dummy := platform.command_line_cell (extended_command_line).item
+--!!!Clean up
+print ("allow non-std per types: " +
+extended_command_line.allow_non_standard_period_types.out + "%N")
 			mas_make
 		end
 
@@ -55,7 +58,12 @@ feature {NONE} -- Implementation - Attributes
 		local
 			platform: expanded EXTENDED_PLATFORM_DEPENDENT_OBJECTS
 		do
-			Result := platform.command_line
+			if extended_command_line_implementation = Void then
+				extended_command_line_implementation := platform.command_line
+			end
+			Result := extended_command_line_implementation
 		end
+
+	extended_command_line_implementation: EXTENDED_MAS_COMMAND_LINE
 
 end
