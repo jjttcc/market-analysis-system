@@ -30,7 +30,7 @@ String tag = thread_tag();
 log("Starting 'service' thread " + tag);
 		try {
 			log_tag("(Version 1.4) Connected", tag);
-			log("Compiled at Thu Feb 20 17:32:35 MST 2003");
+			log("Compiled at Thu Feb 20 21:29:01 MST 2003");
 			log_tag("Reserving a proxy.", tag);
 			mas_proxy = reserved_proxy();
 			log_tag("Obtained proxy with code " + mas_proxy.hashCode(), tag);
@@ -110,7 +110,7 @@ log("Ending 'service' thread " + tag);
 	private String snippet(String msg) {
 		int msg_end = msg.length() > Msglength_limit?
 			Msglength_limit: msg.length();
-		return msg.substring(1, msg_end);
+		return msg.substring(0, msg_end);
 	}
 
 	// Log 'msg' with the specified tag.
@@ -135,5 +135,5 @@ log("Ending 'service' thread " + tag);
 	private ManagedCache proxy_cache;
 
 	// Maximum allowed size of 'proxy_cache'
-	private final int Max_cache_size = 2;
+	private final int Max_cache_size = 5;
 }
