@@ -167,6 +167,29 @@ feature -- Basic operations
 
 	main_menu is
 			-- Display the main menu and respond to the user's commands.
+		local
+			exception_processor: expanded EXCEPTION_PROCESSOR
+			retried: BOOLEAN
+		do
+			if
+				retried implies
+				not exception_processor.abort_command_line_processing
+			then
+				process_main_menu
+			end
+		rescue
+			handle_exception ("main menu")
+			if
+				not end_client and not exit_server and not assertion_violation
+			then
+				retried := True
+				retry
+			else
+				terminate (Error_exit_status)
+			end
+		end
+
+	process_main_menu is
 		do
 			check
 				io_devices_not_void: input_device /= Void and
@@ -240,15 +263,6 @@ feature -- Basic operations
 				exit (0)
 			else
 				print ("(Hit <Enter> to restart the command-line client.)%N")
-			end
-		rescue
-			handle_exception ("main menu")
-			if not end_client and not exit_server then
-				if not assertion_violation then
-					retry
-				end
-			else
-				terminate (Error_exit_status)
 			end
 		end
 
