@@ -28,6 +28,14 @@ feature -- Utility
 			termination_registrants.extend (v)
 		end
 
+	unregister_for_termination (v: TERMINABLE) is
+			-- Remove (all occurrences of) `v' from termination_registrants.
+		do
+			termination_registrants.prune_all (v)
+		ensure
+			not_registered: not termination_registrants.has (v)
+		end
+
 	termination_cleanup is
 			-- Send cleanup notification to all members of
 			-- `termination_registrants' in the order they were added
