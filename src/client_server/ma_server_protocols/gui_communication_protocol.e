@@ -31,13 +31,27 @@ feature -- Client request IDs
 			-- Request for a list of all available indicators for a
 			-- specified market
 
+	Login_request: INTEGER is 6
+			-- Request for a session key
+
+	Session_change_request: INTEGER is 7
+			-- Request for a change in session settings
+
 feature -- Server response IDs
 
-	Error: INTEGER is 6
+	Error: INTEGER is 101
 			-- Response indicating that there was a problem receiving or
 			-- parsing the client request
 
-	OK: INTEGER is 7
+	OK: INTEGER is 102
 			-- Response indicating that no errors occurred
+
+feature -- Subtokens
+
+	Start_date: STRING is "start_date"
+			-- Token specifying session setting for a start date
+
+	End_date: STRING is "end_date"
+			-- Token specifying session setting for an end date
 
 end -- class GUI_NETWORK_PROTOCOL
