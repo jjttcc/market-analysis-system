@@ -150,7 +150,7 @@ feature -- Basic operations
 				when 'v', 'V' then
 					view_menu
 				when 'e', 'E' then
-					main_edit_indicator_menu
+					function_builder.edit_indicator_menu (function_library)
 				when 'm', 'M' then
 					event_generator_builder.edit_event_generator_menu
 				when 'r', 'R' then
@@ -339,6 +339,7 @@ feature {NONE} -- Implementation
 		end
 
 	edit_indicator_menu (indicators: LIST [MARKET_FUNCTION]) is
+--Obsolete!!!
 		require
 			ind_not_void: indicators /= Void
 		local
@@ -362,6 +363,7 @@ feature {NONE} -- Implementation
 		end
 
 	edit_parameter_menu (parameters: LIST [FUNCTION_PARAMETER]) is
+--Obsolete!!!
 		require
 			params_not_void: parameters /= Void
 		local
@@ -405,6 +407,8 @@ feature {NONE} -- Implementation
 		end
 
 	remove_indicator_menu is
+--!!!Move to FUNCTION_EDITING_INTERFACE (?)
+--Obsolete!!!
 			-- Menu for removing one or more indicators from `function_libary'
 		local
 			indicator: MARKET_FUNCTION
@@ -481,7 +485,6 @@ feature {NONE} -- Implementation
 				print ("%N%N")
 			end
 		end
-
 
 	view_menu is
 			-- Menu for viewing market and market function data
@@ -761,6 +764,7 @@ feature {NONE} -- Implementation
 feature {NONE} -- Implementation - utilities
 
 	remove_indicator (f: MARKET_FUNCTION) is
+--Obsolete!!!
 			-- Remove all occurrences of `f' from `function_library'.
 		local
 			l: LINKED_LIST [MARKET_FUNCTION]
