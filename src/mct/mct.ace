@@ -10,6 +10,7 @@ default
 	assertion (ensure)
 	assertion (loop)
 	assertion (invariant)
+	arguments ("-debug")
 	arguments (" ")
 	disabled_debug (yes)
 	disabled_debug ("ev_gtk_c_object_dispose")
@@ -17,6 +18,8 @@ default
 	disabled_debug ("ev_gtk_destroy")
 	disabled_debug ("ev_gtk_dispose")
 	disabled_debug ("persist")
+	disabled_debug ("regexp")
+	debug ("commands")
 	debug (no)
 	line_generation (no)
 	profile (no)
@@ -40,6 +43,7 @@ default
 
 cluster
 	mct:		"$MAS/src/mct"
+
 
 	root_cluster (mct):		"$/root"
 
@@ -69,7 +73,7 @@ cluster
 
 	platform (mct):		"$/system_specific/unix"
 
-	macl_connection:	"$MAS/src/clients/macl/library"
+	macl_connection:		"$MAS/src/clients/macl/library"
 
 	eiflib:		"$MAS/src/eiffel_library"
 
@@ -83,7 +87,7 @@ cluster
 
 	mas_client_lib:		"$MAS/src/client_library"
 
-	mas_client_support (mas_client_lib):	"$/support"
+	mas_client_support (mas_client_lib):		"$/support"
 
 	mas_server:		"$MAS/src/server1"
 
@@ -135,26 +139,25 @@ cluster
 
 	re_support (regexp):		"$/support"
 
-
 	all gobo_utility (gobo):		"$/utility"
 
 	all gobo_structure (gobo):		"$/structure"
 
-	eposix:			"$EPOSIX/src/posix"
+	eposix:		"$EPOSIX/src/posix"
 
-	eposix_stdc:			"$EPOSIX/src/standardc"
+	eposix_stdc:		"$EPOSIX/src/standardc"
 
-	eposix_papi:			"$EPOSIX/src/papi"
+	eposix_papi:		"$EPOSIX/src/papi"
 
-	eposix_capi:			"$EPOSIX/src/capi"
+	eposix_capi:		"$EPOSIX/src/capi"
 
-	eposix_abstract:			"$EPOSIX/src/abstract"
+	eposix_abstract:		"$EPOSIX/src/abstract"
 
-	eposix_support:			"$EPOSIX/src/support"
+	eposix_support:		"$EPOSIX/src/support"
 
-	eposix_c:			"$EPOSIX/src/epxc"
+	eposix_c:		"$EPOSIX/src/epxc"
 
-	eposix_ise:			"$EPOSIX/src/spec/ise"
+	eposix_ise:		"$EPOSIX/src/spec/ise"
 
 external
 
