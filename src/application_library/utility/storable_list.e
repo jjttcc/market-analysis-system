@@ -14,11 +14,15 @@ class STORABLE_LIST [G] inherit
 	LINKED_LIST [G]
 		rename
 			make as ll_make
+		redefine
+			copy
 		end
 
 	STORABLE
 		export {NONE}
 			all
+		undefine
+			copy, is_equal
 		end
 
 creation
@@ -42,6 +46,14 @@ feature -- Access
 
 	persistent_file_name: STRING
 			-- The name of the file that the list contents are stored in.
+
+feature -- Duplication
+
+	copy (other: like Current) is
+		do
+			Precursor {LINKED_LIST} (other)
+			persistent_file_name := clone (other.persistent_file_name)
+		end
 
 feature -- Utility
 

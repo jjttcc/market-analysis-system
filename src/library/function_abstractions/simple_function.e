@@ -28,7 +28,9 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 		export {NONE}
 			all
 				{FACTORY}
-			extend, count, first, last, empty, i_th
+			extend, count, first, last, i_th
+				{ANY}
+			is_empty
 		end
 
 creation {FACTORY}

@@ -28,8 +28,6 @@ creation {GLOBAL_SERVER}
 feature {NONE} -- Initialization
 
 	make is
-		local
-			i: INTEGER
 		do
 			create {LINKED_LIST [INTEGER]} port_numbers.make
 			cl_make

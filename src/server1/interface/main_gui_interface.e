@@ -145,7 +145,7 @@ feature {NONE} -- Hook routine implementation
 				s.extend (io_medium.last_character)
 				io_medium.read_character
 			end
-			if s.empty then
+			if s.is_empty then
 				i := 0
 			else
 				i := s.substring_index (Input_field_separator, 1)
@@ -248,7 +248,7 @@ feature {NONE} -- Implementation
 			rh.extend (create {ERROR_RESPONSE_CMD}.make, Error)
 			request_handlers := rh
 		ensure
-			rh_set: request_handlers /= Void and not request_handlers.empty
+			rh_set: request_handlers /= Void and not request_handlers.is_empty
 		end
 
 	initialize is

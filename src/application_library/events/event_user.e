@@ -70,7 +70,7 @@ feature -- Basic operations
 			msg: STRING
 			e: MARKET_EVENT
 		do
-			if not email_addresses.empty and mailer /= Void then
+			if not email_addresses.is_empty and mailer /= Void then
 				create msg.make (event_cache.count * 120)
 				from
 					event_cache.start
@@ -86,7 +86,7 @@ feature -- Basic operations
 					" TA Events Received at ", current_date, ", ",
 					current_time, " (Notification to ", name, ")">>))
 			else
-				if email_addresses.empty then
+				if email_addresses.is_empty then
 					log_errors (<<"User ", name,
 						" has no email address set.%N">>)
 				else

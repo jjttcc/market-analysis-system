@@ -77,14 +77,14 @@ feature {NONE} -- Hook methods
 			not_processed: not processed
 		deferred
 		ensure
-			output_empty: output.empty
+			output_empty: output.is_empty
 		end
 
 	do_process is
 			-- Do the actual processing.
 			-- Hook method to be defined by descendants
 		require
-			output_empty: output.empty
+			output_empty: output.is_empty
 		deferred
 		end
 

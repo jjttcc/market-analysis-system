@@ -44,8 +44,7 @@ feature -- Basic operations
 			-- status and an error message is sent to the client instead
 			-- of a session ID.
 		local
-			session_id, i, j: INTEGER
-			finished: BOOLEAN
+			session_id: INTEGER
 			setting_type, error_msg: STRING
 			tokens: LIST [STRING]
 		do
@@ -56,7 +55,7 @@ feature -- Basic operations
 			if not command_line_options.intraday_caching then
 				session.turn_caching_off
 			end
-			if not msg.empty then
+			if not msg.is_empty then
 				tokens := sutil.tokens (Input_field_separator)
 				from
 					tokens.start

@@ -66,7 +66,7 @@ feature {NONE} -- Implemetation
 
 	start is
 		do
-			if not target.empty then
+			if not target.is_empty then
 				start_point.set_date (target.first.date_time)
 			end
 			Precursor

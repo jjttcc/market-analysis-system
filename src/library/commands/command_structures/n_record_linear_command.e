@@ -37,7 +37,7 @@ class N_RECORD_LINEAR_COMMAND inherit
 		undefine
 			children
 		redefine
-			forth, action, start, exhausted, invariant_value, target
+			forth, start, exhausted, invariant_value, target, action
 		end
 
 	UNARY_OPERATOR [REAL, REAL]
@@ -57,12 +57,12 @@ creation {NONE} -- Hidden creation routine to prevent instantiation
 
 feature {NONE} -- Initialization
 
-	make (t: CHAIN [MARKET_TUPLE]; i: like n) is
+	make (t: LIST [MARKET_TUPLE]; i: like n) is
 		require
 			t_not_void: t /= Void
 			i_gt_0: i > 0
 		do
-			set_target (t)
+			set (t)
 			set_n (i)
 		ensure
 			set: target = t and n = i

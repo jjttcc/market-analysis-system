@@ -138,17 +138,17 @@ feature {NONE} -- Hook methods
 
 	do_process is
 		do
-			if not (target1.empty or target2.empty) then
+			if not (target1.is_empty or target2.is_empty) then
 				do_all
 			end
 		ensure then
 			output_empty_when_target_empty:
-				target1.empty or target2.empty implies output.empty
+				target1.is_empty or target2.is_empty implies output.is_empty
 		end
 
 	pre_process is
 		do
-			if not output.empty then
+			if not output.is_empty then
 				output.wipe_out
 			end
 			if not input1.processed then
@@ -236,7 +236,7 @@ feature {NONE} -- Implementation
 	do_set_input1 (in: like input1) is
 		do
 			input1 := in
-			target1 := in.output
+			set1 (in.output)
 			parameter_list := Void
 			processed_date_time := Void
 		end
@@ -244,7 +244,7 @@ feature {NONE} -- Implementation
 	do_set_input2 (in: like input2) is
 		do
 			input2 := in
-			target2 := in.output
+			set2 (in.output)
 			parameter_list := Void
 			processed_date_time := Void
 		end

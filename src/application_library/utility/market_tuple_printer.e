@@ -139,15 +139,15 @@ feature -- Basic operations
 			-- output it last.
 		do
 			create print_buffer.make (Buffer_init_size)
-			if preface /= Void and not preface.empty then
+			if preface /= Void and not preface.is_empty then
 				put (preface)
 			end
-			if not l.empty and l.first.is_intraday then
+			if not l.is_empty and l.first.is_intraday then
 				print_tuples_with_time (l)
 			else
 				print_tuples (l)
 			end
-			if appendix /= Void and not appendix.empty then
+			if appendix /= Void and not appendix.is_empty then
 				put (appendix)
 			end
 			flush_buffer
@@ -250,7 +250,7 @@ feature {NONE} -- Implementation
 	first_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER is
 			-- First index for printing, according to print_start_date
 		do
-			if print_start_date /= Void and not l.empty then
+			if print_start_date /= Void and not l.is_empty then
 				-- Set Result to the index of the element whose date matches
 				-- print_start_date, or, if no match, to the first element
 				-- whose date > print_start_date.
@@ -272,7 +272,7 @@ feature {NONE} -- Implementation
 	last_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER is
 			-- Last index for printing, according to print_end_date
 		do
-			if print_end_date /= Void and not l.empty then
+			if print_end_date /= Void and not l.is_empty then
 				-- Set Result to the index of the element whose date matches
 				-- print_end_date, or, if no match, to the last element
 				-- whose date < print_end_date.

@@ -77,7 +77,7 @@ feature -- Status report
 			-- Are the date/time values of elements of `output' correct
 			-- with respect to each other?
 		require
-			not output.empty
+			not output.is_empty
 			-- output is sorted by date/time
 		local
 			previous: MARKET_TUPLE
@@ -163,7 +163,7 @@ feature -- Basic operations
 		do
 			from
 				check
-					output_empty: output /= Void and output.empty
+					output_empty: output /= Void and output.is_empty
 				end
 				missing_data := false
 				create src_sublist.make (0)
@@ -242,7 +242,7 @@ feature {NONE}
 					trading_period_type.name.is_equal (
 					trading_period_type.Yearly)
 				then
-					if d2.i_th_leap_year (d2.year) then
+					if d2.is_leap_year (d2.year) then
 						Result := dt_diff.day = d2.Days_in_leap_year
 					else
 						Result := dt_diff.day = d2.Days_in_non_leap_year

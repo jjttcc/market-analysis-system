@@ -85,8 +85,6 @@ feature {NONE} -- Implementation
 			-- Tradable symbol extracted from `fname' - directory component
 			-- and suffix ('.' and all characters that follow it) of the
 			-- file name are removed.  `fname' is not changed.
-		local
-			i, last_sep_index: INTEGER
 		do
 			strutil.set_target (clone (fname))
 			if strutil.target.has (Directory_separator) then

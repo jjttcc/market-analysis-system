@@ -95,7 +95,7 @@ feature {NONE} -- Hook routines
 			d: DIRECTORY
 		do
 			if
-				env.app_directory /= Void and not env.app_directory.empty
+				env.app_directory /= Void and not env.app_directory.is_empty
 			then
 				create d.make (env.app_directory)
 				if not d.exists then

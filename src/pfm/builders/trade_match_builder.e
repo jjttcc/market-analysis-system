@@ -23,7 +23,7 @@ feature {NONE} -- Initialization
 		require
 			tlist_not_void: tlist /= Void
 		do
-			if not tlist.empty then
+			if not tlist.is_empty then
 				make_trades (tlist)
 			end
 		end
@@ -69,7 +69,7 @@ feature {NONE} -- Implementation
 
 	make_trades (l: LIST [TRADE]) is
 		require
-			l_not_empty: not l.empty
+			l_not_empty: not l.is_empty
 		local
 			ttree: BINARY_SEARCH_TREE [TRADE]
 		do
@@ -138,13 +138,13 @@ feature {NONE} -- Implementation
 			otl: LINKED_LIST [OPEN_TRADE]
 		do
 			otl := open_trade_table @ t.symbol
-			if otl = Void or else otl.empty then
+			if otl = Void or else otl.is_empty then
 				handle_error (concatenation (<<"Open trade to match ",
 					t.symbol, " for close on ", t.date,
 					" not found.">>))
 			else
 				check
-					otl_not_empty: not otl.empty
+					otl_not_empty: not otl.is_empty
 				end
 				from
 					otl.start

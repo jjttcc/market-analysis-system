@@ -179,7 +179,7 @@ feature {NONE} -- Implementation - Hook methods
 			ilst: LINKED_LIST [CHARACTER]
 			keys: ARRAY [STRING]
 		do
-			if not l.empty then
+			if not l.is_empty then
 				create ht.make (l.count)
 				from
 					l.start

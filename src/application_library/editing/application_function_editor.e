@@ -298,7 +298,6 @@ feature -- Basic operations
 			y, slope: REAL
 			p: MARKET_POINT
 			date: DATE_TIME
-			per_type_name: STRING
 		do
 			-- It doesn't matter what date is used here.
 			create date.make_now

@@ -82,7 +82,7 @@ feature -- Basic operations
 		local
 			printer: MARKET_TUPLE_PRINTER
 		do
-			if not l.empty then
+			if not l.is_empty then
 				-- clone to allow concurrent printing
 				printer := clone (tuple_printers @ l.first.generator)
 			else
@@ -94,7 +94,7 @@ feature -- Basic operations
 			printer.set_record_separator (output_record_separator)
 			printer.set_date_field_separator (output_date_field_separator)
 			printer.set_preface (preface)
-			if appendix /= Void and not appendix.empty then
+			if appendix /= Void and not appendix.is_empty then
 				printer.set_appendix (appendix)
 			end
 			if output_medium /= Void then
@@ -153,7 +153,7 @@ feature -- Basic operations
 					print_list (<<"Composite tuple list for ", t.symbol,
 					", Trading period: ", names @ i, "%N">>)
 					l := t.tuple_list (names @ i)
-					if l /= Void and not l.empty then
+					if l /= Void and not l.is_empty then
 						print_tuples (l)
 					else
 						output_medium.put_string ("(Empty)%N")
@@ -211,7 +211,7 @@ feature {NONE} -- Implementation
 			-- MARKET_POINTs are printed by MARKET_TUPLE_PRINTERs (for now).
 			Result.extend (mtprinter, point.generator)
 		ensure
-			not_empty: Result /= Void and not Result.empty
+			not_empty: Result /= Void and not Result.is_empty
 		end
 
 	print_mf_info (f: MARKET_FUNCTION) is

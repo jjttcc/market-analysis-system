@@ -16,6 +16,9 @@ class STORABLE_EVENT_GENERATOR_LIST inherit
 		end
 
 	MARKET_FUNCTION_EDITOR
+		undefine
+			copy, is_equal
+		end
 
 creation
 

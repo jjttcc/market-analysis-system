@@ -22,7 +22,7 @@ feature -- Initialization
 		require
 			not_void: tgt /= Void
 		do
-			target := tgt
+			set (tgt)
 		ensure
 			target = tgt
 		end

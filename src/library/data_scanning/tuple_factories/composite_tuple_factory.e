@@ -42,12 +42,10 @@ feature -- Status setting
 feature -- Basic operations
 
 	execute is
-		local
-			h, l, o, c: REAL
 		do
 			check
 				tuplelist_not_void: tuplelist /= Void
-				tuplelist_not_empty: not tuplelist.empty
+				tuplelist_not_empty: not tuplelist.is_empty
 				tuplelist_dates_not_void:
 					tuplelist.first.date_time /= Void and
 					tuplelist.last.date_time /= Void
@@ -83,8 +81,8 @@ feature {NONE}
 				create low_finder.make (tuples, low, tuples.count)
 			else
 				check low_finder /= Void end
-				high_finder.set_target (tuples)
-				low_finder.set_target (tuples)
+				high_finder.set (tuples)
+				low_finder.set (tuples)
 				-- Set to process all elements:
 				high_finder.set_n (tuples.count)
 				low_finder.set_n (tuples.count)

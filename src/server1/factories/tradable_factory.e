@@ -200,7 +200,7 @@ feature -- Basic operations
 			check
 				product_set_to_scanner_result: product = scanner.product
 			end
-			if not scanner.error_list.empty then
+			if not scanner.error_list.is_empty then
 				error_list := scanner.error_list
 				error_occurred := True
 				last_error_fatal := scanner.last_error_fatal
@@ -357,7 +357,7 @@ feature {NONE} -- Implementation
 		require
 			input_not_void: input /= Void
 		local
-			field_count, expected_fields: INTEGER
+			expected_fields: INTEGER
 		do
 			expected_fields := 6
 			if not no_open then
@@ -382,7 +382,7 @@ invariant
 		record_separator /= Void and
 		time_period_type /= Void
 	error_constraint:
-		error_occurred implies error_list /= Void and not error_list.empty
+		error_occurred implies error_list /= Void and not error_list.is_empty
 	builders_not_void: stock_builder /= Void and derivative_builder /= Void
 
 end -- TRADABLE_FACTORY

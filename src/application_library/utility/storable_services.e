@@ -90,7 +90,8 @@ feature {NONE} -- Implementation
 			real_list.copy (working_list)
 			real_list.save
 			show_message ("The changes have been saved.")
-			working_list.deep_copy (real_list)
+--			deep_copy_working_list
+working_list.deep_copy (real_list)
 			dirty := false
 			end_save
 			changed := true
@@ -154,7 +155,8 @@ feature {NONE} -- Implementation
 				-- to save the changes; so throw away the changes by
 				-- restoring the working list as a deep copy of the real
 				-- list and ensure not dirty.
-				working_list.deep_copy (real_list)
+				deep_copy_working_list
+--!!!!!				working_list.deep_copy (real_list)
 				dirty := false
 			end
 			if lock.locked then
@@ -219,6 +221,15 @@ feature {NONE} -- Implementation
 		rescue
 			unlock_failed := true
 			retry
+		end
+
+	deep_copy_working_list is
+			-- Do a deep copy of 'working_list' from 'real_list'.
+		local
+			temp: like working_list
+		do
+			temp := deep_clone (real_list)
+			working_list.copy (temp)
 		end
 
 feature {NONE} -- Hook routines

@@ -6,6 +6,9 @@ indexing
 	licensing: "Copyright 1998 - 2001: Eirik Mangseth and Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
+--!!!!!!Note: This class does not depend on any MAS facilities and needs
+--to be renamed (to FILER_READER or FILE_PARSER or ...) and moved to
+--the eiffel_library.
 class MAS_FILE_READER inherit
 
 	GENERAL_UTILITIES

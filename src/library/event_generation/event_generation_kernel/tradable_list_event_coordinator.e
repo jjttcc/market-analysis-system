@@ -67,7 +67,7 @@ feature {NONE} -- Implementation
 				exception_occurred := true
 				if
 					gs.last_exception_status.description /= Void and
-					not gs.last_exception_status.description.empty
+					not gs.last_exception_status.description.is_empty
 				then
 					-- Since the exception is caught here and not allowed
 					-- to percolate up further, take responsibility for

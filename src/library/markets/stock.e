@@ -26,9 +26,9 @@ feature {NONE} -- Initialization
 				sd: STOCK_DATA) is
 		require
 			not_void: sym /= Void
-			symbol_not_empty: not sym.empty
+			symbol_not_empty: not sym.is_empty
 			splits_sorted_by_date: stock_splits /= Void and
-				not stock_splits.empty implies
+				not stock_splits.is_empty implies
 					splits_sorted_by_date (stock_splits)
 		do
 			symbol := sym
@@ -85,7 +85,7 @@ feature -- Basic operations
 	splits_sorted_by_date (sp: like splits): BOOLEAN is
 			-- Is `sp' sorted by date ascending?
 		require
-			not_void_or_empty: sp /= Void and not sp.empty
+			not_void_or_empty: sp /= Void and not sp.is_empty
 		local
 			previous_date: DATE
 		do
@@ -126,7 +126,7 @@ feature {NONE} -- Implementation
 		local
 			first_item_date: DATE
 		do
-			if not empty and splits /= Void and not splits.empty then
+			if not is_empty and splits /= Void and not splits.is_empty then
 				-- Since the date of some or all of the elements of splits may
 				-- precede the date of the first element, move splits' cursor
 				-- to the first element whose date > first.date_time.date.
@@ -152,7 +152,7 @@ feature {NONE} -- Implementation
 
 	do_split_adjustment is
 		require
-			lists_not_empty: not empty and splits /= Void and not splits.empty
+			lists_not_empty: not is_empty and splits /= Void and not splits.is_empty
 			not_splits_off: not splits.off
 			splt_date_gt_first: splits.item.date > first.date_time.date
 			prev_splt_date_le_first: not splits.isfirst implies
@@ -215,7 +215,7 @@ feature {NONE} -- Implementation
 invariant
 
 	splits_sorted_by_date:
-		splits /= Void and not splits.empty implies
+		splits /= Void and not splits.is_empty implies
 			splits_sorted_by_date (splits)
 	no_open_interest: not has_open_interest
 

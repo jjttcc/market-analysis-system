@@ -288,7 +288,7 @@ feature {NONE} -- Initialization
 			-- than" because `data' is also added to the list.
 		require
 			type_set: trading_period_type /= Void
-			table_empty: tuple_lists.empty
+			table_empty: tuple_lists.is_empty
 		local
 			types: LINEAR [TIME_PERIOD_TYPE]
 		do
@@ -325,7 +325,7 @@ feature {NONE}
 			start_date_time: DATE_TIME
 		do
 			ctf := make_ctf
-			if not empty then
+			if not is_empty then
 				start_date_time := clone (first.date_time)
 				adjust_start_time (start_date_time, type)
 			else

@@ -44,7 +44,7 @@ feature -- Initialization
 register_for_termination (Current)
 		ensure
 			splits_not_void_if_available:
-				not fatal_error and not db_info.stock_split_query.empty implies
+				not fatal_error and not db_info.stock_split_query.is_empty implies
 					stock_splits /= Void
 		end
 
@@ -142,7 +142,7 @@ feature {NONE} -- Implementation
 	db_mgr: MAS_ODBC_HANDLE is
 			-- The ODBC database session - provides access to the database
 		once
-			if db_info.db_name.empty then
+			if db_info.db_name.is_empty then
 				fatal_error := true
 				last_error := "Database session was not created."
 				raise (Void)

@@ -157,8 +157,6 @@ feature {NONE} -- Implementation
 	create_new_event_generator is
 			-- Create a new event generator and add it to 
 			-- market_event_generation_library.
-		local
-			c: CHARACTER
 		do
 			last_event_generator := Void
 			inspect
@@ -182,7 +180,7 @@ feature {NONE} -- Implementation
 			eg_maker: COMPOUND_GENERATOR_FACTORY
 			left, right: MARKET_EVENT_GENERATOR
 		do
-			if market_event_generation_library.empty then
+			if market_event_generation_library.is_empty then
 				show_message ("Can't create compound market analyzer - %
 					%persistent analyzer list is empty.")
 				error_occurred := true
@@ -255,7 +253,6 @@ feature {NONE} -- Implementation
 			-- Create a new two-variable function analyzer and add it to 
 			-- market_event_generation_library.
 		local
-			c: CHARACTER
 			fa_maker: TVFA_FACTORY
 			op: RESULT_COMMAND [BOOLEAN]
 		do
@@ -280,9 +277,6 @@ feature {NONE} -- Implementation
 
 	function_choice_clone (msg: STRING): MARKET_FUNCTION is
 			-- A clone of a user-selected member of `function_library'
-		local
-			names: ARRAYED_LIST [STRING]
-			s: STRING
 		do
 			Result := deep_clone (function_choice (msg))
 			if editable (Result) then
@@ -355,7 +349,7 @@ feature {NONE} -- Hook methods
 	event_generator_selection (msg: STRING): MARKET_EVENT_GENERATOR is
 			-- User's event generator selection
 		require
-			meg_library_not_empty: not market_event_generation_library.empty
+			meg_library_not_empty: not market_event_generation_library.is_empty
 		deferred
 		end
 

@@ -90,7 +90,7 @@ feature
 					market_event_registrants.count)
 			end
 			check
-				locks_empty: event_locks.empty
+				locks_empty: event_locks.is_empty
 			end
 			from
 				market_event_registrants.start
@@ -115,7 +115,6 @@ feature
 			-- Remove all `event_locks'.
 		local
 			l: FILE_LOCK
-			unlock_failed: BOOLEAN
 		do
 			from
 				market_event_registrants.start
@@ -131,7 +130,7 @@ feature
 			end
 			event_locks.clear_all
 		ensure then
-			no_locks: event_locks.empty
+			no_locks: event_locks.is_empty
 		end
 
 end -- class EVENT_HISTORY_MANAGEMENT

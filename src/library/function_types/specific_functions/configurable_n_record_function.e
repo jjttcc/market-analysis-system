@@ -74,7 +74,7 @@ feature {NONE} -- Basic operations
 			tuple: MARKET_TUPLE
 		do
 			check
-				output_empty: output.empty
+				output_empty: output.is_empty
 			end
 			if target.count < effective_n then
 				-- There are not enough elements in target to process;
@@ -91,7 +91,7 @@ feature {NONE} -- Basic operations
 				-- as its first element, and increment `target' to the
 				-- 2nd element.
 				target.start
-				if not target.empty then
+				if not target.is_empty then
 					first_element_operator.execute (target.item)
 					if target.index /= 1 then
 						-- first_element_operator incremented target's
@@ -113,11 +113,11 @@ feature {NONE} -- Basic operations
 					-- Important - previous operator will operate on the
 					-- current item of `output', which will always be the
 					-- last inserted item.
-					previous_operator.set_target (output)
+					previous_operator.set (output)
 				end
 			end
 		ensure then
-			output_at_last: not output.empty and previous_operator /= Void
+			output_at_last: not output.is_empty and previous_operator /= Void
 				implies output.islast
 		end
 

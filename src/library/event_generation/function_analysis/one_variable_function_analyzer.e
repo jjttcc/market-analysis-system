@@ -63,7 +63,7 @@ feature -- Status setting
 			-- data to be analyzed.
 		do
 			input.set_innermost_input (f)
-			set_target (input.output)
+			set (input.output)
 			-- Operator may need to obtain `target' from Current.
 			operator.initialize (Current)
 		end
@@ -73,7 +73,7 @@ feature -- Status setting
 			in_not_void: in /= Void and in.output /= Void
 		do
 			input := in
-			set_target (input.output)
+			set (input.output)
 		ensure
 			input_set_to_in: input = in
 		end
@@ -97,7 +97,7 @@ feature -- Basic operations
 				if not input.processed then
 					input.process
 				end
-				if not target.empty then
+				if not target.is_empty then
 					do_all
 				end
 			end
@@ -130,7 +130,7 @@ feature {MARKET_FUNCTION_EDITOR}
 			-- Set innermost input to an empty tradable to force it
 			-- to clear its contents.
 			input.set_innermost_input (dummy_tradable)
-			set_target (input.output)
+			set (input.output)
 			product := Void
 			current_tradable := Void
 		end

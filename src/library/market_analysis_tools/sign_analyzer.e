@@ -53,7 +53,7 @@ feature -- Initialization
 				sign_change_spec.i_th (2).item (1) = -1 and
 				sign_change_spec.i_th (2).item (2) = 1
 			spec_empty_if_not_init:
-				not init_sign_spec implies sign_change_spec.empty
+				not init_sign_spec implies sign_change_spec.is_empty
 		end
 
 feature -- Access

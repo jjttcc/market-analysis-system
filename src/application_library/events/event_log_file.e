@@ -40,7 +40,7 @@ feature {NONE} -- Initialization
 			-- Open this file, with `fname', for appending in the application
 			-- environment directory, if set.
 		require
-			fn_not_void_and_not_empty: fname /= Void and not fname.empty
+			fn_not_void_and_not_empty: fname /= Void and not fname.is_empty
 			seps_not_void: field_sep /= Void and record_sep /= Void
 		local
 			env: APP_ENVIRONMENT

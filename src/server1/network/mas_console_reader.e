@@ -52,9 +52,6 @@ feature
 	interface: MAIN_CL_INTERFACE
 
 	execute (arg: ANY) is
-		local
-			s: STRING
-			finished: BOOLEAN
 		do
 			-- When threads are added, this call will probably change to
 			-- "interface.launch" to run in a separate thread.

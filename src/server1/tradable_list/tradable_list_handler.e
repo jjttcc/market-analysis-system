@@ -25,8 +25,8 @@ feature {NONE} -- Initialization
 		require
 			one_not_void: intraday_list /= Void or daily_list /= Void
 			counts_equal_if_both_valid: daily_list /= Void and then
-				not daily_list.empty and then intraday_list /= Void and then
-				not intraday_list.empty implies
+				not daily_list.is_empty and then intraday_list /= Void and then
+				not intraday_list.is_empty implies
 				intraday_list.count = daily_list.count
 			-- for_all i member_of 1 .. daily_list.count it_holds
 			--    (daily_list.symbols @ i).is_equal (intraday_list.symbols @ i)
@@ -152,7 +152,7 @@ feature -- Access
 				end
 			end
 			check tbl_check: not error_occurred implies tbl /= Void end
-			if tbl /= Void and not tbl.empty then
+			if tbl /= Void and not tbl.is_empty then
 				tbl.compare_objects
 				Result := period_types_sorted_by_duration (tbl)
 			end
@@ -170,12 +170,12 @@ feature -- Status report
 			Result := symbol_list = Void or else symbol_list.after
 		end
 
-	empty: BOOLEAN is
+	is_empty: BOOLEAN is
 		do
 			if daily_market_list /= Void then
-				Result := daily_market_list.empty
+				Result := daily_market_list.is_empty
 			else
-				Result := intraday_market_list.empty
+				Result := intraday_market_list.is_empty
 			end
 		end
 
@@ -186,7 +186,7 @@ feature -- Status report
 
 	off: BOOLEAN is
 		do
-			Result := symbol_list = Void or else symbol_list.off or else empty
+			Result := symbol_list = Void or else symbol_list.off or else is_empty
 		end
 
 feature -- Cursor movement
@@ -248,14 +248,14 @@ feature {NONE} -- Implementation
 			-- Are both lists non-void and nonempty?
 		do
 			Result := daily_market_list /= Void and then
-				not daily_market_list.empty and then
+				not daily_market_list.is_empty and then
 				intraday_market_list /= Void and then
-				not intraday_market_list.empty
+				not intraday_market_list.is_empty
 		ensure
 			definition: Result = (daily_market_list /= Void and then
-				not daily_market_list.empty and then
+				not daily_market_list.is_empty and then
 				intraday_market_list /= Void and then
-				not intraday_market_list.empty)
+				not intraday_market_list.is_empty)
 		end
 
 	period_types_sorted_by_duration (t: HASH_TABLE [BOOLEAN, STRING]):

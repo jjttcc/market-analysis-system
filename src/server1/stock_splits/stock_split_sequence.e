@@ -122,7 +122,6 @@ feature {NONE} -- Implementation - hooks
 			-- product.has (current_symbol)
 		local
 			l: DYNAMIC_CHAIN [STOCK_SPLIT]
-			s: STRING
 		do
 			current_symbol.to_lower
 			if not product.has (current_symbol) then

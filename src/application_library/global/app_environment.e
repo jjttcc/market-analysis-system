@@ -55,7 +55,7 @@ feature -- Access
 			not_void: fname /= Void
 		do
 			create Result.make (0)
-			if app_directory /= Void and not app_directory.empty then
+			if app_directory /= Void and not app_directory.is_empty then
 				Result.append (app_directory)
 				Result.extend (Directory_separator)
 			end

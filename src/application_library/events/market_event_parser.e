@@ -110,10 +110,10 @@ feature {NONE} -- Implementation
 
 	set_error is
 		require
-			empty: last_error.empty
+			empty: last_error.is_empty
 		do
 			error_occurred := true
-			if type_name.empty then
+			if type_name.is_empty then
 				last_error.append ("Empty type specification in input")
 			else
 				last_error.append ("Invalid type specification in input: ")

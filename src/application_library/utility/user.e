@@ -47,7 +47,7 @@ feature -- Access
 
 	primary_email_address: STRING is
 		do
-			if not email_addresses.empty then
+			if not email_addresses.is_empty then
 				Result := email_addresses @ 1
 			end
 		end
@@ -106,7 +106,7 @@ feature -- Basic operations
 			-- an appropriate error message.
 		require
 			s_not_void: s /= Void
-			at_least_one_address: not email_addresses.empty
+			at_least_one_address: not email_addresses.is_empty
 			mailer_not_void: mailer /= Void
 		local
 			msg_file: PLAIN_TEXT_FILE
@@ -121,7 +121,7 @@ feature -- Basic operations
 				mail_cmd.extend (' ')
 				if
 					email_subject_flag /= Void and then subject /= Void
-					and then not subject.empty
+					and then not subject.is_empty
 				then
 					mail_cmd.append (email_subject_flag)
 					mail_cmd.append (" '")
@@ -213,7 +213,7 @@ feature {NONE}
 invariant
 
 	eaddrs_not_void: email_addresses /= Void
-	primary_eaddr_definition: not email_addresses.empty implies
+	primary_eaddr_definition: not email_addresses.is_empty implies
 			primary_email_address = email_addresses @ 1
 
 end -- USER

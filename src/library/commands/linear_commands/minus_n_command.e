@@ -58,7 +58,7 @@ feature -- Initialization
 			i_gt_0: i > 0
 		do
 			operand := op
-			target := tgt
+			set (tgt)
 			n := i
 		ensure then
 			op_n_set: operand = op and n = i

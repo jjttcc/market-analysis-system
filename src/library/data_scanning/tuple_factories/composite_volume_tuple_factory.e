@@ -25,7 +25,7 @@ feature {NONE}
 				create operator
 				create volume_adder.make (tuples, operator, tuples.count)
 			else
-				volume_adder.set_target (tuples)
+				volume_adder.set (tuples)
 				volume_adder.set_n (tuples.count)
 			end
 			check

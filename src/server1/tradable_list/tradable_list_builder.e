@@ -34,11 +34,9 @@ feature -- Basic operations
 
 	execute is
 		local
-			global_server: expanded GLOBAL_SERVER
 			db_list_builder: DATABASE_LIST_BUILDER
 			file_list_builder: FILE_LIST_BUILDER
 			external_list_builder: EXTERNAL_LIST_BUILDER
-			daily_file_based_list: FILE_TRADABLE_LIST
 			ilist: TRADABLE_LIST
 		do
 			if command_line_options.use_external_data_source then

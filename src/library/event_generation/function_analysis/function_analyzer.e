@@ -124,9 +124,7 @@ feature -- Basic operations
 		require
 			not_void: tuple /= Void and description /= Void
 		local
-			s: STRING
 			event: ATOMIC_MARKET_EVENT
-			st: expanded SIGNAL_TYPES
 		do
 			check
 				tuple.date_time /= Void and tuple.end_date /= Void

@@ -138,7 +138,6 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			-- User-selected MARKET_FUNCTION from the function library
 		local
 			l: LINKED_LIST [MARKET_FUNCTION]
-			i: INTEGER
 		do
 			create l.make
 			l.append (function_library)
@@ -502,7 +501,7 @@ feature {NONE} -- Implementation
 			until
 				c.exhausted
 			loop
-				if not c.item.parameters.empty then
+				if not c.item.parameters.is_empty then
 					Result.extend (c.item)
 				end
 				c.forth
@@ -519,7 +518,6 @@ feature {NONE} -- Implementation - indicator editing
 			-- persistent store.
 		local
 			selection: INTEGER
-			indicator: MARKET_FUNCTION
 		do
 			from
 				selection := Null_value
@@ -600,7 +598,7 @@ feature {NONE} -- Implementation - indicator editing
 			fpl := gs.sorted_list (parameters)
 			from
 				selection := Null_value
-				if parameters.empty then
+				if parameters.is_empty then
 					show_message (concatenation (<<"No parameters to edit ",
 						"for ", name>>))
 					selection := Exit_value
@@ -656,9 +654,9 @@ feature {NONE} -- Implementation - indicator editing
 			quit: BOOLEAN
 		do
 			children := editable_children (i)
-			has_children_to_edit := not children.empty
-			has_immediate_parameters := not i.immediate_parameters.empty
-			if i.parameters.empty then
+			has_children_to_edit := not children.is_empty
+			has_immediate_parameters := not i.immediate_parameters.is_empty
+			if i.parameters.is_empty then
 				show_message (concatenation (<<"Indicator ", i.name,
 					" has no editable parameters.">>))
 			elseif

@@ -382,7 +382,6 @@ feature {NONE} -- Implementation
 
 	initialize_symbols is
 		local
-			i: INTEGER
 			su: expanded STRING_UTILITIES
 		do
 			make_available_symbols (external_handle)
@@ -420,8 +419,8 @@ feature {NONE} -- Implementation
 			error_occurred := true
 			last_error_fatal := true
 			s := string_from_pointer (last_external_error (external_handle))
-			if not msg.empty then
-				if not s.empty then
+			if not msg.is_empty then
+				if not s.is_empty then
 					error_string := concatenation (<<msg, ":%N", s>>)
 				else
 					error_string := msg

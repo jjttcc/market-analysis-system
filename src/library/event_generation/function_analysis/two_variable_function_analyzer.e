@@ -123,8 +123,8 @@ feature -- Status setting
 		do
 			input1.set_innermost_input (f)
 			input2.set_innermost_input (f)
-			target1 := input1.output
-			target2 := input2.output
+			set1 (input1.output)
+			set2 (input2.output)
 			if operator /= Void then
 				operator.initialize (Current)
 			end
@@ -152,7 +152,7 @@ feature -- Basic operations
 				if not input2.processed then
 					input2.process
 				end
-				if not target1.empty and not target2.empty then
+				if not target1.is_empty and not target2.is_empty then
 					do_all
 				end
 			end
@@ -186,8 +186,6 @@ feature {NONE} -- Hook routine implementation
 		end
 
 	action is
-		local
-			ev_desc: STRING
 		do
 			-- The crossover_in_effect variable and the check for the
 			-- equality (using epsilon) of the 2 values ensures that
@@ -261,7 +259,7 @@ feature {NONE} -- Implementation
 			output_not_void: in.output /= Void
 		do
 			input1 := in
-			target1 := in.output
+			set1 (in.output)
 		ensure
 			input_set: input1 = in and input1 /= Void
 			target_set: target1 = in.output
@@ -273,7 +271,7 @@ feature {NONE} -- Implementation
 			output_not_void: in.output /= Void
 		do
 			input2 := in
-			target2 := in.output
+			set2 (in.output)
 		ensure
 			input_set: input2 = in and input2 /= Void
 			target_set: target2 = in.output

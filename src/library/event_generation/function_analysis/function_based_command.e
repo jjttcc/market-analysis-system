@@ -35,7 +35,7 @@ feature {NONE} -- Initialization
 		--	not_void: input /= Void and op /= Void
 		do
 			input := in
-			set_target (input.output)
+			set (input.output)
 			set_operand (op)
 		ensure
 			set: input = in and operand = op
@@ -81,7 +81,7 @@ feature -- Status setting
 			arg_not_void: arg /= Void
 		do
 			input := arg
-			set_target (input.output)
+			set (input.output)
 		ensure
 			input_set: input = arg and input /= Void
 		end

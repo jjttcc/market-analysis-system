@@ -118,7 +118,7 @@ feature {NONE} -- Administrative
 			env: expanded APP_ENVIRONMENT
 		do
 			if
-				function_library.empty or function_library.count < 5
+				function_library.is_empty or function_library.count < 5
 			then
 				-- !!!May need to lock this section (or whatever the mechanism
 				-- is) to protect `function_library' if threads are used.

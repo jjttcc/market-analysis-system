@@ -16,7 +16,7 @@ class ONE_VARIABLE_FUNCTION inherit
 
 	LINEAR_ANALYZER
 		export {NONE}
-			set_target
+			set
 		redefine
 			action
 		end
@@ -136,7 +136,7 @@ feature {NONE}
 
 	pre_process is
 		do
-			if not output.empty then
+			if not output.is_empty then
 				output.wipe_out
 			end
 			if not input.processed then
@@ -167,7 +167,7 @@ feature {MARKET_FUNCTION_EDITOR}
 			ptype_not_void: in.trading_period_type /= Void
 		do
 			input := in
-			set_target (input.output)
+			set (input.output)
 			parameter_list := Void
 			processed_date_time := Void
 		ensure

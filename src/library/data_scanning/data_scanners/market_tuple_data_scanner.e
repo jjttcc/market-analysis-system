@@ -34,7 +34,7 @@ feature
 		require
 			args_not_void: in /= Void and tm /= Void and vs /= Void and
 							prod /= Void
-			vs_not_empty: not vs.empty
+			vs_not_empty: not vs.is_empty
 		do
 			data_scanner_make (in, tm, vs)
 			product := prod

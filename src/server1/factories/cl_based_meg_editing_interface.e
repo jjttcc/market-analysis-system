@@ -167,8 +167,6 @@ feature {NONE} -- Implementation
 		end
 
 	eg_selection (msg: STRING): INTEGER is
-		local
-			finished: BOOLEAN
 		do
 			Result := backoutable_selection (meg_names (working_meg_library),
 				concatenation (<<"Select a market analyzer", msg>>),
@@ -455,7 +453,6 @@ feature {NONE} -- Implementation
 			-- compound event generator
 		local
 			finished, yes: BOOLEAN
-			i: INTEGER
 		do
 			from
 			until

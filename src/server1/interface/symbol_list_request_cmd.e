@@ -27,7 +27,7 @@ feature {NONE} -- Basic operations
 		do
 			put_ok
 			symbols := tradables.symbols
-			if not symbols.empty then
+			if not symbols.is_empty then
 				from
 					symbols.start
 				until

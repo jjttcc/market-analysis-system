@@ -33,7 +33,7 @@ feature -- Basic operations
 		do
 			from
 				check
-					output_empty: output /= Void and output.empty
+					output_empty: output /= Void and output.is_empty
 				end
 				-- Ensure postcondition - intraday data always has
 				-- missing data:

@@ -204,7 +204,7 @@ feature {NONE} -- Implementation
 		local
 			r: MARKET_EVENT_REGISTRANT
 		do
-			if not working_event_registrants.empty then
+			if not working_event_registrants.is_empty then
 				print ("Select registrant to remove:%N")
 				r := registrant_selection
 				if r /= Void then
@@ -221,7 +221,7 @@ feature {NONE} -- Implementation
 		local
 			r: MARKET_EVENT_REGISTRANT
 		do
-			if not working_event_registrants.empty then
+			if not working_event_registrants.is_empty then
 				print ("Select registrant to view:%N")
 				r := registrant_selection
 				if r /= Void then
@@ -236,7 +236,7 @@ feature {NONE} -- Implementation
 		local
 			r: MARKET_EVENT_REGISTRANT
 		do
-			if not working_event_registrants.empty then
+			if not working_event_registrants.is_empty then
 				print ("Select registrant to edit:%N")
 				r := registrant_selection
 				if r /= Void then
@@ -310,10 +310,9 @@ feature {NONE} -- Implementation
 			types: ARRAY [EVENT_TYPE]
 			finished: BOOLEAN
 			current_type: EVENT_TYPE
-			c: CHARACTER
 		do
 			from
-				if event_types.empty then
+				if event_types.is_empty then
 					finished := true
 					print ("No event types available to add.%N")
 				end
@@ -413,7 +412,7 @@ feature {NONE} -- Implementation
 				types.forth
 			end
 			from
-				if types.empty then
+				if types.is_empty then
 					abort := true
 				else
 					print (eom)

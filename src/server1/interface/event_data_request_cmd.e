@@ -49,8 +49,6 @@ creation
 feature {NONE} -- Initialization
 
 	make (dispenser: TRADABLE_DISPENSER) is
-		local
-			constants: expanded APPLICATION_CONSTANTS
 		do
 			trc_make (dispenser)
 			mer_make
@@ -165,7 +163,7 @@ feature {NONE}
 				report_server_error
 			elseif
 				event_coordinator.event_generators = Void or
-				event_coordinator.event_generators.empty
+				event_coordinator.event_generators.is_empty
 			then
 				if
 					tradable_pair.left = Void and tradable_pair.right = Void
@@ -195,7 +193,7 @@ feature {NONE}
 			check
 				events_sorted: event_cache.sorted
 			end
-			if not event_cache.empty then
+			if not event_cache.is_empty then
 				from
 					event_cache.start
 				until
@@ -228,8 +226,6 @@ feature {NONE}
 		end
 
 	initialize_event_coordinator is
-		local
-			left, right: TRADABLE [BASIC_MARKET_TUPLE]
 		do
 			--Create an event coordinator that only operates on the tradable
 			--for `symbol'; initialize the dispatcher, event generators

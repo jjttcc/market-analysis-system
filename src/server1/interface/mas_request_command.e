@@ -129,7 +129,7 @@ feature {NONE} -- Hook routine implementations
 	respond_to_client (arg: ANY) is
 			-- Send `output_buffer' to the `active_medium'.
 		do
-			if not output_buffer.empty then
+			if not output_buffer.is_empty then
 				active_medium.put_string (output_buffer)
 			end
 		end

@@ -216,8 +216,12 @@ feature -- Basic operations
 	force_function_library_retrieval is
 			-- Force function library to be re-retrieved by deep copying
 			-- `retrieved_function_library' into it.
+		local
+temp: like function_library
 		do
-			function_library.deep_copy (retrieved_function_library)
+--!!!!!			function_library.deep_copy (retrieved_function_library)
+temp := deep_clone (retrieved_function_library) -- !!!!!Temporary, or
+function_library.copy (temp)					-- !!!!!possible bug fix
 		end
 
 	force_meg_library_retrieval is

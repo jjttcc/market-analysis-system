@@ -22,7 +22,6 @@ feature {NONE} -- Basic operations
 
 	do_execute (msg: STRING) is
 		local
-			ilist: LIST [MARKET_FUNCTION]
 			fields: LIST [STRING]
 		do
 			target := msg
@@ -56,7 +55,7 @@ feature {NONE} -- Basic operations
 			else
 				put_ok
 				ilist := tradable.indicators
-				if not ilist.empty then
+				if not ilist.is_empty then
 					from
 						ilist.start
 					until

@@ -137,9 +137,10 @@ feature -- Status report
 			Result := symbol_list.after
 		end
 
-	empty: BOOLEAN is
+--!!!!!!!!Check both is_emptys here: Are they correct?
+	is_empty: BOOLEAN is
 		do
-			Result := symbol_list.empty
+			Result := symbol_list.is_empty
 		end
 
 	fatal_error: BOOLEAN
@@ -327,7 +328,6 @@ feature {NONE} -- Implementation
 		require
 			not_off: not off
 		local
-			s: STRING
 			i: INTEGER
 		do
 			i := symbol_list.index

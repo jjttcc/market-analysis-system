@@ -134,8 +134,6 @@ feature {NONE} -- Implementation
 	name_without_extension (fname: STRING): STRING is
 			-- `fname' without its extension ('.' and all characters that
 			-- follow it)
-		local
-			i, last_sep_index: INTEGER
 		do
 			strutil.set_target (clone (fname))
 			if strutil.target.has ('.') then

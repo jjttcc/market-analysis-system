@@ -119,7 +119,6 @@ feature -- Basic operations
 			-- Save event history to persistent store.
 		local
 			hfile: PLAIN_TEXT_FILE
-			scanner: MARKET_EVENT_SCANNER
 			env: expanded APP_ENVIRONMENT
 		do
 			-- Open the event history file, delete its current contents and

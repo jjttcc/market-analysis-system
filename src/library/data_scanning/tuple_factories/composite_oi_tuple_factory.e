@@ -26,7 +26,7 @@ feature {NONE}
 				create operator
 				create open_interest_adder.make (tuples, operator, tuples.count)
 			else
-				open_interest_adder.set_target (tuples)
+				open_interest_adder.set (tuples)
 				open_interest_adder.set_n (tuples.count)
 			end
 			check

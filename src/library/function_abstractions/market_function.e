@@ -109,7 +109,7 @@ feature -- Status report
 			-- Does this function have children?
 		deferred
 		ensure
-			Result implies children /= Void and not children.empty
+			Result implies children /= Void and not children.is_empty
 		end
 
 feature -- Basic operations
@@ -141,7 +141,7 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 		do
 		ensure
 			output_empty_if_complex_and_not_processed:
-				is_complex and not processed implies output.empty
+				is_complex and not processed implies output.is_empty
 		end
 
 feature {MARKET_FUNCTION}

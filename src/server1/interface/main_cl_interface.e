@@ -246,7 +246,7 @@ feature {NONE} -- Implementation
 			finished: BOOLEAN
 			indicator: MARKET_FUNCTION
 		do
-			if market_list_handler.empty then
+			if market_list_handler.is_empty then
 				print ("There are currently no markets to view.%N")
 				finished := True
 			end
@@ -270,7 +270,7 @@ feature {NONE} -- Implementation
 				when 'i', 'I' then
 					if
 						current_tradable.indicators = Void or
-						current_tradable.indicators.empty
+						current_tradable.indicators.is_empty
 					then
 						print ("There are currently no indicators to view.%N")
 					else
@@ -315,7 +315,7 @@ feature {NONE} -- Implementation
 			if event_coordinator.start_date_time = Void then
 				log_error ("%NError: Start date must be set before %
 					%running analysis.%N")
-			elseif market_list_handler.empty then
+			elseif market_list_handler.is_empty then
 				print ("%NNo tradables to analyze - tradable list is empty.%N")
 			else
 				-- Ensure that the market event generators and event
@@ -391,7 +391,7 @@ feature {NONE} -- Implementation
 			err: STRING
 		do
 			old_tradable := current_tradable
-			if not market_list_handler.empty then
+			if not market_list_handler.is_empty then
 				from
 					symbols := market_list_handler.symbols
 				until
@@ -459,7 +459,7 @@ feature {NONE} -- Implementation
 			per_type_choice: TIME_PERIOD_TYPE
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 		do
-			if not market_list_handler.empty then
+			if not market_list_handler.is_empty then
 				from
 					i := 1
 					types := available_period_types
@@ -515,7 +515,7 @@ feature {NONE} -- Implementation
 				MARKET_FUNCTION is
 			-- User-selected indicator by number - Void if user chooses 0
 		require
-			not_void_or_empty: indicators /= Void and not indicators.empty
+			not_void_or_empty: indicators /= Void and not indicators.is_empty
 		local
 			names: ARRAYED_LIST [STRING]
 			finished: BOOLEAN
@@ -568,7 +568,7 @@ feature {NONE} -- Implementation - utilities
 		require
 			cpt_set: current_period_type /= Void
 		do
-			if market_list_handler.empty then
+			if market_list_handler.is_empty then
 				current_tradable := Void
 			else
 				market_list_handler.start
@@ -589,7 +589,7 @@ feature {NONE} -- Implementation - utilities
 				end
 			end
 		ensure
-			mlh_at_first: not market_list_handler.empty implies
+			mlh_at_first: not market_list_handler.is_empty implies
 				market_list_handler.isfirst
 		rescue
 			-- Exceptions caught during initialization are considered fatal.

@@ -26,18 +26,18 @@ feature -- Access
 			-- The components of the version number
 			-- Components are strings to allow mixed numbers and letters.
 		once
-			Result := <<"1", "6", "d">>
+			Result := <<"1", "6", "e">>
 		end
 
 	date: DATE is
 			-- The last date that `number' was updated
 		once
-			create Result.make (2001, 10, 10)
+			create Result.make (2002, 07, 01)
 		end
 
 	copyright: STRING is
 		once
-			Result := "Copyright 1998 - 2001: Jim Cochrane"
+			Result := "Copyright 1998 - 2002: Jim Cochrane"
 		end
 
 	license_information: STRING is

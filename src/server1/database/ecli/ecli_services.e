@@ -49,7 +49,7 @@ feature -- Initialization
 			end
 		ensure
 			splits_not_void_if_available:
-				not fatal_error and not db_info.stock_split_query.empty implies
+				not fatal_error and not db_info.stock_split_query.is_empty implies
 					stock_splits /= Void
 			not_connected: not connected or else fatal_error
 		end
@@ -92,7 +92,6 @@ feature -- Access
 		local
 			stmt: ECLI_STATEMENT
 			ecli_result: ECLI_VARCHAR
-			symbol: STRING
 		do
 			fatal_error := false
 			create stmt.make (session)
@@ -206,7 +205,7 @@ feature {NONE} -- Implementation
 	session: ECLI_SESSION is
 			-- The ECLI database session - provides access to the database
 		once
-			if db_info.db_name.empty then
+			if db_info.db_name.is_empty then
 				fatal_error := true
 				last_error := "Database session was not created."
 				raise (Void)
@@ -251,7 +250,7 @@ feature {NONE} -- Implementation
 		do
 			fatal_error := false
 			create {ARRAYED_LIST [STRING]} Result.make (0)
-			if not q.empty then
+			if not q.is_empty then
 				-- definition of statement on session
 				create stmt.make (session)
 				-- change execution mode to immediate (no need to prepare)
@@ -400,7 +399,7 @@ feature {NONE} -- Implementation
 			stmt: ECLI_STATEMENT
 		do
 			query := db_info.stock_split_query
-			if not query.empty then
+			if not query.is_empty then
 				stmt := input_statement (query, stock_split_value_holders)
 				create stock_splits.make (stmt)
 				stmt.close

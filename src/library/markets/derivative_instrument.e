@@ -24,7 +24,7 @@ feature {NONE} -- Initialization
 	make (sym: STRING; info: TRADABLE_DATA) is
 		require
 			not_void: sym /= Void
-			symbol_not_empty: not sym.empty
+			symbol_not_empty: not sym.is_empty
 		do
 			symbol := sym
 			tradable_initialize

@@ -38,7 +38,7 @@ feature -- Initialization
 		require
 			not_void: tgt /= Void and op /= Void
 		do
-			target := tgt
+			set (tgt)
 			operand := op
 		ensure
 			set: target = tgt and operand = op

@@ -18,7 +18,7 @@ feature -- Access
 			-- Stock splits for the stock with `symbol' - Void if there
 			-- are no recorded splits for `symbol'
 		require
-			symbol_valid: symbol /= Void and not symbol.empty
+			symbol_valid: symbol /= Void and not symbol.is_empty
 		deferred
 		end
 

@@ -18,9 +18,14 @@ class STORABLE_MARKET_FUNCTION_LIST inherit
 	GLOBAL_SERVICES
 		export {NONE}
 			all
+		undefine
+			copy, is_equal
 		end
 
 	MARKET_FUNCTION_EDITOR
+		undefine
+			copy, is_equal
+		end
 
 creation
 
@@ -34,7 +39,6 @@ feature -- Utility
 			-- the file; then call precursor to save the remaining contents.
 		local
 			dummy_tradable: TRADABLE [BASIC_MARKET_TUPLE]
-			dummy_period: TRADABLE [BASIC_MARKET_TUPLE]
 		do
 			from
 				start

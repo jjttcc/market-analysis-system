@@ -305,7 +305,6 @@ feature {NONE} -- Implementation
 			product_not_void: product /= Void
 		local
 			e: MARKET_EVENT_PAIR
-			st: expanded SIGNAL_TYPES
 		do
 			create e.make (left, right, "Event pair", event_type, signal_type)
 			product.extend (e)

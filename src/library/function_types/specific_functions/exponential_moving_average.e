@@ -103,7 +103,7 @@ feature {NONE} -- Implementation
 	action is
 			-- Calculate exponential MA value for the current period.
 		require else
-			output_not_empty: not output.empty
+			output_not_empty: not output.is_empty
 			tgindex_gt_n: target.index > effective_n
 		local
 			t: SIMPLE_TUPLE

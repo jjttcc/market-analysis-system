@@ -28,7 +28,6 @@ feature {NONE} -- Basic operations
 
 	do_execute (msg: STRING) is
 		local
-			ilist: LIST [MARKET_FUNCTION]
 			fields: LIST [STRING]
 		do
 			target := msg
@@ -48,7 +47,6 @@ feature {NONE} -- Basic operations
 			-- and `trading_period_type' and send it to the client.
 		local
 			tradable: TRADABLE [BASIC_MARKET_TUPLE]
-			ilist: LIST [MARKET_FUNCTION]
 		do
 			tradable := cached_tradable (market_symbol, trading_period_type)
 			if tradable = Void then
@@ -91,7 +89,7 @@ feature {NONE} -- Basic operations
 				end
 				l.forth
 			end
-			if not eglist.empty then
+			if not eglist.is_empty then
 				from
 					eglist.start
 				until

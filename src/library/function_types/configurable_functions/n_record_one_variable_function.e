@@ -104,14 +104,14 @@ feature {NONE} -- Basic operations
 				continue_until
 			end
 		ensure then
-			when_tgcount_lt_n: target.count < effective_n implies output.empty
+			when_tgcount_lt_n: target.count < effective_n implies output.is_empty
 			when_tgcount_ge_n:
 				target.count >= effective_n implies
 					output.count = target.count - effective_n + 1
-			first_date_set: not output.empty implies
+			first_date_set: not output.is_empty implies
 				output.first.date_time.is_equal (
 					target.i_th (effective_n).date_time)
-			last_date_set: not output.empty implies
+			last_date_set: not output.is_empty implies
 				output.last.date_time.is_equal (target.last.date_time)
 		end
 
@@ -138,10 +138,10 @@ feature {NONE}
 invariant
 
 	processed_when_target_lt_n:
-		processed implies (target.count < effective_n implies output.empty)
+		processed implies (target.count < effective_n implies output.is_empty)
 	processed_when_target_ge_n:
 		processed implies
-			(target.count >= effective_n implies not output.empty and
+			(target.count >= effective_n implies not output.is_empty and
 				(strict_n_count implies output.count =
 					target.count - effective_n + 1))
 	effective_n_gt_0: effective_n > 0

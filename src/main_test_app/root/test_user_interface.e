@@ -420,12 +420,12 @@ feature {NONE}
 			from
 				read_line
 			until
-				last_string.empty or Result.date_valid (last_string)
+				last_string.is_empty or Result.date_valid (last_string)
 			loop
 				print ("Date format invalid, try again: ")
 				read_line
 			end
-			if not last_string.empty then
+			if not last_string.is_empty then
 				create Result.make_from_string (last_string)
 			end
 			print_list (<<"Using date of ", Result, ".%N">>)
@@ -625,7 +625,7 @@ feature {NONE}
 				MARKET_FUNCTION is
 			-- User-selected indicator
 		require
-			not_trdble_empty: not current_tradable.indicators.empty
+			not_trdble_empty: not current_tradable.indicators.is_empty
 		local
 			names: ARRAYED_LIST [STRING]
 		do

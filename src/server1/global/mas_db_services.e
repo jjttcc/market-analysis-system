@@ -396,7 +396,7 @@ feature {NONE} -- Implementation
 			q: STRING
 		do
 			q := global_server.database_configuration.stock_name_query
-			if not q.empty then
+			if not q.is_empty then
 				Result := inserted_symbol (q, symbol)
 			else
 				fatal_error := true
@@ -415,7 +415,7 @@ feature {NONE} -- Implementation
 			q: STRING
 		do
 			q := global_server.database_configuration.derivative_name_query
-			if not q.empty then
+			if not q.is_empty then
 				Result := inserted_symbol (q, symbol)
 			else
 				fatal_error := true
@@ -486,7 +486,7 @@ feature {NONE} -- Implementation
 		deferred
 		ensure
 			not_void: Result /= Void
-			empty_if_q_empty: old q.empty implies Result.empty
+			empty_if_q_empty: old q.is_empty implies Result.is_empty
 		end
 
 	check_field_count (seq: DB_INPUT_SEQUENCE; tradable_type: INTEGER;

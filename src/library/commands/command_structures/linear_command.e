@@ -18,14 +18,14 @@ deferred class LINEAR_COMMAND inherit
 	LINEAR_ANALYZER
 		export
 			{NONE} all
-			{COMMAND_EDITOR} set_target
+			{COMMAND_EDITOR} set
 		end
 
 feature -- Initialization
 
 	initialize (a: LINEAR_ANALYZER) is
 		do
-			set_target (a.target)
+			set (a.target)
 		end
 
 feature -- Basic operations

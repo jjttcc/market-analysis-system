@@ -38,7 +38,7 @@ feature -- Access
 			-- Void if the tradable for `symbol' is not found or if
 			-- `period_type' is not a valid type for `symbol'
 		require
-			not_empty: not empty
+			not_empty: not is_empty
 			not_void: symbol /= Void and period_type /= Void
 		deferred
 		ensure
@@ -60,7 +60,7 @@ feature -- Access
 			-- is not a valid type for `symbol'.  `last_tradable' will be set
 			-- to `tradable (symbol, period_type)'.
 		require
-			not_empty: not empty
+			not_empty: not is_empty
 			not_void: symbol /= Void and period_type /= Void
 			period_type_valid: valid_period_type (symbol, period_type)
 		local
@@ -89,7 +89,7 @@ feature -- Access
 			-- ascending order according to period-type duration -
 			-- Void if the tradable for `symbol' is not found
 		require
-			not_empty: not empty
+			not_empty: not is_empty
 			not_void: symbol /= Void
 			symbol_valid: symbols.has (symbol)
 		deferred
@@ -123,7 +123,7 @@ feature -- Status report
 		deferred
 		end
 
-	empty: BOOLEAN is
+	is_empty: BOOLEAN is
 			-- Are there no tradables?
 		deferred
 		end
@@ -150,7 +150,7 @@ feature -- Status report
 			-- does `t' for `symbol' match a member of `period_types'?
 		require
 			not_void: symbol /= Void and t /= Void
-			not_empty: not empty
+			not_empty: not is_empty
 		local
 			change_back: BOOLEAN
 			ptypes: LIST [STRING]
@@ -195,8 +195,8 @@ feature -- Cursor movement
 	start is
 		deferred
 		ensure
-			not empty = not after
-			atfirst: not empty implies isfirst
+			not is_empty = not after
+			atfirst: not is_empty implies isfirst
 		end
 
 feature -- Basic operations
@@ -210,6 +210,6 @@ invariant
 
 	after_constraint: after implies off
 
-	empty_constraint: empty implies off
+	empty_constraint: is_empty implies off
 
 end -- class TRADABLE_DISPENSER

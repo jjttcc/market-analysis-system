@@ -93,7 +93,7 @@ feature {NONE}
 			-- `first_element_operator'), put the result into `output' as its
 			-- first element, and increment `target' to the 2nd element.
 			target.start
-			if not target.empty then
+			if not target.is_empty then
 				first_element_operator.execute (target.item)
 				create t.make (target.item.date_time, target.item.end_date,
 							first_element_operator.value)
@@ -105,11 +105,11 @@ feature {NONE}
 			output.start
 			-- Important - previous operator will operate on the current
 			-- item of `output', which will always be the last inserted item.
-			previous_operator.set_target (output)
+			previous_operator.set (output)
 		ensure then
-			empty_if_empty: target.empty = output.empty
-			output_at_last: not output.empty implies output.islast
-			output_one_less_than_target: not output.empty implies
+			empty_if_empty: target.is_empty = output.is_empty
+			output_at_last: not output.is_empty implies output.islast
+			output_one_less_than_target: not output.is_empty implies
 				target.index = output.index + 1
 		end
 

@@ -54,9 +54,6 @@ feature
 	gui_interface: MAIN_GUI_INTERFACE
 
 	execute (arg: ANY) is
-		local
-			s: STRING
-			finished: BOOLEAN
 		do
 			initialize
 			if is_gui then

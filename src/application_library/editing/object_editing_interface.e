@@ -63,7 +63,7 @@ feature -- Access
 			end
 		ensure
 			result_not_void_if_ol_not_empty:
-				not obj_list.empty implies Result /= Void
+				not obj_list.is_empty implies Result /= Void
 		end
 
 	object_types: HASH_TABLE [ARRAYED_LIST [G], STRING] is
@@ -137,7 +137,7 @@ feature {NONE} -- Implementation
 				obj_names.extend (objects.item.generator)
 				objects.forth
 			end
-			if tree_names.empty then
+			if tree_names.is_empty then
 				general_msg := concatenation (<<
 							"Select an object for the ", msg, ":%N">>)
 			else

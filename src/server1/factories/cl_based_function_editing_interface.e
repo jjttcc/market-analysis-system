@@ -187,8 +187,6 @@ feature {NONE} -- Implementation of hook methods
 		end
 
 	list_selection_with_backout (l: LIST [STRING]; msg: STRING): INTEGER is
-		local
-			finished: BOOLEAN
 		do
 			Result := backoutable_selection (l, msg, Exit_value)
 		end

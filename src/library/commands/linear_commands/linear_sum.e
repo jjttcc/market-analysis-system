@@ -29,7 +29,7 @@ feature {FACTORY} -- Initialization
 			args_not_void: t /= Void and op /= Void
 			i_gt_0: i > 0
 		do
-			set_target (t)
+			set (t)
 			set_operand (op)
 			set_n (i)
 		ensure

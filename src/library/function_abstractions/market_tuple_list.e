@@ -30,7 +30,7 @@ feature -- Access
 			-- Time efficiency is O(log2 n)
 		require
 			not_void: d /= Void
-			not_empty: not empty
+			not_empty: not is_empty
 		local
 			top, bottom, i: INTEGER
 		do
@@ -110,7 +110,7 @@ feature -- Access
 			-- Time efficiency is O(log2 n)
 		require
 			not_void: d /= Void
-			not_empty: not empty
+			not_empty: not is_empty
 		local
 			dt: DATE_TIME
 		do

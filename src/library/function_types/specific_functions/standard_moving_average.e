@@ -73,7 +73,7 @@ feature {NONE} -- Basic operations
 			t: SIMPLE_TUPLE
 		do
 			check
-				output_empty: output.empty
+				output_empty: output.is_empty
 			end
 			if target.count < effective_n then
 				-- null statement
@@ -107,7 +107,7 @@ feature {MARKET_FUNCTION_EDITOR}
 	set_input (in: MARKET_FUNCTION) is
 		do
 			Precursor (in)
-			sum.set_target (in.output)
+			sum.set (in.output)
 		end
 
 	set_n (value: INTEGER) is

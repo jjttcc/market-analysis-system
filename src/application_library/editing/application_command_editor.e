@@ -193,7 +193,7 @@ feature -- Basic operations
 				c_is_valid_type: cmd /= Void
 			end
 			user_interface.set_use_market_function_selection (false)
-			cmd.set_target (user_interface.market_function_selection (
+			cmd.set (user_interface.market_function_selection (
 				concatenation (<<"an indicator for ", cmd.generator,
 								"'s input">>)).output)
 		end
@@ -335,7 +335,6 @@ feature -- Basic operations
 			ui_set: user_interface /= Void
 		local
 			left, right: RESULT_COMMAND [REAL]
-			sign_spec: ARRAY [INTEGER]
 			sign_spec_vector: ARRAY [ARRAY [INTEGER]]
 			choices: LIST [PAIR [STRING, BOOLEAN]]
 			pair: PAIR [STRING, BOOLEAN]
@@ -403,8 +402,6 @@ feature -- Basic operations
 			-- (such as CONSTANT).
 		require
 			ui_set: user_interface /= Void
-		local
-			x: REAL
 		do
 			cmd.set_value (user_interface.real_selection (
 								concatenation (<<cmd.generator, "'s value">>)))

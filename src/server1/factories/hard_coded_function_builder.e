@@ -277,7 +277,6 @@ feature {NONE} -- Hard-coded market function building procedures
 			upsub, downsub, outer_sub: SUBTRACTION
 			rs_div, maindiv, upavg, downavg: DIVISION
 			one_plus_rs: ADDITION
-			exp: N_BASED_UNARY_OPERATOR
 		do
 			create close; create zero.make (0)
 			create one_hundred.make (100); create one.make (1);
