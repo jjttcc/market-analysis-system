@@ -8,7 +8,7 @@ indexing
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class VALUE_AT_INDEX inherit
+class VALUE_AT_INDEX_COMMAND inherit
 
 	UNARY_LINEAR_OPERATOR
 		rename
@@ -16,7 +16,7 @@ class VALUE_AT_INDEX inherit
 		export
 			{NONE} ulo_make_unused
 		redefine
-			execute
+			execute, children
 		end
 
 creation
@@ -28,7 +28,7 @@ feature -- Initialization
 	make (tgt: like target; main_op: like main_operator;
 			index_op: like index_operator) is
 		require
-			not_void: tgt /= Void and main_op /= Void
+			not_void: tgt /= Void and main_op /= Void and index_op /= Void
 		do
 			set (tgt)
 			main_operator := main_op
@@ -41,6 +41,12 @@ feature -- Initialization
 feature -- Access
 
 	index_operator: NUMERIC_VALUE_COMMAND
+
+	children: LIST [COMMAND] is
+		do
+			Result := Precursor
+			Result.extend (index_operator)
+		end
 
 feature -- Basic operations
 
@@ -66,5 +72,9 @@ feature -- Basic operations
 			value := main_operator.value
 			target.go_i_th (old_i) -- Restore cursor.
 		end
+
+invariant
+
+	index_operator_exists: index_operator /= Void
 
 end
