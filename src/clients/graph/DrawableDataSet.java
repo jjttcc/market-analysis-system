@@ -45,6 +45,20 @@ import java.util.*;
  */
 public class DataSet {
 
+// Access
+
+	public BasicDrawer drawer() { return _drawer; }
+
+	// Do dates need to be drawn?
+	public boolean dates_needed() { return _dates_needed; }
+
+	// Number of records in this data set
+	public int count() {
+		return tuple_count;
+	}
+
+// Element change
+
 	public void set_drawer (BasicDrawer d) {
 		_drawer = d;
 	}
@@ -59,17 +73,7 @@ public class DataSet {
 		_drawer.set_times(t);
 	}
 
-	public BasicDrawer drawer() { return _drawer; }
-
-	// Do dates need to be drawn?
-	public boolean dates_needed() { return _dates_needed; }
-
 	public void set_dates_needed(boolean b) { _dates_needed = b; }
-
-	// Number of records in this data set
-	public int count() {
-		return tuple_count;
-	}
 
 /*
 ***********************
