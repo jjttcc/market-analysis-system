@@ -93,6 +93,11 @@ feature -- Basic operations
 			l.extend (wma (f, WMA_n, "Weighted Moving Average"))
 			l.extend (market_data (f, "Market Data"))
 			l.extend (market_function_line (f, "Line"))
+--!!!Temporary test/experiment:
+l.extend (agent_experiment ("Agent-based function"))
+--!!!NOTE: There appears to be a problem with storing the AGENT_BASED_FUNCTION
+--into the indicators_persist file, caused by the agent attribute -
+--POINTER values (which are valid when the object is created) get set to 0.
 			product := l
 		end
 
@@ -492,6 +497,30 @@ feature {NONE} -- Hard-coded market function building procedures
 			-- being processed is the first element.
 			Result.set_effective_offset (1)
 		end
+
+	agent_experiment (name: STRING): AGENT_BASED_FUNCTION is
+		do
+			create Result.make (agent test_function, Void, Void)
+			Result.set_name (name)
+		end
+
+--!!!Temporary - test function for agent experiment:
+test_function (l: LIST [MARKET_FUNCTION]): MARKET_TUPLE_LIST [MARKET_TUPLE] is
+	local
+		ml: LIST [MARKET_TUPLE]
+	do
+print ("test_function start%N")
+		create Result.make (0)
+		if not l.is_empty and then not l.first.output.is_empty then
+			ml := l.first.output
+			from ml.start until ml.exhausted loop
+				Result.extend (create {SIMPLE_TUPLE}.make (ml.item.date_time,
+					ml.item.date_time.date, 100))
+				ml.forth
+			end
+		end
+print ("test_function end%N")
+	end
 
 feature {NONE} -- Functions currently not used
 

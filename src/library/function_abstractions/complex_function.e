@@ -56,6 +56,7 @@ feature -- Basic operations
 	process is
 			-- Process the output from the input.
 		do
+print ("process start%N")
 			if not processed then
 				pre_process
 				do_process
@@ -65,6 +66,7 @@ feature -- Basic operations
 				print (name); print (" just became processed, output size: ")
 				print (output.count); print ("%N")
 			end
+print ("process end%N")
 		end
 
 feature {MARKET_FUNCTION_EDITOR} -- Status setting
@@ -118,6 +120,8 @@ feature {NONE} -- Implementation
 	parameter_list: LINKED_LIST [FUNCTION_PARAMETER]
 
 	immediate_parameters: LIST [FUNCTION_PARAMETER] is
+--!!!!NOTE: This feature is not redefined in several descendants.  Since
+--it is a once function, that could be a problem (bug).  Check it out.
 		once
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 		end
