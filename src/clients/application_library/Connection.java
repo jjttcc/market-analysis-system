@@ -10,7 +10,7 @@ import support.*;
 import mas_gui.*;
 
 /** Interface for connecting and communicating with the server */
-public class Connection implements NetworkProtocol, Constants {
+abstract public class Connection implements NetworkProtocol, Constants {
 
 	// Precondition: io_conn != null
 	public Connection(IO_Connection io_conn) {
@@ -21,9 +21,7 @@ public class Connection implements NetworkProtocol, Constants {
 	}
 
 	// A new connection object
-	public Connection new_object() throws IOException {
-		return new Connection(io_connection.new_object());
-	}
+	abstract public Connection new_object() throws IOException;
 
 	// Session state data received from the server when logging in.
 	public SessionState session_state() {
@@ -48,7 +46,7 @@ public class Connection implements NetworkProtocol, Constants {
 				// Failure of login request is a fatal error.
 				throw new IOException (request_result.toString());
 			}
-			_session_state = new SessionState(s);
+			_session_state = new_session_state(s);
 		} catch (IOException e) {
 			throw new IOException("Attempt to login to server " +
 				"failed: " + e);
@@ -191,6 +189,10 @@ public class Connection implements NetworkProtocol, Constants {
 	boolean valid_application_server_response(int value) {
 		return true;
 	}
+
+	// A new SessionState object of the appropriate descendant class
+	protected abstract SessionState new_session_state(String response)
+		throws IOException;
 
 	protected SessionState _session_state;
 	protected boolean _logged_in = false;

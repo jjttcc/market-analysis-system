@@ -213,11 +213,13 @@ public class DataSetBuilder implements NetworkProtocol {
 	// Precondition: main_field_specs.length >= 7
 	private void initialize_fieldspecs() {
 		int i = 0;
+		MA_SessionState session_state =
+			(MA_SessionState) connection_.session_state();
 		for (int j = 0; j < main_field_specs.length; ++j) {
 			main_field_specs[j] = Parser.Not_set;
 		}
 		main_field_specs[i++] = Parser.Date;
-		if (connection_.session_state().open_field()) {
+		if (session_state.open_field()) {
 			main_field_specs[i++] = Parser.Open;
 		}
 		main_field_specs[i++] = Parser.High;

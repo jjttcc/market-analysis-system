@@ -6,12 +6,12 @@ import common.*;
 import java.io.*;
 import java.util.*;
 
-class SessionState implements NetworkProtocol {
+abstract class SessionState {
 	// `response_string' is the string sent by the server in response to
 	// a login request.
 	SessionState(String response_string) throws IOException {
 		StringTokenizer t = new StringTokenizer(response_string,
-			Message_field_separator);
+			message_field_separator());
 		String s = null;
 		if (! t.hasMoreTokens()) {
 			throw new IOException("Received empty key from server.");
@@ -25,13 +25,7 @@ class SessionState implements NetworkProtocol {
 			throw new IOException("Received invalid key from " +
 				"server: " + s + " - " + e);
 		}
-		// Obtain any session state information sent by the server.
-		while (t.hasMoreTokens()) {
-			s = t.nextToken();
-			if (s.equals(No_open_session_state)) {
-				_open_field = false;
-			}
-		}
+		process_remaining_tokens(t);
 	}
 
 	// The "session key" - used for requests to the server
@@ -39,19 +33,13 @@ class SessionState implements NetworkProtocol {
 		return _session_key;
 	}
 
-	// Is there an open field in the data recevied from the server?
-	public boolean open_field() {
-		return _open_field;
+	// Process the remaining tokens in `t', if any, to obtain session
+	// state information sent by the server.
+	protected void process_remaining_tokens(StringTokenizer t) {
+		// null routine - redefined if needed.
 	}
 
-	// Specify whether there is an open field in the data recevied from
-	// the server.
-	// Postcondition: open_field() == value
-	public void set_open_field(boolean value) {
-		_open_field = value;
-	}
+	protected abstract String message_field_separator();
 
 	private int _session_key;
-
-	private boolean _open_field = true;
 }

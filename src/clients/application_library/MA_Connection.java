@@ -18,7 +18,14 @@ public class MA_Connection extends Connection {
 		return new MA_Connection(io_connection.new_object());
 	}
 
-	boolean valid_application_server_response(int value) {
+// Implementation
+
+	protected boolean valid_application_server_response(int value) {
 		return value == Invalid_symbol;
+	}
+
+	protected SessionState new_session_state(String response)
+			throws IOException {
+		return new MA_SessionState(response);
 	}
 }
