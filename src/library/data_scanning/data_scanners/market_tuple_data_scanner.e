@@ -41,7 +41,7 @@ feature
 		ensure
 			set: input = in and tuple_maker = tm and
 				value_setters = vs and product = prod
-			non_strict: strict_error_checking = false
+			non_strict: strict_error_checking = False
 		end
 
 feature -- Access
@@ -145,9 +145,9 @@ feature {NONE} -- Implementation
 				s.append (t.close.value.out)
 				t.fix_price_relationships
 				error_list.extend (s)
-				error_in_current_tuple := true
+				error_in_current_tuple := True
 				if strict_error_checking then
-					discard_current_tuple := true
+					discard_current_tuple := True
 				end
 			end
 		end
@@ -165,8 +165,8 @@ feature {NONE} -- Implementation
 				s.append (", date for last item: ")
 				s.append (last_date_time.out)
 				error_list.extend (s)
-				error_in_current_tuple := true
-				discard_current_tuple := true
+				error_in_current_tuple := True
+				discard_current_tuple := True
 			end
 			last_date_time := t.date_time
 		end

@@ -64,7 +64,7 @@ feature {NONE} -- Implementation
 					-- problem with this tradable and skip to the next one.
 					tradables.forth
 				end
-				exception_occurred := true
+				exception_occurred := True
 				if
 					gs.last_exception_status.description /= Void and
 					not gs.last_exception_status.description.is_empty

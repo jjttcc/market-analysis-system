@@ -34,7 +34,7 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is true
+	arg_mandatory: BOOLEAN is True
 
 feature -- Basic operations
 

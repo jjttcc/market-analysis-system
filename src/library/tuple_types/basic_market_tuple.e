@@ -76,26 +76,26 @@ feature -- Status report
 feature -- Status setting
 
 	begin_editing is
-			-- Set editing state to true to allow changing values
+			-- Set editing state to True to allow changing values
 			-- without violating the class invariant.  end_editing
 			-- should be called after setting values to allow them
 			-- to be checked again by the class invariant.
 		require
 			not_editing: not editing
 		do
-			editing := true
+			editing := True
 		ensure
 			editing: editing
 		end
 
 	end_editing is
-			-- Set editing state to false and ensure the class invariant.
+			-- Set editing state to False and ensure the class invariant.
 		require
 			prices_valid: 
 					(low <= high and low <= close and close <= high) and
 					(open_available implies low <= open and open <= high)
 		do
-			editing := false
+			editing := False
 		ensure
 			not_editing: not editing
 			prices_valid: price_relationships_correct

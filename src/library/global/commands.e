@@ -252,7 +252,7 @@ feature -- Access
 				%its 'true command'; otherwise, value is set to the %
 				%result of%Nexecuting its 'false command'.")
 			Result.extend (pair)
-			create {SIGN_ANALYZER} cmd.make (real_dummy, real_dummy, false)
+			create {SIGN_ANALYZER} cmd.make (real_dummy, real_dummy, False)
 			create pair.make (cmd,
 				"Operator that detects sign changes with respect to its %
 				%left and right operands")

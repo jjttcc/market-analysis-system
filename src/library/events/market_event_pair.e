@@ -116,7 +116,7 @@ feature -- Status report
 				Result := other.left.is_equal (left) and
 						other.right.is_equal (right)
 			else
-				Result := false
+				Result := False
 			end
 		end
 

@@ -261,13 +261,13 @@ feature -- Status report
 			oi: OPEN_INTEREST
 		do
 			cmds := f.operators
-			Result := true
+			Result := True
 			from cmds.start until not Result or cmds.exhausted loop
 				oi ?= cmds.item
 				-- Currently, the only invalid operator for a STOCK is
 				-- open interest.
 				if oi /= Void then
-					Result := false
+					Result := False
 				end
 				cmds.forth
 			end

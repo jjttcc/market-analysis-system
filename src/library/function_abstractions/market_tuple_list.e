@@ -160,7 +160,7 @@ feature -- Status report
 			-- Is Current sorted by date and time?
 		do
 			from
-				Result := true
+				Result := True
 				start
 				if not after then
 					forth
@@ -172,7 +172,7 @@ feature -- Status report
 				if
 					not (i_th (index).date_time > i_th (index - 1).date_time)
 				then
-					Result := false
+					Result := False
 				end
 			end
 		end
@@ -204,7 +204,7 @@ feature {NONE}
 				Result or i = top + 1
 			loop
 				if i_th(i).date_time.is_equal (d) then
-					Result := true
+					Result := True
 				end
 				i := i + 1
 			end
@@ -216,7 +216,7 @@ feature {NONE}
 					i = count + 1
 				loop
 					if i_th(i).date_time.is_equal (d) then
-						in_array := true
+						in_array := True
 					end
 					i := i + 1
 				end

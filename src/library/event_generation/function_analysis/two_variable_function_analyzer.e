@@ -44,8 +44,8 @@ feature -- Initialization
 			event_type := ev_type
 			period_type := per_type
 			signal_type := sig_type
-			below_to_above := true
-			above_to_below := true
+			below_to_above := True
+			above_to_below := True
 		ensure
 			set: input1 = in1 and input2 = in2 and event_type /= Void and
 				event_type = ev_type and signal_type = sig_type
@@ -91,28 +91,28 @@ feature -- Status report
 feature -- Status setting
 
 	set_below_to_above_only is
-			-- Set `below_to_above' to true and `above_to_below' to false.
+			-- Set `below_to_above' to True and `above_to_below' to False.
 		do
-			below_to_above := true
-			above_to_below := false
+			below_to_above := True
+			above_to_below := False
 		ensure
 			below_to_above_only: below_to_above and not above_to_below
 		end
 
 	set_above_to_below_only is
-			-- Set `above_to_below' to true and `below_to_above' to false.
+			-- Set `above_to_below' to True and `below_to_above' to False.
 		do
-			above_to_below := true
-			below_to_above := false
+			above_to_below := True
+			below_to_above := False
 		ensure
 			above_to_below_only: above_to_below and not below_to_above
 		end
 
 	set_below_and_above is
-			-- Set both `above_to_below' and `below_to_above' to true.
+			-- Set both `above_to_below' and `below_to_above' to True.
 		do
-			above_to_below := true
-			below_to_above := true
+			above_to_below := True
+			below_to_above := True
 		ensure
 			both: above_to_below and below_to_above
 		end
@@ -200,8 +200,8 @@ feature {NONE} -- Hook routine implementation
 					if above_to_below and additional_condition then
 						generate_event (target1.item, event_description)
 					end
-					target1_above := false
-					crossover_in_effect := true
+					target1_above := False
+					crossover_in_effect := True
 				else
 					crossover_in_effect := crossover_in_effect and
 					rabs (target1.item.value - target2.item.value) < epsilon
@@ -215,8 +215,8 @@ feature {NONE} -- Hook routine implementation
 					if below_to_above and additional_condition then
 						generate_event (target1.item, event_description)
 					end
-					target1_above := true
-					crossover_in_effect := true
+					target1_above := True
+					crossover_in_effect := True
 				else
 					crossover_in_effect := crossover_in_effect and
 					rabs (target1.item.value - target2.item.value) < epsilon
@@ -236,7 +236,7 @@ feature {NONE} -- Implementation
 			-- Target for `operator' to process.
 
 	additional_condition: BOOLEAN is
-			-- Is operator Void or is its execution result true?
+			-- Is operator Void or is its execution result True?
 		do
 			if operator /= Void then
 				operator.execute (operator_target.item)

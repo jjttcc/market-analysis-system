@@ -55,7 +55,7 @@ feature -- Access
 			-- Is the duration of the period irregular (e.g., monthly)?
 
 	duration: DATE_TIME_DURATION
-			-- Duration of the time period - approximate if irregular = true
+			-- Duration of the time period - approximate if irregular = True
 
 	intraday: BOOLEAN is
 			-- Is this an intraday time-period type?

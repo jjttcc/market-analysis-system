@@ -85,12 +85,12 @@ feature {NONE} -- Utility routines
 						not l1.item.date_time.is_equal (
 												l2.item.date_time)
 					then
-						Result := true
+						Result := True
 					end
 					l1.forth; l2.forth
 				end
 				if not Result and l1.exhausted /= l2.exhausted then
-					Result := true
+					Result := True
 				end
 			else
 				check
@@ -100,7 +100,7 @@ feature {NONE} -- Utility routines
 				end
 			end
 		ensure
-			void_gives_false: (l1 = Void and l2 = Void) implies (Result = false)
+			void_gives_false: (l1 = Void and l2 = Void) implies (Result = False)
 		end
 
 	line_up (t1, t2: LINEAR [MARKET_TUPLE]) is

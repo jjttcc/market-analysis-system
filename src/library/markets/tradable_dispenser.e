@@ -162,12 +162,12 @@ feature -- Status report
 			error: BOOLEAN
 		do
 			error := error_occurred
-			error_occurred := false
+			error_occurred := False
 			if symbols.has (symbol) then
 				ptypes := period_types (symbol)
 				if ptypes /= Void then
 					if not ptypes.object_comparison then
-						change_back := true
+						change_back := True
 						ptypes.compare_objects
 					end
 					Result := ptypes.has (t.name)
@@ -176,10 +176,10 @@ feature -- Status report
 					end
 				end
 			end
-			-- `error_occurred' may have been reset to false by one of the
+			-- `error_occurred' may have been reset to False by one of the
 			-- routines called above; being a simple query, this routine
 			-- needs to restore it to its original value, unless it was
-			-- set to true within this routine (by a called routine).
+			-- set to True within this routine (by a called routine).
 			if not error_occurred then
 				error_occurred := error
 			end

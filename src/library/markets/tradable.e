@@ -129,7 +129,7 @@ feature -- Status report
 			-- Have all elements of indicators been processed?
 		do
 			from
-				Result := true
+				Result := True
 				indicators.start
 			until
 				not Result or indicators.exhausted
@@ -156,7 +156,7 @@ feature -- Status report
 	valid_indicator (f: MARKET_FUNCTION): BOOLEAN is
 			-- Is `f' a valid indicator for this tradable type?
 		do
-			Result := true
+			Result := True
 		end
 
 feature -- Status setting

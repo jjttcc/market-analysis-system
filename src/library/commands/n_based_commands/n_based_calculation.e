@@ -39,7 +39,7 @@ feature {FACTORY} -- Initialization
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is false
+	arg_mandatory: BOOLEAN is False
 
 feature -- Basic operations
 

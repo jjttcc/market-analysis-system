@@ -28,7 +28,7 @@ creation
 feature -- Initialization
 
 	make (o1, o2: like operand1; init_sign_spec: BOOLEAN) is
-			-- Initialize operands and, if `init_sign_spec' is true,
+			-- Initialize operands and, if `init_sign_spec' is True,
 			-- initialize the contents of `sign_change_spec'.
 		require
 			not_void: o1 /= Void and o2 /= Void
@@ -65,7 +65,7 @@ feature -- Access
 			-- of operand1; element 2 specifies a valid sign for the
 			-- result of execution of operand2.  The specifications are
 			-- 'or'ed, so that a sign change that matches any elements of
-			-- `sign_change_spec' will result in `value' set to true.
+			-- `sign_change_spec' will result in `value' set to True.
 			-- Valid values for elements 1 and 2 of each array are -1
 			-- (negative sign), 1 (positive sign), and 0.
 
@@ -88,7 +88,7 @@ feature {NONE} -- Hook routine implementation
 
 	operate (v1, v2: REAL) is
 		do
-			value := false
+			value := False
 			from
 				sign_change_spec.start
 			until

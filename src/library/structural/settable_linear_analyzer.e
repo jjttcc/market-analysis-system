@@ -59,7 +59,7 @@ feature {NONE} -- Status report
 
 	item_test (v: MARKET_TUPLE): BOOLEAN is
 			-- Test to be applied to item `v'
-			-- (default: false)
+			-- (default: False)
 		do
 		end;
 

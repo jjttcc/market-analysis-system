@@ -24,7 +24,7 @@ feature -- Access
 			-- analysis of market data
 
 	operator: RESULT_COMMAND [BOOLEAN]
-			-- Operator used to analyze each tuple - evaluation to true
+			-- Operator used to analyze each tuple - evaluation to True
 			-- will result in an event being generated.
 
 	period_type: TIME_PERIOD_TYPE

@@ -78,7 +78,7 @@ feature {NONE} -- Basic operations
 			end
 			if target.count < effective_n then
 				-- There are not enough elements in target to process;
-				-- ensure that exhausted is true:
+				-- ensure that exhausted is True:
 				target.finish
 				if not target.off then target.forth end
 				check

@@ -98,15 +98,15 @@ feature -- Status report
 	processed: BOOLEAN is
 			-- Has this function been processed?
 		do
-			Result := true
+			Result := True
 		ensure then
-			Result = true
+			Result = True
 		end
 
 	loaded: BOOLEAN
 			-- Has `data' been loaded and post-processing completed?
 
-	has_children: BOOLEAN is false
+	has_children: BOOLEAN is False
 
 feature {FACTORY} -- Status setting
 
@@ -130,14 +130,14 @@ feature {FACTORY} -- Status setting
 		require
 			period_type_not_void: trading_period_type /= Void
 		do
-			loaded := true
+			loaded := True
 		ensure
 			loaded: loaded
 		end
 
 feature {MARKET_FUNCTION} -- Status report
 
-	is_complex: BOOLEAN is false
+	is_complex: BOOLEAN is False
 
 feature {NONE} -- Basic operations
 

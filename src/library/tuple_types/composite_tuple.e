@@ -59,7 +59,7 @@ feature {COMPOSITE_TUPLE_FACTORY} -- Status setting
 
 invariant
 
-	never_edited: editing = false
+	never_edited: editing = False
 	first_last_time_relationships: first /= Void and last /= Void implies
 									first.date_time <= last.date_time
 	firstdate_gt_date: first /= Void and date_time /= Void implies

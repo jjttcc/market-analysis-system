@@ -34,7 +34,7 @@ feature {NONE}
 			if time = Void then -- stream.last_string was invalid
 				handle_input_error ("Time input value is invalid: ",
 					stream.last_string)
-				unrecoverable_error := true
+				unrecoverable_error := True
 			else
 				tuple.date_time.set_time (time)
 			end

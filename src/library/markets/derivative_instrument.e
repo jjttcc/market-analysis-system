@@ -55,7 +55,7 @@ feature -- Access
 
 feature -- Status report
 
-	has_open_interest: BOOLEAN is true
+	has_open_interest: BOOLEAN is True
 
 feature {NONE} -- Implementation
 

@@ -72,7 +72,7 @@ feature -- Status report
 			valid_for_stock: Result = valid_stock_processor (f)
 		end
 
-	has_open_interest: BOOLEAN is false
+	has_open_interest: BOOLEAN is False
 
 feature -- Basic operations
 
@@ -89,7 +89,7 @@ feature -- Basic operations
 		local
 			previous_date: DATE
 		do
-			Result := true
+			Result := True
 			from
 				sp.start
 				previous_date := sp.item.date
@@ -105,7 +105,7 @@ feature -- Basic operations
 				not Result or sp.after
 			loop
 				if previous_date >= sp.item.date then
-					Result := false
+					Result := False
 				else
 					check
 						prev_lt_current: previous_date < sp.item.date

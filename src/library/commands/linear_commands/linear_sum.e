@@ -1,7 +1,7 @@
 indexing
 	description: "Commands that sum n sequential elements"
 	note: "If target.count < n, all of target's elements will be summed and %
-		%target.exhausted will be true."
+		%target.exhausted will be True."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -69,7 +69,7 @@ feature -- Basic operations
 
 feature -- Status report
 
-	target_cursor_not_affected: BOOLEAN is false
+	target_cursor_not_affected: BOOLEAN is False
 			-- False
 
 feature {NONE}
@@ -106,7 +106,7 @@ feature {NONE}
 	start is
 			-- Should never be called.
 		do
-			check false end
+			check False end
 		end
 
 	low_count_action is
