@@ -96,7 +96,7 @@ feature -- Access
 			loop
 				if
 					l.item.duration >= trading_period_type.duration or
-					valid_irregular_period_type(l.item)
+					valid_irregular_period_type (l.item)
 				then
 					Result.force (l.item.name, i)
 					i := i + 1
@@ -158,6 +158,7 @@ feature -- Status report
 		do
 			if
 				t.name.is_equal (t.Monthly) or
+				t.name.is_equal (t.Quarterly) or
 				t.name.is_equal (t.Yearly)
 			then
 				Result := true
