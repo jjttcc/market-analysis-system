@@ -18,7 +18,7 @@ feature -- Access
 		once
 			Result := get ("TAL_APP_DIRECTORY")
 		ensure
-			set_correctly_if_env_var_is_set:
+			not_void_if_env_var_is_set:
 				Result = Void or Result.is_equal (get ("TAL_APP_DIRECTORY"))
 		end
 
@@ -44,10 +44,14 @@ feature -- Access
 
 	file_name_with_app_directory (fname: STRING): STRING is
 			-- A full path name constructed from `app_directory' and `fname'
+		require
+			not_void: fname /= Void
 		do
 			!!Result.make (0)
-			Result.append (app_directory)
-			Result.extend (Directory_separator)
+			if app_directory /= Void then
+				Result.append (app_directory)
+				Result.extend (Directory_separator)
+			end
 			Result.append (fname)
 		end
 
