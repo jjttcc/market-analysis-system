@@ -38,12 +38,13 @@ feature -- Initialization
 
 	make is
 		do
-			!CL_BASED_COMMAND_EDITING_INTERFACE!operator_maker.make
+			!CL_BASED_COMMAND_EDITING_INTERFACE!operator_maker.make (true)
 			!!help.make
 			-- !!!Satisfy invariant - editor is currently not used; it may
 			-- be used later - if not, might want to change the invariant or?
 			!!editor
 			!!function_editor.make
+			operator_maker.set_market_tuple_selector (function_editor)
 		ensure
 			editor_exists: editor /= Void
 			operator_maker_exists: operator_maker /= Void
