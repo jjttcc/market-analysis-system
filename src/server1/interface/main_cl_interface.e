@@ -648,7 +648,9 @@ feature {NONE} -- Implementation - utilities
 			Result := "%N" + ms.data_source_report + "%N%N" +
 			ms.app_directory_report + "%N%N" +
 			ms.working_directory_report + "%N%N" +
-			ms.email_report + "%N"
+			ms.email_report + "%N" +
+			ms.local_host_name_report + "%N" +
+			ms.ports_report + "%N"
 		end
 
 	make_lock (name: STRING): FILE_LOCK is
