@@ -5,17 +5,30 @@ root
 	MACL: make
 
 default
-	assertion (check)
-	assertion (require)
 	assertion (ensure)
-	assertion (loop)
-	assertion (invariant)
+	arguments ("-i /tmp/indicators 4001")
+	arguments ("4002 -i /tmp/indicators")
+	arguments ("4001 -i /tmp/indicators")
+	arguments ("-h localhost 4002 -i /tmp/bad")
+	arguments ("-h localhost 4002")
+	arguments ("-h localhost 4001")
+	arguments ("-h localhost 4003")
+	arguments ("-h localhost 3003")
+	arguments ("-h localhost 3002")
+	arguments ("-h localhost 3001")
+	arguments ("-h")
 	arguments ("-h foo 3001")
 	arguments (" ")
 	disabled_debug (yes)
+	disabled_debug ("kf")
+	debug ("osm")
 	disabled_debug ("persist")
 	disabled_debug ("regexp")
-	debug (no)
+	disabled_debug ("ri")
+	disabled_debug ("sc")
+	disabled_debug ("very verbose")
+	disabled_debug ("xosm")
+	disabled_debug ("xprocess")
 	line_generation (no)
 	profile (no)
 	trace (no)
@@ -30,75 +43,288 @@ default
 	multithreaded (no)
 
 
---	assertion (check)
---	assertion (require)
---	assertion (ensure)
---	assertion (loop)
---	assertion (invariant)
+--Note: The purpose of the "option assertion (no) ..." clauses to
+--eliminate assertion checking for all but the classes that need to
+--have postconditions on in order to suppress a bug (OS signal) that
+--occurs otherwise.  It appears that the gobo kernel cluster is the
+--"source" of the bug - that is, turning postconditions off for this
+--cluster causes the OS signal to occur during a long test run (
+--"macl -i indicators <portnum>".
 
 cluster
 	macl:		"$MAS/src/clients/macl"
 
 
 	root_cluster (macl):		"$/root"
+		option
+			assertion (no): macl
+		end
 
 	lib (macl):		"$/library"
+		option
+			assertion (no): connection
+		end
 
 	support (macl):		"$/support"
+		option
+			assertion (no): command_processor, macl_command_line
+		end
 
 	eiflib:		"$MAS/src/eiffel_library"
 
+
 	libarch (eiflib):		"$/architectural"
+		option
+			assertion (no): cleanup_services, command, exception_services,
+				factory, index_extractor, indexed, numeric_command,
+				result_command, terminable
+		end
 
 	libsupport (eiflib):		"$/support"
+		option
+			assertion (no): basic_file_lock, data_compression,
+				date_time_services, exception_status, file_lock,
+				general_utilities, generic_sorting, math_constants,
+				non_functioning_file_lock, pair, single, string_utilities,
+				timer, zlib, zlib_compression, zlib_decompression,
+				configuration_utilities, timing_services, file_reader,
+				command_line_utilities, file_name_expander,
+				date_format_specification
+		end
 
 	libserver (eiflib):		"$/server"
+		option
+			assertion (no): client_request_command, client_request_handler,
+				command_line, product_info, server, session
+		end
 
 	liberror (eiflib):		"$/error"
+		option
+			assertion (no): error_subscriber, error_publisher,
+				standard_error_reporter
+		end
 
 	mas_client_lib:		"$MAS/src/client_library"
 
 	mas_client_support (mas_client_lib):		"$/support"
+		option
+			assertion (no): client_connection
+		end
 
 	mas_server:		"$MAS/src/server1"
 
 	mas_server_util (mas_server):		"$/utility"
 
 	mas_server_protocols (mas_server):		"$/protocols"
+		option
+			assertion (no): network_protocol
+		end
 
 	ise:		"$ISE_EIFFEL/library"
 
 	all base (ise):		"$/base"
 		exclude
 			"table_eiffel3"; "desc"; "CVS"; 
+		option
+			assertion (no): any, arguments, array, basic_routines, bit_ref,
+				boolean, boolean_ref, character, character_ref, comparable,
+				console, declarator, directory, directory_name, double,
+				double_ref, excep_const, exceptions, file, file_name, function,
+				gc_info, hashable, integer_16, integer_16_ref, integer_64,
+				integer_64_ref, integer_8, integer_8_ref, integer,
+				integer_interval, integer_ref, io_medium, mem_const, mem_info,
+				memory, numeric, part_comparable, path_name, plain_text_file,
+				platform, pointer, pointer_ref, procedure, raw_file, real,
+				real_ref, routine, seq_string, special, std_files, storable,
+				stream, string, string_handler, to_special, tuple,
+				unix_file_info, unix_signals, wide_character,
+				wide_character_ref, active, bag, collection, container,
+				cursor_structure, indexable,
+				table, arrayed_list_cursor,
+				circular_cursor, compact_tree_cursor,
+				cursor, hash_table_cursor,
+				linked_list_cursor, linked_tree_cursor,
+				multar_list_cursor, recursive_tree_cursor,
+				two_way_tree_cursor, compact_cursor_tree,
+				cursor_tree, linked_cursor_tree,
+				recursive_cursor_tree,
+				two_way_cursor_tree,
+				arrayed_queue, arrayed_stack,
+				bounded_queue, bounded_stack,
+				dispenser, heap_priority_queue,
+				linked_priority_queue, linked_queue,
+				linked_stack, priority_queue, queue,
+				stack, cursor_tree_iterator, iterator,
+				linear_iterator, two_way_chain_iterator,
+				arrayed_circular, arrayed_list,
+				bi_linkable, cell, chain, circular,
+				dynamic_chain, dynamic_circular,
+				dynamic_list, fixed_list, linkable,
+				linked_circular, linked_list, list,
+				multi_array_list, part_sorted_list,
+				part_sorted_two_way_list, sequence,
+				sorted_list, sorted_two_way_list,
+				two_way_circular, two_way_list,
+				arrayed_set, binary_search_tree_set,
+				comparable_set, linear_subset,
+				linked_set, part_sorted_set, set,
+				subset_strategy, subset_strategy_generic,
+				subset_strategy_hashable,
+				subset_strategy_tree, subset,
+				traversable_subset, two_way_sorted_set,
+				comparable_struct, sorted_struct,
+				bounded, box, countable, finite, fixed,
+				infinite, resizable, unbounded, array2,
+				hash_table, array2, hash_table, bilinear,
+				hierarchical, linear, traversable,
+				arrayed_tree, binary_search_tree,
+				binary_tree, dynamic_tree, fixed_tree,
+				linked_tree, tree, two_way_tree,
+				ascii, bool_string, countable_sequence, double_math,
+				execution_environment, fibonacci, format_double,
+				format_integer, identified, identified_controller, internal,
+				math_const, operating_environment, primes, profiling_setting,
+				random, single_math
 		end
 
-	date (ise):		"$/time"
-
-	date_format (date):		"$/format"
-
-	date_tools (date_format):		"$/english"
-
 	all net (ise):		"$/net"
+		option
+			assertion (no): PACKET, SOCKET, SOCKET_ADDRESS,
+				SOCKET_ADDRESS, SOCKET_RESOURCES, STREAM_SOCKET,
+				NETWORK_SOCKET, NETWORK_SOCKET_ADDRESS,
+				NETWORK_STREAM_SOCKET
+		end
 
 	gobo:		"$GOBO/library"
 
 	all gobo_kernel (gobo):		"$/kernel"
 		exclude
 			"se"; "ve"; "hact"; 
+		option
+			assertion (no):
+			kl_boolean_routines, kl_imported_array_routines,
+			kl_imported_character_routines,
+			kl_imported_boolean_routines,
+			kl_imported_integer_routines,
+			kl_imported_string_routines, ks_comparable,
+			ks_hashable, ks_string, ki_directory,
+			ki_buffer, ki_binary_input_file,
+			ki_binary_output_file, ki_character_input_stream,
+			ki_character_buffer, ki_input_file, ki_file,
+			ki_character_output_stream, ki_file_system_entry,
+			ki_text_input_file, ki_input_stream,
+			ki_output_file, ki_output_stream,
+			ki_pathname, ki_text_input_stream,
+			ki_text_output_file, ki_text_output_stream,
+			kl_null_text_output_stream, kl_macos_output_file,
+			kl_pathname, kl_shared_file_system,
+			kl_shared_standard_files, kl_shared_streams,
+			kl_standard_files, kl_string_input_stream,
+			kl_string_output_stream, kl_unix_file_system,
+			kl_unix_output_file, kl_windows_file_system,
+			kl_windows_output_file, ki_shell_command,
+			ki_system_clock, kl_arguments, kl_part_comparable,
+			kl_exceptions, kl_imported_hashable_routines,
+			kl_shared_eiffel_compiler, kl_shared_arguments,
+			kl_shared_operating_system, kl_shared_exceptions,
+			kl_shared_execution_environment,
+			kl_shared_platform, kl_comparator,
+			kl_cell, kl_reverse_part_comparator,
+			kl_comparable_comparator,
+			kl_equality_tester, kl_linkable,
+			kl_part_comparator, kl_reverse_comparator,
+			kl_reverse_comparable_comparator,
+			uc_character, uc_imported_utf16_routines,
+			uc_ctype_lowercase, uc_ctype_uppercase,
+			uc_equality_tester, uc_imported_unicode_routines,
+			uc_imported_utf8_routines, uc_string_handler,
+			uc_unicode_constants, uc_unicode_factory,
+			uc_unicode_routines, uc_utf16_routines,
+			uc_utf8_routines, uc_utf8_string,
+			kl_array_routines, kl_character_routines, kl_fixed_array_routines,
+			kl_imported_fixed_array_routines, kl_imported_fixed_array_type,
+			kl_imported_fixed_array_type2, kl_imported_native_array_routines,
+			kl_imported_native_array_type, kl_imported_string_buffer_routines,
+			kl_integer_routines, kl_native_array_routines,
+			kl_string_buffer_routines, ki_file_system,
+--kl_string_routines,
+			kl_binary_input_file, kl_binary_output_file, kl_character_buffer,
+			kl_directory, kl_file, kl_file_system,
+			kl_imported_input_stream_routines,
+			kl_imported_output_stream_routines, kl_input_file,
+			kl_input_stream_routines, kl_macos_input_file, kl_output_file,
+			kl_output_stream_routines, kl_stderr_file, kl_stdin_file,
+			kl_stdout_file, kl_text_input_file, kl_text_output_file,
+			kl_unix_input_file, kl_windows_input_file, ki_platform,
+			kl_eiffel_compiler, kl_execution_environment,
+			kl_hashable_routines, kl_operating_system, kl_platform,
+			kl_shell_command, kl_system_clock, uc_string
 		end
 
 	regexp (gobo):		"$/regexp"
 
 	pcre (regexp):		"$/pcre"
+		option
+			assertion (no): rx_pcre_byte_code_constants, rx_pcre_compiler,
+				rx_pcre_error_constants, rx_pcre_escape_constants,
+				rx_pcre_matcher, rx_pcre_option_routines,
+				rx_pcre_regular_expression, rx_pcre_shared_character_sets
+		end
 
 	re_interface (regexp):		"$/interface"
+		option
+			assertion (no): rx_pattern_matcher, rx_regular_expression
+		end
 
 	re_support (regexp):		"$/support"
+		option
+			assertion (no): rx_byte_code, rx_case_mapping, rx_character_set
+		end
 
 	all gobo_utility (gobo):		"$/utility"
+		option
+			assertion (no): ut_command, ut_do_nothing_command,
+				ut_shell_command, ut_message, ut_cannot_write_to_file_error,
+				ut_cannot_read_file_error, ut_error, ut_unknown_flag_error,
+				ut_error_handler, ut_syntax_error, ut_separated_flag_error,
+				ut_undefined_environment_variable_error, ut_usage_message,
+				ut_version_number, ut_character_formatter, ut_array_formatter,
+				ut_boolean_formatter, ut_imported_formatters,
+				ut_integer_formatter, ut_string_formatter, ut_tristate,
+				ut_character_codes, ut_filename_handler
+		end
 
 	all gobo_structure (gobo):		"$/structure"
+		option
+			assertion (no): ds_bilinear, ds_bilinear_cursor, ds_container,
+				ds_cursor, ds_dynamic_cursor, ds_extendible, ds_indexable,
+				ds_indexed_cursor, ds_linear, ds_linear_cursor, ds_resizable,
+				ds_searchable, ds_sortable, ds_traversable, ds_dispenser,
+				ds_arrayed_stack, ds_linked_queue, ds_linked_stack, ds_queue,
+				ds_stack, ds_linked_list, ds_arrayed_list_cursor,
+				ds_arrayed_list, ds_linked_list_cursor, ds_bilinked_list,
+				ds_bilinked_list_cursor, ds_list, ds_list_cursor,
+				ds_nested_list, ds_nested_list_flattener, ds_hash_set,
+				ds_multiarrayed_hash_set, ds_arrayed_sparse_set,
+				ds_hash_set_cursor, ds_set, ds_arrayed_sparse_set_cursor,
+				ds_multiarrayed_hash_set_cursor, ds_multiarrayed_sparse_set,
+				ds_multiarrayed_sparse_set_cursor, ds_set_cursor,
+				ds_sparse_set, ds_sparse_set_cursor, ds_comparator,
+				ds_hash_topological_sorter, ds_array_bubble_sorter,
+				ds_array_quick_sorter, ds_array_shell_sorter, ds_array_sorter,
+				ds_bubble_sorter, ds_comparable_comparator,
+				ds_reverse_part_comparator, ds_indexable_sorter,
+				ds_part_comparator, ds_quick_sorter, ds_reverse_comparator,
+				ds_reverse_comparable_comparator, ds_topological_sorter,
+				ds_shell_sorter, ds_sorter, ds_bilinkable, ds_linkable,
+				ds_cell, ds_equality_tester, ds_pair, ds_hash_table,
+				ds_arrayed_sparse_table_cursor, ds_arrayed_sparse_table,
+				ds_multiarrayed_hash_table, ds_hash_table_cursor,
+				ds_multiarrayed_sparse_table_cursor,
+				ds_multiarrayed_hash_table_cursor,
+				ds_multiarrayed_sparse_table, ds_sparse_table_cursor,
+				ds_sparse_table, ds_table
+		end
 
 external
 
