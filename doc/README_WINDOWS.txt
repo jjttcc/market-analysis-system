@@ -1,17 +1,30 @@
 NOTES ABOUT THE WINDOWS RELEASE OF MAS VERSION 1.6.5
 
 
+Prerequisites for the Charting Application
+
+The Java Runtime Environment (JRE) needs to be installed on your system
+before the GUI client, the part of MAS that does charting, can be run.
+If you don't have the JRE on your system, you can download and install
+it (the latest version at the time of this release, 1.4.1) by pointing
+your web browser to: http://java.sun.com/j2se/1.4.1/download.html
+and clicking on the link for the Windows version of the JRE.  If you like,
+you can also view the site: http://java.sun.com/j2se/downloads.html to
+check if there is a later release available.  (Note: If you're a developer,
+The Java Development Kit (JDK) can be used in place of the JRE.)
+
+
 The MAS Desktop Icons
 
-By default, the setup program will place four icons on the desktop:
-"MAS Server (web)", "MAS Charts", "MAS Command Line", and "MAS Server
-(files)".  "MAS Server (web)" starts the server so that it retrieves its
-data from the yahoo finance site.  "MAS Charts" starts the GUI charting
-program, which gets its data from the server.  "MAS Command Line" starts
-a command-line interface to the server, which provides functionality
-not available from the charting program (such as the ability to create
-new indicators).  And "MAS Server (files)" starts the server so that it
-gets its data from files on your hard drive.
+If you installed MAS with the default setup, you should have four icons
+on your desktop: "MAS Server (web)", "MAS Charts", "MAS Command Line",
+and "MAS Server (files)".  "MAS Server (web)" starts the server so that
+it retrieves its data from the yahoo finance site.  "MAS Charts" starts
+the GUI charting program, which gets its data from the server.  "MAS
+Command Line" starts a command-line interface to the server, which
+provides functionality not available from the charting program (such as
+the ability to create new indicators).  And "MAS Server (files)" starts
+the server so that it gets its data from files on your hard drive.
 
 
 Viewing Charts with Data Obtained from Yahoo
