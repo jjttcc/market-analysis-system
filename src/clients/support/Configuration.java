@@ -12,7 +12,7 @@ import java.awt.*;
 public class Configuration implements NetworkProtocol
 {
 	// Graph styles
-	public final int Candle_graph = 1, Regular_graph = 2;
+	public final static int Candle_graph = 1, Regular_graph = 2;
 
 	public String session_settings() {
 		StringBuffer result = new StringBuffer();
