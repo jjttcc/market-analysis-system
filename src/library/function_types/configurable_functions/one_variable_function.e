@@ -47,9 +47,7 @@ feature -- Status report
 
 	processed: BOOLEAN is
 		do
-			Result :=
-						input = Void or --!!!Remove this line soon.
-			input.processed and then
+			Result := input.processed and then
 				(target.empty or not output.empty)
 		ensure then
 			processed_definition: Result = (input.processed and then
