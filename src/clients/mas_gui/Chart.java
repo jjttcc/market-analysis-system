@@ -535,10 +535,14 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	private void handle_invalid_period_type(String tradable) {
 		try {
 			_period_types = data_builder.trading_period_type_list(tradable);
-			current_period_type = initial_period_type(_period_types);
-			ma_menu_bar.reset_period_types(_period_types);
-			send_data_request(tradable);
-			requesting_data = Boolean.FALSE;
+			if (_period_types.size() > 0) {
+				current_period_type = initial_period_type(_period_types);
+				ma_menu_bar.reset_period_types(_period_types);
+				send_data_request(tradable);
+			} else {
+				new ErrorBox("Warning", "No valid period types for " +
+					tradable, this_chart);
+			}
 		} catch (IOException e) {
 			System.err.println("IO exception occurred: " + e + " - aborting");
 			e.printStackTrace();
