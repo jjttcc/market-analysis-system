@@ -11,6 +11,16 @@ class USER inherit
 			all
 		end
 
+	OPERATING_ENVIRONMENT
+		export {NONE}
+			all
+		end
+
+	PRINTING
+		export {NONE}
+			all
+		end
+
 creation
 
 	make
@@ -131,32 +141,46 @@ feature {NONE}
 		require
 			not_void: s /= Void
 		local
-			d: DIRECTORY
+			tmpdir: DIRECTORY
 			i: INTEGER
-			fname: STRING
+			fname, dirname: STRING
 		do
 			tmp_file_failed := false
+			!!dirname.make (4)
+			dirname.append_character (Directory_separator)
+			dirname.append ("tmp")
+			!!tmpdir.make (dirname)
+			if not tmpdir.exists then
+				!!tmpdir.make (".")
+			end
 			from
 				fname := clone (s)
 				fname.append_integer (s.hash_code)
-				!!d.make_open_read (".")
+				tmpdir.open_read
 				i := 1
 			until
-				not d.has_entry (fname) or i > 20
+				not tmpdir.has_entry (fname) or i > 20
 			loop
 				fname.append_integer (i)
 				i := i + 1
 			end
-			if d.has_entry (fname) then
+			if tmpdir.has_entry (fname) then
 				tmp_file_failed := true
 			else
 				!!Result.make_open_write (fname)
 			end
 		ensure
 			failed_or_writable: tmp_file_failed or else Result.is_open_write
+		rescue
+			tmp_file_failed := true
+			print_list (<<"Error: Failed to open temporary file: ",
+				tmpdir, Directory_separator, fname, ".%N">>)
 		end
 
 	tmp_file_failed: BOOLEAN
+
+	output_field_separator, output_record_separator,
+	output_date_field_separator: STRING is ""
 
 invariant
 
