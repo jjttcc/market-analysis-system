@@ -10,11 +10,6 @@ indexing
 class MCT_COMMAND_LINE inherit
 
 	COMMAND_LINE
-		rename
-			make as cl_make
-		export
-			{NONE} cl_make
-		end
 
 	GENERAL_UTILITIES
 		export
@@ -27,20 +22,6 @@ creation
 
 feature {NONE} -- Initialization
 
-	make is
-		do
-			cl_make
-			from
-				main_setup_procedures.start
-			until
-				main_setup_procedures.exhausted
-			loop
-				main_setup_procedures.item.call ([])
-				main_setup_procedures.forth
-			end
-			initialization_complete := True
-		end
-
 feature -- Access
 
 	usage: STRING is
@@ -51,7 +32,20 @@ feature -- Access
 
 feature -- Access -- settings
 
-feature {NONE} -- Implementation
+feature {NONE} -- Implementation - Hook routines
+
+	process_remaining_arguments is
+		do
+			from
+				main_setup_procedures.start
+			until
+				main_setup_procedures.exhausted
+			loop
+				main_setup_procedures.item.call ([])
+				main_setup_procedures.forth
+			end
+			initialization_complete := True
+		end
 
 feature {NONE} -- Implementation queries
 

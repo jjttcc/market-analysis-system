@@ -5,15 +5,11 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
-		%Released under the Eiffel Forum License; see file forum.txt"
+		%License to be determined"
 
 class MACL_COMMAND_LINE inherit
 
 	COMMAND_LINE
-		rename
-			make as cl_make
-		export
-			{NONE} cl_make
 		redefine
 			help_character, ambiguous_characters, debug_string
 		end
@@ -26,24 +22,6 @@ class MACL_COMMAND_LINE inherit
 creation
 
 	make
-
-feature {NONE} -- Initialization
-
-	make is
-		do
-			port_number := -1
-			host_name := ""
-			cl_make
-			from
-				main_setup_procedures.start
-			until
-				main_setup_procedures.exhausted
-			loop
-				main_setup_procedures.item.call ([])
-				main_setup_procedures.forth
-			end
-			initialization_complete := True
-		end
 
 feature -- Access
 
@@ -108,6 +86,21 @@ feature {NONE} -- Implementation - Hook routine implementations
 		once
 			a := <<'t'>>
 			Result := a.linear_representation
+		end
+
+	process_remaining_arguments is
+		do
+			port_number := -1
+			host_name := ""
+			from
+				main_setup_procedures.start
+			until
+				main_setup_procedures.exhausted
+			loop
+				main_setup_procedures.item.call ([])
+				main_setup_procedures.forth
+			end
+			initialization_complete := True
 		end
 
 feature {NONE} -- Implementation
