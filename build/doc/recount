@@ -1,0 +1,10 @@
+#!/bin/bash
+# Recount the build_release_algorithm numbering.
+
+awk '/^[0-9]/ {
+	++number
+	sub(/^[0-9]*/, number, $0)
+}
+{
+	print
+}' $*
