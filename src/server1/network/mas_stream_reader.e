@@ -3,7 +3,6 @@ indexing
 	description:
 		"Command executed by the polling server when data is available %
 		%for reading on the socket";
-
 	status: "See notice at end of class";
 	date: "$Date$";
 	revision: "$Revision$"
@@ -30,6 +29,8 @@ feature
 			pc_make (s)
 			active_medium.listen (5)
 			factory_builder := fb
+			!!cl_interface.make (factory_builder)
+			!!gui_interface.make (factory_builder)
 		ensure
 			set: active_medium = s and factory_builder = fb
 		end
@@ -46,31 +47,28 @@ feature
 	is_gui: BOOLEAN
 			-- Is the current client a GUI?
 
+	cl_interface: MAIN_CL_INTERFACE
+
+	gui_interface: MAIN_GUI_INTERFACE
+
 	execute (arg: ANY) is
 		local
 			s: STRING
 			finished: BOOLEAN
-			mci: MAIN_CL_INTERFACE
-			--mgi: MAIN_GUI_INTERFACE
 		do
 			initialize
---!!!The MAIN_GUI_INTERFACE will handle requests from the GUI client, using
---!!!the msgID of each message to determine the type of request.
-			--NEW: if is_gui then
-			--	!!mgi.make (factory_builder)
-				--mgi.set_output_field_separator ("%T")
-				--mgi.set_date_field_separator ("/")
-				--interface := mgi
-			--else
-				!!mci.make (io_socket, io_socket, factory_builder)
-				mci.set_output_field_separator ("%T")
-				mci.set_date_field_separator ("/")
-				interface := mci
-			--end
-			-- Set event coord?!!!
+			if is_gui then
+				gui_interface.set_io_medium (io_socket)
+				interface := gui_interface
+			else
+				cl_interface.set_input_device (io_socket)
+				cl_interface.set_output_device (io_socket)
+				interface := cl_interface
+			end
 			-- When threads are added, this call will probably change to
 			-- "interface.launch" to run in a separate thread.
 			interface.execute
+			io_socket.close
 		end
 
 	initialize is
