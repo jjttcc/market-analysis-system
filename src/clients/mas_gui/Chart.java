@@ -51,7 +51,7 @@ public class TA_Chart extends Frame
 			}
 		}
 		catch (IOException e) {
-			System.out.println("IO exception occurred, bye ...");
+			System.err.println("IO exception occurred, bye ...");
 			System.exit(-1);
 		}
 		initialize_GUI_components();
@@ -79,7 +79,7 @@ public class TA_Chart extends Frame
 			connection.send_market_data_request(market, current_period_type());
 		}
 		catch (IOException e2) {
-			System.out.println("IO exception occurred, bye ...");
+			System.err.println("IO exception occurred, bye ...");
 			System.exit(-1);
 		}
 		//Ensure that all graph's data sets are removed.  (May need to
@@ -205,7 +205,7 @@ class IndicatorListener implements java.awt.event.ActionListener {
 				market_selection.current_market(), current_period_type());
 		}
 		catch (IOException ex) {
-			System.out.println("IO exception occurred, bye ...");
+			System.err.println("IO exception occurred, bye ...");
 			System.exit(-1);
 		}
 		igraph.detachDataSets();

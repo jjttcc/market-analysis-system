@@ -94,11 +94,19 @@ class TA_Parser {
 			xy_data[i+1] = ((Float) closes.elementAt(j)).floatValue(); // y
 		}
 		try {
-			processed_data = new DataSet(xy_data, xy_data.length / 2);
+			int length = xy_data.length / 2;
+			if (length > 0)
+			{
+				processed_data = new DataSet(xy_data, xy_data.length / 2);
+			}
+			else
+			{
+				processed_data = new DataSet();
+			}
 		}
 		catch (Exception e) {
-			System.out.println("DataSet constructor failed!!!!!!!!");
-			// !!!What to do with e?
+			System.err.println("DataSet constructor failed - " + e);
+			System.exit(-1);
 		}
 	}
 

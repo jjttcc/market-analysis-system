@@ -1,4 +1,5 @@
 import java.util.*;
+import java.io.*;
 
 /** Global configuration settings */
 public class Configuration implements NetworkProtocol
@@ -43,18 +44,83 @@ public class Configuration implements NetworkProtocol
 	{
 		start_date_settings = new Vector();
 		end_date_settings = new Vector();
+		FileReader file = null;
+		try
+		{
+			file = new FileReader(configuration_file);
+		}
+		catch (Exception e)
+		{
+		}
+		load_settings(file);
+	}
 
-		//!!!For now, just hard code (daily) settings.
-		DateSetting ds = new DateSetting("1999/03/01", daily_period_type);
-		start_date_settings.addElement(ds);
-		ds = new DateSetting("now", daily_period_type);
-		end_date_settings.addElement(ds);
+	private void load_settings(FileReader f)
+	{
+		String s, date, pertype;
+		if (f == null)
+		{
+			//Default settings
+			DateSetting ds = new DateSetting("1998/05/01", daily_period_type);
+			start_date_settings.addElement(ds);
+			ds = new DateSetting("now", daily_period_type);
+			end_date_settings.addElement(ds);
+		}
+		else
+		{
+			StringBuffer sb;
+			char[] buffer = new char[2048];
+			try
+			{
+				f.read(buffer);
+			}
+			catch (Exception e)
+			{
+				System.err.println("Configuration.load_settings: " +
+					"failed on fatal read error of configuration file\n" +
+					"(" + e + ")");
+				System.exit(-1);
+			}
+			sb = new StringBuffer(new String(buffer));
+			StringTokenizer t = new StringTokenizer(sb.toString());
+			while (t.hasMoreTokens())
+			{
+				s = t.nextToken();
+				if (s.equals(Start_date))
+				{
+					pertype = t.nextToken();
+					date = t.nextToken();
+					if (date == null || pertype == null)
+					{
+						System.err.println("Missing period type or date" +
+							"in configuration file " + configuration_file);
+						System.exit(-1);
+					}
+					DateSetting ds = new DateSetting(date, pertype);
+					start_date_settings.addElement(ds);
+				}
+				else if (s.equals(End_date))
+				{
+					pertype = t.nextToken();
+					date = t.nextToken();
+					if (date == null || pertype == null)
+					{
+						System.err.println("Missing period type or date" +
+							"in configuration file " + configuration_file);
+						System.exit(-1);
+					}
+					DateSetting ds = new DateSetting(date, pertype);
+					end_date_settings.addElement(ds);
+				}
+			}
+		}
 	}
 
 	private static final Configuration _instance = new Configuration();
 
 	private Vector start_date_settings;
 	private Vector end_date_settings;
+	private final String configuration_file = ".ta_clientrc";
 
 	private class DateSetting
 	{
