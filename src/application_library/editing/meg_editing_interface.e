@@ -207,10 +207,12 @@ feature {NONE} -- Implementation
 			s: STRING
 		do
 			Result := deep_clone (function_choice (msg))
-			s := string_selection (concatenation (
-				<<"Edit ", Result.generator, "? (y/n) ">>))
-			if s @ 1 = 'y' or s @ 1 = 'Y' then
-				function_editor.initialize_function (Result)
+			if editable (Result) then
+				s := string_selection (concatenation (
+					<<"Edit ", Result.generator, "? (y/n) ">>))
+				if s @ 1 = 'y' or s @ 1 = 'Y' then
+					function_editor.initialize_function (Result)
+				end
 			end
 		end
 
@@ -326,6 +328,17 @@ feature -- Hook methods
 		end
 
 feature {NONE}
+
+	editable (f: MARKET_FUNCTION): BOOLEAN is
+			-- Is `f' editable in this context?
+		local
+			line: MARKET_FUNCTION_LINE
+		do
+			-- Currently it only makes sense to edit MARKET_FUNCTION_LINEs
+			-- in the context of market event generator creation/editing.
+			line ?= f
+			Result := line /= Void
+		end
 
 	help: HELP
 
