@@ -25,13 +25,19 @@ check_settings() {
 }
 
 host=$(hostname)
+args=
 main=MA_Client
-while [ $# -gt 0 ]
-do
+while [ $# -gt 0 ]; do
 	case $1 in
 		cl) main=CL_Client; shift ;;
 		n*) no_cd=true; shift ;;
 		-h) shift; host=$1; shift ;;
+		-s)
+		while [ $# -gt 0 ]; do
+			args="$args $1"
+			shift
+		done
+		;;
 		-*) usage; exit 0 ;;
 		*) port_number=$1; shift ;;
 	esac
@@ -48,4 +54,4 @@ if [ "$no_cd" = true ]; then
 else
 	cd $classdir
 fi
-java $main $host $port_number
+java $main $host $port_number $args
