@@ -25,6 +25,19 @@ release available.  (Note: If you're a developer, The Java Development
 Kit (JDK) can be used in place of the JRE.)
 
 
+Configuring the Data Source
+
+MAS is currently able to obtain its data from either files, the web,
+or a database (using an ODBC connection), although obtaining data from
+a database is currently not officially supported.  To change the
+configuration of the data source: from the "MAS Control Panel", click
+on the "Edit" menu, then click on "Server startup configuration".
+Then select one of the options that appears in the resulting selection
+list by double-clicking on it.  The next time you click on "Start a
+MAS session", the data for that session will be obtained from the source
+you just selected.
+
+
 Further Documentation
 
 Under the directory in which you installed MAS, in the doc directory, you
