@@ -18,7 +18,9 @@ public class DataSetBuilder implements NetworkProtocol {
 		assert conn != null && opts != null;
 		connection_ = conn;
 		options = opts;
-		initialize();
+		try {
+			initialize();
+		} catch (Exception e) {}
 	}
 
 	public DataSetBuilder(DataSetBuilder dsb) {
@@ -170,6 +172,10 @@ public class DataSetBuilder implements NetworkProtocol {
 		return connection_.last_received_message_ID();
 	}
 
+	public boolean login_failed() {
+		return login_failed_;
+	}
+
 // Implementation
 
 	private MarketDrawer new_main_drawer() {
@@ -218,13 +224,15 @@ public class DataSetBuilder implements NetworkProtocol {
 	// Login to the server and initialize fields.
 	// Precondition: connection_ != null && ! connection_.logged_in()
 	// Postcondition: connection_.logged_in()
-	private void initialize() {
+	private void initialize() throws Exception {
 		tradables = options.symbols();
+		login_failed_ = true;
 		try {
 			connection_.login();
 		} catch (Exception e) {
 			System.err.println(e);
 			Configuration.terminate(1);
+			throw e;
 		}
 		_open_interest = false;
 		initialize_fieldspecs();
@@ -242,6 +250,7 @@ public class DataSetBuilder implements NetworkProtocol {
 		data_parser.set_volume_drawer(volume_drawer);
 		open_interest_drawer = new LineDrawer(main_drawer);
 		data_parser.set_open_interest_drawer(open_interest_drawer);
+		login_failed_ = false;
 	}
 
 	// Use `data' to determine whether there is an open-interest field
@@ -300,4 +309,5 @@ public class DataSetBuilder implements NetworkProtocol {
 	private boolean _open_interest;
 	// User-specified options
 	private StartupOptions options;
+	private boolean login_failed_;
 }
