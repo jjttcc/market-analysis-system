@@ -115,13 +115,15 @@ feature {NONE} -- Implementation of hook methods
 				msg := concatenation (<<"Select action:",
 					"%N     Create a new indicator (c) %
 					%Remove an indicator (r) %N%
-					%     Edit indicators (e) %
+					%     View an indicator (v) %
+					%Edit indicators (e) %
 					%Previous (-) ", eom>>)
 			else
 				msg := concatenation (<<"Select action:",
 					"%N     Create a new indicator (c) %
 					%Remove an indicator (r) %N%
-					%     Edit indicators (e) %
+					%     View an indicator (v) %
+					%Edit indicators (e) %
 					%Save changes (s) %N%
 					%     Previous - abort changes (-) ", eom>>)
 			end
@@ -137,6 +139,8 @@ feature {NONE} -- Implementation of hook methods
 					Result := Create_new_value
 				when 'r', 'R' then
 					Result := Remove_value
+				when 'v', 'V' then
+					Result := View_value
 				when 'e', 'E' then
 					Result := Edit_value
 				when 's', 'S' then
