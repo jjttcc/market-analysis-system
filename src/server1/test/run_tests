@@ -40,6 +40,11 @@ set_up()
 	indfile=./indicators_persist
 	successes=0
 	test_count=0
+	if [ ! -z "$MAS" ]; then
+		Basedir=$MAS/../projects/current
+	else
+		Basedir=..
+	fi
 	unset MAS_DIRECTORY
 	if [ ! -d bin ]; then
 		echo "Where's the bin directory?"
@@ -57,15 +62,16 @@ set_up()
 		echo "Script compare_numbers is not in bin directory - exiting ..."
 		abort
 	fi
-	if [ -d ../EIFGEN/F_code -a -x ../EIFGEN/F_code/mas ]; then
-		exec=../EIFGEN/F_code/mas
-	elif [ -d ../EIFGEN/W_code -a -x ../EIFGEN/W_code/mas ]; then
-		exec=../EIFGEN/W_code/mas
-		ln -f -s ../EIFGEN/W_code/mas.melted .
+	if [ -d $Basedir/EIFGEN/F_code -a -x $Basedir/EIFGEN/F_code/mas ]; then
+		exec=$Basedir/EIFGEN/F_code/mas
+	elif [ -d $Basedir/EIFGEN/W_code -a -x $Basedir/EIFGEN/W_code/mas ]; then
+		exec=$Basedir/EIFGEN/W_code/mas
+		ln -f -s $Basedir/EIFGEN/W_code/mas.melted .
 	elif [ -d ../../../bin -a -x ../../../bin/mas ]; then
 		exec=../../../bin/mas
 	else
-		echo "Cannot find executable in ../EIFGEN/F_code or ../EIFGEN/W_code."
+		echo "Cannot find executable in $Basedir/EIFGEN/F_code or " \
+			"$Basedir/EIFGEN/W_code."
 		echo "exiting ..."
 		abort
 	fi
