@@ -129,12 +129,12 @@ feature -- Element change
 				end
 				if block_found then
 					target.open_write
-					tokens.do_all (agent write_line)
+					tokens.do_if (agent write_line, agent not_last)
 					target.close
 				end
 			else
 				mark_as_default_failed := True
-				exc.set_verbose_off
+				exc.set_verbose_reporting_off
 				mark_as_default_failure_reason := exc.error_information (
 					Write_error, False)
 			end
@@ -191,14 +191,19 @@ feature {NONE} -- Implementation
 	write_line (s: STRING) is
 			-- Write `s' appended with '%N' to `target'.
 		do
-			if not tokens.islast then
-				if is_end_of_block (s) then
-					-- Don't output the extra `line_field_separator'.
-					target.put_string (End_tag + "%N")
-				else
-					target.put_string (s + "%N")
-				end
+			if is_end_of_block (s) then
+				-- Don't output the extra `line_field_separator'.
+				target.put_string (End_tag + "%N")
+			else
+				target.put_string (s + "%N")
 			end
+		end
+
+	not_last (s: STRING): BOOLEAN is
+		do
+			Result := not tokens.islast
+		ensure
+			not_last: Result = not tokens.islast
 		end
 
 	is_beginning_of_block (s: STRING): BOOLEAN is
