@@ -15,7 +15,7 @@ class LINEAR_SUM inherit
 			index_offset as internal_index, make as nrlc_make_unused
 		redefine
 			execute, target_cursor_not_affected, exhausted, action,
-			forth, invariant_value, start, index
+			forth, invariant_value, start, index, initial_index_offset
 		end
 
 creation
@@ -121,6 +121,11 @@ feature {NONE}
 				action
 				forth
 			end
+		end
+
+	initial_index_offset: INTEGER is
+		do
+			Result := n
 		end
 
 invariant
