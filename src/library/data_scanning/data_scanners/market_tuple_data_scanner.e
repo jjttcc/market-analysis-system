@@ -39,6 +39,7 @@ feature
 		ensure
 			set: input = in and tuple_maker = tm and
 				value_setters = vs and product = prod
+			non_strict: strict_error_checking = false
 		end
 
 feature -- Access
@@ -143,6 +144,9 @@ feature {NONE} -- Implementation
 				t.fix_price_relationships
 				error_list.extend (s)
 				error_in_current_tuple := true
+				if strict_error_checking then
+					discard_current_tuple := true
+				end
 			end
 		end
 
