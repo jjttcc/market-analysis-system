@@ -60,6 +60,7 @@ feature -- Access
 	Williams_n: INTEGER is 7
 	RSI_n: INTEGER is 7
 	Wilder_MA_n: INTEGER is 5
+	WMA_n: INTEGER is 5
 
 feature -- Basic operations
 
@@ -92,6 +93,7 @@ feature -- Basic operations
 											"Slow Stochastic %%D"))
 			l.extend (rsi (f, RSI_n, "Relative Strength Index"))
 			l.extend (wilder_ma (f, Wilder_MA_n, "Wilder Moving Average"))
+			l.extend (wma (f, WMA_n, "Weighted Moving Average"))
 			l.extend (market_data (f, "Market Data"))
 			l.extend (market_function_line (f, "Line"))
 			product := l
@@ -219,6 +221,42 @@ feature {NONE} -- Hard-coded market function building procedures
 			create firstop.make (sum, ncmd)
 			create Result.make (f, plus, firstop, n)
 			Result.set_operators (plus, prevcmd, firstop)
+			Result.set_name (name)
+		end
+
+	wma (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
+				N_RECORD_ONE_VARIABLE_FUNCTION is
+		local
+			plus: ADDITION
+			leftmult, rightmult: MULTIPLICATION
+			outerdiv, innerdiv: DIVISION
+			ncmd: N_VALUE_COMMAND
+			sum: LINEAR_SUM
+			close: CLOSING_PRICE
+			minus_n: MINUS_N_COMMAND
+			k: N_BASED_UNARY_OPERATOR
+			one, two: CONSTANT
+			ix: INDEX_EXTRACTOR
+		do
+			create one.make (1); create two.make (2)
+			create ncmd.make (n)
+			create close
+			create ix.make (Void)
+			create leftmult.make (close, ix)
+			create sum.make (f.output, leftmult, n)
+			ix.set_indexable (sum)
+			create minus_n.make (f.output, sum, n)
+			-- minus_n's offset needs to be adjusted to 1 less than n
+			-- because the cursor needs to move back 4 (n-1) periods in
+			-- order to sum the last 5 periods (relative to the
+			-- current period - i.e., target.item).
+			minus_n.set_n_adjustment (-1)
+			create plus.make (ncmd, one)
+			create rightmult.make (ncmd, plus)
+			create innerdiv.make (rightmult, two)
+			create k.make (innerdiv, n)
+			create outerdiv.make (minus_n, k)
+			create Result.make (f, outerdiv, n)
 			Result.set_name (name)
 		end
 
