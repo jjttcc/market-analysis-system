@@ -117,10 +117,11 @@ feature {NONE} -- Hook routines
 			then
 				create d.make (env.app_directory)
 				if not d.exists then
-					config_error_description := concatenation (<<
-						env_vars.application_directory_name, " setting ",
-						"specifies a directory that does not exist or that ",
-						"is not reachable from the current directory">>)
+					config_error_description := 
+						env_vars.application_directory_name + " setting " +
+						"specifies a directory that does not exist or that%N" +
+						"is not reachable from the current directory:%N" +
+						env.app_directory + "%N"
 					Result := True
 				end
 			end
