@@ -22,8 +22,8 @@ feature {NONE} -- Implementation
 			-- date, open, high, low, close.  Be sure to print the
 			-- field_separator before the first 'other' field.
 		do
-			print (field_separator)
-			print (t.volume)
+			output_medium.put_string (field_separator)
+			output_medium.put_string (t.volume.out)
 		end
 
 end -- VOLUME_TUPLE_PRINTER

@@ -14,8 +14,8 @@ creation
 
 feature -- Initialization
 
-	make (start_date, end_date: DATE;
-			field_sep, date_field_sep, record_sep: STRING) is
+	make (start_date, end_date: DATE; field_sep, date_field_sep,
+			record_sep: STRING) is
 		require
 			not_void: field_sep /= Void and date_field_sep /= Void and
 				record_sep /= Void
@@ -25,11 +25,13 @@ feature -- Initialization
 			field_separator := field_sep
 			date_field_separator := date_field_sep
 			record_separator := record_sep
+			output_medium := io.default_output
 		ensure
 			fields_set: 
 				print_start_date = start_date and print_end_date = end_date and
 				field_separator = field_sep and date_field_separator =
-				date_field_sep and record_separator = record_sep
+				date_field_sep and record_separator = record_sep and
+				output_medium = io.default_output
 		end
 
 feature -- Access
@@ -43,10 +45,22 @@ feature -- Access
 	date_field_separator: STRING
 			-- Field separator used for output between date fields
 
+feature -- Status setting
+
+	set_output_medium (arg: IO_MEDIUM) is
+			-- Set output_medium to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			output_medium := arg
+		ensure
+			output_medium_set: output_medium = arg and output_medium /= Void
+		end
+
 feature -- Basic operations
 
 	execute (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
-			-- Print each tuple in `l'.
+			-- Output each tuple in `l' to `output_medium'.
 		local
 			first, last, i: INTEGER
 		do
@@ -59,7 +73,7 @@ feature -- Basic operations
 					i = last + 1
 				loop
 					print_fields (l @ i)
-					print (record_separator)
+					output_medium.put_string (record_separator)
 					i := i + 1
 				end
 			end
@@ -74,8 +88,8 @@ feature {NONE} -- Implementation
 	print_fields (t: MARKET_TUPLE) is
 		do
 			print_date (t.end_date, 'y', 'm', 'd')
-			print (field_separator)
-			print (t.value)
+			output_medium.put_string (field_separator)
+			output_medium.put_string (t.value.out)
 		end
 
 	print_date (date: DATE; f1, f2, f3: CHARACTER) is
@@ -118,11 +132,11 @@ feature {NONE} -- Implementation
 				check f3 = 'd' end
 				i3 := date.day
 			end
-			print (fmtr.formatted (i1))
-			print (date_field_separator)
-			print (fmtr.formatted (i2))
-			print (date_field_separator)
-			print (fmtr.formatted (i3))
+			output_medium.put_string (fmtr.formatted (i1))
+			output_medium.put_string (date_field_separator)
+			output_medium.put_string (fmtr.formatted (i2))
+			output_medium.put_string (date_field_separator)
+			output_medium.put_string (fmtr.formatted (i3))
 		end
 
 	first_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER is
@@ -164,5 +178,8 @@ feature {NONE} -- Implementation
 
 	print_start_date, print_end_date: DATE
 			-- Start and end date to use for printing, if not void
+
+	output_medium: IO_MEDIUM
+			-- Medium that will be used for output
 
 end -- MARKET_TUPLE_PRINTER

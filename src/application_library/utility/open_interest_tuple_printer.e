@@ -20,8 +20,8 @@ feature {NONE} -- Implementation
 	print_other_fields (t: OPEN_INTEREST_TUPLE) is
 		do
 			precursor (t)
-			print (field_separator)
-			print (t.open_interest)
+			output_medium.put_string (field_separator)
+			output_medium.put_string (t.open_interest.out)
 		end
 
 end -- OPEN_INTEREST_TUPLE_PRINTER

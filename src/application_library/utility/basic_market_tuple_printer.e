@@ -20,16 +20,16 @@ feature {NONE} -- Implementation
 	print_fields (t: BASIC_MARKET_TUPLE) is
 		do
 			print_date (t.end_date, 'y', 'm', 'd')
-			print (field_separator)
+			output_medium.put_string (field_separator)
 			if t.open_available then
-				print (t.open.value)
-				print (field_separator)
+				output_medium.put_string (t.open.value.out)
+				output_medium.put_string (field_separator)
 			end
-			print (t.high.value)
-			print (field_separator)
-			print (t.low.value)
-			print (field_separator)
-			print (t.close.value)
+			output_medium.put_string (t.high.value.out)
+			output_medium.put_string (field_separator)
+			output_medium.put_string (t.low.value.out)
+			output_medium.put_string (field_separator)
+			output_medium.put_string (t.close.value.out)
 			print_other_fields (t)
 		end
 
@@ -39,7 +39,7 @@ feature {NONE} -- Implementation
 			-- field_separator before the first 'other' field, and to
 			-- not print the field_separator after the last field.
 		do
-			print (field_separator)
+			output_medium.put_string (field_separator)
 		end
 
 end -- BASIC_MARKET_TUPLE_PRINTER
