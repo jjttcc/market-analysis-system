@@ -6,7 +6,13 @@ indexing
 
 class MAS_FILE_READER inherit
 
+	GENERAL_UTILITIES
+		export {NONE}
+			all
+		end
+
 creation
+
 	make
 
 feature
@@ -18,10 +24,7 @@ feature
 			create pf.make (file_name)
 		end
 
-feature
-
-	exhausted: BOOLEAN
-			-- Has structure been completely explored?
+feature -- Access
 
 	item: STRING
 			-- Current tokenized field
@@ -29,15 +32,34 @@ feature
 	contents: STRING is
 			-- Contents of the entire file
 		do
+			error := false
 			if file_contents = Void then
 				if pf.exists then
 					pf.open_read
 					pf.read_stream (pf.count)
-					file_contents := clone (pf.last_string)
+					file_contents := pf.last_string
+				else
+					error_string := concatenation (<<"File ", pf.name,
+						" does not exist.">>)
+					error := true
 				end
 			end
-			Result := clone (file_contents)
+			Result := file_contents
+		ensure
+			void_if_error: error implies Result = Void
 		end
+
+	error_string: STRING
+			-- Description of last error
+
+feature -- Status report
+
+	error: BOOLEAN
+
+	exhausted: BOOLEAN
+			-- Has structure been completely explored?
+
+feature -- Cursor movement
 
 	forth is
 			-- Move to next field; if no next field,
@@ -54,13 +76,17 @@ feature
 			item_void_if_exhausted: exhausted implies item = Void
 		end
 
+feature -- Basic operations
+
 	tokenize (field_separator: STRING) is
 			-- Tokenize based on field_separator.
 		do
-			create su.make (contents)
-			tokens := su.tokens (field_separator)
-			tokens.start
-			item := tokens.item
+			if contents /= Void then
+				create su.make (contents)
+				tokens := su.tokens (field_separator)
+				tokens.start
+				item := tokens.item
+			end
 		end
 
 feature {NONE}
@@ -69,7 +95,7 @@ feature {NONE}
 
 	su: STRING_UTILITIES
 
-	tokens: LIST[STRING]
+	tokens: LIST [STRING]
 
 	file_contents: STRING
 
