@@ -117,7 +117,9 @@ feature {NONE}
 						operator.value)
 			output.extend (t)
 		ensure then
-			output.count = old output.count + 1
+			one_more_in_output: output.count = old output.count + 1
+			date_time_correspondence:
+				output.last.date_time.is_equal (target.item.date_time)
 		end
 
 	do_process is
@@ -146,10 +148,7 @@ feature {FACTORY} -- Status setting
 				input.set_innermost_input (in)
 			else
 				set_input (in)
-				if operator /= Void then
-					-- operator will set its target to new input.output.
-					operator.initialize (Current)
-				end
+				initialize_operators
 			end
 			output.wipe_out
 		end
@@ -180,6 +179,16 @@ feature {NONE} -- Implementation
 	make_output is
 		do
 			create output.make (target.count)
+		end
+
+	initialize_operators is
+			-- Initialize all operators that are not Void - default:
+			-- initialize `operator' if it's not Void.
+		do
+			if operator /= Void then
+				-- operator will set its target to new input.output.
+				operator.initialize (Current)
+			end
 		end
 
 invariant
