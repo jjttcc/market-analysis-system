@@ -9,7 +9,7 @@ deferred class N_BASED_CALCULATION inherit
 
 	N_RECORD_COMMAND
 		redefine
-			set_n
+			set_n, initialize
 		end
 
 feature {FACTORY} -- Initialization
@@ -22,6 +22,13 @@ feature {FACTORY} -- Initialization
 			value := calculate
 		ensure then
 			value = calculate
+		end
+
+	initialize (arg: N_RECORD_STRUCTURE) is
+		do
+			set_n (arg.n)
+		ensure then
+			new_n: n = arg.n
 		end
 
 feature -- Status report
