@@ -241,9 +241,9 @@ abstract public class BasicDrawer extends Drawer {
 	// is from 8 to 37.
 	void draw_reference_values(Graphics g, Rectangle main_bounds,
 			Rectangle ref_bounds) {
-		long start;
-		long step = 0;
-		long y;
+		double start;
+		double step = 0;
+		double y;
 		Vector y_values = new Vector();	// Double
 		String[] y_strings;
 		Double d;
@@ -363,44 +363,48 @@ abstract public class BasicDrawer extends Drawer {
 	static protected RefSpec[] refvalue_specs;
 
 	static {
-		refvalue_specs = new RefSpec[28];
-		refvalue_specs[0] = new RefSpec(0, 15, 1);
-		refvalue_specs[1] = new RefSpec(15, 30, 5);
-		refvalue_specs[2] = new RefSpec(30, 150, 10);
-		refvalue_specs[3] = new RefSpec(150, 300, 50);
-		refvalue_specs[4] = new RefSpec(300, 1500, 100);
-		refvalue_specs[5] = new RefSpec(1500, 3000, 500);
-		refvalue_specs[6] = new RefSpec(3000, 15000, 1000);
-		refvalue_specs[7] = new RefSpec(15000, 30000, 5000);
-		refvalue_specs[8] = new RefSpec(30000, 150000, 10000);
-		refvalue_specs[9] = new RefSpec(150000, 300000, 50000);
-		refvalue_specs[10] = new RefSpec(300000, 1500000, 100000);
-		refvalue_specs[11] = new RefSpec(1500000, 3000000, 500000);
-		refvalue_specs[12] = new RefSpec(3000000, 15000000, 1000000);
-		refvalue_specs[13] = new RefSpec(15000000, 30000000, 5000000);
-		refvalue_specs[14] = new RefSpec(30000000, 150000000, 10000000);
-		refvalue_specs[15] = new RefSpec(150000000, 300000000, 50000000);
-		refvalue_specs[16] = new RefSpec(300000000, 1500000000, 100000000);
-		refvalue_specs[17] = new RefSpec(1500000000, 3000000000L, 500000000);
-		refvalue_specs[18] = new RefSpec(3000000000L, 15000000000L,
+		refvalue_specs = new RefSpec[32]; int i = 0;
+		refvalue_specs[i++] = new RefSpec(0, 0.15, .01);
+		refvalue_specs[i++] = new RefSpec(0.15, 0.3, .05);
+		refvalue_specs[i++] = new RefSpec(0.3, 1.5, .1);
+		refvalue_specs[i++] = new RefSpec(1.5, 3, .5);
+		refvalue_specs[i++] = new RefSpec(3, 15, 1);
+		refvalue_specs[i++] = new RefSpec(15, 30, 5);
+		refvalue_specs[i++] = new RefSpec(30, 150, 10);
+		refvalue_specs[i++] = new RefSpec(150, 300, 50);
+		refvalue_specs[i++] = new RefSpec(300, 1500, 100);
+		refvalue_specs[i++] = new RefSpec(1500, 3000, 500);
+		refvalue_specs[i++] = new RefSpec(3000, 15000, 1000);
+		refvalue_specs[i++] = new RefSpec(15000, 30000, 5000);
+		refvalue_specs[i++] = new RefSpec(30000, 150000, 10000);
+		refvalue_specs[i++] = new RefSpec(150000, 300000, 50000);
+		refvalue_specs[i++] = new RefSpec(300000, 1500000, 100000);
+		refvalue_specs[i++] = new RefSpec(1500000, 3000000, 500000);
+		refvalue_specs[i++] = new RefSpec(3000000, 15000000, 1000000);
+		refvalue_specs[i++] = new RefSpec(15000000, 30000000, 5000000);
+		refvalue_specs[i++] = new RefSpec(30000000, 150000000, 10000000);
+		refvalue_specs[i++] = new RefSpec(150000000, 300000000, 50000000);
+		refvalue_specs[i++] = new RefSpec(300000000, 1500000000, 100000000);
+		refvalue_specs[i++] = new RefSpec(1500000000, 3000000000L, 500000000);
+		refvalue_specs[i++] = new RefSpec(3000000000L, 15000000000L,
 			1000000000L);
-		refvalue_specs[19] = new RefSpec(15000000000L, 30000000000L,
+		refvalue_specs[i++] = new RefSpec(15000000000L, 30000000000L,
 			5000000000L);
-		refvalue_specs[20] = new RefSpec(30000000000L, 150000000000L,
+		refvalue_specs[i++] = new RefSpec(30000000000L, 150000000000L,
 			10000000000L);
-		refvalue_specs[21] = new RefSpec(150000000000L, 300000000000L,
+		refvalue_specs[i++] = new RefSpec(150000000000L, 300000000000L,
 			50000000000L);
-		refvalue_specs[22] = new RefSpec(300000000000L, 1500000000000L,
+		refvalue_specs[i++] = new RefSpec(300000000000L, 1500000000000L,
 			100000000000L);
-		refvalue_specs[23] = new RefSpec(1500000000000L, 3000000000000L,
+		refvalue_specs[i++] = new RefSpec(1500000000000L, 3000000000000L,
 			500000000000L);
-		refvalue_specs[24] = new RefSpec(3000000000000L, 15000000000000L,
+		refvalue_specs[i++] = new RefSpec(3000000000000L, 15000000000000L,
 			1000000000000L);
-		refvalue_specs[25] = new RefSpec(15000000000000L, 30000000000000L,
+		refvalue_specs[i++] = new RefSpec(15000000000000L, 30000000000000L,
 			5000000000000L);
-		refvalue_specs[26] = new RefSpec(30000000000000L, 150000000000000L,
+		refvalue_specs[i++] = new RefSpec(30000000000000L, 150000000000000L,
 			10000000000000L);
-		refvalue_specs[27] = new RefSpec(150000000000000L,
+		refvalue_specs[i++] = new RefSpec(150000000000000L,
 			9000000000000000000L, 50000000000000L);
 	}
 
@@ -419,21 +423,21 @@ abstract public class BasicDrawer extends Drawer {
 }
 
 class RefSpec {
-	RefSpec(long min, long max, long v) {
+	RefSpec(double min, double max, double v) {
 		_minimum = min;
 		_maximum = max;
 		_value = v;
 	}
 
-	long minimum() { return _minimum; }
+	double minimum() { return _minimum; }
 
-	long maximum() { return _maximum; }
+	double maximum() { return _maximum; }
 
-	long step_value() { return _value; }
+	double step_value() { return _value; }
 
-	private long _minimum;
+	private double _minimum;
 
-	private long _maximum;
+	private double _maximum;
 
-	private long _value;
+	private double _value;
 }
