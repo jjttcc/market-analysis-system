@@ -58,7 +58,7 @@ feature {TEST_FUNCTION_FACTORY} -- Administration
 		do
 			operator := op
 		ensure
-			operator = op
+			op_set: operator = op and operator /= Void
 		end
 
 	set_name (n: STRING) is
@@ -68,12 +68,12 @@ feature {TEST_FUNCTION_FACTORY} -- Administration
 		do
 			name := n
 		ensure
-			is_set: name = n
+			is_set: name = n and name /= Void
 		end
 
 	operator_used: BOOLEAN is
 			-- Is operator used by this function?
-		do
+		once
 			Result := true
 		end
 
@@ -109,5 +109,6 @@ feature {NONE}
 invariant
 
 	if_processed_output_exists: processed implies output /= Void
+	op_used_constraint: processed implies (operator_used = (operator /= Void))
 
 end -- class MARKET_FUNCTION

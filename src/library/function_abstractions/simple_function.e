@@ -12,7 +12,7 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 		undefine
 			is_equal, copy, setup
 		redefine
-			output, reset_state
+			output, reset_state, operator_used
 		end
 
 	ARRAYED_LIST [G]
@@ -55,4 +55,9 @@ feature {NONE}
 		do
 		end
 
-end -- class MARKET_FUNCTION
+	operator_used: BOOLEAN is
+		once
+			Result := false
+		end
+
+end -- class SIMPLE_FUNCTION
