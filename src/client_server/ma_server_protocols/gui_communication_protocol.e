@@ -56,6 +56,9 @@ feature -- Server response IDs
 			-- Response indicating that the server requested data for
 			-- a symbol that is not in the database
 
+	Warning: INTEGER is 104
+			-- Response indicating that a non-fatal error occurred
+
 feature -- Server response strings
 
 	No_open_session_state: STRING is "no_open"
