@@ -86,8 +86,20 @@ feature -- Access
 	current_period_type: TIME_PERIOD_TYPE
 			-- Current data period type to be processed
 
-	available_period_types: ARRAYED_LIST [STRING]
-			-- List of all period types available for selection
+	available_period_types: ARRAYED_LIST [STRING] is
+			-- List of all period types available for selection for
+			-- current_tradable
+		do
+			if
+				current_tradable /= last_tradable_for_period_types and
+				current_tradable /= Void
+			then
+				last_period_types := market_list_handler.period_types (
+					current_tradable.symbol)
+				last_tradable_for_period_types := current_tradable
+			end
+			Result := last_period_types
+		end
 
 	event_generator_builder: CL_BASED_MEG_EDITING_INTERFACE
 
@@ -545,10 +557,6 @@ feature {NONE} -- Implementation - utilities
 				market_list_handler.start
 				current_tradable :=
 					market_list_handler.item (current_period_type)
-				if not market_list_handler.error_occurred then
-					available_period_types := market_list_handler.period_types (
-						market_list_handler.current_symbol)
-				end
 				if market_list_handler.error_occurred then
 					log_errors (<<market_list_handler.last_error, "%N">>)
 					terminate (Error_exit_status)
@@ -556,7 +564,8 @@ feature {NONE} -- Implementation - utilities
 					-- No daily data, so use intraday data.
 					if not market_list_handler.error_occurred then
 						current_period_type := period_types @ (
-							available_period_types @ 1)
+							market_list_handler.period_types (
+								market_list_handler.current_symbol) @ 1)
 						current_tradable := market_list_handler.item (
 							current_period_type)
 					end
@@ -666,5 +675,9 @@ feature {NONE} -- Implementation - attributes
 			-- Has the user requested to terminate the server?
 
 	saved_mklist_index: INTEGER
+
+	last_period_types: ARRAYED_LIST [STRING]
+
+	last_tradable_for_period_types: TRADABLE [BASIC_MARKET_TUPLE]
 
 end -- class MAIN_CL_INTERFACE
