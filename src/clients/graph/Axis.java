@@ -981,37 +981,37 @@ public class Axis extends Object {
 	* Attach a DataSet to a Horizontal Axis
 	* @param d dataset to attach.
 	*/
-protected void attachXdata( DataSet d ) {
-	d.range();
-	dataset.addElement(d);
-	d.set_xaxis(this);
+	protected void attachXdata( DataSet d ) {
+		d.range();
+		dataset.addElement(d);
+		d.set_xaxis(this);
 
-	if( dataset.size() == 1 ) {
-		minimum_ = d.getXmin();
-		maximum_ = d.getXmax();
-	} else {
-		if(minimum_ > d.getXmin()) minimum_ = d.getXmin();
-		if(maximum_ < d.getXmax()) maximum_ = d.getXmax();
+		if( dataset.size() == 1 ) {
+			minimum_ = d.getXmin();
+			maximum_ = d.getXmax();
+		} else {
+			if(minimum_ > d.getXmin()) minimum_ = d.getXmin();
+			if(maximum_ < d.getXmax()) maximum_ = d.getXmax();
+		}
 	}
-}
 
 	/**
 	* Attach a DataSet to a Vertical Axis
 	* @param d dataset to attach.
 	*/
-protected void attachYdata( DataSet d ) {
-	d.range();
-	dataset.addElement(d);
-	d.set_yaxis(this);
+	protected void attachYdata( DataSet d ) {
+		d.range();
+		dataset.addElement(d);
+		d.set_yaxis(this);
 
-	if (dataset.size() == 1) {
-		minimum_ = d.getYmin();
-		maximum_ = d.getYmax();
-	} else {
-		if (minimum_ > d.getYmin()) minimum_ = d.getYmin();
-		if (maximum_ < d.getYmax()) maximum_ = d.getYmax();
+		if (dataset.size() == 1) {
+			minimum_ = d.getYmin();
+			maximum_ = d.getYmax();
+		} else {
+			if (minimum_ > d.getYmin()) minimum_ = d.getYmin();
+			if (maximum_ < d.getYmax()) maximum_ = d.getYmax();
+		}
 	}
-}
 
 	/**
 	* calculate the labels
