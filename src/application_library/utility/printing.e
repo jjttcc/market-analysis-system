@@ -364,7 +364,8 @@ feature {NONE} -- Implementation
 		do
 			print ("Indicator: "); print (f.name)
 			print (", description: ")
-			print (f.short_description); print ("%N")
+			print (f.short_description); print ("%N(")
+			print (f.full_description); print (")%N")
 			print ("processed? ")
 			if f.processed then
 				print ("Yes, ")
