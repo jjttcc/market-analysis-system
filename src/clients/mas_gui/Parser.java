@@ -22,8 +22,8 @@ class Parser {
 		dates = new Vector();
 		times = new Vector();
 		float_field_count = float_fields(fieldspecs);
-		has_volume = has_field_type(Volume);
-		has_open_interest = has_field_type(Open_interest);
+//		has_volume = has_field_type(Volume);
+//		has_open_interest = has_field_type(Open_interest);
 	}
 
 	// Set the drawer for drawing volume.
@@ -40,19 +40,36 @@ class Parser {
 	// field_separator.  `drawer' is the tuple drawer to use for the
 	// DataSet.  result() gives the new DataSet.
 	public void parse(String s, BasicDrawer drawer) throws Exception {
-		int float_index = 0, volume_index = 0, oi_index = 0, rec_count;
+		int rec_count;
 		is_intraday = contains_time_field(s);
 		StringTokenizer recs = new StringTokenizer(s, _record_separator, false);
 		rec_count = recs.countTokens();
 		clear_vectors();
-		float_data = new double[rec_count * float_field_count];
-		if (has_volume) {
+//		if (has_volume) {
+		if (has_field_type(Volume)) {
 			volumes = new double[rec_count];
 		}
-		if (has_open_interest) {
+//		if (has_open_interest) {
+		if (has_field_type(Open_interest)) {
 			open_interests = new double[rec_count];
 		}
+		// If there is no open field
+		if (! has_field_type(Open) && has_field_type(High) &&
+				has_field_type(Low)) {
+			// Add 1 to make room for the "fake" open field.
+			float_data = new double[rec_count * (float_field_count + 1)];
+			parse_with_no_open(recs);
+		} else {
+			float_data = new double[rec_count * float_field_count];
+			parse_default(recs);
+		}
+		process_data(drawer);
+	}
 
+	// Parse fields - default routine
+	private void parse_default(StringTokenizer recs) throws Exception {
+System.err.println("default parse called");
+		int float_index = 0, volume_index = 0, oi_index = 0;
 		while (recs.hasMoreTokens()) {
 			StringTokenizer fields = new StringTokenizer(recs.nextToken(),
 													_field_separator, false);
@@ -98,7 +115,73 @@ class Parser {
 				}
 			}
 		}
-		process_data(drawer);
+	}
+
+	// Parse fields - expecting high, low, and close fields (in that order),
+	// but NO open field.
+	private void parse_with_no_open(StringTokenizer recs) throws Exception {
+System.err.println("parse with no open called");
+		int float_index = 0, volume_index = 0, oi_index = 0;
+		while (recs.hasMoreTokens()) {
+			StringTokenizer fields = new StringTokenizer(recs.nextToken(),
+													_field_separator, false);
+			int open_field_index = -1;
+			for (int j = 0; fields.hasMoreTokens(); ++j) {
+				try {
+				switch (parsetype[j]) {
+					case Date:
+						dates.addElement(fields.nextToken());
+						if (is_intraday) {
+							times.addElement(fields.nextToken());
+						}
+						// Save a place for the open field:
+						float_data[float_index] = 0;
+						open_field_index = float_index;
+						++float_index;
+						break;
+					case High:
+System.err.print("High - fidx: " + float_index);
+						float_data[float_index++] =
+							parse_double(fields.nextToken());
+System.err.println(" - added " + float_data[float_index - 1]);
+						break;
+					case Low:
+System.err.print("Low - fidx: " + float_index);
+						float_data[float_index++] =
+							parse_double(fields.nextToken());
+System.err.println(" - added " + float_data[float_index - 1]);
+						break;
+					case Close:
+System.err.print("Close - fidx: " + float_index);
+						float_data[float_index++] =
+							parse_double(fields.nextToken());
+System.err.println(" - added " + float_data[float_index - 1]);
+						if (open_field_index != -1) {
+							// Store the close value into the open field.
+							float_data[open_field_index] =
+								float_data[float_index - 1];
+System.err.println("(open) - added " + float_data[open_field_index]);
+						}
+						break;
+					case Volume:
+System.err.print("Volume - fidx: " + float_index);
+						volumes[volume_index++] =
+							parse_double(fields.nextToken());
+System.err.println(" - added " + volumes[volume_index - 1]);
+						break;
+					case Open_interest:
+						open_interests[oi_index++] =
+							parse_double(fields.nextToken());
+						break;
+				}
+				}
+				catch (Exception e) {
+					System.err.println("Last record processed was dated " +
+						dates.elementAt(dates.size() - 1));
+					throw e;
+				}
+			}
+		}
 	}
 
 	// Parsed data set result
@@ -260,8 +343,8 @@ class Parser {
 	DataSet processed_data;		// the parsed data
 	DataSet volume_data;		// the parsed volume data
 	DataSet oi_data;			// the parsed open interest data
-	boolean has_volume;
-	boolean has_open_interest;
+//	boolean has_volume;			// Is there a volume field?
+//	boolean has_open_interest;	// Is there an open-interest field?
 	boolean is_intraday;
 	BasicDrawer volume_drawer;
 	BasicDrawer open_interest_drawer;
