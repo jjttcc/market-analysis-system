@@ -1,8 +1,6 @@
 package common;
 import java.io.*;
 
-// cvs test
-
 /**
  * A <code>DataInspector</code> consumes a character stream from a 
  * <code>Reader</code> or <code>InputStream</code> and parses
