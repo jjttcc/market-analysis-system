@@ -3,44 +3,46 @@ Analyzing Markets with the Market Analysis Server
 This document provides a brief description of how to use MAS to analyze a
 set of markets.
 
-Note that in order to analyze one or more markets, these markets must be
-specified to the server on the command line.  For example, to tell it to
-process all files in the current directory that end in *.txt, you can
-enter:
+Note that in order to analyze one or more markets, the locationn of the
+files for these markets must be specified to the server on the command
+line.  For example, to tell it to process all files in the current
+directory that end in *.txt (and that include opening price and fields
+separated by ',' [comma]), you can enter:
 
-mas -o -v , *.txt
+mas -o -f , *.txt
 
-After starting of the server, the first step is to define a market
-event registrant.  To do this, enter 'r' at the main menu to access
-the "Edit event registrants" menu.  (If you like, you can then enter
-'v' to view any existing registrants.)  To add a new registrant, enter
+After starting the server, the first step is to define a market event
+registrant.  To do this, enter 'r' at the main menu to access the
+"Edit event registrants" menu.  (If you like, you can then enter 'v'
+to view any existing registrants.)  To add a new registrant, enter
 'a'; then select 'u', for User, and enter the User name as requested;
 then, as requested, enter the user's email address.  Next, choose one
 or more event types to use for market analysis for this registrant.
-(An event type specifies criteria, based on one or more indicators,
-by which the system will decide whether to send a buy or sell signal
-for each market during analysis.)  Select 0 to end the event type
-selection loop.  At that point, you can enter another registrant or enter
-'-' to get to the previous menu, and '-' again to get to the main menu.
+(An event type specifies criteria, based on one or more indicators, by
+which the system will decide whether to send a buy or sell signal for each
+market during analysis.)  Select 0 to end the event type selection loop.
+At that point, you can enter another registrant or enter '-' to get to
+the previous menu, and '-' again to get to the main menu.
 
 Now that one or more registrants has been added, one more step is needed
-in order to run a market analysis, which is to set the starting date for
-the analysis.  (The analysis will be run on data for that starting date,
-up to data for the current date.)  Enter 'd' to start the menu for entering
-the analysis date.  At this point you can either set the date (and time,
-if you need more granularity) directly by entering 'd' and following the
-directions, or you can enter 'r' to enter a date relative to the current
-date.  If you enter 'r', you will be asked for the period to use to
-set the date - days, months, or years.  Then you will be asked how many
-days, months, or years to set the date back, relative to the current date.
-For example, if the current date is July 4, 1999, and you select days and
-51, the analysis date will be set to May 20, 1999.  After choosing a
-date with one of the above methods, you need to set the date in the system
-by entering 's', for "set date".  The system is now ready to run market
-analysis on the current data beginning at the date you specified.
+in order to run a market analysis, which is to set the starting date
+for the analysis.  (The analysis will be run on data for that starting
+date, up to data for the current date.)  Enter 'd' to start the menu for
+entering the analysis date.  At this point you can either set the date
+(and time, if you need more granularity) directly by entering 'd' and
+following the directions, or you can enter 'r' to enter a date relative
+to the current date.  If you enter 'r', you will be asked for the period
+to use to set the date - days, months, or years.  Then you will be asked
+how many days, months, or years to set the date back, relative to the
+current date.  For example, if the current date is July 4, 1999, and
+you select days and 51, the analysis date will be set to May 20, 1999.
+After choosing a date with one of the above methods, you need to set the
+date in the system by entering 's', for "set date".  The system is now
+ready to run market analysis on the current data beginning at the date
+you specified.
 
 At this point, you can start the analysis by entering 'a'.  The analysis
-could take a while, especially if there are a large number of files to
-process.  When the analysis is finished, any generated buy or sell signals
-will be sent to the registrant(s) you set up in the first step, using
-the email address you entered.
+could take a while, especially if there are a large number of files
+to process.  When the analysis is finished, any generated buy or sell
+signals will be sent to the registrant(s) you set up in the first step,
+using the email address you provided.
