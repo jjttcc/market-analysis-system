@@ -24,12 +24,7 @@ import graph_library.DataSet;
 **    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 **************************************************************************
 **    Adapted from the original DataSet class by Jim Cochrane,
-**    last changed in October, 2004
-**************************************************************************
-**
-**    This class is designed to be used in conjunction with 
-**    the Graph class and Axis class for plotting 2D graphs.
-**
+**    last changed in 2004.
 *************************************************************************/
 
 
@@ -50,6 +45,7 @@ public class DrawableDataSet extends BasicDataSet {
 	* @postcondition<br>
 	*     dates_needed() && drawer() == drawer<br>
 	*     size() == 0 */
+//!!!!Remove??:
 	public DrawableDataSet(BasicDrawer d) {
 		if (d  == null) {
 			throw new Error("DataSet constructor: precondition violated");
@@ -77,23 +73,27 @@ public class DrawableDataSet extends BasicDataSet {
 	* @param n Number of tuples in the array.
 	* @param drwr object used to draw the data.<br>
 	* precondition:<br>
-	*     d != null && d.length > 0 && n > 0 && drwr != null<br>
+	*     d != null && n > 0 && drwr != null<br>
 	* postcondition:<br>
 	*     dates_needed() && drawer() == drwr<br>
 	*     size() == data_points() */
 	public DrawableDataSet(double d[], int n, BasicDrawer drwr) throws Error {
-		if ( d  == null || d.length == 0 || n <= 0 || drwr == null ) {
-			throw new Error("DataSet constructor: precondition violated");
+		super(d, n);
+		if (drwr == null) {
+			throw new Error("DrawableDataSet constructor: " +
+				"precondition violated - drwr is null");
 		}
 		drawer = drwr;
 		date_drawer = new DateDrawer(drawer);
 		time_drawer = new TimeDrawer(drawer);
+/*!!! Done in parent:
 		data = new ArrayList(d.length);
 		for (int i = 0; i < d.length; ++i) {
 			data.add(new Double(d[i]));
 		}
 
 		tuple_count = n;
+*/
 		dates_needed = true;
 		if (! (dates_needed() && drawer() == drwr) ||
 				size() != data_points()) {
@@ -103,23 +103,25 @@ public class DrawableDataSet extends BasicDataSet {
 
 // Access
 
-	public double maximum_x() {  return dxmax; } 
+//!!!:	public double maximum_x() {  return dxmax; } 
 
-	public double minimum_x() {  return dxmin; } 
+//!!!:	public double minimum_x() {  return dxmin; } 
 
-	public double maximum_y() {  return dymax; } 
+//!!!:	public double maximum_y() {  return dymax; } 
 
-	public double minimum_y() {  return dymin; }
+//!!!:	public double minimum_y() {  return dymin; }
 
 	public BasicDrawer drawer() { return drawer; }
 
 	// Do dates need to be drawn?
 	public boolean dates_needed() { return dates_needed; }
 
+/*!!!:
 	// Number of records in this data set
 	public int size() {
 		return tuple_count;
 	}
+*/
 
 	// x axis
 	public Axis xaxis() { return xaxis; }
@@ -186,6 +188,7 @@ public class DrawableDataSet extends BasicDataSet {
 		return point;
 	}
 
+/*!!!:
 	public String toString() {
 		String result = "";
 		System.out.println("DrawableDataSet - data size: " + data.size());
@@ -205,6 +208,7 @@ public class DrawableDataSet extends BasicDataSet {
 		}
 		return result;
 	}
+*/
 
 // Element change
 
@@ -214,11 +218,14 @@ public class DrawableDataSet extends BasicDataSet {
 System.out.println("append called with dataset:\n'" + d + "'");
 System.out.println("main dataset size before append: " + size());
 //System.out.print("main dataset contents before append:\n<<<<");
-System.out.print(this);
-System.out.print("\n>>>>>");
+//System.out.print(this);
+//System.out.print("\n>>>>>");
 if (d.size() == 0) { System.out.println("d is empty!");}
+System.out.println("OLD tuple count: " + tuple_count);
 			tuple_count = oldsize + d.size();
-			DrawableDataSet drwd = (DrawableDataSet) d;
+System.out.println("tuple count set to: " + tuple_count +
+" (IS THIS CORRECT?)");
+			BasicDataSet drwd = (BasicDataSet) d;
 System.out.println("A");
 System.out.println("before add all - sizes: " +
 data.size() + ", " + dates.size() + ", " + times.size());
@@ -336,8 +343,7 @@ System.out.print("\n>>>>>");
 // Basic operations
 
 	/**
-	* Draw the straight line segments and/or the markers at the
-	* data points.
+	* Draw the data.
 	* If this data has been attached to an Axis then scale the data
 	* based on the axis maximum/minimum otherwise scale using
 	* the data's maximum/minimum
@@ -447,11 +453,13 @@ System.out.println("DDS dd back");
 	*/
 	protected int stride() { return drawer.drawing_stride(); }
 
+/*!!!:
 	protected int length() {
 		int result = 0;
 		if (data != null) result = data.size();
 		return result;
 	}
+*/
 
 // Implementation - attributes
 
@@ -465,16 +473,6 @@ System.out.println("DDS dd back");
 	*    The color of the straight line segments
 	*/
 	private Color linecolor     = null;
-
-	/**
-	*    The marker color
-	*/
-	private Color  markercolor  = null;
-
-	/**
-	*    The scaling factor for the marker. Default value is 1.
-	*/
-	private double markerscale  = 1.0;
 
 	/**
 	*    The Axis object the X data is attached to. From the Axis object
@@ -524,13 +522,13 @@ System.out.println("DDS dd back");
 	private boolean clipping = false;
 
 	// Main data
-	private ArrayList data;	// Double
+//!!!:	private ArrayList data;	// Double
 
 	// Date data
-	protected ArrayList dates;	// String
+//!!!:	protected ArrayList dates;	// String
 
 	// Time data
-	protected ArrayList times;	// String
+//!!!:	protected ArrayList times;	// String
 
 	/**
 	* Drawer of price bars - e.g., tic bars or candles
@@ -551,25 +549,25 @@ System.out.println("DDS dd back");
 	* The data X maximum. 
 	* Once the data is loaded this will never change.
 	*/
-	private double dxmax;
+//!!!:	private double dxmax;
 
 	/**
 	* The data X minimum. 
 	* Once the data is loaded this will never change.
 	*/
-	private double dxmin;
+//!!!:	private double dxmin;
 
 	/**
 	* The data Y maximum. 
 	* Once the data is loaded this will never change.
 	*/
-	private double dymax;
+//!!!:	private double dymax;
 
 	/**
 	* The data Y minimum. 
 	* Once the data is loaded this will never change.
 	*/
-	private double dymin;
+//!!!:	private double dymin;
 
 	// Horizontal, vertical line data
 	private ArrayList hline_data;
@@ -587,9 +585,6 @@ System.out.println("DDS dd back");
 
 	// Has range() been called to set the range?
 	private boolean range_set = false;
-
-	// Number of tuples in the data
-	private int tuple_count;
 
 	private boolean dates_needed;
 }
