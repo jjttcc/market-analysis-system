@@ -175,8 +175,7 @@ src/scripts/windows/runmasf.bat bin/ mas_windows1.6.6p
 src/scripts/windows/runmacl.bat bin/ mas_windows1.6.6p
 src/scripts/windows/runmasgui.bat bin/ mas_windows1.6.6p
 src/scripts/windows/fake_mailer.bat bin/ mas_windows1.6.6p
-src/scripts/windows/init.bat bin/ mas_windows1.6.6p
-src/scripts/windows/bash_init bin/ mas_windows1.6.6p
+src/scripts/windows/cleanup.bat bin/ mas_windows1.6.6p
 src/scripts/windows/simple_cat.exe bin/ mas_windows1.6.6p
 src/scripts/windows/run_command.bat bin/ mas_windows1.6.6p
 # contrib
@@ -239,14 +238,8 @@ lib/binaries/windows/macl.exe_no_assert_v1.6.6p bin/macl.exe mas_windows1.6.6p
 lib/binaries/windows/macl.exe_assert_v1.6.6p bin/macl_assert.exe mas_windows1.6.6p
 lib/binaries/windows/config_tool.exe_no_assert_v1.6.6p bin/config_tool.exe mas_windows1.6.6p
 lib/binaries/windows/config_tool.exe_assert_v1.6.6p bin/config_tool_assert.exe mas_windows1.6.6p
-# bash and a couple other cygwin tools needed to overcome Windows' pathetic
-# scripting capability
-lib/binaries/windows/bash.exe bin/ mas_windows1.6.6p
-lib/binaries/windows/sed.exe bin/ mas_windows1.6.6p
-lib/binaries/windows/mkdir.exe bin/ mas_windows1.6.6p
-lib/binaries/windows/cp.exe bin/ mas_windows1.6.6p
-lib/binaries/windows/cygwin1.dll bin/ mas_windows1.6.6p
-# !!Add macl, mct, etc. binaries here.
+# Installation tool for Windows
+lib/binaries/windows/install_tool.exe_no_assert_v1.0 bin/install_tool.exe mas_windows1.6.6p
 # Include this odbc library if the executable was not statically
 # linked with it:
 lib/binaries/linux/libodbc.so.1 lib mas_linux1.6.6p serversrc1.6.6p
