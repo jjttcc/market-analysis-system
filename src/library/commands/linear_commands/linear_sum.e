@@ -17,13 +17,13 @@ class LINEAR_SUM inherit
 			initialize
 		end
 
-	UNARY_OPERATOR [REAL]
+	UNARY_OPERATOR [REAL, REAL]
 		rename
 			initialize as uo_initialize
 		export {FACTORY}
 			set_operand
 		undefine
-			arg_mandatory
+			arg_mandatory, execute
 		end
 
 creation

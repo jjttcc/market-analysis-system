@@ -8,11 +8,17 @@ indexing
 class SETTABLE_OFFSET_COMMAND inherit
 
 	LINEAR_OFFSET_COMMAND
-		undefine
+		redefine
+			initialize
+		select
 			initialize
 		end
 
-	UNARY_OPERATOR [REAL]
+	UNARY_OPERATOR [REAL, REAL]
+		rename
+			operate as operate_unused, initialize as uo_initialize
+		undefine
+			execute
 		redefine
 			arg_mandatory
 		end
@@ -31,6 +37,12 @@ feature -- Initialization
 			operand := op
 		ensure
 			set: target = tgt and operand = op
+		end
+
+	initialize (arg: LINEAR_ANALYZER) is
+		do
+			Precursor (arg)
+			uo_initialize (arg)
 		end
 
 feature -- Access

@@ -17,11 +17,11 @@ class LOWEST_VALUE inherit
 			initialize
 		end
 
-	UNARY_OPERATOR [REAL]
+	UNARY_OPERATOR [REAL, REAL]
 		rename
 			initialize as uo_initialize
 		undefine
-			arg_mandatory
+			arg_mandatory, execute
 		redefine
 			operand
 		end
@@ -32,7 +32,7 @@ creation
 
 feature -- Initialization
 
-	make (t: CHAIN [MARKET_TUPLE]; o: like operand; i: like n) is
+	make (t: LIST [MARKET_TUPLE]; o: like operand; i: like n) is
 		require
 			not_void: t /= Void and o /= Void
 		do

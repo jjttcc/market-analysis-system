@@ -23,13 +23,19 @@ class MINUS_N_COMMAND inherit
 		end
 
 	LINEAR_OFFSET_COMMAND
-		undefine
-			initialize
+		rename
+			initialize as loc_initialize
+		export {NONE}
+			loc_initialize
 		end
 
-	UNARY_OPERATOR [REAL]
+	UNARY_OPERATOR [REAL, REAL]
 		rename
-			initialize as uo_initialize
+			initialize as uo_initialize, operate as operate_unused
+		export {NONE}
+			uo_initialize, operate_unused
+		undefine
+			execute
 		redefine
 			arg_mandatory
 		end
@@ -54,9 +60,16 @@ feature -- Initialization
 		end
 
 	initialize (arg: N_RECORD_STRUCTURE) is
+		local
+			l: LINEAR_ANALYZER
 		do
 			Precursor (arg)
 			uo_initialize (arg)
+			l ?= arg
+			check
+				arg_conforms_to_linear_analyzer: l /= Void
+			end
+			loc_initialize (l)
 		end
 
 feature -- Access

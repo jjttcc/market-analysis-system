@@ -17,11 +17,15 @@ class N_RECORD_LINEAR_COMMAND inherit
 			make as nrc_make_unused
 		export {NONE}
 			nrc_make_unused
+		redefine
+			initialize
+		select
+			initialize
 		end
 
 	LINEAR_COMMAND
-		undefine
-			initialize
+		rename
+			initialize as lc_initialize
 		redefine
 			forth, action, start, exhausted, invariant_value, target
 		end
@@ -37,6 +41,18 @@ feature -- Initialization
 			set_n (i)
 		ensure
 			set: target = t and n = i
+		end
+
+	initialize (arg: N_RECORD_STRUCTURE) is
+		local
+			l: LINEAR_ANALYZER
+		do
+			Precursor (arg)
+			l ?= arg
+			check
+				arg_conforms_to_linear_analyzer: l /= Void
+			end
+			lc_initialize (l)
 		end
 
 feature -- Basic operations

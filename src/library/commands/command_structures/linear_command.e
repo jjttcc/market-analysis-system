@@ -10,7 +10,7 @@ deferred class LINEAR_COMMAND inherit
 		export {MARKET_FUNCTION}
 			initialize
 		redefine
-			execute
+			execute, initialize
 		end
 
 	LINEAR_ANALYZER
@@ -18,6 +18,13 @@ deferred class LINEAR_COMMAND inherit
 			all
 				{FACTORY}
 			set_target
+		end
+
+feature -- Initialization
+
+	initialize (a: LINEAR_ANALYZER) is
+		do
+			set_target (a.target)
 		end
 
 feature -- Basic operations
