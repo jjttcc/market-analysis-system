@@ -16,8 +16,6 @@ class CL_BASED_MEG_EDITING_INTERFACE inherit
 		end
 
 	MEG_EDITING_INTERFACE
-		rename
-			make as mei_make
 		undefine
 			print
 		end
