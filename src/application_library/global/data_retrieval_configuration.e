@@ -159,7 +159,7 @@ feature -- Element change
 			symbol_set: symbol = arg and symbol /= Void
 		end
 
-feature -- Basic operations
+feature {NONE} -- Implementation
 
 	reset_dates is
 			-- For dates that use the "now" construct, reset them so that
@@ -208,14 +208,14 @@ feature -- Basic operations
 				token_end_delimiter)
 		end
 
+feature {NONE} -- Implementation - Hook routine implementations
+
 	check_results is
 		do
 			check_for_missing_specs (<<eod_start_date_string.is_empty,
 					EOD_start_date_specifier, eod_end_date_string.is_empty,
 					EOD_end_date_specifier>>, False)
 		end
-
-feature {NONE} -- Implementation - Hook routine implementations
 
 	key_index: INTEGER is 1
 
