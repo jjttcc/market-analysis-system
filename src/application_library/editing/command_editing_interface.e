@@ -15,7 +15,7 @@ deferred class COMMAND_EDITING_INTERFACE inherit
 
 feature -- Access
 
-	command_selection (type: STRING; msg: ARRAY [STRING]; top: BOOLEAN):
+	command_selection (type: STRING; msg: STRING; top: BOOLEAN):
 				COMMAND is
 			-- User-selected command whose type conforms to `type'
 			-- `top' specifies whether the returned instance will be
@@ -148,7 +148,7 @@ feature -- Status setting
 
 feature {APPLICATION_COMMAND_EDITOR} -- Access
 
-	integer_selection (msg: ARRAY [STRING]): INTEGER is
+	integer_selection (msg: STRING): INTEGER is
 			-- User-selected integer value
 		deferred
 		end
@@ -158,12 +158,12 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 		deferred
 		end
 
-	real_selection (msg: ARRAY [STRING]): REAL is
+	real_selection (msg: STRING): REAL is
 			-- User-selected real value
 		deferred
 		end
 
-	choice (descr: ARRAY [STRING]; choices: LIST [PAIR [STRING, BOOLEAN]];
+	choice (descr: STRING; choices: LIST [PAIR [STRING, BOOLEAN]];
 				allowed_selections: INTEGER) is
 			-- The user's selections of the specified choices -
 			-- from 1 to choices.count selections (with `descr' providing
@@ -192,19 +192,19 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 feature {NONE} -- Implementation
 
 	current_command_selection (cmd_list: LIST [COMMAND];
-				msg: ARRAY [STRING]): COMMAND is
+				msg: STRING): COMMAND is
 			-- User's selection from existing commands - Void if user
 			-- chooses not to use an existing command.
 		deferred
 		end
 
 	user_command_selection (cmd_list: LIST [COMMAND];
-				msg: ARRAY [STRING]): COMMAND is
+				msg: STRING): COMMAND is
 			-- User's selection of a member of `cmd_list'
 		deferred
 		end
 
-	do_choice (descr: ARRAY [STRING]; choices: LIST [PAIR [STRING, BOOLEAN]];
+	do_choice (descr: STRING; choices: LIST [PAIR [STRING, BOOLEAN]];
 				allowed_selections: INTEGER) is
 			-- Implementation of `choice'
 		deferred

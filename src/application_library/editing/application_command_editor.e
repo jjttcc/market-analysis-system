@@ -12,6 +12,8 @@ class APPLICATION_COMMAND_EDITOR inherit
 			{NONE} all
 		end
 
+	GLOBAL_SERVICES
+
 feature -- Access
 
 	user_interface: COMMAND_EDITING_INTERFACE
@@ -41,12 +43,12 @@ feature -- Basic operations
 		do
 			left ?= user_interface.command_selection (
 						user_interface.Boolean_result_command,
-										<<cmd.generator, "'s left operand">>,
-										false)
+							concatenation (<<cmd.generator,
+								"'s left operand">>), false)
 			right ?= user_interface.command_selection (
 						user_interface.Boolean_result_command,
-										<<cmd.generator, "'s right operand">>,
-										false)
+							concatenation (<<cmd.generator,
+								"'s right operand">>), false)
 			check
 				selections_valid: left /= Void and right /= Void
 			end
@@ -62,12 +64,12 @@ feature -- Basic operations
 		do
 			left ?= user_interface.command_selection (
 						user_interface.Real_result_command,
-										<<cmd.generator, "'s left operand">>,
-										false)
+							concatenation (<<cmd.generator,
+								"'s left operand">>), false)
 			right ?= user_interface.command_selection (
 						user_interface.Real_result_command,
-										<<cmd.generator, "'s right operand">>,
-										false)
+							concatenation (<<cmd.generator,
+								"'s right operand">>), false)
 			check
 				selections_valid: left /= Void and right /= Void
 			end
@@ -97,7 +99,7 @@ feature -- Basic operations
 				c_is_valid_type: cmd /= Void
 			end
 			cmd.set_n (user_interface.integer_selection (
-						<<cmd.generator, "'s n-value">>))
+						concatenation (<<cmd.generator, "'s n-value">>)))
 		end
 
 	edit_mtlist (c: COMMAND) is
@@ -132,8 +134,8 @@ feature -- Basic operations
 			if hv /= Void then
 				bnc_cmd ?= user_interface.command_selection (
 							user_interface.Basic_numeric_command,
-								<<cmd.generator, "'s operand">>,
-								false)
+							concatenation (<<cmd.generator, "'s operand">>),
+							false)
 				check
 					selection_valid: bnc_cmd /= Void
 				end
@@ -141,8 +143,8 @@ feature -- Basic operations
 			elseif lv /= Void then
 				bnc_cmd ?= user_interface.command_selection (
 							user_interface.Basic_numeric_command,
-								<<cmd.generator, "'s operand">>,
-								false)
+							concatenation (<<cmd.generator, "'s operand">>),
+							false)
 				check
 					selection_valid: bnc_cmd /= Void
 				end
@@ -150,8 +152,8 @@ feature -- Basic operations
 			else
 				rr_cmd ?= user_interface.command_selection (
 							user_interface.Real_result_command,
-									<<cmd.generator, "'s operand">>,
-									false)
+							concatenation (<<cmd.generator, "'s operand">>),
+							false)
 				check
 					selection_valid: rr_cmd /= Void
 				end
@@ -171,7 +173,7 @@ feature -- Basic operations
 			edit_unaryop (unop)
 			edit_mtlist (cmd)
 			cmd.set_offset (user_interface.integer_selection (
-							<<cmd.generator, "'s offset value">>))
+						concatenation (<<cmd.generator, "'s offset value">>)))
 		end
 
 	edit_boolean_numeric_client (cmd: BOOLEAN_NUMERIC_CLIENT) is
@@ -183,8 +185,8 @@ feature -- Basic operations
 			-- Obtain and set cmd's boolean operator.
 			binop ?= user_interface.command_selection (
 						user_interface.Binary_boolean_real_command,
-								<<cmd.generator, "'s boolean operator">>,
-								false)
+							concatenation (<<cmd.generator,
+								"'s boolean operator">>), false)
 			check
 				selection_valid: binop /= Void
 			end
@@ -192,8 +194,8 @@ feature -- Basic operations
 			-- Obtain and set cmd's true command.
 			result_cmd ?= user_interface.command_selection (
 						user_interface.Real_result_command,
-									<<cmd.generator, "'s true command">>,
-									false)
+							concatenation (<<cmd.generator,
+								"'s true command">>), false)
 			check
 				selection_valid: result_cmd /= Void
 			end
@@ -201,8 +203,8 @@ feature -- Basic operations
 			-- Obtain and set cmd's false command.
 			result_cmd ?= user_interface.command_selection (
 						user_interface.Real_result_command,
-									<<cmd.generator, "'s false command">>,
-									false)
+							concatenation (<<cmd.generator,
+								"'s false command">>), false)
 			check
 				selection_valid: result_cmd /= Void
 			end
@@ -229,12 +231,12 @@ feature -- Basic operations
 			sign_spec_vector.put (<<0, 1>>, 6)
 			left ?= user_interface.command_selection (
 						user_interface.Real_result_command,
-										<<cmd.generator, "'s left operand">>,
-										false)
+								concatenation (<<cmd.generator,
+									"'s left operand">>), false)
 			right ?= user_interface.command_selection (
 						user_interface.Real_result_command,
-										<<cmd.generator, "'s right operand">>,
-										false)
+								concatenation (<<cmd.generator,
+									"'s right operand">>), false)
 			check
 				selections_valid: left /= Void and right /= Void
 			end
@@ -252,8 +254,8 @@ feature -- Basic operations
 			choices.extend (pair)
 			!!pair.make ("zero to positive", false)
 			choices.extend (pair)
-			user_interface.choice (<<"slope specification for ",
-				cmd.generator>>, choices, choices.count)
+			user_interface.choice (concatenation (<<"slope specification for ",
+				cmd.generator>>), choices, choices.count)
 			from
 				choices.start
 			until
@@ -287,7 +289,7 @@ feature -- Basic operations
 			x: REAL
 		do
 			cmd.set_constant_value (user_interface.real_selection (
-									<<cmd.generator, "'s value">>))
+								concatenation (<<cmd.generator, "'s value">>)))
 		end
 
 end -- APPLICATION_COMMAND_EDITOR
