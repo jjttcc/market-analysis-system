@@ -182,7 +182,7 @@ feature {NONE} -- Implementation
 			eg_maker: COMPOUND_GENERATOR_FACTORY
 			left, right: MARKET_EVENT_GENERATOR
 		do
-			create eg_maker
+			create eg_maker.make
 			left := event_generator_selection ("left component")
 			if left /= Void then
 				right := event_generator_selection ("right component")
@@ -195,6 +195,7 @@ feature {NONE} -- Implementation
 					show_message (concatenation (<<
 						eg_maker.left_target_type.name, " added.">>))
 				end
+				eg_maker.set_signal_type (signal_type_selection)
 				create_event_generator (eg_maker, new_event_type_name,
 					working_meg_library)
 				last_event_generator := eg_maker.product
@@ -226,13 +227,14 @@ feature {NONE} -- Implementation
 		local
 			fa_maker: OVFA_FACTORY
 		do
-			create fa_maker
+			create fa_maker.make
 			fa_maker.set_function (
 				function_choice_clone ("technical indicator"))
 			fa_maker.set_operator (operator_choice (fa_maker.function,
 				one_var_exclude_cmds))
 			fa_maker.set_period_type (period_type_choice)
 			fa_maker.set_left_offset (operator_maker.left_offset)
+			fa_maker.set_signal_type (signal_type_selection)
 			create_event_generator (fa_maker, new_event_type_name,
 				working_meg_library)
 			last_event_generator := fa_maker.product
@@ -259,6 +261,7 @@ feature {NONE} -- Implementation
 			if op /= Void then
 				fa_maker.set_operator (op, use_left_function)
 			end
+			fa_maker.set_signal_type (signal_type_selection)
 			create_event_generator (fa_maker, new_event_type_name,
 				working_meg_library)
 			last_event_generator := fa_maker.product
@@ -302,6 +305,41 @@ feature {NONE} -- Implementation
 			names := deep_clone (event_type_names)
 			names.compare_objects
 			Result := new_event_type_name_selection (names)
+		end
+
+	signal_type_selection: INTEGER is
+		local
+			stypes: expanded SIGNAL_TYPES
+			snames: ARRAY [STRING]
+			scodes, code_selection_list: STRING
+			c: CHARACTER
+			i: INTEGER
+		do
+			snames := stypes.type_names
+			scodes := stypes.character_codes
+			create code_selection_list.make (0)
+			from
+				i := 1
+			until
+				i = scodes.count
+			loop
+				code_selection_list.extend (scodes @ i)
+				code_selection_list.extend ('/')
+				i := i + 1
+			end
+			code_selection_list.extend (scodes @ i)
+			c := character_choice (concatenation (<<
+				"Select signal type - ", snames @ stypes.Buy_signal,
+				", ", snames @ stypes.Sell_signal, ", ",
+				snames @ stypes.Neutral_signal, ", ",
+				snames @ stypes.Other_signal, " (",
+				code_selection_list, ") ">>), scodes)
+			Result := scodes.index_of (c, 1)
+			check
+				valid_selection: scodes.valid_index (Result)
+			end
+			show_message (concatenation (<<"Signal type set to ",
+				stypes.type_names @ Result, ".">>))
 		end
 
 feature {NONE} -- Hook methods
