@@ -500,6 +500,7 @@ feature {NONE} -- Hook routines
 			-- `target_tradable' was last updated?
 		require
 			target_tradable_exists: target_tradable /= Void
+			current_item_is_cached: cached_item (index) /= Void
 		do
 			-- Default: Data is never out of date - Redefine in descendant
 			-- (along with `append_new_data') if update behavior is required.
@@ -515,7 +516,8 @@ Result := True
 			-- appending to it.)
 		require
 			target_tradable_exists: target_tradable /= Void
-			equal (target_tradable.symbol, current_symbol)
+			current_item_is_cached: cached_item (index) /= Void
+			symbols_correspond: equal (target_tradable.symbol, current_symbol)
 			out_of_date: target_tradable_out_of_date
 		do
 			-- Default: Null procedure - Redefine in descendant (along with

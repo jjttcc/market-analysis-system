@@ -183,9 +183,6 @@ feature {NONE} -- Hook routine implementations
 						current_file_status.last_modification_time and
 						current_input_file.count > current_file_status.file_size
 				end
-				-- Position current_input_file's "cursor" at the first
-				-- unread character (after the last character that was
-				-- previously read).
 				-- Advance the file cursor to the beginning of the new
 				-- data.  Note: file position numbering starts a 0.
 				current_input_file.position_cursor (
