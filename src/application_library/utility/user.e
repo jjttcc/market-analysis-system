@@ -130,12 +130,10 @@ feature -- Basic operations
 				end
 				mail_cmd.append (email_addresses @ 1)
 				-- OS-specific construct here:
-				mail_cmd.append (" <")
+				mail_cmd.append (Input_redirect)
 				mail_cmd.append (msg_file.name)
 				msg_file.flush
---!!!!
-print ("Executing launch '" + mail_cmd + "' (notify_by_email).%N")
-				launch (mail_cmd)
+				system (mail_cmd)
 				if return_code /= 0 then
 					last_error := "Command '" + mail_cmd + "' failed%N" +
 						"with non-zero return code: " + return_code.out + ".%N"
@@ -145,7 +143,7 @@ print ("Executing launch '" + mail_cmd + "' (notify_by_email).%N")
 			end
 		end
 
-feature {NONE}
+feature {NONE} -- Implementation
 
 	temporary_file (s: STRING): PLAIN_TEXT_FILE is
 			-- Temporary file for writing - new file
@@ -215,6 +213,10 @@ feature {NONE}
 				i := i + 1
 			end
 		end
+
+feature {NONE} -- Implementation - Constants
+
+	Input_redirect: STRING is " <"
 
 invariant
 
