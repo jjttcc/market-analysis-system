@@ -40,9 +40,7 @@ feature -- Initialization
 			readcmd: POLL_COMMAND
 			factory_builder: FACTORY_BUILDER
 			version: expanded PRODUCT_INFO
-cmprtest: expanded COMPRESSION_TEST
 		do
-cmprtest.execute (10)
 			if command_line_options.error_occurred then
 				print_list (<<"Error occurred during initialization - ",
 					"exiting ...%N">>)
