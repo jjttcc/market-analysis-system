@@ -3,6 +3,11 @@
 
 Progname=$(basename $0)
 config=/tmp/install_config
+non_interactive=
+
+usage() {
+	echo "Usage: $Progname [--rootdir rootpath]" >&2
+}
 
 cleanup() {
 	rm -f $config
@@ -14,6 +19,11 @@ cleanup_after_config_failure() {
 	kill $procs >/dev/null 2>&1
 	kill -9 $procs >/dev/null 2>&1
 	rm -f $libdir/.*persist.lock
+}
+
+interactive() {
+	[ -z "$non_interactive" ]
+	return $?
 }
 
 # Usage: missing_dynamic_libraries executable_file
@@ -109,13 +119,15 @@ set_dir() {
 	defaultdir=$basedir/$1
 	if [ $# -ne 2 ]; then fault "set_dir: wrong number of arguments"; fi
 	while [ -z "$dir" ]; do
-		echo -e "$2 ($defaultdir): \c" >&2
-		read dir
-		case "$dir" in
-			\$PWD*)
-				dir=$PWD/$(echo "$dir"|sed 's/.PWD//')
-			;;
-		esac
+		if interactive; then
+			echo -e "$2 ($defaultdir): \c" >&2
+			read dir
+			case "$dir" in
+				\$PWD*)
+					dir=$PWD/$(echo "$dir"|sed 's/.PWD//')
+				;;
+			esac
+		fi
 		if [ -z "$dir" ]; then
 			dir=$defaultdir
 		elif expr "$dir" : "[^/]" >/dev/null 2>&1; then
@@ -124,17 +136,23 @@ set_dir() {
 		fi
 		if [ ! -z "$dir" ]; then
 			if [ -d $dir ]; then
-				case $(query "Use $dir (y/n/q[uit])? \c") in
-					y*|Y*) ;;
-					q*|Q*)
-						echo -e "Aborting the installation ..." >&2
-						exit 0 ;;
-					*) dir= ;;
-				esac
+				if interactive; then
+					case $(query "Use $dir (y/n/q[uit])? \c") in
+						y*|Y*) ;;
+						q*|Q*)
+							echo -e "Aborting the installation ..." >&2
+							exit 0 ;;
+						*) dir= ;;
+					esac
+				fi
 			elif [ -e $dir ]; then
-				echo -e "$dir is not a directory - try again: " >&2
-				dir=
-			else
+				if interactive; then
+					echo -e "$dir is not a directory - try again: " >&2
+					dir=
+				else
+					fatal "$dir is not a directory."
+				fi
+			elif interactive; then
 				case $(query \
 						"$dir does not exist - create it (y/n/q[uit])? \c") in
 					y*|Y*) mkdir -p $dir
@@ -150,13 +168,22 @@ set_dir() {
 						echo -e "$2 ($defaultdir): \c" >&2
 					;;
 				esac
+			else
+				if ! mkdir -p $dir; then
+					fatal "Failed to create $dir."
+				fi
 			fi
 		fi
 		if [ ! -z "$dir" ]; then
 			[ -w $dir -a -x $dir ]
 			if [ $? -ne 0 ]; then
-				echo -e "Don't have permission to install in $dir - try again: " >&2
-				dir=
+				if interactive; then
+					echo -e "Don't have permission to install in $dir " \
+						"- try again: " >&2
+					dir=
+				else
+					fatal "Don't have permission to install in $dir."
+				fi
 			fi
 		fi
 	done
@@ -247,7 +274,14 @@ monitor() {
 
 config() {
 	>$config
-	if user_is_administrator; then
+	if [ $# -gt 0 ]; then
+		if [ "$1" = "--rootdir" -a ! -z "$2" ]; then
+			basedir=$2
+			non_interactive=y
+		else
+			usage; fatal
+		fi
+	elif user_is_administrator; then
 		basedir=/opt/mas
 	else
 		basedir=$HOME
@@ -255,6 +289,7 @@ config() {
 	if [ $? -ne 0 ]; then fatal "Cannot create configuration file $config"; fi
 	set_dir bin "Enter the directory for executables" >&2
 	set_dir lib "Enter the directory for library files" >&2
+	set_dir doc "Enter the directory for documentation files" >&2
 }
 
 config_cmd() {
@@ -289,20 +324,22 @@ configure_mas() {
 	if [ -z "$port" ]; then port=23491; elif [ $port -lt 1024 ]; then
 		port=$(expr $port + 1024)
 	fi
-	echo -e "\nThe MAS library includes a set of technical indicators and" \
-		"market analyzers." >&2
-	case $(query \
-			"Would you like to have these components added to" \
-			"the MAS configuration? (y/n) ") in
-		y*|Y*) ;;
-		*)
-	echo -e "\nIf you wish, you may add these components later by starting" \
-		"the server\nand then executing the macl script with the" \
-		"configuration files as input." >&2
-	echo -e "For example, if the server was started with port $port:\n" \
-		"$config_example $port\n" >&2
-			return $configresult;;
-	esac
+	if interactive; then
+		echo -e "\nThe MAS library includes a set of technical indicators " \
+			"and market analyzers." >&2
+		case $(query \
+				"Would you like to have these components added to" \
+				"the MAS configuration? (y/n) ") in
+			y*|Y*) ;;
+			*)
+		echo -e "\nIf you wish, you may add these components later by " \
+			"starting the server\nand then executing the macl script with " \
+			"the configuration files as input." >&2
+		echo -e "For example, if the server was started with port $port:\n" \
+			"$config_example $port\n" >&2
+				return $configresult;;
+		esac
+	fi
 	check_file_exists $ifile true "Indicator file $ifile not found."
 	check_file_exists $mfile true "Market analyzer file $mfile not found."
 	check_exe_file $mas true "Script file $mas not found."
@@ -333,43 +370,58 @@ configure_mas() {
 }
 
 trap "handle_signal" SIGINT SIGQUIT SIGABRT SIGBUS SIGILL SIGHUP SIGKILL
-config
+config $*
 
 libdir=$(awk '/lib:/ { print $2}' $config)
 bindir=$(awk '/bin:/ { print $2}' $config)
+docdir=$(awk '/doc:/ { print $2}' $config)
 
-if [ ! -e $libdir ]; then mkdir -p $libdir; fi
-if [ $? -ne 0 ]; then
-	fatal "$Progname: Failed to create directory $libdir" >&2
-fi
+install_files() {
+	if [ ! -e $libdir ]; then mkdir -p $libdir; fi
+	if [ $? -ne 0 ]; then
+		fatal "$Progname: Failed to create directory $libdir" >&2
+	fi
 
-if [ ! -d $libdir -o ! -w $libdir ]; then
-	fatal "$Progname: Cannot write to target dir $libdir" >&2
-fi
+	if [ ! -d $libdir -o ! -w $libdir ]; then
+		fatal "$Progname: Cannot write to target dir $libdir" >&2
+	fi
 
-if [ ! -e $bindir ]; then mkdir -p $bindir; fi
-if [ $? -ne 0 ]; then
-	fatal "$Progname: Failed to create directory $bindir" >&2
-fi
+	if [ ! -e $bindir ]; then mkdir -p $bindir; fi
+	if [ $? -ne 0 ]; then
+		fatal "$Progname: Failed to create directory $bindir" >&2
+	fi
 
-if [ ! -d $bindir -o ! -w $bindir ]; then
-	fatal "$Progname: Cannot write to target dir $bindir" >&2
-fi
+	if [ ! -d $bindir -o ! -w $bindir ]; then
+		fatal "$Progname: Cannot write to target dir $bindir" >&2
+	fi
 
-result=0
-cp -f bin/* $bindir
-binresult=$?
-if [ "$binresult" -eq 0 ]; then
-	cp -fR lib/* $libdir
-	libresult=$?
-fi
-if [ "$binresult" -ne 0 ]; then
-	echo "Error encountered installing executable files." >&2
-	result=$binresult
-elif [ "$libresult" -ne 0 ]; then
-	echo "Error encountered installing library files." >&2
-	result=$libresult
-fi
+	install_result=0
+	cp -f bin/* $bindir
+	binresult=$?
+	if [ "$binresult" -eq 0 ]; then
+		cp -fR lib/* $libdir
+		libresult=$?
+		if [ "$libresult" -eq 0 ]; then
+			cp -fR doc/* $docdir
+			docresult=$?
+			cp -f README $basedir/doc/MAIN_README
+		fi
+	fi
+	if [ "$binresult" -ne 0 ]; then
+		echo "Error encountered installing executable files." >&2
+		install_result=$binresult
+	elif [ "$libresult" -ne 0 ]; then
+		echo "Error encountered installing library files." >&2
+		install_result=$libresult
+	elif [ "$docresult" -ne 0 ]; then
+		echo "Error encountered installing documentation files." >&2
+		install_result=$docresult
+	fi
+	return $install_result
+}
+
+install_files
+result=$?
 if [ "$result" -eq 0 ]; then
 	echo -e "Installation of MAS executable and library files succeeded.\n" >&2
 	if check_dynamic_libs; then
