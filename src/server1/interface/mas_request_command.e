@@ -37,18 +37,7 @@ feature {NONE}
 	ok_string: STRING is
 			-- "OK" message ID and field separator
 		once
-			Result := concatenation (<<OK.out, "%T">>)
-		end
-
-	put_ok is
-			-- Append ok_string to `output_buffer'.
-		require
-			buffer_not_void: output_buffer /= Void
-		do
-			put (ok_string)
-		ensure
-			new_count: output_buffer.count = old output_buffer.count +
-				OK.out.count + ("%T").count
+			Result := OK.out + Message_field_separator
 		end
 
 end
