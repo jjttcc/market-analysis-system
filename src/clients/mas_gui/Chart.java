@@ -303,9 +303,9 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 			period_type_change = true;
 			if (current_tradable != null) {
 				request_data(current_tradable);
-//!!!Replace with:
-//				send_data_request(current_tradable);
-//if it turns out needing to not be threaded.
+				//@@Replace with:
+				//send_data_request(current_tradable);
+				//if it turns out needing to not be threaded.
 			}
 		}
 	}
