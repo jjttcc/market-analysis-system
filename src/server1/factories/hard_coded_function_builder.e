@@ -1,6 +1,6 @@
 indexing
 	description:
-		"Builder of a list of market functions"
+		"Builder of a list of hard-coded market functions"
 	note:
 		"Hard-coded for testing for now, but may evolve into a legitimate %
 		%class"
@@ -8,7 +8,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class FUNCTION_BUILDER inherit
+class HARD_CODED_FUNCTION_BUILDER inherit
 
 	FACTORY
 		redefine
@@ -333,4 +333,4 @@ invariant
 
 	innermost_function_not_void: innermost_function /= Void
 
-end -- FUNCTION_BUILDER
+end -- HARD_CODED_FUNCTION_BUILDER

@@ -24,34 +24,6 @@ feature -- Access
 	market_function: MARKET_FUNCTION
 			-- Market function to use for those commands that need it
 
-	integer_selection (msg: STRING): INTEGER is
-		do
-			print_list (<<"Enter an integer value for ", msg, ": ">>)
-			read_integer
-			Result := last_integer
-		end
-
-	real_selection (msg: STRING): REAL is
-		do
-			print_list (<<"Enter a real value for ", msg, ": ">>)
-			read_real
-			Result := last_real
-		end
-
-	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
-		do
-			-- !!!May need to retrieve market function from user?
-			check
-				mf_not_void: market_function /= Void
-			end
-			Result := market_function.output
-		end
-
-	show_message (msg: STRING) is
-		do
-			print_list (<<msg, "%N">>)
-		end
-
 feature -- Status setting
 
 	set_market_function (arg: MARKET_FUNCTION) is
@@ -91,96 +63,77 @@ feature -- Miscellaneous
 			print_operand_trees (cmd, level + 1)
 		end
 
+feature {APPLICATION_COMMAND_EDITOR} -- Access
+
+	integer_selection (msg: STRING): INTEGER is
+		do
+			print_list (<<"Enter an integer value for ", msg, ": ">>)
+			read_integer
+			Result := last_integer
+		end
+
+	real_selection (msg: STRING): REAL is
+		do
+			print_list (<<"Enter a real value for ", msg, ": ">>)
+			read_real
+			Result := last_real
+		end
+
+	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
+		do
+			-- !!!May need to retrieve market function from user?
+			check
+				mf_not_void: market_function /= Void
+			end
+			Result := market_function.output
+		end
+
+	show_message (msg: STRING) is
+		do
+			print_list (<<msg, "%N">>)
+		end
+
 feature {NONE} -- Hook methods
 
-	user_command_selection (cmds: LIST [COMMAND]; msg: STRING):
-				COMMAND is
+	multilist_selection (lists: ARRAY [PAIR [LIST [STRING], STRING]];
+				general_msg: STRING): INTEGER is
 		local
-			op_names, tree_names: ARRAYED_LIST [STRING]
-			tree_cmds: LIST [COMMAND]
-			shared: BOOLEAN -- Should the selected command be shared?
-			name_choice: STRING
-			cmd_choice: COMMAND
+			i, startnum: INTEGER
 		do
-			tree_cmds := valid_types (cmds, current_commands)
-			from
-				!!tree_names.make (tree_cmds.count)
-				tree_cmds.start
-			until
-				tree_cmds.exhausted
-			loop
-				tree_names.extend (tree_cmds.item.generator)
-				tree_cmds.forth
-			end
-			from
-				!!op_names.make (cmds.count)
-				cmds.start
-			until
-				cmds.exhausted
-			loop
-				op_names.extend (cmds.item.generator)
-				cmds.forth
-			end
+			print (general_msg)
 			from
 			until
-				Result /= Void
+				Result /= 0
 			loop
-				print_list (<<"Select an operator for ", msg,
-					" from either the%Nlist of valid operators currently %
-					%in the tree (which will be shared)%Nor a new operator %
-					%from the list of all valid operators:%N">>)
-				if not tree_names.empty then
-					print ("[Valid operators currently in the tree:]%N")
-					print_names_in_1_column (tree_names, 1)
-				else
-					print ("[There are currently no valid operators in the %
-							%tree.]%N")
+				from
+					i := 1; startnum := 1
+				until
+					i = lists.count + 1
+				loop
+					if lists.item (i).left.count > 0 then
+						print (lists.item (i).right)
+						print_names_in_1_column (lists.item (i).left, startnum)
+					end
+					startnum := startnum + lists.item (i).left.count
+					i := i + 1
 				end
-				print ("[List of all valid operators:]%N")
-				print_names_in_1_column (op_names, tree_names.count + 1)
+				check
+					-- startnum = the sum of the count of all `left' elements
+					-- of lists
+				end
 				read_integer
 				if
 					last_integer < 1 or
-						last_integer > tree_names.count + op_names.count
+						last_integer >= startnum
 				then
 					print_list (<<"Selection must be between 1 and ",
-								tree_names.count + op_names.count, "%N">>)
+								startnum - 1, "%N">>)
 				else
-					if last_integer > tree_names.count then
-						name_choice :=
-							op_names @ (last_integer - tree_names.count)
-						cmd_choice := cmds @ (last_integer - tree_names.count)
-						shared := false
-					else
-						name_choice := tree_names @ last_integer
-						cmd_choice := tree_cmds @ last_integer
-						shared := true
-					end
-					print_list (<<"Select:%N     Print description of ",
-								name_choice, "? (d)%N",
-								"     Choose ", name_choice,
-								" (c) Make another choice (a) ">>)
-					inspect
-						selected_character
-					when 'd', 'D' then
-						print_list (<<"%N", command_description (
-							cmd_choice),
-							"%N%NChoose ", name_choice,
-								"? (y/n) ">>)
-						inspect
-							selected_character
-						when 'y', 'Y' then
-							Result := cmd_choice
-						else
-						end
-					when 'c', 'C' then
-						Result := cmd_choice
-					else
-					end
+					Result := last_integer
 				end
 			end
-			if not shared then
-				Result := deep_clone (Result)
+			check
+				Result < startnum
 			end
 		end
 
@@ -229,6 +182,32 @@ feature {NONE} -- Hook methods
 					end
 				end
 				slimit := slimit - 1
+			end
+		end
+
+	accepted_by_user (c: COMMAND): BOOLEAN is
+		do
+			print_list (<<"Select:%N     Print description of ",
+						c.generator, "? (d)%N",
+						"     Choose ", c.generator,
+						" (c) Make another choice (a) ">>)
+			inspect
+				selected_character
+			when 'd', 'D' then
+				print_list (<<"%N", command_description (c),
+					"%N%NChoose ", c.generator,
+						"? (y/n) ">>)
+				inspect
+					selected_character
+				when 'y', 'Y' then
+					Result := true
+				else
+					check Result = false end
+				end
+			when 'c', 'C' then
+				Result := true
+			else
+				check Result = false end
 			end
 		end
 
