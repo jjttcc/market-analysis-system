@@ -1,7 +1,7 @@
 indexing
 	description:
-		"An abstraction for an n-record command that finds %
-		%the lowest low value in the last n trading periods."
+		"An n-record command that finds the lowest low value in the last %
+		%n trading periods"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
