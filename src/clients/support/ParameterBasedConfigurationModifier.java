@@ -103,7 +103,13 @@ abstract class ColorChanger extends SettingChanger {
 	}
 	void execute(Configuration c, String value) {
 System.out.println("Setting " + key() + " to " + value);
-		c.set_color(key(), value);
+		if (c.valid_color(value)) {
+			c.set_color(key(), value);
+		} else {
+			report_error("Invalid color for " + key() + " specified: " +
+				value);
+System.out.println("Invalid color for " + key() + " specified: " + value);
+		}
 	}
 }
 

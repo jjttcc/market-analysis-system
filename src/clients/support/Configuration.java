@@ -16,11 +16,6 @@ public class Configuration implements NetworkProtocol {
 
 // Access
 
-	// Should a call to 'terminate' be ignored?
-	public static boolean ignore_termination() {
-		return ignore_termination_;
-	}
-
 	public String session_settings() {
 		StringBuffer result = new StringBuffer();
 		int i;
@@ -50,6 +45,11 @@ public class Configuration implements NetworkProtocol {
 							ds.date());
 		}
 		return result.toString();
+	}
+
+	// Is 'c' a valid color to use for set_color?
+	public boolean valid_color(String c) {
+		return c != null && _color_table.containsKey(c);
 	}
 
 	// Indicators configured to be drawn in the upper graph rather than
@@ -158,6 +158,13 @@ public class Configuration implements NetworkProtocol {
 		return _instance;
 	}
 
+// Status report
+
+	// Should a call to 'terminate' be ignored?
+	public static boolean ignore_termination() {
+		return ignore_termination_;
+	}
+
 // Element change
 
 	// Set the input source to be used for configuration input.
@@ -175,7 +182,7 @@ public class Configuration implements NetworkProtocol {
 		ignore_termination_ = value;
 	}
 
-	// Set the background color go 'color'.
+	// Set the color of the element specified by 'color_tag' to 'color'.
 	public void set_color(String color_tag, String color) {
 		if (! _color_table.containsKey(color)) {
 			System.err.println("Invalid color setting for " + color_tag +
