@@ -1,3 +1,4 @@
+@echo off
 echo init.bat is running in:>repl_spec
 rem set line_=%line_:"=%
 cd>>repl_spec
