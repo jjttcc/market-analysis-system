@@ -51,6 +51,13 @@ feature {NONE} -- Hook routine implementations
 			if not parse_error then
 				parse_error := start_date_time = Void
 			end
+			if parse_error then
+				last_field_parsing_error := invalid_date_spec
+				if date_time_range /= Void then
+					last_field_parsing_error := last_field_parsing_error +
+						": " + date_time_range
+				end
+			end
 		end
 
 	additional_field_constraints_fulfilled (fields: LIST [STRING]): BOOLEAN is
@@ -58,8 +65,9 @@ feature {NONE} -- Hook routine implementations
 			Result := fields.i_th (date_time_spec_index) /= Void and then
 				not fields.i_th (date_time_spec_index).is_empty
 		ensure then
-			true_iff_not_empty: Result = (fields.i_th (date_time_spec_index) /=
-				Void and then not fields.i_th (date_time_spec_index).is_empty)
+			false_if_date_spec_empty:
+				(fields.i_th (date_time_spec_index) = Void or else
+				fields.i_th (date_time_spec_index).is_empty) implies not Result
 		end
 
 	additional_post_parse_constraints_fulfilled: BOOLEAN is
@@ -71,7 +79,10 @@ feature {NONE} -- Hook routine implementations
 			true_iff_start_date_time_exists: Result = (start_date_time /= Void)
 		end
 
-	additional_field_constraints_msg: STRING is "date-time range field is emtpy"
+	additional_field_constraints_msg: STRING is
+		once
+			Result := empty_date_range_msg
+		end
 
 feature {NONE} -- Implementation - essential properties
 
@@ -130,5 +141,11 @@ feature {NONE} -- Hook routines
 	date_time_spec_index: INTEGER is
 		deferred
 		end
+
+feature {NONE} -- Implementation - constants
+
+		empty_date_range_msg: STRING is "date-time range field is emtpy"
+
+		invalid_date_spec: STRING is "invalid date-time specification: "
 
 end

@@ -34,6 +34,10 @@ feature {NONE} -- Hook routine implementations
 	additional_field_constraints_fulfilled (fields: LIST [STRING]): BOOLEAN is
 		do
 			Result := fields.first.is_integer
+			if not Result then
+				indicator_id_not_integer_msg := indicator_id_msg_prefix +
+					fields.first + indicator_id_msg_suffix
+			end
 		end
 
 	send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE]) is
@@ -67,7 +71,10 @@ feature {NONE} -- Hook routine implementations
 			Result := concatenation (<<error_context_prefix, market_symbol>>)
 		end
 
-	additional_field_constraints_msg: STRING is "Indicator ID is not an integer"
+	additional_field_constraints_msg: STRING is
+		do
+			Result := indicator_id_not_integer_msg
+		end
 
 feature {NONE} -- Implementation
 
@@ -79,8 +86,16 @@ feature {NONE} -- Implementation
 	indicator_id: INTEGER
 			-- ID of the indicator requested by the user
 
+	indicator_id_not_integer_msg: STRING
+
+feature {NONE} -- Implementation - constants
+
 	invalid_indicator_id_msg: STRING is "Invalid indicator ID"
 
 	error_context_prefix: STRING is "retrieving indicator data for "
+
+	indicator_id_msg_prefix: STRING is "Indicator ID "
+
+	indicator_id_msg_suffix: STRING is " is not an integer"
 
 end -- class INDICATOR_DATA_REQUEST_CMD

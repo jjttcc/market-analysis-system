@@ -140,6 +140,9 @@ feature {NONE} -- Implementation
 	fields_parsed: BOOLEAN
 			-- Has `parse_fields' been called successfully?
 
+	last_field_parsing_error: STRING
+			-- Description of last parsing error encountered
+
 	create_and_send_response is
 			-- Create the requested data and send them to the client.
 		require
@@ -175,6 +178,9 @@ feature {NONE} -- Utility
 					fields_parsed := True
 				end
 			end
+			if parse_error then
+				report_error (Error, <<last_field_parsing_error>>)
+			end
 		ensure
 			parsed_iff_no_error: not parse_error = fields_parsed
 			additional_constraints_fulfilled: not parse_error implies
@@ -200,7 +206,7 @@ feature {NONE} -- Utility
 			market_symbol := fields @ symbol_index
 			pt_name := fields @ period_type_index 
 			if not pt_names.has (pt_name) then
-				report_error (Error, <<bad_period_type_msg>>)
+				last_field_parsing_error := bad_period_type_msg
 				parse_error := True
 			else
 				trading_period_type := period_types @ pt_name

@@ -13,24 +13,25 @@ class TIME_DELIMITED_INDICATOR_DATA_REQUEST_CMD inherit
 	INDICATOR_DATA_REQUEST_CMD
 		rename
 			additional_field_constraints_fulfilled as
-			indicator_id_field_constraint_fulfilled,
-additional_field_constraints_msg as indicator_id_error_msg
+			indicator_id_valid
 		undefine
 			expected_field_count,
 			parse_remainder,
 			set_print_parameters,
-additional_post_parse_constraints_fulfilled
+			additional_post_parse_constraints_fulfilled
+		redefine
+			additional_field_constraints_msg
 		end
 
 	TIME_DELIMITED_DATA_REQUEST_CMD
 		undefine
-			send_response_for_tradable
+			send_response_for_tradable,
+			additional_field_constraints_msg
 		redefine
 			parse_remainder,
 			additional_field_constraints_fulfilled
 		select
-			additional_field_constraints_fulfilled,
-			additional_field_constraints_msg
+			additional_field_constraints_fulfilled
 		end
 
 creation
@@ -47,11 +48,22 @@ feature {NONE} -- Hook routine implementations
 
 	additional_field_constraints_fulfilled (fields: LIST [STRING]): BOOLEAN is
 		do
-			Result := indicator_id_field_constraint_fulfilled (fields) and then
-				{TIME_DELIMITED_DATA_REQUEST_CMD} Precursor (fields)
+			Result := True
+			if not indicator_id_valid (fields) then
+				Result := False
+				additional_field_constraints_msg := indicator_id_not_integer_msg
+			elseif
+				not {TIME_DELIMITED_DATA_REQUEST_CMD} Precursor (fields)
+			then
+				Result := False
+				additional_field_constraints_msg := empty_date_range_msg
+			end
+		ensure then
+			false_if_indicator_id_invalid:
+				not indicator_id_valid (fields) implies not Result
 		end
 
-	date_time_spec_empty_msg: STRING is "date-time range field is emtpy"
+	additional_field_constraints_msg: STRING
 
 feature {NONE} -- Redefined routines
 
