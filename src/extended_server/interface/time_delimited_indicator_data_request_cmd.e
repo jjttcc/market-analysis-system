@@ -67,17 +67,6 @@ feature {NONE} -- Redefined routines
 
 	expected_field_count: INTEGER is 4
 
-feature {NONE} -- Implementation
-
-	old_remove_date_time_spec_exists (fields: LIST [STRING]): BOOLEAN is
-		do
-			Result := fields.i_th (date_time_spec_index) /= Void and then
-				not fields.i_th (date_time_spec_index).is_empty
-		ensure
-			true_iff_not_empty: Result = (fields.i_th (date_time_spec_index) /=
-				Void and then not fields.i_th (date_time_spec_index).is_empty)
-		end
-
 feature {NONE} -- Implementation - constants
 
 	date_time_spec_index: INTEGER is 4
