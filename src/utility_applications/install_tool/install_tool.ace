@@ -24,8 +24,48 @@ default
 	inlining_size ("4")
 
 cluster 
+
+	install_tool: "$MAS/src/utility_applications/install_tool"
+
 		-- The application
-	root_cluster: "$MAS/src/utility_applications/install_tool/application"
+	root_cluster (install_tool): "$/application"
+
+	commands (install_tool): "$/commands"
+
+	support (install_tool):		"$/support"
+
+
+	eiffel_components:		"$MAS/src/eiffel_library"
+
+	architectural (eiffel_components):		"$/architectural"
+
+	eiffel_support (eiffel_components):		"$/support"
+
+	server (eiffel_components):		"$/server"
+
+	error (eiffel_components):		"$/error"
+
+
+	gobo:		"$GOBO/library"
+
+	all gobo_kernel (gobo):		"$/kernel"
+		exclude
+			"se"; "ve"; "hact"; 
+		end
+
+	regexp (gobo):		"$/regexp"
+
+	pcre (regexp):		"$/pcre"
+
+	re_interface (regexp):		"$/interface"
+
+	re_support (regexp):		"$/support"
+
+	all gobo_utility (gobo):		"$/utility"
+
+	all gobo_structure (gobo):		"$/structure"
+
+
 
 		-- EiffelBase
 	all base: "$ISE_EIFFEL/library/base"
@@ -48,7 +88,8 @@ external
 			"\$(ISE_EIFFEL)/library/vision2/spec/include",
 			"\$(ISE_EIFFEL)/library/vision2/implementation/gtk/Clib `gtk-config --cflags`"
 	object:
-			"$(ISE_EIFFEL)/library/vision2/spec/$(ISE_PLATFORM)/lib/gtk_eiffel.o",
-			"$(ISE_EIFFEL)/library/vision2/spec/$(ISE_PLATFORM)/lib/load_pixmap.o `gtk-config --libs`",
-			"-lpng -lz -lXtst"
+		"$(ISE_EIFFEL)/library/vision2/spec/$(ISE_PLATFORM)/lib/gtk_eiffel.o",
+		"$(ISE_EIFFEL)/library/vision2/spec/$(ISE_PLATFORM)/lib/load_pixmap.o `gtk-config --libs`",
+		"/${MAS}/src/eiffel_library/support/spec/${ISE_PLATFORM}/lib/utilities.o",
+		"-lpng -lz -lXtst"
 end
