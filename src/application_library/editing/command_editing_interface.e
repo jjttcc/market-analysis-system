@@ -82,7 +82,7 @@ feature -- Access
 			l.extend (command_with_generator ("MA_EXPONENTIAL"))
 			l.extend (command_with_generator ("SETTABLE_OFFSET_COMMAND"))
 			l.extend (command_with_generator ("MINUS_N_COMMAND"))
-			l.extend (command_with_generator ("CONSTANT"))
+			l.extend (command_with_generator ("NUMERIC_VALUE_COMMAND"))
 			l.extend (command_with_generator ("BASIC_NUMERIC_COMMAND"))
 			l.extend (command_with_generator ("VOLUME"))
 			l.extend (command_with_generator ("LOW_PRICE"))
@@ -91,7 +91,7 @@ feature -- Access
 			l.extend (command_with_generator ("OPENING_PRICE"))
 			l.extend (command_with_generator ("OPEN_INTEREST"))
 			l.extend (command_with_generator ("BASIC_LINEAR_COMMAND"))
-			l.extend (command_with_generator ("BOOLEAN_NUMERIC_CLIENT"))
+			l.extend (command_with_generator ("NUMERIC_CONDITIONAL_COMMAND"))
 			l.extend (command_with_generator ("SLOPE_ANALYZER"))
 			l.extend (command_with_generator ("UNARY_LINEAR_OPERATOR"))
 			l.extend (command_with_generator ("ABSOLUTE_VALUE"))
@@ -103,7 +103,7 @@ feature -- Access
 			l.extend (command_with_generator ("N_BASED_UNARY_OPERATOR"))
 			l.extend (command_with_generator ("FUNCTION_BASED_COMMAND"))
 			l.extend (command_with_generator ("INDEX_EXTRACTOR"))
-			l.extend (command_with_generator ("MANAGED_VALUE_COMMAND"))
+			l.extend (command_with_generator ("NUMERIC_ASSIGNMENT_COMMAND"))
 			l.extend (command_with_generator ("NUMERIC_VALUED_COMMAND_WRAPPER"))
 
 			create l.make (7)
@@ -176,8 +176,8 @@ feature -- Access
 			l.extend (command_with_generator ("BASIC_LINEAR_COMMAND"))
 
 			create l.make (1)
-			Result.extend (l, Constant_command)
-			l.extend (command_with_generator ("CONSTANT"))
+			Result.extend (l, Numeric_value_command)
+			l.extend (command_with_generator ("NUMERIC_VALUE_COMMAND"))
 
 			-- Add all commands.
 			l := clone (command_instances)
@@ -216,8 +216,8 @@ feature -- Constants
 	Indexed: STRING is "INDEXED"
 			-- Name of INDEXED
 
-	Constant_command: STRING is "CONSTANT"
-			-- Name of CONSTANT
+	Numeric_value_command: STRING is "NUMERIC_VALUE_COMMAND"
+			-- Name of NUMERIC_VALUE_COMMAND
 
 feature -- Status report
 
@@ -331,7 +331,7 @@ feature {NONE} -- Implementation
 	Binary_real,		-- binary operator with real result
 	Unary_boolean,		-- unary operator with boolean result
 	Unary_real,			-- unary operator with real result
-	Constant,			-- CONSTANT - needs value to be set
+	Numeric_value,		-- NUMERIC_VALUE_COMMAND - needs value to be set
 	Other,				-- Classes that need no initialization
 	Mtlist_resultreal,  -- Classes that need a market tuple list and a
 						-- RESULT_COMMAND [REAL]
@@ -345,10 +345,10 @@ feature {NONE} -- Implementation
 						-- an n-value
 	Settable_offset,	-- SETTABLE_OFFSET_COMMAND
 	Sign_analyzer,		-- SIGN_ANALYZER
-	Boolean_num_client,	-- BOOLEAN_NUMERIC_CLIENT
+	Numeric_cond,		-- NUMERIC_CONDITIONAL_COMMAND
 	Function_command,   -- FUNCTION_BASED_COMMAND
 	Index,				-- INDEX_EXTRACTOR
-	Managed_value,		-- MANAGED_VALUE_COMMAND
+	Numeric_assignment,		-- NUMERIC_ASSIGNMENT_COMMAND
 	Numeric_wrapper,	-- NUMERIC_VALUED_COMMAND_WRAPPER
 	Command_sequence	-- COMMAND_SEQUENCE
 	:
@@ -462,11 +462,11 @@ feature {NONE} -- Implementation
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_real, name)
-			name := "CONSTANT"
+			name := "NUMERIC_VALUE_COMMAND"
 			check
 				valid_name: command_names.has (name)
 			end
-			Result.extend (Constant, name)
+			Result.extend (Numeric_value, name)
 			name := "ABSOLUTE_VALUE"
 			check
 				valid_name: command_names.has (name)
@@ -582,11 +582,11 @@ feature {NONE} -- Implementation
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Resultreal_n, name)
-			name := "BOOLEAN_NUMERIC_CLIENT"
+			name := "NUMERIC_CONDITIONAL_COMMAND"
 			check
 				valid_name: command_names.has (name)
 			end
-			Result.extend (Boolean_num_client, name)
+			Result.extend (Numeric_cond, name)
 			name := "SIGN_ANALYZER"
 			check
 				valid_name: command_names.has (name)
@@ -607,11 +607,11 @@ feature {NONE} -- Implementation
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Index, name)
-			name := "MANAGED_VALUE_COMMAND"
+			name := "NUMERIC_ASSIGNMENT_COMMAND"
 			check
 				valid_name: command_names.has (name)
 			end
-			Result.extend (Managed_value, name)
+			Result.extend (Numeric_assignment, name)
 			name := "NUMERIC_VALUED_COMMAND_WRAPPER"
 			check
 				valid_name: command_names.has (name)
@@ -627,19 +627,19 @@ feature {NONE} -- Implementation
 	initialize_command (c: COMMAND) is
 			-- Set command parameters - operands, etc.
 		local
-			const: CONSTANT
+			nvc: NUMERIC_VALUE_COMMAND
 			bin_bool_op: BINARY_OPERATOR [ANY, BOOLEAN]
 			bin_real_op: BINARY_OPERATOR [ANY, REAL]
 			un_bool_op: UNARY_OPERATOR [BOOLEAN, BOOLEAN]
 			unop_real: UNARY_OPERATOR [ANY, REAL]
 			unop_real_real: UNARY_OPERATOR [REAL, REAL]
 			offset_cmd: SETTABLE_OFFSET_COMMAND
-			bnc: BOOLEAN_NUMERIC_CLIENT
+			conditional: NUMERIC_CONDITIONAL_COMMAND
 			sign_an: SIGN_ANALYZER
 			fcmd: FUNCTION_BASED_COMMAND
 			minus_n_cmd: MINUS_N_COMMAND
 			ix: INDEX_EXTRACTOR
-			mv: MANAGED_VALUE_COMMAND
+			mv: NUMERIC_ASSIGNMENT_COMMAND
 			nvcw: NUMERIC_VALUED_COMMAND_WRAPPER
 			cmd_seq: COMMAND_SEQUENCE
 		do
@@ -669,12 +669,12 @@ feature {NONE} -- Implementation
 					c_is_a_unary_real: unop_real_real /= Void
 				end
 				editor.edit_unaryop_real (unop_real_real)
-			when Constant then
-				const ?= c
+			when Numeric_value then
+				nvc ?= c
 				check
-					c_is_a_constant: const /= Void
+					c_is_a_numeric_value: nvc /= Void
 				end
-				editor.edit_constant (const)
+				editor.edit_numeric_value (nvc)
 			when Mtlist_resultreal then
 				unop_real_real ?= c
 				check
@@ -711,12 +711,12 @@ feature {NONE} -- Implementation
 					c_is_a_settable_offset_cmd: offset_cmd /= Void
 				end
 				editor.edit_offset (offset_cmd)
-			when Boolean_num_client then
-				bnc ?= c
+			when Numeric_cond then
+				conditional ?= c
 				check
-					c_is_a_boolean_numeric_client: bnc /= Void
+					c_is_a_numeric_conditional_command: conditional /= Void
 				end
-				editor.edit_boolean_numeric_client (bnc)
+				editor.edit_numeric_conditional_command (conditional)
 			when Sign_analyzer then
 				sign_an ?= c
 				check
@@ -735,12 +735,12 @@ feature {NONE} -- Implementation
 					c_is_a_function_based_command: ix /= Void
 				end
 				editor.edit_index_extractor (ix)
-			when Managed_value then
+			when Numeric_assignment then
 				mv ?= c
 				check
-					c_is_a_managed_value_command: mv /= Void
+					c_is_a_numeric_assignment_command: mv /= Void
 				end
-				editor.edit_managed_value (mv)
+				editor.edit_numeric_assignment (mv)
 			when Numeric_wrapper then
 				nvcw ?= c
 				check

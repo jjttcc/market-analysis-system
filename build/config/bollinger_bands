@@ -26,7 +26,7 @@ BASIC_LINEAR_COMMAND
 c
 Standard Deviation
 y
-CONSTANT
+NUMERIC_VALUE_COMMAND
 c
 2
 # Lower band:
@@ -51,7 +51,7 @@ BASIC_LINEAR_COMMAND
 c
 Standard Deviation
 y
-CONSTANT
+NUMERIC_VALUE_COMMAND
 c
 2
 # Set n values to 20

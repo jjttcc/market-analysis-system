@@ -189,7 +189,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			-- RSI:  100 - (100 / (1 + RS))
 			-- RS:  (average n up closes ) / (average n down closes)
 		local
-			one, one_hundred: CONSTANT
+			one, one_hundred: NUMERIC_VALUE_COMMAND
 			outer_div, inner_div, add, sub: BINARY_OPERATOR [REAL, REAL]
 			positive_average, negative_average: BASIC_LINEAR_COMMAND
 			pos_ema, neg_ema: EXPONENTIAL_MOVING_AVERAGE
@@ -247,7 +247,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			close: BASIC_NUMERIC_COMMAND
 			minus_n: MINUS_N_COMMAND
 			k: N_BASED_UNARY_OPERATOR
-			one, two: CONSTANT
+			one, two: NUMERIC_VALUE_COMMAND
 			ix: INDEX_EXTRACTOR
 		do
 			create one.make (1); create two.make (2)
@@ -280,12 +280,12 @@ feature {NONE} -- Hard-coded market function building procedures
 		local
 			up_closes, down_closes: MINUS_N_COMMAND
 			up_adder, down_adder: LINEAR_SUM
-			up_boolclient, down_boolclient: BOOLEAN_NUMERIC_CLIENT
+			up_boolclient, down_boolclient: NUMERIC_CONDITIONAL_COMMAND
 			lt_op: LT_OPERATOR
 			gt_op: GT_OPERATOR
 			offset1, offset2: SETTABLE_OFFSET_COMMAND
 			close: CLOSING_PRICE
-			zero, one_hundred, one: CONSTANT
+			zero, one_hundred, one: NUMERIC_VALUE_COMMAND
 			nvalue: N_VALUE_COMMAND
 			upsub, downsub, outer_sub: SUBTRACTION
 			rs_div, maindiv, upavg, downavg: DIVISION
@@ -336,7 +336,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			high: HIGH_PRICE
 			low: LOW_PRICE
 			close: CLOSING_PRICE
-			one_hundred: CONSTANT
+			one_hundred: NUMERIC_VALUE_COMMAND
 		do
 			create close; create low; create high
 			create one_hundred.make (100) -- factor for conversion to percentage
@@ -367,7 +367,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			high: HIGH_PRICE
 			low: LOW_PRICE
 			close: CLOSING_PRICE
-			one_hundred: CONSTANT
+			one_hundred: NUMERIC_VALUE_COMMAND
 		do
 			create close; create low; create high
 			create one_hundred.make (100) -- factor for conversion to percentage
@@ -404,7 +404,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			high: HIGH_PRICE
 			low: LOW_PRICE
 			close: CLOSING_PRICE
-			one_hundred: CONSTANT
+			one_hundred: NUMERIC_VALUE_COMMAND
 		do
 			create cmd
 			create close; create low; create high
@@ -468,7 +468,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			create bnc
 			create current_close.make (main_data.output, bnc)
 			create minus.make (current_close, sma_op)
-			create square.make (minus, create {CONSTANT}.make (2))
+			create square.make (minus, create {NUMERIC_VALUE_COMMAND}.make (2))
 			create sum.make (f.data, square, n)
 			create div.make (sum, create {N_VALUE_COMMAND}.make (n))
 			create sqrt.make (div)
@@ -513,10 +513,10 @@ feature {NONE} -- Hard-coded market function building procedures
 			-- Positive (`positive') or negative (not `positive') average
 			-- used in the quotient for RS for the RSI formula
 		local
-			one, zero: CONSTANT
+			one, zero: NUMERIC_VALUE_COMMAND
 			exp: N_BASED_UNARY_OPERATOR
 			div, sub: BINARY_OPERATOR [REAL, REAL]
-			main_op: BOOLEAN_NUMERIC_CLIENT
+			main_op: NUMERIC_CONDITIONAL_COMMAND
 			n_cmd: N_VALUE_COMMAND
 			relational_op: BINARY_OPERATOR [BOOLEAN, REAL]
 			offset_minus_1, offset_0: SETTABLE_OFFSET_COMMAND
@@ -584,7 +584,7 @@ feature {NONE} -- Functions currently not used
 			add: ADDITION
 			high: HIGH_PRICE
 			low: LOW_PRICE
-			two: CONSTANT
+			two: NUMERIC_VALUE_COMMAND
 		do
 			create high; create low; create two.make (2)
 			two.set_is_editable (False)

@@ -33,7 +33,7 @@ feature -- Access
 			true_dummy: TRUE_COMMAND
 			bool_real_dummy: LT_OPERATOR
 			cmd: COMMAND
-			real_dummy: CONSTANT
+			real_dummy: NUMERIC_VALUE_COMMAND
 			pair: PAIR [COMMAND, STRING]
 			bnc_dummy: BASIC_NUMERIC_COMMAND
 			stock: STOCK
@@ -46,10 +46,11 @@ feature -- Access
 			-- Likewise, some creation routines need a dummy of type
 			-- RESULT_COMMAND [REAL], fulfilled by real_dummy.
 			create real_dummy.make (0.0)
-			-- Create a pair for the CONSTANT instance (real_dummy) and
-			-- add it to the list (Result).
+			-- Create a pair for the NUMERIC_VALUE_COMMAND instance
+			-- (real_dummy) and add it to the list (Result).
 			create pair.make (real_dummy,
-				"Operator with a numeric constant result")
+				"Operator that simply stores a numeric value - Can be %
+				%used as a constant or a variable")
 			------ Create/insert non-MAL COMMANDs (from eiffel_library) ------
 			Result.extend (pair)
 			-- Create a pair for the TRUE_COMMAND instance (true_dummy) and
@@ -245,14 +246,15 @@ feature -- Access
 				"N-based operator whose value remains unchanged after %
 				%initialization and that uses%Nan operand to obtain its value")
 			Result.extend (pair)
-			create {BOOLEAN_NUMERIC_CLIENT} cmd.make (bool_real_dummy,
+			create {NUMERIC_CONDITIONAL_COMMAND} cmd.make (bool_real_dummy,
 				real_dummy, real_dummy)
 			create pair.make (cmd, "Operator that makes a decision based on %
 				%the value of executing its%Nboolean operator - if the %
 				%result is true, value is set to the result of%Nexecuting %
 				%its 'true command'; otherwise, value is set to the %
 				%result of%Nexecuting its 'false command'.  This operator %
-				%can thus function as%Nan if/else block.%N")
+				%can thus function as%Nan if/else block that produces %
+				%a numeric value.%N")
 			Result.extend (pair)
 			create {SIGN_ANALYZER} cmd.make (real_dummy, real_dummy, False)
 			create pair.make (cmd,
@@ -269,11 +271,11 @@ feature -- Access
 				%obtained from a%Nmarket function - only used by %
 				%ONE_VARIABLE_FUNCTION_ANALYZER")
 			Result.extend (pair)
-			create {MANAGED_VALUE_COMMAND} cmd.make (bnc_dummy, real_dummy)
+			create {NUMERIC_ASSIGNMENT_COMMAND} cmd.make (bnc_dummy, real_dummy)
 			create pair.make (cmd, "Operator that executes its %
 				%'main_operator' and stores the resulting value%Nin a %
-				%'managed_value' and whose result is the managed_value's %
-				%resulting value")
+				%target NUMERIC_VALUE_COMMAND and whose result is the %
+				%target's%Nresulting value")
 			Result.extend (pair)
 			create {NUMERIC_VALUED_COMMAND_WRAPPER} cmd.make (
 				real_dummy)

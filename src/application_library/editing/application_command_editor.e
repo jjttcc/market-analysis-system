@@ -134,20 +134,20 @@ feature -- Basic operations
 			cmd.set_indexable (ix_cmd)
 		end
 
-	edit_managed_value (cmd: MANAGED_VALUE_COMMAND) is
-			-- Edit a MANAGED_VALUE_COMMAND.
+	edit_numeric_assignment (cmd: NUMERIC_ASSIGNMENT_COMMAND) is
+			-- Edit a NUMERIC_ASSIGNMENT_COMMAND.
 		require
 			ui_set: user_interface /= Void
 		local
-			constant: CONSTANT
+			nvc: NUMERIC_VALUE_COMMAND
 		do
-			constant ?= user_interface.command_selection_from_type (
-				user_interface.Constant_command, cmd.generator +
-					user_interface.name_for (cmd) + "'s managed value", False)
+			nvc ?= user_interface.command_selection_from_type (
+				user_interface.Numeric_value_command, cmd.generator +
+					user_interface.name_for (cmd) + "'s target", False)
 			check
-				selection_valid: constant /= Void
+				selection_valid: nvc /= Void
 			end
-			cmd.set_managed_value (constant)
+			cmd.set_target (nvc)
 			edit_unaryop_real (cmd)
 		end
 
@@ -315,8 +315,8 @@ feature -- Basic operations
 			end
 		end
 
-	edit_boolean_numeric_client (cmd: BOOLEAN_NUMERIC_CLIENT) is
-			-- Edit a BOOLEAN_NUMERIC_CLIENT.
+	edit_numeric_conditional_command (cmd: NUMERIC_CONDITIONAL_COMMAND) is
+			-- Edit a NUMERIC_CONDITIONAL_COMMAND.
 		local
 			boolop: RESULT_COMMAND [BOOLEAN]
 			result_cmd: RESULT_COMMAND [REAL]
@@ -418,9 +418,8 @@ feature -- Basic operations
 			end
 		end
 
-	edit_constant (cmd: CONSTANT) is
-			-- Edit a simple command that takes a REAL value
-			-- (such as CONSTANT).
+	edit_numeric_value (cmd: NUMERIC_VALUE_COMMAND) is
+			-- Edit a NUMERIC_VALUE_COMMAND.
 		require
 			ui_set: user_interface /= Void
 		do

@@ -253,7 +253,7 @@ c
 Slope of MACD Signal Line Less Than or Equal to {Limit}
 Slope of MACD Signal Line
 y
-BOOLEAN_NUMERIC_CLIENT
+NUMERIC_CONDITIONAL_COMMAND
 c
 LE_OPERATOR
 c
@@ -261,17 +261,17 @@ BASIC_LINEAR_COMMAND
 c
 Slope of MACD Signal Line
 y
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 Limit
 y
 -0.175
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 True result
 y
 -1
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 False result
 y
@@ -286,7 +286,7 @@ c
 Slope of MACD Signal Line Greater Than or Equal to {Limit}
 Slope of MACD Signal Line
 y
-BOOLEAN_NUMERIC_CLIENT
+NUMERIC_CONDITIONAL_COMMAND
 c
 GE_OPERATOR
 c
@@ -294,17 +294,17 @@ BASIC_LINEAR_COMMAND
 c
 Slope of MACD Signal Line
 y
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 Limit
 y
 0.175
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 True result
 y
 1
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 False result
 y
@@ -369,7 +369,7 @@ HIGH_PRICE
 c
 LOW_PRICE
 c
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 Two
 n
@@ -411,7 +411,7 @@ BASIC_LINEAR_COMMAND
 c
 Standard Deviation
 y
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 Number of standard deviations
 y
@@ -438,7 +438,7 @@ BASIC_LINEAR_COMMAND
 c
 Standard Deviation
 y
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 Number of standard deviations
 y

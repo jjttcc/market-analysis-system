@@ -1,16 +1,14 @@
 indexing
-	description: "Commands that execute a `main_operator' and store the %
-		%resulting value in a `managed_value'.  The result (`value') %
-		%is then `managed_value.value'."
-	note: "An instance of this class can be safely shared within a command %
-		%tree."
+	description: "Commands that provide an assignment instruction by %
+		%executing a `main_operator' and storing the resulting numeric %
+		%value in a `target'.  The result (`value') is then `target.value'."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class MANAGED_VALUE_COMMAND inherit
+class NUMERIC_ASSIGNMENT_COMMAND inherit
 
 	UNARY_OPERATOR [REAL, REAL]
 		rename
@@ -30,34 +28,34 @@ create
 
 feature -- Initialization
 
-	make (main_op: RESULT_COMMAND [REAL]; managed_op: CONSTANT) is
+	make (main_op: RESULT_COMMAND [REAL]; target_op: NUMERIC_VALUE_COMMAND) is
 		require
-			args_exist: main_op /= Void and managed_op /= Void
+			args_exist: main_op /= Void and target_op /= Void
 		do
 			main_operator := main_op
-			managed_value := managed_op
+			target := target_op
 			-- main_operator is not a valid function parameter:
-			managed_value.set_is_editable (False)
+			target.set_is_editable (False)
 		ensure
 			operators_set: main_operator = main_op and
-				managed_value = managed_op
+				target = target_op
 		end
 
 feature -- Access
 
-	managed_value: CONSTANT
-			-- The "managed" object - updated with the last calculated value.
+	target: NUMERIC_VALUE_COMMAND
+			-- The "target" object - updated with the last calculated value.
 
 feature -- Element change
 
-	set_managed_value (arg: CONSTANT) is
-			-- Set `managed_value' to `arg'.
+	set_target (arg: NUMERIC_VALUE_COMMAND) is
+			-- Set `target' to `arg'.
 		require
 			arg_not_void: arg /= Void
 		do
-			managed_value := arg
+			target := arg
 		ensure
-			managed_value_set: managed_value = arg and managed_value /= Void
+			target_set: target = arg and target /= Void
 		end
 
 feature -- Basic operations
@@ -65,14 +63,14 @@ feature -- Basic operations
 	operate (v: REAL) is
 		do
 			value := v
-			managed_value.set_value (value)
+			target.set_value (value)
 		ensure then
-			value_is_managed_value_value:
-				reals_equal (value, managed_value.value)
+			value_is_target_value:
+				reals_equal (value, target.value)
 		end
 
 invariant
 
-	operators_exist: main_operator /= Void and managed_value /= Void
+	operators_exist: main_operator /= Void and target /= Void
 
 end

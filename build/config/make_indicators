@@ -13,7 +13,7 @@ shift
 
 for file in indicators ../../hold/finance-private/ADX slope_of_ema_of_adx \
 parabolic-sar market_analyzers \
-../../hold/private/slope_of_slope_of_macd_signal_trend_ADX_analyzers \
+../../hold/finance-private/slope_of_slope_of_macd_signal_trend_ADX_analyzers \
 macd_buy-sell_anlyzers_with_ema_gt_10; do
 	if ! macl -i $file $port $*; then
 		echo "'macl -i $file $port' failed - Aborting."

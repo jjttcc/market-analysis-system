@@ -4,12 +4,12 @@ Here are some other examples of creating market analyzers.
 Example A:  Daily Volume >= 1,000,000
 
 Choose simple as the analyzer type and "one" for the number of indicators.
-Choose "Market Data" as the indicator.  Choose GE_OPERATOR as the root
-operator.  Choose VOLUME for GE_OPERATOR's left operand and choose
-CONSTANT for GE_OPERATOR's right operand.  For the CONTANT's value, enter
-1000000 - or if you would like to use a different value than 1 million,
-enter that.  Choose daily for the trading period type.  Finally, choose
-a good name.
+Choose "Market Data" as the indicator.  Choose GE_OPERATOR as the
+root operator.  Choose VOLUME for GE_OPERATOR's left operand and
+choose NUMERIC_VALUE_COMMAND for GE_OPERATOR's right operand.  For the
+NUMERIC_VALUE_COMMAND's value, enter 1000000 - or if you would like to
+use a different value than 1 million, enter that.  Choose daily for the
+trading period type.  Finally, choose a good name.
 
 
 Example B:  Volume > yesterday's Volume EMA (5) * 2.75 AND

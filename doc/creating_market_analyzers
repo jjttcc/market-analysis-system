@@ -206,7 +206,7 @@ This will require a composite operator that can be drawn as a tree:
                            /       \
                       VOLUME     MULTIPLICATION
                                    /        \
-                   FUNCTION_BASED_COMMAND  CONSTANT (x)
+                   FUNCTION_BASED_COMMAND  NUMERIC_VALUE_COMMAND (x)
                              |
                    SETTABLE_OFFSET_COMMAND
                              |
@@ -223,7 +223,7 @@ operand to extract the EMA of volume value for the previous period.
 in the creating_indicators example, to obtain the EMA of volume values.)
 SETTABLE_OFFSET_COMMAND, FUNCTION_BASED_COMMAND's operand, will be used
 to access the previous period's data.  SETTABLE_OFFSET_COMMAND will use
-its operand, BASIC_NUMERIC_COMMAND, to extract the EMA value.  CONSTANT,
+its operand, BASIC_NUMERIC_COMMAND, to extract the EMA value.  NUMERIC_VALUE_COMMAND,
 MULTIPLICATION's right operand, provides the x in "(previous period's
 EMA of volume) * x".
 
@@ -260,7 +260,7 @@ used to access the previous period data (the volume EMA for the previous
 period) - one period to the left - enter 1.
 
 For MULTIPLICATION's right operand, according to the diagram, choose the
-CONSTANT object.  Its value will be the value you choose for x in the
+NUMERIC_VALUE_COMMAND object.  Its value will be the value you choose for x in the
 formula: "volume > (previous period's EMA of volume) * x".  For example,
 if you want to detect if the current period's volume is 2.5 times greater
 than the volume EMA of the previous period, choose 2.5.
@@ -355,7 +355,7 @@ of MACD] Trend, the left function, is greater than -1.)
 
 For the root operator, select GT_OPERATOR.  For the left operand, choose
 BASIC_NUMERIC_COMMAND, which will obtain the value of the underlying
-function for the current period.  For the right operand, select CONSTANT
+function for the current period.  For the right operand, select NUMERIC_VALUE_COMMAND
 and give it the value -1.  Select Neutral as the signal type.  Choose a
 good name, such as "[Slope of MACD, Slope of Slope of MACD] Sidelined -
 2 to 0".
@@ -363,4 +363,4 @@ good name, such as "[Slope of MACD, Slope of Slope of MACD] Sidelined -
 For the -2 to 0 analyzer, follow the same steps as the 2 to 0 analyzer,
 but select -1 for the Line's y value, select below-to-above for the
 crossover detection, select LT_OPERATOR as the root operator, select
-1 for the CONSTANT's value, and choose an appropriate name.
+1 for the NUMERIC_VALUE_COMMAND's value, and choose an appropriate name.

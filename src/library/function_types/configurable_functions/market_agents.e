@@ -269,7 +269,7 @@ feature {NONE} -- COMMAND-based utility routines
 			Result := op.value
 		end
 
-	x_value: CONSTANT is
+	x_value: NUMERIC_VALUE_COMMAND is
 			-- Value for `x' used in binary operation - optimization
 		do
 			if x_value_implementation = Void then
@@ -278,7 +278,7 @@ feature {NONE} -- COMMAND-based utility routines
 			Result := x_value_implementation
 		end
 
-	y_value: CONSTANT is
+	y_value: NUMERIC_VALUE_COMMAND is
 			-- Value for `y' used in binary operation - optimization
 		do
 			if y_value_implementation = Void then
@@ -305,7 +305,7 @@ feature {NONE} -- COMMAND-based utility routines
 			Result := subtraction_operator_implementation
 		end
 
-	x_value_implementation, y_value_implementation: CONSTANT
+	x_value_implementation, y_value_implementation: NUMERIC_VALUE_COMMAND
 
 	addition_operator_implementation: ADDITION
 

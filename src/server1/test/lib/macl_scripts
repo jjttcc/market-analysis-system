@@ -73,7 +73,7 @@ COMMAND_SEQUENCE
 e
 Main sequence
 y
-BOOLEAN_NUMERIC_CLIENT
+NUMERIC_CONDITIONAL_COMMAND
 e
 If 1st period, Init; else main body
 EQ_OPERATOR
@@ -88,7 +88,7 @@ INDEX_EXTRACTOR
 c
 shared UNARY_LINEAR_OPERATOR (Period number)
 c
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 One
 n
@@ -102,74 +102,74 @@ COMMAND_SEQUENCE
 e
 Initialization sequence
 y
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 Previous SAR value
 n
 0
 n
 y
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 Previous EP value
 n
 0
 n
 y
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 Previous AF value
 n
 0
 n
 y
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 short
 n
 -1
 n
 y
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 AF increment
 y
 .02
 n
 y
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 Maximum AF value
 y
 .1999
 n
 y
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 Null operation
 n
 0
 n
 y
-MANAGED_VALUE_COMMAND
+NUMERIC_ASSIGNMENT_COMMAND
 e
 tradestate := long
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 tradestate
 n
 0
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 long
 n
 1
 n
 y
-MANAGED_VALUE_COMMAND
+NUMERIC_ASSIGNMENT_COMMAND
 e
 SAR := low
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 SAR
 n
@@ -178,10 +178,10 @@ LOW_PRICE
 c
 n
 y
-MANAGED_VALUE_COMMAND
+NUMERIC_ASSIGNMENT_COMMAND
 e
 EP := high
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 EP
 n
@@ -190,15 +190,15 @@ HIGH_PRICE
 c
 n
 y
-MANAGED_VALUE_COMMAND
+NUMERIC_ASSIGNMENT_COMMAND
 e
 AF := Initial AF value
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 AF
 n
 0
-CONSTANT
+NUMERIC_VALUE_COMMAND
 e
 Initial AF value
 y
@@ -207,18 +207,18 @@ n
 n
 # The main body, executed on periods 2 to the end of the data - Corresponds
 # to the 'execute' routine in the perl script.
-BOOLEAN_NUMERIC_CLIENT
+NUMERIC_CONDITIONAL_COMMAND
 e
 Main body
 EQ_OPERATOR
 e
 tradestate = long?
-shared CONSTANT ({tradestate})
+shared NUMERIC_VALUE_COMMAND ({tradestate})
 c
-shared CONSTANT ({long})
+shared NUMERIC_VALUE_COMMAND ({long})
 c
 # Corresponds to the "long block" in the perl script.
-BOOLEAN_NUMERIC_CLIENT
+NUMERIC_CONDITIONAL_COMMAND
 e
 Long block
 OR_OPERATOR
@@ -232,22 +232,22 @@ LT_OPERATOR
 c
 shared LOW_PRICE
 c
-shared CONSTANT ({Previous SAR value})
+shared NUMERIC_VALUE_COMMAND ({Previous SAR value})
 c
 AND_OPERATOR
 c
 EQ_OPERATOR
 e
 tradestate = short?
-shared CONSTANT ({tradestate})
+shared NUMERIC_VALUE_COMMAND ({tradestate})
 c
-shared CONSTANT ({short})
+shared NUMERIC_VALUE_COMMAND ({short})
 c
 GT_OPERATOR
 c
 shared HIGH_PRICE
 c
-shared CONSTANT ({Previous SAR value})
+shared NUMERIC_VALUE_COMMAND ({Previous SAR value})
 c
 NUMERIC_VALUED_COMMAND_WRAPPER
 e
@@ -258,39 +258,39 @@ COMMAND_SEQUENCE
 e
 "Switch to short" sequence
 y
-MANAGED_VALUE_COMMAND
+NUMERIC_ASSIGNMENT_COMMAND
 e
 SAR := Previous EP value
-shared CONSTANT ({SAR})
+shared NUMERIC_VALUE_COMMAND ({SAR})
 c
-shared CONSTANT ({Previous EP value})
+shared NUMERIC_VALUE_COMMAND ({Previous EP value})
 c
 n
 y
-MANAGED_VALUE_COMMAND
+NUMERIC_ASSIGNMENT_COMMAND
 e
 AF := AF increment
-shared CONSTANT ({AF})
+shared NUMERIC_VALUE_COMMAND ({AF})
 c
-shared CONSTANT ({AF increment})
+shared NUMERIC_VALUE_COMMAND ({AF increment})
 c
 n
 y
-MANAGED_VALUE_COMMAND
+NUMERIC_ASSIGNMENT_COMMAND
 e
 EP := low
-shared CONSTANT ({EP})
+shared NUMERIC_VALUE_COMMAND ({EP})
 c
 shared LOW_PRICE
 c
 n
 y
-MANAGED_VALUE_COMMAND
+NUMERIC_ASSIGNMENT_COMMAND
 e
 tradestate := short
-shared CONSTANT ({tradestate})
+shared NUMERIC_VALUE_COMMAND ({tradestate})
 c
-shared CONSTANT ({short})
+shared NUMERIC_VALUE_COMMAND ({short})
 c
 n
 n
@@ -303,10 +303,10 @@ COMMAND_SEQUENCE
 e
 "Remain long" sequence
 y
-MANAGED_VALUE_COMMAND
+NUMERIC_ASSIGNMENT_COMMAND
 e
 Update SAR
-shared CONSTANT ({SAR})
+shared NUMERIC_VALUE_COMMAND ({SAR})
 c
 ADDITION
 e
@@ -315,66 +315,66 @@ MULTIPLICATION
 c
 SUBTRACTION
 c
-shared CONSTANT ({Previous EP value})
+shared NUMERIC_VALUE_COMMAND ({Previous EP value})
 c
-shared CONSTANT ({Previous SAR value})
+shared NUMERIC_VALUE_COMMAND ({Previous SAR value})
 c
-shared CONSTANT ({Previous AF value})
+shared NUMERIC_VALUE_COMMAND ({Previous AF value})
 c
-shared CONSTANT ({Previous SAR value})
+shared NUMERIC_VALUE_COMMAND ({Previous SAR value})
 c
 n
 y
-BOOLEAN_NUMERIC_CLIENT
+NUMERIC_CONDITIONAL_COMMAND
 c
 GT_OPERATOR
 e
 High > Previous EP?
 shared HIGH_PRICE
 c
-shared CONSTANT ({Previous EP value})
+shared NUMERIC_VALUE_COMMAND ({Previous EP value})
 c
 NUMERIC_VALUED_COMMAND_WRAPPER
 c
 COMMAND_SEQUENCE
 c
 y
-BOOLEAN_NUMERIC_CLIENT
+NUMERIC_CONDITIONAL_COMMAND
 e
 AF increment condition
 LT_OPERATOR
 e
 AF < Maximum AF value?
-shared CONSTANT ({AF})
+shared NUMERIC_VALUE_COMMAND ({AF})
 c
-shared CONSTANT ({Maximum AF value})
+shared NUMERIC_VALUE_COMMAND ({Maximum AF value})
 c
-MANAGED_VALUE_COMMAND
+NUMERIC_ASSIGNMENT_COMMAND
 e
 Increment AF
-shared CONSTANT ({AF})
+shared NUMERIC_VALUE_COMMAND ({AF})
 c
 ADDITION
 e
 AF + AF increment
-shared CONSTANT ({AF})
+shared NUMERIC_VALUE_COMMAND ({AF})
 c
-shared CONSTANT ({AF increment})
+shared NUMERIC_VALUE_COMMAND ({AF increment})
 c
-shared CONSTANT ({Null operation})
+shared NUMERIC_VALUE_COMMAND ({Null operation})
 c
 n
 y
-shared MANAGED_VALUE_COMMAND (EP := high)
+shared NUMERIC_ASSIGNMENT_COMMAND (EP := high)
 c
 n
 n
-shared CONSTANT ({Null operation})
+shared NUMERIC_VALUE_COMMAND ({Null operation})
 c
 n
 n
 # Corresponds to the "short block" section of the perl script.
-BOOLEAN_NUMERIC_CLIENT
+NUMERIC_CONDITIONAL_COMMAND
 e
 Short block
 shared OR_OPERATOR (Change direction?)
@@ -388,19 +388,19 @@ COMMAND_SEQUENCE
 e
 "Switch to long" sequence
 y
-shared MANAGED_VALUE_COMMAND (SAR := Previous EP value)
+shared NUMERIC_ASSIGNMENT_COMMAND (SAR := Previous EP value)
 c
 n
 y
-shared MANAGED_VALUE_COMMAND (AF := AF increment)
+shared NUMERIC_ASSIGNMENT_COMMAND (AF := AF increment)
 c
 n
 y
-shared MANAGED_VALUE_COMMAND (EP := high)
+shared NUMERIC_ASSIGNMENT_COMMAND (EP := high)
 c
 n
 y
-shared MANAGED_VALUE_COMMAND (tradestate := long)
+shared NUMERIC_ASSIGNMENT_COMMAND (tradestate := long)
 c
 n
 n
@@ -413,33 +413,33 @@ COMMAND_SEQUENCE
 e
 "Remain short" sequence
 y
-shared MANAGED_VALUE_COMMAND (Update SAR)
+shared NUMERIC_ASSIGNMENT_COMMAND (Update SAR)
 c
 n
 y
-BOOLEAN_NUMERIC_CLIENT
+NUMERIC_CONDITIONAL_COMMAND
 c
 LT_OPERATOR
 e
 Low < Previous EP?
 shared LOW_PRICE
 c
-shared CONSTANT ({Previous EP value})
+shared NUMERIC_VALUE_COMMAND ({Previous EP value})
 c
 NUMERIC_VALUED_COMMAND_WRAPPER
 c
 COMMAND_SEQUENCE
 c
 y
-shared BOOLEAN_NUMERIC_CLIENT (AF increment condition)
+shared NUMERIC_CONDITIONAL_COMMAND (AF increment condition)
 c
 n
 y
-shared MANAGED_VALUE_COMMAND (EP := low)
+shared NUMERIC_ASSIGNMENT_COMMAND (EP := low)
 c
 n
 n
-shared CONSTANT ({Null operation})
+shared NUMERIC_VALUE_COMMAND ({Null operation})
 c
 n
 n
@@ -450,36 +450,36 @@ y
 #	$prev_sar = $sar;
 #	$prev_af = $af;
 #	$prev_ep = $ep;
-MANAGED_VALUE_COMMAND
+NUMERIC_ASSIGNMENT_COMMAND
 e
 Previous SAR := SAR
-shared CONSTANT ({Previous SAR value})
+shared NUMERIC_VALUE_COMMAND ({Previous SAR value})
 c
-shared CONSTANT ({SAR})
+shared NUMERIC_VALUE_COMMAND ({SAR})
 c
 n
 y
-MANAGED_VALUE_COMMAND
+NUMERIC_ASSIGNMENT_COMMAND
 e
 Previous AF := AF
-shared CONSTANT ({Previous AF value})
+shared NUMERIC_VALUE_COMMAND ({Previous AF value})
 c
-shared CONSTANT ({AF})
+shared NUMERIC_VALUE_COMMAND ({AF})
 c
 n
 y
-MANAGED_VALUE_COMMAND
+NUMERIC_ASSIGNMENT_COMMAND
 e
 Previous EP := EP
-shared CONSTANT ({Previous EP value})
+shared NUMERIC_VALUE_COMMAND ({Previous EP value})
 c
-shared CONSTANT ({EP})
+shared NUMERIC_VALUE_COMMAND ({EP})
 c
 n
 y
 # This last sub-operator of the main command sequence is required in order
 # to provide the resulting value of the calculation for the period: SAR.
-shared CONSTANT ({SAR})
+shared NUMERIC_VALUE_COMMAND ({SAR})
 c
 y
 n

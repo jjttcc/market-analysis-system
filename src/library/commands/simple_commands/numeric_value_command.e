@@ -1,12 +1,13 @@
 indexing
-	description: "Numeric commands that evaluate to a constant value"
+	description: "Numeric commands that simply hold a settable value - %
+		%Can function as constants or variables"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class CONSTANT inherit
+class NUMERIC_VALUE_COMMAND inherit
 
 	NUMERIC_COMMAND
 		rename
@@ -46,7 +47,7 @@ feature
 
 feature -- Access
 
-	Default_name: STRING is "{Constant}"
+	Default_name: STRING is "{Numeric value}"
 
 	name: STRING is
 		do
@@ -63,7 +64,7 @@ feature -- Access
 			if name.is_equal (Default_name) then
 				Result := name
 			else
-				Result := name + " (Constant)"
+				Result := name + " (Numeric value)"
 			end
 		end
 
@@ -120,4 +121,4 @@ feature {NONE} -- FUNCTION_PARAMETER interface
 			set_value (new_value.to_real)
 		end
 
-end -- class CONSTANT
+end -- class NUMERIC_VALUE_COMMAND

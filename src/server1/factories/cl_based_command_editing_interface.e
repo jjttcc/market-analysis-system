@@ -140,7 +140,7 @@ feature {NONE} -- Utility routines
 			-- These three are the only command types that have operands.
 			unop: UNARY_OPERATOR [ANY, ANY]
 			binop: BINARY_OPERATOR [ANY, ANY]
-			bool_client: BOOLEAN_NUMERIC_CLIENT
+			bool_client: NUMERIC_CONDITIONAL_COMMAND
 		do
 			unop ?= cmd
 			binop ?= cmd
