@@ -64,32 +64,32 @@ feature -- Access
 			create {ONE_VARIABLE_FUNCTION} complex_function.make (
 				stock, volume)
 			create pair.make (complex_function,
-				"Market function that operates on another function")
+				"Function that operates one input sequence")
 			Result.extend (pair)
 			create {N_RECORD_ONE_VARIABLE_FUNCTION} f.make (stock, volume, 1)
 			create pair.make (f,
-				"Market function that operates on another function and %
-				%operates on n records of that function at a time")
+				"Function that operates one input sequence and %
+				%operates on n records of that sequence at a time")
 			Result.extend (pair)
 			create {TWO_VARIABLE_FUNCTION} f.make (complex_function,
 				complex_function, volume)
 			create pair.make (f,
-				"Market function that operates on two other functions")
+				"Function that operates on two input sequences")
 			Result.extend (pair)
 			create {STANDARD_MOVING_AVERAGE} f.make (stock, volume, 1)
 			create pair.make (f,
-				"Market function that provides an n-period moving average %
-				%of another function")
+				"Function that provides an n-period moving average %
+				%of an input sequence")
 			Result.extend (pair)
 			create {EXPONENTIAL_MOVING_AVERAGE} f.make (stock, volume,
 				exponential, 1)
 			create pair.make (f,
-				"Market function that provides an n-period exponential %
-				%moving average of another function")
+				"Function that provides an n-period exponential %
+				%moving average of an input sequence")
 			Result.extend (pair)
 			create {ACCUMULATION} f.make (stock, addition, linear_cmd, volume)
 			create pair.make (f,
-				"Market function that accumulates its values")
+				"Function that accumulates its values")
 			Result.extend (pair)
 			create {CONFIGURABLE_N_RECORD_FUNCTION} f.make (
 				stock, addition, volume, 1)
@@ -100,20 +100,20 @@ feature -- Access
 			create {MARKET_FUNCTION_LINE} f.make_from_2_points (point1,
 				point2, stock)
 			create pair.make (f,
-				"Market function that functions as a trend line")
+				"Function that behaves as a trend line")
 			Result.extend (pair)
 			create {LINKED_LIST [MARKET_FUNCTION]} flst.make
 			flst.extend (stock)
 			create {AGENT_BASED_FUNCTION} f.make (agents.Sma_key,
 				addition, flst)
 			create pair.make (f,
-				"Market function that uses a selectable procedure to do %
+				"Function that uses a selectable procedure to do %
 				%its calculation")
 			Result.extend (pair)
 			create {MARKET_DATA_FUNCTION} f.make (stock)
 			create pair.make (f,
-				"Market function that takes basic market data (with close, %
-				%high, volume, etc.) as input and %N%
+				"Function that takes basic market data (with close, %
+				%high, volume, etc.) as input and %
 				%whose output is simply its input")
 			Result.extend (pair)
 			create pair.make (stock,
