@@ -714,10 +714,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		}
 	}
 
-	private boolean vector_has(Vector v, String s) {
-		return Utilities.vector_has(v, s);
-	}
-
 	// First period type to be displayed - daily, if it exists
 	String initial_period_type(Vector types) {
 		String result = null;
