@@ -23,9 +23,11 @@ deferred class MEG_EDITING_INTERFACE inherit
 			real_list as market_event_generation_library,
 			working_list as working_meg_library,
 			retrieve_persistent_list as force_meg_library_retrieval,
-			prompt_for_char as character_choice
+			prompt_for_char as character_choice,
+			edit_list as edit_event_generator_menu
 		export
 			{NONE} all
+			{ANY} edit_event_generator_menu
 		end
 
 	GLOBAL_SERVICES
@@ -38,22 +40,17 @@ feature -- Access
 	last_event_generator: MARKET_EVENT_GENERATOR
 			-- The last MARKET_EVENT_GENERATOR that was built
 
-feature -- Status report
+feature {NONE} -- Implementation
 
-feature -- Basic operations
-
-	edit_event_generator_menu is
+	do_edit is
 			-- Menu for editing market event generators
-		require
-			flib_not_void: function_library /= Void
 		local
 			selection: INTEGER
 		do
-			begin_edit
 			from
 				selection := Null_value
 			until
-				selection = Exit_value or abort_edit
+				selection = Exit_value
 			loop
 				selection := main_menu_selection
 				inspect
@@ -74,10 +71,7 @@ feature -- Basic operations
 				end
 				report_errors
 			end
-			end_edit
 		end
-
-feature {NONE} -- Implementation
 
 	remove_event_generator is
 			-- Allow user to remove a member of

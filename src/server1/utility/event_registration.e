@@ -58,9 +58,11 @@ class EVENT_REGISTRATION inherit
 			real_list as market_event_registrants,
 			working_list as working_event_registrants,
 			retrieve_persistent_list as force_event_registrant_retrieval,
-			prompt_for_char as character_choice
+			prompt_for_char as character_choice,
+			edit_list as registrant_menu
 		export
 			{NONE} all
+			{ANY} registrant_menu
 		undefine
 			print
 		redefine
@@ -88,23 +90,19 @@ feature -- Initialization
 			iodev_set: input_device = in_dev and output_device = out_dev
 		end
 
-feature -- Access
+feature {NONE} -- Implementation
 
-
-feature -- Basic operations
-
-	registrant_menu is
+	do_edit is
 			-- Menu for adding, removing, editing, and viewing event
 			-- registrants
 		local
 			finished: BOOLEAN
 			msg: STRING
 		do
-			begin_edit
 			from
 				msg := main_msg
 			until
-				finished or abort_edit
+				finished
 			loop
 				print (msg)
 				inspect
@@ -141,10 +139,7 @@ feature -- Basic operations
 					msg := main_msg
 				end
 			end
-			end_edit
 		end
-
-feature {NONE} -- Implementation
 
 	add_registrants is
 		local

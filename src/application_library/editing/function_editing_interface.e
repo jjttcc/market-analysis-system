@@ -31,10 +31,12 @@ deferred class FUNCTION_EDITING_INTERFACE inherit
 			real_list as function_library,
 			working_list as working_function_library,
 			retrieve_persistent_list as force_function_library_retrieval,
-			prompt_for_char as character_choice
+			prompt_for_char as character_choice,
+			edit_list as edit_indicator_menu
 		export
 			{NONE} all
 			{EDITING_INTERFACE} changed
+			{ANY} edit_indicator_menu
 		end
 
 	MARKET_TUPLE_LIST_SELECTOR
@@ -60,41 +62,6 @@ feature -- Constants
 			-- Name of COMPLEX_FUNCTION
 
 feature -- Basic operations
-
-	edit_indicator_menu is
-			-- Menu for editing indicators in `function_library' - If
-			-- the user saves the changes, `function_library' is saved to
-			-- persistent store.
-		local
-			selection: INTEGER
-			indicator: MARKET_FUNCTION
-		do
-			begin_edit
-			from
-				selection := Null_value
-			until
-				selection = Exit_value or abort_edit
-			loop
-				selection := main_indicator_edit_selection
-				inspect
-					selection
-				when Create_new_value then
-					create_new_indicator
-				when Edit_value then
-					edit_indicator_list (working_function_library)
-				when Remove_value then
-					remove_indicator
-				when Save_value then
-					check changed and ok_to_save end
-					save
-				when Show_help_value then
-					show_message (help @ help.Edit_indicators)
-				when Exit_value then
-				end
-				report_errors
-			end
-			end_edit
-		end
 
 feature {APPLICATION_FUNCTION_EDITOR} -- Access
 
@@ -477,6 +444,39 @@ feature {NONE} -- Implementation
 		end
 
 feature {NONE} -- Implementation - indicator editing
+
+	do_edit is
+			-- Menu for editing indicators in `function_library' - If
+			-- the user saves the changes, `function_library' is saved to
+			-- persistent store.
+		local
+			selection: INTEGER
+			indicator: MARKET_FUNCTION
+		do
+			from
+				selection := Null_value
+			until
+				selection = Exit_value
+			loop
+				selection := main_indicator_edit_selection
+				inspect
+					selection
+				when Create_new_value then
+					create_new_indicator
+				when Edit_value then
+					edit_indicator_list (working_function_library)
+				when Remove_value then
+					remove_indicator
+				when Save_value then
+					check changed and ok_to_save end
+					save
+				when Show_help_value then
+					show_message (help @ help.Edit_indicators)
+				when Exit_value then
+				end
+				report_errors
+			end
+		end
 
 	create_new_indicator is
 		local

@@ -54,6 +54,25 @@ feature -- Status report
 
 feature -- Basic operations
 
+	edit_list is
+			-- Allow user to edit the list and save the changes.
+		do
+			begin_edit
+			if not abort_edit then
+				do_edit
+				end_edit
+			end
+		ensure
+			not_changed: not changed
+			not_locked: not lock.locked
+		rescue
+			if not abort_edit then
+				end_edit
+			end
+		end
+
+feature {NONE} -- Implementation
+
 	save is
 		require
 			changed_and_ok_to_save: changed and ok_to_save
@@ -93,8 +112,6 @@ feature -- Basic operations
 				retrieve_persistent_list
 				initialize_working_list
 			end
-		ensure
-			abort_rules: abort_edit implies not changed and not lock.locked
 		end
 
 	report_errors is
@@ -113,6 +130,10 @@ feature -- Basic operations
 			abort_rules: abort_edit implies not changed and not lock.locked
 		do
 			if changed then
+				-- The working list was changed, but the user elected not
+				-- to save the changes; so throw away the changes by
+				-- restoring the working list as a deep copy of the real
+				-- list and ensure not changed.
 				working_list.deep_copy (real_list)
 				changed := false
 			end
@@ -132,7 +153,7 @@ feature -- Basic operations
 			c: CHARACTER
 		do
 			c := prompt_for_char ("Failed to lock item.  Wait for lock, %
-				%disallow changes, or abort? (w/d/a) ", "wWdDaA")
+				%Disallow changes, or Abort? (w/d/a) ", "wWdDaA")
 			inspect
 				c
 			when 'w', 'W' then
@@ -173,6 +194,10 @@ feature -- Basic operations
 
 feature {NONE} -- Hook routines
 
+	do_edit is
+		deferred
+		end
+
 	show_message (s: STRING) is
 			-- Display `s' to the user.
 		deferred
@@ -212,5 +237,6 @@ invariant
 	read_implication: readonly implies not ok_to_save and not abort_edit
 	save_implication: ok_to_save implies not readonly and not abort_edit
 	not_locked_when_readonly: readonly implies not lock.locked
+	abort_rules: abort_edit implies not changed and not lock.locked
 
 end -- STORABLE_SERVICES
