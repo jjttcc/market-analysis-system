@@ -1,0 +1,15 @@
+usage() {
+	echo "Usage: $0 <targetpattern> <replacement> file ..."
+}
+
+if [ $# -lt 3 ]; then usage; exit 1; fi
+
+tgt=$1
+repl=$2
+shift; shift
+
+for f;do
+echo "g/$tgt/s//$repl/g
+wq"|ex $f
+#wq"|cat -
+done
