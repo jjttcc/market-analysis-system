@@ -25,25 +25,27 @@ struct input_sequence_handle {
 	int error_occurred;
 };
 
-const char record_separator = '\n';
+const char Record_separator = '\n';
 
-static char* fs_char_table = 0;
+const char Path_separator = '';
 
-static char fs_char_table_contents[256];
+static char* Fs_char_table = 0;
 
-static char* initialization_error_string = 0;
+static char Fs_char_table_contents[256];
 
-int init_error = 0;
+static char* Initialization_error_string = 0;
 
-struct input_sequence_handle* initialize_external_input_routines(char* paths) {
+int Init_error = 0;
+
+struct input_sequence_handle* initialize_external_input_routines(EIF_POINTER paths) {
 	struct input_sequence_handle* result;
 	char error_buffer[BUFSIZ];
 	assert(paths != 0);
-	init_error = 0;
+	Init_error = 0;
 	result = malloc(sizeof(struct input_sequence_handle));
 	if (result != 0) {
 		result->plug_in_handle = new_input_sequence_plug_in_handle(paths,
-			error_buffer, sizeof(error_buffer));
+			error_buffer, sizeof(error_buffer), Path_separator);
 		result->buffer = 0;
 		result->symbols = 0;
 		result->buffersize = 0;
@@ -52,19 +54,19 @@ struct input_sequence_handle* initialize_external_input_routines(char* paths) {
 		result->field_separator = ',';	/* May be made configurable later */
 		result->error_occurred = 0;
 		if (result->plug_in_handle == 0) {
-			init_error = 1;
-			free(initialization_error_string);
-			initialization_error_string = strdup(error_buffer);
+			Init_error = 1;
+			free(Initialization_error_string);
+			Initialization_error_string = strdup(error_buffer);
 			free(result);
 			result = 0;
 		}
 	} else {
-		init_error = 1;
+		Init_error = 1;
 	}
 	return result;
 }
 
-int is_open_implementation(struct input_sequence_handle* handle) {
+EIF_BOOLEAN is_open_implementation(struct input_sequence_handle* handle) {
 	return handle->buffer != 0;
 }
 
@@ -75,33 +77,33 @@ void external_dispose(struct input_sequence_handle* handle) {
 		free(handle->symbols);
 		free(handle);
 	}
-	free(initialization_error_string);
+	free(Initialization_error_string);
 }
 
-int current_field_length(struct input_sequence_handle* handle) {
+EIF_INTEGER current_field_length(struct input_sequence_handle* handle) {
 	return handle->current_field_length_value;
 }
 
-char* current_field(struct input_sequence_handle* handle) {
+EIF_POINTER current_field(struct input_sequence_handle* handle) {
 	int i;
 	handle->current_field_length_value = 0;
 	for (i = handle->current_index; i < handle->buffersize &&
 			handle->buffer[i] != handle->field_separator &&
-			handle->buffer[i] != record_separator; ++i) {
+			handle->buffer[i] != Record_separator; ++i) {
 
 		++handle->current_field_length_value;
 	}
 	return &handle->buffer[handle->current_index];
 }
 
-char current_character(struct input_sequence_handle* handle) {
+EIF_CHARACTER current_character(struct input_sequence_handle* handle) {
 	return handle->buffer[handle->current_index++];
 }
 
 void advance_to_next_field_implementation(
 		struct input_sequence_handle* handle) {
 	while (handle->buffer[handle->current_index] != handle->field_separator &&
-			handle->buffer[handle->current_index] != record_separator &&
+			handle->buffer[handle->current_index] != Record_separator &&
 			handle->current_index < handle->buffersize) {
 		++handle->current_index;
 	}
@@ -113,17 +115,17 @@ void advance_to_next_field_implementation(
 
 void advance_to_next_record_implementation(
 		struct input_sequence_handle* handle) {
-	while (handle->buffer[handle->current_index] != record_separator &&
+	while (handle->buffer[handle->current_index] != Record_separator &&
 			handle->current_index < handle->buffersize) {
 		++handle->current_index;
 	}
 	if (handle->current_index < handle->buffersize &&
-			handle->buffer[handle->current_index] == record_separator) {
+			handle->buffer[handle->current_index] == Record_separator) {
 		++handle->current_index;
 	}
 }
 
-int field_count_implementation(struct input_sequence_handle* handle) {
+EIF_INTEGER field_count_implementation(struct input_sequence_handle* handle) {
 	int result = 0;
 	if (handle->buffer != 0 && handle->buffersize > 0) {
 		int i;
@@ -132,7 +134,7 @@ int field_count_implementation(struct input_sequence_handle* handle) {
 			if (handle->buffer[i] == handle->field_separator) {
 				++result;
 			}
-			if (handle->buffer[i] == record_separator) {
+			if (handle->buffer[i] == Record_separator) {
 				break;
 			}
 		}
@@ -141,11 +143,11 @@ int field_count_implementation(struct input_sequence_handle* handle) {
 	return result;
 }
 
-int after_last_record_implementation(struct input_sequence_handle* handle) {
+EIF_BOOLEAN after_last_record_implementation(struct input_sequence_handle* handle) {
 	return handle->current_index == handle->buffersize;
 }
 
-int readable_implementation(struct input_sequence_handle* handle) {
+EIF_BOOLEAN readable_implementation(struct input_sequence_handle* handle) {
 	return is_open_implementation(handle) &&
 		! after_last_record_implementation(handle);
 }
@@ -155,8 +157,8 @@ static void set_field_separator(struct input_sequence_handle* handle) {
 	if (handle->buffer != 0 && handle->buffersize > 0) {
 		int i;
 		for (i = 0; i < handle->buffersize &&
-				handle->buffer[i] != record_separator; ++i) {
-			if (fs_char_table[(int) handle->buffer[i]]) {
+				handle->buffer[i] != Record_separator; ++i) {
+			if (Fs_char_table[(int) handle->buffer[i]]) {
 				handle->field_separator = handle->buffer[i];
 				break;
 			}
@@ -164,26 +166,27 @@ static void set_field_separator(struct input_sequence_handle* handle) {
 	}
 }
 
-/* Initialize the fs_char_table_contents and set fs_char_table to point to
+/* Initialize the Fs_char_table_contents and set Fs_char_table to point to
  * it.
 */
-void initialize_fs_char_table() {
+void initialize_Fs_char_table() {
 	int fscount = strlen(Field_separator_characters);
 	int i;
-	/* Set all members of fs_char_table_contents whose index is a member
+	/* Set all members of Fs_char_table_contents whose index is a member
 	 * of Field_separator_characters to true - all other members have
 	 * been initialized to false. */
 	for (i = 0; i < fscount; ++i) {
-		fs_char_table_contents[(int) Field_separator_characters[i]] = 1;
+		Fs_char_table_contents[(int) Field_separator_characters[i]] = 1;
 	}
-	fs_char_table = fs_char_table_contents;
+	Fs_char_table = Fs_char_table_contents;
 }
 
 void retrieve_data(struct input_sequence_handle* handle,
-		char* symbol, int is_intraday) {
+		EIF_POINTER symbol, EIF_BOOLEAN is_intraday) {
+fprintf(stderr, "retrieve_data - is_intraday: %d\n", is_intraday);
 	handle->error_occurred = 0;
-	if (fs_char_table == 0) {
-		initialize_fs_char_table();
+	if (Fs_char_table == 0) {
+		initialize_Fs_char_table();
 	}
 	free(handle->buffer);
 	handle->buffer = tradable_data(handle->plug_in_handle, symbol,
@@ -199,15 +202,15 @@ void start_implementation(struct input_sequence_handle* handle) {
 	handle->current_index = 0;
 }
 
-char* available_symbols(struct input_sequence_handle* handle) {
+EIF_POINTER available_symbols(struct input_sequence_handle* handle) {
 	return handle->symbols;
 }
 
-int external_error(struct input_sequence_handle* handle) {
+EIF_BOOLEAN external_error(struct input_sequence_handle* handle) {
 	return handle->error_occurred;
 }
 
-char* last_external_error(struct input_sequence_handle* handle) {
+EIF_POINTER last_external_error(struct input_sequence_handle* handle) {
 	char* result;
 	result = last_error(handle->plug_in_handle);
 	if (result == 0) result = "";
@@ -224,22 +227,22 @@ void make_available_symbols(struct input_sequence_handle* handle) {
 	}
 }
 
-int intraday_data_available_implementation(
+EIF_BOOLEAN intraday_data_available_implementation(
 		struct input_sequence_handle* handle) {
 /**!!!Stub - intraday data is to be implemented in a future release. */
 	return 0;
 }
 
-int initialization_error() {
-	return init_error;
+EIF_BOOLEAN initialization_error() {
+	return Init_error;
 }
 
-char* initialization_error_reason() {
+EIF_POINTER initialization_error_reason() {
 	char* result;
-	if (initialization_error_string == 0) {
+	if (Initialization_error_string == 0) {
 		result = "Memory allocation failed.";
 	} else {
-		result = initialization_error_string;
+		result = Initialization_error_string;
 	}
 	return result;
 }
