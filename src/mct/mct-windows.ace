@@ -85,7 +85,10 @@ cluster
 
 	mas_server_util (mas_server):		"$/utility"
 
-	mas_server_protocols (mas_server):		"$/protocols"
+	client_server:		"$MAS/src/client_server"
+
+	protocols (client_server):		"$/protocols"
+
 
 	ise:		"$ISE_EIFFEL/library"
 
