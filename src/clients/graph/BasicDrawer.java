@@ -176,6 +176,7 @@ abstract public class BasicDrawer extends Drawer {
 	private void draw_horizontal_lines(Graphics g, Rectangle bounds,
 			Vector hline_data) {
 		if (hline_data == null) return;
+		int bounds_x_value = bounds.x - X_left_line_adjust;
 
 		MA_Configuration config = MA_Configuration.application_instance();
 		int y1, y2;
@@ -192,8 +193,7 @@ abstract public class BasicDrawer extends Drawer {
 			if (y1 > bounds.y + vert_margin && y2 > bounds.y + vert_margin &&
 					y1 < bounds.y + bounds.height - vert_margin &&
 					y2 < bounds.y + bounds.height - vert_margin) {
-				g.drawLine(bounds.x - X_left_line_adjust, y1,
-					bounds.x + bounds.width, y2);
+				g.drawLine(bounds_x_value, y1, bounds.x + bounds.width, y2);
 			}
 		}
 	}
@@ -228,12 +228,22 @@ abstract public class BasicDrawer extends Drawer {
 		Double d;
 		boolean lines_needed = reference_lines_needed();
 		Font old_font = g.getFont();
+		int start_ref_index = ref_straddle_one_index;
+		if (yrange < refvalue_specs[ref_straddle_one_index].minimum()) {
+			// Set up for reference values < 1.
+			start_ref_index = 0;
+		}
+System.out.println("yrange: " + yrange);
+System.out.println("using start_ref_index of " + start_ref_index);
+//refvalue_specs[ref_straddle_one_index].minimum() < 1 &&
+
 		g.setFont(new Font("Monospaced", Font.ITALIC, 12));
 
-		for (int i = 0; i < refvalue_specs.length; ++i) {
+		for (int i = start_ref_index; i < refvalue_specs.length; ++i) {
 			if (yrange >= refvalue_specs[i].minimum() &&
 					yrange < refvalue_specs[i].maximum()) {
 				step = refvalue_specs[i].step_value();
+System.out.println("found ref spec: " + refvalue_specs[i]);
 				break;
 			}
 		}
@@ -256,6 +266,10 @@ abstract public class BasicDrawer extends Drawer {
 			boolean lines) {
 		final int Y_text_adjust = 3, margin = 5, margin_for_text = 8;
 		final int Min_vertical_space = 15;
+		final int x_adjustment = -3;
+		int ref_bounds_x_value = ref_bounds.x + x_adjustment;
+		int main_bounds_x_value = main_bounds.x - X_left_line_adjust;
+		int bounds_x_plus_width = main_bounds.x + main_bounds.width;
 		int step = 1;
 		int adj_ys[] = new int[yvalues.size() + 1];
 		String[] ystrings = new String[ystrs.length];
@@ -303,14 +317,14 @@ abstract public class BasicDrawer extends Drawer {
 					adj_ys[i] < ref_bounds.y + ref_bounds.height - margin) {
 				if (lines) {
 					g.setColor(config.reference_line_color());
-					g.drawLine(main_bounds.x - X_left_line_adjust, adj_ys[i],
-						main_bounds.x + main_bounds.width, adj_ys[i]);
+					g.drawLine(main_bounds_x_value, adj_ys[i],
+						bounds_x_plus_width, adj_ys[i]);
 				}
 				if (adj_ys[i] > ref_bounds.y + margin_for_text && adj_ys[i] <
 						ref_bounds.y + ref_bounds.height - margin_for_text) {
 					g.setColor(config.text_color());
-					g.drawString(ystrings[i],
-						ref_bounds.x + ref_bounds.width + Ref_text_offset,
+					g.drawString(ystrings[i], ref_bounds_x_value +
+						ref_bounds.width + Ref_text_offset,
 						adj_ys[i] + Y_text_adjust);
 				}
 			}
@@ -344,11 +358,22 @@ abstract public class BasicDrawer extends Drawer {
 	}
 
 	static protected RefSpec[] refvalue_specs;
+	// refvalue_specs index for which:
+	//    refvalue_specs[ref_straddle_one_index].minimum() < 1 and
+	//    refvalue_specs[ref_straddle_one_index].maximum() > 1
+	protected static int ref_straddle_one_index;
 
 	static {
-		refvalue_specs = new RefSpec[32]; int i = 0;
-		refvalue_specs[i++] = new RefSpec(0, 0.15, .01);
+		refvalue_specs = new RefSpec[38]; int i = 0;
+		refvalue_specs[i++] = new RefSpec(0.00000, 0.00015, .00001);
+		refvalue_specs[i++] = new RefSpec(0.00015, 0.0003, .00005);
+		refvalue_specs[i++] = new RefSpec(0.0003, 0.0015, .0001);
+		refvalue_specs[i++] = new RefSpec(0.0015, 0.003, .0005);
+		refvalue_specs[i++] = new RefSpec(0.003, 0.015, .001);
+		refvalue_specs[i++] = new RefSpec(0.015, 0.03, .005);
+		refvalue_specs[i++] = new RefSpec(0.03, 0.15, .01);
 		refvalue_specs[i++] = new RefSpec(0.15, 0.3, .05);
+		ref_straddle_one_index = i;
 		refvalue_specs[i++] = new RefSpec(0.3, 1.5, .1);
 		refvalue_specs[i++] = new RefSpec(1.5, 3, .5);
 		refvalue_specs[i++] = new RefSpec(3, 15, 1);
@@ -389,9 +414,13 @@ abstract public class BasicDrawer extends Drawer {
 			10000000000000L);
 		refvalue_specs[i++] = new RefSpec(150000000000000L,
 			9000000000000000000L, 50000000000000L);
+
+		assert refvalue_specs[ref_straddle_one_index].minimum() < 1 &&
+			refvalue_specs[ref_straddle_one_index].maximum() > 1;
 	}
 
 	protected boolean boundaries_needed;
+
 	final int Reference_rect_width = 50;	// Width of right reference bar
 	final int Bottom_ref_rect_height = 25;	// Height of bottom reference bar
 	final int X_left_line_adjust = 9;	// Ensures that line starts flush left.
@@ -409,6 +438,12 @@ class RefSpec {
 		_minimum = min;
 		_maximum = max;
 		_value = v;
+	}
+
+	public String toString() {
+		String result = "minimum: " + _minimum + ", maximum: " + _maximum +
+			", step_value: " + _value;
+		return result;
 	}
 
 	double minimum() { return _minimum; }

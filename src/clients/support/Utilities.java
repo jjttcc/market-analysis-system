@@ -188,6 +188,7 @@ public class Utilities implements Constants
 		double d;
 		int size, longest_length = 0;
 
+		formatter.setMaximumFractionDigits(8);
 		for (int i = 0; i < values.size(); ++i) {
 			d = ((Double) values.elementAt(i)).doubleValue();
 			if (d >= billion) {
