@@ -27,7 +27,8 @@ feature
 		end
 
 	fraction: DOUBLE is
-			-- fractional part as a real value - for example, .75 for value of 3.75
+			-- fractional part as a real value - for example,
+			-- .75 for value of 3.75
 		do
 		end
 
