@@ -18,10 +18,10 @@ Final Steps:
 4.  Make sure the cvs tree is completely updated on Windows.
 5.  Run build_windows_mas on the Windows machine and copy the resulting
     executables (from .../finance/lib/binaries/windows) to the equivalent
-	location on the Linux machine.
+    location on the Linux machine.
 6.  Do a bit of testing on the built executables to catch any remaining
     problems.  (Recommended, but not required.)
-7.  Run make_doc in the doc directory.
+7.  Run make_docs in the doc directory.
 8.  Run make_chart_gui to freshly compile all the java files for the
     charting GUI and put them into a jar file.
 9.  Make sure the current release directory is empty and run make_release.
@@ -32,12 +32,13 @@ Final Steps:
 12. Run build_rpm to make the mas rpm file and if any problems occur that
     require it, go back to a previous step.
 13. Make sure the latest version of the indicators_persist and
-    generators_persist files are checked in (in build/config).
-    (Use the ones created in step 7 if needed).  And check them out on
-    the Windows machine.
+    generators_persist files (in build/config) are up to date (by running
+    make_indicators) and make sure the latest version is checked into cvs.
+    And update the cvs work directory on the Windows machine so that these
+    files are up to date there.
 14. On the windows machine, run prepare_windows_setup to copy the tar file
     of the windows release over to the windows machine and extract it into
-	the source directory for the inno setup process.
+    the source directory for the inno setup process.
 15. Run Inno config on the latest inno_config iss file using the source
     files set up by prepare_windows_setup.
 16. If any problems occurred during step 10. or 11. that require it (e.g.,
