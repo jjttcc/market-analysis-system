@@ -174,6 +174,7 @@ return true; //???!!!!!!!!!!!!!!!!!!!!!
 
 	/** Log out of all sessions and exit. */
 	public void log_out_and_exit(int status) {
+		turn_off_refresh();
 		// Log out the corresponding session for all but one window.
 		for (int i = 0; i < window_count - 1; ++i) {
 			data_manager.data_builder().logout(false, 0);
@@ -464,6 +465,7 @@ return true; //???!!!!!!!!!!!!!!!!!!!!!
 	private void post_initialize() {
 		MA_Configuration conf = MA_Configuration.application_instance();
 		if (conf.auto_refresh()) {
+System.out.println("I (" + this + ") am creating a new AutoRefreshSetup");
 			auto_refresh_handler = new AutoRefreshSetup(this);
 			turn_on_refresh();
 		}
@@ -488,6 +490,7 @@ return true; //???!!!!!!!!!!!!!!!!!!!!!
 
 	/** Close a window.  If this is the last open window, just quit. */
 	protected void close() {
+		turn_off_refresh();
 		if (window_count == 1) {	// Close last remaining window, exit.
 			save_settings();
 			data_manager.data_builder().logout(true, 0);
