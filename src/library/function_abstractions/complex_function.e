@@ -11,6 +11,9 @@ indexing
 deferred class COMPLEX_FUNCTION inherit
 
 	MARKET_FUNCTION
+		redefine
+			operators
+		end
 
 feature -- Access
 
@@ -22,6 +25,15 @@ feature -- Access
 			-- efficiency.
 
 	processed_date_time: DATE_TIME
+
+	operators: LIST [COMMAND] is
+		do
+			if operator /= Void then
+				Result := operator_and_descendants (operator)
+			else
+				create {LINKED_LIST [COMMAND]} Result.make
+			end
+		end
 
 feature -- Status report
 
@@ -99,6 +111,16 @@ feature {NONE} -- Implementation
 	immediate_parameters: LIST [FUNCTION_PARAMETER] is
 		once
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
+		end
+
+	operator_and_descendants (op: COMMAND): LIST [COMMAND] is
+			-- Operator `op' and all of its descendants
+		require
+			op_not_void: op /= Void
+		do
+			create {LINKED_LIST [COMMAND]} Result.make
+			Result.extend (op)
+			Result.append (op.descendants)
 		end
 
 invariant
