@@ -94,5 +94,8 @@ feature {NONE} -- Implemetation
 			Result.extend (syfp)
 		end
 
+invariant
+
+	start_point_x_gt_0: start_point.x = 1
 
 end -- class MARKET_FUNCTION_LINE
