@@ -99,7 +99,7 @@ feature -- Basic operations
 			l: MARKET_TUPLE_LIST [MARKET_TUPLE]
 		do
 			from
-				names := t.tuple_list_names
+				names := t.period_types.current_keys
 				i := 1
 			until
 				i > names.count
