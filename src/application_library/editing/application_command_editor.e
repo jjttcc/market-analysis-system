@@ -221,6 +221,24 @@ feature -- Basic operations
 			cmd.set_operand (rr_cmd)
 		end
 
+	edit_unary_boolean (cmd: UNARY_OPERATOR [BOOLEAN, BOOLEAN]) is
+			-- Edit a UNARY_OPERATOR that returns a BOOLEAN value and
+			-- takes a RESULT_COMMAND [BOOLEAN] operand.
+		require
+			ui_set: user_interface /= Void
+		local
+			bool_cmd: RESULT_COMMAND [BOOLEAN]
+		do
+			bool_cmd ?= user_interface.command_selection_from_type (
+						user_interface.Boolean_result_command,
+						concatenation (<<cmd.generator, "'s operand">>),
+						false)
+			check
+				selection_valid: bool_cmd /= Void
+			end
+			cmd.set_operand (bool_cmd)
+		end
+
 	edit_offset (cmd: SETTABLE_OFFSET_COMMAND) is
 			-- Edit a SETTABLE_OFFSET_COMMAND.
 		local

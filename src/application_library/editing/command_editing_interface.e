@@ -62,6 +62,7 @@ feature -- Access
 			l.extend (command_with_generator ("IMPLICATION_OPERATOR"))
 			l.extend (command_with_generator ("EQUIVALENCE_OPERATOR"))
 			l.extend (command_with_generator ("AND_OPERATOR"))
+			l.extend (command_with_generator ("NOT_OPERATOR"))
 			l.extend (command_with_generator ("TRUE_COMMAND"))
 			l.extend (command_with_generator ("FALSE_COMMAND"))
 			l.extend (command_with_generator ("SIGN_ANALYZER"))
@@ -257,6 +258,7 @@ feature {NONE} -- Implementation
 
 	Binary_boolean,		-- binary operator with boolean result
 	Binary_real,		-- binary operator with real result
+	Unary_boolean,		-- unary operator with boolean result
 	Unary_real,			-- unary operator with real result
 	Constant,			-- CONSTANT - needs value to be set
 	Other,				-- Classes that need no initialization
@@ -317,6 +319,11 @@ feature {NONE} -- Implementation
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_boolean, name)
+			name := "NOT_OPERATOR"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Unary_boolean, name)
 			name := "ADDITION"
 			check
 				valid_name: command_names.has (name)
@@ -485,6 +492,7 @@ feature {NONE} -- Implementation
 			const: CONSTANT
 			bin_bool_op: BINARY_OPERATOR [ANY, BOOLEAN]
 			bin_real_op: BINARY_OPERATOR [ANY, REAL]
+			un_bool_op: UNARY_OPERATOR [BOOLEAN, BOOLEAN]
 			unop_real: UNARY_OPERATOR [ANY, REAL]
 			unop_real_real: UNARY_OPERATOR [REAL, REAL]
 			offset_cmd: SETTABLE_OFFSET_COMMAND
@@ -505,6 +513,12 @@ feature {NONE} -- Implementation
 					c_is_a_binary_real: bin_real_op /= Void
 				end
 				editor.edit_binary_real (bin_real_op)
+			when Unary_boolean then
+				un_bool_op ?= c
+				check
+					c_is_a_unary_boolean: un_bool_op /= Void
+				end
+				editor.edit_unary_boolean (un_bool_op)
 			when Unary_real then
 				unop_real_real ?= c
 				check

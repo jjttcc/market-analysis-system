@@ -108,6 +108,9 @@ feature -- Access
 			!ABSOLUTE_VALUE!cmd.make (real_dummy)
 			!!pair.make (cmd, "Absolute value operator")
 			Result.extend (pair)
+			!NOT_OPERATOR!cmd.make (true_dummy)
+			!!pair.make (cmd, "Logical negation operator")
+			Result.extend (pair)
 			----------------- Create/insert MAL COMMANDs -----------------
 			!!bnc_dummy -- Fulfills requirement for type RESULT_COMMAND [REAL].
 			-- Create a pair for the BASIC_NUMERIC_COMMAND instance
