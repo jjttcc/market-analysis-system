@@ -11,9 +11,14 @@ class GUI_CLIENT_CONNECTION inherit
 	CLIENT_CONNECTION
 		export
 			{NONE} connected
+		redefine
+			process_response
 		end
 
 	GUI_NETWORK_PROTOCOL
+		export
+			{NONE} all
+		end
 
 creation
 
@@ -50,7 +55,7 @@ feature -- Basic operations
 		require
 			not_logged_in: not logged_in
 		do
-			send_request (Login_request_msg, True)
+			send_one_time_request (Login_request_msg, True)
 			if last_communication_succeeded then
 				if server_response.is_integer then
 					session_key := server_response.to_integer
@@ -72,7 +77,7 @@ feature -- Basic operations
 		require
 			logged_in: logged_in
 		do
-			send_request (Logout_request_msg, False)
+			send_one_time_request (Logout_request_msg, False)
 			logged_in := False
 		ensure
 			not_connected: not connected
@@ -86,7 +91,7 @@ feature -- Basic operations
 		local
 			su: expanded STRING_UTILITIES
 		do
-			send_request (All_indicators_request_msg, True)
+			send_one_time_request (All_indicators_request_msg, True)
 			if last_communication_succeeded then
 				su.set_target (server_response)
 				indicators := su.tokens (Message_record_separator)
