@@ -406,14 +406,16 @@ feature {NONE} -- Implementation
 			retry
 		end
 
-	stock_function_library: LIST [MARKET_FUNCTION]
+	stock_function_library: LIST [MARKET_FUNCTION] is
 			-- Members of `function_library' that are valid for stocks
+		once
+			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
+		end
 
 	create_stock_function_library (l: LIST [MARKET_FUNCTION]) is
 			-- Create `stock_function_library' and place all members of
 			-- `l' that are `valid_stock_function's into it.
 		do
-			create {LINKED_LIST [MARKET_FUNCTION]} stock_function_library.make
 			from l.start until l.exhausted loop
 				if valid_stock_function (l.item) then
 					stock_function_library.extend (l.item)
