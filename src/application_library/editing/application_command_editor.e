@@ -167,43 +167,17 @@ feature -- Basic operations
 		require
 			ui_set: user_interface /= Void
 		local
-			hv: HIGHEST_VALUE
-			lv: LOWEST_VALUE
 			rr_cmd: RESULT_COMMAND [REAL]
 			bnc_cmd: BASIC_NUMERIC_COMMAND
 		do
-			hv ?= cmd
-			lv ?= cmd
-			-- If cmd conforms to HIGHEST_VALUE or LOWEST_VALUE, it
-			-- needs an operand of type BASIC_NUMERIC_COMMAND.
-			if hv /= Void then
-				bnc_cmd ?= user_interface.command_selection_from_type (
-							user_interface.Basic_numeric_command,
-							concatenation (<<cmd.generator, "'s operand">>),
-							false)
-				check
-					selection_valid: bnc_cmd /= Void
-				end
-				hv.set_operand (bnc_cmd)
-			elseif lv /= Void then
-				bnc_cmd ?= user_interface.command_selection_from_type (
-							user_interface.Basic_numeric_command,
-							concatenation (<<cmd.generator, "'s operand">>),
-							false)
-				check
-					selection_valid: bnc_cmd /= Void
-				end
-				lv.set_operand (bnc_cmd)
-			else
-				rr_cmd ?= user_interface.command_selection_from_type (
-							user_interface.Real_result_command,
-							concatenation (<<cmd.generator, "'s operand">>),
-							false)
-				check
-					selection_valid: rr_cmd /= Void
-				end
-				cmd.set_operand (rr_cmd)
+			rr_cmd ?= user_interface.command_selection_from_type (
+						user_interface.Real_result_command,
+						concatenation (<<cmd.generator, "'s operand">>),
+						false)
+			check
+				selection_valid: rr_cmd /= Void
 			end
+			cmd.set_operand (rr_cmd)
 		end
 
 	edit_unaryop_real (cmd: UNARY_OPERATOR [REAL, REAL]) is
