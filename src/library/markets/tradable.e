@@ -1,7 +1,7 @@
 indexing
 	description: "A tradable market entity, such as a stock or commodity";
-	development_note: "!!!NOTE:  Make sure h_high and y_low are initialized %
-		%to 0.  Also, check on viability of calc_y_high_low.!!!"
+	development_note: "NOTE:  Make sure h_high and y_low are initialized %
+		%to 0.  Also, check on viability of calc_y_high_low."
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -111,7 +111,7 @@ feature -- Status report
 				Result := true
 				indicators.start
 			until
-				not Result or indicators.after
+				not Result or indicators.exhausted
 			loop
 				Result := indicators.item.processed
 				indicators.forth
@@ -150,7 +150,7 @@ feature -- Basic operations
 			from
 				indicators.start
 			until
-				indicators.after
+				indicators.exhausted
 			loop
 				if not indicators.item.processed then
 					indicators.item.process
@@ -198,7 +198,7 @@ feature {NONE} -- Initialization
 				types := period_types.linear_representation
 				types.start
 			until
-				types.after
+				types.exhausted
 			loop
 				if
 					types.item.duration > trading_period_type.duration
@@ -245,10 +245,10 @@ feature {NONE}
 			original_cursor := cursor
 			finish -- Set cursor to last position
 			-- Initialize calculator to find the highest close value.
-			--!!!NOTE:  Not correct yet - needs to either what count needs
-			--!!!to be to go back exactly 52 weeks, or create a sublist that
-			--!!!contains the past 52-weeks worth of Current's data and
-			--!!!pass that sublist and sublist.count to calculator.make.
+			--NOTE:  Not correct yet - needs to either what count needs
+			--to be to go back exactly 52 weeks, or create a sublist that
+			--contains the past 52-weeks worth of Current's data and
+			--pass that sublist and sublist.count to calculator.make.
 			!!calculator.make (Current, count, greater_than, close_extractor)
 			check
 				islast

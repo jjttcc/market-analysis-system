@@ -138,10 +138,10 @@ feature {NONE} -- Implementation
 				end
 			end
 			check
+				-- after implies that some data is missing - allowed for
+				-- robustness:
 				missing_data_condition:
 					after implies last.date_time.date < splits.last.date
-				-- after implies that some data is missing - allowed for
-				-- robustness.
 				for_current_item_to_end_there_are_no_more_splits:
 					not after implies item.date_time.date >= splits.last.date
 				split_ratio_equals_1: rabs (split_ratio - 1) < epsilon
