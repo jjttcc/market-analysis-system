@@ -100,6 +100,7 @@ cluster
 											"$/data_scanning";
 	operators (eiffel_components):			"$/commands/operators";
 	event_library (eiffel_components):		"$/events";
+	eiffel_component_test (eiffel_components):	"$/test";
 
 		-- ISE library clusters
 	ise:						"$EIFFEL4/library";
@@ -189,6 +190,7 @@ external
 			"${EIFFEL4}/library/store/spec/$(PLATFORM)/lib/libsupport.a",
 			"$(ECLI)/src/spec/ise/linux/libecli_c.a",
 			"$(MAS)/src/eiffel_library/lib/utilities.o",
+			"$(MAS)/src/eiffel_library/lib/libz.a",
 			"-lodbc"; 
 
 end
