@@ -1,0 +1,8 @@
+MAS Control Terminal (MCT)
+
+This is an application whose purpose is to control the various components
+of the Market Analysis System (MAS).  It uses the generic Program Control
+Terminal (PCT) package, which resides in the pct directory.
+
+mct_config is the configuration file that specifies how the PCT will look
+and behave as the MCT.
