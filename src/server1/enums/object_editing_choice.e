@@ -8,23 +8,11 @@ indexing
 
 deferred class OBJECT_EDITING_CHOICE inherit
 
-	ENUMERATED [CHARACTER]
+	CHARACTER_ENUMERATED
 
 	OBJECT_EDITING_VALUES
 		undefine
 			out
-		end
-
-feature -- Access
-
-	object_name: STRING is
-		deferred
-		end
-
-	item_description: STRING is
-			-- Description of the editing choice 'item'
-		do
-			Result := value_name_map @ item
 		end
 
 feature {NONE} -- Initialization
@@ -75,14 +63,14 @@ feature {NONE} -- Implementation
 	value_name_map: HASH_TABLE [STRING, CHARACTER] is
 		do
 			create Result.make (11)
-			Result.put ("Create a new " + object_name, creat)
-			Result.put ("Create a new " + object_name, creat_u)
-			Result.put ("Remove an " + object_name, remove)
-			Result.put ("Remove an " + object_name, remove_u)
-			Result.put ("Edit an " + object_name, edit)
-			Result.put ("Edit an " + object_name, edit_u)
-			Result.put ("View an " + object_name, view)
-			Result.put ("View an " + object_name, view_u)
+			Result.put ("Create a new " + type_name, creat)
+			Result.put ("Create a new " + type_name, creat_u)
+			Result.put ("Remove an " + type_name, remove)
+			Result.put ("Remove an " + type_name, remove_u)
+			Result.put ("Edit an " + type_name, edit)
+			Result.put ("Edit an " + type_name, edit_u)
+			Result.put ("View an " + type_name, view)
+			Result.put ("View an " + type_name, view_u)
 			Result.put ("Save changes", sav)
 			Result.put ("Save changes", sav_u)
 			Result.put ("Previous", previous)
@@ -90,8 +78,5 @@ feature {NONE} -- Implementation
 		end
 
 invariant
-
-	name_exists: object_name /= Void and then not object_name.is_empty
-	implementation_data_exist: value_name_map /= Void
 
 end

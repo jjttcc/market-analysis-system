@@ -23,13 +23,6 @@ create {ENUMERATED}
 
 	make
 
-feature -- Access
-
-	new_instance (value: INTEGER): TRADABLE_TYPE is
-		do
-			create Result.make (value)
-		end
-
 feature {NONE} -- Initialization
 
 	make_stock is

@@ -25,11 +25,6 @@ create {ENUMERATED}
 
 feature -- Access
 
-	object_name: STRING is "market analyzer"
-
-	new_instance (value: CHARACTER): MARKET_EVENT_GENERATOR_EDITING_CHOICE is
-		do
-			create Result.make (value)
-		end
+	type_name: STRING is "market analyzer"
 
 end

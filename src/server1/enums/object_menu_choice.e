@@ -8,7 +8,7 @@ indexing
 
 deferred class OBJECT_MENU_CHOICE inherit
 
-	ENUMERATED [CHARACTER]
+	CHARACTER_ENUMERATED
 
 	OBJECT_MENU_VALUES
 		undefine
@@ -34,10 +34,6 @@ feature {NONE} -- Initialization
 			make ('c')
 		end
 
-	object_name: STRING is
-		deferred
-		end
-
 feature {NONE} -- Implementation
 
 	initial_allowable_values: ARRAY [CHARACTER] is
@@ -49,16 +45,14 @@ feature {NONE} -- Implementation
 	value_name_map: HASH_TABLE [STRING, CHARACTER] is
 		do
 			create Result.make (6)
-			Result.put ("Description of the " + object_name, description)
-			Result.put ("Description of the " + object_name, description_u)
-			Result.put ("Choose a " + object_name, choose)
-			Result.put ("Choose a " + object_name, choose_u)
-			Result.put ("Choose another " + object_name, another_choice)
-			Result.put ("Choose another " + object_name, another_choice_u)
+			Result.put ("Description of the " + type_name, description)
+			Result.put ("Description of the " + type_name, description_u)
+			Result.put ("Choose a " + type_name, choose)
+			Result.put ("Choose a " + type_name, choose_u)
+			Result.put ("Choose another " + type_name, another_choice)
+			Result.put ("Choose another " + type_name, another_choice_u)
 		end
 
 invariant
-
-	name_exists: object_name /= Void and then not object_name.is_empty
 
 end

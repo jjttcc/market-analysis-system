@@ -18,7 +18,7 @@ feature -- Access
 	edit_u: CHARACTER is 'E'
 		-- Constant for 'edit' selection, uppercase
 
-	object_name: STRING is "command"
+	type_name: STRING is "command"
 
 invariant
 

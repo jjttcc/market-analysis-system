@@ -12,7 +12,7 @@ class FUNCTION_MENU_VALUES inherit
 
 feature -- Access
 
-	object_name: STRING is "function"
+	type_name: STRING is "function"
 
 feature {NONE} -- Implementation
 

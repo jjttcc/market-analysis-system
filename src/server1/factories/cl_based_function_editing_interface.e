@@ -130,19 +130,19 @@ feature {NONE} -- Implementation of hook methods
 			end
 			if not dirty or not ok_to_save then
 				msg := "Select action:%N     " +
-					enum_menu_string (cr, cr.item_description, " ") +
-					enum_menu_string (rm, rm.item_description, "%N     ") +
-					enum_menu_string (vw, vw.item_description, " ") +
-					enum_menu_string (ed, ed.item_description, " ") +
-					enum_menu_string (prev, prev.item_description, " ") + eom
+					enum_menu_string (cr, cr.name, " ") +
+					enum_menu_string (rm, rm.name, "%N     ") +
+					enum_menu_string (vw, vw.name, " ") +
+					enum_menu_string (ed, ed.name, " ") +
+					enum_menu_string (prev, prev.name, " ") + eom
 			else
 				msg := "Select action:%N     " +
-					enum_menu_string (cr, cr.item_description, " ") +
-					enum_menu_string (rm, rm.item_description, "%N     ") +
-					enum_menu_string (vw, vw.item_description, " ") +
-					enum_menu_string (ed, ed.item_description, " ") +
-					enum_menu_string (sv, sv.item_description, "%N     ") +
-					enum_menu_string (prev, prev.item_description,
+					enum_menu_string (cr, cr.name, " ") +
+					enum_menu_string (rm, rm.name, "%N     ") +
+					enum_menu_string (vw, vw.name, " ") +
+					enum_menu_string (ed, ed.name, " ") +
+					enum_menu_string (sv, sv.name, "%N     ") +
+					enum_menu_string (prev, prev.name,
 						" - abort changes ") + eom
 			end
 			from

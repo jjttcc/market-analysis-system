@@ -26,13 +26,6 @@ create {ENUMERATED}
 
 	make
 
-feature -- Access
-
-	new_instance (value: CHARACTER): COMMAND_MENU_CHOICE is
-		do
-			create Result.make (value)
-		end
-
 feature {NONE} -- Initialization
 
 	make_edit is
@@ -52,8 +45,8 @@ feature {NONE} -- Implementation
 	value_name_map: HASH_TABLE [STRING, CHARACTER] is
 		do
 			Result := Precursor
-			Result.put ("Edit a " + object_name, edit)
-			Result.put ("Edit a " + object_name, edit_u)
+			Result.put ("Edit a " + type_name, edit)
+			Result.put ("Edit a " + type_name, edit_u)
 		end
 
 end
