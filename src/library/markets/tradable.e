@@ -124,6 +124,7 @@ feature -- Element change
 			not_there: not indicators.has (f)
 		do
 			indicators.extend (f)
+			f.set_innermost_input (Current)
 		ensure
 			added: indicators.has (f)
 			one_more: indicators.count = old indicators.count + 1
@@ -190,7 +191,7 @@ feature {NONE} -- Initialization
 			type_set: trading_period_type /= Void
 			table_empty: composite_tuple_lists.empty
 		local
-			types: LIST [TIME_PERIOD_TYPE]
+			types: LINEAR [TIME_PERIOD_TYPE]
 		do
 			from
 				types := period_types.linear_representation
