@@ -224,9 +224,9 @@ public class Axis extends Object {
 	private int max_label_width     = 0;
 
 	/**
-	* Vector containing a list of attached DrawableDataSets
+	* Array containing a list of attached DrawableDataSets
 	*/
-	private Vector dataset = new Vector();
+	private ArrayList dataset = new ArrayList();
 
 	/**
 	* String to contain the labels.
@@ -417,7 +417,7 @@ public class Axis extends Object {
 		} else {
 			d.set_yaxis(null);
 		}
-		dataset.removeElement(d);
+		dataset.remove(d);
 
 		if (!manualRange) resetRange();
 	}
@@ -453,24 +453,24 @@ public class Axis extends Object {
 	*/
 	public double getDataMin() {
 		double m;
-		Enumeration e;
+		Iterator items;
 		DrawableDataSet d;
 
 		if( dataset.isEmpty() ) return 0.0;
 
-		d = (DrawableDataSet)(dataset.firstElement());
+		d = (DrawableDataSet)(dataset.get(0));
 		if (d == null) return 0.0;
 
 		if (orientation == HORIZONTAL) {
 			m = d.minimum_x();
-			for (e = dataset.elements() ; e.hasMoreElements() ;) {
-				d = (DrawableDataSet)e.nextElement();
+			for (items = dataset.iterator() ; items.hasNext() ;) {
+				d = (DrawableDataSet)items.next();
 				m = Math.min(d.minimum_x(),m);
 			}
 		} else {
 			m = d.minimum_y();
-			for (e = dataset.elements() ; e.hasMoreElements() ;) {
-				d = (DrawableDataSet)e.nextElement();
+			for (items = dataset.iterator() ; items.hasNext() ;) {
+				d = (DrawableDataSet)items.next();
 				m = Math.min(d.minimum_y(),m);
 			}
 		}
@@ -483,26 +483,26 @@ public class Axis extends Object {
 	*/
 	public double getDataMax() {
 		double m;
-		Enumeration e;
+		Iterator items;
 		DrawableDataSet d;
 
 		if (dataset.isEmpty()) return 0.0;
 
-		d = (DrawableDataSet)(dataset.firstElement());
+		d = (DrawableDataSet)(dataset.get(0));
 
 		if (d == null) return 0.0;
 
 
 		if (orientation == HORIZONTAL) {
 			m = d.maximum_x();
-			for (e = dataset.elements() ; e.hasMoreElements() ;) {
-				d = (DrawableDataSet)e.nextElement();
+			for (items = dataset.iterator() ; items.hasNext() ;) {
+				d = (DrawableDataSet)items.next();
 				m = Math.max(d.maximum_x(),m);
 		}
 		} else {
 			m = d.maximum_y();
-			for (e = dataset.elements() ; e.hasMoreElements() ;) {
-				d = (DrawableDataSet)e.nextElement();
+			for (items = dataset.iterator() ; items.hasNext() ;) {
+				d = (DrawableDataSet)items.next();
 				m = Math.max(d.maximum_y(),m);
 			}
 		}
