@@ -10,26 +10,26 @@ class MarketSelection implements ActionListener {
 	public MarketSelection(Chart f) {
 		int window_width = f.main_pane.getSize().width / 10 - 4;
 		main_frame = f;
-		selection = new List();
+		selection_list = new List();
 		dialog = new Dialog(f);
 		Panel panel = new Panel(new BorderLayout());
 		Button close_button = new Button("Close");
 		dialog.add(panel);
-		panel.add(selection, "Center");
+		panel.add(selection_list, "Center");
 		panel.add(close_button, "South");
 		dialog.setSize(window_width, 373);
-		selection.setSize(window_width, 348);
+		selection_list.setSize(window_width, 348);
 		close_button.setSize(window_width, 25);
 		panel.setSize(window_width, 373);
 		Vector ml = main_frame.markets();
 		for (int i = 0; i < ml.size(); ++i) {
-			selection.add((String) ml.elementAt(i));
+			selection_list.add((String) ml.elementAt(i));
 		}
 		// Add action listener (anonymous class) to respond to
 		// stock selection from list.
-		selection.addActionListener(new ActionListener() {
+		selection_list.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				main_frame.request_data(selection.getSelectedItem());
+				main_frame.request_data(selection_list.getSelectedItem());
 		}});
 		// Add action listener (anonymous class) to respond to
 		// pressing of close button.
@@ -39,7 +39,7 @@ class MarketSelection implements ActionListener {
 		}});
 		// Add a key listener to close the selection dialog if the
 		// escape key is pressed while the focus is in the selection list.
-		selection.addKeyListener(new KeyAdapter() {
+		selection_list.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == e.VK_ESCAPE) {
 					dialog.setVisible(false);
@@ -65,14 +65,24 @@ class MarketSelection implements ActionListener {
 	}
 
 	public String current_market() {
-		return selection.getSelectedItem();
+		return selection_list.getSelectedItem();
 	}
 
 	public void remove_selection(String s) {
-		selection.remove(s);
+		selection_list.remove(s);
 	}
 
-	private List selection;
+	// The selections - type String
+	public Vector selections() {
+		Vector result = new Vector();
+		int count = selection_list.getItemCount();
+		for (int i = 0; i < count; ++i) {
+			result.addElement(selection_list.getItem(i));
+		}
+		return result;
+	}
+
+	private List selection_list;
 	private Dialog dialog;
 	private Chart main_frame;
 }

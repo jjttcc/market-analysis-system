@@ -7,31 +7,70 @@ import common.*;
 import graph.*;
 import support.*;
 
+// Options specified on the command line
+class MAS_Options {
+
+	public MAS_Options() {
+	}
+
+	// Should all selections be printed on startup?
+	public boolean print_on_startup() {
+		return print_on_startup_;
+	}
+
+	// Initial period type - null if not specified
+	public String period_type() {
+		return period_type_;
+	}
+
+	// Initial indicators - null if not specified
+	public Vector indicators() {
+		return indicators_;
+	}
+
+	protected void set_print_on_startup(boolean v) {
+		print_on_startup_ = v;
+	}
+
+	private boolean print_on_startup_;
+	private String period_type_;
+	private Vector indicators_;
+}
+
+// Flags for various command-line options
+interface OptionFlags {
+	public final String symbol_option = "-s";
+	public final String printall_option = "-print";
+	public final char flag_character = '-';
+}
+
 /** Abstraction responsible for managing a connection and building DataSet
     instances from data returned from connection requests */
-public class DataSetBuilder implements NetworkProtocol
-{
+public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 	// args[0]: hostname, args[1]: port_number
 	public DataSetBuilder(String[] args) {
 		String hostname = null;
 		Integer port_number = null;
-		String symbol_option = "-s";
+		options_ = new MAS_Options();
 		//Process args for the host, port.
-		if (args.length > 1)
-		{
+		if (args.length > 1) {
 			hostname = args[0];
 			port_number = new Integer(port_number.parseInt(args[1]));
-			if (args.length > 3 && args[2].equals(symbol_option))
-			{
-				markets = new Vector();
-				for (int i = 3; i < args.length; ++i)
-				{
-					markets.addElement(args[i]);
+			for (int i = 2; i < args.length; ++i) {
+				if (args[i].equals(symbol_option)) {
+					markets = new Vector();
+					for (i = i + 1; i < args.length; ++i) {
+						if (args[i].charAt(0) == flag_character) {
+							break;
+						}
+						markets.addElement(args[i]);
+					}
+				}
+				if (i < args.length && args[i].equals(printall_option)) {
+					options_.set_print_on_startup(true);
 				}
 			}
-		}
-		else
-		{
+		} else {
 			usage();
 			System.exit(1);
 		}
@@ -42,8 +81,14 @@ public class DataSetBuilder implements NetworkProtocol
 
 	public DataSetBuilder(DataSetBuilder dsb) {
 		connection = new Connection(dsb.hostname(), dsb.port_number());
+		options_ = dsb.options_;
 		initialize();
 		connection.login(Login_request);
+	}
+
+	// Options passed in via the command line
+	public MAS_Options options() {
+		return options_;
 	}
 
 	// Send a logout request to the server to end the current session
@@ -122,15 +167,13 @@ public class DataSetBuilder implements NetworkProtocol
 		StringBuffer mlist;
 
 		synchronized ("x") {
-			if (markets == null)
-			{
+			if (markets == null) {
 				markets = new Vector();
 				connection.send_request(Market_list_request, "");
 				mlist = connection.result();
 				StringTokenizer t = new StringTokenizer(mlist.toString(),
 					Output_record_separator, false);
-				for (int i = 0; t.hasMoreTokens(); ++i)
-				{
+				for (int i = 0; t.hasMoreTokens(); ++i) {
 					markets.addElement(t.nextToken());
 				}
 			}
@@ -148,8 +191,7 @@ public class DataSetBuilder implements NetworkProtocol
 		tpt_list = connection.result();
 		StringTokenizer t = new StringTokenizer(tpt_list.toString(),
 			Output_record_separator, false);
-		for (int i = 0; t.hasMoreTokens(); ++i)
-		{
+		for (int i = 0; t.hasMoreTokens(); ++i) {
 			result.addElement(t.nextToken());
 		}
 		return result;
@@ -187,8 +229,12 @@ public class DataSetBuilder implements NetworkProtocol
 	}
 
 	private void usage() {
-		System.err.println("Usage: MA_Client hostname port_number [options]");
-		System.err.println("Options:\n   -s symbol ...\n");
+		System.err.println("Usage: MA_Client hostname port_number [options]\n"+
+		"Options:\n   "+ symbol_option +" symbol ..." +
+		"    Include only the specified symbols in the selection list.\n" +
+		"   " + printall_option +
+		"           Print the chart for each symbol."
+		);
 	}
 
 	private void initialize() {
@@ -230,4 +276,5 @@ public class DataSetBuilder implements NetworkProtocol
 	private Parser indicator_parser;
 	private Drawer main_drawer;		// draws tuples in main graph
 	private Drawer volume_drawer;	// draws volume tuples
+	private MAS_Options options_;	// command-line options
 }

@@ -7,18 +7,20 @@ import java.util.Vector;
 import java.util.Properties;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import common.*;
 
 /** Scroll pane that holds the Market Analysis graph and buttons */
-public class MA_ScrollPane extends ScrollPane
+public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 {
-	private static Properties print_properties;
+	static Properties print_properties;
 	static { print_properties = new Properties(); }
 
 	public MA_ScrollPane(Vector period_types, int scrollbarDisplayPolicy,
-				Chart parent_chart)
+				Chart parent_chart, Properties print_props)
 	{
 		super(scrollbarDisplayPolicy);
 
+		if (print_props != null) print_properties = print_props;
 		Configuration config = Configuration.instance();
 		chart = parent_chart;
 		_main_graph = new InteractiveGraph();
@@ -129,11 +131,30 @@ public class MA_ScrollPane extends ScrollPane
 		}
 	}
 
-	public void print() {
+	//If all is true, loop through all selections in chart, asking it to
+	//grab the data and print each one.
+	public void print(boolean all) {
 		Toolkit tk = getToolkit();
-		PrintJob pj = tk.getPrintJob(chart, chart.current_market,
-			print_properties);
+		PrintJob pj = tk.getPrintJob(chart,
+			all? "All charts": chart.current_market, print_properties);
 		if (pj != null) {
+			if (all) {
+				Vector selections = chart.market_selection.selections();
+				for (int i = 0; i < selections.size(); ++i) {
+					chart.request_data((String) selections.elementAt(i));
+					if (chart.request_result() != Invalid_symbol) {
+						print_current_chart(pj);
+					}
+				}
+			}
+			else {
+				print_current_chart(pj);
+			}
+			pj.end();
+		}
+	}
+
+	private void print_current_chart(PrintJob pj) {
 			Graphics page = pj.getGraphics();
 			Dimension size = graph_panel.getSize();
 			Dimension pagesize = pj.getPageDimension();
@@ -156,9 +177,7 @@ public class MA_ScrollPane extends ScrollPane
 			}
 			graph_panel.printAll(page);
 			page.dispose();
-			pj.end();
 			_main_graph.set_symbol(null);
-		}
 	}
 
 	// The left button panel component

@@ -17,15 +17,56 @@ import graph.*;
 import support.*;
 import common.*;
 
+class ChartSettings implements Serializable {
+	public ChartSettings(Dimension sz, Properties printprop, Point loc,
+			String upperind, String lowerind) {
+		size_ = sz;
+		print_properties_ = printprop;
+		location_ = loc;
+		upper_indicator_ = upperind;
+		lower_indicator_ = lowerind;
+	}
+	public Dimension size() { return size_; }
+	public Point location() { return location_; }
+	public Properties print_properties() { return print_properties_; }
+	public String upper_indicator() { return upper_indicator_;}
+	public String lower_indicator() { return lower_indicator_;}
+	private Dimension size_;
+	private Properties print_properties_;
+	private Point location_;
+	private String upper_indicator_;
+	private String lower_indicator_;
+}
+
 /** Market analysis GUI chart component */
 public class Chart extends Frame implements Runnable, NetworkProtocol {
-	public Chart(DataSetBuilder builder) {
+	public Chart(DataSetBuilder builder, String sfname) {
 		super("Chart");		// Create the main window frame.
 		num_windows++;			// Count it.
 		data_builder = builder;
 		this_chart = this;
 		Vector inds;
+		Vector _markets = null;
 
+		if (sfname != null) serialize_filename = sfname;
+
+		if (num_windows == 1) {
+			ChartSettings settings;
+			try {
+				FileInputStream chartfile =
+					new FileInputStream(serialize_filename);
+				ObjectInputStream ios = new ObjectInputStream(chartfile);
+				settings = (ChartSettings) ios.readObject();
+				window_settings = settings;
+			}
+			catch (IOException e) {
+				System.err.println("Could not read file " +
+					serialize_filename);
+			}
+			catch (ClassNotFoundException e) {
+				System.err.println("Class not found!");
+			}
+		}
 		try {
 			if (_markets == null) {
 				_markets = data_builder.market_list();
@@ -41,7 +82,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 					// it for all markets.
 					data_builder.send_indicator_list_request(
 						(String) _markets.elementAt(0));
-					if (data_builder.request_result() == Invalid_symbol) {
+					if (request_result() == Invalid_symbol) {
 						System.err.println("Symbol " + (String)
 							_markets.elementAt(0) + " is not in database.");
 						System.err.println("Exiting ...");
@@ -69,6 +110,13 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		}
 		initialize_GUI_components();
 		current_period_type = main_pane.current_period_type();
+		if (_markets.size() > 0) {
+			if (data_builder.options().print_on_startup() && num_windows == 1) {
+				print_all_charts();
+			}
+			// Show the graph of the first symbol in the selection list.
+			request_data((String) _markets.elementAt(0));
+		}
 		new Thread(this).start();
 	}
 
@@ -79,7 +127,20 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 	// List of all markets in the server's database
 	Vector markets() {
-		return _markets;
+		Vector result = null;
+		try {
+			result = data_builder.market_list();
+		}
+		catch (IOException e) {
+			System.err.println("IO exception occurred, bye ...");
+			quit(-1);
+		}
+		return result;
+	}
+
+	// Result of last request to the server
+	public int request_result() {
+		return data_builder.request_result();
 	}
 
 	// Take action when notified that period type changed.
@@ -101,16 +162,14 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			try {
 				data_builder.send_market_data_request(market,
 					current_period_type);
-				if (data_builder.request_result() == Invalid_symbol) {
+				if (request_result() == Invalid_symbol) {
 					handle_nonexistent_sybmol(market);
 					GUI_Utilities.busy_cursor(false, this);
 					return;
 				}
 			}
 			catch (Exception e) {
-				System.err.println("Exception occurred: "+e+", bye ...");
-				e.printStackTrace();
-				quit(-1);
+				fatal("Request to server failed", e);
 			}
 			//Ensure that all graph's data sets are removed.  (May need to
 			//change later.)
@@ -127,7 +186,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 						((Integer) _indicators.get(current_upper_indicator)).
 							intValue(), market, current_period_type);
 				} catch (Exception e) {
-					System.err.println("Exception occurred: "+e+", bye ...");
+					System.err.println("Exception occurred: " + e +
+						" - Exiting ...");
 					e.printStackTrace();
 					quit(-1);
 				}
@@ -153,7 +213,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 								intValue(), market, current_period_type);
 					} catch (Exception e) {
 						System.err.println(
-							"Exception occurred: "+e+", bye ...");
+							"Exception occurred: " + e + "- Exiting ...");
 						e.printStackTrace();
 						quit(-1);
 					}
@@ -200,8 +260,17 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	private void initialize_GUI_components() {
 		// Create the main scroll pane, size it, and center it.
 		main_pane = new MA_ScrollPane(_period_types,
-			MA_ScrollPane.SCROLLBARS_NEVER, this);
-		main_pane.setSize(800, 460);
+			MA_ScrollPane.SCROLLBARS_NEVER, this, window_settings != null?
+				window_settings.print_properties(): null);
+		if (window_settings != null && num_windows == 1) {
+			main_pane.setSize(window_settings.size().width,
+				window_settings.size().height + 2);
+			setLocation(window_settings.location());
+			current_upper_indicator = window_settings.upper_indicator();
+			current_lower_indicator = window_settings.lower_indicator();
+		} else {
+			main_pane.setSize(800, 460);
+		}
 		add(main_pane, "Center");
 		market_selection = new MarketSelection(this);
 
@@ -215,7 +284,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		add_indicators(indicator_menu);
 
 		// Create three menu items, with menu shortcuts, and add to the menu.
-		MenuItem newwin, closewin, mkt_selection, print_cmd, quit;
+		MenuItem newwin, closewin, mkt_selection, print_cmd, print_all, quit;
 		file_menu.add(newwin = new MenuItem("New Window",
 							new MenuShortcut(KeyEvent.VK_N)));
 		file_menu.add(mkt_selection = new MenuItem("Select Market",
@@ -225,6 +294,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		file_menu.addSeparator();
 		file_menu.add(print_cmd = new MenuItem("Print",
 							new MenuShortcut(KeyEvent.VK_P)));
+		file_menu.add(print_all = new MenuItem("Print all",
+							new MenuShortcut(KeyEvent.VK_A)));
 		file_menu.addSeparator();
 		file_menu.add(
 			quit = new MenuItem("Quit", new MenuShortcut(KeyEvent.VK_Q)));
@@ -232,7 +303,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		// Create and register action listener objects for the three menu items.
 		newwin.addActionListener(new ActionListener() {	// Open a new window
 		public void actionPerformed(ActionEvent e) {
-				new Chart(new DataSetBuilder(data_builder));
+				Chart chart = new Chart(new DataSetBuilder(data_builder), null);
+				//chart.setSize(800, 460);
 			}
 		});
 
@@ -245,7 +317,20 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		print_cmd.addActionListener(new ActionListener() {// Print
 		public void actionPerformed(ActionEvent e) {
 			if (! (current_market == null || current_market.length() == 0)) {
-				main_pane.print();
+				main_pane.print(false);
+			}
+			else { // Let the user know there is currently nothing to print.
+				final ErrorBox errorbox = new ErrorBox("Printing error",
+					"Nothing to print", this_chart);
+			}
+		}});
+
+		print_all.addActionListener(new ActionListener() {// Print all
+		public void actionPerformed(ActionEvent e) {
+			if (! (current_market == null || current_market.length() == 0)) {
+				String original_market = current_market;
+				print_all_charts();
+				request_data((String) original_market);
 			}
 			else { // Let the user know there is currently nothing to print.
 				final ErrorBox errorbox = new ErrorBox("Printing error",
@@ -262,8 +347,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		public void windowClosing(WindowEvent e) { close(); }
 		});
 
-		// Set the window size and pop it up.
-		setSize(800, 460);
+		// Pop up the window.
 		pack();
 		show();
 	}
@@ -290,6 +374,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	/** Close a window.  If this is the last open window, just quit. */
 	private void close() {
 		if (--num_windows == 0) {
+			save_settings();
 			data_builder.logout(true, 0);
 		}
 		else {
@@ -300,6 +385,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 	/** Quit gracefully, sending a logout request for each open window. */
 	private void quit(int status) {
+		save_settings();
 		// Log out the corresponding session for all but one window.
 		for (int i = 0; i < num_windows - 1; ++i) {
 			data_builder.logout(false, 0);
@@ -328,6 +414,43 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		market_selection.remove_selection(symbol);
 	}
 
+	// Save persistent settings as a serialized file.
+	private void save_settings() {
+		if (serialize_filename != null) {
+		try {
+			FileOutputStream chartfile =
+				new FileOutputStream(serialize_filename);
+			ObjectOutputStream oos = new ObjectOutputStream(chartfile);
+			ChartSettings cs = new ChartSettings(main_pane.getSize(),
+				main_pane.print_properties, getLocation(),
+				current_upper_indicator, current_lower_indicator);
+			oos.writeObject(cs);
+			oos.flush();
+			oos.close();
+		}
+		catch (IOException e) {
+			System.err.println("Could not save file " + serialize_filename);
+			System.err.println(e);
+		}
+		}
+	}
+
+	// Print the chart for each member of market_selection
+	private void print_all_charts() {
+		main_pane.print(true);
+	}
+
+	// Print fatal error and exit.
+	private void fatal(String s, Exception e) {
+		System.err.print("Fatal error: request to server failed. ");
+		if (e != null) {
+			System.err.println("(" + e + ")");
+			e.printStackTrace();
+		}
+		System.err.println("Exiting ...");
+		quit(-1);
+	}
+
 	private DataSetBuilder data_builder;
 
 	private Chart this_chart;
@@ -341,8 +464,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	// Valid trading period types - static for now, since it is currently
 	// hard-coded in the server
 	protected static Vector _period_types;	// Vector of String
-
-	protected static Vector _markets;		// Vector of String
 
 	// Cached list of market indicators
 	protected static Hashtable _indicators;	// table of String
@@ -369,6 +490,10 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	protected final String No_lower_indicator = "No lower indicator";
 
 	protected final String Volume = "Volume";
+
+	static String serialize_filename;
+
+	static ChartSettings window_settings;
 
 /** Listener for indicator selection */
 class IndicatorListener implements java.awt.event.ActionListener {
