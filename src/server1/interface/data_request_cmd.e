@@ -34,6 +34,8 @@ feature -- Access
 	trading_period_type: TIME_PERIOD_TYPE
 			-- Selected trading period type
 
+	parse_error: BOOLEAN
+
 feature {NONE} -- Utility
 
 	parse_symbol_and_period_type (sindx, ptindx: INTEGER;
@@ -45,13 +47,15 @@ feature {NONE} -- Utility
 			pt_name: STRING
 			object_comparison: BOOLEAN
 		do
+			parse_error := false
 			pt_names := period_type_names
 			object_comparison := pt_names.object_comparison
 			pt_names.compare_objects
 			market_symbol := fields @ sindx
 			pt_name := fields @ ptindx
 			if not pt_names.has (pt_name) then
-				report_error (Error, <<"something or other - error...">>)
+				report_error (Error, <<"Bad period type">>)
+				parse_error := true
 			else
 				trading_period_type := period_types @ pt_name
 			end
@@ -83,6 +87,6 @@ feature {NONE} -- Utility
 
 invariant
 
-	not_void: market_list /= Void
+	not_void: market_list_handler /= Void
 
 end -- class DATA_REQUEST_CMD

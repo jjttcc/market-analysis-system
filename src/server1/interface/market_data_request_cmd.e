@@ -21,10 +21,12 @@ feature -- Basic operations
 			target := msg -- set up for tokenization
 			fields := tokens (input_field_separator)
 			if fields.count /= 2 then
-				report_error (Error, <<"fields count wrong ...">>)
+				report_error (Error, <<"Fields count wrong.">>)
 			else
 				parse_symbol_and_period_type (1, 2, fields)
-				send_response
+				if not parse_error then
+					send_response
+				end
 			end
 		end
 
@@ -37,15 +39,21 @@ feature {NONE}
 		require
 			tpt_ms_not_void:
 				trading_period_type /= Void and market_symbol /= Void
+		local
+			tuple_list: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
 		do
-			if not market_list.symbols.has (market_symbol) then
-				report_error (Invalid_symbol, <<"Symbol not in database">>)
+			tuple_list := market_list_handler.tuple_list (market_symbol,
+				trading_period_type)
+			if tuple_list = Void then
+				if not market_list_handler.symbols.has (market_symbol) then
+					report_error (Invalid_symbol, <<"Symbol not in database.">>)
+				else
+					report_error (Error, <<"Invalid period type.">>)
+				end
 			else
-				market_list.search_by_symbol (market_symbol)
 				set_print_parameters
 				send_ok
-				print_tuples (market_list.item.tuple_list (
-					trading_period_type.name))
+				print_tuples (tuple_list)
 				print (eom)
 			end
 		end

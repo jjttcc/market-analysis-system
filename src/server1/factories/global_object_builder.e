@@ -38,7 +38,7 @@ feature -- Initialization
 		do
 			set_up
 		ensure
-			ml_not_void: market_list /= Void
+			ml_not_void: market_list_handler /= Void
 		end
 
 feature -- Access
@@ -53,8 +53,8 @@ feature -- Access
 			end
 		end
 
-	market_list: TRADABLE_LIST
-			-- Tradable list made from input data
+	market_list_handler: TRADABLE_LIST_HANDLER
+			-- Manager of all available market lists
 
 	event_coordinator: MARKET_EVENT_COORDINATOR
 			-- Object in charge of event generation and dispatch
@@ -63,7 +63,7 @@ feature {NONE}
 
 	set_up is
 			-- Build components and set up relationships, including
-			-- making a factory list for the market_list.  (For now, these
+			-- making a factory list for each market_list.  (For now, these
 			-- will all be STOCK_FACTORYs.)
 		local
 			i: INTEGER
@@ -112,18 +112,22 @@ feature {NONE}
 	build_components (tradable_factories: LINKED_LIST [TRADABLE_FACTORY]) is
 		local
 			dispatcher: EVENT_DISPATCHER
+			intraday_market_list: TRADABLE_LIST
+			daily_market_list: TRADABLE_LIST
 		do
 			if command_line_options.use_db then
-				create {DB_TRADABLE_LIST} market_list.make (
+				create {DB_TRADABLE_LIST} daily_market_list.make (
 					input_entity_names, tradable_factories)
 			else
-				create {FILE_TRADABLE_LIST} market_list.make (
+				create {FILE_TRADABLE_LIST} daily_market_list.make (
 					input_entity_names, tradable_factories)
 			end
+			-- Intraday list is Void for now.
+			create market_list_handler.make (daily_market_list, Void)
 			create dispatcher.make
 			register_event_registrants (dispatcher)
 			create {MARKET_EVENT_COORDINATOR} event_coordinator.make (
-							active_event_generators, market_list, dispatcher)
+				active_event_generators, daily_market_list, dispatcher)
 		end
 
 	register_event_registrants (dispatcher: EVENT_DISPATCHER) is

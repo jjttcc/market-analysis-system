@@ -21,11 +21,13 @@ feature -- Basic operations
 			target := msg -- set up for tokenization
 			fields := tokens (input_field_separator)
 			if fields.count /= 3 or not fields.first.is_integer then
-				report_error (Error, <<"fields count wrong ...">>)
+				report_error (Error, <<"Wrong number of fields.">>)
 			else
 				parse_symbol_and_period_type (2, 3, fields)
-				indicatorID := fields.first.to_integer
-				send_response
+				if not parse_error then
+					indicatorID := fields.first.to_integer
+					send_response
+				end
 			end
 		end
 
@@ -47,26 +49,28 @@ feature {NONE}
 			indicator: MARKET_FUNCTION
 			market: TRADABLE [BASIC_MARKET_TUPLE]
 		do
-			if not market_list.symbols.has (market_symbol) then
-				report_error (Invalid_symbol, <<"Symbol not in database">>)
-			else
-				market_list.search_by_symbol (market_symbol)
-				market := market_list.item
-				if
-					indicatorID < 1 or indicatorID > market.indicators.count
-				then
-					report_error (Error, <<"Invalid indicator ID">>)
+			market := market_list_handler.tradable (market_symbol,
+				trading_period_type)
+			if market = Void then
+				if not market_list_handler.symbols.has (market_symbol) then
+					report_error (Invalid_symbol, <<"Symbol not in database.">>)
 				else
-					market.set_target_period_type (trading_period_type)
-					indicator := market.indicators @ indicatorID
-					if not indicator.processed then
-						indicator.process
-					end
-					set_print_parameters
-					send_ok
-					print_indicator (indicator)
-					print (eom)
+					report_error (Error, <<"Invalid period type">>)
 				end
+			elseif
+				indicatorID < 1 or indicatorID > market.indicators.count
+			then
+				report_error (Error, <<"Invalid indicator ID">>)
+			else
+				market.set_target_period_type (trading_period_type)
+				indicator := market.indicators @ indicatorID
+				if not indicator.processed then
+					indicator.process
+				end
+				set_print_parameters
+				send_ok
+				print_indicator (indicator)
+				print (eom)
 			end
 		end
 

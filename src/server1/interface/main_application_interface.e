@@ -12,13 +12,15 @@ deferred class MAIN_APPLICATION_INTERFACE inherit
 			{NONE} all
 		end
 
-feature -- Access
+feature {NONE} -- Access
 
 	event_coordinator: MARKET_EVENT_COORDINATOR
 
 	factory_builder: FACTORY_BUILDER
 
-	market_list: TRADABLE_LIST
+	market_list_handler: TRADABLE_LIST_HANDLER
+
+	intraday_market_list: TRADABLE_LIST
 
 	event_generator_builder: MEG_EDITING_INTERFACE
 
@@ -38,13 +40,14 @@ feature {NONE}
 		do
 			factory_builder := fb
 			event_coordinator := factory_builder.event_coordinator
-			market_list := factory_builder.market_list
+			market_list_handler := factory_builder.market_list_handler
 			!!help.make
 		ensure
 			fb_set: factory_builder = fb
-			mklist_set: market_list = factory_builder.market_list
-			inited: event_coordinator /= Void and market_list /= Void and
-					help /= Void
+			list_handler_set: market_list_handler =
+				factory_builder.market_list_handler
+			initialized: event_coordinator /= Void and
+				market_list_handler /= Void and help /= Void
 		end
 
 feature {NONE}
@@ -54,7 +57,7 @@ feature {NONE}
 invariant
 
 	fb_not_void: factory_builder /= Void
-	market_list_not_void: market_list /= Void
+	market_list_handler: market_list_handler /= Void
 	event_coordinator_not_void: event_coordinator /= Void
 	event_generator_builder_not_void: event_generator_builder /= Void
 	function_builder_not_void: function_builder /= Void

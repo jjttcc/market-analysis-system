@@ -90,10 +90,10 @@ feature -- Access
 
 	current_tradable: TRADABLE [BASIC_MARKET_TUPLE] is
 		do
-			if market_list.empty then
+			if daily_market_list.empty then
 				Result := Void
 			else
-				Result := market_list.item
+				Result := daily_market_list.item
 			end
 		end
 
@@ -485,7 +485,7 @@ feature {NONE}
 			finished: BOOLEAN
 			indicator: MARKET_FUNCTION
 		do
-			if market_list.empty then
+			if daily_market_list.empty then
 				print ("There are currently no markets to view.%N")
 				finished := True
 			end
@@ -584,14 +584,14 @@ feature {NONE}
 
 	select_market is
 			-- Allow the user to select the current market so that
-			-- market_list.item is the selected market.
+			-- daily_market_list.item is the selected market.
 		local
 			symbol: STRING
 			symbols: LIST [STRING]
 		do
-			if not market_list.empty then
+			if not daily_market_list.empty then
 				from
-					symbols := market_list.symbols
+					symbols := daily_market_list.symbols
 				until
 					symbol /= Void
 				loop
@@ -609,12 +609,12 @@ feature {NONE}
 					end
 				end
 				check
-					symbol_in_list: market_list.symbols.has (symbol)
+					symbol_in_list: daily_market_list.symbols.has (symbol)
 				end
-				market_list.search_by_symbol (symbol)
+				daily_market_list.search_by_symbol (symbol)
 				-- current_tradable will be set to the current item of
-				-- market_list (which, because of the above call, corresponds
-				-- to file `symbol').
+				-- daily_market_list (which, because of the above call,
+				-- corresponds to file `symbol').
 				-- Update the current_tradable's target period type, if needed.
 				if
 					current_tradable.target_period_type /= current_period_type
@@ -634,7 +634,7 @@ feature {NONE}
 			i: INTEGER
 			types: ARRAY [STRING]
 		do
-			if not market_list.empty then
+			if not daily_market_list.empty then
 				from
 					i := 1
 					types := current_tradable.tuple_list_names
@@ -745,24 +745,25 @@ feature {NONE}
 		end
 
 	save_mklist_position is
-			-- Save the current position of `market_list' for later restoring.
+			-- Save the current position of `daily_market_list' for
+			-- later restoring.
 		do
-			saved_mklist_index := market_list.index
+			saved_mklist_index := daily_market_list.index
 		end
 
 	restore_mklist_position is
-			-- Restore `market_list' cursor to last saved position
+			-- Restore `daily_market_list' cursor to last saved position
 		require
 			saved_mklist_index > 0
 		do
 			from
-				if saved_mklist_index < market_list.index then
-					market_list.start
+				if saved_mklist_index < daily_market_list.index then
+					daily_market_list.start
 				end
 			until
-				market_list.index = saved_mklist_index
+				daily_market_list.index = saved_mklist_index
 			loop
-				market_list.forth
+				daily_market_list.forth
 			end
 		end
 
@@ -771,6 +772,8 @@ feature {NONE}
 			current_period_type := period_types @ (period_type_names @ Daily)
 			!!event_generator_builder.make
 			!!function_builder.make
+			-- For now, only use non-intraday data.
+			daily_market_list := market_list_handler.daily_market_list
 		ensure
 			curr_period_not_void: current_period_type /= Void
 		end
@@ -806,5 +809,7 @@ feature {NONE}
 			-- Has the user requested to terminate the server?
 
 	saved_mklist_index: INTEGER
+
+	daily_market_list: TRADABLE_LIST
 
 end -- class MAIN_CL_INTERFACE

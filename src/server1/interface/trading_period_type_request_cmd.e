@@ -24,28 +24,38 @@ creation
 feature -- Basic operations
 
 	execute (msg: STRING) is
+		local
+			ptypes: LIST [STRING]
 		do
 			-- `msg' is expected to contain (only) the market symbol
-			if not market_list.symbols.has (msg) then
+			ptypes := market_list_handler.period_types (msg)
+			if ptypes = Void then
 				report_error (Invalid_symbol, <<"Symbol not in database">>)
 			else
-				market_list.search_by_symbol (msg)
 				send_ok
-				-- Since only daily, weekly, quarterly, and monthly trading
-				-- period types are allowed in the current version (for
-				-- all markets), the response is simply hard-coded here.
-				-- This will probably change in the future.
-				print_list (<<period_type_names @ Daily, 
-							Output_record_separator,
-							period_type_names @ Weekly,
-							Output_record_separator,
-							period_type_names @ Monthly,
-							Output_record_separator,
-							period_type_names @ Quarterly,
-							Output_record_separator,
-							period_type_names @ Yearly>>)
+				print_list (with_record_separators (ptypes))
 				print (eom)
 			end
+		end
+
+	with_record_separators (ptypes: LIST [STRING]): ARRAY [STRING] is
+		local
+			i: INTEGER
+		do
+			create Result.make (1, ptypes.count * 2 - 1)
+			from
+				ptypes.start
+				i := 1
+			until
+				ptypes.islast
+			loop
+				Result.put (ptypes.item, i)
+				i := i + 1
+				Result.put (Output_record_separator, i)
+				i := i + 1
+				ptypes.forth
+			end
+			Result.put (ptypes.item, i)
 		end
 
 end -- class TRADING_PERIOD_TYPE_REQUEST_CMD

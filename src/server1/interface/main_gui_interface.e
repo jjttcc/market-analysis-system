@@ -175,20 +175,20 @@ feature {NONE}
 			rh: HASH_TABLE [REQUEST_COMMAND, INTEGER]
 		do
 			!!rh.make (0)
-			!MARKET_DATA_REQUEST_CMD!cmd.make (market_list)
+			!MARKET_DATA_REQUEST_CMD!cmd.make (market_list_handler)
 			rh.extend (cmd, Market_data_request)
-			!INDICATOR_DATA_REQUEST_CMD!cmd.make (market_list)
+			!INDICATOR_DATA_REQUEST_CMD!cmd.make (market_list_handler)
 			rh.extend (cmd, Indicator_data_request)
 			!TRADING_PERIOD_TYPE_REQUEST_CMD!cmd.make (
-				market_list)
+				market_list_handler)
 			rh.extend (cmd, Trading_period_type_request)
-			!MARKET_LIST_REQUEST_CMD!cmd.make (market_list)
+			!MARKET_LIST_REQUEST_CMD!cmd.make (market_list_handler)
 			rh.extend (cmd, Market_list_request)
-			!INDICATOR_LIST_REQUEST_CMD!cmd.make (market_list)
+			!INDICATOR_LIST_REQUEST_CMD!cmd.make (market_list_handler)
 			rh.extend (cmd, Indicator_list_request)
 			!ERROR_RESPONSE_CMD!cmd
 			rh.extend (cmd, Error)
-			!LOGIN_REQUEST_CMD!cmd.make (market_list)
+			!LOGIN_REQUEST_CMD!cmd.make (market_list_handler)
 			rh.extend (cmd, Login_request)
 			request_handlers := rh
 		ensure

@@ -19,7 +19,7 @@ feature -- Basic operations
 			symbols: LIST [STRING]
 		do
 			send_ok
-			symbols := market_list.symbols
+			symbols := market_list_handler.symbols
 			if not symbols.empty then
 				from
 					symbols.start

@@ -34,19 +34,20 @@ deferred class REQUEST_COMMAND inherit
 
 feature {NONE} -- Initialization
 
-	make (ml: TRADABLE_LIST) is
+	make (list_handler: TRADABLE_LIST_HANDLER) is
 		require
-			not_void: ml /= Void
+			not_void: list_handler /= Void
 		do
-			market_list := ml
+			market_list_handler := list_handler
 		ensure
-			set: market_list = ml and market_list /= Void
+			set: market_list_handler = list_handler and
+				market_list_handler /= Void
 		end
 
 feature -- Access
 
-	market_list: TRADABLE_LIST
-			-- List of all markets currently in the `database'
+	market_list_handler: TRADABLE_LIST_HANDLER
+			-- Hanler of available market lists
 
 	session: SESSION
 			-- Settings specific to a particular client session
@@ -63,14 +64,15 @@ feature -- Status setting
 			active_medium_set: active_medium = arg and active_medium /= Void
 		end
 
-	set_market_list (arg: TRADABLE_LIST) is
-			-- Set market_list to `arg'.
+	set_market_list_handler (arg: TRADABLE_LIST_HANDLER) is
+			-- Set market_list_handler to `arg'.
 		require
-			arg_not_void: arg /= Void
+				arg_not_void: arg /= Void
 		do
-			market_list := arg
+			market_list_handler := arg
 		ensure
-			market_list_set: market_list = arg and market_list /= Void
+			market_list_handler_set: market_list_handler = arg and
+				market_list_handler /= Void
 		end
 
 	set_session (arg: SESSION) is
