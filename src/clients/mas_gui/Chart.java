@@ -63,7 +63,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		this_chart = this;
 		Vector _tradables = null;
 		saved_dialogs = new Vector();
-//!!!!: _indicators = null;
 
 		serialize_filename = sfname;
 
@@ -137,50 +136,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		return result;
 	}
 
-//!!!!!:
-	public Hashtable remove_this_it_is_obsolete_indicators() {
-		return null;
-	}
-
-	// indicators
-	// Postcondition: result != null
-//!!!!:
-	public Hashtable old_remove_me_please_indicators() {
-//!!!Change to use 'tradable_specification.indicator_specs'
-		Hashtable result = null;
-		if (tradable_specification.all_indicator_specifications().size() == 0
-				|| new_indicators) {
-//!!!		if (_indicators == null || new_indicators) [
-			new_indicators = false;
-			Vector inds_from_server = data_builder.last_indicator_list();
-			if (previous_open_interest != data_builder.has_open_interest() ||
-					! Utilities.lists_match(inds_from_server,
-					old_indicators_from_server)) {
-				// The old indicators are not the same as the indicators
-				// just obtained from the server (or there are not yet
-				// any old indicators), so the indicator lists need to
-				// be rebuilt.
-				old_indicators_from_server = inds_from_server;
-				make_indicator_lists(inds_from_server);
-			}
-			previous_open_interest = data_builder.has_open_interest();
-		}
-		if (data_builder.connection().error_occurred()) {
-			display_warning("Error occurred retrieving indicator list.");
-		}
-/*
-		if (_indicators != null) {
-			result = _indicators;
-		} else {
-			result = new Hashtable();
-		}
-//		assert result != null: "Postcondition violation";
-		return _indicators;
-*/
-return null;
-	}
-
-
 	// Indicators in user-specified order
 	public Vector ordered_indicators() {
 		if (ordered_indicator_list == null) {
@@ -208,13 +163,11 @@ return null;
 	// Symbol for current selected tradable
 	public String current_tradable() {
 		return tradable_specification.symbol();
-//!!!REMOVE: return xxxcurrent_tradablexxx;
 	}
 
 	// Current selected period_type
 	public String current_period_type() {
 		return tradable_specification.period_type();
-//!!!REMOVE: return xxxcurrent_period_typexxx;
 	}
 
 	// Valid trading period types for the current tradable
@@ -334,6 +287,7 @@ return null;
 					new_indicators = true;
 					rebuild_indicators_if_needed();
 				} else {
+//!!!!Refactor if possible:
 					// Handle request error.
 					if (request_result_id() == Invalid_symbol) {
 						handle_nonexistent_sybmol(tradable);
@@ -345,6 +299,7 @@ return null;
 						display_warning("Error occurred retrieving " +
 							"data for " + tradable);
 					}
+//end Refactor
 					GUI_Utilities.busy_cursor(false, this);
 					return;
 				}
@@ -353,14 +308,15 @@ return null;
 				facilities.fatal("Request to server failed: ", e);
 			}
 			//Ensure that all graph's data sets are removed.
+//!!!!Refactor:
 			main_pane.clear_main_graph();
 			main_pane.clear_indicator_graph();
 			main_dataset = (DrawableDataSet) data_builder.last_market_data();
 			latest_date_time = data_builder.last_latest_date_time();
 			link_with_axis(main_dataset, null);
-//!!!Hook up data sets here:
 			main_pane.add_main_data_set(main_dataset);
 			tradable_specification.set_main_data(main_dataset);
+//end Refactor
 			if (! current_upper_indicators.isEmpty()) {
 				// Retrieve the data for the newly requested tradable for
 				// the upper indicators, add it to the upper graph and
@@ -373,24 +329,20 @@ return null;
 						data_builder.send_indicator_data_request(
 							indicator_id_for(current_indicator),
 							tradable, current_period_type());
-//!!!: data_builder.send_indicator_data_request(((Integer)
-//!!! indicators().get(current_indicator)).
-//!!! intValue(), tradable, current_period_type());
 					} catch (Exception e) {
 						facilities.fatal("Exception occurred", e);
 					}
+//!!!!Refactor:
 					dataset = (DrawableDataSet)
 						data_builder.last_indicator_data();
 					dataset.set_dates_needed(false);
 					dataset.setColor(
 						conf.indicator_color(current_indicator, true));
 					link_with_axis(dataset, current_indicator);
-//!!! replace with a procedure to update ind. data spec, main pane, etc.:
-//!!!Hook up data sets here:
 					main_pane.add_main_data_set(dataset);
 					tradable_specification.set_indicator_data(dataset,
 						current_indicator);
-//!!!Perhaps replace _indicators with indicator_specs
+//end Refactor
 				}
 			}
 			set_current_tradable(tradable);
@@ -416,12 +368,6 @@ return null;
 							data_builder.send_indicator_data_request(
 								indicator_id_for(current_indicator),
 								tradable, current_period_type());
-/*!!!:
-data_builder.send_indicator_data_request(
-((Integer) indicators().get(
-current_indicator)).intValue(),
-tradable, current_period_type());
-*/
 						} catch (Exception e) {
 							facilities.fatal("Exception occurred", e);
 						}
@@ -429,6 +375,7 @@ tradable, current_period_type());
 							data_builder.last_indicator_data();
 					}
 					if (dataset != null) {
+//!!!!Refactor:
 						dataset.setColor(conf.indicator_color(
 							current_indicator, false));
 						link_with_axis(dataset, current_indicator);
@@ -436,6 +383,7 @@ tradable, current_period_type());
 						main_pane.add_indicator_data_set(dataset);
 						tradable_specification.set_indicator_data(dataset,
 							current_indicator);
+//end Refactor
 					}
 				}
 			}
@@ -470,7 +418,30 @@ System.out.println("I (" + this + ") was notified of an update!");
 	}
 
 	public void notify_of_failure(Exception e) {
+		// Report the failure and ???
+	}
+
+	public void notify_of_error(int result_id, String msg) {
+System.out.println("data request failed with code: " + result_id);
 		// Report the error and ???
+	}
+
+// Basic operations - package access
+
+	// Unselect all upper indicators in the indicator specification.
+	void unselect_upper_indicators() {
+		Iterator i = current_upper_indicators.iterator();
+		while (i.hasNext()) {
+			tradable_specification.unselect_indicator((String) i.next());
+		}
+	}
+
+	// Unselect all lower indicators in the indicator specification.
+	void unselect_lower_indicators() {
+		Iterator i = current_lower_indicators.iterator();
+		while (i.hasNext()) {
+			tradable_specification.unselect_indicator((String) i.next());
+		}
 	}
 
 // Implementation - Element change
@@ -487,7 +458,6 @@ System.out.println("I (" + this + ") was notified of an update!");
 
 	// If the "indicator list" is out of date, rebuild it.
 	public void rebuild_indicators_if_needed() {
-//!!!Change to use 'tradable_specification.indicator_specs'
 		if (tradable_specification.all_indicator_specifications().size() == 0
 				|| new_indicators) {
 			new_indicators = false;
@@ -521,15 +491,18 @@ System.out.println("I (" + this + ") was notified of an update!");
 			valid_indicators = new Hashtable();
 		}
 		ordered_indicator_list = new Vector();
+		tradable_specification.clear_all_indicators();
 		int i;
 		for (i = 0; i < inds_from_server.size(); ++i) {
+//!!!!!Instead of a `valid_indicators' list, this function can probably
+// be assigned to `tradable_specification' so that it contains all "valid"
+// indicators and it also keeps track of 'selected_indicators()'.
 			Object o = inds_from_server.elementAt(i);
 			valid_indicators.put(o, new Integer(i + 1));
 		}
 		// User-selected indicators, in order:
 		ind_iter = MA_Configuration.application_instance().indicator_order().
 			elements();
-//!!!:_indicators = new Hashtable();
 		Vector special_indicators = new Vector();
 		special_indicators.addElement(No_lower_indicator);
 		special_indicators.addElement(No_upper_indicator);
@@ -537,11 +510,10 @@ System.out.println("I (" + this + ") was notified of an update!");
 		if (data_builder.has_open_interest()) {
 			special_indicators.addElement(Open_interest);
 		}
-// Insert into _indicators all user-selected indicators that
-		// Insert into the indicator list all user-selected indicators that
-		// are either in the list returned by the server or are one of
-		// the special strings for no upper/lower indicator, volume,
-		// or open interest.
+		// Insert into the indicator list all "user-configured" indicators
+		// that are either in the list returned by the server or are one of
+		// the special strings for no upper/lower indicator, volume, or
+		// open interest.
 		while (ind_iter.hasMoreElements()) {
 			s = (String) ind_iter.nextElement();
 			if (valid_indicators.containsKey(s)) {
@@ -550,8 +522,6 @@ System.out.println("I (" + this + ") was notified of an update!");
 				tradable_specification.add_indicator(new
 					IndicatorDataSpecification(((Integer)
 					valid_indicators.get(s)).intValue(), s));
-//!!!:
-//_indicators.put(s, valid_indicators.get(s));
 				ordered_indicator_list.addElement(s);
 			}
 			else {
@@ -571,8 +541,6 @@ System.out.println("I (" + this + ") was notified of an update!");
 		for (i = 0; i < special_indicators.size(); ++i) {
 			s = (String) special_indicators.elementAt(i);
 			if (tradable_specification.indicator_spec_for(s) == null) {
-//!!!			if (!_indicators.containsKey(s)) [
-//!!!_indicators.put(s, new Integer(_indicators.size() + 1));
 				tradable_specification.add_special_indicator(new
 					IndicatorDataSpecification(tradable_specification.
 						all_indicator_specifications().size() + 1, s));
@@ -610,7 +578,7 @@ System.out.println("I (" + this + ") was notified of an update!");
 		}
 		for (i = 0; i < remove_list.size(); ++i) {
 			while (current_upper_indicators.lastIndexOf(
-				remove_list.elementAt(i)) != -1) {
+					remove_list.elementAt(i)) != -1) {
 				current_upper_indicators.removeElement(
 					remove_list.elementAt(i));
 			}
@@ -714,7 +682,6 @@ System.out.println("I (" + this + ") was notified of an update!");
 	// `initialize_GUI_components' has been called.
 	private void post_initialize() {
 		MA_Configuration conf = MA_Configuration.application_instance();
-//!!!Note: auto_refresh() needs to be redefined in MA_Configuration.
 		if (conf.auto_refresh()) {
 System.out.println("auto refresh is ON.");
 			AutoRefreshSetup.execute(this);
@@ -869,10 +836,6 @@ else { System.out.println("auto refresh is OFFFFFF.");}
 	// Valid trading period types
 	protected Vector period_types;	// Vector of String
 
-//!!!!!REMOVE:
-	// Table of market indicators
-//	protected static Hashtable _indicators;	// key: String, value: Integer
-
 	// Has data_builder.send_indicator_list_request been called since the
 	// last call to `indicators'?
 	protected boolean new_indicators = true;
@@ -881,17 +844,11 @@ else { System.out.println("auto refresh is OFFFFFF.");}
 	// volume, and open-interest indicators
 	private static Vector ordered_indicator_list;	// Vector of String
 
-	// Current selected tradable
-//!!!:
-	protected String old_remove_current_tradable;
-
-	// Current selected period type
-//!!!:
-	protected String old_remove_current_period_type;
-
 	// Has the period type just been changed?
 	protected boolean period_type_change;
 
+//!!!!Consider moving the logic re. which indicators are current upper
+// and current lower into `tradable_specification'.
 	// Upper indicators currently selected for display
 	protected Vector current_upper_indicators;
 
@@ -944,7 +901,7 @@ else { System.out.println("auto refresh is OFFFFFF.");}
 
 	private ChartFacilities facilities;
 
-	MA_TradableDataSpecification tradable_specification;
+	protected MA_TradableDataSpecification tradable_specification;
 
 	private static NetworkProtocolUtilities protocol_util =
 		new NetworkProtocolUtilities();

@@ -132,6 +132,11 @@ System.out.println("AbstractDataSetBuilder(AbstractDataSetBuilder ) called");
 		return open_interest;
 	}
 
+	// Did the last data request succeed?
+	public boolean request_succeeded() {
+		return request_result_id() == Ok;
+	}
+
 // Basic operations
 
 	// Send a logout request to the server to end the current session
@@ -147,6 +152,7 @@ System.out.println("AbstractDataSetBuilder(AbstractDataSetBuilder ) called");
 	}
 
 	// Send a request for data for the tradable `symbol' with `period_type'.
+	// Postcondition: request_result_id() {
 	public void send_market_data_request(String symbol, String period_type)
 			throws Exception {
 

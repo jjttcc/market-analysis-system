@@ -62,19 +62,30 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 					chart.replace_indicators) {
 				// Remove the old indicator data from the graph (and the
 				// market data).
+//!!!! Refactor into one or more procedures in Chart and call them here:
 				main_pane.clear_main_graph();
 				// Re-attach the market data.
 				chart.link_with_axis(main_dataset, null);
 				main_pane.add_main_data_set(main_dataset);
+//!!!I believe this is not needed because its main data is up to date,
+//!!!but verify that this is so:
+//chart.tradable_specification.set_main_data(main_dataset);
+				chart.unselect_upper_indicators();
 				chart.current_upper_indicators.removeAllElements();
+// End refactor
 			}
+//!!!! Refactor into one or more procedures in Chart and call them here:
 			chart.current_upper_indicators.addElement(selection);
+			chart.tradable_specification.select_indicator(selection);
 			dataset = (DrawableDataSet) data_builder.last_indicator_data();
 			dataset.set_dates_needed(false);
 			dataset.setColor(conf.indicator_color(selection, true));
 			chart.link_with_axis(dataset, selection);
 			main_pane.add_main_data_set(dataset);
+			chart.tradable_specification.set_indicator_data(dataset, selection);
+// End refactor
 		} else if (selection.equals(chart.No_upper_indicator)) {
+//!!!! Refactor into one or more procedures in Chart and call them here:
 			// Remove the old indicator and market data from the graph.
 			main_pane.clear_main_graph();
 			// Re-attach the market data without the indicator data.
@@ -82,11 +93,18 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 				data_builder.last_market_data();
 			chart.link_with_axis(data, null);
 			main_pane.add_main_data_set(data);
+//!!!(See note above about main data.)
+//chart.tradable_specification.set_main_data(main_dataset);
+			chart.unselect_upper_indicators();
 			chart.current_upper_indicators.removeAllElements();
+// End refactor
 		} else if (selection.equals(chart.No_lower_indicator)) {
+//!!!! Refactor into one or more procedures in Chart and call them here:
 			main_pane.clear_indicator_graph();
+			chart.unselect_lower_indicators();
 			chart.current_lower_indicators.removeAllElements();
 			chart.set_window_title();
+// End refactor
 		} else {
 			if (selection.equals(chart.Volume)) {
 				dataset = (DrawableDataSet) data_builder.last_volume();
@@ -96,15 +114,22 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 				dataset = (DrawableDataSet) data_builder.last_indicator_data();
 			}
 			if (chart.replace_indicators) {
+//!!!! Refactor into one or more procedures in Chart and call them here:
 				main_pane.clear_indicator_graph();
+				chart.unselect_lower_indicators();
 				chart.current_lower_indicators.removeAllElements();
+// End refactor
 			}
+//!!!! Refactor into one or more procedures in Chart and call them here:
 			dataset.setColor(conf.indicator_color(selection, false));
 			chart.link_with_axis(dataset, selection);
 			chart.current_lower_indicators.addElement(selection);
+			chart.tradable_specification.select_indicator(selection);
 			chart.set_window_title();
 			chart.add_indicator_lines(dataset, selection);
 			main_pane.add_indicator_data_set(dataset);
+			chart.tradable_specification.set_indicator_data(dataset, selection);
+// End refactor
 		}
 		main_pane.repaint_graphs();
 	}

@@ -46,7 +46,8 @@ abstract public class DataSet {
 	/**
 	* Append a copy of `d' at end.
 	* @postcondition
-	*     count() == old count() + d.count() */
+	*     implies(d == null, count() == old count())
+	*     implies(d != null, count() == old count() + d.count()) */
 	abstract public void append(DataSet d);
 
 // Implementation

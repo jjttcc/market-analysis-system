@@ -91,6 +91,36 @@ else {System.out.println("indicator was NOT found: " + i);}
 		special_indicator_specs.put(i.name(), i);
 	}
 
+	// Mark all indicator specifications as not `selected' and set their
+	// data sets to null to free up no-longer-needed heap space.
+	void unselect_all_indicators() {
+		Iterator specs = indicator_specifications().iterator();
+		IndicatorDataSpecification i;
+		while (specs.hasNext()) {
+			i = (IndicatorDataSpecification) specs.next();
+			i.unselect();
+			i.set_data(null);
+		}
+	}
+
+	// Select indicator with name `name'.
+	void select_indicator(String name) {
+		IndicatorDataSpecification i = indicator_spec_for(name);
+		if (i != null) {
+			i.select();
+		}
+	}
+
+	// Unselect indicator with name `name' and set its data set to null
+	// to free up no-longer-needed heap space.
+	void unselect_indicator(String name) {
+		IndicatorDataSpecification i = indicator_spec_for(name);
+		if (i != null) {
+			i.unselect();
+			i.set_data(null);
+		}
+	}
+
 // Removal
 
 	void clear_all_indicators() {

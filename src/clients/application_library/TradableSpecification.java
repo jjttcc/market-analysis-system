@@ -38,9 +38,23 @@ public class TradableDataSpecification {
 		return (IndicatorDataSpecification) indicator_specs.get(indicator_name);
 	}
 
-	// All 'IndicatorDataSpecification's
+	// The indicator specifications
 	public Collection indicator_specifications() {
 		return indicator_specs.values();
+	}
+
+	// All "selected" indicator specifications
+	public Collection selected_indicators() {
+		Iterator i = indicator_specs.values().iterator();
+		LinkedList result = new LinkedList();
+		IndicatorDataSpecification spec;
+		while (i.hasNext()) {
+			spec = (IndicatorDataSpecification) i.next();
+			if (spec.selected()) {
+				result.add(spec);
+			}
+		}
+		return result;
 	}
 
 // Implementation - attributes

@@ -193,11 +193,15 @@ public class DrawableDataSet extends DataSet {
 
 	public void append(DataSet d) {
 		int oldcount = count();
-		tuple_count = oldcount + d.count();
-		DrawableDataSet drwd = (DrawableDataSet) d;
-		data.addAll(drwd.data);
-		if (! (count() == oldcount + d.count())) {
-			throw new Error("append: postcondition violated");
+		if (d != null) {
+			tuple_count = oldcount + d.count();
+			DrawableDataSet drwd = (DrawableDataSet) d;
+			data.addAll(drwd.data);
+		}
+		if (d != null && ! (count() == oldcount + d.count())) {
+			throw new Error("append: postcondition 1 violated");
+		} else if (d == null && (count() != oldcount)) {
+			throw new Error("append: postcondition 2 violated");
 		}
 	}
 

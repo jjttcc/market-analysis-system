@@ -29,49 +29,65 @@ System.out.println("time del DR - client: " + client);
 		if (client != null) {
 			TradableDataSpecification spec = client.specification();
 			AbstractDataSetBuilder builder = client.data_builder();
-System.out.println("A");
-System.out.println("builder: " + builder);
+			IndicatorDataSpecification i;
+System.out.println("[RUN]\nbuilder: " + builder);
 System.out.println("spec: " + spec);
 			try {
-System.out.println("B");
+System.out.println("A");
 				builder.send_time_delimited_market_data_request(spec.symbol(), 
 					spec.period_type(), client.start_date(), client.end_date());
-				spec.main_data().append(builder.last_market_data());
-				indicators = spec.indicator_specifications().iterator();
+				if (builder.request_succeeded() &&
+						builder.last_market_data().count() > 0) {
+
+System.out.println("B");
+					spec.main_data().append(builder.last_market_data());
+					indicators = spec.selected_indicators().iterator();
+System.out.println("# of indicators: " +
+spec.indicator_specifications().size());
+System.out.println("# of selected indicators: " +
+spec.selected_indicators().size());
+					while (indicators.hasNext()) {
 System.out.println("C");
-				while (indicators.hasNext()) {
+						i = (IndicatorDataSpecification) indicators.next();
+						if (i.selected()) {
 System.out.println("D");
-					IndicatorDataSpecification i =
-						(IndicatorDataSpecification) indicators.next();
-System.out.println("D2");
-					DataSet data = i.data();
-					//!!!Is there a better way to specify/determine if
-					//an indicator has been selected for inclusion in the
-					//graph than checking if its data is null?
-					if (data != null) {
-						builder.send_time_delimited_indicator_data_request(
-							i.identifier(), spec.symbol(), spec.period_type(),
-							client.start_date(), client.end_date());
-System.out.println("D3");
-System.out.println("i: " + i);
+							DataSet data = i.data();
+							builder.send_time_delimited_indicator_data_request(
+								i.identifier(), spec.symbol(),
+								spec.period_type(), client.start_date(),
+								client.end_date());
+System.out.println("i was selected: " + i);
 System.out.println("i.data: " + i.data());
-						i.data().append(builder.last_market_data());
+							i.data().append(builder.last_market_data());
+						}
+else {
+System.out.println("i was NOT selected: " + i); }
 					}
-System.out.println("E");
+	//Need to update and store the new start date somewhere!!!
+	//!!!!Change: If no data was received from the server, don't notify.
+					client.notify_of_update();
+				} else {
+					if (! builder.request_succeeded()) {
+						client.notify_of_error(builder.request_result_id(),
+							null);
+					} else {
+						// assert(builder.last_market_data().count() == 0);
+						// assert(builder.request_succeeded());
+						// Successful request with no data: Assume no new
+						// data is available from the server.
+if ((builder.last_market_data().count() == 0) && builder.request_succeeded()) {
+System.out.println("succeeded and empty");
+} else {
+System.out.println("FAULT: not succeeded or not empty");
+}
+					}
 				}
-//Need to update and store the new start date somewhere!!!
-System.out.println("F");
-//!!!!Change: If no data was received from the server, don't notify.
-				client.notify_of_update();
-System.out.println("G");
 			} catch (Exception e) {
-System.out.println("H");
 System.out.println("data retrieval failed with error: " + e);
 				client.notify_of_failure(e);
-System.out.println("I");
 			}
 		}
-System.out.println("J");
+System.out.println("[end RUN]");
 	}
 
 // Implementation

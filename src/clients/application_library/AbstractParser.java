@@ -86,6 +86,7 @@ System.out.println("parser - latest dt result: " + result);
 	// Parse `s' into a DataSet according to record_separator and
 	// field_separator.
 	// result() gives the new DataSet.
+	// Postcondition: result() != null
 	public void parse(String s) throws Exception {
 		is_intraday = contains_time_field(s);
 		prepare_for_parse();
