@@ -60,7 +60,7 @@ feature {NONE} -- Hook routine implementations
 
 	parse_remainder (fields: LIST [STRING]) is
 		do
-			indicator_id := fields.first.to_integer
+			parse_indicator_id (fields)
 		end
 
 	error_context (msg: STRING): STRING is
@@ -71,6 +71,11 @@ feature {NONE} -- Hook routine implementations
 	additional_field_constraints_msg: STRING is "Indicator ID is not an integer"
 
 feature {NONE} -- Implementation
+
+	parse_indicator_id (fields: LIST [STRING]) is
+		do
+			indicator_id := fields.first.to_integer
+		end
 
 	indicator_id: INTEGER
 			-- ID of the indicator requested by the user
