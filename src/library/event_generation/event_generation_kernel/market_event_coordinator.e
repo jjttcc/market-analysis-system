@@ -22,18 +22,13 @@ creation
 
 feature -- Initialization
 
-	make (egs: LINEAR [MARKET_EVENT_GENERATOR];
-			dispenser: TRADABLE_DISPENSER; disp: EVENT_DISPATCHER) is
+	make (dispenser: TRADABLE_DISPENSER) is
 		require
-			not_void: egs /= Void and dispenser /= Void and disp /= Void
+			not_void: dispenser /= Void
 		do
-			event_generators := egs
 			tradables := dispenser
-			dispatcher := disp
-			set_eg_tradables
 		ensure
-			set: event_generators = egs and tradables = dispenser and
-					dispatcher = disp
+			set: tradables = dispenser
 		end
 
 feature -- Access
@@ -74,6 +69,16 @@ feature -- Status setting
 		ensure
 			event_generators_set: event_generators = arg and
 				event_generators /= Void
+		end
+
+	set_dispatcher (arg: EVENT_DISPATCHER) is
+			-- Set dispatcher to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			dispatcher := arg
+		ensure
+			dispatcher_set: dispatcher = arg and dispatcher /= Void
 		end
 
 feature {NONE} -- Implementation
