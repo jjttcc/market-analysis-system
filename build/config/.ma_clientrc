@@ -1,18 +1,15 @@
 # Format: 'keyword<tab>f1<tab>f2...'
 # Daily start and end date settings (use 'now' for the current date)
-#start_date	daily	2000/01/01
+#start_date	daily	2003/01/01
 start_date	daily	now - 9 months
 end_date	daily	now
 # Intraday start and end date settings (use 'now' for the current date)
-#start_date	hourly	now - 2 months
-#start_date	30-minute	now - 55 days
-#start_date	15-minute	now - 2 months
-start_date	hourly	2000/07/01
-start_date	30-minute	2000/08/01
-#start_date	20-minute	2000/08/14
-start_date	15-minute	2000/08/14
-start_date	10-minute	2000/08/14
-start_date	5-minute	2000/08/14
+start_date	hourly	now - 2 months
+start_date	30-minute	now - 55 days
+start_date	20-minute	now - 1 month
+start_date	15-minute	now - 1 month
+start_date	10-minute	now - 18 days
+start_date	5-minute	now - 18 days
 # Weekly start and end date settings
 start_date	weekly	now - 4 years
 start_date	monthly	now - 8 years
@@ -22,6 +19,8 @@ start_date	quarterly	now - 10 years
 # graph, and, optionally, each one's color.
 upper_indicator	Simple Moving Average	darkGreen
 upper_indicator	Exponential Moving Average	darkBlue
+upper_indicator	Weighted Moving Average	red
+upper_indicator	Parabolic SAR	red
 lower_indicator	MACD Difference	red
 lower_indicator	MACD Signal Line (EMA of MACD Difference)	lightBlue
 lower_indicator	MACD Histogram	black
@@ -45,6 +44,10 @@ lower_indicator	Relative Strength Index	red
 lower_indicator	Slope of MACD Signal Line Trend	red
 lower_indicator	Slope of Slope of MACD Signal Line Trend	blue
 lower_indicator	[Slope of MACD, Slope of Slope of MACD] Trend	red
+upper_indicator	Upper Bollinger Band	blue
+upper_indicator	Lower Bollinger Band	blue
+upper_indicator	Middle Bollinger Band	darkBlue
+lower_indicator	Standard Deviation	gray
 lower_indicator	WMA of Midpoint	oliveGreen
 lower_indicator	WMA of Midpoint 2	red
 lower_indicator	Midpoint	gray
