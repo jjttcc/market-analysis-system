@@ -13,7 +13,7 @@ class MAIN_GUI_INTERFACE inherit
 			event_generator_builder, function_builder
 		end
 
-	SERVER_PROTOCOL --!!!Source of requestID constants
+	GUI_SERVER_PROTOCOL
 		export
 			{NONE} all
 		end
@@ -24,27 +24,19 @@ creation
 
 feature -- Initialization
 
-	make (fb: FACTORY_BUILDER; ifs: STRING) is
+	make (fb: FACTORY_BUILDER) is
 		require
-			not_void: fb /= Void and ifs /= Void
+			not_void: fb /= Void
 		do
-			input_field_separator := ifs
 			mai_initialize (fb)
 			initialize
 		ensure
 			fb_set: factory_builder = fb
-			ifs_set: input_field_separator = ifs
 		end
 
 feature -- Access
 
 	io_medium: IO_MEDIUM
-
-	output_field_separator: STRING
-
-	input_field_separator: STRING
-
-	date_field_separator: STRING
 
 	event_generator_builder: CL_BASED_MEG_EDITING_INTERFACE
 
@@ -64,39 +56,6 @@ feature -- Status setting
 			function_builder.set_output_device (io_medium)
 		ensure
 			io_medium_set: io_medium = arg and io_medium /= Void
-		end
-
-	set_output_field_separator (arg: STRING) is
-			-- Set output_field_separator to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			output_field_separator := arg
-		ensure
-			output_field_separator_set: output_field_separator = arg and
-				output_field_separator /= Void
-		end
-
-	set_input_field_separator (arg: STRING) is
-			-- Set input_field_separator to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			input_field_separator := arg
-		ensure
-			input_field_separator_set: input_field_separator = arg and
-				input_field_separator /= Void
-		end
-
-	set_date_field_separator (arg: STRING) is
-			-- Set date_field_separator to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			date_field_separator := arg
-		ensure
-			date_field_separator_set: date_field_separator = arg and
-				date_field_separator /= Void
 		end
 
 feature -- Basic operations
@@ -154,8 +113,7 @@ feature {NONE}
 			rh: HASH_TABLE [REQUEST_COMMAND, INTEGER]
 		do
 			!!rh.make (0)
-			!MARKET_DATA_REQUEST_CMD!cmd.make (input_field_separator,
-				factory_builder.market_list)
+			!MARKET_DATA_REQUEST_CMD!cmd.make (factory_builder.market_list)
 			rh.extend (cmd, Market_data_request)
 			request_handlers := rh
 		ensure
