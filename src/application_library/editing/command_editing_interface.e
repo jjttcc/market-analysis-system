@@ -1,6 +1,6 @@
 indexing
 	description:
-		"Abstraction user interface that obtains selections needed for %
+		"Abstraction for a user interface that obtains selections needed for %
 		%editing of COMMANDs"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
@@ -36,6 +36,9 @@ feature -- Access
 			-- be explicitly set to 0 before the creation/editing of a new
 			-- operator "tree".
 
+	market_function: MARKET_FUNCTION
+			-- Market function to use for those commands that need it
+
 feature -- Constants
 
 	Boolean_result_command: STRING is "RESULT_COMMAND [BOOLEAN]"
@@ -60,6 +63,28 @@ feature -- Status setting
 			left_offset := arg
 		ensure
 			left_offset_set: left_offset = arg and left_offset >= 0
+		end
+
+	set_market_function (arg: MARKET_FUNCTION) is
+			-- Set market_function to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			market_function := arg
+		ensure
+			market_function_set: market_function = arg and
+				market_function /= Void
+		end
+
+feature -- Miscellaneous
+
+	print_command_tree (cmd: COMMAND; level: INTEGER) is
+			-- Print the type name of `cmd' and, recursively, that of all
+			-- of its operands.
+        require
+            not_void: cmd /= Void
+            level_positive: level > 0
+		deferred
 		end
 
 feature {APPLICATION_COMMAND_EDITOR} -- Access
