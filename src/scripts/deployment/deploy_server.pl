@@ -64,29 +64,29 @@ sub setup {
 
 # Intall MAS into the deployment directory.
 sub install {
-	chdir "mas-" . $settings{$version_tag};
+	chdir "mas-" . &version;
 system("pwd");
 	! system(&install_cmd) || die "Failed to install MAS into " .
-		$settings{$deploy_dir_tag} . ".\n";
+		&deployment_directory . ".\n";
 }
 
 sub untar {
 	# Make sure the tar file exists and is readable.
-	my $tarfile = $settings{$tarfile_tag};
-	open(TAR, $tarfile) || die "Cannot open file: $tarfile for reading.\n";
+	open(TAR, &tarfile) || die "Cannot open file: " . &tarfile .
+		"for reading.\n";
 	close(TAR);
-	print "Untarring $tarfile\n";
-	! system("tar zxf $tarfile") || die "Failed to untar $tarfile";
+	print "Untarring " . &tarfile. "\n";
+	! system("tar zxf " . &tarfile) || die "Failed to untar " . &tarfile . "\n";
 }
 
 sub make_startup_script {
-	$f = $settings{$deploy_dir_tag} . "/bin/" . $start_mas_script;
+	$f = &deployment_directory . "/bin/" . $start_mas_script;
 	open(F, "> " . $f) || die "Cannot create startup file $f";
 	print F &mas_startup_command . "\n";
 }
 
 sub mas_startup_command {
-	return "mas $settings{$port_tag} $settings{$options_tag}";
+	return &deployment_directory . "/mas " . &mas_port . " " . &mas_options;
 }
 
 sub cleanup {
@@ -94,6 +94,26 @@ sub cleanup {
 	print "Removing work directory, $workdir.\n";
 	! system($remove_dir_cmd . " " . $workdir) || die "Failed to remove " .
 		"work directory, $workdir.\n";
+}
+
+sub mas_port {
+	return $settings{$port_tag};
+}
+
+sub mas_options {
+	return $settings{$options_tag};
+}
+
+sub version {
+	return $settings{$version_tag};
+}
+
+sub deployment_directory {
+	return $settings{$deploy_dir_tag};
+}
+
+sub tarfile {
+	return $settings{$tarfile_tag};
 }
 
 # Check that the configuration is correct.
@@ -111,7 +131,7 @@ sub check_config {
 }
 
 sub install_cmd {
-	return "./install --rootdir $settings{$deploy_dir_tag}";
+	return "./install --rootdir " . &deployment_directory;
 }
 
 sub signal_handler {
