@@ -13,12 +13,14 @@ echo replacestart>>$specfile
 echo {main_mas_dir}"$appdir"|sed 's@\\@/@g'>>$specfile
 case $COMSPEC in
 	*cmd*|*CMD*)
-		# The OS is NT or later - The shell is cmd.exe:
-		echo {cmd}cmd>>$specfile
+		# The OS is NT or later - The shell is cmd.exe -
+		# "cat" the nt spec file into the working spec file:
+		sed '' nt_repl_spec >>$specfile
 	;;
 	*)
-		# The OS is pre-NT - The shell is command.exe:
-		echo {cmd}command>>$specfile
+		# The OS is pre-NT - The shell is command.exe -
+		# "cat" the "pre" nt spec file into the working spec file:
+		sed '' pre_nt_repl_spec >>$specfile
 	;;
 esac
 echo replaceend>>$specfile
