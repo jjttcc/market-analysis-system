@@ -3,6 +3,7 @@
 %titleIntroduction to the Market Analysis System
 %end_title
 
+%hdg1Introduction to the Market Analysis Systemhide
 The Market Analysis System (MAS) is a client/server application that
 provides tools for analysis of financial markets, with the goal of
 helping its user make better buying and selling decisions and to help
@@ -262,8 +263,12 @@ date *^fontI21-Oct-81*^fontP is interpreted as October 21, 1981.
 If you have a DBMS with ODBC support, you may be able to store your data in
 a database and have MAS obtain its market data from there instead of from
 files.  I have MAS set up on my system to talk to a Postgres database using
-unixODBC, a package for Linux and UNIX systems.  unixODBC is available at
-http://www.unixodbc.org/.
+%start_url
+%url_labelunixODBCshow
+%url_suffix,show
+%url_addrhttp://www.unixodbc.org/show
+%end_url
+a package for Linux and UNIX systems.
 %par
 To configure MAS to connect to a database, you will first need to
 create a database and the necessary tables to store market data.
@@ -298,21 +303,34 @@ option to tell it to use the database for its data.
 
 %hdg2Using MAS with the QuoteMonster Script
 %par
-You can configure MAS to use the popular QuoteMonster perl script to
+You can configure MAS to use the popular
+%start_url
+%url_labelQuoteMonstershow
+%url_addrhttp://xmlworks.com/quotemonster/
+%end_url
+perl script to
 obtain its stock data from yahoo.com's free historical stock data service.
-To do this, you will first need to download the QuoteMonster script from:
-http://xmlworks.com/quotemonster/
+To do this, you will first need to download the
+%start_url
+%url_labelQuoteMonstershow
+%url_addrhttp://xmlworks.com/quotemonster/show
+%end_url
+script.
 %par
 After downloading QuoteMonster, follow the instructions for installation
 in the readme file.  (You will need to obtain the Perl interpreter
-if it is not already on your system - if you type "perl -v" at the
+if it is not already on your system *^em if you type "perl -v" at the
 command line and get a response back like: "This is perl, version
 5.00X" ..., then you have perl installed.)  Once QuoteMonster is
 installed, make sure the script (which is named qm) is in your path.
 (If you type "type qm", you should get a result something like: "qm
 is /usr/local/bin/qm".  If you get an error message instead, it is not
 in your path.  If you're not sure how to change your path variable,
-http://sunsite.dk/linux-newbie/FAQ2.htm#PATH_change gives a pretty good
+%start_url
+%url_labelhttp://sunsite.dk/linux-newbie/FAQ2.htm#PATH_changeshow
+%url_addrhttp://sunsite.dk/linux-newbie/FAQ2.htm#PATH_change
+%end_url
+gives a pretty good
 descriptionn of how to do this.)
 %par
 After installing QuoteMonster, you will need to make sure that the wrapper
