@@ -172,25 +172,26 @@ This will require a composite operator that can be drawn as a tree:
                            /       \
                       VOLUME     MULTIPLICATION
                                    /        \
-                  SETTABLE_OFFSET_COMMAND  CONSTANT (x)
+                   FUNCTION_BASED_COMMAND  CONSTANT (x)
                              |
-                   FUNCTION_BASED_COMMAND
+                   SETTABLE_OFFSET_COMMAND
                              |
                     BASIC_NUMERIC_COMMAND
 
 GT_OPERATOR (greater-than operator) provides the boolean greater than
-operation needed to express "volume > (previous period's EMA of volume)
-* x".  VOLUME obtains the volume for the current period as GT_OPERATOR's
-left operand.  MULTIPLICATION, GT_OPERATOR's right operand, provides the
-multiplication operation for "(previous period's EMA of volume) * x".
-SETTABLE_OFFSET_COMMAND, MULTIPLICATION's left operand, will be used to
-access the previous period's data.  SETTABLE_OFFSET_COMMAND's operand,
-FUNCTION_BASED_COMMAND, will use its operator BASIC_NUMERIC_COMMAND,
-to extract the EMA of volume value for the previous period.
+operation needed to express "volume > (previous period's EMA of volume) * x".
+VOLUME obtains the volume for the current period as GT_OPERATOR's
+left operand.  MULTIPLICATION, GT_OPERATOR's right operand, provides
+the multiplication operation for "(previous period's EMA of volume) * x".
+MULTIPLICATION's left operand, FUNCTION_BASED_COMMAND, will use its
+operand to extract the EMA of volume value for the previous period.
 (FUNCTION_BASED_COMMAND will also use the EMA of Volume function, defined
 in the creating_indicators example, to obtain the EMA of volume values.)
-CONSTANT, MULTIPLICATION's right operand, provides the x in "(previous
-period's EMA of volume) * x".
+SETTABLE_OFFSET_COMMAND, FUNCTION_BASED_COMMAND's operand, will be used
+to access the previous period's data.  SETTABLE_OFFSET_COMMAND will use
+its operand, BASIC_NUMERIC_COMMAND, to extract the EMA value.  CONSTANT,
+MULTIPLICATION's right operand, provides the x in "(previous period's
+EMA of volume) * x".
 
 Now that we have a picture of what we need to create, we can proceed to
 build our market analyzer.  After choosing 'c' (Create a new market analyzer),
@@ -204,27 +205,25 @@ of the raw market data, rather than a function, like moving average,
 we need to choose the "Market Data" indicator, which, unlike the other
 indicators, simply provides the market data for each period for analysis.
 
-The system then asks for the object to use as the market analyzer's root
-operator.  Referring to the diagram of the operator hierarchy we drew above,
-we see that the root, or top level, operator will be the GT_OPERATOR.
-Select that operator.  For the GT_OPERATOR's left operand, according to our
-diagram, we need to select VOLUME.  For the GT_OPERATOR's right operand
-we need MULTIPLICATION.
+The system then asks for the object to use as the market analyzer's
+root operator.  Referring to the diagram of the operator hierarchy we
+drew above, we see that the root, or top level, operator will be the
+GT_OPERATOR.  Select that operator.  For the GT_OPERATOR's left operand,
+according to our diagram, select VOLUME.  For the GT_OPERATOR's right
+operand select MULTIPLICATION.
 
 For MULTIPLICATION's left operand, according to the diagram, choose
-SETTABLE_OFFSET_COMMAND.  For SETTABLE_OFFSET_COMMAND's operand, we
-see that FUNCTION_BASED_COMMAND is needed.
-
-The system will ask for an indicator for FUNCTION_BASED_COMMAND's input.
-Select "EMA of Volume".  For FUNCTION_BASED_COMMAND's operand, choose
-BASIC_NUMERIC_COMMAND, which will simply retrieve the current value of
-the EMA of volume data.
+FUNCTION_BASED_COMMAND.  The system will ask for an indicator for
+FUNCTION_BASED_COMMAND's input.  Select the "EMA of Volume" indicator
+that you created in "Example 3: Exponential Moving Average of Volume" of
+the creating_indicators document.  For FUNCTION_BASED_COMMAND's operand,
+choose SETTABLE_OFFSET_COMMAND.  For SETTABLE_OFFSET_COMMAND's operand,
+select BASIC_NUMERIC_COMMAND.
 
 The system then asks for the left offset value for the
 SETTABLE_OFFSET_COMMAND.  Since the SETTABLE_OFFSET_COMMAND is being
 used to access the previous period data (the volume EMA for the previous
-period, from the FUNCTION_BASED_COMMAND) - one period to the left -
-enter 1.
+period) - one period to the left - enter 1.
 
 For MULTIPLICATION's right operand, according to the diagram, choose the
 CONSTANT object.  Its value will be the value you choose for x in the
