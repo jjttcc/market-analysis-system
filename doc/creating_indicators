@@ -663,3 +663,103 @@ root function and choose an appropriate name.  For the function's input
 function, select "Slope of MACD Signal Line".  For ONE_VARIABLE_FUNCTION's
 operator, select SLOPE_ANALYZER.  For SLOPE_ANALYZER's input, select
 "Slope of MACD Signal Line".
+
+
+Example 8: Slope of MACD Signal Line and Slope of Slope of MACD Signal Line
+Trend
+
+This indicator uses a combination of the Slope of MACD Signal Line
+indicator and the Slope of Slope of MACD Signal Line indicator from the
+above examples as a means to determine if a stock is in an uptrend,
+in a downtrend, or neither.  It is intended to be used in a market
+analyzer (although it can also be viewed on a chart) with weekly data
+as a long-term indicator within a trading system.  The benefit of this
+indicator is that it not only indicates when a stock is in an uptrend
+or a dowtrend, but also when the stock is essentially going sideways
+(or when the trend has lost momentum), allowing a trader to ignore the
+stock until it is trending again.
+
+The indicator works by showing:
+
+   - When both the Slope of MACD Signal Line and the Slope of Slope of MACD
+     Signal Line are above 0 - This is the uptrend state.
+   - When both the Slope of MACD Signal Line and the Slope of Slope of MACD
+     Signal Line are below 0 - the downtrend state.
+   - When one of the two (Slope of MACD Signal Line and Slope of Slope of
+     MACD Signal Line) is above 0 and one is below 0 - the nontrend state.
+
+We will start by creating two lower-level indicators that will be used by
+the main indicator, one that determines if Slope of MACD Signal Line is
+above or below 0 and one that determines if Slope of Slope of MACD Signal
+Line is above or below 0.  Each of these indicators will evaluate to 1 if
+the underlying indicator is above 0 and to -1 if the underlying indicator
+is below 0.  The main indicator will then combine these two indicators by
+simply adding them.  For a particular period (week when weekly data is used):
+if both of the lower-level indicators equal 1 (meaning that both Slope of
+MACD Signal Line and Slope of Slope of MACD Signal Line are above 0), the
+main indicator will equal 2; if both equal -1 (meaning that the underlying
+indicators are both below 0), the main indicator will equal -2; if one
+equals -1 and the other equals 1 (meaning that one of the underlying
+indicators is above 0 and one is below 0), the main indicator will equal 0.
+Thus the main indicator is interpreted in the following way:  When it
+changes to 2, an uptrend has been detected; when it changes to -2, a
+downtrend has been detected; and when it changes to 0, a non-trend or
+sideways trend has been detected.
+
+We will call the two lower-level indicators the Slope of MACD Signal Line
+Trend and the Slope of Slope of MACD Signal Line Trend.  We will start
+with the Slope of MACD Signal Line Trend.  This indicator will have the
+following tree structure (where SMSL stands for the underlying Slope of
+MACD Signal Line indicator):
+
+                         ONE_VARIABLE_FUNCTION
+                                  |
+                         BOOLEAN_NUMERIC_CLIENT
+                        /           \          \
+             (boolop)  /   (true cmd)\          \ (false cmd)
+            GE_OPERATOR          CONSTANT(1)    CONSTANT (-1)
+            /        \
+  BASIC_LINEAR_CMD  CONSTANT(0)
+         |
+      [SMSL]
+
+From the indicator editing menu, choose "Create a new market-data
+indicator".  Select ONE_VARIABLE_FUNCTION as the root function.
+Choose a good name, such as "Slope of MACD Signal Line Trend".  For the
+ONE_VARIABLE_FUNCTION's input function select Slope of MACD Signal Line.
+For the ONE_VARIABLE_FUNCTION's operator, select BOOLEAN_NUMERIC_CLIENT.
+For BOOLEAN_NUMERIC_CLIENT's boolean operator, select GE_OPERATOR
+(greater-than-or-equal-to).  For GE_OPERATOR's left operand, choose
+BASIC_LINEAR_COMMAND.  For BASIC_LINEAR_COMMAND's input indicator, select,
+of course, Slope of MACD Signal Line.  For GE_OPERATOR's right operand,
+select CONSTANT and give it the value 0.  (We want to determine if the
+current Slope of MACD Signal Line is greater than or equal to 0).
+
+For BOOLEAN_NUMERIC_CLIENT's true command, choose CONSTANT and give it
+the value 1.  (If Slope of MACD Signal Line is greater than or equal to 0,
+we want the result to be 1.)  For BOOLEAN_NUMERIC_CLIENT's false command,
+choose CONSTANT and give it the value -1.  (If Slope of MACD Signal Line
+is not greater than or equal to 0, we want the result to be -1.)
+
+Save the changes to complete the Slope of MACD Signal Line Trend.
+
+To create the Slope of Slope of MACD Signal Line Trend, follow the same
+steps as for the Slope of MACD Signal Line Trend, except choose the
+Slope of Slope of MACD Signal Line as the input indicator (for the
+ONE_VARIABLE_FUNCTION's input function and the BASIC_LINEAR_COMMAND's
+input indicator) instead of Slope of MACD Signal Line.
+
+To create the main indicator, for the root operator, select
+TWO_VARIABLE_FUNCTION.  Choose a good name for the indicator, such as
+"[Slope of MACD, Slope of Slope of MACD] Trend".  For the indicator's
+left input function, choose Slope of MACD Signal Line Trend; for the
+right input function, select Slope of Slope of MACD Signal Line Trend.
+
+For the TWO_VARIABLE_FUNCTION's operator, select ADDITION.  For ADDITION's
+left operand, select BASIC_LINEAR_COMMAND.  For BASIC_LINEAR_COMMAND's
+input indicator, select Slope of MACD Signal Line Trend.  For ADDITION's
+right operand, again select BASIC_LINEAR_COMMAND.  For BASIC_LINEAR_COMMAND's
+input indicator, select Slope of Slope of MACD Signal Line Trend.
+
+Save the changes to complete the Slope of MACD Signal Line and Slope of
+Slope of MACD Signal Line Trend.
