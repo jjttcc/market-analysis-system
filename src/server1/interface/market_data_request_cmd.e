@@ -47,21 +47,28 @@ feature {NONE}
 		do
 			if session.caching_on then
 				t := cached_tradable (market_symbol, trading_period_type)
-				if t /= Void then
+				if
+					t /= Void and t.period_types.has (trading_period_type.name)
+				then
 					tuple_list := t.tuple_list (trading_period_type.name)
 				end
-			else
+			elseif
+				tradables.valid_period_type (market_symbol,
+					trading_period_type)
+			then
 				tuple_list := tradables.tuple_list (market_symbol,
 					trading_period_type)
 				session.set_last_tradable (tradables.last_tradable)
 			end
 			if tuple_list = Void then
 				if not tradables.symbols.has (market_symbol) then
-					report_error (Invalid_symbol, <<"Symbol not in database.">>)
+					report_error (Invalid_symbol, <<"Symbol '", market_symbol,
+						"' not in database.">>)
 				elseif server_error then
 					report_server_error
 				else
-					report_error (Error, <<"Invalid period type.">>)
+					report_error (Error, <<"Invalid period type: ",
+						trading_period_type>>)
 				end
 			else
 				set_print_parameters
