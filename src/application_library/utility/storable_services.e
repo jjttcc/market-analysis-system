@@ -112,6 +112,9 @@ feature {NONE} -- Implementation
 				retrieve_persistent_list
 				initialize_working_list
 			end
+		ensure
+			locked_read_or_abort:
+				ok_to_save and lock.locked or readonly or abort_edit
 		end
 
 	report_errors is
@@ -236,7 +239,8 @@ invariant
 
 	read_implication: readonly implies not ok_to_save and not abort_edit
 	save_implication: ok_to_save implies not readonly and not abort_edit
-	not_locked_when_readonly: readonly implies not lock.locked
-	abort_rules: abort_edit implies not changed and not lock.locked
+	not_locked_when_readonly: readonly implies lock /= Void and not lock.locked
+	abort_rules: abort_edit implies not changed and
+		(lock /= Void implies not lock.locked)
 
 end -- STORABLE_SERVICES
