@@ -192,7 +192,7 @@ feature -- Access
 			Result.extend (pair)
 			!BASIC_LINEAR_COMMAND!cmd.make (default_market_tuple_list)
 			!!pair.make (cmd,
-				"Operator that retrieves the price at the current %
+				"Operator that retrieves the value at the current %
 				%trading period")
 			Result.extend (pair)
 			!UNARY_LINEAR_OPERATOR!cmd.make (default_market_tuple_list,
