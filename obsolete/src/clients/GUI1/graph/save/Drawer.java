@@ -166,6 +166,19 @@ abstract public class Drawer {
 		return drawing_stride() > 1;
 	}
 
+	// Calculation of width factor for drawing based on window width
+	// and xrange.
+	protected double width_factor_value(Rectangle bounds) {
+		final int w_margin = 6;
+		return (bounds.width - w_margin) / xrange;
+	}
+
+	// Calculation of height factor for drawing based on window height
+	// and yrange.
+	protected double height_factor_value(Rectangle bounds) {
+		return bounds.height / yrange;
+	}
+
 	protected double data[];
 	protected Axis xaxis;
 	protected Axis yaxis;

@@ -29,8 +29,8 @@ public class BarDrawer extends Drawer {
 
 		if (bar_width <= 0) bar_width = 1;
 		g.setColor(conf.bar_color());
-		width_factor = bounds.width / xrange;
-		height_factor = bounds.height / yrange;
+		width_factor = width_factor_value(bounds);
+		height_factor = height_factor_value(bounds);
 		for (i = 0, row = 1; i < lngth; i += Stride, ++row) {
 			x = (int)((row - xmin) * width_factor + bounds.x);
 			y = (int)(bounds.height - (data[i]-ymin) * height_factor +

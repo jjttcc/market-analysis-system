@@ -29,8 +29,8 @@ public class LineDrawer extends Drawer {
 		if (data == null || lngth < Stride) return;
 
 		g.setColor(line_color);
-		width_factor = bounds.width / xrange;
-		height_factor = bounds.height / yrange;
+		width_factor = width_factor_value(bounds);
+		height_factor = height_factor_value(bounds);
 		row = 1;
 		x0 = (int)((row - xmin) * width_factor + bounds.x);
 		y0 = (int)(bounds.height - (data[0]-ymin) * height_factor + bounds.y);

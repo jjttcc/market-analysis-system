@@ -19,7 +19,6 @@ public class CandleDrawer extends Drawer {
 	protected void draw_tuples(Graphics g, Rectangle bounds) {
 		int i, row;
 		int openy, highy, lowy, closey;
-		final int w_margin = 6;
 		int x, middle_x;
 		int x_s[] = new int[4], y_s[] = new int[4];
 		int lngth = data.length;
@@ -33,8 +32,8 @@ public class CandleDrawer extends Drawer {
 
 		if (data == null || lngth < Stride) return;
 
-		width_factor = (bounds.width - w_margin) / xrange;
-		height_factor = bounds.height / yrange;
+		width_factor = width_factor_value(bounds);
+		height_factor = height_factor_value(bounds);
 		for (i = 0, row = 1; i < lngth; i += Stride, ++row) {
 			openy = (int) (bounds.height - (data[i] - ymin) * height_factor +
 						bounds.y);

@@ -27,8 +27,8 @@ public class PriceDrawer extends Drawer {
 		if (data == null || lngth < Stride) return;
 
 		g.setColor(bar_color);
-		width_factor = bounds.width / xrange;
-		height_factor = bounds.height / yrange;
+		width_factor = width_factor_value(bounds);
+		height_factor = height_factor_value(bounds);
 		for (i = 0, row = 1; i < lngth; i += Stride, ++row) {
 			openy = (int) (bounds.height - (data[i] - ymin) * height_factor +
 						bounds.y);
