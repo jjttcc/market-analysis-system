@@ -56,8 +56,10 @@ feature -- Access
 				"   -r <file>       Record user input and save to <file>%N" +
 				"   -i <file>       Obtain Input from <file> instead of " +
 				"the console%N" +
-				"   -t              Terminate execution if an error is " +
+				"   -terminate      Terminate execution if an error is " +
 				"encountered%N" +
+				"   -timing         Time each request/response to/from " +
+					"the server%N" +
 				"   -q              Quiet mode - suppress output - for " +
 				"use with -r%N" +
 				"   -?              Print this help message%N"
@@ -85,6 +87,9 @@ feature -- Access -- settings
 
 	terminate_on_error: BOOLEAN
 			-- Should the process be terminated if an error occurs?
+
+	timing_on: BOOLEAN
+			-- Are communications with the server to be timed?
 
 	quiet_mode: BOOLEAN
 			-- Run in quiet mode - suppress output?
@@ -237,8 +242,16 @@ feature {NONE} -- Implementation
 
 	set_terminate_on_error is
 		do
-			if option_in_contents ('t') then
+			if option_string_in_contents ("te") then
 				terminate_on_error := True
+				contents.remove
+			end
+		end
+
+	set_timing_on is
+		do
+			if option_string_in_contents ("ti") then
+				timing_on := True
 				contents.remove
 			end
 		end
@@ -263,6 +276,7 @@ feature {NONE} -- Implementation queries
 			Result.extend (agent set_record_settings)
 			Result.extend (agent set_input_from_file_settings)
 			Result.extend (agent set_terminate_on_error)
+			Result.extend (agent set_timing_on)
 			Result.extend (agent set_quiet_mode)
 			Result.extend (agent set_debug)
 		end

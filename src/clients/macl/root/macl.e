@@ -45,6 +45,9 @@ feature {NONE} -- Initialization
 			-- the server.
 			from
 				create connection.start_conversation (host, port)
+				if command_line.timing_on then
+					connection.set_timing (True)
+				end
 			until
 				connection.termination_requested or
 				not connection.last_communication_succeeded

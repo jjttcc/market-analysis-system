@@ -84,6 +84,12 @@ cluster
 
 	all net (ise):		"$/net"
 
+	date (ise):		"$/time"
+
+	date_format (date):		"$/format"
+
+	date_tools (date_format):		"$/english"
+
 	gobo:		"$GOBO/library"
 
 	all gobo_kernel (gobo):		"$/kernel"

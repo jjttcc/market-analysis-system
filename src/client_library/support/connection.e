@@ -44,6 +44,9 @@ feature -- Status report
 
 	termination_requested: BOOLEAN
 
+	timing: BOOLEAN
+			-- Is timing of requests/responses on?
+
 feature -- Status setting
 
 	do_debug is
@@ -71,6 +74,21 @@ feature -- Status setting
 			print ("not_connected: " + socket.not_connected.out + "%N")
 		end
 
+	set_timing (arg: BOOLEAN) is
+			-- Set `timing' to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			timing := arg
+			if timing then
+				create timer.make
+			else
+				timer := Void
+			end
+		ensure
+			timing_set: timing = arg and timing /= Void
+		end
+
 feature -- Basic operations
 
 	send_message (msg: STRING) is
@@ -79,7 +97,13 @@ feature -- Basic operations
 		require
 			socket_ok: socket_ok
 		do
+			if timing then
+				timer.start
+			end
 			send_request (msg, True)
+			if timing then
+				print_timing_report
+			end
 		ensure
 			response_set_on_success: last_communication_succeeded implies
 				server_response /= Void
@@ -91,6 +115,14 @@ feature {NONE} -- Implementation
 		do
 			Result := c = Eom @ 1 or c = Eot @ 1
 			termination_requested := c = Eot @ 1
+		end
+
+	timer: TIMER
+
+	print_timing_report is
+		do
+			print ("Last request/response took " +
+				timer.elapsed_time.fine_seconds_count.out + " seconds.%N")
 		end
 
 feature {NONE} -- Implementation - Constants
@@ -117,5 +149,9 @@ feature {NONE} -- Unused
 	Message_date_field_separator: STRING is ""
 
 	Message_time_field_separator: STRING is ""
+
+invariant
+
+	timer_exists_if_timing: timing = (timer /= Void)
 
 end
