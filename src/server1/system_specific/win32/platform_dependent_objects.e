@@ -16,8 +16,10 @@ class PLATFORM_DEPENDENT_OBJECTS inherit
 feature -- Access
 
 	database_services: MAS_DB_SERVICES is
+		local
+			gs: expanded GLOBAL_SERVICES
 		do
-			create {ECLI_SERVICES} Result.make
+			create {ECLI_SERVICES} Result.make (gs.debug_state.data_retrieval)
 			if Result.fatal_error then
 				if
 					Result.last_error /= Void and not Result.last_error.is_empty

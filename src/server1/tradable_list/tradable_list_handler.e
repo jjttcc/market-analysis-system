@@ -57,13 +57,21 @@ feature -- Access
 			l: TRADABLE_LIST
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 		do
+print ("starting TRADABLE_LIST_HANDLER.tradable.%Nperiod type is ")
+if period_type.intraday then
+print ("intraday.%N")
+else
+print ("NOT intraday.%N")
+end
 			last_tradable := Void
 			reset_error_state
 			l := list_for (period_type)
 			if l /= Void then
+print ("list_for returned non-void.%N")
 				if l.symbols.has (symbol) then
 					l.search_by_symbol (symbol)
 					if not l.fatal_error then
+print ("Symbol " + symbol + " was found.%N")
 						t := l.item
 						if
 							t /= Void and then
@@ -71,20 +79,29 @@ feature -- Access
 						then
 							Result := t
 							last_tradable := t
+print ("last_tradable was successfully obtained; it has " +
+last_tradable.data.count.out + " records.%N")
+else
+print ("Retrieval of last_tradable failed.%N")
 						end
 					end
 					if l.fatal_error then
+print ("Fatal error detected.%N")
 						error_occurred := True
 						last_error := concatenation (<<
 							"Error occurred retrieving data for ", symbol>>)
 						l.clear_error
 					end
 				else
+print ("Symbol " + symbol + " was NOT found.%N")
 					error_occurred := True
 					last_error := concatenation (<<
 						"Symbol ", symbol, " not found">>)
 				end
+else
+print ("list_for returned Void.%N")
 			end
+print ("returning from TRADABLE_LIST_HANDLER.tradable.%N")
 		end
 
 	symbols: LIST [STRING] is
@@ -108,13 +125,25 @@ feature -- Access
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 			tbl: HASH_TABLE [BOOLEAN, STRING]
 		do
+print ("starting TRADABLE_LIST_HANDLER.period_types.%N")
 			reset_error_state
 			if daily_market_list /= Void then
+print ("period_types (daily list) - searching for symbol '" + symbol + "'%N")
 				daily_market_list.search_by_symbol (symbol)
 				if not daily_market_list.fatal_error then
+print ("Executing 't := daily_market_list.item'%N")
 					t := daily_market_list.item
+  if t = Void then
+  print ("period_types - retrieval of tradable failed.%N")
+  else
+  print ("period_types - tradable retrieved with " + t.data.count.out +
+  " records.%N")
+  end
+else
+print ("fatal error detected.%N")
 				end
 				if not daily_market_list.fatal_error then
+print ("Creating period-type list.%N")
 					l := t.period_types.linear_representation
 					create tbl.make (l.count)
 					from
@@ -126,17 +155,29 @@ feature -- Access
 						l.forth
 					end
 				else
+print ("Failure status - not creating period-type list.%N")
 					error_occurred := True
 					last_error := concatenation (<<"Error occurred ",
 						"retrieving non-intraday period types for ", symbol>>)
 				end
 			end
 			if not error_occurred and intraday_market_list /= Void then
+print ("period_types (intraday list) - searching for symbol '" + symbol + "'%N")
 				intraday_market_list.search_by_symbol (symbol)
 				if not intraday_market_list.fatal_error then
+print ("Executing 't := intraday_market_list.item'%N")
 					t := intraday_market_list.item
+  if t = Void then
+  print ("period_types - retrieval of tradable failed.%N")
+  else
+  print ("period_types - tradable retrieved with " + t.data.count.out +
+  " records.%N")
+  end
+else
+print ("fatal error detected.%N")
 				end
 				if not intraday_market_list.fatal_error then
+print ("Creating period-type list.%N")
 					l := t.period_types.linear_representation
 					if tbl = Void then
 						create tbl.make (l.count)
@@ -150,6 +191,7 @@ feature -- Access
 						l.forth
 					end
 				else
+print ("Failure status - not creating period-type list.%N")
 					error_occurred := True
 					last_error := concatenation (<<"Error occurred ",
 						"retrieving intraday period types for ", symbol>>)
@@ -160,6 +202,7 @@ feature -- Access
 				tbl.compare_objects
 				Result := period_types_sorted_by_duration (tbl)
 			end
+print ("returning from TRADABLE_LIST_HANDLER.period_types.%N")
 		end
 
 	current_symbol: STRING is
@@ -192,7 +235,8 @@ feature -- Status report
 
 	off: BOOLEAN is
 		do
-			Result := symbol_list = Void or else symbol_list.off or else is_empty
+			Result := symbol_list = Void or else symbol_list.off or else
+				is_empty
 		end
 
 feature -- Cursor movement

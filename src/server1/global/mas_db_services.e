@@ -57,19 +57,23 @@ feature -- Access
 		require
 			connected: connected
 		do
+print ("starting MAS_DB_SERVICES.daily_data_for_symbol.%N")
 			if is_stock_symbol (s) then
+print ("daily_data_for_symbol retrieving stock data.%N")
 				Result := daily_stock_data (s)
 				if Result /= Void then
 					check_field_count (Result, Stock, False,
 						"daily stock data")
 				end
 			elseif is_derivative_symbol (s) then
+print ("daily_data_for_symbol retrieving derivative data.%N")
 				Result := daily_derivative_data (s)
 				if Result /= Void then
 					check_field_count (Result, Derivative, False,
 						"daily derivative data")
 				end
 			end
+print ("returning from MAS_DB_SERVICES.daily_data_for_symbol.%N")
 		ensure
 			not_void_if_no_error: not fatal_error and (is_stock_symbol (s) or
 				is_derivative_symbol (s)) implies Result /= Void
@@ -83,6 +87,7 @@ feature -- Access
 		require
 			connected: connected
 		do
+print ("starting MAS_DB_SERVICES.intraday_data_for_symbol.%N")
 			if is_stock_symbol (s) then
 				Result := intraday_stock_data (s)
 				if Result /= Void then
@@ -96,6 +101,7 @@ feature -- Access
 						"intraday derivative data")
 				end
 			end
+print ("returning from MAS_DB_SERVICES.intraday_data_for_symbol.%N")
 		ensure
 			not_void_if_no_error: not fatal_error and (is_stock_symbol (s) or
 				is_derivative_symbol (s)) implies Result /= Void
@@ -266,6 +272,19 @@ feature -- Status report
 
 	fatal_error: BOOLEAN
 			-- Did a fatal error occur on the last operation?
+
+	debugging: BOOLEAN
+			-- Is debugging mode on?
+
+feature -- Status setting
+
+	set_debugging (arg: BOOLEAN) is
+			-- Set `debugging' to `arg'.
+		do
+			debugging := arg
+		ensure
+			debugging_set: debugging = arg
+		end
 
 feature -- Basic operations
 
@@ -453,9 +472,9 @@ feature {NONE} -- Implementation
 	check_field_count (seq: DB_INPUT_SEQUENCE; tradable_type: INTEGER;
 		intraday: BOOLEAN; data_descr: STRING) is
 			-- Check the field count of `seq' according to whether it is
-			-- whether it is for a Stock or Derivative and whether its,
-			-- data is intraday, and if the field count is wrong
-			-- set fatal_error and last_error accordingly.
+			-- for a Stock or Derivative and whether its
+			-- data is intraday, and if the field count is wrong.
+			-- Set fatal_error and last_error accordingly.
 		require
 			valid_tradable_type: tradable_type = Stock or
 				tradable_type = Derivative
@@ -477,6 +496,7 @@ feature {NONE} -- Implementation
 				expected_count := expected_count + 1
 			end
 			if seq.field_count /= expected_count then
+print ("check_field_count found wrong field count.%N")
 				fatal_error := True
 				last_error := concatenation (<<"Database error:%NWrong number ",
 					"of fields in query result for%N", data_descr,

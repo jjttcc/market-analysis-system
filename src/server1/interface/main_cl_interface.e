@@ -178,26 +178,33 @@ feature -- Basic operations
 			exception_processor: expanded EXCEPTION_PROCESSOR
 			retried: BOOLEAN
 		do
+print ("main_menu starting.%N")
+not_verbose_reporting := False
+check verbose_reporting end
 			if
 				retried implies not end_client and then
 				not exception_processor.abort_command_line_processing
 			then
 				process_main_menu
 			end
+print ("main_menu returning.%N")
 		rescue
 			handle_exception ("main menu")
 			if
 				not exit_server and not assertion_violation
 			then
 				retried := True
+print ("main_menu retrying.%N")
 				retry
 			else
+print ("main_menu terminating.%N")
 				terminate (Error_exit_status)
 			end
 		end
 
 	process_main_menu is
 		do
+print ("process_main_menu starting.%N")
 			check
 				io_devices_not_void: input_device /= Void and
 										output_device /= Void
@@ -271,6 +278,7 @@ feature -- Basic operations
 			else
 				print ("(Hit <Enter> to restart the command-line client.)%N")
 			end
+print ("process_main_menu returning.%N")
 		end
 
 feature {NONE} -- Implementation
@@ -602,31 +610,52 @@ feature {NONE} -- Implementation - utilities
 		require
 			cpt_set: current_period_type /= Void
 		do
+print ("initialize_current_tradable starting.%N")
 			if tradable_list_handler.is_empty then
+print ("initialize_current_tradable - tradable list handler is empty.%N")
 				current_tradable := Void
 			else
 				tradable_list_handler.start
+print ("initialize_current_tradable - tradable list handler has " +
+tradable_list_handler.symbols.count.out + " elements.%N")
+print ("executing 'current_tradable := tradable_list_handler.item %
+	%(current_period_type)%N")
 				current_tradable :=
 					tradable_list_handler.item (current_period_type)
+if current_tradable /= Void then
+print ("non-intraday data for " + current_tradable.symbol +
+"retrieved successfully.%N")
+end
 				if tradable_list_handler.error_occurred then
+print ("Call to tradable_list_handler.item failed, exiting ...%N")
 					log_errors (<<tradable_list_handler.last_error, "%N">>)
 					terminate (Error_exit_status)
 				elseif current_tradable = Void then
+print ("Call to tradable_list_handler.item returned Void.%N")
 					-- No daily data, so use intraday data.
 					if not tradable_list_handler.error_occurred then
+print ("Calling tradable_list_handler.item for intraday data.%N")
 						current_period_type := period_types @ (
 							tradable_list_handler.period_types (
 								tradable_list_handler.current_symbol) @ 1)
 						current_tradable := tradable_list_handler.item (
 							current_period_type)
+if current_tradable /= Void then
+print ("intraday data for " + current_tradable.symbol +
+"retrieved successfully.%N")
+else
+print ("Call to tradable_list_handler.item for intraday data returned Void.%N")
+end
 					end
 				end
 			end
+print ("initialize_current_tradable returning.%N")
 		ensure
 			mlh_at_first: not tradable_list_handler.is_empty implies
 				tradable_list_handler.isfirst
 		rescue
 			-- Exceptions caught during initialization are considered fatal.
+print ("initialize_current_tradable caught fatal exception.%N")
 			last_exception_status.set_fatal (True)
 			handle_exception ("Initialization error")
 		end

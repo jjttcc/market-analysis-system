@@ -290,12 +290,16 @@ feature {NONE} -- Implementation
 		do
 			-- Continue to loop until all debug options are removed so
 			-- that none is confused with the -d option.
-			from until not option_string_in_contents ("deb") loop
-				gs.is_debugging_on.set_item (True)
+			from until not option_string_in_contents (Debug_option) loop
+				-- @@For now, set all debugging options on.  In the future,
+				-- different options will be set according to the contents of
+				-- the option.
+				gs.debug_state.make_true
 				contents.remove
 			end
 		ensure
-			debugging_options_removed: not option_string_in_contents ("deb")
+			debugging_options_removed:
+				not option_string_in_contents (Debug_option)
 		end
 
 	set_port_numbers is
@@ -371,6 +375,7 @@ feature {NONE} -- Implementation
 			global_server: expanded GLOBAL_SERVER_FACILITIES
 			db_services: MAS_DB_SERVICES
 			l: LIST [STRING]
+			gs: expanded GLOBAL_SERVICES
 		do
 			db_services := global_server.database_services
 			if not db_services.fatal_error and not db_services.connected then
@@ -397,6 +402,18 @@ feature {NONE} -- Implementation
 				log_errors (<<db_services.last_error, "%N">>)
 			end
 			symbol_list_initialized := True
+			if gs.debug_state.data_retrieval then
+				if
+					symbol_list_implementation /= Void and
+					not symbol_list_implementation.is_empty
+				then
+					io.error.print ("Symbol list:%N")
+					io.error.print (list_concatenation (
+						symbol_list_implementation, "%N"))
+				else
+					io.error.print ("Symbol list is empty or void.%N")
+				end
+			end
 		end
 
 feature {NONE} -- Implementation queries
@@ -410,6 +427,8 @@ feature {NONE} -- Implementation queries
 	no_volume_spec: STRING is "-no-volume"
 			-- No-volume specifier
 
+	Debug_option: STRING is "debug"
+
 	symbol_list_implementation: LIST [STRING]
 
 	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]] is
@@ -417,6 +436,7 @@ feature {NONE} -- Implementation queries
 			-- unconditionally - for convenience
 		once
 			create Result.make
+			Result.extend (agent set_debugging)
 			Result.extend (agent set_special_formatting)
 			Result.extend (agent set_field_separator)
 			Result.extend (agent set_background)
@@ -424,7 +444,6 @@ feature {NONE} -- Implementation queries
 			Result.extend (agent set_port_numbers)
 			Result.extend (agent set_strict)
 			Result.extend (agent set_intraday_caching)
-			Result.extend (agent set_debugging)
 		end
 
 	initialization_complete: BOOLEAN

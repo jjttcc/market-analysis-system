@@ -20,7 +20,10 @@ feature -- Access
 			cursor_valid: not off
 		do
 			if valid_period_type (current_symbol, period_type) then
+print ("TRADABLE_DISPENSER.item: period type was valid.%N")
 				Result := tradable (current_symbol, period_type)
+else
+print ("TRADABLE_DISPENSER.item: period type was NOT valid.%N")
 			end
 		ensure
 			result_definition: Result = tradable (current_symbol, period_type)
@@ -161,6 +164,7 @@ feature -- Status report
 			ptypes: LIST [STRING]
 			error: BOOLEAN
 		do
+print ("starting TRADABLE_DISPENSER.valid_period_type.%N")
 			error := error_occurred
 			error_occurred := False
 			if symbols.has (symbol) then
@@ -183,6 +187,7 @@ feature -- Status report
 			if not error_occurred then
 				error_occurred := error
 			end
+print ("returning from TRADABLE_DISPENSER.valid_period_type.%N")
 		end
 
 feature -- Cursor movement

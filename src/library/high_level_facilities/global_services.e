@@ -273,13 +273,10 @@ feature -- Status report
 			end
 		end
 
-	is_debugging_on: BOOLEAN_REF is
-			-- Is debugging mode on?
+	debug_state: DEBUG_STATE is
+			-- Debugging settings
 		once
-			-- Initialize to False - Clients can reset to True.
-			create Result
-		ensure
-			no: not Result.item
+			create Result.make
 		end
 
 feature -- Basic operations
@@ -361,4 +358,4 @@ feature -- Basic operations
 			weekday: d.date.day_of_the_week > 1 and d.date.day_of_the_week < 7
 		end
 
-end -- class GLOBAL_SERVICES
+end

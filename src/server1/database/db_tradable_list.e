@@ -40,30 +40,42 @@ feature {NONE} -- Implementation
 			global_server: expanded GLOBAL_SERVER_FACILITIES
 			db: MAS_DB_SERVICES
 		do
+print ("starting DB_TRADABLE_LIST.setup_input_medium.%N")
 			db := global_server.database_services
 			if not db.connected then
+print ("Connecting to database.%N")
 				db.connect
+print ("Connected?: " + db.connected.out + "%N")
 			end
+print ("db.fatal_error: " + db.fatal_error.out + "%N")
 			if not db.fatal_error then
 				if intraday then
+print ("Connected to database - retrieving intraday data.%N")
 					input_sequence :=
 						db.intraday_data_for_symbol (current_symbol)
 				else
+print ("Connected to database - retrieving daily data.%N")
 					input_sequence := db.daily_data_for_symbol (current_symbol)
 				end
 				if input_sequence = Void or db.fatal_error then
+print ("Retrieval failed.%N")
 					fatal_error := True
 				else
+print ("Retrieval succeeded.%N")
 					tradable_factory.set_input (input_sequence)
 				end
 			else
 				fatal_error := True
 			end
 			if fatal_error then
+print ("Failed to connect to database.%N")
+--!!!Note: This should probably use current_symbol instead of
+-- tradable_factory.symbol:
 				log_errors (<<"Error occurred while processing ",
 					tradable_factory.symbol, ": ", db.last_error>>)
 				close_input_medium
 			end
+print ("returning from DB_TRADABLE_LIST.setup_input_medium.%N")
 		ensure then
 			input_sequence_closed_on_error: fatal_error and
 				input_sequence /= Void implies not input_sequence.is_open
@@ -74,11 +86,14 @@ feature {NONE} -- Implementation
 			global_server: expanded GLOBAL_SERVER_FACILITIES
 			db: MAS_DB_SERVICES
 		do
+print ("starting DB_TRADABLE_LIST.close_input_medium.%N")
 			if input_sequence /= Void then
+print ("input_sequence /= Void%N")
 				if input_sequence.is_open then
 					input_sequence.close
 				end
 				if input_sequence.error_occurred then
+print ("input_sequence.error_occurred.%N")
 					log_error (input_sequence.error_string)
 				end
 			end
@@ -92,6 +107,7 @@ feature {NONE} -- Implementation
 					log_error (db.last_error)
 				end
 			end
+print ("returning from DB_TRADABLE_LIST.close_input_medium.%N")
 		end
 
 end -- class DB_TRADABLE_LIST

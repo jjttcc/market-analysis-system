@@ -39,8 +39,9 @@ creation
 
 feature -- Initialization
 
-	make is
+	make (debug_on: BOOLEAN) is
 		do
+			debugging := debug_on
 			connect
 			if not fatal_error then
 				load_stock_splits
@@ -52,6 +53,7 @@ feature -- Initialization
 				not fatal_error and not db_info.stock_split_query.is_empty
 					implies stock_splits /= Void
 			not_connected: not connected or else fatal_error
+			debugging_set: debugging = debug_on
 		end
 
 feature -- Access
@@ -97,13 +99,19 @@ feature -- Access
 			create stmt.make (session)
 			stmt.set_immediate_execution_mode
 			stmt.set_sql (query)
+			if debugging then
+				io.error.print ("Executing database query '" + query + "'%N")
+			end
 			stmt.execute
+			if debugging then
+				debug_report (stmt)
+			end
 			if not stmt.is_ok then
 				last_error := concatenation (<<
 					"Execution of statement:%N'",
 					stmt.sql, "' failed:%N", stmt.cli_state, ", ",
 					stmt.diagnostic_message>>)
-				debug ("database")
+				if debugging then
 					print_list (<<last_error, "%N">>)
 				end
 				fatal_error := True
@@ -115,7 +123,7 @@ feature -- Access
 						"Execution of statement:%N'",
 						stmt.sql, "' failed: too many columns in result - ",
 						"expecting 1">>)
-					debug ("database")
+					if debugging then
 						print_list (<<last_error, "%N">>)
 					end
 					fatal_error := True
@@ -124,6 +132,15 @@ feature -- Access
 					stmt.start
 					if not stmt.off and not stmt.cursor.item (1).is_null then
 						Result ?= stmt.cursor.item (1).item
+					end
+					if debugging then
+						if Result /= Void and then not Result.is_empty then
+							io.error.print ("Database query gave result of '" +
+								Result + "'%N")
+						else
+							io.error.print (
+								"Database query gave empty result.%N")
+						end
 					end
 				end
 			end
@@ -160,14 +177,14 @@ feature -- Basic operations
 				fatal_error := False
 				session.connect
 				if session.is_connected then
-					debug ("database")
+					if debugging then
 						io.put_string ("Connected.%N")
 					end
 				else
 					last_error := concatenation (<<
 						"Database error - failed to connect: ",
 						session.diagnostic_message>>)
-					debug ("database")
+					if debugging then
 						print_list (<<last_error, "%N">>)
 					end
 					fatal_error := True
@@ -187,14 +204,14 @@ feature -- Basic operations
 			fatal_error := False
 			session.disconnect
 			if not session.is_connected then
-				debug ("database")
+				if debugging then
 					io.put_string ("Disconnected.%N")
 				end
 			else
 				last_error := concatenation (<<
 					"Database error - failed to disconnect: ",
 					session.diagnostic_message>>)
-				debug ("database")
+				if debugging then
 					print_list (<<last_error, "%N">>)
 				end
 				fatal_error := True
@@ -225,9 +242,8 @@ feature {NONE} -- Implementation
 			-- Change execution mode to immediate (no need to prepare).
 			Result.set_immediate_execution_mode
 			Result.set_sql (query)
-			debug ("database")
-				print_list (<<"ECLI_SERVICES executing statement:%N",
-					Result.sql, "%N">>)
+			if debugging then
+				io.error.print ("Executing database query '" + query + "'%N")
 			end
 			Result.execute
 			if not Result.is_ok then
@@ -235,12 +251,15 @@ feature {NONE} -- Implementation
 					"Database error - execution of statement%N",
 					Result.sql, " failed:%N", Result.cli_state, ", ",
 					Result.diagnostic_message>>)
-				debug ("database")
+				if debugging then
 					print_list (<<last_error, "%N">>)
 				end
 				fatal_error := True
 			end
 			Result.set_cursor (value_holders)
+			if debugging then
+				debug_report (Result)
+			end
 		end
 
 	list_from_query (q: STRING): LIST [STRING] is
@@ -257,13 +276,19 @@ feature {NONE} -- Implementation
 				-- change execution mode to immediate (no need to prepare)
 				stmt.set_immediate_execution_mode
 				stmt.set_sql (q)
+				if debugging then
+					io.error.print ("Executing database query '" + q + "'%N")
+				end
 				stmt.execute
+				if debugging then
+					debug_report (stmt)
+				end
 				if not stmt.is_ok then
 					last_error := concatenation (<<
 						"Database error - execution of statement%N'",
 						stmt.sql, "' failed:%N", stmt.cli_state, ", ",
 						stmt.diagnostic_message>>)
-					debug ("database")
+					if debugging then
 						print_list (<<last_error, "%N">>)
 					end
 					fatal_error := True
@@ -284,6 +309,10 @@ feature {NONE} -- Implementation
 							Result.extend (s)
 						end
 						stmt.forth
+					end
+					if debugging then
+						io.error.print ("Database query returned " +
+							Result.count.out + " rows.%N")
 					end
 				end
 				stmt.close
@@ -415,6 +444,23 @@ feature {NONE} -- Implementation
 			if session.is_valid and not session.is_closed then
 				session.close
 			end
+		end
+
+	debug_report (stmt: ECLI_STATEMENT) is
+			-- Print information from `stmt' for debugging.
+		local
+			tag: STRING
+		do
+			tag := "Database statement"
+			if stmt.is_error then
+				io.error.print (tag + " execution failed: " +
+					stmt.diagnostic_message + "%N")
+			end
+			if stmt.has_results then
+				io.error.print (tag + " has results.%N")
+			end
+			io.error.print ("Number of columns in result: " +
+				stmt.result_column_count.out + "%N")
 		end
 
 	Max_varchar_length: INTEGER is 254

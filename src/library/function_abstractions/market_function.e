@@ -157,7 +157,7 @@ feature -- Status report
 		local
 			gs: expanded GLOBAL_SERVICES
 		do
-			Result := gs.is_debugging_on.item
+			Result := gs.debug_state.market_functions
 		end
 
 feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Element change
