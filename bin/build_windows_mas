@@ -14,7 +14,7 @@ usage() {
 	echo "Usage: $Progname appname [-assert-only | -no-assert-only] version"
 }
 
-appame=$1; shift
+appname=$1; shift
 export Targetdir=$MASBUILD/lib/binaries
 export Projectdir=$MASPROJ/${appname}_current
 export Executable_name=${appname}.exe
