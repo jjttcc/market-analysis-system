@@ -16,6 +16,13 @@ feature -- Access
 		deferred
 		end
 
+	guts: ARRAY [STRING] is
+			-- For persistent storage, the guts of the class instance -
+			-- that is, the fields needed to determine if this instance
+			-- is_equal to another one - converted to an array of strings
+		deferred
+		end
+
 invariant
 
 	components_not_void: components /= Void

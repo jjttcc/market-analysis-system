@@ -66,6 +66,33 @@ feature -- Access
 				left.components.count + right.components.count
 		end
 
+	guts: ARRAY [STRING] is
+		local
+			left_guts, right_guts: ARRAY [STRING]
+		do
+			!!Result.make (1, 2)
+			left_guts := left.guts
+			right_guts := right.guts
+			Result.put ("MEP", 1)
+			Result.put (type.id.out, 2)
+			append_to_array (Result, left_guts, 3)
+			append_to_array (Result, right_guts, Result.count + 1)
+		end
+
+	append_to_array (dest, source: ARRAY [STRING]; start_index: INTEGER) is
+		local
+			i: INTEGER
+		do
+			from
+				i := 1
+			until
+				i = source.count + 1
+			loop
+				dest.force (source @ i, i + start_index - 1)
+				i := i + 1
+			end
+		end
+
 feature -- Status report
 
 	is_equal (other: like Current): BOOLEAN is

@@ -28,9 +28,6 @@ feature -- Initialization
 		do
 			set_input (in)
 			!!start_date_time.make_now
-			debug -- !!!Temporary - for testing
-				!!start_date_time.make (1997, 10, 1, 0, 0, 0)
-			end
 			operator := op
 			-- EVENT_TYPE instances have a one-to-one correspondence to
 			-- FUNTION_ANALYZER instances.  Thus this is the appropriate

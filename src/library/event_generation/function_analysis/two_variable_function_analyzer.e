@@ -36,9 +36,6 @@ feature -- Initialization
 			set_input1 (in1)
 			set_input2 (in2)
 			!!start_date_time.make_now
-			debug -- !!!Temporary - for testing
-				!!start_date_time.make (1997, 10, 1, 0, 0, 0)
-			end
 			-- EVENT_TYPE instances have a one-to-one correspondence to
 			-- FUNTION_ANALYZER instances.  Thus this is the appropriate
 			-- place to create this new EVENT_TYPE instance.

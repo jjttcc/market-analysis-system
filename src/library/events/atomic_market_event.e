@@ -47,6 +47,27 @@ feature -- Access
 			Result.extend (Current)
 		end
 
+	guts: ARRAY [STRING] is
+			-- Class abbreviation ("AME"), event type ID, time_stamp,
+			-- and symbol
+		local
+			date_time: STRING
+		do
+			!!date_time.make (21)
+			date_time.append (time_stamp.year.out)
+			if time_stamp.month < 10 then
+				date_time.extend ('0')
+			end
+			date_time.append (time_stamp.month.out)
+			if time_stamp.day < 10 then
+				date_time.extend ('0')
+			end
+			date_time.append (time_stamp.day.out)
+			date_time.extend (' ')
+			date_time.append (time_stamp.time.out)
+			Result := <<"AME", type.id.out, date_time, symbol>>
+		end
+
 feature -- Status setting
 
 	set_description (arg: STRING) is
