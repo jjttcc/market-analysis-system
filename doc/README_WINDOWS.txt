@@ -28,7 +28,7 @@ Kit (JDK) can be used in place of the JRE.)
 Further Documentation
 
 Under the directory in which you installed MAS, in the doc directory, you
-will find some further documentation.  The file INTRODUCTION.html
+will find some further documentation.  The file index.html
 provides a brief introduction to MAS, as well as license and other
 information.  (The file INTRODUCTION.ps is a printable Postscript version
 of this file.)  The file feature_list.txt contains a summary of MAS's
