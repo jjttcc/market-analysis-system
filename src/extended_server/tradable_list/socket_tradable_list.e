@@ -18,20 +18,37 @@ create
 
 	make
 
-feature -- Initialization
+feature {SOCKET_LIST_BUILDER} -- Initialization
 
 	make (the_symbols: LIST [STRING]; factory: TRADABLE_FACTORY) is
 		do
 			parent_make (the_symbols, factory)
+--!!!!Temporary, for testing - in future it will be passed in.
+create {EXPERIMENTAL_INPUT_DATA_CONNECTION} connection.make
+		end
+
+feature {SOCKET_LIST_BUILDER} -- Access
+
+	connection: INPUT_DATA_CONNECTION
+			-- The "connection" to the data server
+
+feature {SOCKET_LIST_BUILDER} -- Element change
+
+	set_connection (arg: like connection) is
+			-- Set `connection' to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			connection := arg
+		ensure
+			connection_set: connection = arg and connection /= Void
 		end
 
 feature {NONE} -- Implementation
 
 	initialized_input_medium: INPUT_SOCKET is
-		local
-			connection: EXPERIMENTAL_INPUT_DATA_CONNECTION
 		do
-			create connection.connect_to_supplier
+			connection.connect_to_supplier
 			if not connection.last_communication_succeeded then
 				fatal_error := True
 --!!!!Where/when should this error be reported?:

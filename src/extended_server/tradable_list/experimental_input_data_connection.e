@@ -13,7 +13,15 @@ class EXPERIMENTAL_INPUT_DATA_CONNECTION inherit
 
 create
 
-	connect_to_supplier
+	make
+
+feature -- Initialization
+
+	make is
+		do
+			last_communication_succeeded := True
+			server_response := ""
+		end
 
 feature -- Basic operations
 
