@@ -102,7 +102,7 @@ feature {NONE}
 							"%N     Run market analysis (a) ",
 							"Set date for market analysis (d)%N",
 							"     Edit event registrants (r) ",
-							"Memory usage (m) Exit (x) ">>)
+							"Memory usage (m) Exit (x) Help (h) ">>)
 				inspect
 					selected_character
 				when 's', 'S' then
@@ -127,6 +127,8 @@ feature {NONE}
 					mkt_analysis_set_date_menu
 				when 'x', 'X' then
 					end_program := true
+				when 'h', 'H' then
+					print (help @ help.Main)
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
@@ -147,25 +149,33 @@ feature {NONE}
 		local
 			finished: BOOLEAN
 		do
-			print_list (<<"Select action:",
-				"%N     Edit market-data indicators (m) %
-				%Edit market-analysis indicators (a) %
-				%%N     Exit (x) Previous (-) ">>)
-			inspect
-				selected_character
-			when 'm', 'M' then
-				edit_indicator_menu (current_tradable.indicators)
-			when 'a', 'A' then
-				edit_event_generator_menu
-			when 'x', 'X' then
-				end_program := true
-			when '!' then
-				print ("Type exit to return to main program.%N")
-				system ("")
-			when '-' then
-				finished := true
-			else
-				print ("Invalid selection%N")
+			from
+			until
+				finished
+			loop
+				print_list (<<"Select action:",
+					"%N     Edit market-data indicators (m) %
+					%Edit market-analysis indicators (a) %
+					%%N     Exit (x) Previous (-) Help (h) ">>)
+				inspect
+					selected_character
+				when 'm', 'M' then
+					edit_indicator_menu (current_tradable.indicators)
+				when 'a', 'A' then
+					edit_event_generator_menu
+				when 'x', 'X' then
+					end_program := true
+				when 'h', 'H' then
+					print (help @ help.Edit_indicators)
+				when '!' then
+					print ("Type exit to return to main program.%N")
+					system ("")
+				when '-' then
+					finished := true
+				else
+					print ("Invalid selection%N")
+				end
+				print ("%N%N")
 			end
 		end
 
@@ -268,7 +278,8 @@ feature {NONE}
 				print_list (<<"Select action:",
 					"%N     Add registrants (a) Remove registrants (r) %
 					%View registrants (v) %
-					%%N     Edit registrants (e) Exit (x) Previous (-) ">>)
+					%%N     Edit registrants (e) Exit (x) Previous (-) %
+					%Help (h) ">>)
 				inspect
 					selected_character
 				when 'a', 'A' then
@@ -281,6 +292,8 @@ feature {NONE}
 					registrar.edit_registrants
 				when 'x', 'X' then
 					end_program := true
+				when 'h', 'H' then
+					print (help @ help.Edit_event_registrants)
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
@@ -289,6 +302,7 @@ feature {NONE}
 				else
 					print ("Invalid selection%N")
 				end
+				print ("%N%N")
 			end
 		end
 
@@ -305,7 +319,8 @@ feature {NONE}
 				print_list (<<"Select action for ", current_tradable.name,
 					":%N     View market data (m) View an indicator (i)%N%
 					%     Change data period type [currently ",
-					current_period_type.name, "] (c) Exit (x) Previous (-) ">>)
+					current_period_type.name,
+					"] (c)%N     Exit (x) Previous (-) Help (h) ">>)
 				inspect
 					selected_character
 				when 'm', 'M' then
@@ -321,6 +336,8 @@ feature {NONE}
 					view_indicator_menu (indicator)
 				when 'x', 'X' then
 					end_program := true
+				when 'h', 'H' then
+					print (help @ help.View_data)
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
@@ -340,7 +357,7 @@ feature {NONE}
 			date: DATE
 			time: TIME
 			date_time: DATE_TIME
-			finished: BOOLEAN
+			finished, set_date: BOOLEAN
 			indicator: MARKET_FUNCTION
 		do
 			!!date.make_now
@@ -355,7 +372,8 @@ feature {NONE}
 					"%N     Set date (d) Set time (t) %
 					%Set date relative to current date (r)%N%
 					%     Set market analysis date %
-					%to currently selected date (s) Exit (x) ">>)
+					%to currently selected date (s)%N",
+					"     Previous (-) Exit (x) Help (h) ">>)
 				inspect
 					selected_character
 				when 'd', 'D' then
@@ -366,19 +384,27 @@ feature {NONE}
 					date := relative_date_choice
 				when 'x', 'X' then
 					end_program := true
+				when 'h', 'H' then
+					print (help @ help.Set_analysis_date)
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
 				when 's', 'S' then
 					finished := true
+					set_date := true
+				when '-' then
+					finished := true
 				else
 					print ("Invalid selection%N")
 				end
+				print ("%N%N")
 			end
-			!!date_time.make_by_date_time (date, time)
-			print_list (<<"Setting date and time for processing to ",
-						date_time.out, "%N">>)
-			event_coordinator.set_start_date_time (date_time)
+			if set_date then
+				!!date_time.make_by_date_time (date, time)
+				print_list (<<"Setting date and time for processing to ",
+							date_time.out, "%N">>)
+				event_coordinator.set_start_date_time (date_time)
+			end
 		end
 
 	date_choice: DATE is
@@ -496,7 +522,8 @@ feature {NONE}
 			loop
 				print ("Select action:%N%
 						%     Print indicator (p) View description (d) %N%
-						%     View long description (l) Exit (x) previous (-) ")
+						%     View long description (l) Exit (x) Previous (-) %
+						% Help (h) ")
 				inspect
 					selected_character
 				when 'p', 'P' then
@@ -511,6 +538,8 @@ feature {NONE}
 					print (indicator.full_description)
 				when 'x', 'X' then
 					end_program := true
+				when 'h', 'H' then
+					print (help @ help.View_indicator)
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
@@ -751,6 +780,7 @@ feature {NONE}
 			current_period_type := period_types @ (period_type_names @ Daily)
 			market_list := factory_builder.market_list
 			input_file_names := factory_builder.input_file_names
+			!!help.make
 		ensure
 			curr_period_not_void: current_period_type /= Void
 			market_list_not_void: market_list /= Void
@@ -763,5 +793,7 @@ feature {NONE}
 	end_program: BOOLEAN
 
 	saved_mklist_index: INTEGER
+
+	help: HELP
 
 end -- class TEST_USER_INTERFACE
