@@ -62,7 +62,7 @@ feature {FACTORY}
 			Precursor (op)
 			sum.set_operator (op)
 		ensure then
-			sum.operator = op and sum.operator /= Void
+			op_set: sum.operator = op and sum.operator /= Void
 		end
 
 feature {NONE}

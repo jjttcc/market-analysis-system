@@ -40,8 +40,8 @@ feature {NONE}
 	action is
 			-- Calculate exponential MA value for the current period.
 		require else
-			not output.empty
-			target.index > n
+			output_not_empty: not output.empty
+			tgindex_gt_n: target.index > n
 		local
 			t: SIMPLE_TUPLE
 		do
