@@ -1,11 +1,16 @@
--- Provides socket connection facilities for Market Analysis command-line
--- clients.
-
+indexing
+	description: "Socket connection facilities for Market Analysis %
+		%command-line clients."
+	author: "Jim Cochrane"
+	date: "$Date$";
+	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
+		%Released under the Eiffel Forum License; see file forum.txt"
 
 --!!!NOTE: This class can perhaps be replaced by CLIENT_CONNECTION from MCT.
 class CONNECTION inherit
 
-	PROTOCOL
+	NETWORK_PROTOCOL
 
 create
 
@@ -25,7 +30,7 @@ feature -- Feature comment
 			termination_requested := False
 			last_message := ""
 			-- Notify server that this is a command-line client.
-			send_message(Command_line)
+			send_message(Console_flag.out)
 		end
 
 	termination_requested: BOOLEAN
@@ -47,12 +52,12 @@ feature -- Feature comment
 				finished
 			loop
 --!!!Fix:				c := socket.recv(Buffersize)
-				if c = EOM or c = EOF then
+				if c = Eom or c = Eot then
 					finished := True
 				end
 				msg.append(c)
 			end
-			if c = EOF then
+			if c = Eot then
 				termination_requested := True
 			end
 --!!!Fix:			last_message := join(msg, "")
@@ -72,5 +77,11 @@ feature -- Feature comment
 	Buffersize: INTEGER is 1
 
 	socket: NETWORK_STREAM_SOCKET
+
+feature {NONE} -- Unused
+
+	Message_date_field_separator: STRING is ""
+
+	Message_time_field_separator: STRING is ""
 
 end

@@ -1,3 +1,4 @@
+--!!Obsolete
 class CONSTANTS
 
 feature

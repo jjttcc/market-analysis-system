@@ -1,6 +1,11 @@
---!/usr/bin/env python
--- Market Analysis Command-Line (MACL) client - accesses the MA server
--- command-line interface via a socket connection.
+indexing
+	description: "Market Analysis Command-Line (MACL) client - accesses the %
+		%MA server command-line interface via a socket connection."
+	author: "Jim Cochrane"
+	date: "$Date$";
+	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
+		%Released under the Eiffel Forum License; see file forum.txt"
 
 class MACL inherit
 

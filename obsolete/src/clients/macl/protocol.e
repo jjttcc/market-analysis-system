@@ -1,4 +1,5 @@
 class PROTOCOL inherit
+--!!Obsolete
 
 	CONSTANTS
 
