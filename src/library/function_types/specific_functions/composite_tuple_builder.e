@@ -82,29 +82,32 @@ feature -- Status report
 			-- output is sorted by date/time
 		local
 			previous: MARKET_TUPLE
+			output_list: MARKET_TUPLE_LIST [MARKET_TUPLE]
 		do
 			Result := true
+			output_list := output.output
 			from
-				output.output.start
-				previous := output.output.item
-				output.output.forth
+				output_list.start
+				previous := output_list.item
+				output_list.forth
 			until
-				output.output.exhausted or not Result
+				output_list.exhausted or not Result
 			loop
-				Result := (output.output.item.date_time -
+				Result := (output_list.item.date_time -
 							previous.date_time).duration.is_equal (duration)
-				previous := output.output.item
-				output.output.forth
+				previous := output_list.item
+				output_list.forth
 			end
 			if Result then
 				from
-					output.output.start
+					output_list.start
 				until
-					output.output.exhausted or not Result
+					output_list.exhausted or not Result
 				loop
-					Result := output.output.item.last.date_time <
-								output.output.item.date_time + duration
-					output.output.forth
+					Result :=
+						output_list.i_th (output_list.index).date_time <
+								output_list.item.date_time + duration
+					output_list.forth
 				end
 			end
 		ensure
