@@ -348,7 +348,7 @@ public class DataSet {
 	*/
 	protected void draw_dates(Graphics g, Rectangle w) {
 		TemporalDrawer drawer = temporal_drawer();
-		if (drawer != null) {
+		if (drawer != null && drawer.main_data_processed()) {
 			drawer.set_xaxis(xaxis_);
 			drawer.set_yaxis(yaxis_);
 			drawer.set_maxes(xmax, ymax, xmin, ymin);
