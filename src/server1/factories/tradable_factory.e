@@ -199,6 +199,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
+--!!!!:
 	execute is
 			-- Note: Once `execute' is called, set_intraday will have no
 			-- effect - the tradable's data will be intraday according to
@@ -207,6 +208,7 @@ feature -- Basic operations
 			scanner: MARKET_TUPLE_DATA_SCANNER
 			intraday_scanner: INTRADAY_TUPLE_DATA_SCANNER
 		do
+print ("TF.execute - st. inp. from beg.: " + start_input_from_beginning.out + "%N")
 			error_occurred := False
 			check_for_open_interest
 			if not update_current_product then
@@ -242,7 +244,7 @@ feature -- Basic operations
 				error_occurred := True
 				last_error_fatal := scanner.last_error_fatal
 			end
-			if intraday then
+			if intraday and start_input_from_beginning then
 				time_period_type := intraday_scanner.period_type
 				if time_period_type = Void then -- empty input data
 					time_period_type := period_types @ (
@@ -254,7 +256,12 @@ feature -- Basic operations
 					not time_period_type.intraday implies time_period_type =
 					period_types @ (period_type_names @ Daily)
 			end
-			product.set_trading_period_type (time_period_type)
+			-- Don't need to set period type if data is being appended [Check!!]
+			if start_input_from_beginning then
+print ("TF.execute calling product.set_trading_period_type with: " +
+time_period_type.name + "%N")
+				product.set_trading_period_type (time_period_type)
+			end
 			product.finish_loading
 			-- If `update_current_product', the product's indicators have
 			-- already been set up.
