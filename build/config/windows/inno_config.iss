@@ -124,7 +124,7 @@ Name: "{userdesktop}\Main MAS Terminal"; Filename: "{app}\bin\mct.exe"; MinVersi
 FinishedLabel=Setup has finished installing [name] on your computer. The application may be launched by selecting the installed icons.%n%nNote: The [name] environment settings may not take effect right away.  If the [name] fails to run at first on your system, this may be the cause.  This can be fixed on Windows 95, 98, and Me systems by rebooting and on Windows NT, 2000, and XP systems by doing either of the following:%n%nLog out and then log back in or%n%nRight-click on "My Computer", select "Properties", Select the "Environment" settings, and left-click on the "OK" button.
 
 [Run]
-Filename: "{app}\lib\install\init.bat"; Parameters: "{app}"; Flags: shellexec
+Filename: "{app}\lib\install_tool.exe"; Parameters: "{app}"; Flags: shellexec
 ; Filename: "{app}\bin\runmas.bat"; Description: "Launch Market Analysis System"; Flags: nowait postinstall skipifsilent
 
 ;!!!!!!!NOTE: These registry settings are probably no longer needed -
