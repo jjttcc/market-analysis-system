@@ -1,0 +1,146 @@
+system
+	"mct"
+
+root
+	MCT: make
+
+default
+	assertion (check)
+	assertion (require)
+	assertion (ensure)
+	assertion (loop)
+	assertion (invariant)
+	arguments (" ")
+	disabled_debug (yes)
+	disabled_debug ("ev_gtk_c_object_dispose")
+	disabled_debug ("ev_gtk_creation")
+	disabled_debug ("ev_gtk_destroy")
+	disabled_debug ("ev_gtk_dispose")
+	disabled_debug ("persist")
+	debug (no)
+	line_generation (no)
+	profile (no)
+	trace (no)
+	check_vape (yes)
+	console_application (no)
+	address_expression (no)
+	array_optimization (no)
+	dead_code_removal (yes)
+	dynamic_runtime (no)
+	exception_trace (no)
+	inlining (no)
+	multithreaded (no)
+
+
+--	assertion (check)
+--	assertion (require)
+--	assertion (ensure)
+--	assertion (loop)
+--	assertion (invariant)
+
+cluster
+	mct:		"$MAS/src/mct"
+
+	root_cluster (mct):		"$/root"
+
+	actions (mct):		"$/actions"
+
+	commands (mct):		"$/commands"
+
+	abstract_actions (actions):		"$/abstractions"
+
+	session_actions (actions):		"$/session"
+
+	gui (mct):		"$/gui"
+
+	gui_abstractions (gui):		"$/abstractions"
+
+	gui_components (gui):		"$/components"
+
+	gui_support (gui):		"$/support"
+
+	gui_application (gui):		"$/application"
+
+	configuration (mct):		"$/configuration"
+
+	session (mct):		"$/session"
+
+	support (mct):		"$/support"
+
+	eiflib:		"$MAS/src/eiffel_library"
+
+	libarch (eiflib):		"$/architectural"
+
+	libsupport (eiflib):		"$/support"
+
+	libserver (eiflib):		"$/server"
+
+	liberror (eiflib):		"$/error"
+
+	mas_client_lib:		"$MAS/src/client_library"
+
+	mas_client_support (mas_client_lib):	"$/support"
+
+	mas_server:		"$MAS/src/server1"
+
+	mas_server_util (mas_server):		"$/utility"
+
+	mas_server_protocols (mas_server):		"$/protocols"
+
+	ise:		"$ISE_EIFFEL/library"
+
+	all base (ise):		"$/base"
+		exclude
+			"table_eiffel3"; "desc"; "CVS"; 
+		end
+
+	date (ise):		"$/time"
+
+	date_format (date):		"$/format"
+
+	date_tools (date_format):		"$/english"
+
+	all net (ise):		"$/net"
+
+	all wel:		"$ISE_EIFFEL/library/wel"
+
+	all vision2_interface:		"$ISE_EIFFEL/library/vision2/interface"
+
+	all vision2_implementation:		"$ISE_EIFFEL/library/vision2/implementation"
+
+	gobo:		"$GOBO/library"
+
+	all gobo_kernel (gobo):		"$/kernel"
+		exclude
+			"se"; "ve"; "hact"; 
+		end
+
+	regexp (gobo):		"$/regexp"
+
+	pcre (regexp):		"$/pcre"
+
+	re_interface (regexp):		"$/interface"
+
+	re_support (regexp):		"$/support"
+
+	all gobo_utility (gobo):		"$/utility"
+
+	all gobo_structure (gobo):		"$/structure"
+
+external
+
+	include_path:
+		"$(ISE_EIFFEL)/library/vision2/spec/include",
+		"$(ISE_EIFFEL)/library/wel/spec/windows/include",
+		"$ISE_EIFFEL/library/time/Clib"
+
+	object:
+		"${MAS}/src/eiffel_library/lib/utilities.obj",
+		"${ISE_EIFFEL}/library/time/spec/bcb/lib/datetime.lib",
+		"${ISE_EIFFEL}/library/net/spec/bcb/lib/net.lib",
+		"$(ISE_EIFFEL)/library/vision2/spec/$(ISE_C_COMPILER)/lib/vision2.lib",
+		"$(ISE_EIFFEL)/library/wel/spec/$(ISE_C_COMPILER)/lib/wel.lib",
+ 		"$(ISE_EIFFEL)/library/vision2/spec/$(ISE_C_COMPILER)/lib/libpng.lib",
+ 		"$(ISE_EIFFEL)/library/vision2/spec/$(ISE_C_COMPILER)/lib/zlib.lib"
+
+end
