@@ -72,7 +72,6 @@ feature {FACTORY} -- Element change
 	set_operator (op: NUMERIC_COMMAND) is
 		require
 			not_void: op /= Void
-			ready_to_execute: op.execute_precondition
 		do
 			operator := op
 		ensure

@@ -145,12 +145,10 @@ feature -- Element change
 			-- Set tuple_maker to `f'.
 		require
 			not_void: f /= Void
-			ready_to_execute: f.execute_precondition
 		do
 			tuple_maker := f
 		ensure
 			set: tuple_maker = f and f /= Void
-			ready_to_execute: tuple_maker.execute_precondition
 		end
 
 	set_duration (d: DATE_TIME_DURATION) is
@@ -170,8 +168,7 @@ invariant
 
 	input_equals_source_list: input = source_list
 	process_parameters_set: source_list /= Void and tuple_maker /= Void and
-		duration /= Void and
-						tuple_maker.execute_precondition --!!!??
+		duration /= Void
 		--!!!Note: If a MARKET_TUPLE_LIST (the type of source_list) is
 		--refined to further support the concept of lists with time
 		--period types, such as daily or weekly, including comparison
