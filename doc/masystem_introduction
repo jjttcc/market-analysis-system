@@ -1,0 +1,95 @@
+Brief Introduction to the Market Analysis System
+
+The Market Analysis System (MAS) is a client/server application that
+provides tools for analysis of financial markets, with the goal of
+helping its user make better buying and selling decisions and to help
+save time by automating some tasks that would otherwise be done by hand.
+
+The principal component of the MAS is the Market Analysis System Server
+(MASS) [also called the Market Analysis Server (MAS) in contexts where
+it will not be confused with the Market Analysis System].  The server
+inputs market data (such as stock data), applies technical analysis[1]
+indicators to the data, makes market and indicator data available to
+clients via a network connection, and provides configurable analysis of
+market data to help determine good buy and sell prospects.[2]
+
+Another important component of the Market Analysis System is the Market
+Analysis GUI Client (MAGC) (sometimes shortened to Market Analysis Client
+(MAC)).  This application obtains market and indicator data from the
+server and displays it in chart form, allowing the user to visualize
+the data.  MAS currently only runs on Linux x86 systems.  MAGC should
+run on any platform for which a Java Runtime Environment is available,
+which includes UNIX, Windows, and Macintosh systems.
+
+See the file "feature_list" for list of features provided by the Market
+Analysis System client and server.
+
+There are currently two main ways to use MAS: by running the server
+and the GUI client to view charts of markets; and by running the server
+alone and using its analysis features to produce buy and sell signals,
+based on criteria set by the user.  To use both the server and client,
+you will first need to start the server.  Here is an example command-line
+entry for starting the server, in a directory that contains market data
+files whose names follow the format *.txt:
+
+mas -o -f , *.txt -b 13579 &
+
+The -o tells the server that all data files include an opening price;
+the "-f ," tells the server that the character used to separate field
+in the data file is ','.  (The default is tab.)  *.txt, of course,
+passes all file names in the current directory that end in .txt to
+the server and -b tells the server it is to be run in the background.
+13579 is the socket port number that the server will use to communicate
+with one or more GUI clients.  (You can enter "mas -h" to print a short
+summary of the server's command-line options.)
+
+Once you have started the server, you can start a GUI client from the
+command line by changing the current directory to:
+
+{mas_dir}/lib/classes
+
+(where {mas_dir} stands for the directory into which you installed MAS)
+and issuing the command:
+
+java MA_Client hostname port_number
+
+where hostname stands for the network name of the computer the server is
+running on and port_number is the socket port number the server is using
+(13579 in the example above).  Note that since the GUI is a Java program,
+you will need to have the Java Runtime Environment (JRE) installed on
+your system.  The JRE is available for free for most operating systems.
+See the file java_info for information on obtaining the JRE for your
+system.
+
+On UNIX systems, you can start a java GUI client by running the magc
+command.  For example:
+
+magc 13579
+
+will start the GUI and connect with the server at port 13579.  If the
+server is running on a different machine from the client, you can specify
+the machine's network address with the -h option.  For example:
+
+magc -h boston.com 13579
+
+when the server is running on a machine named boston.com.
+
+See the README file for the GUI client for more information on running
+the GUI.
+
+
+[1] For those not familiar with technical analysis, it is a set of
+techniques for analyzing market data, using indicators such as trend
+lines, moving averages, price momentum, oscillators, etc. to identify
+changes in market trends.  It is based on the observation that "prices
+move in trends which are determined by the changing attitudes of investors
+toward a variety of economic, monetary, political, and psychological
+forces." ["Technical Analysis Explained," by Martin J. Pring]
+
+[2] For example, I currently have my system configured to issue a
+buy signal if Stochastic %D changes slope from negative to postivie
+when below 30 and, no more than 28 days before that, the weekly MACD
+difference line crossed above the weekly MACD signal line.  I have it
+configured to issue a sell signal for the opposite event - Stochastic
+%D slope change from positive to negative when above 70 and weekly MACD
+difference line crosses below weekly MACD signal line.

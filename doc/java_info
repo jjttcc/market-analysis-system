@@ -1,0 +1,30 @@
+Information on obtaining the Java Runtime Environment for your System
+
+You will need the Java Runtime Environment (JRE) - version 1.1.7 or
+higher - to run the Market Analysis GUI Client.  You can obtain a version of
+the JRE for Solaris and for Windows at (version 1.2):
+
+http://www.javasoft.com/products/jdk/1.2/jre/index.html
+
+(version 1.1):
+
+http://java.sun.com/products/jdk/1.1/jre/index.html
+
+Either version will probably work equally well.  Although I have not tried
+them, so I can't guarantee this.
+
+You can obtain a version for Linux at:
+
+http://www.blackdown.org/java-linux.html
+
+You can obtain a version for the Macintosh at:
+
+http://www.apple.com/java/
+
+Links to JREs (or JDKs) for other operating systems can be found at:
+http://java.sun.com/cgi-bin/java-ports.cgi
+
+
+Note: If you want to develop Java programs, you can obtain the Java
+Development Kit instead, which includes the JRE; but if you're a developer,
+you probably already know this.
