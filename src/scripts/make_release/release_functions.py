@@ -138,9 +138,9 @@ class ReleaseUtilities:
 			" -name CVS -exec rm -rf {} \; 2>/dev/null")
 
 	def do_copy(self, srcpath, tgtpath, dos_convert):
-		cmd = ''; doscnvrt_cmd = 'cnvrt_todos'
+		cmd = ''; doscnvrt_cmd = 'unix2dos'
 		if tgtpath == '.':
-			cmd = 'cp -fRPr ' + srcpath + ' ' + self.work_directory
+			cmd = 'cp -fRr --parents ' + srcpath + ' ' + self.work_directory
 		else:
 			work_dir = ''
 			if os.path.isdir(srcpath):
@@ -152,8 +152,9 @@ class ReleaseUtilities:
 				cmd = 'cp -f ' + srcpath + ' ' + self.work_directory + \
 					'/' + tgtpath
 				if dos_convert:
-					cmd = cmd + '; ' + doscnvrt_cmd + ' ' + \
-						self.work_directory + '/' + tgtpath
+					cmd = cmd + '; cd $(dirname ' + self.work_directory + \
+						'/' + tgtpath + '); ' + doscnvrt_cmd + \
+						' $(basename ' + tgtpath + ')'
 			else:
 				print srcpath + ' is not a file or directory - skipping ...'
 			# If the work directory doesn't exist yet, make it:
