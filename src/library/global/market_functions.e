@@ -40,60 +40,62 @@ feature -- Access
 			earlier, later: DATE_TIME
 			linear_cmd: BASIC_LINEAR_COMMAND
 		once
-			!!Result.make (0)
-			!!exponential.make (1)
-			!!volume
-			!!earlier.make (1998, 1, 1, 0, 0, 0)
-			!!later.make (1998, 1, 5, 0, 0, 0)
-			!!point1.make
-			!!point2.make
+			create Result.make (0)
+			create exponential.make (1)
+			create volume
+			create earlier.make (1998, 1, 1, 0, 0, 0)
+			create later.make (1998, 1, 5, 0, 0, 0)
+			create point1.make
+			create point2.make
 			point1.set_x_y_date (1, 1, earlier)
 			point2.set_x_y_date (5, 1, later)
-			!!stock.make ("DUMMY",
-				period_types @ (period_type_names @ Daily), Void)
-			stock.set_name ("No Input Function")
-			!!linear_cmd.make(stock)
-			!!addition.make (linear_cmd, volume)
-			!ONE_VARIABLE_FUNCTION!complex_function.make (
+			create stock.make ("DUMMY",
+				period_types @ (period_type_names @ Daily), Void, Void)
+			stock.set_function_name ("No Input Function")
+			create linear_cmd.make(stock)
+			create addition.make (linear_cmd, volume)
+			create {ONE_VARIABLE_FUNCTION} complex_function.make (
 				stock, volume)
-			!!pair.make (complex_function,
+			create pair.make (complex_function,
 				"Market function that operates on another function")
 			Result.extend (pair)
-			!N_RECORD_ONE_VARIABLE_FUNCTION!f.make (stock, volume, 1)
-			!!pair.make (f,
+			create {N_RECORD_ONE_VARIABLE_FUNCTION} f.make (stock, volume, 1)
+			create pair.make (f,
 				"Market function that operates on another function and %
 				%operates on n records of that function at a time")
 			Result.extend (pair)
-			!TWO_VARIABLE_FUNCTION!f.make (complex_function, complex_function,
-											volume)
-			!!pair.make (f,
+			create {TWO_VARIABLE_FUNCTION} f.make (complex_function,
+				complex_function, volume)
+			create pair.make (f,
 				"Market function that operates on two other functions")
 			Result.extend (pair)
-			!STANDARD_MOVING_AVERAGE!f.make (stock, volume, 1)
-			!!pair.make (f,
+			create {STANDARD_MOVING_AVERAGE} f.make (stock, volume, 1)
+			create pair.make (f,
 				"Market function that provides an n-period moving average %
 				%of another function")
 			Result.extend (pair)
-			!EXPONENTIAL_MOVING_AVERAGE!f.make (stock, volume, exponential, 1)
-			!!pair.make (f,
+			create {EXPONENTIAL_MOVING_AVERAGE} f.make (stock, volume,
+				exponential, 1)
+			create pair.make (f,
 				"Market function that provides an n-period exponential %
 				%moving average of another function")
 			Result.extend (pair)
-			!ACCUMULATION!f.make (stock, addition, linear_cmd, volume)
-			!!pair.make (f,
+			create {ACCUMULATION} f.make (stock, addition, linear_cmd, volume)
+			create pair.make (f,
 				"Market function that accumulates its values")
 			Result.extend (pair)
-			!MARKET_FUNCTION_LINE!f.make_from_2_points (point1, point2, stock)
-			!!pair.make (f,
+			create {MARKET_FUNCTION_LINE} f.make_from_2_points (point1,
+				point2, stock)
+			create pair.make (f,
 				"Market function that functions as a trend line")
 			Result.extend (pair)
-			!MARKET_DATA_FUNCTION!f.make (stock)
-			!!pair.make (f,
+			create {MARKET_DATA_FUNCTION} f.make (stock)
+			create pair.make (f,
 				"Market function that takes basic market data (with close, %
 				%high, volume, etc.) as input and %N%
 				%whose output is simply its input")
 			Result.extend (pair)
-			!!pair.make (stock,
+			create pair.make (stock,
 				"Represents a dummy function that does not take input")
 			Result.extend (pair)
 		end
