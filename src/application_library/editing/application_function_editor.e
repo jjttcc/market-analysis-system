@@ -300,6 +300,23 @@ feature -- Basic operations
 			f.make (p, slope, user_interface.dummy_tradable)
 		end
 
+	edit_agent_based_function (f: AGENT_BASED_FUNCTION) is
+			-- Edit an AGENT_BASED_FUNCTION.
+		require
+			ui_set: user_interface /= Void
+			op_maker_set: operator_maker /= Void
+		local
+			cmd: RESULT_COMMAND [REAL]
+		do
+--!!!			set_abf_input (f)
+			operator_maker.reset
+			cmd ?= operator_maker.command_selection_from_type (
+						operator_maker.Real_result_command,
+							concatenation (<<f.generator,
+								"'s operator">>), False)
+			f.set_operator (cmd)
+		end
+
 	set_ovf_input (f: ONE_VARIABLE_FUNCTION) is
 			-- Set the input function for the ONE_VARIABLE_FUNCTION `f'.
 		do
