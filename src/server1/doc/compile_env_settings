@@ -1,0 +1,7 @@
+If you wish to compile MAS, the following environment variables need to be
+set properly to allow the Eiffel compiler to locate the needed source files:
+
+MAS                         base directory for MAS files
+EIFFEL4                     ISE Eiffel 4 directory
+
+See the file env_settings for required settings for running MAS.
