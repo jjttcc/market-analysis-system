@@ -236,7 +236,7 @@ src/clients/support/ErrorBox\$3.class lib/classes/support/ mas_linux1.6 mas_wind
 src/clients/support/IndicatorGroup.class lib/classes/support/ mas_linux1.6 mas_windows1.6 mac1.6
 src/clients/support/IndicatorGroups.class lib/classes/support/ mas_linux1.6 mas_windows1.6 mac1.6
 # (GUI config. file)
-build/config/.ma_clientrc lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+build/config/.ma_clientrc lib/ mas_linux1.6 mas_windows1.6 mac1.6
 # (Scripts)
 src/scripts/mas/magc bin/ mas_linux1.6 mas_windows1.6 clientsrc1.6 mac1.6
 src/scripts/mas/masb bin/ mas_linux1.6 mas_windows1.6 clientsrc1.6 mac1.6
