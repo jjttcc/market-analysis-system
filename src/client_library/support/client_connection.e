@@ -58,7 +58,7 @@ feature {NONE} -- Initialization
 				close
 				socket := Void
 			else
-				error_report := Connection_creation_failed_msg
+				error_report := Connection_failed_msg
 			end
 		ensure
 			host_port_set: hostname = host and port_number = port
@@ -82,7 +82,7 @@ feature {NONE} -- Initialization
 			if socket.socket_ok then
 				last_communication_succeeded := True
 			else
-				error_report := Connection_creation_failed_msg
+				error_report := Connection_failed_msg
 			end
 		ensure
 			host_port_set: hostname = host and port_number = port
@@ -132,8 +132,11 @@ feature {NONE} -- Implementation
 								socket.read_character
 							end
 						until
-							not socket.readable or
-							socket.last_character = eom @ 1
+--!!!Determine whether or not this
+--condition should be included:
+--							not socket.readable or
+--!!!So far, it is OK for both mct and macl - test a bit more.
+							end_of_message (socket.last_character)
 						loop
 							s.extend (socket.last_character)
 							socket.read_character
@@ -157,6 +160,8 @@ feature {NONE} -- Implementation
 		ensure
 			still_connected_if_no_error:
 				last_communication_succeeded implies connected
+			server_response_exists_if_no_error:
+				last_communication_succeeded implies server_response /= Void
 		end
 
 	send_one_time_request (r: STRING; wait_for_response: BOOLEAN) is
@@ -165,8 +170,6 @@ feature {NONE} -- Implementation
 			-- `server_response'.
 		require
 			r_exists: r /= Void
-		local
-			s: STRING
 		do
 			last_communication_succeeded := False
 			make_socket
@@ -178,12 +181,22 @@ feature {NONE} -- Implementation
 			close
 		ensure
 			not_connected: not connected
+			server_response_exists_if_no_error:
+				last_communication_succeeded implies server_response /= Void
 		end
 
 	process_response (s: STRING) is
 			-- Process server response `s' - set `server_response' and
 			-- `last_communication_succeeded' accordingly.
-		deferred
+		require
+			s_exists: s /= Void
+		do
+			-- Default to simply assign `s' to `server_response' and
+			-- "succeed" - Redefine if needed.
+			server_response := s
+			last_communication_succeeded := True
+		ensure
+			server_response_set: server_response /= Void
 		end
 
 	close is
@@ -216,9 +229,14 @@ feature {NONE} -- Implementation - constants
 		deferred
 		end
 
-	Connection_failed_msg: STRING is "Connection to the server failed."
+	end_of_message (c: CHARACTER): BOOLEAN is
+			-- Does `c' indicate that the end of the data from the server
+			-- has been reached?
+		do
+			Result := c = eom @ 1
+		end
 
-	Connection_creation_failed_msg: STRING is "Creation of connection."
+	Connection_failed_msg: STRING is "Connection to the server failed."
 
 	Invalid_address_msg: STRING is "Invalid network address."
 
