@@ -315,8 +315,14 @@ feature {NONE} -- Implementation
 				contents.exhausted or Result
 			loop
 				if
+					(contents.item.count >= 2 and
 					contents.item.item (1) = option_sign and
-					contents.item.item (2) = c
+					contents.item.item (2) = c) or
+						-- Allow GNU "--opt" type options:
+					(contents.item.count >= 3 and
+					contents.item.item (1) = option_sign and
+					contents.item.item (2) = option_sign and
+					contents.item.item (3) = c)
 				then
 					Result := true
 				else
@@ -324,8 +330,10 @@ feature {NONE} -- Implementation
 				end
 			end
 		ensure
-			Result implies contents.item.item (1) = option_sign and
-				contents.item.item (2) = c
+			Result implies (contents.item.item (1) = option_sign and
+				contents.item.item (2) = c) or (contents.item.item (1) =
+				option_sign and contents.item.item (2) = option_sign and
+				contents.item.item (3) = c)
 		end
 
 invariant
