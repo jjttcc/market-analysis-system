@@ -6,7 +6,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class OPEN_INTEREST_COMMAND inherit
+class OPEN_INTEREST inherit
 
 	BASIC_NUMERIC_COMMAND
 		redefine
@@ -23,4 +23,4 @@ feature -- Basic operations
 			value = arg.open_interest
 		end
 
-end -- class OPEN_INTEREST_COMMAND
+end -- class OPEN_INTEREST

@@ -6,7 +6,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class VOLUME_COMMAND inherit
+class VOLUME inherit
 
 	BASIC_NUMERIC_COMMAND
 		redefine
@@ -23,4 +23,4 @@ feature -- Basic operations
 			value = arg.volume
 		end
 
-end -- class VOLUME_COMMAND
+end -- class VOLUME
