@@ -10,12 +10,7 @@ import java.net.*;
 import java.util.*;
 import java.io.*;
 import mas_gui.*;
-import support.IO_URL_Connection;
-import support.Configuration;
-import support.ErrorBox;
-import support.Tokenizer;
-import support.SelfContainedConfiguration;
-import support.ParameterBasedConfigurationModifier;
+import support.*;
 
 // The Market Analysis System charting applet
 public class MAS_Applet extends JApplet {
@@ -52,18 +47,18 @@ public class MAS_Applet extends JApplet {
 
 	public String[][] getParameterInfo() {
 		String result[][] = {
-			{Configuration.Background_color, color_type, Bg_color_description},
-			{Configuration.Text_color, color_type, Text_color_description},
-			{Configuration.Line_color, color_type, Line_color_description},
-			{Configuration.Bar_color, color_type, Bar_color_description},
-			{Configuration.Stick_color, color_type, Stick_color_description},
-			{Configuration.Reference_line_color, color_type,
+			{MA_Configuration.Background_color, color_type, Bg_color_description},
+			{MA_Configuration.Text_color, color_type, Text_color_description},
+			{MA_Configuration.Line_color, color_type, Line_color_description},
+			{MA_Configuration.Bar_color, color_type, Bar_color_description},
+			{MA_Configuration.Stick_color, color_type, Stick_color_description},
+			{MA_Configuration.Reference_line_color, color_type,
 				Reference_line_color_description},
-			{Configuration.Black_candle_color, color_type,
+			{MA_Configuration.Black_candle_color, color_type,
 				Black_candle_color_description},
-			{Configuration.White_candle_color, color_type,
+			{MA_Configuration.White_candle_color, color_type,
 				White_candle_color_description},
-			{Configuration.Main_graph_style, graph_type,
+			{MA_Configuration.Main_graph_style, graph_type,
 				Graph_style_description},
 		};
 		return result;
@@ -97,31 +92,29 @@ public class MAS_Applet extends JApplet {
 		if (compression()) {
 			result = new CompressedConnection(io_connection);
 		} else {
-			result = new MA_Connection(io_connection);
+			result = new Connection(io_connection);
 		}
 
 		return result;
 	}
 
 	private void initialize_configuration() {
-		String[] icon_names = Configuration.icon_names();
+		String[] icon_names = MA_Configuration.icon_names();
 		Hashtable icon_table = new Hashtable();
-		Configuration.set_icon_table(icon_table);
+		MA_Configuration.set_icon_table(icon_table);
 		initialization_succeeded = false;
 		try {
-			Configuration.set_input_source(new Tokenizer(new StringReader(
-				SelfContainedConfiguration.contents()),
-				"configuration settings"));
+			Configuration.set_instance(new MA_Configuration(new Tokenizer(
+				new StringReader(SelfContainedConfiguration.contents()),
+				"configuration settings")));
 			Configuration.set_ignore_termination(true);
-			Configuration.set_modifier(new ParameterBasedConfigurationModifier(
+			MA_Configuration.set_modifier(
+				new ParameterBasedConfigurationModifier(
 				parameter_names(), parameter_values()));
 			initialization_succeeded = true;
 		} catch (IOException e) {
 			report_error("Initialization failed: " + e);
 		}
-		// Create and put the "icon images" into the Configuration's
-		// 'icon_table' to make them available to the components that
-		// need them.
 		for (int i = 0; i < icon_names.length; ++i) {
 			URL url = url_for(icon_path + icon_names[i]);
 			if (url != null) {
@@ -158,15 +151,15 @@ public class MAS_Applet extends JApplet {
 	//@@These features probably need to go into a separate class.
 	private String[] parameter_names() {
 		String[] result = {
-			Configuration.Background_color,
-			Configuration.Text_color,
-			Configuration.Line_color,
-			Configuration.Bar_color,
-			Configuration.Stick_color,
-			Configuration.Reference_line_color,
-			Configuration.Black_candle_color,
-			Configuration.White_candle_color,
-			Configuration.Main_graph_style,
+			MA_Configuration.Background_color,
+			MA_Configuration.Text_color,
+			MA_Configuration.Line_color,
+			MA_Configuration.Bar_color,
+			MA_Configuration.Stick_color,
+			MA_Configuration.Reference_line_color,
+			MA_Configuration.Black_candle_color,
+			MA_Configuration.White_candle_color,
+			MA_Configuration.Main_graph_style,
 		};
 		return result;
 	}
