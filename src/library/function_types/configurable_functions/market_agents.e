@@ -18,15 +18,22 @@ feature -- Access
 			-- Simple function for testing - give result of list of 100s
 	local
 		ml: LIST [MARKET_TUPLE]
+		i: INTEGER
 	do
 print ("test_function start%N")
 		create Result.make (0)
-		if not l.is_empty and then not l.first.output.is_empty then
-			ml := l.first.output
+		if not l.is_empty and then not l.last.output.is_empty then
+			ml := l.last.output
+			i := 100
 			from ml.start until ml.exhausted loop
 				Result.extend (create {SIMPLE_TUPLE}.make (ml.item.date_time,
-					ml.item.date_time.date, 100))
+					ml.item.date_time.date, i))
 				ml.forth
+				if i < 200 then
+					i := i + 1
+				else
+					i := 100
+				end
 			end
 		end
 print ("l.count, Result.count: " + l.count.out + ", " + Result.count.out + "%N")

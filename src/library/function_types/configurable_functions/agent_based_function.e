@@ -37,6 +37,7 @@ feature {NONE} -- Initialization
 				inputs := ins
 			end
 print ("function was set to: " + function.out + "%N")
+print ("inputs.count: " + inputs.count.out + "%N")
 		ensure
 			set: operator = op and function_key = fkey and
 				(ins /= Void implies inputs = ins)
@@ -147,6 +148,7 @@ feature -- Status report
 
 	processed: BOOLEAN is
 		do
+			Result := processed_date_time /= Void
 			--!!!!!Stub
 		end
 
@@ -181,11 +183,24 @@ feature {FACTORY} -- Status setting
 
 	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
 		do
+print ("set_innermost_input called with in.count: " + in.count.out + "%N")
 			-- !!!!Stub - Look at set_innermost_input implentation in
 			-- ONE_VARIABLE_FUNCTION and decide if that logic applies here.
 --!!!For experimentation/testing - may be appropriate in final implementation
 --inside of a guard:
-inputs.extend (in)
+if
+	inputs.is_empty or else inputs.count = 1 and not inputs.first.is_complex
+then
+	inputs.wipe_out
+	inputs.extend (in)
+else
+	from inputs.start until inputs.exhausted loop
+		inputs.item.set_innermost_input (in)
+		print ("is_complex: " + inputs.item.is_complex.out + "%N")
+		inputs.forth
+	end
+ end
+print ("set_innermost_input - inputs.count: " + inputs.count.out + "%N")
 			output.wipe_out
 		end
 
