@@ -15,6 +15,13 @@ class LIST_SELECTION_WINDOW inherit
 			default_create, copy
 		end
 
+	GUI_TOOLS
+		export
+			{NONE} all
+		undefine
+			default_create, copy
+		end
+
 create
 
 	make
@@ -50,17 +57,13 @@ feature {NONE} -- Implementation - initialization
 	create_contents (rows: LIST [LIST [STRING]]) is
 		local
 			wbldr: expanded WIDGET_BUILDER
-			accel: EV_ACCELERATOR
-			key_const: expanded EV_KEY_CONSTANTS
 		do
 			-- Avoid flicker on some platforms.
 			lock_update
 			extend (components (rows))
-			accel := wbldr.default_accelerator (key_const.key_w)
-			accelerators.extend (accel)
-			accel.actions.extend (agent destroy)
+			add_close_window_accelerator (Current)
 			close_request_actions.extend (agent destroy)
-			key_press_actions.extend (agent close_on_esc)
+			key_press_actions.extend (agent close_on_esc (?, Current))
 			-- Allow screen refresh on some platoforms.
 			unlock_update
 		end
@@ -178,15 +181,6 @@ feature {NONE} -- Implementation
 		do
 			notify_clients
 			destroy
-		end
-
-	close_on_esc (k: EV_KEY) is
-		local
-			key_constants: expanded EV_KEY_CONSTANTS
-		do
-			if k.code = key_constants.key_escape then
-				destroy
-			end
 		end
 
 invariant

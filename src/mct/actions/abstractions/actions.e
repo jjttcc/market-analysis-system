@@ -80,12 +80,11 @@ feature -- Actions
 	show_help_introduction is
 			-- Display the "Help -> MCT Introduction".
 		local
-			intro_dialog: EV_INFORMATION_DIALOG
+			help_tools: expanded HELP_TOOLS
+			intro_window: EV_WINDOW
 		do
-			create intro_dialog.make_with_text (
-				"MAS Control Terminal Introduction%N%N(To be completed)")
-			intro_dialog.set_title ("MAS Control Terminal Introduction")
-			intro_dialog.show_modal_to_window (owner_window)
+			intro_window := help_tools.introduction
+			intro_window.show
 		end
 
 feature {NONE} -- Implementation - utilities
