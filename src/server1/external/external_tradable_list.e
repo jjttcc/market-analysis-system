@@ -14,7 +14,7 @@ class EXTERNAL_TRADABLE_LIST inherit
 		export
 			{NONE} tl_make
 		redefine
-			setup_input_medium, close_input_medium
+			setup_input_medium
 		end
 
 	EXCEPTIONS
@@ -77,16 +77,6 @@ feature {NONE} -- Implementation
 			end
 			input_sequence.set_symbol (current_symbol)
 			tradable_factory.set_input (input_sequence)
-		end
-
-	close_input_medium is
-		local
-			db: MAS_DB_SERVICES
-		do
-			input_sequence.close_input
-			if input_sequence.error_occurred then
-				log_error (input_sequence.error_string)
-			end
 		end
 
 invariant
