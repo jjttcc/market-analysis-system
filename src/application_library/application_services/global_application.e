@@ -109,11 +109,13 @@ feature -- Access
 	function_library: STORABLE_LIST [MARKET_FUNCTION] is
 			-- All defined market functions
 		do
+print ("function_library called")
 			if cached_function_library = Void then
-print ("function_library called with cached fl void.%N")
+print (" - cached lib void.%N")
 				cached_function_library := retrieved_function_library
 			end
 			Result := cached_function_library
+print ("%N")
 		ensure
 			cached: Result = cached_function_library
 			not_void: Result /= Void
@@ -122,11 +124,13 @@ print ("function_library called with cached fl void.%N")
 	market_event_generation_library: STORABLE_LIST [MARKET_EVENT_GENERATOR] is
 			-- All defined event generators
 		do
-print ("meg_library called.%N")
+print ("meg_library called")
 			if cached_meg_library = Void then
+print (" - cached lib void.%N")
 				cached_meg_library := retrieved_market_event_generation_library
 			end
 			Result := cached_meg_library
+print ("%N")
 		ensure
 			cached: Result = cached_meg_library
 			not_void: Result /= Void
@@ -134,18 +138,14 @@ print ("meg_library called.%N")
 
 	market_event_registrants: STORABLE_LIST [MARKET_EVENT_REGISTRANT] is
 			-- All defined event registrants
-		local
-			storable: STORABLE
-			reg_list: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
-			retrieval_failed: BOOLEAN
-			app_env: expanded APP_ENVIRONMENT
-			full_path_name: STRING
 		do
-print ("mer called.%N")
+print ("mer called")
 			if cached_event_registrants = Void then
+print (" - cached lib void.%N")
 				cached_event_registrants := retrieved_market_event_registrants
 			end
 			Result := cached_event_registrants
+print ("%N")
 		ensure
 			cached: Result = cached_event_registrants
 			not_void: Result /= Void
