@@ -102,7 +102,7 @@ Source: "lib\config\wma_of_midpoint"; DestDir: "{app}\lib\config"; CopyMode: alw
 Source: "lib\config\wma_of_midpoint2"; DestDir: "{app}\lib\config"; CopyMode: alwaysoverwrite
 Source: "lib\.ma_clientrc"; DestDir: "{app}\lib\classes"; CopyMode: alwaysoverwrite
 Source: "lib\classes\CL_Client.class"; DestDir: "{app}\lib\classes"; CopyMode: alwaysoverwrite
-Source: "lib\classes\mas_gui\mascharts.jar"; DestDir: "{app}\lib\classes"; CopyMode: alwaysoverwrite
+Source: "lib\classes\mascharts.jar"; DestDir: "{app}\lib\classes"; CopyMode: alwaysoverwrite
 Source: "lib\data\tradables\*.txt"; DestDir: "{app}\lib\data"; CopyMode: alwaysoverwrite
 Source: "lib\data\tradables\*.CSF"; DestDir: "{app}\lib\data"; CopyMode: alwaysoverwrite
 Source: "lib\data\tradables\*.5-minute"; DestDir: "{app}\lib\data"; CopyMode: alwaysoverwrite
