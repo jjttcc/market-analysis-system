@@ -504,7 +504,9 @@ feature {NONE} -- Hard-coded market function building procedures
 		local
 			agents: expanded MARKET_AGENTS
 		do
-			create Result.make (agents.one_hundreds_key, Void, Void)
+			create Result.make (agents.Sma_key, Void, Void)
+			Result.add_parameter (create {INTEGER_FUNCTION_PARAMETER}.make (
+				Result, 13))
 			Result.set_name (name)
 		end
 

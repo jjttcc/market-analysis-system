@@ -12,7 +12,8 @@ class AGENT_BASED_FUNCTION inherit
 
 	COMPLEX_FUNCTION
 		redefine
-			set_innermost_input, operators, reset_parameters, operator_used
+			set_innermost_input, operators, reset_parameters, operator_used,
+			immediate_parameters
 		end
 
 creation {FACTORY, MARKET_FUNCTION_EDITOR}
@@ -36,6 +37,7 @@ feature {NONE} -- Initialization
 			else
 				inputs := ins
 			end
+			create immediate_parameters.make
 print ("function was set to: " + function.out + "%N")
 print ("inputs.count: " + inputs.count.out + "%N")
 		ensure
@@ -51,7 +53,7 @@ feature -- Access
 			create Result
 		end
 
-	function: FUNCTION [ANY, TUPLE [LIST [MARKET_FUNCTION]],
+	function: FUNCTION [ANY, TUPLE [like Current],
 		MARKET_TUPLE_LIST [MARKET_TUPLE]] is
 			-- Agent to be used for processing
 		do
@@ -92,6 +94,7 @@ feature -- Access
 			-- Stub !!!!Implementation to be determined
  if parameter_list = Void then
 	create parameter_list.make
+	parameter_list := immediate_parameters	--!!!temporary
  end
  Result := parameter_list
 		end
@@ -144,6 +147,8 @@ feature -- Access
 			end
 		end
 
+	immediate_parameters: LINKED_LIST [FUNCTION_PARAMETER]
+
 feature -- Status report
 
 	processed: BOOLEAN is
@@ -165,7 +170,7 @@ feature {NONE}
 			-- Execute the function.
 		do
 print ("do_process start - function: " + function.out + "%N")
-			output := function.item ([inputs])
+			output := function.item ([Current])
 print ("do_process end%N")
 		end
 
@@ -184,6 +189,7 @@ feature {FACTORY} -- Status setting
 	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
 		do
 print ("set_innermost_input called with in.count: " + in.count.out + "%N")
+processed_date_time := Void
 			-- !!!!Stub - Look at set_innermost_input implentation in
 			-- ONE_VARIABLE_FUNCTION and decide if that logic applies here.
 --!!!For experimentation/testing - may be appropriate in final implementation
@@ -212,7 +218,13 @@ feature {MARKET_FUNCTION_EDITOR}
 			-- !!!!! Call reset_parameters on all inputs.
 		end
 
-feature {MARKET_FUNCTION_EDITOR}
+	add_parameter (p: FUNCTION_PARAMETER) is
+			-- Add `p' to `parameters'.
+		do
+			immediate_parameters.extend (p)
+		end
+
+feature {MARKET_FUNCTION_EDITOR, MARKET_AGENTS}
 
 	inputs: ARRAYED_LIST [MARKET_FUNCTION]
 			-- All inputs to be used for processing
@@ -243,4 +255,4 @@ invariant
 	function_exists: function /= Void
 	function_definition: function = agent_table @ function_key
 
-end -- class ONE_VARIABLE_FUNCTION
+end
