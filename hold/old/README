@@ -1,0 +1,12 @@
+In here go old cvs-ified files that are either old and possibly obsolete,
+but may be reinstated, or cvs-ified files kept here for the purpose of
+keeping the cvs history of a file where keeping a file with its original
+cvs history in its proper place is not convenient, such as in the situation
+caused by my error when I asked the sourceforge cvs administrator to move
+some files into subdirectories of
+/home/development/jtc/finance/src/eiffel_library (the sym-linked directory)
+instead of /home/development/jtc/eiffel_library.  In this case I just
+created new cvs versions of the current files in order to not have to
+wait for the cvs sysadmin to fix my error.  The files put in the
+/home/development/jtc/finance/src/eiffel_library directory, which contain
+original cvs history, are to go in here.
