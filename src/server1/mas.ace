@@ -1,0 +1,307 @@
+system
+	"mas"
+
+root
+	MA_SERVER: make
+
+default
+	assertion (check)
+	assertion (require)
+	assertion (ensure)
+	assertion (loop)
+	assertion (invariant)
+	assertion (no)
+	arguments ("-o -f , -w 12345")
+	arguments ("-o -p")
+	arguments ("-o -p 3333")
+	arguments ("-o -p 3332")
+	arguments ("-o -f , amzn.txt none.txt ibm.txt")
+	arguments ("-o -p 2345")
+	arguments ("-o -f , -w")
+	arguments ("-o -f , ")
+	arguments ("-o -f , aa.txt 2345")
+	arguments ("-o -f , aa.txt")
+	arguments (" ")
+	disabled_debug (yes)
+	disabled_debug ("compression")
+	disabled_debug ("database")
+	disabled_debug ("editing")
+	disabled_debug ("object_editing")
+	disabled_debug ("persist")
+	line_generation (no)
+	profile (no)
+	trace (no)
+	check_vape (yes)
+	console_application (no)
+	address_expression (no)
+	array_optimization (yes)
+	dead_code_removal (yes)
+	dynamic_runtime (no)
+	exception_trace (no)
+	inlining (yes)
+	inlining_size ("0")
+	multithreaded (no)
+
+
+--	assertion (no)
+--	debug (no)
+--debug ("editing");
+--debug ("persist");
+--debug ("command line");
+--debug ("database");
+--debug ("compression");
+--precompiled ("$ISE_EIFFEL/precomp/spec/$PLATFORM/base");
+-- Version with odbc statically linked:
+-- object:	"${ISE_EIFFEL}/library/time/spec/${PLATFORM}/lib/libdatetime.a",
+--			"${ISE_EIFFEL}/library/net/spec/${PLATFORM}/lib/libnet.a",
+--			"${ISE_EIFFEL}/library/store/spec/${PLATFORM}/lib/libsupport.a",
+--			"${ECLI}/src/spec/Ise/linux/libecli_c.a",
+--			"/usr/local/lib/libodbc.a",
+--			"${MAS}/src/eiffel_library/lib/utilities.o",
+--			"${MAS}/src/eiffel_library/lib/libz.a",
+--			"${MAS}/src/server1/lib/external_input_sequence.a",
+--			"/usr/lib/libdl.a";
+-- Version with odbc dynamically linked:
+--			"${ISE_EIFFEL}/library/store/spec/${ISE_PLATFORM}/lib/libsupport.a",
+
+cluster
+
+	server:		"$MAS/src/server1"
+
+	abstractions (server):		"$/abstractions"
+
+	factories (server):		"$/factories"
+
+	network (server):		"$/network"
+
+	root_cluster (server):		"$/root"
+
+	app_server_utility (server):		"$/utility"
+
+	interface (server):		"$/interface"
+
+	server_global (server):		"$/global"
+
+	system_specific (server):		"$/system_specific/unix"
+
+	configuration (server):		"$/configuration"
+
+	data_retrieval (server):		"$/data_retrieval"
+
+	database (server):		"$/database"
+
+	database_odbc (server):		"$/database/odbc"
+
+	database_ecli (server):		"$/database/ecli"
+
+	database_stub (server):		"$/database/stub"
+
+	external_components (server):		"$/external"
+
+	protocols (server):		"$/protocols"
+
+	tradable_list (server):		"$/tradable_list"
+
+	stock_splits (server):		"$/stock_splits"
+
+	app_library:		"$MAS/src/application_library"
+
+	app_events (app_library):		"$/events"
+
+	app_global (app_library):		"$/global"
+
+	app_utility (app_library):		"$/utility"
+
+	app_factories (app_library):		"$/factories"
+
+	app_editing (app_library):		"$/editing"
+
+	app_services (app_library):		"$/application_services"
+
+	ma_library:		"$MAS/src/library"
+
+	function_abstractions (ma_library):		"$/function_abstractions"
+
+	function_types (ma_library):		"$/function_types"
+
+	commands (ma_library):		"$/commands"
+
+	markets (ma_library):		"$/markets"
+
+	structural (ma_library):		"$/structural"
+
+	tuple_types (ma_library):		"$/tuple_types"
+
+	data_scanning (ma_library):		"$/data_scanning"
+
+	events (ma_library):		"$/events"
+
+	global (ma_library):		"$/global"
+
+	event_generation (ma_library):		"$/event_generation"
+
+	market_analysis_tools (ma_library):		"$/market_analysis_tools"
+
+	configuragle_functions (function_types):		"$/configurable_functions"
+
+	specific_functions (function_types):		"$/specific_functions"
+
+	command_structures (commands):		"$/command_structures"
+
+	linear_commands (commands):		"$/linear_commands"
+
+	n_based_commands (commands):		"$/n_based_commands"
+
+	simple_commands (commands):		"$/simple_commands"
+
+	value_setters (data_scanning):		"$/value_setters"
+
+	tuple_factories (data_scanning):		"$/tuple_factories"
+
+	data_scanners (data_scanning):		"$/data_scanners"
+
+	event_generation_kernel (event_generation):		"$/event_generation_kernel"
+
+	function_analysis (event_generation):		"$/function_analysis"
+
+	eiffel_components:		"$MAS/src/eiffel_library"
+
+	architectural (eiffel_components):		"$/architectural"
+
+	component_support (eiffel_components):		"$/support"
+
+	eiflib_data_scanning (eiffel_components):		"$/data_scanning"
+
+	operators (eiffel_components):		"$/commands/operators"
+
+	event_library (eiffel_components):		"$/events"
+
+	component_server (eiffel_components):		"$/server"
+
+	networking (eiffel_components):		"$/networking"
+
+	eiffel_component_test (eiffel_components):		"$/test"
+
+	ise:		"$ISE_EIFFEL/library"
+
+	kernel (ise):		"$/base/kernel"
+
+	support (ise):		"$/base/support"
+
+	access (ise):		"$/base/structures/access"
+
+	cursors (ise):		"$/base/structures/cursors"
+
+	cursor_tree (ise):		"$/base/structures/cursor_tree"
+
+	dispenser (ise):		"$/base/structures/dispenser"
+
+	iteration (ise):		"$/base/structures/iteration"
+
+	list (ise):		"$/base/structures/list"
+
+	set (ise):		"$/base/structures/set"
+
+	setstrategies (ise):		"$/base/structures/set/strategies"
+
+	sort (ise):		"$/base/structures/sort"
+
+	storage (ise):		"$/base/structures/storage"
+
+	table (ise):		"$/base/structures/table"
+
+	traversing (ise):		"$/base/structures/traversing"
+
+	tree (ise):		"$/base/structures/tree"
+
+	date (ise):		"$/time"
+
+	date_format (date):		"$/format"
+
+	date_tools (date_format):		"$/english"
+
+	net (ise):		"$/net"
+
+	http_resources (net):		"$/transfer/resources"
+
+	http_addresses (net):		"$/transfer/addresses"
+
+	http_comparators (net):		"$/transfer/addresses/comparators"
+
+	abstract_socket (net):		"$/abstract/socket"
+
+	net_socket (net):		"$/network/socket"
+
+	local_socket (net):		"$/local/socket"
+
+	polling_abstract (net):		"$/polling/abstract"
+
+	polling_implementation (net):		"$/polling/implementation"
+
+	store (ise):		"$/store"
+
+	estore_interface (store):		"$/interface"
+
+	estore_support (store):		"$/support"
+
+	dbms (store):		"$/dbms"
+
+	db_support (dbms):		"$/support"
+
+	rdbms (dbms):		"$/rdbms"
+
+	odbc (rdbms):		"$/odbc"
+
+	ecli_src:		"$ECLI/src"
+
+	abstract (ecli_src):		"$/abstract"
+
+	ecli_spec (ecli_src):		"$/spec"
+
+	ecli_spec_ise (ecli_spec):		"$/Ise"
+
+	ecli_data (ecli_src):		"$/data"
+
+	ecli_pattern (ecli_src):		"$/pattern"
+
+	ut_command:		"$GOBO/library/utility/command"
+
+	ut_error:		"$GOBO/library/utility/error"
+
+	ut_formatter:		"$GOBO/library/utility/formatter"
+
+	ut_support:		"$GOBO/library/utility/support"
+
+	kl_kernel:		"$GOBO/library/kernel"
+
+	kl_kernel_spec:		"$GOBO/library/kernel/spec/ise"
+
+	ds_container:		"$GOBO/library/structure/container"
+
+	ds_dispenser:		"$GOBO/library/structure/dispenser"
+
+	ds_list:		"$GOBO/library/structure/list"
+
+	ds_sort:		"$GOBO/library/structure/sort"
+
+	ds_support:		"$GOBO/library/structure/support"
+
+	ds_table:		"$GOBO/library/structure/table"
+
+	ds_date:		"$GOBO/library/time/date"
+
+external
+
+	include_path:
+		"$ISE_EIFFEL/library/time/Clib"
+
+	object:
+		"${ISE_EIFFEL}/library/time/spec/${ISE_PLATFORM}/lib/libdatetime.a",
+		"${ISE_EIFFEL}/library/net/spec/${ISE_PLATFORM}/lib/libnet.a",
+		"${ECLI}/src/spec/Ise/linux/libecli_c.a",
+		"/${MAS}/src/eiffel_library/lib/utilities.o",
+		"${ISE_EIFFEL}/C_library/zlib/libz.a",
+		"${MAS}/src/server1/lib/external_input_sequence.a",
+		"-lodbc"
+
+end
