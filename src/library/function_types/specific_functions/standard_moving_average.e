@@ -44,7 +44,7 @@ feature -- Access
 
 feature {NONE} -- Initialization
 
-	make (in: like input; op: BASIC_NUMERIC_COMMAND; i: INTEGER) is
+	make (in: like input; op: like operator; i: INTEGER) is
 		do
 			check operator_used end
 			!!sum.make (in.output, op, i)
@@ -65,25 +65,28 @@ feature {NONE} -- Basic operations
 			check
 				output_empty: output.empty
 			end
-			if target.count < n then
+			if target.count < effective_n then
 				-- null statement
 			else
-				check target.count >= n end
-				target.start
-				check target.index = 1 end
+				check target.count >= effective_n end
+				from target.start until
+					target.index - 1 = effective_offset
+				loop target.forth end
+				check target.index = effective_offset + 1 end
 				sum.execute (Void)
 				check
-					target.index - 1 = n
+					target.index - 1 = effective_n
 				end
 				-- The first trading period of the output is the nth trading
 				-- period of the input (target).
-				!!t.make (target.i_th (n).date_time, target.i_th (n).end_date,
-							sum.value / n)
+				!!t.make (target.i_th (effective_n).date_time,
+							target.i_th (effective_n).end_date, sum.value / n)
 				last_sum := sum.value
 				check
-					target_index_correct: target.index = n + 1
+					target_index_correct: target.index = effective_n + 1
 				end
-				-- sum.value = sum of first n elements of target.
+				-- sum.value = sum applied to
+				--   target[effective_offset+1 .. effective_n]
 				output.extend (t)
 				continue_until
 			end
@@ -104,7 +107,7 @@ feature {MARKET_FUNCTION_EDITOR}
 			sum.initialize (Current)
 		end
 
-	set_operator (op: BASIC_NUMERIC_COMMAND) is
+	set_operator (op: like operator) is
 			-- operator will extract the appropriate field (close, high,
 			-- open, etc.) from the market tuples being averaged, according
 			-- to its type.

@@ -1,5 +1,9 @@
 indexing
 	description: "Exponential moving average";
+	detailed_description:
+		"Applies to each tuple the formula: K * C + EMA[p](1-K), where K is %
+		%the constant result value from `exp', C is the current value, %
+		%and EMA[p] is the result from the previous tuple."
 	notes: "Formula taken from `Trading for a Living', by A. Elder"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
@@ -28,9 +32,12 @@ feature -- Access
 							%on a data sequence")
 		end
 
+	exp: N_BASED_CALCULATION
+			-- The so-called exponential (weighting value)
+
 feature {NONE} -- Initialization
 
-	make (in: like input; op: BASIC_NUMERIC_COMMAND; e: N_BASED_CALCULATION;
+	make (in: like input; op: like operator; e: N_BASED_CALCULATION;
 			i: INTEGER) is
 		require
 			args_not_void: in /= Void and e /= Void and op /= Void
@@ -71,7 +78,7 @@ feature {NONE}
 			-- Calculate exponential MA value for the current period.
 		require else
 			output_not_empty: not output.empty
-			tgindex_gt_n: target.index > n
+			tgindex_gt_n: target.index > effective_n
 		local
 			t: SIMPLE_TUPLE
 			latest_value: REAL
@@ -85,14 +92,9 @@ feature {NONE}
 			output.extend (t)
 		ensure then
 			-- output.last.value = P[curr] * exp + EMA[curr-1] * (1 - exp)
-			--   where P[curr] is the price for the current period and
-			--   EMA[curr-1] is the EMA for the previous period.
+			--   where P[curr] is the result (from `operator') for the current
+			--   period and EMA[curr-1] is the EMA for the previous period.
 		end
-
-feature {NONE}
-
-	exp: N_BASED_CALCULATION
-			-- The so-called exponential
 
 invariant
 
