@@ -42,6 +42,7 @@ feature {NONE}
 			!!help.make
 		ensure
 			fb_set: factory_builder = fb
+			mklist_set: market_list = factory_builder.market_list
 			inited: event_coordinator /= Void and market_list /= Void and
 					help /= Void
 		end
