@@ -1,0 +1,11 @@
+# Specification for cluster dependency checking with "check_dep"
+# Structure: "directory<Tab>rank"
+#    Where rank is an integer > 0 - The lower the number, the higher the
+#    abstraction level of the associated cluster.  (Clusters of a
+#    particular abstraction level should not depend on clusters of a lower
+#    abstraction level - that is, a cluster with rank n should not depend
+#    on a cluster with rank n + x, where x > 0.)
+
+library	5
+root	25
+support	9
