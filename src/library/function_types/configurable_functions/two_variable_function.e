@@ -64,7 +64,14 @@ feature -- Status report
 			input_set: Result implies input_set
 		end
 
-	processed: BOOLEAN
+	processed: BOOLEAN is
+		do
+			Result := (input1.processed and input2.processed) and then
+				target1.empty or target2.empty or not output.empty
+		ensure then
+			Result = ((input1.processed and input2.processed) and then
+				target1.empty or target2.empty or not output.empty)
+		end
 
 	input_set: BOOLEAN is
 		do
@@ -79,15 +86,18 @@ feature {NONE}
 		do
 			target1.forth
 			target2.forth
+		ensure then
+			target_indexes_incremented_by_one:
+				target1.index = old target1.index + 1
+				target2.index = old target2.index + 1
 		end
 
 	start is
 		do
 			line_up (target1, target2)
-			check
-				target1.item.date_time.is_equal (
-					target2.item.date_time)
-			end
+		ensure then
+			current_targets_dates_equal:
+				target1.item.date_time.is_equal (target2.item.date_time)
 		end
 
 	action is
@@ -129,11 +139,6 @@ feature {NONE}
 
 feature {NONE}
 
-	set_processed (b: BOOLEAN) is
-		do
-			processed := b
-		end
-
 	missing_periods (l1, l2: LINEAR [MARKET_TUPLE]): BOOLEAN is
 			-- Are there missing periods in l1 and l2 with
 			-- respect to each other?
@@ -172,6 +177,7 @@ feature {NONE}
 		local
 			l1, l2: LINEAR [MARKET_TUPLE]
 		do
+			--!!!What if t1 or t2 is empty?
 			t1.start; t2.start
 			from
 				if t1.item.date_time < t2.item.date_time then
@@ -201,12 +207,13 @@ feature {TEST_FUNCTION_FACTORY} -- Element change (Export to test class for now.
 			input2 := f2
 			target1 := f1.output
 			target2 := f2.output
-			reset_state
+			check output /= Void end
+			output.wipe_out
 		ensure
 			functions_set: input1 = f1 and input2 = f2 and
 							input1 /= Void and input2 /= Void
 			input_set: input_set
-			not_processed: not processed
+			output_empty: output.empty
 		end
 
 feature {NONE}
@@ -215,8 +222,8 @@ feature {NONE}
 
 invariant
 
-	processed_constraint:
-		processed implies input1.processed and input2.processed
+	--!!!Temp.cmmn-out:processed_constraint:
+		--!!!Temp.cmmn-out: processed implies input1.processed and input2.processed
 	input_target_relation:
 		(input1 = Void or else input1.output = target1) and
 		(input2 = Void or else input2.output = target2)

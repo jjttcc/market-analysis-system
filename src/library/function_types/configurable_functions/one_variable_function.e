@@ -33,9 +33,18 @@ feature -- Access
 
 	output: MARKET_TUPLE_LIST [MARKET_TUPLE]
 
-	processed: BOOLEAN
-
 feature -- Status report
+
+	processed: BOOLEAN is
+		do
+			Result :=
+						input = Void or --!!!Remove this line soon.
+			input.processed and then
+				(target.empty or not output.empty)
+		ensure then
+			processed_definition: Result = (input.processed and then
+				(target.empty or not output.empty))
+		end
 
 	arg_used: BOOLEAN is false
 
@@ -51,7 +60,7 @@ feature {NONE}
 			t.set_date_time (target.item.date_time)
 			output.extend (t)
 		ensure then
-			-- output.count = old (output.count) + 1
+			output.count = old (output.count) + 1
 		end
 
 	do_process is
@@ -73,13 +82,6 @@ feature {NONE}
 
 	input: MARKET_FUNCTION
 
-feature {NONE}
-
-	set_processed (b: BOOLEAN) is
-		do
-			processed := b
-		end
-
 feature {TEST_FUNCTION_FACTORY} -- Element change
 
 	set_input (in: like input) is
@@ -90,16 +92,17 @@ feature {TEST_FUNCTION_FACTORY} -- Element change
 		do
 			input := in
 			set_target (input.output)
-			reset_state
+			check output /= Void end
+			output.wipe_out
 		ensure
 			input_set_to_in: input = in
 			input_set: target_set
-			not_processed: not processed
+			output_empty: output.empty
 		end
 
 invariant
 
-	processed_constraint: processed implies input.processed
+	--!!!Temp. comm-out: processed_constraint: processed implies input.processed
 	input_target_relation: input = Void or else input.output = target
 
 end -- class ONE_VARIABLE_FUNCTION
