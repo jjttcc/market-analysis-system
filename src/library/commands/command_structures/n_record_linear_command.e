@@ -34,7 +34,7 @@ creation {NONE} -- Hidden creation routine to prevent instantiation
 
 	make
 
-feature -- Initialization
+feature {NONE} -- Initialization
 
 	make (t: CHAIN [MARKET_TUPLE]; i: like n) is
 		require
@@ -46,6 +46,8 @@ feature -- Initialization
 		ensure
 			set: target = t and n = i
 		end
+
+feature {MARKET_FUNCTION} -- Initialization
 
 	initialize (arg: N_RECORD_STRUCTURE) is
 		local
