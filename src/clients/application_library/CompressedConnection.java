@@ -29,7 +29,7 @@ public class CompressedConnection extends Connection
 			System.err.println("Failed to read from server (" + e + ")");
 			System.exit(1);
 		}
-System.out.println("decompressing");
+//System.out.println("decompressing");
 		return result;
 	}
 
