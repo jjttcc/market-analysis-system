@@ -225,6 +225,7 @@ feature {NONE} -- Implementation
 		do
 			!!real_formatter.make (5, 5)
 			!!int_formatter.make (5)
+			int_formatter.no_justify
 			if not l.empty then
 				if l.first.open_available then
 					print_open := true
@@ -267,6 +268,7 @@ feature {NONE} -- Implementation
 		do
 			!!real_formatter.make (5, 5)
 			!!int_formatter.make (5)
+			int_formatter.no_justify
 			if not l.empty then
 				if l.first.open_available then
 					print_open := true
