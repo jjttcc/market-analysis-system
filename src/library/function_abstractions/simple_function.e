@@ -78,6 +78,17 @@ feature -- Access
 			!!Result.make (-500, 1, 1, 0, 0, 0)
 		end
 
+feature {FACTORY} -- Status setting
+
+	finish_loading is
+			-- Notify this instance that the process of loading its
+			-- data is finished.  Does nothing here - may change the
+			-- object's state in descendants.
+			-- The class that loads the data into this object should
+			-- always call this procedure after the load process ends.
+		do
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is
