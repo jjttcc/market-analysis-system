@@ -3,9 +3,9 @@
 m
 c
 c
-MACD Difference/Signal Cross-above (Buy)
+MACD Crossover (Buy)
 y
-Stochastic %D Cross Below 35% (Buy)
+Stochastic %D Crossover (Buy)
 y
 y
 d
@@ -17,9 +17,9 @@ MACD Crossover and Stochastic %D Crossover (Buy)
 s
 c
 c
-MACD Difference/Signal Cross-below (Sell)
+MACD Crossover (Sell)
 y
-Stochastic %D Cross Above 65% (Sell)
+Stochastic %D Crossover (Sell)
 y
 y
 d
