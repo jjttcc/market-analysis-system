@@ -14,7 +14,7 @@ class NUMERIC_ASSIGNMENT_COMMAND inherit
 		rename
 			operand as main_operator
 		redefine
-			operate
+			operate, children
 		end
 
 	MATH_CONSTANTS
@@ -46,6 +46,12 @@ feature -- Access
 	target: NUMERIC_VALUE_COMMAND
 			-- The "target" object - updated with the last calculated value.
 
+	children: LIST [COMMAND] is
+		do
+			Result := Precursor
+			Result.extend (target)
+		end
+
 feature -- Element change
 
 	set_target (arg: NUMERIC_VALUE_COMMAND) is
@@ -71,6 +77,6 @@ feature -- Basic operations
 
 invariant
 
-	operators_exist: main_operator /= Void and target /= Void
+	operators_exist: target /= Void
 
 end
