@@ -1,0 +1,9 @@
+# For Windows - create external_input_sequence.lib
+set -x
+Includes="-IC:/Eiffel51/studio/spec/windows/include"
+Libfile=external_input_sequence.lib
+Libdir=../lib
+external_input_sequence_plug_in_module.h
+bcc32 -c -DBCC $Includes *.c &&
+tlib $Libfile +external_input_sequence.obj +plug_in_module_1.obj &&
+mv $Libfile $Libdir
