@@ -13,7 +13,9 @@ import application_support.MA_Configuration;
 // The Market Analysis GUI menu bar
 public class MA_MenuBar extends MenuBar {
 
-	MA_MenuBar(Chart c, DataSetBuilder builder, Vector period_types) {
+	MA_MenuBar(Chart c, DataSetBuilder builder, Vector period_types)
+			throws Exception {
+
 		data_builder = builder;
 		chart = c;
 		menu_bar = this;
