@@ -7,7 +7,6 @@ indexing
 		%Released under the Eiffel Forum License; see file forum.txt"
 
 class MAS_SESSION inherit
---!!!Remember to change the file name to fit the new class name.
 
 	SESSION
 
@@ -40,6 +39,10 @@ feature -- Access
 
 	caching_on: BOOLEAN
 			-- Is market data being cached?
+
+	login_date: DATE_TIME
+
+	logoff_date: DATE_TIME
 
 feature -- Element change
 
