@@ -20,6 +20,7 @@ feature -- Access
 
 	left_generator, right_generator: MARKET_EVENT_GENERATOR
 			-- The left and right generators to be contained by the new CEG
+			xxxx
 
 feature -- Status setting
 
