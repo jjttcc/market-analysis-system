@@ -21,22 +21,16 @@ class CONFIGURABLE_N_RECORD_FUNCTION inherit
 		undefine
 			forth, do_process
 		redefine
-			set_n, short_description, start,
-			initialize_operators
-		select
-			target, operator
+			set_n, short_description, start, initialize_operators, target
 		end
 
 	FUNCTION_WITH_FIRST_AND_PREVIOUS_OPERATORS
-		rename
-			target as accum_target_unused,
-			operator as accum_operator_unused
 		export
 			{NONE} set_operator
 		undefine
 			immediate_parameters, set_operator
 		redefine
-			short_description, start, initialize_operators
+			short_description, start, initialize_operators, target
 		end
 
 creation {FACTORY, MARKET_FUNCTION_EDITOR}
@@ -44,6 +38,8 @@ creation {FACTORY, MARKET_FUNCTION_EDITOR}
 	make
 
 feature -- Access
+
+target: ARRAYED_LIST [MARKET_TUPLE]
 
 	short_description: STRING is
 		do
