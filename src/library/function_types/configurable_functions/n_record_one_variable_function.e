@@ -94,7 +94,7 @@ feature {NONE}
 
 	target: ARRAYED_LIST [MARKET_TUPLE]
 
-feature {TEST_FUNCTION_FACTORY}
+feature {FACTORY}
 
 	set_n (value: INTEGER) is
 		do
