@@ -1,7 +1,7 @@
 indexing
 	description:
 		"A numeric command that operates on a market tuple (passed in via%
-		%the execute feature."
+		%the execute feature)."
 	date: "$Date$";
 	revision: "$Revision$"
 
