@@ -1,0 +1,49 @@
+# Sample http configuration file - set up for yahoo.com
+# (Currently, only end-of-day data retrieval is available.  Intraday may be
+# added later.)
+
+# Format: "label_string<tab>setting"
+
+# Specification for the start and end dates for the data to be retrieved
+# "now" means, of course, the current date; if an actual date is used,
+# it must be of the form: yyyymmdd.
+eod_start_date	now - 4 years
+eod_end_date	now
+
+# The host component of the http URL used to retrieve market data
+host	chart.yahoo.com
+
+# The path component of the http URL used to retrieve market data
+path	table.csv?s=<symbol>&a=<startmonth>&b=<startday>&c=<startyear>&d=<endmonth>&e=<endday>&f=<endyear>&g=d&q=q&y=0&z=<symbol>&x=.csv
+
+# Path of the file that contains the list of symbols for the tradables to
+# be downloaded.  (In this case it's expected to be in the current
+# directory.)
+symbol_file	symbols
+
+# The field separator to use for output when converting the retrieved data
+# Must be just one character; If not specified, comma will be used.
+output_field_separator	,
+
+# The command to post-process the retrieved data, usually for the purpose of
+# converting it into an expected format.  In this case, the specification
+# is for a conversion component called "yahoo", which, as of July 2002, is
+# the only internal conversion component available; more may be added later.
+post_process_command	yahoo
+#post_process_command	[none]
+
+# The time at which to attempt to retrieve the latest end-of-day data from
+# the http data-source site.  It should be in the user's local time.
+# This needs to be set carefully: Too early and a lot of time will be wasted
+# trying to retrieve data that doesn't exist yet; too late and your data
+# will not be as up-to-date as it could be.  Format: hh:mm (24-hour clock)
+eod_turnover_time	17:00
+
+# These specifications prevent unecessary retrieval of data on a weekend
+# if the current time is later than eod_turnover_time.  If data does need
+# to be retrieved, remove or comment out the appropriate specification;
+# for example, if a tradable is traded on Saturday and end-of-day data for
+# it is available, comment out the "ignore_day_of_week	saturday"
+# specification.
+ignore_day_of_week	saturday
+ignore_day_of_week	sunday
