@@ -58,7 +58,7 @@ public class DataSet {
 
 	public void set_times (String t[]) {
 		times = t;
-//??? _drawer.set_times(d);
+		_drawer.set_times(t);
 	}
 
 	public Drawer drawer() { return _drawer; }
@@ -150,6 +150,7 @@ public class DataSet {
 		_drawer = d;
 		data = null;
 		date_drawer = new DateDrawer(d.market_drawer(), d.is_indicator());
+		time_drawer = new TimeDrawer(d.market_drawer(), d.is_indicator());
 		_dates_needed = true;
 		tuple_count = 0;
 	}
@@ -180,6 +181,8 @@ public class DataSet {
 		int i;
 		_drawer = drawer;
 		date_drawer = new DateDrawer(drawer.market_drawer(),
+										drawer.is_indicator());
+		time_drawer = new TimeDrawer(drawer.market_drawer(),
 										drawer.is_indicator());
 		data = d;
 
@@ -250,7 +253,13 @@ public class DataSet {
 		_drawer.set_ranges(xrange, yrange);
 		_drawer.set_clipping(clipping);
 		_drawer.draw_data(g, bounds, hline_data, vline_data, color_);
-		if (_dates_needed) draw_dates(g, bounds);
+		if (_dates_needed) {
+			if (times != null) {
+				draw_times(g, bounds);
+			} else if (dates != null)  {
+				draw_dates(g, bounds);
+			}
+		}
 		if (restore_bounds) {
 			bounds.x -= 4;
 			bounds.width += 4;
@@ -337,13 +346,30 @@ public class DataSet {
 	*/
 	protected void draw_dates(Graphics g, Rectangle w) {
 		if (dates != null) {
-			date_drawer.set_data(dates);
+//Remove?: date_drawer.set_data(dates);
 			date_drawer.set_xaxis(xaxis_);
 			date_drawer.set_yaxis(yaxis_);
 			date_drawer.set_maxes(xmax, ymax, xmin, ymin);
 			date_drawer.set_ranges(xrange, yrange);
 			date_drawer.set_clipping(clipping);
 			date_drawer.draw_data(g, w, null, null, null);
+		}
+	}
+
+	/**
+	* Draw dates, if they exist.
+	* @param g Graphics context
+	* @param w Data Window
+	*/
+	protected void draw_times(Graphics g, Rectangle w) {
+		if (dates != null) {
+//time_drawer.set_data(dates);
+			time_drawer.set_xaxis(xaxis_);
+			time_drawer.set_yaxis(yaxis_);
+			time_drawer.set_maxes(xmax, ymax, xmin, ymin);
+			time_drawer.set_ranges(xrange, yrange);
+			time_drawer.set_clipping(clipping);
+			time_drawer.draw_data(g, w, null, null, null);
 		}
 	}
 
@@ -413,6 +439,11 @@ public class DataSet {
 	* Drawer of dates
 	*/
 	private DateDrawer date_drawer;
+
+	/**
+	* Drawer of times
+	*/
+	private TimeDrawer time_drawer;
 
 	/**
 	* The data X maximum. 
