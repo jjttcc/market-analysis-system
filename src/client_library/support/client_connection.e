@@ -1,5 +1,5 @@
 indexing
-	description: "Client socket connections to the MAS server"
+	description: "Client socket connections to a server"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -17,6 +17,9 @@ feature -- Access
 
 	port_number: INTEGER
 			-- Port number of the server
+
+	socket: NETWORK_STREAM_SOCKET
+			-- The socket used for communication with the server
 
 feature -- Status report
 
@@ -46,7 +49,29 @@ feature -- Status report
 
 feature {NONE} -- Initialization
 
-	make (host: STRING; port: INTEGER) is
+	make_connected_with_socket (skt: like socket) is
+			-- Make the connection, using the socket `skt'
+		require
+			skt_exists: skt /= Void
+		do
+			socket := skt
+			-- An exception will be thrown by this call if host/port
+			-- are invalid:
+			make_socket_connected
+			if socket.socket_ok then
+				last_communication_succeeded := True
+			else
+				error_report := Connection_failed_msg
+			end
+		ensure
+			socket_set: socket /= Void and socket = skt
+			connected_if_no_error: last_communication_succeeded implies
+				connected
+		rescue
+			error_report := Invalid_address_msg
+		end
+
+	make_tested (host: STRING; port: INTEGER) is
 			-- Set `hostname' and `port_number' to the specified values
 			-- and test the connection.  If the test fails (likely because
 			-- the address is invalid, the connection times out, or the
@@ -80,9 +105,10 @@ feature {NONE} -- Initialization
 			hostname := host
 			port_number := port
 			server_response := ""
-			-- An exception to be thrown by this call if host/port
+			socket := Void
+			-- An exception will be thrown by this call if host/port
 			-- are invalid:
-			make_socket
+			make_socket_connected
 			if socket.socket_ok then
 				last_communication_succeeded := True
 			else
@@ -98,11 +124,15 @@ feature {NONE} -- Initialization
 			error_report := Invalid_address_msg
 		end
 
-	make_socket is
+	make_socket_connected is
+			-- Make `socket', connected to the server, with `port_number'
+			-- and `hostname'.  Don't 'create' socket if it is not Void.
 		require
 			host_port_exist: hostname /= Void and port_number /= Void
 		do
-			create socket.make_client_by_port (port_number, hostname)
+			if socket = Void then
+				create socket.make_client_by_port (port_number, hostname)
+			end
 			if socket.socket_ok then
 				socket.set_blocking
 				socket.set_timeout (Timeout_seconds)
@@ -170,7 +200,8 @@ feature {NONE} -- Implementation
 			r_exists: r /= Void
 		do
 			last_communication_succeeded := False
-			make_socket
+			socket := Void
+			make_socket_connected
 			if connected then
 				send_request (r, wait_for_response)
 			else
@@ -212,10 +243,6 @@ feature {NONE} -- Implementation
 				Result := Connection_failed_msg
 			end
 		end
-
-feature {NONE} -- Implementation - attributes
-
-	socket: NETWORK_STREAM_SOCKET
 
 feature {NONE} -- Implementation - constants
 
