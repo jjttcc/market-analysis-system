@@ -1,78 +1,16 @@
 #!/bin/bash
 # Build and store the mas executable.
 
-Progname=$(basename $0)
-eifdir=EIFGEN
-olddir=EIFGEN.old
-bindir=$MAS/lib/binaries
-
-usage() {
-	echo "Usage: $Progname version"
+abort() {
+	echo "$*"
+	exit 1
 }
 
-# Not used because 'mv' on Windows, on directories, does not work as needed.
-save_old_directories() {
-	if [ -e $olddir ]; then
-		echo -e "Delete $olddir? \c"
-		read answer
-		if [ "$answer" = y -o "$answer" = Y ]; then
-			rm -rf $olddir
-		else
-			mv $olddir $olddir.$$
-			echo -e "Moved $olddir to $olddir.$$."
-		fi
-	fi
+lib_script=$MAS/lib/scripts/build_eiffel_application
+.  $lib_script
+if [ $? -ne 0 ]; then abort "Failed to load $lib_script.";fi
+export Targetdir=$MAS/lib/binaries
+export Projectdir=$MASPROJ/mas
+export Executable_name=mas.exe
 
-	if [ -e $eifdir ]; then mv $eifdir $olddir; fi
-	echo -e "Moved $eifdir to $olddir."
-}
-
-finalize() {
-	if ec -batch -finalize $1 -ace mas-windows.ace; then
-		:
-	else
-		echo "Finalization with ec failed."
-		exit 1
-	fi
-}
-
-make_assert_version() {
-	finalize -keep
-	cd $eifdir/F_code
-	if finish_freezing; then
-		strip mas.exe
-		mv mas.exe $bindir/mas_assert${version}
-		cd ../..
-	else
-		echo "'finish_freezing' failed."
-		exit 1
-	fi
-}
-
-make_non_assert_version() {
-	finalize
-	cd $eifdir/F_code
-	if finish_freezing; then
-		strip mas.exe
-		mv mas.exe $bindir/mas_no_assert${version}
-		cd ../..
-	else
-		echo "'finish_freezing' failed."
-		exit 1
-	fi
-}
-
-if [ $# -ne 1 ]; then
-	usage; exit 1
-fi
-version=_v$1
-cd $PROJECTS/mas_current
-echo -e "Removing EIFGEN directory .....\c"
-rm -rf EIFGEN
-echo
-make_assert_version
-echo -e "\nRemoving EIFGEN directory .....\c"
-rm -rf EIFGEN
-echo
-make_non_assert_version
-echo "Build of MAS succeeded."
+execute $*
