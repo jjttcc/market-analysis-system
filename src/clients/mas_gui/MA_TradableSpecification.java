@@ -58,7 +58,6 @@ public class MA_TradableSpecification extends TradableSpecification {
 	// to `d'.  If there is no indicator spec with name `indicator_name',
 	// no action is taken.
 	void set_indicator_data(DataSet d, String indicator_name) {
-System.out.println("set ind data called for " + indicator_name + " with " + d);
 		MA_IndicatorSpecification spec = null;
 		if (indicator_specs.containsKey(indicator_name)) {
 			spec = (MA_IndicatorSpecification)
@@ -68,10 +67,8 @@ System.out.println("set ind data called for " + indicator_name + " with " + d);
 				special_indicator_specs.get(indicator_name);
 		}
 		if (spec != null) {
-System.out.println("indicator was found: " + spec);
 			spec.set_data(d);
 		}
-else {System.out.println("indicator was NOT found: " + spec);}
 	}
 
 	// Add indicator specification `spec' to `indicator_specifications'.
@@ -116,7 +113,6 @@ else {System.out.println("indicator was NOT found: " + spec);}
 			MA_IndicatorSpecification ind =
 				(MA_IndicatorSpecification) indicator_spec_for(n);
 			if (ind != null) {
-System.out.println("selecting ind: " + ind);
 				ind.select();
 			}
 		}

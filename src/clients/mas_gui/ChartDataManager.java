@@ -132,20 +132,12 @@ public class ChartDataManager implements NetworkProtocol, AssertionConstants {
 	**/
 	public int indicator_id_for(String ind_name) {
 		int result = -1;
-System.out.println("iif - ind name: " + ind_name);
-System.out.println("iif - trspec: " + tradable_specification);
 		rebuild_indicators_if_needed();
-System.out.println("1");
 		IndicatorSpecification ispec =
 			tradable_specification.indicator_spec_for(ind_name);
-System.out.println("2");
 		if (ispec != null) {
 			result = ispec.identifier();
-System.out.println("3");
 		}
-else {
-System.out.println("4");
-}
 		return result;
 	}
 

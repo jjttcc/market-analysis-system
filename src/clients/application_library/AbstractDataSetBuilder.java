@@ -218,6 +218,7 @@ abstract public class AbstractDataSetBuilder extends Lockable
 	public void send_time_delimited_market_data_request(String symbol,
 		String period_type, Calendar start_date_time, Calendar end_date_time)
 			throws Exception {
+//!!!:
 System.out.println("sending request with " + symbol + ", " + period_type +
 ", " + start_date_time);
 
@@ -331,12 +332,8 @@ System.out.println("sending request with " + symbol + ", " + period_type +
 			prepare_parser_for_market_data();
 			data_parser.parse(results, is_update);
 			last_market_data = data_parser.result();
-System.out.println("dispatch... - lmd type: " +
-last_market_data.getClass().getName());
 			post_process_market_data(last_market_data, symbol, period_type,
 				is_update);
-System.out.println("dispatch..., after post.proc... - lmd type: " +
-last_market_data.getClass().getName());
 			last_volume = data_parser.volume_result();
 			if (last_volume != null) {
 				post_process_volume_data(last_volume, symbol, period_type,
