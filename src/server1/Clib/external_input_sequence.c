@@ -32,16 +32,19 @@ static char* fs_char_table = 0;
 
 static char fs_char_table_contents[256];
 
+static char* initialization_error_string = 0;
+
 int init_error = 0;
 
 struct input_sequence_handle* initialize_external_input_routines(char* paths) {
 	struct input_sequence_handle* result;
+	char error_buffer[BUFSIZ];
 	assert(paths != 0);
-printf("init external ...: paths: '%s'\n", paths);
 	init_error = 0;
 	result = malloc(sizeof(struct input_sequence_handle));
 	if (result != 0) {
-		result->plug_in_handle = new_input_sequence_plug_in_handle(paths);
+		result->plug_in_handle = new_input_sequence_plug_in_handle(paths,
+			error_buffer, sizeof(error_buffer));
 		result->buffer = 0;
 		result->symbols = 0;
 		result->buffersize = 0;
@@ -52,6 +55,7 @@ printf("init external ...: paths: '%s'\n", paths);
 		result->error_msg = "";
 		if (result->plug_in_handle == 0) {
 			init_error = 1;
+			initialization_error_string = strdup(error_buffer);
 			free(result);
 			result = 0;
 		}
@@ -66,14 +70,13 @@ int is_open_implementation(struct input_sequence_handle* handle) {
 }
 
 void external_dispose(struct input_sequence_handle* handle) {
-printf("starting external_dispose\n");
 	if (handle != 0) {
 		close_handle(handle->plug_in_handle);
 		free(handle->buffer);
 		free(handle->symbols);
 		free(handle);
 	}
-printf("ending external_dispose\n");
+	free(initialization_error_string);
 }
 
 int current_field_length(struct input_sequence_handle* handle) {
@@ -140,8 +143,6 @@ int field_count_implementation(struct input_sequence_handle* handle) {
 }
 
 int after_last_record_implementation(struct input_sequence_handle* handle) {
-/**!!!printf("after_last_record_implementation - ci, bufsz: %d, %d\n",
-handle->current_index, handle->buffersize);*/
 	return handle->current_index == handle->buffersize;
 }
 
@@ -199,7 +200,6 @@ void start_implementation(struct input_sequence_handle* handle,
 	}
 	handle->current_index = 0;
 	set_field_separator(handle);
-printf("start_imp - bufsz: %d\n", handle->buffersize);
 }
 
 char* available_symbols(struct input_sequence_handle* handle) {
@@ -211,17 +211,13 @@ int external_error(struct input_sequence_handle* handle) {
 }
 
 char* last_external_error(struct input_sequence_handle* handle) {
-printf("ler returning %s\n", handle->error_msg);
 	return handle->error_msg;
 }
 
 void make_available_symbols(struct input_sequence_handle* handle) {
-printf("starting make_av symb\n");
 	handle->error_occurred = 0;
-printf("A\n");
 	if (handle->symbols == 0) {
 		handle->symbols = symbol_list(handle->plug_in_handle);
-printf("B\n");
 	}
 	if (handle->symbols == 0) {
 		handle->error_occurred = 1;
@@ -240,5 +236,11 @@ int initialization_error() {
 }
 
 char* initialization_error_reason() {
-	return "Memory allocation failed.";
+	char* result;
+	if (initialization_error_string == 0) {
+		result = "Memory allocation failed.";
+	} else {
+		result = initialization_error_string;
+	}
+	return result;
 }
