@@ -247,7 +247,6 @@ feature {NONE} -- Implementation
 	index_vector: ARRAY [INTEGER] is
 			-- Index vector for value setters
 		do
---!!!!!Need to handling configuration for the "configurable" date setter.
 			if open_interest then
 				Result := derivative_builder.index_vector (intraday)
 			else
@@ -284,12 +283,14 @@ feature {NONE} -- Implementation
 			value_setter_vector: ARRAY [VALUE_SETTER]
 			setter: VALUE_SETTER
 			i: INTEGER
+			gsf: expanded GLOBAL_SERVER_FACILITIES
 		do
 			if value_setter_vector = Void then
 				create value_setter_vector.make (1, Last_index)
 				create {DATE_SETTER} setter.make
 				value_setter_vector.put (setter, Date_index)
-				create {CONFIGURABLE_DATE_SETTER} setter.make
+				create {CONFIGURABLE_DATE_SETTER} setter.make (
+					gsf.command_line_options.special_date_settings)
 				value_setter_vector.put (setter, Configurable_date_index)
 				create {TIME_SETTER} setter.make
 				value_setter_vector.put (setter, Time_index)
