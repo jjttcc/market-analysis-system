@@ -43,8 +43,6 @@ currently under management of the MCT.
 %hdg2Quit
 The Quit button and the Quit menu option (under the File menu) shuts
 down the MCT, terminating all MAS sessions under control of the MCT.
-(!!!Doc. Note: Whether the MAS sessions are terminated may be configurable
-in the future.)
 %hdg2Quit without terminating sessions
 This menu option (under the File menu) shuts down the MCT without
 terminating the managed sessions - that is, all sessions will remain
