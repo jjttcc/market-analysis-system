@@ -48,7 +48,6 @@ feature {NONE} -- Initialization
 				end
 			else
 				set_keep_db_connection
-				set_symbol_list
 			end
 		end
 
@@ -76,8 +75,14 @@ feature -- Access
 	file_names: LIST [STRING]
 			-- Market data input file names
 
-	symbol_list: LIST [STRING]
+	symbol_list: LIST [STRING] is
 			-- Market data input symbols
+		do
+			if symbol_list_implementation = Void and use_db then
+				set_symbol_list
+			end
+			Result := symbol_list_implementation
+		end
 
 	background: BOOLEAN
 			-- Is the server run in the background?
@@ -105,6 +110,11 @@ feature -- Access
 
 	intraday_caching: BOOLEAN
 			-- Cache intraday data?
+
+feature -- Status report
+
+	symbol_list_initialized: BOOLEAN
+			-- Has `symbol_list' been initialized?
 
 feature -- Basic operations
 
@@ -303,11 +313,11 @@ feature {NONE} -- Implementation
 			if db_services.fatal_error then
 				error_occurred := true
 			else
-				symbol_list := db_services.stock_symbols
+				symbol_list_implementation := db_services.stock_symbols
 				if not db_services.fatal_error then
 					l := db_services.derivative_symbols
 					if l /= Void then
-						symbol_list.append (l)
+						symbol_list_implementation.append (l)
 					end
 				end
 				if db_services.fatal_error then
@@ -320,14 +330,18 @@ feature {NONE} -- Implementation
 			if error_occurred then
 				log_errors (<<db_services.last_error, "%N">>)
 			end
+			symbol_list_initialized := True
 		end
+
+	symbol_list_implementation: LIST [STRING]
 
 invariant
 
 	port_numbers_not_void: port_numbers /= Void
-	use_db: use_db and not error_occurred implies
-		file_names = Void and symbol_list /= Void
+	use_db: use_db and not error_occurred implies file_names = Void and
+		(symbol_list_initialized implies symbol_list_implementation /= Void)
 	use_files: not use_db and not use_external_data_source and not use_web and
-		not error_occurred implies symbol_list = Void and file_names /= Void
+		not error_occurred implies symbol_list_implementation = Void and
+		file_names /= Void
 
 end -- class MAS_COMMAND_LINE
