@@ -109,7 +109,7 @@ feature -- Basic operations
 			product_type_set: product.trading_period_type = time_period_type
 		end
 
-feature -- Element change
+feature -- Status setting
 
 	set_input_file (arg: FILE) is
 			-- Set input_file to `arg'.

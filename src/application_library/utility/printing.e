@@ -24,7 +24,7 @@ feature -- Options
 			Result := dfs
 		end
 
-feature -- Element change
+feature -- Status setting
 
 	set_output_field_separator (s: STRING) is
 		require
