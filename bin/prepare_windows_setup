@@ -28,8 +28,8 @@ if [ ! -d $reldir ]; then fatal "Cannot find directory $reldir.";fi
 if [ ! -r $srcfile ]; then fatal "Cannot read tar file $srcfile.";fi
 cd $tgtdir || fatal "Could not cd to target directory: $tgtdir."
 
-srcbase=bad${version}.tar.gz
 # Clean up old mas work directory:
 if [ -d $masdir ]; then rm -rf $masdir; fi
 cp $srcfile .
 tar zxvf $srcbase || fatal "Failed to untar $srcbase."
+rm $srcbase
