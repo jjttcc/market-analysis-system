@@ -27,6 +27,8 @@ import java.awt.image.*;
 **    along with this program; if not, write to the Free Software
 **    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 **************************************************************************
+**    Modified June, 1999 by Jim Cochrane
+**************************************************************************
 **
 **    This class is an extension of TextLine that allows text to be rotated.
 **    Currently only multiples of 90 degrees is allowed but the Image filter

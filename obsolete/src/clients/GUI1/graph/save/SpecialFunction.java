@@ -25,6 +25,8 @@ import java.lang.ArithmeticException;
 **    along with this program; if not, write to the Free Software
 **    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 **************************************************************************
+**    Modified June, 1999 by Jim Cochrane
+**************************************************************************
 **
 **    This class is an extension of java.lang.Math. It includes a number
 **    of special functions not found in the Math class.
