@@ -165,7 +165,7 @@ feature -- Status report
 	symbol_list_initialized: BOOLEAN
 			-- Has `symbol_list' been initialized?
 
-feature {NONE} -- Implementation - Hook routines
+feature {NONE} -- Hook routines implementations
 
 	process_remaining_arguments is
 		local
