@@ -56,7 +56,6 @@ Source: "lib\config\ema_of_slope_of_ema_close_to_0"; DestDir: "{app}\lib\config"
 Source: "lib\config\ema_of_volume"; DestDir: "{app}\lib\config"; CopyMode: alwaysoverwrite
 Source: "lib\config\force_index"; DestDir: "{app}\lib\config"; CopyMode: alwaysoverwrite
 Source: "lib\config\indicators"; DestDir: "{app}\lib\config"; CopyMode: alwaysoverwrite
-Source: "lib\config\indicators_persist"; DestDir: "{app}\lib\config"; CopyMode: alwaysoverwrite
 Source: "lib\config\macd_diffsig_crossover"; DestDir: "{app}\lib\config"; CopyMode: alwaysoverwrite
 Source: "lib\config\macd_diffsigx_and_stoch_35"; DestDir: "{app}\lib\config"; CopyMode: alwaysoverwrite
 Source: "lib\config\macd_of_volume"; DestDir: "{app}\lib\config"; CopyMode: alwaysoverwrite
