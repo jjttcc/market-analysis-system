@@ -201,6 +201,22 @@ TRADABLE to make composite tuples for its composite_tuple_list feature.
 STOCK_SPLIT is an abstraction for a stock split, with a value and a date,
 used by STOCK to adjust its prices for stock splits.
 
+CLUSTER market_analysis
+
+This cluster hold classes used for analysis of market data, including
+the results of technical indicators (the output of a MARKET_FUNCTION).
+An example use of the classes in this cluster is to construct and execute
+a machine that will generate buy or sell signals based on conditions
+of one or more functions.  For example, an analysis of moving average
+crossover could generate a buy/sell signal when one average crossed
+above/below the other.  Class MARKET_LINE provides an abstraction for
+a line determined by two MARKET_TUPLEs.  As with a line in geometry,
+this line is defined by two points, the two MARKET_TUPLEs.  Treating a
+MARKET_TUPLE as a point, its x value is its date/time and its y value
+is the price or indicator value (the `value' query).  MARKET_LINEs are
+used in trend-line analysis and to approximate the slope (rate of change)
+or a market data set at a particular date/time.
+
 CLUSTER data_scanning
 
 This cluster contains subclusters whose classes provide data-scanning
