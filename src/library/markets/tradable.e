@@ -23,6 +23,8 @@ class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 	GLOBAL_SERVICES
 		export {NONE}
 			all
+				{ANY}
+			period_types
 		undefine
 			is_equal, copy, setup
 		end
@@ -55,7 +57,8 @@ feature -- Access
 			-- made from the base data
 		require
 			not_void: period_type /= Void
-			has_type: tuple_list_names.has (period_type)
+			duration_valid: (period_types @ period_type).duration >=
+				trading_period_type.duration
 		do
 			Result := tuple_lists @ period_type
 			-- If the list has not been created and there is enough
@@ -77,8 +80,27 @@ feature -- Access
 	tuple_list_names: ARRAY [STRING] is
 			-- The period-type name (key) of each `tuple_list' associated
 			-- with `Current'
+		local
+			l: LIST [TIME_PERIOD_TYPE]
+			i: INTEGER
 		do
-			Result := tuple_lists.current_keys
+			!!Result.make (1, 1)
+			Result.compare_objects
+			from
+				l := period_types.linear_representation
+				i := 1
+				l.start
+			until
+				l.exhausted
+			loop
+				if l.item.duration >= trading_period_type.duration then
+					Result.force (l.item.name, i)
+					i := i + 1
+				end
+				l.forth
+			end
+		ensure
+			object_comparison: Result.object_comparison
 		end
 
 	target_period_type: TIME_PERIOD_TYPE
