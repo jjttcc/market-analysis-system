@@ -29,6 +29,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		Vector tradables = null;
 		saved_dialogs = new Vector();
 		data_manager = new ChartDataManager(builder, this);
+//!!!!:
+System.out.println("Chart ctor called with builder: " + builder);
 
 		serialize_filename = sfname;
 
@@ -115,6 +117,11 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 
 // Status report - TimeDelimitedDataRequestClient API
 
+	public boolean ready_for_request() {
+			
+		return ! requesting_data.booleanValue() && ! is_exiting;
+	}
+
 	public boolean is_exiting() { return is_exiting; }
 
 // Element change
@@ -127,11 +134,15 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 // Basic operations
 
 	public void send_period_types_request(String tradable) {
+		requesting_data = Boolean.TRUE;
 		data_manager.send_period_types_request(tradable);
+		requesting_data = Boolean.FALSE;
 	}
 
 	public void send_data_request(String tradable) {
+		requesting_data = Boolean.TRUE;
 		data_manager.send_data_request(tradable);
+		requesting_data = Boolean.FALSE;
 	}
 
 	public void reinitialize_current_period_type() {
@@ -186,9 +197,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		synchronized(requesting_data) {
 			if (! requesting_data.booleanValue()) {
 				Thread.yield();
-				requesting_data = Boolean.TRUE;
 				send_data_request(requested_tradable);
-				requesting_data = Boolean.FALSE;
 			} else {
 			}
 		}	// end synchronized block
@@ -484,6 +493,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	protected void close() {
 		turn_off_refresh();
 		if (window_count == 1) {	// Close last remaining window, exit.
+			is_exiting = true;
 			save_settings();
 			data_manager.data_builder().logout(true, 0);
 			dispose();

@@ -14,6 +14,7 @@ public interface TimeDelimitedDataRequestClient {
 	public ChartableSpecification specification();
 
 	// The start date-time of the data to be requested
+	// Precondition: ready_for_request()
 	public Calendar start_date();
 
 	// The end date-time of the data to be requested - null represents
@@ -21,6 +22,9 @@ public interface TimeDelimitedDataRequestClient {
 	public Calendar end_date();
 
 // Status report
+
+	// Is the system ready for a time-delimited data request?
+	public boolean ready_for_request();
 
 	// Is this process exiting (because of a "quit" command from the user or
 	// a fatal error)?
