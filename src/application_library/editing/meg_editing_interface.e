@@ -1,6 +1,6 @@
 indexing
 	description:
-		"Abstraction that allows the user to build and remove %
+		"Abstraction that allows the user to edit, build, and remove %
 		%market event generators"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -18,6 +18,14 @@ deferred class MEG_EDITING_INTERFACE inherit
 
 	EDITING_INTERFACE
 
+	STORABLE_SERVICES [MARKET_EVENT_GENERATOR]
+		rename
+			real_list as market_event_generation_library,
+			working_list as working_meg_library
+		export
+			{NONE} all
+		end
+
 	GLOBAL_SERVICES
 		export
 			{NONE} all
@@ -30,10 +38,6 @@ feature -- Access
 
 feature -- Status report
 
-	changed: BOOLEAN
-			-- Did the last operation produce a change that may need
-			-- to be saved to persistent store?
-
 feature -- Basic operations
 
 	edit_event_generator_menu is
@@ -43,8 +47,7 @@ feature -- Basic operations
 		local
 			selection: INTEGER
 		do
-			changed := false
-			working_meg_library := deep_clone (market_event_generation_library)
+			begin_edit
 			from
 				selection := Null_value
 			until
@@ -62,21 +65,14 @@ feature -- Basic operations
 				when Edit_value then
 					edit_event_generator_indicator
 				when Save_value then
-					market_event_generation_library.copy (working_meg_library)
-					market_event_generation_library.save
-					show_message ("The changes have been saved.")
-					working_meg_library := deep_clone (
-						market_event_generation_library)
-					changed := false
+					save
 				when Show_help_value then
 					show_message (help @ help.Edit_event_generators)
 				else
 				end
-				if error_occurred then
-					show_message (last_error)
-					error_occurred := false
-				end
+				report_errors
 			end
+			end_edit
 		end
 
 feature {NONE} -- Implementation
@@ -152,6 +148,7 @@ feature {NONE} -- Implementation
 					if not changed then
 						changed := function_editor.changed
 					end
+					function_editor.reset_changed
 				end
 			end
 		end
@@ -419,6 +416,16 @@ feature {NONE} -- Implementation
 				operator_maker.Linear_command)
 			Result.extend (operator_maker.command_with_generator (
 				"FUNCTION_BASED_COMMAND"))
+		end
+
+	reset_error is
+		do
+			error_occurred := false
+		end
+
+	initialize_working_list is
+		do
+			working_meg_library := deep_clone (market_event_generation_library)
 		end
 
 	help: APPLICATION_HELP

@@ -1,7 +1,7 @@
 indexing
 	description:
-		"Abstraction user interface that obtains selections needed for %
-		%editing of MARKET_FUNCTIONs"
+		"Abstraction that allows the user to edit, create, and remove %
+		%MARKET_FUNCTIONs"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -26,6 +26,15 @@ deferred class FUNCTION_EDITING_INTERFACE inherit
 			editor, function_types, set_new_name
 		end
 
+	STORABLE_SERVICES [MARKET_FUNCTION]
+		rename
+			real_list as function_library,
+			working_list as working_function_library
+		export
+			{NONE} all
+			{EDITING_INTERFACE} changed
+		end
+
 	MARKET_TUPLE_LIST_SELECTOR
 
 	GLOBAL_APPLICATION
@@ -48,12 +57,6 @@ feature -- Constants
 	Complex_function: STRING is "COMPLEX_FUNCTION"
 			-- Name of COMPLEX_FUNCTION
 
-feature -- Status report
-
-	changed: BOOLEAN
-			-- Did the last operation produce a change that may need to
-			-- be saved to persistent store?
-
 feature -- Basic operations
 
 	edit_indicator_menu (l: LIST [MARKET_FUNCTION]) is
@@ -65,10 +68,7 @@ feature -- Basic operations
 			selection: INTEGER
 			indicator: MARKET_FUNCTION
 		do
-			changed := false
-			if working_function_library = Void then
-				working_function_library := deep_clone (function_library)
-			end
+			begin_edit
 			from
 				selection := Null_value
 			until
@@ -84,27 +84,17 @@ feature -- Basic operations
 				when Remove_value then
 					remove_indicator
 				when Save_value then
-					function_library.copy (working_function_library)
-					function_library.save
-					show_message ("The changes have been saved.")
-					working_function_library := deep_clone (function_library)
-					if l /= Void then l.deep_copy (working_function_library) end
-					changed := false
+					save
+					if l /= Void then
+						l.deep_copy (working_function_library)
+					end
 				when Show_help_value then
 					show_message (help @ help.Edit_indicators)
 				when Exit_value then
-					if changed then
-						-- User is aborting changes - restore working copy of
-						-- function library to a deep copy of the original.
-						working_function_library := deep_clone (
-							function_library)
-					end
 				end
-				if error_occurred then
-					show_message (last_error)
-					error_occurred := false
-				end
+				report_errors
 			end
+			end_edit
 		end
 
 feature {APPLICATION_FUNCTION_EDITOR} -- Access
@@ -303,6 +293,13 @@ feature {EDITING_INTERFACE}
 			end
 		end
 
+	reset_changed is
+		do
+			changed := false
+		ensure
+			not_changed: not changed
+		end
+
 feature {NONE} -- Implementation
 
 	One_fn_op,			-- Takes one market function and an operator.
@@ -433,6 +430,16 @@ feature {NONE} -- Implementation
 			o.set_name (string_selection (concatenation (spiel)))
 		end
 
+	reset_error is
+		do
+			error_occurred := false
+		end
+
+	initialize_working_list is
+		do
+			working_function_library := deep_clone (function_library)
+		end
+
 	names_from_function_list (l: LIST [MARKET_FUNCTION]):
 				ARRAYED_LIST [STRING] is
 			-- Name of each function in `l'
@@ -523,7 +530,7 @@ feature {NONE} -- Implementation - indicator editing
 				selection = Exit_value
 			loop
 				selection := list_selection_with_backout (
-					names_from_parameter_list(parameters, true),
+					names_from_parameter_list (parameters, true),
 					"Select a parameter to edit")
 				if selection /= Exit_value then
 					p := parameters @ selection
