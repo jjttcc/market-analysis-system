@@ -14,8 +14,6 @@ public class ServerTermination extends MCT_Constants {
 			runtime = Runtime.getRuntime();
 		}
 		try {
-System.out.println("STerm - " + server_termination_cmd_key + ": " +
-settings.get(server_termination_cmd_key));
 			String cmd = processed_command(
 				(String) settings.get(server_termination_cmd_key),
 				parent_context);

@@ -96,8 +96,8 @@ public class MCT_Constants {
 			else if (s.equals(server_termination_cmd_key)) {
 				settings.put(server_termination_cmd_key, t.nextToken());
 			}
-if (settings.containsKey(s))
-System.out.println("Set " + s + " to: " + settings.get(s));
+//if (settings.containsKey(s))
+//System.out.println("Set " + s + " to: " + settings.get(s));
 			file_util.forth();
 		}
 	}
