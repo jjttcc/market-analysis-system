@@ -42,7 +42,7 @@ feature -- Utility
 				exhausted
 			loop
 				!STOCK!dummy_tradable.make ("dummy",
-					period_types @ (period_type_names @ Daily))
+					period_types @ (period_type_names @ Daily), Void)
 				-- Set innermost input to an empty tradable to force the
 				-- market function to clear its contents.
 				item.set_innermost_input (dummy_tradable)

@@ -68,16 +68,18 @@ feature -- Access
 			if file_names.index /= old_index then
 				last_tradable := cached_item (file_names.index)
 				if last_tradable = Void then -- If it wasn't in the cache
-					!!input_file.make_open_read (file_names.item)
-					tradable_factories.item.set_input_file (input_file)
-					tradable_factories.item.set_symbol (
-						symbol_from_file_name (file_names.item))
-					tradable_factories.item.execute
-					last_tradable := tradable_factories.item.product
-					add_to_cache (last_tradable, file_names.index)
-					if tradable_factories.item.error_occurred then
-						print_errors (last_tradable,
-										tradable_factories.item.error_list)
+					input_file := open_current_file
+					if input_file /= Void then
+						tradable_factories.item.set_input_file (input_file)
+						tradable_factories.item.set_symbol (
+							symbol_from_file_name (file_names.item))
+						tradable_factories.item.execute
+						last_tradable := tradable_factories.item.product
+						add_to_cache (last_tradable, file_names.index)
+						if tradable_factories.item.error_occurred then
+							print_errors (last_tradable,
+											tradable_factories.item.error_list)
+						end
 					end
 				end
 				old_index := file_names.index
@@ -213,6 +215,18 @@ feature {NONE} -- Implementation
 			end
 			!!pair.make (t, index)
 			cache.extend (pair)
+		end
+
+	open_current_file: PLAIN_TEXT_FILE is
+			-- Open the file associated with `file_names'.item.
+			-- If the open fails with an exception, print an error message,
+			-- set Result to Void, and allow the exception to propogate.
+		do
+			!!Result.make_open_read (file_names.item)
+		rescue
+			print ("Failed to open file ") print (file_names.item)
+			print ("%N")
+			Result := Void
 		end
 
 	cache_size: INTEGER

@@ -50,6 +50,10 @@ feature -- Utility
 
 	cleanup is
 		do
+			debug ("persist")
+				print("cleanup Storing ");
+				print(persistent_file_name); print (".%N")
+			end
 			store_by_name (persistent_file_name)
 		end
 
