@@ -1,6 +1,6 @@
 indexing
 	description: "A command that responds to a GUI client log-in request"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -67,7 +67,7 @@ feature -- Basic operations
 				end
 			end
 			if error_occurred then
-				report_error (<<error_msg>>)
+				report_error (Error, <<error_msg>>)
 				-- Don't add the new session.
 			else
 				send_ok

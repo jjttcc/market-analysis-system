@@ -608,6 +608,9 @@ feature {NONE}
 						symbol := symbols @ last_integer
 					end
 				end
+				check
+					symbol_in_list: market_list.symbols.has (symbol)
+				end
 				market_list.search_by_symbol (symbol)
 				-- current_tradable will be set to the current item of
 				-- market_list (which, because of the above call, corresponds

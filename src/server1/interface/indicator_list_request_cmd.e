@@ -1,6 +1,6 @@
 indexing
 	description: "A command that responds to a GUI client data request"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -19,10 +19,10 @@ feature -- Basic operations
 			ilist: LIST [MARKET_FUNCTION]
 		do
 			-- `msg' is expected to contain (only) the market symbol
-			market_list.search_by_symbol (msg)
-			if market_list.off then
-				report_error (<<"Symbol not in database">>)
+			if not market_list.symbols.has (msg) then
+				report_error (Invalid_symbol, <<"Symbol not in database">>)
 			else
+				market_list.search_by_symbol (msg)
 				send_ok
 				ilist := market_list.item.indicators
 				from

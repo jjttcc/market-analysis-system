@@ -1,6 +1,6 @@
 indexing
 	description: "A command that responds to a GUI client data request"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -21,7 +21,7 @@ feature -- Basic operations
 			target := msg -- set up for tokenization
 			fields := tokens (input_field_separator)
 			if fields.count /= 2 then
-				report_error (<<"fields count wrong ...">>)
+				report_error (Error, <<"fields count wrong ...">>)
 			else
 				parse_symbol_and_period_type (1, 2, fields)
 				send_response
@@ -38,10 +38,10 @@ feature {NONE}
 			tpt_ms_not_void:
 				trading_period_type /= Void and market_symbol /= Void
 		do
-			market_list.search_by_symbol (market_symbol)
-			if market_list.off then
-				report_error (<<"Symbol not in database">>)
+			if not market_list.symbols.has (market_symbol) then
+				report_error (Invalid_symbol, <<"Symbol not in database">>)
 			else
+				market_list.search_by_symbol (market_symbol)
 				set_print_parameters
 				send_ok
 				print_tuples (market_list.item.tuple_list (

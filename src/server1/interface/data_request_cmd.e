@@ -1,6 +1,6 @@
 indexing
 	description: "A command that responds to a GUI client data request"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -51,7 +51,7 @@ feature {NONE} -- Utility
 			market_symbol := fields @ sindx
 			pt_name := fields @ ptindx
 			if not pt_names.has (pt_name) then
-				report_error (<<"something or other - error...">>)
+				report_error (Error, <<"something or other - error...">>)
 			else
 				trading_period_type := period_types @ pt_name
 			end

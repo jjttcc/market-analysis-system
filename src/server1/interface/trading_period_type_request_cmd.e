@@ -2,7 +2,7 @@ indexing
 	description:
 		"A command that responds to a GUI client request for a list of all %
 		%trading period types valid for a specified market"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -26,10 +26,10 @@ feature -- Basic operations
 	execute (msg: STRING) is
 		do
 			-- `msg' is expected to contain (only) the market symbol
-			market_list.search_by_symbol (msg)
-			if market_list.off then
-				report_error (<<"Symbol not in database">>)
+			if not market_list.symbols.has (msg) then
+				report_error (Invalid_symbol, <<"Symbol not in database">>)
 			else
+				market_list.search_by_symbol (msg)
 				send_ok
 				-- Since only daily and weekly trading period types are
 				-- allowed in the current version (for all markets), the
