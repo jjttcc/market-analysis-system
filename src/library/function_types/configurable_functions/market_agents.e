@@ -169,7 +169,6 @@ feature -- Access
 			current_value, latest_extracted_value, initial_value: DOUBLE
 			values: ARRAYED_LIST [DOUBLE]
 		do
-print ("n_based_accumulation called.%N")
 			create values.make (0); initial_value := 0
 			-- @@Note: initial_value needs to be made configurable.
 			if
@@ -238,7 +237,6 @@ print ("n_based_accumulation called.%N")
 					ml.forth
 				end
 			end
-print ("n_based_accumulation ending.%N")
 		end
 
 feature {NONE} -- Implementation
