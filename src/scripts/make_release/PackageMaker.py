@@ -9,9 +9,12 @@ class PackageMaker:
 		self.work_directory = work_directory
 		self.package_directory = package_directory
 
-	def execute(self, package, file_tuples):
+	def execute(self, pkgname, package):
+		do_zip = 0; do_tar = 0
+		file_tuples = package[1]
+		archive_types = package[0]
 		if len(file_tuples) == 0:
-			print '<Empty file list for package ' + package + \
+			print '<Empty file list for package ' + pkgname + \
 				' - skipping ...>'
 			return
 		files = []
@@ -24,12 +27,17 @@ class PackageMaker:
 			os.system('mkdir -p ' + self.package_directory)
 		# Create and execute the packaging commands.
 		file_list = self.file_list(files)
-		tarcmd = 'tar cvfz ' + self.package_directory + '/' + package + \
-			'.tar.gz' + ' ' + file_list
-		zipcmd = 'zip -r ' + self.package_directory + '/' + package + \
-			'.zip' + ' ' + file_list
-		os.system(tarcmd)
-		os.system(zipcmd)
+		for artype in archive_types:
+			if artype == 'zip': do_zip = 1
+			elif artype == 'tar': do_tar = 1
+		if do_tar:
+			tarcmd = 'tar cvfz ' + self.package_directory + '/' + pkgname + \
+				'.tar.gz' + ' ' + file_list
+			os.system(tarcmd)
+		if do_zip:
+			zipcmd = 'zip -r ' + self.package_directory + '/' + pkgname + \
+				'.zip' + ' ' + file_list
+			os.system(zipcmd)
 
 	# Expects current directory to be the parent of the base directory
 	# of self.work_directory.

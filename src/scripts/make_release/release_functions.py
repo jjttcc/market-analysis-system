@@ -22,8 +22,8 @@ class ReleaseUtilities:
 		self.target_files = []
 		self.source_directory = ''
 		self.work_directory = ''
-		# packages is a hash table - key: package names; value: list of
-		# all target files in a package 
+		# packages is a hash table - key: package name; value:
+		# [[archive types], [list of all target files in a package]]
 		self.packages = {}
 		self.keyword_table = {self.source_dir_word: self.set_source,
 						self.work_dir_word: self.set_work,
@@ -41,8 +41,12 @@ class ReleaseUtilities:
 			record = split(line)
 			key = record[0]
 			value = record[1]
+			args = []
+			for i in range(2, len(record)):
+				if record[i][0] == '#': break
+				args.append(record[i])
 			if self.keyword_table.has_key(key):
-				self.keyword_table[key](value)
+				self.keyword_table[key](value, args)
 		file.close()
 		if self.source_directory == '' or self.work_directory == '':
 			raise "Source or work directory not set."
@@ -76,7 +80,8 @@ class ReleaseUtilities:
 			if not self.packages.has_key(k):
 				print "Warning: No package " + k + " found."
 			else:
-				self.packages[k].append((src_path, tgt_path))
+				# The 2nd list ([1]) is the list of src/tgt paths.
+				self.packages[k][1].append((src_path, tgt_path))
 
 	# Copy source files to target files.
 	def copy(self):
@@ -107,24 +112,24 @@ class ReleaseUtilities:
 # Private - implementation
 
 	# Set the source directory to `s'.
-	def set_source(self, s):
+	def set_source(self, s, args):
 		self.source_directory = s
 
 	# Set the work directory to `s'.
-	def set_work(self, s):
+	def set_work(self, s, args):
 		self.work_directory = s
 
 	# Set the work directory to `s'.
-	def set_release_name(self, s):
+	def set_release_name(self, s, args):
 		self.real_work_directory = self.work_directory
 		self.work_directory = self.work_directory + '/' + s
 
 	# Add the package `s' to `packages'.
-	def add_package(self, s):
-		self.packages[s] = []
+	def add_package(self, s, args):
+		self.packages[s] = [args, []]
 
 	# Set the target directory to `s'.
-	def set_target_dir(self, s):
+	def set_target_dir(self, s, args):
 		self.target_dir = s
 
 	# Clean garbage (such as CVS directories) from work directory.
