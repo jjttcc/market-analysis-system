@@ -30,6 +30,7 @@ feature -- Access
 		do
 			create Result.make_with_text (label)
 			add_actions (Result.select_actions, actions)
+			Result.set_minimum_width (Result.width + 9)
 		ensure
 			Result.text.is_equal (label)
 		end

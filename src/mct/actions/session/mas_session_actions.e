@@ -63,11 +63,15 @@ feature -- Actions
 		local
 			cmd: COMMAND
 		do
-			cmd := external_commands @
-				configuration.Termination_cmd_specifier
-			cmd.execute (owner_window)
-			-- Make owner_window.port_number available for other sessions.
-			port_numbers_in_use.prune (owner_window.port_number)
+			-- NOT port_numbers_in_use.has (owner_window.port_number)
+			-- implies that the server has already been terminated.
+			if port_numbers_in_use.has (owner_window.port_number) then
+				cmd := external_commands @
+					configuration.Termination_cmd_specifier
+				cmd.execute (owner_window)
+				-- Make owner_window.port_number available for other sessions.
+				port_numbers_in_use.prune (owner_window.port_number)
+			end
 		end
 
 	start_command_line is

@@ -10,6 +10,8 @@ class MAIN_ACTIONS inherit
 
 	ACTIONS
 
+	LOCATE_SESSION_CLIENT
+
 create
 
 	make
@@ -34,18 +36,22 @@ feature -- Actions
 
 	connect_to_session is
 			-- Connect to an existing MAS "session".
+		local
+			window: LOCATE_SESSION_WINDOW
 		do
-			print ("Connect to MAS session Stub!!!%N")
+			create window.make
+			window.register_client (Current, Connect_to)
+			window.show
 		end
 
 	terminate_arbitrary_session is
 			-- Terminate an arbitrary MAS "session".
 		local
-			cmd: COMMAND
+			window: LOCATE_SESSION_WINDOW
 		do
-			-- Need to obtain the session's port number from the user.
-			--cmd.execute (owner_window)
-			print ("Terminate an arbitrary MAS session Stub!!!%N")
+			create window.make
+			window.register_client (Current, Terminate)
+			window.show
 		end
 
 	start_server is
@@ -55,37 +61,88 @@ feature -- Actions
 			portnumber: STRING
 			wbldr: expanded WIDGET_BUILDER
 			dialog: EV_WIDGET
-			builder: APPLICATION_WINDOW_BUILDER
 			session_window: SESSION_WINDOW
 		do
-			create builder
 			portnumber := reserved_port_number
 			if portnumber = Void then
 				dialog := wbldr.new_error_dialog (
 					"Port numbers are all in use.")
 				dialog.show
 			else
-				session_window := builder.mas_session_window
-				session_window.set_port_number (portnumber)
+				session_window := new_session_window (
+					configuration.hostname, portnumber)
 				cmd := external_commands @
 					configuration.Start_server_cmd_specifier
 				cmd.execute (session_window)
-				server_is_running := True
 			end
 		end
 
 	configure_server_startup is
 			-- Configure how the server is to be started up.
-		local
-			cmd: COMMAND
 		do
 			print ("Configure server startup Stub!!!%N")
 		end
 
-feature {NONE} -- Implementation - Status report
+feature {NONE} -- Implementation - Callback routines
 
-	server_is_running: BOOLEAN
-			-- Is the MAS server currently running?
+	respond_to_session_location (supplier: LOCATE_SESSION_WINDOW) is
+		local
+			dialog: EV_WIDGET
+			err: STRING
+			wbldr: expanded WIDGET_BUILDER
+		do
+			err := host_and_port_diagnosis (supplier.host_name,
+				supplier.port_number)
+			if
+				err = Void
+			then
+				if supplier.action_code = Terminate then
+					terminate_located_session (supplier)
+				else
+					check
+						connect_to: supplier.action_code = Connect_to
+					end
+					connect_to_located_session (supplier)
+				end
+			else
+				dialog := wbldr.new_error_dialog (err)
+				dialog.show
+			end
+		end
+
+	respond_to_session_location_cancellation (
+			supplier: LOCATE_SESSION_WINDOW) is
+		do
+			-- Null routine
+		end
+
+	connect_to_located_session (supplier: LOCATE_SESSION_WINDOW) is
+			-- Connect to the session whose host name and port number are
+			-- specified by `supplier'.
+		local
+			session_window: SESSION_WINDOW
+		do
+			session_window := new_session_window (supplier.host_name,
+				supplier.port_number)
+			if not port_numbers_in_use.has (supplier.port_number) then
+				port_numbers_in_use.extend (supplier.port_number)
+			end
+			session_window.show
+		end
+
+	terminate_located_session (supplier: LOCATE_SESSION_WINDOW) is
+			-- Terminate the session whose host name and port number are
+			-- specified by `supplier'.
+		local
+			session_actions: MAS_SESSION_ACTIONS
+		do
+			if not port_numbers_in_use.has (supplier.port_number) then
+				port_numbers_in_use.extend (supplier.port_number)
+			end
+			create session_actions.make (configuration)
+			session_actions.set_owner_window (supplier)
+			session_actions.terminate_session
+		end
 
 feature {NONE} -- Implementation
 
@@ -106,5 +163,31 @@ feature {NONE} -- Implementation
 				pnums.forth
 			end
 		end
+
+	new_session_window (hostname, portnumber: STRING): SESSION_WINDOW is
+			-- A new SESSION_WINDOW with port number `portnumber'
+		local
+			builder: expanded APPLICATION_WINDOW_BUILDER
+		do
+			Result := builder.mas_session_window
+			Result.set_host_name (hostname)
+			Result.set_port_number (portnumber)
+		end
+
+	host_and_port_diagnosis (host, port: STRING): STRING is
+			-- Diagnosis of validity of `host' and `port' - Void if they
+			-- both are valid; otherwise a description of the problem
+		do
+			if not port.is_integer then
+				Result := "Invalid port number: " + port
+			end
+			-- !!!Check that host is valid.
+			-- !!!If valid, Connect/disconnect to the MAS server as a
+			-- client to test that it is running and reachable - report if not.
+		end
+
+feature {NONE} -- Implementation - constants
+
+	Terminate, Connect_to: INTEGER is unique
 
 end

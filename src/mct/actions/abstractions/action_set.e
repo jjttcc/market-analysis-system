@@ -1,5 +1,5 @@
 indexing
-	description: "A labeled, unique set of event-response actions"
+	description: "A uniquely labeled set of event-response actions"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

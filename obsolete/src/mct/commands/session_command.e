@@ -44,7 +44,9 @@ feature -- Basic operations
 				Token_end_delimiter)
 --!!!print ("Attempting to execute '" + cmd + "'%N")
 			env.launch (cmd)
-			window.show
+			if not window.is_destroyed then
+				window.show
+			end
 		end
 
 end

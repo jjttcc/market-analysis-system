@@ -21,10 +21,23 @@ create
 
 feature -- Access
 
+	host_name: STRING
+			-- Host name used by the MAS server for this session
+
 	port_number: STRING
 			-- Port number used by the MAS server for this session
 
 feature -- Element change
+
+	set_host_name (arg: STRING) is
+			-- Set `host_name' to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			host_name := arg
+		ensure
+			host_name_set: host_name = arg and host_name /= Void
+		end
 
 	set_port_number (arg: STRING) is
 			-- Set `port_number' to `arg'.

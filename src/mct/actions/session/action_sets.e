@@ -74,10 +74,16 @@ feature -- Access
 	close_window_set: ACTION_SET is
 			-- ACTION_SET for closing an application window
 		require
-			actions_set: main_actions /= Void
+			actions_set: main_actions /= Void or mas_session_actions /= Void
+		local
+			actions: ACTIONS
 		do
+			actions := main_actions
+			if actions = Void then
+				actions := mas_session_actions
+			end
 			create Result.make ("Close", close_window_token,
-				<<agent main_actions.close_window>>)
+				<<agent actions.close_window>>)
 		end
 
 	exit_set: ACTION_SET is

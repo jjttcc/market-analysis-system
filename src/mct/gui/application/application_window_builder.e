@@ -22,7 +22,7 @@ feature -- Access
 			create main_box
 			current_main_actions.set_owner_window (Result)
 			Result.extend (main_box)
-			add_main_window_buttons (main_box)
+			add_main_window_components (main_box)
 			Result.set_menu_bar (main_window_menu_bar)
 			-- Allow screen refresh on some platoforms.
 			Result.unlock_update
@@ -40,7 +40,7 @@ feature -- Access
 			create main_box
 			current_mas_session_actions.set_owner_window (Result)
 			Result.extend (main_box)
-			add_mas_session_window_buttons (main_box)
+			add_mas_session_window_components (main_box)
 			Result.set_menu_bar (mas_session_window_menu_bar)
 			-- Allow screen refresh on some platoforms.
 			Result.unlock_update
@@ -57,16 +57,8 @@ feature {NONE} -- Main-window components
 			Result.extend (help_menu)
 		end
 
-	mas_session_window_menu_bar: EV_MENU_BAR is
-			-- Menu bar for MAS session window
-		do
-			create Result
-			Result.extend (file_menu)
-			Result.extend (help_menu)
-		end
-
-	add_main_window_buttons (c: EV_CONTAINER) is
-			-- Add all buttons needed for the main window
+	add_main_window_components (c: EV_CONTAINER) is
+			-- Add all components (buttons) needed for the main window
 		local
 			action_set: ACTION_SET
 			action_sets: expanded ACTION_SETS
@@ -86,8 +78,18 @@ feature {NONE} -- Main-window components
 				action_set.actions))
 		end
 
-	add_mas_session_window_buttons (c: EV_CONTAINER) is
-			-- Add all buttons needed for a MAS session window
+feature {NONE} -- Session-window components
+
+	mas_session_window_menu_bar: EV_MENU_BAR is
+			-- Menu bar for MAS session window
+		do
+			create Result
+			Result.extend (file_menu)
+			Result.extend (help_menu)
+		end
+
+	add_mas_session_window_components (c: EV_CONTAINER) is
+			-- Add all components (buttons) needed for a MAS session window
 		local
 			action_set: ACTION_SET
 			action_sets: expanded ACTION_SETS
@@ -100,6 +102,9 @@ feature {NONE} -- Main-window components
 			c.extend (widget_builder.new_button (action_set.widget_label,
 				action_set.actions))
 			action_set := action_sets.terminate_session_set
+			c.extend (widget_builder.new_button (action_set.widget_label,
+				action_set.actions))
+			action_set := action_sets.close_window_set
 			c.extend (widget_builder.new_button (action_set.widget_label,
 				action_set.actions))
 		end
@@ -169,11 +174,9 @@ feature {NONE} -- Implementation
 feature {NONE} -- Implementation - Constants
 
 	Main_window_title: STRING is "MAS Control Panel"
-			-- Title of the window
+			-- Title of the main window
 
 	Session_window_title: STRING is "MAS"
-			-- Title of the window
-
-	Session_window_minimum_width: INTEGER is 550
+			-- Title of mas-session windows
 
 end
