@@ -345,7 +345,7 @@ configure_mas() {
 	check_file_exists $mfile true "Market analyzer file $mfile not found."
 	check_exe_file $mas true "Script file $mas not found."
 	check_exe_file $macl true "Script file $macl not found."
-	echo "Starting the server." >&2
+	echo "Starting the server to configure indicators." >&2
 	start_server $mas -b $port
 	sleep 1 # Wait for server to start up.
 	echo -e "Configuring - \c" >&2
