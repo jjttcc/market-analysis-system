@@ -3,6 +3,7 @@
 # have made the indicators_persist file out of date.
 e
 c
+n
 EXPONENTIAL_MOVING_AVERAGE
 c
 # Name:
@@ -16,6 +17,7 @@ c
 1
 13
 c
+n
 EXPONENTIAL_MOVING_AVERAGE
 c
 # Name:
