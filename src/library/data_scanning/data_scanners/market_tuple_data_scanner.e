@@ -28,13 +28,11 @@ feature
 							prod /= Void
 			vs_not_empty: not vs.empty
 		do
-			data_scanner_make (in, tm, vs, "%T", "%N")
+			data_scanner_make (in, tm, vs)
 			product := prod
 		ensure
 			set: input = in and tuple_maker = tm and
-				value_setters = vs and product = prod and
-				field_separator.is_equal ("%T") and
-				record_separator.is_equal ("%N")
+				value_setters = vs and product = prod
 		end
 
 feature -- Access
