@@ -152,58 +152,188 @@ feature {NONE} -- Implementation
 			-- Use the tuple at the current cursor position of each element
 			-- of `components' to make `current_tuple'.
 		local
-			operator: RESULT_COMMAND [REAL]
-			variable: NUMERIC_VALUE_COMMAND
+			main_field_extractor_array: ARRAY [BASIC_NUMERIC_COMMAND]
+			extractors: LINEAR [BASIC_NUMERIC_COMMAND]
 		do
-			operator := operator_for_current_component
-			variable := variable_for_current_component
 			create current_tuple.make
-			-- Iterate over each field extractor - open, high, ...
-			from
-				field_extractors.start
-				field_setters.start
-			until
-				field_extractors.exhausted
-			loop
-				-- For the current field extractor, extract, operate on,
-				-- and "accumulate" the corresponding field the current
-				-- tuple of each element of `components'.
-				from
-					components.start
-				until
-					components.exhausted
-				loop
-					calculate_field (field_extractors.item, operator, variable)
-					components.forth
-				end
-				-- Need a 'postprocessing_operator.execute ...' - e.g., to
-				-- divide a "divisor" for a stock index.  Set a
-				-- 'postprocessing_variable' to accumulation_operator.value,
-				-- then execute the postprocessing_operator, and use its
-				-- value for the tuple, below, instead of
-				-- accumulation_operator.value.
-				field_setters.item.call ([current_tuple,
-					accumulation_operator.value])
-				field_extractors.forth
-				field_setters.forth
-			end
+			main_field_extractor_array := <<open, high, low, close, volume>>
+			extractors := main_field_extractor_array.linear_representation
+			extractors.do_all (agent process_components_for_current_tuple)
 		ensure
 			current_tuple_exists: current_tuple /= Void
 		end
 
-	prepare_for_processing is
-			-- Perform any needed initialization before making `data'.
+	process_components_for_current_tuple (
+		field_extractor: BASIC_NUMERIC_COMMAND) is
+			-- For each element, c, of `components', use the field obtained
+			-- by `field_extractor' of c's current tuple to calculate the
+			-- value to be used for the current output tuple.
+		local
+			post_operator: RESULT_COMMAND [REAL]
+			post_variable: NUMERIC_VALUE_COMMAND
 		do
-			if open = Void then
-				create open
-				create high
-				create low
-				create close
-				create volume
+			post_operator := post_processing_operator (field_extractor.name)
+			post_variable := post_processing_variable (field_extractor.name)
+			from
+				components.start
+			until
+				components.exhausted
+			loop
+				calculate_field (field_extractor)
+				components.forth
 			end
+			post_variable.set_value (accumulation_operator.value)
+			post_operator.execute (post_variable.value)
+			-- Need a 'postprocessing_operator.execute ...' - e.g., to
+			-- divide a "divisor" for a stock index.  Set a
+			-- 'postprocessing_variable' to accumulation_operator.value,
+			-- then execute the postprocessing_operator, and use its
+			-- value for the tuple, below, instead of
+			-- accumulation_operator.value.
+			--!!!Check if this call is set up right.
+			field_setters.item (field_extractor.name).call ([current_tuple,
+				accumulation_operator.value])
 		end
 
 feature {NONE} -- Implementation - Hook routines
+
+	prepare_for_processing is
+			-- Perform any needed initialization before making `data'.
+		do
+			-- Null routine - redefine if needed.
+		end
+
+--!!!Check this and make_current_tuple and add comments/advice about
+--using sequence commands
+	calculate_field (field_extractor: BASIC_NUMERIC_COMMAND) is
+			-- Calculate the value for `field_extractor' with
+			-- `components.item'.  The result will be stored in
+			-- `accumulation_operator.value'.
+		local
+			operator: RESULT_COMMAND [REAL]
+			variable: NUMERIC_VALUE_COMMAND
+		do
+			operator := operator_for_current_component (field_extractor.name)
+			variable := variable_for_current_component (field_extractor.name)
+			-- Extract the current field:
+			field_extractor.execute (components.item.data.item)
+			variable.set_value (field_extractor.value)
+			operator.execute (components.item.data.item)
+			-- The following instruction allows the `accumulation_operator'
+			-- to take the result, operator.value, from the above
+			-- calculation and "accumulate" it.  The result of this
+			-- accumulation can then be obtained from
+			-- accumulation_operator.value.
+			accumulation_variable.set_value (operator.value)
+			accumulation_operator.execute (components.item.data.item)
+		end
+
+	operator_for_current_component (field_extractor_name: STRING):
+		RESULT_COMMAND [REAL] is
+			-- Operator for `component.item', possibly specialized with
+			-- `field_extractor_name'
+		deferred
+			-- Specialization on `field_extractor_name' will most likely
+			-- only occur for "volume", with the other field extractors
+			-- sharing the same operator.
+		end
+
+	variable_for_current_component (field_extractor_name: STRING):
+		NUMERIC_VALUE_COMMAND is
+			-- The "variable" to be operated on for `component.item',
+			-- possibly specialized with `field_extractor_name'
+		deferred
+		ensure
+			belongs_to_current_operator_or_current_volume_operator:
+				operator_for_current_component (
+				field_extractor_name).descendants.has (Result)
+		end
+
+	post_processing_operator (field_extractor_name: STRING):
+		RESULT_COMMAND [REAL] is
+			-- Operator to be used for any needed post-processing for the
+			-- current field of the current tuple (possibly specialized
+			-- with `field_extractor_name')
+		deferred
+			-- Specialization on `field_extractor_name' will most likely
+			-- only occur for "volume", with the other field extractors
+			-- sharing the same operator.
+		end
+
+	post_processing_variable (field_extractor_name: STRING):
+		NUMERIC_VALUE_COMMAND is
+			-- The variable to be operated on for any needed post-processing
+			-- for the current field of the current tuple (possibly
+			-- specialized with `field_extractor_name')
+		deferred
+		ensure
+			belongs_to_current_operator_or_current_volume_operator:
+				operator_for_current_component (
+				field_extractor_name).descendants.has (Result)
+		end
+
+feature {NONE} -- Implementation - Utility attributes
+
+	current_tuple: BASIC_VOLUME_TUPLE
+			-- Current value of the current tuple - used for calculation
+			-- of `data'
+			--@@@Check on whether BASIC_VOLUME_TUPLE is the right type.
+
+	open: OPENING_PRICE is
+			-- Operator used to extract the open price of the input
+			-- tuple currently being processed
+		once
+			create Result
+			Result.set_name ("open")
+		end
+
+	high: HIGH_PRICE is
+			-- Operator used to extract the high price of the input
+			-- tuple currently being processed
+		once
+			create Result
+			Result.set_name ("high")
+		end
+
+	low: LOW_PRICE is
+			-- Operator used to extract the low price of the input
+			-- tuple currently being processed
+		once
+			create Result
+			Result.set_name ("low")
+		end
+
+	close: CLOSING_PRICE is
+			-- Operator used to extract the close price of the input
+			-- tuple currently being processed
+		once
+			create Result
+			Result.set_name ("close")
+		end
+
+	volume: VOLUME is
+			-- Operator used to extract the volume of the input
+			-- tuple currently being processed
+		once
+			create Result
+			Result.set_name ("volume")
+		end
+
+	field_setters: HASH_TABLE [PROCEDURE [ANY, TUPLE [
+		BASIC_VOLUME_TUPLE, REAL]], STRING] is
+			-- Tuple field setters, corresponding to the tuple extractors
+			-- (open, high, low, etc.) - The key is the name of the
+			-- extractor.
+		once
+			create Result.make (0)
+			Result.extend (agent {BASIC_VOLUME_TUPLE}.set_open, open.name)
+			Result.extend (agent {BASIC_VOLUME_TUPLE}.set_high, high.name)
+			Result.extend (agent {BASIC_VOLUME_TUPLE}.set_low, low.name)
+			Result.extend (agent {BASIC_VOLUME_TUPLE}.set_close, close.name)
+			Result.extend (agent {BASIC_VOLUME_TUPLE}.set_volume, volume.name)
+		end
+
+feature {NONE} -- Implementation - Utility routines
 
 	synchronize_component_cursors is
 			-- For each element, c, of `components', ensure: equal (
@@ -228,101 +358,6 @@ feature {NONE} -- Implementation - Hook routines
 				components.for_all (agent tradable_date_matches (?,
 				components.first.data.item.date_time))
 		end
-
---!!!Check this and make_current_tuple and add comments/advice about
---using sequence commands
-	calculate_field (field: BASIC_NUMERIC_COMMAND;
-		operator: RESULT_COMMAND [REAL]; variable: NUMERIC_VALUE_COMMAND) is
-			-- Calculate the value for `field' with `components.item'.
-			-- The result will be stored in `accumulation_operator.value'.
-		do
-			-- Extract the current field:
-			field.execute (components.item.data.item)
-			variable.set_value (field.value)
-			operator.execute (components.item.data.item)
-			-- The following instruction allows the `accumulation_operator'
-			-- to take the result, operator.value, from the above
-			-- calculation and "accumulate" it.  The result of this
-			-- accumulation can then be obtained from
-			-- accumulation_operator.value.
-			accumulation_variable.set_value (operator.value)
-			accumulation_operator.execute (components.item.data.item)
-		end
-
-	operator_for_current_component: RESULT_COMMAND [REAL] is
-			-- Operator for `component.item'
-			-- The left operand, `operand1', of this operator will be
-			-- set to one of the utility attributes - open, high, or etc. -
-			-- to extract the field currently being operated on.  The
-			-- right operand, `operand2', is expected to perform the
-			-- appropriate calculation on the current field value
-			-- extracted via `operand1'.
-		deferred
-		end
-
-	variable_for_current_component: NUMERIC_VALUE_COMMAND is
-			-- The "variable" to be operated on for `component.item'
-		deferred
-		ensure
-			belongs_to_current_operator_or_current_volume_operator:
-				operator_for_current_component.descendants.has (Result) or
-				operator_for_current_component_volume.descendants.has (Result)
-		end
-
-	operator_for_current_component_volume: RESULT_COMMAND [REAL] is
-			-- Operator for the volume value for `component.item'
-		deferred
-		end
-
-feature {NONE} -- Implementation - Utility attributes
-
-	current_tuple: BASIC_VOLUME_TUPLE
-			-- Current value of the current tuple - used for calculation
-			-- of `data'
-			--@@@Check on whether BASIC_VOLUME_TUPLE is the right type.
-
-	open: OPENING_PRICE
-			-- Operator used to extract the open price of the input
-			-- tuple currently being processed
-
-	high: HIGH_PRICE
-			-- Operator used to extract the high price of the input
-			-- tuple currently being processed
-
-	low: LOW_PRICE
-			-- Operator used to extract the low price of the input
-			-- tuple currently being processed
-
-	close: CLOSING_PRICE
-			-- Operator used to extract the close price of the input
-			-- tuple currently being processed
-
-	volume: VOLUME
-			-- Operator used to extract the volume of the input
-			-- tuple currently being processed
-
-	field_extractors: LINKED_LIST [BASIC_NUMERIC_COMMAND] is
-		once
-			create Result.make
-			Result.extend (open)
-			Result.extend (high)
-			Result.extend (low)
-			Result.extend (close)
-			Result.extend (volume)
-		end
-
-	field_setters: LINKED_LIST [PROCEDURE [ANY, TUPLE [
-			BASIC_VOLUME_TUPLE, REAL]]] is
-		once
-			create Result.make
-			Result.extend (agent {BASIC_VOLUME_TUPLE}.set_open (?))
-			Result.extend (agent {BASIC_VOLUME_TUPLE}.set_high (?))
-			Result.extend (agent {BASIC_VOLUME_TUPLE}.set_low (?))
-			Result.extend (agent {BASIC_VOLUME_TUPLE}.set_close (?))
-			Result.extend (agent {BASIC_VOLUME_TUPLE}.set_volume (?))
-		end
-
-feature {NONE} -- Implementation - Utility routines
 
 	tradable_date_matches (t: TRADABLE [VOLUME_TUPLE];
 		dt: DATE_TIME): BOOLEAN is
