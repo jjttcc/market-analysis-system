@@ -182,8 +182,9 @@ feature {NONE} -- Implementation
 						session.start_dates.force (date, time_period)
 					else
 						if settings.item.is_equal (Now) then
-							-- Set "now" date to 2 years in the future.
-							date.set_year (date.year + 2)
+							-- Set "now" date to 100 years in the future to
+							-- imitate an "eternal now".
+							date.set_year (date.year + 100)
 						end
 						session.end_dates.force (date, time_period)
 					end
