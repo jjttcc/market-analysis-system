@@ -12,9 +12,15 @@ indexing
 class COMPOUND_GENERATOR_FACTORY inherit
 
 	EVENT_GENERATOR_FACTORY
+		rename
+			initialize_signal_type as make
 		redefine
 			product
 		end
+
+creation
+
+	make
 
 feature -- Access
 
@@ -70,7 +76,8 @@ feature -- Basic operations
 
 	execute is
 		do
-			create product.make (left_generator, right_generator, event_type)
+			create product.make (left_generator, right_generator, event_type,
+				signal_type)
 			if before_extension /= Void then
 				product.set_before_extension (before_extension)
 			end

@@ -31,6 +31,8 @@ deferred class MARKET_EVENT_GENERATOR inherit
 			all
 		end
 
+	SIGNAL_TYPES
+
 feature -- Access
 
 	product: CHAIN [MARKET_EVENT]

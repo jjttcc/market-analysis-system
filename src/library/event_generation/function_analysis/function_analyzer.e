@@ -132,9 +132,7 @@ feature -- Basic operations
 				tuple.date_time /= Void and tuple.end_date /= Void
 			end
 			create event.make (event_name, current_tradable.symbol,
-							tuple.date_time, event_type, st.Buy_signal)
---!!!The above needs to be changed to set from a user-configured signal type.
-
+				tuple.date_time, event_type, signal_type)
 			-- For weekly, monthly, etc. data, this will be the date of
 			-- the last trading period of which the tuple is composed; for
 			-- daily, and intraday data, this will simply be the date

@@ -30,7 +30,7 @@ creation
 
 feature -- Initialization
 
-	make (in1, in2: like input1; ev_type: EVENT_TYPE;
+	make (in1, in2: like input1; ev_type: EVENT_TYPE; sig_type: INTEGER;
 			per_type: TIME_PERIOD_TYPE) is
 		require
 			not_void: in1 /= Void and in2 /= Void and ev_type /= Void
@@ -43,11 +43,12 @@ feature -- Initialization
 			-- place to create this new EVENT_TYPE instance.
 			event_type := ev_type
 			period_type := per_type
+			signal_type := sig_type
 			below_to_above := true
 			above_to_below := true
 		ensure
 			set: input1 = in1 and input2 = in2 and event_type /= Void and
-					event_type = ev_type
+				event_type = ev_type and signal_type = sig_type
 			period_type_set: period_type = per_type
 			both_directions: above_to_below and below_to_above
 			use_right: use_right_function

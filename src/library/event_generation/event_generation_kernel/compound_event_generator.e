@@ -34,7 +34,8 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (la, ra: MARKET_EVENT_GENERATOR; ev_type: EVENT_TYPE) is
+	make (la, ra: MARKET_EVENT_GENERATOR; ev_type: EVENT_TYPE;
+			sig_type: INTEGER) is
 		require
 			not_void: la /= Void and ra /= Void
 		do
@@ -43,6 +44,7 @@ feature {NONE} -- Initialization
 			create before_extension.make (0, 0, 0, 0, 0, 0)
 			create after_extension.make (0, 0, 0, 0, 0, 0)
 			event_type := ev_type
+			signal_type := sig_type
 		ensure
 			analyzers_set: left_analyzer = la and right_analyzer = ra
 			extensions_set_to_0:
@@ -50,6 +52,7 @@ feature {NONE} -- Initialization
 				after_extension.is_equal (before_extension.zero)
 			left_target_type_void: left_target_type = Void
 			event_type_set: event_type = ev_type
+			signal_type_set: signal_type = sig_type
 		end
 
 feature -- Access
@@ -304,9 +307,7 @@ feature {NONE} -- Implementation
 			e: MARKET_EVENT_PAIR
 			st: expanded SIGNAL_TYPES
 		do
-			create e.make (left, right, "Event pair", event_type,
-				st.Buy_signal)
---!!!The above needs to be changed to set from a user-configured signal type.
+			create e.make (left, right, "Event pair", event_type, signal_type)
 			product.extend (e)
 		end
 

@@ -13,6 +13,8 @@ deferred class EVENT_GENERATOR_FACTORY inherit
 			product
 		end
 
+	SIGNAL_TYPES
+
 feature -- Access
 
 	product: MARKET_EVENT_GENERATOR
@@ -31,6 +33,16 @@ feature -- Status setting
 			event_type := arg
 		ensure
 			event_type_set: event_type = arg and event_type /= Void
+		end
+
+	set_signal_type (i: INTEGER) is
+			-- Set signal_type to `i'.
+		require
+			type_names.valid_index (i)
+		do
+			signal_type := i
+		ensure
+			signal_type_set: signal_type = i
 		end
 
 end -- EVENT_GENERATOR_FACTORY

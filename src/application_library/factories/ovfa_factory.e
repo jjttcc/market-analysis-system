@@ -12,9 +12,15 @@ indexing
 class OVFA_FACTORY inherit
 
 	EVENT_GENERATOR_FACTORY
+		rename
+			initialize_signal_type as make
 		redefine
 			product
 		end
+
+creation
+
+	make
 
 feature -- Access
 
@@ -82,7 +88,8 @@ feature -- Basic operations
 
 	execute is
 		do
-			create product.make (function, operator, event_type, period_type)
+			create product.make (function, operator, event_type,
+				signal_type, period_type)
 			if left_offset > 0 then
 				product.set_left_offset (left_offset)
 				debug ("editing")

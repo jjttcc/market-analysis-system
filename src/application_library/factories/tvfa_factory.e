@@ -22,11 +22,12 @@ creation
 
 	make
 
-feature -- Initialization
+feature {NONE} -- Initialization
 
 	make is
 		do
 			crossover_specification := Below_to_above
+			initialize_signal_type
 		ensure
 			below_to_above: crossover_specification = Below_to_above
 		end
@@ -105,7 +106,7 @@ feature -- Basic operations
 	execute is
 		do
 			create product.make (left_function, right_function, event_type,
-							period_type)
+				signal_type, period_type)
 			if operator /= Void then
 				product.set_operator (operator)
 				product.set_function_for_operation (use_left_function)
