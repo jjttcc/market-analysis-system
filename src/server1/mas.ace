@@ -5,7 +5,7 @@ root
 	MA_SERVER: make
 
 default
-	assertion (no)
+	assertion (all)
 	arguments ("-o -f ,  *.txt  4002 -debug")
 	arguments ("-o -f ,  *.txt  ")
 	arguments ("-o -f , aapl.txt aa.txt abgx.txt ibm.txt sunw.txt f.txt cb.txt cah.txt 9999")
