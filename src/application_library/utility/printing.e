@@ -262,52 +262,6 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	print_composite_volume_tuples (
-		l: MARKET_TUPLE_LIST [COMPOSITE_VOLUME_TUPLE]) is
-		local
-			print_open: BOOLEAN
-			first, last, i: INTEGER
-			tuple: COMPOSITE_VOLUME_TUPLE
-		do
-			first := first_index (l)
-			last := last_index (l)
-			if last >= first then
-				if not l.empty then
-					if l.first.open_available then
-						print_open := true
-						-- format: date, open, high, low, close, volume
-					else
-						check
-							no_open: print_open = false
-						end
-						-- format: date, high, low, close, volume
-					end
-				end
-				from
-					i := first
-				until
-					i = last + 1
-				loop
-					tuple := l @ i
-					print_date (tuple.end_date, 'y', 'm', 'd')
-					print (output_field_separator)
-					if print_open then
-						print (tuple.open.value)
-						print (output_field_separator)
-					end
-					print (tuple.high.value)
-					print (output_field_separator)
-					print (tuple.low.value)
-					print (output_field_separator)
-					print (tuple.close.value)
-					print (output_field_separator)
-					print (tuple.volume)
-					print (output_record_separator)
-					i := i + 1
-				end
-			end
-		end
-
 	print_market_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
 		local
 			first, last, i: INTEGER
