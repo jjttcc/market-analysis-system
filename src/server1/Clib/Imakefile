@@ -1,6 +1,6 @@
 INCLUDES = -I.  -I$(EIFFEL_INCLUDE)
 
-CCOPTIONS = -Wall -ansi -pedantic
+CCOPTIONS = -Wall -ansi -pedantic -DNDEBUG
 
 HDRS = external_input_sequence_plug_in_module.h
 
