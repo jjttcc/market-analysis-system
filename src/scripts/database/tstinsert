@@ -1,0 +1,10 @@
+from utilities import *
+c = connect()
+syms = ['ibm']
+#vals = [[[]]]
+vals = [[[20010312, 111, 112, 108.75, 111.875, 12343322],
+	[20010313, 114, 115, 109.75, 112.875, 27311319]]]
+print len(vals[0])
+print len(vals[0][0])
+insert_daily_stock_records(c, syms, vals)
+disconnect(c)

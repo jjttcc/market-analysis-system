@@ -1,0 +1,5 @@
+#!/usr/bin/env python
+# Symbols for all stocks in the MAS database
+
+import db_utilities
+db_utilities.mas_symbols()

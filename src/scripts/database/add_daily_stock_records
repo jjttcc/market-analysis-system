@@ -1,0 +1,76 @@
+#!/usr/bin/env python
+# Add daily stock records to the MAS database from standard input.
+# Standard input is expected to contain the records, 1 record per line,
+# in the format: symbol,date,open,high,low,close,volume
+# where date is in the format: yyyymmdd
+
+import sys
+import string
+from basic_utilities import *
+from db_utilities import *
+import regex
+
+Progname = 'add_daily_stock_records'
+Buffersize = 500
+
+def abort(msg):
+	if msg != None and len(msg) > 0:
+		print msg + " - "
+	print "Exiting ..."
+
+def print_rlsts(symbs, l):
+	for i in range(0, len(l)):
+		print 'list for ' + symbs[i] + ' (size %s):' % len(l[i])
+		print l[i]; print ''
+
+def process_cmds(lines):
+	symbols = []
+	recordlists = []
+	middlelist = []
+	last_symbol = ''
+	for i in range(0, len(lines)):
+		l = lines[i][:-1]
+		if regex.match(".*\r", l) != -1:
+			# Get rid of carriage return.
+			l = l[:-1]
+		r = string.split(l, ',')
+		if len(r) != 7:
+			abort(Progname + ': wrong number of records per line ' +\
+				'in input:\n"' + l + '"')
+		record = r[1:]
+		if r[0] != last_symbol:
+			symbols.append(r[0])
+			if last_symbol != '':
+				recordlists.append(middlelist)
+			middlelist = []
+		middlelist.append(record)
+		last_symbol = r[0]
+	recordlists.append(middlelist)
+	return (symbols, recordlists)
+
+def nextlines():
+	finished = 0
+	result = []
+	for i in range(0, Buffersize):
+		l = sys.stdin.readline()
+		if not l: finished = 1; break
+		result.append(l)
+	return result, finished
+
+c = connect()
+while 1:
+	sym_ix = 0
+	rec_ix = 1
+	nl = nextlines()
+	lines = nl[0]
+	insert_cmds = process_cmds(lines)
+	#print 'the lines are: ',; print lines; print ''
+	#print 'the symbols are: ',; print insert_cmds[sym_ix]; print ''
+	#print 'the rlists are:\n',
+	#print_rlsts(insert_cmds[sym_ix], insert_cmds[rec_ix])
+
+	print 'Inserting %d records.' % len(lines)
+	insert_daily_stock_records(c, insert_cmds[sym_ix], insert_cmds[rec_ix])
+	if nl[1]: break
+
+disconnect(c)

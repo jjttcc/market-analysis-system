@@ -1,0 +1,55 @@
+#!/usr/bin/env python
+# Add stock splits to the MAS database from standard input.
+# Standard input is expected to contain the records, 1 record per line,
+# in the format: date,symbol,split_value
+
+import sys
+import string
+from basic_utilities import *
+from db_utilities import *
+import regex
+
+Progname = 'add_stock_splits'
+Buffersize = 200
+
+def abort(msg):
+	if msg != None and len(msg) > 0:
+		print msg + " - "
+	print "Exiting ..."
+
+def process_records(lines):
+	result = []
+	for i in range(0, len(lines)):
+		l = lines[i][:-1]
+		if regex.match(".*\r", l) != -1:
+			# Get rid of carriage return.
+			l = l[:-1]
+		r = string.split(l, ',')
+		if len(r) != 3:
+			abort(Progname + ': wrong number of records per line ' +\
+				'in input:\n"' + l + '"')
+		result.append(r)
+	return (result)
+
+def nextlines():
+	finished = 0
+	result = []
+	for i in range(0, Buffersize):
+		l = sys.stdin.readline()
+		if not l: finished = 1; break
+		result.append(l)
+	return result, finished
+
+c = connect()
+while 1:
+	sym_ix = 0
+	rec_ix = 1
+	nl = nextlines()
+	lines = nl[0]
+	records = process_records(lines)
+
+	print 'Inserting %d records.' % len(lines)
+	insert_stock_splits(c, records)
+	if nl[1]: break
+
+disconnect(c)
