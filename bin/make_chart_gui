@@ -28,13 +28,9 @@ echo Compiling ...
 javac -classpath .:$javalibdir $Main_file || fatal "Compilation of $Main_file failed."
 echo Creating jar file: $Jarfile ...
 rm -f $Jarfile
-echo A
 jar cvf $Jarfile $(for d in $guidirs;do ls -1 $d/*.class;done)
-echo B
 cd $javalibdir
-echo C
 jar uvf $Gui_dir/$Jarfile $jlibclasses
-echo D
 cd -
 
 # Make the CL program.
