@@ -1,0 +1,9 @@
+This directory contains the main test application for TAL.  It contains the
+following files:
+
+     Ace.ace   - Ace file for compiling main_test
+     CASEGEN   - Reverse-engineered EiffelCase design documentation
+     factories - Cluster containing factory and builder classes
+     root      - Cluster containing the root class file, finance_root.e
+     tools     - Tools cluster
+     test      - Directory containing test scripts and data
