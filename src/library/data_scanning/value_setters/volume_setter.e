@@ -5,7 +5,7 @@ indexing
 
 class VOLUME_SETTER inherit
 
-	VALUE_SETTER
+	INTEGER_SETTER
 
 creation
 
@@ -41,23 +41,22 @@ feature {NONE}
 
 	do_set (stream: IO_MEDIUM; tuple: VOLUME_TUPLE) is
 		do
-			stream.read_integer
-			-- Only set the field if it is not flagged as a dummy.
-			if not is_dummy then
-				if stream.last_integer < 0 then
-					!!last_error.make (128)
-					last_error.append ("Numeric input value is < 0: ")
-					last_error.append (stream.last_integer.out)
-					-- conform to the precondition:
-					tuple.set_volume (0)
-					error_occurred := true
-				else
-					tuple.set_volume (stream.last_integer * multiplier)
-				end
+			if stream.last_integer < 0 then
+				handle_input_error ("Numeric input value is < 0: ",
+									stream.last_integer.out)
+				-- conform to the precondition:
+				tuple.set_volume (0)
+			else
+				tuple.set_volume (stream.last_integer * multiplier)
 			end
 		ensure then
-			volume_set_to_last_integer_times_multiplier:
-				stream.last_integer = tuple.volume*multiplier
+			volume_set_to_last_integer_times_multiplier_if_valid:
+				stream.last_integer >= 0 implies
+					stream.last_integer = tuple.volume * multiplier
+			error_if_last_integer_lt_0:
+				stream.last_integer < 0 implies error_occurred
+			error_implies_tuple_set_to_0:
+				error_occurred implies tuple.volume = 0
 		end
 
 invariant

@@ -5,22 +5,18 @@ indexing
 
 class HOUR_DATE_SETTER inherit
 
-	VALUE_SETTER
+	INTEGER_SETTER
 
 feature {NONE}
 
 	do_set (stream: IO_MEDIUM; tuple: MARKET_TUPLE) is
 		do
 			--Stub!!!
-			-- Tuples must always have a date.
-			check not is_dummy end
 			if stream.last_integer < 0 then
-				!!last_error.make (128)
-				last_error.append ("Numeric input value is < 0: ")
-				last_error.append (stream.last_integer.out)
+				handle_input_error ("Numeric input value is < 0: ",
+									stream.last_integer.out)
 				-- conform to the precondition:
 				tuple.set_close (0)
-				error_occurred := true
 			else
 				-- !!!Set the date/time
 				--!!!When the flyweight pattern is implemented for dates,

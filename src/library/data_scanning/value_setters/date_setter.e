@@ -5,7 +5,7 @@ indexing
 
 class DAY_DATE_SETTER inherit
 
-	VALUE_SETTER
+	INTEGER_SETTER
 
 creation
 
@@ -27,9 +27,6 @@ feature {NONE}
 			date_time: DATE_TIME
 			y, m, d, value: INTEGER
 		do
-			-- Tuples must always have a date.
-			check not is_dummy end
-			stream.read_integer
 			value := stream.last_integer
 			y := value // 10000
 			m := value \\ 10000 // 100
@@ -38,15 +35,12 @@ feature {NONE}
 				y < 0 or m < 1 or m > date.months_in_year or
 				d < 1 or d > date.days_in_i_th_month (m, y)
 			then
-				!!last_error.make (128)
-				last_error.append ("Date input value is invalid: ")
-				last_error.append (value.out)
+				handle_input_error ("Date input value is invalid: ", value.out)
 				!!date_time.make_now -- !!!What date to use?
 				tuple.set_date_time (date_time)
-				error_occurred := true
 				--!!!Should the data scanning be aborted?
 				--!!!Perhaps need a fatal error category, of which
-				--!!!this would be one.
+				--!!!this would be one -- Throw exception?
 			else
 				--!!!When the flyweight pattern is implemented for dates,
 				--!!!will need to reference the global date (probably a

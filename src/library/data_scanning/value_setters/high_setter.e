@@ -5,29 +5,28 @@ indexing
 
 class HIGH_SETTER inherit
 
-	VALUE_SETTER
+	REAL_SETTER
 
 feature {NONE}
 
 	do_set (stream: IO_MEDIUM; tuple: BASIC_MARKET_TUPLE) is
 		do
-			stream.read_real
-			-- Only set the field if it is not flagged as a dummy.
-			if not is_dummy then
-				if stream.last_real < 0 then
-					!!last_error.make (128)
-					last_error.append ("Numeric input value is < 0: ")
-					last_error.append (stream.last_real.out)
-					-- conform to the precondition:
-					tuple.set_high (0)
-					error_occurred := true
-				else
-					tuple.set_high (stream.last_real)
-				end
+			if stream.last_real < 0 then
+				handle_input_error ("Numeric input value is < 0: ",
+									stream.last_real.out)
+				-- conform to the precondition:
+				tuple.set_high (0)
+			else
+				tuple.set_high (stream.last_real)
 			end
 		ensure then
-			high_set_to_last_real:
-				rabs (stream.last_real - tuple.high.value) < epsilon
+			high_set_to_last_real_if_valid:
+				stream.last_real >= 0 implies
+					rabs (stream.last_real - tuple.high.value) < epsilon
+			error_if_last_real_lt_0:
+				stream.last_real < 0 implies error_occurred
+			error_implies_tuple_set_to_0:
+				error_occurred implies rabs (tuple.high.value) < epsilon
 		end
 
 end -- class HIGH_SETTER
