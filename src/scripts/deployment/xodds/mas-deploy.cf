@@ -1,0 +1,48 @@
+# Configuration for deployment of MAS onto a customer's system
+# Format: "label_string<tab>setting"
+
+
+# Settings that the user will most likely need to change
+
+# Directory where the data will be stored, if in files
+# If data is not being stored in files, set this to "NONE".
+data_dir	/home/tester/data
+
+# Directory into which MAS is to be installed
+deployment_dir	/home/tester/mas
+
+# Complete path to the MAS binaries tar file
+mas_tar_file	/home/release/special-releases/mas-1.6.6b/mas_linux1.6.6b.tar.gz
+
+
+# Complete path to the MAS applet archive file
+mas_applet_file	/home/release/special-releases/mas-1.6.6b/mas_client-0.1-dev.jar
+
+# Complete path to the MAS servlet archive file
+mas_servlet_file	/home/release/special-releases/mas-1.6.6b/mas-0.1-dev.war
+
+# Complete path to the MAS servlet deployment directory
+servlet_deployment_dir	/usr/java/jakarta-tomcat-4.1.18/webapps/mas
+
+# Complete path to the MAS applet deployment file
+applet_deployment_path	/usr/java/jakarta-tomcat-4.1.18/webapps/mas/mas_client.jar
+
+
+# ==================================================================== 
+# Settings that the user may need to change
+
+# MAS version number
+version	1.6.6b
+
+# Port number the MAS server uses to accept client requests
+server_port_number	7777
+
+# MAS server command-line options
+cl_options	-f ' ' -b -no-volume -date-spec:date-format=dd#month3#yy,year-partition=80,date-sep=- *.txt&
+
+
+# ==================================================================== 
+# Settings that the user is not likely to need to change
+
+# MAS directory environment variable - not expected to change
+mas_dir	MAS_DIRECTORY
