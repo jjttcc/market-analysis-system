@@ -49,6 +49,7 @@ public class TA_Chart extends Frame {
 					}
 					_indicators.put(No_upper_indicator, new Integer(i + 1));
 					_indicators.put(No_lower_indicator, new Integer(i + 2));
+					_indicators.put(Volume, new Integer(i + 3));
 				}
 			}
 		}
@@ -86,6 +87,7 @@ public class TA_Chart extends Frame {
 			}
 			catch (Exception e) {
 				System.err.println("Exception occurred: "+e+", bye ...");
+				e.printStackTrace();
 				quit(-1);
 			}
 			//Ensure that all graph's data sets are removed.  (May need to
@@ -104,6 +106,7 @@ public class TA_Chart extends Frame {
 							session_key);
 				} catch (Exception e) {
 					System.err.println("Exception occurred: "+e+", bye ...");
+					e.printStackTrace();
 					quit(-1);
 				}
 				dataset = connection.last_indicator_data();
@@ -117,16 +120,23 @@ public class TA_Chart extends Frame {
 				// Retrieve the indicator data for the newly selected market
 				// for the lower indicator and draw it.
 				main_pane.clear_indicator_graph();
-				try {
-					connection.send_indicator_data_request(
+				if (current_lower_indicator.equals(Volume)) {
+					// (Nothing to retrieve from server)
+					dataset = connection.last_volume();
+				} else {
+					try {
+						connection.send_indicator_data_request(
 						((Integer) _indicators.get(current_lower_indicator)).
-							intValue(), market, current_period_type,
-							session_key);
-				} catch (Exception e) {
-					System.err.println("Exception occurred: "+e+", bye ...");
-					quit(-1);
+								intValue(), market, current_period_type,
+								session_key);
+					} catch (Exception e) {
+						System.err.println(
+							"Exception occurred: "+e+", bye ...");
+						e.printStackTrace();
+						quit(-1);
+					}
+					dataset = connection.last_indicator_data();
 				}
-				dataset = connection.last_indicator_data();
 				add_indicator_lines(dataset);
 				main_pane.add_indicator_data_set(dataset);
 			}
@@ -300,6 +310,8 @@ public class TA_Chart extends Frame {
 
 	protected final String No_lower_indicator = "No lower indicator";
 
+	protected final String Volume = "Volume";
+
 /** Listener for indicator selection */
 class IndicatorListener implements java.awt.event.ActionListener {
 	public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -314,7 +326,8 @@ class IndicatorListener implements java.awt.event.ActionListener {
 				return;
 			}
 			if (! (selection.equals(No_upper_indicator) ||
-					selection.equals(No_lower_indicator))) {
+					selection.equals(No_lower_indicator) ||
+					selection.equals(Volume))) {
 				connection.send_indicator_data_request(
 					((Integer) _indicators.get(selection)).intValue(),
 					market, current_period_type, session_key);
@@ -322,6 +335,7 @@ class IndicatorListener implements java.awt.event.ActionListener {
 		}
 		catch (Exception ex) {
 			System.err.println("Exception occurred: " + ex + ", bye ...");
+			ex.printStackTrace();
 			quit(-1);
 		}
 		// Set graph data according to whether the selected indicator is
@@ -354,7 +368,11 @@ class IndicatorListener implements java.awt.event.ActionListener {
 		else {
 			main_pane.clear_indicator_graph();
 			current_lower_indicator = selection;
-			dataset = connection.last_indicator_data();
+			if (selection.equals(Volume)) {
+				dataset = connection.last_volume();
+			} else {
+				dataset = connection.last_indicator_data();
+			}
 			add_indicator_lines(dataset);
 			main_pane.add_indicator_data_set(dataset);
 		}

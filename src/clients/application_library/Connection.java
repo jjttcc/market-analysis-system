@@ -30,6 +30,8 @@ public class TA_Connection implements NetworkProtocol
 		scanner = new DataInspector();
 		main_drawer = new_main_drawer();
 		indicator_drawer = new LineDrawer(main_drawer);
+		volume_drawer = new BarDrawer(main_drawer);
+		data_parser.set_volume_drawer(volume_drawer);
 		//Process args for the host, port.
 		if (args.length > 0)
 		{
@@ -100,6 +102,10 @@ public class TA_Connection implements NetworkProtocol
 		data_parser.parse(receive_msg().toString(), main_drawer);
 		_last_market_data = data_parser.result();
 		_last_market_data.set_drawer(main_drawer);
+		_last_volume = data_parser.volume_result();
+		if (_last_volume != null) {
+			_last_volume.set_drawer(volume_drawer);
+		}
 		close_connection();
 	}
 
@@ -145,6 +151,12 @@ public class TA_Connection implements NetworkProtocol
 	public DataSet last_indicator_data()
 	{
 		return _last_indicator_data;
+	}
+
+	// Volume data from last market data request
+	public DataSet last_volume()
+	{
+		return _last_volume;
 	}
 
 	// Last requested indicator list
@@ -300,12 +312,15 @@ public class TA_Connection implements NetworkProtocol
 	private Vector markets;			// Cached list of markets
 		// result of last market data request
 	private DataSet _last_market_data;
+		// volume result from last market data request
+	private DataSet _last_volume;
 		// result of last indicator data request
 	private DataSet _last_indicator_data;
 		// result of last indicator list request
 	private Vector _last_indicator_list;
 	private TA_Parser data_parser;
 	private TA_Parser indicator_parser;
-	private Drawer main_drawer;	// draws tuples in main graph
-	private Drawer indicator_drawer;	// draws tuples in indicator graph
+	private Drawer main_drawer;		// draws tuples in main graph
+	private Drawer indicator_drawer;// draws tuples in indicator graph
+	private Drawer volume_drawer;	// draws volume tuples
 }

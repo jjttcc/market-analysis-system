@@ -85,7 +85,6 @@ public class TA_ScrollPane extends ScrollPane
 	}
 
 	// Add a data set to the indicator graph.
-	// Precondition: main_dates != null
 	public void add_indicator_data_set(DataSet d) {
 		_indicator_graph.attachDataSet(d);
 		indicator_graph_changed = true;

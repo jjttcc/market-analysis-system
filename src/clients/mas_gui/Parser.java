@@ -17,18 +17,34 @@ class TA_Parser {
 
 		dates = new Vector();
 		float_field_count = float_fields(fieldspecs);
-		volumes = new Vector();
-		open_interests = new Vector();
+		has_volume = has_field_type(Volume);
+		has_open_interest = has_field_type(Open_interest);
+	}
+
+	// Set the drawer for drawing volume.
+	void set_volume_drawer(Drawer d) {
+		volume_drawer = d;
+	}
+
+	// Set the drawer for open interest.
+	void set_open_interest_drawer(Drawer d) {
+		open_interest_drawer = d;
 	}
 
 	// Parse `s' into a DataSet according to record_separator and
 	// field_separator.  `drawer' is the tuple drawer to use for the
 	// DataSet.  result() gives the new DataSet.
 	public void parse(String s, Drawer drawer) throws Exception {
-		int float_index = 0;
+		int float_index = 0, volume_index = 0, oi_index = 0;
 		StringTokenizer recs = new StringTokenizer(s, _record_separator, false);
 		clear_vectors();
 		float_data = new double[recs.countTokens() * float_field_count];
+		if (has_volume) {
+			volumes = new double[recs.countTokens()];
+		}
+		if (has_open_interest) {
+			open_interests = new double[recs.countTokens()];
+		}
 		while (recs.hasMoreTokens()) {
 			StringTokenizer fields = new StringTokenizer(recs.nextToken(),
 													_field_separator, false);
@@ -54,11 +70,12 @@ class TA_Parser {
 							parse_double(fields.nextToken());
 						break;
 					case Volume:
-						volumes.addElement(parse_int(fields.nextToken()));
+						volumes[volume_index++] =
+							parse_double(fields.nextToken());
 						break;
 					case Open_interest:
-						open_interests.addElement(
-							parse_int(fields.nextToken()));
+						open_interests[oi_index++] =
+							parse_double(fields.nextToken());
 						break;
 				}
 			}
@@ -69,6 +86,16 @@ class TA_Parser {
 	// Parsed data set result
 	DataSet result() {
 		return processed_data;
+	}
+
+	// Parsed volume
+	DataSet volume_result() {
+		return volume_data;
+	}
+
+	// Parsed volume
+	DataSet open_interest_result() {
+		return oi_data;
 	}
 
 	public String record_separator() {
@@ -91,9 +118,11 @@ class TA_Parser {
 
 	// Put the parsed data into a data set.
 	private void process_data(Drawer drawer) throws Exception {
-		String[] date_array;
+		String[] date_array = null;
+		boolean has_dates = false;
 
 		try {
+			has_dates = dates != null && ! dates.isEmpty();
 			int length = float_data.length / float_field_count;
 			if (length > 0) {
 				processed_data = new DataSet(float_data, length, drawer);
@@ -101,10 +130,22 @@ class TA_Parser {
 			else {
 				processed_data = new DataSet(drawer);
 			}
-			if (dates != null && ! dates.isEmpty()) {
+			if (has_dates) {
 				date_array = new String[dates.size()];
 				dates.copyInto(date_array);
 				processed_data.set_dates(date_array);
+			}
+			if (volume_drawer != null && volumes != null &&
+					volumes.length > 0) {
+				volume_data = new DataSet(volumes, volumes.length,
+											volume_drawer);
+				if (has_dates) volume_data.set_dates(date_array);
+			}
+			if (open_interest_drawer != null && open_interests != null &&
+					open_interests.length > 0) {
+				oi_data = new DataSet(open_interests,
+					open_interests.length, open_interest_drawer);
+				if (has_dates) oi_data.set_dates(date_array);
 			}
 		}
 		catch (Exception e) {
@@ -116,8 +157,6 @@ class TA_Parser {
 	// Remove all elements from data vectors - set their sizes to 0.
 	private void clear_vectors() {
 		dates.removeAllElements();
-		volumes.removeAllElements();
-		open_interests.removeAllElements();
 	}
 
 	// The number of fields in `fieldspecs' that will be of type float
@@ -136,6 +175,16 @@ class TA_Parser {
 		return result;
 	}
 
+	// Does `parsetype' have the specified field type?
+	private boolean has_field_type(int ftype) {
+		boolean result = false;
+		for (int i = 0; i < parsetype.length; ++i) {
+			if (parsetype[i] == ftype) result = true;
+		}
+
+		return result;
+	}
+
 	int parsetype[];
 	int float_field_count;
 
@@ -144,8 +193,14 @@ class TA_Parser {
 	// be equal to the number of records in the input.
 	protected Vector dates;	// String
 	protected double[] float_data;
-	protected Vector volumes, open_interests;	// int
+	protected double[] volumes, open_interests;
 
 	String _record_separator, _field_separator;
 	DataSet processed_data;		// the parsed data
+	DataSet volume_data;		// the parsed volume data
+	DataSet oi_data;			// the parsed open interest data
+	boolean has_volume;
+	boolean has_open_interest;
+	Drawer volume_drawer;
+	Drawer open_interest_drawer;
 }
