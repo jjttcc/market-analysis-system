@@ -54,8 +54,6 @@ public class TimeDrawer extends TemporalDrawer {
 		return _market_drawer.x_values();
 	}
 
-	protected final static int Max_hours = 720, Max_days = 30;
-
 	protected int Hour_y, Day_y;
 
 	protected int Hour_x_offset, Day_x_offset;
@@ -73,11 +71,11 @@ public class TimeDrawer extends TemporalDrawer {
 		final int Draw_all_hour_limit = 16;
 		boolean draw_all_hours;
 		String old_hour_string;
-		IntPair hours[] = new IntPair[Max_hours],
-			days[] = new IntPair[Max_days];
 		int[] _x_values = x_values();
 		String[] times = times();
 		String[] dates = dates();
+		IntPair hours[] = new IntPair[times.length],
+			days[] = new IntPair[times.length];
 
 		if (times == null || times.length == 0) return;
 
