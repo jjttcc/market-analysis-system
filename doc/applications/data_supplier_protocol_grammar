@@ -1,0 +1,82 @@
+BNF Grammar for the Protocol Between the data-supplier server and its
+client, the MAS server
+
+
+message         -> msg end_of_message
+msg             -> client_req | server_response
+client_req      -> request_id "\t" cl_req_body
+cl_req_body     -> symbol_list_req | data_req
+data_req        -> data_type "\t" mkt_symbol
+server_response -> status_id "\t" srv_resp_body
+srv_resp_body   -> srvr_data | error_msg
+error_msg       -> ta_string
+mkt_symbol      -> ta_string
+srvr_data       -> mkt_data "\n"
+mkt_data        -> { mkt_tuple "\n" ... }
+mkt_tuple       -> datetime "," mkt_fields
+symbol_list     -> { symbol "\n" ... }
+mkt_fields      -> { ta_real "," ... }+ [ "," volume [ "," open_interest ] ]
+volume          -> ta_real
+open_interest   -> ta_real
+true_or_false   -> 'T' | 'F'
+request_id      -> sym_list_id | data_id
+symbol_list_req -> <null>
+datetime        -> date [ "," time ]
+date            -> year<>month<>day
+time            -> hour<>minute [<>second ]
+year            -> digit digit digit digit
+month           -> digit digit
+day             -> digit digit
+hour            -> digit digit
+minute          -> digit digit
+second          -> digit digit
+natural_integer -> +('0'..'9')
+ta_real         -> +('0'..'9') '.' *('0'..'9')
+digit           -> ('0'..'9')
+end_of_message  -> <null>
+ta_string       -> +(ta_char)
+ta_char         -> Any character other than tab or newline
+<null>          -> Empty string (0-length contents)
+status_id       -> ok_id | error_id
+ok_id           -> '1'
+error_id        -> '2'
+sym_list_id     -> '1'
+data_id         -> '2'
+
+
+Client-Request Definitions:
+
+Expected Responses for (successfully executed) Client-Requests:
+
+Notes:
+
+A msgID may be introduced later (probably only for client requests) if
+the kinds of client requests grows.!!!  (See 'message' definition in
+server_protocol_grammar.)
+
+A 'start_date_spec' and 'end_date_spec', as with the server_protocol_grammar,
+may be introduced for efficiency - to prevent receiving more data than is
+needed.!!!
+
+mkt_data, sent by the data supplier (server) to the client, will always
+end with an emtpy line (or, put in another way, two consecutive newlines).
+This indicates end of input to the client.  This means that a correct
+message sent by the server will never have an empty line except at the end
+of the input.
+
+Notice that the field separator for market tuples is a comma.  (See
+'mkt_data'.)
+
+The construct "symbol1<>symbol2" means that there is no white space separating
+symbol1 and symbol2.
+
+All tokens are constructed from a stream of ASCII characters.
+
+Date components must follow the usual rules for dates.
+
+end_of_message is an empty string.  This is a placeholder to allow for a
+later decision to use a one-character end-of-message indicator.
+
+When a client first connects with a server, the server will not send anything
+until it receives a request from the client.  Usually this will be a
+[something-or-other request ... !!! fill this in as it becomes concrete].
