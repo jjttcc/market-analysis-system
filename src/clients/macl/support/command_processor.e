@@ -381,7 +381,7 @@ feature {NONE} -- Implementation - Attributes
 			Result := <<"Invalid selection", "Selection must be between">>
 		end
 
-	non_shared_pattern: STRING is ".*List of all valid objects:.*"
+	non_shared_pattern: STRING is ".*List of valid non.shared objects:.*"
 
 	shared_pattern: STRING is "shared *"
 			-- Pattern indicating that the user response indicates a
