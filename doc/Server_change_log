@@ -1,7 +1,7 @@
 SIGNIFICANT SERVER CHANGES IN RELEASE 1.6.5
 
 Added the ability to retrieve market data from a web server using the http
-GET protocol.  This feature is configurable via a mas_httprc cofig. file
+GET protocol.  This feature is configurable via a mas_httprc config. file
 that specifies start and end dates, host address, path query structure,
 etc.  This feature currently only allows retrieval of end-of-day data.
 Created a mas_httprc configuration file to use the feature to retrieve
@@ -32,7 +32,7 @@ Changed the database configuration to allow complete queries to
 be specified for retrieving market data, instead of the old, more
 constrained specification scheme; this allows, for example, a complex
 join to be performed to retrieve stock data.  Also, changed the database
-configuration rules to allow the symbol being quried on to be in either
+configuration rules to allow the symbol being queried on to be in either
 upper or lower case, which allows the user to store symbols in upper
 case in the database.  (Previously, they had to be lower case.)
 
@@ -95,7 +95,7 @@ symbols, including those obtained from a file with upper-case letters,
 to lower case.  For data obtained from files, symbols are mapped to file
 names so that the file name is not changed.
 
-In the exponential moving average classe, changed the 1 - exp.value
+In the exponential moving average class, changed the 1 - exp.value
 calculation into an attribute for efficiency.
 
 SIGNIFICANT SERVER CHANGES IN RELEASE 1.5
@@ -204,7 +204,7 @@ was processed with weekly data.
 
 Changed the reporting of market analysis events for stocks to include the
 stock symbol at the beginning of the report and ensure the symbol is
-captitalized to make it easier for the user to know which stock the event
+capitalized to make it easier for the user to know which stock the event
 is for.
 
 
