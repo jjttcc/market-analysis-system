@@ -193,7 +193,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			!!upavg.make (up_closes, nvalue)
 
 			!!gt_op.make (offset1, offset2)
-			-- Notice that order of arguments is different:
+			-- Notice that order of arguments is different from upsub.make:
 			!!downsub.make (offset1, offset2)
 			!!down_boolclient.make (gt_op, downsub, zero)
 			!!down_adder.make (f.output, down_boolclient, n)
