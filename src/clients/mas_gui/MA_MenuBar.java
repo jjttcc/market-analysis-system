@@ -97,10 +97,10 @@ public class MA_MenuBar extends MenuBar {
 							new MenuShortcut(KeyEvent.VK_R)));
 		view_menu.add(indicator_colors_item);
 		set_replace_indicator_label(replace_toggle);
+		setup_period_menu(period_menu, period_types);
 		view_menu.add(period_menu);
 		view_menu.add(next);
 		view_menu.add(previous);
-		setup_period_menu(period_menu, period_types);
 		indicator_colors = new IndicatorColors(chart);
 		// Connect the indicator colors dialog/list with the corresponding
 		// menu item:
