@@ -66,15 +66,14 @@ feature -- Access
 		end
 
 	character_choice (msg, chars: STRING): CHARACTER is
-	do
-		from
-		until
-			chars.has (Result)
-		loop
-			Result := character_selection (msg)
+		do
+			from
+			until
+				chars.has (Result)
+			loop
+				Result := character_selection (msg)
+			end
 		end
-	end
-
 
 	character_selection (msg: STRING): CHARACTER is
 			-- User-selected character
