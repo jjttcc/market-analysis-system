@@ -1,0 +1,30 @@
+# macl input file to create a volume spike market analyzer
+m
+c
+s
+o
+Market Data
+y
+GT_OPERATOR
+c
+VOLUME
+c
+MULTIPLICATION
+c
+FUNCTION_BASED_COMMAND
+c
+EMA of Volume
+y
+SETTABLE_OFFSET_COMMAND
+c
+BASIC_NUMERIC_COMMAND
+c
+1
+CONSTANT
+c
+3.5
+daily
+Volume > Yesterday's Volume EMA (5) * 3.5
+s
+-
+x

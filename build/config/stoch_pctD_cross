@@ -1,0 +1,33 @@
+# macl input file to create "Stochastic %D Crossover" buy and sell
+# market analyzers
+m
+c
+s
+t
+Stochastic %D
+y
+Line
+y
+35
+0
+daily
+above-to-below
+n
+Stochastic %D Crossover (Buy)
+s
+c
+s
+t
+Stochastic %D
+y
+Line
+y
+65
+0
+daily
+below-to-above
+n
+Stochastic %D Crossover (Sell)
+s
+-
+x

@@ -1,0 +1,33 @@
+# macl input file to create "MACD Difference/Signal Crossover and
+# Stochastic Crossover" buy and sell market analyzers
+m
+c
+c
+MACD Difference/Signal Cross-above (Buy)
+y
+Stochastic %D Cross Below 35% (Buy)
+y
+y
+d
+28
+e
+n
+n
+MACD Crossover and Stochastic %D Crossover (Buy)
+s
+c
+c
+MACD Difference/Signal Cross-below (Sell)
+y
+Stochastic %D Cross Above 65% (Sell)
+y
+y
+d
+28
+e
+n
+n
+MACD Crossover and Stochastic %D Crossover (Sell)
+s
+-
+x

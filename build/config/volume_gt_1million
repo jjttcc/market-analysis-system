@@ -1,0 +1,32 @@
+# macl input file to create "Volume > Yesterday's Volume EMA (5) * 3.5" and
+# "Volume > Yesterday's Volume EMA (5) * 3.5 and Daily Volume >= 1,000,000"
+# market analyzers
+m
+c
+s
+o
+Market Data
+y
+GE_OPERATOR
+c
+VOLUME
+c
+CONSTANT
+c
+1000000
+daily
+Daily Volume >= 1,000,000
+s
+c
+c
+Volume > Yesterday's Volume EMA (5) * 3.5
+y
+Daily Volume >= 1,000,000
+y
+n
+n
+n
+Volume > Yesterday's Volume EMA (5) * 3.5 and Daily Volume >= 1,000,000
+s
+-
+x

@@ -1,0 +1,34 @@
+# macl input file to create "Slope of Slope of MACD Signal Line Cross Above 0
+# (Buy)" and "Slope of Slope of MACD Signal Line Cross Below 0 (Sell)"
+# market analyzers
+m
+c
+s
+t
+Slope of Slope of MACD Signal Line
+y
+Line
+y
+0
+0
+daily
+below-to-above
+n
+Slope of Slope of MACD Signal Line Cross Above 0 (Buy)
+s
+c
+s
+t
+Slope of Slope of MACD Signal Line
+y
+Line
+y
+0
+0
+daily
+above-to-below
+n
+Slope of Slope of MACD Signal Line Cross Below 0 (Sell)
+s
+-
+x

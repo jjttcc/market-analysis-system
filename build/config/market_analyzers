@@ -1,0 +1,171 @@
+# macl input file to create several market analyzers
+m
+c
+s
+t
+MACD Difference
+y
+MACD Signal Line (EMA of MACD Difference)
+y
+weekly
+below-to-above
+n
+MACD Crossover (Buy)
+s
+c
+s
+t
+MACD Difference
+y
+MACD Signal Line (EMA of MACD Difference)
+y
+weekly
+above-to-below
+n
+MACD Crossover (Sell)
+s
+# Stochastic %D Crossover buy and sell analyzers
+c
+s
+t
+Stochastic %D
+y
+Line
+y
+35
+0
+daily
+above-to-below
+n
+Stochastic %D Crossover (Buy)
+s
+c
+s
+t
+Stochastic %D
+y
+Line
+y
+65
+0
+daily
+below-to-above
+n
+Stochastic %D Crossover (Sell)
+s
+# Slope of MACD Signal Line Cross 0 buy and sell analyzers
+c
+s
+t
+Slope of MACD Signal Line
+y
+Line
+y
+0
+0
+weekly
+below-to-above
+n
+Slope of MACD Signal Line Cross Above 0 (Buy)
+s
+c
+s
+t
+Slope of MACD Signal Line
+y
+Line
+y
+0
+0
+weekly
+above-to-below
+n
+Slope of MACD Signal Line Cross Below 0 (Sell)
+s
+# Slope of Slope of MACD Signal Line Cross 0 buy and sell analyzers
+c
+s
+t
+Slope of Slope of MACD Signal Line
+y
+Line
+y
+0
+0
+daily
+below-to-above
+n
+Slope of Slope of MACD Signal Line Cross Above 0 (Buy)
+s
+c
+s
+t
+Slope of Slope of MACD Signal Line
+y
+Line
+y
+0
+0
+daily
+above-to-below
+n
+Slope of Slope of MACD Signal Line Cross Below 0 (Sell)
+s
+# volume spike analyzer
+c
+s
+o
+Market Data
+y
+GT_OPERATOR
+c
+VOLUME
+c
+MULTIPLICATION
+c
+FUNCTION_BASED_COMMAND
+c
+EMA of Volume
+y
+SETTABLE_OFFSET_COMMAND
+c
+BASIC_NUMERIC_COMMAND
+c
+1
+CONSTANT
+c
+3.5
+daily
+Volume > Yesterday's Volume EMA (5) * 3.5
+s
+# MACD Crossover and Stochastic Crossover" buy and sell analyzers
+c
+c
+MACD Crossover (Buy)
+y
+Stochastic %D Crossover (Buy)
+y
+y
+d
+28
+e
+n
+n
+MACD Crossover and Stochastic %D Crossover (Buy)
+s
+c
+c
+MACD Crossover (Sell)
+y
+Stochastic %D Crossover (Sell)
+y
+y
+d
+28
+e
+n
+n
+MACD Crossover and Stochastic %D Crossover (Sell)
+s
+-
+x

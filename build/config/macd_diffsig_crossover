@@ -1,0 +1,29 @@
+# macl input file to create "MACD Difference/Signal Crossover" buy and sell
+# market analyzers
+m
+c
+s
+t
+MACD Difference
+y
+MACD Signal Line (EMA of MACD Difference)
+y
+weekly
+below-to-above
+n
+MACD Crossover (Buy)
+s
+c
+s
+t
+MACD Difference
+y
+MACD Signal Line (EMA of MACD Difference)
+y
+weekly
+above-to-below
+n
+MACD Crossover (Sell)
+s
+-
+x
