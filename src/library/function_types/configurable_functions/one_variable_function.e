@@ -19,7 +19,7 @@ class ONE_VARIABLE_FUNCTION inherit
 			action
 		end
 
-creation {FACTORY}
+creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 	make
 

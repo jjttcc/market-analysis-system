@@ -28,7 +28,7 @@ class STANDARD_MOVING_AVERAGE inherit
 
 	COMMAND_EDITOR -- To allow editing of `sum'
 
-creation {FACTORY}
+creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 	make
 

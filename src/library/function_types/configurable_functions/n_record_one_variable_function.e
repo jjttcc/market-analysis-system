@@ -20,7 +20,7 @@ class N_RECORD_ONE_VARIABLE_FUNCTION inherit
 			set_n
 		end
 
-creation {FACTORY}
+creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 	make
 

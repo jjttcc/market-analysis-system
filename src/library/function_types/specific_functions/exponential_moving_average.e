@@ -14,7 +14,7 @@ class EXPONENTIAL_MOVING_AVERAGE inherit
 			action, set_n, short_description
 		end
 
-creation {FACTORY}
+creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 	make
 

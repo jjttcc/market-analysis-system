@@ -19,7 +19,7 @@ inherit
 			action
 		end
 
-creation {FACTORY}
+creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 	make
 

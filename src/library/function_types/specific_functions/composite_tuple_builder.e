@@ -19,7 +19,7 @@ class COMPOSITE_TUPLE_BUILDER inherit
 			trading_period_type, make_output
 		end
 
-creation {FACTORY}
+creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 	make
 
