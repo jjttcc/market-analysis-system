@@ -7,11 +7,9 @@ indexing
 
 class MARKET_POINT inherit
 
-	SIMPLE_TUPLE
+	MARKET_TUPLE
 		rename
-			value as y, make as st_make_unused
-		export {NONE}
-			st_make_unused
+			value as y
 		end
 
 creation
@@ -37,6 +35,9 @@ feature -- Access
 
 	x: REAL
 			-- x coordinate
+
+	y: REAL
+			-- y coordinate
 
 feature {FACTORY} -- Status setting
 
