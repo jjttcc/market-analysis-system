@@ -86,7 +86,7 @@ with some sample stock split data in the required format.
 
 @begin:linux
 *^fontBNote*^fontP:
-before running the Market Analysis Server for the first time,
+Before running the Market Analysis Server for the first time,
 you will need to set up a few environment variables for it.  See the
 file environment for an explanation of these variables.
 @end:linux
