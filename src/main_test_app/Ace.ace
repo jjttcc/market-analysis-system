@@ -24,6 +24,7 @@ cluster
 	app_events (app_library): "$/events";
 	app_global (app_library): "$/global";
 	app_utility (app_library): "$/utility";
+	app_factories (app_library): "$/factories";
 
 		-- Technical Analysis Library
 	function_abstractions:
