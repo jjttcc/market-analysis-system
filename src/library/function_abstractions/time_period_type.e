@@ -53,6 +53,8 @@ feature -- Access - pre-defined names
 
 	Yearly: STRING is "yearly"
 
+	Quarterly: STRING is "quarterly"
+
 	Monthly: STRING is "monthly"
 
 	Weekly: STRING is "weekly"
@@ -81,6 +83,11 @@ feature {NONE} -- Implementation
 			elseif duration.month /= 0 then
 				if duration.month = 1 then
 					name.append (Monthly)
+				elseif
+					duration.month = 3 and duration.day = 0 and
+					duration.year = 0
+				then
+					name.append (Quarterly)
 				else
 					name.append (duration.month.out)
 					name.append ("-month")
