@@ -26,7 +26,6 @@ class FACTORY_BUILDER inherit
 		export {NONE}
 			all
 		end
-		x
 
 creation
 
