@@ -45,7 +45,7 @@ feature -- Comparison
 			Result := value < other.value
 		end
 
-feature {MARKET_TUPLE} -- Element change
+feature -- Element change
 
 	set_value (v: REAL) is
 			-- Is this the best way to set the price value?
