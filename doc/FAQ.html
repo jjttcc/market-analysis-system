@@ -31,6 +31,9 @@ Market Analysis System (MAS):  Frequently Asked (or Anticipated) Questions
 <DIV CLASS="indented">
 <P>
 <br><br>
+<h3>
+Operating the Server
+</h3>
 <B>Once the server is started in the background, how do I end / stop the
 server.  (I have been just using the kill command ie kill -9 procid.)
 Is there another way to have the server stop?</B>
@@ -42,6 +45,20 @@ clearly because it's a potential security risk - if mas is running on
 the internet, anyone can connect and stop the server.  Of course, this
 is a little silly (not to document it); probably the best solution is to
 add some user verification functionality.
+<P><B>
+When I change the data files after the server is run, it will not 
+pick up any newly named files.  (For example, if ibm.txt and qqq.txt
+were listed when I ran the mas server, and I added nt.txt later, mas
+will not pick up 'nt'.)  Is there any way without resetting (shutdown
+and restart) the server for it to pick up the new data files?
+<P></B>
+Currently, the only way to add new files is to shut down and restart the
+server.  The capability to add new tradables while the server is
+running is a feature that may be added in the future if there is
+enough demand for it.
+<h3>
+Signal Generation
+</h3>
 <P><B>
 I haven't had much luck with the log file for sending the market analysis -
 it produces a core dump when I try and do this.
@@ -87,17 +104,9 @@ and sell signals into separate files according to the subject line.
 I've written a Python script that adds or removes stock symbols from
 watchlists according to whether a signal arrives indicating that the
 stock is in a long-term uptrend, downtrend, or is going sideways.
-<P><B>
-<P>
-When I change the data files after the server is run, it will not 
-pick up any newly named files.  (For example, if ibm.txt and qqq.txt
-were listed when I ran the mas server, and I added nt.txt later, mas
-will not pick up 'nt'.)  Is there any way without resetting (shutdown
-and restart) the server for it to pick up the new data files?
-<P></B>
-Currently, the only way to add new files is to shut down and restart the
-server.  This is a feature I've thought of adding and, if there is
-enough demand for it, probably will in the future.
+<h3>
+Administration and Setup
+</h3>
 <P><B>
 I'm running into problems with MAS not using the new mailer I've set up -
 it is still trying to use elm.  I have set the MAS_MAILER variable:
@@ -130,7 +139,7 @@ If this is not the problem - if you've already exported the
 MAS_MAILER variable, then the problem could be that you are using a user
 (event registrant) for your events that was set up with a previous MAS_MAILER
 setting.
-The design of MAS has an idiosyncracy where once a user (event registrant)
+The design of MAS has an idiosyncrasy where once a user (event registrant)
 has been registered, the MAS_MAILER that was set at that point is the
 one that is used for that user - it gets saved to a file, and it can't
 be edited.
@@ -139,6 +148,19 @@ The way to
 get around this when you change mailers is to delete the original user
 and add a new user while running mas with the MAS_MAILER variable set
 to the new mailer, in this case to the path of your script.
+<P><B>
+I'm running into problems with MAS not using the
+MAS_DIRECTORY variable.
+I added:
+MAS_DIRECTORY=/home/masuser/masconfig/
+to my .profile.
+But mas doesn't use the indicators and other settings
+files I've set up in that directory.
+What am I doing wrong?
+<P></B>
+Most likely you did not export the MAS_DIRECTORY environment variable.
+See the question above about MAS not using the mailer set up with MAS_MAILER
+for an example of how to export an environment variable.
 <P><B>
 I updated to a new version of MAS and when the server starts up it
 prints the following error and exits:
@@ -188,20 +210,9 @@ and
 &lt;portnumber&gt;
 </I>
 is, again, the port number with which you started the server.
-<P><B>
-I'm running into problems with MAS not using the
-MAS_DIRECTORY variable.
-I added:
-MAS_DIRECTORY=/home/masuser/masconfig/
-to my .profile.
-But mas doesn't use the indicators and other settings
-files I've set up in that directory.
-What am I doing wrong?
-<P></B>
-Most likely you did not export the MAS_DIRECTORY environment variable.
-See the question above about MAS not using the mailer set up with MAS_MAILER
-for an example of how to export an environment variable.
-<P>
+<h3>
+Data-related Problems
+</h3>
 <P><B>
 I'm getting the following error from the server:
 <P>
@@ -263,3 +274,16 @@ awk '{
 <br>
 }' $1 > $2
 <P></I></TT>
+<h3>
+Debugging
+</h3>
+<P><B>
+When I use the debugging option and print a moving average indicator, the
+debug output shows that the value of the LINEAR_SUM operator is always the
+same, from the first record to the last.  Is this a bug?
+<P></B>
+No, it's not a bug.  The main moving average functions, Simple Moving 
+Average and Exponential Moving Average, are optimized to only use the
+LINEAR_SUM operator to produce the first output record.  Thus, since it
+is only executed one time, the LINEAR_SUM operator's value will remain
+the same throughout a run.
