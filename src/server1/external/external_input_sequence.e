@@ -305,12 +305,14 @@ feature -- Input
 
 feature {NONE} -- Implementation
 
+	path_separator: STRING is ""
+
 	working_directories: STRING is
 			-- The working directories for external data retrieval, each
-			-- ending with `directory_separator' and separated by ':'.
-			-- The following directories are included in the listed order,
-			-- if the directory exists and is writable: The `app_directory'
-			-- and the current directory.
+			-- ending with `directory_separator' and separated by
+			-- `path_separator'.  The following directories are included
+			-- in the listed order if the directory exists and is writable:
+			-- The `app_directory' and the current directory.
 		local
 			dir: DIRECTORY
 			env: expanded APP_ENVIRONMENT_VARIABLE_NAMES
@@ -327,7 +329,7 @@ feature {NONE} -- Implementation
 				if Result = Void then
 					Result := clone (current_working_directory)
 				else
-					Result.append (concatenation(<<":",
+					Result.append (concatenation(<<path_separator,
 						clone (current_working_directory)>>))
 				end
 				Result.extend (directory_separator)
