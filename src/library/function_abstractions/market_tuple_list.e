@@ -15,16 +15,22 @@ creation
 
 feature -- Access
 
-	index_at_date_time (d: DATE_TIME): INTEGER is
-			-- Index of the element whose date/time matches `d' or of the
-			-- first element whose date/time is later than `d' - 0 if no
-			-- element's time is later than `d'.
+	index_at_date_time (d: DATE_TIME; search_spec: INTEGER): INTEGER is
+			-- Index of the element whose date_time matches `d'
+			-- If no element's date_time matches `d':
+			--   search_spec < 0: Index of latest element whose date_time < `d'
+			--   search_spec > 0: Index of earliest element whose
+			--                    date_time > `d'
+			--   search_spec = 0: -1
+			-- If there is no element whose date_time is earlier than `d' for
+			-- search_spec < 0 or no element whose date_time is later than `d'
+			-- for search_spec > 0, result is 0.
 			-- Time efficiency is O(log2 n)
 		require
 			not_void: d /= Void
 			not_empty: not empty
 		local
-			top, bottom, i, comparison: INTEGER
+			top, bottom, i: INTEGER
 		do
 			-- Perform a binary search.
 			from
@@ -41,9 +47,8 @@ feature -- Access
 				check
 					i_valid: i > 0 and bottom <= i and i <= top
 				end
-				comparison := d.three_way_comparison (i_th (i).date_time)
 				inspect
-					comparison
+					d.three_way_comparison (i_th (i).date_time)
 				when 0 then
 					Result := i
 				when 1 then
@@ -59,26 +64,47 @@ feature -- Access
 					((valid_index (top) implies i_th (top).date_time < d) and
 					(valid_index (bottom) implies i_th (bottom).date_time > d))
 			end
-			if Result = 0 and valid_index (bottom) then
-				-- bottom is now the index of the first element whose
-				-- date/time is later than `d', unless there is no element
-				-- whose date/time is later than `d'
-				Result := bottom
+			if Result = 0 and search_spec /= 0 then
+				if search_spec < 0 and valid_index (top) then
+					-- top is now the index of the first element whose
+					-- date/time is earlier than `d', unless there is no
+					-- element whose date/time is earlier than `d'
+					Result := top
+				elseif search_spec > 0 and valid_index (bottom) then
+					-- bottom is now the index of the first element whose
+					-- date/time is later than `d', unless there is no element
+					-- whose date/time is later than `d'
+					Result := bottom
+				end
 			end
 		ensure
 			non_zero_implies_valid: Result > 0 implies valid_index (Result)
-			non_zero_implies_result_ge_d:
-				Result > 0 implies i_th (Result).date_time >= (d)
-			previous_item_lt_d_if_valid:
-				valid_index (Result - 1) implies
+			non_zero_spec_negative_implies_result_le_d:
+				Result > 0 and search_spec < 0 implies
+					i_th (Result).date_time <= (d)
+			non_zero_spec_positive_implies_result_ge_d:
+				Result > 0 and search_spec > 0 implies
+					i_th (Result).date_time >= (d)
+			spec_negative_next_item_gt_d_if_valid:
+				search_spec < 0 and valid_index (Result + 1) implies
+					i_th (Result + 1).date_time > d
+			spec_positive_previous_item_lt_d_if_valid:
+				search_spec > 0 and valid_index (Result - 1) implies
 					i_th (Result - 1).date_time < d
 			dates_match_if_has_d:
 				has_date_time (d) implies i_th (Result).date_time.is_equal (d)
 		end
 
-	index_at_date (d: DATE): INTEGER is
-			-- Index of the first element whose date matches or is
-			-- later than `d' - 0 if no element's date is later than `d'
+	index_at_date (d: DATE; search_spec: INTEGER): INTEGER is
+			-- Index of the element whose date matches `d'
+			-- If no element's date matches `d':
+			--   search_spec < 0: Index of latest element whose date < `d'
+			--   search_spec > 0: Index of earliest element whose date > `d'
+			--   search_spec = 0: -1
+			-- If there is no element whose date is earlier than `d' for
+			-- search_spec < 0 or no element whose date is later than `d'
+			-- for search_spec > 0, result is 0.
+			-- Time efficiency is O(log2 n)
 		require
 			not_void: d /= Void
 			not_empty: not empty
@@ -89,7 +115,15 @@ feature -- Access
 			check
 				dt.hour = 0 and dt.minute = 0 and dt.second = 0
 			end
-			Result := index_at_date_time (dt)
+			Result := index_at_date_time (dt, search_spec)
+		ensure
+			non_zero_implies_valid: Result > 0 implies valid_index (Result)
+			non_zero_spec_negative_implies_result_le_d:
+				Result > 0 and search_spec < 0 implies
+					i_th (Result).date_time.date <= (d)
+			non_zero_spec_positive_implies_result_ge_d:
+				Result > 0 and search_spec > 0 implies
+					i_th (Result).date_time.date >= (d)
 		end
 
 feature -- Status report
@@ -101,8 +135,19 @@ feature -- Status report
 		local
 			i: INTEGER
 		do
-			i := index_at_date_time (d)
-			Result := i /= 0 and then i_th (i).date_time.is_equal (d)
+			i := index_at_date_time (d, 0)
+			Result := i /= 0
+		end
+
+	has_date (d: DATE): BOOLEAN is
+			-- Does date `d' occur in the data set?
+		require
+			not_void: d /= Void
+		local
+			i: INTEGER
+		do
+			i := index_at_date (d, 0)
+			Result := i /= 0
 		end
 
 	sorted_by_date_time: BOOLEAN is
