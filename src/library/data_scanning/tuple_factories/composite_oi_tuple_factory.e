@@ -1,6 +1,6 @@
 indexing
-	description: "Composite tuple factory that includes the sum of the %
-		%volume of all elements in the market tuple list";
+	description: "Composite volume tuple factory that includes the sum of %
+		%the open interest of all elements in the market tuple list";
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
