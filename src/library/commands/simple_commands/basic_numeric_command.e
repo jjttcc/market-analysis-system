@@ -12,9 +12,33 @@ class BASIC_NUMERIC_COMMAND inherit
 feature -- Basic operations
 
 	execute (arg: MARKET_TUPLE) is
+			-- Sets its value from arg's value
 			-- Can be redefined by ancestors.
 		do
 			value := arg.value
+		end
+
+feature -- Status report
+
+	arg_used: BOOLEAN is
+		do
+			Result := true
+		ensure then
+			used: Result = true
+		end
+
+	execute_precondition: BOOLEAN is
+		do
+			Result := true
+		ensure then
+			is_true: Result = true
+		end
+
+	execute_postcondition: BOOLEAN is
+		do
+			Result := true
+		ensure then
+			is_true: Result = true
 		end
 
 end -- class BASIC_NUMERIC_COMMAND

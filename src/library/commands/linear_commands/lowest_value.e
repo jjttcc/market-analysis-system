@@ -1,6 +1,6 @@
 indexing
 	description:
-		"An abstraction for an n-record command that finds%
+		"An abstraction for an n-record command that finds %
 		%the lowest low value in the last n trading periods."
 	date: "$Date$";
 	revision: "$Revision$"
@@ -11,10 +11,6 @@ class LOWEST_LOW inherit
 		redefine
 			start_init, sub_action, target
 		end
-
-creation
-
-	make
 
 feature {NONE} -- Basic operations
 

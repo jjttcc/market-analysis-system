@@ -16,12 +16,7 @@ feature -- Basic operations
 
 	execute (arg: BASIC_MARKET_TUPLE) is
 		do
-			debug io.put_string ("CP.execute, value: ") end
 			value := arg.close.value
-			debug
-				io.put_real (value)
-				io.put_string ("%N")
-			end
 		ensure then
 			value = arg.close.value
 		end

@@ -11,14 +11,46 @@ deferred class N_BASED_CALCULATION inherit
 			initialize
 		end
 
+	N_RECORD_STRUCTURE
+
 feature -- Initialization
 
-	initialize (s: n_record_structure) is
+	initialize (s: N_RECORD_STRUCTURE) is
 			-- Initialize value with n from s
+		require else
+			s.n_set
 		do
-			value := calculate (s.n)
+			set_n (s.n)
+			-- Calculate is called here for efficiency, since in most
+			-- cases descendants will keep the empty execute implementation.
+			value := calculate
 		ensure then
-			value = calculate (s.n)
+			value = calculate
+			n_set: n_set
+			n_set_to_s_n: n = s.n
+		end
+
+feature -- Status report
+
+	arg_used: BOOLEAN is
+		do
+			Result := false
+		ensure then
+			not_used: Result = false
+		end
+
+	execute_precondition: BOOLEAN is
+		do
+			Result := n_set
+		ensure then
+			n_set: Result = n_set
+		end
+
+	execute_postcondition: BOOLEAN is
+		do
+			Result := true
+		ensure then
+			is_true: Result = true
 		end
 
 feature -- Basic operations
@@ -30,8 +62,10 @@ feature -- Basic operations
 
 feature {NONE} -- Implmentation
 
-	calculate (n: REAL): REAL is
+	calculate: REAL is
 			-- Perform the calculation based on n.
+		require
+			n_set: n_set
 		deferred
 		end
 

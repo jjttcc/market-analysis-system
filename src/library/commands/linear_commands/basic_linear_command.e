@@ -27,6 +27,29 @@ feature {TEST_FUNCTION_FACTORY} -- Element change
 			target /= Void
 		end
 
+feature -- Status report
+
+	arg_used: BOOLEAN is
+		do
+			Result := false
+		ensure then
+			not_used: Result = false
+		end
+
+	execute_precondition: BOOLEAN is
+		do
+			Result := true
+		ensure then
+			is_true: Result = true
+		end
+
+	execute_postcondition: BOOLEAN is
+		do
+			Result := true
+		ensure then
+			is_true: Result = true
+		end
+
 feature {NONE}
 
 	target: LINEAR [MARKET_TUPLE]

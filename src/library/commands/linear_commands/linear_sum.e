@@ -1,9 +1,9 @@
 indexing
-	description: "Sum of n sequential elements.";
+	description: "Operation on n sequential elements";
 	date: "$Date$";
 	revision: "$Revision$"
 
-class LINEAR_SUM inherit
+class LINEAR_OPERATION inherit
 
 	NUMERIC_COMMAND
 		redefine
@@ -17,16 +17,7 @@ class LINEAR_SUM inherit
 
 	N_RECORD_STRUCTURE
 
-creation
-
-	make
-
 feature -- Initialization
-
-	make is
-		do
-			init_n
-		end
 
 	initialize (arg: N_RECORD_STRUCTURE) is
 		do
@@ -38,14 +29,45 @@ feature -- Initialization
 feature -- Basic operations
 
 	execute (arg: ANY) is
+			-- Operate on the next n elements of the input, beginning
+			-- at the current cursor position.
 		do
 			internal_index := 0
 			value := 0
 			until_continue
+		end
+
+feature -- Status report
+
+	operator_set: BOOLEAN is
+			-- Has the operator used for the operation been set?
+		do
+			Result := operator /= Void
+		end
+
+	arg_used: BOOLEAN is
+		do
+			Result := false
 		ensure then
-			-- target.index = old target.index + n
-			-- value = sum(target[old target.index .. old target.index + n - 1])
-			int_index_eq_n: internal_index = n
+			not_used: Result = false
+		end
+
+	execute_precondition: BOOLEAN is
+		do
+			Result := operator_set and input_set and n_set
+		ensure then
+			op_input_n_set: Result = operator_set and input_set and n_set
+		end
+
+	execute_postcondition: BOOLEAN is
+		do
+			Result := internal_index = n
+		ensure then
+			-- target.index = old target.index + n and
+			-- value =
+			--  operation(target[old target.index .. old target.index+n-1])
+			--    [where operation is the operation to be performed]
+			int_index_eq_n: Result = (internal_index = n)
 		end
 
 feature {NONE}
@@ -55,16 +77,21 @@ feature {NONE}
 			Result := 0 <= internal_index and internal_index <= n
 		end
 
-feature {MARKET_FUNCTION} -- export to??
+feature {MARKET_FUNCTION, FACTORY}
 
-	set_input (in: LINEAR [MARKET_TUPLE]) is
+	set_operator (op: BASIC_NUMERIC_COMMAND) is
+			-- Set operator that provides the value to be summed (from
+			-- the current item).
+			-- NOTE:  This must be set before execute is called.
 		require
-			not_void: in /= Void
+			not_void: op /= Void
 		do
-			target := in
-		ensure then
-			target_set: target = in and target /= Void
+			operator := op
+		ensure
+			set: operator = op and operator /= Void
 		end
+
+	operator: BASIC_NUMERIC_COMMAND
 
 feature {NONE}
 
@@ -76,7 +103,9 @@ feature {NONE}
 
 	action is
 		do
-			value := value + target.item.value
+			check operator /= Void end
+			operator.execute (target.item)
+			value := value + operator.value
 		ensure then
 			-- value = sum (
 			-- target [original_index .. original_index + internal_index - 1])
@@ -93,8 +122,4 @@ feature {NONE}
 
 	internal_index: INTEGER
 
-invariant
-
-	valid_target_index: target /= Void implies invariant_value
-
-end -- class LINEAR_SUM
+end -- class LINEAR_OPERATION

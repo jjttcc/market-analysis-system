@@ -9,7 +9,7 @@ class MA_EXPONENTIAL inherit
 
 feature {NONE}
 
-	calculate (n: REAL): REAL is
+	calculate: REAL is
 		do
 			Result := 2 / (n + 1)
 		end
