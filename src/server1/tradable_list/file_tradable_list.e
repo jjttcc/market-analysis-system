@@ -113,6 +113,10 @@ feature {NONE} -- Implementation
 			input_file := open_current_file
 			if input_file /= Void then
 				tradable_factories.item.set_input (input_file)
+				input_file.set_field_separator (
+					tradable_factories.item.field_separator)
+				input_file.set_record_separator (
+					tradable_factories.item.record_separator)
 			else
 				create exc
 				exc.raise ("Error opening input file")
