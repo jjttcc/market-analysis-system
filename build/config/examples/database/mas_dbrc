@@ -30,7 +30,7 @@ stock split query	SELECT date, ticker, value FROM stock_split ORDER BY date
 # <symbol> indicates where to plug in the actual stock symbol and must
 # occur somewhere in the query string.  (Use <uppersymbol> if the symbol
 # needs to be converted to upper-case for the query.)
-stock name query	SELECT name FROM securities_information WHERE ticker = <uppersymbol>
+stock name query	SELECT name FROM securities_information WHERE ticker = '<uppersymbol>'
 
 # Query for derivative instrument name
 # <symbol> indicates where to plug in the actual stock symbol and must
