@@ -1,7 +1,8 @@
 indexing
 	description: "Parser of command-line arguments for Market Analysis %
 		%System server application"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others - %
+		%see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -37,10 +38,15 @@ feature {NONE} -- Initialization
 			set_field_separator
 			set_opening_price
 			set_background
+			set_use_db
 			set_help
 			set_version_request
 			set_port_numbers
-			set_file_names
+			if not use_db then
+				set_file_names
+			else
+				set_symbol_list
+			end
 		end
 
 feature -- Access
@@ -57,12 +63,17 @@ feature -- Access
 
 	file_names: LIST [STRING]
 			-- Market data input file names
-			-- All arguments that do not start with `option_sign' and that
-			-- are not integers
+
+	symbol_list: LIST [STRING]
+			-- Market data input symbols
 
 	background: BOOLEAN
 			-- Is the server run in the background?
 			-- True if "-b" or "-background" is found.
+
+	use_db: BOOLEAN
+			-- Has the user specified that a database is to be used
+			-- for input data?
 
 	help: BOOLEAN
 			-- Has the user requested help on command-line options?
@@ -136,7 +147,7 @@ feature {NONE} -- Implementation
 					contents.item.item (1) = option_sign and
 					contents.item.item (2) = 'o'
 				then
-					opening_price := true
+					opening_price := True
 					contents.remove
 				else
 					contents.forth
@@ -155,7 +166,28 @@ feature {NONE} -- Implementation
 					contents.item.item (1) = option_sign and
 					contents.item.item (2) = 'b'
 				then
-					background := true
+					background := True
+					contents.remove
+				else
+					contents.forth
+				end
+			end
+		end
+
+	set_use_db is
+		do
+			from
+				contents.start
+			until
+				contents.exhausted or help
+			loop
+				if
+					contents.item.item (1) = option_sign and
+--!!!Change 'd' to whatever letter we decide to use for the use-database
+--!!!option:
+					contents.item.item (2) = 'd'
+				then
+					use_db := True
 					contents.remove
 				else
 					contents.forth
@@ -175,7 +207,7 @@ feature {NONE} -- Implementation
 					(contents.item.item (2) = 'h' or
 					contents.item.item (2) = '?')
 				then
-					help := true
+					help := True
 					contents.remove
 				else
 					contents.forth
@@ -194,7 +226,7 @@ feature {NONE} -- Implementation
 					contents.item.item (1) = option_sign and
 					contents.item.item (2) = 'v'
 				then
-					version_request := true
+					version_request := True
 					contents.remove
 				else
 					contents.forth
@@ -226,6 +258,8 @@ feature {NONE} -- Implementation
 			-- Must be called last because it expects all other arguments
 			-- to have been removed from `contents'.
 			-- Will ignore arguments that start with `option_sign'
+		require
+			not use_db
 		local
 			expander: FILE_NAME_EXPANDER
 		do
@@ -233,10 +267,25 @@ feature {NONE} -- Implementation
 			file_names := expander.results
 		end
 
+	set_symbol_list is
+			-- Set `symbol_list' and remove its settings from `contents'
+			-- Empty if no symbols are specified
+			-- Must be called last because it expects all other arguments
+			-- to have been removed from `contents'.
+			-- Will ignore arguments that start with `option_sign'
+		require
+			use_db
+		do
+			create {LINKED_LIST [STRING]} symbol_list.make
+-- !!!extract symbols from `contents' and put them in `symbol_list'.
+		end
+
 
 invariant
 
 	port_numbers_and_file_names_not_void:
 		port_numbers /= Void and file_names /= Void
+	use_db implies file_names = Void and symbol_list /= Void
+	not use_db implies symbol_list = Void and file_names /= Void
 
 end -- class MAS_COMMAND_LINE
