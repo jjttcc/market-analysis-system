@@ -35,7 +35,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	print_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
+	old_print_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
 			-- Print the fields of each tuple in `l'.  If `print_start_date'
 			-- is not void, print all elements of `l' >= that date;
 			-- otherwise, print from the beginning of `l'.
@@ -64,6 +64,18 @@ feature -- Basic operations
 			end
 		end
 
+	print_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
+			-- Print the fields of each tuple in `l'.  If `print_start_date'
+			-- is not void, print all elements of `l' >= that date;
+			-- otherwise, print from the beginning of `l'.
+			-- If `print_end_date' is not void, print all elements of
+			-- `l' <= that date; otherwise, print to the end of `l'.
+		do
+			if not l.empty then
+				(tuple_printers @ l.first.generator).execute (l)
+			end
+		end
+
 	print_indicators (t: TRADABLE [BASIC_MARKET_TUPLE]) is
 			-- Print the fields of each tuple of each indicator of `t'.
 		local
@@ -76,7 +88,7 @@ feature -- Basic operations
 			loop
 				f := t.indicators.item
 				if verbose then print_mf_info (f) end
-				print_market_tuples (f.output)
+				print_tuples (f.output)
 				t.indicators.forth
 			end
 		end
@@ -85,7 +97,7 @@ feature -- Basic operations
 			-- Print the fields of each tuple of indicator `i'.
 		do
 			if verbose then print_mf_info (i) end
-			print_market_tuples (i.output)
+			print_tuples (i.output)
 		end
 
 	print_composite_lists (t: TRADABLE [BASIC_MARKET_TUPLE]) is
@@ -130,6 +142,46 @@ feature -- Basic operations
 		end
 
 feature {NONE} -- Implementation
+
+	tuple_printers: HASH_TABLE [MARKET_TUPLE_PRINTER, STRING] is
+		local
+			st: SIMPLE_TUPLE
+			bmt: BASIC_MARKET_TUPLE
+			bvt: BASIC_VOLUME_TUPLE
+			ct: COMPOSITE_TUPLE
+			cvt: COMPOSITE_VOLUME_TUPLE
+			boit: BASIC_OPEN_INTEREST_TUPLE
+			mtprinter: MARKET_TUPLE_PRINTER
+			bmtprinter: BASIC_MARKET_TUPLE_PRINTER
+			vtprinter: VOLUME_TUPLE_PRINTER
+			oitprinter: OPEN_INTEREST_TUPLE_PRINTER
+		once
+			create st.make (Void, Void, 0)
+			create bmt.make
+			create bvt.make
+			create ct.make
+			create cvt.make
+			create boit.make
+			create mtprinter.make (print_start_date, print_end_date,
+				output_field_separator, output_date_field_separator,
+				output_record_separator)
+			create bmtprinter.make (print_start_date, print_end_date,
+				output_field_separator, output_date_field_separator,
+				output_record_separator)
+			create vtprinter.make (print_start_date, print_end_date,
+				output_field_separator, output_date_field_separator,
+				output_record_separator)
+			create oitprinter.make (print_start_date, print_end_date,
+				output_field_separator, output_date_field_separator,
+				output_record_separator)
+			create Result.make (5)
+			Result.extend (mtprinter, st.generator)
+			Result.extend (bmtprinter, bmt.generator)
+			Result.extend (bmtprinter, ct.generator)
+			Result.extend (vtprinter, bvt.generator)
+			Result.extend (vtprinter, cvt.generator)
+			Result.extend (oitprinter, boit.generator)
+		end
 
 	print_composite_tuples (l: MARKET_TUPLE_LIST [COMPOSITE_TUPLE]) is
 		local
