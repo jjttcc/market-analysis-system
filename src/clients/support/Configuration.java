@@ -9,8 +9,8 @@ import support.*;
 import java.awt.*;
 
 /** Global configuration settings - singleton */
-public class Configuration implements NetworkProtocol
-{
+public class Configuration implements NetworkProtocol {
+
 	// Graph styles
 	public final static int Candle_graph = 1, Regular_graph = 2;
 
@@ -233,8 +233,7 @@ public class Configuration implements NetworkProtocol
 		}
 	}
 
-	private void add_indicator_line(String line_type, StringTokenizer t)
-	{
+	private void add_indicator_line(String line_type, StringTokenizer t) {
 		Float n1, n2;
 		String indicator_name = t.nextToken();
 		String coordinates = t.nextToken();
@@ -475,8 +474,7 @@ public class Configuration implements NetworkProtocol
 
 	private int _main_graph_drawer;
 
-	private class DateSetting
-	{
+	private class DateSetting {
 		DateSetting(String dt, String period)
 		{
 			_date = dt; _time_period = period;
