@@ -1,17 +1,25 @@
+indexing
+	description: "Abstraction that provides services for building a list %
+	%of COMPOSITE_TUPLE instances"
+	detailed_description:
+		"This class builds a list of composite tuples from a list of %
+		%market tuples, using a duration to "
+	date: "$Date$";
+	revision: "$Revision$"
+
 class COMPOSITE_TUPLE_BUILDER inherit
 
 	FACTORY
-		rename
-			execute as make_composite_data
+		redefine
+			execute_precondition
 		end
 
-feature
+feature -- Basic operations
 
-	make_composite_data (start_date: DATE_TIME) is
-			-- Make a composite list of MARKET_TUPLE
+	execute (start_date: DATE_TIME) is
+			-- Make a list of COMPOSITE_TUPLE
 		local
 			src_sublist: ARRAYED_LIST [BASIC_MARKET_TUPLE]
-			--was: src_sublist: LINKED_LIST [BASIC_MARKET_TUPLE]
 			current_date: DATE_TIME
 		do
 			from
@@ -61,13 +69,33 @@ feature
 				product.first.date_time.is_equal (start_date)
 		end
 
-feature -- Utility
+feature -- Status report
+
+	execute_precondition: BOOLEAN is
+		do
+			Result :=
+				source_list /= Void and tuple_maker /= Void and
+				duration /= Void
+		ensure then
+			parameters_not_void:
+				Result = (source_list /= Void and
+						tuple_maker /= Void and duration /= Void)
+			--!!!Note: If a MARKET_TUPLE_LIST (the type of source_list) is
+			--refined to further support the concept of lists with time
+			--period types, such as daily or weekly, including comparison
+			--based on the length of the period (e.g., weekly > daily),
+			--then it would make sense to extend this predicate to include:
+			--source_list.time_period.duration < duration [or something
+			--equivalent] - the concept being that it only makes sense to
+			--make a composite tuple from a set of tuples whose time period
+			--duration is less than that of the time period duration.
+			--(For example, make weekly from daily, but daily from weekly
+			--of weekly from weekly doesn't make sense.)
+		end
 
 	times_correct: BOOLEAN is
-			-- for_all p member_of product [2 .. product.count]
-			--   it_holds p.date_time - previous (p).date_time equals duration
-			-- for_all p member_of product it_holds
-			--   p.last.date_time < p.date_time + duration
+			-- Are the date/time values of elements of `product' correct
+			-- with respect to each other?
 		require
 			not product.empty
 			-- product is sorted by date/time
@@ -98,25 +126,30 @@ feature -- Utility
 					product.forth
 				end
 			end
+		ensure
+			-- for_all p member_of product [2 .. product.count]
+			--   it_holds p.date_time - previous (p).date_time equals duration
+			-- for_all p member_of product it_holds
+			--   p.last.date_time < p.date_time + duration
 		end
 
 feature -- Access
 
-	product: ARRAYED_LIST [COMPOSITE_TUPLE]
+	product: MARKET_TUPLE_LIST [COMPOSITE_TUPLE]
 			-- Resulting list of tuples
 
-	source_list: LINEAR [BASIC_MARKET_TUPLE]
-			-- tuples used to manufacture product
+	source_list: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]
+			-- Tuples used to manufacture product
 
 	tuple_maker: COMPOSITE_TUPLE_FACTORY
-			-- factory used to create tuples
+			-- Factory used to create tuples
 
 	duration: DATE_TIME_DURATION
-			-- duration of the composite tuples to be created
+			-- Duration of the composite tuples to be created
 
 feature
 
-	set_source_list (l: LINEAR [BASIC_MARKET_TUPLE]) is
+	set_source_list (l: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]) is
 			-- Set source_list to `l'.
 		require
 			not_void: l /= Void
