@@ -7,14 +7,12 @@ class SOMETHING_OR_OTHER inherit
 
 feature
 
--- !!!Need an object to manufacture tuple and an object to set values of
--- !!!product elements according to values of l's elements.
-
-	make_composite_data (duration: DATE_TIME_DURATION) is
+	make_composite_data (start_date: DATE_TIME) is
 			-- Make a composite list of MARKET_TUPLE
-			-- !!!Would duration be better as a settable attribute?
 		local
-			src_sublist: ARRAYED_LIST [MARKET_TUPLE]
+			src_sublist: ARRAYED_LIST [BASIC_MARKET_TUPLE]
+			--was: src_sublist: LINKED_LIST [BASIC_MARKET_TUPLE]
+			current_date: DATE_TIME
 		do
 			from
 				if product = Void then
@@ -23,13 +21,14 @@ feature
 					-- Remove any previously inserted items.
 					product.wipe_out
 				end
-				!!src_sublist.make (100) -- !!!Size?
+				!!src_sublist.make (0)
 				source_list.start
+				current_date := start_date
 				check product.count = 0 end
 			invariant
-				-- times_correct (
-				-- 	product [1..product.count],
-				-- 	source_list [1..source_list.index-1], duration)
+				product.count > 1 implies ((product.last.date_time -
+					product.i_th (
+					product.count - 1).date_time).duration.is_equal (duration))
 			until
 				source_list.after
 			loop
@@ -40,84 +39,84 @@ feature
 					src_sublist.extend (source_list.item)
 					source_list.forth
 				invariant
-					((src_sublist.last.date_time <
-						src_sublist.first.date_time + duration) and
-					(src_sublist.last.date_time >=
-						src_sublist.first.date_time))
+					(src_sublist.last.date_time <
+						current_date + duration)
+					-- src_sublist is sorted by date_time
 				until
 					source_list.after or
 						source_list.item.date_time >=
-							src_sublist.first.date_time + duration
+							current_date + duration
 				loop
 					src_sublist.extend (source_list.item)
 					source_list.forth
 				end
 				tuple_maker.execute (src_sublist)
+				tuple_maker.product.set_date_time (current_date)
+				--!!!When implemented, use the flyweight date_time table.
+				current_date := current_date + duration
 				product.extend (tuple_maker.product)
-				-- Set newly inserted tuple's date to the date of
-				-- the first.
-				product.last.set_date_time (src_sublist.first.date_time)
 			end
 		ensure then
-			times_correct (product, source_list, duration)
+			product.count > 0 implies times_correct and
+				product.first.date_time.is_equal (start_date)
 		end
 
 feature -- Utility
 
-	times_correct (mainl, subl: LINEAR [MARKET_TUPLE];
-					duration: DATE_TIME_DURATION): BOOLEAN is
-			-- For each element of mainl, does its date equal the date
-			-- of an element of subl and are there no elements of subl
-			-- that are not included within the time span (specified by
-			-- `duration') of an element of mainl?
+	times_correct: BOOLEAN is
+			-- for_all p member_of product [2 .. product.count]
+			--   it_holds p.date_time - previous (p).date_time equals duration
+			-- for_all p member_of product it_holds
+			--   p.last.date_time < p.date_time + duration
 		require
-			-- mainl and subl are sorted by date/time
+			not product.empty
+			-- product is sorted by date/time
+		local
+			previous: MARKET_TUPLE
 		do
+			Result := true
 			from
-				Result := true
-				mainl.start
-				subl.start
+				product.start
+				previous := product.item
+				product.forth
 			until
-				mainl.after or not Result
+				product.after or not Result
 			loop
-				if
-					not subl.after and then
-						mainl.item.date_time.is_equal (subl.item.date_time)
-				then
-					from
-						subl.forth
-					until
-						subl.after or else subl.item.date_time >=
-											mainl.item.date_time + duration
-					loop
-						subl.forth
-					end
-					mainl.forth
-				else
-					check
-						not mainl.after -- ensured by until predicate
-						-- subl ended before mainl or mainl's and subl's
-						-- current item dates are not equal:
-						subl.after or not mainl.item.date_time.is_equal (
-														subl.item.date_time)
-					end
-					Result := false
-				end -- if
-			end -- loop
-			Result := Result and subl.after
+				Result := (product.item.date_time -
+							previous.date_time).duration.is_equal (duration)
+				previous := product.item
+				product.forth
+			end
+			if Result then
+				from
+					product.start
+				until
+					product.after or not Result
+				loop
+					Result := product.item.last.date_time <
+								product.item.date_time + duration
+					product.forth
+				end
+			end
 		end
 
-feature
+feature -- Access
 
-	product: ARRAYED_LIST [BASIC_MARKET_TUPLE]
+	product: ARRAYED_LIST [COMPOSITE_TUPLE]
+			-- Resulting list of tuples
 
-	source_list: LINEAR [MARKET_TUPLE]
+	source_list: LINEAR [BASIC_MARKET_TUPLE]
+			-- tuples used to manufacture product
 
 	tuple_maker: COMPOSITE_TUPLE_FACTORY
+			-- factory used to create tuples
+
+	duration: DATE_TIME_DURATION
+			-- duration of the composite tuples to be created
 
 feature
 
-	set_source_list (l: LINEAR [MARKET_TUPLE]) is
+	set_source_list (l: LINEAR [BASIC_MARKET_TUPLE]) is
 			-- Set source_list to `l'.
 		require
 			not_void: l /= Void
@@ -135,6 +134,15 @@ feature
 			tuple_maker := f
 		ensure
 			set: tuple_maker = f and f /= Void
+		end
+
+	set_duration (d: DATE_TIME_DURATION) is
+		require
+			d /= Void
+		do
+			duration := d
+		ensure
+			duration_set: duration = d and duration /= Void
 		end
 
 end -- SOMETHING_OR_OTHER
