@@ -83,4 +83,11 @@ feature {NONE} -- Implementation
 
 	configuration: MCT_CONFIGURATION
 
+invariant
+
+	configuration_exists: configuration /= Void
+	port_numbers_in_use_exists: port_numbers_in_use /= Void
+	compare_port_numbers: port_numbers_in_use.object_comparison
+	external_commands_exist: external_commands /= Void
+
 end

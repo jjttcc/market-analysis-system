@@ -60,4 +60,11 @@ feature -- Access
 			end
 		end
 
+invariant
+
+	actions_exist: actions /= Void
+	widget_label_exists: widget_label /= Void
+	identifier_exists: identifier /= Void
+	array_correct: action_array /= Void and action_array.count = actions.count
+
 end

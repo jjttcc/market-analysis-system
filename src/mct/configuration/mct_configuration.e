@@ -254,4 +254,13 @@ feature {NONE} -- Implementation
 
 	current_cmd_is_default: BOOLEAN
 
+invariant
+
+	default_start_server_command_exists: default_start_server_command /= Void
+	start_server_commands_exist: start_server_commands /= Void
+	start_command_line_client_command_exists:
+		start_command_line_client_command /= Void
+	chart_command_exists: chart_command /= Void
+	termination_command_exists: termination_command /= Void
+
 end

@@ -17,6 +17,8 @@ create
 feature {NONE} -- Initialization
 
 	make (config: MCT_CONFIGURATION) is
+		require
+			config_exists: config /= Void
 		local
 			cmd: EXTERNAL_COMMAND
 		do

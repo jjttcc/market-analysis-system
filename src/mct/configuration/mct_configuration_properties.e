@@ -51,6 +51,10 @@ feature -- Utilities
 			Result := clone (s)
 			Result.prepend_character (Token_start_delimiter)
 			Result.append_character (Token_end_delimiter)
+		ensure
+			result_exists: Result /= Void
+			definition: Result.is_equal (Token_start_delimiter.out + s +
+				Token_end_delimiter.out)
 		end
 
 end

@@ -19,7 +19,8 @@ feature -- Access
 			create Result.make_with_text (label)
 			add_actions (Result.select_actions, actions)
 		ensure
-			Result.text.is_equal (label)
+			result_exists: Result /= Void
+			text_set: Result.text.is_equal (label)
 		end
 
 	new_button (label: STRING; actions: CONTAINER [PROCEDURE [ANY, TUPLE]]):
@@ -32,17 +33,23 @@ feature -- Access
 			add_actions (Result.select_actions, actions)
 			Result.set_minimum_width (Result.width + 9)
 		ensure
-			Result.text.is_equal (label)
+			result_exists: Result /= Void
+			text_set: Result.text.is_equal (label)
 		end
 
 	new_error_dialog (text: STRING): EV_INFORMATION_DIALOG is
 			-- Error reporting dialog
+		require
+			args_exist: text /= Void
 		local
 			pixmaps: expanded EV_STOCK_PIXMAPS
 		do
 			create Result.make_with_text (text)
 			Result.set_title ("Error")
 			Result.set_pixmap (pixmaps.error_pixmap)
+		ensure
+			result_exists: Result /= Void
+			text_set: Result.text.is_equal (text)
 		end
 
 feature -- Basic operations

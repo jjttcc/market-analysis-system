@@ -19,6 +19,8 @@ feature -- Access
 		do
 			create Result.make ("Start a MAS session", start_session_token,
 				<<agent main_actions.start_server>>)
+		ensure
+			result_exists: Result /= Void
 		end
 
 	start_chart_set: ACTION_SET is
@@ -28,6 +30,8 @@ feature -- Access
 		do
 			create Result.make ("Start charts", start_session_token,
 				<<agent mas_session_actions.start_charting_app>>)
+		ensure
+			result_exists: Result /= Void
 		end
 
 	start_command_line_set: ACTION_SET is
@@ -38,6 +42,8 @@ feature -- Access
 			create Result.make ("Start command-line client",
 				start_session_token,
 				<<agent mas_session_actions.start_command_line>>)
+		ensure
+			result_exists: Result /= Void
 		end
 
 	connect_to_session_set: ACTION_SET is
@@ -48,6 +54,8 @@ feature -- Access
 			create Result.make ("Connect to a running MAS session",
 				connect_to_session_token,
 				<<agent main_actions.connect_to_session>>)
+		ensure
+			result_exists: Result /= Void
 		end
 
 	terminate_session_set: ACTION_SET is
@@ -59,6 +67,8 @@ feature -- Access
 				terminate_session_token,
 				<<agent mas_session_actions.terminate_session,
 				agent mas_session_actions.close_window>>)
+		ensure
+			result_exists: Result /= Void
 		end
 
 	terminate_arbitrary_session_set: ACTION_SET is
@@ -69,6 +79,8 @@ feature -- Access
 			create Result.make ("Terminate a MAS session",
 				terminate_arbitrary_session_token,
 					<<agent main_actions.terminate_arbitrary_session>>)
+		ensure
+			result_exists: Result /= Void
 		end
 
 	close_window_set: ACTION_SET is
@@ -84,6 +96,8 @@ feature -- Access
 			end
 			create Result.make ("Close", close_window_token,
 				<<agent actions.close_window>>)
+		ensure
+			result_exists: Result /= Void
 		end
 
 	exit_set: ACTION_SET is
@@ -94,6 +108,8 @@ feature -- Access
 		do
 			create Result.make ("Quit", exit_token,
 				<<agent main_actions.exit>>)
+		ensure
+			result_exists: Result /= Void
 		end
 
 feature -- Access

@@ -28,6 +28,10 @@ feature {NONE} -- Initialization
 		do
 			make_with_title (ttl)
 			create_contents (rows)
+		ensure
+			count_set: list.count = rows.count
+			column_count_set: list.column_count = rows.first.count
+			title_set: title.is_equal (ttl)
 		end
 
 feature -- Access
@@ -44,7 +48,6 @@ feature -- Access
 feature {NONE} -- Implementation - initialization
 
 	create_contents (rows: LIST [LIST [STRING]]) is
-		local
 		do
 			-- Avoid flicker on some platforms.
 			lock_update
@@ -170,5 +173,7 @@ feature {NONE} -- Implementation
 		end
 
 invariant
+
+	list_exists: list /= Void
 
 end

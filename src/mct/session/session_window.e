@@ -12,7 +12,7 @@ class SESSION_WINDOW inherit
 		export
 			{NONE} all
 			{ANY} show, lock_update, unlock_update, extend, set_menu_bar,
-			set_minimum_width, set_minimum_height, is_destroyed
+			set_minimum_width, set_minimum_height, is_destroyed, title
 		end
 
 create

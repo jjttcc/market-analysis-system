@@ -19,6 +19,7 @@ feature {NONE} -- Initialization
 	make (id: STRING; cmd: STRING) is
 		require
 			args_exist: id /= Void and cmd /= Void
+			id_not_empty: not id.is_empty
 		do
 			identifier := id
 			command_string := cmd
@@ -66,5 +67,9 @@ feature -- Basic operations
 --command_string + "'%N")
 			env.launch (command_string)
 		end
+
+invariant
+
+	identifier_not_empty: identifier /= Void and not identifier.is_empty
 
 end

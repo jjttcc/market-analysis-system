@@ -27,6 +27,9 @@ feature -- Access
 			add_main_accelerators (Result)
 			-- Allow screen refresh on some platoforms.
 			Result.unlock_update
+		ensure
+			result_exists: Result /= Void
+			title_set: Result.title.is_equal (Main_window_title)
 		end
 
 	mas_session_window: SESSION_WINDOW is
@@ -47,6 +50,9 @@ feature -- Access
 			add_session_accelerators (Result)
 			-- Allow screen refresh on some platoforms.
 			Result.unlock_update
+		ensure
+			result_exists: Result /= Void
+			title_set: Result.title.is_equal (Session_window_title)
 		end
 
 feature {NONE} -- Main-window components
@@ -279,5 +285,9 @@ feature {NONE} -- Implementation - Constants
 	server_startup_menu_title: STRING is "&Server startup configuration"
 
 	preferences_menu_title: STRING is "&Preferences"
+
+invariant
+
+	configuration_exists: configuration /= Void
 
 end

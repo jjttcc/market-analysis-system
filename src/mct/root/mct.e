@@ -18,7 +18,7 @@ class MCT inherit
 		undefine
 			default_create, copy
 		redefine
-			application_name
+			application_name, log_error
 		end
 
 create
@@ -39,24 +39,21 @@ feature {NONE} -- Initialization
         local
             main_window: EV_TITLED_WINDOW
 			builder: APPLICATION_WINDOW_BUILDER
-			wbldr: expanded WIDGET_BUILDER
-			dialog: EV_MESSAGE_DIALOG
 		do
 			default_create
             create builder
             main_window := builder.main_window
             main_window.show
 			setup_succeeded := True
+		ensure
+			setup_succeeded: setup_succeeded
 		rescue
+			exit_needed := True
 			if is_developer_exception then
-				dialog := wbldr.new_error_dialog (developer_exception_name)
+				log_error (developer_exception_name)
 			else
-				dialog := wbldr.new_error_dialog (Setup_failed_msg)
+				log_error (Setup_failed_msg)
 			end
-			dialog.show
-			dialog.key_press_actions.extend (agent key_abort)
-			dialog.default_push_button.pointer_button_press_actions.extend (
-				agent button_abort)
 			launch
 		end
 
@@ -66,6 +63,10 @@ feature {NONE} -- Initialization
 		rescue
 			debug
 				print ("event loop retrying%N")
+			end
+			if assertion_violation then
+				exit_needed := True
+				log_error (error_information (Assert_string, true))
 			end
 			-- Try to recover from exceptions due to bugs (e.g., void target
 			-- call in multi-lists).
@@ -95,6 +96,22 @@ feature {NONE} -- Implementation
 	key_abort (e: EV_KEY) is
 		do
 			exit (1)
+		end
+
+	exit_needed: BOOLEAN
+
+	log_error (msg: STRING) is
+		local
+			wbldr: expanded WIDGET_BUILDER
+			dialog: EV_MESSAGE_DIALOG
+		do
+			dialog := wbldr.new_error_dialog (msg)
+			dialog.show
+			if exit_needed then
+				dialog.key_press_actions.extend (agent key_abort)
+				dialog.default_push_button.pointer_button_press_actions.extend (
+					agent button_abort)
+			end
 		end
 
 feature {NONE} -- Implementation - hook routine implementations
