@@ -1,0 +1,72 @@
+# [Slope of MACD, Slope of Slope of MACD] Trend
+e
+c
+ONE_VARIABLE_FUNCTION
+c
+Slope of MACD Signal Line Trend
+Slope of MACD Signal Line
+y
+BOOLEAN_NUMERIC_CLIENT
+c
+GE_OPERATOR
+c
+BASIC_LINEAR_COMMAND
+c
+Slope of MACD Signal Line
+y
+CONSTANT
+c
+0
+CONSTANT
+c
+1
+CONSTANT
+c
+-1
+s
+c
+ONE_VARIABLE_FUNCTION
+c
+Slope of Slope of MACD Signal Line Trend
+Slope of Slope of MACD Signal Line
+y
+BOOLEAN_NUMERIC_CLIENT
+c
+GE_OPERATOR
+c
+BASIC_LINEAR_COMMAND
+d
+y
+Slope of Slope of MACD Signal Line
+y
+CONSTANT
+c
+0
+CONSTANT
+c
+1
+CONSTANT
+c
+-1
+s
+c
+TWO_VARIABLE_FUNCTION
+c
+[Slope of MACD, Slope of Slope of MACD] Trend
+Slope of MACD Signal Line Trend
+y
+Slope of Slope of MACD Signal Line Trend
+y
+ADDITION
+c
+BASIC_LINEAR_COMMAND
+c
+Slope of MACD Signal Line Trend
+y
+BASIC_LINEAR_COMMAND
+c
+Slope of Slope of MACD Signal Line Trend
+y
+s
+-
+x
