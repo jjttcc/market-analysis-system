@@ -5,13 +5,13 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class CL_BASED_COMMAND_EDITOR inherit
+class CL_BASED_COMMAND_EDITING_INTERFACE inherit
 
 	COMMAND_LINE_UTILITIES [COMMAND]
 		rename
 			print_object_tree as print_command_tree,
 			print_component_trees as print_operand_trees,
-			print_message as show_message
+			print_message as show_message, set_io_device as make_io
 		export
 			{NONE} all
 		redefine
@@ -21,9 +21,18 @@ class CL_BASED_COMMAND_EDITOR inherit
 	PRINTING
 		export
 			{NONE} all
+		undefine
+			print
 		end
 
 	COMMAND_EDITING_INTERFACE
+		undefine
+			print
+		end
+
+creation
+
+	make_io
 
 feature {NONE} -- Hook methods
 
@@ -32,13 +41,13 @@ feature {NONE} -- Hook methods
 			print_list (<<"Select:%N     Print description of ",
 						c.generator, "? (d)%N",
 						"     Choose ", c.generator,
-						" (c) Make another choice (a) ">>)
+						" (c) Make another choice (a) ", eot>>)
 			inspect
 				selected_character
 			when 'd', 'D' then
 				print_list (<<"%N", command_description (c),
 					"%N%NChoose ", c.generator,
-						"? (y/n) ">>)
+						"? (y/n) ", eot>>)
 				inspect
 					selected_character
 				when 'y', 'Y' then
@@ -79,4 +88,4 @@ feature {NONE} -- Utility routines
 			end
 		end
 
-end -- CL_BASED_COMMAND_EDITOR
+end -- CL_BASED_COMMAND_EDITING_INTERFACE
