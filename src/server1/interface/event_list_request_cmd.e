@@ -15,6 +15,11 @@ class EVENT_LIST_REQUEST_CMD inherit
 			error_context
 		end
 
+	GLOBAL_APPLICATION
+		export
+			{NONE} all
+		end
+
 creation
 
 	make

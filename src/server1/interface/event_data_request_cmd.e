@@ -11,7 +11,7 @@ class EVENT_DATA_REQUEST_CMD inherit
 
 	TRADABLE_REQUEST_COMMAND
 		rename
-			make as trc_make, event_types as global_event_types
+			make as trc_make
 		redefine
 			error_context
 		end
@@ -35,6 +35,11 @@ class EVENT_DATA_REQUEST_CMD inherit
 			{NONE} all
 		redefine
 			event_cache
+		end
+
+	GLOBAL_APPLICATION
+		export
+			{NONE} all
 		end
 
 creation
