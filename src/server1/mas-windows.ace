@@ -70,6 +70,10 @@ cluster
 
 	network (server):		"$/network"
 
+	client_lib:		"$MAS/src/client_library"
+
+	client_support (client_lib):		"$/support"
+
 	root_cluster (server):		"$/root"
 
 	app_server_utility (server):		"$/utility"

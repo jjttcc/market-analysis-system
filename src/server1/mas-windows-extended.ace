@@ -77,8 +77,6 @@ cluster
 
 	extended_global (extended_server):		"$/global"
 
-	extended_support (extended_server):		"$/support"
-
 	extended_sys (extended_server):		"$/system_specific/unix"
 
 	open_source_root_cluster (server):		"$/root"

@@ -30,7 +30,6 @@ feature {MEDIUM_POLLER} -- Basic operations
 		local
 			socket: NETWORK_STREAM_SOCKET
 			response_received: BOOLEAN
-			i: INTEGER
 		do
 			response := ""
 			active_medium.set_non_blocking

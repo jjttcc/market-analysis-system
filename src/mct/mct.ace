@@ -53,8 +53,6 @@ cluster
 
 	gui (mct):		"$/gui"
 
-	gui_abstractions (gui):		"$/abstractions"
-
 	gui_components (gui):		"$/components"
 
 	gui_support (gui):		"$/support"
