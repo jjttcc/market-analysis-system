@@ -39,8 +39,8 @@ feature {NONE} -- Initialization
 			build_standard_status_bar
 			lower_bar.extend (standard_status_bar)
 
-			build_main_container
-			extend (main_container)
+--			build_main_container
+--			extend (main_container)
 
 				-- Execute `request_close_window' when the user clicks
 				-- on the cross in the title bar.
@@ -241,10 +241,10 @@ feature {NONE} -- Implementation / Constants
 	Window_title: STRING is "install_tool"
 			-- Title of the window.
 
-	Window_width: INTEGER is 400
+	Window_width: INTEGER is 175
 			-- Initial width for this window.
 
-	Window_height: INTEGER is 400
+	Window_height: INTEGER is 42
 			-- Initial height for this window.
 
 end -- class MAIN_WINDOW
