@@ -14,7 +14,7 @@ creation
 
 feature -- Initialization
 
-	make (argv: ARRAY [STRING]) is
+	make is
 		local
 			socket: NETWORK_STREAM_SOCKET
 			readcmd: POLL_COMMAND
