@@ -9,11 +9,17 @@
 src/application_library . serversrc1.4
 src/library . serversrc1.4
 src/eiffel_library . serversrc1.4
+src/Ecli/src . serversrc1.4
+src/Ecli/Copyright.txt . serversrc1.4
+src/Ecli/INSTALL_INFO.txt . serversrc1.4
 src/server1/abstractions . serversrc1.4
 src/server1/doc . serversrc1.4
 src/server1/factories . serversrc1.4
 src/server1/global . serversrc1.4
 src/server1/interface . serversrc1.4
+src/server1/protocols . serversrc1.4
+src/server1/tradable_list . serversrc1.4
+src/server1/stock_splits . serversrc1.4
 src/server1/network . serversrc1.4
 src/server1/root . serversrc1.4
 src/server1/utility . serversrc1.4
@@ -35,6 +41,16 @@ src/server1/test/input/stoch . serversrc1.4
 src/server1/test/input/test_data . serversrc1.4
 src/server1/test/input/williams . serversrc1.4
 src/server1/test/input/sunw . serversrc1.4
+src/server1/test/input/ibm.intraday . serversrc1.4
+src/server1/test/input/ma.intraday . serversrc1.4
+src/server1/test/input/momentum.intraday . serversrc1.4
+src/server1/test/input/roc.intraday . serversrc1.4
+src/server1/test/input/rsi.intraday . serversrc1.4
+src/server1/test/input/stoch.intraday . serversrc1.4
+src/server1/test/input/sunw.intraday . serversrc1.4
+src/server1/test/input/test_data.intraday . serversrc1.4
+src/server1/test/input/williams.intraday . serversrc1.4
+src/server1/test/input/dj.intraday . serversrc1.4
 src/server1/test/lib/rsi.awk . serversrc1.4
 src/server1/test/lib/test_files.1 . serversrc1.4
 src/server1/test/lib/test_files.2 . serversrc1.4
@@ -58,8 +74,12 @@ src/server1/test/reference/rsi_sunw . serversrc1.4
 src/server1/test/reference/rsi_sunw_mnthly . serversrc1.4
 src/server1/test/reference/rsi_sunw_qtrly . serversrc1.4
 src/server1/test/reference/sunw_mnthly_stch%K . serversrc1.4
+src/server1/test/reference/dj_stochKintra . serversrc1.4
+src/server1/test/reference/dj_ema_int15 . serversrc1.4
+src/server1/test/reference/dj_macdsig_hourly . serversrc1.4
 doc/mal_intro src/doc/ serversrc1.4
 doc/MAL_design_document src/doc/MAL_design_document serversrc1.4
+doc/MAS_design_document src/doc/MAS_design_document serversrc1.4
 doc/MAL_README src/doc/README serversrc1.4
 doc/src_README src/README serversrc1.4
 doc/applications/server_protocol_grammar src/doc/ serversrc1.4
@@ -196,21 +216,41 @@ src/clients/support/ErrorBox.class lib/classes/support/ mas_linux1.4 mas_windows
 src/clients/support/IndicatorGroup.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/support/IndicatorGroups.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
 # (GUI config. file)
-src/clients/GUI1/.ma_clientrc lib/classes/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config/.ma_clientrc lib/classes/ mas_linux1.4 mas_windows1.4 mac1.4
 # (Scripts)
 bin/magc . mas_linux1.4 mas_windows1.4 clientsrc1.4 mac1.4
 bin/masb . mas_linux1.4 mas_windows1.4 clientsrc1.4 mac1.4
-src/clients/CL/macl bin/ mas_linux1.4 mas_windows1.4 clientsrc1.4 mac1.4
+src/scripts/python/mas/client/macl bin/ mas_linux1.4 mas_windows1.4 clientsrc1.4 mac1.4
+src/scripts/python/mas/client/CommandProcessor.py lib/python/ mas_linux1.4 mas_windows1.4 clientsrc1.4 mac1.4
+src/scripts/python/mas/library/constants.py lib/python/ mas_linux1.4 mas_windows1.4 clientsrc1.4 mac1.4
+src/scripts/python/mas/library/ma_connection.py lib/python/ mas_linux1.4 mas_windows1.4 clientsrc1.4 mac1.4
+src/scripts/python/mas/library/ma_protocol.py lib/python/ mas_linux1.4 mas_windows1.4 clientsrc1.4 mac1.4
 src/clients/CL/maclj bin/ mas_linux1.4 mas_windows1.4 clientsrc1.4 mac1.4
 src/scripts/windows/runmas.bat bin/ mas_windows1.4
 src/scripts/windows/runmacl.bat bin/ mas_windows1.4
 src/scripts/windows/runmasgui.bat bin/ mas_windows1.4
+# (macl configuration files)
+build/config/accumulation_distribution lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config/ema_of_volume lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config/force_index lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config/indicators lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config/obv lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config/slope_of_macd_sl lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config/slope_of_slope_of_macd_sl lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config/macd_diffsig_crossover lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config/macd_diffsigx_and_stoch_35 lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config/market_analyzers lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config/slope_of_macd_sl_cross0 lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config/slope_of_slope_of_macd_sl_cross0 lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config/stoch_pctD_cross lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config/volume_gt_1million lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config/volume_spike lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
 # (Server executables and needed libraries)
 lib/binaries/mas_no_assert_v1.4 bin/mas mas_linux1.4
 lib/binaries/mas_assert_v1.4 bin/mas_assert mas_linux1.4
 # Include this odbc library if the executable was not statically
 # linked with it:
-#lib/binaries/libodbc.so.1 lib mas_linux1.4
+lib/binaries/libodbc.so.1 lib mas_linux1.4 serversrc1.4
 # No new Windows server executable in release 1.4 - use 1.2 version:
 lib/binaries/mas_v1.2.exe bin/mas.exe mas_windows1.4
 # (MAS Documentation)
@@ -223,6 +263,7 @@ doc/creating_market_analyzers . mas_linux1.4 mac1.4
 doc/other_market_analyzer_examples . mas_linux1.4 mac1.4
 doc/market_analysis . mas_linux1.4 mac1.4
 doc/MAS_README doc/README mas_linux1.4 mac1.4
+doc/README_compile src/doc/README_compile serversrc1.4
 doc/main_MAS_README ./README mas_linux1.4 mac1.4
 doc/env_settings ./doc/environment mas_linux1.4 mac1.4
 doc/INSTALL  ./ mas_linux1.4
@@ -249,16 +290,15 @@ doc/mas_odbc_usage.txt . mas_windows1.4
 doc/README_WINDOWS.txt ./ mas_windows1.4
 # (Scripts)
 src/scripts/install/install ./ mas_linux1.4 mas_windows1.4
-src/scripts/install/install_config ./ mas_linux1.4 mas_windows1.4
-# Persistent object and data files needed by mas1.4
-lib/binaries/indicators_persist_v1.4 lib/indicators_persist mas_linux1.4 mas_windows1.4
-lib/binaries/generators_persist_v1.4 lib/generators_persist mas_linux1.4 mas_windows1.4
+#src/scripts/install/install_config ./ mas_linux1.4 mas_windows1.4
+# Data files needed by mas1.4
 /home2/finance/.mas/stock_splits lib mas_linux1.4 mas_windows1.4
 build/data lib mas_linux1.4 mas_windows1.4
+build/mas_dbrc lib mas_linux1.4 mas_windows1.4
 forum.txt . mas_linux1.4 mas_windows1.4 mac1.4 serversrc1.4 clientsrc1.4
 # Scripts
-/home2/finance/lib/python/obtain_eod_data src/scripts/ scripts
-/home2/finance/lib/python/pmm src/scripts/ scripts
+src/scripts/python/obtain_eod_data src/scripts/ scripts
+src/scripts/python/pmm src/scripts/ scripts
 /home2/finance/bin/run_market_analysis src/scripts/ scripts
 /home2/finance/bin/distribute_data src/scripts/ scripts
 /home2/finance/bin/process_stock_splits src/scripts/ scripts
