@@ -14,27 +14,6 @@ creation
 
 	make
 
-feature -- Initialization
-
-	make (in_file: like input_file; tm: like tuple_maker;
-			vs: like value_setters; field_sep, record_sep: STRING) is
-		require
-			args_not_void: in_file /= Void and tm /= Void and vs /= Void and
-				field_sep /= Void and record_sep /= Void
-			in_file_readable: in_file.exists and in_file.is_open_read
-			vs_not_empty: not vs.empty
-		do
-			input_file := in_file
-			tuple_maker := tm
-			value_setters := vs
-			field_separator := field_sep
-			record_separator := record_sep
-		ensure
-			set: input_file = in_file and tuple_maker = tm and
-				value_setters = vs and field_separator = field_sep and
-				record_separator = record_sep
-		end
-
 feature -- Access
 
 	product: SIMPLE_FUNCTION [MARKET_TUPLE]
