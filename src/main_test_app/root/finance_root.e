@@ -53,13 +53,10 @@ feature -- Initialization
 				function_builder.execute (tradable)
 				add_indicators (tradable, function_builder.product)
 				print_tuples (tradable)
-				print_indicators (tradable)
 				if not tradable.indicators_processed then
-					print ("Oops - indicators were not processed, %
-							%processing...%N")
 					tradable.process_indicators
-					print_indicators (tradable)
 				end
+				print_indicators (tradable)
 				print_composite_lists (tradable)
 				--print contents of tradable, including tech. indicators...
 			end
