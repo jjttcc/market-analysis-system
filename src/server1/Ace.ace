@@ -32,6 +32,8 @@ cluster
 	--system_specific (server):	"$/system_specific/win32";
 	database (server)		:	"$/database";
 	database_odbc (server)	:	"$/database/odbc";	
+	protocols (server):			"$/protocols";
+	tradable_list (server):		"$/tradable_list";
 
 		-- Application library clusters
 	app_library:				"$MAS/src/application_library";
@@ -41,6 +43,7 @@ cluster
 	app_factories (app_library):
 								"$/factories";
 	app_editing (app_library):	"$/editing";
+	app_services (app_library):	"$/application_services";
 
 		-- Technical Analysis Library
 	library:					"$MAS/src/library";
