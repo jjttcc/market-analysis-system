@@ -20,7 +20,7 @@ feature -- Access
 
 	function: N_RECORD_ONE_VARIABLE_FUNCTION
 
-	current_value: INTEGER is
+	current_value: INTEGER_REF is
 		do
 			Result := function.n
 		end
@@ -29,14 +29,14 @@ feature -- Access
 
 feature -- Element change
 
-	change_value (new_value: INTEGER) is
+	change_value (new_value: INTEGER_REF) is
 		do
-			function.set_n (new_value)
+			function.set_n (new_value.item)
 		end
 
 feature -- Basic operations
 
-	valid_value (i: INTEGER): BOOLEAN is
+	valid_value (i: INTEGER_REF): BOOLEAN is
 		do
 			Result := i > 0
 		end
