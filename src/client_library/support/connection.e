@@ -97,7 +97,20 @@ feature {NONE} -- Implementation - Constants
 
 	Buffersize: INTEGER is 1
 
-	Timeout_seconds: INTEGER is 35
+	Timeout_seconds: INTEGER is
+		once
+			Result := Seconds_in_a_day * 365
+		end
+
+	Seconds_in_an_hour: INTEGER is
+		once
+			Result := 60 * 60
+		end
+
+	Seconds_in_a_day: INTEGER is
+		once
+			Result := Seconds_in_an_hour * 24
+		end
 
 feature {NONE} -- Unused
 
