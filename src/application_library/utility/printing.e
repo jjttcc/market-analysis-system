@@ -179,12 +179,12 @@ feature {NONE} -- Implementation
 			if not l.empty then
 				if l.first.open_available then
 					print_open := true
-					io.put_string ("date, open, high, low, close:%N%N")
+					print ("date, open, high, low, close:%N%N")
 				else
 					check
 						no_open: print_open = false
 					end
-					io.put_string ("date, high, low, close:%N%N")
+					print ("date, high, low, close:%N%N")
 				end
 			end
 			from
@@ -193,17 +193,17 @@ feature {NONE} -- Implementation
 				l.after
 			loop
 				print_date (l.item.end_date, 'y', 'm', 'd')
-				io.put_string (output_field_separator)
+				print (output_field_separator)
 				if print_open then
-					io.put_string (real_formatter.formatted(l.item.open.value))
-					io.put_string (output_field_separator)
+					print (real_formatter.formatted(l.item.open.value))
+					print (output_field_separator)
 				end
-				io.put_string (real_formatter.formatted(l.item.high.value))
-				io.put_string (output_field_separator)
-				io.put_string (real_formatter.formatted(l.item.low.value))
-				io.put_string (output_field_separator)
-				io.put_string (real_formatter.formatted(l.item.close.value))
-				io.put_string ("%N")
+				print (real_formatter.formatted(l.item.high.value))
+				print (output_field_separator)
+				print (real_formatter.formatted(l.item.low.value))
+				print (output_field_separator)
+				print (real_formatter.formatted(l.item.close.value))
+				print ("%N")
 				l.forth
 			end
 		end
@@ -217,12 +217,12 @@ feature {NONE} -- Implementation
 			if not l.empty then
 				if l.first.open_available then
 					print_open := true
-					io.put_string ("date, open, high, low, close:%N%N")
+					print ("date, open, high, low, close:%N%N")
 				else
 					check
 						no_open: print_open = false
 					end
-					io.put_string ("date, high, low, close:%N%N")
+					print ("date, high, low, close:%N%N")
 				end
 			end
 			from
@@ -231,17 +231,17 @@ feature {NONE} -- Implementation
 				l.after
 			loop
 				print_date (l.item.end_date, 'y', 'm', 'd')
-				io.put_string (output_field_separator)
+				print (output_field_separator)
 				if print_open then
-					io.put_string (real_formatter.formatted(l.item.open.value))
-					io.put_string (output_field_separator)
+					print (real_formatter.formatted(l.item.open.value))
+					print (output_field_separator)
 				end
-				io.put_string (real_formatter.formatted(l.item.high.value))
-				io.put_string (output_field_separator)
-				io.put_string (real_formatter.formatted(l.item.low.value))
-				io.put_string (output_field_separator)
-				io.put_string (real_formatter.formatted(l.item.close.value))
-				io.put_string ("%N")
+				print (real_formatter.formatted(l.item.high.value))
+				print (output_field_separator)
+				print (real_formatter.formatted(l.item.low.value))
+				print (output_field_separator)
+				print (real_formatter.formatted(l.item.close.value))
+				print ("%N")
 				l.forth
 			end
 		end
@@ -257,12 +257,12 @@ feature {NONE} -- Implementation
 			if not l.empty then
 				if l.first.open_available then
 					print_open := true
-					io.put_string ("date, open, high, low, close, volume:%N%N")
+					print ("date, open, high, low, close, volume:%N%N")
 				else
 					check
 						no_open: print_open = false
 					end
-					io.put_string ("date, high, low, close, volume:%N%N")
+					print ("date, high, low, close, volume:%N%N")
 				end
 			end
 			from
@@ -271,19 +271,19 @@ feature {NONE} -- Implementation
 				l.after
 			loop
 				print_date (l.item.end_date, 'y', 'm', 'd')
-				io.put_string (output_field_separator)
+				print (output_field_separator)
 				if print_open then
-					io.put_string (real_formatter.formatted(l.item.open.value))
-					io.put_string (output_field_separator)
+					print (real_formatter.formatted(l.item.open.value))
+					print (output_field_separator)
 				end
-				io.put_string (real_formatter.formatted(l.item.high.value))
-				io.put_string (output_field_separator)
-				io.put_string (real_formatter.formatted(l.item.low.value))
-				io.put_string (output_field_separator)
-				io.put_string (real_formatter.formatted(l.item.close.value))
-				io.put_string (output_field_separator)
-				io.put_string (int_formatter.formatted(l.item.volume))
-				io.put_string ("%N")
+				print (real_formatter.formatted(l.item.high.value))
+				print (output_field_separator)
+				print (real_formatter.formatted(l.item.low.value))
+				print (output_field_separator)
+				print (real_formatter.formatted(l.item.close.value))
+				print (output_field_separator)
+				print (int_formatter.formatted(l.item.volume))
+				print ("%N")
 				l.forth
 			end
 		end
@@ -299,12 +299,12 @@ feature {NONE} -- Implementation
 			if not l.empty then
 				if l.first.open_available then
 					print_open := true
-					io.put_string ("date, open, high, low, close, volume:%N%N")
+					print ("date, open, high, low, close, volume:%N%N")
 				else
 					check
 						no_open: print_open = false
 					end
-					io.put_string ("date, high, low, close, volume:%N%N")
+					print ("date, high, low, close, volume:%N%N")
 				end
 			end
 			from
@@ -313,19 +313,19 @@ feature {NONE} -- Implementation
 				l.after
 			loop
 				print_date (l.item.end_date, 'y', 'm', 'd')
-				io.put_string (output_field_separator)
+				print (output_field_separator)
 				if print_open then
-					io.put_string (real_formatter.formatted(l.item.open.value))
-					io.put_string (output_field_separator)
+					print (real_formatter.formatted(l.item.open.value))
+					print (output_field_separator)
 				end
-				io.put_string (real_formatter.formatted(l.item.high.value))
-				io.put_string (output_field_separator)
-				io.put_string (real_formatter.formatted(l.item.low.value))
-				io.put_string (output_field_separator)
-				io.put_string (real_formatter.formatted(l.item.close.value))
-				io.put_string (output_field_separator)
-				io.put_string (int_formatter.formatted(l.item.volume))
-				io.put_string ("%N")
+				print (real_formatter.formatted(l.item.high.value))
+				print (output_field_separator)
+				print (real_formatter.formatted(l.item.low.value))
+				print (output_field_separator)
+				print (real_formatter.formatted(l.item.close.value))
+				print (output_field_separator)
+				print (int_formatter.formatted(l.item.volume))
+				print ("%N")
 				l.forth
 			end
 		end
@@ -341,9 +341,9 @@ feature {NONE} -- Implementation
 				l.after
 			loop
 				print_date (l.item.end_date, 'y', 'm', 'd')
-				io.put_string (output_field_separator)
-				io.put_string (real_formatter.formatted(l.item.value))
-				io.put_string ("%N")
+				print (output_field_separator)
+				print (real_formatter.formatted(l.item.value))
+				print ("%N")
 				l.forth
 			end
 		end
@@ -388,11 +388,11 @@ feature {NONE} -- Implementation
 				check f3 = 'd' end
 				i3 := date.day
 			end
-			io.put_string (fmtr.formatted (i1))
-			io.put_string (date_field_separator)
-			io.put_string (fmtr.formatted (i2))
-			io.put_string (date_field_separator)
-			io.put_string (fmtr.formatted (i3))
+			print (fmtr.formatted (i1))
+			print (date_field_separator)
+			print (fmtr.formatted (i2))
+			print (date_field_separator)
+			print (fmtr.formatted (i3))
 		end
 
 	print_mf_info (f: MARKET_FUNCTION) is
