@@ -12,12 +12,7 @@ class STORABLE_MARKET_FUNCTION_LIST inherit
 
 	STORABLE_LIST [MARKET_FUNCTION]
 		redefine
-			cleanup
-		end
-
-	MARKET_FUNCTION_EDITOR
-		export {NONE}
-			all
+			save
 		end
 
 	GLOBAL_SERVICES
@@ -25,16 +20,18 @@ class STORABLE_MARKET_FUNCTION_LIST inherit
 			all
 		end
 
+	MARKET_FUNCTION_EDITOR
+
 creation
 
 	make
 
 feature -- Utility
 
-	cleanup is
+	save is
 			-- Ensure that the output data lists of each market function
-			-- are (recursively) cleared so that no extra data is stored
-			-- to the file; then call precursor.
+			-- are (recursively) cleared so that no extra data is stored to
+			-- the file; then call precursor to save the remaining contents.
 		local
 			dummy_tradable: TRADABLE [BASIC_MARKET_TUPLE]
 			dummy_period: TRADABLE [BASIC_MARKET_TUPLE]
