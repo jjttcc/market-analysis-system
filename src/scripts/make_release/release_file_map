@@ -6,285 +6,287 @@
 # Note3: path names with special shell characters (such as '$') should
 # escape the characters with a backslash.
 # Market Analysis Server source code
-src/application_library . serversrc1.5
-src/library . serversrc1.5
-src/eiffel_library . serversrc1.5
-src/Ecli/src . serversrc1.5
-src/Ecli/Copyright.txt . serversrc1.5
-src/Ecli/INSTALL_INFO.txt . serversrc1.5
-src/server1/abstractions . serversrc1.5
-src/server1/doc . serversrc1.5
-src/server1/factories . serversrc1.5
-src/server1/global . serversrc1.5
-src/server1/interface . serversrc1.5
-src/server1/protocols . serversrc1.5
-src/server1/tradable_list . serversrc1.5
-src/server1/stock_splits . serversrc1.5
-src/server1/network . serversrc1.5
-src/server1/root . serversrc1.5
-src/server1/utility . serversrc1.5
-src/server1/system_specific . serversrc1.5
-src/server1/database . serversrc1.5
-src/server1/Ace.ace . serversrc1.5
-src/server1/test/README . serversrc1.5
-src/server1/test/run_tests . serversrc1.5
-src/server1/test/bin/compare_numbers . serversrc1.5
-src/server1/test/bin/pr_dataset . serversrc1.5
-src/server1/test/bin/testlib . serversrc1.5
-src/server1/test/input/force_index . serversrc1.5
-src/server1/test/input/ma . serversrc1.5
-src/server1/test/input/momentum . serversrc1.5
-src/server1/test/input/roc . serversrc1.5
-src/server1/test/input/rsi . serversrc1.5
-src/server1/test/input/rsi_colby . serversrc1.5
-src/server1/test/input/stoch . serversrc1.5
-src/server1/test/input/test_data . serversrc1.5
-src/server1/test/input/wilder_ma . serversrc1.5
-src/server1/test/input/williams . serversrc1.5
-src/server1/test/input/sunw . serversrc1.5
-src/server1/test/input/ibm.intraday . serversrc1.5
-src/server1/test/input/ma.intraday . serversrc1.5
-src/server1/test/input/momentum.intraday . serversrc1.5
-src/server1/test/input/roc.intraday . serversrc1.5
-src/server1/test/input/rsi.intraday . serversrc1.5
-src/server1/test/input/stoch.intraday . serversrc1.5
-src/server1/test/input/sunw.intraday . serversrc1.5
-src/server1/test/input/test_data.intraday . serversrc1.5
-src/server1/test/input/williams.intraday . serversrc1.5
-src/server1/test/input/dj.intraday . serversrc1.5
-src/server1/test/lib/rsi.awk . serversrc1.5
-src/server1/test/lib/test_files.1 . serversrc1.5
-src/server1/test/lib/test_files.2 . serversrc1.5
-src/server1/test/reference/README . serversrc1.5
-src/server1/test/reference/ema . serversrc1.5
-src/server1/test/reference/force_index . serversrc1.5
-src/server1/test/reference/ma . serversrc1.5
-src/server1/test/reference/macd . serversrc1.5
-src/server1/test/reference/macd_hist . serversrc1.5
-src/server1/test/reference/macd_sig . serversrc1.5
-src/server1/test/reference/momentum . serversrc1.5
-src/server1/test/reference/roc . serversrc1.5
-src/server1/test/reference/rsi4 . serversrc1.5
-src/server1/test/reference/rsi7 . serversrc1.5
-src/server1/test/reference/slow_stochD3 . serversrc1.5
-src/server1/test/reference/stochD5 . serversrc1.5
-src/server1/test/reference/stochK5 . serversrc1.5
-src/server1/test/reference/test_data.one_field . serversrc1.5
-src/server1/test/reference/williams . serversrc1.5
-src/server1/test/reference/wilder_ma . serversrc1.5
-src/server1/test/reference/rsi_sunw . serversrc1.5
-src/server1/test/reference/rsi_sunw_mnthly . serversrc1.5
-src/server1/test/reference/rsi_sunw_qtrly . serversrc1.5
-src/server1/test/reference/sunw_mnthly_stch%K . serversrc1.5
-src/server1/test/reference/dj_stochKintra . serversrc1.5
-src/server1/test/reference/dj_ema_int15 . serversrc1.5
-src/server1/test/reference/dj_macdsig_hourly . serversrc1.5
-doc/mal_intro src/doc/ serversrc1.5
-doc/MAL_design_document src/doc/MAL_design_document serversrc1.5
-doc/MAS_design_document src/doc/MAS_design_document serversrc1.5
-doc/MAL_README src/doc/README serversrc1.5
-doc/src_README src/README serversrc1.5
-doc/applications/server_protocol_grammar src/doc/ serversrc1.5
-doc/functions.ps src/doc/ serversrc1.5
-doc/eiffel_library_document src/doc/ serversrc1.5
+src/application_library . serversrc1.6
+src/library . serversrc1.6
+src/eiffel_library . serversrc1.6
+src/Ecli/src . serversrc1.6
+src/Ecli/Copyright.txt . serversrc1.6
+src/Ecli/INSTALL_INFO.txt . serversrc1.6
+src/server1/abstractions . serversrc1.6
+src/server1/doc . serversrc1.6
+src/server1/factories . serversrc1.6
+src/server1/global . serversrc1.6
+src/server1/interface . serversrc1.6
+src/server1/protocols . serversrc1.6
+src/server1/tradable_list . serversrc1.6
+src/server1/stock_splits . serversrc1.6
+src/server1/network . serversrc1.6
+src/server1/root . serversrc1.6
+src/server1/utility . serversrc1.6
+src/server1/system_specific . serversrc1.6
+src/server1/database . serversrc1.6
+src/server1/Ace.ace . serversrc1.6
+src/server1/test/README . serversrc1.6
+src/server1/test/run_tests . serversrc1.6
+src/server1/test/bin/compare_numbers . serversrc1.6
+src/server1/test/bin/pr_dataset . serversrc1.6
+src/server1/test/bin/testlib . serversrc1.6
+src/server1/test/input/force_index . serversrc1.6
+src/server1/test/input/ma . serversrc1.6
+src/server1/test/input/momentum . serversrc1.6
+src/server1/test/input/roc . serversrc1.6
+src/server1/test/input/rsi . serversrc1.6
+src/server1/test/input/rsi_colby . serversrc1.6
+src/server1/test/input/stoch . serversrc1.6
+src/server1/test/input/test_data . serversrc1.6
+src/server1/test/input/wilder_ma . serversrc1.6
+src/server1/test/input/williams . serversrc1.6
+src/server1/test/input/sunw . serversrc1.6
+src/server1/test/input/ibm.intraday . serversrc1.6
+src/server1/test/input/ma.intraday . serversrc1.6
+src/server1/test/input/momentum.intraday . serversrc1.6
+src/server1/test/input/roc.intraday . serversrc1.6
+src/server1/test/input/rsi.intraday . serversrc1.6
+src/server1/test/input/stoch.intraday . serversrc1.6
+src/server1/test/input/sunw.intraday . serversrc1.6
+src/server1/test/input/test_data.intraday . serversrc1.6
+src/server1/test/input/williams.intraday . serversrc1.6
+src/server1/test/input/dj.intraday . serversrc1.6
+src/server1/test/lib/rsi.awk . serversrc1.6
+src/server1/test/lib/test_files.1 . serversrc1.6
+src/server1/test/lib/test_files.2 . serversrc1.6
+src/server1/test/reference/README . serversrc1.6
+src/server1/test/reference/ema . serversrc1.6
+src/server1/test/reference/force_index . serversrc1.6
+src/server1/test/reference/ma . serversrc1.6
+src/server1/test/reference/macd . serversrc1.6
+src/server1/test/reference/macd_hist . serversrc1.6
+src/server1/test/reference/macd_sig . serversrc1.6
+src/server1/test/reference/momentum . serversrc1.6
+src/server1/test/reference/roc . serversrc1.6
+src/server1/test/reference/rsi4 . serversrc1.6
+src/server1/test/reference/rsi7 . serversrc1.6
+src/server1/test/reference/slow_stochD3 . serversrc1.6
+src/server1/test/reference/stochD5 . serversrc1.6
+src/server1/test/reference/stochK5 . serversrc1.6
+src/server1/test/reference/test_data.one_field . serversrc1.6
+src/server1/test/reference/williams . serversrc1.6
+src/server1/test/reference/wilder_ma . serversrc1.6
+src/server1/test/reference/rsi_sunw . serversrc1.6
+src/server1/test/reference/rsi_sunw_mnthly . serversrc1.6
+src/server1/test/reference/rsi_sunw_qtrly . serversrc1.6
+src/server1/test/reference/sunw_mnthly_stch%K . serversrc1.6
+src/server1/test/reference/dj_stochKintra . serversrc1.6
+src/server1/test/reference/dj_ema_int15 . serversrc1.6
+src/server1/test/reference/dj_macdsig_hourly . serversrc1.6
+doc/mal_intro src/doc/ serversrc1.6
+doc/MAL_design_document src/doc/MAL_design_document serversrc1.6
+doc/MAS_design_document src/doc/MAS_design_document serversrc1.6
+doc/MAL_README src/doc/README serversrc1.6
+doc/src_README src/README serversrc1.6
+doc/applications/server_protocol_grammar src/doc/ serversrc1.6
+doc/functions.ps src/doc/ serversrc1.6
+doc/eiffel_library_document src/doc/ serversrc1.6
 # Market Analysis Client source code
-src/clients/GUI1/common/NetworkProtocol.java . clientsrc1.5
-src/clients/GUI1/common/DataInspector.java . clientsrc1.5
-src/clients/GUI1/support/FileReaderUtilities.java . clientsrc1.5
-src/clients/GUI1/support/IntPair.java . clientsrc1.5
-src/clients/GUI1/support/Utilities.java . clientsrc1.5
-src/clients/GUI1/support/Configuration.java . clientsrc1.5
-src/clients/GUI1/support/GUI_Utilities.java . clientsrc1.5
-src/clients/GUI1/support/ErrorBox.java . clientsrc1.5
-src/clients/GUI1/support/IndicatorGroup.java . clientsrc1.5
-src/clients/GUI1/support/IndicatorGroups.java . clientsrc1.5
-src/clients/CL/CL_Client.java . clientsrc1.5
-src/clients/GUI1/Chart.java . clientsrc1.5
-src/clients/GUI1/MA_Client.java . clientsrc1.5
-src/clients/GUI1/CompressedConnection.java . clientsrc1.5
-src/clients/GUI1/Connection.java . clientsrc1.5
-src/clients/GUI1/Parser.java . clientsrc1.5
-src/clients/GUI1/MA_ScrollPane.java . clientsrc1.5
-src/clients/GUI1/MarketSelection.java . clientsrc1.5
-src/clients/GUI1/IndicatorListener.java . clientsrc1.5
-src/clients/GUI1/IndicatorSelection.java . clientsrc1.5
-src/clients/GUI1/MA_MenuBar.java . clientsrc1.5
-src/clients/GUI1/DialogSelection.java . clientsrc1.5
-src/clients/GUI1/IndicatorColors.java . clientsrc1.5
-src/clients/GUI1/MA_Dialog.java . clientsrc1.5
-src/clients/GUI1/DataSetBuilder.java . clientsrc1.5
-src/clients/GUI1/graph/DataSet.java . clientsrc1.5
-src/clients/GUI1/graph/Drawer.java . clientsrc1.5
-src/clients/GUI1/graph/DateDrawer.java . clientsrc1.5
-src/clients/GUI1/graph/Markers.java . clientsrc1.5
-src/clients/GUI1/graph/BarDrawer.java . clientsrc1.5
-src/clients/GUI1/graph/CandleDrawer.java . clientsrc1.5
-src/clients/GUI1/graph/RTextLine.java . clientsrc1.5
-src/clients/GUI1/graph/SpecialFunction.java . clientsrc1.5
-src/clients/GUI1/graph/LineDrawer.java . clientsrc1.5
-src/clients/GUI1/graph/TextLine.java . clientsrc1.5
-src/clients/GUI1/graph/PriceDrawer.java . clientsrc1.5
-src/clients/GUI1/graph/Graph.java . clientsrc1.5
-src/clients/GUI1/graph/InteractiveGraph.java . clientsrc1.5
-src/clients/GUI1/graph/Axis.java . clientsrc1.5
-src/clients/GUI1/graph/DoublePair.java . clientsrc1.5
-src/clients/GUI1/graph/IndicatorDrawer.java . clientsrc1.5
-src/clients/GUI1/graph/MarketDrawer.java . clientsrc1.5
-src/clients/GUI1/graph/BasicDrawer.java . clientsrc1.5
-src/clients/GUI1/graph/LowerGraph.java . clientsrc1.5
-src/clients/GUI1/graph/MainGraph.java . clientsrc1.5
-src/clients/GUI1/graph/TemporalDrawer.java . clientsrc1.5
-src/clients/GUI1/graph/TimeDrawer.java . clientsrc1.5
+src/clients/GUI1/common/NetworkProtocol.java . clientsrc1.6
+src/clients/GUI1/common/DataInspector.java . clientsrc1.6
+src/clients/GUI1/support/FileReaderUtilities.java . clientsrc1.6
+src/clients/GUI1/support/IntPair.java . clientsrc1.6
+src/clients/GUI1/support/Utilities.java . clientsrc1.6
+src/clients/GUI1/support/Configuration.java . clientsrc1.6
+src/clients/GUI1/support/GUI_Utilities.java . clientsrc1.6
+src/clients/GUI1/support/ErrorBox.java . clientsrc1.6
+src/clients/GUI1/support/IndicatorGroup.java . clientsrc1.6
+src/clients/GUI1/support/IndicatorGroups.java . clientsrc1.6
+src/clients/CL/CL_Client.java . clientsrc1.6
+src/clients/GUI1/Chart.java . clientsrc1.6
+src/clients/GUI1/MA_Client.java . clientsrc1.6
+src/clients/GUI1/CompressedConnection.java . clientsrc1.6
+src/clients/GUI1/Connection.java . clientsrc1.6
+src/clients/GUI1/Parser.java . clientsrc1.6
+src/clients/GUI1/SessionState.java . clientsrc1.6
+src/clients/GUI1/MA_ScrollPane.java . clientsrc1.6
+src/clients/GUI1/MarketSelection.java . clientsrc1.6
+src/clients/GUI1/IndicatorListener.java . clientsrc1.6
+src/clients/GUI1/IndicatorSelection.java . clientsrc1.6
+src/clients/GUI1/MA_MenuBar.java . clientsrc1.6
+src/clients/GUI1/DialogSelection.java . clientsrc1.6
+src/clients/GUI1/IndicatorColors.java . clientsrc1.6
+src/clients/GUI1/MA_Dialog.java . clientsrc1.6
+src/clients/GUI1/DataSetBuilder.java . clientsrc1.6
+src/clients/GUI1/graph/DataSet.java . clientsrc1.6
+src/clients/GUI1/graph/Drawer.java . clientsrc1.6
+src/clients/GUI1/graph/DateDrawer.java . clientsrc1.6
+src/clients/GUI1/graph/Markers.java . clientsrc1.6
+src/clients/GUI1/graph/BarDrawer.java . clientsrc1.6
+src/clients/GUI1/graph/CandleDrawer.java . clientsrc1.6
+src/clients/GUI1/graph/RTextLine.java . clientsrc1.6
+src/clients/GUI1/graph/SpecialFunction.java . clientsrc1.6
+src/clients/GUI1/graph/LineDrawer.java . clientsrc1.6
+src/clients/GUI1/graph/TextLine.java . clientsrc1.6
+src/clients/GUI1/graph/PriceDrawer.java . clientsrc1.6
+src/clients/GUI1/graph/Graph.java . clientsrc1.6
+src/clients/GUI1/graph/InteractiveGraph.java . clientsrc1.6
+src/clients/GUI1/graph/Axis.java . clientsrc1.6
+src/clients/GUI1/graph/DoublePair.java . clientsrc1.6
+src/clients/GUI1/graph/IndicatorDrawer.java . clientsrc1.6
+src/clients/GUI1/graph/MarketDrawer.java . clientsrc1.6
+src/clients/GUI1/graph/BasicDrawer.java . clientsrc1.6
+src/clients/GUI1/graph/LowerGraph.java . clientsrc1.6
+src/clients/GUI1/graph/MainGraph.java . clientsrc1.6
+src/clients/GUI1/graph/TemporalDrawer.java . clientsrc1.6
+src/clients/GUI1/graph/TimeDrawer.java . clientsrc1.6
 # Market Analysis System executables and accompanying files (server and client)
 # (First the GUI java classes)
-src/clients/GUI1/MarketSelection.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/Drawer.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/CandleDrawer.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/BarDrawer.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/Axis.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/DoublePair.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/RTextLine.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/FileFormatException.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/LoadMessage.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/RotateTextFilter.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/TextLine.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/TextState.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/DataSet.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/DataSetBuilder.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/SpecialFunction.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/Markers.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/MarkerVertex.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/Graph.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/LineDrawer.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/PriceDrawer.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/Gin.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/Range.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/InteractiveGraph.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/DateDrawer.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/RefSpec.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/MarketDrawer.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/IndicatorDrawer.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/BasicDrawer.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/LowerGraph.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/MainGraph.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/TemporalDrawer.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/graph/TimeDrawer.class lib/classes/graph/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/MarketSelection\$1.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/Chart.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/Chart\$1.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/ChartSettings.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/WindowSettings.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/MA_Client.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/CompressedConnection.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/Connection.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/Parser.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/MA_ScrollPane.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-#src/clients/GUI1/MA_ScrollPane\$1.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/IndicatorListener.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/IndicatorSelection.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/MA_MenuBar.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/MA_MenuBar\$1.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/MA_MenuBar\$2.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/MA_MenuBar\$3.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/MA_MenuBar\$4.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/MA_MenuBar\$5.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/MA_MenuBar\$6.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/MA_MenuBar\$7.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/MA_MenuBar\$8.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/MA_MenuBar\$9.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/DialogSelection.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/DialogSelection\$1.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/DialogSelection\$2.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/DialogSelection\$3.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/IndicatorColors.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/IndicatorColors\$1.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/IndicatorColors\$2.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/MA_Dialog.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/MA_Dialog\$1.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/MAS_Options.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/GUI1/OptionFlags.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/CL/CL_Client.class lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/common/NetworkProtocol.class lib/classes/common/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/common/DataInspector.class lib/classes/common/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/support/Configuration.class lib/classes/support/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/support/Configuration\$DateSetting.class lib/classes/support/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/support/FileReaderUtilities.class lib/classes/support/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/support/Utilities.class lib/classes/support/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/support/IntPair.class lib/classes/support/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/support/GUI_Utilities.class lib/classes/support/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/support/ErrorBox.class lib/classes/support/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/support/ErrorBox\$1.class lib/classes/support/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/support/ErrorBox\$2.class lib/classes/support/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/support/ErrorBox\$3.class lib/classes/support/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/support/IndicatorGroup.class lib/classes/support/ mas_linux1.5 mas_windows1.5 mac1.5
-src/clients/support/IndicatorGroups.class lib/classes/support/ mas_linux1.5 mas_windows1.5 mac1.5
+src/clients/GUI1/MarketSelection.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/Drawer.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/CandleDrawer.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/BarDrawer.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/Axis.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/DoublePair.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/RTextLine.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/FileFormatException.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/LoadMessage.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/RotateTextFilter.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/TextLine.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/TextState.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/DataSet.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/DataSetBuilder.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/SpecialFunction.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/Markers.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/MarkerVertex.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/Graph.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/LineDrawer.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/PriceDrawer.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/Gin.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/Range.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/InteractiveGraph.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/DateDrawer.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/RefSpec.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/MarketDrawer.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/IndicatorDrawer.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/BasicDrawer.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/LowerGraph.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/MainGraph.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/TemporalDrawer.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/graph/TimeDrawer.class lib/graph/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/MarketSelection\$1.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/Chart.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/Chart\$1.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/ChartSettings.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/WindowSettings.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/MA_Client.class lib/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/CompressedConnection.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/Connection.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/Parser.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/SessionState.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/MA_ScrollPane.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+#src/clients/GUI1/MA_ScrollPane\$1.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/IndicatorListener.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/IndicatorSelection.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/MA_MenuBar.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/MA_MenuBar\$1.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/MA_MenuBar\$2.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/MA_MenuBar\$3.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/MA_MenuBar\$4.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/MA_MenuBar\$5.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/MA_MenuBar\$6.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/MA_MenuBar\$7.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/MA_MenuBar\$8.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/MA_MenuBar\$9.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/DialogSelection.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/DialogSelection\$1.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/DialogSelection\$2.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/DialogSelection\$3.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/IndicatorColors.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/IndicatorColors\$1.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/IndicatorColors\$2.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/MA_Dialog.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/MA_Dialog\$1.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/MAS_Options.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/GUI1/OptionFlags.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/CL/CL_Client.class lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/common/NetworkProtocol.class lib/common/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/common/DataInspector.class lib/common/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/support/Configuration.class lib/support/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/support/Configuration\$DateSetting.class lib/support/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/support/FileReaderUtilities.class lib/support/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/support/Utilities.class lib/support/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/support/IntPair.class lib/support/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/support/GUI_Utilities.class lib/support/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/support/ErrorBox.class lib/support/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/support/ErrorBox\$1.class lib/support/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/support/ErrorBox\$2.class lib/support/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/support/ErrorBox\$3.class lib/support/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/support/IndicatorGroup.class lib/support/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/support/IndicatorGroups.class lib/support/ mas_linux1.6 mas_windows1.6 mac1.6
 # (GUI config. file)
-build/config/.ma_clientrc lib/classes/ mas_linux1.5 mas_windows1.5 mac1.5
+build/config/.ma_clientrc lib/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
 # (Scripts)
-src/scripts/mas/magc bin/ mas_linux1.5 mas_windows1.5 clientsrc1.5 mac1.5
-src/scripts/mas/masb bin/ mas_linux1.5 mas_windows1.5 clientsrc1.5 mac1.5
-src/scripts/python/mas/client/macl bin/ mas_linux1.5 mas_windows1.5 clientsrc1.5 mac1.5
-src/scripts/python/mas/client/CommandProcessor.py lib/python/ mas_linux1.5 mas_windows1.5 clientsrc1.5 mac1.5
-src/scripts/python/mas/library/constants.py lib/python/ mas_linux1.5 mas_windows1.5 clientsrc1.5 mac1.5
-src/scripts/python/mas/library/ma_connection.py lib/python/ mas_linux1.5 mas_windows1.5 clientsrc1.5 mac1.5
-src/scripts/python/mas/library/ma_protocol.py lib/python/ mas_linux1.5 mas_windows1.5 clientsrc1.5 mac1.5
-src/clients/CL/maclj bin/ mas_linux1.5 mas_windows1.5 clientsrc1.5 mac1.5
-src/scripts/windows/runmas.bat bin/ mas_windows1.5
-src/scripts/windows/runmacl.bat bin/ mas_windows1.5
-src/scripts/windows/runmasgui.bat bin/ mas_windows1.5
+src/scripts/mas/magc bin/ mas_linux1.6 mas_windows1.6 clientsrc1.6 mac1.6
+src/scripts/mas/masb bin/ mas_linux1.6 mas_windows1.6 clientsrc1.6 mac1.6
+src/scripts/python/mas/client/macl bin/ mas_linux1.6 mas_windows1.6 clientsrc1.6 mac1.6
+src/scripts/python/mas/client/CommandProcessor.py lib/python/ mas_linux1.6 mas_windows1.6 clientsrc1.6 mac1.6
+src/scripts/python/mas/library/constants.py lib/python/ mas_linux1.6 mas_windows1.6 clientsrc1.6 mac1.6
+src/scripts/python/mas/library/ma_connection.py lib/python/ mas_linux1.6 mas_windows1.6 clientsrc1.6 mac1.6
+src/scripts/python/mas/library/ma_protocol.py lib/python/ mas_linux1.6 mas_windows1.6 clientsrc1.6 mac1.6
+src/clients/CL/maclj bin/ mas_linux1.6 mas_windows1.6 clientsrc1.6 mac1.6
+src/scripts/windows/runmas.bat bin/ mas_windows1.6
+src/scripts/windows/runmacl.bat bin/ mas_windows1.6
+src/scripts/windows/runmasgui.bat bin/ mas_windows1.6
 # (macl configuration files)
-build/config lib/ mas_linux1.5 mas_windows1.5 mac1.5
+build/config lib/ mas_linux1.6 mas_windows1.6 mac1.6
 # (Server executables and needed libraries)
-lib/binaries/mas_no_assert_v1.5 bin/mas mas_linux1.5
-lib/binaries/mas_assert_v1.5 bin/mas_assert mas_linux1.5
+lib/binaries/mas_no_assert_v1.6 bin/mas mas_linux1.6
+lib/binaries/mas_assert_v1.6 bin/mas_assert mas_linux1.6
 # Include this odbc library if the executable was not statically
 # linked with it:
-lib/binaries/libodbc.so.1 lib mas_linux1.5 serversrc1.5
-# No new Windows server executable in release 1.5 - use 1.2 version:
-lib/binaries/mas_v1.2.exe bin/mas.exe mas_windows1.5
+lib/binaries/libodbc.so.1 lib mas_linux1.6 serversrc1.6
+# No new Windows server executable in release 1.6 - use 1.2 version:
+lib/binaries/mas_v1.2.exe bin/mas.exe mas_windows1.6
 # (MAS Documentation)
-doc/GUI_introduction . mas_linux1.5 mac1.5
-doc/masystem_introduction . mas_linux1.5 mac1.5
-doc/java_info . mas_linux1.5 mac1.5
-doc/feature_list . mas_linux1.5 mac1.5
-doc/creating_indicators . mas_linux1.5 mac1.5
-doc/creating_market_analyzers . mas_linux1.5 mac1.5
-doc/other_market_analyzer_examples . mas_linux1.5 mac1.5
-doc/market_analysis . mas_linux1.5 mac1.5
-doc/MAS_README doc/README mas_linux1.5 mac1.5
-doc/README_compile src/doc/README_compile serversrc1.5
-doc/main_MAS_README doc/MAIN_README mas_linux1.5 mac1.5
-doc/env_settings ./doc/environment mas_linux1.5 mac1.5
-doc/INSTALL  ./ mas_linux1.5
-doc/THANKS . mas_linux1.5 mac1.5 serversrc1.5 clientsrc1.5
-doc/GUI_client_change_log doc/GUI_CHANGE_LOG mas_linux1.5 mac1.5
-doc/Server_change_log doc/MAS_CHANGE_LOG mas_linux1.5
+doc/GUI_introduction . mas_linux1.6 mac1.6
+doc/masystem_introduction . mas_linux1.6 mac1.6
+doc/java_info . mas_linux1.6 mac1.6
+doc/feature_list . mas_linux1.6 mac1.6
+doc/creating_indicators . mas_linux1.6 mac1.6
+doc/creating_market_analyzers . mas_linux1.6 mac1.6
+doc/other_market_analyzer_examples . mas_linux1.6 mac1.6
+doc/market_analysis . mas_linux1.6 mac1.6
+doc/MAS_README doc/README mas_linux1.6 mac1.6
+doc/README_compile src/doc/README_compile serversrc1.6
+doc/main_MAS_README doc/MAIN_README mas_linux1.6 mac1.6
+doc/env_settings ./doc/environment mas_linux1.6 mac1.6
+doc/INSTALL  ./ mas_linux1.6
+doc/THANKS . mas_linux1.6 mac1.6 serversrc1.6 clientsrc1.6
+doc/GUI_client_change_log doc/GUI_CHANGE_LOG mas_linux1.6 mac1.6
+doc/Server_change_log doc/MAS_CHANGE_LOG mas_linux1.6
 # (MAS Documentation, Windows style)
-doc/GUI_introduction doc/GUI_introduction.txt[dos] mas_windows1.5
-doc/masystem_introduction doc/masystem_introduction.txt[dos] mas_windows1.5
-doc/java_info doc/java_info.txt[dos] mas_windows1.5
-doc/feature_list doc/feature_list.txt[dos] mas_windows1.5
-doc/creating_indicators doc/creating_indicators.txt[dos] mas_windows1.5
-doc/creating_market_analyzers doc/creating_market_analyzers.txt[dos] mas_windows1.5
-doc/other_market_analyzer_examples doc/other_market_analyzer_examples.txt[dos] mas_windows1.5
-doc/market_analysis doc/market_analysis.txt[dos] mas_windows1.5
-doc/MAS_README doc/README.txt[dos] mas_windows1.5
-doc/main_MAS_README ./README.txt[dos] mas_windows1.5
-doc/env_settings ./doc/environment.txt[dos] mas_windows1.5
-doc/INSTALL  ./INSTALL.txt[dos] mas_windows1.5
-doc/THANKS doc/THANKS.txt[dos] mas_windows1.5
-doc/GUI_client_change_log doc/GUI_CHANGE_LOG.txt[dos] mas_windows1.5
-doc/Server_change_log doc/MAS_CHANGE_LOG.txt[dos] mas_windows1.5
-doc/mas_odbc_usage.txt . mas_windows1.5
-doc/README_WINDOWS.txt ./ mas_windows1.5
+doc/GUI_introduction doc/GUI_introduction.txt[dos] mas_windows1.6
+doc/masystem_introduction doc/masystem_introduction.txt[dos] mas_windows1.6
+doc/java_info doc/java_info.txt[dos] mas_windows1.6
+doc/feature_list doc/feature_list.txt[dos] mas_windows1.6
+doc/creating_indicators doc/creating_indicators.txt[dos] mas_windows1.6
+doc/creating_market_analyzers doc/creating_market_analyzers.txt[dos] mas_windows1.6
+doc/other_market_analyzer_examples doc/other_market_analyzer_examples.txt[dos] mas_windows1.6
+doc/market_analysis doc/market_analysis.txt[dos] mas_windows1.6
+doc/MAS_README doc/README.txt[dos] mas_windows1.6
+doc/main_MAS_README ./README.txt[dos] mas_windows1.6
+doc/env_settings ./doc/environment.txt[dos] mas_windows1.6
+doc/INSTALL  ./INSTALL.txt[dos] mas_windows1.6
+doc/THANKS doc/THANKS.txt[dos] mas_windows1.6
+doc/GUI_client_change_log doc/GUI_CHANGE_LOG.txt[dos] mas_windows1.6
+doc/Server_change_log doc/MAS_CHANGE_LOG.txt[dos] mas_windows1.6
+doc/mas_odbc_usage.txt . mas_windows1.6
+doc/README_WINDOWS.txt ./ mas_windows1.6
 # (Scripts)
-src/scripts/install/install ./ mas_linux1.5 mas_windows1.5
-#src/scripts/install/install_config ./ mas_linux1.5 mas_windows1.5
-# Data files needed by mas1.5
-/home2/finance/.mas/stock_splits lib mas_linux1.5 mas_windows1.5
-build/data lib/ mas_linux1.5 mas_windows1.5
-build/database/mas_dbrc lib/ mas_linux1.5 mas_windows1.5
-forum.txt . mas_linux1.5 mas_windows1.5 mac1.5 serversrc1.5 clientsrc1.5
+src/scripts/install/install ./ mas_linux1.6 mas_windows1.6
+#src/scripts/install/install_config ./ mas_linux1.6 mas_windows1.6
+# Data files needed by mas1.6
+/home2/finance/.mas/stock_splits lib mas_linux1.6 mas_windows1.6
+build/data lib/ mas_linux1.6 mas_windows1.6
+build/database/mas_dbrc lib/ mas_linux1.6 mas_windows1.6
+forum.txt . mas_linux1.6 mas_windows1.6 mac1.6 serversrc1.6 clientsrc1.6
 # Scripts
 src/scripts/python/obtain_eod_data src/scripts/ scripts
 src/scripts/python/pmm src/scripts/ scripts
