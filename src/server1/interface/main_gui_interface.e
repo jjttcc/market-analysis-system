@@ -1,6 +1,6 @@
 indexing
 	description: "Top-level application interface - command-line driven"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -35,8 +35,6 @@ feature -- Initialization
 		do
 			mai_initialize (fb)
 			initialize
-		ensure
-			fb_set: factory_builder = fb
 		end
 
 feature -- Access
@@ -177,16 +175,16 @@ feature {NONE}
 			rh: HASH_TABLE [REQUEST_COMMAND, INTEGER]
 		do
 			!!rh.make (0)
-			!MARKET_DATA_REQUEST_CMD!cmd.make (factory_builder.market_list)
+			!MARKET_DATA_REQUEST_CMD!cmd.make (market_list)
 			rh.extend (cmd, Market_data_request)
-			!INDICATOR_DATA_REQUEST_CMD!cmd.make (factory_builder.market_list)
+			!INDICATOR_DATA_REQUEST_CMD!cmd.make (market_list)
 			rh.extend (cmd, Indicator_data_request)
 			!TRADING_PERIOD_TYPE_REQUEST_CMD!cmd.make (
-				factory_builder.market_list)
+				market_list)
 			rh.extend (cmd, Trading_period_type_request)
-			!MARKET_LIST_REQUEST_CMD!cmd.make (factory_builder.market_list)
+			!MARKET_LIST_REQUEST_CMD!cmd.make (market_list)
 			rh.extend (cmd, Market_list_request)
-			!INDICATOR_LIST_REQUEST_CMD!cmd.make (factory_builder.market_list)
+			!INDICATOR_LIST_REQUEST_CMD!cmd.make (market_list)
 			rh.extend (cmd, Indicator_list_request)
 			!ERROR_RESPONSE_CMD!cmd
 			rh.extend (cmd, Error)
