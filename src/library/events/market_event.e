@@ -25,6 +25,11 @@ deferred class MARKET_EVENT inherit
 			is_equal
 		end
 
+	SIGNAL_TYPES
+		undefine
+			is_equal
+		end
+
 feature -- Access
 
 	components: LIST [MARKET_EVENT] is
