@@ -22,14 +22,16 @@ Market Analysis System (MAS): Frequently Asked
 Contents
 </h2>
 <p>
+<a href="/index.html">[Home]</a>
+<br>
 <a href="#server operation">
 Operating the Server (General)
-<br>
 </a>
+<br>
 <a href="#windows server operation">
 Operating the Server (Windows)
-<br>
 </a>
+<br>
 <a href="#administration">
 Administration and Setup
 </a>
@@ -40,7 +42,7 @@ Data-related Problems
 <br>
 <a href="#charting GUI">
 The MAS Charting GUI
-</A>
+</a>
 <br>
 <a href="#database">
 Database Problems
@@ -94,9 +96,9 @@ intraday data in files with the pattern *.5-minute (for 5-minute data
 in this example), you would include the options "-d daily -i 5-minute"
 when you start the server.
 <h2>
-<A name="windows server operation">
+<a name="windows server operation">
 Operating the Server (Windows)
-</A>
+</a>
 </h2>
 <p><strong>
 I`ve tried to install MAS 1.6.5 for Windows but am not able to get
@@ -120,9 +122,9 @@ does most of the calculations.)  This is done by double-clicking on the
 to start the server.  After the server has started, double-click on the
 "MAS Charts" icon to start the charting application.
 <h2>
-<A name="administration">
+<a name="administration">
 Administration and Setup
-</A>
+</a>
 </h2>
 <p><strong>
 I installed MAS and when I try to run it, I get the following error [or
@@ -148,9 +150,9 @@ one Redhat 8.0 user apparently found it in the "databases" package.)
 If you can't find the file in your distribution, you can try searching
 for it on the web.
 google.com may work for this purpose, but a better solution is probably
-<A href="http://rpmfind.net/">
+<a href="http://rpmfind.net/">
 rpmfind
-</A>
+</a>
 (and search for "<em>libodbc.so</em>" or "<em>libodbc.so.1</em>").
 Chances are good that you will be able to find a <em>libodbc.so.1</em> that
 works with your system, but if not, one last thing to try is to use the
@@ -273,9 +275,9 @@ and
 is, again, the port number with which you started the server.
 This solution works for both indicators and market analyzers.
 <h2>
-<A name="data">
+<a name="data">
 Data-related Problems
-</A>
+</a>
 </h2>
 <p><strong>
 I'm not able to view daily data in the charting GUI - only periods of
@@ -340,7 +342,7 @@ latest date at the beginning of the file and the earliest date at the end.
 MAS wants the latest date at the end and the earliest date at the beginning.
 You can use the following script to reverse the order of the lines in a
 data file:
-<p><em><TT>
+<p><em><tt>
 #!/usr/bin/env bash
 <br>
 #  Reverse the order of lines in infile and output the result to outfile.
@@ -376,17 +378,17 @@ awk '{
 &nbsp;&nbsp;&nbsp;&nbsp;}
 <br>
 }' $1 > $2
-<p></em></TT>
+<p></em></tt>
 <h2>
-<A name="charting GUI">
+<a name="charting GUI">
 The MAS Charting GUI
-</A>
+</a>
 </h2>
 <strong>
 I'm trying to run MAS on a Linux system.
 I got the server running OK, but the GUI charting client refuses to come up.
 I get the error message:
-<p><em><TT>
+<p><em><tt>
 java.lang.NullPointerException
 <br>
 &nbsp;&nbsp;&nbsp;at java.awt.Menu.add(Menu.java:39)
@@ -398,7 +400,7 @@ java.lang.NullPointerException
 &nbsp;&nbsp;&nbsp;at mas_gui.Chart.&lt;init&gt;(Chart.java:120)
 <br>
 &nbsp;&nbsp;&nbsp;at MA_Client.main(MA_Client.java:12)
-<p></em></TT>
+<p></em></tt>
 I am using the Kaffe implementation of the Java Virtual Machine (JVM).
 <p></strong>
 This is very likely the same problem that other Linux users have
@@ -427,7 +429,7 @@ unexpected, you can regard this as an informational message rather
 than an error message.
 <p>
 <strong>
-<A name="new indicator in GUI">
+<a name="new indicator in GUI"></a>
 I tried adding a new indicator to MAS.  It worked in the command prompt
 and is showing in the list of indicators. But when I try to load the
 Java Charts the new indicator is not there in the list of indicators.
@@ -496,23 +498,23 @@ the file with such an editor.  To solve this problem, you can obtain
 an editor that recognizes UNIX format.  (I haven't researched it, but
 I would guess that there are several such editors available for free on
 the web.
-<A href="http://www.vim.org/index_real.php">
-Vim</A>, a VI clone, is one,
+<a href="http://www.vim.org/index_real.php">
+Vim</a>, a VI clone, is one,
 and, most likely, a Windows version of emacs exists that can also do this.
 A quick search on google.com unearthed
-<A href="http://www.hsinlin.com/software/text_editors.html">
-this site</A>, which lists several Windows editors.
+<a href="http://www.hsinlin.com/software/text_editors.html">
+this site</a>, which lists several Windows editors.
 One of the links on that site leads to
-<A href="http://www.newbie.net/NotesPad/notespad_32.html">
-a free Windows editor</A>
+<a href="http://www.newbie.net/NotesPad/notespad_32.html">
+a free Windows editor</a>
 that appears to handle UNIX text files.)
 I'm aware that dealing with this obstacle will be a major inconvenience for
 some people.  This is one reason I'm hoping to be able to add a feature to
 the GUI to make it easy to add a new indicator.
 <h2>
-<A name="database">
+<a name="database">
 Database Problems
-</A>
+</a>
 </h2>
 <p><strong>
 I installed MAS and when I try to run it, I get the following error [or
@@ -524,9 +526,9 @@ shared object file: No such file or directory
 </em>
 <p></strong>
 See
-<A href="#administration">
+<a href="#administration">
 Administration and Setup
-</A>
+</a>
 for the solution to this problem.
 <p><strong>
 I get this error when I start MAS using my odbc database connection: 
@@ -535,8 +537,8 @@ the first stock symbol on my list).
 (This answer covers some other SQL errors as well.)
 <p></strong>
 Possible solutions are as follows:
-<UL>
-<LI>
+<ul>
+<li>
 Make sure your stock symbols are all in lowercase.
 MAS currently has a bug that causes upper case symbols to not be handled
 correctly.
@@ -545,16 +547,16 @@ convert to lower case in the symbol query specified in your mas_dbrc file
 and use the <em>&lt;uppersymbol&gt;</em> construct in your data query if
 the query uses the symbol as a key; see the comments in the mas_dbrc file
 for how to use <em>&lt;uppersymbol&gt;</em>.)
-<LI>
+<li>
 Make sure there are no trailing characters after your symbols, if you are
 using a postgres database make sure the symbols are in a varchar field,
 not a char field since char fields will pad with spaces and leave trailing
 spaces in a query.
-<LI>
+<li>
 If all that seems to be right and you still get errors, make sure that
 the stock quotes are in the correct fields of the database (e.g., closing
 price is in the closing field of the query, etc).
-<LI>
+<li>
 If you use the date type for the date field in the database, make sure
 your dates are returned in the format YYYYMMDD; if you are using
 PostgreSQL with a standard installation it will probably return them in the
@@ -562,7 +564,7 @@ YYYY-MM-DD format, so you can use a to_char(date, 'YYYYMMDD') in your
 query to convert them to a MAS supported format.  (Some database systems
 may have a date-to-integer conversion function, which will likely also
 work, as long as the result is in YYYYMMDD format.)
-</UL>
+</ul>
 <p><strong>
 I wish to set MAS up to work with a database with ODBC.
 I am trying to create the needed database tables for MAS and from the
@@ -573,26 +575,26 @@ MAS but have not found them.
 The example script files for creating MAS tables reside in a file separate
 from the main MAS installation file.
 You will find them in the scripts archive file in the
-<A href="http://sourceforge.net/project/showfiles.php?group_id=6838">
+<a href="http://sourceforge.net/project/showfiles.php?group_id=6838">
 download
-</A>
+</a>
 section - either
 scripts{relnum}.tar.gz or scripts{relnum}.zip -, where {relnum} stands for
 the release number - e.g., 1.6.5.
 (The scripts files for the latest release, 1.6.5 - as of June 2003 - are
-<A href="http://prdownloads.sourceforge.net/eiffel-mas/scripts1.6.5.tar.gz?download">
+<a href="http://prdownloads.sourceforge.net/eiffel-mas/scripts1.6.5.tar.gz?download">
 scripts1.6.5.tar.gz
-</A>
+</a>
 and
-<A href="http://prdownloads.sourceforge.net/eiffel-mas/scripts1.6.5.zip?download">
-scripts1.6.5.zip</A>.)
+<a href="http://prdownloads.sourceforge.net/eiffel-mas/scripts1.6.5.zip?download">
+scripts1.6.5.zip</a>.)
 Several people have asked me this question, so I've concluded that I need
 to include the database scripts with the main installation file.
 I will probably do this for the next official (non-beta) release.
 <h2>
-<A name="technical indicators">
+<a name="technical indicators">
 Technical Analysis Indicators
-</A>
+</a>
 </h2>
 <p><strong>
 How do I change the parameter settings of a technical indicator?
@@ -619,7 +621,7 @@ Enter '-' (Previous) to leave the edit-indicators menu.
 Enter 'x' to exit the command-line client.
 <p>
 <strong>
-<A name="new indicator in GUI">
+<a name="new indicator in GUI"></a>
 I tried adding a new indicator to MAS.  It worked in the command prompt
 and is showing in the list of indicators. But when I try to load the
 Java Charts the new indicator is not there in the list of indicators.
@@ -627,13 +629,13 @@ I followed the instructions in the creating_indicators.txt file.  Do I
 need to do something extra for the new indicator to show up in the
 java charts?
 <p></strong>
-<A href="#new indicator in GUI">
-This question is covered</A> in the
+<a href="#new indicator in GUI">
+This question is covered</a> in the
 <em>MAS Charting GUI</em> section.
 <h2>
-<A name="signal generation">
+<a name="signal generation">
 Signal Generation and Market Analyzers
-</A>
+</a>
 </h2>
 <p><strong>
 I haven't had much luck with the log file for sending the market analysis -
@@ -713,7 +715,7 @@ Creating Market Analyzers .....
 I have run into
 a brick wall!
 Using your diagram convention what I want to do is:
-<p><TT>
+<p><tt>
 &nbsp;&nbsp;&nbsp;&nbsp;GT_OPERATOR
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/ \
@@ -721,7 +723,7 @@ Using your diagram convention what I want to do is:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp; \
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;RSI&nbsp;&nbsp;&nbsp;Constant
-<p></TT>
+<p></tt>
 The question is:
 <em>
 How do I get RSI as the left Operand?
@@ -733,7 +735,7 @@ Either the basic linear command or the basic numeric command will work
 here.
 So, using the basic linear command, your diagram would change to (where BLC
 is the basic linear command):
-<p><TT>
+<p><tt>
 &nbsp;&nbsp;&nbsp;&nbsp;GT_OPERATOR
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/ \
@@ -742,7 +744,7 @@ is the basic linear command):
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;BLC&nbsp;&nbsp;&nbsp;Constant
 <br>
-<p></TT>
+<p></tt>
 Note: In the latest version of mas, Constant has been renamed as
 Numeric-value-command.  (Since it can function as either a constant or as a
 variable whose value can change during a run.)
@@ -780,9 +782,9 @@ MAS command-line to create your own analyzers and select "daily" as the
 period type.
 <!-- Include this when version 1.7 is released:
 <h2>
-<A name="debugging">
+<a name="debugging">
 Debugging
-</A>
+</a>
 </h2>
 <p><strong>
 When I use the debugging option and print a moving average indicator, the
