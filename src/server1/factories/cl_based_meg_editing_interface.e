@@ -438,7 +438,7 @@ feature {NONE} -- Implementation
 		do
 			operator_maker.set_left_offset (0) -- Important.
 			operator_maker.set_market_function (function)
-			Result ?= operator_maker.command_selection (
+			Result ?= operator_maker.command_selection_from_type (
 						operator_maker.Boolean_result_command,
 							"root operator", true)
 			check
