@@ -45,11 +45,11 @@ feature {NONE}
 		local
 			t: SIMPLE_TUPLE
 		do
-			exp.execute (Current)
+			exp.execute (Void)
 			!!t
 			t.set_value (target.item.value * exp.value +
 							output.last.value * (1 - exp.value))
-			t.set_trading_period (target.item.trading_period)
+			t.set_date_time (target.item.date_time)
 			output.extend (t)
 		ensure then
 			-- output.last.value = P[curr] * exp + EMA[curr-1] * (1 - exp)

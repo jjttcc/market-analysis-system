@@ -12,10 +12,8 @@ indexing
 class STANDARD_MOVING_AVERAGE inherit
 
 	N_RECORD_ONE_VARIABLE_FUNCTION
-		export {NONE}
-			set_operator -- not used
 		redefine
-			action, set_input, set_n, do_process, operator_used
+			set_operator, action, set_input, set_n, do_process
 		end
 
 creation
@@ -31,20 +29,20 @@ feature -- Basic operations
 		do
 			target.start
 			old_index := target.index
-			sum.execute (Current)
+			sum.execute (Void)
 			check target.index = old_index + n end
 			!!t
 			t.set_value (sum.value / n)
 			-- The first trading period of the output is the nth trading
 			-- period of the input (target).
-			t.set_trading_period (target.i_th (target.index - 1).trading_period)
+			t.set_date_time (target.i_th (target.index - 1).date_time)
 			last_sum := sum.value
 			-- value holds the sum of the first n elements of target
 			output.extend (t)
 			continue_until
 		end
 
-feature {TEST_FUNCTION_FACTORY}
+feature {FACTORY}
 
 	set_input (in: MARKET_FUNCTION) is
 		do
@@ -59,9 +57,12 @@ feature {TEST_FUNCTION_FACTORY}
 			sum.initialize (Current)
 		end
 
-	operator_used: BOOLEAN is
+	set_operator (op: BASIC_NUMERIC_COMMAND) is
 		do
-			Result := false
+			Precursor (op)
+			sum.set_operator (op)
+		ensure then
+			sum.operator = op and sum.operator /= Void
 		end
 
 feature {NONE}
@@ -76,13 +77,13 @@ feature {NONE}
 			last_sum := last_sum - target.i_th(target.index - n).value +
 							target.item.value
 			t.set_value (last_sum / n)
-			t.set_trading_period (target.item.trading_period)
+			t.set_date_time (target.item.date_time)
 			output.extend (t)
 		end
 
 feature {NONE} -- Implementation
 
-	sum: expanded LINEAR_SUM
+	sum: expanded LINEAR_OPERATION
 			-- Provides sum of first n elements.
 
 	last_sum: REAL
