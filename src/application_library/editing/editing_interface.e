@@ -17,6 +17,14 @@ feature -- Access
 	editor: APPLICATION_EDITOR
 			-- Editor used to set Gs' operands and parameters
 
+	last_error: STRING
+			-- Description of last error that occurred
+
+feature -- Status report
+
+	error_occurred: BOOLEAN
+			-- Did an error occur during the last operation?
+
 feature -- Status setting
 
 	set_editor (arg: like editor) is
@@ -30,12 +38,6 @@ feature -- Status setting
 		end
 
 feature -- Access
-
-	show_message (msg: STRING) is
-			-- Display `msg' to user -for example, as an error, warning, or
-			-- informational message.
-		deferred
-		end
 
 	choice (descr: STRING; choices: LIST [PAIR [STRING, BOOLEAN]];
 				allowed_selections: INTEGER) is
@@ -99,6 +101,14 @@ feature -- Access
 		deferred
 		end
 
+feature -- Basic operations
+
+	show_message (msg: STRING) is
+			-- Display `msg' to user -for example, as an error, warning, or
+			-- informational message.
+		deferred
+		end
+
 feature {NONE} -- Implementation
 
 	Exit_menu_value: INTEGER is -1
@@ -110,6 +120,25 @@ feature {NONE} -- Implementation
 			-- Value indicating nullness - negative so as not
 			-- to conflict with the unique values or with the numbered
 			-- list selections
+
+	Show_help_value: INTEGER is 0
+			-- Value indicating "Help" selection
+
+	Save_value: INTEGER is 1
+			-- Value indicating "Save data" selection
+
+	Create_new_value: INTEGER is 2
+			-- Value indicating "Create new item" selection
+
+	Remove_value: INTEGER is 3
+			-- Value indicating "Remove item" selection
+
+	View_value: INTEGER is 4
+			-- Value indicating "View item" selection
+
+	Edit_value: INTEGER is 5
+			-- Value indicating "Edit item" selection
+
 
 feature {NONE} -- Implementation - Hook methods
 
