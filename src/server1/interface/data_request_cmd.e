@@ -9,10 +9,12 @@ deferred class DATA_REQUEST_CMD inherit
 	REQUEST_COMMAND
 
 	PRINTING
+		rename
+			output_medium as active_medium
 		export
 			{NONE} all
 		undefine
-			print
+			print, active_medium
 		end
 
 	STRING_UTILITIES
