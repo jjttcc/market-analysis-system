@@ -11,6 +11,9 @@ class COMPOSITE_OI_TUPLE inherit
 	COMPOSITE_VOLUME_TUPLE
 
 	OPEN_INTEREST_TUPLE
+		undefine
+			end_date, make
+		end
 
 feature -- Access
 
