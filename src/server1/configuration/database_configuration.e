@@ -631,8 +631,6 @@ feature {NONE} -- Implementation - Hook routine implementations
 		end
 
 	check_results is
-			-- Check if all needed fields were set and make any needed
-			-- settings adjustments.
 		local
 			gs: expanded GLOBAL_SERVER
 		do
