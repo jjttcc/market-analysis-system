@@ -1,5 +1,11 @@
 #!/bin/bash
 
+cleanup ()
+{
+	rm -rf output
+	exit $1
+}
+
 find_test_dir()
 {
 	if [ -d test ]
@@ -92,26 +98,39 @@ run_at_index()
 i
 $Tindex
 p
-x"|$exec input/$Tinput|filter_output
+x"|$exec input/$Tinput>output/rawtest.out
+	result=$?
+	if [ "$result" = 0 ]; then
+		filter_output <output/rawtest.out
+	fi
+
+	return $result
 }
 
 run_test()
 {
 	test_count=$(expr $test_count + 1)
 	run_at_index >$outputfile
-	if [ ! -z "$Tepsilon" ]; then
-		echo "Using epsilon of $Tepsilon"
+	result=$?
+	if [ "$result" = 0 ]; then
+		if [ ! -z "$Tepsilon" ]; then
+			echo "Using epsilon of $Tepsilon"
+		fi
+		errors="$(compare_numbers $outputfile reference/$Toutputref -e $Tepsilon)"
+	else
+		errors="Test execution of $* failed with return status $result"
 	fi
-	errors="$(compare_numbers $outputfile reference/$Toutputref -e $Tepsilon)"
 	if [ -z "$errors" ]
 	then
 		echo "$*" test succeeded
 		successes=$(expr $successes + 1)
 	else
-		echo "$*" test failed - appending errors to file output/errors
-		echo $errors >>output/errors
+		echo "$*" test failed - appending errors to file errors
+		echo $errors >>errors
 	fi
 }
+
+trap "cleanup -2" 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 # ...
 
 if [ "$(basename $PWD)" != test ]
 then
@@ -130,7 +149,7 @@ echo "Using executable file $exec"
 set_next_test_params $file_name_table
 while [ ! "$Tfinished" = "true" ]; do
 	echo "Runing test for $Test_name"
-	run_test
+	run_test $Test_name
 	set_next_test_params $file_name_table
 done
 
