@@ -8,6 +8,8 @@ if perl -I $basedir $basedir/deploy_server.pl $*; then
 	if ! perl -I $basedir $basedir/deploy_web.pl $*; then
 		echo "Deployment of MAS web application failed." >&2
 		result=2
+	else
+		echo "Deployment of MAS server and web application succeeded." >&2
 	fi
 else
 	echo "Deployment of MAS server failed." >&2
