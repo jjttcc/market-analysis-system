@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
 import support.ErrorBox;
+import application_support.MA_Configuration;
 
 // The Market Analysis GUI menu bar
 public class MA_MenuBar extends MenuBar {
@@ -24,15 +25,17 @@ public class MA_MenuBar extends MenuBar {
 		add(view_menu);
 
 		// File menu items, with shortcuts
-		MenuItem new_window, close_window, mkt_selection, print_cmd;
+		MenuItem new_window, close_window, reload, mkt_selection, print_cmd;
 		MenuItem indicator_selection_menu, print_all, quit;
 		file_menu.add(new_window = new MenuItem("New Window",
-							new MenuShortcut(KeyEvent.VK_N)));
+			new MenuShortcut(KeyEvent.VK_N)));
 		file_menu.add(close_window = new MenuItem("Close Window",
-							new MenuShortcut(KeyEvent.VK_W)));
+			new MenuShortcut(KeyEvent.VK_W)));
+		file_menu.add(reload = new MenuItem("Reload settings",
+			new MenuShortcut(KeyEvent.VK_Z)));
 		file_menu.addSeparator();
 		file_menu.add(mkt_selection = new MenuItem("Select Tradable",
-							new MenuShortcut(KeyEvent.VK_S)));
+			new MenuShortcut(KeyEvent.VK_S)));
 		file_menu.add(indicator_selection_menu =
 			new MenuItem("Select Indicator", new MenuShortcut(KeyEvent.VK_I)));
 		file_menu.addSeparator();
@@ -46,7 +49,8 @@ public class MA_MenuBar extends MenuBar {
 
 		// Action listeners for file menu items
 		new_window.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) {
+				MA_Configuration.application_instance().reload();
 				Chart new_chart = new Chart(new DataSetBuilder(data_builder),
 					chart.serialize_filename, chart.options());
 			}
@@ -54,34 +58,41 @@ public class MA_MenuBar extends MenuBar {
 		mkt_selection.addActionListener(chart.market_selections);
 		indicator_selection_menu.addActionListener(indicator_selection);
 		close_window.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) { chart.close(); }
+			public void actionPerformed(ActionEvent e) { chart.close(); }
+		});
+		reload.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MA_Configuration.application_instance().reload();
+			}
 		});
 		print_cmd.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			if (! (chart.current_tradable == null ||
-					chart.current_tradable.length() == 0)) {
-				chart.main_pane.print(false);
+			public void actionPerformed(ActionEvent e) {
+				if (! (chart.current_tradable == null ||
+						chart.current_tradable.length() == 0)) {
+					chart.main_pane.print(false);
+				}
+				else {
+					final ErrorBox errorbox = new ErrorBox("Printing error",
+						"Nothing to print", chart);
+				}
 			}
-			else {
-				final ErrorBox errorbox = new ErrorBox("Printing error",
-					"Nothing to print", chart);
-			}
-		}});
+		});
 		print_all.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			if (! (chart.current_tradable == null ||
-					chart.current_tradable.length() == 0)) {
-				String original_tradable = chart.current_tradable;
-				chart.print_all_charts();
-				chart.request_data((String) original_tradable);
+			public void actionPerformed(ActionEvent e) {
+				if (! (chart.current_tradable == null ||
+						chart.current_tradable.length() == 0)) {
+					String original_tradable = chart.current_tradable;
+					chart.print_all_charts();
+					chart.request_data((String) original_tradable);
+				}
+				else {
+					final ErrorBox errorbox = new ErrorBox("Printing error",
+						"Nothing to print", chart);
+				}
 			}
-			else {
-				final ErrorBox errorbox = new ErrorBox("Printing error",
-					"Nothing to print", chart);
-			}
-		}});
+		});
 		quit.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) { chart.quit(0); }
+			public void actionPerformed(ActionEvent e) { chart.quit(0); }
 		});
 
 		// View menu items
@@ -112,20 +123,20 @@ public class MA_MenuBar extends MenuBar {
 
 		// Action listeners for view menu items
 		replace_toggle.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-				chart.toggle_indicator_replacement();
-				set_replace_indicator_label(replace_toggle);
-			}
+			public void actionPerformed(ActionEvent e) {
+					chart.toggle_indicator_replacement();
+					set_replace_indicator_label(replace_toggle);
+				}
 		});
 		next.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-				menu_bar.next_tradable();
-			}
+			public void actionPerformed(ActionEvent e) {
+					menu_bar.next_tradable();
+				}
 		});
 		previous.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-				menu_bar.previous_tradable();
-			}
+			public void actionPerformed(ActionEvent e) {
+					menu_bar.previous_tradable();
+				}
 		});
 	}
 
@@ -257,9 +268,9 @@ public class MA_MenuBar extends MenuBar {
 		for (int i = 0; i < items.size(); ++i) {
 			final MenuItem item = (MenuItem) items.elementAt(i);
 			item.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-					chart.notify_period_type_changed(item.getLabel());
-					set_period_type_label(period_menu);
+				public void actionPerformed(ActionEvent e) {
+						chart.notify_period_type_changed(item.getLabel());
+						set_period_type_label(period_menu);
 				}
 			});
 		}
