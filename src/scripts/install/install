@@ -399,10 +399,10 @@ install_files() {
 	cp -f bin/* $bindir
 	binresult=$?
 	if [ "$binresult" -eq 0 ]; then
-		cp -fR lib/* lib/.* $libdir
+		(cd lib; find . -type f -print | cpio -pdmv $libdir)
 		libresult=$?
 		if [ "$libresult" -eq 0 ]; then
-			cp -fR doc/* doc/.* $docdir
+			(cd doc; find . -type f -print | cpio -pdmv $docdir)
 			docresult=$?
 		fi
 	fi
