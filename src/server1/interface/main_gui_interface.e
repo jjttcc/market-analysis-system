@@ -108,15 +108,18 @@ feature {NONE} -- Hook routine implementation
 			-- and `message_body'.
 		local
 			s, number: STRING
-			i, j: INTEGER
+			i, j, loop_count: INTEGER
 		do
 			create s.make (0)
 			from
+				loop_count := 0
 			until
-				io_medium.last_character = eom @ 1 or not io_medium.readable
+				io_medium.last_character = eom @ 1 or not io_medium.readable or
+				loop_count > Maximum_client_message_size
 			loop
 				s.extend (io_medium.last_character)
 				io_medium.read_character
+				loop_count := loop_count + 1
 			end
 			if s.is_empty then
 				i := 0
@@ -146,8 +149,12 @@ feature {NONE} -- Hook routine implementation
 					request_id := Error
 				else
 					request_id := number.to_integer
-					j := s.substring_index (Message_field_separator,
-							i + Message_field_separator.count)
+					if s.count < i + Message_field_separator.count then
+						j := 0
+					else
+						j := s.substring_index (Message_field_separator,
+								i + Message_field_separator.count)
+					end
 					if j = 0 then
 						report_error ("Invalid message format: " + s,
 							Void, Void)
@@ -203,6 +210,8 @@ feature {NONE} -- Implementation
 				tradable_list_handler), Market_data_request)
 			rh.extend ( create {INDICATOR_DATA_REQUEST_CMD}.make (
 				tradable_list_handler), Indicator_data_request)
+			rh.extend ( create {ALL_INDICATORS_REQUEST_CMD}.make (
+				tradable_list_handler), All_indicators_request)
 			rh.extend (create {TRADING_PERIOD_TYPE_REQUEST_CMD}.make (
 				tradable_list_handler), Trading_period_type_request)
 			rh.extend (create {SYMBOL_LIST_REQUEST_CMD}.make (
@@ -281,5 +290,7 @@ feature {NONE}
 
 	session_key: INTEGER
 			-- Key for the current session, extracted by `process_request'
+
+	Maximum_client_message_size: INTEGER is 100000
 
 end -- class MAIN_GUI_INTERFACE
