@@ -12,8 +12,7 @@ class N_RECORD_ONE_VARIABLE_FUNCTION inherit
 		rename
 			make as ovf_make
 		redefine
-			do_process, target, short_description,
-			immediate_parameters
+			do_process, target, short_description, immediate_parameters
 		end
 
 	N_RECORD_STRUCTURE
@@ -25,24 +24,7 @@ creation {FACTORY}
 
 	make
 
-feature -- Access
-
-	short_description: STRING is
-		do
-			!!Result.make (60)
-			Result.append (n.out)
-			Result.append ("-Period ")
-			Result.append (Precursor)
-		end
-
-	effective_n: INTEGER is
-			-- Effective n value - required because some descendants will
-			-- need to effectively change n by adding a constant value.
-		do
-			Result := n
-		end
-
-feature {NONE}
+feature {NONE} -- Initialization
 
 	make (in: like input; op: like operator; i: INTEGER) is
 		require
@@ -55,6 +37,59 @@ feature {NONE}
 		ensure
 			set: input = in and operator = op and n = i
 			target_set: target = in.output
+			offset_0: effective_offset = 0 and effective_n = n
+		end
+
+feature -- Access
+
+	short_description: STRING is
+		do
+			!!Result.make (60)
+			Result.append (n.out)
+			Result.append ("-Period ")
+			Result.append (Precursor)
+		end
+
+	effective_n: INTEGER is
+			-- 	The value that will be used to advance the cursor of the
+			-- 	target list at the beginning of processing - that is,
+			-- 	its cursor will be advanced to the `effective_n'th value.
+			-- 	This is needed because some instances of this function,
+			-- 	such as for Momentum, will use `n' as an offset and it
+			-- 	will need to be different, but based on effective_n.
+		do
+			Result := n + effective_offset
+		end
+
+	effective_offset: INTEGER
+			-- Offset used to produce the effective_n value
+
+feature {FACTORY} -- Status setting
+
+	set_effective_offset (arg: INTEGER) is
+			-- Set effective_offset to `arg'.
+		require
+			arg /= Void
+		do
+			effective_offset := arg
+		ensure
+			effective_offset_set: effective_offset = arg and
+									effective_offset /= Void
+		end
+
+feature {N_RECORD_FUNCTION_PARAMETER} -- Status setting
+
+	set_n (value: INTEGER) is
+		do
+			Precursor (value)
+			if operator /= Void then
+				operator.initialize (Current)
+			end
+			output.wipe_out
+			processed_date_time := Void
+		ensure then
+			output_empty: output.empty
+			not_processed: not processed
 		end
 
 feature {NONE} -- Basic operations
@@ -93,21 +128,6 @@ feature {NONE}
 			Result.extend (fp)
 		end
 
-feature {N_RECORD_FUNCTION_PARAMETER}
-
-	set_n (value: INTEGER) is
-		do
-			Precursor (value)
-			if operator /= Void then
-				operator.initialize (Current)
-			end
-			output.wipe_out
-			processed_date_time := Void
-		ensure then
-			output_empty: output.empty
-			not_processed: not processed
-		end
-
 invariant
 
 	processed_when_target_lt_n:
@@ -117,5 +137,6 @@ invariant
 			(target.count >= effective_n implies
 				output.count = target.count - effective_n + 1)
 	effective_n_gt_0: effective_n > 0
+	effective_n_definition: effective_n = n + effective_offset
 
 end -- class N_RECORD_ONE_VARIABLE_FUNCTION
