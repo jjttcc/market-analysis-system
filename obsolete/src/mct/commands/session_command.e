@@ -2,6 +2,7 @@ indexing
 	description: "External commands associated with a MAS session"
 	author: "Jim Cochrane"
 	date: "$Date$";
+	note: "!!!!Obsolete"
 	revision: "$Revision$"
 	licensing: "Copyright 2003: Jim Cochrane - %
 		%License to be determined"

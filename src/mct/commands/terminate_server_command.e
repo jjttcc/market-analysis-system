@@ -76,7 +76,7 @@ feature -- Basic operations
 			connection.close
 			-- Obtain the associated process and make sure it's terminated
 			-- and removed from the process list.
-			proc := associated_process (window)
+			proc := process_at (window.host_name, window.port_number)
 			check
 				process_is_ready_for_termination:
 					proc.is_pid_valid and not proc.is_terminated
@@ -84,20 +84,9 @@ feature -- Basic operations
 			proc.wait_for (True)
 			remove_process (window.host_name, window.port_number)
 		ensure
-			process_removed:
-				not has_process (window.host_name, window.port_number)
-		end
-
-feature {NONE} -- Implementation
-
-	associated_process (window: SESSION_WINDOW): EPX_EXEC_PROCESS is
-			-- The process associated with Current
-		require
-			window_exists: window /= Void
-		do
-			Result := process_at (window.host_name, window.port_number)
-		ensure
-			exists: Result /= Void
+			process_removed: not has_process (window.host_name,
+				window.port_number) and current_processes.count = 
+				old current_processes.count - 1
 		end
 
 end

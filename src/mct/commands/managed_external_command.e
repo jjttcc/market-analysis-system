@@ -21,6 +21,11 @@ class MANAGED_EXTERNAL_COMMAND inherit
 			{ANY} has_process
 		end
 
+	MCT_CONFIGURATION_PROPERTIES
+		export
+			{NONE} all
+		end
+
 create
 
 	make
@@ -46,11 +51,23 @@ feature -- Status report
 feature -- Basic operations
 
 	execute (window: SESSION_WINDOW) is
+		local
+			args: ARRAY [STRING]
 		do
 			if program = Void then
 				process_components
 			end
-			launch (program, arguments, window)
+			args := deep_clone (arguments)
+			-- Work with a deep-clone of `arguments' to prevent side-effects:
+			-- `arguments' needs to keep its original "tokens", which are
+			-- replaced here dynamically in the cloned array to "configure" the
+			-- arguments for the `launch' call with the current settings
+			-- (e.g., window.port_number).
+			args.linear_representation.do_all (agent replace_tokens (?,
+				<<Port_number_specifier, Hostname_specifier>>,
+				<<window.port_number, window.host_name>>,
+				Token_start_delimiter, Token_end_delimiter))
+			launch (program, args, window)
 		ensure
 			process_managed: has_process (window.host_name,
 				window.port_number)
@@ -65,7 +82,6 @@ feature {NONE} -- Implementation
 		local
 			env: expanded EXECUTION_ENVIRONMENT
 			previous_directory: STRING
-			gu: expanded GENERAL_UTILITIES
 		do
 			if working_directory /= Void then
 				previous_directory := env.current_working_directory
@@ -82,9 +98,7 @@ feature {NONE} -- Implementation
 				env.change_working_directory (previous_directory)
 			end
 		ensure
-			process_managed:
-				has_process (window.host_name,
-				window.port_number)
+			process_managed: has_process (window.host_name, window.port_number)
 		end
 
 	process_components is

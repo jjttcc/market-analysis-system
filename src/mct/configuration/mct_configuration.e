@@ -225,17 +225,17 @@ feature {NONE} -- Implementation - Hook routine implementations
 			environment_variable_append_specifications.do_all (
 				agent process_environment_variable (?, True))
 			if not settings.item (Start_server_cmd_specifier).is_empty then
-				start_server_commands.extend (new_session_command (
+				start_server_commands.extend (new_managed_command (
 				Start_server_cmd_specifier, report_back_appended (
 				settings @ Start_server_cmd_specifier)))
 			end
 			if settings.has (Start_cl_client_cmd_specifier) then
-				start_command_line_client_command := new_session_command (
+				start_command_line_client_command := new_managed_command (
 					Start_cl_client_cmd_specifier,
 					settings @ Start_cl_client_cmd_specifier)
 			end
 			if settings.has (Chart_cmd_specifier) then
-				chart_command := new_session_command (
+				chart_command := new_managed_command (
 					Chart_cmd_specifier, settings @ Chart_cmd_specifier)
 			end
 			if settings.has (Termination_cmd_specifier) then
@@ -483,10 +483,10 @@ feature {NONE} -- Implementation - Utilities
 			current_cmd_string_set: current_cmd_string /= Void and then
 				not current_cmd_string.is_empty
 		local
-			c: SESSION_COMMAND
+			c: MANAGED_EXTERNAL_COMMAND
 		do
 			replace_configuration_tokens (current_cmd_string)
-			c := new_session_command (Start_server_cmd_specifier,
+			c := new_managed_command (Start_server_cmd_specifier,
 				report_back_appended (current_cmd_string))
 			c.set_name (current_cmd_name)
 			c.set_description (current_cmd_desc)
@@ -624,7 +624,7 @@ feature {NONE} -- Implementation - Utilities
 					Result.set_debugging_on (True)
 				end
 			else
-				Result := new_session_command (Termination_cmd_specifier,
+				Result := new_unmanaged_command (Termination_cmd_specifier,
 					term_cmd_value)
 			end
 		ensure
@@ -632,64 +632,45 @@ feature {NONE} -- Implementation - Utilities
 				Result.debugging_on
 		end
 
-	new_session_command (cmd_id, cmd_string: STRING): SESSION_COMMAND is
-			-- A new SESSION_COMMAND, with the work_directory set, if
-			-- specified in `cmd_string'
-		local
-			workdir: STRING
-		do
-			workdir := command_working_directory (cmd_string)
-			create Result.make (cmd_id, cmd_string)
-			if command_line.is_debug then
-				Result.set_debugging_on (True)
-			end
-			if workdir /= Void then
-				Result.set_working_directory (workdir)
-			end
-		ensure
-			debugging_state: command_line.is_debug implies
-				Result.debugging_on
-		end
-
-	new_external_command (cmd_id, cmd_string: STRING):
+	new_managed_command (cmd_id, cmd_string: STRING):
 		MANAGED_EXTERNAL_COMMAND is
-			-- A new EXTERNAL_COMMAND, with the work_directory set, if
+			-- A new MANAGED_EXTERNAL_COMMAND, with the work_directory set, if
 			-- specified in `cmd_string'
-		local
-			workdir: STRING
 		do
-			workdir := command_working_directory (cmd_string)
 			create Result.make (cmd_id, cmd_string)
-			if command_line.is_debug then
-				Result.set_debugging_on (True)
-			end
-			if workdir /= Void then
-				Result.set_working_directory (workdir)
-			end
+			initialize_external_command (Result, cmd_id)
 		ensure
 			debugging_state: command_line.is_debug implies
 				Result.debugging_on
 		end
 
---!!!!!!!Refactoring needed!!!!!!!!!!
 	new_unmanaged_command (cmd_id, cmd_string: STRING):
 		UNMANAGED_EXTERNAL_COMMAND is
 			-- A new UNMANAGED_EXTERNAL_COMMAND, with the work_directory set,
 			-- if specified in `cmd_string'
-		local
-			workdir: STRING
 		do
-			workdir := command_working_directory (cmd_string)
 			create Result.make (cmd_id, cmd_string)
-			if command_line.is_debug then
-				Result.set_debugging_on (True)
-			end
-			if workdir /= Void then
-				Result.set_working_directory (workdir)
-			end
+			initialize_external_command (Result, cmd_id)
 		ensure
 			debugging_state: command_line.is_debug implies
 				Result.debugging_on
+		end
+
+	initialize_external_command (cmd: EXTERNAL_COMMAND; cmd_id: STRING) is
+			-- Initialize `cmd'.
+		local
+			workdir: STRING
+		do
+			workdir := command_working_directory (cmd.command_string)
+			if command_line.is_debug then
+				cmd.set_debugging_on (True)
+			end
+			if workdir /= Void then
+				cmd.set_working_directory (workdir)
+			end
+		ensure
+			debugging_state: command_line.is_debug implies
+				cmd.debugging_on
 		end
 
 feature {NONE} -- Implementation
@@ -765,7 +746,7 @@ feature {NONE} -- Implementation
 				agent remove_character (?, Escape_character @ 1))
 		end
 
-	convert_command_path (cmd: SESSION_COMMAND) is
+	convert_command_path (cmd: MANAGED_EXTERNAL_COMMAND) is
 			-- Call `platform.convert_path' on `cmd.command_string'.
 		do
 			platform.convert_path (cmd.command_string)
