@@ -51,7 +51,7 @@ public class DateDrawer extends TemporalDrawer {
 		IntPair months[] = new IntPair[Max_months],
 			years[] = new IntPair[Max_years];
 		int[] x_values = x_values();
-		String[] data = (String[]) data().toArray();
+		String[] data = (String[]) data().toArray(new String[0]);
 		if (data == null) return;
 
 		if (is_indicator()) {
