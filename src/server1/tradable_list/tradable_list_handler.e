@@ -56,11 +56,13 @@ feature -- Access
 			l := list_for (period_type)
 			if l.symbols.has (symbol) then
 				l.search_by_symbol (symbol)
-				Result := l.item
-				if l.fatal_error then
-					error_occurred := true
-					last_error := concatenation (<<
-						"Error occurred retrieving data for ", symbol>>)
+				if l.item.valid_period_type (period_type) then
+					Result := l.item
+					if l.fatal_error then
+						error_occurred := true
+						last_error := concatenation (<<
+							"Error occurred retrieving data for ", symbol>>)
+					end
 				end
 			end
 		end
@@ -104,6 +106,7 @@ feature -- Access
 		local
 			l: LIST [TIME_PERIOD_TYPE]
 			t: TRADABLE [BASIC_MARKET_TUPLE]
+			tbl: HASH_TABLE [BOOLEAN, STRING]
 		do
 			error_occurred := false
 			if daily_market_list /= Void then
@@ -111,13 +114,13 @@ feature -- Access
 				t := daily_market_list.item
 				if not daily_market_list.fatal_error then
 					l := t.period_types.linear_representation
-					create Result.make (l.count)
+					create tbl.make (l.count)
 					from
 						l.start
 					until
 						l.exhausted
 					loop
-						Result.extend (l.item.name)
+						tbl.extend (true, l.item.name)
 						l.forth
 					end
 				else
@@ -132,15 +135,15 @@ feature -- Access
 				t := intraday_market_list.item
 				if not intraday_market_list.fatal_error then
 					l := t.period_types.linear_representation
-					if Result = Void then
-						create Result.make (l.count)
+					if tbl = Void then
+						create tbl.make (l.count)
 					end
 					from
 						l.start
 					until
 						l.exhausted
 					loop
-						Result.extend (l.item.name)
+						tbl.extend (true, l.item.name)
 						l.forth
 					end
 				else
@@ -150,6 +153,8 @@ feature -- Access
 						symbol>>)
 				end
 			end
+			tbl.compare_objects
+			Result := period_types_sorted_by_duration (tbl)
 		end
 
 	current_symbol: STRING is
@@ -250,6 +255,30 @@ feature {NONE} -- Implementation
 				not daily_market_list.empty and then
 				intraday_market_list /= Void and then
 				not intraday_market_list.empty)
+		end
+
+	period_types_sorted_by_duration (t: HASH_TABLE [BOOLEAN, STRING]):
+		ARRAYED_LIST [STRING] is
+			-- The result of a sort by duration, ascending, of the
+			-- associated period type of each element of `t'
+		require
+			object_compare: t.object_comparison
+		local
+			l: LIST [TIME_PERIOD_TYPE]
+			gs: expanded GLOBAL_SERVICES
+		do
+			from
+				l := gs.period_types_in_order
+				create Result.make (l.count)
+				l.start
+			until
+				l.exhausted
+			loop
+				if t.has (l.item.name) then
+					Result.force (l.item.name)
+				end
+				l.forth
+			end
 		end
 
 invariant
