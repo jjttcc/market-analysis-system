@@ -153,6 +153,8 @@ feature {NONE} -- Implementation
 		end
 
 	check_date_time (t: BASIC_MARKET_TUPLE) is
+		require
+			t_exists: t /= Void
 		local
 			s: STRING
 		do
@@ -168,10 +170,19 @@ feature {NONE} -- Implementation
 				error_in_current_tuple := True
 				discard_current_tuple := True
 			end
+			auxiliary_check_date_time (t)
 			last_date_time := t.date_time
+		ensure then
+			last_date_time_set: last_date_time = t.date_time
 		end
 
 	last_date_time: DATE_TIME
 			-- date/time of last tuple
+
+feature {NONE} -- Hook routines
+
+	auxiliary_check_date_time (t: BASIC_MARKET_TUPLE) is
+		do
+		end
 
 end -- class MARKET_TUPLE_DATA_SCANNER
