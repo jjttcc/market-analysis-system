@@ -40,13 +40,12 @@ feature -- Initialization
 			tradable_factories := factories
 			object_comparison := true
 			file_names.start; tradable_factories.start
-			!LINKED_LIST[PAIR [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]]!
-				cache.make
-			cache_size := 5
+			!HASH_TABLE [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]!
+				cache.make (cache_size)
 		ensure
 			set: file_names = filenames and tradable_factories = factories
 			implementation_init: last_tradable = Void and old_index = 0
-			cache_initialized: cache /= Void and cache_size = 5
+			cache_initialized: cache /= Void
 		end
 
 feature -- Access
@@ -122,6 +121,8 @@ feature -- Access
 
 	file_names: LINEAR [STRING]
 
+	cache_size: INTEGER is 10
+
 feature -- Status report
 
 	after: BOOLEAN is
@@ -185,36 +186,21 @@ feature {NONE} -- Implementation
 	cached_item (i: INTEGER): TRADABLE [BASIC_MARKET_TUPLE] is
 			-- The cached item with index `i' - Void if not in cache
 		do
-			from
-				cache.start
-			until
-				cache.exhausted or else cache.item.right = i
-			loop
-				cache.forth
-			end
-			if not cache.exhausted then
-				Result := cache.item.left
-			end
+			Result := cache @ i
 		ensure
-			correct_result:
-				not cache.exhausted implies (Result = cache.item.left)
-			void_if_not_there: cache.exhausted implies Result = Void
+			correct_result: cache.has (i) = (Result = cache @ i)
 		end
 
 	add_to_cache (t: TRADABLE [BASIC_MARKET_TUPLE]; idx: INTEGER) is
 			-- Add `t' with its `idx' to the cache
 		require
 			not_void: t /= Void
-		local
-			pair: PAIR [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]
 		do
 			if cache.count = cache_size then
-				-- Arbitrarily prune the last item to keep within the
-				-- allowed cache size.
-				cache.prune (cache.last)
+				cache.clear_all
+				check cache.count = 0 end
 			end
-			!!pair.make (t, index)
-			cache.extend (pair)
+			cache.put (t, idx)
 		end
 
 	open_current_file: PLAIN_TEXT_FILE is
@@ -229,10 +215,7 @@ feature {NONE} -- Implementation
 			Result := Void
 		end
 
-	cache_size: INTEGER
-			-- The maximum size for the cache
-
-	cache: LIST [PAIR [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]]
+	cache: HASH_TABLE [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]
 			-- Cache of tradable/index for efficiency
 
 	old_index: INTEGER
