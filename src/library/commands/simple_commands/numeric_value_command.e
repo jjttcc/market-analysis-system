@@ -10,9 +10,6 @@ indexing
 class CONSTANT inherit
 
 	NUMERIC_COMMAND
-		rename
-			value as constant_value
-		end
 
 creation
 
@@ -22,9 +19,9 @@ feature
 
 	make (r: REAL) is
 		do
-			constant_value := r
+			value := r
 		ensure
-			set: rabs (constant_value - r) < epsilon
+			set: rabs (value - r) < epsilon
 		end
 
 feature -- Basic operations
@@ -32,7 +29,7 @@ feature -- Basic operations
 	execute (arg: ANY) is
 		do
 		ensure then
-			constant_value = old constant_value
+			value = old value
 		end
 
 feature -- Status report
@@ -41,14 +38,14 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_constant_value (arg: REAL) is
-			-- Set constant_value to `arg'.
+	set_value (arg: REAL) is
+			-- Set value to `arg'.
 		require
 			arg /= Void
 		do
-			constant_value := arg
+			value := arg
 		ensure
-			constant_value_set: rabs (constant_value - arg) < epsilon
+			value_set: rabs (value - arg) < epsilon
 		end
 
 end -- class CONSTANT
