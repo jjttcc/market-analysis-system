@@ -35,7 +35,11 @@ Contents
 </h3>
 <P>
 <A href="#server operation">
-Operating the Server
+Operating the Server (General)
+<br>
+</A>
+<A href="#windows server operation">
+Operating the Server (Windows)
 <br>
 </A>
 <A href="#administration">
@@ -46,12 +50,16 @@ Administration and Setup
 Data-related Problems
 </A>
 <br>
+<A href="#charting GUI">
+The MAS Charting GUI
+</A>
+<br>
 <A href="#database">
 Database Problems
 </A>
 <br>
 <A href="#signal generation">
-Signal Generation
+Signal Generation and Market Analyzers
 </A>
 <!--
 <br>
@@ -62,12 +70,12 @@ Debugging
 <br><br>
 <h3>
 <A name="server operation">
-Operating the Server
+Operating the Server (General)
 </A>
 </h3>
-<B>Once the server is started in the background, how do I end / stop the
-server.  (I have been just using the kill command ie kill -9 procid.)
-Is there another way to have the server stop?</B>
+<B>
+Once the server is started in the background, how do I stop it.
+</B>
 <P>
 You can stop the server by starting up the command-line client (either
 macl - or maclj, if you don't have Python installed but do have Java)
@@ -83,6 +91,32 @@ Currently, the only way to add new files is to shut down and restart the
 server.  The capability to add new tradables while the server is
 running is a feature that may be added in the future if there is
 enough demand for it.
+<h3>
+<A name="windows server operation">
+Operating the Server (Windows)
+</A>
+</h3>
+<P><B>
+I`ve tried to install MAS 1.6.5 for Windows but am not able to get
+the charting application working.
+I installed Java, as instructed in the readme file, but
+when I click on the "MAS Charts" icon I get this error message:
+<P>
+c:\MAS\mas1.6.5\lib\classes>java MA_Client localhorst 18273
+<br>
+java.io.IOException: Couldn't get I/O for the connection to: localhorst
+<P></B>
+This error messages indicates that the the MAS charting application
+cannot connect with the MAS server.
+Most likely this is because you have not started the server.
+<P>
+In order to start the charting application you first need to start the
+component called the MAS server.  (This is the component of MAS that
+does most of the calculations.)  This is done by double-clicking on the
+"MAS Server (web)" icon (if you wish to get data from the web) or the
+"MAS Server (files)" icon (if your data resides on files on your computer)
+to start the server.  After the server has started, double-click on the
+"MAS Charts" icon to start the charting application.
 <h3>
 <A name="administration">
 Administration and Setup
@@ -286,6 +320,54 @@ awk '{
 }' $1 > $2
 <P></I></TT>
 <h3>
+<A name="charting GUI">
+The MAS Charting GUI
+</A>
+</h3>
+<B>
+I'm trying to run MAS on a Linux system.
+I got the server running OK, but the GUI charting client refuses to come up.
+I get the error message:
+<P><I><TT>
+java.lang.NullPointerException
+<br>
+&nbsp;&nbsp;&nbsp;at java.awt.Menu.add(Menu.java:39)
+<br>
+&nbsp;&nbsp;&nbsp;at mas_gui.MA_MenuBar.&lt;init&gt;(MA_MenuBar.java:98)
+<br>
+&nbsp;&nbsp;&nbsp;at mas_gui.Chart.initialize_GUI_components(Chart.java:462)
+<br>
+&nbsp;&nbsp;&nbsp;at mas_gui.Chart.&lt;init&gt;(Chart.java:120)
+<br>
+&nbsp;&nbsp;&nbsp;at MA_Client.main(MA_Client.java:12)
+<P></I></TT>
+I am using the Kaffe implementation of the Java Virtual Machine (JVM).
+<P></B>
+This is very likely the same problem that other Linux users have
+encountered who are using the Kaffe JVM.
+This implementation apparently has a bug that causes this "null pointer
+exception".
+Aside from contacting kaffe.org and convincing them to fix the problem, the
+easiest solution is probably to install and use an alternative JVM, such as
+Sun's or IBM's JVM.
+<P>
+<B>
+I got a really weird error from the charting GUI:
+<br>
+"NaN encountered - substituting 0."
+<br>
+It didn't seem to have any effect on processing.
+<P></B>
+What is happening here is that the server is producing NaN (Not a Number)
+as a value, probably because of some impossible calculation, such as
+3.5 / 0, which can happen inadvertently for some indicators.
+The GUI doesn't know how to display a NaN as a value, so it converts it to 0;
+but it tells you about it so that you will know that the
+displayed value is not really correct.
+Since this phenomenon is unusual, but not totally
+unexpected, you can regard this as an informational message rather
+than an error message.
+<h3>
 <A name="database">
 Database Problems
 </A>
@@ -457,9 +539,9 @@ How can MAS give me an answer so dramatically different than BigCharts?
 </B><P>
 It looks like you are using the existing MACD market analyzers
 that come with the MAS release.
-(The phrase "Crossover for weekly trading period" provides the clue here.)
 These analyzers operate on weekly data - that is, they operate on data
 with a weekly period type.
+(The phrase "Crossover for weekly trading period" provides the clue here.)
 Most likely you are using daily data at BigCharts.
 This would account for the difference that you are seeing.
 If you want to apply market analyzers to daily data, you'll need to use the
