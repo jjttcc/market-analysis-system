@@ -129,6 +129,7 @@ feature {NONE} -- Implementation - initialization
 feature {NONE} -- Implementation - attributes
 
 	list: EV_MULTI_COLUMN_LIST
+			-- The selection list
 
 	max_list_widths: ARRAY [INTEGER]
 
