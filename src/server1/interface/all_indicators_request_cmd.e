@@ -49,4 +49,4 @@ feature {NONE} -- Basic operations
 			Result := ""
 		end
 
-end -- class TRADING_PERIOD_TYPE_REQUEST_CMD
+end
