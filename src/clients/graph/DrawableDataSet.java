@@ -393,20 +393,6 @@ public class DataSet {
 		if ( yaxis_ == null) {
 			ymin = dymin;
 			ymax = dymax;
-			// if approximately(ymax > 0 and ymin >= 0 and ymax == ymin)
-			if (ymax > min_max_epsilon && ymin + min_max_epsilon > 0 &&
-				Math.abs(ymax) - Math.abs(ymin) < min_max_epsilon) {
-System.out.println("ymin, ymax before: " + ymin + ", " + ymax);
-				// ymax are essentially the same - Add some extra boundary
-				// space so that the user's data is visible - appears in
-				// the middle rather than the top or bottom.
-				ymin -= min_border_boundary;
-				ymax += min_border_boundary;
-				if (ymin < 0) {
-					ymin = 0;
-				}
-System.out.println("ymin, ymax after: " + ymin + ", " + ymax);
-			}
 		}
 		if ( xaxis_ == null) {
 			xmin = dxmin;
