@@ -276,6 +276,12 @@ feature {NONE} -- Implementation
 				print ("%NError: Start date must be set before %
 					%running analysis.%N")
 			else
+				-- Ensure that the market event generators and event
+				-- registrants currently in persistent store are used
+				-- for the market analysis (in case they were updated by
+				-- a separate process).
+				force_meg_library_retrieval
+				force_event_registrant_retrieval
 				-- Important - update the coordinator with the current
 				-- active event generators:
 				event_coordinator.set_event_generators (
@@ -485,7 +491,7 @@ feature {NONE} -- Implementation - utilities
 			-- Start out with non-intraday data:
 			current_period_type := period_types @ (period_type_names @ Daily)
 			create event_generator_builder.make
-			create function_builder.make
+			create function_builder.make (market_list_handler)
 			initialize_current_tradable
 			if not market_list_handler.exhausted then
 				available_period_types := market_list_handler.period_types (
