@@ -30,6 +30,8 @@ class STOCK_SPLIT_FILE inherit
 		export
 			{NONE} all
 			{ANY} file_name
+		undefine
+			last_error_fatal
 		end
 
 creation
