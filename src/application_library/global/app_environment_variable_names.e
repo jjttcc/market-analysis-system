@@ -21,20 +21,20 @@ feature -- Access
 	application_directory_name: STRING is
 			-- Default name of the application directory environment variable
 		do
-			Result := "MASS_DIRECTORY"
+			Result := "MAS_DIRECTORY"
 		end
 
 	stock_split_file_name: STRING is
 			-- Default name of the stock_split_file_name environment variable
 		do
-			Result := "MASS_STOCK_SPLIT_FILE"
+			Result := "MAS_STOCK_SPLIT_FILE"
 		end
 
 	mailer_name: STRING is
 			-- Default name of the environment variable for the executable
 			-- to use for sending email
 		do
-			Result := "MASS_MAILER"
+			Result := "MAS_MAILER"
 		end
 
 	mailer_subject_flag_name: STRING is
@@ -42,7 +42,7 @@ feature -- Access
 			-- to use to indicate to the mailer that the following
 			-- argument is the subject
 		do
-			Result := "MASS_MAILER_SUBJECT_FLAG"
+			Result := "MAS_MAILER_SUBJECT_FLAG"
 		end
 
 end -- APP_ENVIRONMENT_VARIABLE_NAMES

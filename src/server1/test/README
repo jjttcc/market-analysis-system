@@ -1,9 +1,9 @@
-This directory contains test scripts and test data for the MAS server (mass)
+This directory contains test scripts and test data for the MA server (mas)
 application.  It contains the following files and directories:
 
      README    - This file
      bin       - bin directory where scripts are stored
      input     - input data for tests
      reference - reference output data for tests
-	 lib       - library files for mass tests
+	 lib       - library files for mas tests
      run_tests - script to run a set of tests
