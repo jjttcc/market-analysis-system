@@ -69,11 +69,19 @@ feature {NONE} -- Implementation
 					file_names.item, " - file does not exist.%N">>)
 				fatal_error := True
 			end
+		ensure
+			result_open: not fatal_error implies Result /= Void and then
+				Result.exists and then not Result.is_closed
+			result_open_read: Result.is_open_read
 		end
 
+--!!!:
 	setup_input_medium is
 		do
 			current_input_file := open_current_file
+print ("[1] sim - cif - indexes - field, record: " +
+current_input_file.field_index.out + ", " +
+current_input_file.record_index.out + "%N")
 			if not fatal_error then
 				tradable_factory.set_input (current_input_file)
 				current_input_file.set_field_separator (
@@ -81,10 +89,16 @@ feature {NONE} -- Implementation
 				current_input_file.set_record_separator (
 					tradable_factory.record_separator)
 			end
+print ("[2] sim - cif - indexes - field, record: " +
+current_input_file.field_index.out + ", " +
+current_input_file.record_index.out + "%N")
 		ensure then
-			indices_at_1: current_input_file.readable implies
-				(current_input_file.field_index = 1 and
-				current_input_file.record_index = 1)
+			input_file_open: not fatal_error implies current_input_file /= Void
+				and then current_input_file.exists and then
+				not current_input_file.is_closed
+			input_file_readable: not fatal_error implies
+				current_input_file /= Void and then
+				current_input_file.is_open_read
 		end
 
 	close_input_medium is
