@@ -12,11 +12,11 @@ class
 
 creation
 
-	make_signal_type
+	initialize_signal_type
 
-feature -- Initialization
+feature {NONE} -- Initialization
 
-	make_signal_type is
+	initialize_signal_type is
 		do
 			signal_type := 1
 		end
@@ -56,6 +56,11 @@ feature -- Access
 		once
 			Result := <<"Buy", "Sell", "Neutral", "Other">>
 		end
+
+	character_codes: STRING is "bsno"
+			-- Unique One-character abbreviations for the signal types,
+			-- in one-to- one correspondence with (and in the same order as)
+			-- the names in `type_names'
 
 invariant
 
