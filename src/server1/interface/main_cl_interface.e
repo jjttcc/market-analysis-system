@@ -65,15 +65,11 @@ feature -- Initialization
 	make_io (input_dev, output_dev: IO_MEDIUM; fb: FACTORY_BUILDER) is
 		require
 			not_void: input_dev /= Void and output_dev /= Void and fb /= Void
-local l: list [time_period_type]
 		do
 			mai_initialize (fb)
 			initialize
 			set_input_device (input_dev)
 			set_output_device (output_dev)
-from l := period_types_in_order l.start until l.exhausted loop
- 	print_list (<<l.item.name, "%N">>); l.forth
- end
 		ensure
 			iodev_set: input_device = input_dev and output_device = output_dev
 		end
@@ -565,7 +561,9 @@ feature {NONE} -- Implementation
 		local
 			symbol: STRING
 			symbols: LIST [STRING]
+			old_tradable: TRADABLE [BASIC_MARKET_TUPLE]
 		do
+			old_tradable := current_tradable
 			if not market_list_handler.empty then
 				from
 					symbols := market_list_handler.symbols
@@ -590,12 +588,19 @@ feature {NONE} -- Implementation
 				end
 				current_tradable := market_list_handler.tradable (symbol,
 					current_period_type)
-				-- Update the current_tradable's target period type, if needed.
-				if
-					current_tradable.target_period_type /= current_period_type
-				then
-					current_tradable.set_target_period_type (
-						current_period_type)
+				if market_list_handler.error_occurred then
+					log_errors (<<"Error occurred while retreiving data for ",
+						symbol, ": ", market_list_handler.last_error, ".%N">>)
+				else
+					-- Update the current_tradable's target period type,
+					-- if needed.
+					if
+						current_tradable.target_period_type /=
+							current_period_type
+					then
+						current_tradable.set_target_period_type (
+							current_period_type)
+					end
 				end
 			else
 				print ("There are no markets available to select from.%N")
@@ -637,6 +642,8 @@ feature {NONE} -- Implementation
 				if
 					not t.valid_period_type (per_type_choice)
 				then
+					-- Set `t' to the appropriate tradable according to
+					-- `per_type_choice', intraday or non-intraday.
 					t := market_list_handler.tradable (t.symbol,
 						per_type_choice)
 				end
@@ -737,6 +744,7 @@ feature {NONE} -- Implementation - utilities
 
 	initialize is
 		do
+			-- Start out with non-intraday data:
 			current_period_type := period_types @ (period_type_names @ Daily)
 			create event_generator_builder.make
 			create function_builder.make
@@ -744,6 +752,10 @@ feature {NONE} -- Implementation - utilities
 			if not market_list_handler.exhausted then
 				available_period_types := market_list_handler.period_types (
 					market_list_handler.current_symbol)
+				if market_list_handler.error_occurred then
+					log_errors (<<market_list_handler.last_error, "%N">>)
+					raise ("Data retrieval error")
+				end
 			end
 		ensure
 			curr_period_not_void: current_period_type /= Void
@@ -760,7 +772,15 @@ feature {NONE} -- Implementation - utilities
 				current_tradable :=
 					market_list_handler.item (current_period_type)
 				if market_list_handler.error_occurred then
+					log_errors (<<market_list_handler.last_error, "%N">>)
 					raise ("Data retrieval error")
+				elseif current_tradable = Void then
+					-- No daily data, so use intraday data.
+					current_period_type := period_types @ (
+						market_list_handler.period_types (
+						market_list_handler.current_symbol) @ 1)
+					current_tradable := market_list_handler.item (
+						current_period_type)
 				end
 			end
 		ensure
