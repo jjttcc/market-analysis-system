@@ -49,6 +49,6 @@ public class AutoRefreshSetup {
 	// Timer delay in milliseconds (@@Make configurable - check with Orest.)
 //	private static long refresh_delay = 1000 * 5;
 //	private static long refresh_delay = 100 * 7;
-private static long refresh_delay = 1000 * 6;
+private static long refresh_delay = 1000 * 1;
 //private static long refresh_delay = 1000 * 60;
 }
