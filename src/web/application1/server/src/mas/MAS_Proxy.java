@@ -26,8 +26,10 @@ FileWriter logfile;
 try {
 logfile = new FileWriter(new File("/tmp/proxylogfile"));
 } catch(Exception e) {}
+log("MAS_Proxy() called");
 		assert conn != null;
 		connection = conn;
+log("MAS_Proxy() returning");
 	}
 
 // Access
@@ -56,7 +58,9 @@ logfile = new FileWriter(new File("/tmp/proxylogfile"));
 	public void forward(String msg) throws IOException {
 		assert msg != null: "Precondition";
 		error_ = false;
+log("'forward' opening a connection");
 		connection.open();
+log("connection opened");
 		PrintWriter writer = null;
 		try {
 log("forwarding '" + msg + "'");

@@ -12,6 +12,7 @@ import javax.servlet.GenericServlet;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import support.IO_SocketConnection;
+import support.ServerResponseUtilities;
 
 public final class MAS extends GenericServlet {
 
@@ -30,7 +31,11 @@ public final class MAS extends GenericServlet {
 			server_response = proxy().response();
 			send_response(response, server_response);
 		} catch (Exception e) {
-			e.printStackTrace();
+			//!!!Make production-ready.
+			log("Exception caught in 'service':\n", e);
+			send_response(response,
+				ServerResponseUtilities.error_response_message(
+				"Failed to connect to the server."));
 		}
 	}
 
@@ -64,8 +69,10 @@ public final class MAS extends GenericServlet {
 
 	private MAS_Proxy proxy() {
 		if (proxy_ == null) {
+			log("Creating proxy_");
 			proxy_ = new MAS_Proxy(new IO_SocketConnection(
 				server_address().hostname(), server_address().port_number()));
+			log("proxy_ created");
 		}
 		return proxy_;
 	}
