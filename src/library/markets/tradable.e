@@ -12,6 +12,8 @@ deferred class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 			set_name as set_function_name
 		export {NONE}
 			sf_make
+		redefine
+			set_trading_period_type, finish_loading
 		end
 
 	MATH_CONSTANTS
@@ -64,6 +66,7 @@ feature -- Access
 		require
 			not_void: period_type /= Void
 			period_type_valid: period_types.has (period_type)
+			loaded: loaded
 		do
 			Result := tuple_lists @ period_type
 			-- If the list has not been created and there is enough
@@ -85,6 +88,8 @@ feature -- Access
 	tuple_list_names: ARRAY [STRING] is
 			-- The period-type name (key) of each `tuple_list' associated
 			-- with `Current'
+		require
+			loaded: loaded
 		local
 			l: LIST [TIME_PERIOD_TYPE]
 			i: INTEGER
@@ -116,6 +121,8 @@ feature -- Access
 
 	period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
 			-- Period types available for this tradable
+		require
+			loaded: loaded
 		do
 			if trading_period_type.intraday then
 				Result := intraday_period_types
@@ -195,6 +202,22 @@ feature -- Status setting
 			set_target_period_type (target_period_type)
 		end
 
+feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
+
+	set_trading_period_type (arg: TIME_PERIOD_TYPE) is
+		do
+			trading_period_type := arg
+			target_period_type := trading_period_type
+		ensure then
+			target_type_set_to_tp: target_period_type = trading_period_type
+		end
+
+	finish_loading is
+		do
+			Precursor
+			initialize_tuple_lists
+		end
+
 feature -- Element change
 
 	add_indicator (f: MARKET_FUNCTION) is
@@ -202,6 +225,7 @@ feature -- Element change
 			-- to tuple_list (target_period_type.name).
 		require
 			not_there: not indicators.has (f)
+			period_type_set: target_period_type /= Void
 		do
 			indicators.extend (f)
 			f.set_innermost_input (tuple_list (target_period_type.name))
@@ -224,6 +248,8 @@ feature -- Basic operations
 
 	process_indicators is
 			-- Ensure that all elements of `indicators' have been processed.
+		require
+			loaded: loaded
 		do
 			from
 				indicators.start
@@ -244,21 +270,17 @@ feature -- Basic operations
 
 feature {NONE} -- Initialization
 
-	tradable_initialize (type: TIME_PERIOD_TYPE) is
+	tradable_initialize is
 			-- Establish the class invariant.
 		do
 			create {LINKED_LIST [MARKET_FUNCTION]} indicators.make
 			create indicator_groups.make (0)
 			create tuple_lists.make (0)
-			sf_make (type)
-			initialize_tuple_lists
-			target_period_type := trading_period_type
+			sf_make (Void)
 		ensure
 			containers_not_void:
 				indicators /= Void and indicator_groups /= Void and
 					tuple_lists /= Void
-			type_set: trading_period_type = type
-			target_type_set_to_tp: target_period_type = trading_period_type
 		end
 
 	initialize_tuple_lists is
@@ -382,9 +404,9 @@ feature {NONE} -- Hook methods
 
 invariant
 
-	containers_not_void: indicators /= Void and indicator_groups /= Void and
-							tuple_lists /= Void
-	target_type_valid: target_period_type /= Void and
+	containers_not_void:
+		indicators /= Void and indicator_groups /= Void and tuple_lists /= Void
+	target_type_valid: loaded implies target_period_type /= Void and
 		tuple_list_names.has (target_period_type.name)
 
 end -- class TRADABLE
