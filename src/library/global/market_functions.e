@@ -50,6 +50,8 @@ feature -- Access
 			point1.set_x_y_date (1, 1, earlier)
 			point2.set_x_y_date (5, 1, later)
 			create stock.make ("DUMMY", Void, Void)
+			stock.set_trading_period_type (period_types @ (
+				period_type_names @ Daily))
 			stock.set_function_name ("No Input Function")
 			create linear_cmd.make(stock)
 			create addition.make (linear_cmd, volume)
