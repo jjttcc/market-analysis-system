@@ -93,28 +93,25 @@ feature -- Miscellaneous
 
 feature {NONE} -- Hook methods
 
-	current_command_selection (cmd_list: LIST [COMMAND]; msg: STRING):
-				COMMAND is
-		local
-			cmds: LIST [COMMAND]
-		do
-			print_list (<<"Select ", msg,
-						" from current command tree? (y/n) ">>)
-			inspect
-				selected_character
-			when 'y', 'Y' then
-				cmds := valid_types (cmd_list, current_commands)
-				Result := user_command_selection (cmds, msg)
-			else
-				-- null statement - leave Result Void
-			end
-		end
-
 	user_command_selection (cmds: LIST [COMMAND]; msg: STRING):
 				COMMAND is
 		local
-			op_names: ARRAYED_LIST [STRING]
+			op_names, tree_names: ARRAYED_LIST [STRING]
+			tree_cmds: LIST [COMMAND]
+			shared: BOOLEAN -- Should the selected command be shared?
+			name_choice: STRING
+			cmd_choice: COMMAND
 		do
+			tree_cmds := valid_types (cmds, current_commands)
+			from
+				!!tree_names.make (tree_cmds.count)
+				tree_cmds.start
+			until
+				tree_cmds.exhausted
+			loop
+				tree_names.extend (tree_cmds.item.generator)
+				tree_cmds.forth
+			end
 			from
 				!!op_names.make (cmds.count)
 				cmds.start
@@ -128,38 +125,62 @@ feature {NONE} -- Hook methods
 			until
 				Result /= Void
 			loop
-				print_list (<<"Select an operator for ", msg, ":%N">>)
-				print_names_in_1_column (op_names)
+				print_list (<<"Select an operator for ", msg,
+					" from either the%Nlist of valid operators currently %
+					%in the tree (which will be shared)%Nor a new operator %
+					%from the list of all valid operators:%N">>)
+				if not tree_names.empty then
+					print ("[Valid operators currently in the tree:]%N")
+					print_names_in_1_column (tree_names, 1)
+				else
+					print ("[There are currently no valid operators in the %
+							%tree.]%N")
+				end
+				print ("[List of all valid operators:]%N")
+				print_names_in_1_column (op_names, tree_names.count + 1)
 				read_integer
 				if
 					last_integer < 1 or
-						last_integer > op_names.count
+						last_integer > tree_names.count + op_names.count
 				then
 					print_list (<<"Selection must be between 1 and ",
-								op_names.count, "%N">>)
+								tree_names.count + op_names.count, "%N">>)
 				else
+					if last_integer > tree_names.count then
+						name_choice :=
+							op_names @ (last_integer - tree_names.count)
+						cmd_choice := cmds @ (last_integer - tree_names.count)
+						shared := false
+					else
+						name_choice := tree_names @ last_integer
+						cmd_choice := tree_cmds @ last_integer
+						shared := true
+					end
 					print_list (<<"Select:%N     Print description of ",
-								op_names @ last_integer, "? (d)%N",
-								"     Choose ", op_names @ last_integer,
+								name_choice, "? (d)%N",
+								"     Choose ", name_choice,
 								" (c) Make another choice (a) ">>)
 					inspect
 						selected_character
 					when 'd', 'D' then
 						print_list (<<"%N", command_description (
-							cmds @ last_integer),
-							"%N%NChoose ", op_names @ last_integer,
+							cmd_choice),
+							"%N%NChoose ", name_choice,
 								"? (y/n) ">>)
 						inspect
 							selected_character
 						when 'y', 'Y' then
-							Result := cmds @ last_integer
+							Result := cmd_choice
 						else
 						end
 					when 'c', 'C' then
-						Result := cmds @ last_integer
+						Result := cmd_choice
 					else
 					end
 				end
+			end
+			if not shared then
+				Result := deep_clone (Result)
 			end
 		end
 
@@ -192,7 +213,7 @@ feature {NONE} -- Hook methods
 					choice_made
 				loop
 					print ("Select an item (0 to end):%N")
-					print_names_in_1_column (names)
+					print_names_in_1_column (names, 1)
 					read_integer
 					if last_integer <= -1 or last_integer > choices.count then
 						print_list (<<"Selection must be between 0 and ",

@@ -12,25 +12,17 @@ class APPLICATION_COMMAND_EDITOR inherit
 			{NONE} all
 		end
 
+	APPLICATION_EDITOR
+		redefine
+			user_interface
+		end
+
 	GLOBAL_SERVICES
 
 feature -- Access
 
 	user_interface: COMMAND_EDITING_INTERFACE
 			-- Interface used to obtain data selections from user
-
-feature -- Status setting
-
-	set_user_interface (arg: COMMAND_EDITING_INTERFACE) is
-			-- Set user_interface to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			user_interface := arg
-		ensure
-			user_interface_set: user_interface = arg and
-				user_interface /= Void
-		end
 
 feature -- Basic operations
 

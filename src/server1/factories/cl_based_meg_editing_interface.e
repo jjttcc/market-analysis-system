@@ -119,7 +119,7 @@ feature {NONE} -- Implementation
 				finished
 			loop
 				print ("Select a market analyzer to remove (0 to end):%N")
-				print_names_in_1_column (names)
+				print_names_in_1_column (names, 1)
 				read_integer
 				if
 					last_integer < 0 or
@@ -170,7 +170,7 @@ feature {NONE} -- Implementation
 				finished
 			loop
 				print ("Select a market analyzer to view (0 to end):%N")
-				print_names_in_1_column (names)
+				print_names_in_1_column (names, 1)
 				read_integer
 				if
 					last_integer < 0 or
@@ -272,7 +272,7 @@ feature {NONE} -- Implementation
 				finished
 			loop
 				print_list (<<"Select a market analyzer for ", msg, ":%N">>)
-				print_names_in_1_column (names)
+				print_names_in_1_column (names, 1)
 				read_integer
 				if
 					last_integer < 1 or
@@ -415,7 +415,7 @@ feature {NONE} -- Implementation
 			loop
 				print_list (<<"Select the ", msg,
 							":%N">>)
-				print_names_in_1_column (names)
+				print_names_in_1_column (names, 1)
 				read_integer
 				if
 					last_integer < 1 or
@@ -436,7 +436,7 @@ feature {NONE} -- Implementation
 			operator_maker.set_market_function (function)
 			Result ?= operator_maker.command_selection (
 						operator_maker.Boolean_result_command,
-							"main operator", true)
+							"root operator", true)
 			check
 				cmd_selection_valid: Result /= Void
 			end
@@ -464,7 +464,7 @@ feature {NONE} -- Implementation
 				Result /= Void
 			loop
 				if names.count > 0 then
-					print_names_in_1_column (names)
+					print_names_in_1_column (names, 1)
 					print ("Type a name for the new event that does not match %
 							%any of the above names:%N")
 				else
@@ -500,8 +500,9 @@ feature {NONE} -- Implementation
 			until
 				Result /= Void
 			loop
-				print ("Select the desired trading period type:%N")
-				print_names_in_1_column (names)
+				print ("Select the desired trading period type %
+						%for the new market analyzer:%N")
+				print_names_in_1_column (names, 1)
 				read_integer
 				if
 					last_integer < 1 or
@@ -657,7 +658,7 @@ feature {NONE} -- Implementation
 				finished
 			loop
 				print ("Select an event type:%N")
-				print_names_in_1_column (names)
+				print_names_in_1_column (names, 1)
 				read_integer
 				if
 					last_integer < 1 or

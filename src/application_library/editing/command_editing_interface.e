@@ -13,40 +13,19 @@ deferred class COMMAND_EDITING_INTERFACE inherit
 			{NONE} all
 		end
 
-feature -- Access
-
-	command_selection (type: STRING; msg: STRING; top: BOOLEAN):
-				COMMAND is
-			-- User-selected command whose type conforms to `type'
-			-- `top' specifies whether the returned instance will be
-			-- the top of a command tree.
-		require
-			type_is_valid: command_types @ type /= Void
-			editor_set: editor /= Void
-		local
-			op_names: ARRAYED_LIST [STRING]
-			cmd_list: ARRAYED_LIST [COMMAND]
-		do
-			cmd_list := command_types @ type
-			if not top then
-				-- Not cloned - one instance is shared:
-				Result := current_command_selection (cmd_list, msg)
-			end
-			if Result = Void then
-				-- Do a deep clone so the user-created COMMAND are
-				-- not shared.
-				Result := deep_clone (user_command_selection (cmd_list, msg))
-			end
-			if top then
-				-- List of commands is no longer needed.
-				current_commands.wipe_out
-			else
-				current_commands.extend (Result)
-			end
-			initialize_command (Result)
-		ensure
-			result_not_void: Result /= Void
+	EDITING_INTERFACE [COMMAND]
+		rename
+			object_selection as command_selection,
+			object_types as command_types,
+			user_object_selection as user_command_selection,
+			initialize_object as initialize_command,
+			current_objects as current_commands,
+			object_list as command_list
+		redefine
+			editor
 		end
+
+feature -- Access
 
 	command_types: HASH_TABLE [ARRAYED_LIST [COMMAND], STRING] is
 			-- Hash table of lists of command instances - each list contains
@@ -141,16 +120,6 @@ feature -- Constants
 
 feature -- Status setting
 
-	set_editor (arg: APPLICATION_COMMAND_EDITOR) is
-			-- Set editor to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			editor := arg
-		ensure
-			editor_set: editor = arg and editor /= Void
-		end
-
 	set_left_offset (arg: INTEGER) is
 			-- Set left_offset to `arg'.
 		require
@@ -163,6 +132,7 @@ feature -- Status setting
 
 feature {APPLICATION_COMMAND_EDITOR} -- Access
 
+--!!!!Question: Should any of these queries be moved up to the parent???
 	integer_selection (msg: STRING): INTEGER is
 			-- User-selected integer value
 		deferred
@@ -178,58 +148,7 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 		deferred
 		end
 
-	show_message (msg: STRING) is
-			-- Display `msg' to user -for example, as an error, warning, or
-			-- informational message.
-		deferred
-		end
-
-	choice (descr: STRING; choices: LIST [PAIR [STRING, BOOLEAN]];
-				allowed_selections: INTEGER) is
-			-- The user's selections of the specified choices -
-			-- from 1 to choices.count selections (with `descr' providing
-			-- a description of the choices to the user)
-		require
-			not_void: choices /= Void
-			as_valid: allowed_selections > 0 and allowed_selections <=
-				choices.count
-		do
-			-- Initialize all `right' elements of `choices' to false
-			from
-				choices.start
-			until
-				choices.exhausted
-			loop
-				choices.item.set_right (false)
-				choices.forth
-			end
-			do_choice (descr, choices, allowed_selections)
-		ensure
-			-- For each user-selection of an element of `choices', the
-			-- right member of that pair is set to true; the right
-			-- member of all other elements of `choices' is false.
-		end
-
 feature {NONE} -- Implementation
-
-	current_command_selection (cmd_list: LIST [COMMAND];
-				msg: STRING): COMMAND is
-			-- User's selection from existing commands - Void if user
-			-- chooses not to use an existing command.
-		deferred
-		end
-
-	user_command_selection (cmd_list: LIST [COMMAND];
-				msg: STRING): COMMAND is
-			-- User's selection of a member of `cmd_list'
-		deferred
-		end
-
-	do_choice (descr: STRING; choices: LIST [PAIR [STRING, BOOLEAN]];
-				allowed_selections: INTEGER) is
-			-- Implementation of `choice'
-		deferred
-		end
 
 	Binary_boolean,		-- binary operator with boolean result
 	Binary_real,		-- binary operator with real result
@@ -432,8 +351,6 @@ feature {NONE} -- Implementation
 
 	initialize_command (c: COMMAND) is
 			-- Set command parameters - operands, etc.
-		require
-			editor_set: editor /= Void
 		local
 			const: CONSTANT
 			bin_bool_op: BINARY_OPERATOR [ANY, BOOLEAN]
@@ -495,40 +412,5 @@ feature {NONE} -- Implementation
 				editor.edit_sign_analyzer (sign_an)
 			end
 		end
-
-	valid_types (ref_list, cmd_list: LIST [COMMAND]): LIST [COMMAND] is
-			-- All elements of `cmd_list' whose type matches that of
-			-- an element of `ref_list'
-		do
-			!LINKED_LIST [COMMAND]!Result.make
-			from
-				cmd_list.start
-			until
-				cmd_list.exhausted
-			loop
-				from
-					ref_list.start
-				until
-					ref_list.exhausted
-				loop
-					if cmd_list.item.same_type (ref_list.item) then
-						Result.extend (cmd_list.item)
-						ref_list.finish
-					end
-					ref_list.forth
-				end
-				cmd_list.forth
-			end
-		end
-
-	current_commands: LIST [COMMAND] is
-		do
-			if command_list = Void then
-				!LINKED_LIST [COMMAND]!command_list.make
-			end
-			Result := command_list
-		end
-
-	command_list: LIST [COMMAND]
 
 end -- COMMAND_EDITING_INTERFACE

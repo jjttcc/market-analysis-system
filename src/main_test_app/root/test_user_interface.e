@@ -203,7 +203,7 @@ feature {NONE}
 			loop
 				print_list (<<"Select a market analyzer to edit ",
 							" (0 to end):%N">>)
-				print_names_in_1_column (names)
+				print_names_in_1_column (names, 1)
 				read_integer
 				if
 					last_integer <= -1 or
@@ -591,12 +591,18 @@ feature {NONE}
 			-- Obtain selection for current_period_type from user and set
 			-- the current tradable's target_period_type to it.
 		local
+			i: INTEGER
 			types: ARRAY [STRING]
-			names: ARRAYED_LIST [STRING]
 		do
-			!!names.make (current_tradable.tuple_list_names.count)
-			names.fill (current_tradable.tuple_list_names)
-			print_names_in_1_column (names)
+			from
+				i := 1
+				types := current_tradable.tuple_list_names
+			until
+				i > types.count
+			loop
+				print_list (<<i, ") ", types @ i, "%N">>)
+				i := i + 1
+			end
 			from
 				read_integer
 			until
@@ -634,7 +640,7 @@ feature {NONE}
 			until
 				Result /= Void
 			loop
-				print_names_in_1_column (names)
+				print_names_in_1_column (names, 1)
 				read_integer
 				if
 					last_integer <= 0 or
