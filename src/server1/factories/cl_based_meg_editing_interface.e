@@ -493,7 +493,8 @@ feature {NONE} -- Implementation
 			tvfa: TWO_VARIABLE_FUNCTION_ANALYZER
 		do
 			print_list (<<"Market analyzer type: ", eg.generator,
-				"%NEvent type: ", eg.event_type.name, "%N">>)
+				"%NEvent type: ", eg.event_type.name, ", signal type: ",
+				eg.type_names @ eg.signal_type, "%N">>)
 			compound_eg ?= eg
 			fa ?= eg
 			if compound_eg /= Void then
