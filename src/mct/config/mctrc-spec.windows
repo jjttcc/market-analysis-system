@@ -1,5 +1,4 @@
 replacestart
-{main_mas_dir}c:/Applications/mas
 {chart_dir}<java_dir>
 {projdir}e:/projects/mas-extended_current/EIFGEN/F_code
 {path_separator};
