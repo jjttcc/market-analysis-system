@@ -45,7 +45,6 @@ feature {NONE} -- Initialization
 	setup_application is
         local
             main_window: EV_TITLED_WINDOW
-			builder: APPLICATION_WINDOW_BUILDER
 		do
 			default_create
             create builder
@@ -57,6 +56,7 @@ feature {NONE} -- Initialization
 			end
 		ensure
 			setup_succeeded: setup_succeeded
+			builder_exists: builder /= Void
 		rescue
 			exit_needed := True
 			if is_developer_exception then
@@ -83,9 +83,9 @@ feature {NONE} -- Initialization
 			retry
 		end
 
-	command_line_options: MCT_COMMAND_LINE is
+	command_line_options: COMMAND_LINE is
 		do
-			create Result.make
+			Result := builder.command_line
 		end
 
 	version: MAS_PRODUCT_INFO is
@@ -123,6 +123,8 @@ feature {NONE} -- Implementation
 					agent button_abort)
 			end
 		end
+
+	builder: APPLICATION_WINDOW_BUILDER
 
 feature {NONE} -- Implementation - hook routine implementations
 

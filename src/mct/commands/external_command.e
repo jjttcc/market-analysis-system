@@ -10,6 +10,11 @@ class EXTERNAL_COMMAND inherit
 
 	MCT_COMMAND
 
+	GENERAL_UTILITIES
+		export
+			{NONE} all
+		end
+
 create
 
 	make
@@ -90,6 +95,10 @@ feature {NONE} -- Implementation
 				gu.print_list (args); print ("%N")
 			end
 			create last_process.make_capture_output (prog, args)
+			if debugging_on then
+				print ("executing: " + program + " " + field_concatenation (
+					args.linear_representation, " ") + "%N")
+			end
 			last_process.execute
 			if working_directory /= Void then
 				env.change_working_directory (previous_directory)

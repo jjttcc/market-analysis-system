@@ -13,11 +13,6 @@ class SESSION_COMMAND inherit
 			arg_mandatory, execute
 		end
 
-	GENERAL_UTILITIES
-		export
-			{NONE} all
-		end
-
 	MCT_CONFIGURATION_PROPERTIES
 		export
 			{NONE} all
@@ -50,8 +45,6 @@ feature -- Basic operations
 				<<Port_number_specifier, Hostname_specifier>>,
 				<<window.port_number, window.host_name>>,
 				Token_start_delimiter, Token_end_delimiter))
-print ("executing: " + program + " " + field_concatenation (
-args.linear_representation, " ") + "%N")
 			launch (program, args)
 		end
 

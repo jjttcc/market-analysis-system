@@ -35,12 +35,16 @@ create
 
 feature {NONE} -- Initialization
 
-	make (subs: ARRAY [ERROR_SUBSCRIBER]) is
-			-- Make with error subscribers `subs'.
+	make (subscribers: ARRAY [ERROR_SUBSCRIBER]; cmdline: COMMAND_LINE) is
+			-- Make with error `subscribers'.
+		require
+			cmdline_exists: cmdline /= Void
 		do
-			if subs /= Void then
-				subs.linear_representation.do_all (agent add_error_subscriber)
+			if subscribers /= Void then
+				subscribers.linear_representation.do_all (
+					agent add_error_subscriber)
 			end
+			command_line := cmdline
 			cu_make
 		end
 
@@ -116,6 +120,9 @@ feature -- Access
 				start_server_commands.forth
 			end
 		end
+
+	command_line: COMMAND_LINE
+			-- The command-line used to start the process
 
 feature -- Commands
 
@@ -627,6 +634,9 @@ feature {NONE} -- Implementation - Utilities
 		do
 			workdir := command_working_directory (cmd_string)
 			create Result.make (cmd_id, cmd_string)
+			if command_line.is_debug then
+				Result.set_debugging_on (True)
+			end
 			if workdir /= Void then
 				Result.set_working_directory (workdir)
 			end
@@ -640,6 +650,9 @@ feature {NONE} -- Implementation - Utilities
 		do
 			workdir := command_working_directory (cmd_string)
 			create Result.make (cmd_id, cmd_string)
+			if command_line.is_debug then
+				Result.set_debugging_on (True)
+			end
 			if workdir /= Void then
 				Result.set_working_directory (workdir)
 			end

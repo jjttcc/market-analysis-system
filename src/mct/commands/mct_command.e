@@ -25,11 +25,24 @@ feature -- Access
 			exists: Result /= Void
 		end
 
+	debugging_on: BOOLEAN
+			-- Is debugging turned on?
+
 feature -- Status report
 
 	arg_mandatory: BOOLEAN is
 		once
 			Result := False
+		end
+
+	set_debugging_on (arg: BOOLEAN) is
+			-- Set `debugging_on' to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			debugging_on := arg
+		ensure
+			debugging_on_set: debugging_on = arg and debugging_on /= Void
 		end
 
 feature -- Element change

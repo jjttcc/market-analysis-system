@@ -76,7 +76,12 @@ feature -- Access
 	configuration: MCT_CONFIGURATION is
 			-- The configuration for this session
 		once
-			create Result.make (<<Current>>)
+			create Result.make (<<Current>>, command_line)
+		end
+
+	command_line: COMMAND_LINE is
+		once
+			create {MCT_COMMAND_LINE } Result.make
 		end
 
 feature {NONE} -- Main-window components
