@@ -609,63 +609,12 @@ feature {NONE} -- Implementation - utilities
 
 	settings: STRING is
 		local
-			env: expanded APP_ENVIRONMENT
-			gs: expanded GLOBAL_SERVER_FACILITIES
-			cl: MAS_COMMAND_LINE
-			constants: expanded APPLICATION_CONSTANTS
-			vnames: expanded APP_ENVIRONMENT_VARIABLE_NAMES
+			ms: expanded MAS_SETTINGS
 		do
-			cl := gs.command_line_options
-			if cl.use_db then
-				Result := concatenation(<<"Obtaining data from a database ",
-					"management system.%NDatabase configuration file: ">>)
-				if env.db_config_file_name /= Void then
-					Result.append (env.file_name_with_app_directory (
-							env.db_config_file_name))
-				else
-					Result.append (env.file_name_with_app_directory (
-						constants.Default_database_config_file_name))
-				end
-			else
-				Result := concatenation (<<"Obtaining data from files.%N",
-					"Stock split file: ">>)
-				if env.stock_split_file_name /= Void then
-					Result.append (env.file_name_with_app_directory (
-							env.stock_split_file_name))
-				else
-					Result.append (env.file_name_with_app_directory (
-						constants.Default_stock_split_file_name))
-				end
-			end
-			Result.append ("%N")
-			if env.app_directory = Void then
-				Result.append (concatenation(<<"Application directory ",
-					"variable (", vnames.application_directory_name,
-					") is not set.%N">>))
-			else
-				Result.append (concatenation(<<"Application directory ",
-					"(", vnames.application_directory_name,
-					"): ", env.app_directory, "%N">>))
-			end
-			if env.current_working_directory /= Void then
-				Result.append (concatenation(<<"Current working directory:%N",
-					env.current_working_directory, "%N">>))
-			else
-				Result.append ("Current working directory is not available.%N")
-			end
-			if env.mailer /= Void then
-				Result.append (concatenation(<<"Mailer: ", env.mailer, "%N">>))
-			else
-				Result.append (concatenation(<<"Mailer: ",
-					constants.Default_mailer, "%N">>))
-			end
-			if env.mailer_subject_flag /= Void then
-				Result.append (concatenation(<<"Mailer subject flag: ",
-					env.mailer_subject_flag, "%N">>))
-			else
-				Result.append (concatenation(<<"Mailer subject flag: ",
-					constants.Default_mailer_subject_flag, "%N">>))
-			end
+			Result := "%N" + ms.data_source_report + "%N%N" +
+			ms.app_directory_report + "%N%N" +
+			ms.working_directory_report + "%N%N" +
+			ms.email_report + "%N"
 		end
 
 	make_lock (name: STRING): FILE_LOCK is
