@@ -22,7 +22,7 @@ feature -- Access
 		end
 
 	index: INTEGER is
-			-- index of current cursor position
+			-- Index of current cursor position
 		deferred
 		end
 
