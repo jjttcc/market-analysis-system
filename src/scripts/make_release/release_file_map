@@ -295,7 +295,6 @@ doc/creating_market_analyzers doc/creating_market_analyzers.txt[dos] mas_windows
 doc/other_market_analyzer_examples doc/other_market_analyzer_examples.txt[dos] mas_windows1.6.5
 doc/market_analysis doc/market_analysis.txt[dos] mas_windows1.6.5
 doc/MAS_README doc/README.txt[dos] mas_windows1.6.5
-doc/main_MAS_README ./README.txt[dos] mas_windows1.6.5
 doc/main_MAS_README-windows.ps doc/INTRODUCTION.ps mas_windows1.6.5
 doc/main_MAS_README-windows.html doc/INTRODUCTION.html mas_windows1.6.5
 doc/env_settings ./doc/environment.txt[dos] mas_windows1.6.5
