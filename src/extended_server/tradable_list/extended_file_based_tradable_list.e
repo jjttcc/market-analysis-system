@@ -105,6 +105,7 @@ feature {NONE} -- Hook routine implementations
 				-- Assume the cache is empty and thus there is no data
 				-- that can be out of date.
 				Result := False
+print ("1%N")
 			else
 				if status_work_file = Void then
 					create {PLAIN_TEXT_FILE} status_work_file.make (
@@ -117,7 +118,9 @@ feature {NONE} -- Hook routine implementations
 				Result := status_work_file.date >
 					current_file_status.last_modification_time and
 					status_work_file.count > current_file_status.file_size
+print ("2%N")
 			end
+print ("ttood result: " + Result.out + "%N")
 		end
 
 	append_new_data is

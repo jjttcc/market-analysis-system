@@ -460,6 +460,7 @@ feature {NONE} -- Hook routines
 			-- Default: Data is never out of date - Redefine in descendant
 			-- (along with `append_new_data') if update behavior is required.
 			Result := False
+print ("ttood - WRONG ONE CALLED - you got False%N")
 		end
 
 	append_new_data is

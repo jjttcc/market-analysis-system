@@ -98,7 +98,7 @@ feature -- Access
 -- !!!!??:
 -- Ensure that old indicator data from the previous
 -- `target_tradable' is not re-used.
-target_tradable.flush_indicators
+-- GONE: target_tradable.flush_indicators
 				check_if_data_is_out_of_date
 				if data_out_of_date and not output_file_exists then
 					log_error_with_token (Data_file_does_not_exist_error,
@@ -174,7 +174,8 @@ feature {NONE} -- Hook routine implementations
 -- !!!!??:
 -- Ensure that old indicator data from the previous
 -- `target_tradable' is not re-used.
-target_tradable.flush_indicators
+-- !!!! Note: This call is probably not needed here - if so, remove:
+-- !!!: target_tradable.flush_indicators
 			check_if_data_is_out_of_date
 			if data_out_of_date and not output_file_exists then
 				log_error_with_token (Data_file_does_not_exist_error,
