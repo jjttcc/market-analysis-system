@@ -7,13 +7,13 @@ indexing
 
 class MARKET_FUNCTION_LINE inherit
 
-	SIMPLE_FUNCTION [MARKET_POINT]
+	ONE_VARIABLE_FUNCTION
 		rename
-			make as sf_make
+			make as ovf_make
 		export
-			{NONE} sf_make
+			{NONE} ovf_make
 		redefine
-			item, valid_index, after
+			action, operator_used, start
 		end
 
 	MARKET_LINE
@@ -31,65 +31,33 @@ creation
 
 feature -- Initialization
 
-	make (p1: MARKET_POINT; sl: REAL; period_type: TIME_PERIOD_TYPE) is
-			-- Make the line with p1 as the start point, sl as the slope,
-			-- and period_type as the trading_period_type.
+	make (p1: MARKET_POINT; sl: REAL; in: like input) is
+			-- Make the line with p1 as the start point, sl as the slope.
 		require
-			not_void: p1 /= Void
-			p1_x_gt_0: p1.x > 0
+			not_void: p1 /= Void and in /= Void
 			p1_x_is_1: p1.x.floor = 1
-			not_irregular: not period_type.irregular
 		do
 			make_from_slope (p1, sl)
-			trading_period_type := period_type
-			initialize
---print ("trad. per type is definite: ");
---print (trading_period_type.duration.definite)
---print("%Nlower, upper: ");print(lower);print(", ");print(upper);print("%N")
+			ovf_make (in, Void)
 		ensure
 			set: start_point = p1
-			trading_period_type_set: trading_period_type = period_type
 			-- slope = sl
 		end
 
-	make_from_2_points (p1, p2: market_point; period_type: TIME_PERIOD_TYPE) is
+	make_from_2_points (p1, p2: MARKET_POINT; in: like input) is
 			-- Make the line with p1 as the start point; obtain the slope
 			-- from p1 and p2.
 		require
+			not_void: p1 /= Void and p2 /= Void and in /= Void
 			p1_x_is_1: p1.x.floor = 1
 		do
 			ml_make_from_2_points (p1, p2)
-			trading_period_type := period_type
-			initialize
+			ovf_make (in, Void)
 		ensure
 			set: start_point = p1
-			trading_period_type_set: trading_period_type = period_type
 		end
 
 feature -- Access
-
-	item: MARKET_POINT is
-		do
-			-- If index is outside the bounds of the current array contents,
-			-- make a point corresponding to index and force it into
-			-- the array contents (force a resize).
-			if index < lower or index > upper then
-				Result := point_at_current_index
-				force_i_th (Result, index)
-				count := upper - lower + 1
-			else
-				Result := Precursor
-				-- If the current item has not yet been created, make a
-				-- point corresponding to `index' and place it into the
-				-- array contents.
-				if Result = Void then
-					Result := point_at_current_index
-					put_i_th (Result, index)
-				end
-			end
---print ("item - index: "); print (index); print (", result (x, y): ");
---print (Result.x); print (", ") print (Result.y); print ("%N")
-		end
 
 feature {NONE} -- Implemetation
 
@@ -101,7 +69,7 @@ feature {NONE} -- Implemetation
 			interval: INTEGER
 		do
 			!!Result.make
-			interval := index - start_point.x.floor
+			interval := target.index - start_point.x.floor
 			if trading_period_type.duration.day /= 0 then
 				!!duration.make_definite (
 					trading_period_type.duration.day * interval, 0, 0, 0)
@@ -118,37 +86,31 @@ feature {NONE} -- Implemetation
 			date := start_point.date_time + duration
 --print ("index, sp.x, interval: "); print (index); print (", ")
 --print (start_point.x); print (", "); print (interval); print ("%N")
-			Result.set_x_y_date (index, y_at (index), date)
+			Result.set_x_y_date (target.index, y_at (target.index), date)
 --print ("result (x, y, date): "); print (Result.x); print (", ")
 --print (Result.y); print (", "); print (Result.date_time); print ("%N")
 		end
 
-	initialize is
+	start is
 		do
-			-- Create `area' and enforce the ARRAYED_LIST
-			-- invariant that lower = 1.
-			array_make (1, 1)
-			count := upper - lower + 1
-			force_i_th (start_point, start_point.x.floor)
-			index := 0
+			if not target.empty then
+				start_point.set_date (target.first.date_time)
+			end
+			Precursor
+			check target.index = 1 end
 		end
+
+	action is
+		local
+			t: MARKET_POINT
+		do
+			t := point_at_current_index
+			output.extend (t)
+		end
+
+	operator_used: BOOLEAN is false
 
 feature {NONE} -- Redefined
-
-	valid_index (i: INTEGER): BOOLEAN is
-		do
-			Result := true
-		end
-
-	after: BOOLEAN is
-			-- The line never ends.
-		do
-			if index = count + 1 then
-				force_i_th (point_at_current_index, index)
-				count := upper - lower + 1
-			end
-			Result := false
-		end
 
 --	initialize is
 --			-- Initialize all elements of the list.
