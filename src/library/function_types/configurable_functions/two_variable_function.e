@@ -114,9 +114,6 @@ feature {NONE}
 
 	do_process is
 		do
-			--!!!Remove these checks if added to class invariant:
-			check target1 /= Void and target2 /= Void end
-			check operator /= Void end
 			do_all
 		end
 

@@ -38,7 +38,7 @@ feature {NONE}
 			target_set: target = in.output
 		end
 
-feature -- Basic operations
+feature {NONE} -- Basic operations
 
 	do_process is
 			-- Execute the function.
