@@ -32,6 +32,8 @@ public interface NetworkProtocol
 
 	// String constants
 	String Eom = "";
+	String Eot = "";
+	String Compression_on_flag = "<@z@>";
 	String Input_field_separator = "\t";
 	String Output_field_separator = "\t";
 	String Output_record_separator = "\n";
