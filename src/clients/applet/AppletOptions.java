@@ -3,7 +3,7 @@
 package applet;
 
 import java.util.*;
-import mas_gui.*;
+import application_library.*;
 
 // User-specified options for the applet version
 public class AppletOptions extends StartupOptions {

@@ -7,6 +7,7 @@ import mas_gui.*;
 import application_support.*;
 import support.*;
 import applet.*;
+import application_library.*;
 
 // Applet initialization utilities
 public class AppletInitialization extends AppletTools {

@@ -7,7 +7,6 @@ import java.net.*;
 import java.util.*;
 import common.*;
 import support.*;
-import mas_gui.*;
 
 /** Interface for connecting and communicating with the server */
 abstract public class Connection {
