@@ -1,140 +1,314 @@
 indexing
 	description: "Database-related parameters"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	status: "Copyright 1998 - 2000: Eirik Mangseth and Jim Cochrane; %
+		%see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
-class MAS_DB_INFO
+class MAS_DB_INFO inherit
+
+	APP_ENVIRONMENT
+		export
+			{NONE} all
+		end
+
+	APPLICATION_CONSTANTS
+		export
+			{NONE} all
+		end
+
+	DATABASE_CONSTANTS
+		export
+			{NONE} all
+		end
+
+	GENERAL_UTILITIES
+		export
+			{NONE} all
+		end
 
 creation
+
 	make
 
-feature --initialisation
+feature -- Initialization
 
-	make (param_file: STRING) is
-		require
-			param_file /= void
-	do
-		db_parameters_file := clone(param_file)
-		create host_variables.make(0); host_variables.start
-		create trades_tables.make(0); trades_tables.start
-		read_param_file
-	end
+	make is
+			-- Initialize database settings from configuration file.
+			-- If an error occurs reading the file, all query values
+			-- will be empty strings.
+		do
+			create db_values.make (24)
+			db_values.extend ("", Data_source_specifier)
+			db_values.extend ("", User_id_specifier)
+			db_values.extend ("", Password_specifier)
+			db_values.extend ("", Stock_symbol_query_specifier)
+			db_values.extend ("", Stock_split_query_specifier)
+			db_values.extend ("", Stock_name_query_specifier)
+			db_values.extend ("", Daily_stock_symbol_field_specifier)
+			db_values.extend ("", Daily_stock_date_field_specifier)
+			db_values.extend ("", Daily_stock_open_field_specifier)
+			db_values.extend ("", Daily_stock_high_field_specifier)
+			db_values.extend ("", Daily_stock_low_field_specifier)
+			db_values.extend ("", Daily_stock_close_field_specifier)
+			db_values.extend ("", Daily_stock_volume_field_specifier)
+			db_values.extend ("", Intraday_stock_symbol_field_specifier)
+			db_values.extend ("", Intraday_stock_date_field_specifier)
+			db_values.extend ("", Intraday_stock_time_field_specifier)
+			db_values.extend ("", Intraday_stock_open_field_specifier)
+			db_values.extend ("", Intraday_stock_high_field_specifier)
+			db_values.extend ("", Intraday_stock_low_field_specifier)
+			db_values.extend ("", Intraday_stock_close_field_specifier)
+			db_values.extend ("", Intraday_stock_volume_field_specifier)
+			db_values.extend ("", Daily_stock_table_specifier)
+			db_values.extend ("", Intraday_stock_table_specifier)
+			db_values.extend ("", Daily_stock_query_tail_specifier)
+			db_values.extend ("", Intraday_stock_query_tail_specifier)
+			read_param_file
+		end
 
-feature --access
+feature -- Access
 
-	db_parameters_file: STRING
+	db_name: STRING is
+		do
+			Result := db_values @ Data_source_specifier
+		ensure
+			not_void: Result /= Void
+		end
 
-	db_name: STRING
+	user_name: STRING is
+		do
+			Result := db_values @ User_id_specifier
+		ensure
+			not_void: Result /= Void
+		end
 
-	set_db_name(name: STRING) is
-	do
-		db_name:= clone(name)
-	end
+	password: STRING is
+		do
+			Result := db_values @ Password_specifier
+		ensure
+			not_void: Result /= Void
+		end
 
-	user_name: STRING
+	stock_symbol_query: STRING is
+		do
+			Result := db_values @ Stock_symbol_query_specifier
+		ensure
+			not_void: Result /= Void
+		end
 
-	set_user_name(name: STRING) is
-	do
-		user_name:= clone(name)
-	end
+	stock_split_query: STRING is
+		do
+			Result := db_values @ Stock_split_query_specifier
+		ensure
+			not_void: Result /= Void
+		end
 
-	password: STRING
+	stock_name_query: STRING is
+		do
+			Result := db_values @ Stock_name_query_specifier
+		ensure
+			not_void: Result /= Void
+		end
 
-	set_password(pwd: STRING) is
-	do
-		password:= clone(pwd)
-	end
+	daily_stock_symbol_field_name: STRING is
+		do
+			Result := db_values @ Daily_stock_symbol_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
 
-	symbol_select: STRING
+	daily_stock_date_field_name: STRING is
+		do
+			Result := db_values @ Daily_stock_date_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
 
-	set_symbol_select(sql: STRING) is
-	do
-		symbol_select := clone(sql)
-	end
+	daily_stock_open_field_name: STRING is
+		do
+			Result := db_values @ Daily_stock_open_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
 
-	market_select: STRING
+	daily_stock_high_field_name: STRING is
+		do
+			Result := db_values @ Daily_stock_high_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
 
-	set_market_select(sql: STRING) is
-	do
-		market_select:= clone(sql)
-	end
-	
-	host_variables: HASH_TABLE[STRING, STRING]
+	daily_stock_low_field_name: STRING is
+		do
+			Result := db_values @ Daily_stock_low_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
 
-	set_host_variable(host_var, host_var_name: STRING) is
-		require
-			valid_host_var: host_var /= void
-			host_var_not_present: not host_variables.has(host_var_name)
-	do
-		host_variables.extend(host_var, host_var_name)
-	end
+	daily_stock_close_field_name: STRING is
+		do
+			Result := db_values @ Daily_stock_close_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
 
-	trades_tables: ARRAYED_LIST[STRING]
+	daily_stock_volume_field_name: STRING is
+		do
+			Result := db_values @ Daily_stock_volume_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
 
-	set_trades_table(name: STRING) is
-	do
-		trades_tables.extend(clone(name))
-	end
+	intraday_stock_symbol_field_name: STRING is
+		do
+			Result := db_values @ Intraday_stock_symbol_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
 
-feature {NONE} -- implementation
+	intraday_stock_date_field_name: STRING is
+		do
+			Result := db_values @ Intraday_stock_date_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_stock_time_field_name: STRING is
+		do
+			Result := db_values @ Intraday_stock_time_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_stock_open_field_name: STRING is
+		do
+			Result := db_values @ Intraday_stock_open_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_stock_high_field_name: STRING is
+		do
+			Result := db_values @ Intraday_stock_high_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_stock_low_field_name: STRING is
+		do
+			Result := db_values @ Intraday_stock_low_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_stock_close_field_name: STRING is
+		do
+			Result := db_values @ Intraday_stock_close_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_stock_volume_field_name: STRING is
+		do
+			Result := db_values @ Intraday_stock_volume_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	daily_stock_table_name: STRING is
+		do
+			Result := db_values @ Daily_stock_table_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_stock_table_name: STRING is
+		do
+			Result := db_values @ Intraday_stock_table_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	daily_stock_query_tail: STRING is
+		do
+			Result := db_values @ Daily_stock_query_tail_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_stock_query_tail: STRING is
+		do
+			Result := db_values @ Intraday_stock_query_tail_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+feature {NONE} -- Implementation
+
+	Field_separator: STRING is "%T"
+
+	Record_separator: STRING is "%N"
+
+	key_ix: INTEGER is 1
+
+	value_ix: INTEGER is 2
+
+	db_parameters_file: STRING is
+		do
+			if db_config_file_name = Void then
+				Result := file_name_with_app_directory (
+					Default_database_config_file_name)
+			else
+				Result := file_name_with_app_directory (db_config_file_name)
+			end
+		end
+
+	db_values: HASH_TABLE [STRING, STRING]
 
 	read_param_file is
 		local
-			tokens		: LIST[STRING]
-			su			: STRING_UTILITIES
-			file_reader	: MAS_FILE_READER
-	do
-		!!file_reader.make(db_parameters_file)
-		file_reader.tokenize("%N")
-		from
-		until
-			file_reader.exhausted
-		loop
-			!!su.make(file_reader.item)
-			tokens:= su.tokens("%T")
-			tokens.start;
-			if tokens.item.is_equal("data_source_name") then
-				tokens.forth
-				set_db_name(tokens.item)
-			end
-			if tokens.item.is_equal("user_id") then
-				tokens.forth
-				set_user_name(tokens.item)
-			end
-			if tokens.item.is_equal("password") then
-				tokens.forth
-				set_password(tokens.item)
-			end
-			if tokens.item.is_equal("symbol_select") then
-				tokens.forth
-				set_symbol_select(tokens.item)
-			end
-			if tokens.item.is_equal("market_select") then
-				tokens.forth
-				set_market_select(tokens.item)
-			end
-			if tokens.item.is_equal("symbol_name") then
-				tokens.forth
-				set_host_variable(tokens.item, "symbol_name")
-			end
-			if tokens.item.is_equal("date_name") then
-				tokens.forth
-				set_host_variable(tokens.item, "date_name")
-			end
-			if tokens.item.is_equal("relation") then
+			tokens: LIST [STRING]
+			su: STRING_UTILITIES
+			file_reader: MAS_FILE_READER
+			line: INTEGER
+		do
+			create file_reader.make (db_parameters_file)
+			file_reader.tokenize (Record_separator)
+			if not file_reader.error then
+				create su.make ("")
 				from
-				tokens.forth
+					line := 1
 				until
-					tokens.after
+					file_reader.exhausted
 				loop
-					set_trades_table(tokens.item)
-					tokens.forth
+					if
+						not (file_reader.item.count = 0 or else
+							file_reader.item @ 1 = Comment_character)
+					then
+						su.make (file_reader.item)
+						tokens := su.tokens (Field_separator)
+						if tokens.count >= 2 then
+							db_values.replace (tokens @ value_ix,
+								tokens @ key_ix)
+							if db_values.not_found then
+								log_errors (<<"Invalid identifier in",
+									" database configuration file at line ",
+									line, ": ", tokens @ key_ix, ".%N">>)
+							end
+						else
+							log_errors (<<"Wrong number of fields in",
+									" database configuration file at line ",
+									line, ": ", file_reader.item, ".%N">>)
+						end
+					end
+					file_reader.forth
+					line := line + 1
 				end
-				tokens.start
+			else
+				log_errors (<<"Error reading database configuration file: ",
+					file_reader.error_string, "%N">>)
 			end
-			file_reader.forth
 		end
-	end
 
 end --class MAS_DB_INFO
