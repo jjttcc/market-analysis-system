@@ -2,16 +2,17 @@
 # Make the MAS charting GUI - Compile the Java files and place the
 # resulting class files into a jar file.
 
-Gui_dir=.
-Jarfile=/tmp/foo.jar
+Progname=$(basename $0)
+Basedir=$(dirname $0)
+Gui_dir=$MAS/src/clients/GUI1
+Jarfile=mascharts.jar
 Main_class_files=MA_Client.class
-guidir=mas_gui
 
-fatal() {
-exit 1
-}
+utilpath=$Basedir/../../script_library/support/utilities
+. $utilpath || (
+echo "Cound not load shell functions from $utilpath - aborting ..."; exit 1)
 
-cd $Gui_dir || (echo "OOOOOPS"; exit 1)
+cd $Gui_dir || fatal "Could not cd to $Gui_dir."
 
 guidirs="common mas_gui graph java_library/support support"
 
@@ -20,4 +21,4 @@ find . -follow -name '*.class' -exec rm {} ';'
 echo Compiling ...
 javac MA_Client.java || fatal "OOPS"
 echo Creating jar file: $Jarfile ...
-jar cvf $Jarfile MA_Client.class $(for d in $guidirs;do ls -1 $d/*.class;done)
+jar cvf $Jarfile $Main_class_files $(for d in $guidirs;do ls -1 $d/*.class;done)
