@@ -48,6 +48,10 @@ feature {NONE} -- Initialization
 			create settings.make (0)
 			create start_server_commands.make
 			create error_report.make (0);
+			create {LINKED_LIST [STRING]}
+				environment_variable_set_specifications.make
+			create {LINKED_LIST [STRING]}
+				environment_variable_append_specifications.make
 
 			settings.extend ("", Valid_port_numbers_specifier)
 			settings.extend ("", Server_report_port_number_specifier)
@@ -176,6 +180,10 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	post_process_settings is
 		do
+			check
+				env_specs_exist: environment_variable_set_specifications /=
+					Void and environment_variable_append_specifications /= Void
+			end
 			-- Replace all "non-dynamic" tokens in `user_defined_values'
 			-- with their specified values:
 			user_defined_values.linear_representation.do_all (
@@ -188,6 +196,10 @@ feature {NONE} -- Implementation - Hook routine implementations
 			-- `start_server_commands' with their specified values:
 			start_server_commands.linear_representation.do_all (
 				agent replace_command_string_tokens)
+			environment_variable_set_specifications.do_all (
+				agent process_environment_variable (?, False))
+			environment_variable_append_specifications.do_all (
+				agent process_environment_variable (?, True))
 			if not settings.item (Start_server_cmd_specifier).is_empty then
 				start_server_commands.extend (new_session_command (
 				Start_server_cmd_specifier, report_back_appended (
@@ -230,6 +242,12 @@ feature {NONE} -- Implementation - Hook routine implementations
 			end
 			do_platform_conversion
 			remove_escape_characters
+			-- These data structures are no longer used - reclaim the
+			-- memory they were using:
+			user_defined_variables := Void
+			user_defined_values := Void
+			environment_variable_set_specifications := Void
+			environment_variable_append_specifications := Void
 		end
 
 	check_results is
@@ -274,15 +292,29 @@ feature {NONE} -- Implementation - Hook routine implementations
 			if equal (key, User_definition_specifier) then
 				process_user_definition (value)
 			elseif equal (key, Environment_variable_specifier) then
-				set_environment_variable (value)
+				-- Store the env. var. "set" spec. for later processing.
+				environment_variable_set_specifications.extend (value)
 			elseif equal (key, Environment_variable_append_specifier) then
-				append_to_environment_variable (value)
+				-- Store the env. var. "append" spec. for later processing.
+				environment_variable_append_specifications.extend (value)
 			else
 				check
 					in_or_at_end_of_block:
 						config_file.in_block xor config_file.at_end_of_block
 				end
 				process_block (key, value)
+			end
+		end
+
+	process_environment_variable (value: STRING; append: BOOLEAN) is
+			-- If `append', process `value' as an "append-to" environment
+			-- variable specification; otherwise, process `value' as
+			-- a "set" environment variable specification.
+		do
+			if append then
+				append_to_environment_variable (value)
+			else
+				set_environment_variable (value)
 			end
 		end
 
@@ -586,6 +618,12 @@ feature {NONE} -- Implementation
 	config_file: CONFIGURATION_FILE
 
 	error_report: STRING
+
+	environment_variable_set_specifications: LIST [STRING]
+			-- Stored specifications for environment variable settings
+
+	environment_variable_append_specifications: LIST [STRING]
+			-- Stored specifications for environment variable appends
 
 	report_back_appended (s: STRING): STRING is
 			-- `s' + " " + report_back_option
