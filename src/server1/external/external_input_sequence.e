@@ -78,6 +78,8 @@ feature -- Access
 
 	last_string: STRING
 
+	last_date: DATE
+
 	name: STRING is "external input sequence"
 
 	field_index: INTEGER
@@ -259,6 +261,12 @@ feature -- Input
 		ensure then
 			last_string_not_void_if_no_error:
 				not error_occurred implies last_string /= Void
+		end
+
+	read_date is
+			-- Read the current field as a date.
+		do
+			-- @@Stub - currently not used.
 		end
 
 	read_double is
