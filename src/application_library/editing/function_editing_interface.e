@@ -83,6 +83,72 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			Result := user_function_selection (function_instances, msg).output
 		end
 
+	market_function_selection (msg: STRING): MARKET_FUNCTION is
+			-- User-selected MARKET_FUNCTION from the function library
+		local
+			fnames: ARRAYED_LIST [STRING]
+			l: LINKED_LIST [MARKET_FUNCTION]
+			i: INTEGER
+		do
+			!!l.make
+			l.append (function_library)
+			l.extend (function_with_generator ("STOCK"))
+			!!fnames.make (1)
+			from
+				l.start
+			until
+				l.exhausted
+			loop
+				fnames.extend (l.item.name)
+				l.forth
+			end
+			from
+				i := list_selection (fnames, concatenation(<<"Select ", msg>>))
+				l.start
+			until
+				i = l.index
+			loop
+				l.forth
+			end
+			Result := l.item
+		end
+
+	complex_function_selection (msg: STRING): COMPLEX_FUNCTION is
+			-- User-selected COMPLEX_FUNCTION from the function library
+		local
+			fnames: ARRAYED_LIST [STRING]
+			l: LIST [COMPLEX_FUNCTION]
+			f: COMPLEX_FUNCTION
+		do
+			-- Select objects from function_library that conform to
+			-- COMPLEX_FUNCTION and insert them into l.
+			from
+				!LINKED_LIST [COMPLEX_FUNCTION]!l.make
+				function_library.start
+			until
+				function_library.exhausted
+			loop
+				f ?= function_library.item
+				if f /= Void then
+					l.extend (f)
+				end
+				function_library.forth
+			end
+			!!fnames.make (l.count)
+			from
+				l.start
+			until
+				l.exhausted
+			loop
+				fnames.extend (l.item.name)
+				l.forth
+			end
+			Result := l @ list_selection (fnames,
+						concatenation(<<"Select ", msg>>))
+		ensure
+			result_not_void: Result /= Void
+		end
+
 feature {NONE} -- Implementation
 
 	One_fn_op,			-- Takes one market function and an operator.
@@ -211,9 +277,15 @@ feature {NONE} -- Implementation
 			end
 		end
 
-feature -- Implementation - options
+feature {NONE} -- Hook routines
 
---!!!	initialization_needed: BOOLEAN is true --!!!??
+	list_selection (l: LIST [STRING]; msg: STRING): INTEGER is
+			-- User's selection from `l' - Result is the index of the
+			-- slected item of `l'.
+		deferred
+		end
+
+feature {NONE} -- Implementation - options
 
 	clone_needed: BOOLEAN is true --!!!??
 

@@ -21,7 +21,7 @@ deferred class COMMAND_EDITING_INTERFACE inherit
 			initialize_object as initialize_command,
 			current_objects as current_commands
 		redefine
-			editor, command_types
+			editor, command_types, descendant_reset
 		end
 
 feature -- Access
@@ -223,6 +223,20 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 							msg)
 			else
 				Result := market_function.output
+			end
+		end
+
+	market_function_selection (msg: STRING): MARKET_FUNCTION is
+		do
+			check
+				mf_not_void: market_function /= Void or
+					market_tuple_selector /= Void
+			end
+			if market_tuple_selector /= Void then
+				Result := market_tuple_selector.market_function_selection (
+							msg)
+			else
+				Result := market_function
 			end
 		end
 
@@ -533,6 +547,14 @@ feature {NONE} -- Implementation
 				end
 				editor.edit_sign_analyzer (sign_an)
 			end
+		end
+
+feature -- Implementation
+
+	descendant_reset is
+			-- Reset descendant's state.
+		do
+			left_offset := 0
 		end
 
 feature -- Implementation - options
