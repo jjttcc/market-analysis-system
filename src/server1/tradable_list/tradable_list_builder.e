@@ -65,7 +65,9 @@ feature -- Basic operations
 					file_list_builder.intraday_list)
 				ilist := file_list_builder.intraday_list
 			end
-			if not command_line_options.intraday_caching then
+			if
+				ilist /= Void and not command_line_options.intraday_caching
+			then
 				ilist.turn_caching_off
 			end
 		end
