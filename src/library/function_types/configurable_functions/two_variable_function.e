@@ -72,9 +72,6 @@ feature -- Status report
 		do
 			Result := (input1.processed and input2.processed) and then
 				(target1.empty or target2.empty or not output.empty)
-		ensure then
-			Result = ((input1.processed and input2.processed) and then
-				(target1.empty or target2.empty or not output.empty))
 		end
 
 	arg_used: BOOLEAN is false

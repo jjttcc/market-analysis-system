@@ -11,7 +11,7 @@ class N_RECORD_ONE_VARIABLE_FUNCTION inherit
 		rename
 			make as ovf_make
 		redefine
-			do_process, target
+			do_process, target, processed
 		end
 
 	N_RECORD_STRUCTURE
@@ -22,6 +22,13 @@ class N_RECORD_ONE_VARIABLE_FUNCTION inherit
 creation {FACTORY}
 
 	make
+
+feature -- Status report
+
+	processed: BOOLEAN is
+		do
+			Result := (input.processed and target.count < n) or Precursor
+		end
 
 feature {NONE}
 
@@ -43,8 +50,23 @@ feature {NONE} -- Basic operations
 	do_process is
 			-- Execute the function.
 		do
-			target.go_i_th (n)
-			continue_until
+			check
+				output_empty: output.empty
+			end
+			if target.count < n then
+				-- null statement
+			else
+				target.go_i_th (n)
+				continue_until
+			end
+		ensure then
+			when_tgcount_lt_n: target.count < n implies output.empty
+			when_tgcount_ge_n:
+				target.count >= n implies output.count = target.count - n + 1
+			first_date_set: not output.empty implies
+				output.first.date_time.is_equal (target.i_th (n).date_time)
+			last_date_set: not output.empty implies
+				output.last.date_time.is_equal (target.last.date_time)
 		end
 
 feature {NONE}
@@ -60,5 +82,13 @@ feature {TEST_FUNCTION_FACTORY}
 				operator.initialize (Current)
 			end
 		end
+
+invariant
+
+	processed_when_target_lt_n:
+		processed implies (target.count < n implies output.empty)
+	processed_when_target_ge_n:
+		processed implies
+			(target.count >= n implies output.count = target.count - n + 1)
 
 end -- class N_RECORD_ONE_VARIABLE_FUNCTION

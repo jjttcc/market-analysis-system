@@ -56,9 +56,6 @@ feature -- Status report
 		do
 			Result := input.processed and then
 				(target.empty or not output.empty)
-		ensure then
-			processed_definition: Result = (input.processed and then
-				(target.empty or not output.empty))
 		end
 
 	arg_used: BOOLEAN is false
