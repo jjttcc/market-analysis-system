@@ -223,8 +223,8 @@ feature {NONE} -- Implementation, Close event
 				destroy;
 				
 					-- End the application
-					--| TODO: Remove this line if you don't want the application
-					--|       to end when the first window is closed..
+					--| @@: Remove this line if you don't want the application
+					--|       to end when the main window is closed..
 				(create {EV_ENVIRONMENT}).application.destroy
 			end
 		end

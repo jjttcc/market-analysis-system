@@ -25,22 +25,22 @@ feature {NONE} -- Initialization
 		end
 
 	prepare is
-			-- Prepare the first window to be displayed.
-			-- Perform one call to first window in order to
+			-- Prepare the main window to be displayed.
+			-- Perform one call to main window in order to
 			-- avoid to violate the invariant of class EV_APPLICATION.
 		do
-				-- create and initialize the first window.
-			create first_window
+				-- create and initialize the main window.
+			create main_window
 
-				-- Show the first window.
+				-- Show the main window.
 				--| TODO: Remove this line if you don't want the first 
 				--|       window to be shown at the start of the program.
-			first_window.show
+			main_window.show
 		end
 
 feature {NONE} -- Implementation
 
-	first_window: MAIN_WINDOW
+	main_window: MAIN_WINDOW
 			-- Main window.
 
 	execute_command (cmd: INSTALL_COMMAND) is
@@ -48,7 +48,9 @@ feature {NONE} -- Implementation
 		require
 			cmd_exists: cmd /= Void
 		do
---remove:			first_window.set_status (cmd.description)
+			if main_window /= Void then
+				main_window.set_status (cmd.description)
+			end
 			cmd.execute (options)
 		end
 

@@ -44,6 +44,6 @@ feature -- Access
 
 	Label_confirm_close_window: STRING is "You are about to close this window.%NClick OK to proceed."
 			-- String for the confirmation dialog box that appears
-			-- when the user try to close the first window.
+			-- when the user try to close the main window.
 
 end -- class INTERFACE_NAMES
