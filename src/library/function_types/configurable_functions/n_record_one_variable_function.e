@@ -1,5 +1,5 @@
 indexing
-	description: 
+	description:
 		"A market function that provides a concept of an n-length %
 		%sub-list of the main input list."
 	date: "$Date$";
