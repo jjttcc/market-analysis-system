@@ -31,7 +31,7 @@ feature -- Access
 
 	tuple_maker: BASIC_TUPLE_FACTORY is
 		do
-			!VOLUME_TUPLE_FACTORY!Result
+			create {VOLUME_TUPLE_FACTORY} Result
 		end
 
 feature {NONE}
@@ -41,13 +41,14 @@ feature {NONE}
 			i, last_sep_index: INTEGER
 		do
 			--!!!For now, set the name and symbol to `symbol'.
-			!!product.make (symbol, time_period_type, stock_splits @ symbol)
+			create product.make (symbol, time_period_type,
+				stock_splits @ symbol)
 			product.set_name (symbol)
 		end
 
 	index_vector: ARRAY [INTEGER] is
 		do
-			!!Result.make (1, 6)
+			create Result.make (1, 6)
 			if no_open then
 				Result := << Date_index, High_index, Low_index,
 								CLose_index, Volume_index >>
@@ -61,7 +62,7 @@ feature {NONE}
 		local
 			constants: expanded APPLICATION_CONSTANTS
 		once
-			!STOCK_SPLIT_FILE!Result.make (
+			create {STOCK_SPLIT_FILE} Result.make (
 				constants.stock_split_field_separator,
 				constants.stock_split_record_separator, stock_split_file)
 		end

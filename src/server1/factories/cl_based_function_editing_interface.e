@@ -29,8 +29,8 @@ feature -- Initialization
 
 	make is
 		do
-			!!operator_maker.make (false)
-			!!editor.make (Current, operator_maker)
+			create operator_maker.make (false)
+			create editor.make (Current, operator_maker)
 		ensure
 			editor_exists: editor /= Void
 		end

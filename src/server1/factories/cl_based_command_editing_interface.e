@@ -31,7 +31,7 @@ feature -- Initialization
 
 	make (use_mktfnc_selection: BOOLEAN) is
 		do
-			!!editor.make (Current)
+			create editor.make (Current)
 			use_market_function_selection := use_mktfnc_selection
 		ensure
 			editor_exists: editor /= Void

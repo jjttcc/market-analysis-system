@@ -38,12 +38,13 @@ feature -- Initialization
 
 	make is
 		do
-			!CL_BASED_COMMAND_EDITING_INTERFACE!operator_maker.make (True)
-			!!help.make
+			create {CL_BASED_COMMAND_EDITING_INTERFACE}
+				operator_maker.make (True)
+			create help.make
 			-- !!!Satisfy invariant - editor is currently not used; it may
 			-- be used later - if not, might want to change the invariant or?
-			!!editor
-			!!function_editor.make
+			create editor
+			create function_editor.make
 			operator_maker.set_market_tuple_selector (function_editor)
 		ensure
 			editor_exists: editor /= Void
@@ -304,7 +305,7 @@ feature {NONE} -- Implementation
 								"%" matches one of the %
 								%above names, please try again ...%N">>)
 				else
-					!!Result.make (last_string.count)
+					create Result.make (last_string.count)
 					Result.append (last_string)
 				end
 			end
@@ -318,7 +319,7 @@ feature {NONE} -- Implementation
 		do
 			from
 				i := 1
-				!!names.make
+				create names.make
 			until
 				i > period_type_names.count
 			loop
@@ -438,7 +439,7 @@ feature {NONE} -- Implementation
 							months, " months, ", years, " years.%N">>)
 			end
 			if yes then
-				!!Result.make (years, months, days, 0, 0, 0)
+				create Result.make (years, months, days, 0, 0, 0)
 				print_list (<<"Duration set to ", Result, ".%N">>)
 			end
 		end
