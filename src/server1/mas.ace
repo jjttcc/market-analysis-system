@@ -6,6 +6,9 @@ root
 
 default
 	assertion (all)
+	arguments ("-o -f , /opt/mas/lib/data/tradables/aa.txt /opt/mas/lib/data/tradables/aapl.txt")
+	arguments ("-o -f , /opt/mas/lib/data/tradables/a*.txt")
+	arguments ("-o -f , /opt/mas/lib/a*.txt")
 	arguments ("-o -p -debug")
 	arguments ("-o -p")
 	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4002 ")
