@@ -20,4 +20,10 @@ feature -- Access
 
 	Path_specifier: STRING is "path"
 
-end -- DATABASE_CONSTANTS
+	Symbol_file_specifier: STRING is "symbol_file"
+
+	EOD_result_format_specifier: STRING is "eod_result_format"
+
+	EOD_turnover_time_specifier: STRING is "eod_turnover_time"
+
+end
