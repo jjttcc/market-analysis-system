@@ -188,7 +188,8 @@ feature {NONE} -- Hook routine implementations
 				-- previously read).
 				-- Advance the file cursor to the beginning of the new
 				-- data.  Note: file position numbering starts a 0.
-				current_input_file.go (current_file_status.file_size)
+				current_input_file.position_cursor (
+					current_file_status.file_size)
 				tradable_factory.set_product (target_tradable)
 				tradable_factory.execute
 				update_file_status_cache (index)

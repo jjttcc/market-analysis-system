@@ -188,8 +188,11 @@ feature -- Basic operations
 			error_occurred := False
 			check_for_open_interest
 			if not update_current_product then
+print ("TF execute - update_current_product is FAlSE.%N")
 				make_product
 			else
+print ("TF execute - BEFORE - product.count: " + product.count.out + "%N")
+--print ("TF execute - BEFORE - product.out: " + product.out + "%N")
 				check
 					product_already_exists:  product /= Void
 				end
@@ -231,12 +234,17 @@ feature -- Basic operations
 			-- already been set up.
 			if not update_current_product then
 				add_indicators (product)
+print ("TF execute - AFTER - product.count: " + product.count.out + "%N")
+--print ("TF execute - AFTER - product.out: " + product.out + "%N")
 			end
 			update_current_product := False
 		ensure then
 			product_not_void: product /= Void
 			product_type_set: product.trading_period_type = time_period_type
 			no_current_update: update_current_product = False
+			old_product_count_not_smaller_if_update_current:
+				old update_current_product implies
+				old product.count > product.count
 		end
 
 feature {NONE}

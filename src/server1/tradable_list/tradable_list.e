@@ -67,10 +67,9 @@ feature -- Access
 
 print_cache is
 local
-	indexes: SORTED_TWO_WAY_LIST [INTEGER]
+	indexes: LIST [INTEGER]
 do
-	create indexes.make
-	indexes.merge (cache.current_keys.linear_representation)
+	indexes := cache_index_queue.linear_representation
 	from
 		print ("Cached indexes: ")
 		indexes.start
@@ -90,14 +89,10 @@ end
 			-- occurs.
 		do
 print ("TL item called%N")
---print_cache
+print_cache
 			fatal_error := False
 			if index = old_index then
 print ("A%N")
-if target_tradable = Void then
-	print ("target_tradable is Void%N")
-end
-print ("A2%N")
 				check
 					target_tradable_exists: target_tradable /= Void
 				end
