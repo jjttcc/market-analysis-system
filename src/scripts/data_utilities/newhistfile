@@ -10,6 +10,31 @@ usage() {
 	echo "Usage: $progname symbol [...]"
 }
 
+# Store data from file $1 into a file and/or the database, according to
+# environment variable settings.
+store_data() {
+	sourcefile=$1
+	symbol=$(basename $sourcefile .PRN|tr '[A-Z]' '[a-z]')
+		targetf=$(echo $symbol|sed 's/$/.txt/')
+	if [ ! -z "$MAS_DATA_IN_DB" ]; then
+		# Extract year 96 - 2?, add $symbol, and add 19 or 20.
+		sed -n "/^9[6-9]/s/^/${symbol},19/p;/^[012][0-9]/s/^/${symbol},20/p" \
+			$sourcefile | add_daily_stock_records
+	fi
+	if [ ! -z "$MAS_DATA_IN_FILES" ]; then
+		if [ -e $datadir/$targetf ]; then
+			echo $datadir/$targetf exists, saving to $datadir/$targetf.back.
+			mv $datadir/$targetf $datadir/$targetf.back
+		fi
+		# Extract year 96 - 99, add 19.
+		sed -n '/^[012][0-9]/s/^/20/p;/^9[6-9]/s/^/19/p' \
+			$sourcefile >$datadir/$targetf
+		chmod 664 $datadir/$targetf
+		chgrp investment $datadir/$targetf
+		ln -s $datadir/$targetf $currentdir
+	fi
+}
+
 if [ $# -lt 1 ]; then usage; exit -1; fi
 cd $historydir
 symbols=$(echo $*|tr '[a-z]' '[A-Z]')
@@ -17,17 +42,8 @@ fnames=$(echo "$symbols"|sed 's/[A-Z]\>/&.PRN/g')
 if ftphistfiles $fnames; then
 	cnvrt_fromdos $fnames
 	for f in $fnames; do
-		targetf=$(echo $f|tr '[A-Z]' '[a-z]'|sed 's/.prn/.txt/')
-		if [ -e $datadir/$targetf ]; then
-			echo $datadir/$targetf exists, saving to $datadir/$targetf.back.
-			mv $datadir/$targetf $datadir/$targetf.back
-		fi
-		# Extract year 96 - 99, add 19.
-		sed -n '/^9[6-9]/s/^/19/p;/^0[0-9]/s/^/20/p' \
-			$historydir/$f >$datadir/$targetf
-		chmod 664 $datadir/$targetf
-		chgrp investment $datadir/$targetf
-		ln -s $datadir/$targetf $currentdir
+		store_data $historydir/$f
+		gzip $historydir/$f
 	done
 else
 	echo "Ftp failed, exiting ..."
