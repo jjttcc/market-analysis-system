@@ -1,6 +1,6 @@
 indexing
 	description:
-		"A numeric command that operates on the current item of a linear%
+		"A numeric command that operates on the current item of a linear %
 		%structure of market tuples"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -26,6 +26,7 @@ feature -- Element change (export to ??)
 			input := in
 		ensure
 			input = in
+			input /= Void
 		end
 
 feature {NONE}
