@@ -8,7 +8,7 @@ indexing
 
 deferred class FUNCTION_ANALYZER inherit
 
-	EVENT_GENERATOR
+	MARKET_EVENT_GENERATOR
 
 feature -- Access
 
@@ -29,12 +29,14 @@ feature -- Status setting
 
 	set_tradable (f: TRADABLE [BASIC_MARKET_TUPLE]) is
 			-- Set the tradable whose market data is to be analyzed.
-		require
-			f.tuple_list_names.has (period_type.name)
 		do
+			check
+				-- Unfortunately, this cannot be a precondition.
+				f_has_period_type: f.tuple_list_names.has (period_type.name)
+			end
 			set_innermost_function (f.tuple_list (period_type.name))
 			tradable := f
-		ensure
+		ensure then
 			set: tradable = f
 		end
 

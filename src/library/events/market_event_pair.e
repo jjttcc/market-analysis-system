@@ -8,8 +8,6 @@ indexing
 class MARKET_EVENT_PAIR inherit
 
 	MARKET_EVENT
-		rename
-			time_stamp as end_date
 		redefine
 			is_equal
 		end
@@ -20,14 +18,16 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (l, r: MARKET_EVENT; nm: STRING; typ: EVENT_TYPE) is
+	make (l, r: MARKET_EVENT; nm: STRING; tp: EVENT_TYPE) is
 		require
-			not_void: l /= Void and r /= Void and nm /= Void and type /= Void
+			not_void: l /= Void and r /= Void and nm /= Void and tp /= Void
 		do
 			left := l
 			right := r
+			type := tp
+			name := nm
 		ensure
-			set: left = l and right = r
+			set: left = l and right = r and type = tp and name = nm
 		end
 
 feature -- Access
@@ -35,23 +35,13 @@ feature -- Access
 	left, right: MARKET_EVENT
 			-- left and right elements of the pair
 
-	--out: STRING is
-	--	do
-	--		Result.append (left.out)
-	--		Result.extend (' ')
-	--		Result.append (right.out)
-	--	end
-
-	start_date: DATE_TIME is
-			-- The earlier of left.start_date and right.start_date
+	time_stamp: DATE_TIME is
+			-- The later of left.time_stamp and right.time_stamp
 		do
-			Result := left.start_date.min (right.start_date)
-		end
-
-	end_date: DATE_TIME is
-		-- The later of left.end_date and right.end_date
-		do
-			Result := left.end_date.max (right.end_date)
+			if cached_time_stamp = Void then
+				cached_time_stamp := left.time_stamp.max (right.time_stamp)
+			end
+			Result := cached_time_stamp
 		end
 
 	description: STRING is
@@ -62,6 +52,16 @@ feature -- Access
 			Result.append (right.description)
 		end
 
+	components: LIST [MARKET_EVENT] is
+		do
+			!ARRAYED_LIST [MARKET_EVENT]!Result.make (2)
+			Result.append (left.components)
+			Result.append (right.components)
+		ensure then
+			count_at_least_r_plus_l_count: Result.count >=
+				left.components.count + right.components.count
+		end
+
 feature -- Status report
 
 	is_equal (other: like Current): BOOLEAN is
@@ -70,10 +70,14 @@ feature -- Status report
 						other.right.is_equal (right)
 		end
 
+feature {NONE} -- Implementation
+
+	cached_time_stamp: DATE_TIME
+			-- Implementation attribute to save processing time
+
 invariant
 
 	l_r_not_void: left /= Void and right /= Void
-	start_date_earliest: start_date = left.start_date.min (right.start_date)
-	end_date_latest: end_date = left.end_date.max (right.end_date)
+	time_stamp_latest: time_stamp = left.time_stamp.max (right.time_stamp)
 
 end -- class MARKET_EVENT_PAIR

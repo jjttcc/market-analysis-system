@@ -19,7 +19,7 @@ creation
 
 feature -- Initialization
 
-	make (egs: LINEAR [FUNCTION_ANALYZER];
+	make (egs: LINEAR [MARKET_EVENT_GENERATOR];
 			markets: LINEAR [TRADABLE [BASIC_MARKET_TUPLE]];
 			disp: EVENT_DISPATCHER) is
 		require
@@ -35,13 +35,13 @@ feature -- Initialization
 
 feature -- Access
 
-	event_generators: LINEAR [FUNCTION_ANALYZER]
+	event_generators: LINEAR [MARKET_EVENT_GENERATOR]
 
 	market_list: LINEAR [TRADABLE [BASIC_MARKET_TUPLE]]
 
 feature {NONE} -- Implementation
 
-	initialize (g: FUNCTION_ANALYZER) is
+	initialize (g: MARKET_EVENT_GENERATOR) is
 		do
 			g.set_tradable (current_tradable)
 		end

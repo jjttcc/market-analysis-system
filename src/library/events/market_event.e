@@ -11,12 +11,13 @@ deferred class MARKET_EVENT inherit
 
 feature -- Access
 
-	start_date, end_date: DATE_TIME is
+	components: LIST [MARKET_EVENT] is
+			-- Contained events - Current if atomic
 		deferred
 		end
 
 invariant
 
-	start_date <= end_date
+	components_not_void: components /= Void
 
 end -- class MARKET_EVENT

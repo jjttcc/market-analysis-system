@@ -1,6 +1,6 @@
 indexing
 	description:
-		"An event associated with a market such as a stock or bond"
+		"An simple, atomiac market event"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -8,10 +8,8 @@ indexing
 class ATOMIC_MARKET_EVENT inherit
 
 	MARKET_EVENT
-		rename
-			time_stamp as start_date
 		redefine
-			is_equal, start_date, end_date
+			is_equal
 		end
 
 creation
@@ -26,36 +24,28 @@ feature {NONE} -- Initialization
 						sym /= Void
 		do
 			name := nm
-			start_date := time
+			time_stamp := time
 			type := e_type
 			symbol := sym
 		ensure
-			set: name = nm and start_date = time and type = e_type and
+			set: name = nm and time_stamp = time and type = e_type and
 					symbol = sym
 		end
 
 feature -- Access
 
-	--out: STRING is
-	--	do
-	--		Result := Precursor
-	--		Result.extend (' ')
-	--		Result.append (symbol)
-	--	end
-
 	symbol: STRING
 			-- Symbol that identifies the market associated with the event
 
-	start_date: DATE_TIME
-	
-	end_date: DATE_TIME is
-		do
-			Result := start_date
-		ensure then
-			Result = start_date
-		end
+	time_stamp: DATE_TIME
 
 	description: STRING
+
+	components: LIST [MARKET_EVENT] is
+		do
+			!ARRAYED_LIST [MARKET_EVENT]!Result.make (0)
+			Result.extend (Current)
+		end
 
 feature -- Status setting
 
