@@ -1,4 +1,4 @@
-/* Copyright 1998 - 2003: Jim Cochrane - see file forum.txt */
+/* Copyright 1998 - 2004: Jim Cochrane - see file forum.txt */
 
 package gui1_root;
 

@@ -5,7 +5,7 @@ indexing
 	revision: "$Revision$"
 	note: "This class is currently not used.  If that continues to be the %
 		%case, it should be obsoleted and moved."
-	licensing: "Copyright 2003: Jim Cochrane - %
+	licensing: "Copyright 2004: Jim Cochrane - %
 		%License to be determined"
 
 class HELP_TOOLS inherit

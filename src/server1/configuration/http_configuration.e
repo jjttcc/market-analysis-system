@@ -11,7 +11,7 @@ indexing
 		%retrieval from other external sources besides an http server."
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
+	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
 class HTTP_CONFIGURATION inherit

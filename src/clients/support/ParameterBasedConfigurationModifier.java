@@ -1,4 +1,4 @@
-/* Copyright 1998 - 2003: Jim Cochrane - see file forum.txt */
+/* Copyright 1998 - 2004: Jim Cochrane - see file forum.txt */
 
 /* Module for editing the Configuration via name/value parameters
 ** To add a new setting-change capability, create a descendant of

@@ -3,7 +3,7 @@ indexing
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
+	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%License to be determined - will be non-public"
 
 class

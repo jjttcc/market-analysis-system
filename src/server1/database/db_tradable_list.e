@@ -3,7 +3,7 @@ indexing
 	author: "Eirik Mangseth"
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2003: Eirik Mangseth and Jim Cochrane - %
+	licensing: "Copyright 1998 - 2004: Eirik Mangseth and Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
 class DB_TRADABLE_LIST inherit

@@ -3,7 +3,7 @@ indexing
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 2003: Jim Cochrane - %
+	licensing: "Copyright 2004: Jim Cochrane - %
 		%License to be determined"
 
 class CONNECTION_UTILITIES inherit

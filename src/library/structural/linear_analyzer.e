@@ -4,7 +4,7 @@ indexing
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
+	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 	licensing_addendum: "Part of this class was copied directly from the %
 		%LINEAR_ITERATOR class from the EiffelBase 4.x library, which %
