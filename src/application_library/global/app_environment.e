@@ -8,6 +8,8 @@ class TAL_APP_ENVIRONMENT inherit
 
 	EXECUTION_ENVIRONMENT
 
+	OPERATING_ENVIRONMENT
+
 feature -- Access
 
 	app_directory: STRING is
@@ -38,6 +40,15 @@ feature -- Access
 			set_correctly_if_env_var_is_set:
 				Result = Void or
 					Result.is_equal (get ("TAL_APP_MAILER_SUBJECT_FLAG"))
+		end
+
+	file_name_with_app_directory (fname: STRING): STRING is
+			-- A full path name constructed from `app_directory' and `fname'
+		do
+			!!Result.make (0)
+			Result.append (app_directory)
+			Result.extend (Directory_separator)
+			Result.append (fname)
 		end
 
 end -- TAL_APP_ENVIRONMENT
