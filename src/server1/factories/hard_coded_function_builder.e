@@ -107,11 +107,19 @@ feature {NONE} -- Hard-coded market function building procedures
 			-- Make an exponential moving average function for testing.
 		local
 			cmd: BASIC_NUMERIC_COMMAND
-			e: MA_EXPONENTIAL
+			exp: N_BASED_UNARY_OPERATOR
+			div: DIVISION
+			two, one: CONSTANT
+			add: ADDITION
+			n_cmd: N_VALUE_COMMAND
 		do
+			!!two.make (2); !!one.make (1)
+			!!n_cmd.make (n)
+			!!add.make (n_cmd, one)
+			!!div.make (two, add)
+			!!exp.make (div, n)
 			!!cmd
-			!!e.make (1)
-			!!Result.make (f, cmd, e, n)
+			!!Result.make (f, cmd, exp, n)
 			Result.set_name (name)
 		ensure
 			initialized: Result /= Void and Result.n = n and Result.name = name
@@ -164,6 +172,29 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	rsi (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
+				TWO_VARIABLE_FUNCTION is
+			-- RSI:  100 - (100 / (1 + RS))
+			-- RS:  (average n up closes ) / (average n down closes)
+		local
+			one, one_hundred: CONSTANT
+			outer_div, inner_div, add, sub: BINARY_OPERATOR [REAL, REAL]
+			positive_average, negative_average: BASIC_LINEAR_COMMAND
+			pos_ema, neg_ema: EXPONENTIAL_MOVING_AVERAGE
+		do
+			!!one.make (1); !!one_hundred.make (100)
+			pos_ema := rs_average (f, n, true)
+			neg_ema := rs_average (f, n, false)
+			!!positive_average.make (pos_ema.output)
+			!!negative_average.make (neg_ema.output)
+			!DIVISION!inner_div.make (positive_average, negative_average)
+			!ADDITION!add.make (one, inner_div)
+			!DIVISION!outer_div.make (one_hundred, add)
+			!SUBTRACTION!sub.make (one_hundred, outer_div)
+			!!Result.make (pos_ema, neg_ema, sub)
+			Result.set_name (name)
+		end
+
+	obsolete_rsi (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
 				N_RECORD_ONE_VARIABLE_FUNCTION is
 			-- RSI = 100 - (100 / (1 + RS))
 			-- RS = (average n up closes ) / (average n down closes)
@@ -180,6 +211,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			upsub, downsub, outer_sub: SUBTRACTION
 			rs_div, maindiv, upavg, downavg: DIVISION
 			one_plus_rs: ADDITION
+			exp: N_BASED_UNARY_OPERATOR
 		do
 			!!close; !!zero.make (0)
 			!!one_hundred.make (100); !!one.make (1); !!nvalue.make (n)
@@ -343,6 +375,55 @@ feature {NONE} -- Hard-coded market function building procedures
 			p2.set_x_y_date (later.day, 1, later)
 			!!Result.make (p1, p2, period_types @ (period_type_names @ Daily))
 			Result.set_name (name)
+		end
+
+	rs_average (f: MARKET_FUNCTION; n: INTEGER; positive: BOOLEAN):
+				EXPONENTIAL_MOVING_AVERAGE is
+			-- Positive (`positive') or negative (not `positive') average
+			-- used in the quotient for RS for the RSI formula
+		local
+			one, zero: CONSTANT
+			exp: N_BASED_UNARY_OPERATOR
+			div, sub: BINARY_OPERATOR [REAL, REAL]
+			main_op: BOOLEAN_NUMERIC_CLIENT
+			n_cmd: N_VALUE_COMMAND
+			relational_op: BINARY_OPERATOR [BOOLEAN, REAL]
+			offset_minus_1, offset_0: SETTABLE_OFFSET_COMMAND
+			close: CLOSING_PRICE
+			fname: STRING
+		do
+			!!one.make (1); !!zero.make (0)
+			!!close
+			!!offset_minus_1.make (f.output, close)
+			offset_minus_1.set_offset (-1)
+			!!offset_0.make (f.output, close)
+			!!n_cmd.make (n)
+			!DIVISION!div.make (one, n_cmd)
+			!!exp.make (div, n)
+			if positive then
+				-- Set up the bool operand for main_op so that the result
+				-- is the current close minus the previous close if that
+				-- is positive - otherwise, 0.
+				fname := "Positive average for RSI"
+				!LT_OPERATOR!relational_op.make (offset_minus_1, offset_0)
+				!SUBTRACTION!sub.make (offset_0, offset_minus_1)
+			else
+				-- Set up the bool operand for main_op so that the result
+				-- is the previous close minus the current close if that
+				-- is positive - otherwise, 0.
+				fname := "Negative average for RSI"
+				!GT_OPERATOR!relational_op.make (offset_minus_1, offset_0)
+				!SUBTRACTION!sub.make (offset_minus_1, offset_0)
+			end
+			!!main_op.make (relational_op, sub, zero)
+			!!Result.make (f, main_op, exp, n)
+			Result.set_name (fname)
+			-- Because a SETTABLE_OFFSET_COMMAND with an offset of -1 is
+			-- one of the operators used (indirectly) by Result, the
+			-- effective offset must be set to the opposite value (1) to
+			-- compensate - ensure that the left-most element of the input
+			-- being processed is the first element.
+			Result.set_effective_offset (1)
 		end
 
 invariant
