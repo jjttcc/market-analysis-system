@@ -30,25 +30,25 @@ feature {NONE} -- Utility
 
 	termination_cleanup is
 			-- Send cleanup notification to all members of
-			-- `termination_registrants'.  Since `termination_registrants'
-			-- is a stack, they will be cleaned up in reverser of the order
-			-- in which they were added (with `register_for_termination').
+			-- `termination_registrants' in the order they were added
+			-- (with `register_for_termination').
 		do
 			from
+				termination_registrants.start
 			until
-				termination_registrants.empty
+				termination_registrants.exhausted
 			loop
 				termination_registrants.item.cleanup
-				termination_registrants.remove
+				termination_registrants.forth
 			end
 		end
 
 feature {NONE} -- Access
 
-	termination_registrants: STACK [TERMINABLE] is
+	termination_registrants: LIST [TERMINABLE] is
 			-- Registrants for termination cleanup notification
 		once
-			!LINKED_STACK [TERMINABLE]!result.make
+			!LINKED_LIST [TERMINABLE]!result.make
 		end
 
 	event_types: ARRAY [EVENT_TYPE] is
@@ -84,53 +84,35 @@ feature {NONE} -- Access
 	function_library: LIST [MARKET_FUNCTION] is
 			-- All defined market functions
 		local
-			x: ANY
-			mflist: TERMINABLE_MARKET_FUNCTION_LIST
+			storable: STORABLE
+			mflist: STORABLE_LIST [MARKET_FUNCTION]
 		once
-			print ("function_library called%N")
-			x := storable_array @ Function_index
-			if x = Void then
-				-- The list has not been created and saved to persistent
-				-- store yet, so it's time to create it and add it to
-				-- storable_list.
-				!!mflist.make
-				storable_array.force (mflist, Function_index)
-			else
-				mflist ?= x
+			!!storable
+			mflist ?= storable.retrieve_by_name (indicators_file_name)
+			if mflist = Void then
+				!STORABLE_MARKET_FUNCTION_LIST!mflist.make (
+					indicators_file_name)
 			end
-			check
-				list_not_void: mflist /= Void
-			end
-			-- Ensure that the list will be 'cleaned up' when the process ends.
+			-- Ensure that the list will be saved when the process ends.
 			register_for_termination (mflist)
 			Result := mflist
-			print ("function_library returning%N")
 		end
 
 	market_event_generation_library: LIST [MARKET_EVENT_GENERATOR] is
 			-- All defined event generators
 		local
-			x: ANY
-			meg_list: TERMINABLE_EVENT_GENERATOR_LIST
+			storable: STORABLE
+			meg_list: STORABLE_LIST [MARKET_EVENT_GENERATOR]
 		once
-			print ("market_event_generation_library called%N")
-			x := storable_array @ Event_generation_index
-			if x = Void then
-				-- The list has not been created and saved to persistent
-				-- store yet, so it's time to create it and add it to
-				-- storable_list.
-				!!meg_list.make
-				storable_array.force (meg_list, Event_generation_index)
-			else
-				meg_list ?= x
+			!!storable
+			meg_list ?= storable.retrieve_by_name (generators_file_name)
+			if meg_list = Void then
+				!STORABLE_EVENT_GENERATOR_LIST!meg_list.make (
+					generators_file_name)
 			end
-			check
-				list_not_void: meg_list /= Void
-			end
-			-- Ensure that the list will be 'cleaned up' when the process ends.
+			-- Ensure that the list will be saved when the process ends.
 			register_for_termination (meg_list)
 			Result := meg_list
-			print ("market_event_generation_library returning%N")
 		end
 
 	active_event_generators: LIST [MARKET_EVENT_GENERATOR] is
@@ -173,25 +155,16 @@ feature {NONE} -- Access
 	market_event_registrants: LIST [MARKET_EVENT_REGISTRANT] is
 			-- All defined event registrants
 		local
-			x: ANY
-			reg_list: LINKED_LIST [MARKET_EVENT_REGISTRANT]
+			storable: STORABLE
+			reg_list: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
 		once
-			print ("market_event_registrants called%N")
-			x := storable_array @ Event_registrants_index
-			if x = Void then
-				-- The list has not been created and saved to persistent
-				-- store yet, so it's time to create it and add it to
-				-- storable_list.
-				!!reg_list.make
-				storable_array.force (reg_list, Event_registrants_index)
-			else
-				reg_list ?= x
-			end
-			check
-				list_not_void: reg_list /= Void
+			!!storable
+			reg_list ?= storable.retrieve_by_name (registrants_file_name)
+			if reg_list = Void then
+				!!reg_list.make (registrants_file_name)
 			end
 			Result := reg_list
-			-- The registrants need to be registered for
+			-- The registrants themselves also need to be registered for
 			-- termination/cleanup when the process ends; and they need
 			-- to load their (event) histories, which are stored in
 			-- a separate file.
@@ -204,7 +177,12 @@ feature {NONE} -- Access
 				register_for_termination (Result.item)
 				Result.forth
 			end
-			print ("market_event_registrants returning%N")
+			-- Ensure that the list will be saved when the process ends.
+			-- This is done after registering the contents of the list
+			-- because the MERs need to be cleaned up before being saved
+			-- as elements of reg_list (since cleanup is done for each
+			-- termination registrant in the order it was registered).
+			register_for_termination (reg_list)
 		end
 
 feature {NONE} -- Constants
@@ -212,42 +190,29 @@ feature {NONE} -- Constants
 	default_input_file_name: STRING is "/tmp/tatest"
 			-- Name of default input file if none is specified by the user
 
-	storable_file_name: STRING is
-			-- Name of the file containing persistent data
+	indicators_file_name: STRING is
+			-- Name of the file containing persistent data for indicators
 		local
 			ta_env: expanded TAL_APP_ENVIRONMENT
 		once
-			Result := ta_env.file_name_with_app_directory ("persistent")
+			Result := ta_env.file_name_with_app_directory ("indicators_persist")
 		end
 
-	Event_registrants_index, Event_generation_index, Function_index:
-		INTEGER is unique
-			-- Indexes for elements of storable_array
-			-- Note: If new indexes are added, change the creation procedure
-			-- of the STORABLE_ARRAY (in storable_array) correspondingly.
-
-feature {NONE} -- Implementation
-
-	storable_array: STORABLE_ARRAY [ANY] is
-			-- List of all persistent objects.  Since the list will be
-			-- registered for termination when it is created and since it
-			-- should be the last thing 'cleaned up', it should be called
-			-- before any other object is registered for termination.
-			-- (Termination cleanup uses a stack, so the first item
-			-- registered will be the last one cleaned up.)
+	generators_file_name: STRING is
+			-- Name of the file containing persistent data for event generators
 		local
-			storable: STORABLE
+			ta_env: expanded TAL_APP_ENVIRONMENT
 		once
-			print ("storable_array called%N")
-			!!storable
-			Result ?= storable.retrieve_by_name (storable_file_name)
-			if Result = Void then
-				!!Result.make (storable_file_name, Event_registrants_index,
-								Function_index)
-			end
-			-- Ensure that the list will be saved when the process ends.
-			register_for_termination (Result)
-			print ("storable_array returning%N")
+			Result := ta_env.file_name_with_app_directory ("generators_persist")
+		end
+
+	registrants_file_name: STRING is
+			-- Name of the file containing persistent data for event generators
+		local
+			ta_env: expanded TAL_APP_ENVIRONMENT
+		once
+			Result := ta_env.file_name_with_app_directory (
+						"registrants_persist")
 		end
 
 end -- GLOBAL_APPLICATION
