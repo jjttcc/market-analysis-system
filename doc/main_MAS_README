@@ -1,1 +1,15 @@
-This is the root MAS README.
+The Market Analysis System (MAS) is a client/server application that
+provides tools for analysis of financial markets, with the goal of
+helping its user make better buying and selling decisions and to help
+save time by automating some tasks that would otherwise be done by hand.
+
+The two main components of MAS are the Market Analysis System Server (also
+known as Market Analysis Server) and the Market Analysis GUI Client.
+
+The MAS installation includes the following directories:
+
+bin - All executable files and shell scripts needed for running MAS
+lib - Java class files and other library files needed by MAS
+doc - Documentation on MAS features and how to use MAS
+
+See the file INSTALLATION for instructions on how to install MAS.
