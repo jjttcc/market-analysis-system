@@ -27,9 +27,8 @@ public class TA_Connection implements NetworkProtocol
 		indicator_parser = new TA_Parser(field_specs, Output_record_separator,
 									Output_field_separator);
 		scanner = new DataInspector();
-		main_bar_drawer = new BarDrawer();
-		// When a LineDrawer exists, make this a LineDrawer:
-		indicator_bar_drawer = new BarDrawer();
+		main_drawer = new_main_drawer();
+		indicator_drawer = new LineDrawer();
 		//Process args for the host, port.
 		if (args.length > 0)
 		{
@@ -84,9 +83,9 @@ public class TA_Connection implements NetworkProtocol
 		connect();
 		send_msg(Market_data_request, symbol + Input_field_separator +
 					period_type);
-		data_parser.parse(receive_msg().toString());
+		data_parser.parse(receive_msg().toString(), main_drawer);
 		_last_market_data = data_parser.result();
-		_last_market_data.set_drawer(main_bar_drawer);
+		_last_market_data.set_drawer(main_drawer);
 		close_connection();
 	}
 
@@ -98,9 +97,9 @@ public class TA_Connection implements NetworkProtocol
 		connect();
 		send_msg(Indicator_data_request, ind + Input_field_separator +
 					symbol + Input_field_separator + period_type);
-		indicator_parser.parse(receive_msg().toString());
+		indicator_parser.parse(receive_msg().toString(), indicator_drawer);
 		_last_indicator_data = indicator_parser.result();
-		_last_indicator_data.set_drawer(indicator_bar_drawer);
+		_last_indicator_data.set_drawer(indicator_drawer);
 		close_connection();
 	}
 
@@ -258,6 +257,12 @@ public class TA_Connection implements NetworkProtocol
 		}
 	}
 
+//!!!Change to switch on a configured setting - to make a BarDrawer,
+//!!!CandleDrawer, or LineDrawer.
+	private Drawer new_main_drawer() {
+		return new CandleDrawer();
+	}
+
 	private void usage()
 	{
 		System.err.println("Usage: ta_server hostname port_number");
@@ -280,6 +285,6 @@ public class TA_Connection implements NetworkProtocol
 	private Vector _last_indicator_list;
 	private TA_Parser data_parser;
 	private TA_Parser indicator_parser;
-	private BarDrawer main_bar_drawer;	// draws bars in graph
-	private BarDrawer indicator_bar_drawer;	// draws bars in graph
+	private Drawer main_drawer;	// draws tuples in main graph
+	private Drawer indicator_drawer;	// draws tuples in indicator graph
 }

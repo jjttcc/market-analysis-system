@@ -16,19 +16,20 @@ class TA_Parser {
 		_field_separator = field_sep;
 
 		dates = new Vector();
-		opens = new Vector();
-		highs = new Vector();
-		lows = new Vector();
-		closes = new Vector();
+		float_field_count = float_fields(fieldspecs);
 		volumes = new Vector();
 		open_interests = new Vector();
 	}
 
-	// Parse `s' according to record_separator and field_separator.
-	public void parse(String s) {
+	// Parse `s' into a DataSet according to record_separator and
+	// field_separator.  `drawer' is the tuple drawer to use for the
+	// DataSet.  result() gives the new DataSet.
+	public void parse(String s, Drawer drawer) {
+		int float_index = 0;
 		StringTokenizer recs = new StringTokenizer(s, _record_separator, false);
 		clear_vectors();
-		for (int i = 0; recs.hasMoreTokens(); ++i) {
+		float_data = new double[recs.countTokens() * float_field_count];
+		while (recs.hasMoreTokens()) {
 			StringTokenizer fields = new StringTokenizer(recs.nextToken(),
 													_field_separator, false);
 			for (int j = 0; fields.hasMoreTokens(); ++j) {
@@ -37,16 +38,20 @@ class TA_Parser {
 						dates.addElement(fields.nextToken());
 						break;
 					case Open:
-						opens.addElement(parse_float(fields.nextToken()));
+						float_data[float_index++] =
+							parse_double(fields.nextToken());
 						break;
 					case High:
-						highs.addElement(parse_float(fields.nextToken()));
+						float_data[float_index++] =
+							parse_double(fields.nextToken());
 						break;
 					case Low:
-						lows.addElement(parse_float(fields.nextToken()));
+						float_data[float_index++] =
+							parse_double(fields.nextToken());
 						break;
 					case Close:
-						closes.addElement(parse_float(fields.nextToken()));
+						float_data[float_index++] =
+							parse_double(fields.nextToken());
 						break;
 					case Volume:
 						volumes.addElement(parse_int(fields.nextToken()));
@@ -58,7 +63,7 @@ class TA_Parser {
 				}
 			}
 		}
-		process_data();
+		process_data(drawer);
 	}
 
 	// Parsed data set result
@@ -76,8 +81,8 @@ class TA_Parser {
 
 // Implementation
 
-	Float parse_float(String s) {
-		return Float.valueOf(s);
+	double parse_double(String s) {
+		return Float.valueOf(s).floatValue();
 	}
 
 	Integer parse_int(String s) {
@@ -85,50 +90,57 @@ class TA_Parser {
 	}
 
 	// Put the parsed data into a data set.
-	void process_data() {
-		//!!!For now, just produce an array of indexes and close values to
-		//!!!feed the DataSet.
-		double xy_data[] = new double[closes.size() * 2];
-		for (int i = 0, j = 0; j < closes.size(); i += 2, ++j) {
-			xy_data[i] = j + 1; // x
-			xy_data[i+1] = ((Float) closes.elementAt(j)).floatValue(); // y
-		}
+	private void process_data(Drawer drawer) {
 		try {
-			int length = xy_data.length / 2;
+			int length = float_data.length / float_field_count;
 			if (length > 0)
 			{
-				processed_data = new DataSet(xy_data, length);
+				processed_data = new DataSet(float_data, length, drawer);
 			}
 			else
 			{
-				processed_data = new DataSet();
+				processed_data = new DataSet(drawer);
 			}
 		}
 		catch (Exception e) {
 			System.err.println("DataSet constructor failed - " + e);
+			e.printStackTrace();
 			System.exit(-1);
 		}
 	}
 
 	// Remove all elements from data vectors - set their sizes to 0.
-	void clear_vectors() {
-		dates.removeAllElements(); opens.removeAllElements();
-		highs.removeAllElements(); lows.removeAllElements();
-		closes.removeAllElements(); volumes.removeAllElements();
+	private void clear_vectors() {
+		dates.removeAllElements();
+		volumes.removeAllElements();
 		open_interests.removeAllElements();
 	}
 
+	// The number of fields in `fieldspecs' that will be of type float
+	private int float_fields(int fieldspecs[]) {
+		int result = 0;
+
+		for (int i = 0; i < fieldspecs.length; ++i) {
+			if (fieldspecs[i] == Open ||
+				fieldspecs[i] == Close ||
+				fieldspecs[i] == High ||
+				fieldspecs[i] == Low) {
+				result = result + 1;
+			}
+		}
+
+		return result;
+	}
+
 	int parsetype[];
+	int float_field_count;
 
 	// Date, open, high, low, close, volume, and open interest values -
 	// Some fields may not be used - for those that are, lengths should all
 	// be equal to the number of records in the input.
-	// NOTE: Although these are all public, their contents must not be
-	// changed by a client - I should provide access functions, but I don't
-	// want to take the time.
-	public Vector dates;	// String
-	public Vector opens, highs, lows, closes;	// float
-	public Vector volumes, open_interests;	// int
+	protected Vector dates;	// String
+	protected double[] float_data;
+	protected Vector volumes, open_interests;	// int
 
 	String _record_separator, _field_separator;
 	DataSet processed_data;		// the parsed data
