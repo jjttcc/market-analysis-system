@@ -75,17 +75,24 @@ feature -- Basic operations
 				medium_set: io_medium /= Void
 			end
 			tokenize_message
-			cmd := request_handlers @ message_ID
-			cmd.set_active_medium (io_medium)
-			if
-				message_ID /= Login_request and
-				sessions.has (session_key)
-				-- A session is not needed for the login request command,
-				-- since it will create one.
-			then
-				cmd.set_session(sessions @ session_key)
+			if message_ID = Logout_request then
+				-- Logout requests are handled specially - simply remove the
+				-- client's session.
+				sessions.remove (session_key)
+			else
+print ("sessions.count: ") print (sessions.count.out) print ("%N")
+				cmd := request_handlers @ message_ID
+				cmd.set_active_medium (io_medium)
+				if
+					message_ID /= Login_request and
+					sessions.has (session_key)
+					-- A session is not needed for the login request command,
+					-- since it will create one.
+				then
+					cmd.set_session(sessions @ session_key)
+				end
+				cmd.execute (message_body)
 			end
-			cmd.execute (message_body)
 		end
 
 feature {NONE}
@@ -122,7 +129,10 @@ feature {NONE}
 					message_body := "Message ID is not a valid integer: "
 					message_body.append (message_ID.out)
 					message_ID := Error
-				elseif not request_handlers.has (number.to_integer) then
+				elseif
+					not request_handlers.has (number.to_integer) and
+					number.to_integer /= Logout_request
+				then
 					message_body := "Invalid message ID: "
 					message_body.append (message_ID.out)
 					message_ID := Error
