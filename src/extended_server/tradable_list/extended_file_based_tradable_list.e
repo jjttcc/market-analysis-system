@@ -11,7 +11,7 @@ deferred class EXTENDED_FILE_BASED_TRADABLE_LIST inherit
 
 	FILE_BASED_TRADABLE_LIST
 		redefine
-			target_tradable_out_of_date_implementation,
+			target_tradable_out_of_date,
 			append_new_data, turn_caching_off, add_to_cache, clear_cache
 		end
 
@@ -53,16 +53,13 @@ feature {NONE} -- Implementation
 						not current_input_file.is_closed
 				end
 				file_status_cache.force (create {TRADABLE_FILE_STATUS}.make (
---!!!!!bring up to date re fix:
-					clone (current_input_file.name), current_input_file.date,
-					current_input_file.count), idx)
+					clone (current_input_file.name), current_input_file.count),
+					idx)
 			end
 		ensure then
 			status_added_if_caching_on: caching_on implies equal (
-				(file_status_cache @ idx).file_name, current_input_file.name)
---!!!!!bring up to date re fix:
-				and (file_status_cache @ idx).last_modification_time =
-				current_input_file.date and
+				(file_status_cache @ idx).file_name,
+				current_input_file.name) and
 				(file_status_cache @ idx).file_size = current_input_file.count
 		end
 
@@ -81,15 +78,10 @@ feature {NONE} -- Implementation
 		do
 			if caching_on then
 				file_status := file_status_cache @ idx
---!!!!!bring up to date re fix:
-				file_status.set_last_modification_time (current_input_file.date)
 				file_status.set_file_size (current_input_file.count)
 			end
 		ensure then
 			status_updated_if_caching_on: caching_on implies
---!!!!!bring up to date re fix:
-				(file_status_cache @ idx).last_modification_time =
-				current_input_file.date and
 				(file_status_cache @ idx).file_size = current_input_file.count
 			file_name_unchanged: caching_on implies equal (
 				(file_status_cache @ idx).file_name, current_input_file.name)
@@ -100,18 +92,15 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Hook routine implementations
 
---!!!:
-	target_tradable_out_of_date_implementation: BOOLEAN is
+	target_tradable_out_of_date: BOOLEAN is
 		local
 			current_file_status: TRADABLE_FILE_STATUS
 		do
-print ("[ttoodi]" + "%N")
 			current_file_status := file_status_cache @ index
 			if current_file_status = Void then
 				-- Assume the cache is empty and thus there is no data
 				-- that can be out of date.
 				Result := False
-print ("curr file status = Void" + "%N")
 			else
 				if status_work_file = Void then
 					create {PLAIN_TEXT_FILE} status_work_file.make (
@@ -119,33 +108,15 @@ print ("curr file status = Void" + "%N")
 				else
 					status_work_file.make (current_file_status.file_name)
 				end
-				-- Result := "current input file is newer and larger than
-				--    last recorded":
---!!!old:
---				Result := status_work_file.date >
---					current_file_status.last_modification_time and
---					status_work_file.count > current_file_status.file_size
-				--!!!new:
+				-- Result := "current input file is larger than last recorded":
 				Result := status_work_file.count > current_file_status.file_size
-
-print ("swf.date: " + status_work_file.date.out + ", cfs.lastmodtime: " +
-current_file_status.last_modification_time.out + "%Nswf.count: " +
-status_work_file.count.out + ", cfs.count: " +
-current_file_status.file_size.out + "%N")
 			end
-if Result then
-print ("tgt is out of date%N")
-else
-print ("tgt is NOT out of date%N")
-end
-print ("[ttoodi returning]" + "%N")
 		end
 
 	append_new_data is
 		local
 			current_file_status: TRADABLE_FILE_STATUS
 		do
-print ("append_new_data called" + "%N")
 			current_file_status := file_status_cache @ index
 			setup_input_medium
 			check
@@ -153,18 +124,13 @@ print ("append_new_data called" + "%N")
 			end
 			if not fatal_error then
 				check
---!!!!!bring up to date re fix:
 					current_file_was_updated:
 						not current_input_file.is_closed and
-						current_input_file.date >
-						current_file_status.last_modification_time and
 						current_input_file.count > current_file_status.file_size
 				end
 				tradable_factory.turn_start_input_from_beginning_off
 				-- Advance the file cursor to the beginning of the new
 				-- data.  Note: file position numbering starts a 0.
---!!!:
-print ("app new d - before - tgttr count: " + target_tradable.count.out + "%N")
 				current_input_file.position_cursor (
 					current_file_status.file_size)
 				tradable_factory.set_product (target_tradable)
@@ -177,13 +143,6 @@ print ("app new d - before - tgttr count: " + target_tradable.count.out + "%N")
 						fatal_error := True
 					end
 				end
---!!!:
-print ("app new d - after - tgttr count: " + target_tradable.count.out + "%N")
-print ("tgttr period type: " + target_tradable.trading_period_type.name + "%N")
-print ("tgttr target period type: " + target_tradable.target_period_type.name + "%N")
-if equal(target_tradable.trading_period_type.name, "hourly") then
-	print ("tgt trdble's trading period type is HOURLY." + "%N")
- end
 				tradable_factory.turn_start_input_from_beginning_on
 				close_input_medium
 			else
