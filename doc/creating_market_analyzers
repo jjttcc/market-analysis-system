@@ -16,17 +16,21 @@ Example 2 below shows how to do this.
 
 Example 1 shows how to create a market analyzer that checks if the
 stochastic %D value crosses from above to below 35% for daily data.
-Example 2 shows how to create a composite market analyzer that uses
-the one created in Example 1 combined with one that checks for the MACD
-difference line crossing from below to above the MACD signal line for
-weekly data.  This analyzer produces a buy signal for markets that meet
-the criteria - weekly MACD crossover shows an uptrend and daily stochastic
-below 35% shows an oversold condition.
+Example 2 shows how to create two analyzers that give signals on weekly
+data when the MACD Difference line crosses above (bullish) and below
+(bearish) the MACD Signal line.  Example 3 shows how to create a composite
+market analyzer that uses the one created in Example 1 combined with the
+bullish analyzer from Example 2.  This analyzer produces a buy signal
+for markets that meet the criteria - weekly MACD crossover shows an
+uptrend and daily stochastic below 35% shows an oversold condition.
 
-Example 3 shows how to create a market analyzer that checks for volume
+Example 4 shows how to create a market analyzer that checks for volume
 spikes.  This can be useful to detect stocks where a volume spike precedes
 a strong price breakout, which sometimes happens when knowledgeable
 investors act on news not yet readily available to the public.
+
+Example 5 shows how to create what I call the "[Slope of MACD, Slope of Slope
+of MACD] Trend Analyzers".
 
 Note that after creating an indicator you will need to save (the s option)
 the indicator before exiting the market analyzer editing menu.
