@@ -53,4 +53,4 @@ feature -- Access
 				record_sep, input_file)
 		end
 
-end -- class PLATFORM_DEPENDENT_OBJECTS
+end

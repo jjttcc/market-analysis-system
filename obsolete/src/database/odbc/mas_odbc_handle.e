@@ -23,7 +23,7 @@ feature -- Basic operations
 
 	login (data_source: STRING; username: STRING; password: STRING) is
 		require else
-			valid_data_source: data_source /= void and data_source.count > 0
+			valid_data_source: data_source /= Void and data_source.count > 0
 		do
 			anc_login(username, password)
 			set_data_source(data_source)
@@ -50,7 +50,7 @@ feature -- Basic operations
 
 	retrieve (sql: STRING): LINKED_LIST[DB_RESULT] is
 		require
-			sql_valid_and_not_empty: sql /= void and sql.count > 0
+			sql_valid_and_not_empty: sql /= Void and sql.count > 0
 			connected: connected
 		local
 			db_result: LINKED_LIST[DB_RESULT]
@@ -73,8 +73,8 @@ feature --Change
 
 	set_argument (arg: ANY; var_name: STRING) is
 		require 
-			valid_argument: arg /= void
-			var_exist: var_name /= void
+			valid_argument: arg /= Void
+			var_exist: var_name /= Void
 		do
 		 -- arg refers to the actual value; host_var refers to the bind variable.
 			selection.set_map_name (clone(arg), clone(var_name))
@@ -82,7 +82,7 @@ feature --Change
 
 	unset_argument (var_name: STRING) is
 		require 
-			var_exist: var_name /= void
+			var_exist: var_name /= Void
 		do
 			selection.unset_map_name (clone(var_name))
 		end
@@ -101,6 +101,6 @@ feature {NONE}
 	selection: DB_SELECTION
 
 invariant
-	session_control /= void
+	session_control /= Void
 
-end -- class MAS_SELECTOR_ODBC
+end

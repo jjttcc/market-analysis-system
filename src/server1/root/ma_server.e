@@ -115,4 +115,4 @@ feature {NONE}
 
 	current_sockets: LIST [SOCKET]
 
-end -- MA_SERVER
+end

@@ -235,4 +235,4 @@ feature {NONE} -- Implementation
 			exit (Error_exit_status)
 		end
 
-end -- MAS_EXCEPTION
+end

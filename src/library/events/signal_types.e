@@ -80,4 +80,4 @@ invariant
 		type_names.lower = Buy_signal and type_names.upper = Other_signal and
 		type_names.count = Other_signal
 
-end -- class MARKET_EVENT
+end
