@@ -1,4 +1,4 @@
-/* Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt */
+/* Copyright 1998 - 2001: Jim Cochrane - see file forum.txt */
 
 import java.io.*;
 import java.net.*;
@@ -131,7 +131,7 @@ public class Connection implements NetworkProtocol
 			// error (probably in the client), it is treated as fatal.
 			System.exit(-1);
 		}
-//System.out.println(request_result.toString());
+//System.out.println("'"  + request_result.toString() + "'");
 		return request_result;
 	}
 

@@ -1,3 +1,5 @@
+/* Copyright 1998 - 2001: Jim Cochrane - see file forum.txt */
+
 import java.awt.*;
 import java.awt.event.*;
 
