@@ -32,11 +32,12 @@ Source: "bin\runmasgui.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\fake_mailer.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\init.bat"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "doc\README.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
+Source: "doc\INTRODUCTION.ps"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
+Source: "doc\INTRODUCTION.html"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\creating_market_analyzers.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\environment.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\feature_list.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\GUI_introduction.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
-Source: "doc\java_info.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "README_WINDOWS.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite; DestName: README.txt; Flags: isreadme
 Source: "doc\market_analysis.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\masystem_introduction.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
