@@ -464,8 +464,6 @@ public class MA_Graph extends Canvas {
         if(DefaultBackground == null) DefaultBackground=this.getBackground();
         if(DataBackground == null)    DataBackground=this.getBackground();
 
-//        System.out.println("MA_Graph paint method called!");
-
         if( !paintAll ) return;
 
         r.x      += borderLeft;
@@ -549,8 +547,6 @@ public class MA_Graph extends Canvas {
  * before calling paint.
  */
     public void update(Graphics g) {
-
-//          System.out.println("MA_Graph update method called");
         if( clearAll ) {
             Color c = g.getColor();
 	    /* The r.x and r.y returned from bounds is relative to the
@@ -874,7 +870,8 @@ public class MA_Graph extends Canvas {
 /*
  *  Draws a frame around the data area.
  */
-      protected void drawFrame(Graphics g, int x, int y, int width, int height) {
+      protected void drawFrame(Graphics g, int x, int y, int width,
+			int height) {
         Color c = g.getColor();
 
         if( framecolor != null ) g.setColor(framecolor);
@@ -885,7 +882,6 @@ public class MA_Graph extends Canvas {
 
 
      }
-
 
 
 }
