@@ -9,6 +9,7 @@ import common.*;
 import graph.*;
 import support.*;
 import application_support.*;
+import application_library.*;
 
 /** Abstraction responsible for managing a connection and building DataSet
     instances from data returned from connection requests */

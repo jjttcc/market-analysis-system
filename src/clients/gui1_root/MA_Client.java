@@ -5,12 +5,13 @@ import java.net.*;
 import mas_gui.*;
 import support.*;
 import application_support.*;
+import application_library.*;
 
 /** Root class for the stand-alone Market Analysis client process */
 public class MA_Client {
 	public static void main(String[] args) {
 		initialize_configuration();
-		command_line_options = new mas_gui.CommandLineOptions(args);
+		command_line_options = new CommandLineOptions(args);
 		mas_gui.DataSetBuilder data_builder =
 			new mas_gui.DataSetBuilder(connection(), command_line_options);
 		mas_gui.Chart chart;
@@ -18,9 +19,9 @@ public class MA_Client {
 			command_line_options);
 	}
 
-	private static mas_gui.Connection connection() {
+	private static Connection connection() {
 //		assert command_line_options != null;
-		mas_gui.Connection result;
+		Connection result;
 
 		String hostname = command_line_options.hostname();
 		int port_number = command_line_options.port_number();
@@ -30,9 +31,9 @@ public class MA_Client {
 			new support.IO_SocketConnection(hostname, port_number);
 
 		if (command_line_options.compression()) {
-			result = new mas_gui.CompressedConnection(io_connection);
+			result = new CompressedConnection(io_connection);
 		} else {
-			result = new mas_gui.MA_Connection(io_connection);
+			result = new MA_Connection(io_connection);
 		}
 
 		return result;
@@ -50,7 +51,7 @@ public class MA_Client {
 		}
 	}
 
-	private static mas_gui.CommandLineOptions command_line_options;
+	private static CommandLineOptions command_line_options;
 
 	private static final String chart_filename = ".ma_client_settings";
 	private static final String configuration_file_name = ".ma_clientrc";

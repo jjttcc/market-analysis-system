@@ -4,6 +4,7 @@ package mas_gui;
 
 import java.awt.*;
 import java.awt.event.*;
+import application_library.*;
 
 // Dialog for MA client
 public abstract class MA_Dialog extends Dialog implements ActionListener {
