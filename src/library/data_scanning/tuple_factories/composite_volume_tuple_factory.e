@@ -8,24 +8,7 @@ class COMPOSITE_VOLUME_TUPLE_FACTORY inherit
 
 	COMPOSITE_TUPLE_FACTORY
 		redefine
-			product, do_auxiliary_work, make
-		end
-
-creation
-
-	make
-
-feature
-
-	make is
-		local
-			operator: VOLUME_COMMAND
-		do
-			Precursor
-			!!operator
-			!!volume_adder
-			check operator.execute_precondition end
-			volume_adder.set_operator (operator)
+			product, do_auxiliary_work
 		end
 
 feature {NONE}
@@ -33,15 +16,19 @@ feature {NONE}
 	do_auxiliary_work (tuples: LIST [MARKET_TUPLE]) is
 			-- Set product's volume to sum of all volumes in tuplelist.
 		local
+			operator: VOLUME_COMMAND
 		do
-			volume_adder.set_target (tuples)
-			volume_adder.set_n (tuples.count)
-			tuples.start
-			check
-				volume_adder.operator_set
-				volume_adder.target_set
-				volume_adder.n_set
+			if volume_adder = Void then
+				!!operator
+				!!volume_adder.make (tuples, operator, tuples.count)
+			else
+				volume_adder.set_target (tuples)
+				volume_adder.set_n (tuples.count)
 			end
+			check
+				volume_adder.n = tuples.count
+			end
+			tuples.start
 			volume_adder.execute (Void)
 			product.set_volume (volume_adder.value.rounded)
 		ensure then

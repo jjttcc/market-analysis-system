@@ -12,18 +12,6 @@ class COMPOSITE_TUPLE_FACTORY inherit
 			product
 		end
 
-creation
-
-	make
-
-feature
-
-	make is
-		do
-			!!high_finder
-			!!low_finder
-		end
-
 feature
 
 	execute (tuplelist: LIST [BASIC_MARKET_TUPLE]) is
@@ -54,11 +42,22 @@ feature {NONE}
 		do
 			o := tuples.first.open.value
 			c := tuples.last.close.value
-			high_finder.set_target (tuples)
-			low_finder.set_target (tuples)
-			-- Set to process all elements:
-			high_finder.set_n (tuples.count)
-			low_finder.set_n (tuples.count)
+			if high_finder = Void then
+				check low_finder = Void end
+				!!high_finder.make (tuples, tuples.count)
+				!!low_finder.make (tuples, tuples.count)
+			else
+				check low_finder /= Void end
+				high_finder.set_target (tuples)
+				low_finder.set_target (tuples)
+				-- Set to process all elements:
+				high_finder.set_n (tuples.count)
+				low_finder.set_n (tuples.count)
+			end
+			check
+				high_finder.n = tuples.count
+				low_finder.n = tuples.count
+			end
 			-- Move cursor to last element (n elements will be processed,
 			-- beginning with the last element, going backwards):
 			tuples.start
