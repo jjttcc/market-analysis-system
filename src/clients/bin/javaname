@@ -3,4 +3,4 @@
 # conform to the Java coding standards: begin with a lower case letter,
 # remove "_"s, and convert letters following _ to uppercase.
 
-s/_([a-z])([a-z]*)/\u$1$2/g;
+s/([a-z0-9])_([a-z0-9])/$1\u$2/g;
