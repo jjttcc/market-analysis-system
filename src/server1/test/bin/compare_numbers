@@ -1,0 +1,59 @@
+#!/bin/bash
+# Compare the numeric data in two files and print notification of any
+# significant differences (based on epsilon, defined below).
+
+usage()
+{
+	echo "Usage: $0 file1 file2 [-e epsilon]"
+	echo "    Where file1 and file2 contain parallel numeric values."
+}
+
+if [ $# -lt 2 ]
+then
+	usage
+	exit -1
+fi
+
+if [ $# -ge 4 -a "$3" = "-e" ]
+then
+	epsilon=$4
+else
+	epsilon=.0001
+fi
+
+paste $1 $2 |awk 'BEGIN {
+epsilon = '$epsilon'
+false = 0
+true = 1
+}
+/[0-9][0-9]*\./ {
+	check_if_halves_equal()
+}
+
+function check_if_halves_equal ()
+{
+	assert (NF % 2 != 0)
+	n = NF / 2
+	for (i = 1; i <= n; ++i)
+	{
+		if (abs($i - $(i + n)) > epsilon)
+		{
+			print "Problem at line " NR ":"
+			print "value 1: " $i ", value 2: " $(i + n)
+		}
+	}
+}
+
+function abs(n)
+{
+	if (n < 0)
+	{
+		result = -n
+	}
+	else
+	{
+		result = n
+	}
+
+	return result
+}'

@@ -1,0 +1,170 @@
+#!/bin/bash
+
+cleanup ()
+{
+	rm -rf output
+	exit $ExitStatus
+}
+
+progname ()
+{
+	echo $(basename $0)
+}
+
+usage ()
+{
+	echo "Usage: progname [test_parameter_file] [-time]"
+}
+
+find_test_dir()
+{
+	if [ -d test ]; then
+		cd test
+	elif [ -d ../../test ]; then
+		cd ../../test
+	else
+		echo "Cannot find test directory - exiting ..."
+		exit -1
+	fi
+}
+
+set_up()
+{
+	successes=0
+	test_count=0
+	flags="11259"
+	if [ ! -d bin ]; then
+		echo "Where's the bin directory?"
+		exit -1
+	fi
+	PATH=$PATH:./bin
+	if [ ! -r bin/testlib ]; then
+		echo "shell function definitions file testlib is not in bin directory - exiting ..."
+		exit -1
+	else
+		. bin/testlib
+	fi
+	type compare_numbers >/dev/null 2>&1
+	if [ $? -ne 0 ]; then
+		echo "Script compare_numbers is not in bin directory - exiting ..."
+		exit -1
+	fi
+	if [ -d ../EIFGEN/F_code -a -x ../EIFGEN/F_code/ta_server ]; then
+		exec=../EIFGEN/F_code/ta_server
+	elif [ -d ../EIFGEN/W_code -a -x ../EIFGEN/W_code/ta_server ]; then
+		exec=../EIFGEN/W_code/ta_server
+		ln -f -s ../EIFGEN/W_code/melted.eif .
+	else
+		echo "Cannot find executable in ../EIFGEN/F_code or ../EIFGEN/W_code."
+		echo "exiting ..."
+		exit -1
+	fi
+
+	while [ $# -gt 0 ]; do
+		case $1 in
+			-t*) exec="time $exec";;
+			-*) usage; exit ;;
+			*)
+				test_parameter_file=$1
+				if [ ! -r $test_parameter_file ]; then
+					echo "Cannot read $test_parameter_file - exiting ..."
+					ExitStatus=-1
+					exit
+				fi
+			;;
+		esac
+		shift
+	done
+
+	if [ -z "$test_parameter_file" ]; then
+		test_parameter_file=lib/test_files.1
+	fi
+
+	if [ -e output -a ! -d output ]; then
+		echo "Cannot create directory named output since a file already"
+		echo "exists by that name - exiting ..."
+		exit -1
+	elif [ ! -e output ]; then
+		mkdir output
+	fi
+}
+
+filter_output()
+# Filter the output of a test into for processing.
+# Print only the 2nd field of data extracted from the file.
+{
+	awk '/^[0-9][0-9][0-9][0-9]\// { print $2 }'
+}
+
+run_at_index()
+# Run a test on file $Tinput for indicator at index $Tindex.
+{
+	echo "s
+1
+v
+i
+$Tindex
+p
+-
+"|$exec $flags input/$Tinput>output/rawtest.out
+	result=$?
+	if [ "$result" = 0 ]; then
+		filter_output <output/rawtest.out
+	fi
+
+	return $result
+}
+
+run_test()
+{
+	test_count=$(expr $test_count + 1)
+	run_at_index >$outputfile
+	result=$?
+	if [ "$result" = 0 ]; then
+		if [ ! -z "$Tepsilon" ]; then
+			echo "Using epsilon of $Tepsilon"
+		fi
+		errors="$(compare_numbers $outputfile reference/$Toutputref -e $Tepsilon)"
+	else
+		errors="Test execution of $* failed with return status $result"
+	fi
+	if [ -z "$errors" ]; then
+		echo "$*" test succeeded
+		successes=$(expr $successes + 1)
+	else
+		echo "$*" test failed - appending errors to file errors
+		echo $errors >>errors
+	fi
+}
+
+trap "cleanup" 0
+
+trap "ExitStatus=-2 cleanup" \
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 # ...
+
+if [ "$(basename $PWD)" != test ]; then
+	find_test_dir
+fi
+
+if [ $# -gt 0 ]; then
+	set_up $*
+else
+	set_up
+fi
+
+outputfile=output/test1.out
+
+echo "Using executable file $exec"
+set_next_test_params $test_parameter_file
+while [ ! "$Tfinished" = "true" ]; do
+	echo "Running test for $Test_name"
+	run_test $Test_name
+	set_next_test_params $test_parameter_file
+done
+
+echo "$successes out of $test_count tests succeeded."
+if [ "$successes" -eq "$test_count" ]; then
+	ExitStatus=0; cleanup
+else
+	ExitStatus=1; cleanup
+fi

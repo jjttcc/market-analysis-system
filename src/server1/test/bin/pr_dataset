@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ ! $# -eq 2 ]
+then
+	echo "Usage: $0 inputfile regex"
+	exit -1
+fi
+
+file=$1
+arg=$2
+
+sed -n "/$arg/",\$p $file|
+awk '/^[0-9][0-9][0-9][0-9]\// { #date
+	if (finished) exit
+	print $2
+	started=1
+	next
+}
+{ if (started) finished = 1}'
