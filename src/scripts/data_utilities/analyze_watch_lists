@@ -109,7 +109,7 @@ def process_list(watchfile, env_dir, days, portnum):
 		cmd = cmd + ' ' + watchfile_list(watchfile)
 	#print 'processing with command line: ' + cmd
 	cmd_result = os.system(cmd)
-	if cmd_result != 0: do_process_report(cmd_result)
+	if cmd_result != 0: do_process_report(cmd, cmd_result)
 
 os.chdir(list_dir)
 mapf_name = Map_file_name
