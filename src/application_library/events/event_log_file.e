@@ -19,8 +19,6 @@ class EVENT_LOG_FILE inherit
 			make as er_make
 		export {NONE}
 			er_make
-		redefine
-			cleanup
 		end
 
 	GLOBAL_SERVICES
@@ -51,27 +49,14 @@ feature -- Initialization
 			-- `hfile_name' set to `event_history_file_name'
 		require
 			not_void_and_not_empty: fname /= Void and not fname.empty
-		local
-			open_append_failed: BOOLEAN
 		do
-			if not open_append_failed then
-				hfile_name := event_history_file_name
-				er_make
-				make_open_append (fname)
-			else
-				-- Create the file, open a
-				make_create_read_write (fname)
-			end
+			hfile_name := event_history_file_name
+			er_make
+			make_open_append (fname)
 		ensure
 			names_set: name.is_equal (fname) and
 				hfile_name.is_equal (event_history_file_name)
 			appendable: is_open_append
-		rescue
-			if exception = Operating_system_exception then
-			-- make_open_append failed because the file doesn't exist; set up
-			-- for a second try with a make routine that will create the file.
-				open_append_failed := true
-			end
 		end
 
 feature -- Basic operations
@@ -92,12 +77,6 @@ feature -- Basic operations
 						"%Ndescription: ", e.description, "%N">>))
 				elist.forth
 			end
-		end
-
-	cleanup is
-		do
-			close
-			Precursor
 		end
 
 end -- EVENT_LOG_FILE
