@@ -13,6 +13,7 @@ class CL_BASED_FUNCTION_EDITING_INTERFACE inherit
 			print_message as show_message
 		export
 			{NONE} all
+			{ANY} input_device, output_device
 		end
 
 	FUNCTION_EDITING_INTERFACE

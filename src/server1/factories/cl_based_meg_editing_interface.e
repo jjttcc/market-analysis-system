@@ -13,6 +13,7 @@ class CL_BASED_MEG_EDITING_INTERFACE inherit
 			print_message as show_message
 		export
 			{NONE} all
+			{ANY} input_device, output_device
 		end
 
 	MEG_EDITING_INTERFACE

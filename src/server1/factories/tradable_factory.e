@@ -193,7 +193,7 @@ feature {NONE} -- Implementation
 		do
 			if value_setter_vector = Void then
 				i := 1
-				!!value_setter_vector.make (1, 7)
+				!!value_setter_vector.make (1, Last_index)
 				!DAY_DATE_SETTER!setter.make
 				value_setter_vector.put (setter, i)
 				i := i + 1
@@ -224,6 +224,8 @@ feature {NONE} -- Implementation
 				i := i + 1
 			end
 		end
+--!!!Perhaps add an is_intraday state - if true, use DATE_TIME SETTER instead
+--of DATE_SETTER
 
 	add_indicators (t: TRADABLE [BASIC_MARKET_TUPLE];
 					flst: LIST [MARKET_FUNCTION]) is
@@ -243,6 +245,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Tuple field-key constants
 
+--Change this to Date_time_index (and use for both)?:
 	Date_index: INTEGER is 1
 	Open_index: INTEGER is 2
 	High_index: INTEGER is 3
@@ -250,6 +253,7 @@ feature {NONE} -- Tuple field-key constants
 	Close_index: INTEGER is 5
 	Volume_index: INTEGER is 6
 	OI_index: INTEGER is 7
+	Last_index: INTEGER is 7
 
 invariant
 
