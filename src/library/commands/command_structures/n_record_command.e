@@ -29,7 +29,6 @@ feature {MARKET_FUNCTION}
 	initialize (arg: N_RECORD_STRUCTURE) is
 		do
 			set_n (arg.n)
-			--!!!set_owner (arg)
 		ensure then
 			n_set_to_argn: n = arg.n
 		end
