@@ -44,7 +44,7 @@ create
 
 feature {NONE} -- Initialization
 
-	initialize_settings_table is
+	initialize is
 		local
 			i: INTEGER
 		do

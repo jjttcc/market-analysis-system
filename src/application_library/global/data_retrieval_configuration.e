@@ -216,6 +216,18 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	value_index: INTEGER is 2
 
+	new_file_reader: FILE_READER is
+		do
+			create Result.make (configuration_file_name)
+		end
+
+feature {NONE} -- Implementation - Hook routines
+
+	configuration_file_name: STRING is
+			-- The path and name of the configuration file
+		deferred
+		end
+
 feature {NONE} -- Implementation - attributes
 
 	cached_eod_start_date: DATE

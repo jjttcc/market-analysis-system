@@ -43,7 +43,7 @@ feature {NONE} -- Initialization
 			ac_make
 		end
 
-	initialize_settings_table is
+	initialize is
 		do
 			create settings.make (0)
 			initialize_common_settings
