@@ -15,7 +15,7 @@ feature
 feature {NONE} -- Element change
 
 	set_n (value: INTEGER) is
-			-- Set n to the specified value.
+			-- Set n to `value'.
 		require
 			value >= 1
 		do
