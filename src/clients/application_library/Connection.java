@@ -73,7 +73,10 @@ abstract public class Connection {
 	// Postcondition: `result()' gives the data resulting from this request.
 	public void send_request(int request_code, String request)
 			throws IOException {
-//System.out.println("sending request: " + request);
+
+		if (config.debug()) {
+			System.out.println("sending request: " + request);
+		}
 		connect();
 		send_msg(request_code, request, session_state.session_key());
 		receive_msg();
