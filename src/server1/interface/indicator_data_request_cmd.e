@@ -51,7 +51,6 @@ feature {NONE}
 		require
 			tpt_ms_not_void:
 				trading_period_type /= Void and market_symbol /= Void
-			-- indicatorID is valid
 		local
 			indicator: MARKET_FUNCTION
 			tradable: TRADABLE [BASIC_MARKET_TUPLE]
