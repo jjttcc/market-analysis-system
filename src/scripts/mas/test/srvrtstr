@@ -1,0 +1,85 @@
+#!/usr/bin/env perl
+
+# Test driver that connects to the server and simulates a GUI client
+# Expected format of input:
+# msgID\amsg
+
+print "I'm the new server tester.\n";
+use IO::Socket;
+$Error = 101;
+$Login_code = 6;
+$Logout_code = 8;
+
+$EOM = '';
+
+$port = shift || die "Port not specified.";
+$host = shift || "localhost";
+
+$key = login();
+print "Key is $key.\n";
+while ($line = <>) {
+	chop($line);
+	print "Read: '$line'\n";
+	$socket = sendmsg($line);
+	$r = srvr_response($socket);
+	print "response: <<<$r>>>\n";
+	close($socket);
+}
+logout($key);
+
+sub new_socket {
+$socket = new IO::Socket::INET(PeerAddr => $host, PeerPort => $port, 
+	Proto => 'tcp') or die "Could not connect $!"; 
+}
+
+sub abort {
+	my $s = $_[0];
+	if ($s ne '') { print "$s\n"; }
+	exit(1);
+}
+
+sub login {
+	my $s = new_socket();
+#print $s "start_date\tdaily\tdate_spec"
+	print $s "$Login_code\t0\t$EOM";
+	my $response = srvr_response($s);
+	my @flds = split(/\t/, $response);
+	my $key = $flds[1];
+	my $status = $flds[0];
+	if ($status == $Error) {
+		abort "Error logging in: $response";
+	}
+print "Logged in.\n";
+	return $key
+}
+
+sub logout {
+	my $s = new_socket();
+	my $key = $_[0];
+	print $s "$Logout_code\t$key\t$EOM";
+print "Logged out.\n";
+}
+
+sub srvr_response {
+	$s = $_[0];
+	$result = "";
+	while (1) {
+		$c = getc($s);
+		if ($c eq $EOM) {
+			last;
+		}
+		$result .= $c;
+	}
+	return $result;
+}
+
+sub sendmsg {
+	my $s = new_socket();
+	my $line = $_[0];
+	my $msgID = $line;
+	my $msg = $line;
+	$msgID =~ s/\a.*//;
+	$msg =~ s/.*\a//;
+	print $s "$msgID\t$key\t$msg$EOM";
+	return $s;
+}
