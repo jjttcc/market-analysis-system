@@ -6,6 +6,7 @@ root
 
 default
 	assertion (all)
+	arguments ("-i /tmp/market_analyzers 4001")
 	arguments ("-i /tmp/indicators 4001")
 	arguments ("4002 -i /tmp/indicators")
 	arguments ("4001 -i /tmp/indicators")
@@ -54,7 +55,6 @@ cluster
 	support (macl):		"$/support"
 
 	eiflib:		"$MAS/src/eiffel_library"
-
 
 	libarch (eiflib):		"$/architectural"
 
