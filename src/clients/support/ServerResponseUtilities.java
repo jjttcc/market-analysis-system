@@ -2,10 +2,6 @@
 
 package support;
 
-//import java.util.*;
-//import java.text.*;
-//import java.io.*;
-//import common.Constants;
 import common.NetworkProtocol;
 
 /** Utilities for server responses to the GUI client */
