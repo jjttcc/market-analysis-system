@@ -12,7 +12,7 @@ import java.net.URL;
 /*
 **************************************************************************
 **
-**                      Class  graph.TA_Graph
+**                      Class  graph.MA_Graph
 **
 **************************************************************************
 **    Copyright (C) 1995, 1996 Leigh Brookshaw
@@ -54,7 +54,7 @@ import java.net.URL;
  * @author   Leigh Brookshaw
  */
 
-public class TA_Graph extends Canvas {
+public class MA_Graph extends Canvas {
 
 
 /*
@@ -73,14 +73,14 @@ public class TA_Graph extends Canvas {
 
 /**
  *  A vector list of All the axes attached
- *  @see TA_Graph#attachAxis()
+ *  @see MA_Graph#attachAxis()
  */
 
     protected Vector axis          = new Vector(4);
 
 /**
  *  A vector list of All the DataSets attached
- *  @see TA_Graph#attachDataSet()
+ *  @see MA_Graph#attachDataSet()
  *  @see DataSet
  */
 
@@ -88,14 +88,14 @@ public class TA_Graph extends Canvas {
 
 /**
  *  The markers that may have been loaded
- *  @see TA_Graph#setMarkers()
+ *  @see MA_Graph#setMarkers()
  */
 
     protected Markers markers = null;
 
 /**
  * The blinking "data loading" thread
- * @see TA_Graph#startedloading()
+ * @see MA_Graph#startedloading()
  */
 
     protected LoadMessage load_thread = null;
@@ -464,7 +464,7 @@ public class TA_Graph extends Canvas {
         if(DefaultBackground == null) DefaultBackground=this.getBackground();
         if(DataBackground == null)    DataBackground=this.getBackground();
 
-//        System.out.println("TA_Graph paint method called!");
+//        System.out.println("MA_Graph paint method called!");
 
         if( !paintAll ) return;
 
@@ -550,7 +550,7 @@ public class TA_Graph extends Canvas {
  */
     public void update(Graphics g) {
 
-//          System.out.println("TA_Graph update method called");
+//          System.out.println("MA_Graph update method called");
         if( clearAll ) {
             Color c = g.getColor();
 	    /* The r.x and r.y returned from bounds is relative to the
@@ -591,8 +591,8 @@ public class TA_Graph extends Canvas {
  *  net. Everytime this routine is called a counter is incremented
  *  the method finishedloading() decrements the counter. When the
  *  counter is back to zero the plotting resumes.
- *  @see TA_Graph#finishedloading()
- *  @see TA_Graph#loadmessage()
+ *  @see MA_Graph#finishedloading()
+ *  @see MA_Graph#loadmessage()
  *  @see LoadMessage
 */
     public void startedloading() {
@@ -611,8 +611,8 @@ public class TA_Graph extends Canvas {
 /**
  * Decrement the loading Data counter by one. When it is zero resume
  * plotting.
- *  @see TA_Graph#startedloading()
- *  @see TA_Graph#loadmessage()
+ *  @see MA_Graph#startedloading()
+ *  @see MA_Graph#loadmessage()
  *  @see LoadMessage
 */
     public void finishedloading() {
@@ -628,8 +628,8 @@ public class TA_Graph extends Canvas {
 /**
  * Change the message to be flashed on the canvas
  * @param s String contining the new message.
- * @see TA_Graph#startedloading()
- * @see TA_Graph#finishedloading()
+ * @see MA_Graph#startedloading()
+ * @see MA_Graph#finishedloading()
  * @see LoadMessage
 */
     public void loadmessage(String s) {
@@ -904,11 +904,11 @@ class FileFormatException extends Exception {
 
 /**
  *   This is a separate thread that flashes a message
- *   on the TA_Graph canvas that data is loading
+ *   on the MA_Graph canvas that data is loading
  */
 
 class LoadMessage extends Thread {
-        TA_Graph  g2d;
+        MA_Graph  g2d;
         String   message    = "Loading Data ... Please Wait!";
         String   newmessage = null;
         long     visible    = 500;
@@ -919,20 +919,20 @@ class LoadMessage extends Thread {
         
 /**
  *    Instantiate the class
- * @param g2d The TA_Graph canvas to draw message on
+ * @param g2d The MA_Graph canvas to draw message on
  *
  */            
-        public LoadMessage(TA_Graph g2d) {
+        public LoadMessage(MA_Graph g2d) {
            this.g2d = g2d;
 
         }
 
 /**
  *  Instantiate the class
- * @param g2d The TA_Graph canvas to draw message on
+ * @param g2d The MA_Graph canvas to draw message on
  * @param s   The string to flash on the canvas
  */            
-        public LoadMessage(TA_Graph g2d, String s) {
+        public LoadMessage(MA_Graph g2d, String s) {
 
            this(g2d);
            this.message = s;
@@ -940,13 +940,13 @@ class LoadMessage extends Thread {
         }
 /**
  *  Instantiate the class
- * @param g2d The TA_Graph canvas to draw message on
+ * @param g2d The MA_Graph canvas to draw message on
  * @param s   The string to flash on the canvas
  * @param visible Number of milliseconds the message is visible
  * @param invisible Number of milliseconds the message is invisible
  */            
 
-        public LoadMessage(TA_Graph g, String s, long visible, long invisible) {
+        public LoadMessage(MA_Graph g, String s, long visible, long invisible) {
             this(g,s);
             this.visible = visible;
             this.invisible = invisible;

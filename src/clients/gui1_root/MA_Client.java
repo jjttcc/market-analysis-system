@@ -1,12 +1,12 @@
 import java.io.*;
 import java.net.*;
 
-/** Root class for the TA client process */
-public class TA_Client
+/** Root class for the Market Analysis client process */
+public class MA_Client
 {
 	public static void main(String[] args) throws IOException
 	{
-		TA_Connection connection = new TA_Connection(args);
-		TA_Chart chart = new TA_Chart(connection);
+		MA_Connection connection = new MA_Connection(args);
+		MA_Chart chart = new MA_Chart(connection);
 	}
 }

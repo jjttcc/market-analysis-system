@@ -4,17 +4,17 @@ import java.util.Vector;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
-/** Scroll pane that holds the TA graph and buttons */
-public class TA_ScrollPane extends ScrollPane
+/** Scroll pane that holds the Market Analysis graph and buttons */
+public class MA_ScrollPane extends ScrollPane
 {
-	public TA_ScrollPane(Vector period_types, int scrollbarDisplayPolicy,
-				TA_Chart parent_chart)
+	public MA_ScrollPane(Vector period_types, int scrollbarDisplayPolicy,
+				MA_Chart parent_chart)
 	{
 		super(scrollbarDisplayPolicy);
 
 		chart = parent_chart;
-		_main_graph = new TA_GraphInteractive();
-		_indicator_graph = new TA_GraphInteractive();
+		_main_graph = new MA_GraphInteractive();
+		_indicator_graph = new MA_GraphInteractive();
 		period_type_choice = new Choice();
 		initialize_period_type_choice(period_types);
 
@@ -52,12 +52,12 @@ public class TA_ScrollPane extends ScrollPane
 	}
 
 	// The main graph - where the principal market data is displayed
-	public TA_Graph main_graph() {
+	public MA_Graph main_graph() {
 		return _main_graph;
 	}
 
 	// The indicator graph - where the indicator data is displayed
-	public TA_Graph indicator_graph() {
+	public MA_Graph indicator_graph() {
 		return _indicator_graph;
 	}
 
@@ -122,13 +122,13 @@ public class TA_ScrollPane extends ScrollPane
 		});
 	}
 
-	private TA_GraphInteractive _main_graph;
-	private TA_GraphInteractive _indicator_graph;
+	private MA_GraphInteractive _main_graph;
+	private MA_GraphInteractive _indicator_graph;
 	// Did _main_graph change since it was last repainted?
 	boolean main_graph_changed;
 	// Did _indicator_graph change since it was last repainted?
 	boolean indicator_graph_changed;
 	Choice period_type_choice;
-	TA_Chart chart;
+	MA_Chart chart;
 	String _last_period_type;
 }

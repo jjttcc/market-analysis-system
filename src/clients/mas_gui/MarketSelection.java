@@ -5,7 +5,7 @@ import java.util.*;
 
 // Listener that allows user to select a market to be displayed.
 class MarketSelection implements ActionListener {
-	public MarketSelection(TA_Chart f) {
+	public MarketSelection(MA_Chart f) {
 		main_frame = f;
 		selection = new List();
 		dialog = new Dialog(f);
@@ -34,5 +34,5 @@ class MarketSelection implements ActionListener {
 
 	private List selection;
 	private Dialog dialog;
-	private TA_Chart main_frame;
+	private MA_Chart main_frame;
 }

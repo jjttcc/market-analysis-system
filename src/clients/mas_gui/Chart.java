@@ -15,10 +15,10 @@ import java.io.*;
 import graph.*;
 import support.*;
 
-/** Technical analysis GUI chart component */
-public class TA_Chart extends Frame {
-	public TA_Chart(TA_Connection conn) {
-		super("TA_Chart");		// Create the main window frame.
+/** Market analysis GUI chart component */
+public class MA_Chart extends Frame {
+	public MA_Chart(MA_Connection conn) {
+		super("MA_Chart");		// Create the main window frame.
 		num_windows++;			// Count it.
 		connection = conn;
 		Vector inds;
@@ -178,8 +178,8 @@ public class TA_Chart extends Frame {
 
 	private void initialize_GUI_components() {
 		// Create the main scroll pane, size it, and center it.
-		main_pane = new TA_ScrollPane(_period_types,
-			TA_ScrollPane.SCROLLBARS_NEVER, this);
+		main_pane = new MA_ScrollPane(_period_types,
+			MA_ScrollPane.SCROLLBARS_NEVER, this);
 		main_pane.setSize(610, 410);
 		add(main_pane, "Center");
 		market_selection = new MarketSelection(this);
@@ -207,7 +207,7 @@ public class TA_Chart extends Frame {
 
 		// Create and register action listener objects for the three menu items.
 		newwin.addActionListener(new ActionListener() {	// Open a new window
-		public void actionPerformed(ActionEvent e) { new TA_Chart(connection); }
+		public void actionPerformed(ActionEvent e) { new MA_Chart(connection); }
 		});
 
 		mkt_selection.addActionListener(market_selection);
@@ -271,7 +271,7 @@ public class TA_Chart extends Frame {
 		connection.logout(true, status, session_key);
 	}
 
-	private TA_Connection connection;
+	private MA_Connection connection;
 
 	// # of open windows - so program can exit when last one is closed
 	protected static int num_windows = 0;
@@ -280,7 +280,7 @@ public class TA_Chart extends Frame {
 	protected int session_key;
 
 	// Main window pane
-	TA_ScrollPane main_pane;
+	MA_ScrollPane main_pane;
 
 	// Valid trading period types - static for now, since it is currently
 	// hard-coded in the server

@@ -6,26 +6,26 @@ import graph.*;
 import support.*;
 
 /** Provides an interface for connecting and communicating with the server */
-public class TA_Connection implements NetworkProtocol
+public class MA_Connection implements NetworkProtocol
 {
-	TA_Connection(String[] args)
+	MA_Connection(String[] args)
 	{
 		int field_specs[] = new int[6];
 		// Hard-code these for now:
-		field_specs[0] = TA_Parser.Date;
-		field_specs[1] = TA_Parser.Open;
-		field_specs[2] = TA_Parser.High;
-		field_specs[3] = TA_Parser.Low;
-		field_specs[4] = TA_Parser.Close;
-		field_specs[5] = TA_Parser.Volume;
-		data_parser = new TA_Parser(field_specs, Output_record_separator,
+		field_specs[0] = MA_Parser.Date;
+		field_specs[1] = MA_Parser.Open;
+		field_specs[2] = MA_Parser.High;
+		field_specs[3] = MA_Parser.Low;
+		field_specs[4] = MA_Parser.Close;
+		field_specs[5] = MA_Parser.Volume;
+		data_parser = new MA_Parser(field_specs, Output_record_separator,
 									Output_field_separator);
 		// Set up the indicator parser to expect just a date and a float
 		// (close) value.
 		field_specs = new int[2];
-		field_specs[0] = TA_Parser.Date;
-		field_specs[1] = TA_Parser.Close;
-		indicator_parser = new TA_Parser(field_specs, Output_record_separator,
+		field_specs[0] = MA_Parser.Date;
+		field_specs[1] = MA_Parser.Close;
+		indicator_parser = new MA_Parser(field_specs, Output_record_separator,
 									Output_field_separator);
 		scanner = new DataInspector();
 		main_drawer = new_main_drawer();
@@ -318,8 +318,8 @@ public class TA_Connection implements NetworkProtocol
 	private DataSet _last_indicator_data;
 		// result of last indicator list request
 	private Vector _last_indicator_list;
-	private TA_Parser data_parser;
-	private TA_Parser indicator_parser;
+	private MA_Parser data_parser;
+	private MA_Parser indicator_parser;
 	private Drawer main_drawer;		// draws tuples in main graph
 	private Drawer indicator_drawer;// draws tuples in indicator graph
 	private Drawer volume_drawer;	// draws volume tuples

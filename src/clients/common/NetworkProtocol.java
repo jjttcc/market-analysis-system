@@ -1,6 +1,6 @@
 package common;
 
-/** Constants specifying the components of the TA network 
+/** Constants specifying the components of the Market Analysis network 
 communication protocol */
 public interface NetworkProtocol
 {
