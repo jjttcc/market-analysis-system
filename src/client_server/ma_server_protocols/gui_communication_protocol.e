@@ -50,6 +50,10 @@ feature -- Server response IDs
 	OK: INTEGER is 102
 			-- Response indicating that no errors occurred
 
+	Invalid_symbol: INTEGER is 103
+			-- Response indicating that the server requested data for
+			-- a symbol that is not in the database
+
 feature -- Subtokens
 
 	Start_date: STRING is "start_date"
