@@ -156,7 +156,6 @@ feature -- Access - an instance of each market function
 
 	market_function_line: MARKET_FUNCTION_LINE is
 		local
-			commands: expanded COMMANDS
 			point1, point2: MARKET_POINT
 			earlier, later: DATE_TIME
 		once
@@ -182,8 +181,6 @@ feature -- Access - an instance of each market function
 		end
 
 	market_data_function: MARKET_DATA_FUNCTION is
-		local
-			commands: expanded COMMANDS
 		once
 			create Result.make (stock)
 		end
