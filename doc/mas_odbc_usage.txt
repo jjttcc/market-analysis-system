@@ -1,0 +1,25 @@
+Using MAS with ODBC
+
+For MAS to work with an ODBC driver
+the file 'ms_dbsrvrc' must be present
+in the same directory as mas.exe.
+
+The file contains entries identifying
+data source name, username, password,
+the query for retrieving symbols from
+the database, the query for retrieving
+market data for a given symbol from the 
+database and the name of the host variable
+used in the market data query.
+
+Each key-value pair must be separated by a tab
+character.
+
+Example:
+
+data_source_name	my_db
+user_id	demo
+password	nosuchthing
+markets	select symbol from Security where symbolclass = 14 order by symbol
+market_data_query	select tradeDay, openVal, high, low, last, turnoverVol from tradehistory where tradehistory.symbol = :symbol order by tradeDay
+market_data_host_var	symbol
