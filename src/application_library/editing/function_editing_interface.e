@@ -444,21 +444,27 @@ feature {NONE} -- Implementation
 			-- long description - the paremeter's function name, current
 			-- type, and type description - is included.  Otherwise,
 			-- only the name is included.
+		local
+			desc, value, spaces: STRING
 		do
 			create Result.make (1)
+			spaces := "  "
 			from
 				l.start
 			until
 				l.exhausted
 			loop
 				if desc_type = 'l' then
-					Result.extend (concatenation (<<l.item.name, " - ",
-						l.item.function.name, " (value: ",
+					desc := l.item.description
+					value := concatenation (<<"(value: ",
 						l.item.current_value, ", type: ",
-						l.item.value_type_description, ")">>))
+						l.item.value_type_description, ")">>)
+					if desc.count + value.count > 74 then
+						spaces := "%N    "
+					end
+					Result.extend (concatenation (<<desc, spaces, value>>))
 				elseif desc_type = 's' then
-					Result.extend (concatenation (<<l.item.name, " - ",
-						l.item.function.name>>))
+					Result.extend (l.item.description)
 				else
 					Result.extend (l.item.name)
 				end
@@ -571,8 +577,10 @@ feature {NONE} -- Implementation - indicator editing
 			selection: INTEGER
 			p: FUNCTION_PARAMETER
 			query: STRING
-			gs: expanded GENERIC_SORTING [STRING, STRING]
+			gs: expanded GENERIC_SORTING [FUNCTION_PARAMETER, HASHABLE]
+			fpl: LIST [FUNCTION_PARAMETER]
 		do
+			fpl := gs.sorted_list (parameters)
 			from
 				selection := Null_value
 				if parameters.empty then
@@ -588,10 +596,10 @@ feature {NONE} -- Implementation - indicator editing
 			until
 				selection = Exit_value
 			loop
-				selection := list_selection_with_backout (gs.sorted_list (
-					names_from_parameter_list (parameters, 'l')), query)
+				selection := list_selection_with_backout (
+					names_from_parameter_list (fpl, 'l'), query)
 				if selection /= Exit_value then
-					p := parameters @ selection
+					p := fpl @ selection
 					edit_parameter (p)
 				end
 			end
@@ -602,7 +610,7 @@ feature {NONE} -- Implementation - indicator editing
 		local
 			msg, msg2, value: STRING
 		do
-			msg := concatenation (<<"The current value for ", p.function.name,
+			msg := concatenation (<<"The current value for:%N", p.description,
 				" is ", p.current_value, " - new value?">>)
 			from
 				value := string_selection (msg)
