@@ -1,11 +1,12 @@
 /* Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt */
 
+import java.awt.event.*;
 import java.util.*;
 import support.*;
 import graph.DataSet;
 
 /** Listener for indicator selection */
-public class IndicatorListener implements java.awt.event.ActionListener {
+public class IndicatorListener implements ActionListener {
 	public IndicatorListener(Chart c) {
 		chart = c;
 		data_builder = chart.data_builder;
