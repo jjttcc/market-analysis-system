@@ -444,13 +444,24 @@ feature {NONE} -- Implementation
 			-- Result of replacing "<symbol>" with `symbol'
 		local
 			start_index, end_index: INTEGER
+			sym, upper: STRING
 		do
+			upper := "upper"
 			start_index := query.index_of ('<', 1)
 			if start_index >= 1 then
 				Result := clone (query)
 				end_index := Result.index_of ('>', start_index)
 				if end_index >= 1 then
-					Result.replace_substring (concatenation (<<"'", symbol,
+					if
+						query.substring (start_index + 1,
+							start_index + upper.count).is_equal (upper)
+					then
+						sym := clone (symbol)
+						sym.to_upper
+					else
+						sym := symbol
+					end
+					Result.replace_substring (concatenation (<<"'", sym,
 						"'">>), start_index, end_index)
 				else
 					fatal_error := true
