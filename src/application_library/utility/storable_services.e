@@ -99,6 +99,9 @@ feature {NONE} -- Implementation
 			initialize_lock
 			lock.try_lock
 			if not lock.locked then
+				if lock.error_occurred then
+					show_message (lock.last_error)
+				end
 				prompt_for_edit_state
 				if ok_to_save then
 					show_message ("Waiting to obtain a lock ...")
