@@ -26,27 +26,16 @@ feature {MEDIUM_POLLER} -- Basic operations
 			socket: NETWORK_STREAM_SOCKET
 		do
 			response := ""
-print ("A " + (create {DATE_TIME}.make_now).out + "%N")
-active_medium.set_timeout (1)
-active_medium.set_non_blocking
+			active_medium.set_timeout (1)
+			active_medium.set_non_blocking
 			active_medium.listen (1)
 			if active_medium.socket_ok then
-print (active_medium.socket_would_block.out + "%N")
-print (active_medium.readable.out + "%N")
-print (active_medium.is_blocking.out + "%N")
-print (active_medium.is_linger_on.out + "%N")
-print (active_medium.ready_for_reading.out + "%N")
-print (active_medium.ready_for_writing.out + "%N")
-print (active_medium.socket_in_use.out + "%N")
 				active_medium.accept
-print ("C " + (create {DATE_TIME}.make_now).out + "%N")
 				socket := active_medium.accepted
 				if socket /= Void and then socket.socket_ok then
 					socket.read_stream (Buffer_size)
-print ("F " + (create {DATE_TIME}.make_now).out + "%N")
 					if socket.last_string /= Void then
 						response := socket.last_string
-print ("G (received " + response + " " + (create {DATE_TIME}.make_now).out + "%N")
 					end
 				else
 					if socket /= Void then
@@ -57,13 +46,10 @@ print ("G (received " + response + " " + (create {DATE_TIME}.make_now).out + "%N
 				end
 				if socket /= Void and then not socket.is_closed then
 					socket.close
-print ("I " + (create {DATE_TIME}.make_now).out + "%N")
 				end
 			else
-print ("oops: " + active_medium.out + "%N")
-print ("K " + (create {DATE_TIME}.make_now).out + "%N")
+				--@@An error report is probably needed here.
 			end
-print ("J " + (create {DATE_TIME}.make_now).out + "%N")
 		ensure
 			response_exists: response /= Void
 		end

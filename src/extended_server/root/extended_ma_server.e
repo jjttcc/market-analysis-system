@@ -29,14 +29,10 @@ feature {NONE} -- Initialization
 			platform: expanded PLATFORM_DEPENDENT_OBJECTS
 			cl_dummy: MAS_COMMAND_LINE
 		do
-print ("A%N")
+			-- Force the platform's command-line to be an "extended" one.
 			cl_dummy := platform.command_line_cell (extended_command_line).item
-print ("B%N")
 			create errors.make (0)
-print ("C%N")
-print ("Calling mas_make%N")
 			mas_make
-print ("D%N")
 		end
 
 	compile_this is

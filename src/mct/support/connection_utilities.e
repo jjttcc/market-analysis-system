@@ -42,7 +42,6 @@ feature -- Basic operations
 			i: INTEGER
 		do
 			from
-print ("csa connecting on port " + port + " (" + i.out + ")...%N")
 				microsleep (0, initial_sleep_micro_seconds)
 				Result := server_connection_diagnosis (host, port)
 				i := 1
@@ -51,7 +50,6 @@ print ("csa connecting on port " + port + " (" + i.out + ")...%N")
 				Result = Void or i = tries
 			loop
 				microsleep (0, sleep_micro_seconds)
-print ("csa connecting on port " + port + " (" + i.out + ")...%N")
 				Result := server_connection_diagnosis (host, port)
 				i := i + 1
 			end
