@@ -353,8 +353,6 @@ feature {NONE} -- Implementation
 		end
 
 	set_non_standard_period_types is
-		local
-			gs: expanded GLOBAL_SERVICES
 		do
 			-- Continue to loop until all nonstd options are removed.
 			from
