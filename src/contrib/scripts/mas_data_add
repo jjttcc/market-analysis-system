@@ -1,0 +1,106 @@
+#!/usr/bin/perl
+# Author: Graeme Blackman
+# Transfer the data from the quotemonster download file (quotes.prn) to
+# the database. The script uses a 'SELECT...EXCEPT...' sql statement to
+# initially discard any duplicated data.  This does not work properly if the
+# 'volume' column is type float4 because of rounding differences. Setting
+# the column to type int4 fixes this.
+
+
+use Pg;
+
+my $db          = 'mas';
+my $user        ='grb';
+my $file        ='/usr/local/share/quotemonster/quotes.prn';
+my $logfile     ='Data.log';                                    # file to log retrieval history
+my $i           =0;
+my $sql;
+
+# exit if there is not a new data file $file
+if (! -e $file) {
+        open (LOGFILE, ">>$logfile") or die("Can't open log file - $!");
+        print LOGFILE "\tNo data file found\n";
+        close LOGFILE;
+        exit;
+}
+
+# connect to database
+$conn = Pg::connectdb("dbname=$db user=$user");
+die $conn->errorMessage unless PGRES_CONNECTION_OK eq $conn->status;
+
+# create temporary table new_data
+$result = $conn->exec("CREATE TEMP TABLE new_data () INHERITS (daily_stock_data)");
+die $conn->errorMessage unless PGRES_COMMAND_OK eq $result->resultStatus;
+
+# copy new data into new_data
+$result = $conn->exec("COPY new_data FROM '".$file."' DELIMITERS ','");
+die $conn->errorMessage unless PGRES_COMMAND_OK eq $result->resultStatus;
+
+# insert non-duplicated records into temporary table unique_data
+$result = $conn->exec("SELECT * INTO TEMP unique_data FROM new_data EXCEPT SELECT * FROM daily_stock_data");
+die $conn->errorMessage unless PGRES_COMMAND_OK eq $result->resultStatus;
+
+# drop table new_data
+$result=$conn->exec("DROP TABLE new_data");
+die $conn->errorMessage unless PGRES_COMMAND_OK eq $result->resultStatus;
+
+# identify records in new data that have the same symbol/date as records in daily_stock_data
+$result = $conn->exec("SELECT symbol,date FROM unique_data INTERSECT SELECT symbol,date FROM daily_stock_data");
+die $conn->errorMessage unless PGRES_TUPLES_OK eq $result->resultStatus;
+
+# update these records in daily_stock_data then delete from unique_data
+while ($i<$result->ntuples) {
+        $sql= "SELECT * FROM unique_data WHERE symbol='".$result->getvalue($i,0)."' AND date=".$result->getvalue($i,1)."";
+        $select = $conn->exec($sql);
+        die $conn->errorMessage unless PGRES_TUPLES_OK eq $select->resultStatus;
+
+        $sql="UPDATE daily_stock_data SET ";
+        $sql.="open_price=".$select->getvalue(0,2).",";
+        $sql.="high_price=".$select->getvalue(0,3).",";
+        $sql.="low_price=".$select->getvalue(0,4).",";
+        $sql.="close_price=".$select->getvalue(0,5).",";
+        $sql.="volume=".$select->getvalue(0,6);
+        $sql.=" WHERE symbol='".$result->getvalue($i,0)."'";
+        $sql.=" AND date=".$result->getvalue($i,1)."";
+
+        $update = $conn->exec($sql);
+        die $conn->errorMessage unless PGRES_TUPLES_OK eq $result->resultStatus;
+
+        $delete = $conn->exec("DELETE FROM unique_data WHERE symbol='".$result->getvalue($i,0)."' AND date='".$result->getvalue($i,1)."'");
+        die $conn->errorMessage unless PGRES_TUPLES_OK eq $result->resultStatus;
+
+        $i++;
+}
+
+open (LOGFILE, ">>$logfile") or die("Can't open log file - $!");
+print LOGFILE "\trecords updated: ".$result->ntuples."\n";
+
+# copy new records to table daily_stock_data
+$result = $conn->exec("INSERT INTO daily_stock_data SELECT * FROM unique_data EXCEPT SELECT * FROM daily_stock_data");
+die $conn->errorMessage unless PGRES_COMMAND_OK eq $result->resultStatus;
+print LOGFILE "\trecords added: ".$result->cmdTuples."\n";
+
+# drop temporary table unigue_data
+$result=$conn->exec("DROP TABLE unique_data");
+die $conn->errorMessage unless PGRES_COMMAND_OK eq $result->resultStatus;
+
+# ensure all symbols in daily_stock_data are in stock_information
+$result = $conn->exec("INSERT INTO stock_information SELECT DISTINCT symbol FROM daily_stock_data EXCEPT SELECT symbol FROM stock_information");
+die $conn->errorMessage unless PGRES_COMMAND_OK eq $result->resultStatus;
+
+if ($result->cmdTuples>0) {
+        print LOGFILE "\tsymbols added: ".$result->cmdTuples."\n";
+}
+close LOGFILE;
+
+# mark data file $file as read
+system("mv $file $file.'added'");
+
+
+
+
+
+
+
+
+
