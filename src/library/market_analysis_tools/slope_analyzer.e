@@ -13,6 +13,9 @@ class SLOPE_ANALYZER inherit
 		end
 
 	LINEAR_COMMAND
+		export {MARKET_FUNCTION}
+			initialize
+		end
 
 creation
 
