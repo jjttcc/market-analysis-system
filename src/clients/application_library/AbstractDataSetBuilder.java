@@ -16,7 +16,6 @@ abstract public class AbstractDataSetBuilder extends NetworkProtocolUtilities {
 	// Precondition: conn != null && opts != null
 	public AbstractDataSetBuilder(Connection conn, StartupOptions opts) {
 //		assert conn != null && opts != null;
-System.out.println("AbstractDataSetBuilder(Connection, StartupOptions) called");
 		connection = conn;
 		options = opts;
 		try {
@@ -25,7 +24,6 @@ System.out.println("AbstractDataSetBuilder(Connection, StartupOptions) called");
 	}
 
 	public AbstractDataSetBuilder(AbstractDataSetBuilder dsb) {
-System.out.println("AbstractDataSetBuilder(AbstractDataSetBuilder ) called");
 		try {
 			connection = dsb.connection().new_object();
 			options = dsb.options;
