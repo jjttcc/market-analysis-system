@@ -39,7 +39,7 @@ public class MA_Client {
 
 	private static void initialize_configuration() {
 		try {
-			Configuration.set_input_source(new FileReaderUtilities(
+			Configuration.set_input_source(new FileTokenizer(
 				configuration_file_name));
 		} catch (IOException e) {
 			System.err.println("Failed to open configuration file: " +
