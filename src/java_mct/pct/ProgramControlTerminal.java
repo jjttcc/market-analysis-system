@@ -4,19 +4,6 @@ import java.util.Vector;
 import java.io.*;
 import support.FileReaderUtilities;
 
-//!!!NOTE: Idea: instead of using the dynamic exec tool that the python
-//version used, make it into a framework.  Specializing classes can
-//provide application-specific facilities.
-
-//!!!NOTE: Idea2:  In addition to or instead of the above, allow the
-// user to specify in the config. file the name of the class and method
-// to use for the start command.  Then the user will supply the code
-// for this class and the method will be invoked using reflection.
-// (This is similar to the python design.)  There should probably be
-// a table or list of objects (created by the user) that will be
-// searched to find the specified class.  Catch exceptions to notify
-// user of invalid method name, etc.
-
 // GUI terminal that provides general program control facilities
 public class ProgramControlTerminal extends PCT_Tools {
 
@@ -63,17 +50,6 @@ public class ProgramControlTerminal extends PCT_Tools {
 			f.forth();
 		}
 		return result;
-	}
-
-//!!!!I believe this routine is obsolete - remove.
-	// Set the arguments for the subcomponents' startup command.
-	void set_args(Vector args) {
-		if (args != null && args.size() > 0) {
-			for (int i = 0; i < subcomponents.size(); ++i) {
-				((PCT_Component)
-					subcomponents.elementAt(i)).prepend_cmd_args(args);
-			}
-		}
 	}
 
 	// Parse and process `lines' using separator `sep'.
