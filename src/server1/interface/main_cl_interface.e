@@ -301,8 +301,10 @@ feature {NONE} -- Implementation
 			-- Run market analysis using event coordinator.
 		do
 			if event_coordinator.start_date_time = Void then
-				print ("%NError: Start date must be set before %
+				log_error ("%NError: Start date must be set before %
 					%running analysis.%N")
+			elseif market_list_handler.empty then
+				print ("%NNo tradables to analyze - tradable list is empty.%N")
 			else
 				-- Ensure that the market event generators and event
 				-- registrants currently in persistent store are used
@@ -317,7 +319,7 @@ feature {NONE} -- Implementation
 				factory_builder.make_dispatcher
 				event_coordinator.set_dispatcher (factory_builder.dispatcher)
 				load_market_event_histories
-				if error_occurred then print_list (<<last_error, "%N">>) end
+				if error_occurred then log_errors (<<last_error, "%N">>) end
 				event_coordinator.execute
 				save_market_event_histories
 			end
