@@ -105,7 +105,7 @@ fi
 check_dirs
 tmpfile=/tmp/procsplits.$$
 
-src_split_files="$(ls SPLT* 2>/dev/null)"
+src_split_files="$(ls SPLT* splt* 2>/dev/null)"
 if [ ! -z "$src_split_files" ]; then
 	for f in $src_split_files; do
 		if use_db; then
