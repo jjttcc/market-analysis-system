@@ -1,6 +1,8 @@
 indexing
 	description: "An instance of each instantiable class that conforms to G"
 	author: "Jim Cochrane"
+	note: "@@This class does not depend on any specialized classes and %
+		%can probably be cleanly moved to the ma_library cluster."
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
@@ -96,19 +98,21 @@ feature {NONE} -- Implementation
 		end
 
 	one_of_each (l: ARRAYED_LIST [PAIR [G, STRING]]): BOOLEAN is
+			-- Is there just one object of each separate type in `l',
+			-- differentiated by l.item.right?
 		local
 			namelist: ARRAYED_LIST [STRING]
 		do
-			Result := true
+			Result := True
 			create namelist.make (l.count)
 			namelist.compare_objects
 			from
 				l.start
 			until
-				Result = false or l.exhausted
+				Result = False or l.exhausted
 			loop
 				if namelist.has (l.item.right) then
-					Result := false
+					Result := False
 				else
 					namelist.extend (l.item.right)
 					l.forth
@@ -116,4 +120,4 @@ feature {NONE} -- Implementation
 			end
 		end
 
-end -- CLASSES
+end
