@@ -3,7 +3,7 @@ indexing
 		"A market function that is also an sequence of market tuples. %
 		%Its purpose is to act as the innermost function in a composition %
 		%of functions."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -75,7 +75,7 @@ feature -- Access
 	processed_date_time: DATE_TIME is
 		once
 			-- Very early date
-			!!Result.make (0, 1, 1, 0, 0, 0)
+			!!Result.make (1, 1, 1, 0, 0, 0)
 		end
 
 feature {FACTORY} -- Status setting
