@@ -49,8 +49,6 @@ feature -- Access
 		end
 
 	item: TRADABLE [BASIC_MARKET_TUPLE] is
-		local
-			input_file: PLAIN_TEXT_FILE
 		do
 			check
 				indices_equal: index = tradable_factories.index
@@ -207,6 +205,8 @@ feature {NONE} -- Implementation
 	setup_input_medium is
 			-- Ensure that tradable_list has access to the current
 			-- input medium, if it exists.
+		require
+			tf_index_current: index = tradable_factories.index
 		do
 		end
 
