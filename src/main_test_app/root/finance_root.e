@@ -37,8 +37,9 @@ feature -- Initialization
 	make is
 		local
 			ui: TEST_USER_INTERFACE
-			mfl: MARKET_FUNCTION_LINE -- for test compile
+			functions: MARKET_FUNCTIONS -- !!For test compile
 		do
+			!!functions
 			!!ui
 			ui.set_output_field_separator ("%T")
 			ui.set_date_field_separator ("/")
