@@ -1,5 +1,5 @@
-#!/bin/ksh
-#  Pre-process a pre-groff-formatted document into groff.
+#!/bin/bash
+#  Pre-process a formatted document into groff or html.
 
 Progname=$(basename $0)
 
@@ -72,19 +72,60 @@ awk 'BEGIN {
 /^#/ { next } # skip #comment...
 
 html() && /\\fB/ {
-system("echo BOLD on line " NR " >&2")
 	gsub(/\\fB/, "<B>")
 	boldon = TRUE
 }
 
 html() && /\\fI/ {
-system("echo ITALIC on line " NR " >&2")
 	gsub(/\\fI/, "<I>")
 	italon = TRUE
 }
 
+(html() && $0 ~ /http:\/\//) {
+	fldcnt = split($0, line, " ")
+	$0 = ""
+	for (i = 1; i <= fldcnt; ++i) {
+		if (line[i] ~ /http:\/\//) {
+			no_space = TRUE
+			urlname = line[i]
+			sub(/http:\/\//, "", urlname)
+			sub(/\/.*/, "", urlname)
+			# An URL cannot end with a period, so assume that any periods at
+			# the end of "addr" are not part of the URL - place them
+			# after the URL tag.
+			addr = line[i]
+			append_str = ""
+			if (line[i] ~ /\.$/) {
+				append_str = addr
+				# Remove all "."s at the end of "addr":
+				sub(/\.*$/, "", addr)
+				# Remove all characters from "append_str" except for
+				# the "."s at the end.
+				while (append_str !~ /^\.\.*$/) {
+					# Remove any "."s at beginning of "append_str":
+					sub(/^\.*/, "", append_str)
+					# Remove all non-dot characters at beginning
+					# of "append_str":
+					sub(/^[^.]*/, "", append_str)
+				}
+			}
+			$0 = $0 url(addr, urlname) append_str
+		} else {
+			if (i > 1 && ! no_space) {
+				$0 = $0 " " line[i]
+			} else {
+				if (no_space) {
+					$0 = $0 "\n" line[i]
+					no_space = FALSE
+				} else {
+					$0 = $0 line[i]
+				}
+			}
+		}
+	}
+}
+
 html() && /\\fP/ {
-system("echo font-OFF on line " NR " >&2")
 	if (boldon) {
 		gsub(/\\fP/, "</B>")
 		boldon = FALSE
@@ -260,6 +301,10 @@ function html() {
 	result = 0
 	if ("'$html'" == "TRUE") result = 1
 	return result
+}
+
+function url(address, label) {
+	return sprintf("<A href=\"%s\">\n%s</A>", address, label)
 }
 
 function groff() {
