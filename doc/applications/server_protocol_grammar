@@ -103,6 +103,7 @@ ind_data_req:       Request for the data resulting from the application of
                     response is "Momentum", the 'indID' for requesting the
                     Momentum indicator from the server is 5.
 
+test
 trad_pertyp_req:    Request for all trading-period types available for the
                     specified tradable
 
