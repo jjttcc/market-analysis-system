@@ -340,6 +340,8 @@ feature {NONE} -- Implementation - Utilities
 			work_string := sub ("\)", "", line)
 			objnumber := sub (" .*", "", work_string)
 			objname := sub ("^[^ ]*  *", "", work_string)
+			-- Strip off trailing spaces:
+			objname := sub ("[ %T]*$", "", objname)
 			obj_table.force (objnumber, objname)
 			debug ("sc")
 				print ("Stored: " + obj_table @ objname + " (" +
@@ -357,10 +359,27 @@ feature {NONE} -- Implementation - Utilities
 		local
 			item1, item2: STRING
 		do
-			if match ("^([1-9][0-9]*\) *[^ %T]*).*", line) then
+--!!!Remove:
+--			if match ("^([1-9][0-9]*\) *[^ %T]*).*", line) then
+			-- Match lines with and without the "[#2]" shared-object
+			-- numbering.
+			if
+--				match ("^([0-9]+\).*)[ %T]*([0-9]+\).*)[ %T]*", line)
+				match ("^([0-9]+\).*)[ %T]+([0-9]+\).*)[ %T]*", line)
+			then
 				item1 := last_regular_expression.captured_substring (1)
+				item2 := last_regular_expression.captured_substring (2)
+			else
+				-- @@Report error condition
 			end
-			item2 := sub ("^[1-9][0-9]*\) *[^ %T]* *", "", line)
+--!!!Remove:
+--!!!			if match ("^[1-9][0-9]*\) *[^ %T]* *([^ %T]*)", line) then
+--				item2 := last_regular_expression.captured_substring (1)
+--			else
+--				-- @@Report error condition
+--			end
+--!!!Remove:
+--			item2 := sub ("^[1-9][0-9]*\) *[^ %T]* *", "", line)
 			process_selection_line (obj_table, item1)
 			process_selection_line (obj_table, item2)
 		end
