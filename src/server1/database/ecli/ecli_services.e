@@ -337,7 +337,7 @@ feature {NONE} -- Implementation
 
 	cleanup is
 		do
---!!Stub
+			session.release
 		end
 
 	Max_varchar_length: INTEGER is 254
