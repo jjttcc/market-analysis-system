@@ -58,6 +58,7 @@ feature {NONE} -- Hook routine implementations
 			setting_type, error_msg: STRING
 			tokens: LIST [STRING]
 		do
+			sutil.set_target (message)
 			tokens := sutil.tokens (Message_field_separator)
 			from
 				tokens.start
