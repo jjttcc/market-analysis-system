@@ -49,10 +49,10 @@ set_up()
 		echo "Script compare_numbers is not in bin directory - exiting ..."
 		exit -1
 	fi
-	if [ -d ../EIFGEN/F_code -a -x ../EIFGEN/F_code/ta_server ]; then
-		exec=../EIFGEN/F_code/ta_server
-	elif [ -d ../EIFGEN/W_code -a -x ../EIFGEN/W_code/ta_server ]; then
-		exec=../EIFGEN/W_code/ta_server
+	if [ -d ../EIFGEN/F_code -a -x ../EIFGEN/F_code/mass ]; then
+		exec=../EIFGEN/F_code/mass
+	elif [ -d ../EIFGEN/W_code -a -x ../EIFGEN/W_code/mass ]; then
+		exec=../EIFGEN/W_code/mass
 		ln -f -s ../EIFGEN/W_code/melted.eif .
 	else
 		echo "Cannot find executable in ../EIFGEN/F_code or ../EIFGEN/W_code."
