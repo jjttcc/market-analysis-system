@@ -46,15 +46,18 @@ feature -- Basic operations
 			-- Edit a function that takes one market function and an operator.
 		require
 			ui_set: user_interface /= Void
+		local
+			cmd: RESULT_COMMAND [REAL]
 		do
 			f.set_input (user_interface.function_selection_from_type (
 						user_interface.Market_function,
 							concatenation (<<f.generator,
 								"'s input function">>), false))
-			f.set_operator (operator_maker.command_selection_from_type (
+			cmd ?= operator_maker.command_selection_from_type (
 						operator_maker.Real_result_command,
 							concatenation (<<f.generator,
-								"'s operator">>), false))
+								"'s operator">>), false)
+			f.set_operator (cmd)
 		end
 
 	edit_one_fn_op_n (f: N_RECORD_ONE_VARIABLE_FUNCTION) is
@@ -62,15 +65,18 @@ feature -- Basic operations
 			-- and an n-value.
 		require
 			ui_set: user_interface /= Void
+		local
+			cmd: RESULT_COMMAND [REAL]
 		do
 			f.set_input (user_interface.function_selection_from_type (
 						user_interface.Market_function,
 							concatenation (<<f.generator,
 								"'s input function">>), false))
-			f.set_operator (operator_maker.command_selection_from_type (
+			cmd ?= operator_maker.command_selection_from_type (
 						operator_maker.Real_result_command,
 							concatenation (<<f.generator,
-								"'s operator">>), false))
+								"'s operator">>), false)
+			f.set_operator (cmd)
 			edit_n (f)
 		end
 
@@ -79,19 +85,25 @@ feature -- Basic operations
 			-- and an operator.
 		require
 			ui_set: user_interface /= Void
+		local
+			cmd: RESULT_COMMAND [REAL]
+			i1, i2: COMPLEX_FUNCTION
 		do
-			f.set_input1 (user_interface.function_selection_from_type (
+			i1 ?= user_interface.function_selection_from_type (
 						user_interface.Complex_function,
 							concatenation (<<f.generator,
-								"'s left input function">>), false))
-			f.set_input2 (user_interface.function_selection_from_type (
+								"'s left input function">>), false)
+			f.set_input1 (i1)
+			i2 ?= user_interface.function_selection_from_type (
 						user_interface.Complex_function,
 							concatenation (<<f.generator,
-								"'s right input function">>), false))
-			f.set_operator (operator_maker.command_selection_from_type (
+								"'s right input function">>), false)
+			f.set_input2 (i2)
+			cmd ?= operator_maker.command_selection_from_type (
 						operator_maker.Real_result_command,
 							concatenation (<<f.generator,
-								"'s operator">>), false))
+								"'s operator">>), false)
+			f.set_operator (cmd)
 		end
 
 	edit_one_fn_bnc_n (f: STANDARD_MOVING_AVERAGE) is
@@ -99,15 +111,18 @@ feature -- Basic operations
 			-- a BASIC_NUMERIC_COMMAND, and an n-value.
 		require
 			ui_set: user_interface /= Void
+		local
+			cmd: BASIC_NUMERIC_COMMAND
 		do
 			f.set_input (user_interface.function_selection_from_type (
 						user_interface.Market_function,
 							concatenation (<<f.generator,
 								"'s input function">>), false))
-			f.set_operator (operator_maker.command_selection_from_type (
+			cmd ?= operator_maker.command_selection_from_type (
 						operator_maker.Basic_numeric_command,
 							concatenation (<<f.generator,
-								"'s operator">>), false))
+								"'s operator">>), false)
+			f.set_operator (cmd)
 			edit_n (f)
 		end
 
@@ -116,19 +131,24 @@ feature -- Basic operations
 			-- BASIC_NUMERIC_COMMAND, an N_BASED_CALCULATION, and an n-value.
 		require
 			ui_set: user_interface /= Void
+		local
+			cmd: BASIC_NUMERIC_COMMAND
+			exp: N_BASED_CALCULATION
 		do
 			f.set_input (user_interface.function_selection_from_type (
 						user_interface.Market_function,
 							concatenation (<<f.generator,
 								"'s input function">>), false))
-			f.set_operator (operator_maker.command_selection_from_type (
+			cmd ?= operator_maker.command_selection_from_type (
 						operator_maker.Basic_numeric_command,
 							concatenation (<<f.generator,
-								"'s main operator">>), false))
-			f.set_exponential (operator_maker.command_selection_from_type (
+								"'s main operator">>), false)
+			f.set_operator (cmd)
+			exp ?= operator_maker.command_selection_from_type (
 						operator_maker.N_based_calculation,
 							concatenation (<<f.generator,
-								"'s exponential operator">>), false))
+								"'s exponential operator">>), false)
+			f.set_exponential (exp)
 			edit_n (f)
 		end
 

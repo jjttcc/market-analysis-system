@@ -31,8 +31,11 @@ feature -- Access
 
 feature -- Constants
 
-	???: STRING is "???"
-			-- ???
+	Market_function: STRING is "MARKET_FUNCTION"
+			-- Name of MARKET_FUNCTION
+
+	Complex_function: STRING is "COMPLEX_FUNCTION"
+			-- Name of COMPLEX_FUNCTION
 
 feature {APPLICATION_FUNCTION_EDITOR} -- Access
 
@@ -45,8 +48,8 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 		once
 			!!Result.make (0)
 			!!l.make (13)
-			Result.extend (l, xxx)
-			l.extend (command_with_generator (""))
+			Result.extend (l, Void) --!!!!!!!!!!!!!Temporary
+			l.extend (function_with_generator (""))
 		end
 
 	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
