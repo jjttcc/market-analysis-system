@@ -63,6 +63,7 @@ feature -- Initialization
 		ensure then
 			op_n_set: operand = op and n = i
 			target_set: target = tgt
+			adjustment_0: n_adjustment = 0
 		end
 
 	initialize (arg: N_RECORD_STRUCTURE) is
@@ -82,14 +83,26 @@ feature -- Access
 
 	offset: INTEGER is
 		do
-			Result := -n
-		ensure then
-			Result = -n
+			Result := - (n + n_adjustment)
 		end
+
+	n_adjustment: INTEGER
+			-- Value that will be added to `n' when
+			-- calculating `offset'
 
 feature -- Status report
 
 	arg_mandatory: BOOLEAN is false
+
+feature -- Status report
+
+	set_n_adjustment (arg: INTEGER) is
+			-- Set n_adjustment to `arg'.
+		do
+			n_adjustment := arg
+		ensure
+			n_adjustment_set: n_adjustment = arg
+		end
 
 feature {NONE} -- Implementation
 
@@ -98,5 +111,9 @@ feature {NONE} -- Implementation
 			operand.execute (target.item)
 			value := operand.value
 		end
+
+invariant
+
+	offset_definition: offset = - (n + n_adjustment)
 
 end -- class MINUS_N_COMMAND
