@@ -33,7 +33,7 @@ body { background-color: #e9dcd5; }
 }
 .left_part {
 	background-color: #e9dcd5;
-	font-size: 90%;
+	font-size: 80%;
 	float: left;
 	margin: 1em 0 0 1em;
 	height: 100%
@@ -41,7 +41,7 @@ body { background-color: #e9dcd5; }
 }
 .right_part {
 	background-color: #e9dcd5;
-	font-size: 100%;
+	font-size: 90%;
 	float: right;
 	margin: 1em 1em 0 0;
 	width: 74%;
