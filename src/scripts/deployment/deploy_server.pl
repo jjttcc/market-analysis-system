@@ -1,18 +1,18 @@
 #!/usr/bin/perl -w
 # Install and configure the MAS server on a customer's machine.
+# date: "$Date$";
+# revision: "$Revision$"
 
 # Name of the deployment configuration file
 my $config_file = "mas-deploy.cf";
 
+my $start_mas_script = "start_server";
 # Settings tags used in config. file
-my $tarfile_tag = "mas_tar_file";
-my $deploy_dir_tag = "deployment_dir";
-my $version_tag = "version";
-
-# Values set by processing the configuration file
-my $tarfile = "";
-my $deployment_directory = "";
-my $version = "";
+@tags = ("mas_tar_file", "deployment_dir", "version", "server_port_number",
+	"cl_options");
+my ($tarfile_tag, $deploy_dir_tag, $version_tag, $port_tag,
+	$options_tag) = @tags;
+my %settings = ();
 
 # Other global variables
 my @fields = ();
@@ -23,27 +23,24 @@ open(CF, $config_file) || die "Cannot open configuration file: $config_file\n";
 
 # Process the configuration file.
 while (<CF>) {
-	if (/^#/) {
+	if (/^#/ || /^$/) {
 		next;
 	}
 	@fields = split("\t", $_);
 	chomp @fields;
-	if ($fields[0] eq $tarfile_tag) {
-		$tarfile = $fields[1];
-	} elsif ($fields[0] eq $deploy_dir_tag) {
-		$deployment_directory = $fields[1];
-	} elsif ($fields[0] eq $version_tag) {
-		$version = $fields[1];
+	if (@fields < 2) {
+		print "Wrong number of fields (@fields) at line $.\n";
+		next;
 	}
+	$settings{$fields[0]} = $fields[1];
 }
 
 &check_config;
-open(TAR, $tarfile) || die "Cannot open file: $tarfile for reading.\n";
-print "Opened $tarfile\n";
-close(TAR);
+print "mas cmd: ", &mas_startup_command, "\n";
 &setup;
 &untar;
 &install;
+&make_startup_script;
 &cleanup;
 
 # Create and cd to the work directory, etc.
@@ -65,17 +62,31 @@ sub setup {
 	}
 }
 
-# Intall MAS into $deployment_directory.
+# Intall MAS into the deployment directory.
 sub install {
-	chdir "mas-" . $version;
+	chdir "mas-" . $settings{$version_tag};
 system("pwd");
 	! system(&install_cmd) || die "Failed to install MAS into " .
-		$deployment_directory . ".\n";
+		$settings{$deploy_dir_tag} . ".\n";
 }
 
 sub untar {
-system("echo tar zxf $tarfile");
+	# Make sure the tar file exists and is readable.
+	my $tarfile = $settings{$tarfile_tag};
+	open(TAR, $tarfile) || die "Cannot open file: $tarfile for reading.\n";
+	close(TAR);
+	print "Untarring $tarfile\n";
 	! system("tar zxf $tarfile") || die "Failed to untar $tarfile";
+}
+
+sub make_startup_script {
+	$f = $settings{$deploy_dir_tag} . "/bin/" . $start_mas_script;
+	open(F, "> " . $f) || die "Cannot create startup file $f";
+	print F &mas_startup_command . "\n";
+}
+
+sub mas_startup_command {
+	return "mas $settings{$port_tag} $settings{$options_tag}";
 }
 
 sub cleanup {
@@ -87,11 +98,20 @@ sub cleanup {
 
 # Check that the configuration is correct.
 sub check_config {
-#!!!!Stub
+	my $ok = 1;
+	for my $t (@tags) {
+		if (!$settings{$t}) {
+			print "$t not set in $config_file\n";
+			$ok = 0;
+		}
+	}
+	if (!$ok) {
+		die "Missing configuration setting - aborting.\n";
+	}
 }
 
 sub install_cmd {
-	return "./install --rootdir $deployment_directory";
+	return "./install --rootdir $settings{$deploy_dir_tag}";
 }
 
 sub signal_handler {
