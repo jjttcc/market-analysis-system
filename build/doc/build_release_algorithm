@@ -34,7 +34,7 @@ Final Steps:
 13. Make sure the latest version of the indicators_persist and
     generators_persist files (in build/config) are up to date (by running
     make_indicators or by copying these files after the final Linux test
-	install) and make sure the latest version is checked into cvs.
+    install) and make sure the latest version is checked into cvs.
     And update the cvs work directory on the Windows machine so that these
     files are up to date there.
 14. On the windows machine, run prepare_windows_setup to copy the tar file
