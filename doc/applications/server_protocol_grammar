@@ -1,13 +1,13 @@
-BNF grammar for the protocol between the server and a GUI client
+BNF Grammar for the Protocol Between the Server and a GUI Client
 
 
 message         -> msgID "\t" msg end_of_message
 msg             -> client_req | server_response
 client_req      -> session_key "\t" client_req_spec | login_req
 client_req_spec -> [compress_flag] client_data_req
-client_data_req -> mkt_data_req | ind_data_req | mkt_list_req | ind_list_req |
-                     trad_pertyp_req | change_session_req | event_data_req |
-                     event_list_req | logout_req
+client_data_req -> mkt_data_req | ind_data_req | symbol_list_req |
+                     ind_list_req | trad_pertyp_req | change_session_req |
+                     event_data_req | event_list_req | logout_req
 compress_flag   -> "<@z@>"
 mkt_data_req    -> mkt_symbol "\t" trad_per_type
 event_data_req  -> mkt_symbol "\t" start_date "\t" end_date "\t" event_id_list
@@ -57,7 +57,7 @@ session_state   -> no_open_spec
 no_open_spec    -> "no_open"
 true_or_false   -> 'T' | 'F'
 msgID           -> natural_integer
-mkt_list_req    -> <null>
+symbol_list_req -> <null>
 ind_list_req    -> mkt_symbol "\t" trad_per_type
 event_list_req  -> mkt_symbol "\t" trad_per_type
 start_date      -> date_spec
@@ -80,6 +80,49 @@ ta_string       -> +(ta_char)
 ta_char         -> Any character other than tab or newline
 
 
+Client-Request Definitions:
+
+login_req:          Login request - initial client request that begins
+                    a session
+
+symbol_list_req:    Request for the symbol of each tradable available from
+                    the server
+
+mkt_data_req:       Request for the data of the specified tradable with the
+                    specified trading-period type
+
+ind_list_req:       Request for all technical indicators available for the
+                    specified trading-period type of the specified tradable
+
+ind_data_req:       Request for the data resulting from the application of
+                    the specified technical indicator to the specified
+                    tradable with the specified trading-period type
+
+trad_pertyp_req:    Request for all trading-period types available for the
+                    specified tradable
+
+change_session_req: Not used - May become obsolete.
+
+event_list_req:     Request for all event types available for the specified
+                    trading-period type of the specified tradable
+
+event_data_req:     Request for the data resulting from the analysis of
+                    the specified event types applied to the specified
+                    tradable within the specified date range
+
+logout_req:         Request to end the current login session
+
+
+Expected Responses for Client-Requests:
+
+login_req:          login_response
+mkt_data_req:       mkt_data
+ind_data_req:       ind_data
+symbol_list_req:    symbol_list
+ind_list_req:       ind_list
+trad_pertyp_req:    trad_per_types
+event_list_req:     event_list
+event_data_req:     event_data
 
 Notes:
 
@@ -101,7 +144,7 @@ Date components must follow the usual rules for dates.
 
 end_of_message is the Control-G (bell) character.
 
-mkt_list_req is null because the msgID alone gives enough information
+symbol_list_req is null because the msgID alone gives enough information
 with respect to this request.
 
 msgID is an integer identifying the type of message.  For the server,
@@ -111,9 +154,9 @@ request (srvr_data) and those containing error message information
 
     - mkt_data_req (request for market data)
     - ind_data_req (request for indicator data)
-    - trad_per_type_req (request for list of trading period types valid for
+    - trad_pertyp_req (request for list of trading period types valid for
          the specified market)
-    - mkt_list_req (request for a list of the symbols of all markets in the
+    - symbol_list_req (request for a list of the symbols of all markets in the
          database)
     - ind_list_req (request for a list of all indicators in the database)
     - event_data_req (request for a list of events - trading signals - for a
@@ -129,6 +172,6 @@ The alternatives in the event_type specification specify the following:
 
 When a client first connects with a server, the server will not send anything
 until it receives a request from the client.  Usually this will be a
-mkt_list_req, followed by a ind_list_req; but if the client is a new window
+symbol_list_req, followed by a ind_list_req; but if the client is a new window
 (possibly in a new thread) in an existing process, it may already have a copy
 of the list of markets and of the list of indicators.
