@@ -142,7 +142,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		if (_indicators == null || new_indicators) {
 			new_indicators = false;
 			Vector inds_from_server = data_builder.last_indicator_list();
-			if (previous_open_interest != data_builder.open_interest() ||
+			if (previous_open_interest != data_builder.has_open_interest() ||
 					! Utilities.lists_match(inds_from_server,
 					old_indicators_from_server)) {
 				// The old indicators are not the same as the indicators
@@ -152,7 +152,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 				old_indicators_from_server = inds_from_server;
 				make_indicator_lists(inds_from_server);
 			}
-			previous_open_interest = data_builder.open_interest();
+			previous_open_interest = data_builder.has_open_interest();
 		}
 		if (data_builder.connection().error_occurred()) {
 			display_warning("Error occurred retrieving indicator list.");
@@ -432,7 +432,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		special_indicators.addElement(No_lower_indicator);
 		special_indicators.addElement(No_upper_indicator);
 		special_indicators.addElement(Volume);
-		if (data_builder.open_interest()) {
+		if (data_builder.has_open_interest()) {
 			special_indicators.addElement(Open_interest);
 		}
 		// Insert into _indicators all user-selected indicators that
