@@ -29,7 +29,9 @@ deferred class FUNCTION_EDITING_INTERFACE inherit
 	STORABLE_SERVICES [MARKET_FUNCTION]
 		rename
 			real_list as function_library,
-			working_list as working_function_library
+			working_list as working_function_library,
+			retrieve_persistent_list as force_function_library_retrieval,
+			prompt_for_char as character_choice
 		export
 			{NONE} all
 			{EDITING_INTERFACE} changed
@@ -72,7 +74,7 @@ feature -- Basic operations
 			from
 				selection := Null_value
 			until
-				selection = Exit_value
+				selection = Exit_value or abort_edit
 			loop
 				selection := main_indicator_edit_selection
 				inspect
@@ -84,6 +86,7 @@ feature -- Basic operations
 				when Remove_value then
 					remove_indicator
 				when Save_value then
+					check changed and ok_to_save end
 					save
 					if l /= Void then
 						l.deep_copy (working_function_library)

@@ -21,7 +21,9 @@ deferred class MEG_EDITING_INTERFACE inherit
 	STORABLE_SERVICES [MARKET_EVENT_GENERATOR]
 		rename
 			real_list as market_event_generation_library,
-			working_list as working_meg_library
+			working_list as working_meg_library,
+			retrieve_persistent_list as force_function_library_retrieval,
+			prompt_for_char as character_choice
 		export
 			{NONE} all
 		end
@@ -51,7 +53,7 @@ feature -- Basic operations
 			from
 				selection := Null_value
 			until
-				selection = Exit_value
+				selection = Exit_value or abort_edit
 			loop
 				selection := main_menu_selection
 				inspect
