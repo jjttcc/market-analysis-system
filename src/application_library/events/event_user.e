@@ -49,6 +49,8 @@ feature -- Initialization
 feature -- Basic operations
 
 	perform_notify (elist: LIST [TYPED_EVENT]) is
+			-- Notify user of events in `elist' or print an error message
+			-- if notification failed.
 		local
 			msg: STRING
 			e: TYPED_EVENT
@@ -79,6 +81,10 @@ feature -- Basic operations
 					print (concatenation (<<"User ", name,
 							" has no mailer set.%N">>))
 				end
+			end
+			if last_error /= Void then
+				print_list (<<"Notification to user ", name,
+					" failed with error: ", last_error, "%N">>)
 			end
 		end
 
