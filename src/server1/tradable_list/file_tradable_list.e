@@ -87,9 +87,8 @@ feature {NONE} -- Implementation
 			-- file name are removed.  `fname' is not changed.
 		local
 			i, last_sep_index: INTEGER
-			strutil: STRING_UTILITIES
 		do
-			create strutil.make (clone (fname))
+			strutil.set_target (clone (fname))
 			if strutil.target.has (Directory_separator) then
 				-- Strip directory path from the file name:
 				strutil.tail (Directory_separator)
@@ -146,6 +145,8 @@ feature {NONE} -- Implementation
 
 
 	current_input_file: INPUT_FILE
+
+	strutil: expanded STRING_UTILITIES
 
 invariant
 

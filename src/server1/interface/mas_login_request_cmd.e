@@ -47,12 +47,11 @@ feature -- Basic operations
 			session_id, i, j: INTEGER
 			finished: BOOLEAN
 			setting_type, error_msg: STRING
-			sutil: STRING_UTILITIES
 			tokens: LIST [STRING]
 		do
 			error_occurred := false
 			session_id := new_key
-			create sutil.make (msg)
+			sutil.set_target (msg)
 			create session.make
 			if not command_line_options.intraday_caching then
 				session.turn_caching_off
@@ -184,6 +183,8 @@ feature {NONE} -- Implementation
 				Result.append (type)
 			end
 		end
+
+	sutil: expanded STRING_UTILITIES
 
 feature {NONE} -- Implementation - session state
 

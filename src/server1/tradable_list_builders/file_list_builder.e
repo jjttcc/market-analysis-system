@@ -136,15 +136,15 @@ feature {NONE} -- Implementation
 			-- follow it)
 		local
 			i, last_sep_index: INTEGER
-			strutil: STRING_UTILITIES
 		do
-			create strutil.make (clone (fname))
+			strutil.set_target (clone (fname))
 			if strutil.target.has ('.') then
 				strutil.head ('.')
 			end
 			Result := strutil.target
 		end
 
+	strutil: expanded STRING_UTILITIES
 
 invariant
 
