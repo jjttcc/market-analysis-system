@@ -249,12 +249,6 @@ feature -- Access
 			create Result.make (1, 1)
 		end
 
-	last_exception_status: EXCEPTION_STATUS is
-			-- Status of last exception that occurred, if any
-		once
-			create Result.make
-		end
-
 feature -- Status report
 
 	valid_stock_processor (f: MARKET_PROCESSOR): BOOLEAN is
