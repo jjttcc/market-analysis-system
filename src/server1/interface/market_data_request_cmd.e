@@ -42,7 +42,7 @@ feature {NONE}
 			if market_list.off then
 				report_error (<<"Symbol not in database">>)
 			else
-				set_print_dates
+				set_print_parameters
 				send_ok
 				print_tuples (market_list.item.tuple_list (
 					trading_period_type.name))

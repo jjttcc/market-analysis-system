@@ -62,7 +62,7 @@ feature {NONE}
 					if not indicator.processed then
 						indicator.process
 					end
-					set_print_dates
+					set_print_parameters
 					send_ok
 					print_indicator (indicator)
 					print (eom)
