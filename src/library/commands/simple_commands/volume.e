@@ -40,7 +40,7 @@ feature -- Basic operations
 		do
 			value := arg.volume
 		ensure then
-			value = arg.volume
+			rabs (value - arg.volume) < Epsilon
 		end
 
 end -- class VOLUME
