@@ -50,6 +50,7 @@ feature -- Initialization
 					event_type = ev_type
 			period_type_set: period_type = per_type
 			both_directions: above_to_below and below_to_above
+			use_right: use_right_function
 			-- start_date_set_to_now: start_date_time is set to current time
 		end
 
@@ -63,6 +64,17 @@ feature -- Access
 			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 			Result.extend (input1)
 			Result.extend (input2)
+		end
+
+	use_left_function: BOOLEAN
+			-- Should the operator, if it is not Void, be applied to
+			-- the left function?
+
+	use_right_function: BOOLEAN is
+			-- Should the operator, if it is not Void, be applied to
+			-- the right function?
+		do
+			Result := not use_left_function
 		end
 
 feature -- Status report
@@ -114,6 +126,15 @@ feature -- Status setting
 			target2 := input2.output
 		end
 
+	set_function_for_operation (left: BOOLEAN) is
+			-- Specify the function whose output is to be operated on
+			-- if `operator' is not void - left (input1) or right (input2).
+		do
+			use_left_function := left
+		ensure
+			use_left_function = left and use_right_function /= left
+		end
+
 feature -- Basic operations
 
 	execute is
@@ -125,6 +146,7 @@ feature -- Basic operations
 			t := tradables.item (period_type)
 			if t /= Void and not tradables.error_occurred then
 				set_tradable (t)
+				if operator /= Void then set_operator_target end
 				if not input1.processed then
 					input1.process
 				end
@@ -224,11 +246,14 @@ feature {NONE} -- Implementation
 	crossover_in_effect: BOOLEAN
 			-- Is the last crossover still in effect?
 
+	operator_target: CHAIN [MARKET_TUPLE]
+			-- Target for `operator' to process.
+
 	additional_condition: BOOLEAN is
 			-- Is operator Void or is its execution result true?
 		do
 			if operator /= Void then
-				operator.execute (Void)
+				operator.execute (operator_target.item)
 			end
 			Result := operator = Void or else operator.value
 		end
@@ -266,6 +291,20 @@ feature {NONE} -- Implementation
 			target_set: target2 = in.output
 		end
 
+	set_operator_target is
+			-- Set `operator_target' according to `use_left_function' and
+			-- `use_right_function'.  Must be called after set_tradable.
+		do
+			if use_left_function then
+				operator_target := target1
+			else
+				operator_target := target2
+			end
+		ensure
+			left_tgt1: use_left_function implies operator_target = target1
+			right_tgt2: not use_left_function implies operator_target = target2
+		end
+
 feature {MARKET_FUNCTION_EDITOR}
 
 	wipe_out is
@@ -294,5 +333,6 @@ invariant
 	input_not_void: input1 /= Void and input1 /= Void
 	date_not_void: start_date_time /= Void
 	above_or_below: below_to_above or above_to_below
+	left_xor_right_function: use_left_function xor use_right_function
 
 end -- class TWO_VARIABLE_FUNCTION_ANALYZER

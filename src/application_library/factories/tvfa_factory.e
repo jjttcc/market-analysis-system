@@ -49,6 +49,11 @@ feature -- Access
 	Below_to_above, Above_to_below, Both: INTEGER is unique
 			-- Specifications for TVFA crossover detection
 
+	use_left_function: BOOLEAN
+			-- If the operator is not Void, will the analyzer use its
+			-- operator on the left function?  (False implies it will
+			-- use the operator on the right function.)
+
 feature -- Status setting
 
 	set_functions (left, right: MARKET_FUNCTION) is
@@ -72,14 +77,16 @@ feature -- Status setting
 			period_type_set: period_type = arg and period_type /= Void
 		end
 
-	set_operator (arg: RESULT_COMMAND [BOOLEAN]) is
+	set_operator (arg: RESULT_COMMAND [BOOLEAN]; use_left_func: BOOLEAN) is
 			-- Set operator to `arg'.
 		require
 			arg_not_void: arg /= Void
 		do
 			operator := arg
+			use_left_function := use_left_func
 		ensure
 			operator_set: operator = arg and operator /= Void
+			use_left_set: use_left_function = use_left_func
 		end
 
 	set_crossover_specification (arg: INTEGER) is
@@ -101,6 +108,7 @@ feature -- Basic operations
 							period_type)
 			if operator /= Void then
 				product.set_operator (operator)
+				product.set_function_for_operation (use_left_function)
 			end
 			inspect
 				crossover_specification

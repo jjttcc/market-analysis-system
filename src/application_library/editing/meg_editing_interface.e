@@ -257,7 +257,7 @@ feature {NONE} -- Implementation
 			fa_maker.set_crossover_specification (above_below_choice (fa_maker))
 			op := two_var_function_operator_selection (fa_maker)
 			if op /= Void then
-				fa_maker.set_operator (op)
+				fa_maker.set_operator (op, use_left_function)
 			end
 			create_event_generator (fa_maker, new_event_type_name,
 				working_meg_library)
@@ -436,6 +436,11 @@ feature {NONE} -- Implementation
 	function_editor: FUNCTION_EDITING_INTERFACE
 
 	working_meg_library: STORABLE_LIST [MARKET_EVENT_GENERATOR]
+
+	use_left_function: BOOLEAN
+			-- For a TWO_VARIABLE_FUNCTION_ANALYZER, if it uses an
+			-- operator, should it apply the operator to its left or
+			-- right function.
 
 	Two_value: INTEGER is 6
 	One_value: INTEGER is 7
