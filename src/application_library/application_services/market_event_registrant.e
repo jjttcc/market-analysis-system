@@ -13,8 +13,6 @@ deferred class MARKET_EVENT_REGISTRANT inherit
 			event_history
 		end
 
-	TERMINABLE
-
 	EXCEPTIONS
 		export {NONE}
 			all
@@ -39,6 +37,9 @@ feature -- Access
 
 	record_separator: STRING
 			-- Record separator for history file
+
+	hfile_name: STRING
+			-- Event history file name
 
 feature -- Basic operations
 
@@ -76,7 +77,8 @@ feature -- Basic operations
 			retry
 		end
 
-	cleanup is
+	save_history is
+			-- Save event history to persistent store.
 		local
 			hfile: PLAIN_TEXT_FILE
 			scanner: MARKET_EVENT_SCANNER
@@ -108,9 +110,6 @@ feature -- Basic operations
 		end
 
 feature {NONE} -- Implementation
-
-	hfile_name: STRING
-			-- Event history file name
 
 	event_guts (e: MARKET_EVENT; separator: STRING): STRING is
 		local
