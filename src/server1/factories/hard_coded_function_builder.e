@@ -440,8 +440,8 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	old_standard_deviation (f: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]; n: INTEGER;
-			name: STRING): N_RECORD_ONE_VARIABLE_FUNCTION is
---!!!Doesn't work - remove when ready.
+			name: STRING): TWO_VARIABLE_FUNCTION is
+--!!!Doesn't work - remove when ready, unless it can be fixed.
 		local
 			sma: STANDARD_MOVING_AVERAGE
 			sqrt: SQUARE_ROOT
@@ -458,13 +458,13 @@ feature {NONE} -- Hard-coded market function building procedures
 			create main_data.make (f)
 			create sma_op.make (sma.output)
 			create bnc
-			create current_close.make (f.data, bnc)
+			create current_close.make (main_data.output, bnc)
 			create minus.make (current_close, sma_op)
 			create square.make (minus, create {CONSTANT}.make (2))
 			create sum.make (f.data, square, n)
 			create div.make (sum, create {N_VALUE_COMMAND}.make (n))
 			create sqrt.make (div)
-			create Result.make (sma, sqrt, n)
+			create Result.make (sma, main_data, sqrt)
 			Result.set_name (name)
 		end
 
