@@ -8,13 +8,13 @@ package masweb;
 // Remove any that are not needed:
 import java.io.*;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.GenericServlet;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
-public final class Hello extends HttpServlet {
+public final class Hello extends GenericServlet {
 
-	protected void sendResponse(HttpServletResponse response, String msg) {
+	protected void sendResponse(ServletResponse response, String msg) {
 		ObjectOutputStream outputStream;
 		try {
 			outputStream = new ObjectOutputStream(response.getOutputStream());
@@ -28,8 +28,8 @@ public final class Hello extends HttpServlet {
 		}
 	}
 
-	public void doPost(HttpServletRequest request,
-			HttpServletResponse response)
+	public void service(ServletRequest request,
+			ServletResponse response)
 			throws ServletException, IOException {
 		ObjectInputStream input = null;
 		String clientMsg = null;
@@ -44,7 +44,7 @@ public final class Hello extends HttpServlet {
 
 			System.out.println("Received " + clientMsg);
 			System.out.println("[Complete.]");
-			sendResponse(response, "You sent: " + clientMsg);
+			sendResponse(response, "You said: " + clientMsg);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
