@@ -5,7 +5,7 @@ import org.apache.regexp.*;
 import support.FileReaderUtilities;
 
 // ProgramControlTerminal utility functions
-class PCT_Tools {
+public class PCT_Tools {
 
 	void set_program_name(String s) {
 		program_name = s;
@@ -93,9 +93,9 @@ class PCT_Tools {
 	}
 
 	String program_name;
-	static final String pctname_property = "pct.name";
-	static final String pctdir_property = "pct.dir";
-	static final String pct_default_name = "pct_config";
+	static final public String pctname_property = "pct.name";
+	static final public String pctdir_property = "pct.dir";
+	static final public String pct_default_name = "pct_config";
 	String config_file_name;
 	final String Separator_string = "separator";
 }
