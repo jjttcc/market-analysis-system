@@ -225,7 +225,7 @@ feature -- Access
 			Result.extend (pair)
 			!FUNCTION_BASED_COMMAND!cmd.make (stock, real_dummy)
 			!!pair.make (cmd,
-				"Operator that processes a sequences of market records %
+				"Operator that processes a sequence of market records %
 				%obtained from a%Nmarket function - only used by %
 				%ONE_VARIABLE_FUNCTION_ANALYZER")
 			Result.extend (pair)
