@@ -12,7 +12,7 @@ class DERIVATIVE_INSTRUMENT inherit
 
 	TRADABLE [OPEN_INTEREST_TUPLE]
 		redefine
-			symbol, make_ctf, short_description, finish_loading
+			symbol, make_ctf, short_description
 		end
 
 creation
@@ -21,7 +21,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (sym: STRING; info: DERIVATIVE_DATA) is
+	make (sym: STRING; info: TRADABLE_DATA) is
 		require
 			not_void: sym /= Void
 			symbol_not_empty: not sym.empty
@@ -57,14 +57,6 @@ feature -- Status report
 
 	has_open_interest: BOOLEAN is true
 
-feature -- Basic operations
-
-	finish_loading is
-		do
---!!!Remove (default to ancestor version) if no other work is needed.
-			Precursor
-		end
-
 feature {NONE} -- Implementation
 
 	make_ctf: COMPOSITE_TUPLE_FACTORY is
@@ -72,7 +64,7 @@ feature {NONE} -- Implementation
 			create {COMPOSITE_OI_TUPLE_FACTORY} Result
 		end
 
-	information: DERIVATIVE_DATA
+	information: TRADABLE_DATA
 
 	cached_name: STRING
 
