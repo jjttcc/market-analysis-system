@@ -14,6 +14,7 @@ class MCT_CONFIGURATION inherit
 			make as cu_make
 		export
 			{NONE} all
+			{ANY} settings, settings_report, setting_report
 		redefine
 			post_process_settings, use_customized_setting,
 			do_customized_setting, config_file, log_error, cleanup
@@ -100,6 +101,20 @@ feature -- Access
 			-- The platform for which the executable was compiled
 		once
 			create Result
+		end
+
+	additional_settings_report: STRING is
+		do
+			Result := ""
+			from
+				start_server_commands.start
+			until
+				start_server_commands.exhausted
+			loop
+				Result := Result + start_server_commands.item.name +
+					" command: " + start_server_commands.item.contents + "%N"
+				start_server_commands.forth
+			end
 		end
 
 feature -- Commands
