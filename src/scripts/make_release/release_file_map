@@ -196,6 +196,7 @@ lib/binaries/windows/config_tool.exe_assert_v1.6.7 bin/config_tool_assert.exe ma
 lib/binaries/windows/bash.exe bin/ mas_windows1.6.7
 lib/binaries/windows/sed.exe bin/ mas_windows1.6.7
 lib/binaries/windows/mkdir.exe bin/ mas_windows1.6.7
+lib/binaries/windows/cp.exe bin/ mas_windows1.6.7
 lib/binaries/windows/cygwin1.dll bin/ mas_windows1.6.7
 # !!Add macl, mct, etc. binaries here.
 # Include this odbc library if the executable was not statically
