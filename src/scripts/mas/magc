@@ -3,7 +3,7 @@
 
 Progname=$(basename $0)
 basedir=$(dirname $0)/..
-classdir=$basedir/lib/
+classdir=$basedir/lib/classes
 configdir=$MAS_DIRECTORY
 cmd=java
 
