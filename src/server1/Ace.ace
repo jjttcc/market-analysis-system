@@ -1,5 +1,9 @@
 system mas
-	-- Primary test application
+	-- Market Analysis System server
+
+	-- To compile for Linux, uncomment the line for "$/system_specific/unix",
+	-- below and comment out the "$/system_specific/win32" line.  To compile
+	-- for Windows, do the opposite.
 
 root
 
@@ -11,6 +15,7 @@ default
 	--debug ("editing");
 	--debug ("persist");
 	--debug ("command line");
+	debug ("database");
 	profile (no);
 
 	--precompiled ("$EIFFEL4/precomp/spec/$PLATFORM/base");
@@ -32,6 +37,7 @@ cluster
 	--system_specific (server):	"$/system_specific/win32";
 	database (server)		:	"$/database";
 	database_odbc (server)	:	"$/database/odbc";	
+	database_ecli (server)	:	"$/database/ecli";	
 	protocols (server):			"$/protocols";
 	tradable_list (server):		"$/tradable_list";
 
@@ -135,10 +141,39 @@ cluster
 	-- for the moment only ODBC is supported
 	odbc (rdbms):					"$/odbc";
 	
+	
+	-- Eiffel CLI DB library
+	ecli_src : "$ECLI/src";
+	abstract (ecli_src) : "$/abstract";
+	ecli_spec (ecli_src) : "$/spec";
+	ecli_spec_ise (ecli_spec) : "$/Ise";
+	ecli_data (ecli_src) : "$/data";
+	ecli_pattern (ecli_src) : "$/pattern";
+
+		-- Gobo Eiffel Utility Library - Needed by ECLI library
+	ut_command:			"$GOBO/library/utility/command";
+	ut_error:			"$GOBO/library/utility/error";
+	ut_formatter:		"$GOBO/library/utility/formatter";
+	ut_support:			"$GOBO/library/utility/support";
+
+		-- Gobo Eiffel Kernel Library
+	kl_kernel:			"$GOBO/library/kernel";
+	kl_kernel_spec:		"$GOBO/library/kernel/spec/ise";
+
+		-- Gobo Eiffel Structure Library
+	ds_container:		"$GOBO/library/structure/container";
+	ds_cursor:			"$GOBO/library/structure/cursor";
+	ds_dispenser:		"$GOBO/library/structure/dispenser";
+	ds_list:			"$GOBO/library/structure/list";
+	ds_sort:			"$GOBO/library/structure/sort";
+	ds_support:			"$GOBO/library/structure/support";
+	ds_table:			"$GOBO/library/structure/table";
 
 external
+
  object:	"${EIFFEL4}/library/time/spec/$(PLATFORM)/lib/libdatetime.a",
 			"${EIFFEL4}/library/net/spec/$(PLATFORM)/lib/libnet.a",
-			"${EIFFEL4}/library/store/spec/$(PLATFORM)/lib/libsupport.a";
+			"${EIFFEL4}/library/store/spec/$(PLATFORM)/lib/libsupport.a",
+			"-lodbc", "$(ECLI)/src/spec/Ise/linux/libecli_c.a";
 
 end
