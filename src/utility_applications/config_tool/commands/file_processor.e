@@ -44,7 +44,6 @@ feature -- Basic operations
 		do
 			create configuration.make (options.command_file_path)
 			make_target_file (options.target_file_path)
-			print ("cmd file is: " + options.command_file_path + "%N")
 			create reader.make (target_file.name)
 			replacement_specs :=
 				configuration.replacement_specifications
@@ -72,7 +71,6 @@ feature {NONE} -- Implementation
 
 	do_replacement (key: STRING) is
 		do
-print ("Replacing " + key + " with " + replacement_specs @ key + "%N")
 			target_file_contents := gsub (
 				key, replacement_specs @ key, target_file_contents)
 		end
