@@ -24,6 +24,9 @@ public class IndicatorGroups implements Cloneable {
 		while (e.hasMoreElements()) {
 			indicator = (String) e.nextElement();
 			groups.put(indicator, g);
+			if (g.name().equals("")) {
+				g.set_name(indicator);
+			}
 		}
 	}
 

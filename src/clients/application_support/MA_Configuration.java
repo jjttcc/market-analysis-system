@@ -8,6 +8,7 @@ import common.*;
 import support.*;
 import java.awt.*;
 
+//!!!Diverging class - needs to move to a new cluster.
 /** Global configuration settings - singleton */
 public class MA_Configuration extends Configuration implements NetworkProtocol {
 // Initialization
@@ -22,7 +23,7 @@ public class MA_Configuration extends Configuration implements NetworkProtocol {
 		_horizontal_indicator_lines = new Hashtable();
 		setup_colors();
 		indicator_groups = new IndicatorGroups();
-		main_indicator_group = new IndicatorGroup();
+		main_indicator_group = new MonoAxisIndicatorGroup();
 		main_indicator_group.add_indicator(IndicatorGroups.Maingroup);
 		load_settings(in_source);
 		indicator_groups.add_group(main_indicator_group);
@@ -365,7 +366,7 @@ public class MA_Configuration extends Configuration implements NetworkProtocol {
 	// Precondition: "input".item() is the line following the line with the
 	// Indicator_group token that begins a group definition.
 	private void create_indicator_group(Tokenizer input) {
-		IndicatorGroup g = new IndicatorGroup();
+		IndicatorGroup g = new MonoAxisIndicatorGroup();
 		while (! input.exhausted() && !input.item().equals(End_block)) {
 			g.add_indicator(input.item());
 			input.forth();

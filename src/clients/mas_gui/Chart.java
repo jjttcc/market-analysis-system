@@ -647,11 +647,11 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 			indicator_groups = (IndicatorGroups) MA_Configuration.
 				application_instance().indicator_groups().clone();
 		}
-		IndicatorGroup group;
+		MonoAxisIndicatorGroup group;
 		if (indicator_name == null) {
 			indicator_name = indicator_groups.Maingroup;
 		}
-		group = indicator_groups.at(indicator_name);
+		group = (MonoAxisIndicatorGroup) indicator_groups.at(indicator_name);
 		if (group != null) {
 			group.attach_data_set(d);
 		}

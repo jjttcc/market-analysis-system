@@ -3,13 +3,10 @@
 package support;
 
 import java.util.*;
-import graph.DataSet;
-import graph.Axis;
 
-// Grouping of indicators that share components (currently just the y axis)
-public class IndicatorGroup implements Cloneable {
+// Grouping of indicators that share components
+abstract public class IndicatorGroup implements Cloneable {
 	public IndicatorGroup() {
-		yaxis = new Axis(Axis.LEFT);
 		indicators_ = new Vector();
 	}
 
@@ -18,20 +15,13 @@ public class IndicatorGroup implements Cloneable {
 		return indicators_;
 	}
 
-	// Attach `d' so that it shares the same y axis as the other members
-	// of the group.
-	public void attach_data_set(DataSet d) {
-		yaxis.attachDataSet(d);
-		d.set_yaxis(yaxis);
-	}
-
 	// Add indicator `i' to the group.
 	public void add_indicator(String i) {
 		indicators_.addElement(i);
 	}
 
 	public Object clone() {
-		IndicatorGroup result = new IndicatorGroup();
+		IndicatorGroup result = new_instance();
 		Enumeration e = indicators_.elements();
 		String s;
 		while (e.hasMoreElements()) {
@@ -41,6 +31,19 @@ public class IndicatorGroup implements Cloneable {
 		return result;
 	}
 
-	private Axis yaxis;
+	// The group's name
+	public String name() {return name;}
+
+	// Set the group's name to 'arg'.
+	public void set_name(String arg) {
+		name = arg;
+		//System.out.println("Setting name: "+name);
+	}
+
+	private String name = new String();
+
+	// A new instance of the same run-time type as `this'
+	protected abstract IndicatorGroup new_instance();
+
 	private Vector indicators_;
 }
