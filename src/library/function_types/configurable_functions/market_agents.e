@@ -22,7 +22,6 @@ feature -- Access
 			sum, latest_value, expired_value: DOUBLE
 			n, i: INTEGER
 		do
-print ("test_function start%N")
 			create Result.make (0)
 			l := f.inputs
 			if f.operator /= Void then
@@ -31,7 +30,6 @@ print ("test_function start%N")
 				create {BASIC_NUMERIC_COMMAND} op
 			end
 			n := integer_parameter_value (f, 10)
-print ("param was set to " + n.out + "%N")
 			if not l.is_empty and then not l.first.output.is_empty then
 				ml := l.first.output
 				from
@@ -64,7 +62,6 @@ print ("param was set to " + n.out + "%N")
 					ml.forth
 				end
 			end
-print ("test_function end%N")
 		end
 
 	sma (f: AGENT_BASED_FUNCTION) is
@@ -72,7 +69,6 @@ print ("test_function end%N")
 		require
 			f_output_empty: f.output /= Void and f.output.is_empty
 		do
-print ("sma called%N")
 			sma_based_calculation (f, agent sum_divided_by_n)
 		end
 
@@ -81,7 +77,6 @@ print ("sma called%N")
 		require
 			f_output_empty: f.output /= Void and f.output.is_empty
 		do
-print ("standard_deviation called%N")
 			sma_based_calculation (f, agent sum_of_squares_of_avg_divided_by_n)
 		end
 
@@ -99,7 +94,6 @@ print ("standard_deviation called%N")
 			n: INTEGER
 			values: ARRAYED_LIST [DOUBLE]
 		do
-print ("sma_based_calculation start%N")
 			create values.make (0)
 			if f.inputs.is_empty or else f.inputs.first.output.is_empty then
 				if f.inputs.is_empty then
@@ -155,7 +149,6 @@ print ("sma_based_calculation start%N")
 					ml.forth
 				end
 			end
-print ("sma_based_calculation end%N")
 		end
 
 	old_standard_deviation (f: AGENT_BASED_FUNCTION):
@@ -169,7 +162,6 @@ print ("sma_based_calculation end%N")
 			values: ARRAYED_LIST [DOUBLE]
 			math: expanded SINGLE_MATH
 		do
-print ("standard_deviation start%N")
 			create Result.make (0)
 			create values.make (0)
 			if f.inputs.is_empty or else f.inputs.first.output.is_empty then
@@ -220,7 +212,6 @@ print ("standard_deviation start%N")
 					ml.forth
 				end
 			end
-print ("standard_deviation end%N")
 		end
 
 	agents: HASH_TABLE [PROCEDURE [ANY, TUPLE [AGENT_BASED_FUNCTION]],
@@ -253,15 +244,12 @@ feature {NONE} -- Utilities
 		local
 			i, j: INTEGER
 		do
---print ("sos - starti: " + starti.out + " (n: " + n.out + ")%N")
---print ("sos - values.count: " + values.count.out + "%N")
 			from
 				Result := 0
 				i := starti; j := 1
 			until
 				j > n
 			loop
---print ("i, j: " + i.out + ", " + j.out + "%N")
 				Result := Result + (values @ i - avg) ^ 2
 				j := j + 1; i := i + 1
 			end
@@ -274,9 +262,7 @@ feature {NONE} -- Utilities
 			avg, sos: DOUBLE
 			math: expanded SINGLE_MATH
 		do
---print ("sum_of_squares_of_avg_divided_by_n called%N")
 			avg := sum / n
---print ("sum, n, avg: " + sum.out + ", " + n.out + ", " + avg.out + "%N")
 			sos := sum_of_squares (values.count + 1 - n, n, avg, values)
 			Result := math.sqrt (sos / n)
 		end
@@ -298,10 +284,8 @@ feature {NONE} -- Utilities
 				f.parameters.first.current_value.is_integer
 			then
 				Result := f.parameters.first.current_value.to_integer
-print ("Using f's parameter%N")
 			else
 				Result := deflt
-print ("Using default parameter%N")
 			end
 		end
 

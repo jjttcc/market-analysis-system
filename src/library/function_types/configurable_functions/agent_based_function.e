@@ -38,8 +38,6 @@ feature {NONE} -- Initialization
 				inputs := ins
 			end
 			create immediate_parameters.make
-print ("calculator was set to: " + calculator.out + "%N")
-print ("inputs.count: " + inputs.count.out + "%N")
 		ensure
 			set: operator = op and calculator_key = key and
 				(ins /= Void implies inputs = ins)
@@ -195,9 +193,7 @@ feature {NONE}
 	do_process is
 			-- Execute the `calculator'.
 		do
-print ("do_process start - calculator: " + calculator.out + "%N")
 			calculator.call ([Current])
-print ("do_process end%N")
 		end
 
 	pre_process is
@@ -214,7 +210,6 @@ feature {FACTORY} -- Status setting
 
 	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
 		do
-print ("set_innermost_input called with in.count: " + in.count.out + "%N")
 			processed_date_time := Void
 			if
 				inputs.is_empty or else (inputs.count = 1 and
@@ -225,11 +220,9 @@ print ("set_innermost_input called with in.count: " + in.count.out + "%N")
 			else
 				from inputs.start until inputs.exhausted loop
 					inputs.item.set_innermost_input (in)
-print ("is_complex: " + inputs.item.is_complex.out + "%N")
 					inputs.forth
 				end
 			end
-print ("set_innermost_input - inputs.count: " + inputs.count.out + "%N")
 			if operator /= Void and operator_needs_initializing then
 				-- !!!Check if the operator_needs_initializing
 				-- construct is adequate.
