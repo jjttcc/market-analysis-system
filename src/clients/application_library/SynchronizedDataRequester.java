@@ -122,12 +122,6 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 				volume_result = data_builder.last_volume();
 				open_interest_result = data_builder.last_open_interest();
 				latest_date_time = data_builder.last_latest_date_time();
-//!!!!!:
-if (latest_date_time == null) {
-System.out.println("SDR.exe tr req: latest date/time is null");
-} else {
-System.out.println("SDR.exe: latest date/time is: " + latest_date_time);
-}
 			}
 			data_builder.unlock(this);
 		} else {

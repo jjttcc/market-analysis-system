@@ -7,9 +7,6 @@ import java.util.*;
 import common.*;
 import support.*;
 
-//!!!!:
-import java_library.support.*;
-
 /** Interface for connecting and communicating with the server */
 abstract public class Connection {
 
@@ -127,11 +124,6 @@ abstract public class Connection {
 			config.terminate(-1);
 		}
 		if (config.debug()) {
-//!!!!:
-Calendar dt = new GregorianCalendar();
-System.out.println("got result at " + DateTimeServices.date_as_yyyymmdd(dt) +
-", " + DateTimeServices.standard_formatted_time(dt, ":") + "." +
-dt.get(Calendar.MILLISECOND));
 			System.out.println("Result: '"  + request_result.toString() + "'");
 		}
 		return request_result;
@@ -144,11 +136,6 @@ dt.get(Calendar.MILLISECOND));
 		out.print(Message_field_separator_string + msg);
 		out.print(Eom_string);
 		out.flush();
-//!!!!:
-System.out.println("sending: '" + msgID +
-Message_field_separator_string + session_key +
-Message_field_separator_string + msg +
-Eom_string + "'");
 	}
 
 	// Precondition: out != null && io_connection != null

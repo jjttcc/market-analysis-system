@@ -109,9 +109,6 @@ public class TimeDrawer extends TemporalDrawer {
 			// Set the hour x offset according to the distance between
 			// the x-value for the first hour and the x-value for
 			// the second hour.
-//!!!:
-System.out.println("TimeDrawer.draw_tuples - hours[0].right()]: " +
-hours[0].right() + ", hours[1].right(): " + hours[1].right());
 			Hour_x_offset = label_x_value(x_values[hours[0].right()],
 				x_values[hours[1].right()]);
 			Day_x_offset = Hour_x_offset;

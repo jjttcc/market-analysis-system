@@ -106,13 +106,15 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 		} else {
 			if (selection.equals(chart.Volume)) {
 				dataset = (DrawableDataSet) chart_manager.last_volume_result();
+				//@@@Don't remove this until this case has been tested.
 System.out.println("IL - process_data - last volume obtained - size: " +
-dataset.size());	//@@@Don't remove this until this case has been tested.
+dataset.size() + "\nIs this a bug?");
 			} else if (selection.equals(chart.Open_interest)) {
 				dataset = (DrawableDataSet)
 					chart_manager.last_open_interest_result();
+				//@@@Don't remove this until this case has been tested.
 System.out.println("IL - process_data - last open-interest obtained - size: " +
-dataset.size());	//@@@Don't remove this until this case has been tested.
+dataset.size() + "\nIs this a bug?");
 			}
 			if (chart_manager.replace_indicators()) {
 				main_pane.clear_indicator_graph();

@@ -319,9 +319,6 @@ abstract public class AbstractDataSetBuilder extends Lockable
 			String period_type, String appendix, boolean is_update)
 			throws Exception {
 
-//!!!:
-System.out.println("sending request with " + symbol + ", " + period_type +
-", " + appendix);
 		String request = symbol + Message_field_separator + period_type;
 		if (appendix != null && appendix.length() > 0) {
 			request += Message_field_separator + appendix;
@@ -359,9 +356,6 @@ System.out.println("sending request with " + symbol + ", " + period_type +
 			int indicator_id, String symbol, String period_type,
 			String appendix, boolean is_update) throws Exception {
 
-//!!!:
-System.out.println("sending indicator request with " + indicator_id + ", " +
-symbol + ", " + period_type + ", " + appendix);
 		String request = indicator_id + Message_field_separator + symbol +
 			Message_field_separator + period_type;
 		if (appendix != null && appendix.length() > 0) {

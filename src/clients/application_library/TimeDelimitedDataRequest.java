@@ -27,7 +27,6 @@ class TimeDelimitedDataRequest extends TimerTask {
 
 // Basic operations
 
-//!!!:
 	public void run() {
 		// Avoid requesting data if the last request is still active.
 		if (client != null && client.ready_for_request() && ! requesting_data) {
@@ -36,7 +35,6 @@ class TimeDelimitedDataRequest extends TimerTask {
 			// the data update - wait until next time.
 			builder.lock(this);
 			if (builder.is_locked_by(this)) {
-System.out.println("lock of builder SUCCEEDED");
 				requesting_data = true;
 				ChartableSpecification chartspec = client.specification();
 				Iterator tradable_specs =
@@ -48,9 +46,7 @@ System.out.println("lock of builder SUCCEEDED");
 				}
 				requesting_data = false;
 			}
-else {System.out.println("lock of builder FAILED (already locked)");}
 		}
-else {System.out.println("Needed condition not met for data request");}
 	}
 
 // Implementation
@@ -58,13 +54,11 @@ else {System.out.println("Needed condition not met for data request");}
 	private void perform_data_request(TradableSpecification spec,
 			String period_type, AbstractDataSetBuilder builder) {
 
-		assert client != null && client.ready_for_request() &&
-			builder.is_locked_by(this);
 		Iterator indicators;
-
 		IndicatorSpecification ispec;
 		Calendar start_date, end_date;
-		// The lock attempt above succeeded - proceed with request.
+		assert client != null && client.ready_for_request() &&
+			builder.is_locked_by(this);
 		try {
 			start_date = client.start_date();
 			end_date = client.end_date();
@@ -122,8 +116,6 @@ else {System.out.println("Needed condition not met for data request");}
 			client.notify_of_failure(e);
 		} finally {
 			builder.unlock(this);
-//!!!:
-System.out.println("unlocking builder");
 		}
 	}
 

@@ -95,12 +95,9 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 
 // Access - TimeDelimitedDataRequestClient API
 
-//!!!:
 	public Calendar start_date() {
 		Calendar result = data_manager.latest_date_time();
-		if (result == null) {
-System.out.println("<<<chrt.start_date - latest date/time is null>>>");
-		} else {
+		if (result != null) {
 			result = protocol_util.one_second_later(result);
 		}
 		return result;
@@ -385,7 +382,7 @@ return true; //???!!!!!!!!!!!!!!!!!!!!!
 	// Save persistent settings as a serialized file.
 	// Precondition: main_pane != null
 	void save_settings() {
-//		assert main_pane != null: PRECONDITION;
+		assert main_pane != null: PRECONDITION;
 		if (serialize_filename != null) {
 			try {
 				FileOutputStream chartfile =
