@@ -28,6 +28,8 @@ cluster
 
 	install_tool: "$MAS/src/utility_applications/install_tool"
 
+	all config_tool:		"$MAS/src/utility_applications/config_tool"
+
 		-- The application
 	root_cluster (install_tool): "$/application"
 

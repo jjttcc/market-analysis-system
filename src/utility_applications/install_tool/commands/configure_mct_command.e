@@ -24,6 +24,7 @@ feature {NONE} -- Initialization
 
 	make is
         do
+			create config_command_line.make (spec_file_name, mctrc_file_name)
         end
 
 feature -- Access
@@ -37,11 +38,15 @@ feature -- Status report
 feature -- Basic operations
 
 	execute (options: INSTALL_TOOL_COMMAND_LINE) is
+		local
+			file_processor: FILE_PROCESSOR
 		do
 			spec_file.put_string (spec_file_intro (options))
 			spec_file.put_string (spec_body)
 			spec_file.put_string (spec_file_conclusion)
 			spec_file.close
+			create file_processor.make
+			file_processor.execute (config_command_line)
 		end
 
 feature {NONE} -- Implementation
@@ -95,6 +100,8 @@ feature {NONE} -- Implementation
 
 	spec_file_name: STRING is "repl_spec"
 
+	mctrc_file_name: STRING is "mctrc"
+
 	nt_spec_file_name: STRING is "nt_repl_spec"
 
 	pre_nt_spec_file_name: STRING is "pre_nt_repl_spec"
@@ -132,5 +139,7 @@ feature {NONE} -- Implementation
 				end
 			end
 		end
+
+	config_command_line: HARD_CODED_CONFIG_TOOL_COMMAND_LINE
 
 end
