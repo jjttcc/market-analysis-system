@@ -62,7 +62,11 @@ feature {NONE} -- Implementation
 			if fatal_error then
 				log_errors (<<"Error occurred while processing ",
 					tradable_factory.symbol, ": ", db.last_error>>)
+				close_input_medium
 			end
+		ensure then
+			input_sequence_closed_on_error: fatal_error and
+				input_sequence /= Void implies not input_sequence.is_open
 		end
 
 	close_input_medium is
@@ -70,13 +74,19 @@ feature {NONE} -- Implementation
 			global_server: expanded GLOBAL_SERVER_FACILITIES
 			db: MAS_DB_SERVICES
 		do
-			input_sequence.close
-			if input_sequence.error_occurred then
-				log_error (input_sequence.error_string)
+			if input_sequence /= Void then
+				if input_sequence.is_open then
+					input_sequence.close
+				end
+				if input_sequence.error_occurred then
+					log_error (input_sequence.error_string)
+				end
 			end
 			if not global_server.command_line_options.keep_db_connection then
 				db := global_server.database_services
-				db.disconnect
+				if db.connected then
+					db.disconnect
+				end
 				if db.fatal_error then
 					fatal_error := true
 					log_error (db.last_error)
