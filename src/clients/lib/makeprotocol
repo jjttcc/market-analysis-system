@@ -10,7 +10,7 @@ eiffel_protocol_files ()
 proto_dir=../../server1/protocols
 proto_files=$(eiffel_protocol_files)
 awk 'BEGIN {
-	print "/* Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt */\n"
+	print "/* Copyright 1998 - 2001: Jim Cochrane - see file forum.txt */\n"
 	print "package common;\n"
 	print "/** Constants specifying the components of the Market Analysis \
 System \nnetwork communication protocol */"
