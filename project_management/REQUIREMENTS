@@ -67,13 +67,22 @@ Other types of events:
    1. Price (or other data point) meets or exceeds (falls below) a
 	  pre-specified value that is above (below) the "current" price.
 
-   2. Price crosses above (below) a trend line.  (This could be classified as a
-	  crossing-of-two-curves event.)
+   2. Price (or other value, such as RSI) crosses above (below) a trend line.
+      (This could be classified as a crossing-of-two-curves event.)
 
    3. A specified pattern occurs in the data (such as a price pattern - e.g,
 	  flag - or a candle pattern).
 
    4. A major shift in the rate of change of some data set occurs.
+
+   5. A divergence - for example, between price and MACD histogram.
+
+   6. When an indicator, such as RSI, crosses above or below its reference
+      line.
+
+   7. When an indicator, such as RSI, forms a higher bottom or a lower top.
+
+   8. Slope of a function changes from positive to negative or vice versa.
 
 Type 1 will, if possible, be included in the first release.  Type 2 will, if
 possible, be included in the second release.  Type 3 - at least in the form of
@@ -81,6 +90,16 @@ candle patterns - will, if possible, be included eventually.  Type 4 may be
 included eventually.  ("if possible" generally means that implementation of
 the feature is not overwhelmingly difficult and that there is enough time to
 do it for the specified release.)
+
+Event Dependencies
+
+Some event conditions will depend on other event conditions.  For example,
+rules may be set up such that if, for a market M, daily stochastic
+has reached an oversold level or an overbought level, in order for a
+notification to be generated the MACD difference line must have crossed
+over the MACD signal line (in the appropriate direction, depending on
+whether stochastic is oversold or overbought) for weekly data on market
+M within the past n trading periods.
 
 REQUIREMENTS FOR MEMORY MANAGEMENT
 
