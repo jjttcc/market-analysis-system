@@ -4,5 +4,7 @@ binpath;/opt/mas/bin
 datafiles;/opt/mas/lib/data/*.txt
 command_line_cmd;xterm -e <binpath>/macl -h [hostname] [portnumber]
 gui_cmd;<binpath>/magc -h [hostname] [portnumber]
-server_cmd;<binpath>/mas -o -f , -b [portnumber] <datafiles>
+#server_cmd;<binpath>/mas -o -f , -b [portnumber] <datafiles>
+server_cmd;<binpath>/mas -o -f , -b [portnumber] -p
+#server_cmd;/tmp/testsrvcmd -o -f , -b [portnumber] -p
 server_termination_cmd;bash <binpath>/terminate_mas -h [hostname] [portnumber]
