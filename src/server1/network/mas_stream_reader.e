@@ -28,6 +28,11 @@ inherit
 			{NONE} all
 		end
 
+	NETWORK_PROTOCOL
+		export
+			{NONE} all
+		end
+
 creation
 
 	make
@@ -113,6 +118,10 @@ feature {NONE}
 			io_socket.put_character (constants.End_of_file_character)
 		end
 
-	Console_flag: CHARACTER is 'C'
+feature {NONE} -- Unused
+
+	Message_date_field_separator: STRING is ""
+
+	Message_time_field_separator: STRING is ""
 
 end -- class STREAM_READER

@@ -21,6 +21,9 @@ feature -- String constants
 	Eot: STRING is ""
 			-- End of transmission specifier - for command-line clients
 
+	Console_flag: CHARACTER is 'C'
+			-- Flag indicating that the client is a console
+
 	Compression_on_flag: STRING is "<@z@>"
 			-- Flag (at beginning of a message) that indicates that
 			-- the message is compressed
