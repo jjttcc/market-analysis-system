@@ -101,6 +101,9 @@ feature {NONE} -- Implementation
 				-- If `errs.is_empty', the startup process will assume
 				-- that this process started succefully.
 				connection.send_one_time_request (errs, False)
+				if not connection.last_communication_succeeded then
+					log_error (connection.error_report)
+				end
 			end
 		end
 
