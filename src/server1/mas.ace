@@ -6,6 +6,7 @@ root
 
 default
 	assertion (all)
+	arguments ("-o -p")
 	arguments ("-o -f ,  *.txt  4002")
 	arguments ("-w -f , 12345")
 	arguments ("-o -f ,  *.txt  4002 -debug")
@@ -21,7 +22,6 @@ default
 	arguments ("-o -f , aapl.txt  4002")
 	arguments ("-o -f , *.txt  4002")
 	arguments (" ")
-	arguments ("-o -p")
 	arguments ("-p  -report_back jupiter.milkyway.org^41516")
 	arguments ("-o -f , sunw.txt  4002")
 	arguments ("-o -z")
