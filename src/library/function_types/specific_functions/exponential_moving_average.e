@@ -49,6 +49,7 @@ feature {NONE}
 			!!t
 			t.set_value (target.item.value * exp.value +
 							output.last.value * (1 - exp.value))
+			t.set_trading_period (target.item.trading_period)
 			output.extend (t)
 		ensure then
 			-- output.last.value = P[curr] * exp + EMA[curr-1] * (1 - exp)

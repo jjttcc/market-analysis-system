@@ -31,10 +31,13 @@ feature -- Basic operations
 		do
 			target.start
 			old_index := target.index
-			sum.execute (Void)
+			sum.execute (Current)
 			check target.index = old_index + n end
 			!!t
 			t.set_value (sum.value / n)
+			-- The first trading period of the output is the nth trading
+			-- period of the input (target).
+			t.set_trading_period (target.i_th (target.index - 1).trading_period)
 			last_sum := sum.value
 			-- value holds the sum of the first n elements of target
 			output.extend (t)
@@ -73,6 +76,7 @@ feature {NONE}
 			last_sum := last_sum - target.i_th(target.index - n).value +
 							target.item.value
 			t.set_value (last_sum / n)
+			t.set_trading_period (target.item.trading_period)
 			output.extend (t)
 		end
 
