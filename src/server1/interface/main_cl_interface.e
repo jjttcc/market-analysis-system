@@ -108,7 +108,8 @@ feature -- Access
 				current_tradable /= last_tradable_for_period_types and
 				current_tradable /= Void
 			then
-				last_period_types := tradable_list_handler.period_types (
+				last_period_types :=
+					tradable_list_handler.period_type_names_for (
 					current_tradable.symbol)
 				last_tradable_for_period_types := current_tradable
 			end
@@ -453,21 +454,30 @@ feature {NONE} -- Implementation
 					tradable_list_handler.error_occurred or
 					current_tradable = Void
 				then
+					current_tradable := old_tradable
 					if tradable_list_handler.error_occurred then
-						err := concatenation (
-							<<tradable_list_handler.last_error, ".%N">>)
+						err := tradable_list_handler.last_error + ".%N"
 					else
 						check
 							not_valid:
 							not tradable_list_handler.valid_period_type (symbol,
-							current_period_type)
+								current_period_type)
 						end
-						err := concatenation (
-							<<"Invalid period type for ", symbol,
-							": ", current_period_type.name, ".%N">>)
+						err := "Invalid period type for " + symbol + ": " +
+							current_period_type.name + ".%N"
+						current_period_type := closest_valid_period_type (
+							symbol, current_period_type)
+						current_tradable := tradable_list_handler.tradable (
+							symbol, current_period_type)
+						err := err + "Using " + current_period_type.name +
+							" instead.%N"
+						if tradable_list_handler.error_occurred then
+							err := err + tradable_list_handler.last_error +
+								".%N"
+							current_tradable := old_tradable
+						end
 					end
 					log_error (err)
-					current_tradable := old_tradable
 				else
 					-- Update the current_tradable's target period type,
 					-- if needed.
@@ -615,7 +625,7 @@ feature {NONE} -- Implementation - utilities
 					-- No daily data, so use intraday data.
 					if not tradable_list_handler.error_occurred then
 						current_period_type := period_types @ (
-							tradable_list_handler.period_types (
+							tradable_list_handler.period_type_names_for (
 								tradable_list_handler.current_symbol) @ 1)
 						current_tradable := tradable_list_handler.item (
 							current_period_type)
@@ -665,6 +675,53 @@ feature {NONE} -- Implementation - utilities
 		do
 			print (Eot)
 			exit (status)
+		end
+
+	closest_valid_period_type (symbol: STRING; t: TIME_PERIOD_TYPE):
+		TIME_PERIOD_TYPE is
+			-- If `t' is smaller than at least one valid period type
+			-- for `symbol':
+			--   The smallest valid period type that is larger than `t'
+			-- Otherwise:
+			--   The largest valid period type that is smaller than `t'
+		require
+			invalid: not tradable_list_handler.valid_period_type (symbol, t)
+		local
+			sorted_period_types: LIST [TIME_PERIOD_TYPE ]
+		do
+			-- Clone to prevent side effects.
+			sorted_period_types := clone (period_types_in_order)
+			from
+				sorted_period_types.start
+			until
+				Result /= Void or sorted_period_types.exhausted
+			loop
+				if
+					sorted_period_types.item > t and
+					tradable_list_handler.valid_period_type (symbol,
+						sorted_period_types.item)
+				then
+					Result := sorted_period_types.item
+				end
+				sorted_period_types.forth
+			end
+			from
+				sorted_period_types.finish
+			until
+				Result /= Void or sorted_period_types.exhausted
+			loop
+				if
+					sorted_period_types.item < t and
+					tradable_list_handler.valid_period_type (symbol,
+						sorted_period_types.item)
+				then
+					Result := sorted_period_types.item
+				end
+				sorted_period_types.back
+			end
+		ensure
+			result_valid_if_not_void: Result /= Void implies
+				tradable_list_handler.valid_period_type (symbol, Result)
 		end
 
 feature {NONE} -- Implementation - attributes
