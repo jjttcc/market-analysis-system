@@ -114,6 +114,11 @@ public class Configuration implements NetworkProtocol
 		return result;
 	}
 
+	// The name for `c'
+	public String color_name(Color c) {
+		return (String) reverse_color_table.get(c);
+	}
+
 	// List of indicators in their user-specified order
 	public Vector indicator_order() {
 		return _indicator_order;
@@ -375,6 +380,14 @@ public class Configuration implements NetworkProtocol
 
 		red = (float) 0.001; green = (float) 0.999; blue = (float) 0.0015;
 		_null_color = new Color(red, green, blue);
+
+		reverse_color_table = new Hashtable();
+		Enumeration e = _color_table.keys();
+		String s;
+		while (e.hasMoreElements()) {
+			s = (String) e.nextElement();
+			reverse_color_table.put(_color_table.get(s), s);
+		}
 	}
 
 	private static Configuration _instance;
@@ -388,6 +401,7 @@ public class Configuration implements NetworkProtocol
 	private Hashtable _vertical_indicator_lines;
 	private Hashtable _horizontal_indicator_lines;
 	private Hashtable _color_table;
+	private Hashtable reverse_color_table;
 	private IndicatorGroups indicator_groups;
 	private IndicatorGroup main_indicator_group;
 
