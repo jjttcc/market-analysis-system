@@ -24,7 +24,7 @@ lower_indicator	MACD Difference	red
 lower_indicator	MACD Signal Line (EMA of MACD Difference)	lightBlue
 lower_indicator	MACD Histogram	black
 lower_indicator	Slope of MACD Signal Line	darkGreen
-lower_indicator	Slope of Slope of MACD Signal Line	oliveGreen
+lower_indicator	Slope of Slope of MACD Signal Line	magenta
 lower_indicator	Stochastic %D
 lower_indicator	Slow Stochastic %D	magenta
 lower_indicator	Stochastic %K	gray
