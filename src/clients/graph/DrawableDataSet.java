@@ -267,7 +267,6 @@ public class DataSet {
    * @param bounds The data window to draw into
    */
 	public void draw_data(Graphics g, Rectangle bounds) {
-System.err.println("DS.draw_data called");
 		if ( linecolor != null) g.setColor(linecolor);
 		_drawer.set_data(data);
 		_drawer.set_xaxis(xaxis);
@@ -276,9 +275,7 @@ System.err.println("DS.draw_data called");
 		_drawer.set_ranges(xrange, yrange);
 		_drawer.set_clipping(clipping);
 		_drawer.draw_data(g, bounds, hline_data, vline_data);
-System.err.println("DS.draw_data calling draw_dates");
 		draw_dates(g,bounds);
-System.err.println("DS.draw_data finished");
 	}
 
   /**
@@ -369,9 +366,7 @@ System.err.println("DS.draw_data finished");
    * @param w Data Window
    */
       protected void draw_dates(Graphics g, Rectangle w) {
-System.err.println("DS.draw_dates called");
 		if (dates != null) {
-System.err.println("DS.draw_dates: dates is not null");
 			date_drawer.set_data(dates);
 			date_drawer.set_xaxis(xaxis);
 			date_drawer.set_yaxis(yaxis);
@@ -381,7 +376,6 @@ System.err.println("DS.draw_dates: dates is not null");
 			date_drawer.set_x_values(_drawer.x_values());
 			date_drawer.draw_data(g, w, hline_data, vline_data);
 		}
-System.err.println("DS.draw_dates finished");
       }
 
 	/**

@@ -35,7 +35,6 @@ class TA_Parser {
 			for (int j = 0; fields.hasMoreTokens(); ++j) {
 				switch (parsetype[j]) {
 					case Date:
-System.err.println("parse case Date");
 						dates.addElement(fields.nextToken());
 						break;
 					case Open:
@@ -103,11 +102,9 @@ System.err.println("parse case Date");
 				processed_data = new DataSet(drawer);
 			}
 			if (dates != null && ! dates.isEmpty()) {
-System.err.println("process_data - dates is not null");
 				date_array = new String[dates.size()];
 				dates.copyInto(date_array);
 				processed_data.set_dates(date_array);
-System.err.println("process_data - date_array size: " + date_array.length);
 			}
 		}
 		catch (Exception e) {
