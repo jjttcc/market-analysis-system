@@ -262,18 +262,6 @@ cluster
 
 	kl_kernel_spec:		"$GOBO/library/kernel/spec/ise"
 
-	kl_support:		"$GOBO/library/kernel/support"
-
-	kl_misc:		"$GOBO/library/kernel/misc"
-
-	kl_basic:		"$GOBO/library/kernel/basic"
-
-	kl_unicode:		"$GOBO/library/kernel/unicode"
-
-	kl_io:		"$GOBO/library/kernel/io"
-
-	kl_elks:		"$GOBO/library/kernel/elks"
-
 	ds_container:		"$GOBO/library/structure/container"
 
 	ds_dispenser:		"$GOBO/library/structure/dispenser"
