@@ -107,29 +107,43 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 			if (selection.equals(chart.Volume)) {
 				dataset = (DrawableDataSet) chart_manager.last_volume_result();
 				//@@@Don't remove this until this case has been tested.
+//!!!:
+if (dataset == null) {
+System.out.println("IL - process_data - (VOL) dataset is null\nIs this a bug?");
+} else {
 System.out.println("IL - process_data - last volume obtained - size: " +
 dataset.size() + "\nIs this a bug?");
+}
 			} else if (selection.equals(chart.Open_interest)) {
 				dataset = (DrawableDataSet)
 					chart_manager.last_open_interest_result();
 				//@@@Don't remove this until this case has been tested.
+//!!!:
+if (dataset == null) {
+System.out.println("IL - process_data - (OI) dataset is null\nIs this a bug?");
+} else {
 System.out.println("IL - process_data - last open-interest obtained - size: " +
 dataset.size() + "\nIs this a bug?");
+}
 			}
 			if (chart_manager.replace_indicators()) {
 				main_pane.clear_indicator_graph();
 				chart_manager.unselect_lower_indicators();
 				chart_manager.current_lower_indicators().removeAllElements();
 			}
-			dataset.setColor(conf.indicator_color(selection, false));
-			chart_manager.link_with_axis(dataset, selection);
-			chart_manager.current_lower_indicators().addElement(selection);
 			chart_manager.tradable_specification().select_indicator(selection);
+			chart_manager.current_lower_indicators().addElement(selection);
 			chart.set_window_title();
-			chart.add_indicator_lines(dataset, selection);
-			main_pane.add_indicator_data_set(dataset);
-			chart_manager.tradable_specification().set_indicator_data(dataset,
-				selection);
+			if (dataset != null) {
+				dataset.setColor(conf.indicator_color(selection, false));
+				chart_manager.link_with_axis(dataset, selection);
+				chart.add_indicator_lines(dataset, selection);
+				main_pane.add_indicator_data_set(dataset);
+				chart_manager.tradable_specification().set_indicator_data(
+					dataset, selection);
+			}
+//!!!:
+else { System.out.println("dataset was null"); }
 		}
 		main_pane.repaint_graphs();
 	}
