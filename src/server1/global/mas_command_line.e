@@ -376,21 +376,28 @@ feature {NONE} -- Implementation
 			global_server: expanded GLOBAL_SERVER_FACILITIES
 			expander: FILE_NAME_EXPANDER
 		do
+			check
+				not last_argument_found
+			end
+			-- Note: last_argument_found is not set to true in this routine
+			-- because, since it processes all file arguments, it should only
+			-- be called once.  (See process_arguments in COMMAND_LINE.)
+
 			-- If -i option is specified, create the intraday extension.
 			if option_in_contents ('i') then
 				if contents.item.count > 2 then
 					create intraday_extension.make (contents.item.count - 2)
 					intraday_extension.append (contents.item.substring (
 						3, contents.item.count))
-					last_argument_found := True
+--!!!Remove:					last_argument_found := True
 					contents.remove
 				else
-					last_argument_found := True
+--!!!Remove:					last_argument_found := True
 					contents.remove
 					if not contents.exhausted then
 						create intraday_extension.make (contents.item.count)
 						intraday_extension.append (contents.item)
-						last_argument_found := True
+--!!!Ditto:						last_argument_found := True
 						contents.remove
 					end
 				end
@@ -400,15 +407,15 @@ feature {NONE} -- Implementation
 					create daily_extension.make (contents.item.count - 2)
 					daily_extension.append (contents.item.substring (
 						3, contents.item.count))
-					last_argument_found := True
+--!!!etc...					last_argument_found := True
 					contents.remove
 				else
-					last_argument_found := True
+--					last_argument_found := True
 					contents.remove
 					if not contents.exhausted then
 						create daily_extension.make (contents.item.count)
 						daily_extension.append (contents.item)
-						last_argument_found := True
+--						last_argument_found := True
 						contents.remove
 					end
 				end
@@ -416,6 +423,9 @@ feature {NONE} -- Implementation
 			expander := global_server.file_name_expander
 			expander.execute (contents, option_sign)
 			file_names := expander.results
+			check
+				not last_argument_found
+			end
 		end
 
 	set_symbol_list is
