@@ -17,7 +17,7 @@ inherit
 			target
 		end
 
-feature {FACTORY} -- Status setting
+feature {FACTORY, COMMAND} -- Status setting
 
 	set_target (in: CHAIN [MARKET_TUPLE]) is
 		require
@@ -28,7 +28,7 @@ feature {FACTORY} -- Status setting
 			target_set: target = in and target /= Void
 		end
 
-feature {NONE}
+feature {FACTORY, COMMAND}
 
 	target: CHAIN [MARKET_TUPLE]
 

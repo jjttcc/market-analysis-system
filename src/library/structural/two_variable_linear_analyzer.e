@@ -46,7 +46,8 @@ feature {NONE} -- Hook routines
 			line_up (target1, target2)
 		ensure then
 			current_targets_dates_equal:
-				target1.item.date_time.is_equal (target2.item.date_time)
+				not target1.exhausted and not target2.exhausted implies
+					target1.item.date_time.is_equal (target2.item.date_time)
 		end
 
 feature {NONE} -- Utility routines
