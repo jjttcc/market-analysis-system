@@ -16,6 +16,8 @@ class CommandProcessor:
 			"\n*Select *an *object *for.*'s",
 			"\n*Select *the *[a-z]* *technical indicator",
 			"\n*Select *an *indicator *to *edit:",
+			"Added type.*\.$",
+			"User was created with the following properties:",
 			".*has.*leaf.*function.*-.*",
 			"Examining.*leaf.*function.*",
 			"\n*Select *the.*trading *period *type.*:",
