@@ -91,8 +91,8 @@ public class CommandLineOptions extends StartupOptions {
 	// Print version information and terminate.
 	private void print_version() {
 		MasProductInfo info = new MasProductInfo();
-		String version_info = info.name() + ", Version " + info.number() +
-			", " + info.date();
+		String version_info = info.name() + ", Version " +
+			info.release_description() + "\n" + "Date: " + info.date();
 		System.out.println(version_info);
 		Configuration.terminate(0);
 	}

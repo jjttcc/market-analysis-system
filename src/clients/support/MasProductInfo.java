@@ -39,8 +39,7 @@ public class MasProductInfo extends ProductInfo {
 	* Short description of the current release
 	**/
 	public String release_description() {
-//		return number + " - (development release)";
-return "";
+		return number() + " - (development release)";
 	}
 
 	public String copyright() {
