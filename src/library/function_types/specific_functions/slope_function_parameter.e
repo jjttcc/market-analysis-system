@@ -20,23 +20,23 @@ feature -- Access
 
 	function: MARKET_FUNCTION_LINE
 
-	current_value: INTEGER is
+	current_value: REAL_REF is
 		do
-			Result := function.slope.floor
+			Result := function.slope
 		end
 
 	name: STRING is "slope"
 
 feature -- Element change
 
-	change_value (new_value: INTEGER) is
+	change_value (new_value: REAL_REF) is
 		do
-			function.set_slope (new_value)
+			function.set_slope (new_value.item)
 		end
 
 feature -- Basic operations
 
-	valid_value (i: INTEGER): BOOLEAN is
+	valid_value (i: REAL_REF): BOOLEAN is
 		do
 			Result := true
 		end

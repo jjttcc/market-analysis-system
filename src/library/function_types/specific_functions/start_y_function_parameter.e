@@ -20,23 +20,23 @@ feature -- Access
 
 	function: MARKET_FUNCTION_LINE
 
-	current_value: INTEGER is
+	current_value: REAL_REF is
 		do
-			Result := function.start_y.floor
+			Result := function.start_y
 		end
 
 	name: STRING is "y-value for the left-most point"
 
 feature -- Element change
 
-	change_value (new_value: INTEGER) is
+	change_value (new_value: REAL_REF) is
 		do
-			function.set_start_y (new_value)
+			function.set_start_y (new_value.item)
 		end
 
 feature -- Basic operations
 
-	valid_value (i: INTEGER): BOOLEAN is
+	valid_value (i: REAL_REF): BOOLEAN is
 		do
 			Result := true
 		end
