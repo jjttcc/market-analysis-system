@@ -295,7 +295,7 @@ public class Graph2D extends Canvas {
     public DataSet loadDataSet( double data[], int n ) {
        DataSet d;
        try { 
-             d =  new DataSet(data, n);
+             d =  new DataSet(data, n, new LineDrawer());
              dataset.addElement( d );
              d.g2d = this;
             }

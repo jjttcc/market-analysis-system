@@ -8,35 +8,8 @@ import java.util.*;
  */
 abstract public class Drawer {
 
-	private void draw_horizontal_lines(Graphics g, Rectangle bounds,
-			Vector hline_data) {
-		if (hline_data == null) return;
-
-		int y1, y2;
-		double d1, d2;
-		for (int i = 0; i < hline_data.size(); ++i) {
-			d1 = ((DoublePair) hline_data.elementAt(i)).left();
-			d2 = ((DoublePair) hline_data.elementAt(i)).right();
-			y1 = (int)(bounds.y + (1.0 - (d1-ymin) / yrange) * bounds.height);
-			y2 = (int)(bounds.y + (1.0 - (d2-ymin) / yrange) * bounds.height);
-			g.drawLine(bounds.x, y1, bounds.x + bounds.width, y2);
-		}
-	}
-
-	private void draw_vertical_lines(Graphics g, Rectangle bounds,
-			Vector vline_data) {
-		if (vline_data == null) return;
-
-		int x1, x2;
-		double d1, d2;
-		for (int i = 0; i < vline_data.size(); ++i) {
-			d1 = ((DoublePair) vline_data.elementAt(i)).left();
-			d2 = ((DoublePair) vline_data.elementAt(i)).right();
-			x1 = (int)(bounds.x + ((d1-xmin) / xrange) * bounds.width);
-			x2 = (int)(bounds.x + ((d2-xmin) / xrange) * bounds.width);
-			g.drawLine(x1, bounds.y, x2, bounds.y + bounds.height);
-		}
-	}
+	// Number of fields in each tuple
+	abstract public int drawing_stride();
 
 	public void set_data(double d[]) {
 		data = d;
@@ -67,23 +40,14 @@ abstract public class Drawer {
 		yrange = y;
 	}
 
-    public void set_stride(int s) {
-		stride = s;
-	}
-
-	public void set_length (int l) {
-		length = l;
-	}
-
-  /**
-   * Draw the data bars and the line segments connecting them.
-   * If this data has been attached to an Axis then scale the data
-   * based on the axis maximum/minimum otherwise scale using
-   * the data's maximum/minimum
-   * @param g Graphics state
-   * @param bounds The data window to draw into
-   */
-//!!!Move this into a new parent class - Drawer.
+	/**
+	* Draw the data bars and the line segments connecting them.
+	* If this data has been attached to an Axis then scale the data
+	* based on the axis maximum/minimum otherwise scale using
+	* the data's maximum/minimum
+	* @param g Graphics state
+	* @param bounds The data window to draw into
+	*/
 	public void draw_data(Graphics g, Rectangle bounds, Vector hlines,
 		Vector vlines) {
 		Color c;
@@ -110,25 +74,51 @@ abstract public class Drawer {
 
 		draw_horizontal_lines(g, bounds, hlines);
 		draw_vertical_lines(g, bounds, vlines);
-		draw_tuples(g, bounds, g.getClipBounds());
+		draw_tuples(g, bounds);
 	}
 
-  /**
-   * Draw the data tuples.
-   */
-	abstract protected void draw_tuples(Graphics g, Rectangle bounds,
-			Rectangle clip);
+	/**
+	* Draw the data tuples.
+	*/
+	abstract protected void draw_tuples(Graphics g, Rectangle bounds);
 
-  /**
-   *  Return true if the point (x,y) is inside the allowed data range.
-   */
+	/**
+	*  Return true if the point (x,y) is inside the allowed data range.
+	*/
+	protected boolean inside(double x, double y) {
+		if( x >= xmin && x <= xmax && y >= ymin && y <= ymax )  return true;
+		return false;
+	}
 
-      protected boolean inside(double x, double y) {
-          if( x >= xmin && x <= xmax &&
-              y >= ymin && y <= ymax )  return true;
+	private void draw_horizontal_lines(Graphics g, Rectangle bounds,
+			Vector hline_data) {
+		if (hline_data == null) return;
 
-          return false;
-      }
+		int y1, y2;
+		double d1, d2;
+		for (int i = 0; i < hline_data.size(); ++i) {
+			d1 = ((DoublePair) hline_data.elementAt(i)).left();
+			d2 = ((DoublePair) hline_data.elementAt(i)).right();
+			y1 = (int)(bounds.y + (1.0 - (d1-ymin) / yrange) * bounds.height);
+			y2 = (int)(bounds.y + (1.0 - (d2-ymin) / yrange) * bounds.height);
+			g.drawLine(bounds.x, y1, bounds.x + bounds.width, y2);
+		}
+	}
+
+	private void draw_vertical_lines(Graphics g, Rectangle bounds,
+			Vector vline_data) {
+		if (vline_data == null) return;
+
+		int x1, x2;
+		double d1, d2;
+		for (int i = 0; i < vline_data.size(); ++i) {
+			d1 = ((DoublePair) vline_data.elementAt(i)).left();
+			d2 = ((DoublePair) vline_data.elementAt(i)).right();
+			x1 = (int)(bounds.x + ((d1-xmin) / xrange) * bounds.width);
+			x2 = (int)(bounds.x + ((d2-xmin) / xrange) * bounds.width);
+			g.drawLine(x1, bounds.y, x2, bounds.y + bounds.height);
+		}
+	}
 
 	protected double data[];
 	protected Axis xaxis;
@@ -136,6 +126,4 @@ abstract public class Drawer {
 	protected double xmax, ymax, xmin, ymin;
 	protected double xrange, yrange;
 	protected boolean clipping;
-    protected int stride = 2;
-	protected int length;
 }

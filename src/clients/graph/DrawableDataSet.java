@@ -43,7 +43,7 @@ import java.lang.*;
  * @version $Revision$, $Date$
  * @author Leigh Brookshaw 
  */
-public class DataSet extends Object {
+public class DataSet {
 
 	public void set_drawer (Drawer d)
 	{
@@ -127,6 +127,8 @@ public class DataSet extends Object {
 ** Protected Variables      
 **********************/
 
+	protected double[] data;
+
   /**
    * Drawer of price bars - e.g., tic bars or candles
    */
@@ -152,19 +154,10 @@ public class DataSet extends Object {
    */
       protected double dymin;
 
-  /**
-   * The array containing the actual data 
-   */
-      protected double data[];
-
 	// Horizontal, vertical line data
 	protected Vector hline_data;
 	protected Vector vline_data;
 
-  /**
-   * The number of data points stored in the data array
-   */
-      protected int length;
   /**
    *    The X range of the clipped data
    */
@@ -205,115 +198,59 @@ public class DataSet extends Object {
    */
       protected int increment = 100;
 
-
   /**
-   * The stride of the data. For data pairs (x,y) the stride is 2
+   * Number of components in a data tuple - for example, 2 (x, y) for
+   * a simple point
+   # @precondition
+   #    _drawer != null
    */
-    protected int stride = 2;
+    protected int stride() { return _drawer.drawing_stride(); }
 
+	protected int length() { return data.length; }
 /*
 *********************
 ** Constructors
 ********************/
 
-  /**
-   *  Instantiate an empty data set.
-   */
-      public DataSet ( ) {
-               length = 0;
-               range(stride);
-      }
-  /**
-   *  Instantiate an empty data set.
-   *  @param stride the stride of the data set. The default stride is 2.
-   */
-      public DataSet (int stride ) throws Exception {
-               if( stride < 2 ) throw 
-                          new Exception("Invalid stride parameter!");
-               this.stride = stride;
-               length = 0;
-               range(stride);
-      }
+	/**
+	*  Instantiate an empty data set.
+	*/
+	public DataSet(Drawer d) {
+		_drawer = d;
+		data = null;
+		range(stride(), 0);
+	}
 
-  /**
-   * Instantiate a DataSet with the parsed data. Default stride is 2.
-   * The double array contains the data. The X data is expected in
-   * the even indices, the y data in the odd. The integer n is the
-   * number of data Points. This means that the length of the data
-   * array is 2*n.
-   * @param d Array containing the (x,y) data pairs.
-   * @param n Number of (x,y) data pairs in the array.
-   * @exception  Exception
-   *            A Generic exception if it fails to load the
-   *            parsed array into the class.
-   */
-      public DataSet ( double d[], int n ) throws Exception {
-           int i;
-           int k = 0;
+	/**
+	* Instantiate a DataSet with the parsed data.
+	* `d' contains a set of tuples flattened out into array elements -
+	* for example, for a 4-field tuple, d[0..3] are the fields of the
+	# first tuple, d[4..7] are the fields of the second tuple, etc.
+	* The integer n is the number of data Points. This means that the
+	* length of the data array is t*n, where t is the number of fields
+	* in a tuple.
+	* Note: `d' is expected to take y-position (vertical) data only;
+	* x-positions will be calculated based on the position of each
+	* tuple in `d' - from 1 to d.length.
+	* @param d Array containing the (y1,y2,...) data tuples.
+	* @param n Number of tuples in the array.
+	* @param drawer object used to draw the data.
+	* @precondition
+	*     d != null && d.length > 0 && n > 0 && drawer != null
+	*/
+	public DataSet(double d[], int n, Drawer drawer) throws Exception {
+		if ( d  == null || d.length == 0 || n <= 0 || drawer == null ) {
+			throw new Exception("DataSet constructor: precondition violated");
+		}
+		int i;
+		_drawer = drawer;
+		data = d;
 
-           length = 0;
+		// Calculate the data range.
+		range(stride(), n);
+	}
 
-           if ( d  == null || d.length == 0 || n <= 0 ) {
-              throw new Exception("DataSet: Error in parsed data!");
-           }
-
-//     Copy the data locally.
-
-           data = new double[n*stride];
-           length = n*stride;
-
-           System.arraycopy(d, 0, data, 0, length);
-
-
-//     Calculate the data range.
-
-           range(stride);
-      }
-
-  /**
-   * Instantiate a DataSet with the parsed data.
-   * The double array contains the data. The X data is expected to be in
-   * indices i*stride where i=0,1,... The Y data is expected to be found
-   * in indices i*stride+1 where i=0,1,2...
-   * The integer n is the
-   * number of data Points. This means that the length of the data
-   * array is 2*stride.
-   * @param d Array containing the (x,y) data pairs.
-   * @param n Number of (x,y) data pairs in the array.
-   * @param s The stride of the data.
-   * @exception  Exception
-   *            A Generic exception if it fails to load the
-   *            parsed array into the class.
-   */
-      public DataSet ( double d[], int n, int s ) throws Exception {
-          if( s < 2 ) throw 
-                          new Exception("Invalid stride parameter!");
-           int i;
-           int k = 0;
-
-           length = 0;
-
-           if ( d  == null || d.length == 0 || n <= 0 ) {
-              throw new Exception("DataSet: Error in parsed data!");
-           }
-
-           this.stride = s;
-
-
-//     Copy the data locally.
-
-           data = new double[n*stride];
-           length = n*stride;
-
-           System.arraycopy(d, 0, data, 0, length);
-
-
-//     Calculate the data range.
-
-           range(stride);
-      }
-/*
-*******************
+/*******************
 ** Public Methods
 ******************/
 
@@ -328,93 +265,6 @@ public class DataSet extends Object {
 		if (vline_data == null) vline_data = new Vector();
 		vline_data.addElement(p);
 	}
-
-  /**
-   * Append data to the data set.
-   * @param d Array containing (x,y) pairs to append
-   * @param n Number of (x,y) data pairs in the array.
-   * @exception Exception
-   *          A generic exception if it fails to load the
-   *            parsed array into the class.
-   */
-      public void append( double d[], int n ) throws Exception {
-           int i;
-           int k = 0;
-           double tmp[];
-           int ln = n*stride;
-
-           if ( d  == null || d.length == 0 || n <= 0 ) {
-              throw new Exception("DataSet: Error in append data!");
-           }
-
-           if(data == null) data = new double[increment];
-
-//     Copy the data locally.
-
-
-           if( ln+length < data.length ) {
-               System.arraycopy(d, 0, data, length, ln);
-               length += ln;
-	   } else {
-               tmp = new double[ln+length+increment];
-
-               if( length != 0 ) {
-                 System.arraycopy(data, 0, tmp, 0, length);
-               }
-               System.arraycopy(d, 0, tmp, length, ln);
-
-               length += ln;
-               data = tmp;
-	     }
-
-//     Calculate the data range.
-
-           range(stride);
-//     Update the range on Axis that this data is attached to
-           if(xaxis != null) xaxis.resetRange();
-           if(yaxis != null) yaxis.resetRange();
-
-
-
-      }
-  /**
-   * Delete data from the data set (start and end are inclusive).
-   * The first (x,y) pair in the data set start at index 0.
-   * @param start The start (x,y) pair index.
-   * @param end   The end (x,y) pair index.
-   */
-      public void  delete( int start, int end ) {
-           int End   = stride*end;
-           int Start = stride*start;
-
-           if(length <= 0) return;
-
-           if( End   < Start )         return;
-           if( Start < 0 )             Start = 0;
-           if( End > length-stride )        End = length-stride;
-
-           if( End < length-stride) {
-               System.arraycopy(data, End+stride, 
-                                data, Start, length - End - stride);
-	     }
-
-           length -= End+stride-Start;
-
-
-//     Calculate the data range.
-
-           range(stride);
-
-
-      }
-  /**
-   * Delete all the data from the data set.
-   */
-      public void  deleteData( ) {
-           length = 0;
-           data = null;
-           range(stride);
-      }
 
   /**
    * Draw the straight line segments and/or the markers at the
@@ -434,8 +284,6 @@ public class DataSet extends Object {
 		_drawer.set_maxes(xmax, ymax, xmin, ymin);
 		_drawer.set_ranges(xrange, yrange);
 		_drawer.set_clipping(clipping);
-		_drawer.set_stride(stride);
-		_drawer.set_length(length);
 		draw_legend(g,bounds);
 		_drawer.draw_data(g, bounds, hline_data, vline_data);
 		g.setColor(c);
@@ -515,9 +363,9 @@ public class DataSet extends Object {
       }
   /**
    * Return the number of data points in the DataSet
-   * @return number of (x,y0 points.
+   * @return number of (x,y) points.
    */
-      public int dataPoints() {  return length/stride; }
+      public int dataPoints() {  return length()/stride(); }
 
   /**
    * get the data point at the parsed index. The first (x,y) pair
@@ -526,11 +374,12 @@ public class DataSet extends Object {
    * @return array containing the (x,y) pair.
    */
       public double[] getPoint(int index) {
-            double point[] = new double[stride];
-            int i = index*stride;
-            if( index < 0 || i > length-stride ) return null;
+			int strd = stride();
+            double point[] = new double[strd];
+            int i = index*strd;
+            if( index < 0 || i > length()-strd ) return null;
 
-            for(int j=0; j<stride; j++) point[j] = data[i+j];
+            for(int j=0; j<strd; j++) point[j] = data[i+j];
             
             return point;
 	  }
@@ -545,6 +394,7 @@ public class DataSet extends Object {
             double point[] = {0.0, 0.0, 0.0};
             int i;
             double xdiff, ydiff, dist2;
+			int strd = stride();
 
             xdiff = data[0] - x;
             ydiff = data[1] - y;
@@ -555,7 +405,7 @@ public class DataSet extends Object {
             
  
 
-            for(i=stride; i<length-1; i+=stride) {
+            for(i=strd; i<length()-1; i+=strd) {
 
                 xdiff = data[i  ] - x;
                 ydiff = data[i+1] - y;
@@ -621,46 +471,42 @@ public class DataSet extends Object {
 
       }
 
-  /**
-   * Calculate the range of the data. This modifies dxmin,dxmax,dymin,dymax
-   * and xmin,xmax,ymin,ymax
-   */
+	/**
+	* Calculate the range of the data. This modifies dxmin,dxmax,dymin,dymax
+	* and xmin,xmax,ymin,ymax
+	*/
+	protected void range(int stride, int element_count) {
+		int i;
+		int lnth = length();
 
-      protected void range(int stride) {
-           int i;
+System.err.println("range - stride: " + stride + ", lnth: " + lnth);
+		if (lnth >= stride ) {
+			dymax = data[0];
+			dymin = dymax;
+			// The range for x follows the data index - starts at 1
+			// and ends at data.length.
+			dxmax = element_count;
+			dxmin = 1;
+		} else {
+			dxmin = 0.0;
+			dxmax = 0.0;
+			dymin = 0.0;
+			dymax = 0.0;
+		}
 
+		// `data' holds only y values - find the largest and smallest.
+		for (i = 0; i < lnth; ++i) {
+			if( dymax < data[i] ) { dymax = data[i]; }
+			else if( dymin > data[i] ) { dymin = data[i]; }
+		}
 
-           if( length >= stride ) {
-              dxmax = data[0];
-              dymax = data[1];
-              dxmin = dxmax;
-              dymin = dymax;
-           } else {
-               dxmin = 0.0;
-               dxmax = 0.0;
-               dymin = 0.0;
-               dymax = 0.0;
-           }
-
-           for(i=stride; i<length; i+=stride ) {
-
-             if( dxmax < data[i] )   { dxmax = data[i]; }
-             else
-             if( dxmin > data[i] )   { dxmin = data[i]; }
-
-             if( dymax < data[i+1] ) { dymax = data[i+1]; }
-             else
-             if( dymin > data[i+1] ) { dymin = data[i+1]; }
-           }
-
-           if( xaxis == null) {
-              xmin = dxmin;
-              xmax = dxmax;
-           }
-           if( yaxis == null) {
-              ymin = dymin;
-              ymax = dymax;
-           }
-     }
-
+		if ( xaxis == null) {
+			xmin = dxmin;
+			xmax = dxmax;
+		}
+		if ( yaxis == null) {
+			ymin = dymin;
+			ymax = dymax;
+		}
+	}
 }

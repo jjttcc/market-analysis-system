@@ -13,75 +13,72 @@ public class CandleDrawer extends Drawer {
 	* @param g Graphics context
 	* @param w Data window
 	*/
-	protected void draw_tuples(Graphics g, Rectangle bounds, Rectangle clip) {
-          int i;
-          int j;
-          boolean inside0 = false;
-          boolean inside1 = false;
-          double x,y;
-          int x0 = 0 , y0 = 0;
-          int x1 = 0 , y1 = 0;
-          int xcmin = clip.x;
-          int xcmax = clip.x + clip.width;
-          int ycmin = clip.y;
-          int ycmax = clip.y + clip.height;
+	protected void draw_tuples(Graphics g, Rectangle bounds) {
+		int i, row;
+		int openy, highy, lowy, closey;
+		int x, middle_x;
+		int x_s[] = new int[Stride], y_s[] = new int[Stride];
+		int lngth = data.length;
+		int candlewidth = bounds.width / lngth + 5;
+		Color original_color = g.getColor();
+		boolean white;
+		double width_factor, height_factor;
 
+System.err.println("candle data length: " + lngth);
+System.err.println("xmin, xmax, bounds.x, bounds.width, xrange: " +
+xmin+", "+xmax+", "+bounds.x+", "+bounds.width+", "+xrange);
 
-//    Is there any data to draw? Sometimes the draw command will
-//    will be called before any data has been placed in the class.
-          if( data == null || data.length < stride ) return;
+		if (data == null || lngth < Stride) return;
 
-//    Is the first point inside the drawing region ?
-          if( (inside0 = inside(data[0], data[1])) ) {
+		width_factor = bounds.width / xrange;
+		height_factor = bounds.height / yrange;
+System.err.println("width_factor for candles: " + width_factor);
+System.err.println("height_factor for candles: " + width_factor);
+System.err.println("xmin, bounds.x, bounds.width, xrange: " +
+xmin+", "+bounds.x+", "+bounds.width+", "+xrange);
+		for (i = 0, row = 1; i < lngth; i += Stride, ++row) {
+			openy = (int) (bounds.height - (data[i] - ymin) * height_factor +
+						bounds.y);
+			highy = (int)(bounds.height - (data[i+1] - ymin) * height_factor +
+						bounds.y);
+			lowy = (int)(bounds.height - (data[i+2] - ymin) * height_factor +
+						bounds.y);
+			closey = (int)(bounds.height - (data[i+3] - ymin) * height_factor +
+						bounds.y);
+			x = (int)((row - xmin) * width_factor + bounds.x);
+//!!!experiment: x = (int)(bounds.x + (row-xmin)*(xrange/bounds.width));
+			middle_x = x + candlewidth / 2;
+			// For candle color, relation is reversed (< -> >) because
+			// of the coordinate system used - higher coordinates have
+			// a lower value.
+			white = closey > openy? false: true;
+System.err.println("x, middle_x, candlewidth: "+x+", "+middle_x+", "+
+candlewidth);
+System.err.println("openy, highy, lowy, closey, x, middle_x, white: "+
+openy+", "+highy+", "+lowy+", "+closey+", "+x+", "+middle_x+", "+white);
+System.err.println("row, data["+i+".."+(i+3)+"]: "+row+", "+data[i]+", "+
+(data[i+1])+", "+(data[i+2])+", "+(data[i+3]));
+			g.setColor(white? Color.green: Color.red);
+			y_s[0] = openy; y_s[1] = openy; y_s[2] = closey; y_s[3] = closey;
+			x_s[0] = x; x_s[1] = x + candlewidth;
+			x_s[2] = x + candlewidth; x_s[3] = x;
+			// Candle body
+			g.fillPolygon(x_s, y_s, Stride);
+			g.setColor(original_color);
+			// Stems
+			if (white) {
+				g.drawLine(middle_x, closey, middle_x, highy);
+				g.drawLine(middle_x, openy, middle_x, lowy);
+			}
+			else {
+				g.drawLine(middle_x, closey, middle_x, lowy);
+				g.drawLine(middle_x, openy, middle_x, highy);
+			}
+		}
+	}
 
-              x0 = (int)(bounds.x + ((data[0]-xmin)/xrange)*bounds.width);
-              y0 = (int)(bounds.y +
-					(1.0 - (data[1]-ymin)/yrange)*bounds.height);
+	// 4 points: open, high, low, close - no x coordinates
+	public int drawing_stride() { return Stride; }
 
-              if( x0 < xcmin || x0 > xcmax ||
-                  y0 < ycmin || y0 > ycmax)  inside0 = false;
-
-          }
-
-          for(i=stride; i<length; i+=stride) {
-//        Is this point inside the drawing region?
-              inside1 = inside( data[i], data[i+1]);
-//        If one point is inside the drawing region calculate the second point
-              if ( inside1 || inside0 ) {
-
-               x1 = (int)(bounds.x + ((data[i]-xmin)/xrange)*bounds.width);
-               y1 = (int)(bounds.y +
-						(1.0 - (data[i+1]-ymin)/yrange)*bounds.height);
-
-               if( x1 < xcmin || x1 > xcmax ||
-                   y1 < ycmin || y1 > ycmax)  inside1 = false;
-
-              }
-//        If the second point is inside calculate the first point if it
-//        was outside
-              if ( !inside0 && inside1 ) {
-
-                x0 = (int)(bounds.x +
-						((data[i-stride]-xmin)/xrange)*bounds.width);
-                y0 = (int)(bounds.y +
-						(1.0 - (data[i-stride+1]-ymin)/yrange)*bounds.height);
-
-              }
-//        If either point is inside draw the segment
-              if ( inside0 || inside1 )  {
-					g.drawLine(x0,y0,x1,y1);
-					//g.drawLine(x0,y0 + 25,x1,y1 + 25);
-              }
-
-/*
-**        The reason for the convolution above is to avoid calculating
-**        the points over and over. Now just copy the second point to the
-**        first and grab the next point
-*/
-              inside0 = inside1;
-              x0 = x1;
-              y0 = y1;
-
-          }
-      }
+	private static final int Stride = 4;
 }

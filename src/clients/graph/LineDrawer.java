@@ -13,73 +13,50 @@ public class LineDrawer extends Drawer {
 	* @param g Graphics context
 	* @param w Data window
 	*/
-	protected void draw_tuples(Graphics g, Rectangle bounds, Rectangle clip) {
-          int i;
-          int j;
-          boolean inside0 = false;
-          boolean inside1 = false;
-          double x,y;
-          int x0 = 0 , y0 = 0;
-          int x1 = 0 , y1 = 0;
-          int xcmin = clip.x;
-          int xcmax = clip.x + clip.width;
-          int ycmin = clip.y;
-          int ycmax = clip.y + clip.height;
+	protected void draw_tuples(Graphics g, Rectangle bounds) {
+		int i, row;
+		int x0, y0;
+		int x1, y1;
+		int lngth = data.length;
+		double width_factor, height_factor;
 
-//    Is there any data to draw? Sometimes the draw command will
-//    will be called before any data has been placed in the class.
-          if( data == null || data.length < stride ) return;
+System.err.println("line data length: " + lngth);
 
-//    Is the first point inside the drawing region ?
-          if( (inside0 = inside(data[0], data[1])) ) {
+		// Is there any data to draw? Sometimes the draw command will
+		// will be called before any data has been placed in the class.
+		if (data == null || lngth < Stride) return;
 
-              x0 = (int)(bounds.x + ((data[0]-xmin)/xrange)*bounds.width);
-              y0 = (int)(bounds.y +
-					(1.0 - (data[1]-ymin)/yrange)*bounds.height);
+		width_factor = bounds.width / xrange;
+		height_factor = bounds.height / yrange;
+System.err.println("width factor for lines: " + width_factor);
+System.err.println("height factor for lines: " + height_factor);
+System.err.println("xmin, xmax, bounds.x, bounds.width, xrange: " +
+xmin+", "+xmax+", "+bounds.x+", "+bounds.width+", "+xrange);
+		row = 1;
+		x0 = (int)((row - xmin) * width_factor + bounds.x);
+		y0 = (int)(bounds.height - (data[0]-ymin) * height_factor + bounds.y);
+		++row;
 
-              if( x0 < xcmin || x0 > xcmax ||
-                  y0 < ycmin || y0 > ycmax)  inside0 = false;
+		for (i = Stride; i < lngth; i += Stride, ++row) {
+			x1 = (int)((row - xmin) * width_factor + bounds.x);
+			y1 = (int)(bounds.height - (data[i]-ymin) * height_factor +
+					bounds.y);
+System.err.println("row, data["+i+"], x1, y1: "+row+", "+data[i]+", "+
+x1+", "+y1);
+			g.drawLine(x0,y0,x1,y1);
 
-          }
+			/*
+			** The reason for the convolution above is to avoid calculating
+			** the points over and over. Now just copy the second point to the
+			** first and grab the next point
+			*/
+			x0 = x1;
+			y0 = y1;
+		}
+	}
 
-          for(i=stride; i<length; i+=stride) {
-//        Is this point inside the drawing region?
-              inside1 = inside( data[i], data[i+1]);
-//        If one point is inside the drawing region calculate the second point
-              if ( inside1 || inside0 ) {
+	// 1 coordinate for each point - no x coordinate
+	public int drawing_stride() { return Stride; }
 
-               x1 = (int)(bounds.x + ((data[i]-xmin)/xrange)*bounds.width);
-               y1 = (int)(bounds.y +
-						(1.0 - (data[i+1]-ymin)/yrange)*bounds.height);
-
-               if( x1 < xcmin || x1 > xcmax ||
-                   y1 < ycmin || y1 > ycmax)  inside1 = false;
-
-              }
-//        If the second point is inside calculate the first point if it
-//        was outside
-              if ( !inside0 && inside1 ) {
-
-                x0 = (int)(bounds.x +
-						((data[i-stride]-xmin)/xrange)*bounds.width);
-                y0 = (int)(bounds.y +
-						(1.0 - (data[i-stride+1]-ymin)/yrange)*bounds.height);
-
-              }
-//        If either point is inside draw the segment
-              if ( inside0 || inside1 )  {
-					g.drawLine(x0,y0,x1,y1);
-					//g.drawLine(x0,y0 + 25,x1,y1 + 25);
-              }
-
-/*
-**        The reason for the convolution above is to avoid calculating
-**        the points over and over. Now just copy the second point to the
-**        first and grab the next point
-*/
-              inside0 = inside1;
-              x0 = x1;
-              y0 = y1;
-          }
-      }
+	private static final int Stride = 1;
 }
