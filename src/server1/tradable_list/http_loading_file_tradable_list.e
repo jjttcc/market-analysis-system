@@ -83,7 +83,10 @@ feature -- Access
 				check_if_data_is_out_of_date
 			end
 			if not fatal_error and data_out_of_date then
-				append_new_data
+				retrieve_data
+				if not retrieval_failed and output_file_exists then
+					load_data
+				end
 			end
 		ensure then
 			good_if_no_error: not fatal_error implies target_tradable /= Void
@@ -171,7 +174,6 @@ feature {NONE} -- Hook routine implementations
 		do
 			parameters.set_symbol (current_symbol)
 			use_day_after_latest_date_as_start_date := True
--- !!!!??:
 -- Ensure that old indicator data from the previous
 -- `target_tradable' is not re-used.
 -- !!!! Note: This call is probably not needed here - if so, remove:
@@ -182,13 +184,21 @@ feature {NONE} -- Hook routine implementations
 					current_symbol)
 				use_day_after_latest_date_as_start_date := False
 			end
-			Result := not fatal_error and data_out_of_date
+			if not fatal_error and data_out_of_date then
+				retrieve_data
+				-- If `retrieval_failed', there is not new data - thus
+				-- the target tradable is not out of date.
+				Result := not retrieval_failed
+			else
+				check
+					not_out_of_date: not Result
+				end
+			end
 print ("target_tradable_out_of_date returning: " + Result.out + "%N")
 		end
 
 	append_new_data is
 		do
-			retrieve_data
 			load_data
 		end
 

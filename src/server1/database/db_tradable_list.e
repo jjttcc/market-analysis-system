@@ -63,6 +63,8 @@ feature {NONE} -- Implementation
 				log_errors (<<"Error occurred while processing ",
 					current_symbol, ": ", db.last_error>>)
 				close_input_medium
+			else
+				input_sequence.start
 			end
 		ensure then
 			input_sequence_closed_on_error: fatal_error and

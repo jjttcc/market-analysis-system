@@ -146,14 +146,19 @@ feature {NONE} -- Status report
 	retrieval_failed: BOOLEAN
 			-- Did the last call to `retrieve_data' fail?
 
+	work_outputfile: PLAIN_TEXT_FILE
+
 	output_file_exists: BOOLEAN is
 			-- Does the output file with name
 			-- `output_file_name (parameters.symbol)' exist?
-		local
-			outputfile: PLAIN_TEXT_FILE
 		do
-			create outputfile.make (output_file_name (parameters.symbol))
-			Result := outputfile.exists
+			if work_outputfile = Void then
+				create work_outputfile.make (
+					output_file_name (parameters.symbol))
+			else
+				work_outputfile.make (output_file_name (parameters.symbol))
+			end
+			Result := work_outputfile.exists
 		end
 
 	data_out_of_date: BOOLEAN

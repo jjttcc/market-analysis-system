@@ -62,10 +62,8 @@ feature {NONE} -- Hook routine implementations
 
 	target_tradable_out_of_date: BOOLEAN is
 		do
-			if http_out_of_date then
-				retrieve_data
-			end
-			Result := {EXTENDED_FILE_BASED_TRADABLE_LIST} Precursor
+			Result := http_out_of_date and then
+				{EXTENDED_FILE_BASED_TRADABLE_LIST} Precursor
 print ("target_tradable_out_of_date returning: " + Result.out + "%N")
 		end
 
