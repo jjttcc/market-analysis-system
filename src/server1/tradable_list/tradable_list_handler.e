@@ -59,7 +59,10 @@ feature -- Access
 					l.search_by_symbol (symbol)
 					if not l.fatal_error then
 						t := l.item
-						if t.valid_period_type (period_type) then
+						if
+							t /= Void and then
+							t.valid_period_type (period_type)
+						then
 							Result := t
 							last_tradable := t
 						end
@@ -68,6 +71,7 @@ feature -- Access
 						error_occurred := true
 						last_error := concatenation (<<
 							"Error occurred retrieving data for ", symbol>>)
+						l.clear_error
 					end
 				else
 					error_occurred := true
