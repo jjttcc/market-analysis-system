@@ -204,7 +204,7 @@ feature {NONE}
 				from
 					line_up (l1, l2)
 				until
-					Result or l1.after or l2.after
+					Result or l1.exhausted or l2.exhausted
 				loop
 					if
 						not l1.item.date_time.is_equal (
@@ -214,7 +214,7 @@ feature {NONE}
 					end
 					l1.forth; l2.forth
 				end
-				if not Result and l1.after /= l2.after then
+				if not Result and l1.exhausted /= l2.exhausted then
 					Result := true
 				end
 			else
