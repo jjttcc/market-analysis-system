@@ -402,7 +402,7 @@ feature {NONE} -- Implementation
 			-- User's choice (if any) of a date/time extension for a
 			-- compound event generator
 		local
-			finished, yes_selected: BOOLEAN
+			finished: BOOLEAN
 			days, months, years: INTEGER
 			yes_choice: YES_NO_HELP_CHOICE
 			selection: ENUMERATED [CHARACTER]
@@ -474,7 +474,7 @@ feature {NONE} -- Implementation
 			-- User's choice for the left target type (if any) of a
 			-- compound event generator
 		local
-			finished, yes_selected: BOOLEAN
+			finished: BOOLEAN
 			yes_choice: YES_NO_HELP_CHOICE
 			selection: ENUMERATED [CHARACTER]
 			msg: STRING

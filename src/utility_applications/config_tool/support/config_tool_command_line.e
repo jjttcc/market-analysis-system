@@ -21,16 +21,12 @@ creation
 
 feature {NONE} -- Initialization
 
-	process_remaining_arguments is
+	prepare_for_argument_processing is
 		do
-			from
-				main_setup_procedures.start
-			until
-				main_setup_procedures.exhausted
-			loop
-				main_setup_procedures.item.call ([])
-				main_setup_procedures.forth
-			end
+		end
+
+	finish_argument_processing is
+		do
 			initialization_complete := True
 		end
 
@@ -66,8 +62,10 @@ feature {NONE} -- Implementation
 					command_file_path.append (contents.item.substring (
 						3, contents.item.count))
 					contents.remove
+					last_argument_found := True
 				else
 					contents.remove
+					last_argument_found := True
 					if not contents.exhausted then
 						create command_file_path.make (contents.item.count)
 						command_file_path.append (contents.item)
@@ -89,8 +87,10 @@ feature {NONE} -- Implementation
 					target_file_path.append (contents.item.substring (
 						3, contents.item.count))
 					contents.remove
+					last_argument_found := True
 				else
 					contents.remove
+					last_argument_found := True
 					if not contents.exhausted then
 						create target_file_path.make (contents.item.count)
 						target_file_path.append (contents.item)

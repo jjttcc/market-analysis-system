@@ -167,7 +167,36 @@ feature -- Status report
 
 feature {NONE} -- Hook routines implementations
 
-	process_remaining_arguments is
+	prepare_for_argument_processing is
+		do
+			create {LINKED_LIST [INTEGER]} port_numbers.make
+			create special_date_settings.make (date_format_prefix)
+			special_date_settings.add_error_subscriber (Current)
+			opening_price := True
+		end
+
+	finish_argument_processing is
+		local
+			setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]]
+		do
+			create setup_procedures.make
+			if not use_db then
+				setup_procedures.extend (agent set_use_external_data_source)
+				if not use_external_data_source then
+					setup_procedures.extend (agent set_use_web)
+					if not use_web then
+						setup_procedures.extend (agent set_file_names)
+					end
+				end
+			else
+				setup_procedures.extend (agent set_keep_db_connection)
+			end
+			process_arguments (setup_procedures)
+			initialization_complete := True
+		end
+
+--!!!
+	old_remove_process_remaining_arguments is
 		local
 			setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]]
 		do
@@ -239,8 +268,10 @@ feature {NONE} -- Implementation
 					create field_separator.make (contents.item.count - 2)
 					field_separator.append (contents.item.substring (
 						3, contents.item.count))
+					last_argument_found := True
 					contents.remove
 				else
+					last_argument_found := True
 					contents.remove
 					if not contents.exhausted then
 						create field_separator.make (contents.item.count)
@@ -258,6 +289,7 @@ feature {NONE} -- Implementation
 				-- needs to change, but the option flag needs to be
 				-- removed from `contents' to prevent it being seen
 				-- as an invalid option by `check_for_invalid_flags'.
+				last_argument_found := True
 				contents.remove
 			end
 		end
@@ -266,6 +298,7 @@ feature {NONE} -- Implementation
 		do
 			if option_in_contents ('b') then
 				background := True
+				last_argument_found := True
 				contents.remove
 			end
 		end
@@ -274,6 +307,7 @@ feature {NONE} -- Implementation
 		do
 			if option_in_contents ('s') then
 				strict := True
+				last_argument_found := True
 				contents.remove
 			end
 		end
@@ -282,6 +316,7 @@ feature {NONE} -- Implementation
 		do
 			if option_in_contents ('n') then
 				intraday_caching := False
+				last_argument_found := True
 				contents.remove
 			else
 				intraday_caching := True
@@ -292,6 +327,7 @@ feature {NONE} -- Implementation
 		do
 			if option_in_contents ('p') then
 				use_db := True
+				last_argument_found := True
 				contents.remove
 			end
 		end
@@ -300,6 +336,7 @@ feature {NONE} -- Implementation
 		do
 			if option_in_contents ('w') then
 				use_web := True
+				last_argument_found := True
 				contents.remove
 			end
 		end
@@ -308,6 +345,7 @@ feature {NONE} -- Implementation
 		do
 			if option_in_contents ('x') then
 				use_external_data_source := True
+				last_argument_found := True
 				contents.remove
 			end
 		end
@@ -317,6 +355,7 @@ feature {NONE} -- Implementation
 			keep_db_connection := True -- Default value
 			if option_string_in_contents ("reconnect") then
 				keep_db_connection := False
+				last_argument_found := True
 				contents.remove
 			end
 		end
@@ -375,12 +414,15 @@ feature {NONE} -- Implementation
 					create intraday_extension.make (contents.item.count - 2)
 					intraday_extension.append (contents.item.substring (
 						3, contents.item.count))
+					last_argument_found := True
 					contents.remove
 				else
+					last_argument_found := True
 					contents.remove
 					if not contents.exhausted then
 						create intraday_extension.make (contents.item.count)
 						intraday_extension.append (contents.item)
+						last_argument_found := True
 						contents.remove
 					end
 				end
@@ -390,12 +432,15 @@ feature {NONE} -- Implementation
 					create daily_extension.make (contents.item.count - 2)
 					daily_extension.append (contents.item.substring (
 						3, contents.item.count))
+					last_argument_found := True
 					contents.remove
 				else
+					last_argument_found := True
 					contents.remove
 					if not contents.exhausted then
 						create daily_extension.make (contents.item.count)
 						daily_extension.append (contents.item)
+						last_argument_found := True
 						contents.remove
 					end
 				end

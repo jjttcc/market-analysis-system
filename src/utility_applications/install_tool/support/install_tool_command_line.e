@@ -21,17 +21,13 @@ creation
 
 feature {NONE} -- Initialization
 
-	process_remaining_arguments is
+	prepare_for_argument_processing is
 		do
 			application_dir := ""
-			from
-				main_setup_procedures.start
-			until
-				main_setup_procedures.exhausted
-			loop
-				main_setup_procedures.item.call ([])
-				main_setup_procedures.forth
-			end
+		end
+
+	finish_argument_processing is
+		do
 			initialization_complete := True
 		end
 
@@ -74,6 +70,7 @@ feature {NONE} -- Implementation
 				if not contents.item.is_empty then
 					application_dir := contents.item
 					contents.remove
+					last_argument_found := True
 				else
 					contents.forth
 				end
@@ -86,6 +83,7 @@ feature {NONE} -- Implementation
 				if not contents.item.is_empty then
 					application_dir := application_dir + " " + contents.item
 					contents.remove
+					last_argument_found := True
 				else
 					contents.forth
 				end

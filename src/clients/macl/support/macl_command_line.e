@@ -88,18 +88,14 @@ feature {NONE} -- Implementation - Hook routine implementations
 			Result := a.linear_representation
 		end
 
-	process_remaining_arguments is
+	prepare_for_argument_processing is
 		do
 			port_number := -1
 			host_name := ""
-			from
-				main_setup_procedures.start
-			until
-				main_setup_procedures.exhausted
-			loop
-				main_setup_procedures.item.call ([])
-				main_setup_procedures.forth
-			end
+		end
+
+	finish_argument_processing is
+		do
 			initialization_complete := True
 		end
 
@@ -116,8 +112,10 @@ feature {NONE} -- Implementation
 					host_name.append (contents.item.substring (
 						3, contents.item.count))
 					contents.remove
+					last_argument_found := True
 				else
 					contents.remove
+					last_argument_found := True
 					if not contents.exhausted then
 						create host_name.make (contents.item.count)
 						host_name.append (contents.item)
@@ -141,6 +139,7 @@ feature {NONE} -- Implementation
 				if contents.item.is_integer then
 					port_number := contents.item.to_integer
 					contents.remove
+					last_argument_found := True
 				else
 					contents.forth
 				end
@@ -162,8 +161,10 @@ feature {NONE} -- Implementation
 					file_name.append (contents.item.substring (
 						3, contents.item.count))
 					contents.remove
+					last_argument_found := True
 				else
 					contents.remove
+					last_argument_found := True
 					if not contents.exhausted then
 						record := True
 						create file_name.make (contents.item.count)
@@ -210,8 +211,10 @@ feature {NONE} -- Implementation
 					file_name.append (contents.item.substring (
 						3, contents.item.count))
 					contents.remove
+					last_argument_found := True
 				else
 					contents.remove
+					last_argument_found := True
 					if not contents.exhausted then
 						input_from_file := True
 						create file_name.make (contents.item.count)
@@ -249,6 +252,7 @@ feature {NONE} -- Implementation
 			if option_string_in_contents ("te") then
 				terminate_on_error := True
 				contents.remove
+				last_argument_found := True
 			end
 		end
 
@@ -257,6 +261,7 @@ feature {NONE} -- Implementation
 			if option_string_in_contents ("ti") then
 				timing_on := True
 				contents.remove
+				last_argument_found := True
 			end
 		end
 
@@ -265,6 +270,7 @@ feature {NONE} -- Implementation
 			if option_in_contents ('q') then
 				quiet_mode := True
 				contents.remove
+				last_argument_found := True
 			end
 		end
 

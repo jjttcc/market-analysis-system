@@ -34,16 +34,12 @@ feature -- Access -- settings
 
 feature {NONE} -- Implementation - Hook routines
 
-	process_remaining_arguments is
+	prepare_for_argument_processing is
 		do
-			from
-				main_setup_procedures.start
-			until
-				main_setup_procedures.exhausted
-			loop
-				main_setup_procedures.item.call ([])
-				main_setup_procedures.forth
-			end
+		end
+
+	finish_argument_processing is
+		do
 			initialization_complete := True
 		end
 
