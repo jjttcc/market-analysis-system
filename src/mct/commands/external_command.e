@@ -71,7 +71,7 @@ feature -- Basic operations
 				previous_directory := env.current_working_directory
 				env.change_working_directory (working_directory)
 			end
-			do_execute (command_string)
+			do_execute (arg)
 			if working_directory /= Void then
 				env.change_working_directory (previous_directory)
 			end
