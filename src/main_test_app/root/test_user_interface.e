@@ -572,10 +572,8 @@ feature {NONE}
 			current_period_type := period_types @ "daily"
 			market_list := factory_builder.market_list
 			input_file_names := factory_builder.input_file_names
-			event_coordinator := factory_builder.event_coordinator
 		ensure
 			curr_period_not_void: current_period_type /= Void
-			event_coordinator_not_void: event_coordinator /= Void
 			market_list_not_void: market_list /= Void
 			input_file_names_not_void: input_file_names /= Void
 			event_coordinator_not_void: event_coordinator /= Void
