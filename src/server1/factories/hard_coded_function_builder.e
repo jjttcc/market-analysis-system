@@ -180,13 +180,14 @@ feature {NONE} -- Hard-coded market function building procedures
 			gt_op: GT_OPERATOR
 			offset1, offset2: SETTABLE_OFFSET_COMMAND
 			close: CLOSING_PRICE
-			zero, one_hundred, one, nconst: CONSTANT
+			zero, one_hundred, one: CONSTANT
+			nvalue: N_VALUE_COMMAND
 			upsub, downsub, outer_sub: SUBTRACTION
 			rs_div, maindiv, upavg, downavg: DIVISION
 			one_plus_rs: ADDITION
 		do
 			!!close; !!zero.make (0)
-			!!one_hundred.make (100); !!one.make (1); !!nconst.make (n)
+			!!one_hundred.make (100); !!one.make (1); !!nvalue.make (n)
 			!!offset1.make (f.output, close); !!offset2.make (f.output, close)
 			offset2.set_offset (1)
 			!!lt_op.make (offset1, offset2)
@@ -194,7 +195,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			!!up_boolclient.make (lt_op, upsub, zero)
 			!!up_adder.make (f.output, up_boolclient, n)
 			!!up_closes.make (f.output, up_adder, n)
-			!!upavg.make (up_closes, nconst)
+			!!upavg.make (up_closes, nvalue)
 
 			!!gt_op.make (offset1, offset2)
 			-- Notice that order of arguments is different:
@@ -202,7 +203,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			!!down_boolclient.make (gt_op, downsub, zero)
 			!!down_adder.make (f.output, down_boolclient, n)
 			!!down_closes.make (f.output, down_adder, n)
-			!!downavg.make (down_closes, nconst)
+			!!downavg.make (down_closes, nvalue)
 
 			!!rs_div.make (upavg, downavg) -- RS: up avg / down avg
 			!!one_plus_rs.make (rs_div, one) -- 1 + RS
