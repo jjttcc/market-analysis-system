@@ -245,7 +245,8 @@ public class ChartDataManager implements NetworkProtocol, AssertionConstants {
 				} else {
 					request_result_id = data_requester.request_result_id();
 					new ErrorBox("Warning", "Error occurred retrieving " +
-						"data for " + tradable, owner);
+						"data for " + tradable + ": " +
+						data_requester.request_failure_message, owner);
 					// Handle request error.
 					if (request_result_id == Invalid_symbol) {
 						handle_nonexistent_sybmol(tradable);
