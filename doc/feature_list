@@ -35,6 +35,8 @@ System-defined technical indicators:
   - Stochastic %D
   - Slow Stochastic %D
   - Relative Strength Index
+  - Wilder Moving Average
+  - Weighted Moving Average
 
 Current list of user-configured technical indicators:
 
@@ -44,6 +46,13 @@ Current list of user-configured technical indicators:
   - Slope of Slope of MACD Signal Line
   - EMA of Volume
   - Slope of MACD Signal Line Trend
+  - Force Index
+  - EMA of Open interest
+  - Slope of EMA of Volume
+  - Slope of EMA of Open interest
+  - Midpoint
+  - Weighted Moving Average of Midpoint
+  - MACD of Volume
 
 Current list of market-analysis rules:
 
@@ -63,9 +72,9 @@ Market Analysis GUI Client (MAGC)
 Functionality:
 
 Provides charts of market and indicator data.
-Obtains market and indicator data from the MAS via a network connection.
+Obtains market and indicator data from the MAS server via a network connection.
 Provides choice of candles or price bars.
-Provides selection of markets.
+Provides selection of tradables.
 Provides choice of all period types available from the server (daily,
    weekly, monthly, etc.)
 Displays reference dates and values based on current data.
