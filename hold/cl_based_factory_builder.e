@@ -130,16 +130,16 @@ feature {NONE}
 
 	build_components (tradable_factories: LINKED_LIST [TRADABLE_FACTORY]) is
 		local
-			fa_builder: MARKET_EVENT_GENERATOR_BUILDER
+			meg_builder: MARKET_EVENT_GENERATOR_BUILDER
 		do
-			!!fa_builder.make (function_list_factory.product)
+			!!meg_builder.make (function_list_factory.product)
 			!VIRTUAL_TRADABLE_LIST!market_list.make (input_file_names,
 														tradable_factories)
-			fa_builder.execute
-			!!registration_builder.make (fa_builder.product)
+			meg_builder.execute
+			!!registration_builder.make (meg_builder.product)
 			registration_builder.execute
 			!MARKET_EVENT_COORDINATOR!event_coordinator.make (
-								fa_builder.product, market_list,
+								meg_builder.product, market_list,
 								registration_builder.product)
 		end
 

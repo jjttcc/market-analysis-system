@@ -12,6 +12,9 @@ class STOCK_FACTORY inherit
 		end
 
 	OPERATING_ENVIRONMENT
+		export {NONE}
+			all
+		end
 
 creation
 
