@@ -67,7 +67,7 @@ date,high,low,close,volume
 date,time,open,high,low,close,volume
 date,time,high,low,close,volume
 
-Open interest is not supported in the current version.
+Note that open interest is supported as of version 1.6.
 
 Note that there are some sample data files in {mas_dir}/lib/data that
 you can use to begin with.

@@ -92,13 +92,15 @@ historic data for the markets you are interested in tracking; and you
 will need some method of updating these files each trading day with the
 current end-of-day data.  (If you don't currently have a good data source,
 I have found http://www.msodata.com/ to be a reliable, cheap source of daily
-market data.)
+market data.)  (Note: MAS can also obtain data from a database or from
+yahoo.com using the QuoteMonster script.  See masystem_introduction for
+directions on how to use these alternative data sources.)
 
 Currently MAS handles data with the fields date, open, high, low, close,
-volume (in that order), which provides for stock and index data (with
-volume of 0).  It expects the date field to follow the format:  yyyymmdd.
-For example, 19990701, for July 1, 1999.  Future versions should handle
-more fields, such as open interest.
+volume, and, optionally, open interest (in that order), which provides
+for stock and index data (with volume of 0), as well as futures data.
+It expects the date field to follow the format:  yyyymmdd.  For example,
+19990701, for July 1, 1999.
 
 There are some sample data files included in the correct format in lib/data
 so that you can try out MAS without having to obtain data files.
