@@ -73,6 +73,10 @@ feature -- Basic operations
 			end
 			do_execute (arg)
 			if working_directory /= Void then
+				if debugging_on then
+					print ("'working_directory': " + working_directory + "%N" +
+					"Changing back to prev dir: " + previous_directory+ "%N")
+				end
 				env.change_working_directory (previous_directory)
 			end
 		end
