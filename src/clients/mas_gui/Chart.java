@@ -13,12 +13,11 @@ import java.util.Hashtable;
 import java.util.Enumeration;
 import java.io.*;
 import graph.*;
+import support.*;
 
 /** Technical analysis GUI chart component */
-public class TA_Chart extends Frame
-{
-	public TA_Chart(TA_Connection conn)
-	{
+public class TA_Chart extends Frame {
+	public TA_Chart(TA_Connection conn) {
 		super("TA_Chart");		// Create the main window frame.
 		num_windows++;			// Count it.
 		connection = conn;

@@ -3,6 +3,7 @@ import java.net.*;
 import java.util.*;
 import common.*;
 import graph.*;
+import support.*;
 
 /** Provides an interface for connecting and communicating with the server */
 public class TA_Connection implements NetworkProtocol
@@ -58,8 +59,6 @@ public class TA_Connection implements NetworkProtocol
 		Configuration conf = Configuration.instance();
 
 		connect();
-		System.out.println("Sending settings:\n'" +
-							conf.session_settings() + "'");
 		send_msg(Login_request, conf.session_settings(), 0);
 		try {
 			session_key_str = receive_msg().toString();
@@ -86,7 +85,6 @@ public class TA_Connection implements NetworkProtocol
 	public void logout(boolean exit, int status, int session_key)
 	{
 		connect();
-System.err.println("Sending " + Logout_request);
 		send_msg(Logout_request, "", session_key);
 		if (exit) System.exit(status);
 	}
@@ -230,7 +228,7 @@ System.err.println("Sending " + Logout_request);
 			// error (probably in the client), it is treated as fatal.
 			System.exit(-1);
 		}
-System.out.println(result.toString());
+//System.out.println(result.toString());
 		return result;
 	}
 
@@ -241,10 +239,6 @@ System.out.println(result.toString());
 		out.print(Input_field_separator + session_key);
 		out.print(Input_field_separator + msg);
 		out.print(Eom);
-System.err.print(msgID);
-System.err.print(Input_field_separator + session_key);
-System.err.print(Input_field_separator + msg);
-System.err.print(Eom);
 		out.flush();
 	}
 
@@ -273,18 +267,23 @@ System.err.print(Eom);
 		}
 		catch (IOException e)
 		{
-			System.err.println("Couldn't get I/O for the connection to: ");
-			System.err.println(hostname);
+			System.err.println("Couldn't get I/O for the connection to: " +
+								hostname);
 			System.exit(1);
 		}
 	}
 
-//!!!Change to switch on a configured setting - to make a PriceDrawer,
-//!!!CandleDrawer, or LineDrawer.
 	private Drawer new_main_drawer() {
-		// Currently - for testing - randomly assign candle or price drawer.
-		if ((int) (Math.random() * 10) % 2 == 1) return new CandleDrawer();
-		else return new PriceDrawer();
+		Configuration c = Configuration.instance();
+		Drawer result;
+
+		switch (c.main_graph_drawer()) {
+			case c.Candle_graph: result = new CandleDrawer(); break;
+			case c.Regular_graph: result = new PriceDrawer(); break;
+			case c.Line_graph: result = new LineDrawer(); break;
+			default: result = new PriceDrawer(); break;
+		}
+		return result;
 	}
 
 	private void usage()
