@@ -18,7 +18,7 @@ feature {NONE} -- Access
 
 	factory_builder: FACTORY_BUILDER
 
-	market_list_handler: TRADABLE_LIST_HANDLER
+	market_list_handler: TRADABLE_DISPENSER
 
 	intraday_market_list: TRADABLE_LIST
 
