@@ -46,7 +46,6 @@ feature -- Access
 			Result.extend (main_box)
 			add_mas_session_window_components (main_box)
 			Result.set_menu_bar (mas_session_window_menu_bar)
-			add_main_accelerators (Result)
 			add_session_accelerators (Result)
 			-- Allow screen refresh on some platoforms.
 			Result.unlock_update
@@ -145,8 +144,9 @@ feature {NONE} -- Menu components
 			current_actions_exist: current_mas_session_actions /= Void
 		do
 			create Result.make_with_text (file_menu_title)
-			Result.extend (widget_builder.new_menu_item (close_menu_title,
+			Result.extend (widget_builder.new_menu_item (close_menu_item_title,
 				<<agent current_mas_session_actions.close_window>>))
+			Result.extend (create {EV_MENU_SEPARATOR})
 			common_file_menu_items.do_all (agent Result.extend)
 		end
 
@@ -157,10 +157,10 @@ feature {NONE} -- Menu components
 		do
 			create Result.make_with_text (edit_menu_title)
 			Result.extend (widget_builder.new_menu_item (
-				server_startup_menu_title,
+				server_startup_menu_item_title,
 				<<agent current_main_actions.configure_server_startup>>))
 			Result.extend (widget_builder.new_menu_item (
-				preferences_menu_title,
+				preferences_menu_item_title,
 				<<agent current_main_actions.edit_preferences>>))
 		end
 
@@ -178,7 +178,11 @@ feature {NONE} -- Menu components
 				actions := current_mas_session_actions
 			end
 			create Result.make_with_text (help_menu_title)
-			Result.extend (widget_builder.new_menu_item (about_menu_title,
+			Result.extend (widget_builder.new_menu_item (
+				introduction_menu_item_title,
+				<<agent actions.show_help_introduction>>))
+			Result.extend (create {EV_MENU_SEPARATOR})
+			Result.extend (widget_builder.new_menu_item (about_menu_item_title,
 				<<agent actions.show_about_box>>))
 		end
 
@@ -193,14 +197,47 @@ feature {NONE} -- Menu components
 				actions := current_mas_session_actions
 			end
 			create {LINKED_LIST [EV_MENU_ITEM]} Result.make
-			Result.extend (widget_builder.new_menu_item (quit_menu_title,
+			Result.extend (widget_builder.new_menu_item (quit_menu_item_title,
 				<<agent actions.exit>>))
 			Result.extend (widget_builder.new_menu_item (
-				quit_without_menu_title,
+				quit_without_menu_item_title,
 				<<agent actions.exit_without_session_termination>>))
 		end
 
 feature {NONE} -- Miscellaneous
+
+	add_common_accelerators (w: EV_TITLED_WINDOW) is
+			-- Associate main MCT accelerators with `w'.
+		require
+			current_actions_exist: current_main_actions /= Void or
+				current_mas_session_actions /= Void
+		local
+			accelerator: EV_ACCELERATOR
+			key_constants: expanded EV_KEY_CONSTANTS
+			actions: ACTIONS
+		do
+			if current_main_actions /= Void then
+				actions := current_main_actions
+			else
+				actions := current_mas_session_actions
+			end
+			-- Add a 'quit' accelerator.
+			accelerator := widget_builder.default_accelerator (
+				key_constants.key_q)
+			accelerator.actions.extend (agent actions.exit)
+			w.accelerators.extend (accelerator)
+			-- Add a 'quit without terminating sessions' accelerator.
+			accelerator := widget_builder.default_accelerator (
+				key_constants.key_u)
+			accelerator.actions.extend (
+				agent actions.exit_without_session_termination)
+			w.accelerators.extend (accelerator)
+			-- Add an 'introduction' accelerator.
+			accelerator := widget_builder.default_accelerator (
+				key_constants.key_i)
+			accelerator.actions.extend (agent actions.show_help_introduction)
+			w.accelerators.extend (accelerator)
+		end
 
 	add_main_accelerators (w: EV_TITLED_WINDOW) is
 			-- Associate main MCT accelerators with `w'.
@@ -217,18 +254,13 @@ feature {NONE} -- Miscellaneous
 			else
 				actions := current_mas_session_actions
 			end
-			-- Create an accelerator activated with Ctrl and 'q'.
-			create accelerator.make_with_key_combination (
-				create {EV_KEY}.make_with_code (key_constants.key_q),
-				True, False, False)
-			accelerator.actions.extend (agent actions.exit)
-			w.accelerators.extend (accelerator)
-			-- Create an accelerator activated with Ctrl and `u'.
-			create accelerator.make_with_key_combination (
-				create {EV_KEY}.make_with_code (key_constants.key_u),
-				True, False, False)
+			add_common_accelerators (w)
+			-- Add a 'server startup configuration' accelerator activated
+			-- with Ctrl and 's'.
+			accelerator := widget_builder.default_accelerator (
+				key_constants.key_s)
 			accelerator.actions.extend (
-				agent actions.exit_without_session_termination)
+				agent current_main_actions.configure_server_startup)
 			w.accelerators.extend (accelerator)
 		end
 
@@ -247,10 +279,10 @@ feature {NONE} -- Miscellaneous
 			else
 				actions := current_mas_session_actions
 			end
-			-- Create an accelerator activated with Ctrl and 'w'.
-			create accelerator.make_with_key_combination (
-				create {EV_KEY}.make_with_code (key_constants.key_w),
-				True, False, False)
+			add_common_accelerators (w)
+			-- Create a close-window accelerator.
+			accelerator := widget_builder.default_accelerator (
+				key_constants.key_w)
 			accelerator.actions.extend (agent actions.close_window)
 			w.accelerators.extend (accelerator)
 		end
@@ -278,24 +310,27 @@ feature {NONE} -- Implementation - Constants
 
 	file_menu_title: STRING is "&File"
 
-	close_menu_title: STRING is
-		"&Close Window                           (Ctl+W)"
+	close_menu_item_title: STRING is
+		"&Close Window Ctl+W"
 
-	quit_menu_title: STRING is 
-		"&Quit                                          (Ctl+Q)"
+	quit_menu_item_title: STRING is 
+		"&Quit Ctl+Q"
 
-	quit_without_menu_title: STRING is
-		"Q&uit without terminating sessions  (Ctl+U)"
+	quit_without_menu_item_title: STRING is
+		"Q&uit without terminating sessions Ctl+U"
 
 	help_menu_title: STRING is "&Help"
 
-	about_menu_title: STRING is "&About"
+	about_menu_item_title: STRING is "&About"
+
+	introduction_menu_item_title: STRING is "MCT &Introduction Ctl+I"
 
 	edit_menu_title: STRING is "&Edit"
 
-	server_startup_menu_title: STRING is "&Server startup configuration"
+	server_startup_menu_item_title: STRING is
+		"&Server startup configuration Ctl+S"
 
-	preferences_menu_title: STRING is "&Preferences"
+	preferences_menu_item_title: STRING is "&Preferences"
 
 invariant
 

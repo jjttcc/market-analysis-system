@@ -83,8 +83,7 @@ feature -- Actions
 	edit_preferences is
 			-- Edit "Preferences".
 		do
-			print ("Stub!!! (Will allow setting of (not) " +
-				"%Nterminate on Quitting, among other things)%N")
+			print ("Stub!!! - Edit preferences%N")
 		end
 
 feature {NONE} -- Implementation

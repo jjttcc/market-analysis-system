@@ -52,6 +52,14 @@ feature -- Access
 			text_set: Result.text.is_equal (text)
 		end
 
+	default_accelerator (key_code: INTEGER): EV_ACCELERATOR is
+			-- Accelerator with default settings with the key specified
+			-- by `key_code'
+		do
+			create Result.make_with_key_combination (
+				create {EV_KEY}.make_with_code (key_code), True, False, False)
+		end
+
 feature -- Basic operations
 
 	add_actions (action_sequence: EV_NOTIFY_ACTION_SEQUENCE;
