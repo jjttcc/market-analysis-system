@@ -319,5 +319,56 @@ c
 Slope of MACD Signal Line Greater Than or Equal to 0.175
 y
 s
+c
+n
+ONE_VARIABLE_FUNCTION
+c
+# Name:
+Volume
+No Input Function
+y
+VOLUME
+c
+s
+c
+e
+MACD Signal Line (EMA of MACD Difference)
+y
+Volume
+y
+Volume
+y
+# Name:
+MACD of Volume
+s
+c
+n
+ONE_VARIABLE_FUNCTION
+c
+# Name:
+Midpoint
+No Input Function
+y
+DIVISION
+c
+ADDITION
+c
+HIGH_PRICE
+c
+LOW_PRICE
+c
+CONSTANT
+c
+2
+s
+c
+e
+Weighted Moving Average
+y
+Midpoint
+y
+# Name:
+WMA of Midpoint
+s
 -
 x
