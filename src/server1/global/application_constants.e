@@ -41,8 +41,4 @@ feature -- Default settings
 	Default_mailer_subject_flag: STRING is "-s"
 			-- Default subject flag for mailer program
 
-feature -- Miscellaneous
-
-	Comment_character: CHARACTER is '#'
-
 end -- APPLICATION_CONSTANTS

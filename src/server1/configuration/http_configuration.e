@@ -385,12 +385,6 @@ feature {NONE} -- Implementation - attributes
 
 feature {NONE} -- Implementation - token-related constants
 
-	token_start_delimiter: CHARACTER is '<'
-			-- Delimiter indicating the start of a replacable token
-
-	token_end_delimiter: CHARACTER is '>'
-			-- Delimiter indicating the end of a replacable token
-
 	symbol_token: STRING is "symbol"
 			-- The token which is to be replaced at data-retrieval time
 			-- with the current tradable symbol

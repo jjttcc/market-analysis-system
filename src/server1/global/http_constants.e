@@ -10,6 +10,13 @@ class
 
 	HTTP_CONSTANTS
 
+inherit
+
+	GENERAL_CONFIGURATION_CONSTANTS
+		export
+			{NONE} all
+		end
+
 feature -- Access
 
 	Start_date_specifier: STRING is "start_date"

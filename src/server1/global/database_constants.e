@@ -10,6 +10,13 @@ class
 
 	DATABASE_CONSTANTS
 
+inherit
+
+	GENERAL_CONFIGURATION_CONSTANTS
+		export
+			{NONE} all
+		end
+
 feature -- Access
 
 	Data_source_specifier: STRING is "data_source_name"

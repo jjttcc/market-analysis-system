@@ -1,5 +1,5 @@
 indexing
-	description: "Protocol for reportable errors"
+	description: "Protocol and related utilities for reportable errors"
 	author: "Jim Cochrane"
 	date: "$Date$"
 	revision: "$Revision$"
@@ -10,6 +10,18 @@ class
 
 	ERROR_PROTOCOL
 
+inherit
+
+	GENERAL_CONFIGURATION_CONSTANTS
+		export
+			{NONE} all
+		end
+
+	GENERAL_UTILITIES
+		export
+			{NONE} all
+		end
+
 feature -- Access
 
 	Generic_error_code: INTEGER is 1
@@ -19,6 +31,8 @@ feature -- Access
 	Internal_system_error_code: INTEGER is 3
 
 	Initialization_error_code: INTEGER is 4
+
+	Data_file_does_not_exist_error_code: INTEGER is 5
 
 	Database_error: STRING is
 		do
@@ -38,6 +52,11 @@ feature -- Access
 	Initialization_error: STRING is
 		do
 			Result := errors @ Initialization_error_code
+		end
+
+	Data_file_does_not_exist_error: STRING is
+		do
+			Result := errors @ Data_file_does_not_exist_error_code
 		end
 
 	largest_error_code: INTEGER is
@@ -64,6 +83,25 @@ feature -- Access
 			Result.extend ("Internal system error", Internal_system_error_code)
 			Result.extend ("System initialization error",
 				Initialization_error_code)
+			Result.extend (concatenation (<<"Data file for ",
+				token_start_delimiter, error_token, token_end_delimiter,
+				" does not exist">>), Data_file_does_not_exist_error_code)
 		end
 
-end -- class ERROR_PROTOCOL
+feature -- Constants
+
+	error_token: STRING is "?"
+			-- Token to be replaced in configurable error messages
+
+feature -- Basic operations
+
+	log_error_with_token (emsg, new: STRING) is
+			-- Log `emsg' with the delimited `error_token' replaced by `new'.
+		local
+			gu: expanded GENERAL_UTILITIES
+		do
+			gu.replace_token_all (emsg, error_token, new,
+				token_start_delimiter, token_end_delimiter)
+		end
+
+end
