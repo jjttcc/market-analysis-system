@@ -7,6 +7,7 @@ package mas;
 
 import java.io.*;
 import support.IO_Connection;
+import support.Utilities;
 
 // Abstraction that forwards client requests to the MAS server
 public class MAS_Proxy {
@@ -88,7 +89,7 @@ log("forward failed with an exception: "  + e.toString());
 log("receiving response");
 			reader = new BufferedReader(new InputStreamReader(
 				new BufferedInputStream(connection.input_stream())));
-			response_ = input_string(reader);
+			response_ = Utilities.input_string(reader);
 log("received response: '" + response_ + "'");
 			if (response_ == null || response_.length() == 0) {
 log("response was null or empty");
@@ -101,18 +102,6 @@ log("receive failed with an exception: '" + e.toString() + "'");
 			error_ = true;
 			last_error_ = new String (response_);
 		}
-	}
-
-	//!!!!Move to a utility class:
-	String input_string(Reader r) throws IOException {
-		char[] buffer = new char[16384];
-		int c = 0, i = 0;
-		do {
-			c = r.read();
-			buffer[i] = (char) c;
-			++i;
-		} while (c != -1);
-		return new String(buffer, 0, i);
 	}
 
 	private IO_Connection connection;
