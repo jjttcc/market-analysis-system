@@ -12,12 +12,16 @@ class HIGHEST_VALUE inherit
 		rename
 			make as nrlc_make
 		redefine
-			start_init, sub_action, target
+			start_init, sub_action, target, initialize
+		select
+			initialize
 		end
 
 	UNARY_OPERATOR [REAL]
+		rename
+			initialize as uo_initialize
 		undefine
-			arg_mandatory, initialize
+			arg_mandatory
 		redefine
 			operand
 		end
@@ -36,6 +40,12 @@ feature -- Initialization
 			set_operand (o)
 		ensure
 			set: target = t and operand = o and n = i
+		end
+
+	initialize (arg: N_RECORD_STRUCTURE) is
+		do
+			Precursor (arg)
+			uo_initialize (arg)
 		end
 
 feature -- Access

@@ -13,6 +13,9 @@ class SETTABLE_OFFSET_COMMAND inherit
 		end
 
 	UNARY_OPERATOR [REAL]
+		redefine
+			arg_mandatory
+		end
 
 creation
 
@@ -33,6 +36,10 @@ feature -- Initialization
 feature -- Access
 
 	offset: INTEGER
+
+feature -- Status report
+
+	arg_mandatory: BOOLEAN is false
 
 feature -- Status setting
 

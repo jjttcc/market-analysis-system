@@ -30,6 +30,8 @@ class MINUS_N_COMMAND inherit
 	UNARY_OPERATOR [REAL]
 		rename
 			initialize as uo_initialize
+		redefine
+			arg_mandatory
 		end
 
 creation
@@ -65,6 +67,10 @@ feature -- Access
 		ensure then
 			Result = -n
 		end
+
+feature -- Status report
+
+	arg_mandatory: BOOLEAN is false
 
 feature {NONE} -- Implementation
 

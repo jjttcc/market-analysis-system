@@ -9,10 +9,21 @@ class LINEAR_SUM inherit
 
 	N_RECORD_LINEAR_COMMAND
 		rename
-			offset as internal_index, make as nrlc_make_unused
+			index_offset as internal_index, make as nrlc_make_unused
 		redefine
-			execute, target_cursor_not_affected,
-			exhausted, action, forth, invariant_value, start
+			execute, target_cursor_not_affected, exhausted, action,
+			forth, invariant_value, start, initialize
+		select
+			initialize
+		end
+
+	UNARY_OPERATOR [REAL]
+		rename
+			initialize as uo_initialize
+		export {FACTORY}
+			set_operand
+		undefine
+			arg_mandatory
 		end
 
 creation
@@ -21,17 +32,23 @@ creation
 
 feature {FACTORY} -- Initialization
 
-	make (t: like target; op: like operator; i: like n) is
+	make (t: like target; op: like operand; i: like n) is
 		require
 			args_not_void: t /= Void and op /= Void
 			i_gt_0: i > 0
 		do
 			set_target (t)
-			set_operator (op)
+			set_operand (op)
 			set_n (i)
 		ensure
-			op_n_set: operator = op and n = i
+			op_n_set: operand = op and n = i
 			target_set: target = t
+		end
+
+	initialize (arg: N_RECORD_STRUCTURE) is
+		do
+			Precursor (arg)
+			uo_initialize (arg)
 		end
 
 feature -- Basic operations
@@ -61,23 +78,6 @@ feature {NONE}
 			Result := 0 <= internal_index and internal_index <= n
 		end
 
-feature {FACTORY} -- Status setting
-
-	set_operator (op: like operator) is
-			-- Set operator that provides the value to be summed (from
-			-- the current item).
-		require
-			not_void: op /= Void
-		do
-			operator := op
-		ensure
-			set: operator = op
-		end
-
-feature {FACTORY} -- Access
-
-	operator: RESULT_COMMAND [REAL]
-
 feature {NONE}
 
 	forth is
@@ -88,8 +88,8 @@ feature {NONE}
 
 	action is
 		do
-			operator.execute (target.item)
-			value := value + operator.value
+			operand.execute (target.item)
+			value := value + operand.value
 		ensure then
 			-- value = sum (
 			-- target [original_index .. original_index + internal_index - 1])
@@ -110,6 +110,6 @@ feature {NONE}
 
 invariant
 
-	operator_not_void: operator /= Void
+	operator_not_void: operand /= Void
 
 end -- class LINEAR_SUM
