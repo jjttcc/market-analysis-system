@@ -16,7 +16,8 @@ usage() {
 
 appname=$1; shift
 export Targetdir=$MAS/lib/binaries/linux
-export Projectdir=$MAS/../projects/${appname}
+export Projectdir=$MAS/../projects/builds/${appname}
+export Ace_directory=$MAS/src/ace_files
 export Executable_name=${appname}
 export C_Compile_options=
 export Ace_file_name=$MAS/src/ace_files/${appname}.ace
