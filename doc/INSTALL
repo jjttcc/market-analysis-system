@@ -1,9 +1,10 @@
 INSTALLING THE MARKET ANALYSIS SERVER AND CLIENT
 
-Currently, the Market Analysis Server (MAS) runs on Linux/Intel and Windows
-platforms.  This version of the Linux release requires the new glibc
-libraries.  I recommend at least a pentium machine to run the server, since
-the intensive math processing it does may make it sluggish on older hardware.
+Currently, the Market Analysis Server (MAS) runs on Linux/Intel and
+Windows platforms.  This version of the Linux release requires the
+relatively new glibc libraries.  I recommend at least a pentium machine
+to run the server, since the intensive math processing it does may make
+it sluggish on older hardware.
 
 
 INSTALLATION ON LINUX SYSTEMS
@@ -21,14 +22,14 @@ which to place the library files (including the Java class files for the
 MAS GUI).  Again, you can either accept the default choice by hitting
 <Enter>, or you can enter an absolute path of an appropriate directory.
 
-The script will also check if the dynamic libraries it needs can be
-found.  Any library it reports as not being found you will need to
-obtain and install.  MAS depends on an ODBC library, libodbc.so.1, that
-is not part of the standard Linux distribution.  If this library is
-reported missing, I have included a copy in the MAS distribution, which
-you will find in the lib directory you chose for MAS's library files.
-If this library does not work for you, for some reason, you may be able
-to find one that does work on your system at:
+The script will also check if the dynamic libraries needed by the server
+can be found.  Any library it reports as not being found you will need
+to obtain and install.  MAS depends on an ODBC library, libodbc.so.1,
+that is not part of the standard Linux distribution.  If this library
+is reported missing on your system, I have included a copy in the MAS
+distribution, which you will find in the lib directory you chose for
+MAS's library files.  If this library does not work for you, for some
+reason, you may be able to find one that does work on your system at:
   http://rpmfind.net/linux/rpm2html/search.php?query=libodbc.so.1
 (This site was alive and valid as of Jan. 18, 2001.)
 
