@@ -1,7 +1,8 @@
 # List of test input/output-reference files for test 1
 # Format:
-#   test_name,in_file,out_ref_file,index,epsilon,period_type
-# (epsilon is optional; period_type defaults to 1 - daily).
+#   test_name,in_file,out_ref_file,index,epsilon,period_type,options
+# (epsilon is optional; period_type defaults to base type - e.g., daily).
+# (options specifies command-line options, if any, to pass to mas.)
 # period_types: 1 (daily), 2 (weekly), 3 (monthly), 4 (quarterly), 5 (yearly)
 MACD Difference,test_data,macd,3
 MACD Signal,test_data,macd_sig,4
@@ -16,6 +17,19 @@ Slow Stochastic %D,stoch,slow_stochD3,11,.01
 Williams %R,williams,williams,8,.01
 RSI,rsi,rsi7,12,.001
 RSIsun,sunw,rsi_sunw,12,.0001
+MACD Difference intraday,test_data.intraday,macd,3,,,-i intraday
+MACD Signal intraday,test_data.intraday,macd_sig,4,,,-i intraday
+MACD Histogram intraday,test_data.intraday,macd_hist,5,,,-i intraday
+Exponential Moving Average intraday,test_data.intraday,ema,2,.001,,-i intraday
+Simple Moving Average intraday,ma.intraday,ma,1,,,-i intraday
+Momentum intraday,momentum.intraday,momentum,6,,,-i intraday
+Rate of Change intraday,roc.intraday,roc,7,,,-i intraday
+Stochastic %K intraday,stoch.intraday,stochK5,9,.01,,-i intraday
+Stochastic %D intraday,stoch.intraday,stochD5,10,.01,,-i intraday
+Slow Stochastic %D intraday,stoch.intraday,slow_stochD3,11,.01,,-i intraday
+Williams %R intraday,williams.intraday,williams,8,.01,,-i intraday
+RSI intraday,rsi.intraday,rsi7,12,.001,,-i intraday
+RSIsun intraday,sunw.intraday,rsi_sunw,12,.0001,,-i intraday
 RSIsunmnthly,sunw,rsi_sunw_mnthly,12,.0001,3
 Monthly Stochastic %K,sunw,sunw_mnthly_stch%K,9,.000001,3
 RSIsunqtrly,sunw,rsi_sunw_qtrly,12,.0001,4
