@@ -91,11 +91,9 @@ else {System.out.println("Needed condition not met for data request");}
 				while (indicators.hasNext()) {
 					ispec = (IndicatorSpecification) indicators.next();
 					if (ispec.selected()) {
-						builder.
-							send_time_delimited_indicator_data_request(
-								ispec.identifier(), spec.symbol(),
-								period_type, start_date,
-								end_date);
+						builder.send_time_delimited_indicator_data_request(
+							ispec.identifier(), spec.symbol(),
+							period_type, start_date, end_date);
 						if (builder.request_succeeded()) {
 							ispec.append_data(
 								builder.last_indicator_data());
