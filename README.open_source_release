@@ -1,2 +1,8 @@
-The file open_source_files contains the name of all source (and related)
-files needed to compile the open-source version of the system.
+Open source release information
+
+Info. files in ./:
+
+open_source_files - list of all source (and related) files needed to
+   compile the open-source version of the system.
+
+open_source_java_files - list of all open-source java source files
