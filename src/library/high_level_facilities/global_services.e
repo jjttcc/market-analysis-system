@@ -26,19 +26,39 @@ feature -- Access
 	period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
 			-- All time period types used by the system, indexed by name
 		local
+			i: INTEGER
+			keys: ARRAY [STRING]
+		once
+			!!Result.make (1)
+			from
+				keys := nonintraday_period_types.current_keys
+				i := 1
+			until
+				i = keys.count + 1
+			loop
+				Result.extend (nonintraday_period_types @ (keys @ i), keys @ i)
+				i := i + 1
+			end
+			from
+				keys := intraday_period_types.current_keys
+				i := 1
+			until
+				i = keys.count + 1
+			loop
+				Result.extend (intraday_period_types @ (keys @ i), keys @ i)
+				i := i + 1
+			end
+		end
+
+	nonintraday_period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
+			-- All time period types used by the system, indexed by name,
+			-- whose duration is greater than or equal to a day.
+		local
 			type: TIME_PERIOD_TYPE
 			duration: DATE_TIME_DURATION
 			tbl: HASH_TABLE [TIME_PERIOD_TYPE, STRING]
 		once
 			!!tbl.make (3)
-			-- hourly
-			!!duration.make (0, 0, 0, 1, 0, 0)
-			check duration.hour = 1 end
-			!!type.make (duration)
-			check
-				not_in_table1: not tbl.has (type.name)
-			end
-			tbl.extend (type, type.name)
 			-- daily
 			!!duration.make (0, 0, 1, 0, 0, 0)
 			check duration.day = 1 end
@@ -77,6 +97,26 @@ feature -- Access
 			!!type.make (duration)
 			check
 				not_in_table4: not tbl.has (type.name)
+			end
+			tbl.extend (type, type.name)
+			Result := tbl
+		end
+
+	intraday_period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
+			-- All intraday period types used by the system, indexed by name,
+			-- whose duration is less than a day.
+		local
+			type: TIME_PERIOD_TYPE
+			duration: DATE_TIME_DURATION
+			tbl: HASH_TABLE [TIME_PERIOD_TYPE, STRING]
+		once
+			!!tbl.make (3)
+			-- hourly
+			!!duration.make (0, 0, 0, 1, 0, 0)
+			check duration.hour = 1 end
+			!!type.make (duration)
+			check
+				not_in_table1: not tbl.has (type.name)
 			end
 			tbl.extend (type, type.name)
 			Result := tbl
