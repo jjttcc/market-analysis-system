@@ -10,7 +10,7 @@ class INTRADAY_TUPLE_DATA_SCANNER inherit
 
 	MARKET_TUPLE_DATA_SCANNER
 		redefine
-			check_date_time
+			auxiliary_check_date_time
 		end
 
 creation
@@ -25,7 +25,7 @@ feature -- Access
 
 feature {NONE} -- Implementation
 
-	check_date_time (t: BASIC_MARKET_TUPLE) is
+	auxiliary_check_date_time (t: BASIC_MARKET_TUPLE) is
 		local
 			duration: DATE_TIME_DURATION
 			ptypes: expanded PERIOD_TYPE_FACILITIES
@@ -52,8 +52,8 @@ feature {NONE} -- Implementation
 				end
 			end
 		ensure
-			period_type_set_if_start_input_and_not_first_record: start_input
-				implies (old last_date_time /= Void implies period_type /= Void)
+			period_type_set_if_start_input_and_not_first_record: (start_input
+				and old last_date_time /= Void) implies period_type /= Void
 		end
 
 --!!!!:
