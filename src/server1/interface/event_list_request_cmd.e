@@ -15,7 +15,6 @@ class EVENT_LIST_REQUEST_CMD inherit
 			error_context
 		end
 
-
 creation
 
 	make
@@ -70,10 +69,8 @@ feature {NONE} -- Basic operations
 			meg: MARKET_EVENT_GENERATOR
 		do
 			from
-				if t.has_open_interest then
-					-- All market-event generators are valid.
-					l := market_event_generation_library
-				else
+				l := market_event_generation_library
+				if not t.has_open_interest then
 					-- Only market-event generators for stocks are valid.
 					l := stock_market_event_generation_library
 				end
