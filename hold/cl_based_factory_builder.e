@@ -139,18 +139,6 @@ feature {NONE}
 		do
 			!VIRTUAL_TRADABLE_LIST!market_list.make (input_file_names,
 														tradable_factories)
-			check
-				megl_not_void: market_event_generation_library /= Void
-			end
-			-- (If market_event_generation_library is not empty, it has
-			-- been retrieved from persistent store.)
-			if market_event_generation_library.empty then
-				!!meg_builder
-				-- Create the list of market event generators.
-				-- meg_builder will copy them into the global event
-				-- generation library.
-				meg_builder.execute
-			end
 			!!dispatcher.make
 			register_event_registrants (dispatcher)
 			!MARKET_EVENT_COORDINATOR!event_coordinator.make (
