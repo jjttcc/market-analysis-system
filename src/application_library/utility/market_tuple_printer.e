@@ -222,6 +222,8 @@ prd ("print_start_date: ", print_start_date)
 prd ("print_start_time: ", print_start_time)
 prd ("print_end_date: ", print_end_date)
 prd ("print_end_time: ", print_end_time)
+print ("date field sep: " + date_field_separator + "%N")
+print ("time field sep: " + time_field_separator + "%N")
 			if print_start_time /= Void then
 				first := first_date_time_index (l)
 			else
