@@ -14,6 +14,12 @@ feature -- Access
 			Result := "APP_DIRECTORY"
 		end
 
+	stock_split_file_name: STRING is
+			-- Default name of the stock_split_file_name environment variable
+		do
+			Result := "APP_STOCK_SPLIT_FILE"
+		end
+
 	mailer_name: STRING is
 			-- Default name of the environment variable for the executable
 			-- to use for sending email

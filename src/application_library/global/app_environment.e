@@ -13,11 +13,18 @@ class APP_ENVIRONMENT inherit
 feature -- Access
 
 	app_directory: STRING is
-			-- Full path of the working directory for the application -
+			-- Path of the working directory for the application -
 			-- where configuration and data files are stored.
 			-- Void if the associated environment variable is not set.
 		once
 			Result := get (env_names.item.application_directory_name)
+		end
+
+	stock_split_file_name: STRING is
+			-- Name of the file containing stock split data, if any
+			-- Void if the associated environment variable is not set.
+		once
+			Result := get (env_names.item.stock_split_file_name)
 		end
 
 	mailer: STRING is
