@@ -34,13 +34,14 @@ feature -- Client request IDs
 			-- specified market
 
 	Login_request: INTEGER is 6
-			-- Request for a session key
+			-- Login request from GUI client - to be responded to
+			-- with a new session key and session state information
 
 	Session_change_request: INTEGER is 7
 			-- Request for a change in session settings
 
 	Logout_request: INTEGER is 8
-			-- Request for a change in session settings
+			-- Logout request from GUI client
 
 feature -- Server response IDs
 
@@ -54,6 +55,11 @@ feature -- Server response IDs
 	Invalid_symbol: INTEGER is 103
 			-- Response indicating that the server requested data for
 			-- a symbol that is not in the database
+
+feature -- Server response strings
+
+	No_open_session_state: STRING is "no_open"
+			-- Specification that there is no open field in the market data
 
 feature -- Subtokens
 
