@@ -110,14 +110,9 @@ public class Connection implements NetworkProtocol
 		scanner.getInt();
 		last_rec_msgID = scanner.lastInt();
 		if (! valid_server_response(last_rec_msgID)) {
-			if (last_rec_msgID == Error) {
-				request_result =
-					new StringBuffer("Fatal request protocol error\n");
-			} else {
-				System.err.println("Fatal error: received invalid " +
-					"message ID from server: " + last_rec_msgID);
-				System.exit(-1);
-			}
+			System.err.println("Fatal error: received invalid " +
+				"message ID from server: " + last_rec_msgID);
+			System.exit(-1);
 		} else {
 			request_result = new StringBuffer();
 		}
@@ -205,7 +200,8 @@ public class Connection implements NetworkProtocol
 
 	// Is `value' a valid server response?
 	boolean valid_server_response(int value) {
-		return value == OK || value == Error || value == Invalid_symbol;
+		return value == OK || value == Error || value == Invalid_symbol ||
+			value == Warning;
 	}
 
 	protected SessionState _session_state;
