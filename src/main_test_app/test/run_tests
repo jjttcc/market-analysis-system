@@ -153,7 +153,7 @@ outputfile=output/test1.out
 echo "Using executable file $exec"
 set_next_test_params $test_parameter_file
 while [ ! "$Tfinished" = "true" ]; do
-	echo "Runing test for $Test_name"
+	echo "Running test for $Test_name"
 	run_test $Test_name
 	set_next_test_params $test_parameter_file
 done
