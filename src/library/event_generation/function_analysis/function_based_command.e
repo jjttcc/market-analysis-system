@@ -69,10 +69,7 @@ feature -- Access
 
 feature -- Status report
 
-	target_cursor_not_affected: BOOLEAN is
-		once
-			Result := false
-		end
+	target_cursor_not_affected: BOOLEAN
 
 feature -- Status setting
 
@@ -91,8 +88,17 @@ feature -- Basic operations
 
 	execute (arg: ANY) is
 		do
-			Precursor (arg)
-			target.forth
+			-- The client of this class has no control over the linear
+			-- structure `target', so responsibility must be taken for
+			-- not incrementing beyond the end of `target'.
+			if not target.off then
+				operand.execute (target.item)
+				value := operand.value
+				target.forth
+				target_cursor_not_affected := false
+			else
+				target_cursor_not_affected := true
+			end
 		end
 
 invariant
