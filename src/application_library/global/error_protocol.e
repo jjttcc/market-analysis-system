@@ -102,6 +102,7 @@ feature -- Basic operations
 		do
 			gu.replace_token_all (emsg, error_token, new,
 				token_start_delimiter, token_end_delimiter)
+			gu.log_error (emsg + ".%N")
 		end
 
 end
