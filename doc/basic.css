@@ -1,0 +1,12 @@
+/*
+	date: "$Date$";
+	revision: "$Revision$"
+*/
+body { background-color: #e2c49c; }
+:link { color: blue; }
+:visited { color: purple; }
+:active { color: black; }
+
+h1 {
+	text-align: center;
+}
