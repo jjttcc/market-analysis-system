@@ -8,8 +8,10 @@ known as Market Analysis Server) and the Market Analysis GUI Client.
 
 The MAS installation includes the following directories:
 
-bin - All executable files and shell scripts needed for running MAS
-lib - Java class files and other library files needed by MAS
-doc - Documentation on MAS features and how to use MAS
+    bin - All executable files and shell scripts needed for running MAS
 
-See the file INSTALLATION for instructions on how to install MAS.
+    lib - Java class files and other library files needed by MAS
+
+    doc - Documentation of MAS features and how to use MAS
+
+See the file INSTALL for instructions on how to install MAS.

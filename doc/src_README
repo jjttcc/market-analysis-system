@@ -1,1 +1,15 @@
-This is the src README.
+This directory contains the following subdirectories:
+
+    library - Market Analysis Library - Eiffel source code
+
+    server1 - Market Analysis Server - Eiffel source code
+
+    application_library - Application code that uses the Market Analysis
+       Library and is used by the Market Analysis Server
+
+    clients - Market Analysis Client code - Java source code
+
+    doc - Documents on the design and implementation of the Market Analysis
+       Library and the Market Analysis Server
+
+    eiffel_library - Eiffel component library
