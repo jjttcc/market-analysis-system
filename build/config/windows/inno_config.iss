@@ -41,6 +41,7 @@ Source: "bin\cleanup.bat"; DestDir: "{app}\lib"; CopyMode: alwaysoverwrite
 Source: "bin\config_tool.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "lib\nt_repl_spec"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "lib\pre_nt_repl_spec"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
+Source: "doc\THANKS.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\README.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\INTRODUCTION.ps"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\mct_introduction.html"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
@@ -51,6 +52,7 @@ Source: "doc\environment.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\feature_list.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\GUI_introduction.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "README_WINDOWS.txt"; DestDir: "{app}"; CopyMode: alwaysoverwrite; DestName: README.txt; Flags: isreadme
+Source: "forum.txt"; DestDir: "{app}"; CopyMode: alwaysoverwrite;
 Source: "doc\market_analysis.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\masystem_introduction.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\other_market_analyzer_examples.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
