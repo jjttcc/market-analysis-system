@@ -116,17 +116,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		return data_manager.data_builder();
 	}
 
-// Status report - TimeDelimitedDataRequestClient API
-
-	public boolean ready_for_request() {
-		// latest_date_time != null iff send_data_request has
-		// been successfully called.
-//!!!If this is correct, 'ready_for_request' can logic can be removed
-//from the system.
-return true; //???!!!!!!!!!!!!!!!!!!!!!
-//!!!!Remove:		return data_manager.latest_date_time() != null;
-	}
-
 // Element change
 
 	// Update the period-types menu to synchronize with `period_types'.

@@ -29,7 +29,7 @@ class TimeDelimitedDataRequest extends TimerTask {
 
 	public void run() {
 		// Avoid requesting data if the last request is still active.
-		if (client != null && client.ready_for_request() && ! requesting_data) {
+		if (client != null && ! requesting_data) {
 			AbstractDataSetBuilder builder = client.data_builder();
 			// Try to lock the 'builder' only once.  If it fails, abandon
 			// the data update - wait until next time.
@@ -57,8 +57,7 @@ class TimeDelimitedDataRequest extends TimerTask {
 		Iterator indicators;
 		IndicatorSpecification ispec;
 		Calendar start_date, end_date;
-		assert client != null && client.ready_for_request() &&
-			builder.is_locked_by(this);
+		assert client != null && builder.is_locked_by(this);
 		try {
 			start_date = client.start_date();
 			end_date = client.end_date();

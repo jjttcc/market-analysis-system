@@ -106,25 +106,9 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 		} else {
 			if (selection.equals(chart.Volume)) {
 				dataset = (DrawableDataSet) chart_manager.last_volume_result();
-				//@@@Don't remove this until this case has been tested.
-//!!!:
-if (dataset == null) {
-System.out.println("IL - process_data - (VOL) dataset is null\nIs this a bug?");
-} else {
-System.out.println("IL - process_data - last volume obtained - size: " +
-dataset.size() + "\nIs this a bug?");
-}
 			} else if (selection.equals(chart.Open_interest)) {
 				dataset = (DrawableDataSet)
 					chart_manager.last_open_interest_result();
-				//@@@Don't remove this until this case has been tested.
-//!!!:
-if (dataset == null) {
-System.out.println("IL - process_data - (OI) dataset is null\nIs this a bug?");
-} else {
-System.out.println("IL - process_data - last open-interest obtained - size: " +
-dataset.size() + "\nIs this a bug?");
-}
 			}
 			if (chart_manager.replace_indicators()) {
 				main_pane.clear_indicator_graph();
@@ -142,8 +126,6 @@ dataset.size() + "\nIs this a bug?");
 				chart_manager.tradable_specification().set_indicator_data(
 					dataset, selection);
 			}
-//!!!:
-else { System.out.println("dataset was null"); }
 		}
 		main_pane.repaint_graphs();
 	}

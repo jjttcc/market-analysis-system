@@ -71,12 +71,7 @@ abstract public class IndicatorDrawer extends BasicDrawer {
 		ArrayList times = times();
 
 		if (indicator_dates == null ||
-//!!Check on ^^^^^^^^^^^^^^^^^^^^^^
 				indicator_dates.get(0).equals(dates.get(0))) {
-if (indicator_dates == null) {
-System.out.println("Is this a bug?: 'indicator_dates == null'"+
-"\nIndicatorDrawer line 73");
-}
 			result = 0;
 		} else {
 			result = Utilities.index_at_date((String)
