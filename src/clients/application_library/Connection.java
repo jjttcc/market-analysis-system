@@ -27,13 +27,13 @@ public class Connection implements NetworkProtocol
 	// Log in to the server with the specified login request code.
 	// Precondition: ! logged_in()
 	// Postcondition: logged_in()
-	public void login(int login_request_code) {
+	public void login() {
 		_session_key = 0;
 		String session_key_str = "";
 		Configuration conf = Configuration.instance();
 
 		connect();
-		send_msg(login_request_code, conf.session_settings(), 0);
+		send_msg(Login_request, conf.session_settings(), 0);
 		try {
 			session_key_str = receive_msg().toString();
 			if (error_occurred()) {
@@ -64,14 +64,13 @@ public class Connection implements NetworkProtocol
 			System.exit(-1);
 		}
 		_logged_in = true;
-System.out.println("session key is " + _session_key);
 	}
 
 	// Send a logout request to the server to end the current session.
 	// Precondition:  logged_in()
-	public void logout(int logout_request_code) {
+	public void logout() {
 		connect();
-		send_msg(logout_request_code, "", _session_key);
+		send_msg(Logout_request, "", _session_key);
 		try {
 			close_connection();
 		}
@@ -190,7 +189,7 @@ System.out.println("session key is " + _session_key);
 
 	// A new Reader object created with socket's input stream
 	protected Reader new_reader_from_socket() {
-System.out.println("\nnot decompressing");
+//System.out.println("\nnot decompressing");
 		Reader result = null;
 		try {
 			result = new BufferedReader(new InputStreamReader(
