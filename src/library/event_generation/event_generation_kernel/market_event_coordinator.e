@@ -89,7 +89,12 @@ feature {NONE} -- Implementation
 				market_list.exhausted
 			loop
 				current_tradable := market_list.item
-				execute_event_generators
+				if
+					current_tradable /= Void and not
+					current_tradable.data.empty
+				then
+					execute_event_generators
+				end
 				market_list.forth
 			end
 		end
