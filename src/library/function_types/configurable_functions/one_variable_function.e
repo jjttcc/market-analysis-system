@@ -106,7 +106,7 @@ feature {NONE}
 						operator.value)
 			output.extend (t)
 		ensure then
-			output.count = old (output.count) + 1
+			output.count = old output.count + 1
 		end
 
 	do_process is
