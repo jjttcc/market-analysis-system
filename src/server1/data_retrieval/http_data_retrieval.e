@@ -86,6 +86,7 @@ feature {NONE} -- Basic operations
 			start_timer
 			debug ("http")
 				print ("url.path: " + url.path + "%N")
+				print ("url.address: " + url.address + "%N")
 			end
 			perform_http_retrieval
 		ensure
