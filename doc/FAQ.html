@@ -289,6 +289,17 @@ Data-related Problems
 </A>
 </h3>
 <P><B>
+I'm not able to view daily data in the charting GUI - only periods of
+weekly intervals and longer are viewable.
+<P></B>
+Most likely you are not able to see daily data on the chart because the
+start and end dates for daily data configured in the GUI do not fall
+within the date range of the data you're using (for example, the last date
+in your data is 1/2/2002 and the start date is configured as 12/1/2002).
+To fix this, either update your data so that it includes data up to the
+current date (or last trading day) or change the start and end date settings
+for daily data in the GUI.
+<P><B>
 When I try to download data off the internet using the -w parameter I get a lot
 of error messages that look like this: 
 <br>Date input value is invalid.
