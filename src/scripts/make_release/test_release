@@ -1,7 +1,7 @@
 #!/bin/bash
 # Test a new release to see if it compiles, passes all tests, etc.
 
-wkdir=/tmp/work$$
+wkdir=~/tmp/work$$
 finoutfile=/tmp/finalize.out$$
 masdir=$wkdir/testdir
 keep_src=false
@@ -225,7 +225,7 @@ fi
 trap "handle_signal" SIGINT SIGQUIT SIGABRT SIGBUS SIGILL SIGHUP SIGKILL
 
 rm -rf $wkdir
-mkdir $wkdir
+mkdir -p $wkdir
 cd $wkdir
 if test_binaries; then
 	incr_passed_tests
