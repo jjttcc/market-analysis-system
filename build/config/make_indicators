@@ -10,12 +10,13 @@ if [ $# -lt 1 ]; then usage; exit 1; fi
 
 port=$1
 shift
+options="$*"
 
 for file in indicators ../../hold/finance-private/ADX slope_of_ema_of_adx \
-parabolic-sar market_analyzers \
+parabolic-sar cci market_analyzers \
 ../../hold/finance-private/slope_of_slope_of_macd_signal_trend_ADX_analyzers \
 macd_buy-sell_anlyzers_with_ema_gt_10; do
-	if ! macl -i $file $port $*; then
+	if ! macl -i $file $port $options $*; then
 		echo "'macl -i $file $port' failed - Aborting."
 		exit 1
 	fi
