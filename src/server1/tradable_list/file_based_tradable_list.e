@@ -74,7 +74,6 @@ feature {NONE} -- Implementation
 	setup_input_medium is
 		do
 			current_input_file := open_current_file
-			current_input_file.start
 			if not fatal_error then
 				tradable_factory.set_input (current_input_file)
 				current_input_file.set_field_separator (

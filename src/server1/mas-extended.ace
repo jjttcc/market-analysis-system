@@ -5,7 +5,8 @@ root
 	EXTENDED_MA_SERVER: make
 
 default
-	assertion (no)
+	assertion (all)
+	arguments ("-f , nonexistent.txt")
 	arguments ("-p 30001 -b")
 	arguments ("-w -f , -b 5555")
 	arguments (" -o -b 12345 -f , -w -report_back jupiter.milkyway.org^41512")
