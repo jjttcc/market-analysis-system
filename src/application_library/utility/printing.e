@@ -115,7 +115,7 @@ feature -- Basic operations
 						if cvt /= Void then
 							vl ?= l
 							check vl /= Void end
-							print_composite_volume_tuples (vl)
+							print_volume_tuples (vl)
 						else
 							cl ?= l
 							check cl /= Void end

@@ -297,9 +297,6 @@ feature -- Access
 
 feature -- Constants
 
-	default_input_file_name: STRING is "/tmp/tatest"
-			-- Name of default input file if none is specified by the user
-
 	indicators_file_name: STRING is
 			-- Name of the file containing persistent data for indicators
 		local
