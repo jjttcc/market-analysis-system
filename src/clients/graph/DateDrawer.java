@@ -126,7 +126,7 @@ public class DateDrawer extends TemporalDrawer {
 		}
 		// Draw months and years.
 		boolean do_months = true;
-		if (months.length > 1 && months[0].right() == months[1].right()) {
+		if (mi > 1 && months[0].right() == months[1].right()) {
 			do_months = false;
 		}
 		if (do_months) {
