@@ -35,6 +35,11 @@ class MAIN_GUI_INTERFACE inherit
 			{NONE} all
 		end
 
+	GENERAL_UTILITIES
+		export
+			{NONE} all
+		end
+
 creation
 
 	make
@@ -120,50 +125,48 @@ feature {NONE} -- Hook routine implementation
 			end
 			if i <= 1 then
 				request_id := Error
-				message_body := "Invalid message format: "
-				message_body.append(s)
+				report_error ("Invalid message format: " + s, Void, Void)
 			elseif io_medium.last_character /= eom @ 1 then
 				s.extend (io_medium.last_character)
 				request_id := Error
-				message_body := "End of message string not received with:%N"
-				message_body.append(s)
+				report_error ("End of message string not received with:%N" + s,
+					Void, Void)
 			else
 				-- Extract the request ID.
 				number := s.substring (1, i - 1)
 				if not number.is_integer then
-					message_body := "request ID is not a valid integer: "
-					message_body.append (number)
+					report_error ("Request ID is not a valid integer: " +
+						number, Void, Void)
 					request_id := Error
 				elseif
 					not request_handlers.has (number.to_integer) and
 					number.to_integer /= Logout_request
 				then
-					message_body := "Invalid request ID: "
-					message_body.append (number)
+					report_error ("Invalid request ID: " + number, Void, Void)
 					request_id := Error
 				else
 					request_id := number.to_integer
 					j := s.substring_index (Message_field_separator,
 							i + Message_field_separator.count)
 					if j = 0 then
-						message_body := "Invalid message format: "
-						message_body.append (s)
+						report_error ("Invalid message format: " + s,
+							Void, Void)
 						request_id := Error
 					else
 						-- Extract the session key.
 						number := s.substring (
 							i + Message_field_separator.count, j - 1)
 						if not number.is_integer then
-							message_body :=
-								"Session key is not a valid integer: "
-							message_body.append (number)
+							report_error ("Session key is not a valid " +
+								"integer: " + number, Void, Void)
 							request_id := Error
 						else
 							session_key := number.to_integer
 							if not session_valid then
-								message_body := "Invalid session key %
-									%for request ID: "
-								message_body.append (request_id.out)
+								report_error ("Non-existent session key (" +
+									session_key.out + "(for request ID: " +
+									request_id.out + ".%N(May be a stale " +
+									"session", Void, " (Session may be stale.)")
 								request_id := Error
 							else
 								set_message_body (
@@ -241,6 +244,32 @@ feature {NONE} -- Implementation
 				message_body := s.substring (index, s.count)
 			end
 		end
+
+	report_error (log_msg, client_msg, client_suffix: STRING) is
+			-- Log `log_msg' as an error and report `client_msg' (or, if
+			-- it is Void, `default_client_error_msg'), and `client_suffix',
+			-- if it's not Void, to the client.
+		require
+			log_msg_exists: log_msg /= Void
+		do
+			log_error (log_msg)
+			if client_msg /= Void then
+				message_body := client_msg
+			else
+				message_body := clone(default_client_error_msg)
+			end
+			if client_suffix /= Void then
+				message_body.append (client_suffix)
+			end
+		ensure
+			non_void_msg_body_set_to_client_msg:
+				client_msg /= Void implies message_body = client_msg
+			void_msg_body_set_to_default_msg: client_msg = Void implies
+				message_body.is_equal(default_client_error_msg)
+			message_body_exists: message_body /= Void
+		end
+
+	default_client_error_msg: STRING is "Invalid request"
 
 feature {NONE}
 
