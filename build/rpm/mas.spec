@@ -1,5 +1,5 @@
 # Initial spec file created by autospec ver. 0.4 with rpm 2.4.12 compatibility
-%define version 1.6.5
+%define version 1.6.6q
 %define rootdir /opt/mas
 BuildRoot: /tmp/mas_v%{version}-root
 Prefix: %{rootdir}
