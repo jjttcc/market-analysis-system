@@ -42,12 +42,20 @@ feature -- Initialization
 					event_type /= Void and
 						event_type.name.is_equal (event_type_name)
 			period_type_set: period_type = per_type
+			offset_0: offset = 0
 			start_date_set_to_now: -- start_date_time is set to current time
 		end
 
 feature -- Access
 
 	input: MARKET_FUNCTION
+
+	offset: INTEGER
+			-- Offset (used by `start') to set start position.
+			-- For example, if operator is binary and operand 1 processes
+			-- the current item of target and operand 2 processes the previous
+			-- item, the offset would need to be 1 so that after calling start
+			-- operand 2 would have a valid cursor position to process.
 
 feature -- Status setting
 
@@ -68,6 +76,16 @@ feature -- Status setting
 			input_set_to_in: input = in
 		end
 
+	set_offset (arg: INTEGER) is
+			-- Set offset to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			offset := arg
+		ensure
+			offset_set: offset = arg and offset /= Void
+		end
+
 feature -- Basic operations
 
 	execute is
@@ -84,6 +102,8 @@ feature -- Basic operations
 feature {NONE} -- Hook routine implementation
 
 	start is
+		local
+			i: INTEGER
 		do
 			from
 				target.start
@@ -93,9 +113,21 @@ feature {NONE} -- Hook routine implementation
 			loop
 				target.forth
 			end
+			if offset /= 0 then
+				from
+					i := 0
+				until
+					i = offset or target.exhausted
+				loop
+					target.forth
+					i := i + 1
+				end
+			end
 		ensure then
 			date_not_earlier: not target.exhausted implies
 							target.item.date_time >= start_date_time
+			offset_constraint:
+				not target.exhausted implies target.index >= offset
 		end
 
 	action is
@@ -118,5 +150,6 @@ invariant
 	input_not_void: input /= Void
 	event_type_not_void: event_type /= Void
 	date_not_void: start_date_time /= Void
+	offset_not_negative: offset >= 0
 
 end -- class ONE_VARIABLE_FUNCTION_ANALYZER

@@ -99,7 +99,8 @@ feature {NONE} -- Hook routine implementation
 			end
 		ensure then
 			above_set: not target1.exhausted and not target2.exhausted implies
-				target1_above = (target1.item.value >= target2.item.value)
+				target1_above = (target1.i_th (target1.index - 1).value >=
+								target2.i_th (target2.index - 1).value)
 		end
 
 	action is
