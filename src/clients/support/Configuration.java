@@ -2,6 +2,7 @@
 
 package support;
 
+import java_library.support.*;
 import common.*;
 
 /** Global configuration settings - singleton */
@@ -108,6 +109,10 @@ public class Configuration implements NetworkProtocol {
 	**/
 	public static void terminate(int status) {
 		if (! ignore_termination) {
+			if (debug) {
+				System.out.println("Terminating at: " +
+					DateTimeServices.current_date_as_string());
+			}
 			System.exit(status);
 		}
 	}
