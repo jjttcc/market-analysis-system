@@ -9,6 +9,8 @@
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
+import java.util.Hashtable;
+import java.util.Enumeration;
 import java.io.*;
 import graph.*;
 
@@ -20,6 +22,7 @@ public class TA_Chart extends Frame
 		super("TA_Chart");		// Create the main window frame.
 		num_windows++;			// Count it.
 		connection = conn;
+		Vector inds;
 
 		try {
 			if (_markets == null) {
@@ -35,7 +38,14 @@ public class TA_Chart extends Frame
 					// it for all markets.
 					connection.send_indicator_list_request(
 						(String) _markets.elementAt(0));
-					_indicators = connection.last_indicator_list();
+					inds = connection.last_indicator_list();
+					_indicators = new Hashtable(inds.size());
+					// Initialize _indicators table with each indicator name
+					// in the list, associating each indicator name with its
+					// respective index in the list (starting at 1).
+					for (int i = 0; i < inds.size(); ++i) {
+						_indicators.put(inds.elementAt(i), new Integer(i + 1));
+					}
 				}
 			}
 		}
@@ -137,8 +147,13 @@ public class TA_Chart extends Frame
 
 	// Add a menu item for each indicator to `imenu'.
 	void add_indicators(Menu imenu) {
-		for (int i = 0; i < _indicators.size(); ++i) {
-			imenu.add(new MenuItem((String) _indicators.elementAt(i)));
+		MenuItem menu_item;
+		IndicatorListener listener = new IndicatorListener();
+		Enumeration ind_keys = _indicators.keys();
+		for ( ; ind_keys.hasMoreElements(); ) {
+			menu_item = new MenuItem((String) ind_keys.nextElement());
+			imenu.add(menu_item);
+			menu_item.addActionListener(listener);
 		}
 		//!!Note: When you get there, the listener(s) that is used to
 		//process events for the above menu items can probably use the
@@ -171,7 +186,29 @@ public class TA_Chart extends Frame
 	protected static Vector _markets;		// Vector of String
 
 	// Cached list of market indicators
-	protected static Vector _indicators;	// Vector of String
+	protected static Hashtable _indicators;	// table of String
 
 	MarketSelection market_selection;
+
+/** Listener for indicator selection */
+class IndicatorListener implements java.awt.event.ActionListener {
+	public void actionPerformed(java.awt.event.ActionEvent e) {
+		Graph2D igraph = main_pane.indicator_graph();
+		System.out.println("indicator " + e.getActionCommand() +
+							" was selected");
+		System.out.println("Index: " + _indicators.get(e.getActionCommand()));
+		try {
+			connection.send_indicator_data_request(
+				((Integer) _indicators.get(e.getActionCommand())).intValue(),
+				market_selection.current_market(), current_period_type());
+		}
+		catch (IOException ex) {
+			System.out.println("IO exception occurred, bye ...");
+			System.exit(-1);
+		}
+		igraph.detachDataSets();
+		igraph.attachDataSet(connection.last_indicator_data());
+		igraph.repaint();
+	}
+}
 }

@@ -18,6 +18,13 @@ public class TA_Connection implements NetworkProtocol
 		field_specs[5] = TA_Parser.Volume;
 		data_parser = new TA_Parser(field_specs, Output_record_separator,
 									Output_field_separator);
+		// Set up the indicator parser to expect just a date and a float
+		// (close) value.
+		field_specs = new int[2];
+		field_specs[0] = TA_Parser.Date;
+		field_specs[1] = TA_Parser.Close;
+		indicator_parser = new TA_Parser(field_specs, Output_record_separator,
+									Output_field_separator);
 		scanner = new DataInspector();
 		bar_drawer = new BarDrawer();
 		//Process args for the host, port.
@@ -50,14 +57,14 @@ public class TA_Connection implements NetworkProtocol
 
 	// Send a request for data for indicator `ind' for market `symbol' with
 	// `period_type'.
-	public void send_indicator_data_request(String ind, String symbol,
+	public void send_indicator_data_request(int ind, String symbol,
 		String period_type) throws IOException
 	{
 		connect();
 		send_msg(Indicator_data_request, ind + Input_field_separator +
 					symbol + Input_field_separator + period_type);
-		data_parser.parse(receive_msg().toString());
-		_last_indicator_data = data_parser.result();
+		indicator_parser.parse(receive_msg().toString());
+		_last_indicator_data = indicator_parser.result();
 		_last_indicator_data.set_drawer(bar_drawer);
 		close_connection();
 	}
@@ -220,5 +227,6 @@ public class TA_Connection implements NetworkProtocol
 		// result of last indicator list request
 	private Vector _last_indicator_list;
 	private TA_Parser data_parser;
+	private TA_Parser indicator_parser;
 	private BarDrawer bar_drawer;	// draws bars in graph
 }

@@ -14,8 +14,7 @@ class TA_Parser {
 		parsetype = fieldspecs;
 		_record_separator = record_sep;
 		_field_separator = field_sep;
-		// !!For now (hack, hack), hard code these sizes - In the finished
-		// version, perhaps a Vector should be used.
+
 		dates = new Vector();
 		opens = new Vector();
 		highs = new Vector();
