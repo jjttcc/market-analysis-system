@@ -16,7 +16,8 @@ echo "Cound not load shell functions from $utilpath - aborting ..."; exit 1)
 
 cd $Gui_dir || fatal "Could not cd to $Gui_dir."
 
-guidirs="common mas_gui graph java_library/support support"
+guidirs="common mas_gui graph java_library/support support applet \
+application_library application_support"
 
 echo Removing old class files ...
 find . -follow -name '*.class' -exec rm {} ';'
