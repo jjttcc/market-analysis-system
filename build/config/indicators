@@ -370,5 +370,76 @@ y
 # Name:
 WMA of Midpoint
 s
+# Upper and Lower Bollinger Bands, with n = 20
+# Constructed so that they share the same subcomponents, so that changing
+# the n-value of one indicator also changes the n-value of the other
+# indicator.  (This is done by 's'aving once at the end instead of saving
+# after the creation of each indicator.)
+# Upper band:
+c
+n
+TWO_VARIABLE_FUNCTION
+c
+Upper Bollinger Band
+Standard Deviation
+y
+Simple Moving Average
+y
+ADDITION
+c
+BASIC_LINEAR_COMMAND
+c
+Simple Moving Average
+y
+MULTIPLICATION
+c
+BASIC_LINEAR_COMMAND
+c
+Standard Deviation
+y
+CONSTANT
+c
+2
+# Lower band:
+c
+n
+TWO_VARIABLE_FUNCTION
+c
+Lower Bollinger Band
+Standard Deviation
+y
+Simple Moving Average
+y
+SUBTRACTION
+c
+BASIC_LINEAR_COMMAND
+c
+Simple Moving Average
+y
+MULTIPLICATION
+c
+BASIC_LINEAR_COMMAND
+c
+Standard Deviation
+y
+CONSTANT
+c
+2
+# Set n values to 20
+e
+Upper Bollinger Band
+1
+20
+2
+20
+q
+Lower Bollinger Band
+1
+20
+2
+20
+q
+q
+s
 -
 x
