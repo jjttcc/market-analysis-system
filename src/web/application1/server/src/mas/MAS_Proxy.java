@@ -31,7 +31,7 @@ public class MAS_Proxy implements AssertionConstants {
 		return client_request;
 	}
 
-	// Did an error occur during the last operation?
+	// Information about the last error that occurred, if any
 	public String last_error() {
 		return last_error_;
 	}
