@@ -1,5 +1,5 @@
 indexing
-	description: "Parser of command-line arguments for the Configuration Tool"
+	description: "Parser of command-line arguments for the Installation Tool"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
