@@ -7,7 +7,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class
+deferred class
 
 	NETWORK_PROTOCOL
 
@@ -25,8 +25,13 @@ feature -- String constants
 	Output_record_separator: STRING is "%N"
 			-- Record separator for output produced by the server
 
-	Date_field_separator: STRING is "/"
+	output_date_field_separator: STRING is
 			-- Field separator for date output produced by the server
+		deferred
+		end
+
+	date_field_separator: STRING is "/"
+			-- Internal field separator for dates
 
 invariant
 

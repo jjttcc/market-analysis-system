@@ -54,4 +54,8 @@ feature -- Subtokens
 	End_date: STRING is "end_date"
 			-- Token specifying session setting for an end date
 
+feature -- Field separators
+
+	output_date_field_separator: STRING is ""
+
 end -- class GUI_NETWORK_PROTOCOL
