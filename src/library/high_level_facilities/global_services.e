@@ -56,17 +56,17 @@ feature -- Basic operations
 			-- Adjust `dt' to the starting date/time for a composite
 			-- tuple list according to `type'.
 		do
-			if equal (type.name, (period_type_names @ Weekly)) then
+			if equal (type.name, (period_type_names @ weekly)) then
 				set_to_previous_monday (dt)
 				check
 					is_monday: dt.date.day_of_the_week = 2
 				end
-			elseif equal (type.name, (period_type_names @ Monthly)) then
+			elseif equal (type.name, (period_type_names @ monthly)) then
 				dt.date.set_day (1)
-			elseif equal (type.name, (period_type_names @ Quarterly)) then
+			elseif equal (type.name, (period_type_names @ quarterly)) then
 				dt.date.set_day (1)
 				dt.date.set_month ((dt.month - 1) // 3 * 3 + 1)
-			elseif equal (type.name, (period_type_names @ Yearly)) then
+			elseif equal (type.name, (period_type_names @ yearly)) then
 				dt.date.set_day (1)
 				dt.date.set_month (1)
 			else
