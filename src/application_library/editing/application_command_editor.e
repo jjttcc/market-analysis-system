@@ -130,6 +130,23 @@ feature -- Basic operations
 			cmd.set_indexable (ix_cmd)
 		end
 
+	edit_managed_value (cmd: MANAGED_VALUE_COMMAND) is
+			-- Edit a MANAGED_VALUE_COMMAND.
+		require
+			ui_set: user_interface /= Void
+		local
+			constant: CONSTANT
+		do
+			edit_unaryop_real (cmd)
+			constant ?= user_interface.command_selection_from_type (
+				user_interface.Constant_command, cmd.generator +
+					"'s managed value", false)
+			check
+				selection_valid: constant /= Void
+			end
+			cmd.set_managed_value (constant)
+		end
+
 	edit_mtlist_resultreal (c: UNARY_OPERATOR [REAL, REAL]) is
 			-- Edit `c's market tuple list and operator
 			-- (RESULT_COMMAND [REAL]).

@@ -267,6 +267,12 @@ feature -- Access
 				%obtained from a%Nmarket function - only used by %
 				%ONE_VARIABLE_FUNCTION_ANALYZER")
 			Result.extend (pair)
+			create {MANAGED_VALUE_COMMAND} cmd.make (bnc_dummy, real_dummy)
+			create pair.make (cmd, "Operator that executes its %
+				%'main_operator' and stores the resulting value in a %
+				%'managed_value' and whose result is the managed_value's %
+				%resulting value")
+			Result.extend (pair)
 		end
 
 	command_instances: ARRAYED_LIST [COMMAND] is

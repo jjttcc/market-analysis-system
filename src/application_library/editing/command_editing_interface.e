@@ -103,6 +103,7 @@ feature -- Access
 			l.extend (command_with_generator ("N_BASED_UNARY_OPERATOR"))
 			l.extend (command_with_generator ("FUNCTION_BASED_COMMAND"))
 			l.extend (command_with_generator ("INDEX_EXTRACTOR"))
+			l.extend (command_with_generator ("MANAGED_VALUE_COMMAND"))
 
 			create l.make (7)
 			Result.extend (l, Binary_real_real_command)
@@ -166,6 +167,10 @@ feature -- Access
 			l.extend (command_with_generator ("LOWEST_VALUE"))
 			l.extend (command_with_generator ("HIGHEST_VALUE"))
 			l.extend (command_with_generator ("LINEAR_SUM"))
+
+			create l.make (1)
+			Result.extend (l, Constant_command)
+			l.extend (command_with_generator ("CONSTANT"))
 		end
 
 feature -- Constants
@@ -196,6 +201,9 @@ feature -- Constants
 
 	Indexed: STRING is "INDEXED"
 			-- Name of INDEXED
+
+	Constant_command: STRING is "CONSTANT"
+			-- Name of CONSTANT
 
 feature -- Status report
 
@@ -317,7 +325,8 @@ feature {NONE} -- Implementation
 	Sign_analyzer,		-- SIGN_ANALYZER
 	Boolean_num_client,	-- BOOLEAN_NUMERIC_CLIENT
 	Function_command,   -- FUNCTION_BASED_COMMAND
-	Index				-- INDEX_EXTRACTOR
+	Index,				-- INDEX_EXTRACTOR
+	Managed_value		-- MANAGED_VALUE_COMMAND
 	:
 				INTEGER is unique
 			-- Constants identifying initialization routines required for
@@ -574,6 +583,11 @@ feature {NONE} -- Implementation
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Index, name)
+			name := "MANAGED_VALUE_COMMAND"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Managed_value, name)
 		end
 
 	initialize_command (c: COMMAND) is
@@ -591,6 +605,7 @@ feature {NONE} -- Implementation
 			fcmd: FUNCTION_BASED_COMMAND
 			minus_n_cmd: MINUS_N_COMMAND
 			ix: INDEX_EXTRACTOR
+			mv: MANAGED_VALUE_COMMAND
 		do
 			inspect
 				initialization_map @ c.generator
@@ -684,6 +699,12 @@ feature {NONE} -- Implementation
 					c_is_a_function_based_command: ix /= Void
 				end
 				editor.edit_index_extractor (ix)
+			when Managed_value then
+				mv ?= c
+				check
+					c_is_a_managed_value_command: mv /= Void
+				end
+				editor.edit_managed_value (mv)
 			end
 		end
 
