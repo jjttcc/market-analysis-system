@@ -56,6 +56,12 @@ feature -- Access
 			Result.extend (input)
 		end
 
+	leaf_functions: LIST [COMPLEX_FUNCTION] is
+		do
+			create {LINKED_LIST [COMPLEX_FUNCTION]} Result.make
+			Result.extend (Current)
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is

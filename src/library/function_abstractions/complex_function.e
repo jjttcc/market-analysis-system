@@ -35,6 +35,15 @@ feature -- Access
 			end
 		end
 
+	leaf_functions: LIST [COMPLEX_FUNCTION] is
+			-- All of Current's innermost, or leaf, COMPLEX_FUNCTIONs -
+			-- At least one because a complex function without any children
+			-- will be its own leaf function.
+		deferred
+		ensure
+			at_least_one: Result /= Void and then Result.count >= 1
+		end
+
 feature -- Status report
 
 	operator_used: BOOLEAN is
