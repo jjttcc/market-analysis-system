@@ -24,7 +24,7 @@ feature -- Access
 	function: MARKET_FUNCTION
 			-- The function that this parameter applies to
 
-	current_value: NUMERIC is
+	current_value: STRING is
 			-- Current value of the parameter
 		deferred
 		end
@@ -34,20 +34,31 @@ feature -- Access
 		deferred
 		end
 
+	value_type_description: STRING is
+			-- Description of the type needed by `current_value'.
+		deferred
+		end
+
+	current_value_equals (v: STRING): BOOLEAN is
+			-- Does `v' match the current value according to the
+			-- internal type of the value?
+		deferred
+		end
+
 feature -- Element change
 
-	change_value (new_value: NUMERIC) is
+	change_value (new_value: STRING) is
 			-- Change the value of the parameter to `new_value'.
 		require
 			value_valid: valid_value (new_value)
 		deferred
 		ensure
-			current_value = new_value
+			current_value_equals (new_value)
 		end
 
 feature -- Basic operations
 
-	valid_value (i: NUMERIC): BOOLEAN is
+	valid_value (i: STRING): BOOLEAN is
 			-- Is `i' a valid value for this parameter?
 		deferred
 		end

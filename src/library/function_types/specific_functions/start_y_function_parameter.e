@@ -20,25 +20,32 @@ feature -- Access
 
 	function: MARKET_FUNCTION_LINE
 
-	current_value: REAL_REF is
+	current_value: STRING is
 		do
-			Result := function.start_y
+			Result := function.start_y.out
 		end
 
 	name: STRING is "y-value for the left-most point"
 
+	value_type_description: STRING is "floating point value"
+
+	current_value_equals (v: STRING): BOOLEAN is
+		do
+			Result := v.to_real - function.slope < .001
+		end
+
 feature -- Element change
 
-	change_value (new_value: REAL_REF) is
+	change_value (new_value: STRING) is
 		do
-			function.set_start_y (new_value.item)
+			function.set_start_y (new_value.to_real)
 		end
 
 feature -- Basic operations
 
-	valid_value (i: REAL_REF): BOOLEAN is
+	valid_value (v: STRING): BOOLEAN is
 		do
-			Result := true
+			Result := v /= Void and v.is_real
 		end
 
 end -- class START_Y_FUNCTION_PARAMETER

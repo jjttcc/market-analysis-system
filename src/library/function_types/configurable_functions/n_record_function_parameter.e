@@ -20,25 +20,32 @@ feature -- Access
 
 	function: N_RECORD_ONE_VARIABLE_FUNCTION
 
-	current_value: INTEGER_REF is
+	current_value: STRING is
 		do
-			Result := function.n
+			Result := function.n.out
 		end
 
 	name: STRING is "n-value"
 
+	value_type_description: STRING is "integer value"
+
+	current_value_equals (v: STRING): BOOLEAN is
+		do
+			Result := v.to_integer = function.n
+		end
+
 feature -- Element change
 
-	change_value (new_value: INTEGER_REF) is
+	change_value (new_value: STRING) is
 		do
-			function.set_n (new_value.item)
+			function.set_n (new_value.to_integer)
 		end
 
 feature -- Basic operations
 
-	valid_value (i: INTEGER_REF): BOOLEAN is
+	valid_value (v: STRING): BOOLEAN is
 		do
-			Result := i > 0
+			Result := v /= Void and v.is_integer and v.to_integer > 0
 		end
 
 end -- class N_RECORD_FUNCTION_PARAMETER
