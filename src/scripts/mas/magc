@@ -9,6 +9,7 @@ cmd=java
 usage() {
 	echo "Usage: $pname port_number [options]"
 	echo "Options:"
+	echo "   -h <hostname>    Connect to server on host <hostname>."
 	echo "   -cl              Run command-line client instead of GUI."
 	echo "   -c               Use data compression."
 	echo "   -no_cd           \
