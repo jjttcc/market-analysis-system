@@ -199,15 +199,22 @@ abstract public class BasicDrawer extends Drawer {
 		if (hline_data == null) return;
 
 		int y1, y2;
+		final int vert_margin = 2;
 		double d1, d2;
 		g.setColor(Color.black);
+		boolean lower = is_lower_indicator();
+		Rectangle btm_bounds = bottom_reference_bounds(bounds);
 		for (int i = 0; i < hline_data.size(); ++i) {
 			d1 = ((DoublePair) hline_data.elementAt(i)).left();
 			d2 = ((DoublePair) hline_data.elementAt(i)).right();
 			y1 = (int)(bounds.y + (1.0 - (d1-ymin) / yrange) * bounds.height);
 			y2 = (int)(bounds.y + (1.0 - (d2-ymin) / yrange) * bounds.height);
-			g.drawLine(bounds.x - X_left_line_adjust, y1,
-				bounds.x + bounds.width, y2);
+			if (y1 > bounds.y + vert_margin && y2 > bounds.y + vert_margin &&
+					y1 < bounds.y + bounds.height - vert_margin &&
+					y2 < bounds.y + bounds.height - vert_margin) {
+				g.drawLine(bounds.x - X_left_line_adjust, y1,
+					bounds.x + bounds.width, y2);
+			}
 		}
 	}
 
