@@ -1,6 +1,6 @@
 indexing
 	description:
-		"A storable list of MARKET_EVENT_GENERATORs that wipes out each %
+		"A list of MARKET_EVENT_GENERATORs that wipes out each %
 		%generator in its cleanup operation"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
