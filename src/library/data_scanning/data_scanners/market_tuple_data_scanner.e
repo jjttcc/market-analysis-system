@@ -96,18 +96,18 @@ feature {NONE} -- Hook method implementations
 
 	handle_last_error is
 		local
-			record_number: INTEGER
+			last_record_index: INTEGER
 			s: STRING
 		do
-			record_number := product.data.count
+			last_record_index := product.data.count
 			if discard_current_tuple then
 				s := concatenation (<<"Error occurred after record ",
-					record_number>>)
+					input.record_index>>)
 			else
 				s := concatenation (<<"Error occurred in record ",
-					record_number>>)
+					input.record_index>>)
 			end
-			if record_number >= 1 then
+			if last_record_index >= 1 then
 				s.append (concatenation (<<" (with date/time ",
 					product.data.last.date_time, ")">>))
 			end
