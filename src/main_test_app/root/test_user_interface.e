@@ -22,6 +22,28 @@ class TEST_USER_INTERFACE inherit
 
 feature -- Access
 
+	test_line is
+		local
+			indicator: MARKET_FUNCTION
+			l: MARKET_TUPLE_LIST [MARKET_TUPLE]
+			i: INTEGER
+		do
+			indicator := indicator_selection
+			if not indicator.processed then indicator.process end
+			l := indicator.output
+			print_list (<<"value at ", 1, ": ", (l @ 1).value, "%N">>)
+			from
+				i := 2
+			until
+				i = 50 or i = l.count
+			loop
+				print_list (<<"value at ", i, ": ", (l @ i).value,
+							", slope at ", i, ": ", l.slope_at (i), "%N">>)
+				i := i + 1
+			end
+			print_list (<<"value at ", i, ": ", (l @ i).value, "%N">>)
+		end
+
 	tradable: TRADABLE [BASIC_MARKET_TUPLE]
 
 feature -- Status setting
@@ -65,6 +87,8 @@ feature {NONE}
 					edit_menu
 				when 'm', 'M' then
 					display_memory_values
+				when 'l', 'L' then
+					test_line
 				when 'x', 'X' then
 					end_program := true
 				else
