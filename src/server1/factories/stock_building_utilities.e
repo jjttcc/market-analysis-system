@@ -62,7 +62,8 @@ feature {NONE}
 			constants: expanded APPLICATION_CONSTANTS
 		once
 			!STOCK_SPLIT_FILE!Result.make (
-				constants.stock_split_field_separator, stock_split_file)
+				constants.stock_split_field_separator,
+				constants.stock_split_record_separator, stock_split_file)
 		end
 
 	stock_split_file: STRING is

@@ -50,14 +50,13 @@ feature -- Access
 
 feature {NONE} -- Initialization
 
-	make (field_sep, input_file_name: STRING) is
+	make (field_sep, record_sep, input_file_name: STRING) is
 		require
 			not_void: field_sep /= Void and input_file_name /= Void
 			fsep_size_1: field_sep.count = 1
 		do
 			field_separator := field_sep
-			record_separator := "%N"
---Add rec. sep. parameter?
+			record_separator := record_sep
 			file_name := input_file_name
 			open_file (file_name)
 			!!product.make (100)
@@ -69,6 +68,7 @@ feature {NONE} -- Initialization
 			end
 		ensure
 			fs_set: field_separator.is_equal (field_sep)
+			ss_set: record_separator.is_equal (record_sep)
 			fname_set: file_name = input_file_name
 			input_file_set_if_open: is_open_read implies input = Current
 			value_setters_made: value_setters /= Void
