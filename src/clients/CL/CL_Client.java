@@ -4,10 +4,8 @@ import java.io.*;
 import java.net.*;
 
 // Command-line client to Market Analysis server
-public class CL_Client
-{
-	public static void main(String[] args) throws IOException
-	{
+public class CL_Client {
+	public static void main(String[] args) throws IOException {
 		Socket echoSocket = null;
 		PrintWriter out = null;
 		BufferedReader in = null;
@@ -15,8 +13,7 @@ public class CL_Client
 		Integer port_number = new Integer(22228);
 		char c;
 
-		if (args.length > 0)
-		{
+		if (args.length > 0) {
 			hname = args[0];
 			if (args.length > 1)
 			{
@@ -24,21 +21,16 @@ public class CL_Client
 			}
 		}
 
-		try
-		{
+		try {
 			echoSocket = new Socket(hname, port_number.intValue());
 			out = new PrintWriter(echoSocket.getOutputStream(), true);
 			in = new BufferedReader(
 						new InputStreamReader(echoSocket.getInputStream()));
-		}
-		catch (UnknownHostException e)
-		{
+		} catch (UnknownHostException e) {
 			System.err.println("Don't know about host:");
 			System.err.println(hname);
 			System.exit(1);
-		}
-		catch (IOException e)
-		{
+		} catch (IOException e) {
 			System.err.println("Couldn't get I/O for the connection to:");
 			System.err.println(hname);
 			System.exit(1);
@@ -52,10 +44,8 @@ public class CL_Client
 		// Indicate to server that this is a command-line interface:
 		out.print("C");
 		out.flush();
-		do
-		{
-			do
-			{
+		do {
+			do {
 				c = (char) in.read();
 				if (c == '' || c == '') break;
 				System.out.print(c);
