@@ -253,7 +253,6 @@ feature {NONE} -- Implementation
 			e: MARKET_EVENT_PAIR
 		do
 			!!e.make (left, right, "Event pair", event_type)
-			-- !!!Add more info to e?
 			product.extend (e)
 		end
 

@@ -1,7 +1,7 @@
 indexing
 	description:
-		"Objects that generate a list of market events, based on specified %
-		%conditions"
+		"An abstraction for the generation of events based on analysis %
+		%of market data"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
