@@ -6,6 +6,8 @@ root
 
 default
 	assertion (all)
+	arguments ("-r /tmp/z 4001")
+	arguments ("-i /tmp/x 4001")
 	arguments ("-i /tmp/market_analyzers 4001")
 	arguments ("-i /tmp/indicators 4001")
 	arguments ("4002 -i /tmp/indicators")
@@ -24,12 +26,11 @@ default
 	disabled_debug ("kf")
 	disabled_debug ("osm")
 	disabled_debug ("persist")
+	disabled_debug ("process")
 	disabled_debug ("regexp")
 	disabled_debug ("ri")
 	disabled_debug ("sc")
 	disabled_debug ("very verbose")
-	disabled_debug ("osm")
-	disabled_debug ("process")
 	line_generation (no)
 	profile (no)
 	trace (no)
