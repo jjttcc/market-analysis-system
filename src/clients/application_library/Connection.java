@@ -90,6 +90,11 @@ public class Connection implements NetworkProtocol
 		return request_result;
 	}
 
+	// Last message ID received back from the server
+	public int last_received_message_ID() {
+		return last_rec_msgID;
+	}
+
 // Implementation
 
 	private StringBuffer receive_msg() throws IOException {
