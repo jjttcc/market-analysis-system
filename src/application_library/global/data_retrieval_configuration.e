@@ -24,7 +24,7 @@ deferred class DATA_RETRIEVAL_CONFIGURATION inherit
 			{NONE} all
 		end
 
-	GLOBAL_CONSTANTS
+	DATE_TIME_PROTOCOL
 		export
 			{NONE} all
 		end
