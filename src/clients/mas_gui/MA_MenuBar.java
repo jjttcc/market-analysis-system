@@ -63,9 +63,15 @@ public class MA_MenuBar extends MenuBar {
 		});
 		reload.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Date start_date = protocol_util.one_second_later(
-					null);
-//!!!!: chart.last_date_time());
+Date start_date = protocol_util.one_second_later(
+	chart.latest_date_time());
+try {
+data_builder.send_time_delimited_market_data_request(chart.current_tradable,
+chart.current_period_type, start_date, null);
+// !!!Do something with the results - perhaps print it for now.
+// !!!Also - test the indicator request.
+} catch (Exception) {
+}
 				MA_Configuration.application_instance().reload();
 			}
 		});

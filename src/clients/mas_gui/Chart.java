@@ -52,6 +52,8 @@ class ChartSettings implements Serializable {
 public class Chart extends Frame implements Runnable, NetworkProtocol,
 	AssertionConstants, ChartInterface {
 
+// Initialization
+
 	public Chart(DataSetBuilder builder, String sfname, StartupOptions opt) {
 		super("Chart");
 		++window_count;
@@ -110,6 +112,9 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		}
 		initialize_GUI_components(s);
 	}
+
+
+// Access
 
 	// Startup options
 	public StartupOptions options() {
@@ -175,12 +180,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		return data_builder.request_result_id();
 	}
 
-	// Register `d' to save its size and location on exit with its title
-	// as a key.
-	public void register_dialog_for_save_settings(Dialog d) {
-		saved_dialogs.addElement(d);
-	}
-
 	// Settings for dialog with title `s'
 	public WindowSettings settings_for(String s) {
 		WindowSettings result = null;
@@ -190,10 +189,45 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		return result;
 	}
 
+	// Current selected tradable
+	public String current_tradable() {
+		return current_tradable;
+	}
+
+	// Current selected period_type
+	public String current_period_type() {
+		return current_period_type;
+	}
+
+	// Valid trading period types for the current tradable
+	public Vector period_types() {
+		return _period_types;
+	}
+
+	// The latest date-time in the data set associated with this chart
+	public Date latest_date_time() {
+return null;	// !!!!To be implemented
+	}
+
+// Element change
+
+	// Register `d' to save its size and location on exit with its title
+	// as a key.
+	public void register_dialog_for_save_settings(Dialog d) {
+		saved_dialogs.addElement(d);
+	}
+
 	// Update the period-types menu to synchronize with `period_types'.
 	public void reset_period_types_menu() {
 		ma_menu_bar.reset_period_types(_period_types);
 	}
+
+	// Reset the `current_period_type' to a reasonable value.
+	public void reinitialize_current_period_type() {
+		current_period_type = initial_period_type(_period_types);
+	}
+
+// Basic operations
 
 	// Display the specified warning message.
 	public void display_warning(String msg) {
@@ -221,21 +255,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		log_out_and_exit(status);
 	}
 
-	// Current selected tradable
-	public String current_tradable() {
-		return current_tradable;
-	}
-
-	// Current selected period_type
-	public String current_period_type() {
-		return current_period_type;
-	}
-
-	// Valid trading period types for the current tradable
-	public Vector period_types() {
-		return _period_types;
-	}
-
 	// Request a new set of period types for tradable and, if the request
 	// was successful, set `period_types' to the result.
 	public void send_period_types_request(String tradable) {
@@ -248,11 +267,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 			e.printStackTrace();
 			quit(-1);
 		}
-	}
-
-	// Reset the `current_period_type' to a reasonable value.
-	public void reinitialize_current_period_type() {
-		current_period_type = initial_period_type(_period_types);
 	}
 
 	// Send a data request for the specified tradable.
@@ -372,6 +386,22 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		}
 	}
 
+	public void run() {
+		//@@In the future, if needed, this routine can call one of a
+		//set of routines, based on a flag.
+		synchronized(requesting_data) {
+			if (! requesting_data.booleanValue()) {
+				Thread.yield();
+				requesting_data = Boolean.TRUE;
+				send_data_request(requested_tradable);
+				requesting_data = Boolean.FALSE;
+			} else {
+			}
+		}	// end synchronized block
+	}
+
+// Implementation
+
 	private void make_indicator_lists(Vector inds_from_server) {
 		Enumeration ind_iter;
 		String s;
@@ -488,22 +518,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		requested_tradable = tradable;
 		new Thread(this).start();
 	}
-
-	public void run() {
-		//@@In the future, if needed, this routine can call one of a
-		//set of routines, based on a flag.
-		synchronized(requesting_data) {
-			if (! requesting_data.booleanValue()) {
-				Thread.yield();
-				requesting_data = Boolean.TRUE;
-				send_data_request(requested_tradable);
-				requesting_data = Boolean.FALSE;
-			} else {
-			}
-		}	// end synchronized block
-	}
-
-// Implementation
 
 	// Add any extra lines to the indicator graph - specified in the
 	// configuration.
@@ -697,6 +711,9 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 
 		return result;
 	}
+
+
+// Implementation - attributes
 
 	protected DataSetBuilder data_builder;
 

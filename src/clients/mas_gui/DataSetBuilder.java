@@ -100,6 +100,11 @@ public class DataSetBuilder extends NetworkProtocolUtilities implements NetworkP
 		String period_type, Date start_date_time, Date end_date_time)
 			throws Exception {
 //!!!Adapt ...
+/*!!!!!Notes: Probably the Parser is a good place to extract the
+"latest date-time" - make it available as a query, which, here, can be
+called after 'parse' is called and made available, perhaps as:
+'latest_date_time_from_last_request' or something like that.
+*/
 		connection_.send_request(Market_data_request, symbol +
 			Message_field_separator + period_type + Message_field_separator +
 			date_time_range(start_date_time, end_date_time));
@@ -130,7 +135,8 @@ public class DataSetBuilder extends NetworkProtocolUtilities implements NetworkP
 //!!!Adapt ...
 		connection_.send_request(Indicator_data_request,
 			ind + Message_field_separator + symbol +
-			Message_field_separator + period_type);
+			Message_field_separator + period_type + Message_field_separator +
+			date_time_range(start_date_time, end_date_time));
 		// Note that a new indicator drawer is created each time parse is
 		// called, since indicator drawers should not be shared.
 		indicator_parser.parse(connection_.result().toString(),
