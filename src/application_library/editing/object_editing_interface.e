@@ -62,7 +62,8 @@ feature {NONE} -- Implementation
 							"(Objects selected from current tree will be %
 							%shared; objects selected%Nfrom the list of all %
 							%objects will be copied.)%N">>)
-			tree_objects := valid_types (objects, current_objects)
+			!LINKED_SET [G]!tree_objects.make
+			tree_objects.fill (valid_types (objects, current_objects))
 			from
 				!!tree_names.make (tree_objects.count)
 				tree_objects.start
