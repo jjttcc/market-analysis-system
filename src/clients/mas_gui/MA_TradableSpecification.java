@@ -133,6 +133,15 @@ public class MA_TradableSpecification extends TradableSpecification {
 		data.append(d);
 	}
 
+// Removal
+
+	/**
+	* Clear all data.
+	**/
+	public void clear_data() {
+		data.clear_all();
+	}
+
 // Implementation - attributes
 // Removal
 

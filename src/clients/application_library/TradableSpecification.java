@@ -64,6 +64,13 @@ abstract public class TradableSpecification {
 	**/
 	public abstract void append_data(DataSet d);
 
+// Removal
+
+	/**
+	* Clear all data.
+	**/
+	public abstract void clear_data();
+
 // Implementation - attributes
 
 	protected String symbol;

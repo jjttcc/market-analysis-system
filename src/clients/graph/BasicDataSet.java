@@ -156,6 +156,14 @@ public class BasicDataSet extends DataSet {
 		}
 	}
 
+// Removal
+
+	public void clear_all() {
+		data.clear();
+		dates.clear();
+		times.clear();
+		tuple_count = 0;
+	}
 
 // Implementation
 

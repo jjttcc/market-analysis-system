@@ -66,6 +66,14 @@ abstract public class DataSet {
 	*     implies(d != null, size() == old size() + d.size()) */
 	abstract public void append(DataSet d);
 
+// Removal
+
+	/**
+	* Remove all data.
+	* @postcondition
+	*     size() == 0 */
+	abstract public void clear_all();
+
 // Implementation
 
 	// Color data is to be drawn in - can be null
