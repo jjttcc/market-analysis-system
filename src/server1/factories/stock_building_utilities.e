@@ -15,7 +15,9 @@ feature {TRADABLE_FACTORY} -- Implementation
 	new_item (symbol: STRING): STOCK is
 			-- A new stock instance with symbol `symbol'
 		do
+print ("NEW_ITEM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: A" + "%N")
 			create Result.make (symbol, stock_splits @ symbol, stock_data)
+print ("NEW_ITEM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: B" + "%N")
 		end
 
 	tuple_factory: BASIC_TUPLE_FACTORY is

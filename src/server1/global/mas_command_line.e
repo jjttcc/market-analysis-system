@@ -130,6 +130,12 @@ feature -- Access -- settings
 			-- Are HTTP GET requests to be used to retrieve market data?
 			-- True if "-w" is found
 
+	use_sockets: BOOLEAN is
+			-- Is a socket connection to be used for market data?
+		once
+			Result := False	-- No input-data socket in the OSS version
+		end
+
 	use_external_data_source: BOOLEAN
 			-- Is an external data source to be used to obtain market data?
 

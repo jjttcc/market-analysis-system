@@ -44,6 +44,7 @@ feature {NONE} -- Initialization
 			not_void: field_sep /= Void and input_file_name /= Void
 			fsep_size_1: field_sep.count = 1
 		do
+print (generating_type + ": make was called" + "%N")
 			field_separator := field_sep
 			record_separator := record_sep
 			file_name := input_file_name

@@ -43,15 +43,16 @@ feature -- Basic operations
 		local
 			db_list_builder: DATABASE_LIST_BUILDER
 			file_list_builder: FILE_LIST_BUILDER
+			socket_list_builder: SOCKET_LIST_BUILDER
 			http_list_builder: HTTP_FILE_LIST_BUILDER
 			external_list_builder: EXTERNAL_LIST_BUILDER
 			ilist: TRADABLE_LIST
+			list_handler: TRADABLE_LIST_HANDLER
 		do
 			if command_line_options.use_external_data_source then
 				create external_list_builder.make (tradable_factory)
 				external_list_builder.execute
-				create {TRADABLE_LIST_HANDLER} product.make (
-					external_list_builder.daily_list,
+				create list_handler.make (external_list_builder.daily_list,
 					external_list_builder.intraday_list, indicators)
 				ilist := external_list_builder.intraday_list
 			else
@@ -60,8 +61,7 @@ feature -- Basic operations
 					create db_list_builder.make (input_entity_names,
 						tradable_factory)
 					db_list_builder.execute
-					create {TRADABLE_LIST_HANDLER} product.make (
-						db_list_builder.daily_list,
+					create list_handler.make (db_list_builder.daily_list,
 						db_list_builder.intraday_list, indicators)
 					ilist := db_list_builder.intraday_list
 				elseif command_line_options.use_web then
@@ -70,17 +70,21 @@ feature -- Basic operations
 					create http_list_builder.make (tradable_factory, Void,
 						Void)
 					http_list_builder.execute
-					create {TRADABLE_LIST_HANDLER} product.make (
-						http_list_builder.daily_list,
+					create list_handler.make (http_list_builder.daily_list,
 						http_list_builder.intraday_list, indicators)
 					ilist := http_list_builder.intraday_list
+				elseif command_line_options.use_sockets then
+					create socket_list_builder.make (tradable_factory)
+					socket_list_builder.execute
+					create list_handler.make (socket_list_builder.daily_list,
+						socket_list_builder.intraday_list, indicators)
+					ilist := socket_list_builder.intraday_list
 				else	-- Use regular files.
 					create file_list_builder.make (input_entity_names,
 						tradable_factory, command_line_options.daily_extension,
 						command_line_options.intraday_extension)
 					file_list_builder.execute
-					create {TRADABLE_LIST_HANDLER} product.make (
-						file_list_builder.daily_list,
+					create list_handler.make (file_list_builder.daily_list,
 						file_list_builder.intraday_list, indicators)
 					ilist := file_list_builder.intraday_list
 				end
@@ -90,6 +94,7 @@ feature -- Basic operations
 			then
 				ilist.turn_caching_off
 			end
+			product := list_handler
 		end
 
 feature {NONE} -- Implementation

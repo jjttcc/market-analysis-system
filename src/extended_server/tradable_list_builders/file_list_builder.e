@@ -20,8 +20,7 @@ creation
 feature -- Access
 
 	new_tradable_list (fnames: LIST [STRING]; factory: TRADABLE_FACTORY):
-		EXTENDED_FILE_TRADABLE_LIST is
-			-- A new HTTP_LOADING_FILE_TRADABLE_LIST
+			EXTENDED_FILE_TRADABLE_LIST is
 		do
 			create Result.make (fnames, factory)
 		end

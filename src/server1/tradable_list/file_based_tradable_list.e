@@ -9,10 +9,11 @@ indexing
 
 deferred class FILE_BASED_TRADABLE_LIST inherit
 
-	TRADABLE_LIST
+	INPUT_MEDIUM_BASED_TRADABLE_LIST
+		rename
+			input_medium as current_input_file
 		redefine
-			setup_input_medium, close_input_medium, start, forth, finish,
-			back, remove_current_item
+			start, forth, finish, back, remove_current_item, current_input_file
 		end
 
 	TIMING_SERVICES
@@ -55,55 +56,6 @@ feature -- Cursor movement
 
 feature {NONE} -- Implementation
 
-	open_current_file: INPUT_FILE is
-			-- Open the file associated with `file_names'.item.
-			-- If the open fails with an exception, log the error,
-			-- set Result to Void, and allow the exception to propogate.
-		do
-			start_timer
-			create Result.make (file_names.item)
-			if Result.exists then
-				Result.open_read
-			else
-				log_errors (<<"Failed to open input file ",
-					file_names.item, " - file does not exist.%N">>)
-				fatal_error := True
-			end
-		ensure
-			result_open: not fatal_error implies Result /= Void and then
-				Result.exists and then not Result.is_closed
-			result_open_read: Result.is_open_read
-		end
-
-	setup_input_medium is
-		do
-			current_input_file := open_current_file
-			if not fatal_error then
-				tradable_factory.set_input (current_input_file)
-				current_input_file.set_field_separator (
-					tradable_factory.field_separator)
-				current_input_file.set_record_separator (
-					tradable_factory.record_separator)
-			end
-		ensure then
-			input_file_open: not fatal_error implies current_input_file /= Void
-				and then current_input_file.exists and then
-				not current_input_file.is_closed
-			input_file_readable: not fatal_error implies
-				current_input_file /= Void and then
-				current_input_file.is_open_read
-		end
-
-	close_input_medium is
-		do
-			if not current_input_file.is_closed then
-				current_input_file.close
-			end
-			add_timing_data ("Opening, reading, and closing data for " +
-				symbol_list.item)
-			report_timing
-		end
-
 	remove_current_item is
 		do
 			file_names.prune (file_names.item)
@@ -111,6 +63,23 @@ feature {NONE} -- Implementation
 			if not symbol_list.off then
 				file_names.go_i_th (symbol_list.index)
 			end
+		end
+
+	initialized_input_medium: INPUT_MEDIUM is
+		local
+			file: INPUT_FILE
+		do
+			create {OPTIMIZED_INPUT_FILE} file.make (file_names.item)
+			Result := file
+			if file.exists then
+				file.open_read
+			else
+				log_errors (<<"Failed to open input file ",
+					file_names.item, " - file does not exist.%N">>)
+				fatal_error := True
+			end
+print (generating_type + ": init input med returning type: " +
+Result.generating_type + "%N")
 		end
 
 	current_input_file: INPUT_FILE

@@ -25,6 +25,8 @@ creation
 	make
 
 feature {NONE} -- Hook routine implementations
+--!!!!:
+ifo: OPTIMIZED_INPUT_FILE
 
 -- @@Temporary - make these math classes available in the IDE until
 -- operators using them are implemented:

@@ -10,7 +10,7 @@ class EXTENDED_MAS_COMMAND_LINE inherit
 
 	MAS_COMMAND_LINE
 		redefine
-			usage, main_setup_procedures
+			usage, main_setup_procedures, use_sockets
 		end
 
 creation
@@ -33,6 +33,9 @@ feature -- Access -- settings
 
 	polling_timeout_milliseconds: INTEGER
 			-- Polling timeout value, in milliseconds
+
+--!!!!Stub for testing:
+	use_sockets: BOOLEAN is True
 
 feature {NONE} -- Implementation
 
