@@ -53,18 +53,6 @@ default
 --debug ("database");
 --debug ("compression");
 --precompiled ("$ISE_EIFFEL/precomp/spec/$PLATFORM/base");
--- Version with odbc statically linked:
--- object:	"${ISE_EIFFEL}/library/time/spec/${PLATFORM}/lib/libdatetime.a",
---			"${ISE_EIFFEL}/library/net/spec/${PLATFORM}/lib/libnet.a",
---			"${ISE_EIFFEL}/library/store/spec/${PLATFORM}/lib/libsupport.a",
---			"${ECLI}/src/spec/Ise/linux/libecli_c.a",
---			"/usr/local/lib/libodbc.a",
---			"${MAS}/src/eiffel_library/lib/utilities.o",
---			"${MAS}/src/eiffel_library/lib/libz.a",
---			"${MAS}/src/server1/lib/external_input_sequence.a",
---			"/usr/lib/libdl.a";
--- Version with odbc dynamically linked:
---			"${ISE_EIFFEL}/library/store/spec/${ISE_PLATFORM}/lib/libsupport.a",
 
 cluster
 	server:		"$MAS/src/server1"
@@ -249,8 +237,6 @@ cluster
 	db_support (dbms):		"$/support"
 
 	rdbms (dbms):		"$/rdbms"
-
-	odbc (rdbms):		"$/odbc"
 
 	ecli_src:		"$ECLI/src"
 
