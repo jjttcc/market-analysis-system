@@ -122,7 +122,7 @@ abstract public class Connection {
 			// error (probably in the client), it is treated as fatal.
 			Configuration.terminate(-1);
 		}
-//System.out.println("'"  + request_result.toString() + "'");
+//System.out.println("Result: '"  + request_result.toString() + "'");
 		return request_result;
 	}
 
