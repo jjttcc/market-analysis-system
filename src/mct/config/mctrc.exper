@@ -1,0 +1,129 @@
+# MAS Control Terminal configuration file
+# Format: "label_string<tab>setting"
+
+# Special symbols:
+#   <portnumber> - The MAS server port number for the current session
+#   <hostname> - The name of the network host upon which the server is
+#                running; has the value specified by the hostname setting.
+
+# Directory where file-based data resides
+define	data_dir:/home2/finance/.mas/charting/cached_data
+# for remote example:
+#define	data_dir:/tmp/d
+
+# Utility bin directory
+define	util_dir:/opt/mas/bin
+
+define	mas_exe_file:mas_no_assert_v1.6.6d
+
+# MAS server executables
+define	mas_exe1:/home/development/jtc/finance/\
+lib/binaries/<mas_exe_file>
+define	mas_exe2:/opt/mas/bin/mas
+
+# Remote server start-up example
+define	remote_mas_exe:ssh <hostname> <mas_env3> /tmp/<mas_exe_file> \
+<file_opts> <portnumber> <data_dir>/*.txt
+
+# MAS server file-based data options
+define	file_opts:-o -f , -b
+
+# MAS server DB-based data options
+define	db_opts:-o -p -b
+
+# MAS server web-based data options
+define	web_opts:-o -f , -b -w
+
+# MAS server file-based data options
+define	file_data:<data_dir>/*.txt
+
+# Directory where the documentation files reside
+define	doc_dir:/home/development/jtc/finance/doc
+
+define	browser_cmd_prefix:ps x |grep -q '[m]ozilla' && /usr/local/mozilla/mozilla -remote "openURL(<doc_dir>
+
+define	browser_cmd_middle:, new-window)" || /usr/local/mozilla/mozilla "<doc_dir>
+
+define	browser_cmd_end:"
+
+# MAS_DIRECTORY settings
+define	mas_env1:MAS_DIRECTORY=/home2/finance/.mas/charting
+define	mas_env2:MAS_DIRECTORY=/opt/mas/lib
+define	mas_env3:MAS_DIRECTORY=/tmp LD_LIBRARY_PATH=/tmp
+
+# Command to start mas with data from files
+define	mas_file_cmd:<mas_env1> <mas_exe1> <file_opts> <portnumber> <file_data>
+
+# Command to start mas with data from a database
+define	mas_db_cmd:<mas_env1> <mas_exe2> <db_opts> <portnumber>
+
+# Command to start mas with data from the web
+define	mas_web_cmd:<mas_env1> <mas_exe2> <web_opts> <portnumber>
+
+# Valid port numbers for use by the MAS server
+valid_portnumbers	10101,10102,10103,10104,20102,20103,20104,30101,30102,\
+30103,30104,30105,30106,30107,30108,30109
+
+# Network host name
+hostname	localhost
+# Network host name for remote server
+#hostname	shell.dimensional.com
+
+# Command to start the server - short version
+#start_server_command	<mas_file_cmd>
+
+# Detailed version of command to start the server: data from files
+begin	start_server_command
+command	<mas_file_cmd>
+#command	<remote_mas_exe>
+command_description	Get data from files
+command_name	File-based
+end
+
+# Detailed version of command to start the server: data from a database
+begin	start_server_command
+command	<mas_db_cmd>
+command_description	Get data from database
+command_name	Database-based
+end
+
+# Detailed version of command to start the server: data from the web
+begin	start_server_command
+command	<mas_web_cmd>
+command_description	Get data from the web
+command_name	Web-based
+mark	default
+end
+
+# Command to start a command-line client to connect to the server
+start_cl_client_command	xterm -e <util_dir>/macl -h <hostname> <portnumber>
+
+# Command to start the charting application
+chart_command	<util_dir>/magc <portnumber> -h <hostname>
+
+# Command to terminate the server
+termination_command	echo |<util_dir>/macl -h <hostname> <portnumber>
+
+# Documentation - contents file
+define	doc_contents:index.html
+
+# Documentation - introduction
+define	doc_intro:mct_introduction-linux.html
+
+# Documentation - FAQ
+define	doc_faq:FAQ.html
+
+# Command to start the user's browser for viewing documentation
+browse_docs_command	<browser_cmd_prefix>/<doc_contents>\
+<browser_cmd_middle>/<doc_contents><browser_cmd_end>
+#browse_docs_command	ps x |grep -q '[m]ozilla' && /usr/local/mozilla/mozilla -remote "openURL(<doc_dir>/index.html, new-window)" || /usr/local/mozilla/mozilla "<doc_dir>/index.html"
+
+# Command to start the user's browser for viewing the "MCT Introduction"
+browse_intro_command	<browser_cmd_prefix>/<doc_intro>\
+<browser_cmd_middle>/<doc_intro><browser_cmd_end>
+#browse_intro_command	ps x |grep -q '[m]ozilla' && /usr/local/mozilla/mozilla -remote "openURL(<doc_dir>/mct_introduction-linux.html, new-window)" || /usr/local/mozilla/mozilla "<doc_dir>/mct_introduction-linux.html"
+
+# Command to start the user's browser for viewing the FAQ
+browse_faq_command	<browser_cmd_prefix>/<doc_faq>\
+<browser_cmd_middle>/<doc_faq><browser_cmd_end>
+#browse_faq_command	ps x |grep -q '[m]ozilla' && /usr/local/mozilla/mozilla -remote "openURL(<doc_dir>/FAQ.html, new-window)" || /usr/local/mozilla/mozilla "<doc_dir>/FAQ.html"
