@@ -12,7 +12,7 @@ deferred class APPLICATION_HELP inherit
 
 feature -- Access
 
-	Edit_event_generators: INTEGER is 1
-	Edit_indicators: INTEGER is 2
+	edit_event_generators: INTEGER is 1
+	edit_indicators: INTEGER is 2
 
 end -- class APPLICATION_HELP
