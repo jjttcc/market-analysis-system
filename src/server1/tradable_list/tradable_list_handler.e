@@ -330,6 +330,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
+-- dummy change to allow log entry to correct previous boo-boo.
 invariant
 
 	both_lists_not_void:
