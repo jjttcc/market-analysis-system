@@ -80,8 +80,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 				window_settings = settings;
 			}
 			catch (IOException e) {
-				System.err.println("Could not read file " +
-					serialize_filename);
+				// Most likely the file hasn't been created yet - no error.
 			}
 			catch (ClassNotFoundException e) {
 				System.err.println("Class not found!");
@@ -202,22 +201,34 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 			// Update current_lower_indicators and current_upper_indicators:
 			// remove any elements that are no longer valid.
+			Vector remove_list = new Vector();
 			for (ind_iter = current_lower_indicators.elements();
 					ind_iter.hasMoreElements(); ) {
 				s = (String) ind_iter.nextElement();
 				if (! ordered_indicator_list.contains(s)) {
-					while (current_lower_indicators.lastIndexOf(s) != -1) {
-						current_lower_indicators.removeElement(s);
-					}
+					remove_list.addElement(s);
 				}
 			}
+			for (i = 0; i < remove_list.size(); ++i) {
+				while (current_lower_indicators.lastIndexOf(
+					remove_list.elementAt(i)) != -1) {
+					current_lower_indicators.removeElement(
+						remove_list.elementAt(i));
+				}
+			}
+			remove_list.removeAllElements();
 			for (ind_iter = current_upper_indicators.elements();
 					ind_iter.hasMoreElements(); ) {
 				s = (String) ind_iter.nextElement();
 				if (! ordered_indicator_list.contains(s)) {
-					while (current_upper_indicators.lastIndexOf(s) != -1) {
-						current_upper_indicators.removeElement(s);
-					}
+					remove_list.addElement(s);
+				}
+			}
+			for (i = 0; i < remove_list.size(); ++i) {
+				while (current_upper_indicators.lastIndexOf(
+					remove_list.elementAt(i)) != -1) {
+					current_upper_indicators.removeElement(
+						remove_list.elementAt(i));
 				}
 			}
 		}
@@ -387,6 +398,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	}
 
 	private void initialize_GUI_components() {
+		boolean clear_indicators = false;
 		// Create the main scroll pane, size it, and center it.
 		main_pane = new MA_ScrollPane(_period_types,
 			MA_ScrollPane.SCROLLBARS_NEVER, this, window_settings != null?
@@ -398,6 +410,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			current_upper_indicators = window_settings.upper_indicators();
 			current_lower_indicators = window_settings.lower_indicators();
 			replace_indicators = window_settings.replace_indicators();
+			clear_indicators = true;
 		} else {
 			main_pane.setSize(800, 460);
 			current_upper_indicators = new Vector();
@@ -411,6 +424,13 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		addWindowListener(new WindowAdapter() {
 		public void windowClosing(WindowEvent e) { close(); }
 		});
+		if (clear_indicators) {
+			// Clear current_upper_indicators and current_lower_indicators
+			// of indicators no longer available from the server by
+			// forcing _indicators to be reinitialized.
+			_indicators = null;
+			indicators();
+		}
 
 		pack();
 		show();
@@ -564,8 +584,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	// hard-coded in the server
 	protected static Vector _period_types;	// Vector of String
 
-	// Cached list of market indicators
-	protected static Hashtable _indicators;	// table of String
+	// Table of market indicators
+	protected static Hashtable _indicators;	// key: String, value: Integer
 
 	// Indicators in user-specified order - includes no-upper/lower and
 	// volume indicators
