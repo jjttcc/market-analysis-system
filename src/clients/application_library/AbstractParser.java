@@ -6,8 +6,7 @@ import java.util.*;
 import support.NetworkProtocolUtilities;
 import graph_library.DataSet;
 
-//!!!Fix comments
-/** Market Analysis Parser - parses market and indicator data sent from
+/** Abstraction for parsing market and indicator data sent from
 the Market Analysis server */
 abstract public class AbstractParser extends NetworkProtocolUtilities {
 	public static final int Date = 1, Open = 2, High = 3, Low = 4, Close = 5,
@@ -84,34 +83,15 @@ System.out.println("parser - latest dt result: " + result);
 
 // Basic operations
 
-//!!!Need to add a 'set_main_drawer' or similar - in the OS child.
-
 	// Parse `s' into a DataSet according to record_separator and
 	// field_separator.
 	// result() gives the new DataSet.
 	public void parse(String s) throws Exception {
 		is_intraday = contains_time_field(s);
 		prepare_for_parse();
-//!!!volumes = null;
-//!!!open_interests = null;
 		StringTokenizer recs = new StringTokenizer(s, record_separator, false);
 		clear_vectors();
 		do_main_parse(recs);
-/*!!!Remove:
-		if (has_field_type(Volume)) {
-			volumes = new double[rec_count];
-		}
-		if (has_field_type(Open_interest)) {
-			open_interests = new double[rec_count];
-		}
-		// If there is no open field
-		if (! has_no_open_field()) {
-			process_parse_with_no_open(recs, rec_count);
-		} else {
-			process_oldxefault_parse(recs, rec_count);
-		}
-		post_process_parse();
-*/
 	}
 
 // Potential hook routines

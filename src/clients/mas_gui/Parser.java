@@ -3,15 +3,12 @@
 package mas_gui;
 
 import java.util.*;
-//import support.NetworkProtocolUtilities;
 import application_library.AbstractParser;
 import graph.*;
 import graph_library.DataSet;
 
-/** Market Analysis Parser - parses market and indicator data sent from
-the Market Analysis server */
-//!!!Remove 'public' if possible.
-public class Parser extends AbstractParser {
+/** Parsers that parse "drawable" data sets */
+class Parser extends AbstractParser {
 
 // Initialization
 
@@ -19,15 +16,6 @@ public class Parser extends AbstractParser {
 	// e.g., date, high, low, close, volume.
 	public Parser(int fieldspecs[], String record_sep, String field_sep) {
 		super(fieldspecs, record_sep, field_sep);
-/* !!!Remove:
-parsetype = fieldspecs;
-_record_separator = record_sep;
-field_separator = field_sep;
-
-dates = new Vector();
-times = new Vector();
-float_field_count = float_fields(fieldspecs);
-*/
 	}
 
 // Access
@@ -62,38 +50,6 @@ float_field_count = float_fields(fieldspecs);
 	// Set the drawer for open interest.
 	void set_open_interest_drawer(BasicDrawer d) {
 		open_interest_drawer = d;
-	}
-
-// Basic operations
-/////!!!!Move to right place:
-
-	// Parse `s' into a DataSet according to record_separator and
-	// field_separator.  `drawer' is the tuple drawer to use for the
-	// DataSet.  result() gives the new DataSet.
-//!!!Clean up:
-	public void old_remove_parse(String s, BasicDrawer drawer) throws Exception {
-		int rec_count;
-		is_intraday = contains_time_field(s);
-		StringTokenizer recs = new StringTokenizer(s, record_separator, false);
-		rec_count = recs.countTokens();
-		clear_vectors();
-		if (has_field_type(Volume)) {
-			volumes = new double[rec_count];
-		}
-		if (has_field_type(Open_interest)) {
-			open_interests = new double[rec_count];
-		}
-		// If there is no open field
-		if (! has_field_type(Open) && has_field_type(High) &&
-				has_field_type(Low)) {
-			// Add 1 to make room for the "fake" open field.
-			value_data = new double[rec_count * (float_field_count + 1)];
-			parse_with_no_open(recs);
-		} else {
-			value_data = new double[rec_count * float_field_count];
-			parse_default(recs);
-		}
-		process_data(drawer);
 	}
 
 // Hook routine implementations
