@@ -1,0 +1,17 @@
+Environment variable settings for MAS
+
+The following environment variables should be set to run the market analysis
+server (shown with example settings):
+
+MAS_MAILER=elm
+MAS_DIRECTORY=~/.mas
+MAS_STOCK_SPLIT_FILE=stock_splits
+MAS_MAILER_SUBJECT_FLAG=-s
+
+MAS_MAILER specifies the email client that will be used by MAS.
+MAS_MAILER_SUBJECT_FLAG specifies the command-line flag used by the mailer
+to specify that the next argument is the email message subject.
+MAS_DIRECTORY specifies the directory MAS will look in for configuration
+information, such as user-defined indicators.
+MAS_STOCK_SPLIT_FILE specifies the name of a file containing stock split
+information.

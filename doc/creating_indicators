@@ -1,0 +1,450 @@
+Creating Technical Indicators with the Market Analysis Server
+
+This document provides a tutorial on creating technical indicators with
+the Market Analysis Server (MAS).  It consists of a brief introduction
+to the concepts used by the MAS command-line interface for creating
+technical indicators, as well as two specific examples of creating an
+indicator - creating a Relative Strength Index indicator, and creating
+Elder's Force Index indicator.
+
+The MAS command-line interface uses the concepts of data records
+(sometimes called tuples), functions (sometimes called market functions),
+and operators to allow the user to construct a technical indicator.
+A function can be described as an object that performs processing on
+a data sequence, its input, and produces a resulting data sequence,
+its output.  Each element of a data sequence is simply a record with at
+least two fields:  A date (and possibly a time) and a value.  A basic
+type of record used in a data sequence is that of standard market data -
+open, high, low, close, volume, and date.  Another type of data sequence
+record, which we will call a simple record, is that which results from
+processing a market data sequence - for example, applying a moving average
+to closing prices.  This type of record has only the two required fields -
+date and value.  Another useful concept is that of a trading period.
+Each data record can be said to be associated with a particular
+trading period.
+
+The reason for categorizing both standard market data records and simple
+records is to allow for the nesting or composition of functions to
+implement complex indicators.  For example, the MACD Difference function
+is a composite function that operates on (takes the difference of)
+the output of two EXPONENTIAL_MOVING_AVERAGE functions.  The output of
+these two functions consist of simple records, since MACD Difference
+only expects a date and a value for each record.  Further, the MACD
+Signal Line is an EXPONENTIAL_MOVING_AVERAGE function that provides an
+average of the output from the MACD Difference - again, simple records.
+This provision allows for the creation of very complex indicators.
+
+The other major concept in MAS for creating technical indicators is that
+of an operator.  An operator is an object that "operates" on one or more
+input records at a time.  A market function uses an operator to operate on
+each record of its input data.  For example, the MACD Difference function
+uses a SUBTRACTION operator to obtain the difference of, for each trading
+period of its data, the record for the current period from the first EMA
+and the record for the current period from the second EMA.  Operators can
+also be composite, allowing for very powerful operation combinations.
+The Relative Strength Index indicator example below gives a good example
+of how composite operators can be created to provide required behavior.
+
+MAS provides the following basic types of functions:
+
+ONE_VARIABLE_FUNCTION  A function that uses the result of one other
+function as input.
+
+TWO_VARIABLE_FUNCTION - A function that uses the result of two other
+functions as input - example: MACD Difference.
+
+N_RECORD_ONE_VARIABLE_FUNCTION - A function that operates on
+a subsequence, of length `n', of the main data sequence - example:
+Momentum, which takes the difference between the value for the current
+period and the value n periods before the current period.
+
+STANDARD_MOVING_AVERAGE - An n-record function that provides specific
+behavior for a standard (simple) moving average.
+
+EXPONENTIAL_MOVING_AVERAGE - An standard moving average that provides
+specific behavior for an exponential moving average.
+
+ACCUMULATION - A function that accumulates values as it processes each
+record of a data sequence - example: Volume Accumulation.
+
+MAS currently provides about 35 operators.  These include arithmetic
+operators, such as "addition" and "subtraction"; boolean operators,
+such as "less-than", "equal-to", "and", and "or"; operators that operate
+on a data sequence instead of on one record at a time, such as "linear
+sum"; operators that extract a particular field from a standard market
+data record, such as "closing price", "opening price", and "volume";
+and operators that provide a set value, such as "constant", "true", and
+"false".  Note that you will usually not see all operators listed at
+one time in a menu in the command-line interface, since many operators
+are only applicable in a particular context.
+
+Following are two examples of creating a technical indicator with the
+MAS command-line interface.  The first example, Relative Strength Index,
+shows how a complex indicator can be created.  The second example,
+illustrates the creation of a much simpler indicator, Elder's Force
+Index.  The first example provides a fairly thorough introduction the
+MAS indicator creation functionality; but if you like to start with a
+simpler introduction, you might want to read example 2 first.
+
+Example 1:  Creating a Relative Strength Index Indicator
+
+This example will show how to create Wilder's Relative Strength Index
+(RSI).  This is a fairly complex formula that will provide a good
+introduction to the MAS indicator building functionality.
+
+The formula for RSI is given in "The Encyclopedia of Technical Market
+Indicators", by Robert Colby and Thomas Meyers, as:
+
+    100 - (100 / (1 + RS))
+
+"where RS is the ratio of the exponentially smoothed moving average
+of n-period gains divided by the absolute value of the exponentially
+smoothed moving average of n-period losses."  This can be expressed
+using a standard exponential smoothing formula as:
+
+    RS = P / N
+
+    P = K * UC + Pp * (1 - K)
+    N = K * DC + Np * (1 - K)
+
+where:
+
+    K is 1/n (the `n' in the n-period gain/loss).
+    UC is the gain for the current period based on the following algorithm:
+       if previous close >= current close, result is 0
+       if previous close < current close, result is current close - previous
+          close.
+    DC is the loss for the current period based on the following algorithm:
+       if previous close <= current close, result is 0
+       if previous close > current close, result is previous close - current
+        close.
+    Pp is the P calculation from the previous period.
+    Np is the N calculation from the previous period.
+
+Note that this calculation is for the "current" trading period.  The
+result of RSI will of course be the sequence that results from applying
+this calculation to each trading period.  The first value of the sequence
+is simply the n-period moving average of the first n closing prices.
+
+Our configuration of this indicator in MAS will be based on this
+formula.  The first step is to start the server.  (You can either add
+the new indicator by using the server directly - which can be done
+simply by typing mas at the command line, assuming it's in your path,
+or you can start the server in the background (with "-b port_number"
+as arguments) and use macl, the market analysis command-line client,
+to talk to the server using a network connection.)  To get to the
+add-indicator menu, first enter 'e' ("Edit indicators") and then 'c'
+("Create a new market-data indicator").  A list of the available market
+function (indicator) objects will be displayed from which you can start
+building your new indicator.  For RSI, we want to start by creating two
+exponential moving averages that will be used to calculate the P and N
+values from above.  Then we will create a two-variable function that
+will divide the P and N values to obtain the RS value and then apply
+the remainder of the formula:  100 - (100 / (1 + RS)).  First we will
+create the P function:
+
+Choose EXPONENTIAL_MOVING_AVERAGE from the menu.  The system will ask for
+verification of the choice; enter 'c' to choose the object you selected.
+The system will ask for a name for this function.  A possible name is:
+"P-value for RSI".
+
+Enter that name, or another if you like.
+
+The system will then ask you to select a function that will be used as
+input to the function you are building.  Since this function does not need
+an input function (it will directly process the market values), choose "No
+Input Function".  Next, we need to select the EXPONENTIAL_MOVING_AVERAGE's
+main operator.  Choose BOOLEAN_NUMERIC_CLIENT.  It has a funny name,
+but it will provide the "if previous close >= current close, result is
+0", etc. behavior needed in the formula.  (You will again need to verify
+that this is the object you want to choose.  This verification will be
+needed for all function and operator types.)
+
+The system will then ask you to choose the BOOLEAN_NUMERIC_CLIENT's
+boolean operator.  This will be the operator that determines if the
+previous close is less than the current close.  Choose LT_OPERATOR (less
+than).  Then choose LT_OPERATOR's left operand - SETTABLE_OFFSET_COMMAND.
+This object will provide the offset needed to obtain the previous closing
+price.  Then choose the SETTABLE_OFFSET_COMMAND's operand, CLOSING_PRICE,
+which will extract the closing price from the data for the current period.
+Since the SETTABLE_OFFSET_COMMAND operates on a function or sequence, the
+system will then ask you to choose an existing indicator for it's input.
+Again, you can choose "No Input Function", since the offset command will
+simply operate directly on the current period of the market data.
+
+The next step will provide an offset value for the
+SETTABLE_OFFSET_COMMAND, allowing it to process the period before the
+current period, from which its CLOSING_PRICE object will extract the
+closing price.  Enter 1 - since the offset is a left offset, this means
+that the SETTABLE_OFFSET_COMMAND will operate on the period preceding
+(to the left of) the current period.
+
+Next select the LT_OPERATOR's right operand, which will be CLOSING_PRICE,
+to extract the closing price from the current period.  Since the
+CLOSING_PRICE object is passed the current period's data by its
+owner (in this case, the LT_OPERATOR) and does not need to keep any
+state information of its own, you can, if you like, select the same
+CLOSING_PRICE object as you chose before, near the top of the selection
+list.  This object will then be shared by the SETTABLE_OFFSET_COMMAND
+and the LT_OPERATOR, saving a little bit of memory.
+
+To briefly recap, the structure we have so far for
+EXPONENTIAL_MOVING_AVERAGE's main operator is:
+
+                        BOOLEAN_NUMERIC_CLIENT
+                        / (boolean operator)
+                    LT_OPERATOR
+                    /        \
+    SETTABLE_OFFSET_COMMAND    CLOSING_PRICE
+        /
+CLOSING_PRICE
+
+The BOOLEAN_NUMERIC_CLIENT will, for each trading period, execute
+LT_OPERATOR, which will evaluate to true if the previous close (from the
+SETTABLE_OFFSET_COMMAND and it's closing price object) is less than the
+current close (the right CLOSING_PRICE operand).
+
+Next we need to select the BOOLEAN_NUMERIC_CLIENT's true command, which
+will be used if the LT_OPERATOR evaluates to true.  Choose SUBTRACTION,
+since if the previous close is less than the current close, we want
+the different between the current close and the previous close.
+Then choose CLOSING_PRICE for SUBTRACTION's left operand, since we
+want the current closing price.  (Again, you can choose the same
+CLOSING_PRICE you selected before, from the top list, if you like.)
+Choose SETTABLE_OFFSET_COMMAND for SUBTRACTION's right operand, and
+choose CLOSING_PRICE for SETTABLE_OFFSET_COMMAND's operand.  Again,
+select "No Input Function" for SETTABLE_OFFSET_COMMAND's input; and
+choose 1 for SETTABLE_OFFSET_COMMAND's left offset value.
+
+Next, select the BOOLEAN_NUMERIC_CLIENT's false command, the command that
+will be used if the boolean operator (LT_OPERATOR) evaluates to false.
+Since we want the value 0 if previous close is not less than current
+close, choose the CONSTANT object, which simply provides the same value
+each time it is used.  The system will ask for CONSTANT's value, enter 0
+(zero).
+
+We now have the structure:
+
+                      EXPONENTIAL_MOVING_AVERAGE
+                                  | (main operator)
+                        BOOLEAN_NUMERIC_CLIENT
+                        /           \          \
+                       / (bool. op.) \(true cmd) \ (false cmd)
+            LT_OPERATOR          SUBTRACTION    CONSTANT (0)
+            /        \            /     \
+          SOC       CLOSE       CLOSE   SOC
+          /                               \
+       CLOSE                             CLOSE
+
+This structure will provide the following behavior:  For each trading
+period, if the close of the previous period is less than the close of the
+current period, take the result of subtracting the close of the previous
+period from the close of the current period.  Otherwise (previous close >=
+current close), use the value 0.
+
+Finally, we will build the "exponential operator" that will
+provide the exponential smoothing to the values provided by the
+BOOLEAN_NUMERIC_CLIENT.  Choose the N_BASED_UNARY_OPERATOR, which
+will use the EXPONENTIAL_MOVING_AVERAGE's n-value to calculate a
+"constant" (a value that doesn't change during calculation) that will
+be applied by the EXPONENTIAL_MOVING_AVERAGE to the result of the
+BOOLEAN_NUMERIC_CLIENT's calculation.  The system will ask for the
+N_BASED_UNARY_OPERATOR's n-value.  It doesn't matter what you enter at
+this point, since during calculation, the N_BASED_UNARY_OPERATOR will be
+given the EXPONENTIAL_MOVING_AVERAGE's current n-value.  Simply enter a
+positive number.  Next, select DIVISION as the N_BASED_UNARY_OPERATOR's
+operand.  For DIVISION's left operand, select CONSTANT and give it the
+value 1.  For the right operand, select N_VALUE_COMMAND.  This will simply
+give the current n-value (obtained from EXPONENTIAL_MOVING_AVERAGE as its
+result value).  Again, the system will ask for an n-value and it doesn't
+matter what you enter, since during calculation, the EMA's n-value will
+be used.  Finally the system will ask for the EXPONENTIAL_MOVING_AVERAGE's
+n value, which does matter.  Enter a 7 for a 7-period RSI.
+
+The exponential operator will use its division operator to obtain
+the 1/n value used in the formula for P.  This value will be used
+by the EXPONENTIAL_MOVING_AVERAGE to smooth the result of the
+BOOLEAN_NUMERIC_CLIENT.  The result will be the calculation of the
+formula for P (where K = 1/n): K * UC + Pp * (1 - K).
+
+The final structure of the P-value for RSI is:
+
+                          EXPONENTIAL_MOVING_AVERAGE
+                            / (main op.)        \ (exp. op.)
+                  BOOL_NUM_CLIENT      N_BASED_UNARY_OPERATOR
+                  /    |        \                 |
+       (boolop)  /     |(true)   \(false)         |
+      LT_OPERATOR  SUBTRACTION  CONSTANT (0)   DIVISION
+      /      \       /     \                   /      \
+    SOC     CLOSE  CLOSE   SOC          CONSTANT (1)  N_VALUE_COMMAND
+    /                        \
+ CLOSE                      CLOSE
+
+This completes the creation of the function to calculate the P value from
+the formula for RSI.  Next we will create the function to calculate the
+N value.  Since the formulas are very similar, the structure for the N
+value will look very similar to that of the P value.
+
+From the current menu, choose 'c' ("Create a new market-data indicator").
+Again choose EXPONENTIAL_MOVING_AVERAGE.  Choose something like "N-value
+for RSI" for the name.  Again choose "No Input Function" for the input
+function.
+
+Choose BOOLEAN_NUMERIC_CLIENT as the main operator.  Choose GT_OPERATOR
+for BOOLEAN_NUMERIC_CLIENT's boolean operator, since for N we want
+to find out if the previous close is greater than the current close.
+Choose SETTABLE_OFFSET_COMMAND for the left operand and CLOSING_PRICE
+as SETTABLE_OFFSET_COMMAND's operand.  Once again, choose "No Input
+Function" for the SETTABLE_OFFSET_COMMAND's input function.  Choose 1
+for the SETTABLE_OFFSET_COMMAND's left offset.  For the GT_OPERATOR's
+right operand, choose CLOSING_PRICE.
+
+For the BOOLEAN_NUMERIC_CLIENT's true command, select SUBTRACTION.
+For SUBTRACTION's left operand, choose SETTABLE_OFFSET_COMMAND.  (We want
+the operation "previous close - current close".)  Select CLOSING_PRICE for
+the SETTABLE_OFFSET_COMMAND's operand; and, again, "No Input Function"
+for the SETTABLE_OFFSET_COMMAND's input function.  Choose 1 for the
+SETTABLE_OFFSET_COMMAND's left offset.  Select CLOSING_PRICE for
+SUBTRACTION's right operand.
+
+For BOOLEAN_NUMERIC_CLIENT's false command, as with the P calculation,
+select CONSTANT and give it the value 0.  Select N_BASED_UNARY_OPERATOR
+for EXPONENTIAL_MOVING_AVERAGE's exponential operator, and give
+it any positive value for n, as before.  Select DIVISION for
+N_BASED_UNARY_OPERATOR's operand.  Select CONSTANT, value 1, for
+DIVISION's left operand and N_VALUE_COMMAND with any positive n-value
+for DIVISION's right operand.
+
+Finally, enter 7 for EXPONENTIAL_MOVING_AVERAGE's n-value to match
+the n-value for the P function.  The only difference between this
+structure and the one for the P function is that this one will check if
+the previous close is greater than the current close and, if so, take
+the result of subtracting the current close from the previous close;
+if not, the result will be 0.  As with the P function, this result will
+be smoothed with the same 1/n "exponential" value.
+
+The last step is to create the function that will use the two functions
+defined above to apply the remainder of the RSI formula.  Again, choose
+'c' ("Create a new market-data indicator") from the current menu.
+Choose TWO_VARIABLE_FUNCTION, since we want a function that will operate
+on two other functions (variables).  Then type in a good name for the
+function, like "Relative Strength Index" or "RSI".
+
+The system will next ask for the RSI function's input functions.
+Unlike the N- and P-value functions, the input functions (two here,
+since this is a two-variable function) are needed, since we want to
+operate on the P function and the N function.  So choose the P function
+you created above as the left input function; and choose the N function
+as the right input function.
+
+Now, since we want to apply the formula 100 - (100 / (1 + RS)) and the
+highest level of the formula involves subtraction (100 minus a quotient),
+choose the SUBTRACTION object for the TWO_VARIABLE_FUNCTION's operator.
+For SUBTRACTION's left operand, choose a CONSTANT and give it the
+value 100.  For the right operand, select DIVISION.
+
+Then for DIVISION's left operand, you can select the same constant (100)
+as the one you selected for the SUBTRACTION operator, since you again want
+the value 100.  (Since the object's value has already been set you will
+not be asked to set the value this time, unless you select a new CONSTANT
+object instead of the existing one, which you can do if you like.)
+For DIVISION's right operand, select ADDITION.  For ADDITION's left
+operand, select CONSTANT with value 1 and for its right operand, select
+DIVISION (a new object, not the one for the "current objects" list).
+
+For DIVISION's left operand, select BASIC_LINEAR_COMMAND.  This object
+will be used to obtain the value for the current period from the P
+function.  Thus when the system asks for it's input function, you should
+select the P function you created above.  For DIVISION's right operand,
+again select a (new) BASIC_LINEAR_COMMAND.  And choose the N function
+for its input function.
+
+This completes the creation of the Relative Strength Index function.
+Briefly, what we did was to create a two-variable function to operate on,
+for each trading period, the current period's P-value and the current
+period's N-value.  The operator structure created for the RSI function,
+looks like this:
+
+              SUBTRACTION
+             /          \
+    CONSTANT (100)    DIVISION
+                      /       \
+            CONSTANT (100)  ADDITION
+                            /      \
+                  CONSTANT (1)    DIVISION
+                                  /      \
+                BASIC_LINEAR_COMMAND    BASIC_LINEAR_COMMAND
+                        |                       |
+                  P-value for RSI          N-value for RSI
+
+Executing this structure will create the following flow of calculations:
+
+Take 100 minus the result of a division, which is:
+   Take 100 divided by the result of an addition, which is:
+      Take 1 plus the result of a division, which is:
+         Take the current P-value divided by the current N-value.
+
+The result will be the calculation of the RSI formula:
+
+100 - (100 / (1 + RS)), where RS is P / N
+
+
+Example 2: Force Index
+
+This example is a simple indicator invented by Alexander Elder, documented
+in his book, "Trading for a Living".  It uses volume combined with
+closing prices to measure "the force of bulls behind every rally and of
+bears behind every decline."  The formula is:
+
+    V * (C - Cp)
+
+where V is volume for the current period, C is the close for the current
+period, and Cp is the close for the previous period.
+
+Get to the add-indicator menu, by entering 'e' ("Edit indicators")
+and then 'c' ("Create a new market-data indicator").  Choose
+N_RECORD_ONE_VARIABLE_FUNCTION.  Name it "Force Index".  Choose "No
+Input Function" for it's input function.  Choose MULTIPLICATION for
+its operator.  Choose VOLUME for its left operand and SUBTRACTION
+for its right operand.  Select CLOSING_PRICE for SUBTRACTION's
+left operand and SETTABLE_OFFSET_COMMAND for its right operand.
+For SETTABLE_OFFSET_COMMAND's operand, choose CLOSING_PRICE.  For
+SETTABLE_OFFSET_COMMAND's input function, choose "No Input Function".
+Enter 1 for SETTABLE_OFFSET_COMMAND's left offset value.  Finally,
+select 1 for N_RECORD_ONE_VARIABLE_FUNCTION's n value.
+
+The reason for using an N_RECORD_ONE_VARIABLE_FUNCTION object
+(instead of a ONE_VARIABLE_FUNCTION) is that it allows the
+use of an offset value, which is needed for this indicator (the
+SETTABLE_OFFSET_COMMAND provides the behavior of obtaining the value
+from the previous period).  The configuration module will automatically
+adjust the N_RECORD_ONE_VARIABLE_FUNCTION object so that it starts
+at the correct place according to the largest left offset used by
+any of its operators - in this case 1.  The reason for setting the
+N_RECORD_ONE_VARIABLE_FUNCTION's n-value to 1 is to tell it to start at
+the first period, plus the adjustment for left offset.  Thus in this case,
+the N_RECORD_ONE_VARIABLE_FUNCTION will be set to start at the second
+trading period (the first period plus left offset value of 1), so that
+it will begin by subtracting the previous close from the current close,
+then multiplying the result by the current volume.
+
+The structure of the Force Index function is:
+
+                   N_RECORD_ONE_VARIABLE_FUNCTION
+                                |
+                         MULTIPLICATION
+                          /          \
+                      VOLUME      SUBTRACTION
+                                   /       \
+                        CLOSING_PRICE  SETTABLE_OFFSET_COMMAND
+                                                 |
+                                           CLOSING_PRICE
+
+Thus, for each trading period, the Force Index function will apply the
+following algorithm:
+
+   Take the volume times the result of a subtraction, which is:
+      Take the closing price minus the previous closing price.
+
+This gives volume * (current close - previous close), which is the
+formula given at the beginning of this example.

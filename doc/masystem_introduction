@@ -24,6 +24,10 @@ which includes UNIX, Windows, and Macintosh systems.
 See the file "feature_list" for list of features provided by the Market
 Analysis System client and server.
 
+Note that before running the Market Analysis Server for the first time,
+you will need to set up a few environment variables for it.  See the
+file env_settings for an explanation of these variables.
+
 There are currently two main ways to use MAS: by running the server
 and the GUI client to view charts of markets; and by running the server
 alone and using its analysis features to produce buy and sell signals,
@@ -74,8 +78,7 @@ magc -h boston.com 13579
 
 when the server is running on a machine named boston.com.
 
-See the README file for the GUI client for more information on running
-the GUI.
+See the file README_GUI for more information on running the GUI client.
 
 
 [1] For those not familiar with technical analysis, it is a set of

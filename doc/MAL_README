@@ -2,7 +2,7 @@ The files in this directory provide documentation for the Market Analysis
 Library (MAL) and applications that use it.  The directory currently contains
 the following files:
 
-    MAL_README - This file
+    README - This file
 
     MAL_design_document - Documentation of the design of MAL
 
@@ -11,7 +11,8 @@ the following files:
 
     mal_intro - Introduction to MAL
 
-    applications - Documentation of applications using MAL
+	server_protocol_grammar - BNF specification for the protocol between
+	    the server and a GUI client
 
     functions.ps - An attempt to give a precise specification to some of
         the technical analysis functions that can be constructed with MAL

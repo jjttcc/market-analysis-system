@@ -1,0 +1,54 @@
+You will need the Java Runtime Enviornment (JRE) in order to run the MA GUI
+Client.  See the file java_info for information on obtaining the JRE for
+your system.
+
+To run the MA GUI Client from the command line, you will need to change
+to the directory:
+
+{mas_dir}/lib/classes
+
+where {mas_dir} stands for the directory into which you installed MAS.
+Alternatively, you can set (or change, if it's already set) the CLASSPATH
+environment variable to include that directory.  Then you can start the
+GUI client with the command:
+
+java MA_Client hostname port_number
+
+where hostname stands for the network name of the computer the server is
+running on and port_number is the socket port number the server is using.
+
+Once the client GUI is running, you can select a market from the server's
+database by choosing "Select Market" from the File menu.  Then you can
+double-click on a selection to choose the data for that market.  The data
+will be displayed using either Japanese candlesticks or standard price
+bars, depending on how the GUI is configured.  To display a technical
+indicator, select one from the Indicators menu.
+
+The GUI program will look for a file named .ma_clientrc in the current
+directory.  If it finds this file, it will use the configurations
+specified in the file; if not, it will use default configurations.
+(You can find a default .ma_clientrc file in the {mas_dir}/lib/classes
+directory.)  The following settings are configurable:
+
+  - Start and end date for daily and weekly data.
+
+  - Drawing style for price data - currently there is a choice of
+    candles or price bars.
+
+  - List of indicators to be placed in the main graph (with the market
+    data) instead of in the indicator graph.
+
+  - Specification of horizontal and vertical reference lines to be
+    drawn with indicators.  (Example: 20% and 80% lines for Stochastic
+	indicators.)
+
+  - Specification of colors to be used for candles, sticks, bars, text,
+    and lines.
+
+The default .ma_clientrc file has comments (lines starting with #) that
+explain the different specifications and their format.
+
+Note that you can open more than one window to view market data.  This is
+useful, for example, for viewing more than one market at a time, or for
+using different views of the same market - such as daily and weekly data -
+at the same time.
