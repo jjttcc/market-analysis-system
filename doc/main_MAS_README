@@ -140,6 +140,11 @@ a certification mark of the Open Source Initiative.
 (A list of current OSI-approved licenses can be found at:
 http://www.opensource.org/licenses/index.html.)
 
+Note: This product includes EiffelBase software from Interactive Software
+Engineering, used according to the terms of the ISE Free Eiffel Library
+License (IFELL). See http//www.eiffel.com and, for the license terms,
+http://eiffel.com/products/base/license.html.
+
 CONTACT INFORMATION
 
 If you have problems or questions about MAS or want to give feedback or
