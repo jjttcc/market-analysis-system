@@ -15,7 +15,13 @@
 #include <errno.h>
 #include <string.h>
 #include <sys/stat.h>
+#ifdef UNIX
 #include <unistd.h>
+#endif
+#ifdef BCC
+#include <io.h>
+#define R_OK 4
+#endif
 #include "external_input_sequence_plug_in_module.h"
 
 
@@ -61,6 +67,7 @@ const char* common_errors[] = {
 	"External retrieval script was not found, is not readable, or is empty.",
 	"Shell is not available for executing external commands."
 };
+
 
 /* Number of times `c' occurs in `s' */
 int char_count(const char* s, char c) {
