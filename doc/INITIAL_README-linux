@@ -1,0 +1,7 @@
+NOTE: It is recommended that, for each login ID under which MAS will be run,
+configure_user is run to set up individualized settings that will be under
+that user's control.  To do this, the user would execute:
+<mas_dir>/bin/configure_user <user_config_directory>
+where <mas_dir> is the directory into which MAS was installed and
+<user_config_directory> is the directory in which the users's configuration
+files are to be placed (for example, $HOME/.mas).

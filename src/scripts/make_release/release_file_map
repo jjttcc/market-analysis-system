@@ -258,6 +258,7 @@ doc/MAS_README-linux.txt doc/README mas_linux1.6.6q mac1.6.6q
 doc/README_compile src/doc/README_compile serversrc1.6.6q
 doc/main_MAS_README-linux.ps doc/INTRODUCTION.ps mas_linux1.6.6q mac1.6.6q
 doc/main_MAS_README-linux.html doc/INTRODUCTION.html mas_linux1.6.6q mac1.6.6q
+doc/INITIAL_README-linux doc/INITIAL_README mas_linux1.6.6q
 doc/FAQ.html doc/ mas_windows1.6.6q mas_linux1.6.6q
 doc/env_settings ./doc/environment mas_linux1.6.6q mac1.6.6q
 doc/INSTALL  ./ mas_linux1.6.6q
