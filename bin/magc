@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -x
 # Market Analysis GUI Client (MAGC)
 
 Progname=$(basename $0)
