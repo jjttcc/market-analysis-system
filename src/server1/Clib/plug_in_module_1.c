@@ -38,7 +38,7 @@ enum Error_type {
 	No_valid_path
 };
 
-const char* symbol_file_name = "symbols.mas";
+const char* Symbol_file_name = "symbols.mas";
 const char* data_file_name = "data.mas";
 const char* Data_retrieval_command = "perl ./mas_external_retrieve.pl ";
 
@@ -60,6 +60,15 @@ int char_count(const char* s, char c) {
 	return result;
 }
 
+/* Free (char*) elements 0 to `count' - 1 of `arr'. */
+void free_str_array(char** arr, const int count) {
+	int i = 0;
+	while (i < count) {
+		free(arr[i]);
+		++i;
+	}
+}
+
 /* Array of directories extracted from `paths' with separator ':'.
  * The address at `count' holds the number of elements in the result or,
  * if memory allocation fails, -1.
@@ -68,7 +77,7 @@ char** directories(const char* paths, int* count) {
 	const char *start, *end;
 	const char Separator = ':';
 	char** result = 0;
-	int sepcount, i;
+	int sepcount, i, onedot = 0;
 
 	assert(paths != 0 && paths[strlen(paths)] == '\0');
 	if (paths[0] != '\0') {
@@ -80,12 +89,24 @@ char** directories(const char* paths, int* count) {
 		}
 		if (char_count(paths, ':') == strlen(paths)) {
 			*count = 1;
+			onedot = 1;
 		} else {
 			*count = sepcount + 1;
 		}
 		result = malloc(sizeof(char **) * *count);
 		if (result == 0) {
+			/* malloc failed. */
 			*count = -1;
+		} else if (onedot) {
+			result[0] = malloc(2);
+			if (result[0] == 0) {
+				/* malloc failed. */
+				*count = -1;
+				free(result);
+				result = 0;
+			} else {
+				strncpy(result[0], ".", 2);
+			}
 		} else {
 			i = 0;
 			start = paths;
@@ -94,10 +115,17 @@ char** directories(const char* paths, int* count) {
 				while (*end != Separator && *end != '\0') {
 					++end;
 				}
-				/* !!Need error checking of malloc results. */
 				if (end == start) {
 					assert(*end == Separator || *end == '\0');
 					result[i] = malloc(2);
+					if (result[i] == 0) {
+						/* malloc failed. */
+						*count = -1;
+						free_str_array(result, i);
+						free(result);
+						result = 0;
+						break;
+					}
 					strncpy(result[i], ".", 2);
 					if (end[1] == '\0') {
 						if (i == *count - 2) {
@@ -108,6 +136,14 @@ char** directories(const char* paths, int* count) {
 					}
 				} else {
 					result[i] = malloc(end - start + 1);
+					if (result[i] == 0) {
+						/* malloc failed. */
+						*count = -1;
+						free_str_array(result, i);
+						free(result);
+						result = 0;
+						break;
+					}
 					strncpy(result[i], start, end - start);
 					result[i][end - start] = '\0';
 				}
@@ -208,7 +244,9 @@ void free_path_array(char** path_array, int count) {
 /* A heap-allocated clone of the first directory in path_array where the
  * file named `fname' exists.
  * If a valid directory is found, the address at fsize will hold the
- * size of the file; otherwise, 0 is returned. */
+ * size of the file; otherwise, 0 is returned and *error_type is set
+ * to No_valid_path.  If a memory error occurs, *error_type is set
+ * to Memory. */
 char* first_valid_directory(char** path_array, int count,
 		const char* fname, int* fsize, enum Error_type* error_type) {
 	int i, path_length, flength;
@@ -250,17 +288,21 @@ struct input_sequence_plug_in* new_input_sequence_plug_in_handle(
 	struct input_sequence_plug_in* result = 0;
 	char** path_array;
 	int path_count, symfile_size;
-	char* dir;
+	char* dir = 0;
 	enum Error_type error = None;
 	assert(paths != 0);
 	path_array = directories(paths, &path_count);
-	dir = first_valid_directory(path_array, path_count, symbol_file_name,
-		&symfile_size, &error);
-	free_path_array(path_array, path_count);
+	if (path_count != -1) {
+		dir = first_valid_directory(path_array, path_count,
+			Symbol_file_name, &symfile_size, &error);
+		free_path_array(path_array, path_count);
+	} else {
+		error = Memory;
+	}
 	if (dir != 0) {
 		result = malloc(sizeof (struct input_sequence_plug_in));
 		if (result != 0) {
-			result->symbol_file_name = concat2strings(dir, symbol_file_name);
+			result->symbol_file_name = concat2strings(dir, Symbol_file_name);
 			result->data_file_name = concat2strings(dir, data_file_name);
 			result->working_directory = dir;
 			result->symbol_file_size = symfile_size;
@@ -280,10 +322,10 @@ struct input_sequence_plug_in* new_input_sequence_plug_in_handle(
 		strncpy(error_buffer, common_errors[error], buffer_size);
 		if (error == No_valid_path) {
 			int msgsize = strlen(common_errors[error]) + 2;
-			msgsize += strlen(symbol_file_name);
+			msgsize += strlen(Symbol_file_name);
 			if (buffer_size >= msgsize) {
 				strcat(error_buffer, ": ");
-				strcat(error_buffer, symbol_file_name);
+				strcat(error_buffer, Symbol_file_name);
 			}
 		}
 		error_buffer[buffer_size - 1] = '\0';
@@ -304,6 +346,7 @@ int obtain_data(struct input_sequence_plug_in* handle,
 printf("obtain_data - symbol: '%s'\n", cmd);
 /*!!!Add use of is_intraday.*/
 	if (strlen(symbol) > Maximum_symbol_length) {
+		free(handle->errorbuffer);
 		handle->errorbuffer = concat2strings("Symbol name is too long: ",
 			symbol);
 		cmdresult = -1;
@@ -320,7 +363,6 @@ printf("obtain_data - symbol: '%s'\n", cmd);
 printf("executing %s (currend dir: %s)\n", cmd, getcwd(0, 0));
 		cmdresult = system(cmd);
 printf("result: %d (currend dir: %s)\n", cmdresult, getcwd(0, 0));
-/*!!!Need error msg if cmd fails.*/
 	}
 
 	return cmdresult;
