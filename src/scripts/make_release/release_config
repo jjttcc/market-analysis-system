@@ -1,8 +1,8 @@
 # Specify source and target directories:
 source_directory /home2/jtc/development/finance
-target_directory /usr2/release/mas_v1.5
+target_directory /usr2/release/mas-1.5
 work_directory /tmp/.mas_release
-release_name mas_v1.5
+release_name mas-1.5
 # Define packages:
 package serversrc1.5	# source code for the MA server
 package clientsrc1.5	# source code for the MA client
