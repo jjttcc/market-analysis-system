@@ -3,7 +3,7 @@
 package mas_gui;
 
 import java.util.*;
-import support.Configuration;
+import support.*;
 
 // Options specified on the command line
 public class CommandLineOptions extends StartupOptions {

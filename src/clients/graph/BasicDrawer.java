@@ -5,6 +5,7 @@ package graph;
 import java.awt.*;
 import java.util.*;
 import support.*;
+import application_support.*;
 
 /**
  *  Drawer of Primary, non-temporal market data

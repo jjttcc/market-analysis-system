@@ -1,6 +1,6 @@
 /* Copyright 1998 - 2003: Jim Cochrane - see file forum.txt */
 
-package support;
+package application_support;
 
 import java.util.*;
 import java.io.*;
@@ -10,7 +10,9 @@ import java.awt.*;
 
 //!!!Diverging class - needs to move to a new cluster.
 /** Global configuration settings - singleton */
-public class MA_Configuration extends Configuration implements NetworkProtocol {
+public class MA_Configuration extends Configuration implements NetworkProtocol,
+		MA_ConfigurationInterface {
+
 // Initialization
 	public MA_Configuration(Tokenizer in_source) {
 		super(in_source);

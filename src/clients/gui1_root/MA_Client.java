@@ -4,6 +4,7 @@ import java.io.*;
 import java.net.*;
 import mas_gui.*;
 import support.*;
+import application_support.*;
 
 /** Root class for the stand-alone Market Analysis client process */
 public class MA_Client {

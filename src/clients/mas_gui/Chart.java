@@ -13,6 +13,7 @@ import graph.*;
 import support.*;
 import common.*;
 import java_library.support.*;
+import application_support.*;
 
 class ChartSettings implements Serializable {
 

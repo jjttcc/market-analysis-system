@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import support.*;
+import application_support.*;
 
 public class IndicatorColors extends MA_Dialog {
 

@@ -10,6 +10,7 @@ import java.util.Properties;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 import common.*;
+import application_support.*;
 
 /** Scroll pane that holds the Market Analysis graph and buttons */
 public class MA_ScrollPane extends ScrollPane implements NetworkProtocol {
