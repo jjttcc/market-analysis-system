@@ -69,8 +69,8 @@ feature
 				-- Don't save the history for the current registrant
 				-- unless it was successfully locked.
 				if l.locked then
-					l.unlock
 					market_event_registrants.item.save_history
+					l.unlock
 				end
 				market_event_registrants.forth
 			end
