@@ -85,8 +85,4 @@ feature {NONE} -- Utility
 			end
 		end
 
-invariant
-
-	not_void: market_list_handler /= Void
-
 end -- class DATA_REQUEST_CMD
