@@ -15,7 +15,7 @@ class COMPOSITE_TUPLE_BUILDER inherit
 		rename
 			target as source_list, make as ovf_make
 		redefine
-			process, output, source_list, operator_used, input,
+			do_process, output, source_list, operator_used, input,
 			trading_period_type
 		end
 
@@ -26,18 +26,22 @@ creation {FACTORY}
 feature {NONE} -- Initialization
 
 	make (in: like input; ctf: COMPOSITE_TUPLE_FACTORY;
-			time_period_type: TIME_PERIOD_TYPE) is
+			time_period_type: TIME_PERIOD_TYPE; date: DATE_TIME) is
 		require
-			not_void: in /= Void and ctf /= Void and time_period_type /= Void
+			not_void:
+				in /= Void and ctf /= Void and time_period_type /= Void and
+				date /= Void
 		do
 			ovf_make (in, Void)
 			set_tuple_maker (ctf)
 			set_trading_period_type (time_period_type)
+			start_date := date
 		ensure
 			set: tuple_maker = ctf and tuple_maker /= Void and
 				trading_period_type = time_period_type and
 				trading_period_type /= Void
 			input_set: input = in and input /= Void
+			start_date_set: start_date = date and start_date /= Void
 		end
 
 feature -- Access
@@ -60,6 +64,9 @@ feature -- Access
 
 	tuple_maker: COMPOSITE_TUPLE_FACTORY
 			-- Factory used to create tuples
+
+	start_date: DATE_TIME
+			-- Date/time that will be assigned to the first compostie tuple
 
 feature -- Status report
 
@@ -128,9 +135,20 @@ feature -- Status setting
 				trading_period_type /= Void
 		end
 
+	set_start_date (arg: DATE_TIME) is
+			-- Set start_date to `arg'.
+		require
+			arg /= Void
+		do
+			start_date := arg
+		ensure
+			start_date_set: start_date = arg and
+									start_date /= Void
+		end
+
 feature -- Basic operations
 
-	process (start_date: DATE_TIME) is
+	do_process is
 			-- Make a list of COMPOSITE_TUPLE
 		local
 			src_sublist: ARRAYED_LIST [BASIC_MARKET_TUPLE]
@@ -201,5 +219,6 @@ invariant
 		--(For example, make weekly from daily, but daily from weekly
 		--of weekly from weekly doesn't make sense.)
 	trading_period_type_not_void: trading_period_type /= Void
+	start_date_not_void: start_date /= Void
 
 end -- COMPOSITE_TUPLE_BUILDER
