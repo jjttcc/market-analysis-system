@@ -1,0 +1,49 @@
+# macl input file to onfigure some standard indicator settings
+e
+e
+Simple Moving Average
+1
+13
+0
+Exponential Moving Average
+1
+13
+0
+MACD Difference
+1
+13
+2
+5
+0
+MACD Histogram
+1
+6
+2
+5
+3
+13
+0
+MACD Signal Line (EMA of MACD Difference)
+3
+6
+0
+Slope of MACD Signal Line
+1
+6
+2
+13
+3
+5
+0
+Slope of Slope of MACD Signal Line
+1
+5
+2
+13
+3
+6
+0
+0
+s
+-
+x
