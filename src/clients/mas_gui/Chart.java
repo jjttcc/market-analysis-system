@@ -11,6 +11,19 @@ import graph.*;
 import support.*;
 import common.*;
 
+class WindowSettings implements Serializable {
+	public WindowSettings(Dimension s, Point l) {
+		size_ = s;
+		location_ = l;
+	}
+
+	public Point location() { return location_; }
+	public Dimension size() { return size_; }
+
+	private Point location_;
+	private Dimension size_;
+}
+
 class ChartSettings implements Serializable {
 	public ChartSettings(Dimension sz, Properties printprop, Point loc,
 			Vector upperind, Vector lowerind, boolean replace_ind) {
@@ -20,6 +33,7 @@ class ChartSettings implements Serializable {
 		upper_indicators_ = upperind;
 		lower_indicators_ = lowerind;
 		replace_indicators_ = replace_ind;
+		window_settings = new Hashtable();
 	}
 	public Dimension size() { return size_; }
 	public Point location() { return location_; }
@@ -27,6 +41,13 @@ class ChartSettings implements Serializable {
 	public Vector upper_indicators() { return upper_indicators_;}
 	public Vector lower_indicators() { return lower_indicators_;}
 	public boolean replace_indicators() { return replace_indicators_; }
+	public WindowSettings wsettings(String title) {
+		WindowSettings result = (WindowSettings) window_settings.get(title);
+		return result;
+	}
+	public void add_window_setting(WindowSettings ws, String title) {
+		window_settings.put(title, ws);
+	}
 
 	private Dimension size_;
 	private Properties print_properties_;
@@ -34,6 +55,7 @@ class ChartSettings implements Serializable {
 	private Vector upper_indicators_;
 	private Vector lower_indicators_;
 	private boolean replace_indicators_;
+	private Hashtable window_settings;
 }
 
 /** Market analysis GUI chart component */
@@ -44,6 +66,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		data_builder = builder;
 		this_chart = this;
 		Vector _markets = null;
+		saved_dialogs = new Vector();
 
 		if (sfname != null) serialize_filename = sfname;
 
@@ -87,7 +110,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 						System.exit(-1);
 					}
 					GUI_Utilities.busy_cursor(false, this);
-//_indicators = user_specified_indicators();
 				}
 			}
 		}
@@ -113,7 +135,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	}
 
 	// List of all markets in the server's database
-	Vector markets() {
+	public Vector markets() {
 		Vector result = null;
 		try {
 			result = data_builder.market_list();
@@ -126,7 +148,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	}
 
 	// indicators
-	Hashtable indicators() {
+	public Hashtable indicators() {
 		if (_indicators == null) {
 			Enumeration ind_iter;
 			Vector inds_from_server = data_builder.last_indicator_list();
@@ -203,7 +225,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	}
 
 	// Indicators in user-specified order
-	Vector ordered_indicators() {
+	public Vector ordered_indicators() {
 		if (ordered_indicator_list == null) {
 			// Force creation of ordered_indicator_list.
 			indicators();
@@ -214,6 +236,21 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	// Result of last request to the server
 	public int request_result() {
 		return data_builder.request_result();
+	}
+
+	// Register `d' to save its size and location on exit with its title
+	// as a key.
+	public void register_dialog_for_save_settings(Dialog d) {
+		saved_dialogs.addElement(d);
+	}
+
+	// Settings for dialog with title `s'
+	public WindowSettings settings_for(String s) {
+		WindowSettings result = null;
+		if (window_settings != null) {
+			result = window_settings.wsettings(s);
+		}
+		return result;
 	}
 
 	// Take action when notified that period type changed.
@@ -416,6 +453,12 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 				main_pane.print_properties, getLocation(),
 				current_upper_indicators, current_lower_indicators,
 				replace_indicators);
+			for (int i = 0; i < saved_dialogs.size(); ++i) {
+				Dialog d = (Dialog) saved_dialogs.elementAt(i);
+				WindowSettings ws = new WindowSettings(
+					d.getSize(), d.getLocation());
+				cs.add_window_setting(ws, d.getTitle());
+			}
 			oos.writeObject(cs);
 			oos.flush();
 			oos.close();
@@ -560,4 +603,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	static ChartSettings window_settings;
 
 	IndicatorGroups indicator_groups;
+
+	// Dialog windows registered to have their settings saved on exit
+	private Vector saved_dialogs;
 }
