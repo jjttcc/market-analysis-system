@@ -1,0 +1,35 @@
+#!/bin/bash
+# Obtain the specified history data file(s).
+
+progname=$(basename $0)
+datadir=/home3/finance/data/database
+historydir=/home3/finance/data/historic
+currentdir=/home3/finance/data/current
+
+usage() {
+	echo "Usage: $progname symbol [...]"
+}
+
+if [ $# -lt 1 ]; then usage; exit -1; fi
+cd $historydir
+symbols=$(echo $*|tr '[a-z]' '[A-Z]')
+fnames=$(echo "$symbols"|sed 's/[A-Z]\>/&.PRN/g')
+if ftphistfiles $fnames; then
+	cnvrt_fromdos $fnames
+	for f in $fnames; do
+		targetf=$(echo $f|tr '[A-Z]' '[a-z]'|sed 's/.prn/.txt/')
+		if [ -e $datadir/$targetf ]; then
+			echo $datadir/$targetf exists, saving to $datadir/$targetf.back.
+			mv $datadir/$targetf $datadir/$targetf.back
+		fi
+		# Extract year 96 - 99, add 19.
+		sed -n '/^9[6-9]/s/^/19/p;/^0[0-9]/s/^/20/p' \
+			$historydir/$f >$datadir/$targetf
+		chmod 664 $datadir/$targetf
+		chgrp investment $datadir/$targetf
+		ln -s $datadir/$targetf $currentdir
+	done
+else
+	echo "Ftp failed, exiting ..."
+	exit -1
+fi
