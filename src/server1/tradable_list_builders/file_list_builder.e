@@ -126,12 +126,10 @@ feature {NONE} -- Implementation
 				if daily_extension /= Void then
 					daily_file_names.extend (concatenation (<<l.item, ".",
 						daily_extension>>))
-print_list (<<"added daily file: ", daily_file_names.last, ".%N">>)
 				end
 				if intraday_extension /= Void then
 					intraday_file_names.extend (concatenation (<<l.item, ".",
 						intraday_extension>>))
-print_list (<<"added intraday file: ", intraday_file_names.last, ".%N">>)
 				end
 				l.forth
 			end
