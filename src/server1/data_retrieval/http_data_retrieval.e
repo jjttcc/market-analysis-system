@@ -175,7 +175,6 @@ feature {NONE} -- Status report
 		local
 			env: expanded OPERATING_ENVIRONMENT
 			path: DIRECTORY
-			ex: expanded EXCEPTIONS
 			ep: expanded ERROR_PROTOCOL
 		do
 			--@NOTE: If retrieval of intraday data via http is introduced,

@@ -143,7 +143,7 @@ feature -- Access
 			-- Most recent day of the week (1 = Sunday .. 7 = Saturday)
 			-- that is not marked to be ignored
 		local
-			i, today: INTEGER
+			today: INTEGER
 		do
 			today := (create {DATE}.make_now).day_of_the_week
 		end
