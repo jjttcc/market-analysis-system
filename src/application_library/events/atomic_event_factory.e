@@ -59,6 +59,7 @@ feature -- Basic operations
 			-- is thrown and error_occurred is set to true.
 		local
 			date_time: DATE_TIME
+			st: expanded SIGNAL_TYPES
 		do
 			error_init
 			scan_event_type
@@ -69,7 +70,8 @@ feature -- Basic operations
 			skip_field_separator
 			scan_symbol
 			create product.make (current_event_type.name, last_symbol,
-				date_time, current_event_type)
+				date_time, current_event_type, st.Buy_signal)
+--!!!The above needs to be changed to set from a user-configured signal type.
 		end
 
 feature {NONE} -- Implementation
