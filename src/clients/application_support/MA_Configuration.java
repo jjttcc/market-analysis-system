@@ -494,13 +494,13 @@ public class MA_Configuration extends Configuration implements NetworkProtocol,
 
 	private class DateSetting {
 		DateSetting(String dt, String period) {
-			_date = dt; _time_period = period;
+			date = dt; time_period = period;
 		}
 
-		public String date() { return _date; }
-		public String time_period() { return _time_period; }
+		public String date() { return date; }
+		public String time_period() { return time_period; }
 
-		private String _date;
-		private String _time_period;
+		private String date;
+		private String time_period;
 	}
 }
