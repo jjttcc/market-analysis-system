@@ -92,23 +92,21 @@ class CommandProcessor:
 #print "Stored: " + self.objects[objname] + " (" + objname + ")"
 
 	def record_input(self, s, shared, key_match):
-		print "ri - s, shared, key_match: '" + s + "', " + `shared` + \
-			", " + `key_match`
+#print "ri - s, shared, key_match: '" + s + "', " + `shared` + \
+#	", " + `key_match`
 		if self.selection:
-			print "xxyy"
 			if key_match:
-				print "We're NOT here."
 				if shared:
 					self.input_record = self.input_record + \
 						self.shared_string + key + '\n'
 				else:
 					self.input_record = self.input_record + key + '\n'
 			elif s in self.objects.values():
-				print s + " in objects"
+#print s + " in objects"
 				self.input_record = self.input_record + \
 					self.key_for(s, self.objects) + '\n'
 			elif s in self.shared_objects.values():
-				print s + " in shared objects"
+#print s + " in shared objects"
 				self.input_record = self.input_record + self.shared_string + \
 					self.key_for(s, self.shared_objects) + '\n'
 		else:
@@ -119,5 +117,5 @@ class CommandProcessor:
 		for k in objects.keys():
 			if objects[k] == s:
 				result = k
-		print "key_for returning " + result
+#print "key_for returning " + result
 		return result
