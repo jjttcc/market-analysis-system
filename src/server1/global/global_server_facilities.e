@@ -1,8 +1,8 @@
 indexing
 	description: "Global features needed by the server"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
-	date: "";
-	revision: ""
+	date: "$Date$";
+	revision: "$Revision$"
 
 class
 
@@ -17,3 +17,4 @@ feature -- Access
 		end
 
 end -- GLOBAL_SERVER
+x
