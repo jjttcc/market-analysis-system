@@ -12,8 +12,7 @@ if [ $# -lt 1 ]; then usage; exit 1; fi
 port=$1
 shift
 options="$*"
-files="indicators parabolic-sar cci market_analyzers
-macd_buy-sell_anlyzers_with_ema_gt_10 cci_signals"
+files="indicators parabolic-sar cci market_analyzers cci_signals"
 
 for file in $files; do
 	if ! macl -i $file $port $options; then
