@@ -28,7 +28,7 @@ feature -- Initialization
 
 feature {NONE}
 
-	read_value (stream: INPUT_SEQUENCE) is
+	read_value (stream: ITERABLE_INPUT_SEQUENCE) is
 		do
 			from
 				symbol.wipe_out
