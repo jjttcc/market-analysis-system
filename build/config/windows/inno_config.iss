@@ -45,7 +45,9 @@ Source: "bin\config_tool.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysove
 Source: "bin\bash_init"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "doc\README.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\INTRODUCTION.ps"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
-Source: "doc\INTRODUCTION.html"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
+Source: "doc\mct_introduction.html"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
+Source: "doc\index.html"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
+Source: "doc\FAQ.html"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\creating_market_analyzers.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\environment.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\feature_list.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
