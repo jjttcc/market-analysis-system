@@ -78,13 +78,13 @@ abstract public class Drawer {
 		Color c;
 
 		if ( xaxis != null ) {
-			xmax = xaxis.maximum;
-			xmin = xaxis.minimum;
+			xmax = xaxis.maximum();
+			xmin = xaxis.minimum();
 		}
 
 		if ( yaxis != null ) {
-			ymax = yaxis.maximum;
-			ymin = yaxis.minimum;
+			ymax = yaxis.maximum();
+			ymin = yaxis.minimum();
 		}
 
 		xrange = xmax - xmin;

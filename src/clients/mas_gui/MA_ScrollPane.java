@@ -61,19 +61,19 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 		gbconstraints.fill = GridBagConstraints.BOTH;
 		gblayout.setConstraints(_indicator_graph, gbconstraints);
 		graph_panel.add(_indicator_graph);
-		_main_graph.framecolor = new Color(0,0,0);
-		_main_graph.borderTop = 0;
-		_main_graph.borderBottom = 1;
-		_main_graph.borderLeft = 0;
-		_main_graph.borderRight = 1;
+		_main_graph.set_framecolor(new Color(0,0,0));
+		_main_graph.set_borderTop(0);
+		_main_graph.set_borderBottom(1);
+		_main_graph.set_borderLeft(0);
+		_main_graph.set_borderRight(1);
 		_main_graph.setGraphBackground(config.background_color());
 		_main_graph.setSize(400, 310);
 
-		_indicator_graph.framecolor = new Color(0,0,0);
-		_indicator_graph.borderTop = 0;
-		_indicator_graph.borderBottom = 1;
-		_indicator_graph.borderLeft = 0;
-		_indicator_graph.borderRight = 1;
+		_indicator_graph.set_framecolor(new Color(0,0,0));
+		_indicator_graph.set_borderTop(0);
+		_indicator_graph.set_borderBottom(1);
+		_indicator_graph.set_borderLeft(0);
+		_indicator_graph.set_borderRight(1);
 		_indicator_graph.setGraphBackground(config.background_color());
 		_indicator_graph.setSize(400, 150);
 	}

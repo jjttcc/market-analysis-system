@@ -65,71 +65,71 @@ public class DataSet {
 
 /*
 ***********************
-** Public Variables      
+** Variables      
 **********************/
 
-  /** 
-   *    The Graphics canvas that is driving the whole show.
-   * @see graph.Graph
-   */
-      public Graph g2d;
-  /**
-   *    The color of the straight line segments
-   */
-      public Color linecolor     = null;
-  /**
-   *    The index of the marker to use at the data points.
-   * @see graph.Markers
-   */
-      public int    marker       = 0;
-  /**
-   *    The marker color
-   */
-      public Color  markercolor  = null;
-  /**
-   *    The scaling factor for the marker. Default value is 1.
-   */
-      public double markerscale  = 1.0;
-  /**
-   *    The Axis object the X data is attached to. From the Axis object
-   *    the scaling for the data can be derived.
-   * @see graph.Axis
-   */
-      public Axis xaxis;
-  /**
-   *    The Axis object the Y data is attached to.
-   * @see graph.Axis
-   */
-      public Axis yaxis;
-  /**
-   * The current plottable X maximum of the data. 
-   * This can be very different from
-   * true data X maximum. The data is clipped when plotted.
-   */
-      public double xmax; 
-  /**
-   * The current plottable X minimum of the data. 
-   * This can be very different from
-   * true data X minimum. The data is clipped when plotted.
-   */
-      public double xmin;
-  /**
-   * The current plottable Y maximum of the data. 
-   * This can be very different from
-   * true data Y maximum. The data is clipped when plotted.
-   */
-      public double ymax; 
-  /**
-   * The current plottable Y minimum of the data. 
-   * This can be very different from
-   * true data Y minimum. The data is clipped when plotted.
-   */
-      public double ymin;
-  /**
-   * Boolean to control clipping of the data window.
-   * Default value is <em>true</em>, clip the data window.
-   */
-      public boolean clipping = false;
+	/** 
+	*    The Graphics canvas that is driving the whole show.
+	* @see graph.Graph
+	*/
+	private Graph g2d_;
+	/**
+	*    The color of the straight line segments
+	*/
+	private Color linecolor     = null;
+	/**
+	*    The index of the marker to use at the data points.
+	* @see graph.Markers
+	*/
+	private int    marker       = 0;
+	/**
+	*    The marker color
+	*/
+	private Color  markercolor  = null;
+	/**
+	*    The scaling factor for the marker. Default value is 1.
+	*/
+	private double markerscale  = 1.0;
+	/**
+	*    The Axis object the X data is attached to. From the Axis object
+	*    the scaling for the data can be derived.
+	* @see graph.Axis
+	*/
+	private Axis xaxis_;
+	/**
+	*    The Axis object the Y data is attached to.
+	* @see graph.Axis
+	*/
+	private Axis yaxis_;
+	/**
+	* The current plottable X maximum of the data. 
+	* This can be very different from
+	* true data X maximum. The data is clipped when plotted.
+	*/
+	private double xmax; 
+	/**
+	* The current plottable X minimum of the data. 
+	* This can be very different from
+	* true data X minimum. The data is clipped when plotted.
+	*/
+	private double xmin;
+	/**
+	* The current plottable Y maximum of the data. 
+	* This can be very different from
+	* true data Y maximum. The data is clipped when plotted.
+	*/
+	private double ymax; 
+	/**
+	* The current plottable Y minimum of the data. 
+	* This can be very different from
+	* true data Y minimum. The data is clipped when plotted.
+	*/
+	private double ymin;
+	/**
+	* Boolean to control clipping of the data window.
+	* Default value is <em>true</em>, clip the data window.
+	*/
+	private boolean clipping = false;
 
 /*
 *********************
@@ -186,6 +186,21 @@ public class DataSet {
 ** Public Methods
 ******************/
 
+	// x axis
+	public Axis xaxis() { return xaxis_; }
+
+	// y axis
+	public Axis yaxis() { return yaxis_; }
+
+	// Set the x axis to `a'.
+	public void set_xaxis(Axis a) { xaxis_ = a; }
+
+	// Set the y axis to `a'.
+	public void set_yaxis(Axis a) { yaxis_ = a; }
+
+	// set g2d to `b'.
+	protected void set_g2d(Graph g) { g2d_ = g; }
+
 	// Add y1, y2 values for a horizontal line.
 	public void add_hline(DoublePair p) {
 		if (hline_data == null) hline_data = new Vector();
@@ -198,21 +213,21 @@ public class DataSet {
 		vline_data.addElement(p);
 	}
 
-  /**
-   * Draw the straight line segments and/or the markers at the
-   * data points.
-   * If this data has been attached to an Axis then scale the data
-   * based on the axis maximum/minimum otherwise scale using
-   * the data's maximum/minimum
-   * @param g Graphics state
-   * @param bounds The data window to draw into
-   */
+	/**
+	* Draw the straight line segments and/or the markers at the
+	* data points.
+	* If this data has been attached to an Axis then scale the data
+	* based on the axis maximum/minimum otherwise scale using
+	* the data's maximum/minimum
+	* @param g Graphics state
+	* @param bounds The data window to draw into
+	*/
 	public void draw_data(Graphics g, Rectangle bounds) {
 		if (! range_set) range();
 		if ( linecolor != null) g.setColor(linecolor);
 		_drawer.set_data(data);
-		_drawer.set_xaxis(xaxis);
-		_drawer.set_yaxis(yaxis);
+		_drawer.set_xaxis(xaxis_);
+		_drawer.set_yaxis(yaxis_);
 		_drawer.set_maxes(xmax, ymax, xmin, ymin);
 		_drawer.set_ranges(xrange, yrange);
 		_drawer.set_clipping(clipping);
@@ -220,104 +235,95 @@ public class DataSet {
 		if (_dates_needed) draw_dates(g,bounds);
 	}
 
-  /**
-   * return the data X maximum.
-   */
-      public double getXmax() {  return dxmax; } 
-  /**
-   * return the data X minimum.
-   */
-      public double getXmin() {  return dxmin; } 
-  /**
-   * return the data Y maximum.
-   */
-      public double getYmax() {  return dymax; } 
-  /**
-   * return the data Y minimum.
-   */
-      public double getYmin() {  return dymin; }
- 
-  /**
-   * Return the number of data points in the DataSet
-   * @return number of (x,y) points.
-   */
-      public int dataPoints() {  return length()/stride(); }
+	/**
+	* return the data X maximum.
+	*/
+	public double getXmax() {  return dxmax; } 
+	/**
+	* return the data X minimum.
+	*/
+	public double getXmin() {  return dxmin; } 
+	/**
+	* return the data Y maximum.
+	*/
+	public double getYmax() {  return dymax; } 
+	/**
+	* return the data Y minimum.
+	*/
+	public double getYmin() {  return dymin; }
 
-  /**
-   * get the data point at the parsed index. The first (x,y) pair
-   * is at index 0.
-   * @param index Data point index
-   * @return array containing the (x,y) pair.
-   */
-      public double[] getPoint(int index) {
-			int strd = stride();
-            double point[] = new double[strd];
-            int i = index*strd;
-            if( index < 0 || i > length()-strd ) return null;
+	/**
+	* Return the number of data points in the DataSet
+	* @return number of (x,y) points.
+	*/
+	public int dataPoints() {  return length()/stride(); }
 
-            for(int j=0; j<strd; j++) point[j] = data[i+j];
-            
-            return point;
-	  }
+	/**
+	* get the data point at the parsed index. The first (x,y) pair
+	* is at index 0.
+	* @param index Data point index
+	* @return array containing the (x,y) pair.
+	*/
+	public double[] getPoint(int index) {
+		int strd = stride();
+		double point[] = new double[strd];
+		int i = index*strd;
+		if( index < 0 || i > length()-strd ) return null;
 
-  /**
-   * Return the data point that is closest to the parsed (x,y) position
-   * @param x 
-   * @param y (x,y) position in data space. 
-   * @return array containing the closest data point.
-   */
-      public double[] getClosestPoint(double x, double y) {
-            double point[] = {0.0, 0.0, 0.0};
-            int i;
-            double xdiff, ydiff, dist2;
-			int strd = stride();
+		for(int j=0; j<strd; j++) point[j] = data[i+j];
 
-            xdiff = data[0] - x;
-            ydiff = data[1] - y;
-              
-            point[0] = data[0];
-            point[1] = data[1];
-            point[2] = xdiff*xdiff + ydiff*ydiff;
-            
- 
+		return point;
+	}
 
-            for(i=strd; i<length()-1; i+=strd) {
+	/**
+	* Return the data point that is closest to the parsed (x,y) position
+	* @param x 
+	* @param y (x,y) position in data space. 
+	* @return array containing the closest data point.
+	*/
+	public double[] getClosestPoint(double x, double y) {
+		double point[] = {0.0, 0.0, 0.0};
+		int i;
+		double xdiff, ydiff, dist2;
+		int strd = stride();
 
-                xdiff = data[i  ] - x;
-                ydiff = data[i+1] - y;
+		xdiff = data[0] - x;
+		ydiff = data[1] - y;
+		point[0] = data[0];
+		point[1] = data[1];
+		point[2] = xdiff*xdiff + ydiff*ydiff;
 
+		for(i=strd; i<length()-1; i+=strd) {
+			xdiff = data[i  ] - x;
+			ydiff = data[i+1] - y;
+			dist2 = xdiff*xdiff + ydiff*ydiff;
+			if(dist2 < point[2]) {
+				point[0] = data[i  ];
+				point[1] = data[i+1];
+				point[2] = dist2;
+			}
+		}
 
-                dist2 = xdiff*xdiff + ydiff*ydiff;
-
-                if(dist2 < point[2]) {
-                    point[0] = data[i  ];
-                    point[1] = data[i+1];
-                    point[2] = dist2;
-		  }
-
-           }
-
-           return point;
-            
-	  }
+		return point;
+	}
 
 
-  /**
-   * Draw dates, if they exist.
-   * @param g Graphics context
-   * @param w Data Window
-   */
-      protected void draw_dates(Graphics g, Rectangle w) {
+	/**
+	* Draw dates, if they exist.
+	* @param g Graphics context
+	* @param w Data Window
+	*/
+	protected void draw_dates(Graphics g, Rectangle w) {
 		if (dates != null) {
 			date_drawer.set_data(dates);
-			date_drawer.set_xaxis(xaxis);
-			date_drawer.set_yaxis(yaxis);
+			date_drawer.set_xaxis(xaxis_);
+			date_drawer.set_yaxis(yaxis_);
 			date_drawer.set_maxes(xmax, ymax, xmin, ymin);
 			date_drawer.set_ranges(xrange, yrange);
 			date_drawer.set_clipping(clipping);
 			date_drawer.draw_data(g, w, null, null);
 		}
-      }
+	}
 
 	/**
 	* Calculate the range of the data. This modifies dxmin,dxmax,dymin,dymax
@@ -348,12 +354,11 @@ public class DataSet {
 			if( dymax < data[i] ) { dymax = data[i]; }
 			else if( dymin > data[i] ) { dymin = data[i]; }
 		}
-			if ( yaxis == null) {
-			ymin = dymin;
-			ymax = dymax;
-			}
-
-		if ( xaxis == null) {
+		if ( yaxis_ == null) {
+		ymin = dymin;
+		ymax = dymax;
+		}
+		if ( xaxis_ == null) {
 			xmin = dxmin;
 			xmax = dxmax;
 		}
@@ -366,73 +371,78 @@ public class DataSet {
 **********************/
 
 	// Main data
-	protected double[] data;
+	private double[] data;
 
 	// Date data
-	protected String[] dates;
+	private String[] dates;
 
-  /**
-   * Drawer of price bars - e.g., tic bars or candles
-   */
-	protected Drawer _drawer;
+	/**
+	* Drawer of price bars - e.g., tic bars or candles
+	*/
+	private Drawer _drawer;
 
-  /**
-   * Drawer of dates
-   */
-	protected DateDrawer date_drawer;
+	/**
+	* Drawer of dates
+	*/
+	private DateDrawer date_drawer;
 
-  /**
-   * The data X maximum. 
-   * Once the data is loaded this will never change.
-   */
-      protected double dxmax;
-  /**
-   * The data X minimum. 
-   * Once the data is loaded this will never change.
-   */
-      protected double dxmin;
-  /**
-   * The data Y maximum. 
-   * Once the data is loaded this will never change.
-   */
-      protected double dymax;
-  /**
-   * The data Y minimum. 
-   * Once the data is loaded this will never change.
-   */
-      protected double dymin;
+	/**
+	* The data X maximum. 
+	* Once the data is loaded this will never change.
+	*/
+	private double dxmax;
+
+	/**
+	* The data X minimum. 
+	* Once the data is loaded this will never change.
+	*/
+	private double dxmin;
+
+	/**
+	* The data Y maximum. 
+	* Once the data is loaded this will never change.
+	*/
+	private double dymax;
+
+	/**
+	* The data Y minimum. 
+	* Once the data is loaded this will never change.
+	*/
+	private double dymin;
 
 	// Horizontal, vertical line data
-	protected Vector hline_data;
-	protected Vector vline_data;
+	private Vector hline_data;
+	private Vector vline_data;
 
-  /**
-   *    The X range of the clipped data
-   */
-      protected double xrange;
-  /**
-   *    The Y range of the clipped data
-   */
-      protected double yrange;
-  /**
-   *    The amount to increment the data array when the append method is being
-   *    used.
-   */
-      protected int increment = 100;
+	/**
+	*    The X range of the clipped data
+	*/
+	private double xrange;
+
+	/**
+	*    The Y range of the clipped data
+	*/
+	private double yrange;
+
+	/**
+	*    The amount to increment the data array when the append method is being
+	*    used.
+	*/
+	private int increment = 100;
 
 	// Has range() been called to set the range?
-	protected boolean range_set = false;
+	private boolean range_set = false;
 
 	// Number of tuples in the data
-	protected int tuple_count;
+	private int tuple_count;
 
-  /**
-   * Number of components in a data tuple - for example, 2 (x, y) for
-   * a simple point
-   # @precondition
-   #    _drawer != null
-   */
-    protected int stride() { return _drawer.drawing_stride(); }
+	/**
+	* Number of components in a data tuple - for example, 2 (x, y) for
+	* a simple point
+	* @precondition
+	*    _drawer != null
+	*/
+	protected int stride() { return _drawer.drawing_stride(); }
 
 	protected int length() {
 		int result = 0;
@@ -440,5 +450,5 @@ public class DataSet {
 		return result;
 	}
 
-	protected boolean _dates_needed;
+	private boolean _dates_needed;
 }

@@ -17,7 +17,7 @@ public class IndicatorGroup {
 
 	public void attach_data_set(DataSet d) {
 		yaxis.attachDataSet(d);
-		d.yaxis = yaxis;
+		d.set_yaxis(yaxis);
 	}
 
 	public void add_indicator(String i) {
