@@ -39,6 +39,7 @@ trading system. Some of the features of MAS are:
      several clients at a time running on remote machines.
 
 %prep
+rm -fr $RPM_BUILD_ROOT
 %setup
 #%patch
 
@@ -47,6 +48,13 @@ trading system. Some of the features of MAS are:
 
 %install
 ./install --rootdir $RPM_BUILD_ROOT/%{rootdir}
+
+%post
+cd %{rootdir}
+if [ "$(id -un)" = root ]; then
+	find . -exec chown root {} ';'
+	find . -exec chgrp root {} ';'
+fi
 
 %files
 %{rootdir}/bin/macl
@@ -58,7 +66,7 @@ trading system. Some of the features of MAS are:
 %{rootdir}/lib/classes
 %{rootdir}/lib/config
 %{rootdir}/lib/data
-%{rootdir}/lib/database
+%{rootdir}/lib/mas_dbrc
 %{rootdir}/lib/libodbc.so.1
 %{rootdir}/lib/python
 %{rootdir}/lib/stock_splits
