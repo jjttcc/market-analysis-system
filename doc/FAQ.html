@@ -698,17 +698,24 @@ an RSI generator and use it in a further generator do changes to the
 original RSI generator affect the compound generator - is it statically
 or dynamically linked?
 </B><P>
-It is, to use your words, dynamic.  I just tried it out to verify that I
-was remembering correctly.  I changed the "MACD Crossover and Stochastic
-%D Crossover (Buy)", a compound indicator that uses "MACD Crossover
-(Buy)" and "Stochastic %D Crossover (Buy)":  I changed the parameters
-of its MACD and its stochastic and saved them.  Then I used the "market
-analyzer" editing function to view the parameters for the "MACD Crossover
-(Buy)" and "Stochastic %D Crossover (Buy)" generators and the values
-had not changed.  So the "sub"-generators are not shared.  Since they
-are not shared, going the other way - changing the sub-generators
-(lower-level generators, using your terminology), as
-in your example, also has no effect on the compound generator.
+It is, to use your words, dynamic.
+A more precise way of putting it is that a when a compound generator uses
+an existing generator it gets a copy of that generator rather than
+"linking" to the original.
+Thus if you change the original generator, the compound generator using a
+copy of the original is not affected.
+This is also true of changes in the other direction: If you change a
+sub-generator of a compound generator, the original from which the
+sub-generator was copied is not affected.
+For example (using the generators that come with the current release of
+MAS), if you change the "MACD Crossover and Stochastic
+%D Crossover (Buy)" (a compound indicator that uses "MACD Crossover
+(Buy)" and "Stochastic %D Crossover (Buy)") such that you change
+the parameters of its MACD and its stochastic components (and
+save the changes), and then use the "market analyzer" editing function
+to view the parameters for the "MACD Crossover
+(Buy)" and "Stochastic %D Crossover (Buy)" generators you will see that
+their values have not changed.
 <P><B>
 Having studied the doc
 <I>
