@@ -437,8 +437,13 @@ feature {NONE} -- Implementation
 		end
 
 	names_from_parameter_list (l: LIST [FUNCTION_PARAMETER];
-				desc_needed: BOOLEAN): ARRAYED_LIST [STRING] is
-			-- Name (and description if `desc_needed') of each function in `l'
+				desc_type: CHARACTER): ARRAYED_LIST [STRING] is
+			-- Name of each function in `l'
+			-- If `desc_type' is 's', a short description - the paremeter's
+			-- function name - is included; if `desc_type' is 'l', a
+			-- long description - the paremeter's function name, current
+			-- type, and type description - is included.  Otherwise,
+			-- only the name is included.
 		do
 			create Result.make (1)
 			from
@@ -446,11 +451,14 @@ feature {NONE} -- Implementation
 			until
 				l.exhausted
 			loop
-				if desc_needed then
+				if desc_type = 'l' then
 					Result.extend (concatenation (<<l.item.name, " - ",
 						l.item.function.name, " (value: ",
 						l.item.current_value, ", type: ",
 						l.item.value_type_description, ")">>))
+				elseif desc_type = 's' then
+					Result.extend (concatenation (<<l.item.name, " - ",
+						l.item.function.name>>))
 				else
 					Result.extend (l.item.name)
 				end
@@ -580,7 +588,7 @@ feature {NONE} -- Implementation - indicator editing
 				selection = Exit_value
 			loop
 				selection := list_selection_with_backout (
-					names_from_parameter_list (parameters, true), query)
+					names_from_parameter_list (parameters, 'l'), query)
 				if selection /= Exit_value then
 					p := parameters @ selection
 					edit_parameter (p)
@@ -627,7 +635,9 @@ feature {NONE} -- Implementation - indicator editing
 			if i.parameters.empty then
 				show_message (concatenation (<<"Indicator ", i.name,
 					" has no editable parameters.">>))
-			elseif i.parameters.count = 1 then
+			elseif
+				i.parameters.count = 1 or not duplicates (i.parameters)
+			then
 				edit_parameter_menu (i.parameters, i.name)
 			elseif not has_children_to_edit and has_immediate_parameters then
 				edit_parameter_menu (i.immediate_parameters, i.name)
@@ -677,6 +687,28 @@ feature {NONE} -- Implementation - indicator editing
 					l.remove
 				else
 					l.forth
+				end
+			end
+		end
+
+	duplicates (parameters: LIST [FUNCTION_PARAMETER]): BOOLEAN is
+			-- Are there any items with duplicate names in `parameters'?
+		local
+			tbl: HASH_TABLE [STRING, STRING]
+			pnames: LIST [STRING]
+		do
+			from
+				pnames := names_from_parameter_list (parameters, 's')
+				pnames.start
+				create tbl.make (pnames.count)
+			until
+				Result or pnames.exhausted
+			loop
+				if tbl.has (pnames.item) then
+					Result := true
+				else
+					tbl.put (pnames.item, pnames.item)
+					pnames.forth
 				end
 			end
 		end
