@@ -8,43 +8,49 @@ deferred class N_BASED_CALCULATION inherit
 
 	NUMERIC_COMMAND
 		redefine
-			initialize, execute_precondition
+			initialize
 		end
 
 	N_RECORD_STRUCTURE
+		redefine
+			set_n
+		end
 
-feature -- Initialization
+feature {FACTORY} -- Initialization --!!!Check export
+
+	make (i: like n) is
+		require
+			i_gt_0: i > 0
+		do
+			set_n (i)
+		ensure
+			n_set: n = i
+		end
 
 	initialize (s: N_RECORD_STRUCTURE) is
 			-- Initialize value with n from s
-		require else
-			s.n_set
 		do
 			set_n (s.n)
+		ensure then
+			value = calculate
+			n_set_to_s_n: n = s.n
+		end
+
+feature {FACTORY} -- Initialization --!!!Check export
+
+	set_n (i: like n) is
+		do
+			Precursor (i)
 			-- Calculate is called here for efficiency, since in most
 			-- cases descendants will keep the empty execute implementation.
 			value := calculate
 		ensure then
 			value = calculate
-			n_set: n_set
-			n_set_to_s_n: n = s.n
 		end
 
 feature -- Status report
 
-	arg_used: BOOLEAN is
-		do
-			Result := false
-		ensure then
-			not_used: Result = false
-		end
-
-	execute_precondition: BOOLEAN is
-		do
-			Result := n_set
-		ensure then
-			n_set: Result = n_set
-		end
+	arg_used: BOOLEAN is false
 
 feature -- Basic operations
 
@@ -57,8 +63,6 @@ feature {NONE} -- Implmentation
 
 	calculate: REAL is
 			-- Perform the calculation based on n.
-		require
-			n_set: n_set
 		deferred
 		end
 
