@@ -42,6 +42,7 @@ feature -- Initialization
 			not_void: disp /= Void
 		do
 			dispatcher := disp
+			!!help.make
 		ensure
 			dispatcher = disp
 		end
@@ -63,13 +64,15 @@ feature -- Basic operations
 			loop
 				new_registrant := Void
 				print_list (<<"Select registrant type: ",
-					"%N     User (u) Log file (l) Previous (-) ">>)
+					"%N     User (u) Log file (l) Previous (-) Help (h) ">>)
 				inspect
 					selected_character
 				when 'u', 'U' then
 					new_registrant := new_user
 				when 'l', 'L' then
 					new_registrant := new_log_file
+				when 'h', 'H' then
+					print (help @ help.Add_registrants)
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
@@ -348,7 +351,7 @@ feature {NONE} -- Implementation
 			loop
 				print_list (<<"Select action for ", r.name, ": ",
 					"%N     Remove event type (r) Add event types (a) %
-					%Previous (-) ">>)
+					%Previous (-) Help (h) ">>)
 				inspect
 					selected_character
 				when 'r', 'R' then
@@ -359,6 +362,8 @@ feature {NONE} -- Implementation
 					end
 				when 'a', 'A' then
 					add_event_types (r)
+				when 'h', 'H' then
+					print (help @ help.Edit_registrant)
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
@@ -400,5 +405,9 @@ feature {NONE} -- Implementation
 				end
 			end
 		end
+
+feature {NONE} -- Implementation
+
+	help: HELP
 
 end -- class EVENT_REGISTRATION
