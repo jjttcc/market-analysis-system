@@ -94,14 +94,14 @@ feature {NONE} -- Implementation
 			-- specified by `supplier'.
 		local
 			session_window: SESSION_WINDOW
+			builder: expanded APPLICATION_WINDOW_BUILDER
 		do
-			session_window := new_session_window (supplier.host_name,
-				supplier.port_number)
+			session_window := builder.configured_session_window (
+				supplier.host_name, supplier.port_number)
 			if not port_numbers_in_use.has (supplier.port_number) then
 				port_numbers_in_use.extend (supplier.port_number)
 			end
 			session_window.show
-print ("NEW connect-to-loc...%N")
 		end
 
 	terminate_located_session (supplier: LOCATE_SESSION_WINDOW) is
@@ -116,17 +116,6 @@ print ("NEW connect-to-loc...%N")
 			create session_actions.make (configuration)
 			session_actions.set_owner_window (supplier)
 			session_actions.terminate_session
-print ("NEW terminate-loc...%N")
-		end
-
-	new_session_window (hostname, portnumber: STRING): SESSION_WINDOW is
-			-- A new SESSION_WINDOW with port number `portnumber'
-		local
-			builder: expanded APPLICATION_WINDOW_BUILDER
-		do
-			Result := builder.mas_session_window
-			Result.set_host_name (hostname)
-			Result.set_port_number (portnumber)
 		end
 
 	host_and_port_diagnosis (host, port: STRING): STRING is

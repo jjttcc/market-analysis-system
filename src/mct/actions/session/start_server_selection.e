@@ -96,7 +96,6 @@ feature {NONE} -- Implementation
 				external_commands.replace (selected_command,
 					selected_command.identifier)
 			end
-print ("start_server_selection.e VSN 2 working%N")
 			-- !!Need to modify the mctrc file to mark the selected command
 			-- as the default.
 		end
@@ -108,10 +107,5 @@ feature {NONE} -- Implementation - constants
 	Description: STRING is "Description"
 
 	Window_title: STRING is "Start-server selection"
-
-invariant
-
-	configuration_exists: configuration /= Void
-	external_commands_exist: external_commands /= Void
 
 end
