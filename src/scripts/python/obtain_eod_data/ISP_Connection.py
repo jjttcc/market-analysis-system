@@ -16,4 +16,4 @@ class ISP_Connection:
 
 	def disconnect(self):
 		if not self.was_connected:
-			os.system('killppp')
+			os.system('connectppp &')
