@@ -14,8 +14,17 @@ creation
 
 feature -- Initialization
 
-	make (name: STRING; modtime, size: INTEGER) is
+	make (name: STRING; size: INTEGER) is
 		do
+			file_size := size
+			file_name := name
+		ensure
+			fields_set: file_size = size and file_name = name
+		end
+
+	make_with_mod_time (name: STRING; modtime, size: INTEGER) is
+		do
+			--@@@note: `last_modification_time' may no longer be needed.
 			last_modification_time := modtime
 			file_size := size
 			file_name := name
