@@ -253,12 +253,12 @@ doc/other_market_analyzer_examples . mas_linux1.5 mac1.5
 doc/market_analysis . mas_linux1.5 mac1.5
 doc/MAS_README doc/README mas_linux1.5 mac1.5
 doc/README_compile src/doc/README_compile serversrc1.5
-doc/main_MAS_README ./README mas_linux1.5 mac1.5
+doc/main_MAS_README doc/MAIN_README mas_linux1.5 mac1.5
 doc/env_settings ./doc/environment mas_linux1.5 mac1.5
 doc/INSTALL  ./ mas_linux1.5
 doc/THANKS . mas_linux1.5 mac1.5 serversrc1.5 clientsrc1.5
-doc/GUI_client_change_log ./GUI_CHANGE_LOG mas_linux1.5 mac1.5
-doc/Server_change_log ./MAS_CHANGE_LOG mas_linux1.5
+doc/GUI_client_change_log doc/GUI_CHANGE_LOG mas_linux1.5 mac1.5
+doc/Server_change_log doc/MAS_CHANGE_LOG mas_linux1.5
 # (MAS Documentation, Windows style)
 doc/GUI_introduction doc/GUI_introduction.txt[dos] mas_windows1.5
 doc/masystem_introduction doc/masystem_introduction.txt[dos] mas_windows1.5
@@ -273,8 +273,8 @@ doc/main_MAS_README ./README.txt[dos] mas_windows1.5
 doc/env_settings ./doc/environment.txt[dos] mas_windows1.5
 doc/INSTALL  ./INSTALL.txt[dos] mas_windows1.5
 doc/THANKS doc/THANKS.txt[dos] mas_windows1.5
-doc/GUI_client_change_log ./GUI_CHANGE_LOG.txt[dos] mas_windows1.5
-doc/Server_change_log ./MAS_CHANGE_LOG.txt[dos] mas_windows1.5
+doc/GUI_client_change_log doc/GUI_CHANGE_LOG.txt[dos] mas_windows1.5
+doc/Server_change_log doc/MAS_CHANGE_LOG.txt[dos] mas_windows1.5
 doc/mas_odbc_usage.txt . mas_windows1.5
 doc/README_WINDOWS.txt ./ mas_windows1.5
 # (Scripts)
