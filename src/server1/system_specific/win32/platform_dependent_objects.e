@@ -49,4 +49,9 @@ feature -- Access
 				record_sep, input_file)
 		end
 
+	command_line: MAS_COMMAND_LINE is
+		do
+			create {WINDOWS_MAS_COMMAND_LINE} Result.make
+		end
+
 end

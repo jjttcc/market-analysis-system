@@ -46,4 +46,9 @@ feature -- Access
 			create Result.make (field_sep, record_sep, input_file)
 		end
 
+	command_line: MAS_COMMAND_LINE is
+		do
+			create {MAS_COMMAND_LINE} Result.make
+		end
+
 end -- class PLATFORM_DEPENDENT_OBJECTS

@@ -21,7 +21,7 @@ class MAS_COMMAND_LINE inherit
 			{NONE} all
 		end
 
-creation {GLOBAL_SERVER_FACILITIES}
+creation {PLATFORM_DEPENDENT_OBJECTS}
 
 	make
 
