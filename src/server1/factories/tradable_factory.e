@@ -20,14 +20,15 @@ deferred class TRADABLE_FACTORY inherit
 feature -- Initialization
 
 	make is
-		require
 		do
 			field_separator := "%T"
+			record_separator := "%N"
 			time_period_type := period_types @ (period_type_names @ Daily)
 		ensure
 			daily_type: time_period_type.name.is_equal (
 				period_type_names @ Daily)
 			fs_tab: field_separator.is_equal ("%T")
+			rs_newline: record_separator.is_equal ("%N")
 		end
 
 feature -- Access
@@ -35,7 +36,7 @@ feature -- Access
 	product: TRADABLE [BASIC_MARKET_TUPLE]
 			-- Result of execution
 
-	input: BILINEAR_INPUT_SEQUENCE
+	input: INPUT_SEQUENCE
 			-- Input sequence containing data to be scanned into tuples
 
 	symbol: STRING
@@ -48,6 +49,9 @@ feature -- Access
 
 	field_separator: STRING
 			-- Field separator to expect while scanning input
+
+	record_separator: STRING
+			-- Record separator to expect while scanning input
 
 	time_period_type: TIME_PERIOD_TYPE
 			-- The period type, such as daily, that will be assigned
@@ -73,14 +77,17 @@ feature -- Basic operations
 		local
 			scanner: MARKET_TUPLE_DATA_SCANNER
 		do
-			error_occurred := false
+			error_occurred := False
 			make_product
 			check value_setters.count > 0 end
 			!!scanner.make (product, input, tuple_maker, value_setters)
 			if not scanner.field_separator.is_equal (field_separator) then
 				scanner.set_field_separator (field_separator)
 			end
-			-- Input data from input and stuff it into product.
+			if not scanner.record_separator.is_equal (record_separator) then
+				scanner.set_record_separator (record_separator)
+			end
+			-- Input data from input stream and stuff it into product.
 			scanner.execute
 			add_indicators (product, indicators)
 			check
@@ -88,7 +95,7 @@ feature -- Basic operations
 			end
 			if not scanner.error_list.empty then
 				error_list := scanner.error_list
-				error_occurred := true
+				error_occurred := True
 			end
 			product.finish_loading
 		ensure then
@@ -146,6 +153,17 @@ feature -- Status setting
 		ensure
 			field_separator_set: field_separator = arg and
 				field_separator /= Void
+		end
+
+	set_record_separator (arg: STRING) is
+			-- Set record_separator to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			record_separator := arg
+		ensure
+			record_separator_set: record_separator = arg and
+				record_separator /= Void
 		end
 
 	set_indicators (arg: LIST [MARKET_FUNCTION]) is
@@ -260,6 +278,7 @@ invariant
 
 	these_fields_not_void:
 		field_separator /= Void and
+		record_separator /= Void and
 		tuple_maker /= Void and time_period_type /= Void
 	error_constraint:
 		error_occurred implies error_list /= Void and not error_list.empty
