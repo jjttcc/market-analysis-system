@@ -24,6 +24,7 @@ feature -- Access
 			Result.extend (main_box)
 			add_main_window_components (main_box)
 			Result.set_menu_bar (main_window_menu_bar)
+			add_main_accelerators (Result)
 			-- Allow screen refresh on some platoforms.
 			Result.unlock_update
 		end
@@ -42,6 +43,8 @@ feature -- Access
 			Result.extend (main_box)
 			add_mas_session_window_components (main_box)
 			Result.set_menu_bar (mas_session_window_menu_bar)
+			add_main_accelerators (Result)
+			add_session_accelerators (Result)
 			-- Allow screen refresh on some platoforms.
 			Result.unlock_update
 		end
@@ -117,7 +120,7 @@ feature {NONE} -- Menu components
 			current_actions_exist: current_main_actions /= Void or
 				current_mas_session_actions /= Void
 		do
-			create Result.make_with_text ("&File")
+			create Result.make_with_text (file_menu_title)
 			common_file_menu_items.do_all (agent Result.extend)
 		end
 
@@ -126,8 +129,8 @@ feature {NONE} -- Menu components
 		require
 			current_actions_exist: current_mas_session_actions /= Void
 		do
-			create Result.make_with_text ("&File")
-			Result.extend (widget_builder.new_menu_item ("&Close",
+			create Result.make_with_text (file_menu_title)
+			Result.extend (widget_builder.new_menu_item (close_menu_title,
 				<<agent current_mas_session_actions.close_window>>))
 			common_file_menu_items.do_all (agent Result.extend)
 		end
@@ -137,12 +140,12 @@ feature {NONE} -- Menu components
 		require
 			current_main_actions_exist: current_main_actions /= Void
 		do
-			create Result.make_with_text ("&Edit")
+			create Result.make_with_text (edit_menu_title)
 			Result.extend (widget_builder.new_menu_item (
-				"&Server startup configuration",
+				server_startup_menu_title,
 				<<agent current_main_actions.configure_server_startup>>))
 			Result.extend (widget_builder.new_menu_item (
-				"&Preferences",
+				preferences_menu_title,
 				<<agent current_main_actions.edit_preferences>>))
 		end
 
@@ -159,8 +162,8 @@ feature {NONE} -- Menu components
 			else
 				actions := current_mas_session_actions
 			end
-			create Result.make_with_text ("&Help")
-			Result.extend (widget_builder.new_menu_item ("&About",
+			create Result.make_with_text (help_menu_title)
+			Result.extend (widget_builder.new_menu_item (about_menu_title,
 				<<agent actions.show_about_box>>))
 		end
 
@@ -175,11 +178,66 @@ feature {NONE} -- Menu components
 				actions := current_mas_session_actions
 			end
 			create {LINKED_LIST [EV_MENU_ITEM]} Result.make
-			Result.extend (widget_builder.new_menu_item ("&Quit",
+			Result.extend (widget_builder.new_menu_item (quit_menu_title,
 				<<agent actions.exit>>))
 			Result.extend (widget_builder.new_menu_item (
-				"Q&uit without terminating sessions",
+				quit_without_menu_title,
 				<<agent actions.exit_without_session_termination>>))
+		end
+
+feature {NONE} -- Miscellaneous
+
+	add_main_accelerators (w: EV_TITLED_WINDOW) is
+			-- Associate main MCT accelerators with `w'.
+		require
+			current_actions_exist: current_main_actions /= Void or
+				current_mas_session_actions /= Void
+		local
+			accelerator: EV_ACCELERATOR
+			key_constants: expanded EV_KEY_CONSTANTS
+			actions: ACTIONS
+		do
+			if current_main_actions /= Void then
+				actions := current_main_actions
+			else
+				actions := current_mas_session_actions
+			end
+			-- Create an accelerator activated with Ctrl and 'q'.
+			create accelerator.make_with_key_combination (
+				create {EV_KEY}.make_with_code (key_constants.key_q),
+				True, False, False)
+			accelerator.actions.extend (agent actions.exit)
+			w.accelerators.extend (accelerator)
+			-- Create an accelerator activated with Ctrl and `u'.
+			create accelerator.make_with_key_combination (
+				create {EV_KEY}.make_with_code (key_constants.key_u),
+				True, False, False)
+			accelerator.actions.extend (
+				agent actions.exit_without_session_termination)
+			w.accelerators.extend (accelerator)
+		end
+
+	add_session_accelerators (w: EV_TITLED_WINDOW) is
+			-- Associate session accelerators with `w'.
+		require
+			current_actions_exist: current_main_actions /= Void or
+				current_mas_session_actions /= Void
+		local
+			accelerator: EV_ACCELERATOR
+			key_constants: expanded EV_KEY_CONSTANTS
+			actions: ACTIONS
+		do
+			if current_main_actions /= Void then
+				actions := current_main_actions
+			else
+				actions := current_mas_session_actions
+			end
+			-- Create an accelerator activated with Ctrl and 'w'.
+			create accelerator.make_with_key_combination (
+				create {EV_KEY}.make_with_code (key_constants.key_w),
+				True, False, False)
+			accelerator.actions.extend (agent actions.close_window)
+			w.accelerators.extend (accelerator)
 		end
 
 feature {NONE} -- Implementation
@@ -202,5 +260,24 @@ feature {NONE} -- Implementation - Constants
 
 	Session_window_title: STRING is "MAS"
 			-- Title of mas-session windows
+
+	file_menu_title: STRING is "&File"
+
+	close_menu_title: STRING is "&Close Window  (Ctl+W)"
+
+	quit_menu_title: STRING is "&Quit  (Ctl+Q)"
+
+	quit_without_menu_title: STRING is
+		"Q&uit without terminating sessions (Ctl+U)"
+
+	help_menu_title: STRING is "&Help"
+
+	about_menu_title: STRING is "&About"
+
+	edit_menu_title: STRING is "&Edit"
+
+	server_startup_menu_title: STRING is "&Server startup configuration"
+
+	preferences_menu_title: STRING is "&Preferences"
 
 end

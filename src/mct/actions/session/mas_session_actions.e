@@ -63,7 +63,6 @@ feature -- Actions
 		local
 			cmd: COMMAND
 		do
-print ("terminate_session called%N")
 			-- NOT port_numbers_in_use.has (owner_window.port_number)
 			-- implies that the server has already been terminated.
 			if port_numbers_in_use.has (owner_window.port_number) then
