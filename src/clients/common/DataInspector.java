@@ -180,3 +180,4 @@ public class DataInspector {
 	setReader( new InputStreamReader(s) );
 	}
 }
+x
