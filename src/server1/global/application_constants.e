@@ -32,6 +32,9 @@ feature -- Default settings
 	Default_database_config_file_name: STRING is "mas_dbrc"
 			-- Default name for database configuration file
 
+	Default_http_config_file_name: STRING is "mas_httprc"
+			-- Default name for http configuration file
+
 	Default_mailer: STRING is "elm"
 			-- Default mailer program
 
