@@ -60,9 +60,11 @@ will not be included in this record.
 @begin:windows
 %hdg1Feedback and Informal Support for MAS
 I am interested in hearing your comments and criticisms of the MAS package.
-I am hoping to improve the packaging of MAS for Windows to make it easier
-for people to use and your feedback will help me to determine what areas
-need work to accomplish this.
+This is an early release of MAS for Windows and, although I've put
+some effort into making it easy to install and use, it still has a
+ways to go.
+Your criticisms and suggestions will help me to determine what areas
+need improvement.
 %par
 Additionally, if you have a problem installing MAS or getting it to work
 the way you would like, you are welcome to send me an email describing the
@@ -76,6 +78,7 @@ able to help you fix the problem.
 Since there is no charge for this support at this time, I cannot guarantee
 that I will be able to help with your problem, but I will try,
 so it is probably worthwhile for you to contact me.
+You will find my email address at the end of this document.
 @end:windows
 
 %hdg1Downloading the Current Version of MAS
