@@ -59,6 +59,13 @@ class CL_BASED_FUNCTION_EDITING_INTERFACE inherit
 			print
 		end
 
+	OBJECT_EDITING_VALUES
+		export
+			{NONE} all
+		undefine
+			print
+		end
+
 creation
 
 	make
@@ -108,31 +115,41 @@ feature {NONE} -- Implementation
 
 	tradable_dispenser: TRADABLE_DISPENSER
 
+--!!!
+choice_for (enum: ENUMERATED [CHARACTER]; desc: STRING): STRING is
+	do
+		Result := desc + " (" + enum.item.out + ")"
+	end
+
 feature {NONE} -- Implementation of hook methods
 
 	main_indicator_edit_selection: INTEGER is
 		local
 			msg: STRING
+			cr, rm, vw, ed, sv, prev: INDICATOR_EDITING_CHOICE
 		do
+			create cr.make_creat; create rm.make_remove; create vw.make_edit
+			create ed.make_view; create sv.make_save; create prev.make_previous
 			check
 				io_devices_not_void: input_device /= Void and
 					output_device /= Void
 			end
 			if not dirty or not ok_to_save then
-				msg := concatenation (<<"Select action:",
-					"%N     Create a new indicator (c) %
-					%Remove an indicator (r) %N%
-					%     View an indicator (v) %
-					%Edit an indicator (e) %
-					%Previous (-) ", eom>>)
+				msg := "Select action:%N     " +
+					choice_for (cr, cr.item_description) + " " +
+					choice_for (rm, rm.item_description) + "%N     " +
+					choice_for (ed, ed.item_description) + " " +
+					choice_for (vw, vw.item_description) + " " +
+					choice_for (prev, prev.item_description) + " " + eom
 			else
-				msg := concatenation (<<"Select action:",
-					"%N     Create a new indicator (c) %
-					%Remove an indicator (r) %N%
-					%     View an indicator (v) %
-					%Edit an indicator (e) %
-					%Save changes (s) %N%
-					%     Previous - abort changes (-) ", eom>>)
+				msg := "Select action:%N     " +
+					choice_for (cr, cr.item_description) + " " +
+					choice_for (rm, rm.item_description) + "%N     " +
+					choice_for (ed, ed.item_description) + " " +
+					choice_for (vw, vw.item_description) + " " +
+					choice_for (sv, sv.item_description) + "%N     " +
+					choice_for (prev, prev.item_description +
+						" - abort changes") + " " + eom
 			end
 			from
 				Result := Null_value
@@ -142,23 +159,23 @@ feature {NONE} -- Implementation of hook methods
 				print (msg)
 				inspect
 					character_selection (Void)
-				when 'c', 'C' then
+				when creat, creat_u then
 					Result := Create_new_value
-				when 'r', 'R' then
+				when remove, remove_u then
 					Result := Remove_value
-				when 'v', 'V' then
+				when view, view_u then
 					Result := View_value
-				when 'e', 'E' then
+				when edit, edit_u then
 					Result := Edit_value
-				when 's', 'S' then
+				when sav, sav_u then
 					if not dirty or not ok_to_save then
 						print ("Invalid selection%N")
 					else
 						Result := Save_value
 					end
-				when '!' then
+				when shell_escape then
 					execute_shell_command
-				when '-' then
+				when previous then
 					Result := Exit_value
 				else
 					print ("Invalid selection%N")
@@ -193,9 +210,9 @@ feature {NONE} -- Implementation of hook methods
 			when choose, choose_u then
 				Result := True
 			when another_choice, another_choice_u then
-				print ("Invalid selection%N")
 				check Result = False end
 			else
+				print ("%NInvalid selection%N%N")
 				check Result = False end
 			end
 		end
