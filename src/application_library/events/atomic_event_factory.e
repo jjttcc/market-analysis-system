@@ -71,7 +71,6 @@ feature -- Basic operations
 			scan_symbol
 			create product.make (current_event_type.name, last_symbol,
 				date_time, current_event_type, st.Buy_signal)
---!!!The above needs to be changed to set from a user-configured signal type.
 		end
 
 feature {NONE} -- Implementation

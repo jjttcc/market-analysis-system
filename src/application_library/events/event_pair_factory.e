@@ -57,7 +57,6 @@ feature -- Basic operations
 			right := next_event
 			create product.make (left, right, concatenation (<<left.name, ", ",
 				right.name>>), current_event_type, st.Buy_signal)
---!!!The above needs to be changed to set from a user-configured signal type.
 		end
 
 	next_event: MARKET_EVENT is
