@@ -44,31 +44,6 @@ feature -- Access
 
 	short_description: STRING is "Stock"
 
-feature -- Element change
-
---!!!Remove this:  (perhaps reuse in STOCK_SPLITS)
-	add_split (s: STOCK_SPLIT) is
-			-- Add `s' to `splits' such that splits remains sorted by date.
-		require
-			not_void: s /= Void
-			not_in_splits: splits = Void or else not splits.has (s)
-		do
-			if splits = Void then
-				!LINKED_LIST [STOCK_SPLIT]!splits.make
-				splits.compare_objects
-			end
-			from
-				splits.start
-			until
-				splits.after or s.date < splits.item.date
-			loop
-				splits.forth
-			end
-			splits.put_left (s)
-		ensure
-			added: splits.has (s) and splits.count = old splits.count + 1
-		end
-
 feature -- Basic operations
 
 	finish_loading is
