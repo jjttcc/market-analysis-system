@@ -70,7 +70,32 @@ abstract public class IndicatorDrawer extends BasicDrawer {
 		ArrayList dates = dates();
 		ArrayList times = times();
 
-		if (indicator_dates.get(0).equals(dates.get(0))) {
+//!!!!!Remove debug code:
+System.out.println("[first_date_index]");
+if (data == null) {
+System.out.println("data is null");
+} else {
+	System.out.println("data count: " + data.size());
+}
+if (indicator_times == null) {
+System.out.println("indicator_times is null");
+} else {
+	System.out.println("indicator_times count: " + indicator_times.size());
+}
+if (indicator_dates == null) {
+System.out.println("indicator_dates is null");
+//new Error().printStackTrace();
+return 0;
+//System.exit(1);
+} else {
+System.out.println("indicator_dates is NOT null");
+System.out.println("indicator_dates count: " + indicator_dates.size());
+//new Error().printStackTrace();
+}
+		if (indicator_dates == null ||
+//!!Check on ^^^^^^^^^^^^^^^^^^^^^^
+				indicator_dates.get(0).equals(dates.get(0))) {
+
 			result = 0;
 		} else {
 			result = Utilities.index_at_date((String)
