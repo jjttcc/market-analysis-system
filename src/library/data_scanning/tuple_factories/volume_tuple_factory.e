@@ -5,13 +5,20 @@ indexing
 
 class VOLUME_TUPLE_FACTORY inherit
 
-	TUPLE_FACTORY
+	BASIC_TUPLE_FACTORY
+		redefine
+			product, execute
+		end
 
 feature
 
 	execute (arg: ANY) is
 		do
-			!VOLUME_TUPLE!product.make
+			!!product.make
 		end
+
+feature -- Access
+
+	product: VOLUME_TUPLE
 
 end -- class VOLUME_TUPLE_FACTORY

@@ -5,13 +5,20 @@ indexing
 
 class OI_TUPLE_FACTORY inherit
 
-	TUPLE_FACTORY
+	VOLUME_TUPLE_FACTORY
+		redefine
+			product, execute
+		end
 
 feature
 
 	execute (arg: ANY) is
 		do
-			!OPEN_INTEREST_TUPLE!product.make
+			!!product.make
 		end
+
+feature -- Access
+
+	product: OPEN_INTEREST_TUPLE
 
 end -- class OI_TUPLE_FACTORY
