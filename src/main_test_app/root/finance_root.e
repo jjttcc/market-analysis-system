@@ -23,9 +23,7 @@ feature -- Initialization
 			tradable_builder: TRADABLE_FACTORY
 			function_builder: FUNCTION_BUILDER
 			ui: TEST_USER_INTERFACE
-			testenvelope: ENVELOPE
 		do
-			!!testenvelope.make
 			!!ui
 			initialize (ui)
 			print ("Test execution: "); print (current_date)
