@@ -6,10 +6,10 @@ import common.*;
 import java.io.*;
 import java.util.*;
 
-abstract class SessionState {
+public abstract class SessionState {
 	// `response_string' is the string sent by the server in response to
 	// a login request.
-	SessionState(String response_string) throws IOException {
+	public SessionState(String response_string) throws IOException {
 		StringTokenizer t = new StringTokenizer(response_string,
 			message_field_separator());
 		String s = null;

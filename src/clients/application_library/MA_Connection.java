@@ -4,9 +4,10 @@ package mas_gui;
 
 import java.io.*;
 import support.*;
+import common.*;
 
 /** Connection specialized for MAS */
-public class MA_Connection extends Connection {
+public class MA_Connection extends Connection implements NetworkProtocol {
 
 	// Precondition: io_conn != null
 	public MA_Connection(IO_Connection io_conn) {
@@ -27,5 +28,35 @@ public class MA_Connection extends Connection {
 	protected SessionState new_session_state(String response)
 			throws IOException {
 		return new MA_SessionState(response);
+	}
+
+// Hook routine implementations
+
+	protected int login_request_code() {
+		return Login_request;
+	}
+
+	protected int logout_request_code() {
+		return Logout_request;
+	}
+
+	protected int error_code() {
+		return Error;
+	}
+
+	protected int ok_code() {
+		return OK;
+	}
+
+	protected int warning_code() {
+		return Warning;
+	}
+
+	protected String eom_string() {
+		return Eom;
+	}
+
+	protected String msg_fld_sep() {
+		return Message_field_separator;
 	}
 }

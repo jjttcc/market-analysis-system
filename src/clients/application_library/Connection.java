@@ -10,7 +10,7 @@ import support.*;
 import mas_gui.*;
 
 /** Interface for connecting and communicating with the server */
-abstract public class Connection implements NetworkProtocol, Constants {
+abstract public class Connection {
 
 	// Precondition: io_conn != null
 	public Connection(IO_Connection io_conn) {
@@ -39,7 +39,7 @@ abstract public class Connection implements NetworkProtocol, Constants {
 		Configuration conf = Configuration.instance();
 
 		connect();
-		send_msg(Login_request, conf.session_settings(), 0);
+		send_msg(Login_request_code, conf.session_settings(), 0);
 		try {
 			s = receive_msg().toString();
 			if (error_occurred()) {
@@ -63,7 +63,7 @@ abstract public class Connection implements NetworkProtocol, Constants {
 	// Precondition:  logged_in()
 	public void logout() throws IOException {
 		connect();
-		send_msg(Logout_request, "", _session_state.session_key());
+		send_msg(Logout_request_code, "", _session_state.session_key());
 		try {
 			close_connection();
 		} catch (Exception e) {
@@ -118,7 +118,7 @@ abstract public class Connection implements NetworkProtocol, Constants {
 			++i;
 		} while (true);
 
-		if (last_rec_msgID == Error) {
+		if (last_rec_msgID == Error_code) {
 			System.err.println(request_result);
 			// This error means there is a problem with the protocol of the
 			// last request passed to the server.  Since this is a coding
@@ -132,9 +132,9 @@ abstract public class Connection implements NetworkProtocol, Constants {
 	// Send the `msgID', the session key, and `msg' - with field delimiters.
 	void send_msg(int msgID, String msg, int session_key) {
 		out.print(msgID);
-		out.print(Message_field_separator + session_key);
-		out.print(Message_field_separator + msg);
-		out.print(Eom);
+		out.print(Message_field_separator_string + session_key);
+		out.print(Message_field_separator_string + msg);
+		out.print(Eom_string);
 		out.flush();
 	}
 
@@ -153,7 +153,7 @@ abstract public class Connection implements NetworkProtocol, Constants {
 	}
 
 	boolean error_occurred() {
-		return last_rec_msgID != OK;
+		return last_rec_msgID != OK_code;
 	}
 
 	// A new Reader object created with io_connection's input stream
@@ -180,8 +180,8 @@ abstract public class Connection implements NetworkProtocol, Constants {
 
 	// Is `value' a valid server response?
 	boolean valid_server_response(int value) {
-		return value == OK || value == Error || value == Warning ||
-			valid_application_server_response(value);
+		return value == OK_code || value == Error_code ||
+			value == Warning_code || valid_application_server_response(value);
 	}
 
 	// Is `value' a valid server response for this application?
@@ -194,6 +194,16 @@ abstract public class Connection implements NetworkProtocol, Constants {
 	protected abstract SessionState new_session_state(String response)
 		throws IOException;
 
+// Implementation - Hook routines
+
+	protected abstract int login_request_code();
+	protected abstract int logout_request_code();
+	protected abstract int error_code();
+	protected abstract int ok_code();
+	protected abstract int warning_code();
+	protected abstract String eom_string();
+	protected abstract String msg_fld_sep();
+
 	protected SessionState _session_state;
 	protected boolean _logged_in = false;
 	protected String _hostname;
@@ -204,5 +214,12 @@ abstract public class Connection implements NetworkProtocol, Constants {
 	protected DataInspector scanner;	// for scanning server messages
 	protected int last_rec_msgID;		// last message ID received from server
 	protected StringBuffer request_result;	// result of last data request
-	static int Eom_char = Eom.charAt(0);
+	protected int Login_request_code = login_request_code();
+	protected int Logout_request_code = logout_request_code();
+	protected int Error_code = error_code();
+	protected int OK_code = ok_code();
+	protected int Warning_code = warning_code();
+	protected String Eom_string = eom_string();
+	protected String Message_field_separator_string = msg_fld_sep();
+	protected int Eom_char = Eom_string.charAt(0);
 }
