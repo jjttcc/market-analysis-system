@@ -43,6 +43,14 @@ feature -- Client request IDs
 	Logout_request: INTEGER is 8
 			-- Logout request from GUI client
 
+	Event_data_request: INTEGER is 9
+			-- Request for a list of market events - trading signals, sorted
+			-- by date, increasing
+
+	Event_list_request: INTEGER is 10
+			-- Request for a list of all market event types valid for
+			-- a particular tradable and trading-period type
+
 feature -- Server response IDs
 
 	Error: INTEGER is 101
