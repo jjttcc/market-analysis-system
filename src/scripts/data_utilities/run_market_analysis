@@ -28,19 +28,14 @@ then
 else
 	echo "$progname: Download of end-of-day data succeeded at $(date)"
 	. ~/lib/.mas_env
-echo "distributing data ..."
 	distribute_data $datestring
 	if [ $? -ne 0 ]
 	then
 		echo "$0 failed." >&2
 		result=-1
 	else
-echo "processing splits ..."
 		process_stock_splits
-echo "Result: $?"
-echo "analyzing watch lists ..."
 		analyze_watch_lists 30001
-echo "Result: $?"
 	fi
 fi
 

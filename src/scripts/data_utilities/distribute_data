@@ -52,28 +52,22 @@ if [ $? -ne 0 ]; then
 	exit -1
 fi
 
-echo "A"
 for f in "${yydate}*.zip"
 do
 	chmod 664 $f
 	unzip $f
-echo "unzip result: $?"
 done
-echo "B"
 
 if [ $? -ne 0 ]; then
 	echo "$Progname: fatal error: unzipping of EOD file failed."
 	exit -1
 fi
-echo "C"
 
 for f in "${yydate}.*"
 do
 	dos2unix $f
 	extract_data $PWD/$f $yyyydate $insert
-echo "extract_data result: $?"
 	rm -f $f
 done
-echo "D"
 
 rm -f eod.${yyyydate}

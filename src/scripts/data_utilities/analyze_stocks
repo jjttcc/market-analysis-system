@@ -28,7 +28,6 @@ cl_client() {
 }
 
 start_server() {
-echo "Executing: mas '$portnumber' -background '$MAS_ARGS' '$*'"
 	mas $portnumber -background $MAS_ARGS $*
 }
 
@@ -71,13 +70,9 @@ if [ $# -gt 0 ]; then
 else
 	files=*.txt
 fi
-echo "Processing last $days days of data with mas dir. $MAS_DIRECTORY"
-echo "and port $portnumber"
 if use_database; then
-echo "using DB"
 	start_server -p &
 else
-echo "using files"
 	start_server $files &
 fi
 sleep 12
