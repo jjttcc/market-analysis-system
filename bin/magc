@@ -1,21 +1,32 @@
 #!/usr/bin/env bash
-# Run the Java client
+# Market Analysis GUI Client (MAGC)
 
 Progname=$(basename $0)
+basedir=$(dirname $0)/..
+classdir=$basedir/lib/classes
 
 usage() {
 	echo "Usage: $pname [cl] [-h hostname] port_number"
 }
 
-host=jupiter
+check_settings() {
+	if [ ! -d $classdir -o ! -x $classdir ]; then
+		echo "$Progname: Cannot access class directory: $classdir" >&2
+		exit -1
+	fi
+	if [ ! -r ${classdir}/${main}.class ]; then
+		echo "$Progname: Cannot access java class file: " \
+				"${classdir}/${main}.class" >&2
+		exit -1
+	fi
+}
+
+host=$(hostname)
 main=MA_Client
-exedir=/home/jtc/development/finance/src/clients/GUI1
 while [ $# -gt 0 ]
 do
 	case $1 in
-		cl) main=CL_Client; shift
-			exedir=/home/jtc/development/finance/src/clients/CL
-		;;
+		cl) main=CL_Client; shift ;;
 		-h) shift; host=$1; shift ;;
 		-*) usage; exit 0 ;;
 		*) port_number=$1; shift ;;
@@ -27,7 +38,6 @@ if [ -z "$port_number" ]; then
 	exit -1
 fi
 
-if [ "$Progname" = "runj" ]; then
-	cd $exedir
-fi
+check_settings
+cd $classdir
 java $main $host $port_number
