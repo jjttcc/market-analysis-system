@@ -346,9 +346,7 @@ System.out.println("sending request with " + symbol + ", " + period_type +
 					period_type, is_update);
 			}
 			Calendar date = data_parser.latest_date_time();
-//!!!!!Remove:			if (date != null) {
 			last_latest_date_time = date;
-//!!			}
 		}
 	}
 
