@@ -32,20 +32,14 @@ public class NewServer extends MCT_Constants {
 			runtime = Runtime.getRuntime();
 		}
 		try {
-//System.out.println("NewServer - " + server_cmd_key + ": " +
-//settings.get(server_cmd_key));
 			String hostname = property_value(pcthostname_property);
 			result = new MCT_ComponentContext(hostname, port);
 			String cmd = processed_command(
 				(String) settings.get(server_cmd_key), result);
-//System.out.println("cmd: " + cmd);
 			cmd = globbed_command(cmd);
-//System.out.println("cmd: " + cmd);
+System.out.println("Trying to execute: " + cmd);
 			Process p = runtime.exec(cmd);
 			result.set_process(p);
-//System.out.println("mct context created with hostname: " +
-//((MCT_ComponentContext) result).server_host_name() +
-//", port #: " + ((MCT_ComponentContext) result).server_port_number());
 		} catch (Exception e) {
 			System.err.println("Error: failed to start mas server.");
 		}
@@ -57,23 +51,23 @@ public class NewServer extends MCT_Constants {
 		String s = "", glob, directory, result = "";
 		int last_sep_idx, tokcount;
 		StringTokenizer t = new StringTokenizer(cmd, " ");
-		tokcount = t.countTokens();
-		if (tokcount > 0) {
-			for (int i = 0; i < tokcount - 1; ++i) {
-				result = result + t.nextToken() + " ";
-			}
+		for ( ; t.hasMoreTokens(); ) {
 			s = t.nextToken();
-			last_sep_idx = s.lastIndexOf(sep);
-			if (last_sep_idx != -1) {
-				glob = s.substring(last_sep_idx + 1);
-				directory = s.substring(0, last_sep_idx);
+			if (s.indexOf('*') != -1) {
+				last_sep_idx = s.lastIndexOf(sep);
+				if (last_sep_idx != -1) {
+					glob = s.substring(last_sep_idx + 1);
+					directory = s.substring(0, last_sep_idx);
+				} else {
+					glob = s;
+					directory = ".";
+				}
+				String[] files = FileReaderUtilities.globlist(directory, glob);
+				for (int i = 0; i < files.length; ++i) {
+					result = result + directory + sep + files[i] + " ";
+				}
 			} else {
-				glob = s;
-				directory = ".";
-			}
-			String[] files = FileReaderUtilities.globlist(directory, glob);
-			for (int i = 0; i < files.length; ++i) {
-				result = result + " " + directory + sep + files[i];
+				result = result + s + " ";
 			}
 		}
 		return result;
