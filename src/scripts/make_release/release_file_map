@@ -167,9 +167,6 @@ src/clients/GUI1/graph/MainGraph.class lib/classes/graph/ mas_linux1.4 mas_windo
 src/clients/GUI1/graph/TemporalDrawer.class lib/classes/graph/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/GUI1/graph/TimeDrawer.class lib/classes/graph/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/GUI1/MarketSelection\$1.class lib/classes/ mas_linux1.4 mas_windows1.4 mac1.4
-src/clients/GUI1/MarketSelection\$2.class lib/classes/ mas_linux1.4 mas_windows1.4 mac1.4
-src/clients/GUI1/MarketSelection\$3.class lib/classes/ mas_linux1.4 mas_windows1.4 mac1.4
-src/clients/GUI1/MarketSelection\$4.class lib/classes/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/GUI1/Chart.class lib/classes/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/GUI1/Chart\$1.class lib/classes/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/GUI1/ChartSettings.class lib/classes/ mas_linux1.4 mas_windows1.4 mac1.4
@@ -198,7 +195,6 @@ src/clients/GUI1/DialogSelection\$3.class lib/classes/ mas_linux1.4 mas_windows1
 src/clients/GUI1/IndicatorColors.class lib/classes/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/GUI1/IndicatorColors\$1.class lib/classes/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/GUI1/IndicatorColors\$2.class lib/classes/ mas_linux1.4 mas_windows1.4 mac1.4
-src/clients/GUI1/IndicatorColors\$3.class lib/classes/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/GUI1/MA_Dialog.class lib/classes/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/GUI1/MA_Dialog\$1.class lib/classes/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/GUI1/MAS_Options.class lib/classes/ mas_linux1.4 mas_windows1.4 mac1.4
