@@ -203,8 +203,6 @@ feature {NONE} -- Implementation
 	process_start_server_cmd (key, value: STRING) is
 			-- Process a block-definition of a start-server command.
 		do
-print ("process_start_server_cmd - key, value: '" + key +
-"', '" + value + "'%N")
 			--!!!Stub
 			-- Need to maintain a set of "commands" (SET [EXTERNAL_COMMAND]
 			-- might do - need to add 'description') and update that
