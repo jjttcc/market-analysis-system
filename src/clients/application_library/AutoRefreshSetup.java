@@ -11,10 +11,8 @@ public class AutoRefreshSetup {
 	//    refresh_delay == delay * 1000;
 	public AutoRefreshSetup(TimeDelimitedDataRequestClient client, int delay) {
 
-System.out.println("ARS");
 		data_request_client = client;
 		refresh_delay = delay * 1000;
-System.out.println("ref delay: " + refresh_delay);
 	}
 
 // Access
@@ -48,12 +46,10 @@ System.out.println("ref delay: " + refresh_delay);
 			if (refresh_delay >= minimum_refresh_delay) {
 				timer.scheduleAtFixedRate(timer_task, refresh_delay,
 					refresh_delay);
-System.out.println("scheduling timer for delay of " + refresh_delay);
 			} else {
 				timer.scheduleAtFixedRate(timer_task, default_refresh_delay,
 					default_refresh_delay);
 				System.err.println(default_schedule_msg);
-System.out.println("scheduling timer for DEFAULT delay of " + default_refresh_delay);
 			}
 		}
 	}

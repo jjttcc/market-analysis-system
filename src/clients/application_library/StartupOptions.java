@@ -93,7 +93,6 @@ abstract public class StartupOptions implements OptionFlags,
 		} else {
 			set_auto_refresh(true);
 		}
-System.out.println("auto ref delay set to: " + auto_refresh_delay);
 	}
 
 // Implementation - Attributes
