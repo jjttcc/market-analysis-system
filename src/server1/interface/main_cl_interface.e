@@ -351,8 +351,8 @@ feature {NONE}
 					parameters.after
 				loop
 					print_list (<<i, ") ", parameters.item.name,
-								" (value: ", parameters.item.current_value,
-								")%N">>)
+						" (value: ", parameters.item.current_value, ", type: ",
+						parameters.item.value_type_description, ")%N">>)
 					parameters.forth
 					i := i + 1
 				end
@@ -673,14 +673,14 @@ feature {NONE}
 			print_list (<<"The current value for ", p.function.name, " is ",
 						p.current_value, " - new value? ", eom>>)
 			from
-				read_integer
+				read_line
 			until
-				p.valid_value (last_integer)
+				p.valid_value (last_string)
 			loop
-				print_list (<<last_integer, " is not valid, try again%N", eom>>)
-				read_integer
+				print_list (<<last_string, " is not valid, try again%N", eom>>)
+				read_line
 			end
-			p.change_value (last_integer)
+			p.change_value (last_string)
 			print_list (<<"New value set to ", p.current_value, "%N">>)
 		end
 
