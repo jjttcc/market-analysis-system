@@ -44,7 +44,9 @@ feature {NONE}
 		local
 			tuple_list: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
 			t: TRADABLE [BASIC_MARKET_TUPLE]
+			pref: STRING
 		do
+			pref := ok_string
 			if session.caching_on then
 				t := cached_tradable (market_symbol, trading_period_type)
 				if
@@ -52,12 +54,18 @@ feature {NONE}
 				then
 					tuple_list := t.tuple_list (trading_period_type.name)
 				end
+				if t.has_open_interest then
+					pref := concatenation(<<clone(pref), Open_interest_flag>>)
+				end
 			elseif
 				tradables.valid_period_type (market_symbol,
 					trading_period_type)
 			then
 				tuple_list := tradables.tuple_list (market_symbol,
 					trading_period_type)
+				if tradables.last_tradable.has_open_interest then
+					pref := concatenation(<<clone(pref), Open_interest_flag>>)
+				end
 				session.set_last_tradable (tradables.last_tradable)
 			end
 			if tuple_list = Void then
@@ -73,7 +81,7 @@ feature {NONE}
 			else
 				set_print_parameters
 				-- Ensure ok string is printed first.
-				set_preface (ok_string)
+				set_preface (pref)
 				-- Ensure end-of-message string is printed last.
 				set_appendix (eom)
 				print_tuples (tuple_list)
