@@ -1,5 +1,5 @@
 indexing
-	description: "Global entities needed by the application"
+	description: "Global features needed by the application"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -30,7 +30,8 @@ feature {NONE} -- Utility
 
 	termination_cleanup is
 			-- Send cleanup notification to all members of
-			-- `termination_registrants'.
+			-- `termination_registrants' in the order they were added
+			-- (with `register_for_termination').
 		do
 			from
 				termination_registrants.start
@@ -71,7 +72,6 @@ feature {NONE} -- Access
 
 	new_event_type (name: STRING): EVENT_TYPE is
 			-- Create a new EVENT_TYPE with name `name'.
-			-- !!!with a unique ID - not in m_e_g_l ...
 			-- Note: A new MARKET_EVENT_GENERATOR should be created with
 			-- this new event type and added to market_event_generation_library
 			-- before the next event type is created.
@@ -93,12 +93,13 @@ feature {NONE} -- Access
 				!STORABLE_MARKET_FUNCTION_LIST!mflist.make (
 					indicators_file_name)
 			end
+			-- Ensure that the list will be saved when the process ends.
 			register_for_termination (mflist)
 			Result := mflist
 		end
 
 	market_event_generation_library: LIST [MARKET_EVENT_GENERATOR] is
-			-- All defined market functions
+			-- All defined event generators
 		local
 			storable: STORABLE
 			meg_list: STORABLE_LIST [MARKET_EVENT_GENERATOR]
@@ -109,12 +110,13 @@ feature {NONE} -- Access
 				!STORABLE_EVENT_GENERATOR_LIST!meg_list.make (
 					generators_file_name)
 			end
+			-- Ensure that the list will be saved when the process ends.
 			register_for_termination (meg_list)
 			Result := meg_list
 		end
 
 	market_event_registrants: LIST [MARKET_EVENT_REGISTRANT] is
-			-- All defined market functions
+			-- All defined event registrants
 		local
 			storable: STORABLE
 			reg_list: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
@@ -122,11 +124,28 @@ feature {NONE} -- Access
 			!!storable
 			reg_list ?= storable.retrieve_by_name (registrants_file_name)
 			if reg_list = Void then
-				!!reg_list.make (generators_file_name)
+				!!reg_list.make (registrants_file_name)
 			end
-			-- Registrants are registered for termination somewhere else.
-			-- Should that be moved to here?
 			Result := reg_list
+			-- The registrants themselves also need to be registered for
+			-- termination/cleanup when the process ends; and they need
+			-- to load their (event) histories, which are stored in
+			-- a separate file.
+			from
+				Result.start
+			until
+				Result.exhausted
+			loop
+				Result.item.load_history
+				register_for_termination (Result.item)
+				Result.forth
+			end
+			-- Ensure that the list will be saved when the process ends.
+			-- This is done after registering the contents of the list
+			-- because the MERs need to be cleaned up before being saved
+			-- as elements of reg_list (since cleanup is done for each
+			-- termination registrant in the order it was registered).
+			register_for_termination (reg_list)
 		end
 
 feature {NONE} -- Constants
