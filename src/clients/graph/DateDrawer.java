@@ -217,7 +217,7 @@ public class DateDrawer extends TemporalDrawer {
 			int y = p.left();
 			if (two_digit) y %= 100;
 			String ys = String.valueOf(y);
-			if (y < 10) ys += "0";
+			if (y < 10) ys = "0" + ys;
 
 			g.setColor(conf.text_color());
 			g.drawString(ys, year_x, Year_y);
