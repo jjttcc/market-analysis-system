@@ -165,7 +165,8 @@ feature {NONE} -- Implementation
 			!!fa_maker
 			fa_maker.set_function (
 				function_choice_clone ("technical indicator"))
-			fa_maker.set_operator (operator_choice (fa_maker.function))
+			fa_maker.set_operator (operator_choice (fa_maker.function,
+				one_var_exclude_cmds))
 			fa_maker.set_period_type (period_type_choice)
 			fa_maker.set_left_offset (operator_maker.left_offset)
 			create_event_generator (fa_maker, new_event_type_name)
@@ -212,11 +213,13 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	operator_choice (function: MARKET_FUNCTION): RESULT_COMMAND [BOOLEAN] is
+	operator_choice (function: MARKET_FUNCTION; exclude_list: LIST [COMMAND]):
+				RESULT_COMMAND [BOOLEAN] is
 			-- User's choice of operator
 		do
 			operator_maker.set_left_offset (0) -- Important.
 			operator_maker.set_market_function (function)
+			operator_maker.set_exclude_list (exclude_list)
 			Result ?= operator_maker.command_selection_from_type (
 						operator_maker.Boolean_result_command,
 							"root operator", true)
@@ -323,7 +326,7 @@ feature -- Hook methods
 		deferred
 		end
 
-feature {NONE}
+feature {NONE} -- Implementation
 
 	editable (f: MARKET_FUNCTION): BOOLEAN is
 			-- Is `f' editable in this context?
@@ -334,6 +337,25 @@ feature {NONE}
 			-- in the context of market event generator creation/editing.
 			line ?= f
 			Result := line /= Void
+		end
+
+	one_var_exclude_cmds: LIST [COMMAND] is
+			-- Commands not allowed as operators for one-variable
+			-- function analyzers
+		once
+			Result := operator_maker.command_types @
+				operator_maker.N_record_command
+		end
+
+	two_var_exclude_cmds: LIST [COMMAND] is
+			-- Commands not allowed as operators for one-variable
+			-- function analyzers
+		once
+			!LINKED_LIST [COMMAND]!Result.make
+			Result.append (operator_maker.command_types @
+				operator_maker.N_record_command)
+			Result.append (operator_maker.command_types @
+				operator_maker.Linear_command)
 		end
 
 	help: HELP
