@@ -25,6 +25,7 @@ public class TA_Chart extends Frame
 		Vector inds;
 
 		try {
+			connection.send_login_request();
 			if (_markets == null) {
 				_markets = connection.market_list();
 				if (! _markets.isEmpty()) {

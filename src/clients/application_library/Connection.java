@@ -47,6 +47,33 @@ public class TA_Connection implements NetworkProtocol
 		}
 	}
 
+	public void send_login_request()
+	{
+		String session_key_str = "";
+		Configuration conf = Configuration.instance();
+
+		connect();
+		System.out.println("Sending settings:\n'" +
+							conf.session_settings() + "'");
+		send_msg(Login_request, conf.session_settings());
+		try {
+			session_key_str = receive_msg().toString();
+		}
+		catch (Exception e) {
+			System.err.println("Fatal error: attempt to login to server " +
+				"failed");
+			System.exit(-1);
+		}
+		try {
+			session_key = Integer.valueOf(session_key_str).intValue();
+		}
+		catch (Exception e) {
+			System.err.println("Fatal error: received invalid key from " +
+				"server: " + session_key_str);
+			System.exit(-1);
+		}
+	}
+
 	// Send a request for data for market `symbol' with `period_type'.
 	public void send_market_data_request(String symbol, String period_type)
 		throws IOException
@@ -162,7 +189,7 @@ public class TA_Connection implements NetworkProtocol
 		last_rec_msgID = scanner.lastInt();
 		if (last_rec_msgID == Error)
 		{
-			result = new StringBuffer("Error: ");
+			result = new StringBuffer("Fatal request protocol error: ");
 		}
 		else
 		{
@@ -175,12 +202,22 @@ public class TA_Connection implements NetworkProtocol
 			result.append(c);
 		} while (true);
 
+		if (last_rec_msgID == Error)
+		{
+			System.err.println(result);
+			// This error means there is a problem with the protocol of the
+			// last request passed to the server.  Since this is a coding
+			// error (probably in the client), it is treated as fatal.
+			System.exit(-1);
+		}
 		return result;
 	}
 
+	// Send the `msgID', the session key, and `msg' - with field delimiters.
 	void send_msg (int msgID, String msg)
 	{
 		out.print(msgID);
+		out.print(Input_field_separator + session_key);
 		out.print(Input_field_separator + msg);
 		out.print(Eom);
 		out.flush();
@@ -219,7 +256,7 @@ public class TA_Connection implements NetworkProtocol
 
 	private void usage()
 	{
-		System.out.println("Usage: ta_server hostname port_number");
+		System.err.println("Usage: ta_server hostname port_number");
 	}
 
 	private String hostname;
@@ -228,6 +265,7 @@ public class TA_Connection implements NetworkProtocol
 	private PrintWriter out;		// output to server via socket
 	private BufferedReader in;		// input from server via socket
 	private DataInspector scanner;	// for scanning server messages
+	private int session_key;		// key or ID for current client session
 	private int last_rec_msgID;		// last message ID received from server
 	private Vector markets;			// Cached list of markets
 		// result of last market data request
