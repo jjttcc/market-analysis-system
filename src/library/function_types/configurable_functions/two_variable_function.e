@@ -28,7 +28,7 @@ feature {NONE} -- Initialization
 	make (in1: like input1; in2: like input2; op: like operator)  is
 		require
 			args_not_void: in1 /= Void and in2 /= Void
-			op_not_void_if_used: operator_used implies op /= Void
+			op_not_void: op /= Void
 			in_output_not_void: in1.output /= Void and in2.output /= Void
 		do
 			!!output.make (in1.output.count)
@@ -143,21 +143,13 @@ feature {FACTORY} -- Status setting
 	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
 			-- Both `input1' and `input2' will be changed.
 		do
-			if input1.is_complex then
-				input1.set_innermost_input (in)
-			else
-				set_input1 (in)
-			end
-			if input2.is_complex then
-				input2.set_innermost_input (in)
-			else
-				set_input2 (in)
-			end
+			input1.set_innermost_input (in)
+			input2.set_innermost_input (in)
 		end
 
 feature {NONE}
 
-	input1, input2: MARKET_FUNCTION
+	input1, input2: COMPLEX_FUNCTION
 
 	set_input1 (in: like input1) is
 		require

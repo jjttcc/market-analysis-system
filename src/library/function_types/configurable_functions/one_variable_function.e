@@ -35,6 +35,7 @@ feature {NONE} -- Initialization
 			set_input (in)
 			if op /= Void then
 				set_operator (op)
+				operator.initialize (Current)
 			end
 		ensure
 			set: input = in and operator = op
@@ -129,6 +130,10 @@ feature {FACTORY} -- Status setting
 				input.set_innermost_input (in)
 			else
 				set_input (in)
+				if operator /= Void then
+					-- operator will set its target to new input.output.
+					operator.initialize (Current)
+				end
 			end
 		end
 

@@ -32,8 +32,8 @@ feature {NONE} -- Initialization
 			op_not_void_if_used: operator_used implies op /= Void
 			i_gt_0: i > 0
 		do
+			n := i
 			ovf_make (in, op)
-			set_n (i)
 		ensure
 			set: input = in and operator = op and n = i
 			target_set: target = in.output
@@ -84,10 +84,8 @@ feature {N_RECORD_FUNCTION_PARAMETER} -- Status setting
 			if operator /= Void then
 				operator.initialize (Current)
 			end
-			output.wipe_out
 			processed_date_time := Void
 		ensure then
-			output_empty: output.empty
 			not_processed: not processed
 		end
 
