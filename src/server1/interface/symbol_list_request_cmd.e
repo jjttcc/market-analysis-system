@@ -20,16 +20,18 @@ feature -- Basic operations
 		do
 			send_ok
 			symbols := market_list.symbols
-			from
-				symbols.start
-			until
-				symbols.islast
-			loop
-				print (symbols.item)
-				print ("%N")
-				symbols.forth
+			if not symbols.empty then
+				from
+					symbols.start
+				until
+					symbols.islast
+				loop
+					print (symbols.item)
+					print ("%N")
+					symbols.forth
+				end
+				print (symbols.last)
 			end
-			print (symbols.last)
 			print (eom)
 		end
 
