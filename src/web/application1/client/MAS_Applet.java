@@ -7,6 +7,7 @@ import java.applet.*;
 import java.awt.*;
 import java.net.*;
 import java.io.*;
+import mas_gui.*;
 
 // Test applet that communicates with the servlet via serialization
 public class MAS_Applet extends Applet {
@@ -19,63 +20,18 @@ public class MAS_Applet extends Applet {
 	public void init() {
 		try {
 			initialize();
-			sendMsg("I am your client!");
-			log("srvr: " + serverResponse());
+			Chart chart;
+//!!!Stub:
+			Connection c = null;
+			DataSetBuilder data_builder = new mas_gui.DataSetBuilder(c);
+			chart = new mas_gui.Chart(data_builder, chart_filename, null);
 		} catch (Exception e) {
 			log("Connection failed: " + e.toString());
 		}
 	}
 
-// Implementation
-
-	// Send 'msg' to the servlet using serialization.
-	private void sendMsg(String msg) {
-		ObjectOutputStream output = null;
-		try {
-			connection.connect();
-			output = new ObjectOutputStream(connection.getOutputStream());
-			// Serialize the object.
-			output.writeObject(msg);
-			output.flush();
-			output.close();
-		} catch (IOException e) {
-		  log(e.toString());
-		}
-	}
-
-	// Response from the server
-	private String serverResponse() {
-		ObjectInputStream input = null;
-		String result = null;
-		try {
-			connection.connect();
-			input = new ObjectInputStream(connection.getInputStream());
-			result = extractedMsg(input);
-			if (result == null || result.length() == 0) {
-				result = "(Server returned empty message.)";
-			}
-		} catch (Exception e) {
-			result = "ERROR: " + e.toString();
-		}
-		return result;
-	}
-
-	// Message extracted from 'input'
-	// Precondition: input /= null
-	private String extractedMsg(ObjectInputStream input) {
-		String result = null;
-		try {
-			result = (String) input.readObject();
-			input.close();
-		} catch (IOException e) {
-			log(e.toString());
-		} catch (ClassNotFoundException e) {
-			log(e.toString());
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-		return result;
-	}
+//!!!!!!!Temporary - need to fix:
+private static final String chart_filename = ".ma_client_settings";
 
 // Implementation - initialization
 
