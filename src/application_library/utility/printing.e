@@ -125,6 +125,7 @@ feature {NONE} -- Implementation
 			ct: COMPOSITE_TUPLE
 			cvt: COMPOSITE_VOLUME_TUPLE
 			boit: BASIC_OPEN_INTEREST_TUPLE
+			point: MARKET_POINT
 			mtprinter: MARKET_TUPLE_PRINTER
 			bmtprinter: BASIC_MARKET_TUPLE_PRINTER
 			vtprinter: VOLUME_TUPLE_PRINTER
@@ -136,6 +137,7 @@ feature {NONE} -- Implementation
 			create ct.make
 			create cvt.make
 			create boit.make
+			create point.make
 			create mtprinter.make (output_field_separator,
 				output_date_field_separator, output_record_separator)
 			create bmtprinter.make (output_field_separator,
@@ -151,6 +153,8 @@ feature {NONE} -- Implementation
 			Result.extend (vtprinter, bvt.generator)
 			Result.extend (vtprinter, cvt.generator)
 			Result.extend (oitprinter, boit.generator)
+			-- MARKET_POINTs are printed by MARKET_TUPLE_PRINTERs (for now).
+			Result.extend (mtprinter, point.generator)
 		end
 
 	print_mf_info (f: MARKET_FUNCTION) is
