@@ -50,14 +50,15 @@ feature -- Basic operations
 				last_communication_succeeded = connected
 		end
 
-	request_data is
-			-- Request data for `requester's current tradable.
+	request_data (reqmsg: STRING) is
+			-- Request data for `requester's current tradable with `reqmsg',
+			-- with an appended newline.
 		require
 			connected: connected
 			last_communication_succeeded: last_communication_succeeded
 		do
 			if last_communication_succeeded then
-				send_request (data_request, False)
+				send_request (reqmsg + "%N", False)
 			end
 		ensure
 			socket_exists_if_no_error:
@@ -71,12 +72,6 @@ feature {NONE} -- Hook routines
 	connect_to_supplier is
 			-- Create `socket' and use it to connect to the data supplier
 			-- as the first step in querying for new data.
-		deferred
-		end
-
-	data_request: STRING is
-			-- Request string to send to data-supplier server for the
-			-- data for `tradable_list's current tradable.
 		deferred
 		end
 

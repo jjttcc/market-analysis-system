@@ -56,7 +56,7 @@ print ("Error occurred connecting to data supplier:%N" +
 connection.error_report + "%N")
 			else
 				input_medium := connection.socket
-				connection.request_data
+				connection.request_data (current_symbol)
 				if not connection.last_communication_succeeded then
 					fatal_error := True
 --!!!!Where/when should this error be reported?:

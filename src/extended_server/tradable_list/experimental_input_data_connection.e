@@ -35,11 +35,6 @@ feature {NONE} -- Hook routine implementations
 			make_connected (target_socket_hostname, target_socket_port_number)
 		end
 
-	data_request: STRING is
-		do
-			Result := tradable_list.symbols.item + "%N"
-		end
-
 	initlialized_socket (port: INTEGER; host: STRING): like socket is
 			-- A new socket initialized with `port' and `host'
 		do
@@ -48,7 +43,7 @@ feature {NONE} -- Hook routine implementations
 
 feature {NONE} -- Implementation
 
-	target_socket_port_number: INTEGER is 39414
+	target_socket_port_number: INTEGER is 39415
 
 	target_socket_hostname: STRING is "localhost"
 
