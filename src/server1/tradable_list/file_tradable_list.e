@@ -19,7 +19,8 @@ class FILE_TRADABLE_LIST inherit
 		rename
 			make as parent_make
 		redefine
-			setup_input_medium, close_input_medium, start, forth, finish
+			setup_input_medium, close_input_medium, start, forth, finish,
+			back, remove_current_item
 		end
 
 creation
@@ -69,6 +70,12 @@ feature -- Cursor movement
 	forth is
 		do
 			file_names.forth
+			Precursor
+		end
+
+	back is
+		do
+			file_names.back
 			Precursor
 		end
 
@@ -128,12 +135,22 @@ feature {NONE} -- Implementation
 			end
 		end
 
+	remove_current_item is
+		do
+			file_names.prune (file_names.item)
+			Precursor
+			if not symbol_list.off then
+				file_names.go_i_th (symbol_list.index)
+			end
+		end
+
+
 	current_input_file: INPUT_FILE
 
 invariant
 
 	file_names_correspond_to_symbols:
-		file_names /= Void and symbols.count = file_names.count and
-		symbols.index = file_names.index
+		file_names /= Void and symbols.count = file_names.count
+	file_names_and_symbol_list: symbol_list.index = file_names.index
 
 end -- class FILE_TRADABLE_LIST
