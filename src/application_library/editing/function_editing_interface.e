@@ -484,14 +484,15 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	names_from_parameter_list (l: LIST [FUNCTION_PARAMETER];
+	info_from_parameter_list (l: LIST [FUNCTION_PARAMETER];
 				desc_type: CHARACTER): ARRAYED_LIST [STRING] is
-			-- Name of each function in `l'
-			-- If `desc_type' is 's', a short description - the paremeter's
-			-- function name - is included; if `desc_type' is 'l', a
-			-- long description - the paremeter's function name, current
-			-- type, and type description - is included.  Otherwise,
-			-- only the name is included.
+			-- Information from each function parameter in `l'
+			-- If `desc_type' is 's', a "short" description - the paremeter's
+			-- description - is provided; if `desc_type' is 'l', a
+			-- "long" description - the paremeter's description, current
+			-- value, and type description - is provided; if `desc_type' is
+			-- `a', "all" information is provided: the "long" description
+			-- plus the name.  Otherwise, only the name is provided.
 		local
 			desc, value, spaces: STRING
 		do
@@ -502,8 +503,11 @@ feature {NONE} -- Implementation
 				l.exhausted
 			loop
 				spaces := "  "
-				if desc_type = 'l' then
+				if desc_type = 'l' or desc_type = 'a' then
 					desc := l.item.description
+					if desc_type = 'a' then
+						desc := l.item.name + " - " + desc
+					end
 					value := concatenation (<<"(value: ",
 						l.item.current_value, ", type: ",
 						l.item.value_type_description, ")">>)
@@ -817,7 +821,7 @@ feature {NONE} -- Implementation - indicator editing
 				selection = Exit_value
 			loop
 				selection := list_selection_with_backout (
-					names_from_parameter_list (fpl, 'l'), query)
+					info_from_parameter_list (fpl, 'l'), query)
 				if selection /= Exit_value then
 					p := fpl @ selection
 					edit_parameter (p)
@@ -926,11 +930,11 @@ feature {NONE} -- Implementation - indicator editing
 			gs: expanded GENERIC_SORTING [STRING, STRING]
 		do
 			Result := gs.duplicates (
-				names_from_parameter_list (parameters, 's'))
+				info_from_parameter_list (parameters, 's'))
 		end
 
 invariant
 
 	help_not_void: help /= Void
 
-end -- FUNCTION_EDITING_INTERFACE
+end
