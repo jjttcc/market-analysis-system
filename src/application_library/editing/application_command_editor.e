@@ -153,6 +153,7 @@ feature -- Basic operations
 			check
 				c_is_valid_type: cmd /= Void
 			end
+			user_interface.set_use_market_function_selection (false)
 			cmd.set_target (user_interface.market_function_selection (
 				concatenation (<<"an indicator for ", cmd.generator,
 								"'s input">>)).output)
@@ -395,6 +396,18 @@ feature -- Basic operations
 		do
 			cmd.set_constant_value (user_interface.real_selection (
 								concatenation (<<cmd.generator, "'s value">>)))
+		end
+
+	edit_function_based_command (cmd: FUNCTION_BASED_COMMAND) is
+			-- Edit a FUNCTION_BASED_COMMAND.
+		do
+			-- Always allow the user to select a FUNCTION_BASED_COMMAND's
+			-- market function.
+			user_interface.set_use_market_function_selection (true)
+			cmd.set_input (user_interface.market_function_selection (
+				concatenation (<<"an indicator for ", cmd.generator,
+								"'s input">>)))
+			edit_unaryop_real (cmd)
 		end
 
 end -- APPLICATION_COMMAND_EDITOR
