@@ -25,7 +25,7 @@ class HTTP_LOADING_FILE_TRADABLE_LIST inherit
 		rename
 			initialize as http_initialize
 		redefine
-			output_file_path, latest_date_for
+			output_file_path, latest_date_for, latest_date_requirement
 		end
 
 	ERROR_PROTOCOL
@@ -99,16 +99,26 @@ feature {NONE} -- Implementation
 
 	open_current_file: INPUT_FILE is
 		do
-			parameters.set_symbol (symbol_list.item)
-			if not skip_data_retrieval and data_retrieval_needed then
+			parameters.set_symbol (current_symbol)
+			if last_tradable = Void then
+				-- The input file for `current_symbol' has not yet been read.
+				-- Since `latest_date_for' will be called indirectly by
+				-- `data_retrieval_needed', set up for and call `load_data'
+				-- to ensure, if the data file exists, last_tradable is set.
+				create Result.make (file_names.item)
+				if Result.exists then
+					Result.open_read
+					load_data
+				end
+			end
+			if data_retrieval_needed then
 				retrieve_data
 			end
 			report_timing
-			Result := Precursor
+			if Result = Void then
+				Result := Precursor
+			end
 		end
-
-	skip_data_retrieval: BOOLEAN
-			-- Should `data_retrieval' be skipped?
 
 feature {NONE} -- Hook routine implementations
 
@@ -125,24 +135,29 @@ feature {NONE} -- Hook routine implementations
 	latest_date_for (symbol: STRING): DATE is
 		local
 			t: TRADABLE [BASIC_MARKET_TUPLE]
-			skip_dr: BOOLEAN
 		do
 print ("latest_date_for called.%N")
 			search_by_symbol (symbol)
-			skip_dr := skip_data_retrieval
-			skip_data_retrieval := True
-			t := item
-			skip_data_retrieval := skip_dr
+			t := last_tradable
 			if
 				t /= Void and then not t.data.is_empty
 			then
-				Result := clone (t.data.last.end_date)
+				Result := t.data.last.end_date
 print ("latest_date_for result: " + Result.out + "%N")
 			end
 		end
 
 	ignore_cache: BOOLEAN is
 		do
+			Result := time_to_eod_update and not parameters.ignore_today and
+				latest_date_for (current_symbol) < create {DATE}.make_now
+		end
+
+	latest_date_requirement: BOOLEAN is
+		do
+			Result := last_tradable /= Void
+		ensure
+			last_tradable_set_condition: Result = (last_tradable /= Void)
 		end
 
 invariant

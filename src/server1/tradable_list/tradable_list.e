@@ -80,18 +80,8 @@ feature -- Access
 				if last_tradable = Void or else ignore_cache then
 					setup_input_medium
 					if not fatal_error then
-						tradable_factory.set_symbol (current_symbol)
-						tradable_factory.execute
-						last_tradable := tradable_factory.product
-						add_to_cache (last_tradable, index)
-						if tradable_factory.error_occurred then
-							report_errors (last_tradable.symbol,
-								tradable_factory.error_list)
-							if tradable_factory.last_error_fatal then
-								fatal_error := true
-							end
-						end
-						close_input_medium
+--!!!!!May need to guard against side effects.
+						load_data
 					else
 						-- A fatal error indicates that the current tradable
 						-- is invalid, or not readable, or etc., so ensure
@@ -232,6 +222,25 @@ feature {FACTORY} -- Access
 			-- Manufacturers of tradables
 
 feature {NONE} -- Implementation
+
+	load_data is
+			-- Load the data for `current_symbol' and close the input medium.
+			-- `setup_input_medium' must have been called to open the
+			-- input medium before calling this procedure.
+		do
+			tradable_factory.set_symbol (current_symbol)
+			tradable_factory.execute
+			last_tradable := tradable_factory.product
+			add_to_cache (last_tradable, index)
+			if tradable_factory.error_occurred then
+				report_errors (last_tradable.symbol,
+					tradable_factory.error_list)
+				if tradable_factory.last_error_fatal then
+					fatal_error := true
+				end
+			end
+			close_input_medium
+		end
 
 	report_errors (symbol: STRING; l: LIST [STRING]) is
 		do

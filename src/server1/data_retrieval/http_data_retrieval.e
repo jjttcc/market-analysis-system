@@ -113,7 +113,7 @@ feature {NONE} -- Implementation
 			alternate_start_date := Void
 			create outputfile.make (output_file_name (parameters.symbol))
 			Result := not outputfile.exists or (
-				time_to_eod_udpate and
+				time_to_eod_update and
 				not parameters.ignore_today and
 				current_daily_data_out_of_date)
 		end
@@ -197,7 +197,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	time_to_eod_udpate: BOOLEAN is
+	time_to_eod_update: BOOLEAN is
 			-- Is it time to update end-of-day data according to the
 			-- eod_turnover_time specification?
 		do
@@ -205,8 +205,7 @@ feature {NONE} -- Implementation
 				-- No turnover time specified - always update.
 				Result := True
 			else
-				Result := create {TIME}.make_now >
-					parameters.eod_turnover_time
+				Result := create {TIME}.make_now > parameters.eod_turnover_time
 			end
 		end
 
@@ -218,8 +217,8 @@ feature {NONE} -- Implementation
 		local
 			d: DATE
 		do
-			d := latest_date_for (parameters.symbol)
-			Result := d = Void or else d < create {DATE}.make_now
+			d := clone (latest_date_for (parameters.symbol))
+			Result := d /= Void and then d < create {DATE}.make_now
 			if Result and use_day_after_latest_date_as_start_date then
 				-- Set the alternate start date to the day after the
 				-- latest date in the current data set so that there
@@ -253,11 +252,15 @@ feature {NONE} -- Hook routines
 		end
 
 	latest_date_for (symbol: STRING): DATE is
-			-- Clone of the latest date-stamp of the data cached for `symbol',
+			-- The latest date-stamp of the data cached for `symbol',
 			-- for determining if this data is "out of date" -
-			-- Void indicates that it should be considered out of date.
+			-- Void indicates that it should NOT be considered out of date.
+			-- NOTE: If the result needs to be modified by the caller,
+			-- make sure a clone of the result is modified rather than
+			-- the actual result to prevent unwanted side effects.
 		require
 			symbol_exists: symbol /= Void
+			latest_date_requirement: latest_date_requirement
 		once
 			-- Default to Void - redefine if needed.
 		end
@@ -269,7 +272,13 @@ feature {NONE} -- Hook routines
 			-- start date for retrieval so that there is no overlap
 			-- between the current data set and freshly retrieved data?
 		once
-			Result := True -- Redefine to False if needed.
+			Result := True -- Redefine if needed.
+		end
+
+	latest_date_requirement: BOOLEAN is
+			-- Precondition for `latest_date_for'
+		once
+			Result := True -- Redefine if a specific condition is needed.
 		end
 
 end
