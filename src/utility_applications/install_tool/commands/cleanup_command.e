@@ -11,7 +11,7 @@ class CLEANUP_COMMAND inherit
 
 	INSTALL_COMMAND
 
-	INSTALLATION_CONSTANTS
+	INSTALLATION_FACILITIES
 		export
 			{NONE} all
 		end
@@ -42,17 +42,26 @@ feature -- Basic operations
 			delete_failed: BOOLEAN
 		do
 			if not delete_failed then
+				if is_nt then
+					-- Let the "cleanup" script know that this is an "NT"
+					-- system (so that it can, for example, delete itself):
+					(create {PLAIN_TEXT_FILE}.make_open_write (
+						NT_file_name)).close
+				end
 				create instalL_dir.make (install_dir_name)
 				if install_dir.exists then
---print ("Deleting " + install_dir.name + "%N")
 					install_dir.recursive_delete
 				end
 			else
-				--!!!Announce the failure.
+				-- Let the "cleanup" script take care of the cleanup.
 			end
 		rescue
 			delete_failed := True
 			retry
 		end
+
+feature {NONE} -- Implementation
+
+	NT_file_name: STRING is "os_is_nt"
 
 end
