@@ -52,7 +52,7 @@ class EVENT_REGISTRATION inherit
 		rename
 			real_list as market_event_registrants,
 			working_list as working_event_registrants,
-			retrieve_persistent_list as force_function_library_retrieval,
+			retrieve_persistent_list as force_event_registrant_retrieval,
 			prompt_for_char as character_choice
 		export
 			{NONE} all
@@ -101,7 +101,7 @@ feature -- Basic operations
 			from
 				msg := main_msg
 			until
-				finished
+				finished or abort_edit
 			loop
 				print (msg)
 				inspect
@@ -115,7 +115,11 @@ feature -- Basic operations
 				when 'e', 'E' then
 					edit_registrants
 				when 's', 'S' then
-					save
+					if not changed or not ok_to_save then
+						print ("Invalid selection%N")
+					else
+						save
+					end
 				when 'h', 'H' then
 					print (help @ help.Edit_event_registrants)
 				when '!' then
@@ -128,7 +132,7 @@ feature -- Basic operations
 				end
 				print ("%N%N")
 				report_errors
-				if changed then
+				if changed and ok_to_save then
 					msg := main_changed_msg
 				else
 					msg := main_msg
