@@ -1,0 +1,9 @@
+replacestart
+{main_mas_dir}c:/Applications/mas1.6.5
+{chart_dir}<classes_dir>
+{projdir}e:/projects/mas-extended_current/EIFGEN/F_code
+{path_separator};
+{data_dir}<mas_lib_dir>/data
+{mas_directory_setting}<mas_lib_dir>
+xterm -e *
+replaceend

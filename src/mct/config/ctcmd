@@ -1,0 +1,11 @@
+#!/bin/bash
+# Run the config tool on the mctrc.template file to produce (using the
+# mctrc-spec.linux and mctrc-spec.windows spec files) linux and windows
+# versions of the mctrc file.
+
+ct=/home/development/jtc/projects/config_tool/EIFGEN/F_code/config_tool
+for platform in linux windows; do
+cp mctrc.template mctrc.$platform
+chmod +w mctrc.$platform
+$ct -c mctrc-spec.$platform -f mctrc.$platform
+done

@@ -1,0 +1,8 @@
+replacestart
+{main_mas_dir}/opt/mas
+{chart_dir}/suse_6_3/home2/finance/.mas/charting
+{projdir}/home/development/jtc/projects/mas-extended/EIFGEN/F_code
+{path_separator}:
+{data_dir}<mas_lib_dir>/data/tradables
+{mas_directory_setting}<chart_dir>
+replaceend
