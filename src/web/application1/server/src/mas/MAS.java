@@ -31,7 +31,7 @@ String tag = thread_tag();
 log("Starting 'service' thread " + tag);
 		try {
 			log_tag("(Version 1.4) Connected", tag);
-			log("Compiled at Fri Feb 21 21:39:02 MST 2003");
+			log("Compiled at Fri Feb 21 22:37:18 MST 2003");
 			log_tag("Reserving a proxy.", tag);
 			mas_proxy = reserved_proxy();
 			log_tag("Obtained proxy with code " + mas_proxy.hashCode(), tag);
