@@ -1,5 +1,5 @@
 indexing
-	description: 
+	description:
 		"A market function that is also an array of market tuples. %
 		%Its purpose is to act as the innermost function in a composition %
 		%of functions."
@@ -22,14 +22,14 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 		export {NONE}
 			all
 				{FACTORY}
-			extend
+			extend, count, first, last, empty, i_th
 		end
 
 creation {NONE}
 
 	make
 
-feature -- {NONE} Initialization
+feature -- {FACTORY} Initialization
 
 	make (type: TIME_PERIOD_TYPE) is
 		require
