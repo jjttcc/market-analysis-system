@@ -116,11 +116,13 @@ cluster
 
 	external_components (server):		"$/external"
 
-	protocols (server):		"$/protocols"
-
 	tradable_list (server):		"$/tradable_list"
 
 	stock_splits (server):		"$/stock_splits"
+
+	client_server:		"$MAS/src/client_server"
+
+	protocols (client_server):		"$/protocols"
 
 	app_library:		"$MAS/src/application_library"
 
