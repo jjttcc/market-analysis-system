@@ -8,9 +8,15 @@ import java.io.*;
 /** Utilities for reading a text file */
 public class FileReaderUtilities
 {
-	public FileReaderUtilities(String file_name)
+	// If the file associated with `file_name' is not readable, an
+	// exception is thrown.
+	public FileReaderUtilities(String file_name) throws IOException
 	{
 		file = new File(file_name);
+		if (! file.canRead()) {
+			throw new IOException("File " + file_name + " does not exist " +
+				"or cannot be read.");
+		}
 	}
 
 	/** Tokenize the contents of the file */
