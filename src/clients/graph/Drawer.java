@@ -11,9 +11,15 @@ abstract public class Drawer {
 	// Number of fields in each tuple
 	abstract public int drawing_stride();
 
-	public void set_data(double d[]) {
-		data = d;
+	// Number of tuples in the data
+	public int tuple_count() {
+		return data_length() / drawing_stride();
 	}
+
+	// Number of elements in the data
+	abstract public int data_length();
+
+	abstract public void set_data(Object d);
 
 	public void set_xaxis(Axis a) {
 		xaxis = a;
@@ -78,8 +84,14 @@ abstract public class Drawer {
 		draw_tuples(g, bounds);
 	}
 
+	protected int[] x_values() {
+		return _x_values;
+	}
+
 	/**
 	* Draw the data tuples.
+	* Postcondition: 
+	*    x_values contains the x values that were used to draw each tuple.
 	*/
 	abstract protected void draw_tuples(Graphics g, Rectangle bounds);
 
@@ -179,10 +191,10 @@ abstract public class Drawer {
 		return bounds.height / yrange;
 	}
 
-	protected double data[];
 	protected Axis xaxis;
 	protected Axis yaxis;
 	protected double xmax, ymax, xmin, ymin;
 	protected double xrange, yrange;
 	protected boolean clipping;
+	protected int _x_values[];
 }

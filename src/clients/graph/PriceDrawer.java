@@ -9,6 +9,20 @@ import support.*;
  */
 public class PriceDrawer extends Drawer {
 
+	public void set_data(Object d) {
+		data = (double[]) d;
+	}
+
+	public int data_length() {
+		int result;
+		if (data != null) {
+			result = data.length;
+		} else {
+			result = 0;
+		}
+		return result;
+	}
+
 	/**
 	* Draw the data bars.
 	* @param g Graphics context
@@ -26,6 +40,7 @@ public class PriceDrawer extends Drawer {
 
 		if (data == null || lngth < Stride) return;
 
+		_x_values = new int[tuple_count()];
 		g.setColor(bar_color);
 		width_factor = width_factor_value(bounds);
 		height_factor = height_factor_value(bounds);
@@ -39,6 +54,7 @@ public class PriceDrawer extends Drawer {
 			closey = (int)(bounds.height - (data[i+3] - ymin) * height_factor +
 						bounds.y);
 			x = (int)((row - xmin) * width_factor + bounds.x);
+			_x_values[row-1] = x;
 			// vertical low to high price line
 			g.drawLine(x, lowy, x, highy);
 			// horizontal line for close price
@@ -61,4 +77,6 @@ public class PriceDrawer extends Drawer {
 	private static final int Stride = 4;
 
 	private boolean _open_bar = false;
+
+	protected double data[];
 }

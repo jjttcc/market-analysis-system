@@ -12,7 +12,7 @@ import java.net.URL;
 /*
 **************************************************************************
 **
-**                      Class  graph.Graph2D
+**                      Class  graph.TA_Graph
 **
 **************************************************************************
 **    Copyright (C) 1995, 1996 Leigh Brookshaw
@@ -31,10 +31,9 @@ import java.net.URL;
 **    along with this program; if not, write to the Free Software
 **    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 **************************************************************************
-**    Modified June, 1999 by Jim Cochrane
+**    Modified June, 1999 by Jim Cochrane.
+**    Changed name from Graph2D.
 **************************************************************************
-**
-** class Graph2D extends Canvas 
 **
 ** The main entry point and interface for the 2D graphing package.
 ** This class keeps track of the DataSets and the Axes.
@@ -55,7 +54,7 @@ import java.net.URL;
  * @author   Leigh Brookshaw
  */
 
-public class Graph2D extends Canvas {
+public class TA_Graph extends Canvas {
 
 
 /*
@@ -74,14 +73,14 @@ public class Graph2D extends Canvas {
 
 /**
  *  A vector list of All the axes attached
- *  @see Graph2d#attachAxis()
+ *  @see TA_Graph#attachAxis()
  */
 
     protected Vector axis          = new Vector(4);
 
 /**
  *  A vector list of All the DataSets attached
- *  @see Graph2d#attachDataSet()
+ *  @see TA_Graph#attachDataSet()
  *  @see DataSet
  */
 
@@ -89,14 +88,14 @@ public class Graph2D extends Canvas {
 
 /**
  *  The markers that may have been loaded
- *  @see Graph2D#setMarkers()
+ *  @see TA_Graph#setMarkers()
  */
 
     protected Markers markers = null;
 
 /**
  * The blinking "data loading" thread
- * @see Graph2D#startedloading()
+ * @see TA_Graph#startedloading()
  */
 
     protected LoadMessage load_thread = null;
@@ -566,7 +565,7 @@ public class Graph2D extends Canvas {
         if(DefaultBackground == null) DefaultBackground=this.getBackground();
         if(DataBackground == null)    DataBackground=this.getBackground();
 
-//        System.out.println("Graph2D paint method called!");
+//        System.out.println("TA_Graph paint method called!");
 
         if( !paintAll ) return;
 
@@ -611,7 +610,7 @@ public class Graph2D extends Canvas {
     }
 
 /**
- *  A hook into the Graph2D.paint method. This is called before
+ *  A hook into the paint method. This is called before
  *  anything is plotted. The rectangle passed is the dimension of
  *  the canvas minus the border dimensions.
  *  @params g Graphics state
@@ -621,7 +620,7 @@ public class Graph2D extends Canvas {
     }
 
 /**
- *  A hook into the Graph2D.paint method. This is called before
+ *  A hook into the paint method. This is called before
  *  the data is drawn but after the axis. 
  *  The rectangle passed is the dimension of
  *  the data window.
@@ -632,7 +631,7 @@ public class Graph2D extends Canvas {
     }
 
 /**
- *  A hook into the Graph2D.paint method. This is called after
+ *  A hook into the paint method. This is called after
  *  everything has been drawn. 
  *  The rectangle passed is the dimension of
  *  the data window.
@@ -646,13 +645,13 @@ public class Graph2D extends Canvas {
     }
 
 /**
- * This method is called via the Graph2D.repaint() method.
+ * This method is called via the repaint() method.
  * All it does is blank the canvas (with the background color)
  * before calling paint.
  */
     public void update(Graphics g) {
 
-//          System.out.println("Graph2d update method called");
+//          System.out.println("TA_Graph update method called");
         if( clearAll ) {
             Color c = g.getColor();
 	    /* The r.x and r.y returned from bounds is relative to the
@@ -691,10 +690,10 @@ public class Graph2D extends Canvas {
  *  Calling this method pauses the plot and displays a flashing
  *  message on the screen. Mainly used when data is being loaded across the
  *  net. Everytime this routine is called a counter is incremented
- *  the method Graph2D.finishedloading() decrements the counter. When the
+ *  the method finishedloading() decrements the counter. When the
  *  counter is back to zero the plotting resumes.
- *  @see Graph2D#finishedloading()
- *  @see Graph2D#loadmessage()
+ *  @see TA_Graph#finishedloading()
+ *  @see TA_Graph#loadmessage()
  *  @see LoadMessage
 */
     public void startedloading() {
@@ -713,8 +712,8 @@ public class Graph2D extends Canvas {
 /**
  * Decrement the loading Data counter by one. When it is zero resume
  * plotting.
- *  @see Graph2D#startedloading()
- *  @see Graph2D#loadmessage()
+ *  @see TA_Graph#startedloading()
+ *  @see TA_Graph#loadmessage()
  *  @see LoadMessage
 */
     public void finishedloading() {
@@ -730,8 +729,8 @@ public class Graph2D extends Canvas {
 /**
  * Change the message to be flashed on the canvas
  * @param s String contining the new message.
- * @see Graph2D#startedloading()
- * @see Graph2D#finishedloading()
+ * @see TA_Graph#startedloading()
+ * @see TA_Graph#finishedloading()
  * @see LoadMessage
 */
     public void loadmessage(String s) {
@@ -1006,11 +1005,11 @@ class FileFormatException extends Exception {
 
 /**
  *   This is a separate thread that flashes a message
- *   on the Graph2D canvas that data is loading
+ *   on the TA_Graph canvas that data is loading
  */
 
 class LoadMessage extends Thread {
-        Graph2D  g2d;
+        TA_Graph  g2d;
         String   message    = "Loading Data ... Please Wait!";
         String   newmessage = null;
         long     visible    = 500;
@@ -1021,20 +1020,20 @@ class LoadMessage extends Thread {
         
 /**
  *    Instantiate the class
- * @param g2d The Graph2D canvas to draw message on
+ * @param g2d The TA_Graph canvas to draw message on
  *
  */            
-        public LoadMessage(Graph2D g2d) {
+        public LoadMessage(TA_Graph g2d) {
            this.g2d = g2d;
 
         }
 
 /**
  *  Instantiate the class
- * @param g2d The Graph2D canvas to draw message on
+ * @param g2d The TA_Graph canvas to draw message on
  * @param s   The string to flash on the canvas
  */            
-        public LoadMessage(Graph2D g2d, String s) {
+        public LoadMessage(TA_Graph g2d, String s) {
 
            this(g2d);
            this.message = s;
@@ -1042,13 +1041,13 @@ class LoadMessage extends Thread {
         }
 /**
  *  Instantiate the class
- * @param g2d The Graph2D canvas to draw message on
+ * @param g2d The TA_Graph canvas to draw message on
  * @param s   The string to flash on the canvas
  * @param visible Number of milliseconds the message is visible
  * @param invisible Number of milliseconds the message is invisible
  */            
 
-        public LoadMessage(Graph2D g, String s, long visible, long invisible) {
+        public LoadMessage(TA_Graph g, String s, long visible, long invisible) {
             this(g,s);
             this.visible = visible;
             this.invisible = invisible;

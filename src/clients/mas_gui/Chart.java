@@ -80,7 +80,7 @@ public class TA_Chart extends Frame {
 		DataSet dataset;
 		// Don't redraw the data if it's for the same market as before.
 		if (period_type_change || ! market.equals(current_market)) {
-			Graph2D graph = main_pane.main_graph();
+			TA_Graph graph = main_pane.main_graph();
 			try {
 				connection.send_market_data_request(market,
 					current_period_type, session_key);
@@ -304,7 +304,7 @@ public class TA_Chart extends Frame {
 /** Listener for indicator selection */
 class IndicatorListener implements java.awt.event.ActionListener {
 	public void actionPerformed(java.awt.event.ActionEvent e) {
-		Graph2D graph;
+		TA_Graph graph;
 		String selection = e.getActionCommand();
 		DataSet dataset;
 		try {

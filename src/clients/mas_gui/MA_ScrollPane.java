@@ -13,8 +13,8 @@ public class TA_ScrollPane extends ScrollPane
 		super(scrollbarDisplayPolicy);
 
 		chart = parent_chart;
-		_main_graph = new G2Dint();
-		_indicator_graph = new IndicatorGraph();
+		_main_graph = new TA_GraphInteractive();
+		_indicator_graph = new TA_GraphInteractive();
 		period_type_choice = new Choice();
 		initialize_period_type_choice(period_types);
 
@@ -52,12 +52,12 @@ public class TA_ScrollPane extends ScrollPane
 	}
 
 	// The main graph - where the principal market data is displayed
-	public Graph2D main_graph() {
+	public TA_Graph main_graph() {
 		return _main_graph;
 	}
 
 	// The indicator graph - where the indicator data is displayed
-	public Graph2D indicator_graph() {
+	public TA_Graph indicator_graph() {
 		return _indicator_graph;
 	}
 
@@ -84,9 +84,8 @@ public class TA_ScrollPane extends ScrollPane
 		});
 	}
 
-	private G2Dint _main_graph;
-	private G2Dint _indicator_graph;
-	DataSet data;
+	private TA_GraphInteractive _main_graph;
+	private TA_GraphInteractive _indicator_graph;
 	Choice period_type_choice;
 	TA_Chart chart;
 	String _last_period_type;

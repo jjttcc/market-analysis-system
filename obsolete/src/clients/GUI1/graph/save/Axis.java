@@ -33,7 +33,7 @@ import java.lang.*;
 **************************************************************************
 **
 **    This class is designed to be used in conjunction with 
-**    the Graph2D class and DataSet class for plotting 2D graphs.
+**    the TA_Graph class and DataSet class for plotting 2D graphs.
 **
 *************************************************************************/
 
@@ -42,14 +42,14 @@ import java.lang.*;
 /**
  * This class controls the look and feel of axes. 
  * It is designed to be used in conjunction with 
- * the Graph2D class and DataSet class for plotting 2D graphs.
+ * the TA_Graph class and DataSet class for plotting 2D graphs.
  *
  * To work with the other classes a system of registration is used.
- * The axes have to be attached to the controlling Graph2D class
- * and the DataSet's have to be attached to both the Graph2D class
+ * The axes have to be attached to the controlling TA_Graph class
+ * and the DataSet's have to be attached to both the TA_Graph class
  * and the Axis class.
  *
- * This way the 3 main classes Graph2D, Axis and DataSet know of each
+ * This way the 3 main classes TA_Graph, Axis and DataSet know of each
  * others existence.
  *
  * This does not mean the classes cannot be used independently, they can
@@ -168,9 +168,9 @@ public class Axis extends Object {
 
   /**
    * The graph canvas this axis is attached to (if it is attached to any)
-   * @see graph.Graph2D
+   * @see graph.TA_Graph
    */
-      public Graph2D g2d = null;
+      public TA_Graph g2d = null;
 
 
 

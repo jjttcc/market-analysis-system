@@ -35,6 +35,7 @@ class TA_Parser {
 			for (int j = 0; fields.hasMoreTokens(); ++j) {
 				switch (parsetype[j]) {
 					case Date:
+System.err.println("parse case Date");
 						dates.addElement(fields.nextToken());
 						break;
 					case Open:
@@ -91,15 +92,22 @@ class TA_Parser {
 
 	// Put the parsed data into a data set.
 	private void process_data(Drawer drawer) throws Exception {
+		String[] date_array;
+
 		try {
 			int length = float_data.length / float_field_count;
-			if (length > 0)
-			{
+			if (length > 0) {
 				processed_data = new DataSet(float_data, length, drawer);
 			}
-			else
-			{
+			else {
 				processed_data = new DataSet(drawer);
+			}
+			if (dates != null && ! dates.isEmpty()) {
+System.err.println("process_data - dates is not null");
+				date_array = new String[dates.size()];
+				dates.copyInto(date_array);
+				processed_data.set_dates(date_array);
+System.err.println("process_data - date_array size: " + date_array.length);
 			}
 		}
 		catch (Exception e) {

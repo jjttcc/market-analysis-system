@@ -9,6 +9,20 @@ import support.*;
  */
 public class LineDrawer extends Drawer {
 
+	public void set_data(Object d) {
+		data = (double[]) d;
+	}
+
+	public int data_length() {
+		int result;
+		if (data != null) {
+			result = data.length;
+		} else {
+			result = 0;
+		}
+		return result;
+	}
+
 	/**
 	* Draw the data bars and the line segments connecting them.
 	* @param g Graphics context
@@ -28,16 +42,19 @@ public class LineDrawer extends Drawer {
 		// will be called before any data has been placed in the class.
 		if (data == null || lngth < Stride) return;
 
+		_x_values = new int[tuple_count()];
 		g.setColor(line_color);
 		width_factor = width_factor_value(bounds);
 		height_factor = height_factor_value(bounds);
 		row = 1;
 		x0 = (int)((row - xmin) * width_factor + bounds.x);
+		_x_values[row-1] = x0;
 		y0 = (int)(bounds.height - (data[0]-ymin) * height_factor + bounds.y);
 		++row;
 
 		for (i = Stride; i < lngth; i += Stride, ++row) {
 			x1 = (int)((row - xmin) * width_factor + bounds.x);
+			_x_values[row-1] = x1;
 			y1 = (int)(bounds.height - (data[i]-ymin) * height_factor +
 					bounds.y);
 			g.drawLine(x0,y0,x1,y1);
@@ -51,4 +68,6 @@ public class LineDrawer extends Drawer {
 	public int drawing_stride() { return Stride; }
 
 	private static final int Stride = 1;
+
+	protected double data[];
 }

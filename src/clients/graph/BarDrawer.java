@@ -9,6 +9,23 @@ import support.*;
  */
 public class BarDrawer extends Drawer {
 
+	public void set_data(Object d) {
+		data = (double[]) d;
+	}
+
+	// 1 coordinate for each point - no x coordinate
+	public int drawing_stride() { return Stride; }
+
+	public int data_length() {
+		int result;
+		if (data != null) {
+			result = data.length;
+		} else {
+			result = 0;
+		}
+		return result;
+	}
+
 	/**
 	* Draw the data bars.
 	* @param g Graphics context
@@ -27,12 +44,14 @@ public class BarDrawer extends Drawer {
 		// will be called before any data has been placed in the class.
 		if (data == null || lngth < Stride) return;
 
+		_x_values = new int[tuple_count()];
 		if (bar_width <= 0) bar_width = 1;
 		g.setColor(conf.bar_color());
 		width_factor = width_factor_value(bounds);
 		height_factor = height_factor_value(bounds);
 		for (i = 0, row = 1; i < lngth; i += Stride, ++row) {
 			x = (int)((row - xmin) * width_factor + bounds.x);
+			_x_values[row-1] = x;
 			y = (int)(bounds.height - (data[i]-ymin) * height_factor +
 					bounds.y);
 			x_s[0] = x; x_s[1] = x + bar_width;
@@ -43,8 +62,7 @@ public class BarDrawer extends Drawer {
 		}
 	}
 
-	// 1 coordinate for each point - no x coordinate
-	public int drawing_stride() { return Stride; }
-
 	private static final int Stride = 1;
+
+	protected double data[];
 }

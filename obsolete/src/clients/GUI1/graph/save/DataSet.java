@@ -32,14 +32,14 @@ import java.lang.*;
 **************************************************************************
 **
 **    This class is designed to be used in conjunction with 
-**    the Graph2D class and Axis class for plotting 2D graphs.
+**    the TA_Graph class and Axis class for plotting 2D graphs.
 **
 *************************************************************************/
 
 
 /**
  *  This class is designed to hold the data to be plotted.
- *  It is to be used in conjunction with the Graph2D class and Axis 
+ *  It is to be used in conjunction with the TA_Graph class and Axis 
  *  class for plotting 2D graphs.
  *
  * @version $Revision$, $Date$
@@ -47,9 +47,12 @@ import java.lang.*;
  */
 public class DataSet {
 
-	public void set_drawer (Drawer d)
-	{
+	public void set_drawer (Drawer d) {
 		_drawer = d;
+	}
+
+	public void set_dates (String d[]) {
+		dates = d;
 	}
 
 	public Drawer drawer() { return _drawer; }
@@ -62,9 +65,9 @@ public class DataSet {
 
   /** 
    *    The Graphics canvas that is driving the whole show.
-   * @see graph.Graph2D
+   * @see graph.TA_Graph
    */
-      public Graph2D g2d;
+      public TA_Graph g2d;
   /**
    *    The color of the straight line segments
    */
@@ -129,12 +132,22 @@ public class DataSet {
 ** Protected Variables      
 **********************/
 
+	// Main data
 	protected double[] data;
+
+	// Date data
+	protected String[] dates;
 
   /**
    * Drawer of price bars - e.g., tic bars or candles
    */
 	protected Drawer _drawer;
+
+  /**
+   * Drawer of dates
+   */
+	protected DateDrawer date_drawer;
+
   /**
    * The data X maximum. 
    * Once the data is loaded this will never change.
@@ -168,32 +181,6 @@ public class DataSet {
    *    The Y range of the clipped data
    */
       protected double yrange;
-
-  /**
-   *    The length of the example line in the data legend.
-   */
-      protected int legend_length = 20;
-
-  /**
-   *    The legend text
-   */
-      protected TextLine legend_text = null;
-  /**
-   * The X pixel position of the data legend
-   */
-      protected int legend_ix;
-  /**
-   * The Y pixel position of the data legend
-   */
-      protected int legend_iy;
-  /**
-   * The X data position of the data legend
-   */
-      protected double legend_dx;
-  /**
-   * The Y data position of the data legend
-   */
-      protected double legend_dy;
   /**
    *    The amount to increment the data array when the append method is being
    *    used.
@@ -221,6 +208,7 @@ public class DataSet {
 		_drawer = d;
 		data = null;
 		range(stride(), 0);
+		date_drawer = new DateDrawer();
 	}
 
 	/**
@@ -246,6 +234,7 @@ public class DataSet {
 		}
 		int i;
 		_drawer = drawer;
+		date_drawer = new DateDrawer();
 		data = d;
 
 		// Calculate the data range.
@@ -278,7 +267,7 @@ public class DataSet {
    * @param bounds The data window to draw into
    */
 	public void draw_data(Graphics g, Rectangle bounds) {
-		Color c = g.getColor();
+System.err.println("DS.draw_data called");
 		if ( linecolor != null) g.setColor(linecolor);
 		_drawer.set_data(data);
 		_drawer.set_xaxis(xaxis);
@@ -286,9 +275,10 @@ public class DataSet {
 		_drawer.set_maxes(xmax, ymax, xmin, ymin);
 		_drawer.set_ranges(xrange, yrange);
 		_drawer.set_clipping(clipping);
-		draw_legend(g,bounds);
 		_drawer.draw_data(g, bounds, hline_data, vline_data);
-		g.setColor(c);
+System.err.println("DS.draw_data calling draw_dates");
+		draw_dates(g,bounds);
+System.err.println("DS.draw_data finished");
 	}
 
   /**
@@ -307,62 +297,7 @@ public class DataSet {
    * return the data Y minimum.
    */
       public double getYmin() {  return dymin; }
-
-      
-  /**
-   * Define a data legend in the graph window
-   * @param x    pixel position of the legend.
-   * @param y    pixel position of the legend.
-   * @param text text to display in the legend
-   */ 
-      public void legend(int x, int y, String text) {
-           if(text == null) { legend_text = null;  return; }
-           if(legend_text == null) legend_text = new TextLine(text);
-           else                    legend_text.setText(text);
-           legend_text.setJustification(TextLine.LEFT);
-           legend_ix    = x;
-           legend_iy    = y;
-           legend_dx    = 0.0;
-           legend_dy    = 0.0;
-
-      }
-
-  /**
-   * Define a data legend in the graph window
-   * @param x    data position of the legend.
-   * @param y    data position of the legend.
-   * @param text text to display in the legend
-   */ 
-      public void legend(double x, double y, String text) {
-           if(text == null) { legend_text = null;  return; }
-           if(legend_text == null) legend_text = new TextLine(text);
-           else                    legend_text.setText(text);
-           legend_text.setJustification(TextLine.LEFT);
-           legend_dx    = x;
-           legend_dy    = y;
-           legend_ix    = 0;
-           legend_iy    = 0;
-      }
-  /**
-   * Set the font to be used in the legend
-   * @param f font
-   */
-      public void legendFont(Font f) {
-           if(f == null) return;
-           if(legend_text == null) legend_text = new TextLine();
-
-           legend_text.setFont(f);
-      }
-  /**
-   * Set the color for the legend text
-   * @param c color
-   */
-      public void legendColor(Color c) {
-           if(c == null) return;
-           if(legend_text == null) legend_text = new TextLine();
-
-           legend_text.setColor(c);
-      }
+ 
   /**
    * Return the number of data points in the DataSet
    * @return number of (x,y) points.
@@ -423,54 +358,30 @@ public class DataSet {
 
            }
 
-           //System.out.println("DataSet: closestpoint "+point[0]+", "+point[1]+", "+point[2]);
-
            return point;
             
 	  }
 
 
   /**
-   * Draw a legend for this data set
+   * Draw dates, if they exist.
    * @param g Graphics context
    * @param w Data Window
    */
-      protected void draw_legend(Graphics g, Rectangle w) {
-          Color c = g.getColor();
-          Markers m = null;
-
-
-          if( legend_text == null) return;
-          if( legend_text.isNull() ) return;
-
-          if( legend_ix == 0 && legend_iy == 0 ) {
-                legend_ix = (int)(w.x + ((legend_dx-xmin)/xrange)*w.width);
-                legend_iy = (int)(w.y + (1.0 - (legend_dy-ymin)/yrange)*w.height);
-	  }
-
-
-
-
-		  if ( linecolor != null) g.setColor(linecolor);
-		  g.drawLine(legend_ix,legend_iy,legend_ix+legend_length,legend_iy);
-
-          if( marker > 0 ) {
-               m = g2d.getMarkers();
-               if( m != null) {
-                  if(markercolor != null) g.setColor(markercolor);
-                  else                    g.setColor(c);
-
-                  m.draw(g,marker,1.0, legend_ix+legend_length/2, legend_iy);
-               }
-          }
-
-
-          legend_text.draw( g,
-                        legend_ix+legend_length+legend_text.charWidth(g,' '),
-                        legend_iy+legend_text.getAscent(g)/3);
-
-          g.setColor(c);
-
+      protected void draw_dates(Graphics g, Rectangle w) {
+System.err.println("DS.draw_dates called");
+		if (dates != null) {
+System.err.println("DS.draw_dates: dates is not null");
+			date_drawer.set_data(dates);
+			date_drawer.set_xaxis(xaxis);
+			date_drawer.set_yaxis(yaxis);
+			date_drawer.set_maxes(xmax, ymax, xmin, ymin);
+			date_drawer.set_ranges(xrange, yrange);
+			date_drawer.set_clipping(clipping);
+			date_drawer.set_x_values(_drawer.x_values());
+			date_drawer.draw_data(g, w, hline_data, vline_data);
+		}
+System.err.println("DS.draw_dates finished");
       }
 
 	/**

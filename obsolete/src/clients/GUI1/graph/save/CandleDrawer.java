@@ -9,6 +9,23 @@ import support.*;
  */
 public class CandleDrawer extends Drawer {
 
+	public void set_data(Object d) {
+		data = (double[]) d;
+	}
+
+	// 4 points: open, high, low, close - no x coordinates
+	public int drawing_stride() { return Stride; }
+
+	public int data_length() {
+		int result;
+		if (data != null) {
+			result = data.length;
+		} else {
+			result = 0;
+		}
+		return result;
+	}
+
 	/**
 	* Draw the candles.
 	* @param g Graphics context
@@ -32,6 +49,7 @@ public class CandleDrawer extends Drawer {
 
 		if (data == null || lngth < Stride) return;
 
+		_x_values = new int[tuple_count()];
 		width_factor = width_factor_value(bounds);
 		height_factor = height_factor_value(bounds);
 		for (i = 0, row = 1; i < lngth; i += Stride, ++row) {
@@ -45,6 +63,7 @@ public class CandleDrawer extends Drawer {
 						bounds.y);
 			x = (int)((row - xmin) * width_factor + bounds.x);
 			middle_x = x + candlewidth / 2;
+			_x_values[row-1] = x;
 			// For candle color, relation is reversed (< -> >) because
 			// of the coordinate system used - higher coordinates have
 			// a lower value.
@@ -74,9 +93,6 @@ public class CandleDrawer extends Drawer {
 		}
 	}
 
-	// 4 points: open, high, low, close - no x coordinates
-	public int drawing_stride() { return Stride; }
-
 	// Draw the horizontal line indicating a doji.
 	protected void draw_doji_line(Graphics g, int x, int y, int candlewidth) {
 		g.setColor(Color.white);
@@ -86,4 +102,6 @@ public class CandleDrawer extends Drawer {
 	}
 
 	private static final int Stride = 4;
+
+	protected double data[];
 }
