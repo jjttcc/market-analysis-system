@@ -38,12 +38,16 @@ feature {TRADABLE_FACTORY} -- Implementation
 	tuple_factory: BASIC_TUPLE_FACTORY is
 		do
 			create {OI_TUPLE_FACTORY} Result
+		ensure
+			valid_result: Result /= Void
 		end
 
 	new_item (symbol: STRING): DERIVATIVE_INSTRUMENT is
 			-- A new derivative instance with symbol `symbol'
 		do
 			create Result.make (symbol, derivative_data)
+		ensure
+			valid_result: Result /= Void
 		end
 
 	index_vector (no_open, intraday: BOOLEAN): ARRAY [INTEGER] is
