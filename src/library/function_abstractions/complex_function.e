@@ -143,12 +143,6 @@ feature {NONE} -- Implementation
 			exists: Result /= Void
 		end
 
---!!!Remove soon:
-print_param (fp: FUNCTION_PARAMETER) is
-do print ("fp: " + fp.out + "%N") print ("fp name: " + fp.name + "%N")
-if fp.description /= Void then print ("fp desc: " + fp.description + "%N")
- end end
-
 invariant
 
 	op_used_constraint: operator_used implies operator /= Void
