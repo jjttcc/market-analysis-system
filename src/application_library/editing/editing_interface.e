@@ -1,46 +1,16 @@
 indexing
 	description:
-		"Abstraction for a user interface that obtains selections needed for %
-		%creation of a recursive structure of objects of type G"
+		"Abstraction for a user interface that allows the user to edit %
+		%application elements"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
 deferred class
 
-	EDITING_INTERFACE [G]
+	EDITING_INTERFACE
 
 feature -- Access
-
-	object_selection (type: STRING; msg: STRING; top: BOOLEAN): G is
-			-- User-selected object whose type conforms to `type'.
-			-- `top' specifies whether the returned instance will be
-			-- the top of the tree.
-		require
-			type_is_valid: object_types @ type /= Void
-			editor_set: editor /= Void
-		local
-			op_names: ARRAYED_LIST [STRING]
-			obj_list: ARRAYED_LIST [G]
-		do
-			if top then
-				-- Clear current object list for the new tree.
-				current_objects.wipe_out
-			end
-			obj_list := object_types @ type
-			Result := user_object_selection (obj_list, msg)
-			current_objects.extend (Result)
-			initialize_object (Result)
-		ensure
-			result_not_void: Result /= Void
-		end
-
-	object_types: HASH_TABLE [ARRAYED_LIST [G], STRING] is
-			-- Hash table of lists of class instances - each list contains
-			-- instances of all classes whose type conforms to the Hash
-			-- table key.
-		deferred
-		end
 
 	editor: APPLICATION_EDITOR
 			-- Editor used to set Gs' operands and parameters
@@ -93,65 +63,26 @@ feature {APPLICATION_EDITOR} -- Access
 
 feature {NONE} -- Implementation
 
-	user_object_selection (obj_list: LIST [G]; msg: STRING): G is
-			-- User's selection of a member of `obj_list' that will be
-			-- (deep) cloned or a member of `current_objects' that is
-			-- in `obj_list' that will be shared
-		deferred
-		end
-
 	do_choice (descr: STRING; choices: LIST [PAIR [STRING, BOOLEAN]];
 				allowed_selections: INTEGER) is
 			-- Implementation of `choice'
 		deferred
 		end
 
-	initialization_map: HASH_TABLE [INTEGER, STRING] is
-			-- Mapping of G names to initialization classifications
-		deferred
-		end
-
-	initialize_object (arg: G) is
-			-- Set object parameters - operands, etc.
+	multilist_selection (lists: ARRAY [PAIR [LIST [STRING], STRING]];
+				general_msg: STRING): INTEGER is
+			-- User's selection of one element from one of the `lists'.
+			-- Display all lists in `lists' that are not empty and return
+			-- the relative position of the selected item.  For example,
+			-- if the first list has a count of 5 and the 2nd item in the
+			-- 2nd list is selected, return a value of 7 (5 + 2).
 		require
-			editor_set: editor /= Void
-			arg_not_void: arg /= Void
+			not_void: lists /= Void
+			-- Not all lists in `lists' are empty
 		deferred
+		ensure
+			high_enough: Result >= 1
+			-- Result <= total number of elements in `lists'
 		end
-
-	valid_types (ref_list, obj_list: LIST [G]): LIST [G] is
-			-- All elements of `obj_list' whose type matches that of
-			-- an element of `ref_list'
-		do
-			!LINKED_LIST [G]!Result.make
-			from
-				obj_list.start
-			until
-				obj_list.exhausted
-			loop
-				from
-					ref_list.start
-				until
-					ref_list.exhausted
-				loop
-					if obj_list.item.same_type (ref_list.item) then
-						Result.extend (obj_list.item)
-						ref_list.finish
-					end
-					ref_list.forth
-				end
-				obj_list.forth
-			end
-		end
-
-	current_objects: LIST [G] is
-		do
-			if object_list = Void then
-				!LINKED_LIST [G]!object_list.make
-			end
-			Result := object_list
-		end
-
-	object_list: LIST [G]
 
 end -- EDITING_INTERFACE

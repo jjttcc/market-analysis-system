@@ -9,7 +9,7 @@ class APPLICATION_EDITOR inherit
 
 feature -- Access
 
-	user_interface: EDITING_INTERFACE [ANY]
+	user_interface: EDITING_INTERFACE
 			-- Interface used to obtain data selections from user
 
 feature -- Status setting

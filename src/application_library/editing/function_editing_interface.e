@@ -1,34 +1,34 @@
 indexing
 	description:
 		"Abstraction user interface that obtains selections needed for %
-		%editing of COMMANDs"
+		%editing of MARKET_FUNCTIONs"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
-deferred class COMMAND_EDITING_INTERFACE inherit
+deferred class FUNCTION_EDITING_INTERFACE inherit
 
-	COMMANDS
+	MARKET_FUNCTIONS
 		export
 			{NONE} all
 		end
 
-	TREE_EDITING_INTERFACE [COMMAND]
+	TREE_EDITING_INTERFACE [MARKET_FUNCTION]
 		rename
-			object_selection as command_selection,
-			object_types as command_types,
-			user_object_selection as user_command_selection,
-			initialize_object as initialize_command,
-			current_objects as current_commands,
-			object_list as command_list
+			object_selection as function_selection,
+			object_types as function_types,
+			user_object_selection as user_function_selection,
+			initialize_object as initialize_function,
+			current_objects as current_functions,
+			object_list as function_list
 		redefine
 			editor
 		end
 
 feature -- Access
 
-	editor: APPLICATION_COMMAND_EDITOR
-			-- Editor used to set COMMANDs' operands and parameters
+	editor: APPLICATION_FUNCTION_EDITOR
+			-- Editor used to set MARKET_FUNCTIONs' operands and parameters
 
 	left_offset: INTEGER
 			-- Largest left offset value used by any of the created operators
@@ -62,14 +62,14 @@ feature -- Status setting
 			left_offset_set: left_offset = arg and left_offset >= 0
 		end
 
-feature {APPLICATION_COMMAND_EDITOR} -- Access
+feature {APPLICATION_FUNCTION_EDITOR} -- Access
 
-	command_types: HASH_TABLE [ARRAYED_LIST [COMMAND], STRING] is
-			-- Hash table of lists of command instances - each list contains
+	function_types: HASH_TABLE [ARRAYED_LIST [MARKET_FUNCTION], STRING] is
+			-- Hash table of lists of function instances - each list contains
 			-- instances of all classes whose type conforms to the Hash
 			-- table key.
 		local
-			l: ARRAYED_LIST [COMMAND]
+			l: ARRAYED_LIST [MARKET_FUNCTION]
 		once
 			!!Result.make (0)
 			!!l.make (13)
@@ -164,193 +164,193 @@ feature {NONE} -- Implementation
 	:
 				INTEGER is unique
 			-- Constants identifying initialization routines required for
-			-- the different COMMAND types
+			-- the different MARKET_FUNCTION types
 
 	initialization_map: HASH_TABLE [INTEGER, STRING] is
-			-- Mapping of COMMAND names to initialization classifications
+			-- Mapping of MARKET_FUNCTION names to initialization classifications
 		local
 			name: STRING
 		once
 			!!Result.make (0)
 			name := "TRUE_COMMAND"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Other, name)
 			name := "FALSE_COMMAND"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Other, name)
 			name := "AND_OPERATOR"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Binary_boolean, name)
 			name := "OR_OPERATOR"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Binary_boolean, name)
 			name := "XOR_OPERATOR"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Binary_boolean, name)
 			name := "IMPLICATION_OPERATOR"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Binary_boolean, name)
 			name := "EQUIVALENCE_OPERATOR"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Binary_boolean, name)
 			name := "ADDITION"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Binary_real, name)
 			name := "SUBTRACTION"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Binary_real, name)
 			name := "MULTIPLICATION"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Binary_real, name)
 			name := "DIVISION"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Binary_real, name)
 			name := "EQ_OPERATOR"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Binary_real, name)
 			name := "LT_OPERATOR"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Binary_real, name)
 			name := "GT_OPERATOR"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Binary_real, name)
 			name := "GE_OPERATOR"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Binary_real, name)
 			name := "LE_OPERATOR"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Binary_real, name)
 			name := "CONSTANT"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Constant, name)
 			name := "BASIC_NUMERIC_COMMAND"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Other, name)
 			name := "HIGHEST_VALUE"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Mtlist_resultreal_n, name)
 			name := "LOWEST_VALUE"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Mtlist_resultreal_n, name)
 			name := "LINEAR_SUM"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Mtlist_resultreal_n, name)
 			name := "MINUS_N_COMMAND"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Mtlist_resultreal_n, name)
 			name := "N_VALUE_COMMAND"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
-			Result.extend (N_command, name)
+			Result.extend (N_function, name)
 			name := "MA_EXPONENTIAL"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
-			Result.extend (N_command, name)
+			Result.extend (N_function, name)
 			name := "SETTABLE_OFFSET_COMMAND"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Settable_offset, name)
 			name := "VOLUME"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Other, name)
 			name := "LOW_PRICE"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Other, name)
 			name := "HIGH_PRICE"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Other, name)
 			name := "CLOSING_PRICE"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Other, name)
 			name := "OPENING_PRICE"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Other, name)
 			name := "OPEN_INTEREST"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Other, name)
 			name := "BASIC_LINEAR_COMMAND"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Mtlist, name)
 			name := "BOOLEAN_NUMERIC_CLIENT"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Boolean_num_client, name)
 			name := "SIGN_ANALYZER"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Sign_analyzer, name)
 			name := "SLOPE_ANALYZER"
 			check
-				valid_name: command_names.has (name)
+				valid_name: function_names.has (name)
 			end
 			Result.extend (Mtlist, name)
 		end
 
-	initialize_command (c: COMMAND) is
-			-- Set command parameters - operands, etc.
+	initialize_function (f: MARKET_FUNCTION) is
+			-- Set function parameters - operands, etc.
 		local
 			const: CONSTANT
 			bin_bool_op: BINARY_OPERATOR [ANY, BOOLEAN]
@@ -361,27 +361,27 @@ feature {NONE} -- Implementation
 			sign_an: SIGN_ANALYZER
 		do
 			inspect
-				initialization_map @ c.generator
+				initialization_map @ f.generator
 			when Binary_boolean then
-				bin_bool_op ?= c
+				bin_bool_op ?= f
 				check
 					c_is_a_binary_boolean: bin_bool_op /= Void
 				end
 				editor.edit_binary_boolean (bin_bool_op)
 			when Binary_real then
-				bin_real_op ?= c
+				bin_real_op ?= f
 				check
 					c_is_a_binary_realean: bin_real_op /= Void
 				end
 				editor.edit_binary_real (bin_real_op)
 			when Constant then
-				const ?= c
+				const ?= f
 				check
 					c_is_a_constant: const /= Void
 				end
 				editor.edit_constant (const)
 			when Mtlist_resultreal_n then
-				unop_real ?= c
+				unop_real ?= f
 				check
 					c_is_a_unary_operator_real: unop_real /= Void
 				end
@@ -389,23 +389,23 @@ feature {NONE} -- Implementation
 			when Other then
 				-- No initialization needed.
 			when N_command then
-				editor.edit_n (c)
+				editor.edit_n (f)
 			when Mtlist then
-				editor.edit_mtlist (c)
+				editor.edit_mtlist (f)
 			when Settable_offset then
-				offset_cmd ?= c
+				offset_cmd ?= f
 				check
 					c_is_a_settable_offset_cmd: offset_cmd /= Void
 				end
 				editor.edit_offset (offset_cmd)
 			when Boolean_num_client then
-				bnc ?= c
+				bnc ?= f
 				check
 					c_is_a_boolean_numeric_client: bnc /= Void
 				end
 				editor.edit_boolean_numeric_client (bnc)
 			when Sign_analyzer then
-				sign_an ?= c
+				sign_an ?= f
 				check
 					c_is_a_sign_analyzer: sign_an /= Void
 				end
@@ -413,4 +413,4 @@ feature {NONE} -- Implementation
 			end
 		end
 
-end -- COMMAND_EDITING_INTERFACE
+end -- FUNCTION_EDITING_INTERFACE
