@@ -30,6 +30,7 @@ feature -- Initialization
 			initialize (ui)
 			print ("Test execution: "); print (current_date)
 			print (", "); print (current_time); print ("%N")
+			test_bool_operators
 			!!factory_builder.make (default_input_file_name)
 			tradable_builder :=
 				factory_builder.tradable_factory
@@ -60,6 +61,121 @@ feature -- Initialization
 		do
 			ui.set_output_field_separator ("%T")
 			ui.set_date_field_separator ("/")
+		end
+
+	test_bool_operators is
+			-- Assertions must be on in order for this test to take effect.
+		local
+			andop: AND_OPERATOR
+			orop: OR_OPERATOR
+			xorop: XOR_OPERATOR
+			impop: IMPLICATION_OPERATOR
+			equivop: EQUIVALENCE_OPERATOR
+			trueop: TRUE_COMMAND
+			falseop: FALSE_COMMAND
+		do
+			!!trueop; !!falseop
+			!!andop.make (trueop, trueop)
+			andop.execute (Void)
+			check
+				result1_true: andop.value = true
+			end
+			!!andop.make (trueop, falseop)
+			andop.execute (Void)
+			check
+				result2_false: andop.value = false
+			end
+			!!andop.make (falseop, trueop)
+			andop.execute (Void)
+			check
+				result3_false: andop.value = false
+			end
+			!!andop.make (falseop, falseop)
+			andop.execute (Void)
+			check
+				result4_false: andop.value = false
+			end
+			!!orop.make (trueop, trueop)
+			orop.execute (Void)
+			check
+				result5_true: orop.value = true
+			end
+			!!orop.make (trueop, falseop)
+			orop.execute (Void)
+			check
+				result6_true: orop.value = true
+			end
+			!!orop.make (falseop, trueop)
+			orop.execute (Void)
+			check
+				result7_true: orop.value = true
+			end
+			!!orop.make (falseop, falseop)
+			orop.execute (Void)
+			check
+				result8_false: orop.value = false
+			end
+			!!xorop.make (trueop, trueop)
+			xorop.execute (Void)
+			check
+				result9_false: xorop.value = false
+			end
+			!!xorop.make (trueop, falseop)
+			xorop.execute (Void)
+			check
+				result10_true: xorop.value = true
+			end
+			!!xorop.make (falseop, trueop)
+			xorop.execute (Void)
+			check
+				result11_true: xorop.value = true
+			end
+			!!xorop.make (falseop, falseop)
+			xorop.execute (Void)
+			check
+				result12_false: xorop.value = false
+			end
+			!!impop.make (trueop, trueop)
+			impop.execute (Void)
+			check
+				result13_true: impop.value = true
+			end
+			!!impop.make (trueop, falseop)
+			impop.execute (Void)
+			check
+				result14_false: impop.value = false
+			end
+			!!impop.make (falseop, trueop)
+			impop.execute (Void)
+			check
+				result15_true: impop.value = true
+			end
+			!!impop.make (falseop, falseop)
+			impop.execute (Void)
+			check
+				result16_true: impop.value = true
+			end
+			!!equivop.make (trueop, trueop)
+			equivop.execute (Void)
+			check
+				result17_true: equivop.value = true
+			end
+			!!equivop.make (trueop, falseop)
+			equivop.execute (Void)
+			check
+				result18_false: equivop.value = false
+			end
+			!!equivop.make (falseop, trueop)
+			equivop.execute (Void)
+			check
+				result19_false: equivop.value = false
+			end
+			!!equivop.make (falseop, falseop)
+			equivop.execute (Void)
+			check
+				result20_true: equivop.value = true
+			end
+			print ("Boolean operators test passed%N")
 		end
 
 feature {NONE} -- Utility
