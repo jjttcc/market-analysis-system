@@ -44,7 +44,7 @@ feature -- Basic operations
 			if not delete_failed then
 				create instalL_dir.make (install_dir_name)
 				if install_dir.exists then
-print ("Deleting " + install_dir.name + "%N")
+--print ("Deleting " + install_dir.name + "%N")
 					install_dir.recursive_delete
 				end
 			else
