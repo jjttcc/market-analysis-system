@@ -1,5 +1,5 @@
 #export MAS_DIRECTORY=/home2/finance/.mas/charting
-maindir=/home2/jtc/development/finance/src/mct
+maindir=/home/development/jtc/finance/src/mct
 #export CLASSPATH=$PWD:$PWD/..:$PWD/application
 export CLASSPATH=$maindir:$maindir/pct:$maindir/pct/application
 java -Dpct.name=mct_config -Dpct.dir=$maindir  -Dpct.hostname=$HOSTNAME   pct.PCT_Main
