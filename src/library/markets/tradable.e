@@ -230,9 +230,9 @@ feature {NONE}
 		require
 			not_empty: not empty
 		local
-			calculator: N_BOOLEAN_LINEAR_COMMAND
-			greater_than: GT_OPERATOR [COMPARABLE]
-			less_than: LT_OPERATOR [COMPARABLE]
+			--calculator: N_BOOLEAN_LINEAR_COMMAND
+			greater_than: GT_OPERATOR
+			less_than: LT_OPERATOR
 			close_extractor: CLOSING_PRICE
 			original_cursor: CURSOR
 		do
@@ -242,7 +242,7 @@ feature {NONE}
 			--whose date is 1 year less than the last element's date; get
 			--the n value (for HV and LV) from that element's position; set
 			--the cursor to the last element and put HV and LV into action.
-			!!greater_than; !!less_than; !!close_extractor
+			--!!greater_than; !!less_than; !!close_extractor
 			if y_high = Void then
 				!!y_high; !!y_low
 			end
@@ -253,18 +253,18 @@ feature {NONE}
 			--to be to go back exactly 52 weeks, or create a sublist that
 			--contains the past 52-weeks worth of Current's data and
 			--pass that sublist and sublist.count to calculator.make.
-			!!calculator.make (Current, count, greater_than, close_extractor)
+			--!!calculator.make (Current, count, greater_than, close_extractor)
 			check
 				islast
-				calculator.target_cursor_not_affected
+				--calculator.target_cursor_not_affected
 			end
-			calculator.execute (Void)
-			y_high.set_value (calculator.value)
+			--calculator.execute (Void)
+			--y_high.set_value (calculator.value)
 			-- Re-set calculator to find the lowest close value.
-			calculator.set_boolean_operator (less_than)
-			calculator.set_initial_value (99999999)
-			calculator.execute (Void)
-			y_low.set_value (calculator.value)
+			--calculator.set_boolean_operator (less_than)
+			--calculator.set_initial_value (99999999)
+			--calculator.execute (Void)
+			--y_low.set_value (calculator.value)
 			go_to (original_cursor)
 		ensure
 			not_void: y_high /= Void and y_low /= Void
