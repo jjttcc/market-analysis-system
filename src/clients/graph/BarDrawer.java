@@ -29,7 +29,7 @@ public class BarDrawer extends IndicatorDrawer {
 		int _bar_width = bar_width();
 		double height_factor;
 		int x_s[] = new int[4], y_s[] = new int[4];
-		Configuration conf = Configuration.instance();
+		MA_Configuration conf = MA_Configuration.application_instance();
 		if (draw_color == null) draw_color = conf.bar_color();
 
 		// Is there any data to draw? Sometimes the draw command will

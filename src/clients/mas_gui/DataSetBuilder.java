@@ -187,7 +187,7 @@ public class DataSetBuilder implements NetworkProtocol {
 // Implementation
 
 	private MarketDrawer new_main_drawer() {
-		Configuration c = Configuration.instance();
+		MA_Configuration c = MA_Configuration.application_instance();
 		MarketDrawer result;
 
 		if (c.main_graph_drawer() == c.Candle_graph) {

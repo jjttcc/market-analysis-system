@@ -26,7 +26,7 @@ public class PriceDrawer extends MarketDrawer {
 		if (lngth == 0) return;
 
 		_bar_width = (int) ((double) base_bar_width(bounds, lngth / 4) * .75);
-		Configuration conf = Configuration.instance();
+		MA_Configuration conf = MA_Configuration.application_instance();
 		Color bar_color = conf.stick_color();
 		double width_factor, height_factor;
 

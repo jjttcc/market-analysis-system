@@ -4,7 +4,7 @@ package mas_gui;
 
 import java.awt.*;
 import graph.*;
-import support.Configuration;
+import support.*;
 import java.util.Vector;
 import java.util.Properties;
 import java.awt.event.ItemListener;
@@ -22,7 +22,7 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol {
 		super(scrollbarDisplayPolicy);
 
 		if (print_props != null) print_properties = print_props;
-		Configuration config = Configuration.instance();
+		MA_Configuration config = MA_Configuration.application_instance();
 		chart = parent_chart;
 		_main_graph = new MainGraph();
 		_indicator_graph = new LowerGraph(_main_graph);

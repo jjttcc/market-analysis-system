@@ -16,7 +16,7 @@ abstract public class TemporalDrawer extends Drawer {
 	TemporalDrawer(BasicDrawer d) {
 		_market_drawer = d.market_drawer();
 		main_drawer = d;
-		conf = Configuration.instance();
+		conf = MA_Configuration.application_instance();
 	}
 
 	public MarketDrawer market_drawer() { return _market_drawer; }
@@ -79,7 +79,7 @@ abstract public class TemporalDrawer extends Drawer {
 
 	final double Label_x_factor = .025;
 
-	protected Configuration conf;
+	protected MA_Configuration conf;
 
 	protected MarketDrawer _market_drawer;
 

@@ -2,8 +2,8 @@
 
 package support;
 
-/** Modifier of Configuration class */
+/** Modifier of MA_Configuration class */
 abstract public class ConfigurationModifier {
 
-	abstract public void execute(Configuration c);
+	abstract public void execute(MA_Configuration c);
 }

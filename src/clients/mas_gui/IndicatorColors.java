@@ -112,7 +112,7 @@ public class IndicatorColors extends MA_Dialog {
 		l = new Label(i);
 		p.add(l, "West");
 		color = indicator_color(i, upper);
-		l = new Label(Configuration.instance().color_name(color));
+		l = new Label(MA_Configuration.application_instance().color_name(color));
 		p.add(insidep, "East");
 		insidep.add(l, "West");
 		bar = new Button("    ");
@@ -136,7 +136,7 @@ public class IndicatorColors extends MA_Dialog {
 
 	private Color indicator_color(String i, boolean upper) {
 		Color result;
-		Configuration conf = Configuration.instance();
+		MA_Configuration conf = MA_Configuration.application_instance();
 		result = conf.indicator_color(i, upper);
 		if (result == null) {
 			if (i.equals(chart.Volume)) result = conf.bar_color();

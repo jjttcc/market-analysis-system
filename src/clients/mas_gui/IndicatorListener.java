@@ -20,7 +20,7 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 		String selection = e.getActionCommand();
 		DataSet dataset, main_dataset;
 		boolean retrieve_failied = false;
-		Configuration conf = Configuration.instance();
+		MA_Configuration conf = MA_Configuration.application_instance();
 		try {
 			String tradable = chart.current_tradable;
 			if (tradable == null || no_change(selection)) {
@@ -53,8 +53,8 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 		}
 		// Set graph data according to whether the selected indicator is
 		// configured to go in the upper (main) or lower (indicator) graph.
-		else if (Configuration.instance().upper_indicators().containsKey(
-				selection)) {
+		else if (MA_Configuration.application_instance().
+				upper_indicators().containsKey(selection)) {
 			main_dataset = data_builder.last_market_data();
 			if (! chart.current_upper_indicators.isEmpty() &&
 					chart.replace_indicators) {

@@ -29,7 +29,7 @@ public class CandleDrawer extends MarketDrawer {
 		if (lngth == 0) return;
 
 		_bar_width = (int) ((double) base_bar_width(bounds, lngth / 4) * .65);
-		Configuration conf = Configuration.instance();
+		MA_Configuration conf = MA_Configuration.application_instance();
 		Color black = conf.black_candle_color();
 		Color white = conf.white_candle_color();
 		Color wick_color = conf.stick_color();
@@ -85,7 +85,7 @@ public class CandleDrawer extends MarketDrawer {
 
 	// Draw the horizontal line indicating a doji.
 	protected void draw_doji_line(Graphics g, int x, int y, int candlewidth) {
-		g.setColor(Configuration.instance().stick_color());
+		g.setColor(MA_Configuration.application_instance().stick_color());
 		g.drawLine(x, y, x + candlewidth, y);
 	}
 }

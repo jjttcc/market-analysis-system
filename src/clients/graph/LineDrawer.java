@@ -26,7 +26,7 @@ public class LineDrawer extends IndicatorDrawer {
 		int right_adjust = bar_width() / 2;
 		if (_data != null) lngth = _data.length;
 		double height_factor;
-		Configuration conf = Configuration.instance();
+		MA_Configuration conf = MA_Configuration.application_instance();
 		if (draw_color == null) {
 			draw_color = conf.line_color();
 		}

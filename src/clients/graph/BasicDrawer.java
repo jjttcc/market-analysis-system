@@ -4,8 +4,7 @@ package graph;
 
 import java.awt.*;
 import java.util.*;
-import support.Configuration;
-import support.Utilities;
+import support.*;
 
 /**
  *  Drawer of Primary, non-temporal market data
@@ -198,7 +197,7 @@ abstract public class BasicDrawer extends Drawer {
 			Vector hline_data) {
 		if (hline_data == null) return;
 
-		Configuration config = Configuration.instance();
+		MA_Configuration config = MA_Configuration.application_instance();
 		int y1, y2;
 		final int vert_margin = 2;
 		double d1, d2;
@@ -223,7 +222,7 @@ abstract public class BasicDrawer extends Drawer {
 			Vector vline_data) {
 		if (vline_data == null) return;
 
-		Configuration config = Configuration.instance();
+		MA_Configuration config = MA_Configuration.application_instance();
 		int x1, x2;
 		double d1, d2;
 		g.setColor(config.reference_line_color());
@@ -280,7 +279,7 @@ abstract public class BasicDrawer extends Drawer {
 		int step = 1;
 		int adj_ys[] = new int[yvalues.size() + 1];
 		String[] ystrings = new String[ystrs.length];
-		Configuration config = Configuration.instance();
+		MA_Configuration config = MA_Configuration.application_instance();
 		adj_ys[0] = (int) (ref_bounds.y + (1.0 -
 			(((Double) yvalues.elementAt(0)).doubleValue() - ymin) / yrange) *
 			ref_bounds.height);

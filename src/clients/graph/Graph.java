@@ -8,7 +8,7 @@ import java.io.StreamTokenizer;
 import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
-import support.Configuration;
+import support.*;
 
 /*
 **************************************************************************
@@ -652,7 +652,7 @@ public void startedloading() {
 
 	// Display `s' near the upper right corner of the graph.
 	protected void display_text(String s, Graphics g) {
-		g.setColor(Configuration.instance().text_color());
+		g.setColor(MA_Configuration.application_instance().text_color());
 		g.drawString(s, 23, 23);
 	}
 

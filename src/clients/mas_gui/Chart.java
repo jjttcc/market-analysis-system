@@ -176,7 +176,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 			valid_indicators.put(o, new Integer(i + 1));
 		}
 		// User-selected indicators, in order:
-		ind_iter = Configuration.instance().indicator_order().elements();
+		ind_iter = MA_Configuration.application_instance().indicator_order().
+			elements();
 		_indicators = new Hashtable();
 		Vector special_indicators = new Vector();
 		special_indicators.addElement(No_lower_indicator);
@@ -320,7 +321,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 
 	void send_data_request(String tradable) {
 		DataSet dataset, main_dataset;
-		Configuration conf = Configuration.instance();
+		MA_Configuration conf = MA_Configuration.application_instance();
 		int count;
 		String current_indicator;
 		// Don't redraw the data if it's for the same tradable as before.
@@ -438,7 +439,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 
 		Vector lines;
 		double d1, d2;
-		Configuration conf = Configuration.instance();
+		MA_Configuration conf = MA_Configuration.application_instance();
 		lines = conf.vertical_indicator_lines_at(indicator);
 		if (lines != null && lines.size() > 0) {
 			for (int j = 0; j < lines.size(); j += 2) {
@@ -643,8 +644,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	// indicator that is not a group member, no action is taken.
 	protected void link_with_axis(DataSet d, String indicator_name) {
 		if (indicator_groups == null) {
-			indicator_groups = (IndicatorGroups)
-				Configuration.instance().indicator_groups().clone();
+			indicator_groups = (IndicatorGroups) MA_Configuration.
+				application_instance().indicator_groups().clone();
 		}
 		IndicatorGroup group;
 		if (indicator_name == null) {

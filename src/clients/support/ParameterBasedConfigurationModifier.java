@@ -27,7 +27,7 @@ public class ParameterBasedConfigurationModifier extends ConfigurationModifier {
 		}
 	}
 
-	public void execute(Configuration c) {
+	public void execute(MA_Configuration c) {
 		Enumeration e = contents.keys();
 		SettingChanger changer;
 		while (e.hasMoreElements()) {
@@ -52,7 +52,7 @@ abstract class SettingChanger {
 	abstract String key();
 
 	// Execute the setting change on 'c'.
-	abstract void execute(Configuration c, String value);
+	abstract void execute(MA_Configuration c, String value);
 
 	// Report error 'msg'.
 	void report_error(String msg) {
@@ -100,7 +100,7 @@ abstract class ColorChanger extends SettingChanger {
 	String key() {
 		return key_value;
 	}
-	void execute(Configuration c, String value) {
+	void execute(MA_Configuration c, String value) {
 //System.out.println("Setting " + key() + " to " + value);
 		if (c.valid_color(value)) {
 			c.set_color(key(), value);
@@ -114,14 +114,14 @@ abstract class ColorChanger extends SettingChanger {
 
 // Setting changers for graph style - candle/regular
 class GraphStyleChanger extends SettingChanger {
-	static final String key_constant = Configuration.Main_graph_style;
+	static final String key_constant = MA_Configuration.Main_graph_style;
 	String key() {
 		return key_constant;
 	}
-	void execute(Configuration c, String value) {
+	void execute(MA_Configuration c, String value) {
 		String v = value.toLowerCase();
-		if (v.equals(Configuration.Candle_style) ||
-				v.equals(Configuration.Regular_style)) {
+		if (v.equals(MA_Configuration.Candle_style) ||
+				v.equals(MA_Configuration.Regular_style)) {
 //System.out.println("Setting " + key() + " to " + value);
 			c.set_main_graph_style(value);
 		} else {
@@ -132,56 +132,56 @@ class GraphStyleChanger extends SettingChanger {
 }
 
 class BackgroundColorChanger extends ColorChanger {
-	static final String key_constant = Configuration.Background_color;
+	static final String key_constant = MA_Configuration.Background_color;
 	BackgroundColorChanger() {
 		key_value = key_constant;
 	}
 }
 
 class LineColorChanger extends ColorChanger {
-	static final String key_constant = Configuration.Line_color;
+	static final String key_constant = MA_Configuration.Line_color;
 	LineColorChanger() {
 		key_value = key_constant;
 	}
 }
 
 class BarColorChanger extends ColorChanger {
-	static final String key_constant = Configuration.Bar_color;
+	static final String key_constant = MA_Configuration.Bar_color;
 	BarColorChanger() {
 		key_value = key_constant;
 	}
 }
 
 class StickColorChanger extends ColorChanger {
-	static final String key_constant = Configuration.Stick_color;
+	static final String key_constant = MA_Configuration.Stick_color;
 	StickColorChanger() {
 		key_value = key_constant;
 	}
 }
 
 class ReferenceLineColorChanger extends ColorChanger {
-	static final String key_constant = Configuration.Reference_line_color;
+	static final String key_constant = MA_Configuration.Reference_line_color;
 	ReferenceLineColorChanger() {
 		key_value = key_constant;
 	}
 }
 
 class TextColorChanger extends ColorChanger {
-	static final String key_constant = Configuration.Text_color;
+	static final String key_constant = MA_Configuration.Text_color;
 	TextColorChanger() {
 		key_value = key_constant;
 	}
 }
 
 class BlackCandleColorChanger extends ColorChanger {
-	static final String key_constant = Configuration.Black_candle_color;
+	static final String key_constant = MA_Configuration.Black_candle_color;
 	BlackCandleColorChanger() {
 		key_value = key_constant;
 	}
 }
 
 class WhiteCandleColorChanger extends ColorChanger {
-	static final String key_constant = Configuration.White_candle_color;
+	static final String key_constant = MA_Configuration.White_candle_color;
 	WhiteCandleColorChanger() {
 		key_value = key_constant;
 	}
