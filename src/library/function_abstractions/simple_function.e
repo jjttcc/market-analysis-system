@@ -13,7 +13,7 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 		undefine
 			is_equal, copy, setup
 		redefine
-			output, operator_used
+			output
 		end
 
 	MARKET_TUPLE_LIST [G]
@@ -84,16 +84,9 @@ feature -- Status report
 			Result = (output /= Void)
 		end
 
-	operator_used: BOOLEAN is
-		once
-			Result := false
-		ensure then
-			not_used: Result = false
-		end
-
 feature {NONE} -- Basic operations
 
-	do_process is
+	process is
 			-- Null action
 		do
 		end

@@ -9,10 +9,7 @@ class TWO_VARIABLE_FUNCTION
 
 inherit
 
-	MARKET_FUNCTION
-		redefine
-			pre_process, update_processed_date_time
-		end
+	COMPLEX_FUNCTION
 
 	LINEAR_ANALYZER
 		rename
@@ -58,8 +55,6 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	output: MARKET_TUPLE_LIST [MARKET_TUPLE]
-
 	trading_period_type: TIME_PERIOD_TYPE is
 		do
 			Result := input1.trading_period_type
@@ -104,8 +99,6 @@ feature -- Access
 			Result := parameter_list
 		end
 
-	processed_date_time: DATE_TIME
-
 feature -- Status report
 
 	processed: BOOLEAN is
@@ -115,8 +108,6 @@ feature -- Status report
 					processed_date_time >= input1.processed_date_time and then
 					processed_date_time >= input2.processed_date_time
 		end
-
-	operator_used: BOOLEAN is true
 
 feature {NONE} -- Hook methods
 
@@ -178,15 +169,6 @@ feature {NONE} -- Hook methods
 			end
 		ensure then
 			inputs_processed: input1.processed and input2.processed
-		end
-
-	update_processed_date_time is
-		do
-			if processed_date_time = Void then
-				!!processed_date_time.make_now
-			else
-				processed_date_time.make_now
-			end
 		end
 
 feature {NONE}
@@ -276,12 +258,6 @@ feature {FACTORY} -- Status setting
 feature {NONE}
 
 	input1, input2: MARKET_FUNCTION
-
-	immediate_parameters: LIST [FUNCTION_PARAMETER] is
-		once
-		end
-
-	parameter_list: LINKED_LIST [FUNCTION_PARAMETER]
 
 invariant
 

@@ -36,11 +36,6 @@ feature -- Access
 		deferred
 		end
 
-	operator: NUMERIC_COMMAND
-			-- Operator that will perform the main work of the function.
-			-- Descendant classes may choose not to use this attribute for
-			-- efficiency.
-
 	trading_period_type: TIME_PERIOD_TYPE is
 			-- Type of trading period associated with each tuple:  hourly,
 			-- daily, weekly, etc.
@@ -59,11 +54,6 @@ feature -- Access
 
 feature -- Status report
 
-	operator_used: BOOLEAN is
-			-- Is operator used by this function?
-		deferred
-		end
-
 	processed: BOOLEAN is
 			-- Has this function been processed?
 		deferred
@@ -73,30 +63,12 @@ feature -- Basic operations
 
 	process is
 			-- Process the output from the input.
-		do
-			if not processed then
-				pre_process
-				do_process
-				update_processed_date_time
-			end
-			debug
-				print (name); print (" just became processed, output size: ")
-				print (output.count); print ("%N")
-			end
+		deferred
 		ensure then
 			processed: processed
 		end
 
 feature {FACTORY} -- Status setting
-
-	set_operator (op: NUMERIC_COMMAND) is
-		require
-			not_void: op /= Void
-		do
-			operator := op
-		ensure
-			op_set: operator = op and operator /= Void
-		end
 
 	set_name (n: STRING) is
 			-- Set the function's name to n.
@@ -110,33 +82,9 @@ feature {FACTORY} -- Status setting
 
 feature {NONE} -- Hook methods
 
-	pre_process is
-			-- Do any pre-processing required before calling do_process.
-		require
-			not_processed: not processed
-		do
-		ensure
-			output_empty: output.empty
-		end
-
-	do_process is
-			-- Do the actual processing.
-			-- Hook method to be defined by descendants
-		require
-			output_empty: output.empty
-		deferred
-		end
-
-	update_processed_date_time is
-			-- Set processed_date_time to now.
-			-- Defaults to null action.
-		do
-		end
-
 invariant
 
 	output_not_void: output /= Void
-	op_used_constraint: operator_used implies operator /= Void
 	trading_period_type_not_void: trading_period_type /= Void
 	parameters_not_void: parameters /= Void
 	date_time_not_void_when_processed:
