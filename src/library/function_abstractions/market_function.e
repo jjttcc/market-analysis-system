@@ -17,6 +17,8 @@ deferred class MARKET_FUNCTION inherit
 			output
 		end
 
+	MARKET_PROCESSOR
+
 feature -- Access
 
 	name: STRING
@@ -46,13 +48,13 @@ feature -- Access
 
 	parameters: LIST [FUNCTION_PARAMETER] is
 			-- Changeable parameters for this function, including those
-			-- of `children'
+			-- of `descendants'
 		deferred
 		end
 
 	immediate_parameters: LIST [FUNCTION_PARAMETER] is
 			-- Changeable parameters for this function without those
-			-- of `children'
+			-- of `descendants'
 		deferred
 		end
 
@@ -62,8 +64,31 @@ feature -- Access
 		end
 
 	children: LIST [MARKET_FUNCTION] is
-			-- This function's children, if it is a composite function
+			-- This function's children, if this is a composite function
 		deferred
+		end
+
+	descendants: LIST [MARKET_FUNCTION] is
+			-- This function's descendants, if this is a composite function -
+			-- children, children's children, etc.
+		local
+			l: LIST [MARKET_FUNCTION]
+		do
+			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
+			l := children
+			from l.start until l.exhausted loop
+				Result.extend (l.item)
+				Result.append (l.item.descendants)
+				l.forth
+			end
+		ensure
+			not_void: Result /= Void
+		end
+
+	functions: LIST [MARKET_FUNCTION] is
+		do
+			Result := descendants
+			Result.extend (Current)
 		end
 
 	operators: LIST [COMMAND] is
@@ -71,8 +96,6 @@ feature -- Access
 			-- market function
 		do
 			create {LINKED_LIST [COMMAND]} Result.make
-		ensure
-			not_void: Result /= Void
 		end
 
 feature -- Status report
