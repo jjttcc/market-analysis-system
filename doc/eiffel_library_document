@@ -77,9 +77,6 @@ to be classified and identified by type.
 CLUSTER support
 
 This cluster is for classes that provide general utility functions.
-It currently only contains one class, MATH_CONSTANTS, which currently
-provides a feature named epsilon for the purpose of comparing floating
-point numbers.
 
 
 Copyright 1998, 1999 Jim Cochrane and others, see file "forum.txt"
