@@ -7,7 +7,7 @@ indexing
 
 class STOCK_SPLIT inherit
 
-	ANY
+	MARKET_TUPLE
 		redefine
 			is_equal
 		end
@@ -19,31 +19,18 @@ class STOCK_SPLIT inherit
 			is_equal
 		end
 
-creation
-
-	make
-
-feature -- Initialization
-
-	make (v: REAL; d: DATE) is
-		require
-			gt_0: v > 0
-			date_not_void: d /= Void
-		do
-			value := v
-			date := d
-		ensure
-			value_set: rabs (value - v) < epsilon
-			date_set: date = d
-		end
-
 feature -- Access
 
 	value: REAL
 			-- value of the split
 
-	date: DATE
+	date: DATE is
 			-- The date the split became effective
+		do
+			if date_time /= Void then
+				Result := date_time.date
+			end
+		end
 
 feature -- Status report
 
@@ -56,8 +43,16 @@ feature -- Status report
 						rabs (value - other.value) < epsilon
 		end
 
-invariant
+feature {VALUE_SETTER}
 
-	value_gt_0: value > 0
+	set_value (v: REAL) is
+			-- Set value to `v'.
+		require
+			gt_0: v > 0
+		do
+			value := v
+		ensure
+			value_set: rabs (value - v) < epsilon
+		end
 
 end -- class STOCK_SPLIT

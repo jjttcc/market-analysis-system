@@ -8,7 +8,7 @@ class STOCK inherit
 
 	TRADABLE [VOLUME_TUPLE]
 		redefine
-			symbol, make_ctf, short_description
+			symbol, make_ctf, short_description, finish_loading
 		end
 
 creation
@@ -17,16 +17,17 @@ creation
 
 feature -- Initialization
 
-	make (s: STRING; type: TIME_PERIOD_TYPE; stock_splits: STOCK_SPLITS) is
+	make (s: STRING; type: TIME_PERIOD_TYPE;
+				stock_splits: DYNAMIC_CHAIN [STOCK_SPLIT]) is
 		require
 			not_void: s /= Void and type /= Void
+			splits_sorted_by_date: stock_splits /= Void and
+				not stock_splits.empty implies
+					splits_sorted_by_date (stock_splits)
 		do
 			symbol := s
 			tradable_initialize (type)
-			if stock_splits /= Void then
-				splits := stock_splits @ symbol
-				adjust_for_splits
-			end
+			splits := stock_splits
 		ensure
 			symbol_set: symbol = s
 			period_type_set: trading_period_type = type
@@ -70,6 +71,50 @@ feature -- Element change
 
 feature -- Basic operations
 
+	finish_loading is
+		do
+			adjust_for_splits
+		end
+
+	splits_sorted_by_date (sp: like splits): BOOLEAN is
+			-- Is `sp' sorted by date ascending?
+		require
+			not_void_or_empty: sp /= Void and not sp.empty
+		local
+			previous_date: DATE
+		do
+			Result := true
+			from
+				sp.start
+				previous_date := sp.item.date
+				sp.forth
+			invariant
+				previous_date = sp.i_th (sp.index - 1).date
+			--     and
+			-- (for_all i such_that 1 < i <= sp.index - 1 it_holds
+			-- 	sp.i_th (i-1).date < sp.i_th (i).date)
+			variant
+				sp.count - sp.index + 1
+			until
+				not Result or sp.after
+			loop
+				if previous_date >= sp.item.date then
+					Result := false
+				else
+					check
+						prev_lt_current: previous_date < sp.item.date
+					end
+					previous_date := sp.item.date
+					sp.forth
+				end
+			end
+		ensure
+			-- Result = (for_all i such_that 1 < i <= sp.count it_holds
+			-- 	sp.i_th (i-1).date < sp.i_th (i).date)
+		end
+
+feature {NONE} -- Implementation
+
 	adjust_for_splits is
 			-- Adjust tuples for stock splits.
 		local
@@ -98,8 +143,6 @@ feature -- Basic operations
 				end
 			end
 		end
-
-feature {NONE} -- Implementation
 
 	do_split_adjustment is
 		require
@@ -156,43 +199,6 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	splits_sorted_by_date: BOOLEAN is
-			-- Is attribute `splits' sorted by date ascending?
-		require
-			not_void_or_empty: splits /= Void and not splits.empty
-		local
-			previous_date: DATE
-		do
-			Result := true
-			from
-				splits.start
-				previous_date := splits.item.date
-				splits.forth
-			invariant
-				previous_date = splits.i_th (splits.index - 1).date
-			--     and
-			-- (for_all i such_that 1 < i <= splits.index - 1 it_holds
-			-- 	splits.i_th (i-1).date < splits.i_th (i).date)
-			variant
-				splits.count - splits.index + 1
-			until
-				not Result or splits.after
-			loop
-				if previous_date >= splits.item.date then
-					Result := false
-				else
-					check
-						prev_lt_current: previous_date < splits.item.date
-					end
-					previous_date := splits.item.date
-					splits.forth
-				end
-			end
-		ensure
-			-- Result = (for_all i such_that 1 < i <= splits.count it_holds
-			-- 	splits.i_th (i-1).date < splits.i_th (i).date)
-		end
-
 	make_ctf: COMPOSITE_TUPLE_FACTORY is
 		once
 			!COMPOSITE_VOLUME_TUPLE_FACTORY!Result
@@ -201,6 +207,7 @@ feature {NONE} -- Implementation
 invariant
 
 	splits_sorted_by_date:
-		splits /= Void and not splits.empty implies splits_sorted_by_date
+		splits /= Void and not splits.empty implies
+			splits_sorted_by_date (splits)
 
 end -- class STOCK

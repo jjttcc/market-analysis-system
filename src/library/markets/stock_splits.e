@@ -13,13 +13,11 @@ deferred class
 feature -- Access
 
 	infix "@" (symbol: STRING): DYNAMIC_CHAIN [STOCK_SPLIT] is
-			-- Stock splits for the stock with `symbol' - empty if there
+			-- Stock splits for the stock with `symbol' - Void if there
 			-- are no recorded splits for `symbol'
 		require
 			symbol_valid: symbol /= Void and not symbol.empty
 		deferred
-		ensure
-			Result /= Void
 		end
 
 end -- class STOCK_SPLITS
