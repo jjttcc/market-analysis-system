@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Run the java-based market analysis command-line client.
+
+Progname=$(basename $0)
+basedir=$(dirname $0)/..
+classdir=$basedir/lib/classes
+
+usage() {
+	echo "Usage: $Progname [-h hostname] port_number"
+}
+
+check_settings() {
+	if [ ! -d $classdir -o ! -x $classdir ]; then
+		echo "$Progname: Cannot access class directory: $classdir" >&2
+		exit -1
+	fi
+	if [ ! -r ${classdir}/${main}.class ]; then
+		echo "$Progname: Cannot access java class file: " \
+				"${classdir}/${main}.class" >&2
+		exit -1
+	fi
+}
+
+host=$(hostname)
+main=CL_Client
+while [ $# -gt 0 ]
+do
+	case $1 in
+		-h) shift; host=$1; shift ;;
+		-*) usage; exit 0 ;;
+		*) port_number=$1; shift ;;
+	esac
+done
+
+if [ -z "$port_number" ]; then
+	usage
+	exit -1
+fi
+
+check_settings
+cd $classdir
+java $main $host $port_number
