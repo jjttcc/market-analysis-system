@@ -3,7 +3,7 @@
 
 The Technical Analysis Library (TAL) provides functionality enabling the
 creation of technical analysis (TA) applications.  Examples of typical
-applications that would use library include charting programs (such
+applications that would use the library include charting programs (such
 as the well-known commercial program MetaStock) and technical analysis
 engines that can be run periodically to generate buy and sell signals.
 (For example, on a UNIX system, a cron job can be scheduled to run every
