@@ -112,6 +112,10 @@ filter_output()
 run_at_index()
 # Run a test on file $Tinput for indicator at index $Tindex.
 {
+	if [ ! -r input/$Tinput ]; then
+		echo "File input/$Tinput is not readable" >&2
+		return -1
+	fi
 	echo "s
 1
 v
