@@ -9,8 +9,21 @@ indexing
 deferred class MARKET_EVENT_REGISTRANT inherit
 
 	EVENT_REGISTRANT_WITH_HISTORY
+		rename
+			make as histmake
+		undefine
+			end_notification
 		redefine
-			event_history, event_cache
+			event_history, notify
+		end
+
+	EVENT_REGISTRANT_WITH_CACHE
+		rename
+			make as cache_make
+		undefine
+			is_interested_in
+		redefine
+			event_cache, notify
 		end
 
 	EXCEPTIONS
@@ -26,6 +39,14 @@ deferred class MARKET_EVENT_REGISTRANT inherit
 	GENERAL_UTILITIES
 		export {NONE}
 			all
+		end
+
+feature {NONE} -- Initialization
+
+	make is
+		do
+			histmake
+			cache_make
 		end
 
 feature -- Access
@@ -44,6 +65,12 @@ feature -- Access
 			-- Event history file name
 
 feature -- Basic operations
+
+	notify (e: TYPED_EVENT) is
+		do
+			{EVENT_REGISTRANT_WITH_HISTORY} Precursor (e)
+			{EVENT_REGISTRANT_WITH_CACHE} Precursor (e)
+		end
 
 	load_history is
 		local
