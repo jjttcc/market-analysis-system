@@ -1,0 +1,10 @@
+set -x
+(file ./mas
+ls -ld ./mas
+sum ./mas
+./mas -v
+./mas -b 2292 &
+sleep 1
+echo 'w
+> ^E'|macl 2292
+) >/tmp/masinfo

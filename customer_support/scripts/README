@@ -1,0 +1,2 @@
+mkmasinfo   - script to gather info. about a mas executable, to make sure
+              it's the right file, right size, right version, etc.
