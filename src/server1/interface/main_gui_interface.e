@@ -211,12 +211,12 @@ feature {NONE} -- Hook routine implementation
 			end
 		end
 
-	is_logout_request (id: INTEGER): BOOLEAN is
+	is_logout_request (id: like request_id): BOOLEAN is
 		do
 			Result := id = Logout_request
 		end
 
-	is_login_request (id: INTEGER): BOOLEAN is
+	is_login_request (id: like request_id): BOOLEAN is
 		do
 			Result := id = Login_request
 		end
@@ -226,7 +226,7 @@ feature {NONE} -- Implementation
 	make_request_handlers is
 			-- Create the request handlers.
 		local
-			rh: HASH_TABLE [MAS_REQUEST_COMMAND, INTEGER]
+			rh: like request_handlers
 		do
 			create rh.make (0)
 			rh.extend (create {MARKET_DATA_REQUEST_CMD}.make (
@@ -277,7 +277,7 @@ feature {NONE} -- Implementation
 
 feature {NONE}
 
-	request_handlers: HASH_TABLE [MAS_REQUEST_COMMAND, INTEGER]
+	request_handlers: HASH_TABLE [MAS_REQUEST_COMMAND, HASHABLE]
 			-- Handlers of client requests received via io_medium
 
 	message_body: STRING
