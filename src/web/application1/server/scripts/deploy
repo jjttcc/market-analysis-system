@@ -1,7 +1,8 @@
 #!/bin/sh
 
-warfile=/jupiter/home/development/jtc/finance/src/web/application1/server/dist/mas-0.1-dev.war
-webdir=/usr/java/jakarta-tomcat-5.0.27/webapps/mas
+env_file=`dirname $0`/masweb-env
+ls -ld $env_file
+. $env_file
 
 cd $webdir
 jar xvf $warfile
