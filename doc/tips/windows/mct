@@ -1,0 +1,13 @@
+Tips for the MAS Control Terminal (MCT) on Windows
+
+Setting up the MCT for debugging:
+
+Right-click on the "Main MAS Terminal" icon
+Click on "Properties"
+Select "Shortcut"
+In the "Target" slot, at the end, add a space and the string -debug (that
+   is, " -debug", without the quotes).
+Click "OK".
+
+The next time you start the MCT, a window will appear with debugging
+information in it.
