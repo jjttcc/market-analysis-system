@@ -111,6 +111,7 @@ feature -- Status report
 		end
 
 	target_cursor_not_affected: BOOLEAN is
+			-- True
 		once
 			Result := true
 		end

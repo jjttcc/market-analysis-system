@@ -72,6 +72,7 @@ print ("ls.exe - target.index: ") print (target.index) print("%N")
 feature -- Status report
 
 	target_cursor_not_affected: BOOLEAN is false
+			-- False
 
 feature {NONE}
 

@@ -39,5 +39,6 @@ feature -- Status report
 	arg_mandatory: BOOLEAN is false
 
 	target_cursor_not_affected: BOOLEAN is true
+			-- True
 
 end -- class BASIC_LINEAR_COMMAND

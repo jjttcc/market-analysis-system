@@ -26,6 +26,7 @@ feature -- Access
 feature -- Status report
 
 	target_cursor_not_affected: BOOLEAN is
+			-- True
 		once
 			Result := true
 		end

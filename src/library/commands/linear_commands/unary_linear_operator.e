@@ -63,6 +63,7 @@ feature -- Status report
 	arg_mandatory: BOOLEAN is false
 
 	target_cursor_not_affected: BOOLEAN is
+			-- True
 		once
 			Result := true
 		end
