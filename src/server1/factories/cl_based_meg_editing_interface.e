@@ -46,65 +46,92 @@ feature -- Basic operations
 	execute is
 		local
 			test_left_target: BOOLEAN
+			stoch_up, stoch_down, close_MA: MARKET_EVENT_GENERATOR
+			up_up, down_down: MARKET_EVENT_GENERATOR
+			macd_up, macd_down: TWO_VARIABLE_FUNCTION_ANALYZER
 		do
 			!LINKED_LIST [MARKET_EVENT_GENERATOR]!product.make
 			test_left_target := true
-			product.extend (stochastic_analyzer)
-			product.extend (macd_analyzer)
-			product.extend (close_MA_analyzer)
+			stoch_up := stochastic_analyzer (
+					"Stochastic - -> + slope change event", true)
+			product.extend (stoch_up)
+			stoch_down := stochastic_analyzer (
+					"Stochastic + -> - slope change event", false)
+			product.extend (stoch_down)
+			macd_up := macd_analyzer (
+					"MACD difference/signal crossover event - below to above")
+			product.extend (macd_up)
+			macd_down := macd_analyzer (
+					"MACD difference/signal crossover event - above to below")
+			product.extend (macd_down)
+			macd_up.set_below_to_above_only
+			macd_down.set_above_to_below_only
+			close_MA := close_MA_analyzer
+			product.extend (close_MA)
 			-- For testing, simply re-use the stochastic analyzer and the
 			-- macd analyzer in the compound analyzer.
-			if test_left_target then
-				product.extend (compound_analyzer (product @ 2, product @ 1,
+			-- MACD upward crossover and stochastic upward slope change:
+			up_up := compound_analyzer (macd_up, stoch_up,
+								concatenation (<<"[", macd_up.event_type.name,
+									"] / [", stoch_up.event_type.name, "]">>),
+								-- This last parameter can just be Void, but
+								-- the type is supplied here for testing
+								-- purposes - result should be the same:
+									macd_up.event_type)
+			product.extend (up_up)
+			-- MACD downward crossover and stochastic downward slope change:
+			down_down := compound_analyzer (macd_down, stoch_down,
+								concatenation (<<"[",
+								macd_down.event_type.name, "] / [",
+								stoch_down.event_type.name, "]">>), Void)
+			product.extend (down_down)
+			product.extend (compound_analyzer (up_up, close_MA,
 							concatenation (<<"[",
-								(product @ 2).event_type.name, "] / [",
-								(product @ 1).event_type.name, "]">>),
-								(product @ 2).event_type))
-			else
-				product.extend (compound_analyzer (product @ 2, product @ 1,
+								up_up.event_type.name, "] / [",
+								close_MA.event_type.name, "]">>),
+								stoch_up.event_type))
+			product.extend (compound_analyzer (down_down, close_MA,
 							concatenation (<<"[",
-								(product @ 2).event_type.name, "] / [",
-								(product @ 1).event_type.name, "]">>), Void))
-			end
-			if test_left_target then
-				product.extend (compound_analyzer (product @ 4, product @ 3,
-							concatenation (<<"[",
-								(product @ 4).event_type.name, "] / [",
-								(product @ 3).event_type.name, "]">>),
-								(product @ 1).event_type))
-			else
-				product.extend (compound_analyzer (product @ 4, product @ 3,
-							concatenation (<<"[",
-								(product @ 4).event_type.name, "] / [",
-								(product @ 3).event_type.name, "]">>), Void))
-			end
+								down_down.event_type.name, "] / [",
+								close_MA.event_type.name, "]">>), Void))
 		end
 
 feature {NONE} -- Hard-coded market analyzer building procedures
 
 	Previous_slope_offset: INTEGER is -1
 			-- Offset value for "previous" slope analyzer
+	
+	Neg_to_pos, Pos_to_neg, Both: INTEGER is unique
+			-- Slope specifications
 
-	stoch_slope_spec: ARRAY [INTEGER] is
+	set_slope_spec (op: SIGN_ANALYZER; direction: INTEGER) is
+			-- Add a slope spec. for the specified direction to op.
 		do
-			!!Result.make (1, 2)
-			-- Specify a negative to positive slope change:
-			Result := <<-1, 1>>
-		ensure
-			Result.count = 2
+			inspect
+				direction
+			when Neg_to_pos then
+				-- negative to positive slope change:
+				op.add_sign_change_spec (<<-1, 1>>)
+			when Pos_to_neg then
+				op.add_sign_change_spec (<<1, -1>>)
+			when Both then
+				op.add_sign_change_spec (<<-1, 1>>)
+				op.add_sign_change_spec (<<1, -1>>)
+			end
 		end
 
-	stochastic_analyzer: ONE_VARIABLE_FUNCTION_ANALYZER is
+	stochastic_analyzer (name: STRING; slope_up: BOOLEAN):
+				ONE_VARIABLE_FUNCTION_ANALYZER is
 			-- Analyzer of slow stochastic
 		local
 			l: LIST [MARKET_FUNCTION]
 			f: MARKET_FUNCTION
 			slope_analyzer: SLOPE_ANALYZER
-			previous_cmd: SETTABLE_OFFSET_COMMAND
 			sign_analyzer: SIGN_ANALYZER
+			previous_cmd: SETTABLE_OFFSET_COMMAND
 			blc: BASIC_LINEAR_COMMAND
-			bottom_limit: CONSTANT
-			less_than: LT_OPERATOR
+			boundary: CONSTANT
+			relation: BINARY_OPERATOR [BOOLEAN, REAL]
 			and_op: AND_OPERATOR
 		do
 			l := function_library
@@ -122,13 +149,21 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			!!previous_cmd.make (f.output, slope_analyzer)
 			previous_cmd.set_offset (Previous_slope_offset)
 			!!sign_analyzer.make (previous_cmd, slope_analyzer, false)
-			sign_analyzer.add_sign_change_spec (stoch_slope_spec)
 			!!blc.make (f.output)
-			!!bottom_limit.make (30)
-			!!less_than.make (blc, bottom_limit)
-			!!and_op.make (sign_analyzer, less_than)
-			!!Result.make (f, and_op,
-				"Stochastic - -> + slope change event", period_types @ "daily")
+			-- If slope_up (negative-to-positive slope change) then set up
+			-- for detecting slope change below 30; else set up for
+			-- detecting slope change (pos-to-neg) above 70.
+			if slope_up then
+				!!boundary.make (30)
+				!LT_OPERATOR!relation.make (blc, boundary)
+				set_slope_spec (sign_analyzer, Neg_to_pos)
+			else
+				!!boundary.make (70)
+				!GT_OPERATOR!relation.make (blc, boundary)
+				set_slope_spec (sign_analyzer, Pos_to_neg)
+			end
+			!!and_op.make (sign_analyzer, relation)
+			!!Result.make (f, and_op, name, period_types @ "daily")
 			-- Set offset such that the cursor position used by previous_cmd,
 			-- which has a negative offset, will always be valid.
 			Result.set_offset (Previous_slope_offset.abs)
@@ -136,7 +171,7 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			--!!!!!!!!to be set to a reasonable value!!!!!!!!!!
 		end
 
-	macd_analyzer: TWO_VARIABLE_FUNCTION_ANALYZER is
+	macd_analyzer (name: STRING): TWO_VARIABLE_FUNCTION_ANALYZER is
 			-- Analyzer of MACD signal line crossing difference
 		local
 			l: LIST [MARKET_FUNCTION]
@@ -164,9 +199,7 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			end
 			check not l.exhausted end
 			f2 := l.item
-			!!Result.make (f1, f2,
-				"MACD difference/signal crossover event",
-				period_types @ "weekly")
+			!!Result.make (f1, f2, name, period_types @ "weekly")
 			--!!!!!!!!!!!!!!Remember that Result's start_date_time needs
 			--!!!!!!!!to be set to a reasonable value!!!!!!!!!!
 		end
