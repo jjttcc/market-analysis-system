@@ -1,7 +1,7 @@
+PATH=$PATH:$PWD
 >repl_spec
-echo My args are '(quoted)': "'$*'" >>repl_spec
-echo arg count: $# >>repl_spec
+echo "# arg count: $#" >>repl_spec
 appdir="$*"
 echo replacestart>>repl_spec
-echo {application_directory}"$appdir">>repl_spec
+echo {application_directory}"$appdir"|sed 's@\\@/@g'>>repl_spec
 echo replaceend>>repl_spec
