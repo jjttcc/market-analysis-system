@@ -288,17 +288,20 @@ feature {NONE} -- Implementation
 			mflist: STORABLE_LIST [MARKET_FUNCTION]
 			retrieval_failed: BOOLEAN
 			app_env: expanded APP_ENVIRONMENT
-			full_path_name: STRING
+			full_path_name, file_errinfo: STRING
 		do
+			file_errinfo := "The file may be corrupted or you may have %
+				%an incompatible version.%N"
 			full_path_name := app_env.file_name_with_app_directory (
 				indicators_file_name)
 			if retrieval_failed then
 				if exception = Retrieve_exception then
 					log_errors (<<"Retrieval of indicator library file ",
-								full_path_name, " failed%N">>)
+						full_path_name, " failed.%N", file_errinfo>>)
 				else
-					log_errors (<<"Error occurred while retrieving function %
-									%library: ", meaning(exception), "%N">>)
+					log_errors (<<"Error occurred while retrieving indicator %
+						%%Nlibrary file (", meaning(exception), "):%N",
+						full_path_name, "%N", file_errinfo>>)
 				end
 				die (-1)
 			else
