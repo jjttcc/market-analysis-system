@@ -1,7 +1,8 @@
 indexing
 	description:
 		"Selection of routines for converting data for a tradable input %
-		%from an outside source into the format expected by MAS"
+		%from an outside source into the format expected by technical %
+		%analysis applications"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
