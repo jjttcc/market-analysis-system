@@ -1,6 +1,8 @@
 #!/bin/bash
 # Extract EOD data from ASCII data files for each stock, format the
 # data, and append it to the stock data file in the data directory.
+# NOTE: Expects one or both of the following environment variables to be
+# set to a non-empty string: MAS_DATA_IN_DB, MAS_DATA_IN_FILES.
 
 Progname="$(basename $0)"
 
@@ -12,7 +14,7 @@ usage()
 
 fail()
 {
-	echo "Fatal error: $1"
+	echo "Fatal error: $1" >&2
 	exit -1
 }
 
@@ -27,9 +29,32 @@ insert()
 	return $?
 }
 
+# Is the data-in-files environment variable set?
+file_var_set() {
+	[ ! -z "$MAS_DATA_IN_FILES" ]
+	return $?
+}
+
+# Is the data-in-database environment variable set?
+db_var_set() {
+	[ ! -z "$MAS_DATA_IN_DB" ]
+	return $?
+}
+
+# All symbols in the MAS database
+symbols() {
+	if file_var_set; then
+		ls *.txt|sed 's/.txt//'
+	elif db_var_set; then
+		mas_symbols
+	else
+		fail "Code defect: MAS_DATA_IN_FILES or MAS_DATA_IN_DB must be defined."
+	fi
+}
+
 ok_to_append()
 {
-	if [ ! -r $2 ]; then
+	if file_var_set && [ ! -r $2 ]; then
 		echo "Can't read $2"; exit -1
 	fi
 
@@ -37,7 +62,7 @@ ok_to_append()
 		result=1
 	else
 		# If $1 (a date) is already in the file, no need to append.
-		if grep "^$1" $2 >/dev/null 2>&1; then
+		if file_var_set && grep "^$1" $2 >/dev/null 2>&1; then
 			result=1
 		else
 			result=0
@@ -52,14 +77,57 @@ add_record()
 {
 	record="$1"
 	file=$2
-	wkfile=/tmp/distd.$$
-	if insert; then
-		echo "$record"|cat $file - |sort -nu >>$wkfile
-		mv $wkfile $file
-		rm -f $wkfile
-	else
-		echo "$record" >>$file
+	if file_var_set; then
+		echo "Adding $record to $file." >&2
+		if insert; then
+			echo "$record"|cat $file - |sort -nu >>$wkfile
+			mv $wkfile $file
+			rm -f $wkfile
+		else
+			echo "$record" >>$file
+		fi
 	fi
+	if db_var_set; then
+		echo "$lowercase_symbol,$record" >>$db_datafile
+		dbrecords=true
+	fi
+}
+
+setup() {
+	if [ -z "$MARKET_DATA_DIRECTORY" ]; then
+		echo "$Progname: Error, environment variable MARKET_DATA_DIRECTORY" \
+			"not set - exiting ..."
+		exit -1
+	fi
+
+	if [ ! -d "$MARKET_DATA_DIRECTORY" ]; then
+		echo "$Progname: Error, $MARKET_DATA_DIRECTORY is not a directory" \
+			"exiting ..."
+		exit -2
+	fi
+
+	cd $MARKET_DATA_DIRECTORY/../database
+	if [ $? -ne 0 ]; then
+		echo "$Progname: cd to $MARKET_DATA_DIRECTORY/../database " \
+			"failed, exiting ..."
+		exit -3
+	fi
+	if file_var_set; then wkfile=/tmp/distd.$$;fi
+	if db_var_set; then db_datafile=/tmp/dbdata.$$;fi
+
+	source_data_file=$1
+	date=$2
+	if [ $# -eq 3 -a "$3" = insert ]; then
+		Insert_requested=true
+	else
+		Insert_requested=false
+	fi
+
+	if [ ! -r "$source_data_file" ]
+	then
+		fail "Cannot read $source_data_file"
+	fi
+	dbrecords=false
 }
 
 if [ $# -lt 2 ]
@@ -68,45 +136,20 @@ then
 	exit -1
 fi
 
-if [ -z "$MARKET_DATA_DIRECTORY" ]; then
-	echo "$Progname: Error, environment variable MARKET_DATA_DIRECTORY" \
-		"not set - exiting ..."
-	exit -1
-fi
-
-if [ ! -d "$MARKET_DATA_DIRECTORY" ]; then
-	echo "$Progname: Error, $MARKET_DATA_DIRECTORY is not a directory" \
-		"exiting ..."
-	exit -2
-fi
-
-cd $MARKET_DATA_DIRECTORY/../database
-if [ $? -ne 0 ]; then
-	echo "$Progname: cd to $MARKET_DATA_DIRECTORY/../database failed, exiting ..."
-	exit -3
-fi
-
-source_data_file=$1
-date=$2
-if [ $# -eq 3 -a $3 = insert ]; then
-	Insert_requested=true
-else
-	Insert_requested=false
-fi
-
-if [ ! -r "$source_data_file" ]
-then
-	fail "Cannot read $source_data_file"
-fi
-
+setup $*
 echo processing $source_data_file
 
-for f in *.txt
+for s in $(symbols)
 do
-	symbol=$(basename $f .txt|tr [a-z] [A-Z])
+	stkfile=$s.txt
+	symbol=$(echo $s|tr [a-z] [A-Z])
+	lowercase_symbol=$s
 	record=$(grep "^$symbol," $source_data_file|format)
-	if [ ! -z "$record" ] && ok_to_append "$date" "$f"; then
-		echo "appending $record to $f"
-		add_record "$record" $f
+	if [ ! -z "$record" ] && ok_to_append "$date" "$stkfile"; then
+		echo "Appending $record for $s"
+		add_record "$record" $stkfile
 	fi
 done
+if [ "$dbrecords" = true ]; then
+	add_daily_stock_records <$db_datafile
+fi
