@@ -145,6 +145,11 @@ public class DataSet extends Object {
 **********************/
 
   /**
+   * Drawer of price bars - e.g., tic bars or candles
+   * [Need to find a name for it and create the class.]
+   */
+	protected ClassThatDrawsThePriceBar drawer;
+  /**
    * The data X maximum. 
    * Once the data is loaded this will never change.
    */
@@ -683,7 +688,9 @@ public class DataSet extends Object {
               }
 //        If either point is inside draw the segment
               if ( inside0 || inside1 )  {
-                      g.drawLine(x0,y0,x1,y1);
+					//Replace: g.drawLine(x0,y0,x1,y1);
+				   //With:
+				   drawer.draw(/* args? */);
               }
 
 /*
