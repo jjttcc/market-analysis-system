@@ -117,25 +117,11 @@ feature {NONE} -- Implementation
 		do
 			create {LINKED_SET [G]} tree_objects.make
 			tree_objects.fill (valid_types (current_objects, objects))
-			from
-				create tree_names.make (tree_objects.count)
-				tree_objects.start
-			until
-				tree_objects.exhausted
-			loop
-				tree_names.extend (tree_objects.item.generator)
-				tree_objects.forth
-			end
+			create tree_names.make (tree_objects.count)
+			tree_objects.do_all (agent add_selection_tag (tree_names, ?))
 			distinguish_duplicates (tree_names)
-			from
-				create obj_names.make (objects.count)
-				objects.start
-			until
-				objects.exhausted
-			loop
-				obj_names.extend (objects.item.generator)
-				objects.forth
-			end
+			create obj_names.make (objects.count)
+			objects.do_all (agent add_selection_tag (obj_names, ?))
 			if tree_names.is_empty then
 				general_msg := concatenation (<<
 							"Select an object for the ", tag, ":%N">>)
@@ -280,6 +266,15 @@ feature {NONE} -- Implementation
 
 	current_object_list: LIST [G]
 
+	add_selection_tag (taglist: SEQUENCE [STRING]; o: G) is
+			-- Extract relevant information from `o' and add it to
+			-- `taglist'.
+		require
+			args_exist: taglist /= Void and o /= Void
+		do
+			taglist.extend (o.generator + name_for (o))
+		end
+
 feature {NONE} -- Implementation - hook methods
 
 	accepted_by_user (o: G): BOOLEAN is
@@ -315,6 +310,17 @@ feature {NONE} -- Implementation - hook methods
 	descendant_reset is
 			-- Reset descendant's state - null by default - redefine if needed.
 		do
+		end
+
+	name_for (o: G): STRING is
+			-- `o's name (preceded by a space and enclosed in parentheses),
+			-- or empty string if `o' has no name or if the name is not
+			-- relevant for editing purposes
+		require
+			o_exists: o /= Void
+		deferred
+		ensure
+			Result_exists: Result /= Void
 		end
 
 end -- OBJECT_EDITING_INTERFACE

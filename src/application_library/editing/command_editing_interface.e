@@ -696,6 +696,14 @@ feature {NONE} -- Implementation
 			set_editability (o)
 		end
 
+	name_for (o: COMMAND): STRING is
+		do
+			Result := ""
+			if o.name /= Void and then not o.name.is_empty then
+				Result := " (" + o.name + ")"
+			end
+		end
+
 feature {NONE} -- Implementation
 
 	descendant_reset is

@@ -707,6 +707,11 @@ feature {NONE} -- Implementation
 			end
 		end
 
+	name_for (o: MARKET_FUNCTION): STRING is
+		do
+			Result := ""
+		end
+
 feature {NONE} -- Implementation - indicator editing
 
 	do_edit is
