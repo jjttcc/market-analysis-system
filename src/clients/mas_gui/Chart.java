@@ -199,6 +199,11 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		new ErrorBox("Warning", msg, this_chart);
 	}
 
+	// Print fatal error and exit after saving settings.
+	public void fatal(String s, Exception e) {
+		facilities.fatal(s, e);
+	}
+
 	/** Log out of all sessions and exit. */
 	public void log_out_and_exit(int status) {
 		// Log out the corresponding session for all but one window.
