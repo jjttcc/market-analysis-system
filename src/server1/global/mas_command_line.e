@@ -389,15 +389,12 @@ feature {NONE} -- Implementation
 					create intraday_extension.make (contents.item.count - 2)
 					intraday_extension.append (contents.item.substring (
 						3, contents.item.count))
---!!!Remove:					last_argument_found := True
 					contents.remove
 				else
---!!!Remove:					last_argument_found := True
 					contents.remove
 					if not contents.exhausted then
 						create intraday_extension.make (contents.item.count)
 						intraday_extension.append (contents.item)
---!!!Ditto:						last_argument_found := True
 						contents.remove
 					end
 				end
@@ -407,15 +404,12 @@ feature {NONE} -- Implementation
 					create daily_extension.make (contents.item.count - 2)
 					daily_extension.append (contents.item.substring (
 						3, contents.item.count))
---!!!etc...					last_argument_found := True
 					contents.remove
 				else
---					last_argument_found := True
 					contents.remove
 					if not contents.exhausted then
 						create daily_extension.make (contents.item.count)
 						daily_extension.append (contents.item)
---						last_argument_found := True
 						contents.remove
 					end
 				end
