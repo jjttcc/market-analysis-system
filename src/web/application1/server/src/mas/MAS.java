@@ -17,17 +17,59 @@ public final class MAS extends GenericServlet {
 	public void service(ServletRequest request,
 			ServletResponse response)
 			throws ServletException, IOException {
+		String clientMsg = null;
+		try {
+			log("Connected");
+			log("Reading data...");
+			clientMsg = input_string(request.getReader());
+			log("Finished reading.");
+			log("Received \"" + clientMsg + "\"");
+			log("[Complete.]");
+			sendResponse(response, "You said: " + clientMsg);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	String input_string(Reader r) throws IOException {
+		char[] buffer = new char[16384];
+		int c = 0, i = 0;
+		do {
+			c = r.read();
+			buffer[i] = (char) c;
+			++i;
+		} while (c != -1);
+		return new String(buffer, 0, i - 1);
+	}
+
+	private void sendResponse(ServletResponse response, String msg) {
+		try {
+			PrintWriter writer =
+				new PrintWriter(response.getOutputStream(), true);
+			log("Sending message \"" + msg + "\" to client");
+			writer.print(msg);
+			writer.flush();
+			writer.close();
+			log("Data transmission complete.");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void Oldservice(ServletRequest request,
+			ServletResponse response)
+			throws ServletException, IOException {
 		ObjectInputStream input = null;
 		String clientMsg = null;
 		try {
 			input = new ObjectInputStream(request.getInputStream());
-			System.out.println("Connected");
-			System.out.println("Reading data...");
+			log("Connected");
+			log("Reading data...");
 			clientMsg = (String) input.readObject();
-			System.out.println("Finished reading.");
+			log("Finished reading.");
 			input.close();
-			System.out.println("Received " + clientMsg);
-			System.out.println("[Complete.]");
+			log("Received " + clientMsg);
+			log("[Complete.]");
 			sendResponse(response, "You said: " + clientMsg);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -36,15 +78,15 @@ public final class MAS extends GenericServlet {
 
 // Implementation
 
-	private void sendResponse(ServletResponse response, String msg) {
+	private void OldsendResponse(ServletResponse response, String msg) {
 		ObjectOutputStream outputStream;
 		try {
 			outputStream = new ObjectOutputStream(response.getOutputStream());
-			System.out.println("Sending message " + msg + " to client");
+			log("Sending message " + msg + " to client");
 			outputStream.writeObject(msg);
 			outputStream.flush();
 			outputStream.close();
-			System.out.println("Data transmission complete.");
+			log("Data transmission complete.");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
