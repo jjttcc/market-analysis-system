@@ -36,6 +36,10 @@ feature -- Status report
 	error_occurred: BOOLEAN
 			-- Did an error occur during the last operation?
 
+	changed: BOOLEAN
+			-- Did the last operation produce a change that may need
+			-- to be saved to persistent store?
+
 feature -- Basic operations
 
 	edit_event_generator_menu is
@@ -45,6 +49,8 @@ feature -- Basic operations
 		local
 			selection: INTEGER
 		do
+			changed := false
+			working_meg_library := deep_clone (market_event_generation_library)
 			from
 				selection := Null_value
 			until
@@ -59,6 +65,14 @@ feature -- Basic operations
 					remove_event_generator
 				when View_eg_value then
 					view_event_generator
+				when Edit_eg_indicator_value then
+					edit_event_generator_indicator
+				when Save_value then
+					market_event_generation_library.copy (working_meg_library)
+					market_event_generation_library.save
+					working_meg_library := deep_clone (
+						market_event_generation_library)
+					changed := false
 				when Show_help_value then
 					show_help (help @ help.Edit_event_generators)
 				else
@@ -84,19 +98,20 @@ feature {NONE} -- Implementation
 			until
 				selection = Exit_menu_value
 			loop
-				selection := remove_eg_selection
+				selection := eg_selection (" to remove")
 				if selection /= Exit_menu_value then
-					meg := market_event_generation_library @ selection
+					meg := working_meg_library @ selection
 					inspect
 						character_choice (concatenation
 							(<<"Remove ", meg.event_type.name,
 							"? (y[es]/n[o]/q[uit]) ">>), "yYnNqQ")
 					when 'y', 'Y' then
-						market_event_generation_library.start
-						market_event_generation_library.prune (
-							market_event_generation_library @ selection)
+						working_meg_library.start
+						working_meg_library.prune (
+							working_meg_library @ selection)
 						show_message (concatenation (<<"Market analyzer for ",
 									meg.event_type.name, " removed.">>))
+						changed := true
 					when 'n', 'N' then
 					when 'q', 'Q' then
 						selection := Exit_menu_value
@@ -116,10 +131,32 @@ feature {NONE} -- Implementation
 			until
 				selection = Exit_menu_value
 			loop
-				selection := view_eg_selection
+				selection := eg_selection (" to view")
 				if selection /= Exit_menu_value then
 					display_event_generator (
 						market_event_generation_library @ selection)
+				end
+			end
+		end
+
+	edit_event_generator_indicator is
+			-- Edit the indicators for elements of the
+			-- `market_event_generation_library'.
+		local
+			selection: INTEGER
+		do
+			from
+				selection := Null_value
+			until
+				selection = Exit_menu_value
+			loop
+				selection := eg_selection (" to edit")
+				if selection /= Exit_menu_value then
+					function_editor.edit_indicator_menu ((
+						working_meg_library @ selection).indicators)
+					if not changed then
+						changed := function_editor.changed
+					end
 				end
 			end
 		end
@@ -141,6 +178,7 @@ feature {NONE} -- Implementation
 			if not error_occurred then
 				show_message (concatenation (
 					<<last_event_generator.event_type.name, " added.">>))
+				changed := true
 			end
 		end
 
@@ -164,7 +202,8 @@ feature {NONE} -- Implementation
 					show_message (concatenation (<<
 						eg_maker.left_target_type.name, " added.">>))
 				end
-				create_event_generator (eg_maker, new_event_type_name)
+				create_event_generator (eg_maker, new_event_type_name,
+					working_meg_library)
 				last_event_generator := eg_maker.product
 			else
 				error_occurred := true
@@ -201,7 +240,8 @@ feature {NONE} -- Implementation
 				one_var_exclude_cmds))
 			fa_maker.set_period_type (period_type_choice)
 			fa_maker.set_left_offset (operator_maker.left_offset)
-			create_event_generator (fa_maker, new_event_type_name)
+			create_event_generator (fa_maker, new_event_type_name,
+				working_meg_library)
 			last_event_generator := fa_maker.product
 		ensure
 			-- last_event_generator references the newly created
@@ -226,7 +266,8 @@ feature {NONE} -- Implementation
 			if op /= Void then
 				fa_maker.set_operator (op)
 			end
-			create_event_generator (fa_maker, new_event_type_name)
+			create_event_generator (fa_maker, new_event_type_name,
+				working_meg_library)
 			last_event_generator := fa_maker.product
 		ensure
 			-- last_event_generator references the newly created
@@ -288,13 +329,8 @@ feature {NONE} -- Hook methods
 		deferred
 		end
 
-	remove_eg_selection: INTEGER is
-			-- User's selection of an MEG to be removed from the library
-		deferred
-		end
-
-	view_eg_selection: INTEGER is
-			-- User's selection of an MEG to view
+	eg_selection (msg_tail: STRING): INTEGER is
+			-- User's selection of an MEG
 		deferred
 		end
 
@@ -401,20 +437,12 @@ feature {NONE} -- Implementation
 
 	function_editor: FUNCTION_EDITING_INTERFACE
 
-	Create_new_eg_value, Remove_eg_value, View_eg_value,
-	Show_help_value, Two_value, One_value, Compound_eg_type_value,
-	Simple_eg_type_value: INTEGER is unique
+	working_meg_library: STORABLE_LIST [MARKET_EVENT_GENERATOR]
+
+	Create_new_eg_value, Remove_eg_value, View_eg_value, Save_value,
+	Edit_eg_indicator_value, Show_help_value, Two_value, One_value,
+	Compound_eg_type_value, Simple_eg_type_value: INTEGER is unique
 			-- Menu selection value
-
-	Exit_menu_value: INTEGER is -1
-			-- Value indicating menu is to be exited - negative so as not
-			-- to conflict with the unique values or with the numbered
-			-- list selections
-
-	Null_value: INTEGER is -2
-			-- Value indicating nothing - negative so as not
-			-- to conflict with the unique values or with the numbered
-			-- list selections
 
 invariant
 

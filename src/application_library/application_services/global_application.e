@@ -88,24 +88,25 @@ feature -- Access
 		end
 
 	create_event_generator (eg_maker: EVENT_GENERATOR_FACTORY;
-				event_type_name: STRING) is
+				event_type_name: STRING;
+				meg_list: STORABLE_LIST [MARKET_EVENT_GENERATOR]) is
 			-- Create a new MARKET_EVENT_GENERATOR and a new associated
 			-- EVENT_TYPE (with `event_type_name') and add the new
-			-- MARKET_EVENT_GENERATOR  to `market_event_generation_library'.
+			-- MARKET_EVENT_GENERATOR  to `meg_list'.
 		require
 			not_void: eg_maker /= Void and event_type_name /= Void
 		do
 			eg_maker.set_event_type (new_event_type (event_type_name))
 			eg_maker.execute
-			market_event_generation_library.extend (eg_maker.product)
+			meg_list.extend (eg_maker.product)
 		ensure
-			one_more_eg: market_event_generation_library.count =
-				old market_event_generation_library.count + 1
+			one_more_eg: meg_list.count =
+				old meg_list.count + 1
 			product_in_library: eg_maker.product /= Void and
-				market_event_generation_library.has (eg_maker.product)
+				meg_list.has (eg_maker.product)
 		end
 
-	function_library: LIST [MARKET_FUNCTION] is
+	function_library: STORABLE_LIST [MARKET_FUNCTION] is
 			-- All defined market functions
 		local
 			storable: STORABLE
@@ -141,7 +142,7 @@ feature -- Access
 			retry
 		end
 
-	market_event_generation_library: LIST [MARKET_EVENT_GENERATOR] is
+	market_event_generation_library: STORABLE_LIST [MARKET_EVENT_GENERATOR] is
 			-- All defined event generators
 		local
 			storable: STORABLE
@@ -214,7 +215,7 @@ feature -- Access
 			end
 		end
 
-	market_event_registrants: LIST [MARKET_EVENT_REGISTRANT] is
+	market_event_registrants: STORABLE_LIST [MARKET_EVENT_REGISTRANT] is
 			-- All defined event registrants
 		local
 			storable: STORABLE

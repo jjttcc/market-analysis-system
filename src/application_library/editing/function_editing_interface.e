@@ -48,6 +48,36 @@ feature -- Constants
 	Complex_function: STRING is "COMPLEX_FUNCTION"
 			-- Name of COMPLEX_FUNCTION
 
+feature -- Status report
+
+	changed: BOOLEAN
+			-- Did the last operation produce a change that may need to
+			-- be saved to persistent store?
+
+feature -- Basic operations
+
+	edit_indicator_menu (l: LIST [MARKET_FUNCTION]) is
+			-- Menu for editing indicators in `l'
+		local
+			selection: INTEGER
+			indicator: MARKET_FUNCTION
+		do
+			changed := false
+			from
+				selection := Null_value
+			until
+				selection = Exit_menu_value
+			loop
+				selection := list_selection_with_backout (
+					names_from_function_list(l),
+					"Select an indicator to edit")
+				if selection /= Exit_menu_value then
+					indicator := l @ selection
+					edit_parameter_menu (indicator.parameters)
+				end
+			end
+		end
+
 feature {APPLICATION_FUNCTION_EDITOR} -- Access
 
 	function_types: HASH_TABLE [ARRAYED_LIST [MARKET_FUNCTION], STRING] is
@@ -90,24 +120,15 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 	market_function_selection (msg: STRING): MARKET_FUNCTION is
 			-- User-selected MARKET_FUNCTION from the function library
 		local
-			fnames: ARRAYED_LIST [STRING]
 			l: LINKED_LIST [MARKET_FUNCTION]
 			i: INTEGER
 		do
 			create l.make
 			l.append (function_library)
 			l.extend (function_with_generator ("STOCK"))
-			create fnames.make (1)
 			from
-				l.start
-			until
-				l.exhausted
-			loop
-				fnames.extend (l.item.name)
-				l.forth
-			end
-			from
-				i := list_selection (fnames, concatenation(<<"Select ", msg>>))
+				i := list_selection (names_from_function_list (l),
+					concatenation(<<"Select ", msg>>))
 				l.start
 			until
 				i = l.index
@@ -120,7 +141,6 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 	complex_function_selection (msg: STRING): COMPLEX_FUNCTION is
 			-- User-selected COMPLEX_FUNCTION from the function library
 		local
-			fnames: ARRAYED_LIST [STRING]
 			l: LIST [COMPLEX_FUNCTION]
 			f: COMPLEX_FUNCTION
 		do
@@ -138,16 +158,7 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 				end
 				function_library.forth
 			end
-			create fnames.make (l.count)
-			from
-				l.start
-			until
-				l.exhausted
-			loop
-				fnames.extend (l.item.name)
-				l.forth
-			end
-			Result := l @ list_selection (fnames,
+			Result := l @ list_selection (names_from_function_list (l),
 						concatenation(<<"Select ", msg>>))
 		ensure
 			result_not_void: Result /= Void
@@ -300,7 +311,13 @@ feature {NONE} -- Hook routines
 
 	list_selection (l: LIST [STRING]; msg: STRING): INTEGER is
 			-- User's selection from `l' - Result is the index of the
-			-- slected item of `l'.
+			-- slected item of `l'.  No backout is allowed - that is,
+			-- the user must select one item in `l' in order to continue.
+		deferred
+		end
+
+	list_selection_with_backout (l: LIST [STRING]; msg: STRING): INTEGER is
+			-- User's selection from `l' with backout allowed.
 		deferred
 		end
 
@@ -329,6 +346,88 @@ feature {NONE} -- Implementation
 			spiel.extend (concatenation (<<"Choose a name for ", msg,
 						" that does not match any of the%Nabove names">>))
 			o.set_name (string_selection (concatenation (spiel)))
+		end
+
+	names_from_function_list (l: LIST [MARKET_FUNCTION]):
+				ARRAYED_LIST [STRING] is
+			-- Name of each function in `l'
+		do
+			create Result.make (1)
+			from
+				l.start
+			until
+				l.exhausted
+			loop
+				Result.extend (l.item.name)
+				l.forth
+			end
+		end
+
+	names_from_parameter_list (l: LIST [FUNCTION_PARAMETER];
+				desc_needed: BOOLEAN): ARRAYED_LIST [STRING] is
+			-- Name (and description if `desc_needed') of each function in `l'
+		do
+			create Result.make (1)
+			from
+				l.start
+			until
+				l.exhausted
+			loop
+				if desc_needed then
+					Result.extend (concatenation (<<l.item.name, " - ",
+						l.item.function.name, " (value: ",
+						l.item.current_value, ", type: ",
+						l.item.value_type_description, ")">>))
+				else
+					Result.extend (l.item.name)
+				end
+				l.forth
+			end
+		end
+
+	edit_parameter_menu (parameters: LIST [FUNCTION_PARAMETER]) is
+			-- Menu for editing `parameters'
+		local
+			selection: INTEGER
+			p: FUNCTION_PARAMETER
+		do
+			from
+				selection := Null_value
+			until
+				selection = Exit_menu_value
+			loop
+				selection := list_selection_with_backout (
+					names_from_parameter_list(parameters, true),
+					"Select a parameter to edit")
+				if selection /= Exit_menu_value then
+					p := parameters @ selection
+					edit_parameter (p)
+				end
+			end
+		end
+
+	edit_parameter (p: FUNCTION_PARAMETER) is
+			-- Allow the user to change the value of a function parameter.
+		local
+			msg, msg2, value: STRING
+		do
+			msg := concatenation (<<"The current value for ", p.function.name,
+				" is ", p.current_value, " - new value? ">>)
+			from
+				value := string_selection (msg)
+			until
+				p.valid_value (value)
+			loop
+				msg2 := concatenation (<<value,
+					" is not valid, try again%N">>)
+				value := string_selection (msg2)
+			end
+			-- Since a member of the function library is being changed,
+			-- it needs to be marked as dirty to ensure it gets saved.
+			p.change_value (value)
+			changed := true
+			show_message (concatenation (
+				<<"New value set to ", p.current_value, "%N">>))
 		end
 
 end -- FUNCTION_EDITING_INTERFACE
