@@ -14,5 +14,5 @@ echo {main_mas_dir}"$appdir"|sed 's@\\@/@g'>>$specfile
 echo replaceend>>$specfile
 
 config_tool  -c  $specfile -f ../mctrc
-if [ ! -d $mctdir ]; then mkdir -p $mctdir;fi
-cp ../mctrc $mctdir
+if [ ! -d "$mctdir" ]; then mkdir -p "$mctdir";fi
+cp ../mctrc "$mctdir"
