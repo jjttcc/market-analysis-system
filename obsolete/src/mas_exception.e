@@ -143,17 +143,26 @@ feature {NONE} -- Implementation
 					"%" from class %"", class_name,
 					"%".%NType of ", errname, ": ",
 					meaning (exception), "%N">>)
-				if not recipient_name.is_equal(original_recipient_name) then
+				if
+					recipient_name /= Void and original_recipient_name /= Void
+					and not recipient_name.is_equal(original_recipient_name)
+				then
 					Result := concatenation (<<Result,
 					"(Original routine where the violation occurred: ",
 					original_recipient_name, ".)%N">>)
 				end
-				if not tag_name.is_equal(original_tag_name) then
+				if
+					tag_name /= Void and original_tag_name /= Void and
+					not tag_name.is_equal(original_tag_name)
+				then
 					Result := concatenation (<<Result,
 					"(Original tag name: ",
 					original_tag_name, ".)%N">>)
 				end
-				if not class_name.is_equal(original_class_name) then
+				if
+					class_name /= Void and original_class_name /= Void and
+					not class_name.is_equal(original_class_name)
+				then
 					Result := concatenation (<<Result,
 					"(Original class name: ",
 					original_class_name, ".)%N">>)
