@@ -44,10 +44,7 @@ feature -- Access
 				Result.extend (symbol_from_file_name (fnames.item))
 				fnames.forth
 			end
-		ensure then
-			-- Result.count = file_names.count
-			-- The contents of Result are in the same order as the
-			-- corresponding contents of `file_names'.
+			Result.compare_objects
 		end
 
 feature {NONE} -- Implementation
