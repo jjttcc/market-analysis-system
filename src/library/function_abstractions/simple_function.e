@@ -27,10 +27,10 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 			make as arrayed_list_make
 		export
 			{NONE} all
-			{FACTORY, MARKET_FUNCTION_EDITOR} extend, count, first, last,
-				i_th, item, off
+			{FACTORY, MARKET_FUNCTION_EDITOR} extend, first, last, i_th,
+				item, off
 			{MARKET_FUNCTION} make_from_array
-			{ANY} is_empty
+			{ANY} is_empty, count
 		end
 
 creation {FACTORY}

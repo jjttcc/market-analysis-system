@@ -76,17 +76,17 @@ feature -- Access
 		do
 			parameters.set_symbol (current_symbol)
 			use_day_after_latest_date_as_start_date := True
-			if last_tradable /= Void then
+			if target_tradable /= Void then
 				-- Ensure that old indicator data from the previous
-				-- `last_tradable' is not re-used.
-				last_tradable.flush_indicators
+				-- `target_tradable' is not re-used.
+				target_tradable.flush_indicators
 				check_if_data_is_out_of_date
 				if data_out_of_date and not output_file_exists then
 					log_error_with_token (Data_file_does_not_exist_error,
 						current_symbol)
 					use_day_after_latest_date_as_start_date := False
 				end
-			else	-- last_tradable = Void
+			else	-- target_tradable = Void
 				if not output_file_exists then
 					data_out_of_date := True
 				else
@@ -99,7 +99,7 @@ feature -- Access
 				load_data
 			end
 		ensure then
-			good_if_no_error: not fatal_error implies last_tradable /= Void
+			good_if_no_error: not fatal_error implies target_tradable /= Void
 		end
 
 feature {NONE} -- Implementation
@@ -132,17 +132,18 @@ feature {NONE} -- Hook routine implementations
 				search_by_symbol (symbol)
 			end
 			if
-				last_tradable /= Void and then not last_tradable.data.is_empty
+				target_tradable /= Void and then
+					not target_tradable.data.is_empty
 			then
-				Result := last_tradable.data.last.end_date
+				Result := target_tradable.data.last.end_date
 			end
 		end
 
 	latest_date_requirement: BOOLEAN is
 		do
-			Result := last_tradable /= Void
+			Result := target_tradable /= Void
 		ensure then
-			last_tradable_set_condition: Result = (last_tradable /= Void)
+			target_tradable_set_condition: Result = (target_tradable /= Void)
 		end
 
 	use_day_after_latest_date_as_start_date: BOOLEAN

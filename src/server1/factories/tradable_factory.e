@@ -113,6 +113,19 @@ feature -- Status setting
 			symbol_set: symbol /= Void and symbol = arg
 		end
 
+	set_product (arg: TRADABLE [BASIC_MARKET_TUPLE]) is
+			-- Set `product' to `arg', to be updated by `execute' instead
+			-- of creating a new product.
+		require
+			arg_not_void: arg /= Void
+		do
+			product := arg
+			update_current_product := True
+		ensure
+			product_set: product = arg and product /= Void
+			update_current_product: update_current_product
+		end
+
 	set_time_period_type (arg: TIME_PERIOD_TYPE) is
 			-- Set time_period_type to `arg'.
 		require
@@ -174,7 +187,13 @@ feature -- Basic operations
 		do
 			error_occurred := False
 			check_for_open_interest
-			make_product
+			if not update_current_product then
+				make_product
+			else
+				check
+					product_already_exists:  product /= Void
+				end
+			end
 			make_tuple_maker
 			if intraday then
 				create intraday_scanner.make (
@@ -208,10 +227,16 @@ feature -- Basic operations
 			end
 			product.set_trading_period_type (time_period_type)
 			product.finish_loading
-			add_indicators (product)
+			-- If `update_current_product', the product's indicators have
+			-- already been set up.
+			if not update_current_product then
+				add_indicators (product)
+			end
+			update_current_product := False
 		ensure then
 			product_not_void: product /= Void
 			product_type_set: product.trading_period_type = time_period_type
+			no_current_update: update_current_product = False
 		end
 
 feature {NONE}
@@ -232,6 +257,10 @@ feature {NONE} -- Implementation
 	stock_builder: STOCK_BUILDING_UTILITIES
 
 	derivative_builder: DERIVATIVE_BUILDING_UTILITIES
+
+	update_current_product: BOOLEAN
+			-- Should the current `product' be updated by `execute' rather
+			-- than created a new one?
 
 	make_tuple_maker is
 		do
@@ -371,12 +400,12 @@ feature {NONE} -- Implementation
 
 invariant
 
-	these_fields_not_void:
-		field_separator /= Void and
-		record_separator /= Void and
-		time_period_type /= Void
+	these_fields_not_void: field_separator /= Void and
+		record_separator /= Void and time_period_type /= Void
 	error_constraint:
 		error_occurred implies error_list /= Void and not error_list.is_empty
 	builders_not_void: stock_builder /= Void and derivative_builder /= Void
+	product_exists_if_using_current:
+		update_current_product implies product /= Void
 
 end -- TRADABLE_FACTORY

@@ -74,6 +74,7 @@ feature {NONE} -- Implementation
 	setup_input_medium is
 		do
 			current_input_file := open_current_file
+			current_input_file.start
 			if not fatal_error then
 				tradable_factory.set_input (current_input_file)
 				current_input_file.set_field_separator (
@@ -81,6 +82,10 @@ feature {NONE} -- Implementation
 				current_input_file.set_record_separator (
 					tradable_factory.record_separator)
 			end
+		ensure then
+			indices_at_1: current_input_file.readable implies
+				(current_input_file.field_index = 1 and
+				current_input_file.record_index = 1)
 		end
 
 	close_input_medium is

@@ -45,7 +45,7 @@ feature -- Initialization
 		ensure
 			sym_set: symbols /= Void and symbols.count = s_list.count
 			factory_set: tradable_factory = factory
-			implementation_init: last_tradable = Void and old_index = 0
+			implementation_init: target_tradable = Void and old_index = 0
 			cache_initialized: cache /= Void
 			cache_on: caching_on
 			-- All elements of `s_list' are in `symbols',
@@ -65,7 +65,78 @@ feature -- Access
 			Result := symbol_list.count
 		end
 
+print_cache is
+local
+	indexes: SORTED_TWO_WAY_LIST [INTEGER]
+do
+	create indexes.make
+	indexes.merge (cache.current_keys.linear_representation)
+	from
+		print ("Cached indexes: ")
+		indexes.start
+	until
+		indexes.islast or indexes.exhausted
+	loop
+		print (indexes.item.out + ", ")
+		indexes.forth
+	end
+	if not indexes.off then
+		print (indexes.item.out + "%N")
+	end
+end
+
 	item: TRADABLE [BASIC_MARKET_TUPLE] is
+			-- Current tradable.  `fatal_error' will be True if an error
+			-- occurs.
+		do
+print ("TL item called%N")
+--print_cache
+			fatal_error := False
+			if index = old_index then
+print ("A%N")
+if target_tradable = Void then
+	print ("target_tradable is Void%N")
+end
+print ("A2%N")
+				check
+					target_tradable_exists: target_tradable /= Void
+				end
+				if target_tradable_out_of_date then
+print ("B%N")
+					append_new_data
+				end
+			else
+print ("C%N")
+				check
+					cursor_location_changed: index /= old_index
+				end
+				target_tradable := cached_item (index)
+				if target_tradable = Void then
+print ("D%N")
+					load_target_tradable
+				else
+print ("E%N")
+					if target_tradable_out_of_date then
+print ("F%N")
+						append_new_data
+					end
+					--!!!Check if this call belongs here or somewhere else or
+					--!!!if it is needed at all:
+					target_tradable.flush_indicators
+				end
+				old_index := index
+			end
+			Result := target_tradable
+			if Result = Void then
+				fatal_error := True
+			end
+		ensure then
+			good_if_no_error: not fatal_error = (Result /= Void)
+			old_index_updated: index = old_index
+		end
+
+-- !!!!Remove:
+	old_item_remove: TRADABLE [BASIC_MARKET_TUPLE] is
 			-- Current tradable.  `fatal_error' will be True if an error
 			-- occurs.
 		do
@@ -76,11 +147,11 @@ feature -- Access
 				index /= old_index
 			then
 				old_index := 0
-				last_tradable := cached_item (index)
+				target_tradable := cached_item (index)
 				update_and_load_data
 				old_index := index
 			end
-			Result := last_tradable
+			Result := target_tradable
 			if Result = Void and not fatal_error then
 				fatal_error := True
 			end
@@ -217,6 +288,11 @@ feature -- Basic operations
 			-- Empty the cache.
 		do
 			cache.clear_all
+			if count > 0 then
+				start; back
+			end
+		ensure
+			before: count > 0 implies before and index = 0
 		end
 
 feature {FACTORY} -- Access
@@ -226,33 +302,54 @@ feature {FACTORY} -- Access
 
 feature {NONE} -- Implementation
 
+-- !!!!!!! OBSOLETE - Remove:
 	update_and_load_data is
 			-- Make sure, if appropriate, that the data in the data
 			-- source is up to date, and then load the data.
 		do
-			if last_tradable = Void then
+			if target_tradable = Void then
 print ("Data for " + current_symbol + " not in cache - loading%N")
 				load_data
 			else
 				-- Ensure that old indicator data from the previous
-				-- `last_tradable' is not re-used.
-				last_tradable.flush_indicators
+				-- `target_tradable' is not re-used.
+				target_tradable.flush_indicators
 			end
 		end
 
+	load_target_tradable is
+			-- Load the data for `current_symbol' and set `target_tradable'
+			-- to the resulting TRADABLE.
+		require
+			current_cached_item_void: cached_item (index) = Void
+		do
+print ("Data for " + current_symbol + " not in cache - loading%N")
+			pre_process_data_load
+			load_data
+			post_process_data_load
+		ensure
+			target_tradable_set: not fatal_error = (target_tradable /= Void)
+		end
+
+--@@ Possibility: Split load_data into parts, some of which might be useable
+-- (with a possible template pattern) for appending data.
 	load_data is
 			-- Load the data for `current_symbol' and close the input medium.
 			-- `setup_input_medium' must have been called to open the
 			-- input medium before calling this procedure.
+			-- Set `target_tradable' to the resulting TRADABLE.
+		require
 		do
+print ("Starting 'load_data' for " + current_symbol + "%N")
 			setup_input_medium
 			if not fatal_error then
 				tradable_factory.set_symbol (current_symbol)
 				tradable_factory.execute
-				last_tradable := tradable_factory.product
-				add_to_cache (last_tradable, index)
+				target_tradable := tradable_factory.product
+-- !!!!Move add_to_cache to the caller of 'load_data'?
+				add_to_cache (target_tradable, index)
 				if tradable_factory.error_occurred then
-					report_errors (last_tradable.symbol,
+					report_errors (target_tradable.symbol,
 						tradable_factory.error_list)
 					if tradable_factory.last_error_fatal then
 						fatal_error := True
@@ -262,9 +359,9 @@ print ("Data for " + current_symbol + " not in cache - loading%N")
 			else
 				-- A fatal error indicates that the current tradable
 				-- is invalid, or not readable, or etc., so ensure
-				-- that last_tradable is not set to this invalid
+				-- that target_tradable is not set to this invalid
 				-- object.
-				last_tradable := Void
+				target_tradable := Void
 			end
 		end
 
@@ -287,7 +384,9 @@ print ("Data for " + current_symbol + " not in cache - loading%N")
 			-- Add 't' with its 'idx' to the cache if caching_on.  If not
 			-- caching_on do nothing.
 		require
-			not_void: t /= Void
+			t_not_void: t /= Void
+			valid_index: idx > 0
+			t_loaded: t.loaded
 		do
 			if caching_on then
 				if cache_index_queue.full then
@@ -317,7 +416,8 @@ print ("Data for " + current_symbol + " not in cache - loading%N")
 
 	old_index: INTEGER
 
-	last_tradable: TRADABLE [BASIC_MARKET_TUPLE]
+	target_tradable: TRADABLE [BASIC_MARKET_TUPLE]
+			-- The current tradable - used to produce `item'
 
 	setup_input_medium is
 			-- Ensure that tradable_list has access to the current
@@ -386,6 +486,57 @@ print ("Data for " + current_symbol + " not in cache - loading%N")
 			-- The initial size of the tradable cache
 			-- @@Note: This feature should be moved to a globally accessible
 			-- class and the value should be configurable by the user.
+
+feature {NONE} -- Hook routines
+
+	pre_process_data_load is
+			-- Do any needed processing before calling `load_data'.
+		do
+			-- Null procedure - redefine if needed.
+		end
+
+	post_process_data_load is
+			-- Do any needed processing after calling `load_data'.
+		do
+			-- Null procedure - redefine if needed.
+		end
+
+	target_tradable_out_of_date: BOOLEAN is
+			-- Have new data become available for `target_tradable' since
+			-- `target_tradable' was last updated?
+		require
+			target_tradable_exists: target_tradable /= Void
+		do
+			-- Default: Data is never out of date - Redefine in descendant
+			-- (along with `append_new_data') if update behavior is required.
+			Result := False
+--!!!! temporary - force append for testing.
+Result := True
+		end
+
+	append_new_data is
+			-- Append newly available data to `target_tradable'.  (Note
+			-- the difference between this procedure and the `load_data'
+			-- procedure, which replaces the existing data instead of
+			-- appending to it.)
+		require
+			target_tradable_exists: target_tradable /= Void
+			equal (target_tradable.symbol, current_symbol)
+			out_of_date: target_tradable_out_of_date
+		do
+			-- Default: Null procedure - Redefine in descendant (along with
+			-- `out_of_date') if update behavior is required.
+print ("forced append.new.data test for testing%N")
+		ensure
+			old_data_unchanged: (not target_tradable.data.is_empty implies
+				target_tradable.data.first = old target_tradable.data.first)
+				and then (old target_tradable.data.count > 1 implies
+				target_tradable.data @ (old target_tradable.data.count
+-- Intentional boo-boo for testing:
+- 1) = old target_tradable.data.last)
+			same_size_or_larger:
+				target_tradable.data.count >= old target_tradable.data.count
+		end
 
 feature {NONE} -- Inapplicable
 

@@ -6,7 +6,7 @@ root
 
 default
 	assertion (all)
-	arguments ("-f , -i 15-min  /tmp/bond_10_year.5-min")
+	arguments ("-f , -i 15-minute -b 6333 -no-volume /tmp/bond_10_year.5-minute /tmp/currencies_aud.15-minute /tmp/currencies_bp.15-minute")
 	arguments ("-w -f , 12342")
 	arguments ("-o -p")
 	arguments ("-o -f ,  *.txt  4002")
