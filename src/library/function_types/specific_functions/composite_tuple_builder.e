@@ -234,13 +234,13 @@ feature {NONE}
 				check dt_diff /= Void end
 				if
 					trading_period_type.name.is_equal (
-					trading_period_type.Monthly)
+					trading_period_type.monthly_name)
 				then
 					Result := dt_diff.day =
 						d2.days_in_i_th_month (d2.month, d2.year)
 				elseif
 					trading_period_type.name.is_equal (
-					trading_period_type.Yearly)
+					trading_period_type.yearly_name)
 				then
 					if d2.is_leap_year (d2.year) then
 						Result := dt_diff.day = d2.Days_in_leap_year
@@ -249,7 +249,7 @@ feature {NONE}
 					end
 				elseif
 					trading_period_type.name.is_equal (
-					trading_period_type.Quarterly)
+					trading_period_type.quarterly_name)
 				then
 					Result := dt_diff.day <= max_qrtr_days and
 						dt_diff.day >= min_qrtr_days

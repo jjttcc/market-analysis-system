@@ -69,13 +69,13 @@ feature -- Access
 			gs: expanded GLOBAL_SERVICES
 		do
 			if inputs.is_empty then
-				Result := gs.period_types_in_order @ gs.Daily
+				Result := gs.period_type_at_index (gs.daily)
 			else
 				Result := inputs.first.trading_period_type
 			end
 		ensure then
 			definition: (inputs.is_empty implies
-				Result.name.is_equal (Result.Daily)) and
+				Result.name.is_equal (Result.daily_name)) and
 				(not inputs.is_empty implies
 				Result = inputs.first.trading_period_type)
 		end
