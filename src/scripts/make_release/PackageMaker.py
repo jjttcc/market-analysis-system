@@ -2,10 +2,10 @@ import os
 
 # Makes a package for release.
 class PackageMaker:
-	# target_directory: root directory where target files are placed
-	# package_directory: directory where package is to be placed
-	def __init__(self, target_directory, package_directory):
-		self.target_directory = target_directory
+	# work_directory: temporary work directory for package file creation
+	# package_directory: directory where packages are to be placed
+	def __init__(self, work_directory, package_directory):
+		self.work_directory = work_directory
 		self.package_directory = package_directory
 
 	def execute(self, package, file_tuples):
@@ -15,7 +15,7 @@ class PackageMaker:
 			return
 		files = []
 		# Create the list of files to be place in `package'.
-		os.chdir(self.target_directory + '/..')
+		os.chdir(self.work_directory + '/..')
 		for t in file_tuples:
 			files.append(self.make_file(t))
 		# cd to where the files to be packaged now reside.
@@ -31,11 +31,11 @@ class PackageMaker:
 		os.system(zipcmd)
 
 	# Expects current directory to be the parent of the base directory
-	# of self.target_directory.
+	# of self.work_directory.
 	def make_file(self, tuple):
 		target = tuple[1]
 		source = tuple[0]
-		targetbase = os.path.basename(self.target_directory)
+		targetbase = os.path.basename(self.work_directory)
 		if target == '.':
 			result = targetbase + '/' + source
 		elif os.path.isfile(targetbase + '/' + target):
