@@ -66,8 +66,6 @@ feature {NONE}
 						i_vector: ARRAY [INTEGER]) is
 			-- i_vector indicates which value_setters to insert into
 			-- vs, in the order specified, using the xxx_index constants.
-			-- For example, i_vector = << Date_index, Close_index >>
-			-- specifies to insert the DAY_DATE_SETTER, then the CLOSE_SETTER.
 		require
 			vs /= Void
 		local
