@@ -221,6 +221,7 @@ feature {NONE} -- Tuple field-key constants
 invariant
 
 	these_fields_not_void:
-		field_separator /= Void and input_file /= Void and tuple_maker /= Void
+		field_separator /= Void and input_file /= Void and
+		tuple_maker /= Void and time_period_type /= Void
 
 end -- TRADABLE_FACTORY
