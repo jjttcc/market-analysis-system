@@ -202,6 +202,7 @@ feature -- Basic operations
 				end
 				current_date := current_date + duration
 			end
+			output.finish_loading
 		ensure then
 			output.count > 0 implies times_correct and
 				output.first.date_time.is_equal (start_date)
