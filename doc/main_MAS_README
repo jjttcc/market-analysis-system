@@ -47,11 +47,13 @@ generators, you can either run mas at a terminal and use its command-line
 interface directly or you can run the macl (if you have Python installed)
 or the maclj script.
 
-If you have problems or questions about MAS, you are welcome to email me at:
+If you have problems or questions about MAS or want to give feedback or
+suggestions (requests for new features, etc.), you are welcome to email
+me at:
 
 jtc@dimensional.com
 
-I will try to respond promply, though I can't guarantee a response,
+I will try to respond promptly, though I can't guarantee a response,
 being often busy.  If you do email me about a problem, please include
 as much background information as possible with your email, including,
 if possible, a precise description of what you were doing when the
