@@ -1,0 +1,35 @@
+#!/bin/bash
+# Installation script for MAS
+
+Progname=$(basename $0)
+config=install_config
+
+if [ ! -f $config -o ! -r $config ]; then
+	echo "$Progname: Could not read configuration file $config" >&2
+	echo "Exiting ..." >&2
+	exit -1
+fi
+
+libdir=$(awk '/lib:/ { print $2}' $config)
+bindir=$(awk '/bin:/ { print $2}' $config)
+
+if [ ! -d $libdir -o ! -w $libdir ]; then
+	echo "$Progname: Cannot write to target dir $libdir" >&2
+	echo "Exiting ..."
+	exit -1
+fi
+
+if [ ! -d $bindir -o ! -w $bindir ]; then
+	echo "$Progname: Cannot write to target dir $bindir" >&2
+	echo "Exiting ..."
+	exit -1
+fi
+
+cp bin/* $bindir
+result=$?
+cp -R lib/* $libdir
+if [ "$result" -eq 0 ]; then
+	result=$?
+fi
+
+exit $result
