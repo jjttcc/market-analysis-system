@@ -6,9 +6,12 @@ indexing
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
-class STOCK_FACTORY inherit
+class STOCK_BUILDING_UTILITIES inherit
 
-	TRADABLE_FACTORY
+	TRADABLE_FACTORY_CONSTANTS
+		export
+			{NONE} all
+		end
 
 	OPERATING_ENVIRONMENT
 		export
@@ -30,64 +33,42 @@ class STOCK_FACTORY inherit
 			{NONE} all
 		end
 
-creation
+feature {TRADABLE_FACTORY} -- Implementation
 
-	make
-
-feature {NONE} -- Implementation
-
-	make_product is
-		local
-			i, last_sep_index: INTEGER
+	new_item (symbol: STRING): STOCK is
+			-- A new stock instance with symbol `symbol'
 		do
-			if open_interest then
-				create {DERIVATIVE_INSTRUMENT} product.make (symbol, Void)
-			else
-				create {STOCK} product.make (symbol, stock_splits @ symbol,
-					stock_data)
-			end
+			create Result.make (symbol, stock_splits @ symbol, stock_data)
 		end
 
-	index_vector: ARRAY [INTEGER] is
+	tuple_factory: BASIC_TUPLE_FACTORY is
 		do
-			if open_interest then
-				if no_open then
-					if intraday then
-						Result := << Date_index, Time_index, High_index,
-							Low_index, CLose_index, Volume_index, OI_index >>
-					else
-						Result := << Date_index, High_index, Low_index,
-							CLose_index, Volume_index, OI_index >>
-					end
+			create {VOLUME_TUPLE_FACTORY} Result
+		end
+
+	index_vector (no_open, intraday: BOOLEAN): ARRAY [INTEGER] is
+			-- Index vector for setting up value setters for a STOCK (no
+			-- open interest field)
+		do
+			if no_open then
+				if intraday then
+					Result := << Date_index, Time_index, High_index,
+						Low_index, CLose_index, Volume_index >>
 				else
-					if intraday then
-						Result := << Date_index, Time_index, Open_index,
-							High_index, Low_index, Close_index, Volume_index,
-							OI_index >>
-					else
-						Result := << Date_index, Open_index, High_index,
-							Low_index, Close_index, Volume_index, OI_index >>
-					end
+					Result := << Date_index, High_index, Low_index,
+						CLose_index, Volume_index >>
 				end
-			else -- not open_interest
-				if no_open then
-					if intraday then
-						Result := << Date_index, Time_index, High_index,
-							Low_index, CLose_index, Volume_index >>
-					else
-						Result := << Date_index, High_index, Low_index,
-							CLose_index, Volume_index >>
-					end
+			else
+				if intraday then
+					Result := << Date_index, Time_index, Open_index,
+						High_index, Low_index, Close_index, Volume_index >>
 				else
-					if intraday then
-						Result := << Date_index, Time_index, Open_index,
-							High_index, Low_index, Close_index, Volume_index >>
-					else
-						Result := << Date_index, Open_index, High_index,
-							Low_index, Close_index, Volume_index >>
-					end
+					Result := << Date_index, Open_index, High_index,
+						Low_index, Close_index, Volume_index >>
 				end
 			end
+		ensure
+			at_least_one: Result.count > 0
 		end
 
 	stock_splits: STOCK_SPLITS is
@@ -131,4 +112,4 @@ feature {NONE} -- Implementation
 			end
 		end
 
-end -- STOCK_FACTORY
+end -- STOCK_BUILDING_UTILITIES
