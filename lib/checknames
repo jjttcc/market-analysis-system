@@ -98,7 +98,7 @@ if [ $# -ge 1 ]; then
 	fi
 fi
 
-for f in $(find . -name '*.e' -print)
+for f in $(find . -name '*.e' -print 2>/dev/null)
 do
 	checkname $f
 done
