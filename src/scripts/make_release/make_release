@@ -19,6 +19,4 @@ for line in map_file.readlines():
 	util.add_target_file(filespec[1])
 	util.add_to_packages(filespec[0], filespec[1], filespec[2:])
 map_file.close()
-#Remove:?util.copy()
 util.make_packages()
-#util.cleanup()

@@ -87,21 +87,15 @@ class ReleaseUtilities:
 				# The 2nd list ([1]) is the list of src/tgt paths.
 				self.packages[k][self.File_index].append((src_path, tgt_path))
 
-	# Copy source files to target files.
-	def original_copy(self):
-		dos_str = "[dos]"; dslen = len(dos_str)
-		self.make_work_dir()
-		if len(self.source_files) != len(self.target_files):
-			raise 'Source file and target file lists are different lengths.'
-		os.chdir(self.source_directory)
-		for i in range(len(self.source_files)):
-			dos_cnv = 0
-			tgpath = self.target_files[i]
-			if tgpath[len(tgpath) - dslen:] == dos_str:
-				dos_cnv = 1
-				self.target_files[i] = tgpath[:-dslen]
-			self.do_copy(self.source_files[i], self.target_files[i], dos_cnv)
-		self.clean_work()
+	# For each p in `packages', create package p and place all
+	# files defined for p into p.
+	def make_packages(self):
+		for k in self.packages.keys():
+			self.copy(self.packages[k])
+			self.packager.execute(k, self.packages[k])
+			self.cleanup()
+
+# Private - implementation
 
 	# Copy source files to target files.
 	def copy(self, package):
@@ -119,21 +113,9 @@ class ReleaseUtilities:
 			self.do_copy(srcpath, tgtpath, dos_cnv)
 		self.clean_work()
 
-	# For each p in `packages', create package p and place all
-	# files defined for p into p.
-	def make_packages(self):
-		for k in self.packages.keys():
-			print "Copying for " + k
-			self.copy(self.packages[k])
-			print "Executing " + k
-			self.packager.execute(k, self.packages[k])
-			self.cleanup()
-
 	# Remove work directory.
 	def cleanup(self):
 		self.system_execute('rm -rf ' + self.real_work_directory)
-
-# Private - implementation
 
 	# Set the source directory to `s'.
 	def set_source(self, s, args):
@@ -164,18 +146,15 @@ class ReleaseUtilities:
 			" -type d -perm 000 -exec rmdir {} ';' 2>/dev/null")
 
 	def do_copy(self, srcpath, tgtpath, dos_convert):
-		print "Copying srcpath, tgtpath: " + srcpath + ", " + tgtpath
 		cmd = ''; doscnvrt_cmd = 'unix2dos'
 		if tgtpath == '.':
 			cmd = 'cp -fRr --parents ' + srcpath + ' ' + self.work_directory
 		else:
 			work_dir = ''
 			if os.path.isdir(srcpath):
-				print "A"
 				work_dir = self.work_directory + '/' + tgtpath
 				cmd = 'cp -fRr ' + srcpath + ' ' + work_dir
 			elif os.path.isfile(self.strip_char(srcpath, "\\")):
-				print "B"
 				work_dir = self.work_directory + '/' + \
 					os.path.dirname(tgtpath)
 				cmd = 'cp -f ' + srcpath + ' ' + self.work_directory + \
@@ -185,14 +164,9 @@ class ReleaseUtilities:
 						'/' + tgtpath + '); ' + doscnvrt_cmd + \
 						' $(basename ' + tgtpath + ')'
 			else:
-				print "C"
 				print srcpath + ' is not a file or directory - skipping ...'
 			# If the work directory doesn't exist yet, make it:
 			if not os.path.isdir(work_dir):
-				print "work_dir, work_directory: " + work_dir + ", " + \
-					self.work_directory
-#				cmd = 'mkdir -p ' + self.work_directory + '/' + tgtpath + \
-#					'; ' + cmd
 				cmd = 'mkdir -p ' + work_dir + '; ' + cmd
 		self.system_execute(cmd, 1)
 
@@ -207,7 +181,6 @@ class ReleaseUtilities:
 
 	# Execute 'cmd'
 	def system_execute(self, s, abort_on_failure = 0):
-		print "executing system cmd: " + s
 		sysresult = os.system(s)
 		if abort_on_failure and sysresult != 0:
 			print "System command '" + s + "' failed with value %d ", sysresult
