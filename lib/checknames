@@ -37,10 +37,19 @@ old_name_matches ()
 	return $result
 }
 
+# Filter out the header comments for $1.
+filter_out_header() {
+awk '/^ *class/ {start = 1}
+/^ *deferred *class/ {start = 1}
+/^[ \t]*--/ {next}
+(start) {print}' $1
+}
+
 name_matches ()
 {
 	name=$1
-	file=$2
+	file=/tmp/chknms.work
+	filter_out_header $2 >$file
 	result=$(
 perl -e '
 $result = 0;
