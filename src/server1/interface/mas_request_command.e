@@ -20,7 +20,7 @@ deferred class REQUEST_COMMAND inherit
 			{NONE} all
 		end
 
-	MAS_EXCEPTION
+	EXCEPTION_SERVICES
 		export
 			{NONE} all
 		end

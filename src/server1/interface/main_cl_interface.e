@@ -29,7 +29,7 @@ class MAIN_CL_INTERFACE inherit
 			print
 		end
 
-	MAS_EXCEPTION
+	EXCEPTION_SERVICES
 		export
 			{NONE} all
 		undefine
