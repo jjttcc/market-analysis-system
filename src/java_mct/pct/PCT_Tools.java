@@ -1,5 +1,7 @@
+package pct;
+
 import java.util.*;
-import gnu.rex.*;
+import org.apache.regexp.*;
 import support.FileReaderUtilities;
 
 // ProgramControlTerminal utility functions
@@ -9,7 +11,8 @@ class PCT_Tools {
 		program_name = s;
 	}
 
-	String[] split(String s, String fldsep) {
+	// Split `s', using `fldsep' as the field separator.
+	static String[] split(String s, String fldsep) {
 		StringTokenizer t = new StringTokenizer(s, fldsep, false);
 		//!!Make sure that countTokens(), below, is being used correctly.
 		String[] result = new String[t.countTokens()];
@@ -21,12 +24,11 @@ class PCT_Tools {
 	}
 
 	// Does `s' match the regular expression `regex'?
-	boolean regex_match(String regex, String s) {
+	static boolean regex_match(String regex, String s) {
 		boolean result = false;
 		try {
-			Rex re = Rex.build(regex);
-			RexResult r = re.match(s.toCharArray(), 0, s.length());
-			result =  r != null;
+			RE re = new RE(regex);
+			result = re.match(s);
 		}
 		catch (Exception e) {
 			System.err.println("Code defect in regex_match.");
@@ -82,7 +84,7 @@ class PCT_Tools {
 			//line = line[:-1]
 			if (! comment(line)) {
 				String[] words =  split(line, "=");
-				if (words[0].equals("separator")) {
+				if (words[0].equals(Separator_string)) {
 					result = words[1];
 					if ((result.length()) > 0) {
 						break;
@@ -103,4 +105,5 @@ class PCT_Tools {
 	static final String pctdir_property = "pct.dir";
 	static final String pct_default_name = "pct_config";
 	String config_file_name;
+	final String Separator_string = "separator";
 }

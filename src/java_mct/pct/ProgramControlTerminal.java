@@ -1,3 +1,4 @@
+package pct;
 
 import java.util.Vector;
 import java.io.*;
@@ -7,36 +8,37 @@ import support.FileReaderUtilities;
 //version used, make it into a framework.  Specializing classes can
 //provide application-specific facilities.
 
+//!!!NOTE: Idea2:  In addition to or instead of the above, allow the
+// user to specify in the config. file the name of the class and method
+// to use for the start command.  Then the user will supply the code
+// for this class and the method will be invoked using reflection.
+// (This is similar to the python design.)  There should probably be
+// a table or list of objects (created by the user) that will be
+// searched to find the specified class.  Catch exceptions to notify
+// user of invalid method name, etc.
+
 // GUI terminal that provides general program control facilities
 public class ProgramControlTerminal extends PCT_Tools {
 
-	ProgramControlTerminal(String cfg_filename, String prog_name) 
+	public ProgramControlTerminal(String cfg_filename, String prog_name) 
 			throws Exception {
 		config_file_name = cfg_filename;
-		program_name = prog_name;
-//System.out.println("PCT A");
+		program_name_setting = prog_name;
+System.out.println("PCT A");
 		FileReaderUtilities cfgfile = config_file();
-//System.out.println("PCT B");
 		Vector lines = lines_from_file(cfgfile);
-//System.out.println("PCT C");
 		String sep = separator(lines);
-		window_title = "Program Control Panel";
-		quit = false;
-//System.out.println("PCT C1");
+		terminal_name_setting = "Program Control Panel";
+		quitbutton_setting = false;
 		parse_and_process(lines, sep);
-System.out.println("subcoms line, [1].prompt: " + subcomponents.size() + ", " +
-((PCT_Component) subcomponents.elementAt(1)).prompt);
-System.out.println("subcoms[2].prompt: " + subcomponents.size() + ", " +
-((PCT_Component) subcomponents.elementAt(2)).prompt);
-System.out.println("subcoms[0].prompt: " + subcomponents.size() + ", " +
-((PCT_Component) subcomponents.elementAt(0)).prompt);
+		print_state();
+System.out.println("PCT B");
 //System.out.println("PCT D");
-		window = new PCT_Window(window_title);
-//System.out.println("PCT E");
+		window = new PCT_Window(terminal_name_setting);
 		for (int i = 0; i < subcomponents.size(); ++i) {
 			window.add_button((PCT_Component) subcomponents.elementAt(i));
 		}
-		if (quit) window.add_quit_button();
+		if (quitbutton_setting) window.add_quit_button();
 	}
 
 	//All lines from `f', one element per line
@@ -59,7 +61,7 @@ System.out.println("subcoms[0].prompt: " + subcomponents.size() + ", " +
 		}
 	}
 
-	void main_loop() {
+	public void main_loop() {
 		window.mainloop();
 	}
 
@@ -68,73 +70,82 @@ System.out.println("subcoms[0].prompt: " + subcomponents.size() + ", " +
 		subcomponents = new Vector();
 		boolean in_sub = false;
 		PCT_Component current_sub = null;
+		ComponentSettings settings = null;
+System.out.println("pap a");
+		try {
+			settings = new ComponentSettings();
+		} catch (Exception e) {
+			System.err.println("Fatal error: " + e + " - Aborting");
+			System.exit(-1);
+		}
 		for (int i = 0; i < lines.size(); ++i) {
 			String l = (String) lines.elementAt(i);
+System.out.println("pap b - l: " + l);
 			if (comment(l)) continue;
 			String[] tuple = split(l, sep);
 			String tuple_name = tuple[0];
-//System.out.println("parse... tuple name, curr sub, insub, l: " + tuple_name +
-//	", " + current_sub + ", " + in_sub + ", " + l);
-//System.out.println("l: " + l);
-			if (tuple_name.equals("terminal_name")) {
-				window_title = tuple[1];
-			}
-			else if (tuple_name.equals("program_name")) {
-				program_name = tuple[1];
-			}
-			else if (tuple_name.equals("quitbutton")) {
-				quit = true;
-			}
-			else if (regex_match("^begin", tuple_name)) {
+			if (regex_match("^begin", tuple_name)) {
+System.out.println("pap d1");
 				current_sub = new PCT_Component(this);
-//System.out.println("parse... curr sub set to: " + current_sub);
+				settings.clear_subcomponent_values();
 				in_sub = true;
 			}
 			else if (regex_match("^end", tuple_name)) {
+System.out.println("pap f1");
 				subcomponents.addElement(current_sub);
 				in_sub = false;
+				settings.set_subcomponent_settings(current_sub);
 			}
-			else if (in_sub) {
-//System.out.println("parse... in sub -");
-//System.out.println("parse... tuple name, curr sub, insub: " + tuple_name +
-//	", " + current_sub + ", " + in_sub);
-				if (tuple_name.equals("prompt")) {
-					current_sub.prompt = tuple[1];
-				}
-				else if (tuple_name.equals("startup_cmd")) {
-					current_sub.set_startup_cmd(tuple[1]);
-				}
-				else if (tuple_name.equals("config_file_name")) {
-					current_sub.config_file_name = tuple[1];
-				}
-				else if (tuple_name.equals("cmd_args")) {
-					current_sub.add_cmd_arg(tuple[1]);
-				}
-				else if (tuple_name.equals("exit_after_startup_cmd")) {
-					current_sub.exit_after_startup_cmd = 1;
-				}
-				else if (tuple_name.equals("import_module")) {
-					String spec = tuple[1];
-					if (! in_sub) {
-						System.err.println("Error in cofig. file:\n" + 
-							"Import spec. " + spec + " not within " +
-							"sub-terminal spec.");
-					}
-					else current_sub.import_modules.addElement(tuple[1]);
-				}
+			else if (regex_match("^" + Separator_string, tuple_name)) {
+System.out.println("pap s1");
+				// Ignore separator specification.
 			}
 			else {
-				if (! regex_match("^separator", l))
-					System.out.println("Invalid line in config. file: " + l +
-						".\nMay be invalid because it is outside of " +
-						"a sub-terminal spec.");
+System.out.println("pap g");
+				settings.process(tuple);
+				if (! settings.last_key_valid()) {
+					System.out.println("Invalid line in config. file: " + l);
+				}
+				if (settings.duplicate_setting()) {
+					System.out.println("Note: This specification - '" +
+						l + "' - overwites a previous one: ");
+				}
 			}
+		}
+		settings.set_main_settings(this);
+	}
+
+	// For debugging - print the current object state.
+	private void print_state() {
+		PCT_Component c = null;
+		System.out.println("Status for " + this + ":");
+		System.out.println("terminal_name_setting: " + terminal_name_setting);
+		System.out.println("quitbutton_setting: " + quitbutton_setting);
+		System.out.println("program_name_setting: " + program_name_setting);
+		System.out.println("There are " + subcomponents.size() +
+			" subcomponents:");
+		for (int i = 0; i < subcomponents.size(); ++i) {
+			c = (PCT_Component) subcomponents.elementAt(i);
+			System.out.println("subcomponent[" + i + "]");
+			System.out.println("\tprompt: '" + c.prompt_setting + "'");
+			System.out.println("\tstartup_cmd: '" +
+				c.startup_cmd_setting + "'");
+			System.out.println("\tstartupcmdargs: '" +
+				c.startup_cmd_args_setting + "'");
+			System.out.println("\tconfig_file_name: '" +
+				c.config_file_name_setting + "'");
+			System.out.println("\timport_module size: '" +
+				c.import_module_setting.size() + "'");
+			System.out.println("\timport_module: '" +
+				c.import_module_setting + "'");
+			System.out.println("\texit_after...: '" +
+				c.exit_after_startup_cmd_setting + "'");
 		}
 	}
 
-	String window_title;
-	boolean quit;
 	PCT_Window window;
 	Vector subcomponents;
-	String program_name;
+	public String terminal_name_setting;
+	public boolean quitbutton_setting;
+	public String program_name_setting;
 }

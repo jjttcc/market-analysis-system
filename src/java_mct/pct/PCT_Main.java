@@ -18,6 +18,7 @@
 // for as the congifuration file.
 
 import java.util.Properties;
+import pct.ProgramControlTerminal;
 
 class PCT_Main {
 
@@ -25,7 +26,7 @@ class PCT_Main {
 		try {
 			ProgramControlTerminal pct =
 				new ProgramControlTerminal(null, null);
-			System.err.println("Main2");
+			System.err.println("PCT_Main - calling pct.main_loop.");
 			pct.main_loop();
 		}
 		catch (Exception e) {

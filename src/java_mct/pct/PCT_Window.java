@@ -1,4 +1,6 @@
-import PCT_Component;
+package pct;
+
+import pct.PCT_Component;
 
 class PCT_Window {
 	PCT_Window(String title) {

@@ -1,6 +1,8 @@
+package pct;
+
 import java.util.Vector;
-import ProgramControlTerminal;
-import gnu.rex.*;
+import pct.ProgramControlTerminal;
+import org.apache.regexp.*;
 
 // ProgramControlTerminal Component
 class PCT_Component {
@@ -8,27 +10,25 @@ class PCT_Component {
 	PCT_Component(ProgramControlTerminal the_owner) {
 		owner = the_owner;
 //!! If not used, remove: terminal_name = "";
-		prompt = "";
-		startup_cmd = "";
-		startup_cmd_args = new Vector();
-		config_file_name = "";
-		import_modules = new Vector();
-		exit_after_startup_cmd = 0;
+		prompt_setting = "";
+		startup_cmd_setting = "";
+		startup_cmd_args_setting = new Vector();
+		config_file_name_setting = "";
+		import_module_setting = new Vector();
+		exit_after_startup_cmd_setting = false;
 	}
 
 	void set_startup_cmd(String cmd) {
 		try {
 		//!!Check if \ is needed before (:
-		Rex re = Rex.build(".*(");
-		RexResult result = re.match(cmd.toCharArray(), 0, cmd.length());
-		if (result != null) {
-			//^^^^^^^^^^^^^^^^^if regex.match(".*(", cmd) != -1:
+		RE re = new RE(".*\\(");
+		if (re.match(cmd)) {
 			System.err.println("Parentheses are not allowed in " +
 				"config. file " + "startup_cmd spec.\n(Command was '" +
 				cmd + "'.)");
 			System.exit(-1);
 		} else {
-			startup_cmd = cmd;
+			startup_cmd_setting = cmd;
 		}
 		}
 		catch (Exception e) {
@@ -39,13 +39,13 @@ class PCT_Component {
 
 	// Add an argument to startup_cmd.
 	void add_cmd_arg(String arg) {
-		startup_cmd_args.addElement(arg);
+		startup_cmd_args_setting.addElement(arg);
 	}
 
 	// Prepend the list `l' of arguments to startup_cmd.
 	void prepend_cmd_args(Vector l) {
 		for (int i = 0; i < l.size(); ++i) {
-			startup_cmd_args.insertElementAt(l.elementAt(i), 0);
+			startup_cmd_args_setting.insertElementAt(l.elementAt(i), 0);
 		}
 	}
 
@@ -99,20 +99,18 @@ class PCT_Component {
 	// Import the import_modules and execute startup_cmd.
 	void exec_startup_cmd() throws Exception {
 		Vector exe_result;
-		//print 'setting up cmd with imports: '
-		//print self.import_modules
 		try {
-			exe_result = import_and_execute(import_modules, startup_cmd,
-				startup_cmd_args);
+			exe_result = import_and_execute(import_module_setting,
+				startup_cmd_setting, startup_cmd_args_setting);
 			System.out.println("result was " + exe_result);
 		} catch (Exception e) {
 			throw e;
 		}
-		if (config_file_name != "") {
+		if (config_file_name_setting != "") {
 			System.out.println("config_file_name != ''");
 			// If there is a config file, a sub-terminal needs to be run.
 			ProgramControlTerminal pct =
-				new ProgramControlTerminal(config_file_name,
+				new ProgramControlTerminal(config_file_name_setting,
 					owner.program_name);
 			pct.set_args(exe_result);
 		}
@@ -120,10 +118,10 @@ class PCT_Component {
 
 	ProgramControlTerminal owner;
 //!! If not used, remove:	String terminal_name;
-	String prompt;
-	String startup_cmd;
-	Vector startup_cmd_args;		// of String
-	String config_file_name;
-	Vector import_modules;		// of String
-	int exit_after_startup_cmd;
+	public String prompt_setting;
+	public String startup_cmd_setting;
+	public Vector startup_cmd_args_setting;		// of String
+	public String config_file_name_setting;
+	public Vector import_module_setting;		// of String
+	public boolean exit_after_startup_cmd_setting;
 }
