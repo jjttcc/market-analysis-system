@@ -130,7 +130,6 @@ public class MA_MenuBar extends MenuBar {
 	// Update the indicator menu and the indicator selection list with the 
 	// current indicator list.
 	void update_indicators() {
-System.out.println("MMB ui called");
 		indicator_selection.update_indicators(false);
 		update_indicator_menu();
 	}
@@ -141,7 +140,6 @@ System.out.println("MMB ui called");
 		// Set up so that the indicator colors dialog/list will be
 		// updated whenever an indicator is selected from `indicator_menu':
 		for (int i = 0; i < indicator_menu.getItemCount(); ++i) {
-System.out.println("Adding " + i + "th indicator");
 			indicator_menu.getItem(i).addActionListener(indicator_colors);
 		}
 	}

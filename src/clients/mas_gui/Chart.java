@@ -141,14 +141,12 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 	// indicators
 	public Hashtable indicators() {
-System.out.println("indicators() called");
 		if (_indicators == null || new_indicators) {
 			new_indicators = false;
 			Vector inds_from_server = data_builder.last_indicator_list();
 			if (previous_open_interest != data_builder.open_interest() ||
 					! Utilities.lists_match(inds_from_server,
 					old_indicators_from_server)) {
-System.out.println("indicators(): making new indicator list");
 				// The old indicators are not the same as the indicators
 				// just obtained from the server (or there are not yet
 				// any old indicators), so the indicator lists need to
@@ -165,7 +163,6 @@ System.out.println("indicators(): making new indicator list");
 		Enumeration ind_iter;
 		String s;
 		int ind_count = inds_from_server.size();
-System.out.println("mil - inds fsrv size: " + inds_from_server.size());
 		Hashtable valid_indicators;
 		if (ind_count > 0) {
 			valid_indicators = new Hashtable(inds_from_server.size());
