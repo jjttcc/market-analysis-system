@@ -28,8 +28,7 @@ Source: "bin\macl"; DestDir: "{app}\bin\scripts"; CopyMode: alwaysoverwrite
 Source: "bin\maclj"; DestDir: "{app}\bin\scripts"; CopyMode: alwaysoverwrite
 Source: "bin\magc"; DestDir: "{app}\bin\scripts"; CopyMode: alwaysoverwrite
 Source: "bin\mas.exe"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
-;Source: "bin\config_tool.exe"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
-;Source: "bin\macl.exe"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
+Source: "bin\macl.exe"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\mct.exe"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\runmacl.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\runmas.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
@@ -37,10 +36,12 @@ Source: "bin\runmasf.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\runmasgui.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\fake_mailer.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\init.bat"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
-; bash, sed, and cygwin1.dll are needed for the bash_init init. script.
+; bash, sed, cygwin1.dll, etc. are needed for the bash_init init. script.
 Source: "bin\bash.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "bin\sed.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
+Source: "bin\mkdir.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "bin\cygwin1.dll"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
+Source: "bin\config_tool.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "bin\bash_init"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "doc\README.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\INTRODUCTION.ps"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
@@ -58,6 +59,7 @@ Source: "lib\data\stock_splits"; DestDir: "{app}\lib"; CopyMode: alwaysoverwrite
 Source: "lib\mas_httprc"; DestDir: "{app}\lib"; CopyMode: alwaysoverwrite
 Source: "lib\symbols"; DestDir: "{app}\lib"; CopyMode: alwaysoverwrite
 Source: "lib\mas_dbrc"; DestDir: "{app}\lib"; CopyMode: alwaysoverwrite
+Source: "lib\mctrc"; DestDir: "{app}\lib"; CopyMode: alwaysoverwrite
 Source: "lib\config\generators_persist"; DestDir: "{app}\lib"; CopyMode: alwaysoverwrite
 Source: "lib\config\indicators_persist"; DestDir: "{app}\lib"; CopyMode: alwaysoverwrite
 Source: "lib\mas_external_retrieve.pl"; DestDir: "{app}\lib"; CopyMode: alwaysoverwrite
