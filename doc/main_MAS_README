@@ -82,6 +82,13 @@ interface directly or you can run the macl (if you have Python installed)
 or the maclj script.
 
 
+LICENSE
+
+The Market Analysis System is copyrighted free software, released under
+the Eiffel Forum Freeware License.  See the file forum.txt for the
+contents of the license.
+
+
 CONTACT INFORMATION
 
 If you have problems or questions about MAS or want to give feedback or

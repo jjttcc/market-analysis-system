@@ -5,7 +5,7 @@ Market Analysis Server (MAS)
 
 Functionality:
 
-  - Includes several hard-coded technical indicators.
+  - Includes several system-defined technical indicators.
   - Allows the user to create and save new technical indicators.
   - Handles stock splits.
   - Currently expects daily data.
@@ -18,7 +18,7 @@ Functionality:
     protocol.
   - One server process can service several GUI clients.
 
-Hard-coded technical indicators:
+System-defined technical indicators:
 
   - Simple Moving Average
   - Exponential Moving Average
