@@ -37,7 +37,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	input: INPUT_SEQUENCE
+	input: ITERABLE_INPUT_SEQUENCE
 			-- File containing input data from which to parse MARKET_EVENTs
 
 	last_error: STRING
