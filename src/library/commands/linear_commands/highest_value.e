@@ -9,7 +9,7 @@ class HIGHEST_HIGH inherit
 
 	N_RECORD_COMMAND
 		redefine
-			start_init, sub_action
+			start_init, sub_action, set_input, target
 		end
 
 creation
@@ -28,6 +28,24 @@ feature {NONE} -- Implementation
 			if (target @ current_index).high.value > value then
 				value := (target @ current_index).high.value
 			end
+		end
+
+feature {NONE}
+
+	target: ARRAYED_LIST [BASIC_MARKET_TUPLE]
+
+feature {TEST_FUNCTION_FACTORY}
+
+	set_input (in: LINEAR [BASIC_MARKET_TUPLE]) is
+		local
+			l: ARRAYED_LIST [BASIC_MARKET_TUPLE]
+		do
+			l ?= in
+			check l /= Void end
+			target := l
+		ensure then
+			target = in
+			target /= Void
 		end
 
 end -- class HIGHEST_HIGH

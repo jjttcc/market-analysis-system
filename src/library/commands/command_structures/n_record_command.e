@@ -1,6 +1,6 @@
 indexing
 	description:
-		"An abstraction for a market vector analyzer that processes%
+		"An abstraction for a market vector analyzer that processes %
 		%the last n trading periods."
 	date: "$Date$";
 	revision: "$Revision$"
@@ -8,32 +8,22 @@ indexing
 class N_RECORD_COMMAND inherit
 
 	NUMERIC_COMMAND
+		redefine
+			initialize
+		end
 
 	N_RECORD_STRUCTURE
 
 	VECTOR_ANALYZER
 		redefine
-			target, forth, action, start, exhausted
+			forth, action, start, exhausted, invariant_value
 		end
 
 feature -- Initialization
 
-	make (data: ARRAYED_LIST [BASIC_MARKET_TUPLE]; n_value: INTEGER;
-			o: N_RECORD_STRUCTURE) is
-			-- Initialize with data and value for n.
-			-- NOTE:  This is a very early draft version of this class that
-			-- will probably change quite a bit.
-		require
-			data /= Void
-			n_value >= 0
+	make is
 		do
-			target := data
-			n := n_value
-			owner := o
-		ensure
-			target = data
-			n = n_value
-			owner = o
+			init_n
 		end
 
 feature -- Basic operations
@@ -41,6 +31,15 @@ feature -- Basic operations
 	execute (arg: ANY) is
 		do
 			do_all
+		end
+
+feature {TEST_FUNCTION_FACTORY} --!!!??
+
+	set_input (in: LINEAR [MARKET_TUPLE]) is
+		do
+			target := in
+		ensure then
+			target = in and target /= Void
 		end
 
 feature {NONE} -- Implementation
@@ -60,11 +59,8 @@ feature {NONE} -- Implementation
 		end
 
 	action is
-		local
-			i: INTEGER
 		do
-			i := target.index - offset
-			sub_action (i)
+			sub_action (target.index - offset)
 		end
 
 	exhausted: BOOLEAN is
@@ -72,16 +68,40 @@ feature {NONE} -- Implementation
 			Result := offset = -1
 		end
 
+	invariant_value: BOOLEAN is
+		do
+			--Result := target /= Void and not exhausted implies
+						--target.valid_index (target.index - offset)
+			Result := true -- Remove this when the above is commented-out OR
+						   -- delete the entire routine.
+		end
+
 feature {NONE} -- Implementation
 
 	owner: N_RECORD_STRUCTURE
 
-	target: ARRAYED_LIST [BASIC_MARKET_TUPLE]
-
 	offset: INTEGER
 			-- Offset from current cursor/index
 
+feature {MARKET_FUNCTION}
+
+	initialize (arg: N_RECORD_STRUCTURE) is
+		do
+			set_n (arg.n)
+			set_owner (arg)
+		end
+
 feature {NONE}
+
+	set_owner (o: N_RECORD_STRUCTURE) is
+			-- Set owner to o.
+		require
+			o /= Void
+		do
+			owner := o
+		ensure
+			owner = o and owner /= Void
+		end
 
 	start_init is
 			-- Extra initialization required by start
@@ -95,8 +115,9 @@ feature {NONE}
 		do
 		end
 
-feature {NONE} -- !!REmove this soon
+invariant
 
-	reset_state is do end
+	loop_inv_valid: target /= Void and then not target.off implies
+					invariant_value
 
 end -- class N_RECORD_COMMAND

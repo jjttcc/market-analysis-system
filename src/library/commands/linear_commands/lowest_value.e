@@ -9,7 +9,7 @@ class LOWEST_LOW inherit
 
 	N_RECORD_COMMAND
 		redefine
-			start_init, sub_action
+			start_init, sub_action, set_input, target
 		end
 
 creation
@@ -28,6 +28,24 @@ feature {NONE} -- Basic operations
 	start_init is
 		do
 			value := 999999999
+		end
+
+feature {NONE}
+
+	target: ARRAYED_LIST [BASIC_MARKET_TUPLE]
+
+feature {TEST_FUNCTION_FACTORY} -- Element change
+
+	set_input (in: LINEAR [BASIC_MARKET_TUPLE]) is
+		local
+			l: ARRAYED_LIST [BASIC_MARKET_TUPLE]
+		do
+			l ?= in
+			check l /= Void end
+			target := l
+		ensure then
+			target = in
+			target /= Void
 		end
 
 end -- class LOWEST_LOW

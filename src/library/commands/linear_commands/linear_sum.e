@@ -7,17 +7,31 @@ class VECTOR_SUM inherit
 
 	NUMERIC_COMMAND
 		redefine
-			valid_state
+			initialize
 		end
 
 	VECTOR_ANALYZER
-		export {ANY}
-			set
 		redefine
-			test, action, forth
+			test, action, forth, invariant_value
 		end
 
 	N_RECORD_STRUCTURE
+
+creation
+
+	make
+
+feature -- Initialization
+
+	make is
+		do
+			init_n
+		end
+
+	initialize (arg: N_RECORD_STRUCTURE) is
+		do
+			set_n (arg.n)
+		end
 
 feature -- Basic operations
 
@@ -28,8 +42,27 @@ feature -- Basic operations
 			until_continue
 		ensure then
 			-- target.index = old target.index + n
-			-- value = sum (target [original_index .. original_index + n - 1])
+			-- value = sum(target[old target.index .. old target.index + n - 1])
 			int_index_eq_n: internal_index = n
+		end
+
+feature
+
+	invariant_value: BOOLEAN is
+		do
+			--!!!Result := 0 <= internal_index and internal_index <= n and
+			--!!!			(target.valid_index (target.index) or exhausted)
+			Result := true -- !!!Remove this when above is uncommented OR
+			               -- !!!delete the entire routine.
+		end
+
+feature {MARKET_FUNCTION} -- export to??
+
+	set_input (in: LINEAR [MARKET_TUPLE]) is
+		do
+			target := in
+		ensure then
+			target = in and target /= Void
 		end
 
 feature {NONE}
@@ -55,19 +88,13 @@ feature {NONE}
 			Result := internal_index = n
 		end
 
-	valid_state: BOOLEAN is
-			-- Is Current in a valid state?
-			-- Default to true - descendants redefine as necessary.
-		do
-			Result := target.valid_index(target.index)
-		end
-
 feature {NONE}
 
 	internal_index: INTEGER
 
-feature {NONE} -- !!REmove this soon
+invariant
 
-	reset_state is do end
+	--!!!valid_target_index: target /= Void and not target.before implies
+	--!!!						invariant_value
 
 end -- class VECTOR_SUM

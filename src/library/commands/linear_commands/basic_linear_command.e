@@ -14,23 +14,21 @@ feature -- Basic operations
 	execute (arg: ANY) is
 				-- Can be redefined by ancestors.
 		do
-			value := input.item.value
+			value := target.item.value
 		end
 
-feature -- Element change (export to ??)
+feature {TEST_FUNCTION_FACTORY} -- Element change
 
 	set_input (in: LINEAR [MARKET_TUPLE]) is
-		require
-			in /= Void
 		do
-			input := in
-		ensure
-			input = in
-			input /= Void
+			target := in
+		ensure then
+			target = in
+			target /= Void
 		end
 
 feature {NONE}
 
-	input: LINEAR [MARKET_TUPLE]
+	target: LINEAR [MARKET_TUPLE]
 
 end -- class BASIC_LINEAR_COMMAND

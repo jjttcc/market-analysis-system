@@ -8,18 +8,26 @@ indexing
 class MINUS_N_COMMAND inherit
 
 	N_RECORD_COMMAND
-		export {ANY}
-			set
+		export {MARKET_FUNCTION}
+			set_n
 		redefine
-			execute
+			execute, target
 		end
+
+creation
+
+	make
 
 feature
 
 	execute (arg: ANY) is
 		do
 			check target.index > n end
-			value := target.i_th(target.index - n).value
+			value := target.i_th (target.index - n).value
 		end
+
+feature {NONE}
+
+	target: ARRAYED_LIST [MARKET_TUPLE]
 
 end -- class MINUS_N_COMMAND
