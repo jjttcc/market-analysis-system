@@ -1,0 +1,7 @@
+This is an informal release of some scripts I have written to help automate
+the use of MAS.  I'm releasing them because I think others may find these
+scripts useful.  Since these scripts are not part of the formal release and
+are written specifically to work with my setup, if you use them you will
+probably need to modify most of them to work with your particular setup.
+In other words, no guarantees that they will work for you, but they may save
+you some time if you're willing and able to do some hacking on them.
