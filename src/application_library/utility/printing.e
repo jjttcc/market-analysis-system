@@ -58,26 +58,24 @@ feature -- Basic operations
 	print_tuples (l: CHAIN [MARKET_TUPLE]) is
 			-- Print the fields of each tuple in `l'.
 		local
-			volume_l: CHAIN [VOLUME_TUPLE]
-			composite_l: CHAIN [COMPOSITE_TUPLE]
-			composite_volume_l: CHAIN [COMPOSITE_VOLUME_TUPLE]
-			sep: STRING
+			vt: VOLUME_TUPLE
+			bmt: BASIC_MARKET_TUPLE
+			vl: CHAIN [VOLUME_TUPLE]
+			bl: CHAIN [BASIC_MARKET_TUPLE]
 		do
-			sep := "	"
-			volume_l ?= l
-			if volume_l /= Void then
-				print_volume_tuples (volume_l)
-			else
-				composite_l ?= l
-				if composite_l /= Void then
-					print_composite_tuples (composite_l)
+			if not l.empty then
+				vt ?= l.first
+				bmt ?= l.first
+				if vt /= Void then
+					vl ?= l
+					check vl /= Void end
+					print_volume_tuples (vl)
+				elseif bmt /= Void then
+					bl ?= l
+					check bl /= Void end
+					print_basic_tuples (bl)
 				else
-					composite_volume_l ?= l
-					if composite_volume_l /= Void then
-						print_composite_volume_tuples (composite_volume_l)
-					else
-						print_market_tuples (l)
-					end
+					print_market_tuples (l)
 				end
 			end
 		end
@@ -106,6 +104,7 @@ feature -- Basic operations
 			i: INTEGER
 			l: LIST [COMPOSITE_TUPLE]
 			cvt: COMPOSITE_VOLUME_TUPLE
+			vl: LIST [COMPOSITE_VOLUME_TUPLE]
 		do
 			from
 				names := t.composite_list_names
@@ -114,14 +113,18 @@ feature -- Basic operations
 				i > names.count
 			loop
 				print ("Trading period: "); print (names @ i); print ("%N")
-				if not l.empty then
+				l := t.composite_tuple_list (names @ i)
+				if l /= Void and not l.empty then
 					cvt ?= l.first
-				end
-				if l /= Void then
-					print_composite_volume_tuples (
-						t.composite_tuple_list (names @ i))
+					if cvt /= Void then
+						vl ?= l
+						check vl /= Void end
+						print_composite_volume_tuples (vl)
+					else
+						print_composite_tuples (l)
+					end
 				else
-					print_composite_tuples (t.composite_tuple_list (names @ i))
+					print ("(Empty)%N")
 				end
 				i := i + 1
 			end
@@ -152,6 +155,44 @@ feature {NONE} -- Implementation
 				l.after
 			loop
 				print_date (l.item.last.date_time.date, 'y', 'm', 'd')
+				io.put_string (output_field_separator)
+				if print_open then
+					io.put_string (real_formatter.formatted(l.item.open.value))
+					io.put_string (output_field_separator)
+				end
+				io.put_string (real_formatter.formatted(l.item.high.value))
+				io.put_string (output_field_separator)
+				io.put_string (real_formatter.formatted(l.item.low.value))
+				io.put_string (output_field_separator)
+				io.put_string (real_formatter.formatted(l.item.close.value))
+				io.put_string ("%N")
+				l.forth
+			end
+		end
+
+	print_basic_tuples (l: CHAIN [BASIC_MARKET_TUPLE]) is
+		local
+			real_formatter: FORMAT_DOUBLE
+			print_open: BOOLEAN
+		do
+			!!real_formatter.make (5, 5)
+			if not l.empty then
+				if l.first.open_available then
+					print_open := true
+					io.put_string ("date, open, high, low, close:%N%N")
+				else
+					check
+						no_open: print_open = false
+					end
+					io.put_string ("date, high, low, close:%N%N")
+				end
+			end
+			from
+				l.start
+			until
+				l.after
+			loop
+				print_date (l.item.date_time.date, 'y', 'm', 'd')
 				io.put_string (output_field_separator)
 				if print_open then
 					io.put_string (real_formatter.formatted(l.item.open.value))
