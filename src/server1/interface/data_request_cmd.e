@@ -8,6 +8,13 @@ deferred class DATA_REQUEST_CMD inherit
 
 	REQUEST_COMMAND
 
+	PRINTING
+		export
+			{NONE} all
+		undefine
+			print
+		end
+
 	STRING_UTILITIES
 		rename
 			make as su_make_unused

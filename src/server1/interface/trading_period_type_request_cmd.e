@@ -10,6 +10,13 @@ class TRADING_PERIOD_TYPE_REQUEST_CMD inherit
 
 	REQUEST_COMMAND
 
+	GLOBAL_SERVICES
+		export
+			{NONE} all
+		undefine
+			print
+		end
+
 creation
 
 	make

@@ -10,8 +10,7 @@ class MAIN_CL_INTERFACE inherit
 		export {NONE}
 			all
 		undefine
-			print, output_field_separator, output_record_separator,
-			output_date_field_separator
+			print
 		end
 
 	EXECUTION_ENVIRONMENT
@@ -24,6 +23,13 @@ class MAIN_CL_INTERFACE inherit
 	COMMAND_LINE_UTILITIES [ANY]
 		export
 			{NONE} all
+		end
+
+	PRINTING
+		export
+			{NONE} all
+		undefine
+			print
 		end
 
 	EXCEPTIONS
@@ -133,9 +139,9 @@ feature -- Basic operations
 										output_device /= Void
 			end
 			from
-				end_program := false
+				end_client := false; exit_server := false
 			until
-				end_program
+				end_client or exit_server
 			loop
 				print_list (<<"Select action:%N", "     Select market (s) ",
 							"View data (v) Edit indicators (e)",
@@ -143,7 +149,7 @@ feature -- Basic operations
 							"Run market analysis (a)%N",
 							"     Set date for market analysis (d) ",
 							"Edit event registrants (r)%N",
-							"     Exit (x) Help (h) ", eom>>)
+							"     End client session (x) Help (h) ", eom>>)
 				inspect
 					selected_character
 				when 's', 'S' then
@@ -167,9 +173,11 @@ feature -- Basic operations
 				when 'd', 'D' then
 					mkt_analysis_set_date_menu
 				when 'x', 'X' then
-					end_program := true
+					end_client := true
 				when 'h', 'H' then
 					print (help @ help.Main)
+				when '%/5/' then -- ^E, for exit
+					exit_server := true
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
@@ -179,26 +187,30 @@ feature -- Basic operations
 				print ("%N%N")
 			end
 			check
-				finished: end_program
+				finished: end_client or exit_server
 			end
 			-- Notify client that it can terminate:
 			print ("")
-			io.print ("Sent Ctl-D to client%N")
+			io.print ("Cleaning up ...%N")
 			-- Ensure that all objects registered for cleanup on termination
 			-- are notified of termination.
 			termination_cleanup
+			if exit_server then
+				exit (0)
+			else
+				print ("(Hit <Enter> to restart the command-line client.)%N")
+			end
 		rescue
 			if not assertion_violation then
-				if is_signal and signal = Sigint then
-					die (0) -- Exit normally on interrupt signal.
-				else
+				if not is_signal then
 					print_list (<<"Error encounted in main menu: ",
 								meaning(exception), "%N">>)
-					if not end_program then
-						retry
-					else
-						die (-1)
-					end
+				else
+					print_list (<<"%NCaught signal: ", signal,
+									", continuing ...%N">>)
+				end
+				if not end_client then
+					retry
 				end
 			end
 		end
@@ -212,7 +224,7 @@ feature {NONE}
 		do
 			from
 			until
-				finished or end_program
+				finished or end_client
 			loop
 				print_list (<<"Select action:",
 					"%N     Create a new market-data indicator (c) %
@@ -231,9 +243,11 @@ feature {NONE}
 				when 'a', 'A' then
 					edit_event_generator_indicator_menu
 				when 'x', 'X' then
-					end_program := true
+					end_client := true
 				when 'h', 'H' then
 					print (help @ help.Edit_indicators)
+				when '%/5/' then -- ^E, for exit
+					exit_server := true; finished := true
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
@@ -345,7 +359,7 @@ feature {NONE}
 								input_device, output_device)
 			from
 			until
-				finished or end_program
+				finished or end_client
 			loop
 				print_list (<<"Select action:",
 					"%N     Add registrants (a) Remove registrants (r) %
@@ -363,9 +377,11 @@ feature {NONE}
 				when 'e', 'E' then
 					registrar.edit_registrants
 				when 'x', 'X' then
-					end_program := true
+					end_client := true
 				when 'h', 'H' then
 					print (help @ help.Edit_event_registrants)
+				when '%/5/' then -- ^E, for exit
+					exit_server := true; finished := true
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
@@ -387,7 +403,7 @@ feature {NONE}
 		do
 			from
 			until
-				finished or end_program
+				finished or end_client
 			loop
 				print_list (<<"Select action for ", current_tradable.name,
 					":%N     View market data (m) View an indicator (i)%N%
@@ -407,9 +423,11 @@ feature {NONE}
 									(current_tradable.indicators)
 					view_indicator_menu (indicator)
 				when 'x', 'X' then
-					end_program := true
+					end_client := true
 				when 'h', 'H' then
 					print (help @ help.View_data)
+				when '%/5/' then -- ^E, for exit
+					exit_server := true; finished := true
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
@@ -436,7 +454,7 @@ feature {NONE}
 			!!time.make_now
 			from
 			until
-				finished or end_program
+				finished or end_client
 			loop
 				print_list (<<"Current date and time: ", date, ", ",
 								time, "%N">>)
@@ -455,9 +473,11 @@ feature {NONE}
 				when 'r', 'R' then
 					date := relative_date_choice
 				when 'x', 'X' then
-					end_program := true
+					end_client := true
 				when 'h', 'H' then
 					print (help @ help.Set_analysis_date)
+				when '%/5/' then -- ^E, for exit
+					exit_server := true; finished := true
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
@@ -583,7 +603,7 @@ feature {NONE}
 		do
 			from
 			until
-				finished or end_program
+				finished or end_client
 			loop
 				print_list (<<"Select action:%N%
 						%     Print indicator (p) View description (d) %N%
@@ -602,9 +622,11 @@ feature {NONE}
 				when 'l', 'L' then
 					print (indicator.full_description)
 				when 'x', 'X' then
-					end_program := true
+					end_client := true
 				when 'h', 'H' then
 					print (help @ help.View_indicator)
+				when '%/5/' then -- ^E, for exit
+					exit_server := true; finished := true
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
@@ -772,9 +794,25 @@ feature {NONE}
 			curr_period_not_void: current_period_type /= Void
 		end
 
+	exit (status: INTEGER) is
+			-- Exit the server with the specified status
+		do
+			if status /= 0 then
+				io.print ("Aborting the server.%N")
+			else
+				io.print ("Terminating the server.%N")
+			end
+			die (status)
+		end
+
 feature {NONE}
 
-	end_program: BOOLEAN
+	end_client: BOOLEAN
+			-- Has the user requested to terminate the command-line
+			-- client session?
+
+	exit_server: BOOLEAN
+			-- Has the user requested to terminate the server?
 
 	saved_mklist_index: INTEGER --!!!Is this ever used????
 

@@ -15,6 +15,13 @@ class LOGIN_REQUEST_CMD inherit
 			print
 		end
 
+	GLOBAL_SERVICES
+		export
+			{NONE} all
+		undefine
+			print
+		end
+
 feature -- Basic operations
 
 	execute (msg: STRING) is
@@ -142,7 +149,7 @@ feature {NONE} -- Implementation
 						-- Set date to 2 years in the future.
 						date.set_year (date.year + 2)
 					else
-						date := date_maker.date_from_yyyymmdd_string (
+						date := date_maker.date_from_string (
 									settings.item, Date_field_separator)
 					end
 					if date = Void then

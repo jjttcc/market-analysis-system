@@ -17,7 +17,7 @@ deferred class REQUEST_COMMAND inherit
 			execute
 		end
 
-	PRINTING
+	GENERAL_UTILITIES
 		export
 			{NONE} all
 		undefine
