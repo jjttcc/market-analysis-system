@@ -10,7 +10,7 @@ inherit
 
 	MARKET_FUNCTION
 		redefine
-			process_precondition
+			process_precondition, pre_process
 		end
 
 	LINEAR_ANALYZER
@@ -109,15 +109,22 @@ feature {NONE}
 
 	do_process is
 		do
+			--!!!Remove these checks if added to class invariant:
 			check target1 /= Void and target2 /= Void end
 			check operator /= Void end
-			if not input1.processed then -- !!!Check
+			do_all
+		end
+
+	pre_process is
+		do
+			if not input1.processed then
 				input1.process (Void)
 			end
-			if not input2.processed then -- !!!Check
+			if not input2.processed then
 				input2.process (Void)
 			end
-			do_all
+		ensure then
+			input1_1_processed: input1.processed and input2.processed
 		end
 
 feature {NONE}

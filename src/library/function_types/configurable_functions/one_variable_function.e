@@ -7,6 +7,9 @@ indexing
 class ONE_VARIABLE_FUNCTION inherit
 
 	MARKET_FUNCTION
+		redefine
+			pre_process
+		end
 
 	LINEAR_ANALYZER
 		export {NONE}
@@ -54,10 +57,16 @@ feature {NONE}
 	do_process is
 			-- Execute the function.
 		do
-			if not input.processed then -- !!!Check
+			do_all
+		end
+
+	pre_process is
+		do
+			if not input.processed then
 				input.process (Void)
 			end
-			do_all
+		ensure then
+			input_processed: input.processed
 		end
 
 feature {NONE}
