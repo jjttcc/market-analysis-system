@@ -2,10 +2,6 @@ indexing
 	description: "Minimum data set needed for charting and analysis"
 	Note: "!!!Check whether it's appropriate for PRICE attributes %
 			%to be expanded!!!"
-	Note2: "set takes type REAL_REF for its arguments instead of REAL %
-			%because of a bug in the ISE environment that causes problems %
-			%with assigning real values; the bug does not appear in the %
-			%compiled (finalized) system."
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -101,21 +97,26 @@ feature -- Status setting
 
 feature -- {WHO?} Element change
 
-	set (o, h, l, c: REAL_REF) is
+	set (o, h, l, c: REAL) is
 			-- Set the open, high, low, and close values.
 			--!!!Change args to type REAL - soon
 		require
-			values_valid: h >= l and l <= o and o <= h and l <= c and c <= h
-			non_negative: l.item >= 0
+			h_l_c_valid: h >= l and l <= c and c <= h
+			open_valid: o >= 0 implies l <= o and o <= h
+			h_l_c_non_negative: l >= 0
 		do
-			open.set_value (o.item)
-			high.set_value (h.item)
-			low.set_value (l.item)
-			close.set_value (c.item)
+			if o >= 0 then
+				open.set_value (o)
+			else
+				open.set_value (-1)
+			end
+			high.set_value (h)
+			low.set_value (l)
+			close.set_value (c)
 		ensure
-			values_set: open.value = o; high.value = h; low.value = l;
-							close.value = c
-			open_available: open_available
+			h_l_c_set: high.value = h; low.value = l; close.value = c
+			o_set_if_gt_0: o >= 0 implies open.value = o
+			o_lt_0_not_open_available: o <= 0 implies not open_available
 		end
 
 	set_open (p: REAL) is
