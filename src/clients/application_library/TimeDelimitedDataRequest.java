@@ -62,17 +62,6 @@ class TimeDelimitedDataRequest extends TimerTask {
 		try {
 			start_date = client.start_date();
 			end_date = client.end_date();
-			if (end_date == null || end_date.equals("")) {
-				// Set the end date to the current time.  Leaving it
-				// empty would cause the server to interpret the end
-				// date as "now" for each query in the loop below,
-				// resulting in different "now" values and, possibly,
-				// data sets of different sizes.
-//!!!!:				end_date = new GregorianCalendar();
-				// Add one day to 'end_date' to compensate for any possible
-				// time zone differences.
-//!!!!:				end_date.add(end_date.DAY_OF_YEAR, 1);
-			}
 			builder.send_time_delimited_market_data_request(
 				spec.symbol(), period_type, start_date, end_date);
 			if (builder.request_succeeded() &&
