@@ -26,7 +26,6 @@ feature {NONE} -- Initialization
 		do
 			!!contents.make
 			!LINKED_LIST [INTEGER]!port_numbers.make
-			!LINKED_LIST [STRING]!file_names.make
 			from
 				i := 1
 			until
@@ -227,19 +226,11 @@ feature {NONE} -- Implementation
 			-- Must be called last because it expects all other arguments
 			-- to have been removed from `contents'.
 			-- Will ignore arguments that start with `option_sign'
+		local
+			expander: FILE_NAME_EXPANDER
 		do
-			from
-				contents.start
-			until
-				contents.exhausted
-			loop
-				if not (contents.item.item (1) = option_sign) then
-					file_names.extend (contents.item)
-					contents.remove
-				else
-					contents.forth
-				end
-			end
+			create expander.make (contents, option_sign)
+			file_names := expander.results
 		end
 
 
