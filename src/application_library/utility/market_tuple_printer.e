@@ -297,7 +297,7 @@ feature {NONE} -- Implementation
 			end
 		ensure
 			void_date_result: print_start_date = Void implies Result = 1
-			result_gt_1: Result >= 1
+			result_ge_1: Result >= 1
 		end
 
 	first_date_time_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER is
@@ -307,6 +307,12 @@ feature {NONE} -- Implementation
 			start_time_exists_if_start_date_exists:
 				print_start_date /= Void implies print_start_time /= Void
 		do
+			debug ("data_request")
+				print ("'first_date_time_index' started%N")
+				print ("l.first.date_time: " + l.first.date_time.out + "%N")
+				print ("print_start_date/time: " + print_start_date.out + "," +
+					print_start_time.out + "%N")
+			end
 			if print_start_date /= Void and not l.is_empty then
 				-- Set Result to the index of the element whose date matches
 				-- print_start_date:print_start_time, or, if no match, to
@@ -315,18 +321,26 @@ feature {NONE} -- Implementation
 				Result := l.index_at_date_time (
 					create {DATE_TIME}.make_by_date_time (print_start_date,
 					print_start_time), 1)
+				debug ("data_request")
+					print ("'first_date_time_index' called idx @ date_time%N")
+					print ("Result: " + Result.out + "%N")
+				end
 				if Result = 0 then
 					-- Indicate that no elements of l fall after
 					-- print_start_date,print_start_time by setting Result
 					-- to one past l's last element.
 					Result := l.count + 1
+					debug ("data_request")
+						print ("'first_date_time_index' Result was 0%N")
+						print ("Result: " + Result.out + "%N")
+					end
 				end
 			else
 				Result := 1
 			end
 		ensure
 			void_date_result: print_start_date = Void implies Result = 1
-			result_gt_1: Result >= 1
+			result_ge_1: Result >= 1
 		end
 
 	last_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER is
@@ -370,6 +384,11 @@ feature {NONE} -- Implementation
 		local
 			util: expanded GENERAL_UTILITIES
 		do
+			debug ("data_request")
+				print ("'last_date_time_index' started%N")
+				print ("l.last.date_time: " + l.last.date_time.out + "%N")
+				print ("print_end_date: " + print_end_date.out + "%N")
+			end
 			if print_end_date /= Void and not l.is_empty then
 				if
 					print_end_date > util.now_date and
@@ -385,25 +404,18 @@ feature {NONE} -- Implementation
 						print ("'last_date_time_index' optimized to return %
 							%last tuple%N")
 						print ("Result (l.count): " + Result.out + "%N")
-						print ("l.last.date_time: " + l.last.date_time.out +
-							"%N")
-						print ("print_end_date: " + print_end_date.out + "%N")
 					end
 				else
-				-- Set Result to the index of the element whose date matches
-				-- print_end_date, or, if no match, to the last element
-				-- whose date < print_end_date.
+					-- Set Result to the index of the element whose date
+					-- matches print_end_date, or, if no match, to the last
+					-- element whose date < print_end_date.
 					Result := l.index_at_date_time (
 						create {DATE_TIME}.make_by_date_time (print_end_date,
 						print_end_time), -1)
---					debug ("data_request")
+					debug ("data_request")
 						print ("'last_date_time_index' called idx@date_time%N")
 						print ("Result (l.count): " + Result.out + "%N")
-						print ("l.last.date_time: " + l.last.date_time.out +
-							"%N")
-						print ("print_end_date/time: " + print_end_date.out +
-							 "," + print_end_time.out + "%N")
---					end
+					end
 				end
 			else
 				Result := l.count
