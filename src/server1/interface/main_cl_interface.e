@@ -88,7 +88,11 @@ feature -- Access
 
 	current_tradable: TRADABLE [BASIC_MARKET_TUPLE] is
 		do
-			Result := market_list.item
+			if market_list.empty then
+				Result := Void
+			else
+				Result := market_list.item
+			end
 		end
 
 	current_period_type: TIME_PERIOD_TYPE
@@ -239,7 +243,12 @@ feature {NONE}
 							function_builder.market_function, "root function",
 							true))
 				when 'm', 'M' then
-					edit_indicator_menu (current_tradable.indicators)
+					if current_tradable /= Void then
+						edit_indicator_menu (current_tradable.indicators)
+					else
+						print ("Market list is empty - cannot edit indicators %
+								%unless at least one market is available.%N")
+					end
 				when 'a', 'A' then
 					edit_event_generator_indicator_menu
 				when 'x', 'X' then
@@ -303,6 +312,8 @@ feature {NONE}
 		end
 
 	edit_indicator_menu (indicators: LIST [MARKET_FUNCTION]) is
+		require
+			ind_not_void: indicators /= Void
 		local
 			indicator: MARKET_FUNCTION
 			finished: BOOLEAN
@@ -401,6 +412,10 @@ feature {NONE}
 			finished: BOOLEAN
 			indicator: MARKET_FUNCTION
 		do
+			if market_list.empty then
+				print ("There are currently no markets to view.%N")
+				finished := true
+			end
 			from
 			until
 				finished or end_client
@@ -646,30 +661,38 @@ feature {NONE}
 			symbol: STRING
 			symbols: LIST [STRING]
 		do
-			from
-				symbols := market_list.symbols
-			until
-				symbol /= Void
-			loop
-				print_names_in_4_columns (symbols)
-				print (eom)
-				read_integer
-				if
-					last_integer <= 0 or
-						last_integer > symbols.count
-				then
-					print_list (<<"Selection must be between 1 and ",
-								symbols.count, "%N">>)
-				else
-					symbol := symbols @ last_integer
+			if not market_list.empty then
+				from
+					symbols := market_list.symbols
+				until
+					symbol /= Void
+				loop
+					print_names_in_4_columns (symbols)
+					print (eom)
+					read_integer
+					if
+						last_integer <= 0 or
+							last_integer > symbols.count
+					then
+						print_list (<<"Selection must be between 1 and ",
+									symbols.count, "%N">>)
+					else
+						symbol := symbols @ last_integer
+					end
 				end
-			end
-			market_list.search_by_symbol (symbol)
-			-- current_tradable will be set to the current item of market_list
-			-- (which, because of the above call, corresponds to file `symbol').
-			-- Update the current_tradable's target period type, if needed.
-			if current_tradable.target_period_type /= current_period_type then
-				current_tradable.set_target_period_type (current_period_type)
+				market_list.search_by_symbol (symbol)
+				-- current_tradable will be set to the current item of
+				-- market_list (which, because of the above call, corresponds
+				-- to file `symbol').
+				-- Update the current_tradable's target period type, if needed.
+				if
+					current_tradable.target_period_type /= current_period_type
+				then
+					current_tradable.set_target_period_type (
+						current_period_type)
+				end
+			else
+				print ("There are no markets available to select from.%N")
 			end
 		end
 
@@ -680,38 +703,42 @@ feature {NONE}
 			i: INTEGER
 			types: ARRAY [STRING]
 		do
-			from
-				i := 1
-				types := current_tradable.tuple_list_names
-			until
-				i > types.count
-			loop
-				print_list (<<i, ") ", types @ i, "%N">>)
-				i := i + 1
+			if not market_list.empty then
+				from
+					i := 1
+					types := current_tradable.tuple_list_names
+				until
+					i > types.count
+				loop
+					print_list (<<i, ") ", types @ i, "%N">>)
+					i := i + 1
+				end
+				from
+					print (eom)
+					read_integer
+				until
+					last_integer > 0 and last_integer <= types.count
+				loop
+					print_list (<<"Selection must be between 1 and ",
+								types.count, " - try again: %N">>)
+					print (eom)
+					read_integer
+				end
+				current_period_type := period_types @ (types @ last_integer)
+				print_list (<<"Data period type set to ",
+							current_period_type.name, "%N">>)
+						current_tradable.set_target_period_type (
+							current_period_type)
+			else
+				print ("There are no markets to select a period type for.%N")
 			end
-			from
-				print (eom)
-				read_integer
-			until
-				last_integer > 0 and last_integer <= types.count
-			loop
-				print_list (<<"Selection must be between 1 and ",
-							types.count, " - try again: %N">>)
-				print (eom)
-				read_integer
-			end
-			current_period_type := period_types @ (types @ last_integer)
-			print_list (<<"Data period type set to ",
-						current_period_type.name, "%N">>)
-					current_tradable.set_target_period_type (
-						current_period_type)
 		end
 
 	indicator_selection (indicators: LIST [MARKET_FUNCTION]):
 				MARKET_FUNCTION is
 			-- User-selected indicator
 		require
-			not_trdble_empty: not current_tradable.indicators.empty
+			not_void_or_empty: indicators /= Void and not indicators.empty
 		local
 			names: ARRAYED_LIST [STRING]
 		do
