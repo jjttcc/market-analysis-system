@@ -9,8 +9,9 @@ class LINEAR_SUM inherit
 		rename
 			offset as internal_index, make as nrlc_make_unused
 		redefine
-			initialize, --!!!???
-			execute,
+			initialize, --!!!??? - Can be removed if owner is removed
+						-- from NRLC
+			execute, target_cursor_not_affected,
 			exhausted, action, forth, invariant_value,
 			start
 		end
@@ -54,6 +55,10 @@ feature -- Basic operations
 			-- value = sum (target[old target.index .. old target.index+n-1])
 			int_index_eq_n: internal_index = n
 		end
+
+feature -- Status report
+
+	target_cursor_not_affected: BOOLEAN is false
 
 feature {NONE}
 
