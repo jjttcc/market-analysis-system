@@ -24,7 +24,7 @@ class STOCK_SPLIT_FILE inherit
 
 	INPUT_FILE
 		rename
-			name as file_name, make as ptf_make_unused,
+			name as file_name, make as ptf_make,
 			advance_to_next_field as if_advance_to_next_field,
 			advance_to_next_record as if_advance_to_next_record
 		export
@@ -58,10 +58,10 @@ feature {NONE} -- Initialization
 			record_separator := record_sep
 			file_name := input_file_name
 			open_file (file_name)
-			!!product.make (100)
-			!!tuple_maker
-			make_value_setters
+			create product.make (100)
 			if is_open_read then
+				!!tuple_maker
+				make_value_setters
 				input := Current
 				execute
 			end
@@ -76,6 +76,17 @@ feature {NONE} -- Initialization
 		end
 
 	open_file (fname: STRING) is
+			-- Open file safely - if it fails, is_open_read is false.
+		local
+			open_failed: BOOLEAN
+		do
+			ptf_make (file_name)
+			if exists then
+				open_read
+			end
+		end
+
+	old_open_file (fname: STRING) is
 			-- Open file safely - if it fails, is_open_read is false.
 		local
 			open_failed: BOOLEAN
