@@ -30,7 +30,9 @@ feature -- Basic operations
 			ptypes: LIST [STRING]
 		do
 			-- `msg' is expected to contain (only) the market symbol
-			ptypes := tradables.period_types (msg)
+			if tradables.symbols.has (msg) then
+				ptypes := tradables.period_types (msg)
+			end
 			if tradables.last_tradable /= Void then
 				session.set_last_tradable (tradables.last_tradable)
 			end
@@ -38,7 +40,8 @@ feature -- Basic operations
 				if server_error then
 					report_server_error
 				else
-					report_error (Invalid_symbol, <<"Symbol not in database">>)
+					report_error (Invalid_symbol, <<"Symbol ", msg,
+						" not in database">>)
 				end
 			else
 				send_ok
