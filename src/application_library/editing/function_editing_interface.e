@@ -304,7 +304,7 @@ feature {NONE} -- Hook routines
 
 feature {NONE} -- Implementation
 
-	clone_needed: BOOLEAN is true --!!!??
+	clone_needed: BOOLEAN is true
 
 	name_needed: BOOLEAN is true
 
