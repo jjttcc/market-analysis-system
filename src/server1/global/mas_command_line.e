@@ -195,38 +195,6 @@ feature {NONE} -- Hook routines implementations
 			initialization_complete := True
 		end
 
---!!!
-	old_remove_process_remaining_arguments is
-		local
-			setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]]
-		do
-			setup_procedures := main_setup_procedures
-			create {LINKED_LIST [INTEGER]} port_numbers.make
-			create special_date_settings.make (date_format_prefix)
-			special_date_settings.add_error_subscriber (Current)
-			opening_price := True
-			from
-				setup_procedures.start
-			until
-				setup_procedures.exhausted
-			loop
-				setup_procedures.item.call ([])
-				setup_procedures.forth
-			end
-			if not use_db then
-				set_use_external_data_source
-				if not use_external_data_source then
-					set_use_web
-					if not use_web then
-						set_file_names
-					end
-				end
-			else
-				set_keep_db_connection
-			end
-			initialization_complete := True
-		end
-
 feature {NONE} -- Implementation
 
 	set_special_formatting is

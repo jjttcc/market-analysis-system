@@ -18,9 +18,6 @@ feature -- Access
 	
 	mct_directory: STRING is "c:/Program Files/mct"
 
---!!!!Remove:
-	Test_mct_directory: STRING is "Program_Files_mct"
-
 	directory_separator: CHARACTER is
 			-- The directory separator used for this platform
 		local

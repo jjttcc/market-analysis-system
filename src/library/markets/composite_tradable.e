@@ -179,7 +179,6 @@ feature {NONE} -- Implementation
 			post_operator.execute (work_tuple)
 			-- Use the post_operator's value to set the value of the
 			-- appropriate field of `current_tuple'.
-			--!!!Check if this call is set up right.
 			field_setters.item (field_extractor.name).call ([current_tuple,
 				post_operator.value])
 		end
