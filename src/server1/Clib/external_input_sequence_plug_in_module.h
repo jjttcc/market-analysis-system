@@ -13,6 +13,11 @@
 
 struct input_sequence_plug_in;
 
+/* Allowed field-separator characters - fields for a particular data set
+ * can be separated by any one of the characters in this string
+*/
+const char* Field_separator_characters = ",\t;\a!@$%^&|";
+
 /* A new handle for access to the input-sequence-plug-in interface -
  * `paths' is a list of paths, separated by ':', in which to create temporary
  * files; each path must end with the directory separator character
@@ -30,8 +35,12 @@ struct input_sequence_plug_in* new_input_sequence_plug_in_handle(
 /* Data for the tradable specified by `symbol' - intraday if `is_intraday',
  * otherwise, daily.  Returns 0 if an error occurs.
  * The format of the data is:
- * [To be specified]
- * `size' holds the size of the returned char array.
+ *   date[@time]@open@high@low@close@volume[@open_interest]
+ * where the time field (hh:mm) is only present if the data is intraday,
+ * the open_interest field is optional, and @ stands for a field
+ * separator that can be any one of the characters in the
+ * `Field_separator_characters' string defined above.
+ * The address at `size' holds the size of the returned char array.
  * Precondition: handle != 0 && symbol != 0 && size != 0
  * Note: Caller is responsible for freeing the allocated memory at the
  * returned address.
