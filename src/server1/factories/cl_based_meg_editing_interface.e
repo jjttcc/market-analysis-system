@@ -38,7 +38,7 @@ feature -- Initialization
 
 	make is
 		do
-			!CL_BASED_COMMAND_EDITING_INTERFACE!operator_maker.make (true)
+			!CL_BASED_COMMAND_EDITING_INTERFACE!operator_maker.make (True)
 			!!help.make
 			-- !!!Satisfy invariant - editor is currently not used; it may
 			-- be used later - if not, might want to change the invariant or?
@@ -138,7 +138,7 @@ feature {NONE} -- Implementation
 		do
 			from
 				if meg_names.count = 0 then
-					finished := true
+					finished := True
 					Result := Exit_menu_value
 					print ("There are currently no market analyzers.%N")
 				end
@@ -156,14 +156,14 @@ feature {NONE} -- Implementation
 					print_list (<<"Selection must be between 0 and ",
 								meg_names.count, "%N">>)
 				elseif last_integer = 0 then
-					finished := true
+					finished := True
 					Result := Exit_menu_value
 				else
 					check
 						valid_index: last_integer > 0 and
 									last_integer <= meg_names.count
 					end
-					finished := true
+					finished := True
 					Result := last_integer
 				end
 			end
@@ -199,32 +199,13 @@ feature {NONE} -- Implementation
 		local
 			finished: BOOLEAN
 		do
-			from
-				if meg_names.count = 0 then
-					finished := true
-					print ("There are currently no market analyzers.%N")
-				end
-			until
-				finished
-			loop
-				print_list (<<"Select a market analyzer for ", msg, ":%N">>)
-				print_names_in_1_column (meg_names, 1); print (eom)
-				read_integer
-				if
-					last_integer < 1 or
-						last_integer > meg_names.count
-				then
-					print_list (<<"Selection must be between 1 and ",
-								meg_names.count, "%N">>)
-				else
-					check
-						valid_index: last_integer > 0 and
-								last_integer <= meg_names.count
-					end
-					Result := market_event_generation_library @
-								last_integer
-					finished := true
-				end
+			if meg_names.count = 0 then
+				finished := True
+				print ("There are currently no market analyzers.%N")
+			else
+				Result := market_event_generation_library @ list_selection (
+					meg_names, concatenation (
+						<<"Select a market analyzer for ", msg>>))
 			end
 		end
 
@@ -300,24 +281,8 @@ feature {NONE} -- Implementation
 
 	function_choice (msg: STRING): MARKET_FUNCTION is
 		do
-			from
-			until
-				Result /= Void
-			loop
-				print_list (<<"Select the ", msg,
-							":%N">>)
-				print_names_in_1_column (function_names, 1); print (eom)
-				read_integer
-				if
-					last_integer < 1 or
-						last_integer > function_names.count
-				then
-					print_list (<<"Selection must be between 1 and ",
-								function_names.count, "%N">>)
-				else
-					Result := function_library @ last_integer
-				end
-			end
+			Result := function_library @ list_selection (function_names,
+					concatenation (<<"Select the ", msg>>))
 		end
 
 	new_event_type_name_selection (names: LIST [STRING]): STRING is
@@ -430,10 +395,10 @@ feature {NONE} -- Implementation
 				inspect
 					character_selection (Void)
 				when 'y', 'Y' then
-					yes := true
-					finished := true
+					yes := True
+					finished := True
 				when 'n', 'N' then
-					finished := true
+					finished := True
 				when 'h', 'H' then
 					print (help @
 						help.Compound_event_generator_time_extensions)
@@ -443,7 +408,7 @@ feature {NONE} -- Implementation
 			end
 			from
 				if yes then
-					finished := false
+					finished := False
 				end
 			until
 				finished
@@ -465,7 +430,7 @@ feature {NONE} -- Implementation
 					read_integer
 					years := last_integer
 				when 'e', 'E' then
-					finished := true
+					finished := True
 				else
 					print ("Invalid response.%N")
 				end
@@ -495,10 +460,10 @@ feature {NONE} -- Implementation
 				inspect
 					character_selection (Void)
 				when 'y', 'Y' then
-					yes := true
-					finished := true
+					yes := True
+					finished := True
 				when 'n', 'N' then
-					finished := true
+					finished := True
 				when 'h', 'H' then
 					print (help @
 						help.Compound_event_generator_left_target_type)
@@ -506,26 +471,9 @@ feature {NONE} -- Implementation
 					print ("Invalid response.%N")
 				end
 			end
-			from
-				if yes then
-					finished := false
-				end
-			until
-				finished
-			loop
-				print ("Select an event type:%N")
-				print_names_in_1_column (event_type_names, 1); print (eom)
-				read_integer
-				if
-					last_integer < 1 or
-						last_integer > event_type_names.count
-				then
-					print_list (<<"Selection must be between 1 and ",
-								event_type_names.count, "%N">>)
-				else
-					Result := event_types @ last_integer
-					finished := true
-				end
+			if yes then
+				Result := event_types @ list_selection (
+					event_type_names, "Select an event type:")
 			end
 		end
 
