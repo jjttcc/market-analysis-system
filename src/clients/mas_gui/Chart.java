@@ -461,12 +461,15 @@ System.out.println("replace_indicators: " + replace_indicators);
 	// (upper) graph will be used.  If `indicator_name' specifies an
 	// indicator that is not a group member, no action is taken.
 	private void link_with_axis(DataSet d, String indicator_name) {
-		IndicatorGroups groups = Configuration.instance().indicator_groups();
+		if (indicator_groups == null) {
+			indicator_groups = (IndicatorGroups)
+				Configuration.instance().indicator_groups().clone();
+		}
 		IndicatorGroup group;
 		if (indicator_name == null) {
-			indicator_name = groups.Maingroup;
+			indicator_name = indicator_groups.Maingroup;
 		}
-		group = groups.at(indicator_name);
+		group = indicator_groups.at(indicator_name);
 		if (group != null) {
 			group.attach_data_set(d);
 		}
@@ -537,6 +540,8 @@ System.out.println("replace_indicators: " + replace_indicators);
 	static String serialize_filename;
 
 	static ChartSettings window_settings;
+
+	IndicatorGroups indicator_groups;
 
 /** Listener for indicator selection */
 class IndicatorListener implements
