@@ -1,39 +1,52 @@
+system
+	"install_tool"
+
+root
+	APPLICATION: make_and_launch
+
+default
+	assertion (all)
+	arguments ("application_dir")
+	arguments (" ")
+	disabled_debug (yes)
+	disabled_debug ("ev_gtk_c_object_dispose")
+	disabled_debug ("ev_gtk_creation")
+	disabled_debug ("ev_gtk_destroy")
+	disabled_debug ("ev_gtk_dispose")
+	disabled_debug ("regexp")
+	debug (no)
+	line_generation (no)
+	profile (no)
+	trace (no)
+	check_vape (yes)
+	console_application (no)
+	address_expression (no)
+	array_optimization (no)
+	dead_code_removal (yes)
+	dynamic_runtime (no)
+	exception_trace (no)
+	inlining (no)
+	multithreaded (no)
+
+
 -------------------------------------------------
 -- This ace file has been generated for you by --
 -- The New Vision2 Application Wizard.         --
 -------------------------------------------------
-system
-	install_tool
+-- The application
+-- EiffelBase
+-- GEL
+-- EiffelVision2
 
-root 
-	APPLICATION (root_cluster): "make_and_launch"
+cluster
+	install_tool:		"$MAS/src/utility_applications/install_tool"
 
-default
-	assertion (require)
-	assertion (ensure)
-	assertion (check)
-	multithreaded (no)
-	console_application (no)
-	dynamic_runtime (no)
-	dead_code_removal (yes)
-	profile (no)
-	line_generation (no)
-	debug  (no)
-	array_optimization (no)
-	inlining (no)
-	inlining_size ("4")
 
-cluster 
+	root_cluster (install_tool):		"$/application"
 
-	install_tool: "$MAS/src/utility_applications/install_tool"
-
-		-- The application
-	root_cluster (install_tool): "$/application"
-
-	commands (install_tool): "$/commands"
+	commands (install_tool):		"$/commands"
 
 	support (install_tool):		"$/support"
-
 
 	eiffel_components:		"$MAS/src/eiffel_library"
 
@@ -44,7 +57,6 @@ cluster
 	server (eiffel_components):		"$/server"
 
 	error (eiffel_components):		"$/error"
-
 
 	gobo:		"$GOBO/library"
 
@@ -65,31 +77,29 @@ cluster
 
 	all gobo_structure (gobo):		"$/structure"
 
-
-
-		-- EiffelBase
-	all base: "$ISE_EIFFEL/library/base"
+	all base:		"$ISE_EIFFEL/library/base"
 		exclude
-			"table_eiffel3"; "desc"
+			"table_eiffel3"; "desc"; 
 		end
 
-		-- GEL
-	all gel: "$ISE_EIFFEL/library/gel"
+	all gel:		"$ISE_EIFFEL/library/gel"
 
-		-- EiffelVision2
-	all vision2: "$ISE_EIFFEL/library/vision2"
+	all vision2:		"$ISE_EIFFEL/library/vision2"
 		exclude
-			"mswin"; "EIFGEN"; "tmp"; "temp"; "release"; "obsolete"
+			"mswin"; "EIFGEN"; "tmp"; "temp"; "release"; "obsolete"; 
 		end
 
 external
+
 	include_path:
-			"\$(ISE_EIFFEL)/library/event/Clib",
-			"\$(ISE_EIFFEL)/library/vision2/spec/include",
-			"\$(ISE_EIFFEL)/library/vision2/implementation/gtk/Clib `gtk-config --cflags`"
+		"\$(ISE_EIFFEL)/library/event/Clib",
+		"\$(ISE_EIFFEL)/library/vision2/spec/include",
+		"\$(ISE_EIFFEL)/library/vision2/implementation/gtk/Clib `gtk-config --cflags`"
+
 	object:
 		"$(ISE_EIFFEL)/library/vision2/spec/$(ISE_PLATFORM)/lib/gtk_eiffel.o",
 		"$(ISE_EIFFEL)/library/vision2/spec/$(ISE_PLATFORM)/lib/load_pixmap.o `gtk-config --libs`",
 		"/${MAS}/src/eiffel_library/support/spec/${ISE_PLATFORM}/lib/utilities.o",
 		"-lpng -lz -lXtst"
+
 end
