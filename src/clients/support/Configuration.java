@@ -53,7 +53,6 @@ public class Configuration implements NetworkProtocol
 
 	private static final Configuration _instance = new Configuration();
 
-x
 	private Vector start_date_settings;
 	private Vector end_date_settings;
 
