@@ -82,8 +82,11 @@ feature -- Initialization
 			end
 		rescue
 			close_sockets
-			handle_exception ("main routine")
-			exit (Error_exit_status)
+			-- Let assertion violations be handled by the run-time environment.
+			if not assertion_violation then
+				handle_exception ("main routine")
+				exit (Error_exit_status)
+			end
 		end
 
 feature {NONE}
