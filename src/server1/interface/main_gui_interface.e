@@ -128,6 +128,8 @@ feature {NONE}
 			rh.extend (cmd, Market_list_request)
 			!INDICATOR_LIST_REQUEST_CMD!cmd.make (factory_builder.market_list)
 			rh.extend (cmd, Indicator_list_request)
+			!ERROR_RESPONSE_CMD!cmd
+			rh.extend (cmd, Error)
 			request_handlers := rh
 		ensure
 			rh_set: request_handlers /= Void and not request_handlers.empty
