@@ -11,6 +11,11 @@ class CONFIGURE_MCT_COMMAND inherit
 
 	INSTALL_COMMAND
 
+	INSTALLATION_CONSTANTS
+		export
+			{NONE} all
+		end
+
 create
 
     make
@@ -63,10 +68,10 @@ print ("Spec body: '" + Result + "'%N")
 			-- specification file
 		once
 			if is_nt then
-				create Result.make_open_read (install_dir +
+				create Result.make_open_read (install_dir_name +
 					directory_separator.out + nt_spec_file_name)
 			else
-				create Result.make_open_read (install_dir +
+				create Result.make_open_read (install_dir_name +
 					directory_separator.out + pre_nt_spec_file_name)
 			end
 		end
@@ -87,8 +92,6 @@ print ("Spec body: '" + Result + "'%N")
 		once
 			Result := "replaceend%N"
 		end
-
-	install_dir: STRING is "install"
 
 	spec_file_name: STRING is "repl_spec"
 

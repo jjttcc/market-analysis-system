@@ -11,6 +11,11 @@ class CLEANUP_COMMAND inherit
 
 	INSTALL_COMMAND
 
+	INSTALLATION_CONSTANTS
+		export
+			{NONE} all
+		end
+
 create
 
     make
@@ -33,7 +38,12 @@ feature -- Basic operations
 
 	execute (options: INSTALL_TOOL_COMMAND_LINE) is
 		local
+			install_dir: DIRECTORY
 		do
+			create instalL_dir.make (install_dir_name)
+			if install_dir.exists then
+				install_dir.delete_content
+			end
 		end
 
 end
