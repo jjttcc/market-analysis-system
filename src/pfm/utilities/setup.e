@@ -63,7 +63,7 @@ feature {NONE} -- Implementation
 			fs, rs: STRING
 		do
 			fs := "%T"; rs := "%N"
-			print ("input file name is "); print (argument(1)); print ("%N")
+--print ("input file name is "); print (argument(1)); print ("%N")
 			create input_file.make_open_read (argument(1))
 			input_file.set_field_separator (fs)
 			input_file.set_record_separator (rs)
