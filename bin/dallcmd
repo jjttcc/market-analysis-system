@@ -15,7 +15,9 @@ report_result() {
 cvs diff eiffel_library/ 2>&1;res1=$?
 cvs diff finance/ 2>&1;res2=$?
 cvs diff java_library/ 2>&1;res3=$?
-cvs diff perl_library/ 2>&1;res3=$?
+cvs diff perl_library/ 2>&1;res4=$?
+cvs diff relatives 2>&1;res5=$?
+cvs diff script_library 2>&1;res6=$?
 }  >/tmp/dall
 #if [ "$res1" = 0 -a "$res2" = 0 ]; then
 #	echo  $res2
@@ -26,5 +28,5 @@ cvs diff perl_library/ 2>&1;res3=$?
 #		echo  $res2
 #	fi
 #fi
-report_result $res1 $res2 $res3
+report_result $res1 $res2 $res3 $res4 $res5 $res6
 gvim +/Index:/ /tmp/dall
