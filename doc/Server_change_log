@@ -1,6 +1,26 @@
-SIGNIFICANT SERVER CHANGES IN RELEASE 1.7
+SIGNIFICANT SERVER CHANGES IN RELEASE 1.6.5
 
-[Describe the html, etc. changes.]
+Added the ability to retrieve market data from a web server using the http
+GET protocol.  This feature is configurable via a mas_httprc cofig. file
+that specifies start and end dates, host address, path query structure,
+etc.  This feature currently only allows retrieval of end-of-day data.
+Created a mas_httprc configuration file to use the feature to retrieve
+data from yahoo.com.
+
+Made database configuration more flexible:  Added start and end date
+specifications that can be used in database query specifications; using
+the "now" construct, this allows the start date to be based on the
+current date.  (The end date defaults to "now".)  Allowed the use of
+a <symbol> construct to indicate the current symbol, which can be used
+with an optimized database where the data for each tradable is in a
+separate table.
+
+Added the ability to create a new indicator whose root function is an
+existing indicator.  Previously only the pre-defined functions
+(TWO_VARIABLE_FUNCTION, etc.) could be used.  This provides much more
+flexibility for defining new indicators.  For example, the Momentum
+indicator can be used as the root function with Volume as its input
+function to create a "Momentum of Volume" indicator.
 
 Added a Weighted Moving Average indicator; and added a new operator that
 was used for this indicator, INDEX_EXTRACTOR, which extracts the current
@@ -8,28 +28,31 @@ index of a sequence.  This allows, for example, the index value to be
 used in a summation for the current period (in an indicator calculation),
 which is needed to calculate the Weighted Moving Average.
 
-Changed the database configuration to allow complete queries to be specified
-for retrieving market data, instead of the old, more constrained
-specification scheme; this allows, for example, a complex join to be
-performed to retrieve stock data.  Also, changed the database configuration
-rules to allow the symbol being quried on to be in either upper or lower
-case, which allows the user to store symbols in upper case in the database.
-(Previously, they had to be lower case.)
+Changed the database configuration to allow complete queries to
+be specified for retrieving market data, instead of the old, more
+constrained specification scheme; this allows, for example, a complex
+join to be performed to retrieve stock data.  Also, changed the database
+configuration rules to allow the symbol being quried on to be in either
+upper or lower case, which allows the user to store symbols in upper
+case in the database.  (Previously, they had to be lower case.)
 
 Fixed the problem with the market-event log file mechanism, allowing
 generated buy and sell signals to be written to a user-specified file
-instead of being emailed.
+instead of being emailed.  (Logging to a file does not yet work on
+Windows.  A work-around is to use the simple_cat.exe as the "mailer"
+for a registrant.)
 
 Extended the client/server protocol to allow GUI clients to request
 trading signals for a tradable from the server.  Implemented this
-functionality in the server.
+functionality in the server.  It is not yet implemented in the GUI.
 
-Added three new operators: natural logarithm, base-2 logarithm, and base-10
-logarithm.
+Added three new operators: natural logarithm, base-2 logarithm, and
+base-10 logarithm.
 
 Ported the server to Windows.  The port includes most of the functionality
-of the Linux release, including reading from an external data source.
-Obtaining data from a database is not yet ported to Windows.
+of the Linux release, including reading from an external data source
+(-x option) and from the web (-w option).  Obtaining data from a database
+is not yet ported to Windows.
 
 SIGNIFICANT SERVER CHANGES IN RELEASE 1.6
 
