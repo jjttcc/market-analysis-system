@@ -6,6 +6,7 @@ package application_library;
 public interface OptionFlags {
 	public final String symbol_option = "-s";
 	public final String compression_option = "-c";
+	public final String version_option = "-v";
 	public final String printall_option = "-print";
 	public final String debug_option = "-debug";
 	public final String auto_refresh_option = "-auto-refresh";

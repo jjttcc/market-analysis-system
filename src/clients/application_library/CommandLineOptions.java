@@ -11,6 +11,9 @@ public class CommandLineOptions extends StartupOptions {
 	public CommandLineOptions(String[] args) {
 		//Process args for the host, port.
 		if (args.length > 1) {
+			if (args[0].equals(version_option)) {
+				print_version();
+			}
 			hostname = args[0];
 			port_number = Integer.parseInt(args[1]);
 			for (int i = 2; i < args.length; ++i) {
@@ -22,6 +25,9 @@ public class CommandLineOptions extends StartupOptions {
 						}
 						symbols.addElement(args[i]);
 					}
+				}
+				if (i < args.length && args[i].equals(version_option)) {
+					print_version();
 				}
 				if (i < args.length && args[i].equals(printall_option)) {
 					set_print_on_startup(true);
@@ -47,6 +53,9 @@ public class CommandLineOptions extends StartupOptions {
 				}
 			}
 		} else {
+			if (args.length > 0 && args[0].equals(version_option)) {
+				print_version();
+			}
 			usage();
 			Configuration.terminate(1);
 		}
@@ -72,9 +81,20 @@ public class CommandLineOptions extends StartupOptions {
 		"           Print debugging information.\n" +
 		"   " + printall_option +
 		"           Print the chart for each symbol.\n" +
+		"   " + version_option +
+		"               Print version information and exit.\n" +
 		"   " + compression_option +
 		"               Request compressed data from server."
 		);
+	}
+
+	// Print version information and terminate.
+	private void print_version() {
+		MasProductInfo info = new MasProductInfo();
+		String version_info = info.name() + ", Version " + info.number() +
+			", " + info.date();
+		System.out.println(version_info);
+		Configuration.terminate(0);
 	}
 
 // Implementation - attributes

@@ -11,6 +11,12 @@ import application_library.*;
 import application_support.*;
 import graph.*;
 
+//@@@Note: Some catch blocks were changed to not 'quit' unless
+//QUIT_ON_EXCEPTION is true.  This marks the beginning of the process of
+//examining each exception condition to determine whether or not it is
+//fatal, where the default in most cases (unlike before this change) is
+//that it is not fatal - the process is not terminated.  When complete,
+//the code will terminate iff the error is truly fatal.
 
 /**
 * Objects that manage data and state information associated with a Chart
@@ -75,6 +81,8 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 		}
 		catch (IOException e) {
 			System.err.println(IO_EXCEPTION_ERROR + e + ABORTING_SUFFIX);
+			//@@@For now, quit - later, the logic may be changed to cause
+			//the "new window" attempt to fail instead of terminating.
 			quit(-1);
 		}
 		return result;
@@ -212,7 +220,11 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 			owner.display_warning(errmsg);
 			System.err.println(errmsg);
 			e.printStackTrace();
-			quit(-1);
+			if (QUIT_ON_EXCEPTION) {
+				quit(-1);
+			} else {
+				last_data_request_succeeded = false;
+			}
 		}
 	}
 
@@ -220,7 +232,7 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 	// resulting data sets.
 	public void send_data_request(String tradable) {
 		last_data_request_succeeded = true;
-		DrawableDataSet main_dataset;
+		DrawableDataSet main_dataset = null;
 		List upper_indicator_datasets = null, lower_indicator_datasets = null;
 		if (period_type_change || ! tradable.equals(current_tradable())) {
 			data_requester = new SynchronizedDataRequester(data_builder,
@@ -231,7 +243,9 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 					! tradable.equals(current_tradable())) {
 				facilities.reset_period_types(tradable, false);
 			}
-			main_dataset = main_tradable_data();
+			if (last_data_request_succeeded) {
+				main_dataset = main_tradable_data();
+			}
 			if (last_data_request_succeeded) {
 				update_indicator_list();
 			}
@@ -561,7 +575,12 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 				last_data_request_succeeded = false;
 			}
 		} catch (Exception e) {
-			facilities.fatal(SERVER_REQUEST_FAILURE_ERROR, e);
+			if (QUIT_ON_EXCEPTION) {
+				facilities.fatal(SERVER_REQUEST_FAILURE_ERROR, e);
+			} else {
+				System.err.println(SERVER_REQUEST_FAILURE_ERROR + ": " + e);
+				last_data_request_succeeded = false;
+			}
 		}
 		assert implies(last_data_request_succeeded, result != null):
 			POSTCONDITION;
@@ -601,8 +620,16 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 							current_indicator);
 					}
 				} catch (Exception e) {
-					facilities.fatal(INDICATOR_DATA_RETRIEVAL_FAILURE_ERROR +
-						current_indicator , e);
+					if (QUIT_ON_EXCEPTION) {
+						facilities.fatal(
+							INDICATOR_DATA_RETRIEVAL_FAILURE_ERROR +
+							current_indicator, e);
+					} else {
+						System.err.println(
+							INDICATOR_DATA_RETRIEVAL_FAILURE_ERROR +
+							current_indicator + ": " + e);
+						last_data_request_succeeded = false;
+					}
 				}
 			}
 		}
@@ -655,7 +682,12 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 								current_indicator);
 						}
 					} catch (Exception e) {
-						facilities.fatal(EXCEPTION_ERROR, e);
+						if (QUIT_ON_EXCEPTION) {
+							facilities.fatal(EXCEPTION_ERROR, e);
+						} else {
+							System.err.println(EXCEPTION_ERROR + ": " + e);
+							last_data_request_succeeded = false;
+						}
 					}
 				}
 			}
@@ -728,6 +760,8 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 				owner.display_warning(INDICATOR_LIST_RETRIEVAL_FAILURE_ERROR);
 			}
 		} catch (Exception e) {
+			System.err.println(EXCEPTION_ERROR + ": " + e);
+			last_data_request_succeeded = false;
 		}
 	}
 
@@ -827,7 +861,7 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 
 	private static final String IO_EXCEPTION_ERROR = "IO exception occurred: ";
 
-	private static final String ABORTING_SUFFIX = " - aborting";
+	private static final String ABORTING_SUFFIX = " - [Is this error fatal?]";
 
 	private static final String INDICATOR_LIST_RETRIEVAL_FAILURE_ERROR =
 		"Error occurred retrieving indicator list.";
@@ -842,4 +876,7 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 		"Indicator data request failed for ";
 
 	private static final String EXCEPTION_ERROR = "Exception occurred";
+
+	//@@@Default to not quit on most exceptions:
+	private static final boolean QUIT_ON_EXCEPTION = false;
 }

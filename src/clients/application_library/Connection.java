@@ -64,7 +64,7 @@ abstract public class Connection {
 		try {
 			close_connection();
 		} catch (Exception e) {
-			throw new IOException("Error: close connection failed" + e);
+			throw new IOException("Error: close connection failed: " + e);
 		}
 	}
 
