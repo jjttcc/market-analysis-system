@@ -226,12 +226,6 @@ cluster
 
 	polling_implementation (net):		"$/polling/implementation"
 
-	store (ise):		"$/store"
-
-	estore_interface (store):		"$/interface"
-
-	estore_support (store):		"$/support"
-
 	ecli_src:		"$ECLI/src"
 
 	abstract (ecli_src):		"$/abstract"
