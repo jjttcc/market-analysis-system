@@ -6,9 +6,14 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-deferred class MARKET_ANALYZER inherit
+deferred class FUNCTION_ANALYZER inherit
 
 	EVENT_GENERATOR
+
+	GLOBAL_SERVICES
+		export {NONE}
+			all
+		end
 
 feature -- Access
 
@@ -28,4 +33,62 @@ feature -- Status setting
 		deferred
 		end
 
-end -- class MARKET_ANALYZER
+	set_start_date_time (arg: DATE_TIME) is
+			-- Set start_date_time to `arg'.
+		require
+			arg /= Void
+		do
+			start_date_time := arg
+		ensure
+			start_date_time_set: start_date_time = arg and
+									start_date_time /= Void
+		end
+
+	set_operator (arg: RESULT_COMMAND [BOOLEAN]) is
+			-- Set operator to `arg'.
+		require
+			arg /= Void
+		do
+			operator := arg
+		ensure
+			operator_set: operator = arg and operator /= Void
+		end
+
+feature -- Basic operations
+
+	generate_event (time_stamp: DATE_TIME; name, description: STRING) is
+		require
+			not_void: time_stamp /= Void and name /= Void and
+						description /= Void
+		local
+			debugstr: STRING
+			event: TYPED_EVENT
+		do
+			--!!!Do we need another date/time field in the event, so
+			--!!!that the event generation time, as well as the time
+			--!!!of the tuple that caused the event, are stored?
+			--!!!Or maybe we need a descendant of TYPED_EVENT that also
+			--!!!stores the tuple??
+			!!event.make (name, time_stamp, event_type)
+			event.set_description (description)
+			product.extend (event)
+			debugstr := concatenation (<<"Event name: ", event.name,
+							", date/time: ", event.time_stamp,
+							", type: ", event_type.name,
+							", description:%N", event.description, "%N">>)
+			print (debugstr)
+		end
+
+feature {NONE} -- Implementation
+
+	set_event_type (name: STRING) is
+			-- Create an event type with name `name', add it to the global
+			-- event table, and set attribute event_type to it.
+		do
+			create_event_type (name)
+			event_type := last_event_type
+		ensure
+			event_type /= Void
+		end
+
+end -- class FUNCTION_ANALYZER
