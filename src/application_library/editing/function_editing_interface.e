@@ -134,18 +134,88 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			end
 		end
 
+	set_complex_function_inputs (f: MARKET_FUNCTION) is
+		require
+			f_is_complex: f.is_complex
+		local
+			input: MARKET_FUNCTION
+			complex_f: COMPLEX_FUNCTION
+			l: LIST [COMPLEX_FUNCTION]
+			ovf: ONE_VARIABLE_FUNCTION
+			tvf: TWO_VARIABLE_FUNCTION
+			mfl: MARKET_FUNCTION_LINE
+			f_changed: BOOLEAN
+			leaf_msg, no_function_msg, it_they_msg: STRING
+		do
+			complex_f ?= f
+			check
+				f_is_complex: complex_f /= Void
+			end
+			from
+				l := complex_f.leaf_functions
+				no_function_msg := " does not require user-selected input %
+					%functions.%N"
+				if l.count > 1 then
+					leaf_msg := " leaf functions"
+					it_they_msg := "they require"
+				else
+					leaf_msg := " leaf function"
+					it_they_msg := "it requires"
+				end
+				show_message (f.name + " has " + l.count.out + leaf_msg +
+					" -%NChecking whether " + it_they_msg + " input %
+					%functions to be selected ...%N")
+				l.start
+			until
+				l.exhausted
+			loop
+				show_message ("Examining leaf function " + l.item.name + ".%N")
+				ovf ?= l.item
+--!!!!Should a clone of the selected input function be used?
+--!!!!Seems like the answer is no - side effects aren't happening - Don't
+--have time to do a throrough analysis of why.
+				if ovf /= Void then
+					mfl ?= ovf
+					if mfl = Void then
+						editor.set_ovf_input (ovf)
+						f_changed := True
+					else
+						-- l.item is a MARKET_FUNCTION_LINE and does
+						-- not need its input function set.
+						show_message (l.item.name + no_function_msg)
+					end
+				else
+					tvf ?= l.item
+					if tvf /= Void then
+						editor.set_tvf_input (tvf)
+						f_changed := True
+					else
+						-- l.item is a MARKET_DATA_FUNCTION, which does
+						-- not need its input function set.
+						show_message (l.item.name + no_function_msg)
+					end
+				end
+				l.forth
+			end
+			if f_changed then
+				-- Setting a new input function for any of f's "descendants"
+				-- (in the composite function tree) will cause f's cached
+				-- parameter list to become out of date - it needs to be reset.
+				complex_f.reset_parameters
+			end
+		end
+
 	function_selection_from_library (msg: STRING): MARKET_FUNCTION is
-				-- User-selected MARKET_FUNCTION from the function library
+			-- User-selected MARKET_FUNCTION from the function library
 		do
 			Result := deep_clone (market_function_selection (msg,
 				agent valid_root_function))
-print ("name of selected function: " + Result.name + "%N")
 			editor.set_exclude_operators (True)
 			-- In this flow, only Result's input function should be set, not
 			-- its operator - because the user has selected an existing
 			-- indicator and wants to use its operator rather than choose a
 			-- new one.
-			initialize_function (Result)
+			set_complex_function_inputs (Result)
 			editor.set_exclude_operators (False)
 			set_new_name (Result, msg)
 		end
