@@ -112,6 +112,8 @@ public class Configuration implements NetworkProtocol {
 			if (debug) {
 				System.out.println("Terminating at: " +
 					DateTimeServices.current_date_as_string());
+				new Exception("Configuration.terminate called - " +
+					"stack trace:\n").printStackTrace();
 			}
 			System.exit(status);
 		}

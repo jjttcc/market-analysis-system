@@ -13,6 +13,15 @@ import application_library.*;
 public class MA_Client {
 	public static void main(String[] args) {
 		initialize_configuration();
+		if (STDERR_TO_FILE) {
+			try {
+			System.setErr(new PrintStream(
+				new FileOutputStream(ERROR_FIILE_NAME)));
+			} catch (Exception e) {
+				System.out.println("Debug/init error: Could not create " +
+					"standard error file: " + ERROR_FIILE_NAME);
+			}
+		}
 		command_line_options = new CommandLineOptions(args);
 		configure_options(command_line_options);
 		mas_gui.DataSetBuilder data_builder =
@@ -84,4 +93,6 @@ public class MA_Client {
 
 	private static final String chart_filename = ".ma_client_settings";
 	private static final String configuration_file_name = ".ma_clientrc";
+	private static boolean STDERR_TO_FILE = true;
+	private static String ERROR_FIILE_NAME = "mas_gui_errors";
 }
