@@ -333,7 +333,7 @@
    description="Create binary distribution">
 
     <!-- Copy documentation subdirectories -->
-    <mkdir   todir="${dist.home}/docs"/>
+    <mkdir   dir="${dist.home}/docs"/>
     <copy    todir="${dist.home}/docs">
       <fileset dir="${docs.home}"/>
     </copy>
@@ -398,6 +398,7 @@
     <mkdir          dir="${dist.home}/docs/api"/>
     <javadoc sourcepath="${src.home}"
                 destdir="${dist.home}/docs/api"
+			     source="1.4"
            packagenames="*">
       <classpath refid="compile.classpath"/>
     </javadoc>

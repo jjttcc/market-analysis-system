@@ -169,7 +169,7 @@
   <property name="compile.debug"       value="true"/>
   <property name="compile.deprecation" value="false"/>
   <property name="compile.optimize"    value="true"/>
-  <property name="compile.source"    value="1.4"/>
+  <property name="compile.target"    value="1.1"/>
 
 
 
@@ -291,7 +291,7 @@
 		destdir="${build.home}/classes"
 		debug="${compile.debug}"
 		deprecation="${compile.deprecation}"
-		source="${compile.source}"
+		target="${compile.target}"
 		optimize="${compile.optimize}">
         <classpath refid="compile.classpath"/>
     </javac>
@@ -329,7 +329,7 @@
    description="Create binary distribution">
 
     <!-- Copy documentation subdirectories -->
-    <mkdir   todir="${dist.home}/docs"/>
+    <mkdir   dir="${dist.home}/docs"/>
     <copy    todir="${dist.home}/docs">
       <fileset dir="${docs.home}"/>
     </copy>
