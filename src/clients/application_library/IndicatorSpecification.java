@@ -25,7 +25,9 @@ public class IndicatorSpecification {
 		return name;
 	}
 
-	// The data associated with the indicator
+	/**
+	* The data associated with the indicator
+	*/
 	public DataSet data() {
 		return data;
 	}
@@ -36,6 +38,9 @@ public class IndicatorSpecification {
 
 // Status report
 
+	/**
+	Has the indicator been selected for display?
+	*/
 	public boolean selected() {
 		return selected;
 	}
@@ -45,7 +50,7 @@ public class IndicatorSpecification {
 //@@@Consider creating a MA_IndicatorSpecification, moving this
 //procedure to it, and making it only package-accessible.  (See
 //MA_TradableSpecification.)
-	// The data associated with the indicator
+	/** The data associated with the indicator */
 	public void set_data(DataSet d) {
 		data = d;
 	}
@@ -53,7 +58,7 @@ public class IndicatorSpecification {
 //@@@Consider creating a MA_IndicatorSpecification, moving this
 //procedure to it, and making it only package-accessible.  (See
 //MA_TradableSpecification.)
-	// Set `selected' to true.
+	/** Set `selected' to true. */
 	public void select() {
 		selected = true;
 	}
