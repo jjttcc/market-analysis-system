@@ -23,7 +23,7 @@ feature {NONE} -- Initialization
 
 	make (accum_op: RESULT_COMMAND [REAL]) is
 		require
-			args_exists: accum_op /= Void
+			arg_exists: accum_op /= Void
 		do
 			accumulation_operator := accum_op
 			--@@@Remainder to be determined.
@@ -62,6 +62,11 @@ feature -- Access
 			--may be better (in terms of code clarity/understandability)
 			--to keep the accumulation operator to separate
 			--"weighting" calculations from "accumulation" calculations.
+			--@@Document that this op. is expected to get the value to be
+			--"accumulated" from its argument (a simple tuple), so one of
+			--its subcommands needs to be a basic_numeric_command, which
+			--will extract this value - and it needs to know to read this
+			--value from that BNC.
 
 feature -- Status report
 
@@ -139,13 +144,11 @@ feature {NONE} -- Implementation
 			-- Use the tuple at the current cursor position of each element
 			-- of `components' to make `current_tuple'.
 		local
-			main_field_extractor_array: ARRAY [BASIC_NUMERIC_COMMAND]
 			extractors: LINEAR [BASIC_NUMERIC_COMMAND]
 		do
 			create current_tuple.make
 			current_tuple.set_date_time (components.item.data.first.date_time)
-			main_field_extractor_array := <<open, high, low, close, volume>>
-			extractors := main_field_extractor_array.linear_representation
+			extractors := field_extractors.linear_representation
 			extractors.do_all (agent process_components_for_current_tuple)
 		ensure
 			current_tuple_exists: current_tuple /= Void
@@ -192,6 +195,13 @@ feature {NONE} -- Implementation - Hook routines
 			create work_tuple.make (now, now.date, 0)
 		ensure
 			work_tuple_exists: work_tuple /= Void
+		end
+
+	field_extractors: ARRAY [BASIC_NUMERIC_COMMAND] is
+			-- "commands" used to extract the fields (e.g., open, close, ...)
+			-- used for the calculation
+		do
+			Result := <<open, high, low, close, volume>>
 		end
 
 	calculate_field (field_extractor: BASIC_NUMERIC_COMMAND) is
@@ -245,6 +255,8 @@ feature {NONE} -- Implementation - Hook routines
 			-- Operator to be used for any needed post-processing for the
 			-- current field of the current tuple (possibly specialized
 			-- with `field_extractor_name')
+			--@@Document that this op. needs to get its value from its
+			--argument - similar to the accumulation_operator.
 		deferred
 			-- Specialization on `field_extractor_name' will most likely
 			-- only occur for "volume", with the other field extractors
@@ -269,6 +281,9 @@ feature {NONE} -- Implementation - Hook routines
 	accumulation_result_variable: NUMERIC_VALUE_COMMAND is
 			-- The "variable" that will hold the result of the "accumulation"
 		deferred
+		ensure
+			accumulation_operator_has_result: Result /= Void implies
+				accumulation_operator.descendants.has (Result)
 		end
 
 feature {NONE} -- Implementation - Utility queries
@@ -441,6 +456,6 @@ feature {NONE} -- Implementation - Utility routines
 invariant
 
 	components_exist: components /= Void
-	operators_exists: accumulation_operator /= Void
+	accumulation_operator_exists: accumulation_operator /= Void
 
 end
