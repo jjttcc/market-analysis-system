@@ -178,7 +178,7 @@ src/scripts/windows/fake_mailer.bat bin/ mas_windows1.6.7
 src/scripts/windows/init.bat bin/ mas_windows1.6.7
 src/scripts/windows/bash_init bin/ mas_windows1.6.7
 src/scripts/windows/simple_cat.exe bin/ mas_windows1.6.7
-src/mct/config/windows/run_command.bat bin/ mas_windows1.6.7
+src/scripts/windows/run_command.bat bin/ mas_windows1.6.7
 # contrib
 src/contrib src/ contrib
 # (macl configuration files)
@@ -257,8 +257,8 @@ build/database/mas_dbrc_separate_tables lib/ mas_linux1.6.7 mas_windows1.6.7
 build/config/rc_files/mas_httprc lib/ mas_linux1.6.7 mas_windows1.6.7
 src/mct/config/mctrc.linux lib/mctrc mas_linux1.6.7
 src/mct/config/mctrc.windows lib/mctrc mas_windows1.6.7
-src/mct/config/windows/nt_repl_spec
-src/mct/config/windows/pre_nt_repl_spec
+src/mct/config/windows/nt_repl_spec lib/ mas_windows1.6.7
+src/mct/config/windows/pre_nt_repl_spec lib/ mas_windows1.6.7
 # License file
 forum.txt . mas_linux1.6.7 mas_windows1.6.7 mac1.6.7 serversrc1.6.7 clientsrc1.6.7
 # Scripts
