@@ -9,9 +9,8 @@ deferred class MARKET_FUNCTION inherit
 
 	FACTORY
 		rename
-			product as output
-		export {NONE}
-			execute -- not used
+			product as output, execute as process,
+			execute_precondition as process_precondition
 		redefine
 			output
 		end
@@ -59,15 +58,15 @@ feature -- Status report
 
 feature -- Basic operations
 
-	process is
+	process (arg: ANY) is
 			-- Process the output from the input.
-		require
+		require else -- !!!Fix this!
 			not_processed: not processed
 			opset_if_opused: operator_used implies operator /= Void
 		do
 			do_process
 			set_processed (true)
-		ensure
+		ensure then
 			processed: processed
 		end
 
@@ -114,12 +113,6 @@ feature {NONE}
 		deferred
 		ensure
 			is_set: processed = b
-		end
-
-feature {NONE} -- Not used
-
-	execute (arg: ANY) is
-		do
 		end
 
 invariant
