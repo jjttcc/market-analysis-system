@@ -1,17 +1,16 @@
 indexing
 	description: 
-		"A market function that takes two arguments or variables%
-		%(that is, analyzes two vectors)."
+		"A market function that takes two arguments or variables"
 	date: "$Date$";
 	revision: "$Revision$"
 
-class TWO_VECTOR_FUNCTION
+class TWO_VARIABLE_FUNCTION
 
 inherit
 
 	MARKET_FUNCTION
 
-	VECTOR_ANALYZER
+	LINEAR_ANALYZER
 		rename
 			target as target1 -- x in "z = f(x, y)"
 		redefine
@@ -20,14 +19,12 @@ inherit
 			target1, forth, action, start
 		end
 
-	VECTOR_ANALYZER
+	LINEAR_ANALYZER
 		rename
 			target as target2, -- y in "z = f(x, y)"
 			forth as forth_unused,
 			action as action_unused,
 			start as start_unused
-		export {NONE}
-			forth_unused, action_unused
 		end
 
 creation
@@ -117,4 +114,4 @@ invariant
 		(input1 = Void or else input1.output = target1) and
 		(input2 = Void or else input2.output = target2)
 
-end -- class TWO_VECTOR_FUNCTION
+end -- class TWO_VARIABLE_FUNCTION

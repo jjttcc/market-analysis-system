@@ -1,20 +1,20 @@
 indexing
 	description: 
-		"A market function that provides a concept of an n-length%
-		%sub-vector of the main input vector."
+		"A market function that provides a concept of an n-length %
+		%sub-list of the main input list."
 	date: "$Date$";
 	revision: "$Revision$"
 
-class N_RECORD_ONE_VECTOR_FUNCTION inherit
+class N_RECORD_ONE_VARIABLE_FUNCTION inherit
 
-	ONE_VECTOR_FUNCTION
+	ONE_VARIABLE_FUNCTION
 		redefine
 			do_process, make, target
 		end
 
 	N_RECORD_STRUCTURE
-		rename
-			set_n as set_parent_n
+		redefine
+			set_n
 		end
 
 creation
@@ -26,7 +26,7 @@ feature
 	make is
 		do
 			init_n
-			precursor
+			Precursor
 		end
 
 feature -- Basic operations
@@ -47,17 +47,11 @@ feature {NONE}
 feature {TEST_FUNCTION_FACTORY}
 
 	set_n (i: INTEGER) is
-		require
-			operator_used implies operator /= Void
 		do
-			set_parent_n (i)
+			Precursor (i)
 			if operator /= Void then
 				operator.initialize (Current)
 			end
 		end
 
-invariant
-
-	n_positive: n >= 1
-
-end -- class N_RECORD_ONE_VECTOR_FUNCTION
+end -- class N_RECORD_ONE_VARIABLE_FUNCTION

@@ -1,15 +1,14 @@
 indexing
 	description: 
-		"A market function that takes two arguments or variables%
-		%(that is, analyzes two vectors)."
+		"A market function that takes one argument or variable"
 	date: "$Date$";
 	revision: "$Revision$"
 
-class ONE_VECTOR_FUNCTION inherit
+class ONE_VARIABLE_FUNCTION inherit
 
 	MARKET_FUNCTION
 
-	VECTOR_ANALYZER
+	LINEAR_ANALYZER
 		redefine
 			action
 		end
@@ -79,4 +78,4 @@ invariant
 	processed_constraint: processed implies input.processed
 	input_target_relation: input = Void or else input.output = target
 
-end -- class ONE_VECTOR_FUNCTION
+end -- class ONE_VARIABLE_FUNCTION
