@@ -1,7 +1,18 @@
 PATH=$PATH:$PWD
->repl_spec
-echo "# arg count: $#" >>repl_spec
+specfile=repl_spec
+mctdir="c:/Program Files/mct"
+
+>$specfile
+echo "# arg count: $#" >>$specfile
 appdir="$*"
-echo replacestart>>repl_spec
-echo {application_directory}"$appdir"|sed 's@\\@/@g'>>repl_spec
-echo replaceend>>repl_spec
+
+# Create the specification file for config_tool with replacement specs
+# for the application directory chosen by the user (and any other
+# needed settings).
+echo replacestart>>$specfile
+echo {application_directory}"$appdir"|sed 's@\\@/@g'>>$specfile
+echo replaceend>>$specfile
+
+config_tool  -c  $specfile -f ../mctrc
+if [ ! -d $mctdir ]; then mkdir -p $mctdir;fi
+cp ../mctrc $mctdir
