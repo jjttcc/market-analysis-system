@@ -1,6 +1,14 @@
 class HTTP_TEST inherit
 
 	ARGUMENTS
+		export
+			{NONE} all
+		end
+
+	GENERAL_UTILITIES
+		export
+			{NONE} all
+		end
 
 create
 
@@ -13,23 +21,33 @@ feature {NONE} -- Initialization
 			i: INTEGER
 		do
 			from
-				if argument_count >= 1 and then argument (1).is_integer then
-					start_date := date_from_numeric_string (argument (1))
-					i := 2
-				else
-					i := 1
-				end
 				create parameters.make
+				initialize_symbols
+				symbols.start
 			until
-				i > argument_count
+				symbols.exhausted
 			loop
-				initialize_symbol (i)
-				print ("%N" + symbol + ":%N%N")
-				parameters.set_symbol (symbol)
+				print ("%N" + symbols.item + ":%N%N")
+				parameters.set_symbol (symbols.item)
 				test_http
 				print ("host: " + parameters.host + ", path: " +
 					parameters.path + "%N")
-				i := i + 1
+				symbols.forth
+			end
+		end
+
+	initialize_symbols is
+		local
+			i: INTEGER
+		do
+			create symbols.make (argument_count)
+			if argument_count >= 1 then
+				from i := 1 until i = argument_count + 1 loop
+					symbols.extend (argument (i))
+					i := i + 1
+				end
+			else
+				read_symbols_from_file
 			end
 		end
 
@@ -101,5 +119,38 @@ print ("parameters end date: " + parameters.end_date.out + "%N")
 		end
 
 	start_date: DATE
+
+	use_command_line: BOOLEAN
+			-- Are command-line arguments to be used to specify the
+			-- symbols for which data is to be retrieved?
+
+	symbols: ARRAYED_LIST [STRING]
+			-- The symbols for which data is to be retrieved
+
+	read_symbols_from_file is
+			-- Read `symbols' from the specified input file.
+		local
+			file_reader: FILE_READER
+			contents: STRING
+			su: expanded STRING_UTILITIES
+		do
+			create file_reader.make (parameters.symbol_file)
+			contents := file_reader.contents
+			if not file_reader.error then
+				su.set_target (contents)
+				symbols := su.tokens ("%N")
+				if not symbols.is_empty and then symbols.last.is_empty then
+					-- If the last line of the symbols file ends with
+					-- a newline, `symbols' will have an empty last
+					-- element - remvoe it.
+					symbols.finish
+					symbols.remove
+				end
+			else
+				log_errors (<<"Error reading symbol file: ",
+					parameters.symbol_file, "%N(", 
+					file_reader.error_string, ")%N">>)
+			end
+		end
 
 end
