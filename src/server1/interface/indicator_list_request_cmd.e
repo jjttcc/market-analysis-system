@@ -38,10 +38,10 @@ feature -- Basic operations
 			tradable: TRADABLE [BASIC_MARKET_TUPLE]
 			ilist: LIST [MARKET_FUNCTION]
 		do
-			tradable := market_list_handler.tradable (market_symbol,
+			tradable := tradables.tradable (market_symbol,
 				trading_period_type)
 			if tradable = Void then
-				if not market_list_handler.symbols.has (market_symbol) then
+				if not tradables.symbols.has (market_symbol) then
 					report_error (Invalid_symbol, <<"Symbol not in database.">>)
 				elseif server_error then
 					report_server_error

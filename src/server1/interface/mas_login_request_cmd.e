@@ -80,7 +80,7 @@ feature -- Basic operations
 				sessions.extend (session, session_id)
 				-- Clearing the cache when a new login occurs ensures that
 				-- a new client will receive up-to-date data.
-				market_list_handler.clear_caches
+				tradables.clear_caches
 			end
 		ensure then
 			one_more_session: sessions.count = old sessions.count + 1

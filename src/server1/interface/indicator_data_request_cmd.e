@@ -49,10 +49,10 @@ feature {NONE}
 			indicator: MARKET_FUNCTION
 			market: TRADABLE [BASIC_MARKET_TUPLE]
 		do
-			market := market_list_handler.tradable (market_symbol,
+			market := tradables.tradable (market_symbol,
 				trading_period_type)
 			if market = Void then
-				if not market_list_handler.symbols.has (market_symbol) then
+				if not tradables.symbols.has (market_symbol) then
 					report_error (Invalid_symbol, <<"Symbol not in database.">>)
 				elseif server_error then
 					report_server_error
