@@ -5,9 +5,10 @@ root
 	EXTENDED_MA_SERVER: make
 
 default
-	assertion (all)
-	arguments ("-p 8884 -b")
+	assertion (no)
 	arguments ("-p 8888 -b")
+	arguments ("-p 8886 -b")
+	arguments ("-p 8884 -b")
 	arguments ("-p 8888")
 	arguments ("-p 2345 1234")
 	arguments ("-p")
