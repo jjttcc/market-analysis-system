@@ -20,8 +20,10 @@ feature -- Access
 
 	command_line_options: MAS_COMMAND_LINE is
 			-- Command-line option services
+		local
+			platform_factory: expanded PLATFORM_DEPENDENT_OBJECTS
 		once
-			create Result.make
+			Result := platform_factory.command_line
 		end
 
 	database_services: MAS_DB_SERVICES is
