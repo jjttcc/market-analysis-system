@@ -38,7 +38,7 @@ feature {NONE} -- Implementation
 
 	set_polling_timeout_milliseconds is
 		do
-			-- @@Hard code as 20 seconds for new - make it configurable later.
+			-- @@Hard code as 20 seconds for now - make it configurable later.
 			polling_timeout_milliseconds := 20000
 		end
 
