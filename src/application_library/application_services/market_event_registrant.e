@@ -64,6 +64,18 @@ feature -- Access
 	hfile_name: STRING
 			-- Event history file name
 
+	user_report: STRING is
+			-- Information about Current relevant to the user
+		do
+			Result := "Registrant type: " + type_description + ". " +
+				specialized_user_report + "."
+		end
+
+	type_description: STRING is
+			-- Description of the type of registrant
+		deferred
+		end
+
 feature -- Basic operations
 
 	notify (e: TYPED_EVENT) is
@@ -147,6 +159,14 @@ feature -- Basic operations
 			-- does not need to be persistent.
 			event_cache.wipe_out
 			event_history.clear_all
+		end
+
+feature {NONE} -- Hook routines
+
+	specialized_user_report: STRING is
+			-- Component of user report specialized according to the
+			-- descendant type
+		deferred
 		end
 
 feature {NONE} -- Implementation

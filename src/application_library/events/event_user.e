@@ -61,6 +61,13 @@ feature -- Initialization
 				record_separator = record_sep
 		end
 
+feature -- Access
+
+	type_description: STRING is
+		once
+			Result := "User"
+		end
+
 feature -- Basic operations
 
 	perform_notify is
@@ -100,6 +107,35 @@ feature -- Basic operations
 			if last_error /= Void then
 				log_errors (<<"Notification to user ", name,
 					" failed with error: ", last_error, "%N">>)
+			end
+		end
+
+feature {NONE} -- Implementation - Hook routines
+
+	specialized_user_report: STRING is
+		do
+			Result := "%N"
+			if email_addresses.is_empty then
+				Result := Result + "%NNo email address set."
+			elseif email_addresses.count = 1 then
+				Result := Result + "email address: " + email_addresses @ 1 + "."
+			else
+				from
+					email_addresses.start
+					Result := Result + "email addresses: " +
+						email_addresses.item
+				until
+					email_addresses.exhausted
+				loop
+					Result := Result + ", " + email_addresses.item
+					email_addresses.forth
+				end
+				Result := Result + "."
+			end
+			if mailer /= Void then
+				Result := Result + "%NMailer program: " + mailer
+			else
+				Result := Result + "%NNo mailer program set."
 			end
 		end
 

@@ -78,6 +78,10 @@ feature -- Access
 			Result := logfile.name
 		end
 
+	type_description: STRING is
+		once
+			Result := "Log file"
+		end
 feature -- Basic operations
 
 	perform_notify is
@@ -96,6 +100,13 @@ feature -- Basic operations
 				event_cache.forth
 			end
 			logfile.close
+		end
+
+feature {NONE} -- Implementation - Hook routines
+
+	specialized_user_report: STRING is
+		do
+			Result := "File name: " + name
 		end
 
 feature {NONE} -- Implementation

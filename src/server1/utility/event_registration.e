@@ -386,7 +386,7 @@ feature {NONE} -- Implementation
 			end
 			if not abort then
 				Result := regs @ last_integer
-				print_list (<<Result.name, " selected.%N">>)
+				print_list (<<"'", Result.name, "' selected.%N">>)
 			end
 		end
 
@@ -430,7 +430,7 @@ feature {NONE} -- Implementation
 			end
 			if not abort then
 				Result := types @ last_integer
-				print_list (<<Result.name, " selected.%N">>)
+				print_list (<<"'", Result.name, "' selected.%N">>)
 			end
 		end
 
@@ -438,6 +438,7 @@ feature {NONE} -- Implementation
 		local
 			l: LINEAR [EVENT_TYPE]
 		do
+			print (r.user_report + "%N")
 			print_list (<<"Registrant ", r.name, " is registered for the %
 				%following event types:%N">>)
 			from
