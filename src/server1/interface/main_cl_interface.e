@@ -846,8 +846,7 @@ feature {NONE}
 			loop
 				if l.item = f then
 					l.remove
-				end
-				if not l.empty then
+				else
 					l.forth
 				end
 			end
