@@ -59,8 +59,16 @@ feature -- Access
 		do
 			if is_stock_symbol (s) then
 				Result := daily_stock_data (s)
+				if Result /= Void then
+					check_field_count (Result, Stock, false,
+						"daily stock data")
+				end
 			elseif is_derivative_symbol (s) then
 				Result := daily_derivative_data (s)
+				if Result /= Void then
+					check_field_count (Result, Derivative, false,
+						"daily derivative data")
+				end
 			end
 		ensure
 			not_void_if_no_error: not fatal_error and (is_stock_symbol (s) or
@@ -77,8 +85,16 @@ feature -- Access
 		do
 			if is_stock_symbol (s) then
 				Result := intraday_stock_data (s)
+				if Result /= Void then
+					check_field_count (Result, Stock, true,
+						"intraday stock data")
+				end
 			elseif is_derivative_symbol (s) then
 				Result := intraday_derivative_data (s)
+				if Result /= Void then
+					check_field_count (Result, Derivative, true,
+						"intraday derivative data")
+				end
 			end
 		ensure
 			not_void_if_no_error: not fatal_error and (is_stock_symbol (s) or
@@ -281,7 +297,8 @@ feature {NONE} -- Implementation
 		do
 			db_info := global_server.database_configuration
 			if db_info.using_daily_stock_data_command then
-				Result := db_info.daily_stock_data_command
+				Result := inserted_symbol (db_info.daily_stock_data_command,
+					symbol)
 			else
 				Result := concatenation (<<"select ",
 					db_info.daily_stock_date_field_name, ", ",
@@ -302,16 +319,22 @@ feature {NONE} -- Implementation
 			global_server: expanded GLOBAL_SERVER
 		do
 			db_info := global_server.database_configuration
-			Result := concatenation (<<"select ",
-				db_info.intraday_stock_date_field_name, ", ",
-				db_info.intraday_stock_time_field_name, ", ",
-				open_string (db_info), db_info.intraday_stock_high_field_name,
-				", ", db_info.intraday_stock_low_field_name,
-				", ", db_info.intraday_stock_close_field_name, ", ",
-				db_info.intraday_stock_volume_field_name, " from ",
-				db_info.intraday_stock_table_name,
-				" where ", db_info.intraday_stock_symbol_field_name, " = '",
-				symbol, "'", db_info.intraday_stock_query_tail>>)
+			if db_info.using_intraday_stock_data_command then
+				Result := inserted_symbol (db_info.intraday_stock_data_command,
+					symbol)
+			else
+				Result := concatenation (<<"select ",
+					db_info.intraday_stock_date_field_name, ", ",
+					db_info.intraday_stock_time_field_name, ", ",
+					open_string (db_info),
+					db_info.intraday_stock_high_field_name,
+					", ", db_info.intraday_stock_low_field_name,
+					", ", db_info.intraday_stock_close_field_name, ", ",
+					db_info.intraday_stock_volume_field_name, " from ",
+					db_info.intraday_stock_table_name,
+					" where ", db_info.intraday_stock_symbol_field_name, " = '",
+					symbol, "'", db_info.intraday_stock_query_tail>>)
+			end
 		end
 
 	daily_derivative_query (symbol: STRING): STRING is
@@ -321,17 +344,22 @@ feature {NONE} -- Implementation
 			global_server: expanded GLOBAL_SERVER
 		do
 			db_info := global_server.database_configuration
-			Result := concatenation (<<"select ",
-				db_info.daily_derivative_date_field_name, ", ",
-				open_string (db_info),
-					db_info.daily_derivative_high_field_name,
-				", ", db_info.daily_derivative_low_field_name, ", ",
-				db_info.daily_derivative_close_field_name,
-				", ", db_info.daily_derivative_volume_field_name, ", ",
-				db_info.daily_derivative_open_interest_field_name, " from ",
-				db_info.daily_derivative_table_name, " where ",
-				db_info.daily_derivative_symbol_field_name, " = '", symbol,
-				"' ", db_info.daily_derivative_query_tail>>)
+			if db_info.using_daily_derivative_data_command then
+				Result := inserted_symbol (
+					db_info.daily_derivative_data_command, symbol)
+			else
+				Result := concatenation (<<"select ",
+					db_info.daily_derivative_date_field_name, ", ",
+					open_string (db_info),
+						db_info.daily_derivative_high_field_name,
+					", ", db_info.daily_derivative_low_field_name, ", ",
+					db_info.daily_derivative_close_field_name,
+					", ", db_info.daily_derivative_volume_field_name, ", ",
+					db_info.daily_derivative_open_interest_field_name,
+					" from ", db_info.daily_derivative_table_name, " where ",
+					db_info.daily_derivative_symbol_field_name, " = '", symbol,
+					"' ", db_info.daily_derivative_query_tail>>)
+			end
 		end
 
 	intraday_derivative_query (symbol: STRING): STRING is
@@ -341,18 +369,23 @@ feature {NONE} -- Implementation
 			global_server: expanded GLOBAL_SERVER
 		do
 			db_info := global_server.database_configuration
-			Result := concatenation (<<"select ",
-				db_info.intraday_derivative_date_field_name, ", ",
-				db_info.intraday_derivative_time_field_name, ", ",
-				open_string (db_info),
-				db_info.intraday_derivative_high_field_name,
-				", ", db_info.intraday_derivative_low_field_name,
-				", ", db_info.intraday_derivative_close_field_name, ", ",
-				db_info.intraday_derivative_volume_field_name, ", ",
-				db_info.intraday_derivative_open_interest_field_name, " from ",
-				db_info.intraday_derivative_table_name, " where ",
-				db_info.intraday_derivative_symbol_field_name, " = '",
-				symbol, "'", db_info.intraday_derivative_query_tail>>)
+			if db_info.using_intraday_derivative_data_command then
+				Result := inserted_symbol (
+					db_info.intraday_derivative_data_command, symbol)
+			else
+				Result := concatenation (<<"select ",
+					db_info.intraday_derivative_date_field_name, ", ",
+					db_info.intraday_derivative_time_field_name, ", ",
+					open_string (db_info),
+					db_info.intraday_derivative_high_field_name,
+					", ", db_info.intraday_derivative_low_field_name,
+					", ", db_info.intraday_derivative_close_field_name, ", ",
+					db_info.intraday_derivative_volume_field_name, ", ",
+					db_info.intraday_derivative_open_interest_field_name,
+					" from ", db_info.intraday_derivative_table_name, " where ",
+					db_info.intraday_derivative_symbol_field_name, " = '",
+					symbol, "'", db_info.intraday_derivative_query_tail>>)
+			end
 		end
 
 	stock_name_query (symbol: STRING): STRING is
@@ -445,6 +478,43 @@ feature {NONE} -- Implementation
 			empty_if_q_empty: old q.empty implies Result.empty
 		end
 
+	check_field_count (seq: DB_INPUT_SEQUENCE; tradable_type: INTEGER;
+		intraday: BOOLEAN; data_descr: STRING) is
+			-- Check the field count of `seq' according to whether it is
+			-- whether it is for a Stock or Derivative and whether its,
+			-- data is intraday, and if the field count is wrong
+			-- set fatal_error and last_error accordingly.
+		require
+			valid_tradable_type: tradable_type = Stock or
+				tradable_type = Derivative
+		local
+			global_server: expanded GLOBAL_SERVER
+			expected_count: INTEGER
+		do
+			if global_server.command_line_options.opening_price then
+				expected_count := 1
+			end
+			inspect
+				tradable_type
+			when Stock then
+				expected_count := expected_count + 5
+			when Derivative then
+				expected_count := expected_count + 6
+			end
+			if intraday then
+				expected_count := expected_count + 1
+			end
+			if seq.field_count /= expected_count then
+				fatal_error := true
+				last_error := concatenation (<<"Database error:%NWrong number ",
+					"of fields in query result for%N", data_descr,
+					" - expected ", expected_count,
+					", got ", seq.field_count, ".%N">>)
+			end
+		end
+
 	stock_symbol_table, derivative_symbol_table: HASH_TABLE [ANY, STRING]
+
+	Stock, Derivative: INTEGER is unique
 
 end -- class MAS_DB_SERVICES

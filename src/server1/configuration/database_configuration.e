@@ -94,6 +94,9 @@ feature -- Initialization
 			db_values.extend ("", Intraday_derivative_query_tail_specifier)
 
 			db_values.extend ("", Daily_stock_data_command_specifier)
+			db_values.extend ("", Intraday_stock_data_command_specifier)
+			db_values.extend ("", Daily_derivative_data_command_specifier)
+			db_values.extend ("", Intraday_derivative_data_command_specifier)
 			read_param_file
 		end
 
@@ -213,6 +216,15 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
+	intraday_stock_data_command: STRING is
+		require
+			ok_to_use_this_spec: using_intraday_stock_data_command
+		do
+			Result := db_values @ Intraday_stock_data_command_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
 	intraday_stock_symbol_field_name: STRING is
 		do
 			Result := db_values @ Intraday_stock_symbol_field_specifier
@@ -322,6 +334,15 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
+	daily_derivative_data_command: STRING is
+		require
+			ok_to_use_this_spec: using_daily_derivative_data_command
+		do
+			Result := db_values @ Daily_derivative_data_command_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
 	daily_derivative_symbol_field_name: STRING is
 		do
 			Result := db_values @ Daily_derivative_symbol_field_specifier
@@ -375,6 +396,15 @@ feature -- Access
 		do
 			Result :=
 				db_values @ Daily_derivative_open_interest_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_derivative_data_command: STRING is
+		require
+			ok_to_use_this_spec: using_intraday_derivative_data_command
+		do
+			Result := db_values @ Intraday_derivative_data_command_specifier
 		ensure
 			not_void: Result /= Void
 		end
@@ -473,41 +503,74 @@ feature -- Access
 
 feature -- Status report
 
+	daily_stock_data_available: BOOLEAN
+			-- Does a specification exist for obtaining daily stock data?
+
+	intraday_stock_data_available: BOOLEAN
+			-- Does a specification exist for obtaining intraday stock data?
+
+	daily_derivative_data_available: BOOLEAN
+			-- Does a specification exist for obtaining daily derivative data?
+
+	intraday_derivative_data_available: BOOLEAN
+			-- Does a specification exist for obtaining intraday
+			-- derivative data?
+
 	using_daily_stock_data_command: BOOLEAN is
 			-- Is the `daily_stock_data_command' being used to retrieve
 			-- daily stock data rather than contructing the command with
 			-- `daily_stock_symbol_field_name', etc.?
 		do
-			Result := not daily_stock_data_command.empty
+			Result := daily_stock_data_available and
+				not (db_values @ Daily_stock_data_command_specifier).empty
 		ensure
-			yes_if_not_empty: Result = not daily_stock_data_command.empty
+			data_available_if_true:
+				Result implies daily_stock_data_available
+		end
+
+	using_intraday_stock_data_command: BOOLEAN is
+			-- Is the `intraday_stock_data_command' being used to retrieve
+			-- intraday stock data rather than contructing the command with
+			-- `intraday_stock_symbol_field_name', etc.?
+		do
+			Result := intraday_stock_data_available and
+				not (db_values @ Intraday_stock_data_command_specifier).empty
+		ensure
+			data_available_if_true:
+				Result implies intraday_stock_data_available
+		end
+
+	using_daily_derivative_data_command: BOOLEAN is
+			-- Is the `daily_derivative_data_command' being used to retrieve
+			-- daily derivative data rather than contructing the command with
+			-- `daily_derivative_symbol_field_name', etc.?
+		do
+			Result := daily_derivative_data_available and
+				not (db_values @ Daily_derivative_data_command_specifier).empty
+		ensure
+			data_available_if_true:
+				Result implies daily_derivative_data_available
+		end
+
+	using_intraday_derivative_data_command: BOOLEAN is
+			-- Is the `intraday_derivative_data_command' being used to
+			-- retrieve intraday derivative data rather than contructing
+			-- the command with `intraday_derivative_symbol_field_name', etc.?
+		do
+			Result := intraday_derivative_data_available and not (
+				db_values @ Intraday_derivative_data_command_specifier).empty
+		ensure
+			data_available_if_true:
+				Result implies intraday_derivative_data_available
 		end
 
 	daily_stock_data_rule: BOOLEAN is
 		do
 			Result := using_daily_stock_data_command implies
-				not daily_stock_data_command.empty and
-				daily_stock_symbol_field_name.empty and
-				daily_stock_date_field_name.empty and
-				daily_stock_open_field_name.empty and
-				daily_stock_high_field_name.empty and
-				daily_stock_low_field_name.empty and
-				daily_stock_close_field_name.empty and
-				daily_stock_volume_field_name.empty and
-				daily_stock_table_name.empty and
-				daily_stock_query_tail.empty
+				not daily_stock_data_command.empty
 		ensure
 			Result = using_daily_stock_data_command implies
-				not daily_stock_data_command.empty and
-				daily_stock_symbol_field_name.empty and
-				daily_stock_date_field_name.empty and
-				daily_stock_open_field_name.empty and
-				daily_stock_high_field_name.empty and
-				daily_stock_low_field_name.empty and
-				daily_stock_close_field_name.empty and
-				daily_stock_volume_field_name.empty and
-				daily_stock_table_name.empty and
-				daily_stock_query_tail.empty
+				not daily_stock_data_command.empty
 		end
 
 feature {NONE} -- Implementation
@@ -541,20 +604,21 @@ feature {NONE} -- Implementation
 	current_tokens (file_reader: MAS_FILE_READER): LIST [STRING] is
 			-- Tokens for the current "line" of `file_reader'
 		local
-			s: STRING
+			s, tgt: STRING
 		do
-			s := file_reader.item
-			-- If the current "line" is continued on the next line,
-			if s.item (s.count) = Continuation_character then
-				-- Remove the continuation character from s.
-				s := s.substring (1, s.count - 1)
-				-- Append the next line, if it exists.
+			from
+				s := file_reader.item
+			until
+				s.item (s.count) /= Continuation_character or
+				file_reader.exhausted
+			loop
 				file_reader.forth
 				current_line := current_line + 1
 				if not file_reader.exhausted then
 					s.append (file_reader.item)
 				end
 			end
+			s.prune_all (Continuation_character)
 			su.set_target (s)
 			Result := su.tokens (Field_separator)
 		end
@@ -655,35 +719,107 @@ feature {NONE} -- Implementation
 		local
 			gs: expanded GLOBAL_SERVER
 		do
-			if using_daily_stock_data_command then
-				daily_stock_symbol_field_name.wipe_out
-				daily_stock_date_field_name.wipe_out
-				daily_stock_open_field_name.wipe_out
-				daily_stock_high_field_name.wipe_out
-				daily_stock_low_field_name.wipe_out
-				daily_stock_close_field_name.wipe_out
-				daily_stock_volume_field_name.wipe_out
-				daily_stock_table_name.wipe_out
-				daily_stock_query_tail.wipe_out
-			else
-				check_for_missing_specs (<<
-					daily_stock_symbol_field_name.empty,
-						Daily_stock_symbol_field_specifier,
-					daily_stock_date_field_name.empty,
-						Daily_stock_date_field_specifier,
-					(gs.command_line_options.opening_price and
-					daily_stock_open_field_name.empty),
-						Daily_stock_open_field_specifier,
-					daily_stock_high_field_name.empty,
-						Daily_stock_high_field_specifier,
-					daily_stock_low_field_name.empty,
-						Daily_stock_low_field_specifier,
-					daily_stock_close_field_name.empty,
-						Daily_stock_close_field_specifier,
-					daily_stock_volume_field_name.empty,
-						Daily_stock_volume_field_specifier,
-					daily_stock_table_name.empty,
-						Stock_name_query_specifier>>)
+			if not stock_symbol_query.empty then
+				if daily_stock_data_command.empty then
+					if not daily_stock_table_name.empty then
+						check_for_missing_specs (<<
+							daily_stock_symbol_field_name.empty,
+								Daily_stock_symbol_field_specifier,
+							daily_stock_date_field_name.empty,
+								Daily_stock_date_field_specifier,
+							(gs.command_line_options.opening_price and
+							daily_stock_open_field_name.empty),
+								Daily_stock_open_field_specifier,
+							daily_stock_high_field_name.empty,
+								Daily_stock_high_field_specifier,
+							daily_stock_low_field_name.empty,
+								Daily_stock_low_field_specifier,
+							daily_stock_close_field_name.empty,
+								Daily_stock_close_field_specifier,
+							daily_stock_volume_field_name.empty,
+							Daily_stock_volume_field_specifier>>)
+						daily_stock_data_available := true
+					end
+				else
+					daily_stock_data_available := true
+				end
+				if intraday_stock_data_command.empty then
+					if not intraday_stock_table_name.empty then
+						check_for_missing_specs (<<
+							intraday_stock_symbol_field_name.empty,
+								Intraday_stock_symbol_field_specifier,
+							intraday_stock_date_field_name.empty,
+								Intraday_stock_date_field_specifier,
+							(gs.command_line_options.opening_price and
+							intraday_stock_open_field_name.empty),
+								Intraday_stock_open_field_specifier,
+							intraday_stock_high_field_name.empty,
+								Intraday_stock_high_field_specifier,
+							intraday_stock_low_field_name.empty,
+								Intraday_stock_low_field_specifier,
+							intraday_stock_close_field_name.empty,
+								Intraday_stock_close_field_specifier,
+							intraday_stock_volume_field_name.empty,
+							Intraday_stock_volume_field_specifier>>)
+						intraday_stock_data_available := true
+					end
+				else
+					intraday_stock_data_available := true
+				end
+			end
+			if not derivative_symbol_query.empty then
+				if daily_derivative_data_command.empty then
+					if not daily_derivative_table_name.empty then
+						check_for_missing_specs (<<
+							daily_derivative_symbol_field_name.empty,
+								Daily_derivative_symbol_field_specifier,
+							daily_derivative_date_field_name.empty,
+								Daily_derivative_date_field_specifier,
+							(gs.command_line_options.opening_price and
+							daily_derivative_open_field_name.empty),
+								Daily_derivative_open_field_specifier,
+							daily_derivative_high_field_name.empty,
+								Daily_derivative_high_field_specifier,
+							daily_derivative_low_field_name.empty,
+								Daily_derivative_low_field_specifier,
+							daily_derivative_close_field_name.empty,
+								Daily_derivative_close_field_specifier,
+							daily_derivative_volume_field_name.empty,
+								Daily_derivative_volume_field_specifier,
+							daily_derivative_open_interest_field_name.empty,
+								Daily_derivative_open_interest_field_specifier
+							>>)
+						daily_derivative_data_available := true
+					end
+				else
+					daily_derivative_data_available := true
+				end
+				if intraday_derivative_data_command.empty then
+					if not intraday_derivative_table_name.empty then
+						check_for_missing_specs (<<
+							intraday_derivative_symbol_field_name.empty,
+								Intraday_derivative_symbol_field_specifier,
+							intraday_derivative_date_field_name.empty,
+								Intraday_derivative_date_field_specifier,
+							(gs.command_line_options.opening_price and
+							intraday_derivative_open_field_name.empty),
+								Intraday_derivative_open_field_specifier,
+							intraday_derivative_high_field_name.empty,
+								Intraday_derivative_high_field_specifier,
+							intraday_derivative_low_field_name.empty,
+								Intraday_derivative_low_field_specifier,
+							intraday_derivative_close_field_name.empty,
+								Intraday_derivative_close_field_specifier,
+							intraday_derivative_volume_field_name.empty,
+								Intraday_derivative_volume_field_specifier,
+							intraday_derivative_open_interest_field_name.empty,
+							Intraday_derivative_open_interest_field_specifier
+							>>)
+						intraday_derivative_data_available := true
+					end
+				else
+					intraday_derivative_data_available := true
+				end
 			end
 		end
 
