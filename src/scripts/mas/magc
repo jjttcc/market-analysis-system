@@ -4,6 +4,7 @@
 Progname=$(basename $0)
 basedir=$(dirname $0)/..
 classdir=$basedir/lib/classes
+configdir=$MAS_DIRECTORY
 cmd=java
 
 usage() {
@@ -65,9 +66,10 @@ if [ -z "$port_number" ]; then
 fi
 
 check_settings
+export CLASSPATH=$classdir
 if [ "$no_cd" = true ]; then
-	export CLASSPATH=$classdir
+	:
 else
-	cd $classdir
+	cd $configdir
 fi
 $cmd $main $host $port_number $args
