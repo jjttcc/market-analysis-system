@@ -103,10 +103,10 @@ feature -- Access
 
 feature -- Basic operations
 
-	usage is
+	usage: STRING is
 			-- Message: how to invoke the program from the command-line
 		do
-			print (concatenation (<<"Usage: ", command_name,
+			Result := concatenation (<<"Usage: ", command_name,
 				" [options] [input_file...]%NOptions:%N",
 				"  <number>  Use port <number> for socket communication%N",
 				"  -o        Data has an Open field%N",
@@ -121,7 +121,7 @@ feature -- Basic operations
 				"  -p        Use database (Persistent store)%N",
 				"  -x        Use an external data source%N",
 				"  -n        No caching of intraday data%N",
-				"  -b        Run in Background%N">>))
+				"  -b        Run in Background%N">>)
 		end
 
 feature {NONE} -- Implementation
