@@ -104,7 +104,6 @@ feature {NONE}
 
 	action is
 		do
-			check operator /= Void end
 			operator.execute (target.item)
 			value := value + operator.value
 		ensure then
