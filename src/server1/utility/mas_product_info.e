@@ -26,7 +26,7 @@ feature -- Access
 			-- The components of the version number
 			-- Components are strings to allow mixed numbers and letters.
 		once
-			Result := <<"1", "6", "6">>
+			Result := <<"1", "6", "6a">>
 		end
 
 	date: DATE is
