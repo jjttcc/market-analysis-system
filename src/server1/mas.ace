@@ -176,6 +176,8 @@ cluster
 			assertion (no): market_tuple_list
 		end
 
+	high_level_facilities (ma_library):		"$/high_level_facilities"
+
 	function_types (ma_library):		"$/function_types"
 
 	commands (ma_library):		"$/commands"
