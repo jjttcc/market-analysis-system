@@ -74,14 +74,15 @@ feature {TRADABLE_FACTORY} -- Implementation
 	stock_splits: STOCK_SPLITS is
 		local
 			constants: expanded APPLICATION_CONSTANTS
+			platform_objects: expanded PLATFORM_DEPENDENT_OBJECTS
 		once
 			-- Use stock splits from the database, if they exist; otherwise
 			-- input them from the stock-split file.
 			Result := db_stock_splits
 			if Result = Void then
-				create {STOCK_SPLIT_FILE} Result.make (
+				Result := platform_objects.stock_split_file (
 					constants.Stock_split_field_separator,
-					constants.Stock_split_record_separator, stock_split_file)
+					constants.Stock_split_record_separator, stock_split_fname)
 			end
 		end
 
@@ -100,7 +101,7 @@ feature {TRADABLE_FACTORY} -- Implementation
 			end
 		end
 
-	stock_split_file: STRING is
+	stock_split_fname: STRING is
 		local
 			constants: expanded APPLICATION_CONSTANTS
 		once
