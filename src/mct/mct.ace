@@ -33,7 +33,19 @@ default
 
 cluster
 
-	root_cluster: "$MAS/src/mct"
+	mct: "$MAS/src/mct"
+
+	root_cluster (mct): "$/root"
+
+	actions (mct): "$/actions"
+	abstract_actions (actions): "$/abstractions"
+	session_actions (actions): "$/session"
+	gui (mct): "$/gui"
+	gui_support (gui): "$/support"
+	gui_application (gui): "$/application"
+	configuration (mct): "$/configuration"
+	session (mct): "$/session"
+	support (mct): "$/support"
 
 	eiflib: "$MAS/src/eiffel_library"
 
