@@ -188,9 +188,18 @@ feature -- Access
 				"Operator that uses an operand to operate on the current %
 				%trading period")
 			Result.extend (pair)
+			!N_BASED_UNARY_OPERATOR!cmd.make (real_dummy, 1)
+			!!pair.make (cmd,
+				"N-based operator whose value remains unchanged after %
+				%initialization and that uses%Nan operand to obtain its value")
+			Result.extend (pair)
 			!BOOLEAN_NUMERIC_CLIENT!cmd.make (bool_real_dummy, real_dummy,
 												real_dummy)
-			!!pair.make (cmd, "[This one is very hard to describe.]")
+			!!pair.make (cmd, "Operator that makes a decision based on %
+				%the value of executing its%Nboolean operator - if the %
+				%result is true, value is set to the result of%Nexecuting %
+				%its 'true command'; otherwise, value is set to the %
+				%result of%Nexecuting its 'false command'.")
 			Result.extend (pair)
 			!SIGN_ANALYZER!cmd.make (real_dummy, real_dummy, false)
 			!!pair.make (cmd,
