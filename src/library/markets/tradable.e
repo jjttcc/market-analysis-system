@@ -366,5 +366,6 @@ invariant
 	trading_period_daily_if_not_intraday:
 		loaded and then not trading_period_type.intraday implies
 			trading_period_type.name.is_equal (trading_period_type.Daily)
+	symbol_not_void: symbol /= Void
 
 end -- class TRADABLE
