@@ -1,0 +1,54 @@
+indexing
+	description: "Exponential moving average";
+	notes: "Formulat taken from `Trading for a Living', by A. Elder"
+	date: "$Date$";
+	revision: "$Revision$"
+
+class EXPONENTIAL_MOVING_AVERAGE inherit
+
+	STANDARD_MOVING_AVERAGE
+		redefine
+			action
+		end
+
+creation
+
+	make
+	-- !!NOTE:  Logic of calling set_n, set_exp., etc. must be worked out
+	-- so that it is well designed.
+
+feature -- Element change
+
+	set_exponential (op: N_BASED_CALCULATION) is
+		do
+			op.set_owner (Current)
+			exp := op
+		end
+		
+feature {NONE}
+
+	action is
+			-- Calculate exponential MA value for the current period.
+		require else
+			not output.empty
+			input.index > n
+		local
+			t: SIMPLE_TUPLE
+		do
+			exp.execute (Current)
+			!!t
+			t.set_value (input.item.value * exp.value +
+							output.last.value * (1 - exp.value))
+			output.extend (t)
+		ensure then
+			-- output.last.value = P[curr] * exp + EMA[curr-1] * (1 - exp)
+			--   where P[curr] is the price for the current period and
+			--   EMA[curr-1] is the EMA for the previous period.
+		end
+
+feature {NONE}
+
+	exp: N_BASED_CALCULATION
+			-- The so-called exponential
+
+end -- class EXPONENTIAL_MOVING_AVERAGE
