@@ -339,7 +339,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 			main_dataset = (DrawableDataSet) data_builder.last_market_data();
 			latest_date_time = data_builder.last_latest_date_time();
 			link_with_axis(main_dataset, null);
-			main_pane.add_main_data_set(main_dataset);
+//!!!Hook up data sets here:
+main_pane.add_main_data_set(main_dataset);
 			if (! current_upper_indicators.isEmpty()) {
 				// Retrieve the data for the newly requested tradable for
 				// the upper indicators, add it to the upper graph and
@@ -362,6 +363,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 						conf.indicator_color(current_indicator, true));
 					link_with_axis(dataset, current_indicator);
 //!!! replace with a procedure to update ind. data spec, main pane, etc.:
+//!!!Hook up data sets here:
 					main_pane.add_main_data_set(dataset);
 //!!!Perhaps replace _indicators with indicator_specs
 				}
@@ -401,6 +403,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 							current_indicator, false));
 						link_with_axis(dataset, current_indicator);
 						add_indicator_lines(dataset, current_indicator);
+//!!!Hook up data sets here:
 						main_pane.add_indicator_data_set(dataset);
 					}
 				}
