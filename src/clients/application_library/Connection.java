@@ -152,7 +152,7 @@ abstract public class Connection {
 		in = null;
 	}
 
-	boolean error_occurred() {
+	public boolean error_occurred() {
 		return last_rec_msgID != OK_code;
 	}
 
