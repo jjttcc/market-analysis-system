@@ -47,7 +47,7 @@ feature -- Initialization
 				period_type_names @ Daily)
 			fs_tab: field_separator.is_equal ("%T")
 			rs_newline: record_separator.is_equal ("%N")
-			non_strict: strict_error_checking = false
+			non_strict: strict_error_checking = False
 		end
 
 feature -- Access

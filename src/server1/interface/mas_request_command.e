@@ -48,7 +48,7 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is true
+	arg_mandatory: BOOLEAN is True
 
 feature -- Status setting
 
@@ -71,7 +71,7 @@ feature {NONE}
 			-- Is the `output_buffer' used?  Yes - redefine for
 			-- descendants that don't use it.
 		once
-			Result := true
+			Result := True
 		end
 
 	ok_string: STRING is

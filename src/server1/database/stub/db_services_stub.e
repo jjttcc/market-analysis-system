@@ -65,7 +65,7 @@ feature -- Basic operations
 		do
 			last_error :=
 				"Database services are not available in this release."
-			fatal_error := true
+			fatal_error := True
 		end
 
 	disconnect is

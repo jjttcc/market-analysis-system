@@ -105,11 +105,11 @@ feature -- Access -- settings
 
 	no_high: BOOLEAN
 			-- Does the data exclude the "highest-price" field?
-			-- @@Always false for now - may be made configurable in the future.
+			-- @@Always False for now - may be made configurable in the future.
 
 	no_low: BOOLEAN
 			-- Does the data exclude the "lowest-price" field?
-			-- @@Always false for now - may be made configurable in the future.
+			-- @@Always False for now - may be made configurable in the future.
 
 	field_separator: STRING
 			-- Field separator for (input) market data - Void if not set

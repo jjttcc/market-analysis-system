@@ -581,7 +581,7 @@ feature {NONE} -- Implementation - utilities
 
 	initialize is
 		do
-			no_cleanup := false
+			no_cleanup := False
 			-- Start out with non-intraday data:
 			current_period_type := period_types @ (period_type_names @ Daily)
 			create event_generator_builder.make
@@ -619,7 +619,7 @@ feature {NONE} -- Implementation - utilities
 				tradable_list_handler.isfirst
 		rescue
 			-- Exceptions caught during initialization are considered fatal.
-			last_exception_status.set_fatal (true)
+			last_exception_status.set_fatal (True)
 			handle_exception ("Initialization error")
 		end
 

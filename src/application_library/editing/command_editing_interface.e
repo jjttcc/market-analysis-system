@@ -215,7 +215,7 @@ feature -- Status report
 
 	use_market_function_selection: BOOLEAN
 			-- Will `market_function_selection' be used to ask the user
-			-- for a selection?  If (false or market_tuple_selector is
+			-- for a selection?  If (False or market_tuple_selector is
 			-- Void) and market_function is not Void,
 			-- `market_function' will be used.
 

@@ -163,9 +163,9 @@ feature {NONE} -- Implementation
 			if exception_occurred then
 				set_last_error (<<"Failed to open temporary file: ",
 								fname, " (", meaning(exception), ")">>)
-				tmp_file_failed := true
+				tmp_file_failed := True
 			else
-				tmp_file_failed := false
+				tmp_file_failed := False
 				dirname := app_directory
 				if dirname = Void then
 					dirname := current_working_directory
@@ -188,7 +188,7 @@ feature {NONE} -- Implementation
 					i := i + 1
 				end
 				if tmpdir.has_entry (fname) then
-					tmp_file_failed := true
+					tmp_file_failed := True
 					set_last_error (<<"Failed to open temporary file: ",
 									fname>>)
 				else
@@ -198,7 +198,7 @@ feature {NONE} -- Implementation
 		ensure
 			failed_or_writable: tmp_file_failed or else Result.is_open_write
 		rescue
-			exception_occurred := true
+			exception_occurred := True
 			retry
 		end
 

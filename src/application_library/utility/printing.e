@@ -239,7 +239,7 @@ feature {NONE} -- Implementation
 	verbose: BOOLEAN is
 			-- Print more information than usual? - default: no
 		do
-			Result := false
+			Result := False
 		end
 
 	print_start_date, print_end_date: DATE

@@ -102,7 +102,7 @@ feature {NONE} -- Implementation
 			until
 				file_names.exhausted
 			loop
-				t.put (true, name_without_extension (file_names.item))
+				t.put (True, name_without_extension (file_names.item))
 				file_names.forth
 			end
 			l.fill (t.current_keys)

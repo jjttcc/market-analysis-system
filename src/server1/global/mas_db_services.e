@@ -60,13 +60,13 @@ feature -- Access
 			if is_stock_symbol (s) then
 				Result := daily_stock_data (s)
 				if Result /= Void then
-					check_field_count (Result, Stock, false,
+					check_field_count (Result, Stock, False,
 						"daily stock data")
 				end
 			elseif is_derivative_symbol (s) then
 				Result := daily_derivative_data (s)
 				if Result /= Void then
-					check_field_count (Result, Derivative, false,
+					check_field_count (Result, Derivative, False,
 						"daily derivative data")
 				end
 			end
@@ -86,13 +86,13 @@ feature -- Access
 			if is_stock_symbol (s) then
 				Result := intraday_stock_data (s)
 				if Result /= Void then
-					check_field_count (Result, Stock, true,
+					check_field_count (Result, Stock, True,
 						"intraday stock data")
 				end
 			elseif is_derivative_symbol (s) then
 				Result := intraday_derivative_data (s)
 				if Result /= Void then
-					check_field_count (Result, Derivative, true,
+					check_field_count (Result, Derivative, True,
 						"intraday derivative data")
 				end
 			end
@@ -149,7 +149,7 @@ feature -- Access
 		local
 			query: STRING
 		do
-			fatal_error := false
+			fatal_error := False
 			query := stock_name_query (symbol)
 			if query /= Void then
 				Result := single_string_query_result (query)
@@ -169,7 +169,7 @@ feature -- Access
 		local
 			query: STRING
 		do
-			fatal_error := false
+			fatal_error := False
 			query := derivative_name_query (symbol)
 			if query /= Void then
 				Result := single_string_query_result (query)
@@ -399,7 +399,7 @@ feature {NONE} -- Implementation
 			if not q.is_empty then
 				Result := q
 			else
-				fatal_error := true
+				fatal_error := True
 				last_error :=
 					"Missing stock name query in database configuration file"
 			end
@@ -418,7 +418,7 @@ feature {NONE} -- Implementation
 			if not q.is_empty then
 				Result := q
 			else
-				fatal_error := true
+				fatal_error := True
 				last_error := "Missing derivative name query in %
 					%database configuration file"
 			end
@@ -477,7 +477,7 @@ feature {NONE} -- Implementation
 				expected_count := expected_count + 1
 			end
 			if seq.field_count /= expected_count then
-				fatal_error := true
+				fatal_error := True
 				last_error := concatenation (<<"Database error:%NWrong number ",
 					"of fields in query result for%N", data_descr,
 					" - expected ", expected_count,

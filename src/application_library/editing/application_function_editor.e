@@ -93,7 +93,7 @@ feature -- Basic operations
 			cmd ?= operator_maker.command_selection_from_type (
 						operator_maker.Real_result_command,
 							concatenation (<<f.generator,
-								"'s operator">>), false)
+								"'s operator">>), False)
 			f.set_operator (cmd)
 		end
 
@@ -113,15 +113,15 @@ feature -- Basic operations
 			cmd ?= operator_maker.command_selection_from_type (
 						operator_maker.Binary_real_real_command,
 							concatenation (<<f.generator,
-								"'s main operator">>), false)
+								"'s main operator">>), False)
 			lc ?= operator_maker.command_selection_from_type (
 						operator_maker.Linear_command,
 							concatenation (<<f.generator,
-								"'s 'previous' operator">>), false)
+								"'s 'previous' operator">>), False)
 			rc ?= operator_maker.command_selection_from_type (
 						operator_maker.Real_result_command,
 							concatenation (<<f.generator,
-								"'s first element operator">>), false)
+								"'s first element operator">>), False)
 			-- set_operators in ACCUMULATION requires that cmd's left
 			-- operand is attached to the same object as lc.
 			cmd.set_operands (lc, cmd.operand2)
@@ -148,7 +148,7 @@ feature -- Basic operations
 			mainop ?= operator_maker.command_selection_from_type (
 						operator_maker.Real_result_command,
 							concatenation (<<f.generator,
-								"'s main operator">>), false)
+								"'s main operator">>), False)
 			response := user_interface.string_selection(concatenation(<<
 				"Would you like to choose a previous operator for ",
 				f.name, "? ">>))
@@ -157,12 +157,12 @@ feature -- Basic operations
 				prevop ?= operator_maker.command_selection_from_type (
 							operator_maker.Linear_command,
 								concatenation (<<f.generator,
-									"'s 'previous' operator">>), false)
+									"'s 'previous' operator">>), False)
 			end
 			firstop ?= operator_maker.command_selection_from_type (
 						operator_maker.Real_result_command,
 							concatenation (<<f.generator,
-								"'s first element operator">>), false)
+								"'s first element operator">>), False)
 			f.set_operators (mainop, prevop, firstop)
 			response := user_interface.string_selection(concatenation(<<
 				"Would you like to set ", f.name, "'s n-value? ",
@@ -187,7 +187,7 @@ feature -- Basic operations
 			cmd ?= operator_maker.command_selection_from_type (
 						operator_maker.Real_result_command,
 							concatenation (<<f.generator,
-								"'s operator">>), false)
+								"'s operator">>), False)
 			f.set_operator (cmd)
 			-- Ensure that f's effective offset is set to the absolute
 			-- value of the largest left offset (or highest magnitude of
@@ -214,7 +214,7 @@ feature -- Basic operations
 			cmd ?= operator_maker.command_selection_from_type (
 						operator_maker.Real_result_command,
 							concatenation (<<f.generator,
-								"'s operator">>), false)
+								"'s operator">>), False)
 			f.set_operator (cmd)
 		end
 
@@ -232,7 +232,7 @@ feature -- Basic operations
 			cmd ?= operator_maker.command_selection_from_type (
 						operator_maker.Real_result_command,
 							concatenation (<<f.generator,
-								"'s operator">>), false)
+								"'s operator">>), False)
 			f.set_operator (cmd)
 			-- Ensure that f's effective offset is set to the absolute
 			-- value of the largest left offset (or highest magnitude of
@@ -261,12 +261,12 @@ feature -- Basic operations
 			cmd ?= operator_maker.command_selection_from_type (
 						operator_maker.Real_result_command,
 							concatenation (<<f.generator,
-								"'s main operator">>), false)
+								"'s main operator">>), False)
 			f.set_operator (cmd)
 			exp ?= operator_maker.command_selection_from_type (
 						operator_maker.N_based_calculation,
 							concatenation (<<f.generator,
-								"'s exponential operator">>), false)
+								"'s exponential operator">>), False)
 			f.set_exponential (exp)
 			-- Ensure that f's effective offset is set to the absolute
 			-- value of the largest left offset (or highest magnitude of

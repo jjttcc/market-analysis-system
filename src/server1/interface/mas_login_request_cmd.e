@@ -48,7 +48,7 @@ feature -- Basic operations
 			setting_type, error_msg: STRING
 			tokens: LIST [STRING]
 		do
-			error_occurred := false
+			error_occurred := False
 			session_id := new_key
 			sutil.set_target (msg)
 			create session.make
@@ -69,7 +69,7 @@ feature -- Basic operations
 					setting_type := tokens.item
 					tokens.forth
 					if tokens.exhausted then
-						error_occurred := true
+						error_occurred := True
 						error_msg := "Missing value for setting: "
 						error_msg.append (setting_type)
 					else
@@ -77,7 +77,7 @@ feature -- Basic operations
 						if error_msg = Void then
 							tokens.forth
 						else
-							error_occurred := true
+							error_occurred := True
 						end
 					end
 				end

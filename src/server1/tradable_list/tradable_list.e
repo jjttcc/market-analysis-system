@@ -37,10 +37,10 @@ feature -- Initialization
 			setup_symbol_list (s_list)
 			symbol_list.compare_objects
 			tradable_factory := factory
-			object_comparison := true
+			object_comparison := True
 			symbol_list.start
 			create cache.make (Cache_size)
-			caching_on := true
+			caching_on := True
 		ensure
 			sym_set: symbols /= Void and symbols.count = s_list.count
 			factory_set: tradable_factory = factory
@@ -65,10 +65,10 @@ feature -- Access
 		end
 
 	item: TRADABLE [BASIC_MARKET_TUPLE] is
-			-- Current tradable.  `fatal_error' will be true if an error
+			-- Current tradable.  `fatal_error' will be True if an error
 			-- occurs.
 		do
-			fatal_error := false
+			fatal_error := False
 			-- Create a new tradable (or get it from the cache) only if
 			-- caching is off, or the cursor has moved since the last
 			-- tradable creation, or the cache has been cleared.
@@ -83,7 +83,7 @@ feature -- Access
 			end
 			Result := last_tradable
 			if Result = Void and not fatal_error then
-				fatal_error := true
+				fatal_error := True
 			end
 		ensure then
 			good_if_no_error: not fatal_error implies Result /= Void
@@ -98,7 +98,7 @@ feature -- Access
 			Result := symbol_list_clone
 		end
 
-	changeable_comparison_criterion: BOOLEAN is false
+	changeable_comparison_criterion: BOOLEAN is False
 
 	Cache_size: INTEGER is 10
 
@@ -134,7 +134,7 @@ feature -- Status setting
 			-- Turn caching on.
 		do
 			if not caching_on then
-				caching_on := true
+				caching_on := True
 			end
 		ensure
 			on: caching_on
@@ -144,7 +144,7 @@ feature -- Status setting
 			-- Turn caching off.
 		do
 			if caching_on then
-				caching_on := false
+				caching_on := False
 			end
 		ensure
 			off: not caching_on
@@ -153,9 +153,9 @@ feature -- Status setting
 	clear_error is
 			-- Clear error state.
 		do
-			fatal_error := false
+			fatal_error := False
 		ensure
-			no_error: fatal_error = false
+			no_error: fatal_error = False
 		end
 
 	set_timing_on (arg: BOOLEAN) is
@@ -251,7 +251,7 @@ feature {NONE} -- Implementation
 					report_errors (last_tradable.symbol,
 						tradable_factory.error_list)
 					if tradable_factory.last_error_fatal then
-						fatal_error := true
+						fatal_error := True
 					end
 				end
 				close_input_medium
@@ -313,10 +313,10 @@ feature {NONE} -- Implementation
 
 	setup_input_medium is
 			-- Ensure that tradable_list has access to the current
-			-- input medium, if it exists.  `fatal_error' will be true
+			-- input medium, if it exists.  `fatal_error' will be True
 			-- if an error occurs.
 		require
-			no_error: fatal_error = false
+			no_error: fatal_error = False
 		do
 		end
 
@@ -387,7 +387,7 @@ feature {NONE} -- Inapplicable
 invariant
 
 	factory_not_void: tradable_factory /= Void
-	always_compare_objects: object_comparison = true
+	always_compare_objects: object_comparison = True
 	object_comparison_for_symbol_list: symbol_list.object_comparison
 	cache_exists: cache /= Void
 	cache_not_too_large: cache.count <= Cache_size

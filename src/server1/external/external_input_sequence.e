@@ -52,7 +52,7 @@ feature {NONE} -- Initialization
 			c_string := working_directories.to_c
 			external_handle := initialize_external_input_routines ($c_string)
 			if initialization_error then
-				last_exception_status.set_fatal (true)
+				last_exception_status.set_fatal (True)
 				raise (concatenation (<<"Fatal error occurred initializing ",
 					"external data source:%N", string_from_pointer (
 					initialization_error_reason)>>))
@@ -142,7 +142,7 @@ feature -- Status setting
 			if external_error (external_handle) then
 				set_error_message (concatenation  (<<"Error occurred reading %
 					%from external data source for ", symbol, ".">>),
-					true, false)
+					True, False)
 			end
 		ensure
 			symbol_set: symbol = arg and symbol /= Void
@@ -166,7 +166,7 @@ feature -- Cursor movement
 			if external_error (external_handle) then
 				set_error_message (concatenation  (<<"Error occurred reading %
 					%from external data source for ", symbol, ".">>),
-					true, false)
+					True, False)
 			end
 			field_index := 1
 			record_index := 1
@@ -178,7 +178,7 @@ feature -- Cursor movement
 			if external_error (external_handle) then
 				set_error_message (concatenation  (<<"Error occurred reading %
 					%from external data source for ", symbol, ".">>),
-					true, false)
+					True, False)
 			end
 			field_index := field_index + 1
 		end
@@ -189,7 +189,7 @@ feature -- Cursor movement
 			if external_error (external_handle) then
 				set_error_message (concatenation  (<<"Error occurred reading %
 					%from external data source for ", symbol, ".">>),
-					true, false)
+					True, False)
 			end
 			record_index := record_index + 1
 			field_index := 1
@@ -209,15 +209,15 @@ feature -- Input
 				if last_string.is_integer then
 					last_integer := last_string.to_integer
 				else
-					error_occurred := true
-					last_error_fatal := true
+					error_occurred := True
+					last_error_fatal := True
 					error_string := "Error reading integer value"
 					if external_error (external_handle) then
 						error_string := concatenation (<<error_string, ":%N",
 							string_from_pointer (
 								last_external_error(external_handle))>>)
 					end
-					last_exception_status.set_fatal (false)
+					last_exception_status.set_fatal (False)
 					raise (error_string)
 				end
 			end
@@ -227,12 +227,12 @@ feature -- Input
 			-- Read the current character in the current field and advance
 			-- to the next character.
 		do
-			error_occurred := false
+			error_occurred := False
 			last_character := current_character (external_handle)
 			if external_error (external_handle) then
 				set_error_message (concatenation  (<<"Error occurred reading %
 					%from external data source for ", symbol, ".">>),
-					true, false)
+					True, False)
 			end
 		end
 
@@ -241,21 +241,21 @@ feature -- Input
 		local
 			string: STRING
 		do
-			error_occurred := false
-			last_error_fatal := false
+			error_occurred := False
+			last_error_fatal := False
 			string := current_field_as_string
 			if string /= Void then
 				last_string := string
 			else
-				error_occurred := true
-				last_error_fatal := true
+				error_occurred := True
+				last_error_fatal := True
 				error_string := "Error reading string value"
 				if external_error (external_handle) then
 					error_string := concatenation (<<error_string, ": ",
 						string_from_pointer (
 							last_external_error(external_handle))>>)
 				end
-				last_exception_status.set_fatal (false)
+				last_exception_status.set_fatal (False)
 				raise (error_string)
 			end
 		ensure then
@@ -276,15 +276,15 @@ feature -- Input
 				if last_string.is_double then
 					last_double := last_string.to_double
 				else
-					error_occurred := true
-					last_error_fatal := true
+					error_occurred := True
+					last_error_fatal := True
 					error_string := "Error reading double value"
 					if external_error (external_handle) then
 						error_string := concatenation (<<error_string, ": ",
 							string_from_pointer (
 								last_external_error(external_handle))>>)
 					end
-					last_exception_status.set_fatal (false)
+					last_exception_status.set_fatal (False)
 					raise (error_string)
 				end
 			end
@@ -297,15 +297,15 @@ feature -- Input
 				if last_string.is_real then
 					last_real := last_string.to_real
 				else
-					error_occurred := true
-					last_error_fatal := true
+					error_occurred := True
+					last_error_fatal := True
 					error_string := "Error reading real value"
 					if external_error (external_handle) then
 						error_string := concatenation (<<error_string, ": ",
 							string_from_pointer (
 								last_external_error(external_handle))>>)
 					end
-					last_exception_status.set_fatal (false)
+					last_exception_status.set_fatal (False)
 					raise (error_string)
 				end
 			end
@@ -344,13 +344,13 @@ feature {NONE} -- Implementation
 			end
 			if Result = Void then
 				if app_directory = Void then
-					last_exception_status.set_fatal (true)
+					last_exception_status.set_fatal (True)
 					raise (concatenation (<<"Current directory (",
 						current_working_directory, ") is not writable and ",
 						env.application_directory_name, " is not set - %
 						%external data source retrieval cannot be used.">>))
 				else
-					last_exception_status.set_fatal (true)
+					last_exception_status.set_fatal (True)
 					raise (concatenation (<<"Neither the current directory ",
 						"(", current_working_directory, ") nor the MAS %
 						%application directory (", app_directory,
@@ -395,7 +395,7 @@ feature {NONE} -- Implementation
 			make_available_symbols (external_handle)
 			if external_error (external_handle) then
 				set_error_message ("Error occurred obtaining symbol list",
-					true, true)
+					True, True)
 			else
 				su.set_target (string_from_pointer (
 					available_symbols (external_handle)))
@@ -424,8 +424,8 @@ feature {NONE} -- Implementation
 		local
 			s: STRING
 		do
-			error_occurred := true
-			last_error_fatal := true
+			error_occurred := True
+			last_error_fatal := True
 			s := string_from_pointer (last_external_error (external_handle))
 			if not msg.is_empty then
 				if not s.is_empty then
@@ -551,9 +551,9 @@ feature {NONE} -- Implementation - externals
 			-- Perform any needed initialization by the external routines
 			-- and return a handle for use by the other external routines.
 			-- If the initialization failed, `initialization_error' will
-			-- be true and `initialization_error_reason' will contain the
+			-- be True and `initialization_error_reason' will contain the
 			-- reason for the failure; otherwise, `initialization_error'
-			-- will be false.
+			-- will be False.
 		require
 			working_dir_not_void: working_dirs /= Void
 			-- working_dir_valid: The last character of `working_dir' is

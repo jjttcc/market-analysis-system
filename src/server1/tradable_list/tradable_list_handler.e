@@ -74,13 +74,13 @@ feature -- Access
 						end
 					end
 					if l.fatal_error then
-						error_occurred := true
+						error_occurred := True
 						last_error := concatenation (<<
 							"Error occurred retrieving data for ", symbol>>)
 						l.clear_error
 					end
 				else
-					error_occurred := true
+					error_occurred := True
 					last_error := concatenation (<<
 						"Symbol ", symbol, " not found">>)
 				end
@@ -122,11 +122,11 @@ feature -- Access
 					until
 						l.exhausted
 					loop
-						tbl.extend (true, l.item.name)
+						tbl.extend (True, l.item.name)
 						l.forth
 					end
 				else
-					error_occurred := true
+					error_occurred := True
 					last_error := concatenation (<<"Error occurred ",
 						"retrieving non-intraday period types for ", symbol>>)
 				end
@@ -146,11 +146,11 @@ feature -- Access
 					until
 						l.exhausted
 					loop
-						tbl.extend (true, l.item.name)
+						tbl.extend (True, l.item.name)
 						l.forth
 					end
 				else
-					error_occurred := true
+					error_occurred := True
 					last_error := concatenation (<<"Error occurred ",
 						"retrieving intraday period types for ", symbol>>)
 				end
@@ -291,7 +291,7 @@ feature {NONE} -- Implementation
 	reset_error_state is
 			-- Reset internal error state to no errors.
 		do
-			error_occurred := false
+			error_occurred := False
 			if daily_market_list /= Void then
 				daily_market_list.clear_error
 			end

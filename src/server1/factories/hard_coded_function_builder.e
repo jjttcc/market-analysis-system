@@ -196,8 +196,8 @@ feature {NONE} -- Hard-coded market function building procedures
 		do
 			create one.make (1); create one_hundred.make (100)
 			one.set_is_editable (False); one_hundred.set_is_editable (False)
-			pos_ema := rs_average (f, n, true)
-			neg_ema := rs_average (f, n, false)
+			pos_ema := rs_average (f, n, True)
+			neg_ema := rs_average (f, n, False)
 			create positive_average.make (pos_ema.output)
 			create negative_average.make (neg_ema.output)
 			create {DIVISION} inner_div.make (positive_average,

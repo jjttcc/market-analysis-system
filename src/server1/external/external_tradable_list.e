@@ -34,7 +34,7 @@ feature {NONE} -- Initialization
 		do
 			create input_sequence.make
 			if input_sequence.error_occurred then
-				fatal_error := true
+				fatal_error := True
 				log_error (input_sequence.error_string)
 				raise (
 					"Fatal error occurred initializing external data source")
@@ -72,9 +72,9 @@ feature {NONE} -- Implementation
 		local
 		do
 			if intraday then
-				input_sequence.set_intraday (true)
+				input_sequence.set_intraday (True)
 			else
-				input_sequence.set_intraday (false)
+				input_sequence.set_intraday (False)
 			end
 			input_sequence.set_symbol (current_symbol)
 			tradable_factory.set_input (input_sequence)

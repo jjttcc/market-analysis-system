@@ -109,7 +109,7 @@ feature {NONE} -- Implementation
 				Result.set_record_separator ("%N")
 			end
 			if command_line_options.strict then
-				Result.set_strict_error_checking (true)
+				Result.set_strict_error_checking (True)
 			end
 		end
 

@@ -109,7 +109,7 @@ feature {NONE} -- Hook methods
 			when 'e', 'E' then
 				if do_clone then
 					-- The chosen command should not be editied if
-					-- do_clone is false.
+					-- do_clone is False.
 					editing_needed := True
 					user_specified_command_name := visible_string_selection (
 						"Enter a name for " + c.generator + ": ")

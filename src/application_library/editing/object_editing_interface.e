@@ -52,7 +52,7 @@ feature -- Access
 
 	object_selection_from_list (obj_list: LIST [G]; msg: STRING): G is
 			-- Object selected by user from `obj_list'.  If
-			-- initialization_needed = true, then Result will be
+			-- initialization_needed = True, then Result will be
 			-- initialized.
 		require
 			ol_not_void: obj_list /= Void
@@ -82,7 +82,7 @@ feature -- Status setting
 	reset is
 			-- Initialize state and clear cached values.
 		do
-			initialization_needed := false
+			initialization_needed := False
 			if current_object_list /= Void then
 				current_object_list.wipe_out
 			end
@@ -105,7 +105,7 @@ feature {NONE} -- Implementation
 			-- User's selection of a member of `objects' (deep-cloned) or
 			-- a member of `current_objects' that is in `objects' (shared)
 			-- If the selection is from `current_objects',
-			-- initialization_needed will be false; otherwise it will be true.
+			-- initialization_needed will be False; otherwise it will be True.
 		require
 			objs_not_void: objects /= Void
 		local
@@ -145,14 +145,14 @@ feature {NONE} -- Implementation
 					-- The user wants an alias to a previously chosen object,
 					-- so it should not be cloned and its current settings
 					-- should not be changed.
-					do_clone := false
-					initialization_needed := false
+					do_clone := False
+					initialization_needed := False
 				else
 					-- Selection is NOT from the list of previously
 					-- chosen objects.
 					Result := objects @ (selection - tree_objects.count)
 					do_clone := clone_needed
-					initialization_needed := true
+					initialization_needed := True
 				end
 			until
 				accepted_by_user (Result)
@@ -161,7 +161,7 @@ feature {NONE} -- Implementation
 													general_msg)
 				if selection <= tree_names.count then
 					Result := tree_objects @ selection
-					do_clone := false
+					do_clone := False
 				else
 					Result := objects @ (selection - tree_objects.count)
 					do_clone := clone_needed
@@ -236,12 +236,12 @@ feature {NONE} -- Implementation
 				loop
 					from
 						ref_list.start
-						exclude_current := false
+						exclude_current := False
 					until
 						ref_list.exhausted or exclude_current
 					loop
 						if obj_list.item.same_type (ref_list.item) then
-							exclude_current := true
+							exclude_current := True
 						else
 							ref_list.forth
 						end

@@ -18,8 +18,8 @@ feature {NONE} -- Initialization
 		do
 			tradable_factory := factory
 			intraday_tradable_factory := clone (factory)
-			intraday_tradable_factory.set_intraday (true)
-			tradable_factory.set_intraday (false)
+			intraday_tradable_factory.set_intraday (True)
+			tradable_factory.set_intraday (False)
 		ensure
 			factory_set: tradable_factory = factory and
 				tradable_factory /= Void and not tradable_factory.intraday

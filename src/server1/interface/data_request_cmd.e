@@ -49,7 +49,7 @@ feature {NONE} -- Utility
 			pt_name: STRING
 			object_comparison: BOOLEAN
 		do
-			parse_error := false
+			parse_error := False
 			pt_names := period_type_names
 			object_comparison := pt_names.object_comparison
 			pt_names.compare_objects
@@ -57,7 +57,7 @@ feature {NONE} -- Utility
 			pt_name := fields @ ptindx
 			if not pt_names.has (pt_name) then
 				report_error (Error, <<"Bad period type">>)
-				parse_error := true
+				parse_error := True
 			else
 				trading_period_type := period_types @ pt_name
 			end

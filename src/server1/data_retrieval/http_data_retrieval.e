@@ -98,7 +98,7 @@ feature {NONE} -- Basic operations
 	check_if_data_is_out_of_date is
 			-- Check if the current data for `parameters'.symbol are out
 			-- of date with respect to the current date and the http
-			-- configuration.  If true, `data_out_of_date' is set to True
+			-- configuration.  If True, `data_out_of_date' is set to True
 			-- and `alternate_start_date' is set to the day after the date
 			-- of the latest current data.
 		local

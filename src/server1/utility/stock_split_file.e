@@ -69,7 +69,7 @@ feature {NONE} -- Initialization
 		end
 
 	open_file (fname: STRING) is
-			-- Open file safely - if it fails, is_open_read is false.
+			-- Open file safely - if it fails, is_open_read is False.
 		do
 			ptf_make (file_name)
 			if exists then

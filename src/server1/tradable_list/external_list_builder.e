@@ -37,7 +37,7 @@ feature -- Basic operations
 						intraday: intraday_tradable_factory.intraday
 					end
 					create intraday_list.make (intraday_tradable_factory)
-					intraday_list.set_intraday (true)
+					intraday_list.set_intraday (True)
 				end
 			end
 		end

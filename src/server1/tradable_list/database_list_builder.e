@@ -78,7 +78,7 @@ feature {NONE} -- Implementation
 				intraday: intraday_tradable_factory.intraday
 			end
 			create intraday_list.make (symbol_list, intraday_tradable_factory)
-			intraday_list.set_intraday (true)
+			intraday_list.set_intraday (True)
 		end
 
 end -- class DATABASE_LIST_BUILDER

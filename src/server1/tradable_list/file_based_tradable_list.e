@@ -67,7 +67,7 @@ feature {NONE} -- Implementation
 			else
 				log_errors (<<"Failed to open input file ",
 					file_names.item, " - file does not exist.%N">>)
-				fatal_error := true
+				fatal_error := True
 			end
 		end
 

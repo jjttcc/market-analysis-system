@@ -190,7 +190,7 @@ feature {NONE} -- Implementation
 				if new_registrant /= Void then
 					add_event_types (new_registrant)
 					working_event_registrants.extend (new_registrant)
-					dirty := true
+					dirty := True
 					print_list (<<new_registrant.name,
 						" added as a new event registrant.%N">>)
 				end
@@ -206,7 +206,7 @@ feature {NONE} -- Implementation
 				r := registrant_selection
 				if r /= Void then
 					working_event_registrants.prune_all (r)
-					dirty := true
+					dirty := True
 					print_list (<<"Event registrant ", r.name, " removed.%N">>)
 				end
 			else
@@ -310,7 +310,7 @@ feature {NONE} -- Implementation
 		do
 			from
 				if event_types.is_empty then
-					finished := true
+					finished := True
 					print ("No event types available to add.%N")
 				end
 			until
@@ -344,7 +344,7 @@ feature {NONE} -- Implementation
 				else
 					current_type := types @ last_integer
 					r.add_event_type (current_type)
-					dirty := true
+					dirty := True
 					print_list (<<"Added type ", current_type.name, ".%N">>)
 				end
 			end
@@ -410,7 +410,7 @@ feature {NONE} -- Implementation
 			end
 			from
 				if types.is_empty then
-					abort := true
+					abort := True
 				else
 					print (eom)
 					read_integer
@@ -470,7 +470,7 @@ feature {NONE} -- Implementation
 					t := event_type_selection (r)
 					if t /= Void then
 						r.event_types.prune_all (t)
-						dirty := true
+						dirty := True
 						print_list (<<"Event type ", t.name, " removed.%N">>)
 					end
 				when 'a', 'A' then
@@ -536,7 +536,7 @@ feature {NONE} -- Implementation
 
 	reset_error is
 		do
-			error_occurred := false
+			error_occurred := False
 		end
 
 feature {NONE} -- Implementation of hook routines

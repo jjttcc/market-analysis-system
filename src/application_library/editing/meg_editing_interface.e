@@ -98,7 +98,7 @@ feature {NONE} -- Implementation
 							working_meg_library @ selection)
 						show_message (concatenation (<<"Market analyzer for ",
 									meg.event_type.name, " removed.">>))
-						dirty := true
+						dirty := True
 					when 'n', 'N' then
 					when 'q', 'Q' then
 						selection := Exit_value
@@ -137,7 +137,7 @@ feature {NONE} -- Implementation
 				-- edit_indicator_list precondition - readonly because
 				-- it will be saved as part of the market event generator
 				-- list, not the indicator list.
-				function_editor.set_save_state (false)
+				function_editor.set_save_state (False)
 				selection := Null_value
 			until
 				selection = Exit_value
@@ -169,7 +169,7 @@ feature {NONE} -- Implementation
 			if not error_occurred then
 				show_message (concatenation (
 					<<last_event_generator.event_type.name, " added.">>))
-				dirty := true
+				dirty := True
 			end
 		end
 
@@ -183,7 +183,7 @@ feature {NONE} -- Implementation
 			if market_event_generation_library.is_empty then
 				show_message ("Can't create compound market analyzer - %
 					%persistent analyzer list is empty.")
-				error_occurred := true
+				error_occurred := True
 			else
 				create eg_maker.make
 				left := event_generator_selection ("left component")
@@ -204,7 +204,7 @@ feature {NONE} -- Implementation
 						working_meg_library)
 					last_event_generator := eg_maker.product
 				else
-					error_occurred := true
+					error_occurred := True
 					last_error :=
 						"There are no event generators to select from."
 				end
@@ -293,7 +293,7 @@ feature {NONE} -- Implementation
 			operator_maker.set_exclude_list (exclude_list)
 			Result ?= operator_maker.command_selection_from_type (
 						operator_maker.Boolean_result_command,
-							"root operator", true)
+							"root operator", True)
 			check
 				cmd_selection_valid: Result /= Void
 			end
@@ -460,7 +460,7 @@ feature {NONE} -- Implementation
 
 	reset_error is
 		do
-			error_occurred := false
+			error_occurred := False
 		end
 
 	initialize_working_list is

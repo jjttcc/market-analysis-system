@@ -28,11 +28,11 @@ feature -- Access
 				db_services.connect
 			end
 			if db_services.fatal_error then
-				error_occurred := true
+				error_occurred := True
 			else
 				Result := db_services.derivative_name (symbol)
 				if db_services.fatal_error then
-					error_occurred := true
+					error_occurred := True
 				end
 				if not gs.command_line_options.keep_db_connection then
 					db_services.disconnect

@@ -30,7 +30,7 @@ feature
 			l: LIST [MARKET_EVENT_REGISTRANT]
 			lock: FILE_LOCK
 		do
-			error_occurred := false
+			error_occurred := False
 			register_for_termination (Current)
 			make_event_locks
 			l := market_event_registrants
@@ -42,7 +42,7 @@ feature
 				lock := event_locks.item (l.item.hfile_name)
 				lock.try_lock
 				if not lock.locked then
-					error_occurred := true
+					error_occurred := True
 					last_error := concatenation (<<"Failed to lock event ",
 						"history file ", lock.file_path, " - results will ",
 						"not be saved.">>)

@@ -76,7 +76,7 @@ feature
 				gui_interface.set_io_medium (io_socket)
 				interface := gui_interface
 			else
-				io_socket.set_compression (false)
+				io_socket.set_compression (False)
 				cl_interface.set_input_device (io_socket)
 				cl_interface.set_output_device (io_socket)
 				interface := cl_interface
@@ -93,9 +93,9 @@ feature
 			io_socket := active_medium.accepted
 			io_socket.read_character
 			if io_socket.last_character.is_equal (Console_flag) then
-				is_gui := false
+				is_gui := False
 			else
-				is_gui := true
+				is_gui := True
 			end
 		end
 

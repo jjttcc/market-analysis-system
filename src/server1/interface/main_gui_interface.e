@@ -245,11 +245,11 @@ feature {NONE} -- Implementation
 				s.substring (index, index + Compression_on_flag.count - 1).
 					is_equal (Compression_on_flag)
 			then
-				io_medium.set_compression (true)
+				io_medium.set_compression (True)
 				message_body := s.substring (index + Compression_on_flag.count,
 					s.count)
 			else
-				io_medium.set_compression (false)
+				io_medium.set_compression (False)
 				message_body := s.substring (index, s.count)
 			end
 		end

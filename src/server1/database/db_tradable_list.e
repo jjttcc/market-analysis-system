@@ -52,12 +52,12 @@ feature {NONE} -- Implementation
 					input_sequence := db.daily_data_for_symbol (current_symbol)
 				end
 				if input_sequence = Void or db.fatal_error then
-					fatal_error := true
+					fatal_error := True
 				else
 					tradable_factory.set_input (input_sequence)
 				end
 			else
-				fatal_error := true
+				fatal_error := True
 			end
 			if fatal_error then
 				log_errors (<<"Error occurred while processing ",
@@ -88,7 +88,7 @@ feature {NONE} -- Implementation
 					db.disconnect
 				end
 				if db.fatal_error then
-					fatal_error := true
+					fatal_error := True
 					log_error (db.last_error)
 				end
 			end

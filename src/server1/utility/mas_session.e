@@ -20,10 +20,10 @@ feature {NONE} -- Initialization
 		do
 			create start_dates.make(1)
 			create end_dates.make(1)
-			caching_on := true
+			caching_on := True
 		ensure
 			dates_not_void: start_dates /= Void and end_dates /= Void
-			caching: caching_on = true
+			caching: caching_on = True
 		end
 
 feature -- Access
@@ -59,17 +59,17 @@ feature -- Element change
 	turn_caching_on is
 			-- Turn caching on.
 		do
-			caching_on := true
+			caching_on := True
 		ensure
-			caching_on: caching_on = true
+			caching_on: caching_on = True
 		end
 
 	turn_caching_off is
 			-- Turn caching off.
 		do
-			caching_on := false
+			caching_on := False
 		ensure
-			caching_off: caching_on = false
+			caching_off: caching_on = False
 		end
 
 end -- class MAS_SESSION

@@ -292,7 +292,7 @@ feature {NONE} -- Implementation
 		ensure
 			not_void: Result /= Void
 		rescue
-			retrieval_failed := true
+			retrieval_failed := True
 			retry
 		end
 
@@ -329,7 +329,7 @@ feature {NONE} -- Implementation
 			end
 			create_stock_market_event_generation_library (Result)
 		rescue
-			retrieval_failed := true
+			retrieval_failed := True
 			retry
 		end
 
@@ -364,7 +364,7 @@ feature {NONE} -- Implementation
 				Result := reg_list
 			end
 		rescue
-			retrieval_failed := true
+			retrieval_failed := True
 			retry
 		end
 

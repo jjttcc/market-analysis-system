@@ -52,7 +52,7 @@ feature -- Access
 			as_valid: allowed_selections > 0 and allowed_selections <=
 				choices.count
 		do
-			-- Initialize all `right' elements of `choices' to false
+			-- Initialize all `right' elements of `choices' to False
 			from
 				choices.start
 			until
@@ -64,8 +64,8 @@ feature -- Access
 			do_choice (descr, choices, allowed_selections)
 		ensure
 			-- For each user-selection of an element of `choices', the
-			-- right member of that pair is set to true; the right
-			-- member of all other elements of `choices' is false.
+			-- right member of that pair is set to True; the right
+			-- member of all other elements of `choices' is False.
 		end
 
 	character_choice (msg, chars: STRING): CHARACTER is

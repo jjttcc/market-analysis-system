@@ -44,7 +44,7 @@ feature -- Basic operations
 	execute is
 			-- Scan input and create an MARKET_EVENT_PAIR from it.
 			-- If a fatal error is encountered while scanning, an exception
-			-- is thrown and error_occurred is set to true.
+			-- is thrown and error_occurred is set to True.
 		local
 			left, right: MARKET_EVENT
 			st: expanded SIGNAL_TYPES

@@ -61,11 +61,11 @@ feature -- Basic operations
 			left ?= user_interface.command_selection_from_type (
 						user_interface.Boolean_result_command,
 							concatenation (<<cmd.generator,
-								"'s left operand">>), false)
+								"'s left operand">>), False)
 			right ?= user_interface.command_selection_from_type (
 						user_interface.Boolean_result_command,
 							concatenation (<<cmd.generator,
-								"'s right operand">>), false)
+								"'s right operand">>), False)
 			check
 				selections_valid: left /= Void and right /= Void
 			end
@@ -82,11 +82,11 @@ feature -- Basic operations
 			left ?= user_interface.command_selection_from_type (
 						user_interface.Real_result_command,
 							concatenation (<<cmd.generator,
-								"'s left operand">>), false)
+								"'s left operand">>), False)
 			right ?= user_interface.command_selection_from_type (
 						user_interface.Real_result_command,
 							concatenation (<<cmd.generator,
-								"'s right operand">>), false)
+								"'s right operand">>), False)
 			check
 				selections_valid: left /= Void and right /= Void
 			end
@@ -123,7 +123,7 @@ feature -- Basic operations
 		do
 			ix_cmd ?= user_interface.command_selection_from_type (
 				user_interface.Indexed, concatenation (<<cmd.generator,
-					"'s operand">>), false)
+					"'s operand">>), False)
 			check
 				selection_valid: ix_cmd /= Void
 			end
@@ -140,7 +140,7 @@ feature -- Basic operations
 			edit_unaryop_real (cmd)
 			constant ?= user_interface.command_selection_from_type (
 				user_interface.Constant_command, cmd.generator +
-					"'s managed value", false)
+					"'s managed value", False)
 			check
 				selection_valid: constant /= Void
 			end
@@ -209,7 +209,7 @@ feature -- Basic operations
 			check
 				c_is_valid_type: cmd /= Void
 			end
-			user_interface.set_use_market_function_selection (false)
+			user_interface.set_use_market_function_selection (False)
 			cmd.set (user_interface.market_function_selection (
 				concatenation (<<"an indicator for ", cmd.generator,
 								"'s input">>)).output)
@@ -226,7 +226,7 @@ feature -- Basic operations
 			rr_cmd ?= user_interface.command_selection_from_type (
 						user_interface.Real_result_command,
 						concatenation (<<cmd.generator, "'s operand">>),
-						false)
+						False)
 			check
 				selection_valid: rr_cmd /= Void
 			end
@@ -244,7 +244,7 @@ feature -- Basic operations
 			rr_cmd ?= user_interface.command_selection_from_type (
 						user_interface.Real_result_command,
 						concatenation (<<cmd.generator, "'s operand">>),
-						false)
+						False)
 			check
 				selection_valid: rr_cmd /= Void
 			end
@@ -262,7 +262,7 @@ feature -- Basic operations
 			bool_cmd ?= user_interface.command_selection_from_type (
 						user_interface.Boolean_result_command,
 						concatenation (<<cmd.generator, "'s operand">>),
-						false)
+						False)
 			check
 				selection_valid: bool_cmd /= Void
 			end
@@ -321,7 +321,7 @@ feature -- Basic operations
 			boolop ?= user_interface.command_selection_from_type (
 						user_interface.Boolean_result_command,
 							concatenation (<<cmd.generator,
-								"'s boolean operator">>), false)
+								"'s boolean operator">>), False)
 			check
 				selection_valid: boolop /= Void
 			end
@@ -330,7 +330,7 @@ feature -- Basic operations
 			result_cmd ?= user_interface.command_selection_from_type (
 						user_interface.Real_result_command,
 							concatenation (<<cmd.generator,
-								"'s true command">>), false)
+								"'s true command">>), False)
 			check
 				selection_valid: result_cmd /= Void
 			end
@@ -339,7 +339,7 @@ feature -- Basic operations
 			result_cmd ?= user_interface.command_selection_from_type (
 						user_interface.Real_result_command,
 							concatenation (<<cmd.generator,
-								"'s false command">>), false)
+								"'s false command">>), False)
 			check
 				selection_valid: result_cmd /= Void
 			end
@@ -366,27 +366,27 @@ feature -- Basic operations
 			left ?= user_interface.command_selection_from_type (
 						user_interface.Real_result_command,
 								concatenation (<<cmd.generator,
-									"'s left operand">>), false)
+									"'s left operand">>), False)
 			right ?= user_interface.command_selection_from_type (
 						user_interface.Real_result_command,
 								concatenation (<<cmd.generator,
-									"'s right operand">>), false)
+									"'s right operand">>), False)
 			check
 				selections_valid: left /= Void and right /= Void
 			end
 			cmd.set_operands (left, right)
 			create {LINKED_LIST [PAIR [STRING, BOOLEAN]]} choices.make
-			create pair.make ("negative to positive", false)
+			create pair.make ("negative to positive", False)
 			choices.extend (pair)
-			create pair.make ("positive to negative", false)
+			create pair.make ("positive to negative", False)
 			choices.extend (pair)
-			create pair.make ("negative to zero", false)
+			create pair.make ("negative to zero", False)
 			choices.extend (pair)
-			create pair.make ("positive to zero", false)
+			create pair.make ("positive to zero", False)
 			choices.extend (pair)
-			create pair.make ("zero to negative", false)
+			create pair.make ("zero to negative", False)
 			choices.extend (pair)
-			create pair.make ("zero to positive", false)
+			create pair.make ("zero to positive", False)
 			choices.extend (pair)
 			user_interface.choice (concatenation (<<"slope specification for ",
 				cmd.generator>>), choices, choices.count)
@@ -429,7 +429,7 @@ feature -- Basic operations
 		do
 			-- Always allow the user to select a FUNCTION_BASED_COMMAND's
 			-- market function.
-			user_interface.set_use_market_function_selection (true)
+			user_interface.set_use_market_function_selection (True)
 			cmd.set_input (user_interface.market_function_selection (
 				concatenation (<<"an indicator for ", cmd.generator,
 								"'s input">>)))

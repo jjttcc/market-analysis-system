@@ -68,11 +68,11 @@ feature -- Basic operations
 		local
 			at_end: BOOLEAN
 		do
-			changed := false
+			changed := False
 			begin_edit
 			if not abort_edit then
 				do_edit
-				at_end := true
+				at_end := True
 				end_edit
 			end
 		ensure
@@ -96,9 +96,9 @@ feature {NONE} -- Implementation
 			real_list.save
 			show_message ("The changes have been saved.")
 			deep_copy_list (working_list, real_list)
-			dirty := false
+			dirty := False
 			end_save
-			changed := true
+			changed := True
 		ensure then
 			not_dirty: not dirty
 			changed: changed
@@ -108,9 +108,9 @@ feature {NONE} -- Implementation
 			-- Perform actions necessary to begin the editing session,
 			-- including attempting to lock the persistent file.
 		do
-			readonly := false
-			ok_to_save := true
-			dirty := false
+			readonly := False
+			ok_to_save := True
+			dirty := False
 			initialize_lock
 			lock.try_lock
 			if not lock.locked then
@@ -160,7 +160,7 @@ feature {NONE} -- Implementation
 				-- restoring the working list as a deep copy of the real
 				-- list and ensure not dirty.
 				deep_copy_list (working_list, real_list)
-				dirty := false
+				dirty := False
 			end
 			if lock.locked then
 				lock.unlock
@@ -182,14 +182,14 @@ feature {NONE} -- Implementation
 			inspect
 				c
 			when 'w', 'W' then
-				readonly := false
-				ok_to_save := true
+				readonly := False
+				ok_to_save := True
 			when 'd', 'D' then
-				readonly := true
-				ok_to_save := false
+				readonly := True
+				ok_to_save := False
 			when 'a', 'A' then
-				ok_to_save := false
-				readonly := false
+				ok_to_save := False
+				readonly := False
 			end
 		ensure
 			readonly_or_wait_or_abort: (readonly and not ok_to_save) or
@@ -222,7 +222,7 @@ feature {NONE} -- Implementation
 			unlocked: lock /= Void and not lock.error_occurred implies
 				not lock.locked
 		rescue
-			unlock_failed := true
+			unlock_failed := True
 			retry
 		end
 

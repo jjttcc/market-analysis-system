@@ -73,7 +73,7 @@ feature -- Basic operations
 			-- If an error occurs during parsing, an exception is raised.
 		do
 			last_error.wipe_out
-			error_occurred := false
+			error_occurred := False
 			read_type
 			if type_name.is_equal (Atomic_market_event) then
 				create {ATOMIC_EVENT_FACTORY} product.make (input,
@@ -112,7 +112,7 @@ feature {NONE} -- Implementation
 		require
 			empty: last_error.is_empty
 		do
-			error_occurred := true
+			error_occurred := True
 			if type_name.is_empty then
 				last_error.append ("Empty type specification in input")
 			else

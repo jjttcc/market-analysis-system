@@ -103,7 +103,7 @@ feature {NONE} -- Hook routines
 						env_vars.application_directory_name, " setting ",
 						"specifies a directory that does not exist or that ",
 						"is not reachable from the current directory">>)
-					Result := true
+					Result := True
 				end
 			end
 		end

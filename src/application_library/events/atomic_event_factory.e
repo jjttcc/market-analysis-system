@@ -56,7 +56,7 @@ feature -- Basic operations
 	execute is
 			-- Scan input and create an ATOMIC_MARKET_EVENT from it.
 			-- If a fatal error is encountered while scanning, an exception
-			-- is thrown and error_occurred is set to true.
+			-- is thrown and error_occurred is set to True.
 		local
 			date_time: DATE_TIME
 			st: expanded SIGNAL_TYPES

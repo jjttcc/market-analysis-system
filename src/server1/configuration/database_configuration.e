@@ -662,10 +662,10 @@ feature {NONE} -- Implementation - Hook routine implementations
 								Daily_stock_close_field_specifier,
 							daily_stock_volume_field_name.is_empty,
 							Daily_stock_volume_field_specifier>>, True)
-						daily_stock_data_available := true
+						daily_stock_data_available := True
 					end
 				else
-					daily_stock_data_available := true
+					daily_stock_data_available := True
 				end
 				if intraday_stock_data_command.is_empty then
 					if not intraday_stock_table_name.is_empty then
@@ -685,10 +685,10 @@ feature {NONE} -- Implementation - Hook routine implementations
 								Intraday_stock_close_field_specifier,
 							intraday_stock_volume_field_name.is_empty,
 							Intraday_stock_volume_field_specifier>>, True)
-						intraday_stock_data_available := true
+						intraday_stock_data_available := True
 					end
 				else
-					intraday_stock_data_available := true
+					intraday_stock_data_available := True
 				end
 			end
 			if not derivative_symbol_query.is_empty then
@@ -713,10 +713,10 @@ feature {NONE} -- Implementation - Hook routine implementations
 							daily_derivative_open_interest_field_name.is_empty,
 								Daily_derivative_open_interest_field_specifier
 							>>, True)
-						daily_derivative_data_available := true
+						daily_derivative_data_available := True
 					end
 				else
-					daily_derivative_data_available := true
+					daily_derivative_data_available := True
 				end
 				if intraday_derivative_data_command.is_empty then
 					if not intraday_derivative_table_name.is_empty then
@@ -740,10 +740,10 @@ feature {NONE} -- Implementation - Hook routine implementations
 								is_empty,
 							Intraday_derivative_open_interest_field_specifier
 							>>, True)
-						intraday_derivative_data_available := true
+						intraday_derivative_data_available := True
 					end
 				else
-					intraday_derivative_data_available := true
+					intraday_derivative_data_available := True
 				end
 			end
 		end
