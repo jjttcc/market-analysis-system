@@ -1,5 +1,7 @@
 /* Copyright 1998 - 2001: Jim Cochrane - see file forum.txt */
 
+package mas_gui;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -94,7 +96,12 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 			connection = new Connection(hostname, port_number);
 		}
 		initialize();
-		connection.login();
+		try {
+			connection.login();
+		} catch (Exception e) {
+			System.err.println(e);
+			System.exit(1);
+		}
 	}
 
 	public DataSetBuilder(DataSetBuilder dsb) {
@@ -106,7 +113,12 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 			connection = new Connection(dsb.hostname(), dsb.port_number());
 		}
 		initialize();
-		connection.login();
+		try {
+			connection.login();
+		} catch (Exception e) {
+			System.err.println(e);
+			System.exit(1);
+		}
 	}
 
 	// Options passed in via the command line
@@ -117,7 +129,12 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 	// Send a logout request to the server to end the current session
 	// and, if `exit' is true, exit with `status'.
 	public void logout(boolean exit, int status) {
-		connection.logout();
+		try {
+			connection.logout();
+		} catch (Exception e) {
+			System.err.println(e);
+			System.exit(1);
+		}
 		if (exit) System.exit(status);
 	}
 
