@@ -2,9 +2,11 @@
 # Format: "label_string<tab>setting"
 
 # Special symbols:
-#   <portnumber> - The MAS server port number for the current session
-#   <hostname> - The name of the network host upon which the server is
-#                running; has the value specified by the hostname setting.
+#   <portnumber> -       The MAS server port number for the current session
+#   <hostname> -         The name of the network host upon which the server is
+#                        running; has the value specified by the
+#                        hostname setting.
+#   <terminate_server> - The built-in command for terminating the server
 
 # The escape character: The tilde (~) functions as an escape character,
 # meaning that it protects the character following it from being
@@ -20,23 +22,44 @@
 # value for the variable.  The variable can then be used in definitions
 # that follow by surrounding it with <>, e.g.: <var1>/<var2>.
 
+# The main mas directory
+define	main_mas_dir:c:/Applications/mas1.6.5
+
+# The mas 'lib' directory
+define	mas_lib_dir:<main_mas_dir>/lib
+
+# The location of the Java 'classes' directory
+define	classes_dir:<mas_lib_dir>/classes
+
+# The location of the Java chart-configuration directory
+define	chart_dir:<classes_dir>
+
+# [Temporary:]
+define	projdir:e:/projects/mas-extended_current/EIFGEN/F_code
+
+# OS-dependent path separator (e.g., used for Java CLASSPATH)
+define	path_separator:;
+
 # Directory where file-based data resides
-define	data_dir:data-path
+define	data_dir:<mas_lib_dir>/data
 
 # Directory where the MAS executables reside
-define	bin_dir:bin-path
+define	bin_dir:<main_mas_dir>/bin
 
 # Directory where the documentation files reside
-define	doc_dir:doc-path
+define	doc_dir:<main_mas_dir>/doc
+
+# Shell to use to run macl, if any
+define	macl-shell:
 
 # mas_directory environment variable setting
-define	mas_directory_setting:mas-path
+define	mas_directory_setting:<mas_lib_dir>
 
 # Set the MAS_DIRECTORY environment variable
 environment_variable	MAS_DIRECTORY:<mas_directory_setting>
 
 # Valid port numbers for use by the MAS server
-valid_portnumbers	10101,10102,10103,10104,20102,20103,20104,30101,30102,\
+valid_portnumbers	7777,10101,10102,10103,10104,20102,20103,20104,30101,30102,\
 30103,30104,30105,30106,30107,30108,30109
 
 # The port number to be used to receive a status message back from the
@@ -55,44 +78,35 @@ hostname	localhost
 
 # Detailed version of command to start the server: data from files
 begin	start_server_command
-command	<cwdir> [<data_dir>] <bin_dir>/mas -o -f , -b <portnumber> *.txt
+command	<cwdir> [<data_dir>]<projdir>/mas -o -f , -b <portnumber> *.txt
 command_description	Get data from files
 command_name	File-based
 mark	default
 end
 
 # Detailed version of command to start the server: data from a database
-begin	dummy
-foo	cd <data_dir>; <bin_dir>/mas -o -b <portnumber> -p
-bar	Get data from database
-egg	Database-based
-mark	default
-end
-
-# Detailed version of command to start the server: data from a database
 begin	start_server_command
-command	<bin_dir>/mas -o -b \
-<portnumber> -p
+command	<bin_dir>/mas -o -b <portnumber> -p
 command_description	Get data from database
 command_name	Database-based
 end
 
 # Detailed version of command to start the server: data from the web
 begin	start_server_command
-command	<bin_dir>/mas -o -b \
-<portnumber> -f , -w
+command	<bin_dir>/mas -o -b <portnumber> -f , -w
 command_description	Get data from the web
 command_name	Web-based
 end
 
 # Command to start a command-line client to connect to the server
-start_cl_client_command	<bin_dir>/macl -h <hostname> <portnumber>
+start_cl_client_command	<macl-shell><bin_dir>/macl -h <hostname> <portnumber>
 
 # Command to start the charting application
-chart_command	<bin_dir>/magc <portnumber> -h <hostname>
+chart_command	<cwdir> [<chart_dir>]java -cp <classes_dir> \
+MA_Client <hostname> <portnumber> >/tmp/errs 2>&1
 
 # Command to terminate the server
-termination_command	echo |<bin_dir>/macl -h <hostname> <portnumber>
+termination_command	<terminate_server>
 
 # Command to start the user's browser for viewing documentation
 browse_docs_command	ps x |grep -q '[m]ozilla' && /usr/local/mozilla/mozilla -remote "openURL(<doc_dir>~/index.html, new-window)" || /usr/local/mozilla/mozilla "<doc_dir>~/index.html"
