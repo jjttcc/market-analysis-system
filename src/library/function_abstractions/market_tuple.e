@@ -18,7 +18,7 @@ feature -- Access
 		deferred
 		end
 
-feature {FACTORY, VALUE_SETTER, MARKET_FUNCTION} -- Element change
+feature {FACTORY, VALUE_SETTER} -- Element change
 
 	set_date_time (t: DATE_TIME) is
 			-- Set date_time to `t'.
