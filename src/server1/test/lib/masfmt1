@@ -1,0 +1,6 @@
+# mas command to read a data file with an unusual, configurable date
+# format (without volume)
+
+input_file=$1
+
+mas -f ' '  $input_file -no-volume -date-spec:date-format=dd#month3#yy,year-partition=80,date-sep=-
