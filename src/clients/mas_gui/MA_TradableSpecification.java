@@ -18,7 +18,7 @@ public class MA_TradableDataSpecification extends TradableDataSpecification {
 // Access
 
 	// All 'IndicatorDataSpecification's, including
-	// `special_indicator_specifications'
+	// `special_indicator_specifications', valid for the assocaited tradable
 	public Collection all_indicator_specifications() {
 		Collection result = indicator_specifications();
 		result.addAll(special_indicator_specs.values());
