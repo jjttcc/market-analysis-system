@@ -45,129 +45,6 @@ feature {NONE} -- Initialization
 			line_field_separator_set: line_field_separator = line_field_sep
 		end
 
-feature -- Access
-
-	matching_block_boundaries (begin_value: STRING;
-		target_list: LIST [STRING]): LIST [INTEGER_INTERVAL] is
-			-- Begin/end indices of all blocks in `target_list'
-			-- whose "begin-value" matches `begin_value'
-		require
-			args_exist: begin_value /= Void and target_list /= Void
-		local
-			begin_rec: STRING
-			starti: INTEGER
-		do
-			create {LINKED_LIST [INTEGER_INTERVAL]} Result.make
-			begin_rec := begin_record (begin_value)
-			from
-				target_list.start
-			until
-				target_list.exhausted
-			loop
-				if equal (target_list.item, begin_rec) then
-					-- Beginning of a target block
-					from
-						starti := target_list.index
-					until
-						target_list.exhausted or
-						is_end_of_block (target_list.item)
-					loop
-						target_list.forth
-					end
-					if not target_list.exhausted then
-						Result.extend (create {INTEGER_INTERVAL}.make (
-							starti, target_list.index))
-					else
-						-- The end of `target_list' was reached and
-						-- no end block was found - regard the last
-						-- record as the end of the current block.
-						Result.extend (create {INTEGER_INTERVAL}.make (
-							starti, target_list.count))
-					end
-				end
-				if not target_list.exhausted then
-					target_list.forth
-				end
-			end
-		ensure
-			Result_exists: Result /= Void
-		end
-
-	matching_indices (intervals: LIST [INTEGER_INTERVAL];
-		target_list: LIST [STRING]; tgt: STRING): LIST [INTEGER] is
-			-- For each block, b, in `target_list' whose
-			-- begin-end indices are specified in `intervals':
-			--   The indices, if any, of the records in b matching `tgt'
-		require
-			args_exist: intervals /= Void and target_list /= Void and
-				tgt /= Void
-			intervals_valid: intervals.for_all (agent within_range (?,
-				target_list))
-		do
-			create {ARRAYED_LIST [INTEGER]} Result.make (0)
-			from
-				intervals.start
-			until
-				intervals.exhausted
-			loop
-				-- For each index, i, within the block designated by
-				-- `intervals.item' for which `equal (target_list @ i, tgt)':
-				-- add i to `Result'.
-				from
-					target_list.go_i_th (intervals.item.lower)
-				until
-					target_list.index = intervals.item.upper + 1
-				loop
-					if equal (target_list.item, tgt) then
-						Result.extend (target_list.index)
-					end
-					target_list.forth
-				end
-				intervals.forth
-			end
-		ensure
-			Result_exists: Result /= Void
-		end
-
-	intervals_containing_target (intervals: LIST [INTEGER_INTERVAL];
-		target_list: LIST [STRING]; tgt: STRING): LIST [INTEGER_INTERVAL] is
-			-- All elements of `intervals' that represent a block in
-			-- `target_list' that contains the record `tgt'
-		require
-			args_exist: intervals /= Void and target_list /= Void and
-				tgt /= Void
-		local
-			match: BOOLEAN
-		do
-			create {LINKED_LIST [INTEGER_INTERVAL]} Result.make
-			from
-				intervals.start
-			until
-				intervals.exhausted
-			loop
-				match := False
-				from
-					target_list.go_i_th (intervals.item.lower)
-				until
-					match or target_list.index = intervals.item.upper + 1
-				loop
-					if equal (target_list.item, tgt) then
-						Result.extend (intervals.item)
-						match := True
-					end
-					target_list.forth
-				end
-				intervals.forth
-			end
-			Result.compare_objects
-		ensure
-			Result_exists: Result /= Void
-			object_comparison: Result.object_comparison
-		end
-
-	line_field_separator: STRING
-			-- Separator used to delimit fields in a line (record)
-
 feature -- Status report
 
 	in_block: BOOLEAN
@@ -185,18 +62,6 @@ feature -- Status report
 
 	mark_as_default_failure_reason: STRING
 			-- Reason the last call to `mark_block_as_default' failed.
-
-	within_range (index_range: INTEGER_INTERVAL;
-		target_list: LIST [STRING]): BOOLEAN is
-			-- Is the specified pair of indices within the valid index
-			-- range of `target_list'?
-		require
-			args_exist: index_range /= Void and target_list /= Void
-		do
-			Result := index_range.lower <= index_range.upper and
-				1 <= index_range.lower and
-				target_list.count >= index_range.upper
-		end
 
 feature -- Cursor movement
 
@@ -380,6 +245,127 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - utilities
 
+	matching_block_boundaries (begin_value: STRING;
+		target_list: LIST [STRING]): LIST [INTEGER_INTERVAL] is
+			-- Begin/end indices of all blocks in `target_list'
+			-- whose "begin-value" matches `begin_value'
+		require
+			args_exist: begin_value /= Void and target_list /= Void
+		local
+			begin_rec: STRING
+			starti: INTEGER
+		do
+			create {LINKED_LIST [INTEGER_INTERVAL]} Result.make
+			begin_rec := begin_record (begin_value)
+			from
+				target_list.start
+			until
+				target_list.exhausted
+			loop
+				if equal (target_list.item, begin_rec) then
+					-- Beginning of a target block
+					from
+						starti := target_list.index
+					until
+						target_list.exhausted or
+						is_end_of_block (target_list.item)
+					loop
+						target_list.forth
+					end
+					if not target_list.exhausted then
+						Result.extend (create {INTEGER_INTERVAL}.make (
+							starti, target_list.index))
+					else
+						-- The end of `target_list' was reached and
+						-- no end block was found - regard the last
+						-- record as the end of the current block.
+						Result.extend (create {INTEGER_INTERVAL}.make (
+							starti, target_list.count))
+					end
+				end
+				if not target_list.exhausted then
+					target_list.forth
+				end
+			end
+		ensure
+			Result_exists: Result /= Void
+		end
+
+	matching_indices (intervals: LIST [INTEGER_INTERVAL];
+		target_list: LIST [STRING]; tgt: STRING): LIST [INTEGER] is
+			-- For each block, b, in `target_list' whose
+			-- begin-end indices are specified in `intervals':
+			--   The indices, if any, of the records in b matching `tgt'
+		require
+			args_exist: intervals /= Void and target_list /= Void and
+				tgt /= Void
+			intervals_valid: intervals.for_all (agent within_range (?,
+				target_list))
+		do
+			create {ARRAYED_LIST [INTEGER]} Result.make (0)
+			from
+				intervals.start
+			until
+				intervals.exhausted
+			loop
+				-- For each index, i, within the block designated by
+				-- `intervals.item' for which `equal (target_list @ i, tgt)':
+				-- add i to `Result'.
+				from
+					target_list.go_i_th (intervals.item.lower)
+				until
+					target_list.index = intervals.item.upper + 1
+				loop
+					if equal (target_list.item, tgt) then
+						Result.extend (target_list.index)
+					end
+					target_list.forth
+				end
+				intervals.forth
+			end
+		ensure
+			Result_exists: Result /= Void
+		end
+
+	intervals_containing_target (intervals: LIST [INTEGER_INTERVAL];
+		target_list: LIST [STRING]; tgt: STRING): LIST [INTEGER_INTERVAL] is
+			-- All elements of `intervals' that represent a block in
+			-- `target_list' that contains the record `tgt'
+		require
+			args_exist: intervals /= Void and target_list /= Void and
+				tgt /= Void
+		local
+			match: BOOLEAN
+		do
+			create {LINKED_LIST [INTEGER_INTERVAL]} Result.make
+			from
+				intervals.start
+			until
+				intervals.exhausted
+			loop
+				match := False
+				from
+					target_list.go_i_th (intervals.item.lower)
+				until
+					match or target_list.index = intervals.item.upper + 1
+				loop
+					if equal (target_list.item, tgt) then
+						Result.extend (intervals.item)
+						match := True
+					end
+					target_list.forth
+				end
+				intervals.forth
+			end
+			Result.compare_objects
+		ensure
+			Result_exists: Result /= Void
+			object_comparison: Result.object_comparison
+		end
+
+	line_field_separator: STRING
+			-- Separator used to delimit fields in a line (record)
+
 	write_line (s: STRING) is
 			-- Write `s' appended with '%N' to `target'.
 		require
@@ -394,6 +380,30 @@ feature {NONE} -- Implementation - utilities
 			else
 				target.put_string (s + "%N")
 			end
+		end
+
+	begin_record (begin_value: STRING): STRING is
+		require
+			begin_value_exists: begin_value /= Void
+		do
+			Result := Begin_tag + line_field_separator + begin_value
+		ensure
+			definition: Result.is_equal (Begin_tag + line_field_separator +
+				begin_value)
+		end
+
+feature {NONE} -- Implementation - status report utilities
+
+	within_range (index_range: INTEGER_INTERVAL;
+		target_list: LIST [STRING]): BOOLEAN is
+			-- Is the specified pair of indices within the valid index
+			-- range of `target_list'?
+		require
+			args_exist: index_range /= Void and target_list /= Void
+		do
+			Result := index_range.lower <= index_range.upper and
+				1 <= index_range.lower and
+				target_list.count >= index_range.upper
 		end
 
 	not_last (s: STRING): BOOLEAN is
@@ -415,16 +425,6 @@ feature {NONE} -- Implementation - utilities
 		do
 			Result := s /= Void and then
 				equal (s.substring (1, End_tag.count), End_tag)
-		end
-
-	begin_record (begin_value: STRING): STRING is
-		require
-			begin_value_exists: begin_value /= Void
-		do
-			Result := Begin_tag + line_field_separator + begin_value
-		ensure
-			definition: Result.is_equal (Begin_tag + line_field_separator +
-				begin_value)
 		end
 
 feature {NONE} -- Implementation - constants
