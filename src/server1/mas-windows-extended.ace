@@ -10,6 +10,8 @@ default
 	assertion (ensure)
 	assertion (loop)
 	assertion (invariant)
+	arguments (" -f , -i 15-minute  bond_10_year.15-minute -no-volume 2299 -b")
+	arguments (" -f , ibm.txt 2299 -b")
 	arguments (" -f , -w -o 18273")
 	arguments (" -f , -wbo 18273")
 	arguments ("-o -f , -w -b 18273")
@@ -81,6 +83,10 @@ cluster
 
 	extended_global (extended_server):		"$/global"
 
+	extended_interface (extended_server):		"$/interface"
+
+	extended_factories (extended_server):		"$/factories"
+
 	extended_sys (extended_server):		"$/system_specific/unix"
 
 	extended_utility (extended_server):		"$/utility"
@@ -111,14 +117,15 @@ cluster
 
 	external_components (server):		"$/external"
 
+	tradable_list (server):		"$/tradable_list"
+
+	stock_splits (server):		"$/stock_splits"
+
 	client_server:		"$MAS/src/client_server"
 
 	protocols (client_server):		"$/protocols"
 
-
-	tradable_list (server):		"$/tradable_list"
-
-	stock_splits (server):		"$/stock_splits"
+	extended_protocols (client_server):		"$/extended_protocols"
 
 	app_library:		"$MAS/src/application_library"
 
@@ -180,11 +187,11 @@ cluster
 
 	event_generation_kernel (event_generation):		"$/event_generation_kernel"
 
+	function_analysis (event_generation):		"$/function_analysis"
 
 	client_lib:		"$MAS/src/client_library"
 
 	client_support (client_lib):		"$/support"
-	function_analysis (event_generation):		"$/function_analysis"
 
 	eiffel_components:		"$MAS/src/eiffel_library"
 
@@ -211,8 +218,6 @@ cluster
 	component_server (eiffel_components):		"$/server"
 
 	networking (eiffel_components):		"$/networking"
-
-	eiffel_component_test (eiffel_components):		"$/test"
 
 	ise:		"$ISE_EIFFEL/library"
 
@@ -270,20 +275,6 @@ cluster
 
 	polling_implementation (net):		"$/polling/implementation"
 
-	store (ise):		"$/store"
-
-	estore_interface (store):		"$/interface"
-
-	estore_support (store):		"$/support"
-
-	dbms (store):		"$/dbms"
-
-	db_support (dbms):		"$/support"
-
-	rdbms (dbms):		"$/rdbms"
-
-	odbc (rdbms):		"$/odbc"
-
 	ecli_src:		"$ECLI/src"
 
 	abstract (ecli_src):		"$/abstract"
@@ -304,10 +295,21 @@ cluster
 
 	ut_support:		"$GOBO/library/utility/support"
 
-	all kl_kernel:		"$GOBO/library/kernel"
-		exclude
-			"hact"; "ve"; "se"; 
-		end
+	kl_kernel:		"$GOBO/library/kernel"
+
+	kl_kernel_spec:		"$GOBO/library/kernel/spec/ise"
+
+	kl_support:		"$GOBO/library/kernel/support"
+
+	kl_misc:		"$GOBO/library/kernel/misc"
+
+	kl_basic:		"$GOBO/library/kernel/basic"
+
+	kl_unicode:		"$GOBO/library/kernel/unicode"
+
+	kl_io:		"$GOBO/library/kernel/io"
+
+	kl_elks:		"$GOBO/library/kernel/elks"
 
 	ds_container:		"$GOBO/library/structure/container"
 
@@ -322,6 +324,22 @@ cluster
 	ds_table:		"$GOBO/library/structure/table"
 
 	ds_date:		"$GOBO/library/time/date"
+
+	eposix:		"$EPOSIX/src/posix"
+
+	eposix_stdc:		"$EPOSIX/src/standardc"
+
+	eposix_papi:		"$EPOSIX/src/papi"
+
+	eposix_capi:		"$EPOSIX/src/capi"
+
+	eposix_abstract:		"$EPOSIX/src/abstract"
+
+	eposix_support:		"$EPOSIX/src/support"
+
+	eposix_c:		"$EPOSIX/src/epxc"
+
+	eposix_ise:		"$EPOSIX/src/spec/ise"
 
 external
 

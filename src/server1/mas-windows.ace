@@ -66,19 +66,17 @@ cluster
 	server:		"$MAS/src/server1"
 
 
+	server_configuration (server):		"$/server_configuration"
+
+	client_lib:		"$MAS/src/client_library"
+
+	client_support (client_lib):		"$/support"
+
 	abstractions (server):		"$/abstractions"
 
 	factories (server):		"$/factories"
 
 	network (server):		"$/network"
-
-	server_configuration (server):		"$/server_configuration"
-
-	tradable_list_builders (server):		"$/tradable_list_builders"
-
-	client_lib:		"$MAS/src/client_library"
-
-	client_support (client_lib):		"$/support"
 
 	root_cluster (server):		"$/root"
 
@@ -102,14 +100,15 @@ cluster
 
 	external_components (server):		"$/external"
 
+	tradable_list (server):		"$/tradable_list"
+
+	tradable_list_builders (server):		"$/tradable_list_builders"
+
+	stock_splits (server):		"$/stock_splits"
+
 	client_server:		"$MAS/src/client_server"
 
 	protocols (client_server):		"$/protocols"
-
-
-	tradable_list (server):		"$/tradable_list"
-
-	stock_splits (server):		"$/stock_splits"
 
 	app_library:		"$MAS/src/application_library"
 
@@ -199,8 +198,6 @@ cluster
 
 	networking (eiffel_components):		"$/networking"
 
-	eiffel_component_test (eiffel_components):		"$/test"
-
 	ise:		"$ISE_EIFFEL/library"
 
 	kernel (ise):		"$/base/kernel"
@@ -257,20 +254,6 @@ cluster
 
 	polling_implementation (net):		"$/polling/implementation"
 
-	store (ise):		"$/store"
-
-	estore_interface (store):		"$/interface"
-
-	estore_support (store):		"$/support"
-
-	dbms (store):		"$/dbms"
-
-	db_support (dbms):		"$/support"
-
-	rdbms (dbms):		"$/rdbms"
-
-	odbc (rdbms):		"$/odbc"
-
 	ecli_src:		"$ECLI/src"
 
 	abstract (ecli_src):		"$/abstract"
@@ -291,10 +274,21 @@ cluster
 
 	ut_support:		"$GOBO/library/utility/support"
 
-	all kl_kernel:		"$GOBO/library/kernel"
-		exclude
-			"hact"; "ve"; "se"; 
-		end
+	kl_kernel:		"$GOBO/library/kernel"
+
+	kl_kernel_spec:		"$GOBO/library/kernel/spec/ise"
+
+	kl_support:		"$GOBO/library/kernel/support"
+
+	kl_misc:		"$GOBO/library/kernel/misc"
+
+	kl_basic:		"$GOBO/library/kernel/basic"
+
+	kl_unicode:		"$GOBO/library/kernel/unicode"
+
+	kl_io:		"$GOBO/library/kernel/io"
+
+	kl_elks:		"$GOBO/library/kernel/elks"
 
 	ds_container:		"$GOBO/library/structure/container"
 
@@ -309,6 +303,22 @@ cluster
 	ds_table:		"$GOBO/library/structure/table"
 
 	ds_date:		"$GOBO/library/time/date"
+
+	eposix:		"$EPOSIX/src/posix"
+
+	eposix_stdc:		"$EPOSIX/src/standardc"
+
+	eposix_papi:		"$EPOSIX/src/papi"
+
+	eposix_capi:		"$EPOSIX/src/capi"
+
+	eposix_abstract:		"$EPOSIX/src/abstract"
+
+	eposix_support:		"$EPOSIX/src/support"
+
+	eposix_c:		"$EPOSIX/src/epxc"
+
+	eposix_ise:		"$EPOSIX/src/spec/ise"
 
 external
 
