@@ -228,6 +228,7 @@ feature {NONE}
 			-- Menu for editing technical indicators (market functions)
 		local
 			finished: BOOLEAN
+			f: MARKET_FUNCTION
 		do
 			from
 			until
@@ -242,18 +243,25 @@ feature {NONE}
 				inspect
 					selected_character
 				when 'c', 'C' then
-					function_library.extend (
-						function_builder.function_selection_from_type (
+					f := function_builder.function_selection_from_type (
 							function_builder.market_function, "root function",
-							true))
+							true)
+					function_library.extend (f)
 				when 'r', 'R' then
-					remove_indicator_menu
-				when 'm', 'M' then
-					if current_tradable /= Void then
-						edit_indicator_menu (current_tradable.indicators)
+					if not function_library.empty then
+						remove_indicator_menu
 					else
+						print ("Indicator list is empty - no indicators %
+								%to remove.%N")
+					end
+				when 'm', 'M' then
+					if current_tradable = Void then
 						print ("Market list is empty - cannot edit indicators %
 								%unless at least one market is available.%N")
+					elseif current_tradable.indicators.empty then
+						print ("Indicator list is empty.%N")
+					else
+						edit_indicator_menu (current_tradable.indicators)
 					end
 				when 'a', 'A' then
 					edit_event_generator_indicator_menu
@@ -373,7 +381,7 @@ feature {NONE}
 		do
 			from
 			until
-				finished
+				finished or function_library.empty
 			loop
 				print ("Select indicator to remove%N")
 				indicator := indicator_selection (function_library)
@@ -839,7 +847,9 @@ feature {NONE}
 				if l.item = f then
 					l.remove
 				end
-				l.forth
+				if not l.empty then
+					l.forth
+				end
 			end
 		end
 
