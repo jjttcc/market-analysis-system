@@ -47,4 +47,4 @@ void close_handle(struct input_sequence_plug_in* handle);
 */
 char* last_error(struct input_sequence_plug_in* handle);
 
-#endif	// EXTERNAL_INPUT_SEQUENCE_PLUG_IN_MODULE_H
+#endif	/* EXTERNAL_INPUT_SEQUENCE_PLUG_IN_MODULE_H */
