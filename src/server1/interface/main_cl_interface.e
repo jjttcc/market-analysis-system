@@ -331,31 +331,49 @@ feature {NONE}
 		local
 			indicator: MARKET_FUNCTION
 			finished: BOOLEAN
-			parameter: FUNCTION_PARAMETER
-			parameters: LIST [FUNCTION_PARAMETER]
-			i: INTEGER
 		do
 			from
-				print ("Select indicator to edit%N")
-				indicator := indicator_selection (indicators)
-				parameters := indicator.parameters
 			until
 				finished
 			loop
-				print_list (<<"Select a parameter for ", indicator.name,
-							" (0 to end):%N">>)
+				print ("Select indicator to edit (0 to end):%N")
+				indicator := indicator_selection (indicators)
+				if indicator /= Void then
+					print_list (<<"Select a parameter for ", indicator.name,
+									":%N">>)
+					edit_parameter_menu (indicator.parameters)
+				else
+					finished := True
+				end
+			end
+		end
+
+	edit_parameter_menu (parameters: LIST [FUNCTION_PARAMETER]) is
+		require
+			params_not_void: parameters /= Void
+		local
+			i: INTEGER
+			parameter: FUNCTION_PARAMETER
+			finished: BOOLEAN
+		do
+			from
+			until
+				finished
+			loop
 				from
 					i := 1
 					parameters.start
 				until
 					parameters.after
 				loop
-					print_list (<<i, ") ", parameters.item.name,
+					print_list (<<i, ") ", parameters.item.name, " - ",
+						parameters.item.function.name,
 						" (value: ", parameters.item.current_value, ", type: ",
 						parameters.item.value_type_description, ")%N">>)
 					parameters.forth
 					i := i + 1
 				end
+				print ("(0 to end) ")
 				print (eom)
 				read_integer
 				if
@@ -383,19 +401,23 @@ feature {NONE}
 			until
 				finished or function_library.empty
 			loop
-				print ("Select indicator to remove%N")
+				print ("Select indicator to remove (0 to end):%N")
 				indicator := indicator_selection (function_library)
-				print_list (<<"Remove ", indicator.name,
-					"? (y[es]/n[o]/q[uit]) ", eom>>)
-				inspect
-					selected_character
-				when 'y', 'Y' then
-					remove_indicator (indicator)
-				when 'n', 'N' then
-				when 'q', 'Q' then
-					finished := true
+				if indicator /= Void then
+					print_list (<<"Remove ", indicator.name,
+						"? (y[es]/n[o]/q[uit]) ", eom>>)
+					inspect
+						selected_character
+					when 'y', 'Y' then
+						remove_indicator (indicator)
+					when 'n', 'N' then
+					when 'q', 'Q' then
+						finished := true
+					else
+						print ("Invalid selection%N")
+					end
 				else
-					print ("Invalid selection%N")
+					finished := True
 				end
 				print ("%N%N")
 			end
@@ -475,10 +497,12 @@ feature {NONE}
 				when 'c', 'C' then
 					select_period_type
 				when 'i', 'I' then
-					print ("Select indicator to view%N")
+					print ("Select indicator to view (0 to end):%N")
 					indicator := indicator_selection
 									(current_tradable.indicators)
-					view_indicator_menu (indicator)
+					if indicator /= Void then
+						view_indicator_menu (indicator)
+					end
 				when 'x', 'X' then
 					end_client := true
 				when 'h', 'H' then
@@ -631,11 +655,12 @@ feature {NONE}
 
 	indicator_selection (indicators: LIST [MARKET_FUNCTION]):
 				MARKET_FUNCTION is
-			-- User-selected indicator
+			-- User-selected indicator by number - Void if user chooses 0
 		require
 			not_void_or_empty: indicators /= Void and not indicators.empty
 		local
 			names: ARRAYED_LIST [STRING]
+			finished: BOOLEAN
 		do
 			from
 				!!names.make (indicators.count)
@@ -648,20 +673,22 @@ feature {NONE}
 					indicators.forth
 				end
 			until
-				Result /= Void
+				finished
 			loop
 				print_names_in_1_column (names, 1)
 				print (eom)
 				read_integer
-				print_list (<<"You selected number ", last_integer, "%N">>)
 				if
-					last_integer <= 0 or
+					last_integer < 0 or
 						last_integer > indicators.count
 				then
-					print_list (<<"Selection must be between 1 and ",
+					print_list (<<"Selection must be between 0 and ",
 								indicators.count, "%N">>)
 				else
-					Result := indicators @ last_integer
+					finished := True
+					if last_integer /= 0 then
+						Result := indicators @ last_integer
+					end
 				end
 			end
 		end
