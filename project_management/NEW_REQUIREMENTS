@@ -1,8 +1,7 @@
-Requested by Stockpoint (email dialog with Eirik Mangseth):
-[Fri Aug 18 2000; revised Mon Aug 28]
-
-
 Input Data Validation
+
+[Requested by Stockpoint (email dialog with Eirik Mangseth):
+Fri Aug 18 2000; revised Mon Aug 28]
 
 The validation of input data in MAS will be extended to include the following:
 
@@ -54,12 +53,5 @@ be discarded and processing will continue:
 
 5. There will be two error checking modes, a normal error checking mode, with
 the behavior described in 1 - 4, and a strict error checking mode, where the
-errors in 1 - 4 will be checked and reported, but if one or more errors occur
-for a particular record set (such as the data for IBM), the entire data set
-will be discarded - it will not be available for processing until the data is
-fixed.  [I think this is better than the three different modes we decided on
-earlier, as long as the performance when reading data for the "normal" mode
-is not noticeably slower than MAS's performance with the current limited
-error checking.  If it is noticeably slower, we should probably have the three
-modes, with the default being limited error checking - and the "normal" mode
-would be renamed something like "semi-strict".]
+behavior described in 1 - 4 will be the same except that any record for
+which an error is encountered will be unconditionally discarded.
