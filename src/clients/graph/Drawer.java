@@ -161,23 +161,14 @@ abstract public class Drawer {
 	// to range of the data - for example, 10, 20, 30 when the range
 	// is from 8 to 37.
 	void draw_reference_values(Graphics g, Rectangle bounds) {
-		int step, start, y;
+		int step = 0, start, y;
 
-		if (yrange <= 1200) {
-			if (yrange <= 120) {
-				if (yrange <= 12) {
-					step = 1;
-				}
-				else {
-					step = 10;
-				}
+		for (int i = 0; i < refvalue_specs.length; ++i) {
+			if (yrange >= refvalue_specs[i].minimum() &&
+					yrange < refvalue_specs[i].maximum()) {
+				step = refvalue_specs[i].step_value();
+				break;
 			}
-			else {
-				step = 100;
-			}
-		}
-		else {
-			step = 1000;
 		}
 		start = (int) (Math.floor(ymin / step) * step + step);
 		for (y = start; y < ymax; y += step) {
@@ -218,9 +209,42 @@ abstract public class Drawer {
 		return bounds.height / yrange;
 	}
 
+	static protected RefSpec[] refvalue_specs;
+
+	static {
+		refvalue_specs = new RefSpec[7];
+		refvalue_specs[0] = new RefSpec(0, 15, 1);
+		refvalue_specs[1] = new RefSpec(15, 30, 5);
+		refvalue_specs[2] = new RefSpec(30, 150, 10);
+		refvalue_specs[3] = new RefSpec(150, 300, 50);
+		refvalue_specs[4] = new RefSpec(300, 1500, 100);
+		refvalue_specs[5] = new RefSpec(1500, 3000, 500);
+		refvalue_specs[6] = new RefSpec(3000, 2000000000, 1000);
+	}
+
 	protected Axis xaxis;
 	protected Axis yaxis;
 	protected double xmax, ymax, xmin, ymin;
 	protected double xrange, yrange;
 	protected boolean clipping;
+}
+
+class RefSpec {
+	RefSpec(int min, int max, int v) {
+		_minimum = min;
+		_maximum = max;
+		_value = v;
+	}
+
+	int minimum() { return _minimum; }
+
+	int maximum() { return _maximum; }
+
+	int step_value() { return _value; }
+
+	private int _minimum;
+
+	private int _maximum;
+
+	private int _value;
 }
