@@ -188,7 +188,8 @@ the structure of the indicator code that is not compatible with the old
 version.  As a result, the old indicator file, indicators_persist, cannot
 be loaded when the new version of the server starts up.  Once this occurs,
 the only way to use your old indicators is to keep using the old version
-of the server.  However, there is a preventative method that can be
+of the server.  (This problem can also occur with market analyzers and the
+generators_persist file.)  However, there is a preventative method that can be
 used to overcome the problem: Whenever you create a new indicator, start
 the server in the background (-b option) and use the command-line client
 program, macl, to talk to the server and "record" the conversation with
@@ -225,6 +226,7 @@ and
 &lt;portnumber&gt;
 </I>
 is, again, the port number with which you started the server.
+This solution works for both indicators and market analyzers.
 <h3>
 <A name="data">
 Data-related Problems
