@@ -37,6 +37,9 @@ feature -- Client request IDs
 	Session_change_request: INTEGER is 7
 			-- Request for a change in session settings
 
+	Logout_request: INTEGER is 8
+			-- Request for a change in session settings
+
 feature -- Server response IDs
 
 	Error: INTEGER is 101
