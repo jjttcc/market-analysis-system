@@ -195,10 +195,12 @@ feature -- Basic operations
 			end
 		rescue
 			handle_exception ("main menu")
-			if not assertion_violation then
-				if not end_client then
-					retry
+			if not end_client then
+				if not assertion_violation then
+						retry
 				end
+			else
+				termination_cleanup
 			end
 		end
 
