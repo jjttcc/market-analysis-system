@@ -81,8 +81,7 @@ feature -- Access
 			Result.extend (create {PAIR [COMMAND, STRING]}.make (linear_sum,
 				"Operator that sums a subsequence of n records"))
 			Result.extend (create {PAIR [COMMAND, STRING]}.make (
-				n_value_command,
-				"n-valued operator whose value is `n'"))
+				n_value_command, "n-valued operator whose value is `n'"))
 			Result.extend (create {PAIR [COMMAND, STRING]}.make (
 				n_based_unary_operator, "N-based operator whose value %
 				%remains unchanged after initialization and that obtains %
