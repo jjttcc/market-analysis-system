@@ -121,7 +121,7 @@ setup_correct_number_of_records_test (printer)
 			f: MARKET_FUNCTION
 		do
 --!!!:
-print ("print_indicators" + "%N")
+--print ("print_indicators" + "%N")
 			from
 				t.indicators.start
 			until
@@ -129,7 +129,7 @@ print ("print_indicators" + "%N")
 			loop
 				f := t.indicators.item
 --!!!:
-print ("PERIOD TYPE for " + f.name + ": " + f.trading_period_type.name + "%N")
+--print ("PERIOD TYPE for " + f.name + ": " + f.trading_period_type.name + "%N")
 				if verbose then print_mf_info (f) end
 				print_tuples (f.output)
 				t.indicators.forth
@@ -142,8 +142,8 @@ print ("PERIOD TYPE for " + f.name + ": " + f.trading_period_type.name + "%N")
 			-- not empty, print it at the end.
 		do
 --!!!:
-print ("print_indicator" + "%N")
-print ("PERIOD TYPE for " + i.name + ": " + i.trading_period_type.name + "%N")
+--print ("print_indicator" + "%N")
+--print ("PERIOD TYPE for " + i.name + ": " + i.trading_period_type.name + "%N")
 			if verbose then print_mf_info (i) end
 			print_tuples (i.output)
 		end

@@ -232,13 +232,14 @@ end
 		local
 			first, last, i: INTEGER
 		do
-print ("print_tuples_with_time%N")
-prd ("print_start_date: ", print_start_date)
-prd ("print_start_time: ", print_start_time)
-prd ("print_end_date: ", print_end_date)
-prd ("print_end_time: ", print_end_time)
-print ("date field sep: " + date_field_separator + "%N")
-print ("time field sep: " + time_field_separator + "%N")
+--!!!:
+--print ("print_tuples_with_time%N")
+--prd ("print_start_date: ", print_start_date)
+--prd ("print_start_time: ", print_start_time)
+--prd ("print_end_date: ", print_end_date)
+--prd ("print_end_time: ", print_end_time)
+--print ("date field sep: " + date_field_separator + "%N")
+--print ("time field sep: " + time_field_separator + "%N")
 			if print_start_time /= Void then
 				first := first_date_time_index (l)
 			else
@@ -249,10 +250,10 @@ print ("time field sep: " + time_field_separator + "%N")
 			else
 				last := last_index (l)
 			end
-print ("print_tuples_with_time - first, last: " + first.out + ", " + last.out +
-"%N")
+--!!!:
+--print ("print_tuples_with_time - first, last: " + first.out + ", " + last.out + "%N")
 			if last >= first then
-debug_hook (first, last)
+--debug_hook (first, last)
 				debug ("data_update_bug")
 					print_requested_start_end_dates
 					print_start_end (l, first, last)
