@@ -38,7 +38,7 @@ print "Using backup data for $symbol\n";
 	@lastdate = lastdate($datafile);
 print "last date:", join(', ', @lastdate), "\n";
 	if (out_of_date(@lastdate)) {
-print "Updating data ...";
+print "Updating data ...\n";
 		# Note: All data is retrieved - need to optimize to just append
 		# the last day (or whatever is missing).
 		my @nowdate = date_from_localtime(now());
@@ -48,10 +48,10 @@ print "Updating data ...";
 			save_data();
 		}
 	} else {
-print "Data is up to date.";
+print "Data is up to date.\n";
 	}
 } else {
-print "Retrieving data for $symbol\n";
+print "Retrieving fresh data for $symbol\n";
 	my @nowdate = date_from_localtime(now());
 	$mer_result = retrieve_data(adjusted_start_date(@nowdate), @nowdate);
 	if ($mer_result == 0) {
@@ -140,17 +140,17 @@ sub save_data {
 # Expected arguments:
 #    (startyear, startmonth, startday, endyear, endmonth, endday)
 sub retrieve_data {
+	my $result = 0;
 	my $startdate = squished_date($_[0], $_[1], $_[2]);
 	my $enddate = squished_date($_[3], $_[4], $_[5]);
-#print "retrdata - start/end dates: $startdate, $enddate\n";
 	my @cmd = retrieve_command($startdate, $enddate);
-	return system(@cmd);
+	$result = system(@cmd);
+	return $result;
 }
 
 # Copy the data in $input_file to $output_file, filtering out
 # "^SYMBOL," at the beginning of each line using $output_filter.
 sub copy_data_to_output_file {
-print "a\n";
 	my $ifile; my $ofile;
 	my $i; my $l;
 	$ifile = new FileHandle $input_file, 'r';
@@ -158,7 +158,14 @@ print "a\n";
 	my @lines = <$ifile>;
 	my $filter = "\$l =~ " . $output_filter;
 	if (@lines == 0 || input_error($lines[0])) {
-		warn "Error encountered retrieving data: $lines[0].\n"; exit 1
+		my $msg = "Error encountered retrieving data";
+		if (@lines > 0) {
+			$msg .= ": $lines[0].\n";
+		} else {
+			$msg .= ".\n";
+		}
+		warn $msg;
+		exit 1;
 	}
 	foreach $i (0 .. @lines - 1) {
 		$l = $lines[$i];
@@ -169,18 +176,19 @@ print "a\n";
 	close($ofile);
 }
 
-# Copy the data in $input_file to $output_file.
+# Append the data in $input_file to $output_file, skipping the 1st line
+# andfiltering out "^SYMBOL," at the beginning of each line using
+# $output_filter.
 sub append_data_to_output_file {
-print "b\n";
 	my $ifile; my $ofile; my $i; my $l;
 	$ifile = new FileHandle $input_file, 'r';
 	$ofile = new FileHandle $output_file, 'a';
 	my @lines = <$ifile>;
 	my $filter = "\$l =~ " . $output_filter;
 	if (@lines == 0 || input_error($lines[0])) {
-		my $msg = "Error encountered retrieving data\n";
+		my $msg = "Error encountered retrieving data";
 		if (@lines > 0) {
-			$msg += ": $lines[0].\n";
+			$msg .= ": $lines[0].\n";
 		} else {
 			$msg .= ".\n";
 		}
@@ -266,13 +274,10 @@ sub usage {
 
 # Is there an error in the record ($_[0])?
 sub input_error {
-print "c\n";
 	if (@_ == 0) {
 		# Empty args are regarded as an error.
-print "d\n";
 		return 1;
 	}
-print "e\n";
 	my $expr = "\$_[0] =~ $error_regex";
 	if (eval "$expr") {
 		return 1;
@@ -292,7 +297,7 @@ sub adjusted_start_date {
 
 # Date converted from (y, m, d) to yyyymmdd
 sub squished_date {
-	return sprintf "%u%02u%02u", $_[0], $_[1], $_[2];
+	return sprintf "%04u%02u%02u", $_[0], $_[1], $_[2];
 }
 
 # Day of the week from date/time array
