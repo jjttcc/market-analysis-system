@@ -1,6 +1,6 @@
 indexing
 	description:
-		"Editor of COMMANDs to be used in a TAL application"
+		"Editor of COMMANDs to be used in a MAL application"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"

@@ -37,7 +37,7 @@ feature -- Access
 			-- Create a pair for the CONSTANT instance (real_dummy) and
 			-- add it to the list (Result).
 			!!pair.make (real_dummy, "Operator with a numeric constant result")
-			------ Create/insert non-TAL COMMANDs (from eiffel_library) ------
+			------ Create/insert non-MAL COMMANDs (from eiffel_library) ------
 			Result.extend (pair)
 			-- Create a pair for the TRUE_COMMAND instance (true_dummy) and
 			-- add it to the list (Result).
@@ -108,7 +108,7 @@ feature -- Access
 			!ABSOLUTE_VALUE!cmd.make (real_dummy)
 			!!pair.make (cmd, "Absolute value operator")
 			Result.extend (pair)
-			----------------- Create/insert TAL COMMANDs -----------------
+			----------------- Create/insert MAL COMMANDs -----------------
 			!!bnc_dummy -- Fulfills requirement for type RESULT_COMMAND [REAL].
 			-- Create a pair for the BASIC_NUMERIC_COMMAND instance
 			-- (bnc_dummy) and add it to the list.

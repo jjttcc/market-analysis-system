@@ -1,6 +1,6 @@
 indexing
 	description:
-		"Editor of MARKET_FUNCTIONs to be used in a TAL application"
+		"Editor of MARKET_FUNCTIONs to be used in a MAL application"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
