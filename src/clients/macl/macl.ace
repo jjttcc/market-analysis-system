@@ -10,12 +10,9 @@ default
 	assertion (ensure)
 	assertion (loop)
 	assertion (invariant)
+	arguments ("-h foo 3001")
 	arguments (" ")
 	disabled_debug (yes)
-	disabled_debug ("ev_gtk_c_object_dispose")
-	disabled_debug ("ev_gtk_creation")
-	disabled_debug ("ev_gtk_destroy")
-	disabled_debug ("ev_gtk_dispose")
 	disabled_debug ("persist")
 	debug (no)
 	line_generation (no)
@@ -31,6 +28,7 @@ default
 	inlining (no)
 	multithreaded (no)
 
+
 --	assertion (check)
 --	assertion (require)
 --	assertion (ensure)
@@ -38,8 +36,8 @@ default
 --	assertion (invariant)
 
 cluster
-
 	macl:		"$MAS/src/clients/macl"
+
 
 	root_cluster (macl):		"$/root"
 
@@ -59,7 +57,7 @@ cluster
 
 	mas_client_lib:		"$MAS/src/client_library"
 
-	mas_client_support (mas_client_lib):	"$/support"
+	mas_client_support (mas_client_lib):		"$/support"
 
 	mas_server:		"$MAS/src/server1"
 
@@ -90,6 +88,7 @@ external
 	object:
 		"/${MAS}/src/eiffel_library/lib/utilities.o",
 		"${ISE_EIFFEL}/library/time/spec/${ISE_PLATFORM}/lib/libdatetime.a",
-		"${ISE_EIFFEL}/library/net/spec/${ISE_PLATFORM}/lib/libnet.a", "-lz"
+		"${ISE_EIFFEL}/library/net/spec/${ISE_PLATFORM}/lib/libnet.a",
+		"-lz"
 
 end

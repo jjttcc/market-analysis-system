@@ -7,7 +7,6 @@ indexing
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
---!!!NOTE: This class can perhaps be replaced by CLIENT_CONNECTION from MCT.
 class CONNECTION inherit
 
 	NETWORK_PROTOCOL
@@ -56,50 +55,6 @@ feature -- Basic operations
 		ensure
 			response_set_on_success: last_communication_succeeded implies
 				server_response /= Void
-		end
-
-feature {NONE} -- Obsolete!!!!!
-
-	obsolete_make_remove_me_please (host: STRING; port: INTEGER) is
-			-- Create socket, connect to host, and send initial request.
-		local
-			verbose: BOOLEAN
-		do
-			create socket.make_client_by_port (port, host)
-			socket.connect
-			if verbose then print ("Connected to " + host) end
-			termination_requested := False
-			last_message := ""
-			-- Notify server that this is a command-line client.
-			send_message(Console_flag.out)
-		end
-
-	last_message: STRING
-
-	receive_message is
-			-- Receive the last requested message, put result in last_message.
-		local
-			finished: BOOLEAN
---!!Check if correct type:
-			msg: STRING
-			c: STRING
-		do
-			last_message := ""
-			msg := ""
-			from
-			until
-				finished
-			loop
---!!!Fix:				c := socket.recv(Buffersize)
-				if c = Eom or c = Eot then
-					finished := True
-				end
-				msg.append(c)
-			end
-			if c = Eot then
-				termination_requested := True
-			end
---!!!Fix:			last_message := join(msg, "")
 		end
 
 feature {NONE} -- Implementation
