@@ -213,29 +213,26 @@ feature {NONE} -- Implementation
 	make_request_handlers is
 			-- Create the request handlers.
 		local
-			cmd: MAS_REQUEST_COMMAND
 			rh: HASH_TABLE [MAS_REQUEST_COMMAND, INTEGER]
 		do
 			create rh.make (0)
-			create {MARKET_DATA_REQUEST_CMD} cmd.make (market_list_handler)
-			rh.extend (cmd, Market_data_request)
-			create {INDICATOR_DATA_REQUEST_CMD} cmd.make (market_list_handler)
-			rh.extend (cmd, Indicator_data_request)
-			create {TRADING_PERIOD_TYPE_REQUEST_CMD} cmd.make (
-				market_list_handler)
-			rh.extend (cmd, Trading_period_type_request)
-			create {MARKET_LIST_REQUEST_CMD} cmd.make (market_list_handler)
-			rh.extend (cmd, Market_list_request)
-			create {INDICATOR_LIST_REQUEST_CMD} cmd.make (market_list_handler)
-			rh.extend (cmd, Indicator_list_request)
-			create {LOGIN_REQUEST_CMD} cmd.make (market_list_handler)
-			rh.extend (cmd, Login_request)
-			create {EVENT_LIST_REQUEST_CMD} cmd.make (market_list_handler)
-			rh.extend (cmd, Event_list_request)
-			create {EVENT_DATA_REQUEST_CMD} cmd.make (market_list_handler)
-			rh.extend (cmd, Event_data_request)
-			create {ERROR_RESPONSE_CMD} cmd.make
-			rh.extend (cmd, Error)
+			rh.extend (create {MARKET_DATA_REQUEST_CMD}.make (
+				market_list_handler), Market_data_request)
+			rh.extend ( create {INDICATOR_DATA_REQUEST_CMD}.make (
+				market_list_handler), Indicator_data_request)
+			rh.extend (create {TRADING_PERIOD_TYPE_REQUEST_CMD}.make (
+				market_list_handler), Trading_period_type_request)
+			rh.extend (create {MARKET_LIST_REQUEST_CMD}.make (
+				market_list_handler), Market_list_request)
+			rh.extend (create {INDICATOR_LIST_REQUEST_CMD}.make (
+				market_list_handler), Indicator_list_request)
+			rh.extend (create {LOGIN_REQUEST_CMD}.make (
+				market_list_handler), Login_request)
+			rh.extend (create {EVENT_LIST_REQUEST_CMD}.make (
+				market_list_handler), Event_list_request)
+			rh.extend (create {EVENT_DATA_REQUEST_CMD}.make (
+				market_list_handler), Event_data_request)
+			rh.extend (create {ERROR_RESPONSE_CMD}.make, Error)
 			request_handlers := rh
 		ensure
 			rh_set: request_handlers /= Void and not request_handlers.empty
