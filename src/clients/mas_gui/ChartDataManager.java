@@ -239,34 +239,20 @@ System.out.println("4");
 			GUI_Utilities.busy_cursor(true, owner);
 			try {
 				data_requester.execute_tradable_request();
-System.out.println("X");
 				if (! data_requester.request_failed()) {
 					main_dataset = (DrawableDataSet)
 						data_requester.tradable_result();
-System.out.println("Y");
-/*!!!:
-data_builder.send_market_data_request(tradable,
-current_period_type());
-if (request_result_id() == Ok) /[/
-*/
 					// Ensure that the indicator list is up-to-date with
 					// respect to `tradable'.
-/*!!!REMOVE:
-data_builder.send_indicator_list_request(tradable,
-current_period_type());
-*/
 					data_requester.execute_indicator_list_request();
-System.out.println("Z");
 					// Force re-creation of indicator lists with the result
 					// of the above request.
 					new_indicators = true;
-System.out.println("1");
 					rebuild_indicators_if_needed();
 				} else {
 					request_result_id = data_requester.request_result_id();
 					new ErrorBox("Warning", "Error occurred retrieving " +
 						"data for " + tradable, owner);
-//!!!!Refactor if possible:
 					// Handle request error.
 					if (request_result_id == Invalid_symbol) {
 						handle_nonexistent_sybmol(tradable);
@@ -278,7 +264,6 @@ System.out.println("1");
 						owner.display_warning("Error occurred retrieving " +
 							"data for " + tradable);
 					}
-//end Refactor
 					GUI_Utilities.busy_cursor(false, owner);
 					return;
 				}
@@ -287,19 +272,13 @@ System.out.println("1");
 				facilities.fatal("Request to server failed: ", e);
 			}
 			//Ensure that all graph's data sets are removed.
-//!!!!Refactor:
 			owner.main_pane().clear_main_graph();
 			owner.main_pane().clear_indicator_graph();
-/*!!!:
-main_dataset = (DrawableDataSet) data_builder.last_market_data();
-latest_date_time = data_builder.last_latest_date_time();
-*/
 			latest_date_time = data_requester.latest_date_time();
 			assert main_dataset != null;
 			link_with_axis(main_dataset, null);
 			owner.main_pane().add_main_data_set(main_dataset);
 			tradable_specification.set_data(main_dataset);
-//end Refactor
 			if (! current_upper_indicators.isEmpty()) {
 				// Retrieve the data for the newly requested tradable for
 				// the upper indicators, add it to the upper graph and
@@ -311,20 +290,11 @@ latest_date_time = data_builder.last_latest_date_time();
 					try {
 						data_requester.execute_indicator_request(
 							indicator_id_for(current_indicator));
-/*!!!:
-data_builder.send_indicator_data_request(
-indicator_id_for(current_indicator),
-tradable, current_period_type());
-*/
 					} catch (Exception e) {
 						facilities.fatal("Indicator data request failed", e);
 					}
 					dataset = (DrawableDataSet)
 						data_requester.indicator_result();
-/*!!!:
-dataset = (DrawableDataSet)
-data_builder.last_indicator_data();
-*/
 					dataset.set_dates_needed(false);
 					dataset.setColor(
 						conf.indicator_color(current_indicator, true));
@@ -332,7 +302,6 @@ data_builder.last_indicator_data();
 					owner.main_pane().add_main_data_set(dataset);
 					tradable_specification.set_indicator_data(dataset,
 						current_indicator);
-//end Refactor
 				}
 			}
 			set_current_tradable(tradable);
@@ -347,35 +316,24 @@ data_builder.last_indicator_data();
 					if (current_lower_indicators.elementAt(i).equals(
 							Volume)) {
 						// (Nothing to retrieve from server)
-//!!!remove: dataset = (DrawableDataSet) data_builder.last_volume();
 						dataset = (DrawableDataSet)
 							data_requester.volume_result();
 					} else if (current_lower_indicators.elementAt(i).equals(
 							Open_interest)) {
 						// (Nothing to retrieve from server)
-/*!!!remove: dataset = (DrawableDataSet)
-data_builder.last_open_interest();*/
 						dataset = (DrawableDataSet)
 							data_requester.open_interest_result();
 					} else {
 						try {
 						data_requester.execute_indicator_request(
 							indicator_id_for(current_indicator));
-/*!!!:
-data_builder.send_indicator_data_request(
-indicator_id_for(current_indicator),
-tradable, current_period_type());
-*/
 						} catch (Exception e) {
 							facilities.fatal("Exception occurred", e);
 						}
-/*!!!remove: dataset = (DrawableDataSet)
-data_builder.last_indicator_data();*/
 						dataset = (DrawableDataSet)
 							data_requester.indicator_result();
 					}
 					if (dataset != null) {
-//!!!!Refactor:
 						dataset.setColor(conf.indicator_color(
 							current_indicator, false));
 						link_with_axis(dataset, current_indicator);
@@ -383,7 +341,6 @@ data_builder.last_indicator_data();*/
 						owner.main_pane().add_indicator_data_set(dataset);
 						tradable_specification.set_indicator_data(dataset,
 							current_indicator);
-//end Refactor
 					}
 				}
 			}
@@ -498,24 +455,7 @@ data_builder.last_indicator_data();*/
 		if (tradable_specification.all_indicator_specifications().size() == 0
 				|| new_indicators) {
 			new_indicators = false;
-//!!!remove: Vector inds_from_server = data_builder.last_indicator_list();
 			Vector inds_from_server = data_requester.indicator_list_result();
-if (inds_from_server == null) {
-System.out.println("ifs = null");
-try {
-data_requester.execute_indicator_list_request();
-inds_from_server = data_requester.indicator_list_result();
-	if (inds_from_server == null) {
-	System.out.println("ifs STILL = null");
-//!!!!remove: inds_from_server = data_builder.last_indicator_list();
-		if (inds_from_server == null) {
-			System.out.println("ifs is EVEN YET null");
-		}
-	}
-} catch (Exception e) {
-	System.out.println("caught exc at line 509: " + e);
-}
-}
 			if (previous_open_interest != data_builder.has_open_interest() ||
 					! Utilities.lists_match(inds_from_server,
 					old_indicators_from_server)) {

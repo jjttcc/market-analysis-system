@@ -96,8 +96,6 @@ abstract public class AbstractParser extends NetworkProtocolUtilities {
 		StringTokenizer recs = new StringTokenizer(s, record_separator, false);
 		clear_vectors();
 		do_main_parse(recs);
-System.out.println(this.getClass().getName() + " - parse: result() type: " +
-result().getClass().getName());
 	}
 
 // Potential hook routines

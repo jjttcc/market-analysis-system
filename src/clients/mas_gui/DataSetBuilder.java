@@ -49,10 +49,6 @@ public class DataSetBuilder extends AbstractDataSetBuilder {
 	protected void post_process_market_data(DataSet data, String symbol,
 			String period_type, boolean is_update) {
 
-//!!!:
-System.out.println("DSB post proc md - data type: " +
-data.getClass().getName());
-System.out.println("is_update: " + is_update);
 		if (! is_update) {
 			((DrawableDataSet) data).set_drawer(main_drawer);
 		}

@@ -145,7 +145,6 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 				request_failed = true;
 			} else {
 				indicator_result = data_builder.last_indicator_data();
-System.out.println("synchronized indicator request apparently succeeded");
 			}
 			data_builder.unlock(this);
 		} else {
@@ -170,7 +169,6 @@ System.out.println("synchronized indicator request apparently succeeded");
 				request_failed = true;
 			} else {
 				indicator_list_result = data_builder.last_indicator_list();
-System.out.println("synchronized indicator request apparently succeeded");
 			}
 			data_builder.unlock(this);
 		} else {

@@ -235,18 +235,11 @@ class Parser extends AbstractParser {
 //"Date/time: 2004-10-28, 23:57" for more info. on the bug.):
 //if (length > 0) {
 			if (! for_update) {
-//!!!:
-System.out.println("[1] Parser creating a DrawableDataSet");
 				processed_data = new DrawableDataSet(value_data, length,
 					drawer);
 			} else {
-System.out.println("[1] Parser creating a BasicDataSet");
 				processed_data = new BasicDataSet(value_data, length);
 			}
-//}
-//else {
-//	processed_data = new DrawableDataSet(drawer);
-//}
 			if (has_dates) {
 				date_array = new String[dates.size()];
 				dates.copyInto(date_array);
@@ -260,12 +253,9 @@ System.out.println("[1] Parser creating a BasicDataSet");
 			if (volume_drawer != null && volumes != null &&
 					volumes.length > 0) {
 				if (! for_update) {
-//!!!:
-System.out.println("[2] Parser creating a DrawableDataSet");
 					volume_data = new DrawableDataSet(volumes, volumes.length,
 						volume_drawer);
 				} else {
-System.out.println("[2] Parser creating a BasicDataSet");
 					volume_data = new BasicDataSet(volumes, volumes.length);
 				}
 				if (has_dates) volume_data.set_dates(date_array);
@@ -274,12 +264,9 @@ System.out.println("[2] Parser creating a BasicDataSet");
 			if (open_interest_drawer != null && open_interests != null &&
 					open_interests.length > 0) {
 				if (! for_update) {
-//!!!:
-System.out.println("[3] Parser creating a DrawableDataSet");
 					oi_data = new DrawableDataSet(open_interests,
 						open_interests.length, open_interest_drawer);
 				} else {
-System.out.println("[3] Parser creating a BasicDataSet");
 					oi_data = new BasicDataSet(open_interests,
 						open_interests.length);
 				}
@@ -291,8 +278,6 @@ System.out.println("[3] Parser creating a BasicDataSet");
 			System.err.println("DataSet constructor failed - " + e);
 			e.printStackTrace();
 		}
-System.out.println("parser.process_data - procdata type: " +
-processed_data.getClass().getName());
 	}
 
 // Implementation - attributes

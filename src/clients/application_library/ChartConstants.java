@@ -3,18 +3,6 @@
 package application_library;
 
 import java.util.*;
-/*!!!:
-import java.io.*;
-import common.*;
-import support.*;
-import application_library.*;
-import application_support.*;
-import graph.*;
-import java.awt.*;
-import java.awt.event.*;
-import java_library.support.*;
-import graph_library.DataSet;
-*/
 
 /**
 * Constants used for chart abstractions
