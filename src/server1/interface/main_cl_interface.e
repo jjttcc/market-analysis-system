@@ -233,6 +233,7 @@ feature -- Basic operations
 					if
 						function_builder.changed and current_tradable /= Void
 					then
+-- checkin to correct accident with the last checking
 						tradable_list_handler.clear_caches
 						current_tradable := 
 						tradable_list_handler.tradable (current_tradable.symbol,
