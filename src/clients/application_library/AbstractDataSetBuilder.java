@@ -168,7 +168,7 @@ abstract public class AbstractDataSetBuilder extends Lockable
 	* Did the last data request succeed?
 	**/
 	public boolean request_succeeded() {
-		return request_result_id() == Ok;
+		return ! io_error_occurred && request_result_id() == Ok;
 	}
 
 // Basic operations
@@ -320,12 +320,22 @@ abstract public class AbstractDataSetBuilder extends Lockable
 			String period_type, String appendix, boolean is_update)
 			throws Exception {
 
+		io_error_occurred = false;
 		String request = symbol + Message_field_separator + period_type;
 		if (appendix != null && appendix.length() > 0) {
 			request += Message_field_separator + appendix;
 		}
-		connection.send_request(request_id, request);
-		if (connection.last_received_message_ID() == Ok) {
+		try {
+			connection.send_request(request_id, request);
+		} catch (IOException e) {
+			io_error_occurred = true;
+//!!!:			if (Configuration.debug()) {
+				System.err.println("[Error: " + e + "]");
+//			}
+		}
+		if (! io_error_occurred &&
+				connection.last_received_message_ID() == Ok) {
+
 			String results = connection.result().toString();
 			results = setup_parser_fieldspecs(results);
 			prepare_parser_for_market_data();
@@ -357,13 +367,23 @@ abstract public class AbstractDataSetBuilder extends Lockable
 			int indicator_id, String symbol, String period_type,
 			String appendix, boolean is_update) throws Exception {
 
+		io_error_occurred = false;
 		String request = indicator_id + Message_field_separator + symbol +
 			Message_field_separator + period_type;
 		if (appendix != null && appendix.length() > 0) {
 			request += Message_field_separator + appendix;
 		}
-		connection.send_request(request_id, request);
-		if (connection.last_received_message_ID() == Ok) {
+		try {
+			connection.send_request(request_id, request);
+		} catch (IOException e) {
+			io_error_occurred = true;
+//!!!:			if (Configuration.debug()) {
+				System.err.println("[Error: " + e + "]");
+//			}
+		}
+		if (! io_error_occurred &&
+				connection.last_received_message_ID() == Ok) {
+
 			prepare_parser_for_indicator_data();
 			indicator_parser.parse(connection.result().toString(), is_update);
 			last_indicator_data = indicator_parser.result();
@@ -463,6 +483,8 @@ abstract public class AbstractDataSetBuilder extends Lockable
 	protected static Vector tradables;	// Cached list of tradables
 
 	protected Connection connection;
+
+	private boolean io_error_occurred = false;
 
 	// result of last market data request
 	protected DataSet last_market_data;
