@@ -84,24 +84,22 @@ feature {NONE} -- Access
 	function_library: LIST [MARKET_FUNCTION] is
 			-- All defined market functions
 		local
+			x: ANY
 			mflist: TERMINABLE_MARKET_FUNCTION_LIST
 		once
 			print ("function_library called%N")
-			-- Find the element of storable_list that conforms to mflist.
-			from
-				storable_list.start
-			until
-				mflist /= Void or storable_list.exhausted
-			loop
-				mflist ?= storable_list.item
-				storable_list.forth
-			end
-			if mflist = Void then
+			x := storable_array @ Function_index
+			if x = Void then
 				-- The list has not been created and saved to persistent
 				-- store yet, so it's time to create it and add it to
 				-- storable_list.
 				!!mflist.make
-				storable_list.extend (mflist)
+				storable_array.force (mflist, Function_index)
+			else
+				mflist ?= x
+			end
+			check
+				list_not_void: mflist /= Void
 			end
 			-- Ensure that the list will be 'cleaned up' when the process ends.
 			register_for_termination (mflist)
@@ -112,24 +110,22 @@ feature {NONE} -- Access
 	market_event_generation_library: LIST [MARKET_EVENT_GENERATOR] is
 			-- All defined event generators
 		local
+			x: ANY
 			meg_list: TERMINABLE_EVENT_GENERATOR_LIST
 		once
 			print ("market_event_generation_library called%N")
-			-- Find the element of storable_list that conforms to meg_list.
-			from
-				storable_list.start
-			until
-				meg_list /= Void or storable_list.exhausted
-			loop
-				meg_list ?= storable_list.item
-				storable_list.forth
-			end
-			if meg_list = Void then
+			x := storable_array @ Event_generation_index
+			if x = Void then
 				-- The list has not been created and saved to persistent
 				-- store yet, so it's time to create it and add it to
 				-- storable_list.
 				!!meg_list.make
-				storable_list.extend (meg_list)
+				storable_array.force (meg_list, Event_generation_index)
+			else
+				meg_list ?= x
+			end
+			check
+				list_not_void: meg_list /= Void
 			end
 			-- Ensure that the list will be 'cleaned up' when the process ends.
 			register_for_termination (meg_list)
@@ -177,24 +173,22 @@ feature {NONE} -- Access
 	market_event_registrants: LIST [MARKET_EVENT_REGISTRANT] is
 			-- All defined event registrants
 		local
+			x: ANY
 			reg_list: LINKED_LIST [MARKET_EVENT_REGISTRANT]
 		once
 			print ("market_event_registrants called%N")
-			-- Find the element of storable list that conforms to reg_list.
-			from
-				storable_list.start
-			until
-				reg_list /= Void or storable_list.exhausted
-			loop
-				reg_list ?= storable_list.item
-				storable_list.forth
-			end
-			if reg_list = Void then
+			x := storable_array @ Event_registrants_index
+			if x = Void then
 				-- The list has not been created and saved to persistent
 				-- store yet, so it's time to create it and add it to
 				-- storable_list.
 				!!reg_list.make
-				storable_list.extend (reg_list)
+				storable_array.force (reg_list, Event_registrants_index)
+			else
+				reg_list ?= x
+			end
+			check
+				list_not_void: reg_list /= Void
 			end
 			Result := reg_list
 			-- The registrants need to be registered for
@@ -226,9 +220,15 @@ feature {NONE} -- Constants
 			Result := ta_env.file_name_with_app_directory ("persistent")
 		end
 
+	Event_registrants_index, Event_generation_index, Function_index:
+		INTEGER is unique
+			-- Indexes for elements of storable_array
+			-- Note: If new indexes are added, change the creation procedure
+			-- of the STORABLE_ARRAY (in storable_array) correspondingly.
+
 feature {NONE} -- Implementation
 
-	storable_list: STORABLE_LIST [ANY] is
+	storable_array: STORABLE_ARRAY [ANY] is
 			-- List of all persistent objects.  Since the list will be
 			-- registered for termination when it is created and since it
 			-- should be the last thing 'cleaned up', it should be called
@@ -238,15 +238,16 @@ feature {NONE} -- Implementation
 		local
 			storable: STORABLE
 		once
-			print ("storable_list called%N")
+			print ("storable_array called%N")
 			!!storable
 			Result ?= storable.retrieve_by_name (storable_file_name)
 			if Result = Void then
-				!!Result.make (storable_file_name)
+				!!Result.make (storable_file_name, Event_registrants_index,
+								Function_index)
 			end
 			-- Ensure that the list will be saved when the process ends.
 			register_for_termination (Result)
-			print ("storable_list returning%N")
+			print ("storable_array returning%N")
 		end
 
 end -- GLOBAL_APPLICATION
