@@ -44,7 +44,7 @@ feature {NONE} -- Hook routine implementations
 			target := msg -- set up for tokenization
 			fields := tokens (Message_field_separator)
 			if
-				fields.count = expected_field_count and
+				fields.count = expected_field_count and then
 				additional_field_constraints_fulfilled (fields)
 			then
 				parse_symbol_and_period_type (symbol_index, period_type_index,
@@ -69,6 +69,9 @@ feature {NONE} -- Hook routines
 
 	additional_field_constraints_fulfilled (fields: LIST [STRING]): BOOLEAN is
 			-- Are the additional constraints, if any, for `fields' fulfilled?
+		require
+			fields_exists: fields /= Void
+			correct_field_count: fields.count = expected_field_count
 		do
 			Result := True -- Yes - Redefine if needed.
 		end
@@ -104,6 +107,9 @@ feature {NONE} -- Hook routines
 			-- `parse_symbol_and_period_type'
 		require
 			fields_exist: fields /= Void
+			field_count_valid: fields.count = expected_field_count
+			additional_constraints_hold:
+				additional_field_constraints_fulfilled (fields)
 		do
 			do_nothing -- Redefine is something needs to be done.
 		end
@@ -166,6 +172,7 @@ feature {NONE} -- Utility
 		ensure
 			symbol_and_period_type_set_if_no_error: not parse_error implies
 				market_symbol /= Void and trading_period_type /= Void
+			fields_not_changed: fields.count = old fields.count
 		end
 
 	send_tradable_not_found_response is
