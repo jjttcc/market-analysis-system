@@ -84,6 +84,7 @@ feature -- Basic operations
 				mail_cmd.append (email_addresses @ 1)
 				mail_cmd.append (" <")
 				mail_cmd.append (msg_file.name)
+				msg_file.flush
 				system (mail_cmd)
 				msg_file.delete
 			end
