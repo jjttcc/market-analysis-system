@@ -24,7 +24,6 @@ feature -- Access
 	market_function: MARKET_FUNCTION
 			-- Market function to use for those commands that need it
 
-foo
 	integer_selection (msg: STRING): INTEGER is
 		do
 			print_list (<<"Enter an integer value for ", msg, ": ">>)
