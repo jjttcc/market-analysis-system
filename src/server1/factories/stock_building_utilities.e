@@ -8,30 +8,7 @@ indexing
 
 class STOCK_BUILDING_UTILITIES inherit
 
-	TRADABLE_FACTORY_CONSTANTS
-		export
-			{NONE} all
-		end
-
-	OPERATING_ENVIRONMENT
-		export
-			{NONE} all
-		end
-
-	APP_ENVIRONMENT
-		export
-			{NONE} all
-		end
-
-	GLOBAL_SERVER_FACILITIES
-		export
-			{NONE} all
-		end
-
-	GENERAL_UTILITIES
-		export
-			{NONE} all
-		end
+	TRADABLE_BUILDING_UTILITIES
 
 feature {TRADABLE_FACTORY} -- Implementation
 
@@ -46,11 +23,12 @@ feature {TRADABLE_FACTORY} -- Implementation
 			create {VOLUME_TUPLE_FACTORY} Result
 		end
 
-	index_vector (no_open, intraday: BOOLEAN): ARRAY [INTEGER] is
+	index_vector (intraday: BOOLEAN):
+		ARRAY [INTEGER] is
 			-- Index vector for setting up value setters for a STOCK (no
 			-- open interest field)
 		do
-			if no_open then
+			if not command_line_options.opening_price then
 				if intraday then
 					Result := << Date_index, Time_index, High_index,
 						Low_index, CLose_index, Volume_index >>
@@ -67,8 +45,6 @@ feature {TRADABLE_FACTORY} -- Implementation
 						Low_index, Close_index, Volume_index >>
 				end
 			end
-		ensure
-			at_least_one: Result.count > 0
 		end
 
 	stock_splits: STOCK_SPLITS is
@@ -113,4 +89,4 @@ feature {TRADABLE_FACTORY} -- Implementation
 			end
 		end
 
-end -- STOCK_BUILDING_UTILITIES
+end

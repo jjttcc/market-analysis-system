@@ -8,53 +8,27 @@ indexing
 
 class DERIVATIVE_BUILDING_UTILITIES inherit
 
-	TRADABLE_FACTORY_CONSTANTS
-		export
-			{NONE} all
-		end
-
-	OPERATING_ENVIRONMENT
-		export
-			{NONE} all
-		end
-
-	APP_ENVIRONMENT
-		export
-			{NONE} all
-		end
-
-	GLOBAL_SERVER_FACILITIES
-		export
-			{NONE} all
-		end
-
-	GENERAL_UTILITIES
-		export
-			{NONE} all
-		end
+	TRADABLE_BUILDING_UTILITIES
 
 feature {TRADABLE_FACTORY} -- Implementation
 
 	tuple_factory: BASIC_TUPLE_FACTORY is
 		do
 			create {OI_TUPLE_FACTORY} Result
-		ensure
-			valid_result: Result /= Void
 		end
 
 	new_item (symbol: STRING): DERIVATIVE_INSTRUMENT is
 			-- A new derivative instance with symbol `symbol'
 		do
 			create Result.make (symbol, derivative_data)
-		ensure
-			valid_result: Result /= Void
 		end
 
-	index_vector (no_open, intraday: BOOLEAN): ARRAY [INTEGER] is
+	index_vector (intraday: BOOLEAN):
+		ARRAY [INTEGER] is
 			-- Index vector for setting up value setters for a
 			-- DERIVATIVE_INSTRUMENT (with an open interest field)
 		do
-			if no_open then
+			if not command_line_options.opening_price then
 				if intraday then
 					Result := << Date_index, Time_index, High_index,
 						Low_index, CLose_index, Volume_index, OI_index >>
@@ -72,8 +46,6 @@ feature {TRADABLE_FACTORY} -- Implementation
 						Low_index, Close_index, Volume_index, OI_index >>
 				end
 			end
-		ensure
-			at_least_one: Result.count > 0
 		end
 
 	derivative_data: TRADABLE_DATA is
@@ -83,4 +55,4 @@ feature {TRADABLE_FACTORY} -- Implementation
 			end
 		end
 
-end -- DERIVATIVE_BUILDING_UTILITIES
+end
