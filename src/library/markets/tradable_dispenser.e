@@ -108,13 +108,13 @@ feature -- Status report
 			-- Did an error occur during the last operation?
 
 	after: BOOLEAN is
-			-- Is there not valid position to the right of the current
+			-- Is there no valid position to the right of the current
 			-- cursor position?
 		deferred
 		end
 
 	empty: BOOLEAN is
-			-- Are there not tradables?
+			-- Are there no tradables?
 		deferred
 		end
 
