@@ -20,7 +20,7 @@
 import pct.ProgramControlTerminal;
 import pct.ApplicationContext;
 import pct.ApplicationInitialization;
-import application.*;
+import pct.application.*;
 
 class PCT_Main {
 
@@ -29,7 +29,7 @@ class PCT_Main {
 			ApplicationContext app_context = application_context();
 System.out.println("App context is: " + app_context);
 			ProgramControlTerminal pct =
-				new ProgramControlTerminal(null, null, app_context);
+				new ProgramControlTerminal(null, null, app_context, null);
 			System.err.println("PCT_Main - calling pct.execute.");
 			pct.execute();
 		}
@@ -39,7 +39,7 @@ System.out.println("App context is: " + app_context);
 	}
 
 	public final static String application_init_class_name =
-		"application.SpecializedApplicationInitialization";
+		"pct.application.SpecializedApplicationInitialization";
 
 	static ApplicationContext application_context() {
 		Class app_init_class = null;
