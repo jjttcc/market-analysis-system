@@ -6,7 +6,9 @@ indexing
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
-class DATABASE_LIST_BUILDER
+class DATABASE_LIST_BUILDER inherit
+
+	LIST_BUILDER
 
 creation
 
@@ -21,10 +23,7 @@ feature -- Initialization
 			not_void: symbols /= Void and factory /= Void
 		do
 			symbol_list := symbols
-			tradable_factory := factory
-			intraday_tradable_factory := clone (factory)
-			intraday_tradable_factory.set_intraday (true)
-			tradable_factory.set_intraday (false)
+			make_factories (factory)
 		ensure
 			symbols_set: symbol_list = symbols and symbol_list /= Void
 			factory_set: tradable_factory = factory and
@@ -40,10 +39,6 @@ feature -- Access
 	intraday_list: DB_TRADABLE_LIST
 
 	symbol_list: LIST [STRING]
-
-	tradable_factory: TRADABLE_FACTORY
-
-	intraday_tradable_factory: TRADABLE_FACTORY
 
 feature -- Basic operations
 
@@ -70,8 +65,7 @@ feature {NONE} -- Implementation
 			check
 				not_intraday: not tradable_factory.intraday
 			end
-			create daily_list.make (symbol_list,
-				tradable_factory)
+			create daily_list.make (symbol_list, tradable_factory)
 		end
 
 	create_intraday_list is
@@ -79,8 +73,7 @@ feature {NONE} -- Implementation
 			check
 				intraday: intraday_tradable_factory.intraday
 			end
-			create intraday_list.make (symbol_list,
-				intraday_tradable_factory)
+			create intraday_list.make (symbol_list, intraday_tradable_factory)
 			intraday_list.set_intraday (true)
 		end
 

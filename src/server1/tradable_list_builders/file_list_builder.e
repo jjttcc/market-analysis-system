@@ -13,6 +13,8 @@ class FILE_LIST_BUILDER inherit
 			all
 		end
 
+	LIST_BUILDER
+
 creation
 
 	make
@@ -35,10 +37,7 @@ feature -- Initialization
 			else
 				daily_file_names := file_names
 			end
-			tradable_factory := factory
-			intraday_tradable_factory := clone (factory)
-			intraday_tradable_factory.set_intraday (true)
-			tradable_factory.set_intraday (false)
+			make_factories (factory)
 		ensure
 			factory_set: tradable_factory = factory and
 				tradable_factory /= Void and not tradable_factory.intraday
@@ -53,10 +52,6 @@ feature -- Access
 	daily_list: FILE_TRADABLE_LIST
 
 	intraday_list: FILE_TRADABLE_LIST
-
-	tradable_factory: TRADABLE_FACTORY
-
-	intraday_tradable_factory: TRADABLE_FACTORY
 
 	daily_file_names: LIST [STRING]
 			-- File names for daily data
