@@ -1,0 +1,52 @@
+Another crash - mas server output when the core dump occurred:
+
+Error occurred after record 1594 (with date/time 12/12/2002 12:00:00.0 AM).
+Discarding corrupted record.
+lowest price field is less than or equal to 0
+Error occurred after record 1595 (with date/time 12/12/2002 12:00:00.0 AM).
+Discarding corrupted record.
+lowest price field is less than or equal to 0
+Error occurred after record 1596 (with date/time 12/12/2002 12:00:00.0 AM).
+Discarding corrupted record.
+lowest price field is less than or equal to 0
+Error occurred after record 1597 (with date/time 12/12/2002 12:00:00.0 AM).
+Discarding corrupted record.
+lowest price field is less than or equal to 0
+Error occurred after record 1598 (with date/time 12/12/2002 12:00:00.0 AM).
+Discarding corrupted record.
+lowest price field is less than or equal to 0
+Error occurred after record 1599 (with date/time 12/12/2002 12:00:00.0 AM).
+Discarding corrupted record.
+Errors occurred while processing gt:
+Error in prices for tuple, date: 07/15/2002, time: 12:00:00.0 AM, values (o, h, l, c): 16.7, 16.7, 15.88, 16.75
+Error occurred in record 1638 (with date/time 07/15/2002 12:00:00.0 AM).
+
+mas: PANIC: unexpected harmful signal ...
+
+mas: system execution failed.
+Following is the set of recorded exceptions.
+NB: The raised panic may have induced completely inconsistent information:
+
+-------------------------------------------------------------------------------
+Class / Object      Routine                Nature of exception           Effect
+-------------------------------------------------------------------------------
+MA_SERVER           root's creation        unexpected harmful signal:   
+<4091E028>                                 Eiffel run-time panic.        Bye
+-------------------------------------------------------------------------------
+MA_SERVER           root's creation                                     
+<4091E028>                                 Routine failure.              Bye
+-------------------------------------------------------------------------------
+MA_SERVER           root's creation                                     
+<4091E028>                                 Routine failure.              Bye
+-------------------------------------------------------------------------------
+MA_SERVER           root's creation                                     
+<4091E028>                                 Routine failure.              Bye
+-------------------------------------------------------------------------------
+
+mas: dumping core to generate debugging information...
+
+mas: PANIC CASCADE: main entry point vanished -- Giving up...
+Fatal error: Request to server failed: 
+Current symbol is im
+(java.io.EOFException)
+java.io.EOFException

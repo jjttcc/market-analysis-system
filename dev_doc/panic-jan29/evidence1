@@ -1,0 +1,49 @@
+mas server output when the core dump occurred:
+
+opening price field is less than or equal to 0
+Error occurred after record 992 (with date/time 07/24/2002 12:00:00.0 AM).
+Discarding corrupted record.
+opening price field is less than or equal to 0
+Error occurred after record 994 (with date/time 07/26/2002 12:00:00.0 AM).
+Discarding corrupted record.
+opening price field is less than or equal to 0
+Error occurred after record 996 (with date/time 07/30/2002 12:00:00.0 AM).
+Discarding corrupted record.
+opening price field is less than or equal to 0
+Error occurred after record 997 (with date/time 07/30/2002 12:00:00.0 AM).
+Discarding corrupted record.
+opening price field is less than or equal to 0
+Error occurred after record 998 (with date/time 07/30/2002 12:00:00.0 AM).
+Discarding corrupted record.
+
+mas: PANIC: unexpected harmful signal ...
+
+mas: system execution failed.
+Following is the set of recorded exceptions.
+NB: The raised panic may have induced completely inconsistent information:
+
+-------------------------------------------------------------------------------
+Class / Object      Routine                Nature of exception           Effect
+-------------------------------------------------------------------------------
+MA_SERVER           root's creation        unexpected harmful signal:   
+<406CCFF0>                                 Eiffel run-time panic.        Bye
+-------------------------------------------------------------------------------
+MA_SERVER           root's creation                                     
+<406CCFF0>                                 Routine failure.              Bye
+-------------------------------------------------------------------------------
+MA_SERVER           root's creation                                     
+<406CCFF0>                                 Routine failure.              Bye
+-------------------------------------------------------------------------------
+MA_SERVER           root's creation                                     
+<406CCFF0>                                 Routine failure.              Bye
+-------------------------------------------------------------------------------
+
+mas: dumping core to generate debugging information...
+
+mas: PANIC CASCADE: unexpected harmful signal -- Giving up...
+
+mas: FINAL PANIC: Cannot reclaim Eiffel objects -- Giving up...
+Fatal error: Request to server failed: 
+Current symbol is dpac
+(java.io.EOFException)
+java.io.EOFException

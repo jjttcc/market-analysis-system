@@ -1,0 +1,6 @@
+Some documentation for the panic/core-dump bug that occurred on Jan 29,
+2003.  The bug appears unpredictably.  It occurred twice running the
+newly compiled mas executable with the finance login, running against the
+database with a GUI client.  The 2nd time, I held down Ctl-] to keep
+cycling through the tradables and the crash occurred after a couple
+minutes.
