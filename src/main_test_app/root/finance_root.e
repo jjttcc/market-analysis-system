@@ -19,42 +19,33 @@ feature -- Initialization
 
 	make is
 		local
-			input_file: PLAIN_TEXT_FILE
 			tradable: TRADABLE [BASIC_MARKET_TUPLE]
 			tradable_builder: TRADABLE_FACTORY
 			function_builder: FUNCTION_BUILDER
 			ui: TEST_USER_INTERFACE
+			testenvelope: ENVELOPE
 		do
+			!!testenvelope.make
 			!!ui
-			if argument_count > 0 and argument (1) @ 1 = '-' then
-				usage
-			else
-				initialize (ui)
-				print ("Test execution: "); print (current_date)
-				print (", "); print (current_time); print ("%N")
-				if argument_count = 0 then
-					!!input_file.make_open_read (default_input_file_name)
-				else
-					!!input_file.make_open_read (argument (1))
-				end
-				!!factory_builder
-				tradable_builder :=
-					factory_builder.tradable_factory (input_file)
-				tradable_builder.set_no_open (true)
-				print ("Loading data file ...%N")
-				tradable_builder.execute (Void)
-				tradable := tradable_builder.product
-				if tradable_builder.error_occurred then
-					print_errors (tradable, tradable_builder.error_list)
-				end
-				function_builder :=
-					factory_builder.function_list_factory
-				print ("Building indicators ...%N")
-				function_builder.execute (tradable)
-				add_indicators (tradable, function_builder.product)
-				ui.set_tradable (tradable)
-				ui.execute
+			initialize (ui)
+			print ("Test execution: "); print (current_date)
+			print (", "); print (current_time); print ("%N")
+			!!factory_builder.make (default_input_file_name)
+			tradable_builder :=
+				factory_builder.tradable_factory
+			print ("Loading data file ...%N")
+			tradable_builder.execute
+			tradable := tradable_builder.product
+			if tradable_builder.error_occurred then
+				print_errors (tradable, tradable_builder.error_list)
 			end
+			function_builder :=
+				factory_builder.function_list_factory (tradable)
+			print ("Building indicators ...%N")
+			function_builder.execute
+			add_indicators (tradable, function_builder.product)
+			ui.set_tradable (tradable)
+			ui.execute
 		end
 
 	initialize (ui: TEST_USER_INTERFACE) is
@@ -64,12 +55,6 @@ feature -- Initialization
 		end
 
 feature {NONE} -- Utility
-
-	usage is
-		do
-			print ("Usage: "); print (argument (0))
-			print (" [input_file]%N")
-		end
 
 	add_indicators (t: TRADABLE [BASIC_MARKET_TUPLE];
 					flst: LIST [MARKET_FUNCTION]) is

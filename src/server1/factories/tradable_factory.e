@@ -54,9 +54,6 @@ feature -- Status report
 	no_open: BOOLEAN
 			-- Is there no opening price field in the input?
 
-	arg_mandatory: BOOLEAN is false
-			-- execute arg is optional - if not void it is used.
-
 	error_occurred: BOOLEAN
 			-- Did an error occur during execute?
 
@@ -67,28 +64,19 @@ feature -- Status setting
 
 	set_no_open (arg: BOOLEAN) is
 			-- Set no_open to `arg'.
-		require
-			arg /= Void
 		do
 			no_open := arg
 		ensure
-			no_open_set: no_open = arg and no_open /= Void
+			no_open_set: no_open = arg
 		end
 
 feature -- Basic operations
 
-	execute (in_file: FILE) is
-			-- If in_file is not void and is open for reading, it will
-			-- be used for input instead of what passed to make.
+	execute is
 		local
 			scanner: MARKET_TUPLE_DATA_SCANNER
 		do
 			error_occurred := false
-			if
-				in_file /= Void and in_file.exists and in_file.is_open_read
-			then
-				input_file := in_file
-			end
 			make_product
 			check value_setters.count > 0 end
 			!!scanner.make (product, input_file, tuple_maker, value_setters)
@@ -96,7 +84,7 @@ feature -- Basic operations
 				scanner.set_field_separator (field_separator)
 			end
 			-- Input data from input_file and stuff it into product.
-			scanner.execute (Void)
+			scanner.execute
 			check
 				product_set_to_scanner_result: product = scanner.product
 			end

@@ -38,8 +38,8 @@ feature {NONE}
 				Result := << Date_index, High_index, Low_index,
 								CLose_index, Volume_index >>
 			else
-				Result := << Date_index, Close_index, High_index, Low_index,
-								Open_index, Volume_index >>
+				Result := << Date_index, Open_index, High_index, Low_index,
+								Close_index, Volume_index >>
 			end
 		end
 

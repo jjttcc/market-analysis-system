@@ -15,9 +15,28 @@ class FUNCTION_BUILDER inherit
 			product
 		end
 
+creation
+
+	make
+
+feature
+
+	make (f: MARKET_FUNCTION) is
+		require
+			not_void: f /= Void
+		do
+			innermost_function := f
+		ensure
+			set: innermost_function = f and innermost_function /= Void
+		end
+
 feature -- Access
 
 	product: LIST [MARKET_FUNCTION]
+
+	innermost_function: MARKET_FUNCTION
+			-- The function that provides input data to all manufactured
+			-- functions
 
 	Simple_MA_n: INTEGER is 10
 	EMA_n: INTEGER is 10
@@ -30,12 +49,27 @@ feature -- Access
 	StochasticD_n: INTEGER is 3
 	Williams_n: INTEGER is 7
 
+feature -- Status setting
+
+	set_innermost_function (arg: MARKET_FUNCTION) is
+			-- Set innermost_function to `arg'.
+		require
+			arg /= Void
+		do
+			innermost_function := arg
+		ensure
+			innermost_function_set: innermost_function = arg and
+									innermost_function /= Void
+		end
+
 feature -- Basic operations
 
-	execute (f: MARKET_FUNCTION) is
+	execute is
 		local
 			l: LINKED_LIST [MARKET_FUNCTION]
+			f: MARKET_FUNCTION
 		do
+			f := innermost_function
 			!!l.make
 			l.extend (simple_ma (f, Simple_MA_n, "Simple Moving Average"))
 			l.extend (ema (f, EMA_n, "Exponential Moving Average"))
@@ -56,10 +90,6 @@ feature -- Basic operations
 											"Slow Stochastic %%D"))
 			product := l
 		end
-
-feature -- Status report
-
-	arg_mandatory: BOOLEAN is true
 
 feature {NONE} -- Hard-coded market function building procedures
 
@@ -219,5 +249,9 @@ feature {NONE} -- Hard-coded market function building procedures
 		ensure
 			initialized: Result /= Void and Result.name = name
 		end
+
+invariant
+
+	innermost_function_not_void: innermost_function /= Void
 
 end -- FUNCTION_BUILDER
