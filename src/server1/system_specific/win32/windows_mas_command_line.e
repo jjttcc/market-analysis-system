@@ -30,4 +30,4 @@ feature {NONE} -- Initialization
 			background := True
 		end
 
-end -- class MAS_COMMAND_LINE
+end
