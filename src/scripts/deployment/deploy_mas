@@ -3,5 +3,5 @@
 
 basedir=$(dirname $0)
 
-#perl -I $basedir $basedir/deploy_server.pl $*
+perl -I $basedir $basedir/deploy_server.pl $*
 perl -I $basedir $basedir/deploy_web.pl $*
