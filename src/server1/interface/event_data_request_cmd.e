@@ -34,7 +34,7 @@ class EVENT_DATA_REQUEST_CMD inherit
 		export
 			{NONE} all
 		redefine
-			event_cache
+			event_cache, is_interested_in
 		end
 
 creation
@@ -44,9 +44,13 @@ creation
 feature {NONE} -- Initialization
 
 	make (dispenser: TRADABLE_DISPENSER) is
+		local
+			constants: expanded APPLICATION_CONSTANTS
 		do
 			trc_make (dispenser)
 			mer_make
+			field_separator := constants.event_history_field_separator
+			record_separator := constants.event_history_record_separator
 		end
 
 feature -- Basic operations
@@ -54,7 +58,9 @@ feature -- Basic operations
 	do_execute (msg: STRING) is
 		local
 			fields: LIST [STRING]
+			d: DATE
 		do
+			parse_error := false
 			target := msg -- set up for tokenization
 			fields := tokens (input_field_separator)
 			if fields.count < 4 then
@@ -64,19 +70,23 @@ feature -- Basic operations
 			end
 			if not parse_error then
 				symbol := fields @ 1
-				analysis_start_date := date_from_string (fields @ 2)
-				if analysis_start_date = Void then
+				d := date_from_string (fields @ 2)
+				if d = Void then
 					report_error (Error, <<"Invalid start-date specification %
 						%for trading signals request: ", fields @ 2>>)
 					parse_error := true
+				else
+					create analysis_start_date.make_by_date (d)
 				end
 			end
 			if not parse_error then
-				analysis_end_date := date_from_string (fields @ 3)
-				if analysis_end_date = Void then
+				d := date_from_string (fields @ 3)
+				if d = Void then
 					report_error (Error, <<"Invalid end-date specification %
 						%for trading signals request: ", fields @ 3>>)
 					parse_error := true
+				else
+					create analysis_end_date.make_by_date (d)
 				end
 			end
 			if not parse_error then
@@ -92,13 +102,13 @@ feature {NONE} -- Implementation
 	symbol: STRING
 			-- Symbol for the tradable to be processed
 
-	analysis_start_date: DATE
+	analysis_start_date: DATE_TIME
 			-- Start date for event processing
 
-	analysis_end_date: DATE
+	analysis_end_date: DATE_TIME
 			-- End date for event processing
 
-	requested_event_types: ARRAYED_LIST [INTEGER]
+	requested_event_types: HASH_TABLE [INTEGER, INTEGER]
 			-- Event types to be processed
 
 	parse_error: BOOLEAN
@@ -120,7 +130,7 @@ feature {NONE}
 	create_event_types (fields: LIST [STRING]) is
 			-- Create `requested_event_types' from fields[4 .. fields.count].
 		local
-			i: INTEGER
+			i, id: INTEGER
 			f: STRING
 		do
 			create requested_event_types.make (fields.count - 3)
@@ -131,7 +141,8 @@ feature {NONE}
 						"for trading signals request - non-integer: ", f>>)
 					parse_error := true
 				else
-					requested_event_types.extend (f.to_integer)
+					id := f.to_integer
+					requested_event_types.put (id, id)
 				end
 				i := i + 1
 			end
@@ -147,7 +158,19 @@ feature {NONE}
 				requested_event_types /= Void
 		do
 			initialize_event_coordinator
-			event_coordinator.execute
+			if
+				event_coordinator.event_generators = Void or
+				event_coordinator.event_generators.empty
+			then
+--!!!Need to check for tradable_pair having both tradables void - different
+--error than this report.
+				report_error (Warning, <<"No requested trading signal %
+					%types were valid">>)
+			else
+				put_ok
+				event_coordinator.execute
+				put (eom)
+			end
 -- !!!Anything else?
 		end
 
@@ -156,28 +179,53 @@ feature {NONE}
 			check
 				events_sorted: event_cache.sorted
 			end
---!!!Here's where the event list is sorted and sent back to
---!!!the GUI client.
+			if not event_cache.empty then
+				from
+					event_cache.start
+				until
+					event_cache.islast
+				loop
+					put (concatenation (<<event_cache.item.date,
+						Output_field_separator, event_cache.item.time,
+						Output_field_separator,
+						event_cache.item.type_abbreviation,
+						Output_record_separator>>))
+					event_cache.forth
+				end
+				put (concatenation (<<event_cache.item.date,
+					Output_field_separator, event_cache.item.time,
+					Output_field_separator,
+					event_cache.item.type_abbreviation>>))
+			end
+		end
+
+	is_interested_in (e: TYPED_EVENT): BOOLEAN is
+		once
+			-- This class is structured such that it is interested in all
+			-- generated events.
+			Result := true
 		end
 
 	initialize_event_coordinator is
 		local
 			left, right: TRADABLE [BASIC_MARKET_TUPLE]
 		do
---!!!Stub
 			--Create an event coordinator that only operates on the tradable
 			--for `symbol'; initialize the dispatcher, event generators
 			--(according to requested_event_types), etc.
 			tradable_pair := pair_for_current_symbol
 			if event_coordinator = Void then
-				event_dispatcher.make
+				create event_dispatcher.make
 				event_dispatcher.register (Current)
 				create event_coordinator.make (tradable_pair)
 				event_coordinator.set_dispatcher (event_dispatcher)
-				event_coordinator.set_event_generators (valid_event_generators)
 			else
 				event_coordinator.make (tradable_pair)
 			end
+			-- event generators and coordinators currently don't use an
+			-- end date, so just set the start date.
+			event_coordinator.set_start_date_time (analysis_start_date)
+			event_coordinator.set_event_generators (valid_event_generators)
 		end
 
 	valid_event_generators: LINKED_LIST [MARKET_EVENT_GENERATOR] is
@@ -196,10 +244,8 @@ feature {NONE}
 			end
 			if t /= Void then
 				from
-					if t.has_open_interest then
-						-- All market-event generators are valid.
-						l := market_event_generation_library
-					else
+					l := market_event_generation_library
+					if not t.has_open_interest then
 						-- Only market-event generators for stocks are valid.
 						l := stock_market_event_generation_library
 					end
@@ -207,17 +253,10 @@ feature {NONE}
 				until
 					l.exhausted
 				loop
-					from
-						requested_event_types.start
-					until
-						requested_event_types.exhausted
-					loop
-						requested_event_types.forth
-						if
-							l.item.event_type.id = requested_event_types.item
-						then
-							Result.extend (l.item)
-						end
+					if
+						requested_event_types.has (l.item.event_type.id)
+					then
+						Result.extend (l.item)
 					end
 					l.forth
 				end
@@ -227,7 +266,7 @@ feature {NONE}
 	pair_for_current_symbol: PAIR [TRADABLE [BASIC_MARKET_TUPLE],
 			TRADABLE [BASIC_MARKET_TUPLE]] is
 		do
-			Result.make (tradables.tradable (symbol,
+			create Result.make (tradables.tradable (symbol,
 				period_types @ (period_type_names @ Hourly)),
 				tradables.tradable (symbol,
 				period_types @ (period_type_names @ Daily)))
