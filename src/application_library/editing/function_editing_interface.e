@@ -31,6 +31,9 @@ deferred class FUNCTION_EDITING_INTERFACE inherit
 			function_names as function_library_names
 		export
 			{NONE} all
+		undefine
+			output_field_separator, output_record_separator,
+			output_date_field_separator
 		end
 
 feature -- Access
