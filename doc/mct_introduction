@@ -5,27 +5,53 @@
 %titleIntroduction to the MAS Control Terminal (MCT)
 %end_title
 
-%hdg1Introduction to the MAS Control Terminal (MCT)hide
-The MAS Control Terminal is an application used to manage the different
-components of the Market Analysis System (MAS).
-%par
-[More ...]
+%hdg1Introduction to the MAS Control Terminalhide
+The MAS Control Terminal (MCT) is an application used to manage the different
+components of the Market Analysis System (MAS).  This document
+describes the management features of the MCT, most of which manifest
+in the MCT Graphical User Interface (GUI) as labeled buttons.
 
-%hdg2MAS Sessions
-
-[Description of MAS sessions]
-%hdg3Starting the Charting GUI
-[Description of ...]
-%hdg3Starting the Command-line Client
-[Description of ...]
-%hdg3Terminating the Current Session
-[Description of ...]
-%hdg2Connecting to a Running MAS Session
-
-[Description of ...]
+%hdg2Start a MAS session
+Starting a MAS session consists of starting up the MAS server and bringing up
+a MAS session control window to manage that session.  The window allows
+management of actions related to the session, including starting the
+charting application, invoking the command-line client, and terminating
+the session.  Below are descriptions of the features available for
+managing a session.
+%hdg3Start charts
+This feature starts up the charting application, allowing viewing of
+stock and futures charts, as well as charting of technical indicators.
+%hdg3Start command-line client
+This feature invokes the MAS command-line client, a command-line-based
+application that provides access to advanced features of the server,
+including creating and editing technical indicators and trading-signal
+generation criteria, as well as applying these criteria to generate
+trading signals.
+%hdg3Terminate Session
+This feature terminates the session by telling the MAS server to shut
+itself down.
+%hdg2Connect to a running MAS session
+This feature allows connecting to a running MAS server that is not
+currently under management of the MCT.  If the connection succeeds, it
+brings up a session window for the adopted server process.  The connection
+attempt may fail for various reaons, including if an invalid or incorrect
+host name or port number is entered, if the server is not accepting
+connections at the specified port number, etc.
 %hdg2Terminating a MAS Session
-
-[Description of ...]
-%hdg2Terminating a MAS Session
-
-[Description of ...]
+This feature allows terminating a running MAS server that is not
+currently under management of the MCT.
+%hdg2Quit
+The Quit button and the Quit menu option (under the File menu) shuts
+down the MCT, terminating all MAS sessions under control of the MCT.
+(!!!Doc. Note: Whether the MAS sessions are terminated may be configurable
+in the future.)
+%hdg2Quit without terminating sessions
+This menu option (under the File menu) shuts down the MCT without
+terminating the managed sessions - that is, all sessions will remain
+running after the MCT exits.
+%hdg2Server startup configuration
+This menu option (under the Edit menu) pops up a list-selection window
+that allows the selection of how the server is to be run.  By default,
+the options available allow running the server such that either it gets
+its data from files, from a database (using an ODBC connection), or
+from the web.
