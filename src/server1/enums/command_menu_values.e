@@ -27,7 +27,6 @@ feature {NONE} -- Implementation
 
 	initial_allowable_values: ARRAY [CHARACTER] is
 		do
-io.error.print ("initial_allowable_values called for CMV%N")
 			Result := Precursor
 			Result.force (edit, Result.upper + 1)
 			Result.force (edit_u, Result.upper + 1)

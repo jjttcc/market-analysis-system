@@ -173,7 +173,6 @@ feature {NONE} -- Implementation of hook methods
 		do
 			create desc_chc.make_description; create another_chc.make_another;
 			create choice_chc.make_choice
-print ("choice.out: " + choice_chc.out + "%N")
 			print ("Select:%N     Print description of " + c.generator +
 				name_for (c) + "? (" + desc_chc.item.out + ")%N" +
 				"     Choose " + c.generator + name_for (c) + " (" +

@@ -36,7 +36,6 @@ feature {NONE} -- Implementation
 
 	initial_allowable_values: ARRAY [CHARACTER] is
 		do
-io.error.print ("initial_allowable_values called for OMV%N")
 			Result := <<description, description_u, choose, choose_u,
 				another_choice, another_choice_u>>
 		end
