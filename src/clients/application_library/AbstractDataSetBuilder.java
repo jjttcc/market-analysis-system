@@ -4,6 +4,7 @@ package application_library;
 
 import java.io.*;
 import java.util.*;
+import java_library.support.*;
 import support.*;
 import common.NetworkProtocol;
 import graph_library.DataSet;
@@ -13,7 +14,7 @@ import graph_library.DataSet;
 * instances from data returned from connection requests
 **/
 abstract public class AbstractDataSetBuilder extends Lockable
-	implements NetworkProtocol {
+	implements NetworkProtocol, AssertionConstants {
 
 // Initialization
 
@@ -21,7 +22,7 @@ abstract public class AbstractDataSetBuilder extends Lockable
 	* Precondition: conn != null && opts != null
 	**/
 	public AbstractDataSetBuilder(Connection conn, StartupOptions opts) {
-//		assert conn != null && opts != null;
+		assert conn != null && opts != null: PRECONDITION;
 		connection = conn;
 		options = opts;
 		try {
