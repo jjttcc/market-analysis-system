@@ -152,49 +152,12 @@ feature -- Status report
 			Result implies children /= Void and not children.is_empty
 		end
 
-	debugging: BOOLEAN
+	debugging: BOOLEAN is
 			-- Is debugging mode on?
-
-feature {MARKET_FUNCTION_EDITOR, MARKET_FUNCTION} -- Status setting
-
-	turn_debugging_on is
-			-- Set `debugging' to True for Current and its `descendants'.
 		local
-			l: SEQUENCE [MARKET_FUNCTION]
+			gs: expanded GLOBAL_SERVICES
 		do
-			debugging := True
-			from
-				l := children
-				l.start
-			until
-				l.exhausted
-			loop
-				l.item.turn_debugging_on
-				l.forth
-			end
-		ensure
-			debugging_on: debugging
-			-- descendants.for_all (agent debugging)
-		end
-
-	turn_debugging_off is
-			-- Set `debugging' to False for Current and its `descendants'.
-		local
-			l: SEQUENCE [MARKET_FUNCTION]
-		do
-			debugging := False
-			from
-				l := children
-				l.start
-			until
-				l.exhausted
-			loop
-				l.item.turn_debugging_off
-				l.forth
-			end
-		ensure
-			debugging_off: not debugging
-			-- descendants.for_all (agent (debugging = False))
+			Result := gs.is_debugging_on.item
 		end
 
 feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Element change

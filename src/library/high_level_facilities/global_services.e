@@ -273,6 +273,15 @@ feature -- Status report
 			end
 		end
 
+	is_debugging_on: BOOLEAN_REF is
+			-- Is debugging mode on?
+		once
+			-- Initialize to False - Clients can reset to True.
+			create Result
+		ensure
+			no: not Result.item
+		end
+
 feature -- Basic operations
 
 	adjust_start_time (dt: DATE_TIME; type: TIME_PERIOD_TYPE) is

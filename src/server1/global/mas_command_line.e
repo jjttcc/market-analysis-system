@@ -164,9 +164,6 @@ feature -- Access -- settings
 	intraday_caching: BOOLEAN
 			-- Cache intraday data?
 
-	debugging: BOOLEAN
-			-- Is debugging mode on?
-
 	special_date_settings: DATE_FORMAT_SPECIFICATION
 			-- Special date-format settings
 
@@ -288,11 +285,13 @@ feature {NONE} -- Implementation
 		end
 
 	set_debugging is
+		local
+			gs: expanded GLOBAL_SERVICES
 		do
 			-- Continue to loop until all debug options are removed so
 			-- that none is confused with the -d option.
 			from until not option_string_in_contents ("deb") loop
-				debugging := True
+				gs.is_debugging_on.set_item (True)
 				contents.remove
 			end
 		ensure
