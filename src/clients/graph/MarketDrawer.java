@@ -9,6 +9,8 @@ import java.util.*;
  */
 abstract public class MarketDrawer extends BasicDrawer {
 
+// Access
+
 	// Number of fields in each tuple
 	public int drawing_stride() {
 		return Stride;
@@ -32,8 +34,22 @@ abstract public class MarketDrawer extends BasicDrawer {
 		} else {
 			result = 0;
 		}
+//!!!!!:
+System.out.println("MKT DRW returning data length() of " + result);
 		return result;
 	}
+
+	// Postcondition: result != null
+	public int[] x_values() {
+		int[] result;
+		if (x_values == null) {
+			initialize_x_values();
+		}
+		result = x_values;
+		return result;
+	}
+
+// Element change
 
 	// Set the dates.
 	public void set_dates(ArrayList d) { dates = d; }
@@ -48,12 +64,16 @@ abstract public class MarketDrawer extends BasicDrawer {
 		ref_values_needed = b;
 	}
 
-	public int[] x_values() {
-		return x_values;
+// Implementation
+
+	// Initialize `x_values'.
+	// Postcondition: x_values != null
+	protected void initialize_x_values() {
+		x_values = new int[tuple_count()];
 	}
 
 	protected int bar_width() {
-		return _bar_width;
+		return bar_width;
 	}
 
 	protected boolean reference_values_needed() {
@@ -64,8 +84,10 @@ abstract public class MarketDrawer extends BasicDrawer {
 		return true;
 	}
 
+// Implementation - attributes
+
 	protected int x_values[];
-	protected int _bar_width;
+	protected int bar_width;
 	protected ArrayList data;		// double
 	protected ArrayList dates;		// String
 	protected ArrayList times;		// String

@@ -43,24 +43,34 @@ public class LowerGraph extends InteractiveGraph {
 	}
 
 	protected void draw_as_empty(Graphics g, Rectangle r) {
+System.out.println("draw as empty called");
 		DrawableDataSet mainset = _main_graph.market_data();
 		DrawableDataSet dummyset;
 		BasicDrawer d;
 		MarketDrawer md = null;
 		if (mainset != null) {
+System.out.println("1");
 			d = _main_graph.market_data().drawer();
 			if (d != null) {
+System.out.println("2");
 				md = _main_graph.market_data().drawer().market_drawer();
 			}
 		}
+System.out.println("md: " + md);
 		dummyset = new DrawableDataSet(new LineDrawer(md));
+System.out.println("2a");
 		dummyset.drawer().set_lower(true);
+System.out.println("2b");
 		dummyset.drawer().set_boundaries_needed(true);
+System.out.println("2c");
 		dummyset.draw_data(g, r);
+System.out.println("3");
 		if (md != null) {
+System.out.println("4");
 			dummyset.set_dates(mainset.dates);
 			dummyset.set_times(mainset.times);
 			dummyset.draw_dates(g, r);
+System.out.println("5");
 		}
 	}
 

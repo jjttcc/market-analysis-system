@@ -152,7 +152,7 @@ System.out.println("AbstractDataSetBuilder(AbstractDataSetBuilder ) called");
 	}
 
 	// Send a request for data for the tradable `symbol' with `period_type'.
-	// Postcondition: request_result_id() {
+	// Postcondition: request_succeeded() implies last_market_data() != null
 	public void send_market_data_request(String symbol, String period_type)
 			throws Exception {
 
@@ -162,6 +162,7 @@ System.out.println("AbstractDataSetBuilder(AbstractDataSetBuilder ) called");
 
 	// Send a request for data for indicator `ind' for the tradable
 	// `symbol' with `period_type'.
+	// Postcondition: request_succeeded() implies last_indicator_data() != null
 	public void send_indicator_data_request(int ind, String symbol,
 		String period_type) throws Exception {
 
@@ -173,6 +174,7 @@ System.out.println("AbstractDataSetBuilder(AbstractDataSetBuilder ) called");
 	// `period_type' with the date-time range `start_date_time' ..
 	// `end_date_time'.  If `end_date_time' is null, the current date-time
 	// is used.
+	// Postcondition: request_succeeded() implies last_market_data() != null
 	public void send_time_delimited_market_data_request(String symbol,
 		String period_type, Calendar start_date_time, Calendar end_date_time)
 			throws Exception {
@@ -188,6 +190,7 @@ System.out.println("sending request with " + symbol + ", " + period_type +
 	// the tradable `symbol' with `period_type' with the date-time range
 	// `start_date_time' .. `end_date_time'.  If `end_date_time' is null,
 	// the current date-time is used.
+	// Postcondition: request_succeeded() implies last_indicator_data() != null
 	public void send_time_delimited_indicator_data_request(int ind,
 		String symbol, String period_type, Calendar start_date_time,
 		Calendar end_date_time) throws Exception {

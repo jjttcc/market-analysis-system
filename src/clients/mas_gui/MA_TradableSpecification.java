@@ -111,6 +111,20 @@ else {System.out.println("indicator was NOT found: " + i);}
 		}
 	}
 
+	// Select indicators with the specified names.
+	void select_indicators(Collection names) {
+		Iterator i = names.iterator();
+		String n;
+		while (i.hasNext()) {
+			n = (String) i.next();
+			IndicatorDataSpecification ind = indicator_spec_for(n);
+			if (ind != null) {
+System.out.println("selecting ind: " + ind);
+				ind.select();
+			}
+		}
+	}
+
 	// Unselect indicator with name `name' and set its data set to null
 	// to free up no-longer-needed heap space.
 	void unselect_indicator(String name) {

@@ -11,7 +11,7 @@ import support.*;
 abstract public class IndicatorDrawer extends BasicDrawer {
 
 	IndicatorDrawer(MarketDrawer mktd) {
-		_market_drawer = mktd;
+		market_drawer = mktd;
 		lower_indicator = false;
 	}
 
@@ -19,11 +19,11 @@ abstract public class IndicatorDrawer extends BasicDrawer {
 
 	public ArrayList data() { return data; }
 
-	public ArrayList dates() { return _market_drawer.dates(); }
+	public ArrayList dates() { return market_drawer.dates(); }
 
-	public ArrayList times() { return _market_drawer.times(); }
+	public ArrayList times() { return market_drawer.times(); }
 
-	public MarketDrawer market_drawer() { return _market_drawer; }
+	public MarketDrawer market_drawer() { return market_drawer; }
 
 	// Number of elements in the data
 	public int data_length() {
@@ -57,12 +57,12 @@ abstract public class IndicatorDrawer extends BasicDrawer {
 	}
 
 	public int[] x_values() {
-		return _market_drawer.x_values();
+		return market_drawer.x_values();
 	}
 
-	// Precondition: _market_drawer != null
+	// Precondition: market_drawer != null
 	protected int bar_width() {
-		return _market_drawer.bar_width();
+		return market_drawer.bar_width();
 	}
 
 	protected int first_date_index() {
@@ -127,7 +127,7 @@ abstract public class IndicatorDrawer extends BasicDrawer {
 	protected ArrayList data;				// double
 	protected ArrayList indicator_dates;	// String
 	protected ArrayList indicator_times;	// String
-	protected MarketDrawer _market_drawer;
+	protected MarketDrawer market_drawer;
 	protected boolean ref_values_needed;
 	protected boolean lower_indicator;
 }

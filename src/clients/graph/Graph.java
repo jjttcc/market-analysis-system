@@ -73,7 +73,7 @@ abstract public class Graph extends Canvas {
  *  @see Graph#attachAxis()
  */
 
-	private ArrayList axis          = new ArrayList(4);
+	private ArrayList axes          = new ArrayList(4);
 
 /**
  *  A vector list of All the DrawableDataSets attached
@@ -277,7 +277,7 @@ public Axis createAxis( int position ) {
 	try { 
 		a =  new Axis(position);
 		a.set_g2d(this);
-		axis.add( a );
+		axes.add( a );
 	}
 	catch (Exception e) { 
 		System.err.println("Failed to create Axis");
@@ -297,7 +297,7 @@ public void attachAxis( Axis a ) {
 	if(a == null) return;
 
 	try { 
-		axis.add( a );
+		axes.add( a );
 		a.set_g2d(this);
 	}
 	catch (Exception e) { 
@@ -314,7 +314,7 @@ public void attachAxis( Axis a ) {
 		if(a != null) {
 			a.detachAll();
 			a.set_g2d(null);
-			axis.remove(a);
+			axes.remove(a);
 		}
 	}
 
@@ -324,13 +324,13 @@ public void attachAxis( Axis a ) {
 	public void detachAxes() {
 		int i;
 
-		if(axis == null | axis.isEmpty() ) return;
+		if(axes == null | axes.isEmpty() ) return;
 
-		for (i=0; i<axis.size(); i++) {
-			((Axis)axis.get(i)).detachAll();
-			((Axis)axis.get(i)).set_g2d(null);
+		for (i=0; i<axes.size(); i++) {
+			((Axis)axes.get(i)).detachAll();
+			((Axis)axes.get(i)).set_g2d(null);
 		}
-		axis.clear();
+		axes.clear();
 	}
 
 /**
@@ -456,7 +456,7 @@ public double minimum_y() {
 
 		paintFirst(lg,r);
 
-		if (!axis.isEmpty()) {
+		if (!axes.isEmpty()) {
 			r = drawAxis(lg, r);
 		} else {
 		if (clearAll) {
@@ -599,8 +599,8 @@ public double minimum_y() {
 		**          means that anything other than one xaxis and one yaxis
 		**          is a bit pointless.
 		*/
-		for (int i=0; i<axis.size(); i++) {
-			a = (Axis)axis.get(i);
+		for (int i=0; i<axes.size(); i++) {
+			a = (Axis)axes.get(i);
 			range = a.maximum() - a.minimum();
 			if(a.isVertical()) {
 				yrange = Math.max(range, yrange);
@@ -614,8 +614,8 @@ public double minimum_y() {
 		if (xrange > yrange) range = xrange;
 		else range = yrange;
 
-		for (int i=0; i<axis.size(); i++) {
-			a = (Axis)axis.get(i);
+		for (int i=0; i<axes.size(); i++) {
+			a = (Axis)axes.get(i);
 			a.set_maximum(a.minimum() + range);
 		}
 		// Get the new data rectangle.
@@ -643,11 +643,11 @@ public double minimum_y() {
 		int width = r.width;
 		int height = r.height;
 
-		for (int i=0; i<axis.size(); i++) {
-			a = ((Axis)axis.get(i));
-			waxis = a.getAxisWidth(g);
+		for (int i=0; i<axes.size(); i++) {
+			a = ((Axis)axes.get(i));
+			waxis = a.widthCalculation(g);
 
-			switch (a.getAxisPos()) {
+			switch (a.position()) {
 				case Axis.LEFT:
 					x += waxis;
 					width -= waxis;
@@ -675,7 +675,7 @@ public double minimum_y() {
  *  area that the data is plotted in.
  */
 	protected Rectangle drawAxis(Graphics g, Rectangle r) {
-		Axis a;
+		Axis axis;
 		int waxis;
 		Rectangle dr;
 		int x;
@@ -698,69 +698,69 @@ public double minimum_y() {
 			g.setColor(c);
 		}
 
-		// Draw a frame around the data area (If requested)
+		// Draw axis frame around the data area (If requested)
 		if(frame) drawFrame(g,x,y,width,height);
 
 		// Now draw the axis in the order specified aligning them
 		// with the final data area.
-		for (int i=0; i<axis.size(); i++) {
-			a = ((Axis)axis.get(i));
-			a.set_data_window(new Dimension(width,height));
+		for (int i=0; i<axes.size(); i++) {
+			axis = ((Axis)axes.get(i));
+			axis.set_data_window(new Dimension(width,height));
 
-			switch (a.getAxisPos()) {
+			switch (axis.position()) {
 				case Axis.LEFT:
-					r.x += a.width();
-					r.width -= a.width();
-					a.positionAxis(r.x,r.x,y,y+height);
+					r.x += axis.width();
+					r.width -= axis.width();
+					axis.positionAxis(r.x,r.x,y,y+height);
 					if(r.x == x ) {
-						a.set_gridcolor(gridcolor);
-						a.set_drawgrid (drawgrid);
-						a.set_zerocolor(zerocolor);
-						a.set_drawzero (drawzero);
+						axis.set_gridcolor(gridcolor);
+						axis.set_drawgrid (drawgrid);
+						axis.set_zerocolor(zerocolor);
+						axis.set_drawzero (drawzero);
 					}
-					a.drawAxis(g);
-					a.set_drawgrid (false);
-					a.set_drawzero (false);
+					axis.draw(g);
+					axis.set_drawgrid (false);
+					axis.set_drawzero (false);
 					break;
 				case Axis.RIGHT:
-					r.width -= a.width();
-					a.positionAxis(r.x+r.width,r.x+r.width,y,y+height);
+					r.width -= axis.width();
+					axis.positionAxis(r.x+r.width,r.x+r.width,y,y+height);
 					if(r.x+r.width == x+width ) {
-						a.set_gridcolor(gridcolor);
-						a.set_drawgrid (drawgrid);
-						a.set_zerocolor(zerocolor);
-						a.set_drawzero (drawzero);
+						axis.set_gridcolor(gridcolor);
+						axis.set_drawgrid (drawgrid);
+						axis.set_zerocolor(zerocolor);
+						axis.set_drawzero (drawzero);
 					}
-					a.drawAxis(g);
-					a.set_drawgrid (false);
-					a.set_drawzero (false);
+					axis.draw(g);
+					axis.set_drawgrid (false);
+					axis.set_drawzero (false);
 					break;
 				case Axis.TOP:
-					r.y += a.width();
-					r.height -= a.width();
-					a.positionAxis(x,x+width,r.y,r.y);
+					r.y += axis.width();
+					r.height -= axis.width();
+					axis.positionAxis(x,x+width,r.y,r.y);
 					if(r.y == y) {
-						a.set_gridcolor(gridcolor);
-						a.set_drawgrid (drawgrid);
-						a.set_zerocolor(zerocolor);
-						a.set_drawzero (drawzero);
+						axis.set_gridcolor(gridcolor);
+						axis.set_drawgrid (drawgrid);
+						axis.set_zerocolor(zerocolor);
+						axis.set_drawzero (drawzero);
 					}
-					a.drawAxis(g);
-					a.set_drawgrid (false);
-					a.set_drawzero (false);
+					axis.draw(g);
+					axis.set_drawgrid (false);
+					axis.set_drawzero (false);
 					break;
 				case Axis.BOTTOM:
-					r.height -= a.width();
-					a.positionAxis(x,x+width,r.y+r.height,r.y+r.height);
+					r.height -= axis.width();
+					axis.positionAxis(x,x+width,r.y+r.height,r.y+r.height);
 					if(r.y +r.height == y+height ) {
-						a.set_gridcolor(gridcolor);
-						a.set_drawgrid (drawgrid);
-						a.set_zerocolor(zerocolor);
-						a.set_drawzero (drawzero);
+						axis.set_gridcolor(gridcolor);
+						axis.set_drawgrid (drawgrid);
+						axis.set_zerocolor(zerocolor);
+						axis.set_drawzero (drawzero);
 					}
-					a.drawAxis(g);
-					a.set_drawgrid (false);
-					a.set_drawzero (false);
+					axis.draw(g);
+					axis.set_drawgrid (false);
+					axis.set_drawzero (false);
 					break;
 			}
 		}

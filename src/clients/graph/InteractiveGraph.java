@@ -155,7 +155,7 @@ abstract public class InteractiveGraph extends Graph {
 	public void attachAxis(Axis a) {
 		if (a==null) return;
 		super.attachAxis(a);         
-		if (a.getAxisPos() == Axis.BOTTOM || a.getAxisPos() == Axis.TOP) {
+		if (a.position() == Axis.BOTTOM || a.position() == Axis.TOP) {
 			xaxis = a;
 		} else {
 			yaxis = a;
@@ -262,8 +262,8 @@ abstract public class InteractiveGraph extends Graph {
 				double d[] = closest_point(e.x, e.y);
 				dpgin.setXlabel( d[0] );
 				dpgin.setYlabel( d[1] );
-				int ix = xaxis.getInteger(d[0]);
-				int iy = yaxis.getInteger(d[1]);
+				int ix = xaxis.pixelValue(d[0]);
+				int iy = yaxis.pixelValue(d[1]);
 				if (ix >= datarect.x && ix <= datarect.x +datarect.width && 
 					iy >= datarect.y && iy <= datarect.y +datarect.height) {
 					Graphics g = getGraphics();
@@ -333,18 +333,18 @@ abstract public class InteractiveGraph extends Graph {
 		}
 		if ( Math.abs(x0-x1) > 5 &&  Math.abs(y0-y1) > 5 ) {
 			if (x0 < x1 ) {                
-				xaxis.set_minimum(xaxis.getDouble(x0));
-				xaxis.set_maximum(xaxis.getDouble(x1));
+				xaxis.set_minimum(xaxis.dataValue(x0));
+				xaxis.set_maximum(xaxis.dataValue(x1));
 			} else {
-				xaxis.set_maximum(xaxis.getDouble(x0));
-				xaxis.set_minimum(xaxis.getDouble(x1));
+				xaxis.set_maximum(xaxis.dataValue(x0));
+				xaxis.set_minimum(xaxis.dataValue(x1));
 			}
 			if (y0 >y1 ) {                
-				yaxis.set_minimum(yaxis.getDouble(y0));
-				yaxis.set_maximum(yaxis.getDouble(y1));
+				yaxis.set_minimum(yaxis.dataValue(y0));
+				yaxis.set_maximum(yaxis.dataValue(y1));
 			} else {
-				yaxis.set_maximum(yaxis.getDouble(y0));
-				yaxis.set_minimum(yaxis.getDouble(y1));
+				yaxis.set_maximum(yaxis.dataValue(y0));
+				yaxis.set_minimum(yaxis.dataValue(y1));
 			}
 			repaint();
 		}
@@ -370,8 +370,8 @@ abstract public class InteractiveGraph extends Graph {
 			}
 		}
 		if (cpgin != null && cpgin.isVisible()) {
-			cpgin.setXlabel(  xaxis.getDouble(x1) );
-			cpgin.setYlabel(  yaxis.getDouble(y1) );
+			cpgin.setXlabel(  xaxis.dataValue(x1) );
+			cpgin.setYlabel(  yaxis.dataValue(y1) );
 		}
 		repaint();
 		return true;
@@ -385,8 +385,8 @@ public boolean mouseMove(Event e, int x, int y) {
 	x1   = e.x;
 	y1   = e.y;
 	if (cpgin != null && cpgin.isVisible()) {
-		cpgin.setXlabel(  xaxis.getDouble(x1) );
-		cpgin.setYlabel(  yaxis.getDouble(y1) );
+		cpgin.setXlabel(  xaxis.dataValue(x1) );
+		cpgin.setYlabel(  yaxis.dataValue(y1) );
 	}
 	return true;
 }
@@ -434,8 +434,8 @@ public boolean mouseMove(Event e, int x, int y) {
 		double a[] = new double[3];
 		double distsq = -1.0;
 		double data[] = {0.0, 0.0};
-		double x = xaxis.getDouble(ix);
-		double y = yaxis.getDouble(iy);
+		double x = xaxis.dataValue(ix);
+		double y = yaxis.dataValue(iy);
 
 //System.out.println("closest_point: x="+x+", y="+y);
 		for (i=0; i<dataset.size(); i++) {

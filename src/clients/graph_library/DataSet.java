@@ -13,7 +13,7 @@ abstract public class DataSet {
 // Access
 
 	// Number of records in this data set
-	abstract public int count();
+	abstract public int size();
 
 	// Color data is to be drawn in - can be null
 	public Color color() { return color; }
@@ -46,8 +46,8 @@ abstract public class DataSet {
 	/**
 	* Append a copy of `d' at end.
 	* @postcondition
-	*     implies(d == null, count() == old count())
-	*     implies(d != null, count() == old count() + d.count()) */
+	*     implies(d == null, size() == old size())
+	*     implies(d != null, size() == old size() + d.size()) */
 	abstract public void append(DataSet d);
 
 // Implementation

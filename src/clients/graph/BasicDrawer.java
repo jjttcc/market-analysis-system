@@ -38,13 +38,15 @@ abstract public class BasicDrawer extends Drawer {
 	// Set the times.
 	public void set_times(ArrayList t) {}
 
-	// Number of tuples in the data
-	public int tuple_count() {
-		return data_length() / drawing_stride();
-	}
-
-	// Number of elements in the data
-	abstract public int data_length();
+/****Duplicates of parent versions!!!! - remove:
+// Number of tuples in the data
+public int tuple_count() {
+return data_length() / drawing_stride();
+}
+// Number of elements in the data
+abstract public int data_length();
+!!!
+*/
 
 	public void set_boundaries_needed(boolean b) { boundaries_needed = b; }
 
@@ -445,26 +447,26 @@ abstract public class BasicDrawer extends Drawer {
 
 class RefSpec {
 	RefSpec(double min, double max, double v) {
-		_minimum = min;
-		_maximum = max;
-		_value = v;
+		minimum = min;
+		maximum = max;
+		value = v;
 	}
 
 	public String toString() {
-		String result = "minimum: " + _minimum + ", maximum: " + _maximum +
-			", step_value: " + _value;
+		String result = "minimum: " + minimum + ", maximum: " + maximum +
+			", step_value: " + value;
 		return result;
 	}
 
-	double minimum() { return _minimum; }
+	double minimum() { return minimum; }
 
-	double maximum() { return _maximum; }
+	double maximum() { return maximum; }
 
-	double step_value() { return _value; }
+	double step_value() { return value; }
 
-	private double _minimum;
+	private double minimum;
 
-	private double _maximum;
+	private double maximum;
 
-	private double _value;
+	private double value;
 }

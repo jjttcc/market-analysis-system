@@ -201,6 +201,14 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		return data_builder;
 	}
 
+// Status report - TimeDelimitedDataRequestClient API
+
+	public boolean ready_for_request() {
+		// latest_date_time != null iff send_data_request has
+		// been successfully called.
+		return latest_date_time != null;
+	}
+
 // Element change
 
 	// Register `d' to save its size and location on exit with its title
@@ -265,8 +273,10 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	public void send_data_request(String tradable) {
 		DrawableDataSet dataset, main_dataset;
 		MA_Configuration conf = MA_Configuration.application_instance();
+		turn_off_refresh();	// Prevent auto-refresh conflicts.
 		int count;
 		String current_indicator;
+		try {
 		if (period_type_change || ! tradable.equals(current_tradable())) {
 			// Redraw the data.
 			if (individual_period_type_sets &&
@@ -391,6 +401,9 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 			GUI_Utilities.busy_cursor(false, this);
 			period_type_change = false;
 		}
+		} finally {
+			turn_on_refresh();
+		}
 	}
 
 	public void run() {
@@ -411,6 +424,12 @@ System.out.println("FINISHED requesting " + requested_tradable);
 	}
 
 // Basic operations - TimeDelimitedDataRequestClient API
+
+	public void update_start_date(AbstractDataSetBuilder b) {
+		latest_date_time = b.last_latest_date_time();
+System.out.println("update st dt - latest is now: " + latest_date_time);
+		main_pane.repaint_graphs();
+	}
 
 	public void notify_of_update() {
 System.out.println("I (" + this + ") was notified of an update!");
@@ -583,7 +602,18 @@ System.out.println("data request failed with code: " + result_id);
 					remove_list.elementAt(i));
 			}
 		}
-		if (ma_menu_bar != null) ma_menu_bar.update_indicators();
+		if (ma_menu_bar != null) {
+			ma_menu_bar.update_indicators();
+		}
+		// If the current upper and lower indicator lists are not empty,
+		// they were loaded from the saved settings.  Make sure they
+		// get marked as "selected".
+System.out.println("from the settings, selecting upper indicators: " +
+current_upper_indicators);
+		tradable_specification.select_indicators(current_upper_indicators);
+System.out.println("from the settings, selecting lower indicators: " +
+current_lower_indicators);
+		tradable_specification.select_indicators(current_lower_indicators);
 	}
 
 	// Take action when notified that period type changed.
@@ -684,9 +714,30 @@ System.out.println("data request failed with code: " + result_id);
 		MA_Configuration conf = MA_Configuration.application_instance();
 		if (conf.auto_refresh()) {
 System.out.println("auto refresh is ON.");
-			AutoRefreshSetup.execute(this);
+			auto_refresh_handler = new AutoRefreshSetup(this);
+			turn_on_refresh();
+////!!!! for testing:
+//auto_refresh_handler.schedule();
 		}
 else { System.out.println("auto refresh is OFFFFFF.");}
+	}
+
+	// Turn on 'auto data refresh'.
+	// Ignore if auto_refresh_handler == null
+	private void turn_on_refresh() {
+		if (auto_refresh_handler != null) {
+System.out.println("Scheduling for refresh.");
+			auto_refresh_handler.schedule();
+		}
+	}
+
+	// Turn off 'auto data refresh'.
+	// Ignore if auto_refresh_handler == null
+	private void turn_off_refresh() {
+		if (auto_refresh_handler != null) {
+System.out.println("Unscheduling for refresh.");
+			auto_refresh_handler.unschedule();
+		}
 	}
 
 	// Set the window title using current_tradable() and
@@ -905,4 +956,6 @@ else { System.out.println("auto refresh is OFFFFFF.");}
 
 	private static NetworkProtocolUtilities protocol_util =
 		new NetworkProtocolUtilities();
+
+	private AutoRefreshSetup auto_refresh_handler;
 }

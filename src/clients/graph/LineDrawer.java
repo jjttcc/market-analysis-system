@@ -30,6 +30,8 @@ public class LineDrawer extends IndicatorDrawer {
 			draw_color = conf.line_color();
 		}
 		int[] x_values = x_values();
+System.out.println("BarDrawer draw tuples - data size: " + data.size());
+System.out.println("BarDrawer xvalues size: " + x_values.length);
 
 		// Is there any data to draw? Sometimes the draw command will
 		// will be called before any data has been placed in the class.

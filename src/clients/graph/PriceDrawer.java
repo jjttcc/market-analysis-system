@@ -24,14 +24,16 @@ public class PriceDrawer extends MarketDrawer {
 		if (data != null) lngth = data.size();
 		if (lngth == 0) return;
 
-		_bar_width = (int) ((double) base_bar_width(bounds, lngth / 4) * .75);
+		bar_width = (int) ((double) base_bar_width(bounds, lngth / 4) * .75);
 		MA_Configuration conf = MA_Configuration.application_instance();
 		Color bar_color = conf.stick_color();
 		double width_factor, height_factor;
 
 		if (data == null || lngth < Stride) return;
 
-		x_values = new int[tuple_count()];
+		initialize_x_values();
+//!!!!!:
+System.out.println("x_values was reset HERE - length: " + x_values.length);
 		g.setColor(bar_color);
 		width_factor = width_factor_value(bounds, lngth / 4);
 		height_factor = height_factor_value(bounds);
@@ -54,18 +56,18 @@ public class PriceDrawer extends MarketDrawer {
 			// vertical low to high price line
 			g.drawLine(x, lowy, x, highy);
 			// horizontal line for close price
-			g.drawLine(x, closey, x + _bar_width, closey);
-			if (_open_bar) {
-				g.drawLine(x, openy, x - _bar_width, openy);
+			g.drawLine(x, closey, x + bar_width, closey);
+			if (open_bar) {
+				g.drawLine(x, openy, x - bar_width, openy);
 			}
 		}
 	}
 
 	// Is a bar for the open price to be drawn?
-	public boolean open_bar() { return _open_bar; }
+	public boolean open_bar() { return open_bar; }
 
 	// Set whether a bar for the open price is to be drawn.
-	public void set_open_bar(boolean value) { _open_bar = value; }
+	public void set_open_bar(boolean value) { open_bar = value; }
 
-	private boolean _open_bar = false;
+	private boolean open_bar = false;
 }

@@ -52,7 +52,7 @@ public class DrawableDataSet extends DataSet {
 	*     d != null<br>
 	* @postcondition<br>
 	*     dates_needed() && drawer() == drawer<br>
-	*     count() == 0 */
+	*     size() == 0 */
 	public DrawableDataSet(BasicDrawer d) {
 		if (d  == null) {
 			throw new Error("DataSet constructor: precondition violated");
@@ -83,7 +83,7 @@ public class DrawableDataSet extends DataSet {
 	*     d != null && d.length > 0 && n > 0 && drwr != null<br>
 	* postcondition:<br>
 	*     dates_needed() && drawer() == drwr<br>
-	*     count() == data_points() */
+	*     size() == data_points() */
 	public DrawableDataSet(double d[], int n, BasicDrawer drwr) throws Error {
 		if ( d  == null || d.length == 0 || n <= 0 || drwr == null ) {
 			throw new Error("DataSet constructor: precondition violated");
@@ -99,7 +99,7 @@ public class DrawableDataSet extends DataSet {
 		tuple_count = n;
 		dates_needed = true;
 		if (! (dates_needed() && drawer() == drwr) ||
-				count() != data_points()) {
+				size() != data_points()) {
 			throw new Error("DataSet constructor: postcondition violated");
 		}
 	}
@@ -120,15 +120,15 @@ public class DrawableDataSet extends DataSet {
 	public boolean dates_needed() { return dates_needed; }
 
 	// Number of records in this data set
-	public int count() {
+	public int size() {
 		return tuple_count;
 	}
 
 	// x axis
-	public Axis xaxis() { return xaxis_; }
+	public Axis xaxis() { return xaxis; }
 
 	// y axis
-	public Axis yaxis() { return yaxis_; }
+	public Axis yaxis() { return yaxis; }
 
 	/**
 	* The number of data points in the DataSet
@@ -189,20 +189,81 @@ public class DrawableDataSet extends DataSet {
 		return point;
 	}
 
+	public String toString() {
+		String result = "";
+		System.out.println("DrawableDataSet - data size: " + data.size());
+		Iterator i = dates.iterator();
+		Iterator j = times.iterator();
+		Iterator k = data.iterator();
+		if (dates.size() != times.size()) {
+			System.out.println("dates, times have different sizes: " +
+				dates.size() + ", " + times.size());
+		}
+		if (dates.size() != data.size()) {
+			System.out.println("dates, data have different sizes: " +
+				dates.size() + ", " + data.size());
+		}
+		while (i.hasNext() && j.hasNext() && k.hasNext()) {
+			System.out.println(i.next() + ", " + j.next() + ", " + k.next());
+		}
+		return result;
+	}
+
 // Element change
 
 	public void append(DataSet d) {
-		int oldcount = count();
+		int oldsize = size();
 		if (d != null) {
-			tuple_count = oldcount + d.count();
+System.out.println("append called with dataset:\n'" + d + "'");
+System.out.println("main dataset size before append: " + size());
+System.out.print("main dataset contents before append:\n<<<<");
+System.out.print(this);
+System.out.print("\n>>>>>");
+if (d.size() == 0) { System.out.println("d is empty!");}
+			tuple_count = oldsize + d.size();
 			DrawableDataSet drwd = (DrawableDataSet) d;
+System.out.println("A");
+System.out.println("before add all - sizes: " +
+data.size() + ", " + dates.size() + ", " + times.size());
+System.out.println("B");
 			data.addAll(drwd.data);
+System.out.println("C");
+			dates.addAll(drwd.dates);
+System.out.println("D");
+			times.addAll(drwd.times);
+System.out.println("E");
+if (xaxis == null || yaxis == null) {
+if (xaxis == null) {
+System.out.println("Xaxis is null");
+}
+if (yaxis == null) {
+System.out.println("Yaxis is null");
+}
+}
+//Re-attach 'this' data set to the axes to ...!!!
+if (xaxis != null) {
+//xaxis.attachDataSet(this);
+xaxis.resetDataSets();
+System.out.println("G");
+}
+if (yaxis != null) {
+//yaxis.attachDataSet(this);
+yaxis.resetDataSets();
+System.out.println("H");
+}
 		}
-		if (d != null && ! (count() == oldcount + d.count())) {
+else {
+System.out.println("append called with NULL dataset\n");
+}
+		if (d != null && ! (size() == oldsize + d.size())) {
 			throw new Error("append: postcondition 1 violated");
-		} else if (d == null && (count() != oldcount)) {
+		} else if (d == null && (size() != oldsize)) {
 			throw new Error("append: postcondition 2 violated");
 		}
+System.out.println("main dataset size after append: " + size());
+System.out.print("main dataset contents after append:\n<<<<");
+System.out.print(this);
+System.out.print("\n>>>>>");
 	}
 
 	public void set_drawer(BasicDrawer d) {
@@ -238,10 +299,10 @@ public class DrawableDataSet extends DataSet {
 	public void set_dates_needed(boolean b) { dates_needed = b; }
 
 	// Set the x axis to `a'.
-	public void set_xaxis(Axis a) { xaxis_ = a; }
+	public void set_xaxis(Axis a) { xaxis = a; }
 
 	// Set the y axis to `a'.
-	public void set_yaxis(Axis a) { yaxis_ = a; }
+	public void set_yaxis(Axis a) { yaxis = a; }
 
 	// Add y1, y2 values for a horizontal line.
 	public void add_hline(DoublePair p) {
@@ -272,21 +333,24 @@ public class DrawableDataSet extends DataSet {
 	*/
 	public void draw_data(Graphics g, Rectangle bounds) {
 		boolean restore_bounds = false;
+System.out.println("drawer: " + drawer);
+//System.out.println("data: " + data);
 		if (! range_set) range();
 		if ( linecolor != null) g.setColor(linecolor);
 		drawer.set_data(data);
-		drawer.set_xaxis(xaxis_);
-		drawer.set_yaxis(yaxis_);
+		drawer.set_xaxis(xaxis);
+		drawer.set_yaxis(yaxis);
 		drawer.set_maxes(xmax, ymax, xmin, ymin);
 		drawer.set_ranges(xrange, yrange);
 		drawer.set_clipping(clipping);
 		drawer.draw_data(g, bounds, hline_data, vline_data, color);
+System.out.println("DDS dd back");
 	}
 
 // Implementation
 
 	// set g2d to `b'.
-	protected void set_g2d(Graph g) { g2d_ = g; }
+	protected void set_g2d(Graph g) { g2d = g; }
 
 	// The `time_drawer', if there are times; otherwise the `date_drawer',
 	// if there are dates; otherwise null
@@ -309,8 +373,8 @@ public class DrawableDataSet extends DataSet {
 	protected void draw_dates(Graphics g, Rectangle w) {
 		TemporalDrawer drawer = temporal_drawer();
 		if (drawer != null && drawer.main_data_processed()) {
-			drawer.set_xaxis(xaxis_);
-			drawer.set_yaxis(yaxis_);
+			drawer.set_xaxis(xaxis);
+			drawer.set_yaxis(yaxis);
 			drawer.set_maxes(xmax, ymax, xmin, ymin);
 			drawer.set_ranges(xrange, yrange);
 			drawer.set_clipping(clipping);
@@ -351,11 +415,11 @@ public class DrawableDataSet extends DataSet {
 				dymin = ((Double) data.get(i)).doubleValue();
 			}
 		}
-		if ( yaxis_ == null) {
+		if ( yaxis == null) {
 			ymin = dymin;
 			ymax = dymax;
 		}
-		if ( xaxis_ == null) {
+		if ( xaxis == null) {
 			xmin = dxmin;
 			xmax = dxmax;
 		}
@@ -382,7 +446,7 @@ public class DrawableDataSet extends DataSet {
 	*    The Graphics canvas that is driving the whole show.
 	* @see graph.Graph
 	*/
-	private Graph g2d_;
+	private Graph g2d;
 
 	/**
 	*    The color of the straight line segments
@@ -404,13 +468,13 @@ public class DrawableDataSet extends DataSet {
 	*    the scaling for the data can be derived.
 	* @see graph.Axis
 	*/
-	private Axis xaxis_;
+	private Axis xaxis;
 
 	/**
 	*    The Axis object the Y data is attached to.
 	* @see graph.Axis
 	*/
-	private Axis yaxis_;
+	private Axis yaxis;
 
 	/**
 	* The current plottable X maximum of the data. 
@@ -447,7 +511,7 @@ public class DrawableDataSet extends DataSet {
 	private boolean clipping = false;
 
 	// Main data
-	private ArrayList data;	// double
+	private ArrayList data;	// Double
 
 	// Date data
 	protected ArrayList dates;	// String

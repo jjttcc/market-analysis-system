@@ -25,6 +25,8 @@ abstract public class TemporalDrawer extends Drawer {
 		if (data() != null) {
 			result = data().size();
 		}
+//!!!!!:
+System.out.println("TMPRL DRW returning data length() of " + result);
 		return result;
 	}
 

@@ -51,7 +51,7 @@ System.out.println("dtrange result: " + result);
 	// (no field separator)
 	// Precondition: t != null
 	public Calendar time_from_dataset_string(String t) {
-		return time_from_string(t, "");
+		return time_from_string(t, separator_from_time(t));
 	}
 
 	// A calander representing the date-time based on `d' and `t', where
@@ -60,7 +60,7 @@ System.out.println("dtrange result: " + result);
 	// Precondition: d != null && t != null
 	public Calendar date_time_from_dataset_strings(String d, String t) {
 		Calendar date = date_from_string(d, "");
-		Calendar time = time_from_string(t, "");
+		Calendar time = time_from_string(t, separator_from_time(t));
 System.out.println("dtfds - date, time: " + date + ", " + time);
 		return date_time_from_date_and_time(date, time);
 	}
@@ -89,5 +89,55 @@ System.out.println("dtfds - date, time: " + date + ", " + time);
 		s = time.get(time.SECOND);
 
 		return new GregorianCalendar(y, m, d, h, min, s);
+	}
+
+	// The component separator used in time `t' - empty string if no separator
+	// Precondition: t != null
+	public String separator_from_time(String t) {
+System.out.println("sep from time called with: " + t);
+		String result = null;
+		if (t.length() == 4 || t.length() == 6) {
+			// Assume no separator - hhmm or hhmmss
+			result = "";
+		} else {
+System.out.println("A");
+			for (int i = 0; result == null && i < t.length(); ++i) {
+				char c = t.charAt(i);
+System.out.println("i, c: " + i + ", " + c);
+				if (c < '0' || c > '9') {
+System.out.println(c + " not in 0 .. 9");
+					result = t.substring(i, i + 1);
+				}
+			}
+			if (result == null) {
+				throw new Error("Code defect encountered: time string '" +
+					t + "' has the wrong number of digits");
+			}
+		}
+System.out.println("sep from time returning: " + result);
+		return result;
+	}
+
+	// The component separator used in date `d' (in yyyyxmmxdd) format -
+	// empty string if no separator
+	// Precondition: d != null
+	public String separator_from_date(String d) {
+		String result = null;
+		if (d.length() == 8) {
+			// Assume no separator - yyyymmdd
+			result = "";
+		} else {
+			for (int i = 0; i < d.length(); ++i) {
+				char c = d.charAt(i);
+				if (c < '0' || c > '9') {
+					result = d.substring(i, i);
+				}
+			}
+			if (result == null) {
+				throw new Error("Code defect encountered: date string '" +
+					d + "' has the wrong number of digits");
+			}
+		}
+		return result;
 	}
 }

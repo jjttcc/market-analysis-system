@@ -14,10 +14,17 @@ public interface TimeDelimitedDataRequestClient {
 	public TradableDataSpecification specification();
 
 	// The start date-time of the data to be requested
+	// Precondition: ready_for_request()
 	public Calendar start_date();
 
-	// The end date-time of the data to be requested
+	// The end date-time of the data to be requested - null represents
+	// the current time
 	public Calendar end_date();
+
+// Status report
+
+	// Is the system ready for a time-delimited data request?
+	public boolean ready_for_request();
 
 // Basic operations
 
@@ -27,6 +34,9 @@ public interface TimeDelimitedDataRequestClient {
 
 	// Notify the client (this) that the last data update failed.
 	public void notify_of_failure(Exception e);
+
+	// Use the `last_latest_date_time' of `b' to update the "start date".
+	public void update_start_date(AbstractDataSetBuilder b);
 
 	// Notify the client (this) that the last data update had an error.
 	// `result_id' is the result from `data_builder().request_result_id()'
