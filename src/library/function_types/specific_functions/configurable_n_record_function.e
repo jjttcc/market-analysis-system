@@ -80,6 +80,10 @@ feature {NONE} -- Basic operations
 				-- There are not enough elements in target to process;
 				-- ensure that exhausted is true:
 				target.finish
+				if not target.off then target.forth end
+				check
+					target_exhausted: target.exhausted
+				end
 			else
 				check target.count >= effective_n end
 				-- Operate on the first element of `target' (with
@@ -113,7 +117,6 @@ feature {NONE} -- Basic operations
 				end
 			end
 		ensure then
-			empty_if_empty: target.empty = output.empty
 			output_at_last: not output.empty and previous_operator /= Void
 				implies output.islast
 		end
