@@ -8,7 +8,7 @@ import support.*;
 /** Root class for the stand-alone Market Analysis client process */
 public class MA_Client {
 	public static void main(String[] args) {
-		command_line_options = new mas_gui.MAS_Options(args);
+		command_line_options = new mas_gui.CommandLineOptions(args);
 		mas_gui.DataSetBuilder data_builder =
 			new mas_gui.DataSetBuilder(connection(), command_line_options);
 		mas_gui.Chart chart;
@@ -36,7 +36,7 @@ public class MA_Client {
 		return result;
 	}
 
-	private static mas_gui.MAS_Options command_line_options;
+	private static mas_gui.CommandLineOptions command_line_options;
 
 	private static final String chart_filename = ".ma_client_settings";
 }
