@@ -1,0 +1,13 @@
+Apparent bug in the mas server that occurs during market analysis
+
+First reported on Sat Feb 12 09:01:12 MST 2005.
+
+Last night I encountered an apparent bug in the mas server that appears
+to occur when doing market analysis ('a' option from macl) when the start
+date being used is well before the beginning of the data.  I was running
+mas on the machine for Gary Eisen's oneworldhosting account.  I had data
+going back about a year and set the start date to now - 5 years.  There
+was only one data-set/file.  It was a simple MACD crossover analysis.
+The process, according to 'top', was using about 99% of CPU at one point
+(and possibly continuously) and the analysis had not finished after more
+than a minute.  I ended up killing the process to terminate it.

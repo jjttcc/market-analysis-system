@@ -1,0 +1,21 @@
+This bug occurred once, in the GUI, but I was not able to reproduce it
+again after 2 or 3 tries.  Here is the bug description from the task 44
+entry:
+
+"...
+See the screen capture file:
+
+/home/development/jtc/finance/admin/bug_log/gui-dec21/newguibug1.jpg
+
+which illustrates the bug - the top screen - the moving average line
+(green) is messed up on the middle Wed. and the last Mon.  (Compare with
+the screen on the bottom, which is correct.)  This bug occurred when I was
+trying to get the code path in 'process_data ' with the new bug fix to be
+executed (null volume dataset), which I did.  Perhaps the bug was related
+to that context, though I doubt it.
+
+I tried running a couple more auto-refresh tests to try to duplicate the
+bug (with the SMA indicator), but it did not appear - the graph was
+correct.  The bug may not be reproducable."
+
+Note: The period type being graphed when the bug appeared was 30-minute.

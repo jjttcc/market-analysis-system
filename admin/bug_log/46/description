@@ -1,0 +1,18 @@
+(This description was also entered into the task database for task 46.
+I'm including it here because the formatting is changed when it is entered
+into the database.)
+
+Standard deviation of a function is not working: Using the agent-based
+function with the std. dev. "procedure" (with the basic numeric
+command, and other commands that I would expect to work - e.g., BLC)
+to calculate an existing function gives the wrong results. Using the
+same configuration, except with "no input function" and a closing price
+operator gives correct results for std. dev.  of close, so it appears
+the std. dev. logic itself is correct. Most likely there is a problem
+hooking up the input function as input to the agent-based command.
+
+Note that there is a partial work-around: Use the "function-based command"
+and redundantly select the input function for that command. Except for the
+first several irrlevant garbage values, the non-garbage records (e.g.,
+10th to last) are very close to the reference test values (though not
+as close as I would prefer).
