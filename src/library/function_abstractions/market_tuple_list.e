@@ -1,5 +1,7 @@
 indexing
-	description: "";
+	description:
+		"A list of objects that conform to MARKET_TUPLE that supports the %
+		%concept of a type of trading period, such as daily, weekly, etc.";
 	date: "$Date$";
 	revision: "$Revision$"
 
