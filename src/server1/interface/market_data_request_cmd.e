@@ -16,7 +16,7 @@ creation
 
 feature -- Basic operations
 
-	execute (msg: STRING) is
+	do_execute (msg: STRING) is
 		local
 			fields: LIST [STRING]
 		do
@@ -72,9 +72,11 @@ feature {NONE}
 				end
 			else
 				set_print_parameters
-				send_ok
+				-- Ensure ok string is printed first.
+				set_preface (ok_string)
+				-- Ensure end-of-message string is printed last.
+				set_appendix (eom)
 				print_tuples (tuple_list)
-				print (eom)
 			end
 		end
 

@@ -11,11 +11,16 @@ class ERROR_RESPONSE_CMD inherit
 
 	REQUEST_COMMAND
 
+creation
+
+	make
+
 feature -- Basic operations
 
-	execute (msg: STRING) is
+	do_execute (msg: STRING) is
 		do
-			print_list (<<Error.out, output_field_separator, msg, eom>>)
+			put (concatenation (<<Error.out, output_field_separator,
+				msg, eom>>))
 		end
 
 end -- class ERROR_RESPONSE_CMD

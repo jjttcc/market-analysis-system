@@ -13,15 +13,11 @@ class LOGIN_REQUEST_CMD inherit
 	GLOBAL_SERVER
 		export
 			{NONE} all
-		undefine
-			print
 		end
 
 	GLOBAL_SERVICES
 		export
 			{NONE} all
-		undefine
-			print
 		end
 
 creation
@@ -35,7 +31,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	execute (msg: STRING) is
+	do_execute (msg: STRING) is
 			-- Extract any settings from `msg', create a SESSION and add
 			-- it to `sessions', apply the settings from `msg', and send
 			-- a unique session ID to the requesting client.
@@ -85,9 +81,9 @@ feature -- Basic operations
 				report_error (Error, <<error_msg>>)
 				-- Don't add the new session.
 			else
-				send_ok
-				print (session_id)
-				print (eom)
+				put_ok
+				put (session_id.out)
+				put (eom)
 				sessions.extend (session, session_id)
 				-- Clearing the cache when a new login occurs ensures that
 				-- a new client will receive up-to-date data.

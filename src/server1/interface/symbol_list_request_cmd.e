@@ -17,11 +17,11 @@ creation
 
 feature -- Basic operations
 
-	execute (msg: STRING) is
+	do_execute (msg: STRING) is
 		local
 			symbols: LIST [STRING]
 		do
-			send_ok
+			put_ok
 			symbols := tradables.symbols
 			if not symbols.empty then
 				from
@@ -29,13 +29,13 @@ feature -- Basic operations
 				until
 					symbols.islast
 				loop
-					print (symbols.item)
-					print (Output_record_separator)
+					put (symbols.item)
+					put (Output_record_separator)
 					symbols.forth
 				end
-				print (symbols.last)
+				put (symbols.last)
 			end
-			print (eom)
+			put (eom)
 		end
 
 end -- class MARKET_LIST_REQUEST_CMD

@@ -15,8 +15,6 @@ class TRADING_PERIOD_TYPE_REQUEST_CMD inherit
 	GLOBAL_SERVICES
 		export
 			{NONE} all
-		undefine
-			print
 		end
 
 creation
@@ -25,7 +23,7 @@ creation
 
 feature -- Basic operations
 
-	execute (msg: STRING) is
+	do_execute (msg: STRING) is
 		local
 			ptypes: LIST [STRING]
 		do
@@ -44,9 +42,9 @@ feature -- Basic operations
 						" not in database">>)
 				end
 			else
-				send_ok
-				print_list (with_record_separators (ptypes))
-				print (eom)
+				put_ok
+				put (concatenation (with_record_separators (ptypes)))
+				put (eom)
 			end
 		end
 

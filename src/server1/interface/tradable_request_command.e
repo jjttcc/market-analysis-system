@@ -9,6 +9,9 @@ indexing
 deferred class TRADABLE_REQUEST_COMMAND inherit
 
 	REQUEST_COMMAND
+		rename
+			make as rcmake
+		end
 
 feature {NONE} -- Initialization
 
@@ -17,6 +20,7 @@ feature {NONE} -- Initialization
 			not_void: dispenser /= Void
 		do
 			tradables := dispenser
+			rcmake
 		ensure
 			set: tradables = dispenser and
 				tradables /= Void

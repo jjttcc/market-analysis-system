@@ -16,7 +16,7 @@ creation
 
 feature -- Basic operations
 
-	execute (msg: STRING) is
+	do_execute (msg: STRING) is
 		local
 			ilist: LIST [MARKET_FUNCTION]
 			fields: LIST [STRING]
@@ -50,19 +50,19 @@ feature -- Basic operations
 					report_error (Error, <<"Invalid period type">>)
 				end
 			else
-				send_ok
+				put_ok
 				ilist := tradable.indicators
 				from
 					ilist.start
 				until
 					ilist.islast
 				loop
-					print (ilist.item.name)
-					print (Output_record_separator)
+					put (ilist.item.name)
+					put (Output_record_separator)
 					ilist.forth
 				end
-				print (ilist.last.name)
-				print (eom)
+				put (ilist.last.name)
+				put (eom)
 			end
 		end
 

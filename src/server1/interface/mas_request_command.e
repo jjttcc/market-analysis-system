@@ -9,22 +9,22 @@ indexing
 deferred class REQUEST_COMMAND inherit
 
 	COMMAND
-		undefine
-			print
-		end
 
 	GENERAL_UTILITIES
 		export
 			{NONE} all
-		undefine
-			print
 		end
 
 	GUI_NETWORK_PROTOCOL
 		export
 			{NONE} all
-		undefine
-			print
+		end
+
+feature -- Initialization
+
+	make is
+		do
+			create output_buffer.make (0)
 		end
 
 feature -- Access
@@ -64,32 +64,85 @@ feature -- Status setting
 feature -- Basic operations
 
 	execute (msg: STRING) is
+			-- Call `do_execute' with `msg' and `send_data'.
+		local
+			timer: TIMER
+		do
+			if output_buffer_used then
+				output_buffer.clear_all
+			end
+			create timer.make
+			do_execute (msg)
+			print_list (<<"Elapsed time in seconds since response to client ",
+				"began processing: ",
+				timer.elapsed_time.fine_seconds_count, "%N">>);
+			send_data
+			print_list (<<"Total elapsed time in seconds since response to ",
+				"client began processing, after sending response: ",
+				timer.elapsed_time.fine_seconds_count, "%N">>);
+		end
+
+feature {NONE} -- Hook routines
+
+	do_execute (msg: STRING) is
+			-- produce response from `msg' and place it into `output_buffer'.
 		deferred
 		end
 
 feature {NONE}
 
-	send_ok is
-			-- Send an "OK" message ID and the field separator to the client.
+	output_buffer: STRING
+			-- Buffer containing output to be sent to the client
+
+	output_buffer_used: BOOLEAN is
+			-- Is the `output_buffer' used?  Yes - redefine for
+			-- descendants that don't use it.
+		once
+			Result := true
+		end
+
+	ok_string: STRING is
+			-- "OK" message ID and field separator
+		once
+			Result := concatenation (<<OK.out, "%T">>)
+		end
+
+	put_ok is
+			-- Append ok_string to `output_buffer'.
+		require
+			buffer_not_void: output_buffer /= Void
 		do
-			print_list (<<OK.out, "%T">>)
+			put (ok_string)
+		ensure
+			new_count: output_buffer.count = old output_buffer.count +
+				OK.out.count + ("%T").count
+		end
+
+	put (s: STRING) is
+			-- Append `s' to `output_buffer'.
+		require
+			buffer_not_void: output_buffer /= Void
+		do
+			output_buffer.append (s)
+		ensure
+			new_count: output_buffer.count = old output_buffer.count + s.count
 		end
 
 	report_error (code: INTEGER; slist: ARRAY [ANY]) is
 			-- Report `s' as an error message; include `code' ID at the
 			-- beginning and `eom' at the end.
 		do
-			print_list (<<code.out, "%T">>)
-			print_list (slist)
-			print (eom)
+			put (concatenation (<<code.out, "%T">>))
+			put (concatenation (slist))
+			put (eom)
 		end
 
-	print (o: GENERAL) is
+	send_data is
 			-- Redefinition of output method inherited from GENERAL to
 			-- send output to active_medium
 		do
-			if o /= Void then
-				active_medium.put_string (o.out)
+			if output_buffer /= Void and not output_buffer.empty then
+				active_medium.put_string (output_buffer)
 			end
 		end
 

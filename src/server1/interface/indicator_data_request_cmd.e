@@ -16,7 +16,7 @@ creation
 
 feature -- Basic operations
 
-	execute (msg: STRING) is
+	do_execute (msg: STRING) is
 		local
 			fields: LIST [STRING]
 		do
@@ -71,9 +71,9 @@ feature {NONE}
 					indicator.process
 				end
 				set_print_parameters
-				send_ok
+				set_preface (ok_string)
+				set_appendix (eom)
 				print_indicator (indicator)
-				print (eom)
 			end
 		end
 

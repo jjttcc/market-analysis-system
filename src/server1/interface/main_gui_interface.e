@@ -41,7 +41,7 @@ feature -- Initialization
 
 feature -- Access
 
-	io_medium: IO_MEDIUM
+	io_medium: COMPRESSED_SOCKET
 
 	event_generator_builder: CL_BASED_MEG_EDITING_INTERFACE
 
@@ -49,7 +49,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_io_medium (arg: IO_MEDIUM) is
+	set_io_medium (arg: like io_medium) is
 			-- Set io_medium to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -166,8 +166,8 @@ feature {NONE}
 								message_body.append (message_ID.out)
 								message_ID := Error
 							else
-								message_body := s.substring (
-									j + Input_field_separator.count, s.count)
+								set_message_body (
+									s, j + Input_field_separator.count)
 							end
 						end
 					end
@@ -195,7 +195,7 @@ feature {NONE}
 			rh.extend (cmd, Indicator_list_request)
 			create {LOGIN_REQUEST_CMD} cmd.make (market_list_handler)
 			rh.extend (cmd, Login_request)
-			create {ERROR_RESPONSE_CMD} cmd
+			create {ERROR_RESPONSE_CMD} cmd.make
 			rh.extend (cmd, Error)
 			request_handlers := rh
 		ensure
@@ -219,6 +219,23 @@ feature {NONE}
 				Result := false
 			else
 				Result := true
+			end
+		end
+	
+	set_message_body (s: STRING; index: INTEGER) is
+			-- Set `message_body' from string extracted from `s' @ `index'
+			-- and set io_medium's compression on if specified in `s'.
+		do
+			if
+				s.substring (index, index + Compression_on_flag.count - 1).
+					is_equal(Compression_on_flag)
+			then
+				io_medium.set_compression (true)
+				message_body := s.substring (index + Compression_on_flag.count,
+					s.count)
+			else
+				io_medium.set_compression (false)
+				message_body := s.substring (index, s.count)
 			end
 		end
 

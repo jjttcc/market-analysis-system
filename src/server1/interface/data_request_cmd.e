@@ -15,8 +15,6 @@ deferred class DATA_REQUEST_CMD inherit
 			output_medium as active_medium
 		export
 			{NONE} all
-		undefine
-			print
 		end
 
 	STRING_UTILITIES
@@ -24,8 +22,6 @@ deferred class DATA_REQUEST_CMD inherit
 			make as su_make_unused
 		export
 			{NONE} all
-		undefine
-			print
 		end
 
 feature -- Access
