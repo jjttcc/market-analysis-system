@@ -10,9 +10,10 @@ default
 	assertion (ensure)
 	assertion (loop)
 	assertion (invariant)
-	assertion (no)
-	arguments ("-o -f , -w 12345")
+	arguments ("-o -f , -w 12346")
+	arguments ("-o -p 12345")
 	arguments ("-o -p")
+	arguments ("-o -f , -w 12345")
 	arguments ("-o -p 3333")
 	arguments ("-o -p 3332")
 	arguments ("-o -f , amzn.txt none.txt ibm.txt")
@@ -26,9 +27,9 @@ default
 	disabled_debug ("compression")
 	disabled_debug ("database")
 	disabled_debug ("editing")
+	disabled_debug ("http")
 	disabled_debug ("object_editing")
 	disabled_debug ("persist")
-	disabled_debug ("http")
 	line_generation (no)
 	profile (no)
 	trace (no)
@@ -66,8 +67,8 @@ default
 --			"${ISE_EIFFEL}/library/store/spec/${ISE_PLATFORM}/lib/libsupport.a",
 
 cluster
-
 	server:		"$MAS/src/server1"
+
 
 	abstractions (server):		"$/abstractions"
 
@@ -90,8 +91,6 @@ cluster
 	data_retrieval (server):		"$/data_retrieval"
 
 	database (server):		"$/database"
-
-	database_odbc (server):		"$/database/odbc"
 
 	database_ecli (server):		"$/database/ecli"
 
