@@ -94,7 +94,7 @@ feature -- Basic operations
 			send_one_time_request (All_indicators_request_msg, True)
 			if last_communication_succeeded then
 				su.set_target (server_response)
-				indicators := su.tokens (Message_record_separator)
+				indicators := su.tokens (message_record_separator)
 			end
 		ensure
 			not_connected: not connected
@@ -113,7 +113,7 @@ feature {NONE} -- Implementation
 			l: LIST [STRING]
 		do
 			su.set_target (s)
-			l := su.tokens (Message_field_separator)
+			l := su.tokens (message_field_separator)
 			process_error (l, s)
 			if last_communication_succeeded then
 				server_response := l @ 2
@@ -149,29 +149,29 @@ feature {NONE} -- Implementation - attributes
 
 feature {NONE} -- Implementation - constants
 
-	Timeout_seconds: INTEGER is 10
+	timeout_seconds: INTEGER is 10
 			-- Number of seconds client will wait for server to respond
 			-- before reporting a "timed-out" message
 
-	Login_request_msg: STRING is
+	login_request_msg: STRING is
 			-- Login request to the server
 		once
-			Result := Login_request.out + Message_field_separator + "0" +
-				Message_field_separator + eom
+			Result := Login_request.out + message_field_separator + "0" +
+				message_field_separator + eom
 		end
 
-	Logout_request_msg: STRING is
+	logout_request_msg: STRING is
 			-- Logout request to the server
 		do
-			Result := Logout_request.out + Message_field_separator +
-				session_key.out + Message_field_separator + eom
+			Result := Logout_request.out + message_field_separator +
+				session_key.out + message_field_separator + eom
 		end
 
-	All_indicators_request_msg: STRING is
+	all_indicators_request_msg: STRING is
 			-- "all-indicators" request to the server
 		do
-			Result := All_indicators_request.out + Message_field_separator +
-				session_key.out + Message_field_separator + eom
+			Result := All_indicators_request.out + message_field_separator +
+				session_key.out + message_field_separator + eom
 		end
 
 invariant

@@ -38,7 +38,7 @@ feature {NONE} -- Basic operations
 			until
 				indicators.exhausted
 			loop
-				put (Message_record_separator + indicators.item.name)
+				put (message_record_separator + indicators.item.name)
 				indicators.forth
 			end
 			put (eom)

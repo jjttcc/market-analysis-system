@@ -34,7 +34,7 @@ feature {NONE} -- Basic operations
 					symbols.islast
 				loop
 					put (symbols.item)
-					put (Message_record_separator)
+					put (message_record_separator)
 					symbols.forth
 				end
 				put (symbols.last)

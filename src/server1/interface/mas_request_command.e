@@ -37,7 +37,7 @@ feature {NONE}
 	ok_string: STRING is
 			-- "OK" message ID and field separator
 		once
-			Result := OK.out + Message_field_separator
+			Result := OK.out + message_field_separator
 		end
 
 end

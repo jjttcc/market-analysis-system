@@ -19,7 +19,7 @@ feature -- Basic operations
 
 	do_execute (msg: STRING) is
 		do
-			put (concatenation (<<Error.out, Message_field_separator,
+			put (concatenation (<<Error.out, message_field_separator,
 				msg, eom>>))
 		end
 

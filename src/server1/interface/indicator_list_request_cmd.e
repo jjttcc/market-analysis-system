@@ -39,7 +39,7 @@ feature {NONE} -- Hook routine implementations
 					ilist.islast
 				loop
 					put (ilist.item.name)
-					put (Message_record_separator)
+					put (message_record_separator)
 					ilist.forth
 				end
 				put (ilist.last.name)
