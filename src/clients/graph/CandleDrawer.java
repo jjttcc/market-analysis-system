@@ -29,7 +29,7 @@ public class CandleDrawer extends MarketDrawer {
 		if (lngth == 0) return;
 
 		int candlewidth = (int) (
-			(double) base_bar_width(bounds, lngth / 4) * .7);
+			(double) base_bar_width(bounds, lngth / 4) * .65);
 		Configuration conf = Configuration.instance();
 		Color black = conf.black_candle_color();
 		Color white = conf.white_candle_color();
