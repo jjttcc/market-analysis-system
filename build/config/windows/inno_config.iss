@@ -35,6 +35,7 @@ Source: "bin\runmas.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\runmasf.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\runmasgui.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\fake_mailer.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
+Source: "bin\run_command.bat"; DestDir: "{app}\bin\"; CopyMode: alwaysoverwrite
 Source: "bin\init.bat"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 ; bash, sed, cygwin1.dll, etc. are needed for the bash_init init. script.
 Source: "bin\bash.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
@@ -44,6 +45,11 @@ Source: "bin\cp.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "bin\cygwin1.dll"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "bin\config_tool.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "bin\bash_init"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
+;!!!Reminder: When everything is tested and working, add a statement to the
+;bash script to "clean up" (remove) these "installation utilities".  (Then
+;test that, of course.)
+Source: "lib\nt_repl_spec"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
+Source: "lib\pre_nt_repl_spec"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "doc\README.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\INTRODUCTION.ps"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
 Source: "doc\mct_introduction.html"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
