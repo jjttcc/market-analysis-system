@@ -85,12 +85,7 @@ if port == -1:
 	usage()
 	abort("Missing port number", 0)
 if host == "":
-	f = os.popen("hostname")
-	host = f.readline()[:-1]
-
-if host == "":
-	print argv[0] + ": No host found."
-	usage(); exit(-1)
+	host = "localhost";
 
 processor = CommandProcessor(Record)
 connection = Connection(host, port)

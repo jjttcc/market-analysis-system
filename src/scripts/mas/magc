@@ -8,7 +8,7 @@ configdir=$MAS_DIRECTORY
 cmd=java
 
 usage() {
-	echo "Usage: $pname port_number [options]"
+	echo "Usage: $Progname port_number [options]"
 	echo "Options:"
 	echo "   -h <hostname>    Connect to server on host <hostname>."
 	echo "   -cl              Run command-line client instead of GUI."
@@ -40,7 +40,7 @@ check_settings() {
 	fi
 }
 
-host=$(hostname)
+host=localhost
 args=
 main=MA_Client
 while [ $# -gt 0 ]; do
