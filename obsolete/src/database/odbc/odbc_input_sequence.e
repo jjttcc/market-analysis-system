@@ -21,8 +21,10 @@ feature -- Initialization
 			ts_not_void: ts /= Void
 		do
 			set_tuple_sequence (ts)
+			is_open := true
 		ensure
-			tuple_sequence = ts
+			tuple_sequence_set: tuple_sequence = ts
+			open: is_open
 		end
 
 feature -- Access
@@ -44,6 +46,15 @@ feature -- Status report
 	readable: BOOLEAN is
 		do
 			Result := not tuple_sequence.off
+		end
+
+	is_open: BOOLEAN
+
+feature -- Status setting
+
+	close is
+		do
+			is_open := false
 		end
 
 feature -- Cursor movement
