@@ -18,19 +18,15 @@ import support.SelfContainedConfiguration;
 public class MAS_Applet extends Applet {
 
 	public void init() {
-		log("init: Starting ...");
 		log("Compiled at Thu Feb 20 17:32:20 MST 2003");
 		try {
-			log("init: A");
 			initialize_configuration();
 			if (initialization_succeeded) {
 				StartupOptions options = new AppletOptions();
 				initialize_server_address();
 				// Can't read files from an applet.
-				log("init: C");
 				DataSetBuilder data_builder =
 					new DataSetBuilder(connection(), options);
-				log("init: D");
 				if (data_builder.login_failed()) {
 					if (data_builder.server_response() != null) {
 						report_error(data_builder.server_response());
@@ -40,7 +36,6 @@ public class MAS_Applet extends Applet {
 				} else {
 					Chart chart = new Chart(data_builder, null, options);
 				}
-				log("init: E");
 			}
 		} catch (Exception e) {
 			log("Login failed: " + e.toString());
@@ -48,7 +43,6 @@ public class MAS_Applet extends Applet {
 			report_error("Login failed: " + e.toString());
 			destroy();
 		}
-		log("init: Exiting ...");
 	}
 
 // Implementation - initialization
