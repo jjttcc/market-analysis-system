@@ -213,7 +213,12 @@ while [ ! "$Tfinished" = "true" ]; do
 	set_next_test_params $test_parameter_file
 done
 
-echo "$successes out of $test_count tests succeeded."
+if [ $successes -eq $test_count ]; then
+	echo "ALL tests ($successes out of $test_count) succeeded."
+else
+	echo "$successes out of $test_count tests succeeded."
+	echo "($(expr $test_count - $successes) failed.)"
+fi
 if [ "$successes" -eq "$test_count" ]; then
 	ExitStatus=0; cleanup
 else
