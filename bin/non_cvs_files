@@ -1,0 +1,10 @@
+#!/bin/bash
+# Display, according to specified pattern, files that are not checked in
+# to cvs.
+
+pattern='*.e'
+if [ $# -gt 0 ]; then
+	pattern="$1"
+fi
+
+cvs -q diff $(find . -name "$pattern" -print) >/dev/null
