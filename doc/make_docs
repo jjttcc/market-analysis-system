@@ -2,12 +2,62 @@
 # Create documents in 'proc_doc_list' using proc_doc.
 
 workdir=/tmp/make_docs-$$
+doclist=proc_doc_list
 mkdir $workdir
-for f in $(cat proc_doc_list); do
-	for type in linux windows; do
-		./proc_doc $f -l -x $type >$workdir/$f.$type
-		groff -mm $workdir/$f.$type >$f-$type.ps
-		./proc_doc $f -h -l -x $type >$f-$type.html
+
+run_proc_doc() {
+	input_file=$1; shift
+	format=$1; shift
+	case "$format" in
+		html) fopt=-h ;;
+		*) fopt=
+	esac
+	if [ $# -eq 0 ]; then set "any"; fi
+	for platform; do
+		if [ "$platform" = any ]; then
+			xopts=""
+		else
+			xopts="-x $platform"
+		fi
+		./proc_doc $input_file $fopt -l $xopts \
+			>$workdir/$input_file-$platform.$format
+		if [ "$format" = groff ]; then
+			groff -mm $workdir/$input_file-$platform.$format \
+				>$input_file-$platform.ps
+		elif [ "$format" = nroff ]; then
+			nroff -mm $workdir/$input_file-$platform.$format | col -b \
+				>$input_file-$platform.txt
+		else
+			mv $workdir/$input_file-$platform.$format .
+		fi
 	done
+}
+
+process() {
+	input_file=$1
+	formats="$(echo $2|sed 's/:/ /g')"
+	platforms="$(echo $3|sed 's/:/ /g')"
+	for fmt in $formats; do
+		echo run_proc_doc $input_file $fmt $platforms
+		run_proc_doc $input_file $fmt $platforms
+	done
+}
+
+count=$(wc -l $doclist|awk '{print $1}')
+i=1
+while [ $i -le $count ]; do
+#for f in $(cat $doclist); do
+	set $(sed -n ${i}p $doclist)
+	i=$(expr $i + 1)
+	curfile=$1
+	if [ -z "$curfile" -o "$(echo $curfile|sed 's/\(.\).*/\1/')" = "#" ]; then
+		# Skip comment or blank line.
+		continue
+	fi
+	opts=$2
+	if [ -z "$opts" ]; then opts=all; fi
+	platforms=$3
+	echo process $curfile $opts $platforms
+	process $curfile $opts $platforms
 done
 rm -rf $workdir
