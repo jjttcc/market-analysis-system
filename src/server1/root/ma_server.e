@@ -19,7 +19,7 @@ creation
 
 	make
 
-feature -- Initialization
+feature {NONE} -- Hook routines
 
 	prepare_for_listening is
 		local
@@ -55,8 +55,6 @@ feature -- Initialization
 			end
 		end
 
-feature {NONE}
-
 	listen is
 			-- Listen for and respond to client requests.
 		do
@@ -65,9 +63,6 @@ feature {NONE}
 			end
 			poller.execute (15, 20000)
 		end
-
-	poller: MEDIUM_POLLER
-			-- Poller for client socket connections
 
 	version: MAS_PRODUCT_INFO is
 		once
@@ -112,6 +107,11 @@ feature {NONE}
 				end
 			end
 		end
+
+feature {NONE}
+
+	poller: MEDIUM_POLLER
+			-- Poller for client socket connections
 
 	current_sockets: LIST [SOCKET]
 
