@@ -6,17 +6,20 @@ import java.util.*;
 import support.*;
 
 // Listener that allows user to select an indicator to be displayed.
-class IndicatorSelection implements ActionListener {
+class IndicatorSelection extends Dialog implements ActionListener {
 	public IndicatorSelection(Chart f) {
+		super(f);
 		int window_width = f.main_pane.getSize().width / 3 + 14;
+		final int Min_window_height = 40, Hfactor = 16;
 		main_frame = f;
 		selection_list = new List();
-		dialog = new Dialog(f);
+		dialog = this;
 		Panel panel = new Panel(new BorderLayout());
 		Button close_button = new Button("Close");
-		dialog.add(panel);
+		add(panel);
 		panel.add(selection_list, "Center");
 		panel.add(close_button, "South");
+		setTitle("Indicators");
 		Enumeration indicators = main_frame.ordered_indicators().elements();
 		while (indicators.hasMoreElements()) {
 			selection_list.add((String) indicators.nextElement());
@@ -46,20 +49,25 @@ class IndicatorSelection implements ActionListener {
 				}
 		}});
 
-		dialog.setSize(window_width, (selection_list.getItemCount() + 1) * 21);
+		setSize(window_width, (selection_list.getItemCount() + 1) *
+			Hfactor + Min_window_height);
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		GUI_Utilities.busy_cursor(true, main_frame);
 		Point location = main_frame.getLocation();
 		location.setLocation(location.x, location.y + 135);
-		dialog.setLocation(location);
-		dialog.show();
+		setLocation(location);
+		show();
 		GUI_Utilities.busy_cursor(false, main_frame);
 	}
 
 	public void remove_selection(String s) {
 		selection_list.remove(s);
+	}
+
+	public void addActionListener(ActionListener l) {
+		selection_list.addActionListener(l);
 	}
 
 	// The selections - type String
