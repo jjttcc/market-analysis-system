@@ -41,6 +41,18 @@ class EVENT_REGISTRATION inherit
 			print
 		end
 
+	STORABLE_SERVICES [MARKET_EVENT_REGISTRANT]
+		rename
+			real_list as market_event_registrants,
+			working_list as working_event_registrants
+		export
+			{NONE} all
+		undefine
+			print
+		redefine
+			end_save
+		end
+
 creation
 
 	make
@@ -57,6 +69,7 @@ feature -- Initialization
 			create help.make
 			-- Satisfy invariant (editor is currently not used.)
 			create editor
+			create pending_registrants.make
 		ensure
 			set: dispatcher = disp
 			iodev_set: input_device = in_dev and output_device = out_dev
@@ -67,6 +80,56 @@ feature -- Access
 	dispatcher: EVENT_DISPATCHER
 
 feature -- Basic operations
+
+	registrant_menu is
+			-- Menu for adding, removing, editing, and viewing event
+			-- registrants
+		local
+			finished: BOOLEAN
+			msg: STRING
+		do
+			begin_edit
+			from
+				msg := main_msg
+			until
+				finished
+			loop
+				print (msg)
+				inspect
+					character_selection (Void)
+				when 'a', 'A' then
+					add_registrants
+				when 'r', 'R' then
+					remove_registrants
+				when 'v', 'V' then
+					view_registrants
+				when 'e', 'E' then
+					edit_registrants
+				when 's', 'S' then
+					save
+				when 'h', 'H' then
+					print (help @ help.Edit_event_registrants)
+				when '!' then
+					print ("Type exit to return to main program.%N")
+					system ("")
+				when '-' then
+					finished := True
+				else
+					print ("Invalid selection%N")
+				end
+				print ("%N%N")
+				report_errors
+				if changed then
+					msg := main_changed_msg
+				else
+					msg := main_msg
+				end
+			end
+			end_edit
+		end
+
+feature
+--!!!feature {NONE} -- Implementation
 
 	add_registrants is
 		local
@@ -99,9 +162,11 @@ feature -- Basic operations
 				print ("%N%N")
 				if new_registrant /= Void then
 					add_event_types (new_registrant)
-					add_registrant (new_registrant)
+					working_event_registrants.extend (new_registrant)
+					pending_registrants.extend (new_registrant)
+					changed := true
 					print_list (<<new_registrant.name,
-									" added as a new event registrant.%N">>)
+						" added as a new event registrant.%N">>)
 				end
 			end
 		end
@@ -110,11 +175,12 @@ feature -- Basic operations
 		local
 			r: MARKET_EVENT_REGISTRANT
 		do
-			if not market_event_registrants.empty then
+			if not working_event_registrants.empty then
 				print ("Select registrant to remove:%N")
 				r := registrant_selection
 				if r /= Void then
-					market_event_registrants.prune_all (r)
+					working_event_registrants.prune_all (r)
+					changed := true
 					print_list (<<"Event registrant ", r.name, " removed.%N">>)
 				end
 			else
@@ -126,7 +192,7 @@ feature -- Basic operations
 		local
 			r: MARKET_EVENT_REGISTRANT
 		do
-			if not market_event_registrants.empty then
+			if not working_event_registrants.empty then
 				print ("Select registrant to view:%N")
 				r := registrant_selection
 				if r /= Void then
@@ -141,7 +207,7 @@ feature -- Basic operations
 		local
 			r: MARKET_EVENT_REGISTRANT
 		do
-			if not market_event_registrants.empty then
+			if not working_event_registrants.empty then
 				print ("Select registrant to edit:%N")
 				r := registrant_selection
 				if r /= Void then
@@ -152,11 +218,8 @@ feature -- Basic operations
 			end
 		end
 
-feature {NONE} -- Implementation
-
 	new_user: EVENT_USER is
-			-- Create a user, input its properties from the real user,
-			-- and add it to the global market_event_registrants.
+			-- Create a user and input its properties from the real user.
 		local
 			s1, s2, hist_file_name: STRING
 			constants: expanded APPLICATION_CONSTANTS
@@ -193,8 +256,7 @@ feature {NONE} -- Implementation
 		end
 
 	new_log_file: EVENT_LOG_FILE is
-			-- Create a log file, input its properties from the user,
-			-- and add it to the global market_event_registrants.
+			-- Create a log file and input its properties from the user.
 		local
 			file_name, s2, history_file_name: STRING
 			constants: expanded APPLICATION_CONSTANTS
@@ -222,6 +284,10 @@ feature {NONE} -- Implementation
 			c: CHARACTER
 		do
 			from
+				if event_types.empty then
+					finished := true
+					print ("No event types available to add.%N")
+				end
 			until
 				finished
 			loop
@@ -229,8 +295,8 @@ feature {NONE} -- Implementation
 					i := 1
 					types := event_types
 					print_list (
-							<<"Select an event type for which to register ",
-							r.name, " (0 to end):%N">>)
+						<<"Select an event type for which to register ",
+						r.name, " (0 to end):%N">>)
 				until
 					i > types.count
 				loop
@@ -253,6 +319,7 @@ feature {NONE} -- Implementation
 				else
 					current_type := types @ last_integer
 					r.add_event_type (current_type)
+					changed := true
 					print_list (<<"Added type ", current_type.name, ".%N">>)
 				end
 			end
@@ -267,7 +334,7 @@ feature {NONE} -- Implementation
 		do
 			from
 				i := 1
-				regs := market_event_registrants
+				regs := working_event_registrants
 				regs.start
 			until
 				regs.exhausted
@@ -317,8 +384,12 @@ feature {NONE} -- Implementation
 				types.forth
 			end
 			from
-				print (eom)
-				read_integer
+				if types.empty then
+					abort := true
+				else
+					print (eom)
+					read_integer
+				end
 			until
 				last_integer > 0 and last_integer < i or abort
 			loop
@@ -338,13 +409,12 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	add_registrant (r: MARKET_EVENT_REGISTRANT) is
-			-- Add `r' to `market_event_registrants', register it with
-			-- the `dispatcher', and register it for termination cleanup.
+add_registrant (r: MARKET_EVENT_REGISTRANT) is
+-- Add `r' to `market_event_registrants', register it with
+-- the `dispatcher', and register it for termination cleanup.
 		do
-			market_event_registrants.extend (r)
-			dispatcher.register (r)
-			register_for_termination (r)
+working_event_registrants.extend (r)
+register_for_termination (r)
 		end
 
 	display_registrant (r: MARKET_EVENT_REGISTRANT) is
@@ -383,6 +453,7 @@ feature {NONE} -- Implementation
 					t := event_type_selection (r)
 					if t /= Void then
 						r.event_types.prune_all (t)
+						changed := true
 						print_list (<<"Event type ", t.name, " removed.%N">>)
 					end
 				when 'a', 'A' then
@@ -417,5 +488,55 @@ feature {NONE} -- Implementation
 feature {NONE} -- Implementation
 
 	help: HELP
+
+	working_event_registrants: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
+
+	pending_registrants: LINKED_LIST [MARKET_EVENT_REGISTRANT]
+			-- Newly created event registrants pending registration with
+			-- `dispatcher'
+
+	main_msg: STRING is
+		once
+			Result := concatenation (<<"Select action:",
+				"%N     Add registrants (a) Remove registrants (r) %
+				%View registrants (v) %
+				%%N     Edit registrants (e) Exit (x) Previous (-) %
+				%Help (h) ", eom>>)
+		end
+
+	main_changed_msg: STRING is
+		once
+			Result := concatenation (<<"Select action:",
+				"%N     Add registrants (a) Remove registrants (r) %
+				%View registrants (v) %
+				%%N     Edit registrants (e) Save changes (s) %
+				%Previous - abort changes (-) %N%
+				%     Help (h) ", eom>>)
+		end
+
+	initialize_working_list is
+		do
+			working_event_registrants := deep_clone (market_event_registrants)
+		end
+
+	reset_error is
+		do
+			error_occurred := false
+		end
+
+	end_save is
+		do
+			from
+				pending_registrants.start
+			until
+				pending_registrants.exhausted
+			loop
+				dispatcher.register (pending_registrants.item)
+				pending_registrants.forth
+			end
+			pending_registrants.wipe_out
+		ensure then
+			none_pending: pending_registrants.empty
+		end
 
 end -- class EVENT_REGISTRATION
