@@ -4,7 +4,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
-		%License to be determined"
+		%Released under the Eiffel Forum License; see file forum.txt"
 
 deferred class CLIENT_CONNECTION inherit
 
