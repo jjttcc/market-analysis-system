@@ -52,10 +52,10 @@ feature -- Initialization
 			dispatcher := disp
 			input_device := in_dev
 			output_device := out_dev
-			!!help.make
+			create help.make
 			-- !!!Satisfy invariant - editor is currently not used; it may
 			-- be used later - if not, might want to change the invariant or?
-			!!editor
+			create editor
 		ensure
 			set: dispatcher = disp
 			iodev_set: input_device = in_dev and output_device = out_dev
@@ -160,16 +160,16 @@ feature {NONE} -- Implementation
 			s1, s2, hist_file_name: STRING
 			constants: expanded APPLICATION_CONSTANTS
 		do
-			!!s1.make (0); !!s2.make (0)
+			create s1.make (0); create s2.make (0)
 			print_list (<<"Enter the user's full name: ", eom>>)
 			s1.append (input_string)
 			print_list (<<"Enter the user's email address: ", eom>>)
 			s2.append (input_string)
-			!!hist_file_name.make (s2.count + 8)
+			create hist_file_name.make (s2.count + 8)
 			hist_file_name.append (s2); hist_file_name.append (".history")
 			-- Ensure that the event history file name is unique:
 			hist_file_name.append (s1.hash_code.out)
-			!!Result.make (hist_file_name,
+			create Result.make (hist_file_name,
 				constants.event_history_field_separator,
 				constants.event_history_record_separator)
 			Result.set_name (s1)
@@ -198,13 +198,13 @@ feature {NONE} -- Implementation
 			file_name, s2, history_file_name: STRING
 			constants: expanded APPLICATION_CONSTANTS
 		do
-			!!file_name.make (0); !!s2.make (0)
+			create file_name.make (0); create s2.make (0)
 			print_list (<<"Enter the file name: ", eom>>)
 			file_name.append (input_string)
-			!!history_file_name.make (file_name.count + 8)
+			create history_file_name.make (file_name.count + 8)
 			history_file_name.append (file_name)
 			history_file_name.append (".history")
-			!!Result.make (file_name, history_file_name,
+			create Result.make (file_name, history_file_name,
 				constants.event_history_field_separator,
 				constants.event_history_record_separator)
 			print_list (<<"Log file was created with the following %
