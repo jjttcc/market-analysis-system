@@ -92,6 +92,13 @@ feature -- Access
 			Result := parameter_list
 		end
 
+	children: LIST [MARKET_FUNCTION] is
+		do
+			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
+			Result.extend (input1)
+			Result.extend (input2)
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is
@@ -101,6 +108,8 @@ feature -- Status report
 					processed_date_time >= input1.processed_date_time and then
 					processed_date_time >= input2.processed_date_time
 		end
+
+	has_children: BOOLEAN is true
 
 feature {NONE} -- Hook methods
 
@@ -243,5 +252,6 @@ invariant
 	no_missing_periods: processed implies not missing_periods (target1, target2)
 	inputs_trading_period_types_equal:
 		input1.trading_period_type.is_equal (input2.trading_period_type)
+	has_two_children: has_children and children.count = 2
 
 end -- class TWO_VARIABLE_FUNCTION

@@ -89,6 +89,12 @@ feature -- Access
 			Result := parameter_list
 		end
 
+	children: LIST [MARKET_FUNCTION] is
+		do
+			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
+			Result.extend (input)
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is
@@ -97,6 +103,8 @@ feature -- Status report
 						processed_date_time /= Void and then
 						processed_date_time >= input.processed_date_time
 		end
+
+	has_children: BOOLEAN is true
 
 feature {NONE}
 
@@ -179,5 +187,6 @@ invariant
 	processed_constraint: processed implies input.processed
 	input_not_void: input /= Void
 	input_target_relation: input.output = target
+	has_one_child: has_children and children.count = 1
 
 end -- class ONE_VARIABLE_FUNCTION

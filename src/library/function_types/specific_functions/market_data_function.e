@@ -50,6 +50,12 @@ feature -- Access
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 		end
 
+	children: LIST [MARKET_FUNCTION] is
+		do
+			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
+			Result.extend (input)
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is
@@ -58,6 +64,8 @@ feature -- Status report
 		end
 
 	operator_used: BOOLEAN is false
+
+	has_children: BOOLEAN is true
 
 feature -- Basic operations
 
@@ -94,5 +102,6 @@ invariant
 	always_processed: processed and input.processed
 	input_not_void: input /= Void
 	output_is_input: output = input
+	has_child: has_children and children.count = 1
 
 end -- class MARKET_DATA_FUNCTION
