@@ -147,6 +147,12 @@ feature -- Status report
 			valid_if_in_period_types: Result = period_types.has (t.name)
 		end
 
+	valid_indicator (f: MARKET_FUNCTION): BOOLEAN is
+			-- Is `f' a valid indicator for this tradable type?
+		do
+			Result := true
+		end
+
 feature -- Status setting
 
 	set_target_period_type (arg: TIME_PERIOD_TYPE) is
@@ -204,6 +210,7 @@ feature -- Element change
 			-- Add `f' to `indicators' and set its inner input value
 			-- to tuple_list (target_period_type.name).
 		require
+			valid: valid_indicator (f)
 			not_there: not indicators.has (f)
 			period_type_set: target_period_type /= Void
 			loaded: loaded
