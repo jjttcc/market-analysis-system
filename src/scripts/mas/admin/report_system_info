@@ -113,11 +113,24 @@ get_window_system_info() {
 	fi
 }
 
+get_linux_distribution_info() {
+	echo -e "\nPlease enter the name of the Linux distribution you are" \
+		"using, and,\nif you know, its version number.  Just hit <Enter> if" \
+		"you don't want\nto include this information."
+	read dist
+	if [ ! -z "$dist" ]; then
+		echo -e "Linux distribution: $dist\n" >>$reportfile
+	fi
+}
+
 trap "handle_signal" SIGINT SIGQUIT SIGABRT SIGBUS SIGILL SIGHUP SIGKILL
 
 if setup; then
 	echo "setup succeeded - exe file: $mas_exe"
-	$mas_exe -v >$reportfile
+	>$reportfile
+	$mas_exe -v >>$reportfile
+	echo "" >>$reportfile
+	get_linux_distribution_info
 	uname -a >>$reportfile
 	echo -e "\n/proc/cpuinfo:\n" >>$reportfile
 	cat /proc/cpuinfo >>$reportfile
