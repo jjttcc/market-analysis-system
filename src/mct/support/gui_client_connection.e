@@ -64,7 +64,6 @@ feature -- Basic operations
 			if last_communication_succeeded then
 				if server_response.is_integer then
 					session_key := server_response.to_integer
-print ("server gave us a session key of: " + session_key.out + ".%N")
 				else
 					last_communication_succeeded := False
 					error_report := "Invalid login response received %
@@ -178,7 +177,6 @@ feature {NONE} -- Implementation
 							if not socket.socket_ok then
 								error_report := last_socket_error
 							else
-								print ("The server returned '" + s + "'.%N")
 								process_response (s)
 							end
 						else
@@ -209,7 +207,6 @@ feature {NONE} -- Implementation
 		do
 			su.set_target (s)
 			l := su.tokens (Message_field_separator)
-print ("pr - server returned " + l.count.out + " fields:%N'" + s + "'%N")
 			process_error (l, s)
 			if last_communication_succeeded then
 				server_response := l @ 2
