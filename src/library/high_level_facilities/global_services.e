@@ -10,17 +10,31 @@ class
 
 feature -- Access
 
-	Hourly: INTEGER is 1
+	One_minute: INTEGER is 1
+			-- 1-minute index for `period_type_names'
+	Two_minute: INTEGER is 2
+			-- 2-minute index for `period_type_names'
+	Five_minute: INTEGER is 3
+			-- 5-minute index for `period_type_names'
+	Ten_minute: INTEGER is 4
+			-- 10-minute index for `period_type_names'
+	Fifteen_minute: INTEGER is 5
+			-- 15-minute index for `period_type_names'
+	Twenty_minute: INTEGER is 6
+			-- 20-minute index for `period_type_names'
+	Thirty_minute: INTEGER is 7
+			-- 30-minute index for `period_type_names'
+	Hourly: INTEGER is 8
 			-- Hourly index for `period_type_names'
-	Daily: INTEGER is 2
+	Daily: INTEGER is 9
 			-- Daily index for `period_type_names'
-	Weekly: INTEGER is 3
+	Weekly: INTEGER is 10
 			-- Weekly index for `period_type_names'
-	Monthly: INTEGER is 4
+	Monthly: INTEGER is 11
 			-- Monthly index for `period_type_names'
-	Quarterly: INTEGER is 5
+	Quarterly: INTEGER is 12
 			-- Quarterly index for `period_type_names'
-	Yearly: INTEGER is 6
+	Yearly: INTEGER is 13
 			-- Yearly index for `period_type_names'
 
 	period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
@@ -109,8 +123,73 @@ feature -- Access
 			type: TIME_PERIOD_TYPE
 			duration: DATE_TIME_DURATION
 			tbl: HASH_TABLE [TIME_PERIOD_TYPE, STRING]
+			i: INTEGER
 		once
+			i := 1
 			create tbl.make (3)
+			-- 1-minute
+			create duration.make (0, 0, 0, 0, 1, 0)
+			check duration.minute = 1 end
+			create type.make (duration)
+			check
+				not_in_table1: not tbl.has (type.name)
+			end
+			tbl.extend (type, type.name)
+			intraday_period_type_names.force (type.name, One_minute)
+			-- 2-minute
+			create duration.make (0, 0, 0, 0, 2, 0)
+			check duration.minute = 2 end
+			create type.make (duration)
+			check
+				not_in_table1: not tbl.has (type.name)
+			end
+			tbl.extend (type, type.name)
+			intraday_period_type_names.force (type.name, Two_minute)
+			-- 5-minute
+			create duration.make (0, 0, 0, 0, 5, 0)
+			check duration.minute = 5 end
+			create type.make (duration)
+			check
+				not_in_table1: not tbl.has (type.name)
+			end
+			tbl.extend (type, type.name)
+			intraday_period_type_names.force (type.name, Five_minute)
+			-- 10-minute
+			create duration.make (0, 0, 0, 0, 10, 0)
+			check duration.minute = 10 end
+			create type.make (duration)
+			check
+				not_in_table1: not tbl.has (type.name)
+			end
+			tbl.extend (type, type.name)
+			intraday_period_type_names.force (type.name, Ten_minute)
+			-- 15-minute
+			create duration.make (0, 0, 0, 0, 15, 0)
+			check duration.minute = 15 end
+			create type.make (duration)
+			check
+				not_in_table1: not tbl.has (type.name)
+			end
+			tbl.extend (type, type.name)
+			intraday_period_type_names.force (type.name, Fifteen_minute)
+			-- 20-minute
+			create duration.make (0, 0, 0, 0, 20, 0)
+			check duration.minute = 20 end
+			create type.make (duration)
+			check
+				not_in_table1: not tbl.has (type.name)
+			end
+			tbl.extend (type, type.name)
+			intraday_period_type_names.force (type.name, Twenty_minute)
+			-- 30-minute
+			create duration.make (0, 0, 0, 0, 30, 0)
+			check duration.minute = 30 end
+			create type.make (duration)
+			check
+				not_in_table1: not tbl.has (type.name)
+			end
+			tbl.extend (type, type.name)
+			intraday_period_type_names.force (type.name, Thirty_minute)
 			-- hourly
 			create duration.make (0, 0, 0, 1, 0, 0)
 			check duration.hour = 1 end
@@ -119,6 +198,7 @@ feature -- Access
 				not_in_table1: not tbl.has (type.name)
 			end
 			tbl.extend (type, type.name)
+			intraday_period_type_names.force (type.name, Hourly)
 			Result := tbl
 		end
 
@@ -142,19 +222,29 @@ feature -- Access
 		end
 
 	period_type_names: ARRAY [STRING] is
-			-- The name of each element of `period_types'
+			-- The name of each element of `period_types' in ascending
+			-- order by duration
 		local
 			tpt: TIME_PERIOD_TYPE
+			duration: DATE_TIME_DURATION
+			t: HASH_TABLE [TIME_PERIOD_TYPE, STRING]
 		once
+			-- Force intraday_period_type_names to be created.
+			t := intraday_period_types
 			create Result.make (1, 1)
-			period_types.start
-			tpt := period_types.item_for_iteration
-			Result.force (tpt.Hourly, Hourly)
+			create duration.make (0, 0, 0, 0, 1, 0)
+			create tpt.make (duration)
+			Result := clone (intraday_period_type_names)
 			Result.force (tpt.Daily, Daily)
 			Result.force (tpt.Weekly, Weekly)
 			Result.force (tpt.Monthly, Monthly)
 			Result.force (tpt.Quarterly, Quarterly)
 			Result.force (tpt.Yearly, Yearly)
+		end
+
+	intraday_period_type_names: ARRAY [STRING] is
+		once
+			create Result.make (1, 1)
 		end
 
 feature -- Basic operations
