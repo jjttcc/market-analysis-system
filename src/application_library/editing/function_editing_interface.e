@@ -310,6 +310,11 @@ feature {EDITING_INTERFACE}
 					indicator := l @ selection
 					check indicator /= Void end
 					show_message (indicator.node_names)
+					if
+						string_selection (
+							"Hit <Enter> to continue ...") = "dummy"
+					then
+					end
 				end
 			end
 		end
