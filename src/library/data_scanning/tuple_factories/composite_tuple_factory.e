@@ -26,12 +26,17 @@ feature
 
 feature
 
-	execute (tuplelist: ARRAYED_LIST [MARKET_TUPLE]) is
+	execute (tuplelist: LIST [BASIC_MARKET_TUPLE]) is
 		local
 			h, l, o, c: REAL
-			tuples: ARRAYED_LIST [BASIC_MARKET_TUPLE]
 		do
 			product := make_tuple
+			check
+				tuplelist.first.date_time /= Void and
+				tuplelist.last.date_time /= Void
+			end
+			product.set_first (tuplelist.first)
+			product.set_last (tuplelist.last)
 			do_main_work (tuplelist)
 			do_auxiliary_work (tuplelist)
 		ensure then
@@ -43,20 +48,17 @@ feature
 
 feature {NONE}
 
-	make_tuple: BASIC_MARKET_TUPLE is
+	make_tuple: COMPOSITE_TUPLE is
 			-- Descendants can redefine to make objects that conform
-			-- to BASIC_MARKET_TUPLE.
+			-- to COMPOSITE_TUPLE.
 		do
 			!!Result.make
 		end
 
-	do_main_work (tuplelist: ARRAYED_LIST [MARKET_TUPLE]) is
+	do_main_work (tuples: LIST [BASIC_MARKET_TUPLE]) is
 		local
 			h, l, o, c: REAL
-			tuples: ARRAYED_LIST [BASIC_MARKET_TUPLE]
 		do
-			tuples ?= tuplelist
-			check tuples /= Void end
 			o := tuples.first.open.value
 			c := tuples.last.close.value
 			high_finder.set_input (tuples)
@@ -85,7 +87,7 @@ feature {NONE}
 			-- product.close = close from last element of tuplelist
 		end
 
-	do_auxiliary_work (tuplelist: ARRAYED_LIST [MARKET_TUPLE]) is
+	do_auxiliary_work (tuplelist: LIST [MARKET_TUPLE]) is
 			-- Hook method to be redefined by descendants
 		require
 			product_not_void: product /= Void
@@ -96,7 +98,7 @@ feature {NONE}
 
 feature
 
-	product: BASIC_MARKET_TUPLE
+	product: COMPOSITE_TUPLE
 
 feature {NONE}
 

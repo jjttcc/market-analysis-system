@@ -29,17 +29,15 @@ feature
 
 feature {NONE}
 
-	make_tuple: VOLUME_TUPLE is
+	make_tuple: COMPOSITE_VOLUME_TUPLE is
 		do
 			!!Result.make
 		end
 
-	do_auxiliary_work (tuplelist: ARRAYED_LIST [MARKET_TUPLE]) is
+	do_auxiliary_work (tuples: LIST [MARKET_TUPLE]) is
+			-- Set product's volume to sum of all volumes in tuplelist.
 		local
-			tuples: ARRAYED_LIST [BASIC_MARKET_TUPLE]
 		do
-			tuples ?= tuplelist
-			check tuples /= Void end
 			volume_adder.set_input (tuples)
 			volume_adder.set_n (tuples.count)
 			tuples.start
@@ -49,12 +47,14 @@ feature {NONE}
 				volume_adder.n_set
 			end
 			volume_adder.execute (Void)
-			product.set_volume ((volume_adder.value / tuples.count).rounded)
+			product.set_volume (volume_adder.value.rounded)
+		ensure then
+			-- product.volume = sum_of_volume_fields_in (tuples)
 		end
 
 feature
 
-	product: VOLUME_TUPLE
+	product: COMPOSITE_VOLUME_TUPLE
 
 feature {NONE}
 
