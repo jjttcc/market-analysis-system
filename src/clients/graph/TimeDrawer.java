@@ -151,7 +151,7 @@ public class TimeDrawer extends TemporalDrawer {
 		x = x_values[p.right()];
 		hour_x = x + Hour_x_offset;
 		if (x > Too_far_left) {
-			g.setColor(Color.black);
+			g.setColor(conf.reference_line_color());
 			g.drawLine(x + Line_offset, bounds.y,
 				x + Line_offset, bounds.y + bounds.height);
 		}
@@ -174,7 +174,7 @@ public class TimeDrawer extends TemporalDrawer {
 		x = x_values[p.right()];
 		day_x = x + Day_x_offset;
 		if (x > Too_far_left) {
-			g.setColor(Color.black);
+			g.setColor(conf.reference_line_color());
 			g.drawLine(x + Line_offset, bounds.y,
 				x + Line_offset, bounds.y + bounds.height);
 		}

@@ -198,10 +198,11 @@ abstract public class BasicDrawer extends Drawer {
 			Vector hline_data) {
 		if (hline_data == null) return;
 
+		Configuration config = Configuration.instance();
 		int y1, y2;
 		final int vert_margin = 2;
 		double d1, d2;
-		g.setColor(Color.black);
+		g.setColor(config.reference_line_color());
 		boolean lower = is_lower_indicator();
 		Rectangle btm_bounds = bottom_reference_bounds(bounds);
 		for (int i = 0; i < hline_data.size(); ++i) {
@@ -222,9 +223,10 @@ abstract public class BasicDrawer extends Drawer {
 			Vector vline_data) {
 		if (vline_data == null) return;
 
+		Configuration config = Configuration.instance();
 		int x1, x2;
 		double d1, d2;
-		g.setColor(Color.black);
+		g.setColor(config.reference_line_color());
 		for (int i = 0; i < vline_data.size(); ++i) {
 			d1 = ((DoublePair) vline_data.elementAt(i)).left();
 			d2 = ((DoublePair) vline_data.elementAt(i)).right();
@@ -320,7 +322,7 @@ abstract public class BasicDrawer extends Drawer {
 			if (adj_ys[i] > ref_bounds.y + margin &&
 					adj_ys[i] < ref_bounds.y + ref_bounds.height - margin) {
 				if (lines) {
-					g.setColor(Color.black);
+					g.setColor(config.reference_line_color());
 					g.drawLine(main_bounds.x - X_left_line_adjust, adj_ys[i],
 						main_bounds.x + main_bounds.width, adj_ys[i]);
 				}

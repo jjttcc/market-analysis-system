@@ -185,7 +185,7 @@ public class DateDrawer extends TemporalDrawer {
 		month = p.left();
 		// Don't draw the line if it's close to the left border.
 		if (x > Too_far_left) {
-			g.setColor(Color.black);
+			g.setColor(conf.reference_line_color());
 			g.drawLine(x + Line_offset, bounds.y,
 				x + Line_offset, bounds.y + bounds.height);
 		}
@@ -209,7 +209,7 @@ public class DateDrawer extends TemporalDrawer {
 		x = _x_values[p.right()];
 		year_x = x + Year_x_offset;
 		if (line && x > Too_far_left) {
-			g.setColor(Color.black);
+			g.setColor(conf.reference_line_color());
 			g.drawLine(x + Line_offset, bounds.y,
 				x + Line_offset, bounds.y + bounds.height);
 		}
