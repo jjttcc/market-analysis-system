@@ -20,10 +20,11 @@ import support.FileReaderUtilities;
 // GUI terminal that provides general program control facilities
 public class ProgramControlTerminal extends PCT_Tools {
 
-	public ProgramControlTerminal(String cfg_filename, String prog_name) 
-			throws Exception {
+	public ProgramControlTerminal(String cfg_filename, String prog_name,
+			ApplicationContext app_context) throws Exception {
 		config_file_name = cfg_filename;
 		program_name_setting = prog_name;
+		_application_context = app_context;
 System.out.println("PCT A");
 		FileReaderUtilities cfgfile = config_file();
 		Vector lines = lines_from_file(cfgfile);
@@ -38,6 +39,14 @@ System.out.println("PCT B");
 			window.add_button((PCT_Component) subcomponents.elementAt(i));
 		}
 		if (quitbutton_setting) window.add_quit_button();
+	}
+
+	public ApplicationContext application_context() {
+		return _application_context;
+	}
+
+	public void execute() {
+		window.execute();
 	}
 
 	// All lines from `f', one element per line
@@ -60,10 +69,6 @@ System.out.println("PCT B");
 					subcomponents.elementAt(i)).prepend_cmd_args(args);
 			}
 		}
-	}
-
-	public void main_loop() {
-		window.mainloop();
 	}
 
 	// Parse and process `lines' using separator `sep'.
@@ -150,6 +155,8 @@ System.out.println("PCT B");
 
 	PCT_Window window;
 	Vector subcomponents;
+	ApplicationContext _application_context;
+
 	public String terminal_name_setting;
 	public boolean quitbutton_setting;
 	public String program_name_setting;

@@ -3,14 +3,14 @@ package pct;
 import java.util.Vector;
 import java.lang.reflect.*;
 import pct.ProgramControlTerminal;
-//import org.apache.regexp.*;
-import plugins.*;
+import application.*;
 
 // ProgramControlTerminal Component
 class PCT_Component {
 
-	PCT_Component(ProgramControlTerminal the_owner) {
+	public PCT_Component(ProgramControlTerminal the_owner) {
 		owner = the_owner;
+		_application_context = owner.application_context();
 		cmd_args = null;
 //!! If not used, remove: terminal_name = "";
 		prompt_setting = "";
@@ -20,6 +20,10 @@ class PCT_Component {
 		config_file_name_setting = "";
 		import_module_setting = new Vector();
 		exit_after_startup_cmd_setting = false;
+	}
+
+	public ApplicationContext application_context() {
+		return _application_context;
 	}
 
 	public String prompt() { return prompt_setting; }
@@ -128,18 +132,24 @@ System.out.println("config_file_name != ''");
 System.out.println("A1");
 			ProgramControlTerminal pct =
 				new ProgramControlTerminal(config_file_name_setting,
-					owner.program_name);
+					owner.program_name, _application_context);
 System.out.println("A2 - pct: " + pct);
 			pct.set_args(exe_result);
-			pct.main_loop();
+			pct.execute();
 System.out.println("A3");
 		}
 	}
 
 	protected void create_startup_command(String name) {
+		final String app_pkg = "application.";
+		String classname = app_pkg + name;
 		try {
-			Class the_class = Class.forName(name);
-			startup_command = the_class.newInstance();
+			Class the_class = Class.forName(classname);
+			Class[] constructor_args = new Class[] {ApplicationContext.class};
+			Constructor constructor =
+				the_class.getConstructor(constructor_args);
+			startup_command =
+				constructor.newInstance(new Object[] {_application_context});
 			startup_method = the_class.getMethod(
 				startup_cmd_method_setting, null);
 System.out.println("made the method: " + startup_method);
@@ -151,6 +161,9 @@ System.err.println("2");
 			System.err.println(e);
 		} catch (ClassNotFoundException e) {
 System.err.println("3");
+			System.err.println(e);
+		} catch (InvocationTargetException e) {
+System.err.println("3.5");
 			System.err.println(e);
 		} catch (NoSuchMethodException e) {
 System.err.println("4");
@@ -165,6 +178,7 @@ System.err.println("4");
 		// Name of method to call on `startup_command'
 		// for the command result, if it exists
 	static final String result_method = "last_result";
+	ApplicationContext _application_context;
 //!! If not used, remove:	String terminal_name;
 
 	// "settings" - Must be public for reflection, but regard as private

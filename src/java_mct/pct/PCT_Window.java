@@ -48,7 +48,7 @@ button + ", " + button.component);
 		}});
 	}
 
-	public void mainloop() {
+	public void execute() {
 		pack();
 		show();
 	}

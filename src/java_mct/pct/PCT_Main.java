@@ -18,19 +18,52 @@
 // for as the congifuration file.
 
 import pct.ProgramControlTerminal;
+import pct.ApplicationContext;
+import pct.ApplicationInitialization;
+import application.*;
 
 class PCT_Main {
 
 	public static void main(String[] args) {
 		try {
+			ApplicationContext app_context = application_context();
+System.out.println("App context is: " + app_context);
 			ProgramControlTerminal pct =
-				new ProgramControlTerminal(null, null);
-			System.err.println("PCT_Main - calling pct.main_loop.");
-			pct.main_loop();
+				new ProgramControlTerminal(null, null, app_context);
+			System.err.println("PCT_Main - calling pct.execute.");
+			pct.execute();
 		}
 		catch (Exception e) {
 			abort(e.toString());
 		}
+	}
+
+	public final static String application_init_class_name =
+		"application.SpecializedApplicationInitialization";
+
+	static ApplicationContext application_context() {
+		Class app_init_class = null;
+		ApplicationInitialization ai = null;
+		ApplicationContext result;
+
+		try {
+System.out.println("trying to get the specialized init class");
+			app_init_class = Class.forName(application_init_class_name);
+System.out.println("got the specialized init class: " + app_init_class);
+			Object o = app_init_class.newInstance();
+System.out.println("got the specialized init class instance: " + o);
+			ai = (ApplicationInitialization) o;
+System.out.println("type-converted the specialized init class instance: " + ai);
+		} catch (Exception e) {
+System.err.println("Didn't get the specialized init class instance: " + e);
+		}
+		if (ai == null) {
+			// User-specialized application class was not specified or
+			// was specified incorrectly.
+			ai = new ApplicationInitialization();
+		}
+		result = ai.context();
+		return result;
 	}
 
 	private static void abort(String msg) {
