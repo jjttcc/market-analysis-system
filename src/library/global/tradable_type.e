@@ -11,6 +11,9 @@ class TRADABLE_TYPE inherit
 	ENUMERATED [INTEGER]
 
 	TRADABLE_TYPE_VALUES
+		undefine
+			out
+		end
 
 create
 
@@ -34,13 +37,6 @@ feature {NONE} -- Initialization
 			make (derivative)
 		end
 
-feature -- Access
-
-	value_set: LINKED_SET [INTEGER] is
-		once
-			Result := value_set_implementation
-		end
-
 feature {NONE} -- Implementation
 
 	value_name_map: HASH_TABLE [STRING, INTEGER] is
@@ -50,9 +46,9 @@ feature {NONE} -- Implementation
 			Result.put ("Derivative", derivative)
 		end
 
-	allowable_values: ARRAY [INTEGER] is
+	initial_allowable_values: ARRAY [INTEGER] is
 			-- Allowable values
-		once
+		do
 			Result := <<stock, derivative>>
 		end
 
