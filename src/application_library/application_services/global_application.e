@@ -109,9 +109,7 @@ feature -- Access
 	function_library: STORABLE_LIST [MARKET_FUNCTION] is
 			-- All defined market functions
 		once
-print ("function_library called")
 			Result := retrieved_function_library
-print ("%N")
 		ensure
 			not_void: Result /= Void
 		end
@@ -119,9 +117,7 @@ print ("%N")
 	market_event_generation_library: STORABLE_LIST [MARKET_EVENT_GENERATOR] is
 			-- All defined event generators
 		once
-print ("meg_library called")
 			Result := retrieved_market_event_generation_library
-print ("%N")
 		ensure
 			not_void: Result /= Void
 		end
@@ -129,9 +125,7 @@ print ("%N")
 	market_event_registrants: STORABLE_LIST [MARKET_EVENT_REGISTRANT] is
 			-- All defined event registrants
 		once
-print ("mer called")
 			Result := retrieved_market_event_registrants
-print ("%N")
 		ensure
 			not_void: Result /= Void
 		end
@@ -236,7 +230,6 @@ feature -- Basic operations
 			-- Force function library to be re-retrieved by deep copying
 			-- `retrieved_function_library' into it.
 		do
-print ("force fl ret called.%N")
 			function_library.deep_copy (retrieved_function_library)
 		end
 
@@ -244,7 +237,6 @@ print ("force fl ret called.%N")
 			-- Force market event generator library to be re-retrieved by deep
 			-- copying `retrieved_market_event_generation_library' into it.
 		do
-print ("force megl ret called.%N")
 			market_event_generation_library.deep_copy (
 				retrieved_market_event_generation_library)
 		end
@@ -253,7 +245,6 @@ print ("force megl ret called.%N")
 			-- Force event registrants to be re-retrieved by deep copying
 			-- `retrieved_market_event_registrants' into it.
 		do
-print ("force er ret called.%N")
 			market_event_registrants.deep_copy (
 				retrieved_market_event_registrants)
 		end
@@ -361,7 +352,6 @@ feature {NONE} -- Implementation
 			app_env: expanded APP_ENVIRONMENT
 			full_path_name: STRING
 		do
-print ("retrieve mer called.%N")
 			full_path_name := app_env.file_name_with_app_directory (
 				registrants_file_name)
 			if retrieval_failed then
