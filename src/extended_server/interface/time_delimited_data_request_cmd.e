@@ -22,6 +22,7 @@ deferred class TIME_DELIMITED_DATA_REQUEST_CMD inherit
 
 feature {NONE} -- Hook routine implementations
 
+--!!!!:
 	parse_remainder (fields: LIST [STRING]) is
 		local
 			split_result: LIST [STRING]
@@ -41,13 +42,24 @@ feature {NONE} -- Hook routine implementations
 						end_date_time_string := split_result @ 2
 					end
 				end
-				if start_date_time_string /= Void then
+				if
+					start_date_time_string /= Void and
+					not start_date_time_string.is_empty
+				then
 					start_date_time := parsed_date_time (start_date_time_string)
+				else
+if start_date_time_string = Void then print ("PR - sdts is Void" + "%N") end
+if start_date_time_string.is_empty then print ("PR - sdts is EMPTY" + "%N") end
+					create start_date_time.make_by_date (
+						session.start_dates @ trading_period_type.name)
 				end
 				if end_date_time_string /= Void then
 					end_date_time := parsed_date_time (end_date_time_string)
 				end
 			end
+if start_date_time /= Void then
+print ("PR - SDT: " + start_date_time.out + "%N")
+end
 			if not parse_error then
 				parse_error := start_date_time = Void
 			end
