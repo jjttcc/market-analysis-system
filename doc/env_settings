@@ -1,4 +1,4 @@
-Environment variable settings for MAS
+Environment variables and configuration files for MAS
 
 The following environment variables should be set to run the market analysis
 server:
@@ -24,13 +24,24 @@ files, such as user-defined indicators and the stock split file.  If
 this variable is not set, MAS will look in the current directory for this
 information.
 
+MAS uses the following configuration files:
+
+generators_persist - used to store market analyzers
+indicators_persist - used to store technical indicators
+registrants_persist - used to store registrants of market analysis events
+
 IMPORTANT:  To use the current configuration of indicators and rules for
-event generation, you will need to copy the following files from the MAS
-lib directory (../lib) to $MAS_DIRECTORY:
-
-generators_persist
-indicators_persist
-
+event generation, you will need to copy the files generators_persist and
+indicators_persist from the MAS lib directory (../lib) to $MAS_DIRECTORY:
 MAS will run correctly without these files, but you will be missing some
 functionality - technical indicators and event generation rules - if you
 run MAS without these files.
+
+MAS also creates a history file for each market event registrant created
+by the user.  This file will be named according to a convention that
+begins with the email address of the registrant, followed by ".history",
+followed by a number.  For example, for an email address of "jude" a history
+file might be named: "jude.history1060754277".  These files are used to
+store the history of events previously generated to prevent sending of
+duplicate signals that were generated on a previous run.  You might want
+to back up these files regularly in case they get inadvertantly deleted.
