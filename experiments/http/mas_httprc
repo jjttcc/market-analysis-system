@@ -3,8 +3,8 @@
 # Specification for the start and end dates for the data to be retrieved
 # "now" means, of course, the current date; if an actual date is used,
 # it must be of the form: yyyymmdd.
-start_date	now - 1 year
-end_date	now
+eod_start_date	now - 1 year
+eod_end_date	now
 
 # The host component of the http URL used to retrieve market data
 host	chart.yahoo.com
@@ -32,13 +32,13 @@ post_process_command	yahoo
 # This needs to be set carefully: Too early and a lot of time will be wasted
 # trying to retrieve data that doesn't exist yet; too late and your data
 # will not be as up-to-date as it could be.  Format: hh:mm (24-hour clock)
-eod_turnover_time	18:00
+eod_turnover_time	17:00
 
 # These specifications prevent unecessary retrieval of data on a weekend
 # if the current time is later than eod_turnover_time.  If data does need
 # to be retrieved, remove or comment out the appropriate specification;
 # for example, if a tradable is traded on Saturday and end-of-day data for
-# it is available, comment out the "ignore_weekday	saturday"
+# it is available, comment out the "ignore_day_of_week	saturday"
 # specification.
-ignore_weekday	saturday
-ignore_weekday	sunday
+#ignore_day_of_week	saturday
+ignore_day_of_week	sunday
