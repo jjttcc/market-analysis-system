@@ -4,7 +4,7 @@
 
 [Setup]
 OutputDir=E:\inno
-SourceDir=E:\development\finance
+SourceDir=D:\cygwin\home\jtc\development\inno_source
 AppName=Market Analysis System
 AppVerName=Market Analysis System 1.6.7
 AppPublisher=Jim Cochrane
