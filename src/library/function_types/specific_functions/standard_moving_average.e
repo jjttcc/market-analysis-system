@@ -73,13 +73,14 @@ feature {NONE} -- Basic operations
 				check
 					target.index - 1 = n
 				end
-				!!t
-				t.set_value (sum.value / n)
 				-- The first trading period of the output is the nth trading
 				-- period of the input (target).
-				t.set_date_time (target.i_th (n).date_time)
+				!!t.make (target.i_th (n).date_time, sum.value / n)
 				last_sum := sum.value
-				-- sum.value = sum of first target.index-1 elements of target.
+				check
+					target_index_correct: target.index = n + 1
+				end
+				-- sum.value = sum of first n elements of target.
 				output.extend (t)
 				continue_until
 			end
@@ -120,14 +121,12 @@ feature {NONE}
 			t: SIMPLE_TUPLE
 			expired_value, latest_value: REAL
 		do
-			!!t
 			operator.execute (target.i_th (target.index - n))
 			expired_value := operator.value
 			operator.execute (target.item)
 			latest_value := operator.value
 			last_sum := last_sum - expired_value + latest_value
-			t.set_value (last_sum / n)
-			t.set_date_time (target.item.date_time)
+			!!t.make (target.item.date_time, last_sum / n)
 			output.extend (t)
 		ensure then
 			one_more_in_output: output.count = old output.count + 1

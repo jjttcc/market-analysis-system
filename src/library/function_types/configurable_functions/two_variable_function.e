@@ -143,13 +143,11 @@ feature {NONE} -- Hook methods
 			t: SIMPLE_TUPLE
 		do
 			operator.execute (Void)
-			!!t
-			t.set_value (operator.value)
 			check
-				target1.item.date_time.is_equal (
-					target2.item.date_time)
+				t1_t2_dates_equal: target1.item.date_time.is_equal (
+									target2.item.date_time)
 			end
-			t.set_date_time (target1.item.date_time)
+			!!t.make (target1.item.date_time, operator.value)
 			output.extend (t)
 		ensure then
 			output.count = old (output.count) + 1

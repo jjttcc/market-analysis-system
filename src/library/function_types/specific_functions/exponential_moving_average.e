@@ -77,12 +77,10 @@ feature {NONE}
 			latest_value: REAL
 		do
 			exp.execute (Void)
-			!!t
 			operator.execute (target.item)
 			latest_value := operator.value
-			t.set_value (latest_value * exp.value +
-							output.last.value * (1 - exp.value))
-			t.set_date_time (target.item.date_time)
+			!!t.make (target.item.date_time, latest_value * exp.value +
+						output.last.value * (1 - exp.value))
 			output.extend (t)
 		ensure then
 			-- output.last.value = P[curr] * exp + EMA[curr-1] * (1 - exp)
