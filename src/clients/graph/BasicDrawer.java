@@ -92,13 +92,9 @@ abstract public class BasicDrawer extends Drawer {
 			ymin = yaxis.minimum();
 		}
 
-//System.out.println("ymin, ymax, eps, Math.abs(ymax - ymin), ... < eps:\n" +
-//ymin + ", " + ymax + ", " + min_max_epsilon + ", " +
-//Math.abs(ymax - ymin) + ", " + (Math.abs(ymax - ymin) < min_max_epsilon));
 		if (Math.abs(ymax - ymin) < min_max_epsilon) {
 			ymin -= min_border_boundary;
 			ymax += min_border_boundary;
-//System.out.println("epsilon triggered - ymin, ymax: " + ymin + ", " + ymax);
 		}
 		xrange = xmax - xmin;
 		yrange = ymax - ymin;
@@ -114,14 +110,10 @@ abstract public class BasicDrawer extends Drawer {
 		draw_horizontal_lines(g, main_bounds, hlines);
 		draw_vertical_lines(g, main_bounds, vlines);
 		if (reference_values_needed()) {
-//System.out.println("Calling draw ref values ...");
 			draw_reference_values(g, main_bounds, right_bounds);
-//System.out.println("Back from draw ref values");
 		}
 		if (market_drawer() != null) {
-//System.out.println("Calling draw tuples ...");
 			draw_tuples(g, main_bounds);
-//System.out.println("Back from draw tuples");
 		}
 	}
 
@@ -230,6 +222,7 @@ abstract public class BasicDrawer extends Drawer {
 			Rectangle ref_bounds) {
 		double start;
 		double step = 0;
+		final int small_step_multiplier = 25;
 		double y;
 		Vector y_values = new Vector();	// Double
 		String[] y_strings;
@@ -245,12 +238,9 @@ abstract public class BasicDrawer extends Drawer {
 		g.setFont(new Font("Monospaced", Font.ITALIC, 12));
 
 		for (int i = start_ref_index; i < refvalue_specs.length; ++i) {
-//System.out.println("draw ref val loop - i: " + i);
 			if (yrange >= refvalue_specs[i].minimum() &&
 					yrange < refvalue_specs[i].maximum()) {
-//System.out.println("found RefSpec: " + refvalue_specs[i]);
 				step = refvalue_specs[i].step_value();
-//System.out.println("yrange, step: " + yrange + ", " + step);
 				break;
 			}
 		}
@@ -258,15 +248,15 @@ abstract public class BasicDrawer extends Drawer {
 		if (step > 0.05) {
 			start = (long) (Math.floor(ymin / step) * step + step);
 		} else {
-			start = ymin - step * 25;
+			start = ymin - step * small_step_multiplier;
+System.out.println("start before manip: " + start);
+			start = Math.floor(start * 1 / step) * step;
+System.out.println("start after manip: " + start);
 		}
-//int i = 0, limit = 50;
 System.out.println("start, step, ymax: " + start + ", " + step + ", " + ymax);
 		for (y = start; y < ymax; y += step) {
-System.out.println("adding " + y);
+//System.out.println("adding " + y);
 			y_values.addElement(new Double(y));
-//++i;
-//if (i > limit) break;
 		}
 		y_strings = Utilities.formatted_doubles(y_values, ! is_lower());
 		if (y_values.size() > 0) {
