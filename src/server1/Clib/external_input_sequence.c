@@ -34,15 +34,14 @@ static char fs_char_table_contents[256];
 
 int init_error = 0;
 
-struct input_sequence_handle* initialize_external_input_routines(char* dir) {
+struct input_sequence_handle* initialize_external_input_routines(char* paths) {
 	struct input_sequence_handle* result;
-	assert(dir != 0);
-printf("init external ...: dir, dir length: %s, %d\n", dir, strlen(dir));
-printf("dir[0..3]: %d, %d, %d, %d\n", dir[0], dir[1], dir[2], dir[3]);
+	assert(paths != 0);
+printf("init external ...: paths: '%s'\n", paths);
 	init_error = 0;
 	result = malloc(sizeof(struct input_sequence_handle));
 	if (result != 0) {
-		result->plug_in_handle = new_input_sequence_plug_in_handle(dir);
+		result->plug_in_handle = new_input_sequence_plug_in_handle(paths);
 		result->buffer = 0;
 		result->symbols = 0;
 		result->buffersize = 0;
@@ -187,13 +186,11 @@ void initialize_fs_char_table() {
 
 void start_implementation(struct input_sequence_handle* handle,
 		char* symbol, int is_intraday) {
-	handle->error_occurred = 1;
+	handle->error_occurred = 0;
 	if (fs_char_table == 0) {
 		initialize_fs_char_table();
 	}
 	free(handle->buffer);
-	/**!!!Probably need to check for input_sequence_plug_in being 0 and,
-	 * if so, set error status. */
 	handle->buffer = tradable_data(handle->plug_in_handle, symbol,
 		is_intraday, &handle->buffersize);
 	if (handle->buffer == 0) {
