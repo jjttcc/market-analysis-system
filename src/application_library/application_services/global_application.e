@@ -107,8 +107,7 @@ feature -- Access
 		end
 
 	function_library: STORABLE_LIST [MARKET_FUNCTION] is
-			-- All defined market functions - Force re-retrieval if
-			-- `force_retrieval' is true.
+			-- All defined market functions
 		do
 			if cached_function_library = Void then
 print ("function_library called with cached fl void.%N")
@@ -122,37 +121,34 @@ print ("function_library called with cached fl void.%N")
 
 	market_event_generation_library: STORABLE_LIST [MARKET_EVENT_GENERATOR] is
 			-- All defined event generators
+		do
+print ("meg_library called.%N")
+			if cached_meg_library = Void then
+				cached_meg_library := retrieved_market_event_generation_library
+			end
+			Result := cached_meg_library
+		ensure
+			cached: Result = cached_meg_library
+			not_void: Result /= Void
+		end
+
+	market_event_registrants: STORABLE_LIST [MARKET_EVENT_REGISTRANT] is
+			-- All defined event registrants
 		local
 			storable: STORABLE
-			meg_list: STORABLE_LIST [MARKET_EVENT_GENERATOR]
+			reg_list: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
 			retrieval_failed: BOOLEAN
 			app_env: expanded APP_ENVIRONMENT
 			full_path_name: STRING
-		once
-print ("meg_library called.%N")
-			full_path_name := app_env.file_name_with_app_directory (
-				generators_file_name)
-			if retrieval_failed then
-				if exception = Retrieve_exception then
-					log_errors (<<"Retrieval of market analysis library%
-								% file ", full_path_name, " failed%N">>)
-				else
-					log_errors (<<"Error occurred while retrieving market %
-							%analysis library: ", meaning(exception), "%N">>)
-				end
-				die (-1)
-			else
-				create storable
-				meg_list ?= storable.retrieve_by_name (full_path_name)
-				if meg_list = Void then
-					create {STORABLE_EVENT_GENERATOR_LIST} meg_list.make (
-						generators_file_name)
-				end
-				Result := meg_list
+		do
+print ("mer called.%N")
+			if cached_event_registrants = Void then
+				cached_event_registrants := retrieved_market_event_registrants
 			end
-		rescue
-			retrieval_failed := true
-			retry
+			Result := cached_event_registrants
+		ensure
+			cached: Result = cached_event_registrants
+			not_void: Result /= Void
 		end
 
 	active_event_generators: LIST [MARKET_EVENT_GENERATOR] is
@@ -190,59 +186,6 @@ print ("meg_library called.%N")
 				end
 				registrants.forth
 			end
-		end
-
-	market_event_registrants: STORABLE_LIST [MARKET_EVENT_REGISTRANT] is
-			-- All defined event registrants
-		local
-			storable: STORABLE
-			reg_list: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
-			retrieval_failed: BOOLEAN
-			app_env: expanded APP_ENVIRONMENT
-			full_path_name: STRING
-		once
-print ("mer_library called.%N")
-			full_path_name := app_env.file_name_with_app_directory (
-				registrants_file_name)
-			if retrieval_failed then
-				if exception = Retrieve_exception then
-					log_errors (<<"Retrieval of event registrants file ",
-								full_path_name, " failed%N">>)
-				else
-					log_errors (<<"Error occurred while retrieving event %
-								%registrants: ", meaning(exception), "%N">>)
-				end
-				die (-1)
-			else
-				create storable
-				reg_list ?= storable.retrieve_by_name (full_path_name)
-				if reg_list = Void then
-					create reg_list.make (registrants_file_name)
-				end
-				Result := reg_list
-				-- The registrants themselves also need to be registered for
-				-- termination/cleanup when the process ends; and they need
-				-- to load their (event) histories, which are stored in
-				-- a separate file.
-				from
-					Result.start
-				until
-					Result.exhausted
-				loop
-					Result.item.load_history
-					register_for_termination (Result.item)
-					Result.forth
-				end
-				-- Ensure that the list will be saved when the process ends.
-				-- This is done after registering the contents of the list
-				-- because the MERs need to be cleaned up before being saved
-				-- as elements of reg_list (since cleanup is done for each
-				-- termination registrant in the order it was registered).
---register_for_termination (reg_list)
-			end
-		rescue
-			retrieval_failed := true
-			retry
 		end
 
 	meg_names (meg_lib: LIST [MARKET_EVENT_GENERATOR]):
@@ -300,6 +243,58 @@ print ("mer_library called.%N")
 			end
 	end
 
+feature -- Basic operations
+
+	force_function_library_retrieval is
+			-- Force function library to be re-retrieved.
+		local
+			l: STORABLE_LIST [MARKET_FUNCTION]
+		do
+			cached_function_library := Void
+			l := function_library
+		end
+
+	force_meg_library_retrieval is
+			-- Force market event generator library to be re-retrieved.
+		local
+			l: STORABLE_LIST [MARKET_EVENT_GENERATOR]
+		do
+			cached_meg_library := Void
+			l := market_event_generation_library
+		end
+
+	force_event_registrant_retrieval is
+			-- Force event registrants to be re-retrieved.
+		local
+			l: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
+		do
+			cached_event_registrants := Void
+			l := market_event_registrants
+		end
+
+feature -- Constants
+
+	indicators_file_name: STRING is
+			-- Name of the file containing persistent data for indicators
+		once
+			Result := "indicators_persist"
+		end
+
+	generators_file_name: STRING is
+			-- Name of the file containing persistent data for event generators
+		once
+			Result := "generators_persist"
+		end
+
+	registrants_file_name: STRING is
+			-- Name of the file containing persistent data for event
+			-- registrants
+		once
+			Result := "registrants_persist"
+		end
+
+feature {NONE} -- Implementation
+
 	retrieved_function_library: STORABLE_LIST [MARKET_FUNCTION] is
 		local
 			storable: STORABLE
@@ -335,39 +330,93 @@ print ("mer_library called.%N")
 			retry
 		end
 
-feature -- Basic operations
-
-	force_function_library_retrieval is
-			-- Force function library to be re-retrieved.
+	retrieved_market_event_generation_library:
+				STORABLE_LIST [MARKET_EVENT_GENERATOR] is
+			-- All defined event generators
 		local
-			fl: STORABLE_LIST [MARKET_FUNCTION]
+			storable: STORABLE
+			meg_list: STORABLE_LIST [MARKET_EVENT_GENERATOR]
+			retrieval_failed: BOOLEAN
+			app_env: expanded APP_ENVIRONMENT
+			full_path_name: STRING
 		do
-			cached_function_library := Void
-			fl := function_library
+			full_path_name := app_env.file_name_with_app_directory (
+				generators_file_name)
+			if retrieval_failed then
+				if exception = Retrieve_exception then
+					log_errors (<<"Retrieval of market analysis library%
+								% file ", full_path_name, " failed%N">>)
+				else
+					log_errors (<<"Error occurred while retrieving market %
+							%analysis library: ", meaning(exception), "%N">>)
+				end
+				die (-1)
+			else
+				create storable
+				meg_list ?= storable.retrieve_by_name (full_path_name)
+				if meg_list = Void then
+					create {STORABLE_EVENT_GENERATOR_LIST} meg_list.make (
+						generators_file_name)
+				end
+				Result := meg_list
+			end
+		rescue
+			retrieval_failed := true
+			retry
 		end
 
-feature -- Constants
-
-	indicators_file_name: STRING is
-			-- Name of the file containing persistent data for indicators
-		once
-			Result := "indicators_persist"
+	retrieved_market_event_registrants:
+				STORABLE_LIST [MARKET_EVENT_REGISTRANT] is
+			-- All defined event registrants
+		local
+			storable: STORABLE
+			reg_list: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
+			retrieval_failed: BOOLEAN
+			app_env: expanded APP_ENVIRONMENT
+			full_path_name: STRING
+		do
+print ("retrieve mer called.%N")
+			full_path_name := app_env.file_name_with_app_directory (
+				registrants_file_name)
+			if retrieval_failed then
+				if exception = Retrieve_exception then
+					log_errors (<<"Retrieval of event registrants file ",
+								full_path_name, " failed%N">>)
+				else
+					log_errors (<<"Error occurred while retrieving event %
+								%registrants: ", meaning(exception), "%N">>)
+				end
+				die (-1)
+			else
+				create storable
+				reg_list ?= storable.retrieve_by_name (full_path_name)
+				if reg_list = Void then
+					create reg_list.make (registrants_file_name)
+				end
+				Result := reg_list
+				-- The registrants themselves also need to be registered for
+				-- termination/cleanup when the process ends; and they need
+				-- to load their (event) histories, which are stored in
+				-- a separate file.
+				from
+					Result.start
+				until
+					Result.exhausted
+				loop
+					Result.item.load_history
+					register_for_termination (Result.item)
+					Result.forth
+				end
+				-- Ensure that the list will be saved when the process ends.
+				-- This is done after registering the contents of the list
+				-- because the MERs need to be cleaned up before being saved
+				-- as elements of reg_list (since cleanup is done for each
+				-- termination registrant in the order it was registered).
+			end
+		rescue
+			retrieval_failed := true
+			retry
 		end
-
-	generators_file_name: STRING is
-			-- Name of the file containing persistent data for event generators
-		once
-			Result := "generators_persist"
-		end
-
-	registrants_file_name: STRING is
-			-- Name of the file containing persistent data for event
-			-- registrants
-		once
-			Result := "registrants_persist"
-		end
-
-feature {NONE} -- Implementation
 
 	new_event_type (name: STRING): EVENT_TYPE is
 			-- Create a new EVENT_TYPE with name `name' and a unique ID.
@@ -401,5 +450,9 @@ feature {NONE} -- Implementation
 		end
 
 	cached_function_library: STORABLE_LIST [MARKET_FUNCTION]
+
+	cached_meg_library: STORABLE_LIST [MARKET_EVENT_GENERATOR]
+
+	cached_event_registrants: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
 
 end -- GLOBAL_APPLICATION
