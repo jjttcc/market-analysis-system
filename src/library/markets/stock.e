@@ -17,19 +17,26 @@ creation
 
 feature -- Initialization
 
-	make (s: STRING; type: TIME_PERIOD_TYPE) is
+	make (s: STRING; type: TIME_PERIOD_TYPE; stock_splits: STOCK_SPLITS) is
+		require
+			not_void: s /= Void and type /= Void
 		do
 			symbol := s
 			tradable_initialize (type)
+			if stock_splits /= Void then
+				splits := stock_splits @ symbol
+				adjust_for_splits
+			end
 		ensure
 			symbol_set: symbol = s
 			period_type_set: trading_period_type = type
 			target_period_type_set: target_period_type = trading_period_type
+			splits_built: stock_splits /= Void implies splits /= Void
 		end
 
 feature -- Access
 
-	splits: LINKED_LIST [STOCK_SPLIT]
+	splits: DYNAMIC_CHAIN [STOCK_SPLIT]
 			-- List of all (recorded) stock splits for the stock
 
 	symbol: STRING
@@ -38,6 +45,7 @@ feature -- Access
 
 feature -- Element change
 
+--!!!Remove this:  (perhaps reuse in STOCK_SPLITS)
 	add_split (s: STOCK_SPLIT) is
 			-- Add `s' to `splits' such that splits remains sorted by date.
 		require
@@ -45,7 +53,7 @@ feature -- Element change
 			not_in_splits: splits = Void or else not splits.has (s)
 		do
 			if splits = Void then
-				!!splits.make
+				!LINKED_LIST [STOCK_SPLIT]!splits.make
 				splits.compare_objects
 			end
 			from
