@@ -67,9 +67,8 @@ feature {NONE}
 			-- !!!Hard code for now.
 	
 	stock_split_file: STRING is
-			-- !!!Hard code for now.
 		once
-			Result := file_name_with_app_directory ("ta_stock_splits")
+			Result := file_name_with_app_directory (stock_split_file_name)
 		end
 
 end -- STOCK_FACTORY
