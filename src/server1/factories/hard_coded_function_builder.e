@@ -59,6 +59,7 @@ feature -- Access
 	RSI_n: INTEGER is 7
 	Wilder_MA_n: INTEGER is 5
 	WMA_n: INTEGER is 5
+	SD_n: INTEGER is 5
 
 feature -- Basic operations
 
@@ -91,6 +92,7 @@ feature -- Basic operations
 			l.extend (rsi (f, RSI_n, "Relative Strength Index"))
 			l.extend (wilder_ma (f, Wilder_MA_n, "Wilder Moving Average"))
 			l.extend (wma (f, WMA_n, "Weighted Moving Average"))
+			l.extend (standard_deviation (f, SD_n, "Standard Deviation"))
 			l.extend (market_data (f, "Market Data"))
 			l.extend (market_function_line (f, "Line"))
 --!!!Temporary test/experiment:
@@ -430,6 +432,46 @@ feature {NONE} -- Hard-coded market function building procedures
 			Result.set_name (name)
 		ensure
 			initialized: Result /= Void and Result.name = name
+		end
+
+	old_standard_deviation (f: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]; n: INTEGER;
+			name: STRING): N_RECORD_ONE_VARIABLE_FUNCTION is
+--!!!Doesn't work - remove when ready.
+		local
+			sma: STANDARD_MOVING_AVERAGE
+			sqrt: SQUARE_ROOT
+			div: DIVISION
+			sum: LINEAR_SUM
+			square: POWER
+			minus: SUBTRACTION
+			current_close: UNARY_LINEAR_OPERATOR
+			bnc: BASIC_NUMERIC_COMMAND
+			sma_op: BASIC_LINEAR_COMMAND
+			main_data: MARKET_DATA_FUNCTION
+		do
+			sma := simple_ma (f, n, "")
+			create main_data.make (f)
+			create sma_op.make (sma.output)
+			create bnc
+			create current_close.make (f.data, bnc)
+			create minus.make (current_close, sma_op)
+			create square.make (minus, create {CONSTANT}.make (2))
+			create sum.make (f.data, square, n)
+			create div.make (sum, create {N_VALUE_COMMAND}.make (n))
+			create sqrt.make (div)
+			create Result.make (sma, sqrt, n)
+			Result.set_name (name)
+		end
+
+	standard_deviation (f: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]; n: INTEGER;
+			name: STRING): AGENT_BASED_FUNCTION is
+		local
+			agents: expanded MARKET_AGENTS
+		do
+			create Result.make (agents.Standard_deviation_key, Void, Void)
+			Result.add_parameter (create {INTEGER_FUNCTION_PARAMETER}.make (
+				Result, 5))
+			Result.set_name (name)
 		end
 
 	market_function_line (f: MARKET_FUNCTION; name: STRING):
