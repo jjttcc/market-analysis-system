@@ -61,6 +61,8 @@ feature -- Actions
 			dialog: EV_WIDGET
 			session_window: SESSION_WINDOW
 			builder: expanded APPLICATION_WINDOW_BUILDER
+			orig_cursor: EV_CURSOR
+			gtools: expanded GUI_TOOLS
 		do
 			portnumber := reserved_port_number
 			if portnumber = Void then
@@ -68,6 +70,7 @@ feature -- Actions
 					"Port numbers are all in use.", Void)
 				dialog.show
 			else
+				orig_cursor := gtools.set_busy_cursor (owner_window)
 				session_window := builder.configured_session_window (
 					configuration.hostname, portnumber)
 				cmd := external_commands @
@@ -82,6 +85,7 @@ feature -- Actions
 					dialog.show
 					port_numbers_in_use.prune (portnumber)
 				end
+				gtools.restore_cursor (owner_window, orig_cursor)
 			end
 		end
 

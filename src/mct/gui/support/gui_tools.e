@@ -32,4 +32,18 @@ feature -- Basic operations
 			accel.actions.extend (agent window.destroy)
 		end
 
+	set_busy_cursor (w: EV_WIDGET): EV_CURSOR is
+			-- Set `w's cursor to a busy cursor and return the previous
+			-- cursor.
+		do
+			Result := w.pointer_style
+			w.set_pointer_style ((create {EV_STOCK_PIXMAPS}).Busy_cursor)
+		end
+
+	restore_cursor (w: EV_WIDGET; c: EV_CURSOR) is
+			-- Restore `w's cursor to `c'.
+		do
+			w.set_pointer_style (c)
+		end
+
 end
