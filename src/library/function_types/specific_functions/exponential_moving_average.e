@@ -17,7 +17,7 @@ class EXPONENTIAL_MOVING_AVERAGE inherit
 		rename
 			make as sma_make
 		redefine
-			action, set_n, short_description
+			action, set_n, short_description, operators
 		end
 
 creation {FACTORY, MARKET_FUNCTION_EDITOR}
@@ -36,6 +36,12 @@ feature -- Access
 
 	exp: N_BASED_CALCULATION
 			-- The so-called exponential (weighting value)
+
+	operators: LIST [COMMAND] is
+		do
+			Result := Precursor
+			Result.append (operator_and_descendants (exp))
+		end
 
 feature {NONE} -- Initialization
 

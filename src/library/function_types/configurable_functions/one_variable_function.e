@@ -11,7 +11,7 @@ class ONE_VARIABLE_FUNCTION inherit
 
 	COMPLEX_FUNCTION
 		redefine
-			set_innermost_input
+			set_innermost_input, operators
 		end
 
 	LINEAR_ANALYZER
@@ -93,6 +93,12 @@ feature -- Access
 		do
 			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 			Result.extend (input)
+		end
+
+	operators: LIST [COMMAND] is
+		do
+			Result := Precursor
+			Result.append (input.operators)
 		end
 
 feature -- Status report

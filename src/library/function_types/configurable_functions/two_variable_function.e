@@ -13,7 +13,7 @@ inherit
 
 	COMPLEX_FUNCTION
 		redefine
-			set_innermost_input
+			set_innermost_input, operators
 		end
 
 	TWO_VARIABLE_LINEAR_ANALYZER
@@ -97,6 +97,13 @@ feature -- Access
 			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 			Result.extend (input1)
 			Result.extend (input2)
+		end
+
+	operators: LIST [COMMAND] is
+		do
+			Result := Precursor
+			Result.append (input1.operators)
+			Result.append (input2.operators)
 		end
 
 feature -- Status report
