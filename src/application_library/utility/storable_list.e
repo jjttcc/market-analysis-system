@@ -53,16 +53,16 @@ feature -- Utility
 			-- the application directory, if set; if not set, store in the
 			-- current directory.
 		local
-			ta_env: expanded APP_ENVIRONMENT
+			app_env: expanded APP_ENVIRONMENT
 		do
 			debug ("persist")
 				print("cleanup Storing ");
 				print(
-					ta_env.file_name_with_app_directory (persistent_file_name))
+					app_env.file_name_with_app_directory (persistent_file_name))
 				print (".%N")
 			end
 			store_by_name (
-				ta_env.file_name_with_app_directory (persistent_file_name))
+				app_env.file_name_with_app_directory (persistent_file_name))
 		end
 
 end -- STORABLE_LIST
