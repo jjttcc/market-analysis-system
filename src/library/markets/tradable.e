@@ -212,6 +212,7 @@ print ("set tgt period type calling 'tuple_list'" + "%N")
 			-- indicators are shared with another tradable object.
 		do
 			set_target_period_type (target_period_type)
+print ("TRADABLE.flush_indicators was called" + "%N")
 		end
 
 feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
