@@ -539,7 +539,6 @@ feature {NONE} -- Implementation of hook routines
 
 	do_initialize_lock is
 		do
-print ("il called%N")
 			lock := file_lock (file_name_with_app_directory (
 				generators_file_name))
 		end
