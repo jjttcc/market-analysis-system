@@ -52,7 +52,7 @@ feature -- Access
 	market_list: TRADABLE_LIST
 			-- Tradable list made from input file data
 
-	event_coordinator: EVENT_COORDINATOR
+	event_coordinator: MARKET_EVENT_COORDINATOR
 			-- Object in charge of event generation and dispatch
 
 	registration_builder: EVENT_REGISTRATION_BUILDER
