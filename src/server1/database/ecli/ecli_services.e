@@ -312,7 +312,8 @@ feature {NONE} -- Implementation
 					end
 					if debugging then
 						io.error.print ("Database query returned " +
-							Result.count.out + " rows.%N")
+							Result.count.out + " rows:%N")
+						io.error.print (list_concatenation (Result, "%N"))
 					end
 				end
 				stmt.close

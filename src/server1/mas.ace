@@ -5,11 +5,7 @@ root
 	MA_SERVER: make
 
 default
-	assertion (check)
-	assertion (require)
-	assertion (ensure)
-	assertion (loop)
-	assertion (invariant)
+	assertion (all)
 	arguments ("-o -p -debug")
 	arguments ("-o -p")
 	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4002 ")

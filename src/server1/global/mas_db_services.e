@@ -72,6 +72,11 @@ print ("daily_data_for_symbol retrieving derivative data.%N")
 					check_field_count (Result, Derivative, False,
 						"daily derivative data")
 				end
+			else
+				fatal_error := True
+				last_error :=
+					"Symbol '" + s + "' is neither a valid stock symbol, nor %
+						%a valid derivative symbol.%N"
 			end
 print ("returning from MAS_DB_SERVICES.daily_data_for_symbol.%N")
 		ensure
@@ -237,6 +242,9 @@ print ("returning from MAS_DB_SERVICES.intraday_data_for_symbol.%N")
 				end
 			end
 			Result := stock_symbol_table.has (s)
+			if debugging then
+				print ("is_stock_symbol (" + s + "): " + Result.out + "%N")
+			end
 		end
 
 	is_derivative_symbol (s: STRING): BOOLEAN is
@@ -261,6 +269,9 @@ print ("returning from MAS_DB_SERVICES.intraday_data_for_symbol.%N")
 				end
 			end
 			Result := derivative_symbol_table.has (s)
+			if debugging then
+				print ("is_derivative_symbol (" + s + "): " + Result.out + "%N")
+			end
 		end
 
 feature -- Status report

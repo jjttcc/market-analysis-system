@@ -68,11 +68,11 @@ print ("Retrieval succeeded.%N")
 				fatal_error := True
 			end
 			if fatal_error then
-print ("Failed to connect to database.%N")
+print ("setup_input_medium: database operation failed.%N")
 --!!!Note: This should probably use current_symbol instead of
 -- tradable_factory.symbol:
 				log_errors (<<"Error occurred while processing ",
-					tradable_factory.symbol, ": ", db.last_error>>)
+					current_symbol, ": ", db.last_error>>)
 				close_input_medium
 			end
 print ("returning from DB_TRADABLE_LIST.setup_input_medium.%N")
