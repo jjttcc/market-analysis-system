@@ -32,9 +32,10 @@ body { background-color: #e9dcd5; }
 }
 .left_part {
 	background-color: #e9dcd5;
-	font-size: 80%;
+	font-size: 85%;
 	float: left;
-	margin: 1em 0 0 1em;
+	margin-top: 3.5em;
+	margin-left: 0.5em;
 	height: 100%
 	width: 25%
 }
@@ -43,7 +44,7 @@ body { background-color: #e9dcd5; }
 	font-size: 90%;
 	float: right;
 	margin: 1em 1em 0 0;
-	width: 77%;
+	width: 74%;
 }
 .vwide { width: 2000px; }
 .smallish { font-family:sans-serif; font-size: 70% }
