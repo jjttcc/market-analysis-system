@@ -1,6 +1,6 @@
 indexing
 	description: "DATA_SCANNER that scans MARKET_EVENT fields"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -23,10 +23,9 @@ creation
 
 feature
 
-	make (in_file: like input_file) is
+	make (in: like input) is
 		require
-			args_not_void: in_file /= Void
-			in_file_readable: in_file.exists and in_file.is_open_read
+			args_not_void: in /= Void
 		local
 			dummy_value_setter: VALUE_SETTER
 			vs: LINKED_LIST [VALUE_SETTER]
@@ -37,11 +36,11 @@ feature
 			!VOLUME_SETTER!dummy_value_setter.make
 			!!vs.make
 			vs.extend (dummy_value_setter)
-			!!parser.make (in_file)
-			data_scanner_make (in_file, parser, vs, "%/1/", "%N")
+			!!parser.make (in)
+			data_scanner_make (in, parser, vs, "%/1/", "%N")
 			parser.set_field_separator (field_separator @ 1)
 		ensure
-			set: input_file = in_file and parser.input_file = input_file and
+			set: input = in and parser.input = input and
 				field_separator.is_equal ("%/1/") and
 				record_separator.is_equal ("%N")
 		end
@@ -99,18 +98,18 @@ feature {NONE} -- Hook method implementations
 			until
 				i > record_separator.count
 			loop
-				input_file.read_character
+				input.read_character
 				if
-					input_file.last_character /= record_separator @ i
+					input.last_character /= record_separator @ i
 				then
 					error_list.extend (
 							"Incorrect record separator detected.")
 				end
 				i := i + 1
 			end
-			input_file.read_character
-			if not input_file.end_of_file then
-				input_file.back
+			input.read_character
+			if not input.after then
+				input.back
 			end
 		end
 
