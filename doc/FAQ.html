@@ -376,8 +376,9 @@ Database Problems
 </h3>
 <B>
 I get this error when I start MAS using my odbc database connection: 
-"Error occurred retrieving non-intraday period types for a" (a being the first stock symbol 
-on my list). This answer covers some other SQL errors as well.
+"Error occurred retrieving non-intraday period types for a" (a being
+the first stock symbol on my list).
+(This answer covers some other SQL errors as well.)
 <P></B>
 Possible solutions are as follows:
 <UL>
@@ -408,6 +409,32 @@ query to convert them to a MAS supported format.  (Some database systems
 may have a date-to-integer conversion function, which will likely also
 work, as long as the result is in YYYYMMDD format.)
 </UL>
+<P><B>
+I wish to set MAS up to work with a database with ODBC.
+I am trying to create the needed database tables for MAS and from the
+sysadmin docs it is mentioned that there are Postgres scripts for doing so.
+However, I have looked and looked in the files that were installed with
+MAS but have not found them.
+<P></B>
+The example script files for creating MAS tables reside in a file separate
+from the main MAS installation file.
+You will find them in the scripts archive file in the
+<A href="http://sourceforge.net/project/showfiles.php?group_id=6838">
+download
+</A>
+section - either
+scripts{relnum}.tar.gz or scripts{relnum}.zip -, where {relnum} stands for
+the release number - e.g., 1.6.5.
+(The scripts files for the latest release, 1.6.5 - as of June 2003 - are
+<A href="http://prdownloads.sourceforge.net/eiffel-mas/scripts1.6.5.tar.gz?download">
+scripts1.6.5.tar.gz
+</A>
+and
+<A href="http://prdownloads.sourceforge.net/eiffel-mas/scripts1.6.5.zip?download">
+scripts1.6.5.zip</A>.)
+Several people have asked me this question, so I've concluded that I need
+to include the database scripts with the main installation file.
+I will probably do this for the next official (non-beta) release.
 <h3>
 <A name="signal generation">
 Signal Generation and Market Analyzers
