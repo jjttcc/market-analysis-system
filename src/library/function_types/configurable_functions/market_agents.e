@@ -28,7 +28,7 @@ feature -- Access
 		require
 			f_output_empty: f.output /= Void and f.output.is_empty
 		do
-			n_based_calculation (f, integer_parameter_value (f, 10), agent
+			n_based_accumulation (f, integer_parameter_value (f, 10), agent
 				sum_divided_by_n, addition_operator, subtraction_operator)
 		end
 
@@ -37,12 +37,14 @@ feature -- Access
 		require
 			f_output_empty: f.output /= Void and f.output.is_empty
 		do
-			n_based_calculation (f, integer_parameter_value (f, 10),
+			n_based_accumulation (f, integer_parameter_value (f, 5),
 				agent sum_of_squares_of_avg_divided_by_n, addition_operator,
 				subtraction_operator)
 		end
 
-	original_sma (f: AGENT_BASED_FUNCTION) is --!!!!Put back after experiment
+-- !!!Original implementation - obsoletify (or remove) if the version using
+-- n_based_accumulation becomes the final version.
+	original_sma (f: AGENT_BASED_FUNCTION) is
 			-- Standard moving average
 		require
 			f_output_empty: f.output /= Void and f.output.is_empty
@@ -50,7 +52,9 @@ feature -- Access
 			sma_based_calculation (f, agent sum_divided_by_n)
 		end
 
-	original_standard_deviation (f: AGENT_BASED_FUNCTION) is --!!!!Put back after experiment
+-- !!!Original implementation - obsoletify (or remove) if the version using
+-- n_based_accumulation becomes the final version.
+	original_standard_deviation (f: AGENT_BASED_FUNCTION) is
 			-- Standard deviation
 		require
 			f_output_empty: f.output /= Void and f.output.is_empty
@@ -58,6 +62,8 @@ feature -- Access
 			sma_based_calculation (f, agent sum_of_squares_of_avg_divided_by_n)
 		end
 
+-- !!!May be replaced by n_based_accumulation - If so, obsoletify
+-- (or remove) it.
 	sma_based_calculation (f: AGENT_BASED_FUNCTION; calculation: FUNCTION [
 		ANY, TUPLE [DOUBLE, INTEGER, ARRAYED_LIST [DOUBLE]], DOUBLE]) is
 			-- Calculation that follows the pattern of a
@@ -129,27 +135,22 @@ feature -- Access
 			end
 		end
 
---!!!For compile-testing
-call_n_based_calculation is
- do
-	n_based_calculation (Void, 0, Void, addition_operator, subtraction_operator)
- end
-
-addition (x, y: DOUBLE): DOUBLE is do Result := x + y end
-subtraction (x, y: DOUBLE): DOUBLE is do Result := x - y end
-
-	n_based_calculation (f: AGENT_BASED_FUNCTION; n: INTEGER;
-		main_function: FUNCTION [ANY, TUPLE [DOUBLE, INTEGER,
+	n_based_accumulation (f: AGENT_BASED_FUNCTION; n: INTEGER;
+		calculation: FUNCTION [ANY, TUPLE [DOUBLE, INTEGER,
 		ARRAYED_LIST [DOUBLE]], DOUBLE]; accum_op,
 		drop_off_op: BINARY_OPERATOR [REAL, REAL]) is
-			-- !!!Calculation that ...
-			-- `drop_off_function' is used to "drop-off" the last "obsolete"
-			-- calculation; when accumulation_function is addition, this
-			-- will usually be subtraction - i.e., the obsolete value,
-			-- the (current_index - n)th value is subtracted to maintain
+			-- An "accumulation" - whose input is `f.inputs.first.output' -
+			-- based on applying the specified function, `calculation', to
+			-- n-sized subsets of the elements of the input (for example,
+			-- a moving average calculation), using `accum_op' as the
+			-- intermediary "accumulation" operator (for example, addition,
+			-- for a moving average), and `drop_off_op' to "drop-off" the
+			-- last "obsolete" value ("extracted" using `f.operator', or
+			-- a BASIC_NUMERIC_COMMAND, if `f.operator' is Void).
+			-- When `accum_op' is addition, 'drop_off_op' will usually be
+			-- subtraction - that is, the obsolete value - the
+			-- (current_index - n)th value - is subtracted to maintain
 			-- the sum of the last n values.
-			--!!!Describe what main_function, drop_off_function,
-			--and accumulation_function are.
 		require
 			f_output_empty: f.output /= Void and f.output.is_empty
 		local
@@ -158,7 +159,7 @@ subtraction (x, y: DOUBLE): DOUBLE is do Result := x - y end
 			current_value, latest_extracted_value: DOUBLE
 			values: ARRAYED_LIST [DOUBLE]
 		do
-print ("n_based_calculation called.%N")
+print ("n_based_accumulation called.%N")
 			create values.make (0)
 			if
 				f.inputs.is_empty or else f.inputs.first.output.is_empty or
@@ -171,7 +172,8 @@ print ("n_based_calculation called.%N")
 					-- !!! Report error condition.
 				end
 			else
---!!!!???				n := integer_parameter_value (f, 10)
+--!!!Get the n-value here, or leave the passed-in `n' argument??:
+--				n := integer_parameter_value (f, 10)
 				ml := f.inputs.first.output
 				if f.operator /= Void then
 					extraction_operator := f.operator
@@ -188,19 +190,19 @@ print ("n_based_calculation called.%N")
 						ml.index = n or ml.exhausted
 					loop
 						extraction_operator.execute (ml.item)
-						current_value := binary_double_operation (Void,
+						current_value := binary_double_operation (accum_op,
 							current_value, extraction_operator.value)
 						values.extend (extraction_operator.value)
 						ml.forth
 					end
 					if not ml.exhausted then
 						extraction_operator.execute (ml.item)
-						current_value := binary_double_operation (Void,
+						current_value := binary_double_operation (accum_op,
 							current_value, extraction_operator.value)
 						values.extend (extraction_operator.value)
 						f.output.extend (create {SIMPLE_TUPLE}.make (
 							ml.item.date_time, ml.item.end_date,
-							main_function.item ([current_value, n, values])))
+							calculation.item ([current_value, n, values])))
 						ml.forth
 						check
 							values_ml_index_relation2:
@@ -221,11 +223,11 @@ print ("n_based_calculation called.%N")
 					values.extend (latest_extracted_value)
 					f.output.extend (create {SIMPLE_TUPLE}.make (
 						ml.item.date_time, ml.item.end_date,
-						main_function.item ([current_value, n, values])))
+						calculation.item ([current_value, n, values])))
 					ml.forth
 				end
 			end
-print ("n_based_calculation ending.%N")
+print ("n_based_accumulation ending.%N")
 		end
 
 feature {NONE} -- Implementation
@@ -243,7 +245,7 @@ feature -- Agent keys
 
 	Sma_key, Standard_deviation_key: INTEGER is unique
 
-feature {NONE} -- !!!!!What to call these???
+feature {NONE} -- COMMAND-based utility routines
 
 	binary_double_operation (op: BINARY_OPERATOR [REAL, REAL];
 		x, y: DOUBLE): DOUBLE is
