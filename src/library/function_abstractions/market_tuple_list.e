@@ -39,7 +39,8 @@ feature -- Access
 			invariant
 				must_be_in: in_range_or_not_in_array (d, bottom, top)
 			variant
-				top_bottom_difference: top - bottom + 1
+				top_bottom_interval_or_result_not_0:
+					top - bottom + 1 + is_idx_dt_result_0 (Result)
 			until
 				Result /= 0 or top < bottom
 			loop
@@ -208,6 +209,17 @@ feature {NONE}
 			-- Result = (has_date (d) implies
 			-- 	(exists i such_that i >= bottom and i <= top it_holds
 			-- 		i_th (i).date_time.is_equal (d)))
+		end
+
+	is_idx_dt_result_0 (r: INTEGER): INTEGER is
+			-- Is Result from index_at_date_time 0 (for loop variant)?
+			-- 1 if r is 0, otherwise 0
+		do
+			-- Indulgent? Sure, but it's sometimes fun to try for perfection,
+			-- even though you will never completely succeed. :-)
+			if r = 0 then
+				Result := 1
+			end
 		end
 
 invariant
