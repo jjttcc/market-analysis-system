@@ -38,7 +38,7 @@ feature -- Basic operations
 feature -- Status report
 
 	target_cursor_not_affected: BOOLEAN is
-			-- Will target.index change when execute is called?
+			-- Will target.index not change when execute is called?
 		deferred
 		end
 
