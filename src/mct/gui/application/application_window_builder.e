@@ -278,12 +278,14 @@ feature {NONE} -- Implementation - Constants
 
 	file_menu_title: STRING is "&File"
 
-	close_menu_title: STRING is "&Close Window  (Ctl+W)"
+	close_menu_title: STRING is
+		"&Close Window                           (Ctl+W)"
 
-	quit_menu_title: STRING is "&Quit  (Ctl+Q)"
+	quit_menu_title: STRING is 
+		"&Quit                                          (Ctl+Q)"
 
 	quit_without_menu_title: STRING is
-		"Q&uit without terminating sessions (Ctl+U)"
+		"Q&uit without terminating sessions  (Ctl+U)"
 
 	help_menu_title: STRING is "&Help"
 
