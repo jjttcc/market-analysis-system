@@ -22,6 +22,11 @@ class APPLICATION_COMMAND_EDITOR inherit
 			{NONE} all
 		end
 
+	GENERAL_UTILITIES
+		export
+			{NONE} all
+		end
+
 creation
 
 	make
@@ -86,6 +91,16 @@ feature -- Basic operations
 			cmd.set_operands (left, right)
 		end
 
+	edit_mtlist_resultreal (c: UNARY_OPERATOR [REAL, REAL]) is
+			-- Edit `c's market tuple list and operator
+			-- (RESULT_COMMAND [REAL]).
+		require
+			ui_set: user_interface /= Void
+		do
+			edit_mtlist (c)
+			edit_unaryop_real (c)
+		end
+
 	edit_mtlist_resultreal_n (c: UNARY_OPERATOR [ANY, REAL]) is
 			-- Edit `c's market tuple list, operator (
 			-- RESULT_COMMAND [REAL]), and n-value.
@@ -134,7 +149,8 @@ feature -- Basic operations
 		end
 
 	edit_unaryop (cmd: UNARY_OPERATOR [ANY, REAL]) is
-			-- Edit a UNARY_OPERATOR that takes a REAL operand.
+			-- Edit a UNARY_OPERATOR that takes a RESULT_COMMAND [REAL]
+			-- operand.
 		require
 			ui_set: user_interface /= Void
 		local
@@ -175,6 +191,24 @@ feature -- Basic operations
 				end
 				cmd.set_operand (rr_cmd)
 			end
+		end
+
+	edit_unaryop_real (cmd: UNARY_OPERATOR [REAL, REAL]) is
+			-- Edit a UNARY_OPERATOR that returns a REAL value and
+			-- takes a RESULT_COMMAND [REAL] operand.
+		require
+			ui_set: user_interface /= Void
+		local
+			rr_cmd: RESULT_COMMAND [REAL]
+		do
+			rr_cmd ?= user_interface.command_selection_from_type (
+						user_interface.Real_result_command,
+						concatenation (<<cmd.generator, "'s operand">>),
+						false)
+			check
+				selection_valid: rr_cmd /= Void
+			end
+			cmd.set_operand (rr_cmd)
 		end
 
 	edit_offset (cmd: SETTABLE_OFFSET_COMMAND) is

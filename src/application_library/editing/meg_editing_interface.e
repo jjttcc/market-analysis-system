@@ -12,9 +12,6 @@ deferred class MEG_EDITING_INTERFACE inherit
 		export
 			{NONE} all
 			{ANY} function_library
-		undefine
-			output_field_separator, output_record_separator,
-			output_date_field_separator
 		end
 
 	EDITING_INTERFACE

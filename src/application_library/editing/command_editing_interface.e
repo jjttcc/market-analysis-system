@@ -52,11 +52,17 @@ feature -- Constants
 	Binary_boolean_real_command: STRING is "BINARY_OPERATOR [BOOLEAN, REAL]"
 			-- Name of binary command with BOOLEAN, REAL generic parameters
 
+	Binary_real_real_command: STRING is "BINARY_OPERATOR [REAL, REAL]"
+			-- Name of binary command with REAL, REAL generic parameters
+
 	Basic_numeric_command: STRING is "BASIC_NUMERIC_COMMAND"
 			-- Name of BASIC_NUMERIC_COMMAND
 
 	N_based_calculation: STRING is "N_BASED_CALCULATION"
 			-- Name of N_BASED_CALCULATION
+
+	Linear_command: STRING is "LINEAR_COMMAND"
+			-- Name of LINEAR_COMMAND
 
 feature -- Status setting
 
@@ -130,11 +136,12 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 			l.extend (command_with_generator ("FALSE_COMMAND"))
 			l.extend (command_with_generator ("SIGN_ANALYZER"))
 
-			!!l.make (22)
+			!!l.make (25)
 			Result.extend (l, Real_result_command)
 			l.extend (command_with_generator ("SUBTRACTION"))
 			l.extend (command_with_generator ("MULTIPLICATION"))
 			l.extend (command_with_generator ("DIVISION"))
+			l.extend (command_with_generator ("SAFE_DIVISION"))
 			l.extend (command_with_generator ("ADDITION"))
 			l.extend (command_with_generator ("LOWEST_VALUE"))
 			l.extend (command_with_generator ("LINEAR_SUM"))
@@ -154,6 +161,16 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 			l.extend (command_with_generator ("BASIC_LINEAR_COMMAND"))
 			l.extend (command_with_generator ("BOOLEAN_NUMERIC_CLIENT"))
 			l.extend (command_with_generator ("SLOPE_ANALYZER"))
+			l.extend (command_with_generator ("UNARY_LINEAR_OPERATOR"))
+			l.extend (command_with_generator ("ABSOLUTE_VALUE"))
+
+			!!l.make (5)
+			Result.extend (l, Binary_real_real_command)
+			l.extend (command_with_generator ("SUBTRACTION"))
+			l.extend (command_with_generator ("MULTIPLICATION"))
+			l.extend (command_with_generator ("DIVISION"))
+			l.extend (command_with_generator ("SAFE_DIVISION"))
+			l.extend (command_with_generator ("ADDITION"))
 
 			!!l.make (6)
 			Result.extend (l, Binary_boolean_real_command)
@@ -175,6 +192,17 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 			l.extend (command_with_generator ("CLOSING_PRICE"))
 			l.extend (command_with_generator ("OPENING_PRICE"))
 			l.extend (command_with_generator ("OPEN_INTEREST"))
+
+			!!l.make (8)
+			Result.extend (l, Linear_command)
+			l.extend (command_with_generator ("UNARY_LINEAR_OPERATOR"))
+			l.extend (command_with_generator ("SLOPE_ANALYZER"))
+			l.extend (command_with_generator ("SETTABLE_OFFSET_COMMAND"))
+			l.extend (command_with_generator ("MINUS_N_COMMAND"))
+			l.extend (command_with_generator ("LOWEST_VALUE"))
+			l.extend (command_with_generator ("LINEAR_SUM"))
+			l.extend (command_with_generator ("HIGHEST_VALUE"))
+			l.extend (command_with_generator ("BASIC_LINEAR_COMMAND"))
 
 			!!l.make (2)
 			Result.extend (l, N_based_calculation)
@@ -200,8 +228,11 @@ feature {NONE} -- Implementation
 
 	Binary_boolean,		-- binary operator with boolean result
 	Binary_real,		-- binary operator with real result
+	Unary_real,			-- unary operator with real result
 	Constant,			-- CONSTANT - needs value to be set
 	Other,				-- Classes that need no initialization
+	Mtlist_resultreal,  -- Classes that need a market tuple list and a
+						-- RESULT_COMMAND [REAL]
 	Mtlist_resultreal_n,-- Classes that need a market tuple list, a
 						-- RESULT_COMMAND [REAL], and an n-value
 	N_command,			-- Classes that (only) need an n-value
@@ -275,6 +306,11 @@ feature {NONE} -- Implementation
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_real, name)
+			name := "SAFE_DIVISION"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Binary_real, name)
 			name := "EQ_OPERATOR"
 			check
 				valid_name: command_names.has (name)
@@ -305,6 +341,11 @@ feature {NONE} -- Implementation
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Constant, name)
+			name := "ABSOLUTE_VALUE"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Unary_real, name)
 			name := "BASIC_NUMERIC_COMMAND"
 			check
 				valid_name: command_names.has (name)
@@ -330,6 +371,11 @@ feature {NONE} -- Implementation
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Mtlist_resultreal_n, name)
+			name := "UNARY_LINEAR_OPERATOR"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Mtlist_resultreal, name)
 			name := "N_VALUE_COMMAND"
 			check
 				valid_name: command_names.has (name)
@@ -404,6 +450,7 @@ feature {NONE} -- Implementation
 			bin_bool_op: BINARY_OPERATOR [ANY, BOOLEAN]
 			bin_real_op: BINARY_OPERATOR [ANY, REAL]
 			unop_real: UNARY_OPERATOR [ANY, REAL]
+			unop_real_real: UNARY_OPERATOR [REAL, REAL]
 			offset_cmd: SETTABLE_OFFSET_COMMAND
 			bnc: BOOLEAN_NUMERIC_CLIENT
 			sign_an: SIGN_ANALYZER
@@ -419,15 +466,27 @@ feature {NONE} -- Implementation
 			when Binary_real then
 				bin_real_op ?= c
 				check
-					c_is_a_binary_realean: bin_real_op /= Void
+					c_is_a_binary_real: bin_real_op /= Void
 				end
 				editor.edit_binary_real (bin_real_op)
+			when Unary_real then
+				unop_real_real ?= c
+				check
+					c_is_a_unary_real: unop_real_real /= Void
+				end
+				editor.edit_unaryop_real (unop_real_real)
 			when Constant then
 				const ?= c
 				check
 					c_is_a_constant: const /= Void
 				end
 				editor.edit_constant (const)
+			when Mtlist_resultreal then
+				unop_real_real ?= c
+				check
+					c_is_a_unary_operator_real_real: unop_real_real /= Void
+				end
+				editor.edit_mtlist_resultreal (unop_real_real)
 			when Mtlist_resultreal_n then
 				unop_real ?= c
 				check
@@ -463,7 +522,7 @@ feature {NONE} -- Implementation
 
 feature -- Implementation - options
 
-	initialization_needed: BOOLEAN is true
+--!!!	initialization_needed: BOOLEAN is true
 
 	clone_needed: BOOLEAN is true
 
@@ -471,6 +530,6 @@ feature -- Implementation - options
 
 invariant
 
-	init_clone_needed: initialization_needed = true and clone_needed = true
+	clone_needed: clone_needed = true
 
 end -- COMMAND_EDITING_INTERFACE

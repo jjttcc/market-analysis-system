@@ -15,6 +15,11 @@ deferred class OBJECT_EDITING_INTERFACE [G] inherit
 			{NONE} all
 		end
 
+	GENERAL_UTILITIES
+		export
+			{NONE} all
+		end
+
 feature -- Access
 
 	object_selection_from_type (type: STRING; msg: STRING; top: BOOLEAN): G is
@@ -72,6 +77,8 @@ feature {NONE} -- Implementation
 	user_object_selection (objects: LIST [G]; msg: STRING): G is
 			-- User's selection of a member of `objects' (deep-cloned) or
 			-- a member of `current_objects' that is in `objects' (shared)
+			-- If the selection if from `current_objects',
+			-- initialization_needed will be false; otherwise it will be true.
 		require
 			objs_not_void: objects /= Void
 		local
@@ -119,11 +126,19 @@ feature {NONE} -- Implementation
 				selection := multilist_selection (<<first_pair, second_pair>>,
 													general_msg)
 				if selection <= tree_names.count then
+					-- Selection is from the list of previously chosen objects.
 					Result := tree_objects @ selection
+					-- The user wants an alias to a previously chosen object,
+					-- so it should not be cloned and its current settings
+					-- should not be changed.
 					do_clone := false
+					initialization_needed := false
 				else
+					-- Selection is not from the list of previously
+					-- chosen objects.
 					Result := objects @ (selection - tree_objects.count)
 					do_clone := clone_needed
+					initialization_needed := true
 				end
 			until
 				accepted_by_user (Result)
@@ -210,10 +225,8 @@ feature -- Implementation - hook methods
 		deferred
 		end
 
-	initialization_needed: BOOLEAN is
+	initialization_needed: BOOLEAN
 			-- Does the selected object need to be initialized?
-		deferred
-		end
 
 	name_needed: BOOLEAN is
 			-- Do new objects need a name?

@@ -22,6 +22,11 @@ class APPLICATION_FUNCTION_EDITOR inherit
 			{NONE} all
 		end
 
+	GENERAL_UTILITIES
+		export
+			{NONE} all
+		end
+
 creation
 
 	make
@@ -80,6 +85,42 @@ feature -- Basic operations
 							concatenation (<<f.generator,
 								"'s operator">>), false)
 			f.set_operator (cmd)
+		end
+
+	edit_accumulation (f: ACCUMULATION) is
+			-- Edit an accumulation function (which takes a
+			-- BINARY_OPERATOR and a LINEAR_COMMAND).
+		require
+			ui_set: user_interface /= Void
+			op_maker_set: operator_maker /= Void
+		local
+			cmd: BINARY_OPERATOR [REAL, REAL]
+			lc: LINEAR_COMMAND
+			rc: RESULT_COMMAND [REAL]
+		do
+			f.set_input (user_interface.function_selection_from_type (
+						user_interface.Market_function,
+							concatenation (<<f.generator,
+								"'s input function">>), false))
+			cmd ?= operator_maker.command_selection_from_type (
+						operator_maker.Binary_real_real_command,
+							concatenation (<<f.generator,
+								"'s main operator">>), false)
+			lc ?= operator_maker.command_selection_from_type (
+						operator_maker.Linear_command,
+							concatenation (<<f.generator,
+								"'s 'previous' operator">>), false)
+			rc ?= operator_maker.command_selection_from_type (
+						operator_maker.Real_result_command,
+							concatenation (<<f.generator,
+								"'s first element operator">>), false)
+			-- set_operators in ACCUMULATION requires that cmd's left
+			-- operand is attached to the same object as lc.
+			cmd.set_operands (lc, cmd.operand2)
+			check
+				lc_set_correctly: cmd.operand1 = lc
+			end
+			f.set_operators (cmd, lc, rc)
 		end
 
 	edit_one_fn_op_n (f: N_RECORD_ONE_VARIABLE_FUNCTION) is

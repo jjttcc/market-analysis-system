@@ -31,9 +31,6 @@ deferred class FUNCTION_EDITING_INTERFACE inherit
 			function_names as function_library_names
 		export
 			{NONE} all
-		undefine
-			output_field_separator, output_record_separator,
-			output_date_field_separator
 		end
 
 feature -- Access
@@ -59,7 +56,7 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			l: ARRAYED_LIST [MARKET_FUNCTION]
 		once
 			!!Result.make (0)
-			!!l.make (6)
+			!!l.make (8)
 			Result.extend (l, Market_function)
 			l.extend (function_with_generator ("TWO_VARIABLE_FUNCTION"))
 			l.extend (function_with_generator ("ONE_VARIABLE_FUNCTION"))
@@ -67,8 +64,10 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 						"N_RECORD_ONE_VARIABLE_FUNCTION"))
 			l.extend (function_with_generator ("STANDARD_MOVING_AVERAGE"))
 			l.extend (function_with_generator ("EXPONENTIAL_MOVING_AVERAGE"))
+			l.extend (function_with_generator ("ACCUMULATION"))
 			l.extend (function_with_generator ("MARKET_FUNCTION_LINE"))
-			!!l.make (5)
+			l.extend (function_with_generator ("STOCK"))
+			!!l.make (6)
 			Result.extend (l, Complex_function)
 			l.extend (function_with_generator ("TWO_VARIABLE_FUNCTION"))
 			l.extend (function_with_generator ("ONE_VARIABLE_FUNCTION"))
@@ -76,6 +75,7 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 						"N_RECORD_ONE_VARIABLE_FUNCTION"))
 			l.extend (function_with_generator ("STANDARD_MOVING_AVERAGE"))
 			l.extend (function_with_generator ("EXPONENTIAL_MOVING_AVERAGE"))
+			l.extend (function_with_generator ("ACCUMULATION"))
 		end
 
 	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
@@ -86,6 +86,7 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 feature {NONE} -- Implementation
 
 	One_fn_op,			-- Takes one market function and an operator.
+	Accumulation,		-- Takes one market function and two operators.
 	One_fn_op_n,		-- Takes one market function, an operator, and an
 						-- n-value.
 	Two_cplx_fn_op,		-- Takes two complex functions and an operator.
@@ -93,7 +94,8 @@ feature {NONE} -- Implementation
 						-- and an n-value.
 	One_fn_bnc_nbc_n,	-- Takes one market function, a BASIC_NUMERIC_COMMAND,
 						-- an N_BASED_CALCULATION, and an n-value.
-	Two_points_pertype	-- Takes two market points and a period type.
+	Two_points_pertype,	-- Takes two market points and a period type.
+	Other				-- Classes that need no initialization
 	:
 				INTEGER is unique
 			-- Constants identifying initialization routines required for
@@ -131,11 +133,21 @@ feature {NONE} -- Implementation
 				valid_name: function_names.has (name)
 			end
 			Result.extend (One_fn_bnc_nbc_n, name)
+			name := "ACCUMULATION"
+			check
+				valid_name: function_names.has (name)
+			end
+			Result.extend (Accumulation, name)
 			name := "MARKET_FUNCTION_LINE"
 			check
 				valid_name: function_names.has (name)
 			end
 			Result.extend (Two_points_pertype, name)
+			name := "STOCK"
+			check
+				valid_name: function_names.has (name)
+			end
+			Result.extend (Other, name)
 		end
 
 	initialize_function (f: MARKET_FUNCTION) is
@@ -145,6 +157,7 @@ feature {NONE} -- Implementation
 			sma: STANDARD_MOVING_AVERAGE
 			mfl: MARKET_FUNCTION_LINE
 			ovf: ONE_VARIABLE_FUNCTION
+			accum: ACCUMULATION
 			nrovf: N_RECORD_ONE_VARIABLE_FUNCTION
 			tvf: TWO_VARIABLE_FUNCTION
 		do
@@ -180,18 +193,26 @@ feature {NONE} -- Implementation
 					c_is_a_1vf: ovf /= Void
 				end
 				editor.edit_one_fn_op (ovf)
+			when Accumulation then
+				accum ?= f
+				check
+					c_is_an_accum: accum /= Void
+				end
+				editor.edit_accumulation (accum)
 			when Two_cplx_fn_op then
 				tvf ?= f
 				check
 					c_is_a_2vf: tvf /= Void
 				end
 				editor.edit_two_cplx_fn_op (tvf)
+			when Other then
+				-- No initialization needed.
 			end
 		end
 
 feature -- Implementation - options
 
-	initialization_needed: BOOLEAN is true --!!!??
+--!!!	initialization_needed: BOOLEAN is true --!!!??
 
 	clone_needed: BOOLEAN is true --!!!??
 
@@ -214,7 +235,7 @@ feature -- Implementation - options
 				fnames.forth
 			end
 			spiel.extend (concatenation (<<"Choose a name for ", msg,
-						" that does not match any of the above names:%N">>))
+						" that does not match any of the%Nabove names">>))
 			o.set_name (string_selection (concatenation (spiel)))
 		end
 
