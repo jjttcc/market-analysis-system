@@ -24,10 +24,11 @@ feature -- Initialization
 			day_index := 1
 			field_separator := "-"
 			abbreviated_month := True
+			two_digit_year_partition := -1
 		ensure
 			default_settings: year_index = 3 and month_index = 2 and
 				day_index = 1 and field_separator = "-" and
-				abbreviated_month = True
+				abbreviated_month = True and two_digit_year_partition = -1
 		end
 
 feature -- Access
@@ -47,6 +48,9 @@ feature -- Access
 	abbreviated_month: BOOLEAN
 			-- Is the month represented as a 3-letter abbreviation -
 			-- Jan, Feb, etc.?
+
+	two_digit_year_partition: INTEGER
+			-- Partition value for two-digit year: -1 if not used
 
 feature -- Element change
 
@@ -91,40 +95,42 @@ feature -- Element change
 				field_separator /= Void
 		end
 
+	set_abbreviated_month (arg: BOOLEAN) is
+			-- Set `abbreviated_month' to `arg'.
+		do
+			abbreviated_month := arg
+		ensure
+			abbreviated_month_set: abbreviated_month = arg
+		end
+
+	set_two_digit_year_partition (arg: INTEGER) is
+			-- Set `two_digit_year_partition' to `arg'.
+		require
+			arg_valid: arg = -1 or arg > 0
+		do
+			two_digit_year_partition := arg
+		ensure
+			two_digit_year_partition_set: two_digit_year_partition = arg
+		end
+
 feature {NONE}
 
---Don't forget yy conversion.!!!!!!!!!!!!!!!!!!!!!!!!
 	do_set (stream: INPUT_SEQUENCE; tuple: MARKET_TUPLE) is
 		local
 			date_util: expanded DATE_TIME_SERVICES
 			date: DATE
 			date_string: STRING
-			su: expanded STRING_UTILITIES
-			components: ARRAY [STRING]
-			day, month, year: INTEGER
 		do
-			day := -1; month := -1; year := -1
 			date_string := stream.last_string
-			su.set_target (date_string)
-			components := su.tokens (field_separator)
 			if abbreviated_month then
-				-- Month field is "Jan", "Feb", etc.
-				if date_util.month_table.has (components @ month_index) then
-					month := date_util.month_from_3_letter_abbreviation (
-						components @ month_index)
-				end
+				date := date_util.date_from_month_abbrev_string (date_string,
+					field_separator, year_index, month_index, day_index,
+					two_digit_year_partition)
 			else
-				if (components @ month_index).is_integer then
-					month := (components @ month_index).to_integer
-				end
+				date := date_util.date_from_formatted_string (date_string,
+					field_separator, year_index, month_index, day_index,
+					two_digit_year_partition)
 			end
-			if (components @ day_index).is_integer then
-				day := (components @ day_index).to_integer
-			end
-			if (components @ year_index).is_integer then
-				year := (components @ year_index).to_integer
-			end
-			date := date_util.date_from_y_m_d (year, month, day)
 			if date = Void then
 				handle_input_error ("Date input value is invalid.", Void)
 				unrecoverable_error := True
