@@ -25,6 +25,8 @@ src/server1/root . serversrc1.6
 src/server1/utility . serversrc1.6
 src/server1/system_specific . serversrc1.6
 src/server1/database . serversrc1.6
+src/server1/external . serversrc1.6
+src/server1/Clib . serversrc1.6
 src/server1/Ace.ace . serversrc1.6
 src/server1/test/README . serversrc1.6
 src/server1/test/run_tests . serversrc1.6
@@ -232,6 +234,7 @@ src/scripts/python/mas/library/constants.py lib/python/ mas_linux1.6 mas_windows
 src/scripts/python/mas/library/ma_connection.py lib/python/ mas_linux1.6 mas_windows1.6 clientsrc1.6 mac1.6
 src/scripts/python/mas/library/ma_protocol.py lib/python/ mas_linux1.6 mas_windows1.6 clientsrc1.6 mac1.6
 src/clients/CL/maclj bin/ mas_linux1.6 mas_windows1.6 clientsrc1.6 mac1.6
+src/scripts/external/mas_external_retrieve.pl lib/ mas_linux1.6 mas_windows1.6
 src/scripts/windows/runmas.bat bin/ mas_windows1.6
 src/scripts/windows/runmacl.bat bin/ mas_windows1.6
 src/scripts/windows/runmasgui.bat bin/ mas_windows1.6
