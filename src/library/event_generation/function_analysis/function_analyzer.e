@@ -2,7 +2,7 @@ indexing
 	description:
 		"Event generators whose events are based on analysis of %
 		%MARKET_FUNCTION data"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -80,14 +80,12 @@ feature -- Basic operations
 			end
 			!!event.make (event_name, tradable.symbol,
 							tuple.date_time, event_type)
-			-- For weekly, montly, etc. data, this will be the date of
+			-- For weekly, monthly, etc. data, this will be the date of
 			-- the last trading period of which the tuple is composed; for
 			-- daily, and intraday data, this will simply be the date
 			-- of the tuple's date_time:
 			event.set_date (tuple.end_date)
 			event.set_time (tuple.date_time.time)
-			s := concatenation (<<"Event for market ", tradable.name, ": ">>)
-			description.prepend (s)
 			event.set_description (description)
 			product.extend (event)
 		end
