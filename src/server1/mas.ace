@@ -96,8 +96,6 @@ cluster
 
 	server_extensions (server):		"$/extensions"
 
-	extended_support (server_extensions):		"$/support"
-
 	client_lib:		"$MAS/src/client_library"
 
 	client_support (client_lib):		"$/support"
@@ -209,8 +207,6 @@ cluster
 	eiflib_data_scanning (eiffel_components):		"$/data_scanning"
 
 	eiflib_error (eiffel_components):		"$/error"
-
-	eiflib_network (eiffel_components):		"$/network"
 
 	data_scanning_main (eiflib_data_scanning):		"$/main_abstractions"
 
@@ -346,7 +342,7 @@ external
 	object:
 		"${ISE_EIFFEL}/library/time/spec/${ISE_PLATFORM}/lib/libdatetime.a",
 		"${ISE_EIFFEL}/library/net/spec/${ISE_PLATFORM}/lib/libnet.a",
-		"${ECLI}/src/spec/Ise/linux/libecli_c.a",
+		"${ECLI}/src/spec/Ise/${ISE_PLATFORM}/libecli_c.a",
 		"/${MAS}/src/eiffel_library/support/spec/${ISE_PLATFORM}/lib/utilities.o",
 		"${ISE_EIFFEL}/C_library/zlib/libz.a",
 		"${MAS}/src/server1/spec/${ISE_PLATFORM}/lib/external_input_sequence.a",
