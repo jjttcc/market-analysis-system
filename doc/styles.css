@@ -1,102 +1,33 @@
-/*
-	date: "$Date$";
-	revision: "$Revision$"
-*/
 body { background-color: #e9dcd5; }
 :link { color: blue; }
 :visited { color: purple; }
 :active { color: black; }
-.quote {
-   font-style:italic;
-   font-family:serif;
-   font-size:90%;
-}
-.two_part {
-	border: none;
-	margin: 0 0 1em 0;   /* for wide content */
-    padding: 0;
-	/*
-    height: 4em;
-	*/
-    text-align: left;
-	/*
-    width: auto;
-	*/
-}
-.two_part, .left_part, .right_part {
-	/*
-	font-size: 90%;
-	font-style: italic;
-	*/
-	padding: 0;
-	/*
-	position: relative;
-	*/
-}
-.span_page {
-	font-size: 90%;
-	margin: 0 9% 0 14%;
-    text-align: justify;
-	/*
-	width: 100%;
-	*/
-}
-.left_part {
-	font-size: 90%;
+#navigation {
 	float: left;
-	margin-left: 0.25em;
-	margin-top: 2%;
-	/*
-	width: 25%
-	background-color: #e9dcd5;
-	*/
-}
-.inner_right {
+	width: 6em;
+	position: fixed;
 	font-size: 90%;
-	margin-right: 9%;
-	/*
-	background-color: #d9acd5;
-	margin-left: 2%;
-	*/
+	margin-left: 0.15em;
 }
-.inner_left {
+
+#content {
+	margin: 0 1.5em 0 8.1em;
 	font-size: 90%;
-	/*
-	background-color: #a9acd5;
-	*/
 }
-.right_part {
-	font-size: 90%;
-	float: right;
-	margin: 0 5% 0 0;
-	width: 78%;
-	/*
-	background-color: #e9dcd5;
-	*/
+#navigation li {
+	display: block;
+	margin: 1em 0 1em 0;
+	padding: 0 0 0 0;
 }
-#sf-logos {
-	border: 1px black;
-/*
-	background-color: #39dcd5;
-	margin: 0 0 0 0;
-	width: 100%;
-	background-color: #39dcd5;
-*/
+#navigation ul {
+	padding: 0 0 0 0;
+	border: 0px black solid;
+	border-width: 0 0 0 0;
+	margin: 0;
 }
-.page {
-	/*
-	background-color: #09acd5;
-	*/
+.justified {
+    text-align: justify;
 }
-.vwide { width: 2000px; }
-.smallish { font-family:sans-serif; font-size: 70% }
-.medium { font-size: 80% }
-.large { font-size: 110% }
-.verylarge { font-size: 160% }
-.centeraligned {text-align:center}
-.justified {text-align:justify}
-.leftaligned {text-align:left}
-.rightaligned {text-align:right}
 h1 {
 	margin-top: 0cm; margin-bottom: 0cm; border-bottom: none;
 	border-left: none; border-right: none; padding-top: 0.04cm;
@@ -109,4 +40,6 @@ h2 {
 }
 h3 {
 	font-family: "Times New Roman", serif; font-size: 90%; so-language: en-US
+}
+#sf-logos {
 }
