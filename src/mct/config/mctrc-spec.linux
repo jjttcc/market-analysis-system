@@ -5,7 +5,7 @@ replacestart
 {path_separator}:
 {data_dir}<mas_lib_dir>/data/tradables
 {mas_directory_setting}<chart_dir>
-{macl_shell}xterm -e 
+{macl_shell}xterm -geometry 80x56 -e 
 {start_cl_client_command}<macl-shell><bin_dir>/macl -h <hostname> <portnumber>
 {java_jar}/mascharts.jar
 {java_prefix}
