@@ -5,10 +5,6 @@ package common;
 /** Constants shared by several MAS Java applications */
 public interface Constants {
 
-	// Maximum expected size of data received from the server
-	//!!!!Probably no longer needed
-	final int Max_input_count = 1000000;
-
 	// Supposedly optimum message buffer size for efficiency
 	final int Optimal_msg_buffer_size = 60000;
 
