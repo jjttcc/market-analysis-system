@@ -185,45 +185,6 @@ feature {NONE} -- Implementation
 			current_tuple_exists: current_tuple /= Void
 		end
 
-	xold_update_current_tuple (t: TRADABLE [VOLUME_TUPLE]) is
-			-- Update `current_tuple' according to the data at
-			-- `t's current cursor -- position.
-		local
-			operator: RESULT_COMMAND [REAL]
-			variable: NUMERIC_VALUE_COMMAND
-		do
-			operator := operator_for_current_component
-			variable := variable_for_current_component
-			calculate_field (open, operator, variable)
-			current_tuple.set_open (accumulation_operator.value)
-			calculate_field (high, operator, variable)
-			current_tuple.set_high (accumulation_operator.value)
-			calculate_field (low, operator, variable)
-			current_tuple.set_low (accumulation_operator.value)
-			calculate_field (close, operator, variable)
-			current_tuple.set_close (accumulation_operator.value)
-			calculate_field (volume, operator_for_current_component_volume,
-				variable)
-			current_tuple.set_volume (accumulation_operator.value)
-		end
-
-	old_make_current_tuple is
-			-- Use the tuple at the current cursor position of each element
-			-- of `components' to make `current_tuple'.
-		do
-			from
-				create current_tuple.make
-				components.start
-			until
-				components.exhausted
-			loop
---				update_current_tuple (components.item)
-				components.forth
-			end
-		ensure
-			current_tuple_exists: current_tuple /= Void
-		end
-
 	prepare_for_processing is
 			-- Perform any needed initialization before making `data'.
 		do
@@ -260,28 +221,6 @@ feature {NONE} -- Implementation - Hook routines
 				not components.first.data.exhausted implies
 				components.for_all (agent tradable_date_matches (?,
 				components.first.data.item.date_time))
-		end
-
-	old_update_current_tuple (t: TRADABLE [VOLUME_TUPLE]) is
-			-- Update `current_tuple' according to the data at
-			-- `t's current cursor -- position.
-		local
-			operator: RESULT_COMMAND [REAL]
-			variable: NUMERIC_VALUE_COMMAND
-		do
-			operator := operator_for_current_component
-			variable := variable_for_current_component
-			calculate_field (open, operator, variable)
-			current_tuple.set_open (accumulation_operator.value)
-			calculate_field (high, operator, variable)
-			current_tuple.set_high (accumulation_operator.value)
-			calculate_field (low, operator, variable)
-			current_tuple.set_low (accumulation_operator.value)
-			calculate_field (close, operator, variable)
-			current_tuple.set_close (accumulation_operator.value)
-			calculate_field (volume, operator_for_current_component_volume,
-				variable)
-			current_tuple.set_volume (accumulation_operator.value)
 		end
 
 	calculate_field (field: BASIC_NUMERIC_COMMAND;
