@@ -302,7 +302,7 @@ feature {NONE} -- Hook routines
 		deferred
 		end
 
-feature {NONE} -- Implementation - options
+feature {NONE} -- Implementation
 
 	clone_needed: BOOLEAN is true --!!!??
 
