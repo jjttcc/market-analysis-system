@@ -398,7 +398,8 @@ c
 Standard Deviation
 y
 CONSTANT
-c
+n
+Number of standard deviations
 2
 # Lower band:
 c
@@ -423,7 +424,8 @@ c
 Standard Deviation
 y
 CONSTANT
-c
+n
+Number of standard deviations
 2
 # Set n values to 20
 e
