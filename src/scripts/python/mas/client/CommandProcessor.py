@@ -14,8 +14,11 @@ class CommandProcessor:
 			"\n*Select[^?]*opera[nt][do]",
 			"\n*Select *an *indicator *for.*'s",
 			"\n*Select *an *object *for.*'s",
-			"\n*Select the technical indicator",
+			"\n*Select *the *[a-z]* *technical indicator",
 			"\n*Select *an *indicator *to *edit:",
+			"\n*Select *the.*trading *period *type.*:",
+			".*\n*Select specification for crossover detection:",
+			"\n* *Select *a *market *analyzer",
 			"1) "]
 		self.non_shared_pattern = ".*List of all valid objects:.*"
 		self.objects = {}
@@ -67,7 +70,7 @@ class CommandProcessor:
 
 	def select_object_match(self, s):
 		result = false
-#		print "Checking for match of " + s
+#		print "Checking for match of '" + s + "'"
 		for pattern in self.select_patterns:
 #			print "with " + pattern
 			if match(pattern, s) != -1:
@@ -82,18 +85,17 @@ class CommandProcessor:
 		self.objects.clear(); self.shared_objects.clear()
 		lines = split(s, '\n')
 		for l in lines:
+#			print "l: " + l
 			if match("^[1-9][0-9]*)", l) != -1:
 				l = sub(")", "", l)
 				objnumber = sub(" .*", "", l)
 				objname = sub("^[^ ]*  *", "", l)
 				self.objects[objname] = objnumber
+#				print "Stored: " + self.objects[objname] + " (" + objname + ")"
 			elif match(self.non_shared_pattern, l) != -1 and \
 					len(self.objects) > 0:
 				self.shared_objects = self.objects.copy()
 				self.objects.clear()
-#		print "<<l, shared objects>>: " + l
-#		print self.shared_objects.items()
-#		print "Stored: " + self.objects[objname] + " (" + objname + ")"
 
 	def record_input(self, s, shared, key_match):
 #		print "ri - s, shared, key_match: '" + s + "', " + `shared` + \
@@ -101,10 +103,12 @@ class CommandProcessor:
 		if self.selection:
 			if key_match:
 				if shared:
+					# !!Check use of s here:
 					self.input_record = self.input_record + \
-						self.shared_string + key + '\n'
+						self.shared_string + s + '\n'
 				else:
-					self.input_record = self.input_record + key + '\n'
+					# !!Check use of s here:
+					self.input_record = self.input_record + s + '\n'
 			elif s in self.objects.values():
 #				print s + " in objects"
 				self.input_record = self.input_record + \
