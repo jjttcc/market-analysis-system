@@ -181,7 +181,7 @@ feature {NONE} -- Implementation
 					error_occurred := True
 					record := False
 					log_errors (<<"File ", output_file.name,
-						" is not writable.">>)
+						" is not writable.%N">>)
 				end
 			end
 		end
@@ -226,10 +226,10 @@ feature {NONE} -- Implementation
 					input_from_file := False
 					if not input_file.exists then
 						log_errors (<<"File ", input_file.name,
-							" does not exist.">>)
+							" does not exist.%N">>)
 					else
 						log_errors (<<"File ", input_file.name,
-							" is not readable.">>)
+							" is not readable.%N">>)
 					end
 				end
 			end
