@@ -145,6 +145,9 @@ feature -- Basic operations
 				io_devices_not_void: input_device /= Void and
 										output_device /= Void
 			end
+			if current_tradable = Void then
+				initialize_current_tradable
+			end
 			from
 				end_client := False; exit_server := False
 			until
@@ -194,7 +197,7 @@ feature -- Basic operations
 				finished: end_client or exit_server
 			end
 			-- Notify client that it can terminate:
-			print ("")
+			print (Eot)
 			if exit_server then
 				check no_cleanup = false end
 				exit (0)
@@ -208,7 +211,7 @@ feature -- Basic operations
 						retry
 				end
 			else
-				exit (Error_exit_status)
+				terminate (Error_exit_status)
 			end
 		end
 
@@ -380,8 +383,8 @@ feature {NONE} -- Implementation
 				current_tradable := market_list_handler.tradable (symbol,
 					current_period_type)
 				if market_list_handler.error_occurred then
-					log_errors (<<"Error occurred while retreiving data for ",
-						symbol, ": ", market_list_handler.last_error, ".%N">>)
+					log_errors (<<market_list_handler.last_error, ".%N">>)
+					current_tradable := old_tradable
 				else
 					-- Update the current_tradable's target period type,
 					-- if needed.
@@ -502,13 +505,6 @@ feature {NONE} -- Implementation - utilities
 			current_period_type := period_types @ (period_type_names @ Daily)
 			create event_generator_builder.make
 			create function_builder.make (market_list_handler)
-			initialize_current_tradable
-			if not market_list_handler.exhausted then
-				if market_list_handler.error_occurred then
-					log_errors (<<market_list_handler.last_error, "%N">>)
-					raise ("Data retrieval error")
-				end
-			end
 		ensure
 			curr_period_not_void: current_period_type /= Void
 		end
@@ -523,11 +519,13 @@ feature {NONE} -- Implementation - utilities
 				market_list_handler.start
 				current_tradable :=
 					market_list_handler.item (current_period_type)
-				available_period_types := market_list_handler.period_types (
-					market_list_handler.current_symbol)
+				if not market_list_handler.error_occurred then
+					available_period_types := market_list_handler.period_types (
+						market_list_handler.current_symbol)
+				end
 				if market_list_handler.error_occurred then
 					log_errors (<<market_list_handler.last_error, "%N">>)
-					raise ("Data retrieval error")
+					terminate (Error_exit_status)
 				elseif current_tradable = Void then
 					-- No daily data, so use intraday data.
 					if not market_list_handler.error_occurred then
@@ -558,6 +556,13 @@ feature {NONE} -- Implementation - utilities
 			gs: expanded GLOBAL_SERVER
 		do
 			Result := gs.file_lock (name)
+		end
+
+	terminate (status: INTEGER) is
+			-- Notify client of termination and then exit.
+		do
+			print (Eot)
+			exit (status)
 		end
 
 feature {NONE} -- Implementation - attributes
