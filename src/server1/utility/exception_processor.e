@@ -35,17 +35,18 @@ feature -- Basic operations
 	abort_command_line_processing: BOOLEAN is
 			-- Should command-line processing be aborted?
 		do
-			Result := fatal_cl_tag_names.has (tag_name)
+			Result := fatal_command_line_tag_names.has (tag_name)
 		end
 
 feature {NONE} -- Implementation
 
-	fatal_cl_tag_names: LINEAR [STRING] is
+	fatal_command_line_tag_names: LINEAR [STRING] is
 			-- Tag names that are fatal for command-line processing
 		local
 			names: ARRAY [STRING]
 		once
-			names := <<"Broken pipe", Line_limit_reached>>
+			names := <<"Broken pipe", Line_limit_reached,
+				"Connection reset by peer">>
 			Result := names.linear_representation
 			Result.compare_objects
 		ensure
