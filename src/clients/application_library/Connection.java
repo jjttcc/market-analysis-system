@@ -7,6 +7,7 @@ import java.net.*;
 import java.util.*;
 import common.*;
 import support.*;
+import mas_gui.*;
 
 /** Provides an interface for connecting and communicating with the server */
 public class Connection implements NetworkProtocol
@@ -18,47 +19,42 @@ public class Connection implements NetworkProtocol
 		scanner = new DataInspector();
 	}
 
+	// The host name of the server
 	public String hostname() { return _hostname; }
 
+	// The port number for the server connection
 	public Integer port_number() { return _port_number; }
+
+	// Session state data received from the server when logging in.
+	public SessionState session_state() {
+		return _session_state;
+	}
 
 	// Is this connection currently logged in to the server?
 	public boolean logged_in() { return _logged_in; }
 
 	// Log in to the server with the specified login request code.
 	// Precondition: ! logged_in()
-	// Postcondition: logged_in()
+	// Postcondition: logged_in() && session_state() != null
 	public void login() throws IOException {
-System.out.println("login was called");
-		_session_key = 0;
-System.out.println("a");
-		String session_key_str = "";
-System.out.println("b");
+		String s = "";
 		Configuration conf = Configuration.instance();
-System.out.println("c");
 
-System.out.println("connecting");
 		connect();
-System.out.println("sending message");
 		send_msg(Login_request, conf.session_settings(), 0);
 		try {
-System.out.println("getting key");
-			session_key_str = receive_msg().toString();
+			s = receive_msg().toString();
 			if (error_occurred()) {
 				// Failure of login request is a fatal error.
 				throw new IOException (request_result.toString());
 			}
+			_session_state = new SessionState(s);
+System.out.println("session state: " + _session_state.session_key() + ", " +
+_session_state.open_field());
 		}
 		catch (Exception e) {
 			throw new IOException("Attempt to login to server " +
 				"failed: " + e);
-		}
-		try {
-			_session_key = Integer.valueOf(session_key_str).intValue();
-		}
-		catch (Exception e) {
-			throw new IOException("Received invalid key from " +
-				"server: " + session_key_str + " - " + e);
 		}
 		try {
 			close_connection();
@@ -73,7 +69,7 @@ System.out.println("getting key");
 	// Precondition:  logged_in()
 	public void logout() throws IOException {
 		connect();
-		send_msg(Logout_request, "", _session_key);
+		send_msg(Logout_request, "", _session_state.session_key());
 		try {
 			close_connection();
 		}
@@ -88,7 +84,7 @@ System.out.println("getting key");
 	public void send_request(int request_code, String request)
 			throws IOException {
 		connect();
-		send_msg(request_code, request, _session_key);
+		send_msg(request_code, request, _session_state.session_key());
 		receive_msg();
 		close_connection();
 	}
@@ -214,7 +210,7 @@ System.out.println("getting key");
 		return value == OK || value == Error || value == Invalid_symbol;
 	}
 
-	protected int _session_key;
+	protected SessionState _session_state;
 	protected boolean _logged_in = false;
 	protected String _hostname;
 	protected Integer _port_number;
