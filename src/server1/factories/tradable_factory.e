@@ -81,12 +81,6 @@ feature -- Basic operations
 			make_product
 			check value_setters.count > 0 end
 			!!scanner.make (product, input, tuple_maker, value_setters)
-			if not scanner.field_separator.is_equal (field_separator) then
-				scanner.set_field_separator (field_separator)
-			end
-			if not scanner.record_separator.is_equal (record_separator) then
-				scanner.set_record_separator (record_separator)
-			end
 			-- Input data from input stream and stuff it into product.
 			scanner.execute
 			add_indicators (product, indicators)
