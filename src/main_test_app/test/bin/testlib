@@ -1,0 +1,46 @@
+# Utilities for testing
+
+set_next_tpar_usage ()
+{
+	echo "Usage: $1 file_with_test_file_parameters"
+}
+
+set_next_test_params ()
+# Extract the following parameters from the specified file:
+#    "test name", "test data input file name",
+#    "test data output-reference file name", "test index"
+# Put the results into the following environment variables, respectively:
+#    Test_name, Tinput, Toutputref, Tindex
+# When the end of the specified file has been reached (i.e., the previous
+# call read the last line of the file), environment variable Tfinished is
+# set to "true".
+{
+	if [ ! -r $1 ]; then
+		set_next_tpar_usage set_next_test_params; return -1
+	fi
+
+	data_file=$1
+	if [ -z "$current_line" ]; then
+		current_line="$(sed -n '/^[^#]/=;//q' $data_file)"
+		line_count=$(wc -l $data_file|awk '{print $1}')
+	else
+		current_line=$(expr $current_line + 1)
+		if [ $current_line -gt $line_count ]; then
+			Tfinished=true
+			return 0
+		fi
+	fi
+	Test_name=$(sed -n "${current_line}p" $data_file|awk 'BEGIN {FS = ","}
+	{
+		print $1
+	}')
+	set $(sed -n "${current_line}p" $data_file|awk 'BEGIN {FS = ","}
+	{
+		print $2 " " $3 " " $4
+	}')
+	Tinput=$1
+	Toutputref=$2
+	Tindex=$3
+
+	return 0
+}
