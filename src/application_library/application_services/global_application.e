@@ -108,46 +108,31 @@ feature -- Access
 
 	function_library: STORABLE_LIST [MARKET_FUNCTION] is
 			-- All defined market functions
-		do
+		once
 print ("function_library called")
-			if cached_function_library = Void then
-print (" - cached lib void.%N")
-				cached_function_library := retrieved_function_library
-			end
-			Result := cached_function_library
+			Result := retrieved_function_library
 print ("%N")
 		ensure
-			cached: Result = cached_function_library
 			not_void: Result /= Void
 		end
 
 	market_event_generation_library: STORABLE_LIST [MARKET_EVENT_GENERATOR] is
 			-- All defined event generators
-		do
+		once
 print ("meg_library called")
-			if cached_meg_library = Void then
-print (" - cached lib void.%N")
-				cached_meg_library := retrieved_market_event_generation_library
-			end
-			Result := cached_meg_library
+			Result := retrieved_market_event_generation_library
 print ("%N")
 		ensure
-			cached: Result = cached_meg_library
 			not_void: Result /= Void
 		end
 
 	market_event_registrants: STORABLE_LIST [MARKET_EVENT_REGISTRANT] is
 			-- All defined event registrants
-		do
+		once
 print ("mer called")
-			if cached_event_registrants = Void then
-print (" - cached lib void.%N")
-				cached_event_registrants := retrieved_market_event_registrants
-			end
-			Result := cached_event_registrants
+			Result := retrieved_market_event_registrants
 print ("%N")
 		ensure
-			cached: Result = cached_event_registrants
 			not_void: Result /= Void
 		end
 
@@ -246,30 +231,26 @@ print ("%N")
 feature -- Basic operations
 
 	force_function_library_retrieval is
-			-- Force function library to be re-retrieved.
-		local
-			l: STORABLE_LIST [MARKET_FUNCTION]
+			-- Force function library to be re-retrieved by deep copying
+			-- `retrieved_function_library' into it.
 		do
-			cached_function_library := Void
-			l := function_library
+			function_library.deep_copy (retrieved_function_library)
 		end
 
 	force_meg_library_retrieval is
-			-- Force market event generator library to be re-retrieved.
-		local
-			l: STORABLE_LIST [MARKET_EVENT_GENERATOR]
+			-- Force market event generator library to be re-retrieved by deep
+			-- copying `retrieved_market_event_generation_library' into it.
 		do
-			cached_meg_library := Void
-			l := market_event_generation_library
+			market_event_generation_library.deep_copy (
+				retrieved_market_event_generation_library)
 		end
 
 	force_event_registrant_retrieval is
-			-- Force event registrants to be re-retrieved.
-		local
-			l: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
+			-- Force event registrants to be re-retrieved by deep copying
+			-- `retrieved_market_event_registrants' into it.
 		do
-			cached_event_registrants := Void
-			l := market_event_registrants
+			market_event_registrants.deep_copy (
+				retrieved_market_event_registrants)
 		end
 
 feature -- Constants
@@ -448,11 +429,5 @@ print ("retrieve mer called.%N")
 				l.forth
 			end
 		end
-
-	cached_function_library: STORABLE_LIST [MARKET_FUNCTION]
-
-	cached_meg_library: STORABLE_LIST [MARKET_EVENT_GENERATOR]
-
-	cached_event_registrants: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
 
 end -- GLOBAL_APPLICATION
