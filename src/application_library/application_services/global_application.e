@@ -24,6 +24,4 @@ feature {NONE} -- Constants
 
 	default_input_file_name: STRING is "/tmp/tatest"
 
-	Dir_separator: CHARACTER is '/'
-
 end -- GLOBAL_APPLICATION

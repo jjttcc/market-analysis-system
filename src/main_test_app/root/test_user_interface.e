@@ -45,6 +45,9 @@ feature -- Access
 			Result := market_list.item
 		end
 
+	current_period_type: TIME_PERIOD_TYPE
+			-- Current data period type to be processed
+
 feature -- Status setting
 
 	set_factory_builder (arg: FACTORY_BUILDER) is
@@ -178,13 +181,16 @@ feature {NONE}
 			loop
 				print_list (<<"Select action for ", current_tradable.name,
 					":%N     View market data (m) View an indicator (i)%N%
-					%     View composite data (c) Exit (x) Previous (-) ">>)
+					%     Change data period type [currently ",
+					current_period_type.name, "] (c) Exit (x) Previous (-) ">>)
 				inspect
 					selected_character
 				when 'm', 'M' then
-					print_tuples (current_tradable.data)
+					print_tuples (current_tradable.tuple_list (
+									current_period_type.name))
 				when 'c', 'C' then
-					print_composite_lists (current_tradable)
+					select_period_type
+					--!!!print_composite_lists (current_tradable)
 				when 'i', 'I' then
 					print ("Select indicator to view%N")
 					indicator := indicator_selection
@@ -424,6 +430,44 @@ feature {NONE}
 				end
 			end
 			market_list.search_by_file_name (fname)
+			-- current_tradable will be set to the current item of market_list
+			-- (which, because of the above call, corresponds to file fname).
+			-- Update the current_tradable's target period type, if needed.
+			if current_tradable.target_period_type /= current_period_type then
+				current_tradable.set_target_period_type (current_period_type)
+			end
+		end
+
+	select_period_type is
+			-- Obtain selection for current_period_type from user and set
+			-- the current tradable's target_period_type to it.
+		local
+			i: INTEGER
+			types: ARRAY [STRING]
+		do
+			from
+				i := 1
+				types := current_tradable.tuple_list_names
+			until
+				i > types.count
+			loop
+				print_list (<<i, ") ", types @ i, "%N">>)
+				i := i + 1
+			end
+			from
+				read_integer
+			until
+				last_integer > 0 and last_integer <= types.count
+			loop
+				print_list (<<"Selection must be between 1 and ",
+							types.count, " - try again: %N">>)
+				read_integer
+			end
+			current_period_type := period_types @ (types @ last_integer)
+			print_list (<<"Data period type set to ",
+						current_period_type.name, "%N">>)
+					current_tradable.set_target_period_type (
+						current_period_type)
 		end
 
 	indicator_selection: MARKET_FUNCTION is
@@ -519,9 +563,16 @@ feature {NONE}
 	initialize is
 		do
 			event_coordinator := factory_builder.event_coordinator
+			current_period_type := period_types @ "daily"
 			market_list := factory_builder.market_list
 			input_file_names := factory_builder.input_file_names
 			event_coordinator := factory_builder.event_coordinator
+		ensure
+			curr_period_not_void: current_period_type /= Void
+			event_coordinator_not_void: event_coordinator /= Void
+			market_list_not_void: market_list /= Void
+			input_file_names_not_void: input_file_names /= Void
+			event_coordinator_not_void: event_coordinator /= Void
 		end
 
 feature {NONE}
