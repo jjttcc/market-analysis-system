@@ -96,6 +96,7 @@ feature {NONE} -- Implementation
 			real_list.save
 			show_message ("The changes have been saved.")
 			deep_copy_list (working_list, real_list)
+			synchronize_lists
 			dirty := False
 			end_save
 			changed := True
@@ -271,6 +272,13 @@ feature {NONE} -- Hook routines
 		deferred
 		ensure
 			lock_not_void: lock /= Void and not lock.locked
+		end
+
+	synchronize_lists is
+			-- Perform any needed syncrhonization of in-memory lists
+			-- after changes have been saved to persistent store.
+		do
+			-- Null operation - Redefine if needed.
 		end
 
 invariant

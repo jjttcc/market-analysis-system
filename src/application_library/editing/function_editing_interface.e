@@ -37,6 +37,8 @@ deferred class FUNCTION_EDITING_INTERFACE inherit
 			{NONE} all
 			{EDITING_INTERFACE} dirty, readonly, ok_to_save
 			{ANY} edit_indicator_menu, changed
+		redefine
+			synchronize_lists
 		end
 
 	MARKET_TUPLE_LIST_SELECTOR
@@ -277,6 +279,29 @@ feature {EDITING_INTERFACE}
 				editor.edit_two_cplx_fn_op (tvf)
 			when Other then
 				-- No initialization needed.
+			end
+		end
+
+	view_indicator_list (l: LIST [MARKET_FUNCTION]) is
+			-- Allow user to view indicators from `l'.
+		require
+			not_void: l /= Void
+		local
+			selection: INTEGER
+			indicator: MARKET_FUNCTION
+		do
+			from
+				selection := Null_value
+			until
+				selection = Exit_value
+			loop
+				selection := list_selection_with_backout (
+					names_from_function_list(l), "Select an indicator to view")
+				if selection /= Exit_value then
+					indicator := l @ selection
+					check indicator /= Void end
+					show_message (indicator.node_names)
+				end
 			end
 		end
 
@@ -712,6 +737,11 @@ feature {NONE} -- Implementation
 			Result := ""
 		end
 
+	synchronize_lists is
+		do
+			force_function_library_retrieval
+		end
+
 feature {NONE} -- Implementation - indicator editing
 
 	do_edit is
@@ -731,6 +761,8 @@ feature {NONE} -- Implementation - indicator editing
 					selection
 				when Create_new_value then
 					create_new_indicator
+				when View_value then
+					view_indicator_list (working_function_library)
 				when Edit_value then
 					edit_indicator_list (working_function_library)
 				when Remove_value then
