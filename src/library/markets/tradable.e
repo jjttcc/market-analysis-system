@@ -51,7 +51,7 @@ feature -- Access
 
 	tuple_list (period_type: STRING): SIMPLE_FUNCTION [BASIC_MARKET_TUPLE] is
 			-- List associated with `period_type' whose tuples are
-			-- made from `data'
+			-- made from the base data
 		require
 			not_void: period_type /= Void
 			has_type: tuple_list_names.has (period_type)
@@ -74,18 +74,22 @@ feature -- Access
 		end
 
 	tuple_list_names: ARRAY [STRING] is
-			-- The name (key) of each tuple_list associated
+			-- The period-type name (key) of each tuple_list associated
 			-- with `Current'
 		do
 			Result := tuple_lists.current_keys
 		end
+
+	target_period_type: TIME_PERIOD_TYPE
+			-- Type of data (daily, weekly, etc.) specifying which
+			-- `tuple_list' will be processed by `indicators'.
 
 feature -- Access
 
 	yearly_high: PRICE is
 			-- Highest closing price for the past year (52-week high)
 		require
-			data_not_empty: not data.empty
+			not_empty: not data.empty
 		do
 			if y_high = Void then
 				calc_y_high_low
@@ -120,17 +124,42 @@ feature -- Status report
 			end
 		end
 
+feature -- Status setting
+
+	set_target_period_type (arg: TIME_PERIOD_TYPE) is
+			-- Set target_period_type to `arg' and update indicators so
+			-- that their inner input value is set to tuple_list (arg.name).
+		require
+			arg_not_void: arg /= Void
+			target_type_valid: tuple_list_names.has (arg.name)
+		do
+			target_period_type := arg
+			from
+				indicators.start
+			until
+				indicators.exhausted
+			loop
+				indicators.item.set_innermost_input (
+					tuple_list (target_period_type.name))
+				indicators.forth
+			end
+		ensure
+			target_period_type_set: target_period_type = arg
+						and target_period_type /= Void
+		end
+
 feature -- Element change
 
 	add_indicator (f: MARKET_FUNCTION) is
-			-- Add `f' to `indicators'.
+			-- Add `f' to `indicators' and set its inner input value
+			-- to tuple_list (target_period_type.name).
 		require
 			not_there: not indicators.has (f)
 		do
 			indicators.extend (f)
-			f.set_innermost_input (Current)
+			f.set_innermost_input (tuple_list (target_period_type.name))
 		ensure
-			added: indicators.has (f)
+			f_target_added: indicators.has (f)
 			one_more: indicators.count = old indicators.count + 1
 		end
 
@@ -177,11 +206,13 @@ feature {NONE} -- Initialization
 			!!tuple_lists.make (0)
 			sf_make (type)
 			initialize_tuple_lists
+			target_period_type := trading_period_type
 		ensure
 			containers_not_void:
 				indicators /= Void and indicator_groups /= Void and
 					tuple_lists /= Void
 			type_set: trading_period_type = type
+			target_type_set_to_tp: target_period_type = trading_period_type
 		end
 
 	initialize_tuple_lists is
@@ -226,7 +257,7 @@ feature {NONE}
 			-- Cached yearly low value
 
 	tuple_lists: HASH_TABLE [SIMPLE_FUNCTION [BASIC_MARKET_TUPLE], STRING]
-			-- Lists whose tuples are made from `data' (e.g., weekly,
+			-- Lists whose tuples are made from the base data (e.g., weekly,
 			-- monthy, if primary is daily)
 
 feature {NONE}
@@ -279,16 +310,16 @@ feature {NONE}
 
 	process_composite_list (type: TIME_PERIOD_TYPE):
 				SIMPLE_FUNCTION [COMPOSITE_TUPLE] is
-			-- Create a list of composite tuples, using `data' as input.
+			-- Create a list of composite tuples from the base data.
 		require
-			not_empty: data.count > 1
+			not_empty: count > 1
 		local
 			ctf: COMPOSITE_TUPLE_FACTORY
 			ctbuilder: COMPOSITE_TUPLE_BUILDER
 			start_date_time: DATE_TIME
 		do
 			ctf := make_ctf
-			start_date_time := clone (data.first.date_time)
+			start_date_time := clone (first.date_time)
 			adjust_start_time (start_date_time, type)
 			if type.irregular then
 				--when ready:
@@ -315,5 +346,7 @@ invariant
 
 	containers_not_void: indicators /= Void and indicator_groups /= Void and
 							tuple_lists /= Void
+	target_type_valid: target_period_type /= Void and
+		tuple_list_names.has (target_period_type.name)
 
 end -- class TRADABLE
