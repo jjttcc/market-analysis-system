@@ -16,4 +16,9 @@ feature -- Access
 			create {LINKED_LIST[STRING]} Result.make
 		end
 
+	market_data (symbol: STRING): LINKED_LIST [DB_RESULT] is
+			-- Data for `symbol'
+		do
+		end
+
 end -- class MAS_DB_SERVICES

@@ -47,6 +47,11 @@ feature -- Access
 			end
 		end
 
+	market_data (symbol: STRING): LINKED_LIST [DB_RESULT] is
+			-- Data for `symbol'
+		do
+		end
+
 feature {NONE} -- Implementation
 
 	db_info: MAS_DB_INFO
