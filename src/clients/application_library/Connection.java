@@ -47,7 +47,6 @@ abstract public class Connection {
 				throw new IOException (request_result.toString());
 			}
 			session_state = new_session_state(s);
-System.out.println("login - received key value of " + session_state.session_key());
 		} catch (IOException e) {
 			throw new IOException("Attempt to login to server " +
 				"failed: " + e);
@@ -65,7 +64,6 @@ System.out.println("login - received key value of " + session_state.session_key(
 	public void logout() throws IOException {
 		connect();
 		send_msg(Logout_request_code, "", session_state.session_key());
-System.out.println("logout - with key value of " + session_state.session_key());
 		try {
 			close_connection();
 		} catch (Exception e) {
@@ -80,7 +78,6 @@ System.out.println("logout - with key value of " + session_state.session_key());
 			throws IOException {
 //System.out.println("sending request: " + request);
 		connect();
-System.out.println("send_req - with key value of " + session_state.session_key());
 		send_msg(request_code, request, session_state.session_key());
 		receive_msg();
 		close_connection();

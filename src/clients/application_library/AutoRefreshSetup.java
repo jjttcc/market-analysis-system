@@ -32,7 +32,6 @@ public class AutoRefreshSetup {
 	// if `data_request_client' is already scheduled.
 	public void schedule() {
 		if (timer == null) {
-System.out.println("I (" + this + ") am creating a new Timer");
 			timer = new Timer(true);
 			TimeDelimitedDataRequest timer_task =
 				new TimeDelimitedDataRequest(data_request_client);

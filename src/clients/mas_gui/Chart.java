@@ -465,7 +465,6 @@ return true; //???!!!!!!!!!!!!!!!!!!!!!
 	private void post_initialize() {
 		MA_Configuration conf = MA_Configuration.application_instance();
 		if (conf.auto_refresh()) {
-System.out.println("I (" + this + ") am creating a new AutoRefreshSetup");
 			auto_refresh_handler = new AutoRefreshSetup(this);
 			turn_on_refresh();
 		}
