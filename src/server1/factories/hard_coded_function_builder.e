@@ -1,8 +1,6 @@
 indexing
-	description:
-		"Builder of a list of hard-coded market functions"
-	note:
-		"Hard-coded standard indicators"
+	description: "Builder of a list of hard-coded market functions"
+	note: "Hard-coded standard indicators"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -89,13 +87,13 @@ feature -- Basic operations
 			l.extend (stochastic_percent_K (f, StochasticK_n, "Stochastic %%K"))
 			l.extend (stochastic_percent_D (f, StochasticK_n, StochasticD_n,
 											"Stochastic %%D"))
-			l.extend (simple_ma (l.last, StochasticD_n,
-											"Slow Stochastic %%D"))
+			l.extend (simple_ma (l.last, StochasticD_n, "Slow Stochastic %%D"))
 			l.extend (rsi (f, RSI_n, "Relative Strength Index"))
 			l.extend (wilder_ma (f, Wilder_MA_n, "Wilder Moving Average"))
 			l.extend (wma (f, WMA_n, "Weighted Moving Average"))
 			l.extend (market_data (f, "Market Data"))
 			l.extend (market_function_line (f, "Line"))
+l.extend (wma_of_midpoint (f, WMA_n, "WMA of Midpoint"))
 			product := l
 		end
 
@@ -155,7 +153,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			-- A momentum function
 		local
 			operator: BINARY_OPERATOR [REAL, REAL]
-			close: CLOSING_PRICE
+			close: BASIC_NUMERIC_COMMAND
 			close_minus_n: MINUS_N_COMMAND
 		do
 			create close; create close_minus_n.make (f.output, close, n)
@@ -207,7 +205,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			bnc: BASIC_NUMERIC_COMMAND
 			prevcmd: UNARY_LINEAR_OPERATOR
 			sum: LINEAR_SUM
-			close: CLOSING_PRICE
+			close: BASIC_NUMERIC_COMMAND
 		do
 			create ncmd.make (n)
 			create bnc
@@ -224,7 +222,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			Result.set_name (name)
 		end
 
-	wma (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
+	old_wma (f: MARKET_FUNCTION; n: INTEGER; name: STRING): --!!!!!!!
 				N_RECORD_ONE_VARIABLE_FUNCTION is
 		local
 			plus: ADDITION
@@ -233,6 +231,42 @@ feature {NONE} -- Hard-coded market function building procedures
 			ncmd: N_VALUE_COMMAND
 			sum: LINEAR_SUM
 			close: CLOSING_PRICE
+			minus_n: MINUS_N_COMMAND
+			k: N_BASED_UNARY_OPERATOR
+			one, two: CONSTANT
+			ix: INDEX_EXTRACTOR
+		do
+			create one.make (1); create two.make (2)
+			create ncmd.make (n)
+			create close
+			create ix.make (Void)
+			create leftmult.make (close, ix)
+			create sum.make (f.output, leftmult, n)
+			ix.set_indexable (sum)
+			create minus_n.make (f.output, sum, n)
+			-- minus_n's offset needs to be adjusted to 1 less than n
+			-- because the cursor needs to move back 4 (n-1) periods in
+			-- order to sum the last 5 periods (relative to the
+			-- current period - i.e., target.item).
+			minus_n.set_n_adjustment (-1)
+			create plus.make (ncmd, one)
+			create rightmult.make (ncmd, plus)
+			create innerdiv.make (rightmult, two)
+			create k.make (innerdiv, n)
+			create outerdiv.make (minus_n, k)
+			create Result.make (f, outerdiv, n)
+			Result.set_name (name)
+		end
+
+	wma (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
+				N_RECORD_ONE_VARIABLE_FUNCTION is
+		local
+			plus: ADDITION
+			leftmult, rightmult: MULTIPLICATION
+			outerdiv, innerdiv: DIVISION
+			ncmd: N_VALUE_COMMAND
+			sum: LINEAR_SUM
+			close: BASIC_NUMERIC_COMMAND
 			minus_n: MINUS_N_COMMAND
 			k: N_BASED_UNARY_OPERATOR
 			one, two: CONSTANT
@@ -457,7 +491,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			n_cmd: N_VALUE_COMMAND
 			relational_op: BINARY_OPERATOR [BOOLEAN, REAL]
 			offset_minus_1, offset_0: SETTABLE_OFFSET_COMMAND
-			close: CLOSING_PRICE
+			close: BASIC_NUMERIC_COMMAND
 			fname: STRING
 		do
 			create one.make (1); create zero.make (0)
@@ -494,6 +528,68 @@ feature {NONE} -- Hard-coded market function building procedures
 			-- compensate - ensure that the left-most element of the input
 			-- being processed is the first element.
 			Result.set_effective_offset (1)
+		end
+
+feature -- temporary experiment!!!!!!
+
+	wma_of_midpoint (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
+				N_RECORD_ONE_VARIABLE_FUNCTION is
+		do
+			Result := wma (midpoint (f), n, name)
+		end
+
+	old_wma_of_midpoint (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
+				N_RECORD_ONE_VARIABLE_FUNCTION is
+		local
+			plus: ADDITION
+			leftmult, rightmult: MULTIPLICATION
+			outerdiv, innerdiv: DIVISION
+			ncmd: N_VALUE_COMMAND
+			sum: LINEAR_SUM
+			cmd: BASIC_LINEAR_COMMAND
+			minus_n: MINUS_N_COMMAND
+			k: N_BASED_UNARY_OPERATOR
+			one, two: CONSTANT
+			ix: INDEX_EXTRACTOR
+			mp: MARKET_FUNCTION
+		do
+			mp := midpoint (f)
+			create one.make (1); create two.make (2)
+			create ncmd.make (n)
+create cmd.make (f.output) -- test 'f'
+			create ix.make (Void)
+			create leftmult.make (cmd, ix)
+			create sum.make (mp.output, leftmult, n)
+			ix.set_indexable (sum)
+			create minus_n.make (mp.output, sum, n)
+			-- minus_n's offset needs to be adjusted to 1 less than n
+			-- because the cursor needs to move back 4 (n-1) periods in
+			-- order to sum the last 5 periods (relative to the
+			-- current period - i.e., target.item).
+			minus_n.set_n_adjustment (-1)
+			create plus.make (ncmd, one)
+			create rightmult.make (ncmd, plus)
+			create innerdiv.make (rightmult, two)
+			create k.make (innerdiv, n)
+			create outerdiv.make (minus_n, k)
+			create Result.make (mp, outerdiv, n)
+			Result.set_name (name)
+		end
+
+	midpoint (f: MARKET_FUNCTION): ONE_VARIABLE_FUNCTION is
+			-- Midpoint
+		local
+			div: DIVISION
+			add: ADDITION
+			high: HIGH_PRICE
+			low: LOW_PRICE
+			two: CONSTANT
+		do
+			create high; create low; create two.make (2)
+			create add.make (high, low)
+			create div.make (add, two)
+			create Result.make (f, div)
+			Result.set_name ("Midpoint")
 		end
 
 invariant
