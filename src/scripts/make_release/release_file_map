@@ -270,7 +270,8 @@ lib/binaries/mas_assert_v1.6.5 bin/mas_assert mas_linux1.6.5
 lib/binaries/libodbc.so.1 lib mas_linux1.6.5 serversrc1.6.5
 # (MAS Documentation)
 doc/GUI_introduction . mas_linux1.6.5 mac1.6.5
-doc/masystem_introduction . mas_linux1.6.5 mac1.6.5
+doc/masystem_introduction-linux.txt doc/masystem_introduction.txt mas_linux1.6.5 mac1.6.5
+doc/masystem_introduction-linux.html doc/masystem_introduction.html mas_linux1.6.5 mac1.6.5
 doc/java_info . mas_linux1.6.5 mac1.6.5
 doc/feature_list . mas_linux1.6.5 mac1.6.5
 doc/creating_indicators . mas_linux1.6.5 mac1.6.5
@@ -288,7 +289,8 @@ doc/GUI_client_change_log doc/GUI_CHANGE_LOG mas_linux1.6.5 mac1.6.5
 doc/Server_change_log doc/MAS_CHANGE_LOG mas_linux1.6.5
 # (MAS Documentation, Windows style)
 doc/GUI_introduction doc/GUI_introduction.txt[dos] mas_windows1.6.5
-doc/masystem_introduction doc/masystem_introduction.txt[dos] mas_windows1.6.5
+doc/masystem_introduction-windows.txt doc/masystem_introduction.txt[dos] mas_windows1.6.5
+doc/masystem_introduction-windows.html doc/masystem_introduction.html mas_windows1.6.5
 doc/feature_list doc/feature_list.txt[dos] mas_windows1.6.5
 doc/creating_indicators doc/creating_indicators.txt[dos] mas_windows1.6.5
 doc/creating_market_analyzers doc/creating_market_analyzers.txt[dos] mas_windows1.6.5
