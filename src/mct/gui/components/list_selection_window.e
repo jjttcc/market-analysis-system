@@ -62,7 +62,6 @@ feature {NONE} -- Implementation - initialization
 			list.disable_multiple_selection
 			Result.extend (list)
 			set_max_list_widths
-print ("max_list_width: " + max_list_width.out + "%N")
 			list.set_minimum_size (max_list_width * Estimated_character_width,
 				(rows.count + 1) * Estimated_character_height)
 		end
@@ -115,10 +114,8 @@ print ("max_list_width: " + max_list_width.out + "%N")
 				i = max_list_widths.upper + 1
 			loop
 				max_list_width := max_list_width + max_list_widths @ i
-print ("before: width @ " + i.out + ": " + (max_list_widths @ i).out + "%N")
 				max_list_widths.put (max_list_widths @ i *
 					Estimated_character_width, i)
-print ("after: width @ " + i.out + ": " + (max_list_widths @ i).out + "%N")
 				i := i + 1
 			end
 			list.set_column_widths (max_list_widths)
