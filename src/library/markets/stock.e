@@ -149,8 +149,6 @@ feature {NONE} -- Implementation
 				--       item has been adjusted for all splits in splist
 				--       whose dates apply to (are greater than)
 				--       item.date_time.date
-			variant
-				splits.count + 1 - splits.index
 			until
 				splits.after or after
 			loop
