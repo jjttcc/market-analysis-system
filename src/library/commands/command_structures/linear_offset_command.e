@@ -27,7 +27,7 @@ feature -- Status report
 	target_cursor_not_affected: BOOLEAN is
 			-- True
 		once
-			Result := true
+			Result := True
 		end
 
 feature -- Basic operations

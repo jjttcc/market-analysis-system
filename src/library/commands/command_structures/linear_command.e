@@ -21,11 +21,29 @@ deferred class LINEAR_COMMAND inherit
 			{COMMAND_EDITOR, MARKET_FUNCTION_EDITOR} set
 		end
 
+	INDEXED
+
 feature -- Initialization
 
 	initialize (a: LINEAR_ANALYZER) is
 		do
 			set (a.target)
+		end
+
+feature -- Access
+
+	index: INTEGER is
+		do
+			Result := target.index
+		end
+
+feature -- Status report
+
+	index_is_target_based: BOOLEAN is
+			-- Is `index' derived from `target.index'?
+		do
+			-- Default to True; redefine if needed.
+			Result := True
 		end
 
 feature -- Basic operations
@@ -43,5 +61,10 @@ feature -- Status report
 			-- Will target.index not change when execute is called?
 		deferred
 		end
+
+invariant
+
+	index_value_if_target_based: index_is_target_based implies
+		index = target.index
 
 end -- class LINEAR_COMMAND

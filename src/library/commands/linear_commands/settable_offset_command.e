@@ -61,7 +61,7 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is false
+	arg_mandatory: BOOLEAN is False
 
 feature -- Status setting
 

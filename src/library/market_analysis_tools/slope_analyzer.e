@@ -36,9 +36,9 @@ feature -- Initialization
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is false
+	arg_mandatory: BOOLEAN is False
 
-	target_cursor_not_affected: BOOLEAN is true
+	target_cursor_not_affected: BOOLEAN is True
 			-- True
 
 feature -- Basic operations

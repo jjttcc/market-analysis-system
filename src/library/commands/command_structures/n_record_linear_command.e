@@ -11,9 +11,7 @@ indexing
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class N_RECORD_LINEAR_COMMAND inherit
-
-	INDEXED
+deferred class N_RECORD_LINEAR_COMMAND inherit
 
 	N_RECORD_COMMAND
 		rename
@@ -36,7 +34,8 @@ class N_RECORD_LINEAR_COMMAND inherit
 		undefine
 			children
 		redefine
-			forth, start, exhausted, invariant_value, target, action
+			forth, start, exhausted, invariant_value, target, action, index,
+			index_is_target_based
 		end
 
 	UNARY_OPERATOR [REAL, REAL]
@@ -49,10 +48,6 @@ class N_RECORD_LINEAR_COMMAND inherit
 		redefine
 			operand
 		end
-
-creation {NONE} -- Hidden creation routine to prevent instantiation
-
-	make
 
 feature {NONE} -- Initialization
 
@@ -79,6 +74,31 @@ feature -- Access
 			-- Operand that determines which field in each tuple to
 			-- examine for the highest value
 
+feature -- Status report
+
+	index_is_target_based: BOOLEAN is
+		do
+			Result := False
+		end
+
+	index_is_n_based: BOOLEAN is
+			-- Is `index' the current value in a numeric sequence
+			-- based on the value of `n'?
+		do
+			Result := True
+		end
+
+	arg_mandatory: BOOLEAN is
+		once
+			Result := False
+		end
+
+	target_cursor_not_affected: BOOLEAN is
+			-- True if `operand' does not change the cursor in its
+			-- `execute' routine
+		once
+			Result := True
+		end
 
 feature {MARKET_FUNCTION} -- Initialization
 
@@ -108,20 +128,6 @@ feature -- Basic operations
 	execute (arg: ANY) is
 		do
 			do_all
-		end
-
-feature -- Status report
-
-	arg_mandatory: BOOLEAN is
-		once
-			Result := false
-		end
-
-	target_cursor_not_affected: BOOLEAN is
-			-- True if `operand' does not change the cursor in its
-			-- `execute' routine
-		once
-			Result := true
 		end
 
 feature {NONE} -- Implementation
@@ -184,7 +190,10 @@ feature {NONE}
 
 invariant
 
-	exhausted_if_large_index: index = n + 1 implies exhausted
-	index_constraint: index >= 1 and index <= n + 1
+	index_exhausted_relationship: index_is_n_based implies (
+		index = n + 1 implies exhausted)
+	index_constraint: index_is_n_based implies (
+		index >= 1 and index <= n + 1)
+	not_both_index_meanings: index_is_target_based xor index_is_n_based
 
 end -- class N_RECORD_LINEAR_COMMAND

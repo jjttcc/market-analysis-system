@@ -129,7 +129,7 @@ feature -- Basic operations
 	execute (arg: ANY) is
 		do
 			if function_based then
-				synchronize_target_with_input
+				synchronize_target_with_innermost_input
 			end
 			-- The client of this class may have no control over the linear
 			-- structure `target', so responsibility must be taken for
@@ -164,7 +164,7 @@ feature {NONE} -- Implementation
 	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE]
 			-- Innermost input sequence of `input' - used for efficiency
 
-	synchronize_target_with_input is
+	synchronize_target_with_innermost_input is
 			-- Synchronize `target' with `innermost_input'.
 		require
 			innermost_input_not_off: not innermost_input.off

@@ -68,12 +68,11 @@ feature -- Basic operations
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is false
+	arg_mandatory: BOOLEAN is False
 
 	target_cursor_not_affected: BOOLEAN is
-			-- True
 		once
-			Result := true
+			Result := True
 		end
 
 end -- class UNARY_LINEAR_OPERATOR

@@ -167,6 +167,12 @@ feature -- Access
 			l.extend (command_with_generator ("LOWEST_VALUE"))
 			l.extend (command_with_generator ("HIGHEST_VALUE"))
 			l.extend (command_with_generator ("LINEAR_SUM"))
+			l.extend (command_with_generator ("SLOPE_ANALYZER"))
+			l.extend (command_with_generator ("SETTABLE_OFFSET_COMMAND"))
+			l.extend (command_with_generator ("MINUS_N_COMMAND"))
+			l.extend (command_with_generator ("UNARY_LINEAR_OPERATOR"))
+			l.extend (command_with_generator ("FUNCTION_BASED_COMMAND"))
+			l.extend (command_with_generator ("BASIC_LINEAR_COMMAND"))
 
 			create l.make (1)
 			Result.extend (l, Constant_command)

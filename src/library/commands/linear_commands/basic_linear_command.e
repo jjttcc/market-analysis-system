@@ -54,9 +54,9 @@ feature -- Basic operations
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is false
+	arg_mandatory: BOOLEAN is False
 
-	target_cursor_not_affected: BOOLEAN is true
+	target_cursor_not_affected: BOOLEAN is True
 			-- True
 
 end -- class BASIC_LINEAR_COMMAND
