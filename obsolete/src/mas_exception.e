@@ -44,7 +44,7 @@ feature -- Basic operations
 			error_msg: STRING
 		do
 			if not is_signal then
-				if developer_exception_name /= Void then
+				if is_developer_exception then
 					error_msg := developer_exception_name
 				else
 					error_msg := meaning (exception)
