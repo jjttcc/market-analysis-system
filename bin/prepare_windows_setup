@@ -8,6 +8,7 @@ fatal() {
 	if [ ! -z "$*" ]; then
 		echo "Fatal error encountered: $*" >&2
 	fi
+	rm -f $srcbase
 	echo "Exiting ..." >&2
 	exit -1
 }
