@@ -8,10 +8,7 @@
 # Market Analysis Server source code
 src/application_library . serversrc1.6.5
 src/library . serversrc1.6.5
-src/eiffel_library . serversrc1.6.5
-/suse_6_3/usr3/tmpusr2/eiffel/libraries/ecli/src . serversrc1.6.5
-/suse_6_3/usr3/tmpusr2/eiffel/libraries/ecli/Copyright.txt . serversrc1.6.5
-/suse_6_3/usr3/tmpusr2/eiffel/libraries/ecli/INSTALL_INFO.txt . serversrc1.6.5
+../eiffel_library src/ serversrc1.6.5
 src/server1/abstractions . serversrc1.6.5
 src/server1/doc . serversrc1.6.5
 src/server1/factories . serversrc1.6.5
@@ -30,7 +27,7 @@ src/server1/database . serversrc1.6.5
 src/server1/external . serversrc1.6.5
 src/server1/Clib . serversrc1.6.5
 src/server1/lib . serversrc1.6.5
-src/server1/Ace.ace . serversrc1.6.5
+../projects/current/mas.ace src/server1/ serversrc1.6.5
 src/server1/test/README . serversrc1.6.5
 src/server1/test/run_tests . serversrc1.6.5
 src/server1/test/bin/compare_numbers . serversrc1.6.5
@@ -267,8 +264,6 @@ lib/binaries/mas_assert_v1.6.5 bin/mas_assert mas_linux1.6.5
 # Include this odbc library if the executable was not statically
 # linked with it:
 lib/binaries/libodbc.so.1 lib mas_linux1.6.5 serversrc1.6.5
-# No new Windows server executable in release 1.6.5 - use 1.2 version:
-lib/binaries/mas_v1.2.exe bin/mas.exe mas_windows1.6.5
 # (MAS Documentation)
 doc/GUI_introduction . mas_linux1.6.5 mac1.6.5
 doc/masystem_introduction . mas_linux1.6.5 mac1.6.5
@@ -309,6 +304,7 @@ src/scripts/install/install ./ mas_linux1.6.5 mas_windows1.6.5
 #src/scripts/install/install_config ./ mas_linux1.6.5 mas_windows1.6.5
 # Data and server-configuration files needed by mas1.6.5
 build/data lib/ mas_linux1.6.5 mas_windows1.6.5
+build/data/symbols lib/ mas_linux1.6.5 mas_windows1.6.5
 build/database/mas_dbrc lib/ mas_linux1.6.5 mas_windows1.6.5
 build/database/mas_dbrc_with_commands lib/ mas_linux1.6.5 mas_windows1.6.5
 build/database/mas_dbrc_separate_tables lib/ mas_linux1.6.5 mas_windows1.6.5
