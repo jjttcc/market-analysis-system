@@ -17,9 +17,9 @@ public class MA_Client {
 			command_line_options);
 	}
 
-	private static mas_gui.Connection connection() {
+	private static mas_gui.MA_Connection connection() {
 //		assert command_line_options != null;
-		mas_gui.Connection result;
+		mas_gui.MA_Connection result;
 
 		String hostname = command_line_options.hostname();
 		int port_number = command_line_options.port_number();
@@ -31,7 +31,7 @@ public class MA_Client {
 		if (command_line_options.compression()) {
 			result = new mas_gui.CompressedConnection(io_connection);
 		} else {
-			result = new mas_gui.Connection(io_connection);
+			result = new mas_gui.MA_Connection(io_connection);
 		}
 
 		return result;

@@ -182,8 +182,14 @@ public class Connection implements NetworkProtocol, Constants {
 
 	// Is `value' a valid server response?
 	boolean valid_server_response(int value) {
-		return value == OK || value == Error || value == Invalid_symbol ||
-			value == Warning;
+		return value == OK || value == Error || value == Warning ||
+			valid_application_server_response(value);
+	}
+
+	// Is `value' a valid server response for this application?
+	// (Redefine this method in descendants, if needed.)
+	boolean valid_application_server_response(int value) {
+		return true;
 	}
 
 	protected SessionState _session_state;

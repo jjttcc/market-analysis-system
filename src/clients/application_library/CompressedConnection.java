@@ -11,7 +11,7 @@ import graph.*;
 import support.*;
 
 /** A Connection that receives compressed data from the server */
-public class CompressedConnection extends Connection
+public class CompressedConnection extends MA_Connection
 {
 
 	// args[0]: hostname, args[1]: port_number
