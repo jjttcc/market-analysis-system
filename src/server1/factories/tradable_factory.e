@@ -260,9 +260,9 @@ feature {NONE} -- Implementation
 		do
 --!!!!!Need to handling configuration for the "configurable" date setter.
 			if open_interest then
-				Result := derivative_builder.index_vector (no_open, intraday)
+				Result := derivative_builder.index_vector (intraday)
 			else
-				Result := stock_builder.index_vector (no_open, intraday)
+				Result := stock_builder.index_vector (intraday)
 			end
 		ensure
 			at_least_one: Result.count > 0
@@ -288,7 +288,7 @@ feature {NONE} -- Implementation
 			-- i_vector indicates which value_setters to insert into
 			-- vs, in the order specified, using the xxx_index constants.
 			-- For example, i_vector = << Date_index, Close_index >>
-			-- specifies to insert the DAY_DATE_SETTER, then the CLOSE_SETTER.
+			-- specifies to insert the DATE_SETTER, then the CLOSE_SETTER.
 		require
 			vs /= Void
 		local
@@ -298,9 +298,10 @@ feature {NONE} -- Implementation
 		do
 			if value_setter_vector = Void then
 				create value_setter_vector.make (1, Last_index)
---!!!!!!!Test here:
-				create {CONFIGURABLE_DAY_DATE_SETTER} setter.make
+				create {DATE_SETTER} setter.make
 				value_setter_vector.put (setter, Date_index)
+				create {CONFIGURABLE_DATE_SETTER} setter.make
+				value_setter_vector.put (setter, Configurable_date_index)
 				create {TIME_SETTER} setter.make
 				value_setter_vector.put (setter, Time_index)
 				create {OPEN_SETTER} setter
