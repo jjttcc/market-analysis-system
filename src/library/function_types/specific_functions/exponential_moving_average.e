@@ -88,7 +88,6 @@ feature {MARKET_FUNCTION_EDITOR} -- Status setting
 		do
 			exp := e
 			exp.set_n (n)
-print ("exp set: ") print(exp_inverse); print ("%N")
 		ensure
 			exp_set: exp = e and exp /= Void
 		end
@@ -110,7 +109,6 @@ feature {NONE} -- Implementation
 			t: SIMPLE_TUPLE
 			latest_value: REAL
 		do
---print (1 - exp.value); print (", ") print(exp_inverse); print ("%N")
 			check
 				exp_inv_correct:
 					rabs(1 - exp.value) - rabs(exp_inverse) <= .00001
@@ -120,7 +118,6 @@ feature {NONE} -- Implementation
 			latest_value := operator.value
 			create t.make (target.item.date_time, target.item.end_date,
 						latest_value * exp.value +
---!!!							output.last.value * (1 - exp.value))
 							output.last.value * (exp_inverse))
 			output.extend (t)
 		ensure then
@@ -135,7 +132,6 @@ feature {NONE} -- Implementation
 	update_exp_inverse is
 			-- Update `exp_inverse' with the current `exp' value.
 		do
-print ("update exp inv called%N")
 			exp_inverse := 1 - exp.value
 		end
 
