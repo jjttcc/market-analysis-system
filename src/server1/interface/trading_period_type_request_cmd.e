@@ -28,7 +28,7 @@ feature -- Basic operations
 			ptypes: LIST [STRING]
 		do
 			-- `msg' is expected to contain (only) the market symbol
-			ptypes := market_list_handler.period_types (msg)
+			ptypes := tradables.period_types (msg)
 			if ptypes = Void then
 				if server_error then
 					report_server_error

@@ -42,10 +42,10 @@ feature {NONE}
 		local
 			tuple_list: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
 		do
-			tuple_list := market_list_handler.tuple_list (market_symbol,
+			tuple_list := tradables.tuple_list (market_symbol,
 				trading_period_type)
 			if tuple_list = Void then
-				if not market_list_handler.symbols.has (market_symbol) then
+				if not tradables.symbols.has (market_symbol) then
 					report_error (Invalid_symbol, <<"Symbol not in database.">>)
 				elseif server_error then
 					report_server_error
