@@ -28,29 +28,6 @@ feature -- Access
 		deferred
 		end
 
-feature -- Status report
-
-	justification_on: BOOLEAN
-			-- Is justification to be used for printing?
-
-feature -- Status setting
-
-	justify is
-			-- Set justification on.
-		do
-			justification_on := true
-		ensure
-			justification_on = true
-		end
-
-	no_justify is
-			-- Set justification off.
-		do
-			justification_on := false
-		ensure
-			justification_on = false
-		end
-
 feature -- Basic operations
 
 	print_list (l: ARRAY [ANY]) is
