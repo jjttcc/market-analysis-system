@@ -1,10 +1,11 @@
 /* Copyright 1998 - 2001: Jim Cochrane - see file forum.txt */
 
+package mas_gui;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
 import common.*;
-import graph.*;
 import support.*;
 
 /** Provides an interface for connecting and communicating with the server */
@@ -27,55 +28,57 @@ public class Connection implements NetworkProtocol
 	// Log in to the server with the specified login request code.
 	// Precondition: ! logged_in()
 	// Postcondition: logged_in()
-	public void login() {
+	public void login() throws IOException {
+System.out.println("login was called");
 		_session_key = 0;
+System.out.println("a");
 		String session_key_str = "";
+System.out.println("b");
 		Configuration conf = Configuration.instance();
+System.out.println("c");
 
+System.out.println("connecting");
 		connect();
+System.out.println("sending message");
 		send_msg(Login_request, conf.session_settings(), 0);
 		try {
+System.out.println("getting key");
 			session_key_str = receive_msg().toString();
 			if (error_occurred()) {
 				// Failure of login request is a fatal error.
-				System.err.println(request_result);
-				System.exit(-1);
+				throw new IOException (request_result.toString());
 			}
 		}
 		catch (Exception e) {
-			System.err.println("Fatal error: attempt to login to server " +
+			throw new IOException("Attempt to login to server " +
 				"failed: " + e);
-			e.printStackTrace();
-			System.exit(-1);
 		}
 		try {
 			_session_key = Integer.valueOf(session_key_str).intValue();
 		}
 		catch (Exception e) {
-			System.err.println("Fatal error: received invalid key from " +
-				"server: " + session_key_str);
-			System.exit(-1);
+			throw new IOException("Received invalid key from " +
+				"server: " + session_key_str + " - " + e);
 		}
 		try {
 			close_connection();
 		}
 		catch (Exception e) {
-			System.err.println("Fatal error: close connection failed");
-			System.exit(-1);
+			throw new IOException("Close connection failed");
 		}
 		_logged_in = true;
 	}
 
 	// Send a logout request to the server to end the current session.
 	// Precondition:  logged_in()
-	public void logout() {
+	public void logout() throws IOException {
 		connect();
 		send_msg(Logout_request, "", _session_key);
 		try {
 			close_connection();
 		}
 		catch (Exception e) {
-			System.err.println("Error: close connection failed");
+			throw new IOException("Error: close connection failed" + e);
 		}
 	}
 
@@ -163,7 +166,7 @@ public class Connection implements NetworkProtocol
 		}
 	}
 
-	private void connect() {
+	private void connect() throws IOException {
 		try {
 			//It appears that the only way to connect a client socket is
 			//to create a new one!
@@ -172,14 +175,12 @@ public class Connection implements NetworkProtocol
 			in = null;
 		}
 		catch (UnknownHostException e) {
-			System.err.println("Don't know about host: ");
-			System.err.println(_hostname);
-			System.exit(1);
+			throw new UnknownHostException("Don't know about host: " +
+				_hostname);
 		}
 		catch (IOException e) {
-			System.err.println("Couldn't get I/O for the connection to: " +
+			throw new IOException("Couldn't get I/O for the connection to: " +
 								_hostname);
-			System.exit(1);
 		}
 	}
 
