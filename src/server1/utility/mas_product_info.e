@@ -26,19 +26,19 @@ feature -- Access
 			-- The components of the version number
 			-- Components are strings to allow mixed numbers and letters.
 		once
-			Result := <<"1", "6", "5d">>
+			Result := <<"1", "6", "6">>
 		end
 
 	date: DATE is
 			-- The last date that `number' was updated
 		once
-			create Result.make (2003, 1, 3)
+			create Result.make (2003, 1, 8)
 		end
 
 	release_description: STRING is
 			-- Short description of the current release
 		once
-			Result := "Post-1.6.5 development release b compiled with GOBO 3.0"
+			Result := "1.6.6 - Intermediate release"
 		end
 
 	copyright: STRING is
