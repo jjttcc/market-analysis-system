@@ -144,43 +144,53 @@ public class MA_MenuBar extends MenuBar {
 	}
 
 	private void setup_period_menu(final Menu period_menu, Vector ptypes) {
-		MenuItem daily, weekly, monthly, quarterly, yearly;
+		MenuItem daily = null, weekly = null, monthly = null,
+			quarterly = null, yearly = null;
 		Vector items = new Vector();
+		Vector other_items = new Vector();
 		String s;
 
 		set_period_type_label(period_menu);
 		for (int i = 0; i < ptypes.size(); ++i) {
 			s = (String) ptypes.elementAt(i);
 			if (s.toLowerCase().equals(daily_period.toLowerCase())) {
-				period_menu.add(daily = new MenuItem(s,
-					new MenuShortcut(KeyEvent.VK_D)));
+				daily = new MenuItem(s,
+					new MenuShortcut(KeyEvent.VK_D));
 				items.addElement(daily);
 			}
 			else if (s.toLowerCase().equals(weekly_period.toLowerCase())) {
-				period_menu.add(weekly = new MenuItem(s,
-					new MenuShortcut(KeyEvent.VK_E)));
+				weekly = new MenuItem(s,
+					new MenuShortcut(KeyEvent.VK_E));
 				items.addElement(weekly);
 			}
 			else if (s.toLowerCase().equals(monthly_period.toLowerCase())) {
-				period_menu.add(monthly = new MenuItem(s,
-					new MenuShortcut(KeyEvent.VK_M)));
+				monthly = new MenuItem(s,
+					new MenuShortcut(KeyEvent.VK_M));
 				items.addElement(monthly);
 			}
 			else if (s.toLowerCase().equals(quarterly_period.toLowerCase())) {
-				period_menu.add(quarterly = new MenuItem(s,
-					new MenuShortcut(KeyEvent.VK_U)));
+				quarterly = new MenuItem(s,
+					new MenuShortcut(KeyEvent.VK_U));
 				items.addElement(quarterly);
 			}
 			else if (s.toLowerCase().equals(yearly_period.toLowerCase())) {
-				period_menu.add(yearly = new MenuItem(s,
-					new MenuShortcut(KeyEvent.VK_Y)));
+				yearly = new MenuItem(s,
+					new MenuShortcut(KeyEvent.VK_Y));
 				items.addElement(yearly);
 			}
 			else {
 				MenuItem other;
-				period_menu.add(other = new MenuItem(s));
+				other = new MenuItem(s);
 				items.addElement(other);
+				other_items.addElement(other);
 			}
+		}
+		MenuItem menuitems[] = { daily, weekly, monthly, quarterly, yearly };
+		for (int i = 0; i < menuitems.length; ++i) {
+			if (menuitems[i] != null) period_menu.add(menuitems[i]);
+		}
+		for (int i = 0; i < other_items.size(); ++i) {
+			period_menu.add((MenuItem) other_items.elementAt(i));
 		}
 		for (int i = 0; i < items.size(); ++i) {
 			final MenuItem item = (MenuItem) items.elementAt(i);
@@ -224,9 +234,9 @@ public class MA_MenuBar extends MenuBar {
 	private DataSetBuilder data_builder;
 	private Chart chart;
 	private MA_MenuBar menu_bar;
-	private static final String daily_period = "Daily";
-	private static final String weekly_period = "Weekly";
-	private static final String monthly_period = "Monthly";
-	private static final String quarterly_period = "Quarterly";
-	private static final String yearly_period = "Yearly";
+	public static final String daily_period = "Daily";
+	public static final String weekly_period = "Weekly";
+	public static final String monthly_period = "Monthly";
+	public static final String quarterly_period = "Quarterly";
+	public static final String yearly_period = "Yearly";
 }
