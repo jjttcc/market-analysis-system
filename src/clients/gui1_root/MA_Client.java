@@ -6,7 +6,7 @@ import mas_gui.*;
 
 /** Root class for the Market Analysis client process */
 public class MA_Client {
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		mas_gui.DataSetBuilder data_builder = new mas_gui.DataSetBuilder(args);
 		mas_gui.Chart chart;
 		chart = new mas_gui.Chart(data_builder, chart_filename);
