@@ -25,8 +25,7 @@ public class PriceDrawer extends MarketDrawer {
 		if (_data != null) lngth = data_length();
 		if (lngth == 0) return;
 
-		int sidebar_length = (int) (
-			(double) base_bar_width(bounds, lngth / 4) * .75);
+		_bar_width = (int) ((double) base_bar_width(bounds, lngth / 4) * .75);
 		Configuration conf = Configuration.instance();
 		Color bar_color = conf.stick_color();
 		double width_factor, height_factor;
@@ -52,9 +51,9 @@ public class PriceDrawer extends MarketDrawer {
 			// vertical low to high price line
 			g.drawLine(x, lowy, x, highy);
 			// horizontal line for close price
-			g.drawLine(x, closey, x+sidebar_length, closey);
+			g.drawLine(x, closey, x + _bar_width, closey);
 			if (_open_bar) {
-				g.drawLine(x, openy, x-sidebar_length, openy);
+				g.drawLine(x, openy, x - _bar_width, openy);
 			}
 		}
 	}

@@ -28,8 +28,7 @@ public class CandleDrawer extends MarketDrawer {
 		if (_data != null) lngth = _data.length;
 		if (lngth == 0) return;
 
-		int candlewidth = (int) (
-			(double) base_bar_width(bounds, lngth / 4) * .65);
+		_bar_width = (int) ((double) base_bar_width(bounds, lngth / 4) * .65);
 		Configuration conf = Configuration.instance();
 		Color black = conf.black_candle_color();
 		Color white = conf.white_candle_color();
@@ -53,21 +52,21 @@ public class CandleDrawer extends MarketDrawer {
 			closey = (int)(bounds.height - (_data[i+3] - ymin) * height_factor +
 						bounds.y);
 			x = (int)((row - xmin) * width_factor + bounds.x) + x_adjust;
-			middle_x = x + candlewidth / 2;
+			middle_x = x + _bar_width / 2;
 			_x_values[row-1] = x;
 			// For candle color, relation is reversed (< -> >) because
 			// of the coordinate system used - higher coordinates have
 			// a lower value.
 			is_white = closey > openy? false: true;
 			if (openy == closey) {	// If it's a doji
-				draw_doji_line(g, x, closey, candlewidth);
+				draw_doji_line(g, x, closey, _bar_width);
 			}
 			else {					// Not a doji - regular candle
 				g.setColor(is_white? white: black);
 				y_s[0] = openy; y_s[1] = openy;
 				y_s[2] = closey; y_s[3] = closey;
-				x_s[0] = x; x_s[1] = x + candlewidth;
-				x_s[2] = x + candlewidth; x_s[3] = x;
+				x_s[0] = x; x_s[1] = x + _bar_width;
+				x_s[2] = x + _bar_width; x_s[3] = x;
 				// Candle body
 				g.fillPolygon(x_s, y_s, Stride);
 			}
