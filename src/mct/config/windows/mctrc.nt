@@ -50,7 +50,7 @@ define	bin_dir:<main_mas_dir>/bin
 define	doc_dir:<main_mas_dir>/doc
 
 # Shell to use to run macl, if any
-define	macl-shell:command ~/c start "macl" command ~/c 
+define	macl-shell:cmd ~/c start "macl" cmd ~/c 
 
 # mas_directory environment variable setting
 define	mas_directory_setting:<mas_lib_dir>
@@ -78,7 +78,7 @@ hostname	localhost
 
 # Detailed version of command to start the server: data from files
 begin	start_server_command
-command	<cwdir> [<data_dir>]<bin_dir>/mas -o -f , -b <portnumber> *.txt
+command	<cwdir>[<data_dir>]<bin_dir>/mas -o -f , -b <portnumber> *.txt
 command_description	Get data from files
 command_name	File-based
 mark	default
@@ -99,20 +99,21 @@ command_name	Web-based
 end
 
 # Command to start a command-line client to connect to the server
-start_cl_client_command	<cwdir>[<bin_dir>]start "<bin_dir>"/run_command.bat macl -h <hostname> <portnumber>
+start_cl_client_command	<cwdir>[<bin_dir>]<macl-shell> macl -h <hostname> <portnumber>
 
 # Command to start the charting application
-chart_command	<cwdir>[<chart_dir>]start ~/min "<bin_dir>"/run_command.bat java -cp "<java_path>" \
-MA_Client <hostname> <portnumber>
+chart_command	<cwdir>[<chart_dir>]java -cp "<java_path>" \
+MA_Client <hostname> <portnumber> >/tmp/errs 2>&1
 
 # Command to terminate the server
 termination_command	<terminate_server>
 
 # Command to start the user's browser for viewing documentation
-browse_docs_command	<cwdir> [<doc_dir>]start ~/min index.html
+browse_docs_command	<cwdir>[<doc_dir>]cmd ~/c start ~/b index.html
+##browse_docs_command	cmd ~/c cd "<doc_dir>" && start ~/b index.html
 
 # Command to start the user's browser for viewing the "MCT Introduction"
-browse_intro_command	<cwdir> [<doc_dir>]start ~/min mct_introduction.html
+browse_intro_command	<cwdir>[<doc_dir>]cmd ~/c start ~/b mct_introduction.html
 
 # Command to start the user's browser for viewing the FAQ
-browse_faq_command	<cwdir> [<doc_dir>]start ~/min FAQ.html
+browse_faq_command	<cwdir>[<doc_dir>]cmd ~/c start ~/b FAQ.html
