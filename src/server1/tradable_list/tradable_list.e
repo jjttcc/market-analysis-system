@@ -461,6 +461,7 @@ feature {NONE} -- Hook routines
 			-- (along with `append_new_data') if update behavior is required.
 			Result := False
 print ("ttood - WRONG ONE CALLED - you got False%N")
+print ("(Run-time type is: " + generating_type + "%N")
 		end
 
 	append_new_data is

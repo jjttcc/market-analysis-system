@@ -72,13 +72,14 @@ feature -- Basic operations
 				check
 					not_intraday: not tradable_factory.intraday
 				end
-				create daily_list.make (daily_file_names, tradable_factory)
+				daily_list := new_tradable_list (daily_file_names,
+					tradable_factory)
 			end
 			if intraday_file_names /= Void then
 				check
 					intraday: intraday_tradable_factory.intraday
 				end
-				create intraday_list.make (intraday_file_names,
+				intraday_list := new_tradable_list (intraday_file_names,
 					intraday_tradable_factory)
 			end
 		end
