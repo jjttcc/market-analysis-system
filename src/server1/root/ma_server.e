@@ -27,8 +27,6 @@ feature {NONE} -- Hook routines
 			readcmd: POLL_COMMAND
 			factory_builder: FACTORY_BUILDER
 		do
---!!!!!!!!!!!!Remove soon:
-test_date
 			create poller.make_read_only
 			create factory_builder.make
 			create {LINKED_LIST [SOCKET]} current_sockets.make
@@ -56,39 +54,6 @@ test_date
 				poller.put_read_command (readcmd)
 			end
 		end
-
---!!!!!!!!!!!!Remove soon:
-test_date is
- local
-	 ds: expanded DATE_TIME_SERVICES
-	 test_dates: ARRAY [STRING]
-	 date: STRING
-	 i: INTEGER
- do
-	 test_dates := <<"10-01-03", "10-01-2003", "10-Jan-03", "25-Nov-95",
-	 	"22-Aug-81", "22-Aug-80">>
-	 date := test_dates @ 2
-	 print ("without partition for date " + date + ": " +
-	 	ds.date_from_formatted_string (
-	 	date, "-", 3, 2, 1, -1).out + "%N")
-	 date := test_dates @ 1
-	 print ("without partition for date " + date + ": " +
-	 	ds.date_from_formatted_string (
-	 	date, "-", 3, 2, 1, -1).out + "%N")
-	 print ("with partition for date " + date + ": " +
-	 	ds.date_from_formatted_string (
-			date, "-", 3, 2, 1, 80).out + "%N")
- 	from i := 3 until i = test_dates.upper + 1 loop
-		 date := test_dates @ i
-		 print ("without partition for date " + date + ": " +
-			ds.date_from_month_abbrev_string (
-			date, "-", 3, 2, 1, -1).out + "%N")
-		 print ("with partition for date " + date + ": " +
-			ds.date_from_month_abbrev_string (
-				date, "-", 3, 2, 1, 80).out + "%N")
-		i := i + 1
-	end
- end
 
 	listen is
 			-- Listen for and respond to client requests.
