@@ -170,23 +170,10 @@ feature -- Status report
 	symbol_list_initialized: BOOLEAN
 			-- Has `symbol_list' been initialized?
 
-	special_date_settings_valid: BOOLEAN is
-			-- Have any special date-format settings been specified and
-			-- are they valid?
-		do
-			Result := special_date_settings.valid
-		end
-
 feature {NONE} -- Implementation
 
 	set_special_formatting is
 			-- Set "special" formatting options.
-			--!!!!Remove this note unless the formatting doc. is retracted:
-			-- @@Note: These options are not currently documented by
-			-- `usage' because this method of setting them may change
-			-- (e.g., they may be read from a config. file).  For now,
-			-- the 'special-format string' format is:
-			-- "-special-format:opt1=value,opt2=value,..."
 		do
 			-- Look for and process multi-character options
 			from
@@ -434,7 +421,6 @@ feature {NONE} -- Implementation queries
 			s.multiply (usage_description_column - Result.count -
 				usage_indent.count - 1)
 			Result := Result + s + special_format_description
--- "-special-format:date-format=dd#month3#yy,year-partition=80,date_sep=-"
 		end
 
 	usage_indent: STRING is "  "
