@@ -10,7 +10,7 @@ class CONFIGURE_MCT_COMMAND inherit
 
 	INSTALL_COMMAND
 
-	INSTALLATION_CONSTANTS
+	INSTALLATION_FACILITIES
 		export
 			{NONE} all
 		end
@@ -103,33 +103,6 @@ feature {NONE} -- Implementation
 	nt_spec_file_name: STRING is "nt_repl_spec"
 
 	pre_nt_spec_file_name: STRING is "pre_nt_repl_spec"
-
-	command_variable_name: STRING is "COMSPEC"
-
-	nt_command_name: STRING is "CMD"
-
-	is_nt: BOOLEAN is
-			-- Is the system "NT or better" (as opposed to "pre-NT")?
-		local
-			ex_env: expanded EXECUTION_ENVIRONMENT
-			s, command_name, nt_cmd: STRING
-			last_dirsep: INTEGER
-		do
-			s := ex_env.get (command_variable_name)
-			if s /= Void and then not s.is_empty then
-				last_dirsep := s.last_index_of (directory_separator,
-					s.count)
-				command_name := s.substring (last_dirsep + 1, s.count)
-				if not command_name.is_empty then
-					nt_cmd := clone (nt_command_name)
-					Result := s.substring_index (nt_cmd, 1) > 0
-					if not Result then
-						nt_cmd.to_lower
-						Result := s.substring_index (nt_cmd, 1) > 0
-					end
-				end
-			end
-		end
 
 	config_command_line: HARD_CODED_CONFIG_TOOL_COMMAND_LINE
 
