@@ -1,5 +1,7 @@
 indexing
-	description: "An instance of each instantiable MARKET_FUNCTION class"
+	description:
+		"An instance of each instantiable MARKET_FUNCTION class that can %
+		%be used to construct a technical indicator"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -27,20 +29,17 @@ feature -- Access
 			f: MARKET_FUNCTION
 			stock: STOCK
 			complex_function: COMPLEX_FUNCTION
-			tuple_factory: COMPOSITE_TUPLE_FACTORY
-			now: DATE_TIME
 			volume: VOLUME
 			exponential: MA_EXPONENTIAL
 			point: MARKET_POINT
 			pair: PAIR [MARKET_FUNCTION, STRING]
 		once
+			!!Result.make (0)
 			!!exponential.make (1)
 			!!volume
 			!!point.make
 			!!stock.make ("DUMMY",
 				period_types @ (period_type_names @ Daily))
-			!!pair.make (stock, "Stock")
-			Result.extend (pair)
 			!ONE_VARIABLE_FUNCTION!complex_function.make (
 				stock, volume)
 			!!pair.make (complex_function,
@@ -55,14 +54,6 @@ feature -- Access
 											volume)
 			!!pair.make (f,
 				"Market function that operates on two other functions")
-			Result.extend (pair)
-			!!tuple_factory
-			!!now.make_now
-			!COMPOSITE_TUPLE_BUILDER!f.make (stock, tuple_factory, 
-				period_types @ (period_type_names @ daily), now)
-			!!pair.make (f,
-				"Market function creates composite tuples (such as weekly %
-				%from daily")
 			Result.extend (pair)
 			!STANDARD_MOVING_AVERAGE!f.make (stock, volume, 1)
 			!!pair.make (f,
