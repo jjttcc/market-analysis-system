@@ -17,6 +17,8 @@ feature -- Access
 
 	database_services: MAS_DB_SERVICES is
 		do
+--!!!!!!!Need to create two windows versions of this class - one that
+--uses ODBC_SERVICES and one that uses ECLI_SERVICES.
 			create {ODBC_SERVICES} Result.make
 			if Result.fatal_error then
 				log_errors (<<"Fatal database error: ",
@@ -31,7 +33,10 @@ feature -- Access
 
 	file_lock (file_name: STRING): FILE_LOCK is
 		do
-			create {BASIC_FILE_LOCK} Result.make (file_name)
+			-- The file-locking mechanism for Windows is not yet
+			-- working, so use a "fake" lock for now.
+			create {NON_FUNCTIONING_FILE_LOCK} Result.make (
+				file_name)
 		end
 
 end -- class PLATFORM_DEPENDENT_OBJECTS
