@@ -51,7 +51,7 @@ An example of a line in the stock split file that follows this format is:
 
 19980408	F	1.5
 
-The current distribution of MAS includes a file (lib/stock_splits) with
+The current distribution of MAS includes a file (lib/data/stock_splits) with
 some sample stock split data in the required format.
 
 
