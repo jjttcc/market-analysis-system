@@ -48,8 +48,7 @@ feature {NONE} -- Implementation
 
 	report_server_error is
 		do
-			report_error (Error, <<"Server error: ",
-				tradables.last_error>>)
+			report_error (Warning, <<"Server error: ", tradables.last_error>>)
 		end
 
 	server_error: BOOLEAN is
