@@ -10,6 +10,8 @@ default
 	assertion (ensure)
 	assertion (loop)
 	assertion (invariant)
+	arguments ("-o -f , /tmp/boll/input /tmp/ibm.txt")
+	arguments ("-o -f , /tmp/boll/input")
 	arguments ("-o -f , /tmp/ibm.txt /tmp/aapl.txt /tmp/amzn.txt /tmp/sd_data.txt")
 	arguments ("-o -f , /tmp/ibm.txt /tmp/aapl.txt /tmp/amzn.txt")
 	arguments ("-o -f , /tmp/ibm.txt")
