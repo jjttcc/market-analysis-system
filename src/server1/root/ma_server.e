@@ -26,7 +26,6 @@ feature -- Initialization
 		local
 			socket: NETWORK_STREAM_SOCKET
 			readcmd: POLL_COMMAND
-			i: INTEGER
 			factory_builder: FACTORY_BUILDER
 			version: expanded PRODUCT_INFO
 		do
