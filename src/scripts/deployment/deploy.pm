@@ -6,29 +6,29 @@ package deploy;
     @ISA = qw(Exporter);
     @EXPORT_OK = qw(config_file configure mas_port mas_options version
 	deployment_directory tarfile applet_archive servlet_archive
-	applet_deployment_directory servlet_deployment_directory
+	applet_deployment_path servlet_deployment_directory
 	mas_directory_var data_directory data_from_files process_args
-	setup cleanup
+	setup cleanup set_cleanup_workdir
 );
 
 # Constants
 
 $config_file = "mas-deploy.cf";
-$Docleanup = 0;
+$Clean_work_dir = 0;
 
 # Settings variables
 my %settings = ();
 @tags = ("mas_tar_file", "deployment_dir", "version", "server_port_number",
 	"cl_options", "mas_dir", "data_dir", "mas_applet_file", "mas_servlet_file",
-	"servlet_deployment_dir", "applet_deployment_dir"
+	"applet_deployment_path", "servlet_deployment_dir"
 );
 my ($tarfile_tag, $deploy_dir_tag, $version_tag, $port_tag,
 	$options_tag, $mas_directory_tag, $data_dir_tag, $applet_archive_tag,
-	$servlet_archive_tag, $applet_deploy_dir_tag, $servlet_deploy_dir_tag
+	$servlet_archive_tag, $applet_deploy_path_tag, $servlet_deploy_dir_tag
 ) = @tags;
 
 # Other global variables
-my $workdir = "/tmp/mas-install" . $$;
+my $work_directory = "/tmp/mas-install" . $$;
 my $remove_dir_cmd = "rm -rf";
 my $origdir = $ENV{"PWD"};
 
@@ -38,41 +38,48 @@ sub config_file {
 }
 
 # Process command-line arguments
+# @@Currently takes no arguments - may change in the future.
 sub process_args {
 	my $argcount = @ARGV;
 	for (my $i = 0; $i < $argcount; ++$i) {
 		$arg = $ARGV[$i];
-		if ($arg =~ /^-c/) {
-			$Docleanup = 1;
-		} elsif ($arg =~ /^-+h/ || $arg =~ /^-+?/) {
+		if ($arg =~ /^-+h/ || $arg =~ /^-+?/) {
 			&usage; exit 0;
 		} else {
 			&usage; exit 1;
 		}
 	}
-print "do cleanup: $Docleanup\n";
+}
+
+# Specify that the work directory should be cleaned up - defaults to off.
+sub set_cleanup_workdir {
+	$Clean_work_dir = 1;
 }
 
 sub usage {
-	print "Usage: $0 [-cleanup|-h]\n";
+	print "Usage: $0 [-h]\n";
 }
 
 ### Utilities for set-up, clean-up, etc.
 
 # Create and cd to the work directory, etc.
 sub setup {
-	if (! -d $workdir) {
-		if (! -e $workdir) {
-			mkdir $workdir || die "Cannot create directory $workdir\n";
+	my $setup_dir = $work_directory;
+	if (@_ > 0) {
+		($setup_dir) = @_;
+	}
+	if (! -d $setup_dir) {
+		if (! -e $setup_dir) {
+			mkdir $setup_dir || die "Cannot create directory $setup_dir\n";
 		} else {
-			die "Work directory $workdir cannot be created because\n" .
+			die "Directory $setup_dir cannot be created because\n" .
 				"it already exists, but is not a directory.\n";
 		}
 	}
-	if (! (-w $workdir && -r $workdir)) {
-		die "Do not have permission to use directory $workdir.\n";
+	if (! (-w $setup_dir && -r $setup_dir)) {
+		die "Do not have permission to use directory $setup_dir.\n";
 	}
-	chdir $workdir;
+	chdir $setup_dir;
 	for my $sig ('INT', 'HUP', 'QUIT', 'TERM') {
 		$SIG{$sig} = 'signal_handler';
 	}
@@ -81,10 +88,10 @@ sub setup {
 # Cleanup - remove the work directory, etc.
 sub cleanup {
 	chdir $origdir;
-	if ($Docleanup) {
-		print "Removing work directory, $workdir.\n";
-		! system($remove_dir_cmd . " " . $workdir) || die "Failed to remove " .
-			"work directory, $workdir.\n";
+	if ($Clean_work_dir) {
+		print "Removing work directory, $work_directory.\n";
+		! system($remove_dir_cmd . " " . $work_directory) ||
+			die "Failed to remove " . "work directory, $work_directory.\n";
 	}
 }
 
@@ -150,8 +157,8 @@ sub deployment_directory {
 }
 
 # The directory into which the applet is to be deployed
-sub applet_deployment_directory {
-	return $settings{$applet_deploy_dir_tag};
+sub applet_deployment_path {
+	return $settings{$applet_deploy_path_tag};
 }
 
 # The directory into which the servlet is to be deployed
