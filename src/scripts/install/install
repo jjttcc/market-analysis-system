@@ -16,6 +16,19 @@ cleanup_after_config_failure() {
 	rm -f $libdir/.*persist.lock
 }
 
+# Usage: missing_dynamic_libraries executable_file
+# All dynamic libraries needed by `executable_file' that cannot be found by
+# ldd are echoed, separated by a space, on stdout.  Returns 1 on error.
+missing_dynamic_libraries() {
+if [ $# -lt 1 ]; then
+	return 1
+else
+	libs=$((ldd $1)|sed -n 's/[	 ]*\(.*\) *=> *not *found/\1/p')
+fi
+echo $libs
+return 0
+}
+
 query() {
 	echo -e "$*\c" >&2
 	read answer
@@ -148,6 +161,27 @@ set_dir() {
 		fi
 	done
 	echo "$1: $dir" >>$config
+}
+
+# Check whether any of the dynamic libraries needed by the mas executable
+# are not found by ldd.
+check_dynamic_libs() {
+	result=0
+	echo -e "Using ldd to check for required dynamic libraries ...\c" >&2
+	mas=$bindir/mas
+	mlibs=$(missing_dynamic_libraries $mas)
+	if [ ! -z "$mlibs" ]; then
+		echo -e "\nThe following library files were not found:" >&2
+		echo -e "$mlibs" >&2
+		echo -e "You will need to obtain these files and place them in" >&2
+		echo -e "/lib, /usr/lib, /usr/local/lib or adjust the environment" >&2
+		echo -e "variable LD_LIBRARY_PATH to include the location of" >&2
+		echo -e "the files." >&2
+		result=1
+	else
+		echo -e "\nAll needed libraries were found." >&2
+	fi
+	return $result
 }
 
 # Start the server in the background (with "-o -f ,").
@@ -323,10 +357,12 @@ if [ ! -d $bindir -o ! -w $bindir ]; then
 fi
 
 result=0
-cp bin/* $bindir
+cp -f bin/* $bindir
 binresult=$?
-cp -R lib/* $libdir
-libresult=$?
+if [ "$binresult" -eq 0 ]; then
+	cp -fR lib/* $libdir
+	libresult=$?
+fi
 if [ "$binresult" -ne 0 ]; then
 	echo "Error encountered installing executable files." >&2
 	result=$binresult
@@ -335,9 +371,15 @@ elif [ "$libresult" -ne 0 ]; then
 	result=$libresult
 fi
 if [ "$result" -eq 0 ]; then
-	echo -e "Installation of MAS executable and library files succeeded." >&2
-	configure_mas
-	result=$?
+	echo -e "Installation of MAS executable and library files succeeded.\n" >&2
+	if check_dynamic_libs; then
+		configure_mas
+		result=$?
+	else
+		echo -e "After installing the needed libraries, you can run this" >&2
+		echo -e "script again to configure MAS." >&2
+		result=1
+	fi
 fi
 if [ "$result" -eq 0 ]; then
 	echo -e "Installation complete." >&2
