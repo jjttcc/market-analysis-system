@@ -1,5 +1,5 @@
 indexing
-	description: "Builders of MCT application windows"
+	description: "Builders of MAS Control Terminal application windows"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -11,7 +11,7 @@ class APPLICATION_WINDOW_BUILDER inherit
 feature -- Access
 
 	main_window: EV_TITLED_WINDOW is
-			-- The MCT main window
+			-- The MAS Control Terminal main window
 		local
 			main_box: EV_VERTICAL_BOX
 		do

@@ -1,5 +1,5 @@
 indexing
-	description: "Main MCT actions for GUI-event responses"
+	description: "Main MAS Control Terminal actions for GUI-event responses"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

@@ -1,5 +1,6 @@
 indexing
-	description: "Constants used for processing the MCT configuration file"
+	description: "Constants used for processing the MAS Control Terminal %
+		%configuration file"
 	author: "Jim Cochrane"
 	date: "$Date$"
 	revision: "$Revision$"

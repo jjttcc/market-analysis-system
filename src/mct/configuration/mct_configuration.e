@@ -105,7 +105,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	value_index: INTEGER is 2
 
-	configuration_type: STRING is "MCT"
+	configuration_type: STRING is "MAS Control Terminal"
 
 	configuration_file_name: STRING is "mctrc"
 

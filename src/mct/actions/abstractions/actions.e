@@ -63,7 +63,7 @@ feature -- Actions
 				-- !!!Use the KDE apps' "about" box as a model to make
 				-- this look more polished.
 				"MAS Control Panel%N%N(c) 2003%NAuthor: Jim Cochrane")
-			about_dialog.set_title ("About MCT")
+			about_dialog.set_title ("About MAS Control Terminal")
 			about_dialog.show_modal_to_window (owner_window)
 		end
 
