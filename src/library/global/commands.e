@@ -277,10 +277,13 @@ feature -- Access
 			create {NUMERIC_VALUED_COMMAND_WRAPPER} cmd.make (
 				real_dummy)
 			create pair.make (cmd,
-				"Operator that can be used where a numeric-valued operator %
-				%is expected%Nand that %"wraps%" an operator that cannot %
-				%otherwise be used where a%Nnumeric-valued operator is %
-				%expected%N(The operator's value will simply be 0.)")
+				"Numeric operator that can be used to %"wrap%" a non-numeric %
+				%operator,%Nallowing it to be used in a numeric context.  If %
+				%this operator can%Ndetermine if the wrapped operator has a %
+				%value, it will set its value to%Nthat value; if the wrapped %
+				%operator's value is boolean it will convert%Na true value to %
+				%1 and a false value to 0. If no value can be found,%Nthis %
+				%operator's value will be 0.")
 			Result.extend (pair)
 			create {COMMAND_SEQUENCE} cmd.make
 			create pair.make (cmd,
