@@ -224,36 +224,29 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 
 		owner.turn_off_refresh();	// Prevent auto-refresh conflicts.
 		if (period_type_change || ! tradable.equals(current_tradable())) {
-System.out.println("a");
 			GUI_Utilities.busy_cursor(true, owner);
 			if (individual_period_type_sets &&
 					! tradable.equals(current_tradable())) {
 				facilities.reset_period_types(tradable, false);
-System.out.println("b");
 			}
 			main_dataset = main_tradable_data();
 			if (last_data_request_succeeded) {
 				update_indicator_list();
 			}
-System.out.println("c");
 			if (last_data_request_succeeded) {
 				upper_indicator_datasets = upper_indicator_data();
-System.out.println("d");
 			}
 			if (last_data_request_succeeded) {
 				lower_indicator_datasets = lower_indicator_data();
-System.out.println("e");
 			}
 			if (last_data_request_succeeded) {
 				assert main_dataset != null && upper_indicator_datasets != null
 					&& lower_indicator_datasets != null;
+				// All data-set requests succeeded - plug them in.
 				update_main_dataset(main_dataset);
-				update_upper_indicator_datasets(upper_indicator_datasets);
-				update_lower_indicator_datasets(lower_indicator_datasets);
-System.out.println("f");
-//!!!!Not sure where this line should go:
+				update_indicator_datasets(upper_indicator_datasets, true);
+				update_indicator_datasets(lower_indicator_datasets, false);
 				set_current_tradable(tradable);
-//!!!!Not sure where this line should go:
 				owner.set_window_title();
 				owner.main_pane().repaint_graphs();
 				period_type_change = false;
@@ -261,7 +254,6 @@ System.out.println("f");
 			GUI_Utilities.busy_cursor(false, owner);
 		}
 		owner.turn_on_refresh();
-System.out.println("g");
 	}
 
 // Package-level access
@@ -559,19 +551,14 @@ System.out.println("g");
 			if (! data_requester.request_failed()) {
 //!!!:
 				try {
-System.out.println("A");
 					result = (DrawableDataSet) data_requester.tradable_result();
-System.out.println("A2");
-//!!!:
 				} catch (Exception e) {
+//!!!:
 System.out.println("Oh Oh!!! - e: " + e);
-System.out.println("the result is: " +
-data_requester.tradable_result()
-);
+System.out.println("the result is: " + data_requester.tradable_result());
 e.printStackTrace();
 				}
 			} else {
-System.out.println("B");
 				request_result_id = data_requester.request_result_id();
 				new ErrorBox("Warning", "Error occurred retrieving " +
 					"data for " + data_requester.current_symbol() + ": " +
@@ -591,7 +578,6 @@ System.out.println("B");
 				last_data_request_succeeded = false;
 			}
 		} catch (Exception e) {
-System.out.println("C");
 			facilities.fatal("Request to server failed: ", e);
 		}
 		assert implies(last_data_request_succeeded, result != null):
@@ -604,14 +590,12 @@ System.out.println("C");
 	// indicator name and the second member of the pair is the data set.
 	private List upper_indicator_data() {
 		assert last_data_request_succeeded: PRECONDITION;
-		List result = null;
+		List result = new LinkedList();
 		int count;
 		String current_indicator;
 		DrawableDataSet dataset;
 
 		if (! current_upper_indicators.isEmpty()) {
-			result = new LinkedList();
-System.out.println("D");
 			// Retrieve the data for the newly requested tradable for
 			// the upper indicators, add it to the upper graph and
 			// draw the new indicator data and the tradable data.
@@ -621,16 +605,14 @@ System.out.println("D");
 				current_indicator = (String)
 					current_upper_indicators.elementAt(i);
 				try {
-System.out.println("E");
 					data_requester.execute_indicator_request(
 						indicator_id_for(current_indicator));
 					if (! data_requester.request_failed()) {
 						dataset = (DrawableDataSet)
 							data_requester.indicator_result();
-System.out.println("F");
 						result.add(new Pair(current_indicator, dataset));
 					} else {
-System.out.println("F2");
+//!!!:
 System.out.println("Request for indicator data failed (Fix this error msg!!!)");
 						last_data_request_succeeded = false;
 					}
@@ -639,8 +621,9 @@ System.out.println("Request for indicator data failed (Fix this error msg!!!)");
 				}
 			}
 		}
-		assert implies(last_data_request_succeeded, result != null):
-			POSTCONDITION;
+		assert result != null: POSTCONDITION;
+		assert implies(last_data_request_succeeded,
+			current_upper_indicators.size() == result.size()): POSTCONDITION;
 		return result;
 	}
 
@@ -649,15 +632,13 @@ System.out.println("Request for indicator data failed (Fix this error msg!!!)");
 	// indicator name and the second member of the pair is the data set.
 	private List lower_indicator_data() {
 		assert last_data_request_succeeded: PRECONDITION;
-		List result = null;
+		List result = new LinkedList();
 		int count;
 		String current_indicator;
 		DrawableDataSet dataset;
 		MA_Configuration conf = MA_Configuration.application_instance();
 
 		if (! current_lower_indicators.isEmpty()) {
-			result = new LinkedList();
-System.out.println("G");
 			// Retrieve the indicator data for the newly requested
 			// tradable for the lower indicators and draw it.
 			count = current_lower_indicators.size();
@@ -675,16 +656,14 @@ System.out.println("G");
 					result.add(new Pair(current_indicator, dataset));
 				} else {
 					try {
-System.out.println("H");
 						data_requester.execute_indicator_request(
 							indicator_id_for(current_indicator));
 						if (! data_requester.request_failed()) {
-System.out.println("I");
 							dataset = (DrawableDataSet)
 									data_requester.indicator_result();
 							result.add(new Pair(current_indicator, dataset));
 						} else {
-System.out.println("J");
+//!!!:
 System.out.println("Request for indicator data failed (Fix this error msg!!!)");
 							last_data_request_succeeded = false;
 						}
@@ -694,8 +673,9 @@ System.out.println("Request for indicator data failed (Fix this error msg!!!)");
 				}
 			}
 		}
-		assert implies(last_data_request_succeeded, result != null):
-			POSTCONDITION;
+		assert result != null: POSTCONDITION;
+		assert implies(last_data_request_succeeded,
+			current_lower_indicators.size() == result.size()): POSTCONDITION;
 		return result;
 	}
 
@@ -711,6 +691,34 @@ System.out.println("Request for indicator data failed (Fix this error msg!!!)");
 		tradable_specification.set_data(d);
 	}
 
+	// Update `owner's indicator data sets - upper indicators if `upper',
+	// otherwise, lower indicators - to `datasets' and perform related
+	// state changes.
+	public void update_indicator_datasets(List datasets, boolean upper) {
+		assert datasets != null: PRECONDITION;
+		MA_Configuration conf = MA_Configuration.application_instance();
+		Iterator i = datasets.iterator();
+		Pair p;
+		String ind_name;
+		DrawableDataSet dataset;
+		while (i.hasNext()) {
+			p = (Pair) i.next();
+			ind_name = (String) p.first();
+			dataset = (DrawableDataSet) p.second();
+			dataset.setColor(conf.indicator_color(ind_name, upper));
+			link_with_axis(dataset, ind_name);
+			tradable_specification.set_indicator_data(dataset, ind_name);
+			if (upper) {
+				dataset.set_dates_needed(false);
+				owner.main_pane().add_main_data_set(dataset);
+			} else {
+				owner.add_indicator_lines(dataset, ind_name);
+				owner.main_pane().add_indicator_data_set(dataset);
+			}
+		}
+	}
+
+//!!!!!Obsolete - remove this routine:
 	// Update `owner's upper indicator data sets to `datasets' and perform
 	// related state changes.
 	public void update_upper_indicator_datasets(List datasets) {
@@ -732,6 +740,7 @@ System.out.println("Request for indicator data failed (Fix this error msg!!!)");
 		}
 	}
 
+//!!!!!Obsolete - remove this routine:
 	// Update `owner's lower indicator data sets to `datasets' and perform
 	// related state changes.
 	public void update_lower_indicator_datasets(List datasets) {
@@ -764,12 +773,11 @@ System.out.println("Request for indicator data failed (Fix this error msg!!!)");
 				new_indicators = true;
 				rebuild_indicators_if_needed();
 			} else {
-System.out.println("A3");
+//!!!:
 System.out.println("Request for indicator LIST failed (Fix this error msg!!!)");
 				last_data_request_succeeded = false;
 			}
 		} catch (Exception e) {
-System.out.println("Z");
 		}
 	}
 
