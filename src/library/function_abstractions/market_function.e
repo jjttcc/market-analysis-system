@@ -44,6 +44,12 @@ feature -- Access
 			-- Descendant classes may choose not to use this attribute for
 			-- efficiency.
 
+	trading_period_type: TIME_PERIOD_TYPE is
+			-- Type of trading period associated with each tuple:  hourly,
+			-- daily, weekly, etc.
+		deferred
+		end
+
 feature -- Status report
 
 	operator_used: BOOLEAN is

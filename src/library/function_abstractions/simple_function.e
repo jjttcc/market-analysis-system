@@ -22,7 +22,7 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 				{FACTORY}
 			extend
 				{ANY}
-			sorted_by_date_time, trading_period_type
+			sorted_by_date_time
 		end
 
 creation {FACTORY}
@@ -35,6 +35,8 @@ feature -- Access
 		do
 			Result := Current
 		end
+
+	trading_period_type: TIME_PERIOD_TYPE
 
 feature -- Status report
 
@@ -62,4 +64,7 @@ feature {NONE} -- Basic operations
 		do
 		end
 
+invariant
+
+	trading_period_type_not_void: trading_period_type /= Void
 end -- class SIMPLE_FUNCTION

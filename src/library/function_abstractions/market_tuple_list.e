@@ -13,13 +13,6 @@ creation
 
 	make
 
-feature -- Access
-
-	trading_period_type: STRING
-			-- Type of trading period associated with each tuple:  hourly,
-			-- daily, weekly, etc.
-			-- !!!Are integer constants (enums) or a class needed?
-
 feature
 
 	sorted_by_date_time: BOOLEAN is
