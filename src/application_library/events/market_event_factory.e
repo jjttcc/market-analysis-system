@@ -32,7 +32,7 @@ deferred class MARKET_EVENT_FACTORY inherit
 
 feature -- Access
 
-	input: INPUT_SEQUENCE
+	input: ITERABLE_INPUT_SEQUENCE
 			-- Input data from which to create MARKET_EVENTs
 
 	product: MARKET_EVENT
@@ -64,7 +64,7 @@ feature {NONE} -- Implementation
 				last_error := concatenation (
 					<<"Error occurred inputting event ID:",
 					"  ID for non-existent event: ",
-					ID, " - from file ",
+					ID, " - from ",
 					input.name, " at character ", input.index>>)
 				error_occurred := True
 				raise ("scan_event failed with invalid ID")
