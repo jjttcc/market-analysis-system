@@ -133,7 +133,10 @@ feature -- Access
 		end
 
 	market_event_generation_library: STORABLE_LIST [MARKET_EVENT_GENERATOR] is
-			-- All defined event generators
+			-- All defined event generators - Side effect:
+			-- create_stock_market_event_generation_library is called (once)
+			-- to fill stock_market_event_generation_library with valid
+			-- (for a stock) members of function_library.
 		once
 			Result := retrieved_market_event_generation_library
 		ensure
@@ -358,6 +361,7 @@ feature {NONE} -- Implementation
 				end
 				Result := meg_list
 			end
+			create_stock_market_event_generation_library (Result)
 		rescue
 			retrieval_failed := true
 			retry
@@ -406,12 +410,33 @@ feature {NONE} -- Implementation
 
 	create_stock_function_library (l: LIST [MARKET_FUNCTION]) is
 			-- Create `stock_function_library' and place all members of
-			-- `l' that are `valid_stock_function's into it.
+			-- `l' that are `valid_stock_processor's into it.
 		do
 			stock_function_library.wipe_out
 			from l.start until l.exhausted loop
-				if valid_stock_function (l.item) then
+				if valid_stock_processor (l.item) then
 					stock_function_library.extend (l.item)
+				end
+				l.forth
+			end
+		end
+
+	stock_market_event_generation_library: LIST [MARKET_EVENT_GENERATOR] is
+			-- Members of `market_event_generation_library' that are valid
+			-- for stocks
+		once
+			create {LINKED_LIST [MARKET_EVENT_GENERATOR]} Result.make
+		end
+
+	create_stock_market_event_generation_library (
+		l: LIST [MARKET_EVENT_GENERATOR]) is
+			-- Create `stock_market_event_generation_library' and place all
+			-- members of `l' that are `valid_stock_processor's into it.
+		do
+			stock_market_event_generation_library.wipe_out
+			from l.start until l.exhausted loop
+				if valid_stock_processor (l.item) then
+					stock_market_event_generation_library.extend (l.item)
 				end
 				l.forth
 			end
