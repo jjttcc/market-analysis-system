@@ -8,45 +8,45 @@ public interface NetworkProtocol
 {
 
 	// Client request IDs
-	int Market_data_request = 1;
-	int Indicator_data_request = 2;
-	int Trading_period_type_request = 3;
-	int Market_list_request = 4;
-	int Indicator_list_request = 5;
-	int Login_request = 6;
-	int Session_change_request = 7;
-	int Logout_request = 8;
-	int Event_data_request = 9;
-	int Event_list_request = 10;
+	final int Market_data_request = 1;
+	final int Indicator_data_request = 2;
+	final int Trading_period_type_request = 3;
+	final int Market_list_request = 4;
+	final int Indicator_list_request = 5;
+	final int Login_request = 6;
+	final int Session_change_request = 7;
+	final int Logout_request = 8;
+	final int Event_data_request = 9;
+	final int Event_list_request = 10;
 
 	// Server response IDs
-	int Error = 101;
-	int OK = 102;
-	int Invalid_symbol = 103;
-	int Warning = 104;
+	final int Error = 101;
+	final int OK = 102;
+	final int Invalid_symbol = 103;
+	final int Warning = 104;
 
 	// Server response strings
-	String No_open_session_state = "no_open";
-	String Open_interest_flag = "oi";
+	final String No_open_session_state = "no_open";
+	final String Open_interest_flag = "oi";
 
 	// Subtokens
-	String Start_date = "start_date";
-	String End_date = "end_date";
+	final String Start_date = "start_date";
+	final String End_date = "end_date";
 
 	// Field separators
-	String output_date_field_separator = "";
-	String output_time_field_separator = "";
+	final String output_date_field_separator = "";
+	final String output_time_field_separator = "";
 
 	// String constants
-	String Eom = "";
-	String Eot = "";
-	String Compression_on_flag = "<@z@>";
-	String Input_field_separator = "\t";
-	String Output_field_separator = "\t";
-	String Output_record_separator = "\n";
-	String date_field_separator = "/";
-	String time_field_separator = ":";
+	final String Eom = "";
+	final String Eot = "";
+	final String Compression_on_flag = "<@z@>";
+	final String Input_field_separator = "\t";
+	final String Output_field_separator = "\t";
+	final String Output_record_separator = "\n";
+	final String date_field_separator = "/";
+	final String time_field_separator = ":";
 
 	// daily period type is needed for initialization.
-	String daily_period_type = "daily";
+	final String daily_period_type = "daily";
 }
