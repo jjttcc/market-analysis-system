@@ -12,29 +12,29 @@ feature
 	n: INTEGER
 			-- The length of the sub-list to be analyzed
 
-feature {NONE} -- Element change
+feature -- Status report
+
+	n_set: BOOLEAN is
+			-- Has n been set?
+		do
+			Result := n > 0
+		end
+
+feature {FACTORY} -- Element change
 
 	set_n (value: INTEGER) is
 			-- Set n to `value'.
 		require
-			value >= 1
+			value_gt_0: value > 0
 		do
 			n := value
 		ensure
-			n = value
-		end
-
-feature {NONE} -- Implementation
-
-	init_n is
-		do
-			n := 1
-		ensure
-			n = 1
+			n_set_to_value: n = value
+			n_set: n_set
 		end
 
 invariant
 
-	n_positive: n >= 1
+	n_positive_if_set: n_set = (n > 0)
 
 end -- class N_RECORD_ANALYZER
