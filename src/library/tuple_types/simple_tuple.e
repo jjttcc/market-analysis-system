@@ -8,6 +8,20 @@ class SIMPLE_TUPLE inherit
 
 	MARKET_TUPLE
 
+creation
+
+	make
+
+feature -- Initialization
+
+	make (d: DATE_TIME; v: REAL) is
+		do
+			date_time := d
+			value := v
+		ensure
+			set: date_time = d and value = v
+		end
+
 feature -- Access
 
 	value: REAL
