@@ -2,13 +2,80 @@
 # Installation script for MAS
 
 Progname=$(basename $0)
-config=install_config
+config=/tmp/install_config
 
-if [ ! -f $config -o ! -r $config ]; then
-	echo "$Progname: Could not read configuration file $config" >&2
-	echo "Exiting ..." >&2
+fault() {
+	echo "Programming error encountered: $*" >&2
+	exit -2
+}
+
+fatal() {
+	echo "Fatal error encountered: $*" >&2
 	exit -1
-fi
+}
+
+# Usage: set_dir dirname "message"
+set_dir() {
+	dir=
+	defaultdir=$HOME/$1
+	if [ $# -ne 2 ]; then fault "set_dir: wrong number of arguments"; fi
+	echo -e "$2 ($defaultdir): \c" >&2
+	while [ -z "$dir" ]; do
+		read dir
+		case "$dir" in
+			\$PWD*)
+				dir=$PWD/$(echo "$dir"|sed 's/.PWD//')
+			;;
+		esac
+		if [ -z "$dir" ]; then
+			dir=$defaultdir
+		elif expr "$dir" : "[^/]" >/dev/null 2>&1; then
+			echo -e "Entry must start with / - try again: \c" >&2
+			dir=
+		elif [ -d $dir ]; then
+			echo -e "Use $dir? \c" >&2
+			read answer
+			case "$answer" in
+				y*|Y*) ;;
+				*) dir= ;;
+			esac
+		elif [ -e $dir ]; then
+			echo -e "$dir is not a directory - try again: \c" >&2
+			dir=
+		else
+			echo -e "$dir does not exist - create it? \c" >&2
+			read answer
+			case "$answer" in
+				y*|Y*) mkdir $dir
+					if [ $? -ne 0 ]; then
+						echo -e "Failed to create $dir - try again: \c" >&2
+						dir=
+					fi
+						;;
+				*) dir= ;;
+			esac
+		fi
+		if [ ! -z "$dir" ]; then
+			[ -w $dir -a -x $dir ]
+			if [ $? -ne 0 ]; then
+				echo -e "Don't have permission to install in $dir - try again: \c >&2"
+				dir=
+			fi
+		fi
+	done
+	echo "$1: $dir" >>$config
+}
+
+config() {
+	dir=
+	>$config
+	if [ $? -ne 0 ]; then fatal "Cannot create configuration file $config"; fi
+	set_dir bin "Enter the directory for executables" >&2
+	set_dir lib "Enter the directory for library files" >&2
+}
+
+trap "rm -f $config" SIGINT SIGQUIT SIGABRT SIGBUS SIGILL SIGHUP SIGKILL
+config
 
 libdir=$(awk '/lib:/ { print $2}' $config)
 bindir=$(awk '/bin:/ { print $2}' $config)
