@@ -80,6 +80,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 					// it for all markets.
 					_period_types = data_builder.trading_period_type_list(
 						(String) _markets.elementAt(0));
+					current_period_type = (String) _period_types.elementAt(0);
 					GUI_Utilities.busy_cursor(true, this);
 					// Each market has its own indicator list; but for now,
 					// just retrieve the list for the first market and use
@@ -113,8 +114,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			quit(-1);
 		}
 		initialize_GUI_components();
-replace_indicators = false;
-		current_period_type = main_pane.current_period_type();
+//current_period_type = main_pane.current_period_type();
 		if (_markets.size() > 0) {
 			if (data_builder.options().print_on_startup() && num_windows == 1) {
 				print_all_charts();
@@ -122,7 +122,6 @@ replace_indicators = false;
 			// Show the graph of the first symbol in the selection list.
 			request_data((String) _markets.elementAt(0));
 		}
-System.out.println("replace_indicators: " + replace_indicators);
 		new Thread(this).start();
 	}
 
@@ -144,14 +143,24 @@ System.out.println("replace_indicators: " + replace_indicators);
 		return result;
 	}
 
+	// indicators
+	Hashtable indicators() {
+		return _indicators;
+	}
+
+	// Enumeration of all indicators
+	Enumeration indicators_iterator() {
+		return _indicators.keys();
+	}
+
 	// Result of last request to the server
 	public int request_result() {
 		return data_builder.request_result();
 	}
 
 	// Take action when notified that period type changed.
-	void notify_period_type_changed() {
-		current_period_type = main_pane.current_period_type();
+	void notify_period_type_changed(String new_period_type) {
+		current_period_type = new_period_type;
 		period_type_change = true;
 		if (current_market != null) {
 			request_data(current_market);
@@ -249,7 +258,7 @@ System.out.println("replace_indicators: " + replace_indicators);
 
 	// Add any extra lines to the indicator graph - specified in the
 	// configuration.
-	private void add_indicator_lines(DataSet dataset, String indicator) {
+	protected void add_indicator_lines(DataSet dataset, String indicator) {
 		if (current_lower_indicators.isEmpty()) {
 			return;
 		}
@@ -293,78 +302,11 @@ System.out.println("replace_indicators: " + replace_indicators);
 			current_lower_indicators = new Vector();
 		}
 		add(main_pane, "Center");
-		market_selection = new MarketSelection(this);
+		market_selections = new MarketSelection(this);
+		setMenuBar(new MA_MenuBar(this, data_builder, _period_types));
 
-		// Make a menu bar with a file menu.
-		MenuBar menubar = new MenuBar();
-		setMenuBar(menubar);
-		Menu file_menu = new Menu("File");
-		Menu indicator_menu = new Menu("Indicators");
-		menubar.add(file_menu);
-		menubar.add(indicator_menu);
-		add_indicators(indicator_menu);
-
-		// Create three menu items, with menu shortcuts, and add to the menu.
-		MenuItem newwin, closewin, mkt_selection, print_cmd, print_all, quit;
-		file_menu.add(newwin = new MenuItem("New Window",
-							new MenuShortcut(KeyEvent.VK_N)));
-		file_menu.add(mkt_selection = new MenuItem("Select Market",
-							new MenuShortcut(KeyEvent.VK_S)));
-		file_menu.add(closewin = new MenuItem("Close Window",
-							new MenuShortcut(KeyEvent.VK_W)));
-		file_menu.addSeparator();
-		file_menu.add(print_cmd = new MenuItem("Print",
-							new MenuShortcut(KeyEvent.VK_P)));
-		file_menu.add(print_all = new MenuItem("Print all",
-							new MenuShortcut(KeyEvent.VK_A)));
-		file_menu.addSeparator();
-		file_menu.add(
-			quit = new MenuItem("Quit", new MenuShortcut(KeyEvent.VK_Q)));
-
-		// Create and register action listener objects for the three menu items.
-		newwin.addActionListener(new ActionListener() {	// Open a new window
-		public void actionPerformed(ActionEvent e) {
-				Chart chart = new Chart(new DataSetBuilder(data_builder), null);
-				//chart.setSize(800, 460);
-			}
-		});
-
-		mkt_selection.addActionListener(market_selection);
-
-		closewin.addActionListener(new ActionListener() {// Close this window.
-		public void actionPerformed(ActionEvent e) { close(); }
-		});
-
-		print_cmd.addActionListener(new ActionListener() {// Print
-		public void actionPerformed(ActionEvent e) {
-			if (! (current_market == null || current_market.length() == 0)) {
-				main_pane.print(false);
-			}
-			else { // Let the user know there is currently nothing to print.
-				final ErrorBox errorbox = new ErrorBox("Printing error",
-					"Nothing to print", this_chart);
-			}
-		}});
-
-		print_all.addActionListener(new ActionListener() {// Print all
-		public void actionPerformed(ActionEvent e) {
-			if (! (current_market == null || current_market.length() == 0)) {
-				String original_market = current_market;
-				print_all_charts();
-				request_data((String) original_market);
-			}
-			else { // Let the user know there is currently nothing to print.
-				final ErrorBox errorbox = new ErrorBox("Printing error",
-					"Nothing to print", this_chart);
-			}
-		}});
-
-		quit.addActionListener(new ActionListener() {     // Quit the program.
-		public void actionPerformed(ActionEvent e) { quit(0); }
-		});
-
-		// Another event listener, this one to handle window close requests.
-		this.addWindowListener(new WindowAdapter() {
+		// An event listener to handle window close requests.
+		addWindowListener(new WindowAdapter() {
 		public void windowClosing(WindowEvent e) { close(); }
 		});
 
@@ -373,43 +315,8 @@ System.out.println("replace_indicators: " + replace_indicators);
 		show();
 	}
 
-	// Add a menu item for each indicator to `imenu'.
-	private void add_indicators(Menu imenu) {
-		MenuItem menu_item;
-		IndicatorListener listener = new IndicatorListener();
-		Enumeration ind_keys = _indicators.keys();
-		for ( ; ind_keys.hasMoreElements(); ) {
-			menu_item = new MenuItem((String) ind_keys.nextElement());
-			imenu.add(menu_item);
-			menu_item.addActionListener(listener);
-		}
-	}
-
-	/** Close a window.  If this is the last open window, just quit. */
-	private void close() {
-		if (--num_windows == 0) {
-			save_settings();
-			data_builder.logout(true, 0);
-		}
-		else {
-			data_builder.logout(false, 0);
-			this.dispose();
-		}
-	}
-
-	/** Quit gracefully, sending a logout request for each open window. */
-	private void quit(int status) {
-		save_settings();
-		// Log out the corresponding session for all but one window.
-		for (int i = 0; i < num_windows - 1; ++i) {
-			data_builder.logout(false, 0);
-		}
-		// Log out the remaining window and exit with `status'.
-		data_builder.logout(true, status);
-	}
-
 	// Set the window title using current_market and current_lower_indicators.
-	private void set_window_title() {
+	protected void set_window_title() {
 		if (! current_lower_indicators.isEmpty()) {
 			StringBuffer newtitle = new
 				StringBuffer (current_market.toUpperCase() + " - ");
@@ -431,11 +338,11 @@ System.out.println("replace_indicators: " + replace_indicators);
 	private void handle_nonexistent_sybmol(String symbol) {
 		ErrorBox errorbox = new ErrorBox("",
 			"Symbol " + symbol + " is not in the database.", this_chart);
-		market_selection.remove_selection(symbol);
+		market_selections.remove_selection(symbol);
 	}
 
 	// Save persistent settings as a serialized file.
-	private void save_settings() {
+	protected void save_settings() {
 		if (serialize_filename != null) {
 		try {
 			FileOutputStream chartfile =
@@ -456,11 +363,67 @@ System.out.println("replace_indicators: " + replace_indicators);
 		}
 	}
 
+	// Set replace_indicators to its opposite state.
+	protected void toggle_indicator_replacement() {
+		replace_indicators = ! replace_indicators;
+	}
+
+	// Add a menu item for each indicator to `imenu'.
+	protected void add_indicators(Menu imenu) {
+		MenuItem menu_item;
+		IndicatorListener listener = new IndicatorListener(this);
+		Enumeration ind_keys = _indicators.keys();
+		for ( ; ind_keys.hasMoreElements(); ) {
+			menu_item = new MenuItem((String) ind_keys.nextElement());
+			imenu.add(menu_item);
+			menu_item.addActionListener(listener);
+		}
+	}
+
+	// Print the chart for each member of market_selections
+	protected void print_all_charts() {
+		main_pane.print(true);
+	}
+
+	/** Close a window.  If this is the last open window, just quit. */
+	protected void close() {
+		if (--num_windows == 0) {
+			save_settings();
+			data_builder.logout(true, 0);
+		}
+		else {
+			data_builder.logout(false, 0);
+			dispose();
+		}
+	}
+
+	/** Quit gracefully, sending a logout request for each open window. */
+	protected void quit(int status) {
+		save_settings();
+		// Log out the corresponding session for all but one window.
+		for (int i = 0; i < num_windows - 1; ++i) {
+			data_builder.logout(false, 0);
+		}
+		// Log out the remaining window and exit with `status'.
+		data_builder.logout(true, status);
+	}
+
+	// Print fatal error and exit.
+	private void fatal(String s, Exception e) {
+		System.err.print("Fatal error: request to server failed. ");
+		if (e != null) {
+			System.err.println("(" + e + ")");
+			e.printStackTrace();
+		}
+		System.err.println("Exiting ...");
+		quit(-1);
+	}
+
 	// Link `d' with the appropriate indicator group, using `indicator_name'
 	// as a key.  If `indicator_name' is null, the group for the main
 	// (upper) graph will be used.  If `indicator_name' specifies an
 	// indicator that is not a group member, no action is taken.
-	private void link_with_axis(DataSet d, String indicator_name) {
+	protected void link_with_axis(DataSet d, String indicator_name) {
 		if (indicator_groups == null) {
 			indicator_groups = (IndicatorGroups)
 				Configuration.instance().indicator_groups().clone();
@@ -475,27 +438,11 @@ System.out.println("replace_indicators: " + replace_indicators);
 		}
 	}
 
-	// Print the chart for each member of market_selection
-	private void print_all_charts() {
-		main_pane.print(true);
-	}
-
-	// Print fatal error and exit.
-	private void fatal(String s, Exception e) {
-		System.err.print("Fatal error: request to server failed. ");
-		if (e != null) {
-			System.err.println("(" + e + ")");
-			e.printStackTrace();
-		}
-		System.err.println("Exiting ...");
-		quit(-1);
-	}
-
 	private boolean vector_has(Vector v, String s) {
 		return Utilities.vector_has(v, s);
 	}
 
-	private DataSetBuilder data_builder;
+	protected DataSetBuilder data_builder;
 
 	private Chart this_chart;
 
@@ -529,7 +476,7 @@ System.out.println("replace_indicators: " + replace_indicators);
 	// existing indicators?
 	boolean replace_indicators;
 
-	protected MarketSelection market_selection;
+	protected MarketSelection market_selections;
 
 	protected final String No_upper_indicator = "No upper indicator";
 
@@ -542,87 +489,4 @@ System.out.println("replace_indicators: " + replace_indicators);
 	static ChartSettings window_settings;
 
 	IndicatorGroups indicator_groups;
-
-/** Listener for indicator selection */
-class IndicatorListener implements
-		java.awt.event.ActionListener {
-	public void actionPerformed(java.awt.event.ActionEvent e) {
-		String selection = e.getActionCommand();
-		DataSet dataset, main_dataset;
-		try {
-			String market = current_market;
-			if (market == null ||
-				vector_has(current_upper_indicators, selection) ||
-				vector_has(current_lower_indicators, selection)) {
-				// If no market is selected or the selection hasn't changed,
-				// there is nothing to display.
-				return;
-			}
-			if (! (selection.equals(No_upper_indicator) ||
-					selection.equals(No_lower_indicator) ||
-					selection.equals(Volume))) {
-				GUI_Utilities.busy_cursor(true, Chart.this);
-				data_builder.send_indicator_data_request(
-					((Integer) _indicators.get(selection)).intValue(),
-					market, current_period_type);
-				GUI_Utilities.busy_cursor(false, Chart.this);
-			}
-		}
-		catch (Exception ex) {
-			System.err.println("Exception occurred: " + ex + ", bye ...");
-			ex.printStackTrace();
-			quit(-1);
-		}
-		// Set graph data according to whether the selected indicator is
-		// configured to go in the upper (main) or lower (indicator) graph.
-		if (Configuration.instance().upper_indicators().containsKey(selection))
-		{
-			main_dataset = data_builder.last_market_data();
-			if (! current_upper_indicators.isEmpty() && replace_indicators) {
-				// Remove the old indicator data from the graph (and the
-				// market data).
-				main_pane.clear_main_graph();
-				// Re-attach the market data.
-				link_with_axis(main_dataset, null);
-				main_pane.add_main_data_set(main_dataset);
-				current_upper_indicators.removeAllElements();
-			}
-			current_upper_indicators.addElement(selection);
-			dataset = data_builder.last_indicator_data();
-			dataset.set_dates_needed(false);
-			link_with_axis(dataset, selection);
-			main_pane.add_main_data_set(dataset);
-		}
-		else if (selection.equals(No_upper_indicator)) {
-			// Remove the old indicator and market data from the graph.
-			main_pane.clear_main_graph();
-			// Re-attach the market data without the indicator data.
-			link_with_axis(data_builder.last_market_data(), null);
-			main_pane.add_main_data_set(data_builder.last_market_data());
-			current_upper_indicators.removeAllElements();
-		}
-		else if (selection.equals(No_lower_indicator)) {
-			main_pane.clear_indicator_graph();
-			current_lower_indicators.removeAllElements();
-			set_window_title();
-		}
-		else {
-			if (selection.equals(Volume)) {
-				dataset = data_builder.last_volume();
-			} else {
-				dataset = data_builder.last_indicator_data();
-			}
-			if (replace_indicators) {
-				main_pane.clear_indicator_graph();
-				current_lower_indicators.removeAllElements();
-			}
-			link_with_axis(dataset, selection);
-			current_lower_indicators.addElement(selection);
-			set_window_title();
-			add_indicator_lines(dataset, selection);
-			main_pane.add_indicator_data_set(dataset);
-		}
-		main_pane.repaint_graphs();
-	}
-}
 }

@@ -27,8 +27,8 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 		_indicator_graph = new InteractiveGraph();
 		GridBagLayout gblayout = new GridBagLayout();
 		GridBagConstraints gbconstraints = new GridBagConstraints();
-		period_type_choice = new Choice();
-		initialize_period_type_choice(period_types);
+//period_type_choice = new Choice();
+//initialize_period_type_choice(period_types);
 
 		main_panel = new Panel(new BorderLayout());
 		add(main_panel, "Center");
@@ -41,7 +41,7 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 		_left_button_panel.add (top_button_panel, "North");
 		_left_button_panel.add (bottom_button_panel, "South");
 		//top_button_panel.add(new Button("Dummy1"));
-		top_button_panel.add(period_type_choice);
+		//top_button_panel.add(period_type_choice);
 		//bottom_button_panel.add(new Button("Dummy2"));
 
 		// Set GridBagLayout constraints such that the main graph is at
@@ -86,11 +86,6 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 	// The indicator graph - where the indicator data is displayed
 	public Graph indicator_graph() {
 		return _indicator_graph;
-	}
-
-	// Current selected period type
-	public String current_period_type() {
-		return period_type_choice.getSelectedItem();
 	}
 
 	// Delete all data from the main graph.
@@ -139,7 +134,7 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 			all? "All charts": chart.current_market, print_properties);
 		if (pj != null) {
 			if (all) {
-				Vector selections = chart.market_selection.selections();
+				Vector selections = chart.market_selections.selections();
 				for (int i = 0; i < selections.size(); ++i) {
 					chart.request_data((String) selections.elementAt(i));
 					if (chart.request_result() != Invalid_symbol) {
@@ -185,21 +180,21 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 
 // Implementation
 
-	void initialize_period_type_choice(Vector period_types) {
-		for (int i = 0; i < period_types.size(); ++i) {
-			period_type_choice.add((String) period_types.elementAt(i));
-		}
-		period_type_choice.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent e) {
-				String per_type;
-				per_type = (String) e.getItem();
-				if (! per_type.equals(_last_period_type)) {
-					chart.notify_period_type_changed();
-				}
-				_last_period_type = per_type;
-			}
-		});
-	}
+void initialize_period_type_choice(Vector period_types) {
+for (int i = 0; i < period_types.size(); ++i) {
+period_type_choice.add((String) period_types.elementAt(i));
+}
+period_type_choice.addItemListener(new ItemListener() {
+public void itemStateChanged(ItemEvent e) {
+String per_type;
+per_type = (String) e.getItem();
+if (! per_type.equals(_last_period_type)) {
+//chart.notify_period_type_changed();
+}
+_last_period_type = per_type;
+}
+});
+}
 
 	private InteractiveGraph _main_graph;
 	private InteractiveGraph _indicator_graph;
