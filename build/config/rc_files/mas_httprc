@@ -4,6 +4,19 @@
 
 # Format: "label_string<tab>setting"
 
+# Does the month in a date specification start at zero rather than one -
+# that is, does 0 indicate January and 11 indicate December?
+# NOTE: This specification does not apply to the month settings specified
+# in this file, which always start at 1; rather it specifies how the date
+# settings are translated into the "HTTP GET" request for retrieving the
+# specified range of data.  Note that the chart.yahoo.com site expects (as
+# of Sep. 2002) months to start at zero and thus months_start_at_zero
+# should be set to true if you are using yahoo's site.
+# (Change "true" below to "false" or simply delete the "months_start_at_zero"
+# specification below, since the default is false, to specify that months
+# start at one.)
+months_start_at_zero	true
+
 # Specification for the start and end dates for the data to be retrieved
 # "now" means, of course, the current date; if an actual date is used,
 # it must be of the form: yyyymmdd.
