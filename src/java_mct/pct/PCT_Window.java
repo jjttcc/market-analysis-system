@@ -27,15 +27,10 @@ class PCT_Window extends FrameWindowListener {
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-System.out.println("actPerf with btn, comp: " +
-button + ", " + button.component);
 					button.component.exec_startup_cmd();
 					if (button.component.exit_after_startup_cmd()) {
-System.out.println("actPerf - btn.comp.exit_after...");
 						close();
 					}
-System.out.println("actPerf FINISHED with btn, comp: " +
-button + ", " + button.component);
 				} catch (Exception f) {
 					report_startup_failure(f, button.component);
 				}

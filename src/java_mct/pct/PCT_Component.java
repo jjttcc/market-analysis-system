@@ -52,20 +52,14 @@ class PCT_Component {
 	Object import_and_execute(String cmdclass, String method, Object[] args) {
 		Object result = null;
 		String cmdname = cmdclass + "." + method;
-//System.out.println("import_and_execute called with class.method: " +
-//cmdname);
 		try {
 			if (startup_command == null) {
-System.out.println("Creating cmd object");
 				create_startup_command(cmdclass);
-System.out.println("Created cmd object: " + startup_command);
 			}
-System.out.println("stupcmd and meth: " + startup_command +
-", " + startup_method);
 			if (startup_command != null && startup_method != null) {
-System.out.println("LOOK: About to call " + startup_method);
+//System.out.println("LOOK: About to call " + startup_method);
 				result = startup_method.invoke(startup_command, args);
-System.out.println("LOOK: Finished calling " + startup_method);
+//System.out.println("LOOK: Finished calling " + startup_method);
 			} else {
 				throw new Exception("Command " + cmdname + " not found.");
 			}
@@ -75,7 +69,6 @@ System.out.println("LOOK: Finished calling " + startup_method);
 			System.err.println("Execution of command '" +
 				cmdname + "' failed with the error:\n" + e);
 		}
-System.out.println("returning " + result);
 		return result;
 	}
 
@@ -93,15 +86,11 @@ System.out.println("returning " + result);
 			throw e;
 		}
 		if (config_file_name_setting != "") {
-System.out.println("config_file_name != ''");
 			// If there is a config file, a sub-terminal needs to be run.
-System.out.println("A1");
 			ProgramControlTerminal pct =
 				new ProgramControlTerminal(config_file_name_setting,
 					owner.program_name, _application_context, context);
-System.out.println("A2 - pct: " + pct);
 			pct.execute();
-System.out.println("A3");
 		}
 	}
 
@@ -110,35 +99,25 @@ System.out.println("A3");
 		final String app_pkg = "pct.application.";
 		String classname = app_pkg + name;
 		try {
-System.out.println("x");
 			Class the_class = Class.forName(classname);
 			Class[] constructor_args = new Class[] {
 				ApplicationContext.class, Object.class};
-System.out.println("y");
 			Constructor constructor =
 				the_class.getConstructor(constructor_args);
-System.out.println("z");
 			startup_command =
 				constructor.newInstance(new Object[] {
 					_application_context, parent_component_context});
-System.out.println("getting method " + startup_cmd_method_setting);
 			startup_method = the_class.getMethod(
 				startup_cmd_method_setting, null);
-System.out.println("made the method: " + startup_method);
 		} catch (InstantiationException e) {
-System.err.println("1");
 			System.err.println(e);
 		} catch (IllegalAccessException e) {
-System.err.println("2");
 			System.err.println(e);
 		} catch (ClassNotFoundException e) {
-System.err.println("3");
 			System.err.println(e);
 		} catch (InvocationTargetException e) {
-System.err.println("3.5");
 			System.err.println(e);
 		} catch (NoSuchMethodException e) {
-System.err.println("4");
 			System.err.println(e);
 		}
 	}

@@ -27,7 +27,6 @@ public class ProgramControlTerminal extends PCT_Tools {
 		program_name_setting = prog_name;
 		_application_context = app_context;
 		_component_context = comp_context;
-System.out.println("PCT A");
 		FileReaderUtilities cfgfile = config_file();
 		Vector lines = lines_from_file(cfgfile);
 		String sep = separator(lines);
@@ -35,7 +34,6 @@ System.out.println("PCT A");
 		quitbutton_setting = false;
 		parse_and_process(lines, sep);
 //print_state();
-System.out.println("PCT B");
 		window = new PCT_Window(terminal_name_setting, subcomponents.size());
 		for (int i = 0; i < subcomponents.size(); ++i) {
 			window.add_button((PCT_Component) subcomponents.elementAt(i));
@@ -84,7 +82,6 @@ System.out.println("PCT B");
 		boolean in_sub = false;
 		PCT_Component current_sub = null;
 		ComponentSettings settings = null;
-//System.out.println("pap a");
 		try {
 			settings = new ComponentSettings();
 		} catch (Exception e) {
@@ -93,28 +90,23 @@ System.out.println("PCT B");
 		}
 		for (int i = 0; i < lines.size(); ++i) {
 			String l = (String) lines.elementAt(i);
-//System.out.println("pap b - l: " + l);
 			if (comment(l)) continue;
 			String[] tuple = split(l, sep);
 			String tuple_name = tuple[0];
 			if (regex_match("^begin", tuple_name)) {
-//System.out.println("pap d1");
 				current_sub = new PCT_Component(this);
 				settings.clear_subcomponent_values();
 				in_sub = true;
 			}
 			else if (regex_match("^end", tuple_name)) {
-//System.out.println("pap f1");
 				subcomponents.addElement(current_sub);
 				in_sub = false;
 				settings.set_subcomponent_settings(current_sub);
 			}
 			else if (regex_match("^" + Separator_string, tuple_name)) {
-//System.out.println("pap s1");
 				// Ignore separator specification.
 			}
 			else {
-//System.out.println("pap g");
 				settings.process(tuple);
 				if (! settings.last_key_valid()) {
 					System.out.println("Invalid line in config. file: " + l);

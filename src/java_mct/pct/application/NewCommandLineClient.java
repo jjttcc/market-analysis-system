@@ -17,13 +17,11 @@ public class NewCommandLineClient {
 	}
 
 	public Object execute() {
-System.out.println("NCLC.execute A");
 		Object result = null;
 		if (runtime == null) {
 			runtime = Runtime.getRuntime();
 		}
 		try {
-System.out.println("NCLC.execute B");
 String tmp_cmd = "xterm -e /opt/mas/bin/macl -h " + " " +
 parent_context.server_host_name() + " " +
 parent_context.server_port_number();

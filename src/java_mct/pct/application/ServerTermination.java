@@ -17,19 +17,16 @@ public class ServerTermination {
 	}
 
 	public Object execute() {
-System.out.println("ST.execute A");
 		Object result = null;
 		if (runtime == null) {
 			runtime = Runtime.getRuntime();
 		}
 		try {
-System.out.println("ST.execute B");
 String tmp_cmd = "bash /tmp/terminate_mas -h " +
 parent_context.server_host_name() + " " +
 parent_context.server_port_number();
 System.out.println("Trying to execute: " + tmp_cmd);
 			Process p = runtime.exec(tmp_cmd);
-System.out.println("After executing " + tmp_cmd);
 		} catch (Exception e) {
 			System.err.println("Error: failed to start mas command-line " +
 				"client: " + e);

@@ -27,7 +27,6 @@ class PCT_Main {
 	public static void main(String[] args) {
 		try {
 			ApplicationContext app_context = application_context();
-System.out.println("App context is: " + app_context);
 			ProgramControlTerminal pct =
 				new ProgramControlTerminal(null, null, app_context, null);
 			System.err.println("PCT_Main - calling pct.execute.");
@@ -47,15 +46,10 @@ System.out.println("App context is: " + app_context);
 		ApplicationContext result;
 
 		try {
-System.out.println("trying to get the specialized init class");
 			app_init_class = Class.forName(application_init_class_name);
-System.out.println("got the specialized init class: " + app_init_class);
 			Object o = app_init_class.newInstance();
-System.out.println("got the specialized init class instance: " + o);
 			ai = (ApplicationInitialization) o;
-System.out.println("type-converted the specialized init class instance: " + ai);
 		} catch (Exception e) {
-System.err.println("Didn't get the specialized init class instance: " + e);
 		}
 		if (ai == null) {
 			// User-specialized application class was not specified or
