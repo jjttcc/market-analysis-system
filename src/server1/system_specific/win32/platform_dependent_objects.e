@@ -17,11 +17,7 @@ feature -- Access
 
 	database_services: MAS_DB_SERVICES is
 		do
---!!!!!!!Need to create three windows versions of this class - one that
---uses ODBC_SERVICES, one that uses ECLI_SERVICES, and one that uses
---DB_SERVICES_STUB.
-			create {DB_SERVICES_STUB} Result.make
--- create {ODBC_SERVICES} Result.make
+			create {ECLI_SERVICES} Result.make
 			if Result.fatal_error then
 				if
 					Result.last_error /= Void and not Result.last_error.is_empty
