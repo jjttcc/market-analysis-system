@@ -101,7 +101,7 @@ feature -- Basic operations
 					if l /= Void and not l.empty then
 						print_tuples (l)
 					else
-						print ("(Empty)%N")
+						output_medium.put_string ("(Empty)%N")
 					end
 				end
 				i := i + 1
@@ -154,19 +154,22 @@ feature {NONE} -- Implementation
 		require
 			not_void: f /= Void
 		do
-			print ("Indicator: "); print (f.name)
-			print (", description: ")
-			print (f.short_description); print ("%N(")
-			print (f.full_description); print (")%N")
-			print ("processed? ")
+			output_medium.put_string ("Indicator: ");
+			output_medium.put_string (f.name)
+			output_medium.put_string (", description: ")
+			output_medium.put_string (f.short_description);
+			output_medium.put_string ("%N(")
+			output_medium.put_string (f.full_description);
+			output_medium.put_string (")%N")
+			output_medium.put_string ("processed? ")
 			if f.processed then
-				print ("Yes, ")
+				output_medium.put_string ("Yes, ")
 			else
-				print ("No, ")
+				output_medium.put_string ("No, ")
 			end
-			print ("trading period: ")
-			print (f.trading_period_type.name)
-			print ("%N")
+			output_medium.put_string ("trading period: ")
+			output_medium.put_string (f.trading_period_type.name)
+			output_medium.put_string ("%N")
 		end
 
 	verbose: BOOLEAN is
@@ -179,9 +182,9 @@ feature {NONE} -- Implementation
 			-- Start and end date to use for printing, if not void
 
 	output_medium: IO_MEDIUM is
-			-- Medium to use for output - If Void (default),
-			-- io.default_output will be used.
+			-- Medium to use for output - Defaults to io.default_output.
 		once
+			Result := io.default_output
 		end
 
 end -- PRINTING
