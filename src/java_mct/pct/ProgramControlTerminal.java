@@ -79,10 +79,10 @@ public class ProgramControlTerminal extends PCT_Tools {
 			else {
 				settings.process(tuple);
 				if (! settings.last_key_valid()) {
-					System.out.println("Invalid line in config. file: " + l);
+					System.err.println("Invalid line in config. file: " + l);
 				}
 				if (settings.duplicate_setting()) {
-					System.out.println("Note: This specification - '" +
+					System.err.println("Note: This specification - '" +
 						l + "' - overwites a previous one: ");
 				}
 			}
