@@ -14,6 +14,11 @@ import application_library.*;
 import graph_library.DataSet;
 import graph.*;
 
+//!!!!!XXXXXXXXX - for screen capture experiment
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+//!!!!!XXXXXXXXX
+
 /** Market analysis GUI chart component */
 public class Chart extends Frame implements Runnable, NetworkProtocol,
 	ChartInterface, ChartConstants, AssertionConstants,
@@ -54,6 +59,10 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		}
 		initialize_GUI_components(s);
 		post_initialize();
+//!!!:
+if (screen_capture_experiment) {
+capture_me();
+}
 	}
 
 // Access
@@ -543,4 +552,21 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	private ChartDataManager data_manager;
 
 	private static boolean is_exiting = false;
+
+//!!!!!experiment:
+private boolean screen_capture_experiment = false;
+private void capture_me() {
+System.out.println("trying to capture myself!!!!");
+	try {
+		BufferedImage image = new Robot().createScreenCapture(new Rectangle(
+			this.getX(), this.getY(), this.getWidth(), this.getHeight()));
+		File file = new File("screencapture.jpg");
+		ImageIO.write(image, "jpg", file);
+		Thread.sleep(250);
+	} catch (Exception e) {
+		System.out.println("OOOOOOPS: " + e);
+	}
+System.out.println("Did I succeed????");
+System.exit(0);
+}
 }
