@@ -2,10 +2,25 @@
 # Market Analysis Command-Line (MACL) client - accesses the MA server
 # command-line interface via a socket connection.
 
-from sys import *
-from ma_connection import *
-from CommandProcessor import *
-import os
+def abort(msg, conn):
+	if msg != None:
+		print msg + " - ",
+	print "Exiting ..."
+	if conn != 0:
+		conn.send_message(Exit_string)
+		conn.receive_message()
+		print "Closing ..."
+		conn.close()
+	exit(-1)
+
+try:
+	lastmodule = "sys"; from sys import *
+	lastmodule = "ma_connection"; from ma_connection import *
+	lastmodule = "CommandProcessor"; from CommandProcessor import *
+	lastmodule = "os"; import os
+except:
+	abort("Failed to import library module " + lastmodule + ".\nHas " + \
+		"PYTHONPATH been set to include the MAS lib/python directory?", 0)
 
 Buffersize = 1
 Exit_string = 'x\n'
@@ -17,17 +32,6 @@ def usage():
 		"   -h <hostname>   Connect to server on host <hostname>\n" +\
 		"   -r <file>       Record user input and save to <file>\n" +\
 		"   -i <file>       Obtain input from <file> instead of the console\n"
-
-def abort(msg):
-	if msg != None:
-		print msg + " - ",
-	print "Exiting ..."
-	if connection != 0:
-		connection.send_message(Exit_string)
-		connection.receive_message()
-		print "Closing ..."
-		connection.close()
-	exit(-1)
 
 # Obtain user response, skipping comments (# ...)
 def user_response():
@@ -42,7 +46,6 @@ if len(argv) < 2:
 	usage()
 	exit(-1)
 
-connection = 0
 host = ""
 port = -1
 argcount = len(argv)
@@ -60,17 +63,17 @@ while i < argcount:
 			i = i + 1
 			Recordfile = argv[i]
 		else:
-			abort("Output file for record option was not specified.")
+			abort("Output file for record option was not specified.", 0)
 	elif argv[i][:2] == '-i':
 		if i + 1 < argcount and argv[i+1][:1] != '-':
 			i = i + 1
 			try:
 				input_file = open(argv[i], 'r', 000)
 			except:
-				abort("Attempt to open input file " + argv[i] + " failed")
+				abort("Attempt to open input file " + argv[i] + " failed", 0)
 			stdin = input_file
 		else:
-			abort("Output file for record option was not specified.")
+			abort("Output file for record option was not specified.", 0)
 	else:
 		try:
 			port = eval(argv[i])
@@ -80,7 +83,7 @@ while i < argcount:
 
 if port == -1:
 	usage()
-	abort("Missing port number")
+	abort("Missing port number", 0)
 if host == "":
 	f = os.popen("hostname")
 	host = f.readline()[:-1]
@@ -97,7 +100,7 @@ while not connection.termination_requested:
 	processor.set_server_msg(connection.last_message)
 	if processor.error:
 		if processor.fatal_error:
-			abort("Invalid user input")
+			abort("Invalid user input", connection)
 	processor.process(user_response())
 	connection.send_message(processor.result)
 	connection.receive_message()
