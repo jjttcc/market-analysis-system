@@ -1,5 +1,7 @@
 indexing
-	description: ""
+	description:
+		"Factory that parses an input file and creates a MARKET_EVENT with %
+		%the result"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"

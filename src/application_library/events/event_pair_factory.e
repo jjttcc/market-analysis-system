@@ -1,5 +1,5 @@
 indexing
-	description: ""
+	description: "A market event factory that makes a MARKET_EVENT_PAIR"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
