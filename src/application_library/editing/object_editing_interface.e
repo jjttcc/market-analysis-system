@@ -23,7 +23,8 @@ deferred class OBJECT_EDITING_INTERFACE [G] inherit
 feature -- Access
 
 	object_selection_from_type (type: STRING; msg: STRING; top: BOOLEAN): G is
-			-- User-selected object whose type conforms to `type'.
+			-- User-selected object whose type conforms to `type' and is
+			-- not represented in `exclude_list'.
 			-- `top' specifies whether the returned instance will be
 			-- the top of the tree.
 		require
@@ -37,7 +38,7 @@ feature -- Access
 				-- Clear current object list for the new tree.
 				current_objects.wipe_out
 			end
-			obj_list := object_types @ type
+			obj_list := valid_types_exclude (object_types @ type, exclude_list)
 			Result := user_object_selection (obj_list, msg)
 			current_objects.extend (Result)
 			if initialization_needed then
@@ -72,6 +73,9 @@ feature -- Access
 		do
 		end
 
+	exclude_list: LIST [G]
+			-- List of objects to exclude from user selections
+
 feature -- Status setting
 
 	reset is
@@ -82,6 +86,16 @@ feature -- Status setting
 				current_object_list.wipe_out
 			end
 			descendant_reset
+		end
+
+	set_exclude_list (arg: like exclude_list) is
+			-- Set exclude_list to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			exclude_list := arg
+		ensure
+			exclude_list_set: exclude_list = arg and exclude_list /= Void
 		end
 
 feature {NONE} -- Implementation
@@ -102,7 +116,7 @@ feature {NONE} -- Implementation
 			general_msg: STRING
 		do
 			!LINKED_SET [G]!tree_objects.make
-			tree_objects.fill (valid_types (objects, current_objects))
+			tree_objects.fill (valid_types (current_objects, objects))
 			from
 				!!tree_names.make (tree_objects.count)
 				tree_objects.start
@@ -188,9 +202,11 @@ feature {NONE} -- Implementation
 		deferred
 		end
 
-	valid_types (ref_list, obj_list: LIST [G]): LIST [G] is
+	valid_types (obj_list, ref_list: LIST [G]): LIST [G] is
 			-- All elements of `obj_list' whose type matches that of
 			-- an element of `ref_list'
+		require
+			not_void: obj_list /= Void and ref_list /= Void
 		do
 			!LINKED_LIST [G]!Result.make
 			from
@@ -210,6 +226,43 @@ feature {NONE} -- Implementation
 					ref_list.forth
 				end
 				obj_list.forth
+			end
+		end
+
+	valid_types_exclude (obj_list, ref_list: LIST [G]): LIST [G] is
+			-- All elements of `obj_list' whose type DOES NOT match that of
+			-- an element of `ref_list'
+		require
+			ol_not_void: obj_list /= Void
+		local
+			exclude_current: BOOLEAN
+		do
+			!LINKED_LIST [G]!Result.make
+			if ref_list = Void then
+				Result.append (obj_list)
+			else
+				from
+					obj_list.start
+				until
+					obj_list.exhausted
+				loop
+					from
+						ref_list.start
+						exclude_current := false
+					until
+						ref_list.exhausted or exclude_current
+					loop
+						if obj_list.item.same_type (ref_list.item) then
+							exclude_current := true
+						else
+							ref_list.forth
+						end
+					end
+					if not exclude_current then
+						Result.extend (obj_list.item)
+					end
+					obj_list.forth
+				end
 			end
 		end
 
