@@ -32,14 +32,14 @@ import java.lang.*;
 **************************************************************************
 **
 **    This class is designed to be used in conjunction with 
-**    the MA_Graph class and Axis class for plotting 2D graphs.
+**    the Graph class and Axis class for plotting 2D graphs.
 **
 *************************************************************************/
 
 
 /**
  *  This class is designed to hold the data to be plotted.
- *  It is to be used in conjunction with the MA_Graph class and Axis 
+ *  It is to be used in conjunction with the Graph class and Axis 
  *  class for plotting 2D graphs.
  *
  * @version $Revision$, $Date$
@@ -86,9 +86,9 @@ public class DataSet {
 
   /** 
    *    The Graphics canvas that is driving the whole show.
-   * @see graph.MA_Graph
+   * @see graph.Graph
    */
-      public MA_Graph g2d;
+      public Graph g2d;
   /**
    *    The color of the straight line segments
    */

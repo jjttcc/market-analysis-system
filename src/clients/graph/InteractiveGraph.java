@@ -8,7 +8,7 @@ import java.util.*;
 /*
 **************************************************************************
 **
-**    Class  MA_GraphInteractive
+**    Class  InteractiveGraph
 **
 **************************************************************************
 **    Copyright (C) 1995, 1996 Leigh Brookshaw
@@ -31,14 +31,14 @@ import java.util.*;
 **    Changed name from G2Dint.
 **************************************************************************
 **
-**    This class is an extension of MA_Graph class.
+**    This class is an extension of Graph class.
 **    It adds interactive selection of the plotting range
 **    and can display the mouse position in user coordinates.
 **
 *************************************************************************/
 
 /**
- *    This class is an extension of MA_Graph class.
+ *    This class is an extension of Graph class.
  *    It adds interactive selection of the plotting range
  *    and can display the mouse position in user coordinates.
  *
@@ -80,7 +80,7 @@ import java.util.*;
  * @author Leigh Brookshaw
  */
 
-public class MA_GraphInteractive extends MA_Graph {
+public class InteractiveGraph extends Graph {
 
 /**
  *    Set to true when a rectangle is being dragged out by the mouse
@@ -625,7 +625,7 @@ class Gin extends Frame {
 
 class Range extends Frame {
 
-     MA_Graph g2d = null;
+     Graph g2d = null;
 
 
      private Label xminLabel = new Label("Xmin");
@@ -642,7 +642,7 @@ class Range extends Frame {
      private Button done   = new Button("Done");
 
 
-     public Range(MA_Graph g) {
+     public Range(Graph g) {
 
          g2d = g;
 

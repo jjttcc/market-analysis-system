@@ -12,7 +12,7 @@ import java.net.URL;
 /*
 **************************************************************************
 **
-**                      Class  graph.MA_Graph
+**                      Class  graph.Graph
 **
 **************************************************************************
 **    Copyright (C) 1995, 1996 Leigh Brookshaw
@@ -54,7 +54,7 @@ import java.net.URL;
  * @author   Leigh Brookshaw
  */
 
-public class MA_Graph extends Canvas {
+public class Graph extends Canvas {
 
 
 /*
@@ -73,14 +73,14 @@ public class MA_Graph extends Canvas {
 
 /**
  *  A vector list of All the axes attached
- *  @see MA_Graph#attachAxis()
+ *  @see Graph#attachAxis()
  */
 
     protected Vector axis          = new Vector(4);
 
 /**
  *  A vector list of All the DataSets attached
- *  @see MA_Graph#attachDataSet()
+ *  @see Graph#attachDataSet()
  *  @see DataSet
  */
 
@@ -88,14 +88,14 @@ public class MA_Graph extends Canvas {
 
 /**
  *  The markers that may have been loaded
- *  @see MA_Graph#setMarkers()
+ *  @see Graph#setMarkers()
  */
 
     protected Markers markers = null;
 
 /**
  * The blinking "data loading" thread
- * @see MA_Graph#startedloading()
+ * @see Graph#startedloading()
  */
 
     protected LoadMessage load_thread = null;
@@ -587,8 +587,8 @@ public class MA_Graph extends Canvas {
  *  net. Everytime this routine is called a counter is incremented
  *  the method finishedloading() decrements the counter. When the
  *  counter is back to zero the plotting resumes.
- *  @see MA_Graph#finishedloading()
- *  @see MA_Graph#loadmessage()
+ *  @see Graph#finishedloading()
+ *  @see Graph#loadmessage()
  *  @see LoadMessage
 */
     public void startedloading() {
@@ -607,8 +607,8 @@ public class MA_Graph extends Canvas {
 /**
  * Decrement the loading Data counter by one. When it is zero resume
  * plotting.
- *  @see MA_Graph#startedloading()
- *  @see MA_Graph#loadmessage()
+ *  @see Graph#startedloading()
+ *  @see Graph#loadmessage()
  *  @see LoadMessage
 */
     public void finishedloading() {
@@ -624,8 +624,8 @@ public class MA_Graph extends Canvas {
 /**
  * Change the message to be flashed on the canvas
  * @param s String contining the new message.
- * @see MA_Graph#startedloading()
- * @see MA_Graph#finishedloading()
+ * @see Graph#startedloading()
+ * @see Graph#finishedloading()
  * @see LoadMessage
 */
     public void loadmessage(String s) {
@@ -900,11 +900,11 @@ class FileFormatException extends Exception {
 
 /**
  *   This is a separate thread that flashes a message
- *   on the MA_Graph canvas that data is loading
+ *   on the Graph canvas that data is loading
  */
 
 class LoadMessage extends Thread {
-        MA_Graph  g2d;
+        Graph  g2d;
         String   message    = "Loading Data ... Please Wait!";
         String   newmessage = null;
         long     visible    = 500;
@@ -915,20 +915,20 @@ class LoadMessage extends Thread {
         
 /**
  *    Instantiate the class
- * @param g2d The MA_Graph canvas to draw message on
+ * @param g2d The Graph canvas to draw message on
  *
  */            
-        public LoadMessage(MA_Graph g2d) {
+        public LoadMessage(Graph g2d) {
            this.g2d = g2d;
 
         }
 
 /**
  *  Instantiate the class
- * @param g2d The MA_Graph canvas to draw message on
+ * @param g2d The Graph canvas to draw message on
  * @param s   The string to flash on the canvas
  */            
-        public LoadMessage(MA_Graph g2d, String s) {
+        public LoadMessage(Graph g2d, String s) {
 
            this(g2d);
            this.message = s;
@@ -936,13 +936,13 @@ class LoadMessage extends Thread {
         }
 /**
  *  Instantiate the class
- * @param g2d The MA_Graph canvas to draw message on
+ * @param g2d The Graph canvas to draw message on
  * @param s   The string to flash on the canvas
  * @param visible Number of milliseconds the message is visible
  * @param invisible Number of milliseconds the message is invisible
  */            
 
-        public LoadMessage(MA_Graph g, String s, long visible, long invisible) {
+        public LoadMessage(Graph g, String s, long visible, long invisible) {
             this(g,s);
             this.visible = visible;
             this.invisible = invisible;
