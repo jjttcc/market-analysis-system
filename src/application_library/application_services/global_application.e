@@ -90,12 +90,31 @@ feature {NONE} -- Access
 
 	function_library: LIST [MARKET_FUNCTION] is
 			-- All defined market functions
+		local
+			storable: STORABLE
+			mflist: STORABLE_LIST [MARKET_FUNCTION]
 		once
-			!LINKED_LIST [MARKET_FUNCTION]!Result.make
+			!!storable
+			mflist ?= storable.retrieve_by_name (storable_file_name)
+			if mflist = Void then
+				!STORABLE_MARKET_FUNCTION_LIST!mflist.make (
+														storable_file_name)
+			end
+			register_for_termination (mflist)
+			Result := mflist
 		end
 
 feature {NONE} -- Constants
 
 	default_input_file_name: STRING is "/tmp/tatest"
+			-- Name of default input file if none is specified by the user
+
+	storable_file_name: STRING is
+			-- Name of the file containing persistent data
+		local
+			ta_env: expanded TAL_APP_ENVIRONMENT
+		once
+			Result := ta_env.file_name_with_app_directory ("ta_persist")
+		end
 
 end -- GLOBAL_APPLICATION
