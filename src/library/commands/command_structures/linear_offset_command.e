@@ -15,11 +15,10 @@ deferred class LINEAR_OFFSET_COMMAND inherit
 
 feature -- Access
 
-	offset: INTEGER is
-			-- offset to current index specifying which relative
-			-- position of target to access - may be positive or negative,
-			-- but must never cause an out-of-bounds access on target -
-			-- that is:  target.valid_index (target.index + offset)
+	external_offset: INTEGER is
+			-- Offset to be used externally, for example, to set the
+			-- `effective_n' value of an N_RECORD_ONE_VARIABLE_FUNCTION -
+			-- Will probably either be 0 or the value of `offset'.
 		deferred
 		end
 
@@ -44,6 +43,16 @@ feature -- Basic operations
 			end
 			operate (arg)
 			target.go_i_th (old_i) -- Restore cursor.
+		end
+
+feature {NONE}
+
+	offset: INTEGER is
+			-- offset to current index specifying which relative
+			-- position of target to access - may be positive or negative,
+			-- but must never cause an out-of-bounds access on target -
+			-- that is:  target.valid_index (target.index + offset)
+		deferred
 		end
 
 feature {NONE} -- Hook methods
