@@ -5,7 +5,7 @@ indexing
 		%period"
 	instructions:
 		"To use an instance of this class or any of its descendants, %
-		%set the input to be processed by calling set_input, set n to the %
+		%set the input to be processed by calling set_target, set n to the %
 		%number of items to be processed, call execute to process it, and %
 		%retrieve the result from value.  A subset of the input from the %
 		%current item - n + 1 to the current item will be processed."
@@ -44,9 +44,9 @@ feature -- Status report
 
 	execute_precondition: BOOLEAN is
 		do
-			Result := n_set and input_set
+			Result := n_set and target_set
 		ensure then
-			n_input_set: Result = (n_set and input_set)
+			n_target_set: Result = (n_set and target_set)
 		end
 
 	execute_postcondition: BOOLEAN is

@@ -56,9 +56,9 @@ feature -- Status report
 
 	execute_precondition: BOOLEAN is
 		do
-			Result := operator_set and input_set and n_set
+			Result := operator_set and target_set and n_set
 		ensure then
-			op_input_n_set: Result = (operator_set and input_set and n_set)
+			op_target_n_set: Result = (operator_set and target_set and n_set)
 		end
 
 	execute_postcondition: BOOLEAN is

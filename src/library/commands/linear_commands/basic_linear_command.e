@@ -19,7 +19,7 @@ feature -- Basic operations
 
 feature {TEST_FUNCTION_FACTORY} -- Element change
 
-	set_input (in: LINEAR [MARKET_TUPLE]) is
+	set_target (in: LINEAR [MARKET_TUPLE]) is
 		do
 			target := in
 		ensure then
