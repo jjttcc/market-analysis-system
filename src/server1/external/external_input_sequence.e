@@ -33,6 +33,11 @@ class EXTERNAL_INPUT_SEQUENCE inherit
 			{NONE} all
 		end
 
+	GLOBAL_SERVICES
+		export
+			{NONE} all
+		end
+
 creation
 
 	make
@@ -47,6 +52,7 @@ feature {NONE} -- Initialization
 			c_string := working_directories.to_c
 			external_handle := initialize_external_input_routines ($c_string)
 			if initialization_error then
+				last_exception_status.set_fatal (true)
 				raise (concatenation (<<"Fatal error occurred initializing ",
 					"external data source:%N", string_from_pointer (
 					initialization_error_reason)>>))
@@ -202,6 +208,7 @@ feature -- Input
 							string_from_pointer (
 								last_external_error(external_handle))>>)
 					end
+					last_exception_status.set_fatal (true)
 					raise (error_string)
 				end
 			end
@@ -238,6 +245,7 @@ feature -- Input
 						string_from_pointer (
 							last_external_error(external_handle))>>)
 				end
+				last_exception_status.set_fatal (true)
 				raise (error_string)
 			end
 		ensure then
@@ -260,6 +268,7 @@ feature -- Input
 							string_from_pointer (
 								last_external_error(external_handle))>>)
 					end
+					last_exception_status.set_fatal (true)
 					raise (error_string)
 				end
 			end
@@ -280,6 +289,7 @@ feature -- Input
 							string_from_pointer (
 								last_external_error(external_handle))>>)
 					end
+					last_exception_status.set_fatal (true)
 					raise (error_string)
 				end
 			end
@@ -294,39 +304,43 @@ feature {NONE} -- Implementation
 			-- if the directory exists and is writable: The `app_directory'
 			-- and the current directory.
 		local
-			d1, d2: DIRECTORY
-			no_write_permission: BOOLEAN
-			s: STRING
+			dir: DIRECTORY
 			env: expanded APP_ENVIRONMENT_VARIABLE_NAMES
 		do
-			create d1.make (current_working_directory)
-			if not d1.is_writable then
-				if app_directory /= Void then
-					create d2.make (app_directory)
-					if not d2.exists or not d2.is_writable then
-						no_write_permission := true
-						s := concatenation (<<"Neither the current directory ",
-							"(", current_working_directory, ") nor the MAS %
-							%application directory (", app_directory,
-							") is writable - external data source %
-							%retrieval cannot be used.">>)
-					else
-						Result := clone (app_directory)
-					end
+			if app_directory /= Void then
+				create dir.make (app_directory)
+				if dir.exists and dir.is_writable then
+					Result := clone (app_directory)
+					Result.extend (directory_separator)
+				end
+			end
+			create dir.make (current_working_directory)
+			if dir.is_writable then
+				if Result = Void then
+					Result := clone (current_working_directory)
 				else
-					no_write_permission := true
-					s := concatenation (<<"Current directory (",
+					Result.append (concatenation(<<":",
+						clone (current_working_directory)>>))
+				end
+				Result.extend (directory_separator)
+			end
+			if Result = Void then
+				if app_directory = Void then
+					last_exception_status.set_fatal (true)
+					raise (concatenation (<<"Current directory (",
 						current_working_directory, ") is not writable and ",
 						env.application_directory_name, " is not set - %
-						%external data source retrieval cannot be used.">>)
+						%external data source retrieval cannot be used.">>))
+				else
+					last_exception_status.set_fatal (true)
+					raise (concatenation (<<"Neither the current directory ",
+						"(", current_working_directory, ") nor the MAS %
+						%application directory (", app_directory,
+						") is writable - external data source %
+						%retrieval cannot be used.">>))
 				end
-			else
-				Result := clone (current_working_directory)
 			end
-			if no_write_permission then
-				raise (s)
-			end
-			Result.extend (directory_separator)
+print_list (<<"working_directories returning: ", Result, "%N">>)
 		ensure
 			not_void: Result /= Void
 		end
@@ -403,6 +417,7 @@ feature {NONE} -- Implementation
 				error_string := s
 			end
 			if exc then
+				last_exception_status.set_fatal (true)
 				raise (error_string)
 			end
 		ensure
@@ -504,7 +519,7 @@ feature {NONE} -- Implementation - externals
 			"C"
 		end
 
-	initialize_external_input_routines (working_dir: POINTER): POINTER is
+	initialize_external_input_routines (working_dirs: POINTER): POINTER is
 			-- Perform any needed initialization by the external routines
 			-- and return a handle for use by the other external routines.
 			-- If the initialization failed, `initialization_error' will
@@ -512,7 +527,7 @@ feature {NONE} -- Implementation - externals
 			-- reason for the failure; otherwise, `initialization_error'
 			-- will be false.
 		require
-			working_dir_not_void: working_dir /= Void
+			working_dir_not_void: working_dirs /= Void
 			-- working_dir_valid: The last character of `working_dir' is
 			-- directory_separator.
 		external
