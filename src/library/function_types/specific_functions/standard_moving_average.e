@@ -1,11 +1,7 @@
 indexing
 	description:
-	"Basic structure for some of the more common moving averages, such as %
-	%simple moving average and exponential moving average.  Based on the %
-	%convention of summing the first n elements of the input, using that %
-	%result for the first output element, and calculating the remaining %
-	%output elements by redefining action, which is used in the iteration %
-	%machine.";
+	"Simple n-period moving average.  Can be specialized by descendants to %
+	%provide different types of moving averages, such as exponential MA."
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -47,25 +43,39 @@ feature {NONE} -- Initialization
 feature {NONE} -- Basic operations
 
 	do_process is
+			-- Sum the first n elements of target, then call continue_until
+			-- to do the remaining work.
 		local
 			t: SIMPLE_TUPLE
 		do
-			target.start
-			check target.index = 1 end
-			sum.execute (Void)
-			check
-				target.index - 1 = n
-				-- (or target.exhausted)!!
+			check output.empty end
+			if target.count < n then
+			else
+				check target.count >= n end
+				target.start
+				check target.index = 1 end
+				sum.execute (Void)
+				check
+					target.index - 1 = n
+				end
+				!!t
+				t.set_value (sum.value / n)
+				-- The first trading period of the output is the nth trading
+				-- period of the input (target).
+				t.set_date_time (target.i_th (n).date_time)
+				last_sum := sum.value
+				-- sum.value = sum of first target.index-1 elements of target.
+				output.extend (t)
+				continue_until
 			end
-			!!t
-			t.set_value (sum.value / (target.index - 1))
-			-- The first trading period of the output is the nth trading
-			-- period of the input (target).
-			t.set_date_time (target.i_th (target.index - 1).date_time)
-			last_sum := sum.value
-			-- sum.value = sum of the first target.index-1 elements of target.
-			output.extend (t)
-			continue_until
+		ensure then
+			when_tgcount_lt_n: target.count < n implies output.empty
+			when_tgcount_ge_n:
+				target.count >= n implies output.count = target.count - n + 1
+			first_date_set: not output.empty implies
+				output.first.date_time.is_equal (target.i_th (n).date_time)
+			last_date_set: not output.empty implies
+				output.last.date_time.is_equal (target.last.date_time)
 		end
 
 feature {FACTORY}
@@ -112,6 +122,10 @@ feature {NONE}
 			t.set_value (last_sum / n)
 			t.set_date_time (target.item.date_time)
 			output.extend (t)
+		ensure then
+			one_more_in_output: output.count = old output.count + 1
+			date_time_correspondence:
+				output.last.date_time.is_equal (target.item.date_time)
 		end
 
 feature {NONE} -- Implementation
@@ -126,5 +140,10 @@ invariant
 
 	sum_not_void: sum /= Void
 	sum_attrs_equal_current_attrs: sum.n = n and sum.operator = operator
+	processed_when_target_lt_n:
+		processed implies (target.count < n implies output.empty)
+	processed_when_target_ge_n:
+		processed implies
+			(target.count >= n implies output.count = target.count - n + 1)
 
 end -- class STANDARD_MOVING_AVERAGE
