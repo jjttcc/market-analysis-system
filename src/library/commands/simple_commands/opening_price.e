@@ -3,6 +3,8 @@ indexing
 		"An abstraction for a numeric command that produces the opening %
 		%price for the current trading period (extracted from the argument %
 		%to the execute routine)"
+	note: "An instance of this class can be safely shared within a command %
+		%tree."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

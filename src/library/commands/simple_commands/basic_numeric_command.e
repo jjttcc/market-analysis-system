@@ -2,6 +2,8 @@ indexing
 	description:
 		"A numeric command that operates on a market tuple that is passed in %
 		%as an argument to the execute feature"
+	note: "An instance of this class can be safely shared within a command %
+		%tree."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
