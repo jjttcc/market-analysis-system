@@ -22,6 +22,9 @@ indexing
 class COMPOUND_EVENT_GENERATOR inherit
 
 	MARKET_EVENT_GENERATOR
+		redefine
+			set_tradables
+		end
 
 	GENERAL_UTILITIES
 		export
@@ -121,6 +124,14 @@ feature -- Status setting
 		ensure
 			left_target_type_set: left_target_type = arg and
 				left_target_type /= Void
+		end
+
+	set_tradables (arg: TRADABLE_DISPENSER) is
+			-- Set tradables to `arg'.
+		do
+			tradables := arg
+			left_analyzer.set_tradables (arg)
+			right_analyzer.set_tradables (arg)
 		end
 
 feature -- Basic operations
