@@ -35,6 +35,7 @@ feature -- Initialization
 	make (t: LIST [MARKET_TUPLE]; o: like operand; i: like n) is
 		require
 			not_void: t /= Void and o /= Void
+			i_gt_0: i > 0
 		do
 			nrlc_make (t, i)
 			set_operand (o)
