@@ -84,20 +84,6 @@ abstract public class Graph extends Canvas {
 	protected ArrayList dataset       = new ArrayList(10);
 
 /**
- *  The markers that may have been loaded
- *  @see Graph#setMarkers()
- */
-
-	private Markers markers = null;
-
-/**
- * The blinking "data loading" thread
- * @see Graph#startedloading()
- */
-
-	private LoadMessage load_thread = null;
-
-/**
  * The background color for the data window
  */
 	protected Color DataBackground = null;
@@ -424,24 +410,6 @@ public double minimum_y() {
 
 
 /**
- *  Set the markers for the plot.
- *  @param m  Marker class containing the defined markers
- *  @see Markers
- */
-	public void setMarkers(Markers m) {
-		markers = m;
-	}
-
-/**
- *  Get the markers
- *  @return defined Marker class
- *  @see Markers
- */   
-	public Markers getMarkers() {
-		return markers;
-	}
-
-/**
  * Set the background color for the entire canvas.
  * @params c The color to set the canvas
  */
@@ -467,7 +435,7 @@ public double minimum_y() {
  */
 	public void paint(Graphics g) {
 		Graphics lg  = g.create();
-		Rectangle r = bounds();
+		Rectangle r = getBounds();
 
 		/* The r.x and r.y returned from bounds is relative to the
 		** parents space so set them equal to zero.
@@ -569,7 +537,7 @@ public double minimum_y() {
 			/* The r.x and r.y returned from bounds is relative to the
 			** parents space so set them equal to zero
 			*/
-			Rectangle r = bounds();
+			Rectangle r = getBounds();
 
 			r.x = 0;
 			r.y = 0;
@@ -593,51 +561,6 @@ public double minimum_y() {
 			return false;
 		}
 	}                                               
-
-/**
- *  Calling this method pauses the plot and displays a flashing
- *  message on the screen. Mainly used when data is being loaded across the
- *  net. Everytime this routine is called a counter is incremented
- *  the method finishedloading() decrements the counter. When the
- *  counter is back to zero the plotting resumes.
- *  @see Graph#finishedloading()
- *  @see Graph#loadmessage()
- *  @see LoadMessage
-*/
-public void startedloading() {
-	loadingData++;
-	if(loadingData != 1) return;
-	if(load_thread == null) load_thread = new LoadMessage(this);
-	load_thread.setFont(new Font(FontProperties.HELVETICA_PLAIN,
-		Font.PLAIN, 25));
-	load_thread.begin();
-}
-
-/**
- * Decrement the loading Data counter by one. When it is zero resume
- * plotting.
- *  @see Graph#startedloading()
- *  @see Graph#loadmessage()
- *  @see LoadMessage
-*/
-	public void finishedloading() {
-		loadingData--;
-		if(loadingData > 0) return;
-		if(load_thread != null) load_thread.end();
-		load_thread = null;
-	}
-
-/**
- * Change the message to be flashed on the canvas
- * @param s String contining the new message.
- * @see Graph#startedloading()
- * @see Graph#finishedloading()
- * @see LoadMessage
-*/
-	public void loadmessage(String s) {
-		if(load_thread == null) load_thread = new LoadMessage(this);
-		load_thread.setMessage(s);
-	}                
 
 /*
 *******************
@@ -914,78 +837,8 @@ public LoadMessage(Graph g2d, String s) {
 	}
 
 /**
- *   begin displaying the message
- */
-	public void begin() {
-		g2d.clearAll = false;
-		g2d.paintAll = false;
-		super.start();
-	}
-
-/**
- *   end displaying message and force a graph repaint
- */
-	public void end() {
-		super.stop();
-		g2d.clearAll = true;
-		g2d.paintAll = true;
-		if(lg != null) lg.dispose();
-		g2d.repaint();
-	}
-
-/**
  *   The method to call when the thread starts
  */
-	public void run() {
-		boolean draw = true;
-		FontMetrics fm;
-		Rectangle r;
-		int sw = 0;
-		int sa = 0;
-		int x  = 0;
-		int y  = 0;
-
-		setPriority(Thread.MIN_PRIORITY);
-		while(true) {
-			if( newmessage != null && draw) {
-				message = newmessage;
-				newmessage = null;
-			}
-			if(lg == null) {
-				lg = g2d.getGraphics();
-				if(lg != null) lg = lg.create();
-			}
-
-			if( lg != null) {
-				if(f != null) lg.setFont(f);
-				fm = lg.getFontMetrics(lg.getFont());
-				sw = fm.stringWidth(message);
-				sa = fm.getAscent();
-			} else {
-				draw = false;
-			}
-
-			if (draw) {
-				lg.setColor(foreground);
-				r = g2d.bounds();
-				x = r.x + (r.width-sw)/2;
-				y = r.y + (r.height+sa)/2;
-				lg.drawString(message, x, y);
-				g2d.repaint();
-				try { sleep(visible); }
-				catch(Exception e) { }
-			} else {
-				if(lg != null) {
-					lg.setColor(g2d.getBackground());
-					lg.drawString(message, x, y);
-					g2d.repaint();
-				}
-				try { sleep(invisible); }
-				catch(Exception e) { }
-			}
-			draw = !draw;
-		}
-	}
 
   /**
    * Set the font the message will be displayed in

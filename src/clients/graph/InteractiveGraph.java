@@ -166,7 +166,7 @@ abstract public class InteractiveGraph extends Graph {
  *  New update method incorporating mouse dragging.
  */
 	public void update(Graphics g) {
-		Rectangle r = bounds();
+		Rectangle r = getBounds();
 		Color c = g.getColor();
 
 		/* The r.x and r.y returned from bounds is relative to the
@@ -531,7 +531,7 @@ public void setYlabel(double d) {
    * @param y height in pixels
    */
 	public void resize( int x, int y) {
-		super.resize(x,y);
+		super.setSize(x,y);
 	}
 
   /**
@@ -620,7 +620,7 @@ class Range extends Frame {
 	}
 
 	public void resize( int x, int y) {
-		super.resize(x,y);
+		super.setSize(x,y);
 	}
 
 	public void requestFocus() {
@@ -645,20 +645,6 @@ class Range extends Frame {
 					xminText.requestFocus();
 					return true;
 				}
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean action(Event e, Object a) {
-		if (e.target instanceof Button) {
-			if ( done.equals(e.target) && g2d != null) {
-				g2d.deliverEvent( new Event(this,Event.ACTION_EVENT,this));
-				this.hide();
-				return true;
-			} else if ( cancel.equals(e.target) ) {
-				this.hide();
 				return true;
 			}
 		}

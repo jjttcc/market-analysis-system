@@ -379,58 +379,63 @@ public class DrawableDataSet extends DataSet {
 	* @see graph.Graph
 	*/
 	private Graph g2d_;
+
 	/**
 	*    The color of the straight line segments
 	*/
 	private Color linecolor     = null;
-	/**
-	*    The index of the marker to use at the data points.
-	* @see graph.Markers
-	*/
-	private int    marker       = 0;
+
 	/**
 	*    The marker color
 	*/
 	private Color  markercolor  = null;
+
 	/**
 	*    The scaling factor for the marker. Default value is 1.
 	*/
 	private double markerscale  = 1.0;
+
 	/**
 	*    The Axis object the X data is attached to. From the Axis object
 	*    the scaling for the data can be derived.
 	* @see graph.Axis
 	*/
 	private Axis xaxis_;
+
 	/**
 	*    The Axis object the Y data is attached to.
 	* @see graph.Axis
 	*/
 	private Axis yaxis_;
+
 	/**
 	* The current plottable X maximum of the data. 
 	* This can be very different from
 	* true data X maximum. The data is clipped when plotted.
 	*/
 	private double xmax; 
+
 	/**
 	* The current plottable X minimum of the data. 
 	* This can be very different from
 	* true data X minimum. The data is clipped when plotted.
 	*/
 	private double xmin;
+
 	/**
 	* The current plottable Y maximum of the data. 
 	* This can be very different from
 	* true data Y maximum. The data is clipped when plotted.
 	*/
 	private double ymax; 
+
 	/**
 	* The current plottable Y minimum of the data. 
 	* This can be very different from
 	* true data Y minimum. The data is clipped when plotted.
 	*/
 	private double ymin;
+
 	/**
 	* Boolean to control clipping of the data window.
 	* Default value is <em>true</em>, clip the data window.
