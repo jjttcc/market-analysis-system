@@ -1,7 +1,8 @@
 indexing
 	description:
 		"An iterable list of tradables"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others - %
+		%see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -16,60 +17,19 @@ deferred class TRADABLE_LIST inherit
 
 feature -- Access
 
-	file_names: LINEAR [STRING] is
-			-- Names of tradable data files
-		deferred
-		end
-
-	search_by_file_name (name: STRING) is
-			-- Find the tradable whose associated file name matches `name'.
-		deferred
-		ensure
-			index_match: file_names.index = index
-		end
-
 	search_by_symbol (s: STRING) is
 			-- Find the tradable whose associated symbol matches `s'.
 		deferred
 		ensure
-			index_match: file_names.index = index
+			item /= Void implies item.symbol.is_equal (s)
+			-- not (s in symbols) implies item = Void
 		end
 
 	symbols: LIST [STRING] is
-			-- The symbol of each tradable, extracted from `file_names'
-		local
-			fnames: LINEAR [STRING]
-		do
-			fnames := file_names
-			!LINKED_LIST [STRING]!Result.make
-			from fnames.start until fnames.exhausted loop
-				Result.extend (symbol_from_file_name (fnames.item))
-				fnames.forth
-			end
+			-- The symbol of each tradable
+		deferred
 		ensure
-			-- Result.count = file_names.count
-			-- The contents of Result are in the same order as the
-			-- corresponding contents of `file_names'.
-		end
-
-	symbol_from_file_name (fname: STRING): STRING is
-			-- Tradable symbol extracted from `fname' - directory component
-			-- and suffix ('.' and all characters that follow it) of the
-			-- file name are removed.  `fname' is not changed.
-		local
-			i, last_sep_index: INTEGER
-			strutil: STRING_UTILITIES
-		do
-			!!strutil.make (clone (fname))
-			if strutil.target.has (Directory_separator) then
-				-- Strip directory path from the file name:
-				strutil.tail (Directory_separator)
-			end
-			if strutil.target.has ('.') then
-				-- Strip off "suffix":
-				strutil.head ('.')
-			end
-			Result := strutil.target
+			Result /= Void
 		end
 
 end -- class TRADABLE_LIST
