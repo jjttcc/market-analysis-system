@@ -7,6 +7,8 @@ indexing
 
 class TRADABLE_LIST_HANDLER inherit
 
+	TRADABLE_DISPENSER
+
 	GENERAL_UTILITIES
 		export {NONE}
 			all
@@ -16,13 +18,15 @@ creation
 
 	make
 
-feature -- Initialization
+feature {NONE} -- Initialization
 
 	make (daily_list, intraday_list: TRADABLE_LIST) is
 		require
 			one_not_void: intraday_list /= Void or daily_list /= Void
 			counts_equal_if_both_valid: both_lists_valid implies
 				intraday_list.count = daily_list.count
+			-- for_all i member_of 1 .. daily_list.count it_holds
+			--    (daily_list.symbols @ i).is_equal (intraday_list.symbols @ i)
 		do
 			daily_market_list := daily_list
 			intraday_market_list := intraday_list
@@ -33,19 +37,10 @@ feature -- Initialization
 
 feature -- Access
 
-	daily_market_list: TRADABLE_LIST
-			-- Tradables whose base data period-type is daily
-
-	intraday_market_list: TRADABLE_LIST
-			-- Tradables whose base data period-type is intraday
-
-	list_for (period_type: TIME_PERIOD_TYPE): TRADABLE_LIST is
-			-- The tradable list that holds data for `period_type'
+	index: INTEGER is
 		do
-			if period_type.intraday then
-				Result := intraday_market_list
-			else
-				Result := daily_market_list
+			if symbol_list /= Void then
+				Result := symbol_list.index
 			end
 		end
 
@@ -68,9 +63,6 @@ feature -- Access
 						"Error occurred retrieving data for ", symbol>>)
 				end
 			end
-		ensure
-			period_type_valid: Result /= Void implies
-				Result.tuple_list_names.has (period_type.name)
 		end
 
 	tuple_list (symbol: STRING; period_type: TIME_PERIOD_TYPE):
@@ -95,21 +87,15 @@ feature -- Access
 						"Error occurred retrieving data for ", symbol>>)
 				end
 			end
-		ensure
-			same_period_type: Result /= Void implies
-				Result.trading_period_type.is_equal (period_type)
 		end
 
 	symbols: LIST [STRING] is
 			-- The symbol of each tradable
 		do
-			if not daily_market_list.empty then
-				Result := daily_market_list.symbols
-			else
-				Result := intraday_market_list.symbols
-			end
+			Result := daily_market_list.symbols
 		ensure then
 			object_comparison: Result.object_comparison
+			correct_count: Result.count = daily_market_list.count
 		end
 
 	period_types (symbol: STRING): ARRAYED_LIST [STRING] is
@@ -166,10 +152,91 @@ feature -- Access
 			end
 		end
 
-	last_error: STRING
-			-- Description of last error
+	current_symbol: STRING is
+		do
+			Result := symbol_list.item
+		end
 
 feature -- Status report
+
+	after: BOOLEAN is
+		do
+			Result := symbol_list = Void or else symbol_list.after
+		end
+
+	empty: BOOLEAN is
+		do
+			if daily_market_list /= Void then
+				Result := daily_market_list.empty
+			else
+				Result := intraday_market_list.empty
+			end
+		end
+
+	isfirst: BOOLEAN is
+		do
+			Result := symbol_list /= Void and symbol_list.isfirst
+		end
+
+	off: BOOLEAN is
+		do
+			Result := symbol_list = Void or else symbol_list.off
+		end
+
+feature -- Cursor movement
+
+	finish is
+		do
+			symbol_list.finish
+		end
+
+	forth is
+		do
+			symbol_list.forth
+		end
+
+	start is
+		do
+			if symbol_list = Void then
+				symbol_list := symbols
+			end
+			symbol_list.start
+		end
+
+feature -- Basic operations
+
+	clear_caches is
+			-- Clear the cache of all lists.
+		do
+			if daily_market_list /= Void then
+				daily_market_list.clear_cache
+			end
+			if intraday_market_list /= Void then
+				intraday_market_list.clear_cache
+			end
+			symbol_list := Void
+		end
+
+feature {NONE} -- Implementation
+
+	daily_market_list: TRADABLE_LIST
+			-- Tradables whose base data period-type is daily
+
+	intraday_market_list: TRADABLE_LIST
+			-- Tradables whose base data period-type is intraday
+
+	symbol_list: LIST [STRING]
+			-- List of all tradable symbols - used for iteration
+
+	list_for (period_type: TIME_PERIOD_TYPE): TRADABLE_LIST is
+			-- The tradable list that holds data for `period_type'
+		do
+			if period_type.intraday then
+				Result := intraday_market_list
+			else
+				Result := daily_market_list
+			end
+		end
 
 	both_lists_valid: BOOLEAN is
 			-- Are both lists non-void and nonempty?
@@ -185,27 +252,14 @@ feature -- Status report
 				not intraday_market_list.empty)
 		end
 
-	error_occurred: BOOLEAN
-			-- Did an error occur during the last operation?
-
-feature -- Basic operations
-
-	clear_caches is
-			-- Clear the cache of all lists.
-		do
-			if daily_market_list /= Void then
-				daily_market_list.clear_cache
-			end
-			if intraday_market_list /= Void then
-				intraday_market_list.clear_cache
-			end
-		end
-
 invariant
 
 	both_lists_not_void:
 		not (daily_market_list = Void and intraday_market_list = Void)
 	counts_equal_if_both_valid: both_lists_valid implies
 		daily_market_list.count = intraday_market_list.count
+	-- for_all i member_of 1 .. daily_market_list.count it_holds
+	--    (daily_market_list.symbols @ i).is_equal (
+	--       intraday_market_list.symbols @ i)
 
 end -- class TRADABLE_LIST_HANDLER
