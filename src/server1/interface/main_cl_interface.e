@@ -566,7 +566,7 @@ feature {NONE} -- Implementation - utilities
 		rescue
 			-- Exceptions caught during initialization are considered fatal.
 			last_exception_status.set_fatal (true)
-			handle_exception ("initialize_current_tradable")
+			handle_exception ("Initialization error")
 		end
 
 	product_info: STRING is
