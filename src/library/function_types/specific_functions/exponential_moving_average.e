@@ -7,33 +7,51 @@ indexing
 class EXPONENTIAL_MOVING_AVERAGE inherit
 
 	STANDARD_MOVING_AVERAGE
+		rename
+			make as sma_make
 		redefine
 			action, set_n
 		end
 
-creation
+creation {FACTORY}
 
 	make
 
+feature {NONE} -- Initialization
+
+	make (in: like input; op: BASIC_NUMERIC_COMMAND; e: N_BASED_CALCULATION;
+			i: INTEGER) is
+		require
+			args_not_void: in /= Void and e /= Void and op /= Void
+			i_gt_0: i > 0
+		do
+			check operator_used end
+			sma_make (in, op, i)
+			check n = i end
+			set_exponential (e)
+		ensure
+			set: input = in and operator = op and n = i
+			e_n_set_to_i: e.n = i
+			exp_set: exp = e
+			target_set: target = in.output
+		end
+
 feature -- Element change
 
-	set_exponential (op: N_BASED_CALCULATION) is
+	set_exponential (e: N_BASED_CALCULATION) is
 		require
-			op /= Void
+			e /= Void
 		do
-			exp := op
-			exp.initialize (Current)
+			exp := e
+			exp.set_n (n)
 		ensure
-			exp_set: exp = op and exp /= Void
-			exp_n_set: exp.n_set
+			exp_set: exp = e and exp /= Void
 		end
 
 	set_n (i: integer) is
 		do
 			Precursor (i)
-			if exp /= Void then
-				exp.initialize (Current)
-			end
+			exp.set_n (n)
 		end
 
 feature {NONE}
@@ -46,6 +64,8 @@ feature {NONE}
 		local
 			t: SIMPLE_TUPLE
 		do
+			--!!!Bug:  instead of using target.(expr).value directly,
+			--!!!should be using operator.
 			exp.execute (Void)
 			!!t
 			t.set_value (target.item.value * exp.value +
@@ -62,5 +82,10 @@ feature {NONE}
 
 	exp: N_BASED_CALCULATION
 			-- The so-called exponential
+
+invariant
+
+	exp_not_void: exp /= Void
+	n_equals_exp_n: n = exp.n
 
 end -- class EXPONENTIAL_MOVING_AVERAGE

@@ -12,15 +12,24 @@ class COMPOSITE_TUPLE_BUILDER inherit
 
 	ONE_VARIABLE_FUNCTION
 		rename
-			target as source_list
+			target as source_list, make as ovf_make
 		redefine
-			process_precondition, process, output, source_list,
-			operator_used, input
+			process, output, source_list, operator_used, input
 		end
 
-creation
+creation {FACTORY}
 
 	make
+
+feature {NONE} -- Initialization
+
+	make (in: like input; ctf: COMPOSITE_TUPLE_FACTORY;
+			dur: DATE_TIME_DURATION) is
+		do
+			ovf_make (in, Void)
+			set_tuple_maker (ctf)
+			set_duration (dur)
+		end
 
 feature -- Basic operations
 
@@ -74,29 +83,6 @@ feature -- Basic operations
 
 feature -- Status report
 
-	process_precondition: BOOLEAN is
-		do
-			Result :=
-				source_list /= Void and tuple_maker /= Void and
-				duration /= Void and tuple_maker.execute_precondition
-		ensure then
-			parameters_not_void:
-				Result = (source_list /= Void and
-						tuple_maker /= Void and duration /= Void) and
-						tuple_maker.execute_precondition
-			--!!!Note: If a MARKET_TUPLE_LIST (the type of source_list) is
-			--refined to further support the concept of lists with time
-			--period types, such as daily or weekly, including comparison
-			--based on the length of the period (e.g., weekly > daily),
-			--then it would make sense to extend this predicate to include:
-			--source_list.time_period.duration < duration [or something
-			--equivalent] - the concept being that it only makes sense to
-			--make a composite tuple from a set of tuples whose time period
-			--duration is less than that of the time period duration.
-			--(For example, make weekly from daily, but daily from weekly
-			--of weekly from weekly doesn't make sense.)
-		end
-
 	times_correct: BOOLEAN is
 			-- Are the date/time values of elements of `output' correct
 			-- with respect to each other?
@@ -137,12 +123,7 @@ feature -- Status report
 			--   p.last.date_time < p.date_time + duration
 		end
 
-	operator_used: BOOLEAN is
-		once
-			Result := false
-		ensure then
-			not_used: Result = false
-		end
+	operator_used: BOOLEAN is false
 
 feature -- Access
 
@@ -188,5 +169,19 @@ feature {NONE}
 invariant
 
 	input_equals_source_list: input = source_list
+	process_parameters_set: source_list /= Void and tuple_maker /= Void and
+		duration /= Void and
+						tuple_maker.execute_precondition --!!!??
+		--!!!Note: If a MARKET_TUPLE_LIST (the type of source_list) is
+		--refined to further support the concept of lists with time
+		--period types, such as daily or weekly, including comparison
+		--based on the length of the period (e.g., weekly > daily),
+		--then it would make sense to extend this predicate to include:
+		--source_list.time_period.duration < duration [or something
+		--equivalent] - the concept being that it only makes sense to
+		--make a composite tuple from a set of tuples whose time period
+		--duration is less than that of the time period duration.
+		--(For example, make weekly from daily, but daily from weekly
+		--of weekly from weekly doesn't make sense.)
 
 end -- COMPOSITE_TUPLE_BUILDER
