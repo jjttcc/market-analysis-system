@@ -166,11 +166,12 @@ feature -- Access
 		local
 			ml: LIST [MARKET_TUPLE]
 			extraction_operator: RESULT_COMMAND [REAL]
-			current_value, latest_extracted_value: DOUBLE
+			current_value, latest_extracted_value, initial_value: DOUBLE
 			values: ARRAYED_LIST [DOUBLE]
 		do
 print ("n_based_accumulation called.%N")
-			create values.make (0)
+			create values.make (0); initial_value := 0
+			-- @@Note: initial_value needs to be made configurable.
 			if
 				f.inputs.is_empty or else f.inputs.first.output.is_empty or
 				n <= 1
@@ -193,7 +194,7 @@ print ("n_based_accumulation called.%N")
 				from
 					from
 						ml.start
-						current_value := 0
+						current_value := initial_value
 					invariant
 						values_ml_index_relation1: values.count + 1 = ml.index
 					until
