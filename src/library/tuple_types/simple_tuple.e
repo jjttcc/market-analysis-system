@@ -1,5 +1,5 @@
 indexing
-	description: "A simple tuple that functions as a single value."
+	description: "A single-value tuple."
 	date: "$Date$";
 	revision: "$Revision$"
 

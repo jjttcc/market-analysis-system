@@ -20,8 +20,8 @@ feature {NONE} -- Basic operations
 
 	sub_action (current_index: INTEGER) is
 		do
-			if (input @ current_index).low.value < value then
-				value := (input @ current_index).low.value
+			if (target @ current_index).low.value < value then
+				value := (target @ current_index).low.value
 			end
 		end
 

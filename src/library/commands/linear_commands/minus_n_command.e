@@ -8,6 +8,8 @@ indexing
 class MINUS_N_COMMAND inherit
 
 	N_RECORD_COMMAND
+		export {ANY}
+			set
 		redefine
 			execute
 		end
@@ -16,8 +18,8 @@ feature
 
 	execute (arg: ANY) is
 		do
-			check input.index > n end
-			value := input.i_th(input.index - n).value
+			check target.index > n end
+			value := target.i_th(target.index - n).value
 		end
 
 end -- class MINUS_N_COMMAND

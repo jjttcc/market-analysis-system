@@ -1,31 +1,41 @@
 indexing
 	description: 
-		"A function that outputs an array of market tuples.  Specifications for function%
-		%input are provided by descendant classes."
+		"A function that outputs an array of market tuples.  Specifications%
+		%for function input are provided by descendant classes."
 	date: "$Date$";
 	revision: "$Revision$"
 
 deferred class MARKET_FUNCTION
-
-feature -- Initialization
-
-	make is
-		do
-			!!output.make (0) -- What size to use here?
-		end
 
 feature -- Access
 
 	name: STRING
 			-- function name
 
-	output: ARRAYED_LIST [MARKET_TUPLE]
+	short_description: STRING is
+			-- short description of the function
+		do
+			Result := "Stub: to be defined"
+		end
+
+	full_description: STRING is
+			-- full description of the function, including descriptions
+			-- of contained functions, if any
+		do
+			Result := "Stub: to be defined"
+		end
+
+	output: ARRAYED_LIST [MARKET_TUPLE] is
 			-- y of function "y = f(x)"
+		deferred
+		end
 
 feature -- Status report
 
-	processed: BOOLEAN
+	processed: BOOLEAN is
 			-- Has this function been processed?
+		deferred
+		end
 
 feature -- Basic operations
 
@@ -33,12 +43,14 @@ feature -- Basic operations
 			-- Process the output from the input.
 		require
 			not processed
-		deferred
+		do
+			do_process
+			set_processed (true)
 		ensure
 			processed
 		end
 
-feature -- {FINANCE_ROOT} -- Element change -- Export to test class for now.
+feature {TEST_FUNCTION_FACTORY} -- Element change
 
 	set_operator (op: NUMERIC_COMMAND) is
 		require
@@ -48,8 +60,6 @@ feature -- {FINANCE_ROOT} -- Element change -- Export to test class for now.
 		ensure
 			operator = op
 		end
-
-feature {test_function_factory} -- Element change
 
 	set_name (n: STRING) is
 			-- Set the function's name to n.
@@ -68,5 +78,24 @@ feature {NONE} -- Implementation
 			-- Descendant classes may choose not to use this attribute for
 			-- efficiency.
 
+	reset_state is
+			-- Reset to initial state.
+			-- Can be redefined if needed.
+		do
+			set_processed (false)
+		ensure
+			not_processed: not processed
+		end
+
+	do_process is
+			-- Do the actual processing.
+			-- Hook method to be defined by descendants
+		deferred
+		end
+
+	set_processed (b: BOOLEAN) is
+			-- Hook method to set processed state to the specified value
+		deferred
+		end
 
 end -- class MARKET_FUNCTION

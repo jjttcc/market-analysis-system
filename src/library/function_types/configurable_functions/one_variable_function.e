@@ -8,9 +8,6 @@ indexing
 class ONE_VECTOR_FUNCTION inherit
 
 	MARKET_FUNCTION
-		redefine
-			output
-		end
 
 	VECTOR_ANALYZER
 		redefine
@@ -21,9 +18,16 @@ creation
 
 	make
 
+feature -- Initialization
+
+	make is
+		do
+			!!output.make (100) -- !!What size to use here?
+		end
+
 feature -- Basic operations
 
-	process is
+	do_process is
 			-- Execute the function.
 			-- {Note to self:  It seems logical to export this feature
 			-- and processed to everyone so that outside control is allowed,
@@ -33,12 +37,13 @@ feature -- Basic operations
 			-- or to export to a designated class that manages this.}
 		do
 			do_all
-			processed := true
 		end
 
 feature
 
-	output: ARRAYED_LIST [SIMPLE_TUPLE]
+	output: ARRAYED_LIST [MARKET_TUPLE]
+
+	processed: BOOLEAN
 
 feature {NONE}
 
@@ -46,15 +51,32 @@ feature {NONE}
 		local
 			t: SIMPLE_TUPLE
 		do
-			operator.execute (input.item)
+			operator.execute (target.item)
 			!!t
 			t.set_value (operator.value)
 			output.extend (t)
 		end
 
-	reset_state is
+feature {NONE}
+
+	input: MARKET_FUNCTION
+
+feature {NONE}
+
+	set_processed (b: BOOLEAN) is
 		do
-			processed := false
+			processed := b
+		end
+
+feature {TEST_FUNCTION_FACTORY} -- Element change
+
+	set_input (in: MARKET_FUNCTION) is
+		do
+			input := in
+			target := input.output
+			reset_state
+		ensure
+			not_processed: not processed
 		end
 
 end -- class ONE_VECTOR_FUNCTION

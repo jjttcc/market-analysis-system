@@ -13,7 +13,7 @@ class N_RECORD_COMMAND inherit
 
 	VECTOR_ANALYZER
 		redefine
-			input, forth, action, start, exhausted
+			target, forth, action, start, exhausted
 		end
 
 feature -- Initialization
@@ -27,11 +27,11 @@ feature -- Initialization
 			data /= Void
 			n_value >= 0
 		do
-			input := data
+			target := data
 			n := n_value
 			owner := o
 		ensure
-			input = data
+			target = data
 			n = n_value
 			owner = o
 		end
@@ -63,7 +63,7 @@ feature {NONE} -- Implementation
 		local
 			i: INTEGER
 		do
-			i := input.index - offset
+			i := target.index - offset
 			sub_action (i)
 		end
 
@@ -76,7 +76,7 @@ feature {NONE} -- Implementation
 
 	owner: N_RECORD_STRUCTURE
 
-	input: ARRAYED_LIST [STANDARD_MARKET_TUPLE]
+	target: ARRAYED_LIST [STANDARD_MARKET_TUPLE]
 
 	offset: INTEGER
 			-- Offset from current cursor/index

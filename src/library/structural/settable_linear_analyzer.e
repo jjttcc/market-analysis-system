@@ -13,42 +13,19 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-deferred class VECTOR_ANALYZER
+class VECTOR_ANALYZER
 
 inherit
 
 	LINEAR_ITERATOR [MARKET_TUPLE]
-		rename
-			target as input
 		export
 			{NONE} all
 		redefine
-			input
-		end
-
-feature -- Element change -- For now, export to test class.
-
-	set_input (the_input: ARRAYED_LIST [MARKET_TUPLE]) is
-			-- Set input vector to `the_input'.
-		require
-			not_void: the_input /= Void
-		do
-			input := the_input
-			reset_state
-		ensure
-			input = the_input
+			target
 		end
 
 feature {NONE}
 
-	input: ARRAYED_LIST [MARKET_TUPLE]
-
-feature {NONE}
-
-	reset_state is
-			-- Reset to initial state.
-			-- Intended to be redefined as needed.
-		deferred
-		end
+	target: ARRAYED_LIST [MARKET_TUPLE]
 
 end -- class VECTOR_ANALYZER

@@ -31,7 +31,7 @@ feature -- Basic operations
 		local
 			i: INTEGER
 		do
-			input.go_i_th (n)
+			target.go_i_th (n)
 			continue_until
 			processed := true
 		end

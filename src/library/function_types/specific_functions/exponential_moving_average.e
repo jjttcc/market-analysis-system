@@ -31,13 +31,13 @@ feature {NONE}
 			-- Calculate exponential MA value for the current period.
 		require else
 			not output.empty
-			input.index > n
+			target.index > n
 		local
 			t: SIMPLE_TUPLE
 		do
 			exp.execute (Current)
 			!!t
-			t.set_value (input.item.value * exp.value +
+			t.set_value (target.item.value * exp.value +
 							output.last.value * (1 - exp.value))
 			output.extend (t)
 		ensure then

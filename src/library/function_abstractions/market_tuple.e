@@ -1,7 +1,7 @@
 indexing
 	description: 
 		"Basic abstraction for a market-related value (or tuple of values) that%
-		%has an associated trading period."
+		% has an associated trading period."
 	date: "$Date$";
 	revision: "$Revision$"
 

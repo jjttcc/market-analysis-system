@@ -29,25 +29,25 @@ feature -- Basic operations
 			old_index: INTEGER
 			t: SIMPLE_TUPLE
 		do
-			input.start
-			old_index := input.index
+			target.start
+			old_index := target.index
 			sum.execute (Void)
-			check input.index = old_index + n end
+			check target.index = old_index + n end
 			!!t
 			t.set_value (sum.value / n)
 			last_sum := sum.value
-			-- value holds the sum of the first n elements of input
+			-- value holds the sum of the first n elements of target
 			output.extend (t)
 			continue_until
 			processed := true
 		end
 
-feature
+feature {TEST_FUNCTION_FACTORY}
 
-	set_input (the_input: ARRAYED_LIST [MARKET_TUPLE]) is
+	set_input (in: MARKET_FUNCTION) is
 		do
-			sum.set_input (the_input)
-			Precursor (the_input)
+			sum.set (in.output)
+			Precursor (in)
 		end
 
 	set_n (v: INTEGER) is
@@ -65,8 +65,8 @@ feature {NONE}
 			t: SIMPLE_TUPLE
 		do
 			!!t
-			last_sum := last_sum - input.i_th(input.index - n).value +
-							input.item.value
+			last_sum := last_sum - target.i_th(target.index - n).value +
+							target.item.value
 			t.set_value (last_sum / n)
 			output.extend (t)
 		end

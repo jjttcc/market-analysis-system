@@ -1,0 +1,58 @@
+indexing
+	description: 
+		"A market function that is also an array of market tuples. %
+		%Its purpose is to act as the innermost function in a composition %
+		%of functions."
+	date: "$Date$";
+	revision: "$Revision$"
+
+class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
+
+	MARKET_FUNCTION
+		undefine
+			is_equal, copy, setup
+		redefine
+			output, reset_state
+		end
+
+	ARRAYED_LIST [G]
+
+creation
+
+	make
+
+feature -- Access
+
+	output: ARRAYED_LIST [G] is
+		do
+			Result := Current
+		end
+
+feature -- Status report
+
+	processed: BOOLEAN is
+			-- Has this function been processed?
+		do
+			Result := output /= Void
+		end
+
+feature -- Basic operations
+
+	do_process is
+		do
+			-- Null action
+		end
+
+feature {NONE}
+
+	reset_state is
+		do
+			-- Null action
+		end
+
+	set_processed (b: BOOLEAN) is
+			-- Null action, since processed state cannot be set
+		do
+		end
+
+end -- class MARKET_FUNCTION
