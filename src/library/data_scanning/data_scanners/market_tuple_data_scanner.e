@@ -92,19 +92,17 @@ feature {NONE} -- Implementation
 				s.append (", time: ")
 				s.append (t.date_time.time.out)
 				if t.open_available then
-					s.append (", values (l, o, c, h): ")
-				else
-					s.append (", values (l, c, h): ")
-				end
-				s.append (t.low.value.out)
-				s.append (", ")
-				if t.open_available then
+					s.append (", values (o, h, l, c): ")
 					s.append (t.open.value.out)
 					s.append (", ")
+				else
+					s.append (", values (h, l, c): ")
 				end
-				s.append (t.close.value.out)
-				s.append (", ")
 				s.append (t.high.value.out)
+				s.append (", ")
+				s.append (t.low.value.out)
+				s.append (", ")
+				s.append (t.close.value.out)
 				t.fix_price_relationships
 				error_list.extend (s)
 			end
