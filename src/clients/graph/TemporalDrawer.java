@@ -74,7 +74,7 @@ abstract public class TemporalDrawer extends Drawer {
 
 	final int Too_far_left = 7;
 
-	final int Label_y_offset = 15;
+	final int Label_y_offset = 12;
 
 	final double Label_x_factor = .025;
 

@@ -229,14 +229,14 @@ abstract public class BasicDrawer extends Drawer {
 		String[] y_strings;
 		Double d;
 		boolean lines_needed = reference_lines_needed();
-		Font old_font = g.getFont();
+		FontManager fontmgr = new FontManager(g);
 		int start_ref_index = ref_straddle_one_index;
 		if (yrange < refvalue_specs[ref_straddle_one_index].minimum()) {
 			// Set up for reference values < 1.
 			start_ref_index = 0;
 		}
 
-		g.setFont(new Font("Monospaced", Font.ITALIC, 12));
+		fontmgr.set_new_font(fontmgr.MONOSPACED, Font.PLAIN, 11);
 
 		for (int i = start_ref_index; i < refvalue_specs.length; ++i) {
 			if (yrange >= refvalue_specs[i].minimum() &&
@@ -264,7 +264,7 @@ abstract public class BasicDrawer extends Drawer {
 			display_reference_values(y_values, y_strings, g, main_bounds,
 				ref_bounds, lines_needed);
 		}
-		g.setFont(old_font);
+		fontmgr.restore_font();
 	}
 
 	// Precondition: yvalues != null && yvalues.size() > 0 &&

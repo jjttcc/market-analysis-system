@@ -69,8 +69,9 @@ public class TimeDrawer extends TemporalDrawer {
 		int hour_idx, day_idx, i;
 		int hour, day_of_week;
 		final int Draw_all_hour_limit = 16, Too_many_hours = 200,
-			Too_many_days = 200;
+			Too_many_days = 200, Day_y_offset = 9;
 		boolean draw_all_hours, draw_day_line;
+		FontManager fontmgr = new FontManager(g);
 		String old_hour_string;
 		int[] _x_values = x_values();
 		String[] times = times();
@@ -82,7 +83,7 @@ public class TimeDrawer extends TemporalDrawer {
 
 		if (is_indicator()) {
 			Hour_y = label_y_value(bounds);
-			Day_y = Hour_y;
+			Day_y = Hour_y + Day_y_offset;
 		}
 		Hour_x_offset = 10;
 		// Determine the first hour in `times'.
@@ -124,6 +125,7 @@ public class TimeDrawer extends TemporalDrawer {
 		i = 0;
 		draw_all_hours = hour_idx <= Draw_all_hour_limit;
 		if (hour_idx < Too_many_hours) {
+			fontmgr.set_new_font(fontmgr.SERIF, Font.PLAIN, 10);
 			// Draw hours.
 			while (i < hour_idx) {
 				if (drawable_hour(hours, hour_idx, i, draw_all_hours)) {
@@ -135,9 +137,11 @@ public class TimeDrawer extends TemporalDrawer {
 		i = 0;
 		draw_day_line = day_idx <= Too_many_days;
 		while (i < day_idx) {
+			fontmgr.set_new_font(fontmgr.MONOSPACED, Font.ITALIC, 12);
 			draw_day(g, bounds, days[i], _x_values, draw_day_line);
 			++i;
 		}
+		fontmgr.restore_font();
 	}
 
 	// Precondition:

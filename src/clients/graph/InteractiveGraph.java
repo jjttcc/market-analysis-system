@@ -470,7 +470,7 @@ class Gin extends Frame {
 		setLayout(new GridLayout(2,1));
 		xlabel.setAlignment(Label.LEFT);
 		ylabel.setAlignment(Label.LEFT);
-		this.setFont(new Font("Helvetica", Font.PLAIN, 20));
+		this.setFont(new Font(FontProperties.HELVETICA_PLAIN, Font.PLAIN, 20));
 		add("x",xlabel);
 		add("y",ylabel);
 		resize(150,100);

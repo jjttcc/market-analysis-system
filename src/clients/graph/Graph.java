@@ -607,7 +607,8 @@ public void startedloading() {
 	loadingData++;
 	if(loadingData != 1) return;
 	if(load_thread == null) load_thread = new LoadMessage(this);
-	load_thread.setFont(new Font("Helvetica", Font.PLAIN, 25));
+	load_thread.setFont(new Font(FontProperties.HELVETICA_PLAIN,
+		Font.PLAIN, 25));
 	load_thread.begin();
 }
 
