@@ -42,12 +42,10 @@ feature -- Element change
 
 	set_last_tradable (arg: TRADABLE [BASIC_MARKET_TUPLE]) is
 			-- Set last_tradable to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			last_tradable := arg
 		ensure
-			last_tradable_set: last_tradable = arg and last_tradable /= Void
+			last_tradable_set: last_tradable = arg
 		end
 
 	turn_caching_on is
