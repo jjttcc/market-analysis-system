@@ -53,10 +53,6 @@ feature -- Access
 	event_coordinator: MARKET_EVENT_COORDINATOR
 			-- Object in charge of event generation and dispatch
 
-	registration_builder: EVENT_REGISTRATION_BUILDER
-			-- Builder that sets up event registrations and produces
-			-- an event dispatcher
-
 feature {NONE}
 
 	usage is
@@ -160,16 +156,6 @@ feature {NONE}
 				-- meg_builder will copy them into the global event
 				-- generation library.
 				meg_builder.execute
-			end
-			-- (If market_event_registrants is not empty, it has
-			-- been retrieved from persistent store.)
-			if market_event_registrants.empty then
-				!!registration_builder
-				-- registration_builder will use the
-				-- market_event_generation_library to create and register event
-				-- registrants to event types of the members of the library.
-				registration_builder.execute
-				market_event_registrants.append (registration_builder.product)
 			end
 			!!dispatcher.make
 			register_event_registrants (dispatcher)
