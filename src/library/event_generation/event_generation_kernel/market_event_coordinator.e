@@ -56,6 +56,17 @@ feature -- Status setting
 			end
 		end
 
+	set_event_generators (arg: LINEAR [MARKET_EVENT_GENERATOR]) is
+			-- Set event_generators to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			event_generators := arg
+		ensure
+			event_generators_set: event_generators = arg and
+				event_generators /= Void
+		end
+
 feature {NONE} -- Implementation
 
 	initialize (g: MARKET_EVENT_GENERATOR) is
