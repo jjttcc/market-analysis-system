@@ -36,7 +36,7 @@ lower_indicator	Momentum	oliveGreen
 lower_indicator	Rate of Change	darkGray
 lower_indicator	Williams %R	yellow
 lower_indicator	Relative Strength Index	red
-lower_indicator	Slope of MACD Signal Line Trend	green
+lower_indicator	Slope of MACD Signal Line Trend	red
 lower_indicator	Slope of Slope of MACD Signal Line Trend	blue
 lower_indicator	[Slope of MACD, Slope of Slope of MACD] Trend	red
 lower_indicator	No lower indicator
