@@ -1,7 +1,7 @@
 # MAS database configuration file
 # Format: "label_string<tab>setting"
 # ODBC data source name for MAS database
-data_source_name	mas_test
+data_source_name	mas
 # ID of user for MAS database
 user id	
 # Password for above user
