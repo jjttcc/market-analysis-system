@@ -53,22 +53,25 @@ feature -- Basic operations
 			if
 				exception_occurred and exception = Operating_system_exception
 			then
-				-- hfile.make_open_read failed because the file does not
-				-- exist.  This is not really an error, so continue.
+				-- hfile.open_read failed.  This is not really an
+				-- error, so continue.
 				check
 					eh_created: event_history /= Void
 				end
 				event_history.compare_objects
 			elseif hfile_name /= Void then
-				create hfile.make_open_read (
+				create hfile.make (
 					env.file_name_with_app_directory (hfile_name))
-				hfile.set_field_separator (field_separator)
-				hfile.set_record_separator (record_separator)
-				create scanner.make (hfile)
-				scanner.execute
-				fill_event_history (scanner.product)
-				event_history.compare_objects
-				hfile.close
+				if hfile.exists then
+					hfile.open_read
+					hfile.set_field_separator (field_separator)
+					hfile.set_record_separator (record_separator)
+					create scanner.make (hfile)
+					scanner.execute
+					fill_event_history (scanner.product)
+					event_history.compare_objects
+					hfile.close
+				end
 			end
 		ensure then
 			event_history.object_comparison
