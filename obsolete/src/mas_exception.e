@@ -50,7 +50,9 @@ feature -- Basic operations
 			-- An exception may have caused a lock to have been left open -
 			-- ensure that clean-up occurs to remove the lock:
 			no_cleanup := false
-			if exception /= Signal_exception then
+			if assertion_violation then
+				handle_assertion_violation
+			elseif exception /= Signal_exception then
 				if is_developer_exception then
 					error_msg := developer_exception_name
 				else
@@ -62,7 +64,9 @@ feature -- Basic operations
 				if fatal then
 					exit (Error_exit_status)
 				end
-			elseif signal = Sigterm or signal = Sigabrt then
+			elseif
+				signal = Sigterm or signal = Sigabrt or signal = Sigquit
+			then
 				log_errors (<<"%NCaught kill signal in ", routine_description,
 					":%N", signal_meaning (signal), " (", signal, ")",
 					" - exiting ...%N">>)
@@ -108,6 +112,38 @@ feature -- Basic operations
 			then
 				Result := false
 			end
+		end
+
+feature {NONE} -- Implementation
+
+	handle_assertion_violation is
+		local
+			msg: STRING
+		do
+			msg := concatenation (<<"Assertion violation occurred in ",
+				"routine `", recipient_name, "' with tag%N%"", tag_name,
+				"%" from class %"", class_name,
+				"%".%NType of assertion violation: ",
+				meaning (exception), "%N">>)
+			if not recipient_name.is_equal(original_recipient_name) then
+				msg := concatenation (<<msg,
+				"(Original routine where the violation occurred: ",
+				original_recipient_name, ".)%N">>)
+			end
+			if not tag_name.is_equal(original_tag_name) then
+				msg := concatenation (<<msg,
+				"(Original tag name: ",
+				original_tag_name, ".)%N">>)
+			end
+			if not class_name.is_equal(original_class_name) then
+				msg := concatenation (<<msg,
+				"(Original class name: ",
+				original_class_name, ".)%N">>)
+			end
+			msg := concatenation (<<msg, "%N[Exception trace:%N",
+				exception_trace, "]%N">>)
+			log_error (msg)
+			exit (Error_exit_status)
 		end
 
 end -- GLOBAL_SERVER
