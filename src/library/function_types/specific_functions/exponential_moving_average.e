@@ -62,7 +62,7 @@ feature {FACTORY} -- Status setting
 	set_n (value: integer) is
 		do
 			Precursor (value)
-			exp.set_n (n)
+			exp.initialize (Current)
 		end
 
 feature {NONE}

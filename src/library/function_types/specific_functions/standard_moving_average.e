@@ -98,7 +98,7 @@ feature {FACTORY}
 		do
 			Precursor (value)
 			check n = value end
-			sum.set_n (n)
+			sum.initialize (Current)
 		end
 
 	set_operator (op: BASIC_NUMERIC_COMMAND) is
@@ -107,9 +107,9 @@ feature {FACTORY}
 			-- to its type.
 		do
 			Precursor (op)
-			sum.set_operator (op)
+			sum.set_operand (op)
 		ensure then
-			sum_op_set: sum.operator = op and sum.operator /= Void
+			sum_op_set: sum.operand = op and sum.operand /= Void
 		end
 
 feature {NONE}
@@ -145,6 +145,6 @@ feature {NONE} -- Implementation
 invariant
 
 	sum_not_void: sum /= Void
-	sum_attrs_equal_current_attrs: sum.n = n and sum.operator = operator
+	sum_attrs_equal_current_attrs: sum.n = n and sum.operand = operator
 
 end -- class STANDARD_MOVING_AVERAGE
