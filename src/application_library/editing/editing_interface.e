@@ -141,10 +141,14 @@ feature -- Access
 		deferred
 		end
 
-	enum_menu_string (enum: ENUMERATED [CHARACTER]; desc: STRING): STRING is
-			-- Menu selection string constructed from `enum', `desc'
+	enum_menu_string (enum: ENUMERATED [CHARACTER]; prefx, suffix: STRING):
+		STRING is
+			-- Menu selection string constructed from
+			-- `prefx' + `enum' + `suffix'
+		require
+			args_exist: enum /= Void and prefx /= Void and suffix /= Void
 		do
-			Result := desc + " (" + enum.item.out + ")"
+			Result := prefx + " (" + enum.item.out + ")" + suffix
 		end
 
 feature -- Basic operations
