@@ -37,16 +37,9 @@ feature {NONE}
 				d < 1 or d > date.days_in_i_th_month (m, y)
 			then
 				handle_input_error ("Date input value is invalid: ", value.out)
-				!!date_time.make_now -- !!!What date to use?
+				!!date_time.make_now
 				tuple.set_date_time (date_time)
-				--!!!Should the data scanning be aborted?
-				--!!!Perhaps need a fatal error category, of which
-				--!!!this would be one -- Throw exception?
 			else
-				--!!!When the flyweight pattern is implemented for dates,
-				--!!!will need to reference the global date (probably a
-				--!!!singleton) that matches this one instead of making
-				--!!!a new date.
 				!!date_time.make (y, m, d, 0, 0, 0)
 				tuple.set_date_time (date_time)
 			end

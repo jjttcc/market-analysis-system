@@ -72,8 +72,6 @@ feature {NONE} -- Hook method implementations
 	close_tuple (t: BASIC_MARKET_TUPLE) is
 		do
 			check_date_time (t)
-			-- !!!If check_date_time fails, scanning for this data set should
-			-- !!!probably be aborted, since the data must be sorted by date.
 			check_and_fix_prices (t)
 			t.end_editing
 		ensure then
