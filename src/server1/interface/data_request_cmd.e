@@ -27,7 +27,7 @@ deferred class DATA_REQUEST_CMD inherit
 			{NONE} all
 		end
 
-feature -- Access
+feature {NONE} -- Implementation - essential properties
 
 	market_symbol: STRING
 			-- Symbol for the selected market

@@ -82,6 +82,22 @@ feature -- Status setting
 			print_end_date_set: print_end_date = arg
 		end
 
+	set_print_start_time (arg: TIME) is
+			-- Set print_start_time to `arg'.
+		do
+			print_start_time := arg
+		ensure
+			print_start_time_set: print_start_time = arg
+		end
+
+	set_print_end_time (arg: TIME) is
+			-- Set print_end_time to `arg'.
+		do
+			print_end_time := arg
+		ensure
+			print_end_time_set: print_end_time = arg
+		end
+
 	set_field_separator (arg: STRING) is
 			-- Set field_separator to `arg'.
 		require
@@ -255,6 +271,7 @@ feature {NONE} -- Implementation
 				time_field_separator))
 		end
 
+--!!!Add a 'first_date_time_index' (or whatever an appropriate name is).
 	first_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER is
 			-- First index for printing, according to print_start_date
 		do
@@ -328,6 +345,9 @@ feature {NONE} -- Implementation
 
 	print_start_date, print_end_date: DATE
 			-- Start and end date to use for printing, if not void
+
+	print_start_time, print_end_time: TIME
+			-- Start and end time to use for printing, if not void
 
 	output_medium: IO_MEDIUM
 			-- Medium that will be used for output

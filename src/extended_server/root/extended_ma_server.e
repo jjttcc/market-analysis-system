@@ -24,6 +24,10 @@ creation
 
 feature {NONE} -- Initialization
 
+--!!!!Temporary, until new classes are added to the right place:
+td_request_cmd: TIME_DELIMITED_MARKET_DATA_REQUEST_CMD
+x_gui_if: EXTENDED_MAIN_GUI_INTERFACE
+
 	make is
 		local
 			platform: expanded PLATFORM_DEPENDENT_OBJECTS

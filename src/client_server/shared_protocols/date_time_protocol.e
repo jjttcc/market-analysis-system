@@ -10,10 +10,19 @@ deferred class GLOBAL_CONSTANTS
 
 feature -- Access
 
-	Date_field_separator: STRING is "/"
+	date_field_separator: STRING is "/"
 			-- Default field separator of date fields from input
 
-	Time_field_separator: STRING is ":"
+	time_field_separator: STRING is ":"
 			-- Default field separator of time fields from input
+
+	date_time_range_separator: STRING is ";"
+			-- Default character used to separate the start-date-time field
+			-- from the end-date-time field in a date-time range
+			-- specification in input received from a client
+
+	date_time_separator: STRING is ","
+			-- Default character used to separate the date field from
+			-- the time field in input received from a client
 
 end

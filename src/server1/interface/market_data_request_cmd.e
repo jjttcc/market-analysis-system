@@ -20,11 +20,20 @@ creation
 
 feature {NONE} -- Hook routine implementations
 
-	expected_field_count: INTEGER is 2
+	expected_field_count: INTEGER is
+		once
+			Result := 2
+		end
 
-	symbol_index: INTEGER is 1
+	symbol_index: INTEGER is
+		once
+			Result := 1
+		end
 
-	period_type_index: INTEGER is 2
+	period_type_index: INTEGER is
+		once
+			Result := 2
+		end
 
 	error_context (msg: STRING): STRING is
 		do

@@ -124,6 +124,8 @@ cluster
 
 	extended_global (extended_server):		"$/global"
 
+	extended_interface (extended_server):		"$/interface"
+
 	extended_sys (extended_server):		"$/system_specific/unix"
 
 	extended_utility (extended_server):		"$/utility"
