@@ -134,7 +134,7 @@ feature {NONE} -- Implementation
 
 feature {NONE}
 
-	request_handlers: HASH_TABLE [MAS_REQUEST_COMMAND, HASHABLE]
+	request_handlers: HASH_TABLE [IO_BASED_CLIENT_REQUEST_COMMAND, HASHABLE]
 			-- Handlers of client requests received via io_medium
 
 end -- class MAIN_GUI_INTERFACE
