@@ -6,7 +6,7 @@ indexing
 		%this class as something like DATA_RETRIEVAL_CONSTANTS"
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
+	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
 class

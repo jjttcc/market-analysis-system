@@ -5,7 +5,7 @@ indexing
 	note: "It is expected that, before `execute' is called, the first %
 		%character of the input of io_medium has been read."
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
+	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
 class MAIN_GUI_INTERFACE inherit
