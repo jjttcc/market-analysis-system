@@ -14,7 +14,8 @@ class MARKET_EVENT_SCANNER inherit
 		export {NONE}
 			data_scanner_make
 		redefine
-			product, parser, make_tuple, advance_to_next_record, input
+			product, parser, make_tuple, advance_to_next_record, input,
+			value_setters_used
 		end
 
 	EXCEPTIONS
@@ -33,26 +34,9 @@ feature
 			args_not_void: in /= Void
 			in_separators_not_void:
 				in.field_separator /= Void and in.record_separator /= Void
-		local
-			vs: LINKED_LIST [VALUE_SETTER]
-			i: INTEGER
 		do
-			create vs.make
-			from
-				i := 1
-			until
-				i > Field_count
-			loop
-				-- A dummy value setter is created and added to vs for each
-				-- field in the input to satisfy the class invariant that
-				-- `value_setters' is not empty (which will be true after
-				-- the call to data_scanner_make) and the constraint that
-				-- the number of value setters matches the number of fields.
-				vs.extend (create {VOLUME_SETTER}.make)
-				i := i + 1
-			end
 			create parser.make (in)
-			data_scanner_make (in, parser, vs)
+			input := in
 			parser.set_field_separator (in.field_separator @ 1)
 		ensure
 			set: input = in and parser.input = input
@@ -124,6 +108,8 @@ feature {NONE} -- Hook method implementations
 				input.back
 			end
 		end
+
+	value_setters_used: BOOLEAN is False
 
 feature {NONE} -- Implementation
 
