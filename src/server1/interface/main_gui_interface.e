@@ -30,7 +30,7 @@ class MAIN_GUI_INTERFACE inherit
 			{NONE} all
 		end
 
-	GLOBAL_SERVER
+	GLOBAL_SERVER_FACILITIES
 		export
 			{NONE} all
 		end

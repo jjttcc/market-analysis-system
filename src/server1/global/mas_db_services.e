@@ -21,7 +21,7 @@ feature -- Access
 		require
 			connected: connected
 		local
-			gs: expanded GLOBAL_SERVER
+			gs: expanded GLOBAL_SERVER_FACILITIES
 		do
 			Result := list_from_query (
 				gs.database_configuration.stock_symbol_query)
@@ -35,7 +35,7 @@ feature -- Access
 		require
 			connected: connected
 		local
-			gs: expanded GLOBAL_SERVER
+			gs: expanded GLOBAL_SERVER_FACILITIES
 		do
 			Result := list_from_query (
 				gs.database_configuration.derivative_symbol_query)
@@ -293,7 +293,7 @@ feature {NONE} -- Implementation
 			-- Query for daily stock data
 		local
 			db_info: DATABASE_CONFIGURATION
-			global_server: expanded GLOBAL_SERVER
+			global_server: expanded GLOBAL_SERVER_FACILITIES
 		do
 			db_info := global_server.database_configuration
 			db_info.set_symbol (symbol)
@@ -316,7 +316,7 @@ feature {NONE} -- Implementation
 			-- Query for intraday stock data
 		local
 			db_info: DATABASE_CONFIGURATION
-			global_server: expanded GLOBAL_SERVER
+			global_server: expanded GLOBAL_SERVER_FACILITIES
 		do
 			db_info := global_server.database_configuration
 			db_info.set_symbol (symbol)
@@ -341,7 +341,7 @@ feature {NONE} -- Implementation
 			-- Query for daily derivative data
 		local
 			db_info: DATABASE_CONFIGURATION
-			global_server: expanded GLOBAL_SERVER
+			global_server: expanded GLOBAL_SERVER_FACILITIES
 		do
 			db_info := global_server.database_configuration
 			db_info.set_symbol (symbol)
@@ -366,7 +366,7 @@ feature {NONE} -- Implementation
 			-- Query for intraday derivative data
 		local
 			db_info: DATABASE_CONFIGURATION
-			global_server: expanded GLOBAL_SERVER
+			global_server: expanded GLOBAL_SERVER_FACILITIES
 		do
 			db_info := global_server.database_configuration
 			db_info.set_symbol (symbol)
@@ -392,7 +392,7 @@ feature {NONE} -- Implementation
 			-- Query for stock name from symbol - Void if the user-specified
 			-- query is invalid or non-existent.
 		local
-			global_server: expanded GLOBAL_SERVER
+			global_server: expanded GLOBAL_SERVER_FACILITIES
 			q: STRING
 		do
 			q := global_server.database_configuration.stock_name_query
@@ -411,7 +411,7 @@ feature {NONE} -- Implementation
 			-- Query for derivative name from symbol - Void if the
 			-- user-specified query is invalid or non-existent.
 		local
-			global_server: expanded GLOBAL_SERVER
+			global_server: expanded GLOBAL_SERVER_FACILITIES
 			q: STRING
 		do
 			q := global_server.database_configuration.derivative_name_query
@@ -430,7 +430,7 @@ feature {NONE} -- Implementation
 			-- Open field string needed for query - empty if
 			-- not command_line_options.opening_price
 		local
-			global_server: expanded GLOBAL_SERVER
+			global_server: expanded GLOBAL_SERVER_FACILITIES
 		do
 			if global_server.command_line_options.opening_price then
 				Result := concatenation (<<db_info.daily_stock_open_field_name,
@@ -460,7 +460,7 @@ feature {NONE} -- Implementation
 			valid_tradable_type: tradable_type = Stock or
 				tradable_type = Derivative
 		local
-			global_server: expanded GLOBAL_SERVER
+			global_server: expanded GLOBAL_SERVER_FACILITIES
 			expected_count: INTEGER
 		do
 			if global_server.command_line_options.opening_price then

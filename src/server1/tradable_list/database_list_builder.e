@@ -46,7 +46,7 @@ feature -- Basic operations
 		require
 			input_lists_set: symbol_list /= Void and tradable_factory /= Void
 		local
-			global_server: expanded GLOBAL_SERVER
+			global_server: expanded GLOBAL_SERVER_FACILITIES
 			db_info: DATABASE_CONFIGURATION
 		do
 			db_info := global_server.database_configuration

@@ -6,9 +6,10 @@ indexing
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
+--!!!File rename needed to match new class name.
 class
 
-	GLOBAL_SERVER
+	GLOBAL_SERVER_FACILITIES
 
 feature -- Access
 
@@ -54,4 +55,4 @@ feature -- Access
 			Result := platform_factory.file_lock (file_name)
 		end
 
-end -- GLOBAL_SERVER
+end

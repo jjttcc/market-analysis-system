@@ -11,7 +11,7 @@ class TRADABLE_LIST_BUILDER inherit
 
 	FACTORY
 
-	GLOBAL_SERVER
+	GLOBAL_SERVER_FACILITIES
 		export {NONE}
 			all
 		end

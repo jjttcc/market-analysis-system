@@ -23,7 +23,7 @@ class STOCK_BUILDING_UTILITIES inherit
 			{NONE} all
 		end
 
-	GLOBAL_SERVER
+	GLOBAL_SERVER_FACILITIES
 		export
 			{NONE} all
 		end

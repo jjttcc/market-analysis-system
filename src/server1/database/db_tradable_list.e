@@ -37,7 +37,7 @@ feature {NONE} -- Implementation
 
 	setup_input_medium is
 		local
-			global_server: expanded GLOBAL_SERVER
+			global_server: expanded GLOBAL_SERVER_FACILITIES
 			db: MAS_DB_SERVICES
 		do
 			db := global_server.database_services
@@ -67,7 +67,7 @@ feature {NONE} -- Implementation
 
 	close_input_medium is
 		local
-			global_server: expanded GLOBAL_SERVER
+			global_server: expanded GLOBAL_SERVER_FACILITIES
 			db: MAS_DB_SERVICES
 		do
 			input_sequence.close

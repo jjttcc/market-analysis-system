@@ -20,7 +20,7 @@ feature -- Access
 	name: STRING is
 		local
 			db_services: MAS_DB_SERVICES
-			gs: expanded GLOBAL_SERVER
+			gs: expanded GLOBAL_SERVER_FACILITIES
 			error_occurred: BOOLEAN
 		do
 			db_services := gs.database_services

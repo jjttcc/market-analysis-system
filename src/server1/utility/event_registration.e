@@ -36,7 +36,7 @@ class EVENT_REGISTRATION inherit
 			print
 		end
 
-	GLOBAL_SERVER
+	GLOBAL_SERVER_FACILITIES
 		export
 			{NONE} all
 		undefine

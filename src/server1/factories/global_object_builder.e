@@ -24,7 +24,7 @@ class FACTORY_BUILDER inherit
 			all
 		end
 
-	GLOBAL_SERVER
+	GLOBAL_SERVER_FACILITIES
 		export {NONE}
 			all
 		end

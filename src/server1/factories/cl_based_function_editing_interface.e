@@ -32,7 +32,7 @@ class CL_BASED_FUNCTION_EDITING_INTERFACE inherit
 			print
 		end
 
-	GLOBAL_SERVER
+	GLOBAL_SERVER_FACILITIES
 		export
 			{NONE} all
 		undefine

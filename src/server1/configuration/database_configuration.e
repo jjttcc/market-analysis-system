@@ -645,7 +645,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	check_results is
 		local
-			gs: expanded GLOBAL_SERVER
+			gs: expanded GLOBAL_SERVER_FACILITIES
 		do
 			if not stock_symbol_query.is_empty then
 				if daily_stock_data_command.is_empty then

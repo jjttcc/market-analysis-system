@@ -10,7 +10,7 @@ class ECLI_SERVICES inherit
 
 	MAS_DB_SERVICES
 
-	GLOBAL_SERVER
+	GLOBAL_SERVER_FACILITIES
 		rename
 			database_configuration as db_info
 		export

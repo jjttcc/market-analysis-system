@@ -10,7 +10,7 @@ class MA_SERVER inherit
 
 	SERVER
 
-	GLOBAL_SERVER
+	GLOBAL_SERVER_FACILITIES
 		export
 			{NONE} all
 		end

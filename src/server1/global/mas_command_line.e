@@ -21,7 +21,7 @@ class MAS_COMMAND_LINE inherit
 			{NONE} all
 		end
 
-creation {GLOBAL_SERVER}
+creation {GLOBAL_SERVER_FACILITIES}
 
 	make
 
@@ -249,7 +249,7 @@ feature {NONE} -- Implementation
 		require
 			not use_db
 		local
-			global_server: expanded GLOBAL_SERVER
+			global_server: expanded GLOBAL_SERVER_FACILITIES
 			expander: FILE_NAME_EXPANDER
 		do
 			-- If -i option is specified, create the intraday extension.
@@ -292,7 +292,7 @@ feature {NONE} -- Implementation
 		require
 			db_in_use: use_db
 		local
-			global_server: expanded GLOBAL_SERVER
+			global_server: expanded GLOBAL_SERVER_FACILITIES
 			db_services: MAS_DB_SERVICES
 			l: LIST [STRING]
 		do

@@ -610,7 +610,7 @@ feature {NONE} -- Implementation - utilities
 	settings: STRING is
 		local
 			env: expanded APP_ENVIRONMENT
-			gs: expanded GLOBAL_SERVER
+			gs: expanded GLOBAL_SERVER_FACILITIES
 			cl: MAS_COMMAND_LINE
 			constants: expanded APPLICATION_CONSTANTS
 			vnames: expanded APP_ENVIRONMENT_VARIABLE_NAMES
@@ -670,7 +670,7 @@ feature {NONE} -- Implementation - utilities
 
 	make_lock (name: STRING): FILE_LOCK is
 		local
-			gs: expanded GLOBAL_SERVER
+			gs: expanded GLOBAL_SERVER_FACILITIES
 		do
 			Result := gs.file_lock (name)
 		end
