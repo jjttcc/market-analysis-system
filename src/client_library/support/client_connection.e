@@ -38,7 +38,11 @@ feature -- Status report
 			definition: Result = (socket.is_open_read and socket.is_open_write)
 		end
 
-feature -- Basic operations
+	socket_ok: BOOLEAN is
+			-- Is the socket "OK"?
+		do
+			 Result := socket.socket_ok
+		end
 
 feature {NONE} -- Initialization
 
