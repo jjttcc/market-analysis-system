@@ -21,10 +21,12 @@ import support.FileReaderUtilities;
 public class ProgramControlTerminal extends PCT_Tools {
 
 	public ProgramControlTerminal(String cfg_filename, String prog_name,
-			ApplicationContext app_context) throws Exception {
+			ApplicationContext app_context, Object comp_context)
+				throws Exception {
 		config_file_name = cfg_filename;
 		program_name_setting = prog_name;
 		_application_context = app_context;
+		_component_context = comp_context;
 System.out.println("PCT A");
 		FileReaderUtilities cfgfile = config_file();
 		Vector lines = lines_from_file(cfgfile);
@@ -45,6 +47,10 @@ System.out.println("PCT B");
 		return _application_context;
 	}
 
+	public Object component_context() {
+		return _component_context;
+	}
+
 	public void execute() {
 		window.execute();
 	}
@@ -61,6 +67,7 @@ System.out.println("PCT B");
 		return result;
 	}
 
+//!!!!I believe this routine is obsolete - remove.
 	// Set the arguments for the subcomponents' startup command.
 	void set_args(Vector args) {
 		if (args != null && args.size() > 0) {
@@ -144,10 +151,6 @@ System.out.println("PCT B");
 				c.startup_cmd_args_setting + "'");
 			System.out.println("\tconfig_file_name: '" +
 				c.config_file_name_setting + "'");
-			System.out.println("\timport_module size: '" +
-				c.import_module_setting.size() + "'");
-			System.out.println("\timport_module: '" +
-				c.import_module_setting + "'");
 			System.out.println("\texit_after...: '" +
 				c.exit_after_startup_cmd_setting + "'");
 		}
@@ -156,6 +159,7 @@ System.out.println("PCT B");
 	PCT_Window window;
 	Vector subcomponents;
 	ApplicationContext _application_context;
+	Object _component_context;
 
 	public String terminal_name_setting;
 	public boolean quitbutton_setting;
