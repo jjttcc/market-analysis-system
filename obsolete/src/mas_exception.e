@@ -107,9 +107,21 @@ feature -- Basic operations
 				end
 			end
 			die (status)
+			-- Sometimes die does not work - ensure program termination:
+			end_program (status)
 		rescue
 			-- Make sure that program terminates when an exception occurs.
 			die (status)
+			end_program (status)
+		end
+
+	end_program (i: INTEGER) is
+			-- Replacement for `die', since it appears to sometimes fail to
+			-- exit
+		external
+			"C"
+		alias
+			"exit"
 		end
 
 	fatal_exception (e: INTEGER): BOOLEAN is
