@@ -36,6 +36,7 @@ feature -- Basic operations
 			spec_file.put_string (spec_file_intro (options))
 			spec_file.put_string (spec_body)
 			spec_file.put_string (spec_file_conclusion)
+			spec_file.close
 		end
 
 feature {NONE} -- Implementation
@@ -48,6 +49,7 @@ feature {NONE} -- Implementation
 			else
 				Result := ""
 			end
+print ("Spec body: '" + Result + "'%N")
 		end
 
 	spec_file: PLAIN_TEXT_FILE is
