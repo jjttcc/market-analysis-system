@@ -39,15 +39,15 @@ feature -- Status report
 feature -- Basic operations
 
 	do_process is
-		do
 			-- Null action
+		do
 		end
 
 feature {NONE}
 
 	reset_state is
-		do
 			-- Null action
+		do
 		end
 
 	set_processed (b: BOOLEAN) is

@@ -1,6 +1,6 @@
 indexing
-	description: 
-		"A function that outputs an array of market tuples.  Specifications%
+	description:
+		"A function that outputs an array of market tuples.  Specifications %
 		%for function input are provided by descendant classes."
 	date: "$Date$";
 	revision: "$Revision$"
