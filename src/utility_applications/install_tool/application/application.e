@@ -20,7 +20,7 @@ feature {NONE} -- Initialization
 		do
 			default_create
 			prepare
-			launch
+--			launch
 			finish_installation
 		end
 
