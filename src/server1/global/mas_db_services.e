@@ -436,6 +436,9 @@ feature {NONE} -- Implementation
 		require
 			not_void: q /= Void
 		deferred
+		ensure
+			not_void: Result /= Void
+			empty_if_q_empty: old q.empty implies Result.empty
 		end
 
 	stock_symbol_table, derivative_symbol_table: HASH_TABLE [ANY, STRING]
