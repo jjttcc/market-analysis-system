@@ -58,7 +58,7 @@ feature {NONE} -- Hook routines
 			-- Should the tradable retrieved from `tradables' be "updated"
 			-- during retrieval?
 		once
-			Result := False
+			Result := True
 		end
 
 feature {NONE} -- Implementation
