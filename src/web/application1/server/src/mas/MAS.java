@@ -9,7 +9,7 @@ package mas;
 import java.io.*;
 import java.util.*;
 import javax.servlet.ServletException;
-import javax.servlet.GenericServlet;
+import javax.servlet.http.*;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletConfig;
@@ -17,19 +17,20 @@ import java_library.support.*;
 import support.IO_SocketConnection;
 import support.ServerResponseUtilities;
 
-public final class MAS extends GenericServlet implements AssertionConstants {
+public final class MAS extends HttpServlet implements AssertionConstants {
 
 	public void init() {
 		proxy_cache = new ManagedCache();
 	}
 
-	public void service(ServletRequest request,
-			ServletResponse response)
+	public void service(HttpServletRequest request,
+			HttpServletResponse response)
 			throws ServletException, IOException {
 		String client_msg = null, server_response = null;
 		MAS_Proxy mas_proxy = null;
 		String tag = thread_tag();
 		log("Starting 'service' thread " + tag);
+		log("(from browser: " + request.getHeader(Browser) + ")");
 		try {
 			log_tag("(Version 1.4) Connected", tag);
 			log("Compiled at Fri Feb 21 22:37:18 MST 2003");
@@ -189,4 +190,6 @@ public final class MAS extends GenericServlet implements AssertionConstants {
 
 	// Default MAS server port, in case init. parameter not set
 	private final int Default_server_port = 2004;
+
+	private final String Browser = "user-agent";
 }
