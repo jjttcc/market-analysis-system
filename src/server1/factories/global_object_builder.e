@@ -42,14 +42,18 @@ feature -- Initialization
 
 feature -- Access
 
-    input_file_names: LIST [STRING] is
-            -- List of all specified input file names
+    input_entity_names: LIST [STRING] is
+            -- List of all specified input data sources
 		do
-			Result := command_line_options.file_names
+			if command_line_options.use_db then
+				Result := command_line_options.symbol_list
+			else
+				Result := command_line_options.file_names
+			end
 		end
 
 	market_list: TRADABLE_LIST
-			-- Tradable list made from input file data
+			-- Tradable list made from input data
 
 	event_coordinator: MARKET_EVENT_COORDINATOR
 			-- Object in charge of event generation and dispatch
@@ -84,12 +88,12 @@ feature {NONE}
 			-- may be for different types of markets, in the future,
 			-- different types of factories may be created and
 			-- added to the tradable_factories list.
-			from i := 1 until i = input_file_names.count + 1 loop
+			from i := 1 until i = input_entity_names.count + 1 loop
 				tradable_factories.extend (tradable_factory)
 				i := i + 1
 			end
 			check
-				same_count: tradable_factories.count = input_file_names.count
+				same_count: tradable_factories.count = input_entity_names.count
 			end
 			build_components (tradable_factories)
 		end
@@ -98,11 +102,17 @@ feature {NONE}
 		local
 			dispatcher: EVENT_DISPATCHER
 		do
-			!VIRTUAL_TRADABLE_LIST!market_list.make (input_file_names,
-														tradable_factories)
-			!!dispatcher.make
+			if command_line_options.use_db then
+				-- Uncomment when DB_TRADABLE_LIST exists:
+				-- create {DB_TRADABLE_LIST} market_list.make (
+					-- input_entity_names, tradable_factories)
+			else
+				create {FILE_TRADABLE_LIST} market_list.make (
+					input_entity_names, tradable_factories)
+			end
+			create dispatcher.make
 			register_event_registrants (dispatcher)
-			!MARKET_EVENT_COORDINATOR!event_coordinator.make (
+			create {MARKET_EVENT_COORDINATOR} event_coordinator.make (
 							active_event_generators, market_list, dispatcher)
 		end
 
