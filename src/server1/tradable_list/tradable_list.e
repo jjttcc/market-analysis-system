@@ -52,6 +52,12 @@ feature -- Access
 			Result := symbol_list.index
 		end
 
+	count: INTEGER is
+			-- Number of items in the list
+		do
+			Result := symbols.count
+		end
+
 	item: TRADABLE [BASIC_MARKET_TUPLE] is
 		do
 			check
