@@ -15,7 +15,9 @@ login_spec      -> start_date_spec | end_date_spec
 logout_req      -> <null>
 start_date_spec -> "start_date" "\t" trad_per_type "\t" date_spec
 end_date_spec   -> "end_date" "\t" trad_per_type "\t" date_spec
-date_spec       -> date | "0" | "now"
+date_spec       -> date | "0" | "now" [ now_modifier ]
+now_modifier    -> "-" natural_integer now_mod_type
+now_mod_type    -> "days" | "months"
 server_response -> srvr_data | error_msg | login_id
 error_msg       -> ta_string
 mkt_symbol      -> ta_string
@@ -39,8 +41,8 @@ msgID           -> natural_integer
 login_id        -> natural_integer
 mkt_list_req    -> <null>
 ind_list_req    -> mkt_symbol "\t" trad_per_type
-date            -> year "/" month "/" day [ "\t" time ]
-time            -> hour ":" minute [ ":" second ]
+date            -> year month day [ "\t" time ]
+time            -> hour minute [ second ]
 year            -> digit digit digit digit
 month           -> digit digit
 day             -> digit digit
@@ -64,8 +66,8 @@ Date components must follow the usual rules for dates.
 
 end_of_message is the Control-G (bell) character.
 
-mkt_list_req and ind_list_req are null because the msgID alone gives enough
-information with respect to these requests.
+mkt_list_req is null because the msgID alone gives enough information
+with respect to this request.
 
 msgID is an integer identifying the type of message - for the server,
 the types of messages are those containing data in response to a client
