@@ -48,8 +48,11 @@ feature {NONE} -- Basic operations
 		local
 			t: SIMPLE_TUPLE
 		do
-			check output.empty end
+			check
+				output_empty: output.empty
+			end
 			if target.count < n then
+				-- null statement
 			else
 				check target.count >= n end
 				target.start
