@@ -15,11 +15,12 @@ class STANDARD_MOVING_AVERAGE inherit
 		redefine
 			set_operator, action, set_input, set_n, do_process, make
 		select
-		--	set_operator, action, set_input, set_n, do_process
 			set_operator, set_input, set_n, make
 		end
 
 	N_RECORD_ONE_VARIABLE_FUNCTION
+			-- Repeated inheritance is used to allow access to the
+			-- parent set_xxx routines.
 		rename
 			set_n as nrovf_set_n, set_operator as nrovf_set_operator,
 			set_input as nrovf_set_input, make as nrovf_make
