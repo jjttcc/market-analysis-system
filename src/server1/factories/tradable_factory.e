@@ -256,7 +256,7 @@ feature {NONE} -- Implementation
 		end
 
 	index_vector: ARRAY [INTEGER] is
-			-- To be defined by descendants to specify desired field order.
+			-- Index vector for value setters
 		do
 --!!!!!Need to handling configuration for the "configurable" date setter.
 			if open_interest then
