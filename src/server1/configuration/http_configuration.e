@@ -115,6 +115,20 @@ print ("Current path: " + Result + "%N")
 			Result := cached_end_date
 		end
 
+	eod_turnover_time: TIME is
+		-- The time at which to attempt to retrieve the latest end-of-day
+		-- data from the http data-source site, in the user's local time -
+		-- Void if the specified value is invalid
+		local
+			time_util: expanded DATE_TIME_SERVICES
+		do
+			if cached_eod_turnover_time = Void then
+				cached_eod_turnover_time := time_util.time_from_string (
+					eod_turnover_time_value, ":")
+			end
+			Result := cached_eod_turnover_time
+		end
+
 	symbol: STRING
 			-- The current symbol for which data is being retrieved
 
@@ -150,7 +164,7 @@ feature -- Access
 			Result := settings @ EOD_result_format_specifier
 		end
 
-	eod_turnover_time: STRING is
+	eod_turnover_time_value: STRING is
 		do
 			Result := settings @ EOD_turnover_time_specifier
 		end
@@ -244,7 +258,11 @@ feature {NONE} -- Implementation
 
 	cached_path: STRING
 
+	cached_eod_turnover_time: TIME
+
 	Date_field_separator: STRING is "/"
+
+	Time_field_separator: STRING is ":"
 
 feature {NONE} -- Implementation - token-related constants
 

@@ -10,6 +10,11 @@ class HTTP_TEST inherit
 			{NONE} all
 		end
 
+	EXCEPTIONS
+		export
+			{NONE} all
+		end
+
 create
 
 	make
@@ -22,6 +27,8 @@ feature {NONE} -- Initialization
 		do
 			from
 				create parameters.make
+print ("Turnover time: " + eod_turnover_time_string + "%N")
+die (0)
 				initialize_symbols
 				symbols.start
 			until
@@ -150,6 +157,18 @@ print ("parameters end date: " + parameters.end_date.out + "%N")
 				log_errors (<<"Error reading symbol file: ",
 					parameters.symbol_file, "%N(", 
 					file_reader.error_string, ")%N">>)
+			end
+		end
+
+	eod_turnover_time_string: STRING is
+		require
+			parameters_exist: parameters /= Void
+		do
+			if parameters.eod_turnover_time /= Void then
+				Result := parameters.eod_turnover_time.out
+			else
+				Result := "Invalid time specified: " +
+					parameters.eod_turnover_time_value
 			end
 		end
 
