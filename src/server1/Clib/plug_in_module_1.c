@@ -20,6 +20,7 @@
 #endif
 #ifdef BCC
 #include <io.h>
+#include <dir.h>
 #define R_OK 4
 #endif
 #include "external_input_sequence_plug_in_module.h"
@@ -30,7 +31,7 @@ struct input_sequence_plug_in {
 	char* symbol_file_name;
 	char* data_file_name;
 	char* errorbuffer;
-	int symbol_file_size;
+	unsigned int symbol_file_size;
 };
 
 enum {
@@ -52,7 +53,7 @@ enum Error_type {
 };
 
 const char* Symbol_file_name = "symbols.mas";
-const char* data_file_name = "data.mas";
+const char* Data_file_name = "data.mas";
 const char* Mas_precmd = "perl ";
 const char* Mas_postcmd = "mas_external_retrieve.pl ";
 
@@ -70,7 +71,7 @@ const char* common_errors[] = {
 
 
 /* Number of times `c' occurs in `s' */
-int char_count(const char* s, char c) {
+unsigned int char_count(const char* s, char c) {
 	int result = 0;
 	if (s != 0) {
 		for (result = 0; *s; ++s) {
@@ -99,6 +100,8 @@ enum Error_type initialize(char* working_directory) {
 	int file_length(char* file_path);
 	enum Error_type result = 0;
 	char cmdpath[Buffer_size];
+
+fprintf(stderr, "initialize - wkdir: %s\n", working_directory);
 	if (Data_retrieval_command == 0) {
 		if (system(0) == 0) {
 			result = Shell_not_available;
@@ -136,25 +139,25 @@ enum Error_type initialize(char* working_directory) {
 	return result;
 }
 
-/* Array of directories extracted from `paths' with separator ':'.
+/* Array of directories extracted from `paths' with separator `path_sep'.
  * The address at `count' holds the number of elements in the result or,
  * if memory allocation fails, -1.
  * Returns 0 if `paths' is "" (empty). */
-char** directories(const char* paths, int* count) {
+char** directories(const char* paths, int* count, char path_sep) {
 	const char *start, *end;
-	const char Separator = ':';
 	char** result = 0;
 	int sepcount, i, onedot = 0;
 
+fprintf(stderr, "directories - paths: %s\n", paths);
 	assert(paths != 0 && paths[strlen(paths)] == '\0');
 	if (paths[0] != '\0') {
 		start = paths;
 		for (sepcount = 0; *start != '\0'; ++start) {
-			if (*start == Separator) {
+			if (*start == path_sep) {
 				++sepcount;
 			}
 		}
-		if (char_count(paths, ':') == strlen(paths)) {
+		if (char_count(paths, path_sep) == strlen(paths)) {
 			*count = 1;
 			onedot = 1;
 		} else {
@@ -179,11 +182,11 @@ char** directories(const char* paths, int* count) {
 			start = paths;
 			while (1) {
 				end = start;
-				while (*end != Separator && *end != '\0') {
+				while (*end != path_sep && *end != '\0') {
 					++end;
 				}
 				if (end == start) {
-					assert(*end == Separator || *end == '\0');
+					assert(*end == path_sep || *end == '\0');
 					result[i] = malloc(2);
 					if (result[i] == 0) {
 						/* malloc failed. */
@@ -351,14 +354,15 @@ char* first_valid_directory(char** path_array, int count,
 }
 
 struct input_sequence_plug_in* new_input_sequence_plug_in_handle(
-		const char* paths, char* error_buffer, int buffer_size) {
+		const char* paths, char* error_buffer, int buffer_size,
+		const char path_separator) {
 	struct input_sequence_plug_in* result = 0;
 	char** path_array;
 	int path_count, symfile_size;
 	char* dir = 0;
 	enum Error_type error = None;
 	assert(paths != 0);
-	path_array = directories(paths, &path_count);
+	path_array = directories(paths, &path_count, path_separator);
 	if (path_count != -1) {
 		dir = first_valid_directory(path_array, path_count,
 			Symbol_file_name, &symfile_size, &error);
@@ -366,11 +370,12 @@ struct input_sequence_plug_in* new_input_sequence_plug_in_handle(
 	} else {
 		error = Memory;
 	}
+fprintf(stderr, "new_ispih - dir: %s\n", dir);
 	if (dir != 0) {
 		result = malloc(sizeof (struct input_sequence_plug_in));
 		if (result != 0) {
 			result->symbol_file_name = concat2strings(dir, Symbol_file_name);
-			result->data_file_name = concat2strings(dir, data_file_name);
+			result->data_file_name = concat2strings(dir, Data_file_name);
 			result->working_directory = dir;
 			result->symbol_file_size = symfile_size;
 			result->errorbuffer = 0;
@@ -420,6 +425,7 @@ int obtain_data(struct input_sequence_plug_in* handle,
 	char cmd[Buffer_size * 3 + 512];
 	int cmdresult;
 
+fprintf(stderr, "obtain_data - A\n");
 /*!!!Add use of is_intraday.*/
 	assert(Data_retrieval_command != 0 && strlen(Data_retrieval_command) > 0 &&
 		strlen(Data_retrieval_command) < Buffer_size &&
@@ -430,6 +436,7 @@ int obtain_data(struct input_sequence_plug_in* handle,
 		handle->errorbuffer = concat2strings("Symbol name is too long: ",
 			symbol);
 		cmdresult = -1;
+fprintf(stderr, "obtain_data - B\n");
 	} else {
 		strcpy(cmd, Data_retrieval_command);
 		assert(Data_retrieval_command[strlen(Data_retrieval_command) - 1] ==
@@ -446,9 +453,10 @@ int obtain_data(struct input_sequence_plug_in* handle,
 		strcat(cmd, handle->data_file_name);
 		strcat(cmd, " ");
 		strcat(cmd, symbol);
-/*printf("executing %s (currend dir: %s)\n", cmd, getcwd(0, 0)); */
+fprintf(stderr, "obtain_data - C\n");
+printf("executing %s (current dir: %s)\n", cmd, getcwd(0, 0));
 		cmdresult = system(cmd);
-/*printf("result: %d (currend dir: %s)\n", cmdresult, getcwd(0, 0)); */
+printf("cmdresult: %d (current dir: %s)\n", cmdresult, getcwd(0, 0));
 	}
 
 	return cmdresult;
@@ -485,6 +493,7 @@ char* symbol_list(struct input_sequence_plug_in* handle) {
 	handle->errorbuffer = 0;
 	slist[0] = "Failed to read symbols file ";
 	slist[1] = handle->symbol_file_name;
+fprintf(stderr, "handle->symbol_file_name: %s\n", handle->symbol_file_name);
 	result = malloc(handle->symbol_file_size + 1);
 	buffer = malloc(handle->symbol_file_size + 1);
 	if (result == 0 || buffer == 0) {
@@ -520,45 +529,55 @@ char* tradable_data(struct input_sequence_plug_in* handle,
 		char* symbol, int is_intraday, int* size) {
 	const char* slist[5];
 	char* result = 0;
-	int file_size;
+	unsigned int file_size;
 
 	assert(handle != 0);
 	free(handle->errorbuffer);
 	handle->errorbuffer = 0;
 	slist[0] = "Failed to read data file ";
 	slist[1] = handle->data_file_name;
+fprintf(stderr, "handle->data_file_name: %s\n", handle->data_file_name);
 	if (obtain_data(handle, symbol, is_intraday) == 0) {
 		file_size = file_length(handle->data_file_name);
 		if (file_size == -1) {
 			slist[2] = ": ";
 			slist[3] = strerror(errno);
 			handle->errorbuffer = concatenation(slist, 4);
+fprintf(stderr, "tradable_data - A\n");
 		} else if (access(handle->data_file_name, R_OK) != 0) {
 			slist[2] = ": ";
 			slist[3] = strerror(errno);
 			handle->errorbuffer = concatenation(slist, 4);
+fprintf(stderr, "tradable_data - B\n");
 		} else {
 			result = malloc(file_size + 1);
 			if (result == 0) {
 				slist[0] = strerror(errno);
 				handle->errorbuffer = concatenation(slist, 1);
+fprintf(stderr, "tradable_data - C\n");
 			}
 		}
 		if (result != 0) {
 			FILE* f = fopen(handle->data_file_name, "r");
+fprintf(stderr, "tradable_data - D\n");
 			if (f == 0) {
 				slist[0] = strerror(errno);
 				handle->errorbuffer = concatenation(slist, 1);
+fprintf(stderr, "tradable_data - E\n");
 			} else {
 				if (fread(result, 1, file_size, f) != file_size) {
 					handle->errorbuffer = concatenation(slist, 2);
+fprintf(stderr, "tradable_data - F\n");
 				} else {
 					*size = file_size;
+fprintf(stderr, "tradable_data - G\n");
 				}
 				fclose(f);
 			}
 		}
 	}
 
+fprintf(stderr, "tradable_data - result: %s, hdl->errbfr: %s\n",
+result, handle->errorbuffer);
 	return result;
 }
