@@ -22,7 +22,12 @@ feature -- Access
 
 	Hostname_specifier: STRING is "hostname"
 
+	Working_directory_specifier: STRING is "cwdir"
+
 	Environment_variable_specifier: STRING is "environment_variable"
+
+	Environment_variable_append_specifier: STRING is
+		"add_to_environment_variable"
 
 	Port_number_specifier: STRING is "portnumber"
 

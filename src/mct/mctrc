@@ -84,8 +84,16 @@ end
 # Command to start a command-line client to connect to the server
 start_cl_client_command	xterm -e <bin_dir>/macl -h <hostname> <portnumber>
 
+# Append to the CLASSPATH environment variable.
+add_to_environment_variable	CLASSPATH::/opt/mas/lib/classes
+
 # Command to start the charting application
-chart_command	<bin_dir>/magc <portnumber> -h <hostname>
+#chart_command	<bin_dir>/magc <portnumber> -h <hostname>
+
+# <cwdir> means to use the bracketed path that follows it as the
+# Current Working Directory when the command is executed.
+chart_command	<cwdir> [<mas_directory_setting>] java MA_Client \
+<hostname> <portnumber> >/tmp/errs 2>&1
 
 # Command to terminate the server
 termination_command	echo |<bin_dir>/macl -h <hostname> <portnumber>

@@ -53,6 +53,7 @@ feature {NONE} -- Initialization
 			settings.extend ("", Platform_specifier)
 			settings.extend ("", Hostname_specifier)
 			settings.extend ("", Environment_variable_specifier)
+			settings.extend ("", Environment_variable_append_specifier)
 			settings.extend ("", Start_server_cmd_specifier)
 			settings.extend ("", Start_cl_client_cmd_specifier)
 			settings.extend ("", Chart_cmd_specifier)
@@ -167,7 +168,6 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	configuration_type: STRING is "MAS Control Terminal"
 
-
 	post_process_settings is
 		do
 			-- Replace all "non-dynamic" tokens in `user_defined_values'
@@ -183,37 +183,36 @@ feature {NONE} -- Implementation - Hook routine implementations
 			start_server_commands.linear_representation.do_all (
 				agent replace_command_string_tokens)
 			if not settings.item (Start_server_cmd_specifier).is_empty then
-				start_server_commands.extend (create {SESSION_COMMAND}.make (
+				start_server_commands.extend (new_session_command (
 				Start_server_cmd_specifier,
 				settings @ Start_server_cmd_specifier))
 			end
 			if settings.has (Start_cl_client_cmd_specifier) then
-				create {SESSION_COMMAND}
-					start_command_line_client_command.make (
-						Start_cl_client_cmd_specifier,
-						settings @ Start_cl_client_cmd_specifier)
+				start_command_line_client_command := new_session_command (
+					Start_cl_client_cmd_specifier,
+					settings @ Start_cl_client_cmd_specifier)
 			end
 			if settings.has (Chart_cmd_specifier) then
-				create {SESSION_COMMAND} chart_command.make (
+				chart_command := new_session_command (
 					Chart_cmd_specifier, settings @ Chart_cmd_specifier)
 			end
 			if settings.has (Termination_cmd_specifier) then
-				create {SESSION_COMMAND} termination_command.make (
+				termination_command := new_session_command (
 					Termination_cmd_specifier,
 					settings @ Termination_cmd_specifier)
 			end
 			if settings.has (Browse_docs_cmd_specifier) then
-				create {EXTERNAL_COMMAND} browse_documentation_command.make (
+				browse_documentation_command := new_external_command (
 					Browse_docs_cmd_specifier,
 					settings @ Browse_docs_cmd_specifier)
 			end
 			if settings.has (Browse_intro_cmd_specifier) then
-				create {EXTERNAL_COMMAND} browse_intro_command.make (
+				browse_intro_command := new_external_command (
 					Browse_intro_cmd_specifier,
 					settings @ Browse_intro_cmd_specifier)
 			end
 			if settings.has (Browse_faq_cmd_specifier) then
-				create {EXTERNAL_COMMAND} browse_faq_command.make (
+				browse_faq_command := new_external_command (
 					Browse_faq_cmd_specifier,
 					settings @ Browse_faq_cmd_specifier)
 			end
@@ -258,7 +257,8 @@ feature {NONE} -- Implementation - Hook routine implementations
 			if
 				config_file.in_block or config_file.at_end_of_block or
 				equal (key, User_definition_specifier) or
-				equal (key, Environment_variable_specifier)
+				equal (key, Environment_variable_specifier) or
+				equal (key, Environment_variable_append_specifier)
 			then
 				Result := True
 			end
@@ -270,6 +270,8 @@ feature {NONE} -- Implementation - Hook routine implementations
 				process_user_definition (value)
 			elseif equal (key, Environment_variable_specifier) then
 				set_environment_variable (value)
+			elseif equal (key, Environment_variable_append_specifier) then
+				append_to_environment_variable (value)
 			else
 				check
 					in_or_at_end_of_block:
@@ -282,7 +284,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 	set_environment_variable (value: STRING) is
 			-- Use `Sub_field_separator' to split `value' in two and then
 			-- use the result to set the environment variable specified
-			-- by the left component..
+			-- by the left component.
 		local
 			components: CHAIN [STRING]
 			env: expanded EXECUTION_ENVIRONMENT
@@ -298,6 +300,36 @@ feature {NONE} -- Implementation - Hook routine implementations
 				end
 				env.put (components @ 2, components @ 1)
 			end
+		end
+
+	append_to_environment_variable (value: STRING) is
+			-- Use `Sub_field_separator' to split `value' in two and then
+			-- use the result to append to the environment variable specified
+			-- by the left component.
+		local
+			components: CHAIN [STRING]
+			env: expanded EXECUTION_ENVIRONMENT
+			old_value, key, append_str: STRING
+		do
+			components := split_in_two (value, Sub_field_separator)
+			if components.count < 2 then
+				error_report.append ("Incorrect format for environment %
+					%variable specification: " + value + "%N(at line " +
+					current_line.out + ").%N")
+			else
+				key := components @ 1
+				append_str := components @ 2
+				if platform.is_equal (Windows_platform) then
+					convert_to_windows (append_str)
+				end
+				old_value := env.get (key)
+				if old_value /= Void then
+					env.put (old_value + append_str, key)
+				else
+					env.put (append_str, key)
+				end
+			end
+print ("env var. " + key + ": " + env.get (key) + "%N")
 		end
 
 	process_block (key, value: STRING) is
@@ -485,6 +517,66 @@ feature {NONE} -- Implementation - Utilities
 			check_for_unreplaced_tokens (c.command_string)
 		end
 
+	command_working_directory (s: STRING): STRING is
+			-- Working directory, if any, specified in the raw command
+			-- string `s' - Void if none specified.  If one is specified
+			-- the components of `s' that make up the specification will
+			-- be removed from s.
+		local
+			i: INTEGER
+			regexp: RX_PCRE_REGULAR_EXPRESSION
+			new_s: STRING
+		do
+print ("cwd processing '" + s + "'%N")
+			create regexp.make
+			-- Set up to match, e.g., "<cwdir> [/home/workdir]"
+			regexp.compile (Token_start_delimiter.out +
+				Working_directory_specifier + Token_end_delimiter.out +
+				" *\[([^]]*)\]")
+			if regexp.is_compiled then
+print ("compile succeeded.%N")
+				regexp.set_anchored (False)
+				regexp.match (s)
+				if regexp.has_matched then
+					Result := regexp.captured_substring (1)
+print ("Captured Result: " + Result + "%N")
+					-- Do a `replace_all' - Remove all occurrences
+					new_s := regexp.replace_all ("")
+					s.copy (new_s)
+				else
+print ("match failed.%N")
+				end
+			else
+print ("compile failed.%N")
+			end
+		end
+
+	new_session_command (cmd_id, cmd_string: STRING): SESSION_COMMAND is
+			-- A new SESSION_COMMAND, with the work_directory set, if
+			-- specified in `cmd_string'
+		local
+			workdir: STRING
+		do
+			workdir := command_working_directory (cmd_string)
+			create Result.make (cmd_id, cmd_string)
+			if workdir /= Void then
+				Result.set_working_directory (workdir)
+			end
+		end
+
+	new_external_command (cmd_id, cmd_string: STRING): EXTERNAL_COMMAND is
+			-- A new EXTERNAL_COMMAND, with the work_directory set, if
+			-- specified in `cmd_string'
+		local
+			workdir: STRING
+		do
+			workdir := command_working_directory (cmd_string)
+			create Result.make (cmd_id, cmd_string)
+			if workdir /= Void then
+				Result.set_working_directory (workdir)
+			end
+		end
+
 feature {NONE} -- Implementation
 
 	current_cmd_string, current_cmd_desc, current_cmd_name: STRING
@@ -509,7 +601,7 @@ feature {NONE} -- Implementation
 			-- "<word>" tokens that are to be converted on the fly, rather
 			-- than converted on start-up - without the surrounding "<>"
 		once
-			Result := (<<Port_number_specifier>>)
+			Result := (<<Port_number_specifier, Working_directory_specifier>>)
 		end
 
 	user_defined_variables: ARRAY [STRING]

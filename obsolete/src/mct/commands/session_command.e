@@ -44,7 +44,7 @@ feature -- Basic operations
 				Token_end_delimiter)
 --print ("(SESSION_COMMAND - " + name + ") Attempting to execute:%N'" +
 --cmd + "'%N")
-			env.launch (cmd)
+			launch (cmd)
 		end
 
 end

@@ -38,6 +38,9 @@ feature -- Access
 	description: STRING
 			-- Description of the command
 
+	working_directory: STRING
+			-- Directory in which the command is to be executed
+
 feature -- Status report
 
 	arg_mandatory: BOOLEAN is
@@ -57,15 +60,40 @@ feature -- Element change
 			description_set: description = arg and description /= Void
 		end
 
+	set_working_directory (arg: STRING) is
+			-- Set `working_directory' to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			working_directory := arg
+		ensure
+			working_directory_set: working_directory = arg and
+				working_directory /= Void
+		end
+
 feature -- Basic operations
 
 	execute (arg: ANY) is
-		local
-			env: expanded EXECUTION_ENVIRONMENT
 		do
 --print ("(EXTCMD - " + name + ") Attempting to execute:%N'" +
 --command_string + "'%N")
-			env.launch (command_string)
+			launch (command_string)
+		end
+
+	launch (cmd: STRING) is
+			-- "Launch" the command.
+		local
+			env: expanded EXECUTION_ENVIRONMENT
+			previous_directory: STRING
+		do
+			if working_directory /= Void then
+				previous_directory := env.current_working_directory
+				env.change_working_directory (working_directory)
+			end
+			env.launch (cmd)
+			if working_directory /= Void then
+				env.change_working_directory (previous_directory)
+			end
 		end
 
 invariant
