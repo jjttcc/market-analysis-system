@@ -39,6 +39,7 @@ src/server1/test/input/rsi . serversrc1.5
 src/server1/test/input/rsi_colby . serversrc1.5
 src/server1/test/input/stoch . serversrc1.5
 src/server1/test/input/test_data . serversrc1.5
+src/server1/test/input/wilder_ma . serversrc1.5
 src/server1/test/input/williams . serversrc1.5
 src/server1/test/input/sunw . serversrc1.5
 src/server1/test/input/ibm.intraday . serversrc1.5
@@ -70,6 +71,7 @@ src/server1/test/reference/stochD5 . serversrc1.5
 src/server1/test/reference/stochK5 . serversrc1.5
 src/server1/test/reference/test_data.one_field . serversrc1.5
 src/server1/test/reference/williams . serversrc1.5
+src/server1/test/reference/wilder_ma . serversrc1.5
 src/server1/test/reference/rsi_sunw . serversrc1.5
 src/server1/test/reference/rsi_sunw_mnthly . serversrc1.5
 src/server1/test/reference/rsi_sunw_qtrly . serversrc1.5
