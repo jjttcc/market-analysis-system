@@ -10,41 +10,104 @@ class
 
 feature -- Access
 
-	period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
+	period_types: TABLE [TIME_PERIOD_TYPE, STRING] is
+	--period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
 			-- All time period types used by the system
 		local
 			type: TIME_PERIOD_TYPE
 			duration: DATE_TIME_DURATION
+			tbl: HASH_TABLE [TIME_PERIOD_TYPE, STRING]
 		once
-			!!Result.make (3)
+			--!HASH_TABLE [TIME_PERIOD_TYPE, STRING]!Result.make (3)
+			--!!Result.make (3)
+			!!tbl.make (3)
 			!!duration.make (0, 0, 0, 1, 0, 0)
 			check duration.hour = 1 end
 			!!type.make ("hourly", duration, false)
 			check
-				not_in_table1: not Result.has (type.name)
+				not_in_table1: not tbl.has (type.name)
+				--not_in_table1: not Result.has (type)
 			end
-			Result.extend (type, type.name)
+			tbl.extend (type, type.name)
 			!!duration.make (0, 0, 1, 0, 0, 0)
 			check duration.day = 1 end
 			!!type.make ("daily", duration, false)
 			check
-				not_in_table2: not Result.has (type.name)
+				not_in_table2: not tbl.has (type.name)
+				--not_in_table2: not Result.has (type)
 			end
-			Result.extend (type, type.name)
+			tbl.extend (type, type.name)
 			!!duration.make (0, 0, 7, 0, 0, 0)
 			check duration.day = 7 end
 			!!type.make ("weekly", duration, false)
 			check
-				not_in_table3: not Result.has (type.name)
+				not_in_table3: not tbl.has (type.name)
+				--not_in_table3: not Result.has (type)
 			end
-			Result.extend (type, type.name)
+			tbl.extend (type, type.name)
+			Result := tbl
+		end
+
+	--!!!Probably, event type stuff should go into a separate class.
+	--!!!GS may use that class to make them globally available.
+	--event_types: TABLE [EVENT_TYPE, INTEGER] is
+	event_types: ARRAY [EVENT_TYPE] is
+			-- All event types known to the system
+		once
+			!ARRAY [EVENT_TYPE]!Result.make (1, 0)
+		end
+
+	create_event_type (name: STRING) is
+			-- Create a new EVENT_TYPE with name `name' and add it to
+			-- the `event_types' table.
+			--!!!More design work needed here re. event type management.
+		local
+			et: EVENT_TYPE
+			i: INTEGER
+		do
+			i := last_event_ID.item + 1
+			last_event_ID.set_item (i)
+			!!et.make (name, last_event_ID.item)
+			event_types.force (et, last_event_ID.item)
+		end
+
+	last_event_type: EVENT_TYPE is
+			-- Last created event type
+		do
+			if last_event_ID.item > 0 then
+				Result := event_types @ last_event_ID.item
+			end
+		end
+
+	last_event_ID: INTEGER_REF is
+			-- !!!Temporary hack
+		once
+			!!Result
+			Result.set_item (0)
 		end
 
 	function_library: LIST [MARKET_FUNCTION] is
 			-- All defined market functions
 		once
-			-- !!!Temporary implementation - until persistence is implemented:
-			Result := internal_function_library
+			!LINKED_LIST [MARKET_FUNCTION]!Result.make
+		end
+
+	concatenation (a: ARRAY [ANY]): STRING is
+			-- A string containing a concatenation of all elements of `a'
+		require
+			not_void: a /= Void
+		local
+			i: INTEGER
+		do
+			!!Result.make (0)
+			from
+				i := 1
+			until
+				i = a.count + 1
+			loop
+				Result.append ((a @ i).out)
+				i := i + 1
+			end
 		end
 
 feature -- Basic operations
@@ -75,9 +138,4 @@ feature -- Basic operations
 			set_to_monday: d.date.day_of_the_week = 2
 		end
 
-feature {NONE}
-
-	internal_function_library: LIST [MARKET_FUNCTION]
-			-- !!!Temporary
-
-end -- GLOBAL_SERVICES
+end -- class GLOBAL_SERVICES
