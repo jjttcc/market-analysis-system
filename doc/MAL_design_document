@@ -13,38 +13,33 @@ sequence of values to be averaged.  This abstraction allows for easily
 building complex indicators as composite functions.
 
 Class MARKET_FUNCTION provides the main abstraction for TA indicators
-as functions.  Its main features are output, a list of market tuples,
-and process, a command to process the function and place the result in
-output.  MARKET_TUPLE is an abstraction for a tuple to be used by the TA
-functions, which at the top level has the features value, and date_time.
-MARKET_TUPLEs will be accessed and manipulated by the function classes
-as sequences of tuples, ordered by their date_time values.  This models
-trading periods, where each trading period has a date (and time, if
-it is intraday), and other values (such as open, close, high, low -
-descendant classes add these values).
+as functions.  Its main features are output, a list of market tuples, and
+process, a command to process the function's input and place the result
+in output.  MARKET_TUPLE is an abstraction for tuples processed by the
+TA functions, which has the features value and date_time.  MARKET_TUPLEs
+will be accessed and manipulated by the function classes as sequences of
+tuples, ordered by their date_time values.  This models trading periods -
+each trading period has a date (and time, if it is intraday), and other
+values (such as open, close, high, low - defined in descendant classes).
 
 MARKET_TUPLE_LIST inherits from ARRAYED_LIST (from the base library),
 adding the contraint that the generic argument must be of type
 MARKET_TUPLE and a class invariant that the elements of the list must be
 sorted by date/time.  This abstraction is used as the type of the output
-feature of MARKET_FUNCTION, thus the output for a MARKET_FUNCTION is
+feature of MARKET_FUNCTION; thus the output for a MARKET_FUNCTION is
 constrained to being a date/time-sorted list of instances of MARKET_TUPLE.
 
 TIME_PERIOD_TYPE provides an abstraction for types of trading periods,
 each type having an associated time duration.  For example, a daily
-trading period will have a 24-hour duration; an hourly trading period
-will have a one-hour duration; a weekly (7-day week) trading period will
-have a 7-day duration.  Types for which query `irregular' is true are
-types such as monthly and yearly, whose durations vary.  duration for
-irregular types will be an approximate value (such as 30 days for a montly
-trading period).  Class MARKET_FUNCTION has a query, trading_period_type
-- of type TIME_PERIOD_TYPE, that identifies the type of trading period
-for each function instance.  Examples:  a STOCK (which inherits from
-SIMPLE_FUNCTION) instance will often have a trading period type with a
-duration of one day - a daily trading period.  For hourly data, STOCK
-instances will have an hourly trading period type.  A moving average
-whose input is a STOCK with a daily trading period will itself have
-a daily trading period type.  The trading period type is used in the
+trading period will have a 24-hour duration; a weekly (7-day week) trading
+period will have a 7-day duration.  Class MARKET_FUNCTION has a query,
+trading_period_type - of type TIME_PERIOD_TYPE, that identifies the type
+of trading period for each function instance.  Examples:  a STOCK (which
+inherits from SIMPLE_FUNCTION) instance will often have a trading period
+type with a duration of one day - a daily trading period; for hourly
+data, STOCK instances will have an hourly trading period type.  A moving
+average whose input is a STOCK with a daily trading period will itself
+have a daily trading period type.  The trading period type is used in the
 construction of composite tuples, such as weekly tuples from daily tuples.
 
 SIMPLE_FUNCTION allows for a MARKET_TUPLE_LIST to be treated as
@@ -52,6 +47,16 @@ a MARKET_FUNCTION (by inheriting from both).  It will serve as the
 innermost function in a composition of functions.  The main intent
 of this construct is to allow composite functions to be constructed
 by enclosing one or more functions within another function without the
+enclosing function needing to know the type of function it is containing
+(simple or composite, and various subtypes of composite).  The result
+is that arbitrarily complex functions can be constructed without causing
+resulting complexity in the implementation of the function classes.
+
+SIMPLE_FUNCTION allows for a MARKET_TUPLE_LIST to be treated as
+a MARKET_FUNCTION (by inheriting from both).  By serving as the
+innermost function in a composition of functions, it completes the
+design pattern that enables composite functions to be constructed by
+enclosing one or more functions within another function without the
 enclosing function needing to know the type of function it is containing
 (simple or composite, and various subtypes of composite).  The result
 is that arbitrarily complex functions can be constructed without causing
@@ -66,10 +71,10 @@ that will be used by all of the composite function classes (descendants
 of MARKET_FUNCTION other than SIMPLE_FUNCTION), that of iteration over
 a list of MARKET_TUPLEs (ordered by date_time, as described above).
 The class inherits from LINEAR_ITERATOR from the EiffelBase library,
-providing template and hook routines (see the template method pattern
-in the Gamma, et. al. patterns book and the pattern book by W. Pree)
-that iterate over each element of a list, performing an action on the
-current item.
+providing template and hook routines (as described in the Gamma, et. al.,
+patterns book as the template method pattern and in the pattern book by
+W. Pree) that iterate over each element of a list, performing an action
+on the current item.
 
 N_RECORD_STRUCTURE provides a simple structural abstraction for
 entities that operate on a sublist of n tuples.  For example, class
@@ -147,12 +152,13 @@ its specialization allows it to be optimized for moving averages. Since
 moving averages occur quite frequently in technical analysis, it seems
 reasonable to include a class that provides this optimization.
 
-EXPONENTIAL_MOVING_AVERAGE inherits from STANDARD_MOVING_AVERAGE
-and uses its features to implement the exponential moving average,
-adapting the algorithm to produce the slightly different EMA calculation.
+EXPONENTIAL_MOVING_AVERAGE inherits from STANDARD_MOVING_AVERAGE and
+uses its features to implement the exponential moving average, adapting
+the algorithm to produce the slightly different EMA calculation.
+
 COMPOSITE_TUPLE_BUILDER provides the capability of deriving, from input
 data (market tuples), data whose trading periods have a larger duration
-than the input data.  For example, constructing daily market data from
+than the input data - for example, constructing daily market data from
 hourly data, or weekly data from daily data.
 
 CLUSTER tuple_types
@@ -173,7 +179,7 @@ abstraction in this cluster is TRADABLE, which serves as parent to STOCK
 and STOCK_INDEX.  (More descendants will be added in the future, such
 as FUTURES_CONTRACT and BOND.)  TRADABLE inherits from SIMPLE_FUNCTION,
 allowing its descendants to be used as the innermost function in a
-composite function as described above.  TRADABLE also has a feature
+composite function as described above.  TRADABLE also has a feature,
 `indicators', which is a list of all composite functions - technical
 indicators - that have been constructed to perform analysis on the
 tradable instance.  When used in an application, the user will be able to
@@ -184,26 +190,26 @@ added to all market entities in the system.  TRADABLE has two other
 important features:
 
    - composite_tuple_list, which provides a list of composite tuples made
-	 from the tradable's data.  The argument, period_type, specifies
-	 the kind of composite tuple - for example, weekly or monthly,
-	 when the tradable's trading_period_type is daily.
+     from the tradable's data.  The argument, period_type, specifies the
+     kind of composite tuple - for example, weekly or monthly, when the
+     tradable's trading_period_type is daily.
 
    - indicator_groups, which contains all indicator groupings set up for a
-	 particular tradable instance.	This feature allows technical
-	 indicators to be conceptually grouped together (usually for
-	 presentation).  For example, a moving average crossover uses
-	 two moving averages for which a buy or sell signal is generated
-	 when one moving average crosses over the other.  This would
-	 form an indicator group consisting of the two moving averages.
+     particular tradable instance.    This feature allows technical
+     indicators to be conceptually grouped together (usually for
+     presentation).  For example, a moving average crossover uses two
+     moving averages for which a buy or sell signal is generated when
+     one moving average crosses over the other.  This would form an
+     indicator group consisting of the two moving averages.
 
 Class STOCK inherits from TRADABLE and adds the constraint that a STOCK
 contains tuples of type VOLUME_TUPLE (tuples with a volume field,
 in addition to open, high, low, close) as well as functionality
 to deal with stock splits.  It also redefines make_ctf to make a
-COMPOSITE_VOLUME_TUPLE_FACTORY, which is used by TRADABLE to make
-composite tuples for its composite_tuple_list feature.	STOCK_SPLIT is
-an abstraction for a stock split, with a value and a date, used by STOCK
-to adjust its prices for stock splits.
+COMPOSITE_VOLUME_TUPLE_FACTORY, which is used by features defined in
+TRADABLE to make composite tuples for its composite_tuple_list feature.
+STOCK_SPLIT is an abstraction for a stock split, with a value and a date,
+used by STOCK to adjust its prices for stock splits.
 
 CLUSTER data_scanning
 
@@ -224,7 +230,7 @@ MARKET_TUPLE_DATA_SCANNER to create the appropriate type of MARKET_TUPLE.
 are used by class TRADABLE to create its composite tuple lists.)  Cluster
 value_setters contains classes that are used to set the appropriate fields
 of a tuple from the scanned data.  CLOSE_SETTERS sets the close field,
-HIGH_SETTER sets the high field and so on.  When the scanning process
+HIGH_SETTER sets the high field, and so on.  When the scanning process
 occurs, instances of these classes are arranged in a list whose order
 corresponds to the order of the fields expected in the data.  For example,
 a list would contain instances of DATE_SETTER, HIGH_SETTER, LOW_SETTER,
@@ -233,7 +239,7 @@ excludes the opening price.
 
 CLUSTER global
 
-This cluster contains classes that provides services that need
+This cluster contains classes that provide services that need
 to be globally available.  It currently contains only one class,
 GLOBAL_SERVICES, which provides global services and globally available
 singletons (once functions).  In the future there may be a need to
