@@ -14,6 +14,7 @@ class TIME_DELIMITED_MARKET_DATA_REQUEST_CMD inherit
 		redefine
 			expected_field_count, set_print_parameters, parse_remainder,
 			additional_field_constraints_fulfilled,
+			additional_post_parse_constraints_fulfilled,
 			additional_field_constraints_msg
 		end
 
@@ -52,18 +53,24 @@ feature {NONE} -- Hook routine implementations
 			if not parse_error then
 				parse_error := start_date_time = Void
 			end
-		ensure
-			start_date_set_if_no_error:
-				not parse_error implies start_date_time /= Void
 		end
 
 	additional_field_constraints_fulfilled (fields: LIST [STRING]): BOOLEAN is
 		do
 			Result := fields.i_th (date_time_spec_index) /= Void and then
 				not fields.i_th (date_time_spec_index).is_empty
-		ensure
+		ensure then
 			true_iff_not_empty: Result = (fields.i_th (date_time_spec_index) /=
 				Void and then not fields.i_th (date_time_spec_index).is_empty)
+		end
+
+	additional_post_parse_constraints_fulfilled: BOOLEAN is
+			-- Are the additional constraints required after calling
+			-- `parse_remainder', if not `parse_error', fulfilled?
+		do
+			Result := start_date_time /= Void
+		ensure then
+			true_iff_start_date_time_exists: Result = (start_date_time /= Void)
 		end
 
 	additional_field_constraints_msg: STRING is "date-time range field is emtpy"

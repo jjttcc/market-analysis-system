@@ -41,17 +41,15 @@ feature {NONE} -- Hook routine implementations
 		local
 			fields: LIST [STRING]
 		do
+			parse_error := False
+			fields_parsed := False
 			target := msg -- set up for tokenization
 			fields := tokens (Message_field_separator)
 			if
 				fields.count = expected_field_count and then
 				additional_field_constraints_fulfilled (fields)
 			then
-				parse_symbol_and_period_type (symbol_index, period_type_index,
-					fields)
-				if not parse_error then
-					parse_remainder (fields)
-				end
+				parse_fields (fields)
 				if not parse_error then
 					create_and_send_response
 				end
@@ -72,6 +70,13 @@ feature {NONE} -- Hook routines
 		require
 			fields_exists: fields /= Void
 			correct_field_count: fields.count = expected_field_count
+		do
+			Result := True -- Yes - Redefine if needed.
+		end
+
+	additional_post_parse_constraints_fulfilled: BOOLEAN is
+			-- Are the additional constraints required after calling
+			-- `parse_remainder', if not `parse_error', fulfilled?
 		do
 			Result := True -- Yes - Redefine if needed.
 		end
@@ -112,6 +117,10 @@ feature {NONE} -- Hook routines
 				additional_field_constraints_fulfilled (fields)
 		do
 			do_nothing -- Redefine is something needs to be done.
+		ensure
+			parsed_iff_no_error: not parse_error = fields_parsed
+			additional_constraints_fulfilled: not parse_error implies
+				additional_post_parse_constraints_fulfilled
 		end
 
 	send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE]) is
@@ -126,13 +135,18 @@ feature {NONE} -- Hook routines
 feature {NONE} -- Implementation
 
 	parse_error: BOOLEAN
+			-- Did the last call to `parse_fields' fail?
+
+	fields_parsed: BOOLEAN
+			-- Has `parse_fields' been called successfully?
 
 	create_and_send_response is
 			-- Create the requested data and send them to the client.
 		require
-			no_parse_error: not parse_error
-			tpt_ms_not_void: trading_period_type /= Void and
-				market_symbol /= Void
+			fields_parsed: fields_parsed
+			period_type_exists: trading_period_type /= Void
+			symbol_exists: market_symbol /= Void
+			additional_constraints: additional_post_parse_constraints_fulfilled
 		local
 			tradable: TRADABLE [BASIC_MARKET_TUPLE]
 		do
@@ -146,21 +160,42 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Utility
 
-	parse_symbol_and_period_type (sindx, ptindx: INTEGER;
-				fields: LIST [STRING]) is
+	parse_fields (fields: LIST [STRING]) is
+		require
+			fields_exist: fields /= Void
+			field_count_valid: fields.count = expected_field_count
+			additional_constraints_hold:
+				additional_field_constraints_fulfilled (fields)
+			not_parsed: not parse_error and not fields_parsed
+		do
+			parse_symbol_and_period_type (fields)
+			if not parse_error then
+				parse_remainder (fields)
+			end
+		ensure
+			parsed_iff_no_error: not parse_error = fields_parsed
+			additional_constraints_fulfilled: not parse_error implies
+				additional_post_parse_constraints_fulfilled
+		end
+
+	parse_symbol_and_period_type (fields: LIST [STRING]) is
 			-- Extract the symbol and trading period type and place the
 			-- results into `market_symbol' and `trading_period_type'.
+		require
+			fields_exist: fields /= Void
+			field_count_valid: fields.count = expected_field_count
+			additional_constraints_hold:
+				additional_field_constraints_fulfilled (fields)
 		local
 			pt_names: ARRAY [STRING]
 			pt_name: STRING
 			object_comparison: BOOLEAN
 		do
-			parse_error := False
 			pt_names := period_type_names
 			object_comparison := pt_names.object_comparison
 			pt_names.compare_objects
-			market_symbol := fields @ sindx
-			pt_name := fields @ ptindx
+			market_symbol := fields @ symbol_index
+			pt_name := fields @ period_type_index 
 			if not pt_names.has (pt_name) then
 				report_error (Error, <<bad_period_type_msg>>)
 				parse_error := True
@@ -174,6 +209,9 @@ feature {NONE} -- Utility
 			symbol_and_period_type_set_if_no_error: not parse_error implies
 				market_symbol /= Void and trading_period_type /= Void
 			fields_not_changed: fields.count = old fields.count
+			field_count_still_valid: fields.count = expected_field_count
+			additional_constraints_still_hold:
+				additional_field_constraints_fulfilled (fields)
 		end
 
 	send_tradable_not_found_response is
@@ -234,5 +272,11 @@ feature {NONE} -- Implementation - string constants
 	bad_period_type_msg: STRING is "Bad period type"
 
 	wrong_number_of_fields_msg: STRING is "Wrong number of fields."
+
+invariant
+
+	no_error_if_fields_parsed: fields_parsed implies not parse_error
+	fields_parsed_result: fields_parsed implies trading_period_type /= Void and
+		market_symbol /= Void and additional_post_parse_constraints_fulfilled
 
 end -- class DATA_REQUEST_CMD
