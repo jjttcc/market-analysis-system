@@ -5,7 +5,7 @@
 # Path separator used by the operating system
 path_sep = "/"
 # Command-line based mail client program to use for sending mail
-mailer = "elm"
+mailer = "mutt"
 # Subject flag for mailer
 subject_flag = "-s"
 # Directory where the uptrend and downtrend files reside
