@@ -21,17 +21,6 @@ creation
 
 feature {NONE} -- Hook routines
 
-	compile_this is
-		local
-			--!!!WARNING: These are "proprietary" components.  It needs to be
-			-- removed before the open-source version of the code can be
-			-- released.  A method needs to be developed for only including
-			-- "proprietary" components in "proprietary" releases.
-			composite_tradable: COMPOSITE_TRADABLE
-			basic_composite_tradable: BASIC_COMPOSITE_TRADABLE
-		do
-		end
-
 --@@@Note: Consider adding a CL option (perhaps not documented) such as:
 --
 --mas -p -b 1234 --report_back 9999

@@ -1,0 +1,22 @@
+indexing
+
+	description:
+		"Constants used for the 'report-back-on-startup' protocol"
+	author: "Jim Cochrane"
+	date: "$Date$";
+	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
+		%Released under the Eiffel Forum License; see file forum.txt"
+
+deferred class
+
+	REPORT_BACK_PROTOCOL
+
+feature -- String constants
+
+	Report_back_flag: STRING is "-report_back"
+			-- Flag for the "report-back" option
+
+	Host_port_separator: CHARACTER is '^'
+
+end

@@ -24,6 +24,11 @@ feature {NONE} -- Initialization
 	make is
 		do
 			mcl_make
+			windows_make
+		end
+
+	windows_make is
+		do
 			-- There is a problem with the CONSOLE class in Windows, so
 			-- force the system to always run in the "background" so that
 			-- CONSOLE is not used.

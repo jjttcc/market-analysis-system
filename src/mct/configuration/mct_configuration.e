@@ -50,6 +50,7 @@ feature {NONE} -- Initialization
 			create error_report.make (0);
 
 			settings.extend ("", Valid_port_numbers_specifier)
+			settings.extend ("", Server_report_port_number_specifier)
 			settings.extend ("", Hostname_specifier)
 			settings.extend ("", Environment_variable_specifier)
 			settings.extend ("", Environment_variable_append_specifier)
@@ -73,6 +74,13 @@ feature -- Access
 		do
 			Result := (settings @ Valid_port_numbers_specifier).split (
 				Valid_port_numbers_separator)
+		ensure
+			not_void: Result /= Void
+		end
+
+	server_report_portnumber: STRING is
+		do
+			Result := settings @ Server_report_port_number_specifier
 		ensure
 			not_void: Result /= Void
 		end
@@ -182,8 +190,8 @@ feature {NONE} -- Implementation - Hook routine implementations
 				agent replace_command_string_tokens)
 			if not settings.item (Start_server_cmd_specifier).is_empty then
 				start_server_commands.extend (new_session_command (
-				Start_server_cmd_specifier,
-				settings @ Start_server_cmd_specifier))
+				Start_server_cmd_specifier, report_back_appended (
+				settings @ Start_server_cmd_specifier)))
 			end
 			if settings.has (Start_cl_client_cmd_specifier) then
 				start_command_line_client_command := new_session_command (
@@ -226,8 +234,8 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	check_results is
 		do
-			check_for_empty_fields (<<
-				Valid_port_numbers_specifier, Hostname_specifier,
+			check_for_empty_fields (<<Valid_port_numbers_specifier,
+				Hostname_specifier, Server_report_port_number_specifier,
 				Start_cl_client_cmd_specifier, Chart_cmd_specifier,
 				Termination_cmd_specifier, Browse_docs_cmd_specifier,
 				Browse_intro_cmd_specifier, Browse_faq_cmd_specifier>>)
@@ -417,7 +425,7 @@ feature {NONE} -- Implementation - Utilities
 		do
 			replace_configuration_tokens (current_cmd_string)
 			c := new_session_command (Start_server_cmd_specifier,
-				current_cmd_string)
+				report_back_appended (current_cmd_string))
 			c.set_name (current_cmd_name)
 			c.set_description (current_cmd_desc)
 			if current_cmd_is_default then
@@ -575,11 +583,27 @@ feature {NONE} -- Implementation
 
 	error_report: STRING
 
+	report_back_appended (s: STRING): STRING is
+			-- `s' + " " + report_back_option
+		do
+			Result := s + " " + report_back_option
+		ensure
+			result_exists: Result /= Void
+			definition: Result.is_equal (s + " " + report_back_option)
+		end
+
+	report_back_option: STRING is
+		once
+			Result := Report_back_flag + " " + process_host_name +
+				Host_port_separator.out + server_report_portnumber
+		end
+
 	required_specifiers: LINKED_LIST [STRING] is
 			-- Configuration fields that are required
 		once
 			create Result.make
 			Result.extend (Valid_port_numbers_specifier)
+			Result.extend (Server_report_port_number_specifier)
 			Result.compare_objects
 		ensure
 			Result.object_comparison

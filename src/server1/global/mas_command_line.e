@@ -139,18 +139,21 @@ feature -- Status report
 feature {NONE} -- Implementation - Hook routines
 
 	process_remaining_arguments is
+		local
+			setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]]
 		do
+			setup_procedures := main_setup_procedures
 			create {LINKED_LIST [INTEGER]} port_numbers.make
 			create special_date_settings.make (date_format_prefix)
 			special_date_settings.add_error_subscriber (Current)
 			opening_price := True
 			from
-				main_setup_procedures.start
+				setup_procedures.start
 			until
-				main_setup_procedures.exhausted
+				setup_procedures.exhausted
 			loop
-				main_setup_procedures.item.call ([])
-				main_setup_procedures.forth
+				setup_procedures.item.call ([])
+				setup_procedures.forth
 			end
 			if not use_db then
 				set_use_external_data_source
@@ -216,6 +219,17 @@ feature {NONE} -- Implementation
 						contents.remove
 					end
 				end
+			end
+		end
+
+	set_open is
+		do
+			if option_in_contents ('o') then
+				-- Using an open field is now the default, so no state
+				-- needs to change, but the option flag needs to be
+				-- removed from `contents' to prevent it being seen
+				-- as an invalid option by `check_for_invalid_flags'.
+				contents.remove
 			end
 		end
 
@@ -428,7 +442,7 @@ feature {NONE} -- Implementation queries
 	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]] is
 			-- List of the set_... procedures that are called
 			-- unconditionally - for convenience
-		once
+		do
 			create Result.make
 			Result.extend (agent set_debugging)
 			Result.extend (agent set_special_formatting)
@@ -438,6 +452,7 @@ feature {NONE} -- Implementation queries
 			Result.extend (agent set_port_numbers)
 			Result.extend (agent set_strict)
 			Result.extend (agent set_intraday_caching)
+			Result.extend (agent set_open)
 		end
 
 	initialization_complete: BOOLEAN

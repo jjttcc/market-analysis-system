@@ -50,7 +50,17 @@ feature -- Access
 
 	command_line: MAS_COMMAND_LINE is
 		do
-			create {MAS_COMMAND_LINE} Result.make
+			Result := command_line_cell (Void).item
+print ("cl type: " + Result.generating_type + "%N")
+		end
+
+	command_line_cell (deflt: MAS_COMMAND_LINE): CELL [MAS_COMMAND_LINE] is
+		once
+			if deflt /= Void then
+				create Result.put (deflt)
+			else
+				create Result.put (create {MAS_COMMAND_LINE}.make)
+			end
 		end
 
 end -- class PLATFORM_DEPENDENT_OBJECTS

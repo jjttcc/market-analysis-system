@@ -1,0 +1,357 @@
+system
+	"mas"
+
+root
+	EXTENDED_MA_SERVER: make
+
+default
+	assertion (check)
+	assertion (require)
+	assertion (ensure)
+	assertion (loop)
+	assertion (invariant)
+	arguments ("-o -p -z -report_back jupiter.milkyway.org^41516")
+	arguments ("-o -f , /opt/mas/lib/data/tradables/aa.txt -report_back jupiter.milkyway.org^50173")
+	arguments ("-o -f , /opt/mas/lib/data/tradables/a*.txt -report_back jupiter.milkyway.org^50173")
+	arguments ("-o -f , sunw.txt -report_back jupiter.milkyway.org^50173")
+	arguments ("-o -f , /opt/mas/lib/a*.txt -report_back jupiter.milkyway.org^50173")
+	arguments ("-h")
+	arguments ("-o -f , /opt/mas/lib/data/tradables/aa.txt /opt/mas/lib/data/tradables/aapl.txt")
+	arguments ("-o -f , /opt/mas/lib/data/tradables/a*.txt")
+	arguments ("-o -f , /opt/mas/lib/a*.txt")
+	arguments ("-o -p -debug")
+	arguments ("-o -p")
+	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4002 ")
+	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4002 -debug")
+	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4002")
+	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4001")
+	arguments ("-o -f , sunw.txt  4002")
+	arguments ("-o -f , sunw.txt  4001")
+	arguments ("-o -f , sunw.txt  4001 -r /tmp/fbc1")
+	arguments ("-o -f , sunw.txt 2223")
+	arguments ("-o -f , sunw.txt 2224")
+	arguments ("-o -f , sunw.txt 2225")
+	arguments ("-o -f , sunw.txt 2226")
+	arguments ("-o -f , sunw.txt 22222")
+	arguments ("-o -f , sunw.txt 1234")
+	arguments ("-o -f , sunw.txt 12345")
+	arguments ("-o -f , sunw.txt")
+	arguments ("-o -f , amzn.txt")
+	arguments ("-f ' '  /tmp/newfmt-novol.txt -no-volume -date-spec:date-format=dd#month3#yy,year-partition=80,date-sep=-")
+	arguments ("-f , /tmp/newfmt-novol.txt -no-volume -date-spec:date-format=dd#month3#yy,year-partition=80,date-sep=-")
+	arguments ("-o -f , /tmp/newfmt.txt -no-volume -date-spec:date-format=dd#month3#yy,year-partition=80,date-sep=-")
+	arguments ("-o -f , /tmp/ibm.txt -no-volume -date-spec:date-format=dd#month3#yy,year-partition=80,date-sep=-")
+	arguments ("-o -f , /tmp/ibm.txt -no-volume")
+	arguments ("-o -f , -s -i 5-minute  /tmp/ibm.5-minute -special-format")
+	arguments ("-o -f , -i 5-minute  /tmp/ibm.5-minute -special-format")
+	arguments ("-o -f , -i 5-minute  /tmp/ibm.5-minute")
+	arguments ("-o -f , /tmp/ibm.txt /tmp/aapl.txt /tmp/amzn.txt")
+	arguments ("-o -f , /tmp/boll/input /tmp/ibm.txt")
+	arguments ("-o -f , /tmp/boll/input")
+	arguments ("-o -f , /tmp/ibm.txt /tmp/aapl.txt /tmp/amzn.txt /tmp/sd_data.txt")
+	arguments ("-o -f , /tmp/ibm.txt")
+	arguments ("-o -f , -w 12346")
+	arguments ("-o -p 12345")
+	arguments ("-o -f , -w 12345")
+	arguments ("-o -p 3333")
+	arguments ("-o -p 3332")
+	arguments ("-o -f , amzn.txt none.txt ibm.txt")
+	arguments ("-o -p 2345")
+	arguments ("-o -f , -w")
+	arguments ("-o -f , ")
+	arguments ("-o -f , aa.txt 2345")
+	arguments ("-o -f , aa.txt")
+	arguments (" ")
+	disabled_debug (yes)
+	disabled_debug ("compression")
+	disabled_debug ("editing")
+	disabled_debug ("http")
+	disabled_debug ("object_editing")
+	disabled_debug ("persist")
+	line_generation (no)
+	profile (no)
+	trace (no)
+	check_vape (yes)
+	console_application (no)
+	address_expression (no)
+	array_optimization (yes)
+	dead_code_removal (yes)
+	dynamic_runtime (no)
+	exception_trace (no)
+	inlining (yes)
+	inlining_size ("0")
+	multithreaded (no)
+
+
+--	assertion (no)
+--	debug (no)
+--debug ("editing");
+--debug ("persist");
+--debug ("command line");
+--debug ("database");
+--debug ("compression");
+--precompiled ("$ISE_EIFFEL/precomp/spec/$PLATFORM/base");
+
+cluster
+	server:		"$MAS/src/server1"
+
+
+	abstractions (server):		"$/abstractions"
+
+	factories (server):		"$/factories"
+
+	network (server):		"$/network"
+
+	server_extensions (server):		"$/extensions"
+
+	root_cluster (server_extensions):		"$/root"
+
+	extended_global (server_extensions):		"$/global"
+
+	extended_support (server_extensions):		"$/support"
+
+	extended_sys (server_extensions):		"$/system_specific/unix"
+
+	open_source_root_cluster (server):		"$/root"
+
+	app_server_utility (server):		"$/utility"
+
+	interface (server):		"$/interface"
+
+	server_global (server):		"$/global"
+
+	system_specific (server):		"$/system_specific/unix"
+
+	configuration (server):		"$/configuration"
+
+	data_retrieval (server):		"$/data_retrieval"
+
+	database (server):		"$/database"
+
+	database_ecli (server):		"$/database/ecli"
+
+	database_stub (server):		"$/database/stub"
+
+	external_components (server):		"$/external"
+
+	tradable_list (server):		"$/tradable_list"
+
+	stock_splits (server):		"$/stock_splits"
+
+	client_server:		"$MAS/src/client_server"
+
+	protocols (client_server):		"$/protocols"
+
+	app_library:		"$MAS/src/application_library"
+
+	app_events (app_library):		"$/events"
+
+	app_global (app_library):		"$/global"
+
+	app_utility (app_library):		"$/utility"
+
+	app_factories (app_library):		"$/factories"
+
+	app_editing (app_library):		"$/editing"
+
+	app_services (app_library):		"$/application_services"
+
+	ma_library:		"$MAS/src/library"
+
+	function_abstractions (ma_library):		"$/function_abstractions"
+
+	function_types (ma_library):		"$/function_types"
+
+	commands (ma_library):		"$/commands"
+
+	markets (ma_library):		"$/markets"
+
+	structural (ma_library):		"$/structural"
+
+	tuple_types (ma_library):		"$/tuple_types"
+
+	data_scanning (ma_library):		"$/data_scanning"
+
+	events (ma_library):		"$/events"
+
+	global (ma_library):		"$/global"
+
+	event_generation (ma_library):		"$/event_generation"
+
+	market_analysis_tools (ma_library):		"$/market_analysis_tools"
+
+	configuragle_functions (function_types):		"$/configurable_functions"
+
+	specific_functions (function_types):		"$/specific_functions"
+
+	command_structures (commands):		"$/command_structures"
+
+	linear_commands (commands):		"$/linear_commands"
+
+	n_based_commands (commands):		"$/n_based_commands"
+
+	simple_commands (commands):		"$/simple_commands"
+
+	value_setters (data_scanning):		"$/value_setters"
+
+	tuple_factories (data_scanning):		"$/tuple_factories"
+
+	data_scanners (data_scanning):		"$/data_scanners"
+
+	event_generation_kernel (event_generation):		"$/event_generation_kernel"
+
+	function_analysis (event_generation):		"$/function_analysis"
+
+	client_lib:		"$MAS/src/client_library"
+
+	client_support (client_lib):		"$/support"
+
+	eiffel_components:		"$MAS/src/eiffel_library"
+
+	architectural (eiffel_components):		"$/architectural"
+
+	component_support (eiffel_components):		"$/support"
+
+	system_specific_support (eiffel_components):		"$/support/unix"
+
+	eiflib_data_scanning (eiffel_components):		"$/data_scanning"
+
+	eiflib_error (eiffel_components):		"$/error"
+
+	data_scanning_main (eiflib_data_scanning):		"$/main_abstractions"
+
+	data_scanning_input (eiflib_data_scanning):		"$/input_mechanisms"
+
+	eiflib_value_setters (eiffel_components):		"$/data_scanning/value_setters"
+
+	operators (eiffel_components):		"$/commands/operators"
+
+	event_library (eiffel_components):		"$/events"
+
+	component_server (eiffel_components):		"$/server"
+
+	networking (eiffel_components):		"$/networking"
+
+	eiffel_component_test (eiffel_components):		"$/test"
+
+	ise:		"$ISE_EIFFEL/library"
+
+	kernel (ise):		"$/base/kernel"
+
+	support (ise):		"$/base/support"
+
+	access (ise):		"$/base/structures/access"
+
+	cursors (ise):		"$/base/structures/cursors"
+
+	cursor_tree (ise):		"$/base/structures/cursor_tree"
+
+	dispenser (ise):		"$/base/structures/dispenser"
+
+	iteration (ise):		"$/base/structures/iteration"
+
+	list (ise):		"$/base/structures/list"
+
+	set (ise):		"$/base/structures/set"
+
+	setstrategies (ise):		"$/base/structures/set/strategies"
+
+	sort (ise):		"$/base/structures/sort"
+
+	storage (ise):		"$/base/structures/storage"
+
+	table (ise):		"$/base/structures/table"
+
+	traversing (ise):		"$/base/structures/traversing"
+
+	tree (ise):		"$/base/structures/tree"
+
+	date (ise):		"$/time"
+
+	date_format (date):		"$/format"
+
+	date_tools (date_format):		"$/english"
+
+	net (ise):		"$/net"
+
+	http_resources (net):		"$/transfer/resources"
+
+	http_addresses (net):		"$/transfer/addresses"
+
+	http_comparators (net):		"$/transfer/addresses/comparators"
+
+	abstract_socket (net):		"$/abstract/socket"
+
+	net_socket (net):		"$/network/socket"
+
+	local_socket (net):		"$/local/socket"
+
+	polling_abstract (net):		"$/polling/abstract"
+
+	polling_implementation (net):		"$/polling/implementation"
+
+	ecli_src:		"$ECLI/src"
+
+	abstract (ecli_src):		"$/abstract"
+
+	ecli_spec (ecli_src):		"$/spec"
+
+	ecli_spec_ise (ecli_spec):		"$/Ise"
+
+	ecli_data (ecli_src):		"$/data"
+
+	ecli_pattern (ecli_src):		"$/pattern"
+
+	ut_command:		"$GOBO/library/utility/command"
+
+	ut_error:		"$GOBO/library/utility/error"
+
+	ut_formatter:		"$GOBO/library/utility/formatter"
+
+	ut_support:		"$GOBO/library/utility/support"
+
+	kl_kernel:		"$GOBO/library/kernel"
+
+	kl_kernel_spec:		"$GOBO/library/kernel/spec/ise"
+
+	kl_support:		"$GOBO/library/kernel/support"
+
+	kl_misc:		"$GOBO/library/kernel/misc"
+
+	kl_basic:		"$GOBO/library/kernel/basic"
+
+	kl_unicode:		"$GOBO/library/kernel/unicode"
+
+	kl_io:		"$GOBO/library/kernel/io"
+
+	kl_elks:		"$GOBO/library/kernel/elks"
+
+	ds_container:		"$GOBO/library/structure/container"
+
+	ds_dispenser:		"$GOBO/library/structure/dispenser"
+
+	ds_list:		"$GOBO/library/structure/list"
+
+	ds_sort:		"$GOBO/library/structure/sort"
+
+	ds_support:		"$GOBO/library/structure/support"
+
+	ds_table:		"$GOBO/library/structure/table"
+
+	ds_date:		"$GOBO/library/time/date"
+
+external
+
+	include_path:
+		"$ISE_EIFFEL/library/time/Clib"
+
+	object:
+		"${ISE_EIFFEL}/library/time/spec/${ISE_PLATFORM}/lib/libdatetime.a",
+		"${ISE_EIFFEL}/library/net/spec/${ISE_PLATFORM}/lib/libnet.a",
+		"${ECLI}/src/spec/Ise/linux/libecli_c.a",
+		"/${MAS}/src/eiffel_library/lib/utilities.o",
+		"${ISE_EIFFEL}/C_library/zlib/libz.a",
+		"${MAS}/src/server1/lib/external_input_sequence.a",
+		"-lodbc"
+
+end

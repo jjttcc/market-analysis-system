@@ -72,15 +72,24 @@ feature -- Actions
 					configuration.hostname, portnumber)
 				cmd := external_commands @
 					configuration.Start_server_cmd_specifier
+print ("a " + (create {DATE_TIME}.make_now).out + "%N")
 				cmd.execute (session_window)
-				if msg = Void then
+print ("b " + (create {DATE_TIME}.make_now).out + "%N")
+				msg := server_report (
+					configuration.server_report_portnumber.to_integer)
+print ("msg: '" + msg + "'%N")
+print ("c " + (create {DATE_TIME}.make_now).out + "%N")
+				if msg.is_empty then
 					session_window.show
+print ("d " + (create {DATE_TIME}.make_now).out + "%N")
 				else
 					dialog := wbldr.new_error_dialog (msg, Void)
 					dialog.show
 					port_numbers_in_use.prune (portnumber)
+print ("e " + (create {DATE_TIME}.make_now).out + "%N")
 				end
 			end
+print ("f " + (create {DATE_TIME}.make_now).out + "%N")
 		end
 
 	configure_server_startup is
@@ -116,5 +125,56 @@ feature {NONE} -- Implementation
 				pnums.forth
 			end
 		end
+
+	server_report (portnumber: INTEGER): STRING is
+			-- A server process's report back on its startup status
+		local
+			socket: NETWORK_STREAM_SOCKET
+			poller: MEDIUM_POLLER
+			read_cmd: SERVER_REPORT_READER
+			failed: BOOLEAN
+		do
+print ("1 " + (create {DATE_TIME}.make_now).out + "%N")
+			if not failed then
+				create socket.make_server_by_port (portnumber)
+				if socket.socket_ok then
+					create poller.make
+					create read_cmd.make (socket)
+					poller.put_read_command (read_cmd)
+	print ("6 " + (create {DATE_TIME}.make_now).out + "%N")
+					poller.execute (15, Server_response_wait_interval)
+	print ("7 " + (create {DATE_TIME}.make_now).out + "%N")
+					Result := read_cmd.response
+				else
+					Result := Connection_failed + ":%N" + socket.error
+	print ("8 " + (create {DATE_TIME}.make_now).out + "%N")
+				end
+				if not socket.is_closed then
+					socket.close
+				end
+			else
+				Result := Connection_failed
+				if socket /= Void and not socket.socket_ok then
+					Result := Result + ":%N" + socket.error
+				end
+			end
+print ("10 " + (create {DATE_TIME}.make_now).out + "%N")
+		ensure
+			result_exists: Result /= Void
+		rescue
+			if not socket.is_closed then
+				socket.close
+print ("11 " + (create {DATE_TIME}.make_now).out + "%N")
+			end
+print ("12 " + (create {DATE_TIME}.make_now).out + "%N")
+			failed := True
+			retry
+		end
+
+	Connection_failed: STRING is "Connection to MAS server failed."
+
+	Server_response_wait_interval: INTEGER is 2
+			-- Length of time in milliseconds to wait for a response
+			-- from the server when it starts up
 
 end

@@ -7,9 +7,14 @@ indexing
 	licensing: "Copyright 2003: Jim Cochrane - %
 		%License to be determined"
 
-class MCT_CONFIGURATION_PROPERTIES inherit
+deferred class MCT_CONFIGURATION_PROPERTIES inherit
 
 	CONFIGURATION_CONSTANTS
+		export
+			{NONE} all
+		end
+
+	REPORT_BACK_PROTOCOL
 		export
 			{NONE} all
 		end
@@ -17,6 +22,8 @@ class MCT_CONFIGURATION_PROPERTIES inherit
 feature -- Access
 
 	Valid_port_numbers_specifier: STRING is "valid_portnumbers"
+
+	Server_report_port_number_specifier: STRING is "server_report_port_number"
 
 	Hostname_specifier: STRING is "hostname"
 
@@ -60,6 +67,14 @@ feature -- Access
 	Default_mark: STRING is "default"
 
 	Mct_dir_env_var: STRING is "MCT_DIR"
+
+feature {NONE} -- Implementation - Hook routines
+
+	process_host_name: STRING is
+			-- The name of the local host for this process
+		do
+			Result := (create {HOST_ADDRESS}.make).local_host_name
+		end
 
 feature -- Utilities
 
