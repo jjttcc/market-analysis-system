@@ -52,16 +52,18 @@ feature -- Basic operations
 			else
 				put_ok
 				ilist := tradable.indicators
-				from
-					ilist.start
-				until
-					ilist.islast
-				loop
-					put (ilist.item.name)
-					put (Output_record_separator)
-					ilist.forth
+				if not ilist.empty then
+					from
+						ilist.start
+					until
+						ilist.islast
+					loop
+						put (ilist.item.name)
+						put (Output_record_separator)
+						ilist.forth
+					end
+					put (ilist.last.name)
 				end
-				put (ilist.last.name)
 				put (eom)
 			end
 		end
