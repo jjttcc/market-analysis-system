@@ -86,15 +86,16 @@ cluster
 
 	database (server):		"$/database"
 
-	database_odbc (server):		"$/database/odbc"
-
 	database_ecli (server):		"$/database/ecli"
 
 	database_stub (server):		"$/database/stub"
 
 	external_components (server):		"$/external"
 
-	protocols (server):		"$/protocols"
+	client_server:		"$MAS/src/client_server"
+
+	protocols (client_server):		"$/protocols"
+
 
 	tradable_list (server):		"$/tradable_list"
 
