@@ -7,7 +7,6 @@ indexing
 		%Released under the Eiffel Forum License; see file forum.txt"
 
 class MAS_PRODUCT_INFO inherit
---!!!Remember to rename this file to correspond to the new class name.
 
 	PRODUCT_INFO
 
