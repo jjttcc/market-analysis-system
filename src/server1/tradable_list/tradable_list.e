@@ -95,13 +95,15 @@ feature -- Access
 			good_if_no_error: not fatal_error implies Result /= Void
 		end
 
-	symbols: LIST [STRING] is
+	symbols: ARRAYED_LIST [STRING] is
 			-- The symbol of each tradable
+			-- Note: a new copy will be created each time this feature is
+			-- called.
 		local
-			snames: LINEAR[STRING]
+			snames: LINEAR [STRING]
 		do
 			snames := symbol_list
-			create {LINKED_LIST[STRING]} Result.make
+			create Result.make (0)
 			from snames.start until snames.exhausted loop
 				Result.extend(snames.item)
 				snames.forth
