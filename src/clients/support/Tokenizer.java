@@ -16,7 +16,6 @@ public class Tokenizer {
 		assert r != null && r.ready(): "Precondition";
 		reader = r;
 		description_ = desc;
-System.out.println("Tokenizer() returning");
 		assert desc == null || description().equals(desc): "Postcondition";
 	}
 
@@ -27,7 +26,6 @@ System.out.println("Tokenizer() returning");
 	public void tokenize(String field_separators) throws IOException {
 		tokens = new StringTokenizer(contents(), field_separators);
 		item_ = tokens.nextToken();
-System.out.println("Tokenizer.tokenize returning");
 	}
 
 // Access
@@ -43,13 +41,11 @@ System.out.println("Tokenizer.tokenize returning");
 
 	/** The current tokenized item */
 	public String item() {
-System.out.println("Tokenizer.item called");
 		return item_;
 	}
 
 	/** Advance to the next tokenized item. */
 	public void forth() {
-System.out.println("Tokenizer.forth called");
 		if (tokens.hasMoreTokens()) {
 			item_ = tokens.nextToken();
 		} else {
@@ -60,17 +56,14 @@ System.out.println("Tokenizer.forth called");
 
 	/** Are there no more tokenized items? */
 	public boolean exhausted() {
-System.out.println("Tokenizer.exhausted called");
 		return exhausted_;
 	}
 
 	/** Contents of the file */
 	public String contents() throws IOException {
-System.out.println("Tokenizer.contents called");
 		if (contents_ == null) {
 			contents_ = Utilities.input_string(reader);
 		}
-System.out.println("Tokenizer.contents - size: " + contents_.length());
 		return contents_;
 	}
 

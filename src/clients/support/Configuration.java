@@ -193,18 +193,14 @@ public class Configuration implements NetworkProtocol {
 
 	private void load_settings(Tokenizer input) {
 		String s;
-System.out.println("load_settings: A");
 		if (input == null) {
-System.out.println("load_settings: B");
 			// No input source - use default settings.
 			DateSetting ds = new DateSetting("1998/05/01",
 				daily_period_type);
 			start_date_settings.addElement(ds);
 			ds = new DateSetting("now", daily_period_type);
 			end_date_settings.addElement(ds);
-System.out.println("load_settings: C");
 		} else {
-System.out.println("load_settings: D");
 			try {
 				input.tokenize("\n");
 			} catch (IOException e) {
@@ -212,7 +208,6 @@ System.out.println("load_settings: D");
 					"reading " + input.description() + ": " + e);
 				terminate(-1);
 			}
-System.out.println("load_settings: E");
 			while (! input.exhausted()) {
 				StringTokenizer t =
 					new StringTokenizer(input.item(), "\t");
@@ -240,7 +235,6 @@ System.out.println("load_settings: E");
 				input.forth();
 			}
 		}
-System.out.println("load_settings: F");
 	}
 
 	private void add_indicator_line(String line_type, StringTokenizer t) {

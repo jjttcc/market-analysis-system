@@ -19,7 +19,7 @@ public class MAS_Applet extends Applet {
 
 	public void init() {
 		log("init: Starting ...");
-		log("Compiled at Tue Feb 18 15:27:12 MST 2003");
+		log("Compiled at Tue Feb 18 15:43:59 MST 2003");
 		try {
 			log("init: A");
 			initialize_configuration();
@@ -83,17 +83,14 @@ public class MAS_Applet extends Applet {
 
 	private void initialize_configuration() {
 		initialization_succeeded = false;
-System.out.println("initialize_configuration called");
 		try {
 			Configuration.set_input_source(new Tokenizer(new StringReader(
 				SelfContainedConfiguration.contents()),
 				"configuration settings"));
 			Configuration.set_ignore_termination(true);
 			initialization_succeeded = true;
-System.out.println("initialize_configuration succeeded");
 		} catch (IOException e) {
 			report_error("Initialization failed: " + e);
-System.out.println("initialize_configuration failed");
 		}
 	}
 
