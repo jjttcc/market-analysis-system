@@ -216,7 +216,7 @@ year/month/day format of the date in the input data.  For example:
 %par
 *^fontIdate-format=yyyy#mm#dd*^fontP specifies the order: year, month, day.
 %par
-*^fontIdate-format=dd#mm#yyyy*^fontP specifies the order: day, month, year.
+*^fontIdate-format=mm#dd#yyyy*^fontP specifies the order: month, day, year.
 %par
 *^fontIdate-format=dd#mm#yy*^fontP specifies the order: day, month, year,
 with a two-digit year.
