@@ -49,45 +49,22 @@ feature -- Access
 				TRADABLE [BASIC_MARKET_TUPLE] is
 		local
 			l: TRADABLE_LIST
+			t: TRADABLE [BASIC_MARKET_TUPLE]
 		do
+			last_tradable := Void
 			error_occurred := false
 			l := list_for (period_type)
 			if l /= Void then
 				if l.symbols.has (symbol) then
 					l.search_by_symbol (symbol)
 					if not l.fatal_error then
-						if l.item.valid_period_type (period_type) then
-							Result := l.item
+						t := l.item
+						if t.valid_period_type (period_type) then
+							Result := t
+							last_tradable := t
 						end
 					end
 					if l.fatal_error then
-						error_occurred := true
-						last_error := concatenation (<<
-							"Error occurred retrieving data for ", symbol>>)
-					end
-				else
-					error_occurred := true
-					last_error := concatenation (<<
-						"Symbol ", symbol, " not found">>)
-				end
-			end
-		end
-
-	tuple_list (symbol: STRING; period_type: TIME_PERIOD_TYPE):
-				SIMPLE_FUNCTION [BASIC_MARKET_TUPLE] is
-		local
-			l: TRADABLE_LIST
-			t: TRADABLE [BASIC_MARKET_TUPLE]
-		do
-			error_occurred := false
-			l := list_for (period_type)
-			if l /= Void then
-				if l.symbols.has (symbol) then
-					l.search_by_symbol (symbol)
-					t := l.item
-					if not l.fatal_error then
-						Result := t.tuple_list (period_type.name)
-					else
 						error_occurred := true
 						last_error := concatenation (<<
 							"Error occurred retrieving data for ", symbol>>)
