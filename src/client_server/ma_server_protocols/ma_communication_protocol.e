@@ -18,6 +18,9 @@ feature -- String constants
 	Eom: STRING is ""
 			-- End of message specifier
 
+	Eot: STRING is ""
+			-- End of transmission specifier - for command-line clients
+
 	Input_field_separator: STRING is "%T"
 			-- Field separator for input received by the server
 
