@@ -109,6 +109,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 						System.exit(-1);
 					}
 					GUI_Utilities.busy_cursor(false, this);
+				} else {
+					abort("Server's list of tradables is empty.", null);
 				}
 			}
 		}
@@ -524,6 +526,11 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	/** Quit gracefully, sending a logout request for each open window. */
 	protected void quit(int status) {
 		save_settings();
+		log_out_and_exit(status);
+	}
+
+	/** Log out of all sessions and exit. */
+	protected void log_out_and_exit(int status) {
 		// Log out the corresponding session for all but one window.
 		for (int i = 0; i < window_count - 1; ++i) {
 			data_builder.logout(false, 0);
@@ -532,16 +539,32 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		data_builder.logout(true, status);
 	}
 
-	// Print fatal error and exit.
+	// Print fatal error and exit after saving settings.
 	protected void fatal(String s, Exception e) {
-		System.err.println("Fatal error: request to server failed - " + s);
-		System.err.println("Current symbol is " + current_market);
+		System.err.println("Fatal error: " + s);
+		if (current_market != null) {
+			System.err.println("Current symbol is " + current_market);
+		}
 		if (e != null) {
 			System.err.println("(" + e + ")");
 			e.printStackTrace();
 		}
 		System.err.println("Exiting ...");
 		quit(-1);
+	}
+
+	// Same as `fatal' except `save_settings' is not called.
+	protected void abort(String s, Exception e) {
+		System.err.println("Fatal error: " + s);
+		if (current_market != null) {
+			System.err.println("Current symbol is " + current_market);
+		}
+		if (e != null) {
+			System.err.println("(" + e + ")");
+			e.printStackTrace();
+		}
+		System.err.println("Exiting ...");
+		log_out_and_exit(-1);
 	}
 
 	// Link `d' with the appropriate indicator group, using `indicator_name'
