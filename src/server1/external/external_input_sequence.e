@@ -31,12 +31,13 @@ feature {NONE} -- Initialization
 
 	make is
 		do
-			initialize_external_input_routines
+			external_handle := initialize_external_input_routines
 			create field.make (0)
 			initialize_symbols
 		ensure
 			field_set: not error_occurred implies field /= Void
 			symbols_set: not error_occurred implies symbols /= Void
+			handle_set: external_handle /= Void
 		end
 
 feature -- Access
@@ -59,7 +60,7 @@ feature -- Access
 
 	field_count: INTEGER is
 		do
-			Result := field_count_implementation
+			Result := field_count_implementation (external_handle)
 		end
 
 	symbol: STRING
@@ -70,8 +71,8 @@ feature -- Access
 
 	intraday_data_available: BOOLEAN is
 			-- Is a source of intraday data available?
-		external
-			"C"
+		do
+			Result := intraday_data_available_implementation (external_handle)
 		end
 
 feature -- Status report
@@ -80,18 +81,18 @@ feature -- Status report
 
 	is_open: BOOLEAN is
 			-- Is the input sequence open for use?
-		external
-			"C"
+		do
+			Result := is_open_implementation (external_handle)
 		end
 
 	readable: BOOLEAN is
 		do
-			Result := readable_implementation
+			Result := readable_implementation (external_handle)
 		end
 
 	after_last_record: BOOLEAN is
 		do
-			Result := after_last_record_implementation
+			Result := after_last_record_implementation (external_handle)
 		end
 
 	intraday: BOOLEAN
@@ -99,15 +100,6 @@ feature -- Status report
 			-- data?
 
 feature -- Status setting
-
-	close_input is
-		require
-			open: is_open
-		do
-			--!!!This feature is probably not needed.
-		ensure
-			closed: not is_open
-		end
 
 	set_symbol (arg: STRING) is
 			-- Set symbol to `arg'.
@@ -138,20 +130,20 @@ feature -- Cursor movement
 
 	start is
 		do
-			start_implementation (symbol, intraday)
+			start_implementation (external_handle, symbol, intraday)
 			field_index := 1
 			record_index := 1
 		end
 
 	advance_to_next_field is
 		do
-			advance_to_next_field_implementation
+			advance_to_next_field_implementation (external_handle)
 			field_index := field_index + 1
 		end
 
 	advance_to_next_record is
 		do
-			advance_to_next_record_implementation
+			advance_to_next_record_implementation (external_handle)
 			record_index := record_index + 1
 			field_index := 1
 		end
@@ -173,9 +165,10 @@ feature -- Input
 					error_occurred := true
 					last_error_fatal := true
 					error_string := "Error in reading integer value"
-					if external_error then
+					if external_error (external_handle) then
 						error_string := concatenation (<<error_string, ": ",
-							string_from_pointer (last_external_error)>>)
+							string_from_pointer (
+								last_external_error(external_handle))>>)
 					end
 				end
 			end
@@ -185,7 +178,7 @@ feature -- Input
 			-- Read the current character in the current field and advance
 			-- to the next character.
 		do
-			last_character := current_character
+			last_character := current_character (external_handle)
 			-- !!!Error handling?
 		end
 
@@ -244,14 +237,15 @@ feature {NONE} -- Implementation
 
 	dispose is
 		do
-			external_dispose
+			external_dispose (external_handle)
 			Precursor
 		end
 
 	current_field_as_string: STRING is
 			-- A string created from `current_field'
 		do
-			field.from_c_substring (current_field, 1, current_field_length)
+			field.from_c_substring (current_field (external_handle), 1,
+				current_field_length (external_handle))
 			Result := field
 		end
 
@@ -260,21 +254,19 @@ feature {NONE} -- Implementation
 			i: INTEGER
 			su: STRING_UTILITIES
 		do
-			make_available_symbols
-			if external_error then
+			make_available_symbols (external_handle)
+			if external_error (external_handle) then
 				error_occurred := true
 				error_string := concatenation (<<"Error occurred obtaining %
 					%symbol list: ",
-					string_from_pointer (last_external_error)>>)
+					string_from_pointer (
+						last_external_error(external_handle))>>)
 			else
-				create su.make (string_from_pointer (available_symbols))
+				create su.make (string_from_pointer (
+					available_symbols (external_handle)))
 				symbols := su.tokens ("%N")
 			end
 		end
-
-	field: STRING
-
-feature {NONE} -- Implementation - externals
 
 	string_from_pointer (p: POINTER): STRING is
 		do
@@ -282,19 +274,33 @@ feature {NONE} -- Implementation - externals
 			Result.from_c (p)
 		end
 
-	current_field: POINTER is
+	field: STRING
+
+	external_handle: POINTER
+			-- Handle for external input sequence data used by external
+			-- routines
+
+feature {NONE} -- Implementation - externals
+
+	is_open_implementation (handle: POINTER): BOOLEAN is
+			-- Is the input sequence open for use?
+		external
+			"C"
+		end
+
+	current_field (handle: POINTER): POINTER is
 			-- Current field value as a non-null-terminated C string
 		external
 			"C"
 		end
 
-	current_field_length: INTEGER is
+	current_field_length (handle: POINTER): INTEGER is
 			-- Length of `current_field'
 		external
 			"C"
 		end
 
-	current_character: CHARACTER is
+	current_character (handle: POINTER): CHARACTER is
 			-- The character at the current "cursor" location - the "cursor"
 			-- is advanced to the next character.
 		require
@@ -303,67 +309,67 @@ feature {NONE} -- Implementation - externals
 			"C"
 		end
 
-	advance_to_next_field_implementation is
+	advance_to_next_field_implementation (handle: POINTER) is
 		external
 			"C"
 		end
 
-	advance_to_next_record_implementation is
+	advance_to_next_record_implementation (handle: POINTER) is
 		external
 			"C"
 		end
 
-	field_count_implementation: INTEGER is
+	field_count_implementation (handle: POINTER): INTEGER is
 		external
 			"C"
 		end
 
-	readable_implementation: BOOLEAN is
+	readable_implementation (handle: POINTER): BOOLEAN is
 		external
 			"C"
 		end
 
-	after_last_record_implementation: BOOLEAN is
+	after_last_record_implementation (handle: POINTER): BOOLEAN is
 		external
 			"C"
 		end
 
-	start_implementation (sym: STRING; intrad: BOOLEAN) is
+	start_implementation (handle: POINTER; sym: STRING; intrad: BOOLEAN) is
 		external
 			"C"
 		end
 
-	make_available_symbols is
+	make_available_symbols (handle: POINTER) is
 			-- Create `available_symbols'.
 		external
 			"C"
 		end
 
-	available_symbols: POINTER is
+	available_symbols (handle: POINTER): POINTER is
 			-- All available symbols, separated by newlines
 		external
 			"C"
 		end
 
-	initialize_external_input_routines is
+	initialize_external_input_routines: POINTER is
 			-- Perform any needed initialization by the external routines
 		external
 			"C"
 		end
 
-	external_error: BOOLEAN is
+	external_error (handle: POINTER): BOOLEAN is
 			-- Did an error occur in the last external "C" call?
 		external
 			"C"
 		end
 
-	last_external_error: POINTER is
+	last_external_error (handle: POINTER): POINTER is
 			-- The last error that occurred in an external "C" call
 		external
 			"C"
 		end
 
-	external_dispose is
+	external_dispose (handle: POINTER) is
 			-- Perform any needed cleanup operations for garbage collection.
 		require
 			open: is_open
@@ -371,6 +377,12 @@ feature {NONE} -- Implementation - externals
 			"C"
 		ensure
 			closed: not is_open
+		end
+
+	intraday_data_available_implementation (handle: POINTER): BOOLEAN is
+			-- Is a source of intraday data available?
+		external
+			"C"
 		end
 
 invariant

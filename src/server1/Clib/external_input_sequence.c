@@ -7,93 +7,116 @@
 		%Released under the Eiffel Forum License; see file forum.txt"
 **/
 
+#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
+#include <eif_cecil.h>
 #include "external_input_sequence_plug_in_module.h"
 
-char* buffer = 0;
-int buffersize = 0;
-int current_index = 0;
-int current_field_length_value = 0;
-char field_separator = ',';	/* May be made configurable later */
+struct input_sequence_handle {
+	char* buffer;
+	char* symbols;
+	int buffersize;
+	int current_index;
+	int current_field_length_value;
+	char field_separator;
+	struct input_sequence_plug_in* plug_in_handle;
+	int error_occurred;
+	char* error_msg;
+};
+
 const char record_separator = '\n';
-struct input_sequence_plug_in* input_sequence_handle;
-int error_occurred = 0;
-char* error_msg = "";
 
 static char* fs_char_table = 0;
 
 static char fs_char_table_contents[256];
 
-void initialize_external_input_routines() {
-	if (input_sequence_handle == 0) {
-		input_sequence_handle = new_input_sequence_plug_in_handle();
+//struct input_sequence_plug_in* initialize_external_input_routines() {
+struct input_sequence_handle* initialize_external_input_routines() {
+	struct input_sequence_handle* result;
+	result = malloc(sizeof(struct input_sequence_handle));
+	if (result != 0) {
+		result->plug_in_handle = new_input_sequence_plug_in_handle();
+		result->buffer = 0;
+		result->symbols = 0;
+		result->buffersize = 0;
+		result->current_index = 0;
+		result->current_field_length_value = 0;
+		result->field_separator = ',';	/* May be made configurable later */
+		result->error_occurred = 0;
+		result->error_msg = "";
 	}
+	return result;
 }
 
-int is_open() {
-	return buffer != 0;
+int is_open_implementation(struct input_sequence_handle* handle) {
+	return handle->buffer != 0;
 }
 
-void external_dispose() {
+void external_dispose(struct input_sequence_handle* handle) {
 printf("starting external_dispose\n");
-	close_handle(input_sequence_handle);
-	buffer = 0;
-	buffersize = 0;
+	close_handle(handle->plug_in_handle);
+	free(handle->buffer);
+	free(handle->symbols);
+	free(handle);
 printf("ending external_dispose\n");
 }
 
-int current_field_length() {
-	return current_field_length_value;
+int current_field_length(struct input_sequence_handle* handle) {
+	return handle->current_field_length_value;
 }
 
-char* current_field() {
+char* current_field(struct input_sequence_handle* handle) {
 	int i;
-	current_field_length_value = 0;
-	for (i = current_index; i < buffersize && buffer[i] != field_separator &&
-			buffer[i] != record_separator; ++i) {
+	handle->current_field_length_value = 0;
+	for (i = handle->current_index; i < handle->buffersize &&
+			handle->buffer[i] != handle->field_separator &&
+			handle->buffer[i] != record_separator; ++i) {
 
-		++current_field_length_value;
+		++handle->current_field_length_value;
 	}
-	return &buffer[current_index];
+	return &handle->buffer[handle->current_index];
 }
 
-char current_character() {
-	return buffer[current_index++];
+char current_character(struct input_sequence_handle* handle) {
+	return handle->buffer[handle->current_index++];
 }
 
-void advance_to_next_field_implementation() {
-	while (buffer[current_index] != field_separator &&
-			buffer[current_index] != record_separator &&
-			current_index < buffersize) {
-		++current_index;
+void advance_to_next_field_implementation(
+		struct input_sequence_handle* handle) {
+	while (handle->buffer[handle->current_index] != handle->field_separator &&
+			handle->buffer[handle->current_index] != record_separator &&
+			handle->current_index < handle->buffersize) {
+		++handle->current_index;
 	}
-	if (current_index < buffersize &&
-			buffer[current_index] == field_separator) {
-		++current_index;
-	}
-}
-
-void advance_to_next_record_implementation() {
-	while (buffer[current_index] != record_separator &&
-			current_index < buffersize) {
-		++current_index;
-	}
-	if (current_index < buffersize &&
-			buffer[current_index] == record_separator) {
-		++current_index;
+	if (handle->current_index < handle->buffersize &&
+			handle->buffer[handle->current_index] == handle->field_separator) {
+		++handle->current_index;
 	}
 }
 
-int field_count_implementation() {
+void advance_to_next_record_implementation(
+		struct input_sequence_handle* handle) {
+	while (handle->buffer[handle->current_index] != record_separator &&
+			handle->current_index < handle->buffersize) {
+		++handle->current_index;
+	}
+	if (handle->current_index < handle->buffersize &&
+			handle->buffer[handle->current_index] == record_separator) {
+		++handle->current_index;
+	}
+}
+
+int field_count_implementation(struct input_sequence_handle* handle) {
 	int result = 0;
-	if (buffer != 0 && buffersize > 0) {
+	if (handle->buffer != 0 && handle->buffersize > 0) {
 		int i;
 		result = 1;
-		for (i = 0; i < buffersize; ++i) {
-			if (buffer[i] = field_separator) {
+		for (i = 0; i < handle->buffersize; ++i) {
+			if (handle->buffer[i] == handle->field_separator) {
 				++result;
 			}
-			if (buffer[i] = record_separator) {
+			if (handle->buffer[i] == record_separator) {
 				break;
 			}
 		}
@@ -102,23 +125,25 @@ int field_count_implementation() {
 	return result;
 }
 
-int readable_implementation() {
-	return is_open() && ! after_last_record_implementation();
-}
-
-int after_last_record_implementation() {
+int after_last_record_implementation(struct input_sequence_handle* handle) {
 /**!!!printf("after_last_record_implementation - ci, bufsz: %d, %d\n",
-current_index, buffersize);*/
-	return current_index == buffersize;
+handle->current_index, handle->buffersize);*/
+	return handle->current_index == handle->buffersize;
 }
 
-static void set_field_separator() {
-	field_separator = ',';
-	if (buffer != 0 && buffersize > 0) {
+int readable_implementation(struct input_sequence_handle* handle) {
+	return is_open_implementation(handle) &&
+		! after_last_record_implementation(handle);
+}
+
+static void set_field_separator(struct input_sequence_handle* handle) {
+	handle->field_separator = ',';
+	if (handle->buffer != 0 && handle->buffersize > 0) {
 		int i;
-		for (i = 0; i < buffersize && buffer[i] != record_separator; ++i) {
-			if (fs_char_table[buffer[i]]) {
-				field_separator = buffer[i];
+		for (i = 0; i < handle->buffersize &&
+				handle->buffer[i] != record_separator; ++i) {
+			if (fs_char_table[(int) handle->buffer[i]]) {
+				handle->field_separator = handle->buffer[i];
 				break;
 			}
 		}
@@ -140,65 +165,60 @@ void initialize_fs_char_table() {
 	 * of fschars to true - all other members have been initialized
 	 * to false. */
 	for (i = 0; i < fscount; ++i) {
-		fs_char_table_contents[fschars[i]] = 1;
+		fs_char_table_contents[(int) fschars[i]] = 1;
 	}
 	fs_char_table = fs_char_table_contents;
 }
 
-void start_implementation(char* symbol, int is_intraday) {
-	if (input_sequence_handle == 0) {
-		input_sequence_handle = new_input_sequence_plug_in_handle();
-	}
+void start_implementation(struct input_sequence_handle* handle,
+		char* symbol, int is_intraday) {
+	handle->error_occurred = 1;
 	if (fs_char_table == 0) {
 		initialize_fs_char_table();
 	}
+	free(handle->buffer);
 	/**!!!Probably need to check for input_sequence_plug_in being 0 and,
 	 * if so, set error status. */
-	buffer = tradable_data(input_sequence_handle, symbol,
-		is_intraday, &buffersize);
-	if (buffer == 0) {
-		error_occurred = 1;
-		error_msg = last_error(input_sequence_handle);
+	handle->buffer = tradable_data(handle->plug_in_handle, symbol,
+		is_intraday, &handle->buffersize);
+	if (handle->buffer == 0) {
+		handle->error_occurred = 1;
+		handle->error_msg = last_error(handle->plug_in_handle);
 	}
-	current_index = 0;
-	set_field_separator();
-printf("start_imp - bufsz: %d\n", buffersize);
+	handle->current_index = 0;
+	set_field_separator(handle);
+printf("start_imp - bufsz: %d\n", handle->buffersize);
 }
 
-char* available_symbols_buffer;
-
-char* available_symbols() {
-	return available_symbols_buffer;
+char* available_symbols(struct input_sequence_handle* handle) {
+	return handle->symbols;
 }
 
-int symbol_count_value;
-
-int symbol_count() {
-	return symbol_count_value;
+int external_error(struct input_sequence_handle* handle) {
+	return handle->error_occurred;
 }
 
-int external_error() {
-	return error_occurred;
+char* last_external_error(struct input_sequence_handle* handle) {
+printf("ler returning %s\n", handle->error_msg);
+	return handle->error_msg;
 }
 
-char* last_external_error() {
-printf("ler returning %s\n", error_msg);
-	return error_msg;
-}
-
-void make_available_symbols() {
+void make_available_symbols(struct input_sequence_handle* handle) {
 printf("starting make_av symb\n");
-	error_occurred = 0;
+	handle->error_occurred = 0;
 printf("A\n");
-	available_symbols_buffer = symbol_list(input_sequence_handle);
+	if (handle->symbols == 0) {
+		handle->symbols = symbol_list(handle->plug_in_handle);
 printf("B\n");
-	if (available_symbols_buffer == 0) {
-		error_occurred = 1;
-		error_msg = last_error(input_sequence_handle);
+	}
+	if (handle->symbols == 0) {
+		handle->error_occurred = 1;
+		handle->error_msg = last_error(handle->plug_in_handle);
 	}
 }
 
-int intraday_data_available() {
+int intraday_data_available_implementation(
+		struct input_sequence_handle* handle) {
 /**!!!Stub */
 	return 0;
 }
