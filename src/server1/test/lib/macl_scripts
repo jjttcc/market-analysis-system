@@ -1,0 +1,33 @@
+# macl input file to create EMA of open interest and EMA of volume
+# Use this file to recreate these indicators for testing when changes
+# have made the indicators_persist file out of date.
+e
+c
+EXPONENTIAL_MOVING_AVERAGE
+c
+# Name:
+EMA of Open interest
+No Input Function
+y
+OPEN_INTEREST
+c
+MA_EXPONENTIAL
+c
+1
+13
+c
+EXPONENTIAL_MOVING_AVERAGE
+c
+# Name:
+EMA of Volume
+No Input Function
+y
+VOLUME
+c
+MA_EXPONENTIAL
+c
+1
+5
+s
+-
+x
