@@ -27,8 +27,7 @@ def send_mail(msg, args):
 	if subject != "":
 		mailcmd = \
 			mailer + " " + subject_flag + " '" + subject + "' " + otherargs
-	sysresult = 0
-	#sysresult = os.system("echo '" + contents(msg) + "'|" + mailcmd)
+	sysresult = os.system("echo '" + contents(msg) + "'|" + mailcmd)
 	if sysresult != 0:
 		print "Mail command with subject " + subject + " failed."
 	return subject
