@@ -14,19 +14,21 @@ creation
 
 feature -- Initialization
 
-	make (field_sep, date_field_sep, record_sep: STRING) is
+	make (field_sep, date_field_sep, time_field_sep, record_sep: STRING) is
 		require
 			not_void: field_sep /= Void and date_field_sep /= Void and
-				record_sep /= Void
+				time_field_sep /= Void and record_sep /= Void
 		do
 			field_separator := field_sep
 			date_field_separator := date_field_sep
+			time_field_separator := time_field_sep
 			record_separator := record_sep
 			output_medium := io.default_output
 		ensure
 			fields_set: 
 				field_separator = field_sep and date_field_separator =
 				date_field_sep and record_separator = record_sep and
+				time_field_separator = time_field_sep and
 				output_medium = io.default_output
 		end
 
@@ -40,6 +42,9 @@ feature -- Access
 
 	date_field_separator: STRING
 			-- Field separator used for output between date fields
+
+	time_field_separator: STRING
+			-- Field separator used for output between time fields
 
 feature -- Status setting
 
@@ -106,6 +111,15 @@ feature -- Basic operations
 
 	execute (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
 			-- Output each tuple in `l' to `output_medium'.
+		do
+			if not l.empty and l.first.is_intraday then
+				print_tuples_with_time (l)
+			else
+				print_tuples (l)
+			end
+		end
+
+	print_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
 		local
 			first, last, i: INTEGER
 		do
@@ -124,6 +138,25 @@ feature -- Basic operations
 			end
 		end
 
+	print_tuples_with_time (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
+		local
+			first, last, i: INTEGER
+		do
+			first := first_index (l)
+			last := last_index (l)
+			if last >= first then
+				from
+					i := first
+				until
+					i = last + 1
+				loop
+					print_fields_with_time (l @ i)
+					output_medium.put_string (record_separator)
+					i := i + 1
+				end
+			end
+		end
+
 feature -- Status report
 
 	arg_mandatory: BOOLEAN is True
@@ -133,6 +166,15 @@ feature {NONE} -- Implementation
 	print_fields (t: MARKET_TUPLE) is
 		do
 			print_date (t.end_date, 'y', 'm', 'd')
+			output_medium.put_string (field_separator)
+			output_medium.put_string (t.value.out)
+		end
+
+	print_fields_with_time (t: MARKET_TUPLE) is
+		do
+			print_date (t.end_date, 'y', 'm', 'd')
+			output_medium.put_string (field_separator)
+			print_time (t.date_time.time, 'h', 'm', 's')
 			output_medium.put_string (field_separator)
 			output_medium.put_string (t.value.out)
 		end
@@ -181,6 +223,53 @@ feature {NONE} -- Implementation
 			output_medium.put_string (date_field_separator)
 			output_medium.put_string (fmtr.formatted (i2))
 			output_medium.put_string (date_field_separator)
+			output_medium.put_string (fmtr.formatted (i3))
+		end
+
+	print_time (time: TIME; f1, f2, f3: CHARACTER) is
+			-- Print `time', using f1, f2, and f3 to specify the order
+			-- of the hour, minute, and second fields.
+		require
+			fields_y_m_or_d:
+				(f1 = 'h' or f1 = 'm' or f1 = 's') and
+				(f2 = 'h' or f2 = 'm' or f2 = 's') and
+				(f3 = 'h' or f3 = 'm' or f3 = 's')
+			fields_unique: f1 /= f2 and f2 /= f3 and f3 /= f1
+			not_void: time /= Void
+		local
+			fmtr: FORMAT_INTEGER
+			i1, i2, i3: INTEGER
+		do
+			create fmtr.make (2)
+			fmtr.set_fill ('0')
+			if f1 = 'h' then
+				i1 := time.hour
+			elseif f1 = 'm' then
+				i1 := time.minute
+			else
+				check f1 = 's' end
+				i1 := time.second
+			end
+			if f2 = 'h' then
+				i2 := time.hour
+			elseif f2 = 'm' then
+				i2 := time.minute
+			else
+				check f2 = 's' end
+				i2 := time.second
+			end
+			if f3 = 'h' then
+				i3 := time.hour
+			elseif f3 = 'm' then
+				i3 := time.minute
+			else
+				check f3 = 's' end
+				i3 := time.second
+			end
+			output_medium.put_string (fmtr.formatted (i1))
+			output_medium.put_string (time_field_separator)
+			output_medium.put_string (fmtr.formatted (i2))
+			output_medium.put_string (time_field_separator)
 			output_medium.put_string (fmtr.formatted (i3))
 		end
 

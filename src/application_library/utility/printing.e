@@ -34,6 +34,11 @@ feature -- Access
 		deferred
 		end
 
+	output_time_field_separator: STRING is
+			-- Field separator used for output between time fields
+		deferred
+		end
+
 feature -- Basic operations
 
 	print_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
@@ -139,13 +144,17 @@ feature {NONE} -- Implementation
 			create boit.make
 			create point.make
 			create mtprinter.make (output_field_separator,
-				output_date_field_separator, output_record_separator)
+				output_date_field_separator, output_time_field_separator,
+				output_record_separator)
 			create bmtprinter.make (output_field_separator,
-				output_date_field_separator, output_record_separator)
+				output_date_field_separator, output_time_field_separator,
+				output_record_separator)
 			create vtprinter.make (output_field_separator,
-				output_date_field_separator, output_record_separator)
+				output_date_field_separator, output_time_field_separator,
+				output_record_separator)
 			create oitprinter.make (output_field_separator,
-				output_date_field_separator, output_record_separator)
+				output_date_field_separator, output_time_field_separator,
+				output_record_separator)
 			create Result.make (5)
 			Result.extend (mtprinter, st.generator)
 			Result.extend (bmtprinter, bmt.generator)
