@@ -126,15 +126,19 @@ feature {NONE}
 		local
 			env: expanded APP_ENVIRONMENT
 			env_vars: expanded APP_ENVIRONMENT_VARIABLE_NAMES
+			d: DIRECTORY
 		do
 			if
-				env.app_directory /= Void and not env.app_directory.empty and
-				env.app_directory @ 1 /= env.directory_separator
+				env.app_directory /= Void and not env.app_directory.empty
 			then
-				config_error_description := concatenation (<<
-					env_vars.application_directory_name, " setting must ",
-					"be an absolute path name">>)
-				Result := true
+				create d.make (env.app_directory)
+				if not d.exists then
+					config_error_description := concatenation (<<
+						env_vars.application_directory_name, " setting ",
+						"specifies a directory that does not exist or that ",
+						"is not reachable from the current directory">>)
+					Result := true
+				end
 			end
 		end
 
