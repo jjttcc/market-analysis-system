@@ -15,11 +15,30 @@ deferred class MAS_DB_SERVICES inherit
 
 feature -- Access
 
-	symbols: LIST [STRING] is
-			-- All symbols available in the database
+
+	stock_symbols: LIST [STRING] is
+			-- All stock symbols available in the database
 		require
 			connected: connected
-		deferred
+		local
+			gs: expanded GLOBAL_SERVER
+		do
+			Result := list_from_query (
+				gs.database_configuration.stock_symbol_query)
+		ensure
+			not_void_if_no_error: not fatal_error implies Result /= Void
+			still_connected: connected
+		end
+
+	derivative_symbols: LIST [STRING] is
+			-- All derivative-instrument symbols available in the database
+		require
+			connected: connected
+		local
+			gs: expanded GLOBAL_SERVER
+		do
+			Result := list_from_query (
+				gs.database_configuration.derivative_symbol_query)
 		ensure
 			not_void_if_no_error: not fatal_error implies Result /= Void
 			still_connected: connected
@@ -31,8 +50,44 @@ feature -- Access
 		deferred
 		end
 
+	daily_data_for_symbol (s: STRING): DB_INPUT_SEQUENCE is
+			-- Daily data for symbol `s' - stock data if `s' is a stock
+			-- symbol (stock_symbols.has (s)), derivative data is `s' is
+			-- a derivative-instrument symbol (derivative_symbols.has (s)).
+		require
+			connected: connected
+		do
+			if is_stock_symbol (s) then
+				Result := daily_stock_data (s)
+			elseif is_derivative_symbol (s) then
+				Result := daily_derivative_data (s)
+			end
+		ensure
+			not_void_if_no_error: not fatal_error and (is_stock_symbol (s) or
+				is_derivative_symbol (s)) implies Result /= Void
+			still_connected: connected
+		end
+
+	intraday_data_for_symbol (s: STRING): DB_INPUT_SEQUENCE is
+			-- Intraday data for symbol `s' - stock data if `s' is a stock
+			-- symbol (stock_symbols.has (s)), derivative data is `s' is
+			-- a derivative-instrument symbol (derivative_symbols.has (s)).
+		require
+			connected: connected
+		do
+			if is_stock_symbol (s) then
+				Result := intraday_stock_data (s)
+			elseif is_derivative_symbol (s) then
+				Result := intraday_derivative_data (s)
+			end
+		ensure
+			not_void_if_no_error: not fatal_error and (is_stock_symbol (s) or
+				is_derivative_symbol (s)) implies Result /= Void
+			still_connected: connected
+		end
+
 	daily_stock_data (symbol: STRING): DB_INPUT_SEQUENCE is
-			-- Daily data for `symbol'
+			-- Daily stock data for `symbol'
 		require
 			connected: connected
 		deferred
@@ -42,7 +97,27 @@ feature -- Access
 		end
 
 	intraday_stock_data (symbol: STRING): DB_INPUT_SEQUENCE is
-			-- Intraday data for `symbol'
+			-- Intraday stock data for `symbol'
+		require
+			connected: connected
+		deferred
+		ensure
+			not_void_if_no_error: not fatal_error implies Result /= Void
+			still_connected: connected
+		end
+
+	daily_derivative_data (symbol: STRING): DB_INPUT_SEQUENCE is
+			-- Daily derivative data for `symbol'
+		require
+			connected: connected
+		deferred
+		ensure
+			not_void_if_no_error: not fatal_error implies Result /= Void
+			still_connected: connected
+		end
+
+	intraday_derivative_data (symbol: STRING): DB_INPUT_SEQUENCE is
+			-- Intraday derivative data for `symbol'
 		require
 			connected: connected
 		deferred
@@ -60,6 +135,26 @@ feature -- Access
 		do
 			fatal_error := false
 			query := stock_name_query (symbol)
+			if query /= Void then
+				Result := single_string_query_result (query)
+				if Result = Void and not fatal_error then
+					Result := ""
+				end
+			end
+		ensure
+			not_void_if_ok: (not fatal_error) = (Result /= Void)
+			still_connected: connected
+		end
+
+	derivative_name (symbol: STRING): STRING is
+			-- Name for derivative whose symbol is `symbol'
+		require
+			connected: connected
+		local
+			query: STRING
+		do
+			fatal_error := false
+			query := derivative_name_query (symbol)
 			if query /= Void then
 				Result := single_string_query_result (query)
 				if Result = Void and not fatal_error then
@@ -92,6 +187,54 @@ feature -- Access
 
 	last_error: STRING
 			-- Description of last error that occured
+
+	is_stock_symbol (s: STRING): BOOLEAN is
+			-- Is `s' a symbol for a stock?
+		local
+			symbols: LIST [STRING]
+		do
+			if stock_symbol_table = Void then
+				symbols := stock_symbols
+				if symbols /= Void then
+					create stock_symbol_table.make (symbols.count)
+					from
+						symbols.start
+					until
+						symbols.exhausted
+					loop
+						stock_symbol_table.force (Void, symbols.item)
+						symbols.forth
+					end
+				else
+					create stock_symbol_table.make (0)
+				end
+			end
+			Result := stock_symbol_table.has (s)
+		end
+
+	is_derivative_symbol (s: STRING): BOOLEAN is
+			-- Is `s' a symbol for a derivative instrument?
+		local
+			symbols: LIST [STRING]
+		do
+			if derivative_symbol_table = Void then
+				symbols := derivative_symbols
+				if symbols /= Void then
+					create derivative_symbol_table.make (symbols.count)
+					from
+						symbols.start
+					until
+						symbols.exhausted
+					loop
+						derivative_symbol_table.force (Void, symbols.item)
+						symbols.forth
+					end
+				else
+					create derivative_symbol_table.make (0)
+				end
+			end
+			Result := derivative_symbol_table.has (s)
+		end
 
 feature -- Status report
 
@@ -162,6 +305,47 @@ feature {NONE} -- Implementation
 				symbol, "'", db_info.intraday_stock_query_tail>>)
 		end
 
+	daily_derivative_query (symbol: STRING): STRING is
+			-- Query for daily derivative data
+		local
+			db_info: MAS_DB_INFO
+			global_server: expanded GLOBAL_SERVER
+		do
+			db_info := global_server.database_configuration
+			Result := concatenation (<<"select ",
+				db_info.daily_derivative_date_field_name, ", ",
+				open_string (db_info),
+					db_info.daily_derivative_high_field_name,
+				", ", db_info.daily_derivative_low_field_name, ", ",
+				db_info.daily_derivative_close_field_name,
+				", ", db_info.daily_derivative_volume_field_name, ", ",
+				db_info.daily_derivative_open_interest_field_name, " from ",
+				db_info.daily_derivative_table_name, " where ",
+				db_info.daily_derivative_symbol_field_name, " = '", symbol,
+				"' ", db_info.daily_derivative_query_tail>>)
+		end
+
+	intraday_derivative_query (symbol: STRING): STRING is
+			-- Query for intraday derivative data
+		local
+			db_info: MAS_DB_INFO
+			global_server: expanded GLOBAL_SERVER
+		do
+			db_info := global_server.database_configuration
+			Result := concatenation (<<"select ",
+				db_info.intraday_derivative_date_field_name, ", ",
+				db_info.intraday_derivative_time_field_name, ", ",
+				open_string (db_info),
+				db_info.intraday_derivative_high_field_name,
+				", ", db_info.intraday_derivative_low_field_name,
+				", ", db_info.intraday_derivative_close_field_name, ", ",
+				db_info.intraday_derivative_volume_field_name, ", ",
+				db_info.intraday_derivative_open_interest_field_name, " from ",
+				db_info.intraday_derivative_table_name, " where ",
+				db_info.intraday_derivative_symbol_field_name, " = '",
+				symbol, "'", db_info.intraday_derivative_query_tail>>)
+		end
+
 	stock_name_query (symbol: STRING): STRING is
 			-- Query for stock name from symbol - Void if the user-specified
 			-- query is invalid or non-existent.
@@ -176,6 +360,25 @@ feature {NONE} -- Implementation
 				fatal_error := true
 				last_error :=
 					"Missing stock name query in database configuration file"
+			end
+		ensure
+			not_void_if_ok: not fatal_error implies Result /= Void
+		end
+
+	derivative_name_query (symbol: STRING): STRING is
+			-- Query for derivative name from symbol - Void if the
+			-- user-specified query is invalid or non-existent.
+		local
+			global_server: expanded GLOBAL_SERVER
+			q: STRING
+		do
+			q := global_server.database_configuration.derivative_name_query
+			if not q.empty then
+				Result := inserted_symbol (q, symbol)
+			else
+				fatal_error := true
+				last_error := "Missing derivative name query in %
+					%database configuration file"
 			end
 		ensure
 			not_void_if_ok: not fatal_error implies Result /= Void
@@ -222,5 +425,14 @@ feature {NONE} -- Implementation
 		ensure
 			not_void_if_ok: (not fatal_error) = (Result /= Void)
 		end
+
+	list_from_query (q: STRING): LIST [STRING] is
+			-- List of STRING from query `q' with 1-column result
+		require
+			not_void: q /= Void
+		deferred
+		end
+
+	stock_symbol_table, derivative_symbol_table: HASH_TABLE [ANY, STRING]
 
 end -- class MAS_DB_SERVICES
