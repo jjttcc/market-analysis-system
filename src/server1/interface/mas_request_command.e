@@ -110,22 +110,35 @@ feature {NONE} -- Hook routine implementations
 	warn_client (slst: ARRAY [STRING]) is
 		do
 			report_error (Warning, slst)
-			respond_to_client
+			respond_to_client (slst)
 		end
 
-	prepare_for_execution, exception_cleanup is
+	prepare_for_execution (arg: ANY) is
 		do
 			if output_buffer_used then
 				output_buffer.clear_all
 			end
 		end
 
-	respond_to_client is
+	exception_cleanup (arg: ANY) is
+		do
+			prepare_for_execution (arg)
+			warn_client (<<"Error occurred ", error_context (arg), ".">>)
+		end
+
+	respond_to_client (arg: ANY) is
 			-- Send `output_buffer' to the `active_medium'.
 		do
 			if not output_buffer.empty then
 				active_medium.put_string (output_buffer)
 			end
+		end
+
+feature {NONE} -- Implementation
+
+	error_context (arg: ANY): STRING is
+		do
+			Result := ""
 		end
 
 invariant
