@@ -1,5 +1,5 @@
 # Initial spec file created by autospec ver. 0.4 with rpm 2.4.12 compatibility
-%define version 1.5
+%define version 1.6
 %define rootdir /opt/mas
 BuildRoot: /tmp/mas_v%{version}-root
 Prefix: %{rootdir}
@@ -11,7 +11,7 @@ Group: Applications/Financial
 Copyright: Eiffel Forum License
 Source: mas-%{version}.tar.gz
 # Following are optional fields
-#URL: http://www.example.net/mas_v/
+URL: http://eiffel-mas.sourceforge.net/
 #Distribution: Red Hat Contrib-Net
 #Patch: mas_v%{version}.patch
 #BuildArchitectures: noarch
@@ -69,7 +69,6 @@ fi
 %{rootdir}/lib/mas_dbrc
 %{rootdir}/lib/libodbc.so.1
 %{rootdir}/lib/python
-%{rootdir}/lib/stock_splits
 %{rootdir}/lib/indicators_persist
 %{rootdir}/lib/generators_persist
 %{rootdir}/doc
