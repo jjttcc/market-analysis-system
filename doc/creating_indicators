@@ -49,7 +49,7 @@ Note that the behavior of the following operator types does not depend on
 the context in which they occur, meaning that a particular operator of
 one of these types can be safely shared (as opposed to using two different
 instances of the same operator type) without affecting the resulting
-calculation: BASIC_NUMERIC_COMMAND, OPENING_PRICE OPEN_INTEREST,
+calculation: BASIC_NUMERIC_COMMAND, OPENING_PRICE, OPEN_INTEREST,
 VOLUME, LOW_PRICE, HIGH_PRICE, CLOSING_PRICE.
 
 MAS provides the following basic types of functions:
