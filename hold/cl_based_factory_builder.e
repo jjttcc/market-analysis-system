@@ -17,10 +17,10 @@ feature -- Access
 			!STOCK_FACTORY!Result.make (input_file)
 		end
 
-	function_list_factory (f: MARKET_FUNCTION): FUNCTION_BUILDER is
+	function_list_factory: FUNCTION_BUILDER is
 			-- Builder of a list of composite functions
 		do
-			!!Result.make (f)
+			!!Result
 		end
 
 end -- FACTORY_BUILDER

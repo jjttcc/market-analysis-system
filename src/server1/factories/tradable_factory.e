@@ -12,7 +12,7 @@ deferred class TRADABLE_FACTORY inherit
 
 feature -- Initialization
 
-	make (in_file: PLAIN_TEXT_FILE) is
+	make (in_file: FILE) is
 		require
 			not_void: in_file /= Void and in_file.exists and
 						in_file.is_open_read
@@ -26,10 +26,17 @@ feature -- Initialization
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (in_file: FILE) is
+			-- If in_file is not void and is open for reading, it will
+			-- be used for input instead of what passed to make.
 		local
 			scanner: MARKET_TUPLE_DATA_SCANNER
 		do
+			if
+				in_file /= Void and in_file.exists and in_file.is_open_read
+			then
+				input_file := in_file
+			end
 			make_product
 			check value_setters.count > 0 end
 			!!scanner.make (input_file, tuple_maker, value_setters,
@@ -48,6 +55,7 @@ feature -- Status report
 			-- Is there no opening price field in the input?
 
 	arg_used: BOOLEAN is false
+			-- execute arg is actually optional - if not void it is used.
 
 feature -- Status setting
 
@@ -173,28 +181,6 @@ feature {NONE}
 	add_indicators (t: TRADABLE [BASIC_MARKET_TUPLE]) is
 			-- Add hard-coded set of market functions to `t'.
 		do
-		end
-
-feature {NONE} -- Hard-coded market function building procedures
-
-	create_macd (f1, f2: EXPONENTIAL_MOVING_AVERAGE): MARKET_FUNCTION is
-			-- Create an MACD function using `f1' and `f2'.
-		require
-			not_void: f1 /= Void and f2 /= Void
-			-- !!!Is this precondition reasonable?:
-			o_not_void: f1.output /= Void and f2.output /= Void
-		local
-			sub: SUBTRACTION
-			cmd1: BASIC_LINEAR_COMMAND
-			cmd2: BASIC_LINEAR_COMMAND
-		do
-			!!cmd1.make (f1.output)
-			!!cmd2.make (f2.output)
-			!!sub.make_with_operands (cmd1, cmd2)
-			!TWO_VARIABLE_FUNCTION!Result.make (f1, f2, sub)
-			Result.set_name ("MACD difference")
-		ensure
-			not_void: Result /= Void
 		end
 
 feature {NONE} -- Tuple field-key constants
