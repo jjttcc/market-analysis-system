@@ -2,7 +2,7 @@
 
 package application_support;
 
-import graph.DataSet;
+import graph.DrawableDataSet;
 import graph.Axis;
 import support.*;
 
@@ -17,7 +17,7 @@ public class MonoAxisIndicatorGroup extends IndicatorGroup
 
 	// Attach `d' so that it shares the same y axis as the other members
 	// of the group.
-	public void attach_data_set(DataSet d) {
+	public void attach_data_set(DrawableDataSet d) {
 		yaxis.attachDataSet(d);
 		d.set_yaxis(yaxis);
 	}

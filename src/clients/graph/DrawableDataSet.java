@@ -2,13 +2,10 @@ package graph;
 
 import java.awt.*;
 import java.util.*;
+import graph_library.DataSet;
 
 
 /*
-**************************************************************************
-**
-**    Class  DataSet
-**
 **************************************************************************
 **    Copyright (C) 1995, 1996 Leigh Brookshaw
 **
@@ -26,7 +23,8 @@ import java.util.*;
 **    along with this program; if not, write to the Free Software
 **    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 **************************************************************************
-**    Modified by Jim Cochrane, last changed in May, 2001
+**    Adapted from the original DataSet class by Jim Cochrane,
+**    last changed in October, 2004
 **************************************************************************
 **
 **    This class is designed to be used in conjunction with 
@@ -36,14 +34,15 @@ import java.util.*;
 
 
 /**
- *  This class is designed to hold the data to be plotted.
- *  It is to be used in conjunction with the Graph class and Axis 
- *  class for plotting 2D graphs.
+ * Plottable data sets that can, with the help of a BasicDrawer,
+ * draw themselves
+ * To be used in conjunction with the Graph class and Axis 
+ * class for plotting 2D graphs.
  *
  * @version $Revision$, $Date$
  * @author Leigh Brookshaw 
  */
-public class DataSet {
+public class DrawableDataSet extends DataSet {
 
 // Access
 
@@ -155,7 +154,7 @@ public class DataSet {
 	* @postcondition
 	*     dates_needed() && drawer() == drawer
 	*/
-	public DataSet(BasicDrawer d) {
+	public DrawableDataSet(BasicDrawer d) {
 		if (d  == null) {
 			throw new Error("DataSet constructor: precondition violated");
 		}
@@ -186,7 +185,7 @@ public class DataSet {
 	* @postcondition
 	*     dates_needed() && drawer() == drawer
 	*/
-	public DataSet(double d[], int n, BasicDrawer drawer) throws Error {
+	public DrawableDataSet(double d[], int n, BasicDrawer drawer) throws Error {
 		if ( d  == null || d.length == 0 || n <= 0 || drawer == null ) {
 			throw new Error("DataSet constructor: precondition violated");
 		}
@@ -210,17 +209,11 @@ public class DataSet {
 	// y axis
 	public Axis yaxis() { return yaxis_; }
 
-	// Color data is to be drawn in - can be null
-	public Color color() { return color_; }
-
 	// Set the x axis to `a'.
 	public void set_xaxis(Axis a) { xaxis_ = a; }
 
 	// Set the y axis to `a'.
 	public void set_yaxis(Axis a) { yaxis_ = a; }
-
-	// Set the color the data is to be drawn in - can be null
-	public void set_color(Color c) { color_ = c; }
 
 	// Add y1, y2 values for a horizontal line.
 	public void add_hline(DoublePair p) {
@@ -257,25 +250,25 @@ public class DataSet {
 		_drawer.set_maxes(xmax, ymax, xmin, ymin);
 		_drawer.set_ranges(xrange, yrange);
 		_drawer.set_clipping(clipping);
-		_drawer.draw_data(g, bounds, hline_data, vline_data, color_);
+		_drawer.draw_data(g, bounds, hline_data, vline_data, color);
 	}
 
 	/**
 	* return the data X maximum.
 	*/
-	public double getXmax() {  return dxmax; } 
+	public double maximum_x() {  return dxmax; } 
 	/**
 	* return the data X minimum.
 	*/
-	public double getXmin() {  return dxmin; } 
+	public double minimum_x() {  return dxmin; } 
 	/**
 	* return the data Y maximum.
 	*/
-	public double getYmax() {  return dymax; } 
+	public double maximum_y() {  return dymax; } 
 	/**
 	* return the data Y minimum.
 	*/
-	public double getYmin() {  return dymin; }
+	public double minimum_y() {  return dymin; }
 
 	/**
 	* Return the number of data points in the DataSet
@@ -418,9 +411,6 @@ public class DataSet {
 
 	// Time data
 	protected String[] times;
-
-	// Color data is to be drawn in - can be null
-	private Color color_;
 
 	/**
 	* Drawer of price bars - e.g., tic bars or candles

@@ -26,11 +26,11 @@ import java.util.*;
 **    along with this program; if not, write to the Free Software
 **    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 **************************************************************************
-**    Modified by Jim Cochrane, last changed in July, 2000
+**    Modified by Jim Cochrane, last changed in October, 2004
 **************************************************************************
 **
 **    This class is designed to be used in conjunction with 
-**    the Graph class and DataSet class for plotting 2D graphs.
+**    the Graph class and DrawableDataSet class for plotting 2D graphs.
 **
 *************************************************************************/
 
@@ -39,14 +39,14 @@ import java.util.*;
 /**
 	* This class controls the look and feel of axes. 
 	* It is designed to be used in conjunction with 
-	* the Graph class and DataSet class for plotting 2D graphs.
+	* the Graph class and DrawableDataSet class for plotting 2D graphs.
 	*
 	* To work with the other classes a system of registration is used.
 	* The axes have to be attached to the controlling Graph class
-	* and the DataSet's have to be attached to both the Graph class
+	* and the DrawableDataSet's have to be attached to both the Graph class
 	* and the Axis class.
 	*
-	* This way the 3 main classes Graph, Axis and DataSet know of each
+	* This way the 3 main classes Graph, Axis and DrawableDataSet know of each
 	* others existence.
 	*
 	* This does not mean the classes cannot be used independently, they can
@@ -224,7 +224,7 @@ public class Axis extends Object {
 	private int max_label_width     = 0;
 
 	/**
-	* Vector containing a list of attached DataSets
+	* Vector containing a list of attached DrawableDataSets
 	*/
 	private Vector dataset = new Vector();
 
@@ -393,21 +393,21 @@ public class Axis extends Object {
 	}
 
 	/**
-	* Attach a DataSet for the Axis to manage.
+	* Attach a DrawableDataSet for the Axis to manage.
 	* @param d dataSet to attach
-	* @see graph.DataSet
+	* @see graph.DrawableDataSet
 	*/
-	public void attachDataSet( DataSet d ) {
+	public void attachDataSet( DrawableDataSet d ) {
 		if (orientation == HORIZONTAL) attachXdata( d );
 		else attachYdata( d );
 	}
 
 	/**
-	* Detach an attached DataSet
+	* Detach an attached DrawableDataSet
 	* @param d dataSet to detach
-	* @see graph.DataSet
+	* @see graph.DrawableDataSet
 	*/
-	public void detachDataSet( DataSet d ) {
+	public void detachDataSet( DrawableDataSet d ) {
 		int i = 0;
 
 		if (d == null) return;
@@ -426,18 +426,18 @@ public class Axis extends Object {
 	*/
 	public void detachAll() {
 		int i;
-		DataSet d;
+		DrawableDataSet d;
 
 		if( dataset.isEmpty() ) return;
 
 		if( orientation == HORIZONTAL ) {
 			for (i=0; i<dataset.size(); i++) {
-				d = (DataSet)(dataset.elementAt(i));
+				d = (DrawableDataSet)(dataset.elementAt(i));
 				d.set_xaxis(null);
 			}
 		} else {
 			for (i=0; i<dataset.size(); i++) {
-				d = (DataSet)(dataset.elementAt(i));
+				d = (DrawableDataSet)(dataset.elementAt(i));
 				d.set_yaxis(null);
 			}
 		}
@@ -454,24 +454,24 @@ public class Axis extends Object {
 	public double getDataMin() {
 		double m;
 		Enumeration e;
-		DataSet d;
+		DrawableDataSet d;
 
 		if( dataset.isEmpty() ) return 0.0;
 
-		d = (DataSet)(dataset.firstElement());
+		d = (DrawableDataSet)(dataset.firstElement());
 		if (d == null) return 0.0;
 
 		if (orientation == HORIZONTAL) {
-			m = d.getXmin();
+			m = d.minimum_x();
 			for (e = dataset.elements() ; e.hasMoreElements() ;) {
-				d = (DataSet)e.nextElement();
-				m = Math.min(d.getXmin(),m);
+				d = (DrawableDataSet)e.nextElement();
+				m = Math.min(d.minimum_x(),m);
 			}
 		} else {
-			m = d.getYmin();
+			m = d.minimum_y();
 			for (e = dataset.elements() ; e.hasMoreElements() ;) {
-				d = (DataSet)e.nextElement();
-				m = Math.min(d.getYmin(),m);
+				d = (DrawableDataSet)e.nextElement();
+				m = Math.min(d.minimum_y(),m);
 			}
 		}
 
@@ -484,26 +484,26 @@ public class Axis extends Object {
 	public double getDataMax() {
 		double m;
 		Enumeration e;
-		DataSet d;
+		DrawableDataSet d;
 
 		if (dataset.isEmpty()) return 0.0;
 
-		d = (DataSet)(dataset.firstElement());
+		d = (DrawableDataSet)(dataset.firstElement());
 
 		if (d == null) return 0.0;
 
 
 		if (orientation == HORIZONTAL) {
-			m = d.getXmax();
+			m = d.maximum_x();
 			for (e = dataset.elements() ; e.hasMoreElements() ;) {
-				d = (DataSet)e.nextElement();
-				m = Math.max(d.getXmax(),m);
+				d = (DrawableDataSet)e.nextElement();
+				m = Math.max(d.maximum_x(),m);
 		}
 		} else {
-			m = d.getYmax();
+			m = d.maximum_y();
 			for (e = dataset.elements() ; e.hasMoreElements() ;) {
-				d = (DataSet)e.nextElement();
-				m = Math.max(d.getYmax(),m);
+				d = (DrawableDataSet)e.nextElement();
+				m = Math.max(d.maximum_y(),m);
 			}
 		}
 
@@ -978,38 +978,38 @@ public class Axis extends Object {
 	}
 
 	/**
-	* Attach a DataSet to a Horizontal Axis
+	* Attach a DrawableDataSet to a Horizontal Axis
 	* @param d dataset to attach.
 	*/
-	protected void attachXdata( DataSet d ) {
+	protected void attachXdata( DrawableDataSet d ) {
 		d.range();
 		dataset.addElement(d);
 		d.set_xaxis(this);
 
 		if( dataset.size() == 1 ) {
-			minimum_ = d.getXmin();
-			maximum_ = d.getXmax();
+			minimum_ = d.minimum_x();
+			maximum_ = d.maximum_x();
 		} else {
-			if(minimum_ > d.getXmin()) minimum_ = d.getXmin();
-			if(maximum_ < d.getXmax()) maximum_ = d.getXmax();
+			if(minimum_ > d.minimum_x()) minimum_ = d.minimum_x();
+			if(maximum_ < d.maximum_x()) maximum_ = d.maximum_x();
 		}
 	}
 
 	/**
-	* Attach a DataSet to a Vertical Axis
+	* Attach a DrawableDataSet to a Vertical Axis
 	* @param d dataset to attach.
 	*/
-	protected void attachYdata( DataSet d ) {
+	protected void attachYdata( DrawableDataSet d ) {
 		d.range();
 		dataset.addElement(d);
 		d.set_yaxis(this);
 
 		if (dataset.size() == 1) {
-			minimum_ = d.getYmin();
-			maximum_ = d.getYmax();
+			minimum_ = d.minimum_y();
+			maximum_ = d.maximum_y();
 		} else {
-			if (minimum_ > d.getYmin()) minimum_ = d.getYmin();
-			if (maximum_ < d.getYmax()) maximum_ = d.getYmax();
+			if (minimum_ > d.minimum_y()) minimum_ = d.minimum_y();
+			if (maximum_ < d.maximum_y()) maximum_ = d.maximum_y();
 		}
 	}
 

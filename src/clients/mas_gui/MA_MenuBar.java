@@ -7,6 +7,7 @@ import java.awt.event.*;
 import java.util.Vector;
 import java.util.Calendar;
 import support.*;
+import application_library.AbstractDataSetBuilder;
 import application_support.MA_Configuration;
 
 // The Market Analysis GUI menu bar

@@ -3,6 +3,7 @@ package graph;
 import java.awt.*;
 import java.util.*;
 import application_support.*;
+import graph_library.DataSet;
 
 /*
 **************************************************************************
@@ -31,7 +32,7 @@ import application_support.*;
 **************************************************************************
 **
 ** The main entry point and interface for the 2D graphing package.
-** This class keeps track of the DataSets and the Axes.
+** This class keeps track of the DrawableDataSets and the Axes.
 ** It has the main drawing engine that positions axis etc.
 **
 *************************************************************************/
@@ -42,7 +43,7 @@ import application_support.*;
  * specified axes with the remaining space taken with the plotting region.
  * Axes are packed against the walls of the canvas. The <B>paint</B> and
  * <B>update</B> methods of this class handle all the drawing operations of the
- * graph. This means that independent components like Axis and DataSets must be
+ * graph. This means that independent components like Axis and DrawableDataSets must be
  * registered with this class to be incorporated into the plot.
  *
  * @version  $Revision$, $Date$
@@ -75,7 +76,7 @@ abstract public class Graph extends Canvas {
 	private Vector axis          = new Vector(4);
 
 /**
- *  A vector list of All the DataSets attached
+ *  A vector list of All the DrawableDataSets attached
  *  @see Graph#attachDataSet()
  *  @see DataSet
  */
@@ -230,24 +231,24 @@ abstract public class Graph extends Canvas {
 	public void set_borderRight(int i) { borderRight = i; }
 
 /**
- * Attach a DataSet to the graph. By attaching the data set the class
+ * Attach a DrawableDataSet to the graph. By attaching the data set the class
  * can draw the data through its paint method.
  */
 
-	public void attachDataSet(DataSet d) {
+	public void attachDataSet(DrawableDataSet d) {
 		if( d != null) {
 			dataset.addElement(d);
 			d.set_g2d(this);
 		}
 	}
 /**
- *    Detach the DataSet from the class. Data associated with the DataSet
+ *    Detach the DrawableDataSet from the class. Data associated with the DrawableDataSet
  *    will nolonger be plotted.
  *
  *    @param d    The DataSet to detach.
  */
 
-	public void detachDataSet( DataSet d ) {
+	public void detachDataSet( DrawableDataSet d ) {
 		if(d != null) {
 			if(d.xaxis() != null) d.xaxis().detachDataSet(d);
 			if(d.yaxis() != null) d.yaxis().detachDataSet(d);
@@ -259,13 +260,13 @@ abstract public class Graph extends Canvas {
 */
 
 	public void detachDataSets() {
-		DataSet d;
+		DrawableDataSet d;
 		int i;
 
 		if(dataset == null | dataset.isEmpty() ) return;
 
 		for (i=0; i<dataset.size(); i++) {
-			d = ((DataSet)dataset.elementAt(i));
+			d = ((DrawableDataSet)dataset.elementAt(i));
 			if(d.xaxis() != null) d.xaxis().detachDataSet(d);
 			if(d.yaxis() != null) d.yaxis().detachDataSet(d);
 		}
@@ -350,15 +351,15 @@ public void attachAxis( Axis a ) {
  * Get the Maximum X value of all attached DataSets.
  *  @return  The maximum value
 */
-	public double getXmax() {
+	public double maximum_x() {
 		DataSet d;
 		double max=0.0;
 
 		if(dataset == null | dataset.isEmpty() ) return max;
 		for (int i=0; i<dataset.size(); i++) {
 			d = ((DataSet)dataset.elementAt(i));
-			if(i==0) max = d.getXmax();
-			else max = Math.max(max,d.getXmax());
+			if(i==0) max = d.maximum_x();
+			else max = Math.max(max,d.maximum_x());
 		}
 
 		return max;
@@ -368,15 +369,15 @@ public void attachAxis( Axis a ) {
  * Get the Maximum Y value of all attached DataSets.
  *  @return  The maximum value
 */
-	public double getYmax() {
+	public double maximum_y() {
 		DataSet d;
 		double max=0.0;
 
 		if(dataset == null | dataset.isEmpty() ) return max;
 		for (int i=0; i<dataset.size(); i++) {
 			d = ((DataSet)dataset.elementAt(i));
-			if(i==0) max = d.getYmax();
-			else max = Math.max(max,d.getYmax());
+			if(i==0) max = d.maximum_y();
+			else max = Math.max(max,d.maximum_y());
 		}
 
 		return max;
@@ -387,15 +388,15 @@ public void attachAxis( Axis a ) {
  *  @return  The minimum value
 */
 
-	public double getXmin() {
+	public double minimum_x() {
 		DataSet d;
 		double min = 0.0;
 
 		if(dataset == null | dataset.isEmpty() ) return min;
 		for (int i=0; i<dataset.size(); i++) {
 			d = ((DataSet)dataset.elementAt(i));
-			if(i==0) min = d.getXmin();
-			else     min = Math.min(min,d.getXmin());
+			if(i==0) min = d.minimum_x();
+			else     min = Math.min(min,d.minimum_x());
 		}
 
 		return min;
@@ -406,15 +407,15 @@ public void attachAxis( Axis a ) {
  *  @return  The minimum value
 */
 
-public double getYmin() {
+public double minimum_y() {
 	DataSet d;
 	double min=0.0;
 
 	if(dataset == null | dataset.isEmpty() ) return min;
 	for (int i=0; i<dataset.size(); i++) {
 		d = ((DataSet)dataset.elementAt(i));
-		if(i==0) min = d.getYmin();
-		else     min = Math.min(min,d.getYmin());
+		if(i==0) min = d.minimum_y();
+		else     min = Math.min(min,d.minimum_y());
 	}
 
 	return min;

@@ -6,12 +6,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.io.*;
-import graph.*;
 import support.*;
 import common.*;
 import java_library.support.*;
 import application_support.*;
 import application_library.*;
+import graph_library.DataSet;
+import graph.*;
 
 class ChartSettings implements Serializable {
 
@@ -272,7 +273,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 
 	// Send a data request for the specified tradable.
 	public void send_data_request(String tradable) {
-		DataSet dataset, main_dataset;
+		DrawableDataSet dataset, main_dataset;
 		MA_Configuration conf = MA_Configuration.application_instance();
 		int count;
 		String current_indicator;
@@ -318,7 +319,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 			//change later.)
 			main_pane.clear_main_graph();
 			main_pane.clear_indicator_graph();
-			main_dataset = data_builder.last_market_data();
+			main_dataset = (DrawableDataSet) data_builder.last_market_data();
 			latest_date_time = data_builder.last_latest_date_time();
 			link_with_axis(main_dataset, null);
 			main_pane.add_main_data_set(main_dataset);
@@ -337,9 +338,10 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 					} catch (Exception e) {
 						facilities.fatal("Exception occurred", e);
 					}
-					dataset = data_builder.last_indicator_data();
+					dataset = (DrawableDataSet)
+						data_builder.last_indicator_data();
 					dataset.set_dates_needed(false);
-					dataset.set_color(
+					dataset.setColor(
 						conf.indicator_color(current_indicator, true));
 					link_with_axis(dataset, current_indicator);
 					main_pane.add_main_data_set(dataset);
@@ -357,11 +359,12 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 					if (current_lower_indicators.elementAt(i).equals(
 							Volume)) {
 						// (Nothing to retrieve from server)
-						dataset = data_builder.last_volume();
+						dataset = (DrawableDataSet) data_builder.last_volume();
 					} else if (current_lower_indicators.elementAt(i).equals(
 							Open_interest)) {
 						// (Nothing to retrieve from server)
-						dataset = data_builder.last_open_interest();
+						dataset = (DrawableDataSet)
+							data_builder.last_open_interest();
 					} else {
 						try {
 							data_builder.send_indicator_data_request(
@@ -371,10 +374,11 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 						} catch (Exception e) {
 							facilities.fatal("Exception occurred", e);
 						}
-						dataset = data_builder.last_indicator_data();
+						dataset = (DrawableDataSet)
+							data_builder.last_indicator_data();
 					}
 					if (dataset != null) {
-						dataset.set_color(conf.indicator_color(
+						dataset.setColor(conf.indicator_color(
 							current_indicator, false));
 						link_with_axis(dataset, current_indicator);
 						add_indicator_lines(dataset, current_indicator);
@@ -523,7 +527,9 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 
 	// Add any extra lines to the indicator graph - specified in the
 	// configuration.
-	protected void add_indicator_lines(DataSet dataset, String indicator) {
+	protected void add_indicator_lines(DrawableDataSet dataset,
+			String indicator) {
+
 		if (current_lower_indicators.isEmpty()) {
 			return;
 		}
@@ -685,7 +691,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	// as a key.  If `indicator_name' is null, the group for the main
 	// (upper) graph will be used.  If `indicator_name' specifies an
 	// indicator that is not a group member, no action is taken.
-	protected void link_with_axis(DataSet d, String indicator_name) {
+	protected void link_with_axis(DrawableDataSet d, String indicator_name) {
 		if (indicator_groups == null) {
 			indicator_groups = (IndicatorGroups) MA_Configuration.
 				application_instance().indicator_groups().clone();

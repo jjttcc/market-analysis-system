@@ -13,26 +13,26 @@ public class MainGraph extends InteractiveGraph {
 	}
 
 	// Main market data for the graph
-	public DataSet market_data() {
-		DataSet result = null;
+	public DrawableDataSet market_data() {
+		DrawableDataSet result = null;
 		if (dataset.size() > 0) {
-			result = (DataSet) dataset.elementAt(0);
+			result = (DrawableDataSet) dataset.elementAt(0);
 		}
 
 		return result;
 	}
 
 	protected void draw_data(Graphics g, Rectangle r) {
-		DataSet first_dataset;
+		DrawableDataSet first_dataset;
 		int i;
 
 		// Only the first dataset's boundaries and reference values
 		// need to be drawn, since they are all the same.
-		first_dataset = (DataSet) dataset.elementAt(0);
+		first_dataset = (DrawableDataSet) dataset.elementAt(0);
 		first_dataset.drawer().set_boundaries_needed(true);
 		first_dataset.set_reference_values_needed(true);
 		for (i = 0; i < dataset.size(); ++i) {
-			((DataSet) dataset.elementAt(i)).draw_data(g, r);
+			((DrawableDataSet) dataset.elementAt(i)).draw_data(g, r);
 		}
 		if (first_dataset.drawer().data_processed()) {
 			first_dataset.draw_dates(g, r);
@@ -43,7 +43,8 @@ public class MainGraph extends InteractiveGraph {
 	}
 
 	protected void draw_as_empty(Graphics g, Rectangle r) {
-		DataSet ds = new DataSet(new LineDrawer(new PriceDrawer()));
+		DrawableDataSet ds = new DrawableDataSet(new LineDrawer(
+			new PriceDrawer()));
 		ds.drawer().set_boundaries_needed(true);
 		ds.draw_data(g, r);
 	}

@@ -3,36 +3,34 @@
 package mas_gui;
 
 import java.util.*;
-import support.NetworkProtocolUtilities;
+//import support.NetworkProtocolUtilities;
+import application_library.AbstractParser;
 import graph.*;
+import graph_library.DataSet;
 
 /** Market Analysis Parser - parses market and indicator data sent from
 the Market Analysis server */
-class Parser extends NetworkProtocolUtilities {
-	public static final int Date = 1, Open = 2, High = 3, Low = 4, Close = 5,
-		Volume = 6, Open_interest = 7, Not_set = 0;
+//!!!Remove 'public' if possible.
+public class Parser extends AbstractParser {
 
 // Initialization
 
 	// Constructor - fieldspecs specifies the fields format of each tuple -
 	// e.g., date, high, low, close, volume.
-	Parser(int fieldspecs[], String record_sep, String field_sep) {
-		parsetype = fieldspecs;
-		_record_separator = record_sep;
-		_field_separator = field_sep;
+	public Parser(int fieldspecs[], String record_sep, String field_sep) {
+		super(fieldspecs, record_sep, field_sep);
+/* !!!Remove:
+parsetype = fieldspecs;
+_record_separator = record_sep;
+field_separator = field_sep;
 
-		dates = new Vector();
-		times = new Vector();
-		float_field_count = float_fields(fieldspecs);
+dates = new Vector();
+times = new Vector();
+float_field_count = float_fields(fieldspecs);
+*/
 	}
 
 // Access
-
-	// Specifications of the type (date, open, etc.) and order of each field
-	// in a tuple.
-	public int[] field_specifications() {
-		return parsetype;
-	}
 
 	// Parsed data set result
 	public DataSet result() {
@@ -49,40 +47,11 @@ class Parser extends NetworkProtocolUtilities {
 		return oi_data;
 	}
 
-	// The latest date-time in the parsed data set - null if no data set
-	// has been parsed or if it contains no dates
-	public Calendar latest_date_time() {
-		Calendar result = null;
-		if (dates != null && ! dates.isEmpty()) {
-			String date = (String) dates.elementAt(dates.size() - 1);
-			if (times != null && ! times.isEmpty()) {
-				String time = (String) times.elementAt(dates.size() - 1);
-System.out.println("date, time: " + date + ", " + time);
-				result = date_time_from_dataset_strings(date, time);
-			} else {
-System.out.println("date: " + date);
-				result = date_from_dataset_string(date);
-			}
-		}
-System.out.println("parser - latest dt result: " + result);
-		return result;
-	}
-
-	public String record_separator() {
-		return _record_separator;
-	}
-
-	public String field_separator() {
-		return _field_separator;
-	}
-
 // Element change
 
-	// Set the tuple field specifications.
-	// Precondition: fs != null
-	// Postcondition: field_specifications() == fs
-	void set_field_specifications(int[] fs) {
-		parsetype = fs;
+	// Set the drawer for drawing the main data set.
+	void set_main_drawer(BasicDrawer d) {
+		main_drawer = d;
 	}
 
 	// Set the drawer for drawing volume.
@@ -96,16 +65,16 @@ System.out.println("parser - latest dt result: " + result);
 	}
 
 // Basic operations
+/////!!!!Move to right place:
 
 	// Parse `s' into a DataSet according to record_separator and
 	// field_separator.  `drawer' is the tuple drawer to use for the
 	// DataSet.  result() gives the new DataSet.
-	public void parse(String s, BasicDrawer drawer) throws Exception {
+//!!!Clean up:
+	public void old_remove_parse(String s, BasicDrawer drawer) throws Exception {
 		int rec_count;
-		volumes = null;
-		open_interests = null;
 		is_intraday = contains_time_field(s);
-		StringTokenizer recs = new StringTokenizer(s, _record_separator, false);
+		StringTokenizer recs = new StringTokenizer(s, record_separator, false);
 		rec_count = recs.countTokens();
 		clear_vectors();
 		if (has_field_type(Volume)) {
@@ -127,15 +96,44 @@ System.out.println("parser - latest dt result: " + result);
 		process_data(drawer);
 	}
 
+// Hook routine implementations
+
+	// Perform any needed preprations before parsing.
+	protected void prepare_for_parse() {
+		volumes = null;
+		open_interests = null;
+	}
+
+	protected void do_main_parse(StringTokenizer recs) throws Exception {
+		int rec_count = recs.countTokens();
+		if (has_field_type(Volume)) {
+			volumes = new double[rec_count];
+		}
+		if (has_field_type(Open_interest)) {
+			open_interests = new double[rec_count];
+		}
+		// If there is no open field
+		if (! has_field_type(Open) && has_field_type(High) &&
+				has_field_type(Low)) {
+			// Add 1 to make room for the "fake" open field.
+			value_data = new double[rec_count * (float_field_count + 1)];
+			parse_with_no_open(recs);
+		} else {
+			value_data = new double[rec_count * float_field_count];
+			parse_default(recs);
+		}
+		process_data(main_drawer);
+	}
+
 // Implementation
 
 	// Parse fields - default routine
-	private void parse_default(StringTokenizer recs) throws Exception {
+	protected void parse_default(StringTokenizer recs) throws Exception {
 		int float_index = 0, volume_index = 0, oi_index = 0;
 		while (recs.hasMoreTokens()) {
 			String s = recs.nextToken();
 			StringTokenizer fields = new StringTokenizer(s,
-				_field_separator, false);
+				field_separator, false);
 			for (int j = 0; fields.hasMoreTokens(); ++j) {
 				try {
 				switch (parsetype[j]) {
@@ -182,11 +180,11 @@ System.out.println("parser - latest dt result: " + result);
 
 	// Parse fields - expecting high, low, and close fields (in that order),
 	// but NO open field.
-	private void parse_with_no_open(StringTokenizer recs) throws Exception {
+	protected void parse_with_no_open(StringTokenizer recs) throws Exception {
 		int float_index = 0, volume_index = 0, oi_index = 0;
 		while (recs.hasMoreTokens()) {
 			StringTokenizer fields = new StringTokenizer(recs.nextToken(),
-													_field_separator, false);
+													field_separator, false);
 			int open_field_index = -1;
 			for (int j = 0; fields.hasMoreTokens(); ++j) {
 				try {
@@ -262,7 +260,7 @@ System.out.println("parser - latest dt result: " + result);
 
 	// Put the parsed data into a data set.
 	// Postcondition: result() != null && result().drawer() == drawer
-	private void process_data(BasicDrawer drawer) throws Exception {
+	protected void process_data(BasicDrawer drawer) throws Exception {
 		String[] date_array = null;
 		String[] time_array = null;
 		boolean has_dates = false;
@@ -276,10 +274,11 @@ System.out.println("parser - latest dt result: " + result);
 			has_times = times != null && ! times.isEmpty();
 			int length = value_data.length / float_field_count;
 			if (length > 0) {
-				processed_data = new DataSet(value_data, length, drawer);
+				processed_data = new DrawableDataSet(value_data, length,
+					drawer);
 			}
 			else {
-				processed_data = new DataSet(drawer);
+				processed_data = new DrawableDataSet(drawer);
 			}
 			if (has_dates) {
 				date_array = new String[dates.size()];
@@ -293,14 +292,14 @@ System.out.println("parser - latest dt result: " + result);
 			}
 			if (volume_drawer != null && volumes != null &&
 					volumes.length > 0) {
-				volume_data = new DataSet(volumes, volumes.length,
+				volume_data = new DrawableDataSet(volumes, volumes.length,
 											volume_drawer);
 				if (has_dates) volume_data.set_dates(date_array);
 				if (has_times) volume_data.set_times(time_array);
 			}
 			if (open_interest_drawer != null && open_interests != null &&
 					open_interests.length > 0) {
-				oi_data = new DataSet(open_interests,
+				oi_data = new DrawableDataSet(open_interests,
 					open_interests.length, open_interest_drawer);
 				if (has_dates) oi_data.set_dates(date_array);
 				if (has_times) oi_data.set_times(time_array);
@@ -312,79 +311,17 @@ System.out.println("parser - latest dt result: " + result);
 		}
 	}
 
-	// Remove all elements from data vectors - set their sizes to 0.
-	private void clear_vectors() {
-		dates.removeAllElements();
-		times.removeAllElements();
-	}
-
-	// The number of fields in `fieldspecs' that will be of type float
-	private int float_fields(int fieldspecs[]) {
-		int result = 0;
-
-		for (int i = 0; i < fieldspecs.length; ++i) {
-			if (fieldspecs[i] == Open ||
-				fieldspecs[i] == Close ||
-				fieldspecs[i] == High ||
-				fieldspecs[i] == Low) {
-				result = result + 1;
-			}
-		}
-
-		return result;
-	}
-
-	// Does `parsetype' have the specified field type?
-	private boolean has_field_type(int ftype) {
-		boolean result = false;
-		for (int i = 0; i < parsetype.length; ++i) {
-			if (parsetype[i] == ftype) result = true;
-		}
-
-		return result;
-	}
-
-	// Does `s' contain a time field?
-	private boolean contains_time_field(String s) {
-		boolean result = false;
-		int valid_parse_fields;
-		StringTokenizer recs = new StringTokenizer(s, _record_separator, false);
-		if (recs.countTokens() > 0) {
-			StringTokenizer fields = new StringTokenizer(recs.nextToken(),
-				_field_separator, false);
-
-			valid_parse_fields = 0;
-			for (int i = 0; i < parsetype.length && parsetype[i] != Not_set;
-					++i) {
-				++valid_parse_fields;
-			}
-			// If the number of fields in a record is greater than the number of
-			// parse types, a time field is included.
-			result = fields.countTokens() > valid_parse_fields;
-		}
-		return result;
-	}
-
 // Implementation - attributes
 
-	protected int parsetype[];
-	protected int float_field_count;
-
-	// Date, time, open, high, low, close, volume, and open interest values -
-	// Some fields may not be used - for those that are, lengths should all
-	// be equal to the number of records in the input.
-	protected Vector dates;	// String
-	protected Vector times;	// String
 	// Holds open, high, low, close data or, for indicator data, holds
 	// the main value data.
 	protected double[] value_data;
 	protected double[] volumes, open_interests;
 
-	protected String _record_separator, _field_separator;
-	protected DataSet processed_data;	// the parsed data
-	protected DataSet volume_data;		// the parsed volume data
-	protected DataSet oi_data;			// the parsed open interest data
-	protected boolean is_intraday;
+	protected DrawableDataSet processed_data;	// the parsed data
+	protected DrawableDataSet volume_data;		// the parsed volume data
+	protected DrawableDataSet oi_data;			// the parsed open interest data
+	protected BasicDrawer main_drawer;
 	protected BasicDrawer volume_drawer;
 	protected BasicDrawer open_interest_drawer;
 }

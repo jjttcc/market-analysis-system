@@ -5,169 +5,43 @@ package mas_gui;
 import java.io.*;
 import java.util.*;
 import common.*;
-import graph.*;
 import support.*;
 import application_support.*;
 import application_library.*;
+import graph.*;
+import graph_library.DataSet;
 
-/** Abstraction responsible for managing a connection and building DataSet
-    instances from data returned from connection requests */
-public class DataSetBuilder extends NetworkProtocolUtilities
-	implements NetworkProtocol {
+/** Data set builders that build "drawable" data sets */
+public class DataSetBuilder extends AbstractDataSetBuilder {
+
+// Initialization
 
 	// Precondition: conn != null && opts != null
 	public DataSetBuilder(Connection conn, StartupOptions opts) {
 //		assert conn != null && opts != null;
-		connection = conn;
-		options = opts;
-		try {
-			initialize();
-		} catch (Exception e) {}
+		super(conn, opts);
+//connection = conn;
+//options = opts;
+//try {
+//	initialize();
+//} catch (Exception e) {}
 	}
 
 	public DataSetBuilder(DataSetBuilder dsb) {
-		try {
-			connection = dsb.connection().new_object();
-			options = dsb.options;
-			initialize();
-		} catch (Exception e) {
-			System.err.println(e);
-			Configuration.terminate(1);
-		}
+		super(dsb);
+/*
+try {
+	connection = dsb.connection().new_object();
+	options = dsb.options;
+	initialize();
+} catch (Exception e) {
+	System.err.println(e);
+	Configuration.terminate(1);
+}
+*/
 	}
 
-	public Connection connection() {
-		return connection;
-	}
-
-	// Does the last received market data contain an open interest field?
-	public boolean open_interest() {
-		return open_interest;
-	}
-
-	// Send a logout request to the server to end the current session
-	// and, if `exit' is true, exit with `status'.
-	public void logout(boolean exit, int status) {
-		try {
-			connection.logout();
-		} catch (Exception e) {
-			System.err.println(e);
-			Configuration.terminate(1);
-		}
-		if (exit) Configuration.terminate(status);
-	}
-
-	// Send a request for data for the tradable `symbol' with `period_type'.
-	public void send_market_data_request(String symbol, String period_type)
-			throws Exception {
-		connection.send_request(Market_data_request,
-			symbol + Message_field_separator + period_type);
-		if (connection.last_received_message_ID() == Ok) {
-			String results = connection.result().toString();
-			results = setup_parser_fieldspecs(results);
-			data_parser.parse(results, main_drawer);
-			last_market_data = data_parser.result();
-			last_market_data.set_drawer(main_drawer);
-			last_volume = data_parser.volume_result();
-			if (last_volume != null) {
-				last_volume.set_drawer(volume_drawer);
-			}
-			last_open_interest = data_parser.open_interest_result();
-			if (last_open_interest != null) {
-				last_open_interest.set_drawer(open_interest_drawer);
-			}
-			Calendar date = data_parser.latest_date_time();
-			if (date != null) {
-				last_latest_date_time = date;
-			}
-System.out.println("smdr - last ldt: " + last_latest_date_time);
-		}
-	}
-
-	// Send a request for data for indicator `ind' for the tradable `symbol' with
-	// `period_type'.
-	public void send_indicator_data_request(int ind, String symbol,
-		String period_type) throws Exception {
-		connection.send_request(Indicator_data_request,
-			ind + Message_field_separator + symbol +
-			Message_field_separator + period_type);
-		// Note that a new indicator drawer is created each time parse is
-		// called, since indicator drawers should not be shared.
-		indicator_parser.parse(connection.result().toString(),
-								new_indicator_drawer());
-		last_indicator_data = indicator_parser.result();
-	}
-
-	// Send a time-delimited request for data for the tradable `symbol' with
-	// `period_type' with the date-time range `start_date_time' ..
-	// `end_date_time'.  If `end_date_time' is null, the current date-time
-	// is used.
-	public void send_time_delimited_market_data_request(String symbol,
-		String period_type, Calendar start_date_time, Calendar end_date_time)
-			throws Exception {
-System.out.println("sending request with " + symbol + ", " + period_type +
-", " + start_date_time);
-		connection.send_request(Time_delimited_market_data_request, symbol +
-			Message_field_separator + period_type + Message_field_separator +
-			date_time_range(start_date_time, end_date_time));
-		if (connection.last_received_message_ID() == Ok) {
-			String results = connection.result().toString();
-			results = setup_parser_fieldspecs(results);
-			data_parser.parse(results, main_drawer);
-//!!!Need to append the new data to the current data set.
-			last_market_data = data_parser.result();
-			last_market_data.set_drawer(main_drawer);
-			last_volume = data_parser.volume_result();
-			if (last_volume != null) {
-				last_volume.set_drawer(volume_drawer);
-			}
-			last_open_interest = data_parser.open_interest_result();
-			if (last_open_interest != null) {
-				last_open_interest.set_drawer(open_interest_drawer);
-			}
-			Calendar date = data_parser.latest_date_time();
-			if (date != null) {
-				last_latest_date_time = date;
-			}
-System.out.println("smdr - last ldt: " + last_latest_date_time);
-		}
-	}
-
-	// Send a time-delimited request for data for indicator `ind' for
-	// the tradable `symbol' with `period_type' with the date-time range
-	// `start_date_time' .. `end_date_time'.  If `end_date_time' is null,
-	// the current date-time is used.
-	public void send_time_delimited_indicator_data_request(int ind,
-		String symbol, String period_type, Calendar start_date_time,
-		Calendar end_date_time) throws Exception {
-		connection.send_request(Time_delimited_indicator_data_request,
-			ind + Message_field_separator + symbol +
-			Message_field_separator + period_type + Message_field_separator +
-			date_time_range(start_date_time, end_date_time));
-// Note that a new indicator drawer is created each time parse is
-// called, since indicator drawers should not be shared.
-
-//!!!Need to append the new data to the current data set.
-		indicator_parser.parse(connection.result().toString(),
-			new_indicator_drawer());
-		last_indicator_data = indicator_parser.result();
-	}
-
-	// Send a request for the list of indicators for tradable `symbol'.
-	public void send_indicator_list_request(String symbol,
-			String period_type) throws IOException {
-		StringBuffer mlist;
-		last_indicator_list = new Vector();
-		connection.send_request(Indicator_list_request, symbol +
-			Message_field_separator + period_type);
-		mlist = connection.result();
-		StringTokenizer t = new StringTokenizer(mlist.toString(),
-			Message_record_separator, false);
-		for (int i = 0; t.hasMoreTokens(); ++i)
-		{
-			last_indicator_list.addElement(t.nextToken());
-		}
-	}
+// Access
 
 	// Data from last market data request
 	public DataSet last_market_data() {
@@ -261,6 +135,173 @@ System.out.println("smdr - last ldt: " + last_latest_date_time);
 		return login_failed;
 	}
 
+	// The current connection to the server
+	public Connection connection() {
+		return connection;
+	}
+
+// Status report
+
+	// Does the last received market data contain an open interest field?
+	public boolean open_interest() {
+		return open_interest;
+	}
+
+// Basic operations
+
+	// Send a logout request to the server to end the current session
+	// and, if `exit' is true, exit with `status'.
+	public void logout(boolean exit, int status) {
+		try {
+			connection.logout();
+		} catch (Exception e) {
+			System.err.println(e);
+			Configuration.terminate(1);
+		}
+		if (exit) Configuration.terminate(status);
+	}
+
+	// Send a request for data for the tradable `symbol' with `period_type'.
+	public void send_market_data_request(String symbol, String period_type)
+			throws Exception {
+		connection.send_request(Market_data_request,
+			symbol + Message_field_separator + period_type);
+		if (connection.last_received_message_ID() == Ok) {
+			String results = connection.result().toString();
+			results = setup_parser_fieldspecs(results);
+data_parser.set_main_drawer(main_drawer);
+//!!!Remove: data_parser.parse(results, main_drawer);
+			data_parser.parse(results);
+			last_market_data = (DrawableDataSet) data_parser.result();
+			last_market_data.set_drawer(main_drawer);
+			last_volume = (DrawableDataSet) data_parser.volume_result();
+			if (last_volume != null) {
+				last_volume.set_drawer(volume_drawer);
+			}
+			last_open_interest = (DrawableDataSet)
+				data_parser.open_interest_result();
+			if (last_open_interest != null) {
+				last_open_interest.set_drawer(open_interest_drawer);
+			}
+			Calendar date = data_parser.latest_date_time();
+			if (date != null) {
+				last_latest_date_time = date;
+			}
+System.out.println("smdr - last ldt: " + last_latest_date_time);
+		}
+	}
+
+	// Send a request for data for indicator `ind' for the tradable
+	// `symbol' with `period_type'.
+public void send_indicator_data_request(int ind, String symbol,
+String period_type) throws Exception {
+		connection.send_request(Indicator_data_request,
+			ind + Message_field_separator + symbol +
+			Message_field_separator + period_type);
+		// Note that a new indicator drawer is created each time parse is
+		// called, since indicator drawers should not be shared.
+//!!!Remove: indicator_parser.parse(connection.result().toString(), new_indicator_drawer());
+
+data_parser.set_main_drawer(new_indicator_drawer());
+		indicator_parser.parse(connection.result().toString());
+		last_indicator_data = (DrawableDataSet) indicator_parser.result();
+	}
+
+	// Send a time-delimited request for data for the tradable `symbol' with
+	// `period_type' with the date-time range `start_date_time' ..
+	// `end_date_time'.  If `end_date_time' is null, the current date-time
+	// is used.
+	public void send_time_delimited_market_data_request(String symbol,
+		String period_type, Calendar start_date_time, Calendar end_date_time)
+			throws Exception {
+System.out.println("sending request with " + symbol + ", " + period_type +
+", " + start_date_time);
+		connection.send_request(Time_delimited_market_data_request, symbol +
+			Message_field_separator + period_type + Message_field_separator +
+			date_time_range(start_date_time, end_date_time));
+		if (connection.last_received_message_ID() == Ok) {
+			String results = connection.result().toString();
+			results = setup_parser_fieldspecs(results);
+data_parser.set_main_drawer(main_drawer);
+//!!!Remove: data_parser.parse(results, main_drawer);
+			data_parser.parse(results);
+//!!!Need to append the new data to the current data set.
+			last_market_data = (DrawableDataSet) data_parser.result();
+			last_market_data.set_drawer(main_drawer);
+			last_volume = (DrawableDataSet) data_parser.volume_result();
+			if (last_volume != null) {
+				last_volume.set_drawer(volume_drawer);
+			}
+			last_open_interest = (DrawableDataSet)
+				data_parser.open_interest_result();
+			if (last_open_interest != null) {
+				last_open_interest.set_drawer(open_interest_drawer);
+			}
+			Calendar date = data_parser.latest_date_time();
+			if (date != null) {
+				last_latest_date_time = date;
+			}
+System.out.println("smdr - last ldt: " + last_latest_date_time);
+		}
+	}
+
+	// Send a time-delimited request for data for indicator `ind' for
+	// the tradable `symbol' with `period_type' with the date-time range
+	// `start_date_time' .. `end_date_time'.  If `end_date_time' is null,
+	// the current date-time is used.
+	public void send_time_delimited_indicator_data_request(int ind,
+		String symbol, String period_type, Calendar start_date_time,
+		Calendar end_date_time) throws Exception {
+		connection.send_request(Time_delimited_indicator_data_request,
+			ind + Message_field_separator + symbol +
+			Message_field_separator + period_type + Message_field_separator +
+			date_time_range(start_date_time, end_date_time));
+// Note that a new indicator drawer is created each time parse is
+// called, since indicator drawers should not be shared.
+
+//!!!Remove:		indicator_parser.parse(connection.result().toString(), new_indicator_drawer());
+data_parser.set_main_drawer(new_indicator_drawer());
+		indicator_parser.parse(connection.result().toString());
+//!!!Need to append the new data to the current data set.
+		last_indicator_data = (DrawableDataSet) indicator_parser.result();
+	}
+
+	// Send a request for the list of indicators for tradable `symbol'.
+	public void send_indicator_list_request(String symbol,
+			String period_type) throws IOException {
+		StringBuffer mlist;
+		last_indicator_list = new Vector();
+		connection.send_request(Indicator_list_request, symbol +
+			Message_field_separator + period_type);
+		mlist = connection.result();
+		StringTokenizer t = new StringTokenizer(mlist.toString(),
+			Message_record_separator, false);
+		for (int i = 0; t.hasMoreTokens(); ++i)
+		{
+			last_indicator_list.addElement(t.nextToken());
+		}
+	}
+
+// Hook routine implementations
+
+	protected void prepare_parser_for_market_data() {
+		data_parser.set_main_drawer(main_drawer);
+	}
+
+	protected void prepare_parser_for_indicator_data() {
+		data_parser.set_main_drawer(new_indicator_drawer());
+	}
+
+	protected AbstractParser new_main_parser() {
+		return new Parser(main_field_specs, Message_record_separator,
+			Message_field_separator);
+	}
+
+	protected AbstractParser new_indicator_parser(int[] field_specs) {
+		return new Parser(field_specs, Message_record_separator,
+			Message_field_separator);
+	}
+
 // Implementation
 
 	private MarketDrawer new_main_drawer() {
@@ -330,8 +371,8 @@ System.out.println("smdr - last ldt: " + last_latest_date_time);
 		int indicator_field_specs[] = new int[2];
 		indicator_field_specs[0] = Parser.Date;
 		indicator_field_specs[1] = Parser.Close;
-		indicator_parser = new Parser(indicator_field_specs,
-			Message_record_separator, Message_field_separator);
+indicator_parser = new Parser(indicator_field_specs,
+	Message_record_separator, Message_field_separator);
 		main_drawer = new_main_drawer();
 		volume_drawer = new BarDrawer(main_drawer);
 		data_parser.set_volume_drawer(volume_drawer);
@@ -372,28 +413,23 @@ System.out.println("smdr - last ldt: " + last_latest_date_time);
 		return result;
 	}
 
-	// tradables is shared by all windows
-	private static Vector tradables;	// Cached list of tradables
-
-	private Connection connection;
-
 	// result of last market data request
-	private DataSet last_market_data;
+	private DrawableDataSet last_market_data;
 
 	// result of last time-delimited market data request
-	private DataSet last_time_delimited_market_data;
+	private DrawableDataSet last_time_delimited_market_data;
 
 	// volume result from last market data request
-	private DataSet last_volume;
+	private DrawableDataSet last_volume;
 
 	// open interest result from last market data request
-	private DataSet last_open_interest;
+	private DrawableDataSet last_open_interest;
 
 	// result of last indicator data request
-	private DataSet last_indicator_data;
+	private DrawableDataSet last_indicator_data;
 
 	// result of last time delimited indicator data request
-	private DataSet last_time_delimited_indicator_data;
+	private DrawableDataSet last_time_delimited_indicator_data;
 
 	// result of last indicator list request
 	private Vector last_indicator_list;

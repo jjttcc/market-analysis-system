@@ -3,11 +3,12 @@
 package mas_gui;
 
 import java.awt.*;
-import graph.*;
 import java.util.Vector;
 import java.util.Properties;
 import common.*;
 import application_support.*;
+import graph_library.DataSet;
+import graph.*;
 
 /** Scroll pane that holds the Market Analysis graph and buttons */
 public class MA_ScrollPane extends ScrollPane implements NetworkProtocol {
@@ -88,13 +89,13 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol {
 	}
 
 	// Add a data set to the main graph.
-	public void add_main_data_set(DataSet d) {
+	public void add_main_data_set(DrawableDataSet d) {
 		_main_graph.attachDataSet(d);
 		main_graph_changed = true;
 	}
 
 	// Add a data set to the indicator graph.
-	public void add_indicator_data_set(DataSet d) {
+	public void add_indicator_data_set(DrawableDataSet d) {
 		_indicator_graph.attachDataSet(d);
 	}
 

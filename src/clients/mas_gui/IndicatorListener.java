@@ -6,8 +6,9 @@ import java.awt.event.*;
 import java.util.*;
 import support.*;
 import common.NetworkProtocol;
-import graph.DataSet;
 import application_support.*;
+import graph_library.DataSet;
+import graph.DrawableDataSet;
 
 /** Listener for indicator selection */
 public class IndicatorListener implements ActionListener, NetworkProtocol {
@@ -19,7 +20,7 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 
 	public void actionPerformed(java.awt.event.ActionEvent e) {
 		String selection = e.getActionCommand();
-		DataSet dataset, main_dataset;
+		DrawableDataSet dataset, main_dataset;
 		boolean retrieve_failied = false;
 		MA_Configuration conf = MA_Configuration.application_instance();
 		try {
@@ -56,7 +57,7 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 		// configured to go in the upper (main) or lower (indicator) graph.
 		else if (MA_Configuration.application_instance().
 				upper_indicators().containsKey(selection)) {
-			main_dataset = data_builder.last_market_data();
+			main_dataset = (DrawableDataSet) data_builder.last_market_data();
 			if (! chart.current_upper_indicators.isEmpty() &&
 					chart.replace_indicators) {
 				// Remove the old indicator data from the graph (and the
@@ -68,17 +69,19 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 				chart.current_upper_indicators.removeAllElements();
 			}
 			chart.current_upper_indicators.addElement(selection);
-			dataset = data_builder.last_indicator_data();
+			dataset = (DrawableDataSet) data_builder.last_indicator_data();
 			dataset.set_dates_needed(false);
-			dataset.set_color(conf.indicator_color(selection, true));
+			dataset.setColor(conf.indicator_color(selection, true));
 			chart.link_with_axis(dataset, selection);
 			main_pane.add_main_data_set(dataset);
 		} else if (selection.equals(chart.No_upper_indicator)) {
 			// Remove the old indicator and market data from the graph.
 			main_pane.clear_main_graph();
 			// Re-attach the market data without the indicator data.
-			chart.link_with_axis(data_builder.last_market_data(), null);
-			main_pane.add_main_data_set(data_builder.last_market_data());
+			DrawableDataSet data = (DrawableDataSet)
+				data_builder.last_market_data();
+			chart.link_with_axis(data, null);
+			main_pane.add_main_data_set(data);
 			chart.current_upper_indicators.removeAllElements();
 		} else if (selection.equals(chart.No_lower_indicator)) {
 			main_pane.clear_indicator_graph();
@@ -86,17 +89,17 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 			chart.set_window_title();
 		} else {
 			if (selection.equals(chart.Volume)) {
-				dataset = data_builder.last_volume();
+				dataset = (DrawableDataSet) data_builder.last_volume();
 			} else if (selection.equals(chart.Open_interest)) {
-				dataset = data_builder.last_open_interest();
+				dataset = (DrawableDataSet) data_builder.last_open_interest();
 			} else {
-				dataset = data_builder.last_indicator_data();
+				dataset = (DrawableDataSet) data_builder.last_indicator_data();
 			}
 			if (chart.replace_indicators) {
 				main_pane.clear_indicator_graph();
 				chart.current_lower_indicators.removeAllElements();
 			}
-			dataset.set_color(conf.indicator_color(selection, false));
+			dataset.setColor(conf.indicator_color(selection, false));
 			chart.link_with_axis(dataset, selection);
 			chart.current_lower_indicators.addElement(selection);
 			chart.set_window_title();

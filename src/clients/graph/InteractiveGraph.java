@@ -405,13 +405,13 @@ public boolean mouseMove(Event e, int x, int y) {
 			double tymin = yaxis.minimum();
 			double tymax = yaxis.maximum();
 
-			d = range.getXmin();
+			d = range.minimum_x();
 			if (d != null) txmin = d.doubleValue();
-			d = range.getXmax();
+			d = range.maximum_x();
 			if (d != null) txmax = d.doubleValue();
-			d = range.getYmin();
+			d = range.minimum_y();
 			if (d != null) tymin = d.doubleValue();
-			d = range.getYmax();
+			d = range.maximum_y();
 			if (d != null) tymax = d.doubleValue();
 			if ( txmax > txmin && tymax > tymin ) {
 				xaxis.set_minimum(txmin);
@@ -429,7 +429,7 @@ public boolean mouseMove(Event e, int x, int y) {
  *   Find the closest data point to the cursor
  */
 	protected double[] getClosestPoint(int ix, int iy) {
-		DataSet ds;
+		DrawableDataSet ds;
 		int   i;
 		double a[] = new double[3];
 		double distsq = -1.0;
@@ -439,7 +439,7 @@ public boolean mouseMove(Event e, int x, int y) {
 
 //System.out.println("getClosestPoint: x="+x+", y="+y);
 		for (i=0; i<dataset.size(); i++) {
-			ds = (DataSet)(dataset.elementAt(i));
+			ds = (DrawableDataSet)(dataset.elementAt(i));
 			a = ds.getClosestPoint(x,y);
 			if ( distsq < 0.0 || distsq > a[2] ) {
 				data[0] = a[0];
@@ -583,7 +583,7 @@ class Range extends Frame {
 		super.setTitle("Set Plot Range");
 	}
 
-	public Double getXmin() {
+	public Double minimum_x() {
 		try {
 			return Double.valueOf(xminText.getText());
 		}
@@ -592,7 +592,7 @@ class Range extends Frame {
 		}
 	}
 
-	public Double getXmax() {
+	public Double maximum_x() {
 		try {
 			return Double.valueOf(xmaxText.getText());
 		}
@@ -601,7 +601,7 @@ class Range extends Frame {
 		}
 	}
 
-	public Double getYmin() {
+	public Double minimum_y() {
 		try {
 			return Double.valueOf(yminText.getText());
 		}
@@ -610,7 +610,7 @@ class Range extends Frame {
 		}
 	}
 
-	public Double getYmax() {
+	public Double maximum_y() {
 		try {
 			return Double.valueOf(ymaxText.getText());
 		}
