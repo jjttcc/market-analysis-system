@@ -53,7 +53,7 @@ set_up()
 		exec=../EIFGEN/F_code/mas
 	elif [ -d ../EIFGEN/W_code -a -x ../EIFGEN/W_code/mas ]; then
 		exec=../EIFGEN/W_code/mas
-		ln -f -s ../EIFGEN/W_code/melted.eif .
+		ln -f -s ../EIFGEN/W_code/mas.melted .
 	elif [ -d ../../../bin -a -x ../../../bin/mas ]; then
 		exec=../../../bin/mas
 	else
