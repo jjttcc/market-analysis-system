@@ -90,6 +90,8 @@ feature -- Basic operations
 			end
 			printer.set_print_start_date (print_start_date)
 			printer.set_print_end_date (print_end_date)
+			printer.set_print_start_time (print_start_time)
+			printer.set_print_end_time (print_end_time)
 			printer.set_field_separator (output_field_separator)
 			printer.set_record_separator (output_record_separator)
 			printer.set_date_field_separator (output_date_field_separator)
@@ -244,6 +246,9 @@ feature {NONE} -- Implementation
 
 	print_start_date, print_end_date: DATE
 			-- Start and end date to use for printing, if not void
+
+	print_start_time, print_end_time: TIME
+			-- Start and end time to use for printing, if not void
 
 	output_medium: IO_MEDIUM is
 			-- Medium to use for output

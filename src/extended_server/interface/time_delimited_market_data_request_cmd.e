@@ -23,24 +23,6 @@ creation
 
 feature {NONE} -- Hook routine implementations
 
-	additional_field_constraints_fulfilled (fields: LIST [STRING]): BOOLEAN is
-		do
-			Result := fields.i_th (date_time_spec_index) /= Void and then
-				not fields.i_th (date_time_spec_index).is_empty
-		ensure
-			true_iff_not_empty: Result = (fields.i_th (date_time_spec_index) /=
-				Void and then not fields.i_th (date_time_spec_index).is_empty)
-		end
-
-	additional_field_constraints_msg: STRING is "date-time range field is emtpy"
-
-feature {NONE} -- Implementation - essential properties
-
-	start_date_time, end_date_time: DATE_TIME
-			-- The start and end date-times for the request
-
-feature {NONE} -- Redefined routines
-
 	parse_remainder (fields: LIST [STRING]) is
 		local
 			split_result: LIST [STRING]
@@ -73,6 +55,24 @@ feature {NONE} -- Redefined routines
 			start_date_set_if_no_error:
 				not parse_error implies start_date_time /= Void
 		end
+
+	additional_field_constraints_fulfilled (fields: LIST [STRING]): BOOLEAN is
+		do
+			Result := fields.i_th (date_time_spec_index) /= Void and then
+				not fields.i_th (date_time_spec_index).is_empty
+		ensure
+			true_iff_not_empty: Result = (fields.i_th (date_time_spec_index) /=
+				Void and then not fields.i_th (date_time_spec_index).is_empty)
+		end
+
+	additional_field_constraints_msg: STRING is "date-time range field is emtpy"
+
+feature {NONE} -- Implementation - essential properties
+
+	start_date_time, end_date_time: DATE_TIME
+			-- The start and end date-times for the request
+
+feature {NONE} -- Redefined routines
 
 	parsed_date_time (date_time_string: STRING): DATE_TIME is
 			-- DATE_TIME parsed from `date_time_string' - Void if
@@ -108,14 +108,14 @@ feature {NONE} -- Redefined routines
 	set_print_parameters is
 		do
 			print_start_date := start_date_time.date
---			print_start_time := start_date_time.time
+			print_start_time := start_date_time.time
 --!!!Make sure 'start_date_time.time' is used for "printing" the data.
 			if end_date_time.date /= Void then
 				print_end_date := end_date_time.date
---				print_end_time := end_time_time.time
+				print_end_time := end_date_time.time
 			else
 				print_end_date := Void
---				print_end_time := Void
+				print_end_time := Void
 			end
 		end
 

@@ -196,8 +196,10 @@ feature -- Basic operations
 		local
 			first, last, i: INTEGER
 		do
-			first := first_index (l)
+			first := first_date_time_index (l)
 			last := last_index (l)
+print ("print_tuples_with_time - first, last: " + first.out + ", " + last.out +
+"%N")
 			if last >= first then
 				debug ("data_update_bug")
 					print_requested_start_end_dates
@@ -271,9 +273,8 @@ feature {NONE} -- Implementation
 				time_field_separator))
 		end
 
---!!!Add a 'first_date_time_index' (or whatever an appropriate name is).
 	first_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER is
-			-- First index for printing, according to print_start_date
+			-- First index for printing, according to `print_start_date'
 		do
 			if print_start_date /= Void and not l.is_empty then
 				-- Set Result to the index of the element whose date matches
@@ -284,6 +285,35 @@ feature {NONE} -- Implementation
 					-- Indicate that no elements of l fall after
 					-- print_start_date by setting Result to one past
 					-- l's last element.
+					Result := l.count + 1
+				end
+			else
+				Result := 1
+			end
+		ensure
+			void_date_result: print_start_date = Void implies Result = 1
+			result_gt_1: Result >= 1
+		end
+
+	first_date_time_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER is
+			-- First index for printing, according to `print_start_date' and
+			-- `print_start_time'
+		require
+			start_time_exists_if_start_date_exists:
+				print_start_date /= Void implies print_start_time /= Void
+		do
+			if print_start_date /= Void and not l.is_empty then
+				-- Set Result to the index of the element whose date matches
+				-- print_start_date:print_start_time, or, if no match, to
+				-- the first element whose date_time >
+				-- print_start_date:print_start_time
+				Result := l.index_at_date_time (
+					create {DATE_TIME}.make_by_date_time(print_start_date,
+					print_start_time), 1)
+				if Result = 0 then
+					-- Indicate that no elements of l fall after
+					-- print_start_date,print_start_time by setting Result
+					-- to one past l's last element.
 					Result := l.count + 1
 				end
 			else
