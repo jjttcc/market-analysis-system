@@ -29,18 +29,17 @@ creation
 
 feature -- Initialization
 
-	make (s_list: LINEAR [STRING]; factories: LINEAR [TRADABLE_FACTORY]) is
+	make (s_list: LINEAR [STRING]; factory: TRADABLE_FACTORY) is
 		require
-			not_void: s_list /= Void and factories /= Void
-			-- counts_equal: s_list.count = factories.count
+			not_void: s_list /= Void and factory /= Void
 		do
 			symbol_list := s_list
-			tradable_factories := factories
+			tradable_factory := factory
 			object_comparison := True
-			symbol_list.start; tradable_factories.start
+			symbol_list.start
 			!! cache.make (Cache_size)
 		ensure
-			set: symbol_list = s_list and tradable_factories = factories
+			set: symbol_list = s_list and tradable_factory = factory
 			implementation_init: last_tradable = Void and old_index = 0
 			cache_initialized: cache /= Void
 		end
@@ -62,9 +61,6 @@ feature -- Access
 			-- Current tradable.  `fatal_error' will be true if an error
 			-- occurs.
 		do
-			check
-				indices_equal: index = tradable_factories.index
-			end
 			fatal_error := false
 			-- Create a new tradable (or get it from the cache) only if the
 			-- cursor has moved since the last tradable creation.
@@ -76,14 +72,14 @@ feature -- Access
 				if last_tradable = Void then
 					setup_input_medium
 					if not fatal_error then
-						tradable_factories.item.set_symbol (current_symbol)
-						tradable_factories.item.execute
-						last_tradable := tradable_factories.item.product
+						tradable_factory.set_symbol (current_symbol)
+						tradable_factory.execute
+						last_tradable := tradable_factory.product
 						add_to_cache (last_tradable, index)
-						if tradable_factories.item.error_occurred then
+						if tradable_factory.error_occurred then
 							report_errors (last_tradable.symbol,
-								tradable_factories.item.error_list)
-							if tradable_factories.item.last_error_fatal then
+								tradable_factory.error_list)
+							if tradable_factory.last_error_fatal then
 								fatal_error := true
 							end
 						end
@@ -142,19 +138,16 @@ feature -- Cursor movement
 	start is
 		do
 			symbol_list.start
-			tradable_factories.start
 		end
 
 	finish is
 		do
 			symbol_list.finish
-			tradable_factories.finish
 		end
 
 	forth is
 		do
 			symbol_list.forth
-			tradable_factories.forth
 		end
 
 feature -- Basic operations
@@ -189,7 +182,7 @@ feature -- Basic operations
 
 feature {FACTORY} -- Access
 
-	tradable_factories: LINEAR [TRADABLE_FACTORY]
+	tradable_factory: TRADABLE_FACTORY
 			-- Manufacturers of tradables
 
 feature {NONE} -- Implementation
@@ -241,7 +234,6 @@ feature {NONE} -- Implementation
 			-- input medium, if it exists.  `fatal_error' will be true
 			-- if an error occurs.
 		require
-			tf_index_current: index = tradable_factories.index
 			no_error: fatal_error = false
 		do
 		end
@@ -268,7 +260,7 @@ feature {NONE} -- Inapplicable
 
 invariant
 
-	factories_not_void: tradable_factories /= Void
+	factory_not_void: tradable_factory /= Void
 	always_compare_objects: object_comparison = True
 	cache_exists: cache /= Void
 	cache_not_too_large: cache.count <= Cache_size

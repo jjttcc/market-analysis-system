@@ -47,13 +47,13 @@ feature -- Basic operations
 			retrieve_input_entity_names
 			if command_line_options.use_db then
 				create db_list_builder.make (input_entity_names,
-					tradable_factories)
+					tradable_factory)
 				db_list_builder.execute
 				create product.make (db_list_builder.daily_list,
 					db_list_builder.intraday_list)
 			else
 				create daily_market_list.make (input_entity_names,
-					tradable_factories)
+					tradable_factory)
 				-- !!!Make intraday list Void for now.
 				create product.make (daily_market_list, Void)
 			end
@@ -61,41 +61,29 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	tradable_factories: LINKED_LIST [TRADABLE_FACTORY] is
-		local
-			i: INTEGER
-			tradable_factory: TRADABLE_FACTORY
+	tradable_factory: TRADABLE_FACTORY is
 		do
-			!STOCK_FACTORY!tradable_factory.make
-			tradable_factory.set_no_open (
+			create {STOCK_FACTORY} Result.make
+			Result.set_no_open (
 				not command_line_options.opening_price)
 			if command_line_options.field_separator /= Void then
-				tradable_factory.set_field_separator (
+				Result.set_field_separator (
 					command_line_options.field_separator)
 			end
 			if command_line_options.record_separator /= Void then
-				tradable_factory.set_record_separator (
+				Result.set_record_separator (
 					command_line_options.record_separator)
 			else
 				-- Default to newline.
-				tradable_factory.set_record_separator ("%N")
+				Result.set_record_separator ("%N")
 			end
 			if command_line_options.strict then
-				tradable_factory.set_strict_error_checking (true)
+				Result.set_strict_error_checking (true)
 			end
 			check
 				flist_not_void: function_library /= Void
 			end
-			tradable_factory.set_indicators (function_library)
-			!!Result.make
-			-- Add a factory for each input entity.  Since some entities
-			-- may be for different types of markets, in the future,
-			-- different types of factories may be created and
-			-- added to the tradable_factories list.
-			from i := 1 until i = input_entity_names.count + 1 loop
-				Result.extend (tradable_factory)
-				i := i + 1
-			end
+			Result.set_indicators (function_library)
 		end
 
     retrieve_input_entity_names is

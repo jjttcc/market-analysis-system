@@ -13,17 +13,16 @@ creation
 
 feature -- Initialization
 
-	make (symbols: LINEAR [STRING];
-			factories: LINEAR [TRADABLE_FACTORY]) is
+	make (symbols: LINEAR [STRING]; factory: TRADABLE_FACTORY) is
 		require
-			not_void: symbols /= Void and factories /= Void
+			not_void: symbols /= Void and factory /= Void
 		do
 			symbol_list := symbols
-			tradable_factories := factories
+			tradable_factory := factory
 		ensure
 			symbols_set: symbol_list = symbols and symbol_list /= Void
-			factories_set: tradable_factories = factories and
-				tradable_factories /= Void
+			factory_set: tradable_factory = factory and
+				tradable_factory /= Void
 		end
 
 feature -- Access
@@ -34,13 +33,13 @@ feature -- Access
 
 	symbol_list: LINEAR [STRING]
 
-	tradable_factories: LINEAR [TRADABLE_FACTORY]
+	tradable_factory: TRADABLE_FACTORY
 
 feature -- Basic operations
 
 	execute is
 		require
-			input_lists_set: symbol_list /= Void and tradable_factories /= Void
+			input_lists_set: symbol_list /= Void and tradable_factory /= Void
 		local
 			global_server: expanded GLOBAL_SERVER
 			db_info: MAS_DB_INFO
@@ -59,13 +58,13 @@ feature {NONE} -- Implementation
 	create_daily_list is
 		do
 			create {DB_TRADABLE_LIST} daily_list.make (symbol_list,
-				tradable_factories)
+				tradable_factory)
 		end
 
 	create_intraday_list is
 		do
 			create {DB_TRADABLE_LIST} intraday_list.make (symbol_list,
-				tradable_factories)
+				tradable_factory)
 			intraday_list.set_intraday (true)
 		end
 

@@ -99,11 +99,11 @@ feature {NONE} -- Implementation
 		do
 			input_file := open_current_file
 			if not fatal_error then
-				tradable_factories.item.set_input (input_file)
+				tradable_factory.set_input (input_file)
 				input_file.set_field_separator (
-					tradable_factories.item.field_separator)
+					tradable_factory.field_separator)
 				input_file.set_record_separator (
-					tradable_factories.item.record_separator)
+					tradable_factory.record_separator)
 			end
 		end
 
