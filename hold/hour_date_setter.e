@@ -16,8 +16,6 @@ feature {NONE}
 			if stream.last_integer < 0 then
 				handle_input_error ("Numeric input value is < 0: ",
 									stream.last_integer.out)
-				-- conform to the precondition:
-				tuple.set_close (0)
 			else
 				-- Set the date/time
 			end

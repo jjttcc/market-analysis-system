@@ -8,6 +8,11 @@ class VOLUME_SETTER inherit
 
 	REAL_SETTER
 
+	GENERAL_UTILITIES
+		export {NONE}
+			all
+		end
+
 creation
 
 	make
@@ -42,10 +47,10 @@ feature {NONE}
 
 	do_set (stream: INPUT_SEQUENCE; tuple: BASIC_VOLUME_TUPLE) is
 		do
-			if stream.last_real < 0 then
-				handle_input_error ("Numeric input value is < 0: ",
-									stream.last_real.out)
-				-- conform to the precondition:
+			if stream.last_real + epsilon < 0 then
+				handle_input_error (concatenation (<<"Volume is < 0: ",
+					stream.last_real.out, ", adjusting to 0.">>), Void)
+				-- conform to the postondition:
 				tuple.set_volume (0)
 			else
 				tuple.set_volume (stream.last_real * multiplier)

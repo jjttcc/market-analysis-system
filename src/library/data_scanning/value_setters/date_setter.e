@@ -30,14 +30,13 @@ feature {NONE}
 		do
 			date := date_util.date_from_number (stream.last_integer)
 			if date = Void then -- stream.last_integer was invalid
-				!!date_time.make_now
-				handle_input_error ("Date input value is invalid: ",
-									stream.last_integer.out)
+				handle_input_error ("Date input value is invalid.", Void)
+				unrecoverable_error := true
 			else
 				!!time.make (0, 0, 0)
 				!!date_time.make_by_date_time (date, time)
+				tuple.set_date_time (date_time)
 			end
-			tuple.set_date_time (date_time)
 		end
 
 feature {NONE}

@@ -12,10 +12,9 @@ feature {NONE}
 
 	do_set (stream: INPUT_SEQUENCE; tuple: BASIC_MARKET_TUPLE) is
 		do
-			if stream.last_real < 0 then
-				handle_input_error ("Numeric input value is < 0: ",
-									stream.last_real.out)
-				-- conform to the precondition:
+			if stream.last_real < epsilon then
+				handle_le_0_error ("opening price")
+				-- conform to the postondition:
 				tuple.set_open (0)
 			else
 				tuple.set_open (stream.last_real)

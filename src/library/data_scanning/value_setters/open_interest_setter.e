@@ -16,7 +16,7 @@ feature {NONE}
 			if stream.last_integer < 0 then
 				handle_input_error ("Numeric input value is < 0: ",
 									stream.last_integer.out)
-				-- conform to the precondition:
+				-- conform to the postondition:
 				tuple.set_open_interest (0)
 			else
 				tuple.set_open_interest (stream.last_integer)
