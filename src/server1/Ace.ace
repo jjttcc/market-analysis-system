@@ -17,6 +17,9 @@ default
 	--debug ("command line");
 	--debug ("database");
 	profile (no);
+	array_optimization (yes);
+	inlining (yes);
+	exception_trace (no);
 
 	--precompiled ("$EIFFEL4/precomp/spec/$PLATFORM/base");
 
