@@ -109,7 +109,7 @@ class Parser {
 		return volume_data;
 	}
 
-	// Parsed volume
+	// Parsed open interest
 	DataSet open_interest_result() {
 		return oi_data;
 	}
