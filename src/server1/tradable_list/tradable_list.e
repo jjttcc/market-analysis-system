@@ -8,7 +8,7 @@ indexing
 
 class TRADABLE_LIST inherit
 
-	LINEAR [TRADABLE [BASIC_MARKET_TUPLE]]
+	BILINEAR [TRADABLE [BASIC_MARKET_TUPLE]]
 		redefine
 			compare_references, compare_objects,
 			changeable_comparison_criterion			
@@ -34,11 +34,11 @@ feature -- Initialization
 		require
 			not_void: s_list /= Void and factory /= Void
 		do
-			setup_symbols (s_list)
-			symbols.compare_objects
+			setup_symbol_list (s_list)
+			symbol_list.compare_objects
 			tradable_factory := factory
 			object_comparison := true
-			symbols.start
+			symbol_list.start
 			create cache.make (Cache_size)
 			caching_on := true
 		ensure
@@ -46,8 +46,8 @@ feature -- Initialization
 			factory_set: tradable_factory = factory
 			implementation_init: last_tradable = Void and old_index = 0
 			cache_initialized: cache /= Void
-			cache_on: caching_on
-			-- All elements of `s_list' have been copied into `symbols',
+			ache_on: caching_on
+			-- All elements of `s_list' are in `symbols',
 			-- with upper-case characters changed to lower case.
 		end
 
@@ -55,13 +55,13 @@ feature -- Access
 
 	index: INTEGER is
 		do
-			Result := symbols.index
+			Result := symbol_list.index
 		end
 
 	count: INTEGER is
 			-- Number of items in the list
 		do
-			Result := symbols.count
+			Result := symbol_list.count
 		end
 
 	item: TRADABLE [BASIC_MARKET_TUPLE] is
@@ -92,6 +92,10 @@ feature -- Access
 							end
 						end
 						close_input_medium
+					else
+						-- A fatal error indicates that the current tradable
+						-- is invalid, or not readable, or etc., so:
+						remove_current_item
 					end
 				else
 					last_tradable.flush_indicators
@@ -106,8 +110,14 @@ feature -- Access
 			good_if_no_error: not fatal_error implies Result /= Void
 		end
 
-	symbols: LIST [STRING]
+	symbols: LIST [STRING] is
 			-- The symbol of each tradable
+		do
+			if symbol_list_clone = Void then
+				symbol_list_clone := clone (symbol_list)
+			end
+			Result := symbol_list_clone
+		end
 
 	changeable_comparison_criterion: BOOLEAN is false
 
@@ -115,14 +125,19 @@ feature -- Access
 
 feature -- Status report
 
+	before: BOOLEAN is
+		do
+			Result := symbol_list.before
+		end
+
 	after: BOOLEAN is
 		do
-			Result := symbols.after
+			Result := symbol_list.after
 		end
 
 	empty: BOOLEAN is
 		do
-			Result := symbols.empty
+			Result := symbol_list.empty
 		end
 
 	fatal_error: BOOLEAN
@@ -165,17 +180,22 @@ feature -- Cursor movement
 
 	start is
 		do
-			symbols.start
+			symbol_list.start
 		end
 
 	finish is
 		do
-			symbols.finish
+			symbol_list.finish
 		end
 
 	forth is
 		do
-			symbols.forth
+			symbol_list.forth
+		end
+
+	back is
+		do
+			symbol_list.back
 		end
 
 feature -- Basic operations
@@ -188,13 +208,13 @@ feature -- Basic operations
 			from
 				start
 			until
-				after or else symbols.item.is_equal (s)
+				after or else symbol_list.item.is_equal (s)
 			loop
 				forth
 			end
 		ensure
 			after_if_not_found: not symbols.has (s) implies after
-			current_symbol_equals_s: not fatal_error and
+			current_symbol_equals_s: item /= Void and
 				not after implies item.symbol.is_equal (s)
 		end
 
@@ -274,11 +294,11 @@ feature {NONE} -- Implementation
 
 	current_symbol: STRING is
 		do
-			Result := symbols.item
+			Result := symbol_list.item
 		end
 
-	setup_symbols (s_list: LINEAR [STRING]) is
-			-- Create `symbols' and copy elements of s_list into it,
+	setup_symbol_list (s_list: LINEAR [STRING]) is
+			-- Create `symbol_list' and copy elements of s_list into it,
 			-- converting any upper-case characters to lower-case.
 		local
 			s: STRING
@@ -295,8 +315,32 @@ feature {NONE} -- Implementation
 				list.extend (s)
 				s_list.forth
 			end
-			symbols := list
+			symbol_list := list
 		end
+
+	remove_current_item is
+			-- Remove the current item and leave symbol_list cursor at
+			-- the item after the removed item, if there is one; otherwise
+			-- ensure symbol_list.first if it's not empty.
+		require
+			not_off: not off
+		local
+			s: STRING
+			i: INTEGER
+		do
+			i := symbol_list.index
+			symbol_list.prune (symbol_list.item)
+			if symbol_list.valid_cursor_index (i) then
+				symbol_list.go_i_th (i)
+			else
+				symbol_list.start
+			end
+			symbol_list_clone := Void
+		end
+
+	symbol_list: LIST [STRING]
+
+	symbol_list_clone: LIST [STRING]
 
 feature {NONE} -- Inapplicable
 
@@ -312,10 +356,10 @@ invariant
 
 	factory_not_void: tradable_factory /= Void
 	always_compare_objects: object_comparison = true
-	object_comparison_for_symbols: symbols.object_comparison
+	object_comparison_for_symbol_list: symbol_list.object_comparison
 	cache_exists: cache /= Void
 	cache_not_too_large: cache.count <= Cache_size
 	symbols_not_void: symbols /= Void
-	index_definition: index = symbols.index
+	index_definition: index = symbol_list.index
 
 end -- class TRADABLE_LIST
