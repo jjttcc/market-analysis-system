@@ -21,7 +21,8 @@ class CONFIGURABLE_N_RECORD_FUNCTION inherit
 		undefine
 			forth, do_process
 		redefine
-			set_n, short_description, start, initialize_operators, target
+			set_n, short_description, start, initialize_operators, target,
+			strict_n_count
 		end
 
 	FUNCTION_WITH_FIRST_AND_PREVIOUS_OPERATORS
@@ -143,6 +144,8 @@ feature {NONE} -- Implementation
 				first_element_operator.initialize (Current)
 			end
 		end
+
+	strict_n_count: BOOLEAN is false
 
 invariant
 
