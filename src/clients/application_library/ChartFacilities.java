@@ -34,7 +34,7 @@ public class ChartFacilities {
 		if (chart.period_types().size() > 0) {
 			if (! force_current_type_change) {
 				// Set change_current_type to false if
-				// `current_period_type' is in `period_types'.
+				// `current_period_type()' is in `period_types'.
 				Enumeration types = chart.period_types().elements();
 				while (types.hasMoreElements()) {
 					String s = (String) types.nextElement();

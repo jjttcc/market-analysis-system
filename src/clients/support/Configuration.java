@@ -25,17 +25,17 @@ public class Configuration implements NetworkProtocol {
 
 	// Should a call to 'terminate' be ignored?
 	public static boolean ignore_termination() {
-		return ignore_termination_;
+		return ignore_termination;
 	}
 
 	// Is "debugging" on?
 	public static boolean debug() {
-		return debug_;
+		return debug;
 	}
 
 	// Is the "auto-data-refresh" feature available?
 	public boolean auto_refresh() {
-		return false;	// No - redefine if auto-refresh is to be used.
+		return auto_refresh;
 	}
 
 // Element change
@@ -56,19 +56,24 @@ public class Configuration implements NetworkProtocol {
 
 	// Set whether calls to 'terminate' should be ignored.
 	public static void set_ignore_termination(boolean value) {
-		ignore_termination_ = value;
+		ignore_termination = value;
 	}
 
 	// Set 'debug'.
 	public static void set_debug(boolean value) {
-		debug_ = value;
+		debug = value;
+	}
+
+	// Set 'auto_refresh'.
+	public static void set_auto_refresh(boolean value) {
+		auto_refresh = value;
 	}
 
 // Basic operations
 
 	// If not ignore_termination(), terminate the process.
 	public static void terminate(int status) {
-		if (! ignore_termination_) {
+		if (! ignore_termination) {
 			System.exit(status);
 		}
 	}
@@ -80,8 +85,9 @@ public class Configuration implements NetworkProtocol {
 
 // Implementation - attributes
 
-	protected static boolean ignore_termination_ = false;
-	protected static boolean debug_ = false;
+	protected static boolean ignore_termination = false;
+	protected static boolean debug = false;
+	protected static boolean auto_refresh = false;
 	protected static Configuration _instance;
 	protected static Tokenizer input_source;
 }

@@ -10,11 +10,14 @@ public class AutoRefreshSetup {
 		TimeDelimitedDataRequest timer_task = new TimeDelimitedDataRequest(
 			data_request_client);
 		timer.scheduleAtFixedRate(timer_task, refresh_delay, refresh_delay);
+System.out.println("scheduled " + timer_task + " with delay: " +
+refresh_delay);
 	}
 
 	// Timer, shared by all data-refresh clients
 	private static Timer timer = new Timer(true);
 
 	// Timer delay in milliseconds (!!!Make configurable.)
-	private static long refresh_delay = 1000 * 60;
+	private static long refresh_delay = 100 * 60;
+//private static long refresh_delay = 1000 * 60;
 }

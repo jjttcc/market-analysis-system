@@ -63,11 +63,12 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		this_chart = this;
 		Vector _tradables = null;
 		saved_dialogs = new Vector();
-		_indicators = null;
+//!!!!: _indicators = null;
 
 		serialize_filename = sfname;
 
 		facilities = new ChartFacilities(this);
+		tradable_specification = new MA_TradableDataSpecification("", "");
 		if (window_count == 1 && serialize_filename != null) {
 			ChartSettings settings = null;
 			try {
@@ -90,13 +91,13 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 					// Each tradable has its own period type list; but for now,
 					// just retrieve the list for the first tradable and use
 					// it for all tradables.
-					_period_types = data_builder.trading_period_type_list(
+					period_types = data_builder.trading_period_type_list(
 						(String) _tradables.elementAt(0));
 					if (data_builder.connection().error_occurred()) {
 						facilities.abort(data_builder.connection().
 							result().toString(), null);
 					}
-					current_period_type = initial_period_type(_period_types);
+					reinitialize_current_period_type();
 				} else {
 					facilities.abort("Server's list of tradables is empty.",
 						null);
@@ -136,12 +137,20 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		return result;
 	}
 
+//!!!!!:
+	public Hashtable remove_this_it_is_obsolete_indicators() {
+		return null;
+	}
+
 	// indicators
 	// Postcondition: result != null
-	public Hashtable indicators() {
+//!!!!:
+	public Hashtable old_remove_me_please_indicators() {
 //!!!Change to use 'tradable_specification.indicator_specs'
 		Hashtable result = null;
-		if (_indicators == null || new_indicators) {
+		if (tradable_specification.all_indicator_specifications().size() == 0
+				|| new_indicators) {
+//!!!		if (_indicators == null || new_indicators) [
 			new_indicators = false;
 			Vector inds_from_server = data_builder.last_indicator_list();
 			if (previous_open_interest != data_builder.has_open_interest() ||
@@ -159,6 +168,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		if (data_builder.connection().error_occurred()) {
 			display_warning("Error occurred retrieving indicator list.");
 		}
+/*
 		if (_indicators != null) {
 			result = _indicators;
 		} else {
@@ -166,14 +176,17 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		}
 //		assert result != null: "Postcondition violation";
 		return _indicators;
+*/
+return null;
 	}
 
 
 	// Indicators in user-specified order
 	public Vector ordered_indicators() {
 		if (ordered_indicator_list == null) {
-			// Force creation of ordered_indicator_list.
-			indicators();
+			// Force creation of ordered_indicator_list, if it hasn't
+			// yet been created.
+			rebuild_indicators_if_needed();
 		}
 		return ordered_indicator_list;
 	}
@@ -195,18 +208,25 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	// Symbol for current selected tradable
 	public String current_tradable() {
 		return tradable_specification.symbol();
-//!!!REMOVE: return current_tradable;
+//!!!REMOVE: return xxxcurrent_tradablexxx;
 	}
 
 	// Current selected period_type
 	public String current_period_type() {
 		return tradable_specification.period_type();
-//!!!REMOVE: return current_period_type;
+//!!!REMOVE: return xxxcurrent_period_typexxx;
 	}
 
 	// Valid trading period types for the current tradable
 	public Vector period_types() {
-		return _period_types;
+		return period_types;
+	}
+
+	// The identifier value associated with indicator name `ind_name'
+	public int indicator_id_for(String ind_name) {
+		rebuild_indicators_if_needed();
+		return tradable_specification.indicator_spec_for(
+			ind_name).identifier();
 	}
 
 // Access - TimeDelimitedDataRequestClient API
@@ -238,12 +258,12 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 
 	// Update the period-types menu to synchronize with `period_types'.
 	public void reset_period_types_menu() {
-		ma_menu_bar.reset_period_types(_period_types);
+		ma_menu_bar.reset_period_types(period_types);
 	}
 
-	// Reset the `current_period_type' to a reasonable value.
+	// Reset the `current_period_type()' to a reasonable value.
 	public void reinitialize_current_period_type() {
-		current_period_type = initial_period_type(_period_types);
+		set_current_period_type(initial_period_type(period_types));
 	}
 
 // Basic operations
@@ -278,7 +298,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	// was successful, set `period_types' to the result.
 	public void send_period_types_request(String tradable) {
 		try {
-			_period_types = data_builder.trading_period_type_list(tradable);
+			period_types = data_builder.trading_period_type_list(tradable);
 		} catch (IOException e) {
 			String errmsg = "IO exception occurred: " + e + " - aborting";
 			display_warning(errmsg);
@@ -294,25 +314,25 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		MA_Configuration conf = MA_Configuration.application_instance();
 		int count;
 		String current_indicator;
-		if (period_type_change || ! tradable.equals(current_tradable)) {
+		if (period_type_change || ! tradable.equals(current_tradable())) {
 			// Redraw the data.
 			if (individual_period_type_sets &&
-					! tradable.equals(current_tradable)) {
+					! tradable.equals(current_tradable())) {
 				facilities.reset_period_types(tradable, false);
 			}
 			GUI_Utilities.busy_cursor(true, this);
 			try {
 				data_builder.send_market_data_request(tradable,
-					current_period_type);
+					current_period_type());
 				if (request_result_id() == Ok) {
 					// Ensure that the indicator list is up-to-date with
 					// respect to `tradable'.
 					data_builder.send_indicator_list_request(tradable,
-						current_period_type);
-					// Force call to `indicators()' to create new indicator
-					// lists with the result of the above request.
+						current_period_type());
+					// Force re-creation indicator lists with the result
+					// of the above request.
 					new_indicators = true;
-					indicators();
+					rebuild_indicators_if_needed();
 				} else {
 					// Handle request error.
 					if (request_result_id() == Invalid_symbol) {
@@ -332,15 +352,15 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 			catch (Exception e) {
 				facilities.fatal("Request to server failed: ", e);
 			}
-			//Ensure that all graph's data sets are removed.  (May need to
-			//change later.)
+			//Ensure that all graph's data sets are removed.
 			main_pane.clear_main_graph();
 			main_pane.clear_indicator_graph();
 			main_dataset = (DrawableDataSet) data_builder.last_market_data();
 			latest_date_time = data_builder.last_latest_date_time();
 			link_with_axis(main_dataset, null);
 //!!!Hook up data sets here:
-main_pane.add_main_data_set(main_dataset);
+			main_pane.add_main_data_set(main_dataset);
+			tradable_specification.set_main_data(main_dataset);
 			if (! current_upper_indicators.isEmpty()) {
 				// Retrieve the data for the newly requested tradable for
 				// the upper indicators, add it to the upper graph and
@@ -350,9 +370,12 @@ main_pane.add_main_data_set(main_dataset);
 					current_indicator = (String)
 						current_upper_indicators.elementAt(i);
 					try {
-						data_builder.send_indicator_data_request(((Integer)
-							indicators().get(current_indicator)).
-								intValue(), tradable, current_period_type);
+						data_builder.send_indicator_data_request(
+							indicator_id_for(current_indicator),
+							tradable, current_period_type());
+//!!!: data_builder.send_indicator_data_request(((Integer)
+//!!! indicators().get(current_indicator)).
+//!!! intValue(), tradable, current_period_type());
 					} catch (Exception e) {
 						facilities.fatal("Exception occurred", e);
 					}
@@ -365,10 +388,12 @@ main_pane.add_main_data_set(main_dataset);
 //!!! replace with a procedure to update ind. data spec, main pane, etc.:
 //!!!Hook up data sets here:
 					main_pane.add_main_data_set(dataset);
+					tradable_specification.set_indicator_data(dataset,
+						current_indicator);
 //!!!Perhaps replace _indicators with indicator_specs
 				}
 			}
-			current_tradable = tradable;
+			set_current_tradable(tradable);
 			set_window_title();
 			if (! current_lower_indicators.isEmpty()) {
 				// Retrieve the indicator data for the newly requested
@@ -389,9 +414,14 @@ main_pane.add_main_data_set(main_dataset);
 					} else {
 						try {
 							data_builder.send_indicator_data_request(
-								((Integer) indicators().get(
-									current_indicator)).intValue(),
-									tradable, current_period_type);
+								indicator_id_for(current_indicator),
+								tradable, current_period_type());
+/*!!!:
+data_builder.send_indicator_data_request(
+((Integer) indicators().get(
+current_indicator)).intValue(),
+tradable, current_period_type());
+*/
 						} catch (Exception e) {
 							facilities.fatal("Exception occurred", e);
 						}
@@ -403,8 +433,9 @@ main_pane.add_main_data_set(main_dataset);
 							current_indicator, false));
 						link_with_axis(dataset, current_indicator);
 						add_indicator_lines(dataset, current_indicator);
-//!!!Hook up data sets here:
 						main_pane.add_indicator_data_set(dataset);
+						tradable_specification.set_indicator_data(dataset,
+							current_indicator);
 					}
 				}
 			}
@@ -434,14 +465,50 @@ System.out.println("FINISHED requesting " + requested_tradable);
 // Basic operations - TimeDelimitedDataRequestClient API
 
 	public void notify_of_update() {
-		// Need to repaint.
+System.out.println("I (" + this + ") was notified of an update!");
+		main_pane.repaint_graphs();
 	}
 
 	public void notify_of_failure(Exception e) {
 		// Report the error and ???
 	}
 
+// Implementation - Element change
+
+	private void set_current_period_type(String type) {
+		tradable_specification.set_period_type(type);
+	}
+
+	private void set_current_tradable(String t) {
+		tradable_specification.set_symbol(t);
+	}
+
 // Implementation
+
+	// If the "indicator list" is out of date, rebuild it.
+	public void rebuild_indicators_if_needed() {
+//!!!Change to use 'tradable_specification.indicator_specs'
+		if (tradable_specification.all_indicator_specifications().size() == 0
+				|| new_indicators) {
+			new_indicators = false;
+			Vector inds_from_server = data_builder.last_indicator_list();
+			if (previous_open_interest != data_builder.has_open_interest() ||
+					! Utilities.lists_match(inds_from_server,
+					old_indicators_from_server)) {
+
+				// The old indicators are not the same as the indicators
+				// just obtained from the server (or there are not yet
+				// any old indicators), so the indicator lists need to
+				// be rebuilt.
+				old_indicators_from_server = inds_from_server;
+				make_indicator_lists(inds_from_server);
+			}
+			previous_open_interest = data_builder.has_open_interest();
+		}
+		if (data_builder.connection().error_occurred()) {
+			display_warning("Error occurred retrieving indicator list.");
+		}
+	}
 
 	private void make_indicator_lists(Vector inds_from_server) {
 		Enumeration ind_iter;
@@ -462,7 +529,7 @@ System.out.println("FINISHED requesting " + requested_tradable);
 		// User-selected indicators, in order:
 		ind_iter = MA_Configuration.application_instance().indicator_order().
 			elements();
-		_indicators = new Hashtable();
+//!!!:_indicators = new Hashtable();
 		Vector special_indicators = new Vector();
 		special_indicators.addElement(No_lower_indicator);
 		special_indicators.addElement(No_upper_indicator);
@@ -470,7 +537,8 @@ System.out.println("FINISHED requesting " + requested_tradable);
 		if (data_builder.has_open_interest()) {
 			special_indicators.addElement(Open_interest);
 		}
-		// Insert into _indicators all user-selected indicators that
+// Insert into _indicators all user-selected indicators that
+		// Insert into the indicator list all user-selected indicators that
 		// are either in the list returned by the server or are one of
 		// the special strings for no upper/lower indicator, volume,
 		// or open interest.
@@ -478,8 +546,12 @@ System.out.println("FINISHED requesting " + requested_tradable);
 			s = (String) ind_iter.nextElement();
 			if (valid_indicators.containsKey(s)) {
 				// Add valid indicators (from the server's point of view)
-				// to both `_indicators' and `ordered_indicator_list'.
-				_indicators.put(s, valid_indicators.get(s));
+				// to both the tradable spec. and `ordered_indicator_list'.
+				tradable_specification.add_indicator(new
+					IndicatorDataSpecification(((Integer)
+					valid_indicators.get(s)).intValue(), s));
+//!!!:
+//_indicators.put(s, valid_indicators.get(s));
 				ordered_indicator_list.addElement(s);
 			}
 			else {
@@ -498,14 +570,21 @@ System.out.println("FINISHED requesting " + requested_tradable);
 		// they aren't already there.
 		for (i = 0; i < special_indicators.size(); ++i) {
 			s = (String) special_indicators.elementAt(i);
-			if (!_indicators.containsKey(s)) {
-				_indicators.put(s, new Integer(_indicators.size() + 1));
+			if (tradable_specification.indicator_spec_for(s) == null) {
+//!!!			if (!_indicators.containsKey(s)) [
+//!!!_indicators.put(s, new Integer(_indicators.size() + 1));
+				tradable_specification.add_special_indicator(new
+					IndicatorDataSpecification(tradable_specification.
+						all_indicator_specifications().size() + 1, s));
 				ordered_indicator_list.addElement(s);
 			}
 		}
 
 		// Update current_lower_indicators and current_upper_indicators:
 		// remove any elements that are no longer valid.
+		//@@@It might be a good idea to move knowledge of current upper
+		// and lower indicators into 'tradable_specification' to move
+		// some of this complexity into that class.
 		Vector remove_list = new Vector();
 		for (ind_iter = current_lower_indicators.elements();
 				ind_iter.hasMoreElements(); ) {
@@ -541,13 +620,13 @@ System.out.println("FINISHED requesting " + requested_tradable);
 
 	// Take action when notified that period type changed.
 	void notify_period_type_changed(String new_period_type) {
-		if (! current_period_type.equals(new_period_type)) {
-			current_period_type = new_period_type;
+		if (! current_period_type().equals(new_period_type)) {
+			set_current_period_type(new_period_type);
 			period_type_change = true;
-			if (current_tradable != null) {
-				request_data(current_tradable);
+			if (current_tradable() != null) {
+				request_data(current_tradable());
 				//@@Replace with:
-				//send_data_request(current_tradable);
+				//send_data_request(current_tradable());
 				//if it turns out needing to not be threaded.
 			}
 		}
@@ -594,7 +673,7 @@ System.out.println("FINISHED requesting " + requested_tradable);
 	// it is not null, etc.
 	private void initialize_GUI_components(String symbol) {
 		// Create the main scroll pane, size it, and center it.
-		main_pane = new MA_ScrollPane(_period_types,
+		main_pane = new MA_ScrollPane(period_types,
 			MA_ScrollPane.SCROLLBARS_NEVER, this, window_settings != null?
 				window_settings.print_properties(): null);
 		if (window_settings != null && window_count == 1) {
@@ -619,7 +698,7 @@ System.out.println("FINISHED requesting " + requested_tradable);
 			send_data_request(symbol);
 		}
 		market_selections = new MarketSelection(this);
-		ma_menu_bar = new MA_MenuBar(this, data_builder, _period_types);
+		ma_menu_bar = new MA_MenuBar(this, data_builder, period_types);
 		setMenuBar(ma_menu_bar);
 
 		// Event listener for close requests
@@ -637,15 +716,18 @@ System.out.println("FINISHED requesting " + requested_tradable);
 		MA_Configuration conf = MA_Configuration.application_instance();
 //!!!Note: auto_refresh() needs to be redefined in MA_Configuration.
 		if (conf.auto_refresh()) {
+System.out.println("auto refresh is ON.");
 			AutoRefreshSetup.execute(this);
 		}
+else { System.out.println("auto refresh is OFFFFFF.");}
 	}
 
-	// Set the window title using current_tradable and current_lower_indicators.
+	// Set the window title using current_tradable() and
+	// current_lower_indicators.
 	protected void set_window_title() {
 		if (! current_lower_indicators.isEmpty()) {
 			StringBuffer newtitle = new
-				StringBuffer (current_tradable.toUpperCase() + " - ");
+				StringBuffer (current_tradable().toUpperCase() + " - ");
 			int i;
 			for (i = 0; i < current_lower_indicators.size() - 1; ++i) {
 				newtitle.append(current_lower_indicators.elementAt(i));
@@ -655,7 +737,7 @@ System.out.println("FINISHED requesting " + requested_tradable);
 			setTitle(newtitle.toString());
 		}
 		else {
-			setTitle(current_tradable.toUpperCase());
+			setTitle(current_tradable().toUpperCase());
 		}
 	}
 
@@ -785,11 +867,11 @@ System.out.println("FINISHED requesting " + requested_tradable);
 	Calendar latest_date_time;
 
 	// Valid trading period types
-	protected Vector _period_types;	// Vector of String
+	protected Vector period_types;	// Vector of String
 
-//!!!!!Replace with tradable_specification's indicators:
+//!!!!!REMOVE:
 	// Table of market indicators
-	protected static Hashtable _indicators;	// key: String, value: Integer
+//	protected static Hashtable _indicators;	// key: String, value: Integer
 
 	// Has data_builder.send_indicator_list_request been called since the
 	// last call to `indicators'?
@@ -800,10 +882,12 @@ System.out.println("FINISHED requesting " + requested_tradable);
 	private static Vector ordered_indicator_list;	// Vector of String
 
 	// Current selected tradable
-	protected String current_tradable;
+//!!!:
+	protected String old_remove_current_tradable;
 
 	// Current selected period type
-	protected String current_period_type;
+//!!!:
+	protected String old_remove_current_period_type;
 
 	// Has the period type just been changed?
 	protected boolean period_type_change;
@@ -860,8 +944,7 @@ System.out.println("FINISHED requesting " + requested_tradable);
 
 	private ChartFacilities facilities;
 
-	//!!!!I need to be crated somewhere!!!
-	TradableDataSpecification tradable_specification;
+	MA_TradableDataSpecification tradable_specification;
 
 	private static NetworkProtocolUtilities protocol_util =
 		new NetworkProtocolUtilities();

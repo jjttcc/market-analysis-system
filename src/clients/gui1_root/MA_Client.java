@@ -12,14 +12,25 @@ public class MA_Client {
 	public static void main(String[] args) {
 		initialize_configuration();
 		command_line_options = new CommandLineOptions(args);
-		if (command_line_options.debug()) {
-			Configuration.instance().set_debug(true);
-		}
+		configure_options(command_line_options);
 		mas_gui.DataSetBuilder data_builder =
 			new mas_gui.DataSetBuilder(connection(), command_line_options);
 		mas_gui.Chart chart;
 		chart = new mas_gui.Chart(data_builder, chart_filename,
 			command_line_options);
+	}
+
+	// Configure Configuration.instance() with applicable options
+	// from `command_line_options'.
+	private static void configure_options(
+			CommandLineOptions command_line_options) {
+
+		if (command_line_options.debug()) {
+			Configuration.instance().set_debug(true);
+		}
+		if (command_line_options.auto_refresh()) {
+			Configuration.instance().set_auto_refresh(true);
+		}
 	}
 
 	private static Connection connection() {

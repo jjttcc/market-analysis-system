@@ -24,7 +24,7 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 		boolean retrieve_failied = false;
 		MA_Configuration conf = MA_Configuration.application_instance();
 		try {
-			String tradable = chart.current_tradable;
+			String tradable = chart.current_tradable();
 			if (tradable == null || no_change(selection)) {
 				// If no tradable is selected or the selection hasn't changed,
 				// there is nothing to display.
@@ -36,8 +36,8 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 					selection.equals(chart.Open_interest))) {
 				GUI_Utilities.busy_cursor(true, chart);
 				data_builder.send_indicator_data_request(
-					((Integer) chart.indicators().get(selection)).intValue(),
-					tradable, chart.current_period_type);
+					chart.indicator_id_for(selection), tradable,
+					chart.current_period_type());
 				GUI_Utilities.busy_cursor(false, chart);
 				if (data_builder.request_result_id() == Warning ||
 						data_builder.request_result_id() == Error) {

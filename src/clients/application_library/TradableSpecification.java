@@ -33,23 +33,24 @@ public class TradableDataSpecification {
 	}
 
 	// The indicator specification with indicator with name `indicator_name'
-	IndicatorDataSpecification indicator_spec_for(String indicator_name) {
+	public IndicatorDataSpecification indicator_spec_for(
+			String indicator_name) {
 		return (IndicatorDataSpecification) indicator_specs.get(indicator_name);
 	}
 
 	// All 'IndicatorDataSpecification's
-	Collection indicator_specifications() {
+	public Collection indicator_specifications() {
 		return indicator_specs.values();
 	}
 
 // Implementation - attributes
 
-	private String symbol;
+	protected String symbol;
 
-	private String period_type;
+	protected String period_type;
 
-	// key: String (indicator_name), value: IndicatorDataSpecification:
-	private HashMap indicator_specs;
+	// key: String (name), value: IndicatorDataSpecification:
+	protected HashMap indicator_specs;
 
-	private DataSet main_data;
+	protected DataSet main_data;
 }

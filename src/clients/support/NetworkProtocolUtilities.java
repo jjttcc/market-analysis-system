@@ -18,12 +18,12 @@ public class NetworkProtocolUtilities extends DateTimeServices
 	public String date_time_range(Calendar start, Calendar end) {
 		String result;
 		String end_string;
-System.out.println("A");
+System.out.println("x");
 		String start_string = standard_formatted_date(start,
 			Client_request_date_field_separator) +
 			Client_request_date_time_separator +
 			standard_formatted_time(start, Client_request_time_field_separator);
-System.out.println("B");
+System.out.println("y");
 		if (end == null) {
 			end_string = "";
 		} else {
@@ -31,7 +31,7 @@ System.out.println("B");
 				Client_request_date_field_separator) +
 				Client_request_date_time_separator + standard_formatted_time(
 				end, Client_request_time_field_separator);
-System.out.println("C");
+System.out.println("z");
 		}
 		result = start_string + Client_request_date_time_range_separator +
 			end_string;

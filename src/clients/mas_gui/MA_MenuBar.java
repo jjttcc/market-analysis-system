@@ -73,7 +73,7 @@ start_date = chart.start_date();
 start_date = protocol_util.one_second_later(start_date);
 System.out.println("start date: " + start_date);
 try {
-//data_builder.old_remove_send_time_delimited_market_data_request(chart.current_tradable, chart.current_period_type, start_date, null);
+//data_builder.old_remove_send_time_delimited_market_data_request(chart.current_tradable(), chart.current_period_type(), start_date, null);
 // !!!Do something with the results - perhaps print it for now.
 // !!!Also - test the indicator request.
 } catch (Exception x) {
@@ -83,8 +83,8 @@ try {
 		});
 		print_cmd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (! (chart.current_tradable == null ||
-						chart.current_tradable.length() == 0)) {
+				if (! (chart.current_tradable() == null ||
+						chart.current_tradable().length() == 0)) {
 					chart.main_pane.print(false);
 				}
 				else {
@@ -95,9 +95,9 @@ try {
 		});
 		print_all.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (! (chart.current_tradable == null ||
-						chart.current_tradable.length() == 0)) {
-					String original_tradable = chart.current_tradable;
+				if (! (chart.current_tradable() == null ||
+						chart.current_tradable().length() == 0)) {
+					String original_tradable = chart.current_tradable();
 					chart.print_all_charts();
 					chart.request_data((String) original_tradable);
 				}
@@ -180,7 +180,7 @@ try {
 
 	private void set_period_type_label(Menu m) {
 		m.setLabel("Period Type (" +
-			chart.current_period_type + ")");
+			chart.current_period_type() + ")");
 	}
 
 	private void set_replace_indicator_label(MenuItem item) {
