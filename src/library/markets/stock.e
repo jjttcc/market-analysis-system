@@ -9,7 +9,7 @@ class STOCK inherit
 		rename
 			make as arrayed_list_make
 		redefine
-			symbol
+			symbol, make_ctf
 		end
 
 creation
@@ -18,13 +18,14 @@ creation
 
 feature -- Initialization
 
-	make (s: STRING) is
+	make (s: STRING; type: TIME_PERIOD_TYPE) is
 		do
 			symbol := s
 			arrayed_list_make (300)
-			tradable_initialize
+			tradable_initialize (type)
 		ensure
 			symbol_set: symbol = s
+			trading_period_type = type
 		end
 
 feature -- Access
@@ -181,6 +182,11 @@ feature {NONE} -- Implementation
 		ensure
 			-- Result = (for_all i such_that 1 < i <= splits.count it_holds
 			-- 	splits.i_th (i-1).date < splits.i_th (i).date)
+		end
+
+	make_ctf: COMPOSITE_TUPLE_FACTORY is
+		once
+			!COMPOSITE_VOLUME_TUPLE_FACTORY!Result
 		end
 
 invariant

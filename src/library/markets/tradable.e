@@ -8,6 +8,9 @@ indexing
 class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 
 	SIMPLE_FUNCTION [G]
+		rename
+			output as data
+		end
 
 	MATH_CONSTANTS
 		export {NONE}
@@ -16,17 +19,11 @@ class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 			is_equal, copy, setup
 		end
 
-feature {NONE} -- Initialization
-
-	tradable_initialize is
-		do
-			!LINKED_LIST [MARKET_FUNCTION]!indicators.make
-			!!indicator_groups.make (0)
-			!!composite_tuple_lists.make (0)
-		ensure
-			containers_not_void:
-				indicators /= Void and indicator_groups /= Void and
-					composite_tuple_lists /= Void
+	GLOBAL_SERVICES
+		export {NONE}
+			all
+		undefine
+			is_equal, copy, setup
 		end
 
 feature -- Access
@@ -34,15 +31,12 @@ feature -- Access
 	symbol: STRING is
 			-- The tradable's market symbol - example: IBM
 			-- Defaults to name.
-			--!!!??Does this belong here?  Do all tradables have symbols?
 		do
 			Result := name
 		end
 
 	indicators: LIST [MARKET_FUNCTION]
 			-- Technical indicators associated with this tradable
-			--!!!Change this to ensure that all indicators have been
-			--!!!processed before returning a result?
 
 	indicator_groups: HASH_TABLE [LIST [MARKET_FUNCTION], STRING]
 			-- Groupings of the above technical indicators
@@ -54,28 +48,39 @@ feature -- Access
 			Result := indicator_groups.current_keys
 		end
 
-	composite_tuple_lists: HASH_TABLE [LIST [MARKET_TUPLE], STRING]
-			-- Lists whose tuples are made from those of the primary
-			-- list (e.g., weekly, monthy, if primary is daily)
+	composite_tuple_list (period_type: STRING): LIST [COMPOSITE_TUPLE] is
+			-- List associated with `period_type' whose tuples are
+			-- made from `data'
+		require
+			has_type: composite_list_names.has (period_type)
+		do
+			Result := composite_tuple_lists @ period_type
+			-- If the list has not been created and there is enough
+			-- data, create/process the list of composite tuples.
+			if Result = Void and data.count > 1 then
+				Result := process_composite_list (period_types @ period_type)
+				composite_tuple_lists.replace (Result, period_type)
+				check
+					item_was_replaced: composite_tuple_lists.replaced
+				end
+			end
+		ensure
+			Result = composite_tuple_lists @ period_type
+		end
 
 	composite_list_names: ARRAY [STRING] is
-			-- The name (key) of each list in composite_tuple_lists
+			-- The name (key) of each composite_tuple_list associated
+			-- with `Current'
 		do
 			Result := composite_tuple_lists.current_keys
 		end
 
 feature -- Access
 
-	principal_data: LIST [MARKET_TUPLE] is
-			-- The principal data associated with the main trading period
-		do
-			Result := Current
-		end
-
 	yearly_high: PRICE is
 			-- Highest closing price for the past year (52-week high)
 		require
-			data_not_empty: not principal_data.empty
+			data_not_empty: not data.empty
 		do
 			if y_high = Void then
 				calc_y_high_low
@@ -86,7 +91,7 @@ feature -- Access
 	yearly_low: PRICE is
 			-- Lowest closing price for the past year (52-week low)
 		require
-			not_empty: not principal_data.empty
+			not_empty: not data.empty
 		do
 			if y_low = Void then
 				calc_y_high_low
@@ -113,6 +118,7 @@ feature -- Status report
 feature -- Element change
 
 	add_indicator (f: MARKET_FUNCTION) is
+			-- Add `f' to `indicators'.
 		require
 			not_there: not indicators.has (f)
 		do
@@ -123,6 +129,7 @@ feature -- Element change
 		end
 
 	remove_indicator (f: MARKET_FUNCTION) is
+			-- Remove `f' from `indicators'.
 		do
 			indicators.prune (f)
 		ensure
@@ -152,6 +159,52 @@ feature -- Basic operations
 			processed: indicators_processed
 		end
 
+feature {NONE} -- Initialization
+
+	tradable_initialize (type: TIME_PERIOD_TYPE) is
+			-- Establish the class invariant.
+		do
+			!LINKED_LIST [MARKET_FUNCTION]!indicators.make
+			!!indicator_groups.make (0)
+			!!composite_tuple_lists.make (0)
+			trading_period_type := type
+			initialize_composite_lists
+		ensure
+			containers_not_void:
+				indicators /= Void and indicator_groups /= Void and
+					composite_tuple_lists /= Void
+			type_set: trading_period_type = type
+		end
+
+	initialize_composite_lists is
+			-- Add elements composite_tuple_lists.
+			-- Since composite tuples can only be made from tuples whose
+			-- trading periods are smaller, composite_tuple_lists will
+			-- contain a list for each trading period type with a duration
+			-- greater than that of trading_period_type (which corresponds
+			-- to the duration of tuples in `data').
+		require
+			type_set: trading_period_type /= Void
+		local
+			types: LIST [TIME_PERIOD_TYPE]
+			--l: LIST [COMPOSITE_TUPLE]
+		do
+			from
+				types := period_types.linear_representation
+				types.start
+			until
+				types.after
+			loop
+				if
+					types.item.duration > trading_period_type.duration
+				then
+					--!MARKET_TUPLE_LIST [COMPOSITE_TUPLE]!l.make (0)
+					composite_tuple_lists.extend (Void, types.item.name)
+				end
+				types.forth
+			end
+		end
+
 feature {NONE}
 
 	y_high: PRICE
@@ -160,9 +213,15 @@ feature {NONE}
 	y_low: PRICE
 			-- Cached yearly low value
 
+	composite_tuple_lists: HASH_TABLE [LIST [COMPOSITE_TUPLE], STRING]
+			-- Lists whose tuples are made from `data' (e.g., weekly,
+			-- monthy, if primary is daily)
+
 feature {NONE}
 
 	calc_y_high_low is
+			-- Set y_high to the 52-week high closing price and y_low
+			-- to the 52-week low closing price.
 		require
 			not_empty: not empty
 		local
@@ -173,7 +232,9 @@ feature {NONE}
 			original_cursor: CURSOR
 		do
 			!!greater_than; !!less_than; !!close_extractor
-			!!y_high; !!y_low
+			if y_high = Void then
+				!!y_high; !!y_low
+			end
 			original_cursor := cursor
 			finish -- Set cursor to last position
 			-- Initialize calculator to find the highest close value.
@@ -194,6 +255,41 @@ feature {NONE}
 			calculator.execute (Void)
 			y_low.set_value (calculator.value)
 			go_to (original_cursor)
+		ensure
+			not_void: y_high /= Void and y_low /= Void
+		end
+
+	process_composite_list (type: TIME_PERIOD_TYPE): LIST [COMPOSITE_TUPLE] is
+			-- Create a list of composite tuples, using `data' as input.
+		require
+			not_empty: data.count > 1
+		local
+			ctf: COMPOSITE_TUPLE_FACTORY
+			ctbuilder: COMPOSITE_TUPLE_BUILDER
+			start_date_time: DATE_TIME
+		do
+			ctf := make_ctf
+			start_date_time := clone (data.first.date_time)
+			adjust_start_time (start_date_time, type)
+			if type.irregular then
+				--when ready:
+				-- !IRREGULAR_COMPOSITE_TUPLE_BUILDER!ctbuilder.make (
+				--										Current, ctf, type)
+			else
+				!!ctbuilder.make (Current, ctf, type)
+			end
+			ctbuilder.process (start_date_time)
+			Result := ctbuilder.output
+		end
+
+feature {NONE} -- Hook methods
+
+	make_ctf: COMPOSITE_TUPLE_FACTORY is
+			-- Create the appropriate type of tuple factory - intended
+			-- to be redefined in descendants - for example, to create
+			-- a COMPOSITE_VOLUME_TUPLE_FACTORY
+		once
+			!!Result
 		end
 
 invariant
