@@ -70,23 +70,35 @@ abstract public class IndicatorDrawer extends BasicDrawer {
 		ArrayList dates = dates();
 		ArrayList times = times();
 
+//!!!
+System.out.println("ind dates @ 0, dates @ 0: " +
+indicator_dates.get(0) + ", " + dates.get(0));
+System.out.println("dates.size(), dates.size(): " +
+indicator_dates.size() + ", " + dates.size());
 		if (indicator_dates.get(0).equals(dates.get(0))) {
+System.out.println("A");
 			result = 0;
 		} else {
+System.out.println("B");
 			result = Utilities.index_at_date((String)
 				indicator_dates.get(0), dates, 1, 0, dates.size() - 1);
+System.out.println("result: " + result);
 		}
-		if (
-				indicator_times != null && indicator_times.size() > 0) {
+System.out.println("C");
+		if (indicator_times != null && indicator_times.size() > 0) {
+System.out.println("D");
 			// Since the data is intraday, there are duplicate dates in
 			// the dates array.  Find the first element of dates that
 			// matches indicator_dates.get(0).
 			while (result > 0 && dates.get(result-1).equals(
 					indicator_dates.get(0))) {
 				--result;
+System.out.println("D1");
 			}
+System.out.println("E");
 			if (! indicator_times.get(0).equals(
 					times.get(result))) {
+System.out.println("F");
 				// If indicator_times.get(0) is less than
 				// times.get(result), increment result until
 				// times.get(result) is the first time of the
@@ -94,12 +106,17 @@ abstract public class IndicatorDrawer extends BasicDrawer {
 				while (result < times.size() &&
 						((String) indicator_times.get(0)).compareTo(
 							times.get(result)) < 0) {
+System.out.println("G");
 					++result;
 				}
 				result = first_time_match(indicator_times.get(0),
 					times, result);
+System.out.println("H");
+System.out.println("result: " + result);
 			}
 		}
+System.out.println("I");
+System.out.println("IndicatorDrawer 1st date index returning: " + result);
 		return result;
 	}
 
@@ -113,6 +130,7 @@ abstract public class IndicatorDrawer extends BasicDrawer {
 				break;
 			}
 		}
+System.out.println("IndicatorDrawer 1st time match returning: " + result);
 		return result;
 	}
 
@@ -124,7 +142,7 @@ abstract public class IndicatorDrawer extends BasicDrawer {
 
 // Implementation - attributes
 
-	protected ArrayList data;				// double
+	protected ArrayList data;				// Double
 	protected ArrayList indicator_dates;	// String
 	protected ArrayList indicator_times;	// String
 	protected MarketDrawer market_drawer;

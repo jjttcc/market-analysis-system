@@ -52,7 +52,11 @@ System.out.println("MKT DRW returning data length() of " + result);
 // Element change
 
 	// Set the dates.
-	public void set_dates(ArrayList d) { dates = d; }
+	public void set_dates(ArrayList d) {
+		dates = d;
+//!!!!:
+System.out.println("MD dates set with size: " + d.size());
+		}
 
 	// Set the times.
 	public void set_times(ArrayList t) { times = t; }

@@ -34,12 +34,9 @@ import graph_library.DataSet;
 
 
 /**
- * Plottable data sets that can, with the help of a BasicDrawer,
- * draw themselves
- * To be used in conjunction with the Graph class and Axis 
- * class for plotting 2D graphs.
+ * Basic plottable data sets
  */
-public class DrawableDataSet extends BasicDataSet {
+public class BasicDataSet extends DataSet {
 
 // Initialization
 
@@ -48,17 +45,10 @@ public class DrawableDataSet extends BasicDataSet {
 	* @precondition
 	*     d != null<br>
 	* @postcondition<br>
-	*     dates_needed() && drawer() == drawer<br>
 	*     size() == 0 */
-	public DrawableDataSet(BasicDrawer d) {
-		if (d  == null) {
-			throw new Error("DataSet constructor: precondition violated");
-		}
-		drawer = d;
+	public BasicDataSet() {
 		data = new ArrayList();
-		date_drawer = new DateDrawer(d);
-		time_drawer = new TimeDrawer(d);
-		dates_needed = true;
+//!!!:		dates_needed = true;
 		tuple_count = 0;
 	}
 
@@ -75,30 +65,21 @@ public class DrawableDataSet extends BasicDataSet {
 	* tuple in `d' - from 1 to d.length.
 	* @param d Array containing the (y1,y2,...) data tuples.
 	* @param n Number of tuples in the array.
-	* @param drwr object used to draw the data.<br>
 	* precondition:<br>
-	*     d != null && d.length > 0 && n > 0 && drwr != null<br>
+	*     d != null && d.length > 0 && n > 0<br>
 	* postcondition:<br>
-	*     dates_needed() && drawer() == drwr<br>
 	*     size() == data_points() */
-	public DrawableDataSet(double d[], int n, BasicDrawer drwr) throws Error {
-		if ( d  == null || d.length == 0 || n <= 0 || drwr == null ) {
+	public BasicDataSet(double d[], int n) throws Error {
+		if ( d  == null || d.length == 0 || n <= 0) {
 			throw new Error("DataSet constructor: precondition violated");
 		}
-		drawer = drwr;
-		date_drawer = new DateDrawer(drawer);
-		time_drawer = new TimeDrawer(drawer);
 		data = new ArrayList(d.length);
 		for (int i = 0; i < d.length; ++i) {
 			data.add(new Double(d[i]));
 		}
 
 		tuple_count = n;
-		dates_needed = true;
-		if (! (dates_needed() && drawer() == drwr) ||
-				size() != data_points()) {
-			throw new Error("DataSet constructor: postcondition violated");
-		}
+//!!!:		dates_needed = true;
 	}
 
 // Access
@@ -111,10 +92,8 @@ public class DrawableDataSet extends BasicDataSet {
 
 	public double minimum_y() {  return dymin; }
 
-	public BasicDrawer drawer() { return drawer; }
-
-	// Do dates need to be drawn?
-	public boolean dates_needed() { return dates_needed; }
+//!!!:	// Do dates need to be drawn?
+//!!!:	public boolean dates_needed() { return dates_needed; }
 
 	// Number of records in this data set
 	public int size() {
@@ -127,68 +106,68 @@ public class DrawableDataSet extends BasicDataSet {
 	// y axis
 	public Axis yaxis() { return yaxis; }
 
-	/**
-	* The number of data points in the DataSet
-	* @return number of (x,y) points.
-	*/
-	public int data_points() {  return length()/stride(); }
-
-	/**
-	* The data point at the parsed index. The first (x,y) pair
-	* is at index 0.
-	* @param index Data point index
-	* @return array containing the (x,y) pair.
-	*/
-	public double[] point(int index) {
-		int strd = stride();
-		double point[] = new double[strd];
-		int i = index*strd;
-		if (index < 0 || i > length()-strd) {
-			return null;
-		}
-
-		for (int j=0; j<strd; j++) {
-			point[j] = ((Double) data.get(i+j)).doubleValue();
-		}
-
-		return point;
-	}
-
-	/**
-	* Return the data point that is closest to the parsed (x,y) position
-	* @param x 
-	* @param y (x,y) position in data space. 
-	* @return array containing the closest data point.
-	*/
-	public double[] closest_point(double x, double y) {
-		double point[] = {0.0, 0.0, 0.0};
-		int i;
-		double xdiff, ydiff, dist2;
-		int strd = stride();
-
-		xdiff = ((Double) data.get(0)).doubleValue() - x;
-		ydiff = ((Double) data.get(1)).doubleValue() - y;
-		point[0] = ((Double) data.get(0)).doubleValue();
-		point[1] = ((Double) data.get(1)).doubleValue();
-		point[2] = xdiff*xdiff + ydiff*ydiff;
-
-		for(i=strd; i<length()-1; i+=strd) {
-			xdiff = ((Double) data.get(i)).doubleValue() - x;
-			ydiff = ((Double) data.get(i+1)).doubleValue() - y;
-			dist2 = xdiff*xdiff + ydiff*ydiff;
-			if(dist2 < point[2]) {
-				point[0] = ((Double) data.get(i)).doubleValue();
-				point[1] = ((Double) data.get(i+1)).doubleValue();
-				point[2] = dist2;
-			}
-		}
-
-		return point;
-	}
+//	/**
+//	* The number of data points in the DataSet
+//	* @return number of (x,y) points.
+//	*/
+//	public int data_points() {  return length()/stride(); }
+//
+//	/**
+//	* The data point at the parsed index. The first (x,y) pair
+//	* is at index 0.
+//	* @param index Data point index
+//	* @return array containing the (x,y) pair.
+//	*/
+//	public double[] point(int index) {
+//		int strd = stride();
+//		double point[] = new double[strd];
+//		int i = index*strd;
+//		if (index < 0 || i > length()-strd) {
+//			return null;
+//		}
+//
+//		for (int j=0; j<strd; j++) {
+//			point[j] = ((Double) data.get(i+j)).doubleValue();
+//		}
+//
+//		return point;
+//	}
+//
+//	/**
+//	* Return the data point that is closest to the parsed (x,y) position
+//	* @param x 
+//	* @param y (x,y) position in data space. 
+//	* @return array containing the closest data point.
+//	*/
+//	public double[] closest_point(double x, double y) {
+//		double point[] = {0.0, 0.0, 0.0};
+//		int i;
+//		double xdiff, ydiff, dist2;
+//		int strd = stride();
+//
+//		xdiff = ((Double) data.get(0)).doubleValue() - x;
+//		ydiff = ((Double) data.get(1)).doubleValue() - y;
+//		point[0] = ((Double) data.get(0)).doubleValue();
+//		point[1] = ((Double) data.get(1)).doubleValue();
+//		point[2] = xdiff*xdiff + ydiff*ydiff;
+//
+//		for(i=strd; i<length()-1; i+=strd) {
+//			xdiff = ((Double) data.get(i)).doubleValue() - x;
+//			ydiff = ((Double) data.get(i+1)).doubleValue() - y;
+//			dist2 = xdiff*xdiff + ydiff*ydiff;
+//			if(dist2 < point[2]) {
+//				point[0] = ((Double) data.get(i)).doubleValue();
+//				point[1] = ((Double) data.get(i+1)).doubleValue();
+//				point[2] = dist2;
+//			}
+//		}
+//
+//		return point;
+//	}
 
 	public String toString() {
 		String result = "";
-		System.out.println("DrawableDataSet - data size: " + data.size());
+		System.out.println("BasicDataSet - data size: " + data.size());
 		Iterator i = dates.iterator();
 		Iterator j = times.iterator();
 		Iterator k = data.iterator();
@@ -209,80 +188,10 @@ public class DrawableDataSet extends BasicDataSet {
 // Element change
 
 	public void append(DataSet d) {
-		int oldsize = size();
-		if (d != null) {
-System.out.println("append called with dataset:\n'" + d + "'");
-System.out.println("main dataset size before append: " + size());
-//System.out.print("main dataset contents before append:\n<<<<");
-System.out.print(this);
-System.out.print("\n>>>>>");
-if (d.size() == 0) { System.out.println("d is empty!");}
-			tuple_count = oldsize + d.size();
-			DrawableDataSet drwd = (DrawableDataSet) d;
-System.out.println("A");
-System.out.println("before add all - sizes: " +
-data.size() + ", " + dates.size() + ", " + times.size());
-System.out.println("B");
-			data.addAll(drwd.data);
-System.out.println("C");
-			dates.addAll(drwd.dates);
-System.out.println("D");
-			times.addAll(drwd.times);
-System.out.println("E");
-if (xaxis == null || yaxis == null) {
-if (xaxis == null) {
-System.out.println("Xaxis is null");
-}
-if (yaxis == null) {
-System.out.println("Yaxis is null");
-}
-}
-
-//XXXX
-		range();
-		if (xaxis != null) {
-			xaxis.resetRange();
-			System.out.println("G");
-		}
-		if (yaxis != null) {
-			yaxis.resetRange();
-			System.out.println("H");
-		}
+		throw new Error("Code defect: Unimplemented procedure called: 'append");
+	}
 
 /*
-//Re-attach 'this' data set to the axes to ...!!!
-if (xaxis != null) {
-//xaxis.attachDataSet(this);
-xaxis.resetDataSets();
-System.out.println("G");
-}
-if (yaxis != null) {
-//yaxis.attachDataSet(this);
-yaxis.resetDataSets();
-System.out.println("H");
-}
-*/
-		}
-else {
-System.out.println("append called with NULL dataset\n");
-}
-		if (d != null && ! (size() == oldsize + d.size())) {
-			throw new Error("append: postcondition 1 violated");
-		} else if (d == null && (size() != oldsize)) {
-			throw new Error("append: postcondition 2 violated");
-		}
-System.out.println("main dataset size after append: " + size());
-//System.out.print("main dataset contents after append:\n<<<<");
-System.out.println("dates size after append: " + dates.size());
-System.out.println("times size after append: " + times.size());
-System.out.print(this);
-System.out.print("\n>>>>>");
-	}
-
-	public void set_drawer(BasicDrawer d) {
-		drawer = d;
-	}
-
 	public void set_dates(ArrayList d) {
 		dates = d;
 		drawer.set_dates(d);
@@ -308,8 +217,9 @@ System.out.print("\n>>>>>");
 		}
 		drawer.set_times(times);
 	}
+*/
 
-	public void set_dates_needed(boolean b) { dates_needed = b; }
+//!!!:	public void set_dates_needed(boolean b) { dates_needed = b; }
 
 	// Set the x axis to `a'.
 	public void set_xaxis(Axis a) { xaxis = a; }
@@ -329,9 +239,11 @@ System.out.print("\n>>>>>");
 		vline_data.add(p);
 	}
 
+/*
 	public void set_reference_values_needed(boolean b) {
 		drawer.set_reference_values_needed (b);
 	}
+*/
 
 // Basic operations
 
@@ -344,6 +256,7 @@ System.out.print("\n>>>>>");
 	* @param g Graphics state
 	* @param bounds The data window to draw into
 	*/
+/*
 	public void draw_data(Graphics g, Rectangle bounds) {
 		boolean restore_bounds = false;
 System.out.println("drawer: " + drawer);
@@ -359,47 +272,19 @@ System.out.println("drawer: " + drawer);
 		drawer.draw_data(g, bounds, hline_data, vline_data, color);
 System.out.println("DDS dd back");
 	}
+*/
 
 // Implementation
 
 	// set g2d to `b'.
 	protected void set_g2d(Graph g) { g2d = g; }
 
-	// The `time_drawer', if there are times; otherwise the `date_drawer',
-	// if there are dates; otherwise null
-	protected TemporalDrawer temporal_drawer() {
-		TemporalDrawer result = null;
-
-		if (times != null) result = time_drawer;
-		else if (dates != null) result = date_drawer;
-
-		return result;
-	}
-
-	/**
-	* Draw times, if they exist; otherwise date dates, if they exist.
-	* Precondition: temporal_drawer() != null implies
-	*    temporal_drawer().main_data_processed()
-	* @param g Graphics context
-	* @param w Data Window
-	*/
-	protected void draw_dates(Graphics g, Rectangle w) {
-		TemporalDrawer drawer = temporal_drawer();
-		if (drawer != null && drawer.main_data_processed()) {
-			drawer.set_xaxis(xaxis);
-			drawer.set_yaxis(yaxis);
-			drawer.set_maxes(xmax, ymax, xmin, ymin);
-			drawer.set_ranges(xrange, yrange);
-			drawer.set_clipping(clipping);
-			drawer.draw_data(g, w);
-		}
-	}
-
 	/**
 	* Calculate the range of the data. This modifies dxmin,dxmax,dymin,dymax
 	* and xmin,xmax,ymin,ymax
 	* Precondition: tuple_count has been set
 	*/
+/*
 	protected void range() {
 		int i;
 		int lnth = length();
@@ -438,6 +323,7 @@ System.out.println("DDS dd back");
 		}
 		range_set = true;
 	}
+*/
 
 	/**
 	* Number of components in a data tuple - for example, 2 (x, y) for
@@ -445,7 +331,7 @@ System.out.println("DDS dd back");
 	* @precondition
 	*    drawer != null
 	*/
-	protected int stride() { return drawer.drawing_stride(); }
+//!!!	protected int stride() { return drawer.drawing_stride(); }
 
 	protected int length() {
 		int result = 0;
@@ -533,21 +419,6 @@ System.out.println("DDS dd back");
 	protected ArrayList times;	// String
 
 	/**
-	* Drawer of price bars - e.g., tic bars or candles
-	*/
-	private BasicDrawer drawer;
-
-	/**
-	* Drawer of dates
-	*/
-	protected DateDrawer date_drawer;
-
-	/**
-	* Drawer of times
-	*/
-	private TimeDrawer time_drawer;
-
-	/**
 	* The data X maximum. 
 	* Once the data is loaded this will never change.
 	*/
@@ -591,5 +462,5 @@ System.out.println("DDS dd back");
 	// Number of tuples in the data
 	private int tuple_count;
 
-	private boolean dates_needed;
+//!!!:	private boolean dates_needed;
 }

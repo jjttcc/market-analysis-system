@@ -234,6 +234,7 @@ System.out.println("attachDataSet attaching Y data");
 		}
 	}
 
+//!!!!Remove?:
 	/**
 	* Reset the associated data sets with respect to this axis.
 	*/
@@ -909,6 +910,7 @@ System.out.println("restting with data set " + ++count);
 		}
 	}
 
+//!!!!Remove?:
 	/**
 	* Reset the relationship between DrawableDataSet `d' and this
 	* horizontal axis.
@@ -933,6 +935,7 @@ System.out.println("restting with data set " + ++count);
 		}
 	}
 
+//!!!!Remove?:
 	/**
 	* Reset the relationship between DrawableDataSet `d' and this
 	* vertical axis.

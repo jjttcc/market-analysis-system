@@ -36,6 +36,7 @@ public class AutoRefreshSetup {
 			TimeDelimitedDataRequest timer_task =
 				new TimeDelimitedDataRequest(data_request_client);
 			timer.scheduleAtFixedRate(timer_task, refresh_delay, refresh_delay);
+//!!!:
 System.out.println("scheduled " + timer_task + " with delay: " +
 refresh_delay);
 		}
