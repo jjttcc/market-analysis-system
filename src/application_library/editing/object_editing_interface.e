@@ -162,7 +162,7 @@ feature {NONE} -- Implementation
 					do_clone := false
 					initialization_needed := false
 				else
-					-- Selection is not from the list of previously
+					-- Selection is NOT from the list of previously
 					-- chosen objects.
 					Result := objects @ (selection - tree_objects.count)
 					do_clone := clone_needed
