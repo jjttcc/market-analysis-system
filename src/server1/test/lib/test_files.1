@@ -1,6 +1,6 @@
 # List of test input/output-reference files for test 1
 # Format:
-#   test_name,in_file,out_ref_file,index,epsilon,period_type,options
+#   test_name,in_file,out_ref_file,ind_index,epsilon,period_type,options
 # (epsilon is optional; period_type defaults to base type - e.g., daily).
 # (options specifies command-line options, if any, to pass to mas.)
 # period_types: 1 (daily), 2 (weekly), 3 (monthly), 4 (quarterly), 5 (yearly)
@@ -33,3 +33,4 @@ RSIsun intraday,sunw.intraday,rsi_sunw,12,.0001,,-i intraday
 RSIsunmnthly,sunw,rsi_sunw_mnthly,12,.0001,3
 Monthly Stochastic %K,sunw,sunw_mnthly_stch%K,9,.000001,3
 RSIsunqtrly,sunw,rsi_sunw_qtrly,12,.0001,4
+30-minute Stochastic %K,test_data2.intraday,test_data2.stochKintra,9,.0001,5,-i intraday
