@@ -17,7 +17,7 @@ class EXPONENTIAL_MOVING_AVERAGE inherit
 		rename
 			make as sma_make
 		redefine
-			set_n, short_description, operators, do_process, current_result
+			action, set_n, short_description, operators, do_process
 		end
 
 	MATH_CONSTANTS
@@ -100,22 +100,30 @@ feature {MARKET_FUNCTION_EDITOR} -- Status setting
 
 feature {NONE} -- Implementation
 
-	current_result (t, o: ARRAYED_LIST [MARKET_TUPLE]; last_oindex: INTEGER):
-			SIMPLE_TUPLE is
+	action is
+			-- Calculate exponential MA value for the current period.
+		require else
+			output_not_empty: not output.empty
+			tgindex_gt_n: target.index > effective_n
 		local
+			t: SIMPLE_TUPLE
 			latest_value: REAL
 		do
 			check
-				output_not_empty: not o.empty
-				tindex_gt_n: t.index > effective_n
 				exp_inv_correct:
 					rabs(1 - exp.value) - rabs(exp_inverse) <= .00001
 			end
-			operator.execute (t.item)
+			exp.execute (Void)
+			operator.execute (target.item)
 			latest_value := operator.value
-			create Result.make (t.item.date_time, t.item.end_date,
-				latest_value * exp.value +
-				o.i_th (last_oindex).value * (exp_inverse))
+			create t.make (target.item.date_time, target.item.end_date,
+						latest_value * exp.value +
+							output.last.value * (exp_inverse))
+			output.extend (t)
+		ensure then
+			-- output.last.value = P[curr] * exp + EMA[curr-1] * (1 - exp)
+			--   where P[curr] is the result (from `operator') for the current
+			--   period and EMA[curr-1] is the EMA for the previous period.
 		end
 
 	exp_inverse: DOUBLE
