@@ -242,12 +242,26 @@ feature -- Basic operations
 			f.set_effective_offset (operator_maker.left_offset)
 		end
 
-	edit_two_points_pertype (f: MARKET_FUNCTION_LINE) is
-			-- Edit a function that takes two market points and a period type.
+	edit_market_function_line (f: MARKET_FUNCTION_LINE) is
+			-- Edit a MARKET_FUNCTION_LINE.
 		require
 			ui_set: user_interface /= Void
 			op_maker_set: operator_maker /= Void
+		local
+			y, slope: REAL
+			p: MARKET_POINT
+			date: DATE_TIME
+			per_type_name: STRING
 		do
+			-- It doesn't matter what date is used here.
+			!!date.make_now
+			y := user_interface.real_selection (concatenation (<<
+					f.name, "'s starting (leftmost) y value">>))
+			slope := user_interface.real_selection (concatenation (<<
+					f.name, "'s slope">>))
+			!!p.make
+			p.set_x_y_date (1, y, date)
+			f.make (p, slope, period_types @ (period_type_names @ Weekly))
 		end
 
 feature {NONE} -- Implementation
