@@ -1,4 +1,6 @@
-if not exist c:\autoexec.bat goto end
-echo set MAS_DIRECTORY=%1\lib >>c:\autoexec.bat
-echo set PATH=%%PATH%%;%1\bin >>c:\autoexec.bat
+echo init.bat is running in:>>repl_spec
+cd>>repl_spec
+echo replacestart>>repl_spec
+echo {application_directory}%1>>repl_spec
+echo replaceend>>repl_spec
 :end
