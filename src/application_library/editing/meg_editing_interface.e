@@ -73,11 +73,20 @@ feature {NONE} -- Implementation
 				selection := remove_eg_selection
 				if selection /= Exit_menu_value then
 					meg := market_event_generation_library @ selection
-					market_event_generation_library.start
-					market_event_generation_library.prune (
-						market_event_generation_library @ selection)
-					show_message (concatenation (<<"Market analyzer for ",
-								meg.event_type.name, " removed.">>))
+					inspect
+						character_choice (concatenation
+							(<<"Remove ", meg.event_type.name,
+							"? (y[es]/n[o]/q[uit]) ">>), "yYnNqQ")
+					when 'y', 'Y' then
+						market_event_generation_library.start
+						market_event_generation_library.prune (
+							market_event_generation_library @ selection)
+						show_message (concatenation (<<"Market analyzer for ",
+									meg.event_type.name, " removed.">>))
+					when 'n', 'N' then
+					when 'q', 'Q' then
+						selection := Exit_menu_value
+					end
 				end
 			end
 		end

@@ -51,7 +51,7 @@ feature -- Access
 			until
 				choices.exhausted
 			loop
-				choices.item.set_right (false)
+				choices.item.set_right (False)
 				choices.forth
 			end
 			do_choice (descr, choices, allowed_selections)
@@ -59,6 +59,22 @@ feature -- Access
 			-- For each user-selection of an element of `choices', the
 			-- right member of that pair is set to true; the right
 			-- member of all other elements of `choices' is false.
+		end
+
+	character_choice (msg, chars: STRING): CHARACTER is
+	do
+		from
+		until
+			chars.has (Result)
+		loop
+			Result := character_selection (msg)
+		end
+	end
+
+
+	character_selection (msg: STRING): CHARACTER is
+			-- User-selected character
+		deferred
 		end
 
 	integer_selection (msg: STRING): INTEGER is
