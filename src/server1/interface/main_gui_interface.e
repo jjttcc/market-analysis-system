@@ -205,7 +205,7 @@ feature {NONE}
 	initialize is
 		do
 			create event_generator_builder.make
-			create function_builder.make
+			create function_builder.make (market_list_handler)
 			make_request_handlers
 		end
 
