@@ -1,30 +1,21 @@
-Installing the Market Analysis Server and Client
+INSTALLING THE MARKET ANALYSIS SERVER AND CLIENT
 
-Currently, the Market Analysis Server only runs on Linux/Intel platforms.
-I have tested it successfully on kernel versions 1.2.13, 2.0.28, and 2.2.9.
-I recommend at least a pentium machine to run the server, although I have
-run it successfully on my old 80486/33 machine - it's a little slow on that
-machine, but it's useable.
+Currently, the Market Analysis Server (MAS) runs on Linux/Intel and Windows
+platforms.  This version (1.2) of the Linux release requires the new glibc
+libraries.  I recommend at least a pentium machine to run the server, since
+the intensive math processing it does may make it sluggish on older hardware.
 
-You will need the older libc library to run this version of MAS (rather
-than the new glibc).  I have included all shared libraries that the server
-needs in the lib directory, in case you don't have them.  You can either
-copy these (the lib*.so.* files) to /usr/lib, or you can put them in an
-alternate place (or leave them where you unpacked them) and add the lib
-directory to your LD_LIBRARY_PATH environment variable.  For example,
-if the lib*.so.* files are in /usr/local/lib, you can add that directory
-to the LD_LIBRARY_PATH variable for the korn shell or bash with the command:
 
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
+INSTALLATION ON LINUX SYSTEMS
 
-To install the server executables and the client (Java) class files,
-first edit the install_config file in this directory (that is, the same
-directory where this INSTALL file resides).  In the line that begins
-"bin:", change the second field to the absolute path of the directory
-where you want to put the executable files.  In the line that begins
-"lib:", change the second field to the absolute path of the directory
-where you want to put the MAS library files, including the Java class
-files used by the GUI client.
+To install the server executables and the client (Java) class files on
+a Linux system, first edit the install_config file in this directory
+(that is, the same directory where this INSTALL file resides).  In the
+line that begins "bin:", change the second field to the absolute path of
+the directory where you want to put the executable files.  In the line
+that begins "lib:", change the second field to the absolute path of the
+directory where you want to put the MAS library files, including the Java
+class files used by the GUI client.
 
 Be sure that you have permission to write to the directories you specified
 in the install_config file.  Often the easiest way to do this is to
@@ -40,6 +31,9 @@ Then run the install script from this directory:
 
 If it is not already, you will need to make sure that the bin directory
 you installed to is included in your path.
+
+
+GENERAL INSTALLATION INSTRUCTIONS
 
 After installation, you should read the file doc/environment for
 instructions on setting environment variables needed by the server.
@@ -64,3 +58,7 @@ An example of a line in the stock split file that follows this format is:
 
 The current distribution of MAS includes a file (lib/stock_splits) with
 some stock split data in the required format.
+
+To test that the installation succeeded, you can run mas on the example data
+files in lib/data.  (See the file doc/masystem_introduction for instructions
+on how to start mas.)
