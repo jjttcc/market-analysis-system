@@ -14,45 +14,45 @@ Final Steps:
 
 1.  On Linux, make sure all files in the cvs tree are checked in.
 2.  Make sure the cvs tree is completely updated on Linux.
-3.  Run build_mas on Linux.
-4.  Do a bit of testing on the built executables to catch any remaining
+3.  Run build_linux_mas on Linux to build the Linux executables.
+4. Run build_windows_mas on the Windows machine and copy the resulting
+    executables (from .../finance/lib/binaries/windows) to the equivalent
+	location on the Linux machine.
+5.  Do a bit of testing on the built executables to catch any remaining
     problems.  (Recommended, but not required.)
-5.  Run make_doc in the doc directory.
-6.  Run make_chart_gui to freshly compile all the java files for the
+6.  Run make_doc in the doc directory.
+7.  Run make_chart_gui to freshly compile all the java files for the
     charting GUI and put them into a jar file.
-7.  Make sure the current release directory is empty and run make_release.
-8.  If any problems occurred during the make_release run, fix them and
+8.  Make sure the current release directory is empty and run make_release.
+9.  If any problems occurred during the make_release run, fix them and
     go back to step 1.
-9.  Do a test install of mas_linux*.tar.gz and make sure it installs
+10.  Do a test install of mas_linux*.tar.gz and make sure it installs
     correctly.
-10.  Run build_rpm to make the mas rpm file and if any problems occur that
+11.  Run build_rpm to make the mas rpm file and if any problems occur that
     require it, go back to a previous step.
-11. Make sure the latest version of the indicators_persist and
+12. Make sure the latest version of the indicators_persist and
     generators_persist files are checked in (in build/config).
     (Use the ones created in step 7 if needed).  And check them out on
     the Windows machine.
-12. Make sure the cvs tree is completely updated on Windows.
-13. Copy mas_windows*.tar.gz to the Windows machine to the correct directory.
-14. Run build_windows_mas on the Windows machine.
-NOTE!!: The use of prepare_windows_setup in the following two steps is
-probably obsolete:
-15. Make sure all the up-to-date "source" files needed for creating setup-mas*
-    are in place and run prepare_windows_setup on Windows.
-16. Run Inno config  on the latest inno_config iss file using the source
+13. Make sure the cvs tree is completely updated on Windows.
+14. On the windows machine, run prepare_windows_setup to copy the tar file
+    of the windows release over to the windows machine and extract it into
+	the source directory for the inno setup process.
+15. Run Inno config on the latest inno_config iss file using the source
     files set up by prepare_windows_setup.
-17. If any problems occurred during step 10. or 11. that require it (e.g.,
+16. If any problems occurred during step 10. or 11. that require it (e.g.,
     a CVS-ified file was changed and checked in), go back to step 1.
-18. Run a test install of the Windows setup-mas* exe file on Windows and
+17. Run a test install of the Windows setup-mas* exe file on Windows and
     of the mas-*.rpm on Linux.  Fix any problems that come up and, if
     necessary, go back to a previous step.
     NOTE: rpm runs "strip -R .comment -R .note" on the executables, so they
     are not going to be the same as the ones used to build the rpm package.
 since it will probably pop up again.
-19. Do a cvs tag, using the current release number as a label.
-20. Create a new release-announcement file, perform any needed updates for
+18. Do a cvs tag, using the current release number as a label.
+19. Create a new release-announcement file, perform any needed updates for
     the new release on published files, such as the files accessible on
     sf.net.  Do any needed backups.
-21. Put the files for the new release, from the current release directory,
+20. Put the files for the new release, from the current release directory,
     onto the download section on sourceforge.  Post announcements to
     sourceforge and the appropriate newsgroups - comp.os.linux.announce,
     misc.invest.*, the windows groups, etc.
