@@ -1,6 +1,7 @@
 indexing
 	description: "Sum of n sequential elements";
-	restrictions: "execute expects target.count >= n."
+	note: "If target.count < n, all of target's elements will be summed and %
+		%target.exhausted will be true."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -59,14 +60,21 @@ feature -- Basic operations
 			-- Operate on the next n elements of the input, beginning
 			-- at the current cursor position.
 		do
-			check target.count >= n end
 			internal_index := 0
 			value := 0
-			until_continue
+			if target.count >= n then
+				until_continue
+			else
+				low_count_action
+			end
 		ensure then
-			new_index: target.index = old target.index + n
-			-- value = sum (target[old target.index .. old target.index+n-1])
-			int_index_eq_n: internal_index = n
+			new_index: target.count >= n implies
+				target.index = old target.index + n
+			-- target.count >= n implies 
+			--   value = sum (target[old target.index .. old target.index+n-1])
+			int_index_eq_n: target.count >= n implies internal_index = n
+			state_if_count_lt_n: target.count < n implies
+				internal_index = target.index - 1 and target.exhausted
 		end
 
 feature -- Status report
@@ -108,6 +116,20 @@ feature {NONE}
 			-- Should never be called.
 		do
 			check false end
+		end
+
+	low_count_action is
+			-- Action to take if target.count < n
+		require
+			count_lt_n: target.count < n
+		do
+			from
+			until
+				target.exhausted
+			loop
+				action
+				forth
+			end
 		end
 
 invariant
