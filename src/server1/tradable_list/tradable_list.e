@@ -39,14 +39,14 @@ feature -- Initialization
 			tradable_factory := factory
 			object_comparison := True
 			symbol_list.start
-			create cache.make (Cache_size)
+			create cache.make (cache_size)
 			caching_on := True
 		ensure
 			sym_set: symbols /= Void and symbols.count = s_list.count
 			factory_set: tradable_factory = factory
 			implementation_init: last_tradable = Void and old_index = 0
 			cache_initialized: cache /= Void
-			ache_on: caching_on
+			cache_on: caching_on
 			-- All elements of `s_list' are in `symbols',
 			-- with upper-case characters changed to lower case.
 		end
@@ -74,7 +74,7 @@ feature -- Access
 			-- tradable creation, or the cache has been cleared.
 			if
 				not caching_on or
-				index /= old_index or (Cache_size > 0 and cache.count = 0)
+				index /= old_index or (cache_size > 0 and cache.count = 0)
 			then
 				old_index := 0
 				last_tradable := cached_item (index)
@@ -100,7 +100,7 @@ feature -- Access
 
 	changeable_comparison_criterion: BOOLEAN is False
 
-	Cache_size: INTEGER is 10
+	cache_size: INTEGER is 10
 
 feature -- Status report
 
@@ -286,7 +286,7 @@ feature {NONE} -- Implementation
 			not_void: t /= Void
 		do
 			if caching_on then
-				if cache.count = Cache_size then
+				if cache.count = cache_size then
 					cache.clear_all
 					check cache.count = 0 end
 				end
@@ -390,7 +390,7 @@ invariant
 	always_compare_objects: object_comparison = True
 	object_comparison_for_symbol_list: symbol_list.object_comparison
 	cache_exists: cache /= Void
-	cache_not_too_large: cache.count <= Cache_size
+	cache_not_too_large: cache.count <= cache_size
 	symbols_not_void: symbols /= Void
 	index_definition: index = symbol_list.index
 	non_negative_count: count >= 0
