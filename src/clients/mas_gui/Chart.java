@@ -456,7 +456,7 @@ System.out.println("replace_indicators: " + replace_indicators);
 		}
 	}
 
-	// Link `d' with the appropriate data set group, using `indicator_name'
+	// Link `d' with the appropriate indicator group, using `indicator_name'
 	// as a key.  If `indicator_name' is null, the group for the main
 	// (upper) graph will be used.  If `indicator_name' specifies an
 	// indicator that is not a group member, no action is taken.
