@@ -1,5 +1,6 @@
 indexing
 	description: "Miscellaneous information about a derivative instrument";
+NOTE: Not used any more - move to obsolete directory.
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -8,7 +9,6 @@ indexing
 
 deferred class DERIVATIVE_DATA
 
---NOTE!!!: Needs refactoring with STOCK_DATA
 feature -- Access
 
 	symbol: STRING
