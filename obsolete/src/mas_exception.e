@@ -45,6 +45,7 @@ feature -- Basic operations
 	handle_exception (routine_description: STRING) is
 		local
 			error_msg: STRING
+			fatal: BOOLEAN
 		do
 			-- An exception may have caused a lock to have been left open -
 			-- ensure that clean-up occurs to remove the lock:
@@ -54,9 +55,13 @@ feature -- Basic operations
 					error_msg := developer_exception_name
 				else
 					error_msg := meaning (exception)
+					fatal := fatal_exception (exception)
 				end
 				log_errors (<<"%NError encountered in ", routine_description,
 							": ", error_msg, "%N">>)
+				if fatal then
+					exit (Error_exit_status)
+				end
 			elseif signal = Sigterm or signal = Sigabrt then
 				log_errors (<<"%NCaught kill signal in ", routine_description,
 					":%N", signal_meaning (signal), " (", signal, ")",
@@ -91,6 +96,18 @@ feature -- Basic operations
 		rescue
 			-- Make sure that program terminates when an exception occurs.
 			die (status)
+		end
+
+	fatal_exception (e: INTEGER): BOOLEAN is
+			-- Is `e' an exception that is considered fatal?
+		do
+			Result := true
+			if
+				e = external_exception or e = floating_point_exception or
+				e = routine_failure
+			then
+				Result := false
+			end
 		end
 
 end -- GLOBAL_SERVER
