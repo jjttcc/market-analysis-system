@@ -563,6 +563,10 @@ feature {NONE} -- Implementation - utilities
 		ensure
 			mlh_at_first: not market_list_handler.empty implies
 				market_list_handler.isfirst
+		rescue
+			-- Exceptions caught during initialization are considered fatal.
+			last_exception_status.set_fatal (true)
+			handle_exception ("initialize_current_tradable")
 		end
 
 	product_info: STRING is
