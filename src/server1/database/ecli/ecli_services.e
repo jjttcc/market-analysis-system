@@ -145,6 +145,7 @@ feature -- Status report
 	connected: BOOLEAN is
 			-- Are we connected to the database?
 		do
+			fatal_error := False
 			Result := session.is_connected
 		end
 
@@ -156,7 +157,7 @@ feature -- Basic operations
 			error: BOOLEAN
 		do
 			if not error then
-				fatal_error := false
+				fatal_error := False
 				session.connect
 				if session.is_connected then
 					debug ("database")
