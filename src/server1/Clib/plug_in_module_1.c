@@ -43,26 +43,30 @@ int char_count(const char* s, char c) {
 /* Array of directories extracted from `paths' with separator ':'.
  * The address at `count' holds the number of elements in the result or,
  * if memory allocation fails, -1.
- * Returns 0 if `paths' is "" (empty).
- * Precondition: path != 0 && count != 0 && paths[strlen(paths)] == '\0'
-*/
+ * Returns 0 if `paths' is "" (empty). */
 char** directories(const char* paths, int* count) {
 	const char *start, *end;
 	const char Separator = ':';
 	char** result = 0;
 	int sepcount, i;
-	if (paths != "") {
+
+	assert(paths != 0 && paths[strlen(paths)] == '\0');
+	if (paths[0] != '\0') {
 		start = paths;
 		for (sepcount = 0; *start != '\0'; ++start) {
 			if (*start == Separator) {
 				++sepcount;
 			}
 		}
-		result = malloc(sizeof(char **) * sepcount + 1);
+		if (char_count(paths, ':') == strlen(paths)) {
+			*count = 1;
+		} else {
+			*count = sepcount + 1;
+		}
+		result = malloc(sizeof(char **) * *count);
 		if (result == 0) {
 			*count = -1;
 		} else {
-			*count = sepcount + 1;
 			i = 0;
 			start = paths;
 			while (1) {
@@ -72,9 +76,16 @@ char** directories(const char* paths, int* count) {
 				}
 				/* !!Need error checking of malloc results. */
 				if (end == start) {
-					assert(*end == Separator);
+					assert(*end == Separator || *end == '\0');
 					result[i] = malloc(2);
 					strncpy(result[i], ".", 2);
+					if (end[1] == '\0') {
+						if (i == *count - 2) {
+							*count = i + 1;
+							free(result[*count]);
+						}
+						break;
+					}
 				} else {
 					result[i] = malloc(end - start + 1);
 					strncpy(result[i], start, end - start);
@@ -88,19 +99,22 @@ char** directories(const char* paths, int* count) {
 				}
 			}
 		}
+	} else {
+		*count = 0;
 	}
 
 	return result;
 }
 
 /* A new heap-allocated string with all `count' elements of the array `a'
- * copied to it */
+ * copied to it
+ * Precondition: a != 0 && count > 0 */
 char* concatenation(const char** a, int count) {
 	int i, totalsize;
 	int sizes[count];
 	char* result = 0;
 
-	assert(a != 0);
+	assert(a != 0 && count > 0);
 	for (i = 0, totalsize = 0; i < count; ++i) {
 		sizes[i] = strlen(a[i]);
 		totalsize += sizes[i];
