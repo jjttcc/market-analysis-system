@@ -1,34 +1,35 @@
-BRIEF INTRODUCTION TO THE MARKET ANALYSIS SYSTEM
+%titleBrief Introduction to the Market Analysis System
+%end_title
 
 The Market Analysis System (MAS) is a client/server application that
 provides tools for analysis of financial markets, with the goal of
 helping its user make better buying and selling decisions and to help
 save time by automating some tasks that would otherwise be done by hand.
-
-The principal component of the MAS is the Market Analysis System Server
-(MASS) [also called the Market Analysis Server (MAS) in contexts where
-it will not be confused with the Market Analysis System].  The server
+%par
+The principal component of MAS is the Market Analysis System server.
+The server
 inputs market data (such as stock data), applies technical analysis[1]
 indicators to the data, makes market and indicator data available to
 clients via a network connection, and provides configurable analysis of
 market data to help determine good buy and sell prospects.[2]
-
+%par
 Another important component of the Market Analysis System is the Market
-Analysis GUI Client (MAGC) (sometimes shortened to Market Analysis Client
-(MAC)).  This application obtains market and indicator data from the
+Analysis GUI client.
+This application obtains market and indicator data from the
 server and displays it in chart form, allowing the user to visualize
-the data.  MAS currently runs on Linux x86 and Windows systems.  MAGC should
+the data.
+MAS currently runs on Linux x86 and Windows systems.
+The MAS GUI client should
 run on any platform for which a Java Runtime Environment is available,
 which includes UNIX, Windows, and Macintosh systems.
-
+%par
 See the file "feature_list" for list of features provided by the Market
 Analysis System client and server.
-
+%par
 Note: The term {mas_dir}, used below, stands for the directory into which
 you installed MAS.
 
-
-STOCK SPLITS
+%hdg2Stock Splits
 
 The MAS server can obtain the data it needs for stock splits either from
 a file or from a database.  If you are not using MAS with a database
@@ -40,38 +41,41 @@ stock that has split, if the split has not been adjusted for in the data
 file itself, will not be adjusted for the split by the server and thus
 incorrect values will be used when the data for that stock is processed.)
 The format of the stock split file is simple:
-
-date<tab>symbol<tab>value
-
-where date is the date of the split in the format yyyymmdd, <tab> stands
+%par
+date[tab]symbol[tab]value
+%par
+where date is the date of the split in the format yyyymmdd, [tab] stands
 for a tab character, symbol is the symbol for the stock, and value is the
 split value.  (For example, for a 2-for-1 split, value will be 2.)
-
+%par
 An example of a line in the stock split file that follows this format is:
-
+%par
 19980408	F	1.5
-
+%par
 The current distribution of MAS includes a file (lib/data/stock_splits) with
 some sample stock split data in the required format.
 
 
-RUNNING MAS
+%hdg2Running Mas
 
+@begin:linux
 Note that before running the Market Analysis Server for the first time,
 you will need to set up a few environment variables for it.  See the
-file environment for an explanation of these variables.  Also,
-the current version of MAS supports the following data formats:
-
+file environment for an explanation of these variables.
+@end:linux
+%par
+The current version of MAS supports the following data formats:
+%par
 date,open,high,low,close,volume
 date,high,low,close,volume
 date,time,open,high,low,close,volume
 date,time,high,low,close,volume
-
+%par
 Note that open interest is supported as of version 1.6.
-
+%par
 Note that there are some sample data files in {mas_dir}/lib/data that
 you can use to begin with.
-
+%par
 There are currently two main ways to use MAS: by running the server
 and the GUI client to view charts of markets; and by running the server
 alone and using its analysis features to produce buy and sell signals,
@@ -79,9 +83,9 @@ based on criteria set by the user.  To use both the server and client,
 you will first need to start the server.  Here is an example command-line
 entry for starting the server, in a directory that contains market data
 files whose names follow the format *.txt:
-
+%par
 mas -o -f , *.txt -b 13579 &
-
+%par
 The -o tells the server that the data files include an opening price;
 the "-f ," tells the server that the character used to separate fields
 in the data file is ','.  (The default is tab.)  *.txt, of course,
@@ -90,24 +94,24 @@ the server and -b tells the server it is to be run in the background.
 13579 is the socket port number that you are telling the server to use
 to communicate with one or more GUI clients.  (You can enter "mas -h"
 to print a short summary of the server's command-line options.)
-
+%par
 You may want to use the new feature of the server (as of version 1.6.5) to
 retrieve the latest end-of-day data from yahoo.com.  To do this, make sure
 the mas_httprc configuration file resides in $MAS_DIRECTORY and use the
 -w option; for example, adapting the above example of starting the server
 to read from files to instead retrieve data from yahoo.com results in:
-
+%par
 mas -o -f , -w -b 13579 &
-
+%par
 Once you have started the server, you can start a GUI client from the
 command line by changing the current directory to:
-
+%par
 {mas_dir}/lib/classes
-
+%par
 and entering the command:
-
+%par
 jre MA_Client hostname port_number
-
+%par
 where hostname stands for the network name of the computer the server is
 running on and port_number is the socket port number the server is using
 (13579 in the example above).  (You can find out your machine's host name
@@ -118,41 +122,41 @@ your system.  The JRE is available for free for most operating systems.
 See the file java_info for information on obtaining the JRE for your
 system.  (If you have the Java Development Kit installed, you can replace
 jre with java in the above command, if you like.)
-
+%par
 On UNIX systems, you can start a java GUI client by running the magc
 command.  For example:
-
+%par
 magc 13579
-
+%par
 will start the GUI and connect with the server at port 13579.  If the
 server is running on a different machine from the client, you can specify
 the machine's network address with the -h option.  For example:
-
+%par
 magc -h boston.com 13579
-
+%par
 when the server is running on a machine named boston.com.
-
+%par
 See the file GUI_introduction for more information on running the GUI client.
-
+%par
 You can also run the server on intraday data.  One intraday data file
 is included in {mas_dir}/lib/data: ibm.5-minute, 5-minute data for IBM.
 (Note that this is artificial - made-up - data, since real intraday data
 is expensive.)  You can run the server on the daily and intraday data
 for IBM with:
-
+%par
 mas -o -f , 2425 -b -d txt -i 5-minute ibm.* &
-
+%par
 Then start the GUI the same way as before.
 
 
-USING MAS WITH A DATABASE MANAGEMENT SYSTEM ON LINUX
+%hdg2Using MAS with a Database Management System on Linux
 
 If you have a DBMS with ODBC support, you may be able to store your data in
 a database and have MAS obtain its market data from there instead of from
 files.  I have MAS set up on my system to talk to a Postgres database using
 unixODBC, a package for Linux and UNIX systems.  unixODBC is available at
 http://www.unixodbc.org/.
-
+%par
 To configure MAS to connect to a database, you will first need to
 create a database and the necessary tables to store market data.
 (I have included some scripts I use to create tables in the scripts
@@ -160,26 +164,27 @@ package (in the src/scripts/database/postgres directory), which you
 can use for suggestions as to needed table structures, if you wish.)
 And you will need to make sure that your ODBC libraries and drivers are
 installed and a data source name configured for the MAS database.
-
+%par
 Once the database is created and ODBC configured properly, you will need
 to create a database configuration file for MAS.  The default name for
 this file is mas_dbrc.  This file will need to reside in the directory
 specified by the MAS_DIRECTORY environment variable.
-
+%par
 The mas_dbrc file contains settings that tell MAS how to query for the
 data it needs.  For example, it tells MAS the name of the table in
 which daily stock data is stored.
-
+%par
 I have included the mas_dbrc file I use on my system in the MAS package.
 You will find it in the lib directory.  The file is commented and,
 hopefully, you will be able to figure out from the settings and
 comments in the file how to set it up for your particular system
 configuration.
-
+%par
 Once you have everything set up properly, you can start MAS and use the -p
 option to tell it to use the database for its data.
 
 
+@begin:obsolete
 USING MAS WITH THE QuoteMonster SCRIPT
 
 You can configure MAS to use the popular QuoteMonster perl script to
@@ -232,9 +237,10 @@ There are some settings within the mas_external_retrieve.pl script that
 can be changed to alter settings such as how many years worth of data
 to obtain.  See the documentation (comments) in the script for instructions
 on what settings can be changed and what they are for.
+@end:obsolete
 
 
-NOTES
+%hdg2Notes
 
 [1] For those not familiar with technical analysis, it is a set of
 techniques for analyzing market data, using indicators such as trend
@@ -243,7 +249,7 @@ changes in market trends.  It is based on the observation that "prices
 move in trends which are determined by the changing attitudes of investors
 toward a variety of economic, monetary, political, and psychological
 forces." ["Technical Analysis Explained," by Martin J. Pring]
-
+%par
 [2] For example, one configuration I have used is to issue a buy signal
 if Stochastic %D crosses below 35% (indicating that the stock is becoming
 oversold) and, no more than 28 days before that, the weekly MACD difference
