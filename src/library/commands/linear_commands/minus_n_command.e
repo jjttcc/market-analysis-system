@@ -1,7 +1,7 @@
 indexing
 	description:
 		"An n-record command that simply retrieves the value at the%
-		%current position minus n of the input vector";
+		%current position minus n of the input";
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -11,7 +11,7 @@ class MINUS_N_COMMAND inherit
 		export {MARKET_FUNCTION}
 			set_n
 		redefine
-			execute, target
+			execute
 		end
 
 creation
@@ -25,9 +25,5 @@ feature
 			check target.index > n end
 			value := target.i_th (target.index - n).value
 		end
-
-feature {NONE}
-
-	target: ARRAYED_LIST [MARKET_TUPLE]
 
 end -- class MINUS_N_COMMAND

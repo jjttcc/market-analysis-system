@@ -1,7 +1,7 @@
 indexing
 	description:
-		"An abstraction for a market vector analyzer that processes %
-		%the last n trading periods."
+		"An abstraction for a linear analyzer that functions as a %
+		%command and that processes the last n trading periods."
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -14,9 +14,9 @@ class N_RECORD_COMMAND inherit
 
 	N_RECORD_STRUCTURE
 
-	VECTOR_ANALYZER
+	LINEAR_ANALYZER
 		redefine
-			forth, action, start, exhausted, invariant_value
+			forth, action, start, exhausted, invariant_value, target
 		end
 
 feature -- Initialization
@@ -35,11 +35,12 @@ feature -- Basic operations
 
 feature {TEST_FUNCTION_FACTORY} --!!!??
 
-	set_input (in: LINEAR [MARKET_TUPLE]) is
+	set_input (in: like target) is
 		do
 			target := in
 		ensure then
-			target = in and target /= Void
+			target = in
+			target /= Void
 		end
 
 feature {NONE} -- Implementation
@@ -70,10 +71,8 @@ feature {NONE} -- Implementation
 
 	invariant_value: BOOLEAN is
 		do
-			--Result := target /= Void and not exhausted implies
-						--target.valid_index (target.index - offset)
-			Result := true -- Remove this when the above is commented-out OR
-						   -- delete the entire routine.
+			Result := target /= Void and not exhausted implies
+						target.valid_index (target.index - offset)
 		end
 
 feature {NONE} -- Implementation
@@ -82,6 +81,8 @@ feature {NONE} -- Implementation
 
 	offset: INTEGER
 			-- Offset from current cursor/index
+
+	target: ARRAYED_LIST [MARKET_TUPLE]
 
 feature {MARKET_FUNCTION}
 

@@ -1,16 +1,16 @@
 indexing
-	description: "Sum of n vector elements.";
+	description: "Sum of n sequential elements.";
 	date: "$Date$";
 	revision: "$Revision$"
 
-class VECTOR_SUM inherit
+class LINEAR_SUM inherit
 
 	NUMERIC_COMMAND
 		redefine
 			initialize
 		end
 
-	VECTOR_ANALYZER
+	LINEAR_ANALYZER
 		redefine
 			test, action, forth, invariant_value
 		end
@@ -50,19 +50,18 @@ feature
 
 	invariant_value: BOOLEAN is
 		do
-			--!!!Result := 0 <= internal_index and internal_index <= n and
-			--!!!			(target.valid_index (target.index) or exhausted)
-			Result := true -- !!!Remove this when above is uncommented OR
-			               -- !!!delete the entire routine.
+			Result := 0 <= internal_index and internal_index <= n
 		end
 
 feature {MARKET_FUNCTION} -- export to??
 
 	set_input (in: LINEAR [MARKET_TUPLE]) is
+		require
+			not_void: in /= Void
 		do
 			target := in
 		ensure then
-			target = in and target /= Void
+			target_set: target = in and target /= Void
 		end
 
 feature {NONE}
@@ -94,7 +93,6 @@ feature {NONE}
 
 invariant
 
-	--!!!valid_target_index: target /= Void and not target.before implies
-	--!!!						invariant_value
+	valid_target_index: target /= Void implies invariant_value
 
-end -- class VECTOR_SUM
+end -- class LINEAR_SUM

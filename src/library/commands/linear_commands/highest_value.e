@@ -1,6 +1,6 @@
 indexing
 	description: 
-		"An abstraction for a market vector analyzer that finds%
+		"An abstraction for an n-record command that finds%
 		%the highest high value in the last n trading periods."
 	date: "$Date$";
 	revision: "$Revision$"
@@ -9,7 +9,7 @@ class HIGHEST_HIGH inherit
 
 	N_RECORD_COMMAND
 		redefine
-			start_init, sub_action, set_input, target
+			start_init, sub_action, target
 		end
 
 creation
@@ -33,19 +33,5 @@ feature {NONE} -- Implementation
 feature {NONE}
 
 	target: ARRAYED_LIST [BASIC_MARKET_TUPLE]
-
-feature {TEST_FUNCTION_FACTORY}
-
-	set_input (in: LINEAR [BASIC_MARKET_TUPLE]) is
-		local
-			l: ARRAYED_LIST [BASIC_MARKET_TUPLE]
-		do
-			l ?= in
-			check l /= Void end
-			target := l
-		ensure then
-			target = in
-			target /= Void
-		end
 
 end -- class HIGHEST_HIGH
