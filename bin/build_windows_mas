@@ -6,7 +6,7 @@ abort() {
 	exit 1
 }
 
-lib_script=$MAS/lib/scripts/build_eiffel_application
+lib_script=$MASBUILD/lib/scripts/build_eiffel_application
 .  $lib_script
 if [ $? -ne 0 ]; then abort "Failed to load $lib_script.";fi
 export Targetdir=$MASBUILD/lib/binaries
