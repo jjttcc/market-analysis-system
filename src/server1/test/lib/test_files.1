@@ -4,37 +4,37 @@
 # (epsilon is optional; period_type defaults to base type - e.g., daily).
 # (options specifies command-line options, if any, to pass to mas.)
 # period_types: 1 (daily), 2 (weekly), 3 (monthly), 4 (quarterly), 5 (yearly)
-MACD Difference,test_data,macd,3
-MACD Signal,test_data,macd_sig,4
-MACD Histogram,test_data,macd_hist,5
-Simple Moving Average,ma,ma,1
-Exponential Moving Average,test_data,ema,2,.001
-Weighted Moving Average,wma,wma,14
-Momentum,momentum,momentum,6
-Rate of Change,roc,roc,7
-Stochastic %K,stoch,stochK5,9,.01
-Stochastic %D,stoch,stochD5,10,.01
-Slow Stochastic %D,stoch,slow_stochD3,11,.01
-Williams %R,williams,williams,8,.01
-RSI,rsi,rsi7,12,.001
-RSIsun,sunw,rsi_sunw,12,.0001
+MACD Difference,test_data,macd,3,,,-no-open
+MACD Signal,test_data,macd_sig,4,,,-no-open
+MACD Histogram,test_data,macd_hist,5,,,-no-open
+Simple Moving Average,ma,ma,1,,,-no-open
+Exponential Moving Average,test_data,ema,2,.001,,-no-open
+Weighted Moving Average,wma,wma,14,,,-no-open
+Momentum,momentum,momentum,6,,,-no-open
+Rate of Change,roc,roc,7,,,-no-open
+Stochastic %K,stoch,stochK5,9,.01,,-no-open
+Stochastic %D,stoch,stochD5,10,.01,,-no-open
+Slow Stochastic %D,stoch,slow_stochD3,11,.01,,-no-open
+Williams %R,williams,williams,8,.01,,-no-open
+RSI,rsi,rsi7,12,.001,,-no-open
+RSIsun,sunw,rsi_sunw,12,.0001,,-no-open
 Wilder's MA,wilder_ma,wilder_ma,13,.0001025,,-o
-MACD Difference intraday,test_data.intraday,macd,3,,,-i intraday
-MACD Signal intraday,test_data.intraday,macd_sig,4,,,-i intraday
-MACD Histogram intraday,test_data.intraday,macd_hist,5,,,-i intraday
-Exponential Moving Average intraday,test_data.intraday,ema,2,.001,,-i intraday
-Simple Moving Average intraday,ma.intraday,ma,1,,,-i intraday
-Momentum intraday,momentum.intraday,momentum,6,,,-i intraday
-Rate of Change intraday,roc.intraday,roc,7,,,-i intraday
-Stochastic %K intraday,stoch.intraday,stochK5,9,.01,,-i intraday
-Stochastic %D intraday,stoch.intraday,stochD5,10,.01,,-i intraday
-Slow Stochastic %D intraday,stoch.intraday,slow_stochD3,11,.01,,-i intraday
-Williams %R intraday,williams.intraday,williams,8,.01,,-i intraday
-RSI intraday,rsi.intraday,rsi7,12,.001,,-i intraday
-RSIsun intraday,sunw.intraday,rsi_sunw,12,.0001,,-i intraday
-RSIsunmnthly,sunw,rsi_sunw_mnthly,12,.0001,3
-Monthly Stochastic %K,sunw,sunw_mnthly_stch%K,9,.000001,3
-RSIsunqtrly,sunw,rsi_sunw_qtrly,12,.0001,4
+MACD Difference intraday,test_data.intraday,macd,3,,,-i intraday -no-open
+MACD Signal intraday,test_data.intraday,macd_sig,4,,,-i intraday -no-open
+MACD Histogram intraday,test_data.intraday,macd_hist,5,,,-i intraday -no-open
+Exponential Moving Average intraday,test_data.intraday,ema,2,.001,,-i intraday -no-open
+Simple Moving Average intraday,ma.intraday,ma,1,,,-i intraday -no-open
+Momentum intraday,momentum.intraday,momentum,6,,,-i intraday -no-open
+Rate of Change intraday,roc.intraday,roc,7,,,-i intraday -no-open
+Stochastic %K intraday,stoch.intraday,stochK5,9,.01,,-i intraday -no-open
+Stochastic %D intraday,stoch.intraday,stochD5,10,.01,,-i intraday -no-open
+Slow Stochastic %D intraday,stoch.intraday,slow_stochD3,11,.01,,-i intraday -no-open
+Williams %R intraday,williams.intraday,williams,8,.01,,-i intraday -no-open
+RSI intraday,rsi.intraday,rsi7,12,.001,,-i intraday -no-open
+RSIsun intraday,sunw.intraday,rsi_sunw,12,.0001,,-i intraday -no-open
+RSIsunmnthly,sunw,rsi_sunw_mnthly,12,.0001,3,-no-open
+Monthly Stochastic %K,sunw,sunw_mnthly_stch%K,9,.000001,3,-no-open
+RSIsunqtrly,sunw,rsi_sunw_qtrly,12,.0001,4,-no-open
 30-minute Stochastic %K,dj.intraday,dj_stochKintra,9,.001,5,-i intraday -o
 15-minute EMA,dj.intraday,dj_ema_int15,2,.15,3,-i intraday -o
 hourly MACD Signal,dj.intraday,dj_macdsig_hourly,4,.01,6,-i intraday -o
