@@ -5,11 +5,8 @@ root
 	MA_SERVER: make
 
 default
-	assertion (check)
-	assertion (require)
-	assertion (ensure)
-	assertion (loop)
-	assertion (invariant)
+	assertion (no)
+	arguments ("-o -f ,  a???.txt  4002 -debug")
 	arguments ("-o -f ,  ad??.txt  4002")
 	arguments ("-o -f ,  a???.txt  4002")
 	arguments ("-o -f ,  a*.txt b*.txt sunw.txt  4002")
@@ -86,7 +83,11 @@ default
 	multithreaded (no)
 
 
---	assertion (no)
+--	assertion (check)
+--	assertion (require)
+--	assertion (ensure)
+--	assertion (loop)
+--	assertion (invariant)
 --	debug (no)
 --debug ("editing");
 --debug ("persist");
