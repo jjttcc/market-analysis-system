@@ -153,13 +153,15 @@ feature -- Status report
 		do
 			if symbols.has (symbol) then
 				ptypes := period_types (symbol)
-				if not ptypes.object_comparison then
-					change_back := true
-					ptypes.compare_objects
-				end
-				Result := ptypes.has (t.name)
-				if change_back then
-					ptypes.compare_references
+				if ptypes /= Void then
+					if not ptypes.object_comparison then
+						change_back := true
+						ptypes.compare_objects
+					end
+					Result := ptypes.has (t.name)
+					if change_back then
+						ptypes.compare_references
+					end
 				end
 			end
 		end
