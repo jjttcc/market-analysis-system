@@ -71,13 +71,13 @@ feature {NONE} -- Hook methods
 						"     Choose ", c.generator,
 						" (c) Make another choice (a) ", eom>>)
 			inspect
-				selected_character
+				character_selection (Void)
 			when 'd', 'D' then
 				print_list (<<"%N", command_description (c),
 					"%N%NChoose ", c.generator,
 						"? (y/n) ", eom>>)
 				inspect
-					selected_character
+					character_selection (Void)
 				when 'y', 'Y' then
 					Result := true
 				else

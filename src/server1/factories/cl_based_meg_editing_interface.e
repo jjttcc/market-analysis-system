@@ -101,7 +101,7 @@ feature {NONE} -- Implementation
 					%%N     View a market analyzer (v) %
 					%Previous (-) Help (h) ", eom>>)
 				inspect
-					selected_character
+					character_selection (Void)
 				when 'c', 'C' then
 					Result := Create_new_eg_value
 				when 'r', 'R' then
@@ -179,7 +179,7 @@ feature {NONE} -- Implementation
 			loop
 				print_list (<<"Select analyzer type: ",
 							"Simple (s) Compound (c) ", eom>>)
-				c := selected_character
+				c := character_selection (Void)
 				if not (c = 's' or c = 'S' or c = 'c' or c = 'C') then
 					c := '%U'
 					print_list (<<"Invalid selection: ", c, "%N">>)
@@ -239,7 +239,7 @@ feature {NONE} -- Implementation
 				print_list (<<"Would you like this analyzer to use one ",
 							"or two technical indicators?%N",
 							"     One (o) Two (t) ", eom>>)
-				c := selected_character
+				c := character_selection (Void)
 				if not (c = 'o' or c = 'O' or c = 't' or c = 'T') then
 					c := '%U'
 					print_list (<<"Invalid selection: ", c, "%N">>)
@@ -265,7 +265,7 @@ feature {NONE} -- Implementation
 			loop
 				print_list (<<"Would you like to define an operator for this %
 							%market analyzer? (y/n) ", eom>>)
-				c := selected_character
+				c := character_selection (Void)
 				if not (c = 'y' or c = 'Y' or c = 'n' or c = 'N') then
 					c := '%U'
 					print_list (<<"Invalid selection: ", c, "%N">>)
@@ -281,7 +281,7 @@ feature {NONE} -- Implementation
 							"function (", f.left_function.name,
 							") or the right function (",
 							f.right_function.name, ")? (l/r) ", eom>>)
-					c := selected_character
+					c := character_selection (Void)
 					if not (c = 'l' or c = 'L' or c = 'r' or c = 'R') then
 						c := '%U'
 						print_list (<<"Invalid selection: ", c, "%N">>)
@@ -397,7 +397,7 @@ feature {NONE} -- Implementation
 						%below-to-above (1) above-to-below (2) both (3) ",
 						eom>>)
 				inspect
-					selected_character
+					character_selection (Void)
 				when '1' then
 					Result := fa_maker.Below_to_above
 					print ("Using below-to-above%N")
@@ -428,7 +428,7 @@ feature {NONE} -- Implementation
 					"to match events from the left%Nanalyzer that occur ",
 					which, " the right analyzer? (y/n/h) ", eom>>)
 				inspect
-					selected_character
+					character_selection (Void)
 				when 'y', 'Y' then
 					yes := true
 					finished := true
@@ -451,7 +451,7 @@ feature {NONE} -- Implementation
 				print_list (<<"Select: days (d) months (m) years (y) End (e) ",
 							eom>>)
 				inspect
-					selected_character
+					character_selection (Void)
 				when 'd', 'D' then
 					print_list (<<"Enter the number of days: ", eom>>)
 					read_integer
@@ -493,7 +493,7 @@ feature {NONE} -- Implementation
 					"as target for the left analyzer's date/time? ",
 					" (y/n/h) ", eom>>)
 				inspect
-					selected_character
+					character_selection (Void)
 				when 'y', 'Y' then
 					yes := true
 					finished := true

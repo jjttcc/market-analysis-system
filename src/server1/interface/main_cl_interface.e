@@ -156,7 +156,7 @@ feature -- Basic operations
 							"     End client session (x) Help (h) ",
 							"Product information (p) ", eom>>)
 				inspect
-					selected_character
+					character_selection (Void)
 				when 's', 'S' then
 					select_market
 				when 'v', 'V' then
@@ -241,7 +241,7 @@ feature {NONE}
 					%Edit market-analysis indicators (a) %N%
 					%     Exit (x) Previous (-) Help (h) ", eom>>)
 				inspect
-					selected_character
+					character_selection (Void)
 				when 'c', 'C' then
 					f := function_builder.function_selection_from_type (
 							function_builder.market_function, "root function",
@@ -407,7 +407,7 @@ feature {NONE}
 					print_list (<<"Remove ", indicator.name,
 						"? (y[es]/n[o]/q[uit]) ", eom>>)
 					inspect
-						selected_character
+						character_selection (Void)
 					when 'y', 'Y' then
 						remove_indicator (indicator)
 					when 'n', 'N' then
@@ -442,7 +442,7 @@ feature {NONE}
 					%%N     Edit registrants (e) Exit (x) Previous (-) %
 					%Help (h) ", eom>>)
 				inspect
-					selected_character
+					character_selection (Void)
 				when 'a', 'A' then
 					registrar.add_registrants
 				when 'r', 'R' then
@@ -490,7 +490,7 @@ feature {NONE}
 					current_period_type.name,
 					"] (c)%N     Exit (x) Previous (-) Help (h) ", eom>>)
 				inspect
-					selected_character
+					character_selection (Void)
 				when 'm', 'M' then
 					print_tuples (current_tradable.tuple_list (
 									current_period_type.name))
@@ -544,7 +544,7 @@ feature {NONE}
 						%     View long description (l) Exit (x) Previous (-) %
 						% Help (h) ", eom>>)
 				inspect
-					selected_character
+					character_selection (Void)
 				when 'p', 'P' then
 					if not indicator.processed then
 						print_list (<<"Processing ", indicator.name, " ...%N">>)
