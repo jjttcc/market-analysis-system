@@ -18,6 +18,16 @@ abstract public class Drawer {
 
 	public abstract MarketDrawer market_drawer();
 
+	// The dates associated with the principle (market) data
+	public ArrayList dates() {
+		return market_drawer().dates();
+	}
+
+	// The times (if any) associated with the principle (market) data
+	public ArrayList times() {
+		return market_drawer().times();
+	}
+
 	// Is this Drawer an indicator drawer?
 	public abstract boolean is_indicator();
 
