@@ -6,11 +6,12 @@ root
 
 default
 
-	assertion (check)
-	assertion (require)
-	assertion (ensure)
-	assertion (loop)
-	assertion (invariant)
+	assertion (all)
+--	assertion (check)
+--	assertion (require)
+--	assertion (ensure)
+--	assertion (loop)
+--	assertion (invariant)
 	arguments (" ")
 	disabled_debug (yes)
 	disabled_debug ("ev_gtk_c_object_dispose")
