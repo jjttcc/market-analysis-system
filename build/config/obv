@@ -1,0 +1,42 @@
+# macl input file to create the "On Balance Volume" indicator
+e
+c
+ACCUMULATION
+c
+On Balance Volume
+No Input Function
+y
+ADDITION
+c
+BASIC_LINEAR_COMMAND
+c
+No Input Function
+y
+MULTIPLICATION
+c
+VOLUME
+c
+SAFE_DIVISION
+c
+SUBTRACTION
+c
+CLOSING_PRICE
+c
+SETTABLE_OFFSET_COMMAND
+c
+shared CLOSING_PRICE
+c
+No Input Function
+y
+1
+ABSOLUTE_VALUE
+c
+shared SUBTRACTION
+c
+shared BASIC_LINEAR_COMMAND
+c
+shared VOLUME
+c
+s
+-
+x

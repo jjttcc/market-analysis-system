@@ -1,0 +1,15 @@
+# macl input file to create the "Slope of MACD Signal Line" indicator
+e
+c
+ONE_VARIABLE_FUNCTION
+c
+Slope of MACD Signal Line
+MACD Signal Line (EMA of MACD Difference)
+y
+SLOPE_ANALYZER
+c
+MACD Signal Line (EMA of MACD Difference)
+y
+s
+-
+x

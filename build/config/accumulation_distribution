@@ -1,0 +1,39 @@
+# macl input file to create the "Accumulation/Distribution" indicator
+e
+c
+ACCUMULATION
+c
+Accumulation/Distribution
+No Input Function
+y
+ADDITION
+c
+BASIC_LINEAR_COMMAND
+c
+No Input Function
+y
+MULTIPLICATION
+c
+VOLUME
+c
+SAFE_DIVISION
+c
+SUBTRACTION
+c
+CLOSING_PRICE
+c
+OPENING_PRICE
+c
+SUBTRACTION
+c
+HIGH_PRICE
+c
+LOW_PRICE
+c
+shared BASIC_LINEAR_COMMAND
+c
+shared MULTIPLICATION
+c
+s
+-
+x

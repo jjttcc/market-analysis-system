@@ -1,0 +1,188 @@
+# macl input file to create several indicators
+e
+c
+ACCUMULATION
+c
+# Name:
+On Balance Volume
+No Input Function
+y
+ADDITION
+c
+BASIC_LINEAR_COMMAND
+c
+No Input Function
+y
+MULTIPLICATION
+c
+VOLUME
+c
+SAFE_DIVISION
+c
+SUBTRACTION
+c
+CLOSING_PRICE
+c
+SETTABLE_OFFSET_COMMAND
+c
+shared CLOSING_PRICE
+c
+No Input Function
+y
+1
+ABSOLUTE_VALUE
+c
+shared SUBTRACTION
+c
+shared BASIC_LINEAR_COMMAND
+c
+shared VOLUME
+c
+s
+c
+ACCUMULATION
+c
+# Name:
+Accumulation/Distribution
+No Input Function
+y
+ADDITION
+c
+BASIC_LINEAR_COMMAND
+c
+No Input Function
+y
+MULTIPLICATION
+c
+VOLUME
+c
+SAFE_DIVISION
+c
+SUBTRACTION
+c
+CLOSING_PRICE
+c
+OPENING_PRICE
+c
+SUBTRACTION
+c
+HIGH_PRICE
+c
+LOW_PRICE
+c
+shared BASIC_LINEAR_COMMAND
+c
+shared MULTIPLICATION
+c
+s
+c
+ONE_VARIABLE_FUNCTION
+c
+# Name:
+Slope of MACD Signal Line
+MACD Signal Line (EMA of MACD Difference)
+y
+SLOPE_ANALYZER
+c
+MACD Signal Line (EMA of MACD Difference)
+y
+s
+c
+ONE_VARIABLE_FUNCTION
+c
+# Name:
+Slope of Slope of MACD Signal Line
+Slope of MACD Signal Line
+y
+SLOPE_ANALYZER
+c
+Slope of MACD Signal Line
+y
+s
+c
+N_RECORD_ONE_VARIABLE_FUNCTION
+c
+# Name:
+Force Index
+No Input Function
+y
+MULTIPLICATION
+c
+VOLUME
+c
+SUBTRACTION
+c
+CLOSING_PRICE
+c
+SETTABLE_OFFSET_COMMAND
+c
+shared CLOSING_PRICE
+c
+No Input Function
+y
+1
+1
+s
+c
+EXPONENTIAL_MOVING_AVERAGE
+c
+# Name:
+EMA of Volume
+No Input Function
+y
+VOLUME
+c
+MA_EXPONENTIAL
+d
+y
+1
+5
+s
+# Edit the indicator's parameters with usable values.
+e
+Simple Moving Average
+1
+13
+0
+Exponential Moving Average
+1
+13
+0
+MACD Difference
+1
+13
+2
+5
+0
+MACD Histogram
+1
+6
+2
+5
+3
+13
+0
+MACD Signal Line (EMA of MACD Difference)
+3
+6
+0
+Slope of MACD Signal Line
+1
+6
+2
+13
+3
+5
+0
+Slope of Slope of MACD Signal Line
+1
+5
+2
+13
+3
+6
+0
+0
+s
+-
+x

@@ -1,0 +1,27 @@
+# macl input file to create the "Force Index" indicator
+e
+c
+N_RECORD_ONE_VARIABLE_FUNCTION
+c
+Force Index
+No Input Function
+y
+MULTIPLICATION
+c
+VOLUME
+c
+SUBTRACTION
+c
+CLOSING_PRICE
+c
+SETTABLE_OFFSET_COMMAND
+c
+shared CLOSING_PRICE
+c
+No Input Function
+y
+1
+1
+s
+-
+x
