@@ -16,18 +16,19 @@ class STOCK_SPLIT_FILE inherit
 	STOCK_SPLIT_SEQUENCE
 		rename
 			make as sss_make, name as file_name
+		select
+			last_error_fatal
 		end
 
 	INPUT_FILE
 		rename
 			name as file_name, make as ptf_make,
 			advance_to_next_field as if_advance_to_next_field,
-			advance_to_next_record as if_advance_to_next_record
+			advance_to_next_record as if_advance_to_next_record,
+			last_error_fatal as last_error_fatal_unused
 		export
 			{NONE} all
 			{ANY} file_name
-		undefine
-			last_error_fatal
 		select
 			if_advance_to_next_field, if_advance_to_next_record
 		end
