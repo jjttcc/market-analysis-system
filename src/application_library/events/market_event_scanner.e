@@ -18,6 +18,9 @@ class MARKET_EVENT_SCANNER inherit
 		end
 
 	EXCEPTIONS
+		export
+			{NONE} all
+		end
 
 creation
 
@@ -31,15 +34,23 @@ feature
 			in_separators_not_void:
 				in.field_separator /= Void and in.record_separator /= Void
 		local
-			dummy_value_setter: VALUE_SETTER
 			vs: LINKED_LIST [VALUE_SETTER]
+			i: INTEGER
 		do
-			-- A dummy value setter is created and added to vs to
-			-- satisfy the class invariant that `value_setters' is not
-			-- empty, which will be true after the call to data_scanner_make.
-			create {VOLUME_SETTER} dummy_value_setter.make
 			create vs.make
-			vs.extend (dummy_value_setter)
+			from
+				i := 1
+			until
+				i > Field_count
+			loop
+				-- A dummy value setter is created and added to vs for each
+				-- field in the input to satisfy the class invariant that
+				-- `value_setters' is not empty (which will be true after
+				-- the call to data_scanner_make) and the constraint that
+				-- the number of value setters matches the number of fields.
+				vs.extend (create {VOLUME_SETTER}.make)
+				i := i + 1
+			end
 			create parser.make (in)
 			data_scanner_make (in, parser, vs)
 			parser.set_field_separator (in.field_separator @ 1)
@@ -113,5 +124,9 @@ feature {NONE} -- Hook method implementations
 				input.back
 			end
 		end
+
+feature {NONE} -- Implementation
+
+	Field_count: INTEGER is 4
 
 end -- class MARKET_EVENT_SCANNER
