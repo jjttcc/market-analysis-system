@@ -39,13 +39,11 @@ feature -- Access
 
 	market_list: LINEAR [TRADABLE [BASIC_MARKET_TUPLE]]
 
-	current_tradable: TRADABLE [BASIC_MARKET_TUPLE]
-
 feature {NONE} -- Implementation
 
 	initialize (g: FUNCTION_ANALYZER) is
 		do
-			g.set_inner_target (current_tradable)
+			g.set_tradable (current_tradable)
 		end
 
 	generate_events is
@@ -58,17 +56,12 @@ feature {NONE} -- Implementation
 				market_list.exhausted
 			loop
 				current_tradable := market_list.item
-				debug
-					print ("Generating events for ")
-					print (current_tradable.name)
-					print (", index ")
-					print (market_list.index)
-					print ("%N")
-				end
 				execute_event_generators
 				market_list.forth
 			end
 		end
+
+	current_tradable: TRADABLE [BASIC_MARKET_TUPLE]
 
 invariant
 

@@ -28,14 +28,19 @@ feature -- Access
 	period_type: TIME_PERIOD_TYPE
 			-- The period type to be analyzed - daily, weekly, etc.
 
+	tradable: TRADABLE [BASIC_MARKET_TUPLE]
+
 feature -- Status setting
 
-	set_inner_target (f: TRADABLE [BASIC_MARKET_TUPLE]) is
-			-- Set the innermost target data - the basic data to be analyzed.
+	set_tradable (f: TRADABLE [BASIC_MARKET_TUPLE]) is
+			-- Set the tradable whose market data is to be analyzed.
 		require
 			f.tuple_list_names.has (period_type.name)
 		do
 			set_innermost_function (f.tuple_list (period_type.name))
+			tradable := f
+		ensure
+			set: tradable = f
 		end
 
 	set_start_date_time (arg: DATE_TIME) is
@@ -66,14 +71,17 @@ feature -- Basic operations
 			not_void: time_stamp /= Void and name /= Void and
 						description /= Void
 		local
-			event: TYPED_EVENT
+			s: STRING
+			event: MARKET_EVENT
 		do
 			--!!!Do we need another date/time field in the event, so
 			--!!!that the event generation time, as well as the time
 			--!!!of the tuple that caused the event, are stored?
 			--!!!Or maybe we need a descendant of TYPED_EVENT that also
 			--!!!stores the tuple??
-			!!event.make (name, time_stamp, event_type)
+			!!event.make (name, tradable.symbol, time_stamp, event_type)
+			s := concatenation (<<"Event for market ", tradable.name, ": ">>)
+			description.prepend (s)
 			event.set_description (description)
 			product.extend (event)
 		end
