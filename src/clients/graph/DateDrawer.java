@@ -25,6 +25,9 @@ public class DateDrawer extends Drawer {
 	// The dates associated with the principle (market) data
 	public String[] dates() { return _market_drawer.dates(); }
 
+	// The dates associated with the principle (market) data
+	public String[] times() { return _market_drawer.times(); }
+
 	public Drawer market_drawer() { return _market_drawer; }
 
 	public int data_length() {
@@ -70,7 +73,7 @@ public class DateDrawer extends Drawer {
 
 		Month_y = bounds.y + bounds.height - 15; Month_x_offset = 10;
 		month_ln = 3;
-		// Determine the beginning of each month and year in `_data'.
+		// Determine the first month and year in `_data'.
 		year = Integer.valueOf(_data[0].substring(0,4)).intValue();
 		month = Integer.valueOf(_data[0].substring(4,6)).intValue();
 		// If the first date in `_data' is not "yyyymm01", it is not the
@@ -92,7 +95,7 @@ public class DateDrawer extends Drawer {
 		while (! (year == lastyear && month == lastmonth)) {
 			int date_index;
 			date_index = Utilities.index_at_date(
-				first_date_at(year, month), _data, 1);
+				first_date_at(year, month), _data, 1, 0, _data.length - 1);
 			if (date_index < 0) {
 				month = lastmonth;
 				break;
@@ -112,7 +115,8 @@ public class DateDrawer extends Drawer {
 		}
 		// assert: year == lastyear && month == lastmonth
 		months[mi] = new IntPair(month,
-			Utilities.index_at_date(first_date_at(year, month), _data, 1));
+			Utilities.index_at_date(first_date_at(year, month), _data, 1, 0,
+				_data.length - 1));
 		if (month == 1) {
 			years[yi] = new IntPair(year, months[mi].left());
 			++yi;
