@@ -155,7 +155,8 @@ feature -- Access
 			-- Replace the <symbol> and <uppersymbol> tokens with
 			-- `symbol' and uppercase (`symbol').
 			replace_tokens (Result, <<symbol_token, upper_symbol_token>>,
-				<<symbol, uppercase_symbol>>)
+				<<symbol, uppercase_symbol>>, token_start_delimiter,
+				token_end_delimiter)
 		ensure
 			not_void: Result /= Void
 		end
@@ -363,7 +364,8 @@ feature -- Access
 			-- Replace the <symbol> and <uppersymbol> tokens with
 			-- `symbol' and uppercase (`symbol').
 			replace_tokens (Result, <<symbol_token, upper_symbol_token>>,
-				<<symbol, uppercase_symbol>>)
+				<<symbol, uppercase_symbol>>, token_start_delimiter,
+				token_end_delimiter)
 		ensure
 			not_void: Result /= Void
 		end
