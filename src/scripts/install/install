@@ -32,8 +32,8 @@ set_dir() {
 	dir=
 	defaultdir=$basedir/$1
 	if [ $# -ne 2 ]; then fault "set_dir: wrong number of arguments"; fi
-	echo -e "$2 ($defaultdir): \c" >&2
 	while [ -z "$dir" ]; do
+		echo -e "$2 ($defaultdir): \c" >&2
 		read dir
 		case "$dir" in
 			\$PWD*)
@@ -43,30 +43,36 @@ set_dir() {
 		if [ -z "$dir" ]; then
 			dir=$defaultdir
 		elif expr "$dir" : "[^/]" >/dev/null 2>&1; then
-			echo -e "Entry must start with / - try again: \c" >&2
+			echo -e "Entry must start with / - try again: " >&2
 			dir=
 		fi
 		if [ ! -z "$dir" ]; then
 			if [ -d $dir ]; then
-				echo -e "Use $dir? \c" >&2
+				echo -e "Use $dir (y/n/q[uit])? \c" >&2
 				read answer
 				case "$answer" in
 					y*|Y*) ;;
+					q*|Q*)
+						echo -e "Aborting the installation ..." >&2
+						exit 0 ;;
 					*) dir= ;;
 				esac
 			elif [ -e $dir ]; then
-				echo -e "$dir is not a directory - try again: \c" >&2
+				echo -e "$dir is not a directory - try again: " >&2
 				dir=
 			else
-				echo -e "$dir does not exist - create it? \c" >&2
+				echo -e "$dir does not exist - create it (y/n/q[uit])? \c" >&2
 				read answer
 				case "$answer" in
 					y*|Y*) mkdir -p $dir
 						if [ $? -ne 0 ]; then
-							echo -e "Failed to create $dir - try again: \c" >&2
+							echo -e "Failed to create $dir - try again: " >&2
 							dir=
 						fi
 							;;
+					q*|Q*)
+						echo -e "Aborting the installation ..." >&2
+						exit 0 ;;
 					*) dir=
 						echo -e "$2 ($defaultdir): \c" >&2
 					;;
@@ -76,7 +82,7 @@ set_dir() {
 		if [ ! -z "$dir" ]; then
 			[ -w $dir -a -x $dir ]
 			if [ $? -ne 0 ]; then
-				echo -e "Don't have permission to install in $dir - try again: \c >&2"
+				echo -e "Don't have permission to install in $dir - try again: " >&2
 				dir=
 			fi
 		fi
