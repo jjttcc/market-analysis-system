@@ -234,6 +234,7 @@ feature -- Basic operations
 			-- Force function library to be re-retrieved by deep copying
 			-- `retrieved_function_library' into it.
 		do
+print ("force fl ret called.%N")
 			function_library.deep_copy (retrieved_function_library)
 		end
 
@@ -241,6 +242,7 @@ feature -- Basic operations
 			-- Force market event generator library to be re-retrieved by deep
 			-- copying `retrieved_market_event_generation_library' into it.
 		do
+print ("force megl ret called.%N")
 			market_event_generation_library.deep_copy (
 				retrieved_market_event_generation_library)
 		end
@@ -249,6 +251,7 @@ feature -- Basic operations
 			-- Force event registrants to be re-retrieved by deep copying
 			-- `retrieved_market_event_registrants' into it.
 		do
+print ("force er ret called.%N")
 			market_event_registrants.deep_copy (
 				retrieved_market_event_registrants)
 		end
