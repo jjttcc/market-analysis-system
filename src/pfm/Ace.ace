@@ -3,7 +3,8 @@ system pfm
 
 root
 
-	PORTFOLIO_MANAGER: "make"
+--	PORTFOLIO_MANAGER: "make"
+	REPORT_MANAGER: "make"
 
 default
 
@@ -22,6 +23,7 @@ cluster
 	abstractions (pfm):		"$/abstractions";
 	utilities (pfm):		"$/utilities";
 	builders (pfm):			"$/builders";
+	reports (pfm):			"$/reports";
 
 		-- Eiffel Component Library clusters
 	eiffel_components:						"$MAS/src/eiffel_library";
