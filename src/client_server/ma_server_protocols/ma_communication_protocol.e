@@ -1,7 +1,7 @@
 indexing
 
 	description:
-		"Constants specifying the basic components of the TA server %
+		"Constants specifying the basic components of the MA server %
 		%communication protocol"
 	status:
 		"Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
