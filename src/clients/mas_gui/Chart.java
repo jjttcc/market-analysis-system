@@ -16,7 +16,7 @@ import graph.*;
 import support.*;
 
 /** Market analysis GUI chart component */
-public class Chart extends Frame {
+public class Chart extends Frame implements Runnable {
 	public Chart(DataSetBuilder builder) {
 		super("Chart");		// Create the main window frame.
 		num_windows++;			// Count it.
@@ -58,6 +58,12 @@ public class Chart extends Frame {
 		}
 		initialize_GUI_components();
 		current_period_type = main_pane.current_period_type();
+		new Thread(this).start();
+	}
+
+	// From parent Runnable - for threading
+	public void run() {
+		// null method
 	}
 
 	// List of all markets in the server's database
@@ -231,7 +237,7 @@ public class Chart extends Frame {
 	}
 
 	// Add a menu item for each indicator to `imenu'.
-	void add_indicators(Menu imenu) {
+	private void add_indicators(Menu imenu) {
 		MenuItem menu_item;
 		IndicatorListener listener = new IndicatorListener();
 		Enumeration ind_keys = _indicators.keys();
@@ -250,7 +256,7 @@ public class Chart extends Frame {
 	}
 
 	/** Close a window.  If this is the last open window, just quit. */
-	void close() {
+	private void close() {
 		if (--num_windows == 0) {
 			data_builder.logout(true, 0);
 		}
@@ -261,7 +267,7 @@ public class Chart extends Frame {
 	}
 
 	/** Quit gracefully, sending a logout request for each open window. */
-	void quit(int status) {
+	private void quit(int status) {
 		// Log out the corresponding session for all but one window.
 		for (int i = 0; i < num_windows - 1; ++i) {
 			data_builder.logout(false, 0);
