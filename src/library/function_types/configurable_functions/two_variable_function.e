@@ -115,9 +115,7 @@ feature {NONE} -- Hook methods
 
 	do_process is
 		do
-			if target1.empty or target2.empty then
-				-- null statement
-			else
+			if not (target1.empty or target2.empty) then
 				do_all
 			end
 		ensure then

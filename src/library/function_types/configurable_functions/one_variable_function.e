@@ -139,16 +139,13 @@ feature {NONE}
 	set_input (in: like input) is
 		require
 			in_not_void: in /= Void and in.output /= Void
-			output_not_void: output /= Void
 		do
 			input := in
 			set_target (input.output)
-			output.wipe_out
 			parameter_list := Void
 			processed_date_time := Void
 		ensure
 			input_set_to_in: input = in
-			output_empty: output.empty
 			parameter_list_void: parameter_list = Void
 			not_processed: not processed
 		end
