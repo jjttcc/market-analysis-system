@@ -31,20 +31,30 @@ class MAIN_CL_INTERFACE inherit
 			initialize as mai_initialize, execute as main_menu
 		undefine
 			print
+		redefine
+			event_generator_builder, function_builder
 		end
 
 creation
 
-	make
+	make_io, make
 
 feature -- Initialization
 
-	make (input_dev, output_dev: IO_MEDIUM; fb: FACTORY_BUILDER) is
+	make (fb: FACTORY_BUILDER) is
+		require
+			not_void: fb /= Void
+		do
+			mai_initialize (fb)
+			initialize
+		end
+
+	make_io (input_dev, output_dev: IO_MEDIUM; fb: FACTORY_BUILDER) is
 		require
 			not_void: input_dev /= Void and output_dev /= Void and fb /= Void
 		do
-			set_input_device (input_dev)
-			set_output_device (output_dev)
+			input_device := input_dev
+			output_device := output_dev
 			mai_initialize (fb)
 			initialize
 		ensure
@@ -61,12 +71,48 @@ feature -- Access
 	current_period_type: TIME_PERIOD_TYPE
 			-- Current data period type to be processed
 
+	event_generator_builder: CL_BASED_MEG_EDITING_INTERFACE
+
+	function_builder: CL_BASED_FUNCTION_EDITING_INTERFACE
+
+feature -- Status setting
+
+	set_input_device (arg: IO_MEDIUM) is
+			-- Set input_device to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			input_device := arg
+			event_generator_builder.set_input_device (arg)
+			function_builder.set_input_device (arg)
+		ensure
+			input_device_set: input_device = arg and input_device /= Void
+		end
+
+	set_output_device (arg: IO_MEDIUM) is
+			-- Set output_device to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			output_device := arg
+			event_generator_builder.set_output_device (arg)
+			function_builder.set_output_device (arg)
+		ensure
+			output_device_set: output_device = arg and output_device /= Void
+		end
+
+
 feature -- Basic operations
 
 	main_menu is
 			-- Display the main menu and respond to the user's commands.
 		do
+			check
+				io_devices_not_void: input_device /= Void and
+										output_device /= Void
+			end
 			from
+				end_program := false
 			until
 				end_program
 			loop
@@ -685,10 +731,8 @@ feature {NONE}
 	initialize is
 		do
 			current_period_type := period_types @ (period_type_names @ Daily)
-			!CL_BASED_MEG_EDITING_INTERFACE!event_generator_builder.make (
-				input_device, output_device)
-			!CL_BASED_FUNCTION_EDITING_INTERFACE!function_builder.make (
-				input_device, output_device)
+			!!event_generator_builder.make
+			!!function_builder.make
 		ensure
 			curr_period_not_void: current_period_type /= Void
 		end
