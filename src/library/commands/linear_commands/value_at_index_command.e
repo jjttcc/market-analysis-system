@@ -16,7 +16,7 @@ class VALUE_AT_INDEX_COMMAND inherit
 		export
 			{NONE} ulo_make_unused
 		redefine
-			execute, children
+			execute, children, initialize
 		end
 
 	MATH_CONSTANTS
@@ -41,6 +41,12 @@ feature -- Initialization
 		ensure
 			set: target = tgt and main_operator = main_op and
 				index_operator = index_op
+		end
+
+	initialize (arg: LINEAR_ANALYZER) is
+		do
+			Precursor (arg)
+			index_operator.initialize (arg)
 		end
 
 feature -- Access
@@ -72,6 +78,7 @@ feature -- Basic operations
 			i, old_i: INTEGER
 		do
 			old_i := target.index
+			index_operator.execute (arg)
 			i := (index_operator.value + Epsilon).floor
 			if i >= 1 and i <= target.count then
 				target.go_i_th (i)
