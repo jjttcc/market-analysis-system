@@ -27,7 +27,7 @@ feature -- Basic operations
 					symbols.islast
 				loop
 					print (symbols.item)
-					print ("%N")
+					print (Output_record_separator)
 					symbols.forth
 				end
 				print (symbols.last)

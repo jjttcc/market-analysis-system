@@ -55,7 +55,7 @@ feature -- Basic operations
 					ilist.islast
 				loop
 					print (ilist.item.name)
-					print ("%N")
+					print (Output_record_separator)
 					ilist.forth
 				end
 				print (ilist.last.name)
