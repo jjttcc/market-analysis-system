@@ -35,6 +35,7 @@ class TimeDelimitedDataRequest extends TimerTask {
 			// the data update - wait until next time.
 			builder.lock(this);
 			if (builder.is_locked_by(this)) {
+System.out.println("lock of builder SUCCEEDED");
 				requesting_data = true;
 				ChartableSpecification chartspec = client.specification();
 				Iterator tradable_specs =
@@ -46,7 +47,9 @@ class TimeDelimitedDataRequest extends TimerTask {
 				}
 				requesting_data = false;
 			}
+else {System.out.println("lock of builder FAILED (already locked)");}
 		}
+else {System.out.println("Needed condition not met for data request");}
 	}
 
 // Implementation
@@ -77,6 +80,12 @@ class TimeDelimitedDataRequest extends TimerTask {
 			if (builder.request_succeeded() &&
 					builder.last_market_data().size() > 0) {
 
+				// Adjust the end date to the latest date of the main data
+				// to guarantee that the time range for indicator requests
+				// is the same as for the main data.  (Otherwise, the server
+				// could find and send fresh data, due to a slightly later
+				// request, resulting in different ranges.)
+				end_date = builder.last_latest_date_time();
 				spec.append_data(builder.last_market_data());
 				indicators = spec.selected_indicators().iterator();
 				while (indicators.hasNext()) {
@@ -98,6 +107,8 @@ class TimeDelimitedDataRequest extends TimerTask {
 				client.update_start_date(builder);
 				client.notify_of_update();
 			} else {
+				// builder.send_time_delimited_market_data_request failed or
+				// obtained an empty result, so indicator requests are skipped.
 				if (! builder.request_succeeded()) {
 					client.notify_of_error(builder.request_result_id(),
 						null);
@@ -112,6 +123,7 @@ class TimeDelimitedDataRequest extends TimerTask {
 			client.notify_of_failure(e);
 		} finally {
 			builder.unlock(this);
+System.out.println("unlocking builder");
 		}
 	}
 
