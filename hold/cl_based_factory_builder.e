@@ -83,7 +83,7 @@ feature {NONE}
 						fs := argument (i)
 					else
 						usage
-						die (-1) -- kludgey exit for now!!
+						die (-1) -- kludgey exit for now
 					end
 				else
 					!!input_file.make_open_read (argument (i))
