@@ -56,18 +56,6 @@ abstract public class Graph extends Canvas {
 
 	public Graph () {}
 
-// Access
-
-	// The data set stored in the first "slot" - null if no data sets
-	public DrawableDataSet first_data_set() {
-		DrawableDataSet result = null;
-
-		if (dataset != null && dataset.size() > 0) {
-			result = (DrawableDataSet ) dataset.get(0);
-		}
-		return result;
-	}
-
 // Element change
 
 	public void set_framecolor(Color c) { framecolor = c; }

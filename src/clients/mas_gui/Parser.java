@@ -12,49 +12,65 @@ class Parser extends AbstractParser {
 
 // Initialization
 
-	// Constructor - fieldspecs specifies the fields format of each tuple -
-	// e.g., date, high, low, close, volume.
+	/**
+	* Constructor - fieldspecs specifies the fields format of each tuple -
+	* e.g., date, high, low, close, volume.
+	**/
 	public Parser(int fieldspecs[], String record_sep, String field_sep) {
 		super(fieldspecs, record_sep, field_sep);
 	}
 
 // Access
 
-	// Parsed data set result
+	/**
+	* Parsed data set result
+	**/
 	public DataSet result() {
 		return processed_data;
 	}
 
-	// Parsed volume
+	/**
+	* Parsed volume
+	**/
 	public DataSet volume_result() {
 		return volume_data;
 	}
 
-	// Parsed open interest
+	/**
+	* Parsed open interest
+	**/
 	public DataSet open_interest_result() {
 		return oi_data;
 	}
 
 // Element change
 
-	// Set the drawer for drawing the main data set.
+	/**
+	* Set the drawer for drawing the main data set.
+	**/
 	void set_main_drawer(BasicDrawer d) {
 		main_drawer = d;
 	}
 
-	// Set the drawer for drawing volume.
+	/**
+	* Set the drawer for drawing volume.
+	**/
 	void set_volume_drawer(BasicDrawer d) {
 		volume_drawer = d;
 	}
 
-	// Set the drawer for open interest.
+	/**
+	* Set the drawer for open interest.
+	**/
 	void set_open_interest_drawer(BasicDrawer d) {
 		open_interest_drawer = d;
 	}
 
 // Hook routine implementations
 
-	// Perform any needed preprations before parsing.
+	/**
+	* Perform any needed preprations before parsing.
+	**/
 	protected void prepare_for_parse() {
 		volumes = null;
 		open_interests = null;
@@ -83,7 +99,9 @@ class Parser extends AbstractParser {
 
 // Implementation
 
-	// Parse fields - default routine
+	/**
+	* Parse fields - default routine
+	**/
 	protected void parse_default(StringTokenizer recs) throws Exception {
 		int float_index = 0, volume_index = 0, oi_index = 0;
 		while (recs.hasMoreTokens()) {
@@ -134,8 +152,10 @@ class Parser extends AbstractParser {
 		}
 	}
 
-	// Parse fields - expecting high, low, and close fields (in that order),
-	// but NO open field.
+	/**
+	* Parse fields - expecting high, low, and close fields (in that order),
+	* but NO open field.
+	**/
 	protected void parse_with_no_open(StringTokenizer recs) throws Exception {
 		int float_index = 0, volume_index = 0, oi_index = 0;
 		while (recs.hasMoreTokens()) {
@@ -214,8 +234,10 @@ class Parser extends AbstractParser {
 		return Integer.valueOf(s);
 	}
 
-	// Put the parsed data into a data set.
-	// Postcondition: result() != null && result().drawer() == drawer
+	/**
+	* Put the parsed data into a data set.
+	* Postcondition: result() != null && result().drawer() == drawer
+	**/
 	protected void process_data(BasicDrawer drawer) throws Exception {
 		String[] date_array = null;
 		String[] time_array = null;
@@ -229,11 +251,6 @@ class Parser extends AbstractParser {
 			has_dates = dates != null && ! dates.isEmpty();
 			has_times = times != null && ! times.isEmpty();
 			int length = value_data.length / float_field_count;
-//!!!!Test with only 1 ctor possibility:
-//!!!Check if this removed logic is related to the bug in the 'append'
-//routine of DrawableDataSet.  (See the entry for task 44 with
-//"Date/time: 2004-10-28, 23:57" for more info. on the bug.):
-//if (length > 0) {
 			if (! for_update) {
 				processed_data = new DrawableDataSet(value_data, length,
 					drawer);

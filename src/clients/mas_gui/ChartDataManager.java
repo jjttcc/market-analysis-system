@@ -11,6 +11,7 @@ import application_library.*;
 import application_support.*;
 import graph.*;
 
+
 /**
 * Objects that manage data and state information associated with a Chart
 **/
@@ -422,6 +423,51 @@ System.out.println("4");
 		}
 	}
 
+	/**
+	* Link `d' with the appropriate indicator group, using `indicator_name'
+	* as a key.  If `indicator_name' is null, the group for the main
+	* (upper) graph will be used.  If `indicator_name' specifies an
+	* indicator that is not a group member, no action is taken.
+	**/
+	void link_with_axis(DrawableDataSet d, String indicator_name) {
+		if (indicator_groups == null) {
+			indicator_groups = (IndicatorGroups) MA_Configuration.
+				application_instance().indicator_groups().clone();
+		}
+		MonoAxisIndicatorGroup group;
+		if (indicator_name == null) {
+			indicator_name = indicator_groups.Maingroup;
+		}
+		group = (MonoAxisIndicatorGroup) indicator_groups.at(indicator_name);
+		if (group != null) {
+			group.attach_data_set(d);
+		}
+	}
+
+	/**
+	* The last result of a request for the main data set (o,h,l,c,...)
+	* of the current tradable.
+	**/
+	DrawableDataSet last_tradable_result() {
+		return (DrawableDataSet) data_requester.tradable_result();
+	}
+
+	/**
+	* The last result of a request for the volume component of the
+	* main data set of the current tradable.
+	**/
+	DrawableDataSet last_volume_result() {
+		return (DrawableDataSet) data_requester.volume_result();
+	}
+
+	/**
+	* The last result of a request for the open-interest component of the
+	* main data set of the current tradable.
+	**/
+	DrawableDataSet last_open_interest_result() {
+		return (DrawableDataSet) data_requester.open_interest_result();
+	}
+
 // Implementation - Element change
 
 	private void set_current_period_type(String type) {
@@ -488,9 +534,6 @@ System.out.println("4");
 		tradable_specification.clear_all_indicators();
 		int i;
 		for (i = 0; i < inds_from_server.size(); ++i) {
-//!!!!!Instead of a `valid_indicators' list, this function can probably
-// be assigned to `tradable_specification' so that it contains all "valid"
-// indicators and it also keeps track of 'selected_indicators()'.
 			Object o = inds_from_server.elementAt(i);
 			valid_indicators.put(o, new Integer(i + 1));
 		}
@@ -588,25 +631,6 @@ System.out.println("4");
 	// Set replace_indicators to its opposite state.
 	protected void toggle_indicator_replacement() {
 		replace_indicators = ! replace_indicators;
-	}
-
-	// Link `d' with the appropriate indicator group, using `indicator_name'
-	// as a key.  If `indicator_name' is null, the group for the main
-	// (upper) graph will be used.  If `indicator_name' specifies an
-	// indicator that is not a group member, no action is taken.
-	protected void link_with_axis(DrawableDataSet d, String indicator_name) {
-		if (indicator_groups == null) {
-			indicator_groups = (IndicatorGroups) MA_Configuration.
-				application_instance().indicator_groups().clone();
-		}
-		MonoAxisIndicatorGroup group;
-		if (indicator_name == null) {
-			indicator_name = indicator_groups.Maingroup;
-		}
-		group = (MonoAxisIndicatorGroup) indicator_groups.at(indicator_name);
-		if (group != null) {
-			group.attach_data_set(d);
-		}
 	}
 
 	// Notify the user that the symbol chosen does not exist and then

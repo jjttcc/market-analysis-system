@@ -46,7 +46,7 @@ public class AutoRefreshSetup {
 	// Timer, shared by all data-refresh clients
 	private Timer timer;
 
-	// Timer delay in milliseconds (!!!Make configurable.)
+	// Timer delay in milliseconds (@@Make configurable - check with Orest.)
 	private static long refresh_delay = 100 * 6;
 //private static long refresh_delay = 1000 * 60;
 }

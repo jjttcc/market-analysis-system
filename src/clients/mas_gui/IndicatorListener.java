@@ -21,9 +21,7 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 	}
 
 	public void actionPerformed(java.awt.event.ActionEvent e) {
-		synchronized (data_builder) {
-			retrieve_and_load_data(e);
-		}
+		retrieve_and_load_data(e);
 	}
 
 	private void retrieve_and_load_data(java.awt.event.ActionEvent e) {
@@ -55,7 +53,6 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 				} else {
 					dataset = (DrawableDataSet)
 						data_requester.indicator_result();
-System.out.println("the NEW ret and LD - dataset size: " + dataset.size());
 				}
 			}
 		}
@@ -68,10 +65,7 @@ System.out.println("the NEW ret and LD - dataset size: " + dataset.size());
 	}
 
 	private void process_data(DrawableDataSet dataset, String selection) {
-		DrawableDataSet maindata = main_pane.main_graph().first_data_set();
-//!!!Check if SynchronizedDataRequester.tradable_result() might be better to
-// use than the above first_data_set.  If so, consider passing the
-// data requester above instead of 'dataset'.
+		DrawableDataSet maindata = chart_manager.last_tradable_result();
 		MA_Configuration conf = MA_Configuration.application_instance();
 		// Set graph data according to whether the selected indicator is
 		// configured to go in the upper (main) or lower (indicator) graph.
@@ -85,15 +79,11 @@ System.out.println("the NEW ret and LD - dataset size: " + dataset.size());
 				// Re-attach the market data.
 				chart_manager.link_with_axis(maindata, null);
 				main_pane.add_main_data_set(maindata);
-//!!!I believe this is not needed because its main data is up to date,
-//!!!but verify that this is so:
-//chart.tradable_specification.set_data(maindata);
 				chart_manager.unselect_upper_indicators();
 				chart_manager.current_upper_indicators().removeAllElements();
 			}
 			chart_manager.current_upper_indicators().addElement(selection);
 			chart_manager.tradable_specification().select_indicator(selection);
-//!!!:dataset = (DrawableDataSet) data_builder.last_indicator_data();
 			dataset.set_dates_needed(false);
 			dataset.setColor(conf.indicator_color(selection, true));
 			chart_manager.link_with_axis(dataset, selection);
@@ -106,8 +96,6 @@ System.out.println("the NEW ret and LD - dataset size: " + dataset.size());
 			// Re-attach the old market data without the indicator data.
 			chart_manager.link_with_axis(maindata, null);
 			main_pane.add_main_data_set(maindata);
-//!!!(See note above about main data.)
-//chart.tradable_specification.set_data(maindata);
 			chart_manager.unselect_upper_indicators();
 			chart_manager.current_upper_indicators().removeAllElements();
 		} else if (selection.equals(chart.No_lower_indicator)) {
@@ -117,19 +105,14 @@ System.out.println("the NEW ret and LD - dataset size: " + dataset.size());
 			chart.set_window_title();
 		} else {
 			if (selection.equals(chart.Volume)) {
-				// !!!Need to store the 'last volume' somewhere else -
-				// data_builder.last_volume will get steppend on by the
-				// auto-refresh thread.  (How about the
-				// SynchronizedDataRequester?)
-				dataset = (DrawableDataSet) data_builder.last_volume();
+				dataset = (DrawableDataSet) chart_manager.last_volume_result();
+System.out.println("IL - process_data - last volume obtained - size: " +
+dataset.size());	//@@@Don't remove this until this case has been tested.
 			} else if (selection.equals(chart.Open_interest)) {
-				// !!!Need to store the 'last open interest' somewhere else -
-				// data_builder.last_open_interest will get steppend on by the
-				// auto-refresh thread.  (How about the
-				// SynchronizedDataRequester?)
-				dataset = (DrawableDataSet) data_builder.last_open_interest();
-			} else {
-//!!!: dataset = (DrawableDataSet) data_builder.last_indicator_data();
+				dataset = (DrawableDataSet)
+					chart_manager.last_open_interest_result();
+System.out.println("IL - process_data - last open-interest obtained - size: " +
+dataset.size());	//@@@Don't remove this until this case has been tested.
 			}
 			if (chart_manager.replace_indicators()) {
 				main_pane.clear_indicator_graph();

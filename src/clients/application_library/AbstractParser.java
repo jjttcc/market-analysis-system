@@ -86,8 +86,7 @@ abstract public class AbstractParser extends NetworkProtocolUtilities {
 	// data (as opposed to being for a fresh set of data for a new tradable).
 	// result() gives the new DataSet.
 	// Postcondition: result() != null
-//!!!Try locking the data builder instead of synchronizing this routine!!
-	public synchronized void parse(String s, boolean is_update)
+	public void parse(String s, boolean is_update)
 			throws Exception {
 
 		for_update = is_update;
