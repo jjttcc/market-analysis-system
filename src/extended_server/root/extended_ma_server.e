@@ -13,7 +13,7 @@ class EXTENDED_MA_SERVER inherit
 		rename
 			make as mas_make
 		redefine
-			polling_timeout_milliseconds
+			polling_timeout_milliseconds, factory_builder
 		end
 
 	ERROR_SUBSCRIBER
@@ -51,6 +51,13 @@ feature {NONE} -- Hood routine implementations
 	polling_timeout_milliseconds: INTEGER is
 		do
 			Result := extended_command_line.polling_timeout_milliseconds
+		end
+
+feature {NONE} -- Implementation
+
+	factory_builder: EXTENDED_GLOBAL_OBJECT_BUILDER is
+		once
+			create Result.make
 		end
 
 feature {NONE} -- Implementation - Attributes

@@ -73,7 +73,7 @@ feature {NONE} -- Hook routine implementations
 
 	end_of_message (c: CHARACTER): BOOLEAN is
 		do
-			Result := c = Eom @ 1
+			Result := c = eom @ 1
 		end
 
 feature {NONE} -- Implementation
@@ -85,25 +85,25 @@ feature {NONE} -- Implementation
 		do
 			create rh.make (0)
 			rh.extend (create {MARKET_DATA_REQUEST_CMD}.make (
-				tradable_list_handler), Market_data_request)
+				tradable_list_handler), market_data_request)
 			rh.extend ( create {INDICATOR_DATA_REQUEST_CMD}.make (
-				tradable_list_handler), Indicator_data_request)
+				tradable_list_handler), indicator_data_request)
 			rh.extend ( create {ALL_INDICATORS_REQUEST_CMD}.make (
-				tradable_list_handler), All_indicators_request)
+				tradable_list_handler), all_indicators_request)
 			rh.extend (create {TRADING_PERIOD_TYPE_REQUEST_CMD}.make (
-				tradable_list_handler), Trading_period_type_request)
+				tradable_list_handler), trading_period_type_request)
 			rh.extend (create {SYMBOL_LIST_REQUEST_CMD}.make (
-				tradable_list_handler), Market_list_request)
+				tradable_list_handler), market_list_request)
 			rh.extend (create {INDICATOR_LIST_REQUEST_CMD}.make (
-				tradable_list_handler), Indicator_list_request)
+				tradable_list_handler), indicator_list_request)
 			rh.extend (create {MAS_LOGIN_REQUEST_CMD}.make (
 				tradable_list_handler,
-				global_configuration.auto_data_update_on), Login_request)
+				global_configuration.auto_data_update_on), login_request)
 			rh.extend (create {EVENT_LIST_REQUEST_CMD}.make (
-				tradable_list_handler), Event_list_request)
+				tradable_list_handler), event_list_request)
 			rh.extend (create {EVENT_DATA_REQUEST_CMD}.make (
-				tradable_list_handler), Event_data_request)
-			rh.extend (create {ERROR_RESPONSE_CMD}.make, Error)
+				tradable_list_handler), event_data_request)
+			rh.extend (create {ERROR_RESPONSE_CMD}.make, error)
 			request_handlers := rh
 		ensure
 			rh_set: request_handlers /= Void and not request_handlers.is_empty
@@ -121,11 +121,11 @@ feature {NONE} -- Implementation
 			-- and set io_medium's compression on if specified in `s'.
 		do
 			if
-				s.substring (index, index + Compression_on_flag.count - 1).
-					is_equal (Compression_on_flag)
+				s.substring (index, index + compression_on_flag.count - 1).
+					is_equal (compression_on_flag)
 			then
 				io_medium.set_compression (True)
-				message_body := s.substring (index + Compression_on_flag.count,
+				message_body := s.substring (index + compression_on_flag.count,
 					s.count)
 			else
 				io_medium.set_compression (False)

@@ -70,7 +70,23 @@ feature -- Basic operations
 			dispatcher_created: dispatcher /= Void
 		end
 
-feature {NONE}
+feature {NONE} -- Hook routines
+
+	new_persistent_conn_if: PERSISTENT_CONNECTION_INTERFACE is
+			-- A new "persistent" connection interface of the
+			-- appropriate type
+		do
+			create {MAIN_CL_INTERFACE} Result.make (Current)
+		end
+
+	new_non_persistent_conn_if: NON_PERSISTENT_CONNECTION_INTERFACE is
+			-- A new "non-persistent" connection interface of the
+			-- appropriate type
+		do
+			create {MAIN_GUI_INTERFACE} Result.make (Current)
+		end
+
+feature {NONE} -- Implementation
 
 	set_up is
 			-- Build components and set up relationships.
@@ -96,10 +112,8 @@ feature {NONE}
 			-- Note: The connection interfaces must be built after the above
 			-- objects are build because the former depends on the latter
 			-- having already been created.
-			create {MAIN_CL_INTERFACE} persistent_connection_interface.make (
-				Current)
-			create {MAIN_GUI_INTERFACE}
-				non_persistent_connection_interface.make (Current)
+			persistent_connection_interface := new_persistent_conn_if
+			non_persistent_connection_interface := new_non_persistent_conn_if
 		end
 
 	register_event_registrants is
@@ -225,4 +239,4 @@ feature {NONE} -- Administrative
 			end
 		end
 
-end -- FACTORY_BUILDER
+end

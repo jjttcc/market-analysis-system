@@ -15,6 +15,11 @@ class EXTENDED_MAIN_GUI_INTERFACE inherit
 			make_request_handlers
 		end
 
+	EXTENDED_GUI_NETWORK_PROTOCOL
+		export
+			{NONE} all
+		end
+
 creation
 
 	make
@@ -27,7 +32,12 @@ feature {NONE} -- Implementation
 			Precursor
 			request_handlers.extend (create {
 				TIME_DELIMITED_MARKET_DATA_REQUEST_CMD}.make (
-					tradable_list_handler), Market_data_request)
+					tradable_list_handler), time_delimited_market_data_request)
+--!!! Uncomment when ready:
+--			request_handlers.extend (create {
+--				TIME_DELIMITED_INDICATOR_DATA_REQUEST_CMD}.make (
+--					tradable_list_handler),
+--					time_delimited_indicator_data_request)
 		end
 
 end

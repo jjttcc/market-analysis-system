@@ -26,7 +26,6 @@ feature {NONE} -- Hook routine implementations
 	parse_remainder (fields: LIST [STRING]) is
 		local
 			split_result: LIST [STRING]
-			time: TIME; date: DATE
 			date_time_range: STRING
 			start_date_time_string, end_date_time_string: STRING
 		do
