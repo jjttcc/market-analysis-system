@@ -27,7 +27,8 @@ class COMMANDS inherit
 feature -- Access
 
 	instances_and_descriptions: ARRAYED_LIST [PAIR [COMMAND, STRING]] is
-			-- An instance and description of each COMMAND class
+			-- An instance and description of each COMMAND class used
+			-- in indicator or market-analyzer creation
 		local
 			true_dummy: TRUE_COMMAND
 			bool_real_dummy: LT_OPERATOR
@@ -269,9 +270,25 @@ feature -- Access
 			Result.extend (pair)
 			create {MANAGED_VALUE_COMMAND} cmd.make (bnc_dummy, real_dummy)
 			create pair.make (cmd, "Operator that executes its %
-				%'main_operator' and stores the resulting value in a %
+				%'main_operator' and stores the resulting value%Nin a %
 				%'managed_value' and whose result is the managed_value's %
 				%resulting value")
+			Result.extend (pair)
+			create {NUMERIC_VALUED_COMMAND_WRAPPER} cmd.make (
+				real_dummy)
+			create pair.make (cmd,
+				"Operator that can be used where a numeric-valued operator %
+				%is expected%Nand that %"wraps%" an operator that cannot %
+				%otherwise be used where a%Nnumeric-valued operator is %
+				%expected%N(The operator's value will simply be 0.)")
+			Result.extend (pair)
+			create {COMMAND_SEQUENCE} cmd.make
+			create pair.make (cmd,
+				"Operator that executes a sequence of sub-operators%N%
+				%Note: This operator cannot be used where a numeric-valued %
+				%operator is%Nexepcted.  If it needs to be used in such %
+				%a context, it can be%Nwrapped with a %
+				%%"NUMERIC_VALUED_COMMAND_WRAPPER%".")
 			Result.extend (pair)
 		end
 
