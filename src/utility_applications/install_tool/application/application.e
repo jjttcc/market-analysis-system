@@ -58,6 +58,7 @@ feature {NONE} -- Implementation
 			cmds: ARRAY [COMMAND]
 		do
 			cmds := <<create {CONFIGURE_MCT_COMMAND}.make,
+				create {COPY_MCT_FILE_COMMAND}.make,
 				create {CLEANUP_COMMAND}.make>>
 			cmds.linear_representation.do_all (agent execute_command)
 		end

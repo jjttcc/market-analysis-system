@@ -43,10 +43,25 @@ feature -- Access
 			Result := "Usage: " + command_name + " <application_directory>%N"
 		end
 
+	mctrc_contents: STRING
+			-- Contents to be placed into the official mctrc file
+			
 feature -- Access -- settings
 
 	application_dir: STRING
 			-- Full path of the application directory
+
+feature -- Element change
+
+	set_mctrc_contents (arg: STRING) is
+			-- Set `mctrc_contents' to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			mctrc_contents := arg
+		ensure
+			mctrc_contents_set: mctrc_contents = arg and mctrc_contents /= Void
+		end
 
 feature {NONE} -- Implementation
 

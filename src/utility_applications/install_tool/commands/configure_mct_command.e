@@ -1,6 +1,5 @@
 indexing
-	description: "Objects that process a target file according to a set of%
-		%specifications"
+	description: "Configuration of MCT settings"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -47,6 +46,7 @@ feature -- Basic operations
 			spec_file.close
 			create file_processor.make
 			file_processor.execute (config_command_line)
+			options.set_mctrc_contents (file_processor.target_file_contents)
 		end
 
 feature {NONE} -- Implementation
@@ -100,8 +100,6 @@ feature {NONE} -- Implementation
 
 	spec_file_name: STRING is "repl_spec"
 
-	mctrc_file_name: STRING is "mctrc"
-
 	nt_spec_file_name: STRING is "nt_repl_spec"
 
 	pre_nt_spec_file_name: STRING is "pre_nt_repl_spec"
@@ -109,13 +107,6 @@ feature {NONE} -- Implementation
 	command_variable_name: STRING is "COMSPEC"
 
 	nt_command_name: STRING is "CMD"
-
-	directory_separator: CHARACTER is
-		local
-			op_env: expanded OPERATING_ENVIRONMENT
-		once
-			Result := op_env.directory_separator
-		end
 
 	is_nt: BOOLEAN is
 			-- Is the system "NT or better" (as opposed to "pre-NT")?

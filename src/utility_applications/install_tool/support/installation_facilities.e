@@ -13,4 +13,18 @@ feature -- Access
 	install_dir_name: STRING is "install"
 			-- Directory where the installation specification files live
 
+	mctrc_file_name: STRING is "mctrc"
+
+	
+	REAL_mct_directory_use_this: STRING is "c:/Program Files/mct"
+
+	mct_directory: STRING is "Program_Files_mct"
+
+	directory_separator: CHARACTER is
+		local
+			op_env: expanded OPERATING_ENVIRONMENT
+		once
+			Result := op_env.directory_separator
+		end
+
 end
