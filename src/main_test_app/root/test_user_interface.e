@@ -32,7 +32,7 @@ class TEST_USER_INTERFACE inherit
 
 feature -- Access
 
-	event_coordinator: EVENT_COORDINATOR
+	event_coordinator: MARKET_EVENT_COORDINATOR
 
 	factory_builder: FACTORY_BUILDER
 	
@@ -58,7 +58,7 @@ feature -- Status setting
 									factory_builder /= Void
 		end
 
-	set_event_coordinator (arg: EVENT_COORDINATOR) is
+	set_event_coordinator (arg: MARKET_EVENT_COORDINATOR) is
 			-- Set event_coordinator to `arg'.
 		require
 			arg /= Void
@@ -92,7 +92,8 @@ feature {NONE}
 				print_list (<<"Select action:%N", "     Select market (s) ",
 							"View data (v) Edit parameters (e)",
 							"%N     Run market analysis (r) ",
-							"Memory usage (m) Exit (x) ">>)
+							"Set date for market analysis (d)%N",
+							"     Memory usage (m) Exit (x) ">>)
 				inspect
 					selected_character
 				when 's', 'S' then
@@ -107,6 +108,8 @@ feature {NONE}
 					save_mklist_position
 					event_coordinator.execute
 					restore_mklist_position
+				when 'd', 'D' then
+					mkanalysis_set_date_menu
 				when 'x', 'X' then
 					end_program := true
 				when '!' then
@@ -198,6 +201,59 @@ feature {NONE}
 				end
 				print ("%N%N")
 			end
+		end
+
+	mkanalysis_set_date_menu is
+			-- Obtain the date and time to begin market analysis from the
+			-- user and pass it to the event generators.
+		local
+			date: DATE
+			time: TIME
+			date_time: DATE_TIME
+		do
+			print ("Enter the date to use for analysis or %
+				%hit <Enter> to use the%Ncurrent date (dd/mm/yyyy): ")
+			!!date.make_now
+			from
+				read_line
+			until
+				last_string.empty or date.date_valid (last_string)
+			loop
+				print ("Date format invalid, try again: ")
+				read_line
+			end
+			if not last_string.empty then
+				!!date.make_from_string (last_string)
+			end
+			!!time.make (0, 0, 0)
+			print ("Enter the hour to use for analysis: ")
+			from
+				read_integer
+			until
+				last_integer >= 0 and last_integer < time.Hours_in_day
+			loop
+				print ("Invalid hour, try again: ")
+				read_integer
+			end
+			if not last_string.empty then
+				time.set_hour (last_integer)
+			end
+			print ("Enter the minute to use for analysis: ")
+			from
+				read_integer
+			until
+				last_integer >= 0 and last_integer < time.Minutes_in_hour
+			loop
+				print ("Invalid minute, try again: ")
+				read_integer
+			end
+			if not last_string.empty then
+				time.set_minute (last_integer)
+			end
+			!!date_time.make_by_date_time (date, time)
+			print_list (<<"Setting date and time for processing to ",
+						date_time.out, "%N">>)
+			event_coordinator.set_start_date_time (date_time)
 		end
 
 	display_memory_values is
