@@ -1,0 +1,11 @@
+# Configuration for deployment of MAS onto a customer's system
+# Format: "label_string<tab>setting"
+
+# Complete path to the MAS binaries tar file:
+mas_tar_file	/home/release/mas-1.6.5/mas_linux1.6.5.tar.gz
+
+# Directory into which MAS is to be installed
+deployment_dir	/tmp/test_it_here
+
+# MAS version number
+version	1.6.5

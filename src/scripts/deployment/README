@@ -1,0 +1,4 @@
+Scripts and other tools for targetting MAS for a particular customer
+installation.  For example, the first use of these tools is for deploying
+MAS onto Xodds' system using the applet/server implementation to make the
+charting application available to their customers via their web browsers.
