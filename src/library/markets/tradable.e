@@ -129,6 +129,8 @@ feature -- Element change
 			one_more: indicators.count = old indicators.count + 1
 		end
 
+feature -- Removal
+
 	remove_indicator (f: MARKET_FUNCTION) is
 			-- Remove `f' from `indicators'.
 		do
