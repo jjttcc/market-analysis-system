@@ -19,7 +19,7 @@ class CONFIGURABLE_N_RECORD_FUNCTION inherit
 		export
 			{NONE} nrovf_make_unused
 		undefine
-			forth, do_process, immediate_operators
+			forth, do_process, direct_operators
 		redefine
 			set_n, short_description, start, initialize_operators, target,
 			strict_n_count

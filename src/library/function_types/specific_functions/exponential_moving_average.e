@@ -17,7 +17,7 @@ class EXPONENTIAL_MOVING_AVERAGE inherit
 		rename
 			make as sma_make
 		redefine
-			action, set_n, short_description, immediate_operators, do_process
+			action, set_n, short_description, direct_operators, do_process
 		end
 
 	MATH_CONSTANTS
@@ -123,10 +123,13 @@ feature {NONE} -- Implementation
 			--   period and EMA[curr-1] is the EMA for the previous period.
 		end
 
-	immediate_operators: LIST [COMMAND] is
+	direct_operators: LIST [COMMAND] is
+			-- All operators directly attached to Current
 		do
 			Result := Precursor
-			Result.append (operator_and_descendants (exp))
+			Result.extend (exp)
+		ensure then
+			has_exp: Result.has (exp)
 		end
 
 	exp_inverse: DOUBLE

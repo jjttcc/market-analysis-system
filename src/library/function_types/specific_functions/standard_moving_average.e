@@ -13,7 +13,7 @@ class STANDARD_MOVING_AVERAGE inherit
 	N_RECORD_ONE_VARIABLE_FUNCTION
 		redefine
 			set_operator, action, set_input, set_n, do_process, make,
-			short_description, immediate_operators
+			short_description, direct_operators
 		select
 			set_operator, set_input, set_n, make
 		end
@@ -25,7 +25,7 @@ class STANDARD_MOVING_AVERAGE inherit
 			set_n as nrovf_set_n, set_operator as nrovf_set_operator,
 			set_input as nrovf_set_input, make as nrovf_make
 		undefine
-			immediate_operators
+			direct_operators
 		redefine
 			action, do_process, short_description
 		end
@@ -46,10 +46,13 @@ feature -- Access
 							%on a data sequence")
 		end
 
-	immediate_operators: LIST [COMMAND] is
+	direct_operators: LIST [COMMAND] is
+			-- All operators directly attached to Current
 		do
 			Result := Precursor
-			Result.append (operator_and_descendants (sum))
+			Result.extend (sum)
+		ensure then
+			has_sum: Result.has (sum)
 		end
 
 feature {NONE} -- Initialization

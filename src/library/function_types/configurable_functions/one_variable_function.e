@@ -154,9 +154,6 @@ feature {NONE}
 	start is
 		do
 			Precursor
-			if debugging then
-				print_status_report
-			end
 		end
 
 	do_process is

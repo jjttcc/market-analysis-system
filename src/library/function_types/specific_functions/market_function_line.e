@@ -71,9 +71,6 @@ feature {NONE} -- Implemetation
 			end
 			Precursor
 			check target.index = 1 end
-			if debugging then
-				print_status_report
-			end
 		end
 
 	action is

@@ -25,7 +25,7 @@ deferred class FUNCTION_WITH_FIRST_AND_PREVIOUS_OPERATORS inherit
 		export
 			{NONE} set_operator
 		redefine
-			forth, immediate_operators
+			forth, direct_operators
 		end
 
 	COMMAND_EDITOR -- To allow editing of `previous_operator'
@@ -38,13 +38,18 @@ feature -- Access
 	first_element_operator: RESULT_COMMAND [REAL]
 			-- Operator that produces the first element of the output.
 
-	immediate_operators: LIST [COMMAND] is
+	direct_operators: LIST [COMMAND] is
+			-- All operators directly attached to Current
 		do
 			Result := Precursor
 			if previous_operator /= Void then
-				Result.append (operator_and_descendants (previous_operator))
+				Result.extend (previous_operator)
 			end
-			Result.append (operator_and_descendants (first_element_operator))
+			Result.extend (first_element_operator)
+		ensure then
+			has_first_element_op: Result.has (first_element_operator)
+			has_previous_operator_if_it_exists: previous_operator /= Void
+				implies Result.has (previous_operator)
 		end
 
 feature {MARKET_FUNCTION_EDITOR} -- Status setting

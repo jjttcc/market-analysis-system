@@ -118,6 +118,19 @@ feature {NONE} -- Hook methods
 			end
 		end
 
+	direct_operators: LIST [COMMAND] is
+			-- All operators directly attached to Current
+		do
+			create {LINKED_LIST [COMMAND]} Result.make
+			if operator /= Void then
+				Result.extend (operator)
+			end
+		ensure
+			exists: Result /= Void
+			has_operator_if_it_exists:
+				operator /= Void implies Result.has (operator)
+		end
+
 feature {MARKET_FUNCTION} -- Status report
 
 	is_complex: BOOLEAN is True
@@ -125,24 +138,28 @@ feature {MARKET_FUNCTION} -- Status report
 feature {NONE} -- Implementation
 
 	immediate_operators: LIST [COMMAND] is
-		do
-			if operator /= Void then
-				Result := operator_and_descendants (operator)
-			else
-				create {LINKED_LIST [COMMAND]} Result.make
-			end
-		end
-
-	operator_and_descendants (op: COMMAND): LIST [COMMAND] is
-			-- Operator `op' and all of its descendants
-		require
-			op_not_void: op /= Void
+		local
+			direct_ops: LIST [COMMAND]
 		do
 			create {LINKED_LIST [COMMAND]} Result.make
-			Result.extend (op)
-			Result.append (op.descendants)
-		ensure
-			exists: Result /= Void
+			direct_ops := direct_operators
+			from
+				direct_ops.start
+			invariant
+				result_contains_previous_direct_op_and_descendants:
+					direct_ops.valid_index (direct_ops.index - 1) implies
+					Result.has (direct_ops @ (direct_ops.index - 1)) and
+					(direct_ops @ (direct_ops.index - 1)).descendants.for_all (
+						agent Result.has (?))
+			variant
+				direct_ops.count - direct_ops.index + 1
+			until
+				direct_ops.exhausted
+			loop
+				Result.extend (direct_ops.item)
+				Result.append (direct_ops.item.descendants)
+				direct_ops.forth
+			end
 		end
 
 	print_status_report is
@@ -151,7 +168,7 @@ feature {NONE} -- Implementation
 		do
 			print_current_record_info
 			if operator_used then
-				ops := immediate_operators
+				ops := direct_operators
 				from ops.start until ops.exhausted loop
 					io.error.print (ops.item.status_report)
 					ops.forth
