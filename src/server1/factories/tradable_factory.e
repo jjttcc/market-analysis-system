@@ -19,6 +19,9 @@ deferred class TRADABLE_FACTORY inherit
 			all
 		end
 
+--!!!Remove when done:
+GENERAL_UTILITIES
+
 feature -- Initialization
 
 	make is
@@ -182,6 +185,8 @@ feature -- Basic operations
 			intraday_scanner: INTRADAY_TUPLE_DATA_SCANNER
 		do
 			error_occurred := False
+			check_for_open_interest
+print_list (<<"tradable factory - has open interest: ", open_interest, "%N">>)
 			make_product
 			if intraday then
 				create intraday_scanner.make (
@@ -308,6 +313,28 @@ feature {NONE} -- Implementation
 		end
 
 	cached_value_setters: LINKED_LIST [VALUE_SETTER]
+
+	check_for_open_interest is
+			-- Check if `input' has an open interest field.
+		require
+			input_not_void: input /= Void
+		local
+			field_count, expected_fields: INTEGER
+		do
+			expected_fields := 6
+			if not no_open then
+				expected_fields := expected_fields + 1
+			end
+			if intraday then
+				expected_fields := expected_fields + 1
+			end
+			open_interest := input.field_count = expected_fields
+print_list (<<"chk for oi - expected_fields, i.fld_count: ",
+expected_fields, ", ", input.field_count, "%N">>)
+		end
+
+	open_interest: BOOLEAN
+			-- Is there an open interest field in the input?
 
 feature {NONE} -- Tuple field-key constants
 
