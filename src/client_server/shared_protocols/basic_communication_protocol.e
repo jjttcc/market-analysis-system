@@ -22,12 +22,6 @@ feature -- String constants
 			-- Character used to separate "records" or "lines" within
 			-- a message component
 
-	message_date_field_separator: STRING is deferred end
-			-- Sub-field separator for date fields contained in messages
-
-	message_time_field_separator: STRING is deferred end
-			-- Sub-field separator for time fields contained in messages
-
 invariant
 
 end

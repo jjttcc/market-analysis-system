@@ -9,7 +9,7 @@ indexing
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class DATA_SUPPLIER_COMMUNICATION_PROTOCOL inherit
+deferred class DATA_SUPPLIER_COMMUNICATION_PROTOCOL inherit
 
 	BASIC_COMMUNICATION_PROTOCOL
 
