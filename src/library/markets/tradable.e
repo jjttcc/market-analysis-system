@@ -185,9 +185,9 @@ feature {NONE} -- Initialization
 			-- to the duration of tuples in `data').
 		require
 			type_set: trading_period_type /= Void
+			table_empty: composite_tuple_lists.empty
 		local
 			types: LIST [TIME_PERIOD_TYPE]
-			--l: LIST [COMPOSITE_TUPLE]
 		do
 			from
 				types := period_types.linear_representation
@@ -198,11 +198,13 @@ feature {NONE} -- Initialization
 				if
 					types.item.duration > trading_period_type.duration
 				then
-					--!MARKET_TUPLE_LIST [COMPOSITE_TUPLE]!l.make (0)
 					composite_tuple_lists.extend (Void, types.item.name)
 				end
 				types.forth
 			end
+		ensure
+			all_void: composite_tuple_lists.occurrences (Void) =
+						composite_tuple_lists.count
 		end
 
 feature {NONE}
