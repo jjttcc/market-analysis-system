@@ -11,20 +11,27 @@ import support.*;
 class IndicatorSelection extends DialogSelection {
 	public IndicatorSelection(Chart f) {
 		super(f);
-		int window_width = f.main_pane.getSize().width / 3 + 14;
-		final int Min_window_height = 40, Hfactor = 16;
+		indicator_listener = new IndicatorListener(chart);
+		update_indicators(! size_was_set);
+		add_close_listener();
+	}
+
+	// Update the indicator selection list with the current indicator
+	// list.  If `resize', resize the window appropriately.
+	public void update_indicators(boolean resize) {
 		Enumeration indicators = chart.ordered_indicators().elements();
+		selection_list.removeAll();
 		while (indicators.hasMoreElements()) {
 			selection_list.add((String) indicators.nextElement());
 		}
-		indicator_listener = new IndicatorListener(chart);
 		selection_list.addActionListener(indicator_listener);
 
-		if (! size_was_set) {
+		if (resize) {
+			int window_width = chart.main_pane.getSize().width / 3 + 14;
+			final int Min_window_height = 40, Hfactor = 16;
 			setSize(window_width, (selection_list.getItemCount() + 1) *
 				Hfactor + Min_window_height);
 		}
-		add_close_listener();
 	}
 
 	private IndicatorListener indicator_listener;
