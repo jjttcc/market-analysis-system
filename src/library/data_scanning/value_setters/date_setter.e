@@ -28,6 +28,7 @@ feature {NONE}
 		local
 			date_time: DATE_TIME
 			date: DATE
+			date_util: expanded DATE_TIME_SERVICES
 		do
 			date := date_util.date_from_number (stream.last_integer)
 			if date = Void then -- stream.last_integer was invalid
@@ -38,9 +39,5 @@ feature {NONE}
 				tuple.set_date_time (date_time)
 			end
 		end
-
-feature {NONE}
-
-	date_util: expanded DATE_TIME_SERVICES
 
 end -- class DAY_DATE_SETTER
