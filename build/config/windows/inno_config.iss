@@ -115,5 +115,5 @@ FinishedLabel=Setup has finished installing [name] on your computer. The applica
 
 [Run]
 Filename: "{app}\lib\install_tool.exe"; Parameters: "{app}";
-Filename: "{app}\lib\cleanup"; Parameters: ""; Flags: shellexec runminimized
+Filename: "{app}\lib\cleanup"; Parameters: ""; Flags: shellexec runminimized nowait
 ; Filename: "{app}\bin\runmas.bat"; Description: "Launch Market Analysis System"; Flags: nowait postinstall skipifsilent
