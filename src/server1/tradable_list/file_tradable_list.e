@@ -21,10 +21,6 @@ indexing
 class FILE_TRADABLE_LIST inherit
 
 	TRADABLE_LIST
-		redefine
-			compare_references, compare_objects,
-			changeable_comparison_criterion
-		end
 
 creation
 
@@ -41,8 +37,8 @@ feature -- Initialization
 			tradable_factories := factories
 			object_comparison := True
 			file_names.start; tradable_factories.start
-			!HASH_TABLE [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]!
-				cache.make (cache_size)
+			!HASH_TABLE [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]! cache.make (
+				cache_size)
 		ensure
 			set: file_names = filenames and tradable_factories = factories
 			implementation_init: last_tradable = Void and old_index = 0
@@ -106,8 +102,6 @@ feature -- Access
 			-- corresponding contents of `file_names'.
 		end
 
-	cache_size: INTEGER is 10
-
 feature -- Status report
 
 	after: BOOLEAN is
@@ -119,8 +113,6 @@ feature -- Status report
 		do
 			Result := file_names.empty
 		end
-
-	changeable_comparison_criterion: BOOLEAN is False
 
 feature -- Cursor movement
 
@@ -142,11 +134,6 @@ feature -- Cursor movement
 			tradable_factories.forth
 		end
 
-feature {FACTORY} -- Access
-
-	tradable_factories: LINEAR [TRADABLE_FACTORY]
-			-- Manufacturers of tradables - one for each element of filenames
-
 feature {NONE} -- Implementation
 
 	search_by_file_name (name: STRING) is
@@ -161,25 +148,6 @@ feature {NONE} -- Implementation
 		ensure then
 			-- `file_names' contains `name' implies
 			--	file_names.item.is_equal (name)
-		end
-
-	search_by_symbol (s: STRING) is
-		local
-			slist: LIST [STRING]
-		do
-			from
-				slist := symbols
-				slist.start
-				start
-			until
-				after or else slist.item.is_equal (s)
-			loop
-				slist.forth
-				forth
-			end
-		ensure then
-			-- `symbols' contains `s' implies
-			--	file_names.item corresponds to `s'
 		end
 
 	symbol_from_file_name (fname: STRING): STRING is
@@ -202,43 +170,6 @@ feature {NONE} -- Implementation
 			Result := strutil.target
 		end
 
-	print_errors (t: TRADABLE [BASIC_MARKET_TUPLE]; l: LIST [STRING]) is
-		do
-			if l.count > 1 then
-				print ("Errors occurred while processing ")
-			else
-				print ("Error occurred while processing ")
-			end
-			print (t.symbol); print (":%N")
-			from
-				l.start
-			until
-				l.after
-			loop
-				print (l.item)
-				print ("%N")
-				l.forth
-			end
-		end
-
-	cached_item (i: INTEGER): TRADABLE [BASIC_MARKET_TUPLE] is
-			-- The cached item with index `i' - Void if not in cache
-		do
-			Result := cache @ i
-		end
-
-	add_to_cache (t: TRADABLE [BASIC_MARKET_TUPLE]; idx: INTEGER) is
-			-- Add `t' with its `idx' to the cache
-		require
-			not_void: t /= Void
-		do
-			if cache.count = cache_size then
-				cache.clear_all
-				check cache.count = 0 end
-			end
-			cache.put (t, idx)
-		end
-
 	open_current_file: PLAIN_TEXT_FILE is
 			-- Open the file associated with `file_names'.item.
 			-- If the open fails with an exception, print an error message,
@@ -251,28 +182,9 @@ feature {NONE} -- Implementation
 			Result := Void
 		end
 
-	cache: HASH_TABLE [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]
-			-- Cache of tradable/index for efficiency
-
-	old_index: INTEGER
-
-	last_tradable: TRADABLE [BASIC_MARKET_TUPLE]
-
-feature {NONE} -- Inapplicable
-
-	compare_references is
-		do
-		end
-
-	compare_objects is
-		do
-		end
-
 invariant
 
-	fn_tf_not_void: file_names /= Void and tradable_factories /= Void
-	always_compare_objects: object_comparison = True
+	file_names_not_void: file_names /= Void
 	index_definition: index = file_names.index
-	cache_not_too_large: cache.count <= cache_size
 
 end -- class FILE_TRADABLE_LIST
