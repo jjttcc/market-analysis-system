@@ -95,11 +95,11 @@ feature {NONE}
 			loop
 				print_list (<<"Select action:%N", "     Select market (s) ",
 							"View data (v) Edit indicators (e)",
-							"%N     Edit market analyzers (m)",
-							"%N     Run market analysis (a) ",
-							"Set date for market analysis (d)%N",
-							"     Edit event registrants (r) ",
-							"Memory usage (u) Exit (x) Help (h) ">>)
+							"%N     Edit market analyzers (m) ",
+							"Run market analysis (a)%N",
+							"     Set date for market analysis (d) ",
+							"Edit event registrants (r)%N",
+							"     Memory usage (u) Exit (x) Help (h) ">>)
 				inspect
 					selected_character
 				when 's', 'S' then
@@ -221,34 +221,34 @@ feature {NONE}
 		end
 
 	edit_indicator_menu (indicators: LIST [MARKET_FUNCTION]) is
-			-- Menu allowing user to select and edit an element
-			-- of `indicators'
 		local
 			indicator: MARKET_FUNCTION
 			finished: BOOLEAN
 			parameter: FUNCTION_PARAMETER
 			parameters: LIST [FUNCTION_PARAMETER]
-			names: ARRAYED_LIST [STRING]
+			i: INTEGER
 		do
 			from
 				print ("Select indicator to edit%N")
 				indicator := indicator_selection (indicators)
 				parameters := indicator.parameters
-				!!names.make (parameters.count)
-				from
-					parameters.start
-				until
-					parameters.exhausted
-				loop
-					names.extend (parameters.item.function.name)
-					parameters.forth
-				end
 			until
 				finished
 			loop
 				print_list (<<"Select a parameter for ", indicator.name,
 							" (0 to end):%N">>)
-				print_names_in_1_column (names)
+				from
+					i := 1
+					parameters.start
+				until
+					parameters.after
+				loop
+					print_list (<<i, ") ", parameters.item.function.name,
+								" (value: ", parameters.item.current_value,
+								")%N">>)
+					parameters.forth
+					i := i + 1
+				end
 				read_integer
 				if
 					last_integer <= -1 or
@@ -696,7 +696,7 @@ feature {NONE}
 			market_list := factory_builder.market_list
 			input_file_names := factory_builder.input_file_names
 			!!help.make
-			!!event_generator_builder
+			!!event_generator_builder.make
 		ensure
 			curr_period_not_void: current_period_type /= Void
 			market_list_not_void: market_list /= Void
