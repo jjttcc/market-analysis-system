@@ -2,7 +2,7 @@ system
 	"http_experiment"
 
 root
-	HTTP_TEST: make
+	HTTP_DATA_RETRIEVER: make
 
 default
 	assertion (check)
