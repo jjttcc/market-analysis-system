@@ -64,6 +64,8 @@ echo "<mas_root_dir>"%{rootdir}>>$specfile
 echo "replaceend">>$specfile
 ./config_tool -c $specfile -f configure_user
 rm -f $specfile
+cd ..
+cat doc/INITIAL_README
 
 %files
 %{rootdir}/bin
