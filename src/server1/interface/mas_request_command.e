@@ -10,16 +10,8 @@ indexing
 deferred class MAS_REQUEST_COMMAND inherit
 
 	IO_BASED_CLIENT_REQUEST_COMMAND
-		rename
-			do_post_processing as respond_to_client
 		redefine
-			session, prepare_for_execution, exception_cleanup,
-			respond_to_client
-		end
-
-	GENERAL_UTILITIES
-		export
-			{NONE} all
+			session
 		end
 
 	GUI_NETWORK_PROTOCOL
@@ -32,13 +24,6 @@ deferred class MAS_REQUEST_COMMAND inherit
 			{NONE} all
 		end
 
-feature -- Initialization
-
-	make is
-		do
-			create output_buffer.make (0)
-		end
-
 feature -- Access
 
 	session: MAS_SESSION
@@ -48,17 +33,6 @@ feature -- Status report
 	arg_mandatory: BOOLEAN is True
 
 feature {NONE}
-
---!!!!Move up?
-	output_buffer: STRING
-			-- Buffer containing output to be sent to the client
-
-	output_buffer_used: BOOLEAN is
-			-- Is the `output_buffer' used?  Yes - redefine for
-			-- descendants that don't use it.
-		once
-			Result := True
-		end
 
 	ok_string: STRING is
 			-- "OK" message ID and field separator
@@ -77,64 +51,4 @@ feature {NONE}
 				OK.out.count + ("%T").count
 		end
 
-	put (s: STRING) is
-			-- Append `s' to `output_buffer'.
-		require
-			buffer_not_void: output_buffer /= Void
-		do
-			output_buffer.append (s)
-		ensure
-			new_count: output_buffer.count = old output_buffer.count + s.count
-		end
-
-	report_error (code: INTEGER; slist: ARRAY [ANY]) is
-			-- Report `slist' as an error message; include `code' ID at the
-			-- beginning and `eom' at the end.
-		do
-			put (concatenation (<<code.out, "%T">>))
-			put (concatenation (slist))
-			put (eom)
-		end
-
-feature {NONE} -- Hook routine implementations
-
-	warn_client (slst: ARRAY [STRING]) is
-		do
-			report_error (Warning, slst)
-			respond_to_client (slst)
-		end
-
-	prepare_for_execution (arg: ANY) is
-		do
-			if output_buffer_used then
-				output_buffer.clear_all
-			end
-		end
-
-	exception_cleanup (arg: ANY) is
-		do
-			prepare_for_execution (arg)
-			warn_client (<<"Error occurred ", error_context (arg), ".">>)
-		end
-
---!!!!Move up?
-	respond_to_client (arg: ANY) is
-			-- Send `output_buffer' to the `output_medium'.
-		do
-			if not output_buffer.is_empty then
-				output_medium.put_string (output_buffer)
-			end
-		end
-
-feature {NONE} -- Implementation
-
-	error_context (arg: ANY): STRING is
-		do
-			Result := ""
-		end
-
-invariant
-
-	output_buffer_not_void: output_buffer /= Void
-
-end -- class MAS_REQUEST_COMMAND
+end
