@@ -114,10 +114,11 @@ The bin directory has the following executable files:
 
 %startlist
 %listitem
-macl - MA command-line client - connects to the server over the network
-and uses its command-line interface - implemented in Python
+macl - Market Analysis Command-Line client - connects to the server over
+the network and uses its command-line interface - implemented in Python
 %listitem
-maclj - MA command-line client - wapper script for Java implementation
+maclj - Market Analysis Command-Line client - wapper script for Java
+implementation
 %listitem
 magc - MA GUI Client - wrapper script for Java GUI client
 %listitem
