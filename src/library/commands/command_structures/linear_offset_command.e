@@ -37,9 +37,14 @@ feature -- Basic operations
 			old_i: INTEGER
 		do
 			old_i := target.index
-			target.move (offset)
-			check
-				target_not_off: not target.off
+			if old_i + offset >= 1 then
+				target.move (offset)
+				check
+					target_not_off: not target.off
+					target_index_value: target.index = old_i + offset
+				end
+			else
+				target.go_i_th (1)
 			end
 			operate (arg)
 			target.go_i_th (old_i) -- Restore cursor.
