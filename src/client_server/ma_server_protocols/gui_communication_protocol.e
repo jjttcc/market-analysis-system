@@ -7,9 +7,9 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class GUI_SERVER_PROTOCOL inherit
+class GUI_NETWORK_PROTOCOL inherit
 
-	SERVER_PROTOCOL
+	NETWORK_PROTOCOL
 
 feature -- Client request IDs
 
@@ -23,4 +23,4 @@ feature -- Server response IDs
 	Error: INTEGER is 5
 	OK: INTEGER is 6
 
-end -- class GUI_SERVER_PROTOCOL
+end -- class GUI_NETWORK_PROTOCOL

@@ -75,18 +75,11 @@ feature
 		do
 			active_medium.accept
 			io_socket := active_medium.accepted
-			io_socket.read_line
-			print ("Received initial string from client: ")
-			print (io_socket.last_string)
-			-- Set factory_builder's io_medium to io_socket and read the
-			-- the first few characters from the socket to find out if
-			-- the connection is for a GUI or a command-line UI and create
-			-- the corresponding type of "something-or-other" and give it
-			-- to factory_builder.
-			if io_socket.last_string.is_equal ("GUI") then
-				is_gui := true
-			else
+			io_socket.read_character
+			if io_socket.last_character.is_equal ('C') then
 				is_gui := false
+			else
+				is_gui := true
 			end
 		end
 

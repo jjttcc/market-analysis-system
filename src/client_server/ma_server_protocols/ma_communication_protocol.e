@@ -9,7 +9,7 @@ indexing
 
 class
 
-	SERVER_PROTOCOL
+	NETWORK_PROTOCOL
 
 feature -- Access
 
@@ -25,4 +25,4 @@ invariant
 
 	eom_size: eom.count = 1
 
-end -- class SERVER_PROTOCOL
+end -- class NETWORK_PROTOCOL
