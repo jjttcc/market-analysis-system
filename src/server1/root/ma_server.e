@@ -4,7 +4,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class TA_SERVER inherit
+class TA_SERVER
 
 creation
 
