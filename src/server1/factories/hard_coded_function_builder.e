@@ -84,7 +84,6 @@ feature -- Basic operations
 											"Slow Stochastic %%D"))
 			l.extend (rsi (f, RSI_n, "Relative Strength Index"))
 			l.extend (market_close_data (f, "Market Close Data"))
-			l.extend (market_function_line ("Trend Line"))
 			product := l
 		end
 
