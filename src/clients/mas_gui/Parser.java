@@ -10,7 +10,7 @@ import graph.*;
 the Market Analysis server */
 class Parser {
 	public static final int Date = 1, Open = 2, High = 3, Low = 4, Close = 5,
-		Volume = 6, Open_interest = 7;
+		Volume = 6, Open_interest = 7, Not_set = 0;
 
 	// Constructor - fieldspecs specifies the fields format of each tuple -
 	// e.g., date, high, low, close, volume.
@@ -22,8 +22,13 @@ class Parser {
 		dates = new Vector();
 		times = new Vector();
 		float_field_count = float_fields(fieldspecs);
-//		has_volume = has_field_type(Volume);
-//		has_open_interest = has_field_type(Open_interest);
+	}
+
+	// Set the tuple field specifications.
+	// Precondition: fs != null
+	// Postcondition: field_specifications() == fs
+	void set_field_specifications(int[] fs) {
+		parsetype = fs;
 	}
 
 	// Set the drawer for drawing volume.
@@ -36,20 +41,26 @@ class Parser {
 		open_interest_drawer = d;
 	}
 
+	// Specifications of the type (date, open, etc.) and order of each field
+	// in a tuple.
+	int[] field_specifications() {
+		return parsetype;
+	}
+
 	// Parse `s' into a DataSet according to record_separator and
 	// field_separator.  `drawer' is the tuple drawer to use for the
 	// DataSet.  result() gives the new DataSet.
 	public void parse(String s, BasicDrawer drawer) throws Exception {
 		int rec_count;
+		volumes = null;
+		open_interests = null;
 		is_intraday = contains_time_field(s);
 		StringTokenizer recs = new StringTokenizer(s, _record_separator, false);
 		rec_count = recs.countTokens();
 		clear_vectors();
-//		if (has_volume) {
 		if (has_field_type(Volume)) {
 			volumes = new double[rec_count];
 		}
-//		if (has_open_interest) {
 		if (has_field_type(Open_interest)) {
 			open_interests = new double[rec_count];
 		}
@@ -57,10 +68,10 @@ class Parser {
 		if (! has_field_type(Open) && has_field_type(High) &&
 				has_field_type(Low)) {
 			// Add 1 to make room for the "fake" open field.
-			float_data = new double[rec_count * (float_field_count + 1)];
+			value_data = new double[rec_count * (float_field_count + 1)];
 			parse_with_no_open(recs);
 		} else {
-			float_data = new double[rec_count * float_field_count];
+			value_data = new double[rec_count * float_field_count];
 			parse_default(recs);
 		}
 		process_data(drawer);
@@ -68,7 +79,6 @@ class Parser {
 
 	// Parse fields - default routine
 	private void parse_default(StringTokenizer recs) throws Exception {
-System.err.println("default parse called");
 		int float_index = 0, volume_index = 0, oi_index = 0;
 		while (recs.hasMoreTokens()) {
 			StringTokenizer fields = new StringTokenizer(recs.nextToken(),
@@ -83,19 +93,19 @@ System.err.println("default parse called");
 						}
 						break;
 					case Open:
-						float_data[float_index++] =
+						value_data[float_index++] =
 							parse_double(fields.nextToken());
 						break;
 					case High:
-						float_data[float_index++] =
+						value_data[float_index++] =
 							parse_double(fields.nextToken());
 						break;
 					case Low:
-						float_data[float_index++] =
+						value_data[float_index++] =
 							parse_double(fields.nextToken());
 						break;
 					case Close:
-						float_data[float_index++] =
+						value_data[float_index++] =
 							parse_double(fields.nextToken());
 						break;
 					case Volume:
@@ -120,7 +130,6 @@ System.err.println("default parse called");
 	// Parse fields - expecting high, low, and close fields (in that order),
 	// but NO open field.
 	private void parse_with_no_open(StringTokenizer recs) throws Exception {
-System.err.println("parse with no open called");
 		int float_index = 0, volume_index = 0, oi_index = 0;
 		while (recs.hasMoreTokens()) {
 			StringTokenizer fields = new StringTokenizer(recs.nextToken(),
@@ -135,39 +144,30 @@ System.err.println("parse with no open called");
 							times.addElement(fields.nextToken());
 						}
 						// Save a place for the open field:
-						float_data[float_index] = 0;
+						value_data[float_index] = 0;
 						open_field_index = float_index;
 						++float_index;
 						break;
 					case High:
-System.err.print("High - fidx: " + float_index);
-						float_data[float_index++] =
+						value_data[float_index++] =
 							parse_double(fields.nextToken());
-System.err.println(" - added " + float_data[float_index - 1]);
 						break;
 					case Low:
-System.err.print("Low - fidx: " + float_index);
-						float_data[float_index++] =
+						value_data[float_index++] =
 							parse_double(fields.nextToken());
-System.err.println(" - added " + float_data[float_index - 1]);
 						break;
 					case Close:
-System.err.print("Close - fidx: " + float_index);
-						float_data[float_index++] =
+						value_data[float_index++] =
 							parse_double(fields.nextToken());
-System.err.println(" - added " + float_data[float_index - 1]);
 						if (open_field_index != -1) {
 							// Store the close value into the open field.
-							float_data[open_field_index] =
-								float_data[float_index - 1];
-System.err.println("(open) - added " + float_data[open_field_index]);
+							value_data[open_field_index] =
+								value_data[float_index - 1];
 						}
 						break;
 					case Volume:
-System.err.print("Volume - fidx: " + float_index);
 						volumes[volume_index++] =
 							parse_double(fields.nextToken());
-System.err.println(" - added " + volumes[volume_index - 1]);
 						break;
 					case Open_interest:
 						open_interests[oi_index++] =
@@ -243,9 +243,9 @@ System.err.println(" - added " + volumes[volume_index - 1]);
 		try {
 			has_dates = dates != null && ! dates.isEmpty();
 			has_times = times != null && ! times.isEmpty();
-			int length = float_data.length / float_field_count;
+			int length = value_data.length / float_field_count;
 			if (length > 0) {
-				processed_data = new DataSet(float_data, length, drawer);
+				processed_data = new DataSet(value_data, length, drawer);
 			}
 			else {
 				processed_data = new DataSet(drawer);
@@ -336,15 +336,15 @@ System.err.println(" - added " + volumes[volume_index - 1]);
 	// be equal to the number of records in the input.
 	protected Vector dates;	// String
 	protected Vector times;	// String
-	protected double[] float_data;
+	// Holds open, high, low, close data or, for indicator data, holds
+	// the main value data.
+	protected double[] value_data;
 	protected double[] volumes, open_interests;
 
 	String _record_separator, _field_separator;
 	DataSet processed_data;		// the parsed data
 	DataSet volume_data;		// the parsed volume data
 	DataSet oi_data;			// the parsed open interest data
-//	boolean has_volume;			// Is there a volume field?
-//	boolean has_open_interest;	// Is there an open-interest field?
 	boolean is_intraday;
 	BasicDrawer volume_drawer;
 	BasicDrawer open_interest_drawer;
