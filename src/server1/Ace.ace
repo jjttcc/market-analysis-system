@@ -40,6 +40,7 @@ cluster
 	database_ecli (server)	:	"$/database/ecli";	
 	protocols (server):			"$/protocols";
 	tradable_list (server):		"$/tradable_list";
+	stock_splits (server):		"$/stock_splits";
 
 		-- Application library clusters
 	app_library:				"$MAS/src/application_library";
