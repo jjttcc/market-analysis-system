@@ -1,21 +1,29 @@
-Procedure for adding a new COMMAND class:
+Procedure for adding a new COMMAND class (new procedure as of 2004/01/16):
 
-Add an instance of the new COMMAND class, with a description, to the list
-in the routine `instances_and_descriptions' in the COMMANDS class, following
-the same simple procedure used to add the existing COMMAND instances.
+Add an instance of the new COMMAND class, with a description, in the
+COMMANDS class:
+
+Search for the feature section:
+    "feature -- Access - an instance of each command"
+and find a place in that section to put a once function to create the new
+command.  Then, in the routine `instances_and_descriptions', create a
+pair with the new command object and its descriptions as arguments and
+append the pair to 'Result'.
 
 Add the command's name in the `initialization_map' function in the
 COMMAND_EDITING_INTERFACE class:
 
-	- Choose an initialization classification from the constants defined
-	  above `initialization_map' according to how the command needs to
-	  be initialized (look at other commands for examples).  If the new
-	  command does not fit into any existing initialization classification,
-	  add a new constant for a new init. classification for the new command.
-	- Use the (chosen or newly added) initialization classification constant
-	  in the `extend' call to the hash table in `initialization_map', along
-	  with the name, to add the new class's name/classification to the table
-	  (just as the existing commands were added).
+    - Choose an initialization classification from the constants defined
+      above `initialization_map' according to how the command needs to
+      be initialized (look at other commands for examples).  If the new
+      command does not fit into any existing initialization classification,
+      add a constant for a new init. classification for the command.
+    - In the `initialization_map' function, add a mapping of the (chosen
+      or newly added) initialization-classification constant to the new
+      command's name by obtaining the name from the instance for the
+      command (the one defined in COMMANDS, above) and calling
+      "Result.extend" with it (the same way that the existing command
+      names were mapped).
 
 If a new initialization classification was created for the command, add a when
 block in `initialize_command' to handle the initialization of that command
@@ -24,9 +32,9 @@ initialization/edit routine for that command in the `editor'
 (APPLICATION_COMMAND_EDITOR).
 
 Look at the `command_types' function and determine which types the new
-command conforms to and add an entry to each list for which the command's
-type conforms, using the name of the command (as with the existing entries).
-Be careful to identify all lists (all elements of the hash table) for which
-the command's type conforms.
+command conforms to and add an entry (the instance of that command,
+inherited from COMMANDS) to each list for which the command's type
+conforms (as with the existing entries).  Be careful to identify all lists
+(all elements of the hash table) for which the command's type conforms.
 
 Apply basically the same procedure for adding new MARKET_FUNCTIONs.
