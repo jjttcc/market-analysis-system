@@ -36,6 +36,11 @@ public class Connection implements NetworkProtocol
 		send_msg(login_request_code, conf.session_settings(), 0);
 		try {
 			session_key_str = receive_msg().toString();
+			if (error_occurred()) {
+				// Failure of login request is a fatal error.
+				System.err.println(request_result);
+				System.exit(-1);
+			}
 		}
 		catch (Exception e) {
 			System.err.println("Fatal error: attempt to login to server " +
@@ -167,6 +172,10 @@ public class Connection implements NetworkProtocol
 								_hostname);
 			System.exit(1);
 		}
+	}
+
+	boolean error_occurred() {
+		return last_rec_msgID != OK;
 	}
 
 	int _session_key;
