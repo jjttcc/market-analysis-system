@@ -1,9 +1,9 @@
 indexing
-	description: "Operation on n sequential elements";
+	description: "Sum of n sequential elements";
 	date: "$Date$";
 	revision: "$Revision$"
 
-class LINEAR_OPERATION inherit
+class LINEAR_SUM inherit
 
 	NUMERIC_COMMAND
 		redefine
@@ -43,6 +43,8 @@ feature -- Status report
 			-- Has the operator used for the operation been set?
 		do
 			Result := operator /= Void
+		ensure
+			true_if_op_not_void: Result = (operator /= Void)
 		end
 
 	arg_used: BOOLEAN is
@@ -65,7 +67,7 @@ feature -- Status report
 		ensure then
 			-- target.index = old target.index + n and
 			-- value =
-			--  operation(target[old target.index .. old target.index+n-1])
+			--  sum (target[old target.index .. old target.index+n-1])
 			--    [where operation is the operation to be performed]
 			int_index_eq_n: Result = (internal_index = n)
 		end
@@ -77,18 +79,18 @@ feature {NONE}
 			Result := 0 <= internal_index and internal_index <= n
 		end
 
-feature {MARKET_FUNCTION, FACTORY}
+feature {MARKET_FUNCTION, FACTORY} -- Element change
 
 	set_operator (op: BASIC_NUMERIC_COMMAND) is
 			-- Set operator that provides the value to be summed (from
 			-- the current item).
-			-- NOTE:  This must be set before execute is called.
 		require
 			not_void: op /= Void
 		do
 			operator := op
 		ensure
-			set: operator = op and operator /= Void
+			set: operator = op
+			op_set: operator_set
 		end
 
 	operator: BASIC_NUMERIC_COMMAND
@@ -122,4 +124,4 @@ feature {NONE}
 
 	internal_index: INTEGER
 
-end -- class LINEAR_OPERATION
+end -- class LINEAR_SUM
