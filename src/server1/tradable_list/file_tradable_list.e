@@ -85,7 +85,7 @@ feature {NONE} -- Implementation
 
 	open_current_file: INPUT_FILE is
 			-- Open the file associated with `file_names'.item.
-			-- If the open fails with an exception, print an error message,
+			-- If the open fails with an exception, log the error,
 			-- set Result to Void, and allow the exception to propogate.
 		local
 			error: BOOLEAN
@@ -93,8 +93,7 @@ feature {NONE} -- Implementation
 			if not error then
 				!!Result.make_open_read (file_names.item)
 			else
-				print ("Failed to open file ") print (file_names.item)
-				print ("%N")
+				log_errors (<<"Failed to open file ", file_names.item, "%N">>)
 				Result := Void
 			end
 		rescue

@@ -14,8 +14,13 @@ class TRADABLE_LIST inherit
 		end
 
 	OPERATING_ENVIRONMENT
-		export
-			{NONE} all
+		export {NONE}
+			all
+		end
+
+	GENERAL_UTILITIES
+		export {NONE}
+			all
 		end
 
 creation
@@ -66,7 +71,7 @@ feature -- Access
 					last_tradable := tradable_factories.item.product
 					add_to_cache (last_tradable, index)
 					if tradable_factories.item.error_occurred then
-						print_errors (last_tradable,
+						report_errors (last_tradable,
 										tradable_factories.item.error_list)
 					end
 				else
@@ -170,21 +175,17 @@ feature {NONE} -- Implementation
 
 	symbol_list: LINEAR [STRING]
 
-	print_errors (t: TRADABLE [BASIC_MARKET_TUPLE]; l: LIST [STRING]) is
+	report_errors (t: TRADABLE [BASIC_MARKET_TUPLE]; l: LIST [STRING]) is
 		do
-			if l.count > 1 then
-				print ("Errors occurred while processing ")
-			else
-				print ("Error occurred while processing ")
-			end
-			print (t.symbol); print (":%N")
+			log_error ("Errors occurred while processing ")
+			log_error (t.symbol); log_error (":%N")
 			from
 				l.start
 			until
 				l.after
 			loop
-				print (l.item)
-				print ("%N")
+				log_error (l.item)
+				log_error ("%N")
 				l.forth
 			end
 		end
