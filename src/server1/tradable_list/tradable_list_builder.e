@@ -45,6 +45,7 @@ feature -- Basic operations
 			db_list_builder: DATABASE_LIST_BUILDER
 			file_list_builder: FILE_LIST_BUILDER
 			daily_file_based_list: FILE_TRADABLE_LIST
+			ilist: TRADABLE_LIST
 		do
 			retrieve_input_entity_names
 			if command_line_options.use_db then
@@ -53,6 +54,7 @@ feature -- Basic operations
 				db_list_builder.execute
 				create {TRADABLE_LIST_HANDLER} product.make (
 					db_list_builder.daily_list, db_list_builder.intraday_list)
+				ilist := db_list_builder.intraday_list
 			else
 				create file_list_builder.make (input_entity_names,
 					tradable_factory, command_line_options.daily_extension,
@@ -61,6 +63,10 @@ feature -- Basic operations
 				create {TRADABLE_LIST_HANDLER} product.make (
 					file_list_builder.daily_list,
 					file_list_builder.intraday_list)
+				ilist := file_list_builder.intraday_list
+			end
+			if not command_line_options.intraday_caching then
+				ilist.turn_caching_off
 			end
 		end
 
