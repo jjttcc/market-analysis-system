@@ -15,6 +15,8 @@ order by symbol
 derivative symbol query	select symbol from derivative_information \
 order by symbol
 
+# Start and end date specifications for queries.  If eod_end_date is not
+# specified, it defaults to "now".  This also applies to intraday_end_date.
 eod_start_date	now - 3 years
 intraday_start_date	now - 5 days
 
