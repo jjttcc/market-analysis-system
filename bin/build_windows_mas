@@ -15,7 +15,7 @@ usage() {
 }
 
 appname=$1; shift
-export Targetdir=$MASBUILD/lib/binaries
+export Targetdir=$MASBUILD/lib/binaries/windows
 export Projectdir=$MASPROJ/${appname}_current
 export Executable_name=${appname}.exe
 export C_Compile_options=-batch
