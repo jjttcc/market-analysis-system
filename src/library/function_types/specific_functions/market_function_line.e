@@ -49,8 +49,12 @@ feature {NONE} -- Initialization
 			neg_dur: DATE_TIME_DURATION
 		do
 			last_index := end_point.x.rounded -- This may change.
+			-- Important - the count attribute must be adjusted to the
+			-- "virtual" size of the array/list to fulfill the precondition
+			-- for force_i_th (valid_index):
+			count := last_index
 			force_i_th (end_point, end_point.x.rounded)
-			put_i_th (start_point, start_point.x.rounded)
+			force_i_th (start_point, start_point.x.rounded)
 			-- Create/insert points with indexes start_point.x - 1 to 1.
 			from
 				i := start_point.x.rounded - 1
