@@ -127,7 +127,7 @@ feature {NONE} -- Implementation
 			-- Diagnosis of validity of `host' and `port' - Void if they
 			-- both are valid; otherwise a description of the problem
 		local
-			connection: CLIENT_CONNECTION
+			connection: GUI_CLIENT_CONNECTION
 			retried: BOOLEAN
 		do
 			if not retried then
@@ -145,7 +145,7 @@ feature {NONE} -- Implementation
 						end
 					else
 						Result := "Could not connect to server at host: " +
-							host + ", port; " + port
+							host + ", port: " + port
 						if not connection.error_report.is_empty then
 							Result.append ("%N(" +
 								connection.error_report + ").")

@@ -78,6 +78,10 @@ cluster
 
 	liberror (eiflib):		"$/error"
 
+	mas_client_lib:		"$MAS/src/client_library"
+
+	mas_client_support (mas_client_lib):	"$/support"
+
 	mas_server:		"$MAS/src/server1"
 
 	mas_server_util (mas_server):		"$/utility"
