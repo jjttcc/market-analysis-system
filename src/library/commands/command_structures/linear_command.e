@@ -1,5 +1,5 @@
 indexing
-	description: "A result command that is also a linear analyzer"
+	description: "Result commands that are also linear analyzers"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

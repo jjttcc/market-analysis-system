@@ -1,8 +1,8 @@
 indexing
 	description:
-		"A linear command that changes the cursor of the target according %
-		%to an offset value, operates on the target at that cursor %
-		%position, and restores the cursor to the original value."
+		"Linear commands that change the cursor of the target according %
+		%to an offset value, operate on the target at that cursor %
+		%position, and restore the cursor to the original value."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

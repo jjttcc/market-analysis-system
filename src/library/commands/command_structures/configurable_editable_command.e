@@ -1,6 +1,5 @@
 indexing
-	description:
-		"A 'command' with a settable 'is_editable' feature"
+	description: "Commands with a settable 'is_editable' feature"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
