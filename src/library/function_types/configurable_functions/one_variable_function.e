@@ -8,6 +8,9 @@ indexing
 class ONE_VARIABLE_FUNCTION inherit
 
 	COMPLEX_FUNCTION
+		redefine
+			set_innermost_input
+		end
 
 	LINEAR_ANALYZER
 		export {NONE}
@@ -118,11 +121,20 @@ feature {NONE}
 			input_processed: input.processed
 		end
 
+feature {FACTORY} -- Status setting
+
+	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
+		do
+			if input.is_complex then
+				input.set_innermost_input (in)
+			else
+				set_input (in)
+			end
+		end
+
 feature {NONE}
 
 	input: MARKET_FUNCTION
-
-feature {FACTORY} -- Status setting
 
 	set_input (in: like input) is
 		require

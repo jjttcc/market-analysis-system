@@ -10,6 +10,9 @@ class TWO_VARIABLE_FUNCTION
 inherit
 
 	COMPLEX_FUNCTION
+		redefine
+			set_innermost_input
+		end
 
 	TWO_VARIABLE_LINEAR_ANALYZER
 		redefine
@@ -29,7 +32,8 @@ feature {NONE} -- Initialization
 			in_output_not_void: in1.output /= Void and in2.output /= Void
 		do
 			!!output.make (in1.output.count)
-			set_input (in1, in2)
+			set_input1 (in1)
+			set_input2 (in2)
 			set_operator (op)
 		ensure
 			output_not_void: output /= Void
@@ -138,31 +142,56 @@ feature {NONE} -- Hook methods
 
 feature {FACTORY} -- Status setting
 
-	set_input (f1: like input1; f2: like input2) is
-		require
-			not_void: f1 /= Void and f2 /= Void
-			outputs_not_void: f1.output /= Void and f2.output /= Void
-			output_not_void: output /= Void
+	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
+			-- Both `input1' and `input2' will be changed.
 		do
-			input1 := f1
-			input2 := f2
-			target1 := f1.output
-			target2 := f2.output
-			check output /= Void end
-			output.wipe_out
-			parameter_list := Void
-			processed_date_time := Void
-		ensure
-			functions_set: input1 = f1 and input2 = f2 and
-							input1 /= Void and input2 /= Void
-			output_empty: output.empty
-			parameter_list_void: parameter_list = Void
-			not_processed: not processed
+			if input1.is_complex then
+				input1.set_innermost_input (in)
+			else
+				set_input1 (in)
+			end
+			if input2.is_complex then
+				input2.set_innermost_input (in)
+			else
+				set_input2 (in)
+			end
 		end
 
 feature {NONE}
 
 	input1, input2: MARKET_FUNCTION
+
+	set_input1 (in: like input1) is
+		require
+			not_void: in /= Void
+			output_not_void: in.output /= Void
+		do
+			input1 := in
+			target1 := in.output
+			parameter_list := Void
+			processed_date_time := Void
+		ensure
+			input_set: input1 = in and input1 /= Void
+			target_set: target1 = in.output
+			parameter_list_void: parameter_list = Void
+			not_processed: not processed
+		end
+
+	set_input2 (in: like input2) is
+		require
+			not_void: in /= Void
+			output_not_void: in.output /= Void
+		do
+			input2 := in
+			target2 := in.output
+			parameter_list := Void
+			processed_date_time := Void
+		ensure
+			input_set: input2 = in and input2 /= Void
+			target_set: target2 = in.output
+			parameter_list_void: parameter_list = Void
+			not_processed: not processed
+		end
 
 invariant
 
