@@ -28,7 +28,8 @@ public class IndicatorListener implements ActionListener {
 			}
 			if (! (selection.equals(chart.No_upper_indicator) ||
 					selection.equals(chart.No_lower_indicator) ||
-					selection.equals(chart.Volume))) {
+					selection.equals(chart.Volume) ||
+					selection.equals(chart.Open_interest))) {
 				GUI_Utilities.busy_cursor(true, chart);
 				data_builder.send_indicator_data_request(
 					((Integer) chart.indicators().get(selection)).intValue(),
@@ -77,6 +78,8 @@ public class IndicatorListener implements ActionListener {
 		else {
 			if (selection.equals(chart.Volume)) {
 				dataset = data_builder.last_volume();
+			} else if (selection.equals(chart.Open_interest)) {
+				dataset = data_builder.last_open_interest();
 			} else {
 				dataset = data_builder.last_indicator_data();
 			}
