@@ -81,7 +81,7 @@ feature -- Status report
 			output_list: MARKET_TUPLE_LIST [MARKET_TUPLE]
 		do
 			Result := true
-			output_list := output.output
+			output_list := output.data
 			from
 				output_list.start
 				previous := output_list.item

@@ -97,7 +97,7 @@ feature {NONE} -- Hook method implementations
 			record_number: INTEGER
 			s: STRING
 		do
-			record_number := product.output.count
+			record_number := product.data.count
 			if discard_current_tuple then
 				s := concatenation (<<"Error occurred after record ",
 					record_number>>)
@@ -107,7 +107,7 @@ feature {NONE} -- Hook method implementations
 			end
 			if record_number >= 1 then
 				s.append (concatenation (<<" (with date/time ",
-					product.output.last.date_time, ")">>))
+					product.data.last.date_time, ")">>))
 			end
 			s.append (".")
 			if discard_current_tuple then
