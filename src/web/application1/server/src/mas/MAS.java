@@ -27,8 +27,8 @@ public final class MAS extends GenericServlet {
 			throws ServletException, IOException {
 		String client_msg = null, server_response = null;
 		MAS_Proxy mas_proxy = null;
-String tag = thread_tag();
-log("Starting 'service' thread " + tag);
+		String tag = thread_tag();
+		log("Starting 'service' thread " + tag);
 		try {
 			log_tag("(Version 1.4) Connected", tag);
 			log("Compiled at Fri Feb 21 22:37:18 MST 2003");
@@ -42,18 +42,18 @@ log("Starting 'service' thread " + tag);
 			log_tag("Server responded with: " + snippet(server_response), tag);
 			send_response(response, server_response);
 		} catch (Throwable e) {
-			//!!!Make production-ready.
 			log("Exception caught in 'service':\n", e);
 			send_response(response,
 				ServerResponseUtilities.warning_response_message(
 				"Failed to connect to the server: " + e.getMessage()));
 		} finally {
-			if (mas_proxy != null) {proxy_cache.release(mas_proxy);
+			if (mas_proxy != null) {
+				proxy_cache.release(mas_proxy);
 				log_tag("Released proxy with code " + mas_proxy.hashCode(),
 					tag);
 			}
 		}
-log("Ending 'service' thread " + tag);
+		log("Ending 'service' thread " + tag);
 	}
 
 // Implementation

@@ -12,24 +12,10 @@ import support.Utilities;
 // Abstraction that forwards client requests to the MAS server
 public class MAS_Proxy {
 
-//!!!Temporary debugging stuff:
-private void log(String msg) {
-	try {
-		logfile.write(msg + "\n");
-		logfile.flush();
-	} catch (Exception e){}
-}
-FileWriter logfile;
-
 	// Precondition: conn != null
 	public MAS_Proxy(IO_Connection conn) {
-try {
-logfile = new FileWriter(new File("/tmp/proxylogfile"));
-} catch(Exception e) {}
-log("MAS_Proxy() called");
 		assert conn != null;
 		connection = conn;
-log("MAS_Proxy() returning");
 	}
 
 // Access
@@ -59,18 +45,13 @@ log("MAS_Proxy() returning");
 		assert r != null: "Precondition";
 		error_ = false;
 		String msg = Utilities.input_string(r);
-log("'forward' opening a connection");
 		connection.open();
-log("connection opened");
 		PrintWriter writer = null;
 		try {
-log("forwarding '" + msg + "'");
 			writer = new PrintWriter(connection.output_stream(), true);
 			writer.print(msg);
 			writer.flush();
-log("forward completed without an exception");
 		} catch (IOException e) {
-log("forward failed with an exception: "  + e.toString());
 			error_ = true;
 			last_error_ = e.toString();
 		}
@@ -91,18 +72,13 @@ log("forward failed with an exception: "  + e.toString());
 		response_ = null;
 		Reader reader;
 		try {
-log("receiving response");
 			reader = new BufferedReader(new InputStreamReader(
 				new BufferedInputStream(connection.input_stream())));
 			response_ = Utilities.input_string(reader);
-log("received response: '" + response_ + "'");
 			if (response_ == null || response_.length() == 0) {
-log("response was null or empty");
 				response_ = "(Server returned empty message.)";
 			}
-log("response received without an exception");
 		} catch (Exception e) {
-log("receive failed with an exception: '" + e.toString() + "'");
 			response_ = "ERROR: " + e.toString();
 			error_ = true;
 			last_error_ = new String (response_);
