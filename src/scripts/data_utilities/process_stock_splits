@@ -4,6 +4,19 @@
 
 Progname="$(basename $0)"
 
+# DB command to append splits
+add_split_cmd=add_stock_splits
+
+use_db () {
+	[ ! -z "$MAS_DATA_IN_DB" ]
+	return $?
+}
+
+use_files () {
+	[ ! -z "$MAS_DATA_IN_FILES" ]
+	return $?
+}
+
 check_env() {
 	if [ -z "$EOD_DIRECTORY" ]; then
 		echo "$Progname: Error, environment variable EOD_DIRECTORY" \
@@ -25,6 +38,15 @@ check_env() {
 			"exiting ..."
 		exit -2
 	fi
+	if use_db; then
+		type -p $add_split_cmd
+		if [ $? -ne 0 ]; then
+			echo "$Progname: Error, $add_split_cmd, needed for database " \
+				"updates, is not in the PATH - exiting ..."
+			exit -2
+		fi
+	fi
+
 }
 
 check_dirs() {
@@ -52,6 +74,12 @@ for line in input.readlines():
 EOPY
 }
 
+process_split_file() {
+	process_splits "$1" | sort -u - $tgt_split_file >$tmpfile
+	cp $tmpfile $tgt_split_file
+	rm $tmpfile
+}
+
 check_env
 tgt_split_file=$MAS_DIRECTORY/stock_splits
 cd $EOD_DIRECTORY
@@ -65,9 +93,14 @@ tmpfile=/tmp/procsplits.$$
 src_split_files="$(ls SPLT* 2>/dev/null)"
 if [ ! -z "$src_split_files" ]; then
 	for f in $src_split_files; do
-		process_splits $f | sort -u - $tgt_split_file >$tmpfile
-		cp $tmpfile $tgt_split_file
-		rm $tmpfile
+		if use_db; then
+			process_splits $f | sed 's/	/,/g' | $add_split_cmd
+			if use_files; then
+				process_split_file $f
+			fi
+		else
+			process_split_file $f
+		fi
 	done
 	mv $src_split_files ../splits
 fi
