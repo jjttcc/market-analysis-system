@@ -342,7 +342,7 @@ feature {NONE} -- Implementation
 			-- user and pass it to the event generators.
 		do
 			event_coordinator.set_start_date_time (date_time_selection (
-				"%NPlease selecte a date and time for market analysis."))
+				"%NPlease select a date and time for market analysis."))
 		end
 
 	run_market_analysis is
