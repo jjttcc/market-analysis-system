@@ -72,9 +72,9 @@ feature -- Initialization
 
 feature -- Basic operations
 
-	perform_notify (elist: LIST [TYPED_EVENT]) is
+	perform_notify (elist: LIST [MARKET_EVENT]) is
 		local
-			e: TYPED_EVENT
+			e: MARKET_EVENT
 		do
 			from
 				elist.start

@@ -56,12 +56,12 @@ feature -- Initialization
 
 feature -- Basic operations
 
-	perform_notify (elist: LIST [TYPED_EVENT]) is
+	perform_notify (elist: LIST [MARKET_EVENT]) is
 			-- Notify user of events in `elist' or print an error message
 			-- if notification failed.
 		local
 			msg: STRING
-			e: TYPED_EVENT
+			e: MARKET_EVENT
 		do
 			if not email_addresses.empty and mailer /= Void then
 				!!msg.make (elist.count * 120)
