@@ -157,5 +157,10 @@ invariant
 		duration.day /= 0 implies duration.hour = 0 and duration.minute = 0
 	year_month_day_hour_or_minute: duration.year /= 0 or duration.month /= 0 or
 		duration.day /= 0 or duration.hour /= 0 or duration.minute /=0
+	intraday_regular: intraday implies not irregular
+	intraday_definition: intraday implies
+		duration.day = 0 and duration.month = 0 and duration.year = 0
+	intraday_less_than_day: intraday implies
+		duration.time.seconds_count < duration.time.seconds_in_day
 
 end -- TIME_PERIOD_TYPE
