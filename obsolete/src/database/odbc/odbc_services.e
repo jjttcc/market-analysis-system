@@ -22,6 +22,16 @@ class ODBC_SERVICES inherit
 			all
 		end
 
+GLOBAL_APPLICATION
+	export
+		{NONE} all
+	end
+
+TERMINABLE
+	export
+		{NONE} all
+	end
+
 creation
 
 	make
@@ -31,6 +41,7 @@ feature -- Initialization
 	make is
 		do
 			load_stock_splits
+register_for_termination (Current)
 		ensure
 			splits_not_void_if_available:
 				not fatal_error and not db_info.stock_split_query.empty implies
@@ -167,6 +178,13 @@ feature {NONE} -- Implementation
 	load_stock_splits is
 		do
 			-- Stub
+		end
+
+--(Added for new connect/disconnect scheme.)
+	cleanup is
+		do
+			if connected then disconnect end
+-- Any other needed cleanup ...
 		end
 
 end -- class ODBC_SERVICES
