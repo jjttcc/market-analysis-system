@@ -109,7 +109,7 @@ feature {NONE}
 					event_coordinator.execute
 					restore_mklist_position
 				when 'd', 'D' then
-					mkanalysis_set_date_menu
+					mkt_analysis_set_date_menu
 				when 'x', 'X' then
 					end_program := true
 				when '!' then
@@ -203,57 +203,149 @@ feature {NONE}
 			end
 		end
 
-	mkanalysis_set_date_menu is
+	mkt_analysis_set_date_menu is
 			-- Obtain the date and time to begin market analysis from the
 			-- user and pass it to the event generators.
 		local
 			date: DATE
 			time: TIME
 			date_time: DATE_TIME
+			done: BOOLEAN
+			indicator: MARKET_FUNCTION
 		do
-			print ("Enter the date to use for analysis or %
-				%hit <Enter> to use the%Ncurrent date (dd/mm/yyyy): ")
 			!!date.make_now
+			!!time.make_now
 			from
-				read_line
 			until
-				last_string.empty or date.date_valid (last_string)
+				done or end_program
 			loop
-				print ("Date format invalid, try again: ")
-				read_line
-			end
-			if not last_string.empty then
-				!!date.make_from_string (last_string)
-			end
-			!!time.make (0, 0, 0)
-			print ("Enter the hour to use for analysis: ")
-			from
-				read_integer
-			until
-				last_integer >= 0 and last_integer < time.Hours_in_day
-			loop
-				print ("Invalid hour, try again: ")
-				read_integer
-			end
-			if not last_string.empty then
-				time.set_hour (last_integer)
-			end
-			print ("Enter the minute to use for analysis: ")
-			from
-				read_integer
-			until
-				last_integer >= 0 and last_integer < time.Minutes_in_hour
-			loop
-				print ("Invalid minute, try again: ")
-				read_integer
-			end
-			if not last_string.empty then
-				time.set_minute (last_integer)
+				print_list (<<"Current date and time: ", date, ", ",
+								time, "%N">>)
+				print_list (<<"Select action:",
+					"%N     Set date (d) Set time (t) %
+					%Set date relative to current date (r)%N%
+					%     Set market analysis date %
+					%to currently selected date (s) Exit (x) ">>)
+				inspect
+					selected_character
+				when 'd', 'D' then
+					date := date_choice
+				when 't', 'T' then
+					time := time_choice
+				when 'r', 'R' then
+					date := relative_date_choice
+				when 'x', 'X' then
+					end_program := true
+				when '!' then
+					print ("Type exit to return to main program.%N")
+					system ("")
+				when 's', 'S' then
+					done := true
+				else
+					print ("Invalid selection%N")
+				end
 			end
 			!!date_time.make_by_date_time (date, time)
 			print_list (<<"Setting date and time for processing to ",
 						date_time.out, "%N">>)
 			event_coordinator.set_start_date_time (date_time)
+		end
+
+	date_choice: DATE is
+			-- Date obtained from user.
+		do
+			print ("Enter the date to use for analysis or %
+				%hit <Enter> to use the%Ncurrent date (dd/mm/yyyy): ")
+			!!Result.make_now
+			from
+				read_line
+			until
+				last_string.empty or Result.date_valid (last_string)
+			loop
+				print ("Date format invalid, try again: ")
+				read_line
+			end
+			if not last_string.empty then
+				!!Result.make_from_string (last_string)
+			end
+			print_list (<<"Using date of ", Result, ".%N">>)
+		end
+
+	relative_date_choice: DATE is
+			-- Date obtained from user.
+		local
+			period: CHARACTER
+			period_name: STRING
+		do
+			!!Result.make_now
+			from
+			until
+				period = 'd' or period = 'm' or period = 'y'
+			loop
+				print ("Select period length:%N%
+					%     day (d) month (m) year (y) ")
+				inspect
+					selected_character
+				when 'd', 'D' then
+					period := 'd'
+					period_name := "day"
+				when 'm', 'M' then
+					period := 'm'
+					period_name := "month"
+				when 'y', 'Y' then
+					period := 'y'
+					period_name := "year"
+				else
+					print ("Invalid selection%N")
+				end
+			end
+			print_list (<<"Enter the number of ", period_name,
+						"s to set date back relative to today: ">>)
+			from
+				read_integer
+			until
+				last_integer >= 0
+			loop
+				print ("Invalid number, try again: ")
+				read_integer
+			end
+			inspect
+				period
+			when 'd' then
+				Result.day_add (-last_integer)
+			when 'm' then
+				Result.month_add (-last_integer)
+			when 'y' then
+				Result.year_add (-last_integer)
+			end
+			print_list (<<"Using date of ", Result, ".%N">>)
+		end
+
+	time_choice: TIME is
+			-- Time obtained from user.
+		do
+			!!Result.make (0, 0, 0)
+			print ("Enter the hour to use for analysis: ")
+			from
+				read_integer
+			until
+				last_integer >= 0 and last_integer < Result.Hours_in_day
+			loop
+				print ("Invalid hour, try again: ")
+				read_integer
+			end
+			Result.set_hour (last_integer)
+			print ("Enter the minute to use for analysis: ")
+			from
+				read_integer
+			until
+				last_integer >= 0 and last_integer < Result.Minutes_in_hour
+			loop
+				print ("Invalid minute, try again: ")
+				read_integer
+			end
+			Result.set_minute (last_integer)
+			print_list (<<"Using time of ", Result, ".%N">>)
 		end
 
 	display_memory_values is
