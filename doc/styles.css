@@ -9,7 +9,7 @@ body { background-color: #eadfbd; }
 
 #navigation-bar {
 	position: absolute;
-	top: 1.75cm;
+	top: 3.7em;
 	height: 200%;
 	border-right: 1px dotted;
 	border-top: 1px dotted;
@@ -20,9 +20,8 @@ body { background-color: #eadfbd; }
 }
 #navigation {
 	position: absolute;
-	top: 1.75cm;
+	top: 3.7em;
 	/*
-	margin-top: 2.75cm;
 	background-color: #e2c5ca;
 	*/
 	height: 60%;
@@ -33,14 +32,14 @@ body { background-color: #eadfbd; }
 #navigation-bar, #navigation {
 	left: 0;
 	padding: 0 0 0 0.8em;
-	width: 3.75cm;
+	width: 7.725em;
 	font-size: 90%;
 }
 
 html>body #navigation {
 	position: fixed;
 	/*
-	top: 1.75cm;
+	top: 3.7em;
 	*/
 }
 
@@ -65,15 +64,12 @@ html>body #navheader {
 	position: absolute;
 	right: 0; top: 0;
 	width: 90%;
-	/*
-	width: 98%;
-	*/
-	height: 1.3cm;
+	height: 2.25em;
 	/*
 	border: 1px solid;
 	*/
 	text-align: left;
-	padding: 0.7em 0.8em 0em 0em;
+	padding: 0.8em 0.8em 0em 0em;
 	/*
 	background-color: #c5b2ca;
 	*/
@@ -84,7 +80,7 @@ html>body #navheader {
 	width: 90%;
 	/*
 	*/
-	height: 1.3cm;
+	height: 2.25em;
 	/*
 	border: 1px solid;
 	text-align: center;
@@ -108,12 +104,9 @@ h1.header {
 	/*
 	*/
 	font-size: 90%;
-	/*
-	width: 75%;
-	*/
 	position: absolute;
-	left: 4.5cm;
-	top: 1.2cm;
+	left: 8.75em;
+	top: 2.75em;
 	/*
 	border: 1px solid;
 	*/
@@ -149,9 +142,9 @@ html>body #content {
     text-align: justify;
 }
 h1 {
-	margin-top: 0cm; margin-bottom: 0cm; border-bottom: none;
-	border-left: none; border-right: none; padding-top: 0.04cm;
-	padding-bottom: 0cm; padding-left: 0cm; padding-right: 0cm;
+	margin-top: 0; margin-bottom: 0; border-bottom: none;
+	border-left: none; border-right: none; padding-top: 0.1em;
+	padding-bottom: 0; padding-left: 0; padding-right: 0;
 	text-align: left; widows: 2; orphans: 2;
 	color: #72151a;
 	font-size: 140%
