@@ -45,12 +45,10 @@ feature -- Initialization
 		do
 			set_input_device (input_dev)
 			set_output_device (output_dev)
-			factory_builder := fb
-			mai_initialize
+			mai_initialize (fb)
 			initialize
 		ensure
 			iodev_set: input_device = input_dev and output_device = output_dev
-			fb_set: factory_builder = fb
 		end
 
 feature -- Access
@@ -542,28 +540,30 @@ feature {NONE}
 			-- Allow the user to select the current market so that
 			-- market_list.item is the selected market.
 		local
-			fname: STRING
+			symbol: STRING
+			symbols: LIST [STRING]
 		do
 			from
+				symbols := market_list.symbols
 			until
-				fname /= Void
+				symbol /= Void
 			loop
-				print_names_in_4_columns (input_file_names)
+				print_names_in_4_columns (symbols)
 				print (eom)
 				read_integer
 				if
 					last_integer <= 0 or
-						last_integer > input_file_names.count
+						last_integer > symbols.count
 				then
 					print_list (<<"Selection must be between 1 and ",
-								input_file_names.count, "%N">>)
+								symbols.count, "%N">>)
 				else
-					fname := input_file_names @ last_integer
+					symbol := symbols @ last_integer
 				end
 			end
-			market_list.search_by_file_name (fname)
+			market_list.search_by_symbol (symbol)
 			-- current_tradable will be set to the current item of market_list
-			-- (which, because of the above call, corresponds to file fname).
+			-- (which, because of the above call, corresponds to file `symbol').
 			-- Update the current_tradable's target period type, if needed.
 			if current_tradable.target_period_type /= current_period_type then
 				current_tradable.set_target_period_type (current_period_type)

@@ -33,15 +33,17 @@ feature -- Basic operations
 
 feature {NONE}
 
-	initialize is
+	initialize (fb: FACTORY_BUILDER) is
 		require
-			fb_not_void: factory_builder /= Void
+			fb_not_void: fb /= Void
 		do
+			factory_builder := fb
 			event_coordinator := factory_builder.event_coordinator
 			market_list := factory_builder.market_list
 			input_file_names := factory_builder.input_file_names
 			!!help.make
 		ensure
+			fb_set: factory_builder = fb
 			inited: event_coordinator /= Void and market_list /= Void and
 					input_file_names /= Void and help /= Void
 		end
