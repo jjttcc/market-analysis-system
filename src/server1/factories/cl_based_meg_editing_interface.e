@@ -146,9 +146,9 @@ feature {NONE} -- Implementation
 		local
 			finished: BOOLEAN
 		do
-print ("eg_selection called%N")
-			Result := backoutable_selection (meg_names, concatenation (
-				<<"Select a market analyzer", msg>>), Exit_value)
+			Result := backoutable_selection (meg_names (working_meg_library),
+				concatenation (<<"Select a market analyzer", msg>>),
+				Exit_value)
 		end
 
 	event_generator_type_selection: INTEGER is
@@ -181,11 +181,11 @@ print ("eg_selection called%N")
 		local
 			finished: BOOLEAN
 		do
-			if meg_names.count = 0 then
+			if meg_names (working_meg_library).count = 0 then
 				finished := True
 			else
 				Result := market_event_generation_library @ list_selection (
-					meg_names, concatenation (
+					meg_names (working_meg_library), concatenation (
 						<<"Select a market analyzer for ", msg>>))
 			end
 		end
