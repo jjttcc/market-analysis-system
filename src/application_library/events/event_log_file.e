@@ -39,18 +39,21 @@ creation
 
 feature -- Initialization
 
-	make (fname, event_history_file_name: STRING) is
+	make (fname, event_history_file_name, field_sep, record_sep: STRING) is
 			-- Create the file with `fname' as the file `name' and
 			-- `hfile_name' set to `event_history_file_name'
 			-- Open this file, with `fname', for appending in the application
 			-- environment directory, if set.
 		require
-			not_void_and_not_empty: fname /= Void and not fname.empty
+			fn_not_void_and_not_empty: fname /= Void and not fname.empty
+			seps_not_void: field_sep /= Void and record_sep /= Void
 		local
 			env: APP_ENVIRONMENT
 		do
 			!!env
 			hfile_name := event_history_file_name
+			field_separator := field_sep
+			record_separator := record_sep
 			er_make
 			-- Object comparison is required because of the persistence
 			-- mechanism - on retrieval from storage a member of `event_types'
@@ -63,6 +66,8 @@ feature -- Initialization
 			names_set: name.is_equal (fname) and
 				hfile_name.is_equal (event_history_file_name)
 			appendable: is_open_append
+			separators_set: field_separator = field_sep and
+				record_separator = record_sep
 		end
 
 feature -- Basic operations

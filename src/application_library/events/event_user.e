@@ -1,6 +1,6 @@
 indexing
 	description: "Abstraction for a user who is an event registrant"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -33,9 +33,13 @@ creation
 
 feature -- Initialization
 
-	make (event_history_file_name: STRING) is
+	make (event_history_file_name, field_sep, record_sep: STRING) is
+		require
+			not_void: field_sep /= Void and record_sep /= Void
 		do
 			hfile_name := event_history_file_name
+			field_separator := field_sep
+			record_separator := record_sep
 			u_make
 			er_make
 			-- Object comparison is required because of the persistence
@@ -44,6 +48,10 @@ feature -- Initialization
 			-- `global_event_types'.  (Originally they will be the same
 			-- instance.)
 			event_types.compare_objects
+		ensure
+			hfilename_set: hfile_name = event_history_file_name
+			separators_set: field_separator = field_sep and
+				record_separator = record_sep
 		end
 
 feature -- Basic operations
