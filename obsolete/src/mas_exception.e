@@ -55,12 +55,14 @@ feature -- Basic operations
 			elseif exception /= Signal_exception then
 				if is_developer_exception then
 					error_msg := developer_exception_name
+					fatal := last_exception_status.fatal
 				else
 					error_msg := meaning (exception)
-					fatal := fatal_exception (exception)
+					fatal := last_exception_status.fatal or
+						fatal_exception (exception)
 				end
 				log_errors (<<"%NError encountered in ", routine_description,
-							": ", error_msg, "%N">>)
+							":%N", error_msg, "%N">>)
 				if fatal then
 					exit (Error_exit_status)
 				end
@@ -73,7 +75,7 @@ feature -- Basic operations
 				exit (Error_exit_status)
 			else
 				log_errors (<<"%NCaught signal in ", routine_description,
-					": ", signal_meaning (signal), " (", signal, ")",
+					":%N", signal_meaning (signal), " (", signal, ")",
 					" - continuing ...%N">>)
 			end
 		end
