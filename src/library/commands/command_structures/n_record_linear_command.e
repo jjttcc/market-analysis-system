@@ -111,7 +111,8 @@ feature -- Status report
 		end
 
 	target_cursor_not_affected: BOOLEAN is
-			-- True
+			-- True if `operand' does not change the cursor in its
+			-- `execute' routine
 		once
 			Result := true
 		end
