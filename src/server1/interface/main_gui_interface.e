@@ -243,7 +243,7 @@ feature {NONE} -- Implementation
 		do
 			if
 				s.substring (index, index + Compression_on_flag.count - 1).
-					is_equal(Compression_on_flag)
+					is_equal (Compression_on_flag)
 			then
 				io_medium.set_compression (true)
 				message_body := s.substring (index + Compression_on_flag.count,
@@ -265,7 +265,7 @@ feature {NONE} -- Implementation
 			if client_msg /= Void then
 				message_body := client_msg
 			else
-				message_body := clone(default_client_error_msg)
+				message_body := clone (default_client_error_msg)
 			end
 			if client_suffix /= Void then
 				message_body.append (client_suffix)
@@ -273,8 +273,10 @@ feature {NONE} -- Implementation
 		ensure
 			non_void_msg_body_set_to_client_msg:
 				client_msg /= Void implies message_body = client_msg
-			void_msg_body_set_to_default_msg: client_msg = Void implies
-				message_body.is_equal(default_client_error_msg)
+			void_msg_body_set_to_default_msg:
+				client_msg = Void implies message_body.substring (1,
+				default_client_error_msg.count).is_equal (
+				default_client_error_msg)
 			message_body_exists: message_body /= Void
 		end
 
