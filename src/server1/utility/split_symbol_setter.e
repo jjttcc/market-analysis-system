@@ -28,7 +28,7 @@ feature -- Initialization
 
 feature {NONE}
 
-	read_value (stream: BILINEAR_INPUT_SEQUENCE) is
+	read_value (stream: INPUT_SEQUENCE) is
 		do
 			from
 				symbol.wipe_out
@@ -45,7 +45,7 @@ feature {NONE}
 			splits.set_current_symbol (symbol)
 		end
 
-	do_set (stream: BILINEAR_INPUT_SEQUENCE; tuple: STOCK_SPLIT) is
+	do_set (stream: INPUT_SEQUENCE; tuple: STOCK_SPLIT) is
 			-- Not needed
 		do
 		end
