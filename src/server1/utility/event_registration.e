@@ -23,6 +23,8 @@ class EVENT_REGISTRATION inherit
 		end
 
 	TERMINABLE
+		export
+			{NONE} all
 		undefine
 			print
 		end
@@ -46,9 +48,12 @@ class EVENT_REGISTRATION inherit
 			print_message as show_message
 		export
 			{NONE} all
+			{ANY} input_device, output_device
 		end
 
 	EDITING_INTERFACE
+		export
+			{NONE} all
 		undefine
 			print
 		end
@@ -65,8 +70,6 @@ class EVENT_REGISTRATION inherit
 			{ANY} registrant_menu
 		undefine
 			print
-		redefine
-			--end_save
 		end
 
 creation
@@ -87,6 +90,24 @@ feature -- Initialization
 			register_for_termination (Current)
 		ensure
 			iodev_set: input_device = in_dev and output_device = out_dev
+		end
+
+feature -- Status setting
+
+	set_input_device (i: IO_MEDIUM) is
+			-- Set `input_device' to `i'.
+		do
+			input_device := i
+		ensure
+			set: input_device = i
+		end
+
+	set_output_device (i: IO_MEDIUM) is
+			-- Set `output_device' to `i'.
+		do
+			output_device := i
+		ensure
+			set: output_device = i
 		end
 
 feature {NONE} -- Implementation
