@@ -247,7 +247,7 @@ feature {NONE} -- Implementation
 			indicator: MARKET_FUNCTION
 		do
 			if tradable_list_handler.is_empty then
-				print ("There are currently no markets to view.%N")
+				print ("There are currently no tradables to view.%N")
 				finished := True
 			end
 			from
