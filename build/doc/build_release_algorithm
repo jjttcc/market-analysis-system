@@ -34,12 +34,12 @@ Final Steps:
     a CVS-ified file was changed and checked in), go back to step 1.
 14. Run a test install of the Windows setup-mas*.exe file on Windows and
     of the mas-*.rpm on Linux.  Fix any problems that come up and, if
-	necessary, go back to a previous step.
+    necessary, go back to a previous step.
 15. Do a cvs tag, using the current release number as a label.
 16. Create a new release-announcement file, perform any needed updates for
     the new release on published files, such as the files accessible on
-	sf.net.  Do any needed backups.
+    sf.net.  Do any needed backups.
 17. Put the files for the new release, from the current release directory,
     onto the download section on sourceforge.  Post announcements to
-	sourceforge and the appropriate newsgroups - comp.os.linux.announce,
-	misc.invest.*, the windows groups, etc.
+    sourceforge and the appropriate newsgroups - comp.os.linux.announce,
+    misc.invest.*, the windows groups, etc.
