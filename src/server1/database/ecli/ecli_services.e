@@ -56,51 +56,6 @@ feature -- Initialization
 
 feature -- Access
 
-	symbols: LIST [STRING] is
-			-- All symbols available in the database
-		local
-			stmt: ECLI_STATEMENT
-			ecli_symbol: ECLI_VARCHAR
-			symbol: STRING
-		do
-			fatal_error := false
-			create {ARRAYED_LIST [STRING]} Result.make (0)
-			-- definition of statement on session
-			create stmt.make (session)
-			-- change execution mode to immediate (no need to prepare)
-			stmt.set_immediate_execution_mode
-			stmt.set_sql (db_info.stock_symbol_query)
-			stmt.execute
-			if not stmt.is_ok then
-				last_error := concatenation (<<
-					"Database error - execution of statement%N'",
-					stmt.sql, "' failed:%N", stmt.cli_state, ", ",
-					stmt.diagnostic_message>>)
-				debug ("database")
-					print_list (<<last_error, "%N">>)
-				end
-				fatal_error := true
-			else
-				-- Create result set 'value holders'.
-				create ecli_symbol.make (20)
-				check stmt.result_column_count = 1 end
-				-- Define the container of value holders.
-				stmt.set_cursor (<<ecli_symbol>>)
-				-- Iterate on result-set.
-				from
-					stmt.start
-				until
-					stmt.off
-				loop
-					if not stmt.cursor.item (1).is_null then
-						symbol ?= stmt.cursor.item (1).item
-						Result.extend (symbol)
-					end
-					stmt.forth
-				end
-			end
-		end
-
 	stock_splits: ECLI_STOCK_SPLITS
 
 	daily_stock_data (symbol: STRING): ECLI_INPUT_SEQUENCE is
@@ -115,6 +70,22 @@ feature -- Access
 		do
 			create Result.make (input_statement (
 				intraday_stock_query (symbol), intraday_stock_value_holders))
+		end
+
+	daily_derivative_data (symbol: STRING): ECLI_INPUT_SEQUENCE is
+			-- Daily data for `symbol'
+		do
+			create Result.make (input_statement (
+				daily_derivative_query (symbol),
+				daily_derivative_value_holders))
+		end
+
+	intraday_derivative_data (symbol: STRING): ECLI_INPUT_SEQUENCE is
+			-- Daily data for `symbol'
+		do
+			create Result.make (input_statement (
+				intraday_derivative_query (symbol),
+				intraday_derivative_value_holders))
 		end
 
 	single_string_query_result (query: STRING): STRING is
@@ -266,6 +237,50 @@ feature {NONE} -- Implementation
 			Result.set_cursor (value_holders)
 		end
 
+	list_from_query (q: STRING): LIST [STRING] is
+		local
+			stmt: ECLI_STATEMENT
+			ecli_string: ECLI_VARCHAR
+			s: STRING
+		do
+			fatal_error := false
+			create {ARRAYED_LIST [STRING]} Result.make (0)
+			-- definition of statement on session
+			create stmt.make (session)
+			-- change execution mode to immediate (no need to prepare)
+			stmt.set_immediate_execution_mode
+			stmt.set_sql (q)
+			stmt.execute
+			if not stmt.is_ok then
+				last_error := concatenation (<<
+					"Database error - execution of statement%N'",
+					stmt.sql, "' failed:%N", stmt.cli_state, ", ",
+					stmt.diagnostic_message>>)
+				debug ("database")
+					print_list (<<last_error, "%N">>)
+				end
+				fatal_error := true
+			else
+				-- Create result set 'value holders'.
+				create ecli_string.make (20)
+				check stmt.result_column_count > 0 end
+				-- Define the container of value holders.
+				stmt.set_cursor (<<ecli_string>>)
+				-- Iterate on result-set.
+				from
+					stmt.start
+				until
+					stmt.off
+				loop
+					if not stmt.cursor.item (1).is_null then
+						s ?= stmt.cursor.item (1).item
+						Result.extend (s)
+					end
+					stmt.forth
+				end
+			end
+		end
+
 	daily_stock_value_holders: ARRAY [ECLI_VALUE] is
 			-- Array of value holders for statement execution results for
 			-- daily stock data
@@ -306,6 +321,51 @@ feature {NONE} -- Implementation
 				Result := <<date, time, open, high, low, close, volume>>
 			else
 				Result := <<date, time, high, low, close, volume>>
+			end
+		end
+
+	daily_derivative_value_holders: ARRAY [ECLI_VALUE] is
+			-- Array of value holders for statement execution results for
+			-- daily derivative data
+		local
+			date: ECLI_INTEGER
+			volume, open, high, low, close, oi: ECLI_DOUBLE
+		do
+			create date.make
+			create high.make
+			create low.make
+			create close.make
+			create volume.make
+			create oi.make
+			if command_line_options.opening_price then
+				create open.make
+				Result := <<date, open, high, low, close, volume, oi>>
+			else
+				Result := <<date, high, low, close, volume, oi>>
+			end
+		end
+
+	intraday_derivative_value_holders: ARRAY [ECLI_VALUE] is
+			-- Array of value holders for statement execution results for
+			-- intraday derivative data
+		local
+			date: ECLI_INTEGER
+			time: ECLI_VARCHAR
+			volume, open, high, low, close, oi: ECLI_DOUBLE
+		do
+			create date.make
+			-- Size of "hh:mm:ss" is 8.
+			create time.make (8)
+			create high.make
+			create low.make
+			create close.make
+			create volume.make
+			create oi.make
+			if command_line_options.opening_price then
+				create open.make
+				Result := <<date, time, open, high, low, close, volume, oi>>
+			else
+				Result := <<date, time, high, low, close, volume, oi>>
 			end
 		end
 
