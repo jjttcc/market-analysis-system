@@ -13,7 +13,7 @@ default
 
 	assertion (all);
 	--debug ("editing");
-	debug ("persist");
+	--debug ("persist");
 	--debug ("command line");
 	--debug ("database");
 	profile (no);
