@@ -25,19 +25,19 @@ class Parser {
 	}
 
 	// Set the drawer for drawing volume.
-	void set_volume_drawer(Drawer d) {
+	void set_volume_drawer(BasicDrawer d) {
 		volume_drawer = d;
 	}
 
 	// Set the drawer for open interest.
-	void set_open_interest_drawer(Drawer d) {
+	void set_open_interest_drawer(BasicDrawer d) {
 		open_interest_drawer = d;
 	}
 
 	// Parse `s' into a DataSet according to record_separator and
 	// field_separator.  `drawer' is the tuple drawer to use for the
 	// DataSet.  result() gives the new DataSet.
-	public void parse(String s, Drawer drawer) throws Exception {
+	public void parse(String s, BasicDrawer drawer) throws Exception {
 		int float_index = 0, volume_index = 0, oi_index = 0, rec_count;
 		is_intraday = contains_time_field(s);
 		StringTokenizer recs = new StringTokenizer(s, _record_separator, false);
@@ -149,7 +149,7 @@ class Parser {
 
 	// Put the parsed data into a data set.
 	// Postcondition: result() != null && result().drawer() == drawer
-	private void process_data(Drawer drawer) throws Exception {
+	private void process_data(BasicDrawer drawer) throws Exception {
 		String[] date_array = null;
 		String[] time_array = null;
 		boolean has_dates = false;
@@ -261,6 +261,6 @@ class Parser {
 	boolean has_volume;
 	boolean has_open_interest;
 	boolean is_intraday;
-	Drawer volume_drawer;
-	Drawer open_interest_drawer;
+	BasicDrawer volume_drawer;
+	BasicDrawer open_interest_drawer;
 }
