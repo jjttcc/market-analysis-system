@@ -32,52 +32,92 @@ feature {NONE} -- Initialization
 	make is
 		local
 			processor: COMMAND_PROCESSOR
-pcre: PCRE
 		do
-create pcre.make --!!! Run reg-exp example, for study.
 			initialize
-			create processor.make (Record)
+			create processor.make (command_line.record)
 			-- Create the connection to  and start the conversation with
 			-- the server.
-			create connection.start_conversation (host, port)
-			if connection.last_communication_succeeded then
-				from
-				until
-					connection.termination_requested
-				loop
-					print (connection.server_response)
-					processor.set_server_msg (connection.server_response)
-					if processor.error then
-						if processor.fatal_error then
-							abort ("Invalid user input", connection)
-						end
+			from
+				create connection.start_conversation (host, port)
+			until
+				connection.termination_requested or
+				not connection.last_communication_succeeded
+			loop
+print ("A%N")
+print ("liln: " + last_input_line_number.out + "%N")
+				print (connection.server_response)
+if connection.server_response.substring_index (
+"Select an object for the SUBTRACTION's left operand:", 1) > 0 then
+	print ("Found 'left'.%N")
+end
+if connection.server_response.substring_index (
+"Select an object for the SUBTRACTION's right operand:", 1) > 0 then
+	print ("Found 'right'.%N")
+end
+print ("B%N")
+				processor.process_server_msg (connection.server_response)
+print ("C%N")
+				if processor.error then
+print ("D%N")
+					if processor.fatal_error then
+						abort ("Invalid user input on line " +
+							last_input_line_number.out)
 					end
-					processor.process (user_response())
-					connection.send_message (processor.product)
 				end
-			else
+print ("E%N")
+				processor.process_request (user_response)
+print ("F%N")
+if last_input_line_number >= 119 then
+	print ("last_input_line_number = " + last_input_line_number.out + "%N")
+--	debug_socket
+end
+				connection.send_message (processor.product)
+if last_input_line_number >= 119 then
+	print ("last_input_line_number = " + last_input_line_number.out + "%N")
+--	debug_socket
+end
+print ("G%N")
+			end
+			if not connection.last_communication_succeeded then
 				print (connection.error_report + "%N")
 			end
-			connection.close()
+print ("H%N")
+			connection.close
+print ("I%N")
 			if processor.record then
-				print ("Saving recorded input to file " + Recordfile + ".%N")
-				create record_file.make_open_write (Recordfile)
-				record_file.put_string (processor.input_record)
-				record_file.close
+				print ("Saving recorded input to file " +
+					command_line.output_file.name + ".%N")
+				command_line.output_file.put_string (processor.input_record)
+				command_line.output_file.close
 			end
+print ("J%N")
+		rescue
+print ("K%N")
+			last_exception_status.set_fatal (True)
+print ("L%N")
+			exit_and_close_connection
+print ("M%N")
+			handle_exception ("")
+print ("N%N")
 		end
 
 	initialize is
-		local
-			command_line: expanded MACL_COMMAND_LINE
 		do
-			input_device := io.input
+			not_verbose_reporting := True
 			output_device := io.output
-			recordfile := "mas_session"
+			if command_line.error_occurred then
+				print (command_line.usage)
+				abort (Void)
+			end
+			if command_line.input_from_file then
+				input_device := command_line.input_file
+			else
+				input_device := io.input
+			end
 			port := command_line.port_number
 			if port = -1 then
 				print (command_line.usage)
-				abort ("Missing port number", Void)
+				abort ("Missing port number")
 			end
 			host := command_line.host_name
 			if host.is_empty then
@@ -87,17 +127,12 @@ create pcre.make --!!! Run reg-exp example, for study.
 
 feature {NONE} -- Utilities
 
-	abort (msg: STRING; conn: CONNECTION) is
+	abort (msg: STRING) is
 		do
 			if msg /= Void then
 				print (msg + " - ")
 			end
-			print ("Exiting ...%N")
-			if conn /= Void then
-				conn.send_message (Exit_string)
-				print ("Closing ...%N")
-				conn.close()
-			end
+			exit_and_close_connection
 			exit (-1)
 		end
 
@@ -105,25 +140,45 @@ feature {NONE} -- Utilities
 			-- Obtain user response, skipping comments (# ...)
 		local
 			finished: BOOLEAN
+			console: CONSOLE
 		do
 			from
 			until
 				finished
 			loop
+				if not input_device.readable then
+					console ?= input_device
+					if console /= Void then
+						abort ("End of input reached unexpectedly.")
+					else
+						print ("End of input reached unexpectedly.%N%
+							%Attempting to return control to the console.%N")
+						input_device := io.input
+					end
+				end
 				Result := string_selection ("")
 				if not Result.is_empty and Result @ 1 /= Comment_character then
 					finished := True
 				end
+				last_input_line_number := last_input_line_number + 1
+			end
+		ensure
+			Result_exists: Result /= Void
+		end
+
+	exit_and_close_connection is
+			-- Exit and close the connection.
+		do
+			print ("Exiting ...%N")
+			if connection /= Void then
+				connection.send_message (Exit_string)
+				connection.close
 			end
 		end
 
 feature {NONE} -- Implementation
 
-	record: BOOLEAN
-			-- Is the session to be recorded?
-
-	recordfile: STRING
-			-- File into which recorded data is to be stored
+	command_line: expanded MACL_COMMAND_LINE
 
 	connection: CONNECTION
 
@@ -137,6 +192,13 @@ feature {NONE} -- Implementation
 
 	port: INTEGER
 
+	last_input_line_number: INTEGER
+
 	application_name: STRING is "client"
+
+debug_socket is
+	do
+		connection.do_debug
+	end
 
 end

@@ -18,39 +18,81 @@ feature -- Initialization
 		do
 			record := rec
 			input_record := ""
-			fatal_error := false
-			error := false
-			select_patterns := <<"%N*Select[^?]*function",
-				"%N*Select[^?]*opera[nt][do]",
-				"%N*Select *an *indicator *for.*'s",
-				"%N*Select *indicator *to *view",
-				"%N*Select *an *object *for.*'s",
-				"%N*Select *the *[a-z]* *technical indicator",
-				"%N*Select *an *indicator *to *edit:",
-				"Added type.*\.$",
-				"User was created with the following properties:",
-				".*has.*leaf.*function.*-.*",
-				"Examining.*leaf.*function.*",
-				"%N*Select *the.*trading *period *type.*:",
-				".*%N*Select specification for crossover detection:",
-				"%N* *Select *a *market *analyzer",
-				" *Indicator *%".*%" *children:",
-				"1) ">>
+			fatal_error := False
+			error := False
+			select_patterns := <<"Select[^?]*function",
+				"Select[^?]*opera[nt][do]",
+				"Select *an *indicator *for.*'s",
+				"Select *indicator *to *view",
+				"Select *an *object *for.*'s",
+				"Select *the *[a-z]* *technical indicator",
+				"Select *an *indicator *to *edit:",
+				"^Added type.*\.$",
+				"^User was created with the following properties:",
+				"has.*leaf.*function.*-.*",
+				"^Examining.*leaf.*function.*",
+				"Select *the.*trading *period *type.*:",
+				"Select specification for crossover detection:",
+				"Select *a *market *analyzer",
+				"Indicator *%".*%" *children:",
+				"^1\) ">>
 			create objects.make (0)
 			create shared_objects.make (0)
+			objects.compare_objects
+			shared_objects.compare_objects
 		end
+
+re_test is
+	local
+		s: STRING
+	do
+		if match (invalid_pattern, invalid_pattern) then
+			print ("match test succeeded.%N")
+		else
+			print ("match test failed.%N")
+		end
+		if match ("\bbanana\b", "banana") then
+			print ("match test succeeded.%N")
+		else
+			print ("match test failed.%N")
+		end
+		if not match ("\bbanana\b", "yellowbanana") then
+			print ("match test succeeded.%N")
+		else
+			print ("match test failed.%N")
+		end
+		s := sub ("X.*Y", "X .. Y", "XabcdeyellowY")
+		if s.is_equal ("X .. Y") then
+			print ("sub test succeeded.%N")
+		else
+			print ("sub test failed: '" + s + "'%N")
+		end
+		s := sub ("X.*Y", "X .. Y", "zooXwinnieYPooh")
+		if s.is_equal ("zooX .. YPooh") then
+			print ("sub test succeeded.%N")
+		else
+			print ("sub test failed: '" + s + "'%N")
+		end
+		s := gsub ("[0-9]", "<digit>", "phone: 303-441-4422")
+		if s.is_equal ("phone: <digit><digit><digit>-<digit><digit><digit>-<digit><digit><digit><digit>") then
+			print ("gsub test succeeded.%N")
+		else
+			print ("gsub test failed: '" + s + "'%N")
+		end
+	end
 
 feature -- Access
 
 	product: STRING
+			-- The processed user request to be sent to the server
 
 	input_record: STRING
-			-- Recorded input (!!check)
+			-- Recorded input
 
 feature -- Status report
 
 	record: BOOLEAN
-			-- Is input and output to be recorded? (!!check)
+			-- Is input and output to be recorded?
 
 	fatal_error: BOOLEAN
 
@@ -61,82 +103,100 @@ feature -- Basic operations
 --!!!Remove last_msg if it's not used:
 	last_msg: STRING
 
-	set_server_msg (msg: STRING) is
-			-- Set the current message from the server and, if includes
-			-- an object selection, save the choices for processing.
+	process_server_msg (s: STRING) is
+			-- Process the message `s' from the server - if it includes
+			-- an object selection list, save the list for processing.
+		require
+			s_exists: s /= Void
 		do
-			fatal_error := false
-			error := false
-			selection := false
+			fatal_error := False
+			error := False
+			server_response_is_selection_list := False
 --!!!Remove last_msg if it's not used:
-			last_msg := msg
-			if
---!!!!Note: regular expression match test here:
---				match(invalid_pattern, msg) /= -1
-False--!!!
-			then
-				error := true
+			last_msg := s
+			if match (invalid_pattern, s) then
+				-- Server responded with "invalid input" message.
+				error := True
 			end
-			if select_object_match(msg) then
-				selection := true
-				store_choices(msg)
+			if object_selection_match (s) then
+				server_response_is_selection_list := True
+				store_objects_from_selection_list (s)
 			end
 		end
 
-	process (response: STRING) is
-			-- Process the response to send to the server according to
-			-- the stored object choice.  If there is not current choice,
-			-- result will equal response; else result will be the
+	process_request (r: STRING) is
+			-- Process the request, `r', to send to the server according to
+			-- the stored object choice.  If there is no current choice,
+			-- `product' will equal `r'; else `product' will be the
 			-- specified choice, if there is a match.  If there is no
-			-- match, fatal_error will be true.
+			-- match, fatal_error will be True.
+		require
+			r_exists: r /= Void
 		local
 			otable: HASH_TABLE [STRING, STRING]
 			shared, key_matched: BOOLEAN
+			work_string: STRING
 		do
 			otable := Void
-			shared := false
-			key_matched := false
-			if
---!!!!Note: regular expression match test here:
---				match(shared_pattern, response) /= -1
-True--!!!
-			then
+			shared := False
+			key_matched := False
+			work_string := r
+			if match (shared_pattern, r) then
 				otable := shared_objects
---				print "Using shared list"
---				print otable.items()
---!!!Fix:				response := sub(shared_pattern, "", response)
-				shared := true
+				debug ("xprocess")
+					print ("Using shared list%N")
+				end
+				debug ("very verbose")
+					print (otable.current_keys.out)
+					print (otable.linear_representation.out)
+				end
+				work_string := sub (shared_pattern, "", r)
+				debug ("xprocess")
+					print ("after sub - work_string: " + work_string + "%N")
+				end
+				shared := True
 			else
 				otable := objects
 			end
---			print "Checking '" + response + "' with:%N"
---			print otable.items()
+			debug ("xprocess")
+				print ("Checking '" + work_string + "' with:%N")
+			end
+			debug ("very verbose")
+				print (otable.current_keys.out)
+				print (otable.linear_representation.out)
+			end
 			if
-False and --!!Short circuit, for now
-				selection and otable.has (response)
+				server_response_is_selection_list and otable.has (work_string)
 			then
-				product := otable @ response
---				print "Matched: " + product
-				key_matched := true
+				product := otable @ work_string
+				debug ("xprocess")
+					print ("Matched: " + product)
+				end
+				key_matched := True
 			else
-				product := response
---				print "No match: " + product
+				product := work_string
+				debug ("xprocess")
+					print ("No match: " + product)
+				end
 			end
 			if record then
-				record_input(product, shared, key_matched)
+				record_input (product, shared, key_matched)
 			end
 			product := product + "%N"
+		ensure
+			product_exists: product /= Void
 		end
 
 feature {NONE} -- Implementation
 
-	select_object_match (s: STRING): BOOLEAN is
+	object_selection_match (s: STRING): BOOLEAN is
+			-- Does `s' match one of `select_patterns'?
 		local
 			patterns: LINEAR [STRING]
 		do
-			Result := false
-			debug
-				print ("Checking for match of '" + s + "'%N")
+			Result := False
+			debug ("xosm")
+				print ("%NChecking for match of '" + s + "'%N")
 			end
 			from
 				patterns := select_patterns.linear_representation
@@ -144,60 +204,69 @@ feature {NONE} -- Implementation
 			until
 				Result or patterns.exhausted
 			loop
---				print "with " + pattern
-				if
---!!!!Note: regular expression match test here:
---					match(patterns.item, s) /= -1
-True --!!!
-				then
-					Result := true
+				debug ("xosm")
+					print ("with '" + patterns.item + "'%N")
 				end
-				patterns.forth
+				if match (patterns.item, s) then
+					Result := True
+				else
+					patterns.forth
+				end
 			end
-			debug
-				print ("returning Result of " + Result.out + "%N")
+			debug ("osm")
+				print ("%Nreturning Result of " + Result.out)
+				if Result then
+					print (" (with '" + patterns.item + "')%N")
+				else
+					print ("%N")
+				end
 			end
 		end
 
-	store_choices (s: STRING) is
+	store_objects_from_selection_list (s: STRING) is
+			-- Extract each "object" name and associated selection number
+			-- from `s' and store this pair as key (number) and value
+			-- (name) in either `objects' or `shared_objects' according
+			-- to whether or not the "object" is shared.
 		local
 			lines: LIST [STRING]
 			objname, objnumber: STRING
+			work_string: STRING
 		do
 			objects.clear_all; shared_objects.clear_all
-			--@@Will this work on Windows?:
-			lines := s.split('%N')
+			-- Ensure that DOS-based text can be properly split on
+			-- a newline by removing the carriage return:
+			s.prune_all ('%R')
+			lines := s.split ('%N')
 			from
---!!!for l in lines:
 				lines.start
 			until
 				lines.exhausted
 			loop
-				debug
-					print ("lines.item: " + lines.item + "%N")
+				debug ("sc")
+					print ("lines.item: '" + lines.item + "'%N")
 				end
 				if
---!!!!Note: regular expression match test here:
---					match("^[1-9][0-9]*)", lines.item) /= -1
-True--!!!
+					match ("^[1-9][0-9]*\)", lines.item)
 				then
-objname := "tmp_dummy_name"
-objnumber := "123"
---!!Fix:					lines.item := sub(")", "", lines.item)
---!!Fix:					objnumber := sub(" .*", "", lines.item)
---!!Fix:					objname := sub("^[^ ]*  *", "", lines.item)
-					--!!!put or force?:
-					objects.put (objnumber, objname)
-					debug
+					work_string := sub ("\)", "", lines.item)
+					objnumber := sub (" .*", "", work_string)
+					objname := sub ("^[^ ]*  *", "", work_string)
+					objects.force (objnumber, objname)
+					debug ("sc")
 						print ("Stored: " + objects @ objname + " (" +
 							objname + ")%N")
 					end
 				elseif
---!!!!Note: regular expression match test here:
---					match(non_shared_pattern, lines.item) /= -1 and
---					len(objects) > 0
-True--!!!
+					match (non_shared_pattern, lines.item) and
+					objects.count > 0
 				then
+					-- `lines.item' indicates that the remaining items
+					-- (lines) constitute the list of "non-shared objects".
+					-- This means that `objects', which contains the
+					-- already processed `lines', holds the list of
+					-- "shared objects", so adjust the contents of
+					-- shared_objects and objects accordingly.
 					shared_objects := clone (objects)
 					objects.clear_all
 				end
@@ -206,10 +275,16 @@ True--!!!
 		end
 
 	record_input (s: STRING; shared, key_match: BOOLEAN) is
+			-- Process `s', according to `shared' (`s' matched
+			-- `shared_pattern') and `key_match' (a key associated with
+			-- `s' was contained in an object table) and append the
+			-- result to `input_record'.
 		do
---			print "ri - s, shared, key_match: '" + s + "', " + `shared` +
---				", " + `key_match`
-			if selection then
+			debug ("ri")
+				print ("ri - s, shared, key_match: '" + s + "', " +
+					shared.out + ", " + key_match.out)
+			end
+			if server_response_is_selection_list then
 				if key_match then
 					if shared then
 						-- !!Check use of s here:
@@ -220,27 +295,34 @@ True--!!!
 						input_record := input_record + s + "%N"
 					end
 				elseif objects.has_item (s) then
-					-- ^^^^^^^^^^^^^^^^ !!check re. object_comparison.
---					print s + " in objects"
-					input_record := input_record +
-						key_for(s, objects) + "%N"
+					debug ("ri")
+						print (s + " in objects%N")
+					end
+					input_record := input_record + key_for (s, objects) + "%N"
 				elseif shared_objects.has_item (s) then
-					--         ^^^^^^^^^^^^^^^^ !!check re. object_comparison.
---					print s + " in shared objects"
+					debug ("ri")
+						print (s + " in shared objects%N")
+					end
 					input_record := input_record + shared_string +
-						key_for(s, shared_objects) + "%N"
+						key_for (s, shared_objects) + "%N"
 				else
---					print "adding " + s + " to input record"
+					debug ("ri")
+						print ("adding " + s + " to input record%N")
+					end
 					input_record := input_record + s + "%N"
 				end
 			else
---				print "adding " +  Result + " to input record"
+				debug ("ri")
+					print ("adding " +  product + " to input record%N")
+				end
 				input_record := input_record + product + "%N"
+--!!!Change the above line to:
+--input_record := input_record + s + "%N"
 			end
 		end
 
 	key_for (s: STRING; objs: HASH_TABLE [STRING, STRING]): STRING is
---!!!Not sure of generic arg types in HASH_TABLE.
+			-- The key in `objs' for item `s'
 		local
 			l: LINEAR [STRING]
 		do
@@ -256,25 +338,110 @@ True--!!!
 				end
 				l.forth
 			end
-			debug
+			debug ("kf")
 				print ("key_for returning " + Result + "%N")
 			end
 		end
 
-	selection: BOOLEAN
+feature {NONE} -- Implementation - Regular expressions
+
+	match (pattern, s: STRING): BOOLEAN is
+			-- Does `s' match the regular expression `pattern'?
+		local
+			regexp: RX_PCRE_REGULAR_EXPRESSION
+		do
+			if last_regular_expression = Void then
+				create last_regular_expression.make
+				last_regular_expression.set_anchored (False)
+			end
+			regexp := last_regular_expression
+			regexp.compile (pattern)
+			if regexp.is_compiled then
+				regexp.set_anchored (False)
+				regexp.match (s)
+				Result :=  regexp.has_matched
+			else
+--!				debug ("match")
+					io.error.print (
+						"Defect: regular expression compilation failed.%N")
+					io.error.print (regexp.error_message + "%N(position: " +
+						regexp.error_position.out + "%N")
+--!				end
+				fatal_error := True
+				error := True
+			end
+		ensure
+			last_regular_expression_exists: last_regular_expression /= Void
+		end
+
+	sub (pattern, replacement, target: STRING): STRING is
+			-- The result of replacing the first occurrence of
+			-- `pattern' in `target' by `replacement'.  `target' remains
+			-- unchanged.  If `pattern' is not found in `target' Result
+			-- is equal to target.
+		do
+			if match (pattern, target) then
+				Result := last_regular_expression.replace (replacement)
+			else
+				Result := target
+			end
+		ensure
+			result_is_target_if_no_match:
+				not match (pattern, target) implies Result = target
+		end
+
+	gsub (pattern, replacement, target: STRING): STRING is
+			-- The result of replacing all occurrence of
+			-- `pattern' in `target' by `replacement'.  `target' remains
+			-- unchanged.  If `pattern' is not found in `target' Result
+			-- is equal to target.
+		do
+			if match (pattern, target) then
+				Result := last_regular_expression.replace_all (replacement)
+			else
+				Result := target
+			end
+		ensure
+			result_is_target_if_no_match:
+				not match (pattern, target) implies Result = target
+		end
+
+feature {NONE} -- Implementation - Attributes
+
+	server_response_is_selection_list: BOOLEAN
+			-- Is the last processed server response an
+			-- "object-selection-list"?
 
 	invalid_pattern: STRING is "Invalid selection"
 
 	non_shared_pattern: STRING is ".*List of all valid objects:.*"
 
 	shared_pattern: STRING is "shared *"
+			-- Pattern indicating that the user response indicates a
+			-- "shared" object
 
 	shared_string: STRING is "shared "
+			-- String used to label a user response as specifying a
+			-- "shared" object
 
-	select_patterns: ARRAY [STRING] -- Type?!!
+	select_patterns: ARRAY [STRING]
+			-- Regular-expression patterns used to determine if
+			-- an "object-selection-list" is being presented to the user
 
 	objects: HASH_TABLE [STRING, STRING]
+			-- Unshared objects listed in the last "object-selection-list"
 
 	shared_objects: HASH_TABLE [STRING, STRING]
+			-- Shared objects listed in the last "object-selection-list"
+
+	last_regular_expression: RX_PCRE_REGULAR_EXPRESSION
+			-- The last regular expression processed by `match'
+
+invariant
+
+	object_comparison: objects.object_comparison and
+		shared_objects.object_comparison
+	regular_expression_not_anchored: last_regular_expression /= Void implies
+		not last_regular_expression.is_anchored
 
 end
