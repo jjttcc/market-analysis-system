@@ -145,7 +145,9 @@ feature -- Access
 												bnc_dummy)
 			!!pair.make (cmd,
 				"Operator that processes data based on a settable offset %
-				%from the current trading period")
+				%from the current%Ntrading period - Warning: Be careful to %
+				%set the offset correctly; setting%N it to the wrong value %
+				%may cause out-of-bounds access to the data tuple array")
 			Result.extend (pair)
 			!VOLUME!cmd
 			!!pair.make (cmd,
