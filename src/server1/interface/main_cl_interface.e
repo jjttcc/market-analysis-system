@@ -471,8 +471,9 @@ feature {NONE} -- Implementation
 			until
 				finished or end_client
 			loop
-				print_list (<<"Select action for ", current_tradable.name,
-					":%N     View market data (m) View an indicator (i)%N%
+				print_list (<<"Select action for ", current_tradable.symbol,
+					":%N     View market data (m) View an indicator (i)%
+					% View name (n)%N%
 					%     Change data period type [currently ",
 					current_period_type.name,
 					"] (c)%N     Exit (x) Previous (-) Help (h) ", eom>>)
@@ -490,6 +491,8 @@ feature {NONE} -- Implementation
 					if indicator /= Void then
 						view_indicator_menu (indicator)
 					end
+				when 'n', 'N' then
+					print_list (<<"%N", current_tradable.name>>)
 				when 'x', 'X' then
 					end_client := True
 				when 'h', 'H' then
