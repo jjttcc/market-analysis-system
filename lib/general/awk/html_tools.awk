@@ -1,10 +1,11 @@
 # html-related tools
 
 # Convert special html characters for non-html documents.
-function convert_html_chars() {
-	gsub(/\&lt;/, "<")
-	gsub(/\&gt;/, ">")
-	gsub(/\&nbsp;/, " ")
-	gsub(/\&#8212;/, "-")
+function convert_html_chars(s) {
+	gsub(/\&lt;/, "<", s)
+	gsub(/\&gt;/, ">", s)
+	gsub(/\&nbsp;/, " ", s)
+	gsub(/\&#8212;/, "-", s)
+	return s
 }
 
