@@ -8,11 +8,11 @@ indexing
 
 class MA_SERVER inherit
 
-	SERVER
+	POLLING_SERVER
 		rename
-			make as server_make
+			report_errors as report_back
 		redefine
-			exit, log_errors
+			report_back, current_media, read_command_for
 		end
 
 	GLOBAL_SERVER_FACILITIES
@@ -24,93 +24,42 @@ creation
 
 	make
 
-feature {NONE} -- Initialization
+feature {NONE} -- Hook routine implementations
 
-	make is
+	read_command_for (medium: COMPRESSED_SOCKET): POLL_COMMAND is
 		do
-			create errors.make (0)
-			server_make
+			create {MAS_STREAM_READER} Result.make (medium, factory_builder)
 		end
 
-feature {NONE} -- Hook routine implementation
-
-	prepare_for_listening is
-		local
-			socket: COMPRESSED_SOCKET
-			readcmd: POLL_COMMAND
-			factory_builder: FACTORY_BUILDER
+	make_current_media is
 		do
-			create poller.make_read_only
-			create factory_builder.make
-			create {LINKED_LIST [SOCKET]} current_sockets.make
-			-- Make a socket for each port number provided in the
-			-- command line, create a STREAM_READER to handle it,
-			-- and add it to the poller's list of read commands.
-			-- (Allows concurrent processing - in a future version.)
+			create {LINKED_LIST [SOCKET]} current_media.make
 			from
 				command_line_options.port_numbers.start
 			until
 				command_line_options.port_numbers.exhausted
 			loop
-				create socket.make_server_by_port (
-					command_line_options.port_numbers.item)
-				create {STREAM_READER} readcmd.make (socket,
-					factory_builder)
-				poller.put_read_command (readcmd)
-				current_sockets.extend (socket)
+				current_media.extend (
+					create {COMPRESSED_SOCKET}.make_server_by_port (
+					command_line_options.port_numbers.item))
 				command_line_options.port_numbers.forth
 			end
-			-- If background is not specified, add a reader to respond to
-			-- console commands.
-			if not command_line_options.background then
-				create {CONSOLE_READER} readcmd.make (factory_builder)
-				poller.put_read_command (readcmd)
-			end
-			report_back (errors)
 		end
 
-	listen is
-			-- Listen for and respond to client requests.
+	additional_read_commands: LINEAR [POLL_COMMAND] is
+		local
+			cmds: LINKED_LIST [POLL_COMMAND]
 		do
-			check
-				poller: poller /= Void
+			create cmds.make
+			Result := cmds
+			if not command_line_options.background then
+				cmds.extend (create {MAS_CONSOLE_READER}.make (factory_builder))
 			end
-			poller.execute (15, 20000)
 		end
 
 	version: MAS_PRODUCT_INFO is
 		once
 			create Result
-		end
-
-	cleanup is
-			-- Close all unclosed sockets.
-		local
-			ex_srv: expanded EXCEPTION_SERVICES
-		do
-			if not ex_srv.last_exception_status.description.is_empty then
-				if errors.is_empty then
-					errors := ex_srv.last_exception_status.description
-				else
-					errors := errors + "%N" +
-						ex_srv.last_exception_status.description
-				end
-			end
-			if current_sockets /= Void then
-				from
-					current_sockets.start
-				until
-					current_sockets.exhausted
-				loop
-					if not current_sockets.item.is_closed then
-						current_sockets.item.close
-					end
-					current_sockets.forth
-				end
-			end
-			if not errors.is_empty then
-				report_back (errors)
-			end
 		end
 
 	configuration_error: BOOLEAN is
@@ -136,36 +85,6 @@ feature {NONE} -- Hook routine implementation
 			end
 		end
 
-	notify (msg: STRING) is
-		do
-			errors.append (msg + "%N")
-		end
-
-	exit (status: INTEGER) is
-		do
-			if command_line_options.error_occurred then
-				errors := errors + command_line_options.error_description
-			end
-			report_back (errors)
-			Precursor (status)
-		end
-
-	log_errors (a: ARRAY [STRING]) is
-		local
-			l: LINEAR [STRING]
-		do
-			Precursor (a)
-			from
-				l := a.linear_representation
-				l.start
-			until
-				l.exhausted
-			loop
-				errors := errors + l.item
-				l.forth
-			end
-		end
-
 feature {NONE} -- Implementation
 
 	report_back (errs: STRING) is
@@ -185,14 +104,13 @@ feature {NONE} -- Implementation
 			end
 		end
 
+	factory_builder: FACTORY_BUILDER is
+		once
+			create Result.make
+		end
+
 feature {NONE} -- Implementation - Attributes
 
-	poller: MEDIUM_POLLER
-			-- Poller for client socket connections
-
-	current_sockets: LIST [SOCKET]
-
-	errors: STRING
-			-- List of error messages to "report back" to the startup process
+	current_media: LIST [SOCKET]
 
 end
