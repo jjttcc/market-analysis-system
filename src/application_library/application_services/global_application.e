@@ -94,9 +94,11 @@ feature -- Access
 			-- EVENT_TYPE (with `event_type_name') and add the new
 			-- MARKET_EVENT_GENERATOR  to `meg_list'.
 		require
-			not_void: eg_maker /= Void and event_type_name /= Void
+			not_void: eg_maker /= Void and event_type_name /= Void and
+				meg_list /= Void
 		do
-			eg_maker.set_event_type (new_event_type (event_type_name))
+			eg_maker.set_event_type (new_event_type (
+				event_type_name, meg_list))
 			eg_maker.execute
 			meg_list.extend (eg_maker.product)
 		ensure
@@ -376,16 +378,23 @@ feature {NONE} -- Implementation
 			retry
 		end
 
-	new_event_type (name: STRING): EVENT_TYPE is
-			-- Create a new EVENT_TYPE with name `name' and a unique ID.
+	new_event_type (name: STRING;
+		meg_library: STORABLE_LIST [MARKET_EVENT_GENERATOR]): EVENT_TYPE is
+			-- Create a new EVENT_TYPE with name `name' and a unique ID -
+			-- and ID that does not occur in `meg_library', or if
+			-- `meg_library' is Void, that does not occur in
+			-- `market_event_generation_library'.
 			-- Note: A new MARKET_EVENT_GENERATOR should be created with
 			-- this new event type and added to market_event_generation_library
 			-- before the next event type is created.
+		require
+			not_void: name /= Void and meg_library /= Void
 		local
 			unique_id: INTEGER
 			l: LIST [MARKET_EVENT_GENERATOR]
 		do
-			unique_id := maximum_id_value (market_event_generation_library) + 1
+			l := meg_library
+			unique_id := maximum_id_value (l) + 1
 			create Result.make (name, unique_id)
 		ensure
 			not event_types_by_key.has (Result.id)
