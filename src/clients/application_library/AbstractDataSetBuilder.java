@@ -78,7 +78,8 @@ abstract public class AbstractDataSetBuilder extends Lockable
 	}
 
 	/**
-	* Latest date-time from last market data request
+	* Latest date-time from last market data request - null if no data
+	* was received from the last request.
 	**/
 	public Calendar last_latest_date_time() {
 		return last_latest_date_time;
@@ -345,9 +346,9 @@ System.out.println("sending request with " + symbol + ", " + period_type +
 					period_type, is_update);
 			}
 			Calendar date = data_parser.latest_date_time();
-			if (date != null) {
-				last_latest_date_time = date;
-			}
+//!!!!!Remove:			if (date != null) {
+			last_latest_date_time = date;
+//!!			}
 		}
 	}
 

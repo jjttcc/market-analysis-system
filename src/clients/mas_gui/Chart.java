@@ -95,8 +95,15 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 
 // Access - TimeDelimitedDataRequestClient API
 
+//!!!:
 	public Calendar start_date() {
-		return protocol_util.one_second_later(data_manager.latest_date_time());
+		Calendar result = data_manager.latest_date_time();
+		if (result == null) {
+System.out.println("<<<chrt.start_date - latest date/time is null>>>");
+		} else {
+			result = protocol_util.one_second_later(result);
+		}
+		return result;
 	}
 
 	public Calendar end_date() {
@@ -117,7 +124,10 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	public boolean ready_for_request() {
 		// latest_date_time != null iff send_data_request has
 		// been successfully called.
-		return data_manager.latest_date_time() != null;
+//!!!If this is correct, 'ready_for_request' can logic can be removed
+//from the system.
+return true; //???!!!!!!!!!!!!!!!!!!!!!
+//!!!!Remove:		return data_manager.latest_date_time() != null;
 	}
 
 // Element change
@@ -204,10 +214,13 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		redraw_graphs();
 	}
 
+	// Report a failure and then logout and abort.
 	public void notify_of_failure(Exception e) {
-		// @@Report the failure and then what???
-		display_warning("data request failed [Trace information: " +
-			e + "]");
+		ErrorBox eb = new ErrorBox("Warning", "data request to server failed " +
+			"[Trace information: " + e + "]", this_chart);
+		eb.setModal(true);
+		//@@@Need to change such that the process exits when `eb' is closed.
+		fatal("Data request to server failed", e);
 	}
 
 	public void notify_of_error(int result_id, String msg) {
@@ -429,8 +442,12 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 			send_data_request(symbol);
 		}
 		tradable_selections = new MarketSelection(this);
-		ma_menu_bar = new MA_MenuBar(this,
-			(DataSetBuilder) data_manager.data_builder(), period_types());
+		try {
+			ma_menu_bar = new MA_MenuBar(this,
+				(DataSetBuilder) data_manager.data_builder(), period_types());
+		} catch (Exception e) {
+			notify_of_failure(e);
+		}
 		setMenuBar(ma_menu_bar);
 
 		// Event listener for close requests

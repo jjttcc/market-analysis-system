@@ -17,11 +17,15 @@ public class NetworkProtocolUtilities extends DateTimeServices
 	// time-delimited data request starting at `start' and ending at `end'
 	public static String date_time_range(Calendar start, Calendar end) {
 		String result;
-		String end_string;
-		String start_string = standard_formatted_date(start,
-			Client_request_date_field_separator) +
-			Client_request_date_time_separator +
-			standard_formatted_time(start, Client_request_time_field_separator);
+		String start_string, end_string;
+		if (start == null) {
+			start_string = "";
+		} else {
+			start_string = standard_formatted_date(start,
+				Client_request_date_field_separator) +
+				Client_request_date_time_separator + standard_formatted_time(
+					start, Client_request_time_field_separator);
+		}
 		if (end == null) {
 			end_string = "";
 		} else {
