@@ -10,6 +10,11 @@ deferred class STORABLE_SERVICES [G] inherit
 
 	TERMINABLE
 
+	GENERAL_UTILITIES
+		export
+			{NONE} all
+		end
+
 feature -- Access
 
 	last_error: STRING is
@@ -90,8 +95,7 @@ feature {NONE} -- Implementation
 			real_list.copy (working_list)
 			real_list.save
 			show_message ("The changes have been saved.")
---			deep_copy_working_list
-working_list.deep_copy (real_list)
+			deep_copy_list (working_list, real_list)
 			dirty := false
 			end_save
 			changed := true
@@ -155,8 +159,7 @@ working_list.deep_copy (real_list)
 				-- to save the changes; so throw away the changes by
 				-- restoring the working list as a deep copy of the real
 				-- list and ensure not dirty.
-				deep_copy_working_list
---!!!!!				working_list.deep_copy (real_list)
+				deep_copy_list (working_list, real_list)
 				dirty := false
 			end
 			if lock.locked then
@@ -221,15 +224,6 @@ working_list.deep_copy (real_list)
 		rescue
 			unlock_failed := true
 			retry
-		end
-
-	deep_copy_working_list is
-			-- Do a deep copy of 'working_list' from 'real_list'.
-		local
-			temp: like working_list
-		do
-			temp := deep_clone (real_list)
-			working_list.copy (temp)
 		end
 
 feature {NONE} -- Hook routines

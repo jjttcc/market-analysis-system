@@ -216,19 +216,15 @@ feature -- Basic operations
 	force_function_library_retrieval is
 			-- Force function library to be re-retrieved by deep copying
 			-- `retrieved_function_library' into it.
-		local
-temp: like function_library
 		do
---!!!!!			function_library.deep_copy (retrieved_function_library)
-temp := deep_clone (retrieved_function_library) -- !!!!!Temporary, or
-function_library.copy (temp)					-- !!!!!possible bug fix
+			deep_copy_list (function_library, retrieved_function_library)
 		end
 
 	force_meg_library_retrieval is
 			-- Force market event generator library to be re-retrieved by deep
 			-- copying `retrieved_market_event_generation_library' into it.
 		do
-			market_event_generation_library.deep_copy (
+			deep_copy_list (market_event_generation_library,
 				retrieved_market_event_generation_library)
 		end
 
@@ -236,7 +232,7 @@ function_library.copy (temp)					-- !!!!!possible bug fix
 			-- Force event registrants to be re-retrieved by deep copying
 			-- `retrieved_market_event_registrants' into it.
 		do
-			market_event_registrants.deep_copy (
+			deep_copy_list (market_event_registrants,
 				retrieved_market_event_registrants)
 		end
 
