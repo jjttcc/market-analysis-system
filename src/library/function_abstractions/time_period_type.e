@@ -8,6 +8,11 @@ indexing
 
 class TIME_PERIOD_TYPE inherit
 
+	ANY
+		redefine
+			is_equal
+		end
+
 creation
 
 	make
@@ -72,6 +77,13 @@ feature -- Access - pre-defined names
 	Daily: STRING is "daily"
 
 	Hourly: STRING is "hourly"
+
+feature -- Comparison
+
+	is_equal (other: like Current): BOOLEAN is
+		do
+			Result := other.name.is_equal (name)
+		end
 
 feature {NONE} -- Implementation
 
