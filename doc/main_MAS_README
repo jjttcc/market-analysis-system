@@ -1,9 +1,23 @@
 INTRODUCTION
 
-The Market Analysis System (MAS) is a client/server application that
-provides tools for analysis of financial markets, with the goal of
-helping its user make better buying and selling decisions and to help
-save time by automating some tasks that would otherwise be done by hand.
+The Market Analysis System (MAS) is a software application that provides
+tools for analysis of financial markets using technical analysis. MAS
+provides facilities for stock charting, including price, volume, and a
+wide range of technical analysis indicators. MAS also allows automated
+processing of market data - applying technical analysis indicators with
+user-selected criteria to market data to automatically generate trading
+signals - and can be used as the main component of a sophisticated
+trading system. Some of the features of MAS are:
+
+   - Exponential Moving Average, Stochastic, MACD, RSI, On Balance Volume,
+     Momentum, Rate of Change, etc.
+   - User can create new technical analysis indicators.
+   - User can configure simple and complex criteria for automated signal
+     generation.
+   - Creation of weekly, monthly, quarterly, and yearly data from daily data.
+   - Handles intraday data.
+   - Can be configured and run as a server that provides services for
+     several clients at a time running on remote machines.
 
 See the file INSTALL for instructions on how to install MAS.
 
@@ -102,8 +116,14 @@ me at:
 
 jtc@dimensional.com
 
-I will try to respond promptly, though I can't guarantee a response,
-being often busy.  If you do email me about a problem, please include
-as much background information as possible with your email, including,
-if possible, a precise description of what you were doing when the
-problem occurred.
+I will try my best to respond promptly.  If you do email me about a
+problem, please include as much background information as possible with
+your email, including, if possible, a precise description of what you
+were doing when the problem occurred.
+
+Also, if you are running MAS on a Linux system I would appreciate a short
+email letting me know what version of MAS you are running and what Linux
+distribution and version you are running it on, and whether or not MAS
+installed and runs properly on that distribution.  I will use this
+information to compile a list of Linux distributions on which MAS has
+been know to run successfully.
