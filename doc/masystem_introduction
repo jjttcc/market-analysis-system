@@ -93,10 +93,10 @@ move in trends which are determined by the changing attitudes of investors
 toward a variety of economic, monetary, political, and psychological
 forces." ["Technical Analysis Explained," by Martin J. Pring]
 
-[2] For example, I have in the past configured MAS to issue a
-buy signal if Stochastic %D changes slope from negative to positive
-when below 30 and, no more than 28 days before that, the weekly MACD
-difference line crossed above the weekly MACD signal line; and to
-issue a sell signal for the opposite event - Stochastic %D slope
-change from positive to negative when above 70 and weekly MACD
-difference line crosses below weekly MACD signal line.
+[2] For example, one configuration I have used is to issue a buy signal
+if Stochastic %D crosses below 35% (indicating that the stock is becoming
+oversold) and, no more than 28 days before that, the weekly MACD difference
+line crossed above the weekly MACD signal line (indicating that the stock
+may be in a long-term uptrend), as well as to issue a sell signal for the
+opposite event - Stochastic %D crosses above 65% and weekly MACD difference
+line crosses below weekly MACD signal line.
