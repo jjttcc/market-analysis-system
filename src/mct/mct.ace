@@ -59,6 +59,8 @@ cluster
 
 	libserver (eiflib): "$/server"
 
+	liberror (eiflib): "$/error"
+
 	mas_server: "$MAS/src/server1"
 
 	mas_server_util (mas_server): "$/utility"

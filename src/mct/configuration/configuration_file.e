@@ -45,6 +45,10 @@ feature {NONE} -- Initialization
 			line_field_separator_set: line_field_separator = line_field_sep
 		end
 
+feature -- Access
+
+	Configuration_file_name: STRING is "mctrc"
+
 feature -- Status report
 
 	in_block: BOOLEAN
@@ -428,8 +432,6 @@ feature {NONE} -- Implementation - status report utilities
 		end
 
 feature {NONE} -- Implementation - constants
-
-	configuration_file_name: STRING is "mctrc"
 
 	Write_error: STRING is
 		once

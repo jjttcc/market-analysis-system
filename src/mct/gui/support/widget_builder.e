@@ -37,14 +37,20 @@ feature -- Access
 			text_set: Result.text.is_equal (label)
 		end
 
-	new_error_dialog (text: STRING): EV_INFORMATION_DIALOG is
-			-- Error reporting dialog
+	new_error_dialog (text: STRING;
+		actions: ARRAY [PROCEDURE [ANY, TUPLE]]): EV_INFORMATION_DIALOG is
+			-- Error reporting dialog, with `actions' as button-select
+			-- actions, if `actions' is not Void.
 		require
 			args_exist: text /= Void
 		local
 			pixmaps: expanded EV_STOCK_PIXMAPS
 		do
-			create Result.make_with_text (text)
+			if actions = Void then
+				create Result.make_with_text (text)
+			else
+				create Result.make_with_text_and_actions (text, actions)
+			end
 			Result.set_title ("Error")
 			Result.set_pixmap (pixmaps.error_pixmap)
 		ensure

@@ -10,8 +10,8 @@ class MCT_CONFIGURATION inherit
 
 	CONFIGURATION_UTILITIES
 		rename
-			file_reader as config_file,
-			new_file_reader as new_config_file
+			file_reader as config_file, new_file_reader as new_config_file,
+			make as cu_make
 		export
 			{NONE} all
 		redefine
@@ -20,15 +20,26 @@ class MCT_CONFIGURATION inherit
 		end
 
 	MCT_CONFIGURATION_PROPERTIES
+
+	ERROR_PUBLISHER
 		export
-			{NONE} token_from, Begin_tag, End_tag
+			{NONE} all
 		end
 
-creation
+create
 
 	make
 
 feature {NONE} -- Initialization
+
+	make (subs: ARRAY [ERROR_SUBSCRIBER]) is
+			-- Make with error subscribers `subs'.
+		do
+			if subs /= Void then
+				subs.linear_representation.do_all (agent add_error_subscriber)
+			end
+			cu_make
+		end
 
 	initialize is
 		do
@@ -114,6 +125,9 @@ feature -- Commands
 			-- Command to browse the FAQ
 
 feature -- Status report
+
+	fatal_error_status: BOOLEAN
+			-- Did a fatal configuration error occur?
 
 	terminate_sessions_on_exit: BOOLEAN
 			-- Should all owned MAS sessions be terminated on exit?
@@ -209,7 +223,23 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	check_results is
 		do
-			--!!!Stub
+			create error_report.make (0);
+			check_for_empty_fields (<<Data_directory_specifier,
+				Bin_directory_specifier, Doc_directory_specifier,
+				Valid_port_numbers_specifier, Hostname_specifier,
+				Start_cl_client_cmd_specifier, Chart_cmd_specifier,
+				Termination_cmd_specifier, Browse_docs_cmd_specifier,
+				Browse_intro_cmd_specifier, Browse_faq_cmd_specifier>>)
+			if default_start_server_command = Void then
+				error_report.append ("Default " + Start_server_cmd_specifier +
+					" is not set.%N")
+				fatal_error_status := True
+			end
+			if not error_report.is_empty then
+				error_report.prepend ("Error in configuration file (" +
+					config_file.configuration_file_name + "):%N")
+				publish_error (error_report)
+			end
 		end
 
 	use_customized_setting (key, value: STRING): BOOLEAN is
@@ -292,11 +322,36 @@ feature {NONE} -- Implementation
 			start_server_commands.extend (c)
 		end
 
+	check_field (key: STRING) is
+			-- If `settings @ key' is empty, append notification
+			-- for the condition to `error_report'.
+		require
+			error_report_exists: error_report /= Void
+			setting_exists: settings.has (key)
+		do
+			if settings.item (key).is_empty then
+				error_report.append ("Value for " + key + " is not set.%N")
+			end
+		end
+
+	check_for_empty_fields (keys: ARRAY [STRING]) is
+			-- For each key, k, in `keys', if `settings @ k' is empty,
+			-- append notification for the condition to `error_report'.
+		require
+			error_report_exists: error_report /= Void
+			settings_exist: keys.linear_representation.for_all (
+				agent settings.has)
+		do
+			keys.linear_representation.do_all (agent check_field)
+		end
+
 	current_cmd_string, current_cmd_desc, current_cmd_name: STRING
 
 	current_cmd_is_default: BOOLEAN
 
 	config_file: CONFIGURATION_FILE
+
+	error_report: STRING
 
 invariant
 

@@ -104,8 +104,6 @@ feature {NONE} -- Initialization
 			-- Creation routine for descendants
 		require
 			config_exists: config /= Void
-		local
-			cmd: EXTERNAL_COMMAND
 		do
 			create external_commands.make (0)
 			configuration := config
@@ -146,7 +144,7 @@ feature {NONE} -- Implementation - utilities
 			dialog: EV_WIDGET
 			wbldr: expanded WIDGET_BUILDER
 		do
-			dialog := wbldr.new_error_dialog (s)
+			dialog := wbldr.new_error_dialog (s, Void)
 			dialog.show
 		end
 

@@ -60,7 +60,7 @@ feature -- Actions
 			portnumber := reserved_port_number
 			if portnumber = Void then
 				dialog := wbldr.new_error_dialog (
-					"Port numbers are all in use.")
+					"Port numbers are all in use.", Void)
 				dialog.show
 			else
 				session_window := builder.configured_session_window (

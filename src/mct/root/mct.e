@@ -105,7 +105,7 @@ feature {NONE} -- Implementation
 			wbldr: expanded WIDGET_BUILDER
 			dialog: EV_MESSAGE_DIALOG
 		do
-			dialog := wbldr.new_error_dialog (msg)
+			dialog := wbldr.new_error_dialog (msg, Void)
 			dialog.show
 			if exit_needed then
 				dialog.key_press_actions.extend (agent key_abort)

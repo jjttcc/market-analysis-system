@@ -8,6 +8,16 @@ indexing
 
 class APPLICATION_WINDOW_BUILDER inherit
 
+	ERROR_SUBSCRIBER
+		export
+			{NONE} all
+		end
+
+	EXCEPTION_SERVICES
+		export
+			{NONE} all
+		end
+
 feature -- Access
 
 	main_window: EV_TITLED_WINDOW is
@@ -172,11 +182,7 @@ feature {NONE} -- Menu components
 		local
 			actions: ACTIONS
 		do
-			if current_main_actions /= Void then
-				actions := current_main_actions
-			else
-				actions := current_mas_session_actions
-			end
+			actions := current_actions
 			create Result.make_with_text (help_menu_title)
 			Result.extend (widget_builder.new_menu_item (
 				Introduction_menu_item_title,
@@ -197,11 +203,7 @@ feature {NONE} -- Menu components
 		local
 			actions: ACTIONS
 		do
-			if current_main_actions /= Void then
-				actions := current_main_actions
-			else
-				actions := current_mas_session_actions
-			end
+			actions := current_actions
 			create {LINKED_LIST [EV_MENU_ITEM]} Result.make
 			Result.extend (widget_builder.new_menu_item (Quit_menu_item_title,
 				<<agent actions.exit>>))
@@ -222,11 +224,7 @@ feature {NONE} -- Miscellaneous
 			key_constants: expanded EV_KEY_CONSTANTS
 			actions: ACTIONS
 		do
-			if current_main_actions /= Void then
-				actions := current_main_actions
-			else
-				actions := current_mas_session_actions
-			end
+			actions := current_actions
 			-- Add a 'quit' accelerator.
 			accelerator := widget_builder.default_accelerator (
 				key_constants.key_q)
@@ -260,11 +258,7 @@ feature {NONE} -- Miscellaneous
 			key_constants: expanded EV_KEY_CONSTANTS
 			actions: ACTIONS
 		do
-			if current_main_actions /= Void then
-				actions := current_main_actions
-			else
-				actions := current_mas_session_actions
-			end
+			actions := current_actions
 			add_common_accelerators (w)
 			-- Add a 'server startup configuration' accelerator activated
 			-- with Ctrl and 's'.
@@ -285,11 +279,7 @@ feature {NONE} -- Miscellaneous
 			key_constants: expanded EV_KEY_CONSTANTS
 			actions: ACTIONS
 		do
-			if current_main_actions /= Void then
-				actions := current_main_actions
-			else
-				actions := current_mas_session_actions
-			end
+			actions := current_actions
 			add_common_accelerators (w)
 			-- Create a close-window accelerator.
 			accelerator := widget_builder.default_accelerator (
@@ -298,17 +288,46 @@ feature {NONE} -- Miscellaneous
 			w.accelerators.extend (accelerator)
 		end
 
+feature {NONE} -- Implementation - Hook routine implementations
+
+	notify (errmsg: STRING) is
+			-- Notify the user of errors that occurred while reading the
+			-- configuration file.
+		do
+			if configuration.fatal_error_status then
+				-- The condition is fatal, so register that `exit' be
+				-- called when the error window is closed and do a
+				-- "launch" so that control does not pass back to the caller.
+				widget_builder.new_error_dialog (errmsg + "%NFatal Error",
+					<<agent exit (1)>>).show;
+				(create {EV_ENVIRONMENT}).application.launch
+			else
+				widget_builder.new_error_dialog (errmsg, Void).show
+			end
+		end
+
 feature {NONE} -- Implementation
 
 	current_main_actions: MAIN_ACTIONS
 
 	current_mas_session_actions: MAS_SESSION_ACTIONS
 
+	current_actions: ACTIONS is
+			-- `current_main_actions', if its not Void - otherwise,
+			-- `current_mas_session_actions'
+		do
+			if current_main_actions /= Void then
+				Result := current_main_actions
+			else
+				Result := current_mas_session_actions
+			end
+		end
+
 	widget_builder: expanded WIDGET_BUILDER
 
 	configuration: MCT_CONFIGURATION is
 		once
-			create Result.make
+			create Result.make (<<Current>>)
 		end
 
 feature {NONE} -- Implementation - Constants

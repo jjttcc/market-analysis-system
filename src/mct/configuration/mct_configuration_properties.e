@@ -10,6 +10,9 @@ indexing
 class MCT_CONFIGURATION_PROPERTIES inherit
 
 	GENERAL_CONFIGURATION_CONSTANTS
+		export
+			{NONE} all
+		end
 
 feature -- Constants
 
