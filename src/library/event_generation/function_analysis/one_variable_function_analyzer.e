@@ -53,6 +53,12 @@ feature -- Access
 			-- item, the offset would need to be 1 so that after calling start
 			-- operand 2 would have a valid cursor position to process.
 
+	indicators: LIST [MARKET_FUNCTION] is
+		do
+			!LINKED_LIST [MARKET_FUNCTION]!Result.make
+			Result.extend (input)
+		end
+
 feature -- Status setting
 
 	set_innermost_function (f: SIMPLE_FUNCTION [MARKET_TUPLE]) is

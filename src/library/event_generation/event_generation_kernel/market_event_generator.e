@@ -30,6 +30,11 @@ feature -- Access
 	event_type: EVENT_TYPE
 			-- The type of the generated events
 
+	indicators: LIST [MARKET_FUNCTION] is
+			-- Technical indicators used for analysis
+		deferred
+		end
+
 feature -- Status setting
 
 	set_tradable (f: TRADABLE [BASIC_MARKET_TUPLE]) is

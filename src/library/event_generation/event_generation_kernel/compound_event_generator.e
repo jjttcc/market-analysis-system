@@ -63,6 +63,13 @@ feature -- Access
 			-- comparison.  If left_target_type is Void, the event's time
 			-- stamp will be used, rather than that of one of its components.
 
+	indicators: LIST [MARKET_FUNCTION] is
+		do
+			!LINKED_LIST [MARKET_FUNCTION]!Result.make
+			Result.append (left_analyzer.indicators)
+			Result.append (right_analyzer.indicators)
+		end
+
 feature -- Status setting
 
 	set_tradable (f: TRADABLE [BASIC_MARKET_TUPLE]) is

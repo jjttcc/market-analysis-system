@@ -56,6 +56,13 @@ feature -- Access
 	input1, input2: MARKET_FUNCTION
 			-- The two market functions to be analyzed
 
+	indicators: LIST [MARKET_FUNCTION] is
+		do
+			!LINKED_LIST [MARKET_FUNCTION]!Result.make
+			Result.extend (input1)
+			Result.extend (input2)
+		end
+
 feature -- Status report
 
 	below_to_above: BOOLEAN
