@@ -14,30 +14,24 @@ indexing
 
 class EXTENDED_HTTP_LOADING_FILE_TRADABLE_LIST inherit
 
-	FILE_BASED_TRADABLE_LIST
+	EXTENDED_FILE_BASED_TRADABLE_LIST
 		rename
-			make as parent_make
-		redefine
-			target_tradable_out_of_date,
+			make as efbfl_make
+		undefine
 			load_target_tradable
-		end
-
-	HTTP_DATA_RETRIEVAL
-		rename
-			initialize as http_initialize
 		redefine
-			output_file_path, latest_date_for, latest_date_requirement,
-			use_day_after_latest_date_as_start_date
+			target_tradable_out_of_date
 		end
 
-	ERROR_PROTOCOL
-		export
-			{NONE} all
-		end
-
-	EXCEPTIONS
-		export
-			{NONE} all
+	HTTP_LOADING_FILE_TRADABLE_LIST
+		rename
+			make as http_make
+		undefine
+			start, finish, back, forth, turn_caching_off, clear_cache,
+			add_to_cache, setup_input_medium, close_input_medium,
+			remove_current_item, target_tradable_out_of_date, append_new_data
+		select
+			fbtl_make
 		end
 
 creation
@@ -49,125 +43,19 @@ feature -- Initialization
 	make (factory: TRADABLE_FACTORY; file_ext: STRING) is
 		require
 			valid_factory: factory /= Void
-		local
-			l: LIST [STRING]
 		do
-			http_initialize
-			if file_ext /= Void then file_extension := file_ext end
-			l := symbols_from_file
-			if l = Void then
-				fatal_error := True
-				raise (Initialization_error)
-			else
-				parent_make (l, factory)
-				file_names := file_names_from_symbols
-				file_names.start
-				create file_status_cache.make (cache_size)
-			end
+			http_make (factory, file_ext)
+			create file_status_cache.make (cache_size)
 		ensure
 			symbol_and_file_lists_set_if_no_error: not fatal_error implies
 				symbol_list /= Void and file_names /= Void
+			file_status_cache_exists_if_no_error: not fatal_error implies
+				file_status_cache /= Void
 		end
 
 feature -- Access
 
-	file_names: LIST [STRING]
-			-- Names of all files with tradable data to be processed
-
-	load_target_tradable is
-		do
-			parameters.set_symbol (current_symbol)
-			use_day_after_latest_date_as_start_date := True
-			if not output_file_exists then
-				data_out_of_date := True
-			else
-				load_data
-				check_if_data_is_out_of_date
-			end
-			if not fatal_error and data_out_of_date then
-				retrieve_data
-				load_data
-			end
-		ensure then
-			good_if_no_error: not fatal_error implies target_tradable /= Void
-		end
-
-	update_and_load_data is
-		do
-			parameters.set_symbol (current_symbol)
-			use_day_after_latest_date_as_start_date := True
-			if target_tradable /= Void then
--- !!!!??:
--- Ensure that old indicator data from the previous
--- `target_tradable' is not re-used.
-target_tradable.flush_indicators
-				check_if_data_is_out_of_date
-				if data_out_of_date and not output_file_exists then
-					log_error_with_token (Data_file_does_not_exist_error,
-						current_symbol)
-					use_day_after_latest_date_as_start_date := False
-				end
-			else	-- target_tradable = Void
-				if not output_file_exists then
-					data_out_of_date := True
-				else
-					load_data
-					check_if_data_is_out_of_date
-				end
-			end
-			if not fatal_error and data_out_of_date then
-				retrieve_data
-				load_data
-			end
-		ensure then
-			good_if_no_error: not fatal_error implies target_tradable /= Void
-		end
-
-feature {NONE} -- Implementation
-
-	file_names_from_symbols: LIST [STRING] is
-		require
-			symbols_set: symbols /= Void
-		do
-			create {LINKED_LIST [STRING]} Result.make
-			from symbols.start until symbols.exhausted loop
-				Result.extend (output_file_name (symbols.item))
-				symbols.forth
-			end
-		end
-
 feature {NONE} -- Hook routine implementations
-
-	output_file_path: STRING is
-			-- Directory path of output file - redefine if needed
-		local
-			env: expanded APP_ENVIRONMENT
-		once
-			Result := env.file_name_with_app_directory (
-				parameters.data_cache_subdirectory, False)
-		end
-
-	latest_date_for (symbol: STRING): DATE is
-		do
-			if not current_symbol.is_equal (symbol) then
-				search_by_symbol (symbol)
-			end
-			if
-				target_tradable /= Void and then
-					not target_tradable.data.is_empty
-			then
-				Result := target_tradable.data.last.end_date
-			end
-		end
-
-	latest_date_requirement: BOOLEAN is
-		do
-			Result := target_tradable /= Void
-		ensure then
-			target_tradable_set_condition: Result = (target_tradable /= Void)
-		end
-
-	use_day_after_latest_date_as_start_date: BOOLEAN
 
 	target_tradable_out_of_date: BOOLEAN is
 		do
@@ -186,10 +74,8 @@ target_tradable.flush_indicators
 			if not fatal_error and data_out_of_date then
 				retrieve_data
 			end
-			Result := Precursor
+			Result := {EXTENDED_FILE_BASED_TRADABLE_LIST} Precursor
 print ("target_tradable_out_of_date returning: " + Result.out + "%N")
 		end
-
-invariant
 
 end

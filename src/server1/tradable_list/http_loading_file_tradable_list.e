@@ -16,9 +16,8 @@ class HTTP_LOADING_FILE_TRADABLE_LIST inherit
 
 	FILE_BASED_TRADABLE_LIST
 		rename
-			make as parent_make
+			make as fbtl_make
 		redefine
-			target_tradable_out_of_date,
 			load_target_tradable
 		end
 
@@ -59,10 +58,9 @@ feature -- Initialization
 				fatal_error := True
 				raise (Initialization_error)
 			else
-				parent_make (l, factory)
+				fbtl_make (l, factory)
 				file_names := file_names_from_symbols
 				file_names.start
-				create file_status_cache.make (cache_size)
 			end
 		ensure
 			symbol_and_file_lists_set_if_no_error: not fatal_error implies
@@ -92,6 +90,7 @@ feature -- Access
 			good_if_no_error: not fatal_error implies target_tradable /= Void
 		end
 
+--!!!!Obsolete:
 	update_and_load_data is
 		do
 			parameters.set_symbol (current_symbol)
@@ -168,28 +167,5 @@ feature {NONE} -- Hook routine implementations
 		end
 
 	use_day_after_latest_date_as_start_date: BOOLEAN
-
-	target_tradable_out_of_date: BOOLEAN is
-		do
-			parameters.set_symbol (current_symbol)
-			use_day_after_latest_date_as_start_date := True
--- !!!!??:
--- Ensure that old indicator data from the previous
--- `target_tradable' is not re-used.
-target_tradable.flush_indicators
-			check_if_data_is_out_of_date
-			if data_out_of_date and not output_file_exists then
-				log_error_with_token (Data_file_does_not_exist_error,
-					current_symbol)
-				use_day_after_latest_date_as_start_date := False
-			end
-			if not fatal_error and data_out_of_date then
-				retrieve_data
-			end
-			Result := Precursor
-print ("target_tradable_out_of_date returning: " + Result.out + "%N")
-		end
-
-invariant
 
 end

@@ -17,12 +17,21 @@ class EXTENDED_FILE_TRADABLE_LIST inherit
 
 	EXTENDED_FILE_BASED_TRADABLE_LIST
 		rename
-			make as make1 --!!!
+			make as tl_make1
+		select
+			tl_make1
 		end
 
 	FILE_TRADABLE_LIST
 		rename
-			make as make2 --!!!
+			parent_make as tl_make2,
+			make as ftl_make
+		export
+			{NONE} tl_make2, ftl_make
+		undefine
+			start, finish, back, forth, turn_caching_off, clear_cache,
+			add_to_cache, setup_input_medium, close_input_medium,
+			remove_current_item, target_tradable_out_of_date, append_new_data
 		end
 
 creation
@@ -34,6 +43,8 @@ feature -- Initialization
 	make (fnames: LIST [STRING]; factory: TRADABLE_FACTORY) is
 			-- `symbols' will be created from `fnames'
 		do
+			ftl_make (fnames, factory)
+create file_status_cache.make (cache_size)
 		ensure
 			symbols_set_from_fnames:
 				symbols /= Void and symbols.count = fnames.count

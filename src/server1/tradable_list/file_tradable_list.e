@@ -39,7 +39,6 @@ feature -- Initialization
 			end
 			file_names.start
 			parent_make (slist, factory)
-			create file_status_cache.make (cache_size)
 		ensure
 			symbols_set_from_fnames:
 				symbols /= Void and symbols.count = fnames.count
