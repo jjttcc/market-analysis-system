@@ -176,8 +176,12 @@ html() && /\\fP/ {
 		# Skip the line because 'Extensions' are off.
 		next
 	} else if ($0 !~ "^@'$xname'") {
-		# Skip because 'Extensions' are on and $0 does not match 'xname'.
+		# Skip: $0 does not match 'xname'.
 		next
+	} else {
+		# Remove the @"$xname" directive to allow the line to be
+		# processed normally.
+		sub(/^[^]*/, "")
 	}
 }
 
@@ -313,10 +317,12 @@ html() && /\\fP/ {
 	printf(".sp 3\n..\n")
 }
 
-/^@'$xname'/ {
-	if (Extensions) print $2
-	next
-}
+# Appears to no longer be needed. (See the /^@/ {...} section.)  If so,
+# remove it soon.
+#/^@'$xname'/ {
+#	if (Extensions) print $2
+#	next
+#}
 
 /^%/ {
 	# Unrecognized key word - skip.
