@@ -1,5 +1,4 @@
 #!/bin/bash
-# Make all indicators to be included in an official MAS release.
 # First, start the mas server; then run this script in this directory to
 # create a complete set of indicators.
 
@@ -12,7 +11,9 @@ if [ $# -lt 1 ]; then usage; exit 1; fi
 port=$1
 shift
 options="$*"
-files="indicators parabolic-sar cci market_analyzers
+files="indicators ../../hold/finance-private/ADX slope_of_ema_of_adx
+parabolic-sar cci market_analyzers
+../../hold/finance-private/slope_of_slope_of_macd_signal_trend_ADX_analyzers
 macd_buy-sell_anlyzers_with_ema_gt_10 cci_signals"
 
 for file in $files; do
