@@ -296,7 +296,7 @@ config_cmd() {
 	portnumber=$1
 	config="$macl $portnumber -i $ifile && $macl $portnumber -i $mfile"
 	# Command to stop the server:
-	stop_cmd="(echo |macl $portnumber)"
+	stop_cmd="(echo |$macl $portnumber)"
 	echo -e "($config; $stop_cmd) >/dev/null 2>&1"
 }
 
