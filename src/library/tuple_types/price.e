@@ -49,7 +49,6 @@ feature -- Comparison
 feature -- Status setting
 
 	set_value (v: REAL) is
-			-- !!!Is this the best way to set the price value?
 		do
 			value := v
 		end

@@ -52,7 +52,6 @@ feature -- Basic operations
 			-- according to `type'.
 		do
 			if equal (type.name, "weekly") then
-				-- !!!When implemented, use the flyweight date_time table.
 				set_to_previous_monday (dt)
 				check
 					is_monday: dt.date.day_of_the_week = 2
