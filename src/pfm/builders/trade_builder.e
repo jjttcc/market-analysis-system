@@ -56,7 +56,7 @@ feature {NONE}
 
 	make_value_setters is
 		do
-			!LINKED_LIST [VALUE_SETTER]!value_setters.make
+			create {LINKED_LIST [VALUE_SETTER]} value_setters.make
 			add_value_setters (value_setters, index_vector)
 		end
 

@@ -18,7 +18,7 @@ feature -- Initialization
 		require
 			not_void: field_sep /= Void
 		do
-			!!symbol.make (6)
+			create symbol.make (6)
 			field_separator := field_sep
 		ensure
 			fsep_set: field_separator = field_sep

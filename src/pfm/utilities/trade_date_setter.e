@@ -18,7 +18,7 @@ feature {NONE}
 		do
 			date := date_util.date_from_number (stream.last_integer)
 			if date = Void then -- stream.last_integer was invalid
-				!!date.make_now
+				create date.make_now
 				handle_input_error ("Date input value is invalid: ",
 									stream.last_integer.out)
 			end

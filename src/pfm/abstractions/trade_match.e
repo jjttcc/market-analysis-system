@@ -179,7 +179,7 @@ feature -- Access
 		local
 			usymbol: STRING
 		do
-			!!Result.make (0)
+			create Result.make (0)
 			usymbol := clone (symbol)
 			usymbol.to_upper
 			Result.append (usymbol)
