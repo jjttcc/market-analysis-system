@@ -56,11 +56,11 @@ public class MAS_Applet extends Applet {
 			port = 80;
 		}
 		server_address = "http://" + host_name + ":" + port + servlet_path;
-		assert host_name != null && server_address != null && port > 0;
+//		assert host_name != null && server_address != null && port > 0;
 	}
 
 	private Connection connection() throws Exception {
-		assert server_address != null;
+//		assert server_address != null;
 		Connection result;
 
 		// The applet client uses an URL connection to talk to the server.
