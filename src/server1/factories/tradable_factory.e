@@ -56,6 +56,12 @@ feature -- Status report
 	arg_used: BOOLEAN is false
 			-- execute arg is actually optional - if not void it is used.
 
+	error_occurred: BOOLEAN
+			-- Did an error occur during execute?
+
+	error_list: LIST [STRING]
+			-- List of all errors if error_occurred
+
 feature -- Status setting
 
 	set_no_open (arg: BOOLEAN) is
@@ -76,6 +82,7 @@ feature -- Basic operations
 		local
 			scanner: MARKET_TUPLE_DATA_SCANNER
 		do
+			error_occurred := false
 			if
 				in_file /= Void and in_file.exists and in_file.is_open_read
 			then
@@ -92,8 +99,10 @@ feature -- Basic operations
 			check
 				product_set_to_scanner_result: product = scanner.product
 			end
-			-- Create a bunch of market functions and insert them into product.
-			add_indicators (product)
+			if not scanner.error_list.empty then
+				error_list := scanner.error_list
+				error_occurred := true
+			end
 		ensure then
 			product_not_void: product /= Void
 			product_type_set: product.trading_period_type = time_period_type
@@ -201,13 +210,6 @@ feature {NONE} -- Scanning-related utility features
 			end
 		end
 
-feature {NONE}
-
-	add_indicators (t: TRADABLE [BASIC_MARKET_TUPLE]) is
-			-- Add hard-coded set of market functions to `t'.
-		do
-		end
-
 feature {NONE} -- Tuple field-key constants
 
 	Date_index: INTEGER is 1
@@ -223,5 +225,7 @@ invariant
 	these_fields_not_void:
 		field_separator /= Void and input_file /= Void and
 		tuple_maker /= Void and time_period_type /= Void
+	error_constraint:
+		error_occurred implies error_list /= Void and not error_list.empty
 
 end -- TRADABLE_FACTORY
