@@ -101,13 +101,15 @@ feature {NONE} -- Implementation
 			-- Call `set_start_date_time' on each generator with
 			-- `start_date_time'.
 		do
-			from
-				event_generators.start
-			until
-				event_generators.exhausted
-			loop
-				event_generators.item.set_start_date_time (start_date_time)
-				event_generators.forth
+			if event_generators /= Void then
+				from
+					event_generators.start
+				until
+					event_generators.exhausted
+				loop
+					event_generators.item.set_start_date_time (start_date_time)
+					event_generators.forth
+				end
 			end
 		end
 
