@@ -9,6 +9,11 @@ indexing
 class MA_SERVER inherit
 
 	SERVER
+		rename
+			make as server_make
+		redefine
+			exit, log_errors
+		end
 
 	GLOBAL_SERVER_FACILITIES
 		export
@@ -19,14 +24,15 @@ creation
 
 	make
 
-feature {NONE} -- Hook routines
+feature {NONE} -- Initialization
 
---@@@Note: Consider adding a CL option (perhaps not documented) such as:
---
---mas -p -b 1234 --report_back 9999
---
---To tell it to, as a client, report back to the MCT on port 9999 that is has
---started succesfully.  It would use CLIENT_CONNECTION for this.
+	make is
+		do
+			create errors.make (0)
+			server_make
+		end
+
+feature {NONE} -- Hook routine implementation
 
 	prepare_for_listening is
 		local
@@ -60,6 +66,7 @@ feature {NONE} -- Hook routines
 				create {CONSOLE_READER} readcmd.make (factory_builder)
 				poller.put_read_command (readcmd)
 			end
+			report_back (errors)
 		end
 
 	listen is
@@ -78,7 +85,19 @@ feature {NONE} -- Hook routines
 
 	cleanup is
 			-- Close all unclosed sockets.
+		local
+			ex_srv: expanded EXCEPTION_SERVICES
 		do
+print ("cleanup called%N")
+			if not ex_srv.last_exception_status.description.is_empty then
+				if errors.is_empty then
+					errors := ex_srv.last_exception_status.description
+				else
+					errors := errors + "%N" +
+						ex_srv.last_exception_status.description
+				end
+			end
+print ("errors: " + errors + "%N")
 			if current_sockets /= Void then
 				from
 					current_sockets.start
@@ -90,6 +109,9 @@ feature {NONE} -- Hook routines
 					end
 					current_sockets.forth
 				end
+			end
+			if not errors.is_empty then
+				report_back (errors)
 			end
 		end
 
@@ -109,18 +131,78 @@ feature {NONE} -- Hook routines
 					config_error_description := 
 						env_vars.application_directory_name + " setting " +
 						"specifies a directory that does not exist or that%N" +
-						"is not reachable from the current directory:%N" +
-						env.app_directory + "%N"
+						"is not reachable from the current directory:%N%"" +
+						env.app_directory + "%""
 					Result := True
 				end
 			end
 		end
 
-feature {NONE}
+	notify (msg: STRING) is
+		do
+			errors.append (msg + "%N")
+		end
+
+	exit (status: INTEGER) is
+		do
+			if command_line_options.error_occurred then
+				errors := errors + command_line_options.error_description
+			end
+			report_back (errors)
+			Precursor (status)
+		end
+
+	log_errors (a: ARRAY [STRING]) is
+		local
+			l: LINEAR [STRING]
+		do
+			Precursor (a)
+			from
+				l := a.linear_representation
+				l.start
+			until
+				l.exhausted
+			loop
+				errors := errors + l.item
+				l.forth
+			end
+		end
+
+feature {NONE} -- Implementation
+
+	report_back (errs: STRING) is
+			-- If command_line_options.report_back, send a status
+			-- report back to the startup process.
+		local
+			connection: SERVER_RESPONSE_CONNECTION
+			cl: MAS_COMMAND_LINE
+f: PLAIN_TEXT_FILE
+		do
+create f.make_open_write ("/tmp/debugmas2")
+f.put_string ("report_back called " + (create {DATE_TIME}.make_now).out + "%N")
+f.put_string ("errs: " + errs + "%N")
+f.flush
+			cl := command_line_options
+			if cl.report_back then
+				create connection.make (cl.host_name_for_startup_report,
+					cl.port_for_startup_report)
+				-- If `errs.is_empty', the startup process will assume
+				-- that this process started succefully.
+f.put_string ("sent: '" + errs + "' ("
++ (create {DATE_TIME}.make_now).out + ")%N")
+f.flush
+				connection.send_one_time_request (errs, False)
+			end
+		end
+
+feature {NONE} -- Implementation - Attributes
 
 	poller: MEDIUM_POLLER
 			-- Poller for client socket connections
 
 	current_sockets: LIST [SOCKET]
+
+	errors: STRING
+			-- List of error messages to "report back" to the startup process
 
 end

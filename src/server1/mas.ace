@@ -10,13 +10,14 @@ default
 	assertion (ensure)
 	assertion (loop)
 	assertion (invariant)
+	arguments ("-p  -report_back jupiter.milkyway.org^41516")
+	arguments ("-o -p")
 	arguments ("-o -f , sunw.txt  4002")
 	arguments ("-o -z")
 	arguments ("-o -f , /opt/mas/lib/data/tradables/aa.txt /opt/mas/lib/data/tradables/aapl.txt")
 	arguments ("-o -f , /opt/mas/lib/data/tradables/a*.txt")
 	arguments ("-o -f , /opt/mas/lib/a*.txt")
 	arguments ("-o -p -debug")
-	arguments ("-o -p")
 	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4002 ")
 	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4002 -debug")
 	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4002")
@@ -87,10 +88,19 @@ default
 --debug ("database");
 --debug ("compression");
 --precompiled ("$ISE_EIFFEL/precomp/spec/$PLATFORM/base");
+--!!!!!!Remove:
 
 cluster
 	server:		"$MAS/src/server1"
 
+
+	server_extensions (server):		"$/extensions"
+
+	extended_support (server_extensions):		"$/support"
+
+	client_lib:		"$MAS/src/client_library"
+
+	client_support (client_lib):		"$/support"
 
 	abstractions (server):		"$/abstractions"
 

@@ -7,6 +7,7 @@ indexing
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%License to be determined"
 
+--!!!!!!!!!Move this file.
 class SERVER_RESPONSE_CONNECTION inherit
 
 	CLIENT_CONNECTION
