@@ -39,10 +39,13 @@ msgID           -> natural_integer
 login_id        -> natural_integer
 mkt_list_req    -> <null>
 ind_list_req    -> mkt_symbol
-date            -> year "/" month "/" day
+date            -> year "/" month "/" day [ "\t" time ]
+time            -> hour ":" minute
 year            -> digit digit digit digit
 month           -> digit digit
 day             -> digit digit
+hour            -> digit digit
+minute          -> digit digit
 natural_integer -> +('0'..'9')
 ta_real         -> +('0'..'9') '.' *('0'..'9')
 digit           -> ('0'..'9')
