@@ -14,7 +14,6 @@ class PCT_Tools {
 	// Split `s', using `fldsep' as the field separator.
 	static String[] split(String s, String fldsep) {
 		StringTokenizer t = new StringTokenizer(s, fldsep, false);
-		//!!Make sure that countTokens(), below, is being used correctly.
 		String[] result = new String[t.countTokens()];
 		for (int i = 0; t.hasMoreTokens(); ++i)
 		{
@@ -73,11 +72,9 @@ class PCT_Tools {
 	// Field separator exctracted from `lines'
 	// Precondition: lines != null
 	String separator(Vector lines) throws Exception {
-		//assert(lines != None)
 		String result = "\t";
 		for (int i = 0; i < lines.size(); ++i) {
 			String line = (String) lines.elementAt(i);
-			//line = line[:-1]
 			if (! comment(line)) {
 				String[] words =  split(line, "=");
 				if (words[0].equals(Separator_string)) {

@@ -55,7 +55,7 @@ class PCT_Window extends FrameWindowListener {
 	protected void report_startup_failure(Exception e, PCT_Component c) {
 		System.err.println("Error - startup command failed (" +
 			c.startup_cmd_class() + "." + c.startup_cmd_method() + ") [" +
-			e + " More info needed?!!]");
+			e + "]");
 	}
 
 	protected void close() {
