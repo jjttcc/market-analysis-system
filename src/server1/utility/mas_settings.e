@@ -42,12 +42,16 @@ feature -- Access
 					Result.append (env.file_name_with_app_directory (
 						constants.Default_database_config_file_name))
 				end
-			elseif command_line.use_external_data_source then
-				Result := "Obtaining data from an external data source."
-			elseif command_line.use_web then
-				Result := "Obtaining data from a web server."
 			else
-				Result := "Obtaining data from files.%NStock split file:%N"
+				if command_line.use_external_data_source then
+					Result := "Obtaining data from an external data source."
+				elseif command_line.use_web then
+					Result := "Obtaining data from a web server."
+				else
+					Result := "Obtaining data from files."
+				end
+				Result := Result +
+					"%NStock split file:%N"
 				if env.stock_split_file_name /= Void then
 					Result.append (env.file_name_with_app_directory (
 							env.stock_split_file_name))
