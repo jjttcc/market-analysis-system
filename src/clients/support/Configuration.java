@@ -85,6 +85,11 @@ public class Configuration implements NetworkProtocol
 		return _line_color;
 	}
 
+	// Color to use for connecting lines (indicators)
+	public Color text_color() {
+		return _text_color;
+	}
+
 	public int main_graph_drawer() {
 		return _main_graph_drawer;
 	}
@@ -223,6 +228,9 @@ public class Configuration implements NetworkProtocol
 		else if (color_tag.equals(Line_color)) {
 			_line_color = (Color) _color_table.get(color);
 		}
+		else if (color_tag.equals(Text_color)) {
+			_text_color = (Color) _color_table.get(color);
+		}
 		else {
 			System.err.println("Invalid color tag: " + color_tag);
 		}
@@ -289,6 +297,7 @@ public class Configuration implements NetworkProtocol
 	private final String Stick_color = "stick_color";
 	private final String Bar_color = "bar_color";
 	private final String Line_color = "line_color";
+	private final String Text_color = "text_color";
 	private final String Main_graph_style = "main_graph_style";
 	private final String Candle_style = "candle";
 	private final String Regular_style = "regular";
@@ -300,6 +309,7 @@ public class Configuration implements NetworkProtocol
 	private Color _stick_color;
 	private Color _bar_color;
 	private Color _line_color;
+	private Color _text_color;
 
 	private int _main_graph_drawer;
 
