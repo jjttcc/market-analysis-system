@@ -1,6 +1,7 @@
 indexing
 	description: "TA Printing services"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others -%
+		%see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -24,7 +25,7 @@ feature -- Access
 		end
 
 	output_record_separator: STRING is
-			-- Field separator used when printing output
+			-- Record separator used when printing output
 		deferred
 		end
 
@@ -49,6 +50,9 @@ feature -- Basic operations
 				printer := clone (tuple_printers @ l.first.generator)
 				printer.set_print_start_date (print_start_date)
 				printer.set_print_end_date (print_end_date)
+				printer.set_field_separator (output_field_separator)
+				printer.set_record_separator (output_record_separator)
+				printer.set_date_field_separator (output_date_field_separator)
 				if output_medium /= Void then
 					printer.set_output_medium (output_medium)
 				else	-- default to standard io
@@ -181,9 +185,8 @@ feature {NONE} -- Implementation
 			-- Start and end date to use for printing, if not void
 
 	output_medium: IO_MEDIUM is
-			-- Medium to use for output - Defaults to io.default_output.
-		once
-			Result := io.default_output
+			-- Medium to use for output
+		deferred
 		end
 
 end -- PRINTING
