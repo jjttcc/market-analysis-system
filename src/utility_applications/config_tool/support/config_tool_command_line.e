@@ -42,7 +42,7 @@ feature -- Access
 			Result := "Usage: " + command_name + " [options]" +
 				"%NOptions:%N" +
 				"   -cmdfile <file>   Obtain instructions from <file> %N" +
-				"   -file <target>    Operate on the file with paht %
+				"   -file <target>    Operate on the file with path %
 					%<target>%N" +
 				"   -h                Print this help message%N"
 		end
