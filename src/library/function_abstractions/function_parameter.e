@@ -41,10 +41,7 @@ feature -- Access
 	description: STRING is
 			-- `name' + " - " + `function.name'
 		do
-			create Result.make (0)
-			Result.append (name)
-			Result.append (" - ")
-			Result.append (function.name)
+			Result := name + " - " + function.name
 		end
 
 	value_type_description: STRING is
