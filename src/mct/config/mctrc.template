@@ -99,10 +99,10 @@ command_name	Web-based
 end
 
 # Command to start a command-line client to connect to the server
-start_cl_client_command	<macl-shell><bin_dir>/macl -h <hostname> <portnumber>
+start_cl_client_command	<macl-shell>"<bin_dir>/macl" -h <hostname> <portnumber>
 
 # Command to start the charting application
-chart_command	<cwdir> [<chart_dir>]java -cp <java_path> \
+chart_command	<cwdir> [<chart_dir>]java -cp "<java_path>" \
 MA_Client <hostname> <portnumber> >/tmp/errs 2>&1
 
 # Command to terminate the server
