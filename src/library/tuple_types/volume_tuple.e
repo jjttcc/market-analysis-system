@@ -1,5 +1,5 @@
 indexing
-	description: "A basic market tuple with a volume attribute";
+	description: "A basic market tuple with a volume feature";
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"

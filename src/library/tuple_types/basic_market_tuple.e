@@ -1,5 +1,6 @@
 indexing
-	description: "Minimum data set needed for charting and analysis"
+	description:
+		"Minimum data set needed for charting and analysis of a market"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
