@@ -158,16 +158,18 @@ feature {NONE} -- Implementation
 			-- Create a user, input its properties from the real user,
 			-- and add it to the global market_event_registrants.
 		local
-			s1, s2, s3: STRING
+			s1, s2, hist_file_name: STRING
 		do
 			!!s1.make (0); !!s2.make (0)
 			print_list (<<"Enter the user's full name: ", eom>>)
 			s1.append (input_string)
 			print_list (<<"Enter the user's email address: ", eom>>)
 			s2.append (input_string)
-			!!s3.make (s2.count + 8)
-			s3.append (s2); s3.append (".history")
-			!!Result.make (s3)
+			!!hist_file_name.make (s2.count + 8)
+			hist_file_name.append (s2); hist_file_name.append (".history")
+			-- Ensure that the event history file name is unique:
+			hist_file_name.append (s1.hash_code.out)
+			!!Result.make (hist_file_name)
 			Result.set_name (s1)
 			Result.add_email_address (s2)
 			s1 := mailer
