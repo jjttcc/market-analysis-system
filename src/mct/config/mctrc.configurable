@@ -33,12 +33,15 @@ define	doc_dir:doc-path
 define	mas_directory_setting:mas-path
 
 # Set the MAS_DIRECTORY environment variable
-#environment_variable	MAS_DIRECTORY:/suse_6_3/home2/finance/.mas/charting
 environment_variable	MAS_DIRECTORY:<mas_directory_setting>
 
 # Valid port numbers for use by the MAS server
 valid_portnumbers	10101,10102,10103,10104,20102,20103,20104,30101,30102,\
 30103,30104,30105,30106,30107,30108,30109
+
+# The port number to be used to receive a status message back from the
+# MAS server when it is started
+server_report_port_number	41512
 
 # Network host name
 hostname	localhost
@@ -52,7 +55,6 @@ hostname	localhost
 
 # Detailed version of command to start the server: data from files
 begin	start_server_command
-#command	<bin_dir>/mas -o -f , -b <portnumber> <data_dir>/*.txt
 command	<cwdir> [<mas_directory_setting>] mas -o -f , -b <portnumber> <data_dir>/*.txt
 command_description	Get data from files
 command_name	File-based
