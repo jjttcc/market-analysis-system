@@ -20,14 +20,21 @@ abstract public class Drawer {
 	// The dates associated with the principle (market) data
 	public abstract String[] dates();
 
+	// The times (if any) associated with the principle (market) data
+	public abstract String[] times();
+
 	public abstract Drawer market_drawer();
 
 	// Is this Drawer an indicator drawer?
 	public boolean is_indicator() {
 		return market_drawer() != this;
 	}
+
 	// Set the dates.
 	public void set_dates(String[] d) {}
+
+	// Set the times.
+	public void set_times(String[] t) {}
 
 	// Number of tuples in the data
 	public int tuple_count() {
@@ -103,7 +110,11 @@ abstract public class Drawer {
 		draw_tuples(g, bounds);
 	}
 
+	// x values of main data
 	abstract protected int[] x_values();
+
+	// Current data-bar width - defaults to 0
+	protected int bar_width() { return 0; }
 
 	/**
 	* Draw the data tuples.
