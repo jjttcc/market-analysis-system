@@ -7,7 +7,7 @@ eiffel_protocol_files ()
 		$proto_dir/network_protocol.e
 }
 
-proto_dir=../../server1/protocols
+proto_dir=../../client_server/protocols
 proto_files=$(eiffel_protocol_files)
 awk 'BEGIN {
 	print "/* Copyright 1998 - 2001: Jim Cochrane - see file forum.txt */\n"
