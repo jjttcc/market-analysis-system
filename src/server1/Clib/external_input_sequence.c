@@ -53,6 +53,7 @@ struct input_sequence_handle* initialize_external_input_routines(char* paths) {
 		result->error_occurred = 0;
 		if (result->plug_in_handle == 0) {
 			init_error = 1;
+			free(initialization_error_string);
 			initialization_error_string = strdup(error_buffer);
 			free(result);
 			result = 0;
