@@ -19,7 +19,7 @@ class CONFIGURABLE_N_RECORD_FUNCTION inherit
 		export
 			{NONE} nrovf_make_unused
 		undefine
-			forth, do_process
+			forth, do_process, operators
 		redefine
 			set_n, short_description, start, initialize_operators, target,
 			strict_n_count
@@ -40,7 +40,7 @@ creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 feature -- Access
 
-target: ARRAYED_LIST [MARKET_TUPLE]
+	target: ARRAYED_LIST [MARKET_TUPLE]
 
 	short_description: STRING is
 		do
