@@ -1,0 +1,51 @@
+#! /bin/sh
+#
+# Start MAS; ZapCoded by Trashware; 16.04.2001
+#
+
+### BEGIN INIT INFO
+# Provides:       mas
+# Required-Start: $network
+# Required-Stop:
+# Default-Start:  2 3 5
+# Default-Stop:
+# Description:    Start the mas daemon
+### END INIT INFO
+
+. /etc/rc.status
+
+# Determine the base and follow a runlevel link name.
+base=${0##*/}
+link=${base#*[SK][0-9][0-9]}
+
+# Export home directory of user mas.
+export MAS_DIRECTORY=/var/lib/mas
+
+return=$rc_done
+
+case "$1" in
+    start)
+        echo -n "Starting Market Analysis Server"
+	su mas -c '/opt/mas/bin/mas 13333 -b -f , /var/lib/mas/stoxx/*.mas &' || return=$rc_failed
+        sleep 3
+        echo -e "$return"
+        ;;
+    stop)
+        echo -n "Shutting down Market Analysis Server"
+        killproc -TERM /opt/mas/bin/mas || return=$rc_failed
+        sleep 3
+        echo -e "$return"
+        ;;
+    restart|reload)
+        $0 stop && $0 start || return=$rc_failed
+        ;;
+    status)
+        echo -n "Checking for Market Analysis Server: "
+        checkproc /opt/mas/bin/mas && echo OK || echo No process
+        ;;
+    *)
+        echo "Usage: $0 {start|restart|status|stop}"
+        exit 1
+esac
+test "$return" = "$rc_done" || exit 1
+exit 0
