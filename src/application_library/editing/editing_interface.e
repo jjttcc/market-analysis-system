@@ -220,4 +220,4 @@ invariant
 
 	editor_not_void: editor /= Void
 
-end -- EDITING_INTERFACE
+end
