@@ -32,7 +32,6 @@ default
 	arguments ("-o -f , aa.txt")
 	disabled_debug (yes)
 	disabled_debug ("compression")
-	disabled_debug ("database")
 	disabled_debug ("editing")
 	disabled_debug ("http")
 	disabled_debug ("object_editing")
@@ -53,6 +52,13 @@ default
 	inlining_size ("0")
 	multithreaded (no)
 
+
+--!!!!NOTE: This cluster is probably not needed - Remove it as soon as
+--!!!!you can verify that the project compiles without it.
+--!!!!NOTE: The following 6 clusters may not be needed - Remove them as soon as
+--!!!!you can verify that the project compiles without them.
+--!!!!NOTE: This cluster is probably not needed - Remove it as soon as
+--!!!!you can verify that the project compiles without it.
 
 cluster
 	server:		"$MAS/src/server1"
@@ -80,8 +86,6 @@ cluster
 
 	database (server):		"$/database"
 
---!!!!NOTE: This cluster is probably not needed - Remove it as soon as
---!!!!you can verify that the project compiles without it.
 	database_odbc (server):		"$/database/odbc"
 
 	database_ecli (server):		"$/database/ecli"
@@ -168,11 +172,11 @@ cluster
 
 	eiflib_error (eiffel_components):		"$/error"
 
-	data_scanning_main (eiflib_data_scanning ):	"$/main_abstractions"
+	data_scanning_main (eiflib_data_scanning):		"$/main_abstractions"
 
-	data_scanning_input (eiflib_data_scanning ):	"$/input_mechanisms"
+	data_scanning_input (eiflib_data_scanning):		"$/input_mechanisms"
 
-	eiflib_value_setters (eiffel_components): 	"$/data_scanning/value_setters"
+	eiflib_value_setters (eiffel_components):		"$/data_scanning/value_setters"
 
 	operators (eiffel_components):		"$/commands/operators"
 
@@ -240,8 +244,6 @@ cluster
 
 	polling_implementation (net):		"$/polling/implementation"
 
---!!!!NOTE: The following 6 clusters may not be needed - Remove them as soon as
---!!!!you can verify that the project compiles without them.
 	store (ise):		"$/store"
 
 	estore_interface (store):		"$/interface"
@@ -254,8 +256,6 @@ cluster
 
 	rdbms (dbms):		"$/rdbms"
 
---!!!!NOTE: This cluster is probably not needed - Remove it as soon as
---!!!!you can verify that the project compiles without it.
 	odbc (rdbms):		"$/odbc"
 
 	ecli_src:		"$ECLI/src"
@@ -278,9 +278,10 @@ cluster
 
 	ut_support:		"$GOBO/library/utility/support"
 
-	kl_kernel:		"$GOBO/library/kernel"
-
-	kl_kernel_spec:		"$GOBO/library/kernel/spec/ise"
+	all kl_kernel:		"$GOBO/library/kernel"
+		exclude
+			"hact"; "ve"; "se"; 
+		end
 
 	ds_container:		"$GOBO/library/structure/container"
 
