@@ -46,8 +46,8 @@ System.out.println("CompressedConnection new_reader called.");
 	void send_msg(int msgID, String msg, int session_key) {
 System.out.println("CompressedConnection send_msg called.");
 		out.print(msgID);
-		out.print(Input_field_separator + session_key);
-		out.print(Input_field_separator + Compression_on_flag + msg);
+		out.print(Message_field_separator + session_key);
+		out.print(Message_field_separator + Compression_on_flag + msg);
 		out.print(Eom);
 		out.flush();
 	}

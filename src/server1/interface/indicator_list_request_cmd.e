@@ -26,7 +26,7 @@ feature {NONE} -- Basic operations
 			fields: LIST [STRING]
 		do
 			target := msg
-			fields := tokens (input_field_separator)
+			fields := tokens (Message_field_separator)
 			if fields.count /= 2 then
 				report_error (Error, <<"Wrong number of fields.">>)
 			else
@@ -63,7 +63,7 @@ feature {NONE} -- Basic operations
 						ilist.islast
 					loop
 						put (ilist.item.name)
-						put (Output_record_separator)
+						put (Message_record_separator)
 						ilist.forth
 					end
 					put (ilist.last.name)

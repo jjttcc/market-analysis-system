@@ -27,6 +27,11 @@ deferred class MAS_REQUEST_COMMAND inherit
 			{NONE} all
 		end
 
+	GLOBAL_CONSTANTS
+		export
+			{NONE} all
+		end
+
 feature -- Initialization
 
 	make is

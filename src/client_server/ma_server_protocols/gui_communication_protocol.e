@@ -86,8 +86,8 @@ feature -- Subtokens
 
 feature -- Field separators
 
-	output_date_field_separator: STRING is ""
+	Message_date_field_separator: STRING is ""
 
-	output_time_field_separator: STRING is ""
+	Message_time_field_separator: STRING is ""
 
 end -- class GUI_NETWORK_PROTOCOL

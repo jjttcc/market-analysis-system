@@ -15,12 +15,17 @@ public class ServerResponseUtilities implements NetworkProtocol {
 
 	// Response to the client, built with 'msg_id' and 'msg'
 	public static String response_message(int msg_id, String msg) {
-		return new Integer(msg_id).toString() + Output_field_separator +
+		return new Integer(msg_id).toString() + Message_field_separator +
 			msg + Eom;
 	}
 
 	// Error-status response to the client, built with 'msg'
 	public static String error_response_message(String msg) {
 		return response_message(Error, msg);
+	}
+
+	// Warning-status response to the client, built with 'msg'
+	public static String warning_response_message(String msg) {
+		return response_message(Warning, msg);
 	}
 }

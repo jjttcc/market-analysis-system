@@ -25,26 +25,17 @@ feature -- String constants
 			-- Flag (at beginning of a message) that indicates that
 			-- the message is compressed
 
-	Input_field_separator: STRING is "%T"
-			-- Field separator for input received by the server
+	Message_field_separator: STRING is "%T"
+			-- Field separator for messages sent and received by the server
 
-	Output_field_separator: STRING is "%T"
-			-- Field separator for output produced by the server
+	Message_record_separator: STRING is "%N"
+			-- Record separator for messages sent and received by the server
 
-	Output_record_separator: STRING is "%N"
-			-- Record separator for output produced by the server
+	message_date_field_separator: STRING is deferred end
+			-- Sub-field separator for date fields contained in messages
 
-	output_date_field_separator: STRING is deferred end
-			-- Field separator for date output produced by the server
-
-	date_field_separator: STRING is "/"
-			-- Internal field separator for dates
-
-	output_time_field_separator: STRING is deferred end
-			-- Field separator for time output produced by the server
-
-	time_field_separator: STRING is ":"
-			-- Internal field separator for times
+	message_time_field_separator: STRING is deferred end
+			-- Sub-field separator for time fields contained in messages
 
 invariant
 

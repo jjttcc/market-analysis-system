@@ -59,7 +59,7 @@ public class DataSetBuilder implements NetworkProtocol {
 	public void send_market_data_request(String symbol, String period_type)
 			throws Exception {
 		connection_.send_request(Market_data_request,
-			symbol + Input_field_separator + period_type);
+			symbol + Message_field_separator + period_type);
 		if (connection_.last_received_message_ID() == OK) {
 			String results = connection_.result().toString();
 			results = setup_parser_fieldspecs(results);
@@ -82,8 +82,8 @@ public class DataSetBuilder implements NetworkProtocol {
 	public void send_indicator_data_request(int ind, String symbol,
 		String period_type) throws Exception {
 		connection_.send_request(Indicator_data_request,
-			ind + Input_field_separator + symbol +
-			Input_field_separator + period_type);
+			ind + Message_field_separator + symbol +
+			Message_field_separator + period_type);
 		// Note that a new indicator drawer is created each time parse is
 		// called, since indicator drawers should not be shared.
 		indicator_parser.parse(connection_.result().toString(),
@@ -97,10 +97,10 @@ public class DataSetBuilder implements NetworkProtocol {
 		StringBuffer mlist;
 		_last_indicator_list = new Vector();
 		connection_.send_request(Indicator_list_request, symbol +
-			Input_field_separator + period_type);
+			Message_field_separator + period_type);
 		mlist = connection_.result();
 		StringTokenizer t = new StringTokenizer(mlist.toString(),
-			Output_record_separator, false);
+			Message_record_separator, false);
 		for (int i = 0; t.hasMoreTokens(); ++i)
 		{
 			_last_indicator_list.addElement(t.nextToken());
@@ -142,7 +142,7 @@ public class DataSetBuilder implements NetworkProtocol {
 				connection_.send_request(Market_list_request, "");
 				mlist = connection_.result();
 				StringTokenizer t = new StringTokenizer(mlist.toString(),
-					Output_record_separator, false);
+					Message_record_separator, false);
 				for (int i = 0; t.hasMoreTokens(); ++i) {
 					tradables.addElement(t.nextToken());
 				}
@@ -160,7 +160,7 @@ public class DataSetBuilder implements NetworkProtocol {
 		connection_.send_request(Trading_period_type_request, tradable);
 		tpt_list = connection_.result();
 		StringTokenizer t = new StringTokenizer(tpt_list.toString(),
-			Output_record_separator, false);
+			Message_record_separator, false);
 		for (int i = 0; t.hasMoreTokens(); ++i) {
 			result.addElement(t.nextToken());
 		}
@@ -242,15 +242,15 @@ public class DataSetBuilder implements NetworkProtocol {
 		}
 		_open_interest = false;
 		initialize_fieldspecs();
-		data_parser = new Parser(main_field_specs, Output_record_separator,
-									Output_field_separator);
+		data_parser = new Parser(main_field_specs, Message_record_separator,
+									Message_field_separator);
 		// Set up the indicator parser to expect just a date and a float
 		// (close) value.
 		int indicator_field_specs[] = new int[2];
 		indicator_field_specs[0] = Parser.Date;
 		indicator_field_specs[1] = Parser.Close;
 		indicator_parser = new Parser(indicator_field_specs,
-			Output_record_separator, Output_field_separator);
+			Message_record_separator, Message_field_separator);
 		main_drawer = new_main_drawer();
 		volume_drawer = new BarDrawer(main_drawer);
 		data_parser.set_volume_drawer(volume_drawer);

@@ -134,8 +134,8 @@ public class Connection implements NetworkProtocol, Constants {
 	// Send the `msgID', the session key, and `msg' - with field delimiters.
 	void send_msg(int msgID, String msg, int session_key) {
 		out.print(msgID);
-		out.print(Input_field_separator + session_key);
-		out.print(Input_field_separator + msg);
+		out.print(Message_field_separator + session_key);
+		out.print(Message_field_separator + msg);
 		out.print(Eom);
 		out.flush();
 	}

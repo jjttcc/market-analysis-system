@@ -17,7 +17,11 @@ class MAS_COMMAND_LINE_UTILITIES inherit
 
 	NETWORK_PROTOCOL
 		rename
-			eom as network_eom
+			eom as network_eom,
+			message_field_separator as output_field_separator,
+			message_record_separator as output_record_separator,
+			message_date_field_separator as output_date_field_separator,
+			message_time_field_separator as output_time_field_separator
 		export
 			{NONE} all
 		undefine

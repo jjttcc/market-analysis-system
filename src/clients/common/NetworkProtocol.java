@@ -1,4 +1,4 @@
-/* Copyright 1998 - 2003: Jim Cochrane - see file forum.txt */
+/* Copyright 1998 - 2001: Jim Cochrane - see file forum.txt */
 
 package common;
 
@@ -34,18 +34,15 @@ public interface NetworkProtocol
 	final String End_date = "end_date";
 
 	// Field separators
-	final String output_date_field_separator = "";
-	final String output_time_field_separator = "";
+	final String Message_date_field_separator = "";
+	final String Message_time_field_separator = "";
 
 	// String constants
 	final String Eom = "";
 	final String Eot = "";
 	final String Compression_on_flag = "<@z@>";
-	final String Input_field_separator = "\t";
-	final String Output_field_separator = "\t";
-	final String Output_record_separator = "\n";
-	final String date_field_separator = "/";
-	final String time_field_separator = ":";
+	final String Message_field_separator = "\t";
+	final String Message_record_separator = "\n";
 
 	// daily period type is needed for initialization.
 	final String daily_period_type = "daily";

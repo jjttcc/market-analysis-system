@@ -64,7 +64,7 @@ feature -- Basic operations
 		do
 			parse_error := False
 			target := msg -- set up for tokenization
-			fields := tokens (input_field_separator)
+			fields := tokens (Message_field_separator)
 			if fields.count < 4 then
 				report_error (Error, <<"Fields count wrong for ",
 					"trading-signal event request.">>)
@@ -208,25 +208,25 @@ feature {NONE}
 					put (concatenation (<<
 						dt_util.formatted_date (event_cache.item.date,
 							'y', 'm', 'd', ""),
-						Output_field_separator,
+						Message_field_separator,
 						dt_util.formatted_time (event_cache.item.time,
 							'h', 'm', 's', ""),
-						Output_field_separator,
+						Message_field_separator,
 						event_cache.item.type.id,
-						Output_field_separator,
+						Message_field_separator,
 						event_cache.item.type_abbreviation,
-						Output_record_separator>>))
+						Message_record_separator>>))
 					event_cache.forth
 				end
 				put (concatenation (<<
 					dt_util.formatted_date (event_cache.item.date,
 						'y', 'm', 'd', ""),
-					Output_field_separator,
+					Message_field_separator,
 					dt_util.formatted_time (event_cache.item.time,
 						'h', 'm', 's', ""),
-					Output_field_separator,
+					Message_field_separator,
 					event_cache.item.type.id,
-					Output_field_separator,
+					Message_field_separator,
 					event_cache.item.type_abbreviation>>))
 			end
 		end

@@ -56,7 +56,7 @@ feature -- Basic operations
 				session.turn_caching_off
 			end
 			if not msg.is_empty then
-				tokens := sutil.tokens (Input_field_separator)
+				tokens := sutil.tokens (Message_field_separator)
 				from
 					tokens.start
 				until
@@ -196,7 +196,7 @@ feature {NONE} -- Implementation - session state
 			-- to the client/server communication protocol) to the client.
 		do
 			if not command_line_options.opening_price then
-				put (Output_field_separator)
+				put (Message_field_separator)
 				put (No_open_session_state)
 			end
 		end

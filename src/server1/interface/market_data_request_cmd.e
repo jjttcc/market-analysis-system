@@ -25,7 +25,7 @@ feature -- Basic operations
 			fields: LIST [STRING]
 		do
 			target := msg -- set up for tokenization
-			fields := tokens (input_field_separator)
+			fields := tokens (Message_field_separator)
 			if fields.count /= 2 then
 				report_error (Error, <<"Fields count wrong.">>)
 			else

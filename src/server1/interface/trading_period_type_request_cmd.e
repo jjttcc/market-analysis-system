@@ -65,7 +65,7 @@ feature {NONE} -- Basic operations
 			loop
 				Result.put (ptypes.item, i)
 				i := i + 1
-				Result.put (Output_record_separator, i)
+				Result.put (Message_record_separator, i)
 				i := i + 1
 				ptypes.forth
 			end

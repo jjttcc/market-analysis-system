@@ -116,7 +116,7 @@ feature {NONE} -- Hook routine implementation
 			if s.is_empty then
 				i := 0
 			else
-				i := s.substring_index (Input_field_separator, 1)
+				i := s.substring_index (Message_field_separator, 1)
 			end
 			if i <= 1 then
 				request_id := Error
@@ -143,16 +143,16 @@ feature {NONE} -- Hook routine implementation
 					request_id := Error
 				else
 					request_id := number.to_integer
-					j := s.substring_index (Input_field_separator,
-							i + Input_field_separator.count)
+					j := s.substring_index (Message_field_separator,
+							i + Message_field_separator.count)
 					if j = 0 then
 						message_body := "Invalid message format: "
 						message_body.append (s)
 						request_id := Error
 					else
 						-- Extract the session key.
-						number := s.substring (i + Input_field_separator.count,
-												j - 1)
+						number := s.substring (
+							i + Message_field_separator.count, j - 1)
 						if not number.is_integer then
 							message_body :=
 								"Session key is not a valid integer: "
@@ -168,7 +168,7 @@ feature {NONE} -- Hook routine implementation
 								request_id := Error
 							else
 								set_message_body (
-									s, j + Input_field_separator.count)
+									s, j + Message_field_separator.count)
 							end
 						end
 					end

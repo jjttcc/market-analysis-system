@@ -31,7 +31,7 @@ feature {NONE} -- Basic operations
 			fields: LIST [STRING]
 		do
 			target := msg
-			fields := tokens (input_field_separator)
+			fields := tokens (Message_field_separator)
 			if fields.count /= 2 then
 				report_error (Error, <<"Wrong number of fields.">>)
 			else
@@ -96,15 +96,15 @@ feature {NONE} -- Basic operations
 					eglist.islast
 				loop
 					put (concatenation (<<eglist.item.event_type.name,
-						Output_field_separator, eglist.item.event_type.id,
-						Output_record_separator>>))
+						Message_field_separator, eglist.item.event_type.id,
+						Message_record_separator>>))
 					eglist.forth
 				end
 				check
 					last: eglist.islast
 				end
 				put (concatenation (<<eglist.item.event_type.name,
-						Output_field_separator, eglist.item.event_type.id>>))
+						Message_field_separator, eglist.item.event_type.id>>))
 			end
 		end
 

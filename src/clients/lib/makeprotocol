@@ -26,7 +26,7 @@ System \nnetwork communication protocol */"
 }
 /: *INTEGER/ {
 	sub (/:/, "")
-	print "\tint " $1 " = " $4 ";"
+	print "\tfinal int " $1 " = " $4 ";"
 }
 /: *STRING/ {
 	sub (/:/, "")
@@ -41,10 +41,10 @@ System \nnetwork communication protocol */"
 	else {
 		value = $4
 	}
-	print "\tString " $1 " = " value ";"
+	print "\tfinal String " $1 " = " value ";"
 }
 END {
 	print "\n\t// daily period type is needed for initialization."
-	print "\tString daily_period_type = \"daily\";"
+	print "\tfinal String daily_period_type = \"daily\";"
 	print "}"
 }' $proto_files >../common/NetworkProtocol.java

@@ -23,6 +23,11 @@ deferred class APP_CONFIGURATION inherit
 			{NONE} all
 		end
 
+	GLOBAL_CONSTANTS
+		export
+			{NONE} all
+		end
+
 feature {NONE} -- Initialization
 
 	initialize_common_settings is
@@ -242,10 +247,6 @@ feature {NONE} -- Implementation - attributes
 	cached_intraday_start_date: DATE
 
 	cached_intraday_end_date: DATE
-
-	Date_field_separator: STRING is "/"
-
-	Time_field_separator: STRING is ":"
 
 feature {NONE} -- Implementation - token-related constants
 

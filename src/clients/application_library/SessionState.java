@@ -11,7 +11,7 @@ class SessionState implements NetworkProtocol {
 	// a login request.
 	SessionState(String response_string) throws IOException {
 		StringTokenizer t = new StringTokenizer(response_string,
-			Output_field_separator);
+			Message_field_separator);
 		String s = null;
 		if (! t.hasMoreTokens()) {
 			throw new IOException("Received empty key from server.");
