@@ -30,6 +30,10 @@ feature -- Access
 feature -- Status report
 
 	changed: BOOLEAN
+			-- Did the last editing operation make a change that was
+			-- saved to persistent store?
+
+	dirty: BOOLEAN
 			-- Did the last operation make a change that may need to be
 			-- saved to persistent store?
 
@@ -59,6 +63,7 @@ feature -- Basic operations
 		local
 			at_end: BOOLEAN
 		do
+			changed := false
 			begin_edit
 			if not abort_edit then
 				do_edit
@@ -66,7 +71,7 @@ feature -- Basic operations
 				end_edit
 			end
 		ensure
-			not_changed: not changed
+			not_dirty: not dirty
 			not_locked: not lock.locked
 		rescue
 			if not abort_edit and not at_end then
@@ -79,17 +84,19 @@ feature {NONE} -- Implementation
 	save is
 			-- Save user's changes to persistent store.
 		require
-			changed_and_ok_to_save: changed and ok_to_save
+			changed_and_ok_to_save: dirty and ok_to_save
 			not_aborted: not abort_edit
 		do
 			real_list.copy (working_list)
 			real_list.save
 			show_message ("The changes have been saved.")
 			working_list.deep_copy (real_list)
-			changed := false
+			dirty := false
 			end_save
+			changed := true
 		ensure then
-			not_changed: not changed
+			not_dirty: not dirty
+			changed: changed
 		end
 
 	begin_edit is
@@ -98,7 +105,7 @@ feature {NONE} -- Implementation
 		do
 			readonly := false
 			ok_to_save := true
-			changed := false
+			dirty := false
 			initialize_lock
 			lock.try_lock
 			if not lock.locked then
@@ -139,21 +146,21 @@ feature {NONE} -- Implementation
 			-- including ensuring that the file lock is released.
 		require
 			lock_set: lock /= Void
-			abort_rules: abort_edit implies not changed and not lock.locked
+			abort_rules: abort_edit implies not dirty and not lock.locked
 		do
-			if changed then
+			if dirty then
 				-- The working list was changed, but the user elected not
 				-- to save the changes; so throw away the changes by
 				-- restoring the working list as a deep copy of the real
-				-- list and ensure not changed.
+				-- list and ensure not dirty.
 				working_list.deep_copy (real_list)
-				changed := false
+				dirty := false
 			end
 			if lock.locked then
 				lock.unlock
 			end
 		ensure
-			not_changed: not changed
+			not_dirty: not dirty
 		end
 
 	lock: FILE_LOCK
@@ -261,7 +268,7 @@ invariant
 	read_implication: readonly implies not ok_to_save and not abort_edit
 	save_implication: ok_to_save implies not readonly and not abort_edit
 	not_locked_when_readonly: readonly implies lock /= Void and not lock.locked
-	abort_rules: abort_edit implies not changed and
+	abort_rules: abort_edit implies not dirty and
 		(lock /= Void implies not lock.locked)
 
 end -- STORABLE_SERVICES
