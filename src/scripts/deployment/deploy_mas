@@ -12,7 +12,7 @@ if perl -I $basedir $basedir/deploy_server.pl -m $msg_file $*; then
 	else
 		echo "Deployment of MAS server and web application succeeded." >&2
 		if [ -r $msg_file ]; then
-			echo "$(cat $msg_file)" >&2
+			cat $msg_file >&2
 		else
 			echo "Cannot read message file: $msg_file." >&3
 		fi
