@@ -1,6 +1,7 @@
 indexing
 	description: "User interface for event registration"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
+	note: "!!!Needs to be converted to use the editing interface."
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -9,26 +10,34 @@ class EVENT_REGISTRATION inherit
 	GLOBAL_APPLICATION
 		export {NONE}
 			all
-		end
-
-	PRINTING
-		export {NONE}
-			all
+		undefine
+			print
 		end
 
 	EXECUTION_ENVIRONMENT
 		export {NONE}
 			all
+		undefine
+			print
 		end
 
 	TAL_APP_ENVIRONMENT
 		export {NONE}
 			all
+		undefine
+			print
 		end
 
-	STD_FILES
-		export {NONE}
-			all
+	COMMAND_LINE_UTILITIES [MARKET_EVENT_GENERATOR]
+		rename
+			print_message as show_message, set_io_device as make_io
+		export
+			{NONE} all
+		end
+
+	EDITING_INTERFACE -- Should this be OBJECT_EDITING_INTERFACE?!!!
+		undefine
+			print
 		end
 
 creation
@@ -37,14 +46,15 @@ creation
 
 feature -- Initialization
 
-	make (disp: EVENT_DISPATCHER) is
+	make (disp: EVENT_DISPATCHER; io_dev: IO_MEDIUM) is
 		require
-			not_void: disp /= Void
+			not_void: disp /= Void and io_dev /= Void
 		do
 			dispatcher := disp
+			make_io (io_dev)
 			!!help.make
 		ensure
-			dispatcher = disp
+			set: dispatcher = disp and io_device = io_dev
 		end
 
 feature -- Access
@@ -63,8 +73,8 @@ feature -- Basic operations
 				finished
 			loop
 				new_registrant := Void
-				print_list (<<"Select registrant type: ",
-					"%N     User (u) Log file (l) Previous (-) Help (h) ">>)
+				print_list (<<"Select registrant type:%N     ",
+					"User (u) Log file (l) Previous (-) Help (h) ", eot>>)
 				inspect
 					selected_character
 				when 'u', 'U' then
@@ -146,9 +156,9 @@ feature {NONE} -- Implementation
 			s1, s2, s3: STRING
 		do
 			!!s1.make (0); !!s2.make (0)
-			print ("Enter the user's full name: ")
+			print_list (<<"Enter the user's full name: ", eot>>)
 			s1.append (input_string)
-			print ("Enter the user's email address: ")
+			print_list (<<"Enter the user's email address: ", eot>>)
 			s2.append (input_string)
 			!!s3.make (s2.count + 8)
 			s3.append (s2); s3.append (".history")
@@ -165,12 +175,11 @@ feature {NONE} -- Implementation
 				s1 := "-s"
 			end
 			Result.set_email_subject_flag (s1)
-			print ("User was created with the following properties:%N")
-			print ("name: "); print (Result.name)
-			print (", email address: "); print (Result.primary_email_address)
-			print ("%Nmailer: "); print (Result.mailer)
-			print (", email subject flag: "); print (Result.email_subject_flag)
-			print ("%N")
+			print_list (<<"User was created with the following properties:%N",
+						"name: ", Result.name, ", email address: ",
+						Result.primary_email_address, "%Nmailer: ",
+						Result.mailer, ", email subject flag: ",
+						Result.email_subject_flag, "%N">>)
 		end
 
 	new_log_file: EVENT_LOG_FILE is
@@ -180,15 +189,15 @@ feature {NONE} -- Implementation
 			file_name, s2, history_file_name: STRING
 		do
 			!!file_name.make (0); !!s2.make (0)
-			print ("Enter the file name: ")
+			print_list (<<"Enter the file name: ", eot>>)
 			file_name.append (input_string)
 			!!history_file_name.make (file_name.count + 8)
 			history_file_name.append (file_name)
 			history_file_name.append (".history")
 			!!Result.make (file_name_with_app_directory (file_name),
 						file_name_with_app_directory (history_file_name))
-			print ("Log file was created with the following properties:%N")
-			print ("name: "); print (Result.name); print ("%N")
+			print_list (<<"Log file was created with the following %
+						%properties:%N", "name: ", Result.name, "%N">>)
 		end
 
 	add_event_types (r: EVENT_REGISTRANT_WITH_HISTORY) is
@@ -217,12 +226,14 @@ feature {NONE} -- Implementation
 					i := i + 1
 				end
 				from
+					print (eot)
 					read_integer
 				until
 					last_integer >= 0 and last_integer <= i - 1
 				loop
 					print_list (<<"Selection must be between 0 and ",
 								i - 1, " - try again: %N">>)
+					print (eot)
 					read_integer
 				end
 				if last_integer = 0 then
@@ -254,16 +265,18 @@ feature {NONE} -- Implementation
 				regs.forth
 			end
 			from
+				print (eot)
 				read_integer
 			until
 				last_integer > 0 and last_integer < i or abort
 			loop
 				print_list (<<"Selection must be between 1 and ",
-							i - 1, " - Abort selection? (y/n) ">>)
+							i - 1, " - Abort selection? (y/n) ", eot>>)
 				c := selected_character
 				if c = 'y' or c = 'Y' then
 					abort := true
 				else
+					print (eot)
 					read_integer
 				end
 			end
@@ -292,16 +305,18 @@ feature {NONE} -- Implementation
 				types.forth
 			end
 			from
+				print (eot)
 				read_integer
 			until
 				last_integer > 0 and last_integer < i or abort
 			loop
 				print_list (<<"Selection must be between 1 and ",
-							i - 1, " - Abort selection? (y/n) ">>)
+							i - 1, " - Abort selection? (y/n) ", eot>>)
 				c := selected_character
 				if c = 'y' or c = 'Y' then
 					abort := true
 				else
+					print (eot)
 					read_integer
 				end
 			end
@@ -349,7 +364,7 @@ feature {NONE} -- Implementation
 			loop
 				print_list (<<"Select action for ", r.name, ": ",
 					"%N     Remove event type (r) Add event types (a) %
-					%Previous (-) Help (h) ">>)
+					%Previous (-) Help (h) ", eot>>)
 				inspect
 					selected_character
 				when 'r', 'R' then
@@ -385,23 +400,6 @@ feature {NONE} -- Implementation
 				read_line
 			end
 			Result := last_string
-		end
-
-	selected_character: CHARACTER is
-			-- Character selected by user
-			-- (Duplicated from TEST_USER_INTERFACE; at some point, a new
-			-- class should be created for utility functions like this one.)
-		do
-			from
-				Result := '%U'
-			until
-				Result /= '%U'
-			loop
-				read_line
-				if laststring.count > 0 then
-					Result := laststring @ 1
-				end
-			end
 		end
 
 feature {NONE} -- Implementation
