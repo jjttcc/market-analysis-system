@@ -139,6 +139,8 @@ feature -- Basic operations
 
 	main_menu is
 			-- Display the main menu and respond to the user's commands.
+		local
+			error_msg: STRING
 		do
 			check
 				io_devices_not_void: input_device /= Void and
@@ -212,8 +214,13 @@ feature -- Basic operations
 		rescue
 			if not assertion_violation then
 				if not is_signal then
+					if developer_exception_name /= Void then
+						error_msg := developer_exception_name
+					else
+						error_msg := meaning (exception)
+					end
 					print_list (<<"Error encounted in main menu: ",
-								meaning(exception), "%N">>)
+								error_msg, "%N">>)
 				else
 					print_list (<<"%NCaught signal: ", signal,
 									", continuing ...%N">>)
