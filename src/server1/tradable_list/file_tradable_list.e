@@ -27,13 +27,13 @@ creation
 
 feature -- Access
 
-	symbols: LIST [STRING] is
+	symbols: ARRAYED_LIST [STRING] is
 			-- The symbol of each tradable, extracted from `file_names'
 		local
 			fnames: LINEAR [STRING]
 		do
 			fnames := file_names
-			create {LINKED_LIST [STRING]} Result.make
+			create Result.make (0)
 			from fnames.start until fnames.exhausted loop
 				Result.extend (symbol_from_file_name (fnames.item))
 				fnames.forth
