@@ -48,7 +48,7 @@ feature -- Initialization
 		local
 			l: LIST [STRING]
 		do
-timing_needed := True --!!!Check timing for a while.
+timing_on := True --!!!Check timing for a while.
 			http_initialize
 			if file_ext /= Void then file_extension := file_ext end
 			l := symbols_from_file
@@ -72,14 +72,14 @@ feature -- Access
 
 feature -- Status setting
 
-	set_timing_needed (arg: BOOLEAN) is
-			-- Set `timing_needed' to `arg'.
+	set_timing_on (arg: BOOLEAN) is
+			-- Set `timing_on' to `arg'.
 		require
 			arg_not_void: arg /= Void
 		do
-			timing_needed := arg
+			timing_on := arg
 		ensure
-			timing_needed_set: timing_needed = arg and timing_needed /= Void
+			timing_on_set: timing_on = arg and timing_on /= Void
 		end
 
 feature {NONE} -- Implementation
@@ -101,13 +101,13 @@ feature {NONE} -- Implementation
 			if data_retrieval_needed then
 				retrieve_data
 			end
-			if timing_needed then print (timing_information) end
+			report_timing
 			Result := Precursor
 		end
 
 feature {NONE} -- Hook routine implementations
 
-	timing_needed: BOOLEAN
+	timing_on: BOOLEAN
 
 invariant
 

@@ -52,7 +52,7 @@ feature {NONE} -- Initialization
 
 feature {NONE} -- Implementation
 
-	timing_needed: BOOLEAN is True
+	timing_on: BOOLEAN is True
 
 	symbols: LIST [STRING]
 			-- The symbols for which data are to be retrieved
@@ -73,7 +73,7 @@ feature {NONE} -- Implementation
 				end
 				symbols.forth
 			end
-			if timing_needed then print (timing_information) end
+			report_timing
 		end
 
 end
