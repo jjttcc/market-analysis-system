@@ -11,7 +11,7 @@ class
 
 	NETWORK_PROTOCOL
 
-feature -- Access
+feature -- String constants
 
 	eom: STRING is ""
 
