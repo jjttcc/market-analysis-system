@@ -8,6 +8,8 @@
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Vector;
+import java.io.*;
 
 /** Technical analysis GUI chart component */
 public class TA_Chart extends Frame
@@ -15,17 +17,46 @@ public class TA_Chart extends Frame
 	public TA_Chart(TA_Connection conn)
 	{
 		super("TA_Chart");		// Create the main window frame.
-		connection = conn;
 		num_windows++;			// Count it.
+		connection = conn;
 
+		try {
+			if (_markets == null) {
+				_markets = connection.market_list();
+				if (! _markets.isEmpty()) {
+					_period_types = connection.trading_period_type_list(
+						(String) _markets.elementAt(0));
+				}
+			}
+		}
+		catch (IOException e) {
+			System.out.println("IO exception occurred, bye ...");
+			System.exit(-1);
+		}
+		initialize_GUI_components();
+	}
+
+	// List of all markets in the server's database
+	Vector markets() {
+		return _markets;
+	}
+
+	String current_period_type() {
+		return main_pane.current_period_type();
+	}
+
+// Implementation
+
+	private void initialize_GUI_components() {
 		// Create the main scroll pane, size it, and center it.
-		TA_ScrollPane pane = new TA_ScrollPane(TA_ScrollPane.SCROLLBARS_NEVER);
-		pane.setSize(610, 410);
-		this.add(pane, "Center");
+		main_pane = new TA_ScrollPane(_period_types,
+			TA_ScrollPane.SCROLLBARS_NEVER);
+		main_pane.setSize(610, 410);
+		add(main_pane, "Center");
 
 		// Make a menu bar with a file menu.
 		MenuBar menubar = new MenuBar();
-		this.setMenuBar(menubar);
+		setMenuBar(menubar);
 		Menu file = new Menu("File");
 		menubar.add(file);
 
@@ -46,7 +77,7 @@ public class TA_Chart extends Frame
 		});
 
 		ss.addActionListener(new MarketSelection(this, connection,
-								pane.main_graph()));
+								main_pane.main_graph()));
 
 		closewin.addActionListener(new ActionListener() {// Close this window.
 		public void actionPerformed(ActionEvent e) { close(); }
@@ -66,8 +97,6 @@ public class TA_Chart extends Frame
 		this.show();
 	}
 
-// Implementation
-
 	/** Close a window.  If this is the last open window, just quit. */
 	void close()
 	{
@@ -79,4 +108,13 @@ public class TA_Chart extends Frame
 
 	// # of open windows - so program can exit when last one is closed
 	protected static int num_windows = 0;
+
+	// Main window pane
+	TA_ScrollPane main_pane;
+
+	// Valid trading period types - static for now, since it is currently
+	// hard-coded in the server
+	protected static Vector _period_types;	// Vector of String
+
+	protected static Vector _markets;		// Vector of String
 }

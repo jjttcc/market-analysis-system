@@ -121,6 +121,25 @@ public class TA_Connection implements NetworkProtocol
 		return markets;
 	}
 
+	// List of all valid trading period types for `market'
+	public Vector trading_period_type_list(String market) throws IOException {
+		StringBuffer tpt_list;
+		Vector result;
+
+		result = new Vector();
+		connect();
+		send_msg(Trading_period_type_request, market);
+		tpt_list = receive_msg();
+		close_connection();
+		StringTokenizer t = new StringTokenizer(tpt_list.toString(),
+			Output_record_separator, false);
+		for (int i = 0; t.hasMoreTokens(); ++i)
+		{
+			result.addElement(t.nextToken());
+		}
+		return result;
+	}
+
 // Implementation
 
 	StringBuffer receive_msg() throws IOException

@@ -2,12 +2,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.*;
 import java.util.*;
-import java.io.*;
 import graph.*;
+import java.io.*;
 
 // Listener that allows user to select a market to be displayed.
 class MarketSelection implements ActionListener {
-	public MarketSelection(Frame f, TA_Connection conn, Graph2D g) {
+	public MarketSelection(TA_Chart f, TA_Connection conn, Graph2D g) {
 		connection = conn;
 		graph = g;
 		main_frame = f;
@@ -15,15 +15,9 @@ class MarketSelection implements ActionListener {
 		dialog = new Dialog(f);
 		dialog.add(selection);
 		dialog.setSize(140, 300);
-		try {
-			Vector ml = connection.market_list();
-			for (int i = 0; i < ml.size(); ++i) {
-				selection.add((String) ml.elementAt(i));
-			}
-		}
-		catch (IOException e) {
-			System.out.println("IO exception occurred, bye ...");
-			System.exit(-1);
+		Vector ml = main_frame.markets();
+		for (int i = 0; i < ml.size(); ++i) {
+			selection.add((String) ml.elementAt(i));
 		}
 		// Add action listener (anonymous class) to respond to
 		// stock selection from list.
@@ -33,8 +27,8 @@ class MarketSelection implements ActionListener {
 			String item = selection.getSelectedItem();
 			System.out.println("Retrieving data for " + item);
 			try {
-			//!!!Stubness - hardcoded period type:
-			connection.send_market_data_request(item, "daily");
+				connection.send_market_data_request(item,
+					main_frame.current_period_type());
 			}
 			catch (IOException e2) {
 				System.out.println("IO exception occurred, bye ...");
@@ -57,5 +51,5 @@ class MarketSelection implements ActionListener {
 	private Dialog dialog;
 	private TA_Connection connection;
 	private Graph2D graph;
-	private Frame main_frame;
+	private TA_Chart main_frame;
 }

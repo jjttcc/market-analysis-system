@@ -1,23 +1,21 @@
 import java.awt.*;
 import graph.*;
+import java.util.Vector;
 
 /** Scroll pane that holds the TA graph and buttons */
 public class TA_ScrollPane extends ScrollPane
 {
-	private G2Dint _main_graph, _indicator_graph;
-	DataSet data;
-	BarDrawer drawer;
-
-	public TA_ScrollPane(int scrollbarDisplayPolicy)
+	public TA_ScrollPane(Vector period_types, int scrollbarDisplayPolicy)
 	{
 		super(scrollbarDisplayPolicy);
-
-		int i;
-		int j;
 
 		drawer = new BarDrawer();
 		_main_graph = new G2Dint();
 		_indicator_graph = new G2Dint();
+		period_type_choice = new Choice();
+		for (int i = 0; i < period_types.size(); ++i) {
+			period_type_choice.add((String) period_types.elementAt(i));
+		}
 
 		Panel main_panel = new Panel(new BorderLayout());
 		add(main_panel, "Center");
@@ -30,13 +28,13 @@ public class TA_ScrollPane extends ScrollPane
 		button_panel.add (top_button_panel, "North");
 		button_panel.add (bottom_button_panel, "South");
 		top_button_panel.add(new Button("Go"));
-		top_button_panel.add(new Button("Stay"));
+		top_button_panel.add(period_type_choice);
 		top_button_panel.add(new Button("Modify"));
 		bottom_button_panel.add(new Button("Transact"));
 		bottom_button_panel.add(new Button("Stall"));
 
-		graph_panel.add (_main_graph, "North");
-		graph_panel.add (_indicator_graph, "South");
+		graph_panel.add(_main_graph, "North");
+		graph_panel.add(_indicator_graph, "South");
 		_main_graph.framecolor = new Color(0,0,0);
 		_main_graph.borderTop = 0;
 		_main_graph.borderBottom = 1;
@@ -63,4 +61,16 @@ public class TA_ScrollPane extends ScrollPane
 	public Graph2D indicator_graph() {
 		return _indicator_graph;
 	}
+
+	// Current selected period type
+	String current_period_type() {
+		return period_type_choice.getSelectedItem();
+	}
+
+// Implementation
+
+	private G2Dint _main_graph, _indicator_graph;
+	DataSet data;
+	BarDrawer drawer;
+	Choice period_type_choice;
 }
