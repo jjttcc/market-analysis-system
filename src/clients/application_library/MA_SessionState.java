@@ -26,7 +26,6 @@ class MA_SessionState extends SessionState implements NetworkProtocol {
 	}
 
 	protected void process_remaining_tokens(StringTokenizer t) {
-System.out.println("prt called");
 		String s;
 		while (t.hasMoreTokens()) {
 			s = t.nextToken();
@@ -37,7 +36,6 @@ System.out.println("prt called");
 	}
 
 	protected String message_field_separator() {
-System.out.println("mfs called");
 		return Message_field_separator;
 	}
 
