@@ -23,7 +23,8 @@ feature -- Access
 	Smaller_MACD_EMA_n: INTEGER is 12
 	Larger_MACD_EMA_n: INTEGER is 26
 	MACD_Signal_Line_EMA_n: INTEGER is 9
-	Momentum_n: INTEGER is 8
+	Momentum_n: INTEGER is 7
+	Rate_of_Change_n: INTEGER is 10
 	StochasticK_n: INTEGER is 5
 	StochasticD_n: INTEGER is 3
 	Williams_n: INTEGER is 7
@@ -43,7 +44,9 @@ feature -- Basic operations
 			l.extend (ema (l.last, MACD_Signal_Line_EMA_n,
 						"MACD Signal Line (EMA of MACD Difference)"))
 			l.extend (ma_diff (l.i_th (l.count - 1), l.last, "MACD Histogram"))
-			l.extend (momentum (f, Momentum_n, "Momentum"))
+			l.extend (momentum (f, Momentum_n, "Momentum", "SUBTRACTION"))
+			l.extend (momentum (f, Rate_of_Change_n, "Rate of Change",
+						"DIVISION"))
 			l.extend (williams_percent_R (f, Williams_n, "Williams %%R"))
 			l.extend (stochastic_percent_K (f, StochasticK_n, "Stochastic %%K"))
 			l.extend (stochastic_percent_D (f, StochasticK_n, StochasticD_n,
@@ -108,17 +111,22 @@ feature {NONE} -- Hard-coded market function building procedures
 			initialized: Result /= Void and Result.name = name
 		end
 
-	momentum (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
-				MOMENTUM_FUNCTION is
+	momentum (f: MARKET_FUNCTION; n: INTEGER; name: STRING;
+				operator_type: STRING): MOMENTUM_FUNCTION is
 			-- A momentum function
 		local
-			sub: SUBTRACTION
+			operator: BINARY_NUMERIC_OPERATOR
 			close: CLOSING_PRICE
 			close_minus_n: MINUS_N_COMMAND
 		do
 			!!close; !!close_minus_n.make (f.output, n)
-			!!sub.make_with_operands (close, close_minus_n)
-			!!Result.make (f, sub, close_minus_n, n)
+			if operator_type.is_equal ("SUBTRACTION") then
+				!SUBTRACTION!operator.make_with_operands (close, close_minus_n)
+			else
+				check operator_type.is_equal ("DIVISION") end
+				!DIVISION!operator.make_with_operands (close, close_minus_n)
+			end
+			!!Result.make (f, operator, close_minus_n, n)
 			Result.set_name (name)
 		ensure
 			initialized: Result /= Void and Result.n = n and Result.name = name
