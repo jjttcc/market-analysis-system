@@ -1,5 +1,6 @@
 Creating Market Analyzers with the Market Analysis Server
 
+
 This document provides a tutorial on creating market analyzers with the
 Market Analysis Server (MAS).  It consists of a brief introduction to
 the concepts used by the MAS command-line interface for creating market
@@ -58,7 +59,9 @@ detection should be below-to-above, above-to-below, or both.  Select
 "above-to-below".
 
 It will then ask if you want to define an operator (which will add extra
-criteria to the analyzer).  You don't need this, so answer no.
+criteria to the analyzer).  You don't need this, so answer no.  Next,
+you will be asked to select the signal type, either Buy, Sell, Neutral,
+or Other.  Select Buy.
 
 The system will then ask for a name for the new market analyzer (event).
 Enter a name that you think is appropriate, such as:
@@ -67,8 +70,8 @@ Stochastic %D/35% oversold crossover - Buy signal.
 This completes the definition of the Stochastic %D above to below
 crossover market analyzer.  You can define a (bearish) Stochastic
 %D below to above (65%) analyzer by following the same steps above,
-except for entering 65 for the y start value and "below-to-above" for
-the crossover specification.
+except for entering 65 for the y start value, "below-to-above" for
+the crossover specification, and Sell as the signal type.
 
 
 Example 2:  MACD Difference/Signal Crossover
@@ -88,12 +91,13 @@ indicator, choose MACD Signal Line.  Choose weekly for the trading period
 type.  Choose below-to-above for bullish crossover detection.
 
 When asked if you want to define an operator for the analyzer, say no.
-Then pick a good name, such as "MACD Difference/Signal Cross-above <Buy>".
+Select Buy as the signal type.  Then pick a good name, such as "MACD
+Difference/Signal Cross-above <Buy>".
 
 For the bearish analyzer, which will detect when MACD Difference crosses
 below the MACD Signal, follow the same steps as for the bullish analyzer,
 except that you should choose above-to-below for the specification for
-crossover detection.
+crossover detection and Sell as the signal type.
 
 Example 3:  MACD Difference/Signal Crossover and Stochastic %D Cross-below 35%
 
@@ -133,6 +137,7 @@ after stochastic oversold events, say no.
 
 Next it asks if you want to specify an event type as target for the left
 analyzer's date and time.  You don't need this here, so answer no.
+Select Buy as the signal type.
 
 Finally, select a good name for the compound indicator, such as:
 [MACD below/above crossover] / [Stochastic%D/35% oversold crossover] <Buy>
@@ -261,8 +266,10 @@ if you want to detect if the current period's volume is 2.5 times greater
 than the volume EMA of the previous period, choose 2.5.
 
 The system then asks for the type of trading period.  Since we want to
-check for volume spikes on a daily basis, choose "daily".  Choose a good
-descriptive name for the analyzer, such as "Volume/Volume-EMA spike".
+check for volume spikes on a daily basis, choose "daily".  For the signal
+type, choose Neutral, since a volume spike can indicate either a bullish
+or a bearish condition.  Choose a good descriptive name for the analyzer,
+such as "Volume/Volume-EMA spike".
 
 This concludes the creation of the volume spike market analyzer.
 You may wish to test the analyzer by choosing a data file that has
@@ -320,14 +327,15 @@ This is a long-term indicator (to be used in combination with a shorter-
 term indicator), so choose weekly as the period type (when your shorter-
 term indicator is daily).  Select "above-to-below" for the crossover
 specification.  (You want to know when the line crosses from above to
-below -1.)  No operator is needed.
+below -1.)  No operator is needed.  The signal type should be Sell.
 
 Choose a good name, such as "[Slope of MACD, Slope of Slope of MACD]
 Downtrend".
 
-To create the buy version of the market analyzer, simply repeat the same
-steps as above, except choose 1 as Line's starting y value and
-"below-to-above" for the crossover specification.
+To create the buy version of the market analyzer, simply repeat the
+same steps as above, except choose 1 as Line's starting y value and
+"below-to-above" for the crossover specification and Buy as the signal
+type.
 
 We will need two market analyzers to signal when a market needs to be
 sidelined, one to detect when the indicator moves from 2 to 0 and one to
@@ -348,8 +356,9 @@ of MACD] Trend, the left function, is greater than -1.)
 For the root operator, select GT_OPERATOR.  For the left operand, choose
 BASIC_NUMERIC_COMMAND, which will obtain the value of the underlying
 function for the current period.  For the right operand, select CONSTANT
-and give it the value -1.  Choose a good name, such as "[Slope of MACD,
-Slope of Slope of MACD] Sidelined - 2 to 0".
+and give it the value -1.  Select Neutral as the signal type.  Choose a
+good name, such as "[Slope of MACD, Slope of Slope of MACD] Sidelined -
+2 to 0".
 
 For the -2 to 0 analyzer, follow the same steps as the 2 to 0 analyzer,
 but select -1 for the Line's y value, select below-to-above for the
