@@ -20,7 +20,7 @@ public class CompressedConnection extends Connection
 	}
 
 	public Connection new_object() throws IOException {
-		return new CompressedConnection(io_connection.newObject());
+		return new CompressedConnection(io_connection.new_object());
 	}
 
 // Implementation
@@ -30,7 +30,7 @@ System.out.println("CompressedConnection new_reader called.");
 		Reader result = null;
 		try {
 			result = new BufferedReader(new InputStreamReader(
-				new InflaterInputStream(io_connection.inputStream(),
+				new InflaterInputStream(io_connection.input_stream(),
 				new Inflater(), 850000)));
 		} catch (Exception e) {
 			System.err.println("Failed to read from server (" + e + ")");
