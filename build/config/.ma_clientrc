@@ -3,6 +3,7 @@
 #start_date	daily	1999/12/01
 start_date	daily	now - 9 months
 end_date	daily	now
+# Intraday start and end date settings (use 'now' for the current date)
 #start_date	hourly	now - 2 months
 #start_date	30-minute	now - 55 days
 #start_date	15-minute	now - 2 months
@@ -13,7 +14,7 @@ start_date	15-minute	2000/08/14
 start_date	10-minute	2000/08/14
 start_date	5-minute	2000/08/14
 # Weekly start and end date settings
-#start_date	weekly	1996/12/01
+start_date	weekly	now - 3 years
 # Specify which indicators to include in the selection list, the order
 # in which to display them, whether to draw them in the upper or the lower
 # graph, and, optionally, each one's color.
