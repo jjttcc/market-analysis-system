@@ -21,69 +21,17 @@ indexing
 class FILE_TRADABLE_LIST inherit
 
 	TRADABLE_LIST
+		rename
+			symbol_list as file_names
+		redefine
+			symbols, current_symbol, setup_input_medium
+		end
 
 creation
 
 	make
 
-feature -- Initialization
-
-	make (filenames: LINEAR [STRING]; factories: LINEAR [TRADABLE_FACTORY]) is
-		require
-			not_void: filenames /= Void and factories /= Void
-			-- counts_equal: filenames.count = factories.count
-		do
-			file_names := filenames
-			tradable_factories := factories
-			object_comparison := True
-			file_names.start; tradable_factories.start
-			!HASH_TABLE [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]! cache.make (
-				cache_size)
-		ensure
-			set: file_names = filenames and tradable_factories = factories
-			implementation_init: last_tradable = Void and old_index = 0
-			cache_initialized: cache /= Void
-		end
-
 feature -- Access
-
-	index: INTEGER is
-		do
-			Result := file_names.index
-		end
-
-	item: TRADABLE [BASIC_MARKET_TUPLE] is
-		local
-			input_file: PLAIN_TEXT_FILE
-		do
-			check
-				indexes_equal: file_names.index = tradable_factories.index
-			end
-			-- Create a new tradable (or get it from the cache) only if the
-			-- cursor has moved since the last tradable creation.
-			if file_names.index /= old_index then
-				last_tradable := cached_item (file_names.index)
-				if last_tradable = Void then -- If it wasn't in the cache
-					input_file := open_current_file
-					if input_file /= Void then
-						tradable_factories.item.set_input_file (input_file)
-						tradable_factories.item.set_symbol (
-							symbol_from_file_name (file_names.item))
-						tradable_factories.item.execute
-						last_tradable := tradable_factories.item.product
-						add_to_cache (last_tradable, file_names.index)
-						if tradable_factories.item.error_occurred then
-							print_errors (last_tradable,
-											tradable_factories.item.error_list)
-						end
-					end
-				end
-				old_index := file_names.index
-			end
-			Result := last_tradable
-		end
-
-	file_names: LINEAR [STRING]
 
 	symbols: LIST [STRING] is
 			-- The symbol of each tradable, extracted from `file_names'
@@ -100,38 +48,6 @@ feature -- Access
 			-- Result.count = file_names.count
 			-- The contents of Result are in the same order as the
 			-- corresponding contents of `file_names'.
-		end
-
-feature -- Status report
-
-	after: BOOLEAN is
-		do
-			Result := file_names.after
-		end
-
-	empty: BOOLEAN is
-		do
-			Result := file_names.empty
-		end
-
-feature -- Cursor movement
-
-	start is
-		do
-			file_names.start
-			tradable_factories.start
-		end
-
-	finish is
-		do
-			file_names.finish
-			tradable_factories.finish
-		end
-
-	forth is
-		do
-			file_names.forth
-			tradable_factories.forth
 		end
 
 feature {NONE} -- Implementation
@@ -174,17 +90,38 @@ feature {NONE} -- Implementation
 			-- Open the file associated with `file_names'.item.
 			-- If the open fails with an exception, print an error message,
 			-- set Result to Void, and allow the exception to propogate.
+		local
+			error: BOOLEAN
 		do
-			!!Result.make_open_read (file_names.item)
+			if not error then
+				!!Result.make_open_read (file_names.item)
+			else
+				print ("Failed to open file ") print (file_names.item)
+				print ("%N")
+				Result := Void
+			end
 		rescue
-			print ("Failed to open file ") print (file_names.item)
-			print ("%N")
-			Result := Void
+			error := True
+			retry
 		end
 
-invariant
+	setup_input_medium is
+		local
+			input_file: PLAIN_TEXT_FILE
+			exc: EXCEPTIONS
+		do
+			input_file := open_current_file
+			if input_file /= Void then
+				tradable_factories.item.set_input_file (input_file)
+			else
+				create exc
+				exc.raise ("Error opening input file")
+			end
+		end
 
-	file_names_not_void: file_names /= Void
-	index_definition: index = file_names.index
+	current_symbol: STRING is
+		do
+			Result := symbol_from_file_name (file_names.item)
+		end
 
 end -- class FILE_TRADABLE_LIST
