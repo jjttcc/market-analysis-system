@@ -46,6 +46,7 @@ feature -- Basic operations
 			-- Edit a function that takes one market function and an operator.
 		require
 			ui_set: user_interface /= Void
+			op_maker_set: operator_maker /= Void
 		local
 			cmd: RESULT_COMMAND [REAL]
 		do
@@ -65,6 +66,7 @@ feature -- Basic operations
 			-- and an n-value.
 		require
 			ui_set: user_interface /= Void
+			op_maker_set: operator_maker /= Void
 		local
 			cmd: RESULT_COMMAND [REAL]
 		do
@@ -85,6 +87,7 @@ feature -- Basic operations
 			-- and an operator.
 		require
 			ui_set: user_interface /= Void
+			op_maker_set: operator_maker /= Void
 		local
 			cmd: RESULT_COMMAND [REAL]
 			i1, i2: COMPLEX_FUNCTION
@@ -111,6 +114,7 @@ feature -- Basic operations
 			-- a BASIC_NUMERIC_COMMAND, and an n-value.
 		require
 			ui_set: user_interface /= Void
+			op_maker_set: operator_maker /= Void
 		local
 			cmd: BASIC_NUMERIC_COMMAND
 		do
@@ -131,6 +135,7 @@ feature -- Basic operations
 			-- BASIC_NUMERIC_COMMAND, an N_BASED_CALCULATION, and an n-value.
 		require
 			ui_set: user_interface /= Void
+			op_maker_set: operator_maker /= Void
 		local
 			cmd: BASIC_NUMERIC_COMMAND
 			exp: N_BASED_CALCULATION
@@ -156,6 +161,7 @@ feature -- Basic operations
 			-- Edit a function that takes two market points and a period type.
 		require
 			ui_set: user_interface /= Void
+			op_maker_set: operator_maker /= Void
 		do
 		end
 
@@ -165,6 +171,7 @@ feature {NONE} -- Implementation
 			-- Edit `f's n-value.
 		require
 			ui_set: user_interface /= Void
+			op_maker_set: operator_maker /= Void
 		local
 			fnctn: N_RECORD_ONE_VARIABLE_FUNCTION
 		do

@@ -47,9 +47,23 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			l: ARRAYED_LIST [MARKET_FUNCTION]
 		once
 			!!Result.make (0)
-			!!l.make (13)
-			Result.extend (l, Void) --!!!!!!!!!!!!!Temporary
-			l.extend (function_with_generator (""))
+			!!l.make (6)
+			Result.extend (l, Market_function)
+			l.extend (function_with_generator ("TWO_VARIABLE_FUNCTION"))
+			l.extend (function_with_generator ("ONE_VARIABLE_FUNCTION"))
+			l.extend (function_with_generator (
+						"N_RECORD_ONE_VARIABLE_FUNCTION"))
+			l.extend (function_with_generator ("STANDARD_MOVING_AVERAGE"))
+			l.extend (function_with_generator ("EXPONENTIAL_MOVING_AVERAGE"))
+			l.extend (function_with_generator ("MARKET_FUNCTION_LINE"))
+			!!l.make (5)
+			Result.extend (l, Complex_function)
+			l.extend (function_with_generator ("TWO_VARIABLE_FUNCTION"))
+			l.extend (function_with_generator ("ONE_VARIABLE_FUNCTION"))
+			l.extend (function_with_generator (
+						"N_RECORD_ONE_VARIABLE_FUNCTION"))
+			l.extend (function_with_generator ("STANDARD_MOVING_AVERAGE"))
+			l.extend (function_with_generator ("EXPONENTIAL_MOVING_AVERAGE"))
 		end
 
 	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
