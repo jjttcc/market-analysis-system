@@ -396,6 +396,7 @@ install_files() {
 	fi
 
 	install_result=0
+	if [ -d "$basedir" ]; then cp -f forum.txt $basedir; fi
 	cp -f bin/* $bindir
 	binresult=$?
 	if [ "$binresult" -eq 0 ]; then
