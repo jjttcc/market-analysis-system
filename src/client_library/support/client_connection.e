@@ -128,14 +128,8 @@ feature {NONE} -- Implementation
 					create s.make (0)
 					if socket.ready_for_reading then
 						from
-							if socket.readable then
-								socket.read_character
-							end
+							socket.read_character
 						until
---!!!Determine whether or not this
---condition should be included:
---							not socket.readable or
---!!!So far, it is OK for both mct and macl - test a bit more.
 							end_of_message (socket.last_character)
 						loop
 							s.extend (socket.last_character)
