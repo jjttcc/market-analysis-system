@@ -531,7 +531,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	}
 
 	// Print fatal error and exit.
-	private void fatal(String s, Exception e) {
+	protected void fatal(String s, Exception e) {
 		System.err.println("Fatal error: request to server failed - " + s);
 		System.err.println("Current symbol is " + current_market);
 		if (e != null) {
