@@ -67,6 +67,8 @@ cluster
 
 	support (mct):		"$/support"
 
+	global (mct):		"$/global"
+
 	platform (mct):		"$/system_specific/unix"
 
 	eiflib:		"$MAS/src/eiffel_library"
