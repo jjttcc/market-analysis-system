@@ -45,51 +45,45 @@ feature -- Access
 
 	instances_and_descriptions: ARRAYED_LIST [PAIR [MARKET_FUNCTION, STRING]] is
 			-- An instance and description of each MARKET_FUNCTION class
-		local
-			commands: expanded COMMANDS
-			pair: PAIR [MARKET_FUNCTION, STRING]
 		once
 			create Result.make (0)
-			create pair.make (one_variable_function,
-				"Function that operates one input sequence")
-			Result.extend (pair)
-			create pair.make (n_record_one_variable_function,
+			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+				one_variable_function,
+				"Function that operates one input sequence"))
+			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+				n_record_one_variable_function,
 				"Function that operates one input sequence and %
-				%operates on n records of that sequence at a time")
-			Result.extend (pair)
-			create pair.make (two_variable_function,
-				"Function that operates on two input sequences")
-			Result.extend (pair)
-			create pair.make (standard_moving_average,
+				%operates on n records of that sequence at a time"))
+			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+				two_variable_function,
+				"Function that operates on two input sequences"))
+			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+				standard_moving_average,
 				"Function that provides an n-period moving average %
-				%of an input sequence")
-			Result.extend (pair)
-			create pair.make (exponential_moving_average,
+				%of an input sequence"))
+			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+				exponential_moving_average,
 				"Function that provides an n-period exponential %
-				%moving average of an input sequence")
-			Result.extend (pair)
-			create pair.make (accumulation,
-				"Function that accumulates its values")
-			Result.extend (pair)
-			create pair.make (configurable_n_record_function,
+				%moving average of an input sequence"))
+			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+				accumulation, "Function that accumulates its values"))
+			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+				configurable_n_record_function,
 				"N-period function that can be configured by choosing %
-				%previous and first-element operators")
-			Result.extend (pair)
-			create pair.make (market_function_line,
-				"Function that behaves as a trend line")
-			Result.extend (pair)
-			create pair.make (agent_based_function,
+				%previous and first-element operators"))
+			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+				market_function_line, "Function that behaves as a trend line"))
+			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+				agent_based_function,
 				"Function that uses a selectable procedure to do %
-				%its calculation")
-			Result.extend (pair)
-			create pair.make (market_data_function,
+				%its calculation"))
+			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+				market_data_function,
 				"Function that takes basic market data (with close, %
 				%high, volume, etc.) as input and %
-				%whose output is simply its input")
-			Result.extend (pair)
-			create pair.make (stock,
-				"Represents a dummy function that does not take input")
-			Result.extend (pair)
+				%whose output is simply its input"))
+			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+				stock, "Represents a dummy function that does not take input"))
 		end
 
 	function_instances: ARRAYED_LIST [MARKET_FUNCTION] is
