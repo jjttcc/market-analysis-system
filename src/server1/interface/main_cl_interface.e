@@ -153,7 +153,8 @@ feature -- Basic operations
 							"Run market analysis (a)%N",
 							"     Set date for market analysis (d) ",
 							"Edit event registrants (r)%N",
-							"     End client session (x) Help (h) ", eom>>)
+							"     End client session (x) Help (h) ",
+							"Product information (p) ", eom>>)
 				inspect
 					selected_character
 				when 's', 'S' then
@@ -180,6 +181,8 @@ feature -- Basic operations
 					end_client := true
 				when 'h', 'H' then
 					print (help @ help.Main)
+				when 'p', 'P' then
+					print (product_info)
 				when '%/5/' then -- ^E, for exit
 					exit_server := true
 				when '!' then
@@ -830,6 +833,16 @@ feature {NONE}
 				io.print ("Terminating the server.%N")
 			end
 			die (status)
+		end
+
+	product_info: STRING is
+		local
+			version: expanded PRODUCT_INFO
+		do
+			Result := concatenation (<<
+				"%N", version.name, "%NVersion: ", version.number, "%N",
+				version.copyright, "%NVersion date: ", version.informal_date,
+				"%NLicence:%N%N", version.license_information>>)
 		end
 
 feature {NONE}
