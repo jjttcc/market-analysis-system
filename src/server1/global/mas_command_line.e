@@ -39,6 +39,7 @@ feature {NONE} -- Initialization
 			set_opening_price
 			set_background
 			set_help
+			set_version_request
 			set_port_numbers
 			set_file_names
 		end
@@ -68,6 +69,10 @@ feature -- Access
 			-- Has the user requested help on command-line options?
 			-- True if "-h" or "-?" is found.
 
+	version_request: BOOLEAN
+			-- Has the user requested the version number?
+			-- True if "-v" is found.
+
 feature -- Basic operations
 
 	usage is
@@ -75,8 +80,11 @@ feature -- Basic operations
 		do
 			print (concatenation (<<"Usage: ", command_name,
 				" [port_number ...] [-background]%
-				% [input_file ...] [-o] %H%N[-f field_separator]%N%
+				% [input_file ...] [-o] %H%N[-f field_separator]%
+				% [-h] [-v]%N%
 				%    Where:%N        -o = data has an open field%N",
+				            "        -v = print version number%N",
+				            "        -h = print this help message%N",
 				            "        -background = run in background%N">>))
 		end
 
@@ -169,6 +177,25 @@ feature {NONE} -- Implementation
 					contents.item.item (2) = '?')
 				then
 					help := true
+					contents.remove
+				else
+					contents.forth
+				end
+			end
+		end
+
+	set_version_request is
+		do
+			from
+				contents.start
+			until
+				contents.exhausted or version_request
+			loop
+				if
+					contents.item.item (1) = option_sign and
+					contents.item.item (2) = 'v'
+				then
+					version_request := true
 					contents.remove
 				else
 					contents.forth
