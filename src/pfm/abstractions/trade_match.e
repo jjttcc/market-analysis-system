@@ -111,6 +111,16 @@ feature -- Access
 			end
 		end
 
+	buy_commission: REAL is
+			-- Commission that was charged for the buy
+		do
+			if short then
+				Result := closing_trade.commission
+			else
+				Result := opening_trade.commission
+			end
+		end
+
 	sell_price: REAL is
 			-- Sell price, per unit
 		do
@@ -118,6 +128,16 @@ feature -- Access
 				Result := opening_price
 			else
 				Result := closing_price
+			end
+		end
+
+	sell_commission: REAL is
+			-- Commission that was charged for the sale
+		do
+			if short then
+				Result := opening_trade.commission
+			else
+				Result := closing_trade.commission
 			end
 		end
 
@@ -168,6 +188,21 @@ feature -- Access
 				opening_trade.commission) < epsilon
 		end
 
+	total_commissions: REAL is
+			-- Total commissions on the trade
+		do
+			Result := opening_trade.commission
+			if closing_trade /= Void then
+				Result := Result + closing_trade.commission
+			end
+		ensure
+			result_when_closed: is_closed implies
+				Result - (opening_trade.commission +
+					closing_trade.commission) < epsilon
+			result_when_open: not is_closed implies
+				Result - opening_trade.commission < epsilon
+		end
+
 	percent_gain_or_loss: REAL is
 			-- Percent gain or loss on the trade
 		do
@@ -178,6 +213,7 @@ feature -- Access
 		end
 
 	report: STRING is
+			-- Default report of the trade-match status
 		local
 			usymbol: STRING
 		do
