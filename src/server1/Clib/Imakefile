@@ -1,5 +1,7 @@
 INCLUDES = -I.  -I$(EIFFEL_INCLUDE)
 
+CC = gcc
+
 CCOPTIONS = -Wall -ansi -pedantic -DNDEBUG -DUNIX
 
 HDRS = external_input_sequence_plug_in_module.h
@@ -8,9 +10,9 @@ SRCS = external_input_sequence.c plug_in_module_1.c
 
 OBJS = external_input_sequence.o plug_in_module_1.o
 
-LIBDIR = ../lib/
+LIBDIR = ../spec/${ISE_PLATFORM}/lib/
 
-EIFFEL_INCLUDE = ${EIFFEL4}/bench/spec/${PLATFORM}/include
+EIFFEL_INCLUDE = ${ISE_EIFFEL}/studio/spec/${ISE_PLATFORM}/include
 
 LIB = $(LIBDIR)/external_input_sequence.a
 
@@ -19,7 +21,7 @@ AllTarget ($(LIB))
 $(OBJS): $(HDRS)
 
 $(LIB): $(OBJS)
+	./mkdirs
 	ar crv $(LIB) $(OBJS)
 
 all:: $(LIB)
-
