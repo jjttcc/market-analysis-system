@@ -25,7 +25,7 @@ candlesticks, traders, financial markets, trading tools, subscription">
 <td>&nbsp;
 <center>
 <h2>
-Market Analysis System (MAS):  Frequently Asked Questions
+Market Analysis System (MAS):  Frequently Asked (or Anticipated) Questions
 </h2>
 </center>
 <DIV CLASS="indented">
@@ -139,6 +139,55 @@ The way to
 get around this when you change mailers is to delete the original user
 and add a new user while running mas with the MAS_MAILER variable set
 to the new mailer, in this case to the path of your script.
+<P><B>
+I updated to a new version of MAS and when the server starts up it
+prints the following error and exits:
+"Retrieval of indicator library file indicators_persist failed.
+The file may be corrupted or you may have an incompatible version."
+How can I use the old indicators I have created with the new server?
+<P></B>
+This problem occurs when a new version of MAS incorporates a change to
+the structure of the indicator code that is not compatible with the old
+version.  As a result, the old indicator file, indicators_persist, cannot
+be loaded when the new version of the server starts up.  Once this occurs,
+the only way to use your old indicators is to keep using the old version
+of the server.  However, there is a preventative method that can be
+used to overcome the problem: Whenever you create a new indicator, start
+the server in the background (-b option) and use the command-line client
+program, macl, to talk to the server and "record" the conversation with
+the command:
+<P><I>
+macl -r output_file &lt;portnumber&gt;
+<P></I>
+where
+<I>
+output_file
+</I>
+is the name of the file to which you wish to save the recorded output
+and
+<I>
+&lt;portnumber&gt;
+</I>
+is the port number with which you started the server.
+Keep this file in a safe place.  It would probably also be a good idea
+to keep it backed up.
+<P>
+Whenever you upgrade to a new version of MAS and get the above error
+message, you can restore the indicators you have created by running
+the following command on each of your recorded output files:
+<P><I>
+macl -i file &lt;portnumber&gt;
+<P></I>
+where
+<I>
+file
+</I>
+is the name of a file created earlier with the -r option
+and
+<I>
+&lt;portnumber&gt;
+</I>
+is, again, the port number with which you started the server.
 <P><B>
 I'm running into problems with MAS not using the
 MAS_DIRECTORY variable.
