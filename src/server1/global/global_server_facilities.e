@@ -10,10 +10,10 @@ class
 
 feature -- Access
 
-	sessions: TABLE [SESSION, INTEGER] is
+	sessions: HASH_TABLE [SESSION, INTEGER] is
 			-- Registered GUI Client sessions
 		once
-			!HASH_TABLE [SESSION, INTEGER]!Result.make(1)
+			!!Result.make(1)
 		end
 
 end -- GLOBAL_SERVER
