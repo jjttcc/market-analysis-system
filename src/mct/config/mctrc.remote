@@ -3,6 +3,9 @@
 # Test configuration file for starting and communicating with a MAS server
 # running on a remote machine.  This version runs from mars (my laptop) with
 # the server running on jupiter (the old Suse system).
+# NOTE: This file has not yet been adapted for the MCT change of using
+# user-defined variables in the config. file instead of <data_dir>,
+# <bin_dir>, and <doc_dir>.
 
 # Special symbols:
 #   <portnumber> - The MAS server port number for the current session
