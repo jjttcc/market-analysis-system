@@ -231,8 +231,8 @@ feature {NONE}
 			not_empty: not empty
 		local
 			calculator: N_BOOLEAN_LINEAR_COMMAND
-			greater_than: GT_OPERATOR [REAL]
-			less_than: LT_OPERATOR [REAL]
+			greater_than: GT_OPERATOR [COMPARABLE]
+			less_than: LT_OPERATOR [COMPARABLE]
 			close_extractor: CLOSING_PRICE
 			original_cursor: CURSOR
 		do
