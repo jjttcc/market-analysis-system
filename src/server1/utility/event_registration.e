@@ -1,6 +1,6 @@
 indexing
 	description: "User interface for event registration"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -158,6 +158,7 @@ feature {NONE} -- Implementation
 			-- and add it to the global market_event_registrants.
 		local
 			s1, s2, hist_file_name: STRING
+			constants: expanded APPLICATION_CONSTANTS
 		do
 			!!s1.make (0); !!s2.make (0)
 			print_list (<<"Enter the user's full name: ", eom>>)
@@ -168,7 +169,9 @@ feature {NONE} -- Implementation
 			hist_file_name.append (s2); hist_file_name.append (".history")
 			-- Ensure that the event history file name is unique:
 			hist_file_name.append (s1.hash_code.out)
-			!!Result.make (hist_file_name)
+			!!Result.make (hist_file_name,
+				constants.event_history_field_separator,
+				constants.event_history_record_separator)
 			Result.set_name (s1)
 			Result.add_email_address (s2)
 			s1 := mailer
@@ -193,6 +196,7 @@ feature {NONE} -- Implementation
 			-- and add it to the global market_event_registrants.
 		local
 			file_name, s2, history_file_name: STRING
+			constants: expanded APPLICATION_CONSTANTS
 		do
 			!!file_name.make (0); !!s2.make (0)
 			print_list (<<"Enter the file name: ", eom>>)
@@ -200,7 +204,9 @@ feature {NONE} -- Implementation
 			!!history_file_name.make (file_name.count + 8)
 			history_file_name.append (file_name)
 			history_file_name.append (".history")
-			!!Result.make (file_name, history_file_name)
+			!!Result.make (file_name, history_file_name,
+				constants.event_history_field_separator,
+				constants.event_history_record_separator)
 			print_list (<<"Log file was created with the following %
 						%properties:%N", "name: ", Result.name, "%N">>)
 		end
