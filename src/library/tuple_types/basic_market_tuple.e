@@ -25,6 +25,7 @@ feature -- Initialization
 			open.set_value (-1)
 		ensure
 			not open_available
+			not editing
 		end
 
 feature -- Access
@@ -65,12 +66,46 @@ feature -- Status report
 			Result := not (open.value < 0.0)
 		end
 
+	editing: BOOLEAN
+			-- Is this instance in the process of being edited?
+
+feature -- Status setting
+
+	begin_editing is
+			-- Set editing state to true to allow changing values
+			-- without violating the class invariant.  end_editing
+			-- should be called after setting values to allow them
+			-- to be checked again by the class invariant.
+		require
+			not_editing: not editing
+		do
+			editing := true
+		ensure
+			editing: editing
+		end
+
+	end_editing is
+			-- Set editing state to false and ensure the class invariant.
+		require
+			prices_valid: 
+					(low <= high and low <= close and close <= high) and
+					(open_available implies low <= open and open <= high)
+		do
+			editing := false
+		ensure
+			not_editing: not editing
+			prices_valid: 
+					(low <= high and low <= close and close <= high) and
+					(open_available implies low <= open and open <= high)
+		end
+
 feature -- {WHO?} Element change
 
 	set (o, h, l, c: REAL_REF) is
 			-- Set the open, high, low, and close values.
+			--!!!Change args to type REAL - soon
 		require
-			make_sense: h >= l and l <= o and o <= h and l <= c and c <= h
+			values_valid: h >= l and l <= o and o <= h and l <= c and c <= h
 			non_negative: l.item >= 0
 		do
 			open.set_value (o.item)
@@ -86,7 +121,8 @@ feature -- {WHO?} Element change
 	set_open (p: REAL) is
 			-- Set open to `p'.
 		require
-			argument_valid: p >= low.value and p <= high.value
+			argument_valid:
+				not editing implies p >= low.value and p <= high.value
 			non_negative: p >= 0
 		do
 			open.set_value (p)
@@ -98,7 +134,8 @@ feature -- {WHO?} Element change
 	set_close (p: REAL) is
 			-- Set close to `p'.
 		require
-			argument_valid: p >= low.value and p <= high.value
+			argument_valid:
+				not editing implies p >= low.value and p <= high.value
 			non_negative: p >= 0
 		do
 			close.set_value (p)
@@ -109,7 +146,8 @@ feature -- {WHO?} Element change
 	set_high (p: REAL) is
 			-- Set high to `p'.
 		require
-			argument_valid: p >= close.value and p >= open.value
+			argument_valid:
+				not editing implies p >= close.value and p >= open.value
 			non_negative: p >= 0
 		do
 			high.set_value (p)
@@ -120,7 +158,8 @@ feature -- {WHO?} Element change
 	set_low (p: REAL) is
 			-- Set low to `p'.
 		require
-			argument_valid: p <= close.value and p <= open.value
+			argument_valid:
+				not editing implies p <= close.value and p <= open.value
 			non_negative: p >= 0
 		do
 			low.set_value (p)
@@ -134,7 +173,8 @@ invariant
 							low.value >= 0 and
 							(open.value >= 0 or not open_available)
 	open_na_value: not open_available implies open.value < 0
-	price_relationships: low <= high and low <= close and close <= high;
-						open_available implies open <= high and low <= open
+	price_relationships: not editing implies
+					(low <= high and low <= close and close <= high) and
+					(open_available implies low <= open and open <= high)
 
 end -- class BASIC_MARKET_TUPLE
