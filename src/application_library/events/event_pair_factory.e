@@ -1,6 +1,6 @@
 indexing
 	description: "A market event factory that makes a MARKET_EVENT_PAIR"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -17,22 +17,19 @@ creation
 
 feature -- Initialization
 
-	make (infile: like input_file; p: like parser;
+	make (infile: like input; p: like parser;
 			fsep: like field_separator) is
 		require
 			not_void: infile /= Void and p /= Void
 		do
-			input_file := infile
+			input := infile
 			parser := p
 			field_separator := fsep
 		ensure
-			set: input_file = infile and parser = p and field_separator = fsep
+			set: input = infile and parser = p and field_separator = fsep
 		end
 
 feature -- Access
-
-	input_file: FILE
-			-- File containing input data from which to create MARKET_EVENTs
 
 	parser: MARKET_EVENT_PARSER
 			-- Parser used to create the appropriate event type according
@@ -43,7 +40,7 @@ feature -- Access
 feature -- Basic operations
 
 	execute is
-			-- Scan input_file and create an MARKET_EVENT_PAIR from it.
+			-- Scan input and create an MARKET_EVENT_PAIR from it.
 			-- If a fatal error is encountered while scanning, an exception
 			-- is thrown and error_occurred is set to true.
 		local

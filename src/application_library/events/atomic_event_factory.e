@@ -1,8 +1,8 @@
 indexing
 	description:
-		"Factory that parses an input file and creates an %
+		"Factory that parses an input sequence and creates an %
 		%ATOMIC_MARKET_EVENT with the result"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -21,22 +21,18 @@ creation
 
 feature -- Initialization
 
-	make (infile: like input_file; fs: like field_separator) is
+	make (infile: like input; fs: like field_separator) is
 		require
 			args_not_void: infile /= Void
-			infile_readable: infile.exists and infile.is_open_read
 			event_types_setup: event_types /= Void and event_types.count > 0
 		do
-			input_file := infile
+			input := infile
 			field_separator := fs
 		ensure
-			set: input_file = infile and field_separator = fs
+			set: input = infile and field_separator = fs
 		end
 
 feature -- Access
-
-	input_file: FILE
-			-- File containing input data from which to create MARKET_EVENTs
 
 	product: ATOMIC_MARKET_EVENT
 
@@ -56,7 +52,7 @@ feature -- Status setting
 feature -- Basic operations
 
 	execute is
-			-- Scan input_file and create an ATOMIC_MARKET_EVENT from it.
+			-- Scan input and create an ATOMIC_MARKET_EVENT from it.
 			-- If a fatal error is encountered while scanning, an exception
 			-- is thrown and error_occurred is set to true.
 		local
@@ -84,8 +80,8 @@ feature {NONE} -- Implementation
 				last_error := concatenation (
 					<<"Error occurred inputting market symbol field:",
 					"  Empty field - from file ",
-					input_file.name, " at character ", input_file.index,
-					" - invalid input value: ", input_file.last_integer>>)
+					input.name, " at character ", input.index,
+					" - invalid input value: ", input.last_integer>>)
 				error_occurred := true
 				raise ("scan_symbol failed with empty field")
 			end
@@ -104,13 +100,13 @@ feature {NONE} -- Implementation
 	scan_date is
 			-- Scan the date and set `last_date' to it.
 		do
-			input_file.read_integer
-			last_date := date_scanner.date_from_number (input_file.last_integer)
+			input.read_integer
+			last_date := date_scanner.date_from_number (input.last_integer)
 			if last_date = Void then
 				last_error := concatenation (
 					<<"Error occurred inputting date from file ",
-					input_file.name, " at character ", input_file.index,
-					" - invalid input value: ", input_file.last_integer>>)
+					input.name, " at character ", input.index,
+					" - invalid input value: ", input.last_integer>>)
 				error_occurred := true
 				raise ("scan_date failed")
 			end
@@ -122,32 +118,32 @@ feature {NONE} -- Implementation
 		local
 			hour, minute, second: INTEGER
 		do
-			input_file.read_integer
-			hour := input_file.last_integer
-			input_file.read_character
-			if input_file.last_character /= ':' then
+			input.read_integer
+			hour := input.last_integer
+			input.read_character
+			if input.last_character /= ':' then
 				last_error := concatenation (
 					<<"Error occurred inputting time from file ",
-					input_file.name, " at character ", input_file.index,
+					input.name, " at character ", input.index,
 					" - invalid field separator for time: ",
-					input_file.last_character>>)
+					input.last_character>>)
 				error_occurred := true
 				raise ("scan_time failed with invalid input")
 			else
-				input_file.read_integer
-				minute := input_file.last_integer
-				input_file.read_character
-				if input_file.last_character /= ':' then
+				input.read_integer
+				minute := input.last_integer
+				input.read_character
+				if input.last_character /= ':' then
 					last_error := concatenation (
 						<<"Error occurred inputting time from file ",
-						input_file.name, " at character ", input_file.index,
+						input.name, " at character ", input.index,
 						" - invalid field separator for time: ",
-						input_file.last_character>>)
+						input.last_character>>)
 					error_occurred := true
 					raise ("scan_time failed with invalid input")
 				else
-					input_file.read_integer
-					second := input_file.last_integer
+					input.read_integer
+					second := input.last_integer
 				end
 			end
 			if
@@ -159,7 +155,7 @@ feature {NONE} -- Implementation
 			else
 				last_error := concatenation (
 					<<"Error occurred inputting time from file ",
-					input_file.name, " at character ", input_file.index,
+					input.name, " at character ", input.index,
 					" - invalid time: ", hour, ":", minute, ":", second>>)
 				error_occurred := true
 				raise ("scan_time failed with invalid input")
@@ -174,15 +170,15 @@ feature {NONE} -- Implementation
 			end
 			last_string.wipe_out
 			from
-				input_file.read_character
+				input.read_character
 			until
-				input_file.last_character = field_separator or
-				input_file.last_character = '%N'
+				input.last_character = field_separator or
+				input.last_character = '%N'
 			loop
-				last_string.extend (input_file.last_character)
-				input_file.read_character
+				last_string.extend (input.last_character)
+				input.read_character
 			end
-			input_file.back
+			input.back
 		end
 
 	last_string: STRING
