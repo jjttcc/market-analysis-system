@@ -78,7 +78,6 @@ feature -- Access
 		ensure
 			object_comparison: Result.object_comparison
 			not_void_if_no_error: not error_occurred implies Result /= Void
-			void_if_empty: empty implies Result = Void
 		end
 
 	period_types (symbol: STRING): ARRAYED_LIST [STRING] is
