@@ -41,12 +41,17 @@ feature -- Initialization
 
 	make is
 		do
-			load_stock_splits
-			register_for_termination (Current)
+			connect
+			if not fatal_error then
+				load_stock_splits
+				register_for_termination (Current)
+				disconnect
+			end
 		ensure
 			splits_not_void_if_available:
 				not fatal_error and not db_info.stock_split_query.empty implies
 					stock_splits /= Void
+			not_connected: not connected or else fatal_error
 		end
 
 feature -- Access
@@ -319,25 +324,26 @@ feature {NONE} -- Implementation
 		end
 
 	load_stock_splits is
+		require
+			connected: connected
 		local
 			query: STRING
 		do
 			query := db_info.stock_split_query
 			if not query.empty then
-				connect
-				if not fatal_error then
-					create stock_splits.make (input_statement (query,
-						stock_split_value_holders))
-					if not fatal_error then
-						disconnect
-					end
-				end
+				create stock_splits.make (input_statement (query,
+					stock_split_value_holders))
 			end
+		ensure
+			still_connected: connected
 		end
 
 	cleanup is
 		do
-			session.release
+			if connected then disconnect end
+			if session.is_valid and not session.unattached then
+				session.release
+			end
 		end
 
 	Max_varchar_length: INTEGER is 254
