@@ -11,22 +11,18 @@ class
 feature -- Access
 
 	period_types: TABLE [TIME_PERIOD_TYPE, STRING] is
-	--period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
 			-- All time period types used by the system
 		local
 			type: TIME_PERIOD_TYPE
 			duration: DATE_TIME_DURATION
 			tbl: HASH_TABLE [TIME_PERIOD_TYPE, STRING]
 		once
-			--!HASH_TABLE [TIME_PERIOD_TYPE, STRING]!Result.make (3)
-			--!!Result.make (3)
 			!!tbl.make (3)
 			!!duration.make (0, 0, 0, 1, 0, 0)
 			check duration.hour = 1 end
 			!!type.make ("hourly", duration, false)
 			check
 				not_in_table1: not tbl.has (type.name)
-				--not_in_table1: not Result.has (type)
 			end
 			tbl.extend (type, type.name)
 			!!duration.make (0, 0, 1, 0, 0, 0)
@@ -34,7 +30,6 @@ feature -- Access
 			!!type.make ("daily", duration, false)
 			check
 				not_in_table2: not tbl.has (type.name)
-				--not_in_table2: not Result.has (type)
 			end
 			tbl.extend (type, type.name)
 			!!duration.make (0, 0, 7, 0, 0, 0)
@@ -42,7 +37,6 @@ feature -- Access
 			!!type.make ("weekly", duration, false)
 			check
 				not_in_table3: not tbl.has (type.name)
-				--not_in_table3: not Result.has (type)
 			end
 			tbl.extend (type, type.name)
 			Result := tbl
