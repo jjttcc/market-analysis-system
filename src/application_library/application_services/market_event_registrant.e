@@ -69,7 +69,7 @@ feature -- Basic operations
 	cleanup is
 		local
 			hfile: PLAIN_TEXT_FILE
-			input: BILINEAR_INPUT_SEQUENCE
+			input: INPUT_SEQUENCE
 			scanner: MARKET_EVENT_SCANNER
 			fld_sep, record_sep: STRING
 			env: expanded APP_ENVIRONMENT

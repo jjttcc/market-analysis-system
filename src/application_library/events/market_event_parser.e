@@ -37,7 +37,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	input: BILINEAR_INPUT_SEQUENCE
+	input: INPUT_SEQUENCE
 			-- File containing input data from which to parse MARKET_EVENTs
 
 	last_error: STRING
