@@ -1,0 +1,73 @@
+Notes for the Linux version:
+
+After installing MAS, you will probably want to include the location of
+the MAS executable in your path.  For example, if your login shell is
+bash and MAS was installed in /opt/mas, adding the line:
+
+PATH=$PATH:/opt/mas/bin
+
+to $HOME/.bash_profile will add the mas executable location, /opt/mas/bin,
+to your path.
+
+For those who install MAS as root it is recommended that you set
+the MAS_DIRECTORY environment variable to a directory under your
+home directory and copy the files under the MAS lib directory (e.g.,
+/opt/mas/lib, if MAS was installed in /opt/mas) to $MAS_DIRECTORY.
+This will allow you to modify the .ma_clientrc and other configuration
+files to fit your needs, as well as to run MAS with the web (-w) option,
+which needs to create a directory in which to put the data files.
+
+Below is an example for setting MAS_DIRECTORY and other MAS variables for
+bash and other Bourne-derivative shells.  If you like, you can copy the
+lines below into your shell startup file (e.g., .profile or .bash_profile)
+and then modify them to the settings you need on your system so that these
+environment variables will be set automatically when you log in.
+
+# Environment variables for MAS
+export MAS_MAILER=mutt
+export MAS_DIRECTORY=~/.mas
+export MAS_STOCK_SPLIT_FILE=NOT_USED
+export MAS_MAILER_SUBJECT_FLAG=-s
+if [ -z "$PYTHONPATH" ]; then
+	export PYTHONPATH=$MAS_DIRECTORY/python
+else
+	export PYTHONPATH=$PYTHONPATH:$MAS_DIRECTORY/python
+fi
+
+Below is a bash shell script that copies the MAS lib files into your own
+directory.  You can either use it as an example or you can copy it into
+a file and use it as is, running it as a script.  It should work as is
+as long as you've set the MAS_DIRECTORY environment variable correctly.
+(For example, if you put the contents below into /tmp/mas_config, you
+can run it by typing the following at the command line:
+
+bash /tmp/mas_config
+
+.)  If you use this script, make sure that "#!/bin/bash" is on the first
+line.
+
+#!/bin/bash
+
+if [ ! -e $MAS_DIRECTORY ]; then
+	mkdir $MAS_DIRECTORY
+elif [ ! -d $MAS_DIRECTORY ]; then
+	echo "Error: $MAS_DIRECTORY exists and is not a directory" >&2
+	exit 1
+fi
+cd $MAS_DIRECTORY
+cp /opt/mas/lib/indicators_persist .
+cp /opt/mas/lib/generators_persist .
+cp /opt/mas/lib/.ma_clientrc .
+cp /opt/mas/lib/mas_dbrc .
+cp /opt/mas/lib/mas_httprc .
+cp /opt/mas/lib/symbols .
+for f in /opt/mas/lib/*; do if [ -d $f ]; then ln -s $f . ; fi; done
+
+
+Finally, if you wish to try MAS out using the new feature to obtain data
+from yahoo.com, you should be able to do so by typing the following at
+the command line, provided that you have put the location of the MAS
+executables in your path and set MAS_DIRECTORY as explained above:
+
+mas -o -f , -w -b 13579 &
+magc 13579 &
