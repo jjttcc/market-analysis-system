@@ -215,6 +215,7 @@ doc/MAS_README-linux.txt doc/README mas_linux1.6.7 mac1.6.7
 doc/README_compile src/doc/README_compile serversrc1.6.7
 doc/main_MAS_README-linux.ps doc/INTRODUCTION.ps mas_linux1.6.7 mac1.6.7
 doc/main_MAS_README-linux.html doc/INTRODUCTION.html mas_linux1.6.7 mac1.6.7
+doc/FAQ.html doc/ mas_windows1.6.7 mas_linux1.6.7
 doc/env_settings ./doc/environment mas_linux1.6.7 mac1.6.7
 doc/INSTALL  ./ mas_linux1.6.7
 doc/THANKS . mas_linux1.6.7 mac1.6.7 serversrc1.6.7 clientsrc1.6.7
@@ -231,7 +232,8 @@ doc/other_market_analyzer_examples doc/other_market_analyzer_examples.txt[dos] m
 doc/market_analysis doc/market_analysis.txt[dos] mas_windows1.6.7
 doc/MAS_README-windows.txt doc/README.txt[dos] mas_windows1.6.7
 doc/main_MAS_README-windows.ps doc/INTRODUCTION.ps mas_windows1.6.7
-doc/main_MAS_README-windows.html doc/INTRODUCTION.html mas_windows1.6.7
+doc/main_MAS_README-windows.html doc/index.html mas_windows1.6.7
+doc/mct_introduction-windows.html doc/mct_introduction.html mas_windows1.6.7
 doc/env_settings ./doc/environment.txt[dos] mas_windows1.6.7
 doc/INSTALL  ./INSTALL.txt[dos] mas_windows1.6.7
 doc/THANKS doc/THANKS.txt[dos] mas_windows1.6.7
