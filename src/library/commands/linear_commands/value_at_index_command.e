@@ -19,6 +19,11 @@ class VALUE_AT_INDEX_COMMAND inherit
 			execute, children
 		end
 
+	MATH_CONSTANTS
+		export {NONE}
+			all
+		end
+
 creation
 
 	make
@@ -55,7 +60,7 @@ feature -- Basic operations
 			i, old_i: INTEGER
 		do
 			old_i := target.index
-			i := index_operator.value.floor
+			i := (index_operator.value + Epsilon).floor
 			if i >= 1 and i <= target.count then
 				target.go_i_th (i)
 				check
