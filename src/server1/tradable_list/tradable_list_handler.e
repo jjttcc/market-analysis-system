@@ -54,7 +54,7 @@ feature -- Access
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 		do
 			last_tradable := Void
-			error_occurred := false
+			reset_error_state
 			l := list_for (period_type)
 			if l /= Void then
 				if l.symbols.has (symbol) then
@@ -85,7 +85,7 @@ feature -- Access
 
 	symbols: LIST [STRING] is
 		do
-			error_occurred := false
+			reset_error_state
 			if daily_market_list /= Void then
 				Result := daily_market_list.symbols
 			elseif intraday_market_list /= Void then
@@ -104,7 +104,7 @@ feature -- Access
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 			tbl: HASH_TABLE [BOOLEAN, STRING]
 		do
-			error_occurred := false
+			reset_error_state
 			if daily_market_list /= Void then
 				daily_market_list.search_by_symbol (symbol)
 				if not daily_market_list.fatal_error then
@@ -152,7 +152,7 @@ feature -- Access
 				end
 			end
 			check tbl_check: not error_occurred implies tbl /= Void end
-			if not error_occurred then
+			if tbl /= Void and not tbl.empty then
 				tbl.compare_objects
 				Result := period_types_sorted_by_duration (tbl)
 			end
@@ -279,6 +279,18 @@ feature {NONE} -- Implementation
 					Result.force (l.item.name)
 				end
 				l.forth
+			end
+		end
+
+	reset_error_state is
+			-- Reset internal error state to no errors.
+		do
+			error_occurred := false
+			if daily_market_list /= Void then
+				daily_market_list.clear_error
+			end
+			if intraday_market_list /= Void then
+				intraday_market_list.clear_error
 			end
 		end
 
