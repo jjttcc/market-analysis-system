@@ -1,10 +1,11 @@
 indexing
 	description:
-		"A linear command that processes the last n trading periods from %
-		%the current period"
+		"A linear command that processes n market tuples"
 	note:
-		"A subset of the input from the current item - n + 1 to the current %
-		%item will be processed."
+		"By default, the execute routine will process the last n trading %
+		%periods from the current period (that is, from the current %
+		%item - n + 1 to the current item.  Descendants may override this %
+		%behavior"
 	date: "$Date$";
 	revision: "$Revision$"
 
