@@ -88,7 +88,7 @@ feature -- Access
 				"Market function that accumulates its values")
 			Result.extend (pair)
 			create {CONFIGURABLE_N_RECORD_FUNCTION} f.make (
-				stock, addition, volume, 5)
+				stock, addition, volume, 1)
 			create pair.make (f,
 				"N-period function that can be configured by choosing %
 				%previous and first-element operators")
