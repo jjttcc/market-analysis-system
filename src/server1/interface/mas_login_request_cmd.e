@@ -83,6 +83,7 @@ feature -- Basic operations
 			else
 				put_ok
 				put (session_id.out)
+				put_session_state
 				put (eom)
 				sessions.extend (session, session_id)
 				-- Clearing the cache when a new login occurs ensures that
@@ -219,6 +220,18 @@ feature {NONE} -- Implementation
 						Result := Void
 					end
 				end
+			end
+		end
+
+feature {NONE} -- Implementation - session state
+
+	put_session_state is
+			-- Send the "session state" information (formatted according
+			-- to the client/server communication protocol) to the client.
+		do
+			if not command_line_options.opening_price then
+				put (Output_field_separator)
+				put (No_open_session_state)
 			end
 		end
 
