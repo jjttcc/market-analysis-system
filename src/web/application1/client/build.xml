@@ -109,7 +109,7 @@
 
 -->
 
-  <property name="app.name"      value="mas"/>
+  <property name="app.name"      value="mas_client"/>
   <property name="app.path"      value="/${app.name}"/>
   <property name="app.version"   value="0.1-dev"/>
   <property name="build.home"    value="${basedir}/build"/>
@@ -121,6 +121,7 @@
   <property name="manager.url"   value="http://localhost:8080/manager"/>
   <property name="src.home"      value="${basedir}"/>
   <property name="web.home"      value="${basedir}/web"/>
+  <property name="mas_gui.home"  value="${basedir}/.."/>
 
 
 <!-- ================== Custom Ant Task Definitions ======================= -->
@@ -286,9 +287,9 @@
    description="Compile Java sources">
 
     <!-- Compile Java classes as necessary -->
-    <mkdir    dir="${build.home}/classes"/>
+    <mkdir    dir="${build.home}"/>
     <javac srcdir="${src.home}"
-		destdir="${build.home}/classes"
+		destdir="${build.home}"
 		debug="${compile.debug}"
 		deprecation="${compile.deprecation}"
 		target="${compile.target}"
@@ -302,9 +303,71 @@
     </copy>
 	-->
 	<exec executable="cp">
-	<arg line="${build.home}/classes/MAS_Applet.class deployment"/>
+	<arg line="${build.home}/MAS_Applet.class deployment"/>
 	</exec>
-
+    <copy    todir="${build.home}/common">
+      <fileset dir="${mas_gui.home}/common"
+	  	includes="Constants.class,DataInspector.class,NetworkProtocol.class"
+	  />
+    </copy>
+    <copy    todir="${build.home}/graph">
+	  <fileset dir="${mas_gui.home}/graph"
+		includes="Axis.class,BarDrawer.class,BasicDrawer.class,
+			CandleDrawer.class,DataSet.class,DateDrawer.class,
+			DoublePair.class,Drawer.class,FileFormatException.class,
+			Gin.class,Graph.class,IndicatorDrawer.class,
+			InteractiveGraph.class,Line.class,LineDrawer.class,
+			LoadMessage.class,LowerGraph.class,MainGraph.class,
+			Markers.class,MarkerVertex.class,MarketDrawer.class,
+			PriceDrawer.class,Range.class,RefSpec.class,
+			RotateTextFilter.class,RTextLine.class,SpecialFunction.class,
+			TemporalDrawer.class,TextLine.class,TextState.class,
+			TimeDrawer.class"
+	  />
+    </copy>
+    <copy    todir="${build.home}/java_library/support">
+	  <fileset dir="${mas_gui.home}/java_library/support"
+		includes="AssertionConstants.class,Logic.class,ManagedCache.class"
+	  />
+    </copy>
+    <copy    todir="${build.home}/mas_gui">
+	  <fileset dir="${mas_gui.home}/mas_gui"
+		includes="AppletOptions.class,Chart$1.class,Chart.class
+			ChartSettings.class,CommandLineOptions.class
+			CompressedConnection.class,Connection.class,DataSetBuilder.class
+			DialogSelection$1.class,DialogSelection$2.class
+			DialogSelection$3.class,DialogSelection.class
+			IndicatorColors$1.class,IndicatorColors$2.class
+			IndicatorColors.class,IndicatorListener.class
+			IndicatorSelection.class,MA_Dialog$1.class,MA_Dialog.class
+			MA_MenuBar$1.class,MA_MenuBar$2.class,MA_MenuBar$3.class
+			MA_MenuBar$4.class,MA_MenuBar$5.class,MA_MenuBar$6.class
+			MA_MenuBar$7.class,MA_MenuBar$8.class,MA_MenuBar$9.class
+			MA_MenuBar.class,MarketSelection$1.class,MarketSelection.class
+			MA_ScrollPane.class,OptionFlags.class,Parser.class
+			SessionState.class,StartupOptions.class,WindowSettings.class"
+	  />
+    </copy>
+    <copy    todir="${build.home}/support">
+	  <fileset dir="${mas_gui.home}/support"
+		includes="BackgroundColorChanger.class,BarColorChanger.class
+			BlackCandleColorChanger.class,ColorChanger.class
+			Configuration.class,Configuration$DateSetting.class
+			ConfigurationModifier.class,ErrorBox$1.class,ErrorBox$2.class
+			ErrorBox$3.class,ErrorBox.class,FileTokenizer.class
+			GraphStyleChanger.class,GUI_Utilities.class,IndicatorGroup.class
+			IndicatorGroups.class,IntPair.class,IO_Connection.class
+			IO_SocketConnection.class,IO_URL_Connection.class
+			LineColorChanger.class,ParameterBasedConfigurationModifier.class
+			ReferenceLineColorChanger.class,SelfContainedConfiguration.class
+			ServerResponseUtilities.class,SettingChanger.class
+			SettingChangerMap.class,StickColorChanger.class
+			TextColorChanger.class,Tokenizer.class,Utilities$1.class
+			Utilities.class,WhiteCandleColorChanger.class"
+	  />
+    </copy>
+	<!--
+-->
   </target>
 
 
@@ -335,7 +398,7 @@
     </copy>
 
     <!-- Create application JAR file -->
-    <jar jarfile="${dist.home}/${app.name}-${app.version}.war"
+    <jar jarfile="${dist.home}/${app.name}-${app.version}.jar"
          basedir="${build.home}"/>
 
     <!-- Copy additional files to ${dist.home} as necessary -->
@@ -443,10 +506,11 @@
     <mkdir  dir="${build.home}/classes"/>
 
 
-    <!-- Copy static content of this web application -->
+    <!-- Copy static content of this web application
     <copy todir="${build.home}/classes">
       <fileset file="${build.home}/MAS_Applet.class"/>
     </copy>
+	-->
 
     <!-- Copy external dependencies as required -->
     <!-- *** !!!!!CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
