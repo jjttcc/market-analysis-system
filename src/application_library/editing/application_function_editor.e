@@ -161,7 +161,13 @@ feature -- Basic operations
 							concatenation (<<f.generator,
 								"'s first element operator">>), false)
 			f.set_operators (mainop, prevop, firstop)
-			edit_n (f)
+			response := user_interface.string_selection(concatenation(<<
+				"Would you like to set ", f.name, "'s n-value? ",
+				"%N(Note that this may change operator n-values.) ">>))
+			response.to_lower
+			if response @ 1 = 'y' then
+				edit_n (f)
+			end
 		end
 
 	edit_one_fn_op_n (f: N_RECORD_ONE_VARIABLE_FUNCTION) is
