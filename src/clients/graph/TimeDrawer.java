@@ -68,8 +68,8 @@ public class TimeDrawer extends TemporalDrawer {
 	protected void draw_tuples(Graphics g, Rectangle bounds) {
 		int hour_idx, day_idx, i;
 		int hour, day_of_week;
-		final int Draw_all_hour_limit = 16, Too_many_hours = 175,
-			Too_many_days = 200, Day_y_offset = 9;
+		final int Draw_all_hour_limit = 16, Hour_limit = 175,
+			Hour_line_limit = 65, Day_limit = 200, Day_y_offset = 9;
 		boolean draw_all_hours, draw_day_line;
 		FontManager fontmgr = new FontManager(g);
 		String old_hour_string;
@@ -124,18 +124,19 @@ public class TimeDrawer extends TemporalDrawer {
 		}
 		i = 0;
 		draw_all_hours = hour_idx <= Draw_all_hour_limit;
-		if (hour_idx < Too_many_hours) {
+		if (hour_idx < Hour_limit) {
+			boolean draw_hour_line = hour_idx < Hour_line_limit;
 			fontmgr.set_new_font(fontmgr.SERIF, Font.PLAIN, 10);
 			// Draw hours.
 			while (i < hour_idx) {
 				if (drawable_hour(hours, hour_idx, i, draw_all_hours)) {
-					draw_hour(g, bounds, hours[i], _x_values);
+					draw_hour(g, bounds, hours[i], _x_values, draw_hour_line);
 				}
 				++i;
 			}
 		}
 		i = 0;
-		draw_day_line = day_idx <= Too_many_days;
+		draw_day_line = day_idx <= Day_limit;
 		while (i < day_idx) {
 			fontmgr.set_new_font(fontmgr.MONOSPACED, Font.ITALIC, 12);
 			draw_day(g, bounds, days[i], _x_values, draw_day_line);
@@ -148,7 +149,7 @@ public class TimeDrawer extends TemporalDrawer {
 	//    p.left() specifies the hour
 	//    p.right() specifies the x-index
 	protected void draw_hour(Graphics g, Rectangle bounds, IntPair p,
-			int[] x_values) {
+			int[] x_values, boolean draw_line) {
 		int x, hour_x;
 		final int Line_offset = -2;
 		double width_factor;
@@ -156,7 +157,7 @@ public class TimeDrawer extends TemporalDrawer {
 		width_factor = width_factor_value(bounds, dates().length);
 		x = x_values[p.right()];
 		hour_x = x + Hour_x_offset;
-		if (x > Too_far_left) {
+		if (draw_line && x > Too_far_left) {
 			g.setColor(conf.reference_line_color());
 			g.drawLine(x + Line_offset, bounds.y,
 				x + Line_offset, bounds.y + bounds.height);
