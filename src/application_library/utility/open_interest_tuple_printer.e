@@ -21,7 +21,7 @@ feature {NONE} -- Implementation
 
 	print_other_fields (t: OPEN_INTEREST_TUPLE) is
 		do
-			precursor (t)
+			Precursor (t)
 			output_medium.put_string (field_separator)
 			output_medium.put_string (t.open_interest.out)
 		end
