@@ -31,7 +31,8 @@ feature {NONE} -- Initialization
 			not_void:
 				in /= Void and ctf /= Void and time_period_type /= Void and
 				date /= Void
-			in.trading_period_type.duration < duration
+			duration_gt_in_duration:
+				time_period_type.duration > in.trading_period_type.duration
 		do
 			ovf_make (in, Void)
 			set_tuple_maker (ctf)
@@ -43,6 +44,8 @@ feature {NONE} -- Initialization
 				trading_period_type /= Void
 			input_set: input = in and input /= Void
 			start_date_set: start_date = date and start_date /= Void
+			duration_gt_in_duration:
+				duration > in.trading_period_type.duration
 		end
 
 feature -- Access
