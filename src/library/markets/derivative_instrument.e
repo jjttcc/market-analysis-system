@@ -70,5 +70,6 @@ feature {NONE} -- Implementation
 
 invariant
 
+	has_open_interest: has_open_interest
 
 end -- class DERIVATIVE_INSTRUMENT

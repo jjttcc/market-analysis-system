@@ -217,5 +217,6 @@ invariant
 	splits_sorted_by_date:
 		splits /= Void and not splits.empty implies
 			splits_sorted_by_date (splits)
+	no_open_interest: not has_open_interest
 
 end -- class STOCK
