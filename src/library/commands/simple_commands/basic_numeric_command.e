@@ -20,11 +20,6 @@ feature -- Basic operations
 
 feature -- Status report
 
-	arg_used: BOOLEAN is
-		do
-			Result := true
-		ensure then
-			used: Result = true
-		end
+	arg_used: BOOLEAN is true
 
 end -- class BASIC_NUMERIC_COMMAND
