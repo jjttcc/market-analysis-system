@@ -6,6 +6,7 @@ root
 
 default
 	assertion (all)
+	arguments ("-w -f , 12345")
 	arguments ("-o -f ,  *.txt  4002")
 	arguments ("-o -f ,  *.txt  4002 -debug")
 	arguments ("-o -f ,  *.txt  ")
