@@ -15,13 +15,6 @@ class CL_BASED_FUNCTION_EDITING_INTERFACE inherit
 			{NONE} all
 		end
 
-	PRINTING
-		export
-			{NONE} all
-		undefine
-			print
-		end
-
 	FUNCTION_EDITING_INTERFACE
 		undefine
 			print
@@ -33,19 +26,40 @@ creation
 
 feature -- Initialization
 
-	make (input_dev, output_dev: IO_MEDIUM) is
-		require
-			not_void: input_dev /= Void and output_dev /= Void
-		local
-			op_maker: CL_BASED_COMMAND_EDITING_INTERFACE
+	make is
 		do
-			set_input_device (input_dev)
-			set_output_device (output_dev)
-			!!op_maker.make (input_dev, output_dev)
-			!!editor.make (Current, op_maker)
+			!!operator_maker.make
+			!!editor.make (Current, operator_maker)
 		ensure
-			iodev_set: input_device = input_dev and output_device = output_dev
 			editor_exists: editor /= Void
+		end
+
+feature -- Access
+
+	operator_maker: CL_BASED_COMMAND_EDITING_INTERFACE
+
+feature -- Status setting
+
+	set_input_device (arg: IO_MEDIUM) is
+			-- Set input_device to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			input_device := arg
+			operator_maker.set_input_device (arg)
+		ensure
+			input_device_set: input_device = arg and input_device /= Void
+		end
+
+	set_output_device (arg: IO_MEDIUM) is
+			-- Set output_device to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			output_device := arg
+			operator_maker.set_output_device (arg)
+		ensure
+			output_device_set: output_device = arg and output_device /= Void
 		end
 
 feature {NONE} -- Hook methods

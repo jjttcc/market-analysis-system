@@ -18,6 +18,8 @@ class CL_BASED_MEG_EDITING_INTERFACE inherit
 	MEG_EDITING_INTERFACE
 		undefine
 			print
+		redefine
+			operator_maker
 		end
 
 	EXECUTION_ENVIRONMENT
@@ -31,29 +33,56 @@ creation
 
 	make
 
-feature
+feature -- Initialization
 
-	make (input_dev, output_dev: IO_MEDIUM) is
-		require
-			not_void: io /= Void
+	make is
 		do
-			set_input_device (input_dev)
-			set_output_device (output_dev)
-			!CL_BASED_COMMAND_EDITING_INTERFACE!operator_maker.make (
-				input_dev, output_dev)
+			!CL_BASED_COMMAND_EDITING_INTERFACE!operator_maker.make
 			!!help.make
 			-- !!!Satisfy invariant - editor is currently not used; it may
 			-- be used later - if not, might want to change the invariant or?
 			!!editor
 		ensure
-			iodev_set: input_device = input_dev and output_device = output_dev
 			editor_exists: editor /= Void
+			operator_maker_exists: operator_maker /= Void
+		end
+
+feature -- Access
+
+	operator_maker: CL_BASED_COMMAND_EDITING_INTERFACE
+
+feature -- Status setting
+
+	set_input_device (arg: IO_MEDIUM) is
+			-- Set input_device to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			input_device := arg
+			operator_maker.set_input_device (arg)
+		ensure
+			input_device_set: input_device = arg and input_device /= Void
+		end
+
+	set_output_device (arg: IO_MEDIUM) is
+			-- Set output_device to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			output_device := arg
+			operator_maker.set_output_device (arg)
+		ensure
+			output_device_set: output_device = arg and output_device /= Void
 		end
 
 feature {NONE} -- Implementation
 
 	main_menu_selection: INTEGER is
 		do
+			check
+				io_devices_not_void: input_device /= Void and
+										output_device /= Void
+			end
 			from
 				Result := Null_value
 			until

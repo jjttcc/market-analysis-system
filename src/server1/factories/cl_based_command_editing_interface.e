@@ -18,13 +18,6 @@ class CL_BASED_COMMAND_EDITING_INTERFACE inherit
 			print_operand_trees
 		end
 
-	PRINTING
-		export
-			{NONE} all
-		undefine
-			print
-		end
-
 	COMMAND_EDITING_INTERFACE
 		undefine
 			print
@@ -36,17 +29,35 @@ creation
 
 feature -- Initialization
 
-	make (input_dev, output_dev: IO_MEDIUM) is
-		require
-			not_void: input_dev /= Void and output_dev /= Void
+	make is
 		do
-			set_input_device (input_dev)
-			set_output_device (output_dev)
 			!!editor.make (Current)
 		ensure
-			iodev_set: input_device = input_dev and output_device = output_dev
 			editor_exists: editor /= Void
 		end
+
+feature -- Status setting
+
+	set_input_device (arg: IO_MEDIUM) is
+			-- Set input_device to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			input_device := arg
+		ensure
+			input_device_set: input_device = arg and input_device /= Void
+		end
+
+	set_output_device (arg: IO_MEDIUM) is
+			-- Set output_device to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			output_device := arg
+		ensure
+			output_device_set: output_device = arg and output_device /= Void
+		end
+
 
 feature {NONE} -- Hook methods
 
