@@ -1,6 +1,7 @@
 indexing
 	description:
 		"Calculation based on the n-value from an n-record structure";
+	note: "The calculation is done by `make' and by `initialize'.";
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -43,6 +44,7 @@ feature -- Status report
 feature -- Basic operations
 
 	execute (arg: ANY) is
+			-- Does nothing.
 		do
 			-- Empty
 		end
