@@ -10,60 +10,67 @@ creation
 	make
 
 feature
-	
+
 	make (file_name: STRING) is
 		require
-			file_name /= void
-	do
-		!!pf.make(file_name)
-	end
+			file_name /= Void
+		do
+			create pf.make (file_name)
+		end
 
 feature
 
-	exhausted : BOOLEAN
+	exhausted: BOOLEAN
+			-- Has structure been completely explored?
 
-	item      : STRING
+	item: STRING
+			-- Current tokenized field
 
 	contents: STRING is
-	do
-		if file_contents = void then
-			if pf.exists then
-				pf.open_read
-				pf.read_stream(pf.count)
-				file_contents := clone(pf.last_string)
+			-- Contents of the entire file
+		do
+			if file_contents = Void then
+				if pf.exists then
+					pf.open_read
+					pf.read_stream (pf.count)
+					file_contents := clone (pf.last_string)
+				end
 			end
+			Result := clone (file_contents)
 		end
-		Result:= clone(file_contents)
-	end
 
 	forth is
-	do
-		tokens.forth
-		if not tokens.exhausted then
-			item := tokens.item
-		else
-			exhausted := true
-			item := void
+			-- Move to next field; if no next field,
+			-- ensure that exhausted will be true.
+		do
+			tokens.forth
+			if not tokens.exhausted then
+				item := tokens.item
+			else
+				exhausted := true
+				item := Void
+			end
+		ensure
+			item_void_if_exhausted: exhausted implies item = Void
 		end
-	end
 
-	tokenize(field_separator: STRING) is
-		-- tokenize based on field_separator
-	do
-		!!su.make(contents)
-		tokens := su.tokens(field_separator)
-		tokens.start
-		item   := tokens.item
-	end
+	tokenize (field_separator: STRING) is
+			-- Tokenize based on field_separator.
+		do
+			create su.make (contents)
+			tokens := su.tokens (field_separator)
+			tokens.start
+			item := tokens.item
+		end
 
 feature {NONE}
 
-	pf : PLAIN_TEXT_FILE
+	pf: PLAIN_TEXT_FILE
 
-	su : STRING_UTILITIES
-	
-	tokens : LIST[STRING]
+	su: STRING_UTILITIES
 
-	file_contents : STRING
+	tokens: LIST[STRING]
+
+	file_contents: STRING
 
 end
