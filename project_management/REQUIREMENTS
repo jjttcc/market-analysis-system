@@ -102,7 +102,8 @@ has reached an oversold level or an overbought level, in order for a
 notification to be generated the MACD difference line must have crossed
 over the MACD signal line (in the appropriate direction, depending on
 whether stochastic is oversold or overbought) for weekly data on market
-M within the past n trading periods.
+M within the past n trading periods.  (See the file NOTES for a more complex
+example of such a scenario.)
 
 REQUIREMENTS FOR MEMORY MANAGEMENT
 
