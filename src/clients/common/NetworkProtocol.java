@@ -2,8 +2,8 @@
 
 package common;
 
-/** Constants specifying the components of the Market Analysis network 
-communication protocol */
+/** Constants specifying the components of the Market Analysis System 
+network communication protocol */
 public interface NetworkProtocol
 {
 
@@ -20,6 +20,7 @@ public interface NetworkProtocol
 	// Server response IDs
 	int Error = 101;
 	int OK = 102;
+	int Invalid_symbol = 103;
 
 	// Subtokens
 	String Start_date = "start_date";
