@@ -663,14 +663,9 @@ public void startedloading() {
 		int y      = r.y;
 		int width  = r.width;
 		int height = r.height;
-		double xmin;
-		double xmax;
-		double ymin;
-		double ymax;
 		double xrange = 0.0;
 		double yrange = 0.0;
 		double range;
-		double aspect;
 
 		if( dataset == null | dataset.isEmpty() ) return r; 
 
