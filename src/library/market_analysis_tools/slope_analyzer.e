@@ -8,6 +8,9 @@ indexing
 class SLOPE_ANALYZER inherit
 
 	MARKET_ANALYSIS
+		export {NONE}
+			all
+		end
 
 	LINEAR_COMMAND
 
