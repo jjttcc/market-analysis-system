@@ -14,6 +14,8 @@ deferred class EVENT_HISTORY_MANAGEMENT inherit
 			all
 		end
 
+	TERMINABLE
+
 feature
 
 	error_occurred: BOOLEAN
@@ -29,6 +31,7 @@ feature
 			lock: FILE_LOCK
 		do
 			error_occurred := false
+			register_for_termination (Current)
 			make_event_locks
 			l := market_event_registrants
 			from
@@ -52,7 +55,7 @@ feature
 		end
 
 	save_market_event_histories is
-			-- Load event history for all MARKET_EVENT_REGISTRANTs.
+			-- Save event history for all MARKET_EVENT_REGISTRANTs.
 		local
 			l: FILE_LOCK
 		do
@@ -72,6 +75,7 @@ feature
 				market_event_registrants.forth
 			end
 			event_locks.clear_all
+			unregister_for_termination (Current)
 		end
 
 	make_event_locks is
@@ -105,6 +109,29 @@ feature
 	make_lock (name: STRING): FILE_LOCK is
 			-- Create a new lock.
 		deferred
+		end
+
+	cleanup is
+			-- Remove all `event_locks'.
+		local
+			l: FILE_LOCK
+			unlock_failed: BOOLEAN
+		do
+			from
+				market_event_registrants.start
+			until
+				market_event_registrants.exhausted
+			loop
+				l := event_locks.item (
+					market_event_registrants.item.hfile_name)
+				if l.locked then
+					l.unlock
+				end
+				market_event_registrants.forth
+			end
+			event_locks.clear_all
+		ensure then
+			no_locks: event_locks.empty
 		end
 
 end -- class EVENT_HISTORY_MANAGEMENT
