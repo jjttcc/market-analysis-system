@@ -186,7 +186,7 @@ feature -- Status report
 
 	off: BOOLEAN is
 		do
-			Result := symbol_list = Void or else symbol_list.off
+			Result := symbol_list = Void or else symbol_list.off or else empty
 		end
 
 feature -- Cursor movement
