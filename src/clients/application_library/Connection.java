@@ -279,10 +279,12 @@ System.err.print(Eom);
 		}
 	}
 
-//!!!Change to switch on a configured setting - to make a BarDrawer,
+//!!!Change to switch on a configured setting - to make a PriceDrawer,
 //!!!CandleDrawer, or LineDrawer.
 	private Drawer new_main_drawer() {
-		return new CandleDrawer();
+		// Currently - for testing - randomly assign candle or price drawer.
+		if ((int) (Math.random() * 10) % 2 == 1) return new CandleDrawer();
+		else return new PriceDrawer();
 	}
 
 	private void usage()
