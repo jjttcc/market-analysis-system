@@ -29,6 +29,13 @@ class EVENT_REGISTRATION inherit
 			print
 		end
 
+	GLOBAL_SERVER
+		export
+			{NONE} all
+		undefine
+			print
+		end
+
 	COMMAND_LINE_UTILITIES [MARKET_EVENT_GENERATOR]
 		rename
 			print_message as show_message
@@ -44,7 +51,9 @@ class EVENT_REGISTRATION inherit
 	STORABLE_SERVICES [MARKET_EVENT_REGISTRANT]
 		rename
 			real_list as market_event_registrants,
-			working_list as working_event_registrants
+			working_list as working_event_registrants,
+			retrieve_persistent_list as force_function_library_retrieval,
+			prompt_for_char as character_choice
 		export
 			{NONE} all
 		undefine
@@ -128,8 +137,7 @@ feature -- Basic operations
 			end_edit
 		end
 
-feature
---!!!feature {NONE} -- Implementation
+feature {NONE} -- Implementation
 
 	add_registrants is
 		local
@@ -249,10 +257,10 @@ feature
 			end
 			Result.set_email_subject_flag (s1)
 			print_list (<<"User was created with the following properties:%N",
-						"name: ", Result.name, ", email address: ",
-						Result.primary_email_address, "%Nmailer: ",
-						Result.mailer, ", email subject flag: ",
-						Result.email_subject_flag, "%N">>)
+				"name: ", Result.name, ", email address: ",
+				Result.primary_email_address, "%Nmailer: ",
+				Result.mailer, ", email subject flag: ",
+				Result.email_subject_flag, "%N">>)
 		end
 
 	new_log_file: EVENT_LOG_FILE is
@@ -271,7 +279,7 @@ feature
 				constants.event_history_field_separator,
 				constants.event_history_record_separator)
 			print_list (<<"Log file was created with the following %
-						%properties:%N", "name: ", Result.name, "%N">>)
+				%properties:%N", "name: ", Result.name, "%N">>)
 		end
 
 	add_event_types (r: EVENT_REGISTRANT_WITH_HISTORY) is
@@ -409,20 +417,12 @@ feature
 			end
 		end
 
-add_registrant (r: MARKET_EVENT_REGISTRANT) is
--- Add `r' to `market_event_registrants', register it with
--- the `dispatcher', and register it for termination cleanup.
-		do
-working_event_registrants.extend (r)
-register_for_termination (r)
-		end
-
 	display_registrant (r: MARKET_EVENT_REGISTRANT) is
 		local
 			l: LINEAR [EVENT_TYPE]
 		do
 			print_list (<<"Registrant ", r.name, " is registered for the %
-							%following event types:%N">>)
+				%following event types:%N">>)
 			from
 				l := r.event_types.linear_representation
 				l.start
@@ -537,6 +537,14 @@ feature {NONE} -- Implementation
 			pending_registrants.wipe_out
 		ensure then
 			none_pending: pending_registrants.empty
+		end
+
+feature {NONE} -- Implementation of hook routines
+
+	initialize_lock is
+		do
+			lock := file_lock (file_name_with_app_directory (
+				market_event_registrants.persistent_file_name))
 		end
 
 end -- class EVENT_REGISTRATION
