@@ -30,15 +30,15 @@ if ($intraday) {
 }
 if (backup_file_exists()) {
 	use File::Copy;
-print "Using backup data for $symbol\n";
+#print "Using backup data for $symbol\n";
 	copy $backup_file => $output_file or
 			warn "can't copy $backup_file to $output_file:\n$!" and exit 1;
 	my $datafile = new FileHandle $output_file, 'r';
 	my @lastdate = "";
 	@lastdate = lastdate($datafile);
-print "last date:", join(', ', @lastdate), "\n";
+#print "last date:", join(', ', @lastdate), "\n";
 	if (out_of_date(@lastdate)) {
-print "Updating data ...\n";
+#print "Updating data ...\n";
 		# Note: All data is retrieved - need to optimize to just append
 		# the last day (or whatever is missing).
 		my @nowdate = date_from_localtime(now());
@@ -48,10 +48,10 @@ print "Updating data ...\n";
 			save_data();
 		}
 	} else {
-print "Data is up to date.\n";
+#print "Data is up to date.\n";
 	}
 } else {
-print "Retrieving fresh data for $symbol\n";
+#print "Retrieving fresh data for $symbol\n";
 	my @nowdate = date_from_localtime(now());
 	$mer_result = retrieve_data(adjusted_start_date(@nowdate), @nowdate);
 	if ($mer_result == 0) {
