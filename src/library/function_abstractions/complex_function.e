@@ -14,7 +14,7 @@ feature -- Access
 
 	output: MARKET_TUPLE_LIST [MARKET_TUPLE]
 
-	operator: NUMERIC_COMMAND
+	operator: RESULT_COMMAND [REAL]
 			-- Operator that will perform the main work of the function.
 			-- Descendant classes may choose not to use this attribute for
 			-- efficiency.
@@ -46,7 +46,7 @@ feature -- Basic operations
 
 feature {FACTORY} -- Status setting
 
-	set_operator (op: NUMERIC_COMMAND) is
+	set_operator (op: like operator) is
 		require
 			not_void: op /= Void
 		do
