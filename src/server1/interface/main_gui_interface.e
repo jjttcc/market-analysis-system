@@ -188,7 +188,7 @@ feature {NONE}
 			rh.extend (cmd, Indicator_list_request)
 			!ERROR_RESPONSE_CMD!cmd
 			rh.extend (cmd, Error)
-			!LOGIN_REQUEST_CMD!cmd
+			!LOGIN_REQUEST_CMD!cmd.make (market_list)
 			rh.extend (cmd, Login_request)
 			request_handlers := rh
 		ensure
