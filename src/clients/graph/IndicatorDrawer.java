@@ -110,9 +110,17 @@ abstract public class IndicatorDrawer extends BasicDrawer {
 		return result;
 	}
 
+// Hook routine implementations
+
 	protected boolean reference_values_needed() {
 		return ref_values_needed;
 	}
+
+	protected boolean negative_values_allowed() {
+		return true;
+	}
+
+// Implementation - attributes
 
 	protected double _data[];
 	protected String[] _indicator_dates;
