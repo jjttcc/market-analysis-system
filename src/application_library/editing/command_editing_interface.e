@@ -506,6 +506,7 @@ feature {NONE} -- Implementation
 			check
 				valid_name: command_names.has (name)
 			end
+			Result.extend (Mtlist, name)
 			name := "FUNCTION_BASED_COMMAND"
 			check
 				valid_name: command_names.has (name)
