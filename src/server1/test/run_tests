@@ -42,7 +42,7 @@ set_up()
 	test_count=0
 	save_output=n
 	if [ ! -z "$MAS" ]; then
-		Basedir=$MAS/../projects/current
+		Basedir=$MAS/../projects/mas
 	else
 		Basedir=..
 	fi
