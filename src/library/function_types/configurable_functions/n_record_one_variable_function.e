@@ -73,8 +73,7 @@ feature {FACTORY} -- Status setting
 		do
 			effective_offset := arg
 		ensure
-			effective_offset_set: effective_offset = arg and
-									effective_offset /= Void
+			effective_offset_set: effective_offset = arg
 		end
 
 feature {N_RECORD_FUNCTION_PARAMETER} -- Status setting
