@@ -31,7 +31,7 @@ feature -- Basic operations
 					ilist.islast
 				loop
 					print (ilist.item.name)
-					print ("%T")
+					print ("%N")
 					ilist.forth
 				end
 				print (ilist.last.name)

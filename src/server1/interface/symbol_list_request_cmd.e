@@ -26,7 +26,7 @@ feature -- Basic operations
 				symbols.islast
 			loop
 				print (symbols.item)
-				print ("%T")
+				print ("%N")
 				symbols.forth
 			end
 			print (symbols.last)
