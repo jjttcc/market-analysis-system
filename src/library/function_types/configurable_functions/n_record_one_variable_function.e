@@ -8,8 +8,10 @@ indexing
 class N_RECORD_ONE_VARIABLE_FUNCTION inherit
 
 	ONE_VARIABLE_FUNCTION
+		rename
+			make as ovf_make
 		redefine
-			do_process, make, target, process_precondition
+			do_process, target
 		end
 
 	N_RECORD_STRUCTURE
@@ -17,15 +19,23 @@ class N_RECORD_ONE_VARIABLE_FUNCTION inherit
 			set_n
 		end
 
-creation
+creation {FACTORY}
 
 	make
 
-feature
+feature {NONE}
 
-	make is
+	make (in: like input; op: like operator; i: INTEGER) is
+		require
+			in_not_void: in /= Void
+			op_not_void_if_used: operator_used implies op /= Void
+			i_gt_0: i > 0
 		do
-			Precursor
+			ovf_make (in, op)
+			set_n (i)
+		ensure
+			set: input = in and operator = op and n = i
+			target_set: target = in.output
 		end
 
 feature -- Basic operations
@@ -37,24 +47,15 @@ feature -- Basic operations
 			continue_until
 		end
 
-feature -- Status report
-
-	process_precondition: BOOLEAN is
-		do
-			Result := n_set and Precursor
-		ensure then
-			n_set: Result implies n_set
-		end
-
 feature {NONE}
 
 	target: ARRAYED_LIST [MARKET_TUPLE]
 
 feature {TEST_FUNCTION_FACTORY}
 
-	set_n (i: INTEGER) is
+	set_n (value: INTEGER) is
 		do
-			Precursor (i)
+			Precursor (value)
 			if operator /= Void then
 				operator.initialize (Current)
 			end

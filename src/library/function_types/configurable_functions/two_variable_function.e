@@ -10,16 +10,15 @@ inherit
 
 	MARKET_FUNCTION
 		redefine
-			process_precondition, pre_process
+			pre_process
 		end
 
 	LINEAR_ANALYZER
 		rename
 			target as target1, -- x in "z = f(x, y)"
-			set_target as set_target_unused,
-			target_set as target_set_unused
+			set_target as set_target_unused
 		export {NONE}
-			set_target_unused, target_set_unused
+			set_target_unused
 		redefine
 			forth, action, start
 		select
@@ -32,23 +31,29 @@ inherit
 			forth as forth_unused,
 			action as action_unused,
 			start as start_unused,
-			set_target as set_target_unused,
-			target_set as target_set_unused
+			set_target as set_target_unused
 		export {NONE}
-			set_target_unused, target_set_unused
+			set_target_unused
 		end
 
-creation
+creation {FACTORY}
 
 	make
 
-feature -- Initialization
+feature {NONE} -- Initialization
 
-	make is
+	make (in1: like input1; in2: like input2; op: NUMERIC_COMMAND)  is
+		require
+			args_not_void: in1 /= Void and in2 /= Void
+			op_not_void_if_used: operator_used implies op /= Void
+			in_output_not_void: in1.output /= Void and in2.output /= Void
 		do
-			!!output.make (100) -- !!What size to use here?
+			!!output.make (in1.output.count)
+			set_input (in1, in2)
+			set_operator (op)
 		ensure
-			output /= Void
+			output_not_void: output /= Void
+			set: input1 = in1 and input2 = in2 and operator = op
 		end
 
 feature -- Access
@@ -56,13 +61,6 @@ feature -- Access
 	output: MARKET_TUPLE_LIST [MARKET_TUPLE]
 
 feature -- Status report
-
-	process_precondition: BOOLEAN is
-		do
-			Result := input_set
-		ensure then
-			input_set: Result implies input_set
-		end
 
 	processed: BOOLEAN is
 		do
@@ -73,12 +71,9 @@ feature -- Status report
 				target1.empty or target2.empty or not output.empty)
 		end
 
-	input_set: BOOLEAN is
-		do
-			Result := target1 /= Void and target2 /= Void
-		end
-
 	arg_used: BOOLEAN is false
+
+	operator_used: BOOLEAN is true
 
 feature {NONE}
 
@@ -200,8 +195,7 @@ feature {TEST_FUNCTION_FACTORY} -- Element change (Export to test class for now.
 		require
 			not_void: f1 /= Void and f2 /= Void
 			outputs_not_void: f1.output /= Void and f2.output /= Void
-			f1op_not_void_if_used: f1.operator_used implies f1.operator /= Void
-			f2op_not_void_if_used: f2.operator_used implies f2.operator /= Void
+			output_not_void: output /= Void
 		do
 			input1 := f1
 			input2 := f2
@@ -212,7 +206,6 @@ feature {TEST_FUNCTION_FACTORY} -- Element change (Export to test class for now.
 		ensure
 			functions_set: input1 = f1 and input2 = f2 and
 							input1 /= Void and input2 /= Void
-			input_set: input_set
 			output_empty: output.empty
 		end
 
@@ -222,11 +215,12 @@ feature {NONE}
 
 invariant
 
-	--!!!Temp.cmmn-out:processed_constraint:
-		--!!!Temp.cmmn-out: processed implies input1.processed and input2.processed
+	processed_constraint:
+		 processed implies input1.processed and input2.processed
+	inputs_not_void: input1 /= Void and input2 /= Void
+	target2_not_void: target2 /= Void
 	input_target_relation:
-		(input1 = Void or else input1.output = target1) and
-		(input2 = Void or else input2.output = target2)
+		input1.output = target1 and input2.output = target2
 	no_missing_periods: not missing_periods (target1, target2)
 
 end -- class TWO_VARIABLE_FUNCTION

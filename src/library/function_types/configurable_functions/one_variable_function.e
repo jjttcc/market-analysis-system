@@ -18,15 +18,25 @@ class ONE_VARIABLE_FUNCTION inherit
 			action
 		end
 
-creation
+creation {FACTORY}
 
 	make
 
-feature -- Initialization
+feature {NONE} -- Initialization
 
-	make is
+	make (in: like input; op: like operator) is
+		require
+			in_not_void: in /= Void
+			op_not_void_if_used: operator_used implies op /= Void
+			in_output_not_void: in.output /= Void
 		do
-			!!output.make (100) -- !!!What size to use here?
+			!!output.make (in.output.count)
+			set_input (in)
+			if op /= Void then
+				set_operator (op)
+			end
+		ensure
+			set: input = in and operator = op
 		end
 
 feature -- Access
@@ -47,6 +57,11 @@ feature -- Status report
 		end
 
 	arg_used: BOOLEAN is false
+
+	operator_used: BOOLEAN is
+		once
+			Result := true
+		end
 
 feature {NONE}
 
@@ -86,23 +101,21 @@ feature {TEST_FUNCTION_FACTORY} -- Element change
 
 	set_input (in: like input) is
 		require
-			not_void: in /= Void and in.output /= Void
-			in_op_not_void_if_used:
-				in.operator_used implies in.operator /= Void
+			in_not_void: in /= Void and in.output /= Void
+			output_not_void: output /= Void
 		do
 			input := in
 			set_target (input.output)
-			check output /= Void end
 			output.wipe_out
 		ensure
 			input_set_to_in: input = in
-			input_set: target_set
 			output_empty: output.empty
 		end
 
 invariant
 
-	--!!!Temp. comm-out: processed_constraint: processed implies input.processed
-	input_target_relation: input = Void or else input.output = target
+	processed_constraint: processed implies input.processed
+	input_not_void: input /= Void
+	input_target_relation: input.output = target
 
 end -- class ONE_VARIABLE_FUNCTION
