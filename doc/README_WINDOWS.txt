@@ -55,13 +55,13 @@ on the "MAS Charts" icon to start the charting program.
 
 Changing the Settings for Obtaining Data from Yahoo
 
-To change settings used for obtaining data from yahoo (when running the
-server via the "Mas Server (web)" icon), such as the start-date for
-the retrieved data, or the time at which to retrieve end-of-day data
-for the current day, edit the file "mas_httprc" in the {mas_dir}/lib
-directory (where {mas_dir} stands for the directory in which you chose
-to install MAS).  The "mas_httprc" file contains comments describing the
-purpose and format of each setting.
+To change settings used for obtaining data from yahoo (when running
+the server via the "Mas Server (web)" icon), such as the start-date for
+the retrieved data (eod_start_date), or the time at which to retrieve
+end-of-day data for the current day (eod_turnover_time), edit the file
+"mas_httprc" in the {mas_dir}/lib directory (where {mas_dir} stands
+for the directory in which you chose to install MAS).  The "mas_httprc"
+file contains comments describing the purpose and format of each setting.
 
 To change the list of symbols for which data is to be downloaded from yahoo,
 edit the file "symbols" in the {mas_dir}/lib directory (where {mas_dir}
