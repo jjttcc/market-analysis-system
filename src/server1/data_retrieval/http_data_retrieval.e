@@ -213,7 +213,6 @@ feature {NONE} -- Status report
 						l.finish
 						l.remove
 					end
-print ("l.last: '" + l.last + "'%N")
 				else
 					create l.make (0)
 				end
