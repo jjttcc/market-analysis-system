@@ -53,12 +53,17 @@ feature -- Basic operations
 	process is
 			-- Process the output from the input.
 		do
-			if not processed then
+			if
+True or --!!!!For experimentation/testing - remove this line soon.
+				not processed then
 				pre_process
 				if debugging then
 					print_debugging_header
 				end
 				do_process
+--!!!:
+print ("complex function, name: " + name +
+": process - do_process was just called." + "%N")
 				update_processed_date_time
 			end
 			debug
