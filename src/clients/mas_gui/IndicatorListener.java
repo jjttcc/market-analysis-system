@@ -1,3 +1,5 @@
+/* Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt */
+
 import java.util.*;
 import support.*;
 import graph.DataSet;
@@ -16,9 +18,7 @@ public class IndicatorListener implements java.awt.event.ActionListener {
 		Configuration conf = Configuration.instance();
 		try {
 			String market = chart.current_market;
-			if (market == null ||
-				vector_has(chart.current_upper_indicators, selection) ||
-				vector_has(chart.current_lower_indicators, selection)) {
+			if (market == null || no_change(selection)) {
 				// If no market is selected or the selection hasn't changed,
 				// there is nothing to display.
 				return;
@@ -93,8 +93,30 @@ public class IndicatorListener implements java.awt.event.ActionListener {
 		main_pane.repaint_graphs();
 	}
 
+	// Does `v' contain `s' by value?
 	private boolean vector_has(Vector v, String s) {
 		return Utilities.vector_has(v, s);
+	}
+
+	// Is a change not needed with selection `s'?
+	private boolean no_change(String s) {
+		boolean result = false;
+
+		if (! chart.replace_indicators) {
+			if (vector_has(chart.current_upper_indicators, s) ||
+					vector_has(chart.current_lower_indicators, s)) {
+				result = true;
+			}
+		} else {
+			if ((vector_has(chart.current_upper_indicators, s) &&
+					chart.current_upper_indicators.size() == 1) ||
+					(vector_has(chart.current_lower_indicators, s) &&
+					chart.current_lower_indicators.size() == 1)) {
+				result = true;
+			}
+		}
+
+		return result;
 	}
 
 	private Chart chart;
