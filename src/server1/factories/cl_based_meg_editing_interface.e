@@ -287,10 +287,12 @@ feature {NONE} -- Implementation
 					end
 				end
 				if c = 'l' or c = 'L' then
-					Result := operator_choice (f.left_function)
+					Result := operator_choice (f.left_function,
+						two_var_exclude_cmds)
 				else
 					check c = 'r' or c = 'R' end
-					Result := operator_choice (f.right_function)
+					Result := operator_choice (f.right_function,
+						two_var_exclude_cmds)
 				end
 			end
 		end
