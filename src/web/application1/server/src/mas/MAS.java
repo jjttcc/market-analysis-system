@@ -20,7 +20,7 @@ public final class MAS extends GenericServlet {
 			throws ServletException, IOException {
 		String client_msg = null, server_response = null;
 		try {
-			log("(Version 1.0) Connected");
+			log("(Version 1.1) Connected");
 			log("Reading data...");
 			client_msg = input_string(request.getReader());
 			log("Finished reading.");
@@ -28,7 +28,7 @@ public final class MAS extends GenericServlet {
 			log("Forwarding to mas server");
 			proxy().forward(client_msg);
 			server_response = proxy().response();
-			send_response(response, "mas answered: " + server_response);
+			send_response(response, server_response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
