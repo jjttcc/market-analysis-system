@@ -143,4 +143,5 @@ def update_trend_lists(signals, upfile_path, downfile_path, sidefile_path):
 			add_to_file(sidefile_path, s.symbol)
 		else:
 			print 'Warning: event for ' + s.symbol + ' does not match ' +\
-				'buy, sell or sidelined specification.'
+				'buy, sell or sidelined specification:'
+			print s
