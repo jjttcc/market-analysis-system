@@ -36,7 +36,7 @@ feature -- Access
 	last: MARKET_TUPLE
 			-- Last (chronologically) tuple used to create Current
 
-feature {COMPOSITE_TUPLE_FACTORY} -- Element change
+feature {COMPOSITE_TUPLE_FACTORY} -- Status setting
 
 	set_first (arg: MARKET_TUPLE) is
 			-- Set first to `arg'.

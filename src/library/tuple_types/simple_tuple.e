@@ -12,7 +12,7 @@ feature -- Access
 
 	value: REAL
 
-feature {MARKET_FUNCTION} -- Element change
+feature {MARKET_FUNCTION} -- Status setting
 
 	set_value (v: REAL) is
 			-- Set value to `v'.

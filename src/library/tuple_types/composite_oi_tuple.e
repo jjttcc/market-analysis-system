@@ -12,7 +12,7 @@ feature -- Access
 
 	open_interest: INTEGER
 
-feature {COMPOSITE_TUPLE_FACTORY} -- Element change
+feature {COMPOSITE_TUPLE_FACTORY} -- Status setting
 
 	set_open_interest (arg: INTEGER) is
 			-- Set open_interest to `arg'.

@@ -17,7 +17,7 @@ feature
 	open_interest: INTEGER
 			-- Number of existing contracts
 
-feature {VALUE_SETTER} -- Element change
+feature {VALUE_SETTER} -- Status setting
 
 	set_open_interest (i: INTEGER) is
 			-- Set open_interest to `i'.

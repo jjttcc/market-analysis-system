@@ -44,7 +44,7 @@ feature -- Access
 
 	tuple_maker: BASIC_TUPLE_FACTORY
 
-feature {FACTORY} -- Element change
+feature {FACTORY} -- Status setting
 
 	set_product (arg: like product) is
 			-- Set product to `arg'.

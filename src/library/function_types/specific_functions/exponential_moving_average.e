@@ -47,7 +47,7 @@ feature {NONE} -- Initialization
 			target_set: target = in.output
 		end
 
-feature -- Element change
+feature {FACTORY} -- Status setting
 
 	set_exponential (e: N_BASED_CALCULATION) is
 		require

@@ -108,7 +108,7 @@ feature -- Status setting
 			prices_valid: price_relationships_correct
 		end
 
-feature {VALUE_SETTER, FACTORY} -- Element change
+feature {VALUE_SETTER, FACTORY} -- Status setting
 
 	set (o, h, l, c: REAL) is
 			-- Set the open, high, low, and close values.

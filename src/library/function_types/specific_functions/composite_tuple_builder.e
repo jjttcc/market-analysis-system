@@ -105,7 +105,7 @@ feature -- Status report
 
 	operator_used: BOOLEAN is false
 
-feature -- Element change
+feature -- Status setting
 
 	set_tuple_maker (f: COMPOSITE_TUPLE_FACTORY) is
 			-- Set tuple_maker to `f'.

@@ -74,7 +74,7 @@ feature -- Basic operations
 			processed: processed
 		end
 
-feature {FACTORY} -- Element change
+feature {FACTORY} -- Status setting
 
 	set_operator (op: NUMERIC_COMMAND) is
 		require

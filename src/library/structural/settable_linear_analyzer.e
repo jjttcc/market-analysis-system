@@ -17,7 +17,7 @@ inherit
 			target
 		end
 
-feature {FACTORY} -- Element change
+feature {FACTORY} -- Status setting
 
 	set_target (in: CHAIN [MARKET_TUPLE]) is
 		require

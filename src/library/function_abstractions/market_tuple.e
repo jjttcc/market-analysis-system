@@ -19,7 +19,7 @@ feature -- Access
 		deferred
 		end
 
-feature {FACTORY, VALUE_SETTER} -- Element change
+feature {FACTORY, VALUE_SETTER} -- Status setting
 
 	set_date_time (t: DATE_TIME) is
 			-- Set date_time to `t'.

@@ -13,7 +13,7 @@ feature
 	n: INTEGER
 			-- The length of the sub-list to be analyzed
 
-feature {FACTORY} -- Element change
+feature {FACTORY} -- Status setting
 
 	set_n (value: INTEGER) is
 			-- Set n to `value'.
