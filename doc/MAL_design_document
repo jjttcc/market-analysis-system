@@ -43,16 +43,6 @@ have a daily trading period type.  The trading period type is used in the
 construction of composite tuples, such as weekly tuples from daily tuples.
 
 SIMPLE_FUNCTION allows for a MARKET_TUPLE_LIST to be treated as
-a MARKET_FUNCTION (by inheriting from both).  It will serve as the
-innermost function in a composition of functions.  The main intent
-of this construct is to allow composite functions to be constructed
-by enclosing one or more functions within another function without the
-enclosing function needing to know the type of function it is containing
-(simple or composite, and various subtypes of composite).  The result
-is that arbitrarily complex functions can be constructed without causing
-resulting complexity in the implementation of the function classes.
-
-SIMPLE_FUNCTION allows for a MARKET_TUPLE_LIST to be treated as
 a MARKET_FUNCTION (by inheriting from both).  By serving as the
 innermost function in a composition of functions, it completes the
 design pattern that enables composite functions to be constructed by
