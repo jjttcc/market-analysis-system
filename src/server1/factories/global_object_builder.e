@@ -125,14 +125,6 @@ feature {NONE}
 				end
 				i := i + 1
 			end
-			if input_file_names.empty then
-				if default_input_file_name /= Void then
-					input_file_names.extend (default_input_file_name)
-					tradable_factories.extend (tradable_factory)
-				else
-					raise ("No input file name specified")
-				end
-			end
 			tradable_factory.set_no_open (no_open)
 			if fs /= Void then
 				tradable_factory.set_field_separator (fs)
