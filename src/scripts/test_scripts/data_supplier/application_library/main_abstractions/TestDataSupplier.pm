@@ -52,7 +52,7 @@ print "My socket is: $socket\n";
 	sub initialize {
 		my ($self, %args) = @_;
 		my $new_socket = IO::Socket::INET->new(
-			LocalAddr => 'localhost', LocalPort => 39414, Proto => 'tcp',
+			LocalAddr => 'localhost', LocalPort => 39415, Proto => 'tcp',
 			Listen => 5);
 		die "$!" unless $new_socket;
 		$self->set_field(qw(socket), $new_socket);
@@ -81,13 +81,11 @@ print "Socket was created: ", $self->field_value_for(qw(socket)), "\n";
 	# Process the client request associated with the specified socket.
 	sub process {
 		my ($self, $socket) = @_;
-print "starting 'process'\n";
 		my $client_request = <$socket>;
-		my $test_data = "20050214,8.4,8.8,8.4,8.65,12133412\n" .
-			"20050215,8.4,8.7,8.2,8.5,1123428\n" .
-			"20050216,8.5,8.875,8.15,8.25,1121234\n" .
-			"20050217,8.6,9.9,8.6,9.25,1131233\n" .
-			"20050218,8.9,9.8,8.9,9.45,1012334\n";
+		chomp $client_request;
+		my $symbol = $client_request;
+print "starting 'process with symbol $symbol'\n";
+		my $test_data = $self->data_for($symbol, 0);
 		chomp $client_request;
 		print "'process' received socket request: $client_request\n";
 print "A\n";
@@ -99,5 +97,29 @@ print "B\n";
 print "C\n";
 	}
 
+	# Data for the specification: symbol, whether-it-is-intraday
+	sub data_for {
+		my ($self, $symbol, $intraday) = @_;
+		my $infile = FileHandle->new;
+		my $result;
+		my @lines;
+		my $filename = $symbol . ".txt";
+print "reading data from " . $filename, "\n";
+		if (not $infile->open("< " . $filename)) {
+			$result = "Supplier: Open of input file failed.";
+		} else {
+			@lines = <$infile>;
+print "Sending " . @lines . " lines\n";
+		}
+		$result = join("", @lines);
+#print "result is $result\n";
+		$result;
+	}
+
+#"20050214,8.4,8.8,8.4,8.65,12133412\n" .
+#"20050215,8.4,8.7,8.2,8.5,1123428\n" .
+#"20050216,8.5,8.875,8.15,8.25,1121234\n" .
+#"20050217,8.6,9.9,8.6,9.25,1131233\n" .
+#"20050218,8.9,9.8,8.9,9.45,1012334\n";
 
 1;
