@@ -63,20 +63,25 @@ feature -- Basic operations
 				end
 				log_errors (<<"%NError encountered in ", routine_description,
 							":%N", error_msg, "%N">>)
-				if fatal then
-					exit (Error_exit_status)
-				end
 			elseif
 				signal = Sigterm or signal = Sigabrt or signal = Sigquit
 			then
 				log_errors (<<"%NCaught kill signal in ", routine_description,
 					":%N", signal_meaning (signal), " (", signal, ")",
 					" - exiting ...%N">>)
-				exit (Error_exit_status)
+				fatal := true
 			else
 				log_errors (<<"%NCaught signal in ", routine_description,
-					":%N", signal_meaning (signal), " (", signal, ")",
-					" - continuing ...%N">>)
+					":%N", signal_meaning (signal), " (", signal, ")">>)
+				fatal := last_exception_status.fatal
+				if fatal then
+					log_error(" - exiting ...%N")
+				else
+					log_error(" - continuing ...%N")
+				end
+			end
+			if fatal then
+				exit (Error_exit_status)
 			end
 		end
 
