@@ -15,7 +15,7 @@ feature -- Basic operations
 
 	execute is
 		do
-			!!product.make
+			create product.make
 		end
 
 feature -- Access

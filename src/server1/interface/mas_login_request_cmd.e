@@ -43,8 +43,8 @@ feature -- Basic operations
 			tokens: LIST [STRING]
 		do
 			session_id := new_key
-			!!sutil.make (msg)
-			!!session.make
+			create sutil.make (msg)
+			create session.make
 			tokens := sutil.tokens (Input_field_separator)
 			from
 				tokens.start
@@ -132,17 +132,17 @@ feature {NONE} -- Implementation
 			time_period: STRING
 			date: DATE
 		do
-			!!date_maker
+			create date_maker
 			if type.is_equal (Start_date) or type.is_equal (End_date) then
 				time_period := settings.item
 				settings.forth
 				if settings.exhausted then
-					!!Result.make (0)
+					create Result.make (0)
 					Result.append ("Invalid format for date setting of type ")
 					Result.append (type)
 					Result.append (" - missing date component")
 				elseif not period_types.has (time_period) then
-					!!Result.make (0)
+					create Result.make (0)
 					Result.append ("Invalid time period type for date %
 						%setting of type ")
 					Result.append (type)
@@ -150,9 +150,9 @@ feature {NONE} -- Implementation
 					Result.append (time_period)
 				else
 					if settings.item.is_equal ("0") then
-						!!date.make (0, 0, 0)
+						create date.make (0, 0, 0)
 					elseif settings.item.is_equal ("now") then
-						!!date.make_now
+						create date.make_now
 						-- Set date to 2 years in the future.
 						date.set_year (date.year + 2)
 					else
@@ -160,7 +160,7 @@ feature {NONE} -- Implementation
 									settings.item, Date_field_separator)
 					end
 					if date = Void then
-						!!Result.make (0)
+						create Result.make (0)
 						Result.append ("Invalid date for date %
 							%setting of type ")
 						Result.append (type)
@@ -173,7 +173,7 @@ feature {NONE} -- Implementation
 					end
 				end
 			else
-				!!Result.make (0)
+				create Result.make (0)
 				Result.append ("Invalid type for setting: ")
 				Result.append (type)
 			end

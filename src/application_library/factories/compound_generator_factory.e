@@ -68,7 +68,7 @@ feature -- Basic operations
 
 	execute is
 		do
-			!!product.make (left_generator, right_generator, event_type)
+			create product.make (left_generator, right_generator, event_type)
 			if before_extension /= Void then
 				product.set_before_extension (before_extension)
 			end

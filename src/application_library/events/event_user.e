@@ -69,7 +69,7 @@ feature -- Basic operations
 			e: MARKET_EVENT
 		do
 			if not email_addresses.empty and mailer /= Void then
-				!!msg.make (elist.count * 120)
+				create msg.make (elist.count * 120)
 				from
 					elist.start
 				until

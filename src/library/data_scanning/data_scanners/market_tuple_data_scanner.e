@@ -124,7 +124,7 @@ feature {NONE} -- Implementation
 			s: STRING
 		do
 			if not t.price_relationships_correct then
-				!!s.make (100)
+				create s.make (100)
 				s.append ("Error in prices for tuple, date: ")
 				s.append (t.date_time.date.out)
 				s.append (", time: ")
@@ -157,7 +157,7 @@ feature {NONE} -- Implementation
 			if
 				last_date_time /= Void and not (t.date_time > last_date_time)
 			then
-				!!s.make (0)
+				create s.make (0)
 				s.append ("Error in date - date for current item: ")
 				s.append (t.date_time.out)
 				s.append (", date for last item: ")

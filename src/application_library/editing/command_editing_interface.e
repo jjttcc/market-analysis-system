@@ -45,9 +45,9 @@ feature -- Access
 		local
 			l: ARRAYED_LIST [COMMAND]
 		once
-			!!Result.make (0)
+			create Result.make (0)
 
-			!!l.make (13)
+			create l.make (13)
 			Result.extend (l, Boolean_result_command)
 			l.extend (command_with_generator ("LE_OPERATOR"))
 			l.extend (command_with_generator ("GE_OPERATOR"))
@@ -64,7 +64,7 @@ feature -- Access
 			l.extend (command_with_generator ("FALSE_COMMAND"))
 			l.extend (command_with_generator ("SIGN_ANALYZER"))
 
-			!!l.make (27)
+			create l.make (27)
 			Result.extend (l, Real_result_command)
 			l.extend (command_with_generator ("SUBTRACTION"))
 			l.extend (command_with_generator ("MULTIPLICATION"))
@@ -94,7 +94,7 @@ feature -- Access
 			l.extend (command_with_generator ("N_BASED_UNARY_OPERATOR"))
 			l.extend (command_with_generator ("FUNCTION_BASED_COMMAND"))
 
-			!!l.make (5)
+			create l.make (5)
 			Result.extend (l, Binary_real_real_command)
 			l.extend (command_with_generator ("SUBTRACTION"))
 			l.extend (command_with_generator ("MULTIPLICATION"))
@@ -102,7 +102,7 @@ feature -- Access
 			l.extend (command_with_generator ("SAFE_DIVISION"))
 			l.extend (command_with_generator ("ADDITION"))
 
-			!!l.make (6)
+			create l.make (6)
 			Result.extend (l, Binary_boolean_real_command)
 			l.extend (command_with_generator ("LE_OPERATOR"))
 			l.extend (command_with_generator ("GE_OPERATOR"))
@@ -111,7 +111,7 @@ feature -- Access
 			l.extend (command_with_generator ("GT_OPERATOR"))
 			l.extend (command_with_generator ("SIGN_ANALYZER"))
 
-			!!l.make (9)
+			create l.make (9)
 			Result.extend (l, Basic_numeric_command)
 			l.extend (command_with_generator ("BASIC_NUMERIC_COMMAND"))
 			l.extend (command_with_generator ("OPENING_PRICE"))
@@ -123,7 +123,7 @@ feature -- Access
 			l.extend (command_with_generator ("OPENING_PRICE"))
 			l.extend (command_with_generator ("OPEN_INTEREST"))
 
-			!!l.make (9)
+			create l.make (9)
 			Result.extend (l, Linear_command)
 			l.extend (command_with_generator ("UNARY_LINEAR_OPERATOR"))
 			l.extend (command_with_generator ("SLOPE_ANALYZER"))
@@ -135,13 +135,13 @@ feature -- Access
 			l.extend (command_with_generator ("BASIC_LINEAR_COMMAND"))
 			l.extend (command_with_generator ("FUNCTION_BASED_COMMAND"))
 
-			!!l.make (2)
+			create l.make (2)
 			Result.extend (l, N_based_calculation)
 			l.extend (command_with_generator ("N_VALUE_COMMAND"))
 			l.extend (command_with_generator ("MA_EXPONENTIAL"))
 			l.extend (command_with_generator ("N_BASED_UNARY_OPERATOR"))
 
-			!!l.make (7)
+			create l.make (7)
 			Result.extend (l, N_record_command)
 			l.extend (command_with_generator ("LOWEST_VALUE"))
 			l.extend (command_with_generator ("LINEAR_SUM"))
@@ -306,7 +306,7 @@ feature {NONE} -- Implementation
 		local
 			name: STRING
 		once
-			!!Result.make (0)
+			create Result.make (0)
 			name := "TRUE_COMMAND"
 			check
 				valid_name: command_names.has (name)

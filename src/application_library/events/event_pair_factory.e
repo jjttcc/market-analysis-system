@@ -52,7 +52,7 @@ feature -- Basic operations
 			left := next_event
 			skip_field_separator
 			right := next_event
-			!!product.make (left, right, concatenation (<<left.name, ", ",
+			create product.make (left, right, concatenation (<<left.name, ", ",
 							right.name>>), current_event_type)
 		end
 

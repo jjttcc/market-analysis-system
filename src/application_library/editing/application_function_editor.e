@@ -255,12 +255,12 @@ feature -- Basic operations
 			per_type_name: STRING
 		do
 			-- It doesn't matter what date is used here.
-			!!date.make_now
+			create date.make_now
 			y := user_interface.real_selection (concatenation (<<
 					f.name, "'s starting (leftmost) y value">>))
 			slope := user_interface.real_selection (concatenation (<<
 					f.name, "'s slope">>))
-			!!p.make
+			create p.make
 			p.set_x_y_date (1, y, date)
 			f.make (p, slope, user_interface.dummy_tradable)
 		end
@@ -302,7 +302,7 @@ feature {NONE} -- Implementation
 	exclude_cmds: LIST [COMMAND] is
 			-- Commands not allowed as operators for market functions
 		once
-			!LINKED_LIST [COMMAND]!Result.make
+			create {LINKED_LIST [COMMAND]} Result.make
 			Result.extend (operator_maker.command_with_generator (
 				"FUNCTION_BASED_COMMAND"))
 		end

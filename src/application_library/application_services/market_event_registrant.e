@@ -57,11 +57,11 @@ feature -- Basic operations
 				end
 				event_history.compare_objects
 			elseif hfile_name /= Void then
-				!!hfile.make_open_read (
+				create hfile.make_open_read (
 					env.file_name_with_app_directory (hfile_name))
 				hfile.set_field_separator (field_separator)
 				hfile.set_record_separator (record_separator)
-				!!scanner.make (hfile)
+				create scanner.make (hfile)
 				scanner.execute
 				fill_event_history (scanner.product)
 				event_history.compare_objects
@@ -116,7 +116,7 @@ feature {NONE} -- Implementation
 			i: INTEGER
 		do
 			from
-				!!Result.make (0)
+				create Result.make (0)
 				i := 1
 				guts := e.guts
 			until
@@ -134,7 +134,7 @@ feature {NONE} -- Implementation
 			-- Create `event_history' and fill it with the contents of `l'.
 		do
 			from
-				!!event_history.make (l.count)
+				create event_history.make (l.count)
 				l.start
 			until
 				l.exhausted

@@ -80,7 +80,7 @@ feature -- Basic operations
 
 	execute is
 		do
-			!!product.make (function, operator, event_type, period_type)
+			create product.make (function, operator, event_type, period_type)
 			if left_offset > 0 then
 				product.set_left_offset (left_offset)
 				debug ("editing")

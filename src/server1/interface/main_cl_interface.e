@@ -280,7 +280,7 @@ feature {NONE} -- Implementation
 		do
 			from
 				analyzers := market_event_generation_library
-				!!names.make (analyzers.count)
+				create names.make (analyzers.count)
 				from
 					analyzers.start
 				until
@@ -417,7 +417,7 @@ feature {NONE} -- Implementation
 			finished: BOOLEAN
 			registrar: EVENT_REGISTRATION
 		do
-			!!registrar.make (event_coordinator.dispatcher,
+			create registrar.make (event_coordinator.dispatcher,
 								input_device, output_device)
 			from
 			until
@@ -656,7 +656,7 @@ feature {NONE} -- Implementation
 			finished: BOOLEAN
 		do
 			from
-				!!names.make (indicators.count)
+				create names.make (indicators.count)
 				from
 					indicators.start
 				until
@@ -751,8 +751,8 @@ feature {NONE} -- Implementation - utilities
 	initialize is
 		do
 			current_period_type := period_types @ (period_type_names @ Daily)
-			!!event_generator_builder.make
-			!!function_builder.make
+			create event_generator_builder.make
+			create function_builder.make
 			-- For now, only use non-intraday data.
 			daily_market_list := market_list_handler.daily_market_list
 		ensure

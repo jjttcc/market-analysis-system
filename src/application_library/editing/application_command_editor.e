@@ -328,7 +328,7 @@ feature -- Basic operations
 			choices: LIST [PAIR [STRING, BOOLEAN]]
 			pair: PAIR [STRING, BOOLEAN]
 		do
-			!!sign_spec_vector.make (1, 6)
+			create sign_spec_vector.make (1, 6)
 			sign_spec_vector.put (<<-1, 1>>, 1)
 			sign_spec_vector.put (<<1, -1>>, 2)
 			sign_spec_vector.put (<<-1, 0>>, 3)
@@ -347,18 +347,18 @@ feature -- Basic operations
 				selections_valid: left /= Void and right /= Void
 			end
 			cmd.set_operands (left, right)
-			!LINKED_LIST [PAIR [STRING, BOOLEAN]]!choices.make
-			!!pair.make ("negative to positive", false)
+			create {LINKED_LIST [PAIR [STRING, BOOLEAN]]} choices.make
+			create pair.make ("negative to positive", false)
 			choices.extend (pair)
-			!!pair.make ("positive to negative", false)
+			create pair.make ("positive to negative", false)
 			choices.extend (pair)
-			!!pair.make ("negative to zero", false)
+			create pair.make ("negative to zero", false)
 			choices.extend (pair)
-			!!pair.make ("positive to zero", false)
+			create pair.make ("positive to zero", false)
 			choices.extend (pair)
-			!!pair.make ("zero to negative", false)
+			create pair.make ("zero to negative", false)
 			choices.extend (pair)
-			!!pair.make ("zero to positive", false)
+			create pair.make ("zero to positive", false)
 			choices.extend (pair)
 			user_interface.choice (concatenation (<<"slope specification for ",
 				cmd.generator>>), choices, choices.count)

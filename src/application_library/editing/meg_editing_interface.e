@@ -134,7 +134,7 @@ feature {NONE} -- Implementation
 		local
 			eg_maker: COMPOUND_GENERATOR_FACTORY
 		do
-			!!eg_maker
+			create eg_maker
 			eg_maker.set_generators (
 				event_generator_selection ("left component"),
 				event_generator_selection ("right component"))
@@ -171,7 +171,7 @@ feature {NONE} -- Implementation
 		local
 			fa_maker: OVFA_FACTORY
 		do
-			!!fa_maker
+			create fa_maker
 			fa_maker.set_function (
 				function_choice_clone ("technical indicator"))
 			fa_maker.set_operator (operator_choice (fa_maker.function,
@@ -193,7 +193,7 @@ feature {NONE} -- Implementation
 			fa_maker: TVFA_FACTORY
 			op: RESULT_COMMAND [BOOLEAN]
 		do
-			!!fa_maker.make
+			create fa_maker.make
 			fa_maker.set_functions (
 				function_choice_clone ("left technical indicator"),
 					function_choice_clone ("right technical indicator"))
@@ -362,7 +362,7 @@ feature {NONE} -- Implementation
 			-- Commands not allowed as operators for two-variable
 			-- function analyzers
 		once
-			!LINKED_LIST [COMMAND]!Result.make
+			create {LINKED_LIST [COMMAND]} Result.make
 			Result.append (operator_maker.command_types @
 				operator_maker.N_record_command)
 			Result.append (operator_maker.command_types @

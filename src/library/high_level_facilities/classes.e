@@ -22,7 +22,7 @@ feature -- Access
 	instances: ARRAYED_LIST [G] is
 			-- An instance of each instantiable class that conforms to G
 		do
-			!!Result.make (instances_and_descriptions.count)
+			create Result.make (instances_and_descriptions.count)
 			from
 				instances_and_descriptions.start
 			until
@@ -77,7 +77,7 @@ feature {NONE} -- Implementation
 	names: ARRAYED_LIST [STRING] is
 			-- The class name of each element of `instances'
 		do
-			!!Result.make (instances.count)
+			create Result.make (instances.count)
 			Result.compare_objects
 			from
 				instances.start
@@ -98,7 +98,7 @@ feature {NONE} -- Implementation
 			namelist: ARRAYED_LIST [STRING]
 		do
 			Result := true
-			!!namelist.make (l.count)
+			create namelist.make (l.count)
 			namelist.compare_objects
 			from
 				l.start

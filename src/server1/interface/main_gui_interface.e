@@ -102,7 +102,7 @@ feature {NONE}
 			s, number: STRING
 			i, j: INTEGER
 		do
-			!!s.make (0)
+			create s.make (0)
 			from
 			until
 				io_medium.last_character = eom @ 1
@@ -174,21 +174,21 @@ feature {NONE}
 			cmd: REQUEST_COMMAND
 			rh: HASH_TABLE [REQUEST_COMMAND, INTEGER]
 		do
-			!!rh.make (0)
-			!MARKET_DATA_REQUEST_CMD!cmd.make (market_list_handler)
+			create rh.make (0)
+			create {MARKET_DATA_REQUEST_CMD} cmd.make (market_list_handler)
 			rh.extend (cmd, Market_data_request)
-			!INDICATOR_DATA_REQUEST_CMD!cmd.make (market_list_handler)
+			create {INDICATOR_DATA_REQUEST_CMD} cmd.make (market_list_handler)
 			rh.extend (cmd, Indicator_data_request)
-			!TRADING_PERIOD_TYPE_REQUEST_CMD!cmd.make (
+			create {TRADING_PERIOD_TYPE_REQUEST_CMD} cmd.make (
 				market_list_handler)
 			rh.extend (cmd, Trading_period_type_request)
-			!MARKET_LIST_REQUEST_CMD!cmd.make (market_list_handler)
+			create {MARKET_LIST_REQUEST_CMD} cmd.make (market_list_handler)
 			rh.extend (cmd, Market_list_request)
-			!INDICATOR_LIST_REQUEST_CMD!cmd.make (market_list_handler)
+			create {INDICATOR_LIST_REQUEST_CMD} cmd.make (market_list_handler)
 			rh.extend (cmd, Indicator_list_request)
-			!ERROR_RESPONSE_CMD!cmd
+			create {ERROR_RESPONSE_CMD} cmd
 			rh.extend (cmd, Error)
-			!LOGIN_REQUEST_CMD!cmd.make (market_list_handler)
+			create {LOGIN_REQUEST_CMD} cmd.make (market_list_handler)
 			rh.extend (cmd, Login_request)
 			request_handlers := rh
 		ensure
@@ -197,8 +197,8 @@ feature {NONE}
 
 	initialize is
 		do
-			!!event_generator_builder.make
-			!!function_builder.make
+			create event_generator_builder.make
+			create function_builder.make
 			make_request_handlers
 		end
 

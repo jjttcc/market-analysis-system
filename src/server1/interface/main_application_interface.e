@@ -41,7 +41,7 @@ feature {NONE}
 			factory_builder := fb
 			event_coordinator := factory_builder.event_coordinator
 			market_list_handler := factory_builder.market_list_handler
-			!!help.make
+			create help.make
 		ensure
 			fb_set: factory_builder = fb
 			list_handler_set: market_list_handler =

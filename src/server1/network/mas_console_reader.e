@@ -33,7 +33,7 @@ feature -- Initialization
 			input_device := io.input
 			output_device := io.output
 			factory_builder := fb
-			!!interface.make_io (input_device, output_device, factory_builder)
+			create interface.make_io (input_device, output_device, factory_builder)
 			-- Input from the user is needed to trigger the MEDIUM_POLLER.
 			output_device.put_string (
 				"Welcome to the Market Analysis Server console! %

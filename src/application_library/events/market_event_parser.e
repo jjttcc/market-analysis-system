@@ -28,8 +28,8 @@ feature {NONE} -- Initialization
 		require
 			not_void: in_file /= Void
 		do
-			!!type_name.make (3)
-			!!last_error.make (0)
+			create type_name.make (3)
+			create last_error.make (0)
 			input := in_file
 		ensure
 			set: input = in_file
@@ -74,10 +74,11 @@ feature -- Basic operations
 			error_occurred := false
 			read_type
 			if type_name.is_equal (Atomic_market_event) then
-				!ATOMIC_EVENT_FACTORY!product.make (input, field_separator)
+				create {ATOMIC_EVENT_FACTORY} product.make (input,
+					field_separator)
 			elseif type_name.is_equal (Market_event_pair) then
-				!EVENT_PAIR_FACTORY!product.make (input, clone (Current),
-													field_separator)
+				create {EVENT_PAIR_FACTORY} product.make (input,
+					clone (Current), field_separator)
 			else
 				set_error
 				-- Cannot fulfill the postcondition.

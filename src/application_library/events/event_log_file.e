@@ -50,7 +50,7 @@ feature -- Initialization
 		local
 			env: APP_ENVIRONMENT
 		do
-			!!env
+			create env
 			hfile_name := event_history_file_name
 			field_separator := field_sep
 			record_separator := record_sep

@@ -36,12 +36,12 @@ feature {NONE}
 			meg_builder: CL_BASED_MEG_EDITOR
 			dispatcher: EVENT_DISPATCHER
 		do
-			!VIRTUAL_TRADABLE_LIST!market_list.make (input_file_names,
+			create {VIRTUAL_TRADABLE_LIST} market_list.make (input_file_names,
 														tradable_factories)
 			create dispatcher.make
-			!CL_BASED_COMMAND_EDITOR!command_builder
+			create {CL_BASED_COMMAND_EDITOR} command_builder
 			register_event_registrants (dispatcher)
-			!MARKET_EVENT_COORDINATOR!event_coordinator.make (
+			create {MARKET_EVENT_COORDINATOR} event_coordinator.make (
 							active_event_generators, market_list, dispatcher)
 		end
 

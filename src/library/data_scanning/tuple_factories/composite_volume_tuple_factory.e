@@ -20,8 +20,8 @@ feature {NONE}
 			operator: VOLUME
 		do
 			if volume_adder = Void then
-				!!operator
-				!!volume_adder.make (tuples, operator, tuples.count)
+				create operator
+				create volume_adder.make (tuples, operator, tuples.count)
 			else
 				volume_adder.set_target (tuples)
 				volume_adder.set_n (tuples.count)

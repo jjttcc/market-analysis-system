@@ -30,8 +30,8 @@ feature
 			pc_make (s)
 			active_medium.listen (5)
 			factory_builder := fb
-			!!cl_interface.make (factory_builder)
-			!!gui_interface.make (factory_builder)
+			create cl_interface.make (factory_builder)
+			create gui_interface.make (factory_builder)
 		ensure
 			set: active_medium = s and factory_builder = fb
 		end

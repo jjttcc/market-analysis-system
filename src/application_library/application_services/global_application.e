@@ -46,7 +46,7 @@ feature -- Access
 	termination_registrants: LIST [TERMINABLE] is
 			-- Registrants for termination cleanup notification
 		once
-			!LINKED_LIST [TERMINABLE]!result.make
+			create {LINKED_LIST [TERMINABLE]} result.make
 		end
 
 	event_types: ARRAY [EVENT_TYPE] is
@@ -54,7 +54,7 @@ feature -- Access
 		local
 			i: INTEGER
 		do
-			!ARRAY [EVENT_TYPE]!Result.make (1,
+			create {ARRAY [EVENT_TYPE]} Result.make (1,
 				market_event_generation_library.count)
 			from
 				i := 1
@@ -72,7 +72,7 @@ feature -- Access
 			-- All event types known to the system in a hash table - key
 			-- is the event type ID.
 		do
-			!!Result.make (
+			create Result.make (
 				market_event_generation_library.count)
 			from
 				market_event_generation_library.start
@@ -124,10 +124,10 @@ feature -- Access
 				end
 				die (-1)
 			else
-				!!storable
+				create storable
 				mflist ?= storable.retrieve_by_name (full_path_name)
 				if mflist = Void then
-					!STORABLE_MARKET_FUNCTION_LIST!mflist.make (
+					create {STORABLE_MARKET_FUNCTION_LIST} mflist.make (
 						indicators_file_name)
 				end
 				-- Ensure that the list will be saved when the process ends.
@@ -160,10 +160,10 @@ feature -- Access
 				end
 				die (-1)
 			else
-				!!storable
+				create storable
 				meg_list ?= storable.retrieve_by_name (full_path_name)
 				if meg_list = Void then
-					!STORABLE_EVENT_GENERATOR_LIST!meg_list.make (
+					create {STORABLE_EVENT_GENERATOR_LIST} meg_list.make (
 						generators_file_name)
 				end
 				-- Ensure that the list will be saved when the process ends.
@@ -182,7 +182,7 @@ feature -- Access
 			registrants: LIST [MARKET_EVENT_REGISTRANT]
 			generators: LIST [MARKET_EVENT_GENERATOR]
 		do
-			!LINKED_LIST [MARKET_EVENT_GENERATOR]!Result.make
+			create {LINKED_LIST [MARKET_EVENT_GENERATOR]} Result.make
 			registrants := market_event_registrants
 			generators := market_event_generation_library
 			from
@@ -233,10 +233,10 @@ feature -- Access
 				end
 				die (-1)
 			else
-				!!storable
+				create storable
 				reg_list ?= storable.retrieve_by_name (full_path_name)
 				if reg_list = Void then
-					!!reg_list.make (registrants_file_name)
+					create reg_list.make (registrants_file_name)
 				end
 				Result := reg_list
 				-- The registrants themselves also need to be registered for
@@ -272,7 +272,7 @@ feature -- Access
 		do
 			meg_library := market_event_generation_library
 			from
-				!!Result.make (meg_library.count)
+				create Result.make (meg_library.count)
 				meg_library.start
 			until
 				meg_library.exhausted
@@ -286,7 +286,7 @@ feature -- Access
 	function_names: ARRAYED_LIST [STRING] is
 			-- Names of all elements of `function_library', in the same order
 		do
-			!!Result.make (function_library.count)
+			create Result.make (function_library.count)
 			from
 				function_library.start
 			until
@@ -302,7 +302,7 @@ feature -- Access
 		local
 			etypes: LINEAR [EVENT_TYPE]
 		do
-			!!Result.make (event_types.count)
+			create Result.make (event_types.count)
 			etypes := event_types.linear_representation
 			from
 				etypes.start
@@ -347,7 +347,7 @@ feature {NONE} -- Implementation
 			l: LIST [MARKET_EVENT_GENERATOR]
 		do
 			unique_id := maximum_id_value (market_event_generation_library) + 1
-			!!Result.make (name, unique_id)
+			create Result.make (name, unique_id)
 		ensure
 			not event_types_by_key.has (Result.id)
 		end

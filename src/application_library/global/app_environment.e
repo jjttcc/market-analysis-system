@@ -52,7 +52,7 @@ feature -- Access
 		require
 			not_void: fname /= Void
 		do
-			!!Result.make (0)
+			create Result.make (0)
 			if app_directory /= Void and not app_directory.empty then
 				Result.append (app_directory)
 				Result.extend (Directory_separator)
@@ -64,7 +64,7 @@ feature {NONE} -- Implementation
 
 	env_names: APP_ENVIRONMENT_VARIABLE_NAMES is
 		once
-			!!Result
+			create Result
 		end
 
 end -- APP_ENVIRONMENT

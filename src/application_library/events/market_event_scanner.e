@@ -35,10 +35,10 @@ feature
 			-- A dummy value setter is created and added to vs to
 			-- satisfy the class invariant that `value_setters' is not
 			-- empty, which will be true after the call to data_scanner_make.
-			!VOLUME_SETTER!dummy_value_setter.make
-			!!vs.make
+			create {VOLUME_SETTER} dummy_value_setter.make
+			create vs.make
 			vs.extend (dummy_value_setter)
-			!!parser.make (in)
+			create parser.make (in)
 			data_scanner_make (in, parser, vs)
 			parser.set_field_separator (in.field_separator @ 1)
 		ensure
@@ -57,7 +57,7 @@ feature {NONE} -- Hook method implementations
 
 	create_product is
 		do
-			!LINKED_LIST [MARKET_EVENT]!product.make
+			create {LINKED_LIST [MARKET_EVENT]} product.make
 		end
 
 	make_tuple is

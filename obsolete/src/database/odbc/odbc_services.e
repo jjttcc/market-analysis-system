@@ -49,7 +49,7 @@ feature -- Access
 			db_result := db_mgr.retrieve (db_info.stock_symbol_query)
 			if db_result /= Void then
 				create {LINKED_LIST [STRING]} Result.make
-				!!symbol.make (0)
+				create symbol.make (0)
 				from
 					db_result.start
 				until 

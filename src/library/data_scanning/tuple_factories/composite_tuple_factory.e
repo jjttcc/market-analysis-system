@@ -50,7 +50,7 @@ feature -- Basic operations
 					tuplelist.first.date_time /= Void and
 					tuplelist.last.date_time /= Void
 			end
-			!!product.make
+			create product.make
 			product.set_first (tuplelist.first)
 			product.set_last (tuplelist.last)
 			do_main_work (tuplelist)
@@ -77,8 +77,8 @@ feature {NONE}
 			c := tuples.last.close.value
 			if high_finder = Void then
 				check low_finder = Void end
-				!!high_finder.make (tuples, high, tuples.count)
-				!!low_finder.make (tuples, low, tuples.count)
+				create high_finder.make (tuples, high, tuples.count)
+				create low_finder.make (tuples, low, tuples.count)
 			else
 				check low_finder /= Void end
 				high_finder.set_target (tuples)

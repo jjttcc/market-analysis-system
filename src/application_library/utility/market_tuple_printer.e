@@ -151,7 +151,7 @@ feature {NONE} -- Implementation
 			fmtr: FORMAT_INTEGER
 			i1, i2, i3: INTEGER
 		do
-			!!fmtr.make (2)
+			create fmtr.make (2)
 			fmtr.set_fill ('0')
 			if f1 = 'y' then
 				i1 := date.year

@@ -114,10 +114,10 @@ feature {NONE} -- Implementation
 			do_clone: BOOLEAN
 			general_msg: STRING
 		do
-			!LINKED_SET [G]!tree_objects.make
+			create {LINKED_SET [G]} tree_objects.make
 			tree_objects.fill (valid_types (current_objects, objects))
 			from
-				!!tree_names.make (tree_objects.count)
+				create tree_names.make (tree_objects.count)
 				tree_objects.start
 			until
 				tree_objects.exhausted
@@ -126,7 +126,7 @@ feature {NONE} -- Implementation
 				tree_objects.forth
 			end
 			from
-				!!obj_names.make (objects.count)
+				create obj_names.make (objects.count)
 				objects.start
 			until
 				objects.exhausted
@@ -144,9 +144,10 @@ feature {NONE} -- Implementation
 							%shared; objects selected%Nfrom the list of all %
 							%objects will be copied.)%N">>)
 			end
-			!!first_pair.make (tree_names,
+			create first_pair.make (tree_names,
 								"[Valid objects from current tree:]%N")
-			!!second_pair.make (obj_names, "[List of all valid objects:]%N")
+			create second_pair.make (obj_names,
+				"[List of all valid objects:]%N")
 			from
 				selection := multilist_selection (<<first_pair, second_pair>>,
 													general_msg)
@@ -207,7 +208,7 @@ feature {NONE} -- Implementation
 		require
 			not_void: obj_list /= Void and ref_list /= Void
 		do
-			!LINKED_LIST [G]!Result.make
+			create {LINKED_LIST [G]} Result.make
 			from
 				obj_list.start
 			until
@@ -236,7 +237,7 @@ feature {NONE} -- Implementation
 		local
 			exclude_current: BOOLEAN
 		do
-			!LINKED_LIST [G]!Result.make
+			create {LINKED_LIST [G]} Result.make
 			if ref_list = Void then
 				Result.append (obj_list)
 			else
@@ -268,7 +269,7 @@ feature {NONE} -- Implementation
 	current_objects: LIST [G] is
 		do
 			if current_object_list = Void then
-				!LINKED_LIST [G]!current_object_list.make
+				create {LINKED_LIST [G]} current_object_list.make
 			end
 			Result := current_object_list
 		ensure

@@ -63,11 +63,11 @@ feature -- Basic operations
 			skip_field_separator
 			scan_date
 			scan_time
-			!!date_time.make_by_date_time (last_date, last_time)
+			create date_time.make_by_date_time (last_date, last_time)
 			skip_field_separator
 			scan_symbol
-			!!product.make (current_event_type.name, last_symbol, date_time,
-							current_event_type)
+			create product.make (current_event_type.name, last_symbol,
+				date_time, current_event_type)
 		end
 
 feature {NONE} -- Implementation
@@ -166,7 +166,7 @@ feature {NONE} -- Implementation
 			-- Scan the current field and place the result into `last_string'.
 		do
 			if last_string = Void then
-				!!last_string.make (12)
+				create last_string.make (12)
 			end
 			last_string.wipe_out
 			from

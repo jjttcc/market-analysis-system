@@ -95,7 +95,7 @@ feature -- Basic operations
 
 	execute is
 		do
-			!!product.make (left_function, right_function, event_type,
+			create product.make (left_function, right_function, event_type,
 							period_type)
 			if operator /= Void then
 				product.set_operator (operator)
