@@ -39,7 +39,7 @@ feature -- Initialization
 			socket: COMPRESSED_SOCKET
 			readcmd: POLL_COMMAND
 			factory_builder: FACTORY_BUILDER
-			version: expanded PRODUCT_INFO
+			version: expanded MAS_PRODUCT_INFO
 		do
 			if command_line_options.error_occurred then
 				log_errors (<<"Error occurred during initialization - ",

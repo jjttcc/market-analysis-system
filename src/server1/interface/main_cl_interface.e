@@ -599,7 +599,7 @@ feature {NONE} -- Implementation - utilities
 
 	product_info: STRING is
 		local
-			version: expanded PRODUCT_INFO
+			version: expanded MAS_PRODUCT_INFO
 		do
 			Result := concatenation (<<
 				"%N", version.name, "%NVersion: ", version.number, "%N",
