@@ -1,0 +1,7 @@
+#!/bin/bash
+
+cd /usr/java/jakarta-tomcat-5.0.27/webapps/mas
+mv -f bin ..
+pwd
+rm -rf *
+mv ../bin .
