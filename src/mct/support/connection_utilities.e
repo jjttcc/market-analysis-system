@@ -15,18 +15,18 @@ class CONNECTION_UTILITIES inherit
 
 feature -- Access
 
-	sleep_seconds: INTEGER is
-			-- Number of seconds to sleep in between tries with
+	initial_sleep_micro_seconds: INTEGER is
+			-- Number of microseconds to sleep before the first try with
 			-- `server_connection_attempts'
 		once
-			Result := 0
+			Result := 250000
 		end
 
 	sleep_micro_seconds: INTEGER is
 			-- Number of microseconds to sleep in between tries with
 			-- `server_connection_attempts'
 		once
-			Result := 250000
+			Result := 550000
 		end
 
 feature -- Basic operations
@@ -42,17 +42,21 @@ feature -- Basic operations
 			i: INTEGER
 		do
 			from
-				microsleep (sleep_seconds, sleep_micro_seconds)
+print ("csa connecting on port " + port + " (" + i.out + ")...%N")
+				create connection.make (host, port.to_integer)
+				microsleep (0, initial_sleep_micro_seconds)
 				Result := server_connection_diagnosis (host, port)
 				i := 1
 				check i <= tries end
 			until
 				Result = Void or i = tries
 			loop
-				microsleep (sleep_seconds, sleep_micro_seconds)
+				microsleep (0, sleep_micro_seconds)
+print ("csa connecting on port " + port + " (" + i.out + ")...%N")
 				Result := server_connection_diagnosis (host, port)
 				i := i + 1
 			end
+			connection := Void
 		end
 
 	server_connection_diagnosis (host, port: STRING): STRING is
@@ -62,7 +66,7 @@ feature -- Basic operations
 		require
 			args_exist: host /= Void and port /= Void
 		local
-			connection: GUI_CLIENT_CONNECTION
+			conn: GUI_CLIENT_CONNECTION
 			retried: BOOLEAN
 		do
 			if not retried then
@@ -70,20 +74,24 @@ feature -- Basic operations
 					Result := "Invalid port number: " + port
 				end
 				if Result = Void then
-					create connection.make (host, port.to_integer)
-					if connection.last_communication_succeeded then
-						connection.ping_server
-						if not connection.last_communication_succeeded then
+					if connection /= Void then
+						conn := connection
+					else
+						create conn.make (host, port.to_integer)
+					end
+					if conn.last_communication_succeeded then
+						conn.ping_server
+						if not conn.last_communication_succeeded then
 							Result := "Communication with server (host: " +
 							host + ", port; " + port + ") failed:%N" +
-							connection.error_report + "."
+							conn.error_report + "."
 						end
 					else
 						Result := "Could not connect to server at host: " +
 							host + ", port: " + port
-						if not connection.error_report.is_empty then
+						if not conn.error_report.is_empty then
 							Result.append ("%N(" +
-								connection.error_report + ").")
+								conn.error_report + ").")
 						end
 					end
 				end
@@ -95,5 +103,9 @@ feature -- Basic operations
 			retried := True
 			retry
 		end
+
+feature {NONE} -- Implementation
+
+	connection: GUI_CLIENT_CONNECTION
 
 end
