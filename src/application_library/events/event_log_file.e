@@ -21,11 +21,6 @@ class EVENT_LOG_FILE inherit
 			er_make
 		end
 
-	GLOBAL_SERVICES
-		export {NONE}
-			all
-		end
-
 	GLOBAL_APPLICATION
 		rename
 			event_types as global_event_types
@@ -77,10 +72,8 @@ feature -- Basic operations
 				elist.exhausted
 			loop
 				e := elist.item
-				put_string (concatenation (<<"Event received:%Nname: ",
-						e.name, ", time stamp: ",
-						e.time_stamp, ", type: ", e.type.name,
-						"%Ndescription: ", e.description, "%N">>))
+				put_string (event_information (e))
+				put_string ("%N")
 				elist.forth
 			end
 		end

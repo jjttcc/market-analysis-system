@@ -18,9 +18,11 @@ deferred class MARKET_EVENT_REGISTRANT inherit
 			all
 		end
 
+	GLOBAL_SERVICES
+
 feature -- Access
 
-	event_history: LINKED_LIST [MARKET_EVENT]
+	event_history: HASH_TABLE [MARKET_EVENT, STRING]
 
 feature -- Basic operations
 
@@ -43,7 +45,7 @@ feature -- Basic operations
 				!!hfile.make_open_read (hfile_name)
 				!!scanner.make (hfile)
 				scanner.execute
-				event_history := scanner.product
+				fill_event_history (scanner.product)
 				event_history.compare_objects
 				hfile.close
 			end
@@ -71,9 +73,10 @@ feature -- Basic operations
 				from
 					event_history.start
 				until
-					event_history.exhausted
+					event_history.after
 				loop
-					hfile.put_string (event_guts (event_history.item, fld_sep))
+					hfile.put_string (event_guts (
+						event_history.item_for_iteration, fld_sep))
 					hfile.put_string (record_sep)
 					event_history.forth
 				end
@@ -84,7 +87,7 @@ feature -- Basic operations
 			-- since the history is stored separately (above) and the cache
 			-- does not need to be persistent.
 			event_cache.wipe_out
-			event_history.wipe_out
+			event_history.clear_all
 		end
 
 feature {NONE} -- Implementation
@@ -110,6 +113,45 @@ feature {NONE} -- Implementation
 			end
 			-- Append the last field without a trailing separator:
 			Result.append (guts @ i)
+		end
+
+	fill_event_history (l: LIST [MARKET_EVENT]) is
+			-- Create `event_history' and fill it with the contents of `l'.
+		do
+			from
+				!!event_history.make (l.count)
+				l.start
+			until
+				l.exhausted
+			loop
+				event_history.extend (l.item, l.item.unique_id)
+				l.forth
+			end
+		end
+
+	event_information (e: TYPED_EVENT): STRING is
+			-- Reporting information extracted from `e'
+		do
+			if
+				-- Don't print the time if it's midnight - non-intraday
+				-- trading period.
+				e.time /= Void and then not (e.time.hour = 0 and
+					e.time.minute = 0)
+			then
+				Result := concatenation (<<"Event name: ", e.name, ", date: ",
+										e.date, ", time: ", e.time,
+										", type: ", e.type.name,
+										"%Ndescription: ", e.description>>)
+			elseif e.date /= Void then
+				Result := concatenation (<<"Event name: ", e.name, ", date: ",
+										e.date, ", type: ", e.type.name,
+										"%Ndescription: ", e.description>>)
+			else
+				Result := concatenation (<<"Event name: ", e.name,
+										", time stamp: ", e.time_stamp,
+										", type: ", e.type.name,
+										"%Ndescription: ", e.description>>)
+			end
 		end
 
 end -- MARKET_EVENT_REGISTRANT

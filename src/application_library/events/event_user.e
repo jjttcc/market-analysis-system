@@ -20,11 +20,6 @@ class EVENT_USER inherit
 			er_make
 		end
 
-	GLOBAL_SERVICES
-		export {NONE}
-			all
-		end
-
 	GLOBAL_APPLICATION
 		rename
 			event_types as global_event_types
@@ -66,10 +61,8 @@ feature -- Basic operations
 					elist.exhausted
 				loop
 					e := elist.item
-					msg.append (concatenation (<<"Event name: ",
-								e.name, ", time stamp: ",
-								e.time_stamp, ", type: ", e.type.name,
-								"%Ndescription: ", e.description, "%N%N">>))
+					msg.append (event_information (e))
+					msg.append ("%N%N")
 					elist.forth
 				end
 				notify_by_email (msg, concatenation (<<elist.count,
