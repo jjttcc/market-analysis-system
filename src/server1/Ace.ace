@@ -134,6 +134,7 @@ cluster
 
 external
  object:	"${EIFFEL4}/library/time/spec/$(PLATFORM)/lib/libdatetime.a",
-			"${EIFFEL4}/library/net/spec/$(PLATFORM)/lib/libnet.a";
+			"${EIFFEL4}/library/net/spec/$(PLATFORM)/lib/libnet.a",
+			"${EIFFEL4}/library/store/spec/$(PLATFORM)/lib/libsupport.a";
 
 end
