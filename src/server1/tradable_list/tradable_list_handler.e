@@ -21,9 +21,11 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (daily_list, intraday_list: TRADABLE_LIST) is
+	make (daily_list, intraday_list: TRADABLE_LIST;
+			inds: SEQUENCE [MARKET_FUNCTION]) is
 		require
 			one_not_void: intraday_list /= Void or daily_list /= Void
+			inds_exist: inds /= Void
 			counts_equal_if_both_valid: daily_list /= Void and then
 				not daily_list.is_empty and then intraday_list /= Void and then
 				not intraday_list.is_empty implies
@@ -33,9 +35,12 @@ feature {NONE} -- Initialization
 		do
 			daily_market_list := daily_list
 			intraday_market_list := intraday_list
+			indicators := inds
+print ("TLH - indicators.count: " + indicators.count.out + "%N")
 		ensure
 			lists_set: daily_market_list = daily_list and
 				intraday_market_list = intraday_list
+			indicators_set: indicators = inds
 		end
 
 feature -- Access
@@ -162,6 +167,8 @@ feature -- Access
 		do
 			Result := symbol_list.item
 		end
+
+	indicators: SEQUENCE [MARKET_FUNCTION]
 
 feature -- Status report
 
