@@ -1,0 +1,63 @@
+system pfm
+	-- Primary test application
+
+root
+
+	PORTFOLIO_MANAGER: "make"
+
+default
+
+	assertion (all);
+	debug ("editing");
+	debug ("persist");
+	debug ("command line");
+	profile (no);
+
+	--precompiled ("$EIFFEL4/precomp/spec/$PLATFORM/base");
+
+cluster
+
+	pfm:					"$MAS/src/pfm";
+	root_cluster (pfm):		"$/root";
+	abstractions (pfm):		"$/abstractions";
+	utilities (pfm):		"$/utilities";
+	builders (pfm):			"$/builders";
+
+		-- Eiffel Component Library clusters
+	eiffel_components:						"$MAS/src/eiffel_library";
+	component_support (eiffel_components):	"$/support";
+	component_arch (eiffel_components):		"$/architectural";
+	eiflib_data_scanning (eiffel_components):
+											"$/data_scanning";
+
+		-- Application library clusters
+	app_library:				"$MAS/src/application_library";
+	mas_library:				"$MAS/src/library";
+	app_utility (app_library):	"$/utility";
+	setters (mas_library):		"$/data_scanning/value_setters";
+
+		-- ISE library clusters
+	ise:						"$EIFFEL4/library";
+	kernel (ise):				"$/base/kernel";
+	support (ise):				"$/base/support";
+	access (ise):				"$/base/structures/access";
+	cursors (ise):				"$/base/structures/cursors";
+	cursor_tree (ise):			"$/base/structures/cursor_tree";
+	dispenser (ise):			"$/base/structures/dispenser";
+	iteration (ise):			"$/base/structures/iteration";
+	list (ise):					"$/base/structures/list";
+	set (ise):					"$/base/structures/set";
+	sort (ise):					"$/base/structures/sort";
+	storage (ise):				"$/base/structures/storage";
+	table (ise):				"$/base/structures/table";
+	traversing (ise):			"$/base/structures/traversing";
+	tree (ise):					"$/base/structures/tree";
+	date (ise):					"$/time";
+	date_format (date):			"$/format";
+	date_tools (date_format):	"$/english";
+
+external
+
+ object:	"${EIFFEL4}/library/time/spec/$(PLATFORM)/lib/libdatetime.a";
+
+end
