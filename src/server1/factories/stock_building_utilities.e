@@ -58,21 +58,17 @@ feature {NONE} -- Implementation
 			create Result.make (1, 6)
 			if no_open then
 				if intraday then
-print ("Setting up for intraday data without open.%N")
 					Result := << Date_index, Time_index, High_index, Low_index,
 						CLose_index, Volume_index >>
 				else
-print ("Setting up for non-intraday data without open.%N")
 					Result := << Date_index, High_index, Low_index,
 						CLose_index, Volume_index >>
 				end
 			else
 				if intraday then
-print ("Setting up for intraday data with open.%N")
 					Result := << Date_index, Time_index, Open_index,
 						High_index, Low_index, Close_index, Volume_index >>
 				else
-print ("Setting up for non-intraday data with open.%N")
 					Result := << Date_index, Open_index, High_index, Low_index,
 						Close_index, Volume_index >>
 				end
