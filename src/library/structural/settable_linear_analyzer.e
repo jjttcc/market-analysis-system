@@ -26,6 +26,6 @@ inherit
 
 feature {NONE}
 
-	target: ARRAYED_LIST [MARKET_TUPLE]
+	target: LINEAR [MARKET_TUPLE]
 
 end -- class VECTOR_ANALYZER
