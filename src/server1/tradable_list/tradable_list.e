@@ -68,6 +68,8 @@ feature -- Access
 						print_errors (last_tradable,
 										tradable_factories.item.error_list)
 					end
+				else
+					last_tradable.flush_indicators
 				end
 				old_index := index
 			end
