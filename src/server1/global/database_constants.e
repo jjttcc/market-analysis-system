@@ -64,4 +64,71 @@ feature -- Access
 
 	Intraday_stock_query_tail_specifier: STRING is "intraday stock query tail"
 
+	Derivative_symbol_query_specifier: STRING is "derivative symbol query"
+
+	Derivative_split_query_specifier: STRING is "derivative split query"
+
+	Derivative_name_query_specifier: STRING is "derivative name query"
+
+	Daily_derivative_symbol_field_specifier: STRING is
+		"daily derivative symbol field"
+
+	Daily_derivative_date_field_specifier: STRING is
+		"daily derivative date field"
+
+	Daily_derivative_open_field_specifier: STRING is
+		"daily derivative open field"
+
+	Daily_derivative_high_field_specifier: STRING is
+		"daily derivative high field"
+
+	Daily_derivative_low_field_specifier: STRING is
+		"daily derivative low field"
+
+	Daily_derivative_close_field_specifier: STRING is
+		"daily derivative close field"
+
+	Daily_derivative_volume_field_specifier: STRING is
+		"daily derivative volume field"
+
+	Daily_derivative_open_interest_field_specifier: STRING is
+		"daily derivative open_interest field"
+
+	Intraday_derivative_symbol_field_specifier: STRING is
+		"intraday derivative symbol field"
+
+	Intraday_derivative_date_field_specifier: STRING is
+		"intraday derivative date field"
+
+	Intraday_derivative_time_field_specifier: STRING is
+		"intraday derivative time field"
+
+	Intraday_derivative_open_field_specifier: STRING is
+		"intraday derivative open field"
+
+	Intraday_derivative_high_field_specifier: STRING is
+		"intraday derivative high field"
+
+	Intraday_derivative_low_field_specifier: STRING is
+		"intraday derivative low field"
+
+	Intraday_derivative_close_field_specifier: STRING is
+		"intraday derivative close field"
+
+	Intraday_derivative_volume_field_specifier: STRING is
+		"intraday derivative volume field"
+
+	Intraday_derivative_open_interest_field_specifier: STRING is
+		"intraday derivative open_interest field"
+
+	Daily_derivative_table_specifier: STRING is "daily derivative table"
+
+	Intraday_derivative_table_specifier: STRING is "intraday derivative table"
+
+	Daily_derivative_query_tail_specifier: STRING is
+		"daily derivative query tail"
+
+	Intraday_derivative_query_tail_specifier: STRING is
+		"intraday derivative query tail"
+
 end -- DATABASE_CONSTANTS
