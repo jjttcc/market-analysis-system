@@ -326,7 +326,7 @@ work, as long as the result is in YYYYMMDD format.)
 </UL>
 <h3>
 <A name="signal generation">
-Signal Generation
+Signal Generation and Market Analyzers
 </A>
 </h3>
 <P><B>
@@ -392,6 +392,47 @@ had not changed.  So the "sub"-generators are not shared.  Since they
 are not shared, going the other way - changing the sub-generators
 (lower-level generators, using your terminology), as
 in your example, also has no effect on the compound generator.
+<P><B>
+Having studied the doc
+<I>
+Creating Market Analyzers .....
+</I>
+I have run into
+a brick wall!
+Using your diagram convention what I want to do is:
+<P><TT>
+&nbsp;&nbsp;&nbsp;&nbsp;GT_OPERATOR
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/ \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;RSI&nbsp;&nbsp;&nbsp;Constant
+<P></TT>
+The question is:
+<I>
+How do I get RSI as the left Operand?
+</I>
+I have played with most of the really obvious and not so obvious
+selections and have drawn a blank!
+</B><P>
+I believe what you want is the basic linear command, which extracts
+the current value from the input function being analyzed (which in your
+case is the RSI function).  So your diagram would change to (where BLC
+is the basic linear command):
+<P><TT>
+&nbsp;&nbsp;&nbsp;&nbsp;GT_OPERATOR
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/ \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp; \
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;BLC&nbsp;&nbsp;&nbsp;Constant
+<br>
+<P></TT>
+Note: In the latest version of mas, Constant has been renamed as
+Numeric-value-command.  (Since it can function as either a constant or as a
+variable whose value can change during run.)
 <!-- Include this when version 1.7 is released:
 <h3>
 <A name="debugging">
