@@ -41,7 +41,7 @@ Then run the install script from this directory:
 If it is not already, you will need to make sure that the bin directory
 you installed to is included in your path.
 
-After installation, you should read the file doc/env_settings for
+After installation, you should read the file doc/environment for
 instructions on setting environment variables needed by the server.
 
 Also, you will need to create a file with stock split information, which
