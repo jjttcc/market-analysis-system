@@ -1,0 +1,20 @@
+# Specification for cluster dependency checking with "check_dep"
+# Structure: "directory<Tab>rank"
+#  [First attempt - may need improvement and/or some clusters may need
+#  to be reorganized.]
+
+abstractions	5
+configuration	5
+database	5
+data_retrieval	5
+external	5
+factories	5
+global	5
+interface	5
+network	5
+protocols	3
+root	10
+stock_splits	5
+system_specific	5
+tradable_list	5
+utility	5
