@@ -133,7 +133,9 @@ feature -- Basic operations
 				mail_cmd.append (" <")
 				mail_cmd.append (msg_file.name)
 				msg_file.flush
-				system (mail_cmd)
+--!!!!
+print ("Executing launch '" + mail_cmd + "' (notify_by_email).%N")
+				launch (mail_cmd)
 				if return_code /= 0 then
 					last_error := "Command '" + mail_cmd + "' failed%N" +
 						"with non-zero return code: " + return_code.out + ".%N"
