@@ -164,7 +164,7 @@ feature -- Basic operations
 			error_occurred := False
 			make_product
 			check value_setters.count > 0 end
-			!!scanner.make (product, input, tuple_maker, value_setters)
+			create scanner.make (product, input, tuple_maker, value_setters)
 			scanner.set_strict_error_checking (strict_error_checking)
 			-- Input data from input stream and stuff it into product.
 			scanner.execute
@@ -199,7 +199,7 @@ feature {NONE} -- Implementation
 
 	value_setters: LINKED_LIST [VALUE_SETTER] is
 		once
-			!!Result.make
+			create Result.make
 			add_value_setters (Result, index_vector)
 		end
 
@@ -217,28 +217,23 @@ feature {NONE} -- Implementation
 			i: INTEGER
 		do
 			if value_setter_vector = Void then
-				i := 1
-				!!value_setter_vector.make (1, Last_index)
-				!DAY_DATE_SETTER!setter.make
-				value_setter_vector.put (setter, i)
-				i := i + 1
-				!OPEN_SETTER!setter
-				value_setter_vector.put (setter, i)
-				i := i + 1
-				!HIGH_SETTER!setter
-				value_setter_vector.put (setter, i)
-				i := i + 1
-				!LOW_SETTER!setter
-				value_setter_vector.put (setter, i)
-				i := i + 1
-				!CLOSE_SETTER!setter
-				value_setter_vector.put (setter, i)
-				i := i + 1
-				!VOLUME_SETTER!setter.make
-				value_setter_vector.put (setter, i)
-				i := i + 1
-				!OPEN_INTEREST_SETTER!setter
-				value_setter_vector.put (setter, i)
+				create value_setter_vector.make (1, Last_index)
+				create {DAY_DATE_SETTER} setter.make
+				value_setter_vector.put (setter, Date_index)
+				create {TIME_SETTER} setter.make
+				value_setter_vector.put (setter, Time_index)
+				create {OPEN_SETTER} setter
+				value_setter_vector.put (setter, Open_index)
+				create {HIGH_SETTER} setter
+				value_setter_vector.put (setter, High_index)
+				create {LOW_SETTER} setter
+				value_setter_vector.put (setter, Low_index)
+				create {CLOSE_SETTER} setter
+				value_setter_vector.put (setter, Close_index)
+				create {VOLUME_SETTER} setter.make
+				value_setter_vector.put (setter, Volume_index)
+				create {OPEN_INTEREST_SETTER} setter
+				value_setter_vector.put (setter, OI_index)
 			end
 			from
 				i := 1
@@ -249,8 +244,6 @@ feature {NONE} -- Implementation
 				i := i + 1
 			end
 		end
---!!!Perhaps add an is_intraday state - if true, use DATE_TIME SETTER instead
---of DATE_SETTER (for intraday data capability)
 
 	add_indicators (t: TRADABLE [BASIC_MARKET_TUPLE];
 					flst: LIST [MARKET_FUNCTION]) is
@@ -270,15 +263,15 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Tuple field-key constants
 
---Change this to Date_time_index (and use for both)?:
 	Date_index: INTEGER is 1
-	Open_index: INTEGER is 2
-	High_index: INTEGER is 3
-	Low_index: INTEGER is 4
-	Close_index: INTEGER is 5
-	Volume_index: INTEGER is 6
-	OI_index: INTEGER is 7
-	Last_index: INTEGER is 7
+	Time_index: INTEGER is 2
+	Open_index: INTEGER is 3
+	High_index: INTEGER is 4
+	Low_index: INTEGER is 5
+	Close_index: INTEGER is 6
+	Volume_index: INTEGER is 7
+	OI_index: INTEGER is 8
+	Last_index: INTEGER is 8
 
 invariant
 
