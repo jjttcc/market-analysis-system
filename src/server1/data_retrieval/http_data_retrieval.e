@@ -189,21 +189,33 @@ feature {NONE} -- Status report
 			parameters_exist: parameters /= Void
 		local
 			file_reader: FILE_READER
-			contents: STRING
+			contents, separator: STRING
 			su: expanded STRING_UTILITIES
 			l: ARRAYED_LIST [STRING]
 		do
 			create file_reader.make (parameters.symbol_file)
 			contents := file_reader.contents
 			if not file_reader.error then
-				su.set_target (contents)
-				l := su.tokens ("%N")
-				if not l.is_empty and then l.last.is_empty then
-					-- If the last line of the l file ends with
-					-- a newline, `l' will have an empty last
-					-- element - remvoe it.
-					l.finish
-					l.remove
+				if not contents.is_empty then
+					if contents.has ('%R') then
+						-- DOS-style text, with "%R%N" line termination
+						separator := "%R%N"
+					else
+						-- UNIX-style text, with "%N" line termination
+						separator := "%N"
+					end
+					su.set_target (contents)
+					l := su.tokens (separator)
+					if not l.is_empty and then l.last.is_empty then
+						-- If the last line of the l file ends with
+						-- a newline, `l' will have an empty last
+						-- element - remvoe it.
+						l.finish
+						l.remove
+					end
+print ("l.last: '" + l.last + "'%N")
+				else
+					create l.make (0)
 				end
 			else
 				log_errors (<<"Error reading symbol file: ",
