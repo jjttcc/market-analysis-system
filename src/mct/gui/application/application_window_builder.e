@@ -73,6 +73,12 @@ feature -- Access
 			Result.set_port_number (portnumber)
 		end
 
+	configuration: MCT_CONFIGURATION is
+			-- The configuration for this session
+		once
+			create Result.make (<<Current>>)
+		end
+
 feature {NONE} -- Main-window components
 
 	main_window_menu_bar: EV_MENU_BAR is
@@ -324,11 +330,6 @@ feature {NONE} -- Implementation
 		end
 
 	widget_builder: expanded WIDGET_BUILDER
-
-	configuration: MCT_CONFIGURATION is
-		once
-			create Result.make (<<Current>>)
-		end
 
 feature {NONE} -- Implementation - Constants
 

@@ -52,6 +52,9 @@ feature {NONE} -- Initialization
             main_window := builder.main_window
             main_window.show
 			setup_succeeded := True
+			if command_line_options.is_debug then
+				print ("Settings:%N" + builder.configuration.settings_report)
+			end
 		ensure
 			setup_succeeded: setup_succeeded
 		rescue
