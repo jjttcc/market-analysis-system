@@ -7,9 +7,9 @@ import java.util.*;
 import support.*;
 
 /**
- *  Drawer of market data
+ *  Drawer of market basic data - open, high, low, close, etc.
  */
-abstract public class MarketDrawer extends Drawer {
+abstract public class MarketDrawer extends BasicDrawer {
 
 	// Number of fields in each tuple
 	public int drawing_stride() {
@@ -24,7 +24,7 @@ abstract public class MarketDrawer extends Drawer {
 	// The times associated with the principle (market) data
 	public String[] times() { return _times; }
 
-	public Drawer market_drawer() { return this; }
+	public MarketDrawer market_drawer() { return this; }
 
 	// Number of elements in the data
 	public int data_length() {
@@ -50,7 +50,7 @@ abstract public class MarketDrawer extends Drawer {
 		ref_values_needed = b;
 	}
 
-	protected int[] x_values() {
+	public int[] x_values() {
 		return _x_values;
 	}
 

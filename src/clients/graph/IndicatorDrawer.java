@@ -9,9 +9,12 @@ import support.*;
 /**
  *  Abstraction for drawing indicator tuples
  */
-abstract public class IndicatorDrawer extends Drawer {
+abstract public class IndicatorDrawer extends BasicDrawer {
 
-	IndicatorDrawer(Drawer mktd) { _market_drawer = mktd; }
+	IndicatorDrawer(MarketDrawer mktd) {
+		_market_drawer = mktd;
+		lower_indicator = false;
+	}
 
 	public int drawing_stride() { return 1; }
 
@@ -21,7 +24,7 @@ abstract public class IndicatorDrawer extends Drawer {
 
 	public String[] times() { return _market_drawer.times(); }
 
-	public Drawer market_drawer() { return _market_drawer; }
+	public MarketDrawer market_drawer() { return _market_drawer; }
 
 	// Number of elements in the data
 	public int data_length() {
@@ -44,14 +47,24 @@ abstract public class IndicatorDrawer extends Drawer {
 		ref_values_needed = b;
 	}
 
+	public void set_lower(boolean b) {
+		lower_indicator = b;
+System.out.println("ID set_lower was called  with " + b + " (" +
+getClass() + ", " + this + ")");
+System.out.println("lower: " + is_lower() + ")");
+	}
+
+	protected boolean is_lower() { return lower_indicator; }
+
 	protected boolean reference_lines_needed() {
 		return false;
 	}
 
-	protected int[] x_values() {
+	public int[] x_values() {
 		return _market_drawer.x_values();
 	}
 
+	// Precondition: _market_drawer != null
 	protected int bar_width() {
 		return _market_drawer.bar_width();
 	}
@@ -93,6 +106,7 @@ abstract public class IndicatorDrawer extends Drawer {
 	protected double _data[];
 	protected String[] _indicator_dates;
 	protected String[] _indicator_times;
-	protected Drawer _market_drawer;
-	boolean ref_values_needed;
+	protected MarketDrawer _market_drawer;
+	protected boolean ref_values_needed;
+	protected boolean lower_indicator;
 }

@@ -7,16 +7,14 @@ import java.util.*;
 import support.*;
 
 /**
- *  Abstraction for drawing time-related data
+ *  Abstraction for drawing time data
  */
-public class TimeDrawer extends Drawer {
+public class TimeDrawer extends TemporalDrawer {
 
 	// mkd is the associated market drawer and is_ind specifies whether
 	// this TimeDrawer is associated with indicator data.
-	TimeDrawer(Drawer mkd, boolean is_ind) {
-		_market_drawer = mkd;
-		is_indicator = is_ind;
-		conf = Configuration.instance();
+	TimeDrawer(BasicDrawer mkd) {
+		super(mkd);
 		hour_table = new String[] {"12", "1", "2", "3", "4", "5", "6", "7",
 			"8", "9", "10", "11", "12", "1", "2", "3", "4", "5", "6", "7",
 			"8", "9", "10", "11"};
@@ -39,8 +37,6 @@ public class TimeDrawer extends Drawer {
 	// The dates associated with the principle (market) data
 	public String[] times() { return _market_drawer.times(); }
 
-	public Drawer market_drawer() { return _market_drawer; }
-
 	public int data_length() {
 		int result;
 		if (times() != null) {
@@ -58,18 +54,11 @@ public class TimeDrawer extends Drawer {
 		return _market_drawer.x_values();
 	}
 
-	// (Reference values are never needed for times.)
-	public void set_reference_values_needed(boolean b) {}
-
-	protected boolean reference_lines_needed() { return false; }
-
 	protected final static int Max_hours = 720, Max_days = 30;
-
-	protected final static int Day_x_offset = 8;
 
 	protected int Hour_y, Day_y;
 
-	protected int Hour_x_offset;
+	protected int Hour_x_offset, Day_x_offset;
 
 	// length of the hour name
 	protected int hour_ln = 2;
@@ -92,8 +81,16 @@ public class TimeDrawer extends Drawer {
 
 		if (times == null || times.length == 0) return;
 
-		Hour_y = bounds.y + bounds.height - 15; Hour_x_offset = 10;
-		Day_y = Hour_y;
+		if (is_indicator()) {
+//Rectangle refbounds = main_drawer.bottom_reference_bounds(bounds);
+//Hour_y = bounds.y + bounds.height + 15;
+			Hour_y = label_y_value(bounds);
+			Day_y = Hour_y;
+System.out.println("Hour y was set to: " + Hour_y);
+//Old: Hour_y = bounds.y + bounds.height - 15; Hour_x_offset = 10;
+			Day_y = Hour_y;
+		}
+		Hour_x_offset = 10;
 		// Determine the first hour in `times'.
 		String hour_string = times[0].substring(0,2);
 		String day_string = dates[0].substring(6,8);
@@ -126,8 +123,9 @@ public class TimeDrawer extends Drawer {
 			// Set the hour x offset according to the distance between
 			// the x-value for the first hour and the x-value for
 			// the second hour.
-			Hour_x_offset = (int) ((_x_values[hours[1].right()] -
-								_x_values[hours[0].right()]) * .10);
+			Hour_x_offset = label_x_value(_x_values[hours[0].right()],
+				_x_values[hours[1].right()]);
+			Day_x_offset = Hour_x_offset;
 		}
 		i = 0;
 		draw_all_hours = hi <= Draw_all_hour_limit;
@@ -157,11 +155,13 @@ public class TimeDrawer extends Drawer {
 		width_factor = width_factor_value(bounds, dates().length);
 		x = x_values[p.right()];
 		hour_x = x + Hour_x_offset;
-		g.setColor(Color.black);
-		g.drawLine(x + Line_offset, bounds.y,
-			x + Line_offset, bounds.y + bounds.height);
-		g.setColor(conf.text_color());
-		if (! is_indicator) {
+		if (x > Too_far_left) {
+			g.setColor(Color.black);
+			g.drawLine(x + Line_offset, bounds.y,
+				x + Line_offset, bounds.y + bounds.height);
+		}
+		if (is_indicator()) {
+			g.setColor(conf.text_color());
 			g.drawString(hour_table[p.left()], hour_x, Hour_y);
 		}
 	}
@@ -178,11 +178,13 @@ public class TimeDrawer extends Drawer {
 		width_factor = width_factor_value(bounds, dates().length);
 		x = x_values[p.right()];
 		day_x = x + Day_x_offset;
-		g.setColor(Color.black);
-		g.drawLine(x + Line_offset, bounds.y,
-			x + Line_offset, bounds.y + bounds.height);
-		g.setColor(conf.text_color());
-		if (! is_indicator) {
+		if (x > Too_far_left) {
+			g.setColor(Color.black);
+			g.drawLine(x + Line_offset, bounds.y,
+				x + Line_offset, bounds.y + bounds.height);
+		}
+		if (is_indicator()) {
+			g.setColor(conf.text_color());
 			g.drawString(day_table[p.left()], day_x, Day_y);
 		}
 	}
@@ -223,17 +225,6 @@ public class TimeDrawer extends Drawer {
 
 		return result;
 	}
-
-	// Do y-coordinate reference values need to be displayed for this data?
-	protected boolean reference_values_needed() {
-		return false;
-	}
-
-	protected Configuration conf;
-
-	protected Drawer _market_drawer;
-
-	protected boolean is_indicator;
 
 	protected String[] hour_table;
 

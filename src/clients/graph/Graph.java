@@ -55,11 +55,9 @@ import support.Configuration;
  * @author   Leigh Brookshaw
  */
 
-public class Graph extends Canvas {
+abstract public class Graph extends Canvas {
 
-	public Graph (boolean is_indicator) {
-		_indicator = is_indicator;
-	}
+	public Graph () {}
 
 /*
 ** Default Background Color
@@ -111,7 +109,7 @@ public class Graph extends Canvas {
 
 
 	// Symbol to display, if any
-	private String symbol;
+	protected String symbol;
 
 /*
 **********************
@@ -220,10 +218,6 @@ public class Graph extends Canvas {
    */
 	private TextLine lastText = null;
 
-
-	// Is this the indicator (secondary) graph?
-	private boolean _indicator;
-
 /*
 *******************
 **
@@ -247,11 +241,11 @@ public class Graph extends Canvas {
  */
 
 	public void attachDataSet(DataSet d) {
-	if( d != null) {
-		dataset.addElement(d);
-		d.set_g2d(this);
+		if( d != null) {
+			dataset.addElement(d);
+			d.set_g2d(this);
+		}
 	}
-}
 /**
  *    Detach the DataSet from the class. Data associated with the DataSet
  *    will nolonger be plotted.
@@ -477,11 +471,8 @@ public double getYmin() {
  *  @params g Graphics state.
  */
 	public void paint(Graphics g) {
-		int i;
-		int refval_index = 0;
 		Graphics lg  = g.create();
 		Rectangle r = bounds();
-		DataSet ds;
 
 		/* The r.x and r.y returned from bounds is relative to the
 		** parents space so set them equal to zero.
@@ -522,39 +513,22 @@ public double getYmin() {
 			datarect.width  = r.width;
 			datarect.height = r.height;
 
-			// Only the first dataset's boundaries need to be drawn,
-			// since they are all the same.
-			((DataSet) dataset.elementAt(0)).draw_boundaries(lg, r);
-			if (_indicator) {
-				// This is the indicator graph - only the reference values
-				// for the last data set should be drawn.
-				refval_index = dataset.size() - 1;
-			} else {
-				// This is the main indicator graph - only the first
-				// (market data) reference values should be drawn.
-				refval_index = 0;
-			}
-			for (i=0; i<dataset.size(); ++i) {
-				ds = (DataSet) dataset.elementAt(i);
-				if (i == refval_index) {
-					ds.set_reference_values_needed(true);
-				} else {
-					ds.set_reference_values_needed(false);
-				}
-				ds.draw_data(lg, r);
-			}
+			draw_data(lg, r);
 		} else {
-			// Force boundaries to be drawn.
-			ds = new DataSet(new PriceDrawer());
-			ds.draw_boundaries(lg, r);
+			draw_as_empty(lg, r);
 		}
 
-		if (symbol != null && symbol.length() > 0) {
-			display_text("[" + symbol + "]", g);
-		}
 		paintLast(lg,r);
 		lg.dispose();
 	}
+
+	// Draw the main data.
+	// Precondition: dataset.size() > 0
+	abstract void draw_data(Graphics g, Rectangle r);
+
+	// Draw whatever needs to be drawn when dataset is empty.
+	// Precondition: dataset.size() == 0
+	abstract void draw_as_empty(Graphics g, Rectangle r);
 
 /**
  *  A hook into the paint method. This is called before

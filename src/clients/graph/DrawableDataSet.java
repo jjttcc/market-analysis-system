@@ -47,7 +47,7 @@ import java.lang.*;
  */
 public class DataSet {
 
-	public void set_drawer (Drawer d) {
+	public void set_drawer (BasicDrawer d) {
 		_drawer = d;
 	}
 
@@ -61,7 +61,7 @@ public class DataSet {
 		_drawer.set_times(t);
 	}
 
-	public Drawer drawer() { return _drawer; }
+	public BasicDrawer drawer() { return _drawer; }
 
 	// Do dates need to be drawn?
 	public boolean dates_needed() { return _dates_needed; }
@@ -143,17 +143,20 @@ public class DataSet {
 
 	/**
 	*  Instantiate an empty data set.
+	* @precondition
+	*     d != null
 	* @postcondition
 	*     dates_needed() && drawer() == drawer
 	*/
-	public DataSet(Drawer d) {
+	public DataSet(BasicDrawer d) {
+		if (d  == null) {
+			throw new Error("DataSet constructor: precondition violated");
+		}
 		_drawer = d;
 		data = null;
-		if (d != null) {
-			date_drawer = new DateDrawer(d.market_drawer(), d.is_indicator());
-			time_drawer = new TimeDrawer(d.market_drawer(), d.is_indicator());
-			_dates_needed = true;
-		}
+		date_drawer = new DateDrawer(d);
+		time_drawer = new TimeDrawer(d);
+		_dates_needed = true;
 		tuple_count = 0;
 	}
 
@@ -176,16 +179,14 @@ public class DataSet {
 	* @postcondition
 	*     dates_needed() && drawer() == drawer
 	*/
-	public DataSet(double d[], int n, Drawer drawer) throws Exception {
+	public DataSet(double d[], int n, BasicDrawer drawer) throws Error {
 		if ( d  == null || d.length == 0 || n <= 0 || drawer == null ) {
-			throw new Exception("DataSet constructor: precondition violated");
+			throw new Error("DataSet constructor: precondition violated");
 		}
 		int i;
 		_drawer = drawer;
-		date_drawer = new DateDrawer(drawer.market_drawer(),
-										drawer.is_indicator());
-		time_drawer = new TimeDrawer(drawer.market_drawer(),
-										drawer.is_indicator());
+		date_drawer = new DateDrawer(drawer);
+		time_drawer = new TimeDrawer(drawer);
 		data = d;
 
 		tuple_count = n;
@@ -214,9 +215,6 @@ public class DataSet {
 	// Set the color the data is to be drawn in - can be null
 	public void set_color(Color c) { color_ = c; }
 
-	// set g2d to `b'.
-	protected void set_g2d(Graph g) { g2d_ = g; }
-
 	// Add y1, y2 values for a horizontal line.
 	public void add_hline(DoublePair p) {
 		if (hline_data == null) hline_data = new Vector();
@@ -227,11 +225,6 @@ public class DataSet {
 	public void add_vline(DoublePair p) {
 		if (vline_data == null) vline_data = new Vector();
 		vline_data.addElement(p);
-	}
-
-	// Draw internal graph boundaries.
-	public void draw_boundaries(Graphics g, Rectangle bounds) {
-		_drawer.draw_boundaries(g, bounds);
 	}
 
 	public void set_reference_values_needed (boolean b) {
@@ -264,13 +257,13 @@ public class DataSet {
 		_drawer.set_ranges(xrange, yrange);
 		_drawer.set_clipping(clipping);
 		_drawer.draw_data(g, bounds, hline_data, vline_data, color_);
-		if (_dates_needed) {
-			if (times != null) {
-				draw_times(g, bounds);
-			} else if (dates != null)  {
-				draw_dates(g, bounds);
-			}
-		}
+//		if (_dates_needed) {
+//			if (times != null) {
+//				draw_times(g, bounds);
+//			} else if (dates != null)  {
+//				draw_dates(g, bounds);
+//			}
+//		}
 //		if (restore_bounds) {
 //			bounds.x -= 4;
 //			bounds.width += 4;
@@ -349,38 +342,38 @@ public class DataSet {
 		return point;
 	}
 
+	// set g2d to `b'.
+	protected void set_g2d(Graph g) { g2d_ = g; }
+
+	// The `time_drawer', if there are times; otherwise the `date_drawer',
+	// if there are dates; otherwise null
+	protected TemporalDrawer temporal_drawer() {
+		TemporalDrawer result = null;
+
+		if (times != null) result = time_drawer;
+		else if (dates != null) result = date_drawer;
+
+		return result;
+	}
 
 	/**
-	* Draw dates, if they exist.
+	* Draw times, if they exist; otherwise date dates, if they exist.
+	* Precondition: temporal_drawer() != null implies
+	*    temporal_drawer().main_data_processed()
 	* @param g Graphics context
 	* @param w Data Window
 	*/
 	protected void draw_dates(Graphics g, Rectangle w) {
-		if (dates != null) {
-//Remove?: date_drawer.set_data(dates);
-			date_drawer.set_xaxis(xaxis_);
-			date_drawer.set_yaxis(yaxis_);
-			date_drawer.set_maxes(xmax, ymax, xmin, ymin);
-			date_drawer.set_ranges(xrange, yrange);
-			date_drawer.set_clipping(clipping);
-			date_drawer.draw_data(g, w, null, null, null);
-		}
-	}
-
-	/**
-	* Draw dates, if they exist.
-	* @param g Graphics context
-	* @param w Data Window
-	*/
-	protected void draw_times(Graphics g, Rectangle w) {
-		if (dates != null) {
-//time_drawer.set_data(dates);
-			time_drawer.set_xaxis(xaxis_);
-			time_drawer.set_yaxis(yaxis_);
-			time_drawer.set_maxes(xmax, ymax, xmin, ymin);
-			time_drawer.set_ranges(xrange, yrange);
-			time_drawer.set_clipping(clipping);
-			time_drawer.draw_data(g, w, null, null, null);
+		TemporalDrawer drawer = temporal_drawer();
+		if (drawer != null) {
+			drawer.set_xaxis(xaxis_);
+			drawer.set_yaxis(yaxis_);
+			drawer.set_maxes(xmax, ymax, xmin, ymin);
+			drawer.set_ranges(xrange, yrange);
+			drawer.set_clipping(clipping);
+System.out.println("DataSet.draw_dates calling draw_data with "+
+g + ", " + w + "; drawer: " + drawer);
+			drawer.draw_data(g, w);
 		}
 	}
 
@@ -433,10 +426,10 @@ public class DataSet {
 	private double[] data;
 
 	// Date data
-	private String[] dates;
+	protected String[] dates;
 
 	// Time data
-	private String[] times;
+	protected String[] times;
 
 	// Color data is to be drawn in - can be null
 	private Color color_;
@@ -444,12 +437,12 @@ public class DataSet {
 	/**
 	* Drawer of price bars - e.g., tic bars or candles
 	*/
-	private Drawer _drawer;
+	private BasicDrawer _drawer;
 
 	/**
 	* Drawer of dates
 	*/
-	private DateDrawer date_drawer;
+	protected DateDrawer date_drawer;
 
 	/**
 	* Drawer of times

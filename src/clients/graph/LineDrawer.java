@@ -11,7 +11,7 @@ import support.*;
  */
 public class LineDrawer extends IndicatorDrawer {
 
-	public LineDrawer(Drawer md) { super(md); }
+	public LineDrawer(MarketDrawer md) { super(md); }
 
 	/**
 	* Draw the data bars and the line segments connecting them.

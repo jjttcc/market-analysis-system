@@ -11,7 +11,7 @@ import support.*;
  */
 public class BarDrawer extends IndicatorDrawer {
 
-	public BarDrawer(Drawer md) { super(md); }
+	public BarDrawer(MarketDrawer md) { super(md); }
 
 	/**
 	* Draw the data bars.
