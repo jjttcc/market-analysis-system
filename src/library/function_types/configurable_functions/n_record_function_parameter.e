@@ -25,6 +25,8 @@ feature -- Access
 			Result := function.n
 		end
 
+	name: STRING is "n-value"
+
 feature -- Element change
 
 	change_value (new_value: INTEGER) is

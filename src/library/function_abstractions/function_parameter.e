@@ -29,6 +29,11 @@ feature -- Access
 		deferred
 		end
 
+	name: STRING is
+			-- The name of the parameter
+		deferred
+		end
+
 feature -- Element change
 
 	change_value (new_value: INTEGER) is
