@@ -136,7 +136,7 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 			request_failed = true;
 			// Lock attempts failed.
 			request_failure_message = main_lock_request_failed_message;
-System.out.println("Would previously have thrown an exception here [main data]");
+//!!!: System.out.println("Would previously have thrown an exception here [main data]");
 		}
 	}
 
@@ -164,7 +164,7 @@ System.out.println("Would previously have thrown an exception here [main data]")
 			request_failed = true;
 			// Lock attempts failed.
 			request_failure_message = indicator_lock_request_failed_message;
-System.out.println("Would previously have thrown an exception here [indicator data]");
+//!!!: System.out.println("Would previously have thrown an exception here [indicator data]");
 		}
 	}
 
@@ -192,7 +192,7 @@ System.out.println("Would previously have thrown an exception here [indicator da
 			// Lock attempts failed.
 			request_failure_message =
 				indicator_list_lock_request_failed_message;
-System.out.println("Would previously have thrown an exception here [indicator list data]");
+//!!!: System.out.println("Would previously have thrown an exception here [indicator list data]");
 		}
 	}
 
