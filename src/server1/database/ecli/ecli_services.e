@@ -47,7 +47,7 @@ feature -- Access
 			symbol: STRING
 		do
 			fatal_error := false
-			create {LINKED_LIST[STRING]} Result.make
+			create {ARRAYED_LIST [STRING]} Result.make (0)
 			-- definition of statement on session
 			create stmt.make (session)
 			-- change execution mode to immediate (no need to prepare)
@@ -273,11 +273,13 @@ feature {NONE} -- Implementation
 			-- Array of value holders for statement execution results for
 			-- intraday stock data
 		local
-			date, time: ECLI_INTEGER
+			date: ECLI_INTEGER
+			time: ECLI_VARCHAR
 			volume, open, high, low, close: ECLI_DOUBLE
 		do
 			create date.make
-			create time.make
+			-- Size of "hh:mm:ss" is 8.
+			create time.make (8)
 			create high.make
 			create low.make
 			create close.make
