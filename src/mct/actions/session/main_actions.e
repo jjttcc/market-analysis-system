@@ -13,6 +13,11 @@ class MAIN_ACTIONS inherit
 			post_initialize
 		end
 
+	CONNECTION_UTILITIES
+		export
+			{NONE} all
+		end
+
 create
 
 	make
@@ -32,7 +37,7 @@ feature -- Actions
 	connect_to_session is
 			-- Connect to an existing MAS "session".
 		local
-			cmd: SESSION_LOCATON
+			cmd: SESSION_LOCATION
 		do
 			create cmd.make (configuration, external_commands)
 			cmd.connect_to_session
@@ -41,7 +46,7 @@ feature -- Actions
 	terminate_arbitrary_session is
 			-- Terminate an arbitrary MAS "session".
 		local
-			cmd: SESSION_LOCATON
+			cmd: SESSION_LOCATION
 		do
 			create cmd.make (configuration, external_commands)
 			cmd.terminate_arbitrary_session
@@ -51,7 +56,7 @@ feature -- Actions
 			-- Start the MAS server.
 		local
 			cmd: COMMAND
-			portnumber: STRING
+			portnumber, msg: STRING
 			wbldr: expanded WIDGET_BUILDER
 			dialog: EV_WIDGET
 			session_window: SESSION_WINDOW
@@ -68,6 +73,15 @@ feature -- Actions
 				cmd := external_commands @
 					configuration.Start_server_cmd_specifier
 				cmd.execute (session_window)
+				msg := server_connection_attempts (configuration.hostname,
+					portnumber, 10)
+				if msg = Void then
+					session_window.show
+				else
+					dialog := wbldr.new_error_dialog (msg, Void)
+					dialog.show
+					port_numbers_in_use.prune (portnumber)
+				end
 			end
 		end
 
