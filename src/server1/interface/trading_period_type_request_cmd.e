@@ -31,6 +31,9 @@ feature -- Basic operations
 		do
 			-- `msg' is expected to contain (only) the market symbol
 			ptypes := tradables.period_types (msg)
+			if tradables.last_tradable /= Void then
+				session.set_last_tradable (tradables.last_tradable)
+			end
 			if ptypes = Void then
 				if server_error then
 					report_server_error

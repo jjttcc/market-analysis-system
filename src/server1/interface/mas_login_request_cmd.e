@@ -53,6 +53,9 @@ feature -- Basic operations
 			session_id := new_key
 			create sutil.make (msg)
 			create session.make
+			if not command_line_options.intraday_caching then
+				session.turn_caching_off
+			end
 			tokens := sutil.tokens (Input_field_separator)
 			from
 				tokens.start

@@ -40,7 +40,7 @@ feature -- Status setting
 				tradables /= Void
 		end
 
-feature {NONE}
+feature {NONE} -- Implementation
 
 	report_server_error is
 		do
@@ -52,6 +52,27 @@ feature {NONE}
 			-- Did an error occur in the server?
 		do
 			Result := tradables.error_occurred
+		end
+
+	cached_tradable (symbol: STRING; period_type: TIME_PERIOD_TYPE):
+				TRADABLE [BASIC_MARKET_TUPLE] is
+			-- The tradable corresponding to `symbol' and `period_type' -
+			-- `session.last_tradable' is used, if it matches; otherwise
+			-- tradables.tradable (symbol, period_type).
+		require
+			not_void: symbol /= Void and period_type /= Void
+		do
+			Result := session.last_tradable
+			if
+				Result = Void or not (Result.symbol.is_equal (symbol) and
+				Result.period_types.has (period_type.name))
+			then
+				Result := tradables.tradable (symbol, period_type)
+				session.set_last_tradable (Result)
+			end
+		ensure
+			last_tradable_set: session.last_tradable = Result
+			matches_period_type: Result.period_types.has (period_type.name)
 		end
 
 invariant

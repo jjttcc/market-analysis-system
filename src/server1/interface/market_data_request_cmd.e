@@ -43,9 +43,16 @@ feature {NONE}
 				trading_period_type /= Void and market_symbol /= Void
 		local
 			tuple_list: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
+			t: TRADABLE [BASIC_MARKET_TUPLE]
 		do
-			tuple_list := tradables.tuple_list (market_symbol,
-				trading_period_type)
+			if session.caching_on then
+				t := cached_tradable (market_symbol, trading_period_type)
+				tuple_list := t.tuple_list (trading_period_type.name)
+			else
+				tuple_list := tradables.tuple_list (market_symbol,
+					trading_period_type)
+				session.set_last_tradable (tradables.last_tradable)
+			end
 			if tuple_list = Void then
 				if not tradables.symbols.has (market_symbol) then
 					report_error (Invalid_symbol, <<"Symbol not in database.">>)
