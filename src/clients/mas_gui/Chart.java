@@ -15,9 +15,10 @@ import java.util.Properties;
 import java.io.*;
 import graph.*;
 import support.*;
+import common.*;
 
 /** Market analysis GUI chart component */
-public class Chart extends Frame implements Runnable {
+public class Chart extends Frame implements Runnable, NetworkProtocol {
 	public Chart(DataSetBuilder builder) {
 		super("Chart");		// Create the main window frame.
 		num_windows++;			// Count it.
@@ -40,6 +41,12 @@ public class Chart extends Frame implements Runnable {
 					// it for all markets.
 					data_builder.send_indicator_list_request(
 						(String) _markets.elementAt(0));
+					if (data_builder.request_result() == Invalid_symbol) {
+						System.err.println("Symbol " + (String)
+							_markets.elementAt(0) + " is not in database.");
+						System.err.println("Exiting ...");
+						System.exit(-1);
+					}
 					GUI_Utilities.busy_cursor(false, this);
 					inds = data_builder.last_indicator_list();
 					_indicators = new Hashtable(inds.size());
@@ -94,6 +101,11 @@ public class Chart extends Frame implements Runnable {
 			try {
 				data_builder.send_market_data_request(market,
 					current_period_type);
+				if (data_builder.request_result() == Invalid_symbol) {
+					handle_nonexistent_sybmol(market);
+					GUI_Utilities.busy_cursor(false, this);
+					return;
+				}
 			}
 			catch (Exception e) {
 				System.err.println("Exception occurred: "+e+", bye ...");
@@ -236,19 +248,8 @@ public class Chart extends Frame implements Runnable {
 				main_pane.print();
 			}
 			else { // Let the user know there is currently nothing to print.
-				final Dialog dialog = new Dialog(this_chart);
-				Button ok_button = new Button("Nothing to print");
-				dialog.add(ok_button, "Center"); dialog.setSize(145, 65);
-				dialog.setTitle("Printing error"); dialog.show();
-				ok_button.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						dialog.setVisible(false); }});
-				dialog.addWindowListener(new WindowAdapter() {
-					public void windowClosing(WindowEvent e) {
-						dialog.setVisible(false); }});
-				ok_button.addKeyListener(new KeyAdapter() {
-					public void keyPressed(KeyEvent e) {
-						dialog.setVisible(false); }});
+				final ErrorBox errorbox = new ErrorBox("Printing error",
+					"Nothing to print", this_chart);
 			}
 		}});
 
@@ -317,6 +318,14 @@ public class Chart extends Frame implements Runnable {
 		else {
 			setTitle(current_market.toUpperCase());
 		}
+	}
+
+	// Notify the user that the symbol chosen does not exist and then
+	// remove the symbol from the selection list.
+	private void handle_nonexistent_sybmol(String symbol) {
+		ErrorBox errorbox = new ErrorBox("",
+			"Symbol " + symbol + " is not in the database.", this_chart);
+		market_selection.remove_selection(symbol);
 	}
 
 	private DataSetBuilder data_builder;
