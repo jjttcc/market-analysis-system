@@ -15,6 +15,11 @@ class COMMANDS inherit
 			command_instances
 		end
 
+	GLOBAL_SERVICES
+		export
+			{NONE} all
+		end
+
 feature -- Access
 
 	instances_and_descriptions: ARRAYED_LIST [PAIR [COMMAND, STRING]] is
@@ -26,7 +31,10 @@ feature -- Access
 			real_dummy: CONSTANT
 			pair: PAIR [COMMAND, STRING]
 			bnc_dummy: BASIC_NUMERIC_COMMAND
+			stock: STOCK
 		once
+			!!stock.make ("DUMMY",
+				period_types @ (period_type_names @ Daily), Void)
 			!!Result.make (0)
 			-- true_dummy serves as a dummy command instance, needed by
 			-- some of the creation routines for other commands.
@@ -130,7 +138,7 @@ feature -- Access
 			Result.extend (pair)
 			!LINEAR_SUM!cmd.make (default_market_tuple_list, bnc_dummy, 1)
 			!!pair.make (cmd,
-				"Operator that sums a subsequence of n market tuples")
+				"Operator that sums a subsequence of n market records")
 			Result.extend (pair)
 			!MINUS_N_COMMAND!cmd.make (default_market_tuple_list, bnc_dummy, 1)
 			!!pair.make (cmd,
@@ -214,6 +222,12 @@ feature -- Access
 			!SLOPE_ANALYZER!cmd.make (default_market_tuple_list)
 			!!pair.make (cmd,
 				"Operator that calculates the slope of a function")
+			Result.extend (pair)
+			!FUNCTION_BASED_COMMAND!cmd.make (stock, real_dummy)
+			!!pair.make (cmd,
+				"Operator that processes a sequences of market records %
+				%obtained from a%Nmarket function - only used by %
+				%ONE_VARIABLE_FUNCTION_ANALYZER")
 			Result.extend (pair)
 		end
 
