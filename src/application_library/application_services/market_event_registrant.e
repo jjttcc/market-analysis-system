@@ -75,8 +75,8 @@ feature -- Basic operations
 					hfile.put_string (record_sep)
 					event_history.forth
 				end
+				hfile.close
 			end
-			hfile.close
 		end
 
 feature {NONE} -- Implementation
