@@ -4,9 +4,12 @@ the following files:
 
     README - This file
 
-    MAIN_README - The introductory README file for MAS
+    INTRODUCTION.html - A short introduction to MAS (html format)
 
-    masystem_introduction - Contains a brief description of how to run MAS
+    INTRODUCTION.ps - A short introduction to MAS (Postscript format)
+
+    masystem_introduction - A brief description of how to run MAS, with
+       more detail than the INTRODUCTION document
 
     GUI_introduction - Introduction to the GUI client
 
