@@ -18,6 +18,11 @@ class MAIN_GUI_INTERFACE inherit
 			{NONE} all
 		end
 
+	GLOBAL_SERVER
+		export
+			{NONE} all
+		end
+
 creation
 
 	make
@@ -72,6 +77,14 @@ feature -- Basic operations
 			tokenize_message
 			cmd := request_handlers @ message_ID
 			cmd.set_active_medium (io_medium)
+			if
+				message_ID /= Login_request and
+				sessions.has (session_key)
+				-- A session is not needed for the login request command,
+				-- since it will create one.
+			then
+				cmd.set_session(sessions @ session_key)
+			end
 			cmd.execute (message_body)
 		end
 
@@ -79,10 +92,11 @@ feature {NONE}
 
 	tokenize_message is
 			-- Input the next client request, blocking if necessary, and split
-			-- the received message into `message_ID' and `message_body'.
+			-- the received message into `message_ID', `session_key',
+			-- and `message_body'.
 		local
-			s, msgid: STRING
-			i: INTEGER
+			s, number: STRING
+			i, j: INTEGER
 		do
 			!!s.make (0)
 			from
@@ -95,21 +109,55 @@ feature {NONE}
 			if s.empty then
 				i := 0
 			else
-				i := s.substring_index (input_field_separator, 1)
+				i := s.substring_index (Input_field_separator, 1)
 			end
 			if i <= 1 then
 				message_ID := Error
-				message_body := "Invalid message format"
+				message_body := "Invalid message format: "
+				message_body.append(s)
 			else
-				msgid := s.substring (1, i - 1)
-				if not msgid.is_integer then
+				-- Extract the message ID.
+				number := s.substring (1, i - 1)
+				if not number.is_integer then
+					message_body := "Message ID is not a valid integer: "
+					message_body.append (message_ID.out)
 					message_ID := Error
-					message_body := "Message ID is not a valid integer."
+				elseif not request_handlers.has (number.to_integer) then
+					message_body := "Invalid message ID: "
+					message_body.append (message_ID.out)
+					message_ID := Error
 				else
-					message_ID := msgid.to_integer
+					message_ID := number.to_integer
+					j := s.substring_index (Input_field_separator,
+							i + Input_field_separator.count)
+					if j = 0 then
+						message_body := "Invalid message format: "
+						message_body.append (s)
+						message_ID := Error
+					else
+						-- Extract the session key.
+						number := s.substring (i + Input_field_separator.count,
+												j - 1)
+						if not number.is_integer then
+							message_body :=
+								"Session key is not a valid integer: "
+							message_body.append (number)
+							message_ID := Error
+						else
+							session_key := number.to_integer
+							if not message_ID_and_key_valid then
+								message_body := "Invalid session key: "
+								message_body.append (number)
+								message_body.append (", for message ID: ")
+								message_body.append (message_ID.out)
+								message_ID := Error
+							else
+								message_body := s.substring (
+									j + Input_field_separator.count, s.count)
+							end
+						end
+					end
 				end
-				message_body := s.substring (i + input_field_separator.count,
-												s.count)
 			end
 		end
 
@@ -133,6 +181,8 @@ feature {NONE}
 			rh.extend (cmd, Indicator_list_request)
 			!ERROR_RESPONSE_CMD!cmd
 			rh.extend (cmd, Error)
+			!LOGIN_REQUEST_CMD!cmd
+			rh.extend (cmd, Login_request)
 			request_handlers := rh
 		ensure
 			rh_set: request_handlers /= Void and not request_handlers.empty
@@ -146,10 +196,26 @@ feature {NONE}
 			make_request_handlers
 		end
 
+	message_ID_and_key_valid: BOOLEAN is
+			-- Is the combination of message_ID and session_key valid?
+		do
+			if
+				not sessions.has (session_key) and
+				message_ID /= Login_request
+			then
+				Result := false
+			else
+				Result := true
+			end
+		end
+
 feature {NONE}
 
-	request_handlers: TABLE [REQUEST_COMMAND, INTEGER]
-			-- Handers of client requests received via io_medium
+	request_handlers: HASH_TABLE [REQUEST_COMMAND, INTEGER]
+			-- Handlers of client requests received via io_medium
+
+	session_key: INTEGER
+			-- Session key for last client request
 
 	message_ID: INTEGER
 			-- ID of last client request

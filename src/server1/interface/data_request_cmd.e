@@ -51,6 +51,26 @@ feature {NONE} -- Utility
 			end
 		end
 
+	set_print_dates is
+			-- Set `print_start_date' and `print_end_date' according to
+			-- the respective settings in `session' for `trading_period'.
+			-- If there is no corresponding setting, the date will
+			-- be set to Void.
+		do
+			if session.start_dates.has (trading_period_type.name) then
+				print_start_date := session.start_dates @
+					trading_period_type.name
+			else
+				print_start_date := Void
+			end
+			if session.end_dates.has (trading_period_type.name) then
+				print_end_date := session.end_dates @
+					trading_period_type.name
+			else
+				print_end_date := Void
+			end
+		end
+
 invariant
 
 	not_void: market_list /= Void

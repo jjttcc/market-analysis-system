@@ -13,6 +13,8 @@ deferred class REQUEST_COMMAND inherit
 			{NONE} pc_make_unused
 		undefine
 			print
+		redefine
+			execute
 		end
 
 	PRINTING
@@ -45,6 +47,9 @@ feature -- Access
 	market_list: TRADABLE_LIST
 			-- List of all markets currently in the `database'
 
+	session: SESSION
+			-- Settings specific to a particular client session
+
 feature -- Status setting
 
 	set_active_medium (arg: IO_MEDIUM) is
@@ -67,11 +72,26 @@ feature -- Status setting
 			market_list_set: market_list = arg and market_list /= Void
 		end
 
+	set_session (arg: SESSION) is
+			-- Set session to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			session := arg
+		ensure
+			session_set: session = arg and session /= Void
+		end
+
+feature -- Basic operations
+
+	execute (msg: STRING) is
+		deferred
+		end
+
 feature {NONE}
 
 	send_ok is
-			-- Send an "OK" message ID to the client and the field
-			-- separator.
+			-- Send an "OK" message ID and the field separator to the client.
 		do
 			print_list (<<OK.out, "%T">>)
 		end
