@@ -79,7 +79,7 @@ feature -- Basic operations
 					io.put_string ("Connected !!!%N")
 				end
 			else
-				last_error := "Failed to connect - "
+				last_error := "Failed to connect to database."
 				debug ("database")
 					print_list (<<last_error, "%N">>)
 				end
@@ -97,7 +97,7 @@ feature -- Basic operations
 					io.put_string ("Disconnected!!!%N")
 				end
 			else
-				last_error := "Failed to disconnect - "
+				last_error := "Failed to disconnect to database."
 				debug ("database")
 					print_list (<<last_error, "%N">>)
 				end
@@ -110,8 +110,15 @@ feature {NONE} -- Implementation
 	db_mgr: MAS_ODBC_HANDLE is
 			-- The ODBC database session - provides access to the database
 		once
-			create Result
-			Result.login (db_info.db_name, db_info.user_name, db_info.password)
+			if db_info.db_name.empty then
+				fatal_error := true
+				last_error := "Database session was not created."
+				raise (Void)
+			else
+				create Result
+				Result.login (db_info.db_name, db_info.user_name,
+					db_info.password)
+			end
 		end
 
 	input_sequence (query: STRING): ODBC_INPUT_SEQUENCE is
