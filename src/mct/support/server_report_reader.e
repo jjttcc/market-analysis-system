@@ -32,7 +32,6 @@ feature -- Basic operations
 			response_received: BOOLEAN
 		do
 			response := ""
---active_medium.set_non_blocking
 			active_medium.set_blocking
 			active_medium.set_timeout (Timeout_interval)
 			active_medium.listen (1)

@@ -132,7 +132,6 @@ feature {NONE} -- Implementation
 		do
 			if not failed then
 				create socket.make_server_by_port (portnumber)
---socket.set_blocking
 				if socket.socket_ok then
 					create read_cmd.make (socket)
 					read_cmd.execute (Void)
@@ -163,48 +162,6 @@ feature {NONE} -- Implementation
 			retry
 		end
 
-	old_server_report (portnumber: INTEGER): STRING is
-			-- A server process's report back on its startup status
-		local
-			socket: NETWORK_STREAM_SOCKET
-			poller: MEDIUM_POLLER
-			read_cmd: SERVER_REPORT_READER
-			failed: BOOLEAN
-		do
-			if not failed then
-				create socket.make_server_by_port (portnumber)
-				if socket.socket_ok then
-					create poller.make
-					create read_cmd.make (socket)
-					poller.put_read_command (read_cmd)
-					poller.execute (15, Server_response_wait_interval)
-					Result := read_cmd.response
-				else
-					Result := Connection_failed + ":%N" + socket.error
-				end
-				if not socket.is_closed then
-					socket.close
-				end
-			else
-				Result := Connection_failed
-				if socket /= Void and not socket.socket_ok then
-					Result := Result + ":%N" + socket.error
-				end
-			end
-		ensure
-			result_exists: Result /= Void
-		rescue
-			if not socket.is_closed then
-				socket.close
-			end
-			failed := True
-			retry
-		end
-
 	Connection_failed: STRING is "Connection to MAS server failed."
-
-	Server_response_wait_interval: INTEGER is 2
-			-- Length of time in milliseconds to wait for a response
-			-- from the server when it starts up
 
 end
