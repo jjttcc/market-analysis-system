@@ -22,7 +22,7 @@ your computer is connected to the internet, then double-click on the
 "MAS Charts" icon to start the charting program.
 
 To add or remove symbols of stocks you wish to view, edit the file named
-"symbols" in the {mas_dir}/lib directory (where {mas_dir} stands for the
+"symbols" in the {mas_dir}\lib directory (where {mas_dir} stands for the
 directory in which you chose to install MAS).  Delete the symbol for any
 stocks you don't want in your list and add the symbol, each on a separate
 line, for any stocks you want to view that are not already in the list.
@@ -42,13 +42,13 @@ Viewing Charts with Data Obtained from Files on Your Hard Drive
 To view stock charts with data retrieved from files on your hard drive,
 you will need to find a source for your data and find a way to put the
 data into files readable by the server.  When MAS is installed on your
-system, some sample data files are placed in {mas_dir}/lib/data (where
+system, some sample data files are placed in {mas_dir}\lib\data (where
 {mas_dir} stands for the directory in which you chose to install MAS).
 You can use these files as examples of the data format needed by the MAS
-server.  Your data files will also need to be in the {mas_dir}/lib/data
+server.  Your data files will also need to be in the {mas_dir}\lib\data
 directory, with one file for each stock you want to analyze.
 
-Once you have placed your data files in {mas_dir}/lib/data, start the
+Once you have placed your data files in {mas_dir}\lib\data, start the
 server by double-clicking on "MAS Server (files)".  Then double-click
 on the "MAS Charts" icon to start the charting program.
 
@@ -59,13 +59,6 @@ To change settings used for obtaining data from yahoo (when running
 the server via the "Mas Server (web)" icon), such as the start-date for
 the retrieved data (eod_start_date), or the time at which to retrieve
 end-of-day data for the current day (eod_turnover_time), edit the file
-"mas_httprc" in the {mas_dir}/lib directory (where {mas_dir} stands
+"mas_httprc" in the {mas_dir}\lib directory (where {mas_dir} stands
 for the directory in which you chose to install MAS).  The "mas_httprc"
 file contains comments describing the purpose and format of each setting.
-
-To change the list of symbols for which data is to be downloaded from yahoo,
-edit the file "symbols" in the {mas_dir}/lib directory (where {mas_dir}
-stands for the directory in which you chose to install MAS), deleting
-each symbol you want removed from the list and adding any symbols you want
-that are not already in the list.  Make sure that the file has only one
-symbol per line.
