@@ -11,4 +11,4 @@ package mas_windows1.4	# MA server and client executables for Windows
 package mac1.4			# MA client executables only
 # No updates to scripts in 1.x - Don't forget to uncomment the following line
 # for a release that does have updated scripts.
-#package scripts			# miscellaneous scripts - informal release
+package scripts			# miscellaneous scripts - informal release
