@@ -30,6 +30,7 @@ cluster
 	structural:		"$FINANCE/src/library/structural";
 	tuple_types:	"$FINANCE/src/library/tuple_types";
 	data_scanning:	"$FINANCE/src/library/data_scanning";
+	events:			"$FINANCE/src/library/events";
 	global:			"$FINANCE/src/library/global";
 
 		-- Sub-clusters
@@ -58,6 +59,7 @@ cluster
 	component_support (eiffel_components): "$/support";
 	eiflib_data_scanning (eiffel_components): "$/data_scanning";
 	operators (eiffel_components): "$/commands/operators";
+	event_library (eiffel_components): "$/events";
 
 		-- ISE library clusters
 	kernel:			"$EIFFEL4/library/base/kernel";
