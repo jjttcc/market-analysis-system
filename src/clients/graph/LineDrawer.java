@@ -26,14 +26,16 @@ public class LineDrawer extends IndicatorDrawer {
 		if (_data != null) lngth = _data.length;
 		double width_factor, height_factor;
 		Configuration conf = Configuration.instance();
-		Color line_color = conf.line_color();
+		if (draw_color == null) {
+			draw_color = conf.line_color();
+		}
 		int[] _x_values = x_values();
 
 		// Is there any data to draw? Sometimes the draw command will
 		// will be called before any data has been placed in the class.
 		if (_data == null || lngth < 1) return;
 
-		g.setColor(line_color);
+		g.setColor(draw_color);
 		width_factor = width_factor_value(bounds);
 		height_factor = height_factor_value(bounds);
 		row = first_row() - 1;

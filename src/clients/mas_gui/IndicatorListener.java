@@ -13,6 +13,7 @@ public class IndicatorListener implements java.awt.event.ActionListener {
 	public void actionPerformed(java.awt.event.ActionEvent e) {
 		String selection = e.getActionCommand();
 		DataSet dataset, main_dataset;
+		Configuration conf = Configuration.instance();
 		try {
 			String market = chart.current_market;
 			if (market == null ||
@@ -55,6 +56,7 @@ public class IndicatorListener implements java.awt.event.ActionListener {
 			chart.current_upper_indicators.addElement(selection);
 			dataset = data_builder.last_indicator_data();
 			dataset.set_dates_needed(false);
+			dataset.set_color(conf.indicator_color(selection, true));
 			chart.link_with_axis(dataset, selection);
 			main_pane.add_main_data_set(dataset);
 		}
@@ -81,6 +83,7 @@ public class IndicatorListener implements java.awt.event.ActionListener {
 				main_pane.clear_indicator_graph();
 				chart.current_lower_indicators.removeAllElements();
 			}
+			dataset.set_color(conf.indicator_color(selection, false));
 			chart.link_with_axis(dataset, selection);
 			chart.current_lower_indicators.addElement(selection);
 			chart.set_window_title();

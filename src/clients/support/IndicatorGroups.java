@@ -2,6 +2,7 @@ package support;
 
 import java.util.*;
 
+// Container for the application's "IndicatorGroup"s
 public class IndicatorGroups implements Cloneable {
 	IndicatorGroups() {
 		groups = new Hashtable();

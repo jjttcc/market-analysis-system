@@ -45,9 +45,14 @@ public class Configuration implements NetworkProtocol
 	}
 
 	// Indicators configured to be drawn in the upper graph rather than
-	// the bottom one.
+	// the bottom one
 	public Hashtable upper_indicators() {
 		return _upper_indicators;
+	}
+
+	// Indicators configured to be drawn in the lower graph
+	public Hashtable lower_indicators() {
+		return _lower_indicators;
 	}
 
 	// Vertical lines coordinates configured for `indicator' - null if none.
@@ -95,6 +100,25 @@ public class Configuration implements NetworkProtocol
 		return _text_color;
 	}
 
+	// User-specified color for indicator `i' - null if not specified
+	public Color indicator_color(String i, boolean upper) {
+		Color result;
+
+		if (upper) {
+			result = (Color) _upper_indicators.get(i);
+		} else {
+			result = (Color) _lower_indicators.get(i);
+		}
+		if (result == _null_color) result = null;
+
+		return result;
+	}
+
+	// List of indicators in their user-specified order
+	public Vector indicator_order() {
+		return _indicator_order;
+	}
+
 	public int main_graph_drawer() {
 		return _main_graph_drawer;
 	}
@@ -115,6 +139,8 @@ public class Configuration implements NetworkProtocol
 		start_date_settings = new Vector();
 		end_date_settings = new Vector();
 		_upper_indicators = new Hashtable();
+		_lower_indicators = new Hashtable();
+		_indicator_order = new Vector();
 		_vertical_indicator_lines = new Hashtable();
 		_horizontal_indicator_lines = new Hashtable();
 		setup_colors();
@@ -126,7 +152,7 @@ public class Configuration implements NetworkProtocol
 	}
 
 	private void load_settings(String fname) {
-		String s, date, pertype;
+		String s;
 		File f = new File(fname);
 		if (! f.exists()) {
 			//Default settings
@@ -150,33 +176,16 @@ public class Configuration implements NetworkProtocol
 				s = t.nextToken();
 				if (s.charAt(0) == '#') {}	// skip comment line
 				else if (s.equals(Start_date)) {
-					pertype = t.nextToken();
-					date = t.nextToken();
-					if (date == null || pertype == null)
-					{
-						System.err.println("Missing period type or date" +
-							"in configuration file " + configuration_file);
-						System.exit(-1);
-					}
-					DateSetting ds = new DateSetting(date, pertype);
-					start_date_settings.addElement(ds);
+					add_date(t, true);
 				}
 				else if (s.equals(End_date)) {
-					pertype = t.nextToken();
-					date = t.nextToken();
-					if (date == null || pertype == null)
-					{
-						System.err.println("Missing period type or date" +
-							"in configuration file " + configuration_file);
-						System.exit(-1);
-					}
-					DateSetting ds = new DateSetting(date, pertype);
-					end_date_settings.addElement(ds);
+					add_date(t, false);
 				}
 				else if (s.equals(Upper_indicator)) {
-					String i = t.nextToken();
-					_upper_indicators.put(i, new Boolean(true));
-					main_indicator_group.add_indicator(i);
+					configure_indicator(t, true);
+				}
+				else if (s.equals(Lower_indicator)) {
+					configure_indicator(t, false);
 				}
 				else if (s.equals(Horiz_indicator_line) ||
 							s.equals(Vert_indicator_line)) {
@@ -258,6 +267,47 @@ public class Configuration implements NetworkProtocol
 		}
 	}
 
+	private void add_date(StringTokenizer t, boolean start) {
+		String pertype = t.nextToken();
+		String date = t.nextToken();
+		if (date == null || pertype == null)
+		{
+			System.err.println("Missing period type or date" +
+				"in configuration file " + configuration_file);
+			System.exit(-1);
+		}
+		DateSetting ds = new DateSetting(date, pertype);
+		if (start) start_date_settings.addElement(ds);
+		else end_date_settings.addElement(ds);
+	}
+
+	// Put the group specified in `t' into the appropriate container -
+	// upper or lower, record its position for the indicator order, record
+	// its color (if specified), and, if `upper', add it to the main group.
+	private void configure_indicator(StringTokenizer t, boolean upper) {
+		if (t.hasMoreElements()) {
+			String indicator = t.nextToken();
+			Color color = _null_color;
+			// If the color is specified, scan it.
+			if (t.hasMoreElements()) {
+				String c = t.nextToken();
+				if (! _color_table.containsKey(c)) {
+					System.err.println("Invalid color setting for " +
+						"indicator: " + c);
+				} else {
+					color = (Color) _color_table.get(c);
+				}
+			}
+			if (upper) {
+				_upper_indicators.put(indicator, color);
+				main_indicator_group.add_indicator(indicator);
+			} else {
+				_lower_indicators.put(indicator, color);
+			}
+			_indicator_order.addElement(indicator);
+		}
+	}
+
 	// Create an indicator group for the indicators listed at f's current
 	// position and add it to `indicator_groups'.
 	// Precondition: f.item() is the line following the line with the
@@ -322,6 +372,9 @@ public class Configuration implements NetworkProtocol
 		_stick_color = Color.white;
 		_bar_color = Color.green;
 		_line_color = Color.cyan;
+
+		red = (float) 0.001; green = (float) 0.999; blue = (float) 0.0015;
+		_null_color = new Color(red, green, blue);
 	}
 
 	private static Configuration _instance;
@@ -330,6 +383,8 @@ public class Configuration implements NetworkProtocol
 	private Vector end_date_settings;
 	private final String configuration_file = ".ma_clientrc";
 	private Hashtable _upper_indicators;
+	private Hashtable _lower_indicators;
+	private Vector _indicator_order;
 	private Hashtable _vertical_indicator_lines;
 	private Hashtable _horizontal_indicator_lines;
 	private Hashtable _color_table;
@@ -338,6 +393,7 @@ public class Configuration implements NetworkProtocol
 
 	// Configuration Keywords
 	private final String Upper_indicator = "upper_indicator";
+	private final String Lower_indicator = "lower_indicator";
 	private final String Horiz_indicator_line = "indicator_line_h";
 	private final String Vert_indicator_line = "indicator_line_v";
 	private final String Color_tag = "color";
@@ -362,6 +418,9 @@ public class Configuration implements NetworkProtocol
 	private Color _bar_color;
 	private Color _line_color;
 	private Color _text_color;
+	// "null" color - needed because dorky Java doesn't allow a null value
+	// in a hash table.
+	private Color _null_color;
 
 	private int _main_graph_drawer;
 

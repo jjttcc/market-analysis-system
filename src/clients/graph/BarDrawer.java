@@ -30,13 +30,14 @@ public class BarDrawer extends IndicatorDrawer {
 		int x_s[] = new int[4], y_s[] = new int[4];
 		Configuration conf = Configuration.instance();
 		int[] _x_values = x_values();
+		if (draw_color == null) draw_color = conf.bar_color();
 
 		// Is there any data to draw? Sometimes the draw command will
 		// will be called before any data has been placed in the class.
 		if (_data == null || lngth < 1) return;
 
 		if (bar_width <= 0) bar_width = 1;
-		g.setColor(conf.bar_color());
+		g.setColor(draw_color);
 		width_factor = width_factor_value(bounds);
 		height_factor = height_factor_value(bounds);
 		row = first_row() - 1;

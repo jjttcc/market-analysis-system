@@ -21,11 +21,11 @@ public class MA_MenuBar extends MenuBar {
 		parent.add_indicators(indicator_menu);
 
 		// File menu items, with shortcuts
-		MenuItem newwin, closewin, mkt_selection, print_cmd, print_all, quit;
-		MenuItem indicator_selection;
-		file_menu.add(newwin = new MenuItem("New Window",
+		MenuItem new_window, close_window, mkt_selection, print_cmd;
+		MenuItem indicator_selection, print_all, quit;
+		file_menu.add(new_window = new MenuItem("New Window",
 							new MenuShortcut(KeyEvent.VK_N)));
-		file_menu.add(closewin = new MenuItem("Close Window",
+		file_menu.add(close_window = new MenuItem("Close Window",
 							new MenuShortcut(KeyEvent.VK_W)));
 		file_menu.addSeparator();
 		file_menu.add(mkt_selection = new MenuItem("Select Market",
@@ -41,33 +41,29 @@ public class MA_MenuBar extends MenuBar {
 		file_menu.add(
 			quit = new MenuItem("Quit", new MenuShortcut(KeyEvent.VK_Q)));
 
-		// Create and register action listener objects for the three menu items.
-		newwin.addActionListener(new ActionListener() {	// Open a new window
+		// Action listeners for file menu items
+		new_window.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 				Chart chart = new Chart(new DataSetBuilder(data_builder), null);
 			}
 		});
-
 		mkt_selection.addActionListener(parent.market_selections);
 		indicator_selection.addActionListener(indicator_listener);
-
-		closewin.addActionListener(new ActionListener() {// Close this window.
+		close_window.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) { parent.close(); }
 		});
-
-		print_cmd.addActionListener(new ActionListener() {// Print
+		print_cmd.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (! (parent.current_market == null ||
 					parent.current_market.length() == 0)) {
 				parent.main_pane.print(false);
 			}
-			else { // Let the user know there is currently nothing to print.
+			else {
 				final ErrorBox errorbox = new ErrorBox("Printing error",
 					"Nothing to print", parent);
 			}
 		}});
-
-		print_all.addActionListener(new ActionListener() {// Print all
+		print_all.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			if (! (parent.current_market == null ||
 					parent.current_market.length() == 0)) {
@@ -75,13 +71,12 @@ public class MA_MenuBar extends MenuBar {
 				parent.print_all_charts();
 				parent.request_data((String) original_market);
 			}
-			else { // Let the user know there is currently nothing to print.
+			else {
 				final ErrorBox errorbox = new ErrorBox("Printing error",
 					"Nothing to print", parent);
 			}
 		}});
-
-		quit.addActionListener(new ActionListener() {     // Quit the program.
+		quit.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) { parent.quit(0); }
 		});
 
@@ -91,10 +86,10 @@ public class MA_MenuBar extends MenuBar {
 		view_menu.add(replace_toggle = new MenuItem("",
 							new MenuShortcut(KeyEvent.VK_R)));
 		set_replace_indicator_label(replace_toggle);
-
 		view_menu.add(period_menu);
 		setup_period_menu(period_menu, period_types);
 
+		// Action listeners for view menu items
 		replace_toggle.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 				parent.toggle_indicator_replacement();

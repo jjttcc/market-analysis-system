@@ -4,6 +4,7 @@ import java.util.*;
 import graph.DataSet;
 import graph.Axis;
 
+// Grouping of indicators that share components (currently just the y axis)
 public class IndicatorGroup implements Cloneable {
 	public IndicatorGroup() {
 		yaxis = new Axis(Axis.LEFT);

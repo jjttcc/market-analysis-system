@@ -1,10 +1,4 @@
-// The windowing and event registration code in this class is adapted from
-// "Java in a Nutshell, Second Edition", by David Flanagan.  [Copyright (c)
-// 1997 O'Reilly & Associates.]  The license for that code says:
-// "You may distribute this source code for non-commercial purposes only.
-// You may study, modify, and use this example for any purpose, as long as
-// this notice is retained.  Note that this example is provided "as is",
-// WITHOUT WARRANTY of any kind either expressed or implied."
+/* Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt */
 
 import java.awt.*;
 import java.awt.event.*;
@@ -45,16 +39,15 @@ class ChartSettings implements Serializable {
 /** Market analysis GUI chart component */
 public class Chart extends Frame implements Runnable, NetworkProtocol {
 	public Chart(DataSetBuilder builder, String sfname) {
-		super("Chart");		// Create the main window frame.
-		num_windows++;			// Count it.
+		super("Chart");
+		++window_count;
 		data_builder = builder;
 		this_chart = this;
-		Vector inds;
 		Vector _markets = null;
 
 		if (sfname != null) serialize_filename = sfname;
 
-		if (num_windows == 1) {
+		if (window_count == 1) {
 			ChartSettings settings;
 			try {
 				FileInputStream chartfile =
@@ -94,18 +87,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 						System.exit(-1);
 					}
 					GUI_Utilities.busy_cursor(false, this);
-					inds = data_builder.last_indicator_list();
-					_indicators = new Hashtable(inds.size());
-					int i;
-					// Initialize _indicators table with each indicator name
-					// in the list, associating each indicator name with its
-					// respective index in the list (starting at 1).
-					for (i = 0; i < inds.size(); ++i) {
-						_indicators.put(inds.elementAt(i), new Integer(i + 1));
-					}
-					_indicators.put(No_upper_indicator, new Integer(i + 1));
-					_indicators.put(No_lower_indicator, new Integer(i + 2));
-					_indicators.put(Volume, new Integer(i + 3));
+//_indicators = user_specified_indicators();
 				}
 			}
 		}
@@ -114,9 +96,9 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			quit(-1);
 		}
 		initialize_GUI_components();
-//current_period_type = main_pane.current_period_type();
 		if (_markets.size() > 0) {
-			if (data_builder.options().print_on_startup() && num_windows == 1) {
+			if (data_builder.options().print_on_startup() &&
+					window_count == 1) {
 				print_all_charts();
 			}
 			// Show the graph of the first symbol in the selection list.
@@ -145,12 +127,88 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 	// indicators
 	Hashtable indicators() {
+		if (_indicators == null) {
+			Enumeration ind_iter;
+			Vector inds_from_server = data_builder.last_indicator_list();
+			String s;
+			Hashtable valid_indicators = new Hashtable(inds_from_server.size());
+			ordered_indicator_list = new Vector();
+			int i;
+			for (i = 0; i < inds_from_server.size(); ++i) {
+				Object o = inds_from_server.elementAt(i);
+				valid_indicators.put(o, new Integer(i + 1));
+			}
+			// User-selected indicators, in order:
+			ind_iter = Configuration.instance().indicator_order().elements();
+			_indicators = new Hashtable();
+			Vector special_indicators = new Vector();
+			special_indicators.addElement(No_lower_indicator);
+			special_indicators.addElement(No_upper_indicator);
+			special_indicators.addElement(Volume);
+			// Insert into _indicators all user-selected indicators that
+			// are either in the list returned by the server or are one of
+			// the special strings for no upper/lower indicator or volume.
+			while (ind_iter.hasMoreElements()) {
+				s = (String) ind_iter.nextElement();
+				if (valid_indicators.containsKey(s)) {
+					// Add valid indicators (from the server's point of view)
+					// to both `_indicators' and `ordered_indicator_list'.
+					_indicators.put(s, valid_indicators.get(s));
+					ordered_indicator_list.addElement(s);
+				}
+				else {
+					for (i = 0; i < special_indicators.size(); ++i) {
+						if (s.equals(special_indicators.elementAt(i))) {
+							// Add special indicators only to
+							// `ordered_indicator_list'.
+							ordered_indicator_list.addElement(s);
+							special_indicators.removeElement(s);
+							break;
+						}
+					}
+				}
+			}
+			// Insert the special indicators (no-upper indicator, ...) if
+			// they aren't already there.
+			for (i = 0; i < special_indicators.size(); ++i) {
+				s = (String) special_indicators.elementAt(i);
+				if (!_indicators.containsKey(s)) {
+					_indicators.put(s, new Integer(_indicators.size() + 1));
+					ordered_indicator_list.addElement(s);
+				}
+			}
+
+			// Update current_lower_indicators and current_upper_indicators:
+			// remove any elements that are no longer valid.
+			for (ind_iter = current_lower_indicators.elements();
+					ind_iter.hasMoreElements(); ) {
+				s = (String) ind_iter.nextElement();
+				if (! ordered_indicator_list.contains(s)) {
+					while (current_lower_indicators.lastIndexOf(s) != -1) {
+						current_lower_indicators.removeElement(s);
+					}
+				}
+			}
+			for (ind_iter = current_upper_indicators.elements();
+					ind_iter.hasMoreElements(); ) {
+				s = (String) ind_iter.nextElement();
+				if (! ordered_indicator_list.contains(s)) {
+					while (current_upper_indicators.lastIndexOf(s) != -1) {
+						current_upper_indicators.removeElement(s);
+					}
+				}
+			}
+		}
 		return _indicators;
 	}
 
-	// Enumeration of all indicators
-	Enumeration indicators_iterator() {
-		return _indicators.keys();
+	// Indicators in user-specified order
+	Vector ordered_indicators() {
+		if (ordered_indicator_list == null) {
+			// Force creation of ordered_indicator_list.
+			indicators();
+		}
+		return ordered_indicator_list;
 	}
 
 	// Result of last request to the server
@@ -160,17 +218,20 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 	// Take action when notified that period type changed.
 	void notify_period_type_changed(String new_period_type) {
-		current_period_type = new_period_type;
-		period_type_change = true;
-		if (current_market != null) {
-			request_data(current_market);
+		if (! current_period_type.equals(new_period_type)) {
+			current_period_type = new_period_type;
+			period_type_change = true;
+			if (current_market != null) {
+				request_data(current_market);
+			}
+			period_type_change = false;
 		}
-		period_type_change = false;
 	}
 
 	// Request data for the specified market and display it.
 	void request_data(String market) {
 		DataSet dataset, main_dataset;
+		Configuration conf = Configuration.instance();
 		int count;
 		String current_indicator;
 		// Don't redraw the data if it's for the same market as before.
@@ -204,7 +265,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 						current_upper_indicators.elementAt(i);
 					try {
 						data_builder.send_indicator_data_request(((Integer)
-							_indicators.get(current_indicator)).
+							indicators().get(current_indicator)).
 								intValue(), market, current_period_type);
 					} catch (Exception e) {
 						System.err.println("Exception occurred: " + e +
@@ -214,6 +275,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 					}
 					dataset = data_builder.last_indicator_data();
 					dataset.set_dates_needed(false);
+					dataset.set_color(
+						conf.indicator_color(current_indicator, true));
 					link_with_axis(dataset, current_indicator);
 					main_pane.add_main_data_set(dataset);
 				}
@@ -234,7 +297,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 					} else {
 						try {
 						data_builder.send_indicator_data_request(((Integer)
-							_indicators.get(current_indicator)).
+							indicators().get(current_indicator)).
 								intValue(), market, current_period_type);
 						} catch (Exception e) {
 						System.err.println(
@@ -244,6 +307,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 						}
 						dataset = data_builder.last_indicator_data();
 					}
+					dataset.set_color(
+						conf.indicator_color(current_indicator, false));
 					link_with_axis(dataset, current_indicator);
 					add_indicator_lines(dataset, current_indicator);
 					main_pane.add_indicator_data_set(dataset);
@@ -289,7 +354,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		main_pane = new MA_ScrollPane(_period_types,
 			MA_ScrollPane.SCROLLBARS_NEVER, this, window_settings != null?
 				window_settings.print_properties(): null);
-		if (window_settings != null && num_windows == 1) {
+		if (window_settings != null && window_count == 1) {
 			main_pane.setSize(window_settings.size().width,
 				window_settings.size().height + 2);
 			setLocation(window_settings.location());
@@ -305,12 +370,11 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		market_selections = new MarketSelection(this);
 		setMenuBar(new MA_MenuBar(this, data_builder, _period_types));
 
-		// An event listener to handle window close requests.
+		// Event listener for close requests
 		addWindowListener(new WindowAdapter() {
 		public void windowClosing(WindowEvent e) { close(); }
 		});
 
-		// Pop up the window.
 		pack();
 		show();
 	}
@@ -372,7 +436,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	protected void add_indicators(Menu imenu) {
 		MenuItem menu_item;
 		IndicatorListener listener = new IndicatorListener(this);
-		Enumeration ind_keys = _indicators.keys();
+//Enumeration ind_keys = indicators().keys();
+		Enumeration ind_keys = ordered_indicator_list.elements();
 		for ( ; ind_keys.hasMoreElements(); ) {
 			menu_item = new MenuItem((String) ind_keys.nextElement());
 			imenu.add(menu_item);
@@ -387,11 +452,12 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 	/** Close a window.  If this is the last open window, just quit. */
 	protected void close() {
-		if (--num_windows == 0) {
+		if (window_count == 1) {	// Close last remaining window, exit.
 			save_settings();
 			data_builder.logout(true, 0);
 		}
-		else {
+		else {		// More than 1 windows remain, close this one.
+			--window_count;
 			data_builder.logout(false, 0);
 			dispose();
 		}
@@ -401,7 +467,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	protected void quit(int status) {
 		save_settings();
 		// Log out the corresponding session for all but one window.
-		for (int i = 0; i < num_windows - 1; ++i) {
+		for (int i = 0; i < window_count - 1; ++i) {
 			data_builder.logout(false, 0);
 		}
 		// Log out the remaining window and exit with `status'.
@@ -447,7 +513,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	private Chart this_chart;
 
 	// # of open windows - so program can exit when last one is closed
-	protected static int num_windows = 0;
+	protected static int window_count = 0;
 
 	// Main window pane
 	MA_ScrollPane main_pane;
@@ -458,6 +524,10 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 	// Cached list of market indicators
 	protected static Hashtable _indicators;	// table of String
+
+	// Indicators in user-specified order - includes no-upper/lower and
+	// volume indicators
+	private static Vector ordered_indicator_list;	// Vector of String
 
 	// Current selected market
 	protected String current_market;

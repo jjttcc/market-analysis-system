@@ -192,11 +192,17 @@ public class DataSet {
 	// y axis
 	public Axis yaxis() { return yaxis_; }
 
+	// Color data is to be drawn in - can be null
+	public Color color() { return color_; }
+
 	// Set the x axis to `a'.
 	public void set_xaxis(Axis a) { xaxis_ = a; }
 
 	// Set the y axis to `a'.
 	public void set_yaxis(Axis a) { yaxis_ = a; }
+
+	// Set the color the data is to be drawn in - can be null
+	public void set_color(Color c) { color_ = c; }
 
 	// set g2d to `b'.
 	protected void set_g2d(Graph g) { g2d_ = g; }
@@ -231,7 +237,7 @@ public class DataSet {
 		_drawer.set_maxes(xmax, ymax, xmin, ymin);
 		_drawer.set_ranges(xrange, yrange);
 		_drawer.set_clipping(clipping);
-		_drawer.draw_data(g, bounds, hline_data, vline_data);
+		_drawer.draw_data(g, bounds, hline_data, vline_data, color_);
 		if (_dates_needed) draw_dates(g,bounds);
 	}
 
@@ -321,7 +327,7 @@ public class DataSet {
 			date_drawer.set_maxes(xmax, ymax, xmin, ymin);
 			date_drawer.set_ranges(xrange, yrange);
 			date_drawer.set_clipping(clipping);
-			date_drawer.draw_data(g, w, null, null);
+			date_drawer.draw_data(g, w, null, null, null);
 		}
 	}
 
@@ -375,6 +381,9 @@ public class DataSet {
 
 	// Date data
 	private String[] dates;
+
+	// Color data is to be drawn in - can be null
+	private Color color_;
 
 	/**
 	* Drawer of price bars - e.g., tic bars or candles

@@ -17,7 +17,7 @@ class IndicatorSelection implements ActionListener {
 		dialog.add(panel);
 		panel.add(selection_list, "Center");
 		panel.add(close_button, "South");
-		Enumeration indicators = main_frame.indicators_iterator();
+		Enumeration indicators = main_frame.ordered_indicators().elements();
 		while (indicators.hasMoreElements()) {
 			selection_list.add((String) indicators.nextElement());
 		}
@@ -46,7 +46,7 @@ class IndicatorSelection implements ActionListener {
 				}
 		}});
 
-		dialog.setSize(window_width, (selection_list.getItemCount() + 1) * 18);
+		dialog.setSize(window_width, (selection_list.getItemCount() + 1) * 21);
 	}
 
 	public void actionPerformed(ActionEvent e) {

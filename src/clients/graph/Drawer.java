@@ -74,8 +74,8 @@ abstract public class Drawer {
 	* @param bounds The data window to draw into
 	*/
 	public void draw_data(Graphics g, Rectangle bounds, Vector hlines,
-		Vector vlines) {
-		Color c;
+		Vector vlines, Color c) {
+		draw_color = c;
 
 		if ( xaxis != null ) {
 			xmax = xaxis.maximum();
@@ -232,6 +232,8 @@ abstract public class Drawer {
 	protected double xmax, ymax, xmin, ymin;
 	protected double xrange, yrange;
 	protected boolean clipping;
+	// Color to draw data in
+	protected Color draw_color;
 }
 
 class RefSpec {
