@@ -6,314 +6,314 @@
 # Note3: path names with special shell characters (such as '$') should
 # escape the characters with a backslash.
 # Market Analysis Server source code
-src/application_library . serversrc1.6.6p
-src/library . serversrc1.6.6p
-../eiffel_library src/ serversrc1.6.6p
-src/server1/abstractions . serversrc1.6.6p
-src/server1/doc . serversrc1.6.6p
-src/server1/factories . serversrc1.6.6p
-src/server1/global . serversrc1.6.6p
-src/server1/configuration . serversrc1.6.6p
-src/server1/data_retrieval . serversrc1.6.6p
-src/server1/interface . serversrc1.6.6p
-src/client_server/protocols . serversrc1.6.6p
-src/server1/tradable_list . serversrc1.6.6p
-src/server1/stock_splits . serversrc1.6.6p
-src/server1/network . serversrc1.6.6p
-src/server1/root . serversrc1.6.6p
-src/server1/utility . serversrc1.6.6p
-src/server1/system_specific . serversrc1.6.6p
-src/server1/database . serversrc1.6.6p
-src/server1/external . serversrc1.6.6p
-src/server1/Clib . serversrc1.6.6p
-src/server1/lib . serversrc1.6.6p
-../projects/current/mas.ace src/server1/ serversrc1.6.6p
-src/server1/test/README . serversrc1.6.6p
-src/server1/test/run_tests . serversrc1.6.6p
-src/server1/test/bin/compare_numbers . serversrc1.6.6p
-src/server1/test/bin/pr_dataset . serversrc1.6.6p
-src/server1/test/bin/testlib . serversrc1.6.6p
-src/server1/test/input/force_index . serversrc1.6.6p
-src/server1/test/input/ma . serversrc1.6.6p
-src/server1/test/input/momentum . serversrc1.6.6p
-src/server1/test/input/roc . serversrc1.6.6p
-src/server1/test/input/rsi . serversrc1.6.6p
-src/server1/test/input/rsi_colby . serversrc1.6.6p
-src/server1/test/input/stoch . serversrc1.6.6p
-src/server1/test/input/test_data . serversrc1.6.6p
-src/server1/test/input/wilder_ma . serversrc1.6.6p
-src/server1/test/input/williams . serversrc1.6.6p
-src/server1/test/input/sunw . serversrc1.6.6p
-src/server1/test/input/ibm.intraday . serversrc1.6.6p
-src/server1/test/input/ma.intraday . serversrc1.6.6p
-src/server1/test/input/momentum.intraday . serversrc1.6.6p
-src/server1/test/input/roc.intraday . serversrc1.6.6p
-src/server1/test/input/rsi.intraday . serversrc1.6.6p
-src/server1/test/input/stoch.intraday . serversrc1.6.6p
-src/server1/test/input/sunw.intraday . serversrc1.6.6p
-src/server1/test/input/test_data.intraday . serversrc1.6.6p
-src/server1/test/input/williams.intraday . serversrc1.6.6p
-src/server1/test/input/dj.intraday . serversrc1.6.6p
-src/server1/test/input/FCXNC.CSF . serversrc1.6.6p
-src/server1/test/input/S96N.CSF . serversrc1.6.6p
-src/server1/test/input/ES01MAR.CSV . serversrc1.6.6p
-src/server1/test/input/wma . serversrc1.6.6p
-src/server1/test/input/a . serversrc1.6.6p
-src/server1/test/lib/rsi.awk . serversrc1.6.6p
-src/server1/test/lib/test_files.1 . serversrc1.6.6p
-src/server1/test/lib/test_files.2 . serversrc1.6.6p
-src/server1/test/lib/indicators_persist . serversrc1.6.6p
-src/server1/test/reference/README . serversrc1.6.6p
-src/server1/test/reference/ema . serversrc1.6.6p
-src/server1/test/reference/force_index . serversrc1.6.6p
-src/server1/test/reference/ma . serversrc1.6.6p
-src/server1/test/reference/macd . serversrc1.6.6p
-src/server1/test/reference/macd_hist . serversrc1.6.6p
-src/server1/test/reference/macd_sig . serversrc1.6.6p
-src/server1/test/reference/momentum . serversrc1.6.6p
-src/server1/test/reference/roc . serversrc1.6.6p
-src/server1/test/reference/rsi4 . serversrc1.6.6p
-src/server1/test/reference/rsi7 . serversrc1.6.6p
-src/server1/test/reference/slow_stochD3 . serversrc1.6.6p
-src/server1/test/reference/stochD5 . serversrc1.6.6p
-src/server1/test/reference/stochK5 . serversrc1.6.6p
-src/server1/test/reference/test_data.one_field . serversrc1.6.6p
-src/server1/test/reference/williams . serversrc1.6.6p
-src/server1/test/reference/wilder_ma . serversrc1.6.6p
-src/server1/test/reference/rsi_sunw . serversrc1.6.6p
-src/server1/test/reference/rsi_sunw_mnthly . serversrc1.6.6p
-src/server1/test/reference/rsi_sunw_qtrly . serversrc1.6.6p
-src/server1/test/reference/sunw_mnthly_stch%K . serversrc1.6.6p
-src/server1/test/reference/dj_stochKintra . serversrc1.6.6p
-src/server1/test/reference/dj_ema_int15 . serversrc1.6.6p
-src/server1/test/reference/dj_macdsig_hourly . serversrc1.6.6p
-src/server1/test/reference/es_ema_oi_hrly . serversrc1.6.6p
-src/server1/test/reference/es_ema_volume_hrly . serversrc1.6.6p
-src/server1/test/reference/fcxnc_ema_oi . serversrc1.6.6p
-src/server1/test/reference/fcxnc_ema_oi_mthly . serversrc1.6.6p
-src/server1/test/reference/fcxnc_ema_oi_qtrly . serversrc1.6.6p
-src/server1/test/reference/fcxnc_ema_oi_wkly . serversrc1.6.6p
-src/server1/test/reference/s96n_ema_oi_mthly . serversrc1.6.6p
-src/server1/test/reference/s96n_ema_oi_wkly . serversrc1.6.6p
-src/server1/test/reference/wma . serversrc1.6.6p
-src/server1/test/reference/macd_volume . serversrc1.6.6p
-doc/mal_intro src/doc/ serversrc1.6.6p
-doc/MAL_design_document src/doc/MAL_design_document serversrc1.6.6p
-doc/MAS_design_document src/doc/MAS_design_document serversrc1.6.6p
-doc/MAL_README src/doc/README serversrc1.6.6p
-doc/src_README src/README serversrc1.6.6p
-doc/applications/server_protocol_grammar src/doc/ serversrc1.6.6p
-doc/functions.ps src/doc/ serversrc1.6.6p
-doc/eiffel_library_document src/doc/ serversrc1.6.6p
+src/application_library . serversrc1.6.6q
+src/library . serversrc1.6.6q
+../eiffel_library src/ serversrc1.6.6q
+src/server1/abstractions . serversrc1.6.6q
+src/server1/doc . serversrc1.6.6q
+src/server1/factories . serversrc1.6.6q
+src/server1/global . serversrc1.6.6q
+src/server1/configuration . serversrc1.6.6q
+src/server1/data_retrieval . serversrc1.6.6q
+src/server1/interface . serversrc1.6.6q
+src/client_server/protocols . serversrc1.6.6q
+src/server1/tradable_list . serversrc1.6.6q
+src/server1/stock_splits . serversrc1.6.6q
+src/server1/network . serversrc1.6.6q
+src/server1/root . serversrc1.6.6q
+src/server1/utility . serversrc1.6.6q
+src/server1/system_specific . serversrc1.6.6q
+src/server1/database . serversrc1.6.6q
+src/server1/external . serversrc1.6.6q
+src/server1/Clib . serversrc1.6.6q
+src/server1/lib . serversrc1.6.6q
+../projects/current/mas.ace src/server1/ serversrc1.6.6q
+src/server1/test/README . serversrc1.6.6q
+src/server1/test/run_tests . serversrc1.6.6q
+src/server1/test/bin/compare_numbers . serversrc1.6.6q
+src/server1/test/bin/pr_dataset . serversrc1.6.6q
+src/server1/test/bin/testlib . serversrc1.6.6q
+src/server1/test/input/force_index . serversrc1.6.6q
+src/server1/test/input/ma . serversrc1.6.6q
+src/server1/test/input/momentum . serversrc1.6.6q
+src/server1/test/input/roc . serversrc1.6.6q
+src/server1/test/input/rsi . serversrc1.6.6q
+src/server1/test/input/rsi_colby . serversrc1.6.6q
+src/server1/test/input/stoch . serversrc1.6.6q
+src/server1/test/input/test_data . serversrc1.6.6q
+src/server1/test/input/wilder_ma . serversrc1.6.6q
+src/server1/test/input/williams . serversrc1.6.6q
+src/server1/test/input/sunw . serversrc1.6.6q
+src/server1/test/input/ibm.intraday . serversrc1.6.6q
+src/server1/test/input/ma.intraday . serversrc1.6.6q
+src/server1/test/input/momentum.intraday . serversrc1.6.6q
+src/server1/test/input/roc.intraday . serversrc1.6.6q
+src/server1/test/input/rsi.intraday . serversrc1.6.6q
+src/server1/test/input/stoch.intraday . serversrc1.6.6q
+src/server1/test/input/sunw.intraday . serversrc1.6.6q
+src/server1/test/input/test_data.intraday . serversrc1.6.6q
+src/server1/test/input/williams.intraday . serversrc1.6.6q
+src/server1/test/input/dj.intraday . serversrc1.6.6q
+src/server1/test/input/FCXNC.CSF . serversrc1.6.6q
+src/server1/test/input/S96N.CSF . serversrc1.6.6q
+src/server1/test/input/ES01MAR.CSV . serversrc1.6.6q
+src/server1/test/input/wma . serversrc1.6.6q
+src/server1/test/input/a . serversrc1.6.6q
+src/server1/test/lib/rsi.awk . serversrc1.6.6q
+src/server1/test/lib/test_files.1 . serversrc1.6.6q
+src/server1/test/lib/test_files.2 . serversrc1.6.6q
+src/server1/test/lib/indicators_persist . serversrc1.6.6q
+src/server1/test/reference/README . serversrc1.6.6q
+src/server1/test/reference/ema . serversrc1.6.6q
+src/server1/test/reference/force_index . serversrc1.6.6q
+src/server1/test/reference/ma . serversrc1.6.6q
+src/server1/test/reference/macd . serversrc1.6.6q
+src/server1/test/reference/macd_hist . serversrc1.6.6q
+src/server1/test/reference/macd_sig . serversrc1.6.6q
+src/server1/test/reference/momentum . serversrc1.6.6q
+src/server1/test/reference/roc . serversrc1.6.6q
+src/server1/test/reference/rsi4 . serversrc1.6.6q
+src/server1/test/reference/rsi7 . serversrc1.6.6q
+src/server1/test/reference/slow_stochD3 . serversrc1.6.6q
+src/server1/test/reference/stochD5 . serversrc1.6.6q
+src/server1/test/reference/stochK5 . serversrc1.6.6q
+src/server1/test/reference/test_data.one_field . serversrc1.6.6q
+src/server1/test/reference/williams . serversrc1.6.6q
+src/server1/test/reference/wilder_ma . serversrc1.6.6q
+src/server1/test/reference/rsi_sunw . serversrc1.6.6q
+src/server1/test/reference/rsi_sunw_mnthly . serversrc1.6.6q
+src/server1/test/reference/rsi_sunw_qtrly . serversrc1.6.6q
+src/server1/test/reference/sunw_mnthly_stch%K . serversrc1.6.6q
+src/server1/test/reference/dj_stochKintra . serversrc1.6.6q
+src/server1/test/reference/dj_ema_int15 . serversrc1.6.6q
+src/server1/test/reference/dj_macdsig_hourly . serversrc1.6.6q
+src/server1/test/reference/es_ema_oi_hrly . serversrc1.6.6q
+src/server1/test/reference/es_ema_volume_hrly . serversrc1.6.6q
+src/server1/test/reference/fcxnc_ema_oi . serversrc1.6.6q
+src/server1/test/reference/fcxnc_ema_oi_mthly . serversrc1.6.6q
+src/server1/test/reference/fcxnc_ema_oi_qtrly . serversrc1.6.6q
+src/server1/test/reference/fcxnc_ema_oi_wkly . serversrc1.6.6q
+src/server1/test/reference/s96n_ema_oi_mthly . serversrc1.6.6q
+src/server1/test/reference/s96n_ema_oi_wkly . serversrc1.6.6q
+src/server1/test/reference/wma . serversrc1.6.6q
+src/server1/test/reference/macd_volume . serversrc1.6.6q
+doc/mal_intro src/doc/ serversrc1.6.6q
+doc/MAL_design_document src/doc/MAL_design_document serversrc1.6.6q
+doc/MAS_design_document src/doc/MAS_design_document serversrc1.6.6q
+doc/MAL_README src/doc/README serversrc1.6.6q
+doc/src_README src/README serversrc1.6.6q
+doc/applications/server_protocol_grammar src/doc/ serversrc1.6.6q
+doc/functions.ps src/doc/ serversrc1.6.6q
+doc/eiffel_library_document src/doc/ serversrc1.6.6q
 # Market Analysis Client source code
-src/clients/GUI1/common/NetworkProtocol.java . clientsrc1.6.6p
-src/clients/GUI1/common/DataInspector.java . clientsrc1.6.6p
-src/clients/GUI1/support/IntPair.java . clientsrc1.6.6p
-src/clients/GUI1/support/Utilities.java . clientsrc1.6.6p
-src/clients/GUI1/support/Configuration.java . clientsrc1.6.6p
-src/clients/GUI1/support/GUI_Utilities.java . clientsrc1.6.6p
-src/clients/GUI1/support/ErrorBox.java . clientsrc1.6.6p
-src/clients/GUI1/support/IndicatorGroup.java . clientsrc1.6.6p
-src/clients/GUI1/support/IndicatorGroups.java . clientsrc1.6.6p
-src/clients/CL/CL_Client.java . clientsrc1.6.6p
-src/clients/GUI1/Chart.java src/clients/GUI1/mas_gui/ clientsrc1.6.6p
-src/clients/GUI1/MA_Client.java . clientsrc1.6.6p
-src/clients/GUI1/CompressedConnection.java src/clients/GUI1/mas_gui/ clientsrc1.6.6p
-src/clients/GUI1/Connection.java src/clients/GUI1/mas_gui/ clientsrc1.6.6p
-src/clients/GUI1/Parser.java src/clients/GUI1/mas_gui/ clientsrc1.6.6p
-src/clients/GUI1/SessionState.java src/clients/GUI1/mas_gui/ clientsrc1.6.6p
-src/clients/GUI1/MA_ScrollPane.java src/clients/GUI1/mas_gui/ clientsrc1.6.6p
-src/clients/GUI1/MarketSelection.java src/clients/GUI1/mas_gui/ clientsrc1.6.6p
-src/clients/GUI1/IndicatorListener.java src/clients/GUI1/mas_gui/ clientsrc1.6.6p
-src/clients/GUI1/IndicatorSelection.java src/clients/GUI1/mas_gui/ clientsrc1.6.6p
-src/clients/GUI1/MA_MenuBar.java src/clients/GUI1/mas_gui/ clientsrc1.6.6p
-src/clients/GUI1/DialogSelection.java src/clients/GUI1/mas_gui/ clientsrc1.6.6p
-src/clients/GUI1/IndicatorColors.java src/clients/GUI1/mas_gui/ clientsrc1.6.6p
-src/clients/GUI1/MA_Dialog.java src/clients/GUI1/mas_gui/ clientsrc1.6.6p
-src/clients/GUI1/DataSetBuilder.java src/clients/GUI1/mas_gui/ clientsrc1.6.6p
-src/clients/GUI1/graph/DataSet.java . clientsrc1.6.6p
-src/clients/GUI1/graph/Drawer.java . clientsrc1.6.6p
-src/clients/GUI1/graph/DateDrawer.java . clientsrc1.6.6p
-src/clients/GUI1/graph/Markers.java . clientsrc1.6.6p
-src/clients/GUI1/graph/BarDrawer.java . clientsrc1.6.6p
-src/clients/GUI1/graph/CandleDrawer.java . clientsrc1.6.6p
-src/clients/GUI1/graph/RTextLine.java . clientsrc1.6.6p
-src/clients/GUI1/graph/SpecialFunction.java . clientsrc1.6.6p
-src/clients/GUI1/graph/LineDrawer.java . clientsrc1.6.6p
-src/clients/GUI1/graph/TextLine.java . clientsrc1.6.6p
-src/clients/GUI1/graph/PriceDrawer.java . clientsrc1.6.6p
-src/clients/GUI1/graph/Graph.java . clientsrc1.6.6p
-src/clients/GUI1/graph/InteractiveGraph.java . clientsrc1.6.6p
-src/clients/GUI1/graph/Axis.java . clientsrc1.6.6p
-src/clients/GUI1/graph/DoublePair.java . clientsrc1.6.6p
-src/clients/GUI1/graph/IndicatorDrawer.java . clientsrc1.6.6p
-src/clients/GUI1/graph/MarketDrawer.java . clientsrc1.6.6p
-src/clients/GUI1/graph/BasicDrawer.java . clientsrc1.6.6p
-src/clients/GUI1/graph/LowerGraph.java . clientsrc1.6.6p
-src/clients/GUI1/graph/MainGraph.java . clientsrc1.6.6p
-src/clients/GUI1/graph/TemporalDrawer.java . clientsrc1.6.6p
-src/clients/GUI1/graph/TimeDrawer.java . clientsrc1.6.6p
+src/clients/GUI1/common/NetworkProtocol.java . clientsrc1.6.6q
+src/clients/GUI1/common/DataInspector.java . clientsrc1.6.6q
+src/clients/GUI1/support/IntPair.java . clientsrc1.6.6q
+src/clients/GUI1/support/Utilities.java . clientsrc1.6.6q
+src/clients/GUI1/support/Configuration.java . clientsrc1.6.6q
+src/clients/GUI1/support/GUI_Utilities.java . clientsrc1.6.6q
+src/clients/GUI1/support/ErrorBox.java . clientsrc1.6.6q
+src/clients/GUI1/support/IndicatorGroup.java . clientsrc1.6.6q
+src/clients/GUI1/support/IndicatorGroups.java . clientsrc1.6.6q
+src/clients/CL/CL_Client.java . clientsrc1.6.6q
+src/clients/GUI1/Chart.java src/clients/GUI1/mas_gui/ clientsrc1.6.6q
+src/clients/GUI1/MA_Client.java . clientsrc1.6.6q
+src/clients/GUI1/CompressedConnection.java src/clients/GUI1/mas_gui/ clientsrc1.6.6q
+src/clients/GUI1/Connection.java src/clients/GUI1/mas_gui/ clientsrc1.6.6q
+src/clients/GUI1/Parser.java src/clients/GUI1/mas_gui/ clientsrc1.6.6q
+src/clients/GUI1/SessionState.java src/clients/GUI1/mas_gui/ clientsrc1.6.6q
+src/clients/GUI1/MA_ScrollPane.java src/clients/GUI1/mas_gui/ clientsrc1.6.6q
+src/clients/GUI1/MarketSelection.java src/clients/GUI1/mas_gui/ clientsrc1.6.6q
+src/clients/GUI1/IndicatorListener.java src/clients/GUI1/mas_gui/ clientsrc1.6.6q
+src/clients/GUI1/IndicatorSelection.java src/clients/GUI1/mas_gui/ clientsrc1.6.6q
+src/clients/GUI1/MA_MenuBar.java src/clients/GUI1/mas_gui/ clientsrc1.6.6q
+src/clients/GUI1/DialogSelection.java src/clients/GUI1/mas_gui/ clientsrc1.6.6q
+src/clients/GUI1/IndicatorColors.java src/clients/GUI1/mas_gui/ clientsrc1.6.6q
+src/clients/GUI1/MA_Dialog.java src/clients/GUI1/mas_gui/ clientsrc1.6.6q
+src/clients/GUI1/DataSetBuilder.java src/clients/GUI1/mas_gui/ clientsrc1.6.6q
+src/clients/GUI1/graph/DataSet.java . clientsrc1.6.6q
+src/clients/GUI1/graph/Drawer.java . clientsrc1.6.6q
+src/clients/GUI1/graph/DateDrawer.java . clientsrc1.6.6q
+src/clients/GUI1/graph/Markers.java . clientsrc1.6.6q
+src/clients/GUI1/graph/BarDrawer.java . clientsrc1.6.6q
+src/clients/GUI1/graph/CandleDrawer.java . clientsrc1.6.6q
+src/clients/GUI1/graph/RTextLine.java . clientsrc1.6.6q
+src/clients/GUI1/graph/SpecialFunction.java . clientsrc1.6.6q
+src/clients/GUI1/graph/LineDrawer.java . clientsrc1.6.6q
+src/clients/GUI1/graph/TextLine.java . clientsrc1.6.6q
+src/clients/GUI1/graph/PriceDrawer.java . clientsrc1.6.6q
+src/clients/GUI1/graph/Graph.java . clientsrc1.6.6q
+src/clients/GUI1/graph/InteractiveGraph.java . clientsrc1.6.6q
+src/clients/GUI1/graph/Axis.java . clientsrc1.6.6q
+src/clients/GUI1/graph/DoublePair.java . clientsrc1.6.6q
+src/clients/GUI1/graph/IndicatorDrawer.java . clientsrc1.6.6q
+src/clients/GUI1/graph/MarketDrawer.java . clientsrc1.6.6q
+src/clients/GUI1/graph/BasicDrawer.java . clientsrc1.6.6q
+src/clients/GUI1/graph/LowerGraph.java . clientsrc1.6.6q
+src/clients/GUI1/graph/MainGraph.java . clientsrc1.6.6q
+src/clients/GUI1/graph/TemporalDrawer.java . clientsrc1.6.6q
+src/clients/GUI1/graph/TimeDrawer.java . clientsrc1.6.6q
 # Market Analysis System executables and accompanying files (server and client)
 # (First the GUI java classes)
-src/clients/GUI1/mascharts.jar lib/classes/mas_gui/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-src/clients/CL/CL_Client.class lib/classes/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
+src/clients/GUI1/mascharts.jar lib/classes/mas_gui/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+src/clients/CL/CL_Client.class lib/classes/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
 # (GUI config. file)
-build/config/.ma_clientrc lib/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
+build/config/.ma_clientrc lib/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
 # (Scripts)
-src/scripts/mas/magc bin/ mas_linux1.6.6p mas_windows1.6.6p clientsrc1.6.6p mac1.6.6p
-src/scripts/mas/masb bin/ mas_linux1.6.6p mas_windows1.6.6p clientsrc1.6.6p mac1.6.6p
-src/scripts/mas/admin/report_system_info lib/ mas_linux1.6.6p
-src/scripts/python/mas/client/macl lib/python/ mas_linux1.6.6p mas_windows1.6.6p clientsrc1.6.6p mac1.6.6p
-src/scripts/python/mas/client/CommandProcessor.py lib/python/ mas_linux1.6.6p mas_windows1.6.6p clientsrc1.6.6p mac1.6.6p
-src/scripts/python/mas/library/constants.py lib/python/ mas_linux1.6.6p mas_windows1.6.6p clientsrc1.6.6p mac1.6.6p
-src/scripts/python/mas/library/ma_connection.py lib/python/ mas_linux1.6.6p mas_windows1.6.6p clientsrc1.6.6p mac1.6.6p
-src/scripts/python/mas/library/ma_protocol.py lib/python/ mas_linux1.6.6p mas_windows1.6.6p clientsrc1.6.6p mac1.6.6p
-src/clients/CL/maclj bin/ mas_linux1.6.6p mas_windows1.6.6p clientsrc1.6.6p mac1.6.6p
-src/scripts/external/mas_external_retrieve.pl lib/ mas_linux1.6.6p mas_windows1.6.6p
-src/scripts/windows/runmas.bat bin/ mas_windows1.6.6p
-src/scripts/windows/runmasf.bat bin/ mas_windows1.6.6p
-src/scripts/windows/runmacl.bat bin/ mas_windows1.6.6p
-src/scripts/windows/runmasgui.bat bin/ mas_windows1.6.6p
-src/scripts/windows/fake_mailer.bat bin/ mas_windows1.6.6p
-src/scripts/windows/cleanup.bat bin/ mas_windows1.6.6p
-src/scripts/windows/simple_cat.exe bin/ mas_windows1.6.6p
-src/scripts/windows/run_command.bat bin/ mas_windows1.6.6p
+src/scripts/mas/magc bin/ mas_linux1.6.6q mas_windows1.6.6q clientsrc1.6.6q mac1.6.6q
+src/scripts/mas/masb bin/ mas_linux1.6.6q mas_windows1.6.6q clientsrc1.6.6q mac1.6.6q
+src/scripts/mas/admin/report_system_info lib/ mas_linux1.6.6q
+src/scripts/python/mas/client/macl lib/python/ mas_linux1.6.6q mas_windows1.6.6q clientsrc1.6.6q mac1.6.6q
+src/scripts/python/mas/client/CommandProcessor.py lib/python/ mas_linux1.6.6q mas_windows1.6.6q clientsrc1.6.6q mac1.6.6q
+src/scripts/python/mas/library/constants.py lib/python/ mas_linux1.6.6q mas_windows1.6.6q clientsrc1.6.6q mac1.6.6q
+src/scripts/python/mas/library/ma_connection.py lib/python/ mas_linux1.6.6q mas_windows1.6.6q clientsrc1.6.6q mac1.6.6q
+src/scripts/python/mas/library/ma_protocol.py lib/python/ mas_linux1.6.6q mas_windows1.6.6q clientsrc1.6.6q mac1.6.6q
+src/clients/CL/maclj bin/ mas_linux1.6.6q mas_windows1.6.6q clientsrc1.6.6q mac1.6.6q
+src/scripts/external/mas_external_retrieve.pl lib/ mas_linux1.6.6q mas_windows1.6.6q
+src/scripts/windows/runmas.bat bin/ mas_windows1.6.6q
+src/scripts/windows/runmasf.bat bin/ mas_windows1.6.6q
+src/scripts/windows/runmacl.bat bin/ mas_windows1.6.6q
+src/scripts/windows/runmasgui.bat bin/ mas_windows1.6.6q
+src/scripts/windows/fake_mailer.bat bin/ mas_windows1.6.6q
+src/scripts/windows/cleanup.bat bin/ mas_windows1.6.6q
+src/scripts/windows/simple_cat.exe bin/ mas_windows1.6.6q
+src/scripts/windows/run_command.bat bin/ mas_windows1.6.6q
 # contrib
 src/contrib src/ contrib
 # (macl configuration files)
-build/config/indicators_persist lib/config/ mas_windows1.6.6p
-build/config/generators_persist lib/config/ mas_windows1.6.6p
-build/config/accumulation_distribution lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/bollinger_bands lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/cci lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/cci_signals lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/editind lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/ema_of_slope_of_ema lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/ema_of_slope_of_ema_close_to_0 lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/ema_of_volume lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/force_index lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/indicators lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/macd_diffsig_crossover lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/macd_diffsigx_and_stoch_35 lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/macd_of_volume lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/make_indicators lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/make_test_indicators lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/market_analyzers lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/mas_dbrc lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/mas_httprc lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/midpoint lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/obv lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/parabolic-sar lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/rc_files lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/slope_of_ema_of_volume lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/slope_of_macd_signal_close_to_0 lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/slope_of_macd_signal_trend lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/slope_of_macd_signal_trend_analyzers lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/slope_of_macd_sl lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/slope_of_macd_sl_cross0 lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/slope_of_slope_of_macd_sl lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/slope_of_slope_of_macd_sl_cross0 lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/smsl_ssmsl_trend lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/smsl_ssmsl_trend_analyzers lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/stoch_pctD_cross lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/test_indicators lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/triangular_ma lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/true_range lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/volume_gt_1million lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/volume_spike lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/wma_of_midpoint lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
-build/config/wma_of_midpoint2 lib/config/ mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p
+build/config/indicators_persist lib/config/ mas_windows1.6.6q
+build/config/generators_persist lib/config/ mas_windows1.6.6q
+build/config/accumulation_distribution lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/bollinger_bands lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/cci lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/cci_signals lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/editind lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/ema_of_slope_of_ema lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/ema_of_slope_of_ema_close_to_0 lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/ema_of_volume lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/force_index lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/indicators lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/macd_diffsig_crossover lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/macd_diffsigx_and_stoch_35 lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/macd_of_volume lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/make_indicators lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/make_test_indicators lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/market_analyzers lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/mas_dbrc lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/mas_httprc lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/midpoint lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/obv lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/parabolic-sar lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/rc_files lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/slope_of_ema_of_volume lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/slope_of_macd_signal_close_to_0 lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/slope_of_macd_signal_trend lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/slope_of_macd_signal_trend_analyzers lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/slope_of_macd_sl lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/slope_of_macd_sl_cross0 lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/slope_of_slope_of_macd_sl lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/slope_of_slope_of_macd_sl_cross0 lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/smsl_ssmsl_trend lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/smsl_ssmsl_trend_analyzers lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/stoch_pctD_cross lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/test_indicators lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/triangular_ma lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/true_range lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/volume_gt_1million lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/volume_spike lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/wma_of_midpoint lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+build/config/wma_of_midpoint2 lib/config/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
 # (Server executables and needed libraries)
-lib/binaries/linux/mas_no_assert_v1.6.6p bin/mas mas_linux1.6.6p
-lib/binaries/linux/mas_assert_v1.6.6p bin/mas_assert mas_linux1.6.6p
-lib/binaries/linux/macl_no_assert_v1.6.6p bin/macl mas_linux1.6.6p
-lib/binaries/linux/macl_assert_v1.6.6p bin/macl_assert mas_linux1.6.6p
-lib/binaries/linux/mct_no_assert_v1.6.6p bin/mct mas_linux1.6.6p
-lib/binaries/linux/mct_assert_v1.6.6p bin/mct_assert mas_linux1.6.6p
-lib/binaries/windows/mas.exe_no_assert_v1.6.6p bin/mas.exe mas_windows1.6.6p
-lib/binaries/windows/mas.exe_assert_v1.6.6p bin/mas_assert.exe mas_windows1.6.6p
-lib/binaries/windows/mct.exe_no_assert_v1.6.6p bin/mct.exe mas_windows1.6.6p
-lib/binaries/windows/mct.exe_assert_v1.6.6p bin/mct_assert.exe mas_windows1.6.6p
-lib/binaries/windows/macl.exe_no_assert_v1.6.6p bin/macl.exe mas_windows1.6.6p
-lib/binaries/windows/macl.exe_assert_v1.6.6p bin/macl_assert.exe mas_windows1.6.6p
-lib/binaries/windows/config_tool.exe_no_assert_v1.6.6p bin/config_tool.exe mas_windows1.6.6p
-lib/binaries/windows/config_tool.exe_assert_v1.6.6p bin/config_tool_assert.exe mas_windows1.6.6p
+lib/binaries/linux/mas_no_assert_v1.6.6q bin/mas mas_linux1.6.6q
+lib/binaries/linux/mas_assert_v1.6.6q bin/mas_assert mas_linux1.6.6q
+lib/binaries/linux/macl_no_assert_v1.6.6q bin/macl mas_linux1.6.6q
+lib/binaries/linux/macl_assert_v1.6.6q bin/macl_assert mas_linux1.6.6q
+lib/binaries/linux/mct_no_assert_v1.6.6q bin/mct mas_linux1.6.6q
+lib/binaries/linux/mct_assert_v1.6.6q bin/mct_assert mas_linux1.6.6q
+lib/binaries/windows/mas.exe_no_assert_v1.6.6q bin/mas.exe mas_windows1.6.6q
+lib/binaries/windows/mas.exe_assert_v1.6.6q bin/mas_assert.exe mas_windows1.6.6q
+lib/binaries/windows/mct.exe_no_assert_v1.6.6q bin/mct.exe mas_windows1.6.6q
+lib/binaries/windows/mct.exe_assert_v1.6.6q bin/mct_assert.exe mas_windows1.6.6q
+lib/binaries/windows/macl.exe_no_assert_v1.6.6q bin/macl.exe mas_windows1.6.6q
+lib/binaries/windows/macl.exe_assert_v1.6.6q bin/macl_assert.exe mas_windows1.6.6q
+lib/binaries/windows/config_tool.exe_no_assert_v1.6.6q bin/config_tool.exe mas_windows1.6.6q
+lib/binaries/windows/config_tool.exe_assert_v1.6.6q bin/config_tool_assert.exe mas_windows1.6.6q
 # Installation tool for Windows
-lib/binaries/windows/install_tool.exe_no_assert_v1.0 bin/install_tool.exe mas_windows1.6.6p
+lib/binaries/windows/install_tool.exe_no_assert_v1.0 bin/install_tool.exe mas_windows1.6.6q
 # Include this odbc library if the executable was not statically
 # linked with it:
-lib/binaries/linux/libodbc.so.1 lib mas_linux1.6.6p serversrc1.6.6p
+lib/binaries/linux/libodbc.so.1 lib mas_linux1.6.6q serversrc1.6.6q
 # (MAS Documentation)
-doc/GUI_introduction . mas_linux1.6.6p mac1.6.6p
-doc/masystem_introduction-linux.txt doc/masystem_introduction.txt mas_linux1.6.6p mac1.6.6p
-doc/masystem_introduction-linux.html doc/masystem_introduction.html mas_linux1.6.6p mac1.6.6p
-doc/java_info . mas_linux1.6.6p mac1.6.6p
-doc/feature_list . mas_linux1.6.6p mac1.6.6p
-doc/creating_indicators . mas_linux1.6.6p mac1.6.6p
-doc/creating_market_analyzers . mas_linux1.6.6p mac1.6.6p
-doc/other_market_analyzer_examples . mas_linux1.6.6p mac1.6.6p
-doc/market_analysis . mas_linux1.6.6p mac1.6.6p
-doc/MAS_README-linux.txt doc/README mas_linux1.6.6p mac1.6.6p
-doc/README_compile src/doc/README_compile serversrc1.6.6p
-doc/main_MAS_README-linux.ps doc/INTRODUCTION.ps mas_linux1.6.6p mac1.6.6p
-doc/main_MAS_README-linux.html doc/INTRODUCTION.html mas_linux1.6.6p mac1.6.6p
-doc/FAQ.html doc/ mas_windows1.6.6p mas_linux1.6.6p
-doc/env_settings ./doc/environment mas_linux1.6.6p mac1.6.6p
-doc/INSTALL  ./ mas_linux1.6.6p
-doc/THANKS . mas_linux1.6.6p mac1.6.6p serversrc1.6.6p clientsrc1.6.6p
-doc/GUI_client_change_log doc/GUI_CHANGE_LOG mas_linux1.6.6p mac1.6.6p
-doc/Server_change_log doc/MAS_CHANGE_LOG mas_linux1.6.6p
+doc/GUI_introduction . mas_linux1.6.6q mac1.6.6q
+doc/masystem_introduction-linux.txt doc/masystem_introduction.txt mas_linux1.6.6q mac1.6.6q
+doc/masystem_introduction-linux.html doc/masystem_introduction.html mas_linux1.6.6q mac1.6.6q
+doc/java_info . mas_linux1.6.6q mac1.6.6q
+doc/feature_list . mas_linux1.6.6q mac1.6.6q
+doc/creating_indicators . mas_linux1.6.6q mac1.6.6q
+doc/creating_market_analyzers . mas_linux1.6.6q mac1.6.6q
+doc/other_market_analyzer_examples . mas_linux1.6.6q mac1.6.6q
+doc/market_analysis . mas_linux1.6.6q mac1.6.6q
+doc/MAS_README-linux.txt doc/README mas_linux1.6.6q mac1.6.6q
+doc/README_compile src/doc/README_compile serversrc1.6.6q
+doc/main_MAS_README-linux.ps doc/INTRODUCTION.ps mas_linux1.6.6q mac1.6.6q
+doc/main_MAS_README-linux.html doc/INTRODUCTION.html mas_linux1.6.6q mac1.6.6q
+doc/FAQ.html doc/ mas_windows1.6.6q mas_linux1.6.6q
+doc/env_settings ./doc/environment mas_linux1.6.6q mac1.6.6q
+doc/INSTALL  ./ mas_linux1.6.6q
+doc/THANKS . mas_linux1.6.6q mac1.6.6q serversrc1.6.6q clientsrc1.6.6q
+doc/GUI_client_change_log doc/GUI_CHANGE_LOG mas_linux1.6.6q mac1.6.6q
+doc/Server_change_log doc/MAS_CHANGE_LOG mas_linux1.6.6q
 # (MAS Documentation, Windows style)
-doc/GUI_introduction doc/GUI_introduction.txt[dos] mas_windows1.6.6p
-doc/masystem_introduction-windows.txt doc/masystem_introduction.txt[dos] mas_windows1.6.6p
-doc/masystem_introduction-windows.html doc/masystem_introduction.html mas_windows1.6.6p
-doc/feature_list doc/feature_list.txt[dos] mas_windows1.6.6p
-doc/creating_indicators doc/creating_indicators.txt[dos] mas_windows1.6.6p
-doc/creating_market_analyzers doc/creating_market_analyzers.txt[dos] mas_windows1.6.6p
-doc/other_market_analyzer_examples doc/other_market_analyzer_examples.txt[dos] mas_windows1.6.6p
-doc/market_analysis doc/market_analysis.txt[dos] mas_windows1.6.6p
-doc/MAS_README-windows.txt doc/README.txt[dos] mas_windows1.6.6p
-doc/main_MAS_README-windows.ps doc/INTRODUCTION.ps mas_windows1.6.6p
-doc/main_MAS_README-windows.html doc/index.html mas_windows1.6.6p
-doc/mct_introduction-windows.html doc/mct_introduction.html mas_windows1.6.6p
-doc/env_settings ./doc/environment.txt[dos] mas_windows1.6.6p
-doc/INSTALL  ./INSTALL.txt[dos] mas_windows1.6.6p
-doc/THANKS doc/THANKS.txt[dos] mas_windows1.6.6p
-doc/GUI_client_change_log doc/GUI_CHANGE_LOG.txt[dos] mas_windows1.6.6p
-doc/Server_change_log doc/MAS_CHANGE_LOG.txt[dos] mas_windows1.6.6p
-doc/README_WINDOWS.txt ./ mas_windows1.6.6p
+doc/GUI_introduction doc/GUI_introduction.txt[dos] mas_windows1.6.6q
+doc/masystem_introduction-windows.txt doc/masystem_introduction.txt[dos] mas_windows1.6.6q
+doc/masystem_introduction-windows.html doc/masystem_introduction.html mas_windows1.6.6q
+doc/feature_list doc/feature_list.txt[dos] mas_windows1.6.6q
+doc/creating_indicators doc/creating_indicators.txt[dos] mas_windows1.6.6q
+doc/creating_market_analyzers doc/creating_market_analyzers.txt[dos] mas_windows1.6.6q
+doc/other_market_analyzer_examples doc/other_market_analyzer_examples.txt[dos] mas_windows1.6.6q
+doc/market_analysis doc/market_analysis.txt[dos] mas_windows1.6.6q
+doc/MAS_README-windows.txt doc/README.txt[dos] mas_windows1.6.6q
+doc/main_MAS_README-windows.ps doc/INTRODUCTION.ps mas_windows1.6.6q
+doc/main_MAS_README-windows.html doc/index.html mas_windows1.6.6q
+doc/mct_introduction-windows.html doc/mct_introduction.html mas_windows1.6.6q
+doc/env_settings ./doc/environment.txt[dos] mas_windows1.6.6q
+doc/INSTALL  ./INSTALL.txt[dos] mas_windows1.6.6q
+doc/THANKS doc/THANKS.txt[dos] mas_windows1.6.6q
+doc/GUI_client_change_log doc/GUI_CHANGE_LOG.txt[dos] mas_windows1.6.6q
+doc/Server_change_log doc/MAS_CHANGE_LOG.txt[dos] mas_windows1.6.6q
+doc/README_WINDOWS.txt ./ mas_windows1.6.6q
 # (Scripts)
-src/scripts/install/install ./ mas_linux1.6.6p mas_windows1.6.6p
-src/scripts/functions/utilities ./lib mas_linux1.6.6p
-#src/scripts/install/install_config ./ mas_linux1.6.6p mas_windows1.6.6p
-# Data and server-configuration files needed by mas1.6.6p
-build/data lib/ mas_linux1.6.6p mas_windows1.6.6p
-build/data/symbols lib/ mas_linux1.6.6p mas_windows1.6.6p
-build/database/mas_dbrc lib/ mas_linux1.6.6p mas_windows1.6.6p
-build/database/mas_dbrc_with_commands lib/ mas_linux1.6.6p mas_windows1.6.6p
-build/database/mas_dbrc_separate_tables lib/ mas_linux1.6.6p mas_windows1.6.6p
-build/config/rc_files/mas_httprc lib/ mas_linux1.6.6p mas_windows1.6.6p
-src/mct/config/mctrc.linux lib/mctrc mas_linux1.6.6p
-src/mct/config/mctrc.windows lib/mctrc mas_windows1.6.6p
-src/mct/config/windows/nt_repl_spec lib/ mas_windows1.6.6p
-src/mct/config/windows/pre_nt_repl_spec lib/ mas_windows1.6.6p
+src/scripts/install/install ./ mas_linux1.6.6q mas_windows1.6.6q
+src/scripts/functions/utilities ./lib mas_linux1.6.6q
+#src/scripts/install/install_config ./ mas_linux1.6.6q mas_windows1.6.6q
+# Data and server-configuration files needed by mas1.6.6q
+build/data lib/ mas_linux1.6.6q mas_windows1.6.6q
+build/data/symbols lib/ mas_linux1.6.6q mas_windows1.6.6q
+build/database/mas_dbrc lib/ mas_linux1.6.6q mas_windows1.6.6q
+build/database/mas_dbrc_with_commands lib/ mas_linux1.6.6q mas_windows1.6.6q
+build/database/mas_dbrc_separate_tables lib/ mas_linux1.6.6q mas_windows1.6.6q
+build/config/rc_files/mas_httprc lib/ mas_linux1.6.6q mas_windows1.6.6q
+src/mct/config/mctrc.linux lib/mctrc mas_linux1.6.6q
+src/mct/config/mctrc.windows lib/mctrc mas_windows1.6.6q
+src/mct/config/windows/nt_repl_spec lib/ mas_windows1.6.6q
+src/mct/config/windows/pre_nt_repl_spec lib/ mas_windows1.6.6q
 # License file
-forum.txt . mas_linux1.6.6p mas_windows1.6.6p mac1.6.6p serversrc1.6.6p clientsrc1.6.6p
+forum.txt . mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q serversrc1.6.6q clientsrc1.6.6q
 # Scripts
-src/scripts/python/obtain_eod_data src/scripts/ scripts1.6.6p
-src/scripts/python/pmm src/scripts/ scripts1.6.6p
-/home2/finance/bin/run_market_analysis src/scripts/ scripts1.6.6p
-/home2/finance/bin/distribute_data src/scripts/ scripts1.6.6p
-/home2/finance/bin/process_stock_splits src/scripts/ scripts1.6.6p
-/home2/finance/bin/analyze_watch_lists src/scripts/ scripts1.6.6p
-/home2/finance/bin/analyze_stocks src/scripts/ scripts1.6.6p
-/home2/finance/bin/extract_data src/scripts/ scripts1.6.6p
-/home2/finance/bin/loss src/scripts/ scripts1.6.6p
-/home2/finance/bin/process_mas_mail src/scripts/ scripts1.6.6p
-src/scripts/mas/admin src/scripts/lib/ scripts1.6.6p
-src/scripts/mas/awk src/scripts/lib/ scripts1.6.6p
-doc/scripts_README ./src/scripts/README scripts1.6.6p
-src/scripts/database/db_creation/mas . scripts1.6.6p
-/usr/local/bin/cnvrt_fromdos src/scripts/ scripts1.6.6p
-/usr/local/bin/fromdos src/scripts/ scripts1.6.6p
-/home2/jtc/bin/startmas src/scripts scripts1.6.6p
+src/scripts/python/obtain_eod_data src/scripts/ scripts1.6.6q
+src/scripts/python/pmm src/scripts/ scripts1.6.6q
+/home2/finance/bin/run_market_analysis src/scripts/ scripts1.6.6q
+/home2/finance/bin/distribute_data src/scripts/ scripts1.6.6q
+/home2/finance/bin/process_stock_splits src/scripts/ scripts1.6.6q
+/home2/finance/bin/analyze_watch_lists src/scripts/ scripts1.6.6q
+/home2/finance/bin/analyze_stocks src/scripts/ scripts1.6.6q
+/home2/finance/bin/extract_data src/scripts/ scripts1.6.6q
+/home2/finance/bin/loss src/scripts/ scripts1.6.6q
+/home2/finance/bin/process_mas_mail src/scripts/ scripts1.6.6q
+src/scripts/mas/admin src/scripts/lib/ scripts1.6.6q
+src/scripts/mas/awk src/scripts/lib/ scripts1.6.6q
+doc/scripts_README ./src/scripts/README scripts1.6.6q
+src/scripts/database/db_creation/mas . scripts1.6.6q
+/usr/local/bin/cnvrt_fromdos src/scripts/ scripts1.6.6q
+/usr/local/bin/fromdos src/scripts/ scripts1.6.6q
+/home2/jtc/bin/startmas src/scripts scripts1.6.6q
