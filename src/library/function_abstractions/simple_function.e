@@ -25,11 +25,11 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 			extend
 		end
 
-creation {FACTORY}
+creation {NONE}
 
 	make
 
-feature -- Initialization
+feature -- {NONE} Initialization
 
 	make (type: TIME_PERIOD_TYPE) is
 		require

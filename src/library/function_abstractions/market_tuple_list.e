@@ -26,28 +26,6 @@ feature -- Access
 								i_th (Result).date_time.is_equal (d)
 		end
 
-	slope_at (i: INTEGER): REAL is
-			-- Approximation of lope or rate of change at the point
-			-- (list element) specified by `i'
-		require
-			valid_index (i)
-		local
-			line1, line2: MARKET_LINE
-			p1, p2, p3: expanded MARKET_POINT
-			mt: MARKET_TUPLE
-		do
-			--!!Need to deal with boundaries.
-			mt := i_th (i - 1)
-			p1.set_x_y_date (i - 1, mt.value, mt.date_time)
-			mt := i_th (i)
-			p2.set_x_y_date (i, mt.value, mt.date_time)
-			mt := i_th (i + 1)
-			p3.set_x_y_date (i + 1, mt.value, mt.date_time)
-			!!line1.make (p1, p2)
-			!!line2.make (p2, p3)
-			Result := (line1.slope + line2.slope) / 2
-		end
-
 feature -- Status report
 
 	has_date (d: DATE_TIME): BOOLEAN is
