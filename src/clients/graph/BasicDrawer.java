@@ -233,9 +233,6 @@ abstract public class BasicDrawer extends Drawer {
 			// Set up for reference values < 1.
 			start_ref_index = 0;
 		}
-System.out.println("yrange: " + yrange);
-System.out.println("using start_ref_index of " + start_ref_index);
-//refvalue_specs[ref_straddle_one_index].minimum() < 1 &&
 
 		g.setFont(new Font("Monospaced", Font.ITALIC, 12));
 
@@ -243,7 +240,6 @@ System.out.println("using start_ref_index of " + start_ref_index);
 			if (yrange >= refvalue_specs[i].minimum() &&
 					yrange < refvalue_specs[i].maximum()) {
 				step = refvalue_specs[i].step_value();
-System.out.println("found ref spec: " + refvalue_specs[i]);
 				break;
 			}
 		}
@@ -266,8 +262,8 @@ System.out.println("found ref spec: " + refvalue_specs[i]);
 			boolean lines) {
 		final int Y_text_adjust = 3, margin = 5, margin_for_text = 8;
 		final int Min_vertical_space = 15;
-		final int x_adjustment = -3;
-		int ref_bounds_x_value = ref_bounds.x + x_adjustment;
+		int ref_bounds_x_value = ref_bounds.x + ref_bounds.width +
+			Ref_text_offset;
 		int main_bounds_x_value = main_bounds.x - X_left_line_adjust;
 		int bounds_x_plus_width = main_bounds.x + main_bounds.width;
 		int step = 1;
@@ -323,8 +319,7 @@ System.out.println("found ref spec: " + refvalue_specs[i]);
 				if (adj_ys[i] > ref_bounds.y + margin_for_text && adj_ys[i] <
 						ref_bounds.y + ref_bounds.height - margin_for_text) {
 					g.setColor(config.text_color());
-					g.drawString(ystrings[i], ref_bounds_x_value +
-						ref_bounds.width + Ref_text_offset,
+					g.drawString(ystrings[i], ref_bounds_x_value,
 						adj_ys[i] + Y_text_adjust);
 				}
 			}
@@ -424,7 +419,7 @@ System.out.println("found ref spec: " + refvalue_specs[i]);
 	final int Reference_rect_width = 50;	// Width of right reference bar
 	final int Bottom_ref_rect_height = 25;	// Height of bottom reference bar
 	final int X_left_line_adjust = 9;	// Ensures that line starts flush left.
-	final int Ref_text_offset = -42;	// Offset for reference text
+	final int Ref_text_offset = -45;	// Offset for reference text
 
 	// "epsilon" value for determining if ymin and ymax are almost equal
 	private static double min_max_epsilon = 0.00005;
