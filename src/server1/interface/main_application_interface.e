@@ -6,13 +6,6 @@ indexing
 
 deferred class MAIN_APPLICATION_INTERFACE inherit
 
---	GLOBAL_APPLICATION
---		export {NONE}
---			all
---		undefine
---			print
---		end
-
 	THREAD -- For the future - main interface will run in its own thread.
 		export
 			{NONE} all
