@@ -312,58 +312,57 @@
     </copy>
     <copy    todir="${build.home}/graph">
 	  <fileset dir="${mas_gui.home}/graph"
-		includes="Axis.class,BarDrawer.class,BasicDrawer.class,
-			CandleDrawer.class,DataSet.class,DateDrawer.class,
-			DoublePair.class,Drawer.class,FileFormatException.class,
-			Gin.class,Graph.class,IndicatorDrawer.class,
-			InteractiveGraph.class,Line.class,LineDrawer.class,
-			LoadMessage.class,LowerGraph.class,MainGraph.class,
-			Markers.class,MarkerVertex.class,MarketDrawer.class,
-			PriceDrawer.class,Range.class,RefSpec.class,
-			RotateTextFilter.class,RTextLine.class,SpecialFunction.class,
-			TemporalDrawer.class,TextLine.class,TextState.class,
-			TimeDrawer.class"
+		includes="DataSet.class,BasicDrawer.class,Drawer.class,Axis.class,
+			RefSpec.class,MarketDrawer.class,Graph.class,
+			FileFormatException.class,LoadMessage.class,RTextLine.class,
+			TextLine.class,RotateTextFilter.class,Markers.class,
+			MarkerVertex.class,DoublePair.class,TemporalDrawer.class,
+			DateDrawer.class,TimeDrawer.class,IndicatorDrawer.class,
+			CandleDrawer.class,PriceDrawer.class,LineDrawer.class,
+			BarDrawer.class,SpecialFunction.class,TextState.class,
+			MainGraph.class,CrossHair.class,DrawObject.class,LowerGraph.class,
+			DrawableObjects.class,ChartHandleMouse.class,FibonacciPrice.class,
+			FibonacciTime.class,TrendLine.class"
 	  />
     </copy>
     <copy    todir="${build.home}/java_library/support">
 	  <fileset dir="${mas_gui.home}/java_library/support"
-		includes="AssertionConstants.class,Logic.class,ManagedCache.class"
+		includes="AssertionConstants.class,Logic.class"
 	  />
     </copy>
     <copy    todir="${build.home}/mas_gui">
 	  <fileset dir="${mas_gui.home}/mas_gui"
-		includes="AppletOptions.class,Chart$1.class,Chart.class
-			ChartSettings.class,CommandLineOptions.class
-			CompressedConnection.class,Connection.class,DataSetBuilder.class
-			DialogSelection$1.class,DialogSelection$2.class
-			DialogSelection$3.class,DialogSelection.class
-			IndicatorColors$1.class,IndicatorColors$2.class
-			IndicatorColors.class,IndicatorListener.class
-			IndicatorSelection.class,MA_Dialog$1.class,MA_Dialog.class
-			MA_MenuBar$1.class,MA_MenuBar$2.class,MA_MenuBar$3.class
-			MA_MenuBar$4.class,MA_MenuBar$5.class,MA_MenuBar$6.class
-			MA_MenuBar$7.class,MA_MenuBar$8.class,MA_MenuBar$9.class
-			MA_MenuBar.class,MarketSelection$1.class,MarketSelection.class
-			MA_ScrollPane.class,OptionFlags.class,Parser.class
-			SessionState.class,StartupOptions.class,WindowSettings.class"
+		includes="AppletOptions.class,
+			Connection.class,SessionState.class,CommandLineOptions.class,
+			StartupOptions.class,OptionFlags.class,DataSetBuilder.class,
+			Parser.class,ChartSettings.class,WindowSettings.class,
+			MDI_gui$1.class,MDI_gui.class,MA_CursorBar.class,MA_ButtonBar.class,
+			MA_FileBar$1.class,MA_FileBar$2.class,MA_FileBar.class,
+			MA_DrawBar.class,MarketSelection.class,DialogSelection.class,
+			MA_Dialog.class,MA_Button.class,CompressedConnection.class,
+			IndicatorSelection.class,VTextIcon.class,MA_ChartContainer.class,
+			MA_ChartBar$1.class,MA_ChartBar$2.class,MA_ChartBar$3.class,
+			MA_ChartBar.class,MA_ChartDrawBar$1.class,MA_ChartDrawBar$2.class,
+			MA_ChartDrawBar.class,MA_PeriodBar$1.class,MA_PeriodBar.class,
+			Chart.class,MA_ScrollPane.class,ChartTransferHandler.class"
 	  />
     </copy>
     <copy    todir="${build.home}/support">
 	  <fileset dir="${mas_gui.home}/support"
-		includes="BackgroundColorChanger.class,BarColorChanger.class
-			BlackCandleColorChanger.class,ColorChanger.class
-			Configuration.class,Configuration$DateSetting.class
-			ConfigurationModifier.class,ErrorBox$1.class,ErrorBox$2.class
-			ErrorBox$3.class,ErrorBox.class,FileTokenizer.class
-			GraphStyleChanger.class,GUI_Utilities.class,IndicatorGroup.class
-			IndicatorGroups.class,IntPair.class,IO_Connection.class
-			IO_SocketConnection.class,IO_URL_Connection.class
-			LineColorChanger.class,ParameterBasedConfigurationModifier.class
-			ReferenceLineColorChanger.class,SelfContainedConfiguration.class
-			ServerResponseUtilities.class,SettingChanger.class
-			SettingChangerMap.class,StickColorChanger.class
-			TextColorChanger.class,Tokenizer.class,Utilities$1.class
-			Utilities.class,WhiteCandleColorChanger.class"
+		includes="IO_Connection.class,IO_URL_Connection.class,
+			Configuration$DateSetting.class,SelfContainedConfiguration.class,
+			ParameterBasedConfigurationModifier.class,
+			SettingChanger.class,SettingChangerMap.class,
+			BackgroundColorChanger.class,BarColorChanger.class,
+			BlackCandleColorChanger.class,ColorChanger.class,
+			LineColorChanger.class,ReferenceLineColorChanger.class,
+			StickColorChanger.class,TextColorChanger.class,
+			WhiteCandleColorChanger.class,GraphStyleChanger.class,
+			Configuration.class,IndicatorGroups.class,IndicatorGroup.class,
+			Tokenizer.class,ConfigurationModifier.class,IntPair.class,
+			IO_SocketConnection.class,FileTokenizer.class,Utilities$1.class,
+			Utilities.class,ErrorBox$1.class,ErrorBox$2.class,ErrorBox$3.class,
+			ErrorBox.class,GUI_Utilities.class"
 	  />
     </copy>
 	<!--

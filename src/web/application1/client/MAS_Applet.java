@@ -3,9 +3,11 @@
 	* @author   Jim Cochrane
 */
 
-import java.applet.*;
+//import java.applet.*;
+import javax.swing.*;
 import java.awt.*;
 import java.net.*;
+import java.util.*;
 import java.io.*;
 import mas_gui.*;
 import support.IO_URL_Connection;
@@ -16,7 +18,7 @@ import support.SelfContainedConfiguration;
 import support.ParameterBasedConfigurationModifier;
 
 // The Market Analysis System charting applet
-public class MAS_Applet extends Applet {
+public class MAS_Applet extends JApplet {
 
 	public void init() {
 		try {
@@ -35,7 +37,9 @@ public class MAS_Applet extends Applet {
 						report_error("Login to the server failed");
 					}
 				} else {
-					Chart chart = new Chart(data_builder, null, options);
+//					Chart chart = new Chart(data_builder, null, options);
+					MDI_gui mdi = new mas_gui.MDI_gui(data_builder,
+						null, options);
 				}
 			}
 		} catch (Exception e) {
@@ -100,6 +104,9 @@ public class MAS_Applet extends Applet {
 	}
 
 	private void initialize_configuration() {
+		String[] icon_names = Configuration.icon_names();
+		Hashtable icon_table = new Hashtable();
+		Configuration.set_icon_table(icon_table);
 		initialization_succeeded = false;
 		try {
 			Configuration.set_input_source(new Tokenizer(new StringReader(
@@ -111,6 +118,18 @@ public class MAS_Applet extends Applet {
 			initialization_succeeded = true;
 		} catch (IOException e) {
 			report_error("Initialization failed: " + e);
+		}
+		// Create and put the "icon images" into the Configuration's
+		// 'icon_table' to make them available to the components that
+		// need them.
+		for (int i = 0; i < icon_names.length; ++i) {
+			URL url = url_for(icon_path + icon_names[i]);
+			if (url != null) {
+				icon_table.put(icon_names[i],
+					new ImageIcon(url, "Icon for " + icon_names[i]));
+			} else {
+				//!!!Report: Failed to load icon for icon_names[i].
+			}
 		}
 	}
 
@@ -169,6 +188,20 @@ public class MAS_Applet extends Applet {
 		return result;
 	}
 
+	protected URL url_for(String filename) {
+		URL codebase = getCodeBase();
+		URL url = null;
+
+		try {
+			url = new URL(codebase, filename);
+		} catch (java.net.MalformedURLException e) {
+			//!!!Turn this into a proper error message:
+			System.err.println("Couldn't create image: badly specified URL");
+			return null;
+		}
+		return url;
+	}
+
 // Implementation - attributes
 
 	private String host_name = "";
@@ -203,4 +236,5 @@ public class MAS_Applet extends Applet {
 	private final String White_candle_color_description =
 		"the color used for white candles";
 	private final String Graph_style_description = "the price-graph style";
+	private static final String icon_path = "images/";
 }
