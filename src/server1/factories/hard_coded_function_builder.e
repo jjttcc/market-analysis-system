@@ -221,15 +221,17 @@ feature {NONE} -- Hard-coded market function building procedures
 			d: DIVISION
 			s1: SUBTRACTION
 			s2: SUBTRACTION
-			highest: HIGHEST_HIGH
-			lowest: LOWEST_LOW
+			highest: HIGHEST_VALUE
+			lowest: LOWEST_VALUE
+			high: HIGH_PRICE
+			low: LOW_PRICE
 			close: CLOSING_PRICE
 			constant: CONSTANT
 		do
-			!!close
+			!!close; !!low; !!high
 			!!constant.make (100) -- factor for conversion to percentage
-			!!highest.make (f.output, n)
-			!!lowest.make (f.output, n)
+			!!highest.make (f.output, high, n)
+			!!lowest.make (f.output, low, n)
 			!!s1.make (highest, close)
 			!!s2.make (highest, lowest)
 			!!d.make (s1, s2)
@@ -249,15 +251,17 @@ feature {NONE} -- Hard-coded market function building procedures
 			m: MULTIPLICATION -- Used to convert value to percent.
 			s1: SUBTRACTION
 			s2: SUBTRACTION
-			highest: HIGHEST_HIGH
-			lowest: LOWEST_LOW
+			highest: HIGHEST_VALUE
+			lowest: LOWEST_VALUE
+			high: HIGH_PRICE
+			low: LOW_PRICE
 			close: CLOSING_PRICE
 			constant: CONSTANT
 		do
-			!!close
+			!!close; !!low; !!high
 			!!constant.make (100) -- factor for conversion to percentage
-			!!highest.make (f.output, n)
-			!!lowest.make (f.output, n)
+			!!highest.make (f.output, high, n)
+			!!lowest.make (f.output, low, n)
 			!!s1.make (close, lowest);
 			!!s2.make (highest, lowest)
 			!!d.make (s1, s2)
@@ -283,16 +287,18 @@ feature {NONE} -- Hard-coded market function building procedures
 			high_low_function: N_RECORD_ONE_VARIABLE_FUNCTION
 			ma1, ma2: STANDARD_MOVING_AVERAGE
 			cmd: BASIC_NUMERIC_COMMAND
-			highest: HIGHEST_HIGH
-			lowest: LOWEST_LOW
+			highest: HIGHEST_VALUE
+			lowest: LOWEST_VALUE
+			high: HIGH_PRICE
+			low: LOW_PRICE
 			close: CLOSING_PRICE
 			constant: CONSTANT
 		do
 			!!cmd
+			!!close; !!low; !!high
 			!!constant.make (100) -- factor for conversion to percentage
-			!!highest.make (f.output, inner_n)
-			!!lowest.make (f.output, inner_n)
-			!!close
+			!!highest.make (f.output, high, inner_n)
+			!!lowest.make (f.output, low, inner_n)
 			!!sub1.make (close, lowest);
 			!!sub2.make (highest, lowest)
 			!!close_low_function.make (f, sub1, inner_n)
