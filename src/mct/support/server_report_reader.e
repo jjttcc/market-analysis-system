@@ -1,7 +1,9 @@
 indexing
 	description: "Poll command that reads a MAS server's startup status report"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 2004: Jim Cochrane - License to be determined."
 
 class SERVER_REPORT_READER inherit
 

@@ -1,3 +1,11 @@
+indexing
+
+	description: "algorithm experiments"
+	author: "Jim Cochrane"
+	date: "$Date$"
+	revision: "$Revision$"
+	licensing: "Copyright 2004: Jim Cochrane - License to be determined."
+
 class ALGORITHMS inherit
 
 	BASIC_ROUTINES
