@@ -1,0 +1,13 @@
+Possible FAQ entries:
+
+For the messy "Warning: Cannot convert string "..." to type VirtualBinding"
+warning messages that occur when the java GUI starts up (occurs on redhat 7.3
+with jdk installed as of sep 7 2002), the problem appears to be an
+X-related problem that can be ignored - reference this url if putting it
+into the FAQ:
+
+http://list.opera.com/pipermail/opera-linux/2001-September/001080.html
+
+or this one might be better (or reference both):
+
+http://www.sunmanagers.org/pipermail/summaries/2001-February/000205.html
