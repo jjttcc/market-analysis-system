@@ -95,7 +95,7 @@ feature {NONE} -- Hook methods
 				character_selection (Void)
 			when 'd', 'D' then
 				print_list (<<"%N", command_description (c),
-					"%N%NChoose ", c.generator,
+					"%N%NChoose ", c.generator + name_for (c),
 						"? (y/n) ", eom>>)
 				inspect
 					character_selection (Void)
@@ -167,8 +167,8 @@ feature {NONE} -- Utility routines
 			margin := "     "
 			create text.make
 			text.extend ("Select:%N     Print description of " +
-				c.generator + "? (d)")
-			text.extend ("Choose " + c.generator + " (c)")
+				c.generator + name_for (c) + "? (d)")
+			text.extend ("Choose " + c.generator + name_for (c) + " (c)")
 			text.extend ("filler")
 			text.extend ("Make another choice (a)")
 			Result := text @ 1

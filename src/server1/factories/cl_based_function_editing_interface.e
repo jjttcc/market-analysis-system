@@ -159,14 +159,14 @@ feature {NONE} -- Implementation of hook methods
 	accepted_by_user (c: MARKET_FUNCTION): BOOLEAN is
 		do
 			print_list (<<"Select:%N     Print description of ",
-						c.generator, "? (d)%N",
-						"     Choose ", c.generator,
+						c.generator + name_for (c), "? (d)%N",
+						"     Choose ", c.generator + name_for (c),
 						" (c) Make another choice (a) ", eom>>)
 			inspect
 				character_selection (Void)
 			when 'd', 'D' then
 				print_list (<<"%N", function_description (c),
-					"%N%NChoose ", c.generator,
+					"%N%NChoose ", c.generator + name_for (c),
 						"? (y/n) ", eom>>)
 				inspect
 					character_selection (Void)
