@@ -13,7 +13,6 @@ class PCT_Component {
 		_application_context = owner.application_context();
 		parent_component_context = owner.component_context();
 		cmd_args = null;
-//!! If not used, remove: terminal_name = "";
 		prompt_setting = "";
 		startup_cmd_class_setting = "";
 		startup_cmd_method_setting = "";
@@ -49,7 +48,7 @@ class PCT_Component {
 
 	// Dynamically execute `method' of `cmdclass' with args and return
 	// the resulting component context.
-	Object import_and_execute(String cmdclass, String method, Object[] args) {
+	Object execute_method(String cmdclass, String method, Object[] args) {
 		Object result = null;
 		String cmdname = cmdclass + "." + method;
 		try {
@@ -80,7 +79,7 @@ class PCT_Component {
 					cmd_args.length < startup_cmd_args_setting.size()) {
 				cmd_args = new Object[startup_cmd_args_setting.size()];
 			}
-			context = import_and_execute(startup_cmd_class_setting,
+			context = execute_method(startup_cmd_class_setting,
 				startup_cmd_method_setting, cmd_args);
 		} catch (Exception e) {
 			throw e;
@@ -130,7 +129,6 @@ class PCT_Component {
 		// for the command result, if it exists
 	ApplicationContext _application_context;
 	Object parent_component_context;
-//!! If not used, remove:	String terminal_name;
 
 	// "settings" - Must be public for reflection, but regard as private
 	public String prompt_setting;
