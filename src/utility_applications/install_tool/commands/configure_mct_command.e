@@ -79,6 +79,7 @@ print ("Spec body: '" + Result + "'%N")
 			Result := "replacestart%N"
 			appdir_spec := "{main_mas_dir}" + options.application_dir + "%N"
 			appdir_spec.replace_substring_all (directory_separator.out, "/")
+			Result := Result + appdir_spec
 		end
 
 	spec_file_conclusion: STRING is
