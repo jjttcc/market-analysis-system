@@ -33,8 +33,12 @@ class PackageMaker:
 	# Expects current directory to be the parent of the base directory
 	# of self.work_directory.
 	def make_file(self, tuple):
+		dosstr = '[dos]'
 		target = tuple[1]
 		source = tuple[0]
+		# The [dos] directive is not part of the file name - remove it.
+		if target[len(target) - len(dosstr):] == dosstr:
+			target = target[:-len(dosstr)]
 		targetbase = os.path.basename(self.work_directory)
 		if target == '.':
 			result = targetbase + '/' + source

@@ -80,12 +80,18 @@ class ReleaseUtilities:
 
 	# Copy source files to target files.
 	def copy(self):
+		dos_str = "[dos]"; dslen = len(dos_str)
 		self.make_work_dir()
 		if len(self.source_files) != len(self.target_files):
 			raise 'Source file and target file lists are different lengths.'
 		os.chdir(self.source_directory)
 		for i in range(len(self.source_files)):
-			self.do_copy(self.source_files[i], self.target_files[i])
+			dos_cnv = 0
+			tgpath = self.target_files[i]
+			if tgpath[len(tgpath) - dslen:] == dos_str:
+				dos_cnv = 1
+				self.target_files[i] = tgpath[:-dslen]
+			self.do_copy(self.source_files[i], self.target_files[i], dos_cnv)
 		self.clean_work()
 
 	# For each p in `packages', create package p and place all
@@ -126,8 +132,8 @@ class ReleaseUtilities:
 		os.system("find " + self.work_directory +
 			" -name CVS -exec rm -rf {} \; 2>/dev/null")
 
-	def do_copy(self, srcpath, tgtpath):
-		cmd = ''
+	def do_copy(self, srcpath, tgtpath, dos_convert):
+		cmd = ''; doscnvrt_cmd = 'cnvrt_todos'
 		if tgtpath == '.':
 			cmd = 'cp -fRPr ' + srcpath + ' ' + self.work_directory
 		else:
@@ -140,6 +146,9 @@ class ReleaseUtilities:
 					os.path.dirname(tgtpath)
 				cmd = 'cp -f ' + srcpath + ' ' + self.work_directory + \
 					'/' + tgtpath
+				if dos_convert:
+					cmd = cmd + '; ' + doscnvrt_cmd + ' ' + \
+						self.work_directory + '/' + tgtpath
 			else:
 				print srcpath + ' is not a file or directory - skipping ...'
 			# If the work directory doesn't exist yet, make it:
