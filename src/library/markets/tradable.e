@@ -93,15 +93,29 @@ feature -- Access
 		local
 			l: LIST [TIME_PERIOD_TYPE]
 			i: INTEGER
+			daily_name, stop_name: STRING
 		do
 			create Result.make (1, 1)
 			Result.compare_objects
+			daily_name := period_type_names @ Daily
 			from
 				l := period_types_in_order
 				i := 1
 				l.start
+				if not trading_period_type.intraday then
+					-- Skip over intraday period names.
+					from
+					until
+						l.item.name.is_equal (daily_name)
+					loop
+						l.forth
+					end
+					stop_name := ""
+				else
+					stop_name := daily_name
+				end
 			until
-				l.exhausted
+				l.exhausted or l.item.name.is_equal (stop_name)
 			loop
 				if
 					period_types.has (l.item.name)
@@ -171,6 +185,17 @@ feature -- Status report
 			end
 		end
 
+	valid_period_type (t: TIME_PERIOD_TYPE): BOOLEAN is
+			-- Is `t' a valid period type for this tradable?
+		do
+			if trading_period_type.intraday then
+				Result := t.intraday and
+					t.duration >= trading_period_type.duration
+			else
+				Result := not t.intraday
+			end
+		end
+
 feature -- Status setting
 
 	set_target_period_type (arg: TIME_PERIOD_TYPE) is
@@ -178,7 +203,7 @@ feature -- Status setting
 			-- that their inner input value is set to tuple_list (arg.name).
 		require
 			arg_not_void: arg /= Void
-			target_type_valid: tuple_list_names.has (arg.name)
+			arg_valid: valid_period_type (arg)
 		do
 			target_period_type := arg
 			from
