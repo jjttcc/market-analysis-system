@@ -56,6 +56,11 @@ public class DataSet {
 		_drawer.set_dates(d);
 	}
 
+	public void set_times (String t[]) {
+		times = t;
+//??? _drawer.set_times(d);
+	}
+
 	public Drawer drawer() { return _drawer; }
 
 	// Do dates need to be drawn?
@@ -229,7 +234,14 @@ public class DataSet {
 	* @param bounds The data window to draw into
 	*/
 	public void draw_data(Graphics g, Rectangle bounds) {
+		boolean restore_bounds = false;
 		if (! range_set) range();
+		if (bounds.x == 0) {
+			// Create frame boundary.
+			bounds.x += 4;
+			bounds.width -= 4;
+			restore_bounds = true;
+		}
 		if ( linecolor != null) g.setColor(linecolor);
 		_drawer.set_data(data);
 		_drawer.set_xaxis(xaxis_);
@@ -238,7 +250,11 @@ public class DataSet {
 		_drawer.set_ranges(xrange, yrange);
 		_drawer.set_clipping(clipping);
 		_drawer.draw_data(g, bounds, hline_data, vline_data, color_);
-		if (_dates_needed) draw_dates(g,bounds);
+		if (_dates_needed) draw_dates(g, bounds);
+		if (restore_bounds) {
+			bounds.x -= 4;
+			bounds.width += 4;
+		}
 	}
 
 	/**
@@ -381,6 +397,9 @@ public class DataSet {
 
 	// Date data
 	private String[] dates;
+
+	// Time data
+	private String[] times;
 
 	// Color data is to be drawn in - can be null
 	private Color color_;
