@@ -103,7 +103,7 @@ start_cl_client_command	<cwdir>[<bin_dir>]<macl-shell> macl -h <hostname> <portn
 
 # Command to start the charting application
 chart_command	<cwdir>[<chart_dir>]java -cp "<java_path>" \
-MA_Client <hostname> <portnumber> >/tmp/errs 2>&1
+MA_Client <hostname> <portnumber>
 
 # Command to terminate the server
 termination_command	<terminate_server>
