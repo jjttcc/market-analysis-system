@@ -9,7 +9,7 @@ indexing
 
 class N_RECORD_FUNCTION_PARAMETER inherit
 
-	FUNCTION_PARAMETER
+	FUNCTION_PARAMETER_WITH_FUNCTION
 		redefine
 			function
 		end

@@ -96,27 +96,24 @@ feature -- Access
 			end
 		end
 
-	parameters: LIST [FUNCTION_PARAMETER] is
+	main_parameters: LINKED_LIST [FUNCTION_PARAMETER] is
 		local
 			parameter_set: LINKED_SET [FUNCTION_PARAMETER]
 		do
-			if parameter_list = Void then
-				create parameter_list.make
-				create parameter_set.make
-				if immediate_parameters /= Void then
-					parameter_set.fill (immediate_parameters)
-				end
-				from inputs.start until inputs.exhausted loop
-					check
-						input_parameters_not_void:
-							inputs.item.parameters /= Void
-					end
-					parameter_set.fill (inputs.item.parameters)
-					inputs.forth
-				end
-				parameter_list.append (parameter_set)
+			create Result.make
+			create parameter_set.make
+			if immediate_parameters /= Void then
+				parameter_set.fill (immediate_parameters)
 			end
-			Result := parameter_list
+			from inputs.start until inputs.exhausted loop
+				check
+					input_parameters_not_void:
+						inputs.item.parameters /= Void
+				end
+				parameter_set.fill (inputs.item.parameters)
+				inputs.forth
+			end
+			Result.append (parameter_set)
 		end
 
 	children: LIST [MARKET_FUNCTION] is

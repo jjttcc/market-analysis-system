@@ -9,7 +9,7 @@ indexing
 
 class START_Y_FUNCTION_PARAMETER inherit
 
-	FUNCTION_PARAMETER
+	FUNCTION_PARAMETER_WITH_FUNCTION
 		redefine
 			function
 		end

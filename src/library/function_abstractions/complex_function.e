@@ -44,6 +44,15 @@ feature -- Access
 			at_least_one: Result /= Void and then Result.count >= 1
 		end
 
+	parameters: LIST [FUNCTION_PARAMETER] is
+		do
+			if parameter_list = Void then
+				parameter_list := main_parameters
+				parameter_list.append (command_parameters)
+			end
+			Result := parameter_list
+		end
+
 feature -- Status report
 
 	operator_used: BOOLEAN is
@@ -120,6 +129,8 @@ feature {NONE} -- Implementation
 	immediate_parameters: LIST [FUNCTION_PARAMETER] is
 --!!!!NOTE: This feature is not redefined in several descendants.  Since
 --it is a once function, that could be a problem (bug).  Check it out.
+--NOTE2: A brief review leads me to suspect there is no problem; but
+--it should be checked out more thoroughly before deleting this warning.
 		once
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 		end
@@ -132,6 +143,34 @@ feature {NONE} -- Implementation
 			create {LINKED_LIST [COMMAND]} Result.make
 			Result.extend (op)
 			Result.append (op.descendants)
+		end
+
+	command_parameters: LIST [FUNCTION_PARAMETER] is
+		local
+			ops: LIST [COMMAND]
+		do
+			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
+			if operators /= Void then
+				from
+					ops := operators
+					ops.start
+				until
+					ops.exhausted
+				loop
+					if ops.item.is_editable then
+						ops.item.prepare_for_editing (Result)
+					end
+					ops.forth
+				end
+			end
+		ensure
+			result_exists: Result /= Void
+		end
+
+	main_parameters: LINKED_LIST [FUNCTION_PARAMETER] is
+		deferred
+		ensure
+			result_exists: Result /= Void
 		end
 
 invariant

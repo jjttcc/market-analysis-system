@@ -10,6 +10,14 @@ indexing
 class CONSTANT inherit
 
 	NUMERIC_COMMAND
+		redefine
+			is_editable, prepare_for_editing, name
+		end
+
+	FUNCTION_PARAMETER
+		export
+			{NONE} all
+		end
 
 creation
 
@@ -24,17 +32,21 @@ feature
 			set: rabs (value - r) < epsilon
 		end
 
-feature -- Basic operations
+feature -- Access
 
-	execute (arg: ANY) is
+	name: STRING is
 		do
-		ensure then
-			value = old value
+			Result := "{" + Precursor + "}"
+			if Result.is_empty then
+				Result := "{Constant}"
+			end
 		end
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is false
+	arg_mandatory: BOOLEAN is False
+
+	is_editable: BOOLEAN is True
 
 feature -- Status setting
 
@@ -46,6 +58,43 @@ feature -- Status setting
 			value := arg
 		ensure
 			value_set: rabs (value - arg) < epsilon
+		end
+
+feature -- Basic operations
+
+	execute (arg: ANY) is
+		do
+		ensure then
+			value = old value
+		end
+
+	prepare_for_editing (l: LIST [FUNCTION_PARAMETER]) is
+		do
+			l.extend (Current)
+		end
+
+feature {NONE} -- FUNCTION_PARAMETER interface
+
+	valid_value (v: STRING): BOOLEAN is
+		do
+			Result := v /= Void and v.is_real
+		end
+
+	current_value: STRING is
+		do
+			Result := value.out
+		end
+
+	current_value_equals (v: STRING): BOOLEAN is
+		do
+			Result := valid_value (v) and then value - v.to_real < Epsilon
+		end
+
+	value_type_description: STRING is "constant real value"
+
+	change_value (new_value: STRING) is
+		do
+			set_value (new_value.to_real)
 		end
 
 end -- class CONSTANT

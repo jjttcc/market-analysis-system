@@ -12,7 +12,7 @@ class MARKET_DATA_FUNCTION inherit
 
 	COMPLEX_FUNCTION
 		redefine
-			set_innermost_input, output, operator_used, process
+			set_innermost_input, output, operator_used, process, parameters
 		end
 
 creation {FACTORY, MARKET_FUNCTION_EDITOR}
@@ -44,7 +44,7 @@ feature -- Access
 			Result.append (input.full_description)
 		end
 
-	parameters: LIST [FUNCTION_PARAMETER] is
+	parameters, main_parameters: LINKED_LIST [FUNCTION_PARAMETER] is
 			-- Empty list - no parameters
 		once
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
@@ -66,12 +66,12 @@ feature -- Status report
 
 	processed: BOOLEAN is
 		do
-			Result := true
+			Result := True
 		end
 
-	operator_used: BOOLEAN is false
+	operator_used: BOOLEAN is False
 
-	has_children: BOOLEAN is true
+	has_children: BOOLEAN is True
 
 feature -- Basic operations
 

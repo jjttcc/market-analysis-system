@@ -70,26 +70,23 @@ feature -- Access
 			Result.append (input2.full_description)
 		end
 
-	parameters: LIST [FUNCTION_PARAMETER] is
+	main_parameters: LINKED_LIST [FUNCTION_PARAMETER] is
 		local
 			parameter_set: LINKED_SET [FUNCTION_PARAMETER]
 		do
-			if parameter_list = Void then
-				create parameter_list.make
-				create parameter_set.make
-				if immediate_parameters /= Void then
-					parameter_set.fill (immediate_parameters)
-				end
-				check
-					input_parameters_not_void:
-						input1.parameters /= Void and
-						input2.parameters /= Void
-				end
-				parameter_set.fill (input1.parameters)
-				parameter_set.fill (input2.parameters)
-				parameter_list.append (parameter_set)
+			create Result.make
+			create parameter_set.make
+			if immediate_parameters /= Void then
+				parameter_set.fill (immediate_parameters)
 			end
-			Result := parameter_list
+			check
+				input_parameters_not_void:
+					input1.parameters /= Void and
+					input2.parameters /= Void
+			end
+			parameter_set.fill (input1.parameters)
+			parameter_set.fill (input2.parameters)
+			Result.append (parameter_set)
 		end
 
 	children: LIST [MARKET_FUNCTION] is

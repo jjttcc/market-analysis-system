@@ -10,9 +10,6 @@ indexing
 class INTEGER_FUNCTION_PARAMETER inherit
 
 	FUNCTION_PARAMETER
-		rename
-			make as fp_make
-		end
 
 creation {MARKET_FUNCTION, MARKET_FUNCTION_EDITOR}
 
@@ -20,14 +17,13 @@ creation {MARKET_FUNCTION, MARKET_FUNCTION_EDITOR}
 
 feature {NONE} -- Initialization
 
-	make (f: MARKET_FUNCTION; v: INTEGER) is
+	make (v: INTEGER) is
 		require
-			valid_args: f /= Void and v > 0
+			valid_args: v > 0
 		do
-			fp_make (f)
 			value := v
 		ensure
-			set: function = f and value = v
+			set: value = v
 		end
 
 feature -- Access

@@ -14,19 +14,7 @@ deferred class FUNCTION_PARAMETER inherit
 
 feature {NONE} -- Initialization
 
-	make (f: MARKET_FUNCTION) is
-		require
-			not_void: f /= Void
-		do
-			function := f
-		ensure
-			set: function = f and function /= Void
-		end
-
 feature -- Access
-
-	function: MARKET_FUNCTION
-			-- The function that this parameter applies to
 
 	current_value: STRING is
 			-- Current value of the parameter
@@ -39,9 +27,10 @@ feature -- Access
 		end
 
 	description: STRING is
-			-- `name' + " - " + `function.name'
+			-- `name'
+--!!!Is more needed?
 		do
-			Result := name + " - " + function.name
+			Result := name
 		end
 
 	value_type_description: STRING is
@@ -57,7 +46,7 @@ feature -- Access
 
 feature -- Comparison
 
-	infix "<" (other: like Current): BOOLEAN is
+	infix "<" (other: FUNCTION_PARAMETER): BOOLEAN is
 		do
 			Result := description < other.description
 		end
@@ -79,9 +68,5 @@ feature -- Basic operations
 			-- Is `i' a valid value for this parameter?
 		deferred
 		end
-
-invariant
-
-	function_not_void: function /= Void
 
 end -- class FUNCTION_PARAMETER

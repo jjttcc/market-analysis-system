@@ -479,8 +479,7 @@ feature {NONE} -- Hard-coded market function building procedures
 				l.extend (f)
 			end
 			create Result.make (agents.Standard_deviation_key, Void, l)
-			Result.add_parameter (create {INTEGER_FUNCTION_PARAMETER}.make (
-				Result, 5))
+			Result.add_parameter (create {INTEGER_FUNCTION_PARAMETER}.make (5))
 			Result.set_name (name)
 		end
 
@@ -557,8 +556,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			agents: expanded MARKET_AGENTS
 		do
 			create Result.make (agents.Sma_key, Void, Void)
-			Result.add_parameter (create {INTEGER_FUNCTION_PARAMETER}.make (
-				Result, 13))
+			Result.add_parameter (create{INTEGER_FUNCTION_PARAMETER}.make (13))
 			Result.set_name (name)
 		end
 
