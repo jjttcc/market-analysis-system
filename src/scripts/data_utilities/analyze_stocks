@@ -1,10 +1,10 @@
 #!/bin/bash
 # Run analysis of stocks for buy/sell report.
-# To run this script, you will need to have "java" and "mas" in your path
+# To run this script, you will need to have "python" and "mas" in your path
 # and you will need to set the following environment variables:
 #    MARKET_DATA_DIRECTORY - directory where the stock data files reside
 #    MAS_DIRECTORY - directory where MAS configuration files reside
-#    MAS_CLIENT_DIR - directory where the MAS client resides
+#    MAS_ARGS - command-line arguments needed to run MAS
 
 Progname=$(basename $0)
 files=
@@ -26,7 +26,7 @@ cl_client() {
 }
 
 start_server() {
-	mas $portnumber -background -o -f , $*
+	mas $portnumber -background $MAS_ARGS $*
 }
 
 setup() {
@@ -40,12 +40,11 @@ setup() {
 			"is not set"
 		exit -3
 	fi
-#!!!Remove this check - it's not needed anymore:
-#	if [ -z "$MAS_CLIENT_DIR" ]; then
-#		echo "$Progname: Fatal error: env. var. MAS_CLIENT_DIR " \
-#			"is not set"
-#		exit -4
-#	fi
+	if [ -z "$MAS_ARGS" ]; then
+		echo "$Progname: Fatal error: env. var. MAS_ARGS " \
+			"is not set"
+		exit -3
+	fi
 	portnumber=29535
 	cd $MARKET_DATA_DIRECTORY
 }
