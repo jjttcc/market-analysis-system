@@ -55,8 +55,8 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 		local
 			l: ARRAYED_LIST [MARKET_FUNCTION]
 		once
-			!!Result.make (0)
-			!!l.make (8)
+			create Result.make (0)
+			create l.make (8)
 			Result.extend (l, Market_function)
 			l.extend (function_with_generator ("TWO_VARIABLE_FUNCTION"))
 			l.extend (function_with_generator ("ONE_VARIABLE_FUNCTION"))
@@ -68,7 +68,7 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			l.extend (function_with_generator ("MARKET_FUNCTION_LINE"))
 			l.extend (function_with_generator ("MARKET_DATA_FUNCTION"))
 			l.extend (function_with_generator ("STOCK"))
-			!!l.make (6)
+			create l.make (6)
 			Result.extend (l, Complex_function)
 			l.extend (function_with_generator ("TWO_VARIABLE_FUNCTION"))
 			l.extend (function_with_generator ("ONE_VARIABLE_FUNCTION"))
@@ -92,10 +92,10 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			l: LINKED_LIST [MARKET_FUNCTION]
 			i: INTEGER
 		do
-			!!l.make
+			create l.make
 			l.append (function_library)
 			l.extend (function_with_generator ("STOCK"))
-			!!fnames.make (1)
+			create fnames.make (1)
 			from
 				l.start
 			until
@@ -125,7 +125,7 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			-- Select objects from function_library that conform to
 			-- COMPLEX_FUNCTION and insert them into l.
 			from
-				!LINKED_LIST [COMPLEX_FUNCTION]!l.make
+				create {LINKED_LIST [COMPLEX_FUNCTION]} l.make
 				function_library.start
 			until
 				function_library.exhausted
@@ -136,7 +136,7 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 				end
 				function_library.forth
 			end
-			!!fnames.make (l.count)
+			create fnames.make (l.count)
 			from
 				l.start
 			until
@@ -246,7 +246,7 @@ feature {NONE} -- Implementation
 		local
 			name: STRING
 		once
-			!!Result.make (0)
+			create Result.make (0)
 			name := "ONE_VARIABLE_FUNCTION"
 			check
 				valid_name: function_names.has (name)
@@ -308,12 +308,12 @@ feature {NONE} -- Implementation
 
 	name_needed: BOOLEAN is true
 
-	set_new_name (o: MARKET_FUNCTION; msg: STRING) is
+	set_new_name (o: COMPLEX_FUNCTION; msg: STRING) is
 		local
 			spiel: ARRAYED_LIST [STRING]
 			fnames: LIST [STRING]
 		do
-			!!spiel.make (0)
+			create spiel.make (0)
 			from
 				fnames := function_library_names
 				fnames.start
