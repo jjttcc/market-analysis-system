@@ -72,4 +72,8 @@ feature -- Element change
 			caching_off: caching_on = False
 		end
 
+invariant
+
+	dates_exist: start_dates /= Void and end_dates /= Void
+
 end -- class MAS_SESSION
