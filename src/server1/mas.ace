@@ -166,6 +166,8 @@ cluster
 
 	data_scanning_input (eiflib_data_scanning ):	"$/input_mechanisms"
 
+	eiflib_value_setters (eiffel_components): 	"$/data_scanning/value_setters"
+
 	operators (eiffel_components):		"$/commands/operators"
 
 	event_library (eiffel_components):		"$/events"
