@@ -127,6 +127,48 @@ Administration and Setup
 </A>
 </h3>
 <P><B>
+I installed MAS and when I try to run it, I get the following error [or
+something similar]: 
+<P>
+<I>
+mas: error while loading shared libraries: libodbc.so.1: cannot open
+shared object file: No such file or directory
+</I>
+<P></B>
+The cause of this error is that the shared library file <I>libodbc.so.1</I>
+is not where MAS expects it to be.  (Usually it's in /usr/lib.)
+Unless you're using an old Linux distribution, there's a very good
+chance that this file is included in the distribution, but you probably
+did not install the package that includes the file.  So the first thing
+to do is to start up your distribution's package install program, look
+for the package that contains the <I>libodbc.so.1</I> file, and install it.
+(Note: Since libodbc is an ODBC library used with database systems,
+you're likely to find it in a database-related package.  For example,
+one Redhat 8.0 user apparently found it in the "databases" package.)
+<P>
+If you can't find the file in your distribution, you can try searching
+for it on the web.
+google.com may work for this purpose, but a better solution is probably
+<A href="http://rpmfind.net/">
+rpmfind
+</A>
+(and search for "<I>libodbc.so</I>" or "<I>libodbc.so.1</I>").
+Chances are good that you will be able to find a <I>libodbc.so.1</I> that
+works with your system, but if not, one last thing to try is to use the
+<I>libodbc.so.1</I> file that comes with the MAS installation.
+Once you find that file (by default, the rpm installation puts it in
+/opt/mas/lib), you need to log in as root and do the following:
+<P><I>
+ln -s /opt/mas/lib/libodbc.so.1 /usr/lib
+<P></I>
+(Substitute /opt/mas/lib/<I>libodbc.so.1</I> with the path for this file
+on your system.)
+If MAS still gives an error about <I>libodbc.so.1</I>, then the version
+of the file that came with MAS is probably not compatible with your system.
+The only fix is to find a version that is compatible with your system
+and install it.
+<P>
+<P><B>
 I'm running into problems with MAS not using the new mailer I've set up -
 it is still trying to use elm.  I have set the MAS_MAILER variable:
 MAS_MAILER=/home/masuser/masconfig/masfilter.
@@ -462,7 +504,21 @@ the GUI to make it easy to add a new indicator.
 Database Problems
 </A>
 </h3>
-<B>
+<P><B>
+I installed MAS and when I try to run it, I get the following error [or
+something similar]: 
+<P>
+<I>
+mas: error while loading shared libraries: libodbc.so.1: cannot open
+shared object file: No such file or directory
+</I>
+<P></B>
+See
+<A href="#administration">
+Administration and Setup
+</A>
+for the solution to this problem.
+<P><B>
 I get this error when I start MAS using my odbc database connection: 
 "Error occurred retrieving non-intraday period types for a" (a being
 the first stock symbol on my list).
