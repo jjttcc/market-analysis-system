@@ -55,8 +55,6 @@ feature -- Access
 feature {NONE} -- Implementation - initialization
 
 	create_contents (rows: LIST [LIST [STRING]]) is
-		local
-			wbldr: expanded WIDGET_BUILDER
 		do
 			-- Avoid flicker on some platforms.
 			lock_update
