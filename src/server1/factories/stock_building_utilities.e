@@ -36,7 +36,8 @@ feature {NONE}
 			i, last_sep_index: INTEGER
 		do
 			--!!!For now, set the name and symbol to `symbol'.
-			!!product.make (symbol, time_period_type)
+			--!!!Void stock splits for now.
+			!!product.make (symbol, time_period_type, Void)
 			product.set_name (symbol)
 		end
 
