@@ -6,7 +6,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-deferred class TREE_EDITING_INTERFACE [G] inherit
+deferred class OBJECT_EDITING_INTERFACE [G] inherit
 
 	EDITING_INTERFACE
 
@@ -217,4 +217,4 @@ feature -- Implementation - options
 		deferred
 		end
 
-end -- TREE_EDITING_INTERFACE
+end -- OBJECT_EDITING_INTERFACE

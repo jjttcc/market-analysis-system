@@ -13,7 +13,7 @@ deferred class FUNCTION_EDITING_INTERFACE inherit
 			{NONE} all
 		end
 
-	TREE_EDITING_INTERFACE [MARKET_FUNCTION]
+	OBJECT_EDITING_INTERFACE [MARKET_FUNCTION]
 		rename
 			object_selection as function_selection,
 			object_types as function_types,

@@ -50,7 +50,7 @@ feature -- Access
 	current_period_type: TIME_PERIOD_TYPE
 			-- Current data period type to be processed
 
-	event_generator_builder: MARKET_EVENT_GENERATOR_BUILDER
+	event_generator_builder: CL_BASED_MEG_EDITOR
 
 feature -- Status setting
 

@@ -13,7 +13,7 @@ deferred class COMMAND_EDITING_INTERFACE inherit
 			{NONE} all
 		end
 
-	TREE_EDITING_INTERFACE [COMMAND]
+	OBJECT_EDITING_INTERFACE [COMMAND]
 		rename
 			object_selection_from_type as command_selection_from_type,
 			object_types as command_types,
