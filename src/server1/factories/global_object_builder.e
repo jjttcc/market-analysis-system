@@ -15,8 +15,8 @@ class FACTORY_BUILDER inherit
 		end
 
 	GLOBAL_APPLICATION
-		export {NONE}
-			all
+		export
+			{NONE} all
 		end
 
 	GLOBAL_SERVICES
@@ -50,6 +50,20 @@ feature -- Access
 	event_coordinator: MARKET_EVENT_COORDINATOR
 			-- Object in charge of event generation and dispatch
 
+	dispatcher: EVENT_DISPATCHER
+			-- Event dispatcher used in market event analysis
+
+feature -- Basic operations
+
+	make_dispatcher is
+			-- Create `dispatcher' with the current event registrants.
+		do
+			create dispatcher.make
+			register_event_registrants
+		ensure
+			dispatcher_created: dispatcher /= Void
+		end
+
 feature {NONE}
 
 	set_up is
@@ -66,20 +80,19 @@ feature {NONE}
 
 	build_components is
 		local
-			dispatcher: EVENT_DISPATCHER
 			list_builder: TRADABLE_LIST_BUILDER
 		do
 			create list_builder.make (function_library)
 			list_builder.execute
 			market_list_handler := list_builder.product
-			create dispatcher.make
-			register_event_registrants (dispatcher)
 			create {MARKET_EVENT_COORDINATOR} event_coordinator.make (
-				active_event_generators, market_list_handler, dispatcher)
+				market_list_handler)
 		end
 
-	register_event_registrants (dispatcher: EVENT_DISPATCHER) is
+	register_event_registrants is
 			-- Register global `market_event_registrants' to `dispatcher'
+		require
+			dispatcher_not_void: dispatcher /= Void
 		do
 			from
 				market_event_registrants.start
