@@ -167,24 +167,19 @@ static void set_field_separator(struct input_sequence_handle* handle) {
 /* Initialize the fs_char_table_contents and set fs_char_table to point to
  * it.
 */
-/**!!!NOTE: Need to document in user documentation that any of the field
- * separators used below can be used in the input and that the FS will
- * be determined automatically, and that it's an error if the field
- * separator in the input is not one of these characters. */
 void initialize_fs_char_table() {
-	char* fschars = ",\t;\a!@$%^&|";
-	int fscount = strlen(fschars);
+	int fscount = strlen(Field_separator_characters);
 	int i;
 	/* Set all members of fs_char_table_contents whose index is a member
-	 * of fschars to true - all other members have been initialized
-	 * to false. */
+	 * of Field_separator_characters to true - all other members have
+	 * been initialized to false. */
 	for (i = 0; i < fscount; ++i) {
-		fs_char_table_contents[(int) fschars[i]] = 1;
+		fs_char_table_contents[(int) Field_separator_characters[i]] = 1;
 	}
 	fs_char_table = fs_char_table_contents;
 }
 
-void start_implementation(struct input_sequence_handle* handle,
+void retrieve_data(struct input_sequence_handle* handle,
 		char* symbol, int is_intraday) {
 	handle->error_occurred = 0;
 	if (fs_char_table == 0) {
@@ -198,6 +193,10 @@ void start_implementation(struct input_sequence_handle* handle,
 	}
 	handle->current_index = 0;
 	set_field_separator(handle);
+}
+
+void start_implementation(struct input_sequence_handle* handle) {
+	handle->current_index = 0;
 }
 
 char* available_symbols(struct input_sequence_handle* handle) {
@@ -227,7 +226,7 @@ void make_available_symbols(struct input_sequence_handle* handle) {
 
 int intraday_data_available_implementation(
 		struct input_sequence_handle* handle) {
-/**!!!Stub */
+/**!!!Stub - intraday data is to be implemented in a future release. */
 	return 0;
 }
 
