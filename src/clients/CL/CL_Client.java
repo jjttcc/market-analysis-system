@@ -18,7 +18,7 @@ public class CL_Client
 			hname = args[0];
 			if (args.length > 1)
 			{
-				port_number.parseInt (args[1]);
+				port_number = new Integer(port_number.parseInt(args[1]));
 			}
 		}
 
