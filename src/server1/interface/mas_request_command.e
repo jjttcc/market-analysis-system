@@ -1,7 +1,7 @@
 indexing
 	description: "A command that responds to a GUI client data request"
 	status:
-		"Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+		"Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -97,11 +97,11 @@ feature {NONE}
 			print_list (<<OK.out, "%T">>)
 		end
 
-	report_error (slist: ARRAY [ANY]) is
-			-- Report `s' as an error message; include Error ID at the
+	report_error (code: INTEGER; slist: ARRAY [ANY]) is
+			-- Report `s' as an error message; include `code' ID at the
 			-- beginning and `eom' at the end.
 		do
-			print_list (<<Error.out, "%T">>)
+			print_list (<<code.out, "%T">>)
 			print_list (slist)
 			print (eom)
 		end
