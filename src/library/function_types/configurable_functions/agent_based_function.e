@@ -211,7 +211,6 @@ feature {MARKET_FUNCTION_EDITOR}
 
 	reset_parameters is
 		do
-			parameter_list := Void
 			inputs.do_all (agent reset_market_function_parameters)
 		end
 
@@ -219,8 +218,6 @@ feature {MARKET_FUNCTION_EDITOR}
 			-- Add `p' to `parameters'.
 		do
 			immediate_direct_parameters.extend (p)
-			-- Force `parameters' to recreate `parameter_list':
-			parameter_list := Void
 		end
 
 	set_operator_needs_initializing (arg: BOOLEAN) is

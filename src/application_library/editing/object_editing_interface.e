@@ -118,10 +118,10 @@ feature {NONE} -- Implementation
 			create {LINKED_SET [G]} tree_objects.make
 			tree_objects.fill (valid_types (current_objects, objects))
 			create tree_names.make (tree_objects.count)
-			tree_objects.do_all (agent add_selection_tag (tree_names, ?))
+			tree_objects.do_all (agent add_selection_tag (tree_names, ?, True))
 			distinguish_duplicates (tree_names)
 			create obj_names.make (objects.count)
-			objects.do_all (agent add_selection_tag (obj_names, ?))
+			objects.do_all (agent add_selection_tag (obj_names, ?, False))
 			if tree_names.is_empty then
 				general_msg := concatenation (<<
 							"Select an object for the ", tag, ":%N">>)
@@ -266,13 +266,17 @@ feature {NONE} -- Implementation
 
 	current_object_list: LIST [G]
 
-	add_selection_tag (taglist: SEQUENCE [STRING]; o: G) is
+	add_selection_tag (taglist: SEQUENCE [STRING]; o: G; with_name: BOOLEAN) is
 			-- Extract relevant information from `o' and add it to
-			-- `taglist'.
+			-- `taglist'.  If `with_name', include `o's name.
 		require
 			args_exist: taglist /= Void and o /= Void
 		do
-			taglist.extend (o.generator + name_for (o))
+			if with_name then
+				taglist.extend (o.generator + name_for (o))
+			else
+				taglist.extend (o.generator)
+			end
 		end
 
 feature {NONE} -- Implementation - hook methods

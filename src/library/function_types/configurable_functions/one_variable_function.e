@@ -175,17 +175,14 @@ feature {MARKET_FUNCTION_EDITOR}
 		do
 			input := in
 			set (input.output)
-			parameter_list := Void
 			processed_date_time := Void
 		ensure
 			input_set_to_in: input = in
-			parameter_list_void: parameter_list = Void
 			not_processed: not processed
 		end
 
 	reset_parameters is
 		do
-			parameter_list := Void
 			input.reset_parameters
 		end
 

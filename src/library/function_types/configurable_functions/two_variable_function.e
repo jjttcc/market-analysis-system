@@ -173,7 +173,6 @@ feature {MARKET_FUNCTION_EDITOR}
 		ensure
 			input_set: input1 = in and input1 /= Void
 			target_set: target1 = in.output
-			parameter_list_void: parameter_list = Void
 			not_processed: not processed
 		end
 
@@ -190,7 +189,6 @@ feature {MARKET_FUNCTION_EDITOR}
 		ensure
 			input_set: input2 = in and input2 /= Void
 			target_set: target2 = in.output
-			parameter_list_void: parameter_list = Void
 			not_processed: not processed
 		end
 
@@ -210,13 +208,11 @@ feature {MARKET_FUNCTION_EDITOR}
 			input_set: input1 = in1 and input1 /= Void and
 				input2 = in2 and input2 /= Void
 			target_set: target1 = in1.output and target2 = in2.output
-			parameter_list_void: parameter_list = Void
 			not_processed: not processed
 		end
 
 	reset_parameters is
 		do
-			parameter_list := Void
 			input1.reset_parameters
 			input2.reset_parameters
 		end
@@ -231,7 +227,6 @@ feature {NONE} -- Implementation
 		do
 			input1 := in
 			set1 (in.output)
-			parameter_list := Void
 			processed_date_time := Void
 		end
 
@@ -239,7 +234,6 @@ feature {NONE} -- Implementation
 		do
 			input2 := in
 			set2 (in.output)
-			parameter_list := Void
 			processed_date_time := Void
 		end
 

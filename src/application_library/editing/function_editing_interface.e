@@ -867,17 +867,19 @@ feature {NONE} -- Implementation - indicator editing
 			has_children_to_edit, has_immediate_parameters: BOOLEAN
 			children: LIST [MARKET_FUNCTION]
 			quit: BOOLEAN
+			parameters: LIST [FUNCTION_PARAMETER]
 		do
 			children := editable_children (i)
 			has_children_to_edit := not children.is_empty
 			has_immediate_parameters := not i.immediate_parameters.is_empty
-			if i.parameters.is_empty then
+			parameters := i.parameters
+			if parameters.is_empty then
 				show_message (concatenation (<<"Indicator ", i.name,
 					" has no editable parameters.">>))
 			elseif
-				i.parameters.count = 1 or not duplicates (i.parameters)
+				parameters.count = 1 or not duplicates (parameters)
 			then
-				edit_parameter_menu (i.parameters, i.name)
+				edit_parameter_menu (parameters, i.name)
 			elseif not has_children_to_edit and has_immediate_parameters then
 				edit_parameter_menu (i.immediate_parameters, i.name)
 			elseif has_children_to_edit and not has_immediate_parameters then

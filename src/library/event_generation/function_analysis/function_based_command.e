@@ -1,6 +1,9 @@
 indexing
 	description: "A linear command that gets its input from a MARKET_FUNCTION"
-	note: "This class is used only by ONE_VARIABLE_FUNCTION_ANALYZER."
+	note: "@@This class has recently been modified to be used for indicators %
+		%in addition to its original use by ONE_VARIABLE_FUNCTION_ANALYZER.%
+		%Although this new functionality has been tested successfully, it %
+		%has not yet been tested thoroughly."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -17,7 +20,8 @@ class FUNCTION_BASED_COMMAND inherit
 		undefine
 			start
 		redefine
-			initialize, execute, target_cursor_not_affected
+			initialize, execute, target_cursor_not_affected,
+			prepare_for_editing, is_editable
 		end
 	
 	ONE_VARIABLE_LINEAR_ANALYZER
@@ -102,6 +106,11 @@ feature -- Status report
 
 	target_cursor_not_affected: BOOLEAN
 
+	is_editable: BOOLEAN is
+		once
+			Result := True
+		end
+
 feature -- Status setting
 
 	set_input (arg: like input) is
@@ -139,6 +148,11 @@ feature -- Basic operations
 			else
 				target_cursor_not_affected := not function_based
 			end
+		end
+
+	prepare_for_editing (l: LIST [FUNCTION_PARAMETER]) is
+		do
+			input.parameters.do_all (agent l.extend)
 		end
 
 feature {NONE} -- Implementation

@@ -37,11 +37,8 @@ feature -- Access
 
 	parameters: LIST [FUNCTION_PARAMETER] is
 		do
-			if parameter_list = Void then
-				parameter_list := clone (direct_parameters)
-				parameter_list.append (operator_parameters)
-			end
-			Result := parameter_list
+			Result := clone (direct_parameters)
+			Result.append (operator_parameters)
 		end
 
 feature -- Status report
@@ -74,13 +71,8 @@ feature {MARKET_FUNCTION_EDITOR} -- Status setting
 			not_void: op /= Void
 		do
 			operator := op
-			-- Force `parameters', the next time it is called, to recreate
-			-- `parameter_list' - Needed because this new operator may
-			-- produce more parameters.
-			parameter_list := Void
 		ensure
 			op_set: operator = op and operator /= Void
-			parameter_list_void: parameter_list = Void
 		end
 
 feature {NONE} -- Hook methods
@@ -119,8 +111,6 @@ feature {MARKET_FUNCTION} -- Status report
 	is_complex: BOOLEAN is True
 
 feature {NONE} -- Implementation
-
-	parameter_list: LINKED_LIST [FUNCTION_PARAMETER]
 
 	immediate_operators: LIST [COMMAND] is
 		do
