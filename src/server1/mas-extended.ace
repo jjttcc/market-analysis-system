@@ -10,6 +10,8 @@ default
 	assertion (ensure)
 	assertion (loop)
 	assertion (invariant)
+	arguments ("-p 8888 -b")
+	arguments ("-p 8888")
 	arguments ("-p 2345 1234")
 	arguments ("-p")
 	arguments ("-o -p")
