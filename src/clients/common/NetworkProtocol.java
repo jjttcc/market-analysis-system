@@ -21,6 +21,7 @@ public interface NetworkProtocol
 	int Error = 101;
 	int OK = 102;
 	int Invalid_symbol = 103;
+	int Warning = 104;
 
 	// Server response strings
 	String No_open_session_state = "no_open";
