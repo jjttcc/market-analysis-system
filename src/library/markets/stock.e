@@ -6,8 +6,6 @@ indexing
 class STOCK inherit
 
 	TRADABLE [VOLUME_TUPLE]
-		rename
-			make as arrayed_list_make
 		redefine
 			symbol, make_ctf
 		end

@@ -9,7 +9,7 @@ class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 
 	SIMPLE_FUNCTION [G]
 		rename
-			output as data
+			output as data, make as sf_make
 		end
 
 	MATH_CONSTANTS
@@ -167,7 +167,7 @@ feature {NONE} -- Initialization
 			!LINKED_LIST [MARKET_FUNCTION]!indicators.make
 			!!indicator_groups.make (0)
 			!!composite_tuple_lists.make (0)
-			trading_period_type := type
+			sf_make (type)
 			initialize_composite_lists
 		ensure
 			containers_not_void:
