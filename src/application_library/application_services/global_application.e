@@ -192,6 +192,56 @@ feature -- Access
 			register_for_termination (reg_list)
 		end
 
+	meg_names: ARRAYED_LIST [STRING] is
+			-- Names of all elements of `market_event_generation_library',
+			-- in the same order
+		local
+			meg_library: LIST [MARKET_EVENT_GENERATOR]
+		do
+			meg_library := market_event_generation_library
+			from
+				!!Result.make (meg_library.count)
+				meg_library.start
+			until
+				meg_library.exhausted
+			loop
+				Result.extend (
+					meg_library.item.event_type.name)
+				meg_library.forth
+			end
+		end
+
+	function_names: ARRAYED_LIST [STRING] is
+			-- Names of all elements of `function_library', in the same order
+		do
+			!!Result.make (function_library.count)
+			from
+				function_library.start
+			until
+				function_library.after
+			loop
+				Result.extend (function_library.item.name)
+				function_library.forth
+			end
+		end
+
+	event_type_names: ARRAYED_LIST [STRING] is
+			-- Names of all elements of `event_types', in the same order
+		local
+			etypes: LINEAR [EVENT_TYPE]
+		do
+			!!Result.make (event_types.count)
+			etypes := event_types.linear_representation
+			from
+				etypes.start
+			until
+				etypes.exhausted
+			loop
+				Result.extend (etypes.item.name)
+				etypes.forth
+			end
+	end
+
 feature -- Constants
 
 	default_input_file_name: STRING is "/tmp/tatest"
