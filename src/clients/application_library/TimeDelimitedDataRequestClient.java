@@ -20,6 +20,12 @@ public interface TimeDelimitedDataRequestClient {
 	// the current time
 	public Calendar end_date();
 
+// Status report
+
+	// Is this process exiting (because of a "quit" command from the user or
+	// a fatal error)?
+	public boolean is_exiting();
+
 // Basic operations
 
 	// Notify the client (this) that its associated data sets have been
