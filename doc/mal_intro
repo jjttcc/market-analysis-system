@@ -16,8 +16,8 @@ applications, such as the two examples above, with minimal effort.
 This goal has been accomplished by fulfilling the following requirements:
 
     - Provide a well-designed set of object-oriented components that
-	  can be used to create powerful and flexible technical analysis
-	  applications.
+      can be used to create powerful and flexible technical analysis
+      applications.
 
     - Provide, by means of its status as free software, the ability for
       developers to add to and change the library itself to fulfill
