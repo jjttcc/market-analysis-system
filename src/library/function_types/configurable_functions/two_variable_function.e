@@ -39,13 +39,8 @@ feature -- Initialization
 	make is
 		do
 			!!output.make (100) -- !!What size to use here?
-		end
-
-feature -- Basic operations
-
-	do_process is
-		do
-			do_all
+		ensure
+			output /= Void
 		end
 
 feature -- Access
@@ -78,6 +73,13 @@ feature {NONE}
 			output.extend (t)
 		end
 
+	do_process is
+		do
+			check target1 /= Void and target2 /= Void end
+			check operator /= Void end
+			do_all
+		end
+
 feature {NONE}
 
 	set_processed (b: BOOLEAN) is
@@ -87,7 +89,7 @@ feature {NONE}
 
 feature {TEST_FUNCTION_FACTORY} -- Element change (Export to test class for now.)
 
-	set_input (f1, f2: market_function) is
+	set_input (f1, f2: MARKET_FUNCTION) is
 		require
 			not_void: f1 /= Void and f2 /= Void
 			outputs_not_void: f1.output /= Void and f2.output /= Void
@@ -98,13 +100,21 @@ feature {TEST_FUNCTION_FACTORY} -- Element change (Export to test class for now.
 			target2 := f2.output
 			reset_state
 		ensure
-			input1 = f1
-			input2 = f2
+			input1 = f1 and input2 = f2
+			input1 /= Void and input2 /= Void
 			not_processed: not processed
 		end
 
 feature {NONE}
 
 	input1, input2: MARKET_FUNCTION
+
+invariant
+
+	processed_constraint:
+		processed implies input1.processed and input2.processed
+	input_target_relation:
+		(input1 = Void or else input1.output = target1) and
+		(input2 = Void or else input2.output = target2)
 
 end -- class TWO_VECTOR_FUNCTION

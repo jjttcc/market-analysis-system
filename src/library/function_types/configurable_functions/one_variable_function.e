@@ -25,20 +25,6 @@ feature -- Initialization
 			!!output.make (100) -- !!What size to use here?
 		end
 
-feature -- Basic operations
-
-	do_process is
-			-- Execute the function.
-			-- {Note to self:  It seems logical to export this feature
-			-- and processed to everyone so that outside control is allowed,
-			-- for efficiency, as to when the function is processed.  Two
-			-- alternatives are to export to NONE and have the function itself
-			-- call these functions (that is, if not processed then process end)
-			-- or to export to a designated class that manages this.}
-		do
-			do_all
-		end
-
 feature
 
 	output: ARRAYED_LIST [MARKET_TUPLE]
@@ -57,6 +43,12 @@ feature {NONE}
 			output.extend (t)
 		end
 
+	do_process is
+			-- Execute the function.
+		do
+			do_all
+		end
+
 feature {NONE}
 
 	input: MARKET_FUNCTION
@@ -71,12 +63,20 @@ feature {NONE}
 feature {TEST_FUNCTION_FACTORY} -- Element change
 
 	set_input (in: MARKET_FUNCTION) is
+		require
+			not_void: in /= Void and in.output /= Void
 		do
 			input := in
 			target := input.output
 			reset_state
 		ensure
+			input_set: input = in and input /= Void
 			not_processed: not processed
 		end
+
+invariant
+
+	processed_constraint: processed implies input.processed
+	input_target_relation: input = Void or else input.output = target
 
 end -- class ONE_VECTOR_FUNCTION
