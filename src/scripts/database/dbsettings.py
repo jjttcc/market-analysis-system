@@ -13,13 +13,17 @@ dbconnect = '/usr/bin/psql -q mas'
 # Command to obtain the symbol list from the database
 symbol_query = "select symbol from stock_information order by symbol;"
 # String used to execute a one-shot command to the database
-one_shot_cmd = "/usr/bin/psql -t -q mas"
+one_shot_cmd = "/usr/bin/psql -t -q -F , -A mas -c "
 
 # Name of daily stock table
 daily_stock_tbl = 'daily_stock_data'
 # daily stock table field names
 daily_stock_flds = ['symbol', 'date', 'open_price', 'high_price', 'low_price',
 	'close_price', 'volume']
+# Name of watchlist table
+watchlist_tbl = 'watch_list'
+watchlist_symbol_fld = 'symbol'
+watchlist_watchflag_fld = 'category'
 
 # Name of stock split table
 stock_split_tbl = 'stock_split'
@@ -29,7 +33,7 @@ stock_split_flds = ['date', 'symbol', 'value']
 # In one shot, send `s' as a query to the database and return a readable
 # popened file as the result.
 def db_query(s):
-	query = one_shot_cmd + " -c '" + s + "'"
+	query = one_shot_cmd + '"' + s + '"'
 	try:
 		result = os.popen(query, 'r')
 	except:
@@ -56,6 +60,15 @@ def daily_stock_insert_cmd(symbol, values):
 	assert(len(values) >= 6)
 	result = 'insert into ' + daily_stock_tbl + \
 		daily_insert_portion(symbol, values) + ";\n"
+	return result
+
+# Command to delete a record from the database for stock (with daily data)
+# with symbol `symbol', and date `date'.
+def daily_stock_delete_cmd(symbol, date):
+	symbolfld = daily_stock_flds[0]
+	datefld = daily_stock_flds[1]
+	result = "delete from " + daily_stock_tbl + " where " + symbolfld + \
+		" = '" + symbol + "' and " + datefld + " = " + str(date) + ";"
 	return result
 
 # Command to insert stock split into the database, where `split' is a
