@@ -42,6 +42,7 @@ Source: "bin\bash.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "bin\sed.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "bin\mkdir.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "bin\cp.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
+Source: "bin\sleep.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "bin\cygwin1.dll"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "bin\config_tool.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "bin\bash_init"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
@@ -129,6 +130,6 @@ Filename: "{app}\lib\install\init.bat"; Parameters: "{app}"; Flags: shellexec
 ;!!!!!!!NOTE: These registry settings are probably no longer needed -
 ;!!!!!!!mct (with the mctrc config. file) now takes care of this.
 ;!!!They're commented out - remove them if they are indeed not needed.
-[Registry]
+;[Registry]
 ; Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "MAS_DIRECTORY"; ValueData: "{app}\lib"
 ; Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "PATH"; ValueData: "{app}\bin"
