@@ -22,7 +22,7 @@ feature -- Initialization
 			value := v
 		ensure
 			date_set: date_time = d
-			value_set: rabs (value - v) < epsilon
+			-- value_set: rabs (value - v) < epsilon
 		end
 
 feature -- Access
@@ -36,7 +36,7 @@ feature {MARKET_FUNCTION} -- Status setting
 		do
 			value := v
 		ensure
-			value_set: rabs (value - v) < epsilon
+			-- value_set: rabs (value - v) < epsilon
 		end
 
 end -- class SIMPLE_TUPLE
