@@ -50,7 +50,8 @@ feature -- Access
 
 	guts: ARRAY [STRING] is
 			-- Class abbreviation ("AME"), event type ID, time_stamp,
-			-- and symbol
+			-- and symbol - with time_stamp in the format:
+			-- yyyymmdd h:m:s.
 		local
 			date_time: STRING
 		do
@@ -65,7 +66,11 @@ feature -- Access
 			end
 			date_time.append (time_stamp.day.out)
 			date_time.extend (' ')
-			date_time.append (time_stamp.time.out)
+			date_time.append (time_stamp.time.hour.out)
+			date_time.append (":")
+			date_time.append (time_stamp.time.minute.out)
+			date_time.append (":")
+			date_time.append (time_stamp.time.second.out)
 			Result := <<"AME", type.id.out, date_time, symbol>>
 		end
 
