@@ -24,7 +24,7 @@ Name: "desktopicon"; Description: "Create a &desktop icon"; GroupDescription: "A
 
 [Files]
 Source: "bin\simple_cat.exe"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
-Source: "bin\macl"; DestDir: "{app}\bin\scripts"; CopyMode: alwaysoverwrite
+Source: "lib\python\macl"; DestDir: "{app}\bin\scripts"; CopyMode: alwaysoverwrite
 Source: "bin\maclj"; DestDir: "{app}\bin\scripts"; CopyMode: alwaysoverwrite
 Source: "bin\magc"; DestDir: "{app}\bin\scripts"; CopyMode: alwaysoverwrite
 Source: "bin\mas.exe"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
@@ -85,7 +85,6 @@ Source: "lib\config\macd_of_volume"; DestDir: "{app}\lib\config"; CopyMode: alwa
 Source: "lib\config\market_analyzers"; DestDir: "{app}\lib\config"; CopyMode: alwaysoverwrite
 Source: "lib\config\midpoint"; DestDir: "{app}\lib\config"; CopyMode: alwaysoverwrite
 Source: "lib\config\obv"; DestDir: "{app}\lib\config"; CopyMode: alwaysoverwrite
-Source: "lib\config\slope_of_ema_of_adx"; DestDir: "{app}\lib\config"; CopyMode: alwaysoverwrite
 Source: "lib\config\slope_of_ema_of_volume"; DestDir: "{app}\lib\config"; CopyMode: alwaysoverwrite
 Source: "lib\config\slope_of_macd_signal_close_to_0"; DestDir: "{app}\lib\config"; CopyMode: alwaysoverwrite
 Source: "lib\config\slope_of_macd_signal_trend"; DestDir: "{app}\lib\config"; CopyMode: alwaysoverwrite
