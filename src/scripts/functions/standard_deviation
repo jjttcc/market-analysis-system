@@ -1,0 +1,40 @@
+#!/bin/bash
+#  Standard deviation prototype implementation - Use sd_data as input.
+
+awk 'BEGIN {
+n = 5
+i = 1
+}
+{
+	printf("%s ", $2)
+}
+(NR <= n) {
+	sum += $2
+	values[i++] = $2
+	if (NR == n) {
+		avg = sum / n
+		sos = sum_of_squares(1, avg)
+		printf("%0.4f %0.4f %0.4f\n",  avg, sos, sqrt(sos / n))
+	} else print ""
+	next
+}
+{
+	sum += $2
+#	print "subtracted " values[i-n] " (" i " - " n " = " i - n ")"
+	sum -= values[i-n]
+	values[i++] = $2
+	avg = sum / n
+	sos = sum_of_squares(i - n, avg)
+	printf("%0.4f %0.4f %0.4f\n",  avg, sos, sqrt(sos / n))
+}
+
+function sum_of_squares(starti, avg, sum) {
+#print "sos called"
+	sum = 0
+	i = starti; j = 1
+	while (j <= n) {
+		sum += (values[i] - avg) ^ 2
+		++j; ++i
+	}
+	return sum
+}' $*
