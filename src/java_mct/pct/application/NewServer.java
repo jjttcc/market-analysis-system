@@ -1,18 +1,10 @@
 package pct.application;
 
-import pct.ApplicationContext;
-import pct.application.MCT_ApplicationContext;
 
 // Plug-in to start a new MAS server process
 public class NewServer {
-	public NewServer(ApplicationContext ac, Object pcontext) {
-		app_context = (MCT_ApplicationContext) ac;
+	public NewServer(Object pcontext) {
 		parent_context = (MCT_ComponentContext) pcontext;
-		if (app_context == null) {
-			System.err.println("NewServer failed to get the application " +
-				"context (MCT_ApplicationContext)");
-			System.exit(-1);
-		}
 	}
 
 static int tmp_port = 32348;
@@ -33,7 +25,6 @@ String tmp_cmd = "/opt/mas/bin/mas -o -f , -b /opt/mas/lib/data/ibm.txt";
 		return result;
 	}
 
-	MCT_ApplicationContext app_context;
 	MCT_ComponentContext parent_context;	// context of parent component
 	Runtime runtime;
 }

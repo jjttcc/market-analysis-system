@@ -11,7 +11,6 @@
 // in the current directory and that its name is x_config.
 
 import pct.ProgramControlTerminal;
-import pct.ApplicationContext;
 import pct.ApplicationInitialization;
 import pct.application.*;
 
@@ -19,9 +18,9 @@ class PCT_Main {
 
 	public static void main(String[] args) {
 		try {
-			ApplicationContext app_context = application_context();
+			initialize_application();
 			ProgramControlTerminal pct =
-				new ProgramControlTerminal(null, null, app_context, null);
+				new ProgramControlTerminal(null, null, null);
 			pct.execute();
 		}
 		catch (Exception e) {
@@ -32,10 +31,9 @@ class PCT_Main {
 	public final static String application_init_class_name =
 		"pct.application.SpecializedApplicationInitialization";
 
-	static ApplicationContext application_context() {
+	static void initialize_application() {
 		Class app_init_class = null;
 		ApplicationInitialization ai = null;
-		ApplicationContext result;
 
 		try {
 			app_init_class = Class.forName(application_init_class_name);
@@ -48,8 +46,6 @@ class PCT_Main {
 			// was specified incorrectly.
 			ai = new ApplicationInitialization();
 		}
-		result = ai.context();
-		return result;
 	}
 
 	private static void abort(String msg) {

@@ -1,19 +1,11 @@
 package pct.application;
 
 import java.io.*;
-import pct.ApplicationContext;
-import pct.application.MCT_ApplicationContext;
 
 // Plug-in to start a new MAS command-line client process
 public class NewCommandLineClient {
-	public NewCommandLineClient(ApplicationContext ac, Object pcontext) {
-		app_context = (MCT_ApplicationContext) ac;
+	public NewCommandLineClient(Object pcontext) {
 		parent_context = (MCT_ComponentContext) pcontext;
-		if (app_context == null) {
-			System.err.println("NewCommandLineClient failed to get the " +
-				"application context (MCT_ApplicationContext)");
-			System.exit(-1);
-		}
 	}
 
 	public Object execute() {
@@ -34,7 +26,6 @@ System.out.println("Trying to execute: " + tmp_cmd);
 		return result;
 	}
 
-	MCT_ApplicationContext app_context;
 	MCT_ComponentContext parent_context;	// context of parent component
 	Runtime runtime;
 }

@@ -10,7 +10,6 @@ class PCT_Component {
 
 	public PCT_Component(ProgramControlTerminal the_owner) {
 		owner = the_owner;
-		_application_context = owner.application_context();
 		parent_component_context = owner.component_context();
 		cmd_args = null;
 		prompt_setting = "";
@@ -19,10 +18,6 @@ class PCT_Component {
 		startup_cmd_args_setting = new Vector();
 		config_file_name_setting = "";
 		exit_after_startup_cmd_setting = false;
-	}
-
-	public ApplicationContext application_context() {
-		return _application_context;
 	}
 
 	public String prompt() { return prompt_setting; }
@@ -88,7 +83,7 @@ class PCT_Component {
 			// If there is a config file, a sub-terminal needs to be run.
 			ProgramControlTerminal pct =
 				new ProgramControlTerminal(config_file_name_setting,
-					owner.program_name, _application_context, context);
+					owner.program_name, context);
 			pct.execute();
 		}
 	}
@@ -99,13 +94,12 @@ class PCT_Component {
 		String classname = app_pkg + name;
 		try {
 			Class the_class = Class.forName(classname);
-			Class[] constructor_args = new Class[] {
-				ApplicationContext.class, Object.class};
+			Class[] constructor_args = new Class[] {Object.class};
 			Constructor constructor =
 				the_class.getConstructor(constructor_args);
 			startup_command =
 				constructor.newInstance(new Object[] {
-					_application_context, parent_component_context});
+					parent_component_context});
 			startup_method = the_class.getMethod(
 				startup_cmd_method_setting, null);
 		} catch (InstantiationException e) {
@@ -127,7 +121,6 @@ class PCT_Component {
 	Object[] cmd_args;			// Arguments for "startup" command
 		// Name of method to call on `startup_command'
 		// for the command result, if it exists
-	ApplicationContext _application_context;
 	Object parent_component_context;
 
 	// "settings" - Must be public for reflection, but regard as private
