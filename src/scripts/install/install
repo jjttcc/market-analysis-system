@@ -13,15 +13,29 @@ fi
 libdir=$(awk '/lib:/ { print $2}' $config)
 bindir=$(awk '/bin:/ { print $2}' $config)
 
+if [ ! -e $libdir ]; then mkdir -p $libdir; fi
+if [ $? -ne 0 ]; then
+	echo "$Progname: Failed to create directory $libdir" >&2
+	echo "Exiting ..." >&2
+	exit -1
+fi
+
 if [ ! -d $libdir -o ! -w $libdir ]; then
 	echo "$Progname: Cannot write to target dir $libdir" >&2
-	echo "Exiting ..."
+	echo "Exiting ..." >&2
+	exit -1
+fi
+
+if [ ! -e $bindir ]; then mkdir -p $bindir; fi
+if [ $? -ne 0 ]; then
+	echo "$Progname: Failed to create directory $bindir" >&2
+	echo "Exiting ..." >&2
 	exit -1
 fi
 
 if [ ! -d $bindir -o ! -w $bindir ]; then
 	echo "$Progname: Cannot write to target dir $bindir" >&2
-	echo "Exiting ..."
+	echo "Exiting ..." >&2
 	exit -1
 fi
 
