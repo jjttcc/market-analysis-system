@@ -111,7 +111,8 @@ feature {NONE} -- Utilities
 		end
 
 	user_response: STRING is
-			-- Obtain user response, skipping comments (# ...)
+			-- Obtain user response, skipping comments (# ...) and
+			-- stripping off leading white space
 		local
 			finished: BOOLEAN
 			console: CONSOLE
@@ -139,6 +140,7 @@ feature {NONE} -- Utilities
 					print ("%Ninput line: " + last_input_line_number.out + "%N")
 				end
 			end
+			Result.left_adjust
 		ensure
 			Result_exists: Result /= Void
 		end
