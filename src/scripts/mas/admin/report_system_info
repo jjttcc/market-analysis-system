@@ -131,7 +131,7 @@ if setup; then
 	$mas_exe -v >>$reportfile
 	echo "" >>$reportfile
 	get_linux_distribution_info
-	uname -a >>$reportfile
+	uname -a >>$reportfile 2>&1
 	echo -e "\n/proc/cpuinfo:\n" >>$reportfile
 	cat /proc/cpuinfo >>$reportfile
 	get_window_system_info
