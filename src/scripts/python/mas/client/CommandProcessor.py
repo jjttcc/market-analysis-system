@@ -16,6 +16,8 @@ class CommandProcessor:
 			"\n*Select *an *object *for.*'s",
 			"\n*Select *the *[a-z]* *technical indicator",
 			"\n*Select *an *indicator *to *edit:",
+			".*has.*leaf.*function.*-.*",
+			"Examining.*leaf.*function.*",
 			"\n*Select *the.*trading *period *type.*:",
 			".*\n*Select specification for crossover detection:",
 			"\n* *Select *a *market *analyzer",
