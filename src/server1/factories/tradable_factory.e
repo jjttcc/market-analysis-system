@@ -69,6 +69,9 @@ feature -- Status report
 	error_occurred: BOOLEAN
 			-- Did an error occur during execute?
 
+	last_error_fatal: BOOLEAN
+			-- Was the last error unrecoverable?
+
 	strict_error_checking: BOOLEAN
 
 	error_list: LIST [STRING]
@@ -175,6 +178,7 @@ feature -- Basic operations
 			if not scanner.error_list.empty then
 				error_list := scanner.error_list
 				error_occurred := True
+				last_error_fatal := scanner.last_error_fatal
 			end
 			product.finish_loading
 		ensure then
