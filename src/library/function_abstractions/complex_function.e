@@ -56,7 +56,6 @@ feature -- Basic operations
 	process is
 			-- Process the output from the input.
 		do
-print ("process start%N")
 			if not processed then
 				pre_process
 				do_process
@@ -66,7 +65,6 @@ print ("process start%N")
 				print (name); print (" just became processed, output size: ")
 				print (output.count); print ("%N")
 			end
-print ("process end%N")
 		end
 
 feature {MARKET_FUNCTION_EDITOR} -- Status setting
