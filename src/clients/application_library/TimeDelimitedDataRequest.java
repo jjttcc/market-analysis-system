@@ -27,6 +27,7 @@ class TimeDelimitedDataRequest extends TimerTask {
 
 // Basic operations
 
+//!!!:
 	public void run() {
 		// Avoid requesting data if the last request is still active.
 		if (client != null && client.ready_for_request() && ! requesting_data) {
@@ -121,6 +122,7 @@ else {System.out.println("Needed condition not met for data request");}
 			client.notify_of_failure(e);
 		} finally {
 			builder.unlock(this);
+//!!!:
 System.out.println("unlocking builder");
 		}
 	}
