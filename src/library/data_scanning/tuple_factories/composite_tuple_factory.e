@@ -30,7 +30,7 @@ feature
 		local
 			h, l, o, c: REAL
 		do
-			product := make_tuple
+			!!product.make
 			check
 				tuplelist.first.date_time /= Void and
 				tuplelist.last.date_time /= Void
@@ -47,13 +47,6 @@ feature
 		end
 
 feature {NONE}
-
-	make_tuple: COMPOSITE_TUPLE is
-			-- Descendants can redefine to make objects that conform
-			-- to COMPOSITE_TUPLE.
-		do
-			!!Result.make
-		end
 
 	do_main_work (tuples: LIST [BASIC_MARKET_TUPLE]) is
 		local

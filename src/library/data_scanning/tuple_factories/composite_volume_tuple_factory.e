@@ -1,5 +1,5 @@
 indexing
-	description: "Composite tuple factory that includes the average of the %
+	description: "Composite tuple factory that includes the sum of the %
 	%volume of all elements in the market tuple list";
 	date: "$Date$";
 	revision: "$Revision$"
@@ -8,7 +8,7 @@ class COMPOSITE_VOLUME_TUPLE_FACTORY inherit
 
 	COMPOSITE_TUPLE_FACTORY
 		redefine
-			product, do_auxiliary_work, make, make_tuple
+			product, do_auxiliary_work, make
 		end
 
 creation
@@ -24,15 +24,11 @@ feature
 			Precursor
 			!!operator
 			!!volume_adder
+			check operator.execute_precondition end
 			volume_adder.set_operator (operator)
 		end
 
 feature {NONE}
-
-	make_tuple: COMPOSITE_VOLUME_TUPLE is
-		do
-			!!Result.make
-		end
 
 	do_auxiliary_work (tuples: LIST [MARKET_TUPLE]) is
 			-- Set product's volume to sum of all volumes in tuplelist.
