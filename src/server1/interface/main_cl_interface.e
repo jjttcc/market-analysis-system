@@ -431,7 +431,7 @@ feature {NONE} -- Implementation
 				until
 					symbol /= Void
 				loop
-					print_names_in_n_columns (symbols, 4)
+					print_names_in_n_columns (symbols, 4, 1)
 					print (eom)
 					read_integer
 					if
