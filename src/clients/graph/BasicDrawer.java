@@ -48,18 +48,6 @@ abstract public class BasicDrawer extends Drawer {
 
 	public void set_boundaries_needed(boolean b) { boundaries_needed = b; }
 
-	public void set_xaxis(Axis a) {
-		xaxis = a;
-	}
-
-	public void set_yaxis(Axis a) {
-		yaxis = a;
-	}
-
-	public void set_clipping(boolean b) {
-		clipping = b;
-	}
-
 	public void set_maxes(double xmax_v, double ymax_v,
 		double xmin_v, double ymin_v) {
 		xmax = xmax_v;
