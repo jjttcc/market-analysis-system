@@ -1,13 +1,15 @@
 #!/usr/bin/perl -w
 
-# Parse pre-/post-condition comments in Java files (of the form:
-#	// Postcondition: tag: expression
-# ) and insert the specified predicates into the code.  Assume that
+# Parse pre-/post-condition comments in Java files and
+# insert the specified predicates into the code.  Assume that
 # the (Java) Logic class is available and that the the class being
 # processed "implements" AssertionConstants.
-#!!!!Include the description of the expected format here.
-
-#!!!!Remember to process "implies".
+# Expected format:
+#	// P{ost|re}condition: <tag>: <expression>
+# where "tag:" is optional and "<tag>: <expression>" can be on the next
+# line, and extend over several lines.  Alternatively, there can be more
+# than one set of "<tag>: <expression>", but they need to be indented by
+# the same amount to be recognized as separate assertions.
 
 package assertion_tools;
 
@@ -180,12 +182,9 @@ sub separate_assertions {
 # Extract assertion-specification fields for the current Pre- or Post-
 # condition specification.
 sub extracted_assert_fields {
-	#!!!!Not used, remove(?):
-	my $expr_on_next_line = 0;
 	my @assert_lines = ();
 	my $l = "";
 	if ($_ =~ /tion:[ \t]*$/) {
-		$expr_on_next_line = 1;
 	} else {
 		$l = $_;
 		$l =~ s/.*P[ro][a-z]*condition:[ \t]*//;
