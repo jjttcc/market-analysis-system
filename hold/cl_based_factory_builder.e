@@ -81,10 +81,17 @@ feature {NONE}
 		do
 			no_open := true
 			!STOCK_FACTORY!tradable_factory.make
-			-- Create the list of technical indicators,
-			function_list_factory.execute
-			-- and copy them into the singleton list, function_library.
-			function_library.append (function_list_factory.product)
+			check
+				flist_not_void: function_library /= Void
+			end
+			-- (If function_library is not empty, it has been retrieved
+			-- from persistent store.)
+			if function_library.empty then
+				-- Create the list of technical indicators,
+				function_list_factory.execute
+				-- and copy them into the singleton list, function_library.
+				function_library.append (function_list_factory.product)
+			end
 			--!!!Will need to retrieve the function_library from persistent
 			--!!!store.  And it will need to be saved (if it changed) on program
 			--!!!termination - probably use the TERMINABLE cleanup facility.
@@ -139,7 +146,7 @@ feature {NONE}
 		local
 			meg_builder: MARKET_EVENT_GENERATOR_BUILDER
 		do
-			!!meg_builder.make
+			!!meg_builder
 			!VIRTUAL_TRADABLE_LIST!market_list.make (input_file_names,
 														tradable_factories)
 			meg_builder.execute

@@ -27,23 +27,6 @@ class MARKET_EVENT_GENERATOR_BUILDER inherit
 			function_library
 		end
 
-creation
-
-	make
-
-feature -- Initialization
-
-	make is
-		require
-			flib_not_void: function_library /= Void
-			-- function_library has been initialized with the existing
-			-- indicators.
-			--!!!If the function_library once function is changed to read
-			--!!!in all indicators from persistent store, this precondition
-			--!!!(and probably the make routine) can be removed.
-		do
-		end
-
 feature -- Access
 
 	product: LIST [MARKET_EVENT_GENERATOR]
@@ -453,5 +436,9 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			end
 			-- Leave Result's after extension as 0.
 		end
+
+invariant
+
+	flib_not_void: function_library /= Void
 
 end -- MARKET_EVENT_GENERATOR_BUILDER
