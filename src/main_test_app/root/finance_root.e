@@ -45,6 +45,9 @@ feature -- Initialization
 				tradable_builder.set_no_open (true)
 				tradable_builder.execute (Void)
 				tradable := tradable_builder.product
+				if tradable_builder.error_occurred then
+					print_errors (tradable, tradable_builder.error_list)
+				end
 				function_builder :=
 					factory_builder.function_list_factory
 				function_builder.execute (tradable)
@@ -89,6 +92,25 @@ feature {NONE} -- Utility
 			loop
 				t.add_indicator (flst.item)
 				flst.forth
+			end
+		end
+
+	print_errors (t: TRADABLE [BASIC_MARKET_TUPLE]; l: LIST [STRING]) is
+		do
+			if l.count > 1 then
+				print ("Errors occurred while processing ")
+			else
+				print ("Error occurred while processing ")
+			end
+			print (t.symbol); print (":%N")
+			from
+				l.start
+			until
+				l.after
+			loop
+				print (l.item)
+				print ("%N")
+				l.forth
 			end
 		end
 
