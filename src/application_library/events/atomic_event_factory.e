@@ -9,6 +9,8 @@ indexing
 class ATOMIC_EVENT_FACTORY inherit
 
 	MARKET_EVENT_FACTORY
+		export
+			{ANY} event_types
 		redefine
 			product
 		end
@@ -68,7 +70,7 @@ feature -- Basic operations
 			!!date_time.make_by_date_time (last_date, last_time)
 			skip_field_separator
 			scan_symbol
-			!!product.make ("???NAME???", last_symbol, date_time,
+			!!product.make (current_event_type.name, last_symbol, date_time,
 							current_event_type)
 		end
 

@@ -55,8 +55,8 @@ feature -- Basic operations
 			left := next_event
 			skip_field_separator
 			right := next_event
-			!!product.make (left, right, "What name goes here?",
-							current_event_type)
+			!!product.make (left, right, concatenation (<<left.name, ", ",
+							right.name>>), current_event_type)
 		end
 
 	next_event: MARKET_EVENT is
