@@ -45,12 +45,24 @@ feature -- Initialization
 
 feature -- Access
 
-	index_operator: NUMERIC_VALUE_COMMAND
+	index_operator: RESULT_COMMAND [REAL]
 
 	children: LIST [COMMAND] is
 		do
 			Result := Precursor
 			Result.extend (index_operator)
+		end
+
+feature -- Element change
+
+	set_index_operator (arg: RESULT_COMMAND [REAL]) is
+			-- Set `index_operator' to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			index_operator := arg
+		ensure
+			index_operator_set: index_operator = arg and index_operator /= Void
 		end
 
 feature -- Basic operations
