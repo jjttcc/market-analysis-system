@@ -43,43 +43,40 @@ class PCT_Component {
 
 	// Dynamically execute `method' of `cmdclass' with args and return
 	// the resulting component context.
-	Object execute_method(String cmdclass, String method, Object[] args) {
+	Object execute_method(String cmdname, Object[] args)
+			throws Exception {
 		Object result = null;
-		String cmdname = cmdclass + "." + method;
-		try {
-			if (startup_command == null) {
-				create_startup_command(cmdclass);
-			}
-			if (startup_command != null && startup_method != null) {
+		if (startup_command == null) {
+			create_startup_command();
+		}
+		if (startup_command != null && startup_method != null) {
 //System.out.println("LOOK: About to call " + startup_method);
-				result = startup_method.invoke(startup_command, args);
+			result = startup_method.invoke(startup_command, args);
 //System.out.println("LOOK: Finished calling " + startup_method);
-			} else {
-				throw new Exception("Command " + cmdname + " not found.");
-			}
-		} catch (InvocationTargetException e) {
-			System.out.println(e);
-		} catch (Exception e) {
-			System.err.println("Execution of command '" +
-				cmdname + "' failed with the error:\n" + e);
+		} else {
+			throw new Exception("Command " + cmdname + " not found.");
 		}
 		return result;
 	}
 
-	// Import the import_modules and execute startup_cmd.
+	// Execute startup_cmd.
 	void exec_startup_cmd() throws Exception {
-		Object context;
+		Object context = null;
+		boolean exec_failed = false;
+		String cmdname = startup_cmd_class_setting + "." +
+			startup_cmd_method_setting;
 		try {
 			if (cmd_args == null ||
 					cmd_args.length < startup_cmd_args_setting.size()) {
 				cmd_args = new Object[startup_cmd_args_setting.size()];
 			}
-			context = execute_method(startup_cmd_class_setting,
-				startup_cmd_method_setting, cmd_args);
+			context = execute_method(cmdname, cmd_args);
 		} catch (Exception e) {
-			throw e;
+			System.err.println("Execution of command '" +
+				cmdname + "' failed with the error:\n" + e);
+			exec_failed = true;
 		}
-		if (config_file_name_setting != "") {
+		if (! exec_failed && config_file_name_setting != "") {
 			// If there is a config file, a sub-terminal needs to be run.
 			ProgramControlTerminal pct =
 				new ProgramControlTerminal(config_file_name_setting,
@@ -89,9 +86,9 @@ class PCT_Component {
 	}
 
 	// Create, using reflection, the startup command of class `name'.
-	protected void create_startup_command(String name) {
+	protected void create_startup_command() {
 		final String app_pkg = "pct.application.";
-		String classname = app_pkg + name;
+		String classname = app_pkg + startup_cmd_class_setting;
 		try {
 			Class the_class = Class.forName(classname);
 			Class[] constructor_args = new Class[] {Object.class};
