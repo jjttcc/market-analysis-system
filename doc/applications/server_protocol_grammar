@@ -3,7 +3,8 @@ BNF grammar for the protocol between the server and a GUI client
 
 message         -> msgID "\t" msg end_of_message
 msg             -> client_req | server_response
-client_req      -> mkt_data_req | ind_data_req | mkt_list_req | ind_list_req
+client_req      -> mkt_data_req | ind_data_req | mkt_list_req | ind_list_req |
+                     trad_pertyp_req
 mk_data_req     -> mkt_symbol "\t" trad_per_type
 ind_data_req    -> indID "\t" mkt_symbol "\t" trad_per_type
 trad_pertyp_req -> mkt_symbol
