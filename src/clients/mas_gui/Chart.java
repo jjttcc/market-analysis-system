@@ -12,6 +12,7 @@ import java.io.*;
 import graph.*;
 import support.*;
 import common.*;
+import java_library.support.*;
 
 class WindowSettings implements Serializable {
 	public WindowSettings(Dimension s, Point l) {
@@ -62,7 +63,8 @@ class ChartSettings implements Serializable {
 }
 
 /** Market analysis GUI chart component */
-public class Chart extends Frame implements Runnable, NetworkProtocol {
+public class Chart extends Frame implements Runnable, NetworkProtocol,
+	AssertionConstants {
 
 	public Chart(DataSetBuilder builder, String sfname, StartupOptions opt) {
 		super("Chart");
@@ -538,6 +540,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	// Save persistent settings as a serialized file.
 	// Precondition: main_pane != null
 	protected void save_settings() {
+		assert main_pane != null: PRECONDITION;
 		if (serialize_filename != null) {
 			try {
 				FileOutputStream chartfile =

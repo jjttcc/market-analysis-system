@@ -10,11 +10,11 @@ import support.IO_Connection;
 import support.Utilities;
 
 // Abstraction that forwards client requests to the MAS server
-public class MAS_Proxy {
+public class MAS_Proxy implements AssertionConstants {
 
 	// Precondition: conn != null
 	public MAS_Proxy(IO_Connection conn) {
-		assert conn != null;
+		assert conn != null: PRECONDITION;
 		connection = conn;
 	}
 
@@ -42,7 +42,7 @@ public class MAS_Proxy {
 	// Precondition: r != null
 	// Postcondition: response() != null
 	public void forward(Reader r) throws IOException {
-		assert r != null: "Precondition";
+		assert r != null: PRECONDITION;
 		error_ = false;
 		String msg = Utilities.input_string(r);
 		connection.open();
@@ -60,7 +60,7 @@ public class MAS_Proxy {
 		}
 		if (writer != null) writer.close();
 		connection.close();
-		assert response() != null: "Postcondition";
+		assert response() != null: POSTCONDITION;
 	}
 
 // Implementation
@@ -68,7 +68,7 @@ public class MAS_Proxy {
 	// Response from the server
 	// Precondition: ! error_occurred()
 	private void receive_response() {
-		assert ! error_occurred(): "Precondition";
+		assert ! error_occurred(): PRECONDITION;
 		response_ = null;
 		Reader reader;
 		try {
