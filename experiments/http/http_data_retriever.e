@@ -11,9 +11,6 @@ indexing
 class HTTP_DATA_RETRIEVER inherit
 
 	HTTP_DATA_RETRIEVAL
-		redefine
-			initialize_symbols
-		end
 
 	ARGUMENTS
 		export
@@ -34,6 +31,7 @@ feature {NONE} -- Initialization
 	make is
 		do
 			initialize
+			initialize_symbols
 			execute
 		end
 
@@ -42,18 +40,40 @@ feature {NONE} -- Initialization
 			i: INTEGER
 		do
 			if argument_count >= 1 then
-				create symbols.make (argument_count)
+				create {LINKED_LIST [STRING]} symbols.make
 				from i := 1 until i = argument_count + 1 loop
 					symbols.extend (argument (i))
 					i := i + 1
 				end
 			else
-				Precursor
+				symbols := symbols_from_file
 			end
 		end
 
 feature {NONE} -- Implementation
 
 	timing_needed: BOOLEAN is True
+
+	symbols: LIST [STRING]
+			-- The symbols for which data are to be retrieved
+
+--!!!!!Add exception handling
+	execute is
+			-- For each symbol, s, in `symbols', if data for s needs
+			-- to be retrieved, retrieve them.
+		do
+			from
+				symbols.start
+			until
+				symbols.exhausted
+			loop
+				parameters.set_symbol (symbols.item)
+				if data_retrieval_needed then
+					retrieve_data
+				end
+				symbols.forth
+			end
+			if timing_needed then print (timing_information) end
+		end
 
 end

@@ -29,31 +29,11 @@ feature {NONE} -- Initialization
 			create url.http_make (parameters.host, "")
 			create http_request.make (url)
 			http_request.set_read_mode
-			initialize_symbols
-		end
-
---!!!!!Add exception handling
-	execute is
-			-- For each symbol, s, in `symbols', if data for s needs
-			-- to be retrieved, retrieve them.
-		do
-			from
-				symbols.start
-			until
-				symbols.exhausted
-			loop
-				parameters.set_symbol (symbols.item)
-				if data_retrieval_needed then
-					retrieve_data
-				end
-				symbols.forth
-			end
-			if timing_needed then print (timing_information) end
-		end
-
-	initialize_symbols is
-		do
-			read_symbols_from_file
+			file_extension := Default_file_extension
+		ensure
+			components_initialized: data_retrieved_table /= Void and
+				parameters /= Void and url /= Void and
+				http_request /= Void and file_extension /= Void
 		end
 
 feature {NONE} -- Implementation - attributes
@@ -66,12 +46,15 @@ feature {NONE} -- Implementation - attributes
 
 	http_request: HTTP_PROTOCOL
 
-	symbols: ARRAYED_LIST [STRING]
-			-- The symbols for which data is to be retrieved
-
 	data_retrieved_table: HASH_TABLE [BOOLEAN, STRING]
-			-- Mapping of symbols to the boolean state of whether the
-			-- data for that symbol have been retrieved
+			-- Mapping of tradable symbols to the boolean state of whether
+			-- the data for that symbol have been retrieved
+
+	file_extension: STRING
+			-- Extension to file name of output cache file
+
+	Default_file_extension: STRING is "txt"
+			-- Default value for `file_extension'
 
 feature {NONE} -- Implementation
 
@@ -124,47 +107,57 @@ feature {NONE} -- Implementation
 		local
 			outputfile: PLAIN_TEXT_FILE
 		do
-			create outputfile.make (current_output_file_name)
+			create outputfile.make (output_file_name (parameters.symbol))
 			Result := not outputfile.exists or (
 				time_to_eod_udpate and
 				not parameters.ignore_today and
 				not current_data_have_been_retrieved)
 		end
 
-	current_output_file_name: STRING is
+	output_file_name (symbol: STRING): STRING is
+			-- Output file name constructed from `symbol'
 		do
-			Result := output_file_path + parameters.symbol + ".txt"
+			--@NOTE: If retrieval of intraday data via http is introduced,
+			--a bit of redesign will be needed - Perhaps use an 'intraday'
+			--flag and use a different extension for intraday than for
+			--daily data.  Need to coordinate with other dependent
+			--MAS components.
+			Result := output_file_path + symbol + "." + file_extension
 		end
 
-	read_symbols_from_file is
-			-- Read `symbols' from the specified input file.
+	symbols_from_file: LIST [STRING] is
+			-- List of symbols read from the specified input file.
+		require
+			parameters_exist: parameters /= Void
 		local
 			file_reader: FILE_READER
 			contents: STRING
 			su: expanded STRING_UTILITIES
+			l: ARRAYED_LIST [STRING]
 		do
 			create file_reader.make (parameters.symbol_file)
 			contents := file_reader.contents
 			if not file_reader.error then
 				su.set_target (contents)
-				symbols := su.tokens ("%N")
-				if not symbols.is_empty and then symbols.last.is_empty then
-					-- If the last line of the symbols file ends with
-					-- a newline, `symbols' will have an empty last
+				l := su.tokens ("%N")
+				if not l.is_empty and then l.last.is_empty then
+					-- If the last line of the l file ends with
+					-- a newline, `l' will have an empty last
 					-- element - remvoe it.
-					symbols.finish
-					symbols.remove
+					l.finish
+					l.remove
 				end
 			else
 				log_errors (<<"Error reading symbol file: ",
 					parameters.symbol_file, "%N(", 
 					file_reader.error_string, ")%N">>)
 			end
+			Result := l
 		end
 
 	convert_and_save_result (s: STRING) is
 			-- Convert the retrieved data in `s' to MAS format and save the
-			-- result to a file named parameters.symbol".txt".
+			-- result to a file named parameters.symbol"."file_extension.
 		require
 			symbol_valid: parameters /= Void and then parameters.symbol /=
 				Void and then not parameters.symbol.is_empty
@@ -177,20 +170,27 @@ feature {NONE} -- Implementation
 				s /= Void and then
 				parameters.post_processing_routine /= Void
 			then
-				create file.make_open_write (current_output_file_name)
 				if timing_needed then
 					add_timing_data ("opening file for " + parameters.symbol)
+					timer.start
 				end
-				if timing_needed then timer.start end
 				output := parameters.post_processing_routine.item ([s])
 				if timing_needed then
 					add_timing_data ("converting data for " +
 						parameters.symbol)
 				end
-				if timing_needed then timer.start end
-				file.put_string (output)
-				if timing_needed then
-					add_timing_data ("writing data to " + file.name)
+				if output = Void or else output.is_empty then
+					log_error ("Result for " + parameters.symbol +
+						" is empty - symbol may be invalid.%N")
+				else
+					if timing_needed then timer.start end
+					create file.make_open_write (output_file_name (
+						parameters.symbol))
+					file.put_string (output)
+					if timing_needed then
+						add_timing_data ("writing data to " + file.name)
+					end
+					file.close
 				end
 			end
 		end
