@@ -4,7 +4,7 @@ client, the MAS server
 
 message         -> msg end_of_message
 msg             -> client_req | server_response
-client_req      -> request_id "\t" cl_req_body
+client_req      -> request_id "\t" cl_req_body "\n"
 server_response -> status_id "\t" srv_resp_body
 cl_req_body     -> symbol_list_req | data_req | stock_split_req
 data_req        -> date_time_range "\t" data_flags "\t" mkt_symbol
