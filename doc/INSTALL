@@ -40,3 +40,27 @@ Then run the install script from this directory:
 
 If it is not already, you will need to make sure that the bin directory
 you installed to is included in your path.
+
+After installation, you should read the file doc/env_settings for
+instructions on setting environment variables needed by the server.
+
+Also, you will need to create a file with stock split information, which
+the server will read to adjust its stock data for splits.  (The server
+can run without this file, but any data for a stock that has split,
+if the split has not been adjusted for in the data file itself, will not
+be adjusted for the split by the server and thus incorrect values will
+be used when the data for that stock is processed.)  The format of the
+stock split file is simple:
+
+date<tab>symbol<tab>value
+
+where date is the date of the split in the format yyyymmdd, <tab> stands
+for a tab character, symbol is the symbol for the stock, and value is the
+split value.  (For example, for a 2-for-1 split, value will be 2.)
+
+An example of a line in the stock split file that follows this format is:
+
+19980408	F	1.5
+
+The current distribution of MAS includes a file (lib/stock_splits) with
+some stock split data in the required format.

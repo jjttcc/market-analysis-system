@@ -1,9 +1,14 @@
+INTRODUCTION
+
 The Market Analysis System (MAS) is a client/server application that
 provides tools for analysis of financial markets, with the goal of
 helping its user make better buying and selling decisions and to help
 save time by automating some tasks that would otherwise be done by hand.
 
 See the file INSTALL for instructions on how to install MAS.
+
+
+MAIN DIRECTORIES IN THE MAS INSTALLATION
 
 The two main components of MAS are the Market Analysis System Server (also
 known as Market Analysis Server) and the Market Analysis GUI Client.
@@ -34,6 +39,28 @@ conditions may give extra useful information to help pinpoint the problem.
 If you do this, please capture the results and email them to me at my
 email address at the end of this file.
 
+
+MAS DATA FILES AND FORMAT
+
+Since the current version of MAS expects to obtain its data from a set
+of data files - one for each market - you will need to obtain files with
+historic data for the markets you are interested in tracking; and you
+will need some method of updating these files each trading day with the
+current end-of-day data.  (If you don't currently have a good data source,
+http://www.msodata.com/ appears to be a reliable, cheap source of daily
+market data.  They have a two-week free trial period, which I have taken
+advantage of, and I am satisfied enough with their service that I have
+decided to subscribe when the trial period ends.)
+
+Currently MAS handles data with the fields date, open, high, low, close,
+volume (in that order), which provides for stock and index data (with
+volume of 0).  It expects the date field to follow the format:  yyyymmdd.
+For example, 19990701, for July 1, 1999.  Future versions should handle
+more fields, such as open interest, and time - for intraday data.
+
+
+RUNNING MAS
+
 MAS is intended to be run as a server, servicing requests via a socket.
 To do this, you will need to start the mas executable from the command
 line, giving it the port number you wish to use for the socket connection,
@@ -46,6 +73,9 @@ To access the MAS functionality for creating new indicators or new event
 generators, you can either run mas at a terminal and use its command-line
 interface directly or you can run the macl (if you have Python installed)
 or the maclj script.
+
+
+CONTACT INFORMATION
 
 If you have problems or questions about MAS or want to give feedback or
 suggestions (requests for new features, etc.), you are welcome to email
