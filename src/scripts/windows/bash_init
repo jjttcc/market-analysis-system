@@ -1,4 +1,4 @@
-PATH=$PATH:$PWD
+PATH=$PWD:$PATH
 specfile=repl_spec
 mctdir="c:/Program Files/mct"
 
