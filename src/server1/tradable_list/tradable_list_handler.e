@@ -7,6 +7,11 @@ indexing
 
 class TRADABLE_LIST_HANDLER inherit
 
+	GENERAL_UTILITIES
+		export {NONE}
+			all
+		end
+
 creation
 
 	make
@@ -52,10 +57,16 @@ feature -- Access
 		local
 			l: TRADABLE_LIST
 		do
+			error_occurred := false
 			l := list_for (period_type)
 			if l.symbols.has (symbol) then
 				l.search_by_symbol (symbol)
 				Result := l.item
+				if l.fatal_error then
+					error_occurred := true
+					last_error := concatenation (<<
+						"Error occurred retrieving data for ", symbol>>)
+				end
 			end
 		ensure
 			period_type_valid: Result /= Void implies
@@ -69,11 +80,20 @@ feature -- Access
 			-- `period_type' is not a valid type for `symbol'
 		local
 			l: TRADABLE_LIST
+			t: TRADABLE [BASIC_MARKET_TUPLE]
 		do
+			error_occurred := false
 			l := list_for (period_type)
 			if l.symbols.has (symbol) then
 				l.search_by_symbol (symbol)
-				Result := l.item.tuple_list (period_type.name)
+				t := l.item
+				if not l.fatal_error then
+					Result := t.tuple_list (period_type.name)
+				else
+					error_occurred := true
+					last_error := concatenation (<<
+						"Error occurred retrieving data for ", symbol>>)
+				end
 			end
 		ensure
 			same_period_type: Result /= Void implies
@@ -97,12 +117,14 @@ feature -- Access
 			-- Void if the tradable for `symbol' is not found
 		local
 			l: LIST [TIME_PERIOD_TYPE]
+			t: TRADABLE [BASIC_MARKET_TUPLE]
 		do
+			error_occurred := false
 			if daily_market_list /= Void then
 				daily_market_list.search_by_symbol (symbol)
-				if daily_market_list.item /= Void then
-					l := daily_market_list.item.period_types.
-						linear_representation
+				t := daily_market_list.item
+				if not daily_market_list.fatal_error then
+					l := t.period_types.linear_representation
 					create Result.make (l.count)
 					from
 						l.start
@@ -112,13 +134,18 @@ feature -- Access
 						Result.extend (l.item.name)
 						l.forth
 					end
+				else
+					error_occurred := true
+					last_error := concatenation (<<
+						"Error occurred retrieving period types for ",
+						symbol>>)
 				end
 			end
-			if intraday_market_list /= Void then
+			if not error_occurred and intraday_market_list /= Void then
 				intraday_market_list.search_by_symbol (symbol)
-				if intraday_market_list.item /= Void then
-					l := intraday_market_list.item.period_types.
-						linear_representation
+				t := intraday_market_list.item
+				if not intraday_market_list.fatal_error then
+					l := t.period_types.linear_representation
 					if Result = Void then
 						create Result.make (l.count)
 					end
@@ -130,9 +157,17 @@ feature -- Access
 						Result.extend (l.item.name)
 						l.forth
 					end
+				else
+					error_occurred := true
+					last_error := concatenation (<<
+						"Error occurred retrieving period types for ",
+						symbol>>)
 				end
 			end
 		end
+
+	last_error: STRING
+			-- Description of last error
 
 feature -- Status report
 
@@ -149,6 +184,9 @@ feature -- Status report
 				intraday_market_list /= Void and then
 				not intraday_market_list.empty)
 		end
+
+	error_occurred: BOOLEAN
+			-- Did an error occur during the last operation?
 
 feature -- Basic operations
 

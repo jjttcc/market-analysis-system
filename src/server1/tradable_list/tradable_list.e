@@ -59,10 +59,13 @@ feature -- Access
 		end
 
 	item: TRADABLE [BASIC_MARKET_TUPLE] is
+			-- Current tradable.  `fatal_error' will be true if an error
+			-- occurs.
 		do
 			check
 				indices_equal: index = tradable_factories.index
 			end
+			fatal_error := false
 			-- Create a new tradable (or get it from the cache) only if the
 			-- cursor has moved since the last tradable creation.
 			if
@@ -72,24 +75,28 @@ feature -- Access
 				last_tradable := cached_item (index)
 				if last_tradable = Void then
 					setup_input_medium
-					tradable_factories.item.set_symbol (current_symbol)
-					tradable_factories.item.execute
-					last_tradable := tradable_factories.item.product
-					add_to_cache (last_tradable, index)
-					if tradable_factories.item.error_occurred then
-						report_errors (last_tradable,
-							tradable_factories.item.error_list)
-						if tradable_factories.item.last_error_fatal then
-							fatal_error := true
+					if not fatal_error then
+						tradable_factories.item.set_symbol (current_symbol)
+						tradable_factories.item.execute
+						last_tradable := tradable_factories.item.product
+						add_to_cache (last_tradable, index)
+						if tradable_factories.item.error_occurred then
+							report_errors (last_tradable.symbol,
+								tradable_factories.item.error_list)
+							if tradable_factories.item.last_error_fatal then
+								fatal_error := true
+							end
 						end
+						close_input_medium
 					end
-					close_input_medium
 				else
 					last_tradable.flush_indicators
 				end
 				old_index := index
 			end
 			Result := last_tradable
+		ensure then
+			good_if_no_error: not fatal_error implies Result /= Void
 		end
 
 	symbols: LIST [STRING] is
@@ -170,7 +177,8 @@ feature -- Basic operations
 				forth
 			end
 		ensure
-			current_symbol_equals_s: item.symbol.is_equal (s)
+			current_symbol_equals_s:
+				not fatal_error implies item.symbol.is_equal (s)
 		end
 
 	clear_cache is
@@ -188,10 +196,10 @@ feature {NONE} -- Implementation
 
 	symbol_list: LINEAR [STRING]
 
-	report_errors (t: TRADABLE [BASIC_MARKET_TUPLE]; l: LIST [STRING]) is
+	report_errors (symbol: STRING; l: LIST [STRING]) is
 		do
 			log_error ("Errors occurred while processing ")
-			log_error (t.symbol); log_error (":%N")
+			log_error (symbol); log_error (":%N")
 			from
 				l.start
 			until
@@ -230,9 +238,11 @@ feature {NONE} -- Implementation
 
 	setup_input_medium is
 			-- Ensure that tradable_list has access to the current
-			-- input medium, if it exists.
+			-- input medium, if it exists.  `fatal_error' will be true
+			-- if an error occurs.
 		require
 			tf_index_current: index = tradable_factories.index
+			no_error: fatal_error = false
 		do
 		end
 
