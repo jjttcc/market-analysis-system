@@ -117,6 +117,13 @@ feature {NONE} -- Basic operations
 
 feature {NONE}
 
+	strict_n_count: BOOLEAN is
+			-- Is the `effective_n' value used to enforce a strict relation
+			-- between output.count and target.count after processing?
+		once
+			Result := true
+		end
+
 	target: ARRAYED_LIST [MARKET_TUPLE]
 
 	immediate_parameters: LIST [FUNCTION_PARAMETER] is
@@ -134,8 +141,9 @@ invariant
 		processed implies (target.count < effective_n implies output.empty)
 	processed_when_target_ge_n:
 		processed implies
-			(target.count >= effective_n implies
-				output.count = target.count - effective_n + 1)
+			(target.count >= effective_n implies not output.empty and
+				(strict_n_count implies output.count =
+					target.count - effective_n + 1))
 	effective_n_gt_0: effective_n > 0
 	effective_n_definition: effective_n = n + effective_offset
 
