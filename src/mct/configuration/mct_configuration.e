@@ -9,16 +9,19 @@ indexing
 class MCT_CONFIGURATION inherit
 
 	CONFIGURATION_UTILITIES
+		rename
+			file_reader as config_file,
+			new_file_reader as new_config_file
 		export
 			{NONE} all
 		redefine
 			post_process_settings, use_customized_setting,
-			do_customized_setting
+			do_customized_setting, config_file
 		end
 
-	MCT_CONFIGURATION_CONSTANTS
+	MCT_CONFIGURATION_PROPERTIES
 		export
-			{NONE} token_from
+			{NONE} token_from, Begin_tag, End_tag
 		end
 
 creation
@@ -27,7 +30,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	initialize_settings_table is
+	initialize is
 		do
 			create settings.make (0)
 			create start_server_commands.make
@@ -93,6 +96,18 @@ feature -- Status report
 	terminate_sessions_on_exit: BOOLEAN
 			-- Should all owned MAS sessions be terminated on exit?
 
+	save_command_as_default_failed: BOOLEAN is
+			-- Did the last call to `save_command_as_default ' fail?
+		do
+			Result := config_file.mark_as_default_failed
+		end
+
+	save_command_as_default_failure_reason: STRING is
+			-- Did the last call to `save_command_as_default ' fail?
+		do
+			Result := config_file.mark_as_default_failure_reason
+		end
+
 feature -- Status setting
 
 	set_terminate_sessions_on_exit (arg: BOOLEAN) is
@@ -106,6 +121,15 @@ feature -- Status setting
 				and terminate_sessions_on_exit /= Void
 		end
 
+feature -- Basic operations
+
+	save_command_as_default (cmd: EXTERNAL_COMMAND) is
+			-- Save `cmd' in the configuration file as a default command.
+		do
+			config_file.mark_block_as_default (Command_name_specifier,
+				cmd.name, cmd.identifier)
+		end
+
 feature {NONE} -- Implementation - Hook routine implementations
 
 	key_index: INTEGER is 1
@@ -113,8 +137,6 @@ feature {NONE} -- Implementation - Hook routine implementations
 	value_index: INTEGER is 2
 
 	configuration_type: STRING is "MAS Control Terminal"
-
-	configuration_file_name: STRING is "mctrc"
 
 	post_process_settings is
 		do
@@ -155,44 +177,37 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	use_customized_setting (key, value: STRING): BOOLEAN is
 		do
-			if in_begin_block then
+			if config_file.in_block or config_file.at_end_of_block then
 				Result := True
-			else
-				Result := key.is_equal (Begin_tag)
-				if Result then
-					in_begin_block := True
-					if
-						value /= Void and then
-						value.is_equal (Start_server_cmd_specifier)
-					then
-						in_start_server_cmd := True
-						current_cmd_is_default := False
-					end
-				end
 			end
 		end
 
 	do_customized_setting (key, value: STRING) is
 		do
-			if in_begin_block then
-				if key.is_equal (End_tag) then
-					in_begin_block := False
-					if in_start_server_cmd then
-						make_start_server_cmd
-					end
-				elseif in_start_server_cmd then
+			check
+				in_or_at_end_of_block:
+					config_file.in_block xor config_file.at_end_of_block
+			end
+			if config_file.current_block_is_start_server_cmd then
+				if config_file.in_block then
 					process_start_server_cmd (key, value)
+				else
+					check
+						at_end_and_start_server: config_file.at_end_of_block
+						and config_file.current_block_is_start_server_cmd
+					end
+					make_start_server_cmd
+					current_cmd_is_default := False
 				end
 			end
 		end
 
+	new_config_file: CONFIGURATION_FILE is
+		do
+			create Result.make (Field_separator, Record_separator)
+		end
+
 feature {NONE} -- Implementation
-
-	in_begin_block: BOOLEAN
-			-- Are we currently within a "begin" block?
-
-	in_start_server_cmd: BOOLEAN
-			-- Does the current block define a "start-server" command?
 
 	has_token (s: STRING): BOOLEAN is
 			-- Does `s' have a "<...>" token?
@@ -220,6 +235,8 @@ feature {NONE} -- Implementation
 
 	process_start_server_cmd (key, value: STRING) is
 			-- Process a block-definition of a start-server command.
+		require
+			in_block: config_file.in_block
 		do
 			if key.is_equal (Command_specifier) then
 				current_cmd_string := value
@@ -237,6 +254,8 @@ feature {NONE} -- Implementation
 
 	make_start_server_cmd is
 			-- Make a 'start-server' command and add it to `external_commands'.
+		require
+			at_end_of_block: config_file.at_end_of_block
 		local
 			c: SESSION_COMMAND
 		do
@@ -253,6 +272,8 @@ feature {NONE} -- Implementation
 	current_cmd_string, current_cmd_desc, current_cmd_name: STRING
 
 	current_cmd_is_default: BOOLEAN
+
+	config_file: CONFIGURATION_FILE
 
 invariant
 
