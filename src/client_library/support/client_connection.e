@@ -244,7 +244,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-feature {NONE} -- Implementation - constants
+feature {NONE} -- Implementation
 
 	Timeout_seconds: INTEGER is
 			-- Number of seconds client will wait for server to respond
@@ -259,9 +259,23 @@ feature {NONE} -- Implementation - constants
 			Result := c = eom @ 1
 		end
 
-	Connection_failed_msg: STRING is "Connection to the server failed."
+	Connection_failed_msg: STRING is 
+		do
+			Result := "Connection to the " + server_type + "failed."
+			if socket.error /= Void and not socket.error.is_empty then
+				Result := Result + " (" + socket.error + ")"
+			end
+		end
 
 	Invalid_address_msg: STRING is "Invalid network address."
+
+feature {NONE} -- Hook routines
+
+	server_type: STRING is
+			-- Short description of the server
+		once
+			Result := "sever " -- Redefine if needed - add a space at the end.
+		end
 
 invariant
 
