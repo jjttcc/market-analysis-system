@@ -8,6 +8,9 @@ MAS_DIRECTORY
 MAS_STOCK_SPLIT_FILE
 MAS_MAILER_SUBJECT_FLAG
 
+[NOTE: Don't forget to export these variables in your shell (or use setenv
+if you're using a csh-like shell).]
+
 MAS_MAILER specifies the email client that will be used by MAS.  If this
 variable is not set, a default of "elm" will be used.
 
