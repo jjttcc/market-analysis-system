@@ -33,11 +33,14 @@ feature -- Access
 			exponential: MA_EXPONENTIAL
 			point: MARKET_POINT
 			pair: PAIR [MARKET_FUNCTION, STRING]
+			now: DATE_TIME
 		once
 			!!Result.make (0)
 			!!exponential.make (1)
 			!!volume
+			!!now.make_now
 			!!point.make
+			point.set_x_y_date (1, 1, now)
 			!!stock.make ("DUMMY",
 				period_types @ (period_type_names @ Daily))
 			!ONE_VARIABLE_FUNCTION!complex_function.make (
@@ -68,8 +71,7 @@ feature -- Access
 			!MARKET_FUNCTION_LINE!f.make (point, point,
 				period_types @ (period_type_names @ daily))
 			!!pair.make (f,
-				"Market function that provides an n-period exponential %
-				%moving average of another function")
+				"Market function that functions as a trend line")
 			Result.extend (pair)
 		end
 
