@@ -1,3 +1,14 @@
+name: changing indicator parameters affects period-type state
+description: When the following steps are performed: "Set the period
+type for viewing data to something other than daily, such as quarterly.
+Use the command-line to change the value of a parameter for an indicator;
+save the changes; go to the main menu and view data; select the edited
+indicator and print it.", the period type used for this processing will be
+daily, even though it was set to quarterly (and says such in the menu).
+Explicitly selecting quarterly again and printing the indicator gives
+the correct results.
+status: Discovered on Mon Jun 23 13:12:39 MDT 2003
+
 name: Division by 0
 description: Division by 0 is not checked for in class DIVISION.
 One solution is to simply check for a denominator of 0 in execute and
