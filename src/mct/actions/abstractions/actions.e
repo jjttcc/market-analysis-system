@@ -39,6 +39,13 @@ feature -- Access
 			Result.compare_objects
 		end
 
+	current_default_start_server_command: MCT_COMMAND is
+			-- The currently-selected "default" start-server command
+		do
+			Result := external_commands @
+				configuration.Start_server_cmd_specifier
+		end
+
 feature -- Actions
 
 	exit is

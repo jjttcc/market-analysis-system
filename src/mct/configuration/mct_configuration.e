@@ -144,7 +144,9 @@ feature -- Access
 feature -- Commands
 
 	default_start_server_command: MCT_COMMAND
-			-- Specified default 'start-server' command
+			-- Specified default 'start-server' command specified on
+			-- startup - not necessarily the currently-selected
+			-- default 'start-server' command
 
 	start_server_commands: LINKED_SET [MCT_COMMAND]
 			-- Configured 'start-server' commands

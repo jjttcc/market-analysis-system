@@ -73,8 +73,7 @@ feature -- Actions
 				orig_cursor := gtools.set_busy_cursor (owner_window)
 				session_window := builder.configured_session_window (
 					configuration.hostname, portnumber)
-				cmd := external_commands @
-					configuration.Start_server_cmd_specifier
+				cmd := current_default_start_server_command
 				cmd.execute (session_window)
 				msg := server_report (
 					configuration.server_report_portnumber.to_integer)
@@ -107,7 +106,6 @@ feature -- Actions
 	edit_preferences is
 			-- Edit "Preferences".
 		do
-			print ("Stub!!! - Edit preferences%N")
 		end
 
 feature {NONE} -- Implementation

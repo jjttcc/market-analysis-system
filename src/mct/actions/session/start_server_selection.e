@@ -43,6 +43,7 @@ feature -- Basic operations
 			window: LIST_SELECTION_WINDOW
 			rows: LINKED_LIST [LIST [STRING]]
 			label: STRING
+			default_command: MCT_COMMAND
 		do
 			create rows.make
 			rows.extend (create {LINKED_LIST [STRING]}.make)
@@ -52,6 +53,7 @@ feature -- Basic operations
 			create server_cmd_table.make (
 				configuration.start_server_commands.count)
 			cmds := configuration.start_server_commands
+			default_command := current_default_start_server_command
 			-- Add one row to `rows' for each element of `cmds'.
 			from
 				cmds.start
@@ -64,6 +66,10 @@ feature -- Basic operations
 					label := cmds.item.identifier
 				else
 					label := cmds.item.name
+				end
+				if cmds.item = default_command then
+					-- Mark the currently-selected default command.
+					label := "> " + label
 				end
 				rows.last.extend (label)
 				server_cmd_table.put (cmds.item, label)
@@ -93,7 +99,7 @@ feature {NONE} -- Implementation
 				selected_command := server_cmd_table @
 					supplier.selected_item.first
 				check
-					start_srvr_cmd_set: selected_command /= Void and
+					a_start_srvr_cmd_is_selected: selected_command /= Void and
 					selected_command.identifier.is_equal (
 						configuration.Start_server_cmd_specifier) and
 					external_commands.has (selected_command.identifier)
