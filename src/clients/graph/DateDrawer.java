@@ -45,7 +45,6 @@ public class DateDrawer extends TemporalDrawer {
 	* names at the appropriate places.
 	*/
 	protected void draw_tuples(Graphics g, Rectangle b) {
-System.out.println("0X = ind: " + is_indicator());
 		int mi, yi, i;
 		int lastyear, lastmonth, year, month;
 		Rectangle bounds = b;
@@ -56,11 +55,8 @@ System.out.println("0X = ind: " + is_indicator());
 		if (data == null) return;
 
 		if (is_indicator()) {
-//Rectangle refbounds = main_drawer.bottom_reference_bounds(bounds);
-//Month_y = bounds.y + bounds.height + 15;
 			Month_y = label_y_value(bounds);
 			Year_y = Month_y;
-System.out.println("Month y was set to: " + Month_y);
 		}
 		Month_x_offset = 10;
 		month_ln = 3;
@@ -114,20 +110,12 @@ System.out.println("Month y was set to: " + Month_y);
 		}
 		++mi;
 
-System.out.println("mlen: " + months.length);
-System.out.println("mlen: " + _x_values);
-System.out.println("m[0]: " + months[0]);
-System.out.println("m[1]: " + months[1]);
-System.out.println("m[0].right(): " + months[0].right());
-System.out.println("m[1].right(): " + months[1].right());
-System.out.println("AX = ind: " + is_indicator());
 		if (months.length > 1 && _x_values.length > 1 &&
 			months[0] != null && months[1] != null &&
 			months[0].right() >= 0 && months[1].right() >= 0) {
 			// Set the month name length and the month x offset according
 			// to the distance between the x-value for the first month and
 			// the x-value for the second month.
-System.out.println("BX");
 			if (_x_values[months[1].right()] -
 					_x_values[months[0].right()] < 25) {
 				month_ln = 1;
@@ -191,8 +179,6 @@ System.out.println("BX");
 		final int Line_offset = -2;
 		double width_factor;
 
-System.out.println("draw_month CX - ind, bounds: " +
-is_indicator() + ", " + bounds);
 		width_factor = width_factor_value(bounds, data_length());
 		x = _x_values[p.right()];
 		month_x = x + Month_x_offset;
@@ -207,9 +193,6 @@ is_indicator() + ", " + bounds);
 			g.setColor(conf.text_color());
 			g.drawString(Utilities.month_at(month).substring(0, month_ln),
 							month_x, Month_y);
-System.out.println("<<<<Drawing month " +
-Utilities.month_at(month).substring(0, month_ln) + " at " +
-month_x + ", " + Month_y + ">>>>");
 		}
 	}
 
@@ -222,10 +205,8 @@ month_x + ", " + Month_y + ">>>>");
 		final int Line_offset = -3;
 		double width_factor;
 
-System.out.println("Trying to draw year - ind: " + is_indicator());
 		width_factor = width_factor_value(bounds, data_length());
-		x = (int)(p.right() * width_factor + bounds.x);
-x = _x_values[p.right()];
+		x = _x_values[p.right()];
 		year_x = x + Year_x_offset;
 		if (line && x > Too_far_left) {
 			g.setColor(Color.black);
@@ -240,8 +221,6 @@ x = _x_values[p.right()];
 
 			g.setColor(conf.text_color());
 			g.drawString(ys, year_x, Year_y);
-System.out.println("<<<<Drawing year " + ys + " at " +
-year_x + ", " + Year_y + ">>>>");
 		}
 	}
 }

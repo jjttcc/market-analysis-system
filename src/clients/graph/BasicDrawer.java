@@ -28,8 +28,6 @@ abstract public class BasicDrawer extends Drawer {
 
 	// Is this Drawer an indicator drawer for the lower graph?
 	public boolean is_lower_indicator() {
-System.out.println("ili - is_ind, is_lower: " + is_indicator() + ", " +
-is_lower() + " (" + getClass() + ", " + this + ")");
 		return is_indicator() && is_lower();
 	}
 
@@ -92,7 +90,6 @@ is_lower() + " (" + getClass() + ", " + this + ")");
 			g.fill3DRect(right_bounds.x, right_bounds.y - Y_fill_value,
 				right_bounds.width, right_bounds.height + Y_fill_value, true);
 		}
-System.out.println("reference section was drawn for " + getClass());
 	}
 
 	/**
@@ -109,7 +106,6 @@ System.out.println("reference section was drawn for " + getClass());
 		Rectangle main_bounds = main_bounds(bounds);
 		Rectangle right_bounds = right_reference_bounds(bounds);
 
-System.out.println("main bounds, bounds: " + main_bounds + ", " + bounds);
 		if ( xaxis != null ) {
 			xmax = xaxis.maximum();
 			xmin = xaxis.minimum();
@@ -154,7 +150,6 @@ System.out.println("main bounds, bounds: " + main_bounds + ", " + bounds);
 		result.x += xmargin;
 		result.width -= Reference_rect_width + xmargin;
 		if (is_lower_indicator()) {
-System.out.println("main bounds - setting up for lower indicator.");
 			result.height -= Bottom_ref_rect_height;
 		}
 		return result;
@@ -166,7 +161,6 @@ System.out.println("main bounds - setting up for lower indicator.");
 		result.x = result.width - Reference_rect_width;
 		result.width = Reference_rect_width;
 		if (is_lower_indicator()) {
-System.out.println("reference bounds - setting up for lower indicator.");
 			result.height -= Bottom_ref_rect_height;
 		}
 		return result;
@@ -176,7 +170,6 @@ System.out.println("reference bounds - setting up for lower indicator.");
 	protected Rectangle bottom_reference_bounds(Rectangle r) {
 		Rectangle result = new Rectangle(r);
 		if (is_lower_indicator()) {
-System.out.println("reference bounds - setting up for lower indicator.");
 			result.height = Bottom_ref_rect_height;
 			result.y += r.height - Bottom_ref_rect_height;
 		}
@@ -203,7 +196,6 @@ System.out.println("reference bounds - setting up for lower indicator.");
 	private void draw_horizontal_lines(Graphics g, Rectangle bounds,
 			Vector hline_data) {
 		if (hline_data == null) return;
-System.out.println("dhl - bounds: " + bounds);
 
 		int y1, y2;
 		double d1, d2;
@@ -252,9 +244,6 @@ System.out.println("dhl - bounds: " + bounds);
 		}
 		start = (int) (Math.floor(ymin / step) * step + step);
 		for (y = start; y < ymax; y += step) {
-System.out.println("drv - refspecs - ln, step, start, y: " +
-refvalue_specs.length + ", " + step + ", " + start + ", " + y +
-" (class: " + getClass() + ")");
 			display_reference_value(y, g, main_bounds, ref_bounds,
 				lines_needed);
 		}
@@ -269,18 +258,12 @@ refvalue_specs.length + ", " + step + ", " + start + ", " + y +
 		int adjusted_y = (int) (ref_bounds.y + (1.0 - (y-ymin) / yrange) *
 								ref_bounds.height);
 
-System.out.println("(" + getClass() + ")");
-System.out.println("adjy, rbht + refb.y - topm: " + adjusted_y + ", " +
-(ref_bounds.height + ref_bounds.y - topmargin));
 		if (adjusted_y <= ref_bounds.height + ref_bounds.y - topmargin) {
 			if (lines) {
 				g.setColor(Color.black);
 				g.drawLine(main_bounds.x - X_left_line_adjust, adjusted_y,
 					main_bounds.x + main_bounds.width, adjusted_y);
 			}
-//		g.drawString(new Integer(y).toString(), bounds.x + 5, adjusted_y);
-System.out.print("displrv drawing text at y: " + adjusted_y + Y_text_adjust);
-System.out.println(" (class: " + getClass() + ")");
 			g.setColor(config.text_color());
 			g.drawString(new Integer((int) y).toString(),
 				ref_bounds.x + ref_bounds.width + Ref_text_offset,

@@ -82,12 +82,7 @@ public class TimeDrawer extends TemporalDrawer {
 		if (times == null || times.length == 0) return;
 
 		if (is_indicator()) {
-//Rectangle refbounds = main_drawer.bottom_reference_bounds(bounds);
-//Hour_y = bounds.y + bounds.height + 15;
 			Hour_y = label_y_value(bounds);
-			Day_y = Hour_y;
-System.out.println("Hour y was set to: " + Hour_y);
-//Old: Hour_y = bounds.y + bounds.height - 15; Hour_x_offset = 10;
 			Day_y = Hour_y;
 		}
 		Hour_x_offset = 10;

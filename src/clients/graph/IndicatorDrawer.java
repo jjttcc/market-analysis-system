@@ -49,9 +49,6 @@ abstract public class IndicatorDrawer extends BasicDrawer {
 
 	public void set_lower(boolean b) {
 		lower_indicator = b;
-System.out.println("ID set_lower was called  with " + b + " (" +
-getClass() + ", " + this + ")");
-System.out.println("lower: " + is_lower() + ")");
 	}
 
 	protected boolean is_lower() { return lower_indicator; }

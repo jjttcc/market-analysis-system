@@ -59,8 +59,6 @@ abstract public class TemporalDrawer extends Drawer {
 		} else {
 			bounds = b;
 		}
-System.out.print("Temp... drawing with bounds: " + bounds);
-System.out.println(" (b: + " + b + ")");
 		draw_tuples(g, bounds);
 	}
 
@@ -75,7 +73,7 @@ System.out.println(" (b: + " + b + ")");
 		return -(int) ((secondx - firstx) * Label_x_factor);
 	}
 
-	final int Too_far_left = 13;
+	final int Too_far_left = 7;
 
 	final int Label_y_offset = 15;
 

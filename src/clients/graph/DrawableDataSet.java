@@ -243,12 +243,6 @@ public class DataSet {
 	public void draw_data(Graphics g, Rectangle bounds) {
 		boolean restore_bounds = false;
 		if (! range_set) range();
-//!!!		if (bounds.x == 0) {
-//			// Create frame boundary.
-//			bounds.x += 4;
-//			bounds.width -= 4;
-//			restore_bounds = true;
-//		}
 		if ( linecolor != null) g.setColor(linecolor);
 		_drawer.set_data(data);
 		_drawer.set_xaxis(xaxis_);
@@ -257,17 +251,6 @@ public class DataSet {
 		_drawer.set_ranges(xrange, yrange);
 		_drawer.set_clipping(clipping);
 		_drawer.draw_data(g, bounds, hline_data, vline_data, color_);
-//		if (_dates_needed) {
-//			if (times != null) {
-//				draw_times(g, bounds);
-//			} else if (dates != null)  {
-//				draw_dates(g, bounds);
-//			}
-//		}
-//		if (restore_bounds) {
-//			bounds.x -= 4;
-//			bounds.width += 4;
-//		}
 	}
 
 	/**
@@ -371,8 +354,6 @@ public class DataSet {
 			drawer.set_maxes(xmax, ymax, xmin, ymin);
 			drawer.set_ranges(xrange, yrange);
 			drawer.set_clipping(clipping);
-System.out.println("DataSet.draw_dates calling draw_data with "+
-g + ", " + w + "; drawer: " + drawer);
 			drawer.draw_data(g, w);
 		}
 	}
