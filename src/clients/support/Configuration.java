@@ -119,6 +119,11 @@ public class Configuration implements NetworkProtocol
 		return (String) reverse_color_table.get(c);
 	}
 
+	// Color for `color_name'
+	public Color color(String color_name) {
+		return (Color) _color_table.get(color_name);
+	}
+
 	// List of indicators in their user-specified order
 	public Vector indicator_order() {
 		return _indicator_order;
