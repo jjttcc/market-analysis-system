@@ -1,0 +1,21 @@
+<html>
+<head>
+</head>
+<body>
+<TITLE>
+Market Analysis System Charts
+</TITLE>
+<p>
+<h3>
+Market Analysis System Charts
+</h3>
+Welcome to the Market Analysis System Charts.
+<P>
+Click
+<A href=mas.html>
+here</A>
+to load the charting application.
+<A href=jsptest.jsp>
+Try this.</A>
+</body>
+</html>

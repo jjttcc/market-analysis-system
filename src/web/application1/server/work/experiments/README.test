@@ -1,0 +1,17 @@
+Experimental files
+
+For example, here's an explanatory note in the web test directory about
+index.html.new and jsptest.jsp:
+
+It looks like the files:
+
+index.html.new
+jsptest.jsp
+
+constitute the beginning of an experiment to implement a more full-fledged
+JSP-based application - i.e., I was playing around with ideas for using JSP
+to add more functionality.  I also appears that did not get very far with
+the experiment.
+
+I'm leaving the files here for now to allow me to continue the experiment
+later, if I decide to.
