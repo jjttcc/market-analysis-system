@@ -83,6 +83,7 @@ feature {NONE}
 			-- Display the tradable menu and respond to the user's commands.
 		local
 			c: CHARACTER
+			cursor: CURSOR
 		do
 			from
 			until
@@ -103,7 +104,9 @@ feature {NONE}
 				when 'm', 'M' then
 					display_memory_values
 				when 'r', 'R' then
+					save_mklist_position
 					event_coordinator.execute
+					restore_mklist_position
 				when 'x', 'X' then
 					end_program := true
 				when '!' then
@@ -343,6 +346,28 @@ feature {NONE}
 			end
 		end
 
+	save_mklist_position is
+			-- Save the current position of `market_list' for later restoring.
+		do
+			saved_mklist_index := market_list.index
+		end
+
+	restore_mklist_position is
+			-- Restore `market_list' cursor to last saved position
+		require
+			saved_mklist_index > 0
+		do
+			from
+				if saved_mklist_index < market_list.index then
+					market_list.start
+				end
+			until
+				market_list.index = saved_mklist_index
+			loop
+				market_list.forth
+			end
+		end
+
 	initialize is
 		do
 			event_coordinator := factory_builder.event_coordinator
@@ -354,5 +379,7 @@ feature {NONE}
 feature {NONE}
 
 	end_program: BOOLEAN
+
+	saved_mklist_index: INTEGER
 
 end -- class TEST_USER_INTERFACE
