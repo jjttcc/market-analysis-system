@@ -321,11 +321,12 @@ feature {NONE} -- Implementation
 			c: CHARACTER
 			fa_maker: TVFA_FACTORY
 		do
-			!!fa_maker
+			!!fa_maker.make
 			fa_maker.set_functions (
 				function_choice_clone ("left technical indicator"),
 					function_choice_clone ("right technical indicator"))
 			fa_maker.set_period_type (period_type_choice)
+			fa_maker.set_crossover_specification (above_below_choice (fa_maker))
 			from
 			until
 				c /= '%U'
@@ -401,6 +402,7 @@ feature {NONE} -- Implementation
 		end
 
 	operator_choice (function: MARKET_FUNCTION): RESULT_COMMAND [BOOLEAN] is
+			-- User's choice of operator
 		do
 			operator_maker.set_left_offset (0) -- Important.
 			operator_maker.set_market_function (function)
@@ -453,10 +455,69 @@ feature {NONE} -- Implementation
 		end
 
 	period_type_choice: TIME_PERIOD_TYPE is
+			-- User's choice of trading period type
+		local
+			names: LINKED_LIST [STRING]
+			i: INTEGER
 		do
-			--Allow the user to choose from period_types.
-			--!!!STUB:
-			Result := period_types @ (period_type_names @ Daily)
+			from
+				i := 1
+				!!names.make
+			until
+				i > period_type_names.count
+			loop
+				names.extend (period_type_names @ i)
+				i := i + 1
+			end
+			from
+			until
+				Result /= Void
+			loop
+				print ("Select the desired trading period type:%N")
+				print_names_in_1_column (names)
+				read_integer
+				if
+					last_integer < 1 or
+						last_integer > names.count
+				then
+					print_list (<<"Selection must be between 1 and ",
+								names.count, "%N">>)
+				else
+					Result := period_types @ (names @ last_integer)
+				end
+			end
+			print_list (<<"Using ", Result.name, " period type%N">>)
+		end
+
+	above_below_choice (fa_maker: TVFA_FACTORY): INTEGER is
+			-- User's choice of whether a 2-variable function analyzer
+			-- should look for below-to-above crossovers, above-to-below
+			-- crossovers, or both
+		do
+			from
+				Result := -999999999
+			until
+				Result = fa_maker.Below_to_above or
+				Result = fa_maker.Above_to_below or
+				Result = fa_maker.Both
+			loop
+				print ("Select specification for crossover detection:%N%
+						%below-to-above (1) above-to-below (2) both (3) ")
+				inspect
+					selected_character
+				when '1' then
+					Result := fa_maker.Below_to_above
+					print ("Using below-to-above%N")
+				when '2' then
+					Result := fa_maker.Above_to_below
+					print ("Using above-to-below%N")
+				when '3' then
+					Result := fa_maker.Both
+					print ("Using both above-to-below and below-to-above%N")
+				else
+					print ("Invalid selection%N")
+				end
+			end
 		end
 
 	print_event_generator (eg: MARKET_EVENT_GENERATOR) is
