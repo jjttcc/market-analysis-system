@@ -24,7 +24,7 @@ feature -- Access
 	function: MARKET_FUNCTION
 			-- The function that this parameter applies to
 
-	current_value: INTEGER is
+	current_value: NUMERIC is
 			-- Current value of the parameter
 		deferred
 		end
@@ -36,7 +36,7 @@ feature -- Access
 
 feature -- Element change
 
-	change_value (new_value: INTEGER) is
+	change_value (new_value: NUMERIC) is
 			-- Change the value of the parameter to `new_value'.
 		require
 			value_valid: valid_value (new_value)
@@ -47,7 +47,7 @@ feature -- Element change
 
 feature -- Basic operations
 
-	valid_value (i: INTEGER): BOOLEAN is
+	valid_value (i: NUMERIC): BOOLEAN is
 			-- Is `i' a valid value for this parameter?
 		deferred
 		end
