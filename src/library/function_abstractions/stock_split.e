@@ -6,7 +6,12 @@ indexing
 
 class
 
-	STOCK_SPLIT
+	STOCK_SPLIT inherit
+
+	ANY
+		redefine
+			is_equal
+		end
 
 creation
 
@@ -40,6 +45,15 @@ feature -- Access
 
 	date: DATE
 			-- The date the split became effective
+
+feature -- Status report
+
+	is_equal (other: like Current): BOOLEAN is
+		do
+			Result := other.date.is_equal (date)
+		ensure then
+			Result = other.date.is_equal (date)
+		end
 
 invariant
 

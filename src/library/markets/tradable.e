@@ -9,7 +9,16 @@ class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 
 	SIMPLE_FUNCTION [G]
 
+	MATH_CONSTANTS
+		undefine
+			is_equal, copy, setup
+		end
+
 feature -- Access
+
+	symbol: STRING
+			-- The tradable's market symbol - example: IBM
+			--!!!??Does this belong here?  Do all tradables have symbols?
 
 	indicators: LIST [MARKET_FUNCTION]
 			-- Technical indicators associated with this tradable
