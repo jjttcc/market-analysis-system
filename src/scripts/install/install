@@ -45,7 +45,7 @@ return 0
 # Usage: set_dir dirname "message"
 set_dir() {
 	dir=
-	defaultdir="$basedir/$1"
+	defaultdir="$1"
 	if [ $# -ne 2 ]; then fault "set_dir: wrong number of arguments"; fi
 	while [ -z "$dir" ]; do
 		if interactive; then
@@ -116,7 +116,9 @@ set_dir() {
 			fi
 		fi
 	done
-	echo "$1:$dir" >>$config
+	echo "bin:$dir/bin" >>$config
+	echo "lib:$dir/lib" >>$config
+	echo "doc:$dir/doc" >>$config
 }
 
 # Check whether any of the dynamic libraries needed by the mas executable
@@ -146,8 +148,6 @@ start_server() {
 	if [ -z "$1" ]; then
 		fault "Missing argument for start_server function."
 	fi
-	cd "$libdir"/data
-	if [ $? -ne 0 ]; then fatal "Could not cd to $libdir/data."; fi
 	cmd=$1; shift
 	MAS_DIRECTORY="$libdir" $cmd -o -f , $* >/dev/null 2>&1 &
 	serverproc=$!
@@ -165,21 +165,24 @@ config() {
 	elif user_is_administrator; then
 		basedir=/opt/mas
 	else
-		basedir="$HOME"
+		basedir="$HOME/mas"
 	fi
 	if [ $? -ne 0 ]; then fatal "Cannot create configuration file $config"; fi
 	echo "NOTE: It is recommended not to use spaces in directory names." >&2
-	set_dir bin "Enter the directory for executables" >&2
-	set_dir lib "Enter the directory for library files" >&2
-	set_dir doc "Enter the directory for documentation files" >&2
+	set_dir $basedir "Enter the directory in which you wish to install MAS" >&2
 }
 
 config_cmd() {
 	portnumber=$1
-	config="$macl $portnumber -i $ifile && $macl $portnumber -i $mfile"
+	shift
+	cmd="$macl $portnumber -i $1"
+	shift
+	for f;do
+		cmd="$cmd && $macl $portnumber -i $f"
+	done
 	# Command to stop the server:
 	stop_cmd="(echo |$macl $portnumber)"
-	echo -e "($config; $stop_cmd) >/dev/null 2>&1"
+	echo -e "($cmd; $stop_cmd) >/dev/null 2>&1"
 }
 
 show_config_information() {
@@ -195,10 +198,11 @@ show_config_information() {
 # (Should be last task, if possible.)
 configure_mas() {
 	configresult=0
-	maximum_allowed_time=90
+	maximum_allowed_time=120
 	export PYTHONPATH="$libdir"/python
 	ifile="$libdir"/config/indicators
 	mfile="$libdir"/config/market_analyzers
+	macl_files="indicators parabolic-sar cci market_analyzers cci_signals"
 	macl="$bindir"/macl
 	mas="$bindir"/mas
 	port=$RANDOM
@@ -222,15 +226,19 @@ configure_mas() {
 				return $configresult;;
 		esac
 	fi
-	check_file_exists $ifile true "Indicator file $ifile not found."
-	check_file_exists $mfile true "Market analyzer file $mfile not found."
-	check_exe_file $mas true "Script file $mas not found."
-	check_exe_file $macl true "Script file $macl not found."
+	cd $libdir/config
+	rm -f *_persist # Remove old *_persist files, if they exist.
+	for f in $macl_files; do
+		check_file_exists $f true "Indicator file $f not found."
+	done
+	check_exe_file $mas true "File $mas not found."
+	check_exe_file $macl true "File $macl not found."
 	echo "Starting the server to configure indicators." >&2
 	start_server $mas -b $port
 	sleep 1 # Wait for server to start up.
 	echo -e "Configuring - \c" >&2
-	(eval $(config_cmd $port)) >/dev/null 2>&1 &
+	config_outfile=/dev/null
+	(eval $(config_cmd $port $macl_files)) >$config_outfile 2>&1 &
 	configproc=$!
 	trap "configresult=1" SIGUSR1
 	monitor $maximum_allowed_time -p $configproc -p $serverproc \
