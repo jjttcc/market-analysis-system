@@ -21,7 +21,8 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (nm, sym: STRING; time_stmp: DATE_TIME; e_type: EVENT_TYPE) is
+	make (nm, sym: STRING; time_stmp: DATE_TIME; e_type: EVENT_TYPE;
+			sig_type: INTEGER) is
 		require
 			not_void: nm /= Void and time_stmp /= Void and e_type /= Void and
 						sym /= Void
@@ -30,9 +31,10 @@ feature {NONE} -- Initialization
 			time_stamp := time_stmp
 			type := e_type
 			symbol := sym
+			signal_type := sig_type
 		ensure
 			set: name = nm and time_stamp = time_stmp and type = e_type and
-					symbol = sym
+					symbol = sym and signal_type = sig_type
 		end
 
 feature -- Access

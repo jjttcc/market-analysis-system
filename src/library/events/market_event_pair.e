@@ -20,7 +20,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (l, r: MARKET_EVENT; nm: STRING; tp: EVENT_TYPE) is
+	make (l, r: MARKET_EVENT; nm: STRING; tp: EVENT_TYPE; sig_type: INTEGER) is
 		require
 			not_void: l /= Void and r /= Void and nm /= Void and tp /= Void
 		do
@@ -28,8 +28,10 @@ feature {NONE} -- Initialization
 			right := r
 			type := tp
 			name := nm
+			signal_type := sig_type
 		ensure
-			set: left = l and right = r and type = tp and name = nm
+			set: left = l and right = r and type = tp and name = nm and
+				signal_type = sig_type
 		end
 
 feature -- Access
