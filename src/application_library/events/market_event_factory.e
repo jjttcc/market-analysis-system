@@ -32,7 +32,7 @@ deferred class MARKET_EVENT_FACTORY inherit
 
 feature -- Access
 
-	input: BILINEAR_INPUT_SEQUENCE
+	input: INPUT_SEQUENCE
 			-- File containing input data from which to create MARKET_EVENTs
 
 	product: MARKET_EVENT
@@ -66,7 +66,7 @@ feature {NONE} -- Implementation
 					"  ID for non-existent event: ",
 					ID, " - from file ",
 					input.name, " at character ", input.index>>)
-				error_occurred := true
+				error_occurred := True
 				raise ("scan_event failed with invalid ID")
 			end
 		end
@@ -75,7 +75,7 @@ feature {NONE} -- Implementation
 			-- Initialize error-handling attributes
 		do
 			last_error := Void
-			error_occurred := false
+			error_occurred := False
 		end
 
 	skip_field_separator is
@@ -89,7 +89,7 @@ feature {NONE} -- Implementation
 						input.name, " at character ", input.index,
 						"%N(Actual character encountered was ",
 						input.last_character>>)
-				error_occurred := true
+				error_occurred := True
 				raise ("skip_field_separator failed with invalid field %
 						%separator")
 			end
