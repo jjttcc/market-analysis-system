@@ -9,10 +9,9 @@ deferred class MARKET_FUNCTION inherit
 
 	FACTORY
 		rename
-			product as output, execute as process,
-			execute_precondition as process_precondition
+			product as output, execute as process
 		redefine
-			output, process_precondition
+			output
 		end
 
 feature -- Access
@@ -55,23 +54,15 @@ feature -- Status report
 		deferred
 		end
 
-	process_precondition: BOOLEAN is
-		do
-			Result := not processed and
-						(operator_used implies operator /= Void)
-		ensure then
-			not_processed_and_opset_if_opused:
-				Result implies
-					not processed and (operator_used implies operator /= Void)
-		end
-
 feature -- Basic operations
 
 	process (arg: ANY) is
 			-- Process the output from the input.
 		do
-			pre_process
-			do_process
+			if not processed then
+				pre_process
+				do_process
+			end
 		ensure then
 			processed: processed
 		end
