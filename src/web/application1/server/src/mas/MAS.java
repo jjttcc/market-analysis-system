@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.GenericServlet;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.ServletConfig;
 import support.IO_SocketConnection;
 import support.ServerResponseUtilities;
 
@@ -30,7 +31,7 @@ String tag = thread_tag();
 log("Starting 'service' thread " + tag);
 		try {
 			log_tag("(Version 1.4) Connected", tag);
-			log("Compiled at Thu Feb 20 21:29:01 MST 2003");
+			log("Compiled at Fri Feb 21 21:39:02 MST 2003");
 			log_tag("Reserving a proxy.", tag);
 			mas_proxy = reserved_proxy();
 			log_tag("Obtained proxy with code " + mas_proxy.hashCode(), tag);
@@ -94,10 +95,33 @@ log("Ending 'service' thread " + tag);
 		return result;
 	}
 
+	// Address information for the locating the MAS server
 	private ServerAddress server_address() {
 		if (server_address_ == null) {
-//!!!!Stubbed for now - change soon:
-			server_address_ = new ServerAddress("localhost", 2004);
+			ServletConfig config = getServletConfig();
+			String srvr_hostnm = config.getInitParameter(
+				Server_hostname_parameter_name);
+			if (srvr_hostnm == null) {
+				srvr_hostnm = Default_server_hostname;
+			}
+			String srvr_port = config.getInitParameter(
+				Server_port_parameter_name);
+			int srvr_port_value = -1;
+			if (srvr_port != null) {
+				try {
+					srvr_port_value = new Integer(srvr_port).intValue();
+				} catch (Exception e) {
+					srvr_port_value = Default_server_port;
+					log("Invalid port number specified for parameter " +
+						Server_port_parameter_name + ": " + srvr_port);
+				}
+			}
+			if (srvr_port_value == -1) {
+				srvr_port_value = Default_server_port;
+			}
+			server_address_ = new ServerAddress(srvr_hostnm, srvr_port_value);
+			log("Using server hostname/port: " + srvr_hostnm + ", " +
+				srvr_port_value);
 		}
 		return server_address_;
 	}
@@ -134,6 +158,20 @@ log("Ending 'service' thread " + tag);
 	// Cache of proxies for efficient response
 	private ManagedCache proxy_cache;
 
+// Implementation - constants
+
 	// Maximum allowed size of 'proxy_cache'
-	private final int Max_cache_size = 2;
+	private final int Max_cache_size = 5;
+
+	// Name of MAS server machine hostname initialization parameter
+	private final String Server_hostname_parameter_name = "mas-server-hostname";
+
+	// Name of MAS server port initialization parameter
+	private final String Server_port_parameter_name = "mas-server-port";
+
+	// Default MAS server hostname, in case init. parameter not set
+	private final String Default_server_hostname = "localhost";
+
+	// Default MAS server port, in case init. parameter not set
+	private final int Default_server_port = 1;
 }
