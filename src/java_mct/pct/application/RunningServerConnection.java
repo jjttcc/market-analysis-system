@@ -12,20 +12,23 @@ public class RunningServerConnection extends MCT_Constants {
 		super(pcontext);
 	}
 
-	int port() {
-		PortDialog d = new PortDialog(parent_window);
+	// Obtain hostname and port number from user and place into `hostname'
+	// and `port_number', respectively.
+	void get_hostname_and_port() {
+		PortDialog d = new PortDialog(parent_window, hostname);
 		d.show();
-		return d.result();
+		port_number = d.selected_port();
+		hostname = d.selected_hostname();
 	}
 
 	public Object execute() throws Exception {
 		MCT_ComponentContext result = null;
 		MAS_ConnectionUtilities connection;
-		int port = port();
-		String hostname = property_value(pcthostname_property);
-		result = new MCT_ComponentContext(hostname, port);
+		hostname = property_value(pcthostname_property);
+		get_hostname_and_port();
+		result = new MCT_ComponentContext(hostname, port_number);
 		connection = new MAS_ConnectionUtilities(hostname,
-			new Integer(port));
+			new Integer(port_number));
 		if (! connection.server_is_alive()) {
 			new ErrorBox("Failed to connect to mas server",
 				"server appears to be not running or not available",
@@ -40,4 +43,6 @@ public class RunningServerConnection extends MCT_Constants {
 	}
 
 	Frame parent_window = ApplicationContext.root_window();
+	int port_number;
+	String hostname;
 }
