@@ -25,8 +25,10 @@ feature {NONE} -- Implementation
 		do
 			start_timer
 			input_medium := initialized_input_medium
-print (generating_type + ": input_medium type: " +
+--!!!:
+if input_medium /= Void then print (generating_type + ": input_medium type: " +
 input_medium.generating_type + "%N")
+else print ("setup-input-medium failed to init. input_medium" + "%N") end
 			if not fatal_error then
 				tradable_factory.set_input (input_medium)
 				input_medium.set_field_separator (

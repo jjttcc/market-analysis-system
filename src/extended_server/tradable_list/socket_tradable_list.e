@@ -29,28 +29,16 @@ feature {NONE} -- Implementation
 
 	initialized_input_medium: INPUT_SOCKET is
 		local
-			conn: EXPERIMENTAL_INPUT_SOCKET_CONNECTION
+			connection: EXPERIMENTAL_INPUT_DATA_CONNECTION
 		do
-			create conn
-			create {INPUT_SOCKET} Result.make_client_by_port (
-				target_socket_port_number, target_socket_hostname)
-			conn.make_connected_with_socket (Result)
+			create connection.connect_to_supplier
+			if not connection.last_communication_succeeded then
+				fatal_error := True
+--!!!!Where/when should this error be reported?:
+print ("Error occurred connecting to data supplier:%N" +
+connection.error_report + "%N")
+			end
 		end
-
-	timeout_seconds: INTEGER is 10
-
-feature {NONE} -- Implementation - constants
---!!!!Temporarily hard-cdoed for testing - needs to be configurable.
-
-	target_socket_port_number: INTEGER is 39412
-
-	target_socket_hostname: STRING is "localhost"
-
-feature {NONE} -- Unused
-
-	Message_date_field_separator: STRING is ""
-
-	Message_time_field_separator: STRING is ""
 
 invariant
 
