@@ -84,6 +84,12 @@ feature -- Access
 			!!pair.make (f,
 				"Market function that functions as a trend line")
 			Result.extend (pair)
+			!MARKET_DATA_FUNCTION!f.make (stock)
+			!!pair.make (f,
+				"Market function that takes basic market data (with close, %
+				%high, volume, etc.) as input and %N%
+				%whose output is simply its input")
+			Result.extend (pair)
 			!!pair.make (stock,
 				"Represents a dummy function that does not take input")
 			Result.extend (pair)
