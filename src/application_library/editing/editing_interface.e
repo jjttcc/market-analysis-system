@@ -72,7 +72,12 @@ feature -- Access
 		end
 
 	string_selection (msg: STRING): STRING is
-			-- User-selected real value
+			-- User-selected string value
+		deferred
+		end
+
+	date_time_selection (msg: STRING): DATE_TIME is
+			-- User's selection of date/time
 		deferred
 		end
 
