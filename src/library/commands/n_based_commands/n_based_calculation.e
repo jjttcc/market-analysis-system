@@ -8,18 +8,7 @@ deferred class N_BASED_CALCULATION inherit
 
 	N_RECORD_COMMAND
 		redefine
-			initialize, set_n
-		end
-
-feature {FACTORY} -- Initialization --!!!Check export
-
-	initialize (s: N_RECORD_STRUCTURE) is
-			-- Initialize value with n from s
-		do
-			set_n (s.n)
-		ensure then
-			value = calculate
-			n_set_to_s_n: n = s.n
+			set_n
 		end
 
 feature {FACTORY} -- Initialization --!!!Check export
