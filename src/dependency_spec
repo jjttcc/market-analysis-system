@@ -1,4 +1,4 @@
-# Example specification for cluster dependency checking with "check_dep"
+# Specification for cluster dependency checking with "check_dep"
 # Structure: "directory<Tab>rank"
 #    Where rank is an integer > 0 - The lower the number, the higher the
 #    abstraction level of the associated cluster.  (Higher-level clusters
