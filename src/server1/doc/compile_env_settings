@@ -2,7 +2,7 @@ If you wish to compile MAS, the following environment variables need to be
 set properly to allow the Eiffel compiler to locate the needed source files:
 
 MAS           base directory for MAS files (parent of "src/" directory)
-EIFFEL4       ISE Eiffel 4 directory
+ISE_EIFFEL    ISE Eiffel directory
 ECLI          base directory for Paul Crismer's ECLI/ODBC library
 GOBO          base directory for Eric Bezault's Gobo Eiffel libraries
 
