@@ -1,6 +1,6 @@
 indexing
 	description: 
-		"An abstraction that provides services for processing sequential %
+		"An abstraction that provides services for processing a sequential %
 		%structure of market tuples."
 	date: "$Date$";
 	revision: "$Revision$"
@@ -18,7 +18,7 @@ inherit
 
 feature {FACTORY} -- Element change
 
-	set_target (in: LINEAR [MARKET_TUPLE]) is
+	set_target (in: CHAIN [MARKET_TUPLE]) is
 		require
 			not_void: in /= Void
 		do
@@ -29,7 +29,7 @@ feature {FACTORY} -- Element change
 
 feature {NONE}
 
-	target: LINEAR [MARKET_TUPLE]
+	target: CHAIN [MARKET_TUPLE]
 
 invariant
 
