@@ -69,6 +69,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		this_chart = this;
 		Vector _markets = null;
 		saved_dialogs = new Vector();
+		_indicators = null;
 
 		if (sfname != null) serialize_filename = sfname;
 
@@ -102,19 +103,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 							null);
 					}
 					current_period_type = initial_period_type(_period_types);
-					GUI_Utilities.busy_cursor(true, this);
-					// Each market has its own indicator list; but for now,
-					// just retrieve the list for the first market and use
-					// it for all markets.
-					data_builder.send_indicator_list_request(
-						(String) _markets.elementAt(0), current_period_type);
-					if (request_result() == Invalid_symbol) {
-						System.err.println("Symbol " + (String)
-							_markets.elementAt(0) + " is not in database.");
-						System.err.println("Exiting ...");
-						System.exit(-1);
-					}
-					GUI_Utilities.busy_cursor(false, this);
 				} else {
 					abort("Server's list of tradables is empty.", null);
 				}
@@ -125,15 +113,11 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			e.printStackTrace();
 			quit(-1);
 		}
-		initialize_GUI_components();
-		if (_markets.size() > 0) {
-			if (data_builder.options().print_on_startup() &&
-					window_count == 1) {
-				print_all_charts();
-			}
-			// Show the graph of the first symbol in the selection list.
-			request_data((String) _markets.elementAt(0));
+		String s = null;
+		if (_markets != null && _markets.size() > 0) {
+			s = (String) _markets.elementAt(0);
 		}
+		initialize_GUI_components(s);
 		new Thread(this).start();
 	}
 
@@ -157,91 +141,109 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 	// indicators
 	public Hashtable indicators() {
-		if (_indicators == null) {
-			Enumeration ind_iter;
+		if (_indicators == null || new_indicators) {
+			new_indicators = false;
 			Vector inds_from_server = data_builder.last_indicator_list();
-			String s;
-			Hashtable valid_indicators = new Hashtable(inds_from_server.size());
-			ordered_indicator_list = new Vector();
-			int i;
-			for (i = 0; i < inds_from_server.size(); ++i) {
-				Object o = inds_from_server.elementAt(i);
-				valid_indicators.put(o, new Integer(i + 1));
-			}
-			// User-selected indicators, in order:
-			ind_iter = Configuration.instance().indicator_order().elements();
-			_indicators = new Hashtable();
-			Vector special_indicators = new Vector();
-			special_indicators.addElement(No_lower_indicator);
-			special_indicators.addElement(No_upper_indicator);
-			special_indicators.addElement(Volume);
-			// Insert into _indicators all user-selected indicators that
-			// are either in the list returned by the server or are one of
-			// the special strings for no upper/lower indicator or volume.
-			while (ind_iter.hasMoreElements()) {
-				s = (String) ind_iter.nextElement();
-				if (valid_indicators.containsKey(s)) {
-					// Add valid indicators (from the server's point of view)
-					// to both `_indicators' and `ordered_indicator_list'.
-					_indicators.put(s, valid_indicators.get(s));
-					ordered_indicator_list.addElement(s);
-				}
-				else {
-					for (i = 0; i < special_indicators.size(); ++i) {
-						if (s.equals(special_indicators.elementAt(i))) {
-							// Add special indicators only to
-							// `ordered_indicator_list'.
-							ordered_indicator_list.addElement(s);
-							special_indicators.removeElement(s);
-							break;
-						}
-					}
-				}
-			}
-			// Insert the special indicators (no-upper indicator, ...) if
-			// they aren't already there.
-			for (i = 0; i < special_indicators.size(); ++i) {
-				s = (String) special_indicators.elementAt(i);
-				if (!_indicators.containsKey(s)) {
-					_indicators.put(s, new Integer(_indicators.size() + 1));
-					ordered_indicator_list.addElement(s);
-				}
-			}
-
-			// Update current_lower_indicators and current_upper_indicators:
-			// remove any elements that are no longer valid.
-			Vector remove_list = new Vector();
-			for (ind_iter = current_lower_indicators.elements();
-					ind_iter.hasMoreElements(); ) {
-				s = (String) ind_iter.nextElement();
-				if (! ordered_indicator_list.contains(s)) {
-					remove_list.addElement(s);
-				}
-			}
-			for (i = 0; i < remove_list.size(); ++i) {
-				while (current_lower_indicators.lastIndexOf(
-					remove_list.elementAt(i)) != -1) {
-					current_lower_indicators.removeElement(
-						remove_list.elementAt(i));
-				}
-			}
-			remove_list.removeAllElements();
-			for (ind_iter = current_upper_indicators.elements();
-					ind_iter.hasMoreElements(); ) {
-				s = (String) ind_iter.nextElement();
-				if (! ordered_indicator_list.contains(s)) {
-					remove_list.addElement(s);
-				}
-			}
-			for (i = 0; i < remove_list.size(); ++i) {
-				while (current_upper_indicators.lastIndexOf(
-					remove_list.elementAt(i)) != -1) {
-					current_upper_indicators.removeElement(
-						remove_list.elementAt(i));
-				}
+			if (! Utilities.lists_match(inds_from_server,
+					old_indicators_from_server)) {
+				// The old indicators are not the same as the indicators
+				// just obtained from the server (or there are not yet
+				// any old indicators), so the indicator lists need to
+				// be rebuilt.
+				old_indicators_from_server = inds_from_server;
+				make_indicator_lists(inds_from_server);
 			}
 		}
 		return _indicators;
+	}
+
+	private void make_indicator_lists(Vector inds_from_server) {
+		Enumeration ind_iter;
+		String s;
+		Hashtable valid_indicators = new Hashtable(inds_from_server.size());
+		ordered_indicator_list = new Vector();
+		int i;
+		for (i = 0; i < inds_from_server.size(); ++i) {
+			Object o = inds_from_server.elementAt(i);
+			valid_indicators.put(o, new Integer(i + 1));
+		}
+		// User-selected indicators, in order:
+		ind_iter = Configuration.instance().indicator_order().elements();
+		_indicators = new Hashtable();
+		Vector special_indicators = new Vector();
+		special_indicators.addElement(No_lower_indicator);
+		special_indicators.addElement(No_upper_indicator);
+		special_indicators.addElement(Volume);
+		if (data_builder.open_interest()) {
+			special_indicators.addElement(Open_interest);
+		}
+		// Insert into _indicators all user-selected indicators that
+		// are either in the list returned by the server or are one of
+		// the special strings for no upper/lower indicator, volume,
+		// or open interest.
+		while (ind_iter.hasMoreElements()) {
+			s = (String) ind_iter.nextElement();
+			if (valid_indicators.containsKey(s)) {
+				// Add valid indicators (from the server's point of view)
+				// to both `_indicators' and `ordered_indicator_list'.
+				_indicators.put(s, valid_indicators.get(s));
+				ordered_indicator_list.addElement(s);
+			}
+			else {
+				for (i = 0; i < special_indicators.size(); ++i) {
+					if (s.equals(special_indicators.elementAt(i))) {
+						// Add special indicators only to
+						// `ordered_indicator_list'.
+						ordered_indicator_list.addElement(s);
+						special_indicators.removeElement(s);
+						break;
+					}
+				}
+			}
+		}
+		// Insert the special indicators (no-upper indicator, ...) if
+		// they aren't already there.
+		for (i = 0; i < special_indicators.size(); ++i) {
+			s = (String) special_indicators.elementAt(i);
+			if (!_indicators.containsKey(s)) {
+				_indicators.put(s, new Integer(_indicators.size() + 1));
+				ordered_indicator_list.addElement(s);
+			}
+		}
+
+		// Update current_lower_indicators and current_upper_indicators:
+		// remove any elements that are no longer valid.
+		Vector remove_list = new Vector();
+		for (ind_iter = current_lower_indicators.elements();
+				ind_iter.hasMoreElements(); ) {
+			s = (String) ind_iter.nextElement();
+			if (! ordered_indicator_list.contains(s)) {
+				remove_list.addElement(s);
+			}
+		}
+		for (i = 0; i < remove_list.size(); ++i) {
+			while (current_lower_indicators.lastIndexOf(
+				remove_list.elementAt(i)) != -1) {
+				current_lower_indicators.removeElement(
+					remove_list.elementAt(i));
+			}
+		}
+		remove_list.removeAllElements();
+		for (ind_iter = current_upper_indicators.elements();
+				ind_iter.hasMoreElements(); ) {
+			s = (String) ind_iter.nextElement();
+			if (! ordered_indicator_list.contains(s)) {
+				remove_list.addElement(s);
+			}
+		}
+		for (i = 0; i < remove_list.size(); ++i) {
+			while (current_upper_indicators.lastIndexOf(
+				remove_list.elementAt(i)) != -1) {
+				current_upper_indicators.removeElement(
+					remove_list.elementAt(i));
+			}
+		}
+		if (ma_menu_bar != null) ma_menu_bar.update_indicators();
 	}
 
 	// Indicators in user-specified order
@@ -297,6 +299,15 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			try {
 				data_builder.send_market_data_request(market,
 					current_period_type);
+				if (request_result() != Invalid_symbol) {
+					// Ensure that the indicator list is up-to-date with
+					// respect to `market'.
+					data_builder.send_indicator_list_request(market,
+						current_period_type);
+					// Force call to `indicators()' to create new indicators:
+					new_indicators = true;
+					indicators();
+				}
 				if (request_result() == Invalid_symbol) {
 					handle_nonexistent_sybmol(market);
 					GUI_Utilities.busy_cursor(false, this);
@@ -348,6 +359,10 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 					if (current_lower_indicators.elementAt(i).equals(Volume)) {
 						// (Nothing to retrieve from server)
 						dataset = data_builder.last_volume();
+					} else if (current_lower_indicators.elementAt(i).equals(
+							Open_interest)) {
+						// (Nothing to retrieve from server)
+						dataset = data_builder.last_open_interest();
 					} else {
 						try {
 							data_builder.send_indicator_data_request(((Integer)
@@ -402,7 +417,10 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		}
 	}
 
-	private void initialize_GUI_components() {
+	// Initialize components and obtain and display data for `symbol' if
+	// it is not null, etc.
+	private void initialize_GUI_components(String symbol) {
+//!!!This variable appears to not be needed no mo', clean it up:
 		boolean clear_indicators = false;
 		// Create the main scroll pane, size it, and center it.
 		main_pane = new MA_ScrollPane(_period_types,
@@ -422,20 +440,30 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			current_lower_indicators = new Vector();
 		}
 		add(main_pane, "Center");
+		if (symbol != null) {
+			if (data_builder.options().print_on_startup() &&
+					window_count == 1) {
+				print_all_charts();
+			}
+			// Show the graph of the first symbol in the selection list.
+			request_data(symbol);
+//!!!!!Delete this or use it?:
+//			if (clear_indicators) {
+//				// Clear current_upper_indicators and current_lower_indicators
+//				// of indicators no longer available from the server by
+//				// forcing _indicators to be reinitialized.
+//				_indicators = null;
+//				indicators();
+//			}
+		}
 		market_selections = new MarketSelection(this);
-		setMenuBar(new MA_MenuBar(this, data_builder, _period_types));
+		ma_menu_bar = new MA_MenuBar(this, data_builder, _period_types);
+		setMenuBar(ma_menu_bar);
 
 		// Event listener for close requests
 		addWindowListener(new WindowAdapter() {
 		public void windowClosing(WindowEvent e) { close(); }
 		});
-		if (clear_indicators) {
-			// Clear current_upper_indicators and current_lower_indicators
-			// of indicators no longer available from the server by
-			// forcing _indicators to be reinitialized.
-			_indicators = null;
-			indicators();
-		}
 
 		pack();
 		show();
@@ -622,6 +650,9 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	// Main window pane
 	MA_ScrollPane main_pane;
 
+	// The menu bar for this chart
+	MA_MenuBar ma_menu_bar;
+
 	// Valid trading period types - static for now, since it is currently
 	// hard-coded in the server
 	protected static Vector _period_types;	// Vector of String
@@ -629,8 +660,12 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	// Table of market indicators
 	protected static Hashtable _indicators;	// key: String, value: Integer
 
-	// Indicators in user-specified order - includes no-upper/lower and
-	// volume indicators
+	// Has data_builder.send_indicator_list_request been called since the
+	// last call to `indicators'?
+	protected boolean new_indicators = true;
+
+	// Indicators in user-specified order - includes no-upper/lower,
+	// volume, and open-interest indicators
 	private static Vector ordered_indicator_list;	// Vector of String
 
 	// Current selected market
@@ -660,6 +695,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 	protected final String Volume = "Volume";
 
+	protected final String Open_interest = "Open interest";
+
 	static String serialize_filename;
 
 	static ChartSettings window_settings;
@@ -668,4 +705,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 	// Dialog windows registered to have their settings saved on exit
 	private Vector saved_dialogs;
+
+	// Saved result of data_builder.last_indicator_list(), used by
+	// `indicators' to compare old list with new list
+	Vector old_indicators_from_server = null;
 }
