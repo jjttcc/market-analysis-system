@@ -14,7 +14,8 @@ import_module;mas_tools
 #import_module;tools2;add
 prompt;Start a MAS server
 # Command to start the subprocess:
-startup_cmd;start_server
+startup_cmd_class;NewServer
+startup_cmd_method;execute
 config_file_name;server_ct_config
 end subterminal
 # subterminal for connecting with a running MAS server
@@ -22,14 +23,16 @@ begin subterminal
 import_module;mas_tools
 prompt;Connect to a running MAS server
 # Command to start the subprocess:
-startup_cmd;start_client
+startup_cmd_class;NewCommandLineClient
+startup_cmd_method;execute
 end subterminal
 # subterminal for terminating a server
 begin subterminal
-import_module;mas_toolship
+import_module;mas_tools
 prompt;Terminate a Server
 # Command to start the subprocess:
-startup_cmd;terminate_server
+startup_cmd_class;ServerTermination
+startup_cmd_method;execute
 end subterminal
 # subterminal for mas GUI
 begin subterminal
@@ -38,5 +41,6 @@ import_module;red;add
 import_module;green;add
 prompt;Start a GUI
 # Command to start the subprocess:
-startup_cmd;start_gui
+startup_cmd_class;NewGUI
+startup_cmd_method;execute
 end subterminal
