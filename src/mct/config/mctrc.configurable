@@ -1,0 +1,107 @@
+# MAS Control Terminal configuration file
+# Format: "label_string<tab>setting"
+
+# Special symbols:
+#   <portnumber> - The MAS server port number for the current session
+#   <hostname> - The name of the network host upon which the server is
+#                running; has the value specified by the hostname setting.
+
+# The escape character: The tilde (~) functions as an escape character,
+# meaning that it protects the character following it from being
+# interpreted - changed into another character.  One situation where this
+# is useful is to prevent a slash (/) or backslash (\) from being
+# intrepeted as directory separator in a file path.  To produce a literal
+# tilde - that is, to prevent a tilde from being interpreted as an escape
+# character -, use two tildes (~~).  For example: "homedir	~~user"
+
+# User-defined variables: A user-defined "variable" can be defined using
+# the "define" label, with the format: "define<tab>var-name:value-name"
+# where var-name specifies the variable name and value-name specifies the
+# value for the variable.  The variable can then be used in definitions
+# that follow by surrounding it with <>, e.g.: <var1>/<var2>.
+
+# Directory where file-based data resides
+define	data_dir:data-path
+
+# Directory where the MAS executables reside
+define	bin_dir:bin-path
+
+# Directory where the documentation files reside
+define	doc_dir:doc-path
+
+# mas_directory environment variable setting
+define	mas_directory_setting:mas-path
+
+# Set the MAS_DIRECTORY environment variable
+#environment_variable	MAS_DIRECTORY:/suse_6_3/home2/finance/.mas/charting
+environment_variable	MAS_DIRECTORY:<mas_directory_setting>
+
+# Valid port numbers for use by the MAS server
+valid_portnumbers	10101,10102,10103,10104,20102,20103,20104,30101,30102,\
+30103,30104,30105,30106,30107,30108,30109
+
+# Network host name
+hostname	localhost
+
+# NOTE: <cwdir>, used below, means to use the bracketed path that follows
+# it as the Current Working Directory when the command that follows
+# it is executed.
+
+# Command to start the server - short version
+#start_server_command	cd <data_dir>; <bin_dir>/mas -o -f , -b <portnumber> *.txt
+
+# Detailed version of command to start the server: data from files
+begin	start_server_command
+#command	<bin_dir>/mas -o -f , -b <portnumber> <data_dir>/*.txt
+command	<cwdir> [<mas_directory_setting>] mas -o -f , -b <portnumber> <data_dir>/*.txt
+command_description	Get data from files
+command_name	File-based
+end
+
+# Dummy version of command to start the server (for testing)
+begin	dummy
+foo	cd <data_dir>; <bin_dir>/mas -o -b <portnumber> -p
+bar	Get data from database
+egg	Database-based
+mark	default
+end
+
+# Detailed version of command to start the server: data from a database
+begin	start_server_command
+command	MAS_DIRECTORY=<mas_directory_setting> <bin_dir>/mas -o -b \
+<portnumber> -p
+command_description	Get data from database
+command_name	Database-based
+mark	default
+end
+
+# Detailed version of command to start the server: data from the web
+begin	start_server_command
+command	MAS_DIRECTORY=<mas_directory_setting> <bin_dir>/mas -o -b \
+<portnumber> -f , -w
+command_description	Get data from the web
+command_name	Web-based
+end
+
+# Command to start a command-line client to connect to the server
+start_cl_client_command	xterm -e <bin_dir>/macl -h <hostname> <portnumber>
+
+# Append to the CLASSPATH environment variable.
+add_to_environment_variable	CLASSPATH::/opt/mas/lib/classes
+
+# Command to start the charting application
+#chart_command	<bin_dir>/magc <portnumber> -h <hostname>
+chart_command	<cwdir> [<mas_directory_setting>] java MA_Client \
+<hostname> <portnumber> >/tmp/errs 2>&1
+
+# Command to terminate the server
+termination_command	echo |<bin_dir>/macl -h <hostname> <portnumber>
+
+# Command to start the user's browser for viewing documentation
+browse_docs_command	ps x |grep -q '[m]ozilla' && /usr/local/mozilla/mozilla -remote "openURL(<doc_dir>~/index.html, new-window)" || /usr/local/mozilla/mozilla "<doc_dir>~/index.html"
+
+# Command to start the user's browser for viewing the "MCT Introduction"
+browse_intro_command	ps x |grep -q '[m]ozilla' && /usr/local/mozilla/mozilla -remote "openURL(<doc_dir>~/mct_introduction-linux.html, new-window)" || /usr/local/mozilla/mozilla "<doc_dir>~/mct_introduction-linux.html"
+
+# Command to start the user's browser for viewing the FAQ
+browse_faq_command	ps x |grep -q '[m]ozilla' && /usr/local/mozilla/mozilla -remote "openURL(<doc_dir>~/FAQ.html, new-window)" || /usr/local/mozilla/mozilla "<doc_dir>~/FAQ.html"
