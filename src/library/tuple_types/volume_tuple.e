@@ -29,10 +29,10 @@ feature -- Element change
 			close.set_value (close.value / v)
 			adjust_volume_for_split (v)
 		ensure
-			new_open: rabs (open.value - v / old open.value) < epsilon
-			new_high: rabs (high.value - v / old high.value) < epsilon
-			new_low: rabs (low.value - v / old low.value) < epsilon
-			new_close: rabs (close.value - v / old close.value) < epsilon
+			new_open: rabs (open.value - old open.value / v) < epsilon
+			new_high: rabs (high.value - old high.value / v) < epsilon
+			new_low: rabs (low.value - old low.value / v) < epsilon
+			new_close: rabs (close.value - old close.value / v) < epsilon
 			new_volume: rabs (volume - old volume * v) < epsilon
 		end
 
