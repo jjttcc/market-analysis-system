@@ -109,6 +109,24 @@ feature {NONE} -- Implementation
 
 invariant
 
+	duration_not_void: duration /= Void
 	irregular_not_definite: irregular = not duration.definite
+	no_seconds: duration.second = 0
+	not_hours_and_minutes: not (duration.hour /= 0 and duration.minute /= 0)
+	year_only: duration.year /= 0 implies
+		duration.month = 0 and duration.day = 0
+	month_only: duration.month /= 0 implies
+		duration.year = 0 and duration.day = 0
+	day_only: duration.day /= 0 implies
+		duration.year = 0 and duration.month = 0
+	days_definite: duration.day /= 0 implies duration.definite
+	years_not_definite: duration.year /= 0 implies not duration.definite
+	months_not_definite: duration.month /= 0 implies not duration.definite
+	nodate_definite: duration.year = 0 and duration.month = 0 and
+		duration.day = 0 implies duration.definite
+	day_month_or_year_no_time: duration.month /= 0 or duration.year /= 0 or
+		duration.day /= 0 implies duration.hour = 0 and duration.minute = 0
+	year_month_day_hour_or_minute: duration.year /= 0 or duration.month /= 0 or
+		duration.day /= 0 or duration.hour /= 0 or duration.minute /=0
 
 end -- TIME_PERIOD_TYPE
