@@ -19,32 +19,11 @@ class COMMAND_BUILDER inherit
 
 	COMMAND_EDITING_INTERFACE
 
-feature -- Access
-
-	market_function: MARKET_FUNCTION
-			-- Market function to use for those commands that need it
-
-feature -- Status setting
-
-	set_market_function (arg: MARKET_FUNCTION) is
-			-- Set market_function to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			market_function := arg
-		ensure
-			market_function_set: market_function = arg and
-				market_function /= Void
-		end
-
 feature -- Miscellaneous
 
 	print_command_tree (cmd: COMMAND; level: INTEGER) is
 			-- Print the type name of `cmd' and, recursively, that of all
 			-- of its operands.
-		require
-			not_void: cmd /= Void
-			level_positive: level > 0
 		local
 			i: INTEGER
 		do

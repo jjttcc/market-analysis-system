@@ -37,7 +37,7 @@ feature -- Initialization
 
 	make is
 		do
-			!!operator_maker
+			!COMMAND_BUILDER!operator_maker
 			!!cmd_editor
 			operator_maker.set_editor (cmd_editor)
 			cmd_editor.set_user_interface (operator_maker)
@@ -723,7 +723,7 @@ feature {NONE} -- Implementation
 feature {NONE}
 
 	help: HELP
-	operator_maker: COMMAND_BUILDER
+	operator_maker: COMMAND_EDITING_INTERFACE
 	cmd_editor: APPLICATION_COMMAND_EDITOR
 
 invariant
