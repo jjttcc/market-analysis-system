@@ -1,9 +1,7 @@
 indexing
 	description:
-		"Builder of a list of market event generators"
-	note:
-		"Hard-coded for testing for now, but may evolve into a legitimate %
-		%class"
+		"Abstraction that allows the user to build and remove %
+		%market event generators"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -241,7 +239,7 @@ feature -- Basic operations
 			!!fa_maker
 			fa_maker.set_function (
 				function_choice_clone ("technical indicator"))
-			fa_maker.set_operator (operator_choice)
+			fa_maker.set_operator (operator_choice (fa_maker.function))
 			fa_maker.set_period_type (period_type_choice)
 			create_event_generator (fa_maker, new_event_type_name)
 		end
@@ -271,7 +269,29 @@ feature -- Basic operations
 				end
 			end
 			if c = 'y' or c = 'Y' then
-				fa_maker.set_operator (operator_choice)
+				from
+					c := '%U'
+				until
+					c /= '%U'
+				loop
+					print_list (<<"Should the operator operate on the left ",
+							"function (", fa_maker.left_function.name,
+							") or the right function (",
+							fa_maker.right_function.name, ")? (l/r) ">>)
+					c := selected_character
+					if not (c = 'l' or c = 'L' or c = 'r' or c = 'R') then
+						c := '%U'
+						print_list (<<"Invalid selection: ", c, "%N">>)
+					end
+				end
+				if c = 'l' or c = 'L' then
+					fa_maker.set_operator (
+						operator_choice (fa_maker.left_function))
+				else
+					check c = 'r' or c = 'R' end
+					fa_maker.set_operator (
+						operator_choice (fa_maker.right_function))
+				end
 			end
 			create_event_generator (fa_maker, new_event_type_name)
 		end
@@ -310,10 +330,13 @@ feature -- Basic operations
 			end
 		end
 
-	operator_choice: RESULT_COMMAND [BOOLEAN] is
+	operator_choice (function: MARKET_FUNCTION): RESULT_COMMAND [BOOLEAN] is
+		local
+			op_maker: COMMAND_BUILDER
 		do
-			--!!!STUB:
-			!TRUE_COMMAND!Result
+			!!op_maker
+			op_maker.set_market_function (function)
+			Result := op_maker.boolean_result_command (<<"main operator">>)
 		end
 
 	new_event_type_name: STRING is
