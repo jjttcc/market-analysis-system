@@ -131,9 +131,6 @@ public class SynchronizedDataRequester extends Logic
 			request_result_id = data_builder.request_result_id();
 			if (! data_builder.request_succeeded()) {
 				request_failed = true;
-//!!!!Obsolete - remove:
-////@@@Check if throwing an exception is appropriate here.
-//throw new Exception(main_request_failed_message);
 			} else {
 				// 'send_market_data_request' was successful.
 				tradable_result = data_builder.last_market_data();
@@ -147,7 +144,6 @@ public class SynchronizedDataRequester extends Logic
 			request_failed = true;
 			// Lock attempts failed.
 			request_failure_message = main_lock_request_failed_message;
-//!!!: System.out.println("Would previously have thrown an exception here [main data]");
 		}
 		assert ! data_builder.is_locked_by(this): "builder not locked";
 		assert implies(! data_builder.request_succeeded(), request_failed());
@@ -167,9 +163,6 @@ public class SynchronizedDataRequester extends Logic
 			request_result_id = data_builder.request_result_id();
 			if (! data_builder.request_succeeded()) {
 				request_failed = true;
-//!!!!Obsolete - remove:
-////@@@Check if throwing an exception is appropriate here.
-//throw new Exception(indicator_request_failed_message);
 			} else {
 				indicator_result = data_builder.last_indicator_data();
 				assert ! request_failed(): "data request succeeded";
@@ -179,7 +172,6 @@ public class SynchronizedDataRequester extends Logic
 			request_failed = true;
 			// Lock attempts failed.
 			request_failure_message = indicator_lock_request_failed_message;
-//!!!: System.out.println("Would previously have thrown an exception here [indicator data]");
 		}
 		assert ! data_builder.is_locked_by(this): "builder not locked";
 		assert implies(! data_builder.request_succeeded(), request_failed());
@@ -198,9 +190,6 @@ public class SynchronizedDataRequester extends Logic
 			request_result_id = data_builder.request_result_id();
 			if (! data_builder.request_succeeded()) {
 				request_failed = true;
-//!!!!Obsolete - remove:
-////@@@Check if throwing an exception is appropriate here.
-//throw new Exception(indicator_list_request_failed_message);
 			} else {
 				indicator_list_result = data_builder.last_indicator_list();
 				assert ! request_failed(): "data request succeeded";
@@ -211,7 +200,6 @@ public class SynchronizedDataRequester extends Logic
 			// Lock attempts failed.
 			request_failure_message =
 				indicator_list_lock_request_failed_message;
-//!!!: System.out.println("Would previously have thrown an exception here [indicator list data]");
 		}
 		assert ! data_builder.is_locked_by(this): "builder not locked";
 		assert implies(! data_builder.request_succeeded(), request_failed());

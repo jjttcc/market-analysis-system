@@ -32,8 +32,6 @@ class TimeDelimitedDataRequest extends TimerTask {
 		// Avoid requesting data if the last request is still active.
 		if (client != null && ! requesting_data && client.ready_for_request()) {
 			AbstractDataSetBuilder builder = client.data_builder();
-//!!!!:
-System.out.println("TDDR - my builder is " + builder);
 			// Try to lock the 'builder' only once.  If it fails, abandon
 			// the data update - wait until next time.
 			builder.lock(this);
@@ -50,14 +48,6 @@ System.out.println("TDDR - my builder is " + builder);
 				requesting_data = false;
 			}
 		}
-else {
-System.out.println("TDDR: Not allowed to request data ...");
-if (! client.ready_for_request()) {
-System.out.println(" because client is not ready");
-} else {
-System.out.println(" but NOT because client is not ready");
-}
-}
 	}
 
 // Implementation
@@ -120,32 +110,10 @@ System.out.println(" but NOT because client is not ready");
 					client.notify_of_update();
 				}
 			} else {
-//!!!debugging code:
-if (spec.current_data().size() > 0 &&
-	! spec.current_data().last_date_time_matches_first(
-	builder.last_market_data())) {
-System.out.println("TDDR, line 111 - curdata, lastmktdata: '" +
-spec.current_data() + "'\n\n'" + builder.last_market_data() + "'");
-}
-System.out.println("<<<<XXX:");
-System.out.println("builder.request_succeeded(): " +
-builder.request_succeeded());
-System.out.println("builder.last_market_data().size(): " +
-builder.last_market_data().size());
-System.out.println("spec.current_data().size(): " +
-spec.current_data().size());
-System.out.println("spec.current_data().last_date_time_matches_first(...: " +
-spec.current_data().last_date_time_matches_first( builder.last_market_data()));
-System.out.println("XXX>>>>");
-
 				// builder.send_time_delimited_market_data_request failed or
 				// obtained an empty result, so indicator requests are skipped.
 				if (! builder.request_succeeded()) {
 					client.notify_of_error(builder.request_result_id(), null);
-//!!!!:
-if (DebuggingUtilities.print_stack_trace) {
-	new Error("").printStackTrace();
-}
 				} else {
 					assert(builder.last_market_data().size() == 0);
 					assert(builder.request_succeeded());
@@ -157,10 +125,6 @@ if (DebuggingUtilities.print_stack_trace) {
 			client.notify_of_failure(e);
 		} finally {
 			builder.unlock(this);
-if (DebuggingUtilities.print_stack_trace) {
-	System.out.println("TDDR - finally unlock ...");
-	new Error("").printStackTrace();
-}
 		}
 	}
 

@@ -329,14 +329,13 @@ abstract public class AbstractDataSetBuilder extends Lockable
 			connection.send_request(request_id, request);
 		} catch (IOException e) {
 			io_error_occurred = true;
-//!!!:			if (Configuration.debug()) {
+			if (Configuration.debug()) {
 				System.err.println("[Error in " +
 					"'dispatch_market_data_request': " + e + "]");
 				e.printStackTrace();
 				System.out.println("Current time: " +
 					DateTimeServices.current_date_as_string());
-DebuggingUtilities.print_stack_trace = true;
-//			}
+			}
 		}
 		if (! io_error_occurred &&
 				connection.last_received_message_ID() == Ok) {
@@ -382,14 +381,13 @@ DebuggingUtilities.print_stack_trace = true;
 			connection.send_request(request_id, request);
 		} catch (IOException e) {
 			io_error_occurred = true;
-//!!!:			if (Configuration.debug()) {
+			if (Configuration.debug()) {
 				System.err.println("[Error in " +
 					"'dispatch_indicator_data_request': " + e + "]");
 				e.printStackTrace();
 				System.out.println("Current time: " +
 					DateTimeServices.current_date_as_string());
-DebuggingUtilities.print_stack_trace = true;
-//			}
+			}
 		}
 		if (! io_error_occurred &&
 				connection.last_received_message_ID() == Ok) {

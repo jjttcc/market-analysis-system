@@ -29,8 +29,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		Vector tradables = null;
 		saved_dialogs = new Vector();
 		data_manager = new ChartDataManager(builder, this);
-//!!!!:
-System.out.println("Chart ctor called with builder: " + builder);
 
 		serialize_filename = sfname;
 

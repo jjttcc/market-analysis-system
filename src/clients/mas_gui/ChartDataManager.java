@@ -549,16 +549,9 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 		try {
 			data_requester.execute_tradable_request();
 			if (! data_requester.request_failed()) {
-//!!!:
-				try {
-					result = (DrawableDataSet) data_requester.tradable_result();
-				} catch (Exception e) {
-//!!!:
-System.out.println("Oh Oh!!! - e: " + e);
-System.out.println("the result is: " + data_requester.tradable_result());
-e.printStackTrace();
-				}
+				result = (DrawableDataSet) data_requester.tradable_result();
 			} else {
+//!!!!May need to share some error reporting/handling code, eh?
 				request_result_id = data_requester.request_result_id();
 				new ErrorBox("Warning", "Error occurred retrieving " +
 					"data for " + data_requester.current_symbol() + ": " +
@@ -612,9 +605,8 @@ e.printStackTrace();
 							data_requester.indicator_result();
 						result.add(new Pair(current_indicator, dataset));
 					} else {
-//!!!:
-System.out.println("Request for indicator data failed (Fix this error msg!!!)");
 						last_data_request_succeeded = false;
+						//@@@Set up or report an error message?
 					}
 				} catch (Exception e) {
 					facilities.fatal("Indicator data request failed", e);
@@ -663,9 +655,8 @@ System.out.println("Request for indicator data failed (Fix this error msg!!!)");
 									data_requester.indicator_result();
 							result.add(new Pair(current_indicator, dataset));
 						} else {
-//!!!:
-System.out.println("Request for indicator data failed (Fix this error msg!!!)");
 							last_data_request_succeeded = false;
+							//@@@Set up or report an error message?
 						}
 					} catch (Exception e) {
 						facilities.fatal("Exception occurred", e);
@@ -718,50 +709,6 @@ System.out.println("Request for indicator data failed (Fix this error msg!!!)");
 		}
 	}
 
-//!!!!!Obsolete - remove this routine:
-	// Update `owner's upper indicator data sets to `datasets' and perform
-	// related state changes.
-	public void update_upper_indicator_datasets(List datasets) {
-		assert datasets != null: PRECONDITION;
-		MA_Configuration conf = MA_Configuration.application_instance();
-		Iterator i = datasets.iterator();
-		Pair p;
-		String ind_name;
-		DrawableDataSet dataset;
-		while (i.hasNext()) {
-			p = (Pair) i.next();
-			ind_name = (String) p.first();
-			dataset = (DrawableDataSet) p.second();
-			dataset.set_dates_needed(false);
-			dataset.setColor(conf.indicator_color(ind_name, true));
-			link_with_axis(dataset, ind_name);
-			owner.main_pane().add_main_data_set(dataset);
-			tradable_specification.set_indicator_data(dataset, ind_name);
-		}
-	}
-
-//!!!!!Obsolete - remove this routine:
-	// Update `owner's lower indicator data sets to `datasets' and perform
-	// related state changes.
-	public void update_lower_indicator_datasets(List datasets) {
-		assert datasets != null: PRECONDITION;
-		MA_Configuration conf = MA_Configuration.application_instance();
-		Iterator i = datasets.iterator();
-		Pair p;
-		String ind_name;
-		DrawableDataSet dataset;
-		while (i.hasNext()) {
-			p = (Pair) i.next();
-			ind_name = (String) p.first();
-			dataset = (DrawableDataSet) p.second();
-			dataset.setColor(conf.indicator_color(ind_name, false));
-			link_with_axis(dataset, ind_name);
-			owner.add_indicator_lines(dataset, ind_name);
-			owner.main_pane().add_indicator_data_set(dataset);
-			tradable_specification.set_indicator_data(dataset, ind_name);
-		}
-	}
-
 	// Ensure that the indicator list is up-to-date with respect to
 	// the current tradable.
 	private void update_indicator_list() {
@@ -773,9 +720,8 @@ System.out.println("Request for indicator data failed (Fix this error msg!!!)");
 				new_indicators = true;
 				rebuild_indicators_if_needed();
 			} else {
-//!!!:
-System.out.println("Request for indicator LIST failed (Fix this error msg!!!)");
 				last_data_request_succeeded = false;
+				//@@@Set up or report an error message?
 			}
 		} catch (Exception e) {
 		}
