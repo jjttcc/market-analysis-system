@@ -136,6 +136,8 @@ class ReleaseUtilities:
 	def clean_work(self):
 		os.system("find " + self.work_directory +
 			" -name CVS -exec rm -rf {} \; 2>/dev/null")
+		os.system("find " + self.work_directory +
+			" -type d -perm 000 -exec rmdir {} ';' 2>/dev/null")
 
 	def do_copy(self, srcpath, tgtpath, dos_convert):
 		cmd = ''; doscnvrt_cmd = 'unix2dos'
