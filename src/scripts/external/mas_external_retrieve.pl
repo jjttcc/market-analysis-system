@@ -111,7 +111,15 @@ sub out_of_date {
 		}
 	} elsif (! dates_equal($year, $month, $day, $y, $m, $d)) {
 		my @yesterday = before(1);
-		if (! dates_equal(year(@yesterday), month(@yesterday),
+		if ($current_wd == $Mon) {
+			my @friday = before(3);
+			if (! dates_equal(year(@friday), month(@friday),
+					day(@friday), $y, $m, $d)) {
+				$result = 1;
+			} elsif (after_close_time(@now)) {
+				$result = 1;
+			}
+		} elsif (! dates_equal(year(@yesterday), month(@yesterday),
 				day(@yesterday), $y, $m, $d)) {
 			$result = 1;
 		} elsif (after_close_time(@now)) {
