@@ -9,7 +9,7 @@ class VOLUME_TUPLE_FACTORY inherit
 
 feature
 
-	execute is
+	execute (arg: ANY) is
 		do
 			!VOLUME_TUPLE!product.make
 		end

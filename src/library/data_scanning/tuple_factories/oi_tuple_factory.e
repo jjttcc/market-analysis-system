@@ -9,7 +9,7 @@ class OI_TUPLE_FACTORY inherit
 
 feature
 
-	execute is
+	execute (arg: ANY) is
 		do
 			!OPEN_INTEREST_TUPLE!product.make
 		end

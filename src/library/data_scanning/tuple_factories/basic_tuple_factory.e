@@ -9,7 +9,7 @@ class BASIC_TUPLE_FACTORY inherit
 
 feature
 
-	execute is
+	execute (arg: ANY) is
 		do
 			!BASIC_MARKET_TUPLE!product.make
 		end
