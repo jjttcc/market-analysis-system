@@ -26,6 +26,8 @@ feature -- Access
 
 	indicators: LIST [MARKET_FUNCTION]
 			-- Technical indicators associated with this tradable
+			--!!!Change this to ensure that all indicators have been
+			--!!!processed before returning a result?
 
 	indicator_groups: HASH_TABLE [LIST [MARKET_FUNCTION], STRING]
 			-- Groupings of the above technical indicators
@@ -75,6 +77,26 @@ feature -- Access
 				calc_y_high_low
 			end
 			Result := y_low
+		end
+
+feature -- Element change
+
+	add_indicator (f: MARKET_FUNCTION) is
+		require
+			not_there: not indicators.has (f)
+		do
+			indicators.extend (f)
+		ensure
+			added: indicators.has (f)
+			one_more: indicators.count = old indicators.count + 1
+		end
+
+	remove_indicator (f: MARKET_FUNCTION) is
+		do
+			indicators.prune (f)
+		ensure
+			removed: not indicators.has (f)
+			one_less: indicators.count = old indicators.count - 1
 		end
 
 feature {NONE}

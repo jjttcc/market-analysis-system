@@ -6,6 +6,8 @@ indexing
 class STOCK inherit
 
 	TRADABLE [VOLUME_TUPLE]
+		rename
+			make as arrayed_list_make
 		redefine
 			symbol
 		end
@@ -13,6 +15,16 @@ class STOCK inherit
 creation
 
 	make
+
+feature -- Initialization
+
+	make (s: STRING) is
+		do
+			symbol := s
+			arrayed_list_make (300)
+		ensure
+			symbol_set: symbol = s
+		end
 
 feature -- Access
 
