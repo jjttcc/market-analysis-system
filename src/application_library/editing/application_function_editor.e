@@ -58,6 +58,7 @@ feature -- Access
 
 feature -- Status report
 
+--!!!!Obsolete - remove:
 	exclude_operators: BOOLEAN
 			-- Should the editing of a MARKET_FUNCTION not include setting
 			-- of the function's operators?
@@ -96,9 +97,7 @@ feature -- Basic operations
 		local
 			cmd: RESULT_COMMAND [REAL]
 		do
-			f.set_input (user_interface.market_function_selection (
-							concatenation (<<f.name, "'s (", f.generator,
-							") input function">>), Void))
+			set_ovf_input (f)
 --!!!!!NOTE: operator_maker.reset call was moved from the beginning of
 --this procedure.  Check to make sure this does not cause unwanted side
 --effects.
@@ -125,9 +124,7 @@ print ("edit_one_fn_op was called - CHECK IF RESULTS ARE CORRECT " +
 			lc: LINEAR_COMMAND
 			rc: RESULT_COMMAND [REAL]
 		do
-			f.set_input (user_interface.market_function_selection (
-							concatenation (<<f.name, "'s (", f.generator,
-								") input function">>), Void))
+			set_ovf_input (f)
 --!!!!!NOTE: operator_maker.reset call was moved from the beginning of
 --this procedure.  Check to make sure this does not cause unwanted side
 --effects.
@@ -169,9 +166,7 @@ print ("edit_accumulation was called - CHECK IF RESULTS ARE CORRECT " +
 			firstop: RESULT_COMMAND [REAL]
 			response: STRING
 		do
-			f.set_input (user_interface.market_function_selection (
-							concatenation (<<f.name, "'s (", f.generator,
-								") input function">>), Void))
+			set_ovf_input (f)
 --!!!!!NOTE: operator_maker.reset call was moved from the beginning of
 --this procedure.  Check to make sure this does not cause unwanted side
 --effects.
@@ -217,9 +212,7 @@ print ("edit_configurable_nrf was called - CHECK IF RESULTS ARE CORRECT " +
 		local
 			cmd: RESULT_COMMAND [REAL]
 		do
-			f.set_input (user_interface.market_function_selection (
-							concatenation (<<f.name, "'s (", f.generator,
-								") input function">>), Void))
+			set_ovf_input (f)
 --!!!!!NOTE: operator_maker.reset call was moved from the beginning of
 --this procedure.  Check to make sure this does not cause unwanted side
 --effects.
@@ -257,15 +250,8 @@ print ("edit_one_fn_op_n was called - CHECK IF RESULTS ARE CORRECT " +
 			op_maker_set: operator_maker /= Void
 		local
 			cmd: RESULT_COMMAND [REAL]
-			i1, i2: COMPLEX_FUNCTION
 		do
-			i1 ?= user_interface.complex_function_selection (
-							concatenation (<<f.name, "'s (", f.generator,
-								") left input function">>))
-			i2 ?= user_interface.complex_function_selection (
-							concatenation (<<f.name, "'s (", f.generator,
-								") right input function">>))
-			f.set_inputs (i1, i2)
+			set_tvf_input (f)
 			if not exclude_operators then
 print ("edit_two_cplx_fn_op was called - CHECK IF RESULTS ARE CORRECT " +
 "- See NOTE%N")
@@ -290,9 +276,7 @@ print ("edit_two_cplx_fn_op was called - CHECK IF RESULTS ARE CORRECT " +
 		local
 			cmd: RESULT_COMMAND [REAL]
 		do
-			f.set_input (user_interface.market_function_selection (
-							concatenation (<<f.name, "'s (", f.generator,
-								") input function">>), Void))
+			set_ovf_input (f)
 			if not exclude_operators then
 print ("edit_one_fn_bnc_n was called - CHECK IF RESULTS ARE CORRECT " +
 "- See NOTE%N")
@@ -333,9 +317,7 @@ print ("edit_one_fn_bnc_n was called - CHECK IF RESULTS ARE CORRECT " +
 			cmd: RESULT_COMMAND [REAL]
 			exp: N_BASED_CALCULATION
 		do
-			f.set_input (user_interface.market_function_selection (
-							concatenation (<<f.name, "'s (", f.generator,
-								") input function">>), Void))
+			set_ovf_input (f)
 			if not exclude_operators then
 print ("edit_ema was called - CHECK IF RESULTS ARE CORRECT " +
 "- See NOTE%N")
@@ -369,7 +351,6 @@ print ("edit_ema was called - CHECK IF RESULTS ARE CORRECT " +
 			end
 			edit_n (f)
 		end
---!!!!!!!Need to set the fnc name, too!!!!!!!
 
 	edit_market_function_line (f: MARKET_FUNCTION_LINE) is
 			-- Edit a MARKET_FUNCTION_LINE.
@@ -390,6 +371,28 @@ print ("edit_ema was called - CHECK IF RESULTS ARE CORRECT " +
 			create p.make
 			p.set_x_y_date (1, y, date)
 			f.make (p, slope, user_interface.dummy_tradable)
+		end
+
+	set_ovf_input (f: ONE_VARIABLE_FUNCTION) is
+			-- Set the input function for the ONE_VARIABLE_FUNCTION `f'.
+		do
+			f.set_input (user_interface.market_function_selection (
+				concatenation (<<f.name, "'s (", f.generator,
+				") input function">>), Void))
+		end
+
+	set_tvf_input (f: TWO_VARIABLE_FUNCTION) is
+			-- Set the input functions for the TWO_VARIABLE_FUNCTION `f'.
+		local
+			i1, i2: COMPLEX_FUNCTION
+		do
+			i1 ?= user_interface.complex_function_selection (
+							concatenation (<<f.name, "'s (", f.generator,
+								") left input function">>))
+			i2 ?= user_interface.complex_function_selection (
+							concatenation (<<f.name, "'s (", f.generator,
+								") right input function">>))
+			f.set_inputs (i1, i2)
 		end
 
 feature {NONE} -- Implementation
