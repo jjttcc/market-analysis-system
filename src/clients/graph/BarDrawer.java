@@ -21,7 +21,10 @@ public class BarDrawer extends IndicatorDrawer {
 	protected void draw_tuples(Graphics g, Rectangle bounds) {
 		int i, row;
 		int x, y;
-		int lngth = _data.length;
+		int lngth = 0;
+		if (_data != null) lngth = _data.length;
+		if (lngth == 0) return;
+
 		int bar_width = bounds.width / lngth - 2;
 		double width_factor, height_factor;
 		int x_s[] = new int[4], y_s[] = new int[4];

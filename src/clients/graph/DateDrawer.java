@@ -51,7 +51,7 @@ public class DateDrawer extends Drawer {
 	protected int Month_y;
 
 	protected int Month_x_offset;
-	
+
 	// length of the month name
 	protected int month_ln;
 
@@ -66,6 +66,7 @@ public class DateDrawer extends Drawer {
 			years[] = new IntPair[Max_years];
 		int[] _x_values = x_values();
 		String[] _data = dates();
+		if (_data == null) return;
 
 		Month_y = bounds.y + bounds.height - 15; Month_x_offset = 10;
 		month_ln = 3;
@@ -89,8 +90,14 @@ public class DateDrawer extends Drawer {
 			Integer.valueOf(_data[_data.length-1].substring(4,6)).intValue();
 		mi = 0; yi = 0;
 		while (! (year == lastyear && month == lastmonth)) {
-			months[mi] = new IntPair(month,
-				Utilities.index_at_date(first_date_at(year, month), _data, 1));
+			int date_index;
+			date_index = Utilities.index_at_date(
+				first_date_at(year, month), _data, 1);
+			if (date_index < 0) {
+				month = lastmonth;
+				break;
+			}
+			months[mi] = new IntPair(month, date_index);
 			if (month == 1) {
 				years[yi] = new IntPair(year, months[mi].right());
 				++yi;
@@ -112,7 +119,9 @@ public class DateDrawer extends Drawer {
 		}
 		++mi;
 
-		if (months.length > 1) {
+		if (months.length > 1 && _x_values.length > 1 &&
+			months[0] != null && months[1] != null &&
+			months[0].right() >= 0 && months[1].right() >= 0) {
 			// Set the month name length and the month x offset according
 			// to the distance between the x-value for the first month and
 			// the x-value for the second month.
@@ -126,6 +135,9 @@ public class DateDrawer extends Drawer {
 		// Draw months and years.
 		i = 0;
 		while (i < mi) {
+			if (months[i].right() < 0) {
+				months[i].set_right(0);
+			}
 			draw_month(g, bounds, months[i], _x_values);
 			++i;
 		}

@@ -454,7 +454,11 @@ public class DataSet {
    */
     protected int stride() { return _drawer.drawing_stride(); }
 
-	protected int length() { return data.length; }
+	protected int length() {
+		int result = 0;
+		if (data != null) result = data.length;
+		return result;
+	}
 
 	protected boolean _dates_needed;
 }

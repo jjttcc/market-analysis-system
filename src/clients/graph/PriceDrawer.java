@@ -20,7 +20,10 @@ public class PriceDrawer extends MarketDrawer {
 		int i, row;
 		int openy, highy, lowy, closey;
 		int x;
-		int lngth = _data.length;
+		int lngth = 0;
+		if (_data != null) lngth = _data.length;
+		if (lngth == 0) return;
+
 		int sidebar_length = bounds.width / lngth + 3;
 		Configuration conf = Configuration.instance();
 		Color bar_color = conf.stick_color();

@@ -23,7 +23,10 @@ public class CandleDrawer extends MarketDrawer {
 		int openy, highy, lowy, closey;
 		int x, middle_x;
 		int x_s[] = new int[4], y_s[] = new int[4];
-		int lngth = _data.length;
+		int lngth = 0;
+		if (_data != null) lngth = _data.length;
+		if (lngth == 0) return;
+
 		int candlewidth = bounds.width / lngth * 3 + 1;
 		Configuration conf = Configuration.instance();
 		Color black = conf.black_candle_color();

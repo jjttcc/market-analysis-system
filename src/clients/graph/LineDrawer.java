@@ -22,7 +22,8 @@ public class LineDrawer extends IndicatorDrawer {
 		int i, row;
 		int x0, y0;
 		int x1, y1;
-		int lngth = _data.length;
+		int lngth = 0;
+		if (_data != null) lngth = _data.length;
 		double width_factor, height_factor;
 		Configuration conf = Configuration.instance();
 		Color line_color = conf.line_color();
