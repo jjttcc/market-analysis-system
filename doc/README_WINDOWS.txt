@@ -33,7 +33,7 @@ Shutting Down the MAS Server
 To exit the server, first close any windows opened with the "MAS Charts"
 icon and then double-click on "MAS Command Line".  A command-line
 interface will appear with a list of options to select from.  Simply type
-Control-E.  (Hold the "Control" key down and then press on the "E" key.)
+Control-E.  (Hold the "Control" key down and then press the "E" key.)
 Then hit the "Enter" key.  This should shut down the server.
 
 
@@ -60,5 +60,12 @@ server via the "Mas Server (web)" icon), such as the start-date for
 the retrieved data, or the time at which to retrieve end-of-day data
 for the current day, edit the file "mas_httprc" in the {mas_dir}/lib
 directory (where {mas_dir} stands for the directory in which you chose
-to install MAS).  The "mas_httprc" contains comments describing the
+to install MAS).  The "mas_httprc" file contains comments describing the
 purpose and format of each setting.
+
+To change the list of symbols for which data is to be downloaded from yahoo,
+edit the file "symbols" in the {mas_dir}/lib directory (where {mas_dir}
+stands for the directory in which you chose to install MAS), deleting
+each symbol you want removed from the list and adding any symbols you want
+that are not already in the list.  Make sure that the file has only one
+symbol per line.
