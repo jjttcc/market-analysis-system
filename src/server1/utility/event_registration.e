@@ -8,22 +8,22 @@ indexing
 class EVENT_REGISTRATION inherit
 
 	GLOBAL_APPLICATION
-		export {NONE}
-			all
+		export
+			{NONE} all
 		undefine
 			print
 		end
 
 	EXECUTION_ENVIRONMENT
-		export {NONE}
-			all
+		export
+			{NONE} all
 		undefine
 			print
 		end
 
 	TAL_APP_ENVIRONMENT
-		export {NONE}
-			all
+		export
+			{NONE} all
 		undefine
 			print
 		end
@@ -35,7 +35,7 @@ class EVENT_REGISTRATION inherit
 			{NONE} all
 		end
 
-	EDITING_INTERFACE -- Should this be OBJECT_EDITING_INTERFACE?!!!
+	EDITING_INTERFACE
 		undefine
 			print
 		end
@@ -51,8 +51,8 @@ feature -- Initialization
 			not_void: disp /= Void and in_dev /= Void and out_dev /= Void
 		do
 			dispatcher := disp
-			set_input_device (in_dev)
-			set_output_device (out_dev)
+			input_device := in_dev
+			output_device := out_dev
 			!!help.make
 			-- !!!Satisfy invariant - editor is currently not used; it may
 			-- be used later - if not, might want to change the invariant or?
