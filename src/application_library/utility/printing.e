@@ -112,7 +112,8 @@ feature -- Basic operations
 			until
 				i > names.count
 			loop
-				print ("Trading period: "); print (names @ i); print ("%N")
+				print ("Composite tuple list for "); print (t.symbol)
+				print (", Trading period: "); print (names @ i); print ("%N")
 				l := t.composite_tuple_list (names @ i)
 				if l /= Void and not l.empty then
 					cvt ?= l.first
