@@ -307,7 +307,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			try {
 				data_builder.send_market_data_request(market,
 					current_period_type);
-				if (request_result() != Invalid_symbol) {
+				if (request_result() == OK) {
 					// Ensure that the indicator list is up-to-date with
 					// respect to `market'.
 					data_builder.send_indicator_list_request(market,
@@ -316,9 +316,13 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 					// lists with the result of the above request.
 					new_indicators = true;
 					indicators();
-				}
-				if (request_result() == Invalid_symbol) {
-					handle_nonexistent_sybmol(market);
+				} else {
+					if (request_result() == Invalid_symbol) {
+						handle_nonexistent_sybmol(market);
+					} else if (request_result() == Warning) {
+						new ErrorBox("Warning", "Error occurred retrieving " +
+							"data for " + market, this_chart);
+					}
 					GUI_Utilities.busy_cursor(false, this);
 					return;
 				}
