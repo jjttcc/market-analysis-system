@@ -21,6 +21,8 @@ class MAS_COMMAND_LINE inherit
 			{NONE} all
 		end
 
+	ERROR_SUBSCRIBER
+
 creation {PLATFORM_DEPENDENT_OBJECTS}
 
 	make
@@ -31,8 +33,9 @@ feature {NONE} -- Initialization
 		do
 			create {LINKED_LIST [INTEGER]} port_numbers.make
 			cl_make
---			main_setup_procedures.do_all (
---				agent {PROCEDURE [ANY, TUPLE []]}.call)
+			create special_date_settings.make (date_format_prefix)
+			special_date_settings.add_error_subscriber (Current)
+			opening_price := True
 			from
 				main_setup_procedures.start
 			until
@@ -41,13 +44,6 @@ feature {NONE} -- Initialization
 				main_setup_procedures.item.call ([])
 				main_setup_procedures.forth
 			end
---set_field_separator
---set_opening_price
---set_background
---set_use_db
---set_port_numbers
---set_strict
---set_intraday_caching
 			if not use_db then
 				set_use_external_data_source
 				if not use_external_data_source then
@@ -64,12 +60,48 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
+	usage: STRING is
+			-- Message: how to invoke the program from the command-line
+		do
+			Result := concatenation (<<"Usage: ", command_name,
+				" [options] [input_file...]%NOptions:%N",
+				"  <number>                ",
+				"Use port <number> for socket communication%N",
+				"  -f <sep>                Use Field separator <sep>%N",
+				"  -i <ext>                ",
+				"Include Intraday data from files with %
+				%extension <ext>%N",
+				"  -d <ext>                Include Daily data from files %
+				%with extension <ext>%N",
+				"  -v                      Print Version number%N",
+				"  -h                      Print this Help message%N",
+				"  -s                      Use Strict error checking%N",
+				"  -p                      ",
+				"Get data from database (Persistent store)%N",
+				"  -w                      ",
+				"Get data from the Web (HTTP request)%N",
+				"  -x                      Use an external data source%N",
+				"  -n                      No caching of intraday data%N",
+				"  -b                      Run in Background%N",
+				"  ", no_volume_spec,
+				"              Data has no volume field%N",
+				"  ", no_open_spec,
+				"                Data has no open field%N",
+				usage_indent, special_format_option_spec, "%N">>)
+		end
+
+feature -- Access -- settings
+
 	port_numbers: LIST [INTEGER]
 			-- Port numbers for server sockets
 
 	opening_price: BOOLEAN
 			-- Does the data include opening price?
-			-- True if "-o" is found.
+			-- False if `no_open_spec' is specified.
+
+	no_volume: BOOLEAN
+			-- Does the data exclude the volume field?
+			-- True if `no_volume_spec' is specified.
 
 	field_separator: STRING
 			-- Field separator for (input) market data - Void if not set
@@ -122,52 +154,52 @@ feature -- Access
 	intraday_caching: BOOLEAN
 			-- Cache intraday data?
 
+	special_date_settings: DATE_FORMAT_SPECIFICATION
+			-- Special date-format settings
+
 feature -- Status report
 
 	symbol_list_initialized: BOOLEAN
 			-- Has `symbol_list' been initialized?
 
-feature -- Basic operations
-
-	usage: STRING is
-			-- Message: how to invoke the program from the command-line
+	special_date_settings_valid: BOOLEAN is
+			-- Have any special date-format settings been specified and
+			-- are they valid?
 		do
-			Result := concatenation (<<"Usage: ", command_name,
-				" [options] [input_file...]%NOptions:%N",
-				"  <number>  Use port <number> for socket communication%N",
-				"  -o        Data has an Open field%N",
-				"  -f <sep>  Use Field separator <sep>%N",
-				"  -i <ext>  Include Intraday data from files with %
-				%extension <ext>%N",
-				"  -d <ext>  Include Daily data from files with %
-				%extension <ext>%N",
-				"  -v        Print Version number%N",
-				"  -h        Print this Help message%N",
-				"  -s        Use Strict error checking%N",
-				"  -p        Get data from database (Persistent store)%N",
-				"  -w        Get data from the Web (HTTP request)%N",
-				"  -x        Use an external data source%N",
-				"  -n        No caching of intraday data%N",
-				"  -b        Run in Background%N">>)
+			Result := special_date_settings.valid
 		end
 
 feature {NONE} -- Implementation
 
 	set_special_formatting is
 			-- Set "special" formatting options.
+			--!!!!Remove this note unless the formatting doc. is retracted:
+			-- @@Note: These options are not currently documented by
+			-- `usage' because this method of setting them may change
+			-- (e.g., they may be read from a config. file).  For now,
+			-- the 'special-format string' format is:
+			-- "-special-format:opt1=value,opt2=value,..."
 		do
-			-- Look for "-special-format=..."
+			-- Look for and process multi-character options
 			from
 				contents.start
 			until
 				contents.exhausted
 			loop
 				if
-					contents.item.substring (1, special_format_string.count).
-						is_equal (special_format_string)
-				
+					current_contents_match (date_format_prefix)
 				then
-					--!!!!!Set the appropriate special-formatting flags.
+					special_date_settings.process_option (contents.item)
+					contents.remove
+				elseif
+					current_contents_match (no_open_spec)
+				then
+					opening_price := False
+					contents.remove
+				elseif
+					current_contents_match (no_volume_spec)
+				then
+					no_volume := True
 					contents.remove
 				else
 					contents.forth
@@ -196,20 +228,10 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_opening_price is
-			-- Set `opening_price' and remove its setting from `contents'.
-			-- false if opening price option is not found
-		do
-			if option_in_contents ('o') then
-				opening_price := true
-				contents.remove
-			end
-		end
-
 	set_background is
 		do
 			if option_in_contents ('b') then
-				background := true
+				background := True
 				contents.remove
 			end
 		end
@@ -217,7 +239,7 @@ feature {NONE} -- Implementation
 	set_strict is
 		do
 			if option_in_contents ('s') then
-				strict := true
+				strict := True
 				contents.remove
 			end
 		end
@@ -225,17 +247,17 @@ feature {NONE} -- Implementation
 	set_intraday_caching is
 		do
 			if option_in_contents ('n') then
-				intraday_caching := false
+				intraday_caching := False
 				contents.remove
 			else
-				intraday_caching := true
+				intraday_caching := True
 			end
 		end
 
 	set_use_db is
 		do
 			if option_in_contents ('p') then
-				use_db := true
+				use_db := True
 				contents.remove
 			end
 		end
@@ -243,7 +265,7 @@ feature {NONE} -- Implementation
 	set_use_web is
 		do
 			if option_in_contents ('w') then
-				use_web := true
+				use_web := True
 				contents.remove
 			end
 		end
@@ -251,16 +273,16 @@ feature {NONE} -- Implementation
 	set_use_external_data_source is
 		do
 			if option_in_contents ('x') then
-				use_external_data_source := true
+				use_external_data_source := True
 				contents.remove
 			end
 		end
 
 	set_keep_db_connection is
 		do
-			keep_db_connection := true -- Default value
+			keep_db_connection := True -- Default value
 			if option_string_in_contents ("reconnect") then
-				keep_db_connection := false
+				keep_db_connection := False
 				contents.remove
 			end
 		end
@@ -344,7 +366,7 @@ feature {NONE} -- Implementation
 				db_services.connect
 			end
 			if db_services.fatal_error then
-				error_occurred := true
+				error_occurred := True
 			else
 				symbol_list_implementation := db_services.stock_symbols
 				if not db_services.fatal_error then
@@ -354,7 +376,7 @@ feature {NONE} -- Implementation
 					end
 				end
 				if db_services.fatal_error then
-					error_occurred := true
+					error_occurred := True
 				elseif not keep_db_connection then
 					db_services.disconnect
 					error_occurred := db_services.fatal_error
@@ -366,7 +388,16 @@ feature {NONE} -- Implementation
 			symbol_list_initialized := True
 		end
 
-feature {NONE} -- Implementation attributes
+feature {NONE} -- Implementation queries
+
+	date_format_prefix: STRING is "-date-spec:"
+			-- Prefix of the "special format" option
+
+	no_open_spec: STRING is "-no-open"
+			-- No-open specifier
+
+	no_volume_spec: STRING is "-no-volume"
+			-- No-volume specifier
 
 	symbol_list_implementation: LIST [STRING]
 
@@ -377,7 +408,6 @@ feature {NONE} -- Implementation attributes
 			create Result.make
 			Result.extend (agent set_special_formatting)
 			Result.extend (agent set_field_separator)
-			Result.extend (agent set_opening_price)
 			Result.extend (agent set_background)
 			Result.extend (agent set_use_db)
 			Result.extend (agent set_port_numbers)
@@ -387,9 +417,45 @@ feature {NONE} -- Implementation attributes
 
 	initialization_complete: BOOLEAN
 
-feature {NONE} -- Implementation constants
+	special_format_option_spec: STRING is
+		local
+			s: STRING
+		once
+			s := " "
+			Result := date_format_prefix + "<spec>"
+			s.multiply (usage_description_column - Result.count -
+				usage_indent.count - 1)
+			Result := Result + s + special_format_description
+-- "-special-format:date-format=dd#month3#yy,year-partition=80,date_sep=-"
+		end
 
-	special_format_string: STRING is "-special-format"
+	usage_indent: STRING is "  "
+
+	usage_description_column: INTEGER is 27
+
+	special_format_description: STRING is
+		local
+			s: STRING
+		once
+			s := " "
+			s.multiply (usage_description_column - 1)
+			Result := "Use special date specification <spec>%N" + s +
+                             "  (See documentation for date specificaton.)"
+		end
+
+	current_contents_match (s: STRING): BOOLEAN is
+			-- Does `contents.item' match `s'?
+		do
+			Result := contents.item.substring (1, s.count).is_equal (s)
+		end
+
+feature {NONE} -- ERROR_SUBSCRIBER interface
+
+	notify (s: STRING) is
+		do
+			error_occurred := True
+			error_description := s
+		end
 
 invariant
 
@@ -401,5 +467,6 @@ invariant
 		not use_db and not use_external_data_source and not use_web and
 		not error_occurred implies symbol_list_implementation = Void and
 		file_names /= Void)
+	special_date_settings_exists: special_date_settings /= Void
 
 end -- class MAS_COMMAND_LINE
