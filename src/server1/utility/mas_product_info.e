@@ -4,7 +4,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
-		%Released under the Eiffel Forum Freeware License; see file forum.txt"
+		%Released under the Eiffel Forum License; see file forum.txt"
 
 class PRODUCT_INFO inherit
 
@@ -48,7 +48,7 @@ feature -- Access
 	date: DATE is
 			-- The last date that `number' was updated
 		once
-			create Result.make (2001, 5, 12)
+			create Result.make (2001, 5, 14)
 		end
 
 	informal_date: STRING is
@@ -67,27 +67,23 @@ feature -- Access
 	license_information: STRING is
 		once
 			Result :=
-"      Eiffel Forum Freeware License, version 1%N%N%
-%      Permission is hereby granted, without written agreement and without%N%
-%      license or royalty fees, to use, copy, modify and/or distribute this%N%
-%      package, provided that:%N%N%
-%         * copyright notices are retained unchanged%N%
-%         * any distribution of this package, whether modified or not,%N%
-%           includes this file%N%N%
-%      Permission is hereby also granted, without written agreement and%N%
-%      without license or royalty fees, to distribute binary programs which%N%
-%      depend on this package, provided that:%N%N%
-%         * if the binary program depends on a modified version of this%N%
-%           package, you must publicly release the modified version of this%N%
-%           package - for example by submitting it to the Eiffel Forum%N%
-%           archive (http://www.eiffel-forum.org/archive/)%N%N%
-%      THIS PACKAGE IS PROVIDED %"AS IS%" AND WITHOUT WARRANTY. ANY EXPRESS OR%N%
-%      IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED%N%
-%      WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE%N%
-%      ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY%N%
-%      FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR%N%
-%      CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THIS%N%
-%      PACKAGE."
+"Eiffel Forum License, version 1%N%N%
+%Permission is hereby granted to use, copy, modify and/or distribute%N%
+%this package, provided that:%N%N%
+%  - copyright notices are retained unchanged.%N%N%
+%  - any distribution of this package, whether modified or not,%N%
+%    includes this file.%N%N%
+%Permission is hereby also granted to distribute binary programs which%N%
+%depend on this package, provided that:%N%N%
+%  - if the binary program depends on a modified version of this%N%
+%    package, you must publicly release the modified version of this%N%
+%    package.%N%N%
+%THIS PACKAGE IS PROVIDED %"AS IS%" AND WITHOUT WARRANTY. ANY EXPRESS%N%
+%OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED%N%
+%WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE%N%
+%DISCLAIMED. IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR%N%
+%ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL%N%
+%DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THIS PACKAGE."
 		end
 
 feature {NONE} -- Implementation
