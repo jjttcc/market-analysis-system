@@ -159,15 +159,16 @@ public class Connection implements NetworkProtocol, Constants {
 	}
 
 	// A new Reader object created with io_connection's input stream
-	protected Reader new_reader() {
+	protected Reader new_reader() throws IOException {
 //System.out.println("\nnot decompressing");
 		Reader result = null;
 		try {
 			result = new BufferedReader(new InputStreamReader(
 				new BufferedInputStream(io_connection.input_stream())));
-		} catch (Exception e) {
+		} catch (IOException e) {
 			System.err.println("Failed to read from server (" + e + ")");
 			Configuration.terminate(1);
+			throw e;
 		}
 		return result;
 	}

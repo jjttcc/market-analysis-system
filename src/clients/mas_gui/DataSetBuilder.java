@@ -167,14 +167,18 @@ public class DataSetBuilder implements NetworkProtocol {
 		return result;
 	}
 
-	// Result of the last request to the server
-	public int request_result() {
+	// Message ID of last response from the server
+	public int request_result_id() {
 		return connection_.last_received_message_ID();
 	}
 
 	// Result of the last request to the server
 	public String server_response() {
-		return connection_.result().toString();
+		String result = null;
+		if (connection_.result() != null) {
+			result = connection_.result().toString();
+		}
+		return result;
 	}
 
 	// Did the login process fail?

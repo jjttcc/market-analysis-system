@@ -145,7 +145,9 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	}
 
 	// indicators
+	// Postcondition: result != null
 	public Hashtable indicators() {
+		Hashtable result = null;
 		if (_indicators == null || new_indicators) {
 			new_indicators = false;
 			Vector inds_from_server = data_builder.last_indicator_list();
@@ -161,6 +163,16 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			}
 			previous_open_interest = data_builder.open_interest();
 		}
+		if (data_builder.connection().error_occurred()) {
+			new ErrorBox("Warning",
+				"Error occurred retrieving indicator list.", this_chart);
+		}
+		if (_indicators != null) {
+			result = _indicators;
+		} else {
+			result = new Hashtable();
+		}
+		assert result != null: "Postcondition violation";
 		return _indicators;
 	}
 
@@ -269,8 +281,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	}
 
 	// Result of last request to the server
-	public int request_result() {
-		return data_builder.request_result();
+	public int request_result_id() {
+		return data_builder.request_result_id();
 	}
 
 	// Register `d' to save its size and location on exit with its title
@@ -312,7 +324,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			try {
 				data_builder.send_market_data_request(tradable,
 					current_period_type);
-				if (request_result() == OK) {
+				if (request_result_id() == OK) {
 					// Ensure that the indicator list is up-to-date with
 					// respect to `tradable'.
 					data_builder.send_indicator_list_request(tradable,
@@ -322,9 +334,9 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 					new_indicators = true;
 					indicators();
 				} else {
-					if (request_result() == Invalid_symbol) {
+					if (request_result_id() == Invalid_symbol) {
 						handle_nonexistent_sybmol(tradable);
-					} else if (request_result() == Warning) {
+					} else if (request_result_id() == Warning) {
 						new ErrorBox("Warning", "Error occurred retrieving " +
 							"data for " + tradable, this_chart);
 					}
@@ -609,6 +621,9 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		}
 		System.err.println("Exiting ...");
 		log_out_and_exit(-1);
+		// If still running, ignore-termination flag is on -
+		// Display the error message.
+		new ErrorBox("Warning", s != null? s: "Error encountered", this_chart);
 	}
 
 	// Link `d' with the appropriate indicator group, using `indicator_name'
