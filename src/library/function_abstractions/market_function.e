@@ -143,6 +143,34 @@ feature -- Access
 			end
 		end
 
+	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE] is
+			-- The innermost input sequence to be processed
+		deferred
+		end
+
+feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Element change
+
+	set_name (n: STRING) is
+			-- Set the function's name to n.
+		require
+			not_void: n /= Void
+		do
+			name := n
+		ensure
+			is_set: name = n and name /= Void
+		end
+
+	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
+			-- If the run-time type is a complex function, set the innermost
+			-- input attribute to `in', else do nothing.
+		require
+			not_void: in /= Void and in.trading_period_type /= Void
+		do
+		ensure
+			output_empty_if_complex_and_not_processed:
+				is_complex and not processed implies output.is_empty
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is
@@ -164,29 +192,6 @@ feature -- Basic operations
 		deferred
 		ensure then
 			processed: processed
-		end
-
-feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
-
-	set_name (n: STRING) is
-			-- Set the function's name to n.
-		require
-			not_void: n /= Void
-		do
-			name := n
-		ensure
-			is_set: name = n and name /= Void
-		end
-
-	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
-			-- If the run-time type is a complex function, set the innermost
-			-- input attribute to `in', else do nothing.
-		require
-			not_void: in /= Void and in.trading_period_type /= Void
-		do
-		ensure
-			output_empty_if_complex_and_not_processed:
-				is_complex and not processed implies output.is_empty
 		end
 
 feature {MARKET_FUNCTION, MARKET_FUNCTION_EDITOR}

@@ -87,6 +87,11 @@ feature -- Access
 			Result.append (input2.leaf_functions)
 		end
 
+	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE] is
+		do
+			Result := input1.innermost_input
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is

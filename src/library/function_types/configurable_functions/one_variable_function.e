@@ -89,6 +89,38 @@ feature -- Access
 			end
 		end
 
+	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE] is
+		do
+			if input.is_complex then
+				Result := input.innermost_input
+			else
+				Result ?= input
+			end
+		ensure
+			exists: Result /= Void
+		end
+
+feature {FACTORY} -- Element change
+
+	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
+		do
+			processed_date_time := Void
+			if input.is_complex then
+				input.set_innermost_input (in)
+			else
+				set_input (in)
+				-- Allow all linear commands in the operator hierarchy to
+				-- update their targets with the new `input' object.
+				-- It's only when 'not input.is_complex' that this needs to
+				-- be done (that is, Current is a complex leaf function) -
+				-- the linear operators of non-leaf functions need to keep
+				-- their existing targets, which are the `output's of
+				-- complex functions, to maintain the functions semantics.
+				initialize_operators
+			end
+			output.wipe_out
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is
@@ -132,27 +164,6 @@ feature {NONE}
 			end
 		ensure then
 			input_processed: input.processed
-		end
-
-feature {FACTORY} -- Status setting
-
-	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
-		do
-			processed_date_time := Void
-			if input.is_complex then
-				input.set_innermost_input (in)
-			else
-				set_input (in)
-				-- Allow all linear commands in the operator hierarchy to
-				-- update their targets with the new `input' object.
-				-- It's only when 'not input.is_complex' that this needs to
-				-- be done (that is, Current is a complex leaf function) -
-				-- the linear operators of non-leaf functions need to keep
-				-- their existing targets, which are the `output's of
-				-- complex functions, to maintain the functions semantics.
-				initialize_operators
-			end
-			output.wipe_out
 		end
 
 feature {MARKET_FUNCTION_EDITOR}

@@ -27,7 +27,8 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 			make as arrayed_list_make
 		export
 			{NONE} all
-			{FACTORY} extend, count, first, last, i_th
+			{FACTORY, MARKET_FUNCTION_EDITOR} extend, count, first, last,
+				i_th, item, off
 			{MARKET_FUNCTION} make_from_array
 			{ANY} is_empty
 		end
@@ -85,6 +86,11 @@ feature -- Access
 	children: LIST [MARKET_FUNCTION] is
 		once
 			Result := Void
+		end
+
+	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE] is
+		do
+			Result := Current
 		end
 
 feature -- Status report

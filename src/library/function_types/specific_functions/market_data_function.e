@@ -56,6 +56,11 @@ feature -- Access
 			Result.extend (Current)
 		end
 
+	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE] is
+		do
+			Result := input
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is

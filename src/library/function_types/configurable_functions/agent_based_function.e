@@ -135,6 +135,16 @@ feature -- Access
 
 	immediate_direct_parameters: LINKED_LIST [FUNCTION_PARAMETER]
 
+	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE] is
+		do
+			if not inputs.is_empty then
+				Result := inputs.first.innermost_input
+			end
+		ensure then
+			defined_if_inputs_not_empty:
+				not inputs.is_empty implies Result /= Void
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is

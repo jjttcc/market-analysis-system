@@ -364,8 +364,6 @@ feature {NONE} -- Implementation
 			-- Commands not allowed as operators for market functions
 		once
 			create {LINKED_LIST [COMMAND]} Result.make
-			Result.extend (operator_maker.command_with_generator (
-				"FUNCTION_BASED_COMMAND"))
 		end
 
 invariant
