@@ -42,8 +42,10 @@ feature -- Initialization
 		do
 			set_input_device (input_dev)
 			set_output_device (output_dev)
+			!!editor.make (Current)
 		ensure
 			iodev_set: input_device = input_dev and output_device = output_dev
+			editor_exists: editor /= Void
 		end
 
 feature {NONE} -- Hook methods

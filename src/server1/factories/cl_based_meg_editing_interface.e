@@ -39,15 +39,15 @@ feature
 		do
 			set_input_device (input_dev)
 			set_output_device (output_dev)
-			--!!!Should these two objects be created here?? Or somewhere else?
-			!!cmd_editor
 			!CL_BASED_COMMAND_EDITING_INTERFACE!operator_maker.make (
 				input_dev, output_dev)
-			cmd_editor.set_user_interface (operator_maker)
-			operator_maker.set_editor (cmd_editor)
 			!!help.make
+			-- !!!Satisfy invariant - editor is currently not used; it may
+			-- be used later - if not, might want to change the invariant or?
+			!!editor
 		ensure
 			iodev_set: input_device = input_dev and output_device = output_dev
+			editor_exists: editor /= Void
 		end
 
 feature {NONE} -- Implementation

@@ -334,13 +334,14 @@ feature {NONE} -- Hard-coded market function building procedures
 			-- Dummy line
 		local
 			p1, p2: MARKET_POINT
-			now: DATE_TIME
+			earlier, later: DATE_TIME
 		do
+			!!earlier.make (1998, 1, 5, 0, 0, 0)
+			!!later.make (1998, 1, 23, 0, 0, 0)
 			!!p1.make
+			p1.set_x_y_date (earlier.day, 1, earlier)
 			!!p2.make
-			!!now.make_now
-			p1.set_x_y_date (1, 1, now)
-			p2.set_x_y_date (1, 1, now)
+			p2.set_x_y_date (later.day, 1, later)
 			!!Result.make (p1, p2, period_types @ (period_type_names @ Daily))
 			Result.set_name (name)
 		end
