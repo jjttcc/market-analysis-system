@@ -57,28 +57,30 @@ feature -- Basic operations
 			if not command_line_options.intraday_caching then
 				session.turn_caching_off
 			end
-			tokens := sutil.tokens (Input_field_separator)
-			from
-				tokens.start
-			until
-				tokens.exhausted or error_occurred
-			loop
-				-- Settings follow the pattern "setting_type%Tvalues", 
-				-- where 'values' represents one or more fields and fields
-				-- are separated by a tab character; extract the
-				-- setting type (name) first and then 'values'.
-				setting_type := tokens.item
-				tokens.forth
-				if tokens.exhausted then
-					error_occurred := true
-					error_msg := "Missing value for setting: "
-					error_msg.append (setting_type)
-				else
-					error_msg := change_setting (setting_type, tokens)
-					if error_msg = Void then
-						tokens.forth
-					else
+			if not msg.empty then
+				tokens := sutil.tokens (Input_field_separator)
+				from
+					tokens.start
+				until
+					tokens.exhausted or error_occurred
+				loop
+					-- Settings follow the pattern "setting_type%Tvalues", 
+					-- where 'values' represents one or more fields and fields
+					-- are separated by a tab character; extract the
+					-- setting type (name) first and then 'values'.
+					setting_type := tokens.item
+					tokens.forth
+					if tokens.exhausted then
 						error_occurred := true
+						error_msg := "Missing value for setting: "
+						error_msg.append (setting_type)
+					else
+						error_msg := change_setting (setting_type, tokens)
+						if error_msg = Void then
+							tokens.forth
+						else
+							error_occurred := true
+						end
 					end
 				end
 			end
