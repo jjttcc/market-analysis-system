@@ -1,5 +1,7 @@
 /* Copyright 1998 - 2001: Jim Cochrane - see file forum.txt */
 
+package mas_gui;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;

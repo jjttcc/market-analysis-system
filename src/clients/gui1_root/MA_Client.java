@@ -2,6 +2,7 @@
 
 import java.io.*;
 import java.net.*;
+import mas_gui.*;
 
 /** Root class for the Market Analysis client process */
 public class MA_Client {
