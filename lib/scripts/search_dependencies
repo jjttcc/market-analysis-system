@@ -26,15 +26,13 @@ fi
 
 afiles="$(eiffel_files $clusterA)"
 bfiles="$(cd $clusterB/ >/dev/null; eiffel_files .)"
-#!!!for f in $( (cd $clusterB/ >/dev/null; ls *.e) )
+if [ -z "$afiles" -o -z "$bfiles" ]; then exit 0; fi
 for f in $bfiles
 do
 	classname=$(basename $f .e|tr '[a-z]' '[A-Z]')
 	if
-#!!!		grep "\<$classname\>" $clusterA/*.e >/dev/null
 		grep "\<$classname\>" $afiles >/dev/null
 	then
-#!!!			echo -e classes: \"$(grep -l "\<$classname\>" $clusterA/*.e)\" "\c"
 			echo -e classes: \"$(grep -l "\<$classname\>" $afiles)\" "\c"
 			echo "depend on $clusterB/$f"
 	fi
