@@ -8,18 +8,17 @@ inherit
 
 create
 
-	make, http_make
+	http_make
 
 feature -- Initialization
 
 	http_make (h, p: STRING) is
 		require
-			args_valid: h /= Void and p /= Void and not h.is_empty and
-				not p.is_empty
+			args_valid: h /= Void and p /= Void
 		do
 			host := h
 			path := p
-			make ("http://" + host + "/" + path)
+			make_address
 		ensure
 			host_set: host /= Void and host = h
 			path_set: path /= Void and path = p
@@ -33,8 +32,10 @@ feature -- Element change
 			h_valid: h /= Void and not h.is_empty
 		do
 			host := h
+			make_address
 		ensure
 			host_set: host /= Void and host = h
+			address_set: address.is_equal ("http://" + host + "/" + path)
 		end
 
 	set_path (p: STRING) is
@@ -42,8 +43,17 @@ feature -- Element change
 			p_valid: p /= Void and not p.is_empty
 		do
 			path := p
+			make_address
 		ensure
 			path_set: path /= Void and path = p
+			address_set: address.is_equal ("http://" + host + "/" + path)
+		end
+
+feature {NONE} -- Implementation
+
+	make_address is
+		do
+			make ("http://" + host + "/" + path)
 		end
 
 end
