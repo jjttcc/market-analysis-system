@@ -3,6 +3,8 @@ indexing
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	note: "This class is currently not used.  If that continues to be the %
+		%case, it should be obsoleted and moved."
 	licensing: "Copyright 2003: Jim Cochrane - %
 		%License to be determined"
 
