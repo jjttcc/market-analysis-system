@@ -33,7 +33,7 @@ feature {NONE} -- Basic operations
 		do
 			-- `msg' is expected to contain (only) the market symbol
 			if tradables.symbols.has (msg) then
-				ptypes := tradables.period_types (msg)
+				ptypes := tradables.period_type_names_for (msg)
 			end
 			if tradables.last_tradable /= Void then
 				session.set_last_tradable (tradables.last_tradable)

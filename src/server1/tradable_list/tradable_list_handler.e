@@ -102,7 +102,7 @@ feature -- Access
 					Result.count = intraday_market_list.count
 		end
 
-	period_types (symbol: STRING): ARRAYED_LIST [STRING] is
+	period_type_names_for (symbol: STRING): ARRAYED_LIST [STRING] is
 		local
 			l: LIST [TIME_PERIOD_TYPE]
 			t: TRADABLE [BASIC_MARKET_TUPLE]
