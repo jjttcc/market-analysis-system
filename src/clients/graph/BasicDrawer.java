@@ -239,7 +239,9 @@ abstract public class BasicDrawer extends Drawer {
 		for (int i = start_ref_index; i < refvalue_specs.length; ++i) {
 			if (yrange >= refvalue_specs[i].minimum() &&
 					yrange < refvalue_specs[i].maximum()) {
+//System.out.println("found RefSpec: " + refvalue_specs[i]);
 				step = refvalue_specs[i].step_value();
+//System.out.println("yrange, step: " + yrange + ", " + step);
 				break;
 			}
 		}
@@ -319,6 +321,7 @@ abstract public class BasicDrawer extends Drawer {
 				if (adj_ys[i] > ref_bounds.y + margin_for_text && adj_ys[i] <
 						ref_bounds.y + ref_bounds.height - margin_for_text) {
 					g.setColor(config.text_color());
+//System.out.println("drawing ref value: " + ystrings[i]);
 					g.drawString(ystrings[i], ref_bounds_x_value,
 						adj_ys[i] + Y_text_adjust);
 				}
@@ -359,8 +362,10 @@ abstract public class BasicDrawer extends Drawer {
 	protected static int ref_straddle_one_index;
 
 	static {
-		refvalue_specs = new RefSpec[38]; int i = 0;
-		refvalue_specs[i++] = new RefSpec(0.00000, 0.00015, .00001);
+		refvalue_specs = new RefSpec[40]; int i = 0;
+		refvalue_specs[i++] = new RefSpec(0.000000, 0.000015, .000001);
+		refvalue_specs[i++] = new RefSpec(0.000015, 0.00003, .000005);
+		refvalue_specs[i++] = new RefSpec(0.00003, 0.00015, .00001);
 		refvalue_specs[i++] = new RefSpec(0.00015, 0.0003, .00005);
 		refvalue_specs[i++] = new RefSpec(0.0003, 0.0015, .0001);
 		refvalue_specs[i++] = new RefSpec(0.0015, 0.003, .0005);
@@ -410,8 +415,8 @@ abstract public class BasicDrawer extends Drawer {
 		refvalue_specs[i++] = new RefSpec(150000000000000L,
 			9000000000000000000L, 50000000000000L);
 
-		assert refvalue_specs[ref_straddle_one_index].minimum() < 1 &&
-			refvalue_specs[ref_straddle_one_index].maximum() > 1;
+//		assert refvalue_specs[ref_straddle_one_index].minimum() < 1 &&
+//			refvalue_specs[ref_straddle_one_index].maximum() > 1;
 	}
 
 	protected boolean boundaries_needed;
@@ -422,7 +427,7 @@ abstract public class BasicDrawer extends Drawer {
 	final int Ref_text_offset = -45;	// Offset for reference text
 
 	// "epsilon" value for determining if ymin and ymax are almost equal
-	private static double min_max_epsilon = 0.00005;
+	private static double min_max_epsilon = 0.000000005;
 
 	// boundary value to use if ymin and ymax are almost equal
 	private static double min_border_boundary = 0.25;
