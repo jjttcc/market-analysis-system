@@ -50,12 +50,21 @@ rm -fr $RPM_BUILD_ROOT
 ./install --rootdir $RPM_BUILD_ROOT/%{rootdir}
 
 %post
+set -x
 cd %{rootdir}
 find . -type d -exec chmod +rx {} ';'
 if [ "$(id -un)" = root ]; then
 	find . -exec chown root {} ';'
 	find . -exec chgrp root {} ';'
 fi
+# Plug %{rootdir} as the <mas_root_dir> into the configure_user script.
+cd bin/
+specfile=/tmp/mas-specs.$$
+echo "replacestart">$specfile
+echo "<mas_root_dir>"%{rootdir}>>$specfile
+echo "replaceend">>$specfile
+./config_tool -c $specfile -f configure_user
+rm -f $specfile
 
 %files
 %{rootdir}/bin
