@@ -3,7 +3,7 @@
 cleanup ()
 {
 	rm -rf output
-	exit $1
+	exit $ExitStatus
 }
 
 find_test_dir()
@@ -130,7 +130,10 @@ run_test()
 	fi
 }
 
-trap "cleanup -2" 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 # ...
+trap "cleanup" 0
+
+trap "ExitStatus=-2 cleanup" \
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 # ...
 
 if [ "$(basename $PWD)" != test ]
 then
@@ -156,7 +159,7 @@ done
 echo "$successes out of $test_count tests succeeded."
 if [ "$successes" -eq "$test_count" ]
 then
-	exit 0
+	ExitStatus=0; cleanup
 else
-	exit 1
+	ExitStatus=1; cleanup
 fi
