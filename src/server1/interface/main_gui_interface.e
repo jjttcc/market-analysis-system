@@ -186,8 +186,6 @@ feature {NONE}
 			rh.extend (cmd, Market_list_request)
 			create {INDICATOR_LIST_REQUEST_CMD} cmd.make (market_list_handler)
 			rh.extend (cmd, Indicator_list_request)
-			create {ERROR_RESPONSE_CMD} cmd
-			rh.extend (cmd, Error)
 			create {LOGIN_REQUEST_CMD} cmd.make (market_list_handler)
 			rh.extend (cmd, Login_request)
 			request_handlers := rh
