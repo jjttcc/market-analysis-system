@@ -68,7 +68,7 @@ feature -- Basic operations
 			processed: processed
 		end
 
-feature {FACTORY} -- Status setting
+feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 
 	set_name (n: STRING) is
 			-- Set the function's name to n.
@@ -92,14 +92,6 @@ feature {MARKET_FUNCTION}
 
 	is_complex: BOOLEAN is
 			-- Is the run-time type a complex function?
-		deferred
-		end
-
-feature {MARKET_FUNCTION, MARKET_FUNCTION_EDITOR}
-
-	wipe_out is
-			-- Remove all elements of output and, recursively, of all
-			-- nested MARKET_FUNCTIONs.
 		deferred
 		end
 
