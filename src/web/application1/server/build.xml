@@ -306,6 +306,7 @@
 	<arg value="${build.home}/WEB-INF/classes/mas/MAS.class"/>
 	<arg value="${build.home}/WEB-INF/classes/mas/MAS_Proxy.class"/>
 	<arg value="${build.home}/WEB-INF/classes/mas/ServerAddress.class"/>
+	<arg value="${build.home}/WEB-INF/classes/mas/ManagedCache.class"/>
 	<arg value="srvlt_deployment"/>
 	</exec>
 
