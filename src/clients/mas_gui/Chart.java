@@ -11,6 +11,7 @@ import java.awt.event.*;
 import java.util.Vector;
 import java.util.Hashtable;
 import java.util.Enumeration;
+import java.util.Properties;
 import java.io.*;
 import graph.*;
 import support.*;
@@ -21,6 +22,7 @@ public class Chart extends Frame implements Runnable {
 		super("Chart");		// Create the main window frame.
 		num_windows++;			// Count it.
 		data_builder = builder;
+		this_chart = this;
 		Vector inds;
 
 		try {
@@ -201,14 +203,17 @@ public class Chart extends Frame implements Runnable {
 		add_indicators(indicator_menu);
 
 		// Create three menu items, with menu shortcuts, and add to the menu.
-		MenuItem newwin, closewin, mkt_selection, quit;
+		MenuItem newwin, closewin, mkt_selection, print_cmd, quit;
 		file_menu.add(newwin = new MenuItem("New Window",
 							new MenuShortcut(KeyEvent.VK_N)));
 		file_menu.add(mkt_selection = new MenuItem("Select Market",
 							new MenuShortcut(KeyEvent.VK_S)));
 		file_menu.add(closewin = new MenuItem("Close Window",
 							new MenuShortcut(KeyEvent.VK_W)));
-		file_menu.addSeparator();	// Put a separator in the menu
+		file_menu.addSeparator();
+		file_menu.add(print_cmd = new MenuItem("Print",
+							new MenuShortcut(KeyEvent.VK_P)));
+		file_menu.addSeparator();
 		file_menu.add(
 			quit = new MenuItem("Quit", new MenuShortcut(KeyEvent.VK_Q)));
 
@@ -224,6 +229,28 @@ public class Chart extends Frame implements Runnable {
 		closewin.addActionListener(new ActionListener() {// Close this window.
 		public void actionPerformed(ActionEvent e) { close(); }
 		});
+
+		print_cmd.addActionListener(new ActionListener() {// Print
+		public void actionPerformed(ActionEvent e) {
+			if (! (current_market == null || current_market.length() == 0)) {
+				main_pane.print();
+			}
+			else { // Let the user know there is currently nothing to print.
+				final Dialog dialog = new Dialog(this_chart);
+				Button ok_button = new Button("Nothing to print");
+				dialog.add(ok_button, "Center"); dialog.setSize(145, 65);
+				dialog.setTitle("Printing error"); dialog.show();
+				ok_button.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						dialog.setVisible(false); }});
+				dialog.addWindowListener(new WindowAdapter() {
+					public void windowClosing(WindowEvent e) {
+						dialog.setVisible(false); }});
+				ok_button.addKeyListener(new KeyAdapter() {
+					public void keyPressed(KeyEvent e) {
+						dialog.setVisible(false); }});
+			}
+		}});
 
 		quit.addActionListener(new ActionListener() {     // Quit the program.
 		public void actionPerformed(ActionEvent e) { quit(0); }
@@ -284,14 +311,17 @@ public class Chart extends Frame implements Runnable {
 	private void set_window_title() {
 		if (current_lower_indicator != null &&
 				! current_lower_indicator.equals(No_lower_indicator)) {
-			setTitle(current_market + " - " + current_lower_indicator);
+			setTitle(current_market.toUpperCase() + " - " +
+				current_lower_indicator);
 		}
 		else {
-			setTitle(current_market);
+			setTitle(current_market.toUpperCase());
 		}
 	}
 
 	private DataSetBuilder data_builder;
+
+	private Chart this_chart;
 
 	// # of open windows - so program can exit when last one is closed
 	protected static int num_windows = 0;
