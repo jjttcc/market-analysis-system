@@ -37,30 +37,21 @@ Current list of user-configured technical indicators:
 
   - On Balance Volume
   - Accumulation/Distribution
+  - Slope of MACD Signal Line
+  - Slope of Slope of MACD Signal Line
+  - EMA of Volume
 
 Current list of market-analysis rules:
 
-  - Slow Stochastic %D - -> + slope change event
-  - Slow Stochastic %D + -> - slope change event
-  - Stochastic %D - -> + slope change event
-  - Stochastic %D + -> - slope change event
-  - Stochastic %K - -> + slope change event
-  - Stochastic %K + -> - slope change event
-  - MACD difference/signal crossover event - below to above
-  - MACD difference/signal crossover event - above to below
-  - [MACD difference/signal crossover event - below to above] / [Slow
-    Stochastic %D - -> + slope change event]
-  - [MACD difference/signal crossover event - above to below] / [Slow
-    Stochastic %D + -> - slope change event]
-  - [MACD difference/signal crossover event - below to above] / [Stochastic %D
-    - -> + slope change event]
-  - [MACD difference/signal crossover event - above to below] / [Stochastic %D
-    + -> - slope change event]
-  - [MACD difference/signal crossover event - below to above] / [Stochastic %K
-    - -> + slope change event]
-  - [MACD difference/signal crossover event - above to below] / [Stochastic %K
-    + -> - slope change event]
-
+  - MACD Crossover (Buy)
+  - MACD Crossover (Sell)
+  - Stochastic %D Cross Below 35% (Buy)
+  - Stochastic %D Cross Above 65% (Sell)
+  - Volume > Yesterday's Volume EMA (5) * 2.75
+  - Slope of MACD Signal Line Cross Above 0 (Buy)
+  - Slope of MACD Signal Line Cross Below 0 (Sell)
+  - Slope of Slope of MACD Signal Line Cross Above 0 (Buy)
+  - Slope of Slope of MACD Signal Line Cross Below 0 (Sell)
 
 Market Analysis GUI Client (MAGC)
 
@@ -76,3 +67,4 @@ Allows user to run several windows at a time.
 Provides configuration of colors for graph components.
 Provides configuration of date range for data.
 Allows configuration of user-defined reference lines.
+Allows printing of charts.
