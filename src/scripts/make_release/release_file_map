@@ -282,8 +282,8 @@ src/scripts/install/install ./ mas_linux1.4 mas_windows1.4
 #src/scripts/install/install_config ./ mas_linux1.4 mas_windows1.4
 # Data files needed by mas1.4
 /home2/finance/.mas/stock_splits lib mas_linux1.4 mas_windows1.4
-build/data lib mas_linux1.4 mas_windows1.4
-build/mas_dbrc lib mas_linux1.4 mas_windows1.4
+build/data lib/ mas_linux1.4 mas_windows1.4
+build/database lib/ mas_linux1.4 mas_windows1.4
 forum.txt . mas_linux1.4 mas_windows1.4 mac1.4 serversrc1.4 clientsrc1.4
 # Scripts
 src/scripts/python/obtain_eod_data src/scripts/ scripts
@@ -299,6 +299,7 @@ src/scripts/python/pmm src/scripts/ scripts
 src/scripts/mas/admin src/scripts/lib/ scripts
 src/scripts/mas/awk src/scripts/lib/ scripts
 doc/scripts_README ./src/scripts/README scripts
+src/scripts/postgres src/scripts/database/ scripts
 /usr/local/bin/cnvrt_fromdos src/scripts/ scripts
 /usr/local/bin/fromdos src/scripts/ scripts
 /home2/jtc/bin/startmas src/scripts scripts
