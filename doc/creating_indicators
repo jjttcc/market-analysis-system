@@ -635,3 +635,15 @@ select "MACD Signal Line".  For ONE_VARIABLE_FUNCTION's operator, select
 SLOPE_ANALYZER.  For SLOPE_ANALYZER's input, select "MACD Signal Line".
 
 This concludes the creation of Slope of MACD Signal Line.
+
+
+Example 7: Slope of Slope of MACD Signal Line
+
+The slope of the slope of the MACD Signal Line can be used to detect
+short-term oversold and overbought conditions during a long-term trend.
+
+From the indicator creation menu select ONE_VARIABLE_FUNCTION as the
+root function and choose an appropriate name.  For the function's input
+function, select "Slope of MACD Signal Line".  For ONE_VARIABLE_FUNCTION's
+operator, select SLOPE_ANALYZER.  For SLOPE_ANALYZER's input, select
+"Slope of MACD Signal Line".

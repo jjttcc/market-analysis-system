@@ -23,3 +23,21 @@ Say "no" to adding time extensions before and after the left/right analyzers.
 Say "no" to specifying and event type as target for the left analyzer's
 date/time.  Choose a good name for the analyzer.
 
+Example C: Slope of MACD Signal Crosses Above 0
+
+This is a signal to detect a long-term uptrend using weekly data.
+
+Select Simple as the analyzer type.  It will use two technical indicators.
+The left indicator should be "Slope of MACD Signal line".  (See "Example 6:
+Slope of MACD Signal Line", from creating_indicators.)  The right indicator
+should be "Line".  The starting y-value for the line should be 0 and the
+slope should be 0.
+
+The trading period type should be weekly.  Specification for crossover
+detection should be "below-to-above".  It should not have an operator.
+A good name for the analyzer is: "Slope of MACD Signal Line Cross
+Above 0 (Buy)".
+
+For a similar indicator to detect a downtrend, when the MACD Signal Line
+crosses below 0, follow the above steps, but choose "above-to-below" for
+the crossover detection.
