@@ -77,28 +77,32 @@ feature -- Basic operations
 			-- print to the end of `l'.
 			-- If `appendinx' is not empty, print it after printing the
 			-- tuples.
+		require
+			l_not_void: l /= Void
 		local
 			printer: MARKET_TUPLE_PRINTER
 		do
 			if not l.empty then
 				-- clone to allow concurrent printing
 				printer := clone (tuple_printers @ l.first.generator)
-				printer.set_print_start_date (print_start_date)
-				printer.set_print_end_date (print_end_date)
-				printer.set_field_separator (output_field_separator)
-				printer.set_record_separator (output_record_separator)
-				printer.set_date_field_separator (output_date_field_separator)
-				printer.set_preface (preface)
-				if appendix /= Void and not appendix.empty then
-					printer.set_appendix (appendix)
-				end
-				if output_medium /= Void then
-					printer.set_output_medium (output_medium)
-				else	-- default to standard io
-					printer.set_output_medium (io.default_output)
-				end
-				printer.execute (l)
+			else
+				printer := tuple_printers.linear_representation @ 1
 			end
+			printer.set_print_start_date (print_start_date)
+			printer.set_print_end_date (print_end_date)
+			printer.set_field_separator (output_field_separator)
+			printer.set_record_separator (output_record_separator)
+			printer.set_date_field_separator (output_date_field_separator)
+			printer.set_preface (preface)
+			if appendix /= Void and not appendix.empty then
+				printer.set_appendix (appendix)
+			end
+			if output_medium /= Void then
+				printer.set_output_medium (output_medium)
+			else	-- default to standard io
+				printer.set_output_medium (io.default_output)
+			end
+			printer.execute (l)
 		end
 
 	print_indicators (t: TRADABLE [BASIC_MARKET_TUPLE]) is
@@ -203,6 +207,8 @@ feature {NONE} -- Implementation
 			Result.extend (oitprinter, boit.generator)
 			-- MARKET_POINTs are printed by MARKET_TUPLE_PRINTERs (for now).
 			Result.extend (mtprinter, point.generator)
+		ensure
+			not_empty: Result /= Void and not Result.empty
 		end
 
 	print_mf_info (f: MARKET_FUNCTION) is
