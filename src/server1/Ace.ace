@@ -1,9 +1,7 @@
 system mas
 	-- Market Analysis System server
 
-	-- To compile for Linux, uncomment the line for "$/system_specific/unix",
-	-- below and comment out the "$/system_specific/win32" line.  To compile
-	-- for Windows, do the opposite.
+	-- Ace file for Linux systems
 
 root
 
@@ -16,6 +14,7 @@ default
 	--debug ("persist");
 	--debug ("command line");
 	--debug ("database");
+	--debug ("compression");
 	profile (no);
 	array_optimization (yes);
 	inlining (yes);
@@ -37,7 +36,6 @@ cluster
 	interface (server):			"$/interface";
 	server_global (server):		"$/global";
 	system_specific (server):	"$/system_specific/unix";
-	--system_specific (server):	"$/system_specific/win32";
 	database (server)		:	"$/database";
 	database_odbc (server)	:	"$/database/odbc";	
 	database_ecli (server)	:	"$/database/ecli";	
@@ -92,9 +90,9 @@ cluster
 	data_scanners (data_scanning):
 					"$/data_scanners";
 	event_generation_kernel (event_generation):
-					"$/event_generation_kernel/";
+					"$/event_generation_kernel";
 	function_analysis (event_generation):
-					"$/function_analysis/";
+					"$/function_analysis";
 
 		-- Eiffel Component Library clusters
 	eiffel_components:						"$MAS/src/eiffel_library";
@@ -180,24 +178,24 @@ cluster
 external
 
  -- Version with odbc statically linked:
--- object:	"${EIFFEL4}/library/time/spec/$(PLATFORM)/lib/libdatetime.a",
---			"${EIFFEL4}/library/net/spec/$(PLATFORM)/lib/libnet.a",
---			"${EIFFEL4}/library/store/spec/$(PLATFORM)/lib/libsupport.a",
---			"$(ECLI)/src/spec/ise/linux/libecli_c.a",
+-- object:	"${EIFFEL4}/library/time/spec/${PLATFORM}/lib/libdatetime.a",
+--			"${EIFFEL4}/library/net/spec/${PLATFORM}/lib/libnet.a",
+--			"${EIFFEL4}/library/store/spec/${PLATFORM}/lib/libsupport.a",
+--			"${ECLI}/src/spec/ise/linux/libecli_c.a",
 --			"/usr/local/lib/libodbc.a",
---			"$(MAS)/src/eiffel_library/lib/utilities.o",
---			"$(MAS)/src/eiffel_library/lib/libz.a",
---			"$(MAS)/src/server1/lib/external_input_sequence.a",
+--			"${MAS}/src/eiffel_library/lib/utilities.o",
+--			"${MAS}/src/eiffel_library/lib/libz.a",
+--			"${MAS}/src/server1/lib/external_input_sequence.a",
 --			"/usr/lib/libdl.a";
 
  -- Version with odbc dynamically linked:
- object:	"${EIFFEL4}/library/time/spec/$(PLATFORM)/lib/libdatetime.a",
-			"${EIFFEL4}/library/net/spec/$(PLATFORM)/lib/libnet.a",
-			"${EIFFEL4}/library/store/spec/$(PLATFORM)/lib/libsupport.a",
-			"$(ECLI)/src/spec/ise/linux/libecli_c.a",
-			"$(MAS)/src/eiffel_library/lib/utilities.o",
-			"$(MAS)/src/eiffel_library/lib/libz.a",
-			"$(MAS)/src/server1/lib/external_input_sequence.a",
+ object:	"${EIFFEL4}/library/time/spec/${PLATFORM}/lib/libdatetime.a",
+			"${EIFFEL4}/library/net/spec/${PLATFORM}/lib/libnet.a",
+			"${EIFFEL4}/library/store/spec/${PLATFORM}/lib/libsupport.a",
+			"${ECLI}/src/spec/ise/linux/libecli_c.a",
+			"${MAS}/src/eiffel_library/lib/utilities.o",
+			"${MAS}/src/eiffel_library/lib/libz.a",
+			"${MAS}/src/server1/lib/external_input_sequence.a",
 			"-lodbc"; 
 
 end
