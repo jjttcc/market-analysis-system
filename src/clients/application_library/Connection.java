@@ -3,8 +3,6 @@
 package application_library;
 
 import java.io.*;
-import java.net.*;
-import java.util.*;
 import common.*;
 import support.*;
 

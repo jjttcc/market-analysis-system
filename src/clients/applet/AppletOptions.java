@@ -2,7 +2,6 @@
 
 package applet;
 
-import java.util.*;
 import application_library.*;
 
 // User-specified options for the applet version

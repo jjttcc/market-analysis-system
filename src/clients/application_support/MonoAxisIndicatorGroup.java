@@ -1,10 +1,11 @@
 /* Copyright 1998 - 2003: Jim Cochrane - see file forum.txt */
 
-package support;
+package application_support;
 
 import java.util.*;
 import graph.DataSet;
 import graph.Axis;
+import support.*;
 
 // Grouping of indicators that share the y axis
 public class MonoAxisIndicatorGroup extends IndicatorGroup

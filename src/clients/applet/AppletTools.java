@@ -1,11 +1,8 @@
 package applet;
 
-import java.io.*;
 import java.applet.*;
 import java.net.*;
-import mas_gui.*;
 import application_support.*;
-import support.*;
 
 // Applet-related utilities
 public class AppletTools {
