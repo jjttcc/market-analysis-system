@@ -128,6 +128,7 @@ feature -- Access
 					end
 				end
 			end
+			stmt.close
 		end
 
 	stock_data: STOCK_DATA is
@@ -285,6 +286,7 @@ feature {NONE} -- Implementation
 						stmt.forth
 					end
 				end
+				stmt.close
 			end
 		end
 
@@ -395,11 +397,13 @@ feature {NONE} -- Implementation
 			connected: connected
 		local
 			query: STRING
+			stmt: ECLI_STATEMENT
 		do
 			query := db_info.stock_split_query
 			if not query.empty then
-				create stock_splits.make (input_statement (query,
-					stock_split_value_holders))
+				stmt := input_statement (query, stock_split_value_holders)
+				create stock_splits.make (stmt)
+				stmt.close
 			end
 		ensure
 			still_connected: connected
@@ -408,8 +412,8 @@ feature {NONE} -- Implementation
 	cleanup is
 		do
 			if connected then disconnect end
-			if session.is_valid and not session.unattached then
-				session.release
+			if session.is_valid and not session.is_closed then
+				session.close
 			end
 		end
 
