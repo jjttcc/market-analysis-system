@@ -41,9 +41,17 @@ feature -- Basic operations
 			-- otherwise, print from the beginning of `l'.
 			-- If `print_end_date' is not void, print all elements of
 			-- `l' <= that date; otherwise, print to the end of `l'.
+		local
+			printer: MARKET_TUPLE_PRINTER
 		do
 			if not l.empty then
-				(tuple_printers @ l.first.generator).execute (l)
+				printer := clone (tuple_printers @ l.first.generator)
+				if output_medium /= Void then
+					printer.set_output_medium (output_medium)
+				else	-- default to standard io
+					printer.set_output_medium (io.default_output)
+				end
+				printer.execute (l)
 			end
 		end
 
@@ -169,5 +177,11 @@ feature {NONE} -- Implementation
 
 	print_start_date, print_end_date: DATE
 			-- Start and end date to use for printing, if not void
+
+	output_medium: IO_MEDIUM is
+			-- Medium to use for output - If Void (default),
+			-- io.default_output will be used.
+		once
+		end
 
 end -- PRINTING
