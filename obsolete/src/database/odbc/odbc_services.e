@@ -50,35 +50,6 @@ register_for_termination (Current)
 
 feature -- Access
 
-	symbols: LIST [STRING] is
-			-- All symbols available in the database
-		local
-			data	 : DATABASE_DATA [DATABASE]
-			symbol   : STRING
-			db_result: LINKED_LIST [DB_RESULT]
-		do
-			fatal_error := false
-			db_result := db_mgr.retrieve (db_info.stock_symbol_query)
-			if db_result /= Void then
-				create {ARRAYED_LIST [STRING]} Result.make (0)
-				create symbol.make (0)
-				from
-					db_result.start
-				until 
-					db_result.after
-				loop
-					data ?= db_result.item.data
-					if data /= Void then
-						if data.item (data.count).conforms_to (symbol) then
-							symbol ?= data.item (data.count)
-							Result.extend (clone (symbol))
-						end	
-					end
-					db_result.forth
-				end
-			end
-		end
-
 	stock_splits: ODBC_STOCK_SPLITS
 
 	daily_stock_data (symbol: STRING): DB_INPUT_SEQUENCE is
@@ -91,6 +62,18 @@ feature -- Access
 		do
 			db_mgr.set_argument (symbol, "symbol")
 			Result := input_sequence (intraday_stock_query (symbol))
+		end
+
+	daily_derivative_data (symbol: STRING): DB_INPUT_SEQUENCE is
+		do
+			db_mgr.set_argument (symbol, "symbol")
+			Result := input_sequence (daily_derivative_query (symbol))
+		end
+
+	intraday_derivative_data (symbol: STRING): DB_INPUT_SEQUENCE is
+		do
+			db_mgr.set_argument (symbol, "symbol")
+			Result := input_sequence (intraday_derivative_query (symbol))
 		end
 
 	single_string_query_result (query: STRING): STRING is
@@ -173,6 +156,34 @@ feature {NONE} -- Implementation
 			fatal_error := false
 			result_list := db_mgr.retrieve (query)
 			create Result.make (result_list)
+		end
+
+	list_from_query (q: STRING): LIST [STRING] is
+		local
+			data	 : DATABASE_DATA [DATABASE]
+			s        : STRING
+			db_result: LINKED_LIST [DB_RESULT]
+		do
+			fatal_error := false
+			db_result := db_mgr.retrieve (q)
+			if db_result /= Void then
+				create {ARRAYED_LIST [STRING]} Result.make (0)
+				create s.make (0)
+				from
+					db_result.start
+				until 
+					db_result.after
+				loop
+					data ?= db_result.item.data
+					if data /= Void then
+						if data.item (data.count).conforms_to (s) then
+							s ?= data.item (data.count)
+							Result.extend (clone (s))
+						end	
+					end
+					db_result.forth
+				end
+			end
 		end
 
 	load_stock_splits is
