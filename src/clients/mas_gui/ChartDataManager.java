@@ -212,138 +212,47 @@ public class ChartDataManager implements NetworkProtocol, AssertionConstants {
 		}
 	}
 
-	// Send a data request for the specified tradable.
+	// Send a data request for the specified `tradable' and obtain the
+	// resulting data sets.
 	public void send_data_request(String tradable) {
-		DrawableDataSet dataset, main_dataset = null;
+		last_data_request_succeeded = true;
 		data_requester = new SynchronizedDataRequester(data_builder, tradable,
 			current_period_type());
-		MA_Configuration conf = MA_Configuration.application_instance();
 
 		owner.turn_off_refresh();	// Prevent auto-refresh conflicts.
-		int count;
-		String current_indicator;
 		try {
-		if (period_type_change || ! tradable.equals(current_tradable())) {
-			// Redraw the data.
-			if (individual_period_type_sets &&
-					! tradable.equals(current_tradable())) {
-				facilities.reset_period_types(tradable, false);
-			}
-			GUI_Utilities.busy_cursor(true, owner);
-			try {
-				data_requester.execute_tradable_request();
-				if (! data_requester.request_failed()) {
-					main_dataset = (DrawableDataSet)
-						data_requester.tradable_result();
-					// Ensure that the indicator list is up-to-date with
-					// respect to `tradable'.
-					data_requester.execute_indicator_list_request();
-					// Force re-creation of indicator lists with the result
-					// of the above request.
-					new_indicators = true;
-					rebuild_indicators_if_needed();
-				} else {
-					request_result_id = data_requester.request_result_id();
-					new ErrorBox("Warning", "Error occurred retrieving " +
-						"data for " + tradable + ": " +
-						data_requester.request_failure_message, owner);
-					// Handle request error.
-					if (request_result_id == Invalid_symbol) {
-						handle_nonexistent_sybmol(tradable);
-					} else if (request_result_id == Invalid_period_type) {
-						facilities.handle_invalid_period_type(tradable);
-						individual_period_type_sets = true;
-					} else if (request_result_id == Warning ||
-							request_result_id == Error) {
-						owner.display_warning("Error occurred retrieving " +
-							"data for " + tradable);
-					}
+			if (period_type_change || ! tradable.equals(current_tradable())) {
+System.out.println("a");
+				if (individual_period_type_sets &&
+						! tradable.equals(current_tradable())) {
+					facilities.reset_period_types(tradable, false);
+System.out.println("b");
+				}
+				GUI_Utilities.busy_cursor(true, owner);
+				obtain_main_tradable_data();
+System.out.println("c");
+				if (last_data_request_succeeded) {
+					obtain_upper_indicator_data();
+System.out.println("d");
+				}
+				if (last_data_request_succeeded) {
+					obtain_lower_indicator_data();
+System.out.println("e");
+				}
+				if (last_data_request_succeeded) {
+System.out.println("f");
+//!!!!Not sure where this line should go:
+					set_current_tradable(tradable);
+//!!!!Not sure where this line should go:
+					owner.set_window_title();
+					owner.main_pane().repaint_graphs();
 					GUI_Utilities.busy_cursor(false, owner);
-					return;
+					period_type_change = false;
 				}
 			}
-			catch (Exception e) {
-				facilities.fatal("Request to server failed: ", e);
-			}
-			//Ensure that all graph's data sets are removed.
-			owner.main_pane().clear_main_graph();
-			owner.main_pane().clear_indicator_graph();
-			latest_date_time = data_requester.latest_date_time();
-			assert main_dataset != null;
-			link_with_axis(main_dataset, null);
-			owner.main_pane().add_main_data_set(main_dataset);
-			tradable_specification.set_data(main_dataset);
-			if (! current_upper_indicators.isEmpty()) {
-				// Retrieve the data for the newly requested tradable for
-				// the upper indicators, add it to the upper graph and
-				// draw the new indicator data and the tradable data.
-				count = current_upper_indicators.size();
-				for (int i = 0; i < count; ++i) {
-					current_indicator = (String)
-						current_upper_indicators.elementAt(i);
-					try {
-						data_requester.execute_indicator_request(
-							indicator_id_for(current_indicator));
-					} catch (Exception e) {
-						facilities.fatal("Indicator data request failed", e);
-					}
-					dataset = (DrawableDataSet)
-						data_requester.indicator_result();
-					dataset.set_dates_needed(false);
-					dataset.setColor(
-						conf.indicator_color(current_indicator, true));
-					link_with_axis(dataset, current_indicator);
-					owner.main_pane().add_main_data_set(dataset);
-					tradable_specification.set_indicator_data(dataset,
-						current_indicator);
-				}
-			}
-			set_current_tradable(tradable);
-			owner.set_window_title();
-			if (! current_lower_indicators.isEmpty()) {
-				// Retrieve the indicator data for the newly requested
-				// tradable for the lower indicators and draw it.
-				count = current_lower_indicators.size();
-				for (int i = 0; i < count; ++i) {
-					current_indicator = (String)
-						current_lower_indicators.elementAt(i);
-					if (current_lower_indicators.elementAt(i).equals(
-							Volume)) {
-						// (Nothing to retrieve from server)
-						dataset = (DrawableDataSet)
-							data_requester.volume_result();
-					} else if (current_lower_indicators.elementAt(i).equals(
-							Open_interest)) {
-						// (Nothing to retrieve from server)
-						dataset = (DrawableDataSet)
-							data_requester.open_interest_result();
-					} else {
-						try {
-						data_requester.execute_indicator_request(
-							indicator_id_for(current_indicator));
-						} catch (Exception e) {
-							facilities.fatal("Exception occurred", e);
-						}
-						dataset = (DrawableDataSet)
-							data_requester.indicator_result();
-					}
-					if (dataset != null) {
-						dataset.setColor(conf.indicator_color(
-							current_indicator, false));
-						link_with_axis(dataset, current_indicator);
-						owner.add_indicator_lines(dataset, current_indicator);
-						owner.main_pane().add_indicator_data_set(dataset);
-						tradable_specification.set_indicator_data(dataset,
-							current_indicator);
-					}
-				}
-			}
-			owner.main_pane().repaint_graphs();
-			GUI_Utilities.busy_cursor(false, owner);
-			period_type_change = false;
-		}
 		} finally {
 			owner.turn_on_refresh();
+System.out.println("g");
 		}
 	}
 
@@ -632,6 +541,182 @@ public class ChartDataManager implements NetworkProtocol, AssertionConstants {
 		owner.handle_nonexistent_sybmol(symbol);
 	}
 
+	// Request the main (date/time,open,high,...) tradable data from the
+	// server and set up the needed associations to the resulting data set
+	// and ensure that the indicator list is up-to-date with respect to
+	// the current tradable.
+	private void obtain_main_tradable_data() {
+		assert last_data_request_succeeded: POSTCONDITION;
+		DrawableDataSet dataset = null;
+		try {
+			data_requester.execute_tradable_request();
+			if (! data_requester.request_failed()) {
+//!!!:
+				try {
+System.out.println("A");
+					dataset = (DrawableDataSet)
+						data_requester.tradable_result();
+					// Ensure that the indicator list is up-to-date with
+					// respect to `tradable'.
+					data_requester.execute_indicator_list_request();
+					if (! data_requester.request_failed()) {
+System.out.println("A2");
+						// Force re-creation of indicator lists with the result
+						// of the above request.
+						new_indicators = true;
+						rebuild_indicators_if_needed();
+						//Ensure that all graph's data sets are removed.
+						owner.main_pane().clear_main_graph();
+						owner.main_pane().clear_indicator_graph();
+						latest_date_time = data_requester.latest_date_time();
+						assert dataset != null;
+						link_with_axis(dataset, null);
+						owner.main_pane().add_main_data_set(dataset);
+						tradable_specification.set_data(dataset);
+					} else {
+System.out.println("A3");
+System.out.println("Request for indicator LIST failed (Fix this error msg!!!)");
+GUI_Utilities.busy_cursor(false, owner);
+						last_data_request_succeeded = false;
+					}
+//!!!:
+				} catch (Exception e) {
+System.out.println("Oh Oh!!! - e: " + e);
+System.out.println("the result is: " +
+data_requester.tradable_result()
+);
+e.printStackTrace();
+				}
+			} else {
+System.out.println("B");
+				request_result_id = data_requester.request_result_id();
+				new ErrorBox("Warning", "Error occurred retrieving " +
+					"data for " + data_requester.current_symbol() + ": " +
+					data_requester.request_failure_message, owner);
+				// Handle request error.
+				if (request_result_id == Invalid_symbol) {
+					handle_nonexistent_sybmol(data_requester.current_symbol());
+				} else if (request_result_id == Invalid_period_type) {
+					facilities.handle_invalid_period_type(
+						data_requester.current_symbol());
+					individual_period_type_sets = true;
+				} else if (request_result_id == Warning ||
+						request_result_id == Error) {
+					owner.display_warning("Error occurred retrieving " +
+						"data for " + data_requester.current_symbol());
+				}
+				GUI_Utilities.busy_cursor(false, owner);
+				last_data_request_succeeded = false;
+			}
+		} catch (Exception e) {
+System.out.println("C");
+			facilities.fatal("Request to server failed: ", e);
+		}
+	}
+
+	// Request the "upper indicator" data from the server and set up the
+	// needed associations to the resulting data sets.
+	private void obtain_upper_indicator_data() {
+		assert last_data_request_succeeded: POSTCONDITION;
+		int count;
+		String current_indicator;
+		DrawableDataSet dataset;
+		MA_Configuration conf = MA_Configuration.application_instance();
+
+		if (! current_upper_indicators.isEmpty()) {
+System.out.println("D");
+			// Retrieve the data for the newly requested tradable for
+			// the upper indicators, add it to the upper graph and
+			// draw the new indicator data and the tradable data.
+			count = current_upper_indicators.size();
+			for (int i = 0; last_data_request_succeeded && i < count; ++i) {
+
+				current_indicator = (String)
+					current_upper_indicators.elementAt(i);
+				try {
+System.out.println("E");
+					data_requester.execute_indicator_request(
+						indicator_id_for(current_indicator));
+					if (! data_requester.request_failed()) {
+						dataset = (DrawableDataSet)
+							data_requester.indicator_result();
+System.out.println("F");
+						dataset.set_dates_needed(false);
+						dataset.setColor(
+							conf.indicator_color(current_indicator, true));
+						link_with_axis(dataset, current_indicator);
+						owner.main_pane().add_main_data_set(dataset);
+						tradable_specification.set_indicator_data(dataset,
+							current_indicator);
+					} else {
+System.out.println("F2");
+System.out.println("Request for indicator data failed (Fix this error msg!!!)");
+						GUI_Utilities.busy_cursor(false, owner);
+						last_data_request_succeeded = false;
+					}
+				} catch (Exception e) {
+					facilities.fatal("Indicator data request failed", e);
+				}
+			}
+		}
+	}
+
+	// Request the "lower indicator" data from the server and set up the
+	// needed associations to the resulting data sets.
+	private void obtain_lower_indicator_data() {
+		assert last_data_request_succeeded: POSTCONDITION;
+		int count;
+		String current_indicator;
+		DrawableDataSet dataset;
+		MA_Configuration conf = MA_Configuration.application_instance();
+
+		if (! current_lower_indicators.isEmpty()) {
+System.out.println("G");
+			// Retrieve the indicator data for the newly requested
+			// tradable for the lower indicators and draw it.
+			count = current_lower_indicators.size();
+			for (int i = 0; last_data_request_succeeded && i < count; ++i) {
+				current_indicator = (String)
+					current_lower_indicators.elementAt(i);
+				if (current_lower_indicators.elementAt(i).equals(Volume)) {
+					// (Nothing to retrieve from server)
+					dataset = (DrawableDataSet) data_requester.volume_result();
+				} else if (current_lower_indicators.elementAt(i).equals(
+						Open_interest)) {
+					// (Nothing to retrieve from server)
+					dataset = (DrawableDataSet)
+						data_requester.open_interest_result();
+				} else {
+					try {
+System.out.println("H");
+						data_requester.execute_indicator_request(
+							indicator_id_for(current_indicator));
+						if (! data_requester.request_failed()) {
+System.out.println("I");
+							dataset = (DrawableDataSet)
+									data_requester.indicator_result();
+							dataset.setColor(conf.indicator_color(
+								current_indicator, false));
+							link_with_axis(dataset, current_indicator);
+							owner.add_indicator_lines(dataset,
+								current_indicator);
+							owner.main_pane().add_indicator_data_set(dataset);
+							tradable_specification.set_indicator_data(dataset,
+								current_indicator);
+						} else {
+System.out.println("J");
+System.out.println("Request for indicator data failed (Fix this error msg!!!)");
+							GUI_Utilities.busy_cursor(false, owner);
+							last_data_request_succeeded = false;
+						}
+					} catch (Exception e) {
+						facilities.fatal("Exception occurred", e);
+					}
+				}
+			}
+		}
+	}
+
 // Implementation - attributes
 
 	private DataSetBuilder data_builder;
@@ -697,4 +782,6 @@ public class ChartDataManager implements NetworkProtocol, AssertionConstants {
 	private int request_result_id;
 
 	SynchronizedDataRequester data_requester = null;
+
+	private boolean last_data_request_succeeded;
 }
