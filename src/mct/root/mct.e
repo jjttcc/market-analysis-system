@@ -8,26 +8,36 @@ indexing
 	licensing: "Copyright 2003: Jim Cochrane - %
 		%License to be determined"
 
-class
+class MCT inherit
 
-    MCT
+	EV_APPLICATION
 
 create
+
     make
 
 feature {NONE} -- Initialization
 
-    make is
+	make is
         local
-            application: EV_APPLICATION
             main_window: EV_TITLED_WINDOW
 			builder: APPLICATION_WINDOW_BUILDER
         do
-            create application
+			default_create
             create builder
             main_window := builder.main_window
             main_window.show
-            application.launch
+			launch
         end
+
+	command_line_options: MCT_COMMAND_LINE is
+		do
+			create Result.make
+		end
+
+	version: MAS_PRODUCT_INFO is
+		once
+			create Result
+		end
 
 end

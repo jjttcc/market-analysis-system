@@ -6,7 +6,12 @@ indexing
 	licensing: "Copyright 2003: Jim Cochrane - %
 		%License to be determined"
 
-deferred class ACTIONS
+deferred class ACTIONS inherit
+
+	CLEANUP_SERVICES
+		export
+			{NONE} all
+		end
 
 feature -- Access
 
@@ -38,6 +43,7 @@ feature -- Actions
 
 	exit is
 		do
+			termination_cleanup;
 			(create {EV_ENVIRONMENT}).application.destroy
 		end
 

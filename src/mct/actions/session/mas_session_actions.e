@@ -13,6 +13,11 @@ class MAS_SESSION_ACTIONS inherit
 			owner_window
 		end
 
+	TERMINABLE
+		export
+			{NONE} all
+		end
+
 create
 
 	make
@@ -34,6 +39,7 @@ feature {NONE} -- Initialization
 				config.termination_command)
 			external_commands.put (cmd, cmd.identifier)
 			configuration := config
+			register_for_termination (Current)
 		end
 
 feature -- Access
@@ -72,6 +78,15 @@ feature -- Actions
 			cmd := external_commands @
 				configuration.Start_cl_client_cmd_specifier
 			cmd.execute (owner_window)
+		end
+
+feature {NONE} -- Implementation - Hook routines
+
+	cleanup is
+		do
+			if not owner_window.is_destroyed then
+				terminate_session
+			end
 		end
 
 end
