@@ -403,7 +403,7 @@ feature {NONE} -- Implementation
 			operator_maker.set_market_function (function)
 			Result ?= operator_maker.command_selection (
 						operator_maker.Boolean_result_command,
-							<<"main operator">>, true)
+							"main operator", true)
 			check
 				cmd_selection_valid: Result /= Void
 			end
