@@ -102,11 +102,15 @@ feature -- Access
 			storable: STORABLE
 			mflist: STORABLE_LIST [MARKET_FUNCTION]
 			retrieval_failed: BOOLEAN
+			ta_env: expanded TAL_APP_ENVIRONMENT
+			full_path_name: STRING
 		once
+			full_path_name := ta_env.file_name_with_app_directory (
+				indicators_file_name)
 			if retrieval_failed then
 				if exception = Retrieve_exception then
 					print_list (<<"Retrieval of function library file ",
-								indicators_file_name, " failed%N">>)
+								full_path_name, " failed%N">>)
 				else
 					print_list (<<"Error occurred while retrieving function %
 									%library: ", meaning(exception), "%N">>)
@@ -114,7 +118,7 @@ feature -- Access
 				die (-1)
 			else
 				!!storable
-				mflist ?= storable.retrieve_by_name (indicators_file_name)
+				mflist ?= storable.retrieve_by_name (full_path_name)
 				if mflist = Void then
 					!STORABLE_MARKET_FUNCTION_LIST!mflist.make (
 						indicators_file_name)
@@ -134,11 +138,15 @@ feature -- Access
 			storable: STORABLE
 			meg_list: STORABLE_LIST [MARKET_EVENT_GENERATOR]
 			retrieval_failed: BOOLEAN
+			ta_env: expanded TAL_APP_ENVIRONMENT
+			full_path_name: STRING
 		once
+			full_path_name := ta_env.file_name_with_app_directory (
+				generators_file_name)
 			if retrieval_failed then
 				if exception = Retrieve_exception then
 					print_list (<<"Retrieval of market analysis library%
-								% file ", generators_file_name, " failed%N">>)
+								% file ", full_path_name, " failed%N">>)
 				else
 					print_list (<<"Error occurred while retrieving market %
 							%analysis library: ", meaning(exception), "%N">>)
@@ -146,7 +154,7 @@ feature -- Access
 				die (-1)
 			else
 				!!storable
-				meg_list ?= storable.retrieve_by_name (generators_file_name)
+				meg_list ?= storable.retrieve_by_name (full_path_name)
 				if meg_list = Void then
 					!STORABLE_EVENT_GENERATOR_LIST!meg_list.make (
 						generators_file_name)
@@ -203,11 +211,15 @@ feature -- Access
 			storable: STORABLE
 			reg_list: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
 			retrieval_failed: BOOLEAN
+			ta_env: expanded TAL_APP_ENVIRONMENT
+			full_path_name: STRING
 		once
+			full_path_name := ta_env.file_name_with_app_directory (
+				registrants_file_name)
 			if retrieval_failed then
 				if exception = Retrieve_exception then
 					print_list (<<"Retrieval of event registrants file ",
-								registrants_file_name, " failed%N">>)
+								full_path_name, " failed%N">>)
 				else
 					print_list (<<"Error occurred while retrieving event %
 								%registrants: ", meaning(exception), "%N">>)
@@ -215,7 +227,7 @@ feature -- Access
 				die (-1)
 			else
 				!!storable
-				reg_list ?= storable.retrieve_by_name (registrants_file_name)
+				reg_list ?= storable.retrieve_by_name (full_path_name)
 				if reg_list = Void then
 					!!reg_list.make (registrants_file_name)
 				end
@@ -299,27 +311,21 @@ feature -- Constants
 
 	indicators_file_name: STRING is
 			-- Name of the file containing persistent data for indicators
-		local
-			ta_env: expanded TAL_APP_ENVIRONMENT
 		once
-			Result := ta_env.file_name_with_app_directory ("indicators_persist")
+			Result := "indicators_persist"
 		end
 
 	generators_file_name: STRING is
 			-- Name of the file containing persistent data for event generators
-		local
-			ta_env: expanded TAL_APP_ENVIRONMENT
 		once
-			Result := ta_env.file_name_with_app_directory ("generators_persist")
+			Result := "generators_persist"
 		end
 
 	registrants_file_name: STRING is
-			-- Name of the file containing persistent data for event generators
-		local
-			ta_env: expanded TAL_APP_ENVIRONMENT
+			-- Name of the file containing persistent data for event
+			-- registrants
 		once
-			Result := ta_env.file_name_with_app_directory (
-						"registrants_persist")
+			Result := "registrants_persist"
 		end
 
 feature {NONE} -- Implementation

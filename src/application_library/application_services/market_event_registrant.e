@@ -39,6 +39,7 @@ feature -- Basic operations
 			hfile: PLAIN_TEXT_FILE
 			scanner: MARKET_EVENT_SCANNER
 			exception_occurred: BOOLEAN
+			talenv: expanded TAL_APP_ENVIRONMENT
 		do
 			if
 				exception_occurred and exception = Operating_system_exception
@@ -50,7 +51,8 @@ feature -- Basic operations
 				end
 				event_history.compare_objects
 			elseif hfile_name /= Void then
-				!!hfile.make_open_read (hfile_name)
+				!!hfile.make_open_read (
+					talenv.file_name_with_app_directory (hfile_name))
 				!!scanner.make (hfile)
 				scanner.execute
 				fill_event_history (scanner.product)
@@ -69,11 +71,13 @@ feature -- Basic operations
 			hfile: PLAIN_TEXT_FILE
 			scanner: MARKET_EVENT_SCANNER
 			fld_sep, record_sep: STRING
+			talenv: expanded TAL_APP_ENVIRONMENT
 		do
 			-- Open the event history file, delete its current contents and
 			-- save all elements of `event_history' into the file.
 			if hfile_name /= Void then
-				!!hfile.make_create_read_write (hfile_name)
+				!!hfile.make_create_read_write (
+					talenv.file_name_with_app_directory (hfile_name))
 				-- Make the scanner to get its field separator.
 				!!scanner.make (hfile)
 				fld_sep := scanner.field_separator

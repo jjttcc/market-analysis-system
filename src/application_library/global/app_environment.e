@@ -15,11 +15,9 @@ feature -- Access
 	app_directory: STRING is
 			-- Full path of the working directory for the application -
 			-- where configuration and data files are stored.
+			-- Void if environment variable "TAL_APP_DIRECTORY" is not set.
 		once
 			Result := get ("TAL_APP_DIRECTORY")
-		ensure
-			not_void_if_env_var_is_set:
-				Result = Void or Result.is_equal (get ("TAL_APP_DIRECTORY"))
 		end
 
 	mailer: STRING is

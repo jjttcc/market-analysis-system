@@ -49,12 +49,20 @@ feature -- Access
 feature -- Utility
 
 	cleanup is
+			-- Store the object in file with name `persistent_file_name' in
+			-- the application directory, if set; if not set, store in the
+			-- current directory.
+		local
+			ta_env: expanded TAL_APP_ENVIRONMENT
 		do
 			debug ("persist")
 				print("cleanup Storing ");
-				print(persistent_file_name); print (".%N")
+				print(
+					ta_env.file_name_with_app_directory (persistent_file_name))
+				print (".%N")
 			end
-			store_by_name (persistent_file_name)
+			store_by_name (
+				ta_env.file_name_with_app_directory (persistent_file_name))
 		end
 
 end -- STORABLE_LIST

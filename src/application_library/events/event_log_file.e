@@ -42,9 +42,14 @@ feature -- Initialization
 	make (fname, event_history_file_name: STRING) is
 			-- Create the file with `fname' as the file `name' and
 			-- `hfile_name' set to `event_history_file_name'
+			-- Open this file, with `fname', for appending in the application
+			-- environment directory, if set.
 		require
 			not_void_and_not_empty: fname /= Void and not fname.empty
+		local
+			talenv: TAL_APP_ENVIRONMENT
 		do
+			!!talenv
 			hfile_name := event_history_file_name
 			er_make
 			-- Object comparison is required because of the persistence
@@ -53,7 +58,7 @@ feature -- Initialization
 			-- `global_event_types'.  (Originally they will be the same
 			-- instance.)
 			event_types.compare_objects
-			make_open_append (fname)
+			make_open_append (talenv.file_name_with_app_directory (fname))
 		ensure
 			names_set: name.is_equal (fname) and
 				hfile_name.is_equal (event_history_file_name)
