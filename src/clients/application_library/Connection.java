@@ -44,7 +44,8 @@ public class Connection implements NetworkProtocol
 		}
 		catch (Exception e) {
 			System.err.println("Fatal error: attempt to login to server " +
-				"failed");
+				"failed: " + e);
+			e.printStackTrace();
 			System.exit(-1);
 		}
 		try {
@@ -63,12 +64,12 @@ public class Connection implements NetworkProtocol
 			System.exit(-1);
 		}
 		_logged_in = true;
+System.out.println("session key is " + _session_key);
 	}
 
 	// Send a logout request to the server to end the current session.
 	// Precondition:  logged_in()
-	public void logout(int logout_request_code)
-	{
+	public void logout(int logout_request_code) {
 		connect();
 		send_msg(logout_request_code, "", _session_key);
 		try {
@@ -102,29 +103,40 @@ public class Connection implements NetworkProtocol
 
 // Implementation
 
-	private StringBuffer receive_msg() throws IOException {
+	// Receive the current pending message from the server.
+	protected StringBuffer receive_msg() throws IOException {
+		final int Max_input_count = 1000000;
 		char c;
+		int i;
 
+		in = new_reader_from_socket();
+		scanner.setReader(in);
 		scanner.getInt();
 		last_rec_msgID = scanner.lastInt();
-		if (last_rec_msgID == Error)
-		{
-			request_result =
-				new StringBuffer("Fatal request protocol error:\n");
-		}
-		else
-		{
+		if (! valid_server_response(last_rec_msgID)) {
+			if (last_rec_msgID == Error) {
+				request_result =
+					new StringBuffer("Fatal request protocol error\n");
+			} else {
+				System.err.println("Fatal error: received invalid " +
+					"message ID from server: " + last_rec_msgID);
+				System.exit(-1);
+			}
+		} else {
 			request_result = new StringBuffer();
 		}
-		do
-		{
+		i = 0;
+		do {
 			c = (char) in.read();
-			if (c == '') break;
+			if (c == Eom_char) break;
 			request_result.append(c);
+			++i;
+			if (i > Max_input_count) {
+				message_too_large(Max_input_count);
+			}
 		} while (true);
 
-		if (last_rec_msgID == Error)
-		{
+		if (last_rec_msgID == Error) {
 			System.err.println(request_result);
 			// This error means there is a problem with the protocol of the
 			// last request passed to the server.  Since this is a coding
@@ -136,8 +148,7 @@ public class Connection implements NetworkProtocol
 	}
 
 	// Send the `msgID', the session key, and `msg' - with field delimiters.
-	void send_msg(int msgID, String msg, int session_key)
-	{
+	void send_msg(int msgID, String msg, int session_key) {
 		out.print(msgID);
 		out.print(Input_field_separator + session_key);
 		out.print(Input_field_separator + msg);
@@ -145,29 +156,28 @@ public class Connection implements NetworkProtocol
 		out.flush();
 	}
 
+	// Precondition: out != null && socket != null
 	void close_connection() throws IOException {
-		out.close(); in.close(); socket.close();
+		out.close(); socket.close();
+		if (in != null) {
+			in.close();
+		}
 	}
 
 	private void connect() {
-		try
-		{
+		try {
 			//It appears that the only way to connect a client socket is
 			//to create a new one!
 			socket = new Socket(_hostname, _port_number.intValue());
 			out = new PrintWriter(socket.getOutputStream(), true);
-			in = new BufferedReader(
-						new InputStreamReader(socket.getInputStream()));
-			scanner.setReader(in);
+			in = null;
 		}
-		catch (UnknownHostException e)
-		{
+		catch (UnknownHostException e) {
 			System.err.println("Don't know about host: ");
 			System.err.println(_hostname);
 			System.exit(1);
 		}
-		catch (IOException e)
-		{
+		catch (IOException e) {
 			System.err.println("Couldn't get I/O for the connection to: " +
 								_hostname);
 			System.exit(1);
@@ -178,14 +188,41 @@ public class Connection implements NetworkProtocol
 		return last_rec_msgID != OK;
 	}
 
-	int _session_key;
-	boolean _logged_in = false;
-	private String _hostname;
-	private Integer _port_number;
-	private Socket socket;			// socket connection to server
-	private PrintWriter out;		// output to server via socket
-	private BufferedReader in;		// input from server via socket
-	private DataInspector scanner;	// for scanning server messages
-	private int last_rec_msgID;		// last message ID received from server
-	private StringBuffer request_result;	// result of last data request
+	// A new Reader object created with socket's input stream
+	protected Reader new_reader_from_socket() {
+System.out.println("\nnot decompressing");
+		Reader result = null;
+		try {
+			result = new BufferedReader(new InputStreamReader(
+			new BufferedInputStream(socket.getInputStream())));
+		} catch (Exception e) {
+			System.err.println("Failed to read from server (" + e + ")");
+			System.exit(1);
+		}
+		return result;
+	}
+
+	// Handle message- (from server) too-large situation.
+	void message_too_large(int size) {
+		System.err.println("Message from server exceeded maximum " +
+			"buffer size of " + size + " - aborting");
+		System.exit(-1);
+	}
+
+	// Is `value' a valid server response?
+	boolean valid_server_response(int value) {
+		return value == OK || value == Error || value == Invalid_symbol;
+	}
+
+	protected int _session_key;
+	protected boolean _logged_in = false;
+	protected String _hostname;
+	protected Integer _port_number;
+	protected Socket socket;			// socket connection to server
+	protected PrintWriter out;			// output to server via socket
+	protected Reader in;				// input from server via socket
+	protected DataInspector scanner;	// for scanning server messages
+	protected int last_rec_msgID;		// last message ID received from server
+	protected StringBuffer request_result;	// result of last data request
+	static int Eom_char = Eom.charAt(0);
 }

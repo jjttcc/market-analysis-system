@@ -18,6 +18,11 @@ class MAS_Options {
 		return print_on_startup_;
 	}
 
+	// Request server to compress the data?
+	public boolean compression() {
+		return compression_;
+	}
+
 	// Initial period type - null if not specified
 	public String period_type() {
 		return period_type_;
@@ -32,7 +37,12 @@ class MAS_Options {
 		print_on_startup_ = v;
 	}
 
+	protected void set_compression(boolean v) {
+		compression_ = v;
+	}
+
 	private boolean print_on_startup_;
+	private boolean compression_;
 	private String period_type_;
 	private Vector indicators_;
 }
@@ -40,6 +50,7 @@ class MAS_Options {
 // Flags for various command-line options
 interface OptionFlags {
 	public final String symbol_option = "-s";
+	public final String compression_option = "-c";
 	public final String printall_option = "-print";
 	public final char flag_character = '-';
 }
@@ -69,19 +80,31 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 				if (i < args.length && args[i].equals(printall_option)) {
 					options_.set_print_on_startup(true);
 				}
+				if (i < args.length && args[i].equals(compression_option)) {
+					options_.set_compression(true);
+				}
 			}
 		} else {
 			usage();
 			System.exit(1);
 		}
-		connection = new Connection(hostname, port_number);
+		if (options_.compression()) {
+			connection = new CompressedConnection(hostname, port_number);
+		} else {
+			connection = new Connection(hostname, port_number);
+		}
 		initialize();
 		connection.login(Login_request);
 	}
 
 	public DataSetBuilder(DataSetBuilder dsb) {
-		connection = new Connection(dsb.hostname(), dsb.port_number());
 		options_ = dsb.options_;
+		if (options_.compression()) {
+			connection = new CompressedConnection(dsb.hostname(),
+				dsb.port_number());
+		} else {
+			connection = new Connection(dsb.hostname(), dsb.port_number());
+		}
 		initialize();
 		connection.login(Login_request);
 	}
@@ -235,7 +258,9 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 		"Options:\n   "+ symbol_option +" symbol ..." +
 		"    Include only the specified symbols in the selection list.\n" +
 		"   " + printall_option +
-		"           Print the chart for each symbol."
+		"           Print the chart for each symbol.\n" +
+		"   " + compression_option +
+		"               Request compressed data from server."
 		);
 	}
 
