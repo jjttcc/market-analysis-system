@@ -27,13 +27,6 @@ create
 
 feature {NONE} -- Initialization
 
---@@@Note: Consider adding a CL option to the server (perhaps not documented)
---such as:
---
---mas -p -b 1234 --report_back 9999
---
---To tell it to, as a client, report back to the MCT on port 9999 that is has
---started succesfully.  The MCT would respond as a server in this case.
 	make is
         do
 			setup_application
@@ -50,6 +43,9 @@ feature {NONE} -- Initialization
             create builder
             main_window := builder.main_window
             main_window.show
+			if builder.configuration.start_session_on_startup then
+				builder.current_main_actions.start_server
+			end
 			setup_succeeded := True
 			if command_line_options.is_debug then
 				print ("Settings:%N" + builder.configuration.settings_report)
