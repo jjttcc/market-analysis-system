@@ -3,12 +3,20 @@ BNF grammar for the protocol between the server and a GUI client
 
 message         -> msgID "\t" msg end_of_message
 msg             -> client_req | server_response
-client_req      -> mkt_data_req | ind_data_req | mkt_list_req | ind_list_req |
-                     trad_pertyp_req
+client_req      -> session_key "\t" client_req_spec
+client_req_spec -> mkt_data_req | ind_data_req | mkt_list_req | ind_list_req |
+                     trad_pertyp_req | login_req | change_session_req |
+					 logout_req
 mk_data_req     -> mkt_symbol "\t" trad_per_type
 ind_data_req    -> indID "\t" mkt_symbol "\t" trad_per_type
 trad_pertyp_req -> mkt_symbol
-server_response -> srvr_data | error_msg
+login_req       -> { login_spec "\t" ... }
+login_spec      -> start_date_spec | end_date_spec
+logout_req      -> <null>
+start_date_spec -> "start_date" "\t" trad_per_type "\t" date_spec
+end_date_spec   -> "end_date" "\t" trad_per_type "\t" date_spec
+date_spec       -> date | "0" | "now"
+server_response -> srvr_data | error_msg | login_id
 error_msg       -> ta_string
 mkt_symbol      -> ta_string
 srvr_data       -> mkt_data | ind_data | symbol_list | ind_list |
@@ -26,7 +34,9 @@ trad_per_type   -> "daily" | "weekly"
 indID           -> natural_integer
 volume          -> natural_integer
 open_interest   -> natural_integer
+session_key     -> natural_integer
 msgID           -> natural_integer
+login_id        -> natural_integer
 mkt_list_req    -> <null>
 ind_list_req    -> mkt_symbol
 date            -> year "/" month "/" day
