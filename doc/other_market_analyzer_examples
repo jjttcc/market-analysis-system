@@ -1,0 +1,24 @@
+Here are some other examples of creating market analyzers.
+
+
+Example A:  Daily Volume >= 1,000,000
+
+Choose simple as the analyzer type and "one" for the number of indicators.
+Choose "Market Data" as the indicator.  Choose GE_OPERATOR as the root
+operator.  Choose VOLUME for GE_OPERATOR's left operand and choose
+CONSTANT for GE_OPERATOR's right operand.  For the CONTANT's value, enter
+1000000 - or if you would like to use a different value than 1 million,
+enter that.  Choose daily for the trading period type.  Finally, choose
+a good name.
+
+
+Example B:  Volume > yesterday's Volume EMA (5) * 2.75 AND
+Daily Volume >= 1,000,000
+
+Choose compound as the analyzer type.  Choose the volume spike detector
+that was created in the Volume Spike Detector example from
+creating_market_analyzers as the left analyzer.  Choose the "Daily Volume
+>= 1,000,000" analyzer from the above example for the right analyzer.
+Say "no" to adding time extensions before and after the left/right analyzers.
+Say "no" to specifying and event type as target for the left analyzer's
+date/time.  Choose a good name for the analyzer.
