@@ -50,9 +50,9 @@ feature -- Access
 
 	default_input_file_name: STRING
 
-feature {NONE}
-
 	input_file: PLAIN_TEXT_FILE
+
+feature {NONE}
 
 	usage is
 		do

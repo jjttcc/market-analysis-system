@@ -48,6 +48,7 @@ feature -- Access
 	StochasticK_n: INTEGER is 5
 	StochasticD_n: INTEGER is 3
 	Williams_n: INTEGER is 7
+	RSI_n: INTEGER is 7
 
 feature -- Status setting
 
@@ -88,6 +89,7 @@ feature -- Basic operations
 											"Stochastic %%D"))
 			l.extend (simple_ma (l.last, StochasticD_n,
 											"Slow Stochastic %%D"))
+			l.extend (rsi (f, RSI_n, "Relative Strength Index"))
 			product := l
 		end
 
@@ -132,7 +134,9 @@ feature {NONE} -- Hard-coded market function building procedures
 			sub: SUBTRACTION
 			cmd1: BASIC_LINEAR_COMMAND
 			cmd2: BASIC_LINEAR_COMMAND
+			close: CLOSING_PRICE
 		do
+			!!close
 			!!cmd1.make (f1.output)
 			!!cmd2.make (f2.output)
 			!!sub.make (cmd1, cmd2)
@@ -143,24 +147,70 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	momentum (f: MARKET_FUNCTION; n: INTEGER; name: STRING;
-				operator_type: STRING): MOMENTUM_FUNCTION is
+				operator_type: STRING): N_RECORD_ONE_VARIABLE_FUNCTION is
 			-- A momentum function
 		local
 			operator: BINARY_NUMERIC_OPERATOR
 			close: CLOSING_PRICE
 			close_minus_n: MINUS_N_COMMAND
 		do
-			!!close; !!close_minus_n.make (f.output, n)
+			!!close; !!close_minus_n.make (f.output, close, n)
 			if operator_type.is_equal ("SUBTRACTION") then
 				!SUBTRACTION!operator.make (close, close_minus_n)
 			else
 				check operator_type.is_equal ("DIVISION") end
 				!DIVISION!operator.make (close, close_minus_n)
 			end
-			!!Result.make (f, operator, close_minus_n, n)
+			!!Result.make (f, operator, n)
+			Result.set_effective_offset (1)
 			Result.set_name (name)
 		ensure
 			initialized: Result /= Void and Result.n = n and Result.name = name
+		end
+
+	rsi (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
+				N_RECORD_ONE_VARIABLE_FUNCTION is
+			-- RSI = 100 - (100 / (1 + RS))
+			-- RS = (average n up closes ) / (average n down closes)
+		local
+			up_closes, down_closes: MINUS_N_COMMAND
+			up_adder, down_adder: LINEAR_SUM
+			up_boolclient, down_boolclient: BOOLEAN_CLIENT
+			lt_op: LT_OPERATOR [COMPARABLE]
+			gt_op: GT_OPERATOR [COMPARABLE]
+			blc1, blc2: SETTABLE_OFFSET_COMMAND
+			close: CLOSING_PRICE
+			zero, one_hundred, one, nconst: CONSTANT
+			upsub, downsub, outer_sub: SUBTRACTION
+			rs_div, maindiv, upavg, downavg: DIVISION
+			one_plus_rs: ADDITION
+		do
+			!!close; !!zero.make (0)
+			!!one_hundred.make (100); !!one.make (1); !!nconst.make (n)
+			!!blc1.make (f.output, close); !!blc2.make (f.output, close)
+			blc2.set_offset (1)
+			!!lt_op
+			!!upsub.make (blc2, blc1)
+			!!up_boolclient.make (lt_op, blc1, blc2, upsub, zero)
+			!!up_adder.make (f.output, up_boolclient, n)
+			!!up_closes.make (f.output, up_adder, n)
+			!!upavg.make (up_closes, nconst)
+
+			!!gt_op
+			-- Notice that order of arguments is different:
+			!!downsub.make (blc1, blc2)
+			!!down_boolclient.make (gt_op, blc1, blc2, downsub, zero)
+			!!down_adder.make (f.output, down_boolclient, n)
+			!!down_closes.make (f.output, down_adder, n)
+			!!downavg.make (down_closes, nconst)
+
+			!!rs_div.make (upavg, downavg) -- RS: up avg / down avg
+			!!one_plus_rs.make (rs_div, one) -- 1 + RS
+			!!maindiv.make (one_hundred, one_plus_rs) -- 100 / (1 + RS)
+			!!outer_sub.make (one_hundred, maindiv) -- 100 - (100 / (1 + RS))
+			!!Result.make (f, outer_sub, n)
+			Result.set_effective_offset (1)
+			Result.set_name (name)
 		end
 
 	williams_percent_R (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
@@ -253,7 +303,8 @@ feature {NONE} -- Hard-coded market function building procedures
 			!!ma2.make (high_low_function, cmd, outer_n)
 			ma1.set_name ("Moving Average of close minus lowest low")
 			ma2.set_name ("Moving Average of close minus highest high")
-			!!basic1.make (ma1.output); !!basic2.make (ma2.output)
+			!!basic1.make (ma1.output)
+			!!basic2.make (ma2.output)
 			!!div.make (basic1, basic2)
 			!!mult.make (div, constant)
 			!!Result.make (ma1, ma2, mult)
