@@ -18,7 +18,8 @@ class HTTP_CONFIGURATION inherit
 
 	APP_CONFIGURATION
 		redefine
-			use_customized_setting, do_customized_setting, reset_dates
+			use_customized_setting, do_customized_setting, reset_dates,
+			set_symbol
 		end
 
 	APP_ENVIRONMENT
@@ -34,6 +35,7 @@ class HTTP_CONFIGURATION inherit
 	HTTP_CONSTANTS
 		export
 			{NONE} all
+			{ANY} data_cache_subdirectory
 		end
 
 create
@@ -210,7 +212,8 @@ feature -- Access
 
 	symbol_file: STRING is
 		do
-			Result := settings @ Symbol_file_specifier
+			Result := file_name_with_app_directory (
+				settings @ Symbol_file_specifier)
 		end
 
 	post_process_command: STRING is
@@ -248,13 +251,9 @@ feature -- Element change
 
 	set_symbol (arg: STRING) is
 			-- Set `symbol' to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
-			symbol := arg
+			Precursor (arg)
 			cached_path := Void
-		ensure
-			symbol_set: symbol = arg and symbol /= Void
 		end
 
 feature -- Basic operations

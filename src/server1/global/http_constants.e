@@ -1,6 +1,9 @@
 indexing
 	description: "Constant values used for http-based data retrieval"
 	author: "Jim Cochrane"
+	note: "@@Note: If the other http classes become used for other types %
+		%of data retrieval (socket, etc.), it may be appropriate to rename %
+		%this class as something like DATA_RETRIEVAL_CONSTANTS"
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
@@ -41,5 +44,8 @@ feature -- Access
 
 	Ignore_day_of_week_specifier: STRING is "ignore_day_of_week"
 			-- Specifier token for "ignore-day_of_week" settings
+
+	data_cache_subdirectory: STRING is "cached_data"
+			-- Subdirectory into which cached data files are to be placed
 
 end

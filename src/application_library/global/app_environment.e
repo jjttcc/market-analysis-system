@@ -69,4 +69,4 @@ feature {NONE} -- Implementation
 			create Result
 		end
 
-end -- APP_ENVIRONMENT
+end

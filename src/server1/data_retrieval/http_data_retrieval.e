@@ -87,6 +87,7 @@ print ("Using configured start date.%N")
 			-- call to retrieve_data.
 			alternate_start_date := Void
 			start_timer
+print ("Using path: '" + url.path + "'%N")
 			perform_http_retrieval
 			if not retrieval_failed then
 				mark_as_retrieved (parameters.symbol)
@@ -171,13 +172,26 @@ feature {NONE} -- Status report
 
 	output_file_name (symbol: STRING): STRING is
 			-- Output file name constructed from `symbol'
+		local
+			env: expanded OPERATING_ENVIRONMENT
+			path: DIRECTORY
+			ex: expanded EXCEPTIONS
+			ep: expanded ERROR_PROTOCOL
 		do
 			--@NOTE: If retrieval of intraday data via http is introduced,
 			--a bit of redesign will be needed - Perhaps use an 'intraday'
 			--flag and use a different extension for intraday than for
 			--daily data.  Need to coordinate with other dependent
 			--MAS components.
-			Result := output_file_path + symbol + "." + file_extension
+			create path.make (output_file_path)
+			if not path.exists then
+				path.create_dir
+			end
+			Result := path.name + env.directory_separator.out + symbol +
+				"." + file_extension
+		rescue
+			log_errors (<<ep.Data_cache_directory_creation_failure_error, ": ",
+				output_file_path, ".%N">>)
 		end
 
 	symbols_from_file: LIST [STRING] is
@@ -276,9 +290,11 @@ feature {NONE} -- Status report
 feature {NONE} -- Hook routines
 
 	output_file_path: STRING is
-			-- Directory path of output file - redefine if needed
+			-- Directory path of output file
 		once
-			Result := ""
+			Result := "." -- Default to current directory - redefine if needed.
+		ensure
+			exists: Result /= Void
 		end
 
 	latest_date_for (symbol: STRING): DATE is

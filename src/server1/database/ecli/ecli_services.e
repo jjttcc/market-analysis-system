@@ -49,8 +49,8 @@ feature -- Initialization
 			end
 		ensure
 			splits_not_void_if_available:
-				not fatal_error and not db_info.stock_split_query.is_empty implies
-					stock_splits /= Void
+				not fatal_error and not db_info.stock_split_query.is_empty
+					implies stock_splits /= Void
 			not_connected: not connected or else fatal_error
 		end
 

@@ -34,6 +34,8 @@ feature -- Access
 
 	Data_file_does_not_exist_error_code: INTEGER is 5
 
+	Data_cache_directory_creation_failure_error_code: INTEGER is 6
+
 	Database_error: STRING is
 		do
 			Result := errors @ Database_error_code
@@ -57,6 +59,11 @@ feature -- Access
 	Data_file_does_not_exist_error: STRING is
 		do
 			Result := errors @ Data_file_does_not_exist_error_code
+		end
+
+	Data_cache_directory_creation_failure_error: STRING is
+		do
+			Result := errors @ Data_cache_directory_creation_failure_error_code
 		end
 
 	largest_error_code: INTEGER is
@@ -86,6 +93,8 @@ feature -- Access
 			Result.extend (concatenation (<<"Data file for ",
 				token_start_delimiter, error_token, token_end_delimiter,
 				" does not exist">>), Data_file_does_not_exist_error_code)
+			Result.extend ("Failed to create data-cache directory",
+				Data_cache_directory_creation_failure_error_code)
 		end
 
 feature -- Constants

@@ -119,6 +119,18 @@ feature -- Access
 			Result := settings @ Intraday_end_date_specifier
 		end
 
+feature -- Element change
+
+	set_symbol (arg: STRING) is
+			-- Set `symbol' to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			symbol := arg
+		ensure
+			symbol_set: symbol = arg and symbol /= Void
+		end
+
 feature -- Basic operations
 
 	reset_dates is

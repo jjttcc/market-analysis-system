@@ -39,7 +39,7 @@ feature {NONE} -- Initialization
 
 	make is
 		do
-			symbol := "[NONE]"
+			symbol := "[none]"
 			ac_make
 		end
 

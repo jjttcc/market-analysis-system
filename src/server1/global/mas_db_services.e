@@ -296,6 +296,7 @@ feature {NONE} -- Implementation
 			global_server: expanded GLOBAL_SERVER
 		do
 			db_info := global_server.database_configuration
+			db_info.set_symbol (symbol)
 			if db_info.using_daily_stock_data_command then
 				Result := db_info.daily_stock_data_command
 			else
@@ -318,6 +319,7 @@ feature {NONE} -- Implementation
 			global_server: expanded GLOBAL_SERVER
 		do
 			db_info := global_server.database_configuration
+			db_info.set_symbol (symbol)
 			if db_info.using_intraday_stock_data_command then
 				Result := db_info.intraday_stock_data_command
 			else
@@ -342,6 +344,7 @@ feature {NONE} -- Implementation
 			global_server: expanded GLOBAL_SERVER
 		do
 			db_info := global_server.database_configuration
+			db_info.set_symbol (symbol)
 			if db_info.using_daily_derivative_data_command then
 				Result := db_info.daily_derivative_data_command
 			else
@@ -366,6 +369,7 @@ feature {NONE} -- Implementation
 			global_server: expanded GLOBAL_SERVER
 		do
 			db_info := global_server.database_configuration
+			db_info.set_symbol (symbol)
 			if db_info.using_intraday_derivative_data_command then
 				Result := db_info.intraday_derivative_data_command
 			else
