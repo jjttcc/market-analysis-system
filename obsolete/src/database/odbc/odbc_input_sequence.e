@@ -36,6 +36,11 @@ feature -- Access
 
 	tuple_sequence: LINKED_LIST[DB_RESULT]
 
+	field_count: INTEGER is
+		do
+			Result := tuple.count
+		end
+
 feature -- Status report
 
 	after_last_record: BOOLEAN is
