@@ -5,6 +5,7 @@ mctdir="c:/Program Files/mct"
 >$specfile
 echo "# arg count: $#" >>$specfile
 appdir="$*"
+cleanup=
 
 # Create the specification file for config_tool with replacement specs
 # for the application directory chosen by the user (and any other
@@ -16,6 +17,7 @@ case $COMSPEC in
 		# The OS is NT or later - The shell is cmd.exe -
 		# "cat" the nt spec file into the working spec file:
 		sed '' nt_repl_spec >>$specfile
+		cleanup=y
 	;;
 	*)
 		# The OS is pre-NT - The shell is command.exe -
@@ -28,4 +30,6 @@ echo replaceend>>$specfile
 config_tool  -c  $specfile -f ../mctrc
 if [ ! -d "$mctdir" ]; then mkdir -p "$mctdir";fi
 cp ../mctrc "$mctdir"
->finished
+if [ ! -z "$cleanup" ]; then
+	>finished
+fi
