@@ -199,10 +199,8 @@ feature {NONE} -- Implementation
 
 	close is
 			-- Close the connection.
-		require
-			socket_exists: socket /= Void
 		do
-			if not socket.is_closed then
+			if socket /= Void and not socket.is_closed then
 				socket.close
 			end
 		end
