@@ -1,0 +1,79 @@
+# macl input file to create the "Weighted Moving Average of Midpoint" indicator
+#
+# First, the Midpoint indicator [(H+L) / 2]:
+e
+c
+ONE_VARIABLE_FUNCTION
+c
+Midpoint
+No Input Function
+y
+DIVISION
+c
+ADDITION
+c
+HIGH_PRICE
+c
+LOW_PRICE
+c
+CONSTANT
+c
+2
+s
+-
+# Next, the WMA of Midpoint indicator:
+e
+c
+N_RECORD_ONE_VARIABLE_FUNCTION
+c
+WMA of Midpoint
+Midpoint
+y
+DIVISION
+c
+MINUS_N_COMMAND
+c
+y
+-1
+5
+Midpoint
+y
+LINEAR_SUM
+c
+5
+Midpoint
+y
+MULTIPLICATION
+c
+BASIC_LINEAR_COMMAND
+c
+Midpoint
+y
+INDEX_EXTRACTOR
+c
+shared LINEAR_SUM
+c
+N_BASED_UNARY_OPERATOR
+c
+5
+DIVISION
+c
+MULTIPLICATION
+c
+N_VALUE_COMMAND
+c
+5
+ADDITION
+c
+shared N_VALUE_COMMAND
+c
+CONSTANT
+c
+1
+CONSTANT
+c
+2
+5
+s
+-
+x
