@@ -17,8 +17,8 @@ feature {NONE}
 			if stream.last_real <= 0 then
 				handle_input_error ("Numeric input value is <= 0: ",
 									stream.last_real.out)
-				-- conform to the precondition:
-				tuple.set_value (1)
+				-- conform to the postcondition:
+				tuple.set_value (0)
 			else
 				tuple.set_value (stream.last_real)
 			end
