@@ -18,8 +18,6 @@ feature -- Access
 
 	Valid_port_numbers_specifier: STRING is "valid_portnumbers"
 
-	Platform_specifier: STRING is "platform"
-
 	Hostname_specifier: STRING is "hostname"
 
 	Working_directory_specifier: STRING is "cwdir"
@@ -60,6 +58,8 @@ feature -- Access
 	Sub_field_separator: CHARACTER is ':'
 
 	Default_mark: STRING is "default"
+
+	Mct_dir_env_var: STRING is "MCT_DIR"
 
 feature -- Utilities
 

@@ -50,7 +50,6 @@ feature {NONE} -- Initialization
 			create error_report.make (0);
 
 			settings.extend ("", Valid_port_numbers_specifier)
-			settings.extend ("", Platform_specifier)
 			settings.extend ("", Hostname_specifier)
 			settings.extend ("", Environment_variable_specifier)
 			settings.extend ("", Environment_variable_append_specifier)
@@ -85,11 +84,10 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	platform: STRING is
-		do
-			Result := settings @ Platform_specifier
-		ensure
-			not_void: Result /= Void
+	platform: MCT_PLATFORM is
+			-- The platform for which the executable was compiled
+		once
+			create Result
 		end
 
 feature -- Commands
@@ -230,7 +228,6 @@ feature {NONE} -- Implementation - Hook routine implementations
 		do
 			check_for_empty_fields (<<
 				Valid_port_numbers_specifier, Hostname_specifier,
-				Platform_specifier,
 				Start_cl_client_cmd_specifier, Chart_cmd_specifier,
 				Termination_cmd_specifier, Browse_docs_cmd_specifier,
 				Browse_intro_cmd_specifier, Browse_faq_cmd_specifier>>)
@@ -247,7 +244,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 				agent check_for_unreplaced_commands)
 			if not error_report.is_empty then
 				error_report.prepend ("Error in configuration file (" +
-					config_file.configuration_file_name + "):%N")
+					config_file.Configuration_file_path + "):%N")
 				publish_error (error_report)
 			end
 		end
@@ -296,9 +293,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 					current_line.out + ").%N")
 			else
 				replace_configuration_tokens (components @ 2)
-				if platform.is_equal (Windows_platform) then
-					convert_to_windows (components @ 2)
-				end
+				platform.convert_path (components @ 2)
 				env.put (components @ 2, components @ 1)
 			end
 		end
@@ -321,9 +316,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 				key := components @ 1
 				append_str := components @ 2
 				replace_configuration_tokens (append_str)
-				if platform.is_equal (Windows_platform) then
-					convert_to_windows (append_str)
-				end
+				platform.convert_path (append_str)
 				old_value := env.get (key)
 				if old_value /= Void then
 					env.put (old_value + append_str, key)
@@ -363,7 +356,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	new_config_file: CONFIGURATION_FILE is
 		do
-			create Result.make (Field_separator, Record_separator)
+			create Result.make (Field_separator, platform)
 		end
 
 feature {NONE} -- Implementation - Utilities
@@ -525,7 +518,6 @@ feature {NONE} -- Implementation - Utilities
 			-- the components of `s' that make up the specification will
 			-- be removed from s.
 		local
-			i: INTEGER
 			regexp: RX_PCRE_REGULAR_EXPRESSION
 			new_s: STRING
 		do
@@ -610,15 +602,10 @@ feature {NONE} -- Implementation
 	do_platform_conversion is
 			-- Perform any needed platform conversion.
 		do
-			if platform.is_empty then
-				settings.force (clone (Unix_platform), Platform_specifier)
-			end
-			platform.to_lower
-			if platform.is_equal (Windows_platform) then
-				settings.linear_representation.do_all (agent convert_to_windows)
-				start_server_commands.linear_representation.do_all (
-					agent convert_command_to_windows)
-			end
+			settings.linear_representation.do_all (agent
+			platform.convert_path)
+			start_server_commands.linear_representation.do_all (
+				agent convert_command_path)
 		end
 
 	remove_escape_characters is
@@ -628,23 +615,10 @@ feature {NONE} -- Implementation
 				agent remove_character (?, Escape_character @ 1))
 		end
 
-	convert_to_windows (s: STRING) is
-			-- Apply Windows platform-related modifications to `s'.
-		local
-			regexp_tool: expanded REGULAR_EXPRESSION_UTILITIES
-			scopy: STRING
+	convert_command_path (cmd: SESSION_COMMAND) is
+			-- Call `platform.convert_path' on `cmd.command_string'.
 		do
-			scopy := regexp_tool.gsub ("([^" + Escape_character + "])" +
-				Backslash + Slash, "\1" + Backslash + Backslash, s)
-			scopy := regexp_tool.sub ("^" + Backslash + Slash,
-				Backslash + Backslash, scopy)
-			s.copy (scopy)
-		end
-
-	convert_command_to_windows (cmd: SESSION_COMMAND) is
-			-- Call `convert_to_windows' on `cmd.command_string'.
-		do
-			convert_to_windows (cmd.command_string)
+			platform.convert_path (cmd.command_string)
 		end
 
 	remove_character (s: STRING; c: CHARACTER) is

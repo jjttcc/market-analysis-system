@@ -23,6 +23,11 @@ class CONFIGURATION_FILE inherit
 			{NONE} all
 		end
 
+	EXECUTION_ENVIRONMENT
+		export
+			{NONE} all
+		end
+
 	EXCEPTION_SERVICES
 		export
 			{NONE} all
@@ -34,20 +39,47 @@ create
 
 feature {NONE} -- Initialization
 
-	make (line_field_sep, line_sep: STRING) is
+	make (line_field_sep: STRING; platfm: MCT_PLATFORM) is
 		require
-			args_exist: line_field_sep /= Void and line_sep /= Void
+			args_exist: line_field_sep /= Void and platfm /= Void
 		do
-			rf_make (configuration_file_name)
+			rf_make (Configuration_file_path)
 			line_field_separator := line_field_sep
-			line_field_separator := line_field_sep
+			platform := platfm
 		ensure
 			line_field_separator_set: line_field_separator = line_field_sep
+			platform_set: platform = platfm
 		end
 
 feature -- Access
 
+	platform: MCT_PLATFORM
+			-- The platform on which the executable for this process
+			-- is targeted
+
+	Configuration_file_path: STRING is
+			-- The full path of the MCT configuration file
+		local
+			config_path: STRING
+			dir: DIRECTORY
+		once
+			config_path := get (Mct_dir_env_var)
+			if config_path /= Void and then not config_path.is_empty then
+				create dir.make (config_path)
+				if dir.exists then
+					Result := config_path
+				end
+			end
+			if Result = Void then
+				-- The `Mct_dir_env_var' env. variable is not set or is
+				-- set to an invalid directory, so use the default path.
+				Result := platform.Default_configuration_file_location +
+					Configuration_file_name
+			end
+		end
+
 	Configuration_file_name: STRING is "mctrc"
+			-- The name of the MCT configuration file
 
 feature -- Status report
 
@@ -436,7 +468,7 @@ feature {NONE} -- Implementation - constants
 	Write_error: STRING is
 		once
 			Result := "Error writing to configuration file " +
-				configuration_file_name
+				Configuration_file_path
 		end
 
 	Default_record: STRING is
@@ -454,5 +486,6 @@ invariant
 	in_block_constraint: (item /= Void and
 		is_beginning_of_block (item)) implies in_block
 	separator_exists: line_field_separator /= Void
+	platform_exists: platform /= Void
 
 end
