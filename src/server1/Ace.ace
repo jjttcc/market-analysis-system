@@ -15,7 +15,7 @@ default
 	--debug ("editing");
 	--debug ("persist");
 	--debug ("command line");
-	debug ("database");
+	--debug ("database");
 	profile (no);
 
 	--precompiled ("$EIFFEL4/precomp/spec/$PLATFORM/base");
