@@ -21,6 +21,11 @@ class HARD_CODED_FUNCTION_BUILDER inherit
 			all
 		end
 
+	MARKET_FUNCTION_EDITOR
+		export {NONE}
+			all
+		end
+
 creation
 
 	make
@@ -54,6 +59,7 @@ feature -- Access
 	StochasticD_n: INTEGER is 3
 	Williams_n: INTEGER is 7
 	RSI_n: INTEGER is 7
+	Wilder_MA_n: INTEGER is 5
 
 feature -- Basic operations
 
@@ -85,6 +91,7 @@ feature -- Basic operations
 			l.extend (simple_ma (l.last, StochasticD_n,
 											"Slow Stochastic %%D"))
 			l.extend (rsi (f, RSI_n, "Relative Strength Index"))
+			l.extend (wilder_ma (f, Wilder_MA_n, "Wilder Moving Average"))
 			l.extend (market_data (f, "Market Data"))
 			l.extend (market_function_line (f, "Line"))
 			product := l
@@ -193,6 +200,33 @@ feature {NONE} -- Hard-coded market function building procedures
 			create {DIVISION} outer_div.make (one_hundred, add)
 			create {SUBTRACTION} sub.make (one_hundred, outer_div)
 			create Result.make (pos_ema, neg_ema, sub)
+			Result.set_name (name)
+		end
+
+	wilder_ma (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
+				CONFIGURABLE_N_RECORD_FUNCTION is
+		local
+			plus: ADDITION
+			minus: SUBTRACTION
+			leftdiv, rightdiv, firstop: DIVISION
+			ncmd: N_VALUE_COMMAND
+			bnc: BASIC_NUMERIC_COMMAND
+			prevcmd: UNARY_LINEAR_OPERATOR
+			sum: LINEAR_SUM
+			close: CLOSING_PRICE
+		do
+			create ncmd.make (n)
+			create bnc
+			create leftdiv.make (bnc, ncmd)
+			create minus.make (bnc, leftdiv)
+			create prevcmd.make (f.output, minus)
+			create close
+			create rightdiv.make (close, ncmd)
+			create plus.make (prevcmd, rightdiv)
+			create sum.make (f.output, close, n)
+			create firstop.make (sum, ncmd)
+			create Result.make (f, plus, firstop, n)
+			Result.set_operators (plus, prevcmd, firstop)
 			Result.set_name (name)
 		end
 
