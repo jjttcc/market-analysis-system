@@ -42,6 +42,7 @@ feature -- Basic operations
 		local
 			global_server: expanded GLOBAL_SERVER
 			db_list_builder: DATABASE_LIST_BUILDER
+			file_list_builder: FILE_LIST_BUILDER
 			daily_file_based_list: FILE_TRADABLE_LIST
 		do
 			retrieve_input_entity_names
@@ -52,11 +53,13 @@ feature -- Basic operations
 				create {TRADABLE_LIST_HANDLER} product.make (
 					db_list_builder.daily_list, db_list_builder.intraday_list)
 			else
-				create daily_file_based_list.make (input_entity_names,
-					tradable_factory)
-				-- !!!Make intraday list Void for now.
+				create file_list_builder.make (input_entity_names,
+					tradable_factory, command_line_options.daily_extension,
+					command_line_options.intraday_extension)
+				file_list_builder.execute
 				create {TRADABLE_LIST_HANDLER} product.make (
-					daily_file_based_list, Void)
+					file_list_builder.daily_list,
+					file_list_builder.intraday_list)
 			end
 		end
 
