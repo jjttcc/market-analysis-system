@@ -25,8 +25,8 @@ creation
 feature -- Utility
 
 	cleanup is
-			-- Set the innermost input function to an empty function so
-			-- that no extra data is stored to the file; then call precursor.
+			-- Call wipe_out on each item to ensure that no extra data
+			-- is stored to the file; then call precursor.
 		do
 			from
 				start

@@ -18,6 +18,11 @@ class STORABLE_MARKET_FUNCTION_LIST inherit
 			all
 		end
 
+	GLOBAL_SERVICES
+		export {NONE}
+			all
+		end
+
 creation
 
 	make
@@ -25,15 +30,21 @@ creation
 feature -- Utility
 
 	cleanup is
-			-- Set the innermost input function to an empty function so
-			-- that no extra data is stored to the file; then call precursor.
+			-- Ensure that the output data lists of each market function
+			-- are (recursively) cleared so that no extra data is stored
+			-- to the file; then call precursor.
+		local
+			dummy_tradable: TRADABLE [BASIC_MARKET_TUPLE]
 		do
 			from
 				start
 			until
 				exhausted
 			loop
-				item.wipe_out
+				!STOCK!dummy_tradable.make ("dummy", period_types @ "daily")
+				-- Set innermost input to an empty tradable to force the
+				-- market function to clear its contents.
+				item.set_innermost_input (dummy_tradable)
 				forth
 			end
 			Precursor
