@@ -7,4 +7,6 @@ gui_cmd;<binpath>/magc -h [hostname] [portnumber]
 #server_cmd;<binpath>/mas -o -f , -b [portnumber] <datafiles>
 server_cmd;<binpath>/mas -o -f , -b [portnumber] -p
 #server_cmd;/tmp/testsrvcmd -o -f , -b [portnumber] -p
-server_termination_cmd;bash <binpath>/terminate_mas -h [hostname] [portnumber]
+#server_termination_cmd;bash <binpath>/terminate_mas -h [hostname] [portnumber]
+# (Old path for terminate_mas:)
+server_termination_cmd;bash /suse_6_3/usr3/tmpusr2/opt/mas/bin/terminate_mas -h [hostname] [portnumber]
