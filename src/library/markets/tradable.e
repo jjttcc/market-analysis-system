@@ -89,7 +89,7 @@ feature -- Access
 			l: LIST [TIME_PERIOD_TYPE]
 			i: INTEGER
 		do
-			!!Result.make (1, 1)
+			create Result.make (1, 1)
 			Result.compare_objects
 			from
 				l := period_types_in_order
@@ -247,9 +247,9 @@ feature {NONE} -- Initialization
 	tradable_initialize (type: TIME_PERIOD_TYPE) is
 			-- Establish the class invariant.
 		do
-			!LINKED_LIST [MARKET_FUNCTION]!indicators.make
-			!!indicator_groups.make (0)
-			!!tuple_lists.make (0)
+			create {LINKED_LIST [MARKET_FUNCTION]} indicators.make
+			create indicator_groups.make (0)
+			create tuple_lists.make (0)
 			sf_make (type)
 			initialize_tuple_lists
 			target_period_type := trading_period_type
@@ -324,7 +324,7 @@ feature {NONE}
 			--the cursor to the last element and put HV and LV into action.
 			--!!greater_than; !!less_than; !!close_extractor
 			if y_high = Void then
-				!!y_high; !!y_low
+				create y_high; create y_low
 			end
 			original_cursor := cursor
 			finish -- Set cursor to last position
@@ -365,7 +365,7 @@ feature {NONE}
 			else
 				create start_date_time.make_now
 			end
-			!!ctbuilder.make (Current, ctf, type, start_date_time)
+			create ctbuilder.make (Current, ctf, type, start_date_time)
 			ctbuilder.process
 			Result := ctbuilder.output
 		end
@@ -377,7 +377,7 @@ feature {NONE} -- Hook methods
 			-- to be redefined in descendants - for example, to create
 			-- a COMPOSITE_VOLUME_TUPLE_FACTORY
 		once
-			!!Result
+			create Result
 		end
 
 invariant

@@ -29,7 +29,7 @@ feature {NONE} -- Initialization
 
 	make is
 		do
-			!!email_addresses.make
+			create email_addresses.make
 		end
 
 feature -- Access
@@ -117,7 +117,7 @@ feature -- Basic operations
 			msg_file := temporary_file (email_addresses @ 1)
 			if not tmp_file_failed then
 				msg_file.put_string (s)
-				!!mail_cmd.make (25)
+				create mail_cmd.make (25)
 				mail_cmd.append (mailer)
 				mail_cmd.extend (' ')
 				if
@@ -157,12 +157,12 @@ feature {NONE}
 				tmp_file_failed := true
 			else
 				tmp_file_failed := false
-				!!dirname.make (4)
+				create dirname.make (4)
 				dirname.append_character (Directory_separator)
 				dirname.append ("tmp")
-				!!tmpdir.make (dirname)
+				create tmpdir.make (dirname)
 				if not tmpdir.exists then
-					!!tmpdir.make (".")
+					create tmpdir.make (".")
 				end
 				fname := clone (s)
 				fname.append_integer (s.hash_code)
@@ -182,7 +182,7 @@ feature {NONE}
 					set_last_error (<<"Failed to open temporary file: ",
 									fname>>)
 				else
-					!!Result.make_open_write (fname)
+					create Result.make_open_write (fname)
 				end
 			end
 		ensure
@@ -198,7 +198,7 @@ feature {NONE}
 		local
 			i: INTEGER
 		do
-			!!last_error.make (0)
+			create last_error.make (0)
 			from
 				i := 1
 			until
