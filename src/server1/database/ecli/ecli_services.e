@@ -18,9 +18,19 @@ class ECLI_SERVICES inherit
 			{ANY} db_info
 		end
 
+	GLOBAL_APPLICATION
+		export
+			{NONE} all
+		end
+
 	EXCEPTIONS
-		export {NONE}
-			all
+		export
+			{NONE} all
+		end
+
+	TERMINABLE
+		export
+			{NONE} all
 		end
 
 creation
@@ -32,6 +42,7 @@ feature -- Initialization
 	make is
 		do
 			load_stock_splits
+			register_for_termination (Current)
 		ensure
 			splits_not_void_if_available:
 				not fatal_error and not db_info.stock_split_query.empty implies
@@ -322,6 +333,11 @@ feature {NONE} -- Implementation
 					end
 				end
 			end
+		end
+
+	cleanup is
+		do
+--!!Stub
 		end
 
 	Max_varchar_length: INTEGER is 254
