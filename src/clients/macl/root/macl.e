@@ -10,15 +10,19 @@ indexing
 class MACL inherit
 
 	COMMAND_LINE_UTILITIES
+		rename
+			print as output_message
 		export
 			{NONE} all
 		end
 
 	EXCEPTION_SERVICES
+		rename
+			print as output_message
 		export
 			{NONE} all
 		undefine
-			print
+			output_message
 		redefine
 			application_name
 		end
@@ -46,9 +50,12 @@ feature {NONE} -- Initialization
 				print (connection.server_response)
 				processor.process_server_msg (connection.server_response)
 				if processor.error then
-					if processor.fatal_error then
-						abort ("Invalid user input on line " +
-							last_input_line_number.out)
+					if
+						processor.fatal_error or command_line.input_from_file
+					then
+						abort (Invalid_input_message)
+					else
+						print (Invalid_input_message)
 					end
 				end
 				processor.process_request (user_response)
@@ -65,9 +72,7 @@ feature {NONE} -- Initialization
 				command_line.output_file.close
 			end
 		rescue
-			last_exception_status.set_fatal (True)
-			exit_and_close_connection
-			handle_exception ("")
+			handle_fatal_exception
 		end
 
 	initialize is
@@ -77,6 +82,10 @@ feature {NONE} -- Initialization
 			if command_line.error_occurred then
 				print (command_line.usage)
 				abort (Void)
+			end
+			if command_line.help then
+				print (command_line.usage)
+				exit (0)
 			end
 			if command_line.input_from_file then
 				input_device := command_line.input_file
@@ -139,10 +148,44 @@ feature {NONE} -- Utilities
 			-- Exit and close the connection.
 		do
 			print ("Exiting ...%N")
-			if connection /= Void then
-				connection.send_message (Exit_string)
+			if connection /= Void and connection.socket_ok then
+				connection.send_request (Exit_string, False)
 				connection.close
 			end
+		end
+
+	print (a: ANY) is
+		do
+			if command_line.quiet_mode then
+				output_message (".")
+			else
+				output_message (a)
+			end
+		end
+
+	handle_fatal_exception is
+		local
+			retried: BOOLEAN
+		do
+print ("handle_fatal_exception  - retried: " + retried.out + "%N")
+			if not retried then
+				print (Abnormal_termination_message)
+print ("handle_fatal_exception A%N")
+				last_exception_status.set_fatal (True)
+print ("handle_fatal_exception B%N")
+				exit_and_close_connection
+print ("handle_fatal_exception C%N")
+				if command_line.is_debug then
+print ("handle_fatal_exception D%N")
+					handle_exception ("")
+				end
+print ("handle_fatal_exception E%N")
+			end
+print ("handle_fatal_exception F%N")
+			exit (1)
+		rescue
+			retried := True
+			retry
 		end
 
 feature {NONE} -- Implementation
@@ -164,5 +207,13 @@ feature {NONE} -- Implementation
 	last_input_line_number: INTEGER
 
 	application_name: STRING is "client"
+
+	Abnormal_termination_message: STRING is "Unexpected exception occurred.%N"
+
+	Invalid_input_message: STRING is
+		do
+			Result := "Invalid or incorrect user input on line " +
+				last_input_line_number.out
+		end
 
 end

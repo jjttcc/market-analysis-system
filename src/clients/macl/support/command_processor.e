@@ -70,7 +70,7 @@ feature -- Basic operations
 			fatal_error := False
 			error := False
 			server_response_is_selection_list := False
-			if match (invalid_pattern, s) then
+			if invalid_pattern_match (s) then
 				-- Server responded with "invalid input" message.
 				error := True
 			end
@@ -362,13 +362,24 @@ feature {NONE} -- Implementation - Regular expressions
 				not match (pattern, target) implies Result = target
 		end
 
+	invalid_pattern_match (target: STRING): BOOLEAN is
+			-- Does `target' match an "invalid" pattern?
+		do
+			Result := invalid_patterns.linear_representation.there_exists (
+				agent match (?, target))
+		end
+
 feature {NONE} -- Implementation - Attributes
 
 	server_response_is_selection_list: BOOLEAN
 			-- Is the last processed server response an
 			-- "object-selection-list"?
 
-	invalid_pattern: STRING is "Invalid selection"
+	invalid_patterns: ARRAY [STRING] is
+			-- Patterns for invalid or incorrect input
+		once
+			Result := <<"Invalid selection", "Selection must be between">>
+		end
 
 	non_shared_pattern: STRING is ".*List of all valid objects:.*"
 

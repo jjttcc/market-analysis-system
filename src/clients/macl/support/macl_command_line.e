@@ -52,11 +52,13 @@ feature -- Access
 		do
 			Result := "Usage: " + command_name + " [options] port_number" +
 				"%NOptions:%N" +
-				"   -h <hostname>   Connect to server on host <hostname>%N" +
+				"   -h <hostname>   Connect to server on Host <hostname>%N" +
 				"   -r <file>       Record user input and save to <file>%N" +
-				"   -i <file>       Obtain input from <file> instead of %N" +
-				"   -?              Print this help message%N" +
-				"the console%N"
+				"   -i <file>       Obtain Input from <file> instead of " +
+				"the console%N" +
+				"   -q              Quiet mode - suppress output - for " +
+				"use with -r%N" +
+				"   -?              Print this help message%N"
 		end
 
 feature -- Access -- settings
@@ -78,6 +80,9 @@ feature -- Access -- settings
 
 	input_file: PLAIN_TEXT_FILE
 			-- The input file when `input_from_file'
+
+	quiet_mode: BOOLEAN
+			-- Run in quiet mode - suppress output?
 
 feature -- Status report
 
@@ -225,6 +230,14 @@ feature {NONE} -- Implementation
 			end
 		end
 
+	set_quiet_mode is
+		do
+			if option_in_contents ('q') then
+				quiet_mode := True
+				contents.remove
+			end
+		end
+
 feature {NONE} -- Implementation queries
 
 	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]] is
@@ -236,6 +249,8 @@ feature {NONE} -- Implementation queries
 			Result.extend (agent set_port_number)
 			Result.extend (agent set_record_settings)
 			Result.extend (agent set_input_from_file_settings)
+			Result.extend (agent set_quiet_mode)
+			Result.extend (agent set_debug)
 		end
 
 	initialization_complete: BOOLEAN

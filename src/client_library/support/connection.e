@@ -16,8 +16,7 @@ class CONNECTION inherit
 
 	CLIENT_CONNECTION
 		export
-			{NONE} send_request
-			{ANY} close
+			{ANY} close, send_request
 		redefine
 			end_of_message
 		end
@@ -77,6 +76,8 @@ feature -- Basic operations
 	send_message (msg: STRING) is
 			-- Send `msg' to the server and put the server's response
 			-- into `server_response'.
+		require
+			socket_ok: socket_ok
 		do
 			send_request (msg, True)
 		ensure
