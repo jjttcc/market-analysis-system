@@ -31,7 +31,7 @@ feature {NONE}
 			error_if_last_real_lt_0:
 				stream.last_real < 0 implies error_occurred
 			error_implies_tuple_set_to_0:
-				error_occurred implies tuple.open_interest = 0
+				error_occurred implies rabs (tuple.open_interest) < Epsilon
 		end
 
 end -- class OPEN_INTEREST_SETTER
