@@ -16,9 +16,7 @@ public class MA_MenuBar extends MenuBar {
 		menu_bar = this;
 		Menu file_menu = new Menu("File");
 		indicator_menu = new Menu("Indicators");
-//!!!Check:
-//view_menu = new Menu("View");
-Menu view_menu = new Menu("View");
+		Menu view_menu = new Menu("View");
 		indicator_selection = new IndicatorSelection(chart);
 
 		add(file_menu);
@@ -88,8 +86,7 @@ Menu view_menu = new Menu("View");
 
 		// View menu items
 		final MenuItem replace_toggle;
-// final??????????????!!!!! final Menu period_menu = new Menu();
-period_menu = new Menu();
+		period_menu = new Menu();
 		final MenuItem indicator_colors_item = new MenuItem("Indicator Colors",
 			new MenuShortcut(KeyEvent.VK_C));
 		MenuItem next = new MenuItem("Next",
@@ -134,7 +131,6 @@ period_menu = new Menu();
 
 	void reset_period_types(Vector period_types) {
 		period_menu.removeAll();
-//!!!!!view_menu.add(period_menu);
 		setup_period_menu(period_menu, period_types);
 	}
 
@@ -306,7 +302,6 @@ period_menu = new Menu();
 	private MA_MenuBar menu_bar;
 	private IndicatorSelection indicator_selection;
 	private Menu indicator_menu;
-//!!!!????	private Menu view_menu;
 	private Menu period_menu;
 	private IndicatorColors indicator_colors;
 	public static final String daily_period = "Daily";

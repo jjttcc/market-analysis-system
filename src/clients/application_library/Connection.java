@@ -102,8 +102,6 @@ abstract public class Connection {
 		scanner.setReader(in);
 		scanner.getInt();
 		last_rec_msgID = scanner.lastInt();
-//!!!Remove when finished:
-System.out.println("lrmID: " + last_rec_msgID);
 		if (! valid_server_response(last_rec_msgID)) {
 			System.err.println("Fatal error: received invalid " +
 				"message ID from server: " + last_rec_msgID);
@@ -127,11 +125,6 @@ System.out.println("lrmID: " + last_rec_msgID);
 			Configuration.terminate(-1);
 		}
 //System.out.println("'"  + request_result.toString() + "'");
-//!!!Remove when finished:
-if (error_occurred()) {
-System.out.println("err: lrmID: " + last_rec_msgID);
-System.out.println("result: " + request_result);
-}
 		return request_result;
 	}
 
