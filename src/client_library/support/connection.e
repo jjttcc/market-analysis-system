@@ -52,7 +52,6 @@ feature -- Status setting
 		local
 			old_timeout: INTEGER
 		do
---			socket.enable_debug
 			print ("rec. buf size: " + socket.receive_buf_size.out + "%N")
 			print ("send. buf size: " + socket.send_buf_size.out + "%N")
 			print ("route_enabled: " + socket.route_enabled.out + "%N")
@@ -62,10 +61,12 @@ feature -- Status setting
 			print ("dtable_full: " + socket.dtable_full.out + "%N")
 			old_timeout := socket.timeout
 			socket.set_timeout (1)
-			print ("has_exception_state: " + socket.has_exception_state.out + "%N")
+			print ("has_exception_state: " +
+				socket.has_exception_state.out + "%N")
 			socket.set_timeout (old_timeout)
 			print ("is_linger_on: " + socket.is_linger_on.out + "%N")
-			print ("is_out_of_band_inline: " + socket.is_out_of_band_inline.out + "%N")
+			print ("is_out_of_band_inline: " +
+				socket.is_out_of_band_inline.out + "%N")
 			print ("linger_time: " + socket.linger_time.out + "%N")
 			print ("no_buffers: " + socket.no_buffers.out + "%N")
 			print ("not_connected: " + socket.not_connected.out + "%N")

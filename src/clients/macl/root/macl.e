@@ -43,62 +43,31 @@ feature {NONE} -- Initialization
 				connection.termination_requested or
 				not connection.last_communication_succeeded
 			loop
-print ("A%N")
-print ("liln: " + last_input_line_number.out + "%N")
 				print (connection.server_response)
-if connection.server_response.substring_index (
-"Select an object for the SUBTRACTION's left operand:", 1) > 0 then
-	print ("Found 'left'.%N")
-end
-if connection.server_response.substring_index (
-"Select an object for the SUBTRACTION's right operand:", 1) > 0 then
-	print ("Found 'right'.%N")
-end
-print ("B%N")
 				processor.process_server_msg (connection.server_response)
-print ("C%N")
 				if processor.error then
-print ("D%N")
 					if processor.fatal_error then
 						abort ("Invalid user input on line " +
 							last_input_line_number.out)
 					end
 				end
-print ("E%N")
 				processor.process_request (user_response)
-print ("F%N")
-if last_input_line_number >= 119 then
-	print ("last_input_line_number = " + last_input_line_number.out + "%N")
---	debug_socket
-end
 				connection.send_message (processor.product)
-if last_input_line_number >= 119 then
-	print ("last_input_line_number = " + last_input_line_number.out + "%N")
---	debug_socket
-end
-print ("G%N")
 			end
 			if not connection.last_communication_succeeded then
 				print (connection.error_report + "%N")
 			end
-print ("H%N")
 			connection.close
-print ("I%N")
 			if processor.record then
 				print ("Saving recorded input to file " +
 					command_line.output_file.name + ".%N")
 				command_line.output_file.put_string (processor.input_record)
 				command_line.output_file.close
 			end
-print ("J%N")
 		rescue
-print ("K%N")
 			last_exception_status.set_fatal (True)
-print ("L%N")
 			exit_and_close_connection
-print ("M%N")
 			handle_exception ("")
-print ("N%N")
 		end
 
 	initialize is
@@ -195,10 +164,5 @@ feature {NONE} -- Implementation
 	last_input_line_number: INTEGER
 
 	application_name: STRING is "client"
-
-debug_socket is
-	do
-		connection.do_debug
-	end
 
 end

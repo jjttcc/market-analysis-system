@@ -23,8 +23,6 @@ class MACL_COMMAND_LINE inherit
 			{NONE} all
 		end
 
-	ERROR_SUBSCRIBER --!!!??
-
 creation
 
 	make

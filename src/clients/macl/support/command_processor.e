@@ -42,45 +42,6 @@ feature -- Initialization
 			shared_objects.compare_objects
 		end
 
-re_test is
-	local
-		s: STRING
-	do
-		if match (invalid_pattern, invalid_pattern) then
-			print ("match test succeeded.%N")
-		else
-			print ("match test failed.%N")
-		end
-		if match ("\bbanana\b", "banana") then
-			print ("match test succeeded.%N")
-		else
-			print ("match test failed.%N")
-		end
-		if not match ("\bbanana\b", "yellowbanana") then
-			print ("match test succeeded.%N")
-		else
-			print ("match test failed.%N")
-		end
-		s := sub ("X.*Y", "X .. Y", "XabcdeyellowY")
-		if s.is_equal ("X .. Y") then
-			print ("sub test succeeded.%N")
-		else
-			print ("sub test failed: '" + s + "'%N")
-		end
-		s := sub ("X.*Y", "X .. Y", "zooXwinnieYPooh")
-		if s.is_equal ("zooX .. YPooh") then
-			print ("sub test succeeded.%N")
-		else
-			print ("sub test failed: '" + s + "'%N")
-		end
-		s := gsub ("[0-9]", "<digit>", "phone: 303-441-4422")
-		if s.is_equal ("phone: <digit><digit><digit>-<digit><digit><digit>-<digit><digit><digit><digit>") then
-			print ("gsub test succeeded.%N")
-		else
-			print ("gsub test failed: '" + s + "'%N")
-		end
-	end
-
 feature -- Access
 
 	product: STRING
@@ -100,9 +61,6 @@ feature -- Status report
 
 feature -- Basic operations
 
---!!!Remove last_msg if it's not used:
-	last_msg: STRING
-
 	process_server_msg (s: STRING) is
 			-- Process the message `s' from the server - if it includes
 			-- an object selection list, save the list for processing.
@@ -112,8 +70,6 @@ feature -- Basic operations
 			fatal_error := False
 			error := False
 			server_response_is_selection_list := False
---!!!Remove last_msg if it's not used:
-			last_msg := s
 			if match (invalid_pattern, s) then
 				-- Server responded with "invalid input" message.
 				error := True
@@ -287,11 +243,11 @@ feature {NONE} -- Implementation
 			if server_response_is_selection_list then
 				if key_match then
 					if shared then
-						-- !!Check use of s here:
+-- !!Check use of s here:
 						input_record := input_record +
 							shared_string + s + "%N"
 					else
-						-- !!Check use of s here:
+-- !!Check use of s here:
 						input_record := input_record + s + "%N"
 					end
 				elseif objects.has_item (s) then
@@ -313,11 +269,11 @@ feature {NONE} -- Implementation
 				end
 			else
 				debug ("ri")
-					print ("adding " +  product + " to input record%N")
+					print ("adding " +  s + " to input record%N")
 				end
-				input_record := input_record + product + "%N"
---!!!Change the above line to:
---input_record := input_record + s + "%N"
+--!!!Remove the line below - it was changed to the one below it:
+--				input_record := input_record + product + "%N"
+				input_record := input_record + s + "%N"
 			end
 		end
 
