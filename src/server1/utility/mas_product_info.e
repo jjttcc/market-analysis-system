@@ -32,7 +32,7 @@ feature -- Access
 	date: DATE is
 			-- The last date that `number' was updated
 		once
-			create Result.make (2003, 5, 11)
+			create Result.make (2003, 5, 13)
 		end
 
 	release_description: STRING is
