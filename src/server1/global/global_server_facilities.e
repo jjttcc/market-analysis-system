@@ -19,11 +19,13 @@ feature -- Access
 		end
 
 	command_line_options: MAS_COMMAND_LINE is
+			-- Command-line option services
 		once
 			create Result.make
 		end
 
 	database_services: MAS_DB_SERVICES is
+			-- Database services
 		local
 			platform_factory: expanded PLATFORM_DEPENDENT_OBJECTS
 		once
@@ -31,15 +33,25 @@ feature -- Access
 		end
 
 	database_configuration: MAS_DB_INFO is
+			-- Database configuration settings
 		once
 			create Result.make
 		end
 
 	file_name_expander: FILE_NAME_EXPANDER is
+			-- File name expander for current OS
 		local
 			platform_factory: expanded PLATFORM_DEPENDENT_OBJECTS
 		once
 			Result := platform_factory.file_name_expander
+		end
+
+	file_lock (file_name: STRING): FILE_LOCK is
+			-- File locking services
+		local
+			platform_factory: expanded PLATFORM_DEPENDENT_OBJECTS
+		do
+			Result := platform_factory.file_lock (file_name)
 		end
 
 end -- GLOBAL_SERVER
