@@ -5,7 +5,13 @@ root
 	MA_SERVER: make
 
 default
-	assertion (all)
+	assertion (check)
+	assertion (require)
+	assertion (ensure)
+	assertion (loop)
+	assertion (invariant)
+	arguments ("-o -f , sunw.txt  4002")
+	arguments ("-o -z")
 	arguments ("-o -f , /opt/mas/lib/data/tradables/aa.txt /opt/mas/lib/data/tradables/aapl.txt")
 	arguments ("-o -f , /opt/mas/lib/data/tradables/a*.txt")
 	arguments ("-o -f , /opt/mas/lib/a*.txt")
@@ -15,7 +21,6 @@ default
 	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4002 -debug")
 	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4002")
 	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4001")
-	arguments ("-o -f , sunw.txt  4002")
 	arguments ("-o -f , sunw.txt  4001")
 	arguments ("-o -f , sunw.txt  4001 -r /tmp/fbc1")
 	arguments ("-o -f , sunw.txt 2223")
@@ -55,7 +60,6 @@ default
 	arguments (" ")
 	disabled_debug (yes)
 	disabled_debug ("compression")
-	disabled_debug ("database")
 	disabled_debug ("editing")
 	disabled_debug ("http")
 	disabled_debug ("object_editing")
