@@ -52,20 +52,6 @@ class CL_BASED_FUNCTION_EDITING_INTERFACE inherit
 			print
 		end
 
-	FUNCTION_MENU_VALUES
-		export
-			{NONE} all
-		undefine
-			print
-		end
-
-	OBJECT_EDITING_VALUES
-		export
-			{NONE} all
-		undefine
-			print
-		end
-
 creation
 
 	make
@@ -120,84 +106,72 @@ feature {NONE} -- Implementation of hook methods
 	main_indicator_edit_selection: INTEGER is
 		local
 			msg: STRING
-			cr, rm, vw, ed, sv, prev: INDICATOR_EDITING_CHOICE
 		do
-			create cr.make_creat; create rm.make_remove; create ed.make_edit
-			create vw.make_view; create sv.make_save; create prev.make_previous
 			check
 				io_devices_not_void: input_device /= Void and
 					output_device /= Void
 			end
 			if not dirty or not ok_to_save then
-				msg := "Select action:%N     " +
-					enum_menu_string (cr, cr.name, " ") +
-					enum_menu_string (rm, rm.name, "%N     ") +
-					enum_menu_string (vw, vw.name, " ") +
-					enum_menu_string (ed, ed.name, " ") +
-					enum_menu_string (prev, prev.name, " ") + eom
+				msg := concatenation (<<"Select action:",
+					"%N     Create a new indicator (c) %
+					%Remove an indicator (r) %N%
+					%     View an indicator (v) %
+					%Edit an indicator (e) %
+					%Previous (-) ", eom>>)
 			else
-				msg := "Select action:%N     " +
-					enum_menu_string (cr, cr.name, " ") +
-					enum_menu_string (rm, rm.name, "%N     ") +
-					enum_menu_string (vw, vw.name, " ") +
-					enum_menu_string (ed, ed.name, " ") +
-					enum_menu_string (sv, sv.name, "%N     ") +
-					enum_menu_string (prev, prev.name,
-						" - abort changes ") + eom
+				msg := concatenation (<<"Select action:",
+					"%N     Create a new indicator (c) %
+					%Remove an indicator (r) %N%
+					%     View an indicator (v) %
+					%Edit an indicator (e) %
+					%Save changes (s) %N%
+					%     Previous - abort changes (-) ", eom>>)
 			end
 			from
 				Result := Null_value
 			until
 				Result /= Null_value
 			loop
+				print (msg)
 				inspect
-					character_enumeration_selection (msg,
-						"%NInvalid selection%N", cr.all_members).item
-				when creat, creat_u then
+					character_selection (Void)
+				when 'c', 'C' then
 					Result := Create_new_value
-				when remove, remove_u then
+				when 'r', 'R' then
 					Result := Remove_value
-				when view, view_u then
+				when 'v', 'V' then
 					Result := View_value
-				when edit, edit_u then
+				when 'e', 'E' then
 					Result := Edit_value
-				when sav, sav_u then
+				when 's', 'S' then
 					if not dirty or not ok_to_save then
-						print ("%NInvalid selection%N")
+						print ("Invalid selection%N")
 					else
 						Result := Save_value
 					end
-				when shell_escape then
+				when '!' then
 					execute_shell_command
-				when previous then
+				when '-' then
 					Result := Exit_value
 				else
-					check	-- Should never be reached.
-						selection_always_valid: False
-					end
+					print ("Invalid selection%N")
 				end
 				print ("%N%N")
 			end
 		end
 
 	accepted_by_user (c: MARKET_FUNCTION): BOOLEAN is
-		local
-			desc_chc, another_chc, choice_chc: FUNCTION_MENU_CHOICE
-			msg: STRING
 		do
-			create desc_chc.make_description; create another_chc.make_another;
-			create choice_chc.make_choice
-			msg := "Select:%N     Print description of " + c.generator +
-				name_for (c) + "? (" + desc_chc.item.out + ")%N" +
-				"     Choose " + c.generator + name_for (c) + " (" +
-				choice_chc.item.out + ") Make another choice (" +
-				another_chc.item.out + ") " + eom
+			print_list (<<"Select:%N     Print description of ",
+						c.generator + name_for (c), "? (d)%N",
+						"     Choose ", c.generator + name_for (c),
+						" (c) Make another choice (a) ", eom>>)
 			inspect
-				character_enumeration_selection (msg, "%NInvalid selection%N",
-					desc_chc.all_members).item
-			when description, description_u then
-				print ("%N" + function_description (c) + "%N%NChoose " +
-					c.generator + name_for (c) + "? (y/n) " + eom)
+				character_selection (Void)
+			when 'd', 'D' then
+				print_list (<<"%N", function_description (c),
+					"%N%NChoose ", c.generator + name_for (c),
+						"? (y/n) ", eom>>)
 				inspect
 					character_selection (Void)
 				when 'y', 'Y' then
@@ -205,14 +179,10 @@ feature {NONE} -- Implementation of hook methods
 				else
 					check Result = False end
 				end
-			when choose, choose_u then
+			when 'c', 'C' then
 				Result := True
-			when another_choice, another_choice_u then
-				check Result = False end
 			else
-				check	-- Should never be reached.
-					selection_always_valid: False
-				end
+				check Result = False end
 			end
 		end
 

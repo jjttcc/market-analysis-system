@@ -50,22 +50,6 @@ class CL_BASED_MEG_EDITING_INTERFACE inherit
 			print
 		end
 
-	OBJECT_EDITING_VALUES
-		export
-			{NONE} all
-		undefine
-			print
-		end
-
-	YES_NO_HELP_VALUES
-		rename
-			help as hlp, help_u as hlp_u
-		export
-			{NONE} all
-		undefine
-			print
-		end
-
 creation
 
 	make
@@ -124,61 +108,55 @@ feature {NONE} -- Implementation
 	main_menu_selection: INTEGER is
 		local
 			msg: STRING
-			cr, rm, vw, ed, sv, prev: INDICATOR_EDITING_CHOICE
 		do
-			create cr.make_creat; create rm.make_remove; create vw.make_view
-			create ed.make_edit; create sv.make_save; create prev.make_previous
 			check
 				io_devices_not_void: input_device /= Void and
 										output_device /= Void
 			end
 			if not dirty or not ok_to_save then
-				msg := "Select action:%N     " +
-					enum_menu_string (cr, cr.name, " ") +
-					enum_menu_string (rm, rm.name, "%N     ") +
-					enum_menu_string (vw, vw.name, " ") +
-					enum_menu_string (ed, ed.name, " ") +
-					enum_menu_string (prev, prev.name, " ") + eom
+				msg := concatenation (<<"Select action:",
+					"%N     Create a new market analyzer (c) %
+					%Remove a market analyzer (r) %
+					%%N     View a market analyzer (v) %
+					%Edit market analyzers (e) %N%
+					%     Previous (-) ", eom>>)
 			else
-				msg := "Select action:%N     " +
-					enum_menu_string (cr, cr.name, " ") +
-					enum_menu_string (rm, rm.name, "%N     ") +
-					enum_menu_string (vw, vw.name, " ") +
-					enum_menu_string (ed, ed.name, " ") +
-					enum_menu_string (sv, sv.name, "%N     ") +
-					enum_menu_string (prev, prev.name,
-						" - abort changes ") + eom
+				msg := concatenation (<<"Select action:",
+					"%N     Create a new market analyzer (c) %
+					%Remove a market analyzer (r) %
+					%%N     View a market analyzer (v) %
+					%Edit market analyzers (e) %N%
+					%     Save changes (s) %
+					%Previous - abort changes (-) ", eom>>)
 			end
 			from
 				Result := Null_value
 			until
 				Result /= Null_value
 			loop
+				print (msg)
 				inspect
-					character_enumeration_selection (msg,
-						"%NInvalid selection%N", cr.all_members).item
-				when creat, creat_u then
+					character_selection (Void)
+				when 'c', 'C' then
 					Result := Create_new_value
-				when remove, remove_u then
+				when 'r', 'R' then
 					Result := Remove_value
-				when view, view_u then
+				when 'v', 'V' then
 					Result := View_value
-				when edit, edit_u then
+				when 'e', 'E' then
 					Result := Edit_value
-				when sav, sav_u then
+				when 's', 'S' then
 					if not dirty or not ok_to_save then
 						print ("Invalid selection%N")
 					else
 						Result := Save_value
 					end
-				when shell_escape then
+				when '!' then
 					execute_shell_command
-				when previous then
+				when '-' then
 					Result := Exit_value
 				else
-					check	-- Should never be reached.
-						selection_always_valid: False
-					end
+					print ("Invalid selection%N")
 				end
 				print ("%N%N")
 			end
@@ -199,12 +177,12 @@ feature {NONE} -- Implementation
 			until
 				c /= '%U'
 			loop
-				print ("Select analyzer type: " +
-					"Simple (s) Compound (c) " + eom)
+				print_list (<<"Select analyzer type: ",
+							"Simple (s) Compound (c) ", eom>>)
 				c := character_selection (Void)
 				if not (c = 's' or c = 'S' or c = 'c' or c = 'C') then
 					c := '%U'
-					print ("Invalid selection: " + c.out + "%N")
+					print_list (<<"Invalid selection: ", c, "%N">>)
 				end
 			end
 			inspect
@@ -238,12 +216,13 @@ feature {NONE} -- Implementation
 			until
 				c /= '%U'
 			loop
-				print ("Would you like this analyzer to use one or two " +
-					"technical indicators?%N" + "     One (o) Two (t) " + eom)
+				print_list (<<"Would you like this analyzer to use one ",
+							"or two technical indicators?%N",
+							"     One (o) Two (t) ", eom>>)
 				c := character_selection (Void)
 				if not (c = 'o' or c = 'O' or c = 't' or c = 'T') then
 					c := '%U'
-					print ("Invalid selection: " + c.out + "%N")
+					print_list (<<"Invalid selection: ", c, "%N">>)
 				end
 			end
 			inspect
@@ -264,12 +243,12 @@ feature {NONE} -- Implementation
 			until
 				c /= '%U'
 			loop
-				print ("Would you like to define an operator for this %
-					%market analyzer? (y/n) " + eom)
+				print_list (<<"Would you like to define an operator for this %
+							%market analyzer? (y/n) ", eom>>)
 				c := character_selection (Void)
 				if not (c = 'y' or c = 'Y' or c = 'n' or c = 'N') then
 					c := '%U'
-					print ("Invalid selection: " + c.out + "%N")
+					print_list (<<"Invalid selection: ", c, "%N">>)
 				end
 			end
 			if c = 'y' or c = 'Y' then
@@ -278,14 +257,14 @@ feature {NONE} -- Implementation
 				until
 					c /= '%U'
 				loop
-					print ("Should the operator operate on the left " +
-						"function (" + f.left_function.name +
-						") or the right function (" +
-						f.right_function.name + ")? (l/r) " + eom)
+					print_list (<<"Should the operator operate on the left ",
+							"function (", f.left_function.name,
+							") or the right function (",
+							f.right_function.name, ")? (l/r) ", eom>>)
 					c := character_selection (Void)
 					if not (c = 'l' or c = 'L' or c = 'r' or c = 'R') then
 						c := '%U'
-						print ("Invalid selection: " + c.out + "%N")
+						print_list (<<"Invalid selection: ", c, "%N">>)
 					end
 				end
 				if c = 'l' or c = 'L' then
@@ -315,15 +294,16 @@ feature {NONE} -- Implementation
 			loop
 				if names.count > 0 then
 					print_names_in_1_column (names, 1)
-					print ("Type a name for the new event that does %
-						%not match any of the above names:%N" + eom)
+					print_list (<<"Type a name for the new event that does %
+							%not match any of the above names:%N", eom>>)
 				else
-					print ("Type a name for the new event: " + eom)
+					print_list (<<"Type a name for the new event: ", eom>>)
 				end
 				read_line
 				if names.has (last_string) then
-					print ("%"" + last_string + "%" matches one of the %
-						%above names, please try again ...%N")
+					print_list (<<"%"", last_string,
+								"%" matches one of the %
+								%above names, please try again ...%N">>)
 				else
 					create Result.make (last_string.count)
 					Result.append (last_string)
@@ -358,13 +338,13 @@ feature {NONE} -- Implementation
 					last_integer < 1 or
 						last_integer > names.count
 				then
-					print ("Selection must be between 1 and " +
-						names.count.out + "%N")
+					print_list (<<"Selection must be between 1 and ",
+								names.count, "%N">>)
 				else
 					Result := period_types @ (names @ last_integer)
 				end
 			end
-			print ("Using " + Result.name + " period type%N")
+			print_list (<<"Using ", Result.name, " period type%N">>)
 		end
 
 	above_below_choice (fa_maker: TVFA_FACTORY): INTEGER is
@@ -379,8 +359,9 @@ feature {NONE} -- Implementation
 				Result = fa_maker.Above_to_below or
 				Result = fa_maker.Both
 			loop
-				print ("Select specification for crossover detection:%N%
-					%1) below-to-above%N2) above-to-below%N3) both%N" + eom)
+				print_list (<<"Select specification for crossover detection:%N%
+						%1) below-to-above%N2) above-to-below%N3) both%N",
+						eom>>)
 				inspect
 					character_selection (Void)
 				when '1' then
@@ -402,58 +383,51 @@ feature {NONE} -- Implementation
 			-- User's choice (if any) of a date/time extension for a
 			-- compound event generator
 		local
-			finished: BOOLEAN
+			finished, yes: BOOLEAN
 			days, months, years: INTEGER
-			yes_choice: YES_NO_HELP_CHOICE
-			selection: ENUMERATED [CHARACTER]
-			msg: STRING
 		do
 			from
-				create yes_choice.make_yes
 			until
 				finished
 			loop
-				msg := "Would you like to add a time extension " +
-					"to match events from the left%Nanalyzer that occur " +
-					which + " the right analyzer? (" +
-					yes_choice.abbreviation + ") " + eom
-				selection := character_enumeration_selection (msg,
-					"%NInvalid selection%N", yes_choice.all_members)
+				print_list (<<"Would you like to add a time extension ",
+					"to match events from the left%Nanalyzer that occur ",
+					which, " the right analyzer? (y/n/h) ", eom>>)
 				inspect
-					selection.item
-				when yes, yes_u then
+					character_selection (Void)
+				when 'y', 'Y' then
+					yes := True
 					finished := True
-				when no, no_u then
+				when 'n', 'N' then
 					finished := True
-				when hlp, hlp_u then
+				when 'h', 'H' then
 					print (help @
 						help.Compound_event_generator_time_extensions)
 				else
-					check	-- Should never be reached.
-						selection_always_valid: False
-					end
+					print ("Invalid response.%N")
 				end
 			end
 			from
-				if selection.item = yes then
+				if yes then
 					finished := False
 				end
 			until
 				finished
 			loop
-				print ("Select: days (d) months (m) years (y) End (e) " + eom)
+				print_list (<<"Select: days (d) months (m) years (y) End (e) ",
+							eom>>)
 				inspect
 					character_selection (Void)
 				when 'd', 'D' then
-					print ("Enter the number of days: " + eom)
+					print_list (<<"Enter the number of days: ", eom>>)
 					read_integer
 					days := last_integer
 				when 'm', 'M' then
-					print ("Enter the number of months: " + eom)
+					print_list (<<"Enter the number of months: ", eom>>)
 					read_integer
 					months := last_integer
 				when 'y', 'Y' then
-					print ("Enter the number of years: " + eom)
+					print_list (<<"Enter the number of years: ", eom>>)
 					read_integer
 					years := last_integer
 				when 'e', 'E' then
@@ -461,10 +435,10 @@ feature {NONE} -- Implementation
 				else
 					print ("Invalid response.%N")
 				end
-				print ("Current settings: " + days.out + " days, " +
-					months.out + " months, " + years.out + " years.%N")
+				print_list (<<"Current settings: ", days, " days, ",
+							months, " months, ", years, " years.%N">>)
 			end
-			if selection.item = yes then
+			if yes then
 				create Result.make (years, months, days, 0, 0, 0)
 				print ("Time extension added.%N")
 			end
@@ -474,37 +448,30 @@ feature {NONE} -- Implementation
 			-- User's choice for the left target type (if any) of a
 			-- compound event generator
 		local
-			finished: BOOLEAN
-			yes_choice: YES_NO_HELP_CHOICE
-			selection: ENUMERATED [CHARACTER]
-			msg: STRING
+			finished, yes: BOOLEAN
 		do
 			from
-				create yes_choice.make_yes
 			until
 				finished
 			loop
-				msg := "Would you like to specify an event type " +
-					"as target for the left analyzer's date/time? (" +
-					yes_choice.abbreviation + ") " + eom
-				selection := character_enumeration_selection (msg,
-					"%NInvalid selection%N", yes_choice.all_members)
+				print_list (<<"Would you like to specify an event type ",
+					"as target for the left analyzer's date/time? ",
+					" (y/n/h) ", eom>>)
 				inspect
-					selection.item
-				when yes, yes_u then
+					character_selection (Void)
+				when 'y', 'Y' then
+					yes := True
 					finished := True
-				when no, no_u then
+				when 'n', 'N' then
 					finished := True
-				when hlp, hlp_u then
+				when 'h', 'H' then
 					print (help @
 						help.Compound_event_generator_left_target_type)
 				else
-					check	-- Should never be reached.
-						selection_always_valid: False
-					end
+					print ("Invalid response.%N")
 				end
 			end
-			if selection.item = yes then
+			if yes then
 				Result := event_types @ list_selection (
 					event_type_names, "Select an event type:")
 			end
@@ -518,9 +485,9 @@ feature {NONE} -- Implementation
 			ovfa: ONE_VARIABLE_FUNCTION_ANALYZER
 			tvfa: TWO_VARIABLE_FUNCTION_ANALYZER
 		do
-			print ("Market analyzer type: " + eg.generator +
-				"%NEvent type: " + eg.event_type.name + ", signal type: " +
-				eg.type_names @ eg.signal_type + "%N")
+			print_list (<<"Market analyzer type: ", eg.generator,
+				"%NEvent type: ", eg.event_type.name, ", signal type: ",
+				eg.type_names @ eg.signal_type, "%N">>)
 			compound_eg ?= eg
 			fa ?= eg
 			if compound_eg /= Void then
@@ -532,22 +499,24 @@ feature {NONE} -- Implementation
 				check
 					eg_is_fa: fa /= Void
 				end
-				print ("has period type " + fa.period_type.name +
-					", has start date/time " + fa.start_date_time.out + "%N")
+				print_list (<<"has period type ", fa.period_type.name,
+							", has start date/time ", fa.start_date_time,
+							"%N">>)
 				ovfa ?= fa
 				tvfa ?= fa
 				if ovfa /= Void then
-					print ("Operates on indicator: " +
-						ovfa.input.name + "%N")
+					print_list (<<"Operates on indicator: ",
+								ovfa.input.name, "%N">>)
 				else
 					check
 						two_var: tvfa /= Void
 					end
-					print ("Operates on two indicators:%N  " +
-						tvfa.input1.name + "%N  " + tvfa.input2.name + "%N")
-					print ("above/below, below/above: " +
-						tvfa.above_to_below.out + ", " +
-						tvfa.below_to_above.out + "%N")
+					print_list (<<"Operates on two indicators:%N  ",
+								tvfa.input1.name, "%N  ",
+								tvfa.input2.name, "%N">>)
+					print_list (<<"above/below, below/above: ",
+							tvfa.above_to_below, ", ", tvfa.below_to_above,
+							"%N">>)
 				end
 				if fa.operator /= Void then
 					print ("Uses an operator:%N")

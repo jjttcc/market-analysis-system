@@ -21,13 +21,6 @@ class CL_BASED_COMMAND_EDITING_INTERFACE inherit
 			print
 		end
 
-	COMMAND_MENU_VALUES
-		export
-			{NONE} all
-		undefine
-			print
-		end
-
 creation
 
 	make
@@ -60,9 +53,9 @@ feature -- Basic operations
 				print ("  ")
 				i := i + 1
 			end
-			print (o.generator + "%N")
+			print_list (<<o.generator, "%N">>)
 			debug ("object_editing")
-				print ("(" + o.out + ")%N")
+				print_list (<<"(", o.out, ")%N">>)
 			end
 			print_operand_trees (o, level + 1)
 		end
@@ -95,20 +88,15 @@ feature {NONE} -- Hook methods
 	accepted_by_user (c: COMMAND): BOOLEAN is
 		local
 			editable: CONFIGURABLE_EDITABLE_COMMAND
-			msg: STRING
-			enum: ENUMERATED [CHARACTER]
-			msg_enum: PAIR [STRING, ENUMERATED [CHARACTER]]
 		do
-			msg_enum := display_for_accepted_by_user (c)
-			msg := msg_enum.left + eom
-			enum := msg_enum.right
+			print (display_for_accepted_by_user (c) + eom)
 			editable_state := False; editing_needed := False
 			inspect
-				character_enumeration_selection (msg, "%NInvalid selection%N",
-					enum.all_members).item
-			when description, description_u then
-				print ("%N" + command_description (c) + "%N%NChoose " +
-					c.generator + name_for (c) + "? (y/n) " + eom)
+				character_selection (Void)
+			when 'd', 'D' then
+				print_list (<<"%N", command_description (c),
+					"%N%NChoose ", c.generator + name_for (c),
+						"? (y/n) ", eom>>)
 				inspect
 					character_selection (Void)
 				when 'y', 'Y' then
@@ -116,9 +104,9 @@ feature {NONE} -- Hook methods
 				else
 					check Result = False end
 				end
-			when choose, choose_u then
+			when 'c', 'C' then
 				Result := True
-			when edit, edit_u then
+			when 'e', 'E' then
 				if do_clone then
 					-- The chosen command should not be editied if
 					-- do_clone is False.
@@ -138,12 +126,8 @@ feature {NONE} -- Hook methods
 					end
 					Result := True
 				end
-			when another_choice, another_choice_u then
-				check Result = False end
 			else
-				check	-- Should never be reached.
-					selection_always_valid: False
-				end
+				check Result = False end
 			end
 		end
 
@@ -173,48 +157,39 @@ feature {NONE} -- Utility routines
 			end
 		end
 
-	display_for_accepted_by_user (c: COMMAND):
-		PAIR [STRING, ENUMERATED [CHARACTER]] is
-			-- A menu-selection display based on `c' and an associated
-			-- ENUMERATED object to use for the selection
+	display_for_accepted_by_user (c: COMMAND): STRING is
 		local
 			text: LINKED_LIST [STRING]
 			margin: STRING
 			line_length: INTEGER
-			desc_chc, edit_chc, another_chc, choice_chc: COMMAND_MENU_CHOICE
-			result_string: STRING
 		do
-			create desc_chc.make_description; create edit_chc.make_edit
-			create another_chc.make_another; create choice_chc.make_choice
 			line_length := 76
 			margin := "     "
 			create text.make
 			text.extend ("Select:%N     Print description of " +
-				c.generator + name_for (c) + "? (" + desc_chc.item.out + ")")
-			text.extend ("Choose " + c.generator + name_for (c) +
-				" (" + choice_chc.item.out + ")")
+				c.generator + name_for (c) + "? (d)")
+			text.extend ("Choose " + c.generator + name_for (c) + " (c)")
 			text.extend ("filler")
-			text.extend ("Make another choice (" + another_chc.item.out + ")")
-			result_string := text @ 1
+			text.extend ("Make another choice (a)")
+			Result := text @ 1
 			if do_clone then
 				text.put_i_th ("Choose " + c.generator +
-					" and edit its settings (" + edit_chc.item.out + ")", 3)
+					" and edit its settings (e)", 3)
 				if (text @ 1).count + (text @ 2).count > line_length then
-					result_string.append ("%N" + margin + text @ 2)
+					Result.append ("%N" + margin + text @ 2)
 				else
-					result_string.append (" " + text @ 2)
+					Result.append (" " + text @ 2)
 				end
-				result_string.append ("%N" + margin + text @ 3 + " " + "%N" +
-					margin + text @ 4 + " ")
+				Result.append ("%N" + margin + text @ 3 + " " + "%N" + margin +
+					text @ 4 + " ")
 			else
 				if (text @ 1).count + (text @ 2).count > line_length then
-					result_string.append ("%N" + margin + text @ 2)
+					Result.append ("%N" + margin + text @ 2)
 				else
-					result_string.append (" " + text @ 2)
+					Result.append (" " + text @ 2)
 				end
-				result_string.append ("%N" + margin + text @ 4 + " ")
+				Result.append ("%N" + margin + text @ 4 + " ")
 			end
-			create Result.make (result_string, desc_chc)
 		end
 
 end -- CL_BASED_COMMAND_EDITING_INTERFACE
