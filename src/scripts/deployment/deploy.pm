@@ -2,25 +2,28 @@
 
 package deploy;
 
-    require(Exporter);
-    @ISA = qw(Exporter);
-    @EXPORT_OK = qw(config_file configure mas_port mas_options version
+require Exporter;
+our @ISA = qw(Exporter);
+our @EXPORT_OK = qw(config_file configure mas_port mas_options version
 	deployment_directory tarfile applet_archive servlet_archive
 	applet_deployment_path servlet_deployment_directory
 	mas_directory_var data_directory data_from_files process_args
 	setup cleanup set_cleanup_workdir final_message_file abort
 );
 
+use File::Path;
+
 # Constants
 
-$config_file = "mas-deploy.cf";
-$Clean_work_dir = 0;
-$Final_msg_file = "";
+my $config_file = "mas-deploy.cf";
+my $Clean_work_dir = 0;
+my $Final_msg_file = "";
 
 # Settings variables
 my %settings = ();
-@tags = ("mas_tar_file", "mas_deployment_dir", "version", "server_port_number",
-	"cl_options", "mas_dir", "data_dir", "mas_applet_file", "mas_servlet_file",
+my @tags = ("mas_tar_file", "mas_deployment_dir", "version",
+	"server_port_number", "cl_options", "mas_dir", "data_dir",
+	"mas_applet_file", "mas_servlet_file",
 	"applet_deployment_path", "servlet_deployment_dir"
 );
 my ($tarfile_tag, $deploy_dir_tag, $version_tag, $port_tag,
@@ -30,7 +33,6 @@ my ($tarfile_tag, $deploy_dir_tag, $version_tag, $port_tag,
 
 # Other global variables
 my $work_directory = "/tmp/mas-install" . $$;
-my $remove_dir_cmd = "rm -rf";
 my $origdir = $ENV{"PWD"};
 
 # Name of the configuration file
@@ -43,17 +45,17 @@ sub config_file {
 sub process_args {
 	my $argcount = @ARGV;
 	for (my $i = 0; $i < $argcount; ++$i) {
-		$arg = $ARGV[$i];
+		my $arg = $ARGV[$i];
 		if ($arg =~ /^-+h/ || $arg =~ /^-+\?/) {
-			&usage; exit 0;
+			usage(); exit 0;
 		} elsif ($arg =~ /^-+m/) {
 			++$i;
 			if ($i == $argcount) {
-				&usage; exit 1;
+				usage(); exit 1;
 			}
 			$Final_msg_file = $ARGV[$i];
 		} else {
-			&usage; exit 1;
+			usage(); exit 1;
 		}
 	}
 }
@@ -94,7 +96,7 @@ sub cleanup {
 	chdir $origdir;
 	if ($Clean_work_dir) {
 #		print "Removing work directory, $work_directory.\n";
-		! system($remove_dir_cmd . " " . $work_directory) ||
+		rmtree($work_directory) ||
 			die "Failed to remove " . "work directory, $work_directory.\n";
 	}
 }
@@ -117,7 +119,7 @@ sub configure {
 		$settings{$fields[0]} = $fields[1];
 	}
 	close(CF);
-	&check_config;
+	check_config();
 }
 
 # Check that the configuration is correct.
@@ -125,7 +127,7 @@ sub check_config {
 	my $ok = 1;
 	for my $t (@tags) {
 		if (!$settings{$t}) {
-			print "$t not set in ", &config_file, "\n";
+			print "$t not set in ", config_file(), "\n";
 			$ok = 0;
 		}
 	}
@@ -135,7 +137,7 @@ sub check_config {
 }
 
 sub abort {
-	&cleanup;
+	cleanup();
 	die @_;
 }
 
@@ -198,7 +200,7 @@ sub data_directory {
 
 # Will the mas server get its data from files?
 sub data_from_files {
-	return &data_directory !~ /NONE/;
+	return data_directory() !~ /NONE/;
 }
 
 sub final_message_file {

@@ -14,7 +14,7 @@ if perl -I $basedir $basedir/deploy_server.pl -m $msg_file $*; then
 		if [ -r $msg_file ]; then
 			cat $msg_file >&2
 		else
-			echo "Cannot read message file: $msg_file." >&3
+			echo "Cannot read message file: $msg_file." >&2
 		fi
 	fi
 else
