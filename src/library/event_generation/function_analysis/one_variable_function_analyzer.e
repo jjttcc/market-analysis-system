@@ -107,7 +107,6 @@ feature -- Basic operations
 				input.process
 			end
 			if not target.empty then
-print ("last date: "); print (target.last.date_time); print ("%N")
 				do_all
 			end
 		end
