@@ -252,8 +252,12 @@ src/scripts/python/mas/library/ma_protocol.py lib/python/ mas_linux1.6.5 mas_win
 src/clients/CL/maclj bin/ mas_linux1.6.5 mas_windows1.6.5 clientsrc1.6.5 mac1.6.5
 src/scripts/external/mas_external_retrieve.pl lib/ mas_linux1.6.5 mas_windows1.6.5
 src/scripts/windows/runmas.bat bin/ mas_windows1.6.5
+src/scripts/windows/runmasf.bat bin/ mas_windows1.6.5
 src/scripts/windows/runmacl.bat bin/ mas_windows1.6.5
 src/scripts/windows/runmasgui.bat bin/ mas_windows1.6.5
+src/scripts/windows/fake_mailer.bat bin/ mas_windows1.6.5
+src/scripts/windows/init.bat bin/ mas_windows1.6.5
+src/scripts/windows/simple_cat.exe bin/ mas_windows1.6.5
 # contrib
 src/contrib src/ contrib
 # (macl configuration files)
@@ -297,7 +301,6 @@ doc/INSTALL  ./INSTALL.txt[dos] mas_windows1.6.5
 doc/THANKS doc/THANKS.txt[dos] mas_windows1.6.5
 doc/GUI_client_change_log doc/GUI_CHANGE_LOG.txt[dos] mas_windows1.6.5
 doc/Server_change_log doc/MAS_CHANGE_LOG.txt[dos] mas_windows1.6.5
-doc/mas_odbc_usage.txt . mas_windows1.6.5
 doc/README_WINDOWS.txt ./ mas_windows1.6.5
 # (Scripts)
 src/scripts/install/install ./ mas_linux1.6.5 mas_windows1.6.5

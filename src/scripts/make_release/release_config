@@ -8,7 +8,7 @@ package serversrc1.6.5 zip tar	# source code for the MA server
 package clientsrc1.6.5 zip tar	# source code for the MA client
 package mas_linux1.6.5 tar		# MA server and client executables for Linux
 package contrib tar				# contributions by other developers
-#package mas_windows1.6 zip	# MA server and client executables for Windows
+package mas_windows1.6.5 tar	# MA server and client executables for Windows
 #package mac1.6 zip tar			# MA client executables only
 # No updates to scripts in 1.x - Don't forget to uncomment the following line
 # for a release that does have updated scripts.
