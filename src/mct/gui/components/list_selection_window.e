@@ -38,6 +38,9 @@ feature -- Access
 			Result := list.selected_item
 		end
 
+	list: EV_MULTI_COLUMN_LIST
+			-- The selection list
+
 feature {NONE} -- Implementation - initialization
 
 	create_contents (rows: LIST [LIST [STRING]]) is
@@ -127,9 +130,6 @@ feature {NONE} -- Implementation - initialization
 		end
 
 feature {NONE} -- Implementation - attributes
-
-	list: EV_MULTI_COLUMN_LIST
-			-- The selection list
 
 	max_list_widths: ARRAY [INTEGER]
 
