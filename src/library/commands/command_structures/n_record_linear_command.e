@@ -14,6 +14,8 @@ class N_RECORD_LINEAR_COMMAND inherit
 	N_RECORD_COMMAND
 		rename
 			make as nrc_make_unused
+		export {NONE}
+			nrc_make_unused
 		select
 			initialize
 		end
@@ -21,6 +23,8 @@ class N_RECORD_LINEAR_COMMAND inherit
 	LINEAR_COMMAND
 		rename
 			make as lc_make_unused, initialize as initialize_unused
+		export {NONE}
+			lc_make_unused, initialize_unused
 		redefine
 			forth, action, start, exhausted, invariant_value, target
 		end
