@@ -367,6 +367,7 @@ public class DataSet {
 	* Precondition: tuple_count has been set
 	*/
 	protected void range() {
+System.out.println("range() called");
 		int i;
 		int lnth = length();
 		int stride = stride();
@@ -391,8 +392,15 @@ public class DataSet {
 			else if( dymin > data[i] ) { dymin = data[i]; }
 		}
 		if ( yaxis_ == null) {
-		ymin = dymin;
-		ymax = dymax;
+			ymin = dymin;
+			ymax = dymax;
+			if (Math.abs(ymax) - Math.abs(ymin) < min_max_epsilon) {
+				// ymax are essentially the same - Add some extra boundary
+				// space so that the user's data is visible - appears in
+				// the middle rather than the top or bottom.
+				ymin -= min_border_boundary;
+				ymax += min_border_boundary;
+			}
 		}
 		if ( xaxis_ == null) {
 			xmin = dxmin;
@@ -498,4 +506,7 @@ public class DataSet {
 	}
 
 	private boolean _dates_needed;
+
+	private static double min_max_epsilon = 0.01;
+	private static double min_border_boundary = 2.5;
 }
