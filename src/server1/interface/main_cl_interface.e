@@ -143,7 +143,7 @@ feature -- Basic operations
 										output_device /= Void
 			end
 			from
-				end_client := false; exit_server := false
+				end_client := False; exit_server := False
 			until
 				end_client or exit_server
 			loop
