@@ -120,8 +120,6 @@ feature -- Access
 			create l.make (9)
 			Result.extend (l, Basic_numeric_command)
 			l.extend (command_with_generator ("BASIC_NUMERIC_COMMAND"))
-			l.extend (command_with_generator ("OPENING_PRICE"))
-			l.extend (command_with_generator ("OPEN_INTEREST"))
 			l.extend (command_with_generator ("VOLUME"))
 			l.extend (command_with_generator ("LOW_PRICE"))
 			l.extend (command_with_generator ("HIGH_PRICE"))
