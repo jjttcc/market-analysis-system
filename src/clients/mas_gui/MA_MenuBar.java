@@ -5,7 +5,8 @@ package mas_gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
-import support.ErrorBox;
+import java.util.Date;
+import support.*;
 import application_support.MA_Configuration;
 
 // The Market Analysis GUI menu bar
@@ -62,6 +63,9 @@ public class MA_MenuBar extends MenuBar {
 		});
 		reload.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Date start_date = protocol_util.one_second_later(
+					null);
+//!!!!: chart.last_date_time());
 				MA_Configuration.application_instance().reload();
 			}
 		});
@@ -315,6 +319,10 @@ public class MA_MenuBar extends MenuBar {
 	private Menu indicator_menu;
 	private Menu period_menu;
 	private IndicatorColors indicator_colors;
+
+	private static NetworkProtocolUtilities protocol_util =
+		new NetworkProtocolUtilities();
+
 	public static final String daily_period = "Daily";
 	public static final String weekly_period = "Weekly";
 	public static final String monthly_period = "Monthly";
