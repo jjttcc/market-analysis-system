@@ -404,7 +404,6 @@ install_files() {
 		if [ "$libresult" -eq 0 ]; then
 			cp -fR doc/* $docdir
 			docresult=$?
-			cp -f README $basedir/doc/MAIN_README
 		fi
 	fi
 	if [ "$binresult" -ne 0 ]; then
