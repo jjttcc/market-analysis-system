@@ -74,7 +74,12 @@ abstract public class DataSet extends BasicUtilities {
 	**/
 	public abstract boolean last_tuple_matches_first(DataSet d);
 
-	public abstract boolean need_a_name(DataSet d, int this_index, int d_index);
+	/**
+	* Does the date and time of the tuple of `this' at index `this_index'
+	* match the date and time of the tuple of `d' at index `d_index'?
+	**/
+	public abstract boolean date_time_matches(DataSet d, int this_index,
+		int d_index);
 
 // Element change
 

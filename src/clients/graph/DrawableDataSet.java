@@ -196,13 +196,6 @@ public class DrawableDataSet extends BasicDataSet
 		}
 		assert implies(d == null, size() == oldsize): POSTCONDITION;
 		assert implies(d != null, size() == oldsize + d.size()): POSTCONDITION;
-/*!!!!obsolete - remove:
-		if (d != null && ! (size() == oldsize + d.size())) {
-			throw new Error("append: postcondition 2 violated");
-		} else if (d == null && (size() != oldsize)) {
-			throw new Error("append: postcondition 1 violated");
-		}
-*/
 	}
 
 	public void set_drawer(BasicDrawer d) {
@@ -370,20 +363,6 @@ System.out.println("drawer() != null: " + drawer() != null);
 			xmax = dxmax;
 		}
 		range_set = true;
-	}
-
-	/**
-	* Number of components in a data tuple - for example, 2 (x, y) for
-	* a simple point
-	* @precondition
-	*    drawer != null
-	*/
-//!!!:
-	protected int stride_old_remove_me() {
-		if (drawer == null) {
-			throw new Error("assertion violated in 'stride()': drawer != null");
-		}
-		return drawer.drawing_stride();
 	}
 
 	/**

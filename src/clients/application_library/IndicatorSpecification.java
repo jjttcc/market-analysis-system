@@ -40,20 +40,26 @@ abstract public class IndicatorSpecification extends DataSpecification {
 
 // Element change
 
+	/**
+	* Append data set `d' to the `current_data'.
+	* Precondition: d != null && d.size() > 0
+	* Precondition: last_append_changed_state()
+	**/
 	public void append_data(DataSet d) {
+		assert d != null && d.size() > 0: PRECONDITION;
 		DataSet data = current_data();
 		if (! data.last_date_time_matches_first(d)) {
-			if (data.size() > 1 && data.need_a_name(d, data.size() - 2, 0)) {
+			if (data.size() > 1 &&
+					data.date_time_matches(d, data.size() - 2, 0)) {
+
 				data.remove_last_record();
 				data.remove_last_record();
-System.out.println("IS app_data - 2 records removed");
+			} else {
+				// No records removed.
+				System.out.println(new Error("Possible code defect detected"));
 			}
-else {
-System.out.println("IS app_data - NOTHING removed");
-}
 		} else {
 			data.remove_last_record();
-System.out.println("IS app_data - 1 record removed");
 		}
 		data.append(d);
 		last_append_changed_state = true;
@@ -67,12 +73,6 @@ System.out.println("IS app_data - 1 record removed");
 	// Set `selected' to false.
 	public void unselect() {
 		selected = false;
-	}
-
-// Hook routine implementations
-
-	protected boolean bypass_append_data_guards() {
-		return true;
 	}
 
 // Implementation - attributes

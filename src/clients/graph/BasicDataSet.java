@@ -187,24 +187,18 @@ public class BasicDataSet extends DataSet implements AssertionConstants {
 			if (! new_data.isEmpty() && ! data.isEmpty()) {
 				result = true;
 				int stride = stride();
-//!!!:
-System.out.println("x - stride: " + stride);
 				for (int i = 0; result && i < stride; ++i) {
 					Double current_field =
 						((Double) data.get(data.size() - (stride - i)));
 					Double new_field = ((Double) new_data.get(i));
 					result = current_field.equals(new_field);
-System.out.println("loop (i: " + i + ") - result: " + result);
-System.out.println("comparing " + data.size() + " - " + (1 + i) + " and " + i);
-System.out.println("cur field, new field: " + current_field + ", " + new_field);
 				}
 			}
 		}
-System.out.println("last tupe matches first returning: " + result);
 		return result;
 	}
 
-	public boolean need_a_name(DataSet d, int this_index, int d_index) {
+	public boolean date_time_matches(DataSet d, int this_index, int d_index) {
 
 		boolean result = false;
 		if (d != null) {

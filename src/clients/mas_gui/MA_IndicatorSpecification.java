@@ -25,11 +25,6 @@ public class MA_IndicatorSpecification extends IndicatorSpecification {
 		data = d;
 	}
 
-//!!!!:
-	public void old_remove_me_please_append_data(DataSet d) {
-		data.append(d);
-	}
-
 // Removal
 
 	public void clear_data() {

@@ -97,9 +97,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 
 	public Calendar start_date() {
 		Calendar result = data_manager.latest_date_time();
-		if (result != null) {
-//!!!!:			result = protocol_util.one_second_later(result);
-		}
 		return result;
 	}
 
