@@ -151,11 +151,14 @@ feature -- Status setting
 feature -- Cursor movement
 
 	start is
+		local
+			sym: ANY
 		do
-			start_implementation (external_handle, symbol, intraday)
+			sym := symbol.to_c
+			start_implementation (external_handle, $sym, intraday)
 			if external_error (external_handle) then
 				set_error_message ("Error occurred reading from external %
-					%data source", true)
+					%data source", true, false)
 			end
 			field_index := 1
 			record_index := 1
@@ -166,7 +169,7 @@ feature -- Cursor movement
 			advance_to_next_field_implementation (external_handle)
 			if external_error (external_handle) then
 				set_error_message ("Error occurred reading from external %
-					%data source", true)
+					%data source", true, false)
 			end
 			field_index := field_index + 1
 		end
@@ -176,7 +179,7 @@ feature -- Cursor movement
 			advance_to_next_record_implementation (external_handle)
 			if external_error (external_handle) then
 				set_error_message ("Error occurred reading from external %
-					%data source", true)
+					%data source", true, false)
 			end
 			record_index := record_index + 1
 			field_index := 1
@@ -204,7 +207,7 @@ feature -- Input
 							string_from_pointer (
 								last_external_error(external_handle))>>)
 					end
-					last_exception_status.set_fatal (true)
+					last_exception_status.set_fatal (false)
 					raise (error_string)
 				end
 			end
@@ -218,7 +221,7 @@ feature -- Input
 			last_character := current_character (external_handle)
 			if external_error (external_handle) then
 				set_error_message ("Error occurred reading from external %
-					%data source", true)
+					%data source", true, false)
 			end
 		end
 
@@ -241,7 +244,7 @@ feature -- Input
 						string_from_pointer (
 							last_external_error(external_handle))>>)
 				end
-				last_exception_status.set_fatal (true)
+				last_exception_status.set_fatal (false)
 				raise (error_string)
 			end
 		ensure then
@@ -264,7 +267,7 @@ feature -- Input
 							string_from_pointer (
 								last_external_error(external_handle))>>)
 					end
-					last_exception_status.set_fatal (true)
+					last_exception_status.set_fatal (false)
 					raise (error_string)
 				end
 			end
@@ -285,7 +288,7 @@ feature -- Input
 							string_from_pointer (
 								last_external_error(external_handle))>>)
 					end
-					last_exception_status.set_fatal (true)
+					last_exception_status.set_fatal (false)
 					raise (error_string)
 				end
 			end
@@ -374,7 +377,7 @@ feature {NONE} -- Implementation
 			make_available_symbols (external_handle)
 			if external_error (external_handle) then
 				set_error_message ("Error occurred obtaining symbol list",
-					true)
+					true, true)
 			else
 				create su.make (string_from_pointer (
 					available_symbols (external_handle)))
@@ -394,7 +397,7 @@ feature {NONE} -- Implementation
 			-- Handle for external input sequence data used by
 			-- external routines
 
-	set_error_message (msg: STRING; exc: BOOLEAN) is
+	set_error_message (msg: STRING; exc: BOOLEAN; fatal: BOOLEAN) is
 			-- Set `error_string' from current error message from
 			-- external module, prepended with `msg'.  If `exc',
 			-- raise an exception with the resulting message.
@@ -407,12 +410,16 @@ feature {NONE} -- Implementation
 			last_error_fatal := true
 			s := string_from_pointer (last_external_error (external_handle))
 			if not msg.empty then
-				error_string := concatenation (<<msg, ":%N", s>>)
+				if not s.empty then
+					error_string := concatenation (<<msg, ":%N", s>>)
+				else
+					error_string := msg
+				end
 			else
 				error_string := s
 			end
 			if exc then
-				last_exception_status.set_fatal (true)
+				last_exception_status.set_fatal (fatal)
 				raise (error_string)
 			end
 		ensure
@@ -491,7 +498,7 @@ feature {NONE} -- Implementation - externals
 			"C"
 		end
 
-	start_implementation (handle: POINTER; sym: STRING; intrad: BOOLEAN) is
+	start_implementation (handle: POINTER; sym: POINTER; intrad: BOOLEAN) is
 		require
 			handle_valid: handle /= Void
 		external
