@@ -45,7 +45,10 @@ feature -- Basic operations
 			printer: MARKET_TUPLE_PRINTER
 		do
 			if not l.empty then
+				-- clone to allow concurrent printing
 				printer := clone (tuple_printers @ l.first.generator)
+				printer.set_print_start_date (print_start_date)
+				printer.set_print_end_date (print_end_date)
 				if output_medium /= Void then
 					printer.set_output_medium (output_medium)
 				else	-- default to standard io
@@ -129,18 +132,14 @@ feature {NONE} -- Implementation
 			create ct.make
 			create cvt.make
 			create boit.make
-			create mtprinter.make (print_start_date, print_end_date,
-				output_field_separator, output_date_field_separator,
-				output_record_separator)
-			create bmtprinter.make (print_start_date, print_end_date,
-				output_field_separator, output_date_field_separator,
-				output_record_separator)
-			create vtprinter.make (print_start_date, print_end_date,
-				output_field_separator, output_date_field_separator,
-				output_record_separator)
-			create oitprinter.make (print_start_date, print_end_date,
-				output_field_separator, output_date_field_separator,
-				output_record_separator)
+			create mtprinter.make (output_field_separator,
+				output_date_field_separator, output_record_separator)
+			create bmtprinter.make (output_field_separator,
+				output_date_field_separator, output_record_separator)
+			create vtprinter.make (output_field_separator,
+				output_date_field_separator, output_record_separator)
+			create oitprinter.make (output_field_separator,
+				output_date_field_separator, output_record_separator)
 			create Result.make (5)
 			Result.extend (mtprinter, st.generator)
 			Result.extend (bmtprinter, bmt.generator)

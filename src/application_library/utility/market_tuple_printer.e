@@ -14,21 +14,17 @@ creation
 
 feature -- Initialization
 
-	make (start_date, end_date: DATE; field_sep, date_field_sep,
-			record_sep: STRING) is
+	make (field_sep, date_field_sep, record_sep: STRING) is
 		require
 			not_void: field_sep /= Void and date_field_sep /= Void and
 				record_sep /= Void
 		do
-			print_start_date := start_date
-			print_end_date := end_date
 			field_separator := field_sep
 			date_field_separator := date_field_sep
 			record_separator := record_sep
 			output_medium := io.default_output
 		ensure
 			fields_set: 
-				print_start_date = start_date and print_end_date = end_date and
 				field_separator = field_sep and date_field_separator =
 				date_field_sep and record_separator = record_sep and
 				output_medium = io.default_output
@@ -55,6 +51,27 @@ feature -- Status setting
 			output_medium := arg
 		ensure
 			output_medium_set: output_medium = arg and output_medium /= Void
+		end
+
+	set_print_start_date (arg: DATE) is
+			-- Set print_start_date to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			print_start_date := arg
+		ensure
+			print_start_date_set: print_start_date = arg and
+				print_start_date /= Void
+		end
+
+	set_print_end_date (arg: DATE) is
+			-- Set print_end_date to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			print_end_date := arg
+		ensure
+			print_end_date_set: print_end_date = arg and print_end_date /= Void
 		end
 
 feature -- Basic operations
