@@ -254,8 +254,6 @@ cluster
 
 	networking (eiffel_components):		"$/networking"
 
-	eiffel_component_test (eiffel_components):		"$/test"
-
 	ise:		"$ISE_EIFFEL/library"
 
 	kernel (ise):		"$/base/kernel"
