@@ -6,7 +6,8 @@ root
 
 default
 	assertion (all)
-	arguments ("-f , /tmp/ibm.txt")
+	arguments ("-f , -i 15-minute /tmp/dtst1.15-minute -no-volume")
+	arguments ("-f , -nonstd /tmp/ibm.txt")
 	arguments ("-f , nonexistent.txt")
 	arguments ("-p 30001 -b")
 	arguments ("-w -f , -b 5555")
@@ -177,6 +178,8 @@ cluster
 	ma_library:		"$MAS/src/library"
 
 	function_abstractions (ma_library):		"$/function_abstractions"
+
+	high_level_facilities (ma_library):		"$/high_level_facilities"
 
 	function_types (ma_library):		"$/function_types"
 
