@@ -24,8 +24,8 @@ Final Steps:
     correctly.
 8.  Run build_rpm to make the mas rpm file and if any problems occur that
     require it, go back to a previous step.
-9.  Copy the indicators_persist and generators_persist files created
-    in step 7. to the Windows machine to the correct directory.
+9.  Check in the indicators_persist and generators_persist files created
+    in step 7. (in build/config) and check them out on the Windows machine.
 10. Copy mas_windows*.tar.gz to the Windows machine to the correct directory.
 11. Run prepare_windows_setup on Windows.
 12. Run Inno config. on the latest inno_config.iss file using the source
