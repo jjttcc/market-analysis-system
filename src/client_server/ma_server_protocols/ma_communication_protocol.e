@@ -21,6 +21,10 @@ feature -- String constants
 	Eot: STRING is ""
 			-- End of transmission specifier - for command-line clients
 
+	Compression_on_flag: STRING is "<@z@>"
+			-- Flag (at beginning of a message) that indicates that
+			-- the message is compressed
+
 	Input_field_separator: STRING is "%T"
 			-- Field separator for input received by the server
 
