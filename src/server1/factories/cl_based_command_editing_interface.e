@@ -24,20 +24,16 @@ feature -- Access
 	market_function: MARKET_FUNCTION
 			-- Market function to use for those commands that need it
 
-	integer_selection (msg: ARRAY [STRING]): INTEGER is
+	integer_selection (msg: STRING): INTEGER is
 		do
-			print ("Enter an integer value for ")
-			print_list (msg)
-			print (": ")
+			print_list (<<"Enter an integer value for ", msg, ": ">>)
 			read_integer
 			Result := last_integer
 		end
 
-	real_selection (msg: ARRAY [STRING]): REAL is
+	real_selection (msg: STRING): REAL is
 		do
-			print ("Enter a real value for ")
-			print_list (msg)
-			print (": ")
+			print_list (<<"Enter a real value for ", msg, ": ">>)
 			read_real
 			Result := last_real
 		end
@@ -92,14 +88,13 @@ feature -- Miscellaneous
 
 feature {NONE} -- Hook methods
 
-	current_command_selection (cmd_list: LIST [COMMAND]; msg: ARRAY [STRING]):
+	current_command_selection (cmd_list: LIST [COMMAND]; msg: STRING):
 				COMMAND is
 		local
 			cmds: LIST [COMMAND]
 		do
-			print ("Select ")
-			print_list (msg)
-			print (" from current command tree? (y/n) ")
+			print_list (<<"Select ", msg,
+						" from current command tree? (y/n) ">>)
 			inspect
 				selected_character
 			when 'y', 'Y' then
@@ -110,7 +105,7 @@ feature {NONE} -- Hook methods
 			end
 		end
 
-	user_command_selection (cmds: LIST [COMMAND]; msg: ARRAY [STRING]):
+	user_command_selection (cmds: LIST [COMMAND]; msg: STRING):
 				COMMAND is
 		local
 			op_names: ARRAYED_LIST [STRING]
@@ -128,8 +123,7 @@ feature {NONE} -- Hook methods
 			until
 				Result /= Void
 			loop
-				print_selection_msg ("Select an operator",
-									" for ", msg)
+				print_list (<<"Select an operator for ", msg, ":%N">>)
 				print_names_in_1_column (op_names)
 				read_integer
 				if
@@ -164,7 +158,7 @@ feature {NONE} -- Hook methods
 			end
 		end
 
-	do_choice (descr: ARRAY [STRING]; choices: LIST [PAIR [STRING, BOOLEAN]];
+	do_choice (descr: STRING; choices: LIST [PAIR [STRING, BOOLEAN]];
 				allowed_selections: INTEGER) is
 		local
 			finished, choice_made: BOOLEAN
@@ -173,8 +167,8 @@ feature {NONE} -- Hook methods
 		do
 			from
 				slimit := allowed_selections
-				print_list (descr)
-				print_list (<<"%N(Up to ", allowed_selections, " choices)%N">>)
+				print_list (<<descr, "%N(Up to ",
+							allowed_selections, " choices)%N">>)
 				from
 					!!names.make (choices.count)
 					choices.start
@@ -213,23 +207,6 @@ feature {NONE} -- Hook methods
 		end
 
 feature {NONE} -- Utility routines
-
-	print_selection_msg (s1, s2: STRING; svector: ARRAY [STRING]) is
-			-- Print `s1'; and print `svector', if it's not Void; and print
-			-- `s2' if both `svector' and `s2' are not void.  Then print
-			-- a colon and a new line.
-		require
-			s1_not_void: s1 /= Void
-		do
-			print (s1)
-			if svector /= Void then
-				if s2 /= Void then
-					print (s2)
-				end
-				print_list (svector)
-			end
-			print (":%N")
-		end
 
 	print_operand_trees (cmd: COMMAND; level: INTEGER) is
 			-- Call print_command_tree on all of `cmd's operands, if
