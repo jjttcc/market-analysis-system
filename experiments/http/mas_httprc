@@ -13,18 +13,10 @@ path	table.csv?s=<symbol>&a=<startmonth>&b=<startday>&c=<startyear>&d=<endmonth>
 symbol_file	symbols
 
 # The command to post-process the retrieved data, usually for the purpose of
-# converting it into an expected format.  The following example, if
-# uncommented, will specify a program or script named convert_data (if
-# it's in the users's path):
-# post_process_command	external:convert_data
-#
-# 'external' specifies that an external program is to be executed.  If
-# convert_data is not in the user's path, the full path to the file needs
-# to be specified.  The following line specifies that the inernal
-# conversion component called "yahoo" is to be used, rather than executing
-# an external program.  (As of July 2002, this is the only internal
-# conversion component available; more may be added later.)
-post_process_command	internal:yahoo
+# converting it into an expected format.  In this case, the specification
+# is for a conversion component called "yahoo", which, as of July 2002, is
+# the only internal conversion component available; more may be added later.)
+post_process_command	yahoo
 
 # The time at which to attempt to retrieve the latest end-of-day data from
 # the http data-source site.  It should be in the user's local time.
