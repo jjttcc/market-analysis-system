@@ -15,7 +15,7 @@ public class TA_ScrollPane extends ScrollPane
 		chart = parent_chart;
 		drawer = new BarDrawer();
 		_main_graph = new G2Dint();
-		_indicator_graph = new G2Dint();
+		_indicator_graph = new IndicatorGraph();
 		period_type_choice = new Choice();
 		initialize_period_type_choice(period_types);
 
@@ -29,11 +29,9 @@ public class TA_ScrollPane extends ScrollPane
 		main_panel.add (button_panel, "West");
 		button_panel.add (top_button_panel, "North");
 		button_panel.add (bottom_button_panel, "South");
-		top_button_panel.add(new Button("Go"));
+		//top_button_panel.add(new Button("Dummy1"));
 		top_button_panel.add(period_type_choice);
-		top_button_panel.add(new Button("Modify"));
-		bottom_button_panel.add(new Button("Transact"));
-		bottom_button_panel.add(new Button("Stall"));
+		//bottom_button_panel.add(new Button("Dummy2"));
 
 		graph_panel.add(_main_graph, "North");
 		graph_panel.add(_indicator_graph, "South");
@@ -87,7 +85,8 @@ public class TA_ScrollPane extends ScrollPane
 		});
 	}
 
-	private G2Dint _main_graph, _indicator_graph;
+	private G2Dint _main_graph;
+	private G2Dint _indicator_graph;
 	DataSet data;
 	BarDrawer drawer;
 	Choice period_type_choice;
