@@ -32,7 +32,7 @@ set_up()
 {
 	successes=0
 	test_count=0
-	flags="11259"
+	flags=""
 	if [ ! -d bin ]; then
 		echo "Where's the bin directory?"
 		exit -1
