@@ -160,7 +160,9 @@ feature -- Basic operations
 							"     Set date for market analysis (d) ",
 							"Edit event registrants (r)%N",
 							"     End client session (x) Help (h) ",
-							"Product information (p) ", eom>>)
+							"Product information (p)%N",
+							"     Show settings (w) ",
+							eom>>)
 				inspect
 					character_selection (Void)
 				when 's', 'S' then
@@ -191,6 +193,8 @@ feature -- Basic operations
 					print (help @ help.Main)
 				when 'p', 'P' then
 					print (product_info)
+				when 'w', 'W' then
+					print (settings)
 				when '%/5/' then -- ^E, for exit
 					exit_server := True
 				when '!' then
@@ -562,6 +566,48 @@ feature {NONE} -- Implementation - utilities
 				"%N", version.name, "%NVersion: ", version.number, "%N",
 				version.copyright, "%NVersion date: ", version.informal_date,
 				"%NLicence:%N%N", version.license_information>>)
+		end
+
+	settings: STRING is
+		local
+			env: expanded APP_ENVIRONMENT
+			gs: expanded GLOBAL_SERVER
+			cl: MAS_COMMAND_LINE
+			constants: expanded APPLICATION_CONSTANTS
+			vnames: expanded APP_ENVIRONMENT_VARIABLE_NAMES
+		do
+			cl := gs.command_line_options
+			if cl.use_db then
+				Result := concatenation(<<"Obtaining data from a database ",
+					"management system.%NDatabase configuration file: ">>)
+				if env.db_config_file_name /= Void then
+					Result.append (env.file_name_with_app_directory (
+							env.db_config_file_name))
+				else
+					Result.append (env.file_name_with_app_directory (
+						constants.Default_database_config_file_name))
+				end
+			else
+				Result := concatenation (<<"Obtaining data from files.%N",
+					"Stock split file: ">>)
+				if env.stock_split_file_name /= Void then
+					Result.append (env.file_name_with_app_directory (
+							env.stock_split_file_name))
+				else
+					Result.append (env.file_name_with_app_directory (
+						constants.Default_stock_split_file_name))
+				end
+			end
+			Result.append ("%N")
+			if env.app_directory = Void then
+				Result.append (concatenation(<<"Application directory ",
+					"variable (", vnames.application_directory_name,
+					") is not set.">>))
+			else
+				Result.append (concatenation(<<"Application directory ",
+					"(", vnames.application_directory_name,
+					") is ", env.app_directory>>))
+			end
 		end
 
 	make_lock (name: STRING): FILE_LOCK is
