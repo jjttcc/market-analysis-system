@@ -1,0 +1,16 @@
+# Example specification for cluster dependency checking with "check_dep"
+# Structure: "directory<Tab>rank"
+#    Where rank is an integer > 0 - The lower the number, the higher the
+#    abstraction level of the associated cluster.  (Higher-level clusters
+#    should not have lower-level clusters dependent on them.)
+
+application_library	10
+clients	30
+contrib	30
+eiffel_library	4
+library	7
+main_test_app	25
+mct	25
+pfm	25
+scripts	30
+server1	20
