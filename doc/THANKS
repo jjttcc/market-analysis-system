@@ -30,3 +30,6 @@ Windows systems much easier than before.
 
 Berend de Boer - whose magnificent e-POSIX package is used in the MCT
 program and is likely to be used in other MAS components in the future.
+
+Eric Bezault - whose excellent GOBO library package is used indirectly
+by MAS (via ECLI) and which is likely to be used directly in the future.
