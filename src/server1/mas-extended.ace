@@ -10,6 +10,7 @@ default
 	assertion (ensure)
 	assertion (loop)
 	assertion (invariant)
+	arguments (" -o -b 12345 -f , -w -report_back jupiter.milkyway.org^41512")
 	arguments (" ")
 	arguments ("-o -f , -w 12345")
 	arguments ("-o -f , /tmp/ibm.txt")
