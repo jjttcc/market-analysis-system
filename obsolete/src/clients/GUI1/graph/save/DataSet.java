@@ -63,13 +63,6 @@ public class DataSet extends Object {
    * @see graph.Graph2D
    */
       public Graph2D g2d;
-
-  /**
-   *    The linestyle to employ when joining the data points with
-   *    straight line segments. Currently only solid and no line
-   *    are supported.
-   */
-      public int   linestyle     = LINE;
   /**
    *    The color of the straight line segments
    */
@@ -434,16 +427,13 @@ public class DataSet extends Object {
    */
 	public void draw_data(Graphics g, Rectangle bounds) {
 		Color c = g.getColor();
-		if (linestyle != DataSet.NOLINE ) {
-			if ( linecolor != null) g.setColor(linecolor);
-		}
+		if ( linecolor != null) g.setColor(linecolor);
 		_drawer.set_data(data);
 		_drawer.set_xaxis(xaxis);
 		_drawer.set_yaxis(yaxis);
 		_drawer.set_maxes(xmax, ymax, xmin, ymin);
 		_drawer.set_ranges(xrange, yrange);
 		_drawer.set_clipping(clipping);
-		_drawer.set_linestyle(linestyle);
 		_drawer.set_stride(stride);
 		_drawer.set_length(length);
 		draw_legend(g,bounds);
@@ -609,10 +599,8 @@ public class DataSet extends Object {
 
 
 
-          if( linestyle != DataSet.NOLINE ) {
-              if ( linecolor != null) g.setColor(linecolor);
-              g.drawLine(legend_ix,legend_iy,legend_ix+legend_length,legend_iy);
-          }
+		  if ( linecolor != null) g.setColor(linecolor);
+		  g.drawLine(legend_ix,legend_iy,legend_ix+legend_length,legend_iy);
 
           if( marker > 0 ) {
                m = g2d.getMarkers();
