@@ -117,6 +117,7 @@ class MA_Parser {
 	}
 
 	// Put the parsed data into a data set.
+	// Postcondition: result() != null && result().drawer() == drawer
 	private void process_data(Drawer drawer) throws Exception {
 		String[] date_array = null;
 		boolean has_dates = false;

@@ -155,7 +155,7 @@ public class DataSet {
 	/**
 	*  Instantiate an empty data set.
 	* @postcondition
-	*     dates_needed()
+	*     dates_needed() && drawer() == drawer
 	*/
 	public DataSet(Drawer d) {
 		_drawer = d;
@@ -182,7 +182,7 @@ public class DataSet {
 	* @precondition
 	*     d != null && d.length > 0 && n > 0 && drawer != null
 	* @postcondition
-	*     dates_needed()
+	*     dates_needed() && drawer() == drawer
 	*/
 	public DataSet(double d[], int n, Drawer drawer) throws Exception {
 		if ( d  == null || d.length == 0 || n <= 0 || drawer == null ) {

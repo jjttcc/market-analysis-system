@@ -30,7 +30,6 @@ public class MA_Connection implements NetworkProtocol
 									Output_field_separator);
 		scanner = new DataInspector();
 		main_drawer = new_main_drawer();
-		indicator_drawer = new LineDrawer(main_drawer);
 		volume_drawer = new BarDrawer(main_drawer);
 		data_parser.set_volume_drawer(volume_drawer);
 		//Process args for the host, port.
@@ -122,9 +121,11 @@ public class MA_Connection implements NetworkProtocol
 		connect();
 		send_msg(Indicator_data_request, ind + Input_field_separator +
 				symbol + Input_field_separator + period_type, session_key);
-		indicator_parser.parse(receive_msg().toString(), indicator_drawer);
+		// Note that a new indicator drawer is created each time parse is
+		// called, since indicator drawer's should not be shared.
+		indicator_parser.parse(receive_msg().toString(),
+								new_indicator_drawer());
 		_last_indicator_data = indicator_parser.result();
-		_last_indicator_data.set_drawer(indicator_drawer);
 		close_connection();
 	}
 
@@ -301,6 +302,14 @@ public class MA_Connection implements NetworkProtocol
 		return result;
 	}
 
+	private Drawer new_indicator_drawer() {
+		if (main_drawer == null) {
+			System.out.println("Code defect: main_drawer is null");
+			System.exit(-2);
+		}
+		return new LineDrawer(main_drawer);
+	}
+
 	private void usage()
 	{
 		System.err.println("Usage: MA_Client hostname port_number");
@@ -325,6 +334,5 @@ public class MA_Connection implements NetworkProtocol
 	private MA_Parser data_parser;
 	private MA_Parser indicator_parser;
 	private Drawer main_drawer;		// draws tuples in main graph
-	private Drawer indicator_drawer;// draws tuples in indicator graph
 	private Drawer volume_drawer;	// draws volume tuples
 }
