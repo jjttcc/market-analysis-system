@@ -1,0 +1,122 @@
+#!/bin/bash
+
+find_test_dir()
+{
+	if [ -d test ]
+	then
+		cd test
+	elif [ -d ../../test ]
+	then
+		cd ../../test
+	else
+		echo "Cannot find test directory - exiting ..."
+		exit -1
+	fi
+}
+
+set_up()
+{
+	successes=0
+	test_count=0
+	if [ ! -d bin ]
+	then
+		echo "Where's the bin directory?"
+		exit -1
+	fi
+	PATH=$PATH:./bin
+	type pr_dataset >/dev/null 2>&1
+	if [ $? -ne 0 ]
+	then
+		echo "Script pr_dataset is not in bin directory - exiting ..."
+		exit -1
+	fi
+	type compare_numbers >/dev/null 2>&1
+	if [ $? -ne 0 ]
+	then
+		echo "Script compare_numbers is not in bin directory - exiting ..."
+		exit -1
+	fi
+	if [ -d ../EIFGEN/F_code -a -x ../EIFGEN/F_code/main_test ]
+	then
+		exec=../EIFGEN/F_code/main_test
+	elif [ -d ../EIFGEN/W_code -a -x ../EIFGEN/W_code/main_test ]
+	then
+		exec=../EIFGEN/W_code/main_test
+		ln -s ../EIFGEN/W_code/melted.eif .
+	else
+		echo "Cannot find executable in ../EIFGEN/F_code or ../EIFGEN/W_code."
+		echo "exiting ..."
+		exit -1
+	fi
+	if [ ! -r input/test_data -o ! -r input/ma -o ! -r input/stoch -o \
+		! -r input/williams ]
+	then
+		echo "Cannot find test input file - exiting ..."
+		exit -1
+	else
+		macd_etc_in_file=input/test_data
+		ma_in_file=input/ma
+		momentum_in_file=input/momentum
+		stoch_in_file=input/stoch
+		williams_in_file=input/williams
+		roc_in_file=input/roc
+	fi
+	if [ -e output -a ! -d output ]
+	then
+		echo "Cannot create directory named output since a file already"
+		echo "exists by that name - exiting ..."
+		exit -1
+	elif [ ! -e output ]
+	then
+		mkdir output
+	fi
+}
+
+run_test()
+{
+	test_count=$(expr $test_count + 1)
+	pr_dataset $outputfile "$*" >output/run_test.out
+	errors="$(compare_numbers output/run_test.out reference/$ref_file)"
+	if [ -z "$errors" ]
+	then
+		echo "$*" test succeeded
+		successes=$(expr $successes + 1)
+	else
+		echo "$*" test failed - appending errors to file output/errors
+		echo $errors >>output/errors
+	fi
+}
+
+curdir=$(basename $PWD)
+if [ "$curdir" != test ]
+then
+	find_test_dir
+fi
+
+set_up
+outputfile=output/test1.out
+$exec $macd_etc_in_file >$outputfile
+ref_file=ema run_test "Exponential Moving Average"
+ref_file=macd run_test MACD
+ref_file=macd_sig run_test "MACD Signal"
+ref_file=macd_hist run_test "MACD Histogram"
+$exec $ma_in_file >$outputfile
+ref_file=ma run_test "Moving Average"
+$exec $momentum_in_file >$outputfile
+ref_file=momentum run_test "Momentum"
+$exec $stoch_in_file >$outputfile
+ref_file=stochK5 run_test "Stochastic %K"
+ref_file=stochD5 run_test "Stochastic %D"
+ref_file=slow_stochD3 run_test "Slow Stochastic %D"
+$exec $williams_in_file >$outputfile
+ref_file=williams run_test "Williams"
+$exec $roc_in_file >$outputfile
+ref_file=roc run_test "Rate of Change"
+
+echo "$successes out of $test_count tests succeeded."
+if [ "$successes" -eq "$test_count" ]
+then
+	exit 0
+else
+	exit 1
+fi
