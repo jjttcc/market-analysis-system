@@ -47,8 +47,10 @@ public class DataSet extends Object {
 
 	public void set_drawer (BarDrawer d)
 	{
-		drawer = d;
+		_drawer = d;
 	}
+
+	public BarDrawer drawer() { return _drawer; }
 
 /*
 ***************************
@@ -151,7 +153,7 @@ public class DataSet extends Object {
   /**
    * Drawer of price bars - e.g., tic bars or candles
    */
-	protected BarDrawer drawer;
+	protected BarDrawer _drawer;
   /**
    * The data X maximum. 
    * Once the data is loaded this will never change.
@@ -177,6 +179,11 @@ public class DataSet extends Object {
    * The array containing the actual data 
    */
       protected double data[];
+
+	// Horizontal, vertical line data
+	protected Vector hline_data;
+	protected Vector vline_data;
+
   /**
    * The number of data points stored in the data array
    */
@@ -333,6 +340,18 @@ public class DataSet extends Object {
 ** Public Methods
 ******************/
 
+	// Add y1, y2 values for a horizontal line.
+	public void add_hline(DoublePair p) {
+		if (hline_data == null) hline_data = new Vector();
+		hline_data.addElement(p);
+	}
+
+	// Add x1, x2 values for a vertical line.
+	public void add_vline(DoublePair p) {
+		if (vline_data == null) vline_data = new Vector();
+		vline_data.addElement(p);
+	}
+
   /**
    * Append data to the data set.
    * @param d Array containing (x,y) pairs to append
@@ -434,17 +453,17 @@ public class DataSet extends Object {
 		if (linestyle != DataSet.NOLINE ) {
 			if ( linecolor != null) g.setColor(linecolor);
 		}
-		drawer.set_data(data);
-		drawer.set_xaxis(xaxis);
-		drawer.set_yaxis(yaxis);
-		drawer.set_maxes(xmax, ymax, xmin, ymin);
-		drawer.set_ranges(xrange, yrange);
-		drawer.set_clipping(clipping);
-		drawer.set_linestyle(linestyle);
-		drawer.set_stride(stride);
-		drawer.set_length(length);
+		_drawer.set_data(data);
+		_drawer.set_xaxis(xaxis);
+		_drawer.set_yaxis(yaxis);
+		_drawer.set_maxes(xmax, ymax, xmin, ymin);
+		_drawer.set_ranges(xrange, yrange);
+		_drawer.set_clipping(clipping);
+		_drawer.set_linestyle(linestyle);
+		_drawer.set_stride(stride);
+		_drawer.set_length(length);
 		draw_legend(g,bounds);
-		drawer.draw_data(g, bounds);
+		_drawer.draw_data(g, bounds, hline_data, vline_data);
 		g.setColor(c);
 	}
 
