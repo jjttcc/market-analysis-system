@@ -134,6 +134,7 @@ feature -- Basic operations
 				mail_cmd.append (msg_file.name)
 				msg_file.flush
 				system (mail_cmd)
+				if not msg_file.is_closed then msg_file.close end
 				msg_file.delete
 			end
 		end
