@@ -124,6 +124,10 @@ feature -- Status setting
 			input2.set_innermost_input (f)
 			target1 := input1.output
 			target2 := input2.output
+			-- !!!Added 1/29/2001 - check it (next 3 lines):
+			if operator /= Void then
+				operator.initialize (Current)
+			end
 		end
 
 	set_function_for_operation (left: BOOLEAN) is
@@ -142,6 +146,9 @@ feature -- Basic operations
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 			s: STRING
 		do
+			check
+				tradables_not_void: tradables /= Void
+			end
 			create {LINKED_LIST [MARKET_EVENT]} product.make
 			t := tradables.item (period_type)
 			if t /= Void and not tradables.error_occurred then
