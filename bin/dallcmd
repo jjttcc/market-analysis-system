@@ -1,0 +1,29 @@
+#!/bin/bash
+
+report_result() {
+	result=0
+	for v; do
+		if [ "$v" -ne 0 ]; then
+			result=$v
+			break
+		fi
+	done
+	echo  $result
+}
+
+{
+cvs diff eiffel_library/ 2>&1;res1=$?
+cvs diff finance/ 2>&1;res2=$?
+cvs diff java_library/ 2>&1;res3=$?
+}  >/tmp/dall
+#if [ "$res1" = 0 -a "$res2" = 0 ]; then
+#	echo  $res2
+#else
+#	if [ "$res1" != 0 ]; then
+#		echo  $res1
+#	else
+#		echo  $res2
+#	fi
+#fi
+report_result $res1 $res2 $res3
+gvim +/Index:/ /tmp/dall
