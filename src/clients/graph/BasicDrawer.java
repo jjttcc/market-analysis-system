@@ -241,8 +241,9 @@ abstract public class BasicDrawer extends Drawer {
 	// is from 8 to 37.
 	void draw_reference_values(Graphics g, Rectangle main_bounds,
 			Rectangle ref_bounds) {
-		int start;
-		long step = 0, y;
+		long start;
+		long step = 0;
+		long y;
 		Vector y_values = new Vector();	// Double
 		String[] y_strings;
 		Double d;
@@ -257,7 +258,7 @@ abstract public class BasicDrawer extends Drawer {
 				break;
 			}
 		}
-		start = (int) (Math.floor(ymin / step) * step + step);
+		start = (long) (Math.floor(ymin / step) * step + step);
 		for (y = start; y < ymax; y += step) {
 			y_values.addElement(new Double(y));
 		}
@@ -362,7 +363,7 @@ abstract public class BasicDrawer extends Drawer {
 	static protected RefSpec[] refvalue_specs;
 
 	static {
-		refvalue_specs = new RefSpec[19];
+		refvalue_specs = new RefSpec[28];
 		refvalue_specs[0] = new RefSpec(0, 15, 1);
 		refvalue_specs[1] = new RefSpec(15, 30, 5);
 		refvalue_specs[2] = new RefSpec(30, 150, 10);
@@ -381,8 +382,26 @@ abstract public class BasicDrawer extends Drawer {
 		refvalue_specs[15] = new RefSpec(150000000, 300000000, 50000000);
 		refvalue_specs[16] = new RefSpec(300000000, 1500000000, 100000000);
 		refvalue_specs[17] = new RefSpec(1500000000, 3000000000L, 500000000);
-		refvalue_specs[18] = new RefSpec(3000000000L, 9000000000000,
-			1000000000);
+		refvalue_specs[18] = new RefSpec(3000000000L, 15000000000L,
+			1000000000L);
+		refvalue_specs[19] = new RefSpec(15000000000L, 30000000000L,
+			5000000000L);
+		refvalue_specs[20] = new RefSpec(30000000000L, 150000000000L,
+			10000000000L);
+		refvalue_specs[21] = new RefSpec(150000000000L, 300000000000L,
+			50000000000L);
+		refvalue_specs[22] = new RefSpec(300000000000L, 1500000000000L,
+			100000000000L);
+		refvalue_specs[23] = new RefSpec(1500000000000L, 3000000000000L,
+			500000000000L);
+		refvalue_specs[24] = new RefSpec(3000000000000L, 15000000000000L,
+			1000000000000L);
+		refvalue_specs[25] = new RefSpec(15000000000000L, 30000000000000L,
+			5000000000000L);
+		refvalue_specs[26] = new RefSpec(30000000000000L, 150000000000000L,
+			10000000000000L);
+		refvalue_specs[27] = new RefSpec(150000000000000L,
+			9000000000000000000L, 50000000000000L);
 	}
 
 	protected Axis xaxis;
