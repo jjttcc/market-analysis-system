@@ -16,7 +16,7 @@ class USER inherit
 			all
 		end
 
-	PRINTING
+	EXCEPTIONS
 		export {NONE}
 			all
 		end
@@ -52,6 +52,9 @@ feature -- Access
 				Result := email_addresses @ 1
 			end
 		end
+
+	last_error: STRING
+			-- Error message for last error that occurred
 
 feature -- Element change
 
@@ -100,7 +103,8 @@ feature -- Basic operations
 
 	notify_by_email (s, subject: STRING) is
 			-- Send message `s' to the user by email with `subject' as the
-			-- subject.
+			-- subject.  If the send fails, last_error will reference
+			-- an appropriate error message.
 		require
 			s_not_void: s /= Void
 			at_least_one_address: not email_addresses.empty
@@ -109,6 +113,7 @@ feature -- Basic operations
 			msg_file: PLAIN_TEXT_FILE
 			mail_cmd: STRING
 		do
+			last_error := Void
 			msg_file := temporary_file (email_addresses @ 1)
 			if not tmp_file_failed then
 				msg_file.put_string (s)
@@ -144,43 +149,65 @@ feature {NONE}
 			tmpdir: DIRECTORY
 			i: INTEGER
 			fname, dirname: STRING
+			exception_occurred: BOOLEAN
 		do
-			tmp_file_failed := false
-			!!dirname.make (4)
-			dirname.append_character (Directory_separator)
-			dirname.append ("tmp")
-			!!tmpdir.make (dirname)
-			if not tmpdir.exists then
-				!!tmpdir.make (".")
-			end
-			from
-				fname := clone (s)
-				fname.append_integer (s.hash_code)
-				tmpdir.open_read
-				i := 1
-			until
-				not tmpdir.has_entry (fname) or i > 20
-			loop
-				fname.append_integer (i)
-				i := i + 1
-			end
-			if tmpdir.has_entry (fname) then
+			if exception_occurred then
+				set_last_error (<<"Failed to open temporary file: ",
+								fname, " (", meaning(exception), ")">>)
 				tmp_file_failed := true
 			else
-				!!Result.make_open_write (fname)
+				tmp_file_failed := false
+				!!dirname.make (4)
+				dirname.append_character (Directory_separator)
+				dirname.append ("tmp")
+				!!tmpdir.make (dirname)
+				if not tmpdir.exists then
+					!!tmpdir.make (".")
+				end
+				fname := clone (s)
+				fname.append_integer (s.hash_code)
+				fname.prepend_character (Directory_separator)
+				fname.prepend_string (tmpdir.name)
+				tmpdir.open_read
+				from
+					i := 1
+				until
+					not tmpdir.has_entry (fname) or i > 20
+				loop
+					fname.append_integer (i)
+					i := i + 1
+				end
+				if tmpdir.has_entry (fname) then
+					tmp_file_failed := true
+					set_last_error (<<"Failed to open temporary file: ",
+									fname>>)
+				else
+					!!Result.make_open_write (fname)
+				end
 			end
 		ensure
 			failed_or_writable: tmp_file_failed or else Result.is_open_write
 		rescue
-			tmp_file_failed := true
-			print_list (<<"Error: Failed to open temporary file: ",
-				tmpdir, Directory_separator, fname, ".%N">>)
+			exception_occurred := true
+			retry
 		end
 
 	tmp_file_failed: BOOLEAN
 
-	output_field_separator, output_record_separator,
-	output_date_field_separator: STRING is ""
+	set_last_error (a: ARRAY [STRING]) is
+		local
+			i: INTEGER
+		do
+			!!last_error.make (0)
+			from
+				i := 1
+			until
+				i > a.count
+			loop
+				last_error.append (a @ i)
+				i := i + 1
+			end
+		end
 
 invariant
 
