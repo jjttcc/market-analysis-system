@@ -177,8 +177,9 @@ public class Configuration implements NetworkProtocol
 			end_date_settings.addElement(ds);
 		}
 		else {
-			FileReaderUtilities file_util = new FileReaderUtilities(fname);
+			FileReaderUtilities file_util = null;
 			try {
+				file_util = new FileReaderUtilities(fname);
 				file_util.tokenize("\n");
 			}
 			catch (IOException e) {
