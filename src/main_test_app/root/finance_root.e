@@ -31,7 +31,13 @@ feature -- Initialization
 			!!factory_builder.make (default_input_file_name)
 			tradable_builder :=
 				factory_builder.tradable_factory
-			print ("Loading data file ...%N")
+			print ("Loading data file ")
+			print (factory_builder.input_file.name)
+			if tradable_builder.no_open then
+				print (" with no open field ...%N")
+			else
+				print (" with open field ...%N")
+			end
 			tradable_builder.execute
 			tradable := tradable_builder.product
 			if tradable_builder.error_occurred then
