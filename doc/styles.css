@@ -51,6 +51,14 @@ body { background-color: #e9dcd5; }
 	background-color: #e9dcd5;
 	*/
 }
+.inner_right {
+	font-size: 90%;
+	margin-right: 9%;
+	margin-left: 2%;
+}
+.inner_left {
+	font-size: 90%;
+}
 .right_part {
 	font-size: 90%;
 	float: right;
