@@ -5,7 +5,7 @@ indexing
 	detailed_description:
 		"Each curve in the set of symmetrical curves, as well as the original %
 		%curve, is represented as a MARKET_FUNCTION.  position_factor %
-		%specifies ... !!!"
+		%specifies ... "
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
