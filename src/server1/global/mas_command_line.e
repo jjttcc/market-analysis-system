@@ -48,6 +48,7 @@ feature {NONE} -- Initialization
 			if not use_db then
 				set_file_names
 			else
+				set_keep_db_connection
 				set_symbol_list
 			end
 		end
@@ -87,7 +88,7 @@ feature -- Access
 			-- Is a database to be used for market data?
 			-- True if "-p" is found (p = persistent store)
 
-	keep_db_connection: BOOLEAN is true
+	keep_db_connection: BOOLEAN
 			-- If use_db, should the database remain connected until the
 			-- process terminates instead of connecting and disconnecting
 			-- for each query?
@@ -197,6 +198,15 @@ feature {NONE} -- Implementation
 		do
 			if option_in_contents ('p') then
 				use_db := true
+				contents.remove
+			end
+		end
+
+	set_keep_db_connection is
+		do
+			keep_db_connection := true -- Default value
+			if option_string_in_contents ("reconnect") then
+				keep_db_connection := false
 				contents.remove
 			end
 		end
@@ -341,6 +351,40 @@ feature {NONE} -- Implementation
 				contents.item.item (2) = c) or (contents.item.item (1) =
 				option_sign and contents.item.item (2) = option_sign and
 				contents.item.item (3) = c)
+		end
+
+	option_string_in_contents (s: STRING): BOOLEAN is
+			-- Is option `c' in `contents'?
+		local
+			scount: INTEGER
+		do
+			from
+				scount := s.count
+				contents.start
+			until
+				contents.exhausted or Result
+			loop
+				if
+					(contents.item.count >= scount + 1 and
+					contents.item.item (1) = option_sign and
+					contents.item.substring (2, scount + 1).is_equal (s)) or
+						-- Allow GNU "--opt" type options:
+					(contents.item.count >= scount + 2 and
+					contents.item.item (1) = option_sign and
+					contents.item.item (2) = option_sign and
+					contents.item.substring (3, scount + 2).is_equal (s))
+				then
+					Result := true
+				else
+					contents.forth
+				end
+			end
+		ensure
+			Result implies (contents.item.item (1) = option_sign and
+				contents.item.substring (2, s.count + 1).is_equal (s)) or
+				(contents.item.item (1) = option_sign and
+				contents.item.item (2) = option_sign and
+				contents.item.substring (3, s.count + 2).is_equal (s))
 		end
 
 invariant
