@@ -98,7 +98,4 @@ feature -- Basic operations
 
 invariant
 
-	program_begins_with_command_string:
-		equal (command_string.substring (1, program.count), program)
-
 end
