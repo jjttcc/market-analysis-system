@@ -17,7 +17,12 @@ class EXPONENTIAL_MOVING_AVERAGE inherit
 		rename
 			make as sma_make
 		redefine
-			action, set_n, short_description, operators
+			action, set_n, short_description, operators, do_process
+		end
+
+	MATH_CONSTANTS
+		export
+			{NONE} all
 		end
 
 creation {FACTORY, MARKET_FUNCTION_EDITOR}
@@ -41,6 +46,18 @@ feature -- Access
 		do
 			Result := Precursor
 			Result.append (operator_and_descendants (exp))
+		end
+
+feature {NONE} -- Basic operations
+
+	do_process is
+		do
+			update_exp_inverse
+			check
+				exp_inv_correct:
+					rabs(1 - exp.value) - rabs(exp_inverse) <= .00001
+			end
+			Precursor
 		end
 
 feature {NONE} -- Initialization
@@ -71,6 +88,7 @@ feature {MARKET_FUNCTION_EDITOR} -- Status setting
 		do
 			exp := e
 			exp.set_n (n)
+print ("exp set: ") print(exp_inverse); print ("%N")
 		ensure
 			exp_set: exp = e and exp /= Void
 		end
@@ -81,7 +99,7 @@ feature {MARKET_FUNCTION_EDITOR} -- Status setting
 			exp.initialize (Current)
 		end
 
-feature {NONE}
+feature {NONE} -- Implementation
 
 	action is
 			-- Calculate exponential MA value for the current period.
@@ -92,17 +110,33 @@ feature {NONE}
 			t: SIMPLE_TUPLE
 			latest_value: REAL
 		do
+--print (1 - exp.value); print (", ") print(exp_inverse); print ("%N")
+			check
+				exp_inv_correct:
+					rabs(1 - exp.value) - rabs(exp_inverse) <= .00001
+			end
 			exp.execute (Void)
 			operator.execute (target.item)
 			latest_value := operator.value
 			create t.make (target.item.date_time, target.item.end_date,
 						latest_value * exp.value +
-							output.last.value * (1 - exp.value))
+--!!!							output.last.value * (1 - exp.value))
+							output.last.value * (exp_inverse))
 			output.extend (t)
 		ensure then
 			-- output.last.value = P[curr] * exp + EMA[curr-1] * (1 - exp)
 			--   where P[curr] is the result (from `operator') for the current
 			--   period and EMA[curr-1] is the EMA for the previous period.
+		end
+
+	exp_inverse: DOUBLE
+			-- 1 - exp.value, used for efficiency
+
+	update_exp_inverse is
+			-- Update `exp_inverse' with the current `exp' value.
+		do
+print ("update exp inv called%N")
+			exp_inverse := 1 - exp.value
 		end
 
 invariant
