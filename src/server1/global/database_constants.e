@@ -40,6 +40,9 @@ feature -- Access
 
 	Daily_stock_volume_field_specifier: STRING is "daily stock volume field"
 
+	Intraday_stock_data_command_specifier: STRING is
+		"intraday stock data command"
+
 	Intraday_stock_symbol_field_specifier: STRING is
 		"intraday stock symbol field"
 
@@ -72,6 +75,9 @@ feature -- Access
 
 	Derivative_name_query_specifier: STRING is "derivative name query"
 
+	Daily_derivative_data_command_specifier: STRING is
+		"daily derivative data command"
+
 	Daily_derivative_symbol_field_specifier: STRING is
 		"daily derivative symbol field"
 
@@ -95,6 +101,9 @@ feature -- Access
 
 	Daily_derivative_open_interest_field_specifier: STRING is
 		"daily derivative open_interest field"
+
+	Intraday_derivative_data_command_specifier: STRING is
+		"intraday derivative data command"
 
 	Intraday_derivative_symbol_field_specifier: STRING is
 		"intraday derivative symbol field"
