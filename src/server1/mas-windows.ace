@@ -10,6 +10,7 @@ default
 	assertion (ensure)
 	assertion (loop)
 	assertion (invariant)
+	arguments (" -f , -w -o 18273")
 	arguments (" -f , -wbo 18273")
 	arguments ("-o -f , -w -b 18273")
 	arguments ("-o -f , *.txt 2345 -b")
