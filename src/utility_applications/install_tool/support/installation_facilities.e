@@ -16,9 +16,10 @@ feature -- Access
 	mctrc_file_name: STRING is "mctrc"
 
 	
-	REAL_mct_directory_use_this: STRING is "c:/Program Files/mct"
+	mct_directory: STRING is "c:/Program Files/mct"
 
-	mct_directory: STRING is "Program_Files_mct"
+--!!!!Remove:
+	Test_mct_directory: STRING is "Program_Files_mct"
 
 	directory_separator: CHARACTER is
 		local
