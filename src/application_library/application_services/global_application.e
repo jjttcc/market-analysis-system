@@ -107,39 +107,17 @@ feature -- Access
 		end
 
 	function_library: STORABLE_LIST [MARKET_FUNCTION] is
-			-- All defined market functions
-		local
-			storable: STORABLE
-			mflist: STORABLE_LIST [MARKET_FUNCTION]
-			retrieval_failed: BOOLEAN
-			app_env: expanded APP_ENVIRONMENT
-			full_path_name: STRING
-		once
-			full_path_name := app_env.file_name_with_app_directory (
-				indicators_file_name)
-			if retrieval_failed then
-				if exception = Retrieve_exception then
-					log_errors (<<"Retrieval of indicator library file ",
-								full_path_name, " failed%N">>)
-				else
-					log_errors (<<"Error occurred while retrieving function %
-									%library: ", meaning(exception), "%N">>)
-				end
-				die (-1)
-			else
-				create storable
-				mflist ?= storable.retrieve_by_name (full_path_name)
-				if mflist = Void then
-					create {STORABLE_MARKET_FUNCTION_LIST} mflist.make (
-						indicators_file_name)
-				end
-				-- Ensure that the list will be saved when the process ends.
-				register_for_termination (mflist)
-				Result := mflist
+			-- All defined market functions - Force re-retrieval if
+			-- `force_retrieval' is true.
+		do
+			if cached_function_library = Void then
+print ("function_library called with cached fl void.%N")
+				cached_function_library := retrieved_function_library
 			end
-		rescue
-			retrieval_failed := true
-			retry
+			Result := cached_function_library
+		ensure
+			cached: Result = cached_function_library
+			not_void: Result /= Void
 		end
 
 	market_event_generation_library: STORABLE_LIST [MARKET_EVENT_GENERATOR] is
@@ -151,6 +129,7 @@ feature -- Access
 			app_env: expanded APP_ENVIRONMENT
 			full_path_name: STRING
 		once
+print ("meg_library called.%N")
 			full_path_name := app_env.file_name_with_app_directory (
 				generators_file_name)
 			if retrieval_failed then
@@ -169,8 +148,6 @@ feature -- Access
 					create {STORABLE_EVENT_GENERATOR_LIST} meg_list.make (
 						generators_file_name)
 				end
-				-- Ensure that the list will be saved when the process ends.
-				register_for_termination (meg_list)
 				Result := meg_list
 			end
 		rescue
@@ -224,6 +201,7 @@ feature -- Access
 			app_env: expanded APP_ENVIRONMENT
 			full_path_name: STRING
 		once
+print ("mer_library called.%N")
 			full_path_name := app_env.file_name_with_app_directory (
 				registrants_file_name)
 			if retrieval_failed then
@@ -260,7 +238,7 @@ feature -- Access
 				-- because the MERs need to be cleaned up before being saved
 				-- as elements of reg_list (since cleanup is done for each
 				-- termination registrant in the order it was registered).
-				register_for_termination (reg_list)
+--register_for_termination (reg_list)
 			end
 		rescue
 			retrieval_failed := true
@@ -322,6 +300,52 @@ feature -- Access
 			end
 	end
 
+	retrieved_function_library: STORABLE_LIST [MARKET_FUNCTION] is
+		local
+			storable: STORABLE
+			mflist: STORABLE_LIST [MARKET_FUNCTION]
+			retrieval_failed: BOOLEAN
+			app_env: expanded APP_ENVIRONMENT
+			full_path_name: STRING
+		do
+			full_path_name := app_env.file_name_with_app_directory (
+				indicators_file_name)
+			if retrieval_failed then
+				if exception = Retrieve_exception then
+					log_errors (<<"Retrieval of indicator library file ",
+								full_path_name, " failed%N">>)
+				else
+					log_errors (<<"Error occurred while retrieving function %
+									%library: ", meaning(exception), "%N">>)
+				end
+				die (-1)
+			else
+				create storable
+				mflist ?= storable.retrieve_by_name (full_path_name)
+				if mflist = Void then
+					create {STORABLE_MARKET_FUNCTION_LIST} mflist.make (
+						indicators_file_name)
+				end
+				Result := mflist
+			end
+		ensure
+			not_void: Result /= Void
+		rescue
+			retrieval_failed := true
+			retry
+		end
+
+feature -- Basic operations
+
+	force_function_library_retrieval is
+			-- Force function library to be re-retrieved.
+		local
+			fl: STORABLE_LIST [MARKET_FUNCTION]
+		do
+			cached_function_library := Void
+			fl := function_library
+		end
+
 feature -- Constants
 
 	indicators_file_name: STRING is
@@ -375,5 +399,7 @@ feature {NONE} -- Implementation
 				l.forth
 			end
 		end
+
+	cached_function_library: STORABLE_LIST [MARKET_FUNCTION]
 
 end -- GLOBAL_APPLICATION
