@@ -32,6 +32,8 @@ class MAIN_CL_INTERFACE inherit
 	MAS_EXCEPTION
 		export
 			{NONE} all
+		undefine
+			print
 		end
 
 	MAIN_APPLICATION_INTERFACE
@@ -184,11 +186,8 @@ feature -- Basic operations
 			end
 			-- Notify client that it can terminate:
 			print ("")
-			io.print ("Cleaning up ...%N")
-			-- Ensure that all objects registered for cleanup on termination
-			-- are notified of termination.
 			if exit_server then
-				termination_cleanup
+				check no_cleanup = false end
 				exit (0)
 			else
 				print ("(Hit <Enter> to restart the command-line client.)%N")
@@ -200,7 +199,7 @@ feature -- Basic operations
 						retry
 				end
 			else
-				termination_cleanup
+				exit (Error_exit_status)
 			end
 		end
 
