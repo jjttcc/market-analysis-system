@@ -43,7 +43,6 @@ feature -- Basic operations
 		do
 			from
 print ("csa connecting on port " + port + " (" + i.out + ")...%N")
-				create connection.make (host, port.to_integer)
 				microsleep (0, initial_sleep_micro_seconds)
 				Result := server_connection_diagnosis (host, port)
 				i := 1
@@ -56,7 +55,6 @@ print ("csa connecting on port " + port + " (" + i.out + ")...%N")
 				Result := server_connection_diagnosis (host, port)
 				i := i + 1
 			end
-			connection := Void
 		end
 
 	server_connection_diagnosis (host, port: STRING): STRING is
@@ -66,7 +64,7 @@ print ("csa connecting on port " + port + " (" + i.out + ")...%N")
 		require
 			args_exist: host /= Void and port /= Void
 		local
-			conn: GUI_CLIENT_CONNECTION
+			connection: GUI_CLIENT_CONNECTION
 			retried: BOOLEAN
 		do
 			if not retried then
@@ -74,24 +72,20 @@ print ("csa connecting on port " + port + " (" + i.out + ")...%N")
 					Result := "Invalid port number: " + port
 				end
 				if Result = Void then
-					if connection /= Void then
-						conn := connection
-					else
-						create conn.make (host, port.to_integer)
-					end
-					if conn.last_communication_succeeded then
-						conn.ping_server
-						if not conn.last_communication_succeeded then
+					create connection.make (host, port.to_integer)
+					if connection.last_communication_succeeded then
+						connection.ping_server
+						if not connection.last_communication_succeeded then
 							Result := "Communication with server (host: " +
 							host + ", port; " + port + ") failed:%N" +
-							conn.error_report + "."
+							connection.error_report + "."
 						end
 					else
 						Result := "Could not connect to server at host: " +
 							host + ", port: " + port
-						if not conn.error_report.is_empty then
+						if not connection.error_report.is_empty then
 							Result.append ("%N(" +
-								conn.error_report + ").")
+								connection.error_report + ").")
 						end
 					end
 				end
@@ -103,9 +97,5 @@ print ("csa connecting on port " + port + " (" + i.out + ")...%N")
 			retried := True
 			retry
 		end
-
-feature {NONE} -- Implementation
-
-	connection: GUI_CLIENT_CONNECTION
 
 end
