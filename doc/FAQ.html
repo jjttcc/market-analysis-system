@@ -58,6 +58,10 @@ The MAS Charting GUI
 Database Problems
 </A>
 <br>
+<A href="#technical indicators">
+Technical Analysis Indicators
+</A>
+<br>
 <A href="#signal generation">
 Signal Generation and Market Analyzers
 </A>
@@ -435,6 +439,34 @@ scripts1.6.5.zip</A>.)
 Several people have asked me this question, so I've concluded that I need
 to include the database scripts with the main installation file.
 I will probably do this for the next official (non-beta) release.
+<h3>
+<A name="technical indicators">
+Technical Analysis Indicators
+</A>
+</h3>
+<P><B>
+How do I change the parameter settings of a technical indicator?
+(For example, how would I change the parameter settings of
+"Slow Stochastic %D" from 5, 3, 3, to 11, 9, 8?)
+</B><P>
+In the current version of MAS, you can change the parameter settings of
+an indicator by starting up the MAS command-line client (either
+macl or maclj) and entering 'e' (Edit indicators) and then 'e'
+(Edit an indicator) again.
+You will see a list of all available indicators.
+Select the indicator you want to edit by entering the number of the
+indicator from the list.
+You will see a list of the editable parameters for the indicator.
+Select the parameter you want to edit by entering the number of the
+parameter from the list.
+Enter the new value you wish to assign for that parameter.
+Continue editing the parameters in this way until you've changed all that
+you wish to change.
+Enter '0' (zero) to leave the change-parameter menu.
+Enter '0' again to leave the edit-indicator menu.
+Enter 's' (Save changes) to save the changes you have just made.
+Enter '-' (Previous) to leave the edit-indicators menu.
+Enter 'x' to exit the command-line client.
 <h3>
 <A name="signal generation">
 Signal Generation and Market Analyzers
