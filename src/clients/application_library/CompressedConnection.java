@@ -19,8 +19,8 @@ public class CompressedConnection extends Connection
 		super(io_conn);
 	}
 
-	public Connection new_connection() {
-		return new CompressedConnection(io_connection);
+	public Connection new_object() throws IOException {
+		return new CompressedConnection(io_connection.newObject());
 	}
 
 // Implementation

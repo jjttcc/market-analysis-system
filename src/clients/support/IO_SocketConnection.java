@@ -10,12 +10,16 @@ public class IO_SocketConnection extends IO_Connection
 {
 
 	// Precondition: c != null
-	public IO_SocketConnection(String hostnm, int portnum)
-			throws IOException {
+	public IO_SocketConnection(String hostnm, int portnum) {
 		assert hostnm != null;
 		hostname = hostnm;
 		port_number = portnum;
-		open();
+	}
+
+// Access
+
+	public IO_Connection newObject() {
+		return new IO_SocketConnection(hostname, port_number);
 	}
 
 	public InputStream inputStream() throws IOException {
@@ -26,6 +30,8 @@ public class IO_SocketConnection extends IO_Connection
 		return socket.getOutputStream();
 	}
 
+// Basic operations
+
 	public void close() throws IOException {
 		socket.close();
 	}
@@ -33,7 +39,7 @@ public class IO_SocketConnection extends IO_Connection
 	public void open() throws IOException {
 		try {
 			//It appears that the only way to connect a client socket is
-			//to create a new one!
+			//to create a new one.
 			socket = new Socket(hostname, port_number);
 		}
 		catch (UnknownHostException e) {

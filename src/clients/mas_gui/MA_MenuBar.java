@@ -9,6 +9,7 @@ import support.ErrorBox;
 
 // The Market Analysis GUI menu bar
 public class MA_MenuBar extends MenuBar {
+
 	MA_MenuBar(Chart c, DataSetBuilder builder, Vector period_types) {
 		data_builder = builder;
 		chart = c;

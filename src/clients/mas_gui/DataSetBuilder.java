@@ -13,14 +13,21 @@ import support.*;
     instances from data returned from connection requests */
 public class DataSetBuilder implements NetworkProtocol {
 
-	public DataSetBuilder(Connection conn) {
+	// Precondition: conn != null && opts != null
+	public DataSetBuilder(Connection conn, MAS_Options opts) {
+		assert conn != null && opts != null;
 		connection_ = conn;
 		initialize();
 	}
 
 	public DataSetBuilder(DataSetBuilder dsb) {
-		connection_ = dsb.connection().new_connection();
-		initialize();
+		try {
+			connection_ = dsb.connection().new_object();
+			initialize();
+		} catch (Exception e) {
+			System.err.println(e);
+			System.exit(1);
+		}
 	}
 
 	public Connection connection() {
@@ -210,6 +217,7 @@ public class DataSetBuilder implements NetworkProtocol {
 	// Precondition: connection_ != null && ! connection_.logged_in()
 	// Postcondition: connection_.logged_in()
 	private void initialize() {
+		tradables = options.symbols();
 		try {
 			connection_.login();
 		} catch (Exception e) {
@@ -288,4 +296,6 @@ public class DataSetBuilder implements NetworkProtocol {
 	private int main_field_specs[] = new int[7];
 	// Does the last received market data contain an open interest field?
 	private boolean _open_interest;
+	// User-specified options
+	private MAS_Options options;
 }

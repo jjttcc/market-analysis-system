@@ -719,7 +719,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	// `indicators' to compare old list with new list
 	private Vector old_indicators_from_server = null;
 
-	// Command-line options
+	// User-specified options
 	MAS_Options options_;
 
 	// Did the previously retrieved data from the server contain an

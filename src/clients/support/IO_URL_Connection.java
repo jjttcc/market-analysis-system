@@ -9,11 +9,17 @@ import java.net.*;
 public class IO_URL_Connection extends IO_Connection
 {
 	// Precondition: srvaddr != null
-	public IO_URL_Connection(String srvaddr) throws IOException {
+	public IO_URL_Connection(String srvaddr) throws MalformedURLException {
 		assert srvaddr != null;
 
 		serverAddress = srvaddr;
 		url = new URL(serverAddress);
+	}
+
+// Access
+
+	public IO_Connection newObject() throws MalformedURLException {
+		return new IO_URL_Connection(serverAddress);
 	}
 
 	public InputStream inputStream() throws IOException {
@@ -23,6 +29,8 @@ public class IO_URL_Connection extends IO_Connection
 	public OutputStream outputStream() throws IOException {
 		return connection.getOutputStream();
 	}
+
+// Basic operations
 
 	public void close() {
 		// Null routine

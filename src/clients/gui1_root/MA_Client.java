@@ -3,33 +3,40 @@
 import java.io.*;
 import java.net.*;
 import mas_gui.*;
+import support.*;
 
-/** Root class for the Market Analysis client process */
+/** Root class for the stand-alone Market Analysis client process */
 public class MA_Client {
 	public static void main(String[] args) {
+		command_line_options = new mas_gui.MAS_Options(args);
 		mas_gui.DataSetBuilder data_builder =
-			new mas_gui.DataSetBuilder(connection());
+			new mas_gui.DataSetBuilder(connection(), command_line_options);
 		mas_gui.Chart chart;
 		chart = new mas_gui.Chart(data_builder, chart_filename,
-			command_line_options());
+			command_line_options);
 	}
 
 	private static mas_gui.Connection connection() {
-		//!!!!Stub - Need to parse arguments, create options object,
-		//create io connection, connection, etc.
-		mas_gui.Connection result =
-null;
+		assert command_line_options != null;
+		mas_gui.Connection result;
+
+		String hostname = command_line_options.hostname();
+		int port_number = command_line_options.port_number();
+
+		// The stand-alone client uses sockets to talk to the server.
+		support.IO_SocketConnection io_connection =
+			new support.IO_SocketConnection(hostname, port_number);
+
+		if (command_line_options.compression()) {
+			result = new mas_gui.CompressedConnection(io_connection);
+		} else {
+			result = new mas_gui.Connection(io_connection);
+		}
 
 		return result;
 	}
 
-	private static mas_gui.MAS_Options command_line_options() {
-		//!!!!!Stub
-		mas_gui.MAS_Options result =
-null;
-
-		return result;
-	}
+	private static mas_gui.MAS_Options command_line_options;
 
 	private static final String chart_filename = ".ma_client_settings";
 }

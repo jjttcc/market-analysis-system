@@ -21,8 +21,8 @@ public class Connection implements NetworkProtocol
 	}
 
 	// A new connection object
-	public Connection new_connection() {
-		return new Connection(io_connection);
+	public Connection new_object() throws IOException {
+		return new Connection(io_connection.newObject());
 	}
 
 	// Session state data received from the server when logging in.
@@ -78,7 +78,7 @@ public class Connection implements NetworkProtocol
 
 	// Send a request to the server.
 	// Precondition:  logged_in()
-	// Postcondition: `result' gives the data resulting from this request.
+	// Postcondition: `result()' gives the data resulting from this request.
 	public void send_request(int request_code, String request)
 			throws IOException {
 		connect();
