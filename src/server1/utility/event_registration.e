@@ -503,6 +503,9 @@ feature {NONE} -- Implementation
 				read_line
 			end
 			Result := last_string
+			-- On Windows, the carriage return is not stripped off of
+			-- last_string, so it needs to be done explicitly:
+			Result.prune_all ('%R')
 		end
 
 feature {NONE} -- Implementation
