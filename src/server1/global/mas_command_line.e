@@ -1,10 +1,11 @@
 indexing
-	description: "Parser of command-line arguments for TA server application"
+	description: "Parser of command-line arguments for Market Analysis %
+		%System server application"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
-class TA_COMMAND_LINE inherit
+class MASS_COMMAND_LINE inherit
 
 	ARGUMENTS
 
@@ -220,4 +221,4 @@ invariant
 	port_numbers_and_file_names_not_void:
 		port_numbers /= Void and file_names /= Void
 
-end -- class TA_COMMAND_LINE
+end -- class MASS_COMMAND_LINE

@@ -1,10 +1,10 @@
 indexing
-	description: "Root class for TA application server using TAL"
+	description: "Root class for Market Analysis System Server using MAL"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
-class TA_SERVER inherit
+class MAS_SERVER inherit
 
 	GLOBAL_SERVER
 
@@ -24,6 +24,7 @@ feature -- Initialization
 			if command_line_options.help then
 				command_line_options.usage
 			else
+				initialize
 				!!poller.make_read_only
 				!!factory_builder.make
 				!LINKED_LIST [SOCKET]!current_sockets.make
@@ -92,4 +93,14 @@ feature {NONE}
 
 	current_sockets: LIST [SOCKET]
 
-end -- TA_SERVER
+	initialize is
+			-- Set up to use MASS environment variable names.
+		local
+			tae: expanded TAL_APP_ENVIRONMENT
+			env_names: APP_ENVIRONMENT_VARIABLE_NAMES
+		do
+			!MASS_ENVIRONMENT_VARIABLE_NAMES!env_names
+			tae.set_env_name_service(env_names)
+		end
+
+end -- MAS_SERVER

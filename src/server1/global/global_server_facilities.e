@@ -16,7 +16,7 @@ feature -- Access
 			!!Result.make(1)
 		end
 
-	command_line_options: TA_COMMAND_LINE is
+	command_line_options: MASS_COMMAND_LINE is
 		once
 			!!Result.make
 		end
