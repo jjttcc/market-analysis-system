@@ -19,8 +19,6 @@ trading system. Some of the features of MAS are:
    - Can be configured and run as a server that provides services for
      several clients at a time running on remote machines.
 
-See the file INSTALL for instructions on how to install MAS.
-
 
 DOWNLOADING THE CURRENT VERSION OF MAS
 
@@ -78,7 +76,7 @@ Currently MAS handles data with the fields date, open, high, low, close,
 volume (in that order), which provides for stock and index data (with
 volume of 0).  It expects the date field to follow the format:  yyyymmdd.
 For example, 19990701, for July 1, 1999.  Future versions should handle
-more fields, such as open interest, and time - for intraday data.
+more fields, such as open interest.
 
 There are some sample data files included in the correct format in lib/data
 so that you can try out MAS without having to obtain data files.

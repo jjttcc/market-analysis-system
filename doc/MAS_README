@@ -4,7 +4,9 @@ the following files:
 
     README - This file
 
-    masystem_introduction - Introduction to the Market Analysis System
+	MAIN_README - The introductory README file for MAS
+
+    masystem_introduction - Contains a brief description of how to run MAS
 
     GUI_introduction - Introduction to the GUI client
 
