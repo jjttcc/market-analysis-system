@@ -160,8 +160,7 @@ feature {NONE}
 			!!dispatcher.make
 			register_event_registrants (dispatcher)
 			!MARKET_EVENT_COORDINATOR!event_coordinator.make (
-								market_event_generation_library, market_list,
-								dispatcher)
+							active_event_generators, market_list, dispatcher)
 		end
 
 	register_event_registrants (dispatcher: EVENT_DISPATCHER) is
