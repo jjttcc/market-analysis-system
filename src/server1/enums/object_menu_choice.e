@@ -49,8 +49,8 @@ feature {NONE} -- Implementation
 	value_name_map: HASH_TABLE [STRING, CHARACTER] is
 		do
 			create Result.make (6)
-			Result.put ("description of the " + object_name, description)
-			Result.put ("description of the " + object_name, description_u)
+			Result.put ("Description of the " + object_name, description)
+			Result.put ("Description of the " + object_name, description_u)
 			Result.put ("Choose a " + object_name, choose)
 			Result.put ("Choose a " + object_name, choose_u)
 			Result.put ("Choose another " + object_name, another_choice)
