@@ -24,7 +24,9 @@ feature {NONE} -- Initialization
 	make (daily_list, intraday_list: TRADABLE_LIST) is
 		require
 			one_not_void: intraday_list /= Void or daily_list /= Void
-			counts_equal_if_both_valid: both_lists_valid implies
+			counts_equal_if_both_valid: daily_list /= Void and then
+				not daily_list.empty and then intraday_list /= Void and then
+				not intraday_list.empty implies
 				intraday_list.count = daily_list.count
 			-- for_all i member_of 1 .. daily_list.count it_holds
 			--    (daily_list.symbols @ i).is_equal (intraday_list.symbols @ i)
