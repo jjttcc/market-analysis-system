@@ -206,7 +206,9 @@ feature -- Access
 
 	period_types_in_order: LIST [TIME_PERIOD_TYPE] is
 			-- All time period types sorted in ascending order by
-			-- duration
+			-- duration such that: (Result @ One_minute) is the
+			-- one-minute period type .. (Result @ Yearly) is the
+			-- yearly period type
 		local
 			type_names: ARRAY [STRING]
 			i: INTEGER
