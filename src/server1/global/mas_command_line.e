@@ -22,36 +22,6 @@ creation {PLATFORM_DEPENDENT_OBJECTS}
 
 	make
 
-feature {NONE} -- Initialization
-
-	process_remaining_arguments is
-		do
-			create {LINKED_LIST [INTEGER]} port_numbers.make
-			create special_date_settings.make (date_format_prefix)
-			special_date_settings.add_error_subscriber (Current)
-			opening_price := True
-			from
-				main_setup_procedures.start
-			until
-				main_setup_procedures.exhausted
-			loop
-				main_setup_procedures.item.call ([])
-				main_setup_procedures.forth
-			end
-			if not use_db then
-				set_use_external_data_source
-				if not use_external_data_source then
-					set_use_web
-					if not use_web then
-						set_file_names
-					end
-				end
-			else
-				set_keep_db_connection
-			end
-			initialization_complete := True
-		end
-
 feature -- Access
 
 	usage: STRING is
@@ -165,6 +135,36 @@ feature -- Status report
 
 	symbol_list_initialized: BOOLEAN
 			-- Has `symbol_list' been initialized?
+
+feature {NONE} -- Implementation - Hook routines
+
+	process_remaining_arguments is
+		do
+			create {LINKED_LIST [INTEGER]} port_numbers.make
+			create special_date_settings.make (date_format_prefix)
+			special_date_settings.add_error_subscriber (Current)
+			opening_price := True
+			from
+				main_setup_procedures.start
+			until
+				main_setup_procedures.exhausted
+			loop
+				main_setup_procedures.item.call ([])
+				main_setup_procedures.forth
+			end
+			if not use_db then
+				set_use_external_data_source
+				if not use_external_data_source then
+					set_use_web
+					if not use_web then
+						set_file_names
+					end
+				end
+			else
+				set_keep_db_connection
+			end
+			initialization_complete := True
+		end
 
 feature {NONE} -- Implementation
 
