@@ -38,6 +38,10 @@ if host == "":
 	f = popen("hostname")
 	host = f.readline()[:-1]
 
+if host == "":
+	print argv[0] + ": No host found."
+	usage(); exit(-1)
+
 s = socket(AF_INET, SOCK_STREAM)
 message = []
 s.connect(host, port)
