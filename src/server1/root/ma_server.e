@@ -87,11 +87,8 @@ feature -- Initialization
 				exit (0)
 			end
 		rescue
-			-- Let assertion violations be handled by the run-time environment.
-			if not assertion_violation then
-				handle_exception ("main routine")
-				exit (Error_exit_status)
-			end
+			handle_exception ("main routine")
+			exit (Error_exit_status)
 		end
 
 feature {NONE}
