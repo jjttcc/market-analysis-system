@@ -117,20 +117,50 @@ feature {NONE} -- Implementation
 		end
 
 	scan_time is
-			-- Scan the time and set `last_time' to it.
+			-- Scan the time and set `last_time' to it - with the expected
+			-- format: h:m:s.
+		local
+			hour, minute, second: INTEGER
 		do
-			scan_field
-			if not last_string.has ('.') then
-				-- The string-time conversion routine requires the format
-				-- "00:00:00.000", so append the missing part.
-				last_string.append (".000")
-			end
-			last_time := date_scanner.time_from_string (last_string)
-			if last_time = Void then
+			input_file.read_integer
+			hour := input_file.last_integer
+			input_file.read_character
+			if input_file.last_character /= ':' then
 				last_error := concatenation (
 					<<"Error occurred inputting time from file ",
 					input_file.name, " at character ", input_file.index,
-					" - invalid input value: ", last_string>>)
+					" - invalid field separator for time: ",
+					input_file.last_character>>)
+				error_occurred := true
+				raise ("scan_time failed with invalid input")
+			else
+				input_file.read_integer
+				minute := input_file.last_integer
+				input_file.read_character
+				if input_file.last_character /= ':' then
+					last_error := concatenation (
+						<<"Error occurred inputting time from file ",
+						input_file.name, " at character ", input_file.index,
+						" - invalid field separator for time: ",
+						input_file.last_character>>)
+					error_occurred := true
+					raise ("scan_time failed with invalid input")
+				else
+					input_file.read_integer
+					second := input_file.last_integer
+				end
+			end
+			if
+				date_scanner.hour_valid (hour) and
+				date_scanner.minute_valid (minute) and
+				date_scanner.second_valid (second)
+			then
+				create last_time.make (hour, minute, second)
+			else
+				last_error := concatenation (
+					<<"Error occurred inputting time from file ",
+					input_file.name, " at character ", input_file.index,
+					" - invalid time: ", hour, ":", minute, ":", second>>)
 				error_occurred := true
 				raise ("scan_time failed with invalid input")
 			end
