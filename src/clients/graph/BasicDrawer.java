@@ -398,7 +398,7 @@ abstract public class BasicDrawer extends Drawer {
 	final int Ref_text_offset = -42;	// Offset for reference text
 
 	// "epsilon" value for determining if ymin and ymax are almost equal
-	private static double min_max_epsilon = 0.01;
+	private static double min_max_epsilon = 0.00005;
 
 	// boundary value to use if ymin and ymax are almost equal
 	private static double min_border_boundary = 0.25;
