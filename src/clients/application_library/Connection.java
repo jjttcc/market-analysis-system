@@ -12,18 +12,18 @@ import mas_gui.*;
 /** Provides an interface for connecting and communicating with the server */
 public class Connection implements NetworkProtocol
 {
-	// args[0]: hostname, args[1]: port_number
-	public Connection(String hostname, Integer port_number) {
-		_hostname = hostname;
-		_port_number = port_number;
+	// Precondition: io_conn != null
+	public Connection(IO_Connection io_conn) {
+		assert io_conn != null;
+
+		io_connection = io_conn;
 		scanner = new DataInspector();
 	}
 
-	// The host name of the server
-	public String hostname() { return _hostname; }
-
-	// The port number for the server connection
-	public Integer port_number() { return _port_number; }
+	// A new connection object
+	public Connection new_connection() {
+		return new Connection(io_connection);
+	}
 
 	// Session state data received from the server when logging in.
 	public SessionState session_state() {
@@ -105,7 +105,7 @@ public class Connection implements NetworkProtocol
 		char c;
 		int i;
 
-		in = new_reader_from_socket();
+		in = new_reader();
 		scanner.setReader(in);
 		scanner.getInt();
 		last_rec_msgID = scanner.lastInt();
@@ -147,43 +147,31 @@ public class Connection implements NetworkProtocol
 		out.flush();
 	}
 
-	// Precondition: out != null && socket != null
+	// Precondition: out != null && io_connection != null
 	void close_connection() throws IOException {
-		out.close(); socket.close();
+		out.close(); io_connection.close();
 		if (in != null) {
 			in.close();
 		}
 	}
 
 	private void connect() throws IOException {
-		try {
-			//It appears that the only way to connect a client socket is
-			//to create a new one!
-			socket = new Socket(_hostname, _port_number.intValue());
-			out = new PrintWriter(socket.getOutputStream(), true);
-			in = null;
-		}
-		catch (UnknownHostException e) {
-			throw new UnknownHostException("Don't know about host: " +
-				_hostname);
-		}
-		catch (IOException e) {
-			throw new IOException("Couldn't get I/O for the connection to: " +
-								_hostname);
-		}
+		io_connection.open();
+		out = new PrintWriter(io_connection.output_stream(), true);
+		in = null;
 	}
 
 	boolean error_occurred() {
 		return last_rec_msgID != OK;
 	}
 
-	// A new Reader object created with socket's input stream
-	protected Reader new_reader_from_socket() {
+	// A new Reader object created with io_connection's input stream
+	protected Reader new_reader() {
 //System.out.println("\nnot decompressing");
 		Reader result = null;
 		try {
 			result = new BufferedReader(new InputStreamReader(
-				new BufferedInputStream(socket.getInputStream())));
+				new BufferedInputStream(io_connection.input_stream())));
 		} catch (Exception e) {
 			System.err.println("Failed to read from server (" + e + ")");
 			System.exit(1);
@@ -208,9 +196,9 @@ public class Connection implements NetworkProtocol
 	protected boolean _logged_in = false;
 	protected String _hostname;
 	protected Integer _port_number;
-	protected Socket socket;			// socket connection to server
-	protected PrintWriter out;			// output to server via socket
-	protected Reader in;				// input from server via socket
+	protected IO_Connection io_connection;	// IO connection to server
+	protected PrintWriter out;			// output to server via io_connection
+	protected Reader in;				// input from server via io_connection
 	protected DataInspector scanner;	// for scanning server messages
 	protected int last_rec_msgID;		// last message ID received from server
 	protected StringBuffer request_result;	// result of last data request

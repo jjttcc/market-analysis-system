@@ -46,7 +46,8 @@ public class MA_MenuBar extends MenuBar {
 		// Action listeners for file menu items
 		new_window.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-				Chart chart = new Chart(new DataSetBuilder(data_builder), null);
+				Chart new_chart = new Chart(new DataSetBuilder(data_builder),
+					null, chart.options());
 			}
 		});
 		mkt_selection.addActionListener(chart.market_selections);

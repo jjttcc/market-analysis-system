@@ -27,6 +27,7 @@ class WindowSettings implements Serializable {
 }
 
 class ChartSettings implements Serializable {
+
 	public ChartSettings(Dimension sz, Properties printprop, Point loc,
 			Vector upperind, Vector lowerind, boolean replace_ind) {
 		size_ = sz;
@@ -62,10 +63,12 @@ class ChartSettings implements Serializable {
 
 /** Market analysis GUI chart component */
 public class Chart extends Frame implements Runnable, NetworkProtocol {
-	public Chart(DataSetBuilder builder, String sfname) {
+
+	public Chart(DataSetBuilder builder, String sfname, MAS_Options opt) {
 		super("Chart");
 		++window_count;
 		data_builder = builder;
+		options_ = opt;
 		this_chart = this;
 		Vector _tradables = null;
 		saved_dialogs = new Vector();
@@ -98,8 +101,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 					// it for all tradables.
 					_period_types = data_builder.trading_period_type_list(
 						(String) _tradables.elementAt(0));
-					if (data_builder.connection.error_occurred()) {
-						abort(data_builder.connection.result().toString(),
+					if (data_builder.connection().error_occurred()) {
+						abort(data_builder.connection().result().toString(),
 							null);
 					}
 					current_period_type = initial_period_type(_period_types);
@@ -119,6 +122,10 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		}
 		initialize_GUI_components(s);
 		new Thread(this).start();
+	}
+
+	public MAS_Options options() {
+		return options_;
 	}
 
 	// From parent Runnable - for threading
@@ -451,7 +458,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		}
 		add(main_pane, "Center");
 		if (symbol != null) {
-			if (data_builder.options().print_on_startup() &&
+			if (options_.print_on_startup() &&
 					window_count == 1) {
 				print_all_charts();
 			}
@@ -711,6 +718,9 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	// Saved result of data_builder.last_indicator_list(), used by
 	// `indicators' to compare old list with new list
 	private Vector old_indicators_from_server = null;
+
+	// Command-line options
+	MAS_Options options_;
 
 	// Did the previously retrieved data from the server contain an
 	// open interest field?

@@ -9,109 +9,22 @@ import common.*;
 import graph.*;
 import support.*;
 
-// Options specified on the command line
-class MAS_Options {
-
-	public MAS_Options() {
-	}
-
-	// Should all selections be printed on startup?
-	public boolean print_on_startup() {
-		return print_on_startup_;
-	}
-
-	// Request server to compress the data?
-	public boolean compression() {
-		return compression_;
-	}
-
-	// Initial period type - null if not specified
-	public String period_type() {
-		return period_type_;
-	}
-
-	// Initial indicators - null if not specified
-	public Vector indicators() {
-		return indicators_;
-	}
-
-	protected void set_print_on_startup(boolean v) {
-		print_on_startup_ = v;
-	}
-
-	protected void set_compression(boolean v) {
-		compression_ = v;
-	}
-
-	private boolean print_on_startup_;
-	private boolean compression_;
-	private String period_type_;
-	private Vector indicators_;
-}
-
-// Flags for various command-line options
-interface OptionFlags {
-	public final String symbol_option = "-s";
-	public final String compression_option = "-c";
-	public final String printall_option = "-print";
-	public final char flag_character = '-';
-}
-
 /** Abstraction responsible for managing a connection and building DataSet
     instances from data returned from connection requests */
-public class DataSetBuilder implements NetworkProtocol, OptionFlags {
-	// args[0]: hostname, args[1]: port_number
-	public DataSetBuilder(String[] args) {
-		String hostname = null;
-		Integer port_number = null;
-		options_ = new MAS_Options();
-		//Process args for the host, port.
-		if (args.length > 1) {
-			hostname = args[0];
-			port_number = new Integer(port_number.parseInt(args[1]));
-			for (int i = 2; i < args.length; ++i) {
-				if (args[i].equals(symbol_option)) {
-					tradables = new Vector();
-					for (i = i + 1; i < args.length; ++i) {
-						if (args[i].charAt(0) == flag_character) {
-							break;
-						}
-						tradables.addElement(args[i]);
-					}
-				}
-				if (i < args.length && args[i].equals(printall_option)) {
-					options_.set_print_on_startup(true);
-				}
-				if (i < args.length && args[i].equals(compression_option)) {
-					options_.set_compression(true);
-				}
-			}
-		} else {
-			usage();
-			System.exit(1);
-		}
-		if (options_.compression()) {
-			connection = new CompressedConnection(hostname, port_number);
-		} else {
-			connection = new Connection(hostname, port_number);
-		}
+public class DataSetBuilder implements NetworkProtocol {
+
+	public DataSetBuilder(Connection conn) {
+		connection_ = conn;
 		initialize();
 	}
 
 	public DataSetBuilder(DataSetBuilder dsb) {
-		options_ = dsb.options_;
-		if (options_.compression()) {
-			connection = new CompressedConnection(dsb.hostname(),
-				dsb.port_number());
-		} else {
-			connection = new Connection(dsb.hostname(), dsb.port_number());
-		}
+		connection_ = dsb.connection().new_connection();
 		initialize();
 	}
 
-	// Options passed in via the command line
-	public MAS_Options options() {
-		return options_;
+	public Connection connection() {
+		return connection_;
 	}
 
 	// Does the last received market data contain an open interest field?
@@ -123,7 +36,7 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 	// and, if `exit' is true, exit with `status'.
 	public void logout(boolean exit, int status) {
 		try {
-			connection.logout();
+			connection_.logout();
 		} catch (Exception e) {
 			System.err.println(e);
 			System.exit(1);
@@ -134,10 +47,10 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 	// Send a request for data for market `symbol' with `period_type'.
 	public void send_market_data_request(String symbol, String period_type)
 			throws Exception {
-		connection.send_request(Market_data_request,
+		connection_.send_request(Market_data_request,
 			symbol + Input_field_separator + period_type);
-		if (connection.last_received_message_ID() == OK) {
-			String results = connection.result().toString();
+		if (connection_.last_received_message_ID() == OK) {
+			String results = connection_.result().toString();
 			results = setup_parser_fieldspecs(results);
 			data_parser.parse(results, main_drawer);
 			_last_market_data = data_parser.result();
@@ -157,12 +70,12 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 	// `period_type'.
 	public void send_indicator_data_request(int ind, String symbol,
 		String period_type) throws Exception {
-		connection.send_request(Indicator_data_request,
+		connection_.send_request(Indicator_data_request,
 			ind + Input_field_separator + symbol +
 			Input_field_separator + period_type);
 		// Note that a new indicator drawer is created each time parse is
 		// called, since indicator drawers should not be shared.
-		indicator_parser.parse(connection.result().toString(),
+		indicator_parser.parse(connection_.result().toString(),
 								new_indicator_drawer());
 		_last_indicator_data = indicator_parser.result();
 	}
@@ -172,9 +85,9 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 			String period_type) throws IOException {
 		StringBuffer mlist;
 		_last_indicator_list = new Vector();
-		connection.send_request(Indicator_list_request, symbol +
+		connection_.send_request(Indicator_list_request, symbol +
 			Input_field_separator + period_type);
-		mlist = connection.result();
+		mlist = connection_.result();
 		StringTokenizer t = new StringTokenizer(mlist.toString(),
 			Output_record_separator, false);
 		for (int i = 0; t.hasMoreTokens(); ++i)
@@ -215,8 +128,8 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 		synchronized ("x") {
 			if (tradables == null) {
 				tradables = new Vector();
-				connection.send_request(Market_list_request, "");
-				mlist = connection.result();
+				connection_.send_request(Market_list_request, "");
+				mlist = connection_.result();
 				StringTokenizer t = new StringTokenizer(mlist.toString(),
 					Output_record_separator, false);
 				for (int i = 0; t.hasMoreTokens(); ++i) {
@@ -233,8 +146,8 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 		Vector result;
 
 		result = new Vector();
-		connection.send_request(Trading_period_type_request, tradable);
-		tpt_list = connection.result();
+		connection_.send_request(Trading_period_type_request, tradable);
+		tpt_list = connection_.result();
 		StringTokenizer t = new StringTokenizer(tpt_list.toString(),
 			Output_record_separator, false);
 		for (int i = 0; t.hasMoreTokens(); ++i) {
@@ -245,14 +158,10 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 
 	// Result of the last request to the server
 	public int request_result() {
-		return connection.last_received_message_ID();
+		return connection_.last_received_message_ID();
 	}
 
 // Implementation
-
-	private String hostname() { return connection.hostname(); }
-
-	private Integer port_number() { return connection.port_number(); }
 
 	private MarketDrawer new_main_drawer() {
 		Configuration c = Configuration.instance();
@@ -276,17 +185,6 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 		return new LineDrawer(main_drawer);
 	}
 
-	private void usage() {
-		System.err.println("Usage: MA_Client hostname port_number [options]\n"+
-		"Options:\n   "+ symbol_option +" symbol ..." +
-		"    Include only the specified symbols in the selection list.\n" +
-		"   " + printall_option +
-		"           Print the chart for each symbol.\n" +
-		"   " + compression_option +
-		"               Request compressed data from server."
-		);
-	}
-
 	// Initialize main_field_specs - Include Parser.Open_interest if
 	// `_open_interest' is true.
 	// Precondition: main_field_specs.length >= 7
@@ -296,7 +194,7 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 			main_field_specs[j] = Parser.Not_set;
 		}
 		main_field_specs[i++] = Parser.Date;
-		if (connection.session_state().open_field()) {
+		if (connection_.session_state().open_field()) {
 			main_field_specs[i++] = Parser.Open;
 		}
 		main_field_specs[i++] = Parser.High;
@@ -309,11 +207,11 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 	}
 
 	// Login to the server and initialize fields.
-	// Precondition: connection != null && ! connection.logged_in()
-	// Postcondition: connection.logged_in()
+	// Precondition: connection_ != null && ! connection_.logged_in()
+	// Postcondition: connection_.logged_in()
 	private void initialize() {
 		try {
-			connection.login();
+			connection_.login();
 		} catch (Exception e) {
 			System.err.println(e);
 			System.exit(1);
@@ -371,7 +269,7 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 	// tradables is shared by all windows
 	private static Vector tradables;	// Cached list of tradables
 
-	protected Connection connection;
+	private Connection connection_;
 		// result of last market data request
 	private DataSet _last_market_data;
 		// volume result from last market data request
@@ -387,7 +285,6 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 	private MarketDrawer main_drawer;	// draws data in main graph
 	private IndicatorDrawer volume_drawer;	// draws volume data
 	private IndicatorDrawer open_interest_drawer;	// draws open-interest
-	private MAS_Options options_;	// command-line options
 	private int main_field_specs[] = new int[7];
 	// Does the last received market data contain an open interest field?
 	private boolean _open_interest;

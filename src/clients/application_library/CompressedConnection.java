@@ -13,19 +13,23 @@ import support.*;
 /** A Connection that receives compressed data from the server */
 public class CompressedConnection extends Connection
 {
+
 	// args[0]: hostname, args[1]: port_number
-	public CompressedConnection(String hostname, Integer port_number) {
-		super(hostname, port_number);
+	public CompressedConnection(IO_Connection io_conn) {
+		super(io_conn);
 	}
 
+	public Connection new_connection() {
+		return new CompressedConnection(io_connection);
+	}
 
 // Implementation
 
-	protected Reader new_reader_from_socket() {
+	protected Reader new_reader() {
 		Reader result = null;
 		try {
 			result = new BufferedReader(new InputStreamReader(
-				new InflaterInputStream(socket.getInputStream(),
+				new InflaterInputStream(io_connection.input_stream(),
 				new Inflater(), 850000)));
 		} catch (Exception e) {
 			System.err.println("Failed to read from server (" + e + ")");
