@@ -1,15 +1,15 @@
 # Specify source and target directories:
 source_directory /home/development/jtc/finance
-target_directory /home/release/mas-1.6.7
+target_directory /home/release/mas-1.6.6p
 work_directory /tmp/.mas_release
-release_name mas-1.6.7
+release_name mas-1.6.6p
 # Define packages with archive type specs (zip and/or tar):
-package serversrc1.6.7 tar	# source code for the MA server
-package clientsrc1.6.7 tar	# source code for the MA client
-package mas_linux1.6.7 tar		# MA server and client executables for Linux
+package serversrc1.6.6p tar	# source code for the MA server
+package clientsrc1.6.6p tar	# source code for the MA client
+package mas_linux1.6.6p tar		# MA server and client executables for Linux
 package contrib tar				# contributions by other developers
-package mas_windows1.6.7 tar	# MA server and client executables for Windows
+package mas_windows1.6.6p tar	# MA server and client executables for Windows
 #package mac1.6 zip tar			# MA client executables only
 # No updates to scripts in 1.x - Don't forget to uncomment the following line
 # for a release that does have updated scripts.
-package scripts1.6.7 zip tar		# miscellaneous scripts - informal release
+package scripts1.6.6p zip tar		# miscellaneous scripts - informal release
