@@ -17,22 +17,23 @@ feature -- Access
 
 feature -- Element change
 
-	adjust_for_split (ratio: REAL) is
-			-- Adjust prices for stock split by the specified ratio.
+	adjust_for_split (v: REAL) is
+			-- Adjust prices for stock split by `v' by dividing each
+			-- price field by `v' and multiplying volume by `v'.
 		require
-			gt_0: ratio > 0
+			gt_0: v > 0
 		do
-			open.set_value (open.value * ratio)
-			high.set_value (high.value * ratio)
-			low.set_value (low.value * ratio)
-			close.set_value (close.value * ratio)
-			adjust_volume_for_split (1 / ratio)
+			open.set_value (open.value / v)
+			high.set_value (high.value / v)
+			low.set_value (low.value / v)
+			close.set_value (close.value / v)
+			adjust_volume_for_split (v)
 		ensure
-			new_open: rabs (open.value - ratio * old open.value) < epsilon
-			new_high: rabs (high.value - ratio * old high.value) < epsilon
-			new_low: rabs (low.value - ratio * old low.value) < epsilon
-			new_close: rabs (close.value - ratio * old close.value) < epsilon
-			new_volume: rabs (volume - old volume / ratio) < epsilon
+			new_open: rabs (open.value - v / old open.value) < epsilon
+			new_high: rabs (high.value - v / old high.value) < epsilon
+			new_low: rabs (low.value - v / old low.value) < epsilon
+			new_close: rabs (close.value - v / old close.value) < epsilon
+			new_volume: rabs (volume - old volume * v) < epsilon
 		end
 
 feature {NONE} -- Implementation
