@@ -1,6 +1,6 @@
 #Note: Backslashes are not used as escape characters - instead "*^"name is
 #used; for example *^fontI.
-%titleBrief Introduction to the Market Analysis System
+%titleIntroduction to the Market Analysis System
 %end_title
 
 The Market Analysis System (MAS) is a client/server application that
@@ -201,6 +201,46 @@ mas -o -f , 2425 -b -d txt -i 5-minute ibm.* &
 %par
 Then start the GUI the same way as before.
 
+%hdg2Mas Server Command-line Options
+The -h option to mas will give a full listing of the command-line options.
+%par
+The date-specification (the &lt;spec&gt; part of the -date-spec:&lt;spec&gt;
+option)
+is of the form:
+&lt;key1&gt;=&lt;value1&gt;[,&lt;key2&gt;=&lt;value2&gt;,...]
+where &lt;key#&gt; is one of:
+*^fontIdate-format*^fontP, *^fontIyear-partition*^fontP,
+or *^fontIdate-sep*^fontP.
+For the *^fontIdate-format*^fontP specification, the value gives the
+year/month/day format of the date in the input data.  For example:
+%par
+*^fontIdate-format=yyyy#mm#dd*^fontP specifies the order: year, month, day.
+%par
+*^fontIdate-format=dd#mm#yyyy*^fontP specifies the order: day, month, year.
+%par
+*^fontIdate-format=dd#mm#yy*^fontP specifies the order: day, month, year,
+with a two-digit year.
+%par
+*^fontIdate-format=dd#month3#yy*^fontP specifies day, month, year, with a
+two-digit year and with a three-letter abbreviated month (Jan, Feb, etc.).
+%par
+The *^fontIdate-sep*^fontP specification gives the field separator to use
+for the date.
+And the *^fontIyear-partition*^fontP specification gives the partition value
+for two-digit years: If the year is greater than this value, the year is
+interpreted as a year in the 1900s and if the year is less than or equal
+to this value, the year is interpreted as a year in the 2000s.
+%par
+Here's a complete example:
+%par
+-date-spec:date-format=dd#month3#yy,year-partition=80,date_sep=-
+%par
+This example specifies a date of the form *^fontIdd-Mon-yy*^fontP
+(a three-letter
+abbreviated month with a two-digit year), with 80 as the partition value.
+Thus the date:
+*^fontI10-Jan-03*^fontP is interpreted as January 10, 2003 and the
+date *^fontI21-Oct-81*^fontP is interpreted as October 21, 1981.
 
 @begin:linux
 %hdg2Using MAS with a Database Management System on Linux
