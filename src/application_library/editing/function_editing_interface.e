@@ -491,7 +491,7 @@ feature {NONE} -- Implementation
 			-- description - is provided; if `desc_type' is 'l', a
 			-- "long" description - the paremeter's description, current
 			-- value, and type description - is provided; if `desc_type' is
-			-- `a', "all" information is provided: the "long" description
+			-- 'a', "all" information is provided: the "long" description
 			-- plus the name.  Otherwise, only the name is provided.
 		local
 			desc, value, spaces: STRING

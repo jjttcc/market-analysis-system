@@ -137,7 +137,6 @@ feature -- Basic operations
 		local
 			constant: CONSTANT
 		do
-			edit_unaryop_real (cmd)
 			constant ?= user_interface.command_selection_from_type (
 				user_interface.Constant_command, cmd.generator +
 					"'s managed value", False)
@@ -145,6 +144,7 @@ feature -- Basic operations
 				selection_valid: constant /= Void
 			end
 			cmd.set_managed_value (constant)
+			edit_unaryop_real (cmd)
 		end
 
 	edit_mtlist_resultreal (c: UNARY_OPERATOR [REAL, REAL]) is
@@ -436,4 +436,68 @@ feature -- Basic operations
 			edit_unaryop_real (cmd)
 		end
 
-end -- APPLICATION_COMMAND_EDITOR
+	edit_numeric_wrapper (cmd: NUMERIC_VALUED_COMMAND_WRAPPER) is
+			-- Edit a NUMERIC_VALUED_COMMAND_WRAPPER.
+		local
+			subcmd: COMMAND
+		do
+			subcmd ?= user_interface.command_selection_from_type (
+						user_interface.Any_command, cmd.generator +
+						"'s operand", False)
+			check
+				selection_valid: subcmd /= Void
+			end
+			cmd.set_item (subcmd)
+		end
+
+	edit_command_sequence (cmd: COMMAND_SEQUENCE) is
+			-- Edit a .COMMAND_SEQUENCE
+		local
+			child: COMMAND
+			finished: BOOLEAN
+			c: CHARACTER
+		do
+			from
+				c := user_interface.character_selection (
+					"Add a sub-operator to " + cmd.generator + " ? (y/n) ")
+				if c /= 'y' and c /= 'Y' then
+					finished := True
+				end
+			until
+				finished
+			loop
+				child := user_interface.command_selection_from_type (
+							user_interface.Any_command, cmd.generator +
+							"'s next sub-operator", False)
+				check
+					selection_valid: child /= Void
+				end
+				add_cmd_seq_child (cmd, child)
+				c := user_interface.character_selection (
+					"Add another sub-operator to " + cmd.generator +
+					" ? (y/n) ")
+				if c /= 'y' and c /= 'Y' then
+					finished := True
+				end
+			end
+		end
+
+	add_cmd_seq_child (cmd_seq: COMMAND_SEQUENCE; child: COMMAND) is
+			-- Add `child' to `cmd_seq'.
+		require
+			args_exist: cmd_seq /= Void and child /= Void
+		local
+			c: CHARACTER
+		do
+			cmd_seq.add_child (child)
+			if cmd_seq.main_operator = Void then
+				c := user_interface.character_selection ("Make last " +
+					child.generator + " " + cmd_seq.generator +
+					"'s main operator? (y/n) ")
+				if c = 'y' or c = 'Y' then
+					cmd_seq.set_main_operator (child)
+				end
+			end
+		end
+
+end

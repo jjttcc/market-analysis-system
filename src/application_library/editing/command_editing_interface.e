@@ -104,6 +104,7 @@ feature -- Access
 			l.extend (command_with_generator ("FUNCTION_BASED_COMMAND"))
 			l.extend (command_with_generator ("INDEX_EXTRACTOR"))
 			l.extend (command_with_generator ("MANAGED_VALUE_COMMAND"))
+			l.extend (command_with_generator ("NUMERIC_VALUED_COMMAND_WRAPPER"))
 
 			create l.make (7)
 			Result.extend (l, Binary_real_real_command)
@@ -177,9 +178,16 @@ feature -- Access
 			create l.make (1)
 			Result.extend (l, Constant_command)
 			l.extend (command_with_generator ("CONSTANT"))
+
+			-- Add all commands.
+			l := clone (command_instances)
+			Result.extend (l, Any_command)
 		end
 
 feature -- Constants
+
+	Any_command: STRING is "[Any Command]"
+			-- Name of result command with a BOOLEAN generic parameter
 
 	Boolean_result_command: STRING is "RESULT_COMMAND [BOOLEAN]"
 			-- Name of result command with a BOOLEAN generic parameter
@@ -332,7 +340,9 @@ feature {NONE} -- Implementation
 	Boolean_num_client,	-- BOOLEAN_NUMERIC_CLIENT
 	Function_command,   -- FUNCTION_BASED_COMMAND
 	Index,				-- INDEX_EXTRACTOR
-	Managed_value		-- MANAGED_VALUE_COMMAND
+	Managed_value,		-- MANAGED_VALUE_COMMAND
+	Numeric_wrapper,	-- NUMERIC_VALUED_COMMAND_WRAPPER
+	Command_sequence	-- COMMAND_SEQUENCE
 	:
 				INTEGER is unique
 			-- Constants identifying initialization routines required for
@@ -594,6 +604,16 @@ feature {NONE} -- Implementation
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Managed_value, name)
+			name := "NUMERIC_VALUED_COMMAND_WRAPPER"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Numeric_wrapper, name)
+			name := "COMMAND_SEQUENCE"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Command_sequence, name)
 		end
 
 	initialize_command (c: COMMAND) is
@@ -612,6 +632,8 @@ feature {NONE} -- Implementation
 			minus_n_cmd: MINUS_N_COMMAND
 			ix: INDEX_EXTRACTOR
 			mv: MANAGED_VALUE_COMMAND
+			nvcw: NUMERIC_VALUED_COMMAND_WRAPPER
+			cmd_seq: COMMAND_SEQUENCE
 		do
 			inspect
 				initialization_map @ c.generator
@@ -711,6 +733,18 @@ feature {NONE} -- Implementation
 					c_is_a_managed_value_command: mv /= Void
 				end
 				editor.edit_managed_value (mv)
+			when Numeric_wrapper then
+				nvcw ?= c
+				check
+					c_is_a_numeric_wrapper_command: nvcw /= Void
+				end
+				editor.edit_numeric_wrapper (nvcw)
+			when Command_sequence then
+				cmd_seq ?= c
+				check
+					c_is_a_command_sequence: cmd_seq /= Void
+				end
+				editor.edit_command_sequence (cmd_seq)
 			end
 		end
 

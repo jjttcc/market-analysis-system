@@ -135,7 +135,7 @@ feature {NONE} -- Implementation
 			create first_pair.make (tree_names,
 								"[Valid objects from current tree:]%N")
 			create second_pair.make (obj_names,
-				"[List of all valid objects:]%N")
+				"[List of valid non-shared objects:]%N")
 			from
 				selection := multilist_selection (<<first_pair, second_pair>>,
 													general_msg)
