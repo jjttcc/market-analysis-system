@@ -14,19 +14,6 @@ import support.*;
 import common.*;
 import java_library.support.*;
 
-class WindowSettings implements Serializable {
-	public WindowSettings(Dimension s, Point l) {
-		size_ = s;
-		location_ = l;
-	}
-
-	public Point location() { return location_; }
-	public Dimension size() { return size_; }
-
-	private Point location_;
-	private Dimension size_;
-}
-
 class ChartSettings implements Serializable {
 
 	public ChartSettings(Dimension sz, Properties printprop, Point loc,

@@ -187,7 +187,7 @@ public class TextLine extends Object {
    * Instantiate the class.
    * @param s String to parse.
    */
-     public TextLine(String s) { 
+     public TextLine(String s) {
             this.text = s;
 	  }
   /**
@@ -196,7 +196,7 @@ public class TextLine extends Object {
    * @param f Font to use.
    */
 
-     public TextLine(String s, Font f) { 
+     public TextLine(String s, Font f) {
             this(s);
             font      = f;
             if(font == null) return;
@@ -223,7 +223,7 @@ public class TextLine extends Object {
    * @param s String to parse.
    * @param c Color to use
    */
-     public TextLine(String s, Color c) { 
+     public TextLine(String s, Color c) {
             this(s);
             color = c;
 	  }
@@ -274,7 +274,7 @@ public class TextLine extends Object {
             font  = t.getFont();
             color = t.getColor();
             justification = t.getJustification();
-       
+
             if(font == null) return;
             fontname  = font.getName();
             fontstyle = font.getStyle();
@@ -286,36 +286,36 @@ public class TextLine extends Object {
    * Set the Font to use with the class
    * @param f Font
    */
-     public void setFont(  Font f   ) { 
+     public void setFont(  Font f   ) {
             font      = f;
             fontname  = f.getName();
             fontstyle = f.getStyle();
             fontsize  = f.getSize();
-            parse = true; 
+            parse = true;
 
      }
   /**
    * Set the String to use with the class
    * @param s String
    */
-     public void setText(  String s ) { 
+     public void setText(  String s ) {
             text   = s;
-            parse = true; 
+            parse = true;
      }
 
   /**
    * Set the Color to use with the class
    * @param c Color
    */
-     public void setColor( Color c  ) { 
-            color = c; 
+     public void setColor( Color c  ) {
+            color = c;
      }
   /**
    * Set the Background Color to use with the class
    * @param c Color
    */
-     public void setBackground( Color c  ) { 
-            background = c; 
+     public void setBackground( Color c  ) {
+            background = c;
      }
 
 
@@ -341,33 +341,33 @@ public class TextLine extends Object {
   /**
    * @return the font the class is using
    */
-     public Font   getFont()  { 
-                                return font; 
+     public Font   getFont()  {
+                                return font;
      }
   /**
    * @return the String the class is using.
    */
-     public String getText()  { 
-                               return text; 
+     public String getText()  {
+                               return text;
      }
 
   /**
    * @return the Color the class is using.
    */
-     public Color  getColor() { 
-                               return color; 
+     public Color  getColor() {
+                               return color;
      }
   /**
    * @return the Background Color the class is using.
    */
-     public Color  getBackground() { 
-                               return background; 
+     public Color  getBackground() {
+                               return background;
      }
   /**
    * @return the Justification the class is using.
    */
-     public int    getJustification() { 
-                                return justification; 
+     public int    getJustification() {
+                                return justification;
      }
 
   /**
@@ -392,7 +392,7 @@ public class TextLine extends Object {
 
          if(font==null) fm =  g.getFontMetrics();
          else           fm =  g.getFontMetrics(font);
-         
+
          return fm.charWidth(ch);
      }
 
@@ -454,7 +454,7 @@ public class TextLine extends Object {
          parseText(g);
 
          return descent;
-      
+
      }
   /**
    * @param g Graphics context.
@@ -479,14 +479,14 @@ public class TextLine extends Object {
          parseText(g);
 
          return leading;
-      
+
      }
   /**
    * parse the text. When the text is parsed the width, height, leading
    * are all calculated. The text will only be truly parsed if
    * the graphics context has changed or the text has changed or
    * the font has changed. Otherwise nothing is done when this
-   * method is called. 
+   * method is called.
    * @param g Graphics context.
    */
 
@@ -521,7 +521,7 @@ public class TextLine extends Object {
 
          state.push(current);
          list.addElement(current);
-         
+
          fm = g.getFontMetrics(current.f);
 
          for(int i=0; i<text.length(); i++) {
@@ -579,7 +579,7 @@ public class TextLine extends Object {
                       current.y += (int)((double)(current.getDescent(g))*sub_offset+0.5);
                       break;
 
-             default: 
+             default:
                       current.s.append(ch);
                       break;
 	     }
@@ -592,15 +592,15 @@ public class TextLine extends Object {
 
             if( !current.isEmpty() ) {
                width  += current.getWidth(g);
-               ascent  = Math.max(ascent, Math.abs(current.y) + 
+               ascent  = Math.max(ascent, Math.abs(current.y) +
                                           current.getAscent(g));
-               descent = Math.max(descent, Math.abs(current.y) + 
+               descent = Math.max(descent, Math.abs(current.y) +
                                           current.getDescent(g));
                leading  = Math.max(leading, current.getLeading(g));
 
-               maxDescent = Math.max(maxDescent, Math.abs(current.y) + 
+               maxDescent = Math.max(maxDescent, Math.abs(current.y) +
                                           current.getMaxDescent(g));
-               maxAscent  = Math.max(maxAscent, Math.abs(current.y) + 
+               maxAscent  = Math.max(maxAscent, Math.abs(current.y) +
                                           current.getMaxAscent(g));
 	     }
          }
@@ -641,11 +641,10 @@ public class TextLine extends Object {
          TextState ts;
          int xoffset = x;
          int yoffset = y;
-      
+
 
          if(g == null || text == null) return;
 
- 
          Graphics lg = g.create();
 
          parseText(g);
@@ -653,8 +652,8 @@ public class TextLine extends Object {
 
          if(justification == CENTER ) {
                xoffset = x-width/2;
-         } else 
-         if(justification == RIGHT ) {      
+         } else
+         if(justification == RIGHT ) {
                xoffset = x-width;
 	 }
 
@@ -670,7 +669,7 @@ public class TextLine extends Object {
          for(int i=0; i<list.size(); i++) {
               ts = ((TextState)(list.elementAt(i)));
               if(ts.f != null) lg.setFont(ts.f);
-              if(ts.s != null) 
+              if(ts.s != null)
                    lg.drawString(ts.toString(),ts.x+xoffset,ts.y+yoffset);
 	 }
 
@@ -784,17 +783,17 @@ public class TextLine extends Object {
          int i;
          StringBuffer s = new StringBuffer(n+4);
 
-        
+
          if(left < 0 ) {
             System.out.println(
                 "TextLine.parseDouble: Precision > significant figures!");
             return false;
-         } 
+         }
 
          if(d < 0.0) {
                       x = -d;
                       s.append("-");
-         } 
+         }
 
 
          //System.out.println("parseDouble: value = "+x);
@@ -828,11 +827,11 @@ public class TextLine extends Object {
            for(i=0; i<p; i++) {
                  right *= 10;
                  if(i==p-1) right += 0.5;
-                 s.append((int)(right)); 
+                 s.append((int)(right));
                  right -= (int)right;
 	   }
 	 }
-         
+
          //System.out.println("parseDouble: right = "+right);
 
 
@@ -858,91 +857,6 @@ public class TextLine extends Object {
          setText( s.toString() );
 
          return true;
-     
+
      }
-   }
-
-
-/**
- * A structure class used exclusively with the TextLine class.
- * When the Text changes state (new font, new color, new offset)
- * then this class holds the information plus the substring
- * that the state pertains to.
- */
-class TextState extends Object { 
-      Font f         = null;
-      StringBuffer s = null;
-      int x          = 0;
-      int y          = 0;
-
-      
-      public TextState() {
-              s = new StringBuffer();
-	    }
-
-
-      public TextState copyAll() {
-             TextState tmp = copyState();
-             if(s.length()==0) return tmp;
-             for(int i=0; i<s.length(); i++) { tmp.s.append(s.charAt(i)); }
-             return tmp;
-	   }
-
-
-      public TextState copyState() {
-             TextState tmp = new TextState();
-             tmp.f = f;
-             tmp.x = x;
-             tmp.y = y;
-             return tmp;
-	   }
-
-
-      public String toString() {
-             return s.toString();
-	   }
-
-
-      public boolean isEmpty() {
-           return (s.length() == 0);
-	 }
-
-      public int getWidth(Graphics g) {
-
-           if(g == null || f == null || s.length()==0 ) return 0;
-
-           return g.getFontMetrics(f).stringWidth(s.toString());
-      }
-
-      public int getHeight(Graphics g) {
-           if(g == null || f == null ) return 0;
-           
-           return g.getFontMetrics(f).getHeight();
-	 }
-      public int getAscent(Graphics g) {
-           if(g == null || f == null ) return 0;
-           
-           return g.getFontMetrics(f).getAscent();
-	 }
-      public int getDescent(Graphics g) {
-           if(g == null || f == null ) return 0;
-           
-           return g.getFontMetrics(f).getDescent();
-	 }
-      public int getMaxAscent(Graphics g) {
-           if(g == null || f == null ) return 0;
-           
-           return g.getFontMetrics(f).getMaxAscent();
-	 }
-      public int getMaxDescent(Graphics g) {
-           if(g == null || f == null ) return 0;
-           
-           return g.getFontMetrics(f).getMaxDescent();
-	 }
-      public int getLeading(Graphics g) {
-           if(g == null || f == null ) return 0;
-           
-           return g.getFontMetrics(f).getLeading();
-	 }
 }
-
