@@ -122,7 +122,10 @@ feature -- Access
 		end
 
 	function_library: STORABLE_LIST [MARKET_FUNCTION] is
-			-- All defined market functions
+			-- All defined market functions - Side effect:
+			-- create_stock_function_library is called (once) to fill
+			-- stock_function_library with valid (for a stock) members
+			-- of function_library.
 		once
 			Result := retrieved_function_library
 --!!!Clean up
