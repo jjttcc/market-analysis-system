@@ -34,20 +34,20 @@ deferred class REQUEST_COMMAND inherit
 
 feature {NONE} -- Initialization
 
-	make (list_handler: TRADABLE_LIST_HANDLER) is
+	make (dispenser: TRADABLE_DISPENSER) is
 		require
-			not_void: list_handler /= Void
+			not_void: dispenser /= Void
 		do
-			market_list_handler := list_handler
+			tradables := dispenser
 		ensure
-			set: market_list_handler = list_handler and
-				market_list_handler /= Void
+			set: tradables = dispenser and
+				tradables /= Void
 		end
 
 feature -- Access
 
-	market_list_handler: TRADABLE_LIST_HANDLER
-			-- Hanler of available market lists
+	tradables: TRADABLE_DISPENSER
+			-- Dispenser of available market lists
 
 	session: SESSION
 			-- Settings specific to a particular client session
@@ -64,15 +64,15 @@ feature -- Status setting
 			active_medium_set: active_medium = arg and active_medium /= Void
 		end
 
-	set_market_list_handler (arg: TRADABLE_LIST_HANDLER) is
-			-- Set market_list_handler to `arg'.
+	set_tradables (arg: TRADABLE_DISPENSER) is
+			-- Set tradables to `arg'.
 		require
 				arg_not_void: arg /= Void
 		do
-			market_list_handler := arg
+			tradables := arg
 		ensure
-			market_list_handler_set: market_list_handler = arg and
-				market_list_handler /= Void
+			tradables_set: tradables = arg and
+				tradables /= Void
 		end
 
 	set_session (arg: SESSION) is
@@ -111,7 +111,7 @@ feature {NONE}
 	report_server_error is
 		do
 			report_error (Error, <<"Server error: ",
-				market_list_handler.last_error>>)
+				tradables.last_error>>)
 		end
 
 	print (o: GENERAL) is
@@ -126,7 +126,11 @@ feature {NONE}
 	server_error: BOOLEAN is
 			-- Did an error occur in the server?
 		do
-			Result := market_list_handler.error_occurred
+			Result := tradables.error_occurred
 		end
+
+invariant
+
+	tradables_set: tradables /= Void
 
 end -- class REQUEST_COMMAND
