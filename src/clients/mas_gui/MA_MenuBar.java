@@ -14,18 +14,17 @@ public class MA_MenuBar extends MenuBar {
 		chart = c;
 		menu_bar = this;
 		Menu file_menu = new Menu("File");
-		Menu indicator_menu = new Menu("Indicators");
+		indicator_menu = new Menu("Indicators");
 		Menu view_menu = new Menu("View");
-		IndicatorSelection indicator_listener = new IndicatorSelection(chart);
+		indicator_selection = new IndicatorSelection(chart);
 
 		add(file_menu);
 		add(indicator_menu);
 		add(view_menu);
-		chart.add_indicators(indicator_menu);
 
 		// File menu items, with shortcuts
 		MenuItem new_window, close_window, mkt_selection, print_cmd;
-		MenuItem indicator_selection, print_all, quit;
+		MenuItem indicator_selection_menu, print_all, quit;
 		file_menu.add(new_window = new MenuItem("New Window",
 							new MenuShortcut(KeyEvent.VK_N)));
 		file_menu.add(close_window = new MenuItem("Close Window",
@@ -33,8 +32,8 @@ public class MA_MenuBar extends MenuBar {
 		file_menu.addSeparator();
 		file_menu.add(mkt_selection = new MenuItem("Select Market",
 							new MenuShortcut(KeyEvent.VK_S)));
-		file_menu.add(indicator_selection = new MenuItem("Select Indicator",
-							new MenuShortcut(KeyEvent.VK_I)));
+		file_menu.add(indicator_selection_menu =
+			new MenuItem("Select Indicator", new MenuShortcut(KeyEvent.VK_I)));
 		file_menu.addSeparator();
 		file_menu.add(print_cmd = new MenuItem("Print",
 							new MenuShortcut(KeyEvent.VK_P)));
@@ -51,7 +50,7 @@ public class MA_MenuBar extends MenuBar {
 			}
 		});
 		mkt_selection.addActionListener(chart.market_selections);
-		indicator_selection.addActionListener(indicator_listener);
+		indicator_selection_menu.addActionListener(indicator_selection);
 		close_window.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) { chart.close(); }
 		});
@@ -100,18 +99,14 @@ public class MA_MenuBar extends MenuBar {
 		view_menu.add(next);
 		view_menu.add(previous);
 		setup_period_menu(period_menu, period_types);
-		final IndicatorColors indicator_colors = new IndicatorColors(chart);
+		indicator_colors = new IndicatorColors(chart);
 		// Connect the indicator colors dialog/list with the corresponding
 		// menu item:
 		indicator_colors_item.addActionListener(indicator_colors);
 		// Set up so that the indicator colors dialog/list will be updated
 		// whenever an indicator is selected from the indicator menu item.
-		indicator_listener.addActionListener(indicator_colors);
-		// Set up so that the indicator colors dialog/list will be
-		// updated whenever an indicator is selected from `indicator_menu':
-		for (int i = 0; i < indicator_menu.getItemCount(); ++i) {
-			indicator_menu.getItem(i).addActionListener(indicator_colors);
-		}
+		indicator_selection.addActionListener(indicator_colors);
+		update_indicator_menu();
 
 		// Action listeners for view menu items
 		replace_toggle.addActionListener(new ActionListener() {
@@ -130,6 +125,23 @@ public class MA_MenuBar extends MenuBar {
 				menu_bar.previous_market();
 			}
 		});
+	}
+
+	// Update the indicator menu and the indicator selection list with the 
+	// current indicator list.
+	void update_indicators() {
+		indicator_selection.update_indicators(false);
+		update_indicator_menu();
+	}
+
+	private void update_indicator_menu() {
+		indicator_menu.removeAll();
+		chart.add_indicators(indicator_menu);
+		// Set up so that the indicator colors dialog/list will be
+		// updated whenever an indicator is selected from `indicator_menu':
+		for (int i = 0; i < indicator_menu.getItemCount(); ++i) {
+			indicator_menu.getItem(i).addActionListener(indicator_colors);
+		}
 	}
 
 	private void set_period_type_label(Menu m) {
@@ -281,6 +293,9 @@ public class MA_MenuBar extends MenuBar {
 	private DataSetBuilder data_builder;
 	private Chart chart;
 	private MA_MenuBar menu_bar;
+	private IndicatorSelection indicator_selection;
+	private Menu indicator_menu;
+	private IndicatorColors indicator_colors;
 	public static final String daily_period = "Daily";
 	public static final String weekly_period = "Weekly";
 	public static final String monthly_period = "Monthly";
