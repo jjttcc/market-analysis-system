@@ -29,7 +29,7 @@ feature
 	make is
 		do
 			create innermost_function.make ("dummy",
-				period_types @ (period_type_names @ Daily), Void)
+				period_types @ (period_type_names @ Daily), Void, Void)
 		ensure
 			not_void: innermost_function /= Void
 		end
