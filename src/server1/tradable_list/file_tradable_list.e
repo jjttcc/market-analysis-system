@@ -7,12 +7,6 @@ indexing
 		%in memory.  The purpose of this scheme is to avoid using the %
 		%large amount of memory that would be required to hold a large %
 		%list of tradables in memory at once."
-	NOTE: "!!!A useful extension would be to allow setting of a default %
-		%factory:  If the current item in tradable_factories is Void, %
-		%the default will be used.  This way, the client will not need %
-		%to add a factory reference to tradable_factories for each element %
-		%of file_names (although they will still need to add the Void %
-		%elements)."
 	status: "Copyright 1998 - 2000: Jim Cochrane and others - %
 		%see file forum.txt"
 	date: "$Date$";
@@ -39,7 +33,7 @@ feature -- Access
 			fnames: LINEAR [STRING]
 		do
 			fnames := file_names
-			!LINKED_LIST [STRING]!Result.make
+			create {LINKED_LIST [STRING]} Result.make
 			from fnames.start until fnames.exhausted loop
 				Result.extend (symbol_from_file_name (fnames.item))
 				fnames.forth
@@ -71,7 +65,7 @@ feature {NONE} -- Implementation
 			i, last_sep_index: INTEGER
 			strutil: STRING_UTILITIES
 		do
-			!!strutil.make (clone (fname))
+			create strutil.make (clone (fname))
 			if strutil.target.has (Directory_separator) then
 				-- Strip directory path from the file name:
 				strutil.tail (Directory_separator)
@@ -87,18 +81,15 @@ feature {NONE} -- Implementation
 			-- Open the file associated with `file_names'.item.
 			-- If the open fails with an exception, log the error,
 			-- set Result to Void, and allow the exception to propogate.
-		local
-			error: BOOLEAN
 		do
-			if not error then
-				!!Result.make_open_read (file_names.item)
+			create Result.make (file_names.item)
+			if Result.exists then
+				Result.open_read
 			else
-				log_errors (<<"Failed to open file ", file_names.item, "%N">>)
-				Result := Void
+				log_errors (<<"Failed to open input file ",
+					file_names.item, "%N">>)
+				fatal_error := true
 			end
-		rescue
-			error := True
-			retry
 		end
 
 	setup_input_medium is
@@ -107,15 +98,12 @@ feature {NONE} -- Implementation
 			exc: EXCEPTIONS
 		do
 			input_file := open_current_file
-			if input_file /= Void then
+			if not fatal_error then
 				tradable_factories.item.set_input (input_file)
 				input_file.set_field_separator (
 					tradable_factories.item.field_separator)
 				input_file.set_record_separator (
 					tradable_factories.item.record_separator)
-			else
-				create exc
-				exc.raise ("Error opening input file")
 			end
 		end
 
