@@ -81,8 +81,9 @@ class Parser {
 	private void parse_default(StringTokenizer recs) throws Exception {
 		int float_index = 0, volume_index = 0, oi_index = 0;
 		while (recs.hasMoreTokens()) {
-			StringTokenizer fields = new StringTokenizer(recs.nextToken(),
-													_field_separator, false);
+			String s = recs.nextToken();
+			StringTokenizer fields = new StringTokenizer(s,
+				_field_separator, false);
 			for (int j = 0; fields.hasMoreTokens(); ++j) {
 				try {
 				switch (parsetype[j]) {
@@ -319,14 +320,20 @@ class Parser {
 	// Does `s' contain a time field?
 	boolean contains_time_field(String s) {
 		boolean result = false;
+		int valid_parse_fields;
 		StringTokenizer recs = new StringTokenizer(s, _record_separator, false);
 		if (recs.countTokens() > 0) {
 			StringTokenizer fields = new StringTokenizer(recs.nextToken(),
 				_field_separator, false);
 
+			valid_parse_fields = 0;
+			for (int i = 0; i < parsetype.length && parsetype[i] != Not_set;
+					++i) {
+				++valid_parse_fields;
+			}
 			// If the number of fields in a record is greater than the number of
 			// parse types, a time field is included.
-			result = fields.countTokens() > parsetype.length;
+			result = fields.countTokens() > valid_parse_fields;
 		}
 		return result;
 	}
