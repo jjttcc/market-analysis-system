@@ -120,10 +120,11 @@ feature {NONE} -- Hook routine implementations
 
 	output_file_path: STRING is
 			-- Directory path of output file - redefine if needed
+		local
+			env: expanded APP_ENVIRONMENT
 		once
-			--!!!!!Stub - implement this to use MAS_DIRECTORY env. var.
-			--and perhaps within a ./data subdirectory.
-			Result := ""
+			Result := env.file_name_with_app_directory (
+				parameters.data_cache_subdirectory)
 		end
 
 	latest_date_for (symbol: STRING): DATE is
