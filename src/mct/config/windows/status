@@ -1,5 +1,14 @@
-This mctrc file is tuned for windows 98.  The "browse_*command" settings
-work.  The "start_cl_client_command" command behaves like it should work, but
-doesn't: It starts up a DOS window, but the macl/mas menu never appears -
-it just hangs.  The "chart_command" has not yet been worked with.  (i.e.,
-it currently doesn't work.)
+The mctrc.win98 file is tuned for windows 98.  The only way I could find to
+get the macl and charting commands to work is by calling a separate
+batch file, run_command.bat.
+
+mctrc.nt is the current version of the NT mctrc.
+
+mctrc.nt has been tested on NT and works.  Some changes were made to
+mctrc.win98 since it was tested on the latptop, so it should be tested
+again.
+
+These files have not yet been incorporated into the config_tool template ...
+scheme.  (The win98 vs. NT differences probably need to be incorporated
+into the bash_init script.)  When they are incorporated, the final results
+need to be tested before release, of course.
