@@ -19,7 +19,7 @@ public class TA_Chart extends Frame
 		num_windows++;			// Count it.
 
 		// Create the main scroll pane, size it, and center it.
-		TA_ScrollPane pane = new TA_ScrollPane();
+		TA_ScrollPane pane = new TA_ScrollPane(TA_ScrollPane.SCROLLBARS_NEVER);
 		pane.setSize(610, 410);
 		this.add(pane, "Center");
 
@@ -33,7 +33,7 @@ public class TA_Chart extends Frame
 		MenuItem newwin, closewin, ss, quit;
 		file.add(newwin = new MenuItem("New Window",
 							new MenuShortcut(KeyEvent.VK_N)));
-		file.add(ss = new MenuItem("Select Stock",
+		file.add(ss = new MenuItem("Select Market",
 							new MenuShortcut(KeyEvent.VK_S)));
 		file.add(closewin = new MenuItem("Close Window",
 							new MenuShortcut(KeyEvent.VK_W)));
@@ -45,7 +45,7 @@ public class TA_Chart extends Frame
 		public void actionPerformed(ActionEvent e) { new TA_Chart(connection); }
 		});
 
-		ss.addActionListener(new StockSelection(this, connection,
+		ss.addActionListener(new MarketSelection(this, connection,
 								pane.main_graph()));
 
 		closewin.addActionListener(new ActionListener() {// Close this window.

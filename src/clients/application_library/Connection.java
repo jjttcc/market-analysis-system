@@ -41,7 +41,6 @@ public class TA_Connection implements NetworkProtocol
 		throws IOException
 	{
 		connect();
-		// Send Market_data_request, with symbol - for weekly data.
 		send_msg(Market_data_request, symbol + Input_field_separator +
 					period_type);
 		data_parser.parse(receive_msg().toString());
@@ -53,12 +52,11 @@ public class TA_Connection implements NetworkProtocol
 	// Send a request for data for indicator `ind' for market `symbol' with
 	// `period_type'.
 	public void send_indicator_data_request(String ind, String symbol,
-		String ptype) throws IOException
+		String period_type) throws IOException
 	{
 		connect();
-		// Send Indicator_data_request, for ind, symbol - for weekly data.
 		send_msg(Indicator_data_request, ind + Input_field_separator +
-					symbol + Input_field_separator + ptype);
+					symbol + Input_field_separator + period_type);
 		data_parser.parse(receive_msg().toString());
 		_last_indicator_data = data_parser.result();
 		_last_indicator_data.set_drawer(bar_drawer);
@@ -71,7 +69,6 @@ public class TA_Connection implements NetworkProtocol
 		StringBuffer mlist;
 		_last_indicator_list = new Vector();
 		connect();
-		// Send Indicator_list_request for symbol.
 		send_msg(Indicator_list_request, symbol);
 		mlist = receive_msg();
 		close_connection();
@@ -111,7 +108,6 @@ public class TA_Connection implements NetworkProtocol
 		{
 			markets = new Vector();
 			connect();
-			// Send Market_list_request (and empty message body).
 			send_msg (Market_list_request, "");
 			mlist = receive_msg();
 			close_connection();

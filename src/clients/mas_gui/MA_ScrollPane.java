@@ -4,18 +4,20 @@ import graph.*;
 /** Scroll pane that holds the TA graph and buttons */
 public class TA_ScrollPane extends ScrollPane
 {
-	private Graph2D _main_graph, _indicator_graph;
+	private G2Dint _main_graph, _indicator_graph;
 	DataSet data;
 	BarDrawer drawer;
 
-	public TA_ScrollPane()
+	public TA_ScrollPane(int scrollbarDisplayPolicy)
 	{
+		super(scrollbarDisplayPolicy);
+
 		int i;
 		int j;
 
 		drawer = new BarDrawer();
-		_main_graph = new Graph2D();
-		_indicator_graph = new Graph2D();
+		_main_graph = new G2Dint();
+		_indicator_graph = new G2Dint();
 
 		Panel main_panel = new Panel(new BorderLayout());
 		add(main_panel, "Center");
@@ -33,7 +35,7 @@ public class TA_ScrollPane extends ScrollPane
 		bottom_button_panel.add(new Button("Transact"));
 		bottom_button_panel.add(new Button("Stall"));
 
-		graph_panel.add (_main_graph, "Center");
+		graph_panel.add (_main_graph, "North");
 		graph_panel.add (_indicator_graph, "South");
 		_main_graph.framecolor = new Color(0,0,0);
 		_main_graph.borderTop = 0;
@@ -41,7 +43,7 @@ public class TA_ScrollPane extends ScrollPane
 		_main_graph.borderLeft = 0;
 		_main_graph.borderRight = 1;
 		_main_graph.setGraphBackground(new Color(50,50,200));
-		_main_graph.setSize(300, 200);
+		_main_graph.setSize(300, 250);
 
 		_indicator_graph.framecolor = new Color(0,0,0);
 		_indicator_graph.borderTop = 0;
@@ -49,7 +51,7 @@ public class TA_ScrollPane extends ScrollPane
 		_indicator_graph.borderLeft = 0;
 		_indicator_graph.borderRight = 1;
 		_indicator_graph.setGraphBackground(new Color(50,50,200));
-		_indicator_graph.setSize(300, 100);
+		_indicator_graph.setSize(300, 160);
 	}
 
 	// The main graph - where the principal market data is displayed

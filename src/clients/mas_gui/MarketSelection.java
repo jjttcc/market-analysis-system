@@ -5,9 +5,9 @@ import java.util.*;
 import java.io.*;
 import graph.*;
 
-// Listener that allows user to select a stock to be displayed.
-class StockSelection implements ActionListener {
-	public StockSelection(Frame f, TA_Connection conn, Graph2D g) {
+// Listener that allows user to select a market to be displayed.
+class MarketSelection implements ActionListener {
+	public MarketSelection(Frame f, TA_Connection conn, Graph2D g) {
 		connection = conn;
 		graph = g;
 		main_frame = f;
@@ -44,6 +44,7 @@ class StockSelection implements ActionListener {
 			//change later.)
 			graph.detachDataSets();
 			graph.attachDataSet(connection.last_market_data());
+			main_frame.setTitle(item);
 			graph.repaint();
 		}});
 	}
