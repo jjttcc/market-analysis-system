@@ -19,11 +19,12 @@ feature -- Access
 			type_not_void: period_type /= Void
 			cursor_valid: not off
 		do
-			Result := tradable (current_symbol, period_type)
+			if valid_period_type (current_symbol, period_type) then
+				Result := tradable (current_symbol, period_type)
+			end
 		ensure
 			result_definition: Result = tradable (current_symbol, period_type)
 			last_tradable_set: last_tradable = Result
-			not_void_if_no_error: not error_occurred implies Result /= Void
 		end
 
 	index: INTEGER is
@@ -37,7 +38,9 @@ feature -- Access
 			-- Void if the tradable for `symbol' is not found or if
 			-- `period_type' is not a valid type for `symbol'
 		require
+			not_empty: not empty
 			not_void: symbol /= Void and period_type /= Void
+			period_type_valid: valid_period_type (symbol, period_type)
 		deferred
 		ensure
 			period_type_valid: Result /= Void implies
@@ -53,7 +56,9 @@ feature -- Access
 			-- is not a valid type for `symbol'.  `last_tradable' will be set
 			-- to `tradable (symbol, period_type)'.
 		require
+			not_empty: not empty
 			not_void: symbol /= Void and period_type /= Void
+			period_type_valid: valid_period_type (symbol, period_type)
 		local
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 		do
@@ -73,6 +78,7 @@ feature -- Access
 		ensure
 			object_comparison: Result.object_comparison
 			not_void_if_no_error: not error_occurred implies Result /= Void
+			void_if_empty: empty implies Result = Void
 		end
 
 	period_types (symbol: STRING): ARRAYED_LIST [STRING] is
@@ -80,6 +86,7 @@ feature -- Access
 			-- ascending order according to period-type duration -
 			-- Void if the tradable for `symbol' is not found
 		require
+			not_empty: not empty
 			not_void: symbol /= Void
 			symbol_valid: symbols.has (symbol)
 		deferred
@@ -136,10 +143,32 @@ feature -- Status report
 		deferred
 		end
 
+	valid_period_type (symbol: STRING; t: TIME_PERIOD_TYPE): BOOLEAN is
+			-- does `t' for `symbol' match a member of `period_types'?
+		require
+			not_void: symbol /= Void and t /= Void
+			not_empty: not empty
+		local
+			change_back: BOOLEAN
+			ptypes: LIST [STRING]
+		do
+			if symbols.has (symbol) then
+				ptypes := period_types (symbol)
+				if not ptypes.object_comparison then
+					change_back := true
+					ptypes.compare_objects
+				end
+				Result := ptypes.has (t.name)
+				if change_back then
+					ptypes.compare_references
+				end
+			end
+		end
+
 feature -- Cursor movement
 
 	forth is
-			-- Move to next position; if not next position, ensure
+			-- Move to next position; if no next position, ensure
 			-- `exhausted'.
 		require
 			not_after: not after
