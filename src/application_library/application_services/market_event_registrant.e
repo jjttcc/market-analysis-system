@@ -19,6 +19,14 @@ deferred class MARKET_EVENT_REGISTRANT inherit
 		end
 
 	GLOBAL_SERVICES
+		export {NONE}
+			all
+		end
+
+	GENERAL_UTILITIES
+		export {NONE}
+			all
+		end
 
 feature -- Access
 
