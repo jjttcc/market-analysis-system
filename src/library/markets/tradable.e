@@ -77,6 +77,10 @@ feature -- Access
 			loaded: loaded
 		do
 			Result := tuple_lists @ period_type
+--!!!!Temporary solution to the "read new data problem" here - need to
+-- find an efficient method for updating the composite tradables, such as
+-- keeping the old data and adding composite records based on new data.
+Result := Void -- Force a new tuple list to always be created.!!!
 			-- If the list has not been created and there is enough
 			-- data, create/process the list of tuples.
 			if Result = Void then
@@ -85,7 +89,7 @@ feature -- Access
 					Result := Current
 				else
 					Result := process_composite_list (
-													period_types @ period_type)
+						period_types @ period_type)
 				end
 				tuple_lists.force (Result, period_type)
 			end
