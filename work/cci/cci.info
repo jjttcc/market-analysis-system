@@ -1,0 +1,48 @@
+   	   	Copyright © 2000 Steven B. Achelis and Jon C. DeBry
+
+
+
+Indicator 	Commodity Channel Index
+Security 	NYMEX Lite Crude Oil
+Parameters 	5 days
+Date 	High 	Low 	Close 	Typical Price 	5-day SMA of Column E 	Today's Column F minus each of the 5 preceding Col E's (see text) 	Column G divided by 5 	Column H multiplied by 0.015 	Column E minus Column F 	Column J divided by Column I
+10/12/98 	15.1250 	14.9360 	14.9360 	14.9990
+10/13/98 	15.0520 	14.6267 	14.7520 	14.8102
+10/14/98 	14.8173 	14.5557 	14.5857 	14.6529
+10/15/98 	14.6900 	14.4600 	14.6000 	14.5833
+10/16/98 	14.7967 	14.5483 	14.6983 	14.6811 	14.7453
+10/19/98 	14.7940 	13.9347 	13.9460 	14.2249 	14.5905
+10/20/98 	14.0930 	13.8223 	13.9827 	13.9660 	14.4216
+10/21/98 	14.7000 	14.0200 	14.4500 	14.3900 	14.3691
+10/22/98 	14.5255 	14.2652 	14.3452 	14.3786 	14.3281 	0.9307 	0.1861 	0.0028 	0.0505 	18.0890
+10/23/98 	14.6579 	14.3773 	14.4197 	14.4850 	14.2889 	0.7738 	0.1548 	0.0023 	0.1961 	84.4605
+10/26/98 	14.7842 	14.5527 	14.5727 	14.6365 	14.3712 	0.8105 	0.1621 	0.0024 	0.2653 	109.1186
+10/27/98 	14.8273 	14.3309 	14.4773 	14.5452 	14.4871 	0.4152 	0.0830 	0.0012 	0.0581 	46.6540
+10/28/98 	14.7018 	14.3461 	14.6639 	14.5706 	14.5232 	0.3655 	0.0731 	0.0011 	0.0474 	43.2443
+10/29/98 	14.7242 	14.5261 	14.6488 	14.6330 	14.5741 	0.2429 	0.0486 	0.0007 	0.0590 	80.9317
+10/30/98 	14.8636 	14.3491 	14.8436 	14.6854 	14.6142 	0.2251 	0.0450 	0.0007 	0.0713 	105.5625
+11/02/98 	15.1227 	14.7382 	14.7482 	14.8697 	14.6608 	0.4671 	0.0934 	0.0014 	0.2089 	149.0790
+11/03/98 	14.7152 	14.5830 	14.6530 	14.6504 	14.6818 	0.3829 	0.0766 	0.0011 	-0.0314 	-27.3619
+11/04/98 	14.7636 	14.4706 	14.5879 	14.6074 	14.6892 	0.3610 	0.0722 	0.0011 	-0.0818 	-75.5438
+11/05/98 	14.6227 	14.3500 	14.4318 	14.4682 	14.6562 	0.4854 	0.0971 	0.0015 	-0.1880 	-129.1316
+11/06/98 	14.6345 	14.2970 	14.3821 	14.4379 	14.6067 	0.6147 	0.1229 	0.0018 	-0.1688 	-91.5483
+11/09/98 	14.3588 	13.9709 	13.9709 	14.1002 	14.4528 	0.7351 	0.1470 	0.0022 	-0.3526 	-159.8948
+11/10/98 	14.1712 	13.8791 	14.1112 	14.0538 	14.3335 	1.0259 	0.2052 	0.0031 	-0.2797 	-90.8662
+11/11/98 	14.4273 	14.1409 	14.1473 	14.2385 	14.2597 	0.7732 	0.1546 	0.0023 	-0.0212 	-9.1451
+11/12/98 	14.4967 	14.1933 	14.4267 	14.3722 	14.2405 	0.6581 	0.1316 	0.0020 	0.1317 	66.7112
+11/13/98 	14.6885 	14.0197 	14.1224 	14.2769 	14.2083 	0.5252 	0.1050 	0.0016 	0.0685 	43.4976
+
+Column E is the sum of the high plus low plus close divided by three. This
+is the Typical Price.
+
+Column F is a 5-day simple moving average of the Typical Price calculated
+in Column E. It is calculated by adding the preceding 5 values in Column
+E and dividing by 5.
+
+Column G is rather complicated to explain. First, take the absolute value
+of today?s Column F minus today?s Column E. This is then added to the
+absolute value of  today?s Column F minus yesterday?s Column E. This
+process (i.e., taking the absolute value of the difference between
+today?s Column F and a previous day?s Column E) is repeated for 5 days.
+
+Column H is the value in Column G divided by 5.
