@@ -6,6 +6,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
+x
 class UNARY_LINEAR_OPERATOR inherit
 
 	LINEAR_COMMAND
