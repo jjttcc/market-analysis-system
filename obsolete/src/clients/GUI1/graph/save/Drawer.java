@@ -74,6 +74,7 @@ abstract public class Drawer {
 
 		draw_horizontal_lines(g, bounds, hlines);
 		draw_vertical_lines(g, bounds, vlines);
+		if (reference_values_needed()) draw_reference_values(g, bounds);
 		draw_tuples(g, bounds);
 	}
 
@@ -118,6 +119,51 @@ abstract public class Drawer {
 			x2 = (int)(bounds.x + ((d2-xmin) / xrange) * bounds.width);
 			g.drawLine(x1, bounds.y, x2, bounds.y + bounds.height);
 		}
+	}
+
+	void draw_reference_values(Graphics g, Rectangle bounds) {
+		int step, start, y;
+
+		if (yrange <= 1200) {
+			if (yrange <= 120) {
+				if (yrange <= 12) {
+					step = 1;
+				}
+				else {
+					step = 10;
+				}
+			}
+			else {
+				step = 100;
+			}
+		}
+		else {
+			step = 1000;
+		}
+		start = (int) (Math.floor(ymin / step) * step + step);
+		for (y = start; y < ymax; y += step) {
+			display_reference_value(y, g, bounds);
+		}
+	}
+
+	// Display the value of the specified y coordinate at that y coordinate
+	// at the far left side of the graph and at the far right side.
+	protected void display_reference_value (int y, Graphics g,
+			Rectangle bounds) {
+		int adjusted_y = (int) (bounds.y + (1.0 - (y-ymin) / yrange) *
+								bounds.height);
+
+		g.drawLine(bounds.x, adjusted_y, bounds.x + bounds.width, adjusted_y);
+		g.drawString(new Integer(y).toString(), bounds.x + 5, adjusted_y);
+		g.drawString(new Integer(y).toString(),
+						bounds.x + bounds.width - 30, adjusted_y);
+	}
+
+	// Do y-coordinate reference values need to be displayed for this data?
+	protected boolean reference_values_needed() {
+		// Assumption: If the stride is 1, the data is for an indicator,
+		// which does not need reference values.
+		return drawing_stride() > 1;
 	}
 
 	protected double data[];
