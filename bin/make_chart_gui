@@ -1,14 +1,17 @@
 #!/bin/bash
-# Make the MAS charting GUI - Compile the Java files and place the
+# Make the open-source MAS charting GUI - Compile the Java files and place the
 # resulting class files into a jar file.
 
 Progname=$(basename $0)
 Basedir=$(dirname $0)
-Gui_dir=$MAS/src/clients/GUI1
+Gui_dir=$MAS/src/clients/
 Jarfile=mascharts.jar
-Main_file=MA_Client.java
-Main_class_files=MA_Client.class
+Main_file=gui1_root/MA_Client.java
+# Remove: Main_class_files=MA_Client.class
 CL_classes=CL_Client.java
+javalibdir=/home/development/jtc
+jlsupport=java_library/support
+jlibclasses="$jlsupport/AssertionConstants.class $jlsupport//Logic.class"
 
 utilpath=$Basedir/../../script_library/support/utilities
 . $utilpath || (
@@ -16,17 +19,24 @@ echo "Cound not load shell functions from $utilpath - aborting ..."; exit 1)
 
 cd $Gui_dir || fatal "Could not cd to $Gui_dir."
 
-guidirs="common mas_gui graph java_library/support support applet \
-application_library application_support"
+guidirs="application_library application_support common graph gui1_root \
+mas_gui support"
 
 echo Removing old class files ...
 find . -follow -name '*.class' -exec rm {} ';'
 echo Compiling ...
-javac $Main_file || fatal "Compilation of $Main_file failed."
+javac -classpath .:$javalibdir $Main_file || fatal "Compilation of $Main_file failed."
 echo Creating jar file: $Jarfile ...
 rm -f $Jarfile
-jar cvf $Jarfile $Main_class_files $(for d in $guidirs;do ls -1 $d/*.class;done)
+echo A
+jar cvf $Jarfile $(for d in $guidirs;do ls -1 $d/*.class;done)
+echo B
+cd $javalibdir
+echo C
+jar uvf $Gui_dir/$Jarfile $jlibclasses
+echo D
+cd -
 
 # Make the CL program.
-cd ../CL
+cd CL
 javac $CL_classes
