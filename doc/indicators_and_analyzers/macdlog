@@ -1,0 +1,254 @@
+Customer:* what i'm trying to do is build an indicator
+or analyser which compares todays macd histogram with yesterdays. I
+thiought the easiest way to do it would be to get a simple tool which
+simply returned yesterdays macdh then I can reuse this to chbuild
+slightly more complex tools
+MAS-support:* I see.
+
+MAS-support:* What have you tried so far?
+Customer:* the problem seems to be link the macdh with
+the settable offset - they never quite show up together
+Customer:* I have tried both indicators and analysers
+but both seem to want a root operator
+MAS-support:* OK.
+
+MAS-support:* Let's try starting with a simple example and go
+from there.
+Customer:* ok
+
+MAS-support:* Can you think of a signal you would like to
+generate based on macd today and macd yesterday? -
+MAS-support:* perhaps today was > yesterday?
+Customer:* what i will eventually do is check for a
+reversal but that sounds like a good starting point.
+MAS-support:* OK - nice and simple, although it will give a lot
+of signals, but that's OK.
+Customer:* I will eventually link it to a more complex GT signal
+MAS-support:* Yes, of course - once we get the simple example
+working you can build from there.
+
+...
+
+MAS-support:* OK.
+MAS-support:* Now, It would be good to use the -r option to
+record what you do - with macl.
+MAS-support:* Have you used that before?
+Customer:* no just found it and the input from file
+which will be handy for automation
+MAS-support:* OK - you can start it then with, something like:
+MAS-support:* p=1234; macl $p -r /tmp/recfile
+MAS-support:* where 1234 stands for the port # you're using.
+...
+MAS-support:* OK - you started macl?
+Customer:* once i called it macl not mcal
+MAS-support:* OK. - Did you start it with -r?
+Customer:* yes
+MAS-support:* OK. good.
+Customer:* have an empty recfile in /tmp
+MAS-support:* OK, let me start up a session.
+MAS-support:* That's OK. It should have stuff in it when you exit.
+MAS-support:* OK, are you ready to create an indicator?
+Customer:* ready
+MAS-support:* OK, so we said we want a signal when MACD today >
+MACD yesterday ...
+MAS-support:* Let me think for a minute...
+MAS-support:* OK - I think there may be more than one way to do
+this.
+MAS-support:* Let's try putting most of the logic into the
+indicator.
+Customer:* thats probably best - hides the complexity a
+bit
+MAS-support:* I'm not sure - it may be best. It's the easiest
+for me to think up on the fly at least.
+MAS-support:* OK...
+MAS-support:* Go into the edit indicators menu and create a new
+indicator.
+Customer:* ok
+Customer:* done
+MAS-support:* OK.
+MAS-support:* choose a new object.
+Customer:* done
+MAS-support:* then choose 2 - one-var. functn.
+Customer:* done
+MAS-support:* OK, give a name - just test1 or something short.
+Customer:* done
+MAS-support:* then select macd histogram as the input function.
+Customer:* done
+Customer:* this is the bit where I kept getting stuck
+MAS-support:* OK, now we need an if/else condition.
+MAS-support:* (I need to write a wizard to make this stuff
+easier - it's hard right now.)
+MAS-support:* Select NUMERIC_CONDITIONAL_COMMAND
+Customer:* yes i think you need to be able to see and
+edit the structure and also test it against some data once its built or
+even during the build
+Customer:* done
+MAS-support:* (It's called BOOLEAN_NUMERIC_CLIENT in the old
+version. sorry about the name change, but I think you'll agree it's a
+better name.)
+MAS-support:* OK now it should ask for the boolean op.
+Customer:* do i use the c or e option ??
+MAS-support:* You can use e if you want to name it....
+MAS-support:* which can be useful - take your pick - c or e ...
+Customer:* ill use c at the moment i can get onto the naming later
+MAS-support:* OK...  Is it asking for the boolean operator?
+Customer:* yes
+MAS-support:* OK, now we want to know if today is > thanyesterday, so we need >
+MAS-support:* the GT operator.
+Customer:* done
+MAS-support:* OK.
+MAS-support:* For the left operand, we need today, so choose
+BASIC_NUMERIC_COMMAND -
+MAS-support:* which should just extract the current value, whic is
+MAS-support:* the current macd value.
+MAS-support:* Let me know when you've entered the BNC.
+...
+
+MAS-support:* So is macl asking for GT operator's right operand?
+Customer:* yes its asking for left operand
+MAS-support:* left op - OK.
+MAS-support:* So you need to give it BASIC_NUMERIC_COMMAND.
+Customer:* done
+MAS-support:* OK - the BNC will extract today's value from the MACD function.
+MAS-support:* For the right operator, you want it to use yesterday's value.
+MAS-support:* So give it SETTABLE_OFFSET_COMMAND.
+Customer:* done
+MAS-support:* OK.
+MAS-support:* BASIC_NUMERIC_COMMAND
+MAS-support:* for SOCs oprand.
+Customer:* ok done
+MAS-support:* OK -by the way, you can use the same BNC as the
+first one - that is , share it.
+MAS-support:* Or you can use a new one.
+MAS-support:* Doesn't matter with the BNC.
+Customer:* ok - its asking for an indicator for SOC now
+MAS-support:* OK, for SOC's input select macd histogram.
+MAS-support:* (BTW, I think this question is not necessary and
+should be removed - future release)
+Customer:* done i suppose the answer to the no of days is 1 ???
+MAS-support:* yes.
+MAS-support:* OK, after that it will want the num. cond. cmds'
+true command, right?
+MAS-support:* Are you there yet?
+Customer:* what number ( selection ) is that - its
+given me 41 options ?
+MAS-support:* OK.
+MAS-support:* It's asking for the true command?
+Customer:* I dont have that option showing !!
+
+Customer:* Soory yes i do !!
+MAS-support:* You need a long window :)
+MAS-support:* OK, so one way to do what we want is to set up the
+MAS-support:* signal so that it interprets the value 1 as true.
+MAS-support:* and 0 as false.
+MAS-support:* So, ...
+MAS-support:* We need a constant!
+MAS-support:* What we're setting up here is:
+MAS-support:* if macd[today] > macd[yesterday] then
+MAS-support:* 1
+MAS-support:* else
+MAS-support:* 0
+MAS-support:* end
+MAS-support:* make sense?
+Customer:* yes
+MAS-support:* So you need to choose a constant.
+MAS-support:* (which has been renamed to NUMERIC_VALUE_COMMAND 0
+MAS-support:* better name, because it can also function as a
+variable - used a lot in the parabolic SAR)
+MAS-support:* Let me know when you've got the NUMERIC_VALUE_COMMAND.
+Customer:* got that which value do I enter first 1 or 0 ??
+MAS-support:* OK, this is the true command - so 1 (it could be
+0, but 1 is the protocol we've decided on.)
+MAS-support:* So 1.
+MAS-support:* Then for the false command, 0!
+Customer:* OK we have an indicator - beter save it
+MAS-support:* OK!
+MAS-support:* I was following along in my own macl session - saved it, too.
+MAS-support:* Now, we need to test it.
+MAS-support:* Ready to try a test? If it works, we can go on to the analyzer.
+Customer:* yes not quite sure how to test an indicator ???
+MAS-support:* The easiest way is to use macl.
+MAS-support:* If you exited macl, start it up again.
+MAS-support:* Let me know when you've got macl ready to go.
+Customer:* ok
+MAS-support:* OK.
+MAS-support:* Are you at the main menu? (select tradable ...)
+Customer:* ok
+MAS-support:* OK, select a tradable - just so you know which one
+you're working with. with s
+MAS-support:* After you select a tradable, choose "view data" - v
+MAS-support:* Let me know when you're there.
+Customer:* selected one and am at select action
+MAS-support:* Select action for ?
+MAS-support:* If so, do i
+MAS-support:* for view indicator.
+Customer:* ok print indicator - has lots of 0s ansd 1s - great stuff !!!
+
+MAS-support:* Yep, just what we wanted.
+MAS-support:* We can be primitive for now - can you just copy
+some of that data with your mouse?
+Customer:* thats really neat - the indicators are
+complex to build - but having the file lets you retrace your steps and
+try again. I was sort of hunting around in the dark saying "Have I tried
+this yet ?? "
+MAS-support:* We want to save the last screenfull to a file.
+MAS-support:* (Yes, it helps to use the -r options.)
+MAS-support:* (And of course, you can use the -i option later to
+recreate the indicator using that
+MAS-support:* file as input.)
+...
+
+MAS-support:* try macl again and we'll check with it.
+MAS-support:* view the macd indicator
+MAS-support:* (Yeah - it's rather a mess - usability issues.)
+MAS-support:* Let me know when you've got macl ready.
+Customer:* yes the turnarounds seem to be happening ok
+Customer:* macl is up
+MAS-support:* OK.
+MAS-support:* Can you view the data with the macd hist indicator?
+Customer:* Processing MACD Histogram ...
+2003/02/20 0.0201731
+2003/02/21 0.0169037
+2003/02/24 0.00928733
+2003/02/25 -0.0057812
+2003/02/26 -0.0119539
+2003/02/27 -0.0345361
+2003/02/28 -0.0342321
+2003/03/03 -0.0214359
+2003/03/04 -0.00909017
+2003/03/05 0.0100052
+2003/03/06 0.028478
+
+Customer:* Processing testMACD ...
+2003/02/20 0
+2003/02/21 0
+2003/02/24 0
+2003/02/25 0
+2003/02/26 0
+2003/02/27 0
+2003/02/28 1
+2003/03/03 1
+2003/03/04 1
+2003/03/05 1
+2003/03/06 1
+
+MAS-support:* OK.
+...
+
+Customer:* my problem was i was unsure about the
+indicator building and getting myself confused - this has been a really
+good learning experience !!!
+MAS-support:* Good - I'm glad it helped.
+MAS-support:* I know the interface is hard to understand - you
+sort of have to turn yourself into
+MAS-support:* a lisp machine!
+...
+
+Customer:* yes i think im ok at building an indicator
+into an analyser - the problem was truyying to get the comparison
+between yesterdays and todays value. I kept running into brick walls
+with that bit. The logfile should be a good reference for the future (
+dont forget to save it ).
+MAS-support:* Yes.
+
+...
