@@ -42,7 +42,7 @@ feature -- Initialization
 			version: expanded PRODUCT_INFO
 		do
 			if command_line_options.error_occurred then
-				print_list (<<"Error occurred during initialization - ",
+				log_errors (<<"Error occurred during initialization - ",
 					"exiting ...%N">>)
 				exit (Error_exit_status)
 			elseif command_line_options.help then
@@ -50,6 +50,10 @@ feature -- Initialization
 			elseif command_line_options.version_request then
 				print_list (<<version.name, ", Version ", version.number, ", ",
 					version.informal_date, "%N">>)
+			elseif configuration_error then
+				log_errors (<<"Error occurred during initialization:%N",
+					config_error_description, ".%N">>)
+				exit (Error_exit_status)
 			else
 				register_for_termination (Current)
 				create poller.make_read_only
@@ -115,6 +119,26 @@ feature {NONE}
 				end
 			end
 		end
+
+	configuration_error: BOOLEAN is
+			-- Is there an error in the MAS configuration?  If so,
+			-- a description is placed into config_error_description.
+		local
+			env: expanded APP_ENVIRONMENT
+			env_vars: expanded APP_ENVIRONMENT_VARIABLE_NAMES
+		do
+			if
+				env.app_directory /= Void and not env.app_directory.empty and
+				env.app_directory @ 1 /= env.directory_separator
+			then
+				config_error_description := concatenation (<<
+					env_vars.application_directory_name, " setting must ",
+					"be an absolute path name">>)
+				Result := true
+			end
+		end
+
+	config_error_description: STRING
 
 	current_sockets: LIST [SOCKET]
 
