@@ -145,7 +145,6 @@ invariant
 
 	operator_not_void: operator /= Void
 	input_not_void: input /= Void
-	event_type_not_void: event_type /= Void
 	date_not_void: start_date_time /= Void
 	offset_not_negative: offset >= 0
 

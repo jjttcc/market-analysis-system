@@ -245,7 +245,6 @@ feature {NONE} -- Implementation
 invariant
 
 	input_not_void: input1 /= Void and input1 /= Void
-	event_type_not_void: event_type /= Void
 	date_not_void: start_date_time /= Void
 	above_or_below: below_to_above or above_to_below
 
