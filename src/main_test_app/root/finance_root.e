@@ -31,6 +31,7 @@ feature -- Initialization
 			if argument_count > 0 and argument (1) @ 1 = '-' then
 				usage
 			else
+				initialize
 				print ("Test execution: "); print (current_date)
 				print (", "); print (current_time); print ("%N")
 				if argument_count = 0 then
@@ -52,12 +53,19 @@ feature -- Initialization
 				print_indicators (tradable)
 				if not tradable.indicators_processed then
 					print ("Oops - indicators were not processed, %
-							%trying again...%N")
+							%processing...%N")
 					tradable.process_indicators
 					print_indicators (tradable)
 				end
+				print_composite_lists (tradable)
 				--print contents of tradable, including tech. indicators...
 			end
+		end
+
+	initialize is
+		do
+			set_output_field_separator ("%T")
+			set_date_field_separator ("/")
 		end
 
 feature {NONE} -- Utility
