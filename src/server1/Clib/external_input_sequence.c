@@ -23,7 +23,6 @@ struct input_sequence_handle {
 	char field_separator;
 	struct input_sequence_plug_in* plug_in_handle;
 	int error_occurred;
-	char* error_msg;
 };
 
 const char record_separator = '\n';
@@ -52,7 +51,6 @@ struct input_sequence_handle* initialize_external_input_routines(char* paths) {
 		result->current_field_length_value = 0;
 		result->field_separator = ',';	/* May be made configurable later */
 		result->error_occurred = 0;
-		result->error_msg = "";
 		if (result->plug_in_handle == 0) {
 			init_error = 1;
 			initialization_error_string = strdup(error_buffer);
@@ -196,7 +194,6 @@ void start_implementation(struct input_sequence_handle* handle,
 		is_intraday, &handle->buffersize);
 	if (handle->buffer == 0) {
 		handle->error_occurred = 1;
-		handle->error_msg = last_error(handle->plug_in_handle);
 	}
 	handle->current_index = 0;
 	set_field_separator(handle);
@@ -211,7 +208,10 @@ int external_error(struct input_sequence_handle* handle) {
 }
 
 char* last_external_error(struct input_sequence_handle* handle) {
-	return handle->error_msg;
+	char* result;
+	result = last_error(handle->plug_in_handle);
+	if (result == 0) result = "";
+	return result;
 }
 
 void make_available_symbols(struct input_sequence_handle* handle) {
@@ -221,7 +221,6 @@ void make_available_symbols(struct input_sequence_handle* handle) {
 	}
 	if (handle->symbols == 0) {
 		handle->error_occurred = 1;
-		handle->error_msg = last_error(handle->plug_in_handle);
 	}
 }
 
