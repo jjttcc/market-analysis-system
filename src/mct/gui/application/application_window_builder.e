@@ -52,7 +52,7 @@ feature {NONE} -- Main-window components
 			-- Menu bar for the main window
 		do
 			create Result
-			Result.extend (file_menu)
+			Result.extend (main_file_menu)
 			Result.extend (advanced_menu)
 			Result.extend (help_menu)
 		end
@@ -73,11 +73,7 @@ feature {NONE} -- Main-window components
 			action_set := action_sets.terminate_arbitrary_session_set
 			c.extend (widget_builder.new_button (action_set.widget_label,
 				action_set.actions))
---!!!!!!!!!!!!!!!!!!!!!
-			action_set := action_sets.exit_with_termination_set
-			c.extend (widget_builder.new_button (action_set.widget_label,
-				action_set.actions))
-			action_set := action_sets.exit_without_termination_set
+			action_set := action_sets.exit_set
 			c.extend (widget_builder.new_button (action_set.widget_label,
 				action_set.actions))
 		end
@@ -88,7 +84,7 @@ feature {NONE} -- Session-window components
 			-- Menu bar for MAS session window
 		do
 			create Result
-			Result.extend (file_menu)
+			Result.extend (session_file_menu)
 			Result.extend (help_menu)
 		end
 
@@ -115,13 +111,24 @@ feature {NONE} -- Session-window components
 
 feature {NONE} -- Menu components
 
-	file_menu: EV_MENU is
-			-- The file menu
+	main_file_menu: EV_MENU is
+			-- The file menu for the main window
 		require
 			current_actions_exist: current_main_actions /= Void or
 				current_mas_session_actions /= Void
 		do
 			create Result.make_with_text ("&File")
+			common_file_menu_items.do_all (agent Result.extend)
+		end
+
+	session_file_menu: EV_MENU is
+			-- The file menu for session windows
+		require
+			current_actions_exist: current_mas_session_actions /= Void
+		do
+			create Result.make_with_text ("&File")
+			Result.extend (widget_builder.new_menu_item ("&Close",
+				<<agent current_mas_session_actions.close_window>>))
 			common_file_menu_items.do_all (agent Result.extend)
 		end
 

@@ -42,13 +42,16 @@ feature -- Access
 feature -- Actions
 
 	exit is
+			-- Exit the application, terminating all "owned" sessions.
 		do
 			configuration.set_terminate_sessions_on_exit (True)
+print ("exit - pniu.count: " + port_numbers_in_use.count.out + "%N")
 			termination_cleanup;
 			(create {EV_ENVIRONMENT}).application.destroy
 		end
 
 	exit_without_session_termination is
+			-- Exit the application without terminating sessions.
 		do
 			configuration.set_terminate_sessions_on_exit (False)
 			termination_cleanup;

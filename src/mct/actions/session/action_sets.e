@@ -86,24 +86,14 @@ feature -- Access
 				<<agent actions.close_window>>)
 		end
 
-	exit_with_termination_set: ACTION_SET is
+	exit_set: ACTION_SET is
 			-- ACTION_SET for terminating all sessions and exiting
 			-- the application
 		require
 			actions_set: main_actions /= Void
 		do
-			create Result.make ("Quit (Terminate sessions)", exit_token,
+			create Result.make ("Quit", exit_token,
 				<<agent main_actions.exit>>)
-		end
-
-	exit_without_termination_set: ACTION_SET is
-			-- ACTION_SET for exiting the application without terminating
-			-- sessions
-		require
-			actions_set: main_actions /= Void
-		do
-			create Result.make ("Quit (Do not terminate sessions)", exit_token,
-				<<agent main_actions.exit_without_session_termination>>)
 		end
 
 feature -- Access

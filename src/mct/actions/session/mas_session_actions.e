@@ -63,6 +63,7 @@ feature -- Actions
 		local
 			cmd: COMMAND
 		do
+print ("terminate_session called%N")
 			-- NOT port_numbers_in_use.has (owner_window.port_number)
 			-- implies that the server has already been terminated.
 			if port_numbers_in_use.has (owner_window.port_number) then
@@ -89,9 +90,7 @@ feature {NONE} -- Implementation - Hook routines
 	cleanup is
 		do
 			if configuration.terminate_sessions_on_exit then
-				if not owner_window.is_destroyed then
-					terminate_session
-				end
+				terminate_session
 			end
 		end
 
