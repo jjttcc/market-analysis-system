@@ -17,4 +17,3 @@ feature -- Access
 		end
 
 end -- GLOBAL_SERVER
-xy
