@@ -67,6 +67,7 @@ feature -- Access
 	path: STRING is
 			-- The processed path component of the URL for the http request,
 			-- with all occurrences of "<symbol>" replaced with `symbol'
+			-- and of the date tokens with their respective values.
 --!!!!Note: This and replace_tokens can probably be also used for database
 --configuration - that is, move them up to CONFIGURATION_UTILITIES.
 		do
@@ -80,6 +81,19 @@ feature -- Access
 					end_date.month.out, end_date.year.out>>)
 			end
 			Result := cached_path
+		end
+
+	path_with_alternate_start_date (alt_sd: DATE): STRING is
+			-- Same as `path', but with `alt_sd' used as the start date
+			-- instead of `start_date' (not cached)
+		do
+			Result := clone (original_path)
+			replace_tokens (Result, <<symbol_token, start_day_token,
+				start_month_token, start_year_token, end_day_token,
+				end_month_token, end_year_token>>, <<symbol,
+				alt_sd.day.out, alt_sd.month.out,
+				alt_sd.year.out, end_date.day.out,
+				end_date.month.out, end_date.year.out>>)
 		end
 
 	replace_tokens (target: STRING; tokens: ARRAY [STRING];

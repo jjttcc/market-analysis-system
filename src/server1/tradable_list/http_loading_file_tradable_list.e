@@ -18,12 +18,14 @@ class HTTP_LOADING_FILE_TRADABLE_LIST inherit
 		rename
 			make as parent_make
 		redefine
-			open_current_file
+			open_current_file, timing_on, ignore_cache
 		end
 
 	HTTP_DATA_RETRIEVAL
 		rename
 			initialize as http_initialize
+		redefine
+			output_file_path, latest_date_for
 		end
 
 	ERROR_PROTOCOL
@@ -98,16 +100,50 @@ feature {NONE} -- Implementation
 	open_current_file: INPUT_FILE is
 		do
 			parameters.set_symbol (symbol_list.item)
-			if data_retrieval_needed then
+			if not skip_data_retrieval and data_retrieval_needed then
 				retrieve_data
 			end
 			report_timing
 			Result := Precursor
 		end
 
+	skip_data_retrieval: BOOLEAN
+			-- Should `data_retrieval' be skipped?
+
 feature {NONE} -- Hook routine implementations
 
 	timing_on: BOOLEAN
+
+	output_file_path: STRING is
+			-- Directory path of output file - redefine if needed
+		once
+			--!!!!!Stub - implement this to use MAS_DIRECTORY env. var.
+			--and perhaps within a ./data subdirectory.
+			Result := ""
+		end
+
+	latest_date_for (symbol: STRING): DATE is
+		local
+			t: TRADABLE [BASIC_MARKET_TUPLE]
+			skip_dr: BOOLEAN
+		do
+print ("latest_date_for called.%N")
+			search_by_symbol (symbol)
+			skip_dr := skip_data_retrieval
+			skip_data_retrieval := True
+			t := item
+			skip_data_retrieval := skip_dr
+			if
+				t /= Void and then not t.data.is_empty
+			then
+				Result := clone (t.data.last.end_date)
+print ("latest_date_for result: " + Result.out + "%N")
+			end
+		end
+
+	ignore_cache: BOOLEAN is
+		do
+		end
 
 invariant
 

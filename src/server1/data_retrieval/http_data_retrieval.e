@@ -28,15 +28,13 @@ feature {NONE} -- Initialization
 
 	initialize is
 		do
-			create data_retrieved_table.make (0)
 			create parameters.make
 			create url.http_make (parameters.host, "")
 			create http_request.make (url)
 			http_request.set_read_mode
 			file_extension := Default_file_extension
 		ensure
-			components_initialized: data_retrieved_table /= Void and
-				parameters /= Void and url /= Void and
+			components_initialized: parameters /= Void and url /= Void and
 				http_request /= Void and file_extension /= Void
 		end
 
@@ -48,10 +46,6 @@ feature {NONE} -- Implementation - attributes
 
 	http_request: HTTP_PROTOCOL
 
-	data_retrieved_table: HASH_TABLE [BOOLEAN, STRING]
-			-- Mapping of tradable symbols to the boolean state of whether
-			-- the data for that symbol have been retrieved
-
 	file_extension: STRING
 			-- Extension to file name of output cache file
 
@@ -62,11 +56,20 @@ feature {NONE} -- Implementation
 
 	retrieve_data is
 			-- Retrieve data for `parameters.symbol'.
+		require
+			data_retrieval_needed: data_retrieval_needed
 		local
 			result_string: STRING
 		do
 			create result_string.make (0)
-			url.set_path (parameters.path)
+			append_to_output_file := False
+			if alternate_start_date /= Void then
+				url.set_path (parameters.path_with_alternate_start_date (
+					alternate_start_date))
+				append_to_output_file := True
+			else
+				url.set_path (parameters.path)
+			end
 			start_timer
 			if not http_request.error then
 				http_request.open
@@ -84,8 +87,6 @@ feature {NONE} -- Implementation
 						print ("Error occurred initiating transfer: " +
 							http_request.error_text (http_request.error_code) +
 							"%N")
-					else
-						data_retrieved_table.force (True, parameters.symbol)
 					end
 				else
 					print ("Error occurred opening http request: " +
@@ -93,7 +94,7 @@ feature {NONE} -- Implementation
 						"%N")
 				end
 				http_request.close
-				add_timing_data ("retrieving data for " + parameters.symbol)
+				add_timing_data ("Retrieving data for " + parameters.symbol)
 				convert_and_save_result (result_string)
 			else
 				print ("Error occurred initializing http request: " +
@@ -106,11 +107,15 @@ feature {NONE} -- Implementation
 		local
 			outputfile: PLAIN_TEXT_FILE
 		do
+			--@@NOTE: This algorithm is for EOD data.  If the ability to
+			--handle intraday data is added, a separate algorithm will
+			--be needed for that.
+			alternate_start_date := Void
 			create outputfile.make (output_file_name (parameters.symbol))
 			Result := not outputfile.exists or (
 				time_to_eod_udpate and
 				not parameters.ignore_today and
-				not current_data_have_been_retrieved)
+				current_daily_data_out_of_date)
 		end
 
 	output_file_name (symbol: STRING): STRING is
@@ -169,29 +174,27 @@ feature {NONE} -- Implementation
 				s /= Void and then
 				parameters.post_processing_routine /= Void
 			then
-				add_timing_data ("opening file for " + parameters.symbol)
+				add_timing_data ("Opening file for " + parameters.symbol)
 				start_timer
 				output := parameters.post_processing_routine.item ([s])
-				add_timing_data ("converting data for " + parameters.symbol)
+				add_timing_data ("Converting data for " + parameters.symbol)
 				if output = Void or else output.is_empty then
 					log_error ("Result for " + parameters.symbol +
 						" is empty - symbol may be invalid.%N")
 				else
 					start_timer
-					create file.make_open_write (output_file_name (
-						parameters.symbol))
+					if append_to_output_file then
+						create file.make_open_append (output_file_name (
+							parameters.symbol))
+					else
+						create file.make_open_write (output_file_name (
+							parameters.symbol))
+					end
 					file.put_string (output)
-					add_timing_data ("writing data to " + file.name)
+					add_timing_data ("Writing data to " + file.name)
 					file.close
 				end
 			end
-		end
-
-	current_data_have_been_retrieved: BOOLEAN is
-			-- Have up-to-date data for the current symbol been retrived?
-		do
-			Result := data_retrieved_table.has (parameters.symbol) and then
-				data_retrieved_table @ parameters.symbol
 		end
 
 	time_to_eod_udpate: BOOLEAN is
@@ -207,12 +210,66 @@ feature {NONE} -- Implementation
 			end
 		end
 
+	current_daily_data_out_of_date: BOOLEAN is
+			-- Are the daily data cached for `parameters.symbol' out
+			-- of date with respect to the current date?
+		require
+			alternate_start_date_void: alternate_start_date = Void
+		local
+			d: DATE
+		do
+			d := latest_date_for (parameters.symbol)
+			Result := d = Void or else d < create {DATE}.make_now
+			if Result and use_day_after_latest_date_as_start_date then
+				-- Set the alternate start date to the day after the
+				-- latest date in the current data set so that there
+				-- is no overlap between the current data set and
+				-- freshly retrieved data.
+				alternate_start_date := d
+				alternate_start_date.day_add (1)
+			end
+		ensure
+			no_alternate_start_date_if_not_out_of_date: not Result implies
+				alternate_start_date = Void
+		end
+
+	alternate_start_date: DATE
+			-- Alternate start date to use instead of parameters.start_date -
+			-- allows overriding the configured start date when, for
+			-- example, data beginning at the configured start date has
+			-- already been retrieved (i.e., retrieval is an update).
+			-- Void indicates no alternate start date is being used.
+
+	append_to_output_file: BOOLEAN
+			-- Should retrieved data be appended to the output file
+			-- rather than overwriting it?
+
 feature {NONE} -- Hook routines
 
 	output_file_path: STRING is
 			-- Directory path of output file - redefine if needed
 		once
 			Result := ""
+		end
+
+	latest_date_for (symbol: STRING): DATE is
+			-- Clone of the latest date-stamp of the data cached for `symbol',
+			-- for determining if this data is "out of date" -
+			-- Void indicates that it should be considered out of date.
+		require
+			symbol_exists: symbol /= Void
+		once
+			-- Default to Void - redefine if needed.
+		end
+
+	use_day_after_latest_date_as_start_date: BOOLEAN is
+			-- When a retrieval is needed because
+			-- `current_daily_data_out_of_date', should the day after
+			-- the latest date of the current data set be used as the
+			-- start date for retrieval so that there is no overlap
+			-- between the current data set and freshly retrieved data?
+		once
+			Result := True -- Redefine to False if needed.
 		end
 
 end
