@@ -26,6 +26,8 @@ feature
 	make (in: like input) is
 		require
 			args_not_void: in /= Void
+			in_separators_not_void:
+				in.field_separator /= Void and in.record_separator /= Void
 		local
 			dummy_value_setter: VALUE_SETTER
 			vs: LINKED_LIST [VALUE_SETTER]
@@ -37,12 +39,10 @@ feature
 			!!vs.make
 			vs.extend (dummy_value_setter)
 			!!parser.make (in)
-			data_scanner_make (in, parser, vs, "%/1/", "%N")
-			parser.set_field_separator (field_separator @ 1)
+			data_scanner_make (in, parser, vs)
+			parser.set_field_separator (in.field_separator @ 1)
 		ensure
-			set: input = in and parser.input = input and
-				field_separator.is_equal ("%/1/") and
-				record_separator.is_equal ("%N")
+			set: input = in and parser.input = input
 		end
 
 feature -- Access
