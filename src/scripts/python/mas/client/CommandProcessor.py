@@ -19,6 +19,7 @@ class CommandProcessor:
 			"\n*Select *the.*trading *period *type.*:",
 			".*\n*Select specification for crossover detection:",
 			"\n* *Select *a *market *analyzer",
+			" *Indicator *\".*\" *children:",
 			"1) "]
 		self.non_shared_pattern = ".*List of all valid objects:.*"
 		self.objects = {}
