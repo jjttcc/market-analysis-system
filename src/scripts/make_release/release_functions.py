@@ -6,9 +6,11 @@ from __builtin__ import open
 from string import *
 from PackageMaker import PackageMaker
 
+config_file = 'release_config'
+
 class ReleaseUtilities:
 
-	def __init__(self):
+	def __init__(self, libdir):
 		self.true = 1
 		self.false = 0
 		self.target_dir_word = "target_directory"
@@ -30,7 +32,11 @@ class ReleaseUtilities:
 						self.package_dir_word: self.set_package_dir}
 		# Read configuration file and set up source directory,
 		# target directory, ...
-		file = open('release_config')
+		if not (libdir == ''):
+			config_file_path = libdir + '/' + config_file
+		else:
+			config_file_path = config_file
+		file = open(config_file_path)
 		for line in file.readlines():
 			record = split(line)
 			key = record[0]

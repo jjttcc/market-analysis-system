@@ -3,10 +3,14 @@
 
 from string import *
 from release_functions import *
+from posixpath import dirname
 
-util = ReleaseUtilities()
+from os import getcwd
+import sys
+libdir = dirname(sys.argv[0]) + '/../lib/make_release'
+util = ReleaseUtilities(libdir)
 util.check_settings()
-map_file = open('release_file_map')
+map_file = open(libdir + '/release_file_map')
 for line in map_file.readlines():
 	files = split(line)
 	if files[0][0] == '#':
