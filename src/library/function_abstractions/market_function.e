@@ -66,6 +66,15 @@ feature -- Access
 		deferred
 		end
 
+	operators: LIST [COMMAND] is
+			-- Flattened list of the hierarchy of all operators used by this
+			-- market function
+		do
+			create {LINKED_LIST [COMMAND]} Result.make
+		ensure
+			not_void: Result /= Void
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is
@@ -125,5 +134,6 @@ invariant
 	parameters_not_void: parameters /= Void and immediate_parameters /= Void
 	date_time_not_void_when_processed:
 		processed implies processed_date_time /= Void
+	operators_not_void: operators /= Void
 
 end -- class MARKET_FUNCTION
