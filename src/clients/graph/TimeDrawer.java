@@ -17,9 +17,17 @@ public class TimeDrawer extends Drawer {
 		_market_drawer = mkd;
 		is_indicator = is_ind;
 		conf = Configuration.instance();
-		hour_table = new String[] {"0", "1", "2", "3", "4", "5", "6", "7",
-			"8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18",
-			"19", "20", "21", "22", "23"};
+		hour_table = new String[] {"12", "1", "2", "3", "4", "5", "6", "7",
+			"8", "9", "10", "11", "12", "1", "2", "3", "4", "5", "6", "7",
+			"8", "9", "10", "11"};
+		day_table = new String[8];
+		day_table[Calendar.SUNDAY] = "S";
+		day_table[Calendar.MONDAY] = "M";
+		day_table[Calendar.TUESDAY] = "T";
+		day_table[Calendar.WEDNESDAY] = "W";
+		day_table[Calendar.THURSDAY] = "T";
+		day_table[Calendar.FRIDAY] = "F";
+		day_table[Calendar.SATURDAY] = "S";
 	}
 
 	// The data to be drawn
@@ -35,8 +43,8 @@ public class TimeDrawer extends Drawer {
 
 	public int data_length() {
 		int result;
-		if (dates() != null) {
-			result = dates().length;
+		if (times() != null) {
+			result = times().length;
 		} else {
 			result = 0;
 		}
@@ -52,9 +60,9 @@ public class TimeDrawer extends Drawer {
 
 	protected final static int Max_hours = 720, Max_days = 30;
 
-	protected final static int Day_x_offset = 8, Day_y = 15;
+	protected final static int Day_x_offset = 8;
 
-	protected int Hour_y;
+	protected int Hour_y, Day_y;
 
 	protected int Hour_x_offset;
 
@@ -62,41 +70,64 @@ public class TimeDrawer extends Drawer {
 	protected int hour_ln = 2;
 
 	/**
-	* Draw a vertical line for each hour in `_times' and days and hour
+	* Draw a vertical line for each hour in `times' and days and hour
 	* names at the appropriate places.
 	*/
 	protected void draw_tuples(Graphics g, Rectangle bounds) {
-		int hi, yi, i;
-		int lastday, lasthour, day, hour;
+		int hi, di, i;
+		int hour, day_of_week, old_day_of_week;
+		final int Draw_all_hour_limit = 16;
+		boolean draw_all_hours;
+		String old_hour_string;
 		IntPair hours[] = new IntPair[Max_hours],
 			days[] = new IntPair[Max_days];
 		int[] _x_values = x_values();
-		String[] _times = times();
+		String[] times = times();
 		String[] dates = dates();
+
 System.out.println("time drawer - draw tuples was called - times:");
-System.out.println(_times);
-		if (_times == null || _times.length == 0) return;
+System.out.println(times);
+		if (times == null || times.length == 0) return;
 
 System.out.println("time drawer.draw tuples A");
 		Hour_y = bounds.y + bounds.height - 15; Hour_x_offset = 10;
-		// Determine the first hour in `_times'.
-		String hs = _times[0].substring(0,2);
-		hour = Integer.valueOf(hs).intValue();
-		hi = 0; yi = 0;
+		Day_y = Hour_y;
+		// Determine the first hour in `times'.
+		String hour_string = times[0].substring(0,2);
+		String day_string = dates[0].substring(6,8);
+		hour = Integer.valueOf(hour_string).intValue();
+		day_of_week = week_day_for(dates[0], -1);
+		hi = 0; di = 0;
 		hours[hi] = new IntPair(hour, 0);
-		++hi;
+		days[di] = new IntPair(day_of_week, 0);
+		++hi; ++di;
 System.out.println("Added hour " + hours[hi-1].left() + ", " +
-hours[hi-1].right() + " for " + _times[0]);
-		String old_hs = hs;
+hours[hi-1].right() + " for " + times[0]);
+System.out.println("Added day " + days[di-1].left() + ", " +
+days[di-1].right() + " for " + dates[0]);
+		old_hour_string = hour_string;
 System.out.println("time drawer.draw tuples B");
-		for (i = 1; i < _times.length; ++i) {
-			hs = _times[i].substring(0,2);
-			if (! hs.equals(old_hs)) {
-				hour = Integer.valueOf(hs).intValue();
+		// Map out all hours (from times) and days (from dates) with IntPairs.
+		for (i = 1; i < times.length; ++i) {
+			hour_string = times[i].substring(0,2);
+			if (! hour_string.equals(old_hour_string)) {
+				hour = Integer.valueOf(hour_string).intValue();
 				hours[hi++] = new IntPair(hour, i);
-				old_hs = hs;
+				old_hour_string = hour_string;
 System.out.println("Added hour " + hours[hi-1].left() + ", " +
-hours[hi-1].right() + " for " + _times[i]);
+hours[hi-1].right() + " for " + times[i]);
+System.out.println("hi, hln: " + hi + ", " + hours.length);
+System.out.println(hour < hours[hi-2].left());
+System.out.println(hour + ", " + hours[hi-2].left());
+				// If current hour is less than previous hour,
+				// a new day has begun.
+				if (hour < hours[hi-2].left()) {
+					old_day_of_week = day_of_week;
+					day_of_week = week_day_for(dates[i], old_day_of_week);
+					days[di++] = new IntPair(day_of_week, i);
+System.out.println("Added day " + days[di-1].left() + ", " +
+days[di-1].right() + " for " + dates[i]);
+				}
 			}
 		}
 
@@ -111,36 +142,42 @@ System.out.println("time drawer.draw tuples C");
 								_x_values[hours[0].right()]) * .10);
 		}
 System.out.println("time drawer.draw tuples D - Hour_x_offset" + Hour_x_offset);
-		// Draw hours and days.
-		boolean do_hours = true;
-		if (hours.length > 1 && hours[0].right() == hours[1].right()) {
-			do_hours = false;
-		}
-		if (do_hours) {
 System.out.println("time drawer.draw tuples e - hi" + hi);
 		i = 0;
-			while (i < hi) {
-				if (hours[i].right() < 0) {
-					hours[i].set_right(0);
-				}
+		draw_all_hours = hi <= Draw_all_hour_limit;
+		// Draw hours.
+		while (i < hi) {
+//Probably not needed!!!?
+//if (hours[i].right() < 0) {
+//	hours[i].set_right(0);
+//}
+			if (drawable_hour(hours, hi, i, draw_all_hours)) {
 				draw_hour(g, bounds, hours[i], _x_values);
-				++i;
 			}
+			++i;
 		}
-
+		i = 0;
+		while (i < di) {
+//Probably not needed!!!?
+//if (days[i].right() < 0) {
+//	days[i].set_right(0);
+//}
+			draw_day(g, bounds, days[i], _x_values);
+			++i;
+		}
 	}
 
 	// Precondition:
 	//    p.left() specifies the hour
-	//    p.right() specifies the index
+	//    p.right() specifies the x-index
 	protected void draw_hour(Graphics g, Rectangle bounds, IntPair p,
-			int[] _x_values) {
+			int[] x_values) {
 		int x, hour_x;
 		final int Line_offset = -2;
 		double width_factor;
 
 		width_factor = width_factor_value(bounds, dates().length);
-		x = _x_values[p.right()];
+		x = x_values[p.right()];
 		hour_x = x + Hour_x_offset;
 		g.setColor(Color.black);
 		g.drawLine(x + Line_offset, bounds.y,
@@ -153,24 +190,65 @@ System.out.println("time drawer.draw tuples e - hi" + hi);
 
 	// Precondition:
 	//    p.left() specifies the day
-	//    p.right() specifies the index
+	//    p.right() specifies the x-index
 	protected void draw_day(Graphics g, Rectangle bounds, IntPair p,
-			boolean line, boolean day) {
-		int day_x, x;
-		final int Line_offset = -3;
+			int[] x_values) {
+		int x, day_x;
+		final int Line_offset = -2;
 		double width_factor;
 
 		width_factor = width_factor_value(bounds, dates().length);
-		x = (int)(p.right() * width_factor + bounds.x);
+		x = x_values[p.right()];
 		day_x = x + Day_x_offset;
+		g.setColor(Color.black);
+		g.drawLine(x + Line_offset, bounds.y,
+			x + Line_offset, bounds.y + bounds.height);
 		g.setColor(conf.text_color());
-		if (line) {
-			g.drawLine(x + Line_offset, bounds.y,
-				x + Line_offset, bounds.y + bounds.height);
+		if (! is_indicator) {
+			g.drawString(day_table[p.left()], day_x, Day_y);
 		}
-		if (day) {
-			g.drawString(String.valueOf(p.left()), day_x, Day_y);
+	}
+
+	protected boolean drawable_hour(IntPair hours[], int hcount, int i,
+			boolean draw_all) {
+		 boolean result;
+		 boolean is_odd = hours[i].left() % 2 == 1;
+		 boolean first_hour_of_day = i == 0 ||
+		 	hours[i-1].left() > hours[i].left();
+		 boolean last_hour_of_day = i == hcount - 1 ||
+		 	hours[i].left() > hours[i+1].left();
+
+		 if (draw_all) {
+			// Draw all hours actually means draw all hours except for
+			// odd hours that begin the day.
+		 	result = ! (is_odd && first_hour_of_day ||
+				! is_odd && last_hour_of_day);
+		 } else {
+			 // An hour is drawable if it is not the first hour in the array
+			 // and it is not the first hour of the day and it is odd.
+			 result = ! first_hour_of_day && is_odd;
 		}
+
+		return result;
+	}
+
+	// The day of the week for `date'.  Use last_week_day for optimization,
+	// if it is not negative.
+	protected int week_day_for(String date, int last_week_day) {
+		int result;
+		//if (last_week_day < 0) {
+			int year = Integer.valueOf(date.substring(0,4)).intValue();
+			// Java months start at 0.
+			int month = Integer.valueOf(date.substring(4,6)).intValue() - 1;
+			int day = Integer.valueOf(date.substring(6,8)).intValue();
+			GregorianCalendar cal = new GregorianCalendar(year, month, day);
+			result = cal.get(Calendar.DAY_OF_WEEK);
+System.out.println("day of week was " + result + " (" +
+day_table[result] + ") for " + date + "(" + year + ", " + month + ", " +
+day + ")");
+		//}
+		//!!Finish...
+		return result;
 	}
 
 	// Do y-coordinate reference values need to be displayed for this data?
@@ -185,4 +263,6 @@ System.out.println("time drawer.draw tuples e - hi" + hi);
 	protected boolean is_indicator;
 
 	protected String[] hour_table;
+
+	protected String[] day_table;
 }
