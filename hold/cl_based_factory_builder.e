@@ -8,11 +8,6 @@ indexing
 
 class CL_BASED_FACTORY_BUILDER inherit
 
-	ARGUMENTS
-		export {NONE}
-			all
-		end
-
 	EXCEPTIONS
 		export {NONE}
 			all
