@@ -191,8 +191,6 @@ feature {NONE} -- Implementation
 			-- to whether or not the "object" is shared.
 		local
 			lines: LIST [STRING]
-			objname, objnumber: STRING
-			work_string: STRING
 		do
 			objects.clear_all; shared_objects.clear_all
 			-- Ensure that DOS-based text can be properly split on
@@ -208,15 +206,15 @@ feature {NONE} -- Implementation
 					print ("lines.item: '" + lines.item + "'%N")
 				end
 				if
-					match ("^[1-9][0-9]*\)", lines.item)
+					match (selection_list_pattern, lines.item)
 				then
-					work_string := sub ("\)", "", lines.item)
-					objnumber := sub (" .*", "", work_string)
-					objname := sub ("^[^ ]*  *", "", work_string)
-					objects.force (objnumber, objname)
-					debug ("sc")
-						print ("Stored: " + objects @ objname + " (" +
-							objname + ")%N")
+					if
+						match (two_column_selection_list_pattern, lines.item)
+					then
+						process_2_column_selection_line (objects, lines.item)
+					else
+						-- It's just a one-column selection list.
+						process_selection_line (objects, lines.item)
 					end
 				elseif
 					match (non_shared_pattern, lines.item) and
@@ -327,6 +325,46 @@ feature {NONE} -- Implementation - Regular expressions
 				invalid_patterns.linear_representation, target)
 		end
 
+feature {NONE} -- Implementation - Utilities
+
+	process_selection_line (obj_table: HASH_TABLE [STRING, STRING];
+		line: STRING) is
+			-- Process the current `line' (from a selection list received
+			-- from the server): Extract the "object number" and "object
+			-- name" and insert this pair into `obj_table', where "object
+			-- number" is the key and "object name" is the data item.
+		local
+			objname, objnumber: STRING
+			work_string: STRING
+		do
+			work_string := sub ("\)", "", line)
+			objnumber := sub (" .*", "", work_string)
+			objname := sub ("^[^ ]*  *", "", work_string)
+			obj_table.force (objnumber, objname)
+			debug ("sc")
+				print ("Stored: " + obj_table @ objname + " (" +
+					objname + ")%N")
+			end
+		end
+
+	process_2_column_selection_line (obj_table: HASH_TABLE [STRING, STRING];
+		line: STRING) is
+			-- Process the current `line' (from a selection list received
+			-- from the server) as a line from a two-column selection list:
+			-- For each column: extract the "object number" and "object
+			-- name" and insert this pair into `obj_table', where "object
+			-- number" is the key and "object name" is the data item.
+		local
+			item1, item2: STRING
+		do
+			if match ("^([1-9][0-9]*\) *[^ %T]*).*", line) then
+				item1 := last_regular_expression.captured_substring (1)
+			end
+			item2 := sub ("^[1-9][0-9]*\) *[^ %T]* *", "", line)
+			process_selection_line (obj_table, item1)
+			process_selection_line (obj_table, item2)
+		end
+
 feature {NONE} -- Implementation - Attributes
 
 	server_response_is_selection_list: BOOLEAN
@@ -358,6 +396,13 @@ feature {NONE} -- Implementation - Attributes
 
 	shared_objects: HASH_TABLE [STRING, STRING]
 			-- Shared objects listed in the last "object-selection-list"
+
+	selection_list_pattern: STRING is "^[1-9][0-9]*\)"
+			-- Pattern indicating that the server has sent a "selection list"
+
+	two_column_selection_list_pattern: STRING is "^[1-9][0-9]*\).*[1-9][0-9]*\)"
+			-- Pattern indicating that the server has sent a 2-column
+			-- "selection list"
 
 invariant
 
