@@ -3,40 +3,44 @@ indexing
 	%of COMPOSITE_TUPLE instances"
 	detailed_description:
 		"This class builds a list of composite tuples from a list of %
-		%market tuples, using a duration to "
+		%market tuples, using a duration to determine how many source %
+		%tuples to use to create a composite tuple."
 	date: "$Date$";
 	revision: "$Revision$"
 
 class COMPOSITE_TUPLE_BUILDER inherit
 
-	FACTORY
+	ONE_VARIABLE_FUNCTION
+		rename
+			target as source_list
 		redefine
-			execute_precondition
+			process_precondition, process, output, source_list,
+			operator_used, input
 		end
 
 feature -- Basic operations
 
-	execute (start_date: DATE_TIME) is
+	process (start_date: DATE_TIME) is
 			-- Make a list of COMPOSITE_TUPLE
 		local
 			src_sublist: ARRAYED_LIST [BASIC_MARKET_TUPLE]
 			current_date: DATE_TIME
 		do
 			from
-				if product = Void then
-					!!product.make (1) --!!!??
+				if output = Void then
+					!!output.make (1) --!!!??
 				else
 					-- Remove any previously inserted items.
-					product.wipe_out
+					output.wipe_out
 				end
 				!!src_sublist.make (0)
 				source_list.start
 				current_date := start_date
-				check product.count = 0 end
+				check output.count = 0 end
 			invariant
-				product.count > 1 implies ((product.last.date_time -
-					product.i_th (
-					product.count - 1).date_time).duration.is_equal (duration))
+				output.count > 1 implies ((output.last.date_time -
+					output.i_th (
+					output.count - 1).date_time).duration.is_equal (duration))
 			until
 				source_list.after
 			loop
@@ -62,16 +66,17 @@ feature -- Basic operations
 				tuple_maker.product.set_date_time (current_date)
 				--!!!When implemented, use the flyweight date_time table.
 				current_date := current_date + duration
-				product.extend (tuple_maker.product)
+				output.extend (tuple_maker.product)
 			end
+			set_processed (true)
 		ensure then
-			product.count > 0 implies times_correct and
-				product.first.date_time.is_equal (start_date)
+			output.count > 0 implies times_correct and
+				output.first.date_time.is_equal (start_date)
 		end
 
 feature -- Status report
 
-	execute_precondition: BOOLEAN is
+	process_precondition: BOOLEAN is
 		do
 			Result :=
 				source_list /= Void and tuple_maker /= Void and
@@ -94,70 +99,67 @@ feature -- Status report
 		end
 
 	times_correct: BOOLEAN is
-			-- Are the date/time values of elements of `product' correct
+			-- Are the date/time values of elements of `output' correct
 			-- with respect to each other?
 		require
-			not product.empty
-			-- product is sorted by date/time
+			not output.empty
+			-- output is sorted by date/time
 		local
 			previous: MARKET_TUPLE
 		do
 			Result := true
 			from
-				product.start
-				previous := product.item
-				product.forth
+				output.start
+				previous := output.item
+				output.forth
 			until
-				product.after or not Result
+				output.after or not Result
 			loop
-				Result := (product.item.date_time -
+				Result := (output.item.date_time -
 							previous.date_time).duration.is_equal (duration)
-				previous := product.item
-				product.forth
+				previous := output.item
+				output.forth
 			end
 			if Result then
 				from
-					product.start
+					output.start
 				until
-					product.after or not Result
+					output.after or not Result
 				loop
-					Result := product.item.last.date_time <
-								product.item.date_time + duration
-					product.forth
+					Result := output.item.last.date_time <
+								output.item.date_time + duration
+					output.forth
 				end
 			end
 		ensure
-			-- for_all p member_of product [2 .. product.count]
+			-- for_all p member_of output [2 .. output.count]
 			--   it_holds p.date_time - previous (p).date_time equals duration
-			-- for_all p member_of product it_holds
+			-- for_all p member_of output it_holds
 			--   p.last.date_time < p.date_time + duration
+		end
+
+	operator_used: BOOLEAN is
+		once
+			Result := false
 		end
 
 feature -- Access
 
-	product: MARKET_TUPLE_LIST [COMPOSITE_TUPLE]
+	output: MARKET_TUPLE_LIST [COMPOSITE_TUPLE]
 			-- Resulting list of tuples
-
-	source_list: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]
-			-- Tuples used to manufacture product
-
-	tuple_maker: COMPOSITE_TUPLE_FACTORY
-			-- Factory used to create tuples
 
 	duration: DATE_TIME_DURATION
 			-- Duration of the composite tuples to be created
 
-feature
+feature {FACTORY} -- Access
 
-	set_source_list (l: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]) is
-			-- Set source_list to `l'.
-		require
-			not_void: l /= Void
-		do
-			source_list := l
-		ensure
-			set: source_list = l and l /= Void
-		end
+	source_list: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]
+			-- Tuples used to manufacture output
+
+	tuple_maker: COMPOSITE_TUPLE_FACTORY
+			-- Factory used to create tuples
+
+feature
 
 	set_tuple_maker (f: COMPOSITE_TUPLE_FACTORY) is
 			-- Set tuple_maker to `f'.
@@ -177,5 +179,21 @@ feature
 		ensure
 			duration_set: duration = d and duration /= Void
 		end
+
+feature {NONE}
+
+	set_source_list (l: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]) is
+			-- Set source_list to `l'.
+		require
+			not_void: l /= Void
+		do
+			source_list := l
+		ensure
+			set: source_list = l and l /= Void
+		end
+
+feature {NONE}
+
+	input: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
 
 end -- COMPOSITE_TUPLE_BUILDER
