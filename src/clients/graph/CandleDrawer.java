@@ -84,9 +84,7 @@ public class CandleDrawer extends MarketDrawer {
 
 	// Draw the horizontal line indicating a doji.
 	protected void draw_doji_line(Graphics g, int x, int y, int candlewidth) {
-		g.setColor(Color.white);
-		//g.drawLine(x, y + 1, x + candlewidth, y + 1);
+		g.setColor(Configuration.instance().stick_color());
 		g.drawLine(x, y, x + candlewidth, y);
-		//g.drawLine(x, y - 1, x + candlewidth, y - 1);
 	}
 }
