@@ -1,12 +1,12 @@
 indexing
-	description: "Value setter that sets the (daily) date of a tuple";
+	description: "Value setter that sets the date of a tuple";
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class DAY_DATE_SETTER inherit
+class DATE_SETTER inherit
 
 	INTEGER_SETTER
 
@@ -40,4 +40,4 @@ feature {NONE}
 			end
 		end
 
-end -- class DAY_DATE_SETTER
+end

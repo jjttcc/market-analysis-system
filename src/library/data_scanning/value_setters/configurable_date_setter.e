@@ -1,13 +1,12 @@
 indexing
-	description: "Configurable (to some extent) value setter for setting %
-		%the (daily) date of a tuple";
+	description: "Configurable value setter for setting the date of a tuple";
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class CONFIGURABLE_DAY_DATE_SETTER inherit
+class CONFIGURABLE_DATE_SETTER inherit
 
 	STRING_SETTER
 
