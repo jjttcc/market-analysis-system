@@ -11,7 +11,7 @@ class MINUS_N_COMMAND inherit
 		export {MARKET_FUNCTION}
 			set_n
 		redefine
-			execute, sub_action
+			execute
 		end
 
 creation
@@ -26,13 +26,6 @@ feature
 			value := target.i_th (target.index - n).value
 		ensure then
 			value = target.i_th (target.index - n).value
-		end
-
-feature {NONE}
-
-	sub_action (i: INTEGER) is
-			-- Null action
-		do
 		end
 
 end -- class MINUS_N_COMMAND
