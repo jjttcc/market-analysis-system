@@ -52,10 +52,10 @@ feature -- Initialization
 		require
 			not_void: input_dev /= Void and output_dev /= Void and fb /= Void
 		do
-			input_device := input_dev
-			output_device := output_dev
 			mai_initialize (fb)
 			initialize
+			set_input_device (input_dev)
+			set_output_device (output_dev)
 		ensure
 			iodev_set: input_device = input_dev and output_device = output_dev
 		end
@@ -86,6 +86,8 @@ feature -- Status setting
 			function_builder.set_input_device (arg)
 		ensure
 			input_device_set: input_device = arg and input_device /= Void
+			gen_builder_in_set: event_generator_builder.input_device  = arg
+			function_builder_in_set: function_builder.input_device = arg
 		end
 
 	set_output_device (arg: IO_MEDIUM) is
@@ -98,6 +100,8 @@ feature -- Status setting
 			function_builder.set_output_device (arg)
 		ensure
 			output_device_set: output_device = arg and output_device /= Void
+			gen_builder_out_set: event_generator_builder.output_device  = arg
+			function_builder_out_set: function_builder.output_device = arg
 		end
 
 
