@@ -42,12 +42,14 @@ feature -- Initialization
 			time_period_type := period_types @ (period_type_names @ Daily)
 			create stock_builder
 			create derivative_builder
+			start_input_from_beginning := True
 		ensure
 			daily_type: time_period_type.name.is_equal (
 				period_type_names @ Daily)
 			fs_tab: field_separator.is_equal ("%T")
 			rs_newline: record_separator.is_equal ("%N")
 			non_strict: strict_error_checking = False
+			start_input_from_beginning: start_input_from_beginning
 		end
 
 feature -- Access
@@ -89,6 +91,10 @@ feature -- Status report
 
 	intraday: BOOLEAN
 			-- Is a tradable with intraday data being created?
+
+	start_input_from_beginning: BOOLEAN
+			-- Is 'input.start' to be called by `execute' before
+			-- scanning the data?
 
 feature -- Status setting
 
@@ -175,6 +181,22 @@ feature -- Status setting
 			intraday_set: intraday = arg
 		end
 
+	turn_start_input_from_beginning_off is
+			-- Set `start_input_from_beginning' to False.
+		do
+			start_input_from_beginning := False
+		ensure
+			not_start_input_from_beginning: not start_input_from_beginning
+		end
+
+	turn_start_input_from_beginning_on is
+			-- Set `start_input_from_beginning' to True.
+		do
+			start_input_from_beginning := True
+		ensure
+			start_input_from_beginning: start_input_from_beginning
+		end
+
 feature -- Basic operations
 
 	execute is
@@ -203,6 +225,13 @@ feature -- Basic operations
 				create scanner.make (product, input, tuple_maker, value_setters)
 			end
 			scanner.set_strict_error_checking (strict_error_checking)
+			if not start_input_from_beginning then
+				scanner.turn_start_input_off
+			end
+			check
+				correct_input_start_status:
+					scanner.start_input = start_input_from_beginning
+			end
 			-- Input data from input stream and stuff it into product.
 			scanner.execute
 			check

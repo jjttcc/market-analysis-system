@@ -137,6 +137,7 @@ feature {NONE} -- Hook routine implementations
 						current_file_status.last_modification_time and
 						current_input_file.count > current_file_status.file_size
 				end
+				tradable_factory.turn_start_input_from_beginning_off
 				-- Advance the file cursor to the beginning of the new
 				-- data.  Note: file position numbering starts a 0.
 				current_input_file.position_cursor (
@@ -151,6 +152,7 @@ feature {NONE} -- Hook routine implementations
 						fatal_error := True
 					end
 				end
+				tradable_factory.turn_start_input_from_beginning_on
 				close_input_medium
 			else
 				-- A fatal error indicates that the current tradable

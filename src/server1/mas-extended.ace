@@ -5,13 +5,8 @@ root
 	EXTENDED_MA_SERVER: make
 
 default
-	assertion (all)
---	assertion (check)
---	assertion (require)
---	assertion (ensure)
---	assertion (loop)
---	assertion (invariant)
-	arguments ("-p 9888 -b")
+	assertion (no)
+	arguments ("-p 30001 -b")
 	arguments ("-w -f , -b 5555")
 	arguments (" -o -b 12345 -f , -w -report_back jupiter.milkyway.org^41512")
 	arguments (" ")
@@ -74,11 +69,12 @@ default
 	arguments ("-o -f , aa.txt")
 	disabled_debug (yes)
 	disabled_debug ("compression")
+	disabled_debug ("data_request")
+	disabled_debug ("data_update_bug")
 	disabled_debug ("editing")
 	disabled_debug ("http")
 	disabled_debug ("object_editing")
 	disabled_debug ("persist")
-	disabled_debug ("data_request")
 	line_generation (no)
 	profile (no)
 	trace (no)
@@ -94,6 +90,11 @@ default
 	multithreaded (no)
 
 
+--	assertion (check)
+--	assertion (require)
+--	assertion (ensure)
+--	assertion (loop)
+--	assertion (invariant)
 --	debug (no)
 --debug ("editing");
 --debug ("persist");
@@ -388,7 +389,8 @@ external
 		"/${MAS}/src/eiffel_library/support/spec/${ISE_PLATFORM}/lib/utilities.o",
 		"${ISE_EIFFEL}/C_library/zlib/libz.a",
 		"${MAS}/src/server1/spec/${ISE_PLATFORM}/lib/external_input_sequence.a",
-		"-lodbc", "-L $(EPOSIX)/lib -leposix_ise",
+		"-lodbc",
+		"-L $(EPOSIX)/lib -leposix_ise",
 		"${MAS_LINK_OPTIONS}"
 
 end
