@@ -17,7 +17,7 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 		export {NONE}
 			copy, setup
 		undefine
-			is_equal, copy, setup
+			is_equal, copy, setup, out
 		redefine
 			data
 		end

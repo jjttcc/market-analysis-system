@@ -11,7 +11,7 @@ class MARKET_TUPLE_LIST [G->MARKET_TUPLE] inherit
 
 	ARRAYED_LIST [G]
 		redefine
-			is_equal
+			is_equal, out
 		end
 
 creation
@@ -130,6 +130,23 @@ feature -- Access
 			non_zero_spec_positive_implies_result_ge_d:
 				Result > 0 and search_spec > 0 implies
 					i_th (Result).date_time.date >= (d)
+		end
+
+	out: STRING is
+		local
+			l: LINEAR [MARKET_TUPLE]
+		do
+			l := linear_representation
+			create Result.make (0)
+			from
+				l.start
+			until
+				l.exhausted
+			loop
+				Result.append ("date/time: " + l.item.date_time.out +
+					", value: " + l.item.value.out + "%N")
+				l.forth
+			end
 		end
 
 feature -- Status report

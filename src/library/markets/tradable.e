@@ -23,7 +23,7 @@ deferred class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 		export {NONE}
 			all
 		undefine
-			is_equal, copy, setup
+			is_equal, copy, setup, out
 		end
 
 	GLOBAL_SERVICES
@@ -32,7 +32,7 @@ deferred class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 		export {NONE}
 			all
 		undefine
-			is_equal, copy, setup
+			is_equal, copy, setup, out
 		end
 
 feature -- Access
