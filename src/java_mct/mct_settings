@@ -1,7 +1,7 @@
 # Configuration settings for the MAS Control Terminal application
 binpath;/opt/mas/bin
-#datafiles;/home2/finance/data/current/*.txt
-datafiles;/opt/mas/lib/data/*.txt
+datafiles;/home2/finance/data/current/*.txt
+#datafiles;/opt/mas/lib/data/*.txt
 command_line_cmd;xterm -e <binpath>/macl -h [hostname] [portnumber]
 gui_cmd;<binpath>/magc -h [hostname] [portnumber]
 #server_cmd;<binpath>/mas -o -f , -b [portnumber] <datafiles>
