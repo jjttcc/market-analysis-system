@@ -336,7 +336,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 				} else {
 					if (request_result_id() == Invalid_symbol) {
 						handle_nonexistent_sybmol(tradable);
-					} else if (request_result_id() == Warning) {
+					} else if (request_result_id() == Warning ||
+							request_result_id() == Error) {
 						new ErrorBox("Warning", "Error occurred retrieving " +
 							"data for " + tradable, this_chart);
 					}
