@@ -81,6 +81,16 @@ feature -- Access
 			Result := input_sequence (intraday_stock_query (symbol))
 		end
 
+	single_string_query_result (query: STRING): STRING is
+		do
+			-- Stub
+		end
+
+	stock_data: STOCK_DATA is
+		once
+			create {DB_STOCK_DATA} Result
+		end
+
 feature -- Status report
 
 	connected: BOOLEAN is
