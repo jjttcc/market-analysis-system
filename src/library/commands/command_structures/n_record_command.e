@@ -18,7 +18,7 @@ class N_RECORD_COMMAND inherit
 
 feature -- Initialization
 
-	make (data: ARRAYED_LIST [STANDARD_MARKET_TUPLE]; n_value: INTEGER;
+	make (data: ARRAYED_LIST [BASIC_MARKET_TUPLE]; n_value: INTEGER;
 			o: N_RECORD_STRUCTURE) is
 			-- Initialize with data and value for n.
 			-- NOTE:  This is a very early draft version of this class that
@@ -76,7 +76,7 @@ feature {NONE} -- Implementation
 
 	owner: N_RECORD_STRUCTURE
 
-	target: ARRAYED_LIST [STANDARD_MARKET_TUPLE]
+	target: ARRAYED_LIST [BASIC_MARKET_TUPLE]
 
 	offset: INTEGER
 			-- Offset from current cursor/index

@@ -3,7 +3,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class STANDARD_MARKET_TUPLE inherit
+class BASIC_MARKET_TUPLE inherit
 
 	MARKET_TUPLE
 
@@ -72,4 +72,4 @@ invariant
 	--open_na_value: not open_available implies open = 0
 	--item_definition: item = close
 
-end -- class STANDARD_MARKET_TUPLE
+end -- class BASIC_MARKET_TUPLE

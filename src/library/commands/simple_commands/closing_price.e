@@ -14,7 +14,7 @@ class CLOSING_PRICE inherit
 
 feature -- Basic operations
 
-	execute (arg: STANDARD_MARKET_TUPLE) is
+	execute (arg: BASIC_MARKET_TUPLE) is
 		do
 			debug io.put_string ("CP.execute, value: ") end
 			value := arg.close.value
