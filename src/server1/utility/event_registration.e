@@ -85,7 +85,6 @@ feature -- Initialization
 			-- Satisfy invariant (editor is currently not used.)
 			create editor
 			register_for_termination (Current)
---			create pending_registrants.make
 		ensure
 			iodev_set: input_device = in_dev and output_device = out_dev
 		end
@@ -173,7 +172,6 @@ feature {NONE} -- Implementation
 				if new_registrant /= Void then
 					add_event_types (new_registrant)
 					working_event_registrants.extend (new_registrant)
---					pending_registrants.extend (new_registrant)
 					changed := true
 					print_list (<<new_registrant.name,
 						" added as a new event registrant.%N">>)
@@ -493,10 +491,6 @@ feature {NONE} -- Implementation
 
 	working_event_registrants: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
 
---	pending_registrants: LINKED_LIST [MARKET_EVENT_REGISTRANT]
-			-- Newly created event registrants pending registration with
-			-- `dispatcher'
-
 	main_msg: STRING is
 		once
 			Result := concatenation (<<"Select action:",
@@ -525,21 +519,6 @@ feature {NONE} -- Implementation
 		do
 			error_occurred := false
 		end
-
---	end_save is
---		do
---			from
---				pending_registrants.start
---			until
---				pending_registrants.exhausted
---			loop
---				dispatcher.register (pending_registrants.item)
---				pending_registrants.forth
---			end
---			pending_registrants.wipe_out
---		ensure then
---			none_pending: pending_registrants.empty
---		end
 
 feature {NONE} -- Implementation of hook routines
 
