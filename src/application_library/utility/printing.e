@@ -98,6 +98,13 @@ feature -- Basic operations
 			end
 		end
 
+	print_indicator (i: MARKET_FUNCTION) is
+			-- Print the fields of each tuple of indicator `i'.
+		do
+			print_mf_info (i)
+			print_market_tuples (i.output)
+		end
+
 	print_composite_lists (t: TRADABLE [BASIC_MARKET_TUPLE]) is
 			-- Print the fields of each tuple of each composite list of `t'.
 		local
