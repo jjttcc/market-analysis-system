@@ -61,7 +61,7 @@ feature -- Basic operations
 					fatal := last_exception_status.fatal or
 						fatal_exception (exception)
 				end
-				log_errors (<<"%NError encountered in ", routine_description,
+				log_errors (<<"%NError encountered - ", routine_description,
 							":%N", error_msg, "%N">>)
 			elseif
 				signal = Sigterm or signal = Sigabrt or signal = Sigquit
