@@ -145,6 +145,9 @@ feature {NONE} -- Hard-coded market function building procedures
 			create sub.make (cmd1, cmd2)
 			create Result.make (f1, f2, sub)
 			Result.set_name (name)
+if sub.tree_contains_cycle (create {HASH_TABLE [BOOLEAN, STRING]}.make (0)) then
+	print ("operator " + sub.name + " contains a cycle.%N")
+ end
 		ensure
 			initialized: Result /= Void and Result.name = name
 		end
@@ -168,6 +171,9 @@ feature {NONE} -- Hard-coded market function building procedures
 			-- For momentum, effective_n needs to be 1 larger than n.
 			Result.set_effective_offset (1)
 			Result.set_name (name)
+if operator.tree_contains_cycle (create {HASH_TABLE [BOOLEAN, STRING]}.make (0)) then
+	print ("operator " + operator.name + " contains a cycle.%N")
+ end
 		ensure
 			initialized: Result /= Void and Result.n = n and Result.name = name
 		end
@@ -195,6 +201,9 @@ feature {NONE} -- Hard-coded market function building procedures
 			create {SUBTRACTION} sub.make (one_hundred, outer_div)
 			create Result.make (pos_ema, neg_ema, sub)
 			Result.set_name (name)
+if sub.tree_contains_cycle (create {HASH_TABLE [BOOLEAN, STRING]}.make (0)) then
+	print ("one of rsi's operators contains a cycle.%N")
+ end
 		end
 
 	wilder_ma (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
@@ -222,6 +231,11 @@ feature {NONE} -- Hard-coded market function building procedures
 			create Result.make (f, plus, firstop, n)
 			Result.set_operators (plus, prevcmd, firstop)
 			Result.set_name (name)
+if plus.tree_contains_cycle (create {HASH_TABLE [BOOLEAN, STRING]}.make (0)) or
+	prevcmd.tree_contains_cycle (create {HASH_TABLE [BOOLEAN, STRING]}.make (0))
+	or firstop.tree_contains_cycle (create {HASH_TABLE [BOOLEAN, STRING]}.make (0)) then
+	print ("one of wilder_ma's operators contains a cycle.%N")
+ end
 		end
 
 	wma (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
@@ -257,6 +271,9 @@ feature {NONE} -- Hard-coded market function building procedures
 			create innerdiv.make (rightmult, two)
 			create k.make (innerdiv, n)
 			create outerdiv.make (minus_n, k)
+if outerdiv.tree_contains_cycle (create {HASH_TABLE [BOOLEAN, STRING]}.make (0)) then
+	print ("operator 'outerdiv' contains a cycle.%N")
+ end
 			create Result.make (f, outerdiv, n)
 			Result.set_name (name)
 		end
@@ -338,6 +355,9 @@ feature {NONE} -- Hard-coded market function building procedures
 			create Result.make (f, m, n)
 			Result.set_name (name)
 			check Result.n = highest.n and Result.n = lowest.n end
+if m.tree_contains_cycle (create {HASH_TABLE [BOOLEAN, STRING]}.make (0)) then
+	print ("operator " + m.name + " contains a cycle.%N")
+ end
 		ensure
 			initialized: Result /= Void and Result.n = n and Result.name = name
 		end
@@ -369,6 +389,9 @@ feature {NONE} -- Hard-coded market function building procedures
 			create Result.make (f, m, n)
 			Result.set_name (name)
 			check Result.n = lowest.n and Result.n = highest.n end
+if m.tree_contains_cycle (create {HASH_TABLE [BOOLEAN, STRING]}.make (0)) then
+	print ("operator " + m.name + " contains a cycle.%N")
+ end
 		ensure
 			initialized: Result /= Void and Result.n = n and Result.name = name
 		end
@@ -420,6 +443,9 @@ feature {NONE} -- Hard-coded market function building procedures
 			create mult.make (div, one_hundred)
 			create Result.make (ma1, ma2, mult)
 			Result.set_name (name)
+if mult.tree_contains_cycle (create {HASH_TABLE [BOOLEAN, STRING]}.make (0)) then
+	print ("one of stoch mult operator contains a cycle.%N")
+ end
 		ensure
 			initialized: Result /= Void and Result.name = name
 		end
