@@ -12,6 +12,13 @@ class MCT inherit
 
 	EV_APPLICATION
 
+	EXCEPTION_SERVICES
+		export
+			{NONE} all
+		undefine
+			default_create, copy
+		end
+
 create
 
     make
@@ -27,8 +34,18 @@ feature {NONE} -- Initialization
             create builder
             main_window := builder.main_window
             main_window.show
-			launch
+			event_loop
         end
+
+	event_loop is
+		do
+			launch
+		rescue
+print ("event loop retrying%N")
+			-- Try to recover from exceptions due to bugs (e.g., void target
+			-- call in multi-lists).
+			retry
+		end
 
 	command_line_options: MCT_COMMAND_LINE is
 		do
