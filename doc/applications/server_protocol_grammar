@@ -20,7 +20,7 @@ date_spec       -> date | "0" | "now" [ now_modifier ]
 now_modifier    -> "-" natural_integer now_mod_type
 now_mod_type    -> "days" | "months"
 server_response -> srvr_data | error_msg | login_response
-login_response  -> session_key
+login_response  -> session_key [ "\t" session_state ]
 error_msg       -> ta_string
 mkt_symbol      -> ta_string
 srvr_data       -> mkt_data | ind_data | symbol_list | ind_list |
@@ -39,6 +39,9 @@ indID           -> natural_integer
 volume          -> natural_integer
 open_interest   -> natural_integer
 session_key     -> natural_integer
+session_state   -> no_open_spec
+no_open_spec    -> "no_open"
+true_or_false   -> 'T' | 'F'
 msgID           -> natural_integer
 mkt_list_req    -> <null>
 ind_list_req    -> mkt_symbol "\t" trad_per_type
