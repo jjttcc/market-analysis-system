@@ -7,6 +7,14 @@ indexing
 class MAS_SERVER inherit
 
 	GLOBAL_SERVER
+		export
+			{NONE} all
+		end
+
+	GENERAL_UTILITIES
+		export
+			{NONE} all
+		end
 
 creation
 
@@ -20,9 +28,13 @@ feature -- Initialization
 			readcmd: POLL_COMMAND
 			i: INTEGER
 			factory_builder: FACTORY_BUILDER
+			version: expanded PRODUCT_INFO
 		do
 			if command_line_options.help then
 				command_line_options.usage
+			elseif command_line_options.version_request then
+				print_list (<<version.name, ", Version ", version.number, ", ",
+					version.informal_date, "%N">>)
 			else
 				!!poller.make_read_only
 				!!factory_builder.make
