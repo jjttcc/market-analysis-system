@@ -115,6 +115,43 @@ feature {NONE} -- Access
 			Result := meg_list
 		end
 
+	active_event_generators: LIST [MARKET_EVENT_GENERATOR] is
+			-- Event generators in which at least one event registrant
+			-- is interested in.
+		local
+			registrants: LIST [MARKET_EVENT_REGISTRANT]
+			generators: LIST [MARKET_EVENT_GENERATOR]
+		do
+			!LINKED_LIST [MARKET_EVENT_GENERATOR]!Result.make
+			registrants := market_event_registrants
+			generators := market_event_generation_library
+			from
+				registrants.start
+			until
+				registrants.exhausted
+			loop
+				from
+					generators.start
+				until
+					generators.exhausted
+				loop
+					if
+						-- If the current generator has not already been
+						-- added to Result and the current registrant is
+						-- intersted in that generator's event type, add
+						-- it to Result.
+						not Result.has (generators.item) and
+							registrants.item.event_types.has (
+								generators.item.event_type)
+					then
+						Result.extend (generators.item)
+					end
+					generators.forth
+				end
+				registrants.forth
+			end
+		end
+
 	market_event_registrants: LIST [MARKET_EVENT_REGISTRANT] is
 			-- All defined event registrants
 		local
