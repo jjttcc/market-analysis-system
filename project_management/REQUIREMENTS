@@ -1,0 +1,18 @@
+Need to deal with stock splits - calculate/adjust backwards from the split.
+
+Allow separate indepent windows, each with its own indicator or set of
+indicators.  (Some windows may have "sub-windows" within them, for parallel
+comparisons of different indicators.)
+
+Allow a list of user-comment strings, each string associated with a time
+period.  For example, for stock X, daily time period 7/1/98 has a comment
+about the stock patterns entered on that day; for the same stock, daily
+time period 7/7/98 has 3 different comments (3 separate strings) for the
+same day, each one covering a different aspect of the stock (and/or, perhaps,
+written by a different person).
+
+Compute weekly data on the fly from daily data - high = highest high of the
+week, low = lowest low, open = Monday's open, close = Friday's close.
+
+The technical analysis engine should be designed as a re-usable component
+with a well-defined interface.
