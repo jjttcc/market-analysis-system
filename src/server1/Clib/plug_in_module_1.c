@@ -26,8 +26,21 @@ struct input_sequence_plug_in {
 	int symbol_file_size;
 };
 
+enum Error_type {
+	None,
+	Memory,
+	File_read,
+	No_valid_path
+};
+
 const char* symbol_file_name = "symbols.mas";
 const char* data_file_name = "data.mas";
+const char* common_errors[] = {
+	"(None)",
+	"Memory allocation failed",
+	"Error occurred reading file",
+	"No valid path found for file"
+};
 
 /* Number of times `c' occurs in `s' */
 int char_count(const char* s, char c) {
@@ -143,13 +156,11 @@ char* concat2strings(const char* s1, const char* s2) {
 }
 
 void close_handle(struct input_sequence_plug_in* handle) {
-printf("starting close_handle: handle %d\n", (int) handle);
 	assert(handle != 0);
 	free(handle->symbol_file_name);
 	free(handle->data_file_name);
 	free(handle->errorbuffer);
 	free(handle);
-printf("ending close_handle\n");
 }
 
 /* Size of file with path `file_path' via a call to stat.  If the file does
@@ -179,11 +190,12 @@ void free_path_array(char** path_array, int count) {
  * If a valid directory is found, the address at fsize will hold the
  * size of the file; otherwise, 0 is returned. */
 char* first_valid_directory(char** path_array, int count,
-		const char* fname, int* fsize) {
+		const char* fname, int* fsize, enum Error_type* error_type) {
 	int i, path_length, flength;
 	char path[BUFSIZ];
 	char* s;
 	char* result = 0;
+	*error_type = None;
 	flength = strlen(fname);
 	for (i = 0; i < count; ++i) {
 		s = path_array[i];
@@ -193,37 +205,45 @@ char* first_valid_directory(char** path_array, int count,
 			strncat(path + path_length, fname, flength);
 			*fsize = file_length(path);
 			if (*fsize >= 0) {
-				result = strdup(s);
-				break;
+				if (access(path, R_OK) == 0) {
+					result = strdup(s);
+					if (result == 0) {
+						*error_type = Memory;
+					}
+					break;
+				} else {
+					printf("Warning: file %s is not readable.\n", path);
+				}
 			}
 		} else {
-			/*!!!Warn that `s' is too long. */
+			printf("Warning: path %s too long for internal buffer.\n", s);
 		}
+	}
+	if (result == 0 && *error_type == None) {
+		*error_type = No_valid_path;
 	}
 	return result;
 }
 
 struct input_sequence_plug_in* new_input_sequence_plug_in_handle(
-		const char* paths) {
+		const char* paths, char* error_buffer, int buffer_size) {
 	struct input_sequence_plug_in* result = 0;
 	char** path_array;
 	int path_count, symfile_size;
 	char* dir;
+	enum Error_type error = None;
 	assert(paths != 0);
 	path_array = directories(paths, &path_count);
 	dir = first_valid_directory(path_array, path_count, symbol_file_name,
-		&symfile_size);
+		&symfile_size, &error);
 	free_path_array(path_array, path_count);
 	if (dir != 0) {
-printf("new input...: using dir %s, sym file size is %d\n",
-dir, symfile_size);
 		result = malloc(sizeof (struct input_sequence_plug_in));
 		if (result != 0) {
 			result->symbol_file_name = concat2strings(dir, symbol_file_name);
 			result->data_file_name = concat2strings(dir, data_file_name);
+			free(dir);
 			result->symbol_file_size = symfile_size;
-printf("new input...: set sym fname, data fname, sym fsize to: %s, %s, %d\n",
-result->symbol_file_name, result->data_file_name, result->symbol_file_size);
 			result->errorbuffer = 0;
 			if (result->symbol_file_name == 0 || result->data_file_name == 0) {
 				free(result->symbol_file_name);
@@ -231,7 +251,21 @@ result->symbol_file_name, result->data_file_name, result->symbol_file_size);
 				free(result);
 				result = 0;
 			}
+		} else {
+			error = Memory;
 		}
+	}
+	if (error != None) {
+		strncpy(error_buffer, common_errors[error], buffer_size);
+		if (error == No_valid_path) {
+			int msgsize = strlen(common_errors[error]) + 2;
+			msgsize += strlen(symbol_file_name);
+			if (buffer_size >= msgsize) {
+				strcat(error_buffer, ": ");
+				strcat(error_buffer, symbol_file_name);
+			}
+		}
+		error_buffer[buffer_size - 1] = '\0';
 	}
 	return result;
 }
@@ -261,8 +295,6 @@ char* symbol_list(struct input_sequence_plug_in* handle) {
 	char* buffer = 0;
 	const char* slist[5];
 	char* result = 0;
-printf("symbol_list trying to use file name '%s'\n",
-handle->symbol_file_name);
 
 	assert(handle != 0);
 	free(handle->errorbuffer);
@@ -302,23 +334,26 @@ handle->symbol_file_name);
 
 char* tradable_data(struct input_sequence_plug_in* handle,
 		char* symbol, int is_intraday, int* size) {
-	struct stat sfile_status;
 	const char* slist[5];
 	char* result = 0;
+	int file_size;
 
 	assert(handle != 0);
 	free(handle->errorbuffer);
 	handle->errorbuffer = 0;
 	slist[0] = "Failed to read data file ";
 	slist[1] = handle->data_file_name;
-	if (stat(handle->data_file_name, &sfile_status) != 0) {
-printf("trdata - stat error\n");
+	file_size = file_length(handle->data_file_name);
+	if (file_size == -1) {
+		slist[2] = ": ";
+		slist[3] = strerror(errno);
+		handle->errorbuffer = concatenation(slist, 4);
+	} else if (access(handle->data_file_name, R_OK) != 0) {
 		slist[2] = ": ";
 		slist[3] = strerror(errno);
 		handle->errorbuffer = concatenation(slist, 4);
 	} else {
-printf("trdata - OK\n");
-		result = malloc(sfile_status.st_size + 1);
+		result = malloc(file_size + 1);
 		if (result == 0) {
 			slist[0] = strerror(errno);
 			handle->errorbuffer = concatenation(slist, 1);
@@ -326,24 +361,18 @@ printf("trdata - OK\n");
 	}
 	if (result != 0) {
 		FILE* f = fopen(handle->data_file_name, "r");
-printf("trdata result is not 0\n");
 		if (f == 0) {
-printf("trdata - fopen failed.\n");
 			slist[0] = strerror(errno);
 			handle->errorbuffer = concatenation(slist, 1);
 		} else {
-printf("trdata - fopen succeeded\n");
-			if (fread(result, 1, sfile_status.st_size, f) !=
-					sfile_status.st_size) {
-printf("trdata - fread failed\n");
+			if (fread(result, 1, file_size, f) != file_size) {
 				handle->errorbuffer = concatenation(slist, 2);
 			} else {
-				*size = sfile_status.st_size;
+				*size = file_size;
 			}
 			fclose(f);
 		}
 	}
-/*printf("trdata returning:\n'%s'\n", result);*/
 
 	return result;
 }
