@@ -295,6 +295,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 					%variable specification: " + value + "%N(at line " +
 					current_line.out + ").%N")
 			else
+				replace_configuration_tokens (components @ 2)
 				if platform.is_equal (Windows_platform) then
 					convert_to_windows (components @ 2)
 				end
@@ -319,6 +320,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 			else
 				key := components @ 1
 				append_str := components @ 2
+				replace_configuration_tokens (append_str)
 				if platform.is_equal (Windows_platform) then
 					convert_to_windows (append_str)
 				end
@@ -421,7 +423,8 @@ feature {NONE} -- Implementation - Utilities
 			c: SESSION_COMMAND
 		do
 			replace_configuration_tokens (current_cmd_string)
-			create c.make (Start_server_cmd_specifier, current_cmd_string)
+			c := new_session_command (Start_server_cmd_specifier,
+				current_cmd_string)
 			c.set_name (current_cmd_name)
 			c.set_description (current_cmd_desc)
 			if current_cmd_is_default then
