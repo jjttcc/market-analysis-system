@@ -44,10 +44,19 @@ copy_config_files() {
 	for f in $Mas_root_dir/lib/*; do if [ -d $f ]; then ln -s $f . ; fi; done
 }
 
+configure_mct() {
+	specfile=/tmp/mas-config-specs.$$
+	echo "replacestart">$specfile
+	echo "<user_mas_dir>$PWD">>$specfile
+	echo "replaceend">>$specfile
+	$Mas_root_dir/bin/config_tool -c $specfile -f mctrc
+	rm -f $specfile
+}
+
 config_dir=
 while [ $# -ne 0 ]; do
 	case $1 in
-		-h) help; exit 0
+		-h) usage; help; exit 0
 		;;
 		-*) usage; exit 1
 		;;
@@ -62,3 +71,4 @@ if [ -z "$config_dir" ]; then
 fi
 
 copy_config_files $config_dir
+configure_mct
