@@ -48,7 +48,7 @@ feature -- Access
 	date: DATE is
 			-- The last date that `number' was updated
 		once
-			create Result.make (2001, 3, 27)
+			create Result.make (2001, 3, 18)
 		end
 
 	informal_date: STRING is
