@@ -62,8 +62,6 @@ feature -- Basic operations
 					--when/if http intraday data retrieval is added.
 					create http_list_builder.make (tradable_factory, Void,
 						Void)
---!!!!Test to see if extension is used - delete when done:
-create http_list_builder.make (tradable_factory, "daily", "intraday")
 					http_list_builder.execute
 					create {TRADABLE_LIST_HANDLER} product.make (
 						http_list_builder.daily_list,
