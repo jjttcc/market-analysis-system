@@ -18,6 +18,11 @@ feature -- Access
 		deferred
 		end
 
+	output_record_separator: STRING is
+			-- Field separator used when printing output
+		deferred
+		end
+
 	date_field_separator: STRING is
 			-- Field separator used for output between date fields
 		deferred
@@ -169,7 +174,7 @@ feature {NONE} -- Implementation
 				print (real_formatter.formatted(l.item.low.value))
 				print (output_field_separator)
 				print (real_formatter.formatted(l.item.close.value))
-				print ("%N")
+				print (output_record_separator)
 				l.forth
 			end
 		end
@@ -207,7 +212,7 @@ feature {NONE} -- Implementation
 				print (real_formatter.formatted(l.item.low.value))
 				print (output_field_separator)
 				print (real_formatter.formatted(l.item.close.value))
-				print ("%N")
+				print (output_record_separator)
 				l.forth
 			end
 		end
@@ -249,7 +254,7 @@ feature {NONE} -- Implementation
 				print (real_formatter.formatted(l.item.close.value))
 				print (output_field_separator)
 				print (int_formatter.formatted(l.item.volume))
-				print ("%N")
+				print (output_record_separator)
 				l.forth
 			end
 		end
@@ -291,7 +296,7 @@ feature {NONE} -- Implementation
 				print (real_formatter.formatted(l.item.close.value))
 				print (output_field_separator)
 				print (int_formatter.formatted(l.item.volume))
-				print ("%N")
+				print (output_record_separator)
 				l.forth
 			end
 		end
@@ -309,7 +314,7 @@ feature {NONE} -- Implementation
 				print_date (l.item.end_date, 'y', 'm', 'd')
 				print (output_field_separator)
 				print (real_formatter.formatted(l.item.value))
-				print ("%N")
+				print (output_record_separator)
 				l.forth
 			end
 		end
