@@ -30,11 +30,6 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is
-		once
-			Result := False
-		end
-
 	set_debugging_on (arg: BOOLEAN) is
 			-- Set `debugging_on' to `arg'.
 		require

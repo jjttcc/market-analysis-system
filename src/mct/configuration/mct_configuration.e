@@ -651,7 +651,8 @@ feature {NONE} -- Implementation - Utilities
 				Result.debugging_on
 		end
 
-	new_external_command (cmd_id, cmd_string: STRING): EXTERNAL_COMMAND is
+	new_external_command (cmd_id, cmd_string: STRING):
+		MANAGED_EXTERNAL_COMMAND is
 			-- A new EXTERNAL_COMMAND, with the work_directory set, if
 			-- specified in `cmd_string'
 		local

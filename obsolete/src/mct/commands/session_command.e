@@ -8,7 +8,7 @@ indexing
 
 class SESSION_COMMAND inherit
 
-	EXTERNAL_COMMAND
+	MANAGED_EXTERNAL_COMMAND
 		redefine
 			execute
 		end
@@ -28,7 +28,6 @@ feature -- Basic operations
 		local
 			args: ARRAY [STRING]
 		do
-session_window ?= window
 			if program = Void then
 				process_components
 			end

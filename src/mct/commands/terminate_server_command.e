@@ -8,12 +8,7 @@ indexing
 
 class TERMINATE_SERVER_COMMAND inherit
 
-	SESSION_COMMAND
-		rename
-			make as sc_make_unused
-		redefine
-			execute
-		end
+	MCT_COMMAND
 
 	GLOBAL_APPLICATION_FACILITIES
 		export
@@ -36,6 +31,14 @@ feature -- Initialization
 			items_set: identifier = id
 		end
 
+feature -- Access
+
+	contents: STRING is ""
+
+feature -- Status report
+
+	arg_mandatory: BOOLEAN is True
+
 feature -- Basic operations
 
 	execute (window: SESSION_WINDOW) is
@@ -49,7 +52,7 @@ feature -- Basic operations
 				if debugging_on then
 					print ("Connected with server.%N")
 				end
-				connection.send_termination_request (False)
+				connection.send_termination_request (True)
 				if debugging_on then
 					if connection.last_communication_succeeded then
 						print ("Termination request succeeded.%N")
