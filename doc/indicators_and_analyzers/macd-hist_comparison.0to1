@@ -1,0 +1,23 @@
+# macl script that defines a market analyzer that detects when an
+# indicator (which is 1 if macd-hist[today] > macd-hist[yesterday] and 0
+# otherwise) changes from 0 to 1.  It does this by detecting if the
+# indicator crosses over a horizontal line whose y value is 0.5, which
+# is in between 0 and 1.
+m
+c
+s
+t
+macd-hist[today] > macd-hist[yesterday]
+y
+Line
+y
+0.5
+0
+daily
+below-to-above
+n
+b
+macd-hist[today] > macd-hist[yesterday]: 0 -> 1
+s
+-
+x

@@ -1,0 +1,37 @@
+# macl script that defines a "Slope of MACD Histogram" indicator and a
+# "Slope of macd hist crossed above 0" market analyzer that uses the
+# "Slope of MACD Histogram" indicator.  The market analyzer does its
+# job by detects if slope of macd hist. crosses over horizontal line
+# whose y value is 0.
+e
+c
+n
+ONE_VARIABLE_FUNCTION
+c
+Slope of MACD Histogram
+MACD Histogram
+y
+SLOPE_ANALYZER
+c
+MACD Histogram
+y
+s
+-
+m
+c
+s
+t
+Slope of MACD Histogram
+y
+Line
+y
+0
+0
+daily
+below-to-above
+n
+b
+Slope of MACD Histogram crossed above 0
+s
+-
+x

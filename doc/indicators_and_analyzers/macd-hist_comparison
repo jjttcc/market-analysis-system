@@ -1,0 +1,32 @@
+# An indicator that is 1 if macd-hist[today] > macd-hist[yesterday] and 0
+# otherwise
+e
+c
+n
+ONE_VARIABLE_FUNCTION
+c
+macd-hist[today] > macd-hist[yesterday]
+MACD Histogram
+y
+NUMERIC_CONDITIONAL_COMMAND
+c
+GT_OPERATOR
+c
+BASIC_NUMERIC_COMMAND
+c
+SETTABLE_OFFSET_COMMAND
+c
+BASIC_NUMERIC_COMMAND
+c
+MACD Histogram
+y
+1
+NUMERIC_VALUE_COMMAND
+c
+1
+NUMERIC_VALUE_COMMAND
+c
+0
+s
+-
+x
