@@ -153,8 +153,9 @@ feature -- Basic operations
 			check
 				c_is_valid_type: cmd /= Void
 			end
-			cmd.set_target (user_interface.market_tuple_list_selection (
-								cmd.generator))
+			cmd.set_target (user_interface.market_function_selection (
+				concatenation (<<"an indicator for ", cmd.generator,
+								"'s input">>)).output)
 		end
 
 	edit_unaryop (cmd: UNARY_OPERATOR [ANY, REAL]) is
