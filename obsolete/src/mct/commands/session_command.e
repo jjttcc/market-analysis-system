@@ -37,6 +37,9 @@ feature -- Basic operations
 		local
 			args: ARRAY [STRING]
 		do
+			if program = Void then
+				process_components
+			end
 			args := deep_clone (arguments)
 			-- Work with a deep-clone of `arguments' to prevent side-effects:
 			-- `arguments' needs to keep its original "tokens", which are
@@ -47,6 +50,8 @@ feature -- Basic operations
 				<<Port_number_specifier, Hostname_specifier>>,
 				<<window.port_number, window.host_name>>,
 				Token_start_delimiter, Token_end_delimiter))
+print ("executing: " + program + " " + field_concatenation (
+args.linear_representation, " ") + "%N")
 			launch (program, args)
 		end
 

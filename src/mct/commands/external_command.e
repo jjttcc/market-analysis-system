@@ -20,19 +20,9 @@ feature {NONE} -- Initialization
 		require
 			args_exist: id /= Void and cmd /= Void
 			id_not_empty: not id.is_empty
-		local
-			regutil: expanded REGULAR_EXPRESSION_UTILITIES
-			cmd_components: ARRAY [STRING]
 		do
 			identifier := id
 			command_string := cmd
-			cmd_components := regutil.split (" +", command_string)
-			if cmd_components.is_empty then
-				-- Report empty command error.
-			else
-				program := cmd_components @ 1
-				arguments := cmd_components.subarray (2, cmd_components.upper)
-			end
 		ensure
 			items_set: identifier = id and command_string = cmd
 		end
@@ -41,6 +31,11 @@ feature -- Access
 
 	command_string: STRING
 			-- The complete command, with arguments, to be delegated to the OS
+
+	contents: STRING is
+		do
+			Result := command_string
+		end
 
 	program: STRING
 			-- The name of the program to execute
@@ -71,8 +66,13 @@ feature -- Basic operations
 
 	execute (arg: ANY) is
 		do
+			if program = Void then
+				process_components
+			end
 			launch (program, arguments)
 		end
+
+feature {NONE} -- Implementation
 
 	launch (prog: STRING; args: ARRAY [STRING]) is
 			-- "Launch" the command.
@@ -93,6 +93,20 @@ feature -- Basic operations
 			last_process.execute
 			if working_directory /= Void then
 				env.change_working_directory (previous_directory)
+			end
+		end
+
+	process_components is
+		local
+			cmd_components: ARRAY [STRING]
+			regutil: expanded REGULAR_EXPRESSION_UTILITIES
+		do
+			cmd_components := regutil.split (" +", command_string)
+			if cmd_components.is_empty then
+				-- Report empty command error.
+			else
+				program := cmd_components @ 1
+				arguments := cmd_components.subarray (2, cmd_components.upper)
 			end
 		end
 
