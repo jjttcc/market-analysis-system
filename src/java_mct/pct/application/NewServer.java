@@ -18,8 +18,6 @@ public class NewServer {
 static int tmp_port = 32348;
 	public Object execute() {
 		Object result = null;
-		System.out.println("I am a stub for the new server command.");
-		System.out.println("The context is: " + app_context);
 		if (runtime == null) {
 			runtime = Runtime.getRuntime();
 		}

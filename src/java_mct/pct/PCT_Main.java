@@ -29,7 +29,6 @@ class PCT_Main {
 			ApplicationContext app_context = application_context();
 			ProgramControlTerminal pct =
 				new ProgramControlTerminal(null, null, app_context, null);
-			System.err.println("PCT_Main - calling pct.execute.");
 			pct.execute();
 		}
 		catch (Exception e) {
