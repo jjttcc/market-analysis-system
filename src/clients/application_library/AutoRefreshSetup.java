@@ -32,6 +32,7 @@ public class AutoRefreshSetup {
 	// if `data_request_client' is already scheduled.
 	public void schedule() {
 		if (timer == null) {
+System.out.println("I (" + this + ") am creating a new Timer");
 			timer = new Timer(true);
 			TimeDelimitedDataRequest timer_task =
 				new TimeDelimitedDataRequest(data_request_client);
@@ -48,6 +49,7 @@ public class AutoRefreshSetup {
 
 	// Timer delay in milliseconds (@@Make configurable - check with Orest.)
 //	private static long refresh_delay = 1000 * 5;
-	private static long refresh_delay = 100 * 7;
+//	private static long refresh_delay = 100 * 7;
+private static long refresh_delay = 1000 * 6;
 //private static long refresh_delay = 1000 * 60;
 }
