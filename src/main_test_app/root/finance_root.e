@@ -42,9 +42,6 @@ feature -- Initialization
 			!!ui
 			ui.set_output_field_separator ("%T")
 			ui.set_date_field_separator ("/")
-			print ("Test execution: "); print (current_date)
-			print (", "); print (current_time); print ("%N")
-			test_bool_operators
 			!!factory_builder.make
 			ui.set_factory_builder (factory_builder)
 			ui.execute
