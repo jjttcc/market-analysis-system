@@ -23,3 +23,14 @@ MAS_DIRECTORY specifies the directory MAS will look in for its configuration
 files, such as user-defined indicators and the stock split file.  If
 this variable is not set, MAS will look in the current directory for this
 information.
+
+IMPORTANT:  To use the current configuration of indicators and rules for
+event generation, you will need to copy the following files from the MAS
+lib directory (../lib) to $MAS_DIRECTORY:
+
+generators_persist
+indicators_persist
+
+MAS will run correctly without these files, but you will be missing some
+functionality - technical indicators and event generation rules - if you
+run MAS without these files.
