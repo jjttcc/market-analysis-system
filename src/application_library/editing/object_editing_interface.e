@@ -2,7 +2,7 @@ indexing
 	description:
 		"Abstraction for a user interface that obtains selections needed for %
 		%creation of a recursive structure (or tree) of objects of type G"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -56,7 +56,6 @@ feature -- Access
 			ol_not_void: obj_list /= Void
 		do
 			Result := user_object_selection (obj_list, msg)
-			--!!!???: current_objects.extend (Result)
 			if initialization_needed then
 				initialize_object (Result)
 			end
