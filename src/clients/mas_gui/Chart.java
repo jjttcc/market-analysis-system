@@ -75,7 +75,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		_indicators = null;
 
 		serialize_filename = sfname;
-System.out.println("serialize_filename: " + serialize_filename);
 
 		if (window_count == 1 && serialize_filename != null) {
 			ChartSettings settings = null;
@@ -539,20 +538,15 @@ System.out.println("serialize_filename: " + serialize_filename);
 	// Save persistent settings as a serialized file.
 	// Precondition: main_pane != null
 	protected void save_settings() {
-System.out.println("save settings called.");
-System.out.println("serialize_filename: " + serialize_filename);
 		if (serialize_filename != null) {
-System.out.println("save settings A");
 			try {
 				FileOutputStream chartfile =
 					new FileOutputStream(serialize_filename);
-System.out.println("save settings B");
 				ObjectOutputStream oos = new ObjectOutputStream(chartfile);
 				ChartSettings cs = new ChartSettings(main_pane.getSize(),
 					main_pane.print_properties, getLocation(),
 					current_upper_indicators, current_lower_indicators,
 					replace_indicators);
-System.out.println("save settings C");
 				for (int i = 0; i < saved_dialogs.size(); ++i) {
 					Dialog d = (Dialog) saved_dialogs.elementAt(i);
 					WindowSettings ws = new WindowSettings(
@@ -562,7 +556,6 @@ System.out.println("save settings C");
 				oos.writeObject(cs);
 				oos.flush();
 				oos.close();
-System.out.println("save settings D");
 			}
 			catch (IOException e) {
 				System.err.println("Could not save file " + serialize_filename);
