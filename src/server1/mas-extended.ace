@@ -5,7 +5,11 @@ root
 	EXTENDED_MA_SERVER: make
 
 default
-	assertion (no)
+	assertion (check)
+	assertion (require)
+	assertion (ensure)
+	assertion (loop)
+	assertion (invariant)
 	arguments ("-p 8888 -b")
 	arguments ("-p 8886 -b")
 	arguments ("-p 8884 -b")
