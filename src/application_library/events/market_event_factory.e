@@ -16,6 +16,11 @@ deferred class MARKET_EVENT_FACTORY inherit
 	GLOBAL_SERVICES
 		export {NONE}
 			all
+		end
+
+	GLOBAL_APPLICATION
+		export {NONE}
+			all
 				{ANY}
 			event_types
 		end

@@ -45,7 +45,7 @@ feature -- Initialization
 			print ("Test execution: "); print (current_date)
 			print (", "); print (current_time); print ("%N")
 			test_bool_operators
-			!!factory_builder.make (default_input_file_name)
+			!!factory_builder.make
 			ui.set_factory_builder (factory_builder)
 			ui.execute
 		end

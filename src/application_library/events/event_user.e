@@ -9,21 +9,25 @@ class EVENT_USER inherit
 	USER
 		rename
 			make as u_make
+		export {NONE}
+			u_make
 		end
 
 	MARKET_EVENT_REGISTRANT
 		rename
 			make as er_make
+		export {NONE}
+			er_make
 		end
 
 	GLOBAL_SERVICES
-		rename
-			event_types as global_event_types
 		export {NONE}
 			all
 		end
 
 	GLOBAL_APPLICATION
+		rename
+			event_types as global_event_types
 		export {NONE}
 			all
 		end

@@ -17,7 +17,7 @@ class FACTORY_BUILDER inherit
 			all
 		end
 
-	GLOBAL_SERVICES
+	GLOBAL_APPLICATION
 		export {NONE}
 			all
 		end
@@ -28,15 +28,11 @@ creation
 
 feature -- Initialization
 
-	make (default_input_fname: STRING) is
+	make is
 		do
-			if default_input_fname /= Void then
-				default_input_file_name := default_input_fname
-			end
 			!LINKED_LIST [STRING]!input_file_names.make
 			process_args
 		ensure
-			default_file_name: default_input_file_name = default_input_fname
 			ml_not_void: market_list /= Void
 		end
 
@@ -47,9 +43,6 @@ feature -- Access
 		once
 			!!Result.make
 		end
-
-	default_input_file_name: STRING
-			-- File name to use if none are specified by the user
 
 	input_file_names: LIST [STRING]
 			-- List of all specified input file names

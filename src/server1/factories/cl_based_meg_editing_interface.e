@@ -16,7 +16,11 @@ class MARKET_EVENT_GENERATOR_BUILDER inherit
 		end
 
 	GLOBAL_SERVICES
-	--!!!change to GLOBAL_APPLICATION
+		export {NONE}
+			all
+		end
+
+	GLOBAL_APPLICATION
 		export {NONE}
 			all
 				{ANY}

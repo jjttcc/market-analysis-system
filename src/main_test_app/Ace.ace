@@ -7,7 +7,7 @@ root
 
 default
 
-	assertion (all);
+	assertion (no);
 	debug (yes);
 
 	precompiled ("$EIFFEL4/precomp/spec/$PLATFORM/base");

@@ -50,50 +50,6 @@ feature -- Access
 			Result.count = period_types.count
 		end
 
-	--!!!Probably, event type stuff should go into a separate class.
-	--!!!GS may use that class to make them globally available.
-	--event_types: TABLE [EVENT_TYPE, INTEGER] is
-	event_types: ARRAY [EVENT_TYPE] is
-			-- All event types known to the system
-		once
-			!ARRAY [EVENT_TYPE]!Result.make (1, 0)
-		end
-
-	create_event_type (name: STRING) is
-			-- Create a new EVENT_TYPE with name `name' and add it to
-			-- the `event_types' table.
-			--!!!More design work needed here re. event type management.
-		local
-			et: EVENT_TYPE
-			i: INTEGER
-		do
-			i := last_event_ID.item + 1
-			last_event_ID.set_item (i)
-			!!et.make (name, last_event_ID.item)
-			event_types.force (et, last_event_ID.item)
-		end
-
-	last_event_type: EVENT_TYPE is
-			-- Last created event type
-		do
-			if last_event_ID.item > 0 then
-				Result := event_types @ last_event_ID.item
-			end
-		end
-
-	last_event_ID: INTEGER_REF is
-			-- !!!Temporary hack
-		once
-			!!Result
-			Result.set_item (0)
-		end
-
-	function_library: LIST [MARKET_FUNCTION] is
-			-- All defined market functions
-		once
-			!LINKED_LIST [MARKET_FUNCTION]!Result.make
-		end
-
 	concatenation (a: ARRAY [ANY]): STRING is
 			-- A string containing a concatenation of all elements of `a'
 		require

@@ -17,9 +17,16 @@ class EVENT_LOG_FILE inherit
 	MARKET_EVENT_REGISTRANT
 		rename
 			make as er_make
+		export {NONE}
+			er_make
 		end
 
 	GLOBAL_SERVICES
+		export {NONE}
+			all
+		end
+
+	GLOBAL_APPLICATION
 		rename
 			event_types as global_event_types
 		export {NONE}
