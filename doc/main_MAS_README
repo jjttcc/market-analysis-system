@@ -1,3 +1,5 @@
+#Note: Backslashes are not used as escape characters - instead "*^"name is
+#used; for example *^fontI.
 %titleMarket Analysis System
 General Introduction and Usage Instructions
 %end_title
@@ -55,8 +57,8 @@ you are running; and send this file to me at: jtc@dimensional.com.
 spam filter.)  I will use this information to keep a record of what
 systems MAS has successfully been run on; your name and email address
 will not be included in this record.
-
 @end:linux
+
 @begin:windows
 %hdg1Feedback and Informal Support for MAS
 I am interested in hearing your comments and criticisms of the MAS package.
@@ -133,7 +135,7 @@ some sample data files.
 
 %hdg1MAS Data Files and Format
 
-@windows\fBNote:\fP If you are using the "MAS Server (web)" icon to start
+@windows*^fontBNote:*^fontP If you are using the "MAS Server (web)" icon to start
 @windowsthe server, you can ignore this section.
 @windows%par
 When the MAS server is run such that its data is obtained from files,
@@ -150,13 +152,15 @@ for stock and index data (with volume of 0), as well as futures data.
 It expects the date field to follow the format:  yyyymmdd.  For example,
 19990701, for July 1, 1999.
 %par
-There are some sample data files included in the correct format in lib/data
+There are some sample data files included in the correct format in
+@linuxlib/data/tradables
+@windowslib\data\tradables
 so that you can try out MAS without having to obtain data files.
 
 %hdg1Running MAS
 
 @begin:windows
-\fBNote:\fP
+*^fontBNote:*^fontP
 If you are using the "MAS Server (web)" icon to start the server,
 you can ignore this section.
 %par
