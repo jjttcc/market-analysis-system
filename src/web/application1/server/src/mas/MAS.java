@@ -17,7 +17,7 @@ import java_library.support.*;
 import support.IO_SocketConnection;
 import support.ServerResponseUtilities;
 
-public final class MAS extends GenericServlet {
+public final class MAS extends GenericServlet implements AssertionConstants {
 
 	public void init() {
 		proxy_cache = new ManagedCache();
@@ -75,7 +75,7 @@ public final class MAS extends GenericServlet {
 	}
 
 	// MAS_Proxy reserved for this thread
-	// Postcondition: result != null && proxy_cache.reserved(result)
+	// Postcondition: reserved: result != null && proxy_cache.reserved(result)
 	private MAS_Proxy reserved_proxy() {
 		log("MAS servlet reserving a proxy");
 		MAS_Proxy result = null;
@@ -91,8 +91,8 @@ public final class MAS extends GenericServlet {
 			// The table is full - obtain the first available proxy.
 			result = (MAS_Proxy) proxy_cache.item();
 		}
-		assert proxy_cache.size() <= Max_cache_size;
-		assert result != null && proxy_cache.reserved(result): "Postcondition";
+		assert proxy_cache.size() <= Max_cache_size: ASSERTION;
+		assert result != null && proxy_cache.reserved(result): POSTCONDITION;
 		return result;
 	}
 
