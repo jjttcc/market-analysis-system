@@ -113,6 +113,22 @@ feature {NONE} -- Access
 			Result := meg_list
 		end
 
+	market_event_registrants: LIST [MARKET_EVENT_REGISTRANT] is
+			-- All defined market functions
+		local
+			storable: STORABLE
+			reg_list: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
+		once
+			!!storable
+			reg_list ?= storable.retrieve_by_name (registrants_file_name)
+			if reg_list = Void then
+				!!reg_list.make (generators_file_name)
+			end
+			-- Registrants are registered for termination somewhere else.
+			-- Should that be moved to here?
+			Result := reg_list
+		end
+
 feature {NONE} -- Constants
 
 	default_input_file_name: STRING is "/tmp/tatest"
@@ -132,6 +148,15 @@ feature {NONE} -- Constants
 			ta_env: expanded TAL_APP_ENVIRONMENT
 		once
 			Result := ta_env.file_name_with_app_directory ("generators_persist")
+		end
+
+	registrants_file_name: STRING is
+			-- Name of the file containing persistent data for event generators
+		local
+			ta_env: expanded TAL_APP_ENVIRONMENT
+		once
+			Result := ta_env.file_name_with_app_directory (
+						"registrants_persist")
 		end
 
 end -- GLOBAL_APPLICATION
