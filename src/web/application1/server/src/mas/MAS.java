@@ -35,7 +35,7 @@ public final class MAS extends GenericServlet {
 			log("Exception caught in 'service':\n", e);
 			send_response(response,
 				ServerResponseUtilities.error_response_message(
-				"Failed to connect to the server."));
+				"Failed to connect to the server: " + e.getMessage()));
 		}
 	}
 

@@ -17,7 +17,7 @@ public class MAS_Applet extends Applet {
 
 	public void init() {
 		log("init: Starting ...");
-		log("Compiled at Mon Feb 17 17:44:58 MST 2003");
+		log("Compiled at Mon Feb 17 18:38:21 MST 2003");
 		try {
 			Configuration.set_ignore_termination(true);
 			StartupOptions options = new AppletOptions();
@@ -30,7 +30,11 @@ public class MAS_Applet extends Applet {
 				new DataSetBuilder(connection(), options);
 			log("init: D");
 			if (data_builder.login_failed()) {
-				report_error("Login to the server failed");
+				if (data_builder.server_response() != null) {
+					report_error(data_builder.server_response());
+				} else {
+					report_error("Login to the server failed");
+				}
 			} else {
 				Chart chart = new Chart(data_builder, null, options);
 			}
