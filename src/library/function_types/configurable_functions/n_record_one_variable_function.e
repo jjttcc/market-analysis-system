@@ -71,8 +71,6 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 
 	set_effective_offset (arg: INTEGER) is
 			-- Set effective_offset to `arg'.
-		require
-			arg /= Void
 		do
 			effective_offset := arg
 		ensure
@@ -104,7 +102,8 @@ feature {NONE} -- Basic operations
 				continue_until
 			end
 		ensure then
-			when_tgcount_lt_n: target.count < effective_n implies output.is_empty
+			when_tgcount_lt_n: target.count < effective_n implies
+				output.is_empty
 			when_tgcount_ge_n:
 				target.count >= effective_n implies
 					output.count = target.count - effective_n + 1
