@@ -11,6 +11,8 @@
 
 package assertion_tools;
 
+my $Logic_class_name = "Logic";
+
 my $post;
 my $pre;
 my $postconditions = "";
@@ -53,10 +55,12 @@ while ($current_line < $line_count) {
 	} else {
 		$open_braces += substr_count($_, $obrace);
 		$close_braces += substr_count($_, $cbrace);
-		if ($open_braces == $close_braces) {
+		if (return_at_end_found() || $open_braces == $close_braces) {
 			$in_function = 0;
 			print $postconditions;
 			$postconditions = "";
+			$open_braces = 0;
+			$close_braces = 0;
 		}
 	}
 	if ($print_current_line) {
@@ -67,12 +71,54 @@ while ($current_line < $line_count) {
 		$preconditions = "";
 	}
 	if ($post) {
-		$postconditions .= processed_postcondition(@assertions);
+		$postconditions .= processed_postconditions(@assertions);
 	}
 	if ($pre) {
-		$preconditions .= processed_precondition(@assertions);
+		$preconditions .= processed_preconditions(@assertions);
 	}
 	++$current_line;
+}
+
+# Is the current line a return statement and is it the last statement
+# before the end of the current routine?
+sub return_at_end_found {
+	$result = 0;
+	if ($_ =~ /\breturn\b/ && $open_braces == $close_braces + 1) {
+		for (my $i = 1; $i < $line_count; ++$i) {
+			if ($lines[$current_line + $i] =~ /^\s*\/\//) {
+				# Ignore comment lines.
+			} elsif (! ($lines[$current_line + $i] =~ /^\s*$/)) {
+				if ($lines[$current_line + $i] =~ /^\s*$cbrace\s*$/) {
+					$result = 1;
+				} else {
+					# Statement found after return - leave with
+					# $result == 0.
+				}
+				last;
+			}
+		}
+	}
+	return $result;
+}
+
+# "implies" expression processed for Java - Assume "implies" occurs only
+# once.
+sub processed_implication {
+	$expr = $_[0];
+	$expr =~ /(.*)[ \t]+implies[ \t]+(.*)/;
+	# For now, just assume that everything to the left of "implies" is
+	# its left operator and everything to the right is the right operator.
+	# May want to cover more complex experssions in the future.
+	return $Logic_class_name . ".implies(" . $1 . ", " . $2 . ")";
+}
+
+sub post_processed_expr {
+	my $expr = $_[0];
+	$result = $expr;
+	if ($expr =~ /[ \t]implies[ \t]/) {
+		$result = processed_implication($expr);
+	}
+	return $result;
 }
 
 # The specified assertion line, processed as Java code.
@@ -90,6 +136,7 @@ sub processed_assertion {
 		} else {
 			$expr = $1;
 		}
+		$expr = post_processed_expr($expr);
 		$result = "\t\tassert " . $expr . ": " . $label;
 		if ($tag ne "") {
 			$result = $result . " + \"" . ": " . $tag . "\""
@@ -220,11 +267,11 @@ sub assertions {
 	return $result;
 }
 
-sub processed_postcondition {
+sub processed_postconditions {
 	return assertions("POSTCONDITION", @_);
 }
 
-sub processed_precondition {
+sub processed_preconditions {
 	return assertions("PRECONDITION", @_);
 }
 
