@@ -18,6 +18,7 @@ class Parser {
 		_field_separator = field_sep;
 
 		dates = new Vector();
+		times = new Vector();
 		float_field_count = float_fields(fieldspecs);
 		has_volume = has_field_type(Volume);
 		has_open_interest = has_field_type(Open_interest);
@@ -37,16 +38,20 @@ class Parser {
 	// field_separator.  `drawer' is the tuple drawer to use for the
 	// DataSet.  result() gives the new DataSet.
 	public void parse(String s, Drawer drawer) throws Exception {
-		int float_index = 0, volume_index = 0, oi_index = 0;
+		int float_index = 0, volume_index = 0, oi_index = 0, rec_count;
+		is_intraday = contains_time_field(s);
+System.out.println("intraday: " + is_intraday);
 		StringTokenizer recs = new StringTokenizer(s, _record_separator, false);
+		rec_count = recs.countTokens();
 		clear_vectors();
-		float_data = new double[recs.countTokens() * float_field_count];
+		float_data = new double[rec_count * float_field_count];
 		if (has_volume) {
-			volumes = new double[recs.countTokens()];
+			volumes = new double[rec_count];
 		}
 		if (has_open_interest) {
-			open_interests = new double[recs.countTokens()];
+			open_interests = new double[rec_count];
 		}
+
 		while (recs.hasMoreTokens()) {
 			StringTokenizer fields = new StringTokenizer(recs.nextToken(),
 													_field_separator, false);
@@ -55,6 +60,9 @@ class Parser {
 				switch (parsetype[j]) {
 					case Date:
 						dates.addElement(fields.nextToken());
+						if (is_intraday) {
+							times.addElement(fields.nextToken());
+						}
 						break;
 					case Open:
 						float_data[float_index++] =
@@ -146,10 +154,13 @@ class Parser {
 	// Postcondition: result() != null && result().drawer() == drawer
 	private void process_data(Drawer drawer) throws Exception {
 		String[] date_array = null;
+		String[] time_array = null;
 		boolean has_dates = false;
+		boolean has_times = false;
 
 		try {
 			has_dates = dates != null && ! dates.isEmpty();
+			has_times = times != null && ! times.isEmpty();
 			int length = float_data.length / float_field_count;
 			if (length > 0) {
 				processed_data = new DataSet(float_data, length, drawer);
@@ -161,6 +172,11 @@ class Parser {
 				date_array = new String[dates.size()];
 				dates.copyInto(date_array);
 				processed_data.set_dates(date_array);
+			}
+			if (has_times) {
+				time_array = new String[times.size()];
+				times.copyInto(time_array);
+				processed_data.set_times(time_array);
 			}
 			if (volume_drawer != null && volumes != null &&
 					volumes.length > 0) {
@@ -174,6 +190,7 @@ class Parser {
 					open_interests.length, open_interest_drawer);
 				if (has_dates) oi_data.set_dates(date_array);
 			}
+System.out.println("dates, times: " + dates.size() + ", " + times.size());
 		}
 		catch (Exception e) {
 			System.err.println("DataSet constructor failed - " + e);
@@ -184,6 +201,7 @@ class Parser {
 	// Remove all elements from data vectors - set their sizes to 0.
 	private void clear_vectors() {
 		dates.removeAllElements();
+		times.removeAllElements();
 	}
 
 	// The number of fields in `fieldspecs' that will be of type float
@@ -212,13 +230,31 @@ class Parser {
 		return result;
 	}
 
+	// Does `s' contain a time field?
+	boolean contains_time_field(String s) {
+		boolean result = false;
+		StringTokenizer recs = new StringTokenizer(s, _record_separator, false);
+		if (recs.countTokens() > 0) {
+			StringTokenizer fields = new StringTokenizer(recs.nextToken(),
+				_field_separator, false);
+
+System.out.println("fields, ptlength: " + fields.countTokens() + ", "+
+parsetype.length);
+			// If the number of fields in a record is greater than the number of
+			// parse types, a time field is included.
+			result = fields.countTokens() > parsetype.length;
+		}
+		return result;
+	}
+
 	int parsetype[];
 	int float_field_count;
 
-	// Date, open, high, low, close, volume, and open interest values -
+	// Date, time, open, high, low, close, volume, and open interest values -
 	// Some fields may not be used - for those that are, lengths should all
 	// be equal to the number of records in the input.
 	protected Vector dates;	// String
+	protected Vector times;	// String
 	protected double[] float_data;
 	protected double[] volumes, open_interests;
 
@@ -228,6 +264,7 @@ class Parser {
 	DataSet oi_data;			// the parsed open interest data
 	boolean has_volume;
 	boolean has_open_interest;
+	boolean is_intraday;
 	Drawer volume_drawer;
 	Drawer open_interest_drawer;
 }
