@@ -1,5 +1,6 @@
 e
 c
+n
 EXPONENTIAL_MOVING_AVERAGE
 c
 EMA of ADX
@@ -13,6 +14,7 @@ c
 3
 s
 c
+n
 ONE_VARIABLE_FUNCTION
 c
 Slope of EMA of ADX
