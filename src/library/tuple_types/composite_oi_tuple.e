@@ -15,13 +15,17 @@ class COMPOSITE_OI_TUPLE inherit
 			end_date, make
 		end
 
+creation
+
+	make
+
 feature -- Access
 
-	open_interest: INTEGER
+	open_interest: REAL
 
 feature {COMPOSITE_TUPLE_FACTORY} -- Status setting
 
-	set_open_interest (arg: INTEGER) is
+	set_open_interest (arg: REAL) is
 			-- Set open_interest to `arg'.
 		require
 			arg /= Void
