@@ -1,5 +1,6 @@
 indexing
 	description: "Sum of n sequential elements";
+	restrictions: "execute expects target.count >= n."
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -10,8 +11,7 @@ class LINEAR_SUM inherit
 			offset as internal_index, make as nrlc_make_unused
 		redefine
 			execute, target_cursor_not_affected,
-			exhausted, action, forth, invariant_value,
-			start
+			exhausted, action, forth, invariant_value, start
 		end
 
 creation
@@ -38,11 +38,12 @@ feature -- Basic operations
 			-- Operate on the next n elements of the input, beginning
 			-- at the current cursor position.
 		do
+			check target.count >= n end
 			internal_index := 0
 			value := 0
 			until_continue
 		ensure then
-			target.index = old target.index + n
+			new_index: target.index = old target.index + n
 			-- value = sum (target[old target.index .. old target.index+n-1])
 			int_index_eq_n: internal_index = n
 		end
