@@ -8,6 +8,7 @@ configuration	5
 database	5
 data_retrieval	5
 external	5
+enums	4
 factories	5
 global	5
 interface	5
