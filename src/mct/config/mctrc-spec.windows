@@ -6,8 +6,8 @@ replacestart
 {mas_directory_setting}<mas_lib_dir>
 xterm -e *
 {macl_shell}cmd ~/c start "macl" cmd ~/c 
-{browse_docs_cmd}cmd ~/c start <doc_dir>/index.html
-{browse_intro_command}cmd ~/c start <doc_dir>/mct_introduction.html
-{browse_faq_command}cmd ~/c start <doc_dir>/FAQ.html
+{browse_docs_cmd}cmd ~/c cd "<doc_dir>" && start ~/b index.html
+{browse_intro_command}cmd ~/c cd "<doc_dir>" && start ~/b mct_introduction.html
+{browse_faq_command}cmd ~/c cd "<doc_dir>" && start ~/b FAQ.html
 {java_jar}/mascharts.jar
 replaceend
