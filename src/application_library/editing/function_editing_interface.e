@@ -35,7 +35,7 @@ deferred class FUNCTION_EDITING_INTERFACE inherit
 			edit_list as edit_indicator_menu
 		export
 			{NONE} all
-			{EDITING_INTERFACE} dirty
+			{EDITING_INTERFACE} dirty, readonly, ok_to_save
 			{ANY} edit_indicator_menu, changed
 		end
 
@@ -240,6 +240,8 @@ feature {EDITING_INTERFACE}
 
 	edit_indicator_list (l: LIST [MARKET_FUNCTION]) is
 			-- Editing of indicators in `l'
+		require
+			readonly_or_saveable: readonly or ok_to_save
 		local
 			selection: INTEGER
 			indicator: MARKET_FUNCTION
@@ -265,6 +267,17 @@ feature {EDITING_INTERFACE}
 			dirty := false
 		ensure
 			not_dirty: not dirty
+		end
+
+	set_save_state (arg: BOOLEAN) is
+			-- Set `ok_to_save' to `arg' and `readonly' to not arg.
+		do
+			ok_to_save := arg
+			readonly := not arg
+		ensure
+			not_both: not (readonly and ok_to_save)
+			ok_to_save_set: ok_to_save = arg
+			readonly_if_not_ok_to_save: readonly = not arg
 		end
 
 feature {NONE} -- Implementation
