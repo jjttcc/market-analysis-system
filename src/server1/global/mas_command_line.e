@@ -5,7 +5,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class MASS_COMMAND_LINE inherit
+class MAS_COMMAND_LINE inherit
 
 	ARGUMENTS
 
@@ -248,4 +248,4 @@ invariant
 	port_numbers_and_file_names_not_void:
 		port_numbers /= Void and file_names /= Void
 
-end -- class MASS_COMMAND_LINE
+end -- class MAS_COMMAND_LINE
