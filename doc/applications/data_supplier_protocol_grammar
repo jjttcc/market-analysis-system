@@ -14,14 +14,14 @@ error_msg          -> ta_string
 mkt_symbol         -> ta_string
 data_flags         -> intraday_flag | <null>
 normal_response    -> srvr_data "\n"
-srvr_data          -> mkt_data | symbol_list
+srvr_data          -> mkt_data | symbol_list | boolean_response
 mkt_data           -> { mkt_tuple "\n" ... }
 intraday_flag      -> 'i'
 symbol_list        -> { symbol "\n" ... }
 mkt_fields         -> { ta_real dfs ... }+ [ dfs volume [ dfs open_interest ] ]
 volume             -> ta_real
 open_interest      -> ta_real
-true_or_false      -> 'T' | 'F'
+boolean_response   -> 'T' | 'F'
 request_id         -> sym_list_req_id | data_req_id | data_type_req_id
 symbol_list_req    -> <null>
 date               -> year<>month<>day
@@ -69,11 +69,10 @@ dfs:                Data field separator
 
 Expected Responses for (successfully executed) Client-Requests:
 
-sym_list_req_id    -> '1'
-data_req_id        -> '2'
-data_type_req_id   -> daily_avail_req_id | intra_avail_req_id
-daily_avail_req_id -> '3'
-intra_avail_req_id -> '4'
+sym_list_req_id:      symbol_list
+data_req_id:          mkt_data
+daily_avail_req_id:   boolean_response
+intra_avail_req_id:   boolean_response
 
 
 Notes:
