@@ -1,19 +1,26 @@
 #!/bin/bash
 
-cleanup ()
+ExitStatus=0
+
+cleanup()
 {
 	rm -rf output
 	exit $ExitStatus
 }
 
-progname ()
+progname()
 {
 	echo $(basename $0)
 }
 
-usage ()
+usage()
 {
 	echo "Usage: progname [test_parameter_file] [-time]"
+}
+
+abort()
+{
+	ExitStatus=-1; cleanup
 }
 
 find_test_dir()
@@ -24,7 +31,7 @@ find_test_dir()
 		cd ../../test
 	else
 		echo "Cannot find test directory - exiting ..."
-		exit -1
+		abort
 	fi
 }
 
@@ -36,19 +43,19 @@ set_up()
 	unset MAS_DIRECTORY
 	if [ ! -d bin ]; then
 		echo "Where's the bin directory?"
-		exit -1
+		abort
 	fi
 	PATH=$PATH:./bin
 	if [ ! -r bin/testlib ]; then
 		echo "shell function definitions file testlib is not in bin directory - exiting ..."
-		exit -1
+		abort
 	else
 		. bin/testlib
 	fi
 	type compare_numbers >/dev/null 2>&1
 	if [ $? -ne 0 ]; then
 		echo "Script compare_numbers is not in bin directory - exiting ..."
-		exit -1
+		abort
 	fi
 	if [ -d ../EIFGEN/F_code -a -x ../EIFGEN/F_code/mas ]; then
 		exec=../EIFGEN/F_code/mas
@@ -60,7 +67,7 @@ set_up()
 	else
 		echo "Cannot find executable in ../EIFGEN/F_code or ../EIFGEN/W_code."
 		echo "exiting ..."
-		exit -1
+		abort
 	fi
 
 	while [ $# -gt 0 ]; do
@@ -71,8 +78,7 @@ set_up()
 				test_parameter_file=$1
 				if [ ! -r $test_parameter_file ]; then
 					echo "Cannot read $test_parameter_file - exiting ..."
-					ExitStatus=-1
-					exit
+					abort
 				fi
 			;;
 		esac
@@ -86,16 +92,16 @@ set_up()
 	if [ -e output -a ! -d output ]; then
 		echo "Cannot create directory named output since a file already"
 		echo "exists by that name - exiting ..."
-		exit -1
+		abort
 	elif [ ! -e output ]; then
 		mkdir output
 	fi
 	rm -f $indfile
 	cp lib/$indfile . >/dev/null 2>&1
 	if [ $? -ne 0 ]; then
-		echo "Failed to copy $indfile from ./lib - does it exist? "
+		echo "Failed to copy $indfile from ./lib - does it exist? " >&2
 		echo "Aborting ..."
-		exit -1
+		abort
 	fi
 }
 
