@@ -172,7 +172,7 @@ feature -- Basic operations
 			retried: BOOLEAN
 		do
 			if
-				retried implies
+				retried implies not end_client and then
 				not exception_processor.abort_command_line_processing
 			then
 				process_main_menu
@@ -180,7 +180,7 @@ feature -- Basic operations
 		rescue
 			handle_exception ("main menu")
 			if
-				not end_client and not exit_server and not assertion_violation
+				not exit_server and not assertion_violation
 			then
 				retried := True
 				retry
