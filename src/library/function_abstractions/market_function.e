@@ -50,7 +50,7 @@ feature -- Basic operations
 			processed
 		end
 
-feature {TEST_FUNCTION_FACTORY} -- Element change
+feature {TEST_FUNCTION_FACTORY} -- Administration
 
 	set_operator (op: NUMERIC_COMMAND) is
 		require
@@ -71,12 +71,18 @@ feature {TEST_FUNCTION_FACTORY} -- Element change
 			is_set: name = n
 		end
 
-feature {NONE} -- Implementation
+	operator_used: BOOLEAN is
+			-- Is operator used by this function?
+		do
+			Result := true
+		end
 
 	operator: NUMERIC_COMMAND
 			-- operator that will perform the main work of the function.
 			-- Descendant classes may choose not to use this attribute for
 			-- efficiency.
+
+feature {NONE}
 
 	reset_state is
 			-- Reset to initial state.
@@ -96,6 +102,12 @@ feature {NONE} -- Implementation
 	set_processed (b: BOOLEAN) is
 			-- Hook method to set processed state to the specified value
 		deferred
+		ensure
+			processed = b
 		end
+
+invariant
+
+	if_processed_output_exists: processed implies output /= Void
 
 end -- class MARKET_FUNCTION
