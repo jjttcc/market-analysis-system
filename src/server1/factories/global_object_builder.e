@@ -1,7 +1,8 @@
 indexing
 	description:
 		"Abstraction that builds the appropriate instances of factories"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others - %
+		%see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -103,9 +104,8 @@ feature {NONE}
 			dispatcher: EVENT_DISPATCHER
 		do
 			if command_line_options.use_db then
-				-- Uncomment when DB_TRADABLE_LIST exists:
-				-- create {DB_TRADABLE_LIST} market_list.make (
-					-- input_entity_names, tradable_factories)
+				create {DB_TRADABLE_LIST} market_list.make (
+					input_entity_names, tradable_factories)
 			else
 				create {FILE_TRADABLE_LIST} market_list.make (
 					input_entity_names, tradable_factories)
