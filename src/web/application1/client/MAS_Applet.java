@@ -109,8 +109,7 @@ public class MAS_Applet extends Applet {
 	private String host_name = "";
 	private int port = -1;
 	private String log_msg;
-	//!!!!Needs to be made configurable:
-	private String servlet_path = "/mas/mas";
 	private String server_address = null;
 	private boolean initialization_succeeded;
+	private final String servlet_path = "/mas/mas";
 }
