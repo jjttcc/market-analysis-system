@@ -601,10 +601,10 @@ feature {NONE} -- Implementation - utilities
 		local
 			version: expanded MAS_PRODUCT_INFO
 		do
-			Result := concatenation (<<
-				"%N", version.name, "%NVersion: ", version.number, "%N",
-				version.copyright, "%NVersion date: ", version.informal_date,
-				"%NLicence:%N%N", version.license_information>>)
+			Result := "%N" + version.name + "%NVersion: " + version.number +
+				"%N" + version.copyright + "%NVersion date: " +
+				version.informal_date + "%N" + version.assertion_report +
+				"%NLicence:%N%N" + version.license_information
 		end
 
 	settings: STRING is
