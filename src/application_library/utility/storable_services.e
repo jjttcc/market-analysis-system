@@ -74,6 +74,7 @@ feature -- Basic operations
 feature {NONE} -- Implementation
 
 	save is
+			-- Save user's changes to persistent store.
 		require
 			changed_and_ok_to_save: changed and ok_to_save
 			not_aborted: not abort_edit
@@ -89,6 +90,8 @@ feature {NONE} -- Implementation
 		end
 
 	begin_edit is
+			-- Perform actions necessary to begin the editing session,
+			-- including attempting to lock the persistent file.
 		do
 			readonly := false
 			ok_to_save := true
@@ -176,8 +179,7 @@ feature {NONE} -- Implementation
 		end
 
 	initialize_lock is
-			-- If the lock exists and was left locked, ulock it;
-			-- otherwise create it.
+			-- Ensure `lock' has been created and is unlocked.
 		do
 			if lock /= Void and lock.locked then
 				lock.unlock
@@ -185,7 +187,7 @@ feature {NONE} -- Implementation
 				do_initialize_lock
 			end
 		ensure
-			lock_set: lock /= Void
+			lock_set: lock /= Void and not lock.locked
 		end
 
 	cleanup is
@@ -193,11 +195,14 @@ feature {NONE} -- Implementation
 			if lock /= Void and lock.locked then
 				lock.unlock
 			end
+		ensure then
+			unlocked: lock /= Void implies not lock.locked
 		end
 
 feature {NONE} -- Hook routines
 
 	do_edit is
+			-- Hook method called by edit_list
 		deferred
 		end
 
@@ -233,6 +238,8 @@ feature {NONE} -- Hook routines
 
 	do_initialize_lock is
 		deferred
+		ensure
+			lock_not_void: lock /= Void and not lock.locked
 		end
 
 invariant
