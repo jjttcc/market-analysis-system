@@ -106,7 +106,9 @@ feature {NONE} -- Conversion functions
 						l.finish
 						-- Cursor is now at (empty) last element.
 						l.back
-						-- Cursor is now at first non-empty line.
+						-- Cursor is now at last non-empty line.
+						-- The data from yahoo is reversed, so it needs
+						-- to be read backwards.
 					until
 						-- Stop at the first line (rather than l.before),
 						-- since it only contains header information.
