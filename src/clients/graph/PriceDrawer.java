@@ -7,21 +7,7 @@ import support.*;
 /**
  *  Abstraction for drawing price bars
  */
-public class PriceDrawer extends Drawer {
-
-	public void set_data(Object d) {
-		data = (double[]) d;
-	}
-
-	public int data_length() {
-		int result;
-		if (data != null) {
-			result = data.length;
-		} else {
-			result = 0;
-		}
-		return result;
-	}
+public class PriceDrawer extends MarketDrawer {
 
 	/**
 	* Draw the data bars.
@@ -32,26 +18,27 @@ public class PriceDrawer extends Drawer {
 		int i, row;
 		int openy, highy, lowy, closey;
 		int x;
-		int lngth = data.length;
+		int lngth = _data.length;
 		int sidebar_length = bounds.width / lngth + 3;
 		Configuration conf = Configuration.instance();
 		Color bar_color = conf.stick_color();
 		double width_factor, height_factor;
 
-		if (data == null || lngth < Stride) return;
+		if (_data == null || lngth < Stride) return;
 
 		_x_values = new int[tuple_count()];
 		g.setColor(bar_color);
 		width_factor = width_factor_value(bounds);
 		height_factor = height_factor_value(bounds);
-		for (i = 0, row = 1; i < lngth; i += Stride, ++row) {
-			openy = (int) (bounds.height - (data[i] - ymin) * height_factor +
+		row = first_row();
+		for (i = row - 1; i < lngth; i += Stride, ++row) {
+			openy = (int) (bounds.height - (_data[i] - ymin) * height_factor +
 						bounds.y);
-			highy = (int)(bounds.height - (data[i+1] - ymin) * height_factor +
+			highy = (int)(bounds.height - (_data[i+1] - ymin) * height_factor +
 						bounds.y);
-			lowy = (int)(bounds.height - (data[i+2] - ymin) * height_factor +
+			lowy = (int)(bounds.height - (_data[i+2] - ymin) * height_factor +
 						bounds.y);
-			closey = (int)(bounds.height - (data[i+3] - ymin) * height_factor +
+			closey = (int)(bounds.height - (_data[i+3] - ymin) * height_factor +
 						bounds.y);
 			x = (int)((row - xmin) * width_factor + bounds.x);
 			_x_values[row-1] = x;
@@ -65,18 +52,11 @@ public class PriceDrawer extends Drawer {
 		}
 	}
 
-	// 4 points: open, high, low, close - no x coordinates
-	public int drawing_stride() { return Stride; }
-
 	// Is a bar for the open price to be drawn?
 	public boolean open_bar() { return _open_bar; }
 
 	// Set whether a bar for the open price is to be drawn.
 	public void set_open_bar(boolean value) { _open_bar = value; }
 
-	private static final int Stride = 4;
-
 	private boolean _open_bar = false;
-
-	protected double data[];
 }

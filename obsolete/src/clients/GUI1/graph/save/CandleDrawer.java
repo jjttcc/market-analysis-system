@@ -7,24 +7,7 @@ import support.*;
 /**
  *  Abstraction for drawing candles
  */
-public class CandleDrawer extends Drawer {
-
-	public void set_data(Object d) {
-		data = (double[]) d;
-	}
-
-	// 4 points: open, high, low, close - no x coordinates
-	public int drawing_stride() { return Stride; }
-
-	public int data_length() {
-		int result;
-		if (data != null) {
-			result = data.length;
-		} else {
-			result = 0;
-		}
-		return result;
-	}
+public class CandleDrawer extends MarketDrawer {
 
 	/**
 	* Draw the candles.
@@ -38,7 +21,7 @@ public class CandleDrawer extends Drawer {
 		int openy, highy, lowy, closey;
 		int x, middle_x;
 		int x_s[] = new int[4], y_s[] = new int[4];
-		int lngth = data.length;
+		int lngth = _data.length;
 		int candlewidth = bounds.width / lngth * 3 + 1;
 		Configuration conf = Configuration.instance();
 		Color black = conf.black_candle_color();
@@ -47,19 +30,20 @@ public class CandleDrawer extends Drawer {
 		boolean is_white;
 		double width_factor, height_factor;
 
-		if (data == null || lngth < Stride) return;
+		if (_data == null || lngth < Stride) return;
 
 		_x_values = new int[tuple_count()];
 		width_factor = width_factor_value(bounds);
 		height_factor = height_factor_value(bounds);
-		for (i = 0, row = 1; i < lngth; i += Stride, ++row) {
-			openy = (int) (bounds.height - (data[i] - ymin) * height_factor +
+		row = first_row();
+		for (i = row - 1; i < lngth; i += Stride, ++row) {
+			openy = (int) (bounds.height - (_data[i] - ymin) * height_factor +
 						bounds.y);
-			highy = (int)(bounds.height - (data[i+1] - ymin) * height_factor +
+			highy = (int)(bounds.height - (_data[i+1] - ymin) * height_factor +
 						bounds.y);
-			lowy = (int)(bounds.height - (data[i+2] - ymin) * height_factor +
+			lowy = (int)(bounds.height - (_data[i+2] - ymin) * height_factor +
 						bounds.y);
-			closey = (int)(bounds.height - (data[i+3] - ymin) * height_factor +
+			closey = (int)(bounds.height - (_data[i+3] - ymin) * height_factor +
 						bounds.y);
 			x = (int)((row - xmin) * width_factor + bounds.x);
 			middle_x = x + candlewidth / 2;
@@ -100,8 +84,4 @@ public class CandleDrawer extends Drawer {
 		g.drawLine(x, y, x + candlewidth, y);
 		//g.drawLine(x, y - 1, x + candlewidth, y - 1);
 	}
-
-	private static final int Stride = 4;
-
-	protected double data[];
 }

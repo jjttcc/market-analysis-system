@@ -9,10 +9,26 @@ import support.*;
  */
 public class DateDrawer extends Drawer {
 
+	// mkd is the associated market drawer and is_ind specifies whether
+	// this DateDrawer is associated with indicator data.
+	DateDrawer(Drawer mkd, boolean is_ind) {
+		_market_drawer = mkd;
+		is_indicator = is_ind;
+		conf = Configuration.instance();
+	}
+
+	// The data to be drawn
+	public Object data() { return _market_drawer.dates(); }
+
+	// The dates associated with the principle (market) data
+	public String[] dates() { return _market_drawer.dates(); }
+
+	public Drawer market_drawer() { return _market_drawer; }
+
 	public int data_length() {
 		int result;
-		if (data != null) {
-			result = data.length;
+		if (dates() != null) {
+			result = dates().length;
 		} else {
 			result = 0;
 		}
@@ -20,18 +36,10 @@ public class DateDrawer extends Drawer {
 	}
 
 	// 1 coordinate for each point - no x coordinate
-	public int drawing_stride() { return Stride; }
+	public int drawing_stride() { return 1; }
 
-	DateDrawer () {
-		conf = Configuration.instance();
-	}
-
-	public void set_data(Object d) {
-		data = (String[]) d;
-	}
-
-	void set_x_values(int[] xv) {
-		_x_values = xv;
+	public int[] x_values() {
+		return _market_drawer.x_values();
 	}
 
 	protected final static int Max_months = 360, Max_years = 30;
@@ -46,26 +54,26 @@ public class DateDrawer extends Drawer {
 	protected int month_ln;
 
 	/**
-	* Draw a vertical line for each month in `data' and years and month
+	* Draw a vertical line for each month in `_data' and years and month
 	* names at the appropriate places.
-	* @param g Graphics context
-	* @param w Data window
 	*/
 	protected void draw_tuples(Graphics g, Rectangle bounds) {
 		int mi, yi, i;
 		int lastyear, lastmonth, year, month;
 		IntPair months[] = new IntPair[Max_months],
 			years[] = new IntPair[Max_years];
+		int[] _x_values = x_values();
+		String[] _data = dates();
 
 		Month_y = bounds.y + bounds.height - 15; Month_x_offset = 10;
 		month_ln = 3;
-		// Determine the beginning of each month and year in `data'.
-		year = Integer.valueOf(data[0].substring(0,4)).intValue();
-		month = Integer.valueOf(data[0].substring(4,6)).intValue();
-		// If the first date in `data' is not "yyyymm01", it is not the
+		// Determine the beginning of each month and year in `_data'.
+		year = Integer.valueOf(_data[0].substring(0,4)).intValue();
+		month = Integer.valueOf(_data[0].substring(4,6)).intValue();
+		// If the first date in `_data' is not "yyyymm01", it is not the
 		// first day of the month; thus the `month' needs to be incremented
-		// to the next month in `data', since the first month is not complete.
-		if (! data[0].substring(6,8).equals ("01")) {
+		// to the next month in `_data', since the first month is not complete.
+		if (! _data[0].substring(6,8).equals ("01")) {
 			if (month == 12) {
 				month = 1;
 				++year;
@@ -74,13 +82,13 @@ public class DateDrawer extends Drawer {
 			}
 		}
 		lastyear =
-			Integer.valueOf(data[data.length-1].substring(0,4)).intValue();
+			Integer.valueOf(_data[_data.length-1].substring(0,4)).intValue();
 		lastmonth =
-			Integer.valueOf(data[data.length-1].substring(4,6)).intValue();
+			Integer.valueOf(_data[_data.length-1].substring(4,6)).intValue();
 		mi = 0; yi = 0;
 		while (! (year == lastyear && month == lastmonth)) {
 			months[mi] = new IntPair(month,
-				Utilities.index_at_date(first_date_at(year, month), data, 1));
+				Utilities.index_at_date(first_date_at(year, month), _data, 1));
 			if (month == 1) {
 				years[yi] = new IntPair(year, months[mi].right());
 				++yi;
@@ -95,7 +103,7 @@ public class DateDrawer extends Drawer {
 		}
 		// assert: year == lastyear && month == lastmonth
 		months[mi] = new IntPair(month,
-			Utilities.index_at_date(first_date_at(year, month), data, 1));
+			Utilities.index_at_date(first_date_at(year, month), _data, 1));
 		if (month == 1) {
 			years[yi] = new IntPair(year, months[mi].left());
 			++yi;
@@ -116,13 +124,13 @@ public class DateDrawer extends Drawer {
 		// Draw months and years.
 		i = 0;
 		while (i < mi) {
-			draw_month(g, bounds, months[i]);
+			draw_month(g, bounds, months[i], _x_values);
 			++i;
 		}
 
 		i = 0;
 		while (i < yi) {
-			draw_year(g, bounds, years[i]);
+			if (! is_indicator) draw_year(g, bounds, years[i]);
 			++i;
 		}
 	}
@@ -146,21 +154,26 @@ public class DateDrawer extends Drawer {
 	// Precondition:
 	//    p.left() specifies the month
 	//    p.right() specifies the index
-	protected void draw_month(Graphics g, Rectangle bounds, IntPair p) {
+	protected void draw_month(Graphics g, Rectangle bounds, IntPair p,
+			int[] _x_values) {
 		int x, month_x;
 		double width_factor;
 
 		width_factor = width_factor_value(bounds);
 		x = _x_values[p.right()];
 		month_x = x + Month_x_offset;
+//!!!Fix the color setting - and in draw_year.
 		//g.setXORMode(conf.stick_color());
-		g.setXORMode(conf.line_color());
+//g.setXORMode(conf.line_color());
 		//g.setColor(conf.line_color());
+g.setColor(Color.black);
 		g.drawLine(x, bounds.y, x, bounds.y + bounds.height);
 		g.setColor(conf.text_color());
 		//g.setXORMode(conf.stick_color());
-		g.drawString(Utilities.month_at(p.left()).substring(0, month_ln),
-			month_x, Month_y);
+		if (! is_indicator) {
+			g.drawString(Utilities.month_at(p.left()).substring(0, month_ln),
+							month_x, Month_y);
+		}
 	}
 
 	// Precondition:
@@ -183,9 +196,9 @@ public class DateDrawer extends Drawer {
 		return false;
 	}
 
-	private static final int Stride = 1;
-
-	protected String[] data;
-
 	protected Configuration conf;
+
+	protected Drawer _market_drawer;
+
+	protected boolean is_indicator;
 }

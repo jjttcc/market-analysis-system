@@ -9,7 +9,22 @@ import java.util.*;
 abstract public class Drawer {
 
 	// Number of fields in each tuple
-	abstract public int drawing_stride();
+	public abstract int drawing_stride();
+
+	// The data to be drawn
+	public abstract Object data();
+
+	// The dates associated with the principle (market) data
+	public abstract String[] dates();
+
+	public abstract Drawer market_drawer();
+
+	// Is this Drawer an indicator drawer?
+	public boolean is_indicator() {
+		return market_drawer() != this;
+	}
+	// Set the dates.
+	public void set_dates(String[] d) {}
 
 	// Number of tuples in the data
 	public int tuple_count() {
@@ -19,7 +34,8 @@ abstract public class Drawer {
 	// Number of elements in the data
 	abstract public int data_length();
 
-	abstract public void set_data(Object d);
+	// Set data to `d'.
+	public void set_data(Object d) {}
 
 	public void set_xaxis(Axis a) {
 		xaxis = a;
@@ -74,7 +90,7 @@ abstract public class Drawer {
 		/*
 		** Clip the data window
 		*/
-		if(clipping) {
+		if (clipping) {
 			g.clipRect(bounds.x, bounds.y, bounds.width, bounds.height);
 		}
 
@@ -84,9 +100,7 @@ abstract public class Drawer {
 		draw_tuples(g, bounds);
 	}
 
-	protected int[] x_values() {
-		return _x_values;
-	}
+	abstract protected int[] x_values();
 
 	/**
 	* Draw the data tuples.
@@ -95,8 +109,18 @@ abstract public class Drawer {
 	*/
 	abstract protected void draw_tuples(Graphics g, Rectangle bounds);
 
+	// The row of first data tuple
+	protected int first_row() {
+		return first_date_index() + 1;
+	}
+
+	// Index of the earliest date - 0 by default - redefine if needed.
+	protected int first_date_index() {
+		return 0;
+	}
+
 	/**
-	*  Return true if the point (x,y) is inside the allowed data range.
+	*  Is the point (x,y) inside the allowed data range?
 	*/
 	protected boolean inside(double x, double y) {
 		if( x >= xmin && x <= xmax && y >= ymin && y <= ymax )  return true;
@@ -133,6 +157,9 @@ abstract public class Drawer {
 		}
 	}
 
+	// Draw lines and labels for reference values for the y axis according
+	// to range of the data - for example, 10, 20, 30 when the range
+	// is from 8 to 37.
 	void draw_reference_values(Graphics g, Rectangle bounds) {
 		int step, start, y;
 
@@ -196,5 +223,4 @@ abstract public class Drawer {
 	protected double xmax, ymax, xmin, ymin;
 	protected double xrange, yrange;
 	protected boolean clipping;
-	protected int _x_values[];
 }

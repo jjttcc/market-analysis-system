@@ -53,10 +53,15 @@ public class DataSet {
 
 	public void set_dates (String d[]) {
 		dates = d;
+		_drawer.set_dates(d);
 	}
 
 	public Drawer drawer() { return _drawer; }
 
+	// Do dates need to be drawn?
+	public boolean dates_needed() { return _dates_needed; }
+
+	public void set_dates_needed(boolean b) { _dates_needed = b; }
 
 /*
 ***********************
@@ -124,78 +129,8 @@ public class DataSet {
    * Boolean to control clipping of the data window.
    * Default value is <em>true</em>, clip the data window.
    */
-      public boolean clipping = true;
+      public boolean clipping = false;
 
-
-/*
-*********************
-** Protected Variables      
-**********************/
-
-	// Main data
-	protected double[] data;
-
-	// Date data
-	protected String[] dates;
-
-  /**
-   * Drawer of price bars - e.g., tic bars or candles
-   */
-	protected Drawer _drawer;
-
-  /**
-   * Drawer of dates
-   */
-	protected DateDrawer date_drawer;
-
-  /**
-   * The data X maximum. 
-   * Once the data is loaded this will never change.
-   */
-      protected double dxmax;
-  /**
-   * The data X minimum. 
-   * Once the data is loaded this will never change.
-   */
-      protected double dxmin;
-  /**
-   * The data Y maximum. 
-   * Once the data is loaded this will never change.
-   */
-      protected double dymax;
-  /**
-   * The data Y minimum. 
-   * Once the data is loaded this will never change.
-   */
-      protected double dymin;
-
-	// Horizontal, vertical line data
-	protected Vector hline_data;
-	protected Vector vline_data;
-
-  /**
-   *    The X range of the clipped data
-   */
-      protected double xrange;
-  /**
-   *    The Y range of the clipped data
-   */
-      protected double yrange;
-  /**
-   *    The amount to increment the data array when the append method is being
-   *    used.
-   */
-      protected int increment = 100;
-
-  /**
-   * Number of components in a data tuple - for example, 2 (x, y) for
-   * a simple point
-   # @precondition
-   #    _drawer != null
-   */
-    protected int stride() { return _drawer.drawing_stride(); }
-
-	protected int length() { return data.length; }
 /*
 *********************
 ** Constructors
@@ -203,12 +138,15 @@ public class DataSet {
 
 	/**
 	*  Instantiate an empty data set.
+	* @postcondition
+	*     dates_needed()
 	*/
 	public DataSet(Drawer d) {
 		_drawer = d;
 		data = null;
 		range(stride(), 0);
-		date_drawer = new DateDrawer();
+		date_drawer = new DateDrawer(d.market_drawer(), d.is_indicator());
+		_dates_needed = true;
 	}
 
 	/**
@@ -227,6 +165,8 @@ public class DataSet {
 	* @param drawer object used to draw the data.
 	* @precondition
 	*     d != null && d.length > 0 && n > 0 && drawer != null
+	* @postcondition
+	*     dates_needed()
 	*/
 	public DataSet(double d[], int n, Drawer drawer) throws Exception {
 		if ( d  == null || d.length == 0 || n <= 0 || drawer == null ) {
@@ -234,11 +174,13 @@ public class DataSet {
 		}
 		int i;
 		_drawer = drawer;
-		date_drawer = new DateDrawer();
+		date_drawer = new DateDrawer(drawer.market_drawer(),
+										drawer.is_indicator());
 		data = d;
 
 		// Calculate the data range.
 		range(stride(), n);
+		_dates_needed = true;
 	}
 
 /*******************
@@ -275,7 +217,7 @@ public class DataSet {
 		_drawer.set_ranges(xrange, yrange);
 		_drawer.set_clipping(clipping);
 		_drawer.draw_data(g, bounds, hline_data, vline_data);
-		draw_dates(g,bounds);
+		if (_dates_needed) draw_dates(g,bounds);
 	}
 
   /**
@@ -373,7 +315,6 @@ public class DataSet {
 			date_drawer.set_maxes(xmax, ymax, xmin, ymin);
 			date_drawer.set_ranges(xrange, yrange);
 			date_drawer.set_clipping(clipping);
-			date_drawer.set_x_values(_drawer.x_values());
 			date_drawer.draw_data(g, w, hline_data, vline_data);
 		}
       }
@@ -415,4 +356,76 @@ public class DataSet {
 			ymax = dymax;
 		}
 	}
+
+/*
+*********************
+** Protected Variables      
+**********************/
+
+	// Main data
+	protected double[] data;
+
+	// Date data
+	protected String[] dates;
+
+  /**
+   * Drawer of price bars - e.g., tic bars or candles
+   */
+	protected Drawer _drawer;
+
+  /**
+   * Drawer of dates
+   */
+	protected DateDrawer date_drawer;
+
+  /**
+   * The data X maximum. 
+   * Once the data is loaded this will never change.
+   */
+      protected double dxmax;
+  /**
+   * The data X minimum. 
+   * Once the data is loaded this will never change.
+   */
+      protected double dxmin;
+  /**
+   * The data Y maximum. 
+   * Once the data is loaded this will never change.
+   */
+      protected double dymax;
+  /**
+   * The data Y minimum. 
+   * Once the data is loaded this will never change.
+   */
+      protected double dymin;
+
+	// Horizontal, vertical line data
+	protected Vector hline_data;
+	protected Vector vline_data;
+
+  /**
+   *    The X range of the clipped data
+   */
+      protected double xrange;
+  /**
+   *    The Y range of the clipped data
+   */
+      protected double yrange;
+  /**
+   *    The amount to increment the data array when the append method is being
+   *    used.
+   */
+      protected int increment = 100;
+
+  /**
+   * Number of components in a data tuple - for example, 2 (x, y) for
+   * a simple point
+   # @precondition
+   #    _drawer != null
+   */
+    protected int stride() { return _drawer.drawing_stride(); }
+
+	protected int length() { return data.length; }
+
+	protected boolean _dates_needed;
 }
