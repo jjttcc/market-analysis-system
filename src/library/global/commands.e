@@ -248,8 +248,7 @@ feature -- Access - an instance of each command
 
 	addition: ADDITION is
 		once
-			create Result.make (numeric_value_command,
-				numeric_value_command)
+			create Result.make (basic_linear_command, numeric_value_command)
 		end
 
 	and_operator: AND_OPERATOR is
