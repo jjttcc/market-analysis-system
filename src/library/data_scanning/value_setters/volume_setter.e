@@ -53,7 +53,7 @@ feature {NONE}
 				handle_input_error (concatenation (<<"Numeric input value %
 					%for volume is less than 0: ",
 					stream.last_real.out, "%Nadjusting to 0.">>), Void)
-				-- conform to the postondition:
+				-- conform to the postcondition:
 				tuple.set_volume (0)
 			else
 				tuple.set_volume (stream.last_real * multiplier)
