@@ -179,7 +179,7 @@ feature {NONE} -- Hook routine implementation
 							request_id := Error
 						else
 							session_key := number.to_integer
-							if not request_id_and_key_valid then
+							if not session_key_valid then
 								message_body := "Invalid session key: "
 								message_body.append (number)
 								message_body.append (", for request ID: ")
