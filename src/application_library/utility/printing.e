@@ -8,7 +8,7 @@ class PRINTING inherit
 
 	GLOBAL_SERVICES
 
-feature -- Options
+feature -- Access
 
 	output_field_separator: STRING is
 			-- Field separator used when printing output
@@ -46,15 +46,21 @@ feature -- Status setting
 			date_field_separator.is_equal (s)
 		end
 
-feature {NONE}
-
-	ofs: STRING
-			-- output field separator
-
-	dfs: STRING
-			-- date field separator
-
 feature -- Basic operations
+
+	print_list (l: ARRAY [ANY]) is
+		local
+			i: INTEGER
+		do
+			from
+				i := 1
+			until
+				i = l.count + 1
+			loop
+				print (l @ i)
+				i := i + 1
+			end
+		end
 
 	print_tuples (l: CHAIN [MARKET_TUPLE]) is
 			-- Print the fields of each tuple in `l'.
@@ -138,6 +144,14 @@ feature -- Basic operations
 				i := i + 1
 			end
 		end
+
+feature {NONE} -- Implementation
+
+	ofs: STRING
+			-- output field separator
+
+	dfs: STRING
+			-- date field separator
 
 feature {NONE} -- Implementation
 
