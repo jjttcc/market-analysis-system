@@ -71,24 +71,6 @@ feature -- Access
 			Result.put ("monthly", Monthly)
 		end
 
-	concatenation (a: ARRAY [ANY]): STRING is
-			-- A string containing a concatenation of all elements of `a'
-		require
-			not_void: a /= Void
-		local
-			i: INTEGER
-		do
-			!!Result.make (0)
-			from
-				i := 1
-			until
-				i = a.count + 1
-			loop
-				Result.append ((a @ i).out)
-				i := i + 1
-			end
-		end
-
 feature -- Basic operations
 
 	adjust_start_time (dt: DATE_TIME; type: TIME_PERIOD_TYPE) is
