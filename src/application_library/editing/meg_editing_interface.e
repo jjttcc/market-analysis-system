@@ -317,6 +317,8 @@ feature -- Hook methods
 	function_choice (msg: STRING): MARKET_FUNCTION is
 			-- User's choice of a member of `function_library'
 		deferred
+		ensure
+			Result /= Void
 		end
 
 	new_event_type_name_selection (names: LIST [STRING]): STRING is
