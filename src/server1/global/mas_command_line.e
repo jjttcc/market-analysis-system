@@ -44,6 +44,7 @@ feature {NONE} -- Initialization
 			set_version_request
 			set_port_numbers
 			set_strict
+			set_intraday_caching
 			if not use_db then
 				set_file_names
 			else
@@ -98,6 +99,9 @@ feature -- Access
 			-- Use strict error checking?
 			-- True if "-s" is found.
 
+	intraday_caching: BOOLEAN
+			-- Cache intraday data?
+
 	error_occurred: BOOLEAN
 			-- Did an error occur while processing options?
 
@@ -109,17 +113,18 @@ feature -- Basic operations
 			print (concatenation (<<"Usage: ", command_name,
 				" [options] [input_file...]%NOptions:%N",
 				"  <number>  Use port <number> for socket communication%N",
-				"  -o        Data has an open field%N",
-				"  -f <sep>  Use field separator <sep>%N",
-				"  -i <ext>  Include intraday data from files with %
+				"  -o        Data has an Open field%N",
+				"  -f <sep>  Use Field separator <sep>%N",
+				"  -i <ext>  Include Intraday data from files with %
 				%extension <ext>%N",
-				"  -d <ext>  Include daily data from files with %
+				"  -d <ext>  Include Daily data from files with %
 				%extension <ext>%N",
-				"  -v        Print version number%N",
-				"  -h        Print this help message%N",
-				"  -s        Use strict error checking%N",
-				"  -p        Use database (persistent store)%N",
-				"  -b        Run in background%N">>))
+				"  -v        Print Version number%N",
+				"  -h        Print this Help message%N",
+				"  -s        Use Strict error checking%N",
+				"  -p        Use database (Persistent store)%N",
+				"  -n        No caching of intraday data%N",
+				"  -b        Run in Background%N">>))
 		end
 
 feature {NONE} -- Implementation
@@ -170,6 +175,16 @@ feature {NONE} -- Implementation
 			if option_in_contents ('s') then
 				strict := true
 				contents.remove
+			end
+		end
+
+	set_intraday_caching is
+		do
+			if option_in_contents ('n') then
+				intraday_caching := false
+				contents.remove
+			else
+				intraday_caching := true
 			end
 		end
 
