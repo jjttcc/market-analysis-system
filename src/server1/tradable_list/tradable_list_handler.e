@@ -83,6 +83,7 @@ feature -- Access
 
 	symbols: LIST [STRING] is
 		do
+			error_occurred := false
 			if daily_market_list /= Void then
 				Result := daily_market_list.symbols
 			elseif intraday_market_list /= Void then
