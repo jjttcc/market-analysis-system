@@ -74,9 +74,65 @@ feature {NONE} -- Hook method implementations
 
 	close_tuple (t: BASIC_MARKET_TUPLE) is
 		do
+			check_date_time (t)
+			-- !!!If check_date_time fails, scanning for this data set should
+			-- !!!probably be aborted, since the data must be sorted by date.
+			check_and_fix_prices (t)
 			t.end_editing
 		ensure then
 			not t.editing
 		end
+
+feature {NONE} -- Implementation
+
+	check_and_fix_prices (t: BASIC_MARKET_TUPLE) is
+			-- Check `t's prices and fix them if they are not valid.
+		local
+			s: STRING
+		do
+			if not t.price_relationships_correct then
+				!!s.make (100)
+				s.append ("Error in prices for tuple, date: ")
+				s.append (t.date_time.date.out)
+				s.append (", time: ")
+				s.append (t.date_time.time.out)
+				if t.open_available then
+					s.append (", values (l, o, c, h): ")
+				else
+					s.append (", values (l, c, h): ")
+				end
+				s.append (t.low.value.out)
+				s.append (", ")
+				if t.open_available then
+					s.append (t.open.value.out)
+					s.append (", ")
+				end
+				s.append (t.close.value.out)
+				s.append (", ")
+				s.append (t.high.value.out)
+				t.fix_price_relationships
+				error_list.extend (s)
+			end
+		end
+
+	check_date_time (t: BASIC_MARKET_TUPLE) is
+		local
+			s: STRING
+		do
+			if
+				last_date_time /= Void and not (t.date_time > last_date_time)
+			then
+				!!s.make (0)
+				s.append ("Error in date - date for current item: ")
+				s.append (t.date_time.out)
+				s.append (", date for last item: ")
+				s.append (last_date_time.out)
+				error_list.extend (s)
+			end
+			last_date_time := t.date_time
+		end
+
+	last_date_time: DATE_TIME
+			-- date/time of last tuple
 
 end -- class MARKET_TUPLE_DATA_SCANNER
