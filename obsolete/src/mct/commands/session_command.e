@@ -35,7 +35,6 @@ feature -- Basic operations
 
 	execute (window: SESSION_WINDOW) is
 		local
-			env: expanded EXECUTION_ENVIRONMENT
 			cmd: STRING
 		do
 			cmd := clone (command_string)
