@@ -16,7 +16,7 @@ feature -- Access
 	volume: INTEGER
 			-- Number of shares
 
-feature {VALUE_SETTER}
+feature {VALUE_SETTER, FACTORY}
 
 	set_volume (v: INTEGER) is
 			-- Set volume to `v'.
