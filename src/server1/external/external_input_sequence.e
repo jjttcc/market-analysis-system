@@ -138,8 +138,9 @@ feature -- Status setting
 			sym := symbol.to_c
 			retrieve_data (external_handle, $sym, intraday)
 			if external_error (external_handle) then
-				set_error_message ("Error occurred reading from external %
-					%data source", true, false)
+				set_error_message (concatenation  (<<"Error occurred reading %
+					%from external data source for ", symbol, ".">>),
+					true, false)
 			end
 		ensure
 			symbol_set: symbol = arg and symbol /= Void
@@ -161,8 +162,9 @@ feature -- Cursor movement
 		do
 			start_implementation (external_handle)
 			if external_error (external_handle) then
-				set_error_message ("Error occurred reading from external %
-					%data source", true, false)
+				set_error_message (concatenation  (<<"Error occurred reading %
+					%from external data source for ", symbol, ".">>),
+					true, false)
 			end
 			field_index := 1
 			record_index := 1
@@ -172,8 +174,9 @@ feature -- Cursor movement
 		do
 			advance_to_next_field_implementation (external_handle)
 			if external_error (external_handle) then
-				set_error_message ("Error occurred reading from external %
-					%data source", true, false)
+				set_error_message (concatenation  (<<"Error occurred reading %
+					%from external data source for ", symbol, ".">>),
+					true, false)
 			end
 			field_index := field_index + 1
 		end
@@ -182,8 +185,9 @@ feature -- Cursor movement
 		do
 			advance_to_next_record_implementation (external_handle)
 			if external_error (external_handle) then
-				set_error_message ("Error occurred reading from external %
-					%data source", true, false)
+				set_error_message (concatenation  (<<"Error occurred reading %
+					%from external data source for ", symbol, ".">>),
+					true, false)
 			end
 			record_index := record_index + 1
 			field_index := 1
@@ -224,8 +228,9 @@ feature -- Input
 			error_occurred := false
 			last_character := current_character (external_handle)
 			if external_error (external_handle) then
-				set_error_message ("Error occurred reading from external %
-					%data source", true, false)
+				set_error_message (concatenation  (<<"Error occurred reading %
+					%from external data source for ", symbol, ".">>),
+					true, false)
 			end
 		end
 
@@ -424,6 +429,7 @@ feature {NONE} -- Implementation
 			end
 			if exc then
 				last_exception_status.set_fatal (fatal)
+				last_exception_status.set_description (error_string)
 				raise (error_string)
 			end
 		ensure
