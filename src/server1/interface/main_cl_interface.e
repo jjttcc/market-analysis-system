@@ -235,9 +235,10 @@ feature {NONE}
 			loop
 				print_list (<<"Select action:",
 					"%N     Create a new market-data indicator (c) %
-					%Edit market-data indicators (m) %N%
-					%     Edit market-analysis indicators (a) %
-					%Exit (x) Previous (-) Help (h) ", eom>>)
+					%Remove a market-data indicator (r) %N%
+					%     Edit market-data indicators (m) %
+					%Edit market-analysis indicators (a) %N%
+					%     Exit (x) Previous (-) Help (h) ", eom>>)
 				inspect
 					selected_character
 				when 'c', 'C' then
@@ -245,6 +246,8 @@ feature {NONE}
 						function_builder.function_selection_from_type (
 							function_builder.market_function, "root function",
 							true))
+				when 'r', 'R' then
+					remove_indicator_menu
 				when 'm', 'M' then
 					if current_tradable /= Void then
 						edit_indicator_menu (current_tradable.indicators)
@@ -359,6 +362,34 @@ feature {NONE}
 					parameter := parameters @ last_integer
 					edit_parameter (parameter)
 				end
+			end
+		end
+
+	remove_indicator_menu is
+			-- Menu for removing one or more indicators from `function_libary'
+		local
+			indicator: MARKET_FUNCTION
+			finished: BOOLEAN
+		do
+			from
+			until
+				finished
+			loop
+				print ("Select indicator to remove%N")
+				indicator := indicator_selection (function_library)
+				print_list (<<"Remove ", indicator.name,
+					"? (y[es]/n[o]/q[uit]) ">>)
+				inspect
+					selected_character
+				when 'y', 'Y' then
+					remove_indicator (indicator)
+				when 'n', 'N' then
+				when 'q', 'Q' then
+					finished := true
+				else
+					print ("Invalid selection%N")
+				end
+				print ("%N%N")
 			end
 		end
 
@@ -792,6 +823,25 @@ feature {NONE}
 		end
 
 feature {NONE}
+
+	remove_indicator (f: MARKET_FUNCTION) is
+			-- Remove all occurrences of `f' from `function_library'.
+		local
+			l: LINKED_LIST [MARKET_FUNCTION]
+			finished: BOOLEAN
+		do
+			l ?= function_library
+			from
+				l.start
+			until
+				l.exhausted
+			loop
+				if l.item = f then
+					l.remove
+				end
+				l.forth
+			end
+		end
 
 	save_mklist_position is
 			-- Save the current position of `market_list' for later restoring.
