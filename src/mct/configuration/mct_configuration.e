@@ -157,8 +157,18 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	post_process_settings is
 		do
+			-- Replace all "non-dynamic" tokens in `user_defined_values'
+			-- with their specified values:
+			user_defined_values.linear_representation.do_all (
+				agent replace_configuration_tokens)
+			-- Replace all "non-dynamic" tokens in `settings' with their
+			-- specified values:
 			settings.linear_representation.do_all (
 				agent replace_configuration_tokens)
+			-- Replace all "non-dynamic" tokens in the `command_string' of
+			-- `start_server_commands' with their specified values:
+			start_server_commands.linear_representation.do_all (
+				agent replace_command_string_tokens)
 			if not settings.item (Start_server_cmd_specifier).is_empty then
 				start_server_commands.extend (create {SESSION_COMMAND}.make (
 				Start_server_cmd_specifier,
@@ -200,6 +210,12 @@ feature {NONE} -- Implementation - Hook routine implementations
 			then
 				default_start_server_command := start_server_commands.first
 			end
+print ("%N<<<<BEGIN PRINT SETTINGS.%N>>>>")
+settings.linear_representation.do_all (agent print_str)
+print ("%N<<<<END PRINT SETTINGS.%N>>>>")
+print ("%N<<<<BEGIN start_server_commands SETTINGS.%N>>>>")
+start_server_commands.linear_representation.do_all (agent print_cmd)
+print ("%N<<<<END start_server_commands SETTINGS.%N>>>>")
 		end
 
 	check_results is
@@ -215,6 +231,12 @@ feature {NONE} -- Implementation - Hook routine implementations
 					" is not set.%N")
 				fatal_error_status := True
 			end
+			settings.linear_representation.do_all (
+				agent check_for_unreplaced_tokens)
+			user_defined_values.linear_representation.do_all (
+				agent check_for_unreplaced_tokens)
+			start_server_commands.linear_representation.do_all (
+				agent check_for_unreplaced_commands)
 			if not error_report.is_empty then
 				error_report.prepend ("Error in configuration file (" +
 					config_file.configuration_file_name + "):%N")
@@ -269,7 +291,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 			create Result.make (Field_separator, Record_separator)
 		end
 
-feature {NONE} -- Implementation
+feature {NONE} -- Implementation - Utilities
 
 	replace_configuration_tokens (s: STRING) is
 		local
@@ -287,6 +309,13 @@ feature {NONE} -- Implementation
 				user_defined_variables.upper, cp_start_index)
 			replace_tokens (s, keys, values,
 				Token_start_delimiter, Token_end_delimiter)
+		end
+
+	replace_command_string_tokens (c: EXTERNAL_COMMAND) is
+			-- Replace the tokens in `c's command_string with the specified
+			-- values.
+		do
+			replace_configuration_tokens (c.command_string)
 		end
 
 	process_start_server_cmd (key, value: STRING) is
@@ -374,6 +403,63 @@ feature {NONE} -- Implementation
 			keys.linear_representation.do_all (agent check_field)
 		end
 
+	check_for_unreplaced_tokens (s: STRING) is
+			-- Check `s' for tokens that were not replaced.
+		require
+			s_exists: s /= Void
+		local
+			work_s: STRING
+			empties: ARRAY [STRING]
+			i: INTEGER
+		do
+print ("Checking '" + s + "'%N")
+			-- Eliminate side effects on `s':
+			work_s := clone (s)
+			create empties.make (1, dynamic_tokens.upper)
+			from
+				i := empties.lower
+			until
+				i > empties.upper
+			loop
+				empties.put ("", i)
+				i := i + 1
+			end
+print ("dynamic tokens: '")
+dynamic_tokens.linear_representation.do_all (agent print_str)
+print ("'%N")
+print ("Before replace - work_s: '" + work_s + "'%N")
+			-- In `work_s', replace all `dynamic_tokens' with empty strings.
+			replace_tokens (work_s, dynamic_tokens, empties,
+				Token_start_delimiter, Token_end_delimiter)
+print ("After replace - work_s: '" + work_s + "'%N")
+			i := work_s.index_of (Token_start_delimiter, 1)
+			if i > 0 and work_s.index_of (Token_end_delimiter, i) > 0 then
+				error_report.append ("The setting '" + s + "' contains one %
+					%or more undefined tokens.%N")
+			end
+		end
+
+	check_for_unreplaced_commands (c: EXTERNAL_COMMAND) is
+			-- Check `c's `command_string' for tokens that were not replaced.
+		require
+			c_valid: c /= Void and c.command_string /= Void
+		do
+print ("Checking cmd: '" + c.command_string + "'%N")
+			check_for_unreplaced_tokens (c.command_string)
+		end
+
+print_str (s: STRING) is
+do
+	 print ("'" + s + "'%N")
+end
+
+print_cmd (c: EXTERNAL_COMMAND) is
+do
+	 print ("cmd: " + c.name + ": '" + c.command_string + "'%N")
+end
+
+feature {NONE} -- Implementation
+
 	current_cmd_string, current_cmd_desc, current_cmd_name: STRING
 
 	current_cmd_is_default: BOOLEAN
@@ -390,6 +476,13 @@ feature {NONE} -- Implementation
 			Result.compare_objects
 		ensure
 			Result.object_comparison
+		end
+
+	dynamic_tokens: ARRAY [STRING] is
+			-- "<word>" tokens that are to be converted on the fly, rather
+			-- than converted on start-up - without the surrounding "<>"
+		once
+			Result := (<<Port_number_specifier>>)
 		end
 
 	user_defined_variables: ARRAY [STRING]
