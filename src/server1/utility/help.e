@@ -21,7 +21,7 @@ feature -- Initialization
 		local
 			s: STRING
 		do
-			arr_make (Main, Edit_event_generators)
+			arr_make (Main, Compound_event_generator_left_target_type)
 			s :=
 "%NSelect market: Select a market out of the current list for viewing.%N%
 %View data: View the selected markets's data, or one or more technical%N%
@@ -90,15 +90,20 @@ feature -- Initialization
 %View long description: View a detailed description of the curretnly %N%
 %   selected indicator.%N"
 			put (s, View_indicator)
-			s := "(This will soon be 'edit event generators' help)"
+			s := "(This will soon be 'edit event generators' help)%N"
 			put (s, Edit_event_generators)
+			s := "(This will soon be help for setting CEG time extensions)%N"
+			put (s, Compound_event_generator_time_extensions)
+			s := "(This will soon be help for setting CEG left target type)%N"
+			put (s, Compound_event_generator_left_target_type)
 		end
 
 feature -- Access
 
 	Main, View_data, Set_analysis_date, Edit_event_registrants,
 	Add_registrants, Edit_registrant, View_indicator, Edit_indicators,
-	Edit_event_generators:
+	Edit_event_generators, Compound_event_generator_time_extensions,
+	Compound_event_generator_left_target_type:
 		INTEGER is unique
 
 end -- class HELP
