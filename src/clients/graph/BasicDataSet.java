@@ -2,6 +2,7 @@ package graph;
 
 import java.awt.*;
 import java.util.*;
+import java_library.support.*;
 import graph_library.DataSet;
 
 
@@ -31,7 +32,7 @@ import graph_library.DataSet;
 /**
  * Basic plottable data sets
  */
-public class BasicDataSet extends DataSet {
+public class BasicDataSet extends DataSet implements AssertionConstants {
 
 // Initialization
 
@@ -91,6 +92,21 @@ public class BasicDataSet extends DataSet {
 
 // Access
 
+	// Main data (List[Double])
+	public java.util.List data() {
+		return data;
+	}
+
+	// Date data (List[String])
+	public java.util.List dates() {
+		return dates;
+	}
+
+	// Time data (List[String])
+	public java.util.List times() {
+		return times;
+	}
+
 	public double maximum_x() {  return dxmax; } 
 
 	public double minimum_x() {  return dxmin; } 
@@ -106,23 +122,102 @@ public class BasicDataSet extends DataSet {
 
 	public String toString() {
 		String result = super.toString();
-		result += " - data size, dates size, times size: " + data.size() +
-			", " + dates.size() + ", " + times.size();
+		StringBuffer buffer = new StringBuffer();
+		buffer.append(" - stride, data size, dates size, times size: " +
+			stride() + ", " + data.size() + ", " + dates.size() + ", " +
+			times.size());
 		if (dates.size() != times.size()) {
-			result += "\ndates, times have different sizes: " +
-				dates.size() + ", " + times.size();
+			buffer.append("\ndates, times have different sizes: " +
+				dates.size() + ", " + times.size());
 		}
 			
 		if (getClass().getName().equals("graph.DrawableDataSet")) {
 			if (data.size() / stride() != dates.size()) {
-				result += "\n[1] dates, data have different sizes: " +
-					dates.size() + ", " + data.size() / stride();
+				buffer.append("\n[1] dates, data have different sizes: " +
+					dates.size() + ", " + data.size() / stride());
 		}
 		} else {
 			if (dates.size() != data.size() &&
 					data.size() / 4 != dates.size()) {
-				result += "\n[2] dates, data have different sizes: " +
-					dates.size() + ", " + data.size() / stride();
+				buffer.append("\n[2] dates, data have different sizes: " +
+					dates.size() + ", " + data.size() / stride());
+			}
+		}
+		int size = size();
+		int stride = stride();
+		assert stride > 0;
+		buffer.append("\n");
+		for (int i = 0; i < size; ++i) {
+			buffer.append(dates.get(i) + ", " + times.get(i) + ", ");
+			int j;
+			for (j = 0; j < stride - 1; ++j) {
+				buffer.append(data.get(i * stride + j) + ",");
+			}
+			buffer.append(data.get(i * stride + j) + "\n");
+		}
+		result = result + buffer.toString();
+		return result;
+	}
+
+// Status report
+
+	public boolean last_date_time_matches_first(DataSet d) {
+		boolean result = false;
+		if (d != null) {
+			BasicDataSet drwd = (BasicDataSet) d;
+			java.util.List new_dates = drwd.dates;
+			java.util.List new_times = drwd.times;
+			if (! new_dates.isEmpty() && ! new_times.isEmpty() &&
+					! dates.isEmpty() && ! times.isEmpty()) {
+
+				result = ((String) last_in_list(dates)).equals(
+						((String) first_in_list(new_dates))) &&
+						((String) last_in_list(times)).equals(
+						((String) first_in_list(new_times)));
+			}
+		}
+		return result;
+	}
+
+	public boolean last_tuple_matches_first(DataSet d) {
+		boolean result = false;
+		if (d != null) {
+			BasicDataSet drwd = (BasicDataSet) d;
+			java.util.List new_data = drwd.data;
+			if (! new_data.isEmpty() && ! data.isEmpty()) {
+				result = true;
+				int stride = stride();
+//!!!:
+System.out.println("x - stride: " + stride);
+				for (int i = 0; result && i < stride; ++i) {
+					Double current_field =
+						((Double) data.get(data.size() - (stride - i)));
+					Double new_field = ((Double) new_data.get(i));
+					result = current_field.equals(new_field);
+System.out.println("loop (i: " + i + ") - result: " + result);
+System.out.println("comparing " + data.size() + " - " + (1 + i) + " and " + i);
+System.out.println("cur field, new field: " + current_field + ", " + new_field);
+				}
+			}
+		}
+System.out.println("last tupe matches first returning: " + result);
+		return result;
+	}
+
+	public boolean need_a_name(DataSet d, int this_index, int d_index) {
+
+		boolean result = false;
+		if (d != null) {
+			BasicDataSet drwd = (BasicDataSet) d;
+			java.util.List new_dates = drwd.dates;
+			java.util.List new_times = drwd.times;
+			if (! new_dates.isEmpty() && ! new_times.isEmpty() &&
+					! dates.isEmpty() && ! times.isEmpty()) {
+
+				result = ((String) dates.get(this_index)).equals(
+						((String) new_dates.get(d_index))) &&
+						((String) times.get(this_index)).equals(
+						((String) new_times.get(d_index)));
 			}
 		}
 		return result;
@@ -163,6 +258,29 @@ public class BasicDataSet extends DataSet {
 		dates.clear();
 		times.clear();
 		tuple_count = 0;
+	}
+
+	public void remove_last_record() {
+		assert size() > 0: PRECONDITION;
+		int stride = stride(), oldsize = size();
+		for (int i = 0; i < stride; ++i) {
+			data.remove(data.size() - 1);
+		}
+		assert dates.size() == tuple_count;
+		dates.remove(dates.size() - 1);
+		if (! times.isEmpty()) {
+			times.remove(times.size() - 1);
+		}
+		--tuple_count;
+		assert dates.size() == tuple_count;
+		assert size() == oldsize - 1: POSTCONDITION;
+	}
+
+// Class invariant
+
+	public boolean invariant() {
+		return data != null && dates != null && times != null &&
+			(times.isEmpty() || times.size() == dates.size());
 	}
 
 // Implementation
