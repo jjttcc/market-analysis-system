@@ -18,7 +18,8 @@ creation
 feature -- Access
 
 	period_type: TIME_PERIOD_TYPE
-			-- Period type of data - determined while scanning
+			-- Period type of data - determined while scanning - Void if
+			-- input data stream is empty
 
 feature {NONE} -- Implementation
 
