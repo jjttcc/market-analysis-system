@@ -13,21 +13,8 @@ class HIGHEST_VALUE inherit
 	N_RECORD_LINEAR_COMMAND
 		rename
 			make as nrlc_make
-		undefine
-			children
 		redefine
-			start_init, sub_action, target, initialize
-		select
-			initialize
-		end
-
-	UNARY_OPERATOR [REAL, REAL]
-		rename
-			initialize as uo_initialize
-		undefine
-			arg_mandatory, execute
-		redefine
-			operand
+			start_init, sub_action, target
 		end
 
 creation
@@ -46,18 +33,6 @@ feature -- Initialization
 		ensure
 			set: target = t and operand = o and n = i
 		end
-
-	initialize (arg: N_RECORD_STRUCTURE) is
-		do
-			{N_RECORD_LINEAR_COMMAND} Precursor (arg)
-			uo_initialize (arg)
-		end
-
-feature -- Access
-
-	operand: RESULT_COMMAND [REAL]
-			-- Operand that determines which field in each tuple to
-			-- examine for the highest value
 
 feature {NONE} -- Implementation
 
