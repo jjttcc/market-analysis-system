@@ -18,20 +18,14 @@ end subterminal
 begin subterminal
 prompt;Connect to a running MAS server
 # Command to start the subprocess:
-startup_cmd_class;NewCommandLineClient
+startup_cmd_class;RunningServerConnection
 startup_cmd_method;execute
+config_file_name;server_ct_config
 end subterminal
 # subterminal for terminating a server
 begin subterminal
 prompt;Terminate a Server
 # Command to start the subprocess:
 startup_cmd_class;ServerTermination
-startup_cmd_method;execute
-end subterminal
-# subterminal for mas GUI
-begin subterminal
-prompt;Start a GUI
-# Command to start the subprocess:
-startup_cmd_class;NewGUI
 startup_cmd_method;execute
 end subterminal
