@@ -32,11 +32,13 @@ public class Chart extends Frame implements Runnable {
 					// it for all markets.
 					_period_types = data_builder.trading_period_type_list(
 						(String) _markets.elementAt(0));
+					GUI_Utilities.busy_cursor(true, this);
 					// Each market has its own indicator list; but for now,
 					// just retrieve the list for the first market and use
 					// it for all markets.
 					data_builder.send_indicator_list_request(
 						(String) _markets.elementAt(0));
+					GUI_Utilities.busy_cursor(false, this);
 					inds = data_builder.last_indicator_list();
 					_indicators = new Hashtable(inds.size());
 					int i;
@@ -86,6 +88,7 @@ public class Chart extends Frame implements Runnable {
 		DataSet dataset, main_dataset;
 		// Don't redraw the data if it's for the same market as before.
 		if (period_type_change || ! market.equals(current_market)) {
+			GUI_Utilities.busy_cursor(true, this);
 			try {
 				data_builder.send_market_data_request(market,
 					current_period_type);
@@ -146,6 +149,7 @@ public class Chart extends Frame implements Runnable {
 				main_pane.add_indicator_data_set(dataset);
 			}
 			main_pane.repaint_graphs();
+			GUI_Utilities.busy_cursor(false, this);
 		}
 	}
 
@@ -343,9 +347,11 @@ class IndicatorListener implements java.awt.event.ActionListener {
 			if (! (selection.equals(No_upper_indicator) ||
 					selection.equals(No_lower_indicator) ||
 					selection.equals(Volume))) {
+				GUI_Utilities.busy_cursor(true, Chart.this);
 				data_builder.send_indicator_data_request(
 					((Integer) _indicators.get(selection)).intValue(),
 					market, current_period_type);
+				GUI_Utilities.busy_cursor(false, Chart.this);
 			}
 		}
 		catch (Exception ex) {

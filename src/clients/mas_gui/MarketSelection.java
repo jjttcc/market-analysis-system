@@ -3,6 +3,7 @@
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
+import support.*;
 
 // Listener that allows user to select a market to be displayed.
 class MarketSelection implements ActionListener {
@@ -53,7 +54,9 @@ class MarketSelection implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		GUI_Utilities.busy_cursor(true, main_frame);
 		dialog.show();
+		GUI_Utilities.busy_cursor(false, main_frame);
 	}
 
 	String current_market() {
