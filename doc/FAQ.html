@@ -433,6 +433,38 @@ is the basic linear command):
 Note: In the latest version of mas, Constant has been renamed as
 Numeric-value-command.  (Since it can function as either a constant or as a
 variable whose value can change during run.)
+<P><B>
+I have been trying to get MAS to give me MACD data that matches BigCharts.
+They both use MACD values of 26, 12, & 9.
+MAS defaults, when installed, to 13, 5, & 6.
+I modified all of the MACD analyzer values to long = 26, short = 12,
+and average = 9, to match BigCharts.
+This morning I got this signal:
+<P>
+Event for: BHI, date: 05/19/2003, type: MACD Crossover (Buy)
+<br>
+description: Crossover for weekly trading period with indicators:
+<br>
+MACD Difference and
+<br>
+MACD Signal Line (EMA of MACD Difference)
+<br>
+values: -0.285593, -0.325897
+<P>
+Looking at BigCharts, it shows that the last MACD buy crossover happened
+at about 3 May, not 19 May.
+How can MAS give me an answer so dramatically different than BigCharts?
+</B><P>
+It looks like you are using the existing MACD market analyzers
+that come with the MAS release.
+(The phrase "Crossover for weekly trading period" provides the clue here.)
+These analyzers operate on weekly data - that is, they operate on data
+with a weekly period type.
+Most likely you are using daily data at BigCharts.
+This would account for the difference that you are seeing.
+If you want to apply market analyzers to daily data, you'll need to use the
+MAS command-line to create your own analyzers and select "daily" as the
+period type.
 <!-- Include this when version 1.7 is released:
 <h3>
 <A name="debugging">
