@@ -18,7 +18,7 @@ import support.ServerResponseUtilities;
 public final class MAS extends GenericServlet {
 
 	public void init() {
-		proxy_cache = new Hashtable();
+		proxy_cache = new ManagedCache();
 	}
 
 	public void service(ServletRequest request,
@@ -47,7 +47,7 @@ log("Starting 'service' thread " + tag);
 				ServerResponseUtilities.warning_response_message(
 				"Failed to connect to the server: " + e.getMessage()));
 		} finally {
-			release_proxy(mas_proxy);
+			proxy_cache.release(mas_proxy);
 			log_tag("Released proxy with code " + mas_proxy.hashCode(), tag);
 		}
 log("Ending 'service' thread " + tag);
@@ -71,39 +71,24 @@ log("Ending 'service' thread " + tag);
 	}
 
 	// MAS_Proxy reserved for this thread
-	// Postcondition: result != null && proxy_in_use(result)
+	// Postcondition: result != null && proxy_cache.reserved(result)
 	private synchronized MAS_Proxy reserved_proxy() {
-		log("Assigning a proxy");
+		log("MAS servlet reserving a proxy");
 		MAS_Proxy result = null;
-		if (proxy_cache.size() < Proxy_cache_size) {
+		if (proxy_cache.size() < Max_cache_size) {
 			// There's room for another proxy - make one and insert it into
 			// the table as "in-use".
 			result = new MAS_Proxy(new IO_SocketConnection(
 				server_address().hostname(), server_address().port_number()));
 			// Mark 'result' as in-use.
-			proxy_cache.put(result, new Boolean(true));
+			proxy_cache.extend_reserved(result);
 			log("Proxy with hashcode " + result.hashCode() + " created");
 		} else {
 			// The table is full - obtain the first available proxy.
-boolean waited = false;
-			while (result == null) {
-				result = first_available_proxy();
-				if (result == null) {
-					try {
-						log("Waiting for a proxy");
-						// Wait for a proxy to become available.
-						wait();
-waited = true;
-					} catch (InterruptedException e) {
-						// null statement
-					}
-				}
-			}
-if (waited) log("Got a proxy with hash code: " + result.hashCode());
-			claim_proxy(result);
+			result = (MAS_Proxy) proxy_cache.item();
 		}
-		assert proxy_cache.size() <= Proxy_cache_size;
-		assert result != null && proxy_in_use(result): "Postcondition";
+		assert proxy_cache.size() <= Max_cache_size;
+		assert result != null && proxy_cache.reserved(result): "Postcondition";
 		return result;
 	}
 
@@ -113,54 +98,6 @@ if (waited) log("Got a proxy with hash code: " + result.hashCode());
 			server_address_ = new ServerAddress("localhost", 2004);
 		}
 		return server_address_;
-	}
-
-// Implementation - utility
-
-	// First available proxy from proxy_cache - null if none are available
-	// Postcondition: result == null || ! proxy_in_use(result)
-	private MAS_Proxy first_available_proxy() {
-		Enumeration keys = proxy_cache.keys();
-		MAS_Proxy result = null, p;
-		while (result == null && keys.hasMoreElements()) {
-			p = (MAS_Proxy) keys.nextElement();
-			if (! proxy_in_use(p)) {
-				result = p;
-			}
-		}
-		assert result == null || ! proxy_in_use(result): "Postcondition";
-		return result;
-	}
-
-	// Is proxy 'p' in use?
-	// Precondition: p != null
-	private boolean proxy_in_use(MAS_Proxy p) {
-		assert p != null: "Precondition";
-		return ((Boolean) proxy_cache.get(p)).booleanValue();
-	}
-
-	// Claim ownership of 'p'.
-//!!!!Implement precondition.
-	// Precondition: p != null && ! proxy_in_use(p)
-	// Postcondition: proxy_in_use(p);
-	private void claim_proxy(MAS_Proxy p) {
-		proxy_cache.put(p, Boolean.TRUE);
-		assert proxy_in_use(p);
-	}
-
-	// Release ownership of 'p'.
-//!!!!Implement precondition.
-	// Precondition: p == null || proxy_in_use(p)
-	// Postcondition: ! proxy_in_use(p);
-	private synchronized void release_proxy(MAS_Proxy p) {
-		if (p != null) {
-			proxy_cache.put(p, Boolean.FALSE);
-		}
-		// If any threads are waiting for a proxy, notify one of them that
-		// a proxy is available.
-		log("released " + p.hashCode() + ", notifying ...");
-		notify();
-		assert ! proxy_in_use(p);
 	}
 
 // Implementation - debugging
@@ -193,8 +130,8 @@ if (waited) log("Got a proxy with hash code: " + result.hashCode());
 	private ServerAddress server_address_;
 
 	// Cache of proxies for efficient response
-	private Hashtable proxy_cache;	// key: MAS_Proxy; value: Boolean
+	private ManagedCache proxy_cache;
 
 	// Maximum allowed size of 'proxy_cache'
-	private final int Proxy_cache_size = 2;
+	private final int Max_cache_size = 2;
 }
