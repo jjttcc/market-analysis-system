@@ -1,13 +1,12 @@
 indexing
-	description: "Builder of HTTP_LOADING_FILE_TRADABLE_LISTs used by MAS"
+	description: "Facilities for building HTTP_LOADING_FILE_TRADABLE_LISTs"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
--- !!!OBSOLETE - mv to obsolete directory.
-class EXTENDED_HTTP_FILE_LIST_BUILDER inherit
+deferred class HTTP_FILE_LIST_BUILDER_FACILITIES inherit
 
 	GENERAL_UTILITIES
 		export {NONE}
@@ -15,10 +14,6 @@ class EXTENDED_HTTP_FILE_LIST_BUILDER inherit
 		end
 
 	LIST_BUILDER
-
-creation
-
-	make
 
 feature -- Initialization
 
@@ -42,9 +37,9 @@ feature -- Initialization
 
 feature -- Access
 
-	daily_list: EXTENDED_HTTP_LOADING_FILE_TRADABLE_LIST
+	daily_list: HTTP_LOADING_FILE_TRADABLE_LIST
 
-	intraday_list: EXTENDED_HTTP_LOADING_FILE_TRADABLE_LIST
+	intraday_list: HTTP_LOADING_FILE_TRADABLE_LIST
 
 	intraday_extension: STRING
 			-- File-name extension for intraday-data files
@@ -63,16 +58,23 @@ feature -- Basic operations
 		require
 			input_items_set: tradable_factory /= Void
 		do
-			create daily_list.make (tradable_factory, daily_extension)
+			daily_list := new_tradable_list (tradable_factory, daily_extension)
 			if use_intraday then
 				check
 					intraday: intraday_tradable_factory.intraday
 				end
-				create intraday_list.make (intraday_tradable_factory,
+				intraday_list := new_tradable_list (intraday_tradable_factory,
 					intraday_extension)
 			end
 		end
 
-invariant
+feature {NONE} -- Implementation
+
+	new_tradable_list (factory: TRADABLE_FACTORY; extension: STRING):
+		HTTP_LOADING_FILE_TRADABLE_LIST is
+			-- A new HTTP_LOADING_FILE_TRADABLE_LIST
+		do
+			create Result.make (factory, extension)
+		end
 
 end

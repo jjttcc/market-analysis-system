@@ -144,6 +144,8 @@ cluster
 
 	tradable_list (server):		"$/tradable_list"
 
+	tradable_list_builders (server):		"$/tradable_list_builders"
+
 	stock_splits (server):		"$/stock_splits"
 
 	client_server:		"$MAS/src/client_server"

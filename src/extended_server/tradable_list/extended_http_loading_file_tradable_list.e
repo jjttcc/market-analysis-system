@@ -21,15 +21,18 @@ class EXTENDED_HTTP_LOADING_FILE_TRADABLE_LIST inherit
 			load_target_tradable
 		redefine
 			target_tradable_out_of_date
+		select
+			target_tradable_out_of_date
 		end
 
 	HTTP_LOADING_FILE_TRADABLE_LIST
 		rename
-			make as http_make
+			make as http_make,
+			target_tradable_out_of_date as http_out_of_date
 		undefine
 			start, finish, back, forth, turn_caching_off, clear_cache,
 			add_to_cache, setup_input_medium, close_input_medium,
-			remove_current_item, target_tradable_out_of_date, append_new_data
+			remove_current_item, append_new_data
 		select
 			fbtl_make
 		end
@@ -59,19 +62,7 @@ feature {NONE} -- Hook routine implementations
 
 	target_tradable_out_of_date: BOOLEAN is
 		do
-			parameters.set_symbol (current_symbol)
-			use_day_after_latest_date_as_start_date := True
--- !!!!??:
--- Ensure that old indicator data from the previous
--- `target_tradable' is not re-used.
-target_tradable.flush_indicators
-			check_if_data_is_out_of_date
-			if data_out_of_date and not output_file_exists then
-				log_error_with_token (Data_file_does_not_exist_error,
-					current_symbol)
-				use_day_after_latest_date_as_start_date := False
-			end
-			if not fatal_error and data_out_of_date then
+			if http_out_of_date then
 				retrieve_data
 			end
 			Result := {EXTENDED_FILE_BASED_TRADABLE_LIST} Precursor

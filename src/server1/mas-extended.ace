@@ -124,6 +124,8 @@ cluster
 
 	extended_tradable_list (extended_server):		"$/tradable_list"
 
+	tradable_list_builders (extended_server):		"$/tradable_list_builders"
+
 	open_source_root_cluster (server):		"$/root"
 
 	app_server_utility (server):		"$/utility"

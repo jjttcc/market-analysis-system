@@ -18,7 +18,7 @@ class HTTP_LOADING_FILE_TRADABLE_LIST inherit
 		rename
 			make as fbtl_make
 		redefine
-			load_target_tradable
+			load_target_tradable, target_tradable_out_of_date, append_new_data
 		end
 
 	HTTP_DATA_RETRIEVAL
@@ -83,14 +83,13 @@ feature -- Access
 				check_if_data_is_out_of_date
 			end
 			if not fatal_error and data_out_of_date then
-				retrieve_data
-				load_data
+				append_new_data
 			end
 		ensure then
 			good_if_no_error: not fatal_error implies target_tradable /= Void
 		end
 
---!!!!Obsolete:
+--!!!!Obsolete !!!!!!!!!!  Remove:
 	update_and_load_data is
 		do
 			parameters.set_symbol (current_symbol)
@@ -167,5 +166,29 @@ feature {NONE} -- Hook routine implementations
 		end
 
 	use_day_after_latest_date_as_start_date: BOOLEAN
+
+	target_tradable_out_of_date: BOOLEAN is
+		do
+			parameters.set_symbol (current_symbol)
+			use_day_after_latest_date_as_start_date := True
+-- !!!!??:
+-- Ensure that old indicator data from the previous
+-- `target_tradable' is not re-used.
+target_tradable.flush_indicators
+			check_if_data_is_out_of_date
+			if data_out_of_date and not output_file_exists then
+				log_error_with_token (Data_file_does_not_exist_error,
+					current_symbol)
+				use_day_after_latest_date_as_start_date := False
+			end
+			Result := not fatal_error and data_out_of_date
+print ("target_tradable_out_of_date returning: " + Result.out + "%N")
+		end
+
+	append_new_data is
+		do
+			retrieve_data
+			load_data
+		end
 
 end

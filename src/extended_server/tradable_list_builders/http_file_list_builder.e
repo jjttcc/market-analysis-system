@@ -9,9 +9,21 @@ indexing
 class HTTP_FILE_LIST_BUILDER inherit
 
 	HTTP_FILE_LIST_BUILDER_FACILITIES
+		redefine
+			new_tradable_list
+		end
 
 creation
 
 	make
+
+feature -- Access
+
+	new_tradable_list (factory: TRADABLE_FACTORY; extension: STRING):
+		EXTENDED_HTTP_LOADING_FILE_TRADABLE_LIST is
+			-- A new HTTP_LOADING_FILE_TRADABLE_LIST
+		do
+			create Result.make (factory, extension)
+		end
 
 end

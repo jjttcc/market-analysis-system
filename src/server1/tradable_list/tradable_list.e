@@ -42,6 +42,7 @@ feature -- Initialization
 			cache_size := initial_cache_size
 			create cache.make (cache_size)
 			create cache_index_queue.make (cache_size)
+print ("Using cache size of " + cache_size.out + "%N")
 		ensure
 			sym_set: symbols /= Void and symbols.count = s_list.count
 			factory_set: tradable_factory = factory
