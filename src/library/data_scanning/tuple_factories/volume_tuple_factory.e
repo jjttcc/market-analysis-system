@@ -1,5 +1,5 @@
 indexing
-	description: "";
+	description: "Tuple factory that creates a VOLUME_TUPLE";
 	date: "$Date$";
 	revision: "$Revision$"
 

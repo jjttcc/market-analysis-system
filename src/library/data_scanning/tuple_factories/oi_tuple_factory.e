@@ -1,5 +1,5 @@
 indexing
-	description: "";
+	description: "Tuple factory that creates an OPEN_INTEREST_TUPLE";
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -1,5 +1,5 @@
 indexing
-	description: "";
+	description: "Tuple factory that produces a BASIC_MARKET_TUPLE";
 	date: "$Date$";
 	revision: "$Revision$"
 

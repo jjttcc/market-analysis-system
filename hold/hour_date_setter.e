@@ -1,5 +1,5 @@
 indexing
-	description: "Date setter that uses hourly data";
+	description: "Value setter that sets the date and hour of a tuple";
 	date: "$Date$";
 	revision: "$Revision$"
 

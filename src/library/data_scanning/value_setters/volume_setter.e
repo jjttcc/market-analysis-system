@@ -1,5 +1,5 @@
 indexing
-	description: "";
+	description: "Value setter that sets the volume of a tuple";
 	date: "$Date$";
 	revision: "$Revision$"
 
