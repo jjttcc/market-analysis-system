@@ -88,12 +88,6 @@ feature {NONE}
 				-- and copy them into the singleton list, function_library.
 				function_library.append (function_list_factory.product)
 			end
-			--!!!Will need to retrieve the function_library from persistent
-			--!!!store.  And it will need to be saved (if it changed) on program
-			--!!!termination - probably use the TERMINABLE cleanup facility.
-			--!!!Perhaps the retrieval of function_library should be done
-			--!!!by the function_library once function in GLOBAL_SERVICES.
-			--!!!In that case, the append above will need to change.
 			tradable_factory.set_indicators (function_library)
 			!!tradable_factories.make
 			from
