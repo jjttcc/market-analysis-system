@@ -87,7 +87,9 @@ feature -- Access
 				Result.extend(snames.item)
 				snames.forth
 			end
+			Result.compare_objects
 		ensure then
+			object_comparison: Result.object_comparison
 			-- Result.count = symbol_list.count
 			-- The contents of Result are in the same order as the
 			-- corresponding contents of `symbol_list'.
@@ -133,6 +135,8 @@ feature -- Basic operations
 
 	search_by_symbol (s: STRING) is
 			-- Find the tradable whose associated symbol matches `s'.
+		require
+			has_symbol: symbols.has (s)
 		local
 			slist: LIST [STRING]
 		do
@@ -147,8 +151,7 @@ feature -- Basic operations
 				forth
 			end
 		ensure
-			item /= Void implies item.symbol.is_equal (s)
-			-- not (s in symbols) implies item = Void
+			current_symbol_equals_s: item.symbol.is_equal (s)
 		end
 
 feature {FACTORY} -- Access
