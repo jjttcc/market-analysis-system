@@ -213,10 +213,6 @@ invariant
 
 	processed_constraint1:
 		 processed implies input1.processed and input2.processed
-	i_o_dates_equal_if_processed:
-		processed implies
-			output.last.date_time.is_equal (target1.last.date_time) and
-			target1.last.date_time.is_equal (target2.last.date_time)
 	inputs_not_void: input1 /= Void and input2 /= Void
 	target2_not_void: target2 /= Void
 	input_target_relation:

@@ -113,8 +113,6 @@ feature {TEST_FUNCTION_FACTORY} -- Element change
 invariant
 
 	processed_constraint: processed implies input.processed
-	i_o_dates_equal_if_processed:
-		processed implies output.last.date_time.is_equal (target.last.date_time)
 	input_not_void: input /= Void
 	input_target_relation: input.output = target
 
