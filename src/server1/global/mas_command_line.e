@@ -87,6 +87,11 @@ feature -- Access
 			-- Is a database to be used for market data?
 			-- True if "-p" is found (p = persistent store)
 
+	keep_db_connection: BOOLEAN is true
+			-- If use_db, should the database remain connected until the
+			-- process terminates instead of connecting and disconnecting
+			-- for each query?
+
 	help: BOOLEAN
 			-- Has the user requested help on command-line options?
 			-- True if "-h" or "-?" is found.
@@ -283,20 +288,22 @@ feature {NONE} -- Implementation
 
 	set_symbol_list is
 		require
-			use_db
+			db_in_use: use_db
 		local
 			global_server: expanded GLOBAL_SERVER
 			db_services: MAS_DB_SERVICES
 		do
 			db_services := global_server.database_services
-			db_services.connect
+			if not db_services.fatal_error and not db_services.connected then
+				db_services.connect
+			end
 			if db_services.fatal_error then
 				error_occurred := true
 			else
 				symbol_list := db_services.symbols
 				if db_services.fatal_error then
 					error_occurred := true
-				else
+				elseif not keep_db_connection then
 					db_services.disconnect
 					error_occurred := db_services.fatal_error
 				end
