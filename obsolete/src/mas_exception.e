@@ -46,17 +46,23 @@ feature -- Basic operations
 		local
 			error_msg: STRING
 		do
-			if not is_signal then
+			if exception /= Signal_exception then
 				if is_developer_exception then
 					error_msg := developer_exception_name
 				else
 					error_msg := meaning (exception)
 				end
-				log_errors (<<"Error encountered in ", routine_description,
+				log_errors (<<"%NError encountered in ", routine_description,
 							": ", error_msg, "%N">>)
+			elseif signal = Sigterm or signal = Sigabrt then
+				log_errors (<<"%NCaught kill signal in ", routine_description,
+					":%N", signal_meaning (signal), " (", signal, ")",
+					" - exiting ...%N">>)
+				exit (Error_exit_status)
 			else
 				log_errors (<<"%NCaught signal in ", routine_description,
-					": ", signal, ", continuing ...%N">>)
+					": ", signal_meaning (signal), " (", signal, ")",
+					" - continuing ...%N">>)
 			end
 		end
 
