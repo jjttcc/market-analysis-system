@@ -65,10 +65,14 @@ feature {NONE}
 
 	split_field_separator: STRING is "%T"
 			-- !!!Hard code for now.
-	
+
 	stock_split_file: STRING is
 		once
-			Result := file_name_with_app_directory (stock_split_file_name)
+			if stock_split_file_name = Void then
+				Result := "ma_stock_splits"
+			else
+				Result := file_name_with_app_directory (stock_split_file_name)
+			end
 		end
 
 end -- STOCK_FACTORY
