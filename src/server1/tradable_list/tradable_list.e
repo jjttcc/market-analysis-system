@@ -229,7 +229,6 @@ feature -- Basic operations
 				not after implies item.symbol.is_equal (s)
 		end
 
-
 	clear_cache is
 			-- Empty the cache.
 		do
