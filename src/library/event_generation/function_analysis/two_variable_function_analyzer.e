@@ -245,15 +245,19 @@ feature {NONE} -- Implementation
 feature {MARKET_FUNCTION_EDITOR}
 
 	wipe_out is
+		local
+			dummy_tradable: TRADABLE [BASIC_MARKET_TUPLE]
 		do
-			if product /= Void then
-				product.wipe_out
-			end
 			if tradable /= Void then
-				tradable.wipe_out
+				!STOCK!dummy_tradable.make ("dummy",
+											tradable.trading_period_type)
+				-- Set innermost input to an empty tradable to force it
+				-- to clear its contents.
+				input1.set_innermost_input (dummy_tradable)
+				input2.set_innermost_input (dummy_tradable)
 			end
-			input1.wipe_out
-			input2.wipe_out
+			product := Void
+			tradable := Void
 		end
 
 invariant
