@@ -21,6 +21,7 @@ feature {NONE} -- Initialization
 			default_create
 			prepare
 			launch
+			finish_installation
 		end
 
 	prepare is
@@ -41,5 +42,29 @@ feature {NONE} -- Implementation
 
 	first_window: MAIN_WINDOW
 			-- Main window.
+
+	execute_command (cmd: INSTALL_COMMAND) is
+			-- Execute all elements in `cmds'.
+		require
+			cmd_exists: cmd /= Void
+		do
+			first_window.set_status (cmd.description)
+			cmd.execute (options)
+		end
+
+	finish_installation is
+			-- Complete the installation.
+		local
+			cmds: ARRAY [COMMAND]
+		do
+			cmds := <<create {CONFIGURE_MCT_COMMAND}.make,
+				create {CLEANUP_COMMAND}.make>>
+			cmds.linear_representation.do_all (agent execute_command)
+		end
+
+	options: INSTALL_TOOL_COMMAND_LINE is
+		once
+			create Result.make
+		end
 	
 end -- class APPLICATION

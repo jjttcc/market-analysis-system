@@ -62,6 +62,15 @@ feature {NONE} -- Initialization
 				(title.is_equal (Window_title))
 		end
 
+feature -- Status setting
+
+	set_status (s: STRING) is
+			-- Set the status to `s'.
+		require
+			s_exists: s /= Void
+		do
+			standard_status_label.set_text (s)
+		end
 
 feature {NONE} -- Menu Implementation
 
@@ -178,7 +187,8 @@ feature {NONE} -- StatusBar Implementation
 			standard_status_bar.set_border_width (2)
 			
 				-- Populate the status bar.
-			create standard_status_label.make_with_text ("Add your status text here...")
+			create standard_status_label.make_with_text (
+				"Completing the installation ...")
 			standard_status_label.align_text_left
 			standard_status_bar.extend (standard_status_label)
 		ensure
@@ -238,7 +248,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation / Constants
 
-	Window_title: STRING is "install_tool"
+	Window_title: STRING is "Installation tool"
 			-- Title of the window.
 
 	Window_width: INTEGER is 175
