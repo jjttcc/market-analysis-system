@@ -35,11 +35,22 @@ feature -- Basic operations
 			end
 		end
 
-	print_indicators (TRADABLE [MARKET_FUNCTION]) is
+	print_indicators (t: TRADABLE [BASIC_MARKET_TUPLE]) is
 		local
 			real_formatter: FORMAT_DOUBLE
 			int_formatter: FORMAT_INTEGER
+			f: MARKET_FUNCTION
 		do
+			from
+				t.indicators.start
+			until
+				t.indicators.after
+			loop
+				f := t.indicators.item
+				print_mf_info (f)
+				print_market_tuples (f.output, ",")
+				t.indicators.forth
+			end
 		end
 
 feature {NONE} -- Implementation
@@ -231,6 +242,20 @@ feature {NONE} -- Implementation
 			io.put_string (fmtr.formatted (i2))
 			io.put_string (separator)
 			io.put_string (fmtr.formatted (i3))
+		end
+
+	print_mf_info (f: MARKET_FUNCTION) is
+		require
+			not_void: f /= Void
+		do
+			print ("Indicator: "); print (f.name)
+			print (", processed? ")
+			if f.processed then
+				print ("Yes (")
+			else
+				print ("No (")
+			end
+			print (f.short_description); print (")%N")
 		end
 
 end -- PRINTING
