@@ -1,0 +1,80 @@
+system main_test
+	-- Primary test application
+
+root
+
+	FINANCE_ROOT: "make"
+
+default
+
+	assertion (all);
+	debug (no);
+
+	precompiled ("$EIFFEL4/precomp/spec/$PLATFORM/base");
+
+cluster
+
+		-- Application (test) clusters
+	root_cluster: 	"$FINANCE/src/main_test_app/root";
+	factories:		"$FINANCE/src/main_test_app/factories";
+	tools:			"$FINANCE/src/main_test_app/tools";
+
+		-- Technical Analysis Library
+	function_abstractions:
+					"$FINANCE/src/library/function_abstractions";
+	function_types:	"$FINANCE/src/library/function_types";
+	commands:		"$FINANCE/src/library/commands";
+	markets:		"$FINANCE/src/library/markets";
+	structural:		"$FINANCE/src/library/structural";
+	tuple_types:	"$FINANCE/src/library/tuple_types";
+	data_scanning:	"$FINANCE/src/library/data_scanning";
+	global:			"$FINANCE/src/library/global";
+
+		-- Sub-clusters
+	configuragle_functions (function_types):
+					"$/configurable_functions";
+	specific_functions (function_types):
+					"$/specific_functions";
+	command_structures (commands):
+					"$/command_structures";
+	linear_commands (commands):
+					"$/linear_commands";
+	n_based_commands (commands):
+					"$/n_based_commands";
+	simple_commands (commands):
+					"$/simple_commands";
+	value_setters (data_scanning):
+					"$/value_setters";
+	tuple_factories (data_scanning):
+					"$/tuple_factories";
+	data_scanners (data_scanning):
+					"$/data_scanners";
+
+		-- Eiffel Component Library clusters
+	eiffel_components: "$EIFFEL_COMPONENT_LIBRARY";
+	architectural (eiffel_components): "$/architectural";
+	component_support (eiffel_components): "$/support";
+	eiflib_data_scanning (eiffel_components): "$/data_scanning";
+	operators (eiffel_components): "$/commands/operators";
+
+		-- ISE library clusters
+	kernel:			"$EIFFEL4/library/base/kernel";
+	support:		"$EIFFEL4/library/base/support";
+	access:			"$EIFFEL4/library/base/structures/access";
+	cursors:		"$EIFFEL4/library/base/structures/cursors";
+	cursor_tree:	"$EIFFEL4/library/base/structures/cursor_tree";
+	dispenser:		"$EIFFEL4/library/base/structures/dispenser";
+	iteration:		"$EIFFEL4/library/base/structures/iteration";
+	list:			"$EIFFEL4/library/base/structures/list";
+	set:			"$EIFFEL4/library/base/structures/set";
+	sort:			"$EIFFEL4/library/base/structures/sort";
+	storage:		"$EIFFEL4/library/base/structures/storage";
+	table:			"$EIFFEL4/library/base/structures/table";
+	traversing:		"$EIFFEL4/library/base/structures/traversing";
+	tree:			"$EIFFEL4/library/base/structures/tree";
+	date:			"$EIFFEL4/library/time";
+
+external
+ object: "${EIFFEL4}/library/time/spec/linux/lib/libdatetime.a";
+
+end
