@@ -195,7 +195,7 @@ feature -- Basic operations
 			end
 		rescue
 			handle_exception ("main menu")
-			if not end_client then
+			if not end_client and not exit_server then
 				if not assertion_violation then
 						retry
 				end
