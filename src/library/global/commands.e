@@ -58,7 +58,10 @@ feature -- Access
 			Result.extend (create {PAIR [COMMAND, STRING]}.make (xor_operator,
 				"Logical 'exclusive or' operator"))
 			Result.extend (create {PAIR [COMMAND, STRING]}.make (eq_operator,
-				"Operator that compares two numbers for equality"))
+				"Numeric comparison operator that determines whether the %
+				%absolute value of the difference of the first and second %
+				%operands is less than 'epsilon' (" +
+				eq_operator.epsilon.out + ")"))
 			Result.extend (create {PAIR [COMMAND, STRING]}.make (lt_operator,
 				"Numeric comparison operator that determines whether the %
 				%first number is less than the second"))
