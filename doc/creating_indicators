@@ -456,14 +456,14 @@ Example 3: Exponential Moving Average of Volume
 This example will show how to create an indicator that provides the
 exponential moving average of volume.  From the "Create a new market-data
 indicator" menu, select EXPONENTIAL_MOVING_AVERAGE as the root function.
-Choose and appropriate name for the function, such as "EMA of Volume".
+Choose an appropriate name for the function, such as "EMA of Volume".
 
 You will be prompted for the input function for the EMA of Volume function.
 Since EMA of volume will operate directly on the market data, rather than
 on the results of a function, select "No Input Function".
 
 For the main operator, select VOLUME.  For the exponential operator, select
-MA_EXPONENTIAL, which is an operator that simplies uses the standard
+MA_EXPONENTIAL, which is an operator that simply uses the standard
 2 / (n + 1) exponential value.  Enter any positive number for the
 MA_EXPONENTIAL's n-value.  Then enter the n-value you want for the EMA
 of volume; for example, for a 5-period exponential moving average of volume,
