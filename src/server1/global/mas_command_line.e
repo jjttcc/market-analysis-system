@@ -414,7 +414,7 @@ invariant
 	port_numbers_not_void: port_numbers /= Void
 	use_db: use_db and not error_occurred implies
 		file_names = Void and symbol_list /= Void
-	use_files: not use_db and not error_occurred implies
-		symbol_list = Void and file_names /= Void
+	use_files: not use_db and not use_external_data_source and
+		not error_occurred implies symbol_list = Void and file_names /= Void
 
 end -- class MAS_COMMAND_LINE
