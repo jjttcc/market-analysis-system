@@ -1,0 +1,5 @@
+NOTE: The packages in this directory are intended for general use - by any
+project that needs them.  I've put the directory here for expediency (not
+taking the time to remember how to create a new cvs project).  At some
+point the entire directory should be moved, in cvs, to a new project for
+this purpose.
