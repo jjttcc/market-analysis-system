@@ -285,7 +285,7 @@ System.out.println("sending request with " + symbol + ", " + period_type +
 			String results = connection.result().toString();
 			results = setup_parser_fieldspecs(results);
 			prepare_parser_for_market_data();
-			data_parser.parse(results);
+			data_parser.parse(results, is_update);
 			last_market_data = data_parser.result();
 			post_process_market_data(last_market_data, symbol, period_type,
 				is_update);
@@ -323,7 +323,7 @@ System.out.println("sending request with " + symbol + ", " + period_type +
 		connection.send_request(request_id, request);
 		if (connection.last_received_message_ID() == Ok) {
 			prepare_parser_for_indicator_data();
-			indicator_parser.parse(connection.result().toString());
+			indicator_parser.parse(connection.result().toString(), is_update);
 			last_indicator_data = indicator_parser.result();
 			post_process_indicator_data(last_indicator_data, symbol,
 				period_type, is_update);

@@ -43,15 +43,20 @@ public class DrawableDataSet extends BasicDataSet {
 	* @precondition
 	*     d != null<br>
 	* @postcondition<br>
-	*     dates_needed() && drawer() == drawer<br>
+	*     dates_needed() && drawer() == d<br>
+	*     data != null && dates != null && times != null
 	*     size() == 0 */
 //!!!!Remove??:
 	public DrawableDataSet(BasicDrawer d) {
 		if (d  == null) {
 			throw new Error("DataSet constructor: precondition violated");
 		}
+System.out.println("DrawableDataSet(BasicDrawer) called, by:");
+new Error().printStackTrace();
 		drawer = d;
 		data = new ArrayList();
+		dates = new ArrayList();
+		times = new ArrayList();
 		date_drawer = new DateDrawer(d);
 		time_drawer = new TimeDrawer(d);
 		dates_needed = true;
@@ -76,6 +81,7 @@ public class DrawableDataSet extends BasicDataSet {
 	*     d != null && n > 0 && drwr != null<br>
 	* postcondition:<br>
 	*     dates_needed() && drawer() == drwr<br>
+	*     data != null && dates != null && times != null
 	*     size() == data_points() */
 	public DrawableDataSet(double d[], int n, BasicDrawer drwr) throws Error {
 		super(d, n);
@@ -214,6 +220,13 @@ public class DrawableDataSet extends BasicDataSet {
 
 	public void append(DataSet d) {
 		int oldsize = size();
+if (dates == null || times == null || data == null) {
+System.out.println("dates, times, and/or data is null:\n");
+//System.out.println(dates + ", " + times + ", " + data);
+//System.out.println("this: " + this);
+System.out.println("dates_needed: " + dates_needed);
+new Error().printStackTrace();
+}
 		if (d != null) {
 System.out.println("append called with dataset:\n'" + d + "'");
 System.out.println("main dataset size before append: " + size());
@@ -226,16 +239,12 @@ System.out.println("OLD tuple count: " + tuple_count);
 System.out.println("tuple count set to: " + tuple_count +
 " (IS THIS CORRECT?)");
 			BasicDataSet drwd = (BasicDataSet) d;
-System.out.println("A");
+System.out.println("drwd: " + drwd);
 System.out.println("before add all - sizes: " +
 data.size() + ", " + dates.size() + ", " + times.size());
-System.out.println("B");
 			data.addAll(drwd.data);
-System.out.println("C");
 			dates.addAll(drwd.dates);
-System.out.println("D");
 			times.addAll(drwd.times);
-System.out.println("E");
 if (xaxis == null || yaxis == null) {
 if (xaxis == null) {
 System.out.println("Xaxis is null");
@@ -280,10 +289,10 @@ System.out.println("append called with NULL dataset\n");
 		}
 System.out.println("main dataset size after append: " + size());
 //System.out.print("main dataset contents after append:\n<<<<");
+//System.out.print(this);
+//System.out.print("\n>>>>>");
 System.out.println("dates size after append: " + dates.size());
 System.out.println("times size after append: " + times.size());
-System.out.print(this);
-System.out.print("\n>>>>>");
 	}
 
 	public void set_drawer(BasicDrawer d) {

@@ -40,10 +40,15 @@ public class BasicDataSet extends DataSet {
 	* @precondition
 	*     d != null<br>
 	* @postcondition<br>
-	*     size() == 0 */
+	*     size() == 0
+	*     data != null && dates != null && times != null
+	*/
 //!!!!Remove??:
 	public BasicDataSet() {
 		data = new ArrayList();
+		dates = new ArrayList();
+		times = new ArrayList();
+System.out.println("BasicDataSet() called");
 //!!!:		dates_needed = true;
 		tuple_count = 0;
 	}
@@ -64,8 +69,11 @@ public class BasicDataSet extends DataSet {
 	* precondition:<br>
 	*     d != null && n >= 0<br>
 	* postcondition:<br>
-	*     size() == data_points() */
+	*     size() == data_points()
+	*     data != null && dates != null && times != null
+	*/
 	public BasicDataSet(double d[], int n) throws Error {
+System.out.println("BasicDataSet(double d[], int n) called");
 		if (d  == null || n < 0) {
 			String msg = "BasicDataSet constructor: precondition violated:\n";
 			if (d == null) {
@@ -76,6 +84,8 @@ public class BasicDataSet extends DataSet {
 			throw new Error(msg);
 		}
 		data = new ArrayList(d.length);
+		dates = new ArrayList();
+		times = new ArrayList();
 		for (int i = 0; i < d.length; ++i) {
 			data.add(new Double(d[i]));
 		}
@@ -169,20 +179,30 @@ public class BasicDataSet extends DataSet {
 
 	public String toString() {
 		String result = super.toString();
-		System.out.println(" - data size: " + data.size());
-		Iterator i = dates.iterator();
-		Iterator j = times.iterator();
-		Iterator k = data.iterator();
+		result += " - data size, dates size, times size: " + data.size() +
+			", " + dates.size() + ", " + times.size();
 		if (dates.size() != times.size()) {
-			System.out.println("dates, times have different sizes: " +
-				dates.size() + ", " + times.size());
+			result += "\ndates, times have different sizes: " +
+				dates.size() + ", " + times.size();
+System.out.println(result);
+new Error().printStackTrace();
 		}
-		if (dates.size() != data.size()) {
-			System.out.println("dates, data have different sizes: " +
-				dates.size() + ", " + data.size());
+			
+		if (getClass().getName().equals("graph.DrawableDataSet")) {
+			if (data.size() / stride() != dates.size()) {
+				result += "\n[1] dates, data have different sizes: " +
+					dates.size() + ", " + data.size() / stride();
+System.out.println(result);
+new Error().printStackTrace();
 		}
-		while (i.hasNext() && j.hasNext() && k.hasNext()) {
-			System.out.println(i.next() + ", " + j.next() + ", " + k.next());
+		} else {
+			if (dates.size() != data.size() &&
+					data.size() / 4 != dates.size()) {
+				result += "\n[2] dates, data have different sizes: " +
+					dates.size() + ", " + data.size() / stride();
+System.out.println(result);
+new Error().printStackTrace();
+			}
 		}
 		return result;
 	}
@@ -329,7 +349,7 @@ System.out.println("DDS dd back");
 	* @precondition
 	*    drawer != null
 	*/
-//!!!	protected int stride() { return drawer.drawing_stride(); }
+	protected int stride() { return 1; }
 
 	protected int length() {
 		int result = 0;

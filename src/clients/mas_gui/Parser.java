@@ -229,13 +229,21 @@ class Parser extends AbstractParser {
 			has_dates = dates != null && ! dates.isEmpty();
 			has_times = times != null && ! times.isEmpty();
 			int length = value_data.length / float_field_count;
-			if (length > 0) {
+//!!!!Test with only 1 ctor possibility:
+//if (length > 0) {
+			if (! for_update) {
+//!!!:
+System.out.println("Parser creating a DrawableDataSet");
 				processed_data = new DrawableDataSet(value_data, length,
 					drawer);
+			} else {
+System.out.println("Parser creating a BasicDataSet");
+				processed_data = new BasicDataSet(value_data, length);
 			}
-			else {
-				processed_data = new DrawableDataSet(drawer);
-			}
+//}
+//else {
+//	processed_data = new DrawableDataSet(drawer);
+//}
 			if (has_dates) {
 				date_array = new String[dates.size()];
 				dates.copyInto(date_array);
@@ -248,15 +256,29 @@ class Parser extends AbstractParser {
 			}
 			if (volume_drawer != null && volumes != null &&
 					volumes.length > 0) {
-				volume_data = new DrawableDataSet(volumes, volumes.length,
-											volume_drawer);
+				if (! for_update) {
+//!!!:
+System.out.println("Parser creating a DrawableDataSet");
+					volume_data = new DrawableDataSet(volumes, volumes.length,
+						volume_drawer);
+				} else {
+System.out.println("Parser creating a BasicDataSet");
+					volume_data = new BasicDataSet(volumes, volumes.length);
+				}
 				if (has_dates) volume_data.set_dates(date_array);
 				if (has_times) volume_data.set_times(time_array);
 			}
 			if (open_interest_drawer != null && open_interests != null &&
 					open_interests.length > 0) {
-				oi_data = new DrawableDataSet(open_interests,
-					open_interests.length, open_interest_drawer);
+				if (! for_update) {
+System.out.println("Parser creating a DrawableDataSet");
+					oi_data = new DrawableDataSet(open_interests,
+						open_interests.length, open_interest_drawer);
+				} else {
+System.out.println("Parser creating a BasicDataSet");
+					oi_data = new BasicDataSet(open_interests,
+						open_interests.length);
+				}
 				if (has_dates) oi_data.set_dates(date_array);
 				if (has_times) oi_data.set_times(time_array);
 			}
@@ -274,9 +296,9 @@ class Parser extends AbstractParser {
 	protected double[] value_data;
 	protected double[] volumes, open_interests;
 
-	protected DrawableDataSet processed_data;	// the parsed data
-	protected DrawableDataSet volume_data;		// the parsed volume data
-	protected DrawableDataSet oi_data;			// the parsed open interest data
+	protected BasicDataSet processed_data;	// the parsed data
+	protected BasicDataSet volume_data;		// the parsed volume data
+	protected BasicDataSet oi_data;			// the parsed open interest data
 	protected BasicDrawer main_drawer;
 	protected BasicDrawer volume_drawer;
 	protected BasicDrawer open_interest_drawer;

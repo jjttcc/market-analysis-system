@@ -428,12 +428,12 @@ System.out.println("FINISHED requesting " + requested_tradable);
 	public void update_start_date(AbstractDataSetBuilder b) {
 		latest_date_time = b.last_latest_date_time();
 System.out.println("update st dt - latest is now: " + latest_date_time);
-		main_pane.repaint_graphs();
+//!!!REMOVE: main_pane.force_repaint_graphs();
 	}
 
 	public void notify_of_update() {
 System.out.println("I (" + this + ") was notified of an update!");
-		main_pane.repaint_graphs();
+		main_pane.force_repaint_graphs();
 	}
 
 	public void notify_of_failure(Exception e) {

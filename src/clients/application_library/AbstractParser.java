@@ -87,9 +87,12 @@ System.out.println("parser - latest dt result: " + result);
 
 	// Parse `s' into a DataSet according to record_separator and
 	// field_separator.
+	// `is_update' indicates whether the parse is for an update of existing
+	// data (as opposed to being for a fresh set of data for a new tradable).
 	// result() gives the new DataSet.
 	// Postcondition: result() != null
-	public void parse(String s) throws Exception {
+	public void parse(String s, boolean is_update) throws Exception {
+		for_update = is_update;
 		is_intraday = contains_time_field(s);
 		prepare_for_parse();
 		StringTokenizer recs = new StringTokenizer(s, record_separator, false);
@@ -184,4 +187,7 @@ System.out.println("parser - latest dt result: " + result);
 
 	protected String record_separator, field_separator;
 	protected boolean is_intraday;
+	// Is the current parse for a "data update" (as opposed to being for
+	// a fresh set of data for a new tradable).
+	protected boolean for_update;
 }

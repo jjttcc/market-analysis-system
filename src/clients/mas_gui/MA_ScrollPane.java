@@ -99,6 +99,15 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol {
 		_indicator_graph.attachDataSet(d);
 	}
 
+	// Force the graphs to be repainted.
+	public void force_repaint_graphs() {
+		// The order matters - first repaint the main graph, then
+		// the indicator graph.
+		_main_graph.repaint();
+		main_graph_changed = false;
+		_indicator_graph.repaint();
+	}
+
 	// Repaint the graphs.
 	public void repaint_graphs() {
 		// The order matters - first repaint the main graph, then

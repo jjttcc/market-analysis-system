@@ -25,6 +25,19 @@ System.out.println("time del DR - client: " + client);
 // Basic operations
 
 	public void run() {
+		// Avoid requesting data if the last request is still active.
+		if (! requesting_data) {
+			synchronized (this) {
+				requesting_data = true;
+				perform_data_request();
+				requesting_data = false;
+			}
+		}
+	}
+
+// Implementation
+
+	private void perform_data_request() {
 		Iterator indicators;
 		if (client != null && client.ready_for_request()) {
 			TradableDataSpecification spec = client.specification();
@@ -113,7 +126,8 @@ e.printStackTrace();
 System.out.println("[end RUN]");
 	}
 
-// Implementation
-
 	private TimeDelimitedDataRequestClient client;
+
+	// Is the `run' routine currently active?
+	private boolean requesting_data = false;
 }

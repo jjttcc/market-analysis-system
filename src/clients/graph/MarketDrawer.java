@@ -42,7 +42,7 @@ System.out.println("MKT DRW returning data length() of " + result);
 	// Postcondition: result != null
 	public int[] x_values() {
 		int[] result;
-		if (x_values == null) {
+		if (x_values == null || x_values.length != tuple_count()) {
 			initialize_x_values();
 		}
 		result = x_values;
@@ -71,9 +71,19 @@ System.out.println("MD dates set with size: " + d.size());
 // Implementation
 
 	// Initialize `x_values'.
-	// Postcondition: x_values != null
+	// Postcondition: x_values != null && x_values.length == tuple_count()
 	protected void initialize_x_values() {
 		x_values = new int[tuple_count()];
+//!!!:
+System.out.println("In " + getClass().getName() +
+", initialize_x_values called;\nx_values.length, data.size():" +
+x_values.length + ", " + data.size());
+System.out.println("dates.size(): " + dates.size());
+System.out.println("times.size(): " + times.size());
+		if (! (x_values != null && x_values.length == tuple_count())) {
+			throw new Error("Postcondition violated:\n" +
+				"x_values != null && x_values.length == tuple_count()");
+		}
 	}
 
 	protected int bar_width() {
@@ -92,7 +102,7 @@ System.out.println("MD dates set with size: " + d.size());
 
 	protected int x_values[];
 	protected int bar_width;
-	protected ArrayList data;		// double
+	protected ArrayList data;		// Double
 	protected ArrayList dates;		// String
 	protected ArrayList times;		// String
 	protected final int Stride = 4;

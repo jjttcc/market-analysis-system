@@ -15,8 +15,11 @@ abstract public class DataSet {
 	// Number of records in this data set
 	abstract public int size();
 
-	// Color data is to be drawn in - can be null
-	public Color color() { return color; }
+	// The name of the data set
+	// Postcondition: result != null
+	public String name() {
+		return "";	// Redefine if needed.
+	}
 
 	/**
 	* The data X maximum.
@@ -37,6 +40,19 @@ abstract public class DataSet {
 	* The data Y minimum.
 	*/
 	abstract public double minimum_y();
+
+	// Color data is to be drawn in - can be null
+	public Color color() { return color; }
+
+	public String toString() {
+		String result = name();
+		if (result.length() > 0) {
+			result += ", " + getClass().getName();
+		} else {
+			result = getClass().getName();
+		}
+		return result;
+	}
 
 // Element change
 
