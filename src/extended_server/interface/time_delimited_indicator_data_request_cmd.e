@@ -15,10 +15,8 @@ class TIME_DELIMITED_INDICATOR_DATA_REQUEST_CMD inherit
 			additional_field_constraints_fulfilled as
 			indicator_id_valid
 		undefine
-			expected_field_count,
-			parse_remainder,
-			set_print_parameters,
-			additional_post_parse_constraints_fulfilled
+			expected_field_count, parse_remainder, set_print_parameters,
+			additional_post_parse_constraints_fulfilled, ignore_tradable_cache
 		redefine
 			additional_field_constraints_msg
 		end

@@ -15,7 +15,7 @@ class TIME_DELIMITED_MARKET_DATA_REQUEST_CMD inherit
 			set_print_parameters, parse_remainder,
 			additional_field_constraints_fulfilled,
 			additional_post_parse_constraints_fulfilled,
-			additional_field_constraints_msg
+			additional_field_constraints_msg, ignore_tradable_cache
 		redefine
 			expected_field_count
 		end

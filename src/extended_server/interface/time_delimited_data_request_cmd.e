@@ -17,7 +17,7 @@ deferred class TIME_DELIMITED_DATA_REQUEST_CMD inherit
 			set_print_parameters, parse_remainder,
 			additional_field_constraints_fulfilled,
 			additional_post_parse_constraints_fulfilled,
-			additional_field_constraints_msg
+			additional_field_constraints_msg, ignore_tradable_cache
 		end
 
 feature {NONE} -- Hook routine implementations
@@ -83,6 +83,8 @@ feature {NONE} -- Hook routine implementations
 		once
 			Result := empty_date_range_msg
 		end
+
+	ignore_tradable_cache: BOOLEAN is True
 
 feature {NONE} -- Implementation - essential properties
 

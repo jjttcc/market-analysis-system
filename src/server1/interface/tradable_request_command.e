@@ -46,6 +46,14 @@ feature -- Status setting
 				tradables /= Void
 		end
 
+feature {NONE} -- Hook routines
+
+	ignore_tradable_cache: BOOLEAN is
+			-- Should `cached_tradable' ignore the "tradable cache"?
+		once
+			Result := False
+		end
+
 feature {NONE} -- Implementation
 
 	report_server_error is
@@ -70,8 +78,9 @@ feature {NONE} -- Implementation
 		do
 			Result := session.last_tradable
 			if
-				Result = Void or not (Result.symbol.is_equal (symbol) and
-				Result.period_types.has (period_type.name))
+				ignore_tradable_cache or else Result = Void or
+				(not (Result.symbol.is_equal (symbol) and
+				Result.period_types.has (period_type.name)))
 			then
 				Result := Void
 				if tradables.valid_period_type (symbol, period_type) then
