@@ -32,4 +32,4 @@ feature -- Initialization
 			target /= Void
 		end
 
-end -- class LINEAR_ANALYZER
+end

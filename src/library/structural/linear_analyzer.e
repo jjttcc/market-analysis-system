@@ -177,4 +177,4 @@ invariant
 	target_not_void: target /= Void
 	target_implementation_not_cloned: target = target
 
-end -- class LINEAR_ANALYZER
+end
