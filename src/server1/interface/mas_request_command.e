@@ -22,7 +22,7 @@ deferred class REQUEST_COMMAND inherit
 			print
 		end
 
-	GUI_SERVER_PROTOCOL
+	GUI_NETWORK_PROTOCOL
 		export
 			{NONE} all
 		undefine

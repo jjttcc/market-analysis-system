@@ -30,7 +30,7 @@ feature -- Basic operations
 				until
 					ilist.islast
 				loop
-					print (ilist.name)
+					print (ilist.item.name)
 					print ("%T")
 					ilist.forth
 				end

@@ -13,7 +13,7 @@ class MAIN_GUI_INTERFACE inherit
 			event_generator_builder, function_builder
 		end
 
-	GUI_SERVER_PROTOCOL
+	GUI_NETWORK_PROTOCOL
 		export
 			{NONE} all
 		end
@@ -61,6 +61,8 @@ feature -- Status setting
 feature -- Basic operations
 
 	execute is
+			-- Note: It is expected that the first character of the input
+			-- of io_medium has been read.
 		local
 			cmd: REQUEST_COMMAND
 		do
@@ -79,12 +81,11 @@ feature {NONE}
 			-- Input the next client request, blocking if necessary, and split
 			-- the received message into `message_ID' and `message_body'.
 		local
-			s: STRING
+			s, msgid: STRING
 			i: INTEGER
 		do
 			!!s.make (0)
 			from
-				io_medium.read_character
 			until
 				io_medium.last_character = eom @ 1
 			loop
@@ -100,7 +101,13 @@ feature {NONE}
 				message_ID := Error
 				message_body := "Invalid message format"
 			else
-				message_ID := s.substring (1, i - 1).to_integer
+				msgid := s.substring (1, i - 1)
+				if not msgid.is_integer then
+					message_ID := Error
+					message_body := "Message ID is not a valid integer."
+				else
+					message_ID := msgid.to_integer
+				end
 				message_body := s.substring (i + input_field_separator.count,
 												s.count)
 			end
@@ -119,6 +126,8 @@ feature {NONE}
 			rh.extend (cmd, Indicator_data_request)
 			!MARKET_LIST_REQUEST_CMD!cmd.make (factory_builder.market_list)
 			rh.extend (cmd, Market_list_request)
+			!INDICATOR_LIST_REQUEST_CMD!cmd.make (factory_builder.market_list)
+			rh.extend (cmd, Indicator_list_request)
 			request_handlers := rh
 		ensure
 			rh_set: request_handlers /= Void and not request_handlers.empty
