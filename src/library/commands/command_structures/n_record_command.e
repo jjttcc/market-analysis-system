@@ -46,7 +46,7 @@ feature -- Status report
 		do
 			Result := n_set and input_set
 		ensure then
-			n_input_set: Result = n_set and input_set
+			n_input_set: Result = (n_set and input_set)
 		end
 
 	execute_postcondition: BOOLEAN is
