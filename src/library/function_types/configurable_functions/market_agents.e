@@ -42,8 +42,8 @@ feature -- Access
 				subtraction_operator)
 		end
 
--- !!!Original implementation - obsoletify (or remove) if the version using
--- n_based_accumulation becomes the final version.
+-- !!!Original implementation - make it obsolete (or remove it) if the
+--version using n_based_accumulation becomes the final version.
 	original_sma (f: AGENT_BASED_FUNCTION) is
 			-- Standard moving average
 		require
@@ -52,8 +52,8 @@ feature -- Access
 			sma_based_calculation (f, agent sum_divided_by_n)
 		end
 
--- !!!Original implementation - obsoletify (or remove) if the version using
--- n_based_accumulation becomes the final version.
+-- !!!Original implementation - make it obsolete (or remove it) if the
+--version using n_based_accumulation becomes the final version.
 	original_standard_deviation (f: AGENT_BASED_FUNCTION) is
 			-- Standard deviation
 		require
@@ -62,8 +62,8 @@ feature -- Access
 			sma_based_calculation (f, agent sum_of_squares_of_avg_divided_by_n)
 		end
 
--- !!!May be replaced by n_based_accumulation - If so, obsoletify
--- (or remove) it.
+-- !!!May be replaced by n_based_accumulation - If so, make it obsolete
+-- (or remove it).
 	sma_based_calculation (f: AGENT_BASED_FUNCTION; calculation: FUNCTION [
 		ANY, TUPLE [DOUBLE, INTEGER, ARRAYED_LIST [DOUBLE]], DOUBLE]) is
 			-- Calculation that follows the pattern of a
@@ -135,12 +135,16 @@ feature -- Access
 			end
 		end
 
---@@It it probably better to put this operation into its own class
+--@@Put this operation into its own class (N_BASED_ACCUMULATION)
 --with settable parameters, similar to INTEGRAL or SUM under
 --work/experiments/sicp/integral.  If so, it may be a good idea to
 --add a 'filter' function that must be true before a value is used
 --in the accumulation.  (See
---http://mitpress.mit.edu/sicp/full-text/book/book-Z-H-12.html#%_thm_1.33
+--http://mitpress.mit.edu/sicp/full-text/book/book-Z-H-12.html#%_thm_1.33)
+--Utility instances of this class can be created as attributes or
+--once functions - for example, addition_accumulation', whose combiner
+--(accum_op) and drop_off_op operators are ADDITION and SUBTRACTION,
+--respectively.
 	n_based_accumulation (f: AGENT_BASED_FUNCTION; n: INTEGER;
 		calculation: FUNCTION [ANY, TUPLE [DOUBLE, INTEGER,
 		ARRAYED_LIST [DOUBLE]], DOUBLE]; accum_op, drop_off_op:
@@ -310,6 +314,7 @@ feature {NONE} -- COMMAND-based utility routines
 
 feature {NONE} -- Utilities
 
+--@@These can perhaps go into a separate class (perhaps MARKET_UTILITIES).
 	sum_of_squares (starti, n: INTEGER; avg: DOUBLE;
 			values: ARRAYED_LIST [DOUBLE]): DOUBLE is
 		require

@@ -49,6 +49,8 @@ feature -- Access
 	agent_table: MARKET_AGENTS is
 			-- Table of available "market-agents"
 		once
+			--@@If the application is made multi-threaded, this should be
+			--"once-per-thread".
 			create Result
 		end
 
