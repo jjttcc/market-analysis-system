@@ -331,6 +331,9 @@ feature {NONE} -- Implementation
 		do
 			if settings.item (key).is_empty then
 				error_report.append ("Value for " + key + " is not set.%N")
+				if required_specifiers.has (key) then
+					fatal_error_status := True
+				end
 			end
 		end
 
@@ -352,6 +355,16 @@ feature {NONE} -- Implementation
 	config_file: CONFIGURATION_FILE
 
 	error_report: STRING
+
+	required_specifiers: LINKED_LIST [STRING] is
+			-- Configuration fields that are required
+		once
+			create Result.make
+			Result.extend (Valid_port_numbers_specifier)
+			Result.compare_objects
+		ensure
+			Result.object_comparison
+		end
 
 invariant
 
