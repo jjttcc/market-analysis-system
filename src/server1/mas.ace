@@ -232,12 +232,6 @@ cluster
 
 	estore_support (store):		"$/support"
 
-	dbms (store):		"$/dbms"
-
-	db_support (dbms):		"$/support"
-
-	rdbms (dbms):		"$/rdbms"
-
 	ecli_src:		"$ECLI/src"
 
 	abstract (ecli_src):		"$/abstract"
