@@ -15,10 +15,7 @@ class STOCK_SPLIT_FILE inherit
 
 	DATA_SCANNER
 		rename
-			make as ds_make_unused, field_separator as fs_unused,
-			record_separator as rs_unused,
-			set_record_separator as set_record_separator_unused,
-			set_field_separator as set_field_separator_unused
+			make as ds_make_unused
 		export
 			{NONE} all
 		redefine
