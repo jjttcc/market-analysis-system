@@ -7,7 +7,7 @@ indexing
 
 deferred class N_RECORD_COMMAND inherit
 
-	NUMERIC_COMMAND
+	RESULT_COMMAND [REAL]
 		export {MARKET_FUNCTION}
 			initialize
 		redefine

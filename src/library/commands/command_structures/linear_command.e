@@ -6,7 +6,7 @@ indexing
 
 deferred class LINEAR_COMMAND inherit
 
-	NUMERIC_COMMAND
+	RESULT_COMMAND [REAL]
 		export {MARKET_FUNCTION}
 			initialize
 		redefine

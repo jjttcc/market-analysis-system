@@ -21,7 +21,7 @@ creation
 
 feature {FACTORY} -- Initialization
 
-	make (t: like target; op: NUMERIC_COMMAND; i: like n) is
+	make (t: like target; op: like operator; i: like n) is
 		require
 			args_not_void: t /= Void and op /= Void
 			i_gt_0: i > 0
@@ -63,7 +63,7 @@ feature {NONE}
 
 feature {FACTORY} -- Status setting
 
-	set_operator (op: NUMERIC_COMMAND) is
+	set_operator (op: like operator) is
 			-- Set operator that provides the value to be summed (from
 			-- the current item).
 		require
@@ -76,7 +76,7 @@ feature {FACTORY} -- Status setting
 
 feature {FACTORY} -- Access
 
-	operator: NUMERIC_COMMAND
+	operator: RESULT_COMMAND [REAL]
 
 feature {NONE}
 

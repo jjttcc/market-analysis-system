@@ -15,11 +15,11 @@ class HIGHEST_VALUE inherit
 			start_init, sub_action, target
 		end
 
-	OPERATOR_COMMAND
+	UNARY_OPERATOR [REAL]
 		undefine
 			arg_mandatory, initialize
 		redefine
-			operator
+			operand
 		end
 
 creation
@@ -28,20 +28,20 @@ creation
 
 feature -- Initialization
 
-	make (t: CHAIN [MARKET_TUPLE]; o: like operator; i: like n) is
+	make (t: CHAIN [MARKET_TUPLE]; o: like operand; i: like n) is
 		require
 			not_void: t /= Void and o /= Void
 		do
 			nrlc_make (t, i)
-			set_operator (o)
+			set_operand (o)
 		ensure
-			set: target = t and operator = o and n = i
+			set: target = t and operand = o and n = i
 		end
 
 feature -- Access
 
-	operator: BASIC_NUMERIC_COMMAND
-			-- Operator that determines which field in each tuple to
+	operand: BASIC_NUMERIC_COMMAND
+			-- Operand that determines which field in each tuple to
 			-- examine for the highest value
 
 feature {NONE} -- Implementation
@@ -53,9 +53,9 @@ feature {NONE} -- Implementation
 
 	sub_action (current_index: INTEGER) is
 		do
-			operator.execute (target @ current_index)
-			if operator.value > value then
-				value := operator.value
+			operand.execute (target @ current_index)
+			if operand.value > value then
+				value := operand.value
 			end
 		end
 

@@ -39,13 +39,13 @@ feature -- Basic operations
 			check
 				target_not_off: not target.off
 			end
-			perform_execution (arg)
+			operate (arg)
 			target.go_to (original_cursor) -- Restore cursor.
 		end
 
 feature {NONE} -- Hook methods
 
-	perform_execution (arg: ANY) is
+	operate (arg: ANY) is
 			-- Operate on `target' at the current cursor position.
 		deferred
 		end

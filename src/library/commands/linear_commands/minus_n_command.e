@@ -4,7 +4,7 @@ indexing
 		%the target's cursor n positions to the left, operating on the %
 		%target based on this cursor position, and then restoring the %
 		%target to the original cursor position.  The operation performed %
-		%is determined by the run-time type of the operator."
+		%is determined by the run-time type of its operand."
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -16,7 +16,10 @@ class MINUS_N_COMMAND inherit
 			make as nrc_make_unused
 		export {NONE}
 			nrc_make_unused
-		undefine
+		redefine
+			initialize
+		select
+			initialize
 		end
 
 	LINEAR_OFFSET_COMMAND
@@ -24,9 +27,9 @@ class MINUS_N_COMMAND inherit
 			initialize
 		end
 
-	OPERATOR_COMMAND
-		undefine
-			initialize
+	UNARY_OPERATOR [REAL]
+		rename
+			initialize as uo_initialize
 		end
 
 creation
@@ -35,17 +38,23 @@ creation
 
 feature -- Initialization
 
-	make (tgt: like target; op: like operator; i: like n) is
+	make (tgt: like target; op: like operand; i: like n) is
 		require
 			args_not_void: tgt /= Void and op /= Void
 			i_gt_0: i > 0
 		do
-			operator := op
+			operand := op
 			target := tgt
 			n := i
 		ensure then
-			op_n_set: operator = op and n = i
+			op_n_set: operand = op and n = i
 			target_set: target = tgt
+		end
+
+	initialize (arg: N_RECORD_STRUCTURE) is
+		do
+			Precursor (arg)
+			uo_initialize (arg)
 		end
 
 feature -- Access
@@ -59,10 +68,10 @@ feature -- Access
 
 feature {NONE} -- Implementation
 
-	perform_execution (arg: ANY) is
+	operate (arg: ANY) is
 		do
-			operator.execute (target.item)
-			value := operator.value
+			operand.execute (target.item)
+			value := operand.value
 		end
 
 end -- class MINUS_N_COMMAND

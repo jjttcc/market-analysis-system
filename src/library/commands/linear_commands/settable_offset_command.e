@@ -8,8 +8,11 @@ indexing
 class SETTABLE_OFFSET_COMMAND inherit
 
 	LINEAR_OFFSET_COMMAND
+		undefine
+			initialize
+		end
 
-	OPERATOR_COMMAND
+	UNARY_OPERATOR [REAL]
 
 creation
 
@@ -17,14 +20,14 @@ creation
 
 feature -- Initialization
 
-	make (tgt: like target; op: like operator) is
+	make (tgt: like target; op: like operand) is
 		require
 			not_void: tgt /= Void and op /= Void
 		do
 			target := tgt
-			operator := op
+			operand := op
 		ensure
-			set: target = tgt and operator = op
+			set: target = tgt and operand = op
 		end
 
 feature -- Access
@@ -45,10 +48,10 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	perform_execution (arg: ANY) is
+	operate (arg: ANY) is
 		do
-			operator.execute (target.item)
-			value := operator.value
+			operand.execute (target.item)
+			value := operand.value
 		end
 
 end -- class SETTABLE_OFFSET_COMMAND
