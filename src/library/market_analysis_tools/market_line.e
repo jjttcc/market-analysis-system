@@ -7,32 +7,33 @@ indexing
 
 class MARKET_LINE inherit
 
-	SIMPLE_FUNCTION [MARKET_POINT]
+	MARKET_TUPLE_LIST [MARKET_POINT]
 		rename
-			make as sf_make_unused
+			make as mtl_make
 		export {NONE}
-			sf_make_unused
+			mtl_make
 		end
-
+--!!Consider changing make and set_points to take two int indexes and
+--two market_tuples.  Create the points (they may become expanded) with
+--these objects - Client doesn't need to create points.
 creation
 
 	make
 
 feature -- Initialization
 
-	make (p1, p2: MARKET_POINT; period_type: TIME_PERIOD_TYPE) is
+	make (p1, p2: MARKET_POINT) is
 		require
-			not_void: p1 /= Void and p2 /= Void and period_type /= Void
+			not_void: p1 /= Void and p2 /= Void
 			p1_left_of_p2: p1.x < p2.x
 			p1_earlier_than_p2: p1.date_time < p2.date_time
 		do
 			start_point := p1
 			end_point := p2
-			trading_period_type := period_type
 			calculate_slope
+			mtl_make (p2.x.rounded - p1.x.rounded + 1)
 		ensure
-			set: start_point = p1 and end_point = p2 and
-					trading_period_type = period_type
+			set: start_point = p1 and end_point = p2
 		end
 
 feature -- Access
