@@ -1,7 +1,7 @@
 # Commodity Channel Index
 # Below, for reference, is an implementation of an algorithm to calculate
 # the Mean Deviation of Typical Price (MDTP), written in Eiffel.  It was
-# used as a model for the development of the MDTP component of command
+# used as a model for the development of the MDTP component of the command
 # tree for CCI defined in this file.
 
 #	mdtp (tp: ARRAY [REAL]; n, current_period_index: INTEGER): REAL is
@@ -61,6 +61,8 @@ c
 3
 s
 # Beginning of the Commodity Channel Index definition
+# Note that indentation is used to attempt to make the command-tree
+# structure apparent.
 c
 n
 N_RECORD_ONE_VARIABLE_FUNCTION
@@ -161,7 +163,7 @@ DIVISION
          n
    MULTIPLICATION
 	  c
-# [mdtp:]
+# [MDTP:]
       DIVISION
          e
          mdtp
