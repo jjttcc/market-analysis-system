@@ -12,12 +12,13 @@ import application_library.*;
 
 /** Abstraction responsible for managing a connection and building DataSet
     instances from data returned from connection requests */
-public class DataSetBuilder extends NetworkProtocolUtilities implements NetworkProtocol {
+public class DataSetBuilder extends NetworkProtocolUtilities
+	implements NetworkProtocol {
 
 	// Precondition: conn != null && opts != null
 	public DataSetBuilder(Connection conn, StartupOptions opts) {
 //		assert conn != null && opts != null;
-		connection_ = conn;
+		connection = conn;
 		options = opts;
 		try {
 			initialize();
@@ -26,7 +27,7 @@ public class DataSetBuilder extends NetworkProtocolUtilities implements NetworkP
 
 	public DataSetBuilder(DataSetBuilder dsb) {
 		try {
-			connection_ = dsb.connection().new_object();
+			connection = dsb.connection().new_object();
 			options = dsb.options;
 			initialize();
 		} catch (Exception e) {
@@ -36,19 +37,19 @@ public class DataSetBuilder extends NetworkProtocolUtilities implements NetworkP
 	}
 
 	public Connection connection() {
-		return connection_;
+		return connection;
 	}
 
 	// Does the last received market data contain an open interest field?
 	public boolean open_interest() {
-		return _open_interest;
+		return open_interest;
 	}
 
 	// Send a logout request to the server to end the current session
 	// and, if `exit' is true, exit with `status'.
 	public void logout(boolean exit, int status) {
 		try {
-			connection_.logout();
+			connection.logout();
 		} catch (Exception e) {
 			System.err.println(e);
 			Configuration.terminate(1);
@@ -59,22 +60,27 @@ public class DataSetBuilder extends NetworkProtocolUtilities implements NetworkP
 	// Send a request for data for the tradable `symbol' with `period_type'.
 	public void send_market_data_request(String symbol, String period_type)
 			throws Exception {
-		connection_.send_request(Market_data_request,
+		connection.send_request(Market_data_request,
 			symbol + Message_field_separator + period_type);
-		if (connection_.last_received_message_ID() == Ok) {
-			String results = connection_.result().toString();
+		if (connection.last_received_message_ID() == Ok) {
+			String results = connection.result().toString();
 			results = setup_parser_fieldspecs(results);
 			data_parser.parse(results, main_drawer);
-			_last_market_data = data_parser.result();
-			_last_market_data.set_drawer(main_drawer);
-			_last_volume = data_parser.volume_result();
-			if (_last_volume != null) {
-				_last_volume.set_drawer(volume_drawer);
+			last_market_data = data_parser.result();
+			last_market_data.set_drawer(main_drawer);
+			last_volume = data_parser.volume_result();
+			if (last_volume != null) {
+				last_volume.set_drawer(volume_drawer);
 			}
-			_last_open_interest = data_parser.open_interest_result();
-			if (_last_open_interest != null) {
-				_last_open_interest.set_drawer(open_interest_drawer);
+			last_open_interest = data_parser.open_interest_result();
+			if (last_open_interest != null) {
+				last_open_interest.set_drawer(open_interest_drawer);
 			}
+			Calendar date = data_parser.latest_date_time();
+			if (date != null) {
+				last_latest_date_time = date;
+			}
+System.out.println("smdr - last ldt: " + last_latest_date_time);
 		}
 	}
 
@@ -82,14 +88,14 @@ public class DataSetBuilder extends NetworkProtocolUtilities implements NetworkP
 	// `period_type'.
 	public void send_indicator_data_request(int ind, String symbol,
 		String period_type) throws Exception {
-		connection_.send_request(Indicator_data_request,
+		connection.send_request(Indicator_data_request,
 			ind + Message_field_separator + symbol +
 			Message_field_separator + period_type);
 		// Note that a new indicator drawer is created each time parse is
 		// called, since indicator drawers should not be shared.
-		indicator_parser.parse(connection_.result().toString(),
+		indicator_parser.parse(connection.result().toString(),
 								new_indicator_drawer());
-		_last_indicator_data = indicator_parser.result();
+		last_indicator_data = indicator_parser.result();
 	}
 
 	// Send a time-delimited request for data for the tradable `symbol' with
@@ -97,31 +103,33 @@ public class DataSetBuilder extends NetworkProtocolUtilities implements NetworkP
 	// `end_date_time'.  If `end_date_time' is null, the current date-time
 	// is used.
 	public void send_time_delimited_market_data_request(String symbol,
-		String period_type, Date start_date_time, Date end_date_time)
+		String period_type, Calendar start_date_time, Calendar end_date_time)
 			throws Exception {
-//!!!Adapt ...
-/*!!!!!Notes: Probably the Parser is a good place to extract the
-"latest date-time" - make it available as a query, which, here, can be
-called after 'parse' is called and made available, perhaps as:
-'latest_date_time_from_last_request' or something like that.
-*/
-		connection_.send_request(Market_data_request, symbol +
+System.out.println("sending request with " + symbol + ", " + period_type +
+", " + start_date_time);
+		connection.send_request(Time_delimited_market_data_request, symbol +
 			Message_field_separator + period_type + Message_field_separator +
 			date_time_range(start_date_time, end_date_time));
-		if (connection_.last_received_message_ID() == Ok) {
-			String results = connection_.result().toString();
+		if (connection.last_received_message_ID() == Ok) {
+			String results = connection.result().toString();
 			results = setup_parser_fieldspecs(results);
 			data_parser.parse(results, main_drawer);
-			_last_market_data = data_parser.result();
-			_last_market_data.set_drawer(main_drawer);
-			_last_volume = data_parser.volume_result();
-			if (_last_volume != null) {
-				_last_volume.set_drawer(volume_drawer);
+//!!!Need to append the new data to the current data set.
+			last_market_data = data_parser.result();
+			last_market_data.set_drawer(main_drawer);
+			last_volume = data_parser.volume_result();
+			if (last_volume != null) {
+				last_volume.set_drawer(volume_drawer);
 			}
-			_last_open_interest = data_parser.open_interest_result();
-			if (_last_open_interest != null) {
-				_last_open_interest.set_drawer(open_interest_drawer);
+			last_open_interest = data_parser.open_interest_result();
+			if (last_open_interest != null) {
+				last_open_interest.set_drawer(open_interest_drawer);
 			}
+			Calendar date = data_parser.latest_date_time();
+			if (date != null) {
+				last_latest_date_time = date;
+			}
+System.out.println("smdr - last ldt: " + last_latest_date_time);
 		}
 	}
 
@@ -130,69 +138,75 @@ called after 'parse' is called and made available, perhaps as:
 	// `start_date_time' .. `end_date_time'.  If `end_date_time' is null,
 	// the current date-time is used.
 	public void send_time_delimited_indicator_data_request(int ind,
-		String symbol, String period_type, Date start_date_time,
-		Date end_date_time) throws Exception {
-//!!!Adapt ...
-		connection_.send_request(Indicator_data_request,
+		String symbol, String period_type, Calendar start_date_time,
+		Calendar end_date_time) throws Exception {
+		connection.send_request(Time_delimited_indicator_data_request,
 			ind + Message_field_separator + symbol +
 			Message_field_separator + period_type + Message_field_separator +
 			date_time_range(start_date_time, end_date_time));
-		// Note that a new indicator drawer is created each time parse is
-		// called, since indicator drawers should not be shared.
-		indicator_parser.parse(connection_.result().toString(),
-								new_indicator_drawer());
-		_last_indicator_data = indicator_parser.result();
+// Note that a new indicator drawer is created each time parse is
+// called, since indicator drawers should not be shared.
+
+//!!!Need to append the new data to the current data set.
+		indicator_parser.parse(connection.result().toString(),
+			new_indicator_drawer());
+		last_indicator_data = indicator_parser.result();
 	}
 
 	// Send a request for the list of indicators for tradable `symbol'.
 	public void send_indicator_list_request(String symbol,
 			String period_type) throws IOException {
 		StringBuffer mlist;
-		_last_indicator_list = new Vector();
-		connection_.send_request(Indicator_list_request, symbol +
+		last_indicator_list = new Vector();
+		connection.send_request(Indicator_list_request, symbol +
 			Message_field_separator + period_type);
-		mlist = connection_.result();
+		mlist = connection.result();
 		StringTokenizer t = new StringTokenizer(mlist.toString(),
 			Message_record_separator, false);
 		for (int i = 0; t.hasMoreTokens(); ++i)
 		{
-			_last_indicator_list.addElement(t.nextToken());
+			last_indicator_list.addElement(t.nextToken());
 		}
 	}
 
 	// Data from last market data request
 	public DataSet last_market_data() {
-		return _last_market_data;
+		return last_market_data;
 	}
 
 	// Data from last indicator data request
 	public DataSet last_indicator_data() {
-		return _last_indicator_data;
+		return last_indicator_data;
 	}
 
 	// Data from last time-delimited market data request
 	public DataSet last_time_delimited_market_data() {
-		return _last_time_delimited_market_data;
+		return last_time_delimited_market_data;
 	}
 
 	// Data from last time-delimited indicator data request
 	public DataSet last_time_delimited_indicator_data() {
-		return _last_time_delimited_indicator_data;
+		return last_time_delimited_indicator_data;
 	}
 
 	// Volume data from last market data request
 	public DataSet last_volume() {
-		return _last_volume;
+		return last_volume;
 	}
 
 	// Open interest data from last market data request
 	public DataSet last_open_interest() {
-		return _last_open_interest;
+		return last_open_interest;
+	}
+
+	// Latest date-time from last market data request
+	public Calendar last_latest_date_time() {
+		return last_latest_date_time;
 	}
 
 	// Last requested indicator list
 	public Vector last_indicator_list() {
-		return _last_indicator_list;
+		return last_indicator_list;
 	}
 
 	// List of available tradables
@@ -201,8 +215,8 @@ called after 'parse' is called and made available, perhaps as:
 
 		if (tradables == null) {
 			tradables = new Vector();
-			connection_.send_request(Market_list_request, "");
-			mlist = connection_.result();
+			connection.send_request(Market_list_request, "");
+			mlist = connection.result();
 			StringTokenizer t = new StringTokenizer(mlist.toString(),
 				Message_record_separator, false);
 			for (int i = 0; t.hasMoreTokens(); ++i) {
@@ -218,8 +232,8 @@ called after 'parse' is called and made available, perhaps as:
 		Vector result;
 
 		result = new Vector();
-		connection_.send_request(Trading_period_type_request, tradable);
-		tpt_list = connection_.result();
+		connection.send_request(Trading_period_type_request, tradable);
+		tpt_list = connection.result();
 		StringTokenizer t = new StringTokenizer(tpt_list.toString(),
 			Message_record_separator, false);
 		for (int i = 0; t.hasMoreTokens(); ++i) {
@@ -230,21 +244,21 @@ called after 'parse' is called and made available, perhaps as:
 
 	// Message ID of last response from the server
 	public int request_result_id() {
-		return connection_.last_received_message_ID();
+		return connection.last_received_message_ID();
 	}
 
 	// Result of the last request to the server
 	public String server_response() {
 		String result = null;
-		if (connection_.result() != null) {
-			result = connection_.result().toString();
+		if (connection.result() != null) {
+			result = connection.result().toString();
 		}
 		return result;
 	}
 
 	// Did the login process fail?
 	public boolean login_failed() {
-		return login_failed_;
+		return login_failed;
 	}
 
 // Implementation
@@ -272,12 +286,12 @@ called after 'parse' is called and made available, perhaps as:
 	}
 
 	// Initialize main_field_specs - Include Parser.Open_interest if
-	// `_open_interest' is true.
+	// `open_interest' is true.
 	// Precondition: main_field_specs.length >= 7
 	private void initialize_fieldspecs() {
 		int i = 0;
 		MA_SessionState session_state =
-			(MA_SessionState) connection_.session_state();
+			(MA_SessionState) connection.session_state();
 		for (int j = 0; j < main_field_specs.length; ++j) {
 			main_field_specs[j] = Parser.Not_set;
 		}
@@ -289,25 +303,25 @@ called after 'parse' is called and made available, perhaps as:
 		main_field_specs[i++] = Parser.Low;
 		main_field_specs[i++] = Parser.Close;
 		main_field_specs[i++] = Parser.Volume;
-		if (_open_interest) {
+		if (open_interest) {
 			main_field_specs[i++] = Parser.Open_interest;
 		}
 	}
 
 	// Login to the server and initialize fields.
-	// Precondition: connection_ != null && ! connection_.logged_in()
-	// Postcondition: connection_.logged_in()
+	// Precondition: connection != null && ! connection.logged_in()
+	// Postcondition: connection.logged_in()
 	private void initialize() throws Exception {
 		tradables = options.symbols();
-		login_failed_ = true;
+		login_failed = true;
 		try {
-			connection_.login();
+			connection.login();
 		} catch (Exception e) {
 			System.err.println(e);
 			Configuration.terminate(1);
 			throw e;
 		}
-		_open_interest = false;
+		open_interest = false;
 		initialize_fieldspecs();
 		data_parser = new Parser(main_field_specs, Message_record_separator,
 									Message_field_separator);
@@ -323,7 +337,7 @@ called after 'parse' is called and made available, perhaps as:
 		data_parser.set_volume_drawer(volume_drawer);
 		open_interest_drawer = new LineDrawer(main_drawer);
 		data_parser.set_open_interest_drawer(open_interest_drawer);
-		login_failed_ = false;
+		login_failed = false;
 	}
 
 	// Use `data' to determine whether there is an open-interest field
@@ -342,14 +356,14 @@ called after 'parse' is called and made available, perhaps as:
 			}
 		}
 		if (oi) {
-			if (! _open_interest) {
-				_open_interest = true;
+			if (! open_interest) {
+				open_interest = true;
 				initialize_fieldspecs();
 				data_parser.set_field_specifications(main_field_specs);
 			}
 		} else {
-			if (_open_interest) {
-				_open_interest = false;
+			if (open_interest) {
+				open_interest = false;
 				initialize_fieldspecs();
 				data_parser.set_field_specifications(main_field_specs);
 			}
@@ -361,21 +375,31 @@ called after 'parse' is called and made available, perhaps as:
 	// tradables is shared by all windows
 	private static Vector tradables;	// Cached list of tradables
 
-	private Connection connection_;
-		// result of last market data request
-	private DataSet _last_market_data;
-		// result of last time-delimited market data request
-	private DataSet _last_time_delimited_market_data;
-		// volume result from last market data request
-	private DataSet _last_volume;
-		// open interest result from last market data request
-	private DataSet _last_open_interest;
-		// result of last indicator data request
-	private DataSet _last_indicator_data;
-		// result of last time delimited indicator data request
-	private DataSet _last_time_delimited_indicator_data;
-		// result of last indicator list request
-	private Vector _last_indicator_list;
+	private Connection connection;
+
+	// result of last market data request
+	private DataSet last_market_data;
+
+	// result of last time-delimited market data request
+	private DataSet last_time_delimited_market_data;
+
+	// volume result from last market data request
+	private DataSet last_volume;
+
+	// open interest result from last market data request
+	private DataSet last_open_interest;
+
+	// result of last indicator data request
+	private DataSet last_indicator_data;
+
+	// result of last time delimited indicator data request
+	private DataSet last_time_delimited_indicator_data;
+
+	// result of last indicator list request
+	private Vector last_indicator_list;
+
+	// latest date-time result from last market data request
+	private Calendar last_latest_date_time;
 	private Parser data_parser;
 	private Parser indicator_parser;
 	private MarketDrawer main_drawer;	// draws data in main graph
@@ -383,8 +407,8 @@ called after 'parse' is called and made available, perhaps as:
 	private IndicatorDrawer open_interest_drawer;	// draws open-interest
 	private int main_field_specs[] = new int[7];
 	// Does the last received market data contain an open interest field?
-	private boolean _open_interest;
+	private boolean open_interest;
 	// User-specified options
 	private StartupOptions options;
-	private boolean login_failed_;
+	private boolean login_failed;
 }

@@ -3,13 +3,16 @@
 package mas_gui;
 
 import java.util.*;
+import support.NetworkProtocolUtilities;
 import graph.*;
 
 /** Market Analysis Parser - parses market and indicator data sent from
 the Market Analysis server */
-class Parser {
+class Parser extends NetworkProtocolUtilities {
 	public static final int Date = 1, Open = 2, High = 3, Low = 4, Close = 5,
 		Volume = 6, Open_interest = 7, Not_set = 0;
+
+// Initialization
 
 	// Constructor - fieldspecs specifies the fields format of each tuple -
 	// e.g., date, high, low, close, volume.
@@ -22,6 +25,58 @@ class Parser {
 		times = new Vector();
 		float_field_count = float_fields(fieldspecs);
 	}
+
+// Access
+
+	// Specifications of the type (date, open, etc.) and order of each field
+	// in a tuple.
+	public int[] field_specifications() {
+		return parsetype;
+	}
+
+	// Parsed data set result
+	public DataSet result() {
+		return processed_data;
+	}
+
+	// Parsed volume
+	public DataSet volume_result() {
+		return volume_data;
+	}
+
+	// Parsed open interest
+	public DataSet open_interest_result() {
+		return oi_data;
+	}
+
+	// The latest date-time in the parsed data set - null if no data set
+	// has been parsed or if it contains no dates
+	public Calendar latest_date_time() {
+		Calendar result = null;
+		if (dates != null && ! dates.isEmpty()) {
+			String date = (String) dates.elementAt(dates.size() - 1);
+			if (times != null && ! times.isEmpty()) {
+				String time = (String) times.elementAt(dates.size() - 1);
+System.out.println("date, time: " + date + ", " + time);
+				result = date_time_from_dataset_strings(date, time);
+			} else {
+System.out.println("date: " + date);
+				result = date_from_dataset_string(date);
+			}
+		}
+System.out.println("parser - latest dt result: " + result);
+		return result;
+	}
+
+	public String record_separator() {
+		return _record_separator;
+	}
+
+	public String field_separator() {
+		return _field_separator;
+	}
+
+// Element change
 
 	// Set the tuple field specifications.
 	// Precondition: fs != null
@@ -40,11 +95,7 @@ class Parser {
 		open_interest_drawer = d;
 	}
 
-	// Specifications of the type (date, open, etc.) and order of each field
-	// in a tuple.
-	int[] field_specifications() {
-		return parsetype;
-	}
+// Basic operations
 
 	// Parse `s' into a DataSet according to record_separator and
 	// field_separator.  `drawer' is the tuple drawer to use for the
@@ -76,6 +127,8 @@ class Parser {
 		process_data(drawer);
 	}
 
+// Implementation
+
 	// Parse fields - default routine
 	private void parse_default(StringTokenizer recs) throws Exception {
 		int float_index = 0, volume_index = 0, oi_index = 0;
@@ -94,27 +147,27 @@ class Parser {
 						break;
 					case Open:
 						value_data[float_index++] =
-							parse_double(fields.nextToken());
+							parsed_double(fields.nextToken());
 						break;
 					case High:
 						value_data[float_index++] =
-							parse_double(fields.nextToken());
+							parsed_double(fields.nextToken());
 						break;
 					case Low:
 						value_data[float_index++] =
-							parse_double(fields.nextToken());
+							parsed_double(fields.nextToken());
 						break;
 					case Close:
 						value_data[float_index++] =
-							parse_double(fields.nextToken());
+							parsed_double(fields.nextToken());
 						break;
 					case Volume:
 						volumes[volume_index++] =
-							parse_double(fields.nextToken());
+							parsed_double(fields.nextToken());
 						break;
 					case Open_interest:
 						open_interests[oi_index++] =
-							parse_double(fields.nextToken());
+							parsed_double(fields.nextToken());
 						break;
 				}
 				}
@@ -150,15 +203,15 @@ class Parser {
 						break;
 					case High:
 						value_data[float_index++] =
-							parse_double(fields.nextToken());
+							parsed_double(fields.nextToken());
 						break;
 					case Low:
 						value_data[float_index++] =
-							parse_double(fields.nextToken());
+							parsed_double(fields.nextToken());
 						break;
 					case Close:
 						value_data[float_index++] =
-							parse_double(fields.nextToken());
+							parsed_double(fields.nextToken());
 						if (open_field_index != -1) {
 							// Store the close value into the open field.
 							value_data[open_field_index] =
@@ -167,11 +220,11 @@ class Parser {
 						break;
 					case Volume:
 						volumes[volume_index++] =
-							parse_double(fields.nextToken());
+							parsed_double(fields.nextToken());
 						break;
 					case Open_interest:
 						open_interests[oi_index++] =
-							parse_double(fields.nextToken());
+							parsed_double(fields.nextToken());
 						break;
 				}
 				}
@@ -184,32 +237,7 @@ class Parser {
 		}
 	}
 
-	// Parsed data set result
-	DataSet result() {
-		return processed_data;
-	}
-
-	// Parsed volume
-	DataSet volume_result() {
-		return volume_data;
-	}
-
-	// Parsed open interest
-	DataSet open_interest_result() {
-		return oi_data;
-	}
-
-	public String record_separator() {
-		return _record_separator;
-	}
-
-	public String field_separator() {
-		return _field_separator;
-	}
-
-// Implementation
-
-	double parse_double(String s) throws Exception {
+	private double parsed_double(String s) throws Exception {
 		double result;
 		try {
 			result = Float.valueOf(s).floatValue();
@@ -228,7 +256,7 @@ class Parser {
 		return result;
 	}
 
-	Integer parse_int(String s) {
+	private Integer parsed_int(String s) {
 		return Integer.valueOf(s);
 	}
 
@@ -317,7 +345,7 @@ class Parser {
 	}
 
 	// Does `s' contain a time field?
-	boolean contains_time_field(String s) {
+	private boolean contains_time_field(String s) {
 		boolean result = false;
 		int valid_parse_fields;
 		StringTokenizer recs = new StringTokenizer(s, _record_separator, false);
@@ -337,8 +365,10 @@ class Parser {
 		return result;
 	}
 
-	int parsetype[];
-	int float_field_count;
+// Implementation - attributes
+
+	protected int parsetype[];
+	protected int float_field_count;
 
 	// Date, time, open, high, low, close, volume, and open interest values -
 	// Some fields may not be used - for those that are, lengths should all
@@ -350,11 +380,11 @@ class Parser {
 	protected double[] value_data;
 	protected double[] volumes, open_interests;
 
-	String _record_separator, _field_separator;
-	DataSet processed_data;		// the parsed data
-	DataSet volume_data;		// the parsed volume data
-	DataSet oi_data;			// the parsed open interest data
-	boolean is_intraday;
-	BasicDrawer volume_drawer;
-	BasicDrawer open_interest_drawer;
+	protected String _record_separator, _field_separator;
+	protected DataSet processed_data;	// the parsed data
+	protected DataSet volume_data;		// the parsed volume data
+	protected DataSet oi_data;			// the parsed open interest data
+	protected boolean is_intraday;
+	protected BasicDrawer volume_drawer;
+	protected BasicDrawer open_interest_drawer;
 }

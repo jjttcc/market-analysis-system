@@ -1,7 +1,8 @@
 #!/bin/bash
 # Update eclipse work directory with the latest java source changes.
 
-base_srcdir=/home3/jtc/development/finance/src/clients/
+# OLD: base_srcdir=/home3/jtc/development/finance/src/clients/
+base_srcdir=/home/development/jtc/finance/src/clients
 os_srcdir=$base_srcdir
 comm_srcdir=$base_srcdir/commercial_gui/mas-gui
 dest_commercial=/home3/jtc/development/eclipse/projects/commercial_gui

@@ -204,9 +204,10 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		return _period_types;
 	}
 
+//!!!Possibly, the latest_date_time attribute is not needed in this class.
 	// The latest date-time in the data set associated with this chart
-	public Date latest_date_time() {
-return null;	// !!!!To be implemented
+	public Calendar latest_date_time() {
+		return latest_date_time;
 	}
 
 // Element change
@@ -318,6 +319,7 @@ return null;	// !!!!To be implemented
 			main_pane.clear_main_graph();
 			main_pane.clear_indicator_graph();
 			main_dataset = data_builder.last_market_data();
+			latest_date_time = data_builder.last_latest_date_time();
 			link_with_axis(main_dataset, null);
 			main_pane.add_main_data_set(main_dataset);
 			if (! current_upper_indicators.isEmpty()) {
@@ -727,6 +729,9 @@ return null;	// !!!!To be implemented
 
 	// The menu bar for this chart
 	MA_MenuBar ma_menu_bar;
+
+	// The latest date-time in the data set associated with this chart
+	Calendar latest_date_time;
 
 	// Valid trading period types
 	protected Vector _period_types;	// Vector of String
