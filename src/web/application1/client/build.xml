@@ -362,7 +362,27 @@
 			Tokenizer.class,ConfigurationModifier.class,IntPair.class,
 			IO_SocketConnection.class,FileTokenizer.class,Utilities$1.class,
 			Utilities.class,ErrorBox$1.class,ErrorBox$2.class,ErrorBox$3.class,
-			ErrorBox.class,GUI_Utilities.class"
+			ErrorBox.class,GUI_Utilities.class,MA_ConfigurationInterface.class,
+			BiAxisIndicatorGroup.class, MonoAxisIndicatorGroup.class,
+			"
+	  />
+    </copy>
+    <copy    todir="${build.home}/application_support">
+	  <fileset dir="${mas_gui.home}/application_support"
+		includes="MA_Configuration.class, MA_Configuration$DateSetting.class,
+			"
+	  />
+    </copy>
+    <copy    todir="${build.home}/applet">
+	  <fileset dir="${mas_gui.home}/applet"
+		includes="AppletOptions.class, AppletTools.class,
+			"
+	  />
+    </copy>
+    <copy    todir="${build.home}/appinit">
+	  <fileset dir="${mas_gui.home}/appinit"
+		includes="AppletInitialization.class,
+			"
 	  />
     </copy>
 	<!--

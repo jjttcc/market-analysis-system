@@ -12,6 +12,8 @@ import java.io.*;
 import mas_gui.*;
 import support.*;
 import application_support.*;
+import appinit.*;
+import applet.*;
 
 // The Market Analysis System charting applet
 public class MAS_Applet extends JApplet {
@@ -19,8 +21,9 @@ public class MAS_Applet extends JApplet {
 	public void init() {
 		try {
 			initialize_applet();
-			initialize_configuration();
-			if (initialization_succeeded) {
+			appinit = new AppletInitialization(this);
+			appinit.initialize_configuration();
+			if (appinit.initialization_succeeded()) {
 				StartupOptions options = new AppletOptions();
 				initialize_server_address();
 				// Can't read files from an applet.
@@ -33,10 +36,10 @@ public class MAS_Applet extends JApplet {
 						report_error("Login to the server failed");
 					}
 				} else {
-//					Chart chart = new Chart(data_builder, null, options);
-					MDI_gui mdi = new mas_gui.MDI_gui(data_builder,
-						null, options);
+					appinit.start_gui(data_builder, null, options);
 				}
+			} else {
+				report_error(appinit.init_error());
 			}
 		} catch (Exception e) {
 			log("Login failed: " + e.toString());
@@ -47,22 +50,7 @@ public class MAS_Applet extends JApplet {
 	}
 
 	public String[][] getParameterInfo() {
-		String result[][] = {
-			{MA_Configuration.Background_color, color_type, Bg_color_description},
-			{MA_Configuration.Text_color, color_type, Text_color_description},
-			{MA_Configuration.Line_color, color_type, Line_color_description},
-			{MA_Configuration.Bar_color, color_type, Bar_color_description},
-			{MA_Configuration.Stick_color, color_type, Stick_color_description},
-			{MA_Configuration.Reference_line_color, color_type,
-				Reference_line_color_description},
-			{MA_Configuration.Black_candle_color, color_type,
-				Black_candle_color_description},
-			{MA_Configuration.White_candle_color, color_type,
-				White_candle_color_description},
-			{MA_Configuration.Main_graph_style, graph_type,
-				Graph_style_description},
-		};
-		return result;
+		return appinit.parameter_info();
 	}
 
 	public void paint(Graphics g) {
@@ -99,34 +87,6 @@ public class MAS_Applet extends JApplet {
 		return result;
 	}
 
-	private void initialize_configuration() {
-		String[] icon_names = MA_Configuration.icon_names();
-		Hashtable icon_table = new Hashtable();
-		MA_Configuration.set_icon_table(icon_table);
-		initialization_succeeded = false;
-		try {
-			Configuration.set_instance(new MA_Configuration(new Tokenizer(
-				new StringReader(SelfContainedConfiguration.contents()),
-				"configuration settings")));
-			Configuration.set_ignore_termination(true);
-			MA_Configuration.set_modifier(
-				new ParameterBasedConfigurationModifier(
-				parameter_names(), parameter_values()));
-			initialization_succeeded = true;
-		} catch (IOException e) {
-			report_error("Initialization failed: " + e);
-		}
-		for (int i = 0; i < icon_names.length; ++i) {
-			URL url = url_for(icon_path + icon_names[i]);
-			if (url != null) {
-				icon_table.put(icon_names[i],
-					new ImageIcon(url, "Icon for " + icon_names[i]));
-			} else {
-				//!!!Report: Failed to load icon for icon_names[i].
-			}
-		}
-	}
-
 	private void initialize_applet() {
 		title = applet_title();
 	}
@@ -149,31 +109,6 @@ public class MAS_Applet extends JApplet {
 		new ErrorBox("Error", msg, new Frame());
 	}
 
-	//@@These features probably need to go into a separate class.
-	private String[] parameter_names() {
-		String[] result = {
-			MA_Configuration.Background_color,
-			MA_Configuration.Text_color,
-			MA_Configuration.Line_color,
-			MA_Configuration.Bar_color,
-			MA_Configuration.Stick_color,
-			MA_Configuration.Reference_line_color,
-			MA_Configuration.Black_candle_color,
-			MA_Configuration.White_candle_color,
-			MA_Configuration.Main_graph_style,
-		};
-		return result;
-	}
-
-	private String[] parameter_values() {
-		String[] pnames = parameter_names();
-		String[] result = new String[pnames.length];
-		for (int i = 0; i < pnames.length; ++i) {
-			result[i] = getParameter(pnames[i]);
-		}
-		return result;
-	}
-
 	private String applet_title() {
 		String result = getParameter(Applet_title_name);
 		if (result == null) {
@@ -182,27 +117,14 @@ public class MAS_Applet extends JApplet {
 		return result;
 	}
 
-	protected URL url_for(String filename) {
-		URL codebase = getCodeBase();
-		URL url = null;
-
-		try {
-			url = new URL(codebase, filename);
-		} catch (java.net.MalformedURLException e) {
-			//!!!Turn this into a proper error message:
-			System.err.println("Couldn't create image: badly specified URL");
-			return null;
-		}
-		return url;
-	}
-
 // Implementation - attributes
+	AppletInitialization appinit;
 
 	private String host_name = "";
 	private int port = -1;
 	private String log_msg;
 	private String server_address = null;
-	private boolean initialization_succeeded;
+
 	private final String servlet_path = "/mas/mas";
 	private String title;
 
@@ -211,24 +133,4 @@ public class MAS_Applet extends JApplet {
 	private final boolean debug = false;
 
 	private final String Applet_title_name = "title";
-
-	//@@These elements need to go into a separate class.
-	private final String color_type = "color";
-	private final String graph_type = "graph style";
-
-	private final String Bg_color_description = "the background color";
-	private final String Line_color_description = "the default indicator color";
-	private final String Bar_color_description =
-		"the color used for bar graphs";
-	private final String Stick_color_description =
-		"the color used for straight 'sticks' (bar lines, etc.)";
-	private final String Reference_line_color_description =
-		"the color used for reference lines";
-	private final String Text_color_description = "the text color";
-	private final String Black_candle_color_description =
-		"the color used for black candles";
-	private final String White_candle_color_description =
-		"the color used for white candles";
-	private final String Graph_style_description = "the price-graph style";
-	private static final String icon_path = "images/";
 }

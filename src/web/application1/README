@@ -1,2 +1,5 @@
 Web Application 1 - Java servlet and applet code for using the MAS server
 as a back-end market-data processing engine
+
+Note: saved-links_gui1 and saved-links_gui3 provide a way to switch between
+the old and new GUIs, via symbolic links.
