@@ -17,6 +17,7 @@ cluster
 		-- Application (test) clusters
 	root_cluster: 	"$FINANCE/src/main_test_app/root";
 	factories:		"$FINANCE/src/main_test_app/factories";
+	main_utility:	"$FINANCE/src/main_test_app/utility";
 
 		-- Application library clusters
 	app_library:	"$FINANCE/src/application_library";
