@@ -3,12 +3,8 @@ indexing
 		"Market function that accumulates values by, when calculating the %
 		%current value for a period, using the previously calculated value"
 	note:
-		"`previous_operator' is used to retrieve the previously calculated %
-		%value.  Since the type of these values will be SIMPLE_TUPLE (which %
-		%has a `value' feature but no open, high, low, volume, etc.), the %
-		%type of the object that `previous_operator' is attached to must %
-		%be one that doesn't try to access a feature, such as `open' that %
-		%doesn't exist in SIMPLE_TUPLE."
+		"`previous_operator' has some special constraints - See note in %
+		%parent, FUNCTION_WITH_FIRST_AND_PREVIOUS_OPERATORS."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -17,13 +13,13 @@ indexing
 
 class ACCUMULATION inherit
 
-	ONE_VARIABLE_FUNCTION
+	FUNCTION_WITH_FIRST_AND_PREVIOUS_OPERATORS
 		rename
-			make as ovf_make
+			set_operators as set_operators_unused
 		export
-			{NONE} set_operator
+			{NONE} set_operators_unused
 		redefine
-			operator, forth, start, short_description
+			operator, start, short_description
 		end
 
 	COMMAND_EDITOR -- To allow editing of `previous_operator'
@@ -46,15 +42,9 @@ feature -- Access
 			-- the current period with that for the previous period -
 			-- usually will be ADDITION
 
-	previous_operator: LINEAR_COMMAND
-			-- Operator that Operates on the previously calculated value
-
-	first_element_operator: RESULT_COMMAND [REAL]
-			-- Operator that operates only on the first element of the input.
-
 feature {MARKET_FUNCTION_EDITOR} -- Status setting
 
-	set_operators (op: like operator; pop: like previous_operator;
+	set_required_operators (op: like operator; pop: like previous_operator;
 				fop: like first_element_operator) is
 			-- Set `operator' to `op' and `previous_operator' to `pop'.
 		require
@@ -123,20 +113,9 @@ feature {NONE}
 				target.index = output.index + 1
 		end
 
-	forth is
-		do
-			target.forth
-			-- Ensure that output, used by previous_operator, is set to
-			-- the item last inserted - the result of the last operation.
-			output.forth
-		ensure then
-			output_at_last: output.islast
-			output_one_less_than_target: target.index = output.index + 1
-		end
-
 invariant
 
-	ops_not_void: operator /= Void and previous_operator /= Void
+	prevop_not_void: previous_operator /= Void
 	op_left_operand_is_prev_op: operator.operand1 = previous_operator
 
 end -- class ACCUMULATION
