@@ -14,6 +14,7 @@ default
 	--debug ("persist");
 	--debug ("command line");
 	--debug ("database");
+	--debug ("compression");
 	profile (no);
 	array_optimization (yes);
 	inlining (yes);
@@ -90,9 +91,9 @@ cluster
 	data_scanners (data_scanning):
 					"$/data_scanners";
 	event_generation_kernel (event_generation):
-					"$/event_generation_kernel/";
+					"$/event_generation_kernel";
 	function_analysis (event_generation):
-					"$/function_analysis/";
+					"$/function_analysis";
 
 		-- Eiffel Component Library clusters
 	eiffel_components:						"$MAS/src/eiffel_library";
@@ -177,42 +178,18 @@ cluster
 
 external
 
-	include_path:
-		"$EIFFEL4\library\store\dbms\rdbms\odbc\Clib";
+include_path:
+		"$EIFFEL4/library/store/dbms/rdbms/odbc/Clib";
 
- -- Version with odbc statically linked:
--- object:	"${EIFFEL4}/library/time/spec/$(PLATFORM)/lib/libdatetime.a",
---			"${EIFFEL4}/library/net/spec/$(PLATFORM)/lib/libnet.a",
---			"${EIFFEL4}/library/store/spec/$(PLATFORM)/lib/libsupport.a",
---			"$(ECLI)/src/spec/ise/linux/libecli_c.a",
---			"/usr/local/lib/libodbc.a",
---			"$(MAS)/src/eiffel_library/lib/utilities.o",
---			"$(MAS)/src/eiffel_library/lib/libz.a",
---			"$(MAS)/src/server1/lib/external_input_sequence.a",
---			"/usr/lib/libdl.a";
-
- -- Version with odbc dynamically linked:
--- object:	"${EIFFEL4}/library/time/spec/$(PLATFORM)/lib/libdatetime.a",
---			"${EIFFEL4}/library/net/spec/$(PLATFORM)/lib/libnet.a",
---			"${EIFFEL4}/library/store/spec/$(PLATFORM)/lib/libsupport.a",
---			"$(ECLI)/src/spec/ise/linux/libecli_c.a",
---			"$(MAS)/src/eiffel_library/lib/utilities.o",
---			"$(MAS)/src/eiffel_library/lib/libz.a",
---			"$(MAS)/src/server1/lib/external_input_sequence.a",
---			"-lodbc"; 
-
- -- Windows/Borland - port not finished:
-object:		"${EIFFEL4}/library/time/spec/bcc/lib/datetime.lib",
-			"${EIFFEL4}/library/net/spec/bcc/lib/net.lib",
-			"${EIFFEL4}/library/store/spec/bcc/lib/support.lib",
-			"${ECLI}/src/spec/ise/windows/ecli_c.obj",
-			"${MAS}/src/eiffel_library/lib/utilities.obj",
---			"$(MAS)/src/eiffel_library/lib/libz.a",
+object:		"$EIFFEL4/library/time/spec/$COMPILER/lib/datetime.lib",
+			"$EIFFEL4/library/net/spec/$COMPILER/lib/net.lib",
+			"$EIFFEL4/library/store/spec/$COMPILER/lib/support.lib",
+			"$EIFFEL4/library/store/spec/$COMPILER/lib/odbc_store.lib",
+			"$ECLI/src/spec/ise/windows/ecli_c.lib",
+			"$MAS/src/eiffel_library/lib/utilities.obj",
 	-- !!!Temporary - change to use .lib file instead of these 2 obj files:
-			"${MAS}/src/server1/lib/external_input_sequence.obj",
-			"${MAS}/src/server1/lib/plug_in_module_1.obj",
-			"${EIFFEL4}/library/store/spec/bcc/lib/odbc_store.lib",
-			"${BCC_LIBDIR}/PSDK/odbc32.lib";
---			"-lodbc"; 
+			"$MAS/src/server1/lib/external_input_sequence.obj",
+			"$MAS/src/server1/lib/plug_in_module_1.obj",
+			"$ZLIB", "$ODBCLIB";
 
 end
