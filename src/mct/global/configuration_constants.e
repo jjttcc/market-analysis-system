@@ -8,7 +8,7 @@ indexing
 
 class
 
-	GENERAL_CONFIGURATION_CONSTANTS
+	CONFIGURATION_CONSTANTS
 
 feature -- Access
 
