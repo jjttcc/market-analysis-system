@@ -13,7 +13,7 @@ i = 1
 	values[i++] = $2
 	if (NR == n) {
 		avg = sum / n
-		sos = sum_of_squares(1, avg)
+		sos = sum_of_squares(i - n, avg)
 		printf("%0.4f %0.4f %0.4f\n",  avg, sos, sqrt(sos / n))
 	} else print ""
 	next
@@ -28,7 +28,7 @@ i = 1
 }
 
 function sum_of_squares(starti, avg, sum, i, j) {
-print "sos - starti: " starti
+#print "sos - starti: " starti
 	sum = 0
 	i = starti; j = 1
 	while (j <= n) {
