@@ -1,0 +1,61 @@
+# True Range (Wilder)
+e
+c
+N_RECORD_ONE_VARIABLE_FUNCTION
+c
+True Range
+No Input Function
+y
+BOOLEAN_NUMERIC_CLIENT
+c
+GT_OPERATOR
+c
+SUBTRACTION
+c
+HIGH_PRICE
+c
+LOW_PRICE
+c
+SUBTRACTION
+c
+shared HIGH_PRICE
+c
+SETTABLE_OFFSET_COMMAND
+c
+CLOSING_PRICE
+c
+No Input Function
+y
+1
+BOOLEAN_NUMERIC_CLIENT
+c
+GT_OPERATOR
+c
+shared SUBTRACTION [#1]
+c
+SUBTRACTION
+c
+shared SETTABLE_OFFSET_COMMAND
+c
+shared LOW_PRICE
+c
+shared SUBTRACTION [#1]
+c
+shared SUBTRACTION [#3]
+c
+BOOLEAN_NUMERIC_CLIENT
+c
+GT_OPERATOR
+c
+shared SUBTRACTION [#2]
+c
+shared SUBTRACTION [#3]
+c
+shared SUBTRACTION [#2]
+c
+shared SUBTRACTION [#3]
+c
+1
+s
+-
+x
