@@ -16,3 +16,18 @@ week, low = lowest low, open = Monday's open, close = Friday's close.
 
 The technical analysis engine should be designed as a re-usable component
 with a well-defined interface.
+
+A "library" of technical indicators will be available.  Each tradable (stock
+or commodity or whatever) will have its own list of indicators, set by the
+user.  (The system will be shipped with a default list.)  When adding/removing
+indicators from the library, the user will have the option of adding/removing
+the indicator to/from all tradables or just to/from specific tradables.
+
+Performance constraints that affect design:  In order not to hog too much
+memory, the application may need to be designed such that items (such as
+market data for a stock and/or the results of running an indicator on that
+data) not used for a while will be garbage collected.  Perhaps a mechanism
+that keeps track of accesses of data sets and releases those that have not
+been accessed for a while would be a good solution to this.  Data sets that
+are released will have to be rebuild again whenever the user requests that
+particular data.
