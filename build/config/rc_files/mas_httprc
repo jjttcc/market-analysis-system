@@ -37,7 +37,7 @@ post_process_command	yahoo
 # This needs to be set carefully: Too early and a lot of time will be wasted
 # trying to retrieve data that doesn't exist yet; too late and your data
 # will not be as up-to-date as it could be.  Format: hh:mm (24-hour clock)
-eod_turnover_time	17:00
+eod_turnover_time	19:00
 
 # These specifications prevent unecessary retrieval of data on a weekend
 # if the current time is later than eod_turnover_time.  If data does need
