@@ -267,13 +267,18 @@ feature -- Access
 			retry
 		end
 
-	meg_names: ARRAYED_LIST [STRING] is
-			-- Names of all elements of `market_event_generation_library',
-			-- in the same order
+	meg_names (meg_lib: LIST [MARKET_EVENT_GENERATOR]):
+				ARRAYED_LIST [STRING] is
+			-- Names of all elements of `meg_lib' if not Void; otherwise,
+			-- of `market_event_generation_library', in the same order
 		local
 			meg_library: LIST [MARKET_EVENT_GENERATOR]
 		do
-			meg_library := market_event_generation_library
+			if meg_lib = Void then
+				meg_library := market_event_generation_library
+			else
+				meg_library := meg_lib
+			end
 			from
 				create Result.make (meg_library.count)
 				meg_library.start
