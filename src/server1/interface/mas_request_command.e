@@ -8,11 +8,13 @@ indexing
 		%Released under the Eiffel Forum License; see file forum.txt"
 
 deferred class MAS_REQUEST_COMMAND inherit
---!!!Remember to change file name to fit new class name.
 
 	CLIENT_REQUEST_COMMAND
+		rename
+			do_post_processing as respond_to_client
 		redefine
-			session, prepare_for_execution, exception_cleanup
+			session, prepare_for_execution, exception_cleanup,
+			respond_to_client
 		end
 
 	GENERAL_UTILITIES
@@ -24,12 +26,6 @@ deferred class MAS_REQUEST_COMMAND inherit
 		export
 			{NONE} all
 		end
-
---!!!Remove:
---	EXCEPTION_SERVICES
---		export
---			{NONE} all
---		end
 
 feature -- Initialization
 
@@ -60,34 +56,6 @@ feature -- Status setting
 		ensure
 			active_medium_set: active_medium = arg and active_medium /= Void
 		end
-
-feature -- Basic operations
-
---!!!Remove soon:
---	execute (msg: STRING) is
---			-- Call `do_execute' with `msg' and `send_data'.
---		local
---			timer: TIMER
---			exception_occurred: BOOLEAN
---		do
---			if exception_occurred then
---				output_buffer.clear_all
---				-- If `handle_exception' in the rescue clause didn't exit,
---				-- the exception was non-fatal.
---				report_error (Warning, <<"Error occurred ", error_context (msg),
---					".">>)
---			else
---				if output_buffer_used then
---					output_buffer.clear_all
---				end
---				do_execute (msg)
---			end
---			send_data
---		rescue
---			handle_exception ("obtaining data for GUI client")
---			exception_occurred := true
---			retry
---		end
 
 feature {NONE}
 
