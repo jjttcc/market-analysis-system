@@ -29,9 +29,13 @@ lower_indicator	Stochastic %D
 lower_indicator	Slow Stochastic %D	magenta
 lower_indicator	Stochastic %K	gray
 lower_indicator	Volume
+lower_indicator	Open interest	black
 lower_indicator	On Balance Volume	darkBlue
 lower_indicator	Accumulation/Distribution	red
 lower_indicator	EMA of Volume	darkGray
+lower_indicator	Slope of EMA of Volume	gray
+lower_indicator	EMA of Open interest	darkGray
+lower_indicator	Slope of EMA of Open interest	gray
 lower_indicator	Momentum	oliveGreen
 lower_indicator	Rate of Change	darkGray
 lower_indicator	Williams %R	yellow
@@ -71,6 +75,8 @@ indicator_line_h	Slope of Slope of Price	0 0
 indicator_line_h	Slope of Slope of Slope of Price	0 0
 indicator_line_h	Slope of Slope of Slope of Slope of Price	0 0
 indicator_line_h	Momentum	0 0
+indicator_line_h	Slope of EMA of Volume	0 0
+indicator_line_h	Slope of EMA of Open interest	0 0
 indicator_line_h	Rate of Change	1 1
 indicator_line_h	Relative Strength Index	30 30
 indicator_line_h	Relative Strength Index	70 70
@@ -122,6 +128,14 @@ end_block
 indicator_group
 EMA of Volume
 Volume
+end_block
+indicator_group
+Open interest
+EMA of Open interest
+end_block
+indicator_group
+EMA of Open interest
+Open interest
 end_block
 indicator_group
 Stochastic %K
