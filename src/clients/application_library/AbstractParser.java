@@ -45,11 +45,13 @@ abstract public class AbstractParser extends NetworkProtocolUtilities {
 	// Parsed open interest
 	abstract public DataSet open_interest_result();
 
+//!!!!:
 	// The latest date-time in the parsed data set - null if no data set
 	// has been parsed or if it contains no dates
 	public Calendar latest_date_time() {
 		Calendar result = null;
 		if (dates != null && ! dates.isEmpty()) {
+System.out.println("AbstractParser.latest date time - 'dates' is NOT empty");
 			String date = (String) dates.elementAt(dates.size() - 1);
 			if (times != null && ! times.isEmpty()) {
 				String time = (String) times.elementAt(dates.size() - 1);
@@ -58,6 +60,10 @@ abstract public class AbstractParser extends NetworkProtocolUtilities {
 				result = date_from_dataset_string(date);
 			}
 		}
+else {
+System.out.println("AbstractParser.latest date time - 'dates' is empty, result is: "
++ result);
+}
 		return result;
 	}
 
@@ -118,8 +124,10 @@ abstract public class AbstractParser extends NetworkProtocolUtilities {
 
 // Implementation
 
+//!!!!:
 	// Remove all elements from data vectors - set their sizes to 0.
 	protected void clear_vectors() {
+System.out.println("AbParser - clear vectors called");
 		dates.removeAllElements();
 		times.removeAllElements();
 	}
