@@ -50,7 +50,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	output: MARKET_TUPLE_LIST [COMPOSITE_TUPLE]
+	output: SIMPLE_FUNCTION [COMPOSITE_TUPLE]
 			-- Resulting list of tuples
 
 	duration: DATE_TIME_DURATION is
@@ -85,26 +85,26 @@ feature -- Status report
 		do
 			Result := true
 			from
-				output.start
-				previous := output.item
-				output.forth
+				output.output.start
+				previous := output.output.item
+				output.output.forth
 			until
-				output.exhausted or not Result
+				output.output.exhausted or not Result
 			loop
-				Result := (output.item.date_time -
+				Result := (output.output.item.date_time -
 							previous.date_time).duration.is_equal (duration)
-				previous := output.item
-				output.forth
+				previous := output.output.item
+				output.output.forth
 			end
 			if Result then
 				from
-					output.start
+					output.output.start
 				until
-					output.exhausted or not Result
+					output.output.exhausted or not Result
 				loop
-					Result := output.item.last.date_time <
-								output.item.date_time + duration
-					output.forth
+					Result := output.output.item.last.date_time <
+								output.output.item.date_time + duration
+					output.output.forth
 				end
 			end
 		ensure
