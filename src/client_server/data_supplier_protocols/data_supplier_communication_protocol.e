@@ -13,13 +13,16 @@ deferred class DATA_SUPPLIER_COMMUNICATION_PROTOCOL inherit
 
 	BASIC_COMMUNICATION_PROTOCOL
 
-feature -- Client request IDs
+feature -- Client components - request IDs, etc.
 
 	symbol_list_request: INTEGER is 1
 			-- Request for a list symbols for all available tradables
 
 	tradable_data_request: INTEGER is 2
 			-- Request for data for a specified tradable
+
+	client_request_terminator: STRING is "%N"
+			-- Character indicating end of client request
 
 feature -- Server response IDs
 

@@ -30,6 +30,8 @@ Fake socket-based data-supplier for the MAS server, for testing
 
 # Basic operations
 
+my $debug_file = FileHandle->new(">/tmp/debug." . $$);
+
 	# Wait for and service client requests.
 	sub execute {
 		my ($self) = @_;
@@ -83,8 +85,19 @@ print "Socket was created: ", $self->field_value_for(qw(socket)), "\n";
 		my ($self, $socket) = @_;
 		my $client_request = <$socket>;
 		chomp $client_request;
-		my $symbol = $client_request;
-print "starting 'process with symbol $symbol'\n";
+print $debug_file "received msg: '$client_request'\n";
+		my @fields = split $self->message_component_separator, $client_request;
+print $debug_file "fields: '", join ", ", @fields, "'\n";
+		die "Wrong # of fields: @fields" if @fields <= 1;
+		my $req_id = $fields[0];
+# Assume data request, for now!!!
+		my $date_time_range = $fields[1];
+		my $data_flags = $fields[2];
+		my $symbol = $fields[3];
+print $debug_file "req id: '$req_id', dtrange: '$date_time_range'\n";
+print $debug_file "flags: '$data_flags', symbol: '$symbol'\n";
+print "starting process with symbol '$symbol'\n";
+$debug_file->flush;
 		my $test_data = $self->data_for($symbol, 0);
 		chomp $client_request;
 		print "'process' received socket request: $client_request\n";

@@ -13,7 +13,6 @@ deferred class INPUT_DATA_CONNECTION inherit
 
 	CLIENT_CONNECTION
 		export
-			{ANY} close, send_request, make_connected_with_socket
 		redefine
 			socket, server_type
 		end
@@ -55,15 +54,15 @@ feature -- Basic operations
 				last_communication_succeeded = connected
 		end
 
-	request_data (reqmsg: STRING) is
-			-- Request data for `requester's current tradable with `reqmsg',
-			-- with an appended newline.
+	request_data_for (symbol: STRING) is
+			-- Request data for `requester's current tradable identified
+			-- by `symbol'.
 		require
 			connected: connected
 			last_communication_succeeded: last_communication_succeeded
 		do
 			if last_communication_succeeded then
-				send_request (reqmsg + "%N", False)
+				send_request (tradable_data_request_msg (symbol), False)
 			end
 		ensure
 			socket_exists_if_no_error:
@@ -86,7 +85,31 @@ feature {NONE} -- Hook routine implementations
 
 	end_of_message (c: CHARACTER): BOOLEAN is
 		do
+			check
+				not_used: False --!!!Verify not used.
+			end
 			Result := False -- Not used (I think!!!!)
+		end
+
+feature {NONE} -- Implementation
+
+	tradable_data_request_msg (symbol: STRING): STRING is
+		do
+			Result := tradable_data_request.out + message_component_separator +
+			date_time_range + message_component_separator + data_flags +
+			message_component_separator + symbol + client_request_terminator
+		end
+
+	date_time_range: STRING is
+			-- date/time range, for data request
+		do
+			Result := "" -- !!!Empty, for now
+		end
+
+	data_flags: STRING is
+			-- intraday/non-intraday flag
+		do
+			Result := "" -- !!!Empty, for now
 		end
 
 feature {NONE} -- Implementation - Constants

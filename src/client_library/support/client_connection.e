@@ -156,6 +156,7 @@ feature {NONE} -- Implementation
 			s: STRING
 		do
 			last_communication_succeeded := False
+print ("sending request: '" + r + "'%N")
 			socket.put_string (r)
 			if socket.socket_ok then
 				if wait_for_response then

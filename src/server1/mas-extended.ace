@@ -6,8 +6,8 @@ root
 
 default
 	assertion (no)
-	arguments ("-w -f , -b 5555")
 	arguments ("-f , 2735 /tmp/ibm.txt")
+	arguments ("-w -f , -b 5555")
 	arguments ("-f , 2733 -i 15-minute /tmp/bond_10_year.15-minute -no-volume")
 	arguments ("-f , 2735 -b ibm-sddb.txt")
 	arguments ("-f , 9922 -nonstd -i 15-minute /tmp/dtst1.15-minute -no-volume")
