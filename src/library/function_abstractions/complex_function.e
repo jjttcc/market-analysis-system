@@ -98,6 +98,7 @@ feature {NONE} -- Implementation
 
 	immediate_parameters: LIST [FUNCTION_PARAMETER] is
 		once
+			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 		end
 
 invariant
