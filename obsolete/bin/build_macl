@@ -1,5 +1,6 @@
 #!/bin/bash
 # Build and store the Market Analysis Command Line executable (macl).
+# NOTE: This script is obsolete.  Use build_linux_mas instead.
 
 abort() {
 	echo "$*"

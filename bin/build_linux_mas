@@ -1,0 +1,26 @@
+#!/bin/bash
+# Build and store the specified MAS system executable.
+
+abort() {
+	echo "$*"
+	exit 1
+}
+
+lib_script=$MAS/lib/scripts/build_eiffel_application
+.  $lib_script
+if [ $? -ne 0 ]; then abort "Failed to load $lib_script.";fi
+
+usage() {
+	echo "Usage: $Progname appname [-assert-only | -no-assert-only] version"
+}
+
+appname=$1; shift
+export Targetdir=$MAS/lib/binaries/linux
+export Projectdir=$MAS/../projects/${appname}
+export Executable_name=${appname}
+export C_Compile_options=
+export Ace_file_name=$MAS/ace_files/${appname}.ace
+export Stripcmd=
+export Compile_wait=0
+
+execute $*
