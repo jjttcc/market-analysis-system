@@ -53,11 +53,7 @@ feature {NONE} -- Hook routine implementations
 			else
 				t.set_target_period_type (trading_period_type)
 				indicator := t.indicators @ indicator_id
-print ("send resp ft - period type: " + trading_period_type.name + "%N")
-				if
---!!!!!: True or --!!!!For experimentation/testing - remove this line soon.
-					not indicator.processed then
-print ("send resp ft - calling 'indicator.process'" + "%N")
+				if not indicator.processed then
 					indicator.process
 				end
 				set_print_parameters
@@ -67,6 +63,7 @@ print ("send resp ft - calling 'indicator.process'" + "%N")
 			end
 		end
 
+--!!!:
 setup_correct_number_of_records_test (printer: MARKET_TUPLE_PRINTER) is
 do
 	printer.set_period_type_debug (trading_period_type)
