@@ -41,7 +41,6 @@ feature {NONE} -- Initialization
 			create tuple_maker
 			make_value_setters
 			input := Current
---!!!!!input.start
 			execute
 		ensure
 			input_set: input = Current

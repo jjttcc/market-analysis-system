@@ -145,7 +145,6 @@ feature -- Basic operations
 		do
 			create {LINKED_LIST [MARKET_EVENT]} product.make
 			if current_tradable /= Void then
-print ("processing " + current_tradable.symbol + "%N")
 				if operator /= Void then set_operator_target end
 				if not input1.processed then
 					input1.process
