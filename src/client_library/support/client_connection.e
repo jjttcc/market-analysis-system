@@ -8,7 +8,7 @@ indexing
 
 deferred class CLIENT_CONNECTION inherit
 
-	NETWORK_PROTOCOL
+	MA_COMMUNICATION_PROTOCOL
 
 feature -- Access
 

@@ -14,7 +14,7 @@ deferred class MAS_REQUEST_COMMAND inherit
 			session
 		end
 
-	GUI_NETWORK_PROTOCOL
+	GUI_COMMUNICATION_PROTOCOL
 		export
 			{NONE} all
 		end

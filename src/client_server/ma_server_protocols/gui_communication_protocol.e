@@ -9,9 +9,9 @@ indexing
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class GUI_NETWORK_PROTOCOL inherit
+class GUI_COMMUNICATION_PROTOCOL inherit
 
-	NETWORK_PROTOCOL
+	MA_COMMUNICATION_PROTOCOL
 
 feature -- Client request IDs
 

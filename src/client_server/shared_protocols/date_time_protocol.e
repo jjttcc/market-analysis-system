@@ -7,7 +7,9 @@ indexing
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-deferred class DATE_TIME_PROTOCOL
+deferred class
+
+	DATE_TIME_PROTOCOL
 
 feature -- Access
 

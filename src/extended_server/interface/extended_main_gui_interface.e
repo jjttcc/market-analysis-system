@@ -15,7 +15,7 @@ class EXTENDED_MAIN_GUI_INTERFACE inherit
 			make_request_handlers
 		end
 
-	EXTENDED_GUI_NETWORK_PROTOCOL
+	EXTENDED_GUI_COMMUNICATION_PROTOCOL
 		export
 			{NONE} all
 		end

@@ -18,7 +18,7 @@ class COMPRESSED_SOCKET inherit
 			putstring, put_string, readline, read_line
 		end
 
-	GUI_NETWORK_PROTOCOL
+	GUI_COMMUNICATION_PROTOCOL
 		rename
 			error as gnp_error
 		export

@@ -15,7 +15,7 @@ class GUI_CLIENT_CONNECTION inherit
 			process_response
 		end
 
-	GUI_NETWORK_PROTOCOL
+	GUI_COMMUNICATION_PROTOCOL
 		export
 			{NONE} all
 		end

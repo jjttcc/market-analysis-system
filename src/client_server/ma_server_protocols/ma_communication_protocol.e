@@ -9,7 +9,7 @@ indexing
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-deferred class NETWORK_PROTOCOL inherit
+deferred class MA_COMMUNICATION_PROTOCOL inherit
 
 	BASIC_COMMUNICATION_PROTOCOL
 		rename
@@ -41,4 +41,4 @@ invariant
 
 	eom_size: eom.count = 1
 
-end -- class NETWORK_PROTOCOL
+end

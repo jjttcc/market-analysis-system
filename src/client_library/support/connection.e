@@ -9,11 +9,6 @@ indexing
 
 class CONNECTION inherit
 
-	NETWORK_PROTOCOL
-		export
-			{NONE} all
-		end
-
 	CLIENT_CONNECTION
 		export
 			{ANY} close, send_request

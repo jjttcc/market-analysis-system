@@ -23,7 +23,7 @@ inherit
 			prepare_for_persistent_connection, interface
 		end
 
-	NETWORK_PROTOCOL
+	MA_COMMUNICATION_PROTOCOL
 		export
 			{NONE} all
 		end

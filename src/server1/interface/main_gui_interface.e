@@ -22,7 +22,7 @@ class MAIN_GUI_INTERFACE inherit
 			event_generator_builder, function_builder
 		end
 
-	GUI_NETWORK_PROTOCOL
+	GUI_COMMUNICATION_PROTOCOL
 		export
 			{NONE} all
 		end

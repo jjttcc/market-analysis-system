@@ -15,7 +15,7 @@ class MAS_COMMAND_LINE_UTILITIES inherit
 			eom
 		end
 
-	NETWORK_PROTOCOL
+	MA_COMMUNICATION_PROTOCOL
 		rename
 			eom as network_eom,
 			message_field_separator as output_field_separator,
