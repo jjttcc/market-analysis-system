@@ -130,6 +130,7 @@ public class MA_MenuBar extends MenuBar {
 	// Update the indicator menu and the indicator selection list with the 
 	// current indicator list.
 	void update_indicators() {
+System.out.println("MMB ui called");
 		indicator_selection.update_indicators(false);
 		update_indicator_menu();
 	}
@@ -140,6 +141,7 @@ public class MA_MenuBar extends MenuBar {
 		// Set up so that the indicator colors dialog/list will be
 		// updated whenever an indicator is selected from `indicator_menu':
 		for (int i = 0; i < indicator_menu.getItemCount(); ++i) {
+System.out.println("Adding " + i + "th indicator");
 			indicator_menu.getItem(i).addActionListener(indicator_colors);
 		}
 	}
@@ -261,33 +263,33 @@ public class MA_MenuBar extends MenuBar {
 	// Change the current market to the next one in the market list or, if it
 	// is the last one, to the first item in the market list.
 	private void next_market() {
-		List ind_list = chart.market_selections.selection_list;
-		int i = ind_list.getSelectedIndex();
+		List mlist = chart.market_selections.selection_list;
+		int i = mlist.getSelectedIndex();
 		if (i < 0) {
-			if (ind_list.getItemCount() >= 2) i = 1;
+			if (mlist.getItemCount() >= 2) i = 1;
 			else i = 0;
 		}
-		else if (ind_list.getItemCount() - 1 <= i) {
+		else if (mlist.getItemCount() - 1 <= i) {
 			i = 0;
 		} else {
 			++i;
 		}
-		ind_list.select(i);
-		chart.request_data(ind_list.getItem(i));
+		mlist.select(i);
+		chart.request_data(mlist.getItem(i));
 	}
 
 	// Change the current market to the previous one in the market list or,
 	// if it is the first one, to the last item in the market list.
 	private void previous_market() {
-		List ind_list = chart.market_selections.selection_list;
-		int i = ind_list.getSelectedIndex();
+		List mlist = chart.market_selections.selection_list;
+		int i = mlist.getSelectedIndex();
 		if (i <= 0) {
-			i = ind_list.getItemCount() - 1;
+			i = mlist.getItemCount() - 1;
 		} else {
 			--i;
 		}
-		ind_list.select(i);
-		chart.request_data(ind_list.getItem(i));
+		mlist.select(i);
+		chart.request_data(mlist.getItem(i));
 	}
 
 	private DataSetBuilder data_builder;
