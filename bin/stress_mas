@@ -1,0 +1,35 @@
+#!/bin/bash
+#  Run the stress_mas script to stress-test the server.
+
+Progname=$(basename $0)
+usage() {
+	echo "Usage: $Progname portnumber [options]"
+	echo "Options:"
+echo -e "  -h <hostname>   Connect to server on host <hostname>\n"\
+"  -t <time>       Sleep for 'time' seconds within each loop iteration\n"\
+"  -s              Silent mode - don't echo data from server"
+}
+
+silent=
+while [ $# -gt 0 ]; do
+	case $1 in
+		-t) shift;
+			if [ $# -eq 0 ]; then usage; exit 1; else time="-t $1"; fi;;
+		-h) shift;
+			if [ $# -eq 0 ]; then usage; exit 1; else host="-h $1"; fi;;
+		-s) silent=-s;;
+		-*) usage; exit 2;;
+		*) port=$1;;
+	esac
+	shift
+done
+
+if [ -z "$port" ]; then usage; exit 3; fi
+
+# Simply run the basic loop test for now; can be changed later for a
+# more elaborate test.
+
+workdir=/home/development/jtc/finance/src/scripts/test_scripts/connection_test
+cd $workdir
+
+./stress_mas -i testin2 $port $time $host $silent
