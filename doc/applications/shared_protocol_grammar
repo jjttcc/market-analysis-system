@@ -1,0 +1,12 @@
+BNF Grammar for shared protocol components
+
+
+date_time_range             -> start_date_time [ ";" end_date_time ]
+start_date_time             -> date_time_spec | <null>
+end_date_time               -> date_time_spec
+date_time_spec              -> date_with_sep "," time_with_sep
+time_with_sep               -> hour ":" minute ":" second
+
+
+!!!!Specify somewhere that in some cases (data supplier) the
+start_date_time can be null and in others (extended server) it cannot.!!!
