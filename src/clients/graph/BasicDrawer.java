@@ -223,6 +223,7 @@ abstract public class BasicDrawer extends Drawer {
 		double start;
 		double step = 0;
 		final int small_step_multiplier = 25;
+		final double step_thresh_hold = 0.05;
 		double y;
 		Vector y_values = new Vector();	// Double
 		String[] y_strings;
@@ -245,7 +246,7 @@ abstract public class BasicDrawer extends Drawer {
 			}
 		}
 //System.out.println("ymin: " + ymin);
-		if (step > 0.05) {
+		if (step > step_thresh_hold) {
 			start = (long) (Math.floor(ymin / step) * step + step);
 		} else {
 			start = ymin - step * small_step_multiplier;
