@@ -81,7 +81,9 @@ feature {NONE} -- Basic operations
 			-- call to retrieve_data.
 			alternate_start_date := Void
 			start_timer
-print ("url.path: " + url.path + "%N")
+			debug ("http")
+				print ("url.path: " + url.path + "%N")
+			end
 			perform_http_retrieval
 		ensure
 			output_file_exists_if_successful: not retrieval_failed and
