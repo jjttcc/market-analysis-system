@@ -77,6 +77,13 @@ feature {NONE}
 				tradable_factory.set_field_separator (
 					command_line_options.field_separator)
 			end
+			if command_line_options.record_separator /= Void then
+				tradable_factory.set_record_separator (
+					command_line_options.record_separator)
+			else
+				-- Default to newline.
+				tradable_factory.set_record_separator ("%N")
+			end
 			check
 				flist_not_void: function_library /= Void
 			end
