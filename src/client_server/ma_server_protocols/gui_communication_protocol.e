@@ -61,6 +61,10 @@ feature -- Server response strings
 	No_open_session_state: STRING is "no_open"
 			-- Specification that there is no open field in the market data
 
+	Open_interest_flag: STRING is "oi"
+			-- Specification that there is an open-interest field in
+			-- the market data
+
 feature -- Subtokens
 
 	Start_date: STRING is "start_date"
