@@ -80,11 +80,7 @@ feature -- Basic operations
 				when Create_new_value then
 					create_new_indicator
 				when Edit_value then
-					if function_library.empty then
-						show_message ("Indicator list is empty.%N")
-					else
-						edit_indicator_list (working_function_library)
-					end
+					edit_indicator_list (working_function_library)
 				when Remove_value then
 					remove_indicator
 				when Save_value then
@@ -286,6 +282,27 @@ feature {EDITING_INTERFACE}
 			end
 		end
 
+	edit_indicator_list (l: LIST [MARKET_FUNCTION]) is
+			-- Editing of indicators in `l'
+		local
+			selection: INTEGER
+			indicator: MARKET_FUNCTION
+		do
+			from
+				selection := Null_value
+			until
+				selection = Exit_menu_value
+			loop
+				selection := list_selection_with_backout (
+					names_from_function_list(l),
+					"Select an indicator to edit")
+				if selection /= Exit_menu_value then
+					indicator := l @ selection
+					edit_parameter_menu (indicator.parameters)
+				end
+			end
+		end
+
 feature {NONE} -- Implementation
 
 	One_fn_op,			-- Takes one market function and an operator.
@@ -463,27 +480,6 @@ feature {NONE} -- Implementation - indicator editing
 				"root function", true)
 			working_function_library.extend (f)
 			changed := true
-		end
-
-	edit_indicator_list (l: LIST [MARKET_FUNCTION]) is
-			-- Editing of indicators in `l'
-		local
-			selection: INTEGER
-			indicator: MARKET_FUNCTION
-		do
-			from
-				selection := Null_value
-			until
-				selection = Exit_menu_value
-			loop
-				selection := list_selection_with_backout (
-					names_from_function_list(l),
-					"Select an indicator to edit")
-				if selection /= Exit_menu_value then
-					indicator := l @ selection
-					edit_parameter_menu (indicator.parameters)
-				end
-			end
 		end
 
 	remove_indicator is
