@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+
+def usage():
+	print "Usage: " + argv[0] + " yyyymmdd"
+
+import sys
+import os
+from sys import argv
+
+from EOD_DownloadCoordinator import EOD_DownloadCoordinator
+from Factory import Factory
+if len(argv) == 1:
+	usage()
+	sys.exit(-1)
+coord = EOD_DownloadCoordinator(argv[1], Factory())
+coord.run()

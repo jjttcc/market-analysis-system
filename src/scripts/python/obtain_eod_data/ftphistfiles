@@ -1,0 +1,38 @@
+#!/usr/bin/env python
+# Retrieve the specified historic data files from Marketsource Online
+import os
+
+def usage():
+	print "Usage: " + argv[0] + " file1 [file2 ...]"
+
+configfile = os.environ['HOME'] + '/lib/.moftp'
+#configfile = '/home2/finance/lib/.moftp'
+import sys
+from string import *
+from sys import argv
+from FTP_Downloader import FTP_Downloader
+from ISP_Connection import ISP_Connection
+
+if len(argv) == 1:
+	usage()
+	sys.exit(-1)
+
+stkhistdir = '/pub/data/stkhist/'
+connection = ISP_Connection()
+files = argv[1:]
+connection.connect()
+i = 0
+dirs = []
+for f in files:
+	letter = lower(f[0:1])
+	++i
+	dirs.append(stkhistdir + letter)
+print 'dirs, files: '
+print dirs
+print files
+downloader = FTP_Downloader(configfile)
+downloader.run(files, dirs)
+connection.disconnect()
+if downloader.error:
+	print downloader.error_message
+	sys.exit(-1)

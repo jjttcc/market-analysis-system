@@ -1,0 +1,89 @@
+#!/usr/bin/env python
+# Market Analysis Command-Line (MACL) client - accesses the MA server
+# command-line interface via a socket connection.
+
+from sys import *
+from os import *
+from ma_connection import *
+from CommandProcessor import *
+import os
+
+Buffersize = 1
+Exit_string = 'x\n'
+Record = false
+Recordfile = 'mas_session'
+
+def usage():
+	print "Usage: " + argv[0] + " [-h hostname] [-record [outfile]] port"
+
+def abort(msg):
+	if msg != None:
+		print msg + " - ",
+	print "Exiting ..."
+	connection.send_message(Exit_string)
+	connection.receive_message()
+	print "Closing ..."
+	connection.close()
+	sys.exit(-1)
+
+# Obtain user response, skipping comments (# ...)
+def user_response():
+	loop = true
+	while loop:
+		s = stdin.readline()[:-1]
+		if len(s) > 0 and s[0] != '#':
+			loop = false
+	return s
+
+if len(argv) < 2:
+	usage()
+	exit(-1)
+
+host = ""
+argcount = len(argv)
+i = 1
+while i < argcount:
+	if argv[i][:2] == '-h':
+		if i + 1 < argcount:
+			i = i + 1
+			host = argv[i]
+		else:
+			usage(); exit(-1)
+	elif argv[i][:2] == '-r':
+		Record = true
+		if i + 1 < argcount and argv[i+1][:1] != '-':
+			i = i + 1
+			Recordfile = argv[i]
+	else:
+		try:
+			port = eval(argv[i])
+		except:
+			usage(); exit(-1)
+	i = i + 1
+
+if host == "":
+	f = os.popen("hostname")
+	host = f.readline()[:-1]
+
+if host == "":
+	print argv[0] + ": No host found."
+	usage(); exit(-1)
+
+processor = CommandProcessor(Record)
+connection = Connection(host, port)
+connection.receive_message()
+while not connection.termination_requested:
+	print connection.last_message,
+	processor.set_server_msg(connection.last_message)
+	if processor.error:
+		if processor.fatal_error:
+			abort("Invalid user input")
+	processor.process(user_response())
+	connection.send_message(processor.result)
+	connection.receive_message()
+connection.close()
+if processor.record:
+	print "Saving recorded input to file " + Recordfile + "."
+	record_file = open(Recordfile, 'w', 644)
+	record_file.write(processor.input_record)
+	record_file.close()
