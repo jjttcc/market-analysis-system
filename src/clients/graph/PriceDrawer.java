@@ -17,13 +17,11 @@ public class PriceDrawer extends Drawer {
 	protected void draw_tuples(Graphics g, Rectangle bounds) {
 		int i, row;
 		int openy, highy, lowy, closey;
-		int x, middle_x;
-		int x_s[] = new int[Stride], y_s[] = new int[Stride];
+		int x;
 		int lngth = data.length;
 		int sidebar_length = bounds.width / lngth + 3;
 		Configuration conf = Configuration.instance();
 		Color bar_color = conf.stick_color();
-		boolean is_white;
 		double width_factor, height_factor;
 
 		if (data == null || lngth < Stride) return;

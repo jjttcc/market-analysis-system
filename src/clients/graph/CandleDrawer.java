@@ -10,15 +10,17 @@ import support.*;
 public class CandleDrawer extends Drawer {
 
 	/**
-	* Draw the data bars and the line segments connecting them.
+	* Draw the candles.
 	* @param g Graphics context
 	* @param w Data window
+	* Assumption: Stride >= 4 and the first four fields of each tuple
+	* contain the open, high, low, and close, respectively.
 	*/
 	protected void draw_tuples(Graphics g, Rectangle bounds) {
 		int i, row;
 		int openy, highy, lowy, closey;
 		int x, middle_x;
-		int x_s[] = new int[Stride], y_s[] = new int[Stride];
+		int x_s[] = new int[4], y_s[] = new int[4];
 		int lngth = data.length;
 		int candlewidth = bounds.width / lngth + 5;
 		Configuration conf = Configuration.instance();
@@ -47,12 +49,18 @@ public class CandleDrawer extends Drawer {
 			// of the coordinate system used - higher coordinates have
 			// a lower value.
 			is_white = closey > openy? false: true;
-			g.setColor(is_white? white: black);
-			y_s[0] = openy; y_s[1] = openy; y_s[2] = closey; y_s[3] = closey;
-			x_s[0] = x; x_s[1] = x + candlewidth;
-			x_s[2] = x + candlewidth; x_s[3] = x;
-			// Candle body
-			g.fillPolygon(x_s, y_s, Stride);
+			if (openy == closey) {	// If it's a doji
+				draw_doji_line(g, x, closey, candlewidth);
+			}
+			else {					// Not a doji - regular candle
+				g.setColor(is_white? white: black);
+				y_s[0] = openy; y_s[1] = openy;
+				y_s[2] = closey; y_s[3] = closey;
+				x_s[0] = x; x_s[1] = x + candlewidth;
+				x_s[2] = x + candlewidth; x_s[3] = x;
+				// Candle body
+				g.fillPolygon(x_s, y_s, Stride);
+			}
 			g.setColor(wick_color);
 			// Stems
 			if (is_white) {
@@ -68,6 +76,14 @@ public class CandleDrawer extends Drawer {
 
 	// 4 points: open, high, low, close - no x coordinates
 	public int drawing_stride() { return Stride; }
+
+	// Draw the horizontal line indicating a doji.
+	protected void draw_doji_line(Graphics g, int x, int y, int candlewidth) {
+		g.setColor(Color.white);
+		//g.drawLine(x, y + 1, x + candlewidth, y + 1);
+		g.drawLine(x, y, x + candlewidth, y);
+		//g.drawLine(x, y - 1, x + candlewidth, y - 1);
+	}
 
 	private static final int Stride = 4;
 }

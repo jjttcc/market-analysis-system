@@ -23,7 +23,6 @@ public class LineDrawer extends Drawer {
 		Configuration conf = Configuration.instance();
 		Color line_color = conf.line_color();
 
-System.err.println("line data length: " + lngth);
 
 		// Is there any data to draw? Sometimes the draw command will
 		// will be called before any data has been placed in the class.
@@ -32,10 +31,6 @@ System.err.println("line data length: " + lngth);
 		g.setColor(line_color);
 		width_factor = bounds.width / xrange;
 		height_factor = bounds.height / yrange;
-System.err.println("width factor for lines: " + width_factor);
-System.err.println("height factor for lines: " + height_factor);
-System.err.println("xmin, xmax, bounds.x, bounds.width, xrange: " +
-xmin+", "+xmax+", "+bounds.x+", "+bounds.width+", "+xrange);
 		row = 1;
 		x0 = (int)((row - xmin) * width_factor + bounds.x);
 		y0 = (int)(bounds.height - (data[0]-ymin) * height_factor + bounds.y);
@@ -45,15 +40,8 @@ xmin+", "+xmax+", "+bounds.x+", "+bounds.width+", "+xrange);
 			x1 = (int)((row - xmin) * width_factor + bounds.x);
 			y1 = (int)(bounds.height - (data[i]-ymin) * height_factor +
 					bounds.y);
-System.err.println("row, data["+i+"], x1, y1: "+row+", "+data[i]+", "+
-x1+", "+y1);
 			g.drawLine(x0,y0,x1,y1);
 
-			/*
-			** The reason for the convolution above is to avoid calculating
-			** the points over and over. Now just copy the second point to the
-			** first and grab the next point
-			*/
 			x0 = x1;
 			y0 = y1;
 		}

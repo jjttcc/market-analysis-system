@@ -479,7 +479,6 @@ public class DataSet {
 		int i;
 		int lnth = length();
 
-System.err.println("range - stride: " + stride + ", lnth: " + lnth);
 		if (lnth >= stride ) {
 			dymax = data[0];
 			dymin = dymax;

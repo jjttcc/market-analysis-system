@@ -5,7 +5,7 @@ import java.util.*;
 import support.*;
 
 /**
- *  Abstraction for drawing price bars
+ *  Abstraction for drawing data as a bar graph
  */
 public class BarDrawer extends Drawer {
 
@@ -16,35 +16,35 @@ public class BarDrawer extends Drawer {
 	*/
 	protected void draw_tuples(Graphics g, Rectangle bounds) {
 		int i, row;
-		double x,y;
-		int x0, y0;
-		int x1, y1;
+		int x, y;
+		int lngth = data.length;
+		int bar_width = bounds.width / lngth - 2;
+		double width_factor, height_factor;
+		int x_s[] = new int[4], y_s[] = new int[4];
 		Configuration conf = Configuration.instance();
-		Color line_color = conf.line_color();
 
 		// Is there any data to draw? Sometimes the draw command will
 		// will be called before any data has been placed in the class.
-		if( data == null || data.length < Stride ) return;
+		if (data == null || lngth < Stride) return;
 
-		g.setColor(line_color);
-		x0 = (int)(bounds.x + ((data[0]-xmin)/xrange)*bounds.width);
-		y0 = (int)(bounds.y + (1.0 - (data[1]-ymin)/yrange)*bounds.height);
-
-//!!!Change to not draw lines - just draw the current tuple; and get x[01]
-//!!!from the current row, not from data.
-		for (i = Stride, row = 1; i < data.length; i += Stride, ++row) {
-			// Calculate the second point.
-			x1 = (int)(bounds.x + ((data[i]-xmin)/xrange)*bounds.width);
-			y1 = (int)(bounds.y + (1.0 -
-					(data[i+1]-ymin)/yrange)*bounds.height);
-			g.drawLine(x0,y0,x1,y1);
-			x0 = x1;
-			y0 = y1;
+		if (bar_width <= 0) bar_width = 1;
+		g.setColor(conf.bar_color());
+		width_factor = bounds.width / xrange;
+		height_factor = bounds.height / yrange;
+		for (i = 0, row = 1; i < lngth; i += Stride, ++row) {
+			x = (int)((row - xmin) * width_factor + bounds.x);
+			y = (int)(bounds.height - (data[i]-ymin) * height_factor +
+					bounds.y);
+			x_s[0] = x; x_s[1] = x + bar_width;
+			x_s[2] = x_s[1]; x_s[3] = x_s[0];
+			y_s[0] = y; y_s[1] = y;
+			y_s[2] = bounds.height; y_s[3] = bounds.height;
+			g.fillPolygon(x_s, y_s, 4);
 		}
 	}
 
-	// 4 points: open, high, low, close - no x coordinates
+	// 1 coordinate for each point - no x coordinate
 	public int drawing_stride() { return Stride; }
 
-	private static final int Stride = 4;
+	private static final int Stride = 1;
 }
