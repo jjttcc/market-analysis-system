@@ -364,7 +364,7 @@ feature {NONE} -- Implementation
 				Result = fa_maker.Both
 			loop
 				print_list (<<"Select specification for crossover detection:%N%
-						%below-to-above (1) above-to-below (2) both (3) ",
+						%1) below-to-above%N2) above-to-below%N3) both%N",
 						eom>>)
 				inspect
 					character_selection (Void)
@@ -444,7 +444,7 @@ feature {NONE} -- Implementation
 			end
 			if yes then
 				create Result.make (years, months, days, 0, 0, 0)
-				print_list (<<"Duration set to ", Result, ".%N">>)
+				print ("Time extension added.%N")
 			end
 		end
 
