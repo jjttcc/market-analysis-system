@@ -1,10 +1,14 @@
 SIGNIFICANT SERVER CHANGES IN RELEASE 1.7
 
+Added several enhancements to the indicator-creation mechanism, allowing
+more complex indicators, such as Parabolic SAR, to be created.  (A new
+"command-sequence" operator, in particular, allows the use of sequences of
+"commands" that weren't possible before.)
+
 Added a new "agent-based" function that allows creation of some kinds
-of indicators not previously possible and that may allow even more
-flexibility in the future.  Used this new function to create a standard
-deviation indicator.  Used the standard deviation indicator to create
-a bollinger bands indicator.
+of indicators not previously possible and used this new function to create
+a standard deviation indicator.  Used the standard deviation indicator
+to create a bollinger bands indicator.
 
 Made constant operators into editable parameters for more flexibility in
 editing indicators.  For example, the bollinger-band's "number of standard
@@ -20,12 +24,13 @@ example, the server used to loop forever obtaining non-existent input
 from the client in some situations where the client breaks off the
 communication, eating up more and more memory.)
 
-Removed the unecessary restriction for the boolean-numeric-client command:
-It used to only be able to take boolean operators that compared two real
-values (such as gt-operator, lt-operator, etc.).  It can now accept any
-operator whose result is boolean (and, or, etc.).  This increases the
-power of the indicator creation functionality of the server with respect
-to the use of boolean operators.
+Removed the unnecessary restriction for the numeric-conditional-command (
+formerly named boolean-numeric-client): It used to only be able to take
+boolean operators that compared two real values (such as gt-operator,
+lt-operator, etc.).  It can now accept any operator whose result is
+boolean (and, or, etc.).  This increases the power of the indicator
+creation functionality of the server with respect to the use of boolean
+operators.
 
 Made the function-based command (which previously was only available for
 the creation of market analyzers) available for creating indicators.
