@@ -207,7 +207,6 @@ feature -- Basic operations
 			-- Notify client that it can terminate:
 			print (Eot)
 			if exit_server then
-				check no_cleanup = false end
 				exit (0)
 			else
 				print ("(Hit <Enter> to restart the command-line client.)%N")
@@ -514,6 +513,7 @@ feature {NONE} -- Implementation - utilities
 
 	initialize is
 		do
+			no_cleanup := true
 			-- Start out with non-intraday data:
 			current_period_type := period_types @ (period_type_names @ Daily)
 			create event_generator_builder.make
