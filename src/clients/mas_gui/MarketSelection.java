@@ -1,7 +1,6 @@
 /* Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt */
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
 
@@ -11,8 +10,14 @@ class MarketSelection implements ActionListener {
 		main_frame = f;
 		selection = new List();
 		dialog = new Dialog(f);
-		dialog.add(selection);
-		dialog.setSize(140, 300);
+		Panel panel = new Panel(new BorderLayout());
+		Button close_button = new Button("Close");
+		dialog.add(panel);
+		panel.add(selection, "Center");
+		panel.add(close_button, "South");
+		dialog.setSize(140, 373);
+		selection.setSize(140, 348);
+		close_button.setSize(140, 25);
 		Vector ml = main_frame.markets();
 		for (int i = 0; i < ml.size(); ++i) {
 			selection.add((String) ml.elementAt(i));
@@ -20,9 +25,31 @@ class MarketSelection implements ActionListener {
 		// Add action listener (anonymous class) to respond to
 		// stock selection from list.
 		selection.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) {
-			dialog.setVisible(false);
-			main_frame.request_data(selection.getSelectedItem());
+			public void actionPerformed(ActionEvent e) {
+//dialog.setVisible(false);
+				main_frame.request_data(selection.getSelectedItem());
+		}});
+		// Add action listener (anonymous class) to respond to
+		// pressing of close button.
+		close_button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dialog.setVisible(false);
+		}});
+		// Add a key listener to close the selection dialog if the
+		// escape key is pressed while the focus is in the selection list.
+		selection.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == e.VK_ESCAPE) {
+					dialog.setVisible(false);
+				}
+		}});
+		// Add a key listener to close the selection dialog if the
+		// escape key is pressed while the focus is in the close button.
+		close_button.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == e.VK_ESCAPE) {
+					dialog.setVisible(false);
+				}
 		}});
 	}
 
