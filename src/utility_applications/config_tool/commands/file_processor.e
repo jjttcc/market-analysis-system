@@ -31,6 +31,14 @@ feature {NONE} -- Initialization
         do
         end
 
+feature -- Access
+
+	target_file: PLAIN_TEXT_FILE
+			-- Target file to be modified
+
+	target_file_contents: STRING
+			-- Contents of the target file
+
 feature -- Status report
 
 	arg_mandatory: BOOLEAN is True
@@ -55,11 +63,6 @@ feature -- Basic operations
 		end
 
 feature {NONE} -- Implementation
-
-	target_file: PLAIN_TEXT_FILE
-			-- Target file to be modified
-
-	target_file_contents: STRING
 
 	make_target_file (path: STRING) is
 		do
