@@ -74,14 +74,6 @@ feature -- Status report
 
 	has_open_interest: BOOLEAN is False
 
-feature -- Basic operations
-
-	finish_loading is
-		do
-			Precursor
-			adjust_for_splits
-		end
-
 	splits_sorted_by_date (sp: like splits): BOOLEAN is
 			-- Is `sp' sorted by date ascending?
 		require
@@ -117,6 +109,14 @@ feature -- Basic operations
 		ensure
 			-- Result = (for_all i such_that 1 < i <= sp.count it_holds
 			-- 	sp.i_th (i-1).date < sp.i_th (i).date)
+		end
+
+feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
+
+	finish_loading is
+		do
+			Precursor
+			adjust_for_splits
 		end
 
 feature {NONE} -- Implementation
