@@ -206,6 +206,7 @@ feature -- Element change
 		require
 			not_there: not indicators.has (f)
 			period_type_set: target_period_type /= Void
+			loaded: loaded
 		do
 			indicators.extend (f)
 			f.set_innermost_input (tuple_list (target_period_type.name))
