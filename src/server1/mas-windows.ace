@@ -166,6 +166,8 @@ cluster
 
 	eiflib_data_scanning (eiffel_components):		"$/data_scanning"
 
+	eiflib_error (eiffel_components):		"$/error"
+
 	data_scanning_main (eiflib_data_scanning ):	"$/main_abstractions"
 
 	data_scanning_input (eiflib_data_scanning ):	"$/input_mechanisms"
