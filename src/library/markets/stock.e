@@ -7,7 +7,7 @@ class STOCK inherit
 
 	TRADABLE [VOLUME_TUPLE]
 		redefine
-			symbol, make_ctf
+			symbol, make_ctf, short_description
 		end
 
 creation
@@ -32,6 +32,8 @@ feature -- Access
 			-- List of all (recorded) stock splits for the stock
 
 	symbol: STRING
+
+	short_description: STRING is "Stock"
 
 feature -- Element change
 
