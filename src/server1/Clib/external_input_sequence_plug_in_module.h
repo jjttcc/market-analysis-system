@@ -1,6 +1,16 @@
 #ifndef	EXTERNAL_INPUT_SEQUENCE_PLUG_IN_MODULE_H
 #define	EXTERNAL_INPUT_SEQUENCE_PLUG_IN_MODULE_H
 
+/**
+	description: "Header file that defines the API for the plug-in module %
+		%used by external_input_sequence.c";
+	author: "Jim Cochrane"
+	date: "$Date$";
+	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
+		%Released under the Eiffel Forum License; see file forum.txt"
+**/
+
 struct input_sequence_plug_in;
 
 /* A new handle for access to the input-sequence-plug-in interface -
