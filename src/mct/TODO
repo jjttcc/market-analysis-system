@@ -1,0 +1,21 @@
+Need to deal with MAS_DIRECTORY configuration.
+
+For the mctrc file, add a construct for defining a "user-defined" variable -
+similar to <data_dir> and <bin_dir>, but user-defined, which can then be
+used in definitions that follow.  With this convention, <data_dir>, etc.
+may not be needed.  Example with possible format:
+
+define	mas_bin_dir:/usr/local/bin
+define	macl_dir:/opt/mas/bin
+define	data_file_dir:/opt/mas/bin
+
+# Detailed version of command to start the server: data from files
+begin	start_server_command
+command	<mas_bin_dir>/mas -o -f , -b <portnumber> <data_file_dir>/*.txt
+command_description	Get data from files
+command_name	File-based
+end
+
+start_cl_client_command	xterm -e <macl_dir>/macl -h <hostname> <portnumber>
+
+[End of example]

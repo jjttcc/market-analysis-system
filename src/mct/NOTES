@@ -1,0 +1,5 @@
+Make it "user friendly": Put the commands that could confuse some users,
+such as "Start a MAS server" under an "advanced" window/menu/component.
+Alternative: Name the button to start the MAS server something like:
+"Start MAS session".  As in the java version, it will pop up a new window
+from which the charting app. and the command-line app. can be started.
