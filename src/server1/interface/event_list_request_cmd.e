@@ -12,7 +12,7 @@ class EVENT_LIST_REQUEST_CMD inherit
 
 	DATA_REQUEST_CMD
 		redefine
-			error_context
+			error_context, send_response_for_tradable
 		end
 
 	GLOBAL_APPLICATION
@@ -24,9 +24,29 @@ creation
 
 	make
 
+feature {NONE} -- Hook routine implementations
+
+	expected_field_count: INTEGER is 2
+
+	symbol_index: INTEGER is 1
+
+	period_type_index: INTEGER is 2
+
+	send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE]) is
+		do
+			put_ok
+			find_and_put_event_list (t)
+			put (eom)
+		end
+
+	error_context (msg: STRING): STRING is
+		do
+			Result := concatenation (<<error_context_prefix, market_symbol>>)
+		end
+
 feature {NONE} -- Basic operations
 
-	do_execute (msg: STRING) is
+	old_remove_do_execute (msg: STRING) is
 		local
 			fields: LIST [STRING]
 		do
@@ -37,12 +57,12 @@ feature {NONE} -- Basic operations
 			else
 				parse_symbol_and_period_type (1, 2, fields)
 				if not parse_error then
-					send_response
+					old_remove_send_response
 				end
 			end
 		end
 
-	send_response is
+	old_remove_send_response is
 			-- Obtain the list of all valid market events for `market_symbol'
 			-- and `trading_period_type' and send it to the client.
 		local
@@ -109,10 +129,8 @@ feature {NONE} -- Basic operations
 			end
 		end
 
-	error_context (msg: STRING): STRING is
-		do
-			Result := concatenation (<<"retrieving event-type list for ",
-				market_symbol>>)
-		end
+feature {NONE} -- Implementation - constants
+
+	error_context_prefix: STRING is "retrieving event-type list for "
 
 end -- class EVENT_LIST_REQUEST_CMD

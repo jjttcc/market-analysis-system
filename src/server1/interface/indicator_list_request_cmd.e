@@ -11,7 +11,7 @@ class INDICATOR_LIST_REQUEST_CMD inherit
 
 	DATA_REQUEST_CMD
 		redefine
-			error_context
+			error_context, send_response_for_tradable
 		end
 
 
@@ -19,9 +19,43 @@ creation
 
 	make
 
+feature {NONE} -- Hook routine implementations
+
+	expected_field_count: INTEGER is 2
+
+	symbol_index: INTEGER is 1
+
+	period_type_index: INTEGER is 2
+
+	send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE]) is
+		local
+			ilist: LIST [MARKET_FUNCTION]
+		do
+			put_ok
+			ilist := t.indicators
+			if not ilist.is_empty then
+				from
+					ilist.start
+				until
+					ilist.islast
+				loop
+					put (ilist.item.name)
+					put (Message_record_separator)
+					ilist.forth
+				end
+				put (ilist.last.name)
+			end
+			put (eom)
+		end
+
+	error_context (msg: STRING): STRING is
+		do
+			Result := concatenation (<<error_context_prefix, market_symbol>>)
+		end
+
 feature {NONE} -- Basic operations
 
-	do_execute (msg: STRING) is
+	old_remove_do_execute (msg: STRING) is
 		local
 			fields: LIST [STRING]
 		do
@@ -32,12 +66,12 @@ feature {NONE} -- Basic operations
 			else
 				parse_symbol_and_period_type (1, 2, fields)
 				if not parse_error then
-					send_response
+					old_remove_send_response
 				end
 			end
 		end
 
-	send_response is
+	old_remove_send_response is
 			-- Obtain the indicator list corresponding to `market_symbol' and
 			-- `trading_period_type' and send it to the client.
 		local
@@ -73,10 +107,8 @@ feature {NONE} -- Basic operations
 			end
 		end
 
-	error_context (msg: STRING): STRING is
-		do
-			Result := concatenation (<<"retrieving indicator list for ",
-				market_symbol>>)
-		end
+feature {NONE} -- Implementation - constants
+
+	error_context_prefix: STRING is "retrieving indicator list for "
 
 end -- class INDICATOR_LIST_REQUEST_CMD

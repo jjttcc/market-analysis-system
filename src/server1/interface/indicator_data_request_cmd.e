@@ -11,7 +11,7 @@ class INDICATOR_DATA_REQUEST_CMD inherit
 
 	DATA_REQUEST_CMD
 		redefine
-			error_context
+			error_context, send_response_for_tradable, prepare_response
 		end
 
 
@@ -19,9 +19,9 @@ creation
 
 	make
 
-feature -- Basic operations
+feature {NONE} -- Basic operations
 
-	do_execute (msg: STRING) is
+	old_remove_do_execute (msg: STRING) is
 		local
 			fields: LIST [STRING]
 		do
@@ -33,17 +33,56 @@ feature -- Basic operations
 				parse_symbol_and_period_type (2, 3, fields)
 				if not parse_error then
 					indicatorID := fields.first.to_integer
-					send_response
+					old_remove_send_response
 				end
 			end
 		end
 
-feature {NONE}
+feature {NONE} -- Hook routine implementations
+
+	expected_field_count: INTEGER is 3
+
+	symbol_index: INTEGER is 2
+
+	period_type_index: INTEGER is 3
+
+	send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE]) is
+		local
+			indicator: MARKET_FUNCTION
+		do
+			if
+				indicatorID < 1 or indicatorID > t.indicators.count
+			then
+				report_error (Error, <<invalid_indicator_id_msg>>)
+			else
+				t.set_target_period_type (trading_period_type)
+				indicator := t.indicators @ indicatorID
+				if not indicator.processed then
+					indicator.process
+				end
+				set_print_parameters
+				set_preface (ok_string)
+				set_appendix (eom)
+				print_indicator (indicator)
+			end
+		end
+	prepare_response (fields: LIST [STRING]) is
+		do
+			indicatorID := fields.first.to_integer
+		end
+
+	error_context (msg: STRING): STRING is
+		do
+			Result := concatenation (<<"retrieving indicator data for ",
+				market_symbol>>)
+		end
+
+feature {NONE} -- Implementation
 
 	indicatorID: INTEGER
 			-- ID of the indicator requested by the user
 
-	send_response is
+	old_remove_send_response is
 			-- Obtain the tradable corresponding to `market_symbol' and
 			-- dispatch the data for the indicator specified by
 			-- `indicatorID' for that tradable for `trading_period_type'
@@ -82,10 +121,6 @@ feature {NONE}
 			end
 		end
 
-	error_context (msg: STRING): STRING is
-		do
-			Result := concatenation (<<"retrieving indicator data for ",
-				market_symbol>>)
-		end
+	invalid_indicator_id_msg: STRING is "Invalid indicator ID"
 
 end -- class INDICATOR_DATA_REQUEST_CMD

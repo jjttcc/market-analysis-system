@@ -11,16 +11,29 @@ class MARKET_DATA_REQUEST_CMD inherit
 
 	DATA_REQUEST_CMD
 		redefine
-			error_context
+			error_context, create_and_send_response
 		end
 
 creation
 
 	make
 
-feature -- Basic operations
+feature {NONE} -- Hook routine implementations
 
-	do_execute (msg: STRING) is
+	expected_field_count: INTEGER is 2
+
+	symbol_index: INTEGER is 1
+
+	period_type_index: INTEGER is 2
+
+	error_context (msg: STRING): STRING is
+		do
+			Result := concatenation (<<error_context_prefix, market_symbol>>)
+		end
+
+feature {NONE} -- Basic operations
+
+	old_remove_do_execute (msg: STRING) is
 		local
 			fields: LIST [STRING]
 		do
@@ -31,20 +44,17 @@ feature -- Basic operations
 			else
 				parse_symbol_and_period_type (1, 2, fields)
 				if not parse_error then
-					send_response
+					create_and_send_response
 				end
 			end
 		end
 
 feature {NONE}
 
-	send_response is
+	create_and_send_response is
 			-- Obtain the market corresponding to `market_symbol' and
 			-- dispatch the data for that market for `trading_period_type'
 			-- to the client.
-		require
-			tpt_ms_not_void:
-				trading_period_type /= Void and market_symbol /= Void
 		local
 			tuple_list: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
 			t: TRADABLE [BASIC_MARKET_TUPLE]
@@ -77,15 +87,7 @@ feature {NONE}
 				session.set_last_tradable (tradables.last_tradable)
 			end
 			if tuple_list = Void then
-				if server_error then
-					report_server_error
-				elseif not tradables.symbols.has (market_symbol) then
-					report_error (Invalid_symbol, <<"Symbol '", market_symbol,
-						"' not in database.">>)
-				else
-					report_error (Invalid_period_type,
-						<<"Invalid period type: ", trading_period_type.name>>)
-				end
+				send_tradable_not_found_response
 			else
 				set_print_parameters
 				-- Ensure ok string is printed first.
@@ -96,10 +98,9 @@ feature {NONE}
 			end
 		end
 
-	error_context (msg: STRING): STRING is
-		do
-			Result := concatenation (<<"retrieving data for ",
-				market_symbol>>)
-		end
+
+feature {NONE} -- Implementation - constants
+
+	error_context_prefix: STRING is "retrieving data for "
 
 end -- class MARKET_DATA_REQUEST_CMD
