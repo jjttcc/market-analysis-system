@@ -11,7 +11,7 @@ class CL_BASED_COMMAND_EDITING_INTERFACE inherit
 		rename
 			print_object_tree as print_command_tree,
 			print_component_trees as print_operand_trees,
-			print_message as show_message, set_io_device as make_io
+			print_message as show_message
 		export
 			{NONE} all
 		redefine
@@ -32,7 +32,19 @@ class CL_BASED_COMMAND_EDITING_INTERFACE inherit
 
 creation
 
-	make_io
+	make
+
+feature -- Initialization
+
+	make (input_dev, output_dev: IO_MEDIUM) is
+		require
+			not_void: input_dev /= Void and output_dev /= Void
+		do
+			set_input_device (input_dev)
+			set_output_device (output_dev)
+		ensure
+			iodev_set: input_device = input_dev and output_device = output_dev
+		end
 
 feature {NONE} -- Hook methods
 

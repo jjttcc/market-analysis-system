@@ -10,7 +10,7 @@ class CL_BASED_MEG_EDITING_INTERFACE inherit
 
 	COMMAND_LINE_UTILITIES [MARKET_EVENT_GENERATOR]
 		rename
-			print_message as show_message, set_io_device as make_io
+			print_message as show_message
 		export
 			{NONE} all
 		end
@@ -35,19 +35,21 @@ creation
 
 feature
 
-	make (io_dev: IO_MEDIUM) is
+	make (input_dev, output_dev: IO_MEDIUM) is
 		require
 			not_void: io /= Void
 		do
-			make_io (io_dev)
+			set_input_device (input_dev)
+			set_output_device (output_dev)
 			--!!!Should these two objects be created here?? Or somewhere else?
 			!!cmd_editor
-			!CL_BASED_COMMAND_EDITING_INTERFACE!operator_maker.make_io (io_dev)
+			!CL_BASED_COMMAND_EDITING_INTERFACE!operator_maker.make (
+				input_dev, output_dev)
 			cmd_editor.set_user_interface (operator_maker)
 			operator_maker.set_editor (cmd_editor)
 			!!help.make
 		ensure
-			iodev_set: io_device = io_dev
+			iodev_set: input_device = input_dev and output_device = output_dev
 		end
 
 feature {NONE} -- Implementation

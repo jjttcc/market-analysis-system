@@ -30,7 +30,7 @@ class EVENT_REGISTRATION inherit
 
 	COMMAND_LINE_UTILITIES [MARKET_EVENT_GENERATOR]
 		rename
-			print_message as show_message, set_io_device as make_io
+			print_message as show_message
 		export
 			{NONE} all
 		end
@@ -46,15 +46,17 @@ creation
 
 feature -- Initialization
 
-	make (disp: EVENT_DISPATCHER; io_dev: IO_MEDIUM) is
+	make (disp: EVENT_DISPATCHER; in_dev, out_dev: IO_MEDIUM) is
 		require
-			not_void: disp /= Void and io_dev /= Void
+			not_void: disp /= Void and in_dev /= Void and out_dev /= Void
 		do
 			dispatcher := disp
-			make_io (io_dev)
+			set_input_device (in_dev)
+			set_output_device (out_dev)
 			!!help.make
 		ensure
-			set: dispatcher = disp and io_device = io_dev
+			set: dispatcher = disp
+			iodev_set: input_device = in_dev and output_device = out_dev
 		end
 
 feature -- Access
