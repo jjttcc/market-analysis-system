@@ -204,10 +204,39 @@ feature {NONE} -- Implementation
 			-- New "start-server" command obtained from the user.
 		local
 			cmds: LINEAR [EXTERNAL_COMMAND]
+			window: LIST_SELECTION_WINDOW
+			rows: LINKED_LIST [LIST [STRING]]
 		do
+			create rows.make
+			rows.extend (create {LINKED_LIST [STRING]}.make)
+			-- Add muli-list column titles.
+			rows.first.extend ("Command name")
+			rows.first.extend ("Description")
+			cmds := configuration.start_server_commands
+			-- Add one row to `rows' for each element of `cmds'.
+			from
+				cmds.start
+			until
+				cmds.exhausted
+			loop
+				-- Add new row.
+				rows.extend (create {LINKED_LIST [STRING]}.make)
+				if cmds.item.name = Void or else cmds.item.name.is_empty then
+					rows.last.extend (cmds.item.identifier)
+				else
+					rows.last.extend (cmds.item.name)
+				end
+				if cmds.item.description = Void then
+					rows.last.extend ("")
+				else
+					rows.last.extend (cmds.item.description)
+				end
+				cmds.forth
+			end
+			create window.make ("Start-server selection", rows)
+			window.show
 			-- !!!Stub: Fake obtaining of the command from the user until
 			-- there's time to implement it.
-			cmds := configuration.start_server_commands
 			if cmds.off then
 				cmds.start
 			end
