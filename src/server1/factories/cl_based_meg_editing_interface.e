@@ -177,12 +177,12 @@ feature {NONE} -- Implementation
 			until
 				c /= '%U'
 			loop
-				print_list (<<"Select analyzer type: ",
-							"Simple (s) Compound (c) ", eom>>)
+				print ("Select analyzer type: " +
+					"Simple (s) Compound (c) " + eom)
 				c := character_selection (Void)
 				if not (c = 's' or c = 'S' or c = 'c' or c = 'C') then
 					c := '%U'
-					print_list (<<"Invalid selection: ", c, "%N">>)
+					print ("Invalid selection: " + c.out + "%N")
 				end
 			end
 			inspect
@@ -216,13 +216,12 @@ feature {NONE} -- Implementation
 			until
 				c /= '%U'
 			loop
-				print_list (<<"Would you like this analyzer to use one ",
-							"or two technical indicators?%N",
-							"     One (o) Two (t) ", eom>>)
+				print ("Would you like this analyzer to use one or two " +
+					"technical indicators?%N" + "     One (o) Two (t) " + eom)
 				c := character_selection (Void)
 				if not (c = 'o' or c = 'O' or c = 't' or c = 'T') then
 					c := '%U'
-					print_list (<<"Invalid selection: ", c, "%N">>)
+					print ("Invalid selection: " + c.out + "%N")
 				end
 			end
 			inspect
@@ -243,12 +242,12 @@ feature {NONE} -- Implementation
 			until
 				c /= '%U'
 			loop
-				print_list (<<"Would you like to define an operator for this %
-							%market analyzer? (y/n) ", eom>>)
+				print ("Would you like to define an operator for this %
+					%market analyzer? (y/n) " + eom)
 				c := character_selection (Void)
 				if not (c = 'y' or c = 'Y' or c = 'n' or c = 'N') then
 					c := '%U'
-					print_list (<<"Invalid selection: ", c, "%N">>)
+					print ("Invalid selection: " + c.out + "%N")
 				end
 			end
 			if c = 'y' or c = 'Y' then
@@ -257,14 +256,14 @@ feature {NONE} -- Implementation
 				until
 					c /= '%U'
 				loop
-					print_list (<<"Should the operator operate on the left ",
-							"function (", f.left_function.name,
-							") or the right function (",
-							f.right_function.name, ")? (l/r) ", eom>>)
+					print ("Should the operator operate on the left " +
+						"function (" + f.left_function.name +
+						") or the right function (" +
+						f.right_function.name + ")? (l/r) " + eom)
 					c := character_selection (Void)
 					if not (c = 'l' or c = 'L' or c = 'r' or c = 'R') then
 						c := '%U'
-						print_list (<<"Invalid selection: ", c, "%N">>)
+						print ("Invalid selection: " + c.out + "%N")
 					end
 				end
 				if c = 'l' or c = 'L' then
@@ -294,16 +293,15 @@ feature {NONE} -- Implementation
 			loop
 				if names.count > 0 then
 					print_names_in_1_column (names, 1)
-					print_list (<<"Type a name for the new event that does %
-							%not match any of the above names:%N", eom>>)
+					print ("Type a name for the new event that does %
+						%not match any of the above names:%N" + eom)
 				else
-					print_list (<<"Type a name for the new event: ", eom>>)
+					print ("Type a name for the new event: " + eom)
 				end
 				read_line
 				if names.has (last_string) then
-					print_list (<<"%"", last_string,
-								"%" matches one of the %
-								%above names, please try again ...%N">>)
+					print ("%"" + last_string + "%" matches one of the %
+						%above names, please try again ...%N")
 				else
 					create Result.make (last_string.count)
 					Result.append (last_string)
@@ -338,13 +336,13 @@ feature {NONE} -- Implementation
 					last_integer < 1 or
 						last_integer > names.count
 				then
-					print_list (<<"Selection must be between 1 and ",
-								names.count, "%N">>)
+					print ("Selection must be between 1 and " +
+						names.count.out + "%N")
 				else
 					Result := period_types @ (names @ last_integer)
 				end
 			end
-			print_list (<<"Using ", Result.name, " period type%N">>)
+			print ("Using " + Result.name + " period type%N")
 		end
 
 	above_below_choice (fa_maker: TVFA_FACTORY): INTEGER is
@@ -359,9 +357,8 @@ feature {NONE} -- Implementation
 				Result = fa_maker.Above_to_below or
 				Result = fa_maker.Both
 			loop
-				print_list (<<"Select specification for crossover detection:%N%
-						%1) below-to-above%N2) above-to-below%N3) both%N",
-						eom>>)
+				print ("Select specification for crossover detection:%N%
+					%1) below-to-above%N2) above-to-below%N3) both%N" + eom)
 				inspect
 					character_selection (Void)
 				when '1' then
@@ -390,9 +387,9 @@ feature {NONE} -- Implementation
 			until
 				finished
 			loop
-				print_list (<<"Would you like to add a time extension ",
-					"to match events from the left%Nanalyzer that occur ",
-					which, " the right analyzer? (y/n/h) ", eom>>)
+				print ("Would you like to add a time extension " +
+					"to match events from the left%Nanalyzer that occur " +
+					which + " the right analyzer? (y/n/h) " + eom)
 				inspect
 					character_selection (Void)
 				when 'y', 'Y' then
@@ -414,20 +411,19 @@ feature {NONE} -- Implementation
 			until
 				finished
 			loop
-				print_list (<<"Select: days (d) months (m) years (y) End (e) ",
-							eom>>)
+				print ("Select: days (d) months (m) years (y) End (e) " + eom)
 				inspect
 					character_selection (Void)
 				when 'd', 'D' then
-					print_list (<<"Enter the number of days: ", eom>>)
+					print ("Enter the number of days: " + eom)
 					read_integer
 					days := last_integer
 				when 'm', 'M' then
-					print_list (<<"Enter the number of months: ", eom>>)
+					print ("Enter the number of months: " + eom)
 					read_integer
 					months := last_integer
 				when 'y', 'Y' then
-					print_list (<<"Enter the number of years: ", eom>>)
+					print ("Enter the number of years: " + eom)
 					read_integer
 					years := last_integer
 				when 'e', 'E' then
@@ -435,8 +431,8 @@ feature {NONE} -- Implementation
 				else
 					print ("Invalid response.%N")
 				end
-				print_list (<<"Current settings: ", days, " days, ",
-							months, " months, ", years, " years.%N">>)
+				print ("Current settings: " + days.out + " days, " +
+					months.out + " months, " + years.out + " years.%N")
 			end
 			if yes then
 				create Result.make (years, months, days, 0, 0, 0)
@@ -454,9 +450,9 @@ feature {NONE} -- Implementation
 			until
 				finished
 			loop
-				print_list (<<"Would you like to specify an event type ",
-					"as target for the left analyzer's date/time? ",
-					" (y/n/h) ", eom>>)
+				print ("Would you like to specify an event type " +
+					"as target for the left analyzer's date/time? " +
+					" (y/n/h) " + eom)
 				inspect
 					character_selection (Void)
 				when 'y', 'Y' then
@@ -485,9 +481,9 @@ feature {NONE} -- Implementation
 			ovfa: ONE_VARIABLE_FUNCTION_ANALYZER
 			tvfa: TWO_VARIABLE_FUNCTION_ANALYZER
 		do
-			print_list (<<"Market analyzer type: ", eg.generator,
-				"%NEvent type: ", eg.event_type.name, ", signal type: ",
-				eg.type_names @ eg.signal_type, "%N">>)
+			print ("Market analyzer type: " + eg.generator +
+				"%NEvent type: " + eg.event_type.name + ", signal type: " +
+				eg.type_names @ eg.signal_type + "%N")
 			compound_eg ?= eg
 			fa ?= eg
 			if compound_eg /= Void then
@@ -499,24 +495,22 @@ feature {NONE} -- Implementation
 				check
 					eg_is_fa: fa /= Void
 				end
-				print_list (<<"has period type ", fa.period_type.name,
-							", has start date/time ", fa.start_date_time,
-							"%N">>)
+				print ("has period type " + fa.period_type.name +
+					", has start date/time " + fa.start_date_time.out + "%N")
 				ovfa ?= fa
 				tvfa ?= fa
 				if ovfa /= Void then
-					print_list (<<"Operates on indicator: ",
-								ovfa.input.name, "%N">>)
+					print ("Operates on indicator: " +
+						ovfa.input.name + "%N")
 				else
 					check
 						two_var: tvfa /= Void
 					end
-					print_list (<<"Operates on two indicators:%N  ",
-								tvfa.input1.name, "%N  ",
-								tvfa.input2.name, "%N">>)
-					print_list (<<"above/below, below/above: ",
-							tvfa.above_to_below, ", ", tvfa.below_to_above,
-							"%N">>)
+					print ("Operates on two indicators:%N  " +
+						tvfa.input1.name + "%N  " + tvfa.input2.name + "%N")
+					print ("above/below, below/above: " +
+						tvfa.above_to_below.out + ", " +
+						tvfa.below_to_above.out + "%N")
 				end
 				if fa.operator /= Void then
 					print ("Uses an operator:%N")

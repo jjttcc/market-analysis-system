@@ -60,9 +60,9 @@ feature -- Basic operations
 				print ("  ")
 				i := i + 1
 			end
-			print_list (<<o.generator, "%N">>)
+			print (o.generator + "%N")
 			debug ("object_editing")
-				print_list (<<"(", o.out, ")%N">>)
+				print ("(" + o.out + ")%N")
 			end
 			print_operand_trees (o, level + 1)
 		end
@@ -100,10 +100,9 @@ feature {NONE} -- Hook methods
 			editable_state := False; editing_needed := False
 			inspect
 				character_selection (Void)
-			when description, description_upper then
-				print_list (<<"%N", command_description (c),
-					"%N%NChoose ", c.generator + name_for (c),
-						"? (y/n) ", eom>>)
+			when description, description_u then
+				print ("%N" + command_description (c) + "%N%NChoose " +
+					c.generator + name_for (c) + "? (y/n) " + eom)
 				inspect
 					character_selection (Void)
 				when 'y', 'Y' then
@@ -111,9 +110,9 @@ feature {NONE} -- Hook methods
 				else
 					check Result = False end
 				end
-			when choose, choose_upper then
+			when choose, choose_u then
 				Result := True
-			when edit, edit_upper then
+			when edit, edit_u then
 				if do_clone then
 					-- The chosen command should not be editied if
 					-- do_clone is False.
@@ -133,6 +132,9 @@ feature {NONE} -- Hook methods
 					end
 					Result := True
 				end
+			when another_choice, another_choice_u then
+				print ("Invalid selection%N")
+				check Result = False end
 			else
 				check Result = False end
 			end

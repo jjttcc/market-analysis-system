@@ -173,17 +173,17 @@ feature {NONE} -- Implementation of hook methods
 		do
 			create desc_chc.make_description; create another_chc.make_another;
 			create choice_chc.make_choice
-			print_list (<<"Select:%N     Print description of ",
-						c.generator + name_for (c), "? (", desc_chc.item.out,
-						")%N", "     Choose ", c.generator + name_for (c),
-						" (", choice_chc.item.out, ") Make another choice (",
-						another_chc.item.out, ") ", eom>>)
+print ("choice.out: " + choice_chc.out + "%N")
+			print ("Select:%N     Print description of " + c.generator +
+				name_for (c) + "? (" + desc_chc.item.out + ")%N" +
+				"     Choose " + c.generator + name_for (c) + " (" +
+				choice_chc.item.out + ") Make another choice (" +
+				another_chc.item.out + ") " + eom)
 			inspect
 				character_selection (Void)
-			when description, description_upper then
-				print_list (<<"%N", function_description (c),
-					"%N%NChoose ", c.generator + name_for (c),
-						"? (y/n) ", eom>>)
+			when description, description_u then
+				print ("%N" + function_description (c) + "%N%NChoose " +
+					c.generator + name_for (c) + "? (y/n) " + eom)
 				inspect
 					character_selection (Void)
 				when 'y', 'Y' then
@@ -191,8 +191,11 @@ feature {NONE} -- Implementation of hook methods
 				else
 					check Result = False end
 				end
-			when choose, choose_upper then
+			when choose, choose_u then
 				Result := True
+			when another_choice, another_choice_u then
+				print ("Invalid selection%N")
+				check Result = False end
 			else
 				check Result = False end
 			end
