@@ -8,7 +8,7 @@ class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 
 	SIMPLE_FUNCTION [G]
 		rename
-			output as data, make as sf_make
+			make as sf_make
 		export {NONE}
 			sf_make
 		end

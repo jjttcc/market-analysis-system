@@ -10,12 +10,14 @@ indexing
 class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 
 	MARKET_FUNCTION
+		rename
+			output as data
 		export {NONE}
 			copy, setup
 		undefine
 			is_equal, copy, setup
 		redefine
-			output
+			data
 		end
 
 	MARKET_TUPLE_LIST [G]
@@ -45,13 +47,14 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	output: MARKET_TUPLE_LIST [G] is
+	data: MARKET_TUPLE_LIST [G] is
 			-- Contents - market tuple data
 		do
 			Result := Current
 		end
 
 	trading_period_type: TIME_PERIOD_TYPE
+			-- Period type of `data'
 
 	short_description: STRING is
 		once
