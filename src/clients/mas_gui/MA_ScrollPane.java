@@ -23,8 +23,8 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 		if (print_props != null) print_properties = print_props;
 		Configuration config = Configuration.instance();
 		chart = parent_chart;
-		_main_graph = new InteractiveGraph();
-		_indicator_graph = new InteractiveGraph();
+		_main_graph = new InteractiveGraph(false);
+		_indicator_graph = new InteractiveGraph(true);
 		GridBagLayout gblayout = new GridBagLayout();
 		GridBagConstraints gbconstraints = new GridBagConstraints();
 
