@@ -24,7 +24,7 @@ Source: "bin\simple_cat.exe"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\macl"; DestDir: "{app}\bin\scripts"; CopyMode: alwaysoverwrite
 Source: "bin\maclj"; DestDir: "{app}\bin\scripts"; CopyMode: alwaysoverwrite
 Source: "bin\magc"; DestDir: "{app}\bin\scripts"; CopyMode: alwaysoverwrite
-Source: "lib/binaries/mas.exe_no_assert_v1.6.7"; DestDir: "{app}\bin\mas.exe"; CopyMode: alwaysoverwrite
+Source: "lib\binaries\mas.exe_no_assert_v1.6.7"; DestDir: "{app}\bin\mas.exe"; CopyMode: alwaysoverwrite
 Source: "bin\runmacl.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\runmas.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\runmasf.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
