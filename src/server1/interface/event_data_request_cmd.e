@@ -38,6 +38,11 @@ class EVENT_DATA_REQUEST_CMD inherit
 			event_cache
 		end
 
+	PERIOD_TYPE_FACILITIES
+		export
+			{NONE} all
+		end
+
 	GLOBAL_APPLICATION
 		export
 			{NONE} all

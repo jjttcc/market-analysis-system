@@ -18,7 +18,7 @@ class GLOBAL_APPLICATION inherit
 			{NONE} all
 		end
 
-	GLOBAL_SERVICES
+	TRADABLE_FACILITIES
 		export
 			{NONE} all
 		end
