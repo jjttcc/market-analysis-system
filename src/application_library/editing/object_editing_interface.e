@@ -11,6 +11,9 @@ deferred class TREE_EDITING_INTERFACE [G] inherit
 	EDITING_INTERFACE
 
 	GLOBAL_SERVICES
+		export
+			{NONE} all
+		end
 
 feature -- Access
 
