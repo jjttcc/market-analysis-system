@@ -9,7 +9,7 @@ indexing
 
 class ERROR_RESPONSE_CMD inherit
 
-	REQUEST_COMMAND
+	MAS_REQUEST_COMMAND
 
 creation
 

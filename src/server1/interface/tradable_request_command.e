@@ -8,7 +8,7 @@ indexing
 
 deferred class TRADABLE_REQUEST_COMMAND inherit
 
-	REQUEST_COMMAND
+	MAS_REQUEST_COMMAND
 		rename
 			make as rcmake
 		end
