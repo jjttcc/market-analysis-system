@@ -65,6 +65,33 @@ feature -- Initialization
 			db_values.extend ("", Intraday_stock_table_specifier)
 			db_values.extend ("", Daily_stock_query_tail_specifier)
 			db_values.extend ("", Intraday_stock_query_tail_specifier)
+
+			db_values.extend ("", Derivative_symbol_query_specifier)
+			db_values.extend ("", Derivative_split_query_specifier)
+			db_values.extend ("", Derivative_name_query_specifier)
+			db_values.extend ("", Daily_derivative_symbol_field_specifier)
+			db_values.extend ("", Daily_derivative_date_field_specifier)
+			db_values.extend ("", Daily_derivative_open_field_specifier)
+			db_values.extend ("", Daily_derivative_high_field_specifier)
+			db_values.extend ("", Daily_derivative_low_field_specifier)
+			db_values.extend ("", Daily_derivative_close_field_specifier)
+			db_values.extend ("", Daily_derivative_volume_field_specifier)
+			db_values.extend ("",
+				Daily_derivative_open_interest_field_specifier)
+			db_values.extend ("", Intraday_derivative_symbol_field_specifier)
+			db_values.extend ("", Intraday_derivative_date_field_specifier)
+			db_values.extend ("", Intraday_derivative_time_field_specifier)
+			db_values.extend ("", Intraday_derivative_open_field_specifier)
+			db_values.extend ("", Intraday_derivative_high_field_specifier)
+			db_values.extend ("", Intraday_derivative_low_field_specifier)
+			db_values.extend ("", Intraday_derivative_close_field_specifier)
+			db_values.extend ("", Intraday_derivative_volume_field_specifier)
+			db_values.extend ("",
+				Intraday_derivative_open_interest_field_specifier)
+			db_values.extend ("", Daily_derivative_table_specifier)
+			db_values.extend ("", Intraday_derivative_table_specifier)
+			db_values.extend ("", Daily_derivative_query_tail_specifier)
+			db_values.extend ("", Intraday_derivative_query_tail_specifier)
 			read_param_file
 		end
 
@@ -241,6 +268,176 @@ feature -- Access
 	intraday_stock_query_tail: STRING is
 		do
 			Result := db_values @ Intraday_stock_query_tail_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	derivative_symbol_query: STRING is
+		do
+			Result := db_values @ Derivative_symbol_query_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	derivative_split_query: STRING is
+		do
+			Result := db_values @ Derivative_split_query_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	derivative_name_query: STRING is
+		do
+			Result := db_values @ Derivative_name_query_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	daily_derivative_symbol_field_name: STRING is
+		do
+			Result := db_values @ Daily_derivative_symbol_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	daily_derivative_date_field_name: STRING is
+		do
+			Result := db_values @ Daily_derivative_date_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	daily_derivative_open_field_name: STRING is
+		do
+			Result := db_values @ Daily_derivative_open_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	daily_derivative_high_field_name: STRING is
+		do
+			Result := db_values @ Daily_derivative_high_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	daily_derivative_low_field_name: STRING is
+		do
+			Result := db_values @ Daily_derivative_low_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	daily_derivative_close_field_name: STRING is
+		do
+			Result := db_values @ Daily_derivative_close_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	daily_derivative_volume_field_name: STRING is
+		do
+			Result := db_values @ Daily_derivative_volume_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	daily_derivative_open_interest_field_name: STRING is
+		do
+			Result :=
+				db_values @ Daily_derivative_open_interest_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_derivative_symbol_field_name: STRING is
+		do
+			Result := db_values @ Intraday_derivative_symbol_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_derivative_date_field_name: STRING is
+		do
+			Result := db_values @ Intraday_derivative_date_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_derivative_time_field_name: STRING is
+		do
+			Result := db_values @ Intraday_derivative_time_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_derivative_open_field_name: STRING is
+		do
+			Result := db_values @ Intraday_derivative_open_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_derivative_high_field_name: STRING is
+		do
+			Result := db_values @ Intraday_derivative_high_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_derivative_low_field_name: STRING is
+		do
+			Result := db_values @ Intraday_derivative_low_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_derivative_close_field_name: STRING is
+		do
+			Result := db_values @ Intraday_derivative_close_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_derivative_volume_field_name: STRING is
+		do
+			Result := db_values @ Intraday_derivative_volume_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_derivative_open_interest_field_name: STRING is
+		do
+			Result :=
+				db_values @ Intraday_derivative_open_interest_field_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	daily_derivative_table_name: STRING is
+		do
+			Result := db_values @ Daily_derivative_table_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_derivative_table_name: STRING is
+		do
+			Result := db_values @ Intraday_derivative_table_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	daily_derivative_query_tail: STRING is
+		do
+			Result := db_values @ Daily_derivative_query_tail_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	intraday_derivative_query_tail: STRING is
+		do
+			Result := db_values @ Intraday_derivative_query_tail_specifier
 		ensure
 			not_void: Result /= Void
 		end
