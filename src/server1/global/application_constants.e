@@ -24,13 +24,19 @@ feature -- Input/output constants
 	Event_history_record_separator: STRING is "%N"
 			-- Record separator for event history file
 
-feature -- Configuration file names
+feature -- Default settings
 
 	Default_stock_split_file_name: STRING is "mas_stock_splits"
 			-- Default name for stock-split data file
 
 	Default_database_config_file_name: STRING is "mas_dbrc"
 			-- Default name for database configuration file
+
+	Default_mailer: STRING is "elm"
+			-- Default mailer program
+
+	Default_mailer_subject_flag: STRING is "-s"
+			-- Default subject flag for mailer program
 
 feature -- Miscellaneous
 
