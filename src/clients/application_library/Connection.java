@@ -26,7 +26,7 @@ abstract public class Connection {
 
 	// Session state data received from the server when logging in.
 	public SessionState session_state() {
-		return _session_state;
+		return session_state;
 	}
 
 	// Is this connection currently logged in to the server?
@@ -46,7 +46,8 @@ abstract public class Connection {
 				// Failure of login request is a fatal error.
 				throw new IOException (request_result.toString());
 			}
-			_session_state = new_session_state(s);
+			session_state = new_session_state(s);
+System.out.println("login - received key value of " + session_state.session_key());
 		} catch (IOException e) {
 			throw new IOException("Attempt to login to server " +
 				"failed: " + e);
@@ -63,7 +64,8 @@ abstract public class Connection {
 	// Precondition:  logged_in()
 	public void logout() throws IOException {
 		connect();
-		send_msg(Logout_request_code, "", _session_state.session_key());
+		send_msg(Logout_request_code, "", session_state.session_key());
+System.out.println("logout - with key value of " + session_state.session_key());
 		try {
 			close_connection();
 		} catch (Exception e) {
@@ -78,7 +80,8 @@ abstract public class Connection {
 			throws IOException {
 //System.out.println("sending request: " + request);
 		connect();
-		send_msg(request_code, request, _session_state.session_key());
+System.out.println("send_req - with key value of " + session_state.session_key());
+		send_msg(request_code, request, session_state.session_key());
 		receive_msg();
 		close_connection();
 	}
@@ -219,7 +222,7 @@ Eom_string + "'");
 
 // Implementation - Attributes
 
-	protected SessionState _session_state;
+	protected SessionState session_state;
 	protected boolean _logged_in = false;
 	protected String _hostname;
 	protected Integer _port_number;
