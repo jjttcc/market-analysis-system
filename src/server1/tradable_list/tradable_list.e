@@ -94,8 +94,10 @@ feature -- Access
 						close_input_medium
 					else
 						-- A fatal error indicates that the current tradable
-						-- is invalid, or not readable, or etc., so:
-						remove_current_item
+						-- is invalid, or not readable, or etc., so ensure
+						-- that last_tradable is not set to this invalid
+						-- object.
+						last_tradable := Void
 					end
 				else
 					last_tradable.flush_indicators
