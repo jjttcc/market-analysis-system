@@ -1,8 +1,10 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
 "http://www.w3.org/TR/html4/strict.dtd">
+<!--
 <?php
 $headers = getallheaders();
 ?>
+-->
 <html>
 <head>
 <style type="text/css">
@@ -21,14 +23,16 @@ candlesticks, traders, financial markets, trading tools,
 subscription, futures, commodities, open interest">
 <meta name="description" content="Technical analysis and stock and futures
 charting software for Linux and Windows">
-<title>Market Analysis System - Free Technical Analysis Software</title>
+<title>Market Analysis System &#8212; Free Technical Analysis Software</title>
 </head>
 
 <body>
-<div id="content">
+<div id="header-bar">
 <h1>
 Technical Analysis/Stock Charting Software for Windows&nbsp;and&nbsp;Linux
 </h1>
+</div>
+<div id="content">
 <div class="justified">
 <p>
 The Market Analysis System (MAS) is an open-source software application that
@@ -38,42 +42,53 @@ provides tools for analysis of financial markets using technical analysis.
 MAS provides facilities for stock charting and futures charting,
 including price, volume, and
 a wide range of technical analysis indicators.
-MAS also allows automated processing of market data - applying technical
+MAS also allows automated processing of market data &#8212; applying technical
 analysis indicators with user-selected criteria
-to market data to automatically generate trading signals -
+to market data to automatically generate trading signals &#8212;
 and can be used as the main component of a sophisticated trading system.
 </p>
 </div><!-- justified -->
+<p>
 Some of the features of MAS are:
+</p>
 <ul>
 <li>
 Includes basic technical analysis indicators, such as
 Simple Moving Average, Exponential Moving Average, Stochastic, MACD,
 RSI, On Balance Volume, and Momentum.
+</li>
 <li>
 Includes more advanced indicators, such as Standard Deviation,
 Slope of EMA of Volume, Slope of MACD Signal Line,
 Bollinger Bands, and Parabolic SAR.
+</li>
 <li>
 User can create new technical analysis indicators,
 including complex indicators based on existing
 indicators.
+</li>
 <li>
 User can configure criteria for automated trading-signal
 generation.
+</li>
 <li>
 Creation of weekly, monthly, quarterly, and yearly data from daily data.
+</li>
 <li>
 Handles intraday data.
+</li>
 <li>
 Handles stock and futures data.
+</li>
 <li>
 Accepts input data from files, from a database, or from
 the web.
 (Includes a configuration for obtaining end-of-day data from yahoo.com.)
+</li>
 <li>
 Can be configured and run as a server that provides services for several
 clients at a time running on remote machines.
+</li>
 </ul>
 <p>
 The current version of MAS runs on Intel machines, on both the Linux and
@@ -124,30 +139,34 @@ buy and sell signals resulting from the analysis to all users who have
 subscribed to this service.
 </p>
 </div><!-- justified -->
-<table id = "sf-logos" width = "100%">
-<tr>
-<td>
+<div id="footer">
 <a href="http://sourceforge.net/">
-<img src="http://sourceforge.net/images/sflogo2-steel.png" alt="Sourceforge" height = "35%"></a>
-</td>
-<td align = "right">
+<!--
+<img src="file:///tmp/exp.gif" alt="Sourceforge" height = "35%">
+-->
+<img id="sf-logo1" src="http://sourceforge.net/images/sflogo2-steel.png" alt="Sourceforge">
+</a>
 <a href="http://www.valinux.com">
-<img src="http://sourceforge.net/images/va-btn-small-light.png" alt="VA Linux Systems" height = "35%"></a>
-</td>
-</tr>
-</table>
+<!--
+<img src="file:///tmp/exp.gif" alt="Sourceforge" height = "35%">
+-->
+<img id="sf-logo2" src="http://sourceforge.net/images/va-btn-small-light.png" alt="VA Linux Systems">
+</a>
+</div><!-- footer -->
 </div><!-- content -->
 <!--  !!!May be needed later.
 <div id="header">
 <h1 class="header">Market Analysis System (MAS)</h1>
 </div>
 -->
+<div id="navigation-bar">
+</div><!-- navigation-bar -->
 <div id="navigation">
 <h2 id="navheader">Navigation:</h2>
 <p class="largepar"></p>
 <ul>
 <li>
-<a href="#content">Home</a>
+<a href="#header">Home</a>
 </li>
 <li>
 <a href="http://sourceforge.net/project/showfiles.php?group_id=6838">
