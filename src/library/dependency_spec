@@ -7,14 +7,14 @@
 #    on a cluster with rank n + x, where x > 0.)
 
 commands	7
-data_scanning	6
+data_scanning	7
 event_generation	7
-events	5
-function_abstractions	4
+events	2
+function_abstractions	2
 function_types	7
 global	7
-high_level_facilities	4
+high_level_facilities	2
 market_analysis_tools	7
 markets	7
-structural	5
-tuple_types	6
+structural	2
+tuple_types	7
