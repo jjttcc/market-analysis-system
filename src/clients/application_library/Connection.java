@@ -112,12 +112,14 @@ abstract public class Connection {
 			request_result = new StringBuffer();
 		}
 		i = 0;
-		do {
-			c = (char) in.read();
-			if (c == Eom_char) break;
-			request_result.append(c);
-			++i;
-		} while (true);
+		if (in != null) {	// Guard against window-closing side effect.
+			do {
+				c = (char) in.read();
+				if (c == Eom_char) break;
+				request_result.append(c);
+				++i;
+			} while (true);
+		}
 
 		if (last_rec_msgID == Error_code) {
 			System.err.println("Client defect detected: " + request_result);
