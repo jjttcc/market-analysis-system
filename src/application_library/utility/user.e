@@ -36,7 +36,7 @@ feature -- Access
 	email_addresses: LINKED_LIST [STRING]
 			-- email addresses
 
-	primary_email_addresss: STRING is
+	primary_email_address: STRING is
 		do
 			if not email_addresses.empty then
 				Result := email_addresses @ 1
@@ -162,6 +162,6 @@ invariant
 
 	eaddrs_not_void: email_addresses /= Void
 	primary_eaddr_definition: not email_addresses.empty implies
-			primary_email_addresss = email_addresses @ 1
+			primary_email_address = email_addresses @ 1
 
 end -- USER
