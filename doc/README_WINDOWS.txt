@@ -37,7 +37,8 @@ information.  (The file INTRODUCTION.ps is a printable Postscript version
 of this file.)  The file feature_list.txt contains a summary of MAS's
 current features.  Users wanting to take advantage of MAS's advanced
 capabilities, such as trading-signal generation, will probably want to
-read some of the other files in the doc directory.
+read some of the other files in the doc directory.  See the README file in
+the doc directory for a short description of each file.
 
 
 The MAS Desktop Icons
