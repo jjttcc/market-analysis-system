@@ -15,17 +15,19 @@ public class DataSetBuilder implements NetworkProtocol
 	public DataSetBuilder(String[] args) {
 		String hostname = null;
 		Integer port_number = null;
+		String symbol_option = "-s";
 		//Process args for the host, port.
-		if (args.length > 0)
+		if (args.length > 1)
 		{
 			hostname = args[0];
-			if (args.length > 1)
+			port_number = new Integer(port_number.parseInt(args[1]));
+			if (args.length > 3 && args[2].equals(symbol_option))
 			{
-				port_number = new Integer(port_number.parseInt(args[1]));
-			}
-			else
-			{
-				port_number = new Integer(33333);
+				markets = new Vector();
+				for (int i = 3; i < args.length; ++i)
+				{
+					markets.addElement(args[i]);
+				}
 			}
 		}
 		else
@@ -56,12 +58,14 @@ public class DataSetBuilder implements NetworkProtocol
 			throws Exception {
 		connection.send_request(Market_data_request,
 			symbol + Input_field_separator + period_type);
-		data_parser.parse(connection.result().toString(), main_drawer);
-		_last_market_data = data_parser.result();
-		_last_market_data.set_drawer(main_drawer);
-		_last_volume = data_parser.volume_result();
-		if (_last_volume != null) {
-			_last_volume.set_drawer(volume_drawer);
+		if (connection.last_received_message_ID() == OK) {
+			data_parser.parse(connection.result().toString(), main_drawer);
+			_last_market_data = data_parser.result();
+			_last_market_data.set_drawer(main_drawer);
+			_last_volume = data_parser.volume_result();
+			if (_last_volume != null) {
+				_last_volume.set_drawer(volume_drawer);
+			}
 		}
 	}
 
@@ -113,7 +117,7 @@ public class DataSetBuilder implements NetworkProtocol
 		return _last_indicator_list;
 	}
 
-	// List of markets available from the server
+	// List of available markets
 	public Vector market_list() throws IOException {
 		StringBuffer mlist;
 
@@ -151,6 +155,11 @@ public class DataSetBuilder implements NetworkProtocol
 		return result;
 	}
 
+	// Result of the last request to the server
+	public int request_result() {
+		return connection.last_received_message_ID();
+	}
+
 // Implementation
 
 	private String hostname() { return connection.hostname(); }
@@ -178,7 +187,8 @@ public class DataSetBuilder implements NetworkProtocol
 	}
 
 	private void usage() {
-		System.err.println("Usage: MA_Client hostname port_number");
+		System.err.println("Usage: MA_Client hostname port_number [options]");
+		System.err.println("Options:\n   -s symbol ...\n");
 	}
 
 	private void initialize() {
