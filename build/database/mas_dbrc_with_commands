@@ -28,12 +28,12 @@ stock split query	select date, symbol, value from stock_split order by date
 # <symbol> indicates where to plug in the actual stock symbol and must
 # occur somewhere in the query string.  (Use <uppersymbol> if the symbol
 # needs to be converted to upper-case for the query.)
-stock name query	select name from stock_information where symbol = <symbol>
+stock name query	select name from stock_information where symbol = '<symbol>'
 # Query for derivative instrument name
 # <symbol> indicates where to plug in the actual stock symbol and must
 # occur somewhere in the query string.
 derivative name query	select name from derivative_information where \
-symbol = <symbol>
+symbol = '<symbol>'
 
 daily stock data command	select date, open_price, high_price, low_price, \
 close_price, volume from daily_stock_data where symbol = '<symbol>' and \
