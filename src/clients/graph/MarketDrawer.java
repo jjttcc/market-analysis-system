@@ -21,6 +21,9 @@ abstract public class MarketDrawer extends Drawer {
 	// The dates associated with the principle (market) data
 	public String[] dates() { return _dates; }
 
+	// The times associated with the principle (market) data
+	public String[] times() { return _times; }
+
 	public Drawer market_drawer() { return this; }
 
 	// Number of elements in the data
@@ -37,6 +40,9 @@ abstract public class MarketDrawer extends Drawer {
 	// Set the dates.
 	public void set_dates(String[] d) { _dates = d; }
 
+	// Set the times.
+	public void set_times(String[] t) { _times = t; }
+
 	// Set data to `d'.
 	public void set_data(Object d) { _data = (double[]) d; }
 
@@ -44,8 +50,14 @@ abstract public class MarketDrawer extends Drawer {
 		return _x_values;
 	}
 
+	protected int bar_width() {
+		return _bar_width;
+	}
+
 	protected int _x_values[];
+	protected int _bar_width;
 	protected double _data[];
 	protected String[] _dates;
+	protected String[] _times;
 	protected final int Stride = 4;
 }
