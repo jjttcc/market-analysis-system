@@ -96,6 +96,9 @@ print_list (<<"Obtaining input data for ", current_symbol, ".%N">>)
 				old_index := index
 			end
 			Result := last_tradable
+			if Result = Void and not fatal_error then
+				fatal_error := true
+			end
 		ensure then
 			good_if_no_error: not fatal_error implies Result /= Void
 		end
@@ -104,6 +107,8 @@ print_list (<<"Obtaining input data for ", current_symbol, ".%N">>)
 			-- The symbol of each tradable
 			-- Note: a new copy will be created each time this feature is
 			-- called.
+		require
+			no_error: not fatal_error
 		local
 			snames: LINEAR [STRING]
 		do
@@ -115,6 +120,7 @@ print_list (<<"Obtaining input data for ", current_symbol, ".%N">>)
 			end
 			Result.compare_objects
 		ensure then
+			not_void: Result /= Void
 			object_comparison: Result.object_comparison
 			-- Result.count = symbol_list.count
 			-- The contents of Result are in the same order as the
@@ -163,6 +169,14 @@ feature -- Status setting
 			end
 		ensure
 			off: not caching_on
+		end
+
+	clear_error is
+			-- Clear error state.
+		do
+			fatal_error := false
+		ensure
+			no_error: fatal_error = false
 		end
 
 feature -- Cursor movement
