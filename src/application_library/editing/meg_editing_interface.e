@@ -64,6 +64,7 @@ feature -- Basic operations
 				when Save_value then
 					market_event_generation_library.copy (working_meg_library)
 					market_event_generation_library.save
+					show_message ("The changes have been saved.")
 					working_meg_library := deep_clone (
 						market_event_generation_library)
 					changed := false
@@ -146,7 +147,7 @@ feature {NONE} -- Implementation
 			loop
 				selection := eg_selection (" to edit")
 				if selection /= Exit_menu_value then
-					function_editor.edit_indicator_menu ((
+					function_editor.edit_indicator_list ((
 						working_meg_library @ selection).indicators)
 					if not changed then
 						changed := function_editor.changed
