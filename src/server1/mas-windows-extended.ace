@@ -197,6 +197,8 @@ cluster
 
 	architectural (eiffel_components):		"$/architectural"
 
+	debugging (eiffel_components):		"$/debug"
+
 	component_support (eiffel_components):		"$/support"
 
 	system_specific_support (eiffel_components):		"$/support/windows"
