@@ -5,7 +5,7 @@ root
 	EXTENDED_MA_SERVER: make
 
 default
-	assertion (all)
+	assertion (no)
 	arguments ("-f , 2735 /tmp/ibm.txt")
 	arguments ("-f , 2733 -i 15-minute /tmp/bond_10_year.15-minute -no-volume")
 	arguments ("-f , 2735 -b ibm-sddb.txt")

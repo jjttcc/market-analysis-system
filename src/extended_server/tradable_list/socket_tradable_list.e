@@ -29,7 +29,7 @@ feature {NONE} -- Implementation
 
 	initialized_input_medium: INPUT_SOCKET is
 		local
-			conn: INPUT_SOCKET_CONNECTION
+			conn: EXPERIMENTAL_INPUT_SOCKET_CONNECTION
 		do
 			create conn
 			create {INPUT_SOCKET} Result.make_client_by_port (
