@@ -1,9 +1,9 @@
 /* Copyright 1998 - 2003: Jim Cochrane - see file forum.txt */
 
-package mas_gui;
+package application_library;
 
 // Flags for various command-line options
-interface OptionFlags {
+public interface OptionFlags {
 	public final String symbol_option = "-s";
 	public final String compression_option = "-c";
 	public final String printall_option = "-print";

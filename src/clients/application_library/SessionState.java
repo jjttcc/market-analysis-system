@@ -1,6 +1,6 @@
 /* Copyright 1998 - 2003: Jim Cochrane - see file forum.txt */
 
-package mas_gui;
+package application_library;
 
 import common.*;
 import java.io.*;

@@ -1,6 +1,6 @@
 /* Copyright 1998 - 2003: Jim Cochrane - see file forum.txt */
 
-package mas_gui;
+package application_library;
 
 import java.util.*;
 
@@ -19,7 +19,7 @@ abstract public class StartupOptions implements OptionFlags {
 
 	// All user-specified symbols (Vector of String) - null if none
 	// specified
-	Vector symbols() {
+	public Vector symbols() {
 		return symbols_;
 	}
 
