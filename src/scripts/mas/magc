@@ -13,8 +13,8 @@ usage() {
 	echo "   -h <hostname>    Connect to server on host <hostname>."
 	echo "   -cl              Run command-line client instead of GUI."
 	echo "   -c               Use data compression."
-	echo "   -no_cd           \
-Use the configuration files in the current directory."
+	echo -e "   -no_cd           No 'change directory' - \
+Use the configuration files\n                    in the current directory."
 	echo "   -s symbol ...    \
 Include only the specified symbols in the selection list."
 }
