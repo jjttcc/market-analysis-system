@@ -1,3 +1,5 @@
+/* Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt */
+
 package support;
 
 import java.util.*;
