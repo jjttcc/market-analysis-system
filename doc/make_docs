@@ -1,0 +1,13 @@
+#!/bin/bash
+# Create documents in 'proc_doc_list' using proc_doc.
+
+workdir=/tmp/make_docs-$$
+mkdir $workdir
+for f in $(cat proc_doc_list); do
+	for type in linux windows; do
+		./proc_doc $f -l -x $type >$workdir/$f.$type
+		groff -mm $workdir/$f.$type >$f-$type.ps
+		groff -mm -Thtml $workdir/$f.$type >$f-$type.html
+	done
+done
+rm -rf $workdir
