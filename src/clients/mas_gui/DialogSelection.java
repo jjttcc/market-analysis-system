@@ -11,7 +11,7 @@ import support.*;
 class DialogSelection extends MA_Dialog {
 	public DialogSelection(Chart f) {
 		super(f);
-		selection_list = new List();
+		selection_list = new java.awt.List();
 		Panel panel = new Panel(new BorderLayout());
 		Button close_button = new Button("Close");
 		add(panel);
@@ -65,5 +65,5 @@ class DialogSelection extends MA_Dialog {
 		return result;
 	}
 
-	protected List selection_list;
+	protected java.awt.List selection_list;
 }
