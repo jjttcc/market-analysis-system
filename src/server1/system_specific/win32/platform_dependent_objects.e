@@ -54,6 +54,4 @@ feature -- Access
 			create {WINDOWS_MAS_COMMAND_LINE} Result.make
 		end
 
-	Eod_of_file_character: CHARACTER is ''
-
 end

@@ -108,9 +108,9 @@ feature {NONE}
 
 	terminate_command_line_client is
 		local
-			platform: expanded PLATFORM_DEPENDENT_OBJECTS
+			constants: expanded APPLICATION_CONSTANTS
 		do
-			io_socket.put_character (platform.Eod_of_file_character)
+			io_socket.put_character (constants.End_of_file_character)
 		end
 
 	Console_flag: CHARACTER is 'C'

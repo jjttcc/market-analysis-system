@@ -24,6 +24,9 @@ feature -- Input/output constants
 	Event_history_record_separator: STRING is "%N"
 			-- Record separator for event history file
 
+	End_of_file_character: CHARACTER is ''
+			-- Character used to denote an "end-of-file" condition
+
 feature -- Default settings
 
 	Default_stock_split_file_name: STRING is "mas_stock_splits"
