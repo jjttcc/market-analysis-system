@@ -14,6 +14,7 @@ feature {NONE} -- Initialization
 
 	make is
 		do
+		z
 			!!start_dates.make(1)
 			!!end_dates.make(1)
 		ensure
