@@ -1,0 +1,21 @@
+Design idea for push-based auto-refresh:
+
+For Pedro's "push" architecture requirement, implement it by assigning the
+job of determining when there is new data (e.g., from a real-time feed) to
+a separate process.  This process will keep track of the clients that need
+newly-arrived data to be sent to them (so it will be a network client of each
+of these clients).  When the process becomes aware of newly arrived data,
+if there is a client waiting for it, it will send a request to the main
+server for the data and send that data to all clients that have
+"registered" for it.
+
+This design avoids major architectural changes to the main server.
+The intended result is that, since the complexity of keeping track of
+which clients need to have data pushed to them for which tradables for
+which time periods will be implemented in the code for this separate
+process, the resulting code base will be cleaner and easier to maintain
+than if this complexity was added to the main server.
+
+It may also be appropriate for this separate process to also handle the
+security brokering (checking passwords, ensuring no non-registered clients
+get through, etc.) that will need to be done for larger customers.
