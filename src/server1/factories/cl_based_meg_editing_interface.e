@@ -18,6 +18,8 @@ class FUNCTION_ANALYZER_BUILDER inherit
 	GLOBAL_SERVICES
 		rename
 			function_library as flib_not_currently_used_but_may_be_later --!!!
+		export {NONE}
+			all
 		end
 
 creation
@@ -50,6 +52,9 @@ feature -- Basic operations
 
 feature {NONE} -- Hard-coded market analyzer building procedures
 
+	Previous_slope_offset: INTEGER is -1
+			-- Offset value for "previous" slope analyzer
+
 	stoch_slope_spec: ARRAY [INTEGER] is
 		do
 			!!Result.make (1, 2)
@@ -59,7 +64,7 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			Result.count = 2
 		end
 
-	stochastic_analyzer: FUNCTION_ANALYZER is
+	stochastic_analyzer: ONE_VARIABLE_FUNCTION_ANALYZER is
 			-- Analyzer of slow stochastic
 		local
 			l: LIST [MARKET_FUNCTION]
@@ -85,20 +90,23 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			f := l.item
 			!!slope_analyzer.make (f.output)
 			!!previous_cmd.make (f.output, slope_analyzer)
-			previous_cmd.set_offset (-1)
+			previous_cmd.set_offset (Previous_slope_offset)
 			!!sign_analyzer.make (previous_cmd, slope_analyzer, false)
 			sign_analyzer.add_sign_change_spec (stoch_slope_spec)
 			!!blc.make (f.output)
 			!!bottom_limit.make (30)
 			!!less_than.make (blc, bottom_limit)
 			!!and_op.make (sign_analyzer, less_than)
-			!ONE_VARIABLE_FUNCTION_ANALYZER!Result.make (f, and_op,
+			!!Result.make (f, and_op,
 				"Stochastic - -> + slope change event", period_types @ "daily")
+			-- Set offset such that the cursor position used by previous_cmd,
+			-- which has a negative offset, will always be valid.
+			Result.set_offset (Previous_slope_offset.abs)
 			--!!!!!!!!!!!!!!Remember that Result's start_date_time needs
 			--!!!!!!!!to be set to a reasonable value!!!!!!!!!!
 		end
 
-	macd_analyzer: FUNCTION_ANALYZER is
+	macd_analyzer: TWO_VARIABLE_FUNCTION_ANALYZER is
 			-- Analyzer of MACD signal line crossing difference
 		local
 			l: LIST [MARKET_FUNCTION]
@@ -128,7 +136,7 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			end
 			check not l.exhausted end
 			f2 := l.item
-			!TWO_VARIABLE_FUNCTION_ANALYZER!Result.make (f1, f2,
+			!!Result.make (f1, f2,
 				"MACD difference/signal crossover event",
 				period_types @ "weekly")
 			--!!!!!!!!!!!!!!Remember that Result's start_date_time needs
