@@ -14,6 +14,7 @@ default
 	arguments (" ")
 	disabled_debug (yes)
 	disabled_debug ("persist")
+	disabled_debug ("regexp")
 	debug (no)
 	line_generation (no)
 	profile (no)
@@ -79,6 +80,25 @@ cluster
 	date_tools (date_format):		"$/english"
 
 	all net (ise):		"$/net"
+
+	gobo:		"$GOBO/library"
+
+	all gobo_kernel (gobo):		"$/kernel"
+		exclude
+			"se"; "ve"; "hact"; 
+		end
+
+	regexp (gobo):		"$/regexp"
+
+	pcre (regexp):		"$/pcre"
+
+	re_interface (regexp):		"$/interface"
+
+	re_support (regexp):		"$/support"
+
+	all gobo_utility (gobo):		"$/utility"
+
+	all gobo_structure (gobo):		"$/structure"
 
 external
 

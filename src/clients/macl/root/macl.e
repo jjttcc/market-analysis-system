@@ -31,9 +31,10 @@ feature {NONE} -- Initialization
 
 	make is
 		local
-			i: INTEGER
 			processor: COMMAND_PROCESSOR
+pcre: PCRE
 		do
+create pcre.make --!!! Run reg-exp example, for study.
 			initialize
 			create processor.make (Record)
 			-- Create the connection to  and start the conversation with
