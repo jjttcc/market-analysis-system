@@ -63,7 +63,9 @@ feature -- Basic operations
 			until
 				i = l.count + 1
 			loop
-				print (l @ i)
+				if l @ i /= Void then
+					print (l @ i)
+				end
 				i := i + 1
 			end
 		end
