@@ -98,6 +98,8 @@ feature -- Basic operations
 feature {NONE} -- Hook routines
 
 	set_innermost_function (f: SIMPLE_FUNCTION [MARKET_TUPLE]) is
+		require
+			not_void: f /= Void
 		deferred
 		end
 
