@@ -82,7 +82,7 @@ Following are some examples of creating a technical indicator with the
 MAS command-line interface.  The first example, Relative Strength Index,
 shows how a complex indicator can be created.  The second example,
 illustrates the creation of a much simpler indicator, Elder's Force
-Index.  The first example provides a fairly thorough introduction the
+Index.  The first example provides a fairly thorough introduction to the
 MAS indicator creation functionality; but if you like to start with a
 simpler introduction, you might want to read example 2 first.
 
@@ -208,7 +208,7 @@ current close (the right CLOSING_PRICE operand).
 Next we need to select the BOOLEAN_NUMERIC_CLIENT's true command, which
 will be used if the LT_OPERATOR evaluates to true.  Choose SUBTRACTION,
 since if the previous close is less than the current close, we want
-the different between the current close and the previous close.
+the difference between the current close and the previous close.
 Then choose CLOSING_PRICE for SUBTRACTION's left operand, since we
 want the current closing price.  (Again, you can choose the same
 CLOSING_PRICE you selected before, from the top list, if you like.)
