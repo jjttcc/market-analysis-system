@@ -53,7 +53,12 @@ feature -- Initialization
 
 feature -- Access
 
-	offset, external_offset: INTEGER
+	external_offset: INTEGER is
+		do
+			Result := offset
+		ensure then
+			offset: Result = offset
+		end
 
 feature -- Status report
 
@@ -63,12 +68,11 @@ feature -- Status setting
 
 	set_offset (arg: INTEGER) is
 			-- Set offset to `arg'.
-		require
-			arg /= Void
 		do
 			offset := arg
 		ensure
-			offset_set: offset = arg and offset /= Void
+			offset_set: offset = arg
+			external_offset_set: external_offset = arg
 		end
 
 feature -- Basic operations
@@ -78,5 +82,9 @@ feature -- Basic operations
 			operand.execute (target.item)
 			value := operand.value
 		end
+
+feature {NONE} -- Implementation
+
+	offset: INTEGER
 
 end -- class SETTABLE_OFFSET_COMMAND
