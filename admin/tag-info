@@ -1,0 +1,23 @@
+Information on cvs tags
+
+cvs tag mas-1_6_6q finance/ eiffel_library/ java_library/
+
+The mas-1_6_6q tag was created on (or very close to) Feb., 5, 2004.
+It "freezes" the state of the code, documentation, and other supporting
+files to coincide with the 1.6.6q release of MAS for Windows - The
+release of the setup-mas1.6.6q.exe file.
+
+cvs tag mas-1_6_6q-2-linux finance/ eiffel_library/ java_library/
+
+The mas-1_6_6q-2-linux tag was created on Feb 10, 2004.  It "freezes" the
+state of the code, ... to coincide with the 1.6.6q release of MAS for
+Linux.  No source files were changed in between the mas-1_6_6q tag and
+the mas-1_6_6q-2-linux tag.  Only a few files were changed, such as the
+mas.spec file, to make some adjustments for the auto-install facilities of
+the Linux version.  The files that changed between the mas-1_6_6q tag and
+the mas-1_6_6q-2-linux tag are:
+
+build/config/windows/inno_config.iss
+build/rpm/mas.spec
+src/mct/config/mctrc-spec.linux
+src/scripts/make_release/release_file_map
