@@ -38,7 +38,7 @@ feature {NONE} -- Initialization
 				http_request /= Void and file_extension /= Void
 		end
 
-feature {NONE} -- Implementation - attributes
+feature {NONE} -- Attributes
 
 	parameters: HTTP_CONFIGURATION
 
@@ -52,26 +52,31 @@ feature {NONE} -- Implementation - attributes
 	Default_file_extension: STRING is "txt"
 			-- Default value for `file_extension'
 
-feature {NONE} -- Implementation
+feature {NONE} -- Basic operations
 
 	retrieve_data is
 			-- Retrieve data for `parameters.symbol'.
-		require
---!!!!This may need to go:
-			data_retrieval_needed: data_retrieval_needed
 		local
 			result_string: STRING
 		do
 			retrieval_failed := False
 			create result_string.make (0)
 			append_to_output_file := False
-			if alternate_start_date /= Void then
+			if
+				use_day_after_latest_date_as_start_date and
+				alternate_start_date /= Void
+			then
 				url.set_path (parameters.path_with_alternate_start_date (
 					alternate_start_date))
 				append_to_output_file := True
+print ("Using alternate start date.%N")
 			else
 				url.set_path (parameters.path)
+print ("Using configured start date.%N")
 			end
+			-- Prevent a side effect re. alternate_start_date for the next
+			-- call to retrieve_data.
+			alternate_start_date := Void
 			start_timer
 			if not http_request.error then
 				http_request.open
@@ -109,7 +114,28 @@ feature {NONE} -- Implementation
 		ensure
 			output_file_exists_if_successful:
 				not retrieval_failed implies output_file_exists
+			alternate_start_date_reset_to_void: alternate_start_date = Void
 		end
+
+	check_if_data_is_out_of_date is
+			-- Check if the current data for `parameters.symbols' are out
+			-- of date with respect to the current date and the http
+			-- configuration.  If true, `data_out_of_date' is set to True
+			-- and `alternate_start_date' is set to the day after the date
+			-- of the latest current data.
+		do
+			--@@NOTE: This algorithm is for EOD data.  If the ability to
+			--handle intraday data is added, a separate algorithm will
+			--be needed for that.
+			alternate_start_date := Void
+			data_out_of_date := time_to_eod_update and
+				not parameters.ignore_today and
+				current_date_is_later_than_latest_daily_data
+		ensure
+			data_out_of_date = (alternate_start_date /= Void)
+		end
+
+feature {NONE} -- Status report
 
 	retrieval_failed: BOOLEAN
 			-- Did the last call to `retrieve_data' fail?
@@ -121,21 +147,12 @@ feature {NONE} -- Implementation
 			outputfile: PLAIN_TEXT_FILE
 		do
 			create outputfile.make (output_file_name (parameters.symbol))
-			Result := not outputfile.exists
+			Result := outputfile.exists
 		end
 
-	current_data_is_out_of_date: BOOLEAN is
-			-- Are the current data out of date with respect to the
-			-- current date and the http configuration?
-		do
-			--@@NOTE: This algorithm is for EOD data.  If the ability to
-			--handle intraday data is added, a separate algorithm will
-			--be needed for that.
-			alternate_start_date := Void
-			Result := time_to_eod_update and
-				not parameters.ignore_today and
-				current_date_is_later_than_latest_daily_data
-		end
+	data_out_of_date: BOOLEAN
+			-- Are data for the current symbol (`parameters.symbol')
+			-- out of date with respect to today's date?
 
 	data_retrieval_needed: BOOLEAN is
 -- !!!Remove this feature?
@@ -250,7 +267,7 @@ feature {NONE} -- Implementation
 		do
 			d := clone (latest_date_for (parameters.symbol))
 			Result := d /= Void and then d < create {DATE}.make_now
-			if Result and use_day_after_latest_date_as_start_date then
+			if Result then
 				-- Set the alternate start date to the day after the
 				-- latest date in the current data set so that there
 				-- is no overlap between the current data set and
@@ -261,6 +278,7 @@ feature {NONE} -- Implementation
 		ensure
 			no_alternate_start_date_if_not_out_of_date: not Result implies
 				alternate_start_date = Void
+--!!!!!Change to: Result = (alternate_start_date /= Void)?
 		end
 
 	alternate_start_date: DATE

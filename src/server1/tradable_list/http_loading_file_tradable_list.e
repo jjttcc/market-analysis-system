@@ -18,14 +18,15 @@ class HTTP_LOADING_FILE_TRADABLE_LIST inherit
 		rename
 			make as parent_make
 		redefine
-			timing_on, ignore_cache, update_and_load_data
+			timing_on, update_and_load_data
 		end
 
 	HTTP_DATA_RETRIEVAL
 		rename
 			initialize as http_initialize
 		redefine
-			output_file_path, latest_date_for, latest_date_requirement
+			output_file_path, latest_date_for, latest_date_requirement,
+			use_day_after_latest_date_as_start_date
 		end
 
 	ERROR_PROTOCOL
@@ -73,110 +74,33 @@ feature -- Access
 			-- Names of all files with tradable data to be processed
 
 	update_and_load_data is
-		local
-			data_file_exists, data_out_of_date: BOOLEAN
 		do
 			parameters.set_symbol (current_symbol)
-			data_file_exists := True
+			use_day_after_latest_date_as_start_date := True
 			if last_tradable /= Void then
 				-- Ensure that old indicator data from the previous
 				-- `last_tradable' is not re-used.
 				last_tradable.flush_indicators
-				data_out_of_date := current_data_is_out_of_date
+				check_if_data_is_out_of_date
 				if data_out_of_date and not output_file_exists then
 					log_error_with_token (Data_file_does_not_exist_error,
 						current_symbol)
-					data_file_exists := False
+					use_day_after_latest_date_as_start_date := False
 				end
 			else	-- last_tradable = Void
 				if not output_file_exists then
-					data_file_exists := False
 					data_out_of_date := True
 				else
 					load_data
-					data_out_of_date := current_data_is_out_of_date
+					check_if_data_is_out_of_date
 				end
 			end
 			if not fatal_error and data_out_of_date then
-				if data_file_exists then
-					-- !!!!!!!Set alternate start date.
-				end
 				retrieve_data
 				load_data
 			end
 		ensure then
-			good_if_no_error: not fatal_error implies
-				last_tradable /= Void and not current_data_is_out_of_date
-		end
-
-	old_retrieve_load_code_remove_me is --!!!!!!
-		do
---OLD:
-					setup_input_medium
-					if fatal_error and not output_file_exists then
-						-- `setup_input_medium' failed because the data for
-						-- the current tradable has not yet been retrieved.
-						retrieve_data
-					end
-					if not fatal_error then
---!!!!!May need to guard against side effects.
-						load_data
-						close_input_medium
-					else
-						-- A fatal error indicates that the current tradable
-						-- is invalid, or not readable, or etc., so ensure
-						-- that last_tradable is not set to this invalid
-						-- object.
-						last_tradable := Void
-					end
---END-OLD
-		end
-
-	old_item_remove_me: TRADABLE [BASIC_MARKET_TUPLE] is --!!!!!!
-			-- Current tradable.  `fatal_error' will be true if an error
-			-- occurs.
-		do
-			fatal_error := false
-			-- Create a new tradable (or get it from the cache) only if
-			-- caching is off, or the cursor has moved since the last
-			-- tradable creation, or the cache has been cleared.
-			if
-				not caching_on or
-				index /= old_index or (Cache_size > 0 and cache.count = 0)
-			then
-				old_index := 0
-				last_tradable := cached_item (index)
-				if last_tradable = Void then
-					setup_input_medium
-					if fatal_error and not output_file_exists then
-						-- `setup_input_medium' failed because the data for
-						-- the current tradable has not yet been retrieved.
-						retrieve_data
-					end
-					if not fatal_error then
---!!!!!May need to guard against side effects.
-						load_data
-						close_input_medium
-					else
-						-- A fatal error indicates that the current tradable
-						-- is invalid, or not readable, or etc., so ensure
-						-- that last_tradable is not set to this invalid
-						-- object.
-						last_tradable := Void
-					end
-				else
-					-- Ensure that old indicator data from the previous
-					-- `last_tradable' is not re-used.
-					last_tradable.flush_indicators
-				end
-				old_index := index
-			end
-			Result := last_tradable
-			if Result = Void and not fatal_error then
-				fatal_error := true
-			end
-		ensure then
-			good_if_no_error: not fatal_error implies Result /= Void
+			good_if_no_error: not fatal_error implies last_tradable /= Void
 		end
 
 feature -- Status setting
@@ -204,30 +128,6 @@ feature {NONE} -- Implementation
 			end
 		end
 
---!!!!Remove or fix at cleanup time.
-	old_open_current_file_remove: INPUT_FILE is
-		do
-			parameters.set_symbol (current_symbol)
-			if last_tradable = Void then
-				-- The input file for `current_symbol' has not yet been read.
-				-- Since `latest_date_for' will be called indirectly by
-				-- `data_retrieval_needed', set up for and call `load_data'
-				-- to ensure, if the data file exists, last_tradable is set.
-				create Result.make (file_names.item)
-				if Result.exists then
-					Result.open_read
-					load_data
-				end
-			end
-			if data_retrieval_needed then
-				retrieve_data
-			end
-			report_timing
-			if Result = Void then
---now invalid:				Result := Precursor
-			end
-		end
-
 feature {NONE} -- Hook routine implementations
 
 	timing_on: BOOLEAN
@@ -241,24 +141,17 @@ feature {NONE} -- Hook routine implementations
 		end
 
 	latest_date_for (symbol: STRING): DATE is
-		local
-			t: TRADABLE [BASIC_MARKET_TUPLE]
 		do
 print ("latest_date_for called.%N")
-			search_by_symbol (symbol)
-			t := last_tradable
+			if not current_symbol.is_equal (symbol) then
+				search_by_symbol (symbol)
+			end
 			if
-				t /= Void and then not t.data.is_empty
+				last_tradable /= Void and then not last_tradable.data.is_empty
 			then
-				Result := t.data.last.end_date
+				Result := last_tradable.data.last.end_date
 print ("latest_date_for result: " + Result.out + "%N")
 			end
-		end
-
-	ignore_cache: BOOLEAN is
-		do
-			Result := time_to_eod_update and not parameters.ignore_today and
-				latest_date_for (current_symbol) < create {DATE}.make_now
 		end
 
 	latest_date_requirement: BOOLEAN is
@@ -267,6 +160,8 @@ print ("latest_date_for result: " + Result.out + "%N")
 		ensure
 			last_tradable_set_condition: Result = (last_tradable /= Void)
 		end
+
+	use_day_after_latest_date_as_start_date: BOOLEAN
 
 invariant
 
