@@ -105,6 +105,7 @@ feature -- Access
 			l.extend (log_cmd)
 			l.extend (log2_cmd)
 			l.extend (log10_cmd)
+			l.extend (sine_cmd)
 			l.extend (absolute_value)
 			l.extend (rounded_value)
 			l.extend (slope_analyzer)
@@ -505,6 +506,11 @@ feature {NONE} -- Implementation
 			end
 			Result.extend (Unary_real, name)
 			name := log10_cmd.generator
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Unary_real, name)
+			name := sine_cmd.generator
 			check
 				valid_name: command_names.has (name)
 			end

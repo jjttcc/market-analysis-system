@@ -172,6 +172,8 @@ feature -- Access
 				"Base-2 logarithm operator"))
 			Result.extend (create {PAIR [COMMAND, STRING]}.make (log10_cmd,
 				"Base-10 logarithm operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (sine_cmd,
+				"Trigonometric sine operator"))
 			Result.extend (create {PAIR [COMMAND, STRING]}.make (
 				absolute_value, "Absolute value operator"))
 			Result.extend (create {PAIR [COMMAND, STRING]}.make (rounded_value,
@@ -366,6 +368,11 @@ feature -- Access - an instance of each command
 		end
 
 	log_cmd: LOG is
+		once
+			create Result.make (numeric_value_command)
+		end
+
+	sine_cmd: SINE is
 		once
 			create Result.make (numeric_value_command)
 		end
