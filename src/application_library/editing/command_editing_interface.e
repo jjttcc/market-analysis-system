@@ -136,7 +136,7 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 			l.extend (command_with_generator ("FALSE_COMMAND"))
 			l.extend (command_with_generator ("SIGN_ANALYZER"))
 
-			!!l.make (25)
+			!!l.make (26)
 			Result.extend (l, Real_result_command)
 			l.extend (command_with_generator ("SUBTRACTION"))
 			l.extend (command_with_generator ("MULTIPLICATION"))
@@ -163,6 +163,7 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 			l.extend (command_with_generator ("SLOPE_ANALYZER"))
 			l.extend (command_with_generator ("UNARY_LINEAR_OPERATOR"))
 			l.extend (command_with_generator ("ABSOLUTE_VALUE"))
+			l.extend (command_with_generator ("N_BASED_UNARY_OPERATOR"))
 
 			!!l.make (5)
 			Result.extend (l, Binary_real_real_command)
@@ -208,6 +209,7 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 			Result.extend (l, N_based_calculation)
 			l.extend (command_with_generator ("N_VALUE_COMMAND"))
 			l.extend (command_with_generator ("MA_EXPONENTIAL"))
+			l.extend (command_with_generator ("N_BASED_UNARY_OPERATOR"))
 		end
 
 	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
@@ -237,6 +239,8 @@ feature {NONE} -- Implementation
 						-- RESULT_COMMAND [REAL], and an n-value
 	N_command,			-- Classes that (only) need an n-value
 	Mtlist,				-- Classes that (only) need a market tuple list
+	Resultreal_n,		-- Classes that need a RESULT_COMMAND [REAL] and
+						-- an n-value
 	Settable_offset,	-- SETTABLE_OFFSET_COMMAND
 	Sign_analyzer,		-- SIGN_ANALYZER
 	Boolean_num_client	-- BOOLEAN_NUMERIC_CLIENT
@@ -426,6 +430,11 @@ feature {NONE} -- Implementation
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Mtlist, name)
+			name := "N_BASED_UNARY_OPERATOR"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Resultreal_n, name)
 			name := "BOOLEAN_NUMERIC_CLIENT"
 			check
 				valid_name: command_names.has (name)
@@ -493,6 +502,12 @@ feature {NONE} -- Implementation
 					c_is_a_unary_operator_real: unop_real /= Void
 				end
 				editor.edit_mtlist_resultreal_n (unop_real)
+			when Resultreal_n then
+				unop_real ?= c
+				check
+					c_is_a_unary_operator_real: unop_real /= Void
+				end
+				editor.edit_resultreal_n (unop_real)
 			when Other then
 				-- No initialization needed.
 			when N_command then

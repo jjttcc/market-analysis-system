@@ -130,6 +130,7 @@ feature -- Basic operations
 			ui_set: user_interface /= Void
 			op_maker_set: operator_maker /= Void
 		local
+			response: STRING
 			cmd: RESULT_COMMAND [REAL]
 		do
 			f.set_input (user_interface.function_selection_from_type (
@@ -141,6 +142,15 @@ feature -- Basic operations
 							concatenation (<<f.generator,
 								"'s operator">>), false)
 			f.set_operator (cmd)
+			response := user_interface.string_selection(concatenation(<<
+				"Change ", f.generator, "'s effective offset value? ",
+				"(default: 0) ">>))
+			response.to_lower
+			if response @ 1 = 'y' then
+				f.set_effective_offset (user_interface.integer_selection (
+						concatenation (<<f.generator,
+							"'s effective offset value">>)))
+			end
 			edit_n (f)
 		end
 

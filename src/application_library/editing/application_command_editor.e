@@ -118,6 +118,15 @@ feature -- Basic operations
 			end
 		end
 
+	edit_resultreal_n (c: UNARY_OPERATOR [ANY, REAL]) is
+			-- Edit `c's operator (RESULT_COMMAND [REAL]), and n-value.
+		require
+			ui_set: user_interface /= Void
+		do
+			edit_n (c)
+			edit_unaryop (c)
+		end
+
 	edit_n (c: COMMAND) is
 			-- Edit `c's n-value.
 		require
