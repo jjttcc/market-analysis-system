@@ -1,0 +1,33 @@
+# MAS Control Terminal configuration settings
+separator=;
+terminal_name;MAS Server Control Panel
+# subterminal for mas GUI
+begin subterminal
+# Python module import specification:
+import_module;mas_tools
+prompt;Start a GUI
+# Command to start the subprocess:
+startup_cmd_class;NewGUI
+startup_cmd_method;execute
+end subterminal
+# subterminal for connecting with the server
+begin subterminal
+import_module;mas_tools
+prompt;Start a Command-Line Client
+# Command to start the subprocess:
+startup_cmd_class;NewCommandLineClient
+startup_cmd_method;execute
+end subterminal
+# subterminal for terminating the server
+begin subterminal
+import_module;mas_tools
+prompt;Terminate the Server and Close
+# Command to start the subprocess:
+startup_cmd_class;ServerTermination
+startup_cmd_method;execute
+# Extra arguments for the terminat_server command - they go at the end:
+# (Currently no args)
+#cmd_args;1
+# Tell terminal to exit after the startup command is executed.
+exit_after_startup_cmd;
+end subterminal
