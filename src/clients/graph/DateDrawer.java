@@ -7,7 +7,7 @@ import java.util.*;
 import support.*;
 
 /**
- *  Abstraction for drawing data tuples as points connected by lines
+ *  Abstraction for drawing date-related data
  */
 public class DateDrawer extends Drawer {
 
