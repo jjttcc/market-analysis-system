@@ -207,6 +207,9 @@ feature {NONE} -- Implementation
 				from
 					i := 1
 					types := event_types
+					print_list (
+							<<"Select an event type for which to register ",
+							r.name, " (0 to end):%N">>)
 				until
 					i > types.count
 				loop
@@ -227,12 +230,7 @@ feature {NONE} -- Implementation
 				else
 					current_type := types @ last_integer
 					r.add_event_type (current_type)
-					print_list (<<"Added type ", current_type.name, "%N">>)
-					print ("Add another event type? (y/n) ")
-					c := selected_character
-					if not (c = 'y' or c = 'Y') then
-						finished := true
-					end
+					print_list (<<"Added type ", current_type.name, ".%N">>)
 				end
 			end
 		end
