@@ -533,8 +533,9 @@ feature {NONE} -- Implementation of hook routines
 
 	initialize_lock is
 		do
+print ("il called%N")
 			lock := file_lock (file_name_with_app_directory (
-				market_event_generation_library.persistent_file_name))
+				generators_file_name))
 		end
 
 end -- CL_BASED_MEG_EDITING_INTERFACE

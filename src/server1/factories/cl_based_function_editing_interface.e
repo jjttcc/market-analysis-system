@@ -187,7 +187,7 @@ feature {NONE} -- Implementation of hook methods
 	initialize_lock is
 		do
 			lock := file_lock (file_name_with_app_directory (
-				function_library.persistent_file_name))
+				indicators_file_name))
 		end
 
 end -- CL_BASED_FUNCTION_EDITING_INTERFACE
