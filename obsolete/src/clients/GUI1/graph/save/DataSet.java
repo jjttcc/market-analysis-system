@@ -45,6 +45,10 @@ import java.lang.*;
  */
 public class DataSet extends Object {
 
+	public void set_drawer (BarDrawer d)
+	{
+		drawer = d;
+	}
 
 /*
 ***************************
@@ -148,7 +152,7 @@ public class DataSet extends Object {
    * Drawer of price bars - e.g., tic bars or candles
    * [Need to find a name for it and create the class.]
    */
-	protected ClassThatDrawsThePriceBar drawer;
+	protected BarDrawer drawer;
   /**
    * The data X maximum. 
    * Once the data is loaded this will never change.
@@ -428,54 +432,24 @@ public class DataSet extends Object {
    * @param g Graphics state
    * @param bounds The data window to draw into
    */
-      public void draw_data(Graphics g, Rectangle bounds) {
-           Color c;
-
-           if ( xaxis != null ) {
-                xmax = xaxis.maximum;
-                xmin = xaxis.minimum;
-           }
-
-           if ( yaxis != null ) {
-                ymax = yaxis.maximum;
-                ymin = yaxis.minimum;
-           }
-
-           
-           xrange = xmax - xmin;
-           yrange = ymax - ymin;
-
-	   /*
-	   ** draw the legend before we clip the data window
-	   */
-           draw_legend(g,bounds);
-	   /*
-	   ** Clip the data window
-	   */
-           if(clipping) g.clipRect(bounds.x, bounds.y, 
-                                   bounds.width, bounds.height);
-
-           c = g.getColor();
-
-           if( linestyle != DataSet.NOLINE ) {
-               if ( linecolor != null) g.setColor(linecolor);
-               else                    g.setColor(c);
-               draw_lines(g,bounds);
-           }    
-
-
-           if( marker > 0 ) {
-               if(markercolor != null) g.setColor(markercolor);
-               else                    g.setColor(c);
-               draw_markers(g,bounds);
-           }    
-
-
-
-
-
-           g.setColor(c);
-      }
+	public void draw_data(Graphics g, Rectangle bounds) {
+		Color c = g.getColor();
+		if (linestyle != DataSet.NOLINE ) {
+			if ( linecolor != null) g.setColor(linecolor);
+		}
+		drawer.set_data(data);
+		drawer.set_xaxis(xaxis);
+		drawer.set_yaxis(yaxis);
+		drawer.set_maxes(xmax, ymax, xmin, ymin);
+		drawer.set_ranges(xrange, yrange);
+		drawer.set_clipping(clipping);
+		drawer.set_linestyle(linestyle);
+		drawer.set_stride(stride);
+		drawer.set_length(length);
+		draw_legend(g,bounds);
+		drawer.draw_data(g, bounds);
+		g.setColor(c);
+	}
 
   /**
    * return the data X maximum.
@@ -614,159 +588,11 @@ public class DataSet extends Object {
 	  }
 
 
-/*
-*********************
-** Protected Methods
-*********************/
-
-  /**
-   * Draw into the data window the straight line segments joining the
-   * data points.
-   * @param g Graphics context
-   * @param w Data window
-   */
-
-      protected void draw_lines(Graphics g, Rectangle w) {
-          int i;
-          int j;
-          boolean inside0 = false;
-          boolean inside1 = false;
-          double x,y;
-          int x0 = 0 , y0 = 0;
-          int x1 = 0 , y1 = 0;
-//     Calculate the clipping rectangle
-          Rectangle clip = g.getClipRect();
-          int xcmin = clip.x;
-          int xcmax = clip.x + clip.width;
-          int ycmin = clip.y;
-          int ycmax = clip.y + clip.height;
-
-
-//    Is there any data to draw? Sometimes the draw command will
-//    will be called before any data has been placed in the class.
-          if( data == null || data.length < stride ) return;
-          
-
-//          System.out.println("Drawing Data Lines!");
-
-
-//    Is the first point inside the drawing region ?
-          if( (inside0 = inside(data[0], data[1])) ) {
-
-              x0 = (int)(w.x + ((data[0]-xmin)/xrange)*w.width);
-              y0 = (int)(w.y + (1.0 - (data[1]-ymin)/yrange)*w.height);
-
-              if( x0 < xcmin || x0 > xcmax || 
-                  y0 < ycmin || y0 > ycmax)  inside0 = false;
-
-          }
-
-
-          for(i=stride; i<length; i+=stride) {
-
-//        Is this point inside the drawing region?
-
-              inside1 = inside( data[i], data[i+1]);
-             
-//        If one point is inside the drawing region calculate the second point
-              if ( inside1 || inside0 ) {
-
-               x1 = (int)(w.x + ((data[i]-xmin)/xrange)*w.width);
-               y1 = (int)(w.y + (1.0 - (data[i+1]-ymin)/yrange)*w.height);
-
-               if( x1 < xcmin || x1 > xcmax || 
-                   y1 < ycmin || y1 > ycmax)  inside1 = false;
-
-              }
-//        If the second point is inside calculate the first point if it
-//        was outside
-              if ( !inside0 && inside1 ) {
-
-                x0 = (int)(w.x + ((data[i-stride]-xmin)/xrange)*w.width);
-                y0 = (int)(w.y + (1.0 - (data[i-stride+1]-ymin)/yrange)*w.height);
-
-              }
-//        If either point is inside draw the segment
-              if ( inside0 || inside1 )  {
-					//Replace: g.drawLine(x0,y0,x1,y1);
-				   //With:
-				   drawer.draw(/* args? */);
-              }
-
-/*
-**        The reason for the convolution above is to avoid calculating
-**        the points over and over. Now just copy the second point to the
-**        first and grab the next point
-*/
-              inside0 = inside1;
-              x0 = x1;
-              y0 = y1;
-
-          }
-
-      }
-
-
-  /**
-   *  Return true if the point (x,y) is inside the allowed data range.
-   */
-
-      protected boolean inside(double x, double y) {
-          if( x >= xmin && x <= xmax && 
-              y >= ymin && y <= ymax )  return true;
-          
-          return false;
-      }
-
-  /**
-   *  Draw the markers.
-   *  Only markers inside the specified range will be drawn. Also markers
-   *  close the edge of the clipping region will be clipped.
-   * @param g Graphics context
-   * @param w data window
-   * @see graph.Markers
-   */
-      protected void draw_markers(Graphics g, Rectangle w) {
-          int x1,y1;
-          int i;
-//     Calculate the clipping rectangle
-          Rectangle clip = g.getClipRect();
-          int xcmin = clip.x;
-          int xcmax = clip.x + clip.width;
-          int ycmin = clip.y;
-          int ycmax = clip.y + clip.height;
-/*
-**        Load the marker specified for this data
-*/
-          Markers m = g2d.getMarkers();
-
-
-          if( m == null) return;
-
-//          System.out.println("Drawing Data Markers!");
-
-          for(i=0; i<length; i+=stride) {
-              if( inside( data[i], data[i+1]) ) {
-
-                x1 = (int)(w.x + ((data[i]-xmin)/xrange)*w.width);
-                y1 = (int)(w.y + (1.0 - (data[i+1]-ymin)/yrange)*w.height);
-
-                if( x1 >= xcmin && x1 <= xcmax && 
-                   y1 >= ycmin && y1 <= ycmax ) 
-                        m.draw(g, marker, markerscale, x1, y1);
-
-                }
-          }
-
-
-      }
-
   /**
    * Draw a legend for this data set
    * @param g Graphics context
    * @param w Data Window
    */
-
       protected void draw_legend(Graphics g, Rectangle w) {
           Color c = g.getColor();
           Markers m = null;
@@ -850,5 +676,3 @@ public class DataSet extends Object {
      }
 
 }
-
-
