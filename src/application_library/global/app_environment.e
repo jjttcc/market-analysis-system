@@ -17,23 +17,20 @@ feature -- Access
 			-- where configuration and data files are stored.
 			-- Void if environment variable "TAL_APP_DIRECTORY" is not set.
 		once
-			Result := get ("TAL_APP_DIRECTORY")
+			Result := get (env_names.application_directory_name)
 		end
 
 	mailer: STRING is
 			-- Name of the executable to use for sending email
 		once
-			Result := get ("TAL_APP_MAILER")
-		ensure
-			set_correctly_if_env_var_is_set:
-				Result = Void or Result.is_equal (get ("TAL_APP_MAILER"))
+			Result := get (env_names.mailer_name)
 		end
 
 	mailer_subject_flag: STRING is
 			-- The flag to use to indicate to the mailer that the following
 			-- argument is the subject
 		once
-			Result := get ("TAL_APP_MAILER_SUBJECT_FLAG")
+			Result := get (env_names.mailer_subject_flag_name)
 		ensure
 			set_correctly_if_env_var_is_set:
 				Result = Void or
@@ -53,4 +50,31 @@ feature -- Access
 			Result.append (fname)
 		end
 
+feature -- Status setting
+
+	set_env_name_service (arg: APP_ENVIRONMENT_VARIABLE_NAMES) is
+			-- Set env_name_service to `arg'.
+		require
+			arg_not_void: arg /= Void
+		once
+			env_name_service := arg
+		ensure
+			env_name_service_set: env_name_service = arg and
+				env_name_service /= Void
+		end
+
+feature {NONE} -- Implementation
+
+	env_names: APP_ENVIRONMENT_VARIABLE_NAMES is
+			-- Provides names of required environment variables
+		once
+			if env_name_service = Void then
+				!!Result
+			else
+				Result := env_name_service
+			end
+		end
+
+	env_name_service: APP_ENVIRONMENT_VARIABLE_NAMES
+	
 end -- TAL_APP_ENVIRONMENT
