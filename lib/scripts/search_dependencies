@@ -10,7 +10,7 @@ usage() {
 
 # A list of all eiffel (*.e) files within the specified directory
 eiffel_files() {
-	find $1 -name '*.e' -print
+	find $1 -follow -name '*.e' -print
 }
 
 if [ $# -lt 2 ]; then
