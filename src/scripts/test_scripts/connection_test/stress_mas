@@ -12,6 +12,7 @@ def abort(msg, conn):
 
 try:
 	lastmodule = "sys"; from sys import *
+	lastmodule = "string"; from string import *
 	lastmodule = "time"; from time import *
 	lastmodule = "stress_connection"; from stress_connection import *
 	lastmodule = "os"; import os
@@ -41,6 +42,7 @@ if len(argv) < 2:
 	usage()
 	exit(-1)
 
+Errorcode = '101'
 sleeptime = 0.35
 silent = false
 host = ""
@@ -107,5 +109,10 @@ while 1:
 	connection = Connection(host, port)
 	connection.send_message(s)
 	connection.receive_message()
-	if not silent: print connection.last_message,
+	response = split(connection.last_message)
+	if response[0] == Errorcode:
+		print "Server responded with an error message:"
+		print connection.last_message
+	else:
+		if not silent: print connection.last_message,
 	connection.close()
