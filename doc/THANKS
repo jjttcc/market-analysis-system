@@ -17,13 +17,16 @@ Eirik Mangseth - who did the original port of MAS to Windows, wrote some
 of the code in the database layer, and sent me many helpful suggestions
 and bug reports.
 
-Bertrand Meyer - whose excellent Eiffel language and development guidelines
+Bertrand Meyer - whose superb Eiffel language and development guidelines
 helped me to implement MAS with a good design and with minimal bugs.
 
 Paul Crismer - whose excellent ECLI library allowed me to add database
 capability on Linux.
 
-Jordan Russell - whose excellent Inno Setup (
+Jordan Russell - whose marvelous Inno Setup (
 http://www.jrsoftware.org/isinfo.php) package made it possible to
 package MAS into a self-installing setup.exe file, making installation on
 Windows systems much easier than before.
+
+Berend de Boer - whose magnificent e-POSIX package is used in the MCT
+program and is likely to be used in other MAS components in the future.
