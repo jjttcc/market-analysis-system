@@ -250,38 +250,40 @@ feature {NONE} -- Implementation
 		do
 			fatal_error := false
 			create {ARRAYED_LIST [STRING]} Result.make (0)
-			-- definition of statement on session
-			create stmt.make (session)
-			-- change execution mode to immediate (no need to prepare)
-			stmt.set_immediate_execution_mode
-			stmt.set_sql (q)
-			stmt.execute
-			if not stmt.is_ok then
-				last_error := concatenation (<<
-					"Database error - execution of statement%N'",
-					stmt.sql, "' failed:%N", stmt.cli_state, ", ",
-					stmt.diagnostic_message>>)
-				debug ("database")
-					print_list (<<last_error, "%N">>)
-				end
-				fatal_error := true
-			else
-				-- Create result set 'value holders'.
-				create ecli_string.make (20)
-				check stmt.result_column_count > 0 end
-				-- Define the container of value holders.
-				stmt.set_cursor (<<ecli_string>>)
-				-- Iterate on result-set.
-				from
-					stmt.start
-				until
-					stmt.off
-				loop
-					if not stmt.cursor.item (1).is_null then
-						s ?= stmt.cursor.item (1).item
-						Result.extend (s)
+			if not q.empty then
+				-- definition of statement on session
+				create stmt.make (session)
+				-- change execution mode to immediate (no need to prepare)
+				stmt.set_immediate_execution_mode
+				stmt.set_sql (q)
+				stmt.execute
+				if not stmt.is_ok then
+					last_error := concatenation (<<
+						"Database error - execution of statement%N'",
+						stmt.sql, "' failed:%N", stmt.cli_state, ", ",
+						stmt.diagnostic_message>>)
+					debug ("database")
+						print_list (<<last_error, "%N">>)
 					end
-					stmt.forth
+					fatal_error := true
+				else
+					-- Create result set 'value holders'.
+					create ecli_string.make (20)
+					check stmt.result_column_count > 0 end
+					-- Define the container of value holders.
+					stmt.set_cursor (<<ecli_string>>)
+					-- Iterate on result-set.
+					from
+						stmt.start
+					until
+						stmt.off
+					loop
+						if not stmt.cursor.item (1).is_null then
+							s ?= stmt.cursor.item (1).item
+							Result.extend (s)
+						end
+						stmt.forth
+					end
 				end
 			end
 		end
