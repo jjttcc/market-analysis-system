@@ -46,6 +46,10 @@ abstract public class MarketDrawer extends Drawer {
 	// Set data to `d'.
 	public void set_data(Object d) { _data = (double[]) d; }
 
+	public void set_reference_values_needed(boolean b) {
+		ref_values_needed = b;
+	}
+
 	protected int[] x_values() {
 		return _x_values;
 	}
@@ -54,10 +58,19 @@ abstract public class MarketDrawer extends Drawer {
 		return _bar_width;
 	}
 
+	protected boolean reference_values_needed() {
+		return ref_values_needed;
+	}
+
+	protected boolean reference_lines_needed() {
+		return true;
+	}
+
 	protected int _x_values[];
 	protected int _bar_width;
 	protected double _data[];
 	protected String[] _dates;
 	protected String[] _times;
 	protected final int Stride = 4;
+	boolean ref_values_needed;
 }

@@ -53,4 +53,9 @@ public class LineDrawer extends IndicatorDrawer {
 			y0 = y1;
 		}
 	}
+
+	void draw_reference_values(Graphics g, Rectangle main_bounds,
+			Rectangle ref_bounds) {
+		super.draw_reference_values(g, main_bounds, ref_bounds);
+	}
 }

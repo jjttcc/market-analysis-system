@@ -40,6 +40,14 @@ abstract public class IndicatorDrawer extends Drawer {
 
 	public void set_data(Object d) { _data = (double[]) d; }
 
+	public void set_reference_values_needed(boolean b) {
+		ref_values_needed = b;
+	}
+
+	protected boolean reference_lines_needed() {
+		return false;
+	}
+
 	protected int[] x_values() {
 		return _market_drawer.x_values();
 	}
@@ -78,8 +86,13 @@ abstract public class IndicatorDrawer extends Drawer {
 		return result;
 	}
 
+	protected boolean reference_values_needed() {
+		return ref_values_needed;
+	}
+
 	protected double _data[];
 	protected String[] _indicator_dates;
 	protected String[] _indicator_times;
 	protected Drawer _market_drawer;
+	boolean ref_values_needed;
 }

@@ -58,6 +58,11 @@ public class TimeDrawer extends Drawer {
 		return _market_drawer.x_values();
 	}
 
+	// (Reference values are never needed for times.)
+	public void set_reference_values_needed(boolean b) {}
+
+	protected boolean reference_lines_needed() { return false; }
+
 	protected final static int Max_hours = 720, Max_days = 30;
 
 	protected final static int Day_x_offset = 8;

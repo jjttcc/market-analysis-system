@@ -82,6 +82,10 @@ import java.util.*;
 
 public class InteractiveGraph extends Graph {
 
+	public InteractiveGraph (boolean is_indicator) {
+		super(is_indicator);
+	}
+
 /**
  *    Set to true when a rectangle is being dragged out by the mouse
  */

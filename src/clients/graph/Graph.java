@@ -57,6 +57,9 @@ import support.Configuration;
 
 public class Graph extends Canvas {
 
+	public Graph (boolean is_indicator) {
+		_indicator = is_indicator;
+	}
 
 /*
 ** Default Background Color
@@ -216,6 +219,11 @@ public class Graph extends Canvas {
    * Text to be painted Last onto the Graph Canvas.
    */
 	private TextLine lastText = null;
+
+
+	// Is this the indicator (secondary) graph?
+	private boolean _indicator;
+
 /*
 *******************
 **
@@ -470,8 +478,10 @@ public double getYmin() {
  */
 	public void paint(Graphics g) {
 		int i;
+		int refval_index = 0;
 		Graphics lg  = g.create();
 		Rectangle r = bounds();
+		DataSet ds;
 
 		/* The r.x and r.y returned from bounds is relative to the
 		** parents space so set them equal to zero.
@@ -512,9 +522,31 @@ public double getYmin() {
 			datarect.width  = r.width;
 			datarect.height = r.height;
 
-			for (i=0; i<dataset.size(); i++) {
-				((DataSet)dataset.elementAt(i)).draw_data(lg,r);
+			// Only the first dataset's boundaries need to be drawn,
+			// since they are all the same.
+			((DataSet) dataset.elementAt(0)).draw_boundaries(lg, r);
+			if (_indicator) {
+				// This is the indicator graph - only the reference values
+				// for the last data set should be drawn.
+				refval_index = dataset.size() - 1;
+			} else {
+				// This is the main indicator graph - only the first
+				// (market data) reference values should be drawn.
+				refval_index = 0;
 			}
+			for (i=0; i<dataset.size(); ++i) {
+				ds = (DataSet) dataset.elementAt(i);
+				if (i == refval_index) {
+					ds.set_reference_values_needed(true);
+				} else {
+					ds.set_reference_values_needed(false);
+				}
+				ds.draw_data(lg, r);
+			}
+		} else {
+			// Force boundaries to be drawn.
+			ds = new DataSet(new PriceDrawer());
+			ds.draw_boundaries(lg, r);
 		}
 
 		if (symbol != null && symbol.length() > 0) {

@@ -149,9 +149,11 @@ public class DataSet {
 	public DataSet(Drawer d) {
 		_drawer = d;
 		data = null;
-		date_drawer = new DateDrawer(d.market_drawer(), d.is_indicator());
-		time_drawer = new TimeDrawer(d.market_drawer(), d.is_indicator());
-		_dates_needed = true;
+		if (d != null) {
+			date_drawer = new DateDrawer(d.market_drawer(), d.is_indicator());
+			time_drawer = new TimeDrawer(d.market_drawer(), d.is_indicator());
+			_dates_needed = true;
+		}
 		tuple_count = 0;
 	}
 
@@ -227,6 +229,15 @@ public class DataSet {
 		vline_data.addElement(p);
 	}
 
+	// Draw internal graph boundaries.
+	public void draw_boundaries(Graphics g, Rectangle bounds) {
+		_drawer.draw_boundaries(g, bounds);
+	}
+
+	public void set_reference_values_needed (boolean b) {
+		_drawer.set_reference_values_needed (b);
+	}
+
 	/**
 	* Draw the straight line segments and/or the markers at the
 	* data points.
@@ -239,12 +250,12 @@ public class DataSet {
 	public void draw_data(Graphics g, Rectangle bounds) {
 		boolean restore_bounds = false;
 		if (! range_set) range();
-		if (bounds.x == 0) {
-			// Create frame boundary.
-			bounds.x += 4;
-			bounds.width -= 4;
-			restore_bounds = true;
-		}
+//!!!		if (bounds.x == 0) {
+//			// Create frame boundary.
+//			bounds.x += 4;
+//			bounds.width -= 4;
+//			restore_bounds = true;
+//		}
 		if ( linecolor != null) g.setColor(linecolor);
 		_drawer.set_data(data);
 		_drawer.set_xaxis(xaxis_);
@@ -260,10 +271,10 @@ public class DataSet {
 				draw_dates(g, bounds);
 			}
 		}
-		if (restore_bounds) {
-			bounds.x -= 4;
-			bounds.width += 4;
-		}
+//		if (restore_bounds) {
+//			bounds.x -= 4;
+//			bounds.width += 4;
+//		}
 	}
 
 	/**

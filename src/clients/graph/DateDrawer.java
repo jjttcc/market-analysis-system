@@ -47,6 +47,11 @@ public class DateDrawer extends Drawer {
 		return _market_drawer.x_values();
 	}
 
+	// (Reference values are never needed for dates.)
+	public void set_reference_values_needed(boolean b) {}
+
+	protected boolean reference_lines_needed() { return false; }
+
 	protected final static int Max_months = 360, Max_years = 30;
 
 	protected final static int Year_x_offset = 8, Year_y = 15;
@@ -185,15 +190,18 @@ public class DateDrawer extends Drawer {
 	protected void draw_month(Graphics g, Rectangle bounds, IntPair p,
 			int[] _x_values) {
 		int x, month_x;
-		final int Line_offset = -2;
+		final int Line_offset = -2, Too_far_left = 7;
 		double width_factor;
 
 		width_factor = width_factor_value(bounds, dates().length);
 		x = _x_values[p.right()];
 		month_x = x + Month_x_offset;
-		g.setColor(Color.black);
-		g.drawLine(x + Line_offset, bounds.y,
-			x + Line_offset, bounds.y + bounds.height);
+		// Don't draw the line if it's close to the left border.
+		if (x > Too_far_left) {
+			g.setColor(Color.black);
+			g.drawLine(x + Line_offset, bounds.y,
+				x + Line_offset, bounds.y + bounds.height);
+		}
 		g.setColor(conf.text_color());
 		if (! is_indicator) {
 			g.drawString(Utilities.month_at(p.left()).substring(0, month_ln),
@@ -223,7 +231,6 @@ public class DateDrawer extends Drawer {
 		}
 	}
 
-	// Do y-coordinate reference values need to be displayed for this data?
 	protected boolean reference_values_needed() {
 		return false;
 	}
