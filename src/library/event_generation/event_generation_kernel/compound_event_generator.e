@@ -280,9 +280,7 @@ feature {MARKET_FUNCTION_EDITOR}
 		do
 			left_analyzer.wipe_out
 			right_analyzer.wipe_out
-			if product /= Void then
-				product.wipe_out
-			end
+			product := Void
 		end
 
 invariant

@@ -49,6 +49,7 @@ feature -- Status setting
 feature {MARKET_FUNCTION_EDITOR}
 
 	wipe_out is
+			-- Ensure that data is cleared before storage.
 		deferred
 		end
 
