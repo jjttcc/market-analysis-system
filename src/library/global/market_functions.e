@@ -87,6 +87,12 @@ feature -- Access
 			create pair.make (f,
 				"Market function that accumulates its values")
 			Result.extend (pair)
+			create {CONFIGURABLE_N_RECORD_FUNCTION} f.make (
+				stock, addition, volume, 5)
+			create pair.make (f,
+				"N-period function that can be configured by choosing %
+				%previous and first-element operators")
+			Result.extend (pair)
 			create {MARKET_FUNCTION_LINE} f.make_from_2_points (point1,
 				point2, stock)
 			create pair.make (f,
