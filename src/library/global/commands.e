@@ -41,204 +41,186 @@ feature -- Access
 	instances_and_descriptions: ARRAYED_LIST [PAIR [COMMAND, STRING]] is
 			-- An instance and description of each COMMAND class used
 			-- in indicator or market-analyzer creation
-		local
-			pair: PAIR [COMMAND, STRING]
 		once
 			create Result.make (0)
-			create pair.make (numeric_value_command,
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				numeric_value_command,
 				"Operator that simply stores a numeric value - Can be %
-				%used as a constant or a variable")
-			Result.extend (pair)
-			create pair.make (true_command,
-				"Boolean operator whose result is always true")
-			Result.extend (pair)
-			create pair.make (false_command,
-				"Boolean operator whose result is always false")
-			Result.extend (pair)
-			create pair.make (and_operator, "Logical 'and' operator")
-			Result.extend (pair)
-			create pair.make (or_operator, "Logical 'or' operator")
-			Result.extend (pair)
-			create pair.make (xor_operator, "Logical 'exclusive or' operator")
-			Result.extend (pair)
-			create pair.make (eq_operator,
-				"Operator that compares two numbers for equality")
-			Result.extend (pair)
-			-- lt_operator is needed by boolean numeric client.
-			create pair.make (lt_operator,
+				%used as a constant or a variable"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (true_command,
+				"Boolean operator whose result is always true"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (false_command,
+				"Boolean operator whose result is always false"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (and_operator,
+				"Logical 'and' operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (or_operator,
+				"Logical 'or' operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (xor_operator,
+				"Logical 'exclusive or' operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (eq_operator,
+				"Operator that compares two numbers for equality"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (lt_operator,
 				"Numeric comparison operator that determines whether the %
-				%first number is less than the second")
-			Result.extend (pair)
-			create pair.make (gt_operator,
+				%first number is less than the second"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (gt_operator,
 				"Numeric comparison operator that determines whether the %
-				%first number is greater than the second")
-			Result.extend (pair)
-			create pair.make (ge_operator,
+				%first number is greater than the second"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (ge_operator,
 				"Numeric comparison operator that determines whether the %
-				%first number is greater than or equal to the second")
-			Result.extend (pair)
-			create pair.make (le_operator,
+				%first number is greater than or equal to the second"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (le_operator,
 				"Numeric comparison operator that determines whether the %
-				%first%Nnumber is less than or equal to the second")
-			Result.extend (pair)
-			create pair.make (implication_operator,
+				%first%Nnumber is less than or equal to the second"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				implication_operator,
 				"Logical implication operator - True when %
-				%the left%Noperand is false or both operands are true")
-			Result.extend (pair)
-			create pair.make (equivalence_operator,
-				"Logical equivalence operator")
-			Result.extend (pair)
-			create pair.make (addition, "Addition operator")
-			Result.extend (pair)
-			create pair.make (subtraction, "Subtraction operator")
-			Result.extend (pair)
-			create pair.make (multiplication, "Multiplication operator")
-			Result.extend (pair)
-			create pair.make (division, "Division operator")
-			Result.extend (pair)
-			create pair.make (safe_division,
-				"Division operator that handles division by zero safely")
-			Result.extend (pair)
-			create pair.make (power, "Operator whose result is %
-				%its left operand to the power of its right operand")
-			Result.extend (pair)
-			create pair.make (n_th_root,
+				%the left%Noperand is false or both operands are true"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				equivalence_operator,
+				"Logical equivalence operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (addition,
+				"Addition operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (subtraction,
+				"Subtraction operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				multiplication, "Multiplication operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (division,
+				"Division operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (safe_division,
+				"Division operator that handles division by zero safely"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (power,
+				"Operator whose result is %
+				%its left operand to the power of its right operand"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (n_th_root,
 				"Operator whose result is the n-th root %
-				%(specified by its right operand) of its left operand")
-			Result.extend (pair)
-			create pair.make (absolute_value, "Absolute value operator")
-			Result.extend (pair)
-			create pair.make (rounded_value, "Rounded value operator")
-			Result.extend (pair)
-			create pair.make (square_root, "Square root operator")
-			Result.extend (pair)
-			create pair.make (log_cmd, "Natural logarithm operator")
-			Result.extend (pair)
-			create pair.make (log2_cmd, "Base-2 logarithm operator")
-			Result.extend (pair)
-			create pair.make (log10_cmd, "Base-10 logarithm operator")
-			Result.extend (pair)
-			create pair.make (not_operator, "Logical negation operator")
-			Result.extend (pair)
-			create pair.make (index_extractor,
+				%(specified by its right operand) of its left operand"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				absolute_value, "Absolute value operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (rounded_value,
+				"Rounded value operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (square_root,
+				"Square root operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (log_cmd,
+				"Natural logarithm operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (log2_cmd,
+				"Base-2 logarithm operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (log10_cmd,
+				"Base-10 logarithm operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (not_operator,
+				"Logical negation operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				index_extractor,
 				"Operator that extracts the current index value from %
-				%an indexed operator")
-			Result.extend (pair)
-			----------------- Create/insert MAL COMMANDs -----------------
-			create basic_numeric_command -- Fulfills requirement for type
-							 -- RESULT_COMMAND [REAL].
-			-- Create a pair for the BASIC_NUMERIC_COMMAND instance
-			-- (basic_numeric_command) and add it to the list.
-			create pair.make (basic_numeric_command,
+				%an indexed operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				basic_numeric_command,
 				"Operator that obtains the numeric value for the current %
-				%trading period")
-			Result.extend (pair)
-			create pair.make (highest_value,
+				%trading period"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (highest_value,
 				"Operator that extracts the highest value from a subsequence %
-				%%Nof n trading periods")
-			Result.extend (pair)
-			create pair.make (lowest_value,
+				%%Nof n trading periods"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (lowest_value,
 				"Operator that extracts the lowest value from a subsequence %
-				%%Nof n trading periods")
-			Result.extend (pair)
-			create pair.make (linear_sum,
-				"Operator that sums a subsequence of n records")
-			Result.extend (pair)
-			create pair.make (minus_n_command,
+				%%Nof n trading periods"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (linear_sum,
+				"Operator that sums a subsequence of n records"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				minus_n_command,
 				"Operator that processes data n periods before the current %
 				%trading%N period - used, for example, for the momentum %
-				%indicator")
-			Result.extend (pair)
-			create pair.make (n_value_command,
-				"n-valued operator whose value is `n'")
-			Result.extend (pair)
-			create pair.make (ma_exponential, "Moving average exponential")
-			Result.extend (pair)
-			create pair.make (settable_offset_command,
+				%indicator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				n_value_command,
+				"n-valued operator whose value is `n'"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				ma_exponential,
+				"Moving average exponential"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				settable_offset_command,
 				"Operator that processes data based on a settable offset %
 				%from the current%Ntrading period - Warning: Be careful to %
 				%set the offset correctly; setting%N it to the wrong value %
-				%may cause out-of-bounds access to the data tuple array")
-			Result.extend (pair)
-			create pair.make (volume,
+				%may cause out-of-bounds access to the data tuple array"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (volume,
 				"Operator that extracts the volume for the current trading %
-				%period")
-			Result.extend (pair)
-			create pair.make (low_price,
+				%period"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (low_price,
 				"Operator that extracts the low price for the current trading %
-				%period")
-			Result.extend (pair)
-			create pair.make (high_price,
+				%period"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (high_price,
 				"Operator that extracts the high price for the current %
-				%trading period")
-			Result.extend (pair)
-			create pair.make (closing_price,
+				%trading period"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (closing_price,
 				"Operator that extracts the closing price for the current %
-				%trading period")
-			Result.extend (pair)
-			create pair.make (opening_price,
+				%trading period"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (opening_price,
 				"Operator that extracts the opening price for the current %
-				%trading period")
-			Result.extend (pair)
-			create pair.make (open_interest,
+				%trading period"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (open_interest,
 				"Operator that extracts the open interest for the current %
-				%trading period")
-			Result.extend (pair)
-			create pair.make (basic_linear_command,
+				%trading period"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				basic_linear_command,
 				"Operator that retrieves the value at the current %
-				%trading period")
-			Result.extend (pair)
-			create pair.make (unary_linear_operator,
-				"Operator that uses an operand to operate on the current %
-				%trading period")
-			Result.extend (pair)
-			create pair.make (n_based_unary_operator,
-				"N-based operator whose value remains unchanged after %
-				%initialization and that uses%Nan operand to obtain its value")
-			Result.extend (pair)
-			create pair.make (numeric_conditional_command,
+				%trading period"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				unary_linear_operator,
+				"Operator that operates on the current trading period"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				n_based_unary_operator, "N-based operator whose value %
+				%remains unchanged after initialization and that obtains %
+				%its value from a sub-operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				numeric_conditional_command,
 				"Operator that makes a decision based on %
 				%the value of executing its%Nboolean operator - if the %
 				%result is true, value is set to the result of%Nexecuting %
 				%its 'true command'; otherwise, value is set to the %
 				%result of%Nexecuting its 'false command'.  This operator %
 				%can thus function as%Nan if/else block that produces %
-				%a numeric value.%N")
-			Result.extend (pair)
-			create pair.make (sign_analyzer,
+				%a numeric value.%N"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (sign_analyzer,
 				"Operator that detects sign changes with respect to its %
-				%left and right operands")
-			Result.extend (pair)
-			create pair.make (slope_analyzer,
-				"Operator that calculates the slope of a function")
-			Result.extend (pair)
-			create pair.make (function_based_command,
+				%left and right operands"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				slope_analyzer,
+				"Operator that calculates the slope of a function"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				function_based_command,
 				"Operator that processes a sequence of records %
 				%obtained from a%Nmarket function - only used by %
-				%ONE_VARIABLE_FUNCTION_ANALYZER")
-			Result.extend (pair)
-			create pair.make (numeric_assignment_command,
+				%ONE_VARIABLE_FUNCTION_ANALYZER"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				numeric_assignment_command,
 				"Operator that executes its %
 				%'main_operator' and stores the resulting value%Nin a %
 				%target NUMERIC_VALUE_COMMAND and whose result is the %
-				%target's%Nresulting value")
-			Result.extend (pair)
-			create pair.make (numeric_valued_command_wrapper,
+				%target's%Nresulting value"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				numeric_valued_command_wrapper,
 				"Numeric operator that can be used to %"wrap%" a non-numeric %
 				%operator,%Nallowing it to be used in a numeric context.  If %
 				%this operator can%Ndetermine if the wrapped operator has a %
 				%value, it will set its value to%Nthat value; if the wrapped %
 				%operator's value is boolean it will convert%Na true value to %
 				%1 and a false value to 0. If no value can be found,%Nthis %
-				%operator's value will be 0.")
-			Result.extend (pair)
-			create pair.make (command_sequence,
+				%operator's value will be 0."))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				command_sequence,
 				"Operator that executes a sequence of sub-operators%N%
 				%Note: This operator cannot be used where a numeric-valued %
 				%operator is%Nexepcted.  If it needs to be used in such %
 				%a context, it can be%Nwrapped with a %
-				%%"NUMERIC_VALUED_COMMAND_WRAPPER%".")
-			Result.extend (pair)
+				%%"NUMERIC_VALUED_COMMAND_WRAPPER%"."))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (loop_command,
+				"Operator that emulates a loop construct"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				loop_with_assertions,
+				"Loop command that provides for the specification of a %
+				%loop invariant and a loop variant"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				value_at_index_command, "Operator that operates on a %
+				%specified trading period according to its 'index value'"))
 		end
 
 	command_instances: ARRAYED_LIST [COMMAND] is
@@ -279,7 +261,10 @@ feature -- Access - an instance of each command
 				default_market_tuple_list)
 		end
 
-	basic_numeric_command: BASIC_NUMERIC_COMMAND
+	basic_numeric_command: BASIC_NUMERIC_COMMAND is
+		once
+			create Result
+		end
 
 	closing_price: CLOSING_PRICE is
 		once
@@ -382,6 +367,18 @@ feature -- Access - an instance of each command
 	log_cmd: LOG is
 		once
 			create Result.make (numeric_value_command)
+		end
+
+	loop_command: LOOP_COMMAND is
+		once
+			create Result.make (false_command, false_command,
+				numeric_value_command)
+		end
+
+	loop_with_assertions: LOOP_WITH_ASSERTIONS is
+		once
+			create Result.make (false_command, false_command,
+				numeric_value_command)
 		end
 
 	lowest_value: LOWEST_VALUE is
@@ -530,8 +527,14 @@ feature -- Access - an instance of each command
 
 	unary_linear_operator: UNARY_LINEAR_OPERATOR is
 		once
-			create Result.make (
-				default_market_tuple_list, numeric_value_command)
+			create Result.make (default_market_tuple_list,
+				numeric_value_command)
+		end
+
+	value_at_index_command: VALUE_AT_INDEX_COMMAND is
+		once
+			create Result.make (default_market_tuple_list,
+				numeric_value_command, numeric_value_command)
 		end
 
 	volume: VOLUME is
