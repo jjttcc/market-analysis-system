@@ -182,26 +182,34 @@ feature {NONE} -- Implementation
 			eg_maker: COMPOUND_GENERATOR_FACTORY
 			left, right: MARKET_EVENT_GENERATOR
 		do
-			create eg_maker.make
-			left := event_generator_selection ("left component")
-			if left /= Void then
-				right := event_generator_selection ("right component")
-				eg_maker.set_generators (left, right)
-				eg_maker.set_before_extension (
-					ceg_date_time_extension ("BEFORE"))
-				eg_maker.set_after_extension (ceg_date_time_extension ("AFTER"))
-				eg_maker.set_left_target_type (ceg_left_target_type)
-				if eg_maker.left_target_type /= Void then
-					show_message (concatenation (<<
-						eg_maker.left_target_type.name, " added.">>))
-				end
-				eg_maker.set_signal_type (signal_type_selection)
-				create_event_generator (eg_maker, new_event_type_name,
-					working_meg_library)
-				last_event_generator := eg_maker.product
-			else
+			if market_event_generation_library.empty then
+				show_message ("Can't create compound market analyzer - %
+					%persistent analyzer list is empty.")
 				error_occurred := true
-				last_error := "There are no event generators to select from."
+			else
+				create eg_maker.make
+				left := event_generator_selection ("left component")
+				if left /= Void then
+					right := event_generator_selection ("right component")
+					eg_maker.set_generators (left, right)
+					eg_maker.set_before_extension (
+						ceg_date_time_extension ("BEFORE"))
+					eg_maker.set_after_extension (ceg_date_time_extension (
+						"AFTER"))
+					eg_maker.set_left_target_type (ceg_left_target_type)
+					if eg_maker.left_target_type /= Void then
+						show_message (concatenation (<<
+							eg_maker.left_target_type.name, " added.">>))
+					end
+					eg_maker.set_signal_type (signal_type_selection)
+					create_event_generator (eg_maker, new_event_type_name,
+						working_meg_library)
+					last_event_generator := eg_maker.product
+				else
+					error_occurred := true
+					last_error :=
+						"There are no event generators to select from."
+				end
 			end
 		ensure
 			-- last_event_generator references the newly created
@@ -345,8 +353,9 @@ feature {NONE} -- Implementation
 feature {NONE} -- Hook methods
 
 	event_generator_selection (msg: STRING): MARKET_EVENT_GENERATOR is
-			-- User's event generator selection - Void if there are no
-			-- event generators to select from.
+			-- User's event generator selection
+		require
+			meg_library_not_empty: not market_event_generation_library.empty
 		deferred
 		end
 
