@@ -296,10 +296,8 @@ feature {NONE} -- Implementation
 			mflist: STORABLE_LIST [MARKET_FUNCTION]
 			retrieval_failed: BOOLEAN
 			app_env: expanded APP_ENVIRONMENT
-			full_path_name, file_errinfo: STRING
+			full_path_name: STRING
 		do
-			file_errinfo := "The file may be corrupted or you may have %
-				%an incompatible version.%N"
 			full_path_name := app_env.file_name_with_app_directory (
 				indicators_file_name)
 			if retrieval_failed then
@@ -344,10 +342,11 @@ feature {NONE} -- Implementation
 			if retrieval_failed then
 				if exception = Retrieve_exception then
 					log_errors (<<"Retrieval of market analysis library%
-								% file ", full_path_name, " failed%N">>)
+						% file ", full_path_name, " failed.%N", file_errinfo>>)
 				else
 					log_errors (<<"Error occurred while retrieving market %
-							%analysis library: ", meaning(exception), "%N">>)
+						%analysis library (", meaning(exception),
+							").%N", file_errinfo>>)
 				end
 				die (-1)
 			else
@@ -379,10 +378,11 @@ feature {NONE} -- Implementation
 			if retrieval_failed then
 				if exception = Retrieve_exception then
 					log_errors (<<"Retrieval of event registrants file ",
-								full_path_name, " failed%N">>)
+						full_path_name, " failed.%N", file_errinfo>>)
 				else
 					log_errors (<<"Error occurred while retrieving event %
-								%registrants: ", meaning(exception), "%N">>)
+						%registrants (", meaning(exception),
+						").%N", file_errinfo>>)
 				end
 				die (-1)
 			else
@@ -453,6 +453,13 @@ feature {NONE} -- Implementation
 				end
 				l.forth
 			end
+		end
+
+	file_errinfo: STRING is
+			-- Standard error message for problems loading from files
+		do
+			Result := "The file may be corrupted or you may have %
+				%an incompatible version.%N"
 		end
 
 end -- GLOBAL_APPLICATION
