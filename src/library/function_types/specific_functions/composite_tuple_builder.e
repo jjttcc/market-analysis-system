@@ -31,6 +31,7 @@ feature {NONE} -- Initialization
 			not_void:
 				in /= Void and ctf /= Void and time_period_type /= Void and
 				date /= Void
+			in.trading_period_type.duration < duration
 		do
 			ovf_make (in, Void)
 			set_tuple_maker (ctf)
@@ -85,7 +86,7 @@ feature -- Status report
 				previous := output.item
 				output.forth
 			until
-				output.after or not Result
+				output.exhausted or not Result
 			loop
 				Result := (output.item.date_time -
 							previous.date_time).duration.is_equal (duration)
@@ -96,7 +97,7 @@ feature -- Status report
 				from
 					output.start
 				until
-					output.after or not Result
+					output.exhausted or not Result
 				loop
 					Result := output.item.last.date_time <
 								output.item.date_time + duration
@@ -176,9 +177,8 @@ feature -- Basic operations
 					src_sublist.extend (source_list.item)
 					source_list.forth
 				invariant
-					(src_sublist.last.date_time <
-						current_date + duration)
-					-- src_sublist is sorted by date_time
+					(src_sublist.last.date_time < current_date + duration)
+					sublist_sorted: -- src_sublist is sorted by date_time
 				until
 					source_list.after or
 						source_list.item.date_time >=
@@ -190,7 +190,6 @@ feature -- Basic operations
 				tuple_maker.set_tuplelist (src_sublist)
 				tuple_maker.execute
 				tuple_maker.product.set_date_time (current_date)
-				--!!!When implemented, use the flyweight date_time table.
 				current_date := current_date + duration
 				output.extend (tuple_maker.product)
 			end
@@ -206,20 +205,8 @@ feature {NONE}
 invariant
 
 	input_equals_source_list: input = source_list
-	process_parameters_set: source_list /= Void and tuple_maker /= Void and
-		duration /= Void
-		--!!!Note: If a MARKET_TUPLE_LIST (the type of source_list) is
-		--refined to further support the concept of lists with time
-		--period types, such as daily or weekly, including comparison
-		--based on the length of the period (e.g., weekly > daily),
-		--then it would make sense to extend this predicate to include:
-		--source_list.time_period.duration < duration [or something
-		--equivalent] - the concept being that it only makes sense to
-		--make a composite tuple from a set of tuples whose time period
-		--duration is less than that of the time period duration.
-		--(For example, make weekly from daily, but daily from weekly
-		--of weekly from weekly doesn't make sense.)
-	trading_period_type_not_void: trading_period_type /= Void
+	process_parameters_set: source_list /= Void and tuple_maker /= Void
 	start_date_not_void: start_date /= Void
+	input_duration_lt_duration: input.trading_period_type.duration < duration
 
 end -- COMPOSITE_TUPLE_BUILDER
