@@ -1,6 +1,7 @@
 # macl input file to create several indicators
 e
 c
+n
 ACCUMULATION
 c
 # Name:
@@ -40,6 +41,7 @@ shared VOLUME
 c
 s
 c
+n
 ACCUMULATION
 c
 # Name:
@@ -76,6 +78,7 @@ shared MULTIPLICATION
 c
 s
 c
+n
 ONE_VARIABLE_FUNCTION
 c
 # Name:
@@ -88,6 +91,7 @@ MACD Signal Line (EMA of MACD Difference)
 y
 s
 c
+n
 ONE_VARIABLE_FUNCTION
 c
 # Name:
@@ -100,6 +104,7 @@ Slope of MACD Signal Line
 y
 s
 c
+n
 N_RECORD_ONE_VARIABLE_FUNCTION
 c
 # Name:
@@ -124,6 +129,7 @@ y
 1
 s
 c
+n
 EXPONENTIAL_MOVING_AVERAGE
 c
 # Name:
@@ -138,6 +144,7 @@ c
 5
 s
 c
+n
 EXPONENTIAL_MOVING_AVERAGE
 c
 # Name:
@@ -152,6 +159,7 @@ c
 5
 s
 c
+n
 ONE_VARIABLE_FUNCTION
 c
 # Name:
@@ -164,6 +172,7 @@ EMA of Volume
 y
 s
 c
+n
 ONE_VARIABLE_FUNCTION
 c
 # Name:
@@ -236,10 +245,11 @@ s
 # the trend is upward; when the total is -1, the Slope of MACD Signal Line
 # is less than or equal to -.175 and the trend is downward.
 c
+n
 ONE_VARIABLE_FUNCTION
 c
 # Will be -1 if true, otherwise 0
-# Name
+# Name:
 Slope of MACD Signal Line Less Than or Equal to -0.175
 Slope of MACD Signal Line
 y
@@ -262,10 +272,11 @@ c
 0
 s
 c
+n
 ONE_VARIABLE_FUNCTION
 c
 # Will be 1 if true, otherwise 0
-# Name
+# Name:
 Slope of MACD Signal Line Greater Than or Equal to 0.175
 Slope of MACD Signal Line
 y
@@ -288,9 +299,10 @@ c
 0
 s
 c
+n
 TWO_VARIABLE_FUNCTION
 c
-# Name
+# Name:
 Slope of MACD Signal Line Trend
 Slope of MACD Signal Line Less Than or Equal to -0.175
 y
