@@ -11,7 +11,7 @@ class ONE_VARIABLE_FUNCTION inherit
 
 	COMPLEX_FUNCTION
 		redefine
-			set_innermost_input, operators, reset_parameters
+			set_innermost_input, reset_parameters
 		end
 
 	LINEAR_ANALYZER
@@ -70,32 +70,10 @@ feature -- Access
 			Result.append (input.full_description)
 		end
 
-	main_parameters: LINKED_LIST [FUNCTION_PARAMETER] is
-		local
-			parameter_set: LINKED_SET [FUNCTION_PARAMETER]
-		do
-			create Result.make
-			create parameter_set.make
-			if immediate_parameters /= Void then
-				parameter_set.fill (immediate_parameters)
-			end
-			check
-				input_parameters_not_void: input.parameters /= Void
-			end
-			parameter_set.fill (input.parameters)
-			Result.append (parameter_set)
-		end
-
 	children: LIST [MARKET_FUNCTION] is
 		do
 			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 			Result.extend (input)
-		end
-
-	operators: LIST [COMMAND] is
-		do
-			Result := Precursor
-			Result.append (input.operators)
 		end
 
 	leaf_functions: LIST [COMPLEX_FUNCTION] is
@@ -120,7 +98,7 @@ feature -- Status report
 						processed_date_time >= input.processed_date_time
 		end
 
-	has_children: BOOLEAN is true
+	has_children: BOOLEAN is True
 
 feature {NONE}
 

@@ -11,6 +11,9 @@ indexing
 deferred class FUNCTION_PARAMETER inherit
 
 	PART_COMPARABLE
+		redefine
+			is_equal
+		end
 
 feature {NONE} -- Initialization
 
@@ -27,10 +30,7 @@ feature -- Access
 		end
 
 	description: STRING is
-			-- `name'
---!!!Is more needed?
-		do
-			Result := name
+		deferred
 		end
 
 	value_type_description: STRING is
@@ -49,6 +49,13 @@ feature -- Comparison
 	infix "<" (other: FUNCTION_PARAMETER): BOOLEAN is
 		do
 			Result := description < other.description
+		end
+
+	is_equal (other: FUNCTION_PARAMETER): BOOLEAN is
+		do
+			-- Redefined here to allow descendants to compare with other
+			-- FUNCTION_PARAMETERs instead of "like Current".
+			Result := Precursor (other)
 		end
 
 feature -- Element change

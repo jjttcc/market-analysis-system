@@ -19,7 +19,7 @@ class CONFIGURABLE_N_RECORD_FUNCTION inherit
 		export
 			{NONE} nrovf_make_unused
 		undefine
-			forth, do_process, operators
+			forth, do_process, immediate_operators
 		redefine
 			set_n, short_description, start, initialize_operators, target,
 			strict_n_count
@@ -29,7 +29,7 @@ class CONFIGURABLE_N_RECORD_FUNCTION inherit
 		export
 			{NONE} set_operator
 		undefine
-			immediate_parameters, set_operator
+			immediate_direct_parameters, set_operator
 		redefine
 			short_description, start, initialize_operators, target
 		end
@@ -148,7 +148,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	strict_n_count: BOOLEAN is false
+	strict_n_count: BOOLEAN is False
 
 invariant
 

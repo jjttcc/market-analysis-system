@@ -46,16 +46,17 @@ feature -- Access
 		deferred
 		end
 
-	parameters: LIST [FUNCTION_PARAMETER] is
-			-- Changeable parameters for this function, including those
-			-- of `descendants'
-		deferred
-		end
-
 	immediate_parameters: LIST [FUNCTION_PARAMETER] is
-			-- Changeable parameters for this function without those
+			-- Changeable parameters for this function, exluding those
 			-- of `descendants'
-		deferred
+		do
+			Result := clone (immediate_direct_parameters)
+			Result.append (immediate_operator_parameters)
+		ensure
+			result_exists: Result /= Void
+			immediate_direct_plus_ops: Result.count =
+				immediate_direct_parameters.count +
+				immediate_operator_parameters.count
 		end
 
 	processed_date_time: DATE_TIME is
@@ -73,13 +74,19 @@ feature -- Access
 			-- children, children's children, etc.
 		local
 			l: LIST [MARKET_FUNCTION]
+			function_set: LINKED_SET [MARKET_FUNCTION]
 		do
 			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
-			l := children
-			from l.start until l.exhausted loop
-				Result.extend (l.item)
-				Result.append (l.item.descendants)
-				l.forth
+			l := clone (children)
+			if l /= Void then
+				create function_set.make
+				function_set.compare_objects
+				from l.start until l.exhausted loop
+					function_set.extend (l.item)
+					function_set.fill (l.item.descendants)
+					l.forth
+				end
+				Result.append (function_set)
 			end
 		ensure
 			not_void: Result /= Void
@@ -92,10 +99,17 @@ feature -- Access
 		end
 
 	operators: LIST [COMMAND] is
-			-- Flattened list of the hierarchy of all operators used by this
-			-- market function
+		local
+			l: LIST [MARKET_FUNCTION]
 		do
-			create {LINKED_LIST [COMMAND]} Result.make
+			Result := clone (immediate_operators)
+			l := children
+			if l /= Void then
+				from l.start until l.exhausted loop
+					Result.append (l.item.operators)
+					l.forth
+				end
+			end
 		end
 
 	required_tuple_types: SET [MARKET_TUPLE] is
@@ -191,6 +205,103 @@ feature {MARKET_FUNCTION_EDITOR, MARKET_FUNCTION}
 			-- has been changed.
 		do
 			-- Default to null action - redefine as needed.
+		end
+
+feature {MARKET_FUNCTION}
+
+	immediate_direct_parameters: LIST [FUNCTION_PARAMETER] is
+			-- Parameters of Current, excluding `operator_parameters' and
+			-- exluding those of `descendants'
+		do
+			-- Default to empty list - Redefine as needed.
+			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
+		ensure
+			result_exists: Result /= Void
+		end
+
+feature {NONE} -- Implementation
+
+	direct_parameters: LINKED_LIST [FUNCTION_PARAMETER] is
+			-- Parameters of Current, excluding `operator_parameters'
+		local
+			parameter_set: LINKED_SET [FUNCTION_PARAMETER]
+			fl: LIST [MARKET_FUNCTION]
+		do
+			create Result.make
+			create parameter_set.make
+			from
+				fl := functions
+				fl.start
+			until
+				fl.exhausted
+			loop
+				parameter_set.fill (fl.item.immediate_direct_parameters)
+				fl.forth
+			end
+			Result.append (parameter_set)
+		ensure
+			result_exists: Result /= Void
+		end
+
+	immediate_operators: LIST [COMMAND] is
+			-- All operators that belong directly to this function, but not
+			-- to its descendants
+		do
+			-- Default to empty list - Redefine as needed.
+			create {LINKED_LIST [COMMAND]} Result.make
+		ensure
+			exists: Result /= Void
+		end
+
+	operator_parameters: LIST [FUNCTION_PARAMETER] is
+			-- Parameters belonging to `operators'
+		local
+			ops: LIST [COMMAND]
+		do
+			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
+			if operators /= Void then
+				from
+					ops := operators
+					ops.start
+				until
+					ops.exhausted
+				loop
+					prepare_operator_for_editing (ops.item, Result)
+					ops.forth
+				end
+			end
+		ensure
+			result_exists: Result /= Void
+		end
+
+	immediate_operator_parameters: LIST [FUNCTION_PARAMETER] is
+			-- Parameters of `immediate_operators'
+		local
+			ops: LIST [COMMAND]
+		do
+			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
+			ops := immediate_operators
+			if ops /= Void then
+				from
+					ops.start
+				until
+					ops.exhausted
+				loop
+					prepare_operator_for_editing (ops.item, Result)
+					ops.forth
+				end
+			end
+		ensure
+			result_exists: Result /= Void
+		end
+
+	prepare_operator_for_editing (op: COMMAND; l: LIST [FUNCTION_PARAMETER]) is
+			-- If `op' is editable, prepare it for editing
+			-- (as a FUNCTION_PARAMETER).
+		do
+			if op.is_editable then
+				op.prepare_for_editing (l)
+			end
 		end
 
 invariant

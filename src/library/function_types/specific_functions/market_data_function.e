@@ -12,7 +12,7 @@ class MARKET_DATA_FUNCTION inherit
 
 	COMPLEX_FUNCTION
 		redefine
-			set_innermost_input, output, operator_used, process, parameters
+			set_innermost_input, output, operator_used, process
 		end
 
 creation {FACTORY, MARKET_FUNCTION_EDITOR}
@@ -42,12 +42,6 @@ feature -- Access
 			Result.append (short_description)
 			Result.append (":%N")
 			Result.append (input.full_description)
-		end
-
-	parameters, main_parameters: LINKED_LIST [FUNCTION_PARAMETER] is
-			-- Empty list - no parameters
-		once
-			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 		end
 
 	children: LIST [MARKET_FUNCTION] is

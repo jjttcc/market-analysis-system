@@ -101,7 +101,7 @@ feature -- Status setting
 
 feature {NONE} -- Implementation
 
-	user_object_selection (objects: LIST [G]; msg: STRING): G is
+	user_object_selection (objects: LIST [G]; tag: STRING): G is
 			-- User's selection of a member of `objects' (deep-cloned) or
 			-- a member of `current_objects' that is in `objects' (shared)
 			-- If the selection is from `current_objects',
@@ -113,7 +113,6 @@ feature {NONE} -- Implementation
 			tree_objects: LIST [G]
 			first_pair, second_pair: PAIR [LIST [STRING], STRING]
 			selection: INTEGER
-			do_clone: BOOLEAN
 			general_msg: STRING
 		do
 			create {LINKED_SET [G]} tree_objects.make
@@ -139,10 +138,10 @@ feature {NONE} -- Implementation
 			end
 			if tree_names.is_empty then
 				general_msg := concatenation (<<
-							"Select an object for the ", msg, ":%N">>)
+							"Select an object for the ", tag, ":%N">>)
 			else
 				general_msg := concatenation (<<
-							"Select an object for the ", msg, ":%N",
+							"Select an object for the ", tag, ":%N",
 							"(Objects selected from current tree will be %
 							%shared; objects selected%Nfrom the list of all %
 							%objects will be copied.)%N">>)
@@ -184,8 +183,8 @@ feature {NONE} -- Implementation
 			end
 			if do_clone then
 				Result := deep_clone (Result)
-				if name_needed then
-					set_new_name (Result, msg)
+				if editing_needed then
+					edit_object (Result, tag)
 				end
 			end
 		ensure
@@ -293,16 +292,22 @@ feature {NONE} -- Implementation - hook methods
 		deferred
 		end
 
+	do_clone: BOOLEAN
+			-- Within `user_object_selection', does the selected object
+			-- need to be cloned?  (For use by hook routines)
+
 	initialization_needed: BOOLEAN
 			-- Does the selected object need to be initialized?
 
-	name_needed: BOOLEAN is
-			-- Do new objects need a name?
+	editing_needed: BOOLEAN is
+			-- Does the newly selected object need editing?
 		deferred
 		end
 
-	set_new_name (o: G; msg: STRING) is
-			-- Obtain a name from the user and set 'o's name to it.
+	edit_object (o: G; msg: STRING) is
+			-- Perform any needed editing of `o'.
+		require
+			editing_needed: editing_needed
 		do
 			-- default null implementation
 		end

@@ -94,7 +94,7 @@ feature -- Basic operations
 			l.extend (wma (f, WMA_n, "Weighted Moving Average"))
 			l.extend (standard_deviation (f, SD_n, "Standard Deviation"))
 --!!!This one probably should be removed soon, since it should be easily
---!!!be configurable by the 'create function' facility once editing of
+--!!!configurable by the 'create function' facility once editing of
 --!!!AGENT_BASED_FUNCTIONS is fully supported.
 l.extend (standard_deviation (deep_clone (cf2), SD_n,
 	"Standard Deviation of MACD"))

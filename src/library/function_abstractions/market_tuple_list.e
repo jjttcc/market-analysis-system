@@ -10,6 +10,9 @@ indexing
 class MARKET_TUPLE_LIST [G->MARKET_TUPLE] inherit
 
 	ARRAYED_LIST [G]
+		redefine
+			is_equal
+		end
 
 creation
 
@@ -171,6 +174,18 @@ feature -- Status report
 				then
 					Result := false
 				end
+			end
+		end
+
+feature -- Comparison
+
+	is_equal (other: like Current): BOOLEAN is
+		local
+			this_type: like Current
+		do
+			this_type ?= other
+			if this_type /= Void then
+				Result := Precursor (other)
 			end
 		end
 

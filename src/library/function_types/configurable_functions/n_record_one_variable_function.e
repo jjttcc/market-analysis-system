@@ -14,7 +14,7 @@ class N_RECORD_ONE_VARIABLE_FUNCTION inherit
 		rename
 			make as ovf_make
 		redefine
-			do_process, target, short_description, immediate_parameters
+			do_process, target, short_description, immediate_direct_parameters
 		end
 
 	N_RECORD_STRUCTURE
@@ -120,18 +120,15 @@ feature {NONE}
 			-- Is the `effective_n' value used to enforce a strict relation
 			-- between output.count and target.count after processing?
 		once
-			Result := true
+			Result := True
 		end
 
 	target: ARRAYED_LIST [MARKET_TUPLE]
 
-	immediate_parameters: LIST [FUNCTION_PARAMETER] is
-		local
-			fp: N_RECORD_FUNCTION_PARAMETER
+	immediate_direct_parameters: LIST [FUNCTION_PARAMETER] is
 		do
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
-			create fp.make (Current)
-			Result.extend (fp)
+			Result.extend (create {N_RECORD_FUNCTION_PARAMETER}.make (Current))
 		end
 
 invariant

@@ -10,13 +10,24 @@ indexing
 class CONSTANT inherit
 
 	NUMERIC_COMMAND
+		rename
+			is_equal as numeric_command_is_equal
+		undefine
+			is_editable
 		redefine
-			is_editable, prepare_for_editing, name
+			prepare_for_editing, name
 		end
 
 	FUNCTION_PARAMETER
 		export
 			{NONE} all
+		select
+			is_equal
+		end
+
+	CONFIGURABLE_EDITABLE_COMMAND
+		rename
+			is_equal as editable_is_equal
 		end
 
 creation
@@ -36,21 +47,30 @@ feature
 
 feature -- Access
 
+	Default_name: STRING is "{Constant}"
+
 	name: STRING is
 		do
 			Result := Precursor
 			if Result.is_empty then
-				Result := "{Constant}"
+				Result := Default_name
 			else
 				Result := "{" + Result + "}"
+			end
+		end
+
+	description: STRING is
+		do
+			if name.is_equal (Default_name) then
+				Result := name
+			else
+				Result := name + " (Constant)"
 			end
 		end
 
 feature -- Status report
 
 	arg_mandatory: BOOLEAN is False
-
-	is_editable: BOOLEAN
 
 feature -- Status setting
 
@@ -62,16 +82,6 @@ feature -- Status setting
 			value := arg
 		ensure
 			value_set: rabs (value - arg) < epsilon
-		end
-
-	set_is_editable (arg: BOOLEAN) is
-			-- Set `is_editable' to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			is_editable := arg
-		ensure
-			is_editable_set: is_editable = arg and is_editable /= Void
 		end
 
 feature -- Basic operations
@@ -104,7 +114,7 @@ feature {NONE} -- FUNCTION_PARAMETER interface
 			Result := valid_value (v) and then value - v.to_real < Epsilon
 		end
 
-	value_type_description: STRING is "constant real value"
+	value_type_description: STRING is "real value"
 
 	change_value (new_value: STRING) is
 		do

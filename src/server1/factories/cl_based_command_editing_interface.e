@@ -90,20 +90,10 @@ feature {NONE} -- Hook methods
 			text: ARRAY [STRING]
 			margin: STRING
 			line_length: INTEGER
+			editable: CONFIGURABLE_EDITABLE_COMMAND
 		do
-			line_length := 76
-			margin := "     "
-			text := <<"Select:%N     Print description of " + c.generator +
-				"? (d)", "Choose " + c.generator + " (c)",
-				"Choose and name " + c.generator + " (n)",
-				"Make another choice (a) ">>
-			print (text @ 1)
-			if (text @ 1).count + (text @ 2).count > line_length then
-				print ("%N" + margin + text @ 2)
-			else
-				print (" " + text @ 2)
-			end
-			print ("%N" + margin + text @ 3 + " " + text @ 4 + eom)
+			print (display_for_accepted_by_user (c) + eom)
+			editable_state := False; editing_needed := False
 			inspect
 				character_selection (Void)
 			when 'd', 'D' then
@@ -119,10 +109,26 @@ feature {NONE} -- Hook methods
 				end
 			when 'c', 'C' then
 				Result := True
-			when 'n', 'N' then
-				c.set_name (string_selection ("Enter a name for " +
-					c.generator + ": "))
-				Result := True
+			when 'e', 'E' then
+				if do_clone then
+					-- The chosen command should not be editied if
+					-- do_clone is false.
+					editing_needed := True
+					user_specified_command_name := visible_string_selection (
+						"Enter a name for " + c.generator + ": ")
+					editable ?= c
+					if editable /= Void then
+						inspect
+							character_selection ("Make " + c.generator +
+							" editable ? (y/n) ")
+						when 'y', 'Y' then
+							editable_state := True
+						else
+							-- Null action
+						end
+					end
+					Result := True
+				end
 			else
 				check Result = False end
 			end
@@ -151,6 +157,41 @@ feature {NONE} -- Utility routines
 				print_command_tree (bool_client.boolean_operator, level)
 				print_command_tree (bool_client.false_cmd, level)
 				print_command_tree (bool_client.true_cmd, level)
+			end
+		end
+
+	display_for_accepted_by_user (c: COMMAND): STRING is
+		local
+			text: LINKED_LIST [STRING]
+			margin: STRING
+			line_length: INTEGER
+		do
+			line_length := 76
+			margin := "     "
+			create text.make
+			text.extend ("Select:%N     Print description of " +
+				c.generator + "? (d)")
+			text.extend ("Choose " + c.generator + " (c)")
+			text.extend ("filler")
+			text.extend ("Make another choice (a)")
+			Result := text @ 1
+			if do_clone then
+				text.put_i_th ("Choose " + c.generator +
+					" and edit its settings (e)", 3)
+				if (text @ 1).count + (text @ 2).count > line_length then
+					Result.append ("%N" + margin + text @ 2)
+				else
+					Result.append (" " + text @ 2)
+				end
+				Result.append ("%N" + margin + text @ 3 + " " + "%N" + margin +
+					text @ 4 + " ")
+			else
+				if (text @ 1).count + (text @ 2).count > line_length then
+					Result.append ("%N" + margin + text @ 2)
+				else
+					Result.append (" " + text @ 2)
+				end
+				Result.append ("%N" + margin + text @ 4 + " ")
 			end
 		end
 

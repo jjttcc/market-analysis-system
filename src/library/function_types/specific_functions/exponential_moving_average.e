@@ -17,7 +17,7 @@ class EXPONENTIAL_MOVING_AVERAGE inherit
 		rename
 			make as sma_make
 		redefine
-			action, set_n, short_description, operators, do_process
+			action, set_n, short_description, immediate_operators, do_process
 		end
 
 	MATH_CONSTANTS
@@ -41,12 +41,6 @@ feature -- Access
 
 	exp: N_BASED_CALCULATION
 			-- The so-called exponential (weighting value)
-
-	operators: LIST [COMMAND] is
-		do
-			Result := Precursor
-			Result.append (operator_and_descendants (exp))
-		end
 
 feature {NONE} -- Basic operations
 
@@ -124,6 +118,12 @@ feature {NONE} -- Implementation
 			-- output.last.value = P[curr] * exp + EMA[curr-1] * (1 - exp)
 			--   where P[curr] is the result (from `operator') for the current
 			--   period and EMA[curr-1] is the EMA for the previous period.
+		end
+
+	immediate_operators: LIST [COMMAND] is
+		do
+			Result := Precursor
+			Result.append (operator_and_descendants (exp))
 		end
 
 	exp_inverse: DOUBLE

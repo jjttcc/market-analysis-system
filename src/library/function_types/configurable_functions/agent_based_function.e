@@ -12,8 +12,8 @@ class AGENT_BASED_FUNCTION inherit
 
 	COMPLEX_FUNCTION
 		redefine
-			set_innermost_input, operators, reset_parameters, operator_used,
-			immediate_parameters
+			set_innermost_input, reset_parameters, operator_used,
+			immediate_direct_parameters
 		end
 
 creation {FACTORY, MARKET_FUNCTION_EDITOR}
@@ -37,7 +37,7 @@ feature {NONE} -- Initialization
 			else
 				inputs := ins
 			end
-			create immediate_parameters.make
+			create immediate_direct_parameters.make
 		ensure
 			set: operator = op and calculator_key = key and
 				(ins /= Void implies inputs = ins)
@@ -96,26 +96,6 @@ feature -- Access
 			end
 		end
 
-	main_parameters: LINKED_LIST [FUNCTION_PARAMETER] is
-		local
-			parameter_set: LINKED_SET [FUNCTION_PARAMETER]
-		do
-			create Result.make
-			create parameter_set.make
-			if immediate_parameters /= Void then
-				parameter_set.fill (immediate_parameters)
-			end
-			from inputs.start until inputs.exhausted loop
-				check
-					input_parameters_not_void:
-						inputs.item.parameters /= Void
-				end
-				parameter_set.fill (inputs.item.parameters)
-				inputs.forth
-			end
-			Result.append (parameter_set)
-		end
-
 	children: LIST [MARKET_FUNCTION] is
 		do
 			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
@@ -125,19 +105,6 @@ feature -- Access
 				inputs.exhausted
 			loop
 				Result.extend (inputs.item)
-				inputs.forth
-			end
-		end
-
-	operators: LIST [COMMAND] is
-		do
-			Result := Precursor
-			from
-				inputs.start
-			until
-				inputs.exhausted
-			loop
-				Result.append (inputs.item.operators)
 				inputs.forth
 			end
 		end
@@ -164,7 +131,7 @@ feature -- Access
 			end
 		end
 
-	immediate_parameters: LINKED_LIST [FUNCTION_PARAMETER]
+	immediate_direct_parameters: LINKED_LIST [FUNCTION_PARAMETER]
 
 feature -- Status report
 
@@ -174,7 +141,7 @@ feature -- Status report
 			--!!!!!Check if this implementation is adequate.
 		end
 
-	has_children: BOOLEAN is true
+	has_children: BOOLEAN is True
 
 	operator_used: BOOLEAN is
 		do
@@ -239,7 +206,7 @@ feature {MARKET_FUNCTION_EDITOR}
 	add_parameter (p: FUNCTION_PARAMETER) is
 			-- Add `p' to `parameters'.
 		do
-			immediate_parameters.extend (p)
+			immediate_direct_parameters.extend (p)
 			-- Force `parameters' to recreate `parameter_list':
 			parameter_list := Void
 		end

@@ -76,11 +76,6 @@ feature -- Access
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 		end
 
-	immediate_parameters: LIST [FUNCTION_PARAMETER] is
-		once
-			Result := parameters
-		end
-
 	processed_date_time: DATE_TIME is
 		once
 			-- Very early date

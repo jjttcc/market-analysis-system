@@ -37,7 +37,7 @@ feature -- Basic operations
 				end
 				-- Ensure postcondition - intraday data always has
 				-- missing data:
-				missing_data := true
+				missing_data := True
 				create src_sublist.make (0)
 				source_list.start
 				check output.count = 0 end

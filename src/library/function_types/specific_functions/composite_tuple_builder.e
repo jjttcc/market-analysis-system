@@ -83,7 +83,7 @@ feature -- Status report
 			previous: MARKET_TUPLE
 			output_list: MARKET_TUPLE_LIST [MARKET_TUPLE]
 		do
-			Result := true
+			Result := True
 			output_list := output.data
 			from
 				output_list.start
@@ -117,7 +117,7 @@ feature -- Status report
 			--   p.last.date_time < p.date_time + duration
 		end
 
-	operator_used: BOOLEAN is false
+	operator_used: BOOLEAN is False
 
 feature -- Status setting
 
@@ -165,7 +165,7 @@ feature -- Basic operations
 				check
 					output_empty: output /= Void and output.is_empty
 				end
-				missing_data := false
+				missing_data := False
 				create src_sublist.make (0)
 				source_list.start
 				current_date := start_date
@@ -201,7 +201,7 @@ feature -- Basic operations
 					tuple_maker.product.set_date_time (current_date)
 					output.extend (tuple_maker.product)
 				else
-					missing_data := true
+					missing_data := True
 				end
 				current_date := current_date + duration
 			end

@@ -25,7 +25,7 @@ deferred class FUNCTION_WITH_FIRST_AND_PREVIOUS_OPERATORS inherit
 		export
 			{NONE} set_operator
 		redefine
-			forth, operators
+			forth, immediate_operators
 		end
 
 	COMMAND_EDITOR -- To allow editing of `previous_operator'
@@ -38,7 +38,7 @@ feature -- Access
 	first_element_operator: RESULT_COMMAND [REAL]
 			-- Operator that produces the first element of the output.
 
-	operators: LIST [COMMAND] is
+	immediate_operators: LIST [COMMAND] is
 		do
 			Result := Precursor
 			if previous_operator /= Void then
@@ -58,11 +58,16 @@ feature {MARKET_FUNCTION_EDITOR} -- Status setting
 			operator := op
 			previous_operator := pop
 			first_element_operator := fop
+			-- Force `parameters', the next time it is called, to recreate
+			-- `parameter_list' - Needed because these new operators may
+			-- produce more parameters.
+			parameter_list := Void
 		ensure
 			operator_set: operator = op and operator /= Void
 			previous_operator_set: previous_operator = pop
 			first_element_operator_set: first_element_operator = fop and
 				first_element_operator /= Void
+			parameter_list_void: parameter_list = Void
 		end
 
 feature {NONE}

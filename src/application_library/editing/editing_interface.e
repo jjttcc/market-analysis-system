@@ -98,6 +98,26 @@ feature -- Access
 		deferred
 		end
 
+	visible_string_selection (msg: STRING): STRING is
+			-- User-selected string value with at least one visible character,
+			-- left-adjusted
+		local
+			wk_msg: STRING
+		do
+			wk_msg := clone (msg)
+			from
+				Result := string_selection (wk_msg)
+				Result.left_adjust
+				wk_msg.prepend (
+					"The entry must contain at least one visible character.%N")
+			until
+				not Result.is_empty
+			loop
+				Result := string_selection (wk_msg)
+				Result.left_adjust
+			end
+		end
+
 	date_time_selection (msg: STRING): DATE_TIME is
 			-- User's selection of date/time
 		deferred

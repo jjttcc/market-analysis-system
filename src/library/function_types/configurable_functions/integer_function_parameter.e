@@ -40,6 +40,11 @@ feature -- Access
 
 	name: STRING is "integer-value"
 
+	description: STRING is
+		do
+			Result := name
+		end
+
 	value_type_description: STRING is "integer value"
 
 	current_value_equals (v: STRING): BOOLEAN is

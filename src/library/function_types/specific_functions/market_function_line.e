@@ -15,7 +15,7 @@ class MARKET_FUNCTION_LINE inherit
 		export
 			{NONE} ovf_make
 		redefine
-			action, operator_used, start, immediate_parameters
+			action, operator_used, start, immediate_direct_parameters
 		end
 
 	MARKET_LINE
@@ -83,18 +83,13 @@ feature {NONE} -- Implemetation
 			output.extend (t)
 		end
 
-	operator_used: BOOLEAN is false
+	operator_used: BOOLEAN is False
 
-	immediate_parameters: LIST [FUNCTION_PARAMETER] is
-		local
-			sfp: SLOPE_FUNCTION_PARAMETER
-			syfp: START_Y_FUNCTION_PARAMETER
+	immediate_direct_parameters: LIST [FUNCTION_PARAMETER] is
 		do
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
-			create sfp.make (Current)
-			Result.extend (sfp)
-			create syfp.make (Current)
-			Result.extend (syfp)
+			Result.extend (create {SLOPE_FUNCTION_PARAMETER}.make (Current))
+			Result.extend (create {START_Y_FUNCTION_PARAMETER}.make (Current))
 		end
 
 invariant

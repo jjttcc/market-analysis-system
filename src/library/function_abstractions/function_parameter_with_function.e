@@ -11,7 +11,7 @@ deferred class FUNCTION_PARAMETER_WITH_FUNCTION inherit
 
 	FUNCTION_PARAMETER
 		redefine
-			description
+			description, is_equal
 		end
 
 feature {NONE} -- Initialization
@@ -31,9 +31,25 @@ feature -- Access
 			-- The function that this parameter applies to
 
 	description: STRING is
-			-- `name' + " - " + `function.name'
 		do
-			Result := name + " - " + function.name
+			if function.name /= Void then
+				Result := name + " - " + function.name
+			else
+				Result := name
+			end
+		end
+
+feature -- Comparison
+
+	is_equal (other: FUNCTION_PARAMETER): BOOLEAN is
+		local
+			fpwf: like Current
+		do
+			fpwf ?= other
+			if fpwf /= Void then
+				Result := description.is_equal (fpwf.description) and
+					function = fpwf.function
+			end
 		end
 
 invariant

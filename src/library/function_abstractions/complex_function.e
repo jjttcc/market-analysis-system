@@ -12,7 +12,7 @@ deferred class COMPLEX_FUNCTION inherit
 
 	MARKET_FUNCTION
 		redefine
-			operators
+			immediate_operators
 		end
 
 feature -- Access
@@ -26,15 +26,6 @@ feature -- Access
 
 	processed_date_time: DATE_TIME
 
-	operators: LIST [COMMAND] is
-		do
-			if operator /= Void then
-				Result := operator_and_descendants (operator)
-			else
-				create {LINKED_LIST [COMMAND]} Result.make
-			end
-		end
-
 	leaf_functions: LIST [COMPLEX_FUNCTION] is
 			-- All of Current's innermost, or leaf, COMPLEX_FUNCTIONs -
 			-- At least one because a complex function without any children
@@ -47,8 +38,8 @@ feature -- Access
 	parameters: LIST [FUNCTION_PARAMETER] is
 		do
 			if parameter_list = Void then
-				parameter_list := main_parameters
-				parameter_list.append (command_parameters)
+				parameter_list := clone (direct_parameters)
+				parameter_list.append (operator_parameters)
 			end
 			Result := parameter_list
 		end
@@ -57,7 +48,7 @@ feature -- Status report
 
 	operator_used: BOOLEAN is
 		once
-			Result := true
+			Result := True
 		end
 
 feature -- Basic operations
@@ -83,8 +74,13 @@ feature {MARKET_FUNCTION_EDITOR} -- Status setting
 			not_void: op /= Void
 		do
 			operator := op
+			-- Force `parameters', the next time it is called, to recreate
+			-- `parameter_list' - Needed because this new operator may
+			-- produce more parameters.
+			parameter_list := Void
 		ensure
 			op_set: operator = op and operator /= Void
+			parameter_list_void: parameter_list = Void
 		end
 
 feature {NONE} -- Hook methods
@@ -120,19 +116,19 @@ feature {NONE} -- Hook methods
 
 feature {MARKET_FUNCTION} -- Status report
 
-	is_complex: BOOLEAN is true
+	is_complex: BOOLEAN is True
 
 feature {NONE} -- Implementation
 
 	parameter_list: LINKED_LIST [FUNCTION_PARAMETER]
 
-	immediate_parameters: LIST [FUNCTION_PARAMETER] is
---!!!!NOTE: This feature is not redefined in several descendants.  Since
---it is a once function, that could be a problem (bug).  Check it out.
---NOTE2: A brief review leads me to suspect there is no problem; but
---it should be checked out more thoroughly before deleting this warning.
-		once
-			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
+	immediate_operators: LIST [COMMAND] is
+		do
+			if operator /= Void then
+				Result := operator_and_descendants (operator)
+			else
+				create {LINKED_LIST [COMMAND]} Result.make
+			end
 		end
 
 	operator_and_descendants (op: COMMAND): LIST [COMMAND] is
@@ -143,35 +139,15 @@ feature {NONE} -- Implementation
 			create {LINKED_LIST [COMMAND]} Result.make
 			Result.extend (op)
 			Result.append (op.descendants)
+		ensure
+			exists: Result /= Void
 		end
 
-	command_parameters: LIST [FUNCTION_PARAMETER] is
-		local
-			ops: LIST [COMMAND]
-		do
-			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
-			if operators /= Void then
-				from
-					ops := operators
-					ops.start
-				until
-					ops.exhausted
-				loop
-					if ops.item.is_editable then
-						ops.item.prepare_for_editing (Result)
-					end
-					ops.forth
-				end
-			end
-		ensure
-			result_exists: Result /= Void
-		end
-
-	main_parameters: LINKED_LIST [FUNCTION_PARAMETER] is
-		deferred
-		ensure
-			result_exists: Result /= Void
-		end
+--!!!Remove soon:
+print_param (fp: FUNCTION_PARAMETER) is
+do print ("fp: " + fp.out + "%N") print ("fp name: " + fp.name + "%N")
+if fp.description /= Void then print ("fp desc: " + fp.description + "%N")
+ end end
 
 invariant
 

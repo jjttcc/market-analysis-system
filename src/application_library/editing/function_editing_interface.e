@@ -18,12 +18,12 @@ deferred class FUNCTION_EDITING_INTERFACE inherit
 	OBJECT_EDITING_INTERFACE [MARKET_FUNCTION]
 		rename
 			object_selection_from_type as function_selection_from_type,
-			object_types as function_types,
+			object_types as function_types, edit_object as edit_function,
 			user_object_selection as user_function_selection,
 			initialize_object as initialize_function,
 			current_objects as current_functions
 		redefine
-			editor, function_types, set_new_name
+			editor, function_types, edit_function
 		end
 
 	STORABLE_SERVICES [MARKET_FUNCTION]
@@ -140,7 +140,7 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			Result := deep_clone (market_function_selection (msg,
 				agent valid_root_function))
 			set_complex_function_inputs (Result)
-			set_new_name (Result, msg)
+			edit_function (Result, msg)
 		end
 
 	market_function_selection (msg: STRING; validity_checker:
@@ -174,7 +174,7 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 					l.extend (stock)
 				end
 			end
-			Result := function_selection (msg, l, false)
+			Result := function_selection (msg, l, False)
 		end
 
 	complex_function_selection (msg: STRING): COMPLEX_FUNCTION is
@@ -306,7 +306,7 @@ feature {EDITING_INTERFACE}
 
 	reset_dirty is
 		do
-			dirty := false
+			dirty := False
 		ensure
 			not_dirty: not dirty
 		end
@@ -427,9 +427,9 @@ feature {NONE} -- Hook routines
 
 feature {NONE} -- Implementation
 
-	clone_needed: BOOLEAN is true
+	clone_needed: BOOLEAN is True
 
-	name_needed: BOOLEAN is true
+	editing_needed: BOOLEAN is True
 
 	help: APPLICATION_HELP
 
@@ -437,10 +437,12 @@ feature {NONE} -- Implementation
 			-- List of indicators used for editing until the user saves
 			-- the current changes
 
-	set_new_name (o: MARKET_FUNCTION; msg: STRING) is
+	edit_function (o: MARKET_FUNCTION; msg: STRING) is
+			-- Set `o's name to value obtained from user.
 		local
-			spiel: ARRAYED_LIST [STRING]
+			spiel: STRING
 			fnames: LIST [STRING]
+			name: STRING
 		do
 			create spiel.make (0)
 			from
@@ -449,18 +451,18 @@ feature {NONE} -- Implementation
 			until
 				fnames.exhausted
 			loop
-				spiel.extend (fnames.item)
-				spiel.extend ("%N")
+				spiel.append (fnames.item)
+				spiel.append ("%N")
 				fnames.forth
 			end
-			spiel.extend (concatenation (<<"Choose a name for ", msg,
-						" that does not match any of the%Nabove names:">>))
-			o.set_name (string_selection (concatenation (spiel)))
+			spiel.append ("Choose a name for " + msg +
+						" that does not match any of the%Nabove names:")
+			o.set_name (visible_string_selection (spiel))
 		end
 
 	reset_error is
 		do
-			error_occurred := false
+			error_occurred := False
 		end
 
 	initialize_working_list is
@@ -746,11 +748,11 @@ feature {NONE} -- Implementation - indicator editing
 					"(e[xisting]/n[ew]/q[uit]) ", "eEnNqQ")
 			when 'e', 'E' then
 				f := function_selection_from_library ("the root function")
-				dirty := true
+				dirty := True
 			when 'n', 'N' then
 				f := function_selection_from_type (market_function,
-					"root function", true)
-				dirty := true
+					"root function", True)
+				dirty := True
 			when 'q', 'Q' then
 			end
 			if dirty then
@@ -770,19 +772,19 @@ feature {NONE} -- Implementation - indicator editing
 			until
 				finished
 			loop
-				indicator := function_selection (" to remove", l, true)
+				indicator := function_selection (" to remove", l, True)
 				if indicator /= Void then
 					inspect character_choice (concatenation (<<"Remove ",
 						indicator.name, "? (y[es]/n[o]/q[uit]) ">>), "yYnNqQ")
 					when 'y', 'Y' then
 						remove_from_working_copy (indicator)
-						dirty := true
+						dirty := True
 					when 'n', 'N' then
 					when 'q', 'Q' then
-						finished := true
+						finished := True
 					end
 				else
-					finished := true
+					finished := True
 				end
 			end
 		end
@@ -843,7 +845,7 @@ feature {NONE} -- Implementation - indicator editing
 			-- Since a member of the function library is being changed,
 			-- it needs to be marked as dirty to ensure it gets saved.
 			p.change_value (value)
-			dirty := true
+			dirty := True
 			show_message (concatenation (
 				<<"New value set to ", p.current_value, "%N">>))
 		end
@@ -894,7 +896,7 @@ feature {NONE} -- Implementation - indicator editing
 					when 'i', 'I' then
 						edit_parameter_menu (i.immediate_parameters, i.name)
 					when 'q', 'Q' then
-						quit := true
+						quit := True
 					end
 				end
 			end

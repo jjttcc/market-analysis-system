@@ -15,12 +15,12 @@ deferred class COMMAND_EDITING_INTERFACE inherit
 	OBJECT_EDITING_INTERFACE [COMMAND]
 		rename
 			object_selection_from_type as command_selection_from_type,
-			object_types as command_types,
+			object_types as command_types, edit_object as edit_command,
 			user_object_selection as user_command_selection,
 			initialize_object as initialize_command,
 			current_objects as current_commands
 		redefine
-			editor, command_types, descendant_reset
+			editor, command_types, descendant_reset, edit_command
 		end
 
 feature -- Access
@@ -687,7 +687,16 @@ feature {NONE} -- Implementation
 			end
 		end
 
-feature -- Implementation
+	edit_command (o: COMMAND; msg: STRING) is
+			-- Set `o's name and editable attribute.
+		do
+			if user_specified_command_name /= Void then
+				o.set_name (user_specified_command_name)
+			end
+			set_editability (o)
+		end
+
+feature {NONE} -- Implementation
 
 	descendant_reset is
 			-- Reset descendant's state.
@@ -695,14 +704,30 @@ feature -- Implementation
 			left_offset := 0
 		end
 
-feature -- Implementation - options
+	user_specified_command_name: STRING
 
-	clone_needed: BOOLEAN is true
+	editable_state: BOOLEAN
 
-	name_needed: BOOLEAN is false
+	set_editability (c: COMMAND) is
+			-- If `c' is a CONFIGURABLE_EDITABLE_COMMAND set its
+			-- editability to `editable_state'.
+		local
+			editable: CONFIGURABLE_EDITABLE_COMMAND
+		do
+			editable ?= c
+			if editable /= Void then
+				editable.set_is_editable (editable_state)
+			end
+		end
+
+feature {NONE} -- Implementation - options
+
+	clone_needed: BOOLEAN is True
+
+	editing_needed: BOOLEAN
 
 invariant
 
-	clone_needed: clone_needed = true
+	clone_needed: clone_needed = True
 
 end -- COMMAND_EDITING_INTERFACE

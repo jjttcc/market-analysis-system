@@ -13,7 +13,7 @@ inherit
 
 	COMPLEX_FUNCTION
 		redefine
-			set_innermost_input, operators, reset_parameters
+			set_innermost_input, reset_parameters
 		end
 
 	TWO_VARIABLE_LINEAR_ANALYZER
@@ -70,37 +70,11 @@ feature -- Access
 			Result.append (input2.full_description)
 		end
 
-	main_parameters: LINKED_LIST [FUNCTION_PARAMETER] is
-		local
-			parameter_set: LINKED_SET [FUNCTION_PARAMETER]
-		do
-			create Result.make
-			create parameter_set.make
-			if immediate_parameters /= Void then
-				parameter_set.fill (immediate_parameters)
-			end
-			check
-				input_parameters_not_void:
-					input1.parameters /= Void and
-					input2.parameters /= Void
-			end
-			parameter_set.fill (input1.parameters)
-			parameter_set.fill (input2.parameters)
-			Result.append (parameter_set)
-		end
-
 	children: LIST [MARKET_FUNCTION] is
 		do
 			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 			Result.extend (input1)
 			Result.extend (input2)
-		end
-
-	operators: LIST [COMMAND] is
-		do
-			Result := Precursor
-			Result.append (input1.operators)
-			Result.append (input2.operators)
 		end
 
 	leaf_functions: LIST [COMPLEX_FUNCTION] is
@@ -123,7 +97,7 @@ feature -- Status report
 					processed_date_time >= input2.processed_date_time
 		end
 
-	has_children: BOOLEAN is true
+	has_children: BOOLEAN is True
 
 feature {NONE} -- Hook methods
 

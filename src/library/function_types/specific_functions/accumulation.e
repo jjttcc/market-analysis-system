@@ -54,12 +54,17 @@ feature {MARKET_FUNCTION_EDITOR} -- Status setting
 			operator := op
 			previous_operator := pop
 			first_element_operator := fop
+			-- Force `parameters', the next time it is called, to recreate
+			-- `parameter_list' - Needed because these new operators may
+			-- produce more parameters.
+			parameter_list := Void
 		ensure
 			operator_set: operator = op and operator /= Void
 			previous_operator_set: previous_operator = pop and
 				previous_operator /= Void
 			first_element_operator_set: first_element_operator = fop and
 				first_element_operator /= Void
+			parameter_list_void: parameter_list = Void
 		end
 
 feature {NONE} -- Initialization
