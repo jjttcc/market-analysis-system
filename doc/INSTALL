@@ -33,6 +33,51 @@ If it is not already, you will need to make sure that the bin directory
 you installed to is included in your path.
 
 
+INSTALLATION ON WINDOWS SYSTEMS
+
+Unfortunately, the Windows executable in this release is not fully
+functional.  See the file README_WINDOWS.txt for details.
+
+Choose a directory to put the MAS files in and extract the
+mas_windows1.2.tar.gz file or the mas_windows1.2.zip into this directory.
+After extraction, you will find a subdirectory, mas_v1.2, within which the
+MAS files reside.
+
+Add the bin directory under mas_v1.2 to your path.  For example, if you
+installed mas under c:\"Program Files", you could add the following line to
+your autoexec.bat file:
+
+PATH=%PATH%;c:\"Program Files"\mas_v1.2\bin
+
+There are three scripts in mas_v1.2\bin you can use to run mas with a
+hard-coded port number: runmas.bat, runmasgui.bat, and runmacl.bat.
+(runmas.bat starts the server; runmasgui.bat connects a GUI client to that
+server, and runmacl.bat starts the command-line client.)  You will need to
+set the MAS_DIRECTORY environment variable for these scripts to work
+successfully.  Set this variable to the path of the mas_v1.2\lib directory.
+
+For example, if mas_v1.2 is under c:\"Program Files", add the following line
+to your autoexec.bat file:
+
+set MAS_DIRECTORY=c:\"Program Files"\mas_v1.2\lib
+
+After ensuring that these settings are in your current environment (for
+example, by rebooting Windows), you should be able to start the server by
+running the runmas.bat script and then start the GUI by running the
+runmasgui.bat script.
+
+[To terminate the server, start runmacl.bat and type <Control>E; then hit
+enter.]
+
+On Windows, the option is available to use a database management system
+with an ODBC interface to hold market data instead of MAS's default
+convention of reading the data from files.  This facility was added by
+Eirik Mangseth, who is currently using it successfully.  (I have not used
+it myself, so I will not be able to help you with questions about how to
+configure it.)  Eirik has provided a short document, mas_odbc_usage.txt in
+the doc directory, with instructions on how to configure MAS to work with
+ODBC.
+
 GENERAL INSTALLATION INSTRUCTIONS
 
 After installation, you should read the file doc/environment for
