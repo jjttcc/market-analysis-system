@@ -16,6 +16,8 @@ public interface NetworkProtocol
 	int Login_request = 6;
 	int Session_change_request = 7;
 	int Logout_request = 8;
+	int Event_data_request = 9;
+	int Event_list_request = 10;
 
 	// Server response IDs
 	int Error = 101;
