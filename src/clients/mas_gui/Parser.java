@@ -24,7 +24,7 @@ class TA_Parser {
 	// Parse `s' into a DataSet according to record_separator and
 	// field_separator.  `drawer' is the tuple drawer to use for the
 	// DataSet.  result() gives the new DataSet.
-	public void parse(String s, Drawer drawer) {
+	public void parse(String s, Drawer drawer) throws Exception {
 		int float_index = 0;
 		StringTokenizer recs = new StringTokenizer(s, _record_separator, false);
 		clear_vectors();
@@ -90,7 +90,7 @@ class TA_Parser {
 	}
 
 	// Put the parsed data into a data set.
-	private void process_data(Drawer drawer) {
+	private void process_data(Drawer drawer) throws Exception {
 		try {
 			int length = float_data.length / float_field_count;
 			if (length > 0)
@@ -105,7 +105,6 @@ class TA_Parser {
 		catch (Exception e) {
 			System.err.println("DataSet constructor failed - " + e);
 			e.printStackTrace();
-			System.exit(-1);
 		}
 	}
 
