@@ -69,11 +69,11 @@ feature -- Access
 
 	background: BOOLEAN
 			-- Is the server run in the background?
-			-- True if "-b" or "-background" is found.
+			-- True if "-b" is found.
 
 	use_db: BOOLEAN
-			-- Has the user specified that a database is to be used
-			-- for input data?
+			-- Is a database to be used for market data?
+			-- True if "-p" is found (p = persistent store)
 
 	help: BOOLEAN
 			-- Has the user requested help on command-line options?
@@ -83,19 +83,22 @@ feature -- Access
 			-- Has the user requested the version number?
 			-- True if "-v" is found.
 
+--	db_info: MAS_DB_INFO
+
 feature -- Basic operations
 
 	usage is
 			-- Message: how to invoke the program from the comman-line
 		do
 			print (concatenation (<<"Usage: ", command_name,
-				" [port_number ...] [-background]%
+				" [port_number ...] [-b] [-p]%
 				% [input_file ...] [-o] %H%N[-f field_separator]%
 				% [-h] [-v]%N%
 				%    Where:%N        -o = data has an open field%N",
 				            "        -v = print version number%N",
 				            "        -h = print this help message%N",
-				            "        -background = run in background%N">>))
+				            "        -p = use database (persistent store)%N",
+				            "        -b = run in background%N">>))
 		end
 
 feature {NONE} -- Implementation
@@ -183,9 +186,7 @@ feature {NONE} -- Implementation
 			loop
 				if
 					contents.item.item (1) = option_sign and
---!!!Change 'd' to whatever letter we decide to use for the use-database
---!!!option:
-					contents.item.item (2) = 'd'
+					contents.item.item (2) = 'p'
 				then
 					use_db := True
 					contents.remove
@@ -268,23 +269,44 @@ feature {NONE} -- Implementation
 		end
 
 	set_symbol_list is
-			-- Set `symbol_list' and remove its settings from `contents'
-			-- Empty if no symbols are specified
-			-- Must be called last because it expects all other arguments
-			-- to have been removed from `contents'.
-			-- Will ignore arguments that start with `option_sign'
 		require
 			use_db
+--		local
+--			db_handle: MAS_ODBC_HANDLE
+--			data	 : DATABASE_DATA[DATABASE]
+--			symbol   : STRING
 		do
-			create {LINKED_LIST [STRING]} symbol_list.make
--- !!!extract symbols from `contents' and put them in `symbol_list'.
+--			create db_info.make ("ms_dbsrvrc") --remember to make file name a constant
+--			create db_handle.make(db_info.db_name, db_info.trades_tables.item)
+--			db_handle.login(db_info.user_name, db_info.password)
+--			db_handle.connect
+--			if db_handle.connected then
+--				db_handle.set_current_query(db_info.symbol_select)
+--				db_handle.make_selection
+--				if db_handle.last_result /= void then
+--					create {LINKED_LIST[STRING]} symbol_list.make
+--					!!symbol.make(0)
+--					from
+--						db_handle.last_result.start
+--					until 
+--						db_handle.last_result.after
+--					loop
+--						data ?= db_handle.last_result.item.data
+--						if data /= void then
+--							if data.item(data.count).conforms_to(symbol) then
+--								symbol ?= data.item(data.count)
+--								symbol_list.extend(clone(symbol))
+--							end	
+--						end
+--						db_handle.last_result.forth
+--					end
+--				end
+--			end
 		end
-
 
 invariant
 
-	port_numbers_and_file_names_not_void:
-		port_numbers /= Void and file_names /= Void
+	port_numbers_not_void: port_numbers /= Void
 	use_db implies file_names = Void and symbol_list /= Void
 	not use_db implies symbol_list = Void and file_names /= Void
 
