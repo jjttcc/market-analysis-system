@@ -98,6 +98,9 @@ l.extend (agent_experiment ("Agent-based function"))
 --!!!NOTE: There appears to be a problem with storing the AGENT_BASED_FUNCTION
 --into the indicators_persist file, caused by the agent attribute -
 --POINTER values (which are valid when the object is created) get set to 0.
+--Possible solution: Change the FUNCTION attribute of AGENT_BASED_FUNCTION
+--into a key that will be used to retrieve the appropriate function
+--from a table of available functions.
 			product := l
 		end
 
