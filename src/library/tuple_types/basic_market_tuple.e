@@ -45,16 +45,6 @@ feature -- Access
 	low: PRICE
 			-- lowest price
 
-	h_l_midpoint: PRICE is
-			-- midpoint between high and low
-		do
-		end
-
-	o_c_midpoint: PRICE is
-			-- midpoint between open and close
-		do
-		end
-
 	value: REAL is
 		do
 			Result := close.value
