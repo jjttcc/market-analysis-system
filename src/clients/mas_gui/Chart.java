@@ -141,11 +141,14 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 	// indicators
 	public Hashtable indicators() {
+System.out.println("indicators() called");
 		if (_indicators == null || new_indicators) {
 			new_indicators = false;
 			Vector inds_from_server = data_builder.last_indicator_list();
-			if (! Utilities.lists_match(inds_from_server,
+			if (previous_open_interest != data_builder.open_interest() ||
+					! Utilities.lists_match(inds_from_server,
 					old_indicators_from_server)) {
+System.out.println("indicators(): making new indicator list");
 				// The old indicators are not the same as the indicators
 				// just obtained from the server (or there are not yet
 				// any old indicators), so the indicator lists need to
@@ -153,6 +156,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 				old_indicators_from_server = inds_from_server;
 				make_indicator_lists(inds_from_server);
 			}
+			previous_open_interest = data_builder.open_interest();
 		}
 		return _indicators;
 	}
@@ -160,7 +164,14 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	private void make_indicator_lists(Vector inds_from_server) {
 		Enumeration ind_iter;
 		String s;
-		Hashtable valid_indicators = new Hashtable(inds_from_server.size());
+		int ind_count = inds_from_server.size();
+System.out.println("mil - inds fsrv size: " + inds_from_server.size());
+		Hashtable valid_indicators;
+		if (ind_count > 0) {
+			valid_indicators = new Hashtable(inds_from_server.size());
+		} else {
+			valid_indicators = new Hashtable();
+		}
 		ordered_indicator_list = new Vector();
 		int i;
 		for (i = 0; i < inds_from_server.size(); ++i) {
@@ -321,6 +332,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			//Ensure that all graph's data sets are removed.  (May need to
 			//change later.)
 			main_pane.clear_main_graph();
+			main_pane.clear_indicator_graph();
 			main_dataset = data_builder.last_market_data();
 			link_with_axis(main_dataset, null);
 			main_pane.add_main_data_set(main_dataset);
@@ -352,7 +364,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			if (! current_lower_indicators.isEmpty()) {
 				// Retrieve the indicator data for the newly requested market
 				// for the lower indicators and draw it.
-				main_pane.clear_indicator_graph();
 				count = current_lower_indicators.size();
 				for (int i = 0; i < count; ++i) {
 					current_indicator = (String)
@@ -698,5 +709,9 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 	// Saved result of data_builder.last_indicator_list(), used by
 	// `indicators' to compare old list with new list
-	Vector old_indicators_from_server = null;
+	private Vector old_indicators_from_server = null;
+
+	// Did the previously retrieved data from the server contain an
+	// open interest field?
+	private boolean previous_open_interest;
 }
