@@ -8,18 +8,30 @@ class
 
 	APPLICATION_CONSTANTS
 
-feature -- Access
+feature -- Input/output constants
 
-	stock_split_field_separator: STRING is "%T"
+	Stock_split_field_separator: STRING is "%T"
 			-- Field separator for stock split data
 
-	stock_split_record_separator: STRING is "%N"
+	Stock_split_record_separator: STRING is "%N"
 			-- Record separator for stock split data
 
-	event_history_field_separator: STRING is "%/1/"
+	Event_history_field_separator: STRING is "%/1/"
 			-- Field separator for event history file
 
-	event_history_record_separator: STRING is "%N"
+	Event_history_record_separator: STRING is "%N"
 			-- Record separator for event history file
+
+feature -- Configuration file names
+
+	Default_stock_split_file_name: STRING is "mas_stock_splits"
+			-- Default name for stock-split data file
+
+	Default_database_config_file_name: STRING is "mas_dbrc"
+			-- Default name for database configuration file
+
+feature -- Miscellaneous
+
+	Comment_character: CHARACTER is '#'
 
 end -- APPLICATION_CONSTANTS
