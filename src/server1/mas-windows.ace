@@ -73,6 +73,8 @@ cluster
 
 	server_configuration (server):		"$/server_configuration"
 
+	tradable_list_builders (server):		"$/tradable_list_builders"
+
 	client_lib:		"$MAS/src/client_library"
 
 	client_support (client_lib):		"$/support"

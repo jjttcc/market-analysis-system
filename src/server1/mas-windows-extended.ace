@@ -1,5 +1,5 @@
 system
-	"mas"
+	"mas-extended"
 
 root
 	EXTENDED_MA_SERVER: make
