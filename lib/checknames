@@ -1,0 +1,67 @@
+#!/bin/bash
+# Check that all class names match their file names.
+
+usage ()
+{
+	echo "Usage: $(basename $0) [directory]"
+}
+
+name_matches ()
+#Currently doesn't work.
+{
+	name=$1
+	file=$2
+	result=$(awk '/feature/ {print 1; done=1; exit}
+	/class *[A-Z]/ {
+		for (i = 1; i == NR; ++i)
+		{
+			if ($i == "class")
+			{
+				if ($(i + 1) == ""'$name')
+				{
+					print 0; done=1; exit
+				}
+			}
+		}
+		print 1; done=1; exit
+	}
+	/class/ {looking_for_name = 1}
+	(looking_for_name && $0 ~ /[A-Z]/) {
+		if ($0 == ""'$name') {
+			print 0; done=1; exit
+		}
+	}
+	END {
+		if (! done) print 1
+	}' $file)
+	return $result
+}
+
+checkname ()
+{
+	classname=$(basename $1 .e|tr '[a-z]' '[A-Z]')
+	if grep "class *$classname" $1 >/dev/null 2>&1; then
+	#if name_matches $classname $1; then
+		:
+	else
+		echo Names do not match in $1.
+		grep "class *[A-Z]" $1
+	fi
+}
+
+case "$1" in
+	-*) usage ;;
+esac
+
+if [ $# -ge 1 ]; then
+	cd $1
+	cdresult=$?
+	if [ "$cdresult" -ne 0 ]; then
+		exit $cdresult
+	fi
+fi
+
+for f in $(find . -name '*.e' -print)
+do
+	checkname $f
+done
