@@ -6,332 +6,329 @@
 # Note3: path names with special shell characters (such as '$') should
 # escape the characters with a backslash.
 # Market Analysis Server source code
-src/application_library . serversrc1.6.5
-src/library . serversrc1.6.5
-../eiffel_library src/ serversrc1.6.5
-src/server1/abstractions . serversrc1.6.5
-src/server1/doc . serversrc1.6.5
-src/server1/factories . serversrc1.6.5
-src/server1/global . serversrc1.6.5
-src/server1/configuration . serversrc1.6.5
-src/server1/data_retrieval . serversrc1.6.5
-src/server1/interface . serversrc1.6.5
-src/server1/protocols . serversrc1.6.5
-src/server1/tradable_list . serversrc1.6.5
-src/server1/stock_splits . serversrc1.6.5
-src/server1/network . serversrc1.6.5
-src/server1/root . serversrc1.6.5
-src/server1/utility . serversrc1.6.5
-src/server1/system_specific . serversrc1.6.5
-src/server1/database . serversrc1.6.5
-src/server1/external . serversrc1.6.5
-src/server1/Clib . serversrc1.6.5
-src/server1/lib . serversrc1.6.5
-../projects/current/mas.ace src/server1/ serversrc1.6.5
-src/server1/test/README . serversrc1.6.5
-src/server1/test/run_tests . serversrc1.6.5
-src/server1/test/bin/compare_numbers . serversrc1.6.5
-src/server1/test/bin/pr_dataset . serversrc1.6.5
-src/server1/test/bin/testlib . serversrc1.6.5
-src/server1/test/input/force_index . serversrc1.6.5
-src/server1/test/input/ma . serversrc1.6.5
-src/server1/test/input/momentum . serversrc1.6.5
-src/server1/test/input/roc . serversrc1.6.5
-src/server1/test/input/rsi . serversrc1.6.5
-src/server1/test/input/rsi_colby . serversrc1.6.5
-src/server1/test/input/stoch . serversrc1.6.5
-src/server1/test/input/test_data . serversrc1.6.5
-src/server1/test/input/wilder_ma . serversrc1.6.5
-src/server1/test/input/williams . serversrc1.6.5
-src/server1/test/input/sunw . serversrc1.6.5
-src/server1/test/input/ibm.intraday . serversrc1.6.5
-src/server1/test/input/ma.intraday . serversrc1.6.5
-src/server1/test/input/momentum.intraday . serversrc1.6.5
-src/server1/test/input/roc.intraday . serversrc1.6.5
-src/server1/test/input/rsi.intraday . serversrc1.6.5
-src/server1/test/input/stoch.intraday . serversrc1.6.5
-src/server1/test/input/sunw.intraday . serversrc1.6.5
-src/server1/test/input/test_data.intraday . serversrc1.6.5
-src/server1/test/input/williams.intraday . serversrc1.6.5
-src/server1/test/input/dj.intraday . serversrc1.6.5
-src/server1/test/input/FCXNC.CSF . serversrc1.6.5
-src/server1/test/input/S96N.CSF . serversrc1.6.5
-src/server1/test/input/ES01MAR.CSV . serversrc1.6.5
-src/server1/test/input/wma . serversrc1.6.5
-src/server1/test/input/a . serversrc1.6.5
-src/server1/test/lib/rsi.awk . serversrc1.6.5
-src/server1/test/lib/test_files.1 . serversrc1.6.5
-src/server1/test/lib/test_files.2 . serversrc1.6.5
-src/server1/test/lib/indicators_persist . serversrc1.6.5
-src/server1/test/reference/README . serversrc1.6.5
-src/server1/test/reference/ema . serversrc1.6.5
-src/server1/test/reference/force_index . serversrc1.6.5
-src/server1/test/reference/ma . serversrc1.6.5
-src/server1/test/reference/macd . serversrc1.6.5
-src/server1/test/reference/macd_hist . serversrc1.6.5
-src/server1/test/reference/macd_sig . serversrc1.6.5
-src/server1/test/reference/momentum . serversrc1.6.5
-src/server1/test/reference/roc . serversrc1.6.5
-src/server1/test/reference/rsi4 . serversrc1.6.5
-src/server1/test/reference/rsi7 . serversrc1.6.5
-src/server1/test/reference/slow_stochD3 . serversrc1.6.5
-src/server1/test/reference/stochD5 . serversrc1.6.5
-src/server1/test/reference/stochK5 . serversrc1.6.5
-src/server1/test/reference/test_data.one_field . serversrc1.6.5
-src/server1/test/reference/williams . serversrc1.6.5
-src/server1/test/reference/wilder_ma . serversrc1.6.5
-src/server1/test/reference/rsi_sunw . serversrc1.6.5
-src/server1/test/reference/rsi_sunw_mnthly . serversrc1.6.5
-src/server1/test/reference/rsi_sunw_qtrly . serversrc1.6.5
-src/server1/test/reference/sunw_mnthly_stch%K . serversrc1.6.5
-src/server1/test/reference/dj_stochKintra . serversrc1.6.5
-src/server1/test/reference/dj_ema_int15 . serversrc1.6.5
-src/server1/test/reference/dj_macdsig_hourly . serversrc1.6.5
-src/server1/test/reference/es_ema_oi_hrly . serversrc1.6.5
-src/server1/test/reference/es_ema_volume_hrly . serversrc1.6.5
-src/server1/test/reference/fcxnc_ema_oi . serversrc1.6.5
-src/server1/test/reference/fcxnc_ema_oi_mthly . serversrc1.6.5
-src/server1/test/reference/fcxnc_ema_oi_qtrly . serversrc1.6.5
-src/server1/test/reference/fcxnc_ema_oi_wkly . serversrc1.6.5
-src/server1/test/reference/s96n_ema_oi_mthly . serversrc1.6.5
-src/server1/test/reference/s96n_ema_oi_wkly . serversrc1.6.5
-src/server1/test/reference/wma . serversrc1.6.5
-src/server1/test/reference/macd_volume . serversrc1.6.5
-doc/mal_intro src/doc/ serversrc1.6.5
-doc/MAL_design_document src/doc/MAL_design_document serversrc1.6.5
-doc/MAS_design_document src/doc/MAS_design_document serversrc1.6.5
-doc/MAL_README src/doc/README serversrc1.6.5
-doc/src_README src/README serversrc1.6.5
-doc/applications/server_protocol_grammar src/doc/ serversrc1.6.5
-doc/functions.ps src/doc/ serversrc1.6.5
-doc/eiffel_library_document src/doc/ serversrc1.6.5
+src/application_library . serversrc1.6.7
+src/library . serversrc1.6.7
+../eiffel_library src/ serversrc1.6.7
+src/server1/abstractions . serversrc1.6.7
+src/server1/doc . serversrc1.6.7
+src/server1/factories . serversrc1.6.7
+src/server1/global . serversrc1.6.7
+src/server1/configuration . serversrc1.6.7
+src/server1/data_retrieval . serversrc1.6.7
+src/server1/interface . serversrc1.6.7
+src/client_server/protocols . serversrc1.6.7
+src/server1/tradable_list . serversrc1.6.7
+src/server1/stock_splits . serversrc1.6.7
+src/server1/network . serversrc1.6.7
+src/server1/root . serversrc1.6.7
+src/server1/utility . serversrc1.6.7
+src/server1/system_specific . serversrc1.6.7
+src/server1/database . serversrc1.6.7
+src/server1/external . serversrc1.6.7
+src/server1/Clib . serversrc1.6.7
+src/server1/lib . serversrc1.6.7
+../projects/current/mas.ace src/server1/ serversrc1.6.7
+src/server1/test/README . serversrc1.6.7
+src/server1/test/run_tests . serversrc1.6.7
+src/server1/test/bin/compare_numbers . serversrc1.6.7
+src/server1/test/bin/pr_dataset . serversrc1.6.7
+src/server1/test/bin/testlib . serversrc1.6.7
+src/server1/test/input/force_index . serversrc1.6.7
+src/server1/test/input/ma . serversrc1.6.7
+src/server1/test/input/momentum . serversrc1.6.7
+src/server1/test/input/roc . serversrc1.6.7
+src/server1/test/input/rsi . serversrc1.6.7
+src/server1/test/input/rsi_colby . serversrc1.6.7
+src/server1/test/input/stoch . serversrc1.6.7
+src/server1/test/input/test_data . serversrc1.6.7
+src/server1/test/input/wilder_ma . serversrc1.6.7
+src/server1/test/input/williams . serversrc1.6.7
+src/server1/test/input/sunw . serversrc1.6.7
+src/server1/test/input/ibm.intraday . serversrc1.6.7
+src/server1/test/input/ma.intraday . serversrc1.6.7
+src/server1/test/input/momentum.intraday . serversrc1.6.7
+src/server1/test/input/roc.intraday . serversrc1.6.7
+src/server1/test/input/rsi.intraday . serversrc1.6.7
+src/server1/test/input/stoch.intraday . serversrc1.6.7
+src/server1/test/input/sunw.intraday . serversrc1.6.7
+src/server1/test/input/test_data.intraday . serversrc1.6.7
+src/server1/test/input/williams.intraday . serversrc1.6.7
+src/server1/test/input/dj.intraday . serversrc1.6.7
+src/server1/test/input/FCXNC.CSF . serversrc1.6.7
+src/server1/test/input/S96N.CSF . serversrc1.6.7
+src/server1/test/input/ES01MAR.CSV . serversrc1.6.7
+src/server1/test/input/wma . serversrc1.6.7
+src/server1/test/input/a . serversrc1.6.7
+src/server1/test/lib/rsi.awk . serversrc1.6.7
+src/server1/test/lib/test_files.1 . serversrc1.6.7
+src/server1/test/lib/test_files.2 . serversrc1.6.7
+src/server1/test/lib/indicators_persist . serversrc1.6.7
+src/server1/test/reference/README . serversrc1.6.7
+src/server1/test/reference/ema . serversrc1.6.7
+src/server1/test/reference/force_index . serversrc1.6.7
+src/server1/test/reference/ma . serversrc1.6.7
+src/server1/test/reference/macd . serversrc1.6.7
+src/server1/test/reference/macd_hist . serversrc1.6.7
+src/server1/test/reference/macd_sig . serversrc1.6.7
+src/server1/test/reference/momentum . serversrc1.6.7
+src/server1/test/reference/roc . serversrc1.6.7
+src/server1/test/reference/rsi4 . serversrc1.6.7
+src/server1/test/reference/rsi7 . serversrc1.6.7
+src/server1/test/reference/slow_stochD3 . serversrc1.6.7
+src/server1/test/reference/stochD5 . serversrc1.6.7
+src/server1/test/reference/stochK5 . serversrc1.6.7
+src/server1/test/reference/test_data.one_field . serversrc1.6.7
+src/server1/test/reference/williams . serversrc1.6.7
+src/server1/test/reference/wilder_ma . serversrc1.6.7
+src/server1/test/reference/rsi_sunw . serversrc1.6.7
+src/server1/test/reference/rsi_sunw_mnthly . serversrc1.6.7
+src/server1/test/reference/rsi_sunw_qtrly . serversrc1.6.7
+src/server1/test/reference/sunw_mnthly_stch%K . serversrc1.6.7
+src/server1/test/reference/dj_stochKintra . serversrc1.6.7
+src/server1/test/reference/dj_ema_int15 . serversrc1.6.7
+src/server1/test/reference/dj_macdsig_hourly . serversrc1.6.7
+src/server1/test/reference/es_ema_oi_hrly . serversrc1.6.7
+src/server1/test/reference/es_ema_volume_hrly . serversrc1.6.7
+src/server1/test/reference/fcxnc_ema_oi . serversrc1.6.7
+src/server1/test/reference/fcxnc_ema_oi_mthly . serversrc1.6.7
+src/server1/test/reference/fcxnc_ema_oi_qtrly . serversrc1.6.7
+src/server1/test/reference/fcxnc_ema_oi_wkly . serversrc1.6.7
+src/server1/test/reference/s96n_ema_oi_mthly . serversrc1.6.7
+src/server1/test/reference/s96n_ema_oi_wkly . serversrc1.6.7
+src/server1/test/reference/wma . serversrc1.6.7
+src/server1/test/reference/macd_volume . serversrc1.6.7
+doc/mal_intro src/doc/ serversrc1.6.7
+doc/MAL_design_document src/doc/MAL_design_document serversrc1.6.7
+doc/MAS_design_document src/doc/MAS_design_document serversrc1.6.7
+doc/MAL_README src/doc/README serversrc1.6.7
+doc/src_README src/README serversrc1.6.7
+doc/applications/server_protocol_grammar src/doc/ serversrc1.6.7
+doc/functions.ps src/doc/ serversrc1.6.7
+doc/eiffel_library_document src/doc/ serversrc1.6.7
 # Market Analysis Client source code
-src/clients/GUI1/common/NetworkProtocol.java . clientsrc1.6.5
-src/clients/GUI1/common/DataInspector.java . clientsrc1.6.5
-src/clients/GUI1/support/FileReaderUtilities.java . clientsrc1.6.5
-src/clients/GUI1/support/IntPair.java . clientsrc1.6.5
-src/clients/GUI1/support/Utilities.java . clientsrc1.6.5
-src/clients/GUI1/support/Configuration.java . clientsrc1.6.5
-src/clients/GUI1/support/GUI_Utilities.java . clientsrc1.6.5
-src/clients/GUI1/support/ErrorBox.java . clientsrc1.6.5
-src/clients/GUI1/support/IndicatorGroup.java . clientsrc1.6.5
-src/clients/GUI1/support/IndicatorGroups.java . clientsrc1.6.5
-src/clients/CL/CL_Client.java . clientsrc1.6.5
-src/clients/GUI1/Chart.java src/clients/GUI1/mas_gui/ clientsrc1.6.5
-src/clients/GUI1/MA_Client.java . clientsrc1.6.5
-src/clients/GUI1/CompressedConnection.java src/clients/GUI1/mas_gui/ clientsrc1.6.5
-src/clients/GUI1/Connection.java src/clients/GUI1/mas_gui/ clientsrc1.6.5
-src/clients/GUI1/Parser.java src/clients/GUI1/mas_gui/ clientsrc1.6.5
-src/clients/GUI1/SessionState.java src/clients/GUI1/mas_gui/ clientsrc1.6.5
-src/clients/GUI1/MA_ScrollPane.java src/clients/GUI1/mas_gui/ clientsrc1.6.5
-src/clients/GUI1/MarketSelection.java src/clients/GUI1/mas_gui/ clientsrc1.6.5
-src/clients/GUI1/IndicatorListener.java src/clients/GUI1/mas_gui/ clientsrc1.6.5
-src/clients/GUI1/IndicatorSelection.java src/clients/GUI1/mas_gui/ clientsrc1.6.5
-src/clients/GUI1/MA_MenuBar.java src/clients/GUI1/mas_gui/ clientsrc1.6.5
-src/clients/GUI1/DialogSelection.java src/clients/GUI1/mas_gui/ clientsrc1.6.5
-src/clients/GUI1/IndicatorColors.java src/clients/GUI1/mas_gui/ clientsrc1.6.5
-src/clients/GUI1/MA_Dialog.java src/clients/GUI1/mas_gui/ clientsrc1.6.5
-src/clients/GUI1/DataSetBuilder.java src/clients/GUI1/mas_gui/ clientsrc1.6.5
-src/clients/GUI1/graph/DataSet.java . clientsrc1.6.5
-src/clients/GUI1/graph/Drawer.java . clientsrc1.6.5
-src/clients/GUI1/graph/DateDrawer.java . clientsrc1.6.5
-src/clients/GUI1/graph/Markers.java . clientsrc1.6.5
-src/clients/GUI1/graph/BarDrawer.java . clientsrc1.6.5
-src/clients/GUI1/graph/CandleDrawer.java . clientsrc1.6.5
-src/clients/GUI1/graph/RTextLine.java . clientsrc1.6.5
-src/clients/GUI1/graph/SpecialFunction.java . clientsrc1.6.5
-src/clients/GUI1/graph/LineDrawer.java . clientsrc1.6.5
-src/clients/GUI1/graph/TextLine.java . clientsrc1.6.5
-src/clients/GUI1/graph/PriceDrawer.java . clientsrc1.6.5
-src/clients/GUI1/graph/Graph.java . clientsrc1.6.5
-src/clients/GUI1/graph/InteractiveGraph.java . clientsrc1.6.5
-src/clients/GUI1/graph/Axis.java . clientsrc1.6.5
-src/clients/GUI1/graph/DoublePair.java . clientsrc1.6.5
-src/clients/GUI1/graph/IndicatorDrawer.java . clientsrc1.6.5
-src/clients/GUI1/graph/MarketDrawer.java . clientsrc1.6.5
-src/clients/GUI1/graph/BasicDrawer.java . clientsrc1.6.5
-src/clients/GUI1/graph/LowerGraph.java . clientsrc1.6.5
-src/clients/GUI1/graph/MainGraph.java . clientsrc1.6.5
-src/clients/GUI1/graph/TemporalDrawer.java . clientsrc1.6.5
-src/clients/GUI1/graph/TimeDrawer.java . clientsrc1.6.5
+src/clients/GUI1/common/NetworkProtocol.java . clientsrc1.6.7
+src/clients/GUI1/common/DataInspector.java . clientsrc1.6.7
+src/clients/GUI1/support/IntPair.java . clientsrc1.6.7
+src/clients/GUI1/support/Utilities.java . clientsrc1.6.7
+src/clients/GUI1/support/Configuration.java . clientsrc1.6.7
+src/clients/GUI1/support/GUI_Utilities.java . clientsrc1.6.7
+src/clients/GUI1/support/ErrorBox.java . clientsrc1.6.7
+src/clients/GUI1/support/IndicatorGroup.java . clientsrc1.6.7
+src/clients/GUI1/support/IndicatorGroups.java . clientsrc1.6.7
+src/clients/CL/CL_Client.java . clientsrc1.6.7
+src/clients/GUI1/Chart.java src/clients/GUI1/mas_gui/ clientsrc1.6.7
+src/clients/GUI1/MA_Client.java . clientsrc1.6.7
+src/clients/GUI1/CompressedConnection.java src/clients/GUI1/mas_gui/ clientsrc1.6.7
+src/clients/GUI1/Connection.java src/clients/GUI1/mas_gui/ clientsrc1.6.7
+src/clients/GUI1/Parser.java src/clients/GUI1/mas_gui/ clientsrc1.6.7
+src/clients/GUI1/SessionState.java src/clients/GUI1/mas_gui/ clientsrc1.6.7
+src/clients/GUI1/MA_ScrollPane.java src/clients/GUI1/mas_gui/ clientsrc1.6.7
+src/clients/GUI1/MarketSelection.java src/clients/GUI1/mas_gui/ clientsrc1.6.7
+src/clients/GUI1/IndicatorListener.java src/clients/GUI1/mas_gui/ clientsrc1.6.7
+src/clients/GUI1/IndicatorSelection.java src/clients/GUI1/mas_gui/ clientsrc1.6.7
+src/clients/GUI1/MA_MenuBar.java src/clients/GUI1/mas_gui/ clientsrc1.6.7
+src/clients/GUI1/DialogSelection.java src/clients/GUI1/mas_gui/ clientsrc1.6.7
+src/clients/GUI1/IndicatorColors.java src/clients/GUI1/mas_gui/ clientsrc1.6.7
+src/clients/GUI1/MA_Dialog.java src/clients/GUI1/mas_gui/ clientsrc1.6.7
+src/clients/GUI1/DataSetBuilder.java src/clients/GUI1/mas_gui/ clientsrc1.6.7
+src/clients/GUI1/graph/DataSet.java . clientsrc1.6.7
+src/clients/GUI1/graph/Drawer.java . clientsrc1.6.7
+src/clients/GUI1/graph/DateDrawer.java . clientsrc1.6.7
+src/clients/GUI1/graph/Markers.java . clientsrc1.6.7
+src/clients/GUI1/graph/BarDrawer.java . clientsrc1.6.7
+src/clients/GUI1/graph/CandleDrawer.java . clientsrc1.6.7
+src/clients/GUI1/graph/RTextLine.java . clientsrc1.6.7
+src/clients/GUI1/graph/SpecialFunction.java . clientsrc1.6.7
+src/clients/GUI1/graph/LineDrawer.java . clientsrc1.6.7
+src/clients/GUI1/graph/TextLine.java . clientsrc1.6.7
+src/clients/GUI1/graph/PriceDrawer.java . clientsrc1.6.7
+src/clients/GUI1/graph/Graph.java . clientsrc1.6.7
+src/clients/GUI1/graph/InteractiveGraph.java . clientsrc1.6.7
+src/clients/GUI1/graph/Axis.java . clientsrc1.6.7
+src/clients/GUI1/graph/DoublePair.java . clientsrc1.6.7
+src/clients/GUI1/graph/IndicatorDrawer.java . clientsrc1.6.7
+src/clients/GUI1/graph/MarketDrawer.java . clientsrc1.6.7
+src/clients/GUI1/graph/BasicDrawer.java . clientsrc1.6.7
+src/clients/GUI1/graph/LowerGraph.java . clientsrc1.6.7
+src/clients/GUI1/graph/MainGraph.java . clientsrc1.6.7
+src/clients/GUI1/graph/TemporalDrawer.java . clientsrc1.6.7
+src/clients/GUI1/graph/TimeDrawer.java . clientsrc1.6.7
 # Market Analysis System executables and accompanying files (server and client)
 # (First the GUI java classes)
-src/clients/GUI1/MarketSelection.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/Drawer.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/CandleDrawer.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/BarDrawer.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/Axis.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/DoublePair.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/RTextLine.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/FileFormatException.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/LoadMessage.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/RotateTextFilter.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/TextLine.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/TextState.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/DataSet.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/DataSetBuilder.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/SpecialFunction.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/Markers.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/MarkerVertex.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/Graph.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/LineDrawer.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/PriceDrawer.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/Gin.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/Range.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/InteractiveGraph.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/DateDrawer.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/RefSpec.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/MarketDrawer.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/IndicatorDrawer.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/BasicDrawer.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/LowerGraph.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/MainGraph.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/TemporalDrawer.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/graph/TimeDrawer.class lib/classes/graph/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/MarketSelection\$1.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/Chart.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/Chart\$1.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/ChartSettings.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/WindowSettings.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/MA_Client.class lib/classes/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/CompressedConnection.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/Connection.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/Parser.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/SessionState.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/MA_ScrollPane.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-#src/clients/GUI1/MA_ScrollPane\$1.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/IndicatorListener.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/IndicatorSelection.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/MA_MenuBar.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/MA_MenuBar\$1.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/MA_MenuBar\$2.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/MA_MenuBar\$3.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/MA_MenuBar\$4.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/MA_MenuBar\$5.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/MA_MenuBar\$6.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/MA_MenuBar\$7.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/MA_MenuBar\$8.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/MA_MenuBar\$9.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/DialogSelection.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/DialogSelection\$1.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/DialogSelection\$2.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/DialogSelection\$3.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/IndicatorColors.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/IndicatorColors\$1.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/IndicatorColors\$2.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/MA_Dialog.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/MA_Dialog\$1.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/MAS_Options.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/GUI1/OptionFlags.class lib/classes/mas_gui/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/CL/CL_Client.class lib/classes/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/common/NetworkProtocol.class lib/classes/common/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/common/DataInspector.class lib/classes/common/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/support/Configuration.class lib/classes/support/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/support/Configuration\$DateSetting.class lib/classes/support/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/support/FileReaderUtilities.class lib/classes/support/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/support/Utilities.class lib/classes/support/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/support/IntPair.class lib/classes/support/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/support/GUI_Utilities.class lib/classes/support/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/support/ErrorBox.class lib/classes/support/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/support/ErrorBox\$1.class lib/classes/support/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/support/ErrorBox\$2.class lib/classes/support/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/support/ErrorBox\$3.class lib/classes/support/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/support/IndicatorGroup.class lib/classes/support/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
-src/clients/support/IndicatorGroups.class lib/classes/support/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
+src/clients/GUI1/MarketSelection.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/Drawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/CandleDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/BarDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/Axis.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/DoublePair.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/RTextLine.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/FileFormatException.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/LoadMessage.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/RotateTextFilter.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/TextLine.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/TextState.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/DataSet.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/DataSetBuilder.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/SpecialFunction.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/Markers.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/MarkerVertex.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/Graph.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/LineDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/PriceDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/Gin.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/Range.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/InteractiveGraph.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/DateDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/RefSpec.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/MarketDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/IndicatorDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/BasicDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/LowerGraph.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/MainGraph.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/TemporalDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/graph/TimeDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/MarketSelection\$1.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/Chart.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/Chart\$1.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/ChartSettings.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/WindowSettings.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/MA_Client.class lib/classes/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/CompressedConnection.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/Connection.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/Parser.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/SessionState.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/MA_ScrollPane.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+#src/clients/GUI1/MA_ScrollPane\$1.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/IndicatorListener.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/IndicatorSelection.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/MA_MenuBar.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/MA_MenuBar\$1.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/MA_MenuBar\$2.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/MA_MenuBar\$3.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/MA_MenuBar\$4.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/MA_MenuBar\$5.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/MA_MenuBar\$6.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/MA_MenuBar\$7.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/MA_MenuBar\$8.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/MA_MenuBar\$9.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/DialogSelection.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/DialogSelection\$1.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/DialogSelection\$2.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/DialogSelection\$3.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/IndicatorColors.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/IndicatorColors\$1.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/IndicatorColors\$2.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/MA_Dialog.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/MA_Dialog\$1.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/OptionFlags.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/CL/CL_Client.class lib/classes/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/common/NetworkProtocol.class lib/classes/common/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/common/DataInspector.class lib/classes/common/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/support/Configuration.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/support/MA_Configuration\$DateSetting.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/support/Utilities.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/support/IntPair.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/support/GUI_Utilities.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/support/ErrorBox.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/support/ErrorBox\$1.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/support/ErrorBox\$2.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/support/ErrorBox\$3.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/support/IndicatorGroup.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/support/IndicatorGroups.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
 # (GUI config. file)
-build/config/.ma_clientrc lib/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
+build/config/.ma_clientrc lib/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
 # (Scripts)
-src/scripts/mas/magc bin/ mas_linux1.6.5 mas_windows1.6.5 clientsrc1.6.5 mac1.6.5
-src/scripts/mas/masb bin/ mas_linux1.6.5 mas_windows1.6.5 clientsrc1.6.5 mac1.6.5
-src/scripts/mas/admin/report_system_info lib/ mas_linux1.6.5
-src/scripts/python/mas/client/macl bin/ mas_linux1.6.5 mas_windows1.6.5 clientsrc1.6.5 mac1.6.5
-src/scripts/python/mas/client/CommandProcessor.py lib/python/ mas_linux1.6.5 mas_windows1.6.5 clientsrc1.6.5 mac1.6.5
-src/scripts/python/mas/library/constants.py lib/python/ mas_linux1.6.5 mas_windows1.6.5 clientsrc1.6.5 mac1.6.5
-src/scripts/python/mas/library/ma_connection.py lib/python/ mas_linux1.6.5 mas_windows1.6.5 clientsrc1.6.5 mac1.6.5
-src/scripts/python/mas/library/ma_protocol.py lib/python/ mas_linux1.6.5 mas_windows1.6.5 clientsrc1.6.5 mac1.6.5
-src/clients/CL/maclj bin/ mas_linux1.6.5 mas_windows1.6.5 clientsrc1.6.5 mac1.6.5
-src/scripts/external/mas_external_retrieve.pl lib/ mas_linux1.6.5 mas_windows1.6.5
-src/scripts/windows/runmas.bat bin/ mas_windows1.6.5
-src/scripts/windows/runmasf.bat bin/ mas_windows1.6.5
-src/scripts/windows/runmacl.bat bin/ mas_windows1.6.5
-src/scripts/windows/runmasgui.bat bin/ mas_windows1.6.5
-src/scripts/windows/fake_mailer.bat bin/ mas_windows1.6.5
-src/scripts/windows/init.bat bin/ mas_windows1.6.5
-src/scripts/windows/simple_cat.exe bin/ mas_windows1.6.5
+src/scripts/mas/magc bin/ mas_linux1.6.7 mas_windows1.6.7 clientsrc1.6.7 mac1.6.7
+src/scripts/mas/masb bin/ mas_linux1.6.7 mas_windows1.6.7 clientsrc1.6.7 mac1.6.7
+src/scripts/mas/admin/report_system_info lib/ mas_linux1.6.7
+src/scripts/python/mas/client/macl bin/ mas_linux1.6.7 mas_windows1.6.7 clientsrc1.6.7 mac1.6.7
+src/scripts/python/mas/client/CommandProcessor.py lib/python/ mas_linux1.6.7 mas_windows1.6.7 clientsrc1.6.7 mac1.6.7
+src/scripts/python/mas/library/constants.py lib/python/ mas_linux1.6.7 mas_windows1.6.7 clientsrc1.6.7 mac1.6.7
+src/scripts/python/mas/library/ma_connection.py lib/python/ mas_linux1.6.7 mas_windows1.6.7 clientsrc1.6.7 mac1.6.7
+src/scripts/python/mas/library/ma_protocol.py lib/python/ mas_linux1.6.7 mas_windows1.6.7 clientsrc1.6.7 mac1.6.7
+src/clients/CL/maclj bin/ mas_linux1.6.7 mas_windows1.6.7 clientsrc1.6.7 mac1.6.7
+src/scripts/external/mas_external_retrieve.pl lib/ mas_linux1.6.7 mas_windows1.6.7
+src/scripts/windows/runmas.bat bin/ mas_windows1.6.7
+src/scripts/windows/runmasf.bat bin/ mas_windows1.6.7
+src/scripts/windows/runmacl.bat bin/ mas_windows1.6.7
+src/scripts/windows/runmasgui.bat bin/ mas_windows1.6.7
+src/scripts/windows/fake_mailer.bat bin/ mas_windows1.6.7
+src/scripts/windows/init.bat bin/ mas_windows1.6.7
+src/scripts/windows/simple_cat.exe bin/ mas_windows1.6.7
 # contrib
 src/contrib src/ contrib
 # (macl configuration files)
-build/config lib/ mas_linux1.6.5 mas_windows1.6.5 mac1.6.5
+build/config lib/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
 # (Server executables and needed libraries)
-lib/binaries/mas_no_assert_v1.6.5 bin/mas mas_linux1.6.5
-lib/binaries/mas_assert_v1.6.5 bin/mas_assert mas_linux1.6.5
+lib/binaries/mas_no_assert_v1.6.7 bin/mas mas_linux1.6.7
+lib/binaries/mas_assert_v1.6.7 bin/mas_assert mas_linux1.6.7
 # Include this odbc library if the executable was not statically
 # linked with it:
-lib/binaries/libodbc.so.1 lib mas_linux1.6.5 serversrc1.6.5
+lib/binaries/libodbc.so.1 lib mas_linux1.6.7 serversrc1.6.7
 # (MAS Documentation)
-doc/GUI_introduction . mas_linux1.6.5 mac1.6.5
-doc/masystem_introduction-linux.txt doc/masystem_introduction.txt mas_linux1.6.5 mac1.6.5
-doc/masystem_introduction-linux.html doc/masystem_introduction.html mas_linux1.6.5 mac1.6.5
-doc/java_info . mas_linux1.6.5 mac1.6.5
-doc/feature_list . mas_linux1.6.5 mac1.6.5
-doc/creating_indicators . mas_linux1.6.5 mac1.6.5
-doc/creating_market_analyzers . mas_linux1.6.5 mac1.6.5
-doc/other_market_analyzer_examples . mas_linux1.6.5 mac1.6.5
-doc/market_analysis . mas_linux1.6.5 mac1.6.5
-doc/MAS_README-linux.txt doc/README mas_linux1.6.5 mac1.6.5
-doc/README_compile src/doc/README_compile serversrc1.6.5
-doc/main_MAS_README-linux.ps doc/INTRODUCTION.ps mas_linux1.6.5 mac1.6.5
-doc/main_MAS_README-linux.html doc/INTRODUCTION.html mas_linux1.6.5 mac1.6.5
-doc/env_settings ./doc/environment mas_linux1.6.5 mac1.6.5
-doc/INSTALL  ./ mas_linux1.6.5
-doc/THANKS . mas_linux1.6.5 mac1.6.5 serversrc1.6.5 clientsrc1.6.5
-doc/GUI_client_change_log doc/GUI_CHANGE_LOG mas_linux1.6.5 mac1.6.5
-doc/Server_change_log doc/MAS_CHANGE_LOG mas_linux1.6.5
+doc/GUI_introduction . mas_linux1.6.7 mac1.6.7
+doc/masystem_introduction-linux.txt doc/masystem_introduction.txt mas_linux1.6.7 mac1.6.7
+doc/masystem_introduction-linux.html doc/masystem_introduction.html mas_linux1.6.7 mac1.6.7
+doc/java_info . mas_linux1.6.7 mac1.6.7
+doc/feature_list . mas_linux1.6.7 mac1.6.7
+doc/creating_indicators . mas_linux1.6.7 mac1.6.7
+doc/creating_market_analyzers . mas_linux1.6.7 mac1.6.7
+doc/other_market_analyzer_examples . mas_linux1.6.7 mac1.6.7
+doc/market_analysis . mas_linux1.6.7 mac1.6.7
+doc/MAS_README-linux.txt doc/README mas_linux1.6.7 mac1.6.7
+doc/README_compile src/doc/README_compile serversrc1.6.7
+doc/main_MAS_README-linux.ps doc/INTRODUCTION.ps mas_linux1.6.7 mac1.6.7
+doc/main_MAS_README-linux.html doc/INTRODUCTION.html mas_linux1.6.7 mac1.6.7
+doc/env_settings ./doc/environment mas_linux1.6.7 mac1.6.7
+doc/INSTALL  ./ mas_linux1.6.7
+doc/THANKS . mas_linux1.6.7 mac1.6.7 serversrc1.6.7 clientsrc1.6.7
+doc/GUI_client_change_log doc/GUI_CHANGE_LOG mas_linux1.6.7 mac1.6.7
+doc/Server_change_log doc/MAS_CHANGE_LOG mas_linux1.6.7
 # (MAS Documentation, Windows style)
-doc/GUI_introduction doc/GUI_introduction.txt[dos] mas_windows1.6.5
-doc/masystem_introduction-windows.txt doc/masystem_introduction.txt[dos] mas_windows1.6.5
-doc/masystem_introduction-windows.html doc/masystem_introduction.html mas_windows1.6.5
-doc/feature_list doc/feature_list.txt[dos] mas_windows1.6.5
-doc/creating_indicators doc/creating_indicators.txt[dos] mas_windows1.6.5
-doc/creating_market_analyzers doc/creating_market_analyzers.txt[dos] mas_windows1.6.5
-doc/other_market_analyzer_examples doc/other_market_analyzer_examples.txt[dos] mas_windows1.6.5
-doc/market_analysis doc/market_analysis.txt[dos] mas_windows1.6.5
-doc/MAS_README-windows.txt doc/README.txt[dos] mas_windows1.6.5
-doc/main_MAS_README-windows.ps doc/INTRODUCTION.ps mas_windows1.6.5
-doc/main_MAS_README-windows.html doc/INTRODUCTION.html mas_windows1.6.5
-doc/env_settings ./doc/environment.txt[dos] mas_windows1.6.5
-doc/INSTALL  ./INSTALL.txt[dos] mas_windows1.6.5
-doc/THANKS doc/THANKS.txt[dos] mas_windows1.6.5
-doc/GUI_client_change_log doc/GUI_CHANGE_LOG.txt[dos] mas_windows1.6.5
-doc/Server_change_log doc/MAS_CHANGE_LOG.txt[dos] mas_windows1.6.5
-doc/README_WINDOWS.txt ./ mas_windows1.6.5
+doc/GUI_introduction doc/GUI_introduction.txt[dos] mas_windows1.6.7
+doc/masystem_introduction-windows.txt doc/masystem_introduction.txt[dos] mas_windows1.6.7
+doc/masystem_introduction-windows.html doc/masystem_introduction.html mas_windows1.6.7
+doc/feature_list doc/feature_list.txt[dos] mas_windows1.6.7
+doc/creating_indicators doc/creating_indicators.txt[dos] mas_windows1.6.7
+doc/creating_market_analyzers doc/creating_market_analyzers.txt[dos] mas_windows1.6.7
+doc/other_market_analyzer_examples doc/other_market_analyzer_examples.txt[dos] mas_windows1.6.7
+doc/market_analysis doc/market_analysis.txt[dos] mas_windows1.6.7
+doc/MAS_README-windows.txt doc/README.txt[dos] mas_windows1.6.7
+doc/main_MAS_README-windows.ps doc/INTRODUCTION.ps mas_windows1.6.7
+doc/main_MAS_README-windows.html doc/INTRODUCTION.html mas_windows1.6.7
+doc/env_settings ./doc/environment.txt[dos] mas_windows1.6.7
+doc/INSTALL  ./INSTALL.txt[dos] mas_windows1.6.7
+doc/THANKS doc/THANKS.txt[dos] mas_windows1.6.7
+doc/GUI_client_change_log doc/GUI_CHANGE_LOG.txt[dos] mas_windows1.6.7
+doc/Server_change_log doc/MAS_CHANGE_LOG.txt[dos] mas_windows1.6.7
+doc/README_WINDOWS.txt ./ mas_windows1.6.7
 # (Scripts)
-src/scripts/install/install ./ mas_linux1.6.5 mas_windows1.6.5
-src/scripts/functions/utilities ./lib mas_linux1.6.5
-#src/scripts/install/install_config ./ mas_linux1.6.5 mas_windows1.6.5
-# Data and server-configuration files needed by mas1.6.5
-build/data lib/ mas_linux1.6.5 mas_windows1.6.5
-build/data/symbols lib/ mas_linux1.6.5 mas_windows1.6.5
-build/database/mas_dbrc lib/ mas_linux1.6.5 mas_windows1.6.5
-build/database/mas_dbrc_with_commands lib/ mas_linux1.6.5 mas_windows1.6.5
-build/database/mas_dbrc_separate_tables lib/ mas_linux1.6.5 mas_windows1.6.5
-build/config/rc_files/mas_httprc lib/ mas_linux1.6.5 mas_windows1.6.5
-forum.txt . mas_linux1.6.5 mas_windows1.6.5 mac1.6.5 serversrc1.6.5 clientsrc1.6.5
+src/scripts/install/install ./ mas_linux1.6.7 mas_windows1.6.7
+src/scripts/functions/utilities ./lib mas_linux1.6.7
+#src/scripts/install/install_config ./ mas_linux1.6.7 mas_windows1.6.7
+# Data and server-configuration files needed by mas1.6.7
+build/data lib/ mas_linux1.6.7 mas_windows1.6.7
+build/data/symbols lib/ mas_linux1.6.7 mas_windows1.6.7
+build/database/mas_dbrc lib/ mas_linux1.6.7 mas_windows1.6.7
+build/database/mas_dbrc_with_commands lib/ mas_linux1.6.7 mas_windows1.6.7
+build/database/mas_dbrc_separate_tables lib/ mas_linux1.6.7 mas_windows1.6.7
+build/config/rc_files/mas_httprc lib/ mas_linux1.6.7 mas_windows1.6.7
+forum.txt . mas_linux1.6.7 mas_windows1.6.7 mac1.6.7 serversrc1.6.7 clientsrc1.6.7
 # Scripts
-src/scripts/python/obtain_eod_data src/scripts/ scripts1.6.5
-src/scripts/python/pmm src/scripts/ scripts1.6.5
-/home2/finance/bin/run_market_analysis src/scripts/ scripts1.6.5
-/home2/finance/bin/distribute_data src/scripts/ scripts1.6.5
-/home2/finance/bin/process_stock_splits src/scripts/ scripts1.6.5
-/home2/finance/bin/analyze_watch_lists src/scripts/ scripts1.6.5
-/home2/finance/bin/analyze_stocks src/scripts/ scripts1.6.5
-/home2/finance/bin/extract_data src/scripts/ scripts1.6.5
-/home2/finance/bin/loss src/scripts/ scripts1.6.5
-/home2/finance/bin/process_mas_mail src/scripts/ scripts1.6.5
-src/scripts/mas/admin src/scripts/lib/ scripts1.6.5
-src/scripts/mas/awk src/scripts/lib/ scripts1.6.5
-doc/scripts_README ./src/scripts/README scripts1.6.5
-src/scripts/postgres src/scripts/database/ scripts1.6.5
-/usr/local/bin/cnvrt_fromdos src/scripts/ scripts1.6.5
-/usr/local/bin/fromdos src/scripts/ scripts1.6.5
-/home2/jtc/bin/startmas src/scripts scripts1.6.5
+src/scripts/python/obtain_eod_data src/scripts/ scripts1.6.7
+src/scripts/python/pmm src/scripts/ scripts1.6.7
+/home2/finance/bin/run_market_analysis src/scripts/ scripts1.6.7
+/home2/finance/bin/distribute_data src/scripts/ scripts1.6.7
+/home2/finance/bin/process_stock_splits src/scripts/ scripts1.6.7
+/home2/finance/bin/analyze_watch_lists src/scripts/ scripts1.6.7
+/home2/finance/bin/analyze_stocks src/scripts/ scripts1.6.7
+/home2/finance/bin/extract_data src/scripts/ scripts1.6.7
+/home2/finance/bin/loss src/scripts/ scripts1.6.7
+/home2/finance/bin/process_mas_mail src/scripts/ scripts1.6.7
+src/scripts/mas/admin src/scripts/lib/ scripts1.6.7
+src/scripts/mas/awk src/scripts/lib/ scripts1.6.7
+doc/scripts_README ./src/scripts/README scripts1.6.7
+src/scripts/database/db_creation/mas . scripts1.6.7
+/usr/local/bin/cnvrt_fromdos src/scripts/ scripts1.6.7
+/usr/local/bin/fromdos src/scripts/ scripts1.6.7
+/home2/jtc/bin/startmas src/scripts scripts1.6.7
