@@ -10,6 +10,25 @@ mailer = "elm"
 subject_flag = "-s"
 # Directory where the uptrend and downtrend files reside
 list_file_directory = "/home2/finance/data/etc"
-# Names of uptrend and downtrend files
+# Names of uptrend, downtrend, and sidelined files
 uptrend_file_name = "up_watch"
 downtrend_file_name = "down_watch"
+sidelined_file_name = "sidelined"
+# Strings specifying (regular expression) text matches:
+long_term_string = ".*long-term.*"
+# Event header
+event_string = "Event for:"
+# uptrend specifier
+buy_string = ".*\[Slope of MACD, Slope of Slope of MACD\] Uptrend"
+# downtrend specifier
+sell_string = ".*\[Slope of MACD, Slope of Slope of MACD\] Downtrend"
+# sideline specifier
+sideline_string = ".*\[Slope of MACD, Slope of Slope of MACD\] Sidelined"
+# regex string to match symbol from event line
+symbol_regex = "Event for: *\([^,]*\),.*"
+# string to use on event line to produce symbol from symbol_regex match
+symbol_regsub = "\\1"
+# regex string to match date (which must be mm/dd/yyyy) from event line
+date_regex = ".*date: *\([^,]*\),.*"
+# string to use on event line to produce date from date_regex match
+date_regsub = "\\1"
