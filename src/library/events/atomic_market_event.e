@@ -85,7 +85,7 @@ feature -- Status report
 
 	is_equal (other: like Current): BOOLEAN is
 		do
-			Result := Precursor (other) and equal (symbol, other.symbol)
+			Result := Precursor (other) and symbol.is_equal (other.symbol)
 		ensure then
 			Result implies equal (symbol, other.symbol)
 		end
