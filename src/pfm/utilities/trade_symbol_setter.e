@@ -29,7 +29,7 @@ feature -- Initialization
 
 feature {NONE}
 
-	read_value (stream: INPUT_SEQUENCE) is
+	read_value (stream: ITERABLE_INPUT_SEQUENCE) is
 		do
 			from
 				symbol.wipe_out
@@ -45,7 +45,7 @@ feature {NONE}
 			stream.back
 		end
 
-	do_set (stream: INPUT_SEQUENCE; tuple: TRADE) is
+	do_set (stream: ITERABLE_INPUT_SEQUENCE; tuple: TRADE) is
 			-- Not needed
 		do
 			tuple.set_symbol (clone (symbol))
