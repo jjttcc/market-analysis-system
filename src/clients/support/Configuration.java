@@ -24,6 +24,16 @@ public class Configuration implements NetworkProtocol {
 		return _use_config_file;
 	}
 
+	// Should calls to 'terminate' be ignored?  (Defaults to false.)
+	public static void set_ignore_termination(boolean value) {
+		ignore_termination = value;
+	}
+	public static void terminate(int status) {
+		if (! ignore_termination) {
+			System.exit(status);
+		}
+	}
+
 	public String session_settings() {
 		StringBuffer result = new StringBuffer();
 		int i;
@@ -161,6 +171,8 @@ public class Configuration implements NetworkProtocol {
 		return _instance;
 	}
 
+// Implementation
+
 	protected Configuration() {
 		start_date_settings = new Vector();
 		end_date_settings = new Vector();
@@ -201,7 +213,7 @@ public class Configuration implements NetworkProtocol {
 				catch (IOException e) {
 					System.err.println("I/O error occurred while " +
 						"reading file " + fname + ": " + e);
-					System.exit(-1);
+					terminate(-1);
 				}
 				while (! file_util.exhausted()) {
 					StringTokenizer t =
@@ -303,7 +315,7 @@ public class Configuration implements NetworkProtocol {
 		{
 			System.err.println("Missing period type or date" +
 				"in configuration file " + configuration_file);
-			System.exit(-1);
+			terminate(-1);
 		}
 		DateSetting ds = new DateSetting(date, pertype);
 		if (start) start_date_settings.addElement(ds);
@@ -423,6 +435,7 @@ public class Configuration implements NetworkProtocol {
 	}
 
 	private static boolean _use_config_file = true;
+	private static boolean ignore_termination = false;
 
 	private static Configuration _instance;
 

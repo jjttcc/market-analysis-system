@@ -3,9 +3,10 @@
 package mas_gui;
 
 import java.util.*;
+import support.Configuration;
 
 // Options specified on the command line
-public class CommandLineOptions extends MAS_Options {
+public class CommandLineOptions extends StartupOptions {
 
 	public CommandLineOptions(String[] args) {
 		//Process args for the host, port.
@@ -31,8 +32,18 @@ public class CommandLineOptions extends MAS_Options {
 			}
 		} else {
 			usage();
-			System.exit(1);
+			Configuration.terminate(1);
 		}
+	}
+
+	// Host name of the server
+	public String hostname() {
+		return hostname_;
+	}
+
+	// Port number to use for the socket connection
+	public int port_number() {
+		return port_number_;
 	}
 
 // Implementation
@@ -47,4 +58,9 @@ public class CommandLineOptions extends MAS_Options {
 		"               Request compressed data from server."
 		);
 	}
+
+// Implementation - attributes
+
+	protected String hostname_ = null;
+	protected int port_number_;
 }

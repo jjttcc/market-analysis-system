@@ -14,7 +14,7 @@ import support.*;
 public class DataSetBuilder implements NetworkProtocol {
 
 	// Precondition: conn != null && opts != null
-	public DataSetBuilder(Connection conn, MAS_Options opts) {
+	public DataSetBuilder(Connection conn, StartupOptions opts) {
 		assert conn != null && opts != null;
 		connection_ = conn;
 		options = opts;
@@ -28,7 +28,7 @@ public class DataSetBuilder implements NetworkProtocol {
 			initialize();
 		} catch (Exception e) {
 			System.err.println(e);
-			System.exit(1);
+			Configuration.terminate(1);
 		}
 	}
 
@@ -48,9 +48,9 @@ public class DataSetBuilder implements NetworkProtocol {
 			connection_.logout();
 		} catch (Exception e) {
 			System.err.println(e);
-			System.exit(1);
+			Configuration.terminate(1);
 		}
-		if (exit) System.exit(status);
+		if (exit) Configuration.terminate(status);
 	}
 
 	// Send a request for data for market `symbol' with `period_type'.
@@ -189,7 +189,7 @@ public class DataSetBuilder implements NetworkProtocol {
 	private IndicatorDrawer new_indicator_drawer() {
 		if (main_drawer == null) {
 			System.err.println("Code defect: main_drawer is null");
-			System.exit(-2);
+			Configuration.terminate(-2);
 		}
 		return new LineDrawer(main_drawer);
 	}
@@ -224,7 +224,7 @@ public class DataSetBuilder implements NetworkProtocol {
 			connection_.login();
 		} catch (Exception e) {
 			System.err.println(e);
-			System.exit(1);
+			Configuration.terminate(1);
 		}
 		_open_interest = false;
 		initialize_fieldspecs();
@@ -299,5 +299,5 @@ public class DataSetBuilder implements NetworkProtocol {
 	// Does the last received market data contain an open interest field?
 	private boolean _open_interest;
 	// User-specified options
-	private MAS_Options options;
+	private StartupOptions options;
 }

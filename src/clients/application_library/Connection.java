@@ -108,7 +108,7 @@ public class Connection implements NetworkProtocol, Constants {
 		if (! valid_server_response(last_rec_msgID)) {
 			System.err.println("Fatal error: received invalid " +
 				"message ID from server: " + last_rec_msgID);
-			System.exit(-1);
+			Configuration.terminate(-1);
 		} else {
 			request_result = new StringBuffer();
 		}
@@ -125,7 +125,7 @@ public class Connection implements NetworkProtocol, Constants {
 			// This error means there is a problem with the protocol of the
 			// last request passed to the server.  Since this is a coding
 			// error (probably in the client), it is treated as fatal.
-			System.exit(-1);
+			Configuration.terminate(-1);
 		}
 //System.out.println("'"  + request_result.toString() + "'");
 		return request_result;
@@ -167,7 +167,7 @@ public class Connection implements NetworkProtocol, Constants {
 				new BufferedInputStream(io_connection.input_stream())));
 		} catch (Exception e) {
 			System.err.println("Failed to read from server (" + e + ")");
-			System.exit(1);
+			Configuration.terminate(1);
 		}
 		return result;
 	}
@@ -176,7 +176,7 @@ public class Connection implements NetworkProtocol, Constants {
 	void message_too_large(int size) {
 		System.err.println("Message from server exceeded maximum " +
 			"buffer size of " + size + " - aborting");
-		System.exit(-1);
+		Configuration.terminate(-1);
 	}
 
 	// Is `value' a valid server response?

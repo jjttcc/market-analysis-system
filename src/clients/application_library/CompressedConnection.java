@@ -34,7 +34,7 @@ System.out.println("CompressedConnection new_reader called.");
 				new Inflater(), 850000)));
 		} catch (Exception e) {
 			System.err.println("Failed to read from server (" + e + ")");
-			System.exit(1);
+			Configuration.terminate(1);
 		}
 //System.out.println("decompressing");
 		return result;

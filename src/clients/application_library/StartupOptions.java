@@ -4,22 +4,8 @@ package mas_gui;
 
 import java.util.*;
 
-// Options specified by the user
-abstract public class MAS_Options implements OptionFlags {
-
-//!!!It may be appropriate to move this to the descendant
-//CommandLineOptions because the applet doesn't need it:
-	// Host name of the server
-	public String hostname() {
-		return hostname_;
-	}
-
-//!!!It may be appropriate to move this to the descendant
-//CommandLineOptions because the applet doesn't need it:
-	// Port number to use for the socket connection
-	public int port_number() {
-		return port_number_;
-	}
+// Start-up options specified by the user
+abstract public class StartupOptions implements OptionFlags {
 
 	// Should all selections be printed on startup?
 	public boolean print_on_startup() {
@@ -50,6 +36,4 @@ abstract public class MAS_Options implements OptionFlags {
 	protected boolean print_on_startup_;
 	protected boolean compression_;
 	protected Vector symbols_;
-	protected String hostname_ = null;
-	protected int port_number_;
 }

@@ -5,8 +5,7 @@ package mas_gui;
 import java.util.*;
 
 // User-specified options for the applet version
-//@@Partly hard-coded for now
-public class AppletOptions extends MAS_Options {
+public class AppletOptions extends StartupOptions {
 
 	public AppletOptions() {
 		set_print_on_startup(false);

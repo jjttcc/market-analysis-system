@@ -64,7 +64,7 @@ class ChartSettings implements Serializable {
 /** Market analysis GUI chart component */
 public class Chart extends Frame implements Runnable, NetworkProtocol {
 
-	public Chart(DataSetBuilder builder, String sfname, MAS_Options opt) {
+	public Chart(DataSetBuilder builder, String sfname, StartupOptions opt) {
 		super("Chart");
 		++window_count;
 		data_builder = builder;
@@ -122,7 +122,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		new Thread(this).start();
 	}
 
-	public MAS_Options options() {
+	public StartupOptions options() {
 		return options_;
 	}
 
@@ -558,6 +558,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		if (window_count == 1) {	// Close last remaining window, exit.
 			save_settings();
 			data_builder.logout(true, 0);
+			dispose();
 		}
 		else {		// More than 1 windows remain, close this one.
 			--window_count;
@@ -718,7 +719,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	private Vector old_indicators_from_server = null;
 
 	// User-specified options
-	MAS_Options options_;
+	StartupOptions options_;
 
 	// Did the previously retrieved data from the server contain an
 	// open interest field?
