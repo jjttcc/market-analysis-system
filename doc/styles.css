@@ -5,23 +5,46 @@ body { background-color: #e9dcd5; }
 #navigation {
 	position: absolute;
 	position: fixed;
-	left: 0.75em;
-	top: 4em;
+	left: 0; top: 0;
 	font-size: 90%;
-	margin-left: 0.15em;
-	width: 17%;
 	/*
-	border: 1px solid;
+	margin-left: 0.15em;
+	*/
+	padding: 0 0 0 0.9em;
+	width: 7.1em; height: 100%;
+	background-color: #b2c5ca;
+	border-right: 1px solid;
+	/*
 	*/
 }
 
+#header {
+	position: absolute;
+	left: 0; top: 0;
+	width: 84.8%;
+	height: 1.3em;
+	/*
+	border: 1px solid;
+	text-align: center;
+	*/
+	padding: 0.75em 0.75em 0.75em 5.75em;
+	background-color: #c5b2ca;
+}
+
+h1.header {
+	color: red;
+	font-size: 100%;
+}
+
 #content {
-	margin: 0.5em 0 0 0;
+	margin: 0.75em 0.7em 0 0.5em;
 	font-size: 90%;
+	/*
 	width: 75%;
+	*/
 	position: absolute;
 	left: 8.75em;
-	top: 0;
+	top: 3em;
 	/*
 	border: 1px solid;
 	*/
@@ -37,6 +60,7 @@ body { background-color: #e9dcd5; }
 	border-width: 0 0 0 0;
 	margin: 0;
 }
+
 .justified {
     text-align: justify;
 }
@@ -48,10 +72,13 @@ h1 {
 	font-size: 140%
 }
 h2 {
-	font-family: "Times New Roman", serif; font-size: 110%; so-language: en-US;
+	font-family: "Times New Roman", serif; font-size: 110%;
 }
 h3 {
-	font-family: "Times New Roman", serif; font-size: 90%; so-language: en-US
+	font-family: "Times New Roman", serif; font-size: 90%;
 }
 #sf-logos {
+}
+p.largepar {
+	margin: 1.15em 0 0 0;
 }
