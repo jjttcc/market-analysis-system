@@ -1,6 +1,6 @@
 indexing
 	description: "DATA_SCANNER that scans MARKET_TUPLE fields"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -21,18 +21,17 @@ creation
 
 feature
 
-	make (prod: like product; in_file: like input_file;
+	make (prod: like product; in: like input;
 			tm: like tuple_maker; vs: like value_setters) is
 		require
-			args_not_void: in_file /= Void and tm /= Void and vs /= Void and
+			args_not_void: in /= Void and tm /= Void and vs /= Void and
 							prod /= Void
-			in_file_readable: in_file.exists and in_file.is_open_read
 			vs_not_empty: not vs.empty
 		do
-			data_scanner_make (in_file, tm, vs, "%T", "%N")
+			data_scanner_make (in, tm, vs, "%T", "%N")
 			product := prod
 		ensure
-			set: input_file = in_file and tuple_maker = tm and
+			set: input = in and tuple_maker = tm and
 				value_setters = vs and product = prod and
 				field_separator.is_equal ("%T") and
 				record_separator.is_equal ("%N")

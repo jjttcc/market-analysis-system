@@ -20,7 +20,7 @@ feature -- Initialization
 
 feature {NONE}
 
-	do_set (stream: IO_MEDIUM; tuple: MARKET_TUPLE) is
+	do_set (stream: BILINEAR_INPUT_SEQUENCE; tuple: MARKET_TUPLE) is
 			-- Expected format for date:  yyyymmdd
 			-- Redefine in descendant for different formats.
 		local

@@ -10,7 +10,7 @@ class DATE_SETTER inherit
 
 feature {NONE}
 
-	do_set (stream: IO_MEDIUM; tuple: MARKET_TUPLE) is
+	do_set (stream: BILINEAR_INPUT_SEQUENCE; tuple: MARKET_TUPLE) is
 		do
 			--Stub
 		end

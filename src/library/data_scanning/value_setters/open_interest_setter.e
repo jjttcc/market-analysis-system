@@ -10,7 +10,8 @@ class OPEN_INTEREST_SETTER inherit
 
 feature {NONE}
 
-	do_set (stream: IO_MEDIUM; tuple: BASIC_OPEN_INTEREST_TUPLE) is
+	do_set (stream: BILINEAR_INPUT_SEQUENCE;
+				tuple: BASIC_OPEN_INTEREST_TUPLE) is
 		do
 			if stream.last_integer < 0 then
 				handle_input_error ("Numeric input value is < 0: ",
