@@ -8,13 +8,6 @@ indexing
 
 class MAIN_CL_INTERFACE inherit
 
-	GLOBAL_APPLICATION
-		export {NONE}
-			all
-		undefine
-			print
-		end
-
 	EXECUTION_ENVIRONMENT
 		export {NONE}
 			all
@@ -48,6 +41,13 @@ class MAIN_CL_INTERFACE inherit
 			print
 		redefine
 			event_generator_builder, function_builder
+		end
+
+	EVENT_HISTORY_MANAGEMENT
+		export
+			{NONE} all
+		undefine
+			print
 		end
 
 creation
@@ -263,7 +263,6 @@ feature {NONE} -- Implementation
 	mkt_analysis_set_date_menu is
 			-- Obtain the date and time to begin market analysis from the
 			-- user and pass it to the event generators.
-		local
 		do
 			event_coordinator.set_start_date_time (date_time_selection (
 				"%NPlease selecte a date and time for market analysis."))
@@ -288,7 +287,10 @@ feature {NONE} -- Implementation
 					active_event_generators)
 				factory_builder.make_dispatcher
 				event_coordinator.set_dispatcher (factory_builder.dispatcher)
+				load_market_event_histories
+				if error_occurred then print_list (<<last_error, "%N">>) end
 				event_coordinator.execute
+				save_market_event_histories
 			end
 		end
 
@@ -540,6 +542,13 @@ feature {NONE} -- Implementation - utilities
 				"%N", version.name, "%NVersion: ", version.number, "%N",
 				version.copyright, "%NVersion date: ", version.informal_date,
 				"%NLicence:%N%N", version.license_information>>)
+		end
+
+	make_lock (name: STRING): FILE_LOCK is
+		local
+			gs: expanded GLOBAL_SERVER
+		do
+			Result := gs.file_lock (name)
 		end
 
 feature {NONE} -- Implementation - attributes
