@@ -28,6 +28,8 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
+	--@@Need to add attribute(s) for specified function-parameter settings.
+
 	start_dates: HASH_TABLE [DATE, STRING]
 			-- Start dates - one (or 0) per time-period type
 
