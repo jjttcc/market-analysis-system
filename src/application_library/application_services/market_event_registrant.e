@@ -97,6 +97,9 @@ feature -- Basic operations
 					hfile.set_record_separator (record_separator)
 					create scanner.make (hfile)
 					scanner.execute
+					if scanner.last_error_fatal then
+						log_error_list(scanner.error_list)
+					end
 					fill_event_history (scanner.product)
 					event_history.compare_objects
 					hfile.close
