@@ -25,7 +25,7 @@ hostname	localhost
 # Command to start the server - short version
 #!!!When the "begin start_server_command" stuff is completed, this should
 # be commented out.
-start_server_command	cd <data_dir>; <bin_dir>/mas -o -f , -b <portnumber> *.txt
+#start_server_command	cd <data_dir>; <bin_dir>/mas -o -f , -b <portnumber> *.txt
 
 # Detailed version of command to start the server: data from files
 begin	start_server_command
