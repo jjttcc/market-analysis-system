@@ -110,9 +110,6 @@ feature {NONE}
 			-- Redefinition of output method inherited from GENERAL to
 			-- send output to active_medium
 		do
-			--!!Note: If this method of sending is slow (calling print
-			-- several times for one message) try caching the message here
-			-- until the eom is sent.
 			if o /= Void then
 				active_medium.put_string (o.out)
 			end
