@@ -305,7 +305,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			main_pane.add_main_data_set(main_dataset);
 			if (! current_upper_indicators.isEmpty()) {
 				// Retrieve the data for the newly requested market for the
-				// upper indicator, add it to the upper graph and draw
+				// upper indicators, add it to the upper graph and draw
 				// the new indicator data and the market data.
 				count = current_upper_indicators.size();
 				for (int i = 0; i < count; ++i) {
@@ -330,7 +330,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			set_window_title();
 			if (! current_lower_indicators.isEmpty()) {
 				// Retrieve the indicator data for the newly requested market
-				// for the lower indicator and draw it.
+				// for the lower indicators and draw it.
 				main_pane.clear_indicator_graph();
 				count = current_lower_indicators.size();
 				for (int i = 0; i < count; ++i) {
