@@ -9,6 +9,8 @@ Update mas_product_info.e to contain current release date.
 Go through the steps from below needed to test the Linux and Windows
    installs - make the release, create the mas*setup.exe file, etc., and
    then do the installs and test that the result works as expected.
+If problems occur during a step or if tests are executed that fail, go
+   back to the appropriate previous step and continue from there.
 
 Final Steps:
 
@@ -24,35 +26,32 @@ Final Steps:
 7.  Run make_chart_gui to freshly compile all the java files for the
     charting GUI and put them into a jar file.
 8.  Make sure the current release directory is empty and run make_release.
-9.  If any problems occurred during the make_release run, fix them and
-    go back to step 1.
-10. Do a test install of mas_linux*.tar.gz and make sure it installs
+9.  Do a test install of mas_linux*.tar.gz and make sure it installs
     correctly.
-11. Run build_rpm to make the mas rpm file and if any problems occur that
-    require it, go back to a previous step.
-12. Make sure the latest version of the indicators_persist and
+10. Run build_rpm to make the mas rpm file and verify that it was built
+    correctly.
+11. Make sure the latest version of the indicators_persist and
     generators_persist files (in build/config) are up to date (by running
     make_indicators or by copying these files after the final Linux test
     install) and make sure the latest version is checked into cvs.
     And update the cvs work directory on the Windows machine so that these
     files are up to date there.
-13. On the windows machine, run prepare_windows_setup to copy the tar file
+12. On the windows machine, run prepare_windows_setup to copy the tar file
     of the windows release over to the windows machine and extract it into
     the source directory for the inno setup process.
-14. Run Inno config on the latest inno_config iss file using the source
-    files set up by prepare_windows_setup.
-15. If any problems occurred during step 10. or 11. that require it (e.g.,
-    a CVS-ified file was changed and checked in), go back to step 1.
-16. Run a test install of the Windows setup-mas* exe file on Windows and
+13. Run Inno config on the latest inno_config iss file using the source
+    files set up by prepare_windows_setup to create the Windows
+    setup*.exe file.
+14. Run a test install of the Windows setup-mas* exe file on Windows and
     of the mas-*.rpm on Linux.  Fix any problems that come up and, if
     necessary, go back to a previous step.
     NOTE: rpm runs "strip -R .comment -R .note" on the executables, so they
     are not going to be the same as the ones used to build the rpm package.
-17. Do a cvs tag, using the current release number as a label.
-18. Create a new release-announcement file, perform any needed updates for
+15. Do a cvs tag, using the current release number as a label.
+16. Create a new release-announcement file, perform any needed updates for
     the new release on published files, such as the files accessible on
     sf.net.  Do any needed backups.
-19. Put the files for the new release, from the current release directory,
+17. Put the files for the new release, from the current release directory,
     onto the download section on sourceforge.  Post announcements to
     sourceforge and the appropriate newsgroups - comp.os.linux.announce,
     misc.invest.*, the windows groups, etc.
