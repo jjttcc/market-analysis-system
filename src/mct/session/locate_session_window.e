@@ -50,12 +50,9 @@ feature -- Client services
 feature {NONE} -- Implementation - initialization
 
 	create_contents is
-		local
-			main_box: EV_VERTICAL_BOX
 		do
 			-- Avoid flicker on some platforms.
 			lock_update
-			create main_box
 			extend (components)
 			-- Allow screen refresh on some platoforms.
 			unlock_update
