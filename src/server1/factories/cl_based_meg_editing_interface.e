@@ -119,13 +119,13 @@ feature {NONE} -- Implementation
 				inspect
 					character_selection (Void)
 				when 'c', 'C' then
-					Result := Create_new_eg_value
+					Result := Create_new_value
 				when 'r', 'R' then
-					Result := Remove_eg_value
+					Result := Remove_value
 				when 'v', 'V' then
-					Result := View_eg_value
+					Result := View_value
 				when 'e', 'E' then
-					Result := Edit_eg_indicator_value
+					Result := Edit_value
 				when 's', 'S' then
 					Result := Save_value
 				when 'h', 'H' then
@@ -535,11 +535,6 @@ feature {NONE} -- Implementation
 			end
 			print_list (<<"(Hit <Return> to continue.) ", eom>>)
 			read_line
-		end
-
-	show_help (msg: STRING) is
-		do
-			print (msg)
 		end
 
 	help: HELP
