@@ -93,18 +93,11 @@ abstract public class BasicDrawer extends Drawer {
 		}
 
 		if (Math.abs(ymax - ymin) < min_max_epsilon) {
-System.out.println(this.getClass().getName() + ".draw_data: ymin = ymax");
-System.out.println("ymin, ymax (before): " + ymin + ", " + ymax);
+//System.out.println(this.getClass().getName() + ".draw_data: ymin = ymax");
+//System.out.println("ymin, ymax (before): " + ymin + ", " + ymax);
 			ymin -= min_border_boundary;
 			ymax += min_border_boundary;
-			if (! negative_values_allowed()) {
-				if (ymin < 0 && ymax > 0) {
-					ymin = 0;
-				}
-				// If ymin and ymax are both < 0, assume the
-				// `negative_values_allowed' restriction is invalid.
-			}
-System.out.println("ymin, ymax (after): " + ymin + ", " + ymax);
+//System.out.println("ymin, ymax (after): " + ymin + ", " + ymax);
 		}
 		xrange = xmax - xmin;
 		yrange = ymax - ymin;
@@ -341,21 +334,16 @@ System.out.println("ymin, ymax (after): " + ymin + ", " + ymax);
 	// Do y-coordinate reference lines need to be displayed for this data?
 	abstract protected boolean reference_lines_needed();
 
-	// Are negative values allowed in the data set to be graphed.
-	protected boolean negative_values_allowed() {
-		return false;	// No - redefine is negative values are allowed.
-	}
-
 	// Calculation of height factor for drawing based on window height
 	// and yrange.
 	protected double height_factor_value(Rectangle bounds) {
-System.out.println("(" + this.getClass().getName() + ")");
-System.out.println("(hfv) yrange: " + yrange + ", bnds.ht: " + bounds.height);
-System.out.println("(hfv) ymin, ymax: " + ymin + ", " + ymax +
-", bnds.y: " + bounds.y);
+//System.out.println("(" + this.getClass().getName() + ")");
+//System.out.println("(hfv) yrange: " + yrange + ", bnds.ht: " + bounds.height);
+//System.out.println("(hfv) ymin, ymax: " + ymin + ", " + ymax +
+//", bnds.y: " + bounds.y);
 		double result;
 		result = bounds.height / yrange;
-System.out.println("(hfv) result: " + result);
+//System.out.println("(hfv) result: " + result);
 		return result;
 	}
 

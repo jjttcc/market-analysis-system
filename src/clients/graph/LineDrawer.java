@@ -42,10 +42,13 @@ public class LineDrawer extends IndicatorDrawer {
 		y0 = (int)(bounds.height - (_data[0]-ymin) * height_factor + bounds.y);
 		++row;
 
+//System.out.println("(" + this.getClass().getName() + ")");
 		for (i = 1; row < _x_values.length && i < lngth; ++i, ++row) {
 			x1 = _x_values[row] + right_adjust;
 			y1 = (int)(bounds.height - (_data[i]-ymin) * height_factor +
 					bounds.y);
+//System.out.println("line drawer drawing: " +
+//x0 + ", " + y0 + ", " + x1 + ", " + y1);
 			g.drawLine(x0,y0,x1,y1);
 
 			x0 = x1;
