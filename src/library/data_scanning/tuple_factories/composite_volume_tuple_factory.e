@@ -1,7 +1,7 @@
 indexing
 	description: "Composite tuple factory that includes the sum of the %
 		%volume of all elements in the market tuple list";
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -31,7 +31,7 @@ feature {NONE}
 			end
 			tuples.start
 			volume_adder.execute (Void)
-			product.set_volume (volume_adder.value.rounded)
+			product.set_volume (volume_adder.value)
 		ensure then
 			-- product.volume = sum_of_volume_fields_in (tuples)
 		end

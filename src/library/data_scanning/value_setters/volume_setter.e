@@ -1,12 +1,12 @@
 indexing
 	description: "Value setter that sets the volume of a tuple";
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
 class VOLUME_SETTER inherit
 
-	INTEGER_SETTER
+	REAL_SETTER
 
 creation
 
@@ -42,20 +42,20 @@ feature {NONE}
 
 	do_set (stream: INPUT_SEQUENCE; tuple: BASIC_VOLUME_TUPLE) is
 		do
-			if stream.last_integer < 0 then
+			if stream.last_real < 0 then
 				handle_input_error ("Numeric input value is < 0: ",
-									stream.last_integer.out)
+									stream.last_real.out)
 				-- conform to the precondition:
 				tuple.set_volume (0)
 			else
-				tuple.set_volume (stream.last_integer * multiplier)
+				tuple.set_volume (stream.last_real * multiplier)
 			end
 		ensure then
-			volume_set_to_last_integer_times_multiplier_if_valid:
-				stream.last_integer >= 0 implies
-					stream.last_integer = tuple.volume * multiplier
-			error_if_last_integer_lt_0:
-				stream.last_integer < 0 implies error_occurred
+			volume_set_to_last_real_times_multiplier_if_valid:
+				stream.last_real >= 0 implies
+					stream.last_real - tuple.volume * multiplier < Epsilon
+			error_if_last_real_lt_0:
+				stream.last_real < 0 implies error_occurred
 			error_implies_tuple_set_to_0:
 				error_occurred implies tuple.volume = 0
 		end

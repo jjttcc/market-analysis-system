@@ -1,6 +1,6 @@
 indexing
 	description: "Composite tuple with volume";
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -19,11 +19,11 @@ creation
 
 feature -- Access
 
-	volume: INTEGER
+	volume: REAL
 
 feature {COMPOSITE_TUPLE_FACTORY}
 
-	set_volume (arg: INTEGER) is
+	set_volume (arg: REAL) is
 		require
 			arg /= Void
 		do
@@ -36,7 +36,7 @@ feature {NONE}
 
 	adjust_volume_for_split (r: REAL) is
 		do
-			volume := (volume * r).floor
+			volume := (volume * r)
 		end
 
 end -- class COMPOSITE_VOLUME_TUPLE

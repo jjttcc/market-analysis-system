@@ -10,7 +10,7 @@ deferred class VOLUME_TUPLE inherit
 
 feature -- Access
 
-	volume: INTEGER is
+	volume: REAL is
 			-- Number of shares
 		deferred
 		end
