@@ -161,7 +161,7 @@ public class TA_Chart extends Frame
 		//process events for the above menu items can probably use the
 		//menu item name, which will be the indicator name, as a key
 		//in a hash table that will give the "indicator ID".  The menu
-		//item name (I think) will be available from the getActionCommand
+		//item name will be available from the getActionCommand
 		//method of the ActionEvent argument to ActionListener's
 		//actionPerformed method.  This will probably be set here.
 	}
@@ -195,22 +195,39 @@ public class TA_Chart extends Frame
 /** Listener for indicator selection */
 class IndicatorListener implements java.awt.event.ActionListener {
 	public void actionPerformed(java.awt.event.ActionEvent e) {
-		Graph2D igraph = main_pane.indicator_graph();
-		System.out.println("indicator " + e.getActionCommand() +
-							" was selected");
-		System.out.println("Index: " + _indicators.get(e.getActionCommand()));
+		Graph2D graph;
+		String selection = e.getActionCommand();
+		System.out.println("indicator " + selection + " was selected");
+		System.out.println("Index: " + _indicators.get(selection));
 		try {
+			String market = market_selection.current_market();
+			if (market == null)
+			{
+				// No market is currently selected, so there is nothing
+				// to display.
+				return;
+			}
 			connection.send_indicator_data_request(
-				((Integer) _indicators.get(e.getActionCommand())).intValue(),
-				market_selection.current_market(), current_period_type());
+				((Integer) _indicators.get(selection)).intValue(),
+				market, current_period_type());
 		}
 		catch (IOException ex) {
 			System.err.println("IO exception occurred, bye ...");
 			System.exit(-1);
 		}
-		igraph.detachDataSets();
-		igraph.attachDataSet(connection.last_indicator_data());
-		igraph.repaint();
+		// Set graph according to whether the selected indicator is
+		// configured to go in the upper or lower graph.
+		if (Configuration.instance().upper_indicators().containsKey(selection))
+		{
+			graph = main_pane.main_graph();
+		}
+		else
+		{
+			graph = main_pane.indicator_graph();
+			graph.detachDataSets();
+		}
+		graph.attachDataSet(connection.last_indicator_data());
+		graph.repaint();
 	}
 }
 }

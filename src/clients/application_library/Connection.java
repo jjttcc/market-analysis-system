@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import common.*;
 import graph.*;
 
 /** Provides an interface for connecting and communicating with the server */
@@ -210,6 +211,7 @@ public class TA_Connection implements NetworkProtocol
 			// error (probably in the client), it is treated as fatal.
 			System.exit(-1);
 		}
+System.out.println(result.toString());
 		return result;
 	}
 
