@@ -12,13 +12,13 @@ util = ReleaseUtilities(libdir)
 util.check_settings()
 map_file = open(libdir + '/release_file_map')
 for line in map_file.readlines():
-	files = split(line)
-	if files[0][0] == '#':
+	filespec = split(line)
+	if filespec[0][0] == '#':
 		continue	# Skip comment.
-	util.add_source_file(files[0])
-	util.add_target_file(files[1])
-	util.add_to_packages(files[0], files[1], files[2:])
+	util.add_source_file(filespec[0])
+	util.add_target_file(filespec[1])
+	util.add_to_packages(filespec[0], filespec[1], filespec[2:])
 map_file.close()
-util.copy()
+#Remove:?util.copy()
 util.make_packages()
-util.cleanup()
+#util.cleanup()

@@ -8,11 +8,15 @@ class PackageMaker:
 	def __init__(self, work_directory, package_directory):
 		self.work_directory = work_directory
 		self.package_directory = package_directory
+		self.Archive_index = 0
+		self.File_index = 1
+		self.Source_index = 0
+		self.Target_index = 1
 
 	def execute(self, pkgname, package):
 		do_zip = 0; do_tar = 0
-		file_tuples = package[1]
-		archive_types = package[0]
+		file_tuples = package[self.File_index]
+		archive_types = package[self.Archive_index]
 		if len(file_tuples) == 0:
 			print '<Empty file list for package ' + pkgname + \
 				' - skipping ...>'
@@ -43,8 +47,8 @@ class PackageMaker:
 	# of self.work_directory.
 	def make_file(self, tuple):
 		dosstr = '[dos]'
-		target = tuple[1]
-		source = tuple[0]
+		target = tuple[self.Target_index]
+		source = tuple[self.Source_index]
 		# The [dos] directive is not part of the file name - remove it.
 		if target[len(target) - len(dosstr):] == dosstr:
 			target = target[:-len(dosstr)]
