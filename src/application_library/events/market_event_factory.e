@@ -22,7 +22,7 @@ deferred class MARKET_EVENT_FACTORY inherit
 		export {NONE}
 			all
 				{ANY}
-			event_types
+			event_types_by_key
 		end
 
 	EXCEPTIONS
@@ -61,7 +61,7 @@ feature {NONE} -- Implementation
 		do
 			input_file.read_integer
 			ID := input_file.last_integer
-			current_event_type := event_types @ ID
+			current_event_type := event_types_by_key @ ID
 			if current_event_type = Void then
 				last_error := concatenation (
 					<<"Error occurred inputting event ID:",
