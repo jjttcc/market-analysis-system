@@ -76,10 +76,10 @@ feature -- Basic operations
 		local
 			cmd: RESULT_COMMAND [REAL]
 		do
-			f.set_input (user_interface.function_selection_from_type (
-						user_interface.Market_function,
-							concatenation (<<f.generator,
-								"'s input function">>), false))
+			operator_maker.reset
+			f.set_input (user_interface.market_function_selection (
+							concatenation (<<f.name, "'s (", f.generator,
+							") input function">>)))
 			cmd ?= operator_maker.command_selection_from_type (
 						operator_maker.Real_result_command,
 							concatenation (<<f.generator,
@@ -98,10 +98,10 @@ feature -- Basic operations
 			lc: LINEAR_COMMAND
 			rc: RESULT_COMMAND [REAL]
 		do
-			f.set_input (user_interface.function_selection_from_type (
-						user_interface.Market_function,
-							concatenation (<<f.generator,
-								"'s input function">>), false))
+			operator_maker.reset
+			f.set_input (user_interface.market_function_selection (
+							concatenation (<<f.name, "'s (", f.generator,
+								") input function">>)))
 			cmd ?= operator_maker.command_selection_from_type (
 						operator_maker.Binary_real_real_command,
 							concatenation (<<f.generator,
@@ -130,28 +130,26 @@ feature -- Basic operations
 			ui_set: user_interface /= Void
 			op_maker_set: operator_maker /= Void
 		local
-			response: STRING
 			cmd: RESULT_COMMAND [REAL]
 		do
-			f.set_input (user_interface.function_selection_from_type (
-						user_interface.Market_function,
-							concatenation (<<f.generator,
-								"'s input function">>), false))
+			operator_maker.reset
+			f.set_input (user_interface.market_function_selection (
+							concatenation (<<f.name, "'s (", f.generator,
+								") input function">>)))
 			cmd ?= operator_maker.command_selection_from_type (
 						operator_maker.Real_result_command,
 							concatenation (<<f.generator,
 								"'s operator">>), false)
 			f.set_operator (cmd)
-			response := user_interface.string_selection(concatenation(<<
-				"Change ", f.generator, "'s effective offset value? ",
-				"(default: 0) ">>))
-			response.to_lower
-			if response @ 1 = 'y' then
-				f.set_effective_offset (user_interface.integer_selection (
-						concatenation (<<f.generator,
-							"'s effective offset value">>)))
-			end
 			edit_n (f)
+			-- Ensure that f's effective offset is set to the absolute
+			-- value of the largest left offset (or highest magnitude of
+			-- negative offset) used by `cmd' and any members of its
+			-- tree - for example, if a SETTABLE_OFFSET_COMMAND occurs
+			-- in `cmd's tree and its offset is -3 and there is no smaller
+			-- (e.g., -4) offset used by a command in the tree, set f's
+			-- effective offset to 3.
+			f.set_effective_offset (operator_maker.left_offset)
 		end
 
 	edit_two_cplx_fn_op (f: TWO_VARIABLE_FUNCTION) is
@@ -164,16 +162,14 @@ feature -- Basic operations
 			cmd: RESULT_COMMAND [REAL]
 			i1, i2: COMPLEX_FUNCTION
 		do
-			i1 ?= user_interface.function_selection_from_type (
-						user_interface.Complex_function,
-							concatenation (<<f.generator,
-								"'s left input function">>), false)
-			f.set_input1 (i1)
-			i2 ?= user_interface.function_selection_from_type (
-						user_interface.Complex_function,
-							concatenation (<<f.generator,
-								"'s right input function">>), false)
-			f.set_input2 (i2)
+			operator_maker.reset
+			i1 ?= user_interface.complex_function_selection (
+							concatenation (<<f.name, "'s (", f.generator,
+								") left input function">>))
+			i2 ?= user_interface.complex_function_selection (
+							concatenation (<<f.name, "'s (", f.generator,
+								") right input function">>))
+			f.set_inputs (i1, i2)
 			cmd ?= operator_maker.command_selection_from_type (
 						operator_maker.Real_result_command,
 							concatenation (<<f.generator,
@@ -183,23 +179,31 @@ feature -- Basic operations
 
 	edit_one_fn_bnc_n (f: STANDARD_MOVING_AVERAGE) is
 			-- Edit a function that takes one market function,
-			-- a BASIC_NUMERIC_COMMAND, and an n-value.
+			-- a RESULT_COMMAND [REAL], and an n-value.
 		require
 			ui_set: user_interface /= Void
 			op_maker_set: operator_maker /= Void
 		local
-			cmd: BASIC_NUMERIC_COMMAND
+			cmd: RESULT_COMMAND [REAL]
 		do
-			f.set_input (user_interface.function_selection_from_type (
-						user_interface.Market_function,
-							concatenation (<<f.generator,
-								"'s input function">>), false))
+			operator_maker.reset
+			f.set_input (user_interface.market_function_selection (
+							concatenation (<<f.name, "'s (", f.generator,
+								") input function">>)))
 			cmd ?= operator_maker.command_selection_from_type (
-						operator_maker.Basic_numeric_command,
+						operator_maker.Real_result_command,
 							concatenation (<<f.generator,
 								"'s operator">>), false)
 			f.set_operator (cmd)
 			edit_n (f)
+			-- Ensure that f's effective offset is set to the absolute
+			-- value of the largest left offset (or highest magnitude of
+			-- negative offset) used by `cmd' and any members of its
+			-- tree - for example, if a SETTABLE_OFFSET_COMMAND occurs
+			-- in `cmd's tree and its offset is -3 and there is no smaller
+			-- (e.g., -4) offset used by a command in the tree, set f's
+			-- effective offset to 3.
+			f.set_effective_offset (operator_maker.left_offset)
 		end
 
 	edit_ema (f: EXPONENTIAL_MOVING_AVERAGE) is
@@ -213,10 +217,10 @@ feature -- Basic operations
 			cmd: RESULT_COMMAND [REAL]
 			exp: N_BASED_CALCULATION
 		do
-			f.set_input (user_interface.function_selection_from_type (
-						user_interface.Market_function,
-							concatenation (<<f.generator,
-								"'s input function">>), false))
+			operator_maker.reset
+			f.set_input (user_interface.market_function_selection (
+							concatenation (<<f.name, "'s (", f.generator,
+								") input function">>)))
 			cmd ?= operator_maker.command_selection_from_type (
 						operator_maker.Real_result_command,
 							concatenation (<<f.generator,
@@ -228,6 +232,14 @@ feature -- Basic operations
 								"'s exponential operator">>), false)
 			f.set_exponential (exp)
 			edit_n (f)
+			-- Ensure that f's effective offset is set to the absolute
+			-- value of the largest left offset (or highest magnitude of
+			-- negative offset) used by `cmd' and any members of its
+			-- tree - for example, if a SETTABLE_OFFSET_COMMAND occurs
+			-- in `cmd's tree and its offset is -3 and there is no smaller
+			-- (e.g., -4) offset used by a command in the tree, set f's
+			-- effective offset to 3.
+			f.set_effective_offset (operator_maker.left_offset)
 		end
 
 	edit_two_points_pertype (f: MARKET_FUNCTION_LINE) is
@@ -254,6 +266,22 @@ feature {NONE} -- Implementation
 			end
 			fnctn.set_n (user_interface.integer_selection (
 						concatenation (<<fnctn.generator, "'s n-value">>)))
+		end
+
+	edit_effective_offset (f: N_RECORD_ONE_VARIABLE_FUNCTION) is
+			-- Edit `f's effective_offset value.
+		local
+			response: STRING
+		do
+			response := user_interface.string_selection(concatenation(<<
+				"Change ", f.generator, "'s effective offset value? ",
+				"(default: 0) ">>))
+			response.to_lower
+			if response @ 1 = 'y' then
+				f.set_effective_offset (user_interface.integer_selection (
+						concatenation (<<f.generator,
+							"'s effective offset value">>)))
+			end
 		end
 
 invariant
