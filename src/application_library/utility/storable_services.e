@@ -6,7 +6,7 @@ indexing
 	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
 		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
-deferred class STORABLE_SERVICES [G] inherit
+deferred class STORABLE_SERVICES [G]
 
 feature -- Access
 
@@ -31,6 +31,20 @@ feature -- Status report
 			-- Did the last operation make a change that may need to be
 			-- saved to persistent store?
 
+	readonly: BOOLEAN
+			-- Are changes not allowed to be saved?
+
+	ok_to_save: BOOLEAN
+			-- Are changes allowed to be saved?
+
+	abort_edit: BOOLEAN is
+			-- Should the edit session be aborted?
+		do
+			Result := not ok_to_save and not readonly
+		ensure
+			definition: Result = (not ok_to_save and not readonly)
+		end
+
 	error_occurred: BOOLEAN is
 			-- Did an error occur during the last operation?
 		deferred
@@ -40,7 +54,8 @@ feature -- Basic operations
 
 	save is
 		require
-			changed: changed
+			changed_and_ok_to_save: changed and ok_to_save
+			not_aborted: not abort_edit
 		do
 			real_list.copy (working_list)
 			real_list.save
@@ -54,10 +69,30 @@ feature -- Basic operations
 
 	begin_edit is
 		do
-			if working_list = Void then
+			readonly := false
+			ok_to_save := true
+			changed := false
+			initialize_lock
+			lock.try_lock
+			if not lock.locked then
+				prompt_for_edit_state
+				if ok_to_save then
+					show_message ("Waiting to obtain a lock ...")
+					lock.lock
+					show_message ("  Lock obtained - continuing.%N")
+				elseif abort_edit then
+					show_message ("Aborting edit session.%N")
+				else
+					check check_readonly: readonly end
+					show_message ("Continuing - changes will not be saved.%N")
+				end
+			end
+			if not abort_edit then
+				retrieve_persistent_list
 				initialize_working_list
 			end
-			changed := false
+		ensure
+			abort_rules: abort_edit implies not changed and not lock.locked
 		end
 
 	report_errors is
@@ -69,16 +104,59 @@ feature -- Basic operations
 		end
 
 	end_edit is
+			-- Perform actions necessary to end the editing session,
+			-- including ensuring that the file lock is released.
+		require
+			lock_set: lock /= Void
+			abort_rules: abort_edit implies not changed and not lock.locked
 		do
 			if changed then
 				working_list.deep_copy (real_list)
 				changed := false
 			end
+			if lock.locked then
+				lock.unlock
+			end
+		ensure
+			not_changed: not changed
+		end
+
+	lock: FILE_LOCK
+
+	prompt_for_edit_state is
+			-- Prompt the user as to whether to "edit" read-only, wait for
+			-- lock to clear, or abort edit.
+		local
+			c: CHARACTER
+		do
+			c := prompt_for_char ("Failed to lock item.  Wait for lock, %
+				%disallow changes, or abort? (w/d/a) ", "wWdDaA")
+			inspect
+				c
+			when 'w', 'W' then
+				readonly := false
+				ok_to_save := true
+			when 'd', 'D' then
+				readonly := true
+				ok_to_save := false
+			when 'a', 'A' then
+				ok_to_save := false
+				readonly := false
+			end
+		ensure
+			readonly_or_wait_or_abort: (readonly and not ok_to_save) or
+				(not readonly and ok_to_save) or
+				(not readonly and not ok_to_save)
 		end
 
 feature {NONE} -- Hook routines
 
 	show_message (s: STRING) is
+			-- Display `s' to the user.
+		deferred
+		end
+
+	prompt_for_char (msg, charselection: STRING): CHARACTER is
 		deferred
 		end
 
@@ -86,6 +164,12 @@ feature {NONE} -- Hook routines
 		deferred
 		ensure
 			no_error: not error_occurred
+		end
+
+	retrieve_persistent_list is
+			-- Retrieve the current contents of the storable list from
+			-- persistent store.
+		deferred
 		end
 
 	initialize_working_list is
@@ -96,5 +180,17 @@ feature {NONE} -- Hook routines
 			-- Hook for end of save routine, if needed
 		do
 		end
+
+	initialize_lock is
+		deferred
+		ensure
+			lock_set: lock /= Void
+		end
+
+invariant
+
+	read_implication: readonly implies not ok_to_save and not abort_edit
+	save_implication: ok_to_save implies not readonly and not abort_edit
+	not_locked_when_readonly: readonly implies not lock.locked
 
 end -- STORABLE_SERVICES
