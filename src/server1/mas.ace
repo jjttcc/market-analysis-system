@@ -99,8 +99,6 @@ default
 --debug ("command line");
 --debug ("database");
 --debug ("compression");
---precompiled ("$ISE_EIFFEL/precomp/spec/$PLATFORM/base");
---!!!!!!Remove:
 
 cluster
 	server:		"$MAS/src/server1"
@@ -168,7 +166,7 @@ cluster
 		option
 			-- Cover up a compiler bug.  (See note under the "markets"
 			-- cluster.)
-			assertion (no): MARKET_TUPLE_LIST;
+			assertion (no): market_tuple_list
 		end
 
 	function_types (ma_library):		"$/function_types"
@@ -183,7 +181,7 @@ cluster
 			-- off asssertions for STOCK gets rid of the problem.
 			-- If the problem also shows up in STOCK's sibling,
 			-- DERIVATIVE_INSTRUMENT, uncomment that line.
-			assertion (no): STOCK;
+			assertion (no): stock
 --			assertion (no): DERIVATIVE_INSTRUMENT;
 		end
 
