@@ -6,7 +6,7 @@ usage ()
 	echo "Usage: $(basename $0) [directory]"
 }
 
-name_matches ()
+old_name_matches ()
 #Currently doesn't work.
 {
 	name=$1
@@ -37,15 +37,43 @@ name_matches ()
 	return $result
 }
 
+name_matches ()
+{
+	name=$1
+	file=$2
+	result=$(
+perl -e '
+$result = 0;
+open (F, "'$file'");
+read (F, $contents, 100000000);
+@words = split(" ", $contents);
+$i = $#words;
+while ($i >= 0) {
+# Note: If "class" occurs in the indexing clause, there could be a problem.
+	if (@words[$i] eq "class") {
+#		print ("comparing '$name' with ", @words[$i], "\n");
+		if (@words[$i+1] ne "'$name'") {
+			$result = 1;
+			last;
+		}
+#		last if all_class_strings_have_been_compared;
+	}
+	--$i;
+}
+print $result;'
+)
+	return $result
+}
+
 checkname ()
 {
 	classname=$(basename $1 .e|tr '[a-z]' '[A-Z]')
-	if grep "class *$classname" $1 >/dev/null 2>&1; then
-	#if name_matches $classname $1; then
+#	if grep "class *$classname" $1 >/dev/null 2>&1; then
+	if name_matches $classname $1; then
 		:
 	else
 		echo Names do not match in $1.
-		grep "class *[A-Z]" $1
+		grep "\<class\>" $1
 	fi
 }
 
