@@ -53,6 +53,8 @@ feature -- Status report
 			Result = false
 		end
 
+	arg_used: BOOLEAN is false
+
 feature -- Basic operations
 
 	do_process is

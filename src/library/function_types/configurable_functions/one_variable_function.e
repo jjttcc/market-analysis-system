@@ -26,11 +26,15 @@ feature -- Initialization
 			!!output.make (100) -- !!What size to use here?
 		end
 
-feature
+feature -- Access
 
 	output: MARKET_TUPLE_LIST [MARKET_TUPLE]
 
 	processed: BOOLEAN
+
+feature -- Status report
+
+	arg_used: BOOLEAN is false
 
 feature {NONE}
 

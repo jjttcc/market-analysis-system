@@ -10,7 +10,7 @@ class BASIC_TUPLE_FACTORY inherit
 			product
 		end
 
-feature
+feature -- Basic operations
 
 	execute (arg: ANY) is
 		do

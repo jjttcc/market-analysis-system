@@ -18,4 +18,8 @@ feature -- Basic operations
 		deferred
 		end
 
+feature -- Status report
+
+	arg_used: BOOLEAN is false
+
 end -- class TUPLE_FACTORY

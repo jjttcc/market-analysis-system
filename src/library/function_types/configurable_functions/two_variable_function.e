@@ -71,6 +71,8 @@ feature -- Status report
 			Result := target1 /= Void and target2 /= Void
 		end
 
+	arg_used: BOOLEAN is false
+
 feature {NONE}
 
 	forth is

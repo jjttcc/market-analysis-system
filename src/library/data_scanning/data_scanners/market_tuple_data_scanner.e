@@ -16,6 +16,10 @@ feature -- Access
 
 	tuple_maker: BASIC_TUPLE_FACTORY
 
+feature -- Status report
+
+	arg_used: BOOLEAN is false
+
 feature {NONE} -- Hook method implementations
 
 	create_product is
