@@ -7,7 +7,7 @@ eiffel_protocol_files ()
 		../../server1/network/network_protocol.e
 }
 
-files=$(eiffel_protocol_files)
+proto_files=$(eiffel_protocol_files)
 awk 'BEGIN {
 	print "/** Constants specifying the components of the TA network \n\
 communication protocol */"
@@ -15,7 +15,7 @@ communication protocol */"
 }
 /^feature/ {
 	sub (/.*-- */, "")
-	print "\t// " $0
+	print "\n\t// " $0
 }
 /: *INTEGER/ {
 	sub (/:/, "")
@@ -37,5 +37,8 @@ communication protocol */"
 	print "\tString " $1 " = " value ";"
 }
 END {
+	print "\n\t// Currently, only daily and weekly period types are supported."
+	print "\tString daily_period_type = \"daily\";"
+	print "\tString weekly_period_type = \"weekly\";"
 	print "}"
-}' $files >../common/NetworkProtocol.java
+}' $proto_files >../common/NetworkProtocol.java
