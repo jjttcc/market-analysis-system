@@ -24,9 +24,6 @@ creation
 
 feature {NONE} -- Initialization
 
-eftl: EXTENDED_FILE_TRADABLE_LIST
-ehlftl: EXTENDED_HTTP_LOADING_FILE_TRADABLE_LIST
-
 	make is
 		local
 			platform: expanded PLATFORM_DEPENDENT_OBJECTS
