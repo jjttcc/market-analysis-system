@@ -86,7 +86,7 @@ feature {NONE} -- Implementation
 			Result := strutil.target
 		end
 
-	open_current_file: PLAIN_TEXT_FILE is
+	open_current_file: INPUT_FILE is
 			-- Open the file associated with `file_names'.item.
 			-- If the open fails with an exception, print an error message,
 			-- set Result to Void, and allow the exception to propogate.
@@ -107,12 +107,12 @@ feature {NONE} -- Implementation
 
 	setup_input_medium is
 		local
-			input_file: PLAIN_TEXT_FILE
+			input_file: INPUT_FILE
 			exc: EXCEPTIONS
 		do
 			input_file := open_current_file
 			if input_file /= Void then
-				tradable_factories.item.set_input_file (input_file)
+				tradable_factories.item.set_input (input_file)
 			else
 				create exc
 				exc.raise ("Error opening input file")
