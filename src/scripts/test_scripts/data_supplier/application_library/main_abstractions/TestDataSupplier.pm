@@ -8,6 +8,7 @@ use Carp;
 use File::Spec::Functions;
 use FileHandle;
 use IO::Socket;
+use FileBasedDataDispenser;
 use base qw(CommunicationProtocol);
 
 
@@ -25,7 +26,20 @@ Fake socket-based data-supplier for the MAS server, for testing
 
 =cut
 
+my %req_handlers = (
+	CommunicationProtocol::sym_list_req_id, \&process_symlist_request,
+	CommunicationProtocol::data_req_id, \&process_data_request,
+	CommunicationProtocol::daily_avail_req_id, \&process_daily_avail_request,
+	CommunicationProtocol::intra_avail_req_id, \&process_intraday_avail_request
+);
 
+# !!!!remove:
+#print CommunicationProtocol::sym_list_req_id, "\n";
+#print CommunicationProtocol::data_req_id, "\n";
+#print CommunicationProtocol::daily_avail_req_id, "\n";
+#print CommunicationProtocol::intra_avail_req_id, "\n";
+#print join "\n", keys %req_handlers, "\n";
+#print join "\n", values %req_handlers, "\n";
 # --------------- Public features ---------------
 
 # Basic operations
@@ -58,6 +72,7 @@ print "My socket is: $socket\n";
 			Listen => 5);
 		die "$!" unless $new_socket;
 		$self->set_field(qw(socket), $new_socket);
+		$self->set_field(qw(data_dispenser), FileBasedDataDispenser->new);
 print "Socket was created: ", $self->field_value_for(qw(socket)), "\n";
 		$self->SUPER::initialize(@_);
 	}
@@ -68,7 +83,8 @@ print "Socket was created: ", $self->field_value_for(qw(socket)), "\n";
 	sub non_public_attributes {
 		$_[0]->enforce_access_policy(caller) if DEBUG;
 		(
-		'socket'
+		'socket',
+		'data_dispenser'
 		);
 	}
 
@@ -88,26 +104,77 @@ print "Socket was created: ", $self->field_value_for(qw(socket)), "\n";
 print $debug_file "received msg: '$client_request'\n";
 		my @fields = split $self->message_component_separator, $client_request;
 print $debug_file "fields: '", join ", ", @fields, "'\n";
-		die "Wrong # of fields: @fields" if @fields <= 1;
+# !!!		die "Wrong # of fields: @fields" if @fields <= 1;
 		my $req_id = $fields[0];
-# Assume data request, for now!!!
-		my $date_time_range = $fields[1];
-		my $data_flags = $fields[2];
-		my $symbol = $fields[3];
-print $debug_file "req id: '$req_id', dtrange: '$date_time_range'\n";
+print $debug_file "req id: '$req_id'\n";
+$debug_file->flush;
+print $req_handlers{$req_id}, "\n";
+		$req_handlers{$req_id}->($self, $socket, \@fields);
+	}
+
+	sub process_symlist_request {
+		my ($self, $socket, $fields) = @_;
+		my $dispenser = $self->field_value_for(qw(data_dispenser));
+		$socket->send(join("\n", $dispenser->symbols) . "\n");
+		$socket->flush;
+		$socket->shutdown(2);
+	}
+
+	sub process_daily_avail_request {
+		my ($self, $socket, $fields) = @_;
+# Hard code 'true' for now.
+print "pDar sending ", $self->true, "\n";
+		$socket->send($self->true . "\n");
+		$socket->flush;
+		$socket->shutdown(2);
+	}
+
+	sub process_intraday_avail_request {
+		my ($self, $socket, $fields) = @_;
+# Hard code 'false' for now.
+print "piar sending ", $self->false, "\n";
+		$socket->send($self->false . "\n");
+		$socket->flush;
+		$socket->shutdown(2);
+	}
+
+	sub process_data_request {
+		my ($self, $socket, $fields) = @_;
+		my $date_time_range = $$fields[1];
+		my $data_flags = $$fields[2];
+		my $symbol = $$fields[3];
+print $debug_file "dtrange: '$date_time_range'\n";
 print $debug_file "flags: '$data_flags', symbol: '$symbol'\n";
 print "starting process with symbol '$symbol'\n";
 $debug_file->flush;
-		my $test_data = $self->data_for($symbol, 0);
-		chomp $client_request;
-		print "'process' received socket request: $client_request\n";
-print "A\n";
-print "sending: '" . $test_data, "'\n";
-		$socket->send($test_data . "\n");
-print "B\n";
+		my $dispenser = $self->field_value_for(qw(data_dispenser));
+		my $data;
+		if ($data_flags =~ $self->intraday_flag) {
+			$data = $dispenser->intraday_data_for($symbol, 0);
+		} else {
+			$data = $dispenser->daily_data_for($symbol, 0);
+		}
+#print "sending: '" . $data, "'\n";
+		$socket->send($data . "\n");
 		$socket->flush;
-		$socket->close;
-print "C\n";
+		$socket->shutdown(2);
+	}
+
+# !!!!:
+	sub old_remove_process_data_request {
+		my ($self, $socket, $fields) = @_;
+		my $date_time_range = $$fields[1];
+		my $data_flags = $$fields[2];
+		my $symbol = $$fields[3];
+print $debug_file "dtrange: '$date_time_range'\n";
+print $debug_file "flags: '$data_flags', symbol: '$symbol'\n";
+print "starting process with symbol '$symbol'\n";
+$debug_file->flush;
+		my $data = $self->data_for($symbol, 0);
+#print "sending: '" . $data, "'\n";
+		$socket->send($data . "\n");
+		$socket->flush;
+		$socket->shutdown(2);
 	}
 
 	# Data for the specification: symbol, whether-it-is-intraday
@@ -128,11 +195,5 @@ print "Sending " . @lines . " lines\n";
 #print "result is $result\n";
 		$result;
 	}
-
-#"20050214,8.4,8.8,8.4,8.65,12133412\n" .
-#"20050215,8.4,8.7,8.2,8.5,1123428\n" .
-#"20050216,8.5,8.875,8.15,8.25,1121234\n" .
-#"20050217,8.6,9.9,8.6,9.25,1131233\n" .
-#"20050218,8.9,9.8,8.9,9.45,1012334\n";
 
 1;

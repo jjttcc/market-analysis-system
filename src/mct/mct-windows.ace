@@ -84,6 +84,8 @@ cluster
 
 	libarch (eiflib):		"$/architectural"
 
+	debugging (eiflib):		"$/debug"
+
 	libsupport (eiflib):		"$/support"
 
 	libserver (eiflib):		"$/server"

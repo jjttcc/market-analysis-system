@@ -23,6 +23,8 @@ feature -- Access
 			-- Message: how to invoke the program from the command-line
 		do
 			Result := Precursor +
+				"  -k:<portnum>         " +
+				"Get data from a socKet connection on port <portnum>%N" +
 				"  -report_back <hostname>^<number>%N%
 				%                       Report back the %
 				%startup-status at host <hostname>%N%
@@ -34,9 +36,7 @@ feature -- Access -- settings
 	polling_timeout_milliseconds: INTEGER
 			-- Polling timeout value, in milliseconds
 
---!!!!Stub for testing:
-	use_sockets: BOOLEAN is True
---use_sockets: BOOLEAN is False --!!!!Use Files
+	use_sockets: BOOLEAN
 
 feature {NONE} -- Implementation
 
@@ -50,6 +50,7 @@ feature {NONE} -- Implementation
 		do
 			Result := Precursor
 			Result.extend (agent set_polling_timeout_milliseconds)
+			Result.extend (agent set_use_sockets)
 		end
 
 invariant

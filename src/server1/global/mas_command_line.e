@@ -78,6 +78,9 @@ feature -- Access -- settings
 	port_numbers: LIST [INTEGER]
 			-- Port numbers for server sockets
 
+	data_supplier_port_number: INTEGER
+			-- Port number for data-supplier server
+
 	opening_price: BOOLEAN
 			-- Does the data include opening price?
 			-- False if `no_open_spec' is specified.
@@ -130,11 +133,9 @@ feature -- Access -- settings
 			-- Are HTTP GET requests to be used to retrieve market data?
 			-- True if "-w" is found
 
-	use_sockets: BOOLEAN is
+	use_sockets: BOOLEAN
 			-- Is a socket connection to be used for market data?
-		once
-			Result := False	-- No input-data socket in the OSS version
-		end
+			-- (No input-data socket in the OSS version (@@This may change.))
 
 	use_external_data_source: BOOLEAN
 			-- Is an external data source to be used to obtain market data?
@@ -312,6 +313,65 @@ feature {NONE} -- Implementation
 			end
 		end
 
+	set_use_sockets is
+		local
+			portnum: STRING
+		do
+			if option_in_contents ('k') then
+				last_argument_found := True
+				-- Expecting, e.g., -k:2233
+				if
+					contents.item.count > 6 and
+					contents.item @ 3 = option_component_separator
+				then
+					portnum := contents.item.substring (4, contents.item.count)
+--!!!Check
+					if portnum.is_integer then
+						use_sockets := True
+						data_supplier_port_number := portnum.to_integer
+					else
+						error_occurred := True
+						log_errors (<<invalid_port_number,
+							socket_data_source_phrase, ": ",
+							contents.item, "%N">>)
+					end
+				else
+					error_occurred := True
+					if contents.item @ 3 /= option_component_separator then
+						log_errors (<<invalid_format,
+							socket_data_source_phrase, ": ",
+							contents.item, "%N">>)
+					else
+						check
+							count_6_or_less: contents.item.count <= 6
+						end
+						log_errors (<<invalid_port_number,
+							socket_data_source_phrase, ": ",
+							contents.item, "%N">>)
+					end
+				end
+				contents.remove
+			end
+		end
+
+foo is do
+			if option_in_contents ('d') then
+				if contents.item.count > 2 then
+					create daily_extension.make (contents.item.count - 2)
+					daily_extension.append (contents.item.substring (
+						3, contents.item.count))
+					contents.remove
+				else
+					contents.remove
+					if not contents.exhausted then
+						create daily_extension.make (contents.item.count)
+						daily_extension.append (contents.item)
+						contents.remove
+					end
+				end
+			end
+end
+
 	set_use_web is
 		do
 			if option_in_contents ('w') then
@@ -386,7 +446,9 @@ feature {NONE} -- Implementation
 			until
 				contents.exhausted
 			loop
-				if contents.item.is_integer then
+				if
+					(contents.item @ 1).is_digit and contents.item.is_integer
+				then
 					port_numbers.extend (contents.item.to_integer)
 					contents.remove
 				else
@@ -517,7 +579,7 @@ feature {NONE} -- Implementation
 						set_startup_settings
 						contents.remove
 					else
-						log_error (Missing_port)
+						log_error (missing_port + report_back_phrase)
 					end
 				else
 					contents.forth
@@ -536,14 +598,16 @@ feature {NONE} -- Implementation
 		do
 			l := contents.item.split (Host_port_separator)
 			if l.count /= 2 then
-				log_error (Invalid_format + ": " + contents.item)
+				log_error (invalid_format + report_back_phrase +
+					": " + contents.item)
 			else
 				host_name_for_startup_report := l @ 1
 				port := l @ 2
 				if port.is_integer then
 					port_for_startup_report := port.to_integer
 				else
-					log_error (Invalid_port_number + ": " + port)
+					log_error (invalid_port_number + report_back_phrase +
+						": " + port)
 				end
 			end
 		end
@@ -562,14 +626,23 @@ feature {NONE} -- Implementation - Hook routines
 
 feature {NONE} -- Implementation queries
 
-	Missing_port: STRING is "Missing port number for report-back option"
+	missing_port: STRING is "Missing port number"
 
-	Invalid_format: STRING is "Invalid format for report-back option"
+	invalid_format: STRING is "Invalid format"
 
-	Invalid_port_number: STRING is "Invalid port number for report-back option"
+	invalid_port_number: STRING is "Invalid port number"
 
-	date_format_prefix: STRING is "-date-spec:"
+	report_back_phrase: STRING is " for report-back option"
+
+	socket_data_source_phrase: STRING is " for socket-data-source option"
+
+	option_component_separator: CHARACTER is ':'
+
+	date_format_prefix: STRING is
 			-- Prefix of the "special format" option
+		once
+			Result := "-date-spec" + option_component_separator.out
+		end
 
 	no_open_spec: STRING is "-no-open"
 			-- No-open specifier

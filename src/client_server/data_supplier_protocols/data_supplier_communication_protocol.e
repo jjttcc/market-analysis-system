@@ -21,6 +21,12 @@ feature -- Client components - request IDs, etc.
 	tradable_data_request: INTEGER is 2
 			-- Request for data for a specified tradable
 
+	daily_avail_req: INTEGER is 3
+			-- Request for whether daily data is available
+
+	intra_avail_req: INTEGER is 4
+			-- Request for whether intra-day data is available
+
 	client_request_terminator: STRING is "%N"
 			-- Character indicating end of client request
 
@@ -41,5 +47,17 @@ feature -- Server response IDs
 --!!!???:
 	warning: INTEGER is 104
 			-- Response indicating that a non-fatal error occurred
+
+feature -- Server response values
+
+	true_response: CHARACTER is 'T'
+
+	false_response: CHARACTER is 'F'
+
+feature -- Error messages
+
+	invalid_server_response: STRING is "Invalid server response"
+
+	empty_server_response: STRING is "Server response is empty"
 
 end

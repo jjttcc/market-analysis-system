@@ -74,7 +74,8 @@ feature -- Basic operations
 						http_list_builder.intraday_list, indicators)
 					ilist := http_list_builder.intraday_list
 				elseif command_line_options.use_sockets then
-					create socket_list_builder.make (tradable_factory)
+					create socket_list_builder.make (tradable_factory,
+						command_line_options.data_supplier_port_number)
 					socket_list_builder.execute
 					create list_handler.make (socket_list_builder.daily_list,
 						socket_list_builder.intraday_list, indicators)

@@ -11,7 +11,7 @@ class EXPERIMENTAL_INPUT_DATA_CONNECTION inherit
 
 	INPUT_DATA_CONNECTION
 		redefine
-			initlialized_socket
+			initialized_socket, prepare_for_socket_connection
 		end
 
 create
@@ -20,10 +20,11 @@ create
 
 feature -- Initialization
 
-	make is
+	make (portnum: INTEGER) is
 		do
 			last_communication_succeeded := True
 			server_response := ""
+			target_socket_port_number := portnum
 		end
 
 feature {NONE} -- Hook routine implementations
@@ -35,15 +36,23 @@ feature {NONE} -- Hook routine implementations
 			make_connected (target_socket_hostname, target_socket_port_number)
 		end
 
-	initlialized_socket (port: INTEGER; host: STRING): like socket is
+	initialized_socket (port: INTEGER; host: STRING): like socket is
 			-- A new socket initialized with `port' and `host'
 		do
 			create Result.make_client_by_port (port, host)
 		end
 
+	prepare_for_socket_connection is
+		do
+--			socket.set_linger_on (2000)
+--			socket.set_delay
+--			socket.set_timeout (2000)
+--			socket.set_non_blocking
+		end
+
 feature {NONE} -- Implementation
 
-	target_socket_port_number: INTEGER is 39415
+	target_socket_port_number: INTEGER
 
 	target_socket_hostname: STRING is "localhost"
 

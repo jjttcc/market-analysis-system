@@ -54,6 +54,7 @@ feature {NONE} -- Initialization
 		require
 			skt_exists: skt /= Void
 		do
+			last_communication_succeeded := False
 			socket := skt
 			-- An exception will be thrown by this call if host/port
 			-- are invalid:
@@ -61,7 +62,7 @@ feature {NONE} -- Initialization
 			if socket.socket_ok then
 				last_communication_succeeded := True
 			else
-				error_report := Connection_failed_msg
+				error_report := connection_failed_msg
 			end
 		ensure
 			socket_set: socket /= Void and socket = skt
@@ -77,17 +78,18 @@ feature {NONE} -- Initialization
 			-- the address is invalid, the connection times out, or the
 			-- server can't be reached), an exception is thrown.
 		do
+			last_communication_succeeded := False
 			hostname := host
 			port_number := port
 			server_response := ""
 			-- Cause an exception to be thrown if host/port are invalid:
-			socket := initlialized_socket (port_number, hostname)
+			socket := initialized_socket (port_number, hostname)
 			if socket.socket_ok then
 				last_communication_succeeded := True
 				close
 				socket := Void
 			else
-				error_report := Connection_failed_msg
+				error_report := connection_failed_msg
 			end
 		ensure
 			host_port_set: hostname = host and port_number = port
@@ -102,6 +104,7 @@ feature {NONE} -- Initialization
 			-- times out, or the server can't be reached), an exception
 			-- is thrown.
 		do
+			last_communication_succeeded := False
 			hostname := host
 			port_number := port
 			server_response := ""
@@ -112,7 +115,7 @@ feature {NONE} -- Initialization
 			if socket.socket_ok then
 				last_communication_succeeded := True
 			else
-				error_report := Connection_failed_msg
+				error_report := connection_failed_msg
 			end
 		ensure
 			host_port_set: hostname = host and port_number = port
@@ -129,14 +132,20 @@ feature {NONE} -- Initialization
 			-- and `hostname'.  Don't 'create' socket if it is not Void.
 		require
 			host_port_exist: hostname /= Void and port_number /= Void
+local
+sdb: SOCKET_DEBUGGER
 		do
 			if socket = Void then
-				socket := initlialized_socket (port_number, hostname)
+				socket := initialized_socket (port_number, hostname)
 			end
+create sdb.make_with_socket (socket)
 			if socket.socket_ok then
 				socket.set_blocking
 				socket.set_timeout (Timeout_seconds)
+				prepare_for_socket_connection
+--print ("socket report before request:%N" + sdb.report (Void) + "%N")
 				socket.connect
+--print ("socket report after request:%N" + sdb.report (Void) + "%N")
 			end
 		ensure
 			blocking: connected implies socket.is_blocking and socket.socket_ok
@@ -153,47 +162,29 @@ feature {NONE} -- Implementation
 			socket_exists: socket /= Void
 			connected: connected
 		local
-			s: STRING
+sdb: SOCKET_DEBUGGER
 		do
+create sdb.make_with_socket (socket)
 			last_communication_succeeded := False
+			server_response := ""
 --!!!!:
-print ("sending request: '" + r + "'%N")
+--print ("socket report before request:%N" + sdb.report (Void) + "%N")
+--print ("sending request: '" + r + "'%N")
 			socket.put_string (r)
+--print ("socket report after request:%N" + sdb.report (Void) + "%N")
 			if socket.socket_ok then
+				last_communication_succeeded := True
 				if wait_for_response then
-					create s.make (0)
-					if socket.ready_for_reading then
-						from
-							socket.read_character
-						until
-							end_of_message (socket.last_character)
-						loop
-							s.extend (socket.last_character)
-							socket.read_character
-						end
-						if not socket.socket_ok then
-							error_report := last_socket_error
-						else
-							process_response (s)
-						end
-					else
-						error_report :=
-							"Timed out waiting for server response."
-					end
-				else
-					last_communication_succeeded := True
+					receive_and_process_response
 				end
 			else
 				last_communication_succeeded := False
 				error_report := last_socket_error
 			end
-if s /= Void then
-print ("sendreq - s: '" + s + "'%N")
-end
 		ensure
 			still_connected_if_no_error:
 				last_communication_succeeded implies connected
-			server_response_exists_if_no_error:
+			server_response_exists_if_wait_no_error: wait_for_response and
 				last_communication_succeeded implies server_response /= Void
 		end
 
@@ -245,7 +236,7 @@ end
 		do
 			Result := socket.error
 			if Result = Void then
-				Result := Connection_failed_msg
+				Result := connection_failed_msg
 			end
 		end
 
@@ -263,7 +254,7 @@ feature {NONE} -- Implementation
 		deferred
 		end
 
-	Connection_failed_msg: STRING is 
+	connection_failed_msg: STRING is 
 		do
 			Result := "Connection to the " + server_type + "failed."
 			if socket.error /= Void and not socket.error.is_empty then
@@ -281,10 +272,57 @@ feature {NONE} -- Hook routines
 			Result := "sever " -- Redefine if needed - add a space at the end.
 		end
 
-	initlialized_socket (port: INTEGER; host: STRING): like socket is
+	initialized_socket (port: INTEGER; host: STRING): like socket is
 			-- A new socket initialized with `port' and `host'
 		do
 			create Result.make_client_by_port (port, host)
+		end
+
+	prepare_for_socket_connection is
+			-- Make any needed preparations before calling `socket.connect',
+			-- such as setting options on the `socket'.
+		do
+			do_nothing	-- Redefine if needed.
+		end
+
+	receive_and_process_response is
+			-- Read response from the last request to the server and
+			-- place the result into `server_response'.
+		require
+			last_communication_succeeded: socket.socket_ok and
+				last_communication_succeeded
+		local
+			s: STRING
+		do
+			create s.make (0)
+			if socket.ready_for_reading then
+				from
+					socket.read_character
+				until
+					end_of_message (socket.last_character)
+				loop
+					s.extend (socket.last_character)
+					socket.read_character
+				end
+				if not socket.socket_ok then
+					error_report := last_socket_error
+				else
+					process_response (s)
+				end
+			else
+				error_report :=
+					"Timed out waiting for server response."
+				last_communication_succeeded := False
+			end
+--!!!:
+if s /= Void then
+--print ("sendreq - s: '" + s + "'%N")
+end
+		ensure
+			still_connected_if_no_error:
+				last_communication_succeeded implies connected
+			server_response_exists_if_no_error:
+				last_communication_succeeded implies server_response /= Void
 		end
 
 invariant

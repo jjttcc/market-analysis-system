@@ -28,13 +28,21 @@ Protocol for communication with the client
 
 # --------------- Public features ---------------
 
-# Access
+# Server response IDs
 
 	# OK status_id
 	use constant ok_id => '1';
 
 	# Error status_id
 	use constant error_id => '2';
+
+# Server response values
+
+	use constant true => 'T';
+
+	use constant false => 'F';
+
+# Component separators
 
 	# Character used to separate top-level message components
 	use constant message_component_separator => "\t";
@@ -57,5 +65,23 @@ Protocol for communication with the client
 	# Default character used to separate the date field from
 	# the time field
 	use constant date_time_separator => ",";
+
+# Client request IDs
+
+	# Request for a list of symbols for all available tradables
+	use constant sym_list_req_id => '1';
+
+	# Request for tradable data
+	use constant data_req_id => '2';
+
+	# Request whether daily data is available
+	use constant daily_avail_req_id => '3';
+
+	# Request whether intraday data is available
+	use constant intra_avail_req_id => '4';
+
+# Client request values
+
+	use constant intraday_flag => 'i';
 
 1;

@@ -9,13 +9,18 @@ indexing
 class SOCKET_LIST_BUILDER inherit
 
 	LIST_BUILDER
-		rename
-			make_factories as make
-		end
 
 creation
 
 	make
+
+feature -- Initialization
+
+	make (factory: TRADABLE_FACTORY; portnum: INTEGER) is
+		do
+			make_factories (factory)
+			port_number := portnum
+		end
 
 feature -- Access
 
@@ -23,27 +28,37 @@ feature -- Access
 
 	intraday_list: SOCKET_TRADABLE_LIST
 
+	port_number: INTEGER
+
 feature -- Basic operations
 
 	build_lists is
-		do
-			daily_list := new_tradable_list (tradable_factory)
-			intraday_list := new_tradable_list (intraday_tradable_factory)
---!!!Temporary - for socket-based experimentation:
-			intraday_list := Void
-		end
-
-	new_tradable_list (factory: TRADABLE_FACTORY):
-			SOCKET_TRADABLE_LIST is
 		local
-			l: LINKED_LIST [STRING]
 			input_connection: EXPERIMENTAL_INPUT_DATA_CONNECTION
 		do
-			create l.make
-			l.fill (<<"aapl", "ibm", "rhat", "novl", "f">>)
-			create input_connection.make
-			create Result.make (l, factory, input_connection)
-			input_connection.set_tradable_list (Result)
+			create input_connection.make (port_number)
+--!!!!:input_connection.initiate_connection
+			input_connection.request_initial_data
+			if input_connection.last_communication_succeeded then
+				if input_connection.daily_data_available then
+					create daily_list.make (input_connection.symbol_list,
+						tradable_factory, input_connection)
+				end
+				if input_connection.intraday_data_available then
+					create intraday_list.make (input_connection.symbol_list,
+						intraday_tradable_factory, input_connection)
+				end
+--!!!!!!: if l /= Void then
+--create Result.make (l, factory, input_connection)
+--input_connection.set_tradable_list (Result)
+			else
+				--!!!Report error.
+			end
+			if daily_list = Void and intraday_list = Void then
+				-- fulfill the postcondition
+				create daily_list.make (create {LINKED_LIST [STRING]}.make,
+					tradable_factory, input_connection)
+			end
 		end
 
 end
