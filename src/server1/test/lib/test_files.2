@@ -1,0 +1,12 @@
+# List of test input/output-reference files for test 2
+# Format:
+#   test_name,in_file,out_ref_file,index,epsilon
+# (epsilon is optional).
+# This tests the colby data for rsi (n = 4) and the user-build EMA function
+# instead of the hard-coded one.  Note: With the current version of the
+# test script, the n-value for RSI must be reset (and stored) by hand to 4.
+# If the RSI test fails, this is one of the first items to check.  (And if
+# the test fails with test_files.1, the RSI n-value may not have been
+# reset back to 7.)
+RSI,rsi_colby,rsi4,15,.001
+Exponential Moving Average,test_data,ema,3,.001
