@@ -50,7 +50,6 @@ rm -fr $RPM_BUILD_ROOT
 ./install --rootdir $RPM_BUILD_ROOT/%{rootdir}
 
 %post
-set -x
 cd %{rootdir}
 find . -type d -exec chmod +rx {} ';'
 if [ "$(id -un)" = root ]; then
