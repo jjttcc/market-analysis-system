@@ -3,7 +3,7 @@ e
 c
 ONE_VARIABLE_FUNCTION
 c
-Slope of MACD Signal Line Trend
+Slope of MACD Signal Line >= 0
 Slope of MACD Signal Line
 y
 BOOLEAN_NUMERIC_CLIENT
@@ -27,7 +27,7 @@ s
 c
 ONE_VARIABLE_FUNCTION
 c
-Slope of Slope of MACD Signal Line Trend
+Slope of Slope of MACD Signal Line >= 0
 Slope of Slope of MACD Signal Line
 y
 BOOLEAN_NUMERIC_CLIENT
@@ -53,19 +53,19 @@ c
 TWO_VARIABLE_FUNCTION
 c
 [Slope of MACD, Slope of Slope of MACD] Trend
-Slope of MACD Signal Line Trend
+Slope of MACD Signal Line >= 0
 y
-Slope of Slope of MACD Signal Line Trend
+Slope of Slope of MACD Signal Line >= 0
 y
 ADDITION
 c
 BASIC_LINEAR_COMMAND
 c
-Slope of MACD Signal Line Trend
+Slope of MACD Signal Line >= 0
 y
 BASIC_LINEAR_COMMAND
 c
-Slope of Slope of MACD Signal Line Trend
+Slope of Slope of MACD Signal Line >= 0
 y
 s
 -

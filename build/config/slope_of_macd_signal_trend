@@ -1,0 +1,80 @@
+# Slope of MACD Signal Line Trend indicator and two indicators used
+# to make it: Slope of MACD Signal Line Less Than or Equal to -0.175 and
+# Slope of MACD Signal Line Greater Than or Equal to 0.175.
+# It adds the two indicators: when total is 0, Slope of MACD Signal Line is
+# close to 0 (>-.175 and <.175) and the trend is sideways; when the total
+# is 1, the Slope of MACD Signal Line is greater than or equal to .175 and
+# the trend is upward; when the total is -1, the Slope of MACD Signal Line
+# is less than or equal to -.175 and the trend is downward.
+e
+c
+ONE_VARIABLE_FUNCTION
+c
+# Will be -1 if true, otherwise 0
+Slope of MACD Signal Line Less Than or Equal to -0.175
+Slope of MACD Signal Line
+y
+BOOLEAN_NUMERIC_CLIENT
+c
+LE_OPERATOR
+c
+BASIC_LINEAR_COMMAND
+c
+Slope of MACD Signal Line
+y
+CONSTANT
+c
+-0.175
+CONSTANT
+c
+-1
+CONSTANT
+c
+0
+s
+c
+ONE_VARIABLE_FUNCTION
+c
+# Will be 1 if true, otherwise 0
+Slope of MACD Signal Line Greater Than or Equal to 0.175
+Slope of MACD Signal Line
+y
+BOOLEAN_NUMERIC_CLIENT
+c
+GE_OPERATOR
+c
+BASIC_LINEAR_COMMAND
+c
+Slope of MACD Signal Line
+y
+CONSTANT
+c
+0.175
+CONSTANT
+c
+1
+CONSTANT
+c
+0
+s
+c
+TWO_VARIABLE_FUNCTION
+c
+Slope of MACD Signal Line Trend
+Slope of MACD Signal Line Less Than or Equal to -0.175
+y
+Slope of MACD Signal Line Greater Than or Equal to 0.175
+y
+ADDITION
+c
+BASIC_LINEAR_COMMAND
+c
+Slope of MACD Signal Line Less Than or Equal to -0.175
+y
+BASIC_LINEAR_COMMAND
+c
+Slope of MACD Signal Line Greater Than or Equal to 0.175
+y
+s
+-
+x
