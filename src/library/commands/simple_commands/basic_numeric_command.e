@@ -1,7 +1,7 @@
 indexing
 	description:
 		"A numeric command that operates on a market tuple that is passed in %
-		%as an argument to the execute feature."
+		%as an argument to the execute feature"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"

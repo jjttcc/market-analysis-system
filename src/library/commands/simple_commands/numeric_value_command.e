@@ -46,7 +46,7 @@ feature -- Status setting
 		do
 			constant_value := arg
 		ensure
-			constant_value_set: constant_value = arg and constant_value /= Void
+			constant_value_set: rabs (constant_value - arg) < epsilon
 		end
 
 end -- class CONSTANT

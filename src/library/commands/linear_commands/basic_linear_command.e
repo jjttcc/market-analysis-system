@@ -1,6 +1,6 @@
 indexing
 	description:
-		"A numeric command that retrieves the value of the current item of %
+		"A command that retrieves the value of the current item of %
 		%a linear structure of market tuples"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
