@@ -25,7 +25,7 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 			sorted_by_date_time
 		end
 
-creation
+creation {FACTORY}
 
 	make
 

@@ -47,8 +47,7 @@ feature -- Status report
 
 	operator_used: BOOLEAN is
 			-- Is operator used by this function?
-		once
-			Result := true
+		deferred
 		end
 
 	processed: BOOLEAN is
@@ -114,7 +113,7 @@ feature {NONE} -- Hook methods
 
 invariant
 
-	--!!!Temporarily commented-out: if_processed_output_exists: processed implies output /= Void
-	--!!!Temporarily commented-out: op_used_constraint: processed implies (operator_used = (operator /= Void))
+	output_not_void: output /= Void
+	op_used_constraint: operator_used implies operator /= Void
 
 end -- class MARKET_FUNCTION
