@@ -13,6 +13,7 @@ class CommandProcessor:
 		self.select_patterns = ["\n*Select[^?]*function",
 			"\n*Select[^?]*opera[nt][do]",
 			"\n*Select *an *indicator *for.*'s",
+			"\n*Select *indicator *to *view",
 			"\n*Select *an *object *for.*'s",
 			"\n*Select *the *[a-z]* *technical indicator",
 			"\n*Select *an *indicator *to *edit:",
