@@ -8,7 +8,7 @@ class
 
 	GLOBAL_APPLICATION
 
-feature {NONE} -- Utility
+feature -- Utility
 
 	current_date: DATE is
 		do
@@ -43,7 +43,7 @@ feature {NONE} -- Utility
 			end
 		end
 
-feature {NONE} -- Access
+feature -- Access
 
 	termination_registrants: LIST [TERMINABLE] is
 			-- Registrants for termination cleanup notification
@@ -192,7 +192,7 @@ feature {NONE} -- Access
 			register_for_termination (reg_list)
 		end
 
-feature {NONE} -- Constants
+feature -- Constants
 
 	default_input_file_name: STRING is "/tmp/tatest"
 			-- Name of default input file if none is specified by the user
