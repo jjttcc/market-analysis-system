@@ -19,9 +19,14 @@ feature -- Access
 	product: LIST [MARKET_FUNCTION]
 
 	Simple_MA_n: INTEGER is 10
-	Smaller_EMA_n: INTEGER is 12
-	Larger_EMA_n: INTEGER is 26
+	EMA_n: INTEGER is 10
+	Smaller_MACD_EMA_n: INTEGER is 12
+	Larger_MACD_EMA_n: INTEGER is 26
 	MACD_Signal_Line_EMA_n: INTEGER is 9
+	Momentum_n: INTEGER is 8
+	StochasticK_n: INTEGER is 5
+	StochasticD_n: INTEGER is 3
+	Williams_n: INTEGER is 7
 
 feature -- Basic operations
 
@@ -31,17 +36,20 @@ feature -- Basic operations
 		do
 			!!l.make
 			l.extend (simple_ma (f, Simple_MA_n, "Simple Moving Average"))
-			l.extend (ema (f, Smaller_EMA_n, "Short EMA"))
-			l.extend (ema (f, Larger_EMA_n, "Long EMA"))
-			l.extend (ma_diff (l.i_th (l.count - 1), l.last, "MACD Difference"))
-			l.extend (ema (l.last, 9,
+			l.extend (ema (f, EMA_n, "Exponential Moving Average"))
+			l.extend (ma_diff ((ema (f, Smaller_MACD_EMA_n, "Short EMA")),
+								(ema (f, Larger_MACD_EMA_n, "Long EMA")),
+								"MACD Difference"))
+			l.extend (ema (l.last, MACD_Signal_Line_EMA_n,
 						"MACD Signal Line (EMA of MACD Difference)"))
 			l.extend (ma_diff (l.i_th (l.count - 1), l.last, "MACD Histogram"))
-			l.extend (momentum (f, 8, "Momentum"))
-			l.extend (williams_percent_R (f, 7, "Williams %%R"))
-			l.extend (stochastic_percent_K (f, 5, "Stochastic %%K"))
-			l.extend (stochastic_percent_D (f, 5, 3, "Stochastic %%D"))
-			l.extend (simple_ma (l.last, 3, "Slow Stochastic %%D"))
+			l.extend (momentum (f, Momentum_n, "Momentum"))
+			l.extend (williams_percent_R (f, Williams_n, "Williams %%R"))
+			l.extend (stochastic_percent_K (f, StochasticK_n, "Stochastic %%K"))
+			l.extend (stochastic_percent_D (f, StochasticK_n, StochasticD_n,
+											"Stochastic %%D"))
+			l.extend (simple_ma (l.last, StochasticD_n,
+											"Slow Stochastic %%D"))
 			product := l
 		end
 
