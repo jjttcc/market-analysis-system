@@ -183,7 +183,7 @@ public class Connection implements NetworkProtocol
 		Reader result = null;
 		try {
 			result = new BufferedReader(new InputStreamReader(
-			new BufferedInputStream(socket.getInputStream())));
+				new BufferedInputStream(socket.getInputStream())));
 		} catch (Exception e) {
 			System.err.println("Failed to read from server (" + e + ")");
 			System.exit(1);
