@@ -20,11 +20,13 @@ create
 
 feature {SOCKET_LIST_BUILDER} -- Initialization
 
-	make (the_symbols: LIST [STRING]; factory: TRADABLE_FACTORY) is
+	make (the_symbols: LIST [STRING]; factory: TRADABLE_FACTORY;
+			conn: INPUT_DATA_CONNECTION) is
 		do
 			parent_make (the_symbols, factory)
+			connection := conn
 --!!!!Temporary, for testing - in future it will be passed in.
-create {EXPERIMENTAL_INPUT_DATA_CONNECTION} connection.make
+--create {EXPERIMENTAL_INPUT_DATA_CONNECTION} connection.make
 		end
 
 feature {SOCKET_LIST_BUILDER} -- Access
@@ -46,7 +48,7 @@ feature {SOCKET_LIST_BUILDER} -- Element change
 
 feature {NONE} -- Implementation
 
-	initialized_input_medium: INPUT_SOCKET is
+	initialize_input_medium is
 		do
 			connection.request_data (Current)
 			if not connection.last_communication_succeeded then
@@ -55,6 +57,7 @@ feature {NONE} -- Implementation
 print ("Error occurred connecting to data supplier:%N" +
 connection.error_report + "%N")
 			end
+			input_medium := connection.socket
 		end
 
 invariant

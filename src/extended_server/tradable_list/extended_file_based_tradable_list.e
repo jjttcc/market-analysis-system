@@ -49,42 +49,42 @@ feature {NONE} -- Implementation
 			Precursor (t, idx)
 			if caching_on then
 				check
-					input_file_valid: current_input_file /= Void and
-						not current_input_file.is_closed
+					input_file_valid: input_medium /= Void and
+						not input_medium.is_closed
 				end
 				file_status_cache.force (create {TRADABLE_FILE_STATUS}.make (
-					clone (current_input_file.name), current_input_file.count),
+					clone (input_medium.name), input_medium.count),
 					idx)
 			end
 		ensure then
 			status_added_if_caching_on: caching_on implies equal (
 				(file_status_cache @ idx).file_name,
-				current_input_file.name) and
-				(file_status_cache @ idx).file_size = current_input_file.count
+				input_medium.name) and
+				(file_status_cache @ idx).file_size = input_medium.count
 		end
 
 	update_file_status_cache (idx: INTEGER) is
 			-- If `caching_on', update the TRADABLE_FILE_STATUS at the
 			-- specified index `idx'.
 		require
-			input_file_valid: current_input_file /= Void and
-				not current_input_file.is_closed
+			input_file_valid: input_medium /= Void and
+				not input_medium.is_closed
 			object_in_cache_if_caching_on: caching_on implies
 				file_status_cache @ idx /= Void
 			file_name_set: caching_on implies equal (
-				(file_status_cache @ idx).file_name, current_input_file.name)
+				(file_status_cache @ idx).file_name, input_medium.name)
 		local
 			file_status: TRADABLE_FILE_STATUS
 		do
 			if caching_on then
 				file_status := file_status_cache @ idx
-				file_status.set_file_size (current_input_file.count)
+				file_status.set_file_size (input_medium.count)
 			end
 		ensure then
 			status_updated_if_caching_on: caching_on implies
-				(file_status_cache @ idx).file_size = current_input_file.count
+				(file_status_cache @ idx).file_size = input_medium.count
 			file_name_unchanged: caching_on implies equal (
-				(file_status_cache @ idx).file_name, current_input_file.name)
+				(file_status_cache @ idx).file_name, input_medium.name)
 		end
 
 	status_work_file: FILE
@@ -108,7 +108,7 @@ feature {NONE} -- Hook routine implementations
 				else
 					status_work_file.make (current_file_status.file_name)
 				end
-				-- Result := "current input file is larger than last recorded":
+				-- Result := "input_medium is larger than last recorded":
 				Result := status_work_file.count > current_file_status.file_size
 			end
 		end
@@ -120,18 +120,18 @@ feature {NONE} -- Hook routine implementations
 			current_file_status := file_status_cache @ index
 			setup_input_medium
 			check
-				current_input_file.readable
+				input_medium.readable
 			end
 			if not fatal_error then
 				check
 					current_file_was_updated:
-						not current_input_file.is_closed and
-						current_input_file.count > current_file_status.file_size
+						not input_medium.is_closed and
+						input_medium.count > current_file_status.file_size
 				end
 				tradable_factory.turn_start_input_from_beginning_off
 				-- Advance the file cursor to the beginning of the new
 				-- data.  Note: file position numbering starts a 0.
-				current_input_file.position_cursor (
+				input_medium.position_cursor (
 					current_file_status.file_size)
 				tradable_factory.set_product (target_tradable)
 				tradable_factory.execute

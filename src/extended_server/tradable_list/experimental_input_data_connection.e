@@ -34,12 +34,12 @@ feature {NONE} -- Hook routine implementations
 
 	data_request_for (requester: TRADABLE_LIST): STRING is
 		do
-			Result := requester.symbols.item
+			Result := requester.symbols.item + "%N"
 		end
 
 feature {NONE} -- Implementation
 
-	target_socket_port_number: INTEGER is 39412
+	target_socket_port_number: INTEGER is 39414
 
 	target_socket_hostname: STRING is "localhost"
 

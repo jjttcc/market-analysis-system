@@ -8,7 +8,7 @@ indexing
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class TRADABLE_LIST inherit
+deferred class TRADABLE_LIST inherit
 
 	BILINEAR [TRADABLE [BASIC_MARKET_TUPLE]]
 		redefine
@@ -25,10 +25,6 @@ class TRADABLE_LIST inherit
 		export {NONE}
 			all
 		end
-
-creation
-
-	make
 
 feature -- Initialization
 
@@ -354,23 +350,25 @@ feature {NONE} -- Implementation
 			void_if_no_caching: not caching_on implies Result = Void
 		end
 
-	cache: HASH_TABLE [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]
-			-- Cache of tradable/index for efficiency
-
-	cache_index_queue: BOUNDED_QUEUE [INTEGER]
-
-	old_index: INTEGER
-
-	target_tradable: TRADABLE [BASIC_MARKET_TUPLE]
-			-- The current tradable - used to produce `item'
-
 	setup_input_medium is
-			-- Ensure that tradable_list has access to the current
-			-- input medium, if it exists.  `fatal_error' will be True
+			-- Initialize `input_medium', call 
+			-- 'tradable_factory.set_input (input_medium)', and
+			-- perform any other needed intialization before reading and
+			-- processing the input.  `fatal_error' will be True
 			-- if an error occurs.
 		require
-			no_error: fatal_error = False
+			no_error: not fatal_error
 		do
+			pre_initialize_input_medium
+			initialize_input_medium
+			if not fatal_error then
+				tradable_factory.set_input (input_medium)
+				post_initialize_input_medium
+			end
+		ensure then
+			input_medium_exists: not fatal_error implies input_medium /= Void
+			factory_input_set: not fatal_error implies
+				tradable_factory.input = input_medium
 		end
 
 	close_input_medium is
@@ -423,10 +421,6 @@ feature {NONE} -- Implementation
 			symbol_list_clone := Void
 		end
 
-	symbol_list: LIST [STRING]
-
-	symbol_list_clone: LIST [STRING]
-
 	initial_cache_size: INTEGER is
 			-- The initial size of the tradable cache
 		local
@@ -434,6 +428,24 @@ feature {NONE} -- Implementation
 		once
 			Result := gsf.global_configuration.tradable_cache_size
 		end
+
+feature {NONE} -- Implementation - attributes
+
+	cache: HASH_TABLE [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]
+			-- Cache of tradable/index for efficiency
+
+	cache_index_queue: BOUNDED_QUEUE [INTEGER]
+
+	old_index: INTEGER
+
+	target_tradable: TRADABLE [BASIC_MARKET_TUPLE]
+			-- The current tradable - used to produce `item'
+
+	symbol_list: LIST [STRING]
+
+	symbol_list_clone: LIST [STRING]
+
+	input_medium: INPUT_RECORD_SEQUENCE
 
 feature {NONE} -- Hook routines
 
@@ -473,6 +485,33 @@ feature {NONE} -- Hook routines
 			same_size_or_larger:
 				target_tradable.data.count >= old target_tradable.data.count
 		end
+
+	pre_initialize_input_medium is
+			-- Perform any needed preparation before calling
+			-- `initialize_input_medium'.
+		require
+			no_error: not fatal_error
+		do
+			do_nothing -- Redefine, if needed.
+		end
+
+	post_initialize_input_medium is
+			-- Perform any needed preparation after calling
+			-- `initialize_input_medium'.
+		require
+			no_error: not fatal_error
+		do
+			do_nothing -- Redefine, if needed.
+		end
+
+	initialize_input_medium is
+			-- Initialize `input_medium' so that it's ready to be read from.
+		deferred
+		ensure
+			result_exists_if_no_error: not fatal_error implies
+				input_medium /= Void
+		end
+
 
 feature {NONE} -- Debugging tools
 

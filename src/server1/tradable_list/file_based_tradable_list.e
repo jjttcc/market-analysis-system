@@ -10,10 +10,8 @@ indexing
 deferred class FILE_BASED_TRADABLE_LIST inherit
 
 	INPUT_MEDIUM_BASED_TRADABLE_LIST
-		rename
-			input_medium as current_input_file
 		redefine
-			start, forth, finish, back, remove_current_item, current_input_file
+			start, forth, finish, back, remove_current_item, input_medium
 		end
 
 	TIMING_SERVICES
@@ -65,12 +63,12 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	initialized_input_medium: INPUT_MEDIUM is
+	initialize_input_medium is
 		local
 			file: INPUT_FILE
 		do
 			create {OPTIMIZED_INPUT_FILE} file.make (file_names.item)
-			Result := file
+			input_medium := file
 			if file.exists then
 				file.open_read
 			else
@@ -79,10 +77,10 @@ feature {NONE} -- Implementation
 				fatal_error := True
 			end
 print (generating_type + ": init input med returning type: " +
-Result.generating_type + "%N")
+input_medium.generating_type + "%N")
 		end
 
-	current_input_file: INPUT_FILE
+	input_medium: INPUT_FILE
 
 invariant
 

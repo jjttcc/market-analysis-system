@@ -158,7 +158,9 @@ feature {NONE} -- Implementation
 			last_communication_succeeded := False
 			socket.put_string (r)
 			if socket.socket_ok then
-				if wait_for_response then
+				if wait_for_response
+or True
+then
 					create s.make (0)
 					if socket.ready_for_reading then
 						from
@@ -185,6 +187,9 @@ feature {NONE} -- Implementation
 				last_communication_succeeded := False
 				error_report := last_socket_error
 			end
+if s /= Void then
+print ("sendreq - s: '" + s + "'%N")
+end
 		ensure
 			still_connected_if_no_error:
 				last_communication_succeeded implies connected

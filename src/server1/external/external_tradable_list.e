@@ -14,7 +14,7 @@ class EXTERNAL_TRADABLE_LIST inherit
 		export
 			{NONE} tl_make
 		redefine
-			setup_input_medium
+			input_medium
 		end
 
 	EXCEPTIONS
@@ -32,14 +32,14 @@ feature {NONE} -- Initialization
 		require
 			not_void: factory /= Void
 		do
-			create input_sequence.make
-			if input_sequence.error_occurred then
+			create input_medium.make
+			if input_medium.error_occurred then
 				fatal_error := True
-				log_error (input_sequence.error_string)
+				log_error (input_medium.error_string)
 				raise (
 					"Fatal error occurred initializing external data source")
 			else
-				tl_make (input_sequence.symbols, factory)
+				tl_make (input_medium.symbols, factory)
 			end
 		end
 
@@ -51,7 +51,7 @@ feature -- Status report
 	intraday_data_available: BOOLEAN is
 			-- Is intraday data available from the external source?
 		do
-			Result := input_sequence.intraday_data_available
+			Result := input_medium.intraday_data_available
 		end
 
 feature -- Status setting
@@ -66,22 +66,21 @@ feature -- Status setting
 
 feature {NONE} -- Implementation
 
-	input_sequence: EXTERNAL_INPUT_SEQUENCE
+	input_medium: EXTERNAL_INPUT_SEQUENCE
 
-	setup_input_medium is
+	initialize_input_medium is
 		local
 		do
 			if intraday then
-				input_sequence.set_intraday (True)
+				input_medium.set_intraday (True)
 			else
-				input_sequence.set_intraday (False)
+				input_medium.set_intraday (False)
 			end
-			input_sequence.set_symbol (current_symbol)
-			tradable_factory.set_input (input_sequence)
+			input_medium.set_symbol (current_symbol)
 		end
 
 invariant
 
-	input_sequence_set: input_sequence /= Void
+	input_medium_set: input_medium /= Void
 
 end -- class EXTERNAL_TRADABLE_LIST

@@ -31,6 +31,7 @@ feature -- Basic operations
 		do
 			daily_list := new_tradable_list (tradable_factory)
 			intraday_list := new_tradable_list (intraday_tradable_factory)
+--!!!Add:			intraday_list.set_intraday (True)
 		end
 
 
@@ -41,7 +42,8 @@ feature -- Basic operations
 		do
 			create l.make
 			l.fill (<<"aapl", "ibm", "rhat", "novl", "f">>)
-			create Result.make (l, factory)
+			create Result.make (l, factory, create
+				{EXPERIMENTAL_INPUT_DATA_CONNECTION}.make)
 		end
 
 end

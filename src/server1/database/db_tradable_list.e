@@ -10,7 +10,7 @@ class DB_TRADABLE_LIST inherit
 
 	TRADABLE_LIST
 		redefine
-			setup_input_medium, close_input_medium
+			close_input_medium, input_medium
 		end
 
 creation
@@ -33,9 +33,9 @@ feature -- Status setting
 
 feature {NONE} -- Implementation
 
-	input_sequence: DB_INPUT_SEQUENCE
+	input_medium: DB_INPUT_SEQUENCE
 
-	setup_input_medium is
+	old_remove_setup_input_medium is
 		local
 			global_server: expanded GLOBAL_SERVER_FACILITIES
 			db: MAS_DB_SERVICES
@@ -46,15 +46,15 @@ feature {NONE} -- Implementation
 			end
 			if not db.fatal_error then
 				if intraday then
-					input_sequence :=
+					input_medium :=
 						db.intraday_data_for_symbol (current_symbol)
 				else
-					input_sequence := db.daily_data_for_symbol (current_symbol)
+					input_medium := db.daily_data_for_symbol (current_symbol)
 				end
-				if input_sequence = Void or db.fatal_error then
+				if input_medium = Void or db.fatal_error then
 					fatal_error := True
 				else
-					tradable_factory.set_input (input_sequence)
+					tradable_factory.set_input (input_medium)
 				end
 			else
 				fatal_error := True
@@ -65,8 +65,40 @@ feature {NONE} -- Implementation
 				close_input_medium
 			end
 		ensure then
-			input_sequence_closed_on_error: fatal_error and
-				input_sequence /= Void implies not input_sequence.is_open
+			input_medium_closed_on_error: fatal_error and
+				input_medium /= Void implies not input_medium.is_open
+		end
+
+	initialize_input_medium is
+		local
+			global_server: expanded GLOBAL_SERVER_FACILITIES
+			db: MAS_DB_SERVICES
+		do
+			db := global_server.database_services
+			if not db.connected then
+				db.connect
+			end
+			if not db.fatal_error then
+				if intraday then
+					input_medium :=
+						db.intraday_data_for_symbol (current_symbol)
+				else
+					input_medium := db.daily_data_for_symbol (current_symbol)
+				end
+				if input_medium = Void or db.fatal_error then
+					fatal_error := True
+				end
+			else
+				fatal_error := True
+			end
+			if fatal_error then
+				log_errors (<<"Error occurred while processing ",
+					current_symbol, ": ", db.last_error>>)
+				close_input_medium
+			end
+		ensure then
+			input_medium_closed_on_error: fatal_error and
+				input_medium /= Void implies not input_medium.is_open
 		end
 
 	close_input_medium is
@@ -74,12 +106,12 @@ feature {NONE} -- Implementation
 			global_server: expanded GLOBAL_SERVER_FACILITIES
 			db: MAS_DB_SERVICES
 		do
-			if input_sequence /= Void then
-				if input_sequence.is_open then
-					input_sequence.close
+			if input_medium /= Void then
+				if input_medium.is_open then
+					input_medium.close
 				end
-				if input_sequence.error_occurred then
-					log_error (input_sequence.error_string)
+				if input_medium.error_occurred then
+					log_error (input_medium.error_string)
 				end
 			end
 			if not global_server.command_line_options.keep_db_connection then

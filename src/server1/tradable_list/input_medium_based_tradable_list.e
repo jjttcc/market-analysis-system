@@ -11,7 +11,8 @@ deferred class INPUT_MEDIUM_BASED_TRADABLE_LIST inherit
 
 	TRADABLE_LIST
 		redefine
-			setup_input_medium, close_input_medium
+			close_input_medium, pre_initialize_input_medium,
+			post_initialize_input_medium, input_medium
 		end
 
 	TIMING_SERVICES
@@ -21,29 +22,15 @@ deferred class INPUT_MEDIUM_BASED_TRADABLE_LIST inherit
 
 feature {NONE} -- Implementation
 
-	setup_input_medium is
-		do
-			start_timer
-			input_medium := initialized_input_medium
---!!!:
-if input_medium /= Void then print (generating_type + ": input_medium type: " +
-input_medium.generating_type + "%N")
-else print ("setup-input-medium failed to init. input_medium" + "%N") end
-			if not fatal_error then
-				tradable_factory.set_input (input_medium)
-				input_medium.set_field_separator (
-					tradable_factory.field_separator)
-				input_medium.set_record_separator (
-					tradable_factory.record_separator)
-			end
-		ensure then
-			input_medium_open: not fatal_error implies input_medium /= Void
-				and then input_medium.exists and then
-				not input_medium.is_closed
-			input_medium_readable: not fatal_error implies
-				input_medium /= Void and then
-				input_medium.is_open_read
+	initialize_input_medium is
+		deferred
+		ensure
+			result_open_if_no_error: not fatal_error implies
+				input_medium.exists and then not input_medium.is_closed
+			result_open_read: input_medium.is_open_read
 		end
+
+feature {NONE} -- Hook routine implementations
 
 	close_input_medium is
 		do
@@ -55,13 +42,16 @@ else print ("setup-input-medium failed to init. input_medium" + "%N") end
 			report_timing
 		end
 
-	initialized_input_medium: INPUT_MEDIUM is
-			-- An INPUT_MEDIUM, initialized and ready to use
-		deferred
-		ensure
-			result_open: not fatal_error implies Result /= Void and then
-				Result.exists and then not Result.is_closed
-			result_open_read: Result.is_open_read
+	pre_initialize_input_medium is
+		do
+			start_timer
+		end
+
+	post_initialize_input_medium is
+		do
+			input_medium.set_field_separator (tradable_factory.field_separator)
+			input_medium.set_record_separator (
+				tradable_factory.record_separator)
 		end
 
 feature {NONE} -- Implementation - attributes
