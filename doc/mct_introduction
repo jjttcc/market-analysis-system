@@ -1,0 +1,31 @@
+#Note: Backslashes are not used as escape characters - instead "*^"name is
+#used; for example *^fontI.
+# $Date$
+# $Revision$
+%titleIntroduction to the MAS Control Terminal (MCT)
+%end_title
+
+%hdg1Introduction to the MAS Control Terminal (MCT)hide
+The MAS Control Terminal is an application used to manage the different
+components of the Market Analysis System (MAS).
+%par
+[More ...]
+
+%hdg2MAS Sessions
+
+[Description of MAS sessions]
+%hdg3Starting the Charting GUI
+[Description of ...]
+%hdg3Starting the Command-line Client
+[Description of ...]
+%hdg3Terminating the Current Session
+[Description of ...]
+%hdg2Connecting to a Running MAS Session
+
+[Description of ...]
+%hdg2Terminating a MAS Session
+
+[Description of ...]
+%hdg2Terminating a MAS Session
+
+[Description of ...]
