@@ -37,7 +37,6 @@ feature {NONE} -- Implementation
 
 	setup_input_medium is
 		local
-			exc: EXCEPTIONS
 			global_server: expanded GLOBAL_SERVER
 			db: MAS_DB_SERVICES
 		do
