@@ -8,7 +8,7 @@ client_req_spec -> [compress_flag] client_data_req
 client_data_req -> mkt_data_req | ind_data_req | symbol_list_req |
                      ind_list_req | trad_pertyp_req | change_session_req |
                      event_data_req | event_list_req | logout_req |
-					 all_ind_req | param_req | param_set_req
+                     all_ind_req | param_req | param_set_req
 compress_flag   -> "<@z@>"
 mkt_data_req    -> mkt_symbol "\t" trad_per_type
 event_data_req  -> mkt_symbol "\t" start_date "\t" end_date "\t" event_id_list
@@ -117,13 +117,13 @@ all_ind_req:        Request for all indicators known to the server
 
 param_req:          Request for a list of changeable parameters for the
                     indicator with the specified name (The name is a unique
-					key - one of the "ind_name"s returned in response to
-					an 'all_ind_req'.)
+                    key - one of the "ind_name"s returned in response to
+                    an 'all_ind_req'.)
 
 param_set_req:      Request to change the settings for the specified
                     parameter with the specified period type ("all" to
-					change the parameter for all period types) to the
-					specified values
+                    change the parameter for all period types) to the
+                    specified values
 
 change_session_req: Not used - May become obsolete.
 
