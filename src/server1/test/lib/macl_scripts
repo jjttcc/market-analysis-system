@@ -54,5 +54,382 @@ y
 # Name:
 MACD of Volume
 s
+# Parabolic SAR
+c
+n
+ONE_VARIABLE_FUNCTION
+c
+Parabolic SAR 4
+No Input Function
+y
+NUMERIC_VALUED_COMMAND_WRAPPER
+e
+Root
+COMMAND_SEQUENCE
+e
+Main sequence
+y
+BOOLEAN_NUMERIC_CLIENT
+e
+If 1st period, Init; else main body
+EQ_OPERATOR
+e
+First period?
+UNARY_LINEAR_OPERATOR
+e
+Period number
+No Input Function
+y
+INDEX_EXTRACTOR
+c
+shared UNARY_LINEAR_OPERATOR (Period number)
+c
+CONSTANT
+e
+One
+n
+1
+NUMERIC_VALUED_COMMAND_WRAPPER
+e
+Initialization
+COMMAND_SEQUENCE
+e
+Initialization sequence
+y
+MANAGED_VALUE_COMMAND
+e
+tradestate := long
+CONSTANT
+e
+tradestate
+n
+0
+CONSTANT
+e
+long
+n
+1
+n
+y
+MANAGED_VALUE_COMMAND
+e
+SAR := low
+CONSTANT
+e
+SAR
+n
+0
+LOW_PRICE
+c
+n
+y
+MANAGED_VALUE_COMMAND
+e
+EP := high
+CONSTANT
+e
+EP
+n
+0
+HIGH_PRICE
+c
+n
+y
+MANAGED_VALUE_COMMAND
+e
+AF := Initial AF value
+CONSTANT
+e
+AF
+n
+0
+CONSTANT
+e
+Initial AF value
+y
+.2
+n
+n
+BOOLEAN_NUMERIC_CLIENT
+e
+Main body
+EQ_OPERATOR
+e
+tradestate = long?
+shared CONSTANT ({tradestate})
+c
+shared CONSTANT ({long})
+c
+BOOLEAN_NUMERIC_CLIENT
+e
+Long block
+OR_OPERATOR
+e
+Change direction?
+AND_OPERATOR
+c
+shared EQ_OPERATOR (tradestate = long?)
+c
+LT_OPERATOR
+c
+12
+c
+CONSTANT
+e
+Previous SAR value
+n
+0
+AND_OPERATOR
+c
+EQ_OPERATOR
+e
+tradestate = short?
+shared CONSTANT ({tradestate})
+c
+CONSTANT
+e
+short
+n
+-1
+GT_OPERATOR
+c
+15
+c
+shared CONSTANT ({Previous SAR value})
+c
+NUMERIC_VALUED_COMMAND_WRAPPER
+e
+Switch to short
+COMMAND_SEQUENCE
+e
+"Switch to short" sequence
+y
+MANAGED_VALUE_COMMAND
+e
+SAR := Previous EP value
+shared CONSTANT ({SAR})
+c
+CONSTANT
+e
+Previous EP value
+n
+0
+n
+y
+MANAGED_VALUE_COMMAND
+e
+AF := AF increment
+shared CONSTANT ({AF})
+c
+CONSTANT
+e
+AF increment
+y
+.02
+n
+y
+MANAGED_VALUE_COMMAND
+e
+EP := low
+shared CONSTANT ({EP})
+c
+12
+c
+n
+y
+MANAGED_VALUE_COMMAND
+e
+tradestate := short
+shared CONSTANT ({tradestate})
+c
+shared CONSTANT ({short})
+c
+n
+n
+NUMERIC_VALUED_COMMAND_WRAPPER
+e
+Remain long
+COMMAND_SEQUENCE
+e
+"Remain long" sequence
+y
+MANAGED_VALUE_COMMAND
+e
+Update SAR
+shared CONSTANT ({SAR})
+c
+ADDITION
+e
+SAR calculation
+MULTIPLICATION
+c
+SUBTRACTION
+c
+shared CONSTANT ({Previous EP value})
+c
+shared CONSTANT ({Previous SAR value})
+c
+CONSTANT
+e
+Previous AF value
+n
+0
+shared CONSTANT ({Previous SAR value})
+c
+n
+y
+BOOLEAN_NUMERIC_CLIENT
+c
+GT_OPERATOR
+e
+High > Previous EP?
+15
+c
+shared CONSTANT ({Previous EP value})
+c
+NUMERIC_VALUED_COMMAND_WRAPPER
+c
+COMMAND_SEQUENCE
+c
+y
+BOOLEAN_NUMERIC_CLIENT
+e
+AF increment condition
+LT_OPERATOR
+e
+AF < Maximum AF value?
+shared CONSTANT ({AF})
+c
+CONSTANT
+e
+Maximum AF value
+y
+.1999
+MANAGED_VALUE_COMMAND
+e
+Increment AF
+shared CONSTANT ({AF})
+c
+ADDITION
+e
+AF + AF increment
+shared CONSTANT ({AF})
+c
+shared CONSTANT ({AF increment})
+c
+CONSTANT
+e
+Null operation
+n
+0
+n
+y
+shared MANAGED_VALUE_COMMAND (EP := high)
+c
+n
+n
+shared CONSTANT ({Null operation})
+c
+n
+n
+BOOLEAN_NUMERIC_CLIENT
+e
+Short block
+shared OR_OPERATOR (Change direction?)
+c
+NUMERIC_VALUED_COMMAND_WRAPPER
+e
+Switch to long
+COMMAND_SEQUENCE
+e
+"Switch to long" sequence
+y
+shared MANAGED_VALUE_COMMAND (SAR := Previous EP value)
+c
+n
+y
+shared MANAGED_VALUE_COMMAND (AF := AF increment)
+c
+n
+y
+shared MANAGED_VALUE_COMMAND (EP := high)
+c
+n
+y
+shared MANAGED_VALUE_COMMAND (tradestate := long)
+c
+n
+n
+NUMERIC_VALUED_COMMAND_WRAPPER
+e
+Remain short
+COMMAND_SEQUENCE
+e
+"Remain short" sequence
+y
+shared MANAGED_VALUE_COMMAND (Update SAR)
+c
+n
+y
+BOOLEAN_NUMERIC_CLIENT
+c
+LT_OPERATOR
+e
+Low < Previous EP?
+12
+c
+shared CONSTANT ({Previous EP value})
+c
+NUMERIC_VALUED_COMMAND_WRAPPER
+c
+COMMAND_SEQUENCE
+c
+y
+shared BOOLEAN_NUMERIC_CLIENT (AF increment condition)
+c
+n
+y
+shared MANAGED_VALUE_COMMAND (EP := low)
+c
+n
+n
+shared CONSTANT ({Null operation})
+c
+n
+n
+n
+y
+MANAGED_VALUE_COMMAND
+e
+Previous SAR := SAR
+shared CONSTANT ({Previous SAR value})
+c
+shared CONSTANT ({SAR})
+c
+n
+y
+MANAGED_VALUE_COMMAND
+e
+Previous AF := AF
+shared CONSTANT ({Previous AF value})
+c
+shared CONSTANT ({AF})
+c
+n
+y
+MANAGED_VALUE_COMMAND
+e
+Previous EP := EP
+shared CONSTANT ({Previous EP value})
+c
+shared CONSTANT ({EP})
+c
+n
+y
+shared CONSTANT ({SAR})
+c
+y
+n
+s
 -
 x
