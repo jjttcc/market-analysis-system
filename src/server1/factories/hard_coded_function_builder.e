@@ -93,6 +93,7 @@ feature -- Basic operations
 			l.extend (wilder_ma (f, Wilder_MA_n, "Wilder Moving Average"))
 			l.extend (wma (f, WMA_n, "Weighted Moving Average"))
 			l.extend (standard_deviation (f, SD_n, "Standard Deviation"))
+l.extend (abf_test (f, SD_n, "ABF test"))
 --!!!This one probably should be removed soon, since it should be easily
 --!!!configurable by the 'create function' facility once editing of
 --!!!AGENT_BASED_FUNCTIONS is fully supported.
@@ -487,7 +488,25 @@ feature {NONE} -- Hard-coded market function building procedures
 				l.extend (f)
 			end
 			create Result.make (agents.Standard_deviation_key, Void, l)
-			Result.add_parameter (create {INTEGER_FUNCTION_PARAMETER}.make (5))
+			Result.add_parameter (create {INTEGER_FUNCTION_PARAMETER}.make (n))
+			Result.set_name (name)
+		end
+
+	abf_test (f: MARKET_FUNCTION; n: INTEGER;
+			name: STRING): AGENT_BASED_FUNCTION is
+		local
+			agents: expanded MARKET_AGENTS
+			l: LINKED_LIST [MARKET_FUNCTION]
+			log2, bnc: RESULT_COMMAND [REAL]
+		do
+			create {BASIC_NUMERIC_COMMAND} bnc
+			create {LOG2} log2.make (bnc)
+			if f /= Void then
+				create l.make
+				l.extend (f)
+			end
+			create Result.make (agents.Standard_deviation_key, log2, l)
+			Result.add_parameter (create {INTEGER_FUNCTION_PARAMETER}.make (n))
 			Result.set_name (name)
 		end
 
