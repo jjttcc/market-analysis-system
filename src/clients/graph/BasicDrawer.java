@@ -245,6 +245,8 @@ abstract public class BasicDrawer extends Drawer {
 				break;
 			}
 		}
+		//@@The code below can probably be tuned such that the for loop
+		// inserts the minimum required values into y_valyes.
 //System.out.println("ymin: " + ymin);
 		if (step > step_thresh_hold) {
 			start = (long) (Math.floor(ymin / step) * step + step);
