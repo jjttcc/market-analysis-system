@@ -12,7 +12,13 @@ class MARKET_TUPLE_DATA_SCANNER inherit
 		export {NONE}
 			data_scanner_make
 		redefine
-			product, tuple_maker, open_tuple, close_tuple
+			product, tuple_maker, open_tuple, close_tuple,
+			do_last_error_check, handle_last_error
+		end
+
+	GENERAL_UTILITIES
+		export {NONE}
+			all
 		end
 
 creation
@@ -66,13 +72,47 @@ feature {NONE} -- Hook method implementations
 			t.editing
 		end
 
+	do_last_error_check (t: BASIC_MARKET_TUPLE) is
+		do
+			if not discard_current_tuple then
+				-- If t.date_time is Void, the date_time error has already
+				-- been encountered and handled.
+				if t.date_time /= Void then
+					check_date_time (t)
+				end
+				check_and_fix_prices (t)
+			end
+		end
+
 	close_tuple (t: BASIC_MARKET_TUPLE) is
 		do
-			check_date_time (t)
-			check_and_fix_prices (t)
 			t.end_editing
 		ensure then
 			not t.editing
+		end
+
+	handle_last_error is
+		local
+			record_number: INTEGER
+			s: STRING
+		do
+			record_number := product.output.count
+			if discard_current_tuple then
+				s := concatenation (<<"Error occurred after record ",
+					record_number>>)
+			else
+				s := concatenation (<<"Error occurred in record ",
+					record_number>>)
+			end
+			if record_number >= 1 then
+				s.append (concatenation (<<" (with date/time ",
+					product.output.last.date_time, ")">>))
+			end
+			s.append (".")
+			if discard_current_tuple then
+				s.append ("%NDiscarding corrupted record.")
+			end
+			error_list.extend (s)
 		end
 
 feature {NONE} -- Implementation
@@ -102,6 +142,7 @@ feature {NONE} -- Implementation
 				s.append (t.close.value.out)
 				t.fix_price_relationships
 				error_list.extend (s)
+				error_in_current_tuple := true
 			end
 		end
 
@@ -118,6 +159,8 @@ feature {NONE} -- Implementation
 				s.append (", date for last item: ")
 				s.append (last_date_time.out)
 				error_list.extend (s)
+				error_in_current_tuple := true
+				discard_current_tuple := true
 			end
 			last_date_time := t.date_time
 		end
