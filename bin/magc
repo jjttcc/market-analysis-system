@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Run the Java client
+
+Progname=$(basename $0)
+
+usage() {
+	echo "Usage: $pname [cl] [-h hostname] port_number"
+}
+
+host=jupiter
+main=MA_Client
+exedir=/home/jtc/development/finance/src/clients/GUI1
+while [ $# -gt 0 ]
+do
+	case $1 in
+		cl) main=CL_Client; shift
+			exedir=/home/jtc/development/finance/src/clients/CL
+		;;
+		-h) shift; host=$1; shift ;;
+		-*) usage; exit 0 ;;
+		*) port_number=$1; shift ;;
+	esac
+done
+
+if [ -z "$port_number" ]; then
+	usage
+	exit -1
+fi
+
+if [ "$Progname" = "runj" ]; then
+	cd $exedir
+fi
+java $main $host $port_number
