@@ -56,6 +56,7 @@ src/server1/test/reference/test_data.one_field . serversrc1.3
 src/server1/test/reference/williams . serversrc1.3
 src/server1/test/reference/rsi_sunw . serversrc1.3
 src/server1/test/reference/rsi_sunw_mnthly . serversrc1.3
+src/server1/test/reference/rsi_sunw_qtrly . serversrc1.3
 src/server1/test/reference/sunw_mnthly_stch%K . serversrc1.3
 doc/mal_intro src/doc/ serversrc1.3
 doc/MAL_design_document src/doc/MAL_design_document serversrc1.3
