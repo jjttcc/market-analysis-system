@@ -141,42 +141,6 @@ print_list (<<"Calling o.extend at oidx ", out_index, ".%N">>)
 			end
 		end
 
-	old_do_process is
-			-- Sum the first n elements of target, then call continue_until
-			-- to do the remaining work.
-		local
-			t: SIMPLE_TUPLE
-		do
-			check
-				output_empty: output.empty
-			end
-			if target.count < effective_n then
-				-- null statement
-			else
-				check target.count >= effective_n end
-				from target.start until
-					target.index - 1 = effective_offset
-				loop target.forth end
-				check target.index = effective_offset + 1 end
-				sum.execute (Void)
-				check
-					target.index - 1 = effective_n
-				end
-				-- The first trading period of the output is the nth trading
-				-- period of the input (target).
-				create t.make (target.i_th (effective_n).date_time,
-							target.i_th (effective_n).end_date, sum.value / n)
-				last_sum := sum.value
-				check
-					target_index_correct: target.index = effective_n + 1
-				end
-				-- sum.value = sum applied to
-				--   target[effective_offset+1 .. effective_n]
-				output.extend (t)
-				continue_until
-			end
-		end
-
 feature {MARKET_FUNCTION_EDITOR}
 
 	set_input (in: MARKET_FUNCTION) is
@@ -231,21 +195,12 @@ feature {NONE}
 			-- Default to simple moving average.
 			-- Intended to be redefined by descenants for more complex MAs.
 		local
-			t: SIMPLE_TUPLE
-			expired_value, latest_value: REAL
+			e: expanded EXCEPTIONS
 		do
-			operator.execute (target.i_th (target.index - n))
-			expired_value := operator.value
-			operator.execute (target.item)
-			latest_value := operator.value
-			last_sum := last_sum - expired_value + latest_value
-			create t.make (target.item.date_time, target.item.end_date,
-						last_sum / n)
-			output.extend (t)
+			print ("Fatal error: feature `action' in STANDARD_MOVING_AVERAGE %
+				%should not have been called.%N")
+			e.die (-1)
 		ensure then
-			one_more_in_output: output.count = old output.count + 1
-			date_time_correspondence:
-				output.last.date_time.is_equal (target.item.date_time)
 		end
 
 feature {NONE} -- Implementation
