@@ -374,6 +374,7 @@ public class Configuration implements NetworkProtocol
 		_color_table.put("darkBlue", new Color(red, green, blue));
 		red = (float) 0.425; green = (float) 0.425; blue = (float) 0.9;
 		_color_table.put("lightBlue", new Color(red, green, blue));
+		_color_table.put("purple", new Color(204, 0, 102));
 
 		// Set default colors.
 		_background_color = Color.blue;
