@@ -65,14 +65,14 @@ feature {NONE} -- Hook method implementations
 			exception_raised: BOOLEAN
 		do
 			if exception_raised then
-				scanning_error_occurred := True
+				error_in_current_tuple := True
 				if parser.error_occurred then
 					error_list.extend (parser.last_error)
 				elseif parser.product.error_occurred then
 					error_list.extend (parser.product.last_error)
 				end
 			else
-				scanning_error_occurred := False
+				error_in_current_tuple := False
 				-- Execute parser to make the appropriate kind of factory
 				-- according to the type spec. in the input.
 				parser.execute
