@@ -261,7 +261,7 @@ feature -- Basic operations
 					f.name, "'s slope">>))
 			!!p.make
 			p.set_x_y_date (1, y, date)
-			f.make (p, slope, period_types @ (period_type_names @ Weekly))
+			f.make (p, slope, user_interface.dummy_tradable)
 		end
 
 feature {NONE} -- Implementation

@@ -149,6 +149,14 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			result_not_void: Result /= Void
 		end
 
+	dummy_tradable: TRADABLE [BASIC_MARKET_TUPLE] is
+			-- A tradable to be used as dummy input
+		do
+			Result ?= function_with_generator ("STOCK")
+		ensure
+			result_not_void: Result /= Void
+		end
+
 feature {EDITING_INTERFACE}
 
 	initialize_function (f: MARKET_FUNCTION) is
