@@ -92,6 +92,16 @@ set_up()
 	fi
 }
 
+period_type_cmd()
+{
+	if [ $# -eq 0 -o "$1" = "" ]; then
+		echo ""
+	else
+		echo "c
+$1"
+	fi
+}
+
 filter_output()
 # Filter the output of a test into for processing.
 # Print only the 2nd field of data extracted from the file.
@@ -105,6 +115,7 @@ run_at_index()
 	echo "s
 1
 v
+$Period_type_string
 i
 $Tindex
 p
@@ -120,6 +131,7 @@ p
 
 run_test()
 {
+	Period_type_string="$(period_type_cmd $Tperiod_type)"
 	test_count=$(expr $test_count + 1)
 	run_at_index >$outputfile
 	result=$?

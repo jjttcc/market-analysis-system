@@ -37,12 +37,13 @@ set_next_test_params ()
 	}')
 	set $(sed -n "${current_line}p" $data_file|awk 'BEGIN {FS = ","}
 	{
-		print $2 " " $3 " " $4 " " $5
+		print $2 " " $3 " " $4 " " $5 " " $6
 	}')
 	Tinput=$1
 	Toutputref=$2
 	Tindex=$3
 	Tepsilon=$4
+	Tperiod_type=$5
 
 	return 0
 }
