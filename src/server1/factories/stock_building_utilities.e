@@ -12,8 +12,8 @@ class STOCK_FACTORY inherit
 		end
 
 	OPERATING_ENVIRONMENT
-		export {NONE}
-			all
+		export
+			{NONE} all
 		end
 
 creation
@@ -35,27 +35,18 @@ feature {NONE}
 		local
 			name: STRING
 			i, last_sep_index: INTEGER
+			strutil: STRING_UTILITIES
 		do
-			name := clone (input_file.name)
-			-- Strip directory path from the file name:
-			from
-				i := 1
-				last_sep_index := 0
-			until
-				i = 0
-			loop
-				if i + 1 <= name.count then
-					i := name.index_of (Directory_separator, i + 1)
-				else
-					i := 0
-				end
-				if i /= 0 then
-					last_sep_index := i
-				end
+			!!strutil.make (clone (input_file.name))
+			if strutil.target.has (Directory_separator) then
+				-- Strip directory path from the file name:
+				strutil.tail (Directory_separator)
 			end
-			if last_sep_index > 0 then
-				name.tail (name.count - last_sep_index)
+			if strutil.target.has ('.') then
+				-- Strip off "suffix":
+				strutil.head ('.')
 			end
+			name := strutil.target
 			--!!!For now, set the name and symbol to the file name.
 			!!product.make (name, time_period_type)
 			product.set_name (name)
