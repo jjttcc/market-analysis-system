@@ -28,13 +28,7 @@ feature -- Access
 	last_event_generator: MARKET_EVENT_GENERATOR
 			-- The last MARKET_EVENT_GENERATOR that was built
 
-	last_error: STRING
-			-- Description of last error that occurred
-
 feature -- Status report
-
-	error_occurred: BOOLEAN
-			-- Did an error occur during the last operation?
 
 	changed: BOOLEAN
 			-- Did the last operation produce a change that may need
@@ -59,13 +53,13 @@ feature -- Basic operations
 				selection := main_menu_selection
 				inspect
 					selection
-				when Create_new_eg_value then
+				when Create_new_value then
 					create_new_event_generator
-				when Remove_eg_value then
+				when Remove_value then
 					remove_event_generator
-				when View_eg_value then
+				when View_value then
 					view_event_generator
-				when Edit_eg_indicator_value then
+				when Edit_value then
 					edit_event_generator_indicator
 				when Save_value then
 					market_event_generation_library.copy (working_meg_library)
@@ -74,7 +68,7 @@ feature -- Basic operations
 						market_event_generation_library)
 					changed := false
 				when Show_help_value then
-					show_help (help @ help.Edit_event_generators)
+					show_message (help @ help.Edit_event_generators)
 				else
 				end
 				if error_occurred then
@@ -313,11 +307,6 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Hook methods
 
-	show_help (msg: STRING) is
-			-- Display `msg' as help information for the user.
-		deferred
-		end
-
 	event_generator_selection (msg: STRING): MARKET_EVENT_GENERATOR is
 			-- User's event generator selection - Void if there are no
 			-- event generators to select from.
@@ -439,10 +428,11 @@ feature {NONE} -- Implementation
 
 	working_meg_library: STORABLE_LIST [MARKET_EVENT_GENERATOR]
 
-	Create_new_eg_value, Remove_eg_value, View_eg_value, Save_value,
-	Edit_eg_indicator_value, Show_help_value, Two_value, One_value,
-	Compound_eg_type_value, Simple_eg_type_value: INTEGER is unique
-			-- Menu selection value
+	Two_value: INTEGER is 6
+	One_value: INTEGER is 7
+	Compound_eg_type_value: INTEGER is 8
+	Simple_eg_type_value: INTEGER is 9
+			-- Menu selection values
 
 invariant
 
