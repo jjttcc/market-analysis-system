@@ -81,10 +81,7 @@ feature -- Initialization
 
 feature -- Access
 
-	offset: INTEGER is
-		do
-			Result := - (n + n_adjustment)
-		end
+	external_offset: INTEGER is 0
 
 	n_adjustment: INTEGER
 			-- Value that will be added to `n' when
@@ -105,6 +102,11 @@ feature -- Status report
 		end
 
 feature {NONE} -- Implementation
+
+	offset: INTEGER is
+		do
+			Result := - (n + n_adjustment)
+		end
 
 	operate (arg: ANY) is
 		do
