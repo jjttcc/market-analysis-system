@@ -17,12 +17,14 @@ public class DataSetBuilder implements NetworkProtocol {
 	public DataSetBuilder(Connection conn, MAS_Options opts) {
 		assert conn != null && opts != null;
 		connection_ = conn;
+		options = opts;
 		initialize();
 	}
 
 	public DataSetBuilder(DataSetBuilder dsb) {
 		try {
 			connection_ = dsb.connection().new_object();
+			options = dsb.options;
 			initialize();
 		} catch (Exception e) {
 			System.err.println(e);

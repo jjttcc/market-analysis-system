@@ -10,13 +10,13 @@ abstract public class IO_Connection
 // Access
 
 	// A new instance copied from 'this'
-	abstract public IO_Connection newObject() throws IOException;
+	abstract public IO_Connection new_object() throws IOException;
 
 	// The IO connection's input stream
-	abstract public InputStream inputStream() throws IOException;
+	abstract public InputStream input_stream() throws IOException;
 
 	// The IO connection's output stream
-	abstract public OutputStream outputStream() throws IOException;
+	abstract public OutputStream output_stream() throws IOException;
 
 // Basic operations
 

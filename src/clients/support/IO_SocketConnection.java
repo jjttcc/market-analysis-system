@@ -9,7 +9,7 @@ import java.net.*;
 public class IO_SocketConnection extends IO_Connection
 {
 
-	// Precondition: c != null
+	// Precondition: hostnm != null
 	public IO_SocketConnection(String hostnm, int portnum) {
 		assert hostnm != null;
 		hostname = hostnm;
@@ -18,25 +18,27 @@ public class IO_SocketConnection extends IO_Connection
 
 // Access
 
-	public IO_Connection newObject() {
+	public IO_Connection new_object() {
 		return new IO_SocketConnection(hostname, port_number);
 	}
 
-	public InputStream inputStream() throws IOException {
+	public InputStream input_stream() throws IOException {
 		return socket.getInputStream();
 	}
 
-	public OutputStream outputStream() throws IOException {
+	public OutputStream output_stream() throws IOException {
 		return socket.getOutputStream();
 	}
 
 // Basic operations
 
 	public void close() throws IOException {
+		System.out.println("IO_SocketConnection.close called");
 		socket.close();
 	}
 
 	public void open() throws IOException {
+		System.out.println("IO_SocketConnection.open called");
 		try {
 			//It appears that the only way to connect a client socket is
 			//to create a new one.

@@ -12,21 +12,21 @@ public class IO_URL_Connection extends IO_Connection
 	public IO_URL_Connection(String srvaddr) throws MalformedURLException {
 		assert srvaddr != null;
 
-		serverAddress = srvaddr;
-		url = new URL(serverAddress);
+		server_address = srvaddr;
+		url = new URL(server_address);
 	}
 
 // Access
 
-	public IO_Connection newObject() throws MalformedURLException {
-		return new IO_URL_Connection(serverAddress);
+	public IO_Connection new_object() throws MalformedURLException {
+		return new IO_URL_Connection(server_address);
 	}
 
-	public InputStream inputStream() throws IOException {
+	public InputStream input_stream() throws IOException {
 		return connection.getInputStream();
 	}
 
-	public OutputStream outputStream() throws IOException {
+	public OutputStream output_stream() throws IOException {
 		return connection.getOutputStream();
 	}
 
@@ -34,10 +34,12 @@ public class IO_URL_Connection extends IO_Connection
 
 	public void close() {
 		// Null routine
+		System.out.println("IO_URL_Connection.close called");
 	}
 
 	public void open() throws IOException {
 		assert url != null;
+		System.out.println("IO_URL_Connection.open called");
 
 		connection = url.openConnection();
 		connection.setDoInput(true);
@@ -54,5 +56,5 @@ public class IO_URL_Connection extends IO_Connection
 
 	private URL url;
 
-	private String serverAddress;
+	private String server_address;
 }
