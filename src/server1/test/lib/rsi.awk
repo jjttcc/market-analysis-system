@@ -1,4 +1,5 @@
-# Compute RSI - from Colby and Meyers (alternate method)
+# Compute RSI - from Colby and Meyers (method using explicit exponential
+# calculation)
 BEGIN {
 if (n_value == 0) n_value = 7 # default n
 n = n_value
