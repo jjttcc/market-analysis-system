@@ -4,7 +4,7 @@
 
 [Setup]
 OutputDir=E:\inno
-SourceDir=D:\cygwin\home\jtc\development\inno_source
+SourceDir=D:\cygwin\home\jtc\development\inno_source\mas-1.6.7
 AppName=Market Analysis System
 AppVerName=Market Analysis System 1.6.7
 AppPublisher=Jim Cochrane
@@ -146,7 +146,6 @@ Source: "lib\classes\mas_gui\MA_MenuBar.class"; DestDir: "{app}\lib\classes\mas_
 Source: "lib\classes\mas_gui\MA_ScrollPane.class"; DestDir: "{app}\lib\classes\mas_gui"; CopyMode: alwaysoverwrite
 Source: "lib\classes\mas_gui\MarketSelection$1.class"; DestDir: "{app}\lib\classes\mas_gui"; CopyMode: alwaysoverwrite
 Source: "lib\classes\mas_gui\MarketSelection.class"; DestDir: "{app}\lib\classes\mas_gui"; CopyMode: alwaysoverwrite
-Source: "lib\classes\mas_gui\MAS_Options.class"; DestDir: "{app}\lib\classes\mas_gui"; CopyMode: alwaysoverwrite
 Source: "lib\classes\mas_gui\OptionFlags.class"; DestDir: "{app}\lib\classes\mas_gui"; CopyMode: alwaysoverwrite
 Source: "lib\classes\mas_gui\Parser.class"; DestDir: "{app}\lib\classes\mas_gui"; CopyMode: alwaysoverwrite
 Source: "lib\classes\mas_gui\SessionState.class"; DestDir: "{app}\lib\classes\mas_gui"; CopyMode: alwaysoverwrite
@@ -157,12 +156,10 @@ Source: "lib\classes\support\ErrorBox$1.class"; DestDir: "{app}\lib\classes\supp
 Source: "lib\classes\support\ErrorBox$2.class"; DestDir: "{app}\lib\classes\support"; CopyMode: alwaysoverwrite
 Source: "lib\classes\support\ErrorBox$3.class"; DestDir: "{app}\lib\classes\support"; CopyMode: alwaysoverwrite
 Source: "lib\classes\support\ErrorBox.class"; DestDir: "{app}\lib\classes\support"; CopyMode: alwaysoverwrite
-Source: "lib\classes\support\FileReaderUtilities.class"; DestDir: "{app}\lib\classes\support"; CopyMode: alwaysoverwrite
 Source: "lib\classes\support\GUI_Utilities.class"; DestDir: "{app}\lib\classes\support"; CopyMode: alwaysoverwrite
 Source: "lib\classes\support\IndicatorGroup.class"; DestDir: "{app}\lib\classes\support"; CopyMode: alwaysoverwrite
 Source: "lib\classes\support\IndicatorGroups.class"; DestDir: "{app}\lib\classes\support"; CopyMode: alwaysoverwrite
 Source: "lib\classes\support\IntPair.class"; DestDir: "{app}\lib\classes\support"; CopyMode: alwaysoverwrite
-Source: "lib\classes\support\Configuration$DateSetting.class"; DestDir: "{app}\lib\classes\support"; CopyMode: alwaysoverwrite
 Source: "lib\classes\MA_Client.class"; DestDir: "{app}\lib\classes"; CopyMode: alwaysoverwrite
 Source: "lib\classes\CL_Client.class"; DestDir: "{app}\lib\classes"; CopyMode: alwaysoverwrite
 Source: "lib\.ma_clientrc"; DestDir: "{app}\lib\classes"; CopyMode: alwaysoverwrite
