@@ -72,12 +72,24 @@ feature -- Access
 		do
 		end
 
+feature -- Status setting
+
+	reset is
+			-- Initialize state and clear cached values.
+		do
+			initialization_needed := false
+			if current_object_list /= Void then
+				current_object_list.wipe_out
+			end
+			descendant_reset
+		end
+
 feature {NONE} -- Implementation
 
 	user_object_selection (objects: LIST [G]; msg: STRING): G is
 			-- User's selection of a member of `objects' (deep-cloned) or
 			-- a member of `current_objects' that is in `objects' (shared)
-			-- If the selection if from `current_objects',
+			-- If the selection is from `current_objects',
 			-- initialization_needed will be false; otherwise it will be true.
 		require
 			objs_not_void: objects /= Void
@@ -237,6 +249,11 @@ feature -- Implementation - hook methods
 			-- Obtain a name from the user and set 'o's name to it.
 		do
 			-- default null implementation
+		end
+
+	descendant_reset is
+			-- Reset descendant's state - null by default - redefine if needed.
+		do
 		end
 
 end -- OBJECT_EDITING_INTERFACE
