@@ -19,7 +19,6 @@ import support.ParameterBasedConfigurationModifier;
 public class MAS_Applet extends Applet {
 
 	public void init() {
-		log("Compiled at Thu Mar  6 00:41:09 MST 2003");
 		try {
 			initialize_applet();
 			initialize_configuration();
@@ -41,7 +40,7 @@ public class MAS_Applet extends Applet {
 			}
 		} catch (Exception e) {
 			log("Login failed: " + e.toString());
-			e.printStackTrace();
+//			e.printStackTrace();
 			report_error("Login failed: " + e.toString());
 			destroy();
 		}
@@ -122,8 +121,10 @@ public class MAS_Applet extends Applet {
 // Implementation - utilities
 
 	private void log(String msg) {
-		showStatus(msg);
-		System.out.println(msg + "\n");
+		if (debug) {
+			showStatus(msg);
+			System.out.println(msg + "\n");
+		}
 	}
 
 	private boolean compression() {
@@ -179,6 +180,8 @@ public class MAS_Applet extends Applet {
 	private String title;
 
 // Implementation - constants
+
+	private final boolean debug = false;
 
 	private final String Applet_title_name = "title";
 
