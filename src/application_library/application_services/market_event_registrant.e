@@ -35,13 +35,18 @@ feature -- Basic operations
 			then
 				-- hfile.make_open_read failed because the file does not
 				-- exist.  This is not really an error, so continue.
+				!!event_history.make
+				event_history.compare_objects
 			elseif hfile_name /= Void then
 				!!hfile.make_open_read (hfile_name)
 				!!scanner.make (hfile)
 				scanner.execute
 				event_history := scanner.product
+				event_history.compare_objects
 				hfile.close
 			end
+		ensure then
+			event_history.object_comparison
 		rescue
 			exception_occurred := true
 			retry
@@ -53,12 +58,10 @@ feature -- Basic operations
 			scanner: MARKET_EVENT_SCANNER
 			fld_sep, record_sep: STRING
 		do
+			-- Open the event history file, delete its current contents and
+			-- save all elements of `event_history' into the file.
 			if hfile_name /= Void then
-				-- Create the file if it doesn't exist:
-				!!hfile.make_open_write (hfile_name)
-				hfile.close
-				-- Re-open the file - readable to satisfy scanner constraint:
-				hfile.open_read_write
+				!!hfile.make_create_read_write (hfile_name)
 				-- Make the scanner to get its field separator.
 				!!scanner.make (hfile)
 				fld_sep := scanner.field_separator
