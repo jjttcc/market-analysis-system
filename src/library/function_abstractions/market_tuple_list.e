@@ -38,7 +38,7 @@ feature
 
 invariant
 
-	-- sorted_by_date_time: sorted_by_date_time
+	sorted_by_date_time: -- sorted_by_date_time
 	--   (The above call is too inefficient to execute.)
 
 end -- class MARKET_TUPLE_LIST
