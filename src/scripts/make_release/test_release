@@ -1,0 +1,194 @@
+#!/bin/bash
+# Test a new release to see if it compiles, passes all tests, etc.
+
+wkdir=/tmp/work$$
+Progname=$(basename $0)
+testcount=0
+passed_tests=0
+
+usage() {
+	echo "Usage: $Progname release_number"
+}
+
+# Print fatal error message and exit
+fatal() {
+	echo -e "Fatal error\c"
+	if [ $# -gt 0 ]; then echo "$*."; else echo "."; fi
+	exit -1
+}
+
+# Fail a test.
+fail() {
+	echo -e "Test failed\c"
+	if [ $# -gt 0 ]; then echo ": $*."; else echo "."; fi
+}
+
+random_port() {
+	x=$RANDOM
+	if [ $x -lt 1024 ]; then x=$(expr $x + 1024); fi
+	echo $x
+}
+
+# Increment passed test count.
+incr_passed_tests() {
+	passed_tests="$(expr $passed_tests + 1)"
+}
+
+# Report test statistics.
+report() {
+	echo "$passed_tests tests passed out of a total of $testcount tests."
+}
+
+# Test the binary release of the server and client
+test_binaries() {
+	testcount="$(expr $testcount + 1)"
+	(
+	rm -rf $wkdir/*
+	sbintarfile=$release_dir/mas_linux${release_number}.tar.gz
+	echo -e "Testing server binary release ..\c"
+	tar zxf $sbintarfile || {
+		fail "Failed to untar $sbintarfile"; return 1
+	}
+	echo -e "..\c"
+	mkdir -p testdir/bin testdir/lib testdir/doc
+	cd *${release_number} >/dev/null || {
+		fail "Failed to cd to mas directory"; return 1
+	}
+	masdir=$wkdir/testdir
+	echo "$masdir/bin
+y
+$masdir/lib
+y
+$masdir/doc
+y
+y"| ./install >/dev/null 2>&1 || {
+		fail "Installation failed"; return 1
+	}
+	echo -e ".."
+	cd $masdir/lib || {
+		fail "Failed to cd to lib directory"; return 1
+	}
+	export MAS_DIRECTORY=$PWD
+	export PYTHONPATH=$masdir/lib/python
+	echo -e "Running server using data files."
+	(p=$(random_port); $masdir/bin/mas -o -f , -b $p data/*txt >/dev/null &
+	$masdir/bin/magc $p
+	echo  | $masdir/bin/macl >/dev/null $p) || {
+		fail; return 1
+	}
+	echo -e "Running server using database."
+	(p=$(random_port); $masdir/bin/mas -o -f , -b $p -p >/dev/null &
+	$masdir/bin/magc $p
+	echo  | $masdir/bin/macl >/dev/null $p) || {
+		fail; return 1
+	}
+	echo "Test of binary release passed."
+	)
+}
+
+finalize() {
+	if es4 -finalize $1 -ace Ace.ace >/dev/null 2>&1; then
+		:
+	else
+		echo "Finalization with es4 failed."
+		return 1
+	fi
+}
+
+freeze() {
+	(
+	cd EIFGEN/F_code >/dev/null
+	finish_freezing >/dev/null 2>&1
+	return $?
+	)
+}
+
+run_server_tests() {
+	cd test >/dev/null
+	./run_tests>/tmp/mastestresults.$$
+	result=$?
+	egrep 'out of .*tests succeeded' /tmp/mastestresults.$$
+	rm -f /tmp/mastestresults.$$
+	return $result
+}
+
+# Test the server source code release
+test_server_source() {
+	testcount="$(expr $testcount + 1)"
+	(
+	rm -rf $wkdir/*
+	srctarfile=$release_dir/serversrc${release_number}.tar.gz
+	echo -e "Testing server source release .."
+	tar zxf $srctarfile || {
+		fail "Failed to untar $srctarfile"; return 1
+	}
+	cd *${release_number}/src/server1 >/dev/null || {
+		fail "Failed to cd to source directory"; return 1
+	}
+	echo -e "Compiling Eiffel source code."
+	export MAS=$PWD/../..
+	finalize || {
+		fail "Eiffel finalization failed"; return 1
+	}
+	echo -e "Freezing results."
+	freeze || {
+		fail "Eiffel freezing failed"; return 1
+	}
+	echo -e "Running server tests."
+	run_server_tests || {
+		fail "Server tests failed"; return 1
+	}
+	echo "Test of server source release passed."
+	)
+}
+
+# Test the client source code release
+test_client_source() {
+	testcount="$(expr $testcount + 1)"
+	(
+	rm -rf $wkdir/*
+	echo -e "Testing client source release ..\c"
+	sbintarfile=$release_dir/mas_linux${release_number}.tar.gz
+	tar zxf $sbintarfile || {
+		fail "Failed to untar $sbintarfile"; return 1
+	}
+	clsrctarfile=$release_dir/clientsrc${release_number}.tar.gz
+	tar zxf $clsrctarfile || {
+		fail "Failed to untar $clsrctarfile"; return 1
+	}
+	echo -e "..\c"
+	cd *${release_number}/src/clients/GUI1 >/dev/null || {
+		fail "Failed to cd to client source directory"; return 1
+	}
+	javac */*java *java >/dev/null 2>&1 || {
+		fail "Failed to compile client source code"; return 1
+	}
+	echo -e "..\c"
+	mdir="$(ls -d $wkdir/*${release_number})"
+	export PYTHONPATH=$mdir/lib/python
+	(p=$(random_port)
+	$mdir/bin/mas -o -f , -b $p $mdir/lib/data/*txt >/dev/null&
+	java MA_Client $(hostname) $p
+	echo  | $mdir/bin/macl >/dev/null 2>&1 $p) || {
+		fail; return 1
+	}
+	echo
+	echo "Test of client source release passed."
+	)
+}
+
+if [ $# -ne 1 ]; then usage; exit -1; fi
+release_number=$1
+release_dir="$(ls -d ~release/*${release_number})"
+if [ $? -ne 0 ]; then
+	fatal "Cannot find directory for release $release_number"
+fi
+
+rm -rf $wkdir
+mkdir $wkdir
+cd $wkdir
+if test_binaries; then incr_passed_tests; fi
+if test_server_source; then incr_passed_tests; fi
+if test_client_source; then incr_passed_tests; fi
+report
+rm -rf $wkdir
