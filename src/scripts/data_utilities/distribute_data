@@ -1,0 +1,68 @@
+#!//bin/bash
+# Distribute daily stock data to the appropriate data repositories.
+
+Progname="$(basename $0)"
+
+usage ()
+{
+	echo "Usage: $Progname [yyyymmdd]"
+}
+
+case "$1" in
+	-*) usage; exit -1
+esac
+
+if [ -z "$EOD_DIRECTORY" ]; then
+	echo "$Progname: Error, environment variable EOD_DIRECTORY" \
+		"not set - exiting ..."
+	exit -1
+fi
+
+if [ ! -d "$EOD_DIRECTORY" ]; then
+	echo "$Progname: Error, $EOD_DIRECTORY is not a directory" \
+		"exiting ..."
+	exit -2
+fi
+
+cd $EOD_DIRECTORY
+if [ $? -ne 0 ]; then
+	echo "$Progname: cd to $EOD_DIRECTORY failed, exiting ..."
+	exit -3
+fi
+
+if [ $# -eq 0 ]; then
+	yydate=$(date +%y%m%d)
+	yyyydate=$(date +%Y%m%d)
+	insert=
+else
+	yyyydate=$1
+	yydate=$(echo $1|sed 's/..//')
+	insert=insert
+fi
+
+juju eod.${yyyydate}
+
+if [ $? -ne 0 ]; then
+	echo "$Progname: fatal error: data extraction from mime file failed."
+	exit -1
+fi
+
+for f in "${yydate}*.zip"
+do
+	chmod 664 $f
+	unzip $f
+done
+
+if [ $? -ne 0 ]; then
+	echo "$Progname: fatal error: unzipping of EOD file failed."
+	exit -1
+fi
+
+for f in "${yydate}.*"
+do
+	cnvrt_fromdos $f
+	extract_data $PWD/$f $yyyydate $insert
+	rm $f
+done
+
+rm eod.${yyyydate}

@@ -1,0 +1,77 @@
+#!/bin/bash
+# Run analysis of stocks for buy/sell report.
+# To run this script, you will need to have "java" and "mas" in your path
+# and you will need to set the following environment variables:
+#    MARKET_DATA_DIRECTORY - directory where the stock data files reside
+#    MAS_DIRECTORY - directory where MAS configuration files reside
+#    MAS_CLIENT_DIR - directory where the MAS client resides
+
+Progname=$(basename $0)
+files=
+days=40
+
+usage() {
+	echo "Usage: $Progname [-d days] [-p port_number] [data_file ...]"
+	echo "where:"
+	echo "   days is the number of days backwards from the current date to"
+	echo "     begin processing."
+	echo "   -p option specifies the port number to use for client/server " \
+			"comminucation."
+}
+
+cl_client() {
+	(
+	macl -h jupiter $portnumber
+	)
+}
+
+start_server() {
+	mas $portnumber -background -o -f , $*
+}
+
+setup() {
+	if [ -z "$MARKET_DATA_DIRECTORY" ]; then
+		echo "$Progname: Fatal error: env. var. MARKET_DATA_DIRECTORY " \
+			"is not set"
+		exit -2
+	fi
+	if [ -z "$MAS_DIRECTORY" ]; then
+		echo "$Progname: Fatal error: env. var. MAS_DIRECTORY " \
+			"is not set"
+		exit -3
+	fi
+#!!!Remove this check - it's not needed anymore:
+#	if [ -z "$MAS_CLIENT_DIR" ]; then
+#		echo "$Progname: Fatal error: env. var. MAS_CLIENT_DIR " \
+#			"is not set"
+#		exit -4
+#	fi
+	portnumber=29535
+	cd $MARKET_DATA_DIRECTORY
+}
+
+setup
+if [ $# -gt 0 ]; then
+	while [ $# -gt 0 ]
+	do
+		case $1 in
+			-d*) shift; days=$1; shift ;;
+			-p*) shift; portnumber=$1; shift ;;
+			-*) usage; exit 0 ;;
+			*) files="$files $1"; shift ;;
+		esac
+	done
+else
+	files=*.txt
+fi
+echo "Processing last $days days of data with mas dir. $MAS_DIRECTORY"
+echo "and port $portnumber"
+start_server $files &
+sleep 12
+echo 'd
+r
+d
+'$days'
+s
+a
+'|cl_client

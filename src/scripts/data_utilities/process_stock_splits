@@ -1,0 +1,73 @@
+#!/bin/bash
+# Process stock split data from investorlink into MAS stock split data.
+# If there is no data for the specified date, do nothing.
+
+Progname="$(basename $0)"
+
+check_env() {
+	if [ -z "$EOD_DIRECTORY" ]; then
+		echo "$Progname: Error, environment variable EOD_DIRECTORY" \
+			"not set - exiting ..."
+		exit -1
+	fi
+	if [ ! -d "$EOD_DIRECTORY" ]; then
+		echo "$Progname: Error, $EOD_DIRECTORY is not a directory" \
+			"exiting ..."
+		exit -2
+	fi
+	if [ -z "$MAS_DIRECTORY" ]; then
+		echo "$Progname: Error, environment variable MAS_DIRECTORY" \
+			"not set - exiting ..."
+		exit -1
+	fi
+	if [ ! -d "$MAS_DIRECTORY" ]; then
+		echo "$Progname: Error, $MAS_DIRECTORY is not a directory" \
+			"exiting ..."
+		exit -2
+	fi
+}
+
+check_dirs() {
+	if [ ! -d ../splits -o ! -w ../splits -o ! -x ../splits ]; then
+		echo "$Progname: Error, $PWD/../splits doesn't exist or is not " \
+				"writable - exiting ..."
+		exit -3
+	fi
+}
+
+#Usage: process_splits source_split_file
+process_splits() {
+python <<EOPY
+from string import split, join
+input = open("$1", 'r')
+for line in input.readlines():
+	fields = split(line)
+	symbol = fields[0]
+	s = split(fields[3], '-')
+	split_value = float(eval(s[0])) / float(eval(s[1]))
+	year = fields[1][:4]
+	month = fields[1][4:6]
+	day = fields[1][6:]
+	print '%s%s%s\t%s\t%f' % (year, month, day, symbol, split_value)
+EOPY
+}
+
+check_env
+tgt_split_file=$MAS_DIRECTORY/stock_splits
+cd $EOD_DIRECTORY
+if [ $? -ne 0 ]; then
+	echo "$Progname: cd to $EOD_DIRECTORY failed, exiting ..."
+	exit -3
+fi
+check_dirs
+tmpfile=/tmp/procsplits.$$
+
+src_split_files="$(ls SPLT* 2>/dev/null)"
+if [ ! -z "$src_split_files" ]; then
+	for f in $src_split_files; do
+		process_splits $f | sort -u - $tgt_split_file >$tmpfile
+		cp $tmpfile $tgt_split_file
+		rm $tmpfile
+	done
+	mv $src_split_files ../splits
+fi

@@ -1,0 +1,112 @@
+#!/bin/bash
+# Extract EOD data from ASCII data files for each stock, format the
+# data, and append it to the stock data file in the data directory.
+
+Progname="$(basename $0)"
+
+usage()
+{
+	echo "Usage: $Progname full_path/source_data_file yyyymmdd [insert]"
+	echo "(Append the record unless insert is specified.)"
+}
+
+fail()
+{
+	echo "Fatal error: $1"
+	exit -1
+}
+
+format()
+{
+	sed "s/^[^,]*,/${date},/"|cnvrt_eod
+}
+
+insert()
+{
+	[ "$Insert_requested" = true ]
+	return $?
+}
+
+ok_to_append()
+{
+	if [ ! -r $2 ]; then
+		echo "Can't read $2"; exit -1
+	fi
+
+	if [ -z "$1" ]; then
+		result=1
+	else
+		# If $1 (a date) is already in the file, no need to append.
+		if grep "^$1" $2 >/dev/null 2>&1; then
+			result=1
+		else
+			result=0
+		fi
+	fi
+
+	return $result
+}
+
+# Usage: add_record record file
+add_record()
+{
+	record="$1"
+	file=$2
+	wkfile=/tmp/distd.$$
+	if insert; then
+		echo "$record"|cat $file - |sort -nu >>$wkfile
+		mv $wkfile $file
+		rm -f $wkfile
+	else
+		echo "$record" >>$file
+	fi
+}
+
+if [ $# -lt 2 ]
+then
+	usage
+	exit -1
+fi
+
+if [ -z "$MARKET_DATA_DIRECTORY" ]; then
+	echo "$Progname: Error, environment variable MARKET_DATA_DIRECTORY" \
+		"not set - exiting ..."
+	exit -1
+fi
+
+if [ ! -d "$MARKET_DATA_DIRECTORY" ]; then
+	echo "$Progname: Error, $MARKET_DATA_DIRECTORY is not a directory" \
+		"exiting ..."
+	exit -2
+fi
+
+cd $MARKET_DATA_DIRECTORY/../database
+if [ $? -ne 0 ]; then
+	echo "$Progname: cd to $MARKET_DATA_DIRECTORY/../database failed, exiting ..."
+	exit -3
+fi
+
+source_data_file=$1
+date=$2
+if [ $# -eq 3 -a $3 = insert ]; then
+	Insert_requested=true
+else
+	Insert_requested=false
+fi
+
+if [ ! -r "$source_data_file" ]
+then
+	fail "Cannot read $source_data_file"
+fi
+
+echo processing $source_data_file
+
+for f in *.txt
+do
+	symbol=$(basename $f .txt|tr [a-z] [A-Z])
+	record=$(grep "^$symbol," $source_data_file|format)
+	if [ ! -z "$record" ] && ok_to_append "$date" "$f"; then
+		echo "appending $record to $f"
+		add_record "$record" $f
+	fi
+done

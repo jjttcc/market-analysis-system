@@ -1,0 +1,30 @@
+#!/bin/bash
+# Convert stock data files:  Delete all records that have 0.0 in
+# their open fields, delete the 0 open interest field at the end, and
+# insert 19 at the beginning of the date to make it year-2000 compliant.
+# (Will insert 20 if the yy date is < 40.)
+# Example record with 0 open field:
+# 881003,0.0000,43.2500,42.0000,42.5000,810500,0
+
+sort -u -n -t , +0 $*|awk 'BEGIN {
+	FS = ","
+	date = 1
+	open = 2
+	high = 3
+	low = 4
+	cclose = 5
+	volume = 6
+}
+
+($2 == 0.0) {
+	next
+}
+{
+	printf("%s,%s,%s,%s,%s,%s\n", $date, $open, $high, $low, $cclose, $volume)
+}
+
+function first2year_digits (y)
+{
+	if (y < 40) return 20
+	else return 19
+}'

@@ -1,0 +1,43 @@
+#!/bin/bash
+# Automate retrieval and processing of end-of-day data.
+
+. ~/lib/.marketenv
+PATH=$PATH:~/bin:/usr/local/bin
+result=0
+progname=$(basename $0)
+
+usage() {
+	echo "usage: $progname [yyyymmdd]"
+}
+
+if [ $# -ge 1 ]; then
+	case $1 in
+		[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]) datestring=$1 ;;
+		*) usage; exit -1 ;;
+	esac
+else
+	datestring=$(date +%Y%m%d)
+fi
+
+obtain_eod_file $datestring
+
+if [ $? -ne 0 ]
+then
+	echo "$0: failed to obtain end-of-day data." >&2
+	result=-1
+else
+	echo "$progname: Download of end-of-day data succeeded at $(date)"
+	. ~/lib/.mas_env
+	distribute_data $datestring
+	if [ $? -ne 0 ]
+	then
+		echo "$0 failed." >&2
+		result=-1
+	else
+		process_stock_splits
+		fix_prices
+		analyze_watch_lists 30001
+	fi
+fi
+
+exit $result

@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+# Fix corrupted prices for stock data - currently only fixes corrupted
+# open prices.
+
+pname=$(basename $0)
+
+usage() {
+	echo "Usage: $pname data_file ..."
+	echo "    where data_file's format is yyyymmdd,open,high,low,close,..."
+}
+cd_to_data_dir() {
+	if [ -z "$MARKET_DATA_DIRECTORY" ]; then
+		echo "$Progname: Fatal error: env. var. MARKET_DATA_DIRECTORY " \
+			"is not set"
+		exit -2
+	fi
+	cd $MARKET_DATA_DIRECTORY
+}
+
+fix() {
+awk 'BEGIN {
+	FS = ","
+	OFS = ","
+	open = 2
+	high = 3
+	low = 4
+	closex = 5
+}
+{
+	if ($open > $high) $open = $high
+	else if ($open < $low) $open = $low
+	print
+}' $1 >/tmp/$1.$$
+if cmp -s $1 /tmp/$1.$$ ; then
+	rm /tmp/$1.$$
+else
+	echo "Fixing $1."
+	# Copy instead of move in order to preserve hard links.
+	cp /tmp/$1.$$ $1
+fi
+}
+
+if [ $# -lt 1 ]; then cd_to_data_dir; files=*.txt; else files="$*"; fi
+for f in $files
+do
+	fix $f
+	# Make sure $f is group investment and -rw-rw-r--:
+	chgrp investment $f; chmod 664 $f
+done
+rm -f /tmp/*.$$

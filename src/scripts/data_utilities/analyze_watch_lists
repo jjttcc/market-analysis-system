@@ -1,0 +1,99 @@
+#!/usr/bin/env python
+# Run mas on each stock list specified by a *_watch file in the
+# data/etc directory.
+import os
+import posixpath
+import sys
+import glob
+import time
+from string import *
+Progname = posixpath.basename(sys.argv[0])
+port_number = 11887
+Sleeptime = 25
+Sleeptime = 1
+Map_file_name = 'env_map'
+
+def fatal(s):
+	print Progname + ': Fatal error: ' + s + ' - exiting ...'
+	sys.exit(-1)
+
+def usage():
+	print "Usage: %s %s\n  where:\n%s" % (Progname,
+		" [start_port_number] [-m map_file_name]",
+		"    start_port_number is the port number to start with, " +
+		"incrementing\n      by 1 for each succeeding list to be processed." +
+		"\n    map_file_name is the name of the file that containts the\n" +
+		"      watch-list/env. config file map")
+
+if len(sys.argv) > 1:
+	i = 1
+	while i < len(sys.argv):
+		if sys.argv[i][0] in digits:
+			port_number = atoi(sys.argv[i])
+		elif sys.argv[i] == "-m" and i < len(sys.argv) - 1:
+			print "Here"
+			i = i + 1
+			Map_file_name = sys.argv[i]
+		else:
+			usage()
+			sys.exit(-1)
+		i = i + 1
+mktdata_dirname = 'MARKET_DATA_DIRECTORY'
+mas_dirname = 'MAS_DIRECTORY'
+list_dir = os.environ[mktdata_dirname] + "/../etc"
+data_dir = os.environ[mktdata_dirname]
+if not posixpath.isdir(list_dir):
+	fatal(list_dir + " is not a directory.")
+
+if not posixpath.isdir(data_dir):
+	fatal(data_dir + " is not a directory.")
+
+# Return the names of all *.txt files in data_dir.
+def all_data_files():
+	prev_dir = os.getcwd()
+	os.chdir(data_dir)
+	result = ''
+	flist = glob.glob('*.txt')
+	flist.sort()
+	for x in flist:
+		result = result + ' ' + x
+	os.chdir(prev_dir)
+	return result
+
+# Return the list of data files constructed from watchlist file `f'.
+# Expected format: one symbol per line, or '*', meaning all *.txt files.
+def watchfile_list(f):
+	file = open(f, 'r', 000)
+	result = ''
+	for s in file.readlines():
+		if s[0] == '#': continue
+		if s[:-1] == '*':
+			result = all_data_files()
+			break
+		else:
+			result = result + ' ' + s[:-1] + '.txt'
+	return result
+
+# Run analyze_stocks on the list of files in `watchfile' with mas directory
+# set to env_dir and days set to `days'.
+def process_list(watchfile, env_dir, days, portnum):
+	if portnum > 0:
+		cmd = mas_dirname + '=' + env_dir + ' analyze_stocks -p ' + \
+			`portnum` + ' -d ' + days + watchfile_list(watchfile)
+	else:
+		cmd = mas_dirname + '=' + env_dir + \
+			' analyze_stocks -d ' + days + ' ' + watchfile_list(watchfile)
+	#print 'processing with command line: ' + cmd
+	os.system(cmd)
+
+os.chdir(list_dir)
+mapf_name = Map_file_name
+map_file = open(mapf_name, 'r', 000)
+if map_file == None: fatal('could not open ' + mapf_name)
+for line in map_file.readlines():
+	if line[0] == '#': continue
+	pl_args = split(line)
+	process_list(pl_args[0], pl_args[1], pl_args[2], port_number)
+	# Allow the last process to end properly before starting the next one:
+	time.sleep(Sleeptime)
+	port_number = port_number + 1
