@@ -40,29 +40,40 @@ else
 	insert=insert
 fi
 
-juju eod.${yyyydate}
+eod_file=eod.${yyyydate}
+pwd
+if [ ! -r $eod_file ]; then
+	echo "$Progname: Fatal error: Cannot read file $PWD/$eod_file." >&2; exit 1
+fi
+juju $eod_file
 
 if [ $? -ne 0 ]; then
 	echo "$Progname: fatal error: data extraction from mime file failed."
 	exit -1
 fi
 
+echo "A"
 for f in "${yydate}*.zip"
 do
 	chmod 664 $f
 	unzip $f
+echo "unzip result: $?"
 done
+echo "B"
 
 if [ $? -ne 0 ]; then
 	echo "$Progname: fatal error: unzipping of EOD file failed."
 	exit -1
 fi
+echo "C"
 
 for f in "${yydate}.*"
 do
-	cnvrt_fromdos $f
+	dos2unix $f
 	extract_data $PWD/$f $yyyydate $insert
-	rm $f
+echo "extract_data result: $?"
+	rm -f $f
 done
+echo "D"
 
-rm eod.${yyyydate}
+rm -f eod.${yyyydate}

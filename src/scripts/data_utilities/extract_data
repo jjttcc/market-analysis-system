@@ -148,27 +148,43 @@ setup() {
 	dbrecords=false
 }
 
+echo "1"
+echo dbrecords: $dbrecords
+echo dbrecords: $dbrecords
+echo "db_var_set: $(db_var_set)"
 if [ $# -lt 2 ]
 then
 	usage
 	exit -1
 fi
 
+echo "2"
 setup $*
+echo "3"
 echo processing $source_data_file
+echo "4"
 
 for s in $(symbols)
 do
+echo "5"
 	stkfile=$s.txt
+echo $stkfile:
+ls -ld $stkfile
 	symbol=$(echo $s|tr [a-z] [A-Z])
 	lowercase_symbol=$s
 	record=$(grep "^$symbol," $source_data_file|format)
+echo "record: $record"
+echo "6"
 	if [ ! -z "$record" ] && ok_to_append "$date" "$stkfile"; then
 		echo "Appending $record for $s"
 		add_record "$record" $stkfile
 	fi
+echo "7"
 done
+echo "8"
 if [ "$dbrecords" = true ]; then
 	add_daily_stock_records <$db_datafile
+echo "9"
 fi
+echo "10"
 rm -f $db_datafile

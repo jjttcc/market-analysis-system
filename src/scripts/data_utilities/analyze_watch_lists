@@ -101,7 +101,7 @@ def process_list(watchfile, env_dir, days, portnum):
 			' analyze_stocks -d ' + days
 	if not use_database():
 		cmd = cmd + ' ' + watchfile_list(watchfile)
-	#print 'processing with command line: ' + cmd
+	print 'processing with command line: ' + cmd
 	os.system(cmd)
 
 os.chdir(list_dir)
