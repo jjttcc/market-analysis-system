@@ -13,9 +13,9 @@ class STANDARD_MOVING_AVERAGE inherit
 
 	N_RECORD_ONE_VECTOR_FUNCTION
 		export {NONE}
-			set_operator
+			set_operator -- not used
 		redefine
-			action, set_input, set_n, process
+			action, set_input, set_n, do_process, operator_used
 		end
 
 creation
@@ -24,7 +24,7 @@ creation
 
 feature -- Basic operations
 
-	process is
+	do_process is
 		local
 			old_index: INTEGER
 			t: SIMPLE_TUPLE
@@ -39,21 +39,26 @@ feature -- Basic operations
 			-- value holds the sum of the first n elements of target
 			output.extend (t)
 			continue_until
-			processed := true
 		end
 
 feature {TEST_FUNCTION_FACTORY}
 
 	set_input (in: MARKET_FUNCTION) is
 		do
-			sum.set (in.output)
+			sum.set_input (in.output)
 			Precursor (in)
 		end
 
 	set_n (v: INTEGER) is
 		do
-			sum.set_n (v)
 			Precursor (v)
+			check n = v end
+			sum.initialize (Current)
+		end
+
+	operator_used: BOOLEAN is
+		do
+			Result := false
 		end
 
 feature {NONE}
