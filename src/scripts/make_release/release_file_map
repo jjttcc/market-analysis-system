@@ -27,6 +27,7 @@ src/server1/system_specific . serversrc1.6
 src/server1/database . serversrc1.6
 src/server1/external . serversrc1.6
 src/server1/Clib . serversrc1.6
+src/server1/lib . serversrc1.6
 src/server1/Ace.ace . serversrc1.6
 src/server1/test/README . serversrc1.6
 src/server1/test/run_tests . serversrc1.6
@@ -54,9 +55,13 @@ src/server1/test/input/sunw.intraday . serversrc1.6
 src/server1/test/input/test_data.intraday . serversrc1.6
 src/server1/test/input/williams.intraday . serversrc1.6
 src/server1/test/input/dj.intraday . serversrc1.6
+src/server1/test/input/FCXNC.CSF . serversrc1.6
+src/server1/test/input/S96N.CSF . serversrc1.6
+src/server1/test/input/ES01MAR.CSV . serversrc1.6
 src/server1/test/lib/rsi.awk . serversrc1.6
 src/server1/test/lib/test_files.1 . serversrc1.6
 src/server1/test/lib/test_files.2 . serversrc1.6
+src/server1/test/lib/indicators_persist . serversrc1.6
 src/server1/test/reference/README . serversrc1.6
 src/server1/test/reference/ema . serversrc1.6
 src/server1/test/reference/force_index . serversrc1.6
@@ -81,6 +86,14 @@ src/server1/test/reference/sunw_mnthly_stch%K . serversrc1.6
 src/server1/test/reference/dj_stochKintra . serversrc1.6
 src/server1/test/reference/dj_ema_int15 . serversrc1.6
 src/server1/test/reference/dj_macdsig_hourly . serversrc1.6
+src/server1/test/reference/es_ema_oi_hrly . serversrc1.6
+src/server1/test/reference/es_ema_volume_hrly . serversrc1.6
+src/server1/test/reference/fcxnc_ema_oi . serversrc1.6
+src/server1/test/reference/fcxnc_ema_oi_mthly . serversrc1.6
+src/server1/test/reference/fcxnc_ema_oi_qtrly . serversrc1.6
+src/server1/test/reference/fcxnc_ema_oi_wkly . serversrc1.6
+src/server1/test/reference/s96n_ema_oi_mthly . serversrc1.6
+src/server1/test/reference/s96n_ema_oi_wkly . serversrc1.6
 doc/mal_intro src/doc/ serversrc1.6
 doc/MAL_design_document src/doc/MAL_design_document serversrc1.6
 doc/MAS_design_document src/doc/MAS_design_document serversrc1.6
