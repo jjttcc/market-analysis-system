@@ -39,19 +39,20 @@ feature {NONE} -- Implementation
 		local
 			exc: EXCEPTIONS
 			global_server: expanded GLOBAL_SERVER
-			mds: MAS_DB_SERVICES
+			db: MAS_DB_SERVICES
 		do
-			mds := global_server.database_services
-			if not mds.connected then
-				mds.connect
+			db := global_server.database_services
+			if not db.connected then
+				db.connect
 			end
-			if not mds.fatal_error then
+			if not db.fatal_error then
 				if intraday then
-					input_sequence := mds.intraday_stock_data (current_symbol)
+					input_sequence :=
+						db.intraday_data_for_symbol (current_symbol)
 				else
-					input_sequence := mds.daily_stock_data (current_symbol)
+					input_sequence := db.daily_data_for_symbol (current_symbol)
 				end
-				if input_sequence = Void or mds.fatal_error then
+				if input_sequence = Void or db.fatal_error then
 					fatal_error := true
 				else
 					tradable_factory.set_input (input_sequence)
@@ -61,25 +62,25 @@ feature {NONE} -- Implementation
 			end
 			if fatal_error then
 				log_errors (<<"Error occurred while processing ",
-					tradable_factory.symbol, ": ", mds.last_error>>)
+					tradable_factory.symbol, ": ", db.last_error>>)
 			end
 		end
 
 	close_input_medium is
 		local
 			global_server: expanded GLOBAL_SERVER
-			mds: MAS_DB_SERVICES
+			db: MAS_DB_SERVICES
 		do
 			input_sequence.close
 			if input_sequence.error_occurred then
 				log_error (input_sequence.error_string)
 			end
 			if not global_server.command_line_options.keep_db_connection then
-				mds := global_server.database_services
-				mds.disconnect
-				if mds.fatal_error then
+				db := global_server.database_services
+				db.disconnect
+				if db.fatal_error then
 					fatal_error := true
-					log_error (mds.last_error)
+					log_error (db.last_error)
 				end
 			end
 		end
