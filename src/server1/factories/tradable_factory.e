@@ -76,9 +76,6 @@ feature -- Access
 
 feature -- Status report
 
-	no_open: BOOLEAN
-			-- Is there no opening price field in the input?
-
 	error_occurred: BOOLEAN
 			-- Did an error occur during execute?
 
@@ -94,14 +91,6 @@ feature -- Status report
 			-- Is a tradable with intraday data being created?
 
 feature -- Status setting
-
-	set_no_open (arg: BOOLEAN) is
-			-- Set no_open to `arg'.
-		do
-			no_open := arg
-		ensure
-			no_open_set: no_open = arg
-		end
 
 	set_input (arg: like input) is
 			-- Set input to `arg'.
@@ -361,9 +350,10 @@ feature {NONE} -- Implementation
 			input_not_void: input /= Void
 		local
 			expected_fields: INTEGER
+			gsf: expanded GLOBAL_SERVER_FACILITIES
 		do
 			expected_fields := 6
-			if not no_open then
+			if gsf.command_line_options.opening_price then
 				expected_fields := expected_fields + 1
 			end
 			if intraday then

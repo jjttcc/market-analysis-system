@@ -90,8 +90,6 @@ feature {NONE} -- Implementation
 	tradable_factory: TRADABLE_FACTORY is
 		do
 			create Result.make
-			Result.set_no_open (
-				not command_line_options.opening_price)
 			if command_line_options.field_separator /= Void then
 				Result.set_field_separator (
 					command_line_options.field_separator)
