@@ -62,8 +62,6 @@ feature -- Access
 			l: TRADABLE_LIST
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 		do
---!!!:
-print ("TLH.tradable called, update: " + update.out + "%N")
 			last_tradable := Void
 			reset_error_state
 			l := list_for (period_type)
@@ -73,10 +71,7 @@ print ("TLH.tradable called, update: " + update.out + "%N")
 					--here - ensure there is no conflict re. `t'.
 					l.search_by_symbol (symbol)
 					if not l.fatal_error then
---!!!!!!!!! Prevent unwanted side effects re. updated data:
---l.disable_data_updates
 						t := l.item
---l.enable_data_updates
 						if
 							t /= Void and then
 							t.valid_period_type (period_type)
@@ -134,10 +129,7 @@ print ("TLH.tradable called, update: " + update.out + "%N")
 			if intraday_market_list /= Void then
 				intraday_market_list.search_by_symbol (symbol)
 				if not intraday_market_list.fatal_error then
---!!!!!!!!! Prevent unwanted side effects re. updated data:
---intraday_market_list.disable_data_updates
 					t := intraday_market_list.item
---intraday_market_list.enable_data_updates
 				end
 				if not intraday_market_list.fatal_error then
 					target_set.fill (t.period_types.linear_representation)
@@ -161,10 +153,7 @@ print ("TLH.tradable called, update: " + update.out + "%N")
 			if not error_occurred and daily_market_list /= Void then
 				daily_market_list.search_by_symbol (symbol)
 				if not daily_market_list.fatal_error then
---!!!!!!!!! Prevent unwanted side effects re. updated data:
---daily_market_list.disable_data_updates
 					t := daily_market_list.item
---daily_market_list.enable_data_updates
 				end
 				if not daily_market_list.fatal_error then
 					target_set.fill (t.period_types.linear_representation)
