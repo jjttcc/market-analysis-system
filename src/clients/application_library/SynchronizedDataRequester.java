@@ -196,6 +196,7 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 				i < maximum_number_of_lock_attempts) {
 
 			Thread.sleep(sleep_time);
+System.out.println("lock of data builder failed - trying again"); //<-!!!!
 			data_builder.lock(this);
 			++i;
 		}
