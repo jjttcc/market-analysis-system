@@ -74,21 +74,20 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		saved_dialogs = new Vector();
 		_indicators = null;
 
-		if (sfname != null) serialize_filename = sfname;
+		serialize_filename = sfname;
 
-		if (window_count == 1) {
-			ChartSettings settings;
+		if (window_count == 1 && serialize_filename != null) {
+			ChartSettings settings = null;
 			try {
+				// Read the settings file, if it exists.
 				FileInputStream chartfile =
 					new FileInputStream(serialize_filename);
 				ObjectInputStream ios = new ObjectInputStream(chartfile);
 				settings = (ChartSettings) ios.readObject();
 				window_settings = settings;
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				// Most likely the file hasn't been created yet - no error.
-			}
-			catch (ClassNotFoundException e) {
+			} catch (ClassNotFoundException e) {
 				System.err.println("Class not found!" + e);
 			}
 		}
@@ -110,8 +109,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 					abort("Server's list of tradables is empty.", null);
 				}
 			}
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			System.err.println("IO exception occurred: " + e + " - aborting");
 			e.printStackTrace();
 			quit(-1);
@@ -508,28 +506,28 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	// Precondition: main_pane != null
 	protected void save_settings() {
 		if (serialize_filename != null) {
-		try {
-			FileOutputStream chartfile =
-				new FileOutputStream(serialize_filename);
-			ObjectOutputStream oos = new ObjectOutputStream(chartfile);
-			ChartSettings cs = new ChartSettings(main_pane.getSize(),
-				main_pane.print_properties, getLocation(),
-				current_upper_indicators, current_lower_indicators,
-				replace_indicators);
-			for (int i = 0; i < saved_dialogs.size(); ++i) {
-				Dialog d = (Dialog) saved_dialogs.elementAt(i);
-				WindowSettings ws = new WindowSettings(
-					d.getSize(), d.getLocation());
-				cs.add_window_setting(ws, d.getTitle());
+			try {
+				FileOutputStream chartfile =
+					new FileOutputStream(serialize_filename);
+				ObjectOutputStream oos = new ObjectOutputStream(chartfile);
+				ChartSettings cs = new ChartSettings(main_pane.getSize(),
+					main_pane.print_properties, getLocation(),
+					current_upper_indicators, current_lower_indicators,
+					replace_indicators);
+				for (int i = 0; i < saved_dialogs.size(); ++i) {
+					Dialog d = (Dialog) saved_dialogs.elementAt(i);
+					WindowSettings ws = new WindowSettings(
+						d.getSize(), d.getLocation());
+					cs.add_window_setting(ws, d.getTitle());
+				}
+				oos.writeObject(cs);
+				oos.flush();
+				oos.close();
 			}
-			oos.writeObject(cs);
-			oos.flush();
-			oos.close();
-		}
-		catch (IOException e) {
-			System.err.println("Could not save file " + serialize_filename);
-			System.err.println(e);
-		}
+			catch (IOException e) {
+				System.err.println("Could not save file " + serialize_filename);
+				System.err.println(e);
+			}
 		}
 	}
 
