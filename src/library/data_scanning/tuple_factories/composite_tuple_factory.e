@@ -13,6 +13,11 @@ class COMPOSITE_TUPLE_FACTORY inherit
 			product
 		end
 
+	COMMAND_EDITOR -- To allow setting parameters of high_finder, ...
+		export
+			{NONE} all
+		end
+
 feature -- Access
 
 	product: COMPOSITE_TUPLE
