@@ -8,7 +8,9 @@ user id
 password	
 # Query for stock symbols
 #stock symbol query	select symbol from stock_information order by symbol
-stock symbol query	select symbol from watch_list where category = 'all' order by symbol
+# ('\' at the end of the line continues the command on the next line)
+stock symbol query	select symbol from watch_list where category = 'all' \
+order by symbol
 # Query for derivatives symbols
 derivative symbol query	select symbol from derivative_information order by symbol
 
@@ -17,14 +19,19 @@ derivative symbol query	select symbol from derivative_information order by symbo
 # results must be sorted by date, ascending
 stock split query	select date, symbol, value from stock_split order by date
 # Query for stock name
-# <symbol> indicates where to plug in the actual stock symbol and must
-# occur somewhere in the query string.
-stock name query	select name from stock_information where symbol = <symbol>
+# <uppersymbol> indicates where to plug in the actual stock symbol and must
+# occur somewhere in the query string.  (The term "upper" indicates that
+# the symbol is to be converted to upper case for the query; to specify
+# that the symbol remain in lower case, use <symbol> instead of <uppersymbol>.
+stock name query	select name from stock_information where symbol = \
+<uppersymbol>
 # Query for derivative instrument name
-# <symbol> indicates where to plug in the actual stock symbol and must
-# occur somewhere in the query string.
-derivative name query	select name from derivative_information where symbol = <symbol>
+derivative name query	select name from derivative_information where \
+symbol = <uppersymbol>
 
+#
+daily stock data command	select date, open_price, high_price, low_price, \
+close_price, volume from daily_stock_data where symbol = <uppersymbol>
 # Field names for daily stock data table
 # NOTE: All specified fields must be defined in the database as "not null".
 daily stock symbol field	symbol
