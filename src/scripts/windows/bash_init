@@ -28,3 +28,4 @@ echo replaceend>>$specfile
 config_tool  -c  $specfile -f ../mctrc
 if [ ! -d "$mctdir" ]; then mkdir -p "$mctdir";fi
 cp ../mctrc "$mctdir"
+>finished
