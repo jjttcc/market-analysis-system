@@ -70,15 +70,22 @@ feature {NONE} -- Access
 			end
 		end
 
-	new_event_type (name: STRING): EVENT_TYPE is
-			-- Create a new EVENT_TYPE with name `name'.
-			-- Note: A new MARKET_EVENT_GENERATOR should be created with
-			-- this new event type and added to market_event_generation_library
-			-- before the next event type is created.
+	create_event_generator (eg_maker: EVENT_GENERATOR_FACTORY;
+				event_type_name: STRING) is
+			-- Create a new MARKET_EVENT_GENERATOR and a new associated
+			-- EVENT_TYPE (with `event_type_name') and add the new
+			-- MARKET_EVENT_GENERATOR  to `market_event_generation_library'.
+		require
+			not_void: eg_maker /= Void and event_type_name /= Void
 		do
-			!!Result.make (name, market_event_generation_library.count + 1)
+			eg_maker.set_event_type (new_event_type (event_type_name))
+			eg_maker.execute
+			market_event_generation_library.extend (eg_maker.product)
 		ensure
-			not event_types.has (Result)
+			one_more_eg: market_event_generation_library.count = 
+				old market_event_generation_library.count + 1
+			product_in_library: eg_maker.product /= Void and
+				market_event_generation_library.has (eg_maker.product)
 		end
 
 	function_library: LIST [MARKET_FUNCTION] is
@@ -213,6 +220,19 @@ feature {NONE} -- Constants
 		once
 			Result := ta_env.file_name_with_app_directory (
 						"registrants_persist")
+		end
+
+feature {NONE} -- Implementation
+
+	new_event_type (name: STRING): EVENT_TYPE is
+			-- Create a new EVENT_TYPE with name `name'.
+			-- Note: A new MARKET_EVENT_GENERATOR should be created with
+			-- this new event type and added to market_event_generation_library
+			-- before the next event type is created.
+		do
+			!!Result.make (name, market_event_generation_library.count + 1)
+		ensure
+			not event_types.has (Result)
 		end
 
 end -- GLOBAL_APPLICATION
