@@ -36,22 +36,9 @@ Source: "bin\runmasf.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\runmasgui.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\fake_mailer.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\run_command.bat"; DestDir: "{app}\bin\"; CopyMode: alwaysoverwrite
-;!!!remove:
-;Source: "bin\init.bat"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "bin\install_tool.exe"; DestDir: "{app}\lib"; CopyMode: alwaysoverwrite
 Source: "bin\cleanup.bat"; DestDir: "{app}\lib"; CopyMode: alwaysoverwrite
-; bash, sed, cygwin1.dll, etc. are needed for the bash_init init. script.
-Source: "bin\bash.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
-Source: "bin\sed.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
-Source: "bin\mkdir.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
-Source: "bin\cp.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
-Source: "bin\sleep.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
-Source: "bin\cygwin1.dll"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "bin\config_tool.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
-Source: "bin\bash_init"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
-;!!!Reminder: When everything is tested and working, add a statement to the
-;bash script to "clean up" (remove) these "installation utilities".  (Then
-;test that, of course.)
 Source: "lib\nt_repl_spec"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "lib\pre_nt_repl_spec"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "doc\README.txt"; DestDir: "{app}\doc"; CopyMode: alwaysoverwrite
@@ -120,21 +107,13 @@ Source: "lib\python\ma_protocol.py"; DestDir: "{app}\lib\python"; CopyMode: alwa
 Source: "lib\python\CommandProcessor.py"; DestDir: "{app}\lib\python"; CopyMode: alwaysoverwrite
 
 [Icons]
-Name: "{group}\Main MAS Terminal"; Filename: "{app}\bin\mct.exe"
-Name: "{userdesktop}\Main MAS Terminal"; Filename: "{app}\bin\mct.exe"; MinVersion: 4,4; Tasks: desktopicon
+Name: "{group}\MAS"; Filename: "{app}\bin\mct.exe"
+Name: "{userdesktop}\MAS"; Filename: "{app}\bin\mct.exe"; MinVersion: 4,4; Tasks: desktopicon
 
 [Messages]
 FinishedLabel=Setup has finished installing [name] on your computer. The application may be launched by selecting the installed icons.%n%nNote: The [name] environment settings may not take effect right away.  If the [name] fails to run at first on your system, this may be the cause.  This can be fixed on Windows 95, 98, and Me systems by rebooting and on Windows NT, 2000, and XP systems by doing either of the following:%n%nLog out and then log back in or%n%nRight-click on "My Computer", select "Properties", Select the "Environment" settings, and left-click on the "OK" button.
 
 [Run]
-;Filename: "{app}\lib\install_tool.exe"; Parameters: "{app}"; Flags: shellexec
 Filename: "{app}\lib\install_tool.exe"; Parameters: "{app}";
 Filename: "{app}\lib\cleanup"; Parameters: ""; Flags: shellexec runminimized
 ; Filename: "{app}\bin\runmas.bat"; Description: "Launch Market Analysis System"; Flags: nowait postinstall skipifsilent
-
-;!!!!!!!NOTE: These registry settings are probably no longer needed -
-;!!!!!!!mct (with the mctrc config. file) now takes care of this.
-;!!!They're commented out - remove them if they are indeed not needed.
-;[Registry]
-; Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "MAS_DIRECTORY"; ValueData: "{app}\lib"
-; Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "PATH"; ValueData: "{app}\bin"
