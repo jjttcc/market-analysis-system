@@ -10,7 +10,7 @@ class
 feature
 
 	n: INTEGER
-			-- The length of the sub-vector to be analyzed
+			-- The length of the sub-list to be analyzed
 
 feature {NONE} -- Element change
 
