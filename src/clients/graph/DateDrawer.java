@@ -205,7 +205,7 @@ public class DateDrawer extends Drawer {
 		double width_factor;
 
 		width_factor = width_factor_value(bounds);
-		x = (int)((p.right() - xmin) * width_factor + bounds.x);
+		x = (int)(p.right() * width_factor + bounds.x);
 		year_x = x + Year_x_offset;
 		g.setColor(conf.text_color());
 		if (line) {
