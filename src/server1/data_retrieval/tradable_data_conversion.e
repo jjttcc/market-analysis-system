@@ -193,17 +193,14 @@ feature {NONE} -- Implemenation
 				if fs_count = expected_fs_occurrences then
 					Result := year + month + day + l.substring (
 						l.index_of (yahoo_field_separator, 1), l.count) + "%N"
-print ("Found expected # of fields%N")
 				elseif fs_count > expected_fs_occurrences then
 					Result := year + month + day + l.substring (l.index_of (
 						yahoo_field_separator, 1), l.last_index_of (
 						yahoo_field_separator, l.count) - 1) + "%N"
-print ("Found " + fs_count.out + " fields (" + l + ")%N")
 				else
 					check
 						not_enough_fields: fs_count < expected_fs_occurrences
 					end
-print ("Not enough fields: " + fs_count.out + " (" + l + ")%N")
 					--@@ Report the error.
 				end
 				if output_field_separator /= yahoo_field_separator then
