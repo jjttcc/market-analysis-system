@@ -6,7 +6,9 @@ indexing
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
+	licensing: "!!!!Need to change this, since it uses code from %
+		%LINEAR_ITERATOR from EiffelBase 4.x.%
+		%Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
 class
