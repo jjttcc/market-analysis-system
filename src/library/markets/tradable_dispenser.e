@@ -40,15 +40,17 @@ feature -- Access
 		require
 			not_empty: not empty
 			not_void: symbol /= Void and period_type /= Void
-			period_type_valid: valid_period_type (symbol, period_type)
 		deferred
 		ensure
 			period_type_valid: Result /= Void implies
-				Result.period_types.has (period_type.name)
+				Result.valid_period_type (period_type)
 			last_tradable_set: last_tradable = Result
-			not_void_if_no_error: not error_occurred implies Result /= Void
+			not_void_if_valid_and_no_error: not error_occurred and
+				valid_period_type (symbol, period_type) implies Result /= Void
 			intraday_correspondence: Result /= Void implies
 				period_type.intraday = Result.trading_period_type.intraday
+			void_if_not_valid: not valid_period_type (symbol, period_type)
+				implies Result = Void
 		end
 
 	tuple_list (symbol: STRING; period_type: TIME_PERIOD_TYPE):
