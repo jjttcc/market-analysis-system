@@ -34,7 +34,7 @@ public class LineDrawer extends IndicatorDrawer {
 
 		// Is there any data to draw? Sometimes the draw command will
 		// will be called before any data has been placed in the class.
-		if (_data == null || lngth < 1) return;
+		if (lngth == 0 || _x_values == null) return;
 
 		g.setColor(draw_color);
 		height_factor = height_factor_value(bounds);

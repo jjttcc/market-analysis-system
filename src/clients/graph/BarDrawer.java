@@ -22,14 +22,14 @@ public class BarDrawer extends IndicatorDrawer {
 		int i, row;
 		int x, y;
 		int lngth = 0;
+		int[] _x_values = x_values();
 		if (_data != null) lngth = data_length();
-		if (lngth == 0) return;
+		if (lngth == 0 || _x_values == null) return;
 
 		int _bar_width = bar_width();
 		double height_factor;
 		int x_s[] = new int[4], y_s[] = new int[4];
 		Configuration conf = Configuration.instance();
-		int[] _x_values = x_values();
 		if (draw_color == null) draw_color = conf.bar_color();
 
 		// Is there any data to draw? Sometimes the draw command will
@@ -41,7 +41,7 @@ public class BarDrawer extends IndicatorDrawer {
 		height_factor = height_factor_value(bounds);
 		row = first_row() - 1;
 		for (i = 0; row < lngth; ++i, ++row) {
-			 x = _x_values[row] + 1;
+			x = _x_values[row] + 1;
 			y = (int)(bounds.height - (_data[i]-ymin) * height_factor +
 					bounds.y);
 			x_s[0] = x; x_s[1] = x + _bar_width;
