@@ -48,9 +48,13 @@ feature -- Constants
 
 	Command_name_specifier: STRING is "command_name"
 
+	User_definition_specifier: STRING is "define"
+
 	Mark_specifier: STRING is "mark"
 
 	Valid_port_numbers_separator: CHARACTER is ','
+
+	User_definition_separator: CHARACTER is ':'
 
 	Default_mark: STRING is "default"
 

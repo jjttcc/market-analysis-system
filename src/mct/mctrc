@@ -3,23 +3,23 @@
 
 # Special symbols:
 #   <portnumber> - The MAS server port number for the current session
-#   <data_dir> - The directory where data files reside; has the value
-#                specified by the data_dir setting
-#   <bin_dir> - The directory where the MAS executables reside; has the
-#               value specified by the bin_dir setting
-#   <doc_dir> - The directory where documentation files reside; has the value
-#                specified by the doc_dir setting
 #   <hostname> - The name of the network host upon which the server is
 #                running; has the value specified by the hostname setting.
 
+# User-defined variables: A user-defined "variable" can be defined using
+# the "define" label, with the format: "define<tab>var-name:value-name"
+# where var-name specifies the variable name and value-name specifies the
+# value for the variable.  The variable can then be used in definitions
+# that follow by surrounding it with <>, e.g.: <var1>/<var2>.
+
 # Directory where file-based data resides
-data_dir	/opt/mas/lib/data/tradables
+define	data_dir:/opt/mas/lib/data/tradables
 
 # Directory where the MAS executables reside
-bin_dir	/opt/mas/bin
+define	bin_dir:/opt/mas/bin
 
 # Directory where the documentation files reside
-doc_dir	/home/development/jtc/finance/doc
+define	doc_dir:/home/development/jtc/finance/doc
 
 # Valid port numbers for use by the MAS server
 valid_portnumbers	10101,10102,10103,10104,20102,20103,20104,30101,30102,\
@@ -33,7 +33,7 @@ hostname	localhost
 
 # Detailed version of command to start the server: data from files
 begin	start_server_command
-command	cd <data_dir>; <bin_dir>/mas -o -f , -b <portnumber> *.txt
+command	<bin_dir>/mas -o -f , -b <portnumber> <data_dir>/*.txt
 command_description	Get data from files
 command_name	File-based
 end

@@ -58,6 +58,11 @@ feature {NONE} -- Initialization
 			settings.extend ("", Browse_docs_cmd_specifier)
 			settings.extend ("", Browse_intro_cmd_specifier)
 			settings.extend ("", Browse_faq_cmd_specifier)
+			create user_defined_variables.make (1, 0)
+			create user_defined_values.make (1, 0)
+		ensure
+			zero_counts: user_defined_variables.count = 0 and
+				user_defined_values.count = 0
 		end
 
 feature -- Access
@@ -176,6 +181,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	post_process_settings is
 		do
+report (user_defined_variables, user_defined_values)
 			settings.linear_representation.do_all (
 				agent replace_configuration_tokens)
 			if not settings.item (Start_server_cmd_specifier).is_empty then
@@ -224,8 +230,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 	check_results is
 		do
 			create error_report.make (0);
-			check_for_empty_fields (<<Data_directory_specifier,
-				Bin_directory_specifier, Doc_directory_specifier,
+			check_for_empty_fields (<<
 				Valid_port_numbers_specifier, Hostname_specifier,
 				Start_cl_client_cmd_specifier, Chart_cmd_specifier,
 				Termination_cmd_specifier, Browse_docs_cmd_specifier,
@@ -244,17 +249,32 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	use_customized_setting (key, value: STRING): BOOLEAN is
 		do
-			if config_file.in_block or config_file.at_end_of_block then
+			if
+				config_file.in_block or config_file.at_end_of_block or
+				equal (key, User_definition_specifier)
+			then
 				Result := True
 			end
 		end
 
 	do_customized_setting (key, value: STRING) is
 		do
-			check
-				in_or_at_end_of_block:
-					config_file.in_block xor config_file.at_end_of_block
+			if equal (key, User_definition_specifier) then
+				process_user_definition (value)
+			else
+				check
+					in_or_at_end_of_block:
+						config_file.in_block xor config_file.at_end_of_block
+				end
+				process_block (key, value)
 			end
+		end
+
+	process_block (key, value: STRING) is
+		require
+			in_or_at_end_of_block: config_file.in_block xor
+				config_file.at_end_of_block
+		do
 			if config_file.current_block_is_start_server_cmd then
 				if config_file.in_block then
 					process_start_server_cmd (key, value)
@@ -277,12 +297,23 @@ feature {NONE} -- Implementation - Hook routine implementations
 feature {NONE} -- Implementation
 
 	replace_configuration_tokens (s: STRING) is
+		local
+			keys, values: ARRAY [STRING]
+			cp_start_index: INTEGER
 		do
-			replace_tokens (s, <<Data_directory_specifier,
-				Bin_directory_specifier, Hostname_specifier,
-				Doc_directory_specifier>>,
-				<<data_directory, bin_directory, hostname, doc_directory>>,
+print ("rct started - s: " + s + "%N")
+			keys := <<Hostname_specifier>>
+			values := <<hostname>>
+			cp_start_index := keys.upper + 1
+			keys.resize (1, keys.upper + user_defined_variables.count)
+			values.resize (1, keys.upper)
+			keys.subcopy (user_defined_variables, 1,
+				user_defined_variables.upper, cp_start_index)
+			values.subcopy (user_defined_values, 1,
+				user_defined_variables.upper, cp_start_index)
+			replace_tokens (s, keys, values,
 				Token_start_delimiter, Token_end_delimiter)
+print ("rct finished - s: " + s + "%N")
 		end
 
 	process_start_server_cmd (key, value: STRING) is
@@ -320,6 +351,38 @@ feature {NONE} -- Implementation
 				default_start_server_command := c
 			end
 			start_server_commands.extend (c)
+		end
+
+	process_user_definition (value: STRING) is
+			-- Process a user-defined variable definition
+		local
+			i: INTEGER
+		do
+print ("Processing user def - value: " + value + "%N")
+			i := value.index_of (User_definition_separator, 1)
+			if i < 2 then
+				error_report.append ("Incorrect format for user-defined %
+					%variable: " + value + "%N(at line " +
+					current_line.out + ").%N")
+			else
+				user_defined_variables.force (value.substring (1, i - 1),
+					user_defined_variables.upper + 1)
+				user_defined_values.force (value.substring (i + 1,
+					value.count), user_defined_values.upper + 1)
+				check
+					at_least_one: user_defined_variables.item (
+						user_defined_variables.upper).count > 0
+				end
+			end
+print ("user def result - var name: '" + user_defined_variables.item (
+user_defined_variables.upper) + "'%N")
+print ("user def result - value: '" + user_defined_values.item (
+user_defined_values.upper) + "'%N")
+print ("(array bounds now: " +
+user_defined_values.lower.out + ", " +
+user_defined_values.upper.out + "; " +
+user_defined_values.lower.out + ", " +
+user_defined_values.upper.out + ")%N")
 		end
 
 	check_field (key: STRING) is
@@ -366,6 +429,27 @@ feature {NONE} -- Implementation
 			Result.object_comparison
 		end
 
+	user_defined_variables: ARRAY [STRING]
+			-- User-defined variable names
+
+	user_defined_values: ARRAY [STRING]
+			-- User-defined values, one for each element
+			-- of `user_defined_variables'
+
+report (vars, vals: ARRAY [STRING]) is
+local
+	i: INTEGER
+do
+	from
+		i := vars.lower
+	until
+		i > vars.upper
+	loop
+		print (vars @ i + " set to: " + vals @ i + "%N")
+		i := i + 1
+	end
+end
+
 invariant
 
 	default_start_server_command_exists: default_start_server_command /= Void
@@ -374,5 +458,10 @@ invariant
 		start_command_line_client_command /= Void
 	chart_command_exists: chart_command /= Void
 	termination_command_exists: termination_command /= Void
+	user_defined_arrays_exist: user_defined_variables /= Void and
+		user_defined_values /= Void
+	user_defined_arrays_match:
+		user_defined_variables.lower = user_defined_values.lower and
+		user_defined_variables.upper = user_defined_values.upper
 
 end
