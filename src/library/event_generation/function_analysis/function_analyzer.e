@@ -10,11 +10,6 @@ deferred class FUNCTION_ANALYZER inherit
 
 	EVENT_GENERATOR
 
-	GLOBAL_SERVICES
-		export {NONE}
-			all
-		end
-
 feature -- Access
 
 	start_date_time: DATE_TIME
@@ -72,7 +67,7 @@ feature -- Basic operations
 						description /= Void
 		local
 			s: STRING
-			event: MARKET_EVENT
+			event: ATOMIC_MARKET_EVENT
 		do
 			--!!!Do we need another date/time field in the event, so
 			--!!!that the event generation time, as well as the time
@@ -84,18 +79,6 @@ feature -- Basic operations
 			description.prepend (s)
 			event.set_description (description)
 			product.extend (event)
-		end
-
-feature {NONE} -- Implementation
-
-	set_event_type (name: STRING) is
-			-- Create an event type with name `name', add it to the global
-			-- event table, and set attribute event_type to it.
-		do
-			create_event_type (name)
-			event_type := last_event_type
-		ensure
-			event_type /= Void
 		end
 
 feature {NONE} -- Hook routines

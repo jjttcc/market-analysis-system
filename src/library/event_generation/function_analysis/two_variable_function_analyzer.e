@@ -64,7 +64,7 @@ feature -- Basic operations
 
 	execute is
 		do
-			!LINKED_LIST [EVENT]!product.make
+			!LINKED_LIST [MARKET_EVENT]!product.make
 			if not input1.processed then
 				input1.process
 			end
