@@ -7,11 +7,6 @@ indexing
 
 class FACTORY_BUILDER inherit
 
-	ARGUMENTS
-		export {NONE}
-			all
-		end
-
 	EXCEPTIONS
 		export {NONE}
 			all
@@ -27,6 +22,11 @@ class FACTORY_BUILDER inherit
 			all
 		end
 
+	GLOBAL_SERVER
+		export {NONE}
+			all
+		end
+
 creation
 
 	make
@@ -35,16 +35,18 @@ feature -- Initialization
 
 	make is
 		do
-			!ARRAYED_LIST [STRING]!input_file_names.make (argument_count)
-			process_args
+			set_up
 		ensure
 			ml_not_void: market_list /= Void
 		end
 
 feature -- Access
 
-	input_file_names: LIST [STRING]
-			-- List of all specified input file names
+    input_file_names: LIST [STRING] is
+            -- List of all specified input file names
+		do
+			Result := command_line_options.file_names
+		end
 
 	market_list: TRADABLE_LIST
 			-- Tradable list made from input file data
@@ -54,32 +56,25 @@ feature -- Access
 
 feature {NONE}
 
-	usage is
-		do
-			-- !!!Usage situation needs to be worked on.
-			print (concatenation (<<"Usage: ", argument (0),
-				" [port_number] [-background]%
-				% [input_file ...] [-o] [-f field_separator]%N%
-				%    Where:%N        -o = data has an open field%N">>))
-		end
-
-	process_args is
-			-- Process command-line arguments, including, for each input
-			-- file name in the arguments, adding the name to the
-			-- input_file_names list.  Also, make a factory list for the
-			-- market_list.  For now, these will all be STOCK_FACTORYs.
+	set_up is
+			-- Build components and set up relationships, including
+			-- making a factory list for the market_list.  (For now, these
+			-- will all be STOCK_FACTORYs.)
 		local
 			i: INTEGER
-			no_open: BOOLEAN
-			fs: STRING
 			file: PLAIN_TEXT_FILE
 			tradable_factories: LINKED_LIST [TRADABLE_FACTORY]
 			tradable_factory: TRADABLE_FACTORY
 			hc_function_factory: HARD_CODED_FUNCTION_BUILDER
 		do
 			!!hc_function_factory.make
-			no_open := true
 			!STOCK_FACTORY!tradable_factory.make
+			tradable_factory.set_no_open (
+				not command_line_options.opening_price)
+			if command_line_options.field_separator /= Void then
+				tradable_factory.set_field_separator (
+					command_line_options.field_separator)
+			end
 			check
 				flist_not_void: function_library /= Void
 			end
@@ -95,39 +90,16 @@ feature {NONE}
 			end
 			tradable_factory.set_indicators (function_library)
 			!!tradable_factories.make
-			from
-				--!!!What to do about args now?  Cheat for now:
-				i := 2
-			until
-				i > argument_count
-			loop
-				if argument (i) @ 1 = '-' and argument (i).count > 1 then
-					if argument (i) @ 2 = 'o' then
-						no_open := false
-					elseif argument (i) @ 2 = 'b' then
-						-- background flag - no action here
-					elseif
-						argument (i) @ 2 = 'f' and argument_count > i
-					then
-						i := i + 1
-						fs := argument (i)
-					else
-						usage
-						die (-1) -- kludgey exit for now
-					end
-				else
-					input_file_names.extend (argument (i))
-					-- Add a factory for each file name.  Since some files
-					-- may be for different types of markets, in the future,
-					-- different types of factories may be created and
-					-- added to the tradable_factories list.
-					tradable_factories.extend (tradable_factory)
-				end
+			-- Add a factory for each file name.  Since some files
+			-- may be for different types of markets, in the future,
+			-- different types of factories may be created and
+			-- added to the tradable_factories list.
+			from i := 1 until i = input_file_names.count + 1 loop
+				tradable_factories.extend (tradable_factory)
 				i := i + 1
 			end
-			tradable_factory.set_no_open (no_open)
-			if fs /= Void then
-				tradable_factory.set_field_separator (fs)
+			check
+				same_count: tradable_factories.count = input_file_names.count
 			end
 			build_components (tradable_factories)
 		end
