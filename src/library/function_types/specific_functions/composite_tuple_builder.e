@@ -14,7 +14,8 @@ class COMPOSITE_TUPLE_BUILDER inherit
 		rename
 			target as source_list, make as ovf_make
 		redefine
-			process, output, source_list, operator_used, input
+			process, output, source_list, operator_used, input,
+			trading_period_type
 		end
 
 creation {FACTORY}
@@ -24,62 +25,40 @@ creation {FACTORY}
 feature {NONE} -- Initialization
 
 	make (in: like input; ctf: COMPOSITE_TUPLE_FACTORY;
-			dur: DATE_TIME_DURATION) is
+			time_period_type: TIME_PERIOD_TYPE) is
+		require
+			not_void: in /= Void and ctf /= Void and time_period_type /= Void
 		do
 			ovf_make (in, Void)
 			set_tuple_maker (ctf)
-			set_duration (dur)
+			set_trading_period_type (time_period_type)
+		ensure
+			set: tuple_maker = ctf and tuple_maker /= Void and
+				trading_period_type = time_period_type and
+				trading_period_type /= Void
+			input_set: input = in and input /= Void
 		end
 
-feature -- Basic operations
+feature -- Access
 
-	process (start_date: DATE_TIME) is
-			-- Make a list of COMPOSITE_TUPLE
-		local
-			src_sublist: ARRAYED_LIST [BASIC_MARKET_TUPLE]
-			current_date: DATE_TIME
+	output: MARKET_TUPLE_LIST [COMPOSITE_TUPLE]
+			-- Resulting list of tuples
+
+	duration: DATE_TIME_DURATION is
+			-- Duration of the composite tuples to be created
 		do
-			from
-				check output /= Void and output.empty end
-				!!src_sublist.make (0)
-				source_list.start
-				current_date := start_date
-				check output.count = 0 end
-			invariant
-				output.count > 1 implies ((output.last.date_time -
-					output.i_th (
-					output.count - 1).date_time).duration.is_equal (duration))
-			until
-				source_list.after
-			loop
-				from
-					-- Remove all previously inserted items.
-					src_sublist.wipe_out
-					check not source_list.after end
-					src_sublist.extend (source_list.item)
-					source_list.forth
-				invariant
-					(src_sublist.last.date_time <
-						current_date + duration)
-					-- src_sublist is sorted by date_time
-				until
-					source_list.after or
-						source_list.item.date_time >=
-							current_date + duration
-				loop
-					src_sublist.extend (source_list.item)
-					source_list.forth
-				end
-				tuple_maker.execute (src_sublist)
-				tuple_maker.product.set_date_time (current_date)
-				--!!!When implemented, use the flyweight date_time table.
-				current_date := current_date + duration
-				output.extend (tuple_maker.product)
-			end
-		ensure then
-			output.count > 0 implies times_correct and
-				output.first.date_time.is_equal (start_date)
+			Result := trading_period_type.duration
+		ensure
+			period_type_duration: Result = trading_period_type.duration
 		end
+
+	trading_period_type: TIME_PERIOD_TYPE
+
+	source_list: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]
+			-- Tuples used to manufacture output
+
+	tuple_maker: COMPOSITE_TUPLE_FACTORY
+			-- Factory used to create tuples
 
 feature -- Status report
 
@@ -125,20 +104,6 @@ feature -- Status report
 
 	operator_used: BOOLEAN is false
 
-feature -- Access
-
-	output: MARKET_TUPLE_LIST [COMPOSITE_TUPLE]
-			-- Resulting list of tuples
-
-	duration: DATE_TIME_DURATION
-			-- Duration of the composite tuples to be created
-
-	source_list: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]
-			-- Tuples used to manufacture output
-
-	tuple_maker: COMPOSITE_TUPLE_FACTORY
-			-- Factory used to create tuples
-
 feature -- Element change
 
 	set_tuple_maker (f: COMPOSITE_TUPLE_FACTORY) is
@@ -151,13 +116,67 @@ feature -- Element change
 			set: tuple_maker = f and f /= Void
 		end
 
-	set_duration (d: DATE_TIME_DURATION) is
+	set_trading_period_type (arg: TIME_PERIOD_TYPE) is
+			-- Set trading_period_type to `arg'.
 		require
-			d /= Void
+			arg /= Void
 		do
-			duration := d
+			trading_period_type := arg
 		ensure
-			duration_set: duration = d and duration /= Void
+			trading_period_type_set: trading_period_type = arg and
+				trading_period_type /= Void
+		end
+
+feature -- Basic operations
+
+	process (start_date: DATE_TIME) is
+			-- Make a list of COMPOSITE_TUPLE
+		local
+			src_sublist: ARRAYED_LIST [BASIC_MARKET_TUPLE]
+			current_date: DATE_TIME
+		do
+			from
+				check
+					output_empty: output /= Void and output.empty
+				end
+				!!src_sublist.make (0)
+				source_list.start
+				current_date := start_date
+				check output.count = 0 end
+			invariant
+				output.count > 1 implies ((output.last.date_time -
+					output.i_th (
+					output.count - 1).date_time).duration.is_equal (duration))
+			until
+				source_list.after
+			loop
+				from
+					-- Remove all previously inserted items.
+					src_sublist.wipe_out
+					check not source_list.after end
+					src_sublist.extend (source_list.item)
+					source_list.forth
+				invariant
+					(src_sublist.last.date_time <
+						current_date + duration)
+					-- src_sublist is sorted by date_time
+				until
+					source_list.after or
+						source_list.item.date_time >=
+							current_date + duration
+				loop
+					src_sublist.extend (source_list.item)
+					source_list.forth
+				end
+				tuple_maker.execute (src_sublist)
+				tuple_maker.product.set_date_time (current_date)
+				--!!!When implemented, use the flyweight date_time table.
+				current_date := current_date + duration
+				output.extend (tuple_maker.product)
+			end
+		ensure then
+			output.count > 0 implies times_correct and
+				output.first.date_time.is_equal (start_date)
 		end
 
 feature {NONE}
@@ -180,5 +199,6 @@ invariant
 		--duration is less than that of the time period duration.
 		--(For example, make weekly from daily, but daily from weekly
 		--of weekly from weekly doesn't make sense.)
+	trading_period_type_not_void: trading_period_type /= Void
 
 end -- COMPOSITE_TUPLE_BUILDER
