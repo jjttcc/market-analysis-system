@@ -47,23 +47,23 @@ public class DataSetBuilder extends AbstractDataSetBuilder {
 	}
 
 	protected void post_process_market_data(DataSet data, String symbol,
-			String period_type) {
+			String period_type, boolean new_data_set) {
 
 		((DrawableDataSet) data).set_drawer(main_drawer);
 	}
 
 	protected void post_process_indicator_data(DataSet data, String symbol,
-			String period_type) {
+			String period_type, boolean new_data_set) {
 	}
 
 	protected void post_process_volume_data(DataSet data,
-			String symbol, String period_type) {
+			String symbol, String period_type, boolean new_data_set) {
 
 		((DrawableDataSet) data).set_drawer(volume_drawer);
 	}
 
 	protected void post_process_open_interest_data(DataSet data,
-			String symbol, String period_type) {
+			String symbol, String period_type, boolean new_data_set) {
 
 		((DrawableDataSet) data).set_drawer(open_interest_drawer);
 	}

@@ -33,6 +33,11 @@ public class Configuration implements NetworkProtocol {
 		return debug_;
 	}
 
+	// Is the "auto-data-refresh" feature available?
+	public boolean auto_refresh() {
+		return false;	// No - redefine if auto-refresh is to be used.
+	}
+
 // Element change
 
 	// Set the input source to be used for configuration input.

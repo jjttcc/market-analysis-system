@@ -51,7 +51,7 @@ class ChartSettings implements Serializable {
 
 /** Market analysis GUI chart component */
 public class Chart extends Frame implements Runnable, NetworkProtocol,
-	AssertionConstants, ChartInterface {
+	AssertionConstants, ChartInterface, TimeDelimitedDataRequestClient {
 
 // Initialization
 
@@ -112,6 +112,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 			s = (String) _tradables.elementAt(0);
 		}
 		initialize_GUI_components(s);
+		post_initialize();
 	}
 
 
@@ -138,6 +139,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	// indicators
 	// Postcondition: result != null
 	public Hashtable indicators() {
+//!!!Change to use 'tradable_specification.indicator_specs'
 		Hashtable result = null;
 		if (_indicators == null || new_indicators) {
 			new_indicators = false;
@@ -190,14 +192,16 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		return result;
 	}
 
-	// Current selected tradable
+	// Symbol for current selected tradable
 	public String current_tradable() {
-		return current_tradable;
+		return tradable_specification.symbol();
+//!!!REMOVE: return current_tradable;
 	}
 
 	// Current selected period_type
 	public String current_period_type() {
-		return current_period_type;
+		return tradable_specification.period_type();
+//!!!REMOVE: return current_period_type;
 	}
 
 	// Valid trading period types for the current tradable
@@ -205,10 +209,23 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		return _period_types;
 	}
 
-//!!!Possibly, the latest_date_time attribute is not needed in this class.
-	// The latest date-time in the data set associated with this chart
-	public Calendar latest_date_time() {
-		return latest_date_time;
+// Access - TimeDelimitedDataRequestClient API
+
+	public Calendar start_date() {
+		return protocol_util.one_second_later(latest_date_time);
+	}
+
+	public Calendar end_date() {
+		// null represents "now".
+		return null;
+	}
+
+	public TradableDataSpecification specification() {
+		return tradable_specification;
+	}
+
+	public AbstractDataSetBuilder data_builder() {
+		return data_builder;
 	}
 
 // Element change
@@ -344,7 +361,9 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 					dataset.setColor(
 						conf.indicator_color(current_indicator, true));
 					link_with_axis(dataset, current_indicator);
+//!!! replace with a procedure to update ind. data spec, main pane, etc.:
 					main_pane.add_main_data_set(dataset);
+//!!!Perhaps replace _indicators with indicator_specs
 				}
 			}
 			current_tradable = tradable;
@@ -407,6 +426,16 @@ System.out.println("FINISHED requesting " + requested_tradable);
 			} else {
 			}
 		}	// end synchronized block
+	}
+
+// Basic operations - TimeDelimitedDataRequestClient API
+
+	public void notify_of_update() {
+		// Need to repaint.
+	}
+
+	public void notify_of_failure(Exception e) {
+		// Report the error and ???
 	}
 
 // Implementation
@@ -597,6 +626,15 @@ System.out.println("FINISHED requesting " + requested_tradable);
 
 		pack();
 		show();
+	}
+
+	// Perform any other needed initialization after
+	// `initialize_GUI_components' has been called.
+	private void post_initialize() {
+		MA_Configuration conf = MA_Configuration.application_instance();
+		if (conf.auto_refresh()) {
+			AutoRefreshSetup.execute(this);
+		}
 	}
 
 	// Set the window title using current_tradable and current_lower_indicators.
@@ -816,4 +854,10 @@ System.out.println("FINISHED requesting " + requested_tradable);
 	private String requested_tradable;
 
 	private ChartFacilities facilities;
+
+	//!!!!I need to be crated somewhere!!!
+	TradableDataSpecification tradable_specification;
+
+	private static NetworkProtocolUtilities protocol_util =
+		new NetworkProtocolUtilities();
 }

@@ -158,15 +158,18 @@ System.out.println("AbstractDataSetBuilder(AbstractDataSetBuilder ) called");
 			prepare_parser_for_market_data();
 			data_parser.parse(results);
 			last_market_data = data_parser.result();
-			post_process_market_data(last_market_data, symbol, period_type);
+			post_process_market_data(last_market_data, symbol, period_type,
+true);
 			last_volume = data_parser.volume_result();
 			if (last_volume != null) {
-				post_process_volume_data(last_volume, symbol, period_type);
+				post_process_volume_data(last_volume, symbol, period_type,
+true);
 			}
 			last_open_interest = data_parser.open_interest_result();
 			if (last_open_interest != null) {
 				post_process_open_interest_data(last_open_interest, symbol,
-					period_type);
+					period_type,
+true);
 			}
 			Calendar date = data_parser.latest_date_time();
 			if (date != null) {
@@ -186,8 +189,11 @@ System.out.println("smdr - last ldt: " + last_latest_date_time);
 		prepare_parser_for_indicator_data();
 		indicator_parser.parse(connection.result().toString());
 		last_indicator_data = indicator_parser.result();
-		post_process_indicator_data(last_indicator_data, symbol, period_type);
+		post_process_indicator_data(last_indicator_data, symbol, period_type,
+true);
 	}
+
+//!!!!!!!!!!Clean this mess up - Need to factor out common stuff, etc.:
 
 	// Send a time-delimited request for data for the tradable `symbol' with
 	// `period_type' with the date-time range `start_date_time' ..
@@ -210,8 +216,12 @@ System.out.println("sending request with " + symbol + ", " + period_type +
 //!!!Need to append the new data to the current data set.
 			last_market_data = data_parser.result();
 //!!!:			last_market_data.set_drawer(main_drawer);
+			post_process_market_data(last_market_data, symbol, period_type,
+true);
 			last_volume = data_parser.volume_result();
 			if (last_volume != null) {
+				post_process_volume_data(last_volume, symbol, period_type,
+true);
 //!!!:				last_volume.set_drawer(volume_drawer);
 			}
 			last_open_interest = data_parser.open_interest_result();
@@ -237,6 +247,25 @@ System.out.println("smdr - last ldt: " + last_latest_date_time);
 			ind + Message_field_separator + symbol +
 			Message_field_separator + period_type + Message_field_separator +
 			date_time_range(start_date_time, end_date_time));
+		prepare_parser_for_indicator_data();
+		indicator_parser.parse(connection.result().toString());
+		last_indicator_data = indicator_parser.result();
+		post_process_indicator_data(last_indicator_data, symbol, period_type,
+true);
+	}
+
+	// Send a time-delimited request for data for indicator `ind' for
+	// the tradable `symbol' with `period_type' with the date-time range
+	// `start_date_time' .. `end_date_time'.  If `end_date_time' is null,
+	// the current date-time is used.
+//!!!:
+	public void old_remove_send_time_delimited_indicator_data_request(int ind,
+		String symbol, String period_type, Calendar start_date_time,
+		Calendar end_date_time) throws Exception {
+		connection.send_request(Time_delimited_indicator_data_request,
+			ind + Message_field_separator + symbol +
+			Message_field_separator + period_type + Message_field_separator +
+			date_time_range(start_date_time, end_date_time));
 // Note that a new indicator drawer is created each time parse is
 // called, since indicator drawers should not be shared.
 
@@ -247,7 +276,8 @@ System.out.println("smdr - last ldt: " + last_latest_date_time);
 		prepare_parser_for_indicator_data();
 		indicator_parser.parse(connection.result().toString());
 		last_indicator_data = indicator_parser.result();
-		post_process_indicator_data(last_indicator_data, symbol, period_type);
+		post_process_indicator_data(last_indicator_data, symbol, period_type,
+true);
 	}
 
 	// Send a request for the list of indicators for tradable `symbol'.
@@ -277,18 +307,18 @@ System.out.println("smdr - last ldt: " + last_latest_date_time);
 	// Perform any needed post processing on `data', the parsed result of
 	// of a market data request.
 	abstract protected void post_process_market_data(DataSet data,
-		String symbol, String period_type);
+		String symbol, String period_type, boolean new_data_set);
 
 	abstract protected void post_process_volume_data(DataSet data,
-		String symbol, String period_type);
+		String symbol, String period_type, boolean new_data_set);
 
 	abstract protected void post_process_open_interest_data(DataSet data,
-		String symbol, String period_type);
+		String symbol, String period_type, boolean new_data_set);
 
 	// Perform any needed post processing on `data', the parsed result of
 	// of an indicator data request.
 	abstract protected void post_process_indicator_data(DataSet data,
-		String symbol, String period_type);
+		String symbol, String period_type, boolean new_data_set);
 
 	protected void prepare_parser_for_market_data() {
 		// do nothing - redefine if needed.
@@ -423,6 +453,7 @@ System.out.println("smdr - last ldt: " + last_latest_date_time);
 
 	// Does the last received market data contain an open interest field?
 	private boolean open_interest;
+
 	// User-specified options
 	private StartupOptions options;
 	private boolean login_failed;
