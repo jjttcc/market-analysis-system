@@ -30,7 +30,7 @@ feature -- Initialization
 
 	make is
 		do
-			!LINKED_LIST [STRING]!input_file_names.make
+			!ARRAYED_LIST [STRING]!input_file_names.make (argument_count)
 			process_args
 		ensure
 			ml_not_void: market_list /= Void
