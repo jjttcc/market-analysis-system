@@ -19,7 +19,7 @@ feature {NONE} -- Initialization
 				else
 					i := 1
 				end
-				initialize_parameters
+				create parameters.make
 			until
 				i > argument_count
 			loop
@@ -43,6 +43,8 @@ feature {NONE} -- Implementation
 			http_request: HTTP_PROTOCOL
 			result_string: STRING
 		do
+print ("parameters start date: " + parameters.start_date.out + "%N")
+print ("parameters end date: " + parameters.end_date.out + "%N")
 			create result_string.make (0)
 			create url.http_make (parameters.host, parameters.path)
 			create http_request.make (url)
@@ -88,18 +90,6 @@ feature {NONE} -- Implementation
 	host: STRING is "chart.yahoo.com"
 
 	symbol: STRING
-
-	initialize_parameters is
-		do
-			create parameters.make
-			parameters.set_host (host)
-			if start_date = Void then
-				parameters.set_start_date (create {DATE}.make (2000, 1, 1))
-			else
-				parameters.set_start_date (start_date)
-			end
-			parameters.set_end_date_to_now
-		end
 
 	date_from_numeric_string (s: STRING): DATE is
 		require
