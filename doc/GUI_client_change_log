@@ -1,3 +1,15 @@
+SIGNIFICANT SERVER CHANGES IN RELEASE 1.7
+
+Made modifications to allow the GUI client to run in a user's browser (
+by adapting the GUI client to run as an applet and writing a servlet
+application to facilitate communication between the applet and the MAS
+server).
+
+Implemented multi-threading to allow one window to update itself while
+another window is retrieving data from the server.
+
+Fixed the "doesn't resize when a charting window is made smaller" bug.
+
 SIGNIFICANT GUI CLIENT CHANGES IN RELEASE 1.6 OF MAS
 
 Changed to accept the change in protocol from the server regarding
