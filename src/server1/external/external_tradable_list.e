@@ -46,6 +46,7 @@ feature {NONE} -- Initialization
 feature -- Status report
 
 	intraday: BOOLEAN
+			-- Do the tradables in this list contain intraday data?
 
 	intraday_data_available: BOOLEAN is
 			-- Is intraday data available from the external source?
