@@ -172,7 +172,7 @@ feature -- Basic operations
 					fatal_error := true
 				end
 			else
-					check fatal_error: fatal_error end
+				fatal_error := true
 			end
 		rescue
 			-- Caught exception from first call to `session'.
