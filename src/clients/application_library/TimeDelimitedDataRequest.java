@@ -27,25 +27,35 @@ class TimeDelimitedDataRequest extends TimerTask {
 		if (client != null) {
 			TradableDataSpecification spec = client.specification();
 			AbstractDataSetBuilder builder = client.data_builder();
+System.out.println("A");
 			try {
+System.out.println("B");
 				builder.send_time_delimited_market_data_request(spec.symbol(), 
 					spec.period_type(), client.start_date(), client.end_date());
 				spec.main_data().append(builder.last_market_data());
 				indicators = spec.indicator_specifications().iterator();
+System.out.println("C");
 				while (indicators.hasNext()) {
+System.out.println("D");
 					IndicatorDataSpecification i =
 						(IndicatorDataSpecification) indicators.next();
 					builder.send_time_delimited_indicator_data_request(
 						i.indicator_id(), spec.symbol(), spec.period_type(),
 						client.start_date(), client.end_date());
 					i.data().append(builder.last_market_data());
+System.out.println("E");
 				}
-	//Need to update and store the new start date somewhere!!!
+//Need to update and store the new start date somewhere!!!
+System.out.println("F");
 				client.notify_of_update();
+System.out.println("G");
 			} catch (Exception e) {
+System.out.println("H");
 				client.notify_of_failure(e);
+System.out.println("I");
 			}
 		}
+System.out.println("J");
 	}
 
 // Implementation

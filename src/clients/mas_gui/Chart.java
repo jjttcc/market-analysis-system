@@ -632,6 +632,7 @@ System.out.println("FINISHED requesting " + requested_tradable);
 	// `initialize_GUI_components' has been called.
 	private void post_initialize() {
 		MA_Configuration conf = MA_Configuration.application_instance();
+//!!!Note: auto_refresh() needs to be redefined in MA_Configuration.
 		if (conf.auto_refresh()) {
 			AutoRefreshSetup.execute(this);
 		}
