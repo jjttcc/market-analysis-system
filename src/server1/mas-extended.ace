@@ -348,6 +348,22 @@ cluster
 
 	ds_date:		"$GOBO/library/time/date"
 
+	eposix:		"$EPOSIX/src/posix"
+
+	eposix_stdc:		"$EPOSIX/src/standardc"
+
+	eposix_papi:		"$EPOSIX/src/papi"
+
+	eposix_capi:		"$EPOSIX/src/capi"
+
+	eposix_abstract:		"$EPOSIX/src/abstract"
+
+	eposix_support:		"$EPOSIX/src/support"
+
+	eposix_c:		"$EPOSIX/src/epxc"
+
+	eposix_ise:		"$EPOSIX/src/spec/ise"
+
 external
 
 	include_path:
@@ -360,7 +376,7 @@ external
 		"/${MAS}/src/eiffel_library/support/spec/${ISE_PLATFORM}/lib/utilities.o",
 		"${ISE_EIFFEL}/C_library/zlib/libz.a",
 		"${MAS}/src/server1/spec/${ISE_PLATFORM}/lib/external_input_sequence.a",
-		"-lodbc",
+		"-lodbc", "-L $(EPOSIX)/lib -leposix_ise",
 		"${MAS_LINK_OPTIONS}"
 
 end
