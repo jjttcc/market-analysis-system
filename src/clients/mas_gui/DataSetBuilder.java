@@ -265,7 +265,7 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 	// markets is shared by all windows
 	private static Vector markets;	// Cached list of markets
 
-	private Connection connection;
+	protected Connection connection;
 		// result of last market data request
 	private DataSet _last_market_data;
 		// volume result from last market data request
