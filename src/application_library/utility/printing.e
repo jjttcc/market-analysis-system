@@ -3,42 +3,88 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class PRINTING
+class PRINTING inherit
+
+	GLOBAL_SERVICES
+
+feature -- Options
+
+	output_field_separator: STRING is
+			-- Field separator used when printing output
+		once
+			!!ofs.make (1)
+			Result := ofs
+		end
+
+	date_field_separator: STRING is
+			-- Field separator used for output between date fields
+		once
+			!!dfs.make (1)
+			Result := dfs
+		end
+
+feature -- Element change
+
+	set_output_field_separator (s: STRING) is
+		require
+			not_void: s /= Void
+		do
+			output_field_separator.wipe_out
+			output_field_separator.append (s)
+		ensure
+			output_field_separator.is_equal (s)
+		end
+
+	set_date_field_separator (s: STRING) is
+		require
+			not_void: s /= Void
+		do
+			date_field_separator.wipe_out
+			date_field_separator.append (s)
+		ensure
+			date_field_separator.is_equal (s)
+		end
+
+feature {NONE}
+
+	ofs: STRING
+			-- output field separator
+
+	dfs: STRING
+			-- date field separator
 
 feature -- Basic operations
 
-	print_tuples (orig_l: CHAIN [MARKET_TUPLE]) is
+	print_tuples (l: CHAIN [MARKET_TUPLE]) is
+			-- Print the fields of each tuple in `l'.
 		local
-			real_formatter: FORMAT_DOUBLE
-			int_formatter: FORMAT_INTEGER
 			volume_l: CHAIN [VOLUME_TUPLE]
 			composite_l: CHAIN [COMPOSITE_TUPLE]
 			composite_volume_l: CHAIN [COMPOSITE_VOLUME_TUPLE]
 			sep: STRING
 		do
 			sep := "	"
-			volume_l ?= orig_l
+			volume_l ?= l
 			if volume_l /= Void then
-				print_volume_tuples (volume_l, sep)
+				print_volume_tuples (volume_l)
 			else
-				composite_l ?= orig_l
+				composite_l ?= l
 				if composite_l /= Void then
-					print_composite_tuples (composite_l, sep)
+					print_composite_tuples (composite_l)
 				else
-					composite_volume_l ?= orig_l
+					composite_volume_l ?= l
 					if composite_volume_l /= Void then
-						print_composite_volume_tuples (composite_volume_l, sep)
+						print_composite_volume_tuples (composite_volume_l)
 					else
-						print_market_tuples (orig_l, sep)
+						print_market_tuples (l)
 					end
 				end
 			end
 		end
 
 	print_indicators (t: TRADABLE [BASIC_MARKET_TUPLE]) is
+			-- Print the fields of each tuple of each indicator of `t'.
 		local
-			real_formatter: FORMAT_DOUBLE
-			int_formatter: FORMAT_INTEGER
 			f: MARKET_FUNCTION
 		do
 			from
@@ -48,14 +94,42 @@ feature -- Basic operations
 			loop
 				f := t.indicators.item
 				print_mf_info (f)
-				print_market_tuples (f.output, ",")
+				print_market_tuples (f.output)
 				t.indicators.forth
+			end
+		end
+
+	print_composite_lists (t: TRADABLE [BASIC_MARKET_TUPLE]) is
+			-- Print the fields of each tuple of each composite list of `t'.
+		local
+			names: ARRAY [STRING]
+			i: INTEGER
+			l: LIST [COMPOSITE_TUPLE]
+			cvt: COMPOSITE_VOLUME_TUPLE
+		do
+			from
+				names := t.composite_list_names
+				i := 1
+			until
+				i > names.count
+			loop
+				print ("Trading period: "); print (names @ i); print ("%N")
+				if not l.empty then
+					cvt ?= l.first
+				end
+				if l /= Void then
+					print_composite_volume_tuples (
+						t.composite_tuple_list (names @ i))
+				else
+					print_composite_tuples (t.composite_tuple_list (names @ i))
+				end
+				i := i + 1
 			end
 		end
 
 feature {NONE} -- Implementation
 
-	print_composite_tuples (l: CHAIN [COMPOSITE_TUPLE]; separator: STRING) is
+	print_composite_tuples (l: CHAIN [COMPOSITE_TUPLE]) is
 		local
 			real_formatter: FORMAT_DOUBLE
 			print_open: BOOLEAN
@@ -77,23 +151,23 @@ feature {NONE} -- Implementation
 			until
 				l.after
 			loop
-				print_date (l.item.last.date_time.date, 'y', 'm', 'd', "")
-				io.put_string (separator)
+				print_date (l.item.last.date_time.date, 'y', 'm', 'd')
+				io.put_string (output_field_separator)
 				if print_open then
 					io.put_string (real_formatter.formatted(l.item.open.value))
-					io.put_string (separator)
+					io.put_string (output_field_separator)
 				end
 				io.put_string (real_formatter.formatted(l.item.high.value))
-				io.put_string (separator)
+				io.put_string (output_field_separator)
 				io.put_string (real_formatter.formatted(l.item.low.value))
-				io.put_string (separator)
+				io.put_string (output_field_separator)
 				io.put_string (real_formatter.formatted(l.item.close.value))
 				io.put_string ("%N")
 				l.forth
 			end
 		end
 
-	print_volume_tuples (l: CHAIN [VOLUME_TUPLE]; separator: STRING) is
+	print_volume_tuples (l: CHAIN [VOLUME_TUPLE]) is
 		local
 			real_formatter: FORMAT_DOUBLE
 			int_formatter: FORMAT_INTEGER
@@ -117,26 +191,25 @@ feature {NONE} -- Implementation
 			until
 				l.after
 			loop
-				print_date (l.item.date_time.date, 'y', 'm', 'd', "")
-				io.put_string (separator)
+				print_date (l.item.date_time.date, 'y', 'm', 'd')
+				io.put_string (output_field_separator)
 				if print_open then
 					io.put_string (real_formatter.formatted(l.item.open.value))
-					io.put_string (separator)
+					io.put_string (output_field_separator)
 				end
 				io.put_string (real_formatter.formatted(l.item.high.value))
-				io.put_string (separator)
+				io.put_string (output_field_separator)
 				io.put_string (real_formatter.formatted(l.item.low.value))
-				io.put_string (separator)
+				io.put_string (output_field_separator)
 				io.put_string (real_formatter.formatted(l.item.close.value))
-				io.put_string (separator)
+				io.put_string (output_field_separator)
 				io.put_string (int_formatter.formatted(l.item.volume))
 				io.put_string ("%N")
 				l.forth
 			end
 		end
 
-	print_composite_volume_tuples (l: CHAIN [COMPOSITE_VOLUME_TUPLE];
-									separator: STRING) is
+	print_composite_volume_tuples (l: CHAIN [COMPOSITE_VOLUME_TUPLE]) is
 		local
 			real_formatter: FORMAT_DOUBLE
 			int_formatter: FORMAT_INTEGER
@@ -160,25 +233,25 @@ feature {NONE} -- Implementation
 			until
 				l.after
 			loop
-				print_date (l.item.last.date_time.date, 'y', 'm', 'd', "")
-				io.put_string (separator)
+				print_date (l.item.last.date_time.date, 'y', 'm', 'd')
+				io.put_string (output_field_separator)
 				if print_open then
 					io.put_string (real_formatter.formatted(l.item.open.value))
-					io.put_string (separator)
+					io.put_string (output_field_separator)
 				end
 				io.put_string (real_formatter.formatted(l.item.high.value))
-				io.put_string (separator)
+				io.put_string (output_field_separator)
 				io.put_string (real_formatter.formatted(l.item.low.value))
-				io.put_string (separator)
+				io.put_string (output_field_separator)
 				io.put_string (real_formatter.formatted(l.item.close.value))
-				io.put_string (separator)
+				io.put_string (output_field_separator)
 				io.put_string (int_formatter.formatted(l.item.volume))
 				io.put_string ("%N")
 				l.forth
 			end
 		end
 
-	print_market_tuples (l: CHAIN [MARKET_TUPLE]; separator: STRING) is
+	print_market_tuples (l: CHAIN [MARKET_TUPLE]) is
 		local
 			real_formatter: FORMAT_DOUBLE
 		do
@@ -188,25 +261,24 @@ feature {NONE} -- Implementation
 			until
 				l.after
 			loop
-				print_date (l.item.date_time.date, 'y', 'm', 'd', "")
-				io.put_string (separator)
+				print_date (l.item.date_time.date, 'y', 'm', 'd')
+				io.put_string (output_field_separator)
 				io.put_string (real_formatter.formatted(l.item.value))
 				io.put_string ("%N")
 				l.forth
 			end
 		end
 
-	print_date (date: DATE; f1, f2, f3: CHARACTER; separator: STRING) is
+	print_date (date: DATE; f1, f2, f3: CHARACTER) is
 				-- Print `date', using f1, f2, and f3 to specify the order
-				-- of the year, month, and day fields, and separator to
-				-- separate each field.
+				-- of the year, month, and day fields.
 		require
 			fields_y_m_or_d:
 				(f1 = 'y' or f1 = 'm' or f1 = 'd') and
 				(f2 = 'y' or f2 = 'm' or f2 = 'd') and
 				(f3 = 'y' or f3 = 'm' or f3 = 'd')
 			fields_unique: f1 /= f2 and f2 /= f3 and f3 /= f1
-			not_void: date /= Void and separator /= Void
+			not_void: date /= Void
 		local
 			fmtr: FORMAT_INTEGER
 			i1, i2, i3: INTEGER
@@ -238,9 +310,9 @@ feature {NONE} -- Implementation
 				i3 := date.day
 			end
 			io.put_string (fmtr.formatted (i1))
-			io.put_string (separator)
+			io.put_string (date_field_separator)
 			io.put_string (fmtr.formatted (i2))
-			io.put_string (separator)
+			io.put_string (date_field_separator)
 			io.put_string (fmtr.formatted (i3))
 		end
 
@@ -249,13 +321,17 @@ feature {NONE} -- Implementation
 			not_void: f /= Void
 		do
 			print ("Indicator: "); print (f.name)
-			print (", processed? ")
+			print (", description: ")
+			print (f.short_description); print ("%N")
+			print ("processed? ")
 			if f.processed then
-				print ("Yes (")
+				print ("Yes, ")
 			else
-				print ("No (")
+				print ("No, ")
 			end
-			print (f.short_description); print (")%N")
+			print ("trading period: ")
+			print (f.trading_period_type.name)
+			print ("%N")
 		end
 
 end -- PRINTING
