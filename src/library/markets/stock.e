@@ -6,6 +6,9 @@ indexing
 class STOCK inherit
 
 	TRADABLE [VOLUME_TUPLE]
+		redefine
+			symbol
+		end
 
 creation
 
@@ -15,6 +18,8 @@ feature -- Access
 
 	splits: LINKED_LIST [STOCK_SPLIT]
 			-- List of all (recorded) stock splits for the stock
+
+	symbol: STRING
 
 feature -- Element change
 

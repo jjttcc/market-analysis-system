@@ -16,9 +16,13 @@ class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 
 feature -- Access
 
-	symbol: STRING
+	symbol: STRING is
 			-- The tradable's market symbol - example: IBM
+			-- Defaults to name.
 			--!!!??Does this belong here?  Do all tradables have symbols?
+		do
+			Result := name
+		end
 
 	indicators: LIST [MARKET_FUNCTION]
 			-- Technical indicators associated with this tradable
