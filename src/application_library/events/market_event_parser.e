@@ -1,8 +1,8 @@
 indexing
 	description:
 		"Abstraction that determines the type of a MARKET_EVENT being read %
-		%from an input file"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+		%from an input sequence"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -24,20 +24,20 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (in_file: FILE) is
+	make (in_file: like input) is
 		require
 			not_void: in_file /= Void
 		do
 			!!type_name.make (3)
 			!!last_error.make (0)
-			input_file := in_file
+			input := in_file
 		ensure
-			set: input_file = in_file
+			set: input = in_file
 		end
 
 feature -- Access
 
-	input_file: FILE
+	input: BILINEAR_INPUT_SEQUENCE
 			-- File containing input data from which to parse MARKET_EVENTs
 
 	last_error: STRING
@@ -74,9 +74,9 @@ feature -- Basic operations
 			error_occurred := false
 			read_type
 			if type_name.is_equal (Atomic_market_event) then
-				!ATOMIC_EVENT_FACTORY!product.make (input_file, field_separator)
+				!ATOMIC_EVENT_FACTORY!product.make (input, field_separator)
 			elseif type_name.is_equal (Market_event_pair) then
-				!EVENT_PAIR_FACTORY!product.make (input_file, clone (Current),
+				!EVENT_PAIR_FACTORY!product.make (input, clone (Current),
 													field_separator)
 			else
 				set_error
@@ -95,13 +95,13 @@ feature {NONE} -- Implementation
 		do
 			type_name.wipe_out
 			from
-				input_file.read_character
+				input.read_character
 			until
-				input_file.last_character = field_separator or
-				input_file.after
+				input.last_character = field_separator or
+				input.after
 			loop
-				type_name.extend (input_file.last_character)
-				input_file.read_character
+				type_name.extend (input.last_character)
+				input.read_character
 			end
 		end
 
@@ -128,6 +128,6 @@ feature {NONE} -- Implementation
 
 invariant
 
-	not_void: type_name /= Void and last_error /= Void and input_file /= Void
+	not_void: type_name /= Void and last_error /= Void and input /= Void
 
 end -- class MARKET_EVENT_PARSER
