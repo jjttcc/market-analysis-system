@@ -48,7 +48,7 @@ feature -- Status report
 
 	arg_mandatory: BOOLEAN is True
 
-feature -- Basic operations
+feature {NONE} -- Implementation
 
 	do_execute (window: SESSION_WINDOW) is
 		local
@@ -72,8 +72,6 @@ feature -- Basic operations
 			process_managed: has_process (window.host_name,
 				window.port_number)
 		end
-
-feature {NONE} -- Implementation
 
 	launch (prog: STRING; args: ARRAY [STRING]; window: SESSION_WINDOW) is
 			-- "Launch" the command.

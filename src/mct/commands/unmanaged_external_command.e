@@ -18,7 +18,7 @@ feature -- Status report
 
 	arg_mandatory: BOOLEAN is False
 
-feature -- Basic operations
+feature {NONE} -- Implementation
 
 	do_execute (arg: ANY) is
 		local
