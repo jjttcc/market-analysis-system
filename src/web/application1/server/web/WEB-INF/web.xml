@@ -14,6 +14,14 @@
     <servlet>
         <servlet-name>MAS_Servlet</servlet-name>
         <servlet-class>mas.MAS</servlet-class>
+        <init-param>
+            <param-name>mas-server-hostname</param-name>
+            <param-value>localhost</param-value>
+        </init-param>
+        <init-param>
+            <param-name>mas-server-port</param-name>
+            <param-value>2004</param-value>
+        </init-param>
     </servlet>
 
     <servlet-mapping>
