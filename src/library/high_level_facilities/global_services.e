@@ -284,10 +284,6 @@ feature -- Basic operations
 			new_time_in_seconds: INTEGER
 			hour, minute: INTEGER
 		do
-print ("adjust_intraday_start_time called with ")
-print (dt); print (", "); print (type.duration.date);
-print (", "); print (type.duration.time)
-print (".%N")
 			time_duration := type.duration.time
 			time := dt.time
 			check
@@ -300,8 +296,6 @@ print (".%N")
 			minute := new_time_in_seconds \\ time.seconds_in_hour //
 				time.seconds_in_minute
 			dt.make (dt.year, dt.month, dt.day, hour, minute, 0)
-print ("adjust_intraday_start_time time set to ")
-print (dt); print (".%N")
 		end
 
 	set_to_previous_monday (d: DATE_TIME) is
