@@ -10,6 +10,7 @@ y
 weekly
 below-to-above
 n
+# Name
 MACD Crossover (Buy)
 s
 c
@@ -22,6 +23,7 @@ y
 weekly
 above-to-below
 n
+# Name
 MACD Crossover (Sell)
 s
 # Stochastic %D Crossover buy and sell analyzers
@@ -37,6 +39,7 @@ y
 daily
 above-to-below
 n
+# Name
 Stochastic %D Crossover (Buy)
 s
 c
@@ -51,6 +54,7 @@ y
 daily
 below-to-above
 n
+# Name
 Stochastic %D Crossover (Sell)
 s
 # Slope of MACD Signal Line Cross 0 buy and sell analyzers
@@ -66,6 +70,7 @@ y
 weekly
 below-to-above
 n
+# Name
 Slope of MACD Signal Line Cross Above 0 (Buy)
 s
 c
@@ -80,6 +85,7 @@ y
 weekly
 above-to-below
 n
+# Name
 Slope of MACD Signal Line Cross Below 0 (Sell)
 s
 # Slope of Slope of MACD Signal Line Cross 0 buy and sell analyzers
@@ -95,6 +101,7 @@ y
 daily
 below-to-above
 n
+# Name
 Slope of Slope of MACD Signal Line Cross Above 0 (Buy)
 s
 c
@@ -109,6 +116,7 @@ y
 daily
 above-to-below
 n
+# Name
 Slope of Slope of MACD Signal Line Cross Below 0 (Sell)
 s
 # volume spike analyzer
@@ -136,6 +144,7 @@ CONSTANT
 c
 3.5
 daily
+# Name
 Volume > Yesterday's Volume EMA (5) * 3.5
 s
 # MACD Crossover and Stochastic Crossover" buy and sell analyzers
@@ -151,6 +160,7 @@ d
 e
 n
 n
+# Name
 MACD Crossover and Stochastic %D Crossover (Buy)
 s
 c
@@ -165,7 +175,87 @@ d
 e
 n
 n
+# Name
 MACD Crossover and Stochastic %D Crossover (Sell)
+s
+# analyzers to detect if the Slope of MACD Signal Line Trend indicator
+# moves to 1 (buy), -1 (sell) or 0 (sideline).  Long-term trend signal
+# based on weekly data.
+c
+s
+t
+Slope of MACD Signal Line Trend
+y
+Line
+y
+-0.5
+0
+weekly
+above-to-below
+n
+# Name
+Slope of MACD Signal Line Downtrend
+s
+c
+s
+t
+Slope of MACD Signal Line Trend
+y
+Line
+y
+0.5
+0
+weekly
+below-to-above
+n
+# Name
+Slope of MACD Signal Line Uptrend
+s
+c
+s
+t
+Slope of MACD Signal Line Trend
+y
+Line
+y
+0.5
+0
+weekly
+above-to-below
+y
+l
+GT_OPERATOR
+c
+BASIC_NUMERIC_COMMAND
+c
+CONSTANT
+c
+-0.5
+# Name
+Slope of MACD Signal Line Sideways: 1 to 0
+s
+c
+s
+t
+Slope of MACD Signal Line Trend
+y
+Line
+y
+-0.5
+0
+weekly
+below-to-above
+y
+l
+LT_OPERATOR
+c
+BASIC_NUMERIC_COMMAND
+c
+CONSTANT
+c
+0.5
+# Name
+Slope of MACD Signal Line Sideways: -1 to 0
 s
 -
 x

@@ -133,10 +133,47 @@ y
 VOLUME
 c
 MA_EXPONENTIAL
-d
-y
+c
 1
 5
+s
+c
+EXPONENTIAL_MOVING_AVERAGE
+c
+# Name:
+EMA of Open interest
+No Input Function
+y
+OPEN_INTEREST
+c
+MA_EXPONENTIAL
+c
+1
+5
+s
+c
+ONE_VARIABLE_FUNCTION
+c
+# Name:
+Slope of EMA of Volume
+EMA of Volume
+y
+SLOPE_ANALYZER
+c
+EMA of Volume
+y
+s
+c
+ONE_VARIABLE_FUNCTION
+c
+# Name:
+Slope of EMA of Open interest
+EMA of Open interest
+y
+SLOPE_ANALYZER
+c
+EMA of Open interest
+y
 s
 # Edit the indicator's parameters with usable values.
 e
@@ -187,6 +224,88 @@ Slope of Slope of MACD Signal Line
 6
 0
 0
+s
+# These new indicators are created after the above indicator editing
+# in order to use the resulting newly edited values in these indicators.
+# Slope of MACD Signal Line Trend indicator and two indicators used
+# to make it: Slope of MACD Signal Line Less Than or Equal to -0.175 and
+# Slope of MACD Signal Line Greater Than or Equal to 0.175.
+# It adds the two indicators: when total is 0, Slope of MACD Signal Line is
+# close to 0 (>-.175 and <.175) and the trend is sideways; when the total
+# is 1, the Slope of MACD Signal Line is greater than or equal to .175 and
+# the trend is upward; when the total is -1, the Slope of MACD Signal Line
+# is less than or equal to -.175 and the trend is downward.
+c
+ONE_VARIABLE_FUNCTION
+c
+# Will be -1 if true, otherwise 0
+# Name
+Slope of MACD Signal Line Less Than or Equal to -0.175
+Slope of MACD Signal Line
+y
+BOOLEAN_NUMERIC_CLIENT
+c
+LE_OPERATOR
+c
+BASIC_LINEAR_COMMAND
+c
+Slope of MACD Signal Line
+y
+CONSTANT
+c
+-0.175
+CONSTANT
+c
+-1
+CONSTANT
+c
+0
+s
+c
+ONE_VARIABLE_FUNCTION
+c
+# Will be 1 if true, otherwise 0
+# Name
+Slope of MACD Signal Line Greater Than or Equal to 0.175
+Slope of MACD Signal Line
+y
+BOOLEAN_NUMERIC_CLIENT
+c
+GE_OPERATOR
+c
+BASIC_LINEAR_COMMAND
+c
+Slope of MACD Signal Line
+y
+CONSTANT
+c
+0.175
+CONSTANT
+c
+1
+CONSTANT
+c
+0
+s
+c
+TWO_VARIABLE_FUNCTION
+c
+# Name
+Slope of MACD Signal Line Trend
+Slope of MACD Signal Line Less Than or Equal to -0.175
+y
+Slope of MACD Signal Line Greater Than or Equal to 0.175
+y
+ADDITION
+c
+BASIC_LINEAR_COMMAND
+c
+Slope of MACD Signal Line Less Than or Equal to -0.175
+y
+BASIC_LINEAR_COMMAND
+c
+Slope of MACD Signal Line Greater Than or Equal to 0.175
+y
 s
 -
 x
