@@ -60,7 +60,7 @@ feature -- Access
 		end
 
 	event_types: ARRAY [EVENT_TYPE] is
-			-- All event types known to the system
+			-- All event types known to the system - in an array.
 		local
 			i: INTEGER
 		do
@@ -75,6 +75,23 @@ feature -- Access
 				Result.put (market_event_generation_library.item.event_type, i)
 				market_event_generation_library.forth
 				i := i + 1
+			end
+		end
+
+	event_types_by_key: HASH_TABLE [EVENT_TYPE, INTEGER] is
+			-- All event types known to the system in a hash table - key
+			-- is the event type ID.
+		do
+			!!Result.make (
+				market_event_generation_library.count)
+			from
+				market_event_generation_library.start
+			until
+				market_event_generation_library.exhausted
+			loop
+				Result.extend (market_event_generation_library.item.event_type,
+					market_event_generation_library.item.event_type.id)
+				market_event_generation_library.forth
 			end
 		end
 
@@ -170,7 +187,7 @@ feature -- Access
 
 	active_event_generators: LIST [MARKET_EVENT_GENERATOR] is
 			-- Event generators in which at least one event registrant
-			-- is interested in.
+			-- is interested.
 		local
 			registrants: LIST [MARKET_EVENT_REGISTRANT]
 			generators: LIST [MARKET_EVENT_GENERATOR]
@@ -342,7 +359,7 @@ feature {NONE} -- Implementation
 			unique_id := maximum_id_value (market_event_generation_library) + 1
 			!!Result.make (name, unique_id)
 		ensure
-			not event_types.has (Result)
+			not event_types_by_key.has (Result.id)
 		end
 
 	maximum_id_value (l: LIST [MARKET_EVENT_GENERATOR]): INTEGER is
