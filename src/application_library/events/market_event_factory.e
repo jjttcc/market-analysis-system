@@ -33,7 +33,7 @@ deferred class MARKET_EVENT_FACTORY inherit
 feature -- Access
 
 	input: INPUT_SEQUENCE
-			-- File containing input data from which to create MARKET_EVENTs
+			-- Input data from which to create MARKET_EVENTs
 
 	product: MARKET_EVENT
 
