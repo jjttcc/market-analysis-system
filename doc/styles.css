@@ -2,7 +2,7 @@
 	date: "$Date$";
 	revision: "$Revision$"
 */
-body { background-color: #f0e9e2; }
+body { background-color: #eadfbd; }
 :link { color: blue; }
 :visited { color: purple; }
 :active { color: black; }
@@ -46,7 +46,7 @@ html>body #navigation {
 
 html>body #navigation-bar {
 	border-right: 1px dotted;
-	height: 136%;
+	height: 140%;
 }
 
 #navheader {
