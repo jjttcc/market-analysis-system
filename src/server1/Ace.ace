@@ -143,8 +143,8 @@ cluster
 	rdbms (dbms):					"$/rdbms";
 	-- for the moment only ODBC is supported
 	odbc (rdbms):					"$/odbc";
-	
-	
+
+
 	-- Eiffel CLI DB library
 	ecli_src : "$ECLI/src";
 	abstract (ecli_src) : "$/abstract";
