@@ -454,7 +454,6 @@ feature {NONE}
 			finished: BOOLEAN
 			indicator: MARKET_FUNCTION
 		do
---!!!Remove after testing: testmfline
 			if market_list.empty then
 				print ("There are currently no markets to view.%N")
 				finished := true
