@@ -99,7 +99,10 @@ run_test()
 {
 	test_count=$(expr $test_count + 1)
 	run_at_index >$outputfile
-	errors="$(compare_numbers $outputfile reference/$Toutputref)"
+	if [ ! -z "$Tepsilon" ]; then
+		echo "Using epsilon of $Tepsilon"
+	fi
+	errors="$(compare_numbers $outputfile reference/$Toutputref -e $Tepsilon)"
 	if [ -z "$errors" ]
 	then
 		echo "$*" test succeeded
@@ -123,6 +126,7 @@ fi
 
 outputfile=output/test1.out
 
+echo "Using executable file $exec"
 set_next_test_params $file_name_table
 while [ ! "$Tfinished" = "true" ]; do
 	echo "Runing test for $Test_name"

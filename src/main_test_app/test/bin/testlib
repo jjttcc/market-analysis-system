@@ -10,7 +10,8 @@ set_next_test_params ()
 #    "test name", "test data input file name",
 #    "test data output-reference file name", "test index"
 # Put the results into the following environment variables, respectively:
-#    Test_name, Tinput, Toutputref, Tindex
+#    Test_name, Tinput, Toutputref, Tindex, Tepsilon
+# Tepsilon will set to a null string if its field (the last one) is empty.
 # When the end of the specified file has been reached (i.e., the previous
 # call read the last line of the file), environment variable Tfinished is
 # set to "true".
@@ -36,11 +37,12 @@ set_next_test_params ()
 	}')
 	set $(sed -n "${current_line}p" $data_file|awk 'BEGIN {FS = ","}
 	{
-		print $2 " " $3 " " $4
+		print $2 " " $3 " " $4 " " $5
 	}')
 	Tinput=$1
 	Toutputref=$2
 	Tindex=$3
+	Tepsilon=$4
 
 	return 0
 }
