@@ -26,6 +26,11 @@ creation
 
 feature {NONE} -- Hook routine implementations
 
+-- @@Temporary - make these math classes available in the IDE until
+-- operators using them are implemented:
+r: RANDOM
+f: FIBONACCI
+
 	read_command_for (medium: COMPRESSED_SOCKET): POLL_COMMAND is
 		do
 			create {MAS_STREAM_READER} Result.make (medium, factory_builder)
