@@ -2,6 +2,7 @@
 import java.io.*;
 import java.net.*;
 
+// Command-line client to Market Analysis server
 public class CL_Client
 {
 	public static void main(String[] args) throws IOException
