@@ -33,8 +33,7 @@ feature -- Access
 			bnc_dummy: BASIC_NUMERIC_COMMAND
 			stock: STOCK
 		once
-			create stock.make ("DUMMY",
-				period_types @ (period_type_names @ Daily), Void, Void)
+			create stock.make ("DUMMY", Void, Void)
 			create Result.make (0)
 			-- true_dummy serves as a dummy command instance, needed by
 			-- some of the creation routines for other commands.

@@ -35,14 +35,16 @@ feature -- Utility
 			-- to the file; then call precursor.
 		local
 			dummy_tradable: TRADABLE [BASIC_MARKET_TUPLE]
+			dummy_period: TRADABLE [BASIC_MARKET_TUPLE]
 		do
 			from
 				start
 			until
 				exhausted
 			loop
-				create {STOCK} dummy_tradable.make ("dummy",
-					period_types @ (period_type_names @ Daily), Void, Void)
+				create {STOCK} dummy_tradable.make ("dummy", Void, Void)
+				dummy_tradable.set_trading_period_type (
+					period_types @ (period_type_names @ Daily))
 				-- Set innermost input to an empty tradable to force the
 				-- market function to clear its contents.
 				item.set_innermost_input (dummy_tradable)
