@@ -236,6 +236,12 @@ feature {NONE}
 			close_extractor: CLOSING_PRICE
 			original_cursor: CURSOR
 		do
+			--NOTE:  It may be a little cleaner to use the HIGHEST_VALUE
+			--and LOWEST_VALUE classes; perform a binary search (good for
+			--efficiency since this is an ARRAYED_LIST) to find the element
+			--whose date is 1 year less than the last element's date; get
+			--the n value (for HV and LV) from that element's position; set
+			--the cursor to the last element and put HV and LV into action.
 			!!greater_than; !!less_than; !!close_extractor
 			if y_high = Void then
 				!!y_high; !!y_low
