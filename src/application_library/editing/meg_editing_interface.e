@@ -292,7 +292,7 @@ feature {NONE} -- Implementation
 			operator_maker.set_market_function (function)
 			operator_maker.set_exclude_list (exclude_list)
 			Result ?= operator_maker.command_selection_from_type (
-						operator_maker.Boolean_result_command,
+						operator_maker.Boolean_result_cmd,
 							"root operator", True)
 			check
 				cmd_selection_valid: Result /= Void
@@ -444,7 +444,7 @@ feature {NONE} -- Implementation
 			-- function analyzers
 		once
 			Result := operator_maker.command_types @
-				operator_maker.N_record_command
+				operator_maker.N_record_cmd
 		end
 
 	two_var_exclude_cmds: LIST [COMMAND] is
@@ -453,9 +453,9 @@ feature {NONE} -- Implementation
 		once
 			create {LINKED_LIST [COMMAND]} Result.make
 			Result.append (operator_maker.command_types @
-				operator_maker.N_record_command)
+				operator_maker.N_record_cmd)
 			Result.append (operator_maker.command_types @
-				operator_maker.Linear_command)
+				operator_maker.Linear_cmd)
 		end
 
 	reset_error is

@@ -94,7 +94,7 @@ feature -- Basic operations
 			set_ovf_input (f)
 			operator_maker.reset
 			cmd ?= operator_maker.command_selection_from_type (
-						operator_maker.Real_result_command,
+						operator_maker.Real_result_cmd,
 							concatenation (<<f.generator,
 								"'s operator">>), False)
 			f.set_operator (cmd)
@@ -114,15 +114,15 @@ feature -- Basic operations
 			set_ovf_input (f)
 			operator_maker.reset
 			cmd ?= operator_maker.command_selection_from_type (
-						operator_maker.Binary_real_real_command,
+						operator_maker.Binary_real_real_cmd,
 							concatenation (<<f.generator,
 								"'s main operator">>), False)
 			lc ?= operator_maker.command_selection_from_type (
-						operator_maker.Linear_command,
+						operator_maker.Linear_cmd,
 							concatenation (<<f.generator,
 								"'s 'previous' operator">>), False)
 			rc ?= operator_maker.command_selection_from_type (
-						operator_maker.Real_result_command,
+						operator_maker.Real_result_cmd,
 							concatenation (<<f.generator,
 								"'s first element operator">>), False)
 			-- set_operators in ACCUMULATION requires that cmd's left
@@ -149,7 +149,7 @@ feature -- Basic operations
 			set_ovf_input (f)
 			operator_maker.reset
 			mainop ?= operator_maker.command_selection_from_type (
-						operator_maker.Real_result_command,
+						operator_maker.Real_result_cmd,
 							concatenation (<<f.generator,
 								"'s main operator">>), False)
 			response := user_interface.string_selection(concatenation(<<
@@ -158,12 +158,12 @@ feature -- Basic operations
 			response.to_lower
 			if response @ 1 = 'y' then
 				prevop ?= operator_maker.command_selection_from_type (
-							operator_maker.Linear_command,
+							operator_maker.Linear_cmd,
 								concatenation (<<f.generator,
 									"'s 'previous' operator">>), False)
 			end
 			firstop ?= operator_maker.command_selection_from_type (
-						operator_maker.Real_result_command,
+						operator_maker.Real_result_cmd,
 							concatenation (<<f.generator,
 								"'s first element operator">>), False)
 			f.set_operators (mainop, prevop, firstop)
@@ -188,7 +188,7 @@ feature -- Basic operations
 			set_ovf_input (f)
 			operator_maker.reset
 			cmd ?= operator_maker.command_selection_from_type (
-						operator_maker.Real_result_command,
+						operator_maker.Real_result_cmd,
 							concatenation (<<f.generator,
 								"'s operator">>), False)
 			f.set_operator (cmd)
@@ -215,7 +215,7 @@ feature -- Basic operations
 			set_tvf_input (f)
 			operator_maker.reset
 			cmd ?= operator_maker.command_selection_from_type (
-						operator_maker.Real_result_command,
+						operator_maker.Real_result_cmd,
 							concatenation (<<f.generator,
 								"'s operator">>), False)
 			f.set_operator (cmd)
@@ -233,7 +233,7 @@ feature -- Basic operations
 			set_ovf_input (f)
 			operator_maker.reset
 			cmd ?= operator_maker.command_selection_from_type (
-						operator_maker.Real_result_command,
+						operator_maker.Real_result_cmd,
 							concatenation (<<f.generator,
 								"'s operator">>), False)
 			f.set_operator (cmd)
@@ -262,7 +262,7 @@ feature -- Basic operations
 			set_ovf_input (f)
 			operator_maker.reset
 			cmd ?= operator_maker.command_selection_from_type (
-						operator_maker.Real_result_command,
+						operator_maker.Real_result_cmd,
 							concatenation (<<f.generator,
 								"'s main operator">>), False)
 			f.set_operator (cmd)
@@ -314,7 +314,7 @@ feature -- Basic operations
 			set_abf_input (f)
 			operator_maker.reset
 			cmd ?= operator_maker.command_selection_from_type (
-						operator_maker.Real_result_command,
+						operator_maker.Real_result_cmd,
 							concatenation (<<f.generator,
 								"'s operator">>), False)
 			f.set_operator (cmd)

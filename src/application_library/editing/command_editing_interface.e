@@ -51,7 +51,7 @@ feature -- Access
 			make_instances
 
 			create l.make (14)
-			Result.extend (l, Boolean_result_command)
+			Result.extend (l, Boolean_result_cmd)
 			l.extend (le_operator)
 			l.extend (ge_operator)
 			l.extend (eq_operator)
@@ -68,7 +68,7 @@ feature -- Access
 			l.extend (sign_analyzer)
 
 			create l.make (35)
-			Result.extend (l, Real_result_command)
+			Result.extend (l, Real_result_cmd)
 			l.extend (subtraction)
 			l.extend (multiplication)
 			l.extend (division)
@@ -111,7 +111,7 @@ feature -- Access
 			l.extend (value_at_index_command)
 
 			create l.make (7)
-			Result.extend (l, Binary_real_real_command)
+			Result.extend (l, Binary_real_real_cmd)
 			l.extend (subtraction)
 			l.extend (multiplication)
 			l.extend (division)
@@ -121,7 +121,7 @@ feature -- Access
 			l.extend (n_th_root)
 
 			create l.make (6)
-			Result.extend (l, Binary_boolean_real_command)
+			Result.extend (l, Binary_boolean_real_cmd)
 			l.extend (le_operator)
 			l.extend (ge_operator)
 			l.extend (eq_operator)
@@ -130,7 +130,7 @@ feature -- Access
 			l.extend (sign_analyzer)
 
 			create l.make (7)
-			Result.extend (l, Basic_numeric_command.generator)
+			Result.extend (l, Basic_numeric_cmd)
 			l.extend (basic_numeric_command)
 			l.extend (volume)
 			l.extend (low_price)
@@ -140,7 +140,7 @@ feature -- Access
 			l.extend (open_interest)
 
 			create l.make (9)
-			Result.extend (l, Linear_command)
+			Result.extend (l, Linear_cmd)
 			l.extend (unary_linear_operator)
 			l.extend (slope_analyzer)
 			l.extend (settable_offset_command)
@@ -159,7 +159,7 @@ feature -- Access
 			l.extend (n_based_unary_operator)
 
 			create l.make (7)
-			Result.extend (l, N_record_command)
+			Result.extend (l, N_record_cmd)
 			l.extend (lowest_value)
 			l.extend (linear_sum)
 			l.extend (highest_value)
@@ -182,42 +182,52 @@ feature -- Access
 			l.extend (value_at_index_command)
 
 			create l.make (1)
-			Result.extend (l, Numeric_value_command.generator)
+			Result.extend (l, Numeric_value_cmd)
 			l.extend (numeric_value_command)
 
 			-- Add all commands.
 			l := clone (command_instances)
-			Result.extend (l, Any_command)
+			Result.extend (l, Any_cmd)
 		end
 
 feature -- Constants
 
-	Any_command: STRING is "[Any Command]"
+	Any_cmd: STRING is "[Any Command]"
 			-- Name of type of any command
 
-	Boolean_result_command: STRING is "RESULT_COMMAND [BOOLEAN]"
+	Boolean_result_cmd: STRING is "RESULT_COMMAND [BOOLEAN]"
 			-- Name of result command with a BOOLEAN generic parameter
 
-	Real_result_command: STRING is "RESULT_COMMAND [REAL]"
+	Real_result_cmd: STRING is "RESULT_COMMAND [REAL]"
 			-- Name of result command with a REAL generic parameter
 
-	Binary_boolean_real_command: STRING is "BINARY_OPERATOR [BOOLEAN, REAL]"
+	Binary_boolean_real_cmd: STRING is "BINARY_OPERATOR [BOOLEAN, REAL]"
 			-- Name of binary command with BOOLEAN, REAL generic parameters
 
-	Binary_real_real_command: STRING is "BINARY_OPERATOR [REAL, REAL]"
+	Binary_real_real_cmd: STRING is "BINARY_OPERATOR [REAL, REAL]"
 			-- Name of binary command with REAL, REAL generic parameters
 
 	N_based_calculation: STRING is "N_BASED_CALCULATION"
 			-- Name of N_BASED_CALCULATION
 
-	N_record_command: STRING is "N_RECORD_COMMAND"
+	N_record_cmd: STRING is "N_RECORD_COMMAND"
 			-- Name of N_RECORD_COMMAND
 
-	Linear_command: STRING is "LINEAR_COMMAND"
+	Linear_cmd: STRING is "LINEAR_COMMAND"
 			-- Name of LINEAR_COMMAND
 
 	Indexed: STRING is "INDEXED"
 			-- Name of INDEXED
+
+	Basic_numeric_cmd: STRING is
+		once
+			Result := basic_numeric_command.generator
+		end
+
+	Numeric_value_cmd: STRING is
+		once
+			Result := numeric_value_command.generator
+		end
 
 feature -- Status report
 
