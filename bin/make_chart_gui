@@ -6,6 +6,7 @@ Progname=$(basename $0)
 Basedir=$(dirname $0)
 Gui_dir=$MAS/src/clients/GUI1
 Jarfile=mascharts.jar
+Main_file=MA_Client.java
 Main_class_files=MA_Client.class
 
 utilpath=$Basedir/../../script_library/support/utilities
@@ -19,6 +20,6 @@ guidirs="common mas_gui graph java_library/support support"
 echo Removing old class files ...
 find . -follow -name '*.class' -exec rm {} ';'
 echo Compiling ...
-javac MA_Client.java || fatal "OOPS"
+javac $Main_file || fatal "Compilation of $Main_file failed."
 echo Creating jar file: $Jarfile ...
 jar cvf $Jarfile $Main_class_files $(for d in $guidirs;do ls -1 $d/*.class;done)
