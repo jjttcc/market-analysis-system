@@ -1,0 +1,18 @@
+<!--
+<!doctype taglib
+PUBLIC ""
+"http://java.sun.com">
+-->
+<taglib>
+<tag>
+<name>test_a_tag</name>
+<tagclass>com.sun.TagTest</tagclass>
+<info>
+A tag test
+</info>
+<attribute>
+<name>testvalue</name>
+</attribute>
+</tag>
+
+</taglib>
