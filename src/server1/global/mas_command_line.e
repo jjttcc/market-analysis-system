@@ -42,6 +42,7 @@ feature {NONE} -- Initialization
 			set_help
 			set_version_request
 			set_port_numbers
+			set_strict
 			if not use_db then
 				set_file_names
 			else
@@ -86,6 +87,10 @@ feature -- Access
 			-- Has the user requested the version number?
 			-- True if "-v" is found.
 
+	strict: BOOLEAN
+			-- Use strict error checking?
+			-- True if "-s" is found.
+
 feature -- Basic operations
 
 	usage is
@@ -98,6 +103,7 @@ feature -- Basic operations
 				%    Where:%N        -o = data has an open field%N",
 				            "        -v = print version number%N",
 				            "        -h = print this help message%N",
+				            "        -s = strict error checking%N",
 				            "        -p = use database (persistent store)%N",
 				            "        -b = run in background%N">>))
 		end
@@ -110,30 +116,19 @@ feature {NONE} -- Implementation
 			-- Set `field_separator' and remove its settings from `contents'
 			-- Void if no field separator is specified
 		do
-			from
-				contents.start
-			until
-				contents.exhausted or field_separator /= Void
-			loop
-				if
-					contents.item.item (1) = option_sign and
-					contents.item.item (2) = 'f'
-				then
-					if contents.item.count > 2 then
-						!!field_separator.make (contents.item.count - 2)
-						field_separator.append (contents.item.substring (
-							3, contents.item.count))
-						contents.remove
-					else
-						contents.remove
-						if not contents.exhausted then
-							!!field_separator.make (contents.item.count)
-							field_separator.append (contents.item)
-							contents.remove
-						end
-					end
+			if option_in_contents ('f') then
+				if contents.item.count > 2 then
+					!!field_separator.make (contents.item.count - 2)
+					field_separator.append (contents.item.substring (
+						3, contents.item.count))
+					contents.remove
 				else
-					contents.forth
+					contents.remove
+					if not contents.exhausted then
+						!!field_separator.make (contents.item.count)
+						field_separator.append (contents.item)
+						contents.remove
+					end
 				end
 			end
 		end
@@ -142,97 +137,52 @@ feature {NONE} -- Implementation
 			-- Set `opening_price' and remove its setting from `contents'
 			-- false if opening price option is not found
 		do
-			from
-				contents.start
-			until
-				contents.exhausted or opening_price
-			loop
-				if
-					contents.item.item (1) = option_sign and
-					contents.item.item (2) = 'o'
-				then
-					opening_price := True
-					contents.remove
-				else
-					contents.forth
-				end
+			if option_in_contents ('o') then
+				opening_price := True
+				contents.remove
 			end
 		end
 
 	set_background is
 		do
-			from
-				contents.start
-			until
-				contents.exhausted or background
-			loop
-				if
-					contents.item.item (1) = option_sign and
-					contents.item.item (2) = 'b'
-				then
-					background := True
-					contents.remove
-				else
-					contents.forth
-				end
+			if option_in_contents ('b') then
+				background := True
+				contents.remove
+			end
+		end
+
+	set_strict is
+		do
+			if option_in_contents ('s') then
+				strict := True
+				contents.remove
 			end
 		end
 
 	set_use_db is
 		do
-			from
-				contents.start
-			until
-				contents.exhausted or help
-			loop
-				if
-					contents.item.item (1) = option_sign and
-					contents.item.item (2) = 'p'
-				then
-					use_db := True
-					contents.remove
-				else
-					contents.forth
-				end
+			if option_in_contents ('p') then
+				use_db := True
+				contents.remove
 			end
 		end
 
 	set_help is
 		do
-			from
-				contents.start
-			until
-				contents.exhausted or help
-			loop
-				if
-					contents.item.item (1) = option_sign and
-					(contents.item.item (2) = 'h' or
-					contents.item.item (2) = '?')
-				then
+			if option_in_contents ('h') then
+				help := True
+				contents.remove
+			elseif option_in_contents ('?') then
 					help := True
 					contents.remove
-				else
-					contents.forth
-				end
 			end
 		end
 
 	set_version_request is
 		do
-			from
-				contents.start
-			until
-				contents.exhausted or version_request
-			loop
-				if
-					contents.item.item (1) = option_sign and
-					contents.item.item (2) = 'v'
-				then
-					version_request := True
-					contents.remove
-				else
-					contents.forth
-				end
+			if option_in_contents ('v') then
+				version_request := True
+				contents.remove
 			end
 		end
 
@@ -276,6 +226,28 @@ feature {NONE} -- Implementation
 			db_services: MAS_DB_SERVICES
 		do
 			symbol_list := db_services.symbols
+		end
+
+	option_in_contents (c: CHARACTER): BOOLEAN is
+			-- Is option `c' in `contents'?
+		do
+			from
+				contents.start
+			until
+				contents.exhausted or Result
+			loop
+				if
+					contents.item.item (1) = option_sign and
+					contents.item.item (2) = c
+				then
+					Result := True
+				else
+					contents.forth
+				end
+			end
+		ensure
+			Result implies contents.item.item (1) = option_sign and
+				contents.item.item (2) = c
 		end
 
 invariant
