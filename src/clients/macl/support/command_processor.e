@@ -35,7 +35,9 @@ feature -- Initialization
 				"Select specification for crossover detection:",
 				"Select *a *market *analyzer",
 				"Indicator *%".*%" *children:",
-				"^1\) ">>
+				-- Built to match "1) word\n.*" but not match
+				-- "1) word   2) word.*":
+				"^1\) [^)]*$">>
 			create objects.make (0)
 			create shared_objects.make (0)
 			objects.compare_objects
