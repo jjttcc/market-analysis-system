@@ -305,7 +305,9 @@ feature {NONE} -- Implementation - Hook routine implementations
 			-- Notify the user of errors that occurred while reading the
 			-- configuration file.
 		do
-			if configuration.fatal_error_status then
+			if
+				configuration = Void or else configuration.fatal_error_status
+			then
 				-- The condition is fatal, so register that `exit' be
 				-- called when the error window is closed and do a
 				-- "launch" so that control does not pass back to the caller.
