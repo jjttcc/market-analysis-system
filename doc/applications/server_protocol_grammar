@@ -137,7 +137,7 @@ event_data_req:     Request for the data resulting from the analysis of
 logout_req:         Request to end the current login session
 
 
-Expected Responses for Client-Requests:
+Expected Responses for (successfully executed) Client-Requests:
 
 login_req:          login_response
 symbol_list_req:    symbol_list
