@@ -38,7 +38,6 @@ process() {
 	formats="$(echo $2|sed 's/:/ /g')"
 	platforms="$(echo $3|sed 's/:/ /g')"
 	for fmt in $formats; do
-		echo run_proc_doc $input_file $fmt $platforms
 		run_proc_doc $input_file $fmt $platforms
 	done
 }
@@ -57,7 +56,6 @@ while [ $i -le $count ]; do
 	opts=$2
 	if [ -z "$opts" ]; then opts=all; fi
 	platforms=$3
-	echo process $curfile $opts $platforms
 	process $curfile $opts $platforms
 done
 rm -rf $workdir
