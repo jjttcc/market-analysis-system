@@ -517,7 +517,7 @@ feature {NONE} -- Implementation
 			Result := concatenation (<<"Select action:",
 				"%N     Add registrants (a) Remove registrants (r) %
 				%View registrants (v) %
-				%%N     Edit registrants (e) Exit (x) Previous (-) %
+				%%N     Edit registrants (e) Previous (-) %
 				%Help (h) ", eom>>)
 		end
 
