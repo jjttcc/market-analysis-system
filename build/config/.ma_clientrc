@@ -45,13 +45,14 @@ lower_indicator	Relative Strength Index	red
 lower_indicator	Slope of MACD Signal Line Trend	red
 lower_indicator	Slope of Slope of MACD Signal Line Trend	blue
 lower_indicator	[Slope of MACD, Slope of Slope of MACD] Trend	red
-lower_indicator	No lower indicator
-lower_indicator	No upper indicator
 lower_indicator	WMA of Midpoint	oliveGreen
 lower_indicator	WMA of Midpoint 2	red
 lower_indicator	Midpoint	gray
 lower_indicator	MACD of Volume	blue
 lower_indicator	MACD of OBV	gray
+lower_indicator	Commodity Channel Index	red
+lower_indicator	No lower indicator
+lower_indicator	No upper indicator
 # Horizontal and vertical line configurations - specifies horizontal
 # (indicator_line_h) and vertical (indicator_line_v) reference lines for
 # indicator graph.  Format:
