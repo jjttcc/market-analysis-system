@@ -23,7 +23,7 @@ feature {NONE} -- Hook routines
 
 	compile_this is
 		local
-			--!!!WARNING: This is a "proprietary" component.  It needs to be
+			--!!!WARNING: These are "proprietary" components.  It needs to be
 			-- removed before the open-source version of the code can be
 			-- released.  A method needs to be developed for only including
 			-- "proprietary" components in "proprietary" releases.
