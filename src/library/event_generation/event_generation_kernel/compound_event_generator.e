@@ -187,11 +187,11 @@ feature {NONE} -- Implementation
 			-- of an infinite loop.
 			if Result = Void then
 				!!Result.make (9999, 1, 1, 0, 0, 0)
-				print (concatenation (<<"Error occurred in ", generator,
-						" in feature target_date: left_target_type ",
-						left_target_type.name, " (ID: ", left_target_type.id,
-						") was not found in event ", e.name,
-						"'s components.">>))
+				log_errors (<<"Error occurred in ", generator,
+					" in feature target_date: left_target_type ",
+					left_target_type.name, " (ID: ", left_target_type.id,
+					") was not found in event ", e.name,
+					"'s components.">>)
 			end
 		end
 
