@@ -193,5 +193,4 @@ Filename: "{app}\lib\install\init.bat"; Parameters: "{app}"; Flags: shellexec
 
 [Registry]
 Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "MAS_DIRECTORY"; ValueData: "{app}\lib"
-Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "MAS_STOCK_SPLIT_FILE"; ValueData: "stock_splits"
 Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "PATH"; ValueData: "{app}\bin"
