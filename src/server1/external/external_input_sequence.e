@@ -143,10 +143,6 @@ feature -- Status setting
 			arg_not_void: arg /= Void
 			intraday_rule: arg implies intraday_data_available
 		do
-print ("arg: "); print (arg); print ("%N")
-print ("intra avail: "); print (intraday_data_available); print ("%N")
-print ("arg -> intra avail: ");
-print (arg implies intraday_data_available); print ("%N")
 			intraday := arg
 		ensure
 			intraday_set: intraday = arg and intraday /= Void
@@ -340,7 +336,6 @@ feature {NONE} -- Implementation
 						%retrieval cannot be used.">>))
 				end
 			end
-print_list (<<"working_directories returning: ", Result, "%N">>)
 		ensure
 			not_void: Result /= Void
 		end
