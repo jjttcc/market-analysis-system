@@ -192,8 +192,8 @@ feature -- Basic operations
 			io.print ("Cleaning up ...%N")
 			-- Ensure that all objects registered for cleanup on termination
 			-- are notified of termination.
-			termination_cleanup
 			if exit_server then
+				termination_cleanup
 				exit (0)
 			else
 				print ("(Hit <Enter> to restart the command-line client.)%N")
@@ -214,23 +214,34 @@ feature {NONE} -- Implementation
 		local
 			finished: BOOLEAN
 			f: MARKET_FUNCTION
+			msg, default_msg, changed_msg: STRING
+			work_indicators: LIST [MARKET_FUNCTION]
 		do
 			from
+				default_msg := concatenation (<<"Select action:",
+					"%N     Create a new market-data indicator (c) %
+					%Remove a market-data indicator (r) %N%
+					%     Edit market-data indicators (e) %
+					%Exit (x) Previous (-) Help (h) ", eom>>)
+				changed_msg := concatenation (<<"Select action:",
+					"%N     Create a new market-data indicator (c) %
+					%Remove a market-data indicator (r) %N%
+					%     Edit market-data indicators (e) %
+					%Save changes (s) Exit without saving changes (x) %N%
+					%     Previous - abort changes (-) Help (h) ", eom>>)
+				msg := default_msg
 			until
 				finished or end_client
 			loop
-				print_list (<<"Select action:",
-					"%N     Create a new market-data indicator (c) %
-					%Remove a market-data indicator (r) %N%
-					%     Edit market-data indicators (m) %
-					%Edit market-analysis indicators (a) %N%
-					%     Exit (x) Previous (-) Help (h) ", eom>>)
+				dirty := false
+				print (msg)
 				inspect
 					character_selection (Void)
 				when 'c', 'C' then
 					f := function_builder.function_selection_from_type (
 							function_builder.market_function, "root function",
 							True)
+--!!!Needs to incorporate working library and save/abort option.
 					function_library.extend (f)
 				when 'r', 'R' then
 					if not function_library.empty then
@@ -239,17 +250,26 @@ feature {NONE} -- Implementation
 						print ("Indicator list is empty - no indicators %
 								%to remove.%N")
 					end
-				when 'm', 'M' then
+				when 'e', 'E' then
 					if current_tradable = Void then
 						print ("Market list is empty - cannot edit indicators %
 								%unless at least one market is available.%N")
 					elseif current_tradable.indicators.empty then
 						print ("Indicator list is empty.%N")
 					else
-						edit_indicator_menu (current_tradable.indicators)
+						if work_indicators = Void then
+							work_indicators := deep_clone (
+								current_tradable.indicators)
+						end
+						function_builder.edit_indicator_menu (work_indicators)
+--edit_indicator_menu (work_indicators)
 					end
-				when 'a', 'A' then
-					edit_event_generator_indicator_menu
+				when 's', 'S' then
+					function_library.copy (working_function_library)
+					function_library.save
+					working_function_library := deep_clone (function_library)
+					current_tradable.indicators.deep_copy (work_indicators)
+					msg := default_msg
 				when 'x', 'X' then
 					end_client := True
 				when 'h', 'H' then
@@ -265,10 +285,18 @@ feature {NONE} -- Implementation
 					print ("Invalid selection%N")
 				end
 				print ("%N%N")
+				if function_builder.changed then
+					msg := changed_msg
+					-- Update working_function_library with changed indicators.
+					working_function_library.wipe_out
+					working_function_library.append (work_indicators)
+					working_function_library.set_dirty
+				end
 			end
 		end
 
 	edit_event_generator_indicator_menu is
+--Obsolete!!!
 			-- Menu for editing market functions owned by event generators
 		local
 			analyzer: MARKET_EVENT_GENERATOR
@@ -723,7 +751,10 @@ feature {NONE} -- Implementation
 				print_list (<<last_string, " is not valid, try again%N", eom>>)
 				read_line
 			end
+			-- Since a member of the function library is being changed,
+			-- it needs to be marked as dirty to ensure it gets saved.
 			p.change_value (last_string)
+			dirty := true
 			print_list (<<"New value set to ", p.current_value, "%N">>)
 		end
 
@@ -764,6 +795,7 @@ feature {NONE} -- Implementation - utilities
 					raise ("Data retrieval error")
 				end
 			end
+			working_function_library := deep_clone (function_library)
 		ensure
 			curr_period_not_void: current_period_type /= Void
 		end
@@ -813,6 +845,13 @@ feature {NONE} -- Implementation - attributes
 
 	exit_server: BOOLEAN
 			-- Has the user requested to terminate the server?
+
+	working_function_library: STORABLE_LIST [MARKET_FUNCTION]
+			-- List of indicators used for editing until the user saves
+			-- the current changes
+
+	dirty: BOOLEAN
+			-- Has a persistent entity been changed?
 
 	saved_mklist_index: INTEGER
 

@@ -93,4 +93,41 @@ feature {NONE} -- Hook methods
 			end
 		end
 
+	list_selection_with_backout (l: LIST [STRING]; msg: STRING): INTEGER is
+		local
+			finished: BOOLEAN
+		do
+			from
+				if l.count = 0 then
+					finished := True
+					Result := Exit_menu_value
+					print ("There are no items to edit.%N")
+				end
+			until
+				finished
+			loop
+				print_list (<<msg, " (0 to end):%N">>)
+				print_names_in_1_column (l, 1); print (eom)
+				read_integer
+				if
+					last_integer < 0 or
+						last_integer > l.count
+				then
+					print_list (<<"Selection must be between 0 and ",
+								l.count, "%N">>)
+				elseif last_integer = 0 then
+					finished := True
+					Result := Exit_menu_value
+				else
+					check
+						valid_index: last_integer > 0 and
+									last_integer <= l.count
+					end
+					finished := True
+					Result := last_integer
+				end
+			end
+		end
+
+
 end -- CL_BASED_FUNCTION_EDITING_INTERFACE

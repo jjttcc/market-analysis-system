@@ -87,21 +87,35 @@ feature -- Status setting
 feature {NONE} -- Implementation
 
 	main_menu_selection: INTEGER is
+		local
+			msg: STRING
 		do
 			check
 				io_devices_not_void: input_device /= Void and
 										output_device /= Void
+			end
+			if not changed then
+				msg := concatenation (<<"Select action:",
+					"%N     Create a new market analyzer (c) %
+					%Remove a market analyzer (r) %
+					%%N     View a market analyzer (v) %
+					%Edit market-analysis indicators (e) %N%
+					%     Previous (-) Help (h) ", eom>>)
+			else
+				msg := concatenation (<<"Select action:",
+					"%N     Create a new market analyzer (c) %
+					%Remove a market analyzer (r) %
+					%%N     View a market analyzer (v) %
+					%Edit market-analysis indicators (e) %N%
+					%     Save changes (s) %
+					%Previous - abort changes (-) Help (h) ", eom>>)
 			end
 			from
 				Result := Null_value
 			until
 				Result /= Null_value
 			loop
-				print_list (<<"Select action:",
-					"%N     Create a new market analyzer (c) %
-					%Remove a market analyzer (r) %
-					%%N     View a market analyzer (v) %
-					%Previous (-) Help (h) ", eom>>)
+				print (msg)
 				inspect
 					character_selection (Void)
 				when 'c', 'C' then
@@ -110,6 +124,10 @@ feature {NONE} -- Implementation
 					Result := Remove_eg_value
 				when 'v', 'V' then
 					Result := View_eg_value
+				when 'e', 'E' then
+					Result := Edit_eg_indicator_value
+				when 's', 'S' then
+					Result := Save_value
 				when 'h', 'H' then
 					Result := Show_help_value
 				when '!' then
@@ -122,16 +140,6 @@ feature {NONE} -- Implementation
 				end
 				print ("%N%N")
 			end
-		end
-
-	remove_eg_selection: INTEGER is
-		do
-			Result := eg_selection (" to remove")
-		end
-
-	view_eg_selection: INTEGER is
-		do
-			Result := eg_selection (" to view")
 		end
 
 	eg_selection (msg: STRING): INTEGER is
