@@ -96,7 +96,7 @@ feature -- Access
 			else
 				Result ?= input
 			end
-		ensure
+		ensure then
 			exists: Result /= Void
 		end
 

@@ -28,8 +28,6 @@ feature -- Access
 			-- BASIC_OPEN_INTEREST_TUPLE conforms to OPEN_INTEREST_TUPLE
 			-- with respect to the intended semantics of this feature.
 			Result.extend (tuples.basic_open_interest_tuple)
-		ensure
-			not_void: Result /= Void
 		end
 
 feature -- Basic operations

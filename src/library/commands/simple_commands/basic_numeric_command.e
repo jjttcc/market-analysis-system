@@ -28,8 +28,6 @@ feature -- Access
 			-- conforms to MARKET_TUPLE with respect to the
 			-- intended semantics of this feature.
 			Result.extend (tuples.simple_tuple)
-		ensure
-			not_void: Result /= Void
 		end
 
 feature -- Status report

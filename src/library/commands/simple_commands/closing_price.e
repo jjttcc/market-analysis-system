@@ -25,8 +25,6 @@ feature -- Access
 		do
 			create {LINKED_SET [ANY]} Result.make
 			Result.extend (tuples.basic_market_tuple)
-		ensure
-			not_void: Result /= Void
 		end
 
 feature -- Basic operations

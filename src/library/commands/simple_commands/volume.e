@@ -28,8 +28,6 @@ feature -- Access
 			-- conforms to VOLUME_TUPLE with respect to the
 			-- intended semantics of this feature.
 			Result.extend (tuples.basic_volume_tuple)
-		ensure
-			not_void: Result /= Void
 		end
 
 feature -- Basic operations

@@ -125,8 +125,6 @@ feature -- Status setting
 
 	set_input_device (arg: IO_MEDIUM) is
 			-- Set input_device to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			input_device := arg
 			event_generator_builder.set_input_device (arg)
@@ -135,8 +133,7 @@ feature -- Status setting
 				create event_registrar.make (io.input, io.output)
 			end
 			event_registrar.set_input_device (arg)
-		ensure
-			input_device_set: input_device = arg and input_device /= Void
+		ensure then
 			gen_builder_in_set: event_generator_builder.input_device  = arg
 			function_builder_in_set: function_builder.input_device = arg
 			registrar_in_set: event_registrar.input_device = arg
@@ -144,8 +141,6 @@ feature -- Status setting
 
 	set_output_device (arg: IO_MEDIUM) is
 			-- Set output_device to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			output_device := arg
 			event_generator_builder.set_output_device (arg)
@@ -154,8 +149,7 @@ feature -- Status setting
 				create event_registrar.make (io.input, io.output)
 			end
 			event_registrar.set_output_device (arg)
-		ensure
-			output_device_set: output_device = arg and output_device /= Void
+		ensure then
 			gen_builder_out_set: event_generator_builder.output_device  = arg
 			function_builder_out_set: function_builder.output_device = arg
 			registrar_out_set: event_registrar.output_device = arg

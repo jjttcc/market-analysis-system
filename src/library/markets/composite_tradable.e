@@ -408,8 +408,6 @@ feature {NONE} -- Implementation - Utility routines
 	start_data_cursors is
 			-- Position the cursor of the `data' feature of each element of
 			-- `components' on the first element.
-		local
-			last_date_time: DATE_TIME
 		do
 			from
 				components.start

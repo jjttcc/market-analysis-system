@@ -141,7 +141,7 @@ feature {NONE} -- Hook routine implementations
 	latest_date_requirement: BOOLEAN is
 		do
 			Result := last_tradable /= Void
-		ensure
+		ensure then
 			last_tradable_set_condition: Result = (last_tradable /= Void)
 		end
 
