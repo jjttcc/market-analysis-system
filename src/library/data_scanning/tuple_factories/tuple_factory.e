@@ -1,5 +1,5 @@
 indexing
-	description: "";
+	description: "Abstraction of market tuple manufacturer";
 	date: "$Date$";
 	revision: "$Revision$"
 
