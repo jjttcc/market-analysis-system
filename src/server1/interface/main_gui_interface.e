@@ -108,7 +108,7 @@ feature {NONE} -- Hook routine implementation
 
 	setup_command (cmd: MAS_REQUEST_COMMAND) is
 		do
-				cmd.set_active_medium (io_medium)
+			cmd.set_active_medium (io_medium)
 		end
 
 	request_error: BOOLEAN is
