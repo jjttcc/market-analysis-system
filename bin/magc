@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -x
 # Market Analysis GUI Client (MAGC)
 
 Progname=$(basename $0)
@@ -9,7 +10,7 @@ usage() {
 	echo "Usage: $pname [cl] [no_cd] [-h hostname] port_number"
 	echo "where:"
 	echo "   cl = run command-line client instead of GUI"
-	echo "   no_cd = do change directories - stay in the current directory"
+	echo "   no_cd = do not change directories - stay in the current directory"
 }
 
 check_settings() {
