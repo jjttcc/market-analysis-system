@@ -16,7 +16,7 @@ class EVENT_DATA_REQUEST_CMD inherit
 			error_context
 		end
 
-	GUI_PROTOCOL_UTILITIES
+	DATE_PARSING_UTILITIES
 		export
 			{NONE} all
 		end
@@ -87,6 +87,11 @@ feature -- Basic operations
 						%for trading signals request: ", fields @ 3>>)
 					parse_error := true
 				else
+					if (fields @ 3).is_equal (Now) then
+						-- Set "now" date to 2 years in the future.
+						--!!!(Check if this is needed here.)
+						d.set_year (d.year + 2)
+					end
 					create analysis_end_date.make_by_date (d)
 				end
 			end

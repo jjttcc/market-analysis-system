@@ -20,7 +20,7 @@ class LOGIN_REQUEST_CMD inherit
 			{NONE} all
 		end
 
-	GUI_PROTOCOL_UTILITIES
+	DATE_PARSING_UTILITIES
 		export
 			{NONE} all
 		end
@@ -173,6 +173,10 @@ feature {NONE} -- Implementation
 					elseif type.is_equal (Start_date) then
 						session.start_dates.force (date, time_period)
 					else
+						if settings.item.is_equal (Now) then
+							-- Set "now" date to 2 years in the future.
+							date.set_year (date.year + 2)
+						end
 						session.end_dates.force (date, time_period)
 					end
 				end
