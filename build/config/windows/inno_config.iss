@@ -12,6 +12,7 @@ AppPublisherURL=http://eiffel-mas.sf.net
 AppSupportURL=http://eiffel-mas.sf.net
 AppUpdatesURL=http://eiffel-mas.sf.net
 DefaultDirName=C:\Program Files\mas1.6.7
+UsePreviousAppDir=no
 DefaultGroupName=Market Analysis System
 OutputBaseFilename=setup-mas1.6.7
 AlwaysCreateUninstallIcon=yes
@@ -26,10 +27,10 @@ Source: "bin\simple_cat.exe"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\macl"; DestDir: "{app}\bin\scripts"; CopyMode: alwaysoverwrite
 Source: "bin\maclj"; DestDir: "{app}\bin\scripts"; CopyMode: alwaysoverwrite
 Source: "bin\magc"; DestDir: "{app}\bin\scripts"; CopyMode: alwaysoverwrite
-Source: "lib\binaries\windows\mas.exe_no_assert_v1.6.7"; DestDir: "{app}\bin\mas.exe"; CopyMode: alwaysoverwrite
-Source: "lib\binaries\windows\config_tool.exe_no_assert_v1.6.7"; DestDir: "{app}\bin\config_tool.exe"; CopyMode: alwaysoverwrite
-Source: "lib\binaries\windows\macl.exe_no_assert_v1.6.7"; DestDir: "{app}\bin\macl.exe"; CopyMode: alwaysoverwrite
-Source: "lib\binaries\windows\mct.exe_no_assert_v1.6.7"; DestDir: "{app}\bin\mct.exe"; CopyMode: alwaysoverwrite
+Source: "lib\binaries\windows\mas.exe_no_assert_v1.6.7"; DestDir: "{app}\bin"; DestName: "mas.exe"; CopyMode: alwaysoverwrite
+Source: "lib\binaries\windows\config_tool.exe_no_assert_v1.6.7"; DestDir: "{app}\bin"; DestName: "config_tool.exe"; CopyMode: alwaysoverwrite
+Source: "lib\binaries\windows\macl.exe_no_assert_v1.6.7"; DestDir: "{app}\bin"; DestName: "macl.exe"; CopyMode: alwaysoverwrite
+Source: "lib\binaries\windows\mct.exe_no_assert_v1.6.7"; DestDir: "{app}\bin"; DestName: "mct.exe"; CopyMode: alwaysoverwrite
 Source: "bin\runmacl.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\runmas.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\runmasf.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
@@ -176,14 +177,8 @@ Source: "lib\python\ma_protocol.py"; DestDir: "{app}\lib\python"; CopyMode: alwa
 Source: "lib\python\CommandProcessor.py"; DestDir: "{app}\lib\python"; CopyMode: alwaysoverwrite
 
 [Icons]
-Name: "{group}\MAS Server (web)"; Filename: "{app}\bin\runmas.bat"
-Name: "{group}\MAS Server (files)"; Filename: "{app}\bin\runmasf.bat"
-Name: "{group}\MAS Charts"; Filename: "{app}\bin\runmasgui.bat"
-Name: "{group}\MAS Command-Line"; Filename: "{app}\bin\runmacl.bat"
-Name: "{userdesktop}\MAS Server (web)"; Filename: "{app}\bin\runmas.bat"; MinVersion: 4,4; Tasks: desktopicon
-Name: "{userdesktop}\MAS Server (files)"; Filename: "{app}\bin\runmasf.bat"; MinVersion: 4,4; Tasks: desktopicon
-Name: "{userdesktop}\MAS Charts"; Filename: "{app}\bin\runmasgui.bat"; MinVersion: 4,4; Tasks: desktopicon
-Name: "{userdesktop}\MAS Command-Line"; Filename: "{app}\bin\runmacl.bat"; MinVersion: 4,4; Tasks: desktopicon
+Name: "{group}\Main MAS Terminal"; Filename: "{app}\bin\mct.exe"
+Name: "{userdesktop}\Main MAS Terminal"; Filename: "{app}\bin\mct.exe"; MinVersion: 4,4; Tasks: desktopicon
 
 [Messages]
 FinishedLabel=Setup has finished installing [name] on your computer. The application may be launched by selecting the installed icons.%n%nNote: The [name] environment settings may not take effect right away.  If the [name] fails to run at first on your system, this may be the cause.  This can be fixed on Windows 95, 98, and Me systems by rebooting and on Windows NT, 2000, and XP systems by doing either of the following:%n%nLog out and then log back in or%n%nRight-click on "My Computer", select "Properties", Select the "Environment" settings, and left-click on the "OK" button.
