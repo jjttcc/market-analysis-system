@@ -213,9 +213,11 @@ feature {NONE} -- Implementation
 		require
 			not use_db
 		local
+			global_server: expanded GLOBAL_SERVER
 			expander: FILE_NAME_EXPANDER
 		do
-			create expander.make (contents, option_sign)
+			expander := global_server.file_name_expander
+			expander.execute (contents, option_sign)
 			file_names := expander.results
 		end
 
@@ -223,9 +225,13 @@ feature {NONE} -- Implementation
 		require
 			use_db
 		local
-			db_services: expanded MAS_DB_SERVICES
+			global_server: expanded GLOBAL_SERVER
+			db_services: MAS_DB_SERVICES
 		do
+			db_services := global_server.database_services
+			db_services.connect
 			symbol_list := db_services.symbols
+			db_services.disconnect
 		end
 
 	option_in_contents (c: CHARACTER): BOOLEAN is
