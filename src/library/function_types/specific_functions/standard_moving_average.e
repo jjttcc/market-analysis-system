@@ -93,7 +93,7 @@ feature {FACTORY}
 			sum.set_target (in.output)
 		end
 
-	set_n (v: INTEGER) is
+	set_n (value: INTEGER) is
 		do
 			Precursor (v)
 			check n = v end

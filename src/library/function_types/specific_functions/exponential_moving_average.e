@@ -59,7 +59,7 @@ feature {FACTORY} -- Status setting
 			exp_set: exp = e and exp /= Void
 		end
 
-	set_n (i: integer) is
+	set_n (value: integer) is
 		do
 			Precursor (i)
 			exp.set_n (n)
