@@ -95,13 +95,13 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 					// it for all markets.
 					_period_types = data_builder.trading_period_type_list(
 						(String) _markets.elementAt(0));
-					current_period_type = (String) _period_types.elementAt(0);
+					current_period_type = initial_period_type(_period_types);
 					GUI_Utilities.busy_cursor(true, this);
 					// Each market has its own indicator list; but for now,
 					// just retrieve the list for the first market and use
 					// it for all markets.
 					data_builder.send_indicator_list_request(
-						(String) _markets.elementAt(0));
+						(String) _markets.elementAt(0), current_period_type);
 					if (request_result() == Invalid_symbol) {
 						System.err.println("Symbol " + (String)
 							_markets.elementAt(0) + " is not in database.");
@@ -568,6 +568,20 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 	private boolean vector_has(Vector v, String s) {
 		return Utilities.vector_has(v, s);
+	}
+
+	// First period type to be displayed - daily, if it exists
+	String initial_period_type(Vector types) {
+		String result = null;
+		String daily = MA_MenuBar.daily_period.toLowerCase();
+		for (int i = 0; result == null && i < types.size(); ++i) {
+			if (((String) types.elementAt(i)).toLowerCase().equals(daily)) {
+				result = (String) types.elementAt(i);
+			}
+		}
+		if (result == null) result = (String) types.elementAt(0);
+
+		return result;
 	}
 
 	protected DataSetBuilder data_builder;
