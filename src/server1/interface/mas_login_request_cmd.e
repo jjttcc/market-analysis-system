@@ -22,6 +22,10 @@ class LOGIN_REQUEST_CMD inherit
 			print
 		end
 
+creation
+
+	make
+
 feature -- Basic operations
 
 	execute (msg: STRING) is
@@ -74,6 +78,9 @@ feature -- Basic operations
 				print (session_id)
 				print (eom)
 				sessions.extend (session, session_id)
+				-- Clearing the cache when a new login occurs ensures that
+				-- a new client will receive up-to-date data.
+				market_list.clear_cache
 			end
 		ensure then
 			one_more_session: sessions.count = old sessions.count + 1
