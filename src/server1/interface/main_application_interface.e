@@ -21,8 +21,6 @@ feature {NONE} -- Access
 
 	market_list_handler: TRADABLE_DISPENSER
 
-	intraday_market_list: TRADABLE_LIST
-
 	event_generator_builder: MEG_EDITING_INTERFACE
 
 	function_builder: FUNCTION_EDITING_INTERFACE
