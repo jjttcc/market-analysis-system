@@ -280,15 +280,19 @@ feature {NONE} -- Implementation
 			global_server: expanded GLOBAL_SERVER
 		do
 			db_info := global_server.database_configuration
-			Result := concatenation (<<"select ",
-				db_info.daily_stock_date_field_name, ", ",
-				open_string (db_info), db_info.daily_stock_high_field_name,
-				", ", db_info.daily_stock_low_field_name, ", ",
-				db_info.daily_stock_close_field_name,
-				", ", db_info.daily_stock_volume_field_name, " from ",
-				db_info.daily_stock_table_name, " where ",
-				db_info.daily_stock_symbol_field_name, " = '", symbol,
-				"' ", db_info.daily_stock_query_tail>>)
+			if db_info.using_daily_stock_data_command then
+				Result := db_info.daily_stock_data_command
+			else
+				Result := concatenation (<<"select ",
+					db_info.daily_stock_date_field_name, ", ",
+					open_string (db_info), db_info.daily_stock_high_field_name,
+					", ", db_info.daily_stock_low_field_name, ", ",
+					db_info.daily_stock_close_field_name,
+					", ", db_info.daily_stock_volume_field_name, " from ",
+					db_info.daily_stock_table_name, " where ",
+					db_info.daily_stock_symbol_field_name, " = '", symbol,
+					"' ", db_info.daily_stock_query_tail>>)
+			end
 		end
 
 	intraday_stock_query (symbol: STRING): STRING is
