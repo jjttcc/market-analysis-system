@@ -14,7 +14,7 @@ class MAIN_GUI_INTERFACE inherit
 		rename
 			command_argument as message_body
 		redefine
-			message_body, request_handlers, setup_command
+			message_body, request_handlers, setup_command, cleanup_session
 		end
 
 	MAIN_APPLICATION_INTERFACE
@@ -116,6 +116,18 @@ feature {NONE} -- Hook routine implementation
 			Result := request_id = Error
 		end
 
+	session: MAS_SESSION is
+		do
+			if sessions.has (session_key) then
+				Result := sessions @ session_key
+			end
+		end
+
+	cleanup_session is
+		do
+			sessions.remove (session_key)
+		end
+
 	process_request is
 			-- Input the next client request, blocking if necessary, and split
 			-- the received message into `request_id', `session_key',
@@ -179,7 +191,7 @@ feature {NONE} -- Hook routine implementation
 							request_id := Error
 						else
 							session_key := number.to_integer
-							if not session_key_valid then
+							if not session_valid then
 								message_body := "Invalid session key: "
 								message_body.append (number)
 								message_body.append (", for request ID: ")
@@ -269,5 +281,8 @@ feature {NONE}
 
 	message_body: STRING
 			-- body of last client request
+
+	session_key: INTEGER
+			-- Key for the current session, extracted by `process_request'
 
 end -- class MAIN_GUI_INTERFACE
