@@ -6,7 +6,7 @@ indexing
 		"Each curve in the set of symmetrical curves, as well as the original %
 		%curve, is represented as a MARKET_FUNCTION.  position_factor %
 		%specifies ... !!!"
-	status: "Copyright 1998, 1999: Jim Cochrane - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -2,7 +2,7 @@ indexing
 	description:
 		"A market function that takes the result of another market function %
 		%as input"
-	status: "Copyright 1998, 1999: Jim Cochrane - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

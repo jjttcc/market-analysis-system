@@ -1,4 +1,4 @@
-/* Copyright 1998, 1999: Jim Cochrane - see file forum.txt */
+/* Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt */
 
 package common;
 

@@ -1,6 +1,6 @@
 indexing
 	description: "Information about the current version of the application"
-	status: "Copyright 1998, 1999: Jim Cochrane and others, see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -59,7 +59,7 @@ feature -- Access
 
 	copyright: STRING is
 		once
-			Result := "Copyright 1998, 1999: Jim Cochrane and others"
+			Result := "Copyright 1998 - 2000: Jim Cochrane and others"
 		end
 
 	license_information: STRING is

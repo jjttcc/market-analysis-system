@@ -1,6 +1,6 @@
 indexing
 	description: "Value setter that sets the symbol of a stock split"
-	status: "Copyright 1998, 1999: Jim Cochrane - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

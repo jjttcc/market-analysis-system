@@ -9,7 +9,7 @@ indexing
 		%type of the object that `previous_operator' is attached to must %
 		%be one that doesn't try to access a feature, such as `open' that %
 		%doesn't exist in SIMPLE_TUPLE."
-	status: "Copyright 1998, 1999: Jim Cochrane - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

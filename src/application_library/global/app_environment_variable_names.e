@@ -10,7 +10,7 @@ indexing
 		%way to do this and make these values globally available %
 		%via once functions (without getting a segmentation violation - %
 		%may be a bug in the ISE compiler."
-	status: "Copyright 1998, 1999: Jim Cochrane - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

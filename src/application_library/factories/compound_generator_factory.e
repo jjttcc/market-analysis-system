@@ -3,7 +3,7 @@ indexing
 		"Factory class that manufactures COMPOUND_EVENT_GENERATORs"
 	note: "Features left_generator, right_generator, and event_type should %
 		%all be non-Void when execute is called."
-	status: "Copyright 1998, 1999: Jim Cochrane - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
