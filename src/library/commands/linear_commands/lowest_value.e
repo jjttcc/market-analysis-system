@@ -13,6 +13,8 @@ class LOWEST_VALUE inherit
 	N_RECORD_LINEAR_COMMAND
 		rename
 			make as nrlc_make
+		undefine
+			children
 		redefine
 			start_init, sub_action, target, initialize
 		select

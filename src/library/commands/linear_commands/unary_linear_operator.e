@@ -11,6 +11,8 @@ indexing
 class UNARY_LINEAR_OPERATOR inherit
 
 	LINEAR_COMMAND
+		undefine
+			children
 		redefine
 			initialize
 		select

@@ -18,6 +18,8 @@ class MINUS_N_COMMAND inherit
 			make as nrc_make_unused
 		export {NONE}
 			nrc_make_unused
+		undefine
+			children
 		redefine
 			initialize
 		select
@@ -29,6 +31,8 @@ class MINUS_N_COMMAND inherit
 			initialize as loc_initialize
 		export {NONE}
 			loc_initialize
+		undefine
+			children
 		end
 
 	UNARY_OPERATOR [REAL, REAL]

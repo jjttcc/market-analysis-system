@@ -10,6 +10,8 @@ indexing
 class SETTABLE_OFFSET_COMMAND inherit
 
 	LINEAR_OFFSET_COMMAND
+		undefine
+			children
 		redefine
 			initialize
 		select

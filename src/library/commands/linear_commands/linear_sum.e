@@ -13,6 +13,8 @@ class LINEAR_SUM inherit
 	N_RECORD_LINEAR_COMMAND
 		rename
 			index_offset as internal_index, make as nrlc_make_unused
+		undefine
+			children
 		redefine
 			execute, target_cursor_not_affected, exhausted, action,
 			forth, invariant_value, start, initialize
