@@ -18,22 +18,22 @@ inherit
 
 feature -- Status report
 
-	input_set: BOOLEAN is
-			-- Has the input to be analyzed been set?
+	target_set: BOOLEAN is
+			-- Has the target to be analyzed been set?
 		do
 			Result := target /= Void
 		end
 
 feature {FACTORY} -- Element change
 
-	set_input (in: LINEAR [MARKET_TUPLE]) is
+	set_target (in: LINEAR [MARKET_TUPLE]) is
 		require
 			not_void: in /= Void
 		do
 			target := in
 		ensure then
 			target_set: target = in
-			input_set: input_set
+			target_set: target_set
 		end
 
 feature {NONE}
