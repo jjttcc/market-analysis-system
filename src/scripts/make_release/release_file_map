@@ -186,6 +186,12 @@ lib/binaries/linux/mas_no_assert_v1.6.7 bin/mas mas_linux1.6.7
 lib/binaries/linux/mas_assert_v1.6.7 bin/mas_assert mas_linux1.6.7
 lib/binaries/windows/mas.exe_no_assert_v1.6.7 bin/mas.exe mas_windows1.6.7
 lib/binaries/windows/mas.exe_assert_v1.6.7 bin/mas_assert.exe mas_windows1.6.7
+lib/binaries/windows/mct.exe_no_assert_v1.6.7 bin/mct.exe mct_windows1.6.7
+lib/binaries/windows/mct.exe_assert_v1.6.7 bin/mct_assert.exe mct_windows1.6.7
+lib/binaries/windows/macl.exe_no_assert_v1.6.7 bin/macl.exe macl_windows1.6.7
+lib/binaries/windows/macl.exe_assert_v1.6.7 bin/macl_assert.exe macl_windows1.6.7
+lib/binaries/windows/config_tool.exe_no_assert_v1.6.7 bin/config_tool.exe config_tool_windows1.6.7
+lib/binaries/windows/config_tool.exe_assert_v1.6.7 bin/config_tool_assert.exe config_tool_windows1.6.7
 # !!Add macl, mct, etc. binaries here.
 # Include this odbc library if the executable was not statically
 # linked with it:
@@ -238,6 +244,9 @@ build/database/mas_dbrc lib/ mas_linux1.6.7 mas_windows1.6.7
 build/database/mas_dbrc_with_commands lib/ mas_linux1.6.7 mas_windows1.6.7
 build/database/mas_dbrc_separate_tables lib/ mas_linux1.6.7 mas_windows1.6.7
 build/config/rc_files/mas_httprc lib/ mas_linux1.6.7 mas_windows1.6.7
+src/mct/config/mctrc.linux lib/mctrc mas_linux1.6.7
+src/mct/config/mctrc.windows lib/mctrc mas_windows1.6.7
+# License file
 forum.txt . mas_linux1.6.7 mas_windows1.6.7 mac1.6.7 serversrc1.6.7 clientsrc1.6.7
 # Scripts
 src/scripts/python/obtain_eod_data src/scripts/ scripts1.6.7
