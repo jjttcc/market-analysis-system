@@ -1,0 +1,26 @@
+This is the root directory for the source code and documentation of the
+Technical Analysis Library (TAL).  It contains the following directories and
+files:
+
+      doc        - Documentation directory
+      src        - TAL source code
+      forum.txt  - Eiffel Forum Freeware License text
+
+Directory src contains the directories:
+
+      basic_test_app - A basic test application
+      main_test_app  - Primary test application
+      library        - Directory structure for the TAL source code
+
+Directories basic_test_app and main_test_app contain Ace files for building
+the test applications for TAL.  The development system is Linux 2.0.28 using
+the ISE Eiffel 4.2f compiler and environment.  TAL has not yet been ported to
+other platforms.
+
+See the file intro in the doc directory for a brief introduction to TAL.
+
+Additionally, the directory ../eiffel_library contains a small component
+library used by TAL.
+
+
+Copyright 1998 Jim Cochrane and others, see file "forum.txt"
