@@ -33,11 +33,19 @@ feature -- Access
 			Result.append (Precursor)
 		end
 
+	effective_n: INTEGER is
+			-- Effective n value - required because some descendants will
+			-- need to effectively change n by adding a constant value.
+		do
+			Result := n
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is
 		do
-			Result := (input.processed and target.count < n) or Precursor
+			Result := (input.processed and target.count < effective_n) or
+						Precursor
 		end
 
 feature {NONE}
@@ -63,18 +71,20 @@ feature {NONE} -- Basic operations
 			check
 				output_empty: output.empty
 			end
-			if target.count < n then
+			if target.count < effective_n then
 				-- null statement
 			else
-				target.go_i_th (n)
+				target.go_i_th (effective_n)
 				continue_until
 			end
 		ensure then
-			when_tgcount_lt_n: target.count < n implies output.empty
+			when_tgcount_lt_n: target.count < effective_n implies output.empty
 			when_tgcount_ge_n:
-				target.count >= n implies output.count = target.count - n + 1
+				target.count >= effective_n implies
+					output.count = target.count - effective_n + 1
 			first_date_set: not output.empty implies
-				output.first.date_time.is_equal (target.i_th (n).date_time)
+				output.first.date_time.is_equal (
+					target.i_th (effective_n).date_time)
 			last_date_set: not output.empty implies
 				output.last.date_time.is_equal (target.last.date_time)
 		end
@@ -96,9 +106,11 @@ feature {TEST_FUNCTION_FACTORY}
 invariant
 
 	processed_when_target_lt_n:
-		processed implies (target.count < n implies output.empty)
+		processed implies (target.count < effective_n implies output.empty)
 	processed_when_target_ge_n:
 		processed implies
-			(target.count >= n implies output.count = target.count - n + 1)
+			(target.count >= effective_n implies
+				output.count = target.count - effective_n + 1)
+	effective_n_gt_0: effective_n > 0
 
 end -- class N_RECORD_ONE_VARIABLE_FUNCTION
