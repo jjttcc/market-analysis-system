@@ -21,9 +21,6 @@ class MarketSelection implements ActionListener {
 		selection.setSize(window_width, 348);
 		close_button.setSize(window_width, 25);
 		panel.setSize(window_width, 373);
-		Point location = dialog.getLocation();
-		location.setLocation(location.x, location.y + 135);
-		dialog.setLocation(location);
 		Vector ml = main_frame.markets();
 		for (int i = 0; i < ml.size(); ++i) {
 			selection.add((String) ml.elementAt(i));
@@ -60,6 +57,9 @@ class MarketSelection implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		GUI_Utilities.busy_cursor(true, main_frame);
+		Point location = main_frame.getLocation();
+		location.setLocation(location.x, location.y + 135);
+		dialog.setLocation(location);
 		dialog.show();
 		GUI_Utilities.busy_cursor(false, main_frame);
 	}
