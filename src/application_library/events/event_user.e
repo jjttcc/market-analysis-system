@@ -27,6 +27,11 @@ class EVENT_USER inherit
 			all
 		end
 
+	DATE_TIME_SERVICES
+		export {NONE}
+			all
+		end
+
 creation
 
 	make
