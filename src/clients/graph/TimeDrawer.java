@@ -76,10 +76,12 @@ public class TimeDrawer extends TemporalDrawer {
 		int[] x_values = x_values();
 		ArrayList times = times();
 		ArrayList dates = dates();
+
+		// If there are no 'times', there is nothing to draw here.
+		if (times == null || times.size() == 0) return;
+
 		IntPair hours[] = new IntPair[times.size()],
 			days[] = new IntPair[times.size()];
-
-		if (times == null || times.size() == 0) return;
 
 		if (is_indicator()) {
 			Hour_y = label_y_value(bounds);

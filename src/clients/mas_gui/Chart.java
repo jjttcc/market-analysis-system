@@ -67,7 +67,9 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		serialize_filename = sfname;
 
 		facilities = new ChartFacilities(this);
-		tradable_specification = new MA_TradableSpecification("", "");
+		specification = new MA_ChartableSpecification("", "");
+		tradable_specification = (MA_TradableSpecification)
+			specification.tradable_specification();
 		if (window_count == 1 && serialize_filename != null) {
 			ChartSettings settings = null;
 			try {
@@ -167,7 +169,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 
 	// Current selected period_type
 	public String current_period_type() {
-		return tradable_specification.period_type();
+		return specification.period_type();
 	}
 
 	// Valid trading period types for the current tradable
@@ -193,8 +195,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		return null;
 	}
 
-	public TradableSpecification specification() {
-		return tradable_specification;
+	public ChartableSpecification specification() {
+		return specification;
 	}
 
 	public AbstractDataSetBuilder data_builder() {
@@ -325,7 +327,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 			latest_date_time = data_builder.last_latest_date_time();
 			link_with_axis(main_dataset, null);
 			main_pane.add_main_data_set(main_dataset);
-			tradable_specification.set_main_data(main_dataset);
+			tradable_specification.set_data(main_dataset);
 //end Refactor
 			if (! current_upper_indicators.isEmpty()) {
 				// Retrieve the data for the newly requested tradable for
@@ -462,7 +464,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 // Implementation - Element change
 
 	private void set_current_period_type(String type) {
-		tradable_specification.set_period_type(type);
+		specification.set_period_type(type);
 	}
 
 	private void set_current_tradable(String t) {
@@ -612,7 +614,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 				// Add valid indicators (from the server's point of view)
 				// to both the tradable spec. and `ordered_indicator_list'.
 				tradable_specification.add_indicator(new
-					IndicatorSpecification(((Integer)
+					MA_IndicatorSpecification(((Integer)
 					valid_indicators.get(s)).intValue(), s));
 				ordered_indicator_list.addElement(s);
 			}
@@ -634,7 +636,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 			s = (String) special_indicators.elementAt(i);
 			if (tradable_specification.indicator_spec_for(s) == null) {
 				tradable_specification.add_special_indicator(new
-					IndicatorSpecification(tradable_specification.
+					MA_IndicatorSpecification(tradable_specification.
 						all_indicator_specifications().size() + 1, s));
 				ordered_indicator_list.addElement(s);
 			}
@@ -944,6 +946,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	private String requested_tradable;
 
 	private ChartFacilities facilities;
+
+	protected MA_ChartableSpecification specification;
 
 	protected MA_TradableSpecification tradable_specification;
 

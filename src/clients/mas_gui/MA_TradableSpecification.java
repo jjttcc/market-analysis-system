@@ -10,8 +10,8 @@ public class MA_TradableSpecification extends TradableSpecification {
 
 // Initialization
 
-	public MA_TradableSpecification(String sym, String pertype) {
-		super(sym, pertype);
+	public MA_TradableSpecification(String sym) {
+		super(sym);
 		special_indicator_specs = new HashMap();
 	}
 
@@ -49,14 +49,9 @@ public class MA_TradableSpecification extends TradableSpecification {
 		symbol = s;
 	}
 
-	// Set `period_type' to `t'.
-	void set_period_type(String t) {
-		period_type = t;
-	}
-
-	// Set `main_data' to `d'.
-	void set_main_data(DataSet d) {
-		main_data = d;
+	// Set `data' to `d'.
+	void set_data(DataSet d) {
+		data = d;
 	}
 
 	// Set the data set for the indicator whose name is `indicator_name'
@@ -64,50 +59,51 @@ public class MA_TradableSpecification extends TradableSpecification {
 	// no action is taken.
 	void set_indicator_data(DataSet d, String indicator_name) {
 System.out.println("set ind data called for " + indicator_name + " with " + d);
-		IndicatorSpecification i = null;
+		MA_IndicatorSpecification spec = null;
 		if (indicator_specs.containsKey(indicator_name)) {
-			i = (IndicatorSpecification)
+			spec = (MA_IndicatorSpecification)
 				indicator_specs.get(indicator_name);
 		} else if (special_indicator_specs.containsKey(indicator_name)) {
-			i = (IndicatorSpecification)
+			spec = (MA_IndicatorSpecification)
 				special_indicator_specs.get(indicator_name);
 		}
-		if (i != null) {
-System.out.println("indicator was found: " + i);
-			i.set_data(d);
+		if (spec != null) {
+System.out.println("indicator was found: " + spec);
+			spec.set_data(d);
 		}
-else {System.out.println("indicator was NOT found: " + i);}
+else {System.out.println("indicator was NOT found: " + spec);}
 	}
 
-	// Add indicator specification `i' to `indicator_specifications'.
-	void add_indicator(IndicatorSpecification i) {
-		indicator_specs.put(i.name(), i);
+	// Add indicator specification `spec' to `indicator_specifications'.
+	void add_indicator(IndicatorSpecification spec) {
+		indicator_specs.put(spec.name(), spec);
 	}
 
 
-	// Add "special" indicator specification `i' to
+	// Add "special" indicator specification `spec' to
 	// `special_indicator_specifications'.
-	void add_special_indicator(IndicatorSpecification i) {
-		special_indicator_specs.put(i.name(), i);
+	void add_special_indicator(IndicatorSpecification spec) {
+		special_indicator_specs.put(spec.name(), spec);
 	}
 
 	// Mark all indicator specifications as not `selected' and set their
 	// data sets to null to free up no-longer-needed heap space.
 	void unselect_all_indicators() {
 		Iterator specs = indicator_specifications().iterator();
-		IndicatorSpecification i;
+		MA_IndicatorSpecification spec;
 		while (specs.hasNext()) {
-			i = (IndicatorSpecification) specs.next();
-			i.unselect();
-			i.set_data(null);
+			spec = (MA_IndicatorSpecification) specs.next();
+			spec.unselect();
+			spec.set_data(null);
 		}
 	}
 
 	// Select indicator with name `name'.
 	void select_indicator(String name) {
-		IndicatorSpecification i = indicator_spec_for(name);
-		if (i != null) {
-			i.select();
+		MA_IndicatorSpecification spec =
+			(MA_IndicatorSpecification) indicator_spec_for(name);
+		if (spec != null) {
+			spec.select();
 		}
 	}
 
@@ -117,7 +113,8 @@ else {System.out.println("indicator was NOT found: " + i);}
 		String n;
 		while (i.hasNext()) {
 			n = (String) i.next();
-			IndicatorSpecification ind = indicator_spec_for(n);
+			MA_IndicatorSpecification ind =
+				(MA_IndicatorSpecification) indicator_spec_for(n);
 			if (ind != null) {
 System.out.println("selecting ind: " + ind);
 				ind.select();
@@ -128,13 +125,19 @@ System.out.println("selecting ind: " + ind);
 	// Unselect indicator with name `name' and set its data set to null
 	// to free up no-longer-needed heap space.
 	void unselect_indicator(String name) {
-		IndicatorSpecification i = indicator_spec_for(name);
-		if (i != null) {
-			i.unselect();
-			i.set_data(null);
+		MA_IndicatorSpecification spec =
+			(MA_IndicatorSpecification) indicator_spec_for(name);
+		if (spec != null) {
+			spec.unselect();
+			spec.set_data(null);
 		}
 	}
 
+	public void append_data(DataSet d) {
+		data.append(d);
+	}
+
+// Implementation - attributes
 // Removal
 
 	void clear_all_indicators() {
@@ -144,6 +147,8 @@ System.out.println("selecting ind: " + ind);
 
 // Implementation - attributes
 
-	// key: String (name), value: IndicatorSpecification:
+	// key: String (name), value: MA_IndicatorSpecification:
 	private HashMap special_indicator_specs;
+
+	protected DataSet data;
 }

@@ -6,14 +6,12 @@ import graph_library.DataSet;
 /**
 * Specification for a data request to the server for data for a "tradable"
 **/
-public class TradableSpecification {
+abstract public class TradableSpecification {
 
 // Initialization
 
-	public TradableSpecification(String sym, String pertype) {
-
+	public TradableSpecification(String sym) {
 		symbol = sym;
-		period_type = pertype;
 		indicator_specs = new HashMap();
 	}
 
@@ -24,20 +22,6 @@ public class TradableSpecification {
 	**/
 	public String symbol() {
 		return symbol;
-	}
-
-	/**
-	* The period type of the data to be requested
-	**/
-	public String period_type() {
-		return period_type;
-	}
-
-	/**
-	* The main (date,open,high,low,close,...) data set for the tradable
-	**/
-	public DataSet main_data() {
-		return main_data;
 	}
 
 	/**
@@ -71,14 +55,18 @@ public class TradableSpecification {
 		return result;
 	}
 
+// Element change
+
+	/**
+	* Append data set `d' to the current main (date,open,high,low,close,...)
+	* tradable data.
+	**/
+	public abstract void append_data(DataSet d);
+
 // Implementation - attributes
 
 	protected String symbol;
 
-	protected String period_type;
-
 	// key: String (name), value: IndicatorSpecification:
 	protected HashMap indicator_specs;
-
-	protected DataSet main_data;
 }

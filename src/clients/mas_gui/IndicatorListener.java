@@ -69,7 +69,7 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 				main_pane.add_main_data_set(main_dataset);
 //!!!I believe this is not needed because its main data is up to date,
 //!!!but verify that this is so:
-//chart.tradable_specification.set_main_data(main_dataset);
+//chart.tradable_specification.set_data(main_dataset);
 				chart.unselect_upper_indicators();
 				chart.current_upper_indicators.removeAllElements();
 // End refactor
@@ -94,7 +94,7 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 			chart.link_with_axis(data, null);
 			main_pane.add_main_data_set(data);
 //!!!(See note above about main data.)
-//chart.tradable_specification.set_main_data(main_dataset);
+//chart.tradable_specification.set_data(main_dataset);
 			chart.unselect_upper_indicators();
 			chart.current_upper_indicators.removeAllElements();
 // End refactor

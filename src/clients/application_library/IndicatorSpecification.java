@@ -3,7 +3,7 @@ package application_library;
 import graph_library.DataSet;
 
 // Specification for an indicator data request to the server
-public class IndicatorSpecification {
+abstract public class IndicatorSpecification {
 
 // Initialization
 
@@ -25,13 +25,6 @@ public class IndicatorSpecification {
 		return name;
 	}
 
-	/**
-	* The data associated with the indicator
-	*/
-	public DataSet data() {
-		return data;
-	}
-
 	public String toString() {
 		return "indicator name: " + name + ", ID: " + identifier;
 	}
@@ -47,37 +40,26 @@ public class IndicatorSpecification {
 
 // Element change
 
-//@@@Consider creating a MA_IndicatorSpecification, moving this
-//procedure to it, and making it only package-accessible.  (See
-//MA_TradableSpecification.)
-	/** The data associated with the indicator */
-	public void set_data(DataSet d) {
-		data = d;
-	}
-
-//@@@Consider creating a MA_IndicatorSpecification, moving this
-//procedure to it, and making it only package-accessible.  (See
-//MA_TradableSpecification.)
 	/** Set `selected' to true. */
 	public void select() {
 		selected = true;
 	}
 
-//@@@Consider creating a MA_IndicatorSpecification, moving this
-//procedure to it, and making it only package-accessible.  (See
-//MA_TradableSpecification.)
 	// Set `selected' to false.
 	public void unselect() {
 		selected = false;
 	}
 
+	/**
+	* Append data set `d' to the current indicator data.
+	**/
+	public abstract void append_data(DataSet d);
+
 // Implementation - attributes
 
-	private int identifier;
+	protected int identifier;
 
-	private String name;
-
-	private DataSet data;
+	protected String name;
 
 	private boolean selected = false;
 }

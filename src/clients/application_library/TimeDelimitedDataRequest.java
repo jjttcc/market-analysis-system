@@ -28,7 +28,13 @@ class TimeDelimitedDataRequest extends TimerTask {
 		if (! requesting_data) {
 			synchronized (this) {
 				requesting_data = true;
-				perform_data_request();
+				ChartableSpecification chartspec = client.specification();
+				Iterator tradable_specs =
+					chartspec.tradable_specifications().iterator();
+				while (tradable_specs.hasNext()) {
+					perform_data_request((TradableSpecification)
+						tradable_specs.next(), chartspec.period_type());
+				}
 				requesting_data = false;
 			}
 		}
@@ -36,12 +42,14 @@ class TimeDelimitedDataRequest extends TimerTask {
 
 // Implementation
 
-	private void perform_data_request() {
+	private void perform_data_request(TradableSpecification spec,
+			String period_type) {
+
 		Iterator indicators;
 		if (client != null && client.ready_for_request()) {
-			TradableSpecification spec = client.specification();
+
 			AbstractDataSetBuilder builder = client.data_builder();
-			IndicatorSpecification i;
+			IndicatorSpecification ispec;
 			Calendar start_date, end_date;
 			try {
 				start_date = client.start_date();
@@ -55,22 +63,22 @@ class TimeDelimitedDataRequest extends TimerTask {
 					end_date = new GregorianCalendar();
 				}
 				builder.send_time_delimited_market_data_request(spec.symbol(), 
-					spec.period_type(), start_date, end_date);
+					period_type, start_date, end_date);
 				if (builder.request_succeeded() &&
 						builder.last_market_data().size() > 0) {
 
-					spec.main_data().append(builder.last_market_data());
+					spec.append_data(builder.last_market_data());
 					indicators = spec.selected_indicators().iterator();
 					while (indicators.hasNext()) {
-						i = (IndicatorSpecification) indicators.next();
-						if (i.selected()) {
-							DataSet data = i.data();
+						ispec = (IndicatorSpecification) indicators.next();
+						if (ispec.selected()) {
 							builder.send_time_delimited_indicator_data_request(
-								i.identifier(), spec.symbol(),
-								spec.period_type(), start_date,
+								ispec.identifier(), spec.symbol(),
+								period_type, start_date,
 								end_date);
 							if (builder.request_succeeded()) {
-								i.data().append(builder.last_indicator_data());
+								ispec.append_data(
+									builder.last_indicator_data());
 							} else {
 								// Throw exception? Or call notify_of_update?
 							}
