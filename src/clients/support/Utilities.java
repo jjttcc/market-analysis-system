@@ -5,11 +5,24 @@ package support;
 import java.util.*;
 import java.text.*;
 import java.io.*;
+import common.Constants;
 
 /** General utilities */
-public class Utilities
+public class Utilities implements Constants
 {
 	public Utilities() {}
+
+	// String resulting from reading `r' until End_of_file
+	public static String input_string(Reader r) throws IOException {
+		StringBuffer buffer = new StringBuffer(Optimal_msg_buffer_size);
+		int c = 0, i = 0;
+		do {
+			c = r.read();
+			buffer.append((char) c);
+			++i;
+		} while (c != End_of_file);
+		return buffer.toString();
+	}
 
 	// Do Vectors `l1' and `l2' have the same contents, compared by object
 	// (not by reference)?
