@@ -20,6 +20,8 @@ feature -- Access
 
 	Stock_split_query_specifier: STRING is "stock split query"
 
+	Stock_name_query_specifier: STRING is "stock name query"
+
 	Daily_stock_symbol_field_specifier: STRING is "daily stock symbol field"
 
 	Daily_stock_date_field_specifier: STRING is "daily stock date field"
