@@ -2,9 +2,9 @@ package pct.application;
 
 
 // Plug-in to start a new MAS server process
-public class NewServer {
+public class NewServer extends MCT_Constants {
 	public NewServer(Object pcontext) {
-		parent_context = (MCT_ComponentContext) pcontext;
+		super(pcontext);
 	}
 
 static int tmp_port = 32348;
@@ -14,6 +14,8 @@ static int tmp_port = 32348;
 			runtime = Runtime.getRuntime();
 		}
 		try {
+System.out.println("NewServer - " + server_cmd_key + ": " +
+settings.get(server_cmd_key));
 String tmp_hostname = "jupiter";
 String tmp_cmd = "/opt/mas/bin/mas -o -f , -b /opt/mas/lib/data/ibm.txt";
 ++tmp_port;
@@ -25,6 +27,5 @@ String tmp_cmd = "/opt/mas/bin/mas -o -f , -b /opt/mas/lib/data/ibm.txt";
 		return result;
 	}
 
-	MCT_ComponentContext parent_context;	// context of parent component
 	Runtime runtime;
 }
