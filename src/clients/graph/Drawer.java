@@ -4,6 +4,7 @@ package graph;
 
 import java.awt.*;
 import java.util.*;
+import support.Configuration;
 
 /**
  *  Abstraction for drawing data tuples
@@ -182,10 +183,12 @@ abstract public class Drawer {
 	// at the far left side of the graph and at the far right side.
 	protected void display_reference_value (int y, Graphics g,
 			Rectangle bounds) {
+		Configuration config = Configuration.instance();
 		int adjusted_y = (int) (bounds.y + (1.0 - (y-ymin) / yrange) *
 								bounds.height);
 
 		g.drawLine(bounds.x, adjusted_y, bounds.x + bounds.width, adjusted_y);
+		g.setColor(config.text_color());
 		g.drawString(new Integer(y).toString(), bounds.x + 5, adjusted_y);
 		g.drawString(new Integer(y).toString(),
 						bounds.x + bounds.width - 30, adjusted_y);
