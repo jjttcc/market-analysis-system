@@ -54,6 +54,11 @@ feature -- Status report
 			not_used: Result = false
 		end
 
+	target_cursor_not_affected: BOOLEAN is
+		once
+			Result := true
+		end
+
 feature {NONE} -- Implementation
 
 	forth is

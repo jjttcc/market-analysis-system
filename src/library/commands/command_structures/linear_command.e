@@ -6,6 +6,9 @@ indexing
 deferred class LINEAR_COMMAND inherit
 
 	NUMERIC_COMMAND
+		redefine
+			execute
+		end
 
 	LINEAR_ANALYZER
 		export {NONE}
@@ -23,6 +26,22 @@ feature -- Initialization
 			set_target (t)
 		ensure
 			target_set: target = t
+		end
+
+feature -- Basic operations
+
+	execute (arg: ANY) is
+		deferred
+		ensure then
+			target_cursor_internal_contract:
+			target_cursor_not_affected = (target.index = old target.index)
+		end
+
+feature -- Status report
+
+	target_cursor_not_affected: BOOLEAN is
+			-- Will target.index change when execute is called?
+		deferred
 		end
 
 end -- class LINEAR_COMMAND
