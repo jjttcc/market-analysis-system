@@ -804,7 +804,8 @@ feature {NONE} -- Implementation - indicator editing
 			gs: expanded GENERIC_SORTING [FUNCTION_PARAMETER, HASHABLE]
 			fpl: LIST [FUNCTION_PARAMETER]
 		do
-			fpl := gs.sorted_list (parameters)
+			-- Use a set to discard duplicates:
+			fpl := gs.sorted_set (parameters)
 			from
 				selection := Null_value
 				if parameters.is_empty then
