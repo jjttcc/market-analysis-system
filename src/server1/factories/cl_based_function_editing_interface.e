@@ -122,28 +122,28 @@ feature {NONE} -- Implementation of hook methods
 			msg: STRING
 			cr, rm, vw, ed, sv, prev: INDICATOR_EDITING_CHOICE
 		do
-			create cr.make_creat; create rm.make_remove; create vw.make_edit
-			create ed.make_view; create sv.make_save; create prev.make_previous
+			create cr.make_creat; create rm.make_remove; create ed.make_edit
+			create vw.make_view; create sv.make_save; create prev.make_previous
 			check
 				io_devices_not_void: input_device /= Void and
 					output_device /= Void
 			end
 			if not dirty or not ok_to_save then
 				msg := "Select action:%N     " +
-					enum_menu_string (cr, cr.item_description) + " " +
-					enum_menu_string (rm, rm.item_description) + "%N     " +
-					enum_menu_string (ed, ed.item_description) + " " +
-					enum_menu_string (vw, vw.item_description) + " " +
-					enum_menu_string (prev, prev.item_description) + " " + eom
+					enum_menu_string (cr, cr.item_description, " ") +
+					enum_menu_string (rm, rm.item_description, "%N     ") +
+					enum_menu_string (vw, vw.item_description, " ") +
+					enum_menu_string (ed, ed.item_description, " ") +
+					enum_menu_string (prev, prev.item_description, " ") + eom
 			else
 				msg := "Select action:%N     " +
-					enum_menu_string (cr, cr.item_description) + " " +
-					enum_menu_string (rm, rm.item_description) + "%N     " +
-					enum_menu_string (ed, ed.item_description) + " " +
-					enum_menu_string (vw, vw.item_description) + " " +
-					enum_menu_string (sv, sv.item_description) + "%N     " +
-					enum_menu_string (prev, prev.item_description +
-						" - abort changes") + " " + eom
+					enum_menu_string (cr, cr.item_description, " ") +
+					enum_menu_string (rm, rm.item_description, "%N     ") +
+					enum_menu_string (vw, vw.item_description, " ") +
+					enum_menu_string (ed, ed.item_description, " ") +
+					enum_menu_string (sv, sv.item_description, "%N     ") +
+					enum_menu_string (prev, prev.item_description,
+						" - abort changes ") + eom
 			end
 			from
 				Result := Null_value
@@ -163,7 +163,7 @@ feature {NONE} -- Implementation of hook methods
 					Result := Edit_value
 				when sav, sav_u then
 					if not dirty or not ok_to_save then
-						print ("Invalid selection%N")
+						print ("%NInvalid selection%N")
 					else
 						Result := Save_value
 					end
@@ -172,7 +172,7 @@ feature {NONE} -- Implementation of hook methods
 				when previous then
 					Result := Exit_value
 				else
-					print ("Invalid selection%N")
+					print ("%NInvalid selection%N")
 				end
 				print ("%N%N")
 			end

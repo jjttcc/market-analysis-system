@@ -50,6 +50,22 @@ class CL_BASED_MEG_EDITING_INTERFACE inherit
 			print
 		end
 
+	OBJECT_EDITING_VALUES
+		export
+			{NONE} all
+		undefine
+			print
+		end
+
+	YES_NO_HELP_VALUES
+		rename
+			help as hlp, help_u as hlp_u
+		export
+			{NONE} all
+		undefine
+			print
+		end
+
 creation
 
 	make
@@ -108,26 +124,30 @@ feature {NONE} -- Implementation
 	main_menu_selection: INTEGER is
 		local
 			msg: STRING
+			cr, rm, vw, ed, sv, prev: INDICATOR_EDITING_CHOICE
 		do
+			create cr.make_creat; create rm.make_remove; create vw.make_view
+			create ed.make_edit; create sv.make_save; create prev.make_previous
 			check
 				io_devices_not_void: input_device /= Void and
 										output_device /= Void
 			end
 			if not dirty or not ok_to_save then
-				msg := concatenation (<<"Select action:",
-					"%N     Create a new market analyzer (c) %
-					%Remove a market analyzer (r) %
-					%%N     View a market analyzer (v) %
-					%Edit market analyzers (e) %N%
-					%     Previous (-) ", eom>>)
+				msg := "Select action:%N     " +
+					enum_menu_string (cr, cr.item_description, " ") +
+					enum_menu_string (rm, rm.item_description, "%N     ") +
+					enum_menu_string (vw, vw.item_description, " ") +
+					enum_menu_string (ed, ed.item_description, " ") +
+					enum_menu_string (prev, prev.item_description, " ") + eom
 			else
-				msg := concatenation (<<"Select action:",
-					"%N     Create a new market analyzer (c) %
-					%Remove a market analyzer (r) %
-					%%N     View a market analyzer (v) %
-					%Edit market analyzers (e) %N%
-					%     Save changes (s) %
-					%Previous - abort changes (-) ", eom>>)
+				msg := "Select action:%N     " +
+					enum_menu_string (cr, cr.item_description, " ") +
+					enum_menu_string (rm, rm.item_description, "%N     ") +
+					enum_menu_string (vw, vw.item_description, " ") +
+					enum_menu_string (ed, ed.item_description, " ") +
+					enum_menu_string (sv, sv.item_description, "%N     ") +
+					enum_menu_string (prev, prev.item_description,
+						" - abort changes ") + eom
 			end
 			from
 				Result := Null_value
@@ -137,26 +157,26 @@ feature {NONE} -- Implementation
 				print (msg)
 				inspect
 					character_selection (Void)
-				when 'c', 'C' then
+				when creat, creat_u then
 					Result := Create_new_value
-				when 'r', 'R' then
+				when remove, remove_u then
 					Result := Remove_value
-				when 'v', 'V' then
+				when view, view_u then
 					Result := View_value
-				when 'e', 'E' then
+				when edit, edit_u then
 					Result := Edit_value
-				when 's', 'S' then
+				when sav, sav_u then
 					if not dirty or not ok_to_save then
 						print ("Invalid selection%N")
 					else
 						Result := Save_value
 					end
-				when '!' then
+				when shell_escape then
 					execute_shell_command
-				when '-' then
+				when previous then
 					Result := Exit_value
 				else
-					print ("Invalid selection%N")
+					print ("%NInvalid selection%N")
 				end
 				print ("%N%N")
 			end
@@ -380,7 +400,7 @@ feature {NONE} -- Implementation
 			-- User's choice (if any) of a date/time extension for a
 			-- compound event generator
 		local
-			finished, yes: BOOLEAN
+			finished, yes_selected: BOOLEAN
 			days, months, years: INTEGER
 		do
 			from
@@ -392,12 +412,12 @@ feature {NONE} -- Implementation
 					which + " the right analyzer? (y/n/h) " + eom)
 				inspect
 					character_selection (Void)
-				when 'y', 'Y' then
-					yes := True
+				when yes, yes_u then
+					yes_selected := True
 					finished := True
-				when 'n', 'N' then
+				when no, no_u then
 					finished := True
-				when 'h', 'H' then
+				when hlp, hlp_u then
 					print (help @
 						help.Compound_event_generator_time_extensions)
 				else
@@ -405,7 +425,7 @@ feature {NONE} -- Implementation
 				end
 			end
 			from
-				if yes then
+				if yes_selected then
 					finished := False
 				end
 			until
@@ -434,7 +454,7 @@ feature {NONE} -- Implementation
 				print ("Current settings: " + days.out + " days, " +
 					months.out + " months, " + years.out + " years.%N")
 			end
-			if yes then
+			if yes_selected then
 				create Result.make (years, months, days, 0, 0, 0)
 				print ("Time extension added.%N")
 			end
@@ -444,7 +464,7 @@ feature {NONE} -- Implementation
 			-- User's choice for the left target type (if any) of a
 			-- compound event generator
 		local
-			finished, yes: BOOLEAN
+			finished, yes_selected: BOOLEAN
 		do
 			from
 			until
@@ -455,19 +475,19 @@ feature {NONE} -- Implementation
 					" (y/n/h) " + eom)
 				inspect
 					character_selection (Void)
-				when 'y', 'Y' then
-					yes := True
+				when yes, yes_u then
+					yes_selected := True
 					finished := True
-				when 'n', 'N' then
+				when no, no_u then
 					finished := True
-				when 'h', 'H' then
+				when hlp, hlp_u then
 					print (help @
 						help.Compound_event_generator_left_target_type)
 				else
 					print ("Invalid response.%N")
 				end
 			end
-			if yes then
+			if yes_selected then
 				Result := event_types @ list_selection (
 					event_type_names, "Select an event type:")
 			end
