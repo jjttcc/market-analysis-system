@@ -20,7 +20,7 @@ class CL_BASED_MEG_EDITING_INTERFACE inherit
 		undefine
 			print
 		redefine
-			operator_maker
+			operator_maker, function_editor
 		end
 
 	EXECUTION_ENVIRONMENT
@@ -43,6 +43,7 @@ feature -- Initialization
 			-- !!!Satisfy invariant - editor is currently not used; it may
 			-- be used later - if not, might want to change the invariant or?
 			!!editor
+			!!function_editor.make
 		ensure
 			editor_exists: editor /= Void
 			operator_maker_exists: operator_maker /= Void
@@ -51,6 +52,8 @@ feature -- Initialization
 feature -- Access
 
 	operator_maker: CL_BASED_COMMAND_EDITING_INTERFACE
+
+	function_editor: CL_BASED_FUNCTION_EDITING_INTERFACE
 
 feature -- Status setting
 
@@ -61,6 +64,7 @@ feature -- Status setting
 		do
 			input_device := arg
 			operator_maker.set_input_device (arg)
+			function_editor.set_input_device (input_device)
 		ensure
 			input_device_set: input_device = arg and input_device /= Void
 		end
@@ -72,6 +76,7 @@ feature -- Status setting
 		do
 			output_device := arg
 			operator_maker.set_output_device (arg)
+			function_editor.set_output_device (output_device)
 		ensure
 			output_device_set: output_device = arg and output_device /= Void
 		end
