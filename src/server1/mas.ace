@@ -165,6 +165,9 @@ cluster
 	ma_library:		"$MAS/src/library"
 
 	function_abstractions (ma_library):		"$/function_abstractions"
+		option
+			assertion (no): MARKET_TUPLE_LIST;
+		end
 
 	function_types (ma_library):		"$/function_types"
 
