@@ -44,7 +44,7 @@ feature -- Access
 
 	processed: BOOLEAN
 
-	output: ARRAYED_LIST [MARKET_TUPLE]
+	output: MARKET_TUPLE_LIST [MARKET_TUPLE]
 
 feature {NONE}
 

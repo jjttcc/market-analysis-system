@@ -26,7 +26,7 @@ feature -- Initialization
 
 feature
 
-	output: ARRAYED_LIST [MARKET_TUPLE]
+	output: MARKET_TUPLE_LIST [MARKET_TUPLE]
 
 	processed: BOOLEAN
 
