@@ -92,38 +92,6 @@ feature -- Access
 			good_if_no_error: not fatal_error implies target_tradable /= Void
 		end
 
---!!!!Obsolete !!!!!!!!!!  Remove:
-	update_and_load_data is
-		do
-			parameters.set_symbol (current_symbol)
-			use_day_after_latest_date_as_start_date := True
-			if target_tradable /= Void then
--- !!!!??:
--- Ensure that old indicator data from the previous
--- `target_tradable' is not re-used.
--- GONE: target_tradable.flush_indicators
-				check_if_data_is_out_of_date
-				if data_out_of_date and not output_file_exists then
-					log_error_with_token (Data_file_does_not_exist_error,
-						current_symbol)
-					use_day_after_latest_date_as_start_date := False
-				end
-			else	-- target_tradable = Void
-				if not output_file_exists then
-					data_out_of_date := True
-				else
-					load_data
-					check_if_data_is_out_of_date
-				end
-			end
-			if not fatal_error and data_out_of_date then
-				retrieve_data
-				load_data
-			end
-		ensure then
-			good_if_no_error: not fatal_error implies target_tradable /= Void
-		end
-
 feature {NONE} -- Implementation
 
 	file_names_from_symbols: LIST [STRING] is
@@ -174,10 +142,6 @@ feature {NONE} -- Hook routine implementations
 		do
 			parameters.set_symbol (current_symbol)
 			use_day_after_latest_date_as_start_date := True
--- Ensure that old indicator data from the previous
--- `target_tradable' is not re-used.
--- !!!! Note: This call is probably not needed here - if so, remove:
--- !!!: target_tradable.flush_indicators
 			check_if_data_is_out_of_date
 			if data_out_of_date and not output_file_exists then
 				log_error_with_token (Data_file_does_not_exist_error,
@@ -194,7 +158,6 @@ feature {NONE} -- Hook routine implementations
 					not_out_of_date: not Result
 				end
 			end
-print ("target_tradable_out_of_date returning: " + Result.out + "%N")
 		end
 
 	append_new_data is

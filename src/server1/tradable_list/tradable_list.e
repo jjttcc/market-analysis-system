@@ -42,7 +42,6 @@ feature -- Initialization
 			cache_size := initial_cache_size
 			create cache.make (cache_size)
 			create cache_index_queue.make (cache_size)
-print ("Using cache size of " + cache_size.out + "%N")
 		ensure
 			sym_set: symbols /= Void and symbols.count = s_list.count
 			factory_set: tradable_factory = factory
@@ -66,58 +65,29 @@ feature -- Access
 			Result := symbol_list.count
 		end
 
-print_cache is
-local
-	indexes: LIST [INTEGER]
-do
-	indexes := cache_index_queue.linear_representation
-	from
-		print ("Cached indexes: ")
-		indexes.start
-	until
-		indexes.islast or indexes.exhausted
-	loop
-		print (indexes.item.out + ", ")
-		indexes.forth
-	end
-	if not indexes.off then
-		print (indexes.item.out + "%N")
-	end
-end
-
 	item: TRADABLE [BASIC_MARKET_TUPLE] is
 			-- Current tradable.  `fatal_error' will be True if an error
 			-- occurs.
 		do
-print ("TL item called%N")
-print_cache
 			fatal_error := False
 			if index = old_index then
-print ("A%N")
 				check
 					target_tradable_exists: target_tradable /= Void
 				end
 				if target_tradable_out_of_date then
-print ("B%N")
 					append_new_data
 				end
 			else
-print ("C%N")
 				check
 					cursor_location_changed: index /= old_index
 				end
 				target_tradable := cached_item (index)
 				if target_tradable = Void then
-print ("D%N")
 					load_target_tradable
 				else
-print ("E%N")
 					if target_tradable_out_of_date then
-print ("F%N")
 						append_new_data
 					end
-					--!!!Check if this call belongs here or somewhere else or
-					--!!!if it is needed at all:
 					target_tradable.flush_indicators
 				end
 				old_index := index
@@ -282,14 +252,11 @@ feature {NONE} -- Implementation
 			current_cached_item_void: cached_item (index) = Void
 			no_error: not fatal_error
 		do
-print ("Data for " + current_symbol + " not in cache - loading%N")
 			load_data
 		ensure
 			target_tradable_set: not fatal_error = (target_tradable /= Void)
 		end
 
---@@ Possibility: Split load_data into parts, some of which might be useable
--- (with a possible template pattern) for appending data.
 	load_data is
 			-- Load the data for `current_symbol' and close the input medium.
 			-- `setup_input_medium' must have been called to open the
@@ -297,13 +264,11 @@ print ("Data for " + current_symbol + " not in cache - loading%N")
 			-- Set `target_tradable' to the resulting TRADABLE.
 		require
 		do
-print ("Starting 'load_data' for " + current_symbol + "%N")
 			setup_input_medium
 			if not fatal_error then
 				tradable_factory.set_symbol (current_symbol)
 				tradable_factory.execute
 				target_tradable := tradable_factory.product
--- !!!!Move add_to_cache to the caller of 'load_data'?
 				add_to_cache (target_tradable, index)
 				if tradable_factory.error_occurred then
 					report_errors (target_tradable.symbol,
@@ -460,8 +425,6 @@ feature {NONE} -- Hook routines
 			-- Default: Data is never out of date - Redefine in descendant
 			-- (along with `append_new_data') if update behavior is required.
 			Result := False
-print ("ttood - WRONG ONE CALLED - you got False%N")
-print ("(Run-time type is: " + generating_type + "%N")
 		end
 
 	append_new_data is
@@ -486,6 +449,27 @@ print ("(Run-time type is: " + generating_type + "%N")
 				old target_tradable.data.last)
 			same_size_or_larger:
 				target_tradable.data.count >= old target_tradable.data.count
+		end
+
+feature {NONE} -- Debugging tools
+
+	print_cache is
+		local
+			indexes: LIST [INTEGER]
+		do
+			indexes := cache_index_queue.linear_representation
+			from
+				print ("Cached indexes: ")
+				indexes.start
+			until
+				indexes.islast or indexes.exhausted
+			loop
+				print (indexes.item.out + ", ")
+				indexes.forth
+			end
+			if not indexes.off then
+				print (indexes.item.out + "%N")
+			end
 		end
 
 feature {NONE} -- Inapplicable

@@ -64,7 +64,6 @@ feature {NONE} -- Hook routine implementations
 		do
 			Result := http_out_of_date and then
 				{EXTENDED_FILE_BASED_TRADABLE_LIST} Precursor
-print ("target_tradable_out_of_date returning: " + Result.out + "%N")
 		end
 
 end

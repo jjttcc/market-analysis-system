@@ -221,7 +221,6 @@ feature -- Basic operations
 	clear_caches is
 			-- Clear the cache of all lists.
 		do
-print ("TRADABLE_LIST_HANDLER clear_caches called%N")
 			if daily_market_list /= Void then
 				daily_market_list.clear_cache
 			end
