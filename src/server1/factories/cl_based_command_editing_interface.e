@@ -29,11 +29,14 @@ creation
 
 feature -- Initialization
 
-	make is
+	make (use_mktfnc_selection: BOOLEAN) is
 		do
 			!!editor.make (Current)
+			use_market_function_selection := use_mktfnc_selection
 		ensure
 			editor_exists: editor /= Void
+			mfsa_set:
+				use_market_function_selection = use_mktfnc_selection
 		end
 
 feature -- Status setting
