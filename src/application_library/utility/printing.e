@@ -49,13 +49,17 @@ feature -- Basic operations
 			end
 		end
 
-	print_tuples (l: CHAIN [MARKET_TUPLE]) is
-			-- Print the fields of each tuple in `l'.
+	print_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
+			-- Print the fields of each tuple in `l'.  If `print_start_date'
+			-- is not void, print all elements of `l' >= that date;
+			-- otherwise, print from the beginning of `l'.
+			-- If `print_end_date' is not void, print all elements of
+			-- `l' <= that date; otherwise, print to the end of `l'.
 		local
 			vt: VOLUME_TUPLE
 			bmt: BASIC_MARKET_TUPLE
-			vl: CHAIN [VOLUME_TUPLE]
-			bl: CHAIN [BASIC_MARKET_TUPLE]
+			vl: MARKET_TUPLE_LIST [VOLUME_TUPLE]
+			bl: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]
 		do
 			if not l.empty then
 				vt ?= l.first
@@ -103,10 +107,10 @@ feature -- Basic operations
 		local
 			names: ARRAY [STRING]
 			i: INTEGER
-			l: LIST [BASIC_MARKET_TUPLE]
+			l: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]
 			cvt: COMPOSITE_VOLUME_TUPLE
-			cl: LIST [COMPOSITE_TUPLE]
-			vl: LIST [COMPOSITE_VOLUME_TUPLE]
+			cl: MARKET_TUPLE_LIST [COMPOSITE_TUPLE]
+			vl: MARKET_TUPLE_LIST [COMPOSITE_VOLUME_TUPLE]
 		do
 			from
 				names := t.tuple_list_names
@@ -141,189 +145,225 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	print_composite_tuples (l: CHAIN [COMPOSITE_TUPLE]) is
+	print_composite_tuples (l: MARKET_TUPLE_LIST [COMPOSITE_TUPLE]) is
 		local
 			real_formatter: FORMAT_DOUBLE
 			print_open: BOOLEAN
+			first, last, i: INTEGER
+			tuple: COMPOSITE_TUPLE
 		do
 			!!real_formatter.make (5, 5)
-			if not l.empty then
-				if l.first.open_available then
-					print_open := true
-					-- format: date, open, high, low, close
-				else
-					check
-						no_open: print_open = false
+			first := first_index (l)
+			last := last_index (l)
+			if last >= first then
+				if not l.empty then
+					if l.first.open_available then
+						print_open := true
+						-- format: date, open, high, low, close
+					else
+						check
+							no_open: print_open = false
+						end
+						-- format: date, high, low, close
 					end
-					-- format: date, high, low, close
 				end
-			end
-			from
-				l.start
-			until
-				l.after
-			loop
-				print_date (l.item.end_date, 'y', 'm', 'd')
-				print (output_field_separator)
-				if print_open then
-					print (real_formatter.formatted(l.item.open.value))
+				from
+					i := first
+				until
+					i = last + 1
+				loop
+					tuple := l @ i
+					print_date (tuple.end_date, 'y', 'm', 'd')
 					print (output_field_separator)
+					if print_open then
+						print (real_formatter.formatted(tuple.open.value))
+						print (output_field_separator)
+					end
+					print (real_formatter.formatted(tuple.high.value))
+					print (output_field_separator)
+					print (real_formatter.formatted(tuple.low.value))
+					print (output_field_separator)
+					print (real_formatter.formatted(tuple.close.value))
+					print (output_record_separator)
+					i := i + 1
 				end
-				print (real_formatter.formatted(l.item.high.value))
-				print (output_field_separator)
-				print (real_formatter.formatted(l.item.low.value))
-				print (output_field_separator)
-				print (real_formatter.formatted(l.item.close.value))
-				print (output_record_separator)
-				l.forth
 			end
 		end
 
-	print_basic_tuples (l: CHAIN [BASIC_MARKET_TUPLE]) is
+	print_basic_tuples (l: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]) is
 		local
 			real_formatter: FORMAT_DOUBLE
 			print_open: BOOLEAN
+			first, last, i: INTEGER
+			tuple: BASIC_MARKET_TUPLE
 		do
 			!!real_formatter.make (5, 5)
-			if not l.empty then
-				if l.first.open_available then
-					print_open := true
-					-- format: date, open, high, low, close
-				else
-					check
-						no_open: print_open = false
+			first := first_index (l)
+			last := last_index (l)
+			if last >= first then
+				if not l.empty then
+					if l.first.open_available then
+						print_open := true
+						-- format: date, open, high, low, close
+					else
+						check
+							no_open: print_open = false
+						end
+						-- format: date, high, low, close
 					end
-					-- format: date, high, low, close
 				end
-			end
-			from
-				l.start
-			until
-				l.after
-			loop
-				print_date (l.item.end_date, 'y', 'm', 'd')
-				print (output_field_separator)
-				if print_open then
-					print (real_formatter.formatted(l.item.open.value))
+				from
+					i := first
+				until
+					i = last + 1
+				loop
+					tuple := l @ i
+					print_date (tuple.end_date, 'y', 'm', 'd')
 					print (output_field_separator)
+					if print_open then
+						print (real_formatter.formatted(tuple.open.value))
+						print (output_field_separator)
+					end
+					print (real_formatter.formatted(tuple.high.value))
+					print (output_field_separator)
+					print (real_formatter.formatted(tuple.low.value))
+					print (output_field_separator)
+					print (real_formatter.formatted(tuple.close.value))
+					print (output_record_separator)
+					i := i + 1
 				end
-				print (real_formatter.formatted(l.item.high.value))
-				print (output_field_separator)
-				print (real_formatter.formatted(l.item.low.value))
-				print (output_field_separator)
-				print (real_formatter.formatted(l.item.close.value))
-				print (output_record_separator)
-				l.forth
 			end
 		end
 
-	print_volume_tuples (l: CHAIN [VOLUME_TUPLE]) is
+	print_volume_tuples (l: MARKET_TUPLE_LIST [VOLUME_TUPLE]) is
 		local
 			real_formatter: FORMAT_DOUBLE
 			int_formatter: FORMAT_INTEGER
 			print_open: BOOLEAN
+			first, last, i: INTEGER
+			tuple: VOLUME_TUPLE
 		do
 			!!real_formatter.make (5, 5)
 			!!int_formatter.make (5)
 			int_formatter.no_justify
-			if not l.empty then
-				if l.first.open_available then
-					print_open := true
-					-- format: date, open, high, low, close, volume
-				else
-					check
-						no_open: print_open = false
+			first := first_index (l)
+			last := last_index (l)
+			if last >= first then
+				if not l.empty then
+					if l.first.open_available then
+						print_open := true
+						-- format: date, open, high, low, close, volume
+					else
+						check
+							no_open: print_open = false
+						end
+						-- format: date, high, low, close, volume
 					end
-					-- format: date, high, low, close, volume
 				end
-			end
-			from
-				l.start
-			until
-				l.after
-			loop
-				print_date (l.item.end_date, 'y', 'm', 'd')
-				print (output_field_separator)
-				if print_open then
-					print (real_formatter.formatted(l.item.open.value))
+				from
+					i := first
+				until
+					i = last + 1
+				loop
+					tuple := l @ i
+					print_date (tuple.end_date, 'y', 'm', 'd')
 					print (output_field_separator)
+					if print_open then
+						print (real_formatter.formatted(tuple.open.value))
+						print (output_field_separator)
+					end
+					print (real_formatter.formatted(tuple.high.value))
+					print (output_field_separator)
+					print (real_formatter.formatted(tuple.low.value))
+					print (output_field_separator)
+					print (real_formatter.formatted(tuple.close.value))
+					print (output_field_separator)
+					print (int_formatter.formatted(tuple.volume))
+					print (output_record_separator)
+					i := i + 1
 				end
-				print (real_formatter.formatted(l.item.high.value))
-				print (output_field_separator)
-				print (real_formatter.formatted(l.item.low.value))
-				print (output_field_separator)
-				print (real_formatter.formatted(l.item.close.value))
-				print (output_field_separator)
-				print (int_formatter.formatted(l.item.volume))
-				print (output_record_separator)
-				l.forth
 			end
 		end
 
-	print_composite_volume_tuples (l: CHAIN [COMPOSITE_VOLUME_TUPLE]) is
+	print_composite_volume_tuples (
+		l: MARKET_TUPLE_LIST [COMPOSITE_VOLUME_TUPLE]) is
 		local
 			real_formatter: FORMAT_DOUBLE
 			int_formatter: FORMAT_INTEGER
 			print_open: BOOLEAN
+			first, last, i: INTEGER
+			tuple: COMPOSITE_VOLUME_TUPLE
 		do
 			!!real_formatter.make (5, 5)
 			!!int_formatter.make (5)
 			int_formatter.no_justify
-			if not l.empty then
-				if l.first.open_available then
-					print_open := true
-					-- format: date, open, high, low, close, volume
-				else
-					check
-						no_open: print_open = false
+			first := first_index (l)
+			last := last_index (l)
+			if last >= first then
+				if not l.empty then
+					if l.first.open_available then
+						print_open := true
+						-- format: date, open, high, low, close, volume
+					else
+						check
+							no_open: print_open = false
+						end
+						-- format: date, high, low, close, volume
 					end
-					-- format: date, high, low, close, volume
 				end
-			end
-			from
-				l.start
-			until
-				l.after
-			loop
-				print_date (l.item.end_date, 'y', 'm', 'd')
-				print (output_field_separator)
-				if print_open then
-					print (real_formatter.formatted(l.item.open.value))
+				from
+					i := first
+				until
+					i = last + 1
+				loop
+					tuple := l @ i
+					print_date (tuple.end_date, 'y', 'm', 'd')
 					print (output_field_separator)
+					if print_open then
+						print (real_formatter.formatted(tuple.open.value))
+						print (output_field_separator)
+					end
+					print (real_formatter.formatted(tuple.high.value))
+					print (output_field_separator)
+					print (real_formatter.formatted(tuple.low.value))
+					print (output_field_separator)
+					print (real_formatter.formatted(tuple.close.value))
+					print (output_field_separator)
+					print (int_formatter.formatted(tuple.volume))
+					print (output_record_separator)
+					i := i + 1
 				end
-				print (real_formatter.formatted(l.item.high.value))
-				print (output_field_separator)
-				print (real_formatter.formatted(l.item.low.value))
-				print (output_field_separator)
-				print (real_formatter.formatted(l.item.close.value))
-				print (output_field_separator)
-				print (int_formatter.formatted(l.item.volume))
-				print (output_record_separator)
-				l.forth
 			end
 		end
 
-	print_market_tuples (l: CHAIN [MARKET_TUPLE]) is
+	print_market_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
 		local
 			real_formatter: FORMAT_DOUBLE
+			first, last, i: INTEGER
+			tuple: MARKET_TUPLE
 		do
 			!!real_formatter.make (5, 5)
-			from
-				l.start
-			until
-				l.after
-			loop
-				print_date (l.item.end_date, 'y', 'm', 'd')
-				print (output_field_separator)
-				print (real_formatter.formatted(l.item.value))
-				print (output_record_separator)
-				l.forth
+			first := first_index (l)
+			last := last_index (l)
+			if last >= first then
+				from
+					i := first
+				until
+					i = last + 1
+				loop
+					tuple := l @ i
+					print_date (tuple.end_date, 'y', 'm', 'd')
+					print (output_field_separator)
+					print (real_formatter.formatted(tuple.value))
+					print (output_record_separator)
+					i := i + 1
+				end
 			end
 		end
 
 	print_date (date: DATE; f1, f2, f3: CHARACTER) is
-				-- Print `date', using f1, f2, and f3 to specify the order
-				-- of the year, month, and day fields.
+			-- Print `date', using f1, f2, and f3 to specify the order
+			-- of the year, month, and day fields.
 		require
 			fields_y_m_or_d:
 				(f1 = 'y' or f1 = 'm' or f1 = 'd') and
@@ -387,9 +427,59 @@ feature {NONE} -- Implementation
 			print ("%N")
 		end
 
+	first_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER is
+			-- First index for printing, according to print_start_date
+		do
+			if print_start_date /= Void and not l.empty then
+				Result := l.index_at_date (print_start_date)
+				if Result = 0 then
+					-- Indicate that no elements of l fall after
+					-- print_start_date by setting Result to one past
+					-- l's last element.
+					Result := l.count + 1
+				end
+			else
+				Result := 1
+			end
+		ensure
+			void_date_result: print_start_date = Void implies Result = 1
+			result_gt_1: Result >= 1
+		end
+
+	last_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER is
+			-- Last index for printing, according to print_end_date
+		do
+			if print_end_date /= Void and not l.empty then
+				Result := l.index_at_date (print_end_date)
+				if Result = 0 then
+					-- Result = 0 means that print_end_date > all dates in l.
+					-- Therefore, set Result to the last element of l.
+					Result := l.count
+				elseif
+					not l.i_th (Result).date_time.date.is_equal (print_end_date)
+				then
+					-- if no date in l matches print_end_date,
+					-- indext_at_date will return the index of the first
+					-- element whose date > print_end_date.  Since no dates
+					-- are to be printed that are later than the end date,
+					-- adjust Result to the previous element, which will
+					-- be earlier than print_end_date.
+					Result := Result - 1
+				end
+			else
+				Result := l.count
+			end
+		ensure
+			void_date_result: print_end_date = Void implies Result = l.count
+		end
+
 	verbose: BOOLEAN is
 			-- Print more information than usual? - default: no
 		do
 			Result := false
 		end
+
+	print_start_date, print_end_date: DATE
+			-- Start and end date to use for printing, if not void
+
 end -- PRINTING
