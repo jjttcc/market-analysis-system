@@ -197,12 +197,20 @@ feature {NONE} -- Implementation
 		end
 
 	cleanup is
+		local
+			unlock_failed: BOOLEAN
 		do
-			if lock /= Void and lock.locked then
+			if unlock_failed then
+				show_message (lock.last_error)
+			elseif lock /= Void and lock.locked then
 				lock.unlock
 			end
 		ensure then
-			unlocked: lock /= Void implies not lock.locked
+			unlocked: lock /= Void and not lock.error_occurred implies
+				not lock.locked
+		rescue
+			unlock_failed := true
+			retry
 		end
 
 feature {NONE} -- Hook routines
