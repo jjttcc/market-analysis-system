@@ -160,6 +160,10 @@ feature -- Basic operations
 			first := first_index (l)
 			last := last_index (l)
 			if last >= first then
+				debug ("data_update_bug")
+					print_requested_start_end_dates
+					print_start_end (l, first, last)
+				end
 				from
 					i := first
 				until
@@ -179,6 +183,10 @@ feature -- Basic operations
 			first := first_index (l)
 			last := last_index (l)
 			if last >= first then
+				debug ("data_update_bug")
+					print_requested_start_end_dates
+					print_start_end (l, first, last)
+				end
 				from
 					i := first
 				until
@@ -307,5 +315,44 @@ feature {NONE} -- Implementation
 			-- Buffer used to collect output to be printed
 
 	Buffer_init_size: INTEGER is 15000
+
+feature {NONE} -- Debugging tools
+
+	print_start_end (l: MARKET_TUPLE_LIST [MARKET_TUPLE];
+		first, last: INTEGER) is
+			-- Print the date/time of the starting and ending tuples,
+			-- according to first and last in `l'.
+		local
+			tuple: MARKET_TUPLE
+		do
+			io.print ("   Sending data with start date: ")
+			if l.valid_index (first) then
+				tuple := l @ first
+				io.print (tuple.date_time.out)
+			end
+			if l.valid_index (last) then
+				tuple := l @ last
+				io.print ("%N   end date: " + tuple.date_time.out)
+			end
+			io.print ("%N")
+		end
+
+	print_requested_start_end_dates is
+			-- Print the requested start and end dates.
+		do
+			io.print ("   Requested start date: ")
+			if print_start_date /= Void then
+				io.print (print_start_date.out)
+			else
+				io.print ("date of first record")
+			end
+			io.print ("%N   Requested end date: ")
+			if print_end_date /= Void then
+				io.print (print_end_date.out)
+			else
+				io.print ("date of last record")
+			end
+			io.print ("%N")
+		end
 
 end -- MARKET_TUPLE_PRINTER

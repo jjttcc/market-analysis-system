@@ -50,6 +50,10 @@ feature {NONE}
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 			pref: STRING
 		do
+			debug ("data_update_bug")
+				print ("%N%NSending data for '" + market_symbol + "' (" +
+				(create {DATE}.make_now).out + ")%N")
+			end
 			pref := ok_string
 			if session.caching_on then
 				t := cached_tradable (market_symbol, trading_period_type)

@@ -83,6 +83,10 @@ feature -- Access
 					Result := bottom
 				end
 			end
+			debug ("data_update_bug")
+				print ("index_at_date_time - count, top, Result: " +
+					count.out + ", " + top.out + ", " + Result.out + "%N")
+			end
 		ensure
 			non_zero_implies_valid: Result > 0 implies valid_index (Result)
 			non_zero_spec_negative_implies_result_le_d:
