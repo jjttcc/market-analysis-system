@@ -55,7 +55,7 @@ feature {NONE} -- Hook routine implementations
 				indicator := t.indicators @ indicator_id
 print ("send resp ft - period type: " + trading_period_type.name + "%N")
 				if
-True or --!!!!For experimentation/testing - remove this line soon.
+--!!!!!: True or --!!!!For experimentation/testing - remove this line soon.
 					not indicator.processed then
 print ("send resp ft - calling 'indicator.process'" + "%N")
 					indicator.process
