@@ -18,6 +18,11 @@ class GLOBAL_APPLICATION inherit
 			{NONE} all
 		end
 
+	GLOBAL_SERVICES
+		export
+			{NONE} all
+		end
+
 feature -- Utility
 
 	register_for_termination (v: TERMINABLE) is
@@ -120,6 +125,17 @@ feature -- Access
 			-- All defined market functions
 		once
 			Result := retrieved_function_library
+--!!!Clean up
+from Result.start until Result.exhausted loop
+if valid_stock_function (Result.item) then
+	print_list (<<"function ", Result.item.name, " was valid.%N">>)
+else
+	print_list (<<"function ", Result.item.name, " was INvalid.%N">>)
+ end
+ Result.forth
+ end
+print_list (<<"flib size: ", function_library.count, ", stock flib size: ",
+stock_function_library.count, "%N">>)
 		ensure
 			not_void: Result /= Void
 		end
@@ -313,6 +329,7 @@ feature {NONE} -- Implementation
 				end
 				Result := mflist
 			end
+			create_stock_function_library (Result)
 		ensure
 			not_void: Result /= Void
 		rescue
@@ -387,6 +404,22 @@ feature {NONE} -- Implementation
 		rescue
 			retrieval_failed := true
 			retry
+		end
+
+	stock_function_library: LIST [MARKET_FUNCTION]
+			-- Members of `function_library' that are valid for stocks
+
+	create_stock_function_library (l: LIST [MARKET_FUNCTION]) is
+			-- Create `stock_function_library' and place all members of
+			-- `l' that are `valid_stock_function's into it.
+		do
+			create {LINKED_LIST [MARKET_FUNCTION]} stock_function_library.make
+			from l.start until l.exhausted loop
+				if valid_stock_function (l.item) then
+					stock_function_library.extend (l.item)
+				end
+				l.forth
+			end
 		end
 
 	new_event_type (name: STRING;
