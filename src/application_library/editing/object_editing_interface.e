@@ -127,6 +127,7 @@ feature {NONE} -- Implementation
 				tree_names.extend (tree_objects.item.generator)
 				tree_objects.forth
 			end
+			distinguish_duplicates (tree_names)
 			from
 				create obj_names.make (objects.count)
 				objects.start
