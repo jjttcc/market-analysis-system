@@ -2,18 +2,24 @@
 
 import java.awt.*;
 import graph.*;
+import support.Configuration;
 import java.util.Vector;
+import java.util.Properties;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
 /** Scroll pane that holds the Market Analysis graph and buttons */
 public class MA_ScrollPane extends ScrollPane
 {
+	private static Properties print_properties;
+	static { print_properties = new Properties(); }
+
 	public MA_ScrollPane(Vector period_types, int scrollbarDisplayPolicy,
 				Chart parent_chart)
 	{
 		super(scrollbarDisplayPolicy);
 
+		Configuration config = Configuration.instance();
 		chart = parent_chart;
 		_main_graph = new InteractiveGraph();
 		_indicator_graph = new InteractiveGraph();
@@ -22,16 +28,16 @@ public class MA_ScrollPane extends ScrollPane
 		period_type_choice = new Choice();
 		initialize_period_type_choice(period_types);
 
-		Panel main_panel = new Panel(new BorderLayout());
+		main_panel = new Panel(new BorderLayout());
 		add(main_panel, "Center");
-		Panel graph_panel = new Panel(gblayout);
+		graph_panel = new Panel(gblayout);
 		main_panel.add (graph_panel, "Center");
-		Panel button_panel = new Panel(new BorderLayout());
+		_left_button_panel = new Panel(new BorderLayout());
 		Panel top_button_panel = new Panel(new GridLayout(3, 2));
 		Panel bottom_button_panel = new Panel(new GridLayout(3, 2));
-		main_panel.add (button_panel, "West");
-		button_panel.add (top_button_panel, "North");
-		button_panel.add (bottom_button_panel, "South");
+		main_panel.add (_left_button_panel, "West");
+		_left_button_panel.add (top_button_panel, "North");
+		_left_button_panel.add (bottom_button_panel, "South");
 		//top_button_panel.add(new Button("Dummy1"));
 		top_button_panel.add(period_type_choice);
 		//bottom_button_panel.add(new Button("Dummy2"));
@@ -58,7 +64,7 @@ public class MA_ScrollPane extends ScrollPane
 		_main_graph.borderBottom = 1;
 		_main_graph.borderLeft = 0;
 		_main_graph.borderRight = 1;
-		_main_graph.setGraphBackground(new Color(50,50,200));
+		_main_graph.setGraphBackground(config.background_color());
 		_main_graph.setSize(400, 310);
 
 		_indicator_graph.framecolor = new Color(0,0,0);
@@ -66,7 +72,7 @@ public class MA_ScrollPane extends ScrollPane
 		_indicator_graph.borderBottom = 1;
 		_indicator_graph.borderLeft = 0;
 		_indicator_graph.borderRight = 1;
-		_indicator_graph.setGraphBackground(new Color(50,50,200));
+		_indicator_graph.setGraphBackground(config.background_color());
 		_indicator_graph.setSize(400, 150);
 	}
 
@@ -123,6 +129,41 @@ public class MA_ScrollPane extends ScrollPane
 		}
 	}
 
+	public void print() {
+		Toolkit tk = getToolkit();
+		PrintJob pj = tk.getPrintJob(chart, chart.current_market,
+			print_properties);
+		if (pj != null) {
+			Graphics page = pj.getGraphics();
+			Dimension size = graph_panel.getSize();
+			Dimension pagesize = pj.getPageDimension();
+			_main_graph.set_symbol(chart.current_market.toUpperCase());
+			if (size.width <= pagesize.width) {
+				// Center the output on the page.
+				page.translate((pagesize.width - size.width)/2,
+				   (pagesize.height - size.height)/2);
+			} else {
+				// The graph size is wider than a page, so print first
+				// the left side, then the right side.  Assumption - it is
+				// not larger than two pages.
+				page.translate(15,
+				   (pagesize.height - size.height)/2);
+				graph_panel.printAll(page);
+				page.dispose();
+				page = pj.getGraphics();
+				page.translate(pagesize.width - size.width - 13,
+				   (pagesize.height - size.height)/2);
+			}
+			graph_panel.printAll(page);
+			page.dispose();
+			pj.end();
+			_main_graph.set_symbol(null);
+		}
+	}
+
+	// The left button panel component
+	public Panel left_button_panel() { return _left_button_panel; }
+
 // Implementation
 
 	void initialize_period_type_choice(Vector period_types) {
@@ -143,6 +184,9 @@ public class MA_ScrollPane extends ScrollPane
 
 	private InteractiveGraph _main_graph;
 	private InteractiveGraph _indicator_graph;
+	private Panel main_panel;
+	private Panel graph_panel;
+	private Panel _left_button_panel;
 	// Did _main_graph change since it was last repainted?
 	boolean main_graph_changed;
 	// Did _indicator_graph change since it was last repainted?
