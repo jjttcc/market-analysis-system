@@ -124,9 +124,6 @@ public class TimeDrawer extends TemporalDrawer {
 		}
 		i = 0;
 		draw_all_hours = hour_idx <= Draw_all_hour_limit;
-//!!!:
-System.out.println("[draw_tuples] times size: " + times.size());
-System.out.println("[draw_tuples] x_values.length: " + x_values.length);
 		if (hour_idx < Hour_limit) {
 			boolean draw_hour_line = hour_idx < Hour_line_limit;
 			fontmgr.set_new_font(fontmgr.SERIF, Font.PLAIN, 10);
@@ -159,17 +156,9 @@ System.out.println("[draw_tuples] x_values.length: " + x_values.length);
 
 		width_factor = width_factor_value(bounds, dates().size());
 		if (p.right() >= x_values.length) {
-//!!!:
-System.out.println("[dh] p.right is too large for index: " +
-p.right() + ", " + x_values.length);
-System.out.flush();
-x = 0;
+			throw new Error("[TimeDrawer.draw_hour] p.right is too large " +
+				"for index: " + p.right() + ", " + x_values.length);
 		} else {
-/*!!!:
-System.out.println("[dh] p.right is just right for index: " + p.right() + ", " +
-x_values.length);
-System.out.flush();
-*/
 			x = x_values[p.right()];
 		}
 		hour_x = x + Hour_x_offset;
@@ -195,15 +184,9 @@ System.out.flush();
 
 		width_factor = width_factor_value(bounds, dates().size());
 		if (p.right() >= x_values.length) {
-//!!!:
-System.out.println("[dd] p.right is too large for index: " + p.right() + ", " +
-x_values.length);
-x = 0;
+			throw new Error("[TimeDrawer.draw_day] p.right is too large " +
+				"for index: " + p.right() + ", " + x_values.length);
 		} else {
-/*!!!:
-System.out.println("[dd] p.right is just right for index: " + p.right() + ", " +
-x_values.length);
-*/
 			x = x_values[p.right()];
 		}
 		day_x = x + Day_x_offset;

@@ -32,8 +32,6 @@ public class PriceDrawer extends MarketDrawer {
 		if (data == null || lngth < Stride) return;
 
 		initialize_x_values();
-//!!!!!:
-System.out.println("x_values was reset HERE - length: " + x_values.length);
 		g.setColor(bar_color);
 		width_factor = width_factor_value(bounds, lngth / 4);
 		height_factor = height_factor_value(bounds);

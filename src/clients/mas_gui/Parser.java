@@ -230,6 +230,9 @@ class Parser extends AbstractParser {
 			has_times = times != null && ! times.isEmpty();
 			int length = value_data.length / float_field_count;
 //!!!!Test with only 1 ctor possibility:
+//!!!Check if this removed logic is related to the bug in the 'append'
+//routine of DrawableDataSet.  (See the entry for task 44 with
+//"Date/time: 2004-10-28, 23:57" for more info. on the bug.):
 //if (length > 0) {
 			if (! for_update) {
 //!!!:
@@ -271,6 +274,7 @@ System.out.println("Parser creating a BasicDataSet");
 			if (open_interest_drawer != null && open_interests != null &&
 					open_interests.length > 0) {
 				if (! for_update) {
+//!!!:
 System.out.println("Parser creating a DrawableDataSet");
 					oi_data = new DrawableDataSet(open_interests,
 						open_interests.length, open_interest_drawer);

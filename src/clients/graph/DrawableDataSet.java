@@ -46,13 +46,10 @@ public class DrawableDataSet extends BasicDataSet {
 	*     dates_needed() && drawer() == d<br>
 	*     data != null && dates != null && times != null
 	*     size() == 0 */
-//!!!!Remove??:
 	public DrawableDataSet(BasicDrawer d) {
 		if (d  == null) {
 			throw new Error("DataSet constructor: precondition violated");
 		}
-System.out.println("DrawableDataSet(BasicDrawer) called, by:");
-new Error().printStackTrace();
 		drawer = d;
 		data = new ArrayList();
 		dates = new ArrayList();
@@ -92,14 +89,6 @@ new Error().printStackTrace();
 		drawer = drwr;
 		date_drawer = new DateDrawer(drawer);
 		time_drawer = new TimeDrawer(drawer);
-/*!!! Done in parent:
-		data = new ArrayList(d.length);
-		for (int i = 0; i < d.length; ++i) {
-			data.add(new Double(d[i]));
-		}
-
-		tuple_count = n;
-*/
 		dates_needed = true;
 		if (! (dates_needed() && drawer() == drwr) ||
 				size() != data_points()) {
@@ -109,25 +98,10 @@ new Error().printStackTrace();
 
 // Access
 
-//!!!:	public double maximum_x() {  return dxmax; } 
-
-//!!!:	public double minimum_x() {  return dxmin; } 
-
-//!!!:	public double maximum_y() {  return dymax; } 
-
-//!!!:	public double minimum_y() {  return dymin; }
-
 	public BasicDrawer drawer() { return drawer; }
 
 	// Do dates need to be drawn?
 	public boolean dates_needed() { return dates_needed; }
-
-/*!!!:
-	// Number of records in this data set
-	public int size() {
-		return tuple_count;
-	}
-*/
 
 	// x axis
 	public Axis xaxis() { return xaxis; }
@@ -194,105 +168,31 @@ new Error().printStackTrace();
 		return point;
 	}
 
-/*!!!:
-	public String toString() {
-		String result = "";
-		System.out.println("DrawableDataSet - data size: " + data.size());
-		Iterator i = dates.iterator();
-		Iterator j = times.iterator();
-		Iterator k = data.iterator();
-		if (dates.size() != times.size()) {
-			System.out.println("dates, times have different sizes: " +
-				dates.size() + ", " + times.size());
-		}
-		if (dates.size() != data.size()) {
-			System.out.println("dates, data have different sizes: " +
-				dates.size() + ", " + data.size());
-		}
-		while (i.hasNext() && j.hasNext() && k.hasNext()) {
-			System.out.println(i.next() + ", " + j.next() + ", " + k.next());
-		}
-		return result;
-	}
-*/
-
 // Element change
 
 	public void append(DataSet d) {
 		int oldsize = size();
-if (dates == null || times == null || data == null) {
-System.out.println("dates, times, and/or data is null:\n");
-//System.out.println(dates + ", " + times + ", " + data);
-//System.out.println("this: " + this);
-System.out.println("dates_needed: " + dates_needed);
-new Error().printStackTrace();
-}
 		if (d != null) {
-System.out.println("append called with dataset:\n'" + d + "'");
-System.out.println("main dataset size before append: " + size());
-//System.out.print("main dataset contents before append:\n<<<<");
-//System.out.print(this);
-//System.out.print("\n>>>>>");
-if (d.size() == 0) { System.out.println("d is empty!");}
-System.out.println("OLD tuple count: " + tuple_count);
 			tuple_count = oldsize + d.size();
-System.out.println("tuple count set to: " + tuple_count +
-" (IS THIS CORRECT?)");
 			BasicDataSet drwd = (BasicDataSet) d;
-System.out.println("drwd: " + drwd);
-System.out.println("before add all - sizes: " +
-data.size() + ", " + dates.size() + ", " + times.size());
 			data.addAll(drwd.data);
 			dates.addAll(drwd.dates);
 			times.addAll(drwd.times);
-if (xaxis == null || yaxis == null) {
-if (xaxis == null) {
-System.out.println("Xaxis is null");
-}
-if (yaxis == null) {
-System.out.println("Yaxis is null");
-}
-}
 
-//XXXX
-		range();
-		if (xaxis != null) {
-			xaxis.resetRange();
-			System.out.println("G");
+			// Reset fields dependent on the data set contents.
+			range();
+			if (xaxis != null) {
+				xaxis.resetRange();
+			}
+			if (yaxis != null) {
+				yaxis.resetRange();
+			}
 		}
-		if (yaxis != null) {
-			yaxis.resetRange();
-			System.out.println("H");
-		}
-
-/*
-//Re-attach 'this' data set to the axes to ...!!!
-if (xaxis != null) {
-//xaxis.attachDataSet(this);
-xaxis.resetDataSets();
-System.out.println("G");
-}
-if (yaxis != null) {
-//yaxis.attachDataSet(this);
-yaxis.resetDataSets();
-System.out.println("H");
-}
-*/
-		}
-else {
-System.out.println("append called with NULL dataset\n");
-}
 		if (d != null && ! (size() == oldsize + d.size())) {
-			throw new Error("append: postcondition 1 violated");
-		} else if (d == null && (size() != oldsize)) {
 			throw new Error("append: postcondition 2 violated");
+		} else if (d == null && (size() != oldsize)) {
+			throw new Error("append: postcondition 1 violated");
 		}
-System.out.println("main dataset size after append: " + size());
-//System.out.print("main dataset contents after append:\n<<<<");
-//System.out.print(this);
-//System.out.print("\n>>>>>");
-System.out.println("dates size after append: " + dates.size());
-System.out.println("times size after append: " + times.size());
 	}
 
 	public void set_drawer(BasicDrawer d) {
@@ -361,8 +261,6 @@ System.out.println("times size after append: " + times.size());
 	*/
 	public void draw_data(Graphics g, Rectangle bounds) {
 		boolean restore_bounds = false;
-System.out.println("drawer: " + drawer);
-//System.out.println("data: " + data);
 		if (! range_set) range();
 		if ( linecolor != null) g.setColor(linecolor);
 		drawer.set_data(data);
@@ -372,7 +270,6 @@ System.out.println("drawer: " + drawer);
 		drawer.set_ranges(xrange, yrange);
 		drawer.set_clipping(clipping);
 		drawer.draw_data(g, bounds, hline_data, vline_data, color);
-System.out.println("DDS dd back");
 	}
 
 // Implementation
@@ -460,15 +357,12 @@ System.out.println("DDS dd back");
 	* @precondition
 	*    drawer != null
 	*/
-	protected int stride() { return drawer.drawing_stride(); }
-
-/*!!!:
-	protected int length() {
-		int result = 0;
-		if (data != null) result = data.size();
-		return result;
+	protected int stride() {
+		if (drawer == null) {
+			throw new Error("assertion violated in 'stride()': drawer != null");
+		}
+		return drawer.drawing_stride();
 	}
-*/
 
 // Implementation - attributes
 
@@ -530,15 +424,6 @@ System.out.println("DDS dd back");
 	*/
 	private boolean clipping = false;
 
-	// Main data
-//!!!:	private ArrayList data;	// Double
-
-	// Date data
-//!!!:	protected ArrayList dates;	// String
-
-	// Time data
-//!!!:	protected ArrayList times;	// String
-
 	/**
 	* Drawer of price bars - e.g., tic bars or candles
 	*/
@@ -553,30 +438,6 @@ System.out.println("DDS dd back");
 	* Drawer of times
 	*/
 	private TimeDrawer time_drawer;
-
-	/**
-	* The data X maximum. 
-	* Once the data is loaded this will never change.
-	*/
-//!!!:	private double dxmax;
-
-	/**
-	* The data X minimum. 
-	* Once the data is loaded this will never change.
-	*/
-//!!!:	private double dxmin;
-
-	/**
-	* The data Y maximum. 
-	* Once the data is loaded this will never change.
-	*/
-//!!!:	private double dymax;
-
-	/**
-	* The data Y minimum. 
-	* Once the data is loaded this will never change.
-	*/
-//!!!:	private double dymin;
 
 	// Horizontal, vertical line data
 	private ArrayList hline_data;

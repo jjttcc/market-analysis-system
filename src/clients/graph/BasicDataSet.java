@@ -43,13 +43,10 @@ public class BasicDataSet extends DataSet {
 	*     size() == 0
 	*     data != null && dates != null && times != null
 	*/
-//!!!!Remove??:
 	public BasicDataSet() {
 		data = new ArrayList();
 		dates = new ArrayList();
 		times = new ArrayList();
-System.out.println("BasicDataSet() called");
-//!!!:		dates_needed = true;
 		tuple_count = 0;
 	}
 
@@ -73,8 +70,6 @@ System.out.println("BasicDataSet() called");
 	*     data != null && dates != null && times != null
 	*/
 	public BasicDataSet(double d[], int n) throws Error {
-//!!!:
-System.out.println("BasicDataSet(double d[], int n) called");
 		if (d  == null || n < 0) {
 			String msg = "BasicDataSet constructor: precondition violated:\n";
 			if (d == null) {
@@ -92,7 +87,6 @@ System.out.println("BasicDataSet(double d[], int n) called");
 		}
 
 		tuple_count = n;
-//!!!:		dates_needed = true;
 	}
 
 // Access
@@ -105,78 +99,10 @@ System.out.println("BasicDataSet(double d[], int n) called");
 
 	public double minimum_y() {  return dymin; }
 
-//!!!:	// Do dates need to be drawn?
-//!!!:	public boolean dates_needed() { return dates_needed; }
-
 	// Number of records in this data set
 	public int size() {
 		return tuple_count;
 	}
-
-	// x axis
-//!!!:	public Axis xaxis() { return xaxis; }
-
-	// y axis
-//!!!:	public Axis yaxis() { return yaxis; }
-
-//	/**
-//	* The number of data points in the DataSet
-//	* @return number of (x,y) points.
-//	*/
-//	public int data_points() {  return length()/stride(); }
-//
-//	/**
-//	* The data point at the parsed index. The first (x,y) pair
-//	* is at index 0.
-//	* @param index Data point index
-//	* @return array containing the (x,y) pair.
-//	*/
-//	public double[] point(int index) {
-//		int strd = stride();
-//		double point[] = new double[strd];
-//		int i = index*strd;
-//		if (index < 0 || i > length()-strd) {
-//			return null;
-//		}
-//
-//		for (int j=0; j<strd; j++) {
-//			point[j] = ((Double) data.get(i+j)).doubleValue();
-//		}
-//
-//		return point;
-//	}
-//
-//	/**
-//	* Return the data point that is closest to the parsed (x,y) position
-//	* @param x 
-//	* @param y (x,y) position in data space. 
-//	* @return array containing the closest data point.
-//	*/
-//	public double[] closest_point(double x, double y) {
-//		double point[] = {0.0, 0.0, 0.0};
-//		int i;
-//		double xdiff, ydiff, dist2;
-//		int strd = stride();
-//
-//		xdiff = ((Double) data.get(0)).doubleValue() - x;
-//		ydiff = ((Double) data.get(1)).doubleValue() - y;
-//		point[0] = ((Double) data.get(0)).doubleValue();
-//		point[1] = ((Double) data.get(1)).doubleValue();
-//		point[2] = xdiff*xdiff + ydiff*ydiff;
-//
-//		for(i=strd; i<length()-1; i+=strd) {
-//			xdiff = ((Double) data.get(i)).doubleValue() - x;
-//			ydiff = ((Double) data.get(i+1)).doubleValue() - y;
-//			dist2 = xdiff*xdiff + ydiff*ydiff;
-//			if(dist2 < point[2]) {
-//				point[0] = ((Double) data.get(i)).doubleValue();
-//				point[1] = ((Double) data.get(i+1)).doubleValue();
-//				point[2] = dist2;
-//			}
-//		}
-//
-//		return point;
-//	}
 
 	public String toString() {
 		String result = super.toString();
@@ -185,24 +111,18 @@ System.out.println("BasicDataSet(double d[], int n) called");
 		if (dates.size() != times.size()) {
 			result += "\ndates, times have different sizes: " +
 				dates.size() + ", " + times.size();
-System.out.println(result);
-new Error().printStackTrace();
 		}
 			
 		if (getClass().getName().equals("graph.DrawableDataSet")) {
 			if (data.size() / stride() != dates.size()) {
 				result += "\n[1] dates, data have different sizes: " +
 					dates.size() + ", " + data.size() / stride();
-System.out.println(result);
-new Error().printStackTrace();
 		}
 		} else {
 			if (dates.size() != data.size() &&
 					data.size() / 4 != dates.size()) {
 				result += "\n[2] dates, data have different sizes: " +
 					dates.size() + ", " + data.size() / stride();
-System.out.println(result);
-new Error().printStackTrace();
 			}
 		}
 		return result;
@@ -236,119 +156,12 @@ new Error().printStackTrace();
 		}
 	}
 
-//!!!:	public void set_dates_needed(boolean b) { dates_needed = b; }
-
-	// Set the x axis to `a'.
-//!!!:	public void set_xaxis(Axis a) { xaxis = a; }
-
-	// Set the y axis to `a'.
-//!!!:	public void set_yaxis(Axis a) { yaxis = a; }
-
-/*!!!:
-	// Add y1, y2 values for a horizontal line.
-	public void add_hline(DoublePair p) {
-		if (hline_data == null) hline_data = new ArrayList();
-		hline_data.add(p);
-	}
-
-	// Add x1, x2 values for a vertical line.
-	public void add_vline(DoublePair p) {
-		if (vline_data == null) vline_data = new ArrayList();
-		vline_data.add(p);
-	}
-*/
-
-/*
-	public void set_reference_values_needed(boolean b) {
-		drawer.set_reference_values_needed (b);
-	}
-*/
-
-// Basic operations
-
-	/**
-	* Draw the straight line segments and/or the markers at the
-	* data points.
-	* If this data has been attached to an Axis then scale the data
-	* based on the axis maximum/minimum otherwise scale using
-	* the data's maximum/minimum
-	* @param g Graphics state
-	* @param bounds The data window to draw into
-	*/
-/*
-	public void draw_data(Graphics g, Rectangle bounds) {
-		boolean restore_bounds = false;
-System.out.println("drawer: " + drawer);
-//System.out.println("data: " + data);
-		if (! range_set) range();
-		if ( linecolor != null) g.setColor(linecolor);
-		drawer.set_data(data);
-		drawer.set_xaxis(xaxis);
-		drawer.set_yaxis(yaxis);
-		drawer.set_maxes(xmax, ymax, xmin, ymin);
-		drawer.set_ranges(xrange, yrange);
-		drawer.set_clipping(clipping);
-		drawer.draw_data(g, bounds, hline_data, vline_data, color);
-System.out.println("DDS dd back");
-	}
-*/
 
 // Implementation
-
-	// set g2d to `b'.
-//!!!:	protected void set_g2d(Graph g) { g2d = g; }
-
-	/**
-	* Calculate the range of the data. This modifies dxmin,dxmax,dymin,dymax
-	* and xmin,xmax,ymin,ymax
-	* Precondition: tuple_count has been set
-	*/
-/*
-	protected void range() {
-		int i;
-		int lnth = length();
-		int stride = stride();
-
-		if (lnth >= stride ) {
-			dymax = ((Double) data.get(0)).doubleValue();
-			dymin = dymax;
-			// The range for x follows the data index - starts at 1
-			// and ends at data.length.
-			dxmax = tuple_count;
-			dxmin = 1;
-		} else {
-			dxmin = 0.0;
-			dxmax = 0.0;
-			dymin = 0.0;
-			dymax = 0.0;
-		}
-
-		// `data' holds only y values - find the largest and smallest.
-		for (i = 0; i < lnth; ++i) {
-			if (dymax < ((Double) data.get(i)).doubleValue()) {
-				dymax = ((Double) data.get(i)).doubleValue();
-			}
-			else if ( dymin > ((Double) data.get(i)).doubleValue() ) {
-				dymin = ((Double) data.get(i)).doubleValue();
-			}
-		}
-		if ( yaxis == null) {
-			ymin = dymin;
-			ymax = dymax;
-		}
-		if ( xaxis == null) {
-			xmin = dxmin;
-			xmax = dxmax;
-		}
-		range_set = true;
-	}
-*/
 
 	/**
 	* Number of components in a data tuple - for example, 2 (x, y) for
 	* a simple point
-	* @precondition
-	*    drawer != null
 	*/
 	protected int stride() { return 1; }
 
@@ -359,74 +172,6 @@ System.out.println("DDS dd back");
 	}
 
 // Implementation - attributes
-
-	/** 
-	*    The Graphics canvas that is driving the whole show.
-	* @see graph.Graph
-	*/
-//!!!:	private Graph g2d;
-
-	/**
-	*    The color of the straight line segments
-	*/
-//!!!:	private Color linecolor     = null;
-
-	/**
-	*    The marker color
-	*/
-//!!!:	private Color  markercolor  = null;
-
-	/**
-	*    The scaling factor for the marker. Default value is 1.
-	*/
-//!!!:	private double markerscale  = 1.0;
-
-	/**
-	*    The Axis object the X data is attached to. From the Axis object
-	*    the scaling for the data can be derived.
-	* @see graph.Axis
-	*/
-//!!!:	private Axis xaxis;
-
-	/**
-	*    The Axis object the Y data is attached to.
-	* @see graph.Axis
-	*/
-//!!!:	private Axis yaxis;
-
-	/**
-	* The current plottable X maximum of the data. 
-	* This can be very different from
-	* true data X maximum. The data is clipped when plotted.
-	*/
-//!!!:	private double xmax; 
-
-	/**
-	* The current plottable X minimum of the data. 
-	* This can be very different from
-	* true data X minimum. The data is clipped when plotted.
-	*/
-//!!!:	private double xmin;
-
-	/**
-	* The current plottable Y maximum of the data. 
-	* This can be very different from
-	* true data Y maximum. The data is clipped when plotted.
-	*/
-//!!!:	private double ymax; 
-
-	/**
-	* The current plottable Y minimum of the data. 
-	* This can be very different from
-	* true data Y minimum. The data is clipped when plotted.
-	*/
-//!!!:	private double ymin;
-
-	/**
-	* Boolean to control clipping of the data window.
-	* Default value is <em>true</em>, clip the data window.
-	*/
-//!!!:	private boolean clipping = false;
 
 	// Main data
 	protected ArrayList data;	// Double
@@ -461,27 +206,6 @@ System.out.println("DDS dd back");
 	*/
 	protected double dymin;
 
-/*!!!:
-	// Horizontal, vertical line data
-	private ArrayList hline_data;
-	private ArrayList vline_data;
-*/
-
-	/**
-	*    The X range of the clipped data
-	*/
-//!!!:	private double xrange;
-
-	/**
-	*    The Y range of the clipped data
-	*/
-//!!!:	private double yrange;
-
-//	// Has range() been called to set the range?
-//!!!:	private boolean range_set = false;
-
 	// Number of tuples in the data
 	protected int tuple_count;
-
-//!!!:	private boolean dates_needed;
 }

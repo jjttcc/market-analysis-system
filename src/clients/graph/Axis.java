@@ -224,29 +224,10 @@ public class Axis {
 	* @see graph.DrawableDataSet
 	*/
 	public void attachDataSet( DrawableDataSet d ) {
-System.out.println("attachDataSet - d.size: " + d.size());
 		if (orientation == HORIZONTAL) {
-System.out.println("attachDataSet attaching X data");
 			attachX_Data( d );
 		} else {
-System.out.println("attachDataSet attaching Y data");
 			attachY_Data( d );
-		}
-	}
-
-//!!!!Remove?:
-	/**
-	* Reset the associated data sets with respect to this axis.
-	*/
-	public void resetDataSets() {
-		DrawableDataSet d;
-		Iterator i = dataset.iterator();
-int count = 0;
-		while (i.hasNext()) {
-System.out.println("restting with data set " + ++count);
-			d = (DrawableDataSet) i.next();
-			resetX_Data(d);
-			resetY_Data(d);
 		}
 	}
 
@@ -326,7 +307,7 @@ System.out.println("restting with data set " + ++count);
 		}
 		dataset.remove(d);
 
-		if (!manualRange) {
+		if (! manualRange) {
 			resetRange();
 		}
 	}
@@ -343,12 +324,12 @@ System.out.println("restting with data set " + ++count);
 		}
 
 		if (orientation == HORIZONTAL) {
-			for (i=0; i<dataset.size(); i++) {
+			for (i=0; i < dataset.size(); i++) {
 				d = (DrawableDataSet)(dataset.get(i));
 				d.set_xaxis(null);
 			}
 		} else {
-			for (i=0; i<dataset.size(); i++) {
+			for (i=0; i < dataset.size(); i++) {
 				d = (DrawableDataSet)(dataset.get(i));
 				d.set_yaxis(null);
 			}
@@ -489,7 +470,7 @@ System.out.println("restting with data set " + ++count);
 			width = label.getRHeight(g) + label.getLeading(g); 
 			width += Math.max(title.getRHeight(g),exponent.getRHeight(g));
 		} else {
-			for(i=0; i<label_string.length; i++) {
+			for(i=0; i < label_string.length; i++) {
 				label.setText(" "+label_string[i]);
 				width = Math.max(label.getRWidth(g),width);
 			}
@@ -644,7 +625,7 @@ System.out.println("restting with data set " + ++count);
 
 		minor_step = label_step/(minor_tic_count+1);
 		val = label_start;
-		for(i=0; i<label_count; i++) {
+		for(i=0; i < label_count; i++) {
 			if (val >= vmin && val <= vmax) {
 				y0 = amin.y;
 				x0 = amin.x + (int)( ( val - minimum ) * scale);
@@ -670,7 +651,7 @@ System.out.println("restting with data set " + ++count);
 			}
 
 			minor = val + minor_step;
-			for(j=0; j<minor_tic_count; j++) {
+			for(j=0; j < minor_tic_count; j++) {
 				if (minor >= vmin && minor <= vmax) {
 					y0 = amin.y;
 					x0 = amin.x + (int)( ( minor - minimum ) * scale);
@@ -698,7 +679,7 @@ System.out.println("restting with data set " + ++count);
 		}
 
 		val = label_start;
-		for(i=0; i<label_count; i++) {
+		for(i=0; i < label_count; i++) {
 			if (val >= vmin && val <= vmax) {
 				y0 = amin.y + offset;
 				x0 = amin.x + (int)(( val - minimum ) * scale);
@@ -768,7 +749,7 @@ System.out.println("restting with data set " + ++count);
 
 		minor_step = label_step/(minor_tic_count+1);
 		val = label_start;
-		for(i=0; i<label_count; i++) {
+		for(i=0; i < label_count; i++) {
 			if (val >= vmin && val <= vmax) {
 				x0 = amin.x;
 				y0 = amax.y - (int)( ( val - minimum ) * scale);
@@ -793,7 +774,7 @@ System.out.println("restting with data set " + ++count);
 			}
 
 			minor = val + minor_step;
-			for(j=0; j<minor_tic_count; j++) {
+			for(j=0; j < minor_tic_count; j++) {
 				if (minor >= vmin && minor <= vmax) {
 					x0 = amin.x;
 					y0 = amax.y - (int)( ( minor - minimum ) * scale);
@@ -815,7 +796,7 @@ System.out.println("restting with data set " + ++count);
 		}
 
 		val = label_start;
-		for(i=0; i<label_count; i++) {
+		for(i=0; i < label_count; i++) {
 			if (val >= vmin && val <= vmax) {
 				x0 = amin.x + offset;
 				y0 = amax.y - (int)(( val - minimum ) * scale) + 
@@ -910,55 +891,6 @@ System.out.println("restting with data set " + ++count);
 		}
 	}
 
-//!!!!Remove?:
-	/**
-	* Reset the relationship between DrawableDataSet `d' and this
-	* horizontal axis.
-	* @param d dataset to attach.
-	*/
-	private void resetX_Data (DrawableDataSet d) {
-		d.range();
-//!!!dataset.add(d);
-//!!!d.set_xaxis(this);
-
-//!!!!!:? resetRange();
-		if (dataset.size() == 1) {
-			minimum = d.minimum_x();
-			maximum = d.maximum_x();
-		} else {
-			if (minimum > d.minimum_x()) {
-				minimum = d.minimum_x();
-			}
-			if (maximum < d.maximum_x()) {
-				maximum = d.maximum_x();
-			}
-		}
-	}
-
-//!!!!Remove?:
-	/**
-	* Reset the relationship between DrawableDataSet `d' and this
-	* vertical axis.
-	* @param d dataset to attach.
-	*/
-	private void resetY_Data (DrawableDataSet d) {
-		d.range();
-//!!!dataset.add(d);
-//!!!d.set_yaxis(this);
-
-		if (dataset.size() == 1) {
-			minimum = d.minimum_y();
-			maximum = d.maximum_y();
-		} else {
-			if (minimum > d.minimum_y()) {
-				minimum = d.minimum_y();
-			}
-			if (maximum < d.maximum_y()) {
-				maximum = d.maximum_y();
-			}
-		}
-	}
-
 	/**
 	* calculate the labels
 	*/
@@ -988,7 +920,7 @@ System.out.println("restting with data set " + ++count);
 		label_string = new String[label_count];
 		label_value  = new float[label_count];
 
-		for(i=0; i<label_count; i++) {
+		for(i=0; i < label_count; i++) {
 			val = label_start + i*label_step;
 
 			if (label_exponent < 0) {
@@ -996,7 +928,7 @@ System.out.println("restting with data set " + ++count);
 					val *= 10;
 				}
 			} else {
-				for (j=0; j<label_exponent;j++) {
+				for (j=0; j < label_exponent;j++) {
 					val /= 10;
 				}
 			}
@@ -1023,7 +955,7 @@ System.out.println("restting with data set " + ++count);
 				val *= 10.0;
 			}
 		} else {
-			for(i=0; i<exponent; i++) {
+			for(i=0; i < exponent; i++) {
 				val /= 10.0;
 			}
 		}
@@ -1042,7 +974,7 @@ System.out.println("restting with data set " + ++count);
 				val /= 10.0;
 			}
 		} else {
-			for(i=0; i<exponent; i++) {
+			for(i=0; i < exponent; i++) {
 				val *= 10.0;
 			}
 		}

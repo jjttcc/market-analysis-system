@@ -38,16 +38,6 @@ abstract public class BasicDrawer extends Drawer {
 	// Set the times.
 	public void set_times(ArrayList t) {}
 
-/****Duplicates of parent versions!!!! - remove:
-// Number of tuples in the data
-public int tuple_count() {
-return data_length() / drawing_stride();
-}
-// Number of elements in the data
-abstract public int data_length();
-!!!
-*/
-
 	public void set_boundaries_needed(boolean b) { boundaries_needed = b; }
 
 	private void draw_boundaries(Graphics g, Rectangle bounds) {
@@ -249,16 +239,13 @@ abstract public int data_length();
 		}
 		//@@The code below can probably be tuned such that the for loop
 		// inserts the minimum required values into y_valyes.
-//System.out.println("ymin: " + ymin);
 		if (step > step_thresh_hold) {
 			start = (long) (Math.floor(ymin / step) * step + step);
 		} else {
 			start = ymin - step * small_step_multiplier;
 			start = Math.floor(start * 1 / step) * step;
 		}
-//System.out.println("start, step, ymax: " + start + ", " + step + ", " + ymax);
 		for (y = start; y < ymax; y += step) {
-//System.out.println("adding " + y);
 			y_values.add(new Double(y));
 		}
 		y_strings = Utilities.formatted_doubles(y_values, ! is_lower());

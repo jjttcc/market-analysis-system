@@ -34,8 +34,6 @@ abstract public class MarketDrawer extends BasicDrawer {
 		} else {
 			result = 0;
 		}
-//!!!!!:
-System.out.println("MKT DRW returning data length() of " + result);
 		return result;
 	}
 
@@ -54,8 +52,6 @@ System.out.println("MKT DRW returning data length() of " + result);
 	// Set the dates.
 	public void set_dates(ArrayList d) {
 		dates = d;
-//!!!!:
-System.out.println("MD dates set with size: " + d.size());
 		}
 
 	// Set the times.
@@ -74,12 +70,6 @@ System.out.println("MD dates set with size: " + d.size());
 	// Postcondition: x_values != null && x_values.length == tuple_count()
 	protected void initialize_x_values() {
 		x_values = new int[tuple_count()];
-//!!!:
-System.out.println("In " + getClass().getName() +
-", initialize_x_values called;\nx_values.length, data.size():" +
-x_values.length + ", " + data.size());
-System.out.println("dates.size(): " + dates.size());
-System.out.println("times.size(): " + times.size());
 		if (! (x_values != null && x_values.length == tuple_count())) {
 			throw new Error("Postcondition violated:\n" +
 				"x_values != null && x_values.length == tuple_count()");

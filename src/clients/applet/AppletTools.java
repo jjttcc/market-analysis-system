@@ -39,7 +39,7 @@ public class AppletTools {
 		try {
 			url = new URL(codebase, filename);
 		} catch (java.net.MalformedURLException e) {
-			//!!!Turn this into a proper error message:
+			//@@@Turn this into a proper error message:
 			System.err.println("Couldn't create image: badly specified URL");
 			return null;
 		}

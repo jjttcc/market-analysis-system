@@ -407,16 +407,13 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	}
 
 	public void run() {
-System.out.println("Chart.run called");
 		//@@In the future, if needed, this routine can call one of a
 		//set of routines, based on a flag.
 		synchronized(requesting_data) {
 			if (! requesting_data.booleanValue()) {
 				Thread.yield();
 				requesting_data = Boolean.TRUE;
-System.out.println("requesting " + requested_tradable);
 				send_data_request(requested_tradable);
-System.out.println("FINISHED requesting " + requested_tradable);
 				requesting_data = Boolean.FALSE;
 			} else {
 			}
@@ -427,12 +424,9 @@ System.out.println("FINISHED requesting " + requested_tradable);
 
 	public void update_start_date(AbstractDataSetBuilder b) {
 		latest_date_time = b.last_latest_date_time();
-//!!!:
-System.out.println("update st dt - latest is now: " + latest_date_time);
 	}
 
 	public void notify_of_update() {
-System.out.println("I (" + this + ") was notified of an update!");
 		redraw_graphs();
 	}
 
@@ -477,7 +471,6 @@ System.out.println("data request failed with code: " + result_id);
 
 	// Force all graphs contained in the chart window to be redrawn.
 	protected void redraw_graphs() {
-System.out.println("Chart.redraw_graphs called");
 		main_pane.force_repaint_graphs();
 	}
 
@@ -686,6 +679,7 @@ System.out.println("Chart.redraw_graphs called");
 		// If the current upper and lower indicator lists are not empty,
 		// they were loaded from the saved settings.  Make sure they
 		// get marked as "selected".
+//!!!:
 System.out.println("from the settings, selecting upper indicators: " +
 current_upper_indicators);
 		tradable_specification.select_indicators(current_upper_indicators);
@@ -740,20 +734,15 @@ current_lower_indicators);
 	private void post_initialize() {
 		MA_Configuration conf = MA_Configuration.application_instance();
 		if (conf.auto_refresh()) {
-System.out.println("auto refresh is ON.");
 			auto_refresh_handler = new AutoRefreshSetup(this);
 			turn_on_refresh();
-////!!!! for testing:
-//auto_refresh_handler.schedule();
 		}
-else { System.out.println("auto refresh is OFFFFFF.");}
 	}
 
 	// Turn on 'auto data refresh'.
 	// Ignore if auto_refresh_handler == null
 	private void turn_on_refresh() {
 		if (auto_refresh_handler != null) {
-System.out.println("Scheduling for refresh.");
 			auto_refresh_handler.schedule();
 		}
 	}
@@ -762,7 +751,6 @@ System.out.println("Scheduling for refresh.");
 	// Ignore if auto_refresh_handler == null
 	private void turn_off_refresh() {
 		if (auto_refresh_handler != null) {
-System.out.println("Unscheduling for refresh.");
 			auto_refresh_handler.unschedule();
 		}
 	}

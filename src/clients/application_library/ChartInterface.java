@@ -13,12 +13,6 @@ public interface ChartInterface {
 	// List of all tradables in the server's database
 	public Vector tradables();
 
-/*!!!!!REMOVE:
-	// indicators
-	// Postcondition: result != null
-	public Hashtable indicators();
-*/
-
 	// The identifier value associated with indicator name `ind_name'
 	public int indicator_id_for(String ind_name);
 
