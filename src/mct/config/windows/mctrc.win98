@@ -78,7 +78,7 @@ hostname	localhost
 
 # Detailed version of command to start the server: data from files
 begin	start_server_command
-command	<cwdir> [<data_dir>]<bin_dir>/mas -o -f , -b <portnumber> *.txt
+command	<cwdir>[<data_dir>]<bin_dir>/mas -o -f , -b <portnumber> *.txt
 command_description	Get data from files
 command_name	File-based
 mark	default
