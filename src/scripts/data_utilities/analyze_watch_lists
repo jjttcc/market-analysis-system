@@ -12,6 +12,7 @@ port_number = 11887
 Sleeptime = 25
 Sleeptime = 1
 Map_file_name = 'env_map'
+Use_db_envname = 'MAS_DATA_IN_DB'
 
 def fatal(s):
 	print Progname + ': Fatal error: ' + s + ' - exiting ...'
@@ -24,6 +25,14 @@ def usage():
 		"incrementing\n      by 1 for each succeeding list to be processed." +
 		"\n    map_file_name is the name of the file that containts the\n" +
 		"      watch-list/env. config file map")
+
+def use_database():
+	result = 0
+	try:
+		if os.environ[Use_db_envname] != '': result = 1
+	except:
+		None
+	return result
 
 if len(sys.argv) > 1:
 	i = 1
@@ -40,8 +49,15 @@ if len(sys.argv) > 1:
 		i = i + 1
 mktdata_dirname = 'MARKET_DATA_DIRECTORY'
 mas_dirname = 'MAS_DIRECTORY'
-list_dir = os.environ[mktdata_dirname] + "/../etc"
-data_dir = os.environ[mktdata_dirname]
+data_dir = ''; list_dir = ''
+try:
+	list_dir = os.environ[mktdata_dirname] + "/../etc"
+	data_dir = os.environ[mktdata_dirname]
+except:
+	print Progname + ': Environment variable ' + mktdata_dirname + \
+		' not set - exiting ...'
+	sys.exit(-1)
+
 if not posixpath.isdir(list_dir):
 	fatal(list_dir + " is not a directory.")
 
@@ -79,10 +95,12 @@ def watchfile_list(f):
 def process_list(watchfile, env_dir, days, portnum):
 	if portnum > 0:
 		cmd = mas_dirname + '=' + env_dir + ' analyze_stocks -p ' + \
-			`portnum` + ' -d ' + days + watchfile_list(watchfile)
+			`portnum` + ' -d ' + days
 	else:
 		cmd = mas_dirname + '=' + env_dir + \
-			' analyze_stocks -d ' + days + ' ' + watchfile_list(watchfile)
+			' analyze_stocks -d ' + days
+	if not use_database():
+		cmd = cmd + ' ' + watchfile_list(watchfile)
 	#print 'processing with command line: ' + cmd
 	os.system(cmd)
 

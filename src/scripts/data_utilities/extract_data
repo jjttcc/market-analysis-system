@@ -18,9 +18,27 @@ fail()
 	exit -1
 }
 
+# Fix record (stdin) - ensure open price is >= low and <= high
+fix_record()
+{
+awk 'BEGIN {
+	FS = ","
+	OFS = ","
+	open = 2
+	high = 3
+	low = 4
+	closex = 5
+}
+{
+	if ($open > $high) $open = $high
+	else if ($open < $low) $open = $low
+	print
+}'
+}
+
 format()
 {
-	sed "s/^[^,]*,/${date},/"|cnvrt_eod
+	sed "s/^[^,]*,/${date},/"|cnvrt_eod|fix_record
 }
 
 insert()

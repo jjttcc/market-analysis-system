@@ -35,7 +35,6 @@ else
 		result=-1
 	else
 		process_stock_splits
-		fix_prices
 		analyze_watch_lists 30001
 	fi
 fi

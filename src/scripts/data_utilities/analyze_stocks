@@ -5,6 +5,8 @@
 #    MARKET_DATA_DIRECTORY - directory where the stock data files reside
 #    MAS_DIRECTORY - directory where MAS configuration files reside
 #    MAS_ARGS - command-line arguments needed to run MAS
+#    MAS_DATA_IN_DB - Should be set to a non-null string iff the stock
+#                     data is stored in a database.
 
 Progname=$(basename $0)
 files=
@@ -27,6 +29,11 @@ cl_client() {
 
 start_server() {
 	mas $portnumber -background $MAS_ARGS $*
+}
+
+use_database() {
+	[ ! -z "$MAS_DATA_IN_DB" ]
+	return $?
 }
 
 setup() {
@@ -65,7 +72,11 @@ else
 fi
 echo "Processing last $days days of data with mas dir. $MAS_DIRECTORY"
 echo "and port $portnumber"
-start_server $files &
+if use_database; then
+	start_server -p &
+else
+	start_server $files &
+fi
 sleep 12
 echo 'd
 r
