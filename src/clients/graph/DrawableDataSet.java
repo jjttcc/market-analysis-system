@@ -367,7 +367,6 @@ public class DataSet {
 	* Precondition: tuple_count has been set
 	*/
 	protected void range() {
-System.out.println("range() called");
 		int i;
 		int lnth = length();
 		int stride = stride();
