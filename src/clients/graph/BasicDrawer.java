@@ -5,6 +5,7 @@ package graph;
 import java.awt.*;
 import java.util.*;
 import support.Configuration;
+import support.Utilities;
 
 /**
  *  Drawer of Primary, non-temporal market data
@@ -233,7 +234,12 @@ abstract public class BasicDrawer extends Drawer {
 			Rectangle ref_bounds) {
 		int start;
 		long step = 0, y;
+		Vector y_values = new Vector();	// Double
+		String[] y_strings;
+		Double d;
 		boolean lines_needed = reference_lines_needed();
+		Font old_font = g.getFont();
+		g.setFont(new Font("Monospaced", Font.ITALIC, 12));
 
 		for (int i = 0; i < refvalue_specs.length; ++i) {
 			if (yrange >= refvalue_specs[i].minimum() &&
@@ -244,30 +250,40 @@ abstract public class BasicDrawer extends Drawer {
 		}
 		start = (int) (Math.floor(ymin / step) * step + step);
 		for (y = start; y < ymax; y += step) {
-			display_reference_value(y, g, main_bounds, ref_bounds,
-				lines_needed);
+			y_values.addElement(new Double(y));
 		}
+		y_strings = Utilities.formatted_doubles(y_values, ! is_lower());
+		for (int i = 0; i < y_strings.length; ++i) {
+			d = (Double) y_values.elementAt(i);
+			display_reference_value(d.doubleValue(),
+				y_strings[i], g, main_bounds, ref_bounds, lines_needed);
+		}
+		g.setFont(old_font);
 	}
 
 	// Display the value of the specified y coordinate at that y coordinate
 	// at the far left side of the graph and at the far right side.
-	protected void display_reference_value (long y, Graphics g,
+	protected void display_reference_value (double y, String ystr, Graphics g,
 			Rectangle main_bounds, Rectangle ref_bounds, boolean lines) {
-		final int Y_text_adjust = 3, topmargin = 5;
+		final int Y_text_adjust = 3, margin = 5, margin_for_text = 8;
 		Configuration config = Configuration.instance();
 		int adjusted_y = (int) (ref_bounds.y + (1.0 - (y-ymin) / yrange) *
 								ref_bounds.height);
 
-		if (adjusted_y <= ref_bounds.height + ref_bounds.y - topmargin) {
+		if (adjusted_y > ref_bounds.y + margin &&
+				adjusted_y < ref_bounds.y + ref_bounds.height - margin) {
 			if (lines) {
 				g.setColor(Color.black);
 				g.drawLine(main_bounds.x - X_left_line_adjust, adjusted_y,
 					main_bounds.x + main_bounds.width, adjusted_y);
 			}
-			g.setColor(config.text_color());
-			g.drawString(new Integer((int) y).toString(),
-				ref_bounds.x + ref_bounds.width + Ref_text_offset,
-				adjusted_y + Y_text_adjust);
+			if (adjusted_y > ref_bounds.y + margin_for_text && adjusted_y <
+					ref_bounds.y + ref_bounds.height - margin_for_text) {
+				g.setColor(config.text_color());
+				g.drawString(ystr,
+					ref_bounds.x + ref_bounds.width + Ref_text_offset,
+					adjusted_y + Y_text_adjust);
+			}
 		}
 	}
 
@@ -315,7 +331,8 @@ abstract public class BasicDrawer extends Drawer {
 		refvalue_specs[15] = new RefSpec(150000000, 300000000, 50000000);
 		refvalue_specs[16] = new RefSpec(300000000, 1500000000, 100000000);
 		refvalue_specs[17] = new RefSpec(1500000000, 3000000000L, 500000000);
-		refvalue_specs[18] = new RefSpec(3000000000L, 9000000000000, 1000000000);
+		refvalue_specs[18] = new RefSpec(3000000000L, 9000000000000,
+			1000000000);
 	}
 
 	protected Axis xaxis;
@@ -329,7 +346,7 @@ abstract public class BasicDrawer extends Drawer {
 	final int Reference_rect_width = 50;	// Width of right reference bar
 	final int Bottom_ref_rect_height = 25;	// Height of bottom reference bar
 	final int X_left_line_adjust = 9;	// Ensures that line starts flush left.
-	final int Ref_text_offset = -45;	// Offset for reference text
+	final int Ref_text_offset = -42;	// Offset for reference text
 }
 
 class RefSpec {
