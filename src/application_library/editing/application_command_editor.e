@@ -61,10 +61,12 @@ feature -- Basic operations
 			left ?= user_interface.command_selection_from_type (
 						user_interface.Boolean_result_command,
 							concatenation (<<cmd.generator,
+								user_interface.name_for (cmd),
 								"'s left operand">>), False)
 			right ?= user_interface.command_selection_from_type (
 						user_interface.Boolean_result_command,
 							concatenation (<<cmd.generator,
+								user_interface.name_for (cmd),
 								"'s right operand">>), False)
 			check
 				selections_valid: left /= Void and right /= Void
@@ -82,10 +84,12 @@ feature -- Basic operations
 			left ?= user_interface.command_selection_from_type (
 						user_interface.Real_result_command,
 							concatenation (<<cmd.generator,
+								user_interface.name_for (cmd),
 								"'s left operand">>), False)
 			right ?= user_interface.command_selection_from_type (
 						user_interface.Real_result_command,
 							concatenation (<<cmd.generator,
+								user_interface.name_for (cmd),
 								"'s right operand">>), False)
 			check
 				selections_valid: left /= Void and right /= Void
@@ -123,7 +127,7 @@ feature -- Basic operations
 		do
 			ix_cmd ?= user_interface.command_selection_from_type (
 				user_interface.Indexed, concatenation (<<cmd.generator,
-					"'s operand">>), False)
+					user_interface.name_for (cmd), "'s operand">>), False)
 			check
 				selection_valid: ix_cmd /= Void
 			end
@@ -139,7 +143,7 @@ feature -- Basic operations
 		do
 			constant ?= user_interface.command_selection_from_type (
 				user_interface.Constant_command, cmd.generator +
-					"'s managed value", False)
+					user_interface.name_for (cmd) + "'s managed value", False)
 			check
 				selection_valid: constant /= Void
 			end
@@ -195,7 +199,7 @@ feature -- Basic operations
 				c_is_valid_type: cmd /= Void
 			end
 			cmd.set_n (user_interface.integer_selection (
-						concatenation (<<cmd.generator, "'s n-value">>)))
+				concatenation (<<cmd.generator, "'s n-value">>)))
 		end
 
 	edit_mtlist (c: COMMAND) is
@@ -224,9 +228,9 @@ feature -- Basic operations
 			rr_cmd: RESULT_COMMAND [REAL]
 		do
 			rr_cmd ?= user_interface.command_selection_from_type (
-						user_interface.Real_result_command,
-						concatenation (<<cmd.generator, "'s operand">>),
-						False)
+				user_interface.Real_result_command, concatenation (
+				<<cmd.generator, user_interface.name_for (cmd),
+				"'s operand">>), False)
 			check
 				selection_valid: rr_cmd /= Void
 			end
@@ -242,9 +246,9 @@ feature -- Basic operations
 			rr_cmd: RESULT_COMMAND [REAL]
 		do
 			rr_cmd ?= user_interface.command_selection_from_type (
-						user_interface.Real_result_command,
-						concatenation (<<cmd.generator, "'s operand">>),
-						False)
+				user_interface.Real_result_command, concatenation (
+				<<cmd.generator, user_interface.name_for (cmd),
+				"'s operand">>), False)
 			check
 				selection_valid: rr_cmd /= Void
 			end
@@ -260,9 +264,9 @@ feature -- Basic operations
 			bool_cmd: RESULT_COMMAND [BOOLEAN]
 		do
 			bool_cmd ?= user_interface.command_selection_from_type (
-						user_interface.Boolean_result_command,
-						concatenation (<<cmd.generator, "'s operand">>),
-						False)
+				user_interface.Boolean_result_command, concatenation (
+				<<cmd.generator, user_interface.name_for (cmd),
+				"'s operand">>), False)
 			check
 				selection_valid: bool_cmd /= Void
 			end
@@ -283,15 +287,15 @@ feature -- Basic operations
 			edit_mtlist (cmd)
 			from
 				offset := user_interface.integer_selection (
-						concatenation (<<cmd.generator,
-						"'s (left) offset value (must be non-negative)">>))
+					concatenation (<<cmd.generator,
+					"'s (left) offset value (must be non-negative)">>))
 			until
 				offset >= 0
 			loop
 				user_interface.show_message ("Negative value entered.")
 				offset := user_interface.integer_selection (
-						concatenation (<<cmd.generator,
-						"'s (left) offset value (must be non-negative)">>))
+					concatenation (<<cmd.generator,
+					"'s (left) offset value (must be non-negative)">>))
 			end
 			cmd.set_offset (-offset)
 			record_lowest_offset (cmd)
@@ -319,27 +323,27 @@ feature -- Basic operations
 		do
 			-- Obtain and set cmd's boolean operator.
 			boolop ?= user_interface.command_selection_from_type (
-						user_interface.Boolean_result_command,
-							concatenation (<<cmd.generator,
-								"'s boolean operator">>), False)
+				user_interface.Boolean_result_command, concatenation (
+				<<cmd.generator, user_interface.name_for (cmd),
+				"'s boolean operator">>), False)
 			check
 				selection_valid: boolop /= Void
 			end
 			cmd.set_boolean_operator (boolop)
 			-- Obtain and set cmd's true command.
 			result_cmd ?= user_interface.command_selection_from_type (
-						user_interface.Real_result_command,
-							concatenation (<<cmd.generator,
-								"'s true command">>), False)
+				user_interface.Real_result_command, concatenation (
+				<<cmd.generator, user_interface.name_for (cmd),
+				"'s true command">>), False)
 			check
 				selection_valid: result_cmd /= Void
 			end
 			cmd.set_true_cmd (result_cmd)
 			-- Obtain and set cmd's false command.
 			result_cmd ?= user_interface.command_selection_from_type (
-						user_interface.Real_result_command,
-							concatenation (<<cmd.generator,
-								"'s false command">>), False)
+				user_interface.Real_result_command, concatenation (
+				<<cmd.generator, user_interface.name_for (cmd),
+				"'s false command">>), False)
 			check
 				selection_valid: result_cmd /= Void
 			end
@@ -364,13 +368,13 @@ feature -- Basic operations
 			sign_spec_vector.put (<<0, -1>>, 5)
 			sign_spec_vector.put (<<0, 1>>, 6)
 			left ?= user_interface.command_selection_from_type (
-						user_interface.Real_result_command,
-								concatenation (<<cmd.generator,
-									"'s left operand">>), False)
+				user_interface.Real_result_command, concatenation (
+				<<cmd.generator, user_interface.name_for (cmd),
+				"'s left operand">>), False)
 			right ?= user_interface.command_selection_from_type (
-						user_interface.Real_result_command,
-								concatenation (<<cmd.generator,
-									"'s right operand">>), False)
+				user_interface.Real_result_command, concatenation (
+				<<cmd.generator, user_interface.name_for (cmd),
+				"'s right operand">>), False)
 			check
 				selections_valid: left /= Void and right /= Void
 			end
@@ -442,8 +446,8 @@ feature -- Basic operations
 			subcmd: COMMAND
 		do
 			subcmd ?= user_interface.command_selection_from_type (
-						user_interface.Any_command, cmd.generator +
-						"'s operand", False)
+				user_interface.Any_command, cmd.generator +
+				user_interface.name_for (cmd) + "'s operand", False)
 			check
 				selection_valid: subcmd /= Void
 			end
@@ -459,7 +463,8 @@ feature -- Basic operations
 		do
 			from
 				c := user_interface.character_selection (
-					"Add a sub-operator to " + cmd.generator + " ? (y/n) ")
+					"Add a sub-operator to " + cmd.generator +
+					user_interface.name_for (cmd) + " ? (y/n) ")
 				if c /= 'y' and c /= 'Y' then
 					finished := True
 				end
@@ -475,7 +480,7 @@ feature -- Basic operations
 				add_cmd_seq_child (cmd, child)
 				c := user_interface.character_selection (
 					"Add another sub-operator to " + cmd.generator +
-					" ? (y/n) ")
+					user_interface.name_for (cmd) + " ? (y/n) ")
 				if c /= 'y' and c /= 'Y' then
 					finished := True
 				end
@@ -493,6 +498,7 @@ feature -- Basic operations
 			if cmd_seq.main_operator = Void then
 				c := user_interface.character_selection ("Make last " +
 					child.generator + " " + cmd_seq.generator +
+					user_interface.name_for (cmd_seq) +
 					"'s main operator? (y/n) ")
 				if c = 'y' or c = 'Y' then
 					cmd_seq.set_main_operator (child)
