@@ -43,7 +43,7 @@ feature -- Initialization
 
 feature -- Access
 
-	market_list_handler: TRADABLE_LIST_HANDLER
+	market_list_handler: TRADABLE_DISPENSER
 			-- Manager of all available market lists
 
 	event_coordinator: MARKET_EVENT_COORDINATOR
@@ -74,8 +74,7 @@ feature {NONE}
 			create dispatcher.make
 			register_event_registrants (dispatcher)
 			create {MARKET_EVENT_COORDINATOR} event_coordinator.make (
-				active_event_generators,
-				market_list_handler.daily_market_list, dispatcher)
+				active_event_generators, market_list_handler, dispatcher)
 		end
 
 	register_event_registrants (dispatcher: EVENT_DISPATCHER) is
