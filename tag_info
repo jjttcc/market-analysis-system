@@ -1,0 +1,15 @@
+Information on cvs tags for MAS (Started on Tue Feb  8 17:56:41 MST 2005)
+
+mas-1_6_6u16:
+
+Tag was created on Feb 8, 2005, around 18:00 MST.  This is the version
+of the latest compiled mas executable that I released to Orest Lebedovych
+as of Feb 8, 2005.  I created the tag to create a snapshot of this stable
+version that I released to Orest and to allow me to safely continue with
+some experimental, somewhat major changes to the data-scanning/inputting
+components such that if the changes don't work, I can "back out" to
+the version as of this tag.  It's been at least several days (again,
+as of Feb 8, 2005) since I've checked in any changes to the Eiffel code,
+but the open-source GUI was modified and checked into cvs last night.
+However, I regard this version of the GUI, which includes the
+auto-data-refresh changes for Orest, as stable.
