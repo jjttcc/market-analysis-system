@@ -142,7 +142,7 @@ feature -- Basic operations
 			nvc: NUMERIC_VALUE_COMMAND
 		do
 			nvc ?= user_interface.command_selection_from_type (
-				user_interface.Numeric_value_command, cmd.generator +
+				user_interface.numeric_value_command.generator, cmd.generator +
 					user_interface.name_for (cmd) + "'s target", False)
 			check
 				selection_valid: nvc /= Void

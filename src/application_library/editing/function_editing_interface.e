@@ -75,37 +75,36 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			l: ARRAYED_LIST [MARKET_FUNCTION]
 		once
 			create Result.make (0)
+			make_instances
+
 			create l.make (8)
 			Result.extend (l, Market_function)
-			l.extend (function_with_generator ("TWO_VARIABLE_FUNCTION"))
-			l.extend (function_with_generator ("ONE_VARIABLE_FUNCTION"))
-			l.extend (function_with_generator (
-						"N_RECORD_ONE_VARIABLE_FUNCTION"))
-			l.extend (function_with_generator ("STANDARD_MOVING_AVERAGE"))
-			l.extend (function_with_generator ("EXPONENTIAL_MOVING_AVERAGE"))
-			l.extend (function_with_generator ("ACCUMULATION"))
-			l.extend (function_with_generator (
-				"CONFIGURABLE_N_RECORD_FUNCTION"))
-			l.extend (function_with_generator ("MARKET_FUNCTION_LINE"))
-			l.extend (function_with_generator ("AGENT_BASED_FUNCTION"))
-			l.extend (function_with_generator ("MARKET_DATA_FUNCTION"))
-			l.extend (function_with_generator ("STOCK"))
+			l.extend (two_variable_function)
+			l.extend (one_variable_function)
+			l.extend (n_record_one_variable_function)
+			l.extend (standard_moving_average)
+			l.extend (exponential_moving_average)
+			l.extend (accumulation)
+			l.extend (configurable_n_record_function)
+			l.extend (market_function_line)
+			l.extend (agent_based_function)
+			l.extend (market_data_function)
+			l.extend (stock)
+
 			create l.make (6)
 			Result.extend (l, Complex_function)
-			l.extend (function_with_generator ("TWO_VARIABLE_FUNCTION"))
-			l.extend (function_with_generator ("ONE_VARIABLE_FUNCTION"))
-			l.extend (function_with_generator (
-						"N_RECORD_ONE_VARIABLE_FUNCTION"))
-			l.extend (function_with_generator ("STANDARD_MOVING_AVERAGE"))
-			l.extend (function_with_generator ("EXPONENTIAL_MOVING_AVERAGE"))
-			l.extend (function_with_generator ("ACCUMULATION"))
-			l.extend (function_with_generator (
-				"CONFIGURABLE_N_RECORD_FUNCTION"))
+			l.extend (two_variable_function)
+			l.extend (one_variable_function)
+			l.extend (n_record_one_variable_function)
+			l.extend (standard_moving_average)
+			l.extend (exponential_moving_average)
+			l.extend (accumulation)
+			l.extend (configurable_n_record_function)
 			-- @@Added this MARKET_FUNCTION_LINE here on 2003/05/17,
 			-- assuming it not being there was an oversight - check this.
-			l.extend (function_with_generator ("MARKET_FUNCTION_LINE"))
-			l.extend (function_with_generator ("AGENT_BASED_FUNCTION"))
-			l.extend (function_with_generator ("MARKET_DATA_FUNCTION"))
+			l.extend (market_function_line)
+			l.extend (agent_based_function)
+			l.extend (market_data_function)
 		end
 
 	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
@@ -155,10 +154,8 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			-- User-selected MARKET_FUNCTION from the function library
 		local
 			l: LINKED_LIST [MARKET_FUNCTION]
-			stock: MARKET_FUNCTION
 		do
 			create l.make
-			stock := function_with_generator ("STOCK")
 			if validity_checker = Void then
 				l.append (function_library)
 				l.extend (stock)
@@ -265,7 +262,7 @@ feature {EDITING_INTERFACE}
 					f_is_a_1vf: ovf /= Void
 				end
 				editor.edit_one_fn_op (ovf)
-			when Accumulation then
+			when Accumulation_key then
 				accum ?= f
 				check
 					f_is_an_accum: accum /= Void
@@ -362,7 +359,7 @@ feature {EDITING_INTERFACE}
 feature {NONE} -- Implementation
 
 	One_fn_op,			-- Takes one market function and an operator.
-	Accumulation,		-- Takes one market function and two operators.
+	Accumulation_key,	-- Takes one market function and two operators.
 	One_fn_op_n,		-- Takes one market function, an operator, and an
 						-- n-value.
 	Two_cplx_fn_op,		-- Takes two complex functions and an operator.
@@ -387,57 +384,57 @@ feature {NONE} -- Implementation
 			name: STRING
 		once
 			create Result.make (0)
-			name := "ONE_VARIABLE_FUNCTION"
+			name := one_variable_function.generator
 			check
 				valid_name: function_names.has (name)
 			end
 			Result.extend (One_fn_op, name)
-			name := "N_RECORD_ONE_VARIABLE_FUNCTION"
+			name := n_record_one_variable_function.generator
 			check
 				valid_name: function_names.has (name)
 			end
 			Result.extend (One_fn_op_n, name)
-			name := "TWO_VARIABLE_FUNCTION"
+			name := two_variable_function.generator
 			check
 				valid_name: function_names.has (name)
 			end
 			Result.extend (Two_cplx_fn_op, name)
-			name := "STANDARD_MOVING_AVERAGE"
+			name := standard_moving_average.generator
 			check
 				valid_name: function_names.has (name)
 			end
 			Result.extend (One_fn_bnc_n, name)
-			name := "EXPONENTIAL_MOVING_AVERAGE"
+			name := exponential_moving_average.generator
 			check
 				valid_name: function_names.has (name)
 			end
 			Result.extend (ema_function, name)
-			name := "ACCUMULATION"
+			name := accumulation.generator
 			check
 				valid_name: function_names.has (name)
 			end
-			Result.extend (Accumulation, name)
-			name := "CONFIGURABLE_N_RECORD_FUNCTION"
+			Result.extend (Accumulation_key, name)
+			name := configurable_n_record_function.generator
 			check
 				valid_name: function_names.has (name)
 			end
 			Result.extend (Configurable_nrfn, name)
-			name := "MARKET_FUNCTION_LINE"
+			name := market_function_line.generator
 			check
 				valid_name: function_names.has (name)
 			end
 			Result.extend (Mkt_fnctn_line, name)
-			name := "MARKET_DATA_FUNCTION"
+			name := market_data_function.generator
 			check
 				valid_name: function_names.has (name)
 			end
 			Result.extend (Other, name)
-			name := "AGENT_BASED_FUNCTION"
+			name := agent_based_function.generator
 			check
 				valid_name: function_names.has (name)
 			end
 			Result.extend (Agent_based_fn, name)
-			name := "STOCK"
+			name := stock.generator
 			check
 				valid_name: function_names.has (name)
 			end

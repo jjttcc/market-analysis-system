@@ -48,136 +48,137 @@ feature -- Access
 			l: ARRAYED_LIST [COMMAND]
 		once
 			create Result.make (0)
+			make_instances
 
 			create l.make (14)
 			Result.extend (l, Boolean_result_command)
-			l.extend (command_with_generator ("LE_OPERATOR"))
-			l.extend (command_with_generator ("GE_OPERATOR"))
-			l.extend (command_with_generator ("EQ_OPERATOR"))
-			l.extend (command_with_generator ("LT_OPERATOR"))
-			l.extend (command_with_generator ("GT_OPERATOR"))
-			l.extend (command_with_generator ("XOR_OPERATOR"))
-			l.extend (command_with_generator ("OR_OPERATOR"))
-			l.extend (command_with_generator ("IMPLICATION_OPERATOR"))
-			l.extend (command_with_generator ("EQUIVALENCE_OPERATOR"))
-			l.extend (command_with_generator ("AND_OPERATOR"))
-			l.extend (command_with_generator ("NOT_OPERATOR"))
-			l.extend (command_with_generator ("TRUE_COMMAND"))
-			l.extend (command_with_generator ("FALSE_COMMAND"))
-			l.extend (command_with_generator ("SIGN_ANALYZER"))
+			l.extend (le_operator)
+			l.extend (ge_operator)
+			l.extend (eq_operator)
+			l.extend (lt_operator)
+			l.extend (gt_operator)
+			l.extend (xor_operator)
+			l.extend (or_operator)
+			l.extend (implication_operator)
+			l.extend (equivalence_operator)
+			l.extend (and_operator)
+			l.extend (not_operator)
+			l.extend (true_command)
+			l.extend (false_command)
+			l.extend (sign_analyzer)
 
 			create l.make (35)
 			Result.extend (l, Real_result_command)
-			l.extend (command_with_generator ("SUBTRACTION"))
-			l.extend (command_with_generator ("MULTIPLICATION"))
-			l.extend (command_with_generator ("DIVISION"))
-			l.extend (command_with_generator ("SAFE_DIVISION"))
-			l.extend (command_with_generator ("ADDITION"))
-			l.extend (command_with_generator ("POWER"))
-			l.extend (command_with_generator ("N_TH_ROOT"))
-			l.extend (command_with_generator ("LOWEST_VALUE"))
-			l.extend (command_with_generator ("LINEAR_SUM"))
-			l.extend (command_with_generator ("HIGHEST_VALUE"))
-			l.extend (command_with_generator ("N_VALUE_COMMAND"))
-			l.extend (command_with_generator ("MA_EXPONENTIAL"))
-			l.extend (command_with_generator ("SETTABLE_OFFSET_COMMAND"))
-			l.extend (command_with_generator ("MINUS_N_COMMAND"))
-			l.extend (command_with_generator ("NUMERIC_VALUE_COMMAND"))
-			l.extend (command_with_generator ("BASIC_NUMERIC_COMMAND"))
-			l.extend (command_with_generator ("VOLUME"))
-			l.extend (command_with_generator ("LOW_PRICE"))
-			l.extend (command_with_generator ("HIGH_PRICE"))
-			l.extend (command_with_generator ("CLOSING_PRICE"))
-			l.extend (command_with_generator ("OPENING_PRICE"))
-			l.extend (command_with_generator ("OPEN_INTEREST"))
-			l.extend (command_with_generator ("BASIC_LINEAR_COMMAND"))
-			l.extend (command_with_generator ("NUMERIC_CONDITIONAL_COMMAND"))
-			l.extend (command_with_generator ("SLOPE_ANALYZER"))
-			l.extend (command_with_generator ("UNARY_LINEAR_OPERATOR"))
-			l.extend (command_with_generator ("ABSOLUTE_VALUE"))
-			l.extend (command_with_generator ("ROUNDED_VALUE"))
-			l.extend (command_with_generator ("SQUARE_ROOT"))
-			l.extend (command_with_generator ("LOG"))
-			l.extend (command_with_generator ("LOG2"))
-			l.extend (command_with_generator ("LOG10"))
-			l.extend (command_with_generator ("N_BASED_UNARY_OPERATOR"))
-			l.extend (command_with_generator ("FUNCTION_BASED_COMMAND"))
-			l.extend (command_with_generator ("INDEX_EXTRACTOR"))
-			l.extend (command_with_generator ("NUMERIC_ASSIGNMENT_COMMAND"))
-			l.extend (command_with_generator ("NUMERIC_VALUED_COMMAND_WRAPPER"))
+			l.extend (subtraction)
+			l.extend (multiplication)
+			l.extend (division)
+			l.extend (safe_division)
+			l.extend (addition)
+			l.extend (power)
+			l.extend (n_th_root)
+			l.extend (lowest_value)
+			l.extend (linear_sum)
+			l.extend (highest_value)
+			l.extend (n_value_command)
+			l.extend (ma_exponential)
+			l.extend (settable_offset_command)
+			l.extend (minus_n_command)
+			l.extend (numeric_value_command)
+			l.extend (basic_numeric_command)
+			l.extend (volume)
+			l.extend (low_price)
+			l.extend (high_price)
+			l.extend (closing_price)
+			l.extend (opening_price)
+			l.extend (open_interest)
+			l.extend (basic_linear_command)
+			l.extend (numeric_conditional_command)
+			l.extend (slope_analyzer)
+			l.extend (unary_linear_operator)
+			l.extend (absolute_value)
+			l.extend (rounded_value)
+			l.extend (square_root)
+			l.extend (log_cmd)
+			l.extend (log2_cmd)
+			l.extend (log10_cmd)
+			l.extend (n_based_unary_operator)
+			l.extend (function_based_command)
+			l.extend (index_extractor)
+			l.extend (numeric_assignment_command)
+			l.extend (numeric_valued_command_wrapper)
 
 			create l.make (7)
 			Result.extend (l, Binary_real_real_command)
-			l.extend (command_with_generator ("SUBTRACTION"))
-			l.extend (command_with_generator ("MULTIPLICATION"))
-			l.extend (command_with_generator ("DIVISION"))
-			l.extend (command_with_generator ("SAFE_DIVISION"))
-			l.extend (command_with_generator ("ADDITION"))
-			l.extend (command_with_generator ("POWER"))
-			l.extend (command_with_generator ("N_TH_ROOT"))
+			l.extend (subtraction)
+			l.extend (multiplication)
+			l.extend (division)
+			l.extend (safe_division)
+			l.extend (addition)
+			l.extend (power)
+			l.extend (n_th_root)
 
 			create l.make (6)
 			Result.extend (l, Binary_boolean_real_command)
-			l.extend (command_with_generator ("LE_OPERATOR"))
-			l.extend (command_with_generator ("GE_OPERATOR"))
-			l.extend (command_with_generator ("EQ_OPERATOR"))
-			l.extend (command_with_generator ("LT_OPERATOR"))
-			l.extend (command_with_generator ("GT_OPERATOR"))
-			l.extend (command_with_generator ("SIGN_ANALYZER"))
+			l.extend (le_operator)
+			l.extend (ge_operator)
+			l.extend (eq_operator)
+			l.extend (lt_operator)
+			l.extend (gt_operator)
+			l.extend (sign_analyzer)
 
 			create l.make (7)
-			Result.extend (l, Basic_numeric_command)
-			l.extend (command_with_generator ("BASIC_NUMERIC_COMMAND"))
-			l.extend (command_with_generator ("VOLUME"))
-			l.extend (command_with_generator ("LOW_PRICE"))
-			l.extend (command_with_generator ("HIGH_PRICE"))
-			l.extend (command_with_generator ("CLOSING_PRICE"))
-			l.extend (command_with_generator ("OPENING_PRICE"))
-			l.extend (command_with_generator ("OPEN_INTEREST"))
+			Result.extend (l, Basic_numeric_command.generator)
+			l.extend (basic_numeric_command)
+			l.extend (volume)
+			l.extend (low_price)
+			l.extend (high_price)
+			l.extend (closing_price)
+			l.extend (opening_price)
+			l.extend (open_interest)
 
 			create l.make (9)
 			Result.extend (l, Linear_command)
-			l.extend (command_with_generator ("UNARY_LINEAR_OPERATOR"))
-			l.extend (command_with_generator ("SLOPE_ANALYZER"))
-			l.extend (command_with_generator ("SETTABLE_OFFSET_COMMAND"))
-			l.extend (command_with_generator ("MINUS_N_COMMAND"))
-			l.extend (command_with_generator ("LOWEST_VALUE"))
-			l.extend (command_with_generator ("LINEAR_SUM"))
-			l.extend (command_with_generator ("HIGHEST_VALUE"))
-			l.extend (command_with_generator ("BASIC_LINEAR_COMMAND"))
-			l.extend (command_with_generator ("FUNCTION_BASED_COMMAND"))
+			l.extend (unary_linear_operator)
+			l.extend (slope_analyzer)
+			l.extend (settable_offset_command)
+			l.extend (minus_n_command)
+			l.extend (lowest_value)
+			l.extend (linear_sum)
+			l.extend (highest_value)
+			l.extend (basic_linear_command)
+			l.extend (function_based_command)
 
 			create l.make (3)
 			Result.extend (l, N_based_calculation)
-			l.extend (command_with_generator ("N_VALUE_COMMAND"))
-			l.extend (command_with_generator ("MA_EXPONENTIAL"))
-			l.extend (command_with_generator ("N_BASED_UNARY_OPERATOR"))
+			l.extend (n_value_command)
+			l.extend (ma_exponential)
+			l.extend (n_based_unary_operator)
 
 			create l.make (7)
 			Result.extend (l, N_record_command)
-			l.extend (command_with_generator ("LOWEST_VALUE"))
-			l.extend (command_with_generator ("LINEAR_SUM"))
-			l.extend (command_with_generator ("HIGHEST_VALUE"))
-			l.extend (command_with_generator ("MA_EXPONENTIAL"))
-			l.extend (command_with_generator ("N_VALUE_COMMAND"))
-			l.extend (command_with_generator ("N_BASED_UNARY_OPERATOR"))
-			l.extend (command_with_generator ("MINUS_N_COMMAND"))
+			l.extend (lowest_value)
+			l.extend (linear_sum)
+			l.extend (highest_value)
+			l.extend (ma_exponential)
+			l.extend (n_value_command)
+			l.extend (n_based_unary_operator)
+			l.extend (minus_n_command)
 
 			create l.make (3)
 			Result.extend (l, Indexed)
-			l.extend (command_with_generator ("LOWEST_VALUE"))
-			l.extend (command_with_generator ("HIGHEST_VALUE"))
-			l.extend (command_with_generator ("LINEAR_SUM"))
-			l.extend (command_with_generator ("SLOPE_ANALYZER"))
-			l.extend (command_with_generator ("SETTABLE_OFFSET_COMMAND"))
-			l.extend (command_with_generator ("MINUS_N_COMMAND"))
-			l.extend (command_with_generator ("UNARY_LINEAR_OPERATOR"))
-			l.extend (command_with_generator ("FUNCTION_BASED_COMMAND"))
-			l.extend (command_with_generator ("BASIC_LINEAR_COMMAND"))
+			l.extend (lowest_value)
+			l.extend (highest_value)
+			l.extend (linear_sum)
+			l.extend (slope_analyzer)
+			l.extend (settable_offset_command)
+			l.extend (minus_n_command)
+			l.extend (unary_linear_operator)
+			l.extend (function_based_command)
+			l.extend (basic_linear_command)
 
 			create l.make (1)
-			Result.extend (l, Numeric_value_command)
-			l.extend (command_with_generator ("NUMERIC_VALUE_COMMAND"))
+			Result.extend (l, Numeric_value_command.generator)
+			l.extend (numeric_value_command)
 
 			-- Add all commands.
 			l := clone (command_instances)
@@ -201,9 +202,6 @@ feature -- Constants
 	Binary_real_real_command: STRING is "BINARY_OPERATOR [REAL, REAL]"
 			-- Name of binary command with REAL, REAL generic parameters
 
-	Basic_numeric_command: STRING is "BASIC_NUMERIC_COMMAND"
-			-- Name of BASIC_NUMERIC_COMMAND
-
 	N_based_calculation: STRING is "N_BASED_CALCULATION"
 			-- Name of N_BASED_CALCULATION
 
@@ -215,9 +213,6 @@ feature -- Constants
 
 	Indexed: STRING is "INDEXED"
 			-- Name of INDEXED
-
-	Numeric_value_command: STRING is "NUMERIC_VALUE_COMMAND"
-			-- Name of NUMERIC_VALUE_COMMAND
 
 feature -- Status report
 
@@ -344,13 +339,13 @@ feature {NONE} -- Implementation
 	Resultreal_n,		-- Classes that need a RESULT_COMMAND [REAL] and
 						-- an n-value
 	Settable_offset,	-- SETTABLE_OFFSET_COMMAND
-	Sign_analyzer,		-- SIGN_ANALYZER
+	Sign_analyzer_key,	-- SIGN_ANALYZER
 	Numeric_cond,		-- NUMERIC_CONDITIONAL_COMMAND
 	Function_command,   -- FUNCTION_BASED_COMMAND
 	Index,				-- INDEX_EXTRACTOR
 	Numeric_assignment,		-- NUMERIC_ASSIGNMENT_COMMAND
 	Numeric_wrapper,	-- NUMERIC_VALUED_COMMAND_WRAPPER
-	Command_sequence	-- COMMAND_SEQUENCE
+	Command_sequence_key-- COMMAND_SEQUENCE
 	:
 				INTEGER is unique
 			-- Constants identifying initialization routines required for
@@ -362,266 +357,266 @@ feature {NONE} -- Implementation
 			name: STRING
 		once
 			create Result.make (0)
-			name := "TRUE_COMMAND"
+			name := true_command.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Other, name)
-			name := "FALSE_COMMAND"
+			name := false_command.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Other, name)
-			name := "AND_OPERATOR"
+			name := and_operator.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_boolean, name)
-			name := "OR_OPERATOR"
+			name := or_operator.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_boolean, name)
-			name := "XOR_OPERATOR"
+			name := xor_operator.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_boolean, name)
-			name := "IMPLICATION_OPERATOR"
+			name := implication_operator.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_boolean, name)
-			name := "EQUIVALENCE_OPERATOR"
+			name := equivalence_operator.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_boolean, name)
-			name := "NOT_OPERATOR"
+			name := not_operator.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Unary_boolean, name)
-			name := "ADDITION"
+			name := addition.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_real, name)
-			name := "SUBTRACTION"
+			name := subtraction.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_real, name)
-			name := "MULTIPLICATION"
+			name := multiplication.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_real, name)
-			name := "POWER"
+			name := power.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_real, name)
-			name := "N_TH_ROOT"
+			name := n_th_root.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_real, name)
-			name := "DIVISION"
+			name := division.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_real, name)
-			name := "SAFE_DIVISION"
+			name := safe_division.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_real, name)
-			name := "EQ_OPERATOR"
+			name := eq_operator.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_real, name)
-			name := "LT_OPERATOR"
+			name := lt_operator.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_real, name)
-			name := "GT_OPERATOR"
+			name := gt_operator.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_real, name)
-			name := "GE_OPERATOR"
+			name := ge_operator.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_real, name)
-			name := "LE_OPERATOR"
+			name := le_operator.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Binary_real, name)
-			name := "NUMERIC_VALUE_COMMAND"
+			name := numeric_value_command.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Numeric_value, name)
-			name := "ABSOLUTE_VALUE"
+			name := absolute_value.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Unary_real, name)
-			name := "ROUNDED_VALUE"
+			name := rounded_value.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Unary_real, name)
-			name := "SQUARE_ROOT"
+			name := square_root.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Unary_real, name)
-			name := "LOG"
+			name := log_cmd.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Unary_real, name)
-			name := "LOG2"
+			name := log2_cmd.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Unary_real, name)
-			name := "LOG10"
+			name := log10_cmd.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Unary_real, name)
-			name := "BASIC_NUMERIC_COMMAND"
+			name := basic_numeric_command.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Other, name)
-			name := "HIGHEST_VALUE"
+			name := highest_value.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Mtlist_resultreal_n, name)
-			name := "LOWEST_VALUE"
+			name := lowest_value.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Mtlist_resultreal_n, name)
-			name := "LINEAR_SUM"
+			name := linear_sum.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Mtlist_resultreal_n, name)
-			name := "MINUS_N_COMMAND"
+			name := minus_n_command.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Minus_n, name)
-			name := "UNARY_LINEAR_OPERATOR"
+			name := unary_linear_operator.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Mtlist_resultreal, name)
-			name := "N_VALUE_COMMAND"
+			name := n_value_command.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (N_command, name)
-			name := "MA_EXPONENTIAL"
+			name := ma_exponential.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (N_command, name)
-			name := "SETTABLE_OFFSET_COMMAND"
+			name := settable_offset_command.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Settable_offset, name)
-			name := "VOLUME"
+			name := volume.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Other, name)
-			name := "LOW_PRICE"
+			name := low_price.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Other, name)
-			name := "HIGH_PRICE"
+			name := high_price.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Other, name)
-			name := "CLOSING_PRICE"
+			name := closing_price.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Other, name)
-			name := "OPENING_PRICE"
+			name := opening_price.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Other, name)
-			name := "OPEN_INTEREST"
+			name := open_interest.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Other, name)
-			name := "BASIC_LINEAR_COMMAND"
+			name := basic_linear_command.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Mtlist, name)
-			name := "N_BASED_UNARY_OPERATOR"
+			name := n_based_unary_operator.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Resultreal_n, name)
-			name := "NUMERIC_CONDITIONAL_COMMAND"
+			name := numeric_conditional_command.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Numeric_cond, name)
-			name := "SIGN_ANALYZER"
+			name := sign_analyzer.generator
 			check
 				valid_name: command_names.has (name)
 			end
-			Result.extend (Sign_analyzer, name)
-			name := "SLOPE_ANALYZER"
+			Result.extend (Sign_analyzer_key, name)
+			name := slope_analyzer.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Mtlist, name)
-			name := "FUNCTION_BASED_COMMAND"
+			name := function_based_command.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Function_command, name)
-			name := "INDEX_EXTRACTOR"
+			name := index_extractor.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Index, name)
-			name := "NUMERIC_ASSIGNMENT_COMMAND"
+			name := numeric_assignment_command.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Numeric_assignment, name)
-			name := "NUMERIC_VALUED_COMMAND_WRAPPER"
+			name := numeric_valued_command_wrapper.generator
 			check
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Numeric_wrapper, name)
-			name := "COMMAND_SEQUENCE"
+			name := command_sequence.generator
 			check
 				valid_name: command_names.has (name)
 			end
-			Result.extend (Command_sequence, name)
+			Result.extend (Command_sequence_key, name)
 		end
 
 	initialize_command (c: COMMAND) is
@@ -717,7 +712,7 @@ feature {NONE} -- Implementation
 					c_is_a_numeric_conditional_command: conditional /= Void
 				end
 				editor.edit_numeric_conditional_command (conditional)
-			when Sign_analyzer then
+			when Sign_analyzer_key then
 				sign_an ?= c
 				check
 					c_is_a_sign_analyzer: sign_an /= Void
@@ -747,7 +742,7 @@ feature {NONE} -- Implementation
 					c_is_a_numeric_wrapper_command: nvcw /= Void
 				end
 				editor.edit_numeric_wrapper (nvcw)
-			when Command_sequence then
+			when Command_sequence_key then
 				cmd_seq ?= c
 				check
 					c_is_a_command_sequence: cmd_seq /= Void

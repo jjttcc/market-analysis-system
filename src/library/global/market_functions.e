@@ -4,8 +4,9 @@ indexing
 		%be used to construct a technical indicator"
 	author: "Jim Cochrane"
 	date: "$Date$";
-	note: "@@This class does not depend on any specialized classes and %
-		%can probably be cleanly moved to the ma_library cluster."
+	note: "`make_instances' must be called before using any of the %
+		%market-function-instance queries: one_variable_function, %
+		%two_variable_function, etc."
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
@@ -28,90 +29,60 @@ class MARKET_FUNCTIONS inherit
 
 	MARKET_FUNCTION_EDITOR
 
+feature -- Initialization
+
+	make_instances is
+			-- Ensure that all "once" data are created.
+		local
+			i_and_d: ARRAYED_LIST [PAIR [MARKET_FUNCTION, STRING]]
+			fn: ARRAYED_LIST [STRING]
+		do
+			i_and_d := instances_and_descriptions
+			fn := function_names
+		end
+
 feature -- Access
 
 	instances_and_descriptions: ARRAYED_LIST [PAIR [MARKET_FUNCTION, STRING]] is
 			-- An instance and description of each MARKET_FUNCTION class
 		local
-			f: MARKET_FUNCTION
-			stock: STOCK
-			complex_function: COMPLEX_FUNCTION
-			volume: VOLUME
-			addition: ADDITION
-			exponential: MA_EXPONENTIAL
-			point1, point2: MARKET_POINT
+			commands: expanded COMMANDS
 			pair: PAIR [MARKET_FUNCTION, STRING]
-			earlier, later: DATE_TIME
-			linear_cmd: BASIC_LINEAR_COMMAND
-			agents: expanded MARKET_AGENTS
-			flst: LIST [MARKET_FUNCTION]
 		once
 			create Result.make (0)
-			create exponential.make (1)
-			create volume
-			create earlier.make (1998, 1, 1, 0, 0, 0)
-			create later.make (1998, 1, 5, 0, 0, 0)
-			create point1.make
-			create point2.make
-			point1.set_x_y_date (1, 1, earlier)
-			point2.set_x_y_date (5, 1, later)
-			create stock.make ("DUMMY", Void, Void)
-			stock.set_trading_period_type (period_types @ (
-				period_type_names @ Daily))
-			stock.set_function_name ("No Input Function")
-			create linear_cmd.make (stock)
-			create addition.make (linear_cmd, volume)
-			create {ONE_VARIABLE_FUNCTION} complex_function.make (
-				stock, volume)
-			create pair.make (complex_function,
+			create pair.make (one_variable_function,
 				"Function that operates one input sequence")
 			Result.extend (pair)
-			create {N_RECORD_ONE_VARIABLE_FUNCTION} f.make (stock, volume, 1)
-			create pair.make (f,
+			create pair.make (n_record_one_variable_function,
 				"Function that operates one input sequence and %
 				%operates on n records of that sequence at a time")
 			Result.extend (pair)
-			create {TWO_VARIABLE_FUNCTION} f.make (complex_function,
-				complex_function, volume)
-			create pair.make (f,
+			create pair.make (two_variable_function,
 				"Function that operates on two input sequences")
 			Result.extend (pair)
-			create {STANDARD_MOVING_AVERAGE} f.make (stock, volume, 1)
-			create pair.make (f,
+			create pair.make (standard_moving_average,
 				"Function that provides an n-period moving average %
 				%of an input sequence")
 			Result.extend (pair)
-			create {EXPONENTIAL_MOVING_AVERAGE} f.make (stock, volume,
-				exponential, 1)
-			create pair.make (f,
+			create pair.make (exponential_moving_average,
 				"Function that provides an n-period exponential %
 				%moving average of an input sequence")
 			Result.extend (pair)
-			create {ACCUMULATION} f.make (stock, addition, linear_cmd, volume)
-			create pair.make (f,
+			create pair.make (accumulation,
 				"Function that accumulates its values")
 			Result.extend (pair)
-			create {CONFIGURABLE_N_RECORD_FUNCTION} f.make (
-				stock, addition, volume, 1)
-			create pair.make (f,
+			create pair.make (configurable_n_record_function,
 				"N-period function that can be configured by choosing %
 				%previous and first-element operators")
 			Result.extend (pair)
-			create {MARKET_FUNCTION_LINE} f.make_from_2_points (point1,
-				point2, stock)
-			create pair.make (f,
+			create pair.make (market_function_line,
 				"Function that behaves as a trend line")
 			Result.extend (pair)
-			create {LINKED_LIST [MARKET_FUNCTION]} flst.make
-			flst.extend (stock)
-			create {AGENT_BASED_FUNCTION} f.make (agents.Sma_key,
-				addition, flst)
-			create pair.make (f,
+			create pair.make (agent_based_function,
 				"Function that uses a selectable procedure to do %
 				%its calculation")
 			Result.extend (pair)
-			create {MARKET_DATA_FUNCTION} f.make (stock)
-			create pair.make (f,
+			create pair.make (market_data_function,
 				"Function that takes basic market data (with close, %
 				%high, volume, etc.) as input and %
 				%whose output is simply its input")
@@ -133,6 +104,102 @@ feature -- Access
 			object_comparison: Result.object_comparison
 			not_void: Result /= Void
 			Result.count = function_instances.count
+		end
+
+feature -- Access - an instance of each market function
+
+	one_variable_function: ONE_VARIABLE_FUNCTION is
+		local
+			commands: expanded COMMANDS
+		once
+			create Result.make (stock, commands.volume)
+		end
+
+	n_record_one_variable_function: N_RECORD_ONE_VARIABLE_FUNCTION is
+		local
+			commands: expanded COMMANDS
+		once
+			create Result.make (stock, commands.volume, 1)
+		end
+
+	two_variable_function: TWO_VARIABLE_FUNCTION is
+		local
+			commands: expanded COMMANDS
+		once
+			create Result.make (one_variable_function,
+				one_variable_function, commands.volume)
+		end
+
+	standard_moving_average: STANDARD_MOVING_AVERAGE is
+		local
+			commands: expanded COMMANDS
+		once
+			create Result.make (stock, commands.volume, 1)
+		end
+
+	exponential_moving_average: EXPONENTIAL_MOVING_AVERAGE is
+		local
+			commands: expanded COMMANDS
+		once
+			create Result.make (stock, commands.volume,
+				commands.ma_exponential, 1)
+		end
+
+	accumulation: ACCUMULATION is
+		local
+			commands: expanded COMMANDS
+		once
+			create Result.make (stock, commands.addition,
+				commands.basic_linear_command, commands.volume)
+		end
+
+	configurable_n_record_function: CONFIGURABLE_N_RECORD_FUNCTION is
+		local
+			commands: expanded COMMANDS
+		once
+			create Result.make (stock, commands.addition, commands.volume, 1)
+		end
+
+	market_function_line: MARKET_FUNCTION_LINE is
+		local
+			commands: expanded COMMANDS
+			point1, point2: MARKET_POINT
+			earlier, later: DATE_TIME
+		once
+			create point1.make
+			create point2.make
+			point1.set_x_y_date (1, 1, earlier)
+			point2.set_x_y_date (5, 1, later)
+			create earlier.make (1998, 1, 1, 0, 0, 0)
+			create later.make (1998, 1, 5, 0, 0, 0)
+			create Result.make_from_2_points (point1, point2, stock)
+		end
+
+	agent_based_function: AGENT_BASED_FUNCTION is
+		local
+			commands: expanded COMMANDS
+			agents: expanded MARKET_AGENTS
+			flst: LIST [MARKET_FUNCTION]
+		once
+			create {LINKED_LIST [MARKET_FUNCTION]} flst.make
+			flst.extend (stock)
+			create Result.make (agents.Sma_key,
+				commands.addition, flst)
+		end
+
+	market_data_function: MARKET_DATA_FUNCTION is
+		local
+			commands: expanded COMMANDS
+		once
+			create Result.make (stock)
+		end
+
+	stock: STOCK is
+		once
+			create Result.make ("DUMMY", Void, Void)
+			Result.set_trading_period_type (period_types @ (
+				period_type_names @ Daily))
+			Result.set_function_name ("No Input Function")
 		end
 
 end -- MARKET_FUNCTIONS
