@@ -3,7 +3,6 @@
 # command-line interface via a socket connection.
 
 from sys import *
-from os import *
 from ma_connection import *
 from CommandProcessor import *
 import os
