@@ -197,7 +197,6 @@ feature {NONE}
 
 	initialize is
 		do
-			-- !!!Use the cl-based ones as stubs for now:
 			!!event_generator_builder.make
 			!!function_builder.make
 			make_request_handlers
