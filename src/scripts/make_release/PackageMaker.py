@@ -1,4 +1,5 @@
 import os
+from regsub import gsub
 
 # Makes a package for release.
 class PackageMaker:
@@ -49,7 +50,7 @@ class PackageMaker:
 		else:
 			raise "Error: " + target + \
 				" is not a file or directory."
-		return result
+		return self.remove_double_slashes(result)
 
 	def file_list(self, files):
 		if len(files) == 0:
@@ -60,4 +61,8 @@ class PackageMaker:
 			result = result + files[i] + ' '
 			i = i + 1
 		result = result + files[i]
+		return result
+
+	def remove_double_slashes(self, path):
+		result = gsub("///*", "/", path)
 		return result
