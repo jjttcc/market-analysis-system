@@ -1,6 +1,6 @@
 indexing
 	description: 
-		"An abstraction for an n-record command that finds%
+		"An abstraction for an n-record command that finds %
 		%the highest high value in the last n trading periods."
 	date: "$Date$";
 	revision: "$Revision$"

@@ -1,11 +1,11 @@
 indexing
-	description: "Basic structure for some of the more common moving%
-				%averages, such as simple moving average and exponential%
-				%moving average.  Based on the convention of summing the%
-				%first n elements of the input, using that result for the%
-				%first output element, and calculating the remaining%
-				%output elements by redefining action, which is used in%
-				%the iteration machine.";
+	description:
+	"Basic structure for some of the more common moving averages, such as %
+	%simple moving average and exponential moving average.  Based on the %
+	%convention of summing the first n elements of the input, using that %
+	%result for the first output element, and calculating the remaining %
+	%output elements by redefining action, which is used in the iteration %
+	%machine.";
 	date: "$Date$";
 	revision: "$Revision$"
 

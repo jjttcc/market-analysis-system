@@ -56,8 +56,6 @@ feature -- Status report
 			is_true: Result = true
 		end
 
-feature {FACTORY} --!!!??
-
 feature {NONE} -- Implementation
 
 	forth is
