@@ -1,28 +1,20 @@
 Analyzing Markets with the Market Analysis Server
 
 This document provides a brief description of how to use MAS to analyze a
-set of markets.
-
-Note that in order to analyze one or more markets, the locationn of the
-files for these markets must be specified to the server on the command
-line.  For example, to tell it to process all files in the current
-directory that end in *.txt (and that include opening price and fields
-separated by ',' [comma]), you can enter:
-
-mas -o -f , *.txt
+set of tradables.
 
 After starting the server, the first step is to define a market event
 registrant.  To do this, enter 'r' at the main menu to access the
-"Edit event registrants" menu.  (If you like, you can then enter 'v'
-to view any existing registrants.)  To add a new registrant, enter
+"Edit event registrants" menu.  To add a new registrant, enter
 'a'; then select 'u', for User, and enter the User name as requested;
 then, as requested, enter the user's email address.  Next, choose one
 or more event types to use for market analysis for this registrant.
 (An event type specifies criteria, based on one or more indicators, by
 which the system will decide whether to send a buy or sell signal for each
 market during analysis.)  Select 0 to end the event type selection loop.
-At that point, you can enter another registrant or enter '-' to get to
-the previous menu, and '-' again to get to the main menu.
+At that point, you can add another registrant or enter '-' to get to
+the previous menu,; then enter 's' to save the new registrant; and enter
+'-' again to get to the main menu.
 
 Now that one or more registrants has been added, one more step is needed
 in order to run a market analysis, which is to set the starting date
@@ -42,7 +34,7 @@ ready to run market analysis on the current data beginning at the date
 you specified.
 
 At this point, you can start the analysis by entering 'a'.  The analysis
-could take a while, especially if there are a large number of files
+could take a while, especially if there are a large number of tradables
 to process.  When the analysis is finished, any generated buy or sell
 signals will be sent to the registrant(s) you set up in the first step,
 using the email address you provided.
