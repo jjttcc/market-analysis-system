@@ -41,6 +41,8 @@ public class BarDrawer extends IndicatorDrawer {
 		height_factor = height_factor_value(bounds);
 		row = first_row() - 1;
 		for (i = 0; row < lngth; ++i, ++row) {
+			// !!!Check this change for performance:
+			if (_data[i] == 0) continue;
 			x = _x_values[row] + 1;
 			y = (int)(bounds.height - (_data[i]-ymin) * height_factor +
 					bounds.y);
