@@ -45,9 +45,6 @@ feature -- Basic operations
 --print ("(SESSION_COMMAND - " + name + ") Attempting to execute:%N'" +
 --cmd + "'%N")
 			env.launch (cmd)
---			if not window.is_destroyed then
---				window.show
---			end
 		end
 
 end
