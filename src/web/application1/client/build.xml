@@ -332,14 +332,13 @@
     </copy>
     <copy    todir="${build.home}/mas_gui">
 	  <fileset dir="${mas_gui.home}/mas_gui"
-		includes="AppletOptions.class,
-			Connection.class,SessionState.class,CommandLineOptions.class,
-			StartupOptions.class,OptionFlags.class,DataSetBuilder.class,
-			Parser.class,ChartSettings.class,WindowSettings.class,
+		includes="
+			DataSetBuilder.class,
+			Parser.class,ChartSettings.class,
 			MDI_gui$1.class,MDI_gui.class,MA_CursorBar.class,MA_ButtonBar.class,
 			MA_FileBar$1.class,MA_FileBar$2.class,MA_FileBar.class,
 			MA_DrawBar.class,MarketSelection.class,DialogSelection.class,
-			MA_Dialog.class,MA_Button.class,CompressedConnection.class,
+			MA_Dialog.class,MA_Button.class,
 			IndicatorSelection.class,VTextIcon.class,MA_ChartContainer.class,
 			MA_ChartBar$1.class,MA_ChartBar$2.class,MA_ChartBar$3.class,
 			MA_ChartBar.class,MA_ChartDrawBar$1.class,MA_ChartDrawBar$2.class,
@@ -383,6 +382,15 @@
 	  <fileset dir="${mas_gui.home}/appinit"
 		includes="AppletInitialization.class,
 			"
+	  />
+    </copy>
+    <copy    todir="${build.home}/application_library">
+	  <fileset dir="${mas_gui.home}/application_library"
+		includes="CommandLineOptions.class, CompressedConnection.class,
+			Connection.class, MA_Connection.class, MA_SessionState.class,
+			OptionFlags.class, SessionState.class, StartupOptions.class,
+			WindowSettings.class,
+		"
 	  />
     </copy>
 	<!--
