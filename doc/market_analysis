@@ -46,3 +46,7 @@ could take a while, especially if there are a large number of files
 to process.  When the analysis is finished, any generated buy or sell
 signals will be sent to the registrant(s) you set up in the first step,
 using the email address you provided.
+
+If none of the existing event types does what you want, you can use MAS
+to create new market analyzers (event types).  See the file
+creating_market_analyzers for a short tutorial on how to do this.

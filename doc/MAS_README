@@ -18,4 +18,6 @@ the following files:
 
     market_analysis - A brief description of how to analyze markets with MAS
 
+	creating_market_analyzers - A tutorial on creating new market analyzers
+
     env_settings - Description of environment variables used by MAS
