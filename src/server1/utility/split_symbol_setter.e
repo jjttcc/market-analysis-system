@@ -1,6 +1,6 @@
 indexing
 	description: "Value setter that sets the symbol of a stock split"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -28,7 +28,7 @@ feature -- Initialization
 
 feature {NONE}
 
-	read_value (stream: FILE) is
+	read_value (stream: BILINEAR_INPUT_SEQUENCE) is
 		do
 			from
 				symbol.wipe_out
@@ -45,7 +45,7 @@ feature {NONE}
 			splits.set_current_symbol (symbol)
 		end
 
-	do_set (stream: FILE; tuple: STOCK_SPLIT) is
+	do_set (stream: BILINEAR_INPUT_SEQUENCE; tuple: STOCK_SPLIT) is
 			-- Not needed
 		do
 		end
