@@ -8,6 +8,18 @@ usage()
 	echo "    Where file1 and file2 contain parallel numeric values."
 }
 
+check_line_count() {
+	c1="$(wc -l $1|awk '{print $1}')"
+	c2="$(wc -l $2|awk '{print $1}')"
+	if [ "$c1" -eq "$c2" ]
+	then
+		:
+	else
+		echo "Files $1 and $2 have different line counts: $c1, $c2"
+		exit 1
+	fi
+}
+
 if [ $# -lt 2 ]
 then
 	usage
@@ -21,12 +33,14 @@ else
 	epsilon=.0001
 fi
 
-paste $1 $2 |awk 'BEGIN {
+file1=$1; file2=$2
+check_line_count $file1 $file2
+paste $file1 $file2 |awk 'BEGIN {
 epsilon = '$epsilon'
 false = 0
 true = 1
 }
-/[0-9][0-9]*\./ {
+/ *[0-9][0-9]*/ {
 	check_if_halves_equal()
 }
 
