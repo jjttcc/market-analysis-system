@@ -117,10 +117,6 @@ public class BarDrawer {
 //    will be called before any data has been placed in the class.
           if( data == null || data.length < stride ) return;
           
-
-//          System.out.println("Drawing Data Lines!");
-
-
 //    Is the first point inside the drawing region ?
           if( (inside0 = inside(data[0], data[1])) ) {
 
@@ -133,13 +129,9 @@ public class BarDrawer {
 
           }
 
-
           for(i=stride; i<length; i+=stride) {
-
 //        Is this point inside the drawing region?
-
               inside1 = inside( data[i], data[i+1]);
-             
 //        If one point is inside the drawing region calculate the second point
               if ( inside1 || inside0 ) {
 
@@ -164,7 +156,7 @@ public class BarDrawer {
 //        If either point is inside draw the segment
               if ( inside0 || inside1 )  {
 					g.drawLine(x0,y0,x1,y1);
-					g.drawLine(x0,y0 + 25,x1,y1 + 25);
+					//g.drawLine(x0,y0 + 25,x1,y1 + 25);
               }
 
 /*
