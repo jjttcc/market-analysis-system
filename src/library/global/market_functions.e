@@ -80,7 +80,7 @@ feature -- Access
 			!!pair.make (f,
 				"Market function that accumulates its values")
 			Result.extend (pair)
-			!MARKET_FUNCTION_LINE!f.make (point1, point2,
+			!MARKET_FUNCTION_LINE!f.make_from_2_points (point1, point2,
 				period_types @ (period_type_names @ daily))
 			!!pair.make (f,
 				"Market function that functions as a trend line")
