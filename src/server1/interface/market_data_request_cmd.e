@@ -79,8 +79,8 @@ feature {NONE}
 					report_error (Invalid_symbol, <<"Symbol '", market_symbol,
 						"' not in database.">>)
 				else
-					report_error (Error, <<"Invalid period type: ",
-						trading_period_type>>)
+					report_error (Invalid_period_type,
+						<<"Invalid period type: ", trading_period_type.name>>)
 				end
 			else
 				set_print_parameters

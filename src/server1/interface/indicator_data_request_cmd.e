@@ -62,7 +62,8 @@ feature {NONE}
 				elseif not tradables.symbols.has (market_symbol) then
 					report_error (Invalid_symbol, <<"Symbol not in database.">>)
 				else
-					report_error (Error, <<"Invalid period type">>)
+					report_error (Invalid_period_type,
+						<<"Invalid period type: ", trading_period_type.name>>)
 				end
 			elseif
 				indicatorID < 1 or indicatorID > tradable.indicators.count

@@ -70,6 +70,10 @@ feature -- Server response IDs
 	Warning: INTEGER is 104
 			-- Response indicating that a non-fatal error occurred
 
+	Invalid_period_type: INTEGER is 105
+			-- Response indicating that the server requested data for
+			-- a period type that is not in the database
+
 feature -- Server response strings
 
 	No_open_session_state: STRING is "no_open"

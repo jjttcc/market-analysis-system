@@ -342,8 +342,11 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 					new_indicators = true;
 					indicators();
 				} else {
+					// Handle request error.
 					if (request_result_id() == Invalid_symbol) {
 						handle_nonexistent_sybmol(tradable);
+					} else if (request_result_id() == Invalid_period_type) {
+						handle_invalid_period_type(tradable);
 					} else if (request_result_id() == Warning ||
 							request_result_id() == Error) {
 						new ErrorBox("Warning",
@@ -525,6 +528,22 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		ErrorBox errorbox = new ErrorBox("",
 			"Symbol " + symbol + " is not in the database.", this_chart);
 		market_selections.remove_selection(symbol);
+	}
+
+	// Notify the user that the symbol chosen does not exist and then
+	// remove the symbol from the selection list.
+	private void handle_invalid_period_type(String tradable) {
+		try {
+			_period_types = data_builder.trading_period_type_list(tradable);
+			current_period_type = initial_period_type(_period_types);
+			ma_menu_bar.reset_period_types(_period_types);
+			send_data_request(tradable);
+			requesting_data = Boolean.FALSE;
+		} catch (IOException e) {
+			System.err.println("IO exception occurred: " + e + " - aborting");
+			e.printStackTrace();
+			quit(-1);
+		}
 	}
 
 	// Save persistent settings as a serialized file.

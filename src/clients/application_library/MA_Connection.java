@@ -22,7 +22,7 @@ public class MA_Connection extends Connection implements NetworkProtocol {
 // Implementation
 
 	protected boolean valid_application_server_response(int value) {
-		return value == Invalid_symbol;
+		return value == Invalid_symbol || value == Invalid_period_type;
 	}
 
 	protected SessionState new_session_state(String response)

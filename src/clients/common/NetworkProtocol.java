@@ -18,12 +18,14 @@ public interface NetworkProtocol
 	final int Logout_request = 8;
 	final int Event_data_request = 9;
 	final int Event_list_request = 10;
+	final int All_indicators_request = 11;
 
 	// Server response IDs
 	final int Error = 101;
 	final int OK = 102;
 	final int Invalid_symbol = 103;
 	final int Warning = 104;
+	final int Invalid_period_type = 105;
 
 	// Server response strings
 	final String No_open_session_state = "no_open";
