@@ -49,7 +49,7 @@ feature -- Access
 		once
 			create Result.make (0)
 
-			create l.make (13)
+			create l.make (14)
 			Result.extend (l, Boolean_result_command)
 			l.extend (command_with_generator ("LE_OPERATOR"))
 			l.extend (command_with_generator ("GE_OPERATOR"))
@@ -66,7 +66,7 @@ feature -- Access
 			l.extend (command_with_generator ("FALSE_COMMAND"))
 			l.extend (command_with_generator ("SIGN_ANALYZER"))
 
-			create l.make (31)
+			create l.make (34)
 			Result.extend (l, Real_result_command)
 			l.extend (command_with_generator ("SUBTRACTION"))
 			l.extend (command_with_generator ("MULTIPLICATION"))
@@ -97,6 +97,9 @@ feature -- Access
 			l.extend (command_with_generator ("ABSOLUTE_VALUE"))
 			l.extend (command_with_generator ("ROUNDED_VALUE"))
 			l.extend (command_with_generator ("SQUARE_ROOT"))
+			l.extend (command_with_generator ("LOG"))
+			l.extend (command_with_generator ("LOG2"))
+			l.extend (command_with_generator ("LOG10"))
 			l.extend (command_with_generator ("N_BASED_UNARY_OPERATOR"))
 			l.extend (command_with_generator ("FUNCTION_BASED_COMMAND"))
 
@@ -119,7 +122,7 @@ feature -- Access
 			l.extend (command_with_generator ("GT_OPERATOR"))
 			l.extend (command_with_generator ("SIGN_ANALYZER"))
 
-			create l.make (9)
+			create l.make (7)
 			Result.extend (l, Basic_numeric_command)
 			l.extend (command_with_generator ("BASIC_NUMERIC_COMMAND"))
 			l.extend (command_with_generator ("VOLUME"))
@@ -141,7 +144,7 @@ feature -- Access
 			l.extend (command_with_generator ("BASIC_LINEAR_COMMAND"))
 			l.extend (command_with_generator ("FUNCTION_BASED_COMMAND"))
 
-			create l.make (2)
+			create l.make (3)
 			Result.extend (l, N_based_calculation)
 			l.extend (command_with_generator ("N_VALUE_COMMAND"))
 			l.extend (command_with_generator ("MA_EXPONENTIAL"))
@@ -429,6 +432,21 @@ feature {NONE} -- Implementation
 			end
 			Result.extend (Unary_real, name)
 			name := "SQUARE_ROOT"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Unary_real, name)
+			name := "LOG"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Unary_real, name)
+			name := "LOG2"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Unary_real, name)
+			name := "LOG10"
 			check
 				valid_name: command_names.has (name)
 			end
