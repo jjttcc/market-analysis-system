@@ -374,6 +374,24 @@ and sell signals into separate files according to the subject line.
 I've written a Python script that adds or removes stock symbols from
 watchlists according to whether a signal arrives indicating that the
 stock is in a long-term uptrend, downtrend, or is going sideways.
+<P><B>
+When building compound generators (market analyzers) are the links to
+the lower level generators static or dynamic?  For example, if I build
+an RSI generator and use it in a further generator do changes to the
+original RSI generator affect the compound generator - is it statically
+or dynamically linked?
+</B><P>
+It is, to use your words, dynamic.  I just tried it out to verify that I
+was remembering correctly.  I changed the "MACD Crossover and Stochastic
+%D Crossover (Buy)", a compound indicator that uses "MACD Crossover
+(Buy)" and "Stochastic %D Crossover (Buy)":  I changed the parameters
+of its MACD and its stochastic and saved them.  Then I used the "market
+analyzer" editing function to view the parameters for the "MACD Crossover
+(Buy)" and "Stochastic %D Crossover (Buy)" generators and the values
+had not changed.  So the "sub"-generators are not shared.  Since they
+are not shared, going the other way - changing the sub-generators
+(lower-level generators, using your terminology), as
+in your example, also has no effect on the compound generator.
 <!-- Include this when version 1.7 is released:
 <h3>
 <A name="debugging">
