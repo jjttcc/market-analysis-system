@@ -154,7 +154,7 @@ It expects the date field to follow the format:  yyyymmdd.  For example,
 %par
 There are some sample data files included in the correct format in
 @linuxlib/data/tradables
-@windowslib\data\tradables
+@windowslib\data
 so that you can try out MAS without having to obtain data files.
 
 %hdg1Running MAS
