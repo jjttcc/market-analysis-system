@@ -17,12 +17,12 @@ public class ServerTermination extends MCT_Constants {
 System.out.println("STerm - " + server_termination_cmd_key + ": " +
 settings.get(server_termination_cmd_key));
 			String cmd = processed_command(
-				(String) settings.get(server_termination_cmd_key));
+				(String) settings.get(server_termination_cmd_key),
+				parent_context);
 System.out.println("Trying to execute: " + cmd);
 			Process p = runtime.exec(cmd);
 		} catch (Exception e) {
-			System.err.println("Error: failed to start mas command-line " +
-				"client: " + e);
+			System.err.println("Error: failed to terminate server: " + e);
 		}
 		return result;
 	}

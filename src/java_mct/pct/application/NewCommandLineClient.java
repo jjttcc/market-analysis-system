@@ -15,7 +15,7 @@ public class NewCommandLineClient extends MCT_Constants {
 		}
 		try {
 			String cmd = processed_command(
-				(String) settings.get(command_line_cmd_key));
+				(String) settings.get(command_line_cmd_key), parent_context);
 System.out.println("Trying to execute: " + cmd);
 			Process p = runtime.exec(cmd);
 		} catch (Exception e) {

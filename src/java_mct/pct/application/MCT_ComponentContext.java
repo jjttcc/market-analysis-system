@@ -2,11 +2,13 @@ package pct.application;
 
 // Data associated with a MAS Control Terminal component
 class MCT_ComponentContext {
-	public MCT_ComponentContext(Process proc, String hostname,
-			int port_number) {
-		_server_process = proc;
+	public MCT_ComponentContext(String hostname, int port_number) {
 		_server_host_name = hostname;
 		_server_port_number = port_number;
+	}
+
+	public void set_process(Process proc) {
+		_server_process = proc;
 	}
 
 	public Process server_process() {

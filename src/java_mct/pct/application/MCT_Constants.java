@@ -33,6 +33,15 @@ public class MCT_Constants {
 	// Field separator used in scanning settings file
 	public final static String settings_field_separator = ";";
 
+	// Field separator used in scanning settings file
+	public final static String pcthostname_property = "pct.hostname";
+
+	// String property value associated with property `propname'
+	public String property_value(String propname) {
+		Properties p = new Properties(System.getProperties());
+		return p.getProperty(propname);
+	}
+
 	// Path of the program configuration file
 	static private String setting_file_path() {
 		Properties p = new Properties(System.getProperties());
@@ -108,17 +117,17 @@ System.out.println("Set " + s + " to: " + settings.get(s));
 	}
 
 	// Result of processing "[token]" `s' - empty if `s' is invalid or
-	// if `parent_context' is null.
-	String processed_token(String s) {
+	// if `context' is null.
+	String processed_token(String s, MCT_ComponentContext context) {
 		StringTokenizer t = new StringTokenizer(s, "[]");
 		String result = "";
 		String word;
-		if (t.hasMoreTokens() && parent_context != null) {
+		if (t.hasMoreTokens() && context != null) {
 			word = t.nextToken();
 			if (word.equals(hostname_token)) {
-				result = parent_context.server_host_name();
+				result = context.server_host_name();
 			} else if (word.equals(port_token)) {
-				result = "" + parent_context.server_port_number();
+				result = "" + context.server_port_number();
 			}
 			if (t.hasMoreTokens()) {
 				result = result + t.nextToken();
@@ -129,7 +138,7 @@ System.out.println("Set " + s + " to: " + settings.get(s));
 
 	// `cmd', processed to replace <word> and [word] with appropriate
 	// settings.
-	String processed_command(String cmd) {
+	String processed_command(String cmd, MCT_ComponentContext context) {
 		String result = "", s, current_word;
 		StringTokenizer t = new StringTokenizer(cmd, " ");
 		while (t.hasMoreTokens()) {
@@ -137,7 +146,7 @@ System.out.println("Set " + s + " to: " + settings.get(s));
 			if (s.charAt(0) == '<' && s.lastIndexOf('>') != -1) {
 				current_word = setting_for(s);
 			} else if (s.charAt(0) == '[' && s.lastIndexOf(']') != -1) {
-				current_word = processed_token(s);
+				current_word = processed_token(s, context);
 			} else {
 				current_word = s;
 			}
