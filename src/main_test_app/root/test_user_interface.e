@@ -328,7 +328,6 @@ feature {NONE}
 									current_period_type.name))
 				when 'c', 'C' then
 					select_period_type
-					--!!!print_composite_lists (current_tradable)
 				when 'i', 'I' then
 					print ("Select indicator to view%N")
 					indicator := indicator_selection
