@@ -260,13 +260,13 @@ html() && /\\fP/ {
 	next
 }
 
-/%start_url/ {
+/%start_anchor/ {
 	In_url = TRUE
 #print "url started"
 	next
 }
 
-/%end_url/ {
+/%end_anchor/ {
 	In_url = FALSE
 #print "url ended"
 #print "(Url_label is " Url_label

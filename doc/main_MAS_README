@@ -75,11 +75,11 @@ need improvement.
 %hdg1Support for MAS
 Additionally, if you have a problem installing MAS or getting it to work the
 way you would like, please first look over the documentation, including the
-%start_url
+%start_anchor
 %url_labelFAQshow
 %url_addrhttp://eiffel-mas.sourceforge.net/support/FAQ.html
 %url_suffix,show
-%end_url
+%end_anchor
 to see if you can find a solution.
 If you're not able to find a solution, you are welcome to send me an email
 describing the problem you are having.
@@ -100,11 +100,11 @@ You will find my email address at the end of this document.
 
 As of January, 2004, the current version of MAS can be downloaded from:
 %br
-%start_url
+%start_anchor
 %url_labelhttp://eiffel-mas.sourceforge.net/show
 %url_addrhttp://eiffel-mas.sourceforge.net/
 %url_suffix.show
-%end_url
+%end_anchor
 
 %hdg1Main Directories in the MAS Installation
 
@@ -206,26 +206,26 @@ This software is OSI Certified Open Source Software.  OSI Certified is
 a certification mark of the Open Source Initiative.
 %par
 (A list of current OSI-approved licenses can be found at:
-%start_url
+%start_anchor
 %url_addrhttp://www.opensource.org/licenses/index.html
 %url_labelhttp://www.opensource.org/licenses/index.htmlshow
 %url_suffix.)show
-%end_url
+%end_anchor
 %par
 Note: This product includes EiffelBase software from Interactive Software
 Engineering, used according to the terms of the ISE Free Eiffel Library
 License (IFELL).
 See
-%start_url
+%start_anchor
 %url_addrhttp://www.eiffel.com
 %url_labelhttp://www.eiffel.comshow
-%end_url
+%end_anchor
 and, for the license terms,
-%start_url
+%start_anchor
 %url_addrhttp://eiffel.com/products/base/license.html
 %url_labelhttp://eiffel.com/products/base/license.htmlshow
 %url_suffix.show
-%end_url
+%end_anchor
 
 %hdg1Contact Information
 

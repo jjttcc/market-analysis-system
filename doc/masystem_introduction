@@ -265,11 +265,11 @@ date *^fontI21-Oct-81*^fontP is interpreted as October 21, 1981.
 If you have a DBMS with ODBC support, you may be able to store your data in
 a database and have MAS obtain its market data from there instead of from
 files.  I have MAS set up on my system to talk to a Postgres database using
-%start_url
+%start_anchor
 %url_labelunixODBCshow
 %url_suffix,show
 %url_addrhttp://www.unixodbc.org/show
-%end_url
+%end_anchor
 a package for Linux and UNIX systems.
 %par
 To configure MAS to connect to a database, you will first need to
@@ -306,17 +306,17 @@ option to tell it to use the database for its data.
 %hdg2Using MAS with the QuoteMonster Script
 %par
 You can configure MAS to use the popular
-%start_url
+%start_anchor
 %url_labelQuoteMonstershow
 %url_addrhttp://xmlworks.com/quotemonster/
-%end_url
+%end_anchor
 perl script to
 obtain its stock data from yahoo.com's free historical stock data service.
 To do this, you will first need to download the
-%start_url
+%start_anchor
 %url_labelQuoteMonstershow
 %url_addrhttp://xmlworks.com/quotemonster/show
-%end_url
+%end_anchor
 script.
 %par
 After downloading QuoteMonster, follow the instructions for installation
@@ -328,10 +328,10 @@ installed, make sure the script (which is named qm) is in your path.
 (If you type "type qm", you should get a result something like: "qm
 is /usr/local/bin/qm".  If you get an error message instead, it is not
 in your path.  If you're not sure how to change your path variable,
-%start_url
+%start_anchor
 %url_labelhttp://sunsite.dk/linux-newbie/FAQ2.htm#PATH_changeshow
 %url_addrhttp://sunsite.dk/linux-newbie/FAQ2.htm#PATH_change
-%end_url
+%end_anchor
 gives a pretty good
 descriptionn of how to do this.)
 %par
