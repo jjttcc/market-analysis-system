@@ -40,9 +40,13 @@ feature -- Initialization
 			tradable_factories := factories
 			object_comparison := true
 			file_names.start; tradable_factories.start
+			!LINKED_LIST[PAIR [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]]!
+				cache.make
+			cache_size := 5
 		ensure
 			set: file_names = filenames and tradable_factories = factories
 			implementation_init: last_tradable = Void and old_index = 0
+			cache_initialized: cache /= Void and cache_size = 5
 		end
 
 feature -- Access
@@ -59,16 +63,22 @@ feature -- Access
 			check
 				indexes_equal: file_names.index = tradable_factories.index
 			end
-			-- Create a new tradable only if the cursor has moved since
-			-- the last tradable creation
+			-- Create a new tradable (or get it from the cache) only if the
+			-- cursor has moved since the last tradable creation.
 			if file_names.index /= old_index then
-				!!input_file.make_open_read (file_names.item)
-				tradable_factories.item.set_input_file (input_file)
-				tradable_factories.item.execute
-				last_tradable := tradable_factories.item.product
-				if tradable_factories.item.error_occurred then
-					print_errors (last_tradable,
-									tradable_factories.item.error_list)
+				last_tradable := cached_item (file_names.index)
+				if last_tradable = Void then -- If it wasn't in the cache
+					!!input_file.make_open_read (file_names.item)
+					tradable_factories.item.set_input_file (input_file)
+					tradable_factories.item.set_symbol (
+						symbol_from_file_name (file_names.item))
+					tradable_factories.item.execute
+					last_tradable := tradable_factories.item.product
+					add_to_cache (last_tradable, file_names.index)
+					if tradable_factories.item.error_occurred then
+						print_errors (last_tradable,
+										tradable_factories.item.error_list)
+					end
 				end
 				old_index := file_names.index
 			end
@@ -87,6 +97,25 @@ feature -- Access
 		ensure then
 			-- `file_names' contains `name' implies
 			--	file_names.item.is_equal (name)
+		end
+
+	search_by_symbol (s: STRING) is
+		local
+			slist: LIST [STRING]
+		do
+			from
+				slist := symbols
+				slist.start
+				start
+			until
+				after or else slist.item.is_equal (s)
+			loop
+				slist.forth
+				forth
+			end
+		ensure then
+			-- `symbols' contains `s' implies
+			--	file_names.item corresponds to `s'
 		end
 
 	file_names: LINEAR [STRING]
@@ -151,6 +180,47 @@ feature {NONE} -- Implementation
 			end
 		end
 
+	cached_item (i: INTEGER): TRADABLE [BASIC_MARKET_TUPLE] is
+			-- The cached item with index `i' - Void if not in cache
+		do
+			from
+				cache.start
+			until
+				cache.exhausted or else cache.item.right = i
+			loop
+				cache.forth
+			end
+			if not cache.exhausted then
+				Result := cache.item.left
+			end
+		ensure
+			correct_result:
+				not cache.exhausted implies (Result = cache.item.left)
+			void_if_not_there: cache.exhausted implies Result = Void
+		end
+
+	add_to_cache (t: TRADABLE [BASIC_MARKET_TUPLE]; idx: INTEGER) is
+			-- Add `t' with its `idx' to the cache
+		require
+			not_void: t /= Void
+		local
+			pair: PAIR [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]
+		do
+			if cache.count = cache_size then
+				-- Arbitrarily prune the last item to keep within the
+				-- allowed cache size.
+				cache.prune (cache.last)
+			end
+			!!pair.make (t, index)
+			cache.extend (pair)
+		end
+
+	cache_size: INTEGER
+			-- The maximum size for the cache
+
+	cache: LIST [PAIR [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]]
+			-- Cache of tradable/index for efficiency
+
 	old_index: INTEGER
 
 	last_tradable: TRADABLE [BASIC_MARKET_TUPLE]
@@ -169,5 +239,7 @@ invariant
 
 	fn_tf_not_void: file_names /= Void and tradable_factories /= Void
 	always_compare_objects: object_comparison = true
+	index_definition: index = file_names.index
+	cache_not_too_large: cache.count <= cache_size
 
 end -- class VIRTUAL_TRADABLE_LIST
