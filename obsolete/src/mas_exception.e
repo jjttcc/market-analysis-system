@@ -46,6 +46,9 @@ feature -- Basic operations
 		local
 			error_msg: STRING
 		do
+			-- An exception may have caused a lock to have been left open -
+			-- ensure that clean-up occurs to remove the lock:
+			no_cleanup := false
 			if exception /= Signal_exception then
 				if is_developer_exception then
 					error_msg := developer_exception_name
