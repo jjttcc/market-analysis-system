@@ -69,7 +69,7 @@ feature {NONE} -- Implementation
 			check
 				not_intraday: not tradable_factory.intraday
 			end
-			create {DB_TRADABLE_LIST} daily_list.make (symbol_list,
+			create daily_list.make (symbol_list,
 				tradable_factory)
 		end
 
@@ -78,7 +78,7 @@ feature {NONE} -- Implementation
 			check
 				intraday: intraday_tradable_factory.intraday
 			end
-			create {DB_TRADABLE_LIST} intraday_list.make (symbol_list,
+			create intraday_list.make (symbol_list,
 				intraday_tradable_factory)
 			intraday_list.set_intraday (true)
 		end
