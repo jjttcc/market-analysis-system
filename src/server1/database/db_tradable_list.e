@@ -50,14 +50,14 @@ feature {NONE} -- Implementation
 				if inp_seq = Void or mds.fatal_error then
 					fatal_error := true
 				else
-					tradable_factories.item.set_input (inp_seq)
+					tradable_factory.set_input (inp_seq)
 				end
 			else
 				fatal_error := true
 			end
 			if fatal_error then
 				log_errors (<<"Error occurred while processing ",
-					tradable_factories.item.symbol, ": ", mds.last_error>>)
+					tradable_factory.symbol, ": ", mds.last_error>>)
 			end
 		end
 
