@@ -29,6 +29,10 @@ feature -- Access
 
 	Local_hostname: STRING is "localhost"
 
+	Start_session_specifier: STRING is "start_session_on_startup"
+
+	Start_charts_specifier: STRING is "start_charts_on_startup"
+
 	Working_directory_specifier: STRING is "cwdir"
 
 	Environment_variable_specifier: STRING is "environment_variable"

@@ -84,6 +84,10 @@ feature -- Access
 			create {MCT_COMMAND_LINE } Result.make
 		end
 
+	current_main_actions: MAIN_ACTIONS
+
+	current_mas_session_actions: MAS_SESSION_ACTIONS
+
 feature {NONE} -- Main-window components
 
 	main_window_menu_bar: EV_MENU_BAR is
@@ -320,10 +324,6 @@ feature {NONE} -- Implementation - Hook routine implementations
 		end
 
 feature {NONE} -- Implementation
-
-	current_main_actions: MAIN_ACTIONS
-
-	current_mas_session_actions: MAS_SESSION_ACTIONS
 
 	current_actions: ACTIONS is
 			-- `current_main_actions', if its not Void - otherwise,

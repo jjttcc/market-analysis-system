@@ -21,6 +21,9 @@ class MCT_CONFIGURATION inherit
 		end
 
 	MCT_CONFIGURATION_PROPERTIES
+		export
+			{ACTIONS} all
+		end
 
 	ERROR_PUBLISHER
 		export
@@ -61,6 +64,8 @@ feature {NONE} -- Initialization
 			settings.extend ("", Valid_port_numbers_specifier)
 			settings.extend ("", Server_report_port_number_specifier)
 			settings.extend ("", Hostname_specifier)
+			settings.extend ("", Start_session_specifier)
+			settings.extend ("", Start_charts_specifier)
 			settings.extend ("", Environment_variable_specifier)
 			settings.extend ("", Environment_variable_append_specifier)
 			settings.extend ("", Start_server_cmd_specifier)
@@ -99,6 +104,18 @@ feature -- Access
 			Result := settings @ Hostname_specifier
 		ensure
 			not_void: Result /= Void
+		end
+
+	start_session_on_startup: BOOLEAN is
+		do
+			(settings @ Start_session_specifier).to_lower
+			Result := equal (True_string, settings @ Start_session_specifier)
+		end
+
+	start_charts_on_startup: BOOLEAN is
+		do
+			(settings @ Start_charts_specifier).to_lower
+			Result := equal (True_string, settings @ Start_charts_specifier)
 		end
 
 	platform: MCT_PLATFORM is

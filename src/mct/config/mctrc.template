@@ -1,4 +1,4 @@
-# MAS Control Terminal configuration file
+# MAS Control Terminal (MCT) configuration file
 # Format: "label_string<tab>setting"
 
 # Special symbols:
@@ -55,7 +55,7 @@ define	macl-shell:{macl_shell}
 # mas_directory environment variable setting
 define	mas_directory_setting:{mas_directory_setting}
 
-# Set the MAS_DIRECTORY environment variable
+# Set the MAS_DIRECTORY environment variable.
 environment_variable	MAS_DIRECTORY:<mas_directory_setting>
 
 # Valid port numbers for use by the MAS server
@@ -68,6 +68,15 @@ server_report_port_number	41512
 
 # Network host name
 hostname	localhost
+
+# Specify whether a MAS session should be started when the MCT starts up.
+# (Values: true/false)
+start_session_on_startup	true
+
+# Specify whether the charting program should be started when the MCT
+# starts up.  Note: This setting is ignored if 'start_session_on_startup' is
+# not true.  (Values: true/false)
+start_charts_on_startup	true
 
 # NOTE: <cwdir>, used below, means to use the bracketed path that follows
 # it as the Current Working Directory when the command that follows

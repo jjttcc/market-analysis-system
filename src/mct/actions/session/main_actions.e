@@ -85,6 +85,13 @@ feature -- Actions
 					dialog.show
 					port_numbers_in_use.prune (portnumber)
 				end
+				if
+					configuration.start_charts_on_startup
+				then
+					-- Bypass the normal event-triggered process for
+					-- starting the charting application.
+					builder.current_mas_session_actions.start_charting_app
+				end
 				gtools.restore_cursor (owner_window, orig_cursor)
 			end
 		end

@@ -38,4 +38,10 @@ feature -- Access
 			-- "Escape" character - protects the following character from
 			-- being interpreted.
 
+	True_string: STRING is "true"
+			-- Value used to specify 'true' for a boolean setting
+
+	False_string: STRING is "false"
+			-- Value used to specify 'false' for a boolean setting
+
 end
