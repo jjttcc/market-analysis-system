@@ -9,8 +9,11 @@ indexing
 class STOCK inherit
 
 	TRADABLE [VOLUME_TUPLE]
+		export {ANY}
+			valid_stock_function
 		redefine
-			symbol, make_ctf, short_description, finish_loading
+			symbol, make_ctf, short_description, finish_loading,
+			valid_indicator
 		end
 
 creation
@@ -59,6 +62,15 @@ feature -- Access
 		end
 
 	short_description: STRING is "Stock"
+
+feature -- Status report
+
+	valid_indicator (f: MARKET_FUNCTION): BOOLEAN is
+		do
+			Result := valid_stock_function (f)
+		ensure then
+			valid_for_stock: Result = valid_stock_function (f)
+		end
 
 feature -- Basic operations
 
