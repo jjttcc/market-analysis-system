@@ -10,7 +10,7 @@ appdir="$*"
 # for the application directory chosen by the user (and any other
 # needed settings).
 echo replacestart>>$specfile
-echo {application_directory}"$appdir"|sed 's@\\@/@g'>>$specfile
+echo {main_mas_dir}"$appdir"|sed 's@\\@/@g'>>$specfile
 echo replaceend>>$specfile
 
 config_tool  -c  $specfile -f ../mctrc
