@@ -2,6 +2,7 @@ body { background-color: #e9dcd5; }
 :link { color: blue; }
 :visited { color: purple; }
 :active { color: black; }
+
 #navigation {
 	position: absolute;
 	position: fixed;
@@ -12,10 +13,24 @@ body { background-color: #e9dcd5; }
 	*/
 	padding: 0 0 0 0.8em;
 	width: 7.2em; height: 100%;
-	background-color: #b2c5ca;
-	border-right: 1px solid;
 	/*
 	*/
+}
+
+html>body #navigation {
+	background-color: #b2c5ca;
+	border-right: 1px dotted;
+}
+
+#navheader {
+	margin: 0 0 0 0;
+	color: #e9dcd5;
+}
+
+html>body #navheader {
+	margin: 1em 0 0 0;
+	display: normal;
+	color: black;
 }
 
 #header {
@@ -37,14 +52,14 @@ h1.header {
 }
 
 #content {
-	margin: 0.75em 0.7em 0 0.5em;
+	margin: 0.85em 0.7em 0 0.5em;
 	font-size: 90%;
 	/*
 	width: 75%;
 	*/
 	position: absolute;
 	left: 8.75em;
-	top: 3em;
+	top: 0;
 	/*
 	border: 1px solid;
 	*/
