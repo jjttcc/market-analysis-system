@@ -46,7 +46,10 @@ feature {NONE} -- Initialization
 			set_strict
 			set_intraday_caching
 			if not use_db then
-				set_file_names
+				set_use_external_data_source
+				if not use_external_data_source then
+					set_file_names
+				end
 			else
 				set_keep_db_connection
 				set_symbol_list
@@ -87,6 +90,9 @@ feature -- Access
 	use_db: BOOLEAN
 			-- Is a database to be used for market data?
 			-- True if "-p" is found (p = persistent store)
+
+	use_external_data_source: BOOLEAN
+			-- Is an external data source to be used to obtain market data?
 
 	keep_db_connection: BOOLEAN
 			-- If use_db, should the database remain connected until the
@@ -129,6 +135,7 @@ feature -- Basic operations
 				"  -h        Print this Help message%N",
 				"  -s        Use Strict error checking%N",
 				"  -p        Use database (Persistent store)%N",
+				"  -x        Use an external data source%N",
 				"  -n        No caching of intraday data%N",
 				"  -b        Run in Background%N">>))
 		end
@@ -198,6 +205,14 @@ feature {NONE} -- Implementation
 		do
 			if option_in_contents ('p') then
 				use_db := true
+				contents.remove
+			end
+		end
+
+	set_use_external_data_source is
+		do
+			if option_in_contents ('x') then
+				use_external_data_source := true
 				contents.remove
 			end
 		end
