@@ -12,13 +12,6 @@ deferred class MA_POLL_COMMAND
 
 inherit
 
-	POLL_COMMAND
-		rename
-			make as pc_make
-		export
-			{NONE} pc_make
-		end
-
 feature -- Access
 
 	factory_builder: FACTORY_BUILDER
@@ -30,6 +23,6 @@ feature {NONE}
 
 invariant
 
-	not_void: active_medium /= Void and factory_builder /= Void
+	factory_builder_exists: factory_builder /= Void
 
-end -- class MA_POLL_COMMAND
+end

@@ -9,15 +9,18 @@ indexing
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class CONSOLE_READER
+class MAS_CONSOLE_READER
 
 inherit
 
-	MA_POLL_COMMAND
+	CONSOLE_READER
 		rename
-			active_medium as output_device
+			make as cr_make
+		end
+
+	MA_POLL_COMMAND
 		redefine
-			output_device, interface
+			interface
 		end
 
 creation
@@ -30,27 +33,23 @@ feature -- Initialization
 		require
 			not_void: fb /= Void
 		do
-			input_device := io.input
-			output_device := io.output
+			initialize
 			factory_builder := fb
 			create interface.make_io (input_device, output_device,
 				factory_builder)
 			interface.set_console
 			-- Input from the user is needed to trigger the MEDIUM_POLLER.
-			output_device.put_string (
-				"Welcome to the Market Analysis Server console! %
-				%(Hit <Enter> to continue)%N")
+			output_welcome_message
 		ensure
 			set: input_device = io.input and output_device = io.output and
 					factory_builder = fb
 		end
 
-feature
-
-	output_device, input_device: PLAIN_TEXT_FILE
-			-- input and output consoles
+feature -- Access
 
 	interface: MAIN_CL_INTERFACE
+
+feature -- Basic operations
 
 	execute (arg: ANY) is
 		do
@@ -59,5 +58,8 @@ feature
 			interface.main_menu
 		end
 
-end -- class CONSOLE_READER
+feature {NONE} -- Hook routine Implementations
 
+	welcome_message: STRING is "Welcome to the Market Analysis Server console!"
+
+end

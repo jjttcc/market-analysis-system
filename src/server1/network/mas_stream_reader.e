@@ -9,13 +9,15 @@ indexing
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class STREAM_READER
+class MAS_STREAM_READER
 
 inherit
 
 	MA_POLL_COMMAND
+
+	STREAM_READER
 		redefine
-			active_medium
+			active_medium, io_socket, initialize_for_execution
 		end
 
 	CLEANUP_SERVICES
@@ -43,12 +45,10 @@ feature
 		require
 			not_void: s /= Void and fb /= Void
 		do
-			pc_make (s)
-			active_medium.listen (5)
+			initialize_components (s)
 			factory_builder := fb
 			create cl_interface.make (factory_builder)
 			create gui_interface.make (factory_builder)
-			register_for_termination (Current)
 		ensure
 			set: active_medium = s and factory_builder = fb
 		end
@@ -69,9 +69,8 @@ feature
 
 	gui_interface: MAIN_GUI_INTERFACE
 
-	execute (arg: ANY) is
+	do_execute (arg: ANY) is
 		do
-			initialize
 			if is_gui then
 				gui_interface.set_io_medium (io_socket)
 				interface := gui_interface
@@ -84,13 +83,11 @@ feature
 			-- When threads are added, this call will probably change to
 			-- "interface.launch" to run in a separate thread.
 			interface.execute
-			io_socket.close
 		end
 
-	initialize is
+	initialize_for_execution is
 		do
-			active_medium.accept
-			io_socket := active_medium.accepted
+			Precursor
 			io_socket.read_character
 			if io_socket.last_character.is_equal (Console_flag) then
 				is_gui := False
@@ -124,4 +121,4 @@ feature {NONE} -- Unused
 
 	Message_time_field_separator: STRING is ""
 
-end -- class STREAM_READER
+end
