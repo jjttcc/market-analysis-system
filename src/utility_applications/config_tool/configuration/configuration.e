@@ -44,6 +44,12 @@ feature -- Access
 
 	replacement_specifications: HASH_TABLE [STRING, STRING]
 
+	additional_settings_report: STRING is
+			-- Additional settings, if any, formatted as a string
+		do
+			Result := ""
+		end
+
 feature -- Status report
 
 	fatal_error_status: BOOLEAN
