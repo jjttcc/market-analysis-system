@@ -254,7 +254,8 @@ feature {EDITING_INTERFACE}
 					"Select an indicator to edit")
 				if selection /= Exit_value then
 					indicator := l @ selection
-					edit_parameter_menu (indicator.parameters)
+					check indicator /= Void end
+					edit_parameter_menu (indicator.parameters, indicator.name)
 				end
 			end
 		end
@@ -517,20 +518,27 @@ feature {NONE} -- Implementation - indicator editing
 			end
 		end
 
-	edit_parameter_menu (parameters: LIST [FUNCTION_PARAMETER]) is
+	edit_parameter_menu (parameters: LIST [FUNCTION_PARAMETER];
+				name: STRING) is
 			-- Menu for editing `parameters'
 		local
 			selection: INTEGER
 			p: FUNCTION_PARAMETER
+			query: STRING
 		do
 			from
 				selection := Null_value
+				if name /= Void then
+					query := concatenation (<<"Select a parameter to edit",
+						" for ", name>>)
+				else
+					query := "Select a parameter to edit"
+				end
 			until
 				selection = Exit_value
 			loop
 				selection := list_selection_with_backout (
-					names_from_parameter_list (parameters, true),
-					"Select a parameter to edit")
+					names_from_parameter_list (parameters, true), query)
 				if selection /= Exit_value then
 					p := parameters @ selection
 					edit_parameter (p)
