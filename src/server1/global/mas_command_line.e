@@ -61,6 +61,9 @@ feature -- Access
 	field_separator: STRING
 			-- Field separator for (input) market data - Void if not set
 
+	record_separator: STRING
+			-- Record separator for (input) market data - Void if not set
+
 	file_names: LIST [STRING]
 			-- Market data input file names
 
