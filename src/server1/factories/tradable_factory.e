@@ -199,6 +199,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
+--!!!:
 	execute is
 			-- Note: Once `execute' is called, set_intraday will have no
 			-- effect - the tradable's data will be intraday according to
@@ -206,6 +207,7 @@ feature -- Basic operations
 		local
 			scanner: MARKET_TUPLE_DATA_SCANNER
 			intraday_scanner: INTRADAY_TUPLE_DATA_SCANNER
+old_prod_count: integer
 		do
 			error_occurred := False
 			check_for_open_interest
@@ -216,6 +218,7 @@ feature -- Basic operations
 			check
 				product_exists:  product /= Void
 			end
+old_prod_count := product.count
 			make_tuple_maker
 			if intraday then
 				create intraday_scanner.make (product, input, tuple_maker,
@@ -265,13 +268,15 @@ feature -- Basic operations
 				add_indicators (product)
 			end
 			update_current_product := False
+print ("old prod count, prod count: " + old_prod_count.out + ", " +
+product.count.out + "%N")
 		ensure then
 			product_not_void: product /= Void
 			product_type_set: product.trading_period_type = time_period_type
 			no_current_update: update_current_product = False
-			old_product_count_not_smaller_if_update_current:
+			old_product_count_smaller_or_equal_if_update_current:
 				old update_current_product implies
-				old product.count > product.count
+				old product.count <= product.count
 		end
 
 feature {NONE}
@@ -417,14 +422,18 @@ feature {NONE} -- Implementation
 			expected_fields: INTEGER
 			gsf: expanded GLOBAL_SERVER_FACILITIES
 		do
-			expected_fields := 6
-			if gsf.command_line_options.opening_price then
-				expected_fields := expected_fields + 1
+			if update_current_product then
+				open_interest := product.has_open_interest
+			else
+				expected_fields := date_ohlc_vol_field_count
+				if gsf.command_line_options.opening_price then
+					expected_fields := expected_fields + 1
+				end
+				if intraday then
+					expected_fields := expected_fields + 1
+				end
+				open_interest := input.field_count = expected_fields
 			end
-			if intraday then
-				expected_fields := expected_fields + 1
-			end
-			open_interest := input.field_count = expected_fields
 		end
 
 	open_interest: BOOLEAN
