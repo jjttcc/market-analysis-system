@@ -87,9 +87,9 @@ the "-f ," tells the server that the character used to separate fields
 in the data file is ','.  (The default is tab.)  *.txt, of course,
 passes all file names in the current directory that end in .txt to
 the server and -b tells the server it is to be run in the background.
-13579 is the socket port number that the server will use to communicate
-with one or more GUI clients.  (You can enter "mas -h" to print a short
-summary of the server's command-line options.)
+13579 is the socket port number that you are telling the server to use
+to communicate with one or more GUI clients.  (You can enter "mas -h"
+to print a short summary of the server's command-line options.)
 
 Once you have started the server, you can start a GUI client from the
 command line by changing the current directory to:
@@ -102,7 +102,9 @@ jre MA_Client hostname port_number
 
 where hostname stands for the network name of the computer the server is
 running on and port_number is the socket port number the server is using
-(13579 in the example above).  Note that since the GUI is a Java program,
+(13579 in the example above).  (You can find out your machine's host name
+with the hostname command or from the HOSTNAME environment variable -
+i.e., echo $HOSTNAME.)  Note that since the GUI is a Java program,
 you will need to have the Java Runtime Environment (JRE) installed on
 your system.  The JRE is available for free for most operating systems.
 See the file java_info for information on obtaining the JRE for your
