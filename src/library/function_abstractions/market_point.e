@@ -50,4 +50,13 @@ feature {FACTORY} -- Status setting
 			set: x = x_value and y = y_value
 		end
 
+	set_date (d: DATE_TIME) is
+		require
+			not_void: d /= Void
+		do
+			date_time := d
+		ensure
+			set: date_time = d
+		end
+
 end -- class MARKET_POINT
