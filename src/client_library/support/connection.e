@@ -109,6 +109,23 @@ feature -- Basic operations
 				server_response /= Void
 		end
 
+	send_termination_request (wait_for_response: BOOLEAN) is
+			-- Send a request to terminate the server process.
+		require
+			socket_ok: socket_ok
+		do
+			if timing then
+				timer.start
+			end
+			send_request (Termination_message, wait_for_response)
+			if timing then
+				print_timing_report
+			end
+		ensure
+			response_set_on_success: last_communication_succeeded implies
+				server_response /= Void
+		end
+
 feature {NONE} -- Implementation
 
 	end_of_message (c: CHARACTER): BOOLEAN is
@@ -143,6 +160,8 @@ feature {NONE} -- Implementation - Constants
 		once
 			Result := Seconds_in_an_hour * 24
 		end
+
+	Termination_message: STRING is "%N"
 
 feature {NONE} -- Unused
 

@@ -10,6 +10,8 @@ default
 	assertion (ensure)
 	assertion (loop)
 	assertion (invariant)
+	arguments ("9999")
+	arguments ("7777")
 	arguments (" 4444 -te -r /tmp/maclbug.1")
 	arguments (" 4444 -te")
 	arguments ("-i /tmp/parabolic_sar4 4444 -te")
