@@ -1,5 +1,5 @@
 # Initial spec file created by autospec ver. 0.4 with rpm 2.4.12 compatibility
-%define version 1.6
+%define version 1.6.5
 %define rootdir /opt/mas
 BuildRoot: /tmp/mas_v%{version}-root
 Prefix: %{rootdir}
@@ -21,12 +21,12 @@ URL: http://eiffel-mas.sourceforge.net/
 %description
 The Market Analysis System (MAS) is a software application that provides
 tools for analysis of financial markets using technical analysis. MAS
-provides facilities for stock charting, including price, volume, and a
-wide range of technical analysis indicators. MAS also allows automated
-processing of market data - applying technical analysis indicators with
-user-selected criteria to market data to automatically generate trading
-signals - and can be used as the main component of a sophisticated
-trading system. Some of the features of MAS are:
+provides facilities for charting of stock and futures data, including
+price, volume, and a wide range of technical analysis indicators. MAS also
+allows automated processing of market data - applying technical analysis
+indicators with user-selected criteria to market data to automatically
+generate trading signals - and can be used as the main component of a
+sophisticated trading system. Some of the features of MAS are:
 
    - Exponential Moving Average, Stochastic, MACD, RSI, On Balance Volume,
      Momentum, Rate of Change, etc. 

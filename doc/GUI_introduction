@@ -2,8 +2,7 @@ Introduction to the Market Analysis GUI Client
 
 
 You will need the Java Runtime Enviornment (JRE) in order to run the MA GUI
-Client.  See the file java_info for information on obtaining the JRE for
-your system.
+Client.
 
 To run the MA GUI Client from the command line, you will need to change
 to the directory:
@@ -23,9 +22,9 @@ running on and port_number is the socket port number the server is using.
 with an empty argument - two double quotes - e.g.: java MA_Client "" 12345;
 no guarantee, but this works with Windows on my laptop.)
 
-Once the client GUI is running, you can select a market from the server's
-database by choosing "Select Market" from the File menu.  Then you can
-double-click on a selection to choose the data for that market.  The data
+Once the client GUI is running, you can select a tradable from the server's
+database by choosing "Select Tradable" from the File menu.  Then you can
+double-click on a selection to choose the data for that tradable.  The data
 will be displayed using either Japanese candlesticks or standard price
 bars, depending on how the GUI is configured.  To display a technical
 indicator, select one from the Indicators menu.
@@ -58,6 +57,6 @@ The default .ma_clientrc file has comments (lines starting with #) that
 explain the different specifications and their format.
 
 Note that you can open more than one window to view market data.  This is
-useful, for example, for viewing more than one market at a time, or for
-using different views of the same market - such as daily and weekly data -
+useful, for example, for viewing more than one tradable at a time, or for
+using different views of the same tradable - such as daily and weekly data -
 at the same time.
