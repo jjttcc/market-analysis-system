@@ -17,20 +17,20 @@ feature -- Access
 			-- where configuration and data files are stored.
 			-- Void if the associated environment variable is not set.
 		once
-			Result := get (env_names.application_directory_name)
+			Result := get (env_names.item.application_directory_name)
 		end
 
 	mailer: STRING is
 			-- Name of the executable to use for sending email
 		once
-			Result := get (env_names.mailer_name)
+			Result := get (env_names.item.mailer_name)
 		end
 
 	mailer_subject_flag: STRING is
 			-- The flag to use to indicate to the mailer that the following
 			-- argument is the subject
 		once
-			Result := get (env_names.mailer_subject_flag_name)
+			Result := get (env_names.item.mailer_subject_flag_name)
 		end
 
 	file_name_with_app_directory (fname: STRING): STRING is
@@ -53,24 +53,20 @@ feature -- Status setting
 		require
 			arg_not_void: arg /= Void
 		do
-			env_name_service := arg
+			env_names.set_item (arg)
 		ensure
-			env_name_service_set: env_name_service = arg and
-				env_name_service /= Void
+			env_name_item_set: env_names.item = arg
 		end
 
 feature {NONE} -- Implementation
 
-	env_names: APP_ENVIRONMENT_VARIABLE_NAMES is
+	env_names: SINGLE [APP_ENVIRONMENT_VARIABLE_NAMES] is
 			-- Provides names of required environment variables
+		local
+			default_app_env_names: APP_ENVIRONMENT_VARIABLE_NAMES
 		once
-			if env_name_service = Void then
-				!!Result
-			else
-				Result := env_name_service
-			end
+			!!default_app_env_names
+			!!Result.make_item (default_app_env_names)
 		end
 
-	env_name_service: APP_ENVIRONMENT_VARIABLE_NAMES
-	
 end -- APP_ENVIRONMENT
