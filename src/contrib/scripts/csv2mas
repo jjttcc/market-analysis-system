@@ -1,0 +1,157 @@
+#!/usr/bin/perl
+
+#
+$scriptId = '$Id$' ;
+$scriptId =~ s/\$//g ;
+chomp( $scriptId );
+$scriptVersion = '$Revision$' ;
+$scriptVersion =~ s/\$//g ;
+chomp( $scriptVersion );
+#
+
+
+#
+# Perl Modules
+#
+require 'getopts.pl';	# get command line arguments
+use Date::Manip;
+
+#
+# Variables needing initial state
+#
+$debug = 0;		# debug flag
+$exit_status = 0;	# exit status, normal termination is zero (0)
+$infile = "";		# default input filename
+$outfile = "";		# default output filename
+chomp( $script = `basename $0`);	# get the name of this script
+
+$status = &Getopts('f:hi:o:sv');
+
+sub Usage {
+    print STDERR "'$script' filters a CSV formated stock history file ";
+    print STDERR "from finance.yahoo.com into MAS suitable format.\n";
+    print STDERR "\nUsage:\t$script <options>\n";
+    print STDERR "where the available options are:\n\n";
+    print STDERR "[-f <file>]\tuse <file> as input and output.\n";
+    print STDERR "[-h] \t\tshow this help message.\n";
+    print STDERR "[-i <input>]\tuse <input> input file.\n";
+    print STDERR "\t\tDefault is standard input (STDIN).\n";
+    print STDERR "[-o <options>]\tuse <options> for output file.\n";
+    print STDERR "\t\tDefault is standard output (STDOUT).\n";
+    print STDERR "[-s] \t\tsort the data by date.\n";
+    print STDERR "[-v] \t\tprints this program's version number.\n";
+    print STDERR "\n$scriptId\n";
+    &byeBye;
+}
+
+
+sub Version {
+    print STDERR "'$script' $scriptVersion\n";
+    &Usage if( $opt_h );
+    $exit_status = 1;
+    &byeBye;
+}
+
+
+&Version if( $opt_v );
+# give help, if asked
+&Usage if( $opt_h || ($#ARGV >= 0) || $status != 1);
+
+
+#
+# Reconcile options
+#
+if( $opt_f ) {
+    $infile = $opt_f;
+    $outfile = $opt_f;
+    if( $opt_i ) {
+	print STDERR "$script: -f overriding -i, continuing...\n";
+	$exit_status = 1;
+    }
+    if( $opt_o ) {
+	print STDERR "$script: -f overriding -o, continuing...\n";
+	$exit_status = 1;
+    }
+} else {
+    if( $opt_i ) {
+	$infile = $opt_i;
+    }
+    if( $opt_o ) {
+	$outfile = $opt_o;
+    }
+}
+
+
+#
+# Open the input file
+#
+if( $infile ne "" ) {
+    open(INFILE, "<$infile") or die "$script:  $infile:  $!";
+} else {
+    $infile = "-";
+    open(INFILE, '-') or die "$script:  $infile:  $!";
+}
+
+
+#
+# Read & fix the input
+#
+while( <INFILE> ) {
+	if( $_ =~ m/^\d/ ) {
+		( $date, $open, $high, $low, $close, $vol ) = split /,/, $_;
+		( $day, $mon, $year ) = split /-/, $date;
+
+		$ndate = &ParseDate($date);
+		$sdate = &UnixDate($ndate,"%Y%m%d");
+
+		$_ = sprintf( "%s,%s,%s,%s,%s,%s", $sdate,
+					   $open, $high, $low, $close, $vol );
+		push( @unsorted_data, $_ );
+	}
+}
+
+
+#
+# Sort the data by date, oldest to newest
+#
+if( $opt_s ) {
+	@data = sort @unsorted_data;
+} else {
+	@data = @unsorted_data;
+}
+
+#
+# Open the output file
+#
+if( $outfile ne "" ) {
+    open(OUTFILE, ">$outfile") or die "$script:  $outfile:  $!";
+} else {
+    $outfile = ">-";
+    open(OUTFILE, '>-') or die "$script:  $outfile:  $!";
+}
+
+
+#
+# Write the output
+#
+for( $i = 0 ; $i < @data ; $i++ ) {
+    print OUTFILE $data[$i];
+}
+
+
+&byeBye;
+
+
+#
+# Clean up and exit
+#
+sub byeBye {
+    close(OUTFILE) if($outfile);
+    exit($exit_status);
+}
+
+
+#
+# Set editor options
+#
+# vim:nu:sw=4:ts=4:
