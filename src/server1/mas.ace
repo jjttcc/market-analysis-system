@@ -166,6 +166,8 @@ cluster
 
 	function_abstractions (ma_library):		"$/function_abstractions"
 		option
+			-- Cover up a compiler bug.  (See note under the "markets"
+			-- cluster.)
 			assertion (no): MARKET_TUPLE_LIST;
 		end
 
