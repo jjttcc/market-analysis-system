@@ -24,16 +24,19 @@ feature -- Access
 			error_occurred: BOOLEAN
 		do
 			db_services := gs.database_services
-			db_services.connect
+			if not db_services.connected then
+				db_services.connect
+			end
 			if db_services.fatal_error then
 				error_occurred := true
 			else
 				Result := db_services.stock_name (symbol)
 				if db_services.fatal_error then
 					error_occurred := true
-				else
+				end
+				if not gs.command_line_options.keep_db_connection then
 					db_services.disconnect
-					error_occurred := db_services.fatal_error
+					error_occurred := error_occurred or db_services.fatal_error
 				end
 			end
 			if error_occurred then
