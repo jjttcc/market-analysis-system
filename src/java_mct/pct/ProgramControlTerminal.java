@@ -24,31 +24,29 @@ public class ProgramControlTerminal extends PCT_Tools {
 			throws Exception {
 		config_file_name = cfg_filename;
 		program_name_setting = prog_name;
-System.out.println("PCT A");
+//System.out.println("PCT A");
 		FileReaderUtilities cfgfile = config_file();
 		Vector lines = lines_from_file(cfgfile);
 		String sep = separator(lines);
 		terminal_name_setting = "Program Control Panel";
 		quitbutton_setting = false;
 		parse_and_process(lines, sep);
-		print_state();
-System.out.println("PCT B");
-//System.out.println("PCT D");
-		window = new PCT_Window(terminal_name_setting);
+//print_state();
+//System.out.println("PCT B");
+		window = new PCT_Window(terminal_name_setting, subcomponents.size());
 		for (int i = 0; i < subcomponents.size(); ++i) {
 			window.add_button((PCT_Component) subcomponents.elementAt(i));
 		}
 		if (quitbutton_setting) window.add_quit_button();
 	}
 
-	//All lines from `f', one element per line
+	// All lines from `f', one element per line
 	Vector lines_from_file(FileReaderUtilities f) throws IOException {
 		Vector result = new Vector();
 		String newline = "\n";
 		f.tokenize(newline);
 		while (! f.exhausted()) {
 			result.addElement(f.item());
-//System.err.println("added " + f.item());
 			f.forth();
 		}
 		return result;
@@ -56,8 +54,11 @@ System.out.println("PCT B");
 
 	// Set the arguments for the subcomponents' startup command.
 	void set_args(Vector args) {
-		for (int i = 0; i < subcomponents.size(); ++i) {
-			((PCT_Component) subcomponents.elementAt(i)).prepend_cmd_args(args);
+		if (args != null && args.size() > 0) {
+			for (int i = 0; i < subcomponents.size(); ++i) {
+				((PCT_Component)
+					subcomponents.elementAt(i)).prepend_cmd_args(args);
+			}
 		}
 	}
 
@@ -71,7 +72,7 @@ System.out.println("PCT B");
 		boolean in_sub = false;
 		PCT_Component current_sub = null;
 		ComponentSettings settings = null;
-System.out.println("pap a");
+//System.out.println("pap a");
 		try {
 			settings = new ComponentSettings();
 		} catch (Exception e) {
@@ -80,28 +81,28 @@ System.out.println("pap a");
 		}
 		for (int i = 0; i < lines.size(); ++i) {
 			String l = (String) lines.elementAt(i);
-System.out.println("pap b - l: " + l);
+//System.out.println("pap b - l: " + l);
 			if (comment(l)) continue;
 			String[] tuple = split(l, sep);
 			String tuple_name = tuple[0];
 			if (regex_match("^begin", tuple_name)) {
-System.out.println("pap d1");
+//System.out.println("pap d1");
 				current_sub = new PCT_Component(this);
 				settings.clear_subcomponent_values();
 				in_sub = true;
 			}
 			else if (regex_match("^end", tuple_name)) {
-System.out.println("pap f1");
+//System.out.println("pap f1");
 				subcomponents.addElement(current_sub);
 				in_sub = false;
 				settings.set_subcomponent_settings(current_sub);
 			}
 			else if (regex_match("^" + Separator_string, tuple_name)) {
-System.out.println("pap s1");
+//System.out.println("pap s1");
 				// Ignore separator specification.
 			}
 			else {
-System.out.println("pap g");
+//System.out.println("pap g");
 				settings.process(tuple);
 				if (! settings.last_key_valid()) {
 					System.out.println("Invalid line in config. file: " + l);
@@ -116,6 +117,8 @@ System.out.println("pap g");
 	}
 
 	// For debugging - print the current object state.
+	// (Note: May want to remove when everything is working, since it causes
+	// a maintenance drag by using the "_setting" attributes.)
 	private void print_state() {
 		PCT_Component c = null;
 		System.out.println("Status for " + this + ":");
@@ -128,8 +131,10 @@ System.out.println("pap g");
 			c = (PCT_Component) subcomponents.elementAt(i);
 			System.out.println("subcomponent[" + i + "]");
 			System.out.println("\tprompt: '" + c.prompt_setting + "'");
-			System.out.println("\tstartup_cmd: '" +
-				c.startup_cmd_setting + "'");
+			System.out.println("\tstartup_cmd_class: '" +
+				c.startup_cmd_class_setting + "'");
+			System.out.println("\tstartup_cmd_method: '" +
+				c.startup_cmd_method_setting + "'");
 			System.out.println("\tstartupcmdargs: '" +
 				c.startup_cmd_args_setting + "'");
 			System.out.println("\tconfig_file_name: '" +

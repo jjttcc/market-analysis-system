@@ -38,15 +38,12 @@ public class ComponentSettings extends Hashtable {
 	// If `f' is a valid "_setting" field, add it (minus the "_setting"
 	// substring) to `settings'.
 	void setup_field(String f, Vector settings) throws Exception {
-System.err.println("checking for match on '" + f + "'");
-//		Rex re = Rex.build(".*" + Setting_string);
-//		RexResult result = re.match(f.toCharArray(), 0, f.length());
+//System.err.println("checking for match on '" + f + "'");
 		int flen = f.length(); int slen = Setting_string.length();
 		if (flen > slen &&
 				f.substring(flen - slen, flen).equals(Setting_string)) {
-//		if (result != null) {
 			String s = f.substring(0, flen - slen);
-System.err.println("\t<<<setup field adding " + s + ">>>");
+//System.err.println("\t<<<setup field adding " + s + ">>>");
 			settings.addElement(s);
 		}
 	}
@@ -56,39 +53,32 @@ System.err.println("\t<<<setup field adding " + s + ">>>");
 	// Postcondition: last_key_valid == ! get(tuple[0]).equals(Not_set)
 	public void process(String[] tuple) {
 		String key = tuple[0];
-System.err.println("A - processing " + tuple[0] + " with key " + key);
+//System.err.println("A - processing " + tuple[0] + " with key " + key);
 		String s = (String) get(key);
-System.err.println("B - s: '" + s + "'");
+//System.err.println("B - s: '" + s + "'");
 		last_key_valid_ = true;
 		duplicate_setting_ = false;
-System.err.println("C");
 		if (s == null) {
-System.err.println("D1");
 			last_key_valid_ = false;
 		}
 		else {
 			if (! s.equals(Not_set)) {
-System.err.println("D2");
 				duplicate_setting_ = true;
 			}
 			if (tuple.length > 1) {
-System.err.println("E");
 				if (tuple.length > 2 && tuple[2].equals(Addspec)) {
-System.err.println("putting: " + s + "," + tuple[1]);
+//System.err.println("putting: " + s + "," + tuple[1]);
 					put(key, s + Field_separator + tuple[1]);
 				duplicate_setting_ = false;
-System.err.println("Put: " + (String) get(key));
+//System.err.println("Put: " + (String) get(key));
 				} else {
 					put(key, tuple[1]);
 				}
-System.err.println("F");
 			}
 			else {
-System.err.println("G");
 				// There is no value in this tuple (tuple[1]) - this means the
 				// value should simply be set to a value other than Not_set.
 				put(key, Set);
-System.err.println("H");
 			}
 		}
 	}
@@ -105,19 +95,16 @@ System.err.println("H");
 
 	// Use `process'ed values to configure main component `comp'.
 	public void set_main_settings(ProgramControlTerminal comp) {
-System.err.println("set main settings");
 		set_object_fields(comp, mainsettings, comp.getClass());
 	}
 
 	// Use `process'ed values to configure subcomponent `sub'.
 	public void set_subcomponent_settings(PCT_Component sub) {
-System.err.println("set subcomponent settings");
 		set_object_fields(sub, subsettings, sub.getClass());
 	}
 
 	// Set all values associated with a setting key to Not_set.
 	public void clear_values() {
-System.err.println("clear values called");
 		Enumeration keys = keys();
 		String k;
 		while (keys.hasMoreElements()) {
@@ -128,7 +115,6 @@ System.err.println("clear values called");
 
 	// Set all subcomponent values associated with a setting key to Not_set.
 	public void clear_subcomponent_values() {
-System.err.println("clear subcomp values called");
 		for (int i = 0; i < subsettings.size(); ++i) {
 			put(subsettings.elementAt(i), Not_set);
 		}
@@ -136,7 +122,6 @@ System.err.println("clear subcomp values called");
 
 	// Set all main values associated with a setting key to Not_set.
 	public void clear_main_values() {
-System.err.println("clear subcomp values called");
 		for (int i = 0; i < mainsettings.size(); ++i) {
 			put(mainsettings.elementAt(i), Not_set);
 		}
@@ -144,44 +129,30 @@ System.err.println("clear subcomp values called");
 
 	// Set fields of `o', from `settings' and hashed values.
 	protected void set_object_fields(Object o, Vector settings, Class c) {
-System.err.println("set object fields");
 		String key, fieldname, value;
 		Field field = null;
 		Class field_type = null;
 		final Boolean True = new Boolean(true);
 		for (int i = 0; i < settings.size(); ++i) {
 			key = (String) settings.elementAt(i);
-System.err.print("Using key: " + key);
-System.err.println(" for object " + o + " for class " + c);
 			fieldname = key + Setting_string;
 			value = (String) get(key);
 			if (! value.equals(Not_set)) {
 				try {
-System.err.println("Obtaining " + fieldname);
 					field = c.getField(fieldname);
-//					field = c.getField("prompt_setting");
-System.err.println("x");
 					field_type = field.getType();
-System.err.println("y");
 					if (field_type.equals(boolean.class)) {
 						// Set boolean field to true.
-System.err.println("setting field " + field.getName() + " to true");
 						field.set(o, True);
-System.err.println("z");
 					}
 					else if (field_type.equals(String.class)) {
 						// Set String field to value.
-System.err.println("setting field " + field.getName() + ", " + value);
 						field.set(o, value);
 					}
 					else if (field_type.equals(Vector.class)) {
 						// Append value to Vector field.
-System.err.println("Appending to field " + field.getName() + ", " + value);
 						Vector v = (Vector) field.get(o);
-System.err.println("v is currently: " + v);
 						insert_elements(v, value);
-//						v.addElement(value);
-System.err.println("after adding, v is now: " + v);
 					}
 				} catch (Exception e) {
 					System.err.println("Fatal error - code defect in " +

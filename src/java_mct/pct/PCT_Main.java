@@ -17,7 +17,6 @@
 // perhaps, mail control terminal), a file named mct_config will be searched
 // for as the congifuration file.
 
-import java.util.Properties;
 import pct.ProgramControlTerminal;
 
 class PCT_Main {

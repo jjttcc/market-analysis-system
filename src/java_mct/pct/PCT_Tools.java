@@ -42,8 +42,6 @@ class PCT_Tools {
 			throws Exception {
 		FileReaderUtilities result = null;
 		String cfpath = config_file_path();
-//System.err.println("x - looking for " + cfpath);
-		String pypath = "";
 		try {
 			result = new FileReaderUtilities(cfpath);
 		}
@@ -69,7 +67,6 @@ class PCT_Tools {
 		}
 		String result = p.getProperty(pctdir_property, ".") +
 			p.getProperty("file.separator") + cfgfname;
-//System.err.println("cfg.file.path using path " + result);
 		return result;
 	}
 
@@ -77,7 +74,6 @@ class PCT_Tools {
 	// Precondition: lines != null
 	String separator(Vector lines) throws Exception {
 		//assert(lines != None)
-//System.err.println("separator() - lines: " + lines);
 		String result = "\t";
 		for (int i = 0; i < lines.size(); ++i) {
 			String line = (String) lines.elementAt(i);
@@ -96,7 +92,6 @@ class PCT_Tools {
 			}
 		}
 
-//System.err.println("separator() - result: " + result);
 		return result;
 	}
 
