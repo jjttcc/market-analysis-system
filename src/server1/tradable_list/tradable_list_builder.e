@@ -37,26 +37,37 @@ feature -- Basic operations
 			global_server: expanded GLOBAL_SERVER
 			db_list_builder: DATABASE_LIST_BUILDER
 			file_list_builder: FILE_LIST_BUILDER
+			external_list_builder: EXTERNAL_LIST_BUILDER
 			daily_file_based_list: FILE_TRADABLE_LIST
 			ilist: TRADABLE_LIST
 		do
-			retrieve_input_entity_names
-			if command_line_options.use_db then
-				create db_list_builder.make (input_entity_names,
-					tradable_factory)
-				db_list_builder.execute
+			if command_line_options.use_external_data_source then
+				create external_list_builder.make (tradable_factory)
+				external_list_builder.execute
 				create {TRADABLE_LIST_HANDLER} product.make (
-					db_list_builder.daily_list, db_list_builder.intraday_list)
-				ilist := db_list_builder.intraday_list
+					external_list_builder.daily_list,
+					external_list_builder.intraday_list)
+				ilist := external_list_builder.intraday_list
 			else
-				create file_list_builder.make (input_entity_names,
-					tradable_factory, command_line_options.daily_extension,
-					command_line_options.intraday_extension)
-				file_list_builder.execute
-				create {TRADABLE_LIST_HANDLER} product.make (
-					file_list_builder.daily_list,
-					file_list_builder.intraday_list)
-				ilist := file_list_builder.intraday_list
+				retrieve_input_entity_names
+				if command_line_options.use_db then
+					create db_list_builder.make (input_entity_names,
+						tradable_factory)
+					db_list_builder.execute
+					create {TRADABLE_LIST_HANDLER} product.make (
+						db_list_builder.daily_list,
+						db_list_builder.intraday_list)
+					ilist := db_list_builder.intraday_list
+				else
+					create file_list_builder.make (input_entity_names,
+						tradable_factory, command_line_options.daily_extension,
+						command_line_options.intraday_extension)
+					file_list_builder.execute
+					create {TRADABLE_LIST_HANDLER} product.make (
+						file_list_builder.daily_list,
+						file_list_builder.intraday_list)
+					ilist := file_list_builder.intraday_list
+				end
 			end
 			if
 				ilist /= Void and not command_line_options.intraday_caching
