@@ -61,3 +61,4 @@ fi
 %{rootdir}/bin
 %{rootdir}/lib
 %{rootdir}/doc
+%{rootdir}/forum.txt
