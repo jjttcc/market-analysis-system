@@ -14,63 +14,27 @@ class MACL inherit
 			make as cl_make
 		export
 			{NONE} all
+		undefine
+			print
+		end
+
+	COMMAND_LINE_UTILITIES
+		export
+			{NONE} all
 		end
 
 	EXCEPTION_SERVICES
 		export
 			{NONE} all
+		undefine
+			print
 		end
 
 create
 
 	make
 
-feature -- Feature comment
-
-	abort (msg: STRING; conn: CONNECTION) is
-		do
-			if msg /= Void then
-				print (msg + " - ")
-			end
-			print ("Exiting ...%N")
-			if conn /= Void then
-				conn.send_message(Exit_string)
-				conn.receive_message()
-				print ("Closing ...%N")
-				conn.close()
-			end
-			exit (-1)
-		end
-
-	dummy_init is
-		do
---!!!Appears to not be needed:			Buffersize := 1
-			Record := false
-			Recordfile := "mas_session"
-		end
-
-	usage: STRING is
-		do
-			Result := "Usage: " + command_name + " [options] port_number" +
-				"%NOptions:%N" +
-				"   -h <hostname>   Connect to server on host <hostname>%N" +
-				"   -r <file>       Record user input and save to <file>%N" +
-				"   -i <file>       Obtain input from <file> instead of %
-				%the console%N"
-		end
-
-	user_response (): STRING is
-			-- Obtain user response, skipping comments (# ...)
-		do
-			--!!!!Replace with existing reusable code.
---			loop := true
---			while loop:
---				s := stdin.readline()[:-1]
---				if len(s) > 0 and s[0] /= "--" then
---					loop := false
---				end
---			return s
-		end
+feature {NONE} -- Initialization
 
 	make is
 		local
@@ -88,6 +52,8 @@ feature -- Feature comment
 --			end
 			host := ""
 			port := -1
+			input_device := io.input
+			output_device := io.output
 --			argcount := len(argv)
 			i := 1
 --			while i < argcount:
@@ -127,39 +93,100 @@ feature -- Feature comment
 --						usage(); exit(-1)
 --				end
 --				i := i + 1
+
+--!!!tmp test:
+port := 2003
 			if port = -1 then
 				print (usage())
-				abort("Missing port number", Void)
+				abort ("Missing port number", Void)
 			end
-			if host = "" then
-				host := "localhost";
+			if host.is_empty then
+				host := "localhost"
 			end
 			create processor.make (Record)
-			create connection.make (host, port)
-			connection.receive_message()
-			from
-			until
-				connection.termination_requested
-			loop
-				print (connection.last_message)
-				processor.set_server_msg(connection.last_message)
-				if processor.error then
-					if processor.fatal_error then
-						abort("Invalid user input", connection)
+			-- Create the connection to  and start the conversation with
+			-- the server.
+			create connection.start_conversation (host, port)
+--!!!remove:			connection.receive_message()
+			if connection.last_communication_succeeded then
+				from
+				until
+					connection.termination_requested
+				loop
+					print (connection.server_response)
+					processor.set_server_msg (connection.server_response)
+					if processor.error then
+						if processor.fatal_error then
+							abort ("Invalid user input", connection)
+						end
 					end
+--!!!					processor.process (user_response())
+					connection.send_message (processor.product)
+	--!!!remove:			connection.receive_message()
 				end
-				processor.process(user_response())
-				connection.send_message(processor.product)
-				connection.receive_message()
+			else
+				print (connection.error_report + "%N")
 			end
 			connection.close()
 			if processor.record then
 				print ("Saving recorded input to file " + Recordfile + ".%N")
-				create record_file.make_open_write (Recordfile)
+--				create record_file.make_open_write (Recordfile)
 				record_file.put_string (processor.input_record)
 				record_file.close
 			end
 		end
+
+feature {NONE} -- Utilities
+
+	abort (msg: STRING; conn: CONNECTION) is
+		do
+			if msg /= Void then
+				print (msg + " - ")
+			end
+			print ("Exiting ...%N")
+			if conn /= Void then
+				conn.send_message (Exit_string)
+--!!!remove:				conn.receive_message()
+				print ("Closing ...%N")
+				conn.close()
+			end
+			exit (-1)
+		end
+
+	dummy_init is
+		do
+--!!!Appears to not be needed:			Buffersize := 1
+			Record := false
+			Recordfile := "mas_session"
+		end
+
+	usage: STRING is
+		do
+			Result := "Usage: " + command_name + " [options] port_number" +
+				"%NOptions:%N" +
+				"   -h <hostname>   Connect to server on host <hostname>%N" +
+				"   -r <file>       Record user input and save to <file>%N" +
+				"   -i <file>       Obtain input from <file> instead of %
+				%the console%N"
+		end
+
+	user_response: STRING is
+			-- Obtain user response, skipping comments (# ...)
+		local
+			finished: BOOLEAN
+		do
+			from
+			until
+				finished
+			loop
+				Result := string_selection ("")
+				if not Result.is_empty and Result @ 1 /= Comment_character then
+					finished := True
+				end
+			end
+		end
+
+feature {NONE} -- Implementation
 
 	Record: BOOLEAN
 			-- Is the session to be recorded?
@@ -172,5 +199,7 @@ feature -- Feature comment
 	record_file: PLAIN_TEXT_FILE
 
 	Exit_string: STRING is "x%N"
+
+	Comment_character: CHARACTER is '#'
 
 end

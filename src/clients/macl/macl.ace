@@ -17,7 +17,7 @@ default
 	disabled_debug ("ev_gtk_destroy")
 	disabled_debug ("ev_gtk_dispose")
 	disabled_debug ("persist")
-	debug (no)
+	debug (all)
 	line_generation (no)
 	profile (no)
 	trace (no)
@@ -56,6 +56,10 @@ cluster
 	libserver (eiflib):		"$/server"
 
 	liberror (eiflib):		"$/error"
+
+	mas_client_lib:		"$MAS/src/client_library"
+
+	mas_client_support (mas_client_lib):	"$/support"
 
 	mas_server:		"$MAS/src/server1"
 

@@ -11,15 +11,56 @@ indexing
 class CONNECTION inherit
 
 	NETWORK_PROTOCOL
+		export
+			{NONE} all
+		end
+
+	CLIENT_CONNECTION
+		export
+			{NONE} send_request
+			{ANY} close
+		redefine
+			end_of_message
+		end
 
 create
 
-	make
+	make_connected, start_conversation
 
-feature -- Feature comment
+feature {NONE} -- Initialization
 
+	start_conversation (host: STRING; port: INTEGER) is
+			-- Setup initial state and begin the conversation with
+			-- the server.
+		do
+			make_connected (host, port)
+			if last_communication_succeeded then
+				send_message (Console_flag.out)
+			end
+		ensure
+			response_set_on_success: last_communication_succeeded implies
+				server_response /= Void
+		end
 
-	make (host: STRING; port: INTEGER) is
+feature -- Status report
+
+	termination_requested: BOOLEAN
+
+feature -- Basic operations
+
+	send_message (msg: STRING) is
+			-- Send `msg' to the server and put the server's response
+			-- into `server_response'.
+		do
+			send_request (msg, True)
+		ensure
+			response_set_on_success: last_communication_succeeded implies
+				server_response /= Void
+		end
+
+feature {NONE} -- Obsolete!!!!!
+
+	obsolete_make_remove_me_please (host: STRING; port: INTEGER) is
 			-- Create socket, connect to host, and send initial request.
 		local
 			verbose: BOOLEAN
@@ -32,8 +73,6 @@ feature -- Feature comment
 			-- Notify server that this is a command-line client.
 			send_message(Console_flag.out)
 		end
-
-	termination_requested: BOOLEAN
 
 	last_message: STRING
 
@@ -63,20 +102,19 @@ feature -- Feature comment
 --!!!Fix:			last_message := join(msg, "")
 		end
 
-	send_message (msg: STRING) is
+feature {NONE} -- Implementation
+
+	end_of_message (c: CHARACTER): BOOLEAN is
 		do
-			socket.put_string (msg)
+			Result := c = Eom @ 1 or c = Eot @ 1
+--!!!Probably needed: termination_requested := c = Eot @ 1
 		end
 
-	close is
-			-- Close the connection.
-		do
-			socket.close()
-		end
+feature {NONE} -- Implementation - Constants
 
 	Buffersize: INTEGER is 1
 
-	socket: NETWORK_STREAM_SOCKET
+	Timeout_seconds: INTEGER is 35
 
 feature {NONE} -- Unused
 

@@ -12,7 +12,7 @@ create
 
 	make
 
-feature -- Feature comment
+feature -- Initialization
 
 	make (rec: BOOLEAN) is
 		do
@@ -36,9 +36,30 @@ feature -- Feature comment
 				"%N* *Select *a *market *analyzer",
 				" *Indicator *%".*%" *children:",
 				"1) ">>
-			objects := Void
-			shared_objects := Void
+			create objects.make (0)
+			create shared_objects.make (0)
 		end
+
+feature -- Access
+
+	product: STRING
+
+	input_record: STRING
+			-- Recorded input (!!check)
+
+feature -- Status report
+
+	record: BOOLEAN
+			-- Is input and output to be recorded? (!!check)
+
+	fatal_error: BOOLEAN
+
+	error: BOOLEAN
+
+feature -- Basic operations
+
+--!!!Remove last_msg if it's not used:
+	last_msg: STRING
 
 	set_server_msg (msg: STRING) is
 			-- Set the current message from the server and, if includes
@@ -47,11 +68,12 @@ feature -- Feature comment
 			fatal_error := false
 			error := false
 			selection := false
---!!!Remove last_msg if it's not used:			last_msg := msg
+--!!!Remove last_msg if it's not used:
+			last_msg := msg
 			if
 --!!!!Note: regular expression match test here:
 --				match(invalid_pattern, msg) /= -1
-True--!!!
+False--!!!
 			then
 				error := true
 			end
@@ -103,14 +125,17 @@ True--!!!
 			product := product + "%N"
 		end
 
+feature {NONE} -- Implementation
+
 	select_object_match (s: STRING): BOOLEAN is
 		local
 			patterns: LINEAR [STRING]
 		do
 			Result := false
---			print "Checking for match of '" + s + "'"
+			debug
+				print ("Checking for match of '" + s + "'%N")
+			end
 			from
---!!			for pattern in select_patterns:
 				patterns := select_patterns.linear_representation
 				patterns.start
 			until
@@ -126,9 +151,9 @@ True --!!!
 				end
 				patterns.forth
 			end
---			print "returning Result of ",
---			if Result then print "true" end
---			else print "false"
+			debug
+				print ("returning Result of " + Result.out + "%N")
+			end
 		end
 
 	store_choices (s: STRING) is
@@ -137,25 +162,33 @@ True --!!!
 			objname, objnumber: STRING
 		do
 			objects.clear_all; shared_objects.clear_all
---!!!Fix:			lines := split(s, "%N")
+			--@@Will this work on Windows?:
+			lines := s.split('%N')
 			from
 --!!!for l in lines:
 				lines.start
 			until
 				lines.exhausted
 			loop
---				print "lines.item: " + lines.item
+				debug
+					print ("lines.item: " + lines.item + "%N")
+				end
 				if
 --!!!!Note: regular expression match test here:
 --					match("^[1-9][0-9]*)", lines.item) /= -1
 True--!!!
 				then
+objname := "tmp_dummy_name"
+objnumber := "123"
 --!!Fix:					lines.item := sub(")", "", lines.item)
 --!!Fix:					objnumber := sub(" .*", "", lines.item)
 --!!Fix:					objname := sub("^[^ ]*  *", "", lines.item)
 					--!!!put or force?:
 					objects.put (objnumber, objname)
---					print "Stored: " + objects[objname] + " (" + objname + ")"
+					debug
+						print ("Stored: " + objects @ objname + " (" +
+							objname + ")%N")
+					end
 				elseif
 --!!!!Note: regular expression match test here:
 --					match(non_shared_pattern, lines.item) /= -1 and
@@ -211,7 +244,6 @@ True--!!!
 			Result := ""
 			l := objs.current_keys.linear_representation
 			from
---!!for k in objs.keys():
 				l.start
 			until
 				l.exhausted
@@ -221,20 +253,12 @@ True--!!!
 				end
 				l.forth
 			end
---			print "key_for returning " + Result
+			debug
+				print ("key_for returning " + Result + "%N")
+			end
 		end
 
-	record: BOOLEAN
-			-- Is input and output to be recorded? (!!check)
-
 	selection: BOOLEAN
-
-	input_record: STRING
-			-- Recorded input (!!check)
-
-	fatal_error: BOOLEAN
-
-	error: BOOLEAN
 
 	invalid_pattern: STRING is "Invalid selection"
 
@@ -243,8 +267,6 @@ True--!!!
 	shared_pattern: STRING is "shared *"
 
 	shared_string: STRING is "shared "
-
-	product: STRING
 
 	select_patterns: ARRAY [STRING] -- Type?!!
 
