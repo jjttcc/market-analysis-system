@@ -158,6 +158,8 @@ cluster
 
 	component_support (eiffel_components):		"$/support"
 
+	system_specific_support (eiffel_components):		"$/support/unix"
+
 	eiflib_data_scanning (eiffel_components):		"$/data_scanning"
 
 	data_scanning_main (eiflib_data_scanning ):	"$/main_abstractions"
