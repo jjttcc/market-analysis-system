@@ -42,8 +42,7 @@ feature -- Basic operations
 		do
 			create instalL_dir.make (install_dir_name)
 			if install_dir.exists then
-				install_dir.delete_content
-				install_dir.delete
+				install_dir.recursive_delete
 			end
 		end
 
