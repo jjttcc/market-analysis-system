@@ -12,7 +12,7 @@ deferred class N_BASED_CALCULATION inherit
 			set_n
 		end
 
-feature {FACTORY} -- Initialization --!!!Check export
+feature {FACTORY} -- Initialization
 
 	set_n (i: like n) is
 		do
