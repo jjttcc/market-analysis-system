@@ -68,7 +68,7 @@ public class TimeDrawer extends TemporalDrawer {
 	protected void draw_tuples(Graphics g, Rectangle bounds) {
 		int hour_idx, day_idx, i;
 		int hour, day_of_week;
-		final int Draw_all_hour_limit = 16, Too_many_hours = 200,
+		final int Draw_all_hour_limit = 16, Too_many_hours = 175,
 			Too_many_days = 200, Day_y_offset = 9;
 		boolean draw_all_hours, draw_day_line;
 		FontManager fontmgr = new FontManager(g);
