@@ -53,10 +53,10 @@ feature {NONE}
 		do
 			tradable := cached_tradable (market_symbol, trading_period_type)
 			if tradable = Void then
-				if not tradables.symbols.has (market_symbol) then
-					report_error (Invalid_symbol, <<"Symbol not in database.">>)
-				elseif server_error then
+				if server_error then
 					report_server_error
+				elseif not tradables.symbols.has (market_symbol) then
+					report_error (Invalid_symbol, <<"Symbol not in database.">>)
 				else
 					report_error (Error, <<"Invalid period type">>)
 				end
