@@ -51,6 +51,9 @@ feature -- Client request IDs
 			-- Request for a list of all market event types valid for
 			-- a particular tradable and trading-period type
 
+	All_indicators_request: INTEGER is 11
+			-- Request for a list of all known indicators
+
 feature -- Server response IDs
 
 	Error: INTEGER is 101
