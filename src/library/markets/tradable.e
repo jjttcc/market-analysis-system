@@ -21,10 +21,10 @@ class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 		end
 
 	GLOBAL_SERVICES
+		rename
+			period_types as gs_period_types
 		export {NONE}
 			all
-				{ANY}
-			period_types
 		undefine
 			is_equal, copy, setup
 		end
@@ -57,9 +57,7 @@ feature -- Access
 			-- made from the base data
 		require
 			not_void: period_type /= Void
-			duration_valid: (period_types @ period_type).duration >=
-				trading_period_type.duration or
-				valid_irregular_period_type (period_types @ period_type)
+			period_type_valid: period_types.has (period_type)
 		do
 			Result := tuple_lists @ period_type
 			-- If the list has not been created and there is enough
@@ -95,8 +93,7 @@ feature -- Access
 				l.exhausted
 			loop
 				if
-					l.item.duration >= trading_period_type.duration or
-					valid_irregular_period_type (l.item)
+					period_types.has (l.item.name)
 				then
 					Result.force (l.item.name, i)
 					i := i + 1
@@ -110,6 +107,16 @@ feature -- Access
 	target_period_type: TIME_PERIOD_TYPE
 			-- Type of data (daily, weekly, etc.) specifying which
 			-- `tuple_list' will be processed by `indicators'.
+
+	period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
+			-- Period types available for this tradable
+		do
+			if trading_period_type.intraday then
+				Result := intraday_period_types
+			else
+				Result := nonintraday_period_types
+			end
+		end
 
 feature -- Access
 
@@ -148,20 +155,6 @@ feature -- Status report
 			loop
 				Result := indicators.item.processed
 				indicators.forth
-			end
-		end
-
-	valid_irregular_period_type (t: TIME_PERIOD_TYPE): BOOLEAN is
-			-- Is `t' an irregular type that is handled by the current version?
-		require
-			t_not_void: t /= Void
-		do
-			if
-				t.name.is_equal (t.Monthly) or
-				t.name.is_equal (t.Quarterly) or
-				t.name.is_equal (t.Yearly)
-			then
-				Result := true
 			end
 		end
 
@@ -283,12 +276,7 @@ feature {NONE} -- Initialization
 			until
 				types.exhausted
 			loop
-				if
-					types.item.duration >= trading_period_type.duration or
-					valid_irregular_period_type(types.item)
-				then
-					tuple_lists.extend (Void, types.item.name)
-				end
+				tuple_lists.extend (Void, types.item.name)
 				types.forth
 			end
 		ensure
