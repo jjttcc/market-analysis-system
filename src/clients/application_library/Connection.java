@@ -15,7 +15,12 @@ public class TA_Connection implements NetworkProtocol
 			hostname = args[0];
 			if (args.length > 1)
 			{
-				port_number.parseInt (args[1]);
+				port_number = new Integer(port_number.parseInt(args[1]));
+				System.out.println("port number set to: " + port_number);
+			}
+			else
+			{
+				port_number = new Integer(33333);
 			}
 		}
 	}
@@ -28,6 +33,8 @@ public class TA_Connection implements NetworkProtocol
 		// Send Market_data_request, with symbol - for weekly data.
 		send_msg(Market_data_request, symbol + Input_field_separator +
 					period_type);
+//!!!!Change: Use the new TA_Parser to parse this market data into
+//date/int/float/... for graph/display.
 		_last_market_data = receive_msg(in);
 		close_connection();
 	}
@@ -82,6 +89,7 @@ public class TA_Connection implements NetworkProtocol
 	}
 
 	// List of markets available from the server
+	// !!!Q: Is it better not to cache - i.e., retrieve each time?
 	public Vector market_list() throws IOException
 	{
 		StringBuffer mlist;
@@ -148,6 +156,7 @@ public class TA_Connection implements NetworkProtocol
 		{
 			//It appears that the only way to connect a client socket is
 			//to create a new one!
+			System.out.println(hostname + ", " + port_number);
 			echoSocket = new Socket(hostname, port_number.intValue());
 			out = new PrintWriter(echoSocket.getOutputStream(), true);
 			in = new BufferedReader(

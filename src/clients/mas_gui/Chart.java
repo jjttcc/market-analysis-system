@@ -6,8 +6,8 @@
 // this notice is retained.  Note that this example is provided "as is",
 // WITHOUT WARRANTY of any kind either expressed or implied."
 
-import java.awt.*;               // ScrollPane, PopupMenu, MenuShortcut, etc.
-import java.awt.event.*;         // New event model.
+import java.awt.*;
+import java.awt.event.*;
 
 /** Technical analysis GUI chart component */
 public class TA_Chart extends Frame
@@ -30,24 +30,28 @@ public class TA_Chart extends Frame
 		menubar.add(file);
 
 		// Create three menu items, with menu shortcuts, and add to the menu.
-		MenuItem n, c, q;
-		file.add(n = new MenuItem("New Window",
+		MenuItem newwin, closewin, ss, quit;
+		file.add(newwin = new MenuItem("New Window",
 							new MenuShortcut(KeyEvent.VK_N)));
-		file.add(c = new MenuItem("Close Window",
+		file.add(ss = new MenuItem("Select Stock",
+							new MenuShortcut(KeyEvent.VK_S)));
+		file.add(closewin = new MenuItem("Close Window",
 							new MenuShortcut(KeyEvent.VK_W)));
 		file.addSeparator();                     // Put a separator in the menu
-		file.add(q = new MenuItem("Quit", new MenuShortcut(KeyEvent.VK_Q)));
+		file.add(quit = new MenuItem("Quit", new MenuShortcut(KeyEvent.VK_Q)));
 
 		// Create and register action listener objects for the three menu items.
-		n.addActionListener(new ActionListener() {     // Open a new window
+		newwin.addActionListener(new ActionListener() {	// Open a new window
 		public void actionPerformed(ActionEvent e) { new TA_Chart(connection); }
 		});
 
-		c.addActionListener(new ActionListener() {     // Close this window.
+		ss.addActionListener(new StockSelection(this, connection));
+
+		closewin.addActionListener(new ActionListener() {// Close this window.
 		public void actionPerformed(ActionEvent e) { close(); }
 		});
 
-		q.addActionListener(new ActionListener() {     // Quit the program.
+		quit.addActionListener(new ActionListener() {     // Quit the program.
 		public void actionPerformed(ActionEvent e) { System.exit(0); }
 		});
 
@@ -59,11 +63,13 @@ public class TA_Chart extends Frame
 		// Set the window size and pop it up.
 		this.pack();
 		this.show();
-  }
+	}
 
-  public void execute()
-  {
-  }
+	public void execute()
+	{
+		System.out.println("Is execute needed or should we just wait for" +
+		"events?");
+	}
 
 // Implementation
 
