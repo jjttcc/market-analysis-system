@@ -9,9 +9,11 @@ indexing
 
 class MAS_COMMAND_LINE inherit
 
-	ARGUMENTS
+	COMMAND_LINE
+		rename
+			make as cl_make
 		export
-			{NONE} all
+			{NONE} cl_make
 		end
 
 	GENERAL_UTILITIES
@@ -29,22 +31,12 @@ feature {NONE} -- Initialization
 		local
 			i: INTEGER
 		do
-			create contents.make
 			create {LINKED_LIST [INTEGER]} port_numbers.make
-			from
-				i := 1
-			until
-				i = argument_count + 1
-			loop
-				contents.extend (argument (i))
-				i := i + 1
-			end
+			cl_make
 			set_field_separator
 			set_opening_price
 			set_background
 			set_use_db
-			set_help
-			set_version_request
 			set_port_numbers
 			set_strict
 			set_intraday_caching
@@ -102,14 +94,6 @@ feature -- Access
 			-- process terminates instead of connecting and disconnecting
 			-- for each query?
 
-	help: BOOLEAN
-			-- Has the user requested help on command-line options?
-			-- True if "-h" or "-?" is found.
-
-	version_request: BOOLEAN
-			-- Has the user requested the version number?
-			-- True if "-v" is found.
-
 	strict: BOOLEAN
 			-- Use strict error checking?
 			-- True if "-s" is found.
@@ -117,13 +101,10 @@ feature -- Access
 	intraday_caching: BOOLEAN
 			-- Cache intraday data?
 
-	error_occurred: BOOLEAN
-			-- Did an error occur while processing options?
-
 feature -- Basic operations
 
 	usage is
-			-- Message: how to invoke the program from the comman-line
+			-- Message: how to invoke the program from the command-line
 		do
 			print (concatenation (<<"Usage: ", command_name,
 				" [options] [input_file...]%NOptions:%N",
@@ -144,8 +125,6 @@ feature -- Basic operations
 		end
 
 feature {NONE} -- Implementation
-
-	contents: LINKED_LIST [STRING]
 
 	set_field_separator is
 			-- Set `field_separator' and remove its settings from `contents'
@@ -225,25 +204,6 @@ feature {NONE} -- Implementation
 			keep_db_connection := true -- Default value
 			if option_string_in_contents ("reconnect") then
 				keep_db_connection := false
-				contents.remove
-			end
-		end
-
-	set_help is
-		do
-			if option_in_contents ('h') then
-				help := true
-				contents.remove
-			elseif option_in_contents ('?') then
-					help := true
-					contents.remove
-			end
-		end
-
-	set_version_request is
-		do
-			if option_in_contents ('v') then
-				version_request := true
 				contents.remove
 			end
 		end
@@ -346,70 +306,6 @@ feature {NONE} -- Implementation
 			if error_occurred then
 				log_errors (<<db_services.last_error, "%N">>)
 			end
-		end
-
-	option_in_contents (c: CHARACTER): BOOLEAN is
-			-- Is option `c' in `contents'?
-		do
-			from
-				contents.start
-			until
-				contents.exhausted or Result
-			loop
-				if
-					(contents.item.count >= 2 and
-					contents.item.item (1) = option_sign and
-					contents.item.item (2) = c) or
-						-- Allow GNU "--opt" type options:
-					(contents.item.count >= 3 and
-					contents.item.item (1) = option_sign and
-					contents.item.item (2) = option_sign and
-					contents.item.item (3) = c)
-				then
-					Result := true
-				else
-					contents.forth
-				end
-			end
-		ensure
-			Result implies (contents.item.item (1) = option_sign and
-				contents.item.item (2) = c) or (contents.item.item (1) =
-				option_sign and contents.item.item (2) = option_sign and
-				contents.item.item (3) = c)
-		end
-
-	option_string_in_contents (s: STRING): BOOLEAN is
-			-- Is option `c' in `contents'?
-		local
-			scount: INTEGER
-		do
-			from
-				scount := s.count
-				contents.start
-			until
-				contents.exhausted or Result
-			loop
-				if
-					(contents.item.count >= scount + 1 and
-					contents.item.item (1) = option_sign and
-					contents.item.substring (2, scount + 1).is_equal (s)) or
-						-- Allow GNU "--opt" type options:
-					(contents.item.count >= scount + 2 and
-					contents.item.item (1) = option_sign and
-					contents.item.item (2) = option_sign and
-					contents.item.substring (3, scount + 2).is_equal (s))
-				then
-					Result := true
-				else
-					contents.forth
-				end
-			end
-		ensure
-			Result implies (contents.item.item (1) = option_sign and
-				contents.item.substring (2, s.count + 1).is_equal (s)) or
-				(contents.item.item (1) = option_sign and
-				contents.item.item (2) = option_sign and
-				contents.item.substring (3, s.count + 2).is_equal (s))
 		end
 
 invariant
