@@ -81,14 +81,14 @@ Where cl, lw, and hg are functions defined as:
 The Stochastic %D is a \fIv\fP-period average of the 
 \fIn\fP-period %K
 #roman ( n <= x roman ) roman ,
-where \fIv\fP usually has the value 3, with the definition:
+with the definition:
 .EQ
-f(S)~=~left ( { sum from i=0 to v-1 { cl_fnc - lw_fnc } } over
-{ sum from i=0 to v-1 { hg_fnc - lw_fnc } } times 100 ,
-{ sum from i=1 to v { cl_fnc - lw_fnc } } over
-{ sum from i=1 to v { hg_fnc - lw_fnc } } times 100 ,...,
-{ sum from i=x-n-v+1 to x-n { cl_fnc - lw_fnc } } over
-{ sum from i=x-n-v+1 to x-n { hg_fnc - lw_fnc } } times 100
+f(S)~=~left ( { sum from k=0 to v-1 { cl_fnc - lw_fnc } } over
+{ sum from k=0 to v-1 { hg_fnc - lw_fnc } } times 100 ,
+{ sum from k=1 to v { cl_fnc - lw_fnc } } over
+{ sum from k=1 to v { hg_fnc - lw_fnc } } times 100 ,...,
+{ sum from k=x-n-v+1 to x-n { cl_fnc - lw_fnc } } over
+{ sum from k=x-n-v+1 to x-n { hg_fnc - lw_fnc } } times 100
 right )
 .EN
 .sp
@@ -96,11 +96,11 @@ right )
 Where
 .sp
 .in +0.15i
-\fIcl_fnc\fP stands for #cl(S, n+i) roman ,
+\fIcl_fnc\fP stands for #cl(S, n+k) roman ,
 .br
-lw_fnc stands for #lw(S, i+1, n+i) roman ,
+lw_fnc stands for #lw(S, k+1, n+k) roman ,
 .br
-and hg_fnc stands for #hg(S, i+1, n+i) roman ;
+and hg_fnc stands for #hg(S, k+1, n+k) roman ;
 .in
 .sp
 and \fIcl\fP, \fIlw\fP, and \fIhg\fP are as defined above for
