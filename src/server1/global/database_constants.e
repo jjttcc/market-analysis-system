@@ -16,7 +16,9 @@ feature -- Access
 
 	Password_specifier: STRING is "password"
 
-	Symbol_select_specifier: STRING is "stock symbol select"
+	Stock_symbol_query_specifier: STRING is "stock symbol query"
+
+	Stock_split_query_specifier: STRING is "stock split query"
 
 	Daily_stock_symbol_field_specifier: STRING is "daily stock symbol field"
 
