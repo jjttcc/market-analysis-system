@@ -12,7 +12,7 @@ class MAIN_GUI_INTERFACE inherit
 
 	NON_PERSISTENT_CONNECTION_INTERFACE
 		redefine
-			io_medium, request_handlers, set_message_body
+			io_medium, set_message_body
 		end
 
 	MAIN_APPLICATION_INTERFACE
@@ -131,10 +131,5 @@ feature {NONE} -- Implementation
 				message_body := s.substring (index, s.count)
 			end
 		end
-
-feature {NONE}
-
-	request_handlers: HASH_TABLE [IO_BASED_CLIENT_REQUEST_COMMAND, HASHABLE]
-			-- Handlers of client requests received via io_medium
 
 end -- class MAIN_GUI_INTERFACE
