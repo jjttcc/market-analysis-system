@@ -18,6 +18,11 @@ deferred class MARKET_EVENT_GENERATOR inherit
 			all
 		end
 
+	MARKET_FUNCTION_EDITOR
+		export {NONE}
+			all
+		end
+
 feature -- Access
 
 	product: CHAIN [MARKET_EVENT]
@@ -38,6 +43,12 @@ feature -- Status setting
 			-- Set the date and time to begin the analysis to `d'.
 		require
 			not_void: d /= Void
+		deferred
+		end
+
+feature {MARKET_FUNCTION_EDITOR}
+
+	wipe_out is
 		deferred
 		end
 

@@ -242,6 +242,20 @@ feature {NONE} -- Implementation
 			target_set: target2 = in.output
 		end
 
+feature {MARKET_FUNCTION_EDITOR}
+
+	wipe_out is
+		do
+			if product /= Void then
+				product.wipe_out
+			end
+			if tradable /= Void then
+				tradable.wipe_out
+			end
+			input1.wipe_out
+			input2.wipe_out
+		end
+
 invariant
 
 	input_not_void: input1 /= Void and input1 /= Void

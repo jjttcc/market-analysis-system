@@ -141,6 +141,19 @@ feature {NONE} -- Hook routine implementation
 			end
 		end
 
+feature {MARKET_FUNCTION_EDITOR}
+
+	wipe_out is
+		do
+			if product /= Void then
+				product.wipe_out
+			end
+			if tradable /= Void then
+				tradable.wipe_out
+			end
+			input.wipe_out
+		end
+
 invariant
 
 	operator_not_void: operator /= Void

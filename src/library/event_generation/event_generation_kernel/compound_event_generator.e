@@ -274,6 +274,17 @@ feature {NONE} -- Implementation
 			product.extend (e)
 		end
 
+feature {MARKET_FUNCTION_EDITOR}
+
+	wipe_out is
+		do
+			left_analyzer.wipe_out
+			right_analyzer.wipe_out
+			if product /= Void then
+				product.wipe_out
+			end
+		end
+
 invariant
 
 	analyzers_not_void: left_analyzer /= Void and right_analyzer /= Void
