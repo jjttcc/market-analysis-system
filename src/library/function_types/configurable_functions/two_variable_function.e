@@ -155,11 +155,11 @@ feature {MARKET_FUNCTION_EDITOR}
 		require
 			not_void: in /= Void
 			output_not_void: in.output /= Void
+			period_types_equal:
+				input2 /= Void implies in.trading_period_type.is_equal (
+					input2.trading_period_type)
 		do
-			input1 := in
-			target1 := in.output
-			parameter_list := Void
-			processed_date_time := Void
+			do_set_input1 (in)
 		ensure
 			input_set: input1 = in and input1 /= Void
 			target_set: target1 = in.output
@@ -171,11 +171,11 @@ feature {MARKET_FUNCTION_EDITOR}
 		require
 			not_void: in /= Void
 			output_not_void: in.output /= Void
+			period_types_equal:
+				input1 /= Void implies in.trading_period_type.is_equal (
+					input1.trading_period_type)
 		do
-			input2 := in
-			target2 := in.output
-			parameter_list := Void
-			processed_date_time := Void
+			do_set_input2 (in)
 		ensure
 			input_set: input2 = in and input2 /= Void
 			target_set: target2 = in.output
@@ -183,9 +183,45 @@ feature {MARKET_FUNCTION_EDITOR}
 			not_processed: not processed
 		end
 
-feature {NONE}
+	set_inputs (in1, in2: like input1) is
+			-- Set input1 and input2.
+		require
+			not_void: in1 /= Void and in2 /= Void
+			output_not_void: in1.output /= Void and in2.output /= Void
+			period_types_equal:
+				in1.trading_period_type.is_equal (in2.trading_period_type)
+		do
+			do_set_input1 (in1)
+			do_set_input2 (in2)
+		ensure
+			input_set: input1 = in1 and input1 /= Void and
+				input2 = in2 and input2 /= Void
+			target_set: target1 = in1.output and target2 = in2.output
+			parameter_list_void: parameter_list = Void
+			not_processed: not processed
+		end
+
+feature {MARKET_FUNCTION_EDITOR}
 
 	input1, input2: COMPLEX_FUNCTION
+
+feature {NONE} -- Implementation
+
+	do_set_input1 (in: like input1) is
+		do
+			input1 := in
+			target1 := in.output
+			parameter_list := Void
+			processed_date_time := Void
+		end
+
+	do_set_input2 (in: like input2) is
+		do
+			input2 := in
+			target2 := in.output
+			parameter_list := Void
+			processed_date_time := Void
+		end
 
 invariant
 
@@ -196,6 +232,6 @@ invariant
 		input1.output = target1 and input2.output = target2
 	no_missing_periods: processed implies not missing_periods (target1, target2)
 	inputs_trading_period_types_equal:
-		input1.trading_period_type = input2.trading_period_type
+		input1.trading_period_type.is_equal (input2.trading_period_type)
 
 end -- class TWO_VARIABLE_FUNCTION
