@@ -1,6 +1,6 @@
 indexing
 	description: "Exponential moving average";
-	notes: "Formulat taken from `Trading for a Living', by A. Elder"
+	notes: "Formula taken from `Trading for a Living', by A. Elder"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -8,23 +8,33 @@ class EXPONENTIAL_MOVING_AVERAGE inherit
 
 	STANDARD_MOVING_AVERAGE
 		redefine
-			action
+			action, set_n
 		end
 
 creation
 
 	make
-	-- !!NOTE:  Logic of calling set_n, set_exp., etc. must be worked out
-	-- so that it is well designed.
 
 feature -- Element change
 
 	set_exponential (op: N_BASED_CALCULATION) is
+		require
+			op /= Void
 		do
-			op.set_owner (Current)
 			exp := op
+			exp.initialize (Current)
+		ensure
+			exp_set: exp = op and exp /= Void
 		end
-		
+
+	set_n (i: integer) is
+		do
+			Precursor (i)
+			if exp /= Void then
+				exp.initialize (Current)
+			end
+		end
+
 feature {NONE}
 
 	action is

@@ -11,7 +11,7 @@ indexing
 
 class STANDARD_MOVING_AVERAGE inherit
 
-	N_RECORD_ONE_VECTOR_FUNCTION
+	N_RECORD_ONE_VARIABLE_FUNCTION
 		export {NONE}
 			set_operator -- not used
 		redefine
@@ -78,7 +78,7 @@ feature {NONE}
 
 feature {NONE} -- Implementation
 
-	sum: expanded VECTOR_SUM
+	sum: expanded LINEAR_SUM
 			-- Provides sum of first n elements.
 
 	last_sum: REAL
