@@ -119,7 +119,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			}
 		}
 		catch (IOException e) {
-			System.err.println("IO exception occurred, bye ...");
+			System.err.println("IO exception occurred: " + e + " - aborting");
+			e.printStackTrace();
 			quit(-1);
 		}
 		initialize_GUI_components();
@@ -465,6 +466,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	}
 
 	// Save persistent settings as a serialized file.
+	// Precondition: main_pane != null
 	protected void save_settings() {
 		if (serialize_filename != null) {
 		try {
@@ -529,7 +531,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 	/** Quit gracefully, sending a logout request for each open window. */
 	protected void quit(int status) {
-		save_settings();
+		if (main_pane != null) save_settings();
 		log_out_and_exit(status);
 	}
 
