@@ -1,10 +1,10 @@
 indexing
-	description: "Root class for Market Analysis System Server using MAL"
+	description: "Root class for the Market Analysis Server using MAL"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
-class MAS_SERVER inherit
+class MA_SERVER inherit
 
 	GLOBAL_SERVER
 		export
@@ -39,10 +39,6 @@ feature -- Initialization
 				!!poller.make_read_only
 				!!factory_builder.make
 				!LINKED_LIST [SOCKET]!current_sockets.make
-				--!!!Decide what to do about CL args - should the fb process
-				-- all of them, including the socket port numbers, or should
-				-- a new class do all CL processing, or ??? - Perhaps use
-				-- one of the free Eiffel Forum CL parsing libraries.
 				-- Make a socket for each port number provided in the
 				-- command line, create a STREAM_READER to handle it,
 				-- and add it to the poller's list of read commands.
@@ -104,4 +100,4 @@ feature {NONE}
 
 	current_sockets: LIST [SOCKET]
 
-end -- MAS_SERVER
+end -- MA_SERVER
