@@ -30,8 +30,6 @@ class TIME_DELIMITED_INDICATOR_DATA_REQUEST_CMD inherit
 		undefine
 			send_response_for_tradable,
 			additional_field_constraints_msg
---!!!Temporary debugging item:
-,setup_correct_number_of_records_test
 		redefine
 			parse_remainder,
 			additional_field_constraints_fulfilled

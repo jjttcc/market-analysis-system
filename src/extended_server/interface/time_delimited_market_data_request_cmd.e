@@ -23,8 +23,6 @@ class TIME_DELIMITED_MARKET_DATA_REQUEST_CMD inherit
 	TIME_DELIMITED_DATA_REQUEST_CMD
 		undefine
 			create_and_send_response, update_retrieved_tradable
---!!!Temporary debugging item:
-,setup_correct_number_of_records_test
 		end
 
 creation

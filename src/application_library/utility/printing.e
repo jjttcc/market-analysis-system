@@ -68,10 +68,6 @@ feature -- Status setting
 
 feature -- Basic operations
 
---!!!Debugging tool:
-setup_correct_number_of_records_test (printer: MARKET_TUPLE_PRINTER) is
-do end
-
 	print_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
 			-- If `preface' is not empty, first print it; then print the
 			-- fields of each tuple in `l'.  If `print_start_date' is not
@@ -92,8 +88,6 @@ do end
 			else
 				printer := tuple_printers.linear_representation @ 1
 			end
---!!!:
---setup_correct_number_of_records_test (printer)
 			printer.set_print_start_date (print_start_date)
 			printer.set_print_end_date (print_end_date)
 			printer.set_print_start_time (print_start_time)
@@ -120,16 +114,12 @@ do end
 		local
 			f: MARKET_FUNCTION
 		do
---!!!:
---print ("print_indicators" + "%N")
 			from
 				t.indicators.start
 			until
 				t.indicators.after
 			loop
 				f := t.indicators.item
---!!!:
---print ("PERIOD TYPE for " + f.name + ": " + f.trading_period_type.name + "%N")
 				if verbose then print_mf_info (f) end
 				print_tuples (f.output)
 				t.indicators.forth
@@ -141,9 +131,6 @@ do end
 			-- `preface' is not empty, print it first.  If `appendix' is
 			-- not empty, print it at the end.
 		do
---!!!:
---print ("print_indicator" + "%N")
---print ("PERIOD TYPE for " + i.name + ": " + i.trading_period_type.name + "%N")
 			if verbose then print_mf_info (i) end
 			print_tuples (i.output)
 		end

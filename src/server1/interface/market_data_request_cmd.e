@@ -12,8 +12,6 @@ class MARKET_DATA_REQUEST_CMD inherit
 	DATA_REQUEST_CMD
 		redefine
 			error_context, create_and_send_response
---!!!Temporary debugging item:
-,setup_correct_number_of_records_test
 		end
 
 creation
@@ -41,12 +39,6 @@ feature {NONE} -- Hook routine implementations
 		do
 			Result := concatenation (<<error_context_prefix, market_symbol>>)
 		end
-
---!!!:
-setup_correct_number_of_records_test (printer: MARKET_TUPLE_PRINTER) is
-do
-	printer.set_period_type_debug (trading_period_type)
-end
 
 feature {NONE}
 

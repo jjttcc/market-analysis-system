@@ -240,8 +240,8 @@ feature -- Basic operations
 					append_new_data
 					--@@@Verify that this flush_indicators call is not
 					--needed (See header comments of
-					--'TRADABLE.flush_indicators'.) and if so, remove it -
-					--if not, uncomment it:
+					--'TRADABLE.flush_indicators'.) and if is not, remove it -
+					--if it is needed, uncomment it:
 --					target_tradable.flush_indicators
 				end
 			end
@@ -280,7 +280,6 @@ feature {NONE} -- Implementation
 			target_tradable_set: not fatal_error = (target_tradable /= Void)
 		end
 
---!!!:
 	load_data is
 			-- Load the data for `current_symbol' and close the input medium.
 			-- `setup_input_medium' must have been called to open the
@@ -288,7 +287,6 @@ feature {NONE} -- Implementation
 			-- Set `target_tradable' to the resulting TRADABLE.
 		require
 		do
---print ("load_data calling setup input medium" + "%N")
 			setup_input_medium
 			if not fatal_error then
 				tradable_factory.set_symbol (current_symbol)

@@ -75,13 +75,9 @@ feature {NONE} -- Implementation
 			result_open_read: Result.is_open_read
 		end
 
---!!!:
 	setup_input_medium is
 		do
 			current_input_file := open_current_file
---print ("[1] sim - cif - indexes - field, record: " +
---current_input_file.field_index.out + ", " +
---current_input_file.record_index.out + "%N")
 			if not fatal_error then
 				tradable_factory.set_input (current_input_file)
 				current_input_file.set_field_separator (
@@ -89,9 +85,6 @@ feature {NONE} -- Implementation
 				current_input_file.set_record_separator (
 					tradable_factory.record_separator)
 			end
---print ("[2] sim - cif - indexes - field, record: " +
---current_input_file.field_index.out + ", " +
---current_input_file.record_index.out + "%N")
 		ensure then
 			input_file_open: not fatal_error implies current_input_file /= Void
 				and then current_input_file.exists and then

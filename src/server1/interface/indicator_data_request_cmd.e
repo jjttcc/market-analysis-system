@@ -14,8 +14,6 @@ class INDICATOR_DATA_REQUEST_CMD inherit
 			error_context, send_response_for_tradable, parse_remainder,
 			additional_field_constraints_fulfilled,
 			additional_field_constraints_msg
---!!!Temporary debugging item:
-,setup_correct_number_of_records_test
 		end
 
 creation
@@ -62,12 +60,6 @@ feature {NONE} -- Hook routine implementations
 				print_indicator (indicator)
 			end
 		end
-
---!!!:
-setup_correct_number_of_records_test (printer: MARKET_TUPLE_PRINTER) is
-do
-	printer.set_period_type_debug (trading_period_type)
-end
 
 	parse_remainder (fields: LIST [STRING]) is
 		do

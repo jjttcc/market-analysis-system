@@ -40,13 +40,7 @@ feature {NONE} -- Hook routine implementations
 	do_execute (msg: STRING) is
 		local
 			fields: LIST [STRING]
---!!!:
-line: STRING
 		do
---!!!:
---create line.make (74)
---line.fill_character ('<')
---print (line + "%N")
 			parse_error := False
 			fields_parsed := False
 			target := msg -- set up for tokenization
@@ -62,9 +56,6 @@ line: STRING
 			else
 				report_msg_fields_error (fields)
 			end
---!!!:
---line.fill_character ('>')
---print (line + "%N")
 		end
 
 feature {NONE} -- Hook routines

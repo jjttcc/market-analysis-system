@@ -149,20 +149,6 @@ feature -- Status setting
 
 feature -- Basic operations
 
---!!!!:
-period_type_debug: TIME_PERIOD_TYPE
-
---!!!!:
-set_period_type_debug (arg: TIME_PERIOD_TYPE) is
-		-- Set `period_type_debug' to `arg'.
-	require
-		arg_not_void: arg /= Void
-	do
-		period_type_debug := arg
-	ensure
-		period_type_debug_set: period_type_debug = arg and period_type_debug /= Void
-	end
-
 	execute (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
 			-- Output each tuple in `l' to `output_medium'.  If `preface'
 			-- is not empty, output it first.  If `appendix' is not empty,
@@ -212,17 +198,6 @@ feature {NONE} -- Implementation
 			end
 		end
 
---!!!:
-prd (msg: STRING; d: ANY) is
-do
-	if d = Void then
-		print (msg + "Void%N")
-	else
-		print (msg + d.out + "%N")
-	end
-end
-
---!!!!:
 	print_tuples_with_time (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
 		require
 			start_date_if_start_time:
@@ -232,14 +207,6 @@ end
 		local
 			first, last, i: INTEGER
 		do
---!!!:
---print ("print_tuples_with_time%N")
---prd ("print_start_date: ", print_start_date)
---prd ("print_start_time: ", print_start_time)
---prd ("print_end_date: ", print_end_date)
---prd ("print_end_time: ", print_end_time)
---print ("date field sep: " + date_field_separator + "%N")
---print ("time field sep: " + time_field_separator + "%N")
 			if print_start_time /= Void then
 				first := first_date_time_index (l)
 			else
@@ -250,10 +217,7 @@ end
 			else
 				last := last_index (l)
 			end
---!!!:
---print ("print_tuples_with_time - first, last: " + first.out + ", " + last.out + "%N")
 			if last >= first then
---debug_hook (first, last)
 				debug ("data_update_bug")
 					print_requested_start_end_dates
 					print_start_end (l, first, last)
@@ -269,41 +233,6 @@ end
 				end
 			end
 		end
-
-debug_hook (first, last: INTEGER) is
-local
-	dts: expanded DATE_TIME_SERVICES
-	ptype_min, st_end_min, rec_count, expected_count: INTEGER
-do
-	rec_count := last - first + 1
-	print ("sending " + rec_count.out + " records at:%N" +
-	(create {DATE_TIME}.make_now).out + "%N")
-	if
-		period_type_debug /= Void and then
-		print_start_time /= Void and then
-		print_end_time /= Void
-	then
-		ptype_min := dts.date_time_duration_in_minutes (
-			period_type_debug.duration)
-		st_end_min := dts.time_duration_in_minutes (
-			print_end_time.duration - print_start_time.duration)
-		expected_count := st_end_min // ptype_min
-		print ("(end time - start time): " + (print_end_time - 
-			print_start_time).out + "%Nperiod type: " +
-			ptype_min.out + " minutes%N")
-		print ("end time - start time, minutes: " + st_end_min.out + "%N")
-		print ("# of period types in the above: " +
-		expected_count.out + "%N")
-		if rec_count /= expected_count and expected_count >= 0 then
-			print ("OOOOOOPS: record count and expected count are not " +
-				"equal - recs, expected: " + rec_count.out + ", " +
-				expected_count.out + "%N")
-			print ("[period type: " + period_type_debug.name + "]%N")
-		end
-	else
-		print ("period_type_debug is void.%N")
-	end
-end
 
 	print_fields (t: MARKET_TUPLE) is
 		do

@@ -199,7 +199,6 @@ feature -- Status setting
 
 feature -- Basic operations
 
---!!!:
 	execute is
 			-- Note: Once `execute' is called, set_intraday will have no
 			-- effect - the tradable's data will be intraday according to
@@ -207,7 +206,6 @@ feature -- Basic operations
 		local
 			scanner: MARKET_TUPLE_DATA_SCANNER
 			intraday_scanner: INTRADAY_TUPLE_DATA_SCANNER
-old_prod_count: integer
 		do
 			error_occurred := False
 			check_for_open_interest
@@ -218,7 +216,6 @@ old_prod_count: integer
 			check
 				product_exists:  product /= Void
 			end
-old_prod_count := product.count
 			make_tuple_maker
 			if intraday then
 				create intraday_scanner.make (product, input, tuple_maker,
@@ -268,8 +265,6 @@ old_prod_count := product.count
 				add_indicators (product)
 			end
 			update_current_product := False
---print ("old prod count, prod count: " + old_prod_count.out + ", " +
---product.count.out + "%N")
 		ensure then
 			product_not_void: product /= Void
 			product_type_set: product.trading_period_type = time_period_type
