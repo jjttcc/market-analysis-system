@@ -220,6 +220,11 @@
     <pathelement location="${foo.jar}"/>
 -->
 
+	<!-- !!!Use a directory path for now - may change to use a jar file
+		 in the future. -->
+
+    <pathelement location=".."/>
+
     <!-- Include all elements that Tomcat exposes to applications -->
     <pathelement location="${catalina.home}/common/classes"/>
     <fileset dir="${catalina.home}/common/endorsed">
