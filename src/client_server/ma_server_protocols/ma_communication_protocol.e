@@ -13,13 +13,20 @@ class
 
 feature -- String constants
 
-	eom: STRING is ""
+	Eom: STRING is ""
+			-- End of message specifier
 
-	input_field_separator: STRING is "%T"
+	Input_field_separator: STRING is "%T"
+			-- Field separator for input received by the server
 
-	output_field_separator: STRING is "%T"
+	Output_field_separator: STRING is "%T"
+			-- Field separator for output produced by the server
 
-	date_field_separator: STRING is "/"
+	Output_record_separator: STRING is "%N"
+			-- Record separator for output produced by the server
+
+	Date_field_separator: STRING is "/"
+			-- Field separator for date output produced by the server
 
 invariant
 
