@@ -25,6 +25,7 @@ feature -- Element change
 			exp.initialize (Current)
 		ensure
 			exp_set: exp = op and exp /= Void
+			exp_n_set: exp.n_set
 		end
 
 	set_n (i: integer) is

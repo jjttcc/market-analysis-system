@@ -80,11 +80,12 @@ feature -- Status report
 		do
 			Result :=
 				source_list /= Void and tuple_maker /= Void and
-				duration /= Void
+				duration /= Void and tuple_maker.execute_precondition
 		ensure then
 			parameters_not_void:
 				Result = (source_list /= Void and
-						tuple_maker /= Void and duration /= Void)
+						tuple_maker /= Void and duration /= Void) and
+						tuple_maker.execute_precondition
 			--!!!Note: If a MARKET_TUPLE_LIST (the type of source_list) is
 			--refined to further support the concept of lists with time
 			--period types, such as daily or weekly, including comparison
@@ -141,6 +142,8 @@ feature -- Status report
 	operator_used: BOOLEAN is
 		once
 			Result := false
+		ensure then
+			not_used: Result = false
 		end
 
 feature -- Access
@@ -157,16 +160,18 @@ feature -- Access
 	tuple_maker: COMPOSITE_TUPLE_FACTORY
 			-- Factory used to create tuples
 
-feature
+feature -- Element change
 
 	set_tuple_maker (f: COMPOSITE_TUPLE_FACTORY) is
 			-- Set tuple_maker to `f'.
 		require
 			not_void: f /= Void
+			ready_to_execute: f.execute_precondition
 		do
 			tuple_maker := f
 		ensure
 			set: tuple_maker = f and f /= Void
+			ready_to_execute: tuple_maker.execute_precondition
 		end
 
 	set_duration (d: DATE_TIME_DURATION) is
@@ -176,18 +181,6 @@ feature
 			duration := d
 		ensure
 			duration_set: duration = d and duration /= Void
-		end
-
-feature {NONE}
-
-	set_source_list (l: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]) is
-			-- Set source_list to `l'.
-		require
-			not_void: l /= Void
-		do
-			source_list := l
-		ensure
-			set: source_list = l and l /= Void
 		end
 
 feature {NONE}
