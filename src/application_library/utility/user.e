@@ -8,12 +8,9 @@ indexing
 
 class USER inherit
 
-	EXECUTION_ENVIRONMENT
-		export {NONE}
-			all
-		end
-
-	OPERATING_ENVIRONMENT
+	APP_ENVIRONMENT
+		rename
+			mailer as app_env_mailer
 		export {NONE}
 			all
 		end
@@ -159,9 +156,10 @@ feature {NONE}
 				tmp_file_failed := true
 			else
 				tmp_file_failed := false
-				create dirname.make (4)
-				dirname.append_character (Directory_separator)
-				dirname.append ("tmp")
+				dirname := app_directory
+				if dirname = Void then
+					dirname := current_working_directory
+				end
 				create tmpdir.make (dirname)
 				if not tmpdir.exists then
 					create tmpdir.make (".")
