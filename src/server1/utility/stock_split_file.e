@@ -13,14 +13,6 @@ class STOCK_SPLIT_FILE inherit
 
 	STOCK_SPLITS
 
-	PLAIN_TEXT_FILE
-		rename
-			name as file_name, make as ptf_make_unused
-		export
-			{NONE} all
-			{ANY} file_name
-		end
-
 	DATA_SCANNER
 		rename
 			make as ds_make_unused
@@ -30,11 +22,18 @@ class STOCK_SPLIT_FILE inherit
 			close_tuple, product, tuple_maker, add_tuple
 		end
 
-	BILINEAR_INPUT_SEQUENCE
+	INPUT_FILE
 		rename
-			index as position, name as file_name
-		undefine
-			off
+			name as file_name, make as ptf_make_unused,
+			record_separator as if_record_separator,
+			field_separator as if_field_separator,
+			set_record_separator as set_if_record_separator,
+			set_field_separator as set_if_field_separator,
+			advance_to_next_field as if_advance_to_next_field,
+			advance_to_next_record as if_advance_to_next_record
+		export
+			{NONE} all
+			{ANY} file_name
 		end
 
 creation
@@ -59,6 +58,8 @@ feature {NONE} -- Initialization
 		do
 			field_separator := field_sep
 			record_separator := "%N"
+			if_field_separator := field_sep
+			if_record_separator := "%N"
 			file_name := input_file_name
 			open_file (file_name)
 			!!product.make (100)
