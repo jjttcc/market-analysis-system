@@ -12,15 +12,25 @@ public class Utilities implements Constants
 {
 	public Utilities() {}
 
-	// String resulting from reading `r' until End_of_file
-	public static String input_string(Reader r) throws IOException {
+	// String resulting from reading `r' until End_of_file - If
+	// `strip_carriage_return', strip all '\r' characters.
+	public static String input_string(Reader r, boolean strip_carriage_return)
+			throws IOException {
 		StringBuffer buffer = new StringBuffer(Optimal_msg_buffer_size);
-		int c = 0, i = 0;
-		do {
-			c = r.read();
-			buffer.append((char) c);
-			++i;
-		} while (c != End_of_file);
+		int c = 0;
+		if (strip_carriage_return) {
+			do {
+				c = r.read();
+				if (c != '\r') {
+					buffer.append((char) c);
+				}
+			} while (c != End_of_file);
+		} else {
+			do {
+				c = r.read();
+				buffer.append((char) c);
+			} while (c != End_of_file);
+		}
 		return buffer.toString();
 	}
 

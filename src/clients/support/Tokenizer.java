@@ -62,7 +62,7 @@ public class Tokenizer {
 	/** Contents of the file */
 	public String contents() throws IOException {
 		if (contents_ == null) {
-			contents_ = Utilities.input_string(reader);
+			contents_ = Utilities.input_string(reader, true);
 		}
 		return contents_;
 	}
