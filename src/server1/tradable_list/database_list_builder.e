@@ -14,15 +14,22 @@ creation
 feature -- Initialization
 
 	make (symbols: LINEAR [STRING]; factory: TRADABLE_FACTORY) is
+			-- Initialize symbol_list and tradable factories.  A separate
+			-- tradable factory for intraday data is used for efficiency.
 		require
 			not_void: symbols /= Void and factory /= Void
 		do
 			symbol_list := symbols
 			tradable_factory := factory
+			intraday_tradable_factory := clone (factory)
+			intraday_tradable_factory.set_intraday (true)
+			tradable_factory.set_intraday (false)
 		ensure
 			symbols_set: symbol_list = symbols and symbol_list /= Void
 			factory_set: tradable_factory = factory and
-				tradable_factory /= Void
+				tradable_factory /= Void and not tradable_factory.intraday
+			intraday_factory_set: intraday_tradable_factory /= Void and
+				intraday_tradable_factory.intraday
 		end
 
 feature -- Access
@@ -34,6 +41,8 @@ feature -- Access
 	symbol_list: LINEAR [STRING]
 
 	tradable_factory: TRADABLE_FACTORY
+
+	intraday_tradable_factory: TRADABLE_FACTORY
 
 feature -- Basic operations
 
@@ -57,14 +66,20 @@ feature {NONE} -- Implementation
 
 	create_daily_list is
 		do
+			check
+				not_intraday: not tradable_factory.intraday
+			end
 			create {DB_TRADABLE_LIST} daily_list.make (symbol_list,
 				tradable_factory)
 		end
 
 	create_intraday_list is
 		do
+			check
+				intraday: intraday_tradable_factory.intraday
+			end
 			create {DB_TRADABLE_LIST} intraday_list.make (symbol_list,
-				tradable_factory)
+				intraday_tradable_factory)
 			intraday_list.set_intraday (true)
 		end
 
