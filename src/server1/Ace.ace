@@ -174,9 +174,18 @@ cluster
 
 external
 
+ -- Version with odbc statically linked:
  object:	"${EIFFEL4}/library/time/spec/$(PLATFORM)/lib/libdatetime.a",
 			"${EIFFEL4}/library/net/spec/$(PLATFORM)/lib/libnet.a",
 			"${EIFFEL4}/library/store/spec/$(PLATFORM)/lib/libsupport.a",
-			"-lodbc", "$(ECLI)/src/spec/Ise/linux/libecli_c.a";
+			"$(ECLI)/src/spec/Ise/linux/libecli_c.a",
+			"/usr/local/lib/libodbc.a",
+			"/usr/lib/libdl.a";
+
+ -- Version with odbc dynamically linked:
+-- object:	"${EIFFEL4}/library/time/spec/$(PLATFORM)/lib/libdatetime.a",
+--			"${EIFFEL4}/library/net/spec/$(PLATFORM)/lib/libnet.a",
+--			"${EIFFEL4}/library/store/spec/$(PLATFORM)/lib/libsupport.a",
+--			"$(ECLI)/src/spec/Ise/linux/libecli_c.a", "-lodbc"; 
 
 end
