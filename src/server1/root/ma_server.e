@@ -21,6 +21,7 @@ feature -- Initialization
 		do
 			!!poller.make_read_only
 			!!factory_builder.make
+			!LINKED_LIST [SOCKET]!current_sockets.make
 			--!!!Decide what to do about CL args - should the fb process
 			-- all of them, including the socket port numbers, or should
 			-- a new class do all CL processing, or ??? - Perhaps use
@@ -38,6 +39,7 @@ feature -- Initialization
 					argv.item (i).to_integer)
 				!STREAM_READER!readcmd.make (socket, factory_builder)
 				poller.put_read_command (readcmd)
+				current_sockets.extend (socket)
 				i := i + 1
 			end
 			-- If background is not specified, add a reader to respond to
@@ -66,10 +68,20 @@ feature {NONE}
 			-- Poller for client socket connections
 
 	close_sockets is
-			-- Close all sockets added to `poller'.
+			-- Close all unclosed sockets.
 		do
-			-- If sockets aren't closed, close them.
-			-- TBI
+			from
+				current_sockets.start
+			until
+				current_sockets.exhausted
+			loop
+				if not current_sockets.item.is_closed then
+					current_sockets.item.close
+				end
+				current_sockets.forth
+			end
 		end
+
+	current_sockets: LIST [SOCKET]
 
 end -- TA_SERVER
