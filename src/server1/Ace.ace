@@ -147,7 +147,7 @@ cluster
 	ecli_src : "$ECLI/src";
 	abstract (ecli_src) : "$/abstract";
 	ecli_spec (ecli_src) : "$/spec";
-	ecli_spec_ise (ecli_spec) : "$/Ise";
+	ecli_spec_ise (ecli_spec) : "$/ise";
 	ecli_data (ecli_src) : "$/data";
 	ecli_pattern (ecli_src) : "$/pattern";
 
@@ -178,7 +178,7 @@ external
 -- object:	"${EIFFEL4}/library/time/spec/$(PLATFORM)/lib/libdatetime.a",
 --			"${EIFFEL4}/library/net/spec/$(PLATFORM)/lib/libnet.a",
 --			"${EIFFEL4}/library/store/spec/$(PLATFORM)/lib/libsupport.a",
---			"$(ECLI)/src/spec/Ise/linux/libecli_c.a",
+--			"$(ECLI)/src/spec/ise/linux/libecli_c.a",
 --			"/usr/local/lib/libodbc.a",
 --			"$(MAS)/src/eiffel_library/lib/utilities.o",
 --			"/usr/lib/libdl.a";
@@ -187,7 +187,7 @@ external
  object:	"${EIFFEL4}/library/time/spec/$(PLATFORM)/lib/libdatetime.a",
 			"${EIFFEL4}/library/net/spec/$(PLATFORM)/lib/libnet.a",
 			"${EIFFEL4}/library/store/spec/$(PLATFORM)/lib/libsupport.a",
-			"$(ECLI)/src/spec/Ise/linux/libecli_c.a",
+			"$(ECLI)/src/spec/ise/linux/libecli_c.a",
 			"$(MAS)/src/eiffel_library/lib/utilities.o",
 			"-lodbc"; 
 
