@@ -1,0 +1,30 @@
+#!/bin/bash
+# Make a NetworkProtocol class for the TA server protocol.
+
+eiffel_protocol_files ()
+{
+	echo ../../server1/network/gui_network_protocol.e \
+		../../server1/network/network_protrocol.e
+}
+
+files=$(eiffel_protocol_files)
+awk 'BEGIN {
+	print "/** Constants specifying the components of the TA network \n\
+communication protocol */"
+	print "public interface NetworkProtocol\n{"
+}
+/^feature/ {
+	sub (/.*-- */, "")
+	print "\t// " $0
+}
+/: *INTEGER/ {
+	sub (/:/, "")
+	print "\tint " $1 " = " $4 ";"
+}
+/: *STRING/ {
+	sub (/:/, "")
+	print "\tString " $1 " = " $4 ";"
+}
+END {
+	print "}"
+}' $files >../common/NetworkProtocol.java
