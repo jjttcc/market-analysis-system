@@ -35,8 +35,6 @@ feature -- Access
 	trading_period_type: TIME_PERIOD_TYPE
 			-- Selected trading period type
 
-	parse_error: BOOLEAN
-
 feature {NONE} -- Hook routine implementations
 
 	do_execute (msg: STRING) is
@@ -55,7 +53,6 @@ feature {NONE} -- Hook routine implementations
 					parse_remainder (fields)
 				end
 				if not parse_error then
-					prepare_response (fields)
 					create_and_send_response
 				end
 			else
@@ -111,15 +108,6 @@ feature {NONE} -- Hook routines
 			do_nothing -- Redefine is something needs to be done.
 		end
 
-	prepare_response (fields: LIST [STRING]) is
-			-- Perform any needed preparation (using `fields', if appropriate)
-			-- before calling `create_and_send_response'.
-		require
-			fields_exist: fields /= Void
-		do
-			do_nothing -- Redefine is something needs to be done.
-		end
-
 	send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE]) is
 			-- Use `t' to obtain the requested data and send them
 			-- back to the client.
@@ -130,6 +118,8 @@ feature {NONE} -- Hook routines
 		end
 
 feature {NONE} -- Implementation
+
+	parse_error: BOOLEAN
 
 	create_and_send_response is
 			-- Create the requested data and send them to the client.
@@ -173,6 +163,9 @@ feature {NONE} -- Utility
 			if not object_comparison then
 				pt_names.compare_references
 			end
+		ensure
+			symbol_and_period_type_set_if_no_error: not parse_error implies
+				market_symbol /= Void and trading_period_type /= Void
 		end
 
 	send_tradable_not_found_response is

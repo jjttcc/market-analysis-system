@@ -11,7 +11,7 @@ class INDICATOR_DATA_REQUEST_CMD inherit
 
 	DATA_REQUEST_CMD
 		redefine
-			error_context, send_response_for_tradable, prepare_response,
+			error_context, send_response_for_tradable, parse_remainder,
 			additional_field_constraints_fulfilled,
 			additional_field_constraints_msg
 		end
@@ -55,15 +55,14 @@ feature {NONE} -- Hook routine implementations
 			end
 		end
 
-	prepare_response (fields: LIST [STRING]) is
+	parse_remainder (fields: LIST [STRING]) is
 		do
 			indicator_id := fields.first.to_integer
 		end
 
 	error_context (msg: STRING): STRING is
 		do
-			Result := concatenation (<<"retrieving indicator data for ",
-				market_symbol>>)
+			Result := concatenation (<<error_context_prefix, market_symbol>>)
 		end
 
 	additional_field_constraints_msg: STRING is "Indicator ID is not an integer"
@@ -74,5 +73,7 @@ feature {NONE} -- Implementation
 			-- ID of the indicator requested by the user
 
 	invalid_indicator_id_msg: STRING is "Invalid indicator ID"
+
+	error_context_prefix: STRING is "retrieving indicator data for "
 
 end -- class INDICATOR_DATA_REQUEST_CMD
