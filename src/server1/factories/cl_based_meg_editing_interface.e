@@ -134,7 +134,7 @@ feature {NONE} -- Implementation
 					print ("Type exit to return to main program.%N")
 					system ("")
 				when '-' then
-					Result := Exit_menu_value
+					Result := Exit_value
 				else
 					print ("Invalid selection%N")
 				end
@@ -146,37 +146,9 @@ feature {NONE} -- Implementation
 		local
 			finished: BOOLEAN
 		do
-			from
-				if meg_names.count = 0 then
-					finished := True
-					Result := Exit_menu_value
-					print ("There are currently no market analyzers.%N")
-				end
-			until
-				finished
-			loop
-				print_list (<<"Select a market analyzer",
-							msg, " (0 to end):%N">>)
-				print_names_in_1_column (meg_names, 1); print (eom)
-				read_integer
-				if
-					last_integer < 0 or
-						last_integer > meg_names.count
-				then
-					print_list (<<"Selection must be between 0 and ",
-								meg_names.count, "%N">>)
-				elseif last_integer = 0 then
-					finished := True
-					Result := Exit_menu_value
-				else
-					check
-						valid_index: last_integer > 0 and
-									last_integer <= meg_names.count
-					end
-					finished := True
-					Result := last_integer
-				end
-			end
+print ("eg_selection called%N")
+			Result := backoutable_selection (meg_names, concatenation (
+				<<"Select a market analyzer", msg>>), Exit_value)
 		end
 
 	event_generator_type_selection: INTEGER is

@@ -48,7 +48,7 @@ feature -- Basic operations
 			from
 				selection := Null_value
 			until
-				selection = Exit_menu_value
+				selection = Exit_value
 			loop
 				selection := main_menu_selection
 				inspect
@@ -91,10 +91,10 @@ feature {NONE} -- Implementation
 			from
 				selection := Null_value
 			until
-				selection = Exit_menu_value
+				selection = Exit_value
 			loop
 				selection := eg_selection (" to remove")
-				if selection /= Exit_menu_value then
+				if selection /= Exit_value then
 					meg := working_meg_library @ selection
 					inspect
 						character_choice (concatenation
@@ -109,7 +109,7 @@ feature {NONE} -- Implementation
 						changed := true
 					when 'n', 'N' then
 					when 'q', 'Q' then
-						selection := Exit_menu_value
+						selection := Exit_value
 					end
 				end
 			end
@@ -124,10 +124,10 @@ feature {NONE} -- Implementation
 			from
 				selection := Null_value
 			until
-				selection = Exit_menu_value
+				selection = Exit_value
 			loop
 				selection := eg_selection (" to view")
-				if selection /= Exit_menu_value then
+				if selection /= Exit_value then
 					display_event_generator (
 						market_event_generation_library @ selection)
 				end
@@ -143,10 +143,10 @@ feature {NONE} -- Implementation
 			from
 				selection := Null_value
 			until
-				selection = Exit_menu_value
+				selection = Exit_value
 			loop
 				selection := eg_selection (" to edit")
-				if selection /= Exit_menu_value then
+				if selection /= Exit_value then
 					function_editor.edit_indicator_list ((
 						working_meg_library @ selection).indicators)
 					if not changed then

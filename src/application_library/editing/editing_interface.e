@@ -111,7 +111,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	Exit_menu_value: INTEGER is -1
+	Exit_value: INTEGER is -1
 			-- Value indicating menu is to be exited - negative so as not
 			-- to conflict with the unique values or with the numbered
 			-- list selections

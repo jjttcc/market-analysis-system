@@ -72,7 +72,7 @@ feature -- Basic operations
 			from
 				selection := Null_value
 			until
-				selection = Exit_menu_value
+				selection = Exit_value
 			loop
 				selection := main_indicator_edit_selection
 				inspect
@@ -92,7 +92,7 @@ feature -- Basic operations
 					changed := false
 				when Show_help_value then
 					show_message (help @ help.Edit_indicators)
-				when Exit_menu_value then
+				when Exit_value then
 					if changed then
 						-- User is aborting changes - restore working copy of
 						-- function library to a deep copy of the original.
@@ -165,11 +165,11 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 				end
 				l.start
 			until
-				i = Exit_menu_value or i = l.index
+				i = Exit_value or i = l.index
 			loop
 				l.forth
 			end
-			if i /= Exit_menu_value then
+			if i /= Exit_value then
 				Result := l.item
 			end
 		end
@@ -291,12 +291,12 @@ feature {EDITING_INTERFACE}
 			from
 				selection := Null_value
 			until
-				selection = Exit_menu_value
+				selection = Exit_value
 			loop
 				selection := list_selection_with_backout (
 					names_from_function_list(l),
 					"Select an indicator to edit")
-				if selection /= Exit_menu_value then
+				if selection /= Exit_value then
 					indicator := l @ selection
 					edit_parameter_menu (indicator.parameters)
 				end
@@ -392,7 +392,7 @@ feature {NONE} -- Hook routines
 		deferred
 		ensure
 			valid_or_exit: Result >= 1 and Result <= l.count or
-				Result = Exit_menu_value
+				Result = Exit_value
 		end
 
 	main_indicator_edit_selection: INTEGER is
@@ -429,7 +429,7 @@ feature {NONE} -- Implementation
 				fnames.forth
 			end
 			spiel.extend (concatenation (<<"Choose a name for ", msg,
-						" that does not match any of the%Nabove names">>))
+						" that does not match any of the%Nabove names:">>))
 			o.set_name (string_selection (concatenation (spiel)))
 		end
 
@@ -520,12 +520,12 @@ feature {NONE} -- Implementation - indicator editing
 			from
 				selection := Null_value
 			until
-				selection = Exit_menu_value
+				selection = Exit_value
 			loop
 				selection := list_selection_with_backout (
 					names_from_parameter_list(parameters, true),
 					"Select a parameter to edit")
-				if selection /= Exit_menu_value then
+				if selection /= Exit_value then
 					p := parameters @ selection
 					edit_parameter (p)
 				end
@@ -538,7 +538,7 @@ feature {NONE} -- Implementation - indicator editing
 			msg, msg2, value: STRING
 		do
 			msg := concatenation (<<"The current value for ", p.function.name,
-				" is ", p.current_value, " - new value? ">>)
+				" is ", p.current_value, " - new value?">>)
 			from
 				value := string_selection (msg)
 			until
