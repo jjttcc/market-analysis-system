@@ -68,7 +68,7 @@ feature -- Status report
 			not_used: Result = false
 		end
 
-	arg_used: BOOLEAN is false
+	arg_mandatory: BOOLEAN is false
 
 feature {NONE} -- Basic operations
 

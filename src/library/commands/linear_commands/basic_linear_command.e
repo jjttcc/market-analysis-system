@@ -23,7 +23,7 @@ feature -- Basic operations
 
 feature -- Status report
 
-	arg_used: BOOLEAN is false
+	arg_mandatory: BOOLEAN is false
 
 	target_cursor_not_affected: BOOLEAN is true
 

@@ -47,7 +47,7 @@ feature -- Basic operations
 
 feature -- Status report
 
-	arg_used: BOOLEAN is true
+	arg_mandatory: BOOLEAN is true
 
 feature {NONE} -- Hard-coded market function building procedures
 

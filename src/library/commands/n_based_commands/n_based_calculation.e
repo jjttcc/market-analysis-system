@@ -25,7 +25,7 @@ feature {FACTORY} -- Initialization --!!!Check export
 
 feature -- Status report
 
-	arg_used: BOOLEAN is false
+	arg_mandatory: BOOLEAN is false
 
 feature -- Basic operations
 

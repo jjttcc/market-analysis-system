@@ -74,7 +74,7 @@ feature -- Status report
 				(target1.empty or target2.empty or not output.empty)
 		end
 
-	arg_used: BOOLEAN is false
+	arg_mandatory: BOOLEAN is false
 
 	operator_used: BOOLEAN is true
 

@@ -43,10 +43,6 @@ feature -- Access
 
 	tuple_maker: BASIC_TUPLE_FACTORY
 
-feature -- Status report
-
-	arg_used: BOOLEAN is false
-
 feature {FACTORY} -- Element change
 
 	set_product (arg: like product) is

@@ -51,7 +51,7 @@ feature -- Basic operations
 
 feature -- Status report
 
-	arg_used: BOOLEAN is
+	arg_mandatory: BOOLEAN is
 		do
 			Result := false
 		ensure then

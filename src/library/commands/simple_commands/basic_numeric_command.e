@@ -20,6 +20,6 @@ feature -- Basic operations
 
 feature -- Status report
 
-	arg_used: BOOLEAN is true
+	arg_mandatory: BOOLEAN is true
 
 end -- class BASIC_NUMERIC_COMMAND

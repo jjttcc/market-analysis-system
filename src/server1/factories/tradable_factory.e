@@ -53,8 +53,8 @@ feature -- Status report
 	no_open: BOOLEAN
 			-- Is there no opening price field in the input?
 
-	arg_used: BOOLEAN is false
-			-- execute arg is actually optional - if not void it is used.
+	arg_mandatory: BOOLEAN is false
+			-- execute arg is optional - if not void it is used.
 
 	error_occurred: BOOLEAN
 			-- Did an error occur during execute?

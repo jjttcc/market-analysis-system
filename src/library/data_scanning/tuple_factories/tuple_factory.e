@@ -20,6 +20,6 @@ feature -- Basic operations
 
 feature -- Status report
 
-	arg_used: BOOLEAN is false
+	arg_mandatory: BOOLEAN is false
 
 end -- class TUPLE_FACTORY
