@@ -3,18 +3,20 @@ Technical Analysis Library (TAL).  It contains the following directories and
 files:
 
       doc        - Documentation directory
-      src        - TAL source code
+      src        - Source code for TAL and applications that use it
       forum.txt  - Eiffel Forum Freeware License text
 
 Directory src contains the directories:
 
-      basic_test_app - A basic test application
-      main_test_app  - Primary test application
-      library        - Directory structure for the TAL source code
+      main_test_app       - Primary test application
+      application_library - Classes for building applications with TAL
+      library             - Directory structure for the TAL source code
 
-Directories basic_test_app and main_test_app contain Ace files for building
-the test applications for TAL.  The environment variable FINANCE will need to
-be set to this directory in order to compile the test applications.
+main_test_app contains an Ace file for building a functional test
+application for TAL.  In order to compile the test application, the
+environment variable FINANCE will need to be set to this directory and
+the environment variable EIFFEL_COMPONENT_LIBRARY will need to be set to
+the absolute path of the ../eiffel_library directory.
 
 The development system is Linux 2.0.28 using the ISE Eiffel 4.2f compiler
 and environment.  TAL has not yet been ported to other platforms.
