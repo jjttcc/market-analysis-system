@@ -4,13 +4,20 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class
+class COMMANDS inherit
 
-	COMMANDS
+	CLASSES [COMMAND]
+		rename
+			instances as command_instances, names as command_names,
+			description as command_description, 
+			instance_with_generator as command_with_generator
+		redefine
+			command_instances
+		end
 
 feature -- Access
 
-	commands_and_descriptions: ARRAYED_LIST [PAIR [COMMAND, STRING]] is
+	instances_and_descriptions: ARRAYED_LIST [PAIR [COMMAND, STRING]] is
 			-- An instance and description of each COMMAND class
 		local
 			true_dummy: TRUE_COMMAND
@@ -181,96 +188,14 @@ feature -- Access
 			!!pair.make (cmd,
 				"Operator that calculates the slope of a function")
 			Result.extend (pair)
-		ensure
-			one_of_each: one_of_each (Result)
 		end
 
 	command_instances: ARRAYED_LIST [COMMAND] is
-			-- An instance of each COMMAND class
 		once
-			!!Result.make (commands_and_descriptions.count)
-			from
-				commands_and_descriptions.start
-			until
-				commands_and_descriptions.exhausted
-			loop
-				Result.extend (commands_and_descriptions.item.left)
-				commands_and_descriptions.forth
-			end
-		end
-
-	command_names: ARRAYED_LIST [STRING] is
-			-- The name of each element of `command_instances'
-		once
-			!!Result.make (command_instances.count)
-			Result.compare_objects
-			from
-				command_instances.start
-			until
-				command_instances.exhausted
-			loop
-				Result.extend (command_instances.item.generator)
-				command_instances.forth
-			end
-		ensure
-			object_comparison: Result.object_comparison
-		end
-
-	description (cmd: COMMAND): STRING is
-			-- The description of the run-time type of `cmd'
-		do
-			from
-				commands_and_descriptions.start
-			until
-				Result /= Void or commands_and_descriptions.exhausted
-			loop
-				if commands_and_descriptions.item.left.same_type (cmd) then
-					Result := commands_and_descriptions.item.right
-				else
-					commands_and_descriptions.forth
-				end
-			end
-		end
-
-	command_with_generator (name: STRING): COMMAND is
-			-- COMMAND instance whose generating type matches `name' -
-			-- Void if there is no COMMAND instance whose generator matches
-			-- name.
-		do
-			from
-				command_instances.start
-			until
-				Result /= Void or command_instances.exhausted
-			loop
-				if command_instances.item.generator.is_equal (name) then
-					Result := command_instances.item
-				end
-				command_instances.forth
-			end
+			Result := Precursor
 		end
 
 feature {NONE} -- Implementation
-
-	one_of_each (cmds: ARRAYED_LIST [PAIR [COMMAND, STRING]]): BOOLEAN is
-		local
-			names: ARRAYED_LIST [STRING]
-		do
-			Result := true
-			!!names.make (cmds.count)
-			names.compare_objects
-			from
-				cmds.start
-			until
-				Result = false or cmds.exhausted
-			loop
-				if names.has (cmds.item.right) then
-					Result := false
-				else
-					names.extend (cmds.item.right)
-					cmds.forth
-				end
-			end
-		end
 
 	default_market_tuple_list: LIST [MARKET_TUPLE] is
 			-- Default list of MARKET_TUPLE to provide to the make routines
