@@ -10,11 +10,6 @@ indexing
 class MAS_COMMAND_LINE inherit
 
 	COMMAND_LINE
-		rename
-			make as cl_make
-		export
-			{NONE} cl_make
-		end
 
 	GENERAL_UTILITIES
 		export
@@ -29,10 +24,9 @@ creation {PLATFORM_DEPENDENT_OBJECTS}
 
 feature {NONE} -- Initialization
 
-	make is
+	process_remaining_arguments is
 		do
 			create {LINKED_LIST [INTEGER]} port_numbers.make
-			cl_make
 			create special_date_settings.make (date_format_prefix)
 			special_date_settings.add_error_subscriber (Current)
 			opening_price := True
