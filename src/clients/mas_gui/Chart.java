@@ -85,7 +85,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 				// Most likely the file hasn't been created yet - no error.
 			}
 			catch (ClassNotFoundException e) {
-				System.err.println("Class not found!");
+				System.err.println("Class not found!" + e);
 			}
 		}
 		try {
