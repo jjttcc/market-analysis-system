@@ -49,8 +49,6 @@ public class Connection implements NetworkProtocol
 				throw new IOException (request_result.toString());
 			}
 			_session_state = new SessionState(s);
-System.out.println("session state: " + _session_state.session_key() + ", " +
-_session_state.open_field());
 		}
 		catch (Exception e) {
 			throw new IOException("Attempt to login to server " +
