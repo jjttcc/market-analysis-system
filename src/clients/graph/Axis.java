@@ -29,7 +29,7 @@ import java.lang.*;
 **    along with this program; if not, write to the Free Software
 **    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 **************************************************************************
-**    Modified by Jim Cochrane
+**    Modified by Jim Cochrane, last changed in July, 2000
 **************************************************************************
 **
 **    This class is designed to be used in conjunction with 
