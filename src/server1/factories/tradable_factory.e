@@ -29,6 +29,7 @@ feature -- Initialization
 				period_type_names @ Daily)
 			fs_tab: field_separator.is_equal ("%T")
 			rs_newline: record_separator.is_equal ("%N")
+			non_strict: strict_error_checking = false
 		end
 
 feature -- Access
@@ -68,34 +69,10 @@ feature -- Status report
 	error_occurred: BOOLEAN
 			-- Did an error occur during execute?
 
+	strict_error_checking: BOOLEAN
+
 	error_list: LIST [STRING]
 			-- List of all errors if error_occurred
-
-feature -- Basic operations
-
-	execute is
-		local
-			scanner: MARKET_TUPLE_DATA_SCANNER
-		do
-			error_occurred := False
-			make_product
-			check value_setters.count > 0 end
-			!!scanner.make (product, input, tuple_maker, value_setters)
-			-- Input data from input stream and stuff it into product.
-			scanner.execute
-			add_indicators (product, indicators)
-			check
-				product_set_to_scanner_result: product = scanner.product
-			end
-			if not scanner.error_list.empty then
-				error_list := scanner.error_list
-				error_occurred := True
-			end
-			product.finish_loading
-		ensure then
-			product_not_void: product /= Void
-			product_type_set: product.trading_period_type = time_period_type
-		end
 
 feature -- Status setting
 
@@ -168,6 +145,41 @@ feature -- Status setting
 			indicators := arg
 		ensure
 			indicators_set: indicators = arg and indicators /= Void
+		end
+
+	set_strict_error_checking (arg: BOOLEAN) is
+			-- Set strict_error_checking to `arg'.
+		do
+			strict_error_checking := arg
+		ensure
+			strict_error_checking_set: strict_error_checking = arg
+		end
+
+feature -- Basic operations
+
+	execute is
+		local
+			scanner: MARKET_TUPLE_DATA_SCANNER
+		do
+			error_occurred := False
+			make_product
+			check value_setters.count > 0 end
+			!!scanner.make (product, input, tuple_maker, value_setters)
+			scanner.set_strict_error_checking (strict_error_checking)
+			-- Input data from input stream and stuff it into product.
+			scanner.execute
+			add_indicators (product, indicators)
+			check
+				product_set_to_scanner_result: product = scanner.product
+			end
+			if not scanner.error_list.empty then
+				error_list := scanner.error_list
+				error_occurred := True
+			end
+			product.finish_loading
+		ensure then
+			product_not_void: product /= Void
+			product_type_set: product.trading_period_type = time_period_type
 		end
 
 feature {NONE}
