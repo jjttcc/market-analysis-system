@@ -15,7 +15,7 @@ class MACL_COMMAND_LINE inherit
 		export
 			{NONE} cl_make
 		redefine
-			help_character
+			help_character, ambiguous_characters, debug_string
 		end
 
 	GENERAL_UTILITIES
@@ -62,6 +62,7 @@ feature -- Access
 					"the server%N" +
 				"   -q              Quiet mode - suppress output - for " +
 				"use with -r%N" +
+				"   -debug          Debug mode - print input line numbers%N" +
 				"   -?              Print this help message%N"
 		end
 
@@ -98,6 +99,16 @@ feature -- Status report
 
 	symbol_list_initialized: BOOLEAN
 			-- Has `symbol_list' been initialized?
+
+feature {NONE} -- Implementation - Hook routine implementations
+
+	ambiguous_characters: LINEAR [CHARACTER] is
+		local
+			a: ARRAY [CHARACTER]
+		once
+			a := <<'t'>>
+			Result := a.linear_representation
+		end
 
 feature {NONE} -- Implementation
 
@@ -298,6 +309,7 @@ feature {NONE} -- Implementation - Constants
 
 	Hostname_error: STRING is "Host name for -h option was not specified.%N"
 
+	debug_string: STRING is "deb"
 
 feature {NONE} -- ERROR_SUBSCRIBER interface
 

@@ -75,6 +75,7 @@ feature {NONE} -- Initialization
 			not_verbose_reporting := True
 			output_device := io.output
 			if command_line.error_occurred then
+				print (command_line.error_description)
 				print (command_line.usage)
 				abort (Void)
 			end
@@ -134,6 +135,9 @@ feature {NONE} -- Utilities
 					finished := True
 				end
 				last_input_line_number := last_input_line_number + 1
+				if command_line.is_debug then
+					print ("%Ninput line: " + last_input_line_number.out + "%N")
+				end
 			end
 		ensure
 			Result_exists: Result /= Void
