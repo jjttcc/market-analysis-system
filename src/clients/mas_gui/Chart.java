@@ -9,6 +9,7 @@
 import java.awt.*;               // ScrollPane, PopupMenu, MenuShortcut, etc.
 import java.awt.event.*;         // New event model.
 
+/** Technical analysis GUI chart component */
 public class TA_Chart extends Frame
 {
 	public TA_Chart(TA_Connection conn)

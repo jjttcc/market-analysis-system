@@ -1,8 +1,9 @@
 import java.awt.*;
 import graph.*;
 
-public class TA_ScrollPane extends ScrollPane {
-
+/** Scroll pane that holds the TA graph and buttons */
+public class TA_ScrollPane extends ScrollPane
+{
 	private Graph2D main_graph, indicator_graph;
 	DataSet data;
 	BarDrawer drawer;

@@ -2,6 +2,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+/** Provides an interface for connecting and communicating with the server */
 public class TA_Connection implements NetworkProtocol
 {
 	TA_Connection(String[] args)
