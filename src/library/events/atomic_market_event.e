@@ -17,17 +17,17 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (nm, sym: STRING; time: DATE_TIME; e_type: EVENT_TYPE) is
+	make (nm, sym: STRING; time_stmp: DATE_TIME; e_type: EVENT_TYPE) is
 		require
-			not_void: nm /= Void and time /= Void and e_type /= Void and
+			not_void: nm /= Void and time_stmp /= Void and e_type /= Void and
 						sym /= Void
 		do
 			name := nm
-			time_stamp := time
+			time_stamp := time_stmp
 			type := e_type
 			symbol := sym
 		ensure
-			set: name = nm and time_stamp = time and type = e_type and
+			set: name = nm and time_stamp = time_stmp and type = e_type and
 					symbol = sym
 		end
 
@@ -69,6 +69,10 @@ feature -- Access
 			Result := <<"AME", type.id.out, date_time, symbol>>
 		end
 
+	date: DATE
+
+	time: TIME
+
 feature -- Status setting
 
 	set_description (arg: STRING) is
@@ -79,6 +83,26 @@ feature -- Status setting
 			description := arg
 		ensure
 			description_set: description = arg and description /= Void
+		end
+
+	set_date (arg: DATE) is
+			-- Set date to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			date := arg
+		ensure
+			date_set: date = arg and date /= Void
+		end
+
+	set_time (arg: TIME) is
+			-- Set time to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			time := arg
+		ensure
+			time_set: time = arg and time /= Void
 		end
 
 feature -- Status report

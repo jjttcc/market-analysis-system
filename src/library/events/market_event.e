@@ -9,6 +9,11 @@ deferred class MARKET_EVENT inherit
 
 	TYPED_EVENT
 
+	GLOBAL_SERVICES
+		undefine
+			is_equal
+		end
+
 feature -- Access
 
 	components: LIST [MARKET_EVENT] is
@@ -22,6 +27,20 @@ feature -- Access
 			-- is_equal to another one - converted to an array of strings
 		deferred
 		end
+
+	unique_id: STRING is
+		do
+			if cached_id = Void then
+				cached_id := concatenation (guts)
+			end
+			Result := cached_id
+		ensure then
+			not_void: Result /= Void
+		end
+
+feature {NONE} -- Implementation
+
+	cached_id: STRING
 
 invariant
 

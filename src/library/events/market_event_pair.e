@@ -44,15 +44,29 @@ feature -- Access
 			Result := cached_time_stamp
 		end
 
+	date: DATE is
+			-- The date of the time_stamp
+		do
+			Result := time_stamp.date
+		ensure then
+			time_stamp_date: Result = time_stamp.date
+		end
+
+	time: TIME is
+			-- The date of the time_stamp
+		do
+			Result := time_stamp.time
+		ensure then
+			time_stamp_date: Result = time_stamp.time
+		end
+
 	description: STRING is
 		do
 			Result := "Pair of events:%Nleft event: "
-			Result.append (left.time_stamp.out)
-			Result.append (", ")
+			append_date_time (left, Result)
 			Result.append (left.description)
 			Result.append ("%Nright event: ")
-			Result.append (right.time_stamp.out)
-			Result.append (", ")
+			append_date_time (right, Result)
 			Result.append (right.description)
 		end
 
@@ -83,8 +97,16 @@ feature -- Status report
 
 	is_equal (other: like Current): BOOLEAN is
 		do
-			Result := other.type = type and other.left.is_equal (left) and
+			if
+				-- Guard against calling is_equal on different types.
+				other.type = type and other.left.same_type (left) and
+				other.right.same_type (right)
+			then
+				Result := other.left.is_equal (left) and
 						other.right.is_equal (right)
+			else
+				Result := false
+			end
 		end
 
 feature {NONE} -- Implementation
@@ -104,6 +126,25 @@ feature {NONE} -- Implementation
 				dest.force (source @ i, i + start_index - 1)
 				i := i + 1
 			end
+		end
+
+	append_date_time (e: MARKET_EVENT; s: STRING) is
+			-- Append e's date (and time, if not void) to s; if e's date
+			-- and time are void, append its date_time instead.
+		do
+			if e.date /= Void then
+				s.append (e.date.out)
+			end
+			if e.time /= Void then
+				if e.date /= Void then
+					s.append (", ")
+				end
+				s.append (e.time.out)
+			end
+			if e.date = Void and e.time = Void then
+				s.append (e.time_stamp.out)
+			end
+			s.append (", ")
 		end
 
 invariant
