@@ -40,4 +40,10 @@ feature -- Access
 			create {BASIC_FILE_LOCK} Result.make (file_name)
 		end
 
+	stock_split_file (field_sep, record_sep, input_file: STRING):
+			STOCK_SPLIT_FILE is
+		do
+			create Result.make (field_sep, record_sep, input_file)
+		end
+
 end -- class PLATFORM_DEPENDENT_OBJECTS
