@@ -23,7 +23,7 @@ public class MAS_Applet extends Applet {
 			Chart chart;
 //!!!Stub:
 			Connection c = null;
-			DataSetBuilder data_builder = new mas_gui.DataSetBuilder(c);
+			DataSetBuilder data_builder = new mas_gui.DataSetBuilder(null,null);
 			chart = new mas_gui.Chart(data_builder, chart_filename, null);
 		} catch (Exception e) {
 			log("Connection failed: " + e.toString());
