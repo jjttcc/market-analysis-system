@@ -91,9 +91,12 @@ set_up()
 		mkdir output
 	fi
 	rm -f $indfile
-	# Force mas to create the indicators_persist file:
-	echo "
-"|$exec >/dev/null 2>&1
+	cp lib/$indfile . >/dev/null 2>&1
+	if [ $? -ne 0 ]; then
+		echo "Failed to copy $indfile from ./lib - does it exist? "
+		echo "Aborting ..."
+		exit -1
+	fi
 }
 
 period_type_cmd()
@@ -139,10 +142,17 @@ p
 
 run_test()
 {
-	Period_type_string="$(period_type_cmd $Tperiod_type)"
+	result=0
 	test_count=$(expr $test_count + 1)
-	run_at_index >$outputfile
-	result=$?
+	if [ ! -r reference/$Toutputref ]; then
+		echo "File reference/$Toutputref is not readable" >&2
+		result=1
+	fi
+	if [ "$result" -eq 0 ]; then
+		Period_type_string="$(period_type_cmd $Tperiod_type)"
+		run_at_index >$outputfile
+		result=$?
+	fi
 	if [ "$result" = 0 ]; then
 		if [ ! -z "$Tepsilon" ]; then
 			echo "Using epsilon of $Tepsilon"
@@ -151,7 +161,7 @@ run_test()
 	else
 		errors="Test execution of $* failed with return status $result"
 	fi
-	if [ -z "$errors" ]; then
+	if [ "$result" -eq 0 -a -z "$errors" ]; then
 		echo "$*" test succeeded
 		successes=$(expr $successes + 1)
 	else
