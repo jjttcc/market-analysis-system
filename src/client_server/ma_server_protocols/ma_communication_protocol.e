@@ -4,7 +4,7 @@ indexing
 		"Constants specifying the basic components of the MA server %
 		%communication protocol"
 	status:
-		"Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+		"Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

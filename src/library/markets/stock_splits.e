@@ -2,7 +2,7 @@ indexing
 	description:
 		"Abstraction for a table of stock split sequences, with the stock "
 		"symbol as the key"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

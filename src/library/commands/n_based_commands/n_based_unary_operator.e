@@ -3,7 +3,7 @@ indexing
 		"N-based calculation that takes an operand"
 	detailed_description: "The operand is only executed on initialization %
 		%and it's execute routine must not expect a valid argument."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -2,7 +2,7 @@ indexing
 	description:
 		"A storable list of MARKET_FUNCTIONs that wipes out each market %
 		%function before saving it to persistent store"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

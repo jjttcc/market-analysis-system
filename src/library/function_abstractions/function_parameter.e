@@ -2,7 +2,7 @@ indexing
 	description:
 		"A changeable parameter for a market function, such as n for an %
 		%n-period moving average."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -1,7 +1,7 @@
 indexing
 	description: "Abstraction for an event registrant that simply logs %
 				%events to a file"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

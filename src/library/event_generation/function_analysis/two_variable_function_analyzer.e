@@ -4,7 +4,7 @@ indexing
 		%input2, generating an event if input1 crosses (below-to-above, %
 		%above-to-below, or both, depending on configuration) input2 with %
 		%an optional additional condition provided by an operator"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

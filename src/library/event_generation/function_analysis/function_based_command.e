@@ -1,7 +1,7 @@
 indexing
 	description: "A linear command that gets its input from a MARKET_FUNCTION"
 	note: "This class is used only by ONE_VARIABLE_FUNCTION_ANALYZER."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -2,7 +2,7 @@ indexing
 	description:
 		"A storable list of MARKET_EVENT_GENERATORs that wipes out each %
 		%generator before saving it to persistent store."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

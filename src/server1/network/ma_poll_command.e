@@ -3,7 +3,7 @@ indexing
 	description:
 		"A poll command specialized for the Market Analysis server"
 	status:
-		"Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+		"Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

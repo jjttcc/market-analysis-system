@@ -4,7 +4,7 @@ indexing
 	note:
 		"Hard-coded for testing for now, but may evolve into a legitimate %
 		%class"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

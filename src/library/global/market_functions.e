@@ -2,7 +2,7 @@ indexing
 	description:
 		"An instance of each instantiable MARKET_FUNCTION class that can %
 		%be used to construct a technical indicator"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

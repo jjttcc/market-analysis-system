@@ -4,7 +4,7 @@ indexing
 		"Constants specifying components of the TA server protocol %
 		%for servicing GUIs"
 	status:
-		"Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+		"Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -5,7 +5,7 @@ indexing
 		%the constant result value from `exp', C is the current value, %
 		%and EMA[p] is the result from the previous tuple."
 	notes: "Formula taken from `Trading for a Living', by A. Elder"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -2,7 +2,7 @@ indexing
 	description:
 		"A command that simply gives as its `value', the value of its %
 		%`n' feature";
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

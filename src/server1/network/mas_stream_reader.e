@@ -4,7 +4,7 @@ indexing
 		"Command executed by the polling server when data is available %
 		%for reading on the socket";
 	status:
-		"Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+		"Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
