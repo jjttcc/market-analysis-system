@@ -15,17 +15,6 @@ public class TimeDrawer extends TemporalDrawer {
 	// this TimeDrawer is associated with indicator data.
 	TimeDrawer(BasicDrawer mkd) {
 		super(mkd);
-		hour_table = new String[] {"12", "1", "2", "3", "4", "5", "6", "7",
-			"8", "9", "10", "11", "12", "1", "2", "3", "4", "5", "6", "7",
-			"8", "9", "10", "11"};
-		day_table = new String[8];
-		day_table[Calendar.SUNDAY] = "S";
-		day_table[Calendar.MONDAY] = "M";
-		day_table[Calendar.TUESDAY] = "T";
-		day_table[Calendar.WEDNESDAY] = "W";
-		day_table[Calendar.THURSDAY] = "T";
-		day_table[Calendar.FRIDAY] = "F";
-		day_table[Calendar.SATURDAY] = "S";
 	}
 
 	// The data to be drawn
@@ -243,7 +232,21 @@ hours[0].right() + ", hours[1].right(): " + hours[1].right());
 		return result;
 	}
 
-	protected String[] hour_table;
+	protected static String[] hour_table;
 
-	protected String[] day_table;
+	protected static String[] day_table;
+
+	static {
+		hour_table = new String[] {"12", "1", "2", "3", "4", "5", "6", "7",
+			"8", "9", "10", "11", "12", "1", "2", "3", "4", "5", "6", "7",
+			"8", "9", "10", "11"};
+		day_table = new String[8];
+		day_table[Calendar.SUNDAY] = "S";
+		day_table[Calendar.MONDAY] = "M";
+		day_table[Calendar.TUESDAY] = "T";
+		day_table[Calendar.WEDNESDAY] = "W";
+		day_table[Calendar.THURSDAY] = "T";
+		day_table[Calendar.FRIDAY] = "F";
+		day_table[Calendar.SATURDAY] = "S";
+	}
 }
