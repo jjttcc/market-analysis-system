@@ -10,6 +10,8 @@ indexing
 class SETTABLE_OFFSET_COMMAND inherit
 
 	LINEAR_OFFSET_COMMAND
+		export {NONE}
+			offset
 		undefine
 			children
 		redefine
@@ -51,7 +53,7 @@ feature -- Initialization
 
 feature -- Access
 
-	offset: INTEGER
+	offset, external_offset: INTEGER
 
 feature -- Status report
 
