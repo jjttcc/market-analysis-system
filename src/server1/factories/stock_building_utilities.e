@@ -58,13 +58,12 @@ feature {NONE}
 		end
 
 	stock_splits: STOCK_SPLITS is
+		local
+			constants: expanded APPLICATION_CONSTANTS
 		once
 			!STOCK_SPLIT_FILE!Result.make (
-				split_field_separator, stock_split_file)
+				constants.stock_split_field_separator, stock_split_file)
 		end
-
-	split_field_separator: STRING is "%T"
-			-- !!!Hard code for now.
 
 	stock_split_file: STRING is
 		once
