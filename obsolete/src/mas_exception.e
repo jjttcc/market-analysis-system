@@ -47,8 +47,6 @@ feature -- Basic operations
 			error_msg: STRING
 			fatal: BOOLEAN
 		do
-print_list (<<"exception: ", exception, "meaning: ", meaning (exception),
-"%N">>)
 			-- An exception may have caused a lock to have been left open -
 			-- ensure that clean-up occurs to remove the lock:
 			no_cleanup := false
