@@ -31,3 +31,79 @@ that keeps track of accesses of data sets and releases those that have not
 been accessed for a while would be a good solution to this.  Data sets that
 are released will have to be rebuild again whenever the user requests that
 particular data.
+
+REQUIREMENTS FOR EVENTS/TRIGGERS
+
+Probably the most important "event" is the crossing of two curves.  Examples:
+
+   - Price crosses above/below MA.
+
+   - Price crosses above top envelope line or below bottom evelope line
+     (Bollinger band or simple envelope based on MA).
+
+   - MACD signal line crosses above MACD difference.
+
+An unlimited number of entities may register to be notified of an event.  Each
+"regristration" can include a start date and/or an end date to specify
+notification only of events that occur after the start date and/or before
+the end date.  These dates, of course, can include time components in order
+to be useful for intraday data.  (Not specifying dates would of course mean
+that the registrant is interested in all events from the earliest data element
+to the latest.)
+
+A registrant for a specific event type will receive exactly one notification
+per registration for each event of that type that occurs.  Clarifying
+example:  User Sally registers twice for event type X.  When an event of
+type X occurs (if within the start/end dates that she specified) Sally will
+receive 2 notifications for the event, one per registration.  If Sally had
+only registered once, she would receive just one notification.
+
+It may be useful to keep an event history - records of all events that have
+been triggered.  However, this behavior may belong to the application and not
+to the library (TAL).
+
+Other types of events:
+
+   1. Price (or other data point) meets or exceeds (falls below) a
+	  pre-specified value that is above (below) the "current" price.
+
+   2. Price crosses above (below) a trend line.  (This could be classified as a
+	  crossing-of-two-curves event.)
+
+   3. A specified pattern occurs in the data (such as a price pattern - e.g,
+	  flag - or a candle pattern).
+
+   4. A major shift in the rate of change of some data set occurs.
+
+Type 1 will, if possible, be included in the first release.  Type 2 will, if
+possible, be included in the second release.  Type 3 - at least in the form of
+candle patterns - will, if possible, be included eventually.  Type 4 may be
+included eventually.  ("if possible" generally means that implementation of
+the feature is not overwhelmingly difficult and that there is enough time to
+do it for the specified release.)
+
+REQUIREMENTS FOR MEMORY MANAGEMENT
+
+Since it appears that loading data for a market can, with error checking, be
+done quickly, even for a rather larget data set, (less than 1 second), the
+application can load data files as needed without caching.  Thus, if the user
+is viewing data for one market, markets that were previously viewed can be
+released back to the garbage collector (that is, make sure that no object has
+a reference to one of these market - tradable - objects).  If the user is
+viewing data for several markets, only those markets will be referenced at
+that time in the application (that is, all other markets will be released to
+the GC).  As soon as the user finished viewing a market, that market will be
+released to the GC.  If this scheme turns out to be unacceptable for the user
+in terms of performance, a caching mechanism can be designed at that point.
+
+EXCEPTIONS
+
+The application must catch all exceptions.  If the program state after a
+particular exception makes it impossible to continue, the application will
+exit gracefully.  Otherwise, the application will allow the user to continue
+with a new operation.  When an exception occurs, it will be reported to the
+user as an error, with some description to help the user understand what went
+wrong.  This rule may be broken if the application "knows" that the exception
+has no visible effect on the user.  [At design time for these requirements,
+the last two sentences may simply boil down to only reporting exceptions that
+are caught at the "top" level.]

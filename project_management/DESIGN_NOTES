@@ -39,15 +39,6 @@ line (EMA of the difference).)  In other words, we want to avoid duplicating
 that already appears in the list rather than referring to the original, since
 the duplication is wasteful.
 
-PROCESS AND PROCESSED IN TRADABLE
-
-It may be useful for TRADABLE to redefine processed and process:  processed
-would be an attribute and process would simply set processed to True.
-Whenever a TRADABLE instance changes, such as when a new tuple/trading period
-is added to its list, processed would be reset to False.  This would force all
-functions using this TRADABLE to to have the state not processed, so that they
-would have to be re-processed to be up-to-date with the TRADABLE.
-
 TA INDICATOR SINGLETON HASH TABLE
 
 It may be useful to make the singleton list of all technical indicators into a
@@ -69,3 +60,10 @@ Exporting of set_... (such as set_n) should be further examined when the
 design is extended to allow the user to change parameters of indicators.  (Is
 n the only parameter that can change?)  Perhaps add some kind of EDITOR class
 and export {EDITOR} for set_n ...
+
+NEW INTERMEDIATE DESCENDANT OF MARKET_FUNCTION
+
+Since ONE_VARIABLE_FUNCTON and TWO_VARIABLE_FUNCTION now have a couple things
+in common (feature implementations), it may be worthwhile to create a new
+class that inherits from MARKET_FUNCTION and that defines these common
+features.  OVF and TVF would inherit from this new class.
