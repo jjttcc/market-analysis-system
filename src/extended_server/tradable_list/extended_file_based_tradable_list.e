@@ -53,12 +53,14 @@ feature {NONE} -- Implementation
 						not current_input_file.is_closed
 				end
 				file_status_cache.force (create {TRADABLE_FILE_STATUS}.make (
+--!!!!!bring up to date re fix:
 					clone (current_input_file.name), current_input_file.date,
 					current_input_file.count), idx)
 			end
 		ensure then
 			status_added_if_caching_on: caching_on implies equal (
 				(file_status_cache @ idx).file_name, current_input_file.name)
+--!!!!!bring up to date re fix:
 				and (file_status_cache @ idx).last_modification_time =
 				current_input_file.date and
 				(file_status_cache @ idx).file_size = current_input_file.count
@@ -79,11 +81,13 @@ feature {NONE} -- Implementation
 		do
 			if caching_on then
 				file_status := file_status_cache @ idx
+--!!!!!bring up to date re fix:
 				file_status.set_last_modification_time (current_input_file.date)
 				file_status.set_file_size (current_input_file.count)
 			end
 		ensure then
 			status_updated_if_caching_on: caching_on implies
+--!!!!!bring up to date re fix:
 				(file_status_cache @ idx).last_modification_time =
 				current_input_file.date and
 				(file_status_cache @ idx).file_size = current_input_file.count
@@ -96,15 +100,18 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Hook routine implementations
 
+--!!!:
 	target_tradable_out_of_date_implementation: BOOLEAN is
 		local
 			current_file_status: TRADABLE_FILE_STATUS
 		do
+print ("[ttoodi]" + "%N")
 			current_file_status := file_status_cache @ index
 			if current_file_status = Void then
 				-- Assume the cache is empty and thus there is no data
 				-- that can be out of date.
 				Result := False
+print ("curr file status = Void" + "%N")
 			else
 				if status_work_file = Void then
 					create {PLAIN_TEXT_FILE} status_work_file.make (
@@ -114,16 +121,24 @@ feature {NONE} -- Hook routine implementations
 				end
 				-- Result := "current input file is newer and larger than
 				--    last recorded":
-				Result := status_work_file.date >
-					current_file_status.last_modification_time and
-					status_work_file.count > current_file_status.file_size
+--!!!old:
+--				Result := status_work_file.date >
+--					current_file_status.last_modification_time and
+--					status_work_file.count > current_file_status.file_size
+				--!!!new:
+				Result := status_work_file.count > current_file_status.file_size
+
+print ("swf.date: " + status_work_file.date.out + ", cfs.lastmodtime: " +
+current_file_status.last_modification_time.out + "%Nswf.count: " +
+status_work_file.count.out + ", cfs.count: " +
+current_file_status.file_size.out + "%N")
 			end
---!!!:
 if Result then
 print ("tgt is out of date%N")
 else
 print ("tgt is NOT out of date%N")
 end
+print ("[ttoodi returning]" + "%N")
 		end
 
 	append_new_data is
@@ -138,6 +153,7 @@ print ("append_new_data called" + "%N")
 			end
 			if not fatal_error then
 				check
+--!!!!!bring up to date re fix:
 					current_file_was_updated:
 						not current_input_file.is_closed and
 						current_input_file.date >
