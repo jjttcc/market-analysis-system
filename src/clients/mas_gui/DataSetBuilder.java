@@ -129,10 +129,12 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 	}
 
 	// Send a request for the list of indicators for market `symbol'.
-	public void send_indicator_list_request(String symbol) throws IOException {
+	public void send_indicator_list_request(String symbol,
+			String period_type) throws IOException {
 		StringBuffer mlist;
 		_last_indicator_list = new Vector();
-		connection.send_request(Indicator_list_request, symbol);
+		connection.send_request(Indicator_list_request, symbol +
+			Input_field_separator + period_type);
 		mlist = connection.result();
 		StringTokenizer t = new StringTokenizer(mlist.toString(),
 			Output_record_separator, false);
