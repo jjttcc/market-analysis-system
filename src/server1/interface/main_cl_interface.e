@@ -62,8 +62,7 @@ feature -- Initialization
 		do
 			mai_initialize (fb)
 			initialize
-			create event_registrar.make (event_coordinator.dispatcher,
-				input_device, output_device)
+			create event_registrar.make (input_device, output_device)
 		end
 
 	make_io (input_dev, output_dev: IO_MEDIUM; fb: FACTORY_BUILDER) is
@@ -74,8 +73,7 @@ feature -- Initialization
 			initialize
 			set_input_device (input_dev)
 			set_output_device (output_dev)
-			create event_registrar.make (event_coordinator.dispatcher,
-				input_device, output_device)
+			create event_registrar.make (input_device, output_device)
 		ensure
 			iodev_set: input_device = input_dev and output_device = output_dev
 		end
@@ -156,22 +154,13 @@ feature -- Basic operations
 				when 'v', 'V' then
 					view_menu
 				when 'e', 'E' then
-					function_builder.edit_indicator_menu (function_library)
+					function_builder.edit_indicator_menu
 				when 'm', 'M' then
 					event_generator_builder.edit_event_generator_menu
 				when 'r', 'R' then
 					event_registrar.registrant_menu
 				when 'a', 'A' then
-					if event_coordinator.start_date_time = Void then
-						print ("%NError: Start date must be set before %
-							%running analysis.%N")
-					else
-						-- Important - update the coordinator with the current
-						-- active event generators:
-						event_coordinator.set_event_generators (
-							active_event_generators)
-						event_coordinator.execute
-					end
+					run_market_analysis
 				when 'd', 'D' then
 					mkt_analysis_set_date_menu
 				when 'x', 'X' then
@@ -276,6 +265,23 @@ feature {NONE} -- Implementation
 		do
 			event_coordinator.set_start_date_time (date_time_selection (
 				"%NPlease selecte a date and time for market analysis."))
+		end
+
+	run_market_analysis is
+			-- Run market analysis using event coordinator.
+		do
+			if event_coordinator.start_date_time = Void then
+				print ("%NError: Start date must be set before %
+					%running analysis.%N")
+			else
+				-- Important - update the coordinator with the current
+				-- active event generators:
+				event_coordinator.set_event_generators (
+					active_event_generators)
+				factory_builder.make_dispatcher
+				event_coordinator.set_dispatcher (factory_builder.dispatcher)
+				event_coordinator.execute
+			end
 		end
 
 	view_indicator_menu (indicator: MARKET_FUNCTION) is
