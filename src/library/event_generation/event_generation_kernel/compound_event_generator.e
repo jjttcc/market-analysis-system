@@ -22,9 +22,6 @@ indexing
 class COMPOUND_EVENT_GENERATOR inherit
 
 	MARKET_EVENT_GENERATOR
-		redefine
-			set_tradables
-		end
 
 	GENERAL_UTILITIES
 		export
@@ -80,6 +77,19 @@ feature -- Access
 			Result.append (right_analyzer.indicators)
 		end
 
+	immediate_operators: LIST [COMMAND] is
+		do
+			create {LINKED_LIST [COMMAND]} Result.make
+		end
+
+feature -- Status report
+
+	valid_period_type (t: TIME_PERIOD_TYPE): BOOLEAN is
+		do
+			Result := left_analyzer.valid_period_type (t) or
+				right_analyzer.valid_period_type (t)
+		end
+
 feature -- Status setting
 
 	set_start_date_time (d: DATE_TIME) is
@@ -126,12 +136,17 @@ feature -- Status setting
 				left_target_type /= Void
 		end
 
-	set_tradables (arg: TRADABLE_DISPENSER) is
-			-- Set tradables to `arg'.
+	set_tradable_from_dispenser (d: TRADABLE_DISPENSER) is
 		do
-			tradables := arg
-			left_analyzer.set_tradables (arg)
-			right_analyzer.set_tradables (arg)
+			left_analyzer.set_tradable_from_dispenser (d)
+			right_analyzer.set_tradable_from_dispenser (d)
+		end
+
+	set_tradable_from_pair (p: PAIR [TRADABLE [BASIC_MARKET_TUPLE],
+			TRADABLE [BASIC_MARKET_TUPLE]]) is
+		do
+			left_analyzer.set_tradable_from_pair (p)
+			right_analyzer.set_tradable_from_pair (p)
 		end
 
 feature -- Basic operations
@@ -287,8 +302,11 @@ feature {NONE} -- Implementation
 			product_not_void: product /= Void
 		local
 			e: MARKET_EVENT_PAIR
+			st: expanded SIGNAL_TYPES
 		do
-			create e.make (left, right, "Event pair", event_type)
+			create e.make (left, right, "Event pair", event_type,
+				st.Buy_signal)
+--!!!The above needs to be changed to set from a user-configured signal type.
 			product.extend (e)
 		end
 
