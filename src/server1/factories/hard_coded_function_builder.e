@@ -84,6 +84,7 @@ feature -- Basic operations
 											"Slow Stochastic %%D"))
 			l.extend (rsi (f, RSI_n, "Relative Strength Index"))
 			l.extend (market_close_data (f, "Market Close Data"))
+			l.extend (market_function_line ("Line"))
 			product := l
 		end
 
@@ -367,7 +368,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			p1, p2: MARKET_POINT
 			earlier, later: DATE_TIME
 		do
-			!!earlier.make (1998, 1, 5, 0, 0, 0)
+			!!earlier.make (1998, 1, 1, 0, 0, 0)
 			!!later.make (1998, 1, 23, 0, 0, 0)
 			!!p1.make
 			p1.set_x_y_date (earlier.day, 1, earlier)
