@@ -28,6 +28,10 @@ struct input_sequence_plug_in {
 };
 
 enum {
+	Buffer_size = 4096
+};
+
+enum {
 	Maximum_symbol_length = 30
 };
 
@@ -35,18 +39,27 @@ enum Error_type {
 	None,
 	Memory,
 	File_read,
-	No_valid_path
+	No_valid_path,
+	Working_directory_too_long,
+	External_retrieval_script_not_found,
+	Shell_not_available
 };
 
 const char* Symbol_file_name = "symbols.mas";
 const char* data_file_name = "data.mas";
-const char* Data_retrieval_command = "perl ./mas_external_retrieve.pl ";
+const char* Mas_precmd = "perl ";
+const char* Mas_postcmd = "mas_external_retrieve.pl ";
+
+char* Data_retrieval_command = 0;
 
 const char* common_errors[] = {
 	"(None)",
-	"Memory allocation failed",
-	"Error occurred reading file",
-	"No valid path found for file"
+	"Memory allocation failed.",
+	"Error occurred reading file.",
+	"No valid path found for file.",
+	"Working directory name is too long.",
+	"External retrieval script was not found, is not readable, or is empty.",
+	"Shell is not available for executing external commands."
 };
 
 /* Number of times `c' occurs in `s' */
@@ -67,6 +80,53 @@ void free_str_array(char** arr, const int count) {
 		free(arr[i]);
 		++i;
 	}
+}
+
+/* Initialize any uninitialized global variables.  Return a value other
+ * than None if an error occurred.
+ * Precondition: working_directory[strlen(working_directory) - 1] is the
+ *    directory separator character.
+ * Postcondition: strlen(Data_retrieval_command) < Buffer_size
+*/
+enum Error_type initialize(char* working_directory) {
+	int file_length(char* file_path);
+	enum Error_type result = 0;
+	char cmdpath[Buffer_size];
+	if (Data_retrieval_command == 0) {
+		if (system(0) == 0) {
+			result = Shell_not_available;
+		} else {
+			int size = strlen(working_directory) + strlen(Mas_precmd) +
+				strlen(Mas_postcmd) + 1;
+			if (size > Buffer_size) {
+				result = Working_directory_too_long;
+			} else {
+				/* The working directory is not expected to change during a
+				 * process run, so this global variable will keep the same
+				 * value from initialization until process termination. */
+				Data_retrieval_command = malloc(size);
+				if (Data_retrieval_command == 0) {
+					result = Memory;
+				} else {
+					char* s;
+					int length;
+					strcpy(Data_retrieval_command, Mas_precmd);
+					strcat(Data_retrieval_command, working_directory);
+					strcat(Data_retrieval_command, Mas_postcmd);
+					strcpy(cmdpath, Data_retrieval_command +
+						strlen(Mas_precmd));
+					s = strstr(cmdpath, " ");
+					if (s != 0) *s = '\0';
+					length = file_length(cmdpath);
+					if (length == -1 || length == 0 ||
+							access(cmdpath, R_OK) != 0) {
+						result = External_retrieval_script_not_found;
+					}
+				}
+			}
+		}
+	}
+	return result;
 }
 
 /* Array of directories extracted from `paths' with separator ':'.
@@ -250,7 +310,7 @@ void free_path_array(char** path_array, int count) {
 char* first_valid_directory(char** path_array, int count,
 		const char* fname, int* fsize, enum Error_type* error_type) {
 	int i, path_length, flength;
-	char path[BUFSIZ];
+	char path[Buffer_size];
 	char* s;
 	char* result = 0;
 	*error_type = None;
@@ -258,7 +318,7 @@ char* first_valid_directory(char** path_array, int count,
 	for (i = 0; i < count; ++i) {
 		s = path_array[i];
 		path_length = strlen(s);
-		if (path_length + flength < BUFSIZ) {
+		if (path_length + flength < Buffer_size) {
 			strcpy(path, s);
 			strncat(path + path_length, fname, flength);
 			*fsize = file_length(path);
@@ -318,6 +378,9 @@ struct input_sequence_plug_in* new_input_sequence_plug_in_handle(
 			error = Memory;
 		}
 	}
+	if (error == None) {
+		error = initialize(result->working_directory);
+	}
 	if (error != None) {
 		strncpy(error_buffer, common_errors[error], buffer_size);
 		if (error == No_valid_path) {
@@ -329,7 +392,9 @@ struct input_sequence_plug_in* new_input_sequence_plug_in_handle(
 			}
 		}
 		error_buffer[buffer_size - 1] = '\0';
+		result = 0;
 	}
+
 	return result;
 }
 
@@ -337,14 +402,22 @@ struct input_sequence_plug_in* new_input_sequence_plug_in_handle(
  * If is_intraday, obtain intraday data, else obtain daily data.
  * If an error occurs, put a description of the error into errorbuffer
  * and return a non-zero value.  If no error occurs, return 0.
+ * Precondition: Data_retrieval_command != 0 &&
+ *    strlen(Data_retrieval_command) > 0 &&
+ *    strlen(Data_retrieval_command) < Buffer_size &&
+ *    strlen(handle->working_directory) < Buffer_size &&
+ *    strlen(handle->data_file_name) < Buffer_size
 */
 int obtain_data(struct input_sequence_plug_in* handle,
 		char* symbol, int is_intraday) {
-	char cmd[BUFSIZ];
+	char cmd[Buffer_size * 3 + 512];
 	int cmdresult;
 
-printf("obtain_data - symbol: '%s'\n", cmd);
 /*!!!Add use of is_intraday.*/
+	assert(Data_retrieval_command != 0 && strlen(Data_retrieval_command) > 0 &&
+		strlen(Data_retrieval_command) < Buffer_size &&
+		strlen(handle->working_directory) < Buffer_size &&
+		strlen(handle->data_file_name) < Buffer_size);
 	if (strlen(symbol) > Maximum_symbol_length) {
 		free(handle->errorbuffer);
 		handle->errorbuffer = concat2strings("Symbol name is too long: ",
@@ -352,6 +425,12 @@ printf("obtain_data - symbol: '%s'\n", cmd);
 		cmdresult = -1;
 	} else {
 		strcpy(cmd, Data_retrieval_command);
+		assert(Data_retrieval_command[strlen(Data_retrieval_command) - 1] ==
+			' ');
+		assert(strlen(Data_retrieval_command) + strlen("-i ") +
+			strlen(handle->working_directory) + strlen(" ") +
+			strlen(handle->data_file_name) + strlen(" ") +
+			strlen(symbol) < sizeof(cmd));
 		if (is_intraday) {
 			strcat(cmd, "-i ");
 		}
@@ -360,9 +439,9 @@ printf("obtain_data - symbol: '%s'\n", cmd);
 		strcat(cmd, handle->data_file_name);
 		strcat(cmd, " ");
 		strcat(cmd, symbol);
-printf("executing %s (currend dir: %s)\n", cmd, getcwd(0, 0));
+/*printf("executing %s (currend dir: %s)\n", cmd, getcwd(0, 0)); */
 		cmdresult = system(cmd);
-printf("result: %d (currend dir: %s)\n", cmdresult, getcwd(0, 0));
+/*printf("result: %d (currend dir: %s)\n", cmdresult, getcwd(0, 0)); */
 	}
 
 	return cmdresult;
