@@ -1,0 +1,56 @@
+# MAS database configuration file - for optimized database where each tradable
+# has its data in a separate table
+# Format: "label_string<tab>setting"
+# ODBC data source name for MAS database
+data_source_name	mas_optimized
+
+# ID of user for MAS database
+user id	
+
+# Password for above user
+password	
+
+# Query for stock symbols
+# ('\' at the end of the line continues the string on the next line)
+#stock symbol query	select symbol from stock_information order by symbol
+stock symbol query	select symbol from watch_list where category = 'all' \
+order by symbol
+
+# Query for derivatives symbols
+derivative symbol query	select symbol from derivative_information \
+order by symbol
+
+eod_start_date	now - 3 years
+intraday_start_date	now - 5 days
+
+# Query for stock splits
+# Note: query result fields must be: date, symbol, split-value; and the
+# results must be sorted by date, ascending
+stock split query	select date, symbol, value from stock_split order by date
+
+# Query for stock name
+# <symbol> indicates where to plug in the actual stock symbol and must
+# occur somewhere in the query string.  (Use <uppersymbol> if the symbol
+# needs to be converted to upper-case for the query.)
+stock name query	select name from stock_information where symbol = <symbol>
+
+# Query for derivative instrument name
+# <symbol> indicates where to plug in the actual stock symbol and must
+# occur somewhere in the query string.
+derivative name query	select name from derivative_information where \
+symbol = <symbol>
+
+# Queries for daily and intraday stock and derivatives data
+daily stock data command	select date, open_price, high_price, low_price, \
+close_price, volume from daily_<symbol>_data where date >= <eod_start_date>
+# Uncomment the following if you have intraday stock data in your database.
+#intraday stock data command	select date, time, open_price, high_price, \
+#low_price, close_price, volume from intraday_<symbol>_data where \
+#date >= <intraday_start_date>
+daily derivative data command	select date, open_price, high_price, \
+low_price, close_price, volume, open_interest from \
+daily_<symbol>_data where date >= <eod_start_date>
+# Uncomment the following if you have intraday futures data in your database.
+#intraday derivative data command	select date, time, open_price, \
+#high_price, low_price, close_price, volume, open_interest from \
+#intraday_<symbol>_data where date >= <intraday_start_date>
