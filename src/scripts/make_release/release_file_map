@@ -193,6 +193,8 @@ lib/binaries/windows/macl.exe_no_assert_v1.6.7 bin/macl.exe mas_windows1.6.7
 lib/binaries/windows/macl.exe_assert_v1.6.7 bin/macl_assert.exe mas_windows1.6.7
 lib/binaries/windows/config_tool.exe_no_assert_v1.6.7 bin/config_tool.exe mas_windows1.6.7
 lib/binaries/windows/config_tool.exe_assert_v1.6.7 bin/config_tool_assert.exe mas_windows1.6.7
+# bash and a couple other cygwin tools needed to overcome Windows' pathetic
+# scripting capability
 lib/binaries/windows/bash.exe bin/ mas_windows1.6.7
 lib/binaries/windows/sed.exe bin/ mas_windows1.6.7
 lib/binaries/windows/mkdir.exe bin/ mas_windows1.6.7
