@@ -7,6 +7,9 @@ indexing
 class USER inherit
 
 	EXECUTION_ENVIRONMENT
+		export {NONE}
+			all
+		end
 
 creation
 

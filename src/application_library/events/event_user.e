@@ -19,9 +19,14 @@ class EVENT_USER inherit
 	GLOBAL_SERVICES
 		rename
 			event_types as global_event_types
+		export {NONE}
+			all
 		end
 
 	GLOBAL_APPLICATION
+		export {NONE}
+			all
+		end
 
 creation
 

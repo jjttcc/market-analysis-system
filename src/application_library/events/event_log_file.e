@@ -22,6 +22,8 @@ class EVENT_LOG_FILE inherit
 	GLOBAL_SERVICES
 		rename
 			event_types as global_event_types
+		export {NONE}
+			all
 		end
 
 creation
