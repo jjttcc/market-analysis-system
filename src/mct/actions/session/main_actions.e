@@ -73,8 +73,6 @@ feature -- Actions
 				cmd := external_commands @
 					configuration.Start_server_cmd_specifier
 				cmd.execute (session_window)
-				msg := server_connection_attempts (configuration.hostname,
-					portnumber, 10)
 				if msg = Void then
 					session_window.show
 				else
