@@ -120,7 +120,7 @@ feature {NONE} -- Administrative
 			if
 				function_library.is_empty or function_library.count < 5
 			then
-				-- !!!May need to lock this section (or whatever the mechanism
+				-- @@@May need to lock this section (or whatever the mechanism
 				-- is) to protect `function_library' if threads are used.
 				create hc_function_factory.make
 				-- Create the list of technical indicators,
