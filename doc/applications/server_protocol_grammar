@@ -5,10 +5,12 @@ message         -> msgID "\t" msg end_of_message
 msg             -> client_req | server_response
 client_req      -> session_key "\t" client_req_spec | login_req
 client_req_spec -> [compress_flag] client_data_req
-client_data_rec -> mkt_data_req | ind_data_req | mkt_list_req | ind_list_req |
-                     trad_pertyp_req | change_session_req | logout_req
+client_data_req -> mkt_data_req | ind_data_req | mkt_list_req | ind_list_req |
+                     trad_pertyp_req | change_session_req | event_data_req |
+                     event_list_req | logout_req
 compress_flag   -> "<@z@>"
-mk_data_req     -> mkt_symbol "\t" trad_per_type
+mkt_data_req    -> mkt_symbol "\t" trad_per_type
+event_data_req  -> mkt_symbol "\t" start_date "\t" end_date "\t" event_id_list
 ind_data_req    -> indID "\t" mkt_symbol "\t" trad_per_type
 trad_pertyp_req -> mkt_symbol
 login_req       -> { login_spec "\t" ... }
@@ -16,7 +18,7 @@ login_spec      -> start_date_spec | end_date_spec
 logout_req      -> <null>
 start_date_spec -> "start_date" "\t" trad_per_type "\t" date_spec
 end_date_spec   -> "end_date" "\t" trad_per_type "\t" date_spec
-date_spec       -> date | "0" | "now" [ now_modifier ]
+date_spec       -> date_with_sep | "0" | "now" [ now_modifier ]
 now_modifier    -> "-" natural_integer now_mod_type
 now_mod_type    -> "days" | "months"
 server_response -> srvr_data | error_msg | login_response
@@ -24,21 +26,32 @@ login_response  -> session_key [ "\t" session_state ]
 error_msg       -> ta_string
 mkt_symbol      -> ta_string
 srvr_data       -> mkt_data | ind_data | symbol_list | ind_list |
-                     trad_per_types
+                     trad_per_types | event_list | event_data
 mkt_data        -> { [open_int_flag] mkt_tuple "\n" ... }
-mkt_tuple       -> date "\t" mkt_fields
+mkt_tuple       -> datetime "\t" mkt_fields
 open_int_flag   -> "oi"
 ind_data        -> { ind_tuple "\n" ... }
-ind_tuple       -> date "\t" ta_real
+ind_tuple       -> datetime "\t" ta_real
 symbol_list     -> { symbol "\n" ... }
 ind_list        -> { ind_specifier "\n" ... }
+event_list      -> { event_specifier "\n" ... }
+event_data      -> { event_tuple "\n" ... }
+event_tuple     -> datetime "\t" eventID "\t" event_type
+event_type      -> "b" | "s" | "n" | "o"
 trad_per_types  -> { trad_per_type "\n" ... }
+event_id_list   -> { eventID "\t" ... }+
 ind_specifier   -> ind_name "\t" indID
+event_specifier -> event_name "\t" eventID
 mkt_fields      -> { ta_real "\t" ... }+ [ "\t" volume [ "\t" open_interest ] ]
-trad_per_type   -> "daily" | "weekly"
+trad_per_type   -> "daily" | "weekly" | "monthly" | "quarterly" | "yearly" |
+                     "hourly" | "1-minute" | "2-minute" | "5-minute" |
+                     "10-minute" | "15-minute" | "20-minute" | "30-minute"
+ind_name        -> ta_string
+event_name      -> ta_string
 indID           -> natural_integer
-volume          -> natural_integer
-open_interest   -> natural_integer
+eventID         -> natural_integer
+volume          -> ta_real
+open_interest   -> ta_real
 session_key     -> natural_integer
 session_state   -> no_open_spec
 no_open_spec    -> "no_open"
@@ -46,8 +59,13 @@ true_or_false   -> 'T' | 'F'
 msgID           -> natural_integer
 mkt_list_req    -> <null>
 ind_list_req    -> mkt_symbol "\t" trad_per_type
-date            -> year<>month<>day [ "\t" time ]
+event_list_req  -> mkt_symbol "\t" trad_per_type
+start_date      -> date_spec
+end_date        -> date_spec
+datetime        -> date [ "\t" time ]
+date            -> year<>month<>day
 time            -> hour<>minute [<>second ]
+date_with_sep   -> year "/" month "/" day
 year            -> digit digit digit digit
 month           -> digit digit
 day             -> digit digit
@@ -73,7 +91,7 @@ in response to this particular request is to be compressed with the zlib
 compression library.
 
 open_int_flag indicates that the data sent by the server in response to
-a mk_data_req includes an open-interest field.  If this string does not
+a mkt_data_req includes an open-interest field.  If this string does not
 occur at the beginning of the data sent by the server (mkt_data), this
 means there is no open-interest field.
 
@@ -86,7 +104,7 @@ end_of_message is the Control-G (bell) character.
 mkt_list_req is null because the msgID alone gives enough information
 with respect to this request.
 
-msgID is an integer identifying the type of message - for the server,
+msgID is an integer identifying the type of message.  For the server,
 the types of messages are those containing data in response to a client
 request (srvr_data) and those containing error message information
 (error_msg).  For the client, the types of messages are:
@@ -94,15 +112,20 @@ request (srvr_data) and those containing error message information
     - mkt_data_req (request for market data)
     - ind_data_req (request for indicator data)
     - trad_per_type_req (request for list of trading period types valid for
-                   the specified market)
+         the specified market)
     - mkt_list_req (request for a list of the symbols of all markets in the
-                   database)
+         database)
     - ind_list_req (request for a list of all indicators in the database)
+    - event_data_req (request for a list of events - trading signals - for a
+         particular tradable and trading period type)
 
 A client market data request always includes the symbol for the desired
 market and the desired trading period type.  A client indicator data request
 always includes the indicator ID, the symbol for the desired market, and the
 desired trading period type.
+
+The alternatives in the event_type specification specify the following:
+"b": buy signal; "s": sell signal; "n": neutral signal; "o": other
 
 When a client first connects with a server, the server will not send anything
 until it receives a request from the client.  Usually this will be a
