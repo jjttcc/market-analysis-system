@@ -300,7 +300,7 @@ The final structure of the P-value for RSI is:
 
                           EXPONENTIAL_MOVING_AVERAGE
                             / (main op.)        \ (exp. op.)
-                  BOOL_NUM_CLIENT      N_BASED_UNARY_OPERATOR
+                  NUM_COND_CMD      N_BASED_UNARY_OPERATOR
                   /    |        \                 |
        (boolop)  /     |(true)   \(false)         |
       LT_OPERATOR  SUBTRACTION  NUMERIC_VALUE_COMMAND (0)   DIVISION
