@@ -48,7 +48,7 @@ end
 
 # Detailed version of command to start the server: data from a database
 begin	start_server_command
-command	cd <data_dir>; <bin_dir>/mas -o -b <portnumber> -p
+command	<bin_dir>/mas -o -b <portnumber> -p
 command_description	Get data from database
 command_name	Database-based
 mark	default
@@ -56,7 +56,7 @@ end
 
 # Detailed version of command to start the server: data from the web
 begin	start_server_command
-command	cd <data_dir>; <bin_dir>/mas -o -b <portnumber> -f , -w
+command	<bin_dir>/mas -o -b <portnumber> -f , -w
 command_description	Get data from the web
 command_name	Web-based
 end
