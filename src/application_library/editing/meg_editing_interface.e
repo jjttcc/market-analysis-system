@@ -208,11 +208,7 @@ feature {NONE} -- Implementation
 		do
 			Result := deep_clone (function_choice (msg))
 			if editable (Result) then
-				s := string_selection (concatenation (
-					<<"Edit ", Result.generator, "? (y/n)">>))
-				if s @ 1 = 'y' or s @ 1 = 'Y' then
-					function_editor.initialize_function (Result)
-				end
+				function_editor.initialize_function (Result)
 			end
 		end
 
