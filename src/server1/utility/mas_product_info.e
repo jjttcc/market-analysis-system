@@ -3,7 +3,7 @@ indexing
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
+	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
 class MAS_PRODUCT_INFO inherit
@@ -26,24 +26,24 @@ feature -- Access
 			-- The components of the version number
 			-- Components are strings to allow mixed numbers and letters.
 		once
-			Result := <<"1", "6", "6h">>
+			Result := <<"1", "6", "7">>
 		end
 
 	date: DATE is
 			-- The last date that `number' was updated
 		once
-			create Result.make (2003, 6, 21)
+			create Result.make (2004, 2, 5)
 		end
 
 	release_description: STRING is
 			-- Short description of the current release
 		once
-			Result := "1.6.6 - Intermediate release 'f'"
+			Result := "1.6.7 - (Beta release)"
 		end
 
 	copyright: STRING is
 		once
-			Result := "Copyright 1998 - 2003: Jim Cochrane"
+			Result := "Copyright 1998 - 2004: Jim Cochrane"
 		end
 
 	license_information: STRING is
