@@ -252,8 +252,8 @@ feature -- Access
 feature -- Basic operations
 
 	adjust_start_time (dt: DATE_TIME; type: TIME_PERIOD_TYPE) is
-			-- Adjust the starting date/time for a composite tuple list
-			-- according to `type'.
+			-- Adjust `dt' to the starting date/time for a composite
+			-- tuple list according to `type'.
 		do
 			if equal (type.name, (period_type_names @ Weekly)) then
 				set_to_previous_monday (dt)
@@ -270,6 +270,38 @@ feature -- Basic operations
 				dt.date.set_month (1)
 			else
 			end
+		end
+
+	adjust_intraday_start_time (dt: DATE_TIME; type: TIME_PERIOD_TYPE) is
+			-- Adjust `dt' to the starting date/time for an intraday
+			-- composite tuple list according to `type'.
+		require
+			intraday: type.intraday
+			no_seconds: type.duration.second = 0
+		local
+			time_duration: TIME_DURATION
+			time: TIME
+			new_time_in_seconds: INTEGER
+			hour, minute: INTEGER
+		do
+print ("adjust_intraday_start_time called with ")
+print (dt); print (", "); print (type.duration.date);
+print (", "); print (type.duration.time)
+print (".%N")
+			time_duration := type.duration.time
+			time := dt.time
+			check
+				duration_less_than_day:
+					time_duration.seconds_count < time_duration.seconds_in_day
+			end
+			new_time_in_seconds := time.seconds -
+				(time.seconds \\ time_duration.seconds_count)
+			hour := new_time_in_seconds // time.seconds_in_hour
+			minute := new_time_in_seconds \\ time.seconds_in_hour //
+				time.seconds_in_minute
+			dt.make (dt.year, dt.month, dt.day, hour, minute, 0)
+print ("adjust_intraday_start_time time set to ")
+print (dt); print (".%N")
 		end
 
 	set_to_previous_monday (d: DATE_TIME) is
