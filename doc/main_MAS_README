@@ -115,6 +115,10 @@ programs to use mas's services.  See the file masystem_introduction,
 in the doc directory, for more information on how to start the server
 and the client.
 
+If you want to use MAS's capability to obtain data from the internet,
+using the popular QuoteMonster script, see the instructions on how to
+do this in the masystem_introduction file.
+
 To access the MAS functionality for creating new indicators or new event
 generators, you can either run mas at a terminal and use its command-line
 interface directly or you can run the macl (if you have Python installed)
@@ -124,8 +128,8 @@ or the maclj script.
 LICENSE
 
 The Market Analysis System is copyrighted free software, released under
-the Eiffel Forum Freeware License.  See the file forum.txt for the
-contents of the license.
+the Eiffel Forum License.  See the file forum.txt for the contents of
+the license.
 
 
 CONTACT INFORMATION

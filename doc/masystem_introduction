@@ -136,6 +136,7 @@ mas -o -f , 2425 -b -d txt -i 5-minute ibm.* &
 
 Then start the GUI the same way as before.
 
+
 USING MAS WITH A DATABASE MANAGEMENT SYSTEM ON LINUX
 
 If you have a DBMS with ODBC support, you may be able to store your data in
@@ -169,6 +170,60 @@ configuration.
 
 Once you have everything set up properly, you can start MAS and use the -p
 option to tell it to use the database for its data.
+
+
+USING MAS WITH THE QuoteMonster SCRIPT
+
+You can configure MAS to use the popular QuoteMonster perl script to
+obtain its stock data from yahoo.com's free historical stock data service.
+To do this, you will first need to download the QuoteMonster script from:
+http://xmlworks.com/quotemonster/
+
+After downloading QuoteMonster, follow the instructions for installation
+in the readme file.  (You will need to obtain the Perl interpreter
+if it is not already on your system - if you type "perl -v" at the
+command line and get a response back like: "This is perl, version
+5.00X" ..., then you have perl installed.)  Once QuoteMonster is
+installed, make sure the script (which is named qm) is in your path.
+(If you type "type qm", you should get a result something like: "qm
+is /usr/local/bin/qm".  If you get an error message instead, it is not
+in your path.  If you're not sure how to change your path variable,
+http://sunsite.dk/linux-newbie/FAQ2.htm#PATH_change gives a pretty good
+descriptionn of how to do this.)
+
+After installing QuoteMonster, you will need to make sure that the wrapper
+script that calls QuoteMonster, named mas_external_retrieve.pl, resides
+in the directory specified by the MAS_DIRECTORY environment variable.
+(See the file env_settings for information about the MAS_DIRECTORY
+environment variable.)  The mas_external_retrieve.pl file is installed
+in /masdir/lib (where /masdir stands for the parent directory into which
+you installed MAS).
+
+After making sure mas_external_retrieve.pl is in your MAS_DIRECTORY,
+you will need to create a symbols.mas file, which also needs to reside
+in the directory specified by the MAS_DIRECTORY variable.  This file
+holds all the stock symbols that you want to be available to MAS, one
+symbol per line.  You can simply use a text editor (such as vi, emacs,
+or pico, etc.) to enter the symbols for the stocks you wish to analyze
+(either upper or lower-case is fine).  Or you can copy the list of
+symbols from another file, as long as you make sure that the result in
+symbols.mas has one symbol per line and has no other garbage in it.
+(There is a sample symbols.mas file in /masdir/lib.)
+
+At this point, you should be able to start MAS using the external
+data retrieval mechanism hooked to QuoteMonster with the command:
+
+mas -o -x -b 2345 &
+
+(The -o tells MAS that the data includes an "open" field; -x tells MAS
+to use the external-data-retrieval mechanism; -b tells MAS it is being
+run in the background; and 2345 is the port number to be used by the
+GUI and command-line clients to communicate with the MAS server.)
+
+There are some settings within the mas_external_retrieve.pl script that
+can be changed to alter settings such as how many years worth of data
+to obtain.  See the documentation (comments) in the script for instructions
+on what settings can be changed and what they are for.
 
 
 NOTES
