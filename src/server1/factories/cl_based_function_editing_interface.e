@@ -19,13 +19,18 @@ class CL_BASED_FUNCTION_EDITING_INTERFACE inherit
 		end
 
 	FUNCTION_EDITING_INTERFACE
+		export
+			{NONE} all
+			{ANY} edit_indicator_menu
 		undefine
 			print
 		redefine
-			help
+			help, end_save
 		end
 
 	TERMINABLE
+		export
+			{NONE} all
 		undefine
 			print
 		end
@@ -57,19 +62,16 @@ creation
 
 feature -- Initialization
 
-	make is
+	make (dispenser: TRADABLE_DISPENSER) is
 		do
 			create operator_maker.make (false)
 			create editor.make (Current, operator_maker)
 			create help.make
 			register_for_termination (Current)
+			tradable_dispenser := dispenser
 		ensure
 			editor_exists: editor /= Void
 		end
-
-feature -- Access
-
-	operator_maker: CL_BASED_COMMAND_EDITING_INTERFACE
 
 feature -- Status setting
 
@@ -98,6 +100,10 @@ feature -- Status setting
 feature {NONE} -- Implementation
 
 	help: HELP
+
+	operator_maker: CL_BASED_COMMAND_EDITING_INTERFACE
+
+	tradable_dispenser: TRADABLE_DISPENSER
 
 feature {NONE} -- Implementation of hook methods
 
@@ -194,6 +200,15 @@ feature {NONE} -- Implementation of hook methods
 		do
 			lock := file_lock (file_name_with_app_directory (
 				indicators_file_name))
+		end
+
+	end_save is
+		do
+			-- Ensure current changes show up in the tradable_dispenser by
+			-- clearing its caches.
+			if tradable_dispenser /= Void then
+				tradable_dispenser.clear_caches
+			end
 		end
 
 end -- CL_BASED_FUNCTION_EDITING_INTERFACE
