@@ -48,7 +48,11 @@ feature {TRADABLE_FACTORY} -- Access
 			vector: ARRAYED_LIST [INTEGER]
 		do
 			create vector.make (0)
-			vector.extend (Date_index)
+			if command_line_options.special_date_settings.valid then
+				vector.extend (Configurable_date_index)
+			else
+				vector.extend (Date_index)
+			end
 			if intraday then
 				vector.extend (Time_index)
 			end
