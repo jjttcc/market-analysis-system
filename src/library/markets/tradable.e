@@ -26,6 +26,11 @@ deferred class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 			is_equal, copy, setup, out
 		end
 
+	TRADABLE_FACILITIES
+		undefine
+			is_equal, copy, setup, out
+		end
+
 	GLOBAL_SERVICES
 		rename
 			period_types as gs_period_types
