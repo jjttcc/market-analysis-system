@@ -82,7 +82,7 @@ feature {NONE}
 		local
 			list_builder: TRADABLE_LIST_BUILDER
 		do
-			create list_builder.make
+			create list_builder.make (clone (function_library))
 			list_builder.execute
 			tradable_list_handler := list_builder.product
 			create {TRADABLE_LIST_EVENT_COORDINATOR} event_coordinator.make (

@@ -22,13 +22,20 @@ creation
 
 feature -- Initialization
 
-	make is
+	make (all_indicators: SEQUENCE [MARKET_FUNCTION]) is
+		require
+			all_indicators_exists: all_indicators /= Void
 		do
+			indicators := all_indicators
+		ensure
+			indicators = all_indicators
 		end
 
 feature -- Access
 
 	product: TRADABLE_DISPENSER
+
+    indicators: SEQUENCE [MARKET_FUNCTION]
 
 feature -- Basic operations
 
@@ -45,7 +52,7 @@ feature -- Basic operations
 				external_list_builder.execute
 				create {TRADABLE_LIST_HANDLER} product.make (
 					external_list_builder.daily_list,
-					external_list_builder.intraday_list)
+					external_list_builder.intraday_list, indicators)
 				ilist := external_list_builder.intraday_list
 			else
 				retrieve_input_entity_names
@@ -55,7 +62,7 @@ feature -- Basic operations
 					db_list_builder.execute
 					create {TRADABLE_LIST_HANDLER} product.make (
 						db_list_builder.daily_list,
-						db_list_builder.intraday_list)
+						db_list_builder.intraday_list, indicators)
 					ilist := db_list_builder.intraday_list
 				elseif command_line_options.use_web then
 					--@NOTE: May want to pass in valid file extensions
@@ -65,7 +72,7 @@ feature -- Basic operations
 					http_list_builder.execute
 					create {TRADABLE_LIST_HANDLER} product.make (
 						http_list_builder.daily_list,
-						http_list_builder.intraday_list)
+						http_list_builder.intraday_list, indicators)
 					ilist := http_list_builder.intraday_list
 				else	-- Use regular files.
 					create file_list_builder.make (input_entity_names,
@@ -74,7 +81,7 @@ feature -- Basic operations
 					file_list_builder.execute
 					create {TRADABLE_LIST_HANDLER} product.make (
 						file_list_builder.daily_list,
-						file_list_builder.intraday_list)
+						file_list_builder.intraday_list, indicators)
 					ilist := file_list_builder.intraday_list
 				end
 			end
@@ -119,5 +126,7 @@ feature {NONE} -- Implementation
     input_entity_names: LIST [STRING]
 
 invariant
+
+    indicators_exist: indicators /= Void
 
 end -- class TRADABLE_LIST_BUILDER
