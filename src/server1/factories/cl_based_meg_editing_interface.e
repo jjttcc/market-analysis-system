@@ -64,7 +64,7 @@ feature -- Initialization
 			create help.make
 			-- Satisfy invariant (editor is currently not used.)
 			create editor
-			create function_editor.make
+			create function_editor.make (Void)
 			operator_maker.set_market_tuple_selector (function_editor)
 			register_for_termination (Current)
 		ensure
