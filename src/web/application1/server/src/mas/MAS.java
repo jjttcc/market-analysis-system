@@ -38,10 +38,16 @@ public final class MAS extends GenericServlet implements AssertionConstants {
 			log_tag("Obtained proxy with code " + mas_proxy.hashCode(), tag);
 			log_tag("Forwarding request to the server.", tag);
 			mas_proxy.forward(request.getReader());
-			log_tag("Message forwarded.", tag);
-			server_response = mas_proxy.response();
-			log_tag("Server responded with: " + snippet(server_response), tag);
-			send_response(response, server_response);
+			if (mas_proxy.error_occurred()) {
+				report_error(response, mas_proxy.last_error());
+			} else {
+				log_tag("Message: '" + mas_proxy.last_client_request() +
+					"' forwarded.", tag);
+				server_response = mas_proxy.response();
+				log_tag("Server responded with: " + snippet(server_response),
+					tag);
+				send_response(response, server_response);
+			}
 		} catch (Throwable e) {
 			log("Exception caught in 'service':\n", e);
 			send_response(response,
@@ -125,6 +131,14 @@ public final class MAS extends GenericServlet implements AssertionConstants {
 				srvr_port_value);
 		}
 		return server_address_;
+	}
+
+	// Report 'msg' to the client as an error.
+	private void report_error(ServletResponse response, String msg) {
+		String errmsg = "Failed to connect to the server: " + msg;
+		send_response(response,
+			ServerResponseUtilities.warning_response_message(errmsg));
+		log("Error status message sent to client: " + errmsg + "\n");
 	}
 
 // Implementation - debugging

@@ -21,8 +21,14 @@ public class MAS_Proxy implements AssertionConstants {
 
 // Access
 
+	// The server's response to the last forwarded request
 	public String response() {
 		return response_;
+	}
+
+	// The last client request forwarded to the server
+	public String last_client_request() {
+		return client_request;
 	}
 
 	// Did an error occur during the last operation?
@@ -45,12 +51,13 @@ public class MAS_Proxy implements AssertionConstants {
 	public void forward(Reader r) throws IOException {
 		assert r != null: PRECONDITION;
 		error_ = false;
-		String msg = Utilities.input_string(r);
+		response_ = "";
+		client_request = Utilities.input_string(r);
 		connection.open();
 		PrintWriter writer = null;
 		try {
 			writer = new PrintWriter(connection.output_stream(), true);
-			writer.print(msg);
+			writer.print(client_request);
 			writer.flush();
 		} catch (IOException e) {
 			error_ = true;
@@ -66,7 +73,7 @@ public class MAS_Proxy implements AssertionConstants {
 
 // Implementation
 
-	// Response from the server
+	// Receive the response from the server.
 	// Precondition: ! error_occurred()
 	private void receive_response() {
 		assert ! error_occurred(): PRECONDITION;
@@ -88,6 +95,7 @@ public class MAS_Proxy implements AssertionConstants {
 
 	private IO_Connection connection;
 	private String response_;
+	private String client_request;
 	private boolean error_ = false;
 	private String last_error_ = "";
 }
