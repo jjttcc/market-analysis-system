@@ -52,8 +52,6 @@ feature -- Basic operations
 			if not db_info.intraday_stock_table_name.empty then
 				create_intraday_list
 			end
-		ensure
-			lists_created: daily_list /= Void and intraday_list /= Void
 		end
 
 feature {NONE} -- Implementation
