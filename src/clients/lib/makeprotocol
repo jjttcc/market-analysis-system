@@ -3,10 +3,11 @@
 
 eiffel_protocol_files ()
 {
-	echo ../../server1/network/gui_network_protocol.e \
-		../../server1/network/network_protocol.e
+	echo $proto_dir/gui_network_protocol.e \
+		$proto_dir/network_protocol.e
 }
 
+proto_dir=../../server1/protocols
 proto_files=$(eiffel_protocol_files)
 awk 'BEGIN {
 	print "/* Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt */\n"
@@ -43,8 +44,7 @@ System \nnetwork communication protocol */"
 	print "\tString " $1 " = " value ";"
 }
 END {
-	print "\n\t// Currently, only daily and weekly period types are supported."
+	print "\n\t// daily period type is needed for initialization."
 	print "\tString daily_period_type = \"daily\";"
-	print "\tString weekly_period_type = \"weekly\";"
 	print "}"
 }' $proto_files >../common/NetworkProtocol.java
