@@ -30,7 +30,8 @@ struct input_sequence_plug_in;
  * Precondition: paths != 0
 */
 struct input_sequence_plug_in* new_input_sequence_plug_in_handle(
-	const char* paths, char* error_buffer, int buffer_size);
+	const char* paths, char* error_buffer, int buffer_size,
+	const char path_separator);
 
 /* Data for the tradable specified by `symbol' - intraday if `is_intraday',
  * otherwise, daily.  Returns 0 if an error occurs.
