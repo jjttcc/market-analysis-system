@@ -171,6 +171,13 @@ feature -- Status setting
 						and target_period_type /= Void
 		end
 
+	flush_indicators is
+			-- Flush the contents of `indicators' - needed when the
+			-- indicators are shared with another tradable object.
+		do
+			set_target_period_type (target_period_type)
+		end
+
 feature -- Element change
 
 	add_indicator (f: MARKET_FUNCTION) is
