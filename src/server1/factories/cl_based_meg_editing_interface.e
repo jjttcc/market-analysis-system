@@ -1,28 +1,21 @@
 indexing
 	description:
-		"Abstraction that allows the user to build and remove %
-		%market event generators"
+		"Builder/editor of MARKET_EVENT_GENERATORs using a command-line %
+		%interface"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
-class MARKET_EVENT_GENERATOR_BUILDER inherit
-
-	GLOBAL_SERVICES
-		export {NONE}
-			all
-		end
-
-	GLOBAL_APPLICATION
-		export
-			{NONE} all
-			{ANY} function_library
-		end
+class CL_BASED_MEG_EDITOR inherit
 
 	COMMAND_LINE_UTILITIES [MARKET_EVENT_GENERATOR]
+		rename
+			print_message as show_message
 		export
 			{NONE} all
 		end
+
+	MEG_EDITING_INTERFACE
 
 	EXECUTION_ENVIRONMENT
 		export
@@ -33,38 +26,14 @@ creation
 
 	make
 
-feature -- Initialization
+feature {NONE} -- Implementation
 
-	make (op_maker: COMMAND_EDITING_INTERFACE) is
-		require
-			arg_not_void: op_maker /= Void
-		do
-			operator_maker := op_maker
-			!!cmd_editor
-			operator_maker.set_editor (cmd_editor)
-			cmd_editor.set_user_interface (operator_maker)
-			!!help.make
-		ensure
-			opmkr_set: operator_maker = op_maker
-		end
-
-feature -- Access
-
-	last_event_generator: MARKET_EVENT_GENERATOR
-			-- The last MARKET_EVENT_GENERATOR that was built
-
-feature -- Basic operations
-
-	edit_event_generator_menu is
-			-- Menu for editing market event generators
-		require
-			flib_not_void: function_library /= Void
-		local
-			finished: BOOLEAN
+	main_menu_selection: INTEGER is
 		do
 			from
+				Result := Null_value
 			until
-				finished
+				Result /= Null_value
 			loop
 				print_list (<<"Select action:",
 					"%N     Create a new market analyzer (c) %
@@ -74,18 +43,18 @@ feature -- Basic operations
 				inspect
 					selected_character
 				when 'c', 'C' then
-					create_new_event_generator
+					Result := Create_new_eg_value
 				when 'r', 'R' then
-					remove_event_generator
+					Result := Remove_eg_value
 				when 'v', 'V' then
-					view_event_generator
+					Result := View_eg_value
 				when 'h', 'H' then
-					print (help @ help.Edit_event_generators)
+					Result := Show_help_value
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
 				when '-' then
-					finished := true
+					Result := Exit_menu_value
 				else
 					print ("Invalid selection%N")
 				end
@@ -93,115 +62,57 @@ feature -- Basic operations
 			end
 		end
 
-feature {NONE} -- Implementation
-
-	remove_event_generator is
-			-- Allow user to remove a member of
-			-- `market_event_generation_library'.
-		local
-			names: ARRAYED_LIST [STRING]
-			finished: BOOLEAN
-			meg_library: LIST [MARKET_EVENT_GENERATOR]
+	remove_eg_selection: INTEGER is
 		do
-			meg_library := market_event_generation_library
+			Result := eg_selection (" to remove")
+		end
+
+	view_eg_selection: INTEGER is
+		do
+			Result := eg_selection (" to view")
+		end
+
+	eg_selection (msg: STRING): INTEGER is
+		local
+			finished: BOOLEAN
+		do
 			from
-				from
-					!!names.make (meg_library.count)
-					meg_library.start
-				until
-					meg_library.exhausted
-				loop
-					names.extend (
-						meg_library.item.event_type.name)
-					meg_library.forth
-				end
-				if names.count = 0 then
+				if meg_names.count = 0 then
 					finished := true
+					Result := Exit_menu_value
 					print ("There are currently no market analyzers.%N")
 				end
 			until
 				finished
 			loop
-				print ("Select a market analyzer to remove (0 to end):%N")
-				print_names_in_1_column (names, 1)
+				print_list (<<"Select a market analyzer",
+							msg, " (0 to end):%N">>)
+				print_names_in_1_column (meg_names, 1)
 				read_integer
 				if
 					last_integer < 0 or
-						last_integer > meg_library.count
+						last_integer > meg_names.count
 				then
 					print_list (<<"Selection must be between 0 and ",
-								meg_library.count, "%N">>)
+								meg_names.count, "%N">>)
 				elseif last_integer = 0 then
 					finished := true
+					Result := Exit_menu_value
 				else
 					check
 						valid_index: last_integer > 0 and last_integer <=
-							meg_library.count
+							meg_names.count
 					end
-					meg_library.start
-					meg_library.prune (
-						meg_library @ last_integer)
 					finished := true
+					Result := last_integer
 				end
 			end
 		end
 
-	view_event_generator is
-			-- Allow user to view a member of the
-			-- `market_event_generation_library'.
-		local
-			names: ARRAYED_LIST [STRING]
-			finished: BOOLEAN
-			meg_library: LIST [MARKET_EVENT_GENERATOR]
-		do
-			meg_library := market_event_generation_library
-			from
-				from
-					!!names.make (meg_library.count)
-					meg_library.start
-				until
-					meg_library.exhausted
-				loop
-					names.extend (
-						meg_library.item.event_type.name)
-					meg_library.forth
-				end
-				if names.count = 0 then
-					finished := true
-					print ("There are currently no market analyzers.%N")
-				end
-			until
-				finished
-			loop
-				print ("Select a market analyzer to view (0 to end):%N")
-				print_names_in_1_column (names, 1)
-				read_integer
-				if
-					last_integer < 0 or
-						last_integer > meg_library.count
-				then
-					print_list (<<"Selection must be between 0 and ",
-								meg_library.count, "%N">>)
-				elseif last_integer = 0 then
-					finished := true
-				else
-					check
-						valid_index: last_integer > 0 and last_integer <=
-							meg_library.count
-					end
-					print_event_generator (meg_library @ last_integer)
-					finished := true
-				end
-			end
-		end
-
-	create_new_event_generator is
-			-- Create a new event generator and add it to 
-			-- market_event_generation_library.
+	event_generator_type_selection: INTEGER is
 		local
 			c: CHARACTER
 		do
-			last_event_generator := Void
 			from
 			until
 				c /= '%U'
@@ -216,59 +127,19 @@ feature {NONE} -- Implementation
 			inspect
 				c
 			when 's', 'S' then
-				create_new_simple_event_generator
+				Result := Simple_eg_type_value
 			when 'c', 'C' then
-				create_new_compound_event_generator
+				Result := Compound_eg_type_value
 			end
-			if last_event_generator /= Void then
-				print ("New market analyzer created:%N")
-				print_event_generator (last_event_generator)
-			end
-		end
-
-	create_new_compound_event_generator is
-			-- Create a new compound event generator and add it to 
-			-- market_event_generation_library.
-		local
-			eg_maker: COMPOUND_GENERATOR_FACTORY
-		do
-			!!eg_maker
-			eg_maker.set_generators (
-				event_generator_selection ("left component"),
-				event_generator_selection ("right component"))
-			eg_maker.set_before_extension (
-				ceg_date_time_extension ("BEFORE"))
-			eg_maker.set_after_extension (
-				ceg_date_time_extension ("AFTER"))
-			eg_maker.set_left_target_type (
-				ceg_left_target_type)
-			create_event_generator (eg_maker, new_event_type_name)
-			last_event_generator := eg_maker.product
-		ensure
-			-- last_event_generator references the newly created
-			-- COMPOUND_EVENT_GENERATOR
 		end
 
 	event_generator_selection (msg: STRING): MARKET_EVENT_GENERATOR is
 			-- User's event generator selection
 		local
-			names: ARRAYED_LIST [STRING]
 			finished: BOOLEAN
-			meg_library: LIST [MARKET_EVENT_GENERATOR]
 		do
-			meg_library := market_event_generation_library
 			from
-				from
-					!!names.make (meg_library.count)
-					meg_library.start
-				until
-					meg_library.exhausted
-				loop
-					names.extend (
-						meg_library.item.event_type.name)
-					meg_library.forth
-				end
-				if names.count = 0 then
+				if meg_names.count = 0 then
 					finished := true
 					print ("There are currently no market analyzers.%N")
 				end
@@ -276,28 +147,26 @@ feature {NONE} -- Implementation
 				finished
 			loop
 				print_list (<<"Select a market analyzer for ", msg, ":%N">>)
-				print_names_in_1_column (names, 1)
+				print_names_in_1_column (meg_names, 1)
 				read_integer
 				if
 					last_integer < 1 or
-						last_integer > meg_library.count
+						last_integer > meg_names.count
 				then
 					print_list (<<"Selection must be between 1 and ",
-								meg_library.count, "%N">>)
+								meg_names.count, "%N">>)
 				else
 					check
 						valid_index: last_integer > 0 and last_integer <=
-							meg_library.count
+							meg_names.count
 					end
-					Result := meg_library @ last_integer
+					Result := market_event_generation_library @ last_integer
 					finished := true
 				end
 			end
 		end
 
-	create_new_simple_event_generator is
-			-- Create a new atomic event generator and add it to 
-			-- market_event_generation_library.
+	one_or_two_market_function_selection: INTEGER is
 		local
 			c: CHARACTER
 		do
@@ -317,44 +186,17 @@ feature {NONE} -- Implementation
 			inspect
 				c
 			when 'o', 'O' then
-				create_new_one_variable_function_analyzer
+				Result := One_value
 			when 't', 'T' then
-				create_new_two_variable_function_analyzer
+				Result := Two_value
 			end
 		end
 
-	create_new_one_variable_function_analyzer is
-			-- Create a new one-variable function analyzer and add it to 
-			-- market_event_generation_library.
-		local
-			fa_maker: OVFA_FACTORY
-		do
-			!!fa_maker
-			fa_maker.set_function (
-				function_choice_clone ("technical indicator"))
-			fa_maker.set_operator (operator_choice (fa_maker.function))
-			fa_maker.set_period_type (period_type_choice)
-			fa_maker.set_left_offset (operator_maker.left_offset)
-			create_event_generator (fa_maker, new_event_type_name)
-			last_event_generator := fa_maker.product
-		ensure
-			-- last_event_generator references the newly created
-			-- ONE_VARIABLE_FUNCTION_ANALYZER
-		end
-
-	create_new_two_variable_function_analyzer is
-			-- Create a new two-variable function analyzer and add it to 
-			-- market_event_generation_library.
+	two_var_function_operator_selection (f: TVFA_FACTORY):
+				RESULT_COMMAND [BOOLEAN] is
 		local
 			c: CHARACTER
-			fa_maker: TVFA_FACTORY
 		do
-			!!fa_maker.make
-			fa_maker.set_functions (
-				function_choice_clone ("left technical indicator"),
-					function_choice_clone ("right technical indicator"))
-			fa_maker.set_period_type (period_type_choice)
-			fa_maker.set_crossover_specification (above_below_choice (fa_maker))
 			from
 			until
 				c /= '%U'
@@ -374,9 +216,9 @@ feature {NONE} -- Implementation
 					c /= '%U'
 				loop
 					print_list (<<"Should the operator operate on the left ",
-							"function (", fa_maker.left_function.name,
+							"function (", f.left_function.name,
 							") or the right function (",
-							fa_maker.right_function.name, ")? (l/r) ">>)
+							f.right_function.name, ")? (l/r) ">>)
 					c := selected_character
 					if not (c = 'l' or c = 'L' or c = 'r' or c = 'R') then
 						c := '%U'
@@ -384,85 +226,38 @@ feature {NONE} -- Implementation
 					end
 				end
 				if c = 'l' or c = 'L' then
-					fa_maker.set_operator (
-						operator_choice (fa_maker.left_function))
+					Result := operator_choice (f.left_function)
 				else
 					check c = 'r' or c = 'R' end
-					fa_maker.set_operator (
-						operator_choice (fa_maker.right_function))
+					Result := operator_choice (f.right_function)
 				end
 			end
-			create_event_generator (fa_maker, new_event_type_name)
-			last_event_generator := fa_maker.product
-		ensure
-			-- last_event_generator references the newly created
-			-- ONE_VARIABLE_FUNCTION_ANALYZER
 		end
 
-	function_choice_clone (msg: STRING): MARKET_FUNCTION is
-			-- A clone of a user-selected member of `function_library'
-		local
-			names: ARRAYED_LIST [STRING]
+	function_choice (msg: STRING): MARKET_FUNCTION is
 		do
 			from
-				!!names.make (function_library.count)
-				from
-					function_library.start
-				until
-					function_library.after
-				loop
-					names.extend (function_library.item.name)
-					function_library.forth
-				end
 			until
 				Result /= Void
 			loop
 				print_list (<<"Select the ", msg,
 							":%N">>)
-				print_names_in_1_column (names, 1)
+				print_names_in_1_column (function_names, 1)
 				read_integer
 				if
 					last_integer < 1 or
-						last_integer > function_library.count
+						last_integer > function_names.count
 				then
 					print_list (<<"Selection must be between 1 and ",
-								function_library.count, "%N">>)
+								function_names.count, "%N">>)
 				else
-					Result := deep_clone (function_library @ last_integer)
+					Result := function_library @ last_integer
 				end
 			end
 		end
 
-	operator_choice (function: MARKET_FUNCTION): RESULT_COMMAND [BOOLEAN] is
-			-- User's choice of operator
+	new_event_type_name_selection (names: LIST [STRING]): STRING is
 		do
-			operator_maker.set_left_offset (0) -- Important.
-			operator_maker.set_market_function (function)
-			Result ?= operator_maker.command_selection_from_type (
-						operator_maker.Boolean_result_command,
-							"root operator", true)
-			check
-				cmd_selection_valid: Result /= Void
-			end
-		end
-
-	new_event_type_name: STRING is
-		local
-			names: ARRAYED_LIST [STRING]
-			etypes: LINEAR [EVENT_TYPE]
-		do
-			--Ask the user for the name of the new event type.
-			!!names.make (event_types.count)
-			names.compare_objects
-			etypes := event_types.linear_representation
-			from
-				etypes.start
-			until
-				etypes.exhausted
-			loop
-				names.extend (etypes.item.name)
-				etypes.forth
-			end
 			from
 			until
 				Result /= Void
@@ -621,7 +416,6 @@ feature {NONE} -- Implementation
 			-- compound event generator
 		local
 			finished, yes: BOOLEAN
-			names: LINKED_LIST [STRING]
 			i: INTEGER
 		do
 			from
@@ -648,28 +442,19 @@ feature {NONE} -- Implementation
 			from
 				if yes then
 					finished := false
-					from
-						!!names.make
-						i := 1
-					until
-						i = event_types.count + 1
-					loop
-						names.extend ((event_types @ i).name)
-						i := i + 1
-					end
 				end
 			until
 				finished
 			loop
 				print ("Select an event type:%N")
-				print_names_in_1_column (names, 1)
+				print_names_in_1_column (event_type_names, 1)
 				read_integer
 				if
 					last_integer < 1 or
-						last_integer > names.count
+						last_integer > event_type_names.count
 				then
 					print_list (<<"Selection must be between 1 and ",
-								names.count, "%N">>)
+								event_type_names.count, "%N">>)
 				else
 					Result := event_types @ last_integer
 					finished := true
@@ -677,7 +462,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	print_event_generator (eg: MARKET_EVENT_GENERATOR) is
+	display_event_generator (eg: MARKET_EVENT_GENERATOR) is
 			-- Print the contents of `eg'.
 		local
 			compound_eg: COMPOUND_EVENT_GENERATOR
@@ -691,9 +476,9 @@ feature {NONE} -- Implementation
 			fa ?= eg
 			if compound_eg /= Void then
 				print ("Left sub-analyzer:%N")
-				print_event_generator (compound_eg.left_analyzer)
+				display_event_generator (compound_eg.left_analyzer)
 				print ("Right sub-analyzer:%N")
-				print_event_generator (compound_eg.right_analyzer)
+				display_event_generator (compound_eg.right_analyzer)
 			else
 				check
 					eg_is_fa: fa /= Void
@@ -722,17 +507,13 @@ feature {NONE} -- Implementation
 					operator_maker.print_command_tree (fa.operator, 1)
 				end
 			end
+			print ("(Hit <Return> to continue.) ")
+			read_line
 		end
 
-feature {NONE}
+	show_help (msg: STRING) is
+		do
+			print (msg)
+		end
 
-	help: HELP
-	operator_maker: COMMAND_EDITING_INTERFACE
-	cmd_editor: APPLICATION_COMMAND_EDITOR
-
-invariant
-
-	field_not_void: operator_maker /= Void and cmd_editor /= Void and
-		help /= Void
-
-end -- MARKET_EVENT_GENERATOR_BUILDER
+end -- CL_BASED_MEG_EDITOR

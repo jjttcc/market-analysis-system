@@ -1,11 +1,11 @@
 indexing
 	description:
-		"Abstraction that allows the user to build COMMANDs"
+		"Builder/editor of COMMANDs using a command-line interface"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
-class COMMAND_BUILDER inherit
+class CL_BASED_COMMAND_EDITOR inherit
 
 	COMMAND_LINE_UTILITIES [COMMAND]
 		rename
@@ -79,4 +79,4 @@ feature {NONE} -- Utility routines
 			end
 		end
 
-end -- COMMAND_BUILDER
+end -- CL_BASED_COMMAND_EDITOR
