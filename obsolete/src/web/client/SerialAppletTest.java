@@ -26,8 +26,10 @@ public class SerialAppletTest extends Applet {
 		}
 	}
 
+// Implementation
+
 	// Send 'msg' to the servlet using serialization.
-	protected void sendMsg(String msg) {
+	private void sendMsg(String msg) {
 		ObjectOutputStream output = null;
 		try {
 			connection.connect();
@@ -42,7 +44,7 @@ public class SerialAppletTest extends Applet {
 	}
 
 	// Response from the server
-	protected String serverResponse() {
+	private String serverResponse() {
 		ObjectInputStream input = null;
 		String result = null;
 		try {
@@ -60,10 +62,10 @@ public class SerialAppletTest extends Applet {
 
 	// Message extracted from 'input'
 	// Precondition: input /= null
-	protected String extractedMsg(ObjectInputStream input) {
-		String msg = null;
+	private String extractedMsg(ObjectInputStream input) {
+		String result = null;
 		try {
-			msg = (String) input.readObject();
+			result = (String) input.readObject();
 			input.close();
 		} catch (IOException e) {
 			log(e.toString());
@@ -72,23 +74,10 @@ public class SerialAppletTest extends Applet {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
-		return msg;
-	}
-
-// Implementation
-
-	// Connection to the server for binary input and ouput with caching off
-	// Precondition: serverAddress != null
-	private URLConnection serverConnection() throws Exception {
-		URLConnection result = (new URL(serverAddress)).openConnection();
-
-		result.setDoInput(true);
-		result.setDoOutput(true);
-		result.setUseCaches (false);
-		result.setRequestProperty ("Content-Type",
-			"application/octet-stream");
 		return result;
 	}
+
+// Implementation - initialization
 
 	// Postcondition: hostName != null && serverAddress != null &&
 	//    port > 0 && connection != null
@@ -106,9 +95,26 @@ public class SerialAppletTest extends Applet {
 			connection != null;
 	}
 
+// Implementation - utilities
+
+	// Connection to the server for binary input and ouput with caching off
+	// Precondition: serverAddress != null
+	private URLConnection serverConnection() throws Exception {
+		URLConnection result = (new URL(serverAddress)).openConnection();
+
+		result.setDoInput(true);
+		result.setDoOutput(true);
+		result.setUseCaches (false);
+		result.setRequestProperty ("Content-Type",
+			"application/octet-stream");
+		return result;
+	}
+
 	private void log(String msg) {
 		logMsg = msg;
 	}
+
+// Implementation - attributes
 
 	private String hostName = "";
 	private int port = -1;
