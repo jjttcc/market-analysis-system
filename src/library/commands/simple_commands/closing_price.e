@@ -1,7 +1,8 @@
 indexing
 	description: 
-		"An abstraction for a numeric command that produces the%
-		%closing price for the current trading period."
+		"An abstraction for a numeric command that produces the closing %
+		%price for the current trading period (extracted from the argument %
+		%to the execute routine)"
 	date: "$Date$";
 	revision: "$Revision$"
 
