@@ -120,7 +120,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 		do
 			settings.linear_representation.do_all (
 				agent replace_configuration_tokens)
-			if settings.has (Start_server_cmd_specifier) then
+			if not settings.item (Start_server_cmd_specifier).is_empty then
 				start_server_commands.extend (create {SESSION_COMMAND}.make (
 				Start_server_cmd_specifier,
 				settings @ Start_server_cmd_specifier))
