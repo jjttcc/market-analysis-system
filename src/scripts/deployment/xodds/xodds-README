@@ -1,0 +1,13 @@
+To automatically install and configure the MAS server and web application,
+first edit the configuration file, mas-deploy.cf, as needed and then
+run the deploy_mas script:
+
+./deploy_mas
+
+After installation:
+
+To start the MAS server, run the start_mas_server script.
+To stop the MAS server, run the shutdown_mas_server script.
+
+These scripts reside in mas/bin, within the directory specified as the
+mas_deployment_dir in the mas-deploy.cf file.
