@@ -57,10 +57,12 @@ feature {NONE} -- Implementation
 	retrieve_data is
 			-- Retrieve data for `parameters.symbol'.
 		require
+--!!!!This may need to go:
 			data_retrieval_needed: data_retrieval_needed
 		local
 			result_string: STRING
 		do
+			retrieval_failed := False
 			create result_string.make (0)
 			append_to_output_file := False
 			if alternate_start_date /= Void then
@@ -87,11 +89,13 @@ feature {NONE} -- Implementation
 						print ("Error occurred initiating transfer: " +
 							http_request.error_text (http_request.error_code) +
 							"%N")
+						retrieval_failed := True
 					end
 				else
 					print ("Error occurred opening http request: " +
 						http_request.error_text (http_request.error_code) +
 						"%N")
+					retrieval_failed := True
 				end
 				http_request.close
 				add_timing_data ("Retrieving data for " + parameters.symbol)
@@ -100,22 +104,49 @@ feature {NONE} -- Implementation
 				print ("Error occurred initializing http request: " +
 					http_request.error_text (http_request.error_code) +
 					"%N")
+				retrieval_failed := True
 			end
+		ensure
+			output_file_exists_if_successful:
+				not retrieval_failed implies output_file_exists
 		end
 
-	data_retrieval_needed: BOOLEAN is
+	retrieval_failed: BOOLEAN
+			-- Did the last call to `retrieve_data' fail?
+
+	output_file_exists: BOOLEAN is
+			-- Does the output file with name
+			-- `output_file_name (parameters.symbol)' exist?
 		local
 			outputfile: PLAIN_TEXT_FILE
+		do
+			create outputfile.make (output_file_name (parameters.symbol))
+			Result := not outputfile.exists
+		end
+
+	current_data_is_out_of_date: BOOLEAN is
+			-- Are the current data out of date with respect to the
+			-- current date and the http configuration?
 		do
 			--@@NOTE: This algorithm is for EOD data.  If the ability to
 			--handle intraday data is added, a separate algorithm will
 			--be needed for that.
 			alternate_start_date := Void
-			create outputfile.make (output_file_name (parameters.symbol))
-			Result := not outputfile.exists or (
-				time_to_eod_update and
+			Result := time_to_eod_update and
 				not parameters.ignore_today and
-				current_daily_data_out_of_date)
+				current_date_is_later_than_latest_daily_data
+		end
+
+	data_retrieval_needed: BOOLEAN is
+-- !!!Remove this feature?
+		do
+			--@@NOTE: This algorithm is for EOD data.  If the ability to
+			--handle intraday data is added, a separate algorithm will
+			--be needed for that.
+			alternate_start_date := Void
+			Result := not output_file_exists or (time_to_eod_update and
+				not parameters.ignore_today and
+				current_date_is_later_than_latest_daily_data)
 		end
 
 	output_file_name (symbol: STRING): STRING is
@@ -209,7 +240,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	current_daily_data_out_of_date: BOOLEAN is
+	current_date_is_later_than_latest_daily_data: BOOLEAN is
 			-- Are the daily data cached for `parameters.symbol' out
 			-- of date with respect to the current date?
 		require
@@ -267,8 +298,8 @@ feature {NONE} -- Hook routines
 
 	use_day_after_latest_date_as_start_date: BOOLEAN is
 			-- When a retrieval is needed because
-			-- `current_daily_data_out_of_date', should the day after
-			-- the latest date of the current data set be used as the
+			-- `current_date_is_later_than_latest_daily_data', should the day
+			-- after the latest date of the current data set be used as the
 			-- start date for retrieval so that there is no overlap
 			-- between the current data set and freshly retrieved data?
 		once

@@ -69,29 +69,16 @@ feature -- Access
 			-- occurs.
 		do
 			fatal_error := false
-			-- Create a new tradable (or get it from the cache) only if the
-			-- cursor has moved since the last tradable creation.
+			-- Create a new tradable (or get it from the cache) only if
+			-- caching is off, or the cursor has moved since the last
+			-- tradable creation, or the cache has been cleared.
 			if
 				not caching_on or
-				index /= old_index or Cache_size > 0 and cache.count = 0
+				index /= old_index or (Cache_size > 0 and cache.count = 0)
 			then
 				old_index := 0
 				last_tradable := cached_item (index)
-				if last_tradable = Void or else ignore_cache then
-					setup_input_medium
-					if not fatal_error then
---!!!!!May need to guard against side effects.
-						load_data
-					else
-						-- A fatal error indicates that the current tradable
-						-- is invalid, or not readable, or etc., so ensure
-						-- that last_tradable is not set to this invalid
-						-- object.
-						last_tradable := Void
-					end
-				else
-					last_tradable.flush_indicators
-				end
+				update_and_load_data
 				old_index := index
 			end
 			Result := last_tradable
@@ -223,23 +210,45 @@ feature {FACTORY} -- Access
 
 feature {NONE} -- Implementation
 
+	update_and_load_data is
+			-- Make sure, if appropriate, that the data in the data
+			-- source is up to date, and then load the data.
+		do
+			if last_tradable = Void then
+				load_data
+			else
+				-- Ensure that old indicator data from the previous
+				-- `last_tradable' is not re-used.
+				last_tradable.flush_indicators
+			end
+		end
+
 	load_data is
 			-- Load the data for `current_symbol' and close the input medium.
 			-- `setup_input_medium' must have been called to open the
 			-- input medium before calling this procedure.
 		do
-			tradable_factory.set_symbol (current_symbol)
-			tradable_factory.execute
-			last_tradable := tradable_factory.product
-			add_to_cache (last_tradable, index)
-			if tradable_factory.error_occurred then
-				report_errors (last_tradable.symbol,
-					tradable_factory.error_list)
-				if tradable_factory.last_error_fatal then
-					fatal_error := true
+			setup_input_medium
+			if not fatal_error then
+				tradable_factory.set_symbol (current_symbol)
+				tradable_factory.execute
+				last_tradable := tradable_factory.product
+				add_to_cache (last_tradable, index)
+				if tradable_factory.error_occurred then
+					report_errors (last_tradable.symbol,
+						tradable_factory.error_list)
+					if tradable_factory.last_error_fatal then
+						fatal_error := true
+					end
 				end
+				close_input_medium
+			else
+				-- A fatal error indicates that the current tradable
+				-- is invalid, or not readable, or etc., so ensure
+				-- that last_tradable is not set to this invalid
+				-- object.
+				last_tradable := Void
 			end
-			close_input_medium
 		end
 
 	report_errors (symbol: STRING; l: LIST [STRING]) is
