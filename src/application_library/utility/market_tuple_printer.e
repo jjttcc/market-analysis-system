@@ -196,8 +196,13 @@ feature -- Basic operations
 		local
 			first, last, i: INTEGER
 		do
+print ("print_tuples_with_time%N")
+print ("print_end_date/time: " + print_end_date.out +
+"," + print_end_time.out + "%N")
+print ("print_start_date/time: " + print_start_date.out +
+"," + print_start_time.out + "%N")
 			first := first_date_time_index (l)
-			last := last_index (l)
+			last := last_date_time_index (l)
 print ("print_tuples_with_time - first, last: " + first.out + ", " + last.out +
 "%N")
 			if last >= first then
@@ -308,7 +313,7 @@ feature {NONE} -- Implementation
 				-- the first element whose date_time >
 				-- print_start_date:print_start_time
 				Result := l.index_at_date_time (
-					create {DATE_TIME}.make_by_date_time(print_start_date,
+					create {DATE_TIME}.make_by_date_time (print_start_date,
 					print_start_time), 1)
 				if Result = 0 then
 					-- Indicate that no elements of l fall after
@@ -327,7 +332,7 @@ feature {NONE} -- Implementation
 	last_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER is
 			-- Last index for printing, according to print_end_date
 		local
-			util: GENERAL_UTILITIES
+			util: expanded GENERAL_UTILITIES
 		do
 			if print_end_date /= Void and not l.is_empty then
 				if
@@ -352,6 +357,53 @@ feature {NONE} -- Implementation
 				-- print_end_date, or, if no match, to the last element
 				-- whose date < print_end_date.
 					Result := l.index_at_date (print_end_date, -1)
+				end
+			else
+				Result := l.count
+			end
+		ensure
+			void_date_result: print_end_date = Void implies Result = l.count
+		end
+
+	last_date_time_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER is
+			-- Last index for printing, according to print_end_date
+		local
+			util: expanded GENERAL_UTILITIES
+		do
+			if print_end_date /= Void and not l.is_empty then
+				if
+					print_end_date > util.now_date and
+					print_end_date > l.last.date_time.date
+				then
+					-- Since print_end_date is in the future and is later
+					-- than the date of the last tuple in `l', the index
+					-- of the latest tuple (last tuple in l) can simply
+					-- be used, instead of the more expensive call to
+					-- l.index_at_date.
+					Result := l.count
+					debug ("data_request")
+						print ("'last_date_time_index' optimized to return %
+							%last tuple%N")
+						print ("Result (l.count): " + Result.out + "%N")
+						print ("l.last.date_time: " + l.last.date_time.out +
+							"%N")
+						print ("print_end_date: " + print_end_date.out + "%N")
+					end
+				else
+				-- Set Result to the index of the element whose date matches
+				-- print_end_date, or, if no match, to the last element
+				-- whose date < print_end_date.
+					Result := l.index_at_date_time (
+						create {DATE_TIME}.make_by_date_time (print_end_date,
+						print_end_time), -1)
+--					debug ("data_request")
+						print ("'last_date_time_index' called idx@date_time%N")
+						print ("Result (l.count): " + Result.out + "%N")
+						print ("l.last.date_time: " + l.last.date_time.out +
+							"%N")
+						print ("print_end_date/time: " + print_end_date.out +
+							 "," + print_end_time.out + "%N")
+--					end
 				end
 			else
 				Result := l.count
