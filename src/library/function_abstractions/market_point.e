@@ -39,7 +39,7 @@ feature -- Access
 	y: REAL
 			-- y coordinate
 
-feature {FACTORY} -- Status setting
+feature -- Status setting
 
 	set_x_y (x_value, y_value: REAL) is
 			-- Set x and y coordinates.
@@ -51,12 +51,29 @@ feature {FACTORY} -- Status setting
 		end
 
 	set_date (d: DATE_TIME) is
+			-- Set the date.
 		require
 			not_void: d /= Void
 		do
 			date_time := d
 		ensure
 			set: date_time = d
+		end
+
+	set_x (arg: REAL) is
+			-- Set x to `arg'.
+		do
+			x := arg
+		ensure
+			-- x = arg
+		end
+
+	set_y (arg: REAL) is
+			-- Set y to `arg'.
+		do
+			y := arg
+		ensure
+			-- y = arg
 		end
 
 end -- class MARKET_POINT

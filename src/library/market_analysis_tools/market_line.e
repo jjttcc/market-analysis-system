@@ -43,6 +43,12 @@ feature -- Access
 	start_point: MARKET_POINT
 			-- The two points that define the line
 
+	start_y: REAL is
+			-- y value of the start point
+		do
+			Result := start_point.y
+		end
+
 	slope: REAL
 			-- Slope of the line
 
@@ -50,6 +56,28 @@ feature -- Access
 			-- y value at index (x-value) `x'
 		do
 			Result := (x - start_point.x) * slope + start_point.y
+		end
+
+feature -- Status setting
+
+	set_slope (v: REAL) is
+			-- Set slope to `v'.
+		require
+			v_not_void: v /= Void
+		do
+			slope := v
+		ensure
+			-- slope = v
+		end
+
+	set_start_y (v: REAL) is
+			-- Set start_y to `v'.
+		require
+			v_not_void: v /= Void
+		do
+			start_point.set_y (v)
+		ensure
+			-- start_y = v
 		end
 
 feature {NONE} -- Implementation
