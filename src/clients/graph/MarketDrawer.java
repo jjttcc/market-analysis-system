@@ -50,9 +50,7 @@ abstract public class MarketDrawer extends BasicDrawer {
 // Element change
 
 	// Set the dates.
-	public void set_dates(ArrayList d) {
-		dates = d;
-		}
+	public void set_dates(ArrayList d) { dates = d; }
 
 	// Set the times.
 	public void set_times(ArrayList t) { times = t; }
