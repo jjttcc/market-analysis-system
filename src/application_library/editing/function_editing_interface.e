@@ -448,19 +448,19 @@ feature {NONE} -- Implementation
 			desc, value, spaces: STRING
 		do
 			create Result.make (1)
-			spaces := "  "
 			from
 				l.start
 			until
 				l.exhausted
 			loop
+				spaces := "  "
 				if desc_type = 'l' then
 					desc := l.item.description
 					value := concatenation (<<"(value: ",
 						l.item.current_value, ", type: ",
 						l.item.value_type_description, ")">>)
 					if desc.count + value.count > 74 then
-						spaces := "%N    "
+						spaces := "%N      "
 					end
 					Result.extend (concatenation (<<desc, spaces, value>>))
 				elseif desc_type = 's' then
