@@ -85,7 +85,7 @@ feature {NONE} -- Inapplicable
 
 feature {MARKET_FUNCTION_EDITOR}
 
-	set_input, make, set_innermost_input (in: like input) is
+	set_input, make (in: like input) is
 		require else
 			in_not_void: in /= Void
 			in_ptype_not_void: in.trading_period_type /= Void
@@ -95,6 +95,19 @@ feature {MARKET_FUNCTION_EDITOR}
 			processed_date_time := input.processed_date_time
 		ensure then
 			input_set_to_in: input = in
+			output_is_input: output = input
+			processed_date_time_not_void: processed_date_time /= Void
+		end
+
+	set_innermost_input (in: like input) is
+		require else
+			in_not_void: in /= Void
+			in_ptype_not_void: in.trading_period_type /= Void
+		do
+			input.make_from_array (in)
+			processed_date_time := input.processed_date_time
+		ensure then
+			input_copied_from_in: input.count = in.count
 			output_is_input: output = input
 			processed_date_time_not_void: processed_date_time /= Void
 		end

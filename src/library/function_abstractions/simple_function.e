@@ -25,12 +25,11 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 	MARKET_TUPLE_LIST [G]
 		rename
 			make as arrayed_list_make
-		export {NONE}
-			all
-				{FACTORY}
-			extend, count, first, last, i_th
-				{ANY}
-			is_empty
+		export
+			{NONE} all
+			{FACTORY} extend, count, first, last, i_th
+			{MARKET_FUNCTION} make_from_array
+			{ANY} is_empty
 		end
 
 creation {FACTORY}
