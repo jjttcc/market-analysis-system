@@ -112,6 +112,47 @@ feature -- Access
 			end
 		end
 
+	local_host_name_report: STRING is
+			-- Report - host name on which this process is running.
+		do
+			Result := "Host name: " + local_host_name
+		ensure
+			exists: Result /= Void
+		end
+
+	ports_report: STRING is
+			-- Report on all port numbers being used
+		do
+			Result := "Port numbers: "
+			from
+				command_line.port_numbers.start
+			until
+				command_line.port_numbers.islast or
+				command_line.port_numbers.exhausted
+			loop
+				Result := Result + command_line.port_numbers.item.out + ", "
+				command_line.port_numbers.forth
+			end
+			if command_line.port_numbers.islast then
+				Result := Result + command_line.port_numbers.item.out
+			else
+				Result := Result + " (None)"
+			end
+			command_line.port_numbers.start
+		ensure
+			exists: Result /= Void
+		end
+
+	local_host_name: STRING is
+		do
+			Result := (create {HOST_ADDRESS}.make).local_host_name
+			if Result = Void then
+				Result := ""
+			end
+		ensure
+			exists: Result /= Void
+		end
+
 invariant
 
 	command_line_set: command_line /= Void
