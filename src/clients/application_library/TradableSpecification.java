@@ -3,7 +3,9 @@ package application_library;
 import java.util.*;
 import graph_library.DataSet;
 
-// Specification for a data request to the server for data for a "tradable"
+/**
+* Specification for a data request to the server for data for a "tradable"
+**/
 public class TradableSpecification {
 
 // Initialization
@@ -17,33 +19,45 @@ public class TradableSpecification {
 
 // Access
 
-	// The symbol of the tradable for which data is to be requested
+	/**
+	* The symbol of the tradable for which data is to be requested
+	**/
 	public String symbol() {
 		return symbol;
 	}
 
-	// The period type of the data to be requested
+	/**
+	* The period type of the data to be requested
+	**/
 	public String period_type() {
 		return period_type;
 	}
 
-	// The main (date,open,high,low,close,...) data set for the tradable
+	/**
+	* The main (date,open,high,low,close,...) data set for the tradable
+	**/
 	public DataSet main_data() {
 		return main_data;
 	}
 
-	// The indicator specification with indicator with name `indicator_name'
+	/**
+	* The indicator specification with indicator with name `indicator_name'
+	**/
 	public IndicatorSpecification indicator_spec_for(
 			String indicator_name) {
 		return (IndicatorSpecification) indicator_specs.get(indicator_name);
 	}
 
-	// The indicator specifications
+	/**
+	* The indicator specifications
+	**/
 	public Collection indicator_specifications() {
 		return indicator_specs.values();
 	}
 
-	// All "selected" indicator specifications
+	/**
+	* All "selected" indicator specifications
+	**/
 	public Collection selected_indicators() {
 		Iterator i = indicator_specs.values().iterator();
 		LinkedList result = new LinkedList();
