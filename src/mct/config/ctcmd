@@ -4,10 +4,18 @@
 # versions of the mctrc file.
 
 ct=/home/development/jtc/projects/config_tool/EIFGEN/F_code/config_tool
+
+if [ ! -x $ct ]; then
+	ct=/home/development/jtc/finance/lib/binaries/linux/config_tool_no_assert_v1.6.7
+fi
+if [ ! -x $ct ]; then
+	echo "Cannot find $ct - aborting ..."; exit 1
+fi
+
 for platform in linux windows; do
-cp mctrc.template mctrc.$platform
-chmod +w mctrc.$platform
-$ct -c mctrc-spec.$platform -f mctrc.$platform
+	cp mctrc.template mctrc.$platform
+	chmod +w mctrc.$platform
+	$ct -c mctrc-spec.$platform -f mctrc.$platform
 done
 unix2dos mctrc.windows
 chmod +r mctrc.windows
