@@ -25,6 +25,11 @@ class CL_BASED_FUNCTION_EDITING_INTERFACE inherit
 			help
 		end
 
+	TERMINABLE
+		undefine
+			print
+		end
+
 	GLOBAL_SERVER
 		export
 			{NONE} all
@@ -57,6 +62,7 @@ feature -- Initialization
 			create operator_maker.make (false)
 			create editor.make (Current, operator_maker)
 			create help.make
+			register_for_termination (Current)
 		ensure
 			editor_exists: editor /= Void
 		end
@@ -184,7 +190,7 @@ feature {NONE} -- Implementation of hook methods
 			Result := backoutable_selection (l, msg, Exit_value)
 		end
 
-	initialize_lock is
+	do_initialize_lock is
 		do
 			lock := file_lock (file_name_with_app_directory (
 				indicators_file_name))

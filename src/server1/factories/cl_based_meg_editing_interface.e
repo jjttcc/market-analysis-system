@@ -25,6 +25,11 @@ class CL_BASED_MEG_EDITING_INTERFACE inherit
 			operator_maker, function_editor, help
 		end
 
+	TERMINABLE
+		undefine
+			print
+		end
+
 	GLOBAL_SERVER
 		export
 			{NONE} all
@@ -61,6 +66,7 @@ feature -- Initialization
 			create editor
 			create function_editor.make
 			operator_maker.set_market_tuple_selector (function_editor)
+			register_for_termination (Current)
 		ensure
 			editor_exists: editor /= Void
 			operator_maker_exists: operator_maker /= Void
@@ -531,7 +537,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation of hook routines
 
-	initialize_lock is
+	do_initialize_lock is
 		do
 print ("il called%N")
 			lock := file_lock (file_name_with_app_directory (

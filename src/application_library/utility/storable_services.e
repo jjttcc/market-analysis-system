@@ -6,7 +6,9 @@ indexing
 	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
 		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
-deferred class STORABLE_SERVICES [G]
+deferred class STORABLE_SERVICES [G] inherit
+
+	TERMINABLE
 
 feature -- Access
 
@@ -149,6 +151,26 @@ feature -- Basic operations
 				(not readonly and not ok_to_save)
 		end
 
+	initialize_lock is
+			-- If the lock exists and was left locked, ulock it;
+			-- otherwise create it.
+		do
+			if lock /= Void and lock.locked then
+				lock.unlock
+			else
+				do_initialize_lock
+			end
+		ensure
+			lock_set: lock /= Void
+		end
+
+	cleanup is
+		do
+			if lock /= Void and lock.locked then
+				lock.unlock
+			end
+		end
+
 feature {NONE} -- Hook routines
 
 	show_message (s: STRING) is
@@ -181,10 +203,8 @@ feature {NONE} -- Hook routines
 		do
 		end
 
-	initialize_lock is
+	do_initialize_lock is
 		deferred
-		ensure
-			lock_set: lock /= Void
 		end
 
 invariant

@@ -22,6 +22,11 @@ class EVENT_REGISTRATION inherit
 			print
 		end
 
+	TERMINABLE
+		undefine
+			print
+		end
+
 	APP_ENVIRONMENT
 		export
 			{NONE} all
@@ -77,6 +82,7 @@ feature -- Initialization
 			create help.make
 			-- Satisfy invariant (editor is currently not used.)
 			create editor
+			register_for_termination (Current)
 --			create pending_registrants.make
 		ensure
 			iodev_set: input_device = in_dev and output_device = out_dev
@@ -542,7 +548,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation of hook routines
 
-	initialize_lock is
+	do_initialize_lock is
 		do
 			lock := file_lock (file_name_with_app_directory (
 				registrants_file_name))
