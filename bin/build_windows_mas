@@ -41,7 +41,7 @@ make_assert_version() {
 	cd $eifdir/F_code
 	if finish_freezing; then
 		strip mas.exe
-		mv mas.exe $bindir/mas_assert${version}
+		mv mas.exe $bindir/mas_assert${version}.exe
 		cd ../..
 	else
 		echo "'finish_freezing' failed."
@@ -55,7 +55,7 @@ make_non_assert_version() {
 	if finish_freezing; then
 		strip mas.exe
 		cp mas.exe $MAS_SOURCE_DIR/bin
-		mv mas.exe $bindir/mas_no_assert${version}
+		mv mas.exe $bindir/mas_no_assert${version}.exe
 		cd ../..
 	else
 		echo "'finish_freezing' failed."
