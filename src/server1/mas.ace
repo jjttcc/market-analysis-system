@@ -6,6 +6,7 @@ root
 
 default
 	assertion (all)
+	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4002 -debug")
 	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4002")
 	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4001")
 	arguments ("-o -f , sunw.txt  4002")
