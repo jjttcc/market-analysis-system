@@ -224,34 +224,25 @@ feature -- Basic operations
 				not after implies item.symbol.is_equal (s)
 		end
 
---!!!:
 	update_item is
 			-- If new data is available for `item' (the current tradable),
 			-- load the new data into `item'.
 		local
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 		do
-print ("update_item was called" + "%N")
-			--@@@Note: Synchronization may be needed here in MT version.
+			--@@@Note: Synchronization may be needed here in threaded version.
 			t := item -- Force `item' and `target_tradable' to be "up to date".
 			if not fatal_error then
-if target_tradable /= Void then
-print ("update_item state is OK" + "%N")
-else
-print ("update_item - something went wrong - tgttrd is void." + "%N")
-end
 				check
 					target_exists: target_tradable /= Void
 				end
 				if target_tradable_out_of_date then
-print ("update_item data was out of date, appending new data.%N")
 					append_new_data
-print ("update_item NOT flushing indicators" + "%N")
--- !!!This command appears to have no effect on the results with respect to
--- auto-refreshed data.  Verify and remove if so: [MAYBE NOT!]
+					--@@@Verify that this flush_indicators call is not
+					--needed (See header comments of
+					--'TRADABLE.flush_indicators'.) and if so, remove it -
+					--if not, uncomment it:
 --					target_tradable.flush_indicators
-else
-print ("update_item data was NOT out of date, NOT appending.%N")
 				end
 			end
 		end
@@ -273,41 +264,6 @@ feature {FACTORY} -- Access
 
 	tradable_factory: TRADABLE_FACTORY
 			-- Manufacturers of tradables
-
-feature {TRADABLE_LIST_HANDLER} -- Status report
-
---!!!!Remove - no longer needed.
-	data_updates_disabled: BOOLEAN
-			-- Is dynamic updating of tradable data disabled?
-
-feature {TRADABLE_LIST_HANDLER} -- Status setting
-
---!!!!Remove - no longer needed.
-	disable_data_updates is
-			-- Set `data_updates_disabled' to `True'.
-		do
-			data_updates_disabled := True
-		ensure
-			data_updates_disabled: data_updates_disabled
-		end
-
---!!!!Remove - no longer needed.
-	enable_data_updates is
-			-- Set `data_updates_disabled' to `False'.
-		do
-			data_updates_disabled := False
-		ensure
-			data_updates_enabled: not data_updates_disabled
-		end
-
---!!!!Remove - no longer needed.
-	set_data_updates_disabled (arg: BOOLEAN) is
-			-- Set `data_updates_disabled' to `arg'.
-		do
-			data_updates_disabled := arg
-		ensure
-			data_updates_disabled_set: data_updates_disabled = arg
-		end
 
 feature {NONE} -- Implementation
 
@@ -479,27 +435,12 @@ feature {NONE} -- Implementation
 			Result := gsf.global_configuration.tradable_cache_size
 		end
 
+feature {NONE} -- Hook routines
+
 	target_tradable_out_of_date: BOOLEAN is
 			-- Have new data become available for `target_tradable' since
 			-- `target_tradable' was last updated?
 		require
-			target_tradable_exists: target_tradable /= Void
-			current_item_is_cached_if_caching_on: caching_on implies
-				cached_item (index) /= Void
-		do
---!!!!Fix ...disabled...
-			Result := not data_updates_disabled and
-				target_tradable_out_of_date_implementation
-		end
-
-feature {NONE} -- Hook routines
-
-	target_tradable_out_of_date_implementation: BOOLEAN is
-			-- Have new data become available for `target_tradable' since
-			-- `target_tradable' was last updated?
-		require
---!!!!Fix ...disabled...
-			updates_enabled: not data_updates_disabled
 			target_tradable_exists: target_tradable /= Void
 			current_item_is_cached_if_caching_on: caching_on implies
 				cached_item (index) /= Void
