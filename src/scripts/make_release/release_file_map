@@ -155,86 +155,8 @@ src/clients/GUI1/graph/TemporalDrawer.java . clientsrc1.6.7
 src/clients/GUI1/graph/TimeDrawer.java . clientsrc1.6.7
 # Market Analysis System executables and accompanying files (server and client)
 # (First the GUI java classes)
-src/clients/GUI1/MarketSelection.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/Drawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/CandleDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/BarDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/Axis.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/DoublePair.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/RTextLine.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/FileFormatException.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/LoadMessage.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/RotateTextFilter.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/TextLine.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/TextState.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/DataSet.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/DataSetBuilder.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/SpecialFunction.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/Markers.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/MarkerVertex.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/Graph.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/LineDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/PriceDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/Gin.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/Range.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/InteractiveGraph.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/DateDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/RefSpec.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/MarketDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/IndicatorDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/BasicDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/LowerGraph.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/MainGraph.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/TemporalDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/graph/TimeDrawer.class lib/classes/graph/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/MarketSelection\$1.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/Chart.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/Chart\$1.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/ChartSettings.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/WindowSettings.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/MA_Client.class lib/classes/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/CompressedConnection.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/Connection.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/Parser.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/SessionState.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/MA_ScrollPane.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-#src/clients/GUI1/MA_ScrollPane\$1.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/IndicatorListener.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/IndicatorSelection.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/MA_MenuBar.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/MA_MenuBar\$1.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/MA_MenuBar\$2.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/MA_MenuBar\$3.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/MA_MenuBar\$4.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/MA_MenuBar\$5.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/MA_MenuBar\$6.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/MA_MenuBar\$7.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/MA_MenuBar\$8.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/MA_MenuBar\$9.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/DialogSelection.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/DialogSelection\$1.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/DialogSelection\$2.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/DialogSelection\$3.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/IndicatorColors.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/IndicatorColors\$1.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/IndicatorColors\$2.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/MA_Dialog.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/MA_Dialog\$1.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/GUI1/OptionFlags.class lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
+src/clients/GUI1/mascharts.jar lib/classes/mas_gui/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
 src/clients/CL/CL_Client.class lib/classes/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/common/NetworkProtocol.class lib/classes/common/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/common/DataInspector.class lib/classes/common/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/support/Configuration.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/support/MA_Configuration\$DateSetting.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/support/Utilities.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/support/IntPair.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/support/GUI_Utilities.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/support/ErrorBox.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/support/ErrorBox\$1.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/support/ErrorBox\$2.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/support/ErrorBox\$3.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/support/IndicatorGroup.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
-src/clients/support/IndicatorGroups.class lib/classes/support/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
 # (GUI config. file)
 build/config/.ma_clientrc lib/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
 # (Scripts)
@@ -262,8 +184,8 @@ build/config lib/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
 # (Server executables and needed libraries)
 lib/binaries/linux/mas_no_assert_v1.6.7 bin/mas mas_linux1.6.7
 lib/binaries/linux/mas_assert_v1.6.7 bin/mas_assert mas_linux1.6.7
-lib/binaries/windows/mas_no_assert_v1.6.7 bin/mas.exe mas_windows1.6.7
-lib/binaries/windows/mas_assert_v1.6.7 bin/mas_assert.exe mas_windows1.6.7
+lib/binaries/windows/mas.exe_no_assert_v1.6.7 bin/mas.exe mas_windows1.6.7
+lib/binaries/windows/mas.exe_assert_v1.6.7 bin/mas_assert.exe mas_windows1.6.7
 # !!Add macl, mct, etc. binaries here.
 # Include this odbc library if the executable was not statically
 # linked with it:
