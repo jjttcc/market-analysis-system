@@ -436,7 +436,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	protected void add_indicators(Menu imenu) {
 		MenuItem menu_item;
 		IndicatorListener listener = new IndicatorListener(this);
-//Enumeration ind_keys = indicators().keys();
 		Enumeration ind_keys = ordered_indicator_list.elements();
 		for ( ; ind_keys.hasMoreElements(); ) {
 			menu_item = new MenuItem((String) ind_keys.nextElement());
@@ -538,8 +537,10 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	// Has the period type just been changed?
 	protected boolean period_type_change;
 
+	// Upper indicators currently selected for display
 	protected Vector current_upper_indicators;
 
+	// Lower indicators currently selected for display
 	protected Vector current_lower_indicators;
 
 	// Should new indicator selections replace, rather than be added to,
