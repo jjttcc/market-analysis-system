@@ -6,7 +6,7 @@
 use deploy('configure', 'mas_port', 'mas_options', 'version',
 	'deployment_directory', 'tarfile', 'mas_directory_var', 'data_directory',
 	'data_from_files', 'process_args', 'setup', 'cleanup',
-	'set_cleanup_workdir', 'abort'
+	'set_cleanup_workdir', 'final_message_file', 'abort'
 );
 
 # Constants
@@ -23,6 +23,9 @@ my $python_path_var = "PYTHONPATH";
 &install;
 &make_driver_scripts;
 &cleanup;
+if (length(&final_message_file) > 0) {
+	&write_startup_instructions;
+}
 
 ### Main operations
 
@@ -52,6 +55,16 @@ sub make_driver_scripts {
 	open(F, "> " . $f) || &abort("Cannot create shutdown script $f");
 	print F &mas_shutdown_command . "\n";
 	chmod 0500, $f;
+}
+
+# Briefly describe how to start and stop the mas server.
+sub write_startup_instructions {
+	$f = &final_message_file;
+	open(F, "> " . $f) || &abort("Cannot create message file $f");
+	print F "\n\n\nNOTE:\n\nTo start the MAS server, run:\n",
+		&deployment_directory . "/bin/" . $start_mas_script, "\n";
+	print F "To stop the MAS server, run:\n\n",
+		&deployment_directory . "/bin/" . $stop_mas_script, "\n";
 }
 
 ### General utilities

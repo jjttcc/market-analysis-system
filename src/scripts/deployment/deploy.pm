@@ -8,13 +8,14 @@ package deploy;
 	deployment_directory tarfile applet_archive servlet_archive
 	applet_deployment_path servlet_deployment_directory
 	mas_directory_var data_directory data_from_files process_args
-	setup cleanup set_cleanup_workdir abort
+	setup cleanup set_cleanup_workdir final_message_file abort
 );
 
 # Constants
 
 $config_file = "mas-deploy.cf";
 $Clean_work_dir = 0;
+$Final_msg_file = "";
 
 # Settings variables
 my %settings = ();
@@ -43,8 +44,14 @@ sub process_args {
 	my $argcount = @ARGV;
 	for (my $i = 0; $i < $argcount; ++$i) {
 		$arg = $ARGV[$i];
-		if ($arg =~ /^-+h/ || $arg =~ /^-+?/) {
+		if ($arg =~ /^-+h/ || $arg =~ /^-+\?/) {
 			&usage; exit 0;
+		} elsif ($arg =~ /^-+m/) {
+			++$i;
+			if ($i == $argcount) {
+				&usage; exit 1;
+			}
+			$Final_msg_file = $ARGV[$i];
 		} else {
 			&usage; exit 1;
 		}
@@ -57,7 +64,7 @@ sub set_cleanup_workdir {
 }
 
 sub usage {
-	print "Usage: $0 [-h]\n";
+	print "Usage: $0 [-h|-m final_message_file]\n";
 }
 
 ### Utilities for set-up, clean-up, etc.
@@ -84,10 +91,9 @@ sub setup {
 
 # Cleanup - remove the work directory, etc.
 sub cleanup {
-print "cleanup called - cwd: $Clean_work_dir\n";
 	chdir $origdir;
 	if ($Clean_work_dir) {
-		print "Removing work directory, $work_directory.\n";
+#		print "Removing work directory, $work_directory.\n";
 		! system($remove_dir_cmd . " " . $work_directory) ||
 			die "Failed to remove " . "work directory, $work_directory.\n";
 	}
@@ -192,6 +198,10 @@ sub data_directory {
 # Will the mas server get its data from files?
 sub data_from_files {
 	return &data_directory !~ /NONE/;
+}
+
+sub final_message_file {
+	return $Final_msg_file;
 }
 
 return 1;

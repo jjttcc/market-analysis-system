@@ -2,18 +2,25 @@
 # Deploy the MAS server and web application.
 
 basedir=$(dirname $0)
+msg_file=/tmp/msg$$
 
 result=0
-if perl -I $basedir $basedir/deploy_server.pl $*; then
+if perl -I $basedir $basedir/deploy_server.pl -m $msg_file $*; then
 	if ! perl -I $basedir $basedir/deploy_web.pl $*; then
 		echo "Deployment of MAS web application failed." >&2
 		result=2
 	else
 		echo "Deployment of MAS server and web application succeeded." >&2
+		if [ -r $msg_file ]; then
+			echo "$(cat $msg_file)" >&2
+		else
+			echo "Cannot read message file: $msg_file." >&3
+		fi
 	fi
 else
 	echo "Deployment of MAS server failed." >&2
 	result=1
 fi
 
+rm -f $msg_file
 exit $result
