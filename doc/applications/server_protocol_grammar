@@ -7,11 +7,15 @@ client_req      -> session_key "\t" client_req_spec | login_req
 client_req_spec -> [compress_flag] client_data_req
 client_data_req -> mkt_data_req | ind_data_req | symbol_list_req |
                      ind_list_req | trad_pertyp_req | change_session_req |
-                     event_data_req | event_list_req | logout_req
+                     event_data_req | event_list_req | logout_req |
+					 all_ind_req | param_req | param_set_req
 compress_flag   -> "<@z@>"
 mkt_data_req    -> mkt_symbol "\t" trad_per_type
 event_data_req  -> mkt_symbol "\t" start_date "\t" end_date "\t" event_id_list
 ind_data_req    -> indID "\t" mkt_symbol "\t" trad_per_type
+all_ind_req     -> <null>
+param_req       -> ind_name
+param_set_req   -> To Be Defined!!!
 trad_pertyp_req -> mkt_symbol
 login_req       -> { login_spec "\t" ... }
 login_spec      -> start_date_spec | end_date_spec
@@ -26,7 +30,8 @@ login_response  -> session_key [ "\t" session_state ]
 error_msg       -> ta_string
 mkt_symbol      -> ta_string
 srvr_data       -> mkt_data | ind_data | symbol_list | ind_list |
-                     trad_per_types | event_list | event_data
+                     trad_per_types | event_list | event_data |
+                     ind_param_list | <null>
 mkt_data        -> { [open_int_flag] mkt_tuple "\n" ... }
 mkt_tuple       -> datetime "\t" mkt_fields
 open_int_flag   -> "oi"
@@ -34,6 +39,7 @@ ind_data        -> { ind_tuple "\n" ... }
 ind_tuple       -> datetime "\t" ta_real
 symbol_list     -> { symbol "\n" ... }
 ind_list        -> { ind_name "\n" ... }
+ind_param_list  -> To Be Defined
 event_list      -> { event_specifier "\n" ... }
 event_data      -> { event_tuple "\n" ... }
 event_tuple     -> datetime "\t" eventID "\t" event_type
@@ -77,6 +83,7 @@ digit           -> ('0'..'9')
 end_of_message  -> ''
 ta_string       -> +(ta_char)
 ta_char         -> Any character other than tab or newline
+<null>          -> Empty string (0-length contents)
 
 
 Client-Request Definitions:
@@ -106,6 +113,18 @@ ind_data_req:       Request for the data resulting from the application of
 trad_pertyp_req:    Request for all trading-period types available for the
                     specified tradable
 
+all_ind_req:        Request for all indicators known to the server
+
+param_req:          Request for a list of changeable parameters for the
+                    indicator with the specified name (The name is a unique
+					key - one of the "ind_name"s returned in response to
+					an 'all_ind_req'.)
+
+param_set_req:      Request to change the settings for the specified
+                    parameter with the specified period type ("all" to
+					change the parameter for all period types) to the
+					specified values
+
 change_session_req: Not used - May become obsolete.
 
 event_list_req:     Request for all event types available for the specified
@@ -126,10 +145,27 @@ mkt_data_req:       mkt_data
 ind_list_req:       ind_list
 ind_data_req:       ind_data
 trad_pertyp_req:    trad_per_types
+all_ind_req:        ind_list
+param_req:          ind_param_list
+param_set_req:      <null>
 event_list_req:     event_list
 event_data_req:     event_data
+logout_req:         <null>
 
 Notes:
+
+!!!The grammars for param_set_req and ind_param_list are not yet defined.
+'ind_param_list' will probably be a list of function parameters, where
+each element of the list includes the FP's name (which serves
+as a unique key) and the FP's full description, including its type.
+There needs to be enough information for the user to know what he is
+editing.  The 'param_set_req' will probably consist of the 'ind_name' (key
+to the indicator being edited), the FP's name to ID the FP, and the new
+value for the FP.  (It may also include the period type, to specify that
+only the indicator for that period type should be changed; if so, an "all"
+period type should probably be included to specify that the specified
+indicators for all period types be changed.)
+Remove this note when the definition for these terms are complete.
 
 The construct "symbol1<>symbol2" means that there is no white space separating
 symbol1 and symbol2.
@@ -155,17 +191,8 @@ with respect to this request.
 msgID is an integer identifying the type of message.  For the server,
 the types of messages are those containing data in response to a client
 request (srvr_data) and those containing error message information
-(error_msg).  For the client, the types of messages are:
-
-    - mkt_data_req (request for market data)
-    - ind_data_req (request for indicator data)
-    - trad_pertyp_req (request for list of trading period types valid for
-         the specified market)
-    - symbol_list_req (request for a list of the symbols of all markets in the
-         database)
-    - ind_list_req (request for a list of all indicators in the database)
-    - event_data_req (request for a list of events - trading signals - for a
-         particular tradable and trading period type)
+(error_msg).  See "Client-Request Definitions:", above for a description
+of the different types of client requests.
 
 A client market data request always includes the symbol for the desired
 market and the desired trading period type.  A client indicator data request
