@@ -21,7 +21,7 @@ feature -- Initialization
 		local
 			s: STRING
 		do
-			arr_make (Main, Edit_indicators)
+			arr_make (Main, Edit_event_generators)
 			s :=
 "%NSelect market: Select a market out of the current list for viewing.%N%
 %View data: View the selected markets's data, or one or more technical%N%
@@ -90,12 +90,15 @@ feature -- Initialization
 %View long description: View a detailed description of the curretnly %N%
 %   selected indicator.%N"
 			put (s, View_indicator)
+			s := "(This will soon be 'edit event generators' help)"
+			put (s, Edit_event_generators)
 		end
 
 feature -- Access
 
 	Main, View_data, Set_analysis_date, Edit_event_registrants,
-	Add_registrants, Edit_registrant, View_indicator, Edit_indicators:
+	Add_registrants, Edit_registrant, View_indicator, Edit_indicators,
+	Edit_event_generators:
 		INTEGER is unique
 
 end -- class HELP
