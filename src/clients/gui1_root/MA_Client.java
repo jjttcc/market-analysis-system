@@ -43,6 +43,8 @@ public class MA_Client {
 		}
 		if (command_line_options.auto_refresh()) {
 			Configuration.instance().set_auto_refresh(true);
+			Configuration.instance().set_auto_refresh_delay(
+				command_line_options.auto_refresh_delay());
 		}
 	}
 

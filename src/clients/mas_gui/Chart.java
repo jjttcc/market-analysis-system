@@ -455,7 +455,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		MA_Configuration conf = MA_Configuration.application_instance();
 		conf.add_chart(this);
 		if (conf.auto_refresh()) {
-			auto_refresh_handler = new AutoRefreshSetup(this);
+			auto_refresh_handler = new AutoRefreshSetup(this,
+				conf.auto_refresh_delay());
 			turn_on_refresh();
 		}
 	}

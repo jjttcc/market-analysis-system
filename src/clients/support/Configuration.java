@@ -38,6 +38,11 @@ public class Configuration implements NetworkProtocol {
 		return auto_refresh;
 	}
 
+	// Number of seconds for the "auto-data-refresh" delay
+	public int auto_refresh_delay() {
+		return auto_refresh_delay;
+	}
+
 // Element change
 
 	// Set the input source to be used for configuration input.
@@ -69,6 +74,11 @@ public class Configuration implements NetworkProtocol {
 		auto_refresh = value;
 	}
 
+	// Set the 'auto_refresh' delay.
+	public static void set_auto_refresh_delay(int value) {
+		auto_refresh_delay = value;
+	}
+
 // Basic operations
 
 	// If not ignore_termination(), terminate the process.
@@ -88,6 +98,7 @@ public class Configuration implements NetworkProtocol {
 	protected static boolean ignore_termination = false;
 	protected static boolean debug = false;
 	protected static boolean auto_refresh = false;
+	protected static int auto_refresh_delay;
 	protected static Configuration _instance;
 	protected static Tokenizer input_source;
 }

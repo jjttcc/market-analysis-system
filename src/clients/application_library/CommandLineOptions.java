@@ -32,8 +32,18 @@ public class CommandLineOptions extends StartupOptions {
 				if (i < args.length && args[i].equals(debug_option)) {
 					set_debug(true);
 				}
-				if (i < args.length && args[i].equals(auto_refresh_option)) {
-					set_auto_refresh(true);
+				if (i < args.length && args[i].regionMatches(0,
+						auto_refresh_option, 0, auto_refresh_option.length())) {
+//				if (i < args.length && args[i].equals(auto_refresh_option)) {
+					if (args[i].length() == auto_refresh_option.length()) {
+						set_auto_refresh(true);
+					} else {
+						parse_auto_refresh_settings(args[i]);
+						if (refresh_settings_parse_error) {
+							usage();
+							Configuration.terminate(1);
+						}
+					}
 				}
 			}
 		} else {
@@ -58,8 +68,6 @@ public class CommandLineOptions extends StartupOptions {
 		System.err.println("Usage: MA_Client hostname port_number [options]\n"+
 		"Options:\n   "+ symbol_option +" symbol ..." +
 		"    Include only the specified symbols in the selection list.\n" +
-		"   " + auto_refresh_option +
-		"    Enable the auto-data-refresh feature.\n" +
 		"   " + debug_option +
 		"           Print debugging information.\n" +
 		"   " + printall_option +
