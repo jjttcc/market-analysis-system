@@ -8,16 +8,32 @@ host	chart.yahoo.com
 path	table.csv?s=<symbol>&a=<startmonth>&b=<startday>&c=<startyear>&d=<endmonth>&e=<endday>&f=<endyear>&g=d&q=q&y=0&z=<symbol>&x=.csv
 symbol_file	symbols
 
+# Specification of lines from the output (for the data retrieval for a
+# single tradable symbol) that should ignored - format:
+# postitive_integer: line count from the beginning of the output stream
+# where the first line is counted as 1
+# negative_integer: line count from the end of the output stream where the
+# last line is counted as -1, next-to-last line as -2, etc.
+# Example specifying to ignore the first, last and next-to-last lines:
+# eod_result_ignore_lines	1,-1,-2
+eod_result_ignore_lines	1
+
 # The format of the resulting end-of-day data sent back from the http data-
 # source site
-eod_result_format	ignore_lines:1;<day>-<month_abbr3>-<yy>,<o>,<h>,<l>,<c>,<v>
-# Example from yahoo:
+# This spec. is for yahoo:
 # Date,Open,High,Low,Close,Volume
 # 9-Jul-02,71.40,72.25,69.45,69.67,11165600
+eod_result_format	<day>-<mon>-<yy>,<o>,<h>,<l>,<c>,<v>
+eod_result_format	<day>-<month3>-<yy>,<o>,<h>,<l>,<c>,<v>
+# Meaning of the above specification:
+# <day>: Day of the month; <month3>: Month as a 3-letter abbreviation
+# (Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec);
+# <yy>: Year in 2-digit format (e.g., 02 is 2002, 96 is 1996, etc.)
+# <o>: open; <h>: high; <l>: low; <c>: close; <v>: volume
 
 # The time at which to attempt to retrieve the latest end-of-day data from
 # the http data-source site.  It should be in the user's local time.
 # This needs to be set carefully: Too early and a lot of time will be wasted
 # trying to retrieve data that doesn't exist yet; too late and your data
-# will not be as up-to-date as it could be.
-eod_turnover_time	6 pm
+# will not be as up-to-date as it could be.  Format: hh:mm (24-hour clock)
+eod_turnover_time	18:00
