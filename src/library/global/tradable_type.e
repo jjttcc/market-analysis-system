@@ -37,19 +37,23 @@ feature {NONE} -- Initialization
 feature -- Access
 
 	value_set: LINKED_SET [INTEGER] is
-			-- Allowable values
 		once
-			create Result.make
-			Result.extend (stock)
-			Result.extend (derivative)
+			Result := value_set_implementation
 		end
 
-	name_set: ARRAY [STRING] is
-			-- Names corresponding to `value_set'
+feature {NONE} -- Implementation
+
+	value_name_map: HASH_TABLE [STRING, INTEGER] is
 		once
-			create Result.make (stock, derivative)
+			create Result.make (2)
 			Result.put ("Stock", stock)
 			Result.put ("Derivative", derivative)
+		end
+
+	allowable_values: ARRAY [INTEGER] is
+			-- Allowable values
+		once
+			Result := <<stock, derivative>>
 		end
 
 invariant
