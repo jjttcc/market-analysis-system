@@ -6,16 +6,6 @@ indexing
 
 class MARKET_TUPLE_PRINTER inherit
 
---	GLOBAL_SERVICES
---		export {NONE}
---			all
---		end
-
---	GENERAL_UTILITIES
---		export {NONE}
---			all
---		end
-
 	COMMAND
 
 creation
@@ -27,9 +17,8 @@ feature -- Initialization
 	make (start_date, end_date: DATE;
 			field_sep, date_field_sep, record_sep: STRING) is
 		require
-			not_void:
-				start_date /= Void and end_date /= Void and field_sep /= Void
-				and date_field_sep /= Void and record_sep /= Void
+			not_void: field_sep /= Void and date_field_sep /= Void and
+				record_sep /= Void
 		do
 			print_start_date := start_date
 			print_end_date := end_date
