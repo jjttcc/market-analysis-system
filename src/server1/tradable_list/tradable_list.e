@@ -68,7 +68,6 @@ feature -- Access
 			-- Current tradable.  `fatal_error' will be True if an error
 			-- occurs.
 		do
-print ("starting TRADABLE_LIST.item.%N")
 			fatal_error := False
 			-- Create a new tradable (or get it from the cache) only if
 			-- caching is off, or the cursor has moved since the last
@@ -79,18 +78,13 @@ print ("starting TRADABLE_LIST.item.%N")
 			then
 				old_index := 0
 				last_tradable := cached_item (index)
-print ("Calling update_and_load_data.%N")
 				update_and_load_data
 				old_index := index
-else
-print ("Not calling update_and_load_data.%N")
 			end
 			Result := last_tradable
 			if Result = Void and not fatal_error then
 				fatal_error := True
-print ("last_tradable was Void - fatal error set to True.%N")
 			end
-print ("returning from TRADABLE_LIST.item.%N")
 		ensure then
 			good_if_no_error: not fatal_error implies Result /= Void
 		end
@@ -203,7 +197,6 @@ feature -- Basic operations
 			-- Note: If `s' contains any upper-case characters, no matching
 			-- tradable will be found.
 		do
-print ("starting TRADABLE_LIST.search_by_symbol.%N")
 			from
 				start
 			until
@@ -211,12 +204,6 @@ print ("starting TRADABLE_LIST.search_by_symbol.%N")
 			loop
 				forth
 			end
-if after then
-print ("search_by_symbol could not find symbol " + s + ".%N")
-else
-print ("search_by_symbol found symbol " + s + ".%N")
-end
-print ("returning from TRADABLE_LIST.search_by_symbol.%N")
 		ensure
 			after_if_not_found: not symbols.has (s) implies after
 			current_symbol_equals_s: item /= Void and
@@ -241,13 +228,10 @@ feature {NONE} -- Implementation
 			-- source is up to date, and then load the data.
 		do
 			if last_tradable = Void then
-print ("TRADABLE_LIST.update_and_load_data calling load_data.%N")
 				load_data
 			else
 				-- Ensure that old indicator data from the previous
 				-- `last_tradable' is not re-used.
-print ("TRADABLE_LIST.update_and_load_data calling %
-%last_tradable.flush_indicators.%N")
 				last_tradable.flush_indicators
 			end
 		end
@@ -257,25 +241,18 @@ print ("TRADABLE_LIST.update_and_load_data calling %
 			-- `setup_input_medium' must have been called to open the
 			-- input medium before calling this procedure.
 		do
-print ("TRADABLE_LIST.load_data calling setup_input_medium.%N")
 			setup_input_medium
 			if not fatal_error then
-print ("load_data: NO fatal error.%N")
 				tradable_factory.set_symbol (current_symbol)
-print ("Calling tradable_factory.execute.%N")
 				tradable_factory.execute
 				last_tradable := tradable_factory.product
 				add_to_cache (last_tradable, index)
 				if tradable_factory.error_occurred then
-print ("tradable_factory.error_occurred.%N")
 					report_errors (last_tradable.symbol,
 						tradable_factory.error_list)
 					if tradable_factory.last_error_fatal then
-print ("tradable_factory.last_error_fatal.%N")
 						fatal_error := True
 					end
-else
-print ("NOT tradable_factory.error_occurred.%N")
 				end
 				close_input_medium
 			else
@@ -284,7 +261,6 @@ print ("NOT tradable_factory.error_occurred.%N")
 				-- that last_tradable is not set to this invalid
 				-- object.
 				last_tradable := Void
-print ("load_data: fatal error.%N")
 			end
 		end
 

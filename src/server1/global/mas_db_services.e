@@ -57,16 +57,13 @@ feature -- Access
 		require
 			connected: connected
 		do
-print ("starting MAS_DB_SERVICES.daily_data_for_symbol.%N")
 			if is_stock_symbol (s) then
-print ("daily_data_for_symbol retrieving stock data.%N")
 				Result := daily_stock_data (s)
 				if Result /= Void then
 					check_field_count (Result, Stock, False,
 						"daily stock data")
 				end
 			elseif is_derivative_symbol (s) then
-print ("daily_data_for_symbol retrieving derivative data.%N")
 				Result := daily_derivative_data (s)
 				if Result /= Void then
 					check_field_count (Result, Derivative, False,
@@ -78,7 +75,6 @@ print ("daily_data_for_symbol retrieving derivative data.%N")
 					"Symbol '" + s + "' is neither a valid stock symbol, nor %
 						%a valid derivative symbol.%N"
 			end
-print ("returning from MAS_DB_SERVICES.daily_data_for_symbol.%N")
 		ensure
 			not_void_if_no_error: not fatal_error and (is_stock_symbol (s) or
 				is_derivative_symbol (s)) implies Result /= Void
@@ -92,7 +88,6 @@ print ("returning from MAS_DB_SERVICES.daily_data_for_symbol.%N")
 		require
 			connected: connected
 		do
-print ("starting MAS_DB_SERVICES.intraday_data_for_symbol.%N")
 			if is_stock_symbol (s) then
 				Result := intraday_stock_data (s)
 				if Result /= Void then
@@ -105,8 +100,12 @@ print ("starting MAS_DB_SERVICES.intraday_data_for_symbol.%N")
 					check_field_count (Result, Derivative, True,
 						"intraday derivative data")
 				end
+			else
+				fatal_error := True
+				last_error :=
+					"Symbol '" + s + "' is neither a valid stock symbol, nor %
+						%a valid derivative symbol.%N"
 			end
-print ("returning from MAS_DB_SERVICES.intraday_data_for_symbol.%N")
 		ensure
 			not_void_if_no_error: not fatal_error and (is_stock_symbol (s) or
 				is_derivative_symbol (s)) implies Result /= Void
@@ -507,7 +506,6 @@ feature {NONE} -- Implementation
 				expected_count := expected_count + 1
 			end
 			if seq.field_count /= expected_count then
-print ("check_field_count found wrong field count.%N")
 				fatal_error := True
 				last_error := concatenation (<<"Database error:%NWrong number ",
 					"of fields in query result for%N", data_descr,
