@@ -181,6 +181,11 @@ feature -- Status report
 		deferred
 		end
 
+	caching_on: BOOLEAN is
+			-- Is cahing of tradable data turned on?
+		deferred
+		end
+
 	valid_period_type (symbol: STRING; t: TIME_PERIOD_TYPE): BOOLEAN is
 			-- Is `t' a valid period type for the tradable with symbol
 			-- `symbol'?
@@ -245,11 +250,15 @@ feature -- Basic operations
 	turn_caching_off is
 			-- Turn off caching of tradable data.
 		deferred
+		ensure
+			caching_off: not caching_on
 		end
 
 	turn_caching_on is
 			-- Turn on caching of tradable data.
 		deferred
+		ensure
+			caching_on: caching_on
 		end
 
 invariant
