@@ -75,6 +75,9 @@ feature {NONE} -- Hook methods
 		end
 
 	update_processed_date_time is
+			-- Update `processed_date_time' to now - can be used by
+			-- descendants as part of `processed' implementation and
+			-- redefined if needed.
 		do
 			if processed_date_time = Void then
 				create processed_date_time.make_now
