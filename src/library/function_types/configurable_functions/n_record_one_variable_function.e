@@ -9,7 +9,7 @@ class N_RECORD_ONE_VARIABLE_FUNCTION inherit
 
 	ONE_VARIABLE_FUNCTION
 		redefine
-			do_process, make, target
+			do_process, make, target, process_precondition
 		end
 
 	N_RECORD_STRUCTURE
@@ -35,6 +35,15 @@ feature -- Basic operations
 		do
 			target.go_i_th (n)
 			continue_until
+		end
+
+feature -- Status report
+
+	process_precondition: BOOLEAN is
+		do
+			Result := n_set and Precursor
+		ensure then
+			n_set: Result implies n_set
 		end
 
 feature {NONE}

@@ -165,7 +165,7 @@ feature {NONE}
 
 feature {TEST_FUNCTION_FACTORY} -- Element change (Export to test class for now.)
 
-	set_input (f1, f2: MARKET_FUNCTION) is
+	set_input (f1, f2: like input1) is
 		require
 			not_void: f1 /= Void and f2 /= Void
 			outputs_not_void: f1.output /= Void and f2.output /= Void
