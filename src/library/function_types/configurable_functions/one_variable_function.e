@@ -9,6 +9,8 @@ class ONE_VARIABLE_FUNCTION inherit
 	MARKET_FUNCTION
 
 	LINEAR_ANALYZER
+		export {NONE}
+			set_target
 		redefine
 			action
 		end
@@ -48,6 +50,9 @@ feature {NONE}
 	do_process is
 			-- Execute the function.
 		do
+			if not input.processed then -- !!!Check
+				input.process (Void)
+			end
 			do_all
 		end
 
@@ -67,6 +72,8 @@ feature {TEST_FUNCTION_FACTORY} -- Element change
 	set_input (in: like input) is
 		require
 			not_void: in /= Void and in.output /= Void
+			in_op_not_void_if_used:
+				in.operator_used implies in.operator /= Void
 		do
 			input := in
 			set_target (input.output)

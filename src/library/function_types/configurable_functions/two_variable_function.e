@@ -9,6 +9,9 @@ class TWO_VARIABLE_FUNCTION
 inherit
 
 	MARKET_FUNCTION
+		redefine
+			process_precondition
+		end
 
 	LINEAR_ANALYZER
 		rename
@@ -50,11 +53,18 @@ feature -- Initialization
 
 feature -- Access
 
-	processed: BOOLEAN
-
 	output: MARKET_TUPLE_LIST [MARKET_TUPLE]
 
 feature -- Status report
+
+	process_precondition: BOOLEAN is
+		do
+			Result := input_set
+		ensure then
+			input_set: Result implies input_set
+		end
+
+	processed: BOOLEAN
 
 	input_set: BOOLEAN is
 		do
@@ -92,13 +102,19 @@ feature {NONE}
 			t.set_date_time (target1.item.date_time)
 			output.extend (t)
 		ensure then
-			-- output.count = old (output.count) + 1
+			output.count = old (output.count) + 1
 		end
 
 	do_process is
 		do
 			check target1 /= Void and target2 /= Void end
 			check operator /= Void end
+			if not input1.processed then -- !!!Check
+				input1.process (Void)
+			end
+			if not input2.processed then -- !!!Check
+				input2.process (Void)
+			end
 			do_all
 		end
 
@@ -165,10 +181,12 @@ feature {NONE}
 
 feature {TEST_FUNCTION_FACTORY} -- Element change (Export to test class for now.)
 
-	set_input (f1, f2: like input1) is
+	set_input (f1: like input1; f2: like input2) is
 		require
 			not_void: f1 /= Void and f2 /= Void
 			outputs_not_void: f1.output /= Void and f2.output /= Void
+			f1op_not_void_if_used: f1.operator_used implies f1.operator /= Void
+			f2op_not_void_if_used: f2.operator_used implies f2.operator /= Void
 		do
 			input1 := f1
 			input2 := f2
