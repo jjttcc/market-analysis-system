@@ -171,6 +171,8 @@ print ("%N")
 				end
 				registrants.forth
 			end
+		ensure
+			not_void: Result /= Void
 		end
 
 	meg_names (meg_lib: LIST [MARKET_EVENT_GENERATOR]):
@@ -378,24 +380,6 @@ print ("retrieve mer called.%N")
 					create reg_list.make (registrants_file_name)
 				end
 				Result := reg_list
-				-- The registrants themselves also need to be registered for
-				-- termination/cleanup when the process ends; and they need
-				-- to load their (event) histories, which are stored in
-				-- a separate file.
-				from
-					Result.start
-				until
-					Result.exhausted
-				loop
-					Result.item.load_history
-					register_for_termination (Result.item)
-					Result.forth
-				end
-				-- Ensure that the list will be saved when the process ends.
-				-- This is done after registering the contents of the list
-				-- because the MERs need to be cleaned up before being saved
-				-- as elements of reg_list (since cleanup is done for each
-				-- termination registrant in the order it was registered).
 			end
 		rescue
 			retrieval_failed := true
