@@ -72,4 +72,4 @@ invariant
 	start_left_of_end: start_point.x < end_point.x
 	start_point_x_gt_0: start_point.x > 0
 
-end -- class MARKET_POINT
+end -- class MARKET_LINE
