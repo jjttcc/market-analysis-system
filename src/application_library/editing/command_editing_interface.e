@@ -52,6 +52,9 @@ feature -- Constants
 	Basic_numeric_command: STRING is "BASIC_NUMERIC_COMMAND"
 			-- Name of BASIC_NUMERIC_COMMAND
 
+	N_based_calculation: STRING is "N_BASED_CALCULATION"
+			-- Name of N_BASED_CALCULATION
+
 feature -- Status setting
 
 	set_left_offset (arg: INTEGER) is
@@ -96,6 +99,7 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 			l: ARRAYED_LIST [COMMAND]
 		once
 			!!Result.make (0)
+
 			!!l.make (13)
 			Result.extend (l, Boolean_result_command)
 			l.extend (command_with_generator ("LE_OPERATOR"))
@@ -111,6 +115,7 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 			l.extend (command_with_generator ("TRUE_COMMAND"))
 			l.extend (command_with_generator ("FALSE_COMMAND"))
 			l.extend (command_with_generator ("SIGN_ANALYZER"))
+
 			!!l.make (22)
 			Result.extend (l, Real_result_command)
 			l.extend (command_with_generator ("SUBTRACTION"))
@@ -135,6 +140,7 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 			l.extend (command_with_generator ("BASIC_LINEAR_COMMAND"))
 			l.extend (command_with_generator ("BOOLEAN_NUMERIC_CLIENT"))
 			l.extend (command_with_generator ("SLOPE_ANALYZER"))
+
 			!!l.make (6)
 			Result.extend (l, Binary_boolean_real_command)
 			l.extend (command_with_generator ("LE_OPERATOR"))
@@ -143,6 +149,7 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 			l.extend (command_with_generator ("LT_OPERATOR"))
 			l.extend (command_with_generator ("GT_OPERATOR"))
 			l.extend (command_with_generator ("SIGN_ANALYZER"))
+
 			!!l.make (9)
 			Result.extend (l, Basic_numeric_command)
 			l.extend (command_with_generator ("BASIC_NUMERIC_COMMAND"))
@@ -154,6 +161,11 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 			l.extend (command_with_generator ("CLOSING_PRICE"))
 			l.extend (command_with_generator ("OPENING_PRICE"))
 			l.extend (command_with_generator ("OPEN_INTEREST"))
+
+			!!l.make (2)
+			Result.extend (l, Basic_numeric_command)
+			l.extend (command_with_generator ("N_VALUE_COMMAND"))
+			l.extend (command_with_generator ("MA_EXPONENTIAL"))
 		end
 
 	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is

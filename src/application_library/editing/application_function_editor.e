@@ -22,118 +22,142 @@ class APPLICATION_FUNCTION_EDITOR inherit
 feature -- Access
 
 	user_interface: FUNCTION_EDITING_INTERFACE
-			-- Interface used to obtain data selections from user
+			-- Interface used to obtain function selections from user
+
+	operator_maker: COMMAND_EDITING_INTERFACE
+			-- Interface used to obtain operator selections from user
+
+feature -- Status setting
+
+	set_operator_maker (arg: COMMAND_EDITING_INTERFACE) is
+			-- Set operator_maker to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			operator_maker := arg
+		ensure
+			operator_maker_set: operator_maker = arg and
+				operator_maker /= Void
+		end
 
 feature -- Basic operations
 
-	edit_binary_boolean (cmd: BINARY_OPERATOR [ANY, BOOLEAN]) is
-			-- Edit a BINARY_OPERATOR that takes BOOLEAN operands.
+	edit_one_fn_op (f: ONE_VARIABLE_FUNCTION) is
+			-- Edit a function that takes one market function and an operator.
 		require
 			ui_set: user_interface /= Void
-		local
-			left, right: RESULT_COMMAND [BOOLEAN]
 		do
-			left ?= user_interface.function_selection (
-						user_interface.Boolean_result_command,
-							concatenation (<<cmd.generator,
-								"'s left operand">>), false)
-			right ?= user_interface.function_selection (
-						user_interface.Boolean_result_command,
-							concatenation (<<cmd.generator,
-								"'s right operand">>), false)
-			check
-				selections_valid: left /= Void and right /= Void
-			end
-			cmd.set_operands (left, right)
+			f.set_input (user_interface.function_selection_from_type (
+						user_interface.Market_function,
+							concatenation (<<f.generator,
+								"'s input function">>), false))
+			f.set_operator (operator_maker.command_selection_from_type (
+						operator_maker.Real_result_command,
+							concatenation (<<f.generator,
+								"'s operator">>), false))
 		end
 
-	edit_mtlist_resultreal_n (f: UNARY_OPERATOR [ANY, REAL]) is
-			-- Edit `f's market tuple list, operator (
-			-- RESULT_COMMAND [REAL]), and n-value.
+	edit_one_fn_op_n (f: N_RECORD_ONE_VARIABLE_FUNCTION) is
+			-- Edit a function that takes one market function, an operator,
+			-- and an n-value.
 		require
 			ui_set: user_interface /= Void
-		local
-			offset_cmd: LINEAR_OFFSET_COMMAND
 		do
+			f.set_input (user_interface.function_selection_from_type (
+						user_interface.Market_function,
+							concatenation (<<f.generator,
+								"'s input function">>), false))
+			f.set_operator (operator_maker.command_selection_from_type (
+						operator_maker.Real_result_command,
+							concatenation (<<f.generator,
+								"'s operator">>), false))
 			edit_n (f)
-			edit_mtlist (f)
-			edit_unaryop (f)
-			offset_cmd ?= f
-			if offset_cmd /= Void then
-				record_lowest_offset (offset_cmd)
-			end
 		end
 
-	edit_n (f: MARKET_FUNCTION) is
+	edit_two_cplx_fn_op (f: TWO_VARIABLE_FUNCTION) is
+			-- Edit a function that takes two complex functions
+			-- and an operator.
+		require
+			ui_set: user_interface /= Void
+		do
+			f.set_input1 (user_interface.function_selection_from_type (
+						user_interface.Complex_function,
+							concatenation (<<f.generator,
+								"'s left input function">>), false))
+			f.set_input2 (user_interface.function_selection_from_type (
+						user_interface.Complex_function,
+							concatenation (<<f.generator,
+								"'s right input function">>), false))
+			f.set_operator (operator_maker.command_selection_from_type (
+						operator_maker.Real_result_command,
+							concatenation (<<f.generator,
+								"'s operator">>), false))
+		end
+
+	edit_one_fn_bnc_n (f: STANDARD_MOVING_AVERAGE) is
+			-- Edit a function that takes one market function,
+			-- a BASIC_NUMERIC_COMMAND, and an n-value.
+		require
+			ui_set: user_interface /= Void
+		do
+			f.set_input (user_interface.function_selection_from_type (
+						user_interface.Market_function,
+							concatenation (<<f.generator,
+								"'s input function">>), false))
+			f.set_operator (operator_maker.command_selection_from_type (
+						operator_maker.Basic_numeric_command,
+							concatenation (<<f.generator,
+								"'s operator">>), false))
+			edit_n (f)
+		end
+
+	edit_one_fn_bnc_nbc_n (f: EXPONENTIAL_MOVING_AVERAGE) is
+			-- Edit a function that takes one market function, a
+			-- BASIC_NUMERIC_COMMAND, an N_BASED_CALCULATION, and an n-value.
+		require
+			ui_set: user_interface /= Void
+		do
+			f.set_input (user_interface.function_selection_from_type (
+						user_interface.Market_function,
+							concatenation (<<f.generator,
+								"'s input function">>), false))
+			f.set_operator (operator_maker.command_selection_from_type (
+						operator_maker.Basic_numeric_command,
+							concatenation (<<f.generator,
+								"'s main operator">>), false))
+			f.set_exponential (operator_maker.command_selection_from_type (
+						operator_maker.N_based_calculation,
+							concatenation (<<f.generator,
+								"'s exponential operator">>), false))
+			edit_n (f)
+		end
+
+	edit_two_points_pertype (f: MARKET_FUNCTION_LINE) is
+			-- Edit a function that takes two market points and a period type.
+		require
+			ui_set: user_interface /= Void
+		do
+		end
+
+feature {NONE} -- Implementation
+
+	edit_n (f: ONE_VARIABLE_FUNCTION) is
 			-- Edit `f's n-value.
 		require
 			ui_set: user_interface /= Void
 		local
-			cmd: N_RECORD_COMMAND
+			fnctn: N_RECORD_ONE_VARIABLE_FUNCTION
 		do
-			cmd ?= f
+			fnctn ?= f
 			check
-				c_is_valid_type: cmd /= Void
+				f_is_valid_type: fnctn /= Void
 			end
-			cmd.set_n (user_interface.integer_selection (
-						concatenation (<<cmd.generator, "'s n-value">>)))
+			fnctn.set_n (user_interface.integer_selection (
+						concatenation (<<fnctn.generator, "'s n-value">>)))
 		end
 
-	edit_mtlist (f: MARKET_FUNCTION) is
-			-- Edit `f's market tuple list target.
-		require
-			ui_set: user_interface /= Void
-		local
-			cmd: LINEAR_COMMAND
-		do
-			cmd ?= f
-			check
-				c_is_valid_type: cmd /= Void
-			end
-			cmd.set_target (user_interface.market_tuple_list_selection (
-								cmd.generator))
-		end
+invariant
 
-	edit_offset (cmd: SETTABLE_OFFSET_COMMAND) is
-			-- Edit a SETTABLE_OFFSET_COMMAND.
-		local
-			unop: UNARY_OPERATOR [ANY, REAL]
-			offset: INTEGER
-		do
-			unop ?= cmd
-			check
-				cmd_is_a_unop_real: unop /= Void
-			end
-			edit_unaryop (unop)
-			edit_mtlist (cmd)
-			from
-				offset := user_interface.integer_selection (
-						concatenation (<<cmd.generator,
-						"'s (left) offset value (must be non-negative)">>))
-			until
-				offset >= 0
-			loop
-				user_interface.show_message ("Negative value entered.")
-				offset := user_interface.integer_selection (
-						concatenation (<<cmd.generator,
-						"'s (left) offset value (must be non-negative)">>))
-			end
-			cmd.set_offset (-offset)
-			record_lowest_offset (cmd)
-		end
-
-	record_lowest_offset (cmd: LINEAR_OFFSET_COMMAND) is
-			-- If `cmd's offset value (expected to be negative or 0) is
-			-- lower than the current offset value, record the offset
-			-- value so that the lowest (or highest-magnitude) value can
-			-- be used to keep objects needing it consistent.
-		do
-			-- Important: The arithmetic negation of the `cmd.offset'
-			-- (which is expected to be negative) is used - the
-			-- `left_offset' value being set must be positive.
-			if -cmd.offset > user_interface.left_offset then
-				user_interface.set_left_offset (-cmd.offset)
-			end
-		end
+	om_not_void: operator_maker /= Void
 
 end -- APPLICATION_FUNCTION_EDITOR
