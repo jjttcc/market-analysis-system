@@ -8,15 +8,9 @@ indexing
 
 deferred class REQUEST_COMMAND inherit
 
-	POLL_COMMAND
-		rename
-			make as pc_make_unused
-		export
-			{NONE} pc_make_unused
+	COMMAND
 		undefine
 			print
-		redefine
-			execute
 		end
 
 	GENERAL_UTILITIES
@@ -33,25 +27,17 @@ deferred class REQUEST_COMMAND inherit
 			print
 		end
 
-feature {NONE} -- Initialization
-
-	make (dispenser: TRADABLE_DISPENSER) is
-		require
-			not_void: dispenser /= Void
-		do
-			tradables := dispenser
-		ensure
-			set: tradables = dispenser and
-				tradables /= Void
-		end
-
 feature -- Access
 
-	tradables: TRADABLE_DISPENSER
-			-- Dispenser of available market lists
+	active_medium: IO_MEDIUM
+			-- Medium for output
 
 	session: SESSION
 			-- Settings specific to a particular client session
+
+feature -- Status report
+
+	arg_mandatory: BOOLEAN is true
 
 feature -- Status setting
 
@@ -63,17 +49,6 @@ feature -- Status setting
 			active_medium := arg
 		ensure
 			active_medium_set: active_medium = arg and active_medium /= Void
-		end
-
-	set_tradables (arg: TRADABLE_DISPENSER) is
-			-- Set tradables to `arg'.
-		require
-				arg_not_void: arg /= Void
-		do
-			tradables := arg
-		ensure
-			tradables_set: tradables = arg and
-				tradables /= Void
 		end
 
 	set_session (arg: SESSION) is
@@ -109,12 +84,6 @@ feature {NONE}
 			print (eom)
 		end
 
-	report_server_error is
-		do
-			report_error (Error, <<"Server error: ",
-				tradables.last_error>>)
-		end
-
 	print (o: GENERAL) is
 			-- Redefinition of output method inherited from GENERAL to
 			-- send output to active_medium
@@ -123,15 +92,5 @@ feature {NONE}
 				active_medium.put_string (o.out)
 			end
 		end
-
-	server_error: BOOLEAN is
-			-- Did an error occur in the server?
-		do
-			Result := tradables.error_occurred
-		end
-
-invariant
-
-	tradables_set: tradables /= Void
 
 end -- class REQUEST_COMMAND
