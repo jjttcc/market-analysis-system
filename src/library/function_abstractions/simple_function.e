@@ -13,7 +13,7 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 		undefine
 			is_equal, copy, setup
 		redefine
-			output, reset_state, operator_used
+			output, operator_used
 		end
 
 	MARKET_TUPLE_LIST [G]
@@ -59,18 +59,6 @@ feature -- Basic operations
 
 	do_process is
 			-- Null action
-		do
-		end
-
-feature {NONE}
-
-	reset_state is
-			-- Null action
-		do
-		end
-
-	set_processed (b: BOOLEAN) is
-			-- Null action, since processed state cannot be set
 		do
 		end
 

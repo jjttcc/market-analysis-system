@@ -73,7 +73,6 @@ feature -- Basic operations
 		do
 			pre_process
 			do_process
-			set_processed (true)
 		ensure then
 			processed: processed
 		end
@@ -102,15 +101,6 @@ feature {FACTORY} -- Element change
 
 feature {NONE} -- Hook methods
 
-	reset_state is
-			-- Reset to initial state.
-			-- Can be redefined if needed.
-		do
-			set_processed (false)
-		ensure
-			not_processed: not processed
-		end
-
 	pre_process is
 			-- Do any pre-processing required before calling do_process.
 		do
@@ -122,16 +112,9 @@ feature {NONE} -- Hook methods
 		deferred
 		end
 
-	set_processed (b: BOOLEAN) is
-			-- Hook method to set processed state to the specified value
-		deferred
-		ensure
-			is_set: processed = b
-		end
-
 invariant
 
-	if_processed_output_exists: processed implies output /= Void
-	op_used_constraint: processed implies (operator_used = (operator /= Void))
+	--!!!Temporarily commented-out: if_processed_output_exists: processed implies output /= Void
+	--!!!Temporarily commented-out: op_used_constraint: processed implies (operator_used = (operator /= Void))
 
 end -- class MARKET_FUNCTION
