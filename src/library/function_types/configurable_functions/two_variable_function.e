@@ -145,15 +145,7 @@ feature {FACTORY} -- Status setting
 		do
 			input1.set_innermost_input (in)
 			input2.set_innermost_input (in)
-		end
-
-feature {MARKET_FUNCTION, MARKET_FUNCTION_EDITOR}
-
-	wipe_out is
-		do
 			output.wipe_out
-			input1.wipe_out
-			input2.wipe_out
 		end
 
 feature {NONE}
