@@ -80,6 +80,8 @@ cluster
 
 	database (server):		"$/database"
 
+--!!!!NOTE: This cluster is probably not needed - Remove it as soon as
+--!!!!you can verify that the project compiles without it.
 	database_odbc (server):		"$/database/odbc"
 
 	database_ecli (server):		"$/database/ecli"
@@ -240,6 +242,8 @@ cluster
 
 	rdbms (dbms):		"$/rdbms"
 
+--!!!!NOTE: This cluster is probably not needed - Remove it as soon as
+--!!!!you can verify that the project compiles without it.
 	odbc (rdbms):		"$/odbc"
 
 	ecli_src:		"$ECLI/src"
