@@ -32,10 +32,10 @@ feature -- Initialization
 		require
 			not_void: t /= Void and o /= Void
 		do
-			nrlc_make (t, n)
+			nrlc_make (t, i)
 			set_operator (o)
 		ensure
-			set: target = t and operator = o
+			set: target = t and operator = o and n = i
 		end
 
 feature -- Access
