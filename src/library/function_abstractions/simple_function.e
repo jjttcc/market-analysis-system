@@ -80,9 +80,9 @@ feature -- Status report
 	processed: BOOLEAN is
 			-- Has this function been processed?
 		do
-			Result := output /= Void
+			Result := true
 		ensure then
-			Result = (output /= Void)
+			Result = true
 		end
 
 feature {MARKET_FUNCTION} -- Status report
