@@ -8,11 +8,6 @@ indexing
 
 deferred class MAIN_APPLICATION_INTERFACE inherit
 
-	THREAD -- For the future - main interface will run in its own thread.
-		export
-			{NONE} all
-		end
-
 feature {NONE} -- Access
 
 	event_coordinator: MARKET_EVENT_COORDINATOR
