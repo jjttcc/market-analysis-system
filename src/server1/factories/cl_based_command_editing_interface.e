@@ -21,6 +21,13 @@ class CL_BASED_COMMAND_EDITING_INTERFACE inherit
 			print
 		end
 
+	COMMAND_MENU_VALUES
+		export
+			{NONE} all
+		undefine
+			print
+		end
+
 creation
 
 	make
@@ -93,7 +100,7 @@ feature {NONE} -- Hook methods
 			editable_state := False; editing_needed := False
 			inspect
 				character_selection (Void)
-			when 'd', 'D' then
+			when description, description_upper then
 				print_list (<<"%N", command_description (c),
 					"%N%NChoose ", c.generator + name_for (c),
 						"? (y/n) ", eom>>)
@@ -104,9 +111,9 @@ feature {NONE} -- Hook methods
 				else
 					check Result = False end
 				end
-			when 'c', 'C' then
+			when choose, choose_upper then
 				Result := True
-			when 'e', 'E' then
+			when edit, edit_upper then
 				if do_clone then
 					-- The chosen command should not be editied if
 					-- do_clone is False.
@@ -162,19 +169,23 @@ feature {NONE} -- Utility routines
 			text: LINKED_LIST [STRING]
 			margin: STRING
 			line_length: INTEGER
+			desc_chc, edit_chc, another_chc, choice_chc: COMMAND_MENU_CHOICE
 		do
+			create desc_chc.make_description; create edit_chc.make_edit
+			create another_chc.make_another; create choice_chc.make_choice
 			line_length := 76
 			margin := "     "
 			create text.make
 			text.extend ("Select:%N     Print description of " +
-				c.generator + name_for (c) + "? (d)")
-			text.extend ("Choose " + c.generator + name_for (c) + " (c)")
+				c.generator + name_for (c) + "? (" + desc_chc.item.out + ")")
+			text.extend ("Choose " + c.generator + name_for (c) +
+				" (" + choice_chc.item.out + ")")
 			text.extend ("filler")
-			text.extend ("Make another choice (a)")
+			text.extend ("Make another choice (" + another_chc.item.out + ")")
 			Result := text @ 1
 			if do_clone then
 				text.put_i_th ("Choose " + c.generator +
-					" and edit its settings (e)", 3)
+					" and edit its settings (" + edit_chc.item.out + ")", 3)
 				if (text @ 1).count + (text @ 2).count > line_length then
 					Result.append ("%N" + margin + text @ 2)
 				else
