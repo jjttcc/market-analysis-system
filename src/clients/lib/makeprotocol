@@ -1,5 +1,5 @@
 #!/bin/bash
-# Make a NetworkProtocol class for the TA server protocol.
+# Make a NetworkProtocol class for the MAS server protocol.
 
 eiffel_protocol_files ()
 {
@@ -9,9 +9,10 @@ eiffel_protocol_files ()
 
 proto_files=$(eiffel_protocol_files)
 awk 'BEGIN {
+	print "/* Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt */\n"
 	print "package common;\n"
-	print "/** Constants specifying the components of the TA network \n\
-communication protocol */"
+	print "/** Constants specifying the components of the Market Analysis \
+System \nnetwork communication protocol */"
 	print "public interface NetworkProtocol\n{"
 }
 
