@@ -5,7 +5,8 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-deferred class MARKET_TUPLE
+deferred class
+	MARKET_TUPLE
 
 feature -- Access
 

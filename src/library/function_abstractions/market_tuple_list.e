@@ -23,7 +23,6 @@ feature
 	sorted_by_date_time: BOOLEAN is
 			-- Is Current sorted by date and time?
 		do
-			io.put_string ("MARKET_TUPLE_LIST:sorted_by_date_time called%N")
 			from
 				Result := true
 				start

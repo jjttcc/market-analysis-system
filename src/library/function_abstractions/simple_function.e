@@ -19,7 +19,7 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 		export {NONE}
 			all
 				{ANY}
-			extend
+			extend, sorted_by_date_time
 		end
 
 creation
