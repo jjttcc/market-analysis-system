@@ -21,6 +21,11 @@ class COMPOUND_EVENT_GENERATOR inherit
 
 	MARKET_EVENT_GENERATOR
 
+	GENERAL_UTILITIES
+		export
+			{NONE} all
+		end
+
 creation
 
 	make
