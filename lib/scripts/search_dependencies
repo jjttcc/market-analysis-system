@@ -20,7 +20,8 @@ dependency_list() {
 	files=$*
 	list=
 	for f in $files; do
-		if sed '/^[ 	]*--/d' $f|grep "\<$clname\>" >/dev/null; then
+		if sed '/^[ 	]*--/d;s/"[^"]*"/""/g' $f|
+			grep "\<$clname\>" >/dev/null; then
 			list="$list $f"
 		fi
 	done
