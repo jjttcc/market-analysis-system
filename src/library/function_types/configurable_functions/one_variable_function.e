@@ -43,6 +43,13 @@ feature -- Access
 
 	output: MARKET_TUPLE_LIST [MARKET_TUPLE]
 
+	trading_period_type: TIME_PERIOD_TYPE is
+		do
+			Result := input.trading_period_type
+		ensure then
+			Result = input.trading_period_type
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is

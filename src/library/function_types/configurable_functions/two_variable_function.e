@@ -59,6 +59,13 @@ feature -- Access
 
 	output: MARKET_TUPLE_LIST [MARKET_TUPLE]
 
+	trading_period_type: TIME_PERIOD_TYPE is
+		do
+			Result := input1.trading_period_type
+		ensure then
+			Result = input1.trading_period_type
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is
@@ -231,5 +238,7 @@ invariant
 	input_target_relation:
 		input1.output = target1 and input2.output = target2
 	no_missing_periods: processed implies not missing_periods (target1, target2)
+	inputs_trading_period_types_equal:
+		input1.trading_period_type = input2.trading_period_type
 
 end -- class TWO_VARIABLE_FUNCTION
