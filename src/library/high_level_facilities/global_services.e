@@ -1,6 +1,6 @@
 indexing
 	description: "Access to globally available singletons and other services"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -67,6 +67,25 @@ feature -- Access
 			Result := tbl
 		end
 
+	period_types_in_order: LIST [TIME_PERIOD_TYPE] is
+			-- All time period types sorted in ascending order by
+			-- duration
+		local
+			type_names: ARRAY [STRING]
+			i: INTEGER
+		once
+			!LINKED_LIST [TIME_PERIOD_TYPE]!Result.make
+			type_names := period_type_names
+			from
+				i := 1
+			until
+				i = type_names.count + 1
+			loop
+				Result.extend (period_types @ (type_names @ i))
+				i := i + 1
+			end
+		end
+
 	period_type_names: ARRAY [STRING] is
 			-- The name of each element of `period_types'
 		local
@@ -93,12 +112,17 @@ feature -- Basic operations
 				check
 					is_monday: dt.date.day_of_the_week = 2
 				end
-			else -- ...
+			elseif equal (type.name, (period_type_names @ Monthly)) then
+				dt.date.set_day (1)
+			elseif equal (type.name, (period_type_names @ Yearly)) then
+				dt.date.set_day (1)
+				dt.date.set_month (1)
+			else
 			end
 		end
 
 	set_to_previous_monday (d: DATE_TIME) is
-			-- If d is not a Monday, set its value to the Monday
+			-- If `d' is not a Monday, set its value to the Monday
 			-- preceding its current value.
 		require
 			d /= Void
@@ -108,6 +132,33 @@ feature -- Basic operations
 			end
 		ensure
 			set_to_monday: d.date.day_of_the_week = 2
+		end
+
+	set_to_first_weekday_of_month (d: DATE_TIME) is
+			-- Set `d' to the first weekday of `d's month.
+		require
+			d_not_void: d /= Void
+		do
+			d.date.set_day (1)
+			if d.date.day_of_the_week = 1 or d.date.day_of_the_week = 7 then
+				if d.date.day_of_the_week = 1 then
+					d.date.day_add(1)
+				elseif d.date.day_of_the_week = 7 then
+					d.date.day_add(2)
+				end
+			end
+		ensure
+			weekday: d.date.day_of_the_week > 1 and d.date.day_of_the_week < 7
+		end
+
+	set_to_first_day_of_month (d: DATE_TIME) is
+			-- Set `d' to the first day of `d's month.
+		require
+			d_not_void: d /= Void
+		do
+			d.date.set_day (1)
+		ensure
+			first_of_month: d.date.day = 1
 		end
 
 end -- class GLOBAL_SERVICES

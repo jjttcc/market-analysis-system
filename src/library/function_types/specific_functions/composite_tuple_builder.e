@@ -5,7 +5,7 @@ indexing
 		"This class builds a list of composite tuples from a list of %
 		%market tuples, using a duration to determine how many source %
 		%tuples to use to create a composite tuple."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -31,21 +31,22 @@ feature {NONE} -- Initialization
 			not_void:
 				in /= Void and ctf /= Void and time_period_type /= Void and
 				date /= Void
-			duration_gt_in_duration:
+			duration_gt_in_duration_if_regular:
+				not time_period_type.irregular implies
 				time_period_type.duration > in.trading_period_type.duration
 		do
 			set_trading_period_type (time_period_type)
 			ovf_make (in, Void)
 			set_tuple_maker (ctf)
 			start_date := date
+			duration := time_period_type.duration
 		ensure
 			set: tuple_maker = ctf and tuple_maker /= Void and
 				trading_period_type = time_period_type and
 				trading_period_type /= Void
 			input_set: input = in and input /= Void
 			start_date_set: start_date = date and start_date /= Void
-			duration_gt_in_duration:
-				duration > in.trading_period_type.duration
+			duration_set: duration = trading_period_type.duration
 		end
 
 feature -- Access
@@ -53,13 +54,8 @@ feature -- Access
 	output: SIMPLE_FUNCTION [COMPOSITE_TUPLE]
 			-- Resulting list of tuples
 
-	duration: DATE_TIME_DURATION is
+	duration: DATE_TIME_DURATION
 			-- Duration of the composite tuples to be created
-		do
-			Result := trading_period_type.duration
-		ensure
-			period_type_duration: Result = trading_period_type.duration
-		end
 
 	trading_period_type: TIME_PERIOD_TYPE
 
@@ -93,8 +89,8 @@ feature -- Status report
 			until
 				output_list.exhausted or not Result
 			loop
-				Result := (output_list.item.date_time -
-							previous.date_time).duration.is_equal (duration)
+				Result := time_diff_equals_duration (
+					output_list.item.date_time, previous.date_time)
 				previous := output_list.item
 				output_list.forth
 			end
@@ -105,7 +101,7 @@ feature -- Status report
 					output_list.exhausted or not Result
 				loop
 					Result :=
-						output_list.i_th (output_list.index).date_time <
+						output.i_th (output_list.index).last.date_time <
 								output_list.item.date_time + duration
 					output_list.forth
 				end
@@ -170,20 +166,21 @@ feature -- Basic operations
 				current_date := start_date
 				check output.count = 0 end
 			invariant
-				output.count > 1 implies ((output.last.date_time -
-					output.i_th (
-					output.count - 1).date_time).duration.is_equal (duration))
+				outer_invariant:
+					output.count > 1 implies
+						time_diff_equals_duration (output.last.date_time,
+							output.i_th (output.count - 1).date_time)
 			until
 				source_list.after
 			loop
 				from
 					-- Remove all previously inserted items.
 					src_sublist.wipe_out
-					check not source_list.after end
 					src_sublist.extend (source_list.item)
 					source_list.forth
 				invariant
-					(src_sublist.last.date_time < current_date + duration)
+					inner_invariant:
+						src_sublist.last.date_time < current_date + duration
 					sublist_sorted: -- src_sublist is sorted by date_time
 				until
 					source_list.after or
@@ -213,11 +210,44 @@ feature {NONE}
 			!!output.make (trading_period_type)
 		end
 
+	time_diff_equals_duration (d1, d2: DATE_TIME): BOOLEAN is
+			-- Does the difference between `d1' and `d2' equal `duration'?
+		local
+			diff: DURATION
+			dt_diff: DATE_TIME_DURATION
+		do
+			diff := (d1 - d2).duration
+			if trading_period_type.irregular then
+				dt_diff ?= diff
+				check dt_diff /= Void end
+				if
+					trading_period_type.name.is_equal (
+					trading_period_type.Monthly)
+				then
+					Result := dt_diff.day =
+						d2.days_in_i_th_month (d2.month, d2.year)
+				elseif
+					trading_period_type.name.is_equal (
+					trading_period_type.Yearly)
+				then
+					if d2.i_th_leap_year (d2.year) then
+						Result := dt_diff.day = d2.Days_in_leap_year
+					else
+						Result := dt_diff.day = d2.Days_in_non_leap_year
+					end
+				end
+			else
+				Result := diff.is_equal (duration)
+			end
+		end
+
 invariant
 
 	input_equals_source_list: input = source_list
 	process_parameters_set: source_list /= Void and tuple_maker /= Void
 	start_date_not_void: start_date /= Void
-	input_duration_lt_duration: input.trading_period_type.duration < duration
+	regular_input_duration_lt_duration:
+		not trading_period_type.irregular implies
+		input.trading_period_type.duration < duration
 
 end -- COMPOSITE_TUPLE_BUILDER

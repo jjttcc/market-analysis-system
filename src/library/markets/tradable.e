@@ -58,7 +58,8 @@ feature -- Access
 		require
 			not_void: period_type /= Void
 			duration_valid: (period_types @ period_type).duration >=
-				trading_period_type.duration
+				trading_period_type.duration or
+				valid_irregular_period_type (period_types @ period_type)
 		do
 			Result := tuple_lists @ period_type
 			-- If the list has not been created and there is enough
@@ -87,13 +88,16 @@ feature -- Access
 			!!Result.make (1, 1)
 			Result.compare_objects
 			from
-				l := period_types.linear_representation
+				l := period_types_in_order
 				i := 1
 				l.start
 			until
 				l.exhausted
 			loop
-				if l.item.duration >= trading_period_type.duration then
+				if
+					l.item.duration >= trading_period_type.duration or
+					valid_irregular_period_type(l.item)
+				then
 					Result.force (l.item.name, i)
 					i := i + 1
 				end
@@ -144,6 +148,19 @@ feature -- Status report
 			loop
 				Result := indicators.item.processed
 				indicators.forth
+			end
+		end
+
+	valid_irregular_period_type (t: TIME_PERIOD_TYPE): BOOLEAN is
+			-- Is `t' an irregular type that is handled by the current version?
+		require
+			t_not_void: t /= Void
+		do
+			if
+				t.name.is_equal (t.Monthly) or
+				t.name.is_equal (t.Yearly)
+			then
+				Result := true
 			end
 		end
 
@@ -266,7 +283,8 @@ feature {NONE} -- Initialization
 				types.exhausted
 			loop
 				if
-					types.item.duration >= trading_period_type.duration
+					types.item.duration >= trading_period_type.duration or
+					valid_irregular_period_type(types.item)
 				then
 					tuple_lists.extend (Void, types.item.name)
 				end
@@ -352,13 +370,7 @@ feature {NONE}
 			else
 				create start_date_time.make_now
 			end
-			if type.irregular then
-				--when ready:
-				-- !IRREGULAR_COMPOSITE_TUPLE_BUILDER!ctbuilder.make (
-				--										Current, ctf, type)
-			else
-				!!ctbuilder.make (Current, ctf, type, start_date_time)
-			end
+			!!ctbuilder.make (Current, ctf, type, start_date_time)
 			ctbuilder.process
 			Result := ctbuilder.output
 		end
