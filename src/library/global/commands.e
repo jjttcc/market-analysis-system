@@ -119,6 +119,10 @@ feature -- Access
 			create pair.make (cmd, "Operator whose result is %
 				%its left operand to the power of its right operand")
 			Result.extend (pair)
+			create {N_TH_ROOT} cmd.make (real_dummy, real_dummy)
+			create pair.make (cmd, "Operator whose result is the n-th root %
+				%(specified by its right operand) of its left operand")
+			Result.extend (pair)
 			create {ABSOLUTE_VALUE} cmd.make (real_dummy)
 			create pair.make (cmd, "Absolute value operator")
 			Result.extend (pair)

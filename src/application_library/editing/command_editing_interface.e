@@ -66,7 +66,7 @@ feature -- Access
 			l.extend (command_with_generator ("FALSE_COMMAND"))
 			l.extend (command_with_generator ("SIGN_ANALYZER"))
 
-			create l.make (27)
+			create l.make (31)
 			Result.extend (l, Real_result_command)
 			l.extend (command_with_generator ("SUBTRACTION"))
 			l.extend (command_with_generator ("MULTIPLICATION"))
@@ -74,6 +74,7 @@ feature -- Access
 			l.extend (command_with_generator ("SAFE_DIVISION"))
 			l.extend (command_with_generator ("ADDITION"))
 			l.extend (command_with_generator ("POWER"))
+			l.extend (command_with_generator ("N_TH_ROOT"))
 			l.extend (command_with_generator ("LOWEST_VALUE"))
 			l.extend (command_with_generator ("LINEAR_SUM"))
 			l.extend (command_with_generator ("HIGHEST_VALUE"))
@@ -99,7 +100,7 @@ feature -- Access
 			l.extend (command_with_generator ("N_BASED_UNARY_OPERATOR"))
 			l.extend (command_with_generator ("FUNCTION_BASED_COMMAND"))
 
-			create l.make (5)
+			create l.make (7)
 			Result.extend (l, Binary_real_real_command)
 			l.extend (command_with_generator ("SUBTRACTION"))
 			l.extend (command_with_generator ("MULTIPLICATION"))
@@ -107,6 +108,7 @@ feature -- Access
 			l.extend (command_with_generator ("SAFE_DIVISION"))
 			l.extend (command_with_generator ("ADDITION"))
 			l.extend (command_with_generator ("POWER"))
+			l.extend (command_with_generator ("N_TH_ROOT"))
 
 			create l.make (6)
 			Result.extend (l, Binary_boolean_real_command)
@@ -367,6 +369,11 @@ feature {NONE} -- Implementation
 			end
 			Result.extend (Binary_real, name)
 			name := "POWER"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Binary_real, name)
+			name := "N_TH_ROOT"
 			check
 				valid_name: command_names.has (name)
 			end
