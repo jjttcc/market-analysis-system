@@ -1,0 +1,130 @@
+#!/bin/bash
+#  Send a report of operating system version, cpu info., etc. for this system
+#  to the author of the Market Analysis System (MAS), Jim Cochrane.  Since the
+#  purpose of this script is to let the author know which systems MAS has
+#  been run successfully on, it should be run after MAS has been successfully
+#  installed and confirmed to run correctly on the user's system.
+
+authaddr=jtc@dimensional.com
+possible_mas_bin_dirs="/opt/mas/bin $HOME/bin/ /usr/local/bin /usr/bin /bin"
+reportfile=/tmp/masrept$$
+progname=$(basename $0)
+
+cleanup() {
+	rm -f $reportfile
+}
+
+handle_signal() {
+	echo "$progname: caught signal - aborting ..." >&2
+	cleanup
+	exit -1
+}
+
+valid_mas_file() {
+	result=0
+	if [ ! -x $1 ]; then
+		if [ -e $1 ]; then
+			echo -e "Warning: Possible mas file found: $1,\nbut it is" \
+				"not executable." >&2
+		else
+			echo -e "Warning: File $1 does not exist." >&2
+		fi
+		result=1
+	else
+		file $1|grep executable >/dev/null 2>&1
+		if [ $? -ne 0 ]; then
+				echo -e "Warning: Possible mas file found: $1,\nbut it is" \
+					"not a binary executable file." >&2
+			result=1
+		fi
+	fi
+	if [ "$result" -eq 0 ]; then
+		echo -e "Is $1 the latest MAS executable installed on your system? \c"
+		read ans
+		case "$ans" in
+			y*|Y*) ;;
+			*) result=1 ;;
+		esac
+	fi
+	return $result
+}
+
+# Find the mailer.
+set_mailer() {
+	result=0
+	mailprogs="elm mailx mail mutt"
+	mail_subject_flag=-s
+	for p in $mailprogs; do
+		if type $p >/dev/null 2>&1; then
+			mailer=$p
+			break
+		fi
+	done
+	if [ -z "$mailer" ]; then result=1; fi
+	return $result
+}
+
+# Find mas executable, set up mailer, etc.
+setup() {
+	mas_exe=
+	for d in $possible_mas_bin_dirs; do
+		f=$d/mas
+		if [ -e $f ]; then
+			if valid_mas_file $f; then
+				mas_exe=$f
+				break
+			fi
+		fi
+	done
+	if [ "$mas_exe" = "" ]; then
+		echo -e "Cannot find mas executable in any of\n" \
+			"$possible_mas_bin_dirs." >&2
+		echo -e "Please enter the path for the mas executable,\n" \
+			"or hit <Enter> to abort this script." >&2
+		while :; do
+			read fname
+			if [ -z "$fname" ]; then
+				result=1; break
+			fi
+			if valid_mas_file $fname; then
+				mas_exe=$fname; break
+			fi
+			echo "$fname was not valid, try again ..." >&2
+		done
+	fi
+	if [ "$result" -eq 0 ]; then
+		set_mailer
+		result=$?
+	fi
+	return $result
+}
+
+send_report() {
+	cat $reportfile|$mailer $mail_subject_flag "MAS system report" $authaddr
+}
+
+get_window_system_info() {
+	echo -e "\nPlease enter the name of the desktop environment you are" \
+		"using, and,\nif you know, its version number.  Just hit <Enter> if" \
+		"you don't want\nto include this information."
+	read dtenv
+	if [ ! -z "$dtenv" ]; then
+		echo "Desktop environment: $dtenv" >>$reportfile
+	fi
+}
+
+trap "handle_signal" SIGINT SIGQUIT SIGABRT SIGBUS SIGILL SIGHUP SIGKILL
+
+if setup; then
+	echo "setup succeeded - exe file: $mas_exe"
+	$mas_exe -v >$reportfile
+	uname -a >>$reportfile
+	echo -e "\n/proc/cpuinfo:\n" >>$reportfile
+	cat /proc/cpuinfo >>$reportfile
+	get_window_system_info
+	send_report
+else
+	echo "Report failed." >&2
+fi
+
+cleanup
