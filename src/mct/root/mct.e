@@ -17,6 +17,8 @@ class MCT inherit
 			{NONE} all
 		undefine
 			default_create, copy
+		redefine
+			application_name
 		end
 
 create
@@ -26,22 +28,45 @@ create
 feature {NONE} -- Initialization
 
 	make is
+        do
+			setup_application
+			if setup_succeeded then
+				event_loop
+			end
+        end
+
+	setup_application is
         local
             main_window: EV_TITLED_WINDOW
 			builder: APPLICATION_WINDOW_BUILDER
-        do
+			wbldr: expanded WIDGET_BUILDER
+			dialog: EV_MESSAGE_DIALOG
+		do
 			default_create
             create builder
             main_window := builder.main_window
             main_window.show
-			event_loop
-        end
+			setup_succeeded := True
+		rescue
+			if is_developer_exception then
+				dialog := wbldr.new_error_dialog (developer_exception_name)
+			else
+				dialog := wbldr.new_error_dialog (Setup_failed_msg)
+			end
+			dialog.show
+			dialog.key_press_actions.extend (agent key_abort)
+			dialog.default_push_button.pointer_button_press_actions.extend (
+				agent button_abort)
+			launch
+		end
 
 	event_loop is
 		do
 			launch
 		rescue
-print ("event loop retrying%N")
+			debug
+				print ("event loop retrying%N")
+			end
 			-- Try to recover from exceptions due to bugs (e.g., void target
 			-- call in multi-lists).
 			retry
@@ -56,5 +81,28 @@ print ("event loop retrying%N")
 		once
 			create Result
 		end
+
+	setup_succeeded: BOOLEAN
+			-- Did setup_application succeed?
+
+feature {NONE} -- Implementation
+
+	button_abort (i, j, k: INTEGER; x, y, z: DOUBLE; l, m: INTEGER) is
+		do
+			exit (1)
+		end
+
+	key_abort (e: EV_KEY) is
+		do
+			exit (1)
+		end
+
+feature {NONE} -- Implementation - hook routine implementations
+
+	application_name: STRING is "application"
+
+feature {NONE} -- Implementation - constants
+
+	Setup_failed_msg: STRING is "Initialization failed."
 
 end
