@@ -61,7 +61,7 @@ feature -- Initialization
 
 	make (dispenser: TRADABLE_DISPENSER) is
 		do
-			create operator_maker.make (false)
+			create operator_maker.make (False)
 			create editor.make (Current, operator_maker)
 			create help.make
 			register_for_termination (Current)
@@ -173,14 +173,14 @@ feature {NONE} -- Implementation of hook methods
 				inspect
 					character_selection (Void)
 				when 'y', 'Y' then
-					Result := true
+					Result := True
 				else
-					check Result = false end
+					check Result = False end
 				end
 			when 'c', 'C' then
-				Result := true
+				Result := True
 			else
-				check Result = false end
+				check Result = False end
 			end
 		end
 
