@@ -45,7 +45,14 @@ feature -- Access
 		end
 
 	parameters: LIST [FUNCTION_PARAMETER] is
-			-- Changeable parameters for this function
+			-- Changeable parameters for this function, including those
+			-- of `children'
+		deferred
+		end
+
+	immediate_parameters: LIST [FUNCTION_PARAMETER] is
+			-- Changeable parameters for this function without those
+			-- of `children'
 		deferred
 		end
 
@@ -54,11 +61,23 @@ feature -- Access
 		deferred
 		end
 
+	children: LIST [MARKET_FUNCTION] is
+			-- This function's children, if it is a composite function
+		deferred
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is
 			-- Has this function been processed?
 		deferred
+		end
+
+	has_children: BOOLEAN is
+			-- Does this function have children?
+		deferred
+		ensure
+			Result implies children /= Void and not children.empty
 		end
 
 feature -- Basic operations
@@ -103,7 +122,7 @@ feature {MARKET_FUNCTION}
 invariant
 
 	output_not_void: output /= Void
-	parameters_not_void: parameters /= Void
+	parameters_not_void: parameters /= Void and immediate_parameters /= Void
 	date_time_not_void_when_processed:
 		processed implies processed_date_time /= Void
 
