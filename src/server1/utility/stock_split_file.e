@@ -48,6 +48,7 @@ feature {NONE} -- Initialization
 			create product.make (100)
 			if is_open_read then
 				sss_make
+				close
 			end
 		ensure
 			fs_set: field_separator.is_equal (field_sep)
