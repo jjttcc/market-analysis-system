@@ -11,12 +11,18 @@ class MAS_LOGIN_REQUEST_CMD inherit
 	LOGIN_REQUEST_CMD
 		rename
 			make as lrc_make_unused
+		export
+			{NONE} lrc_make_unused, initialize
 		redefine
 			session, put_session_state, pre_process_session,
 			post_process_session
 		end
 
 	TRADABLE_REQUEST_COMMAND
+		rename
+			make as trc_make
+		export
+			{NONE} trc_make
 		redefine
 			session
 		select
@@ -42,9 +48,28 @@ creation
 
 	make
 
+feature -- Initialization
+
+	make (dispenser: TRADABLE_DISPENSER; auto_update: BOOLEAN) is
+		require
+			dispenser_exists: dispenser /= Void
+		do
+			trc_make (dispenser)
+			auto_update_on := auto_update
+		ensure
+			tradables_set: tradables = dispenser and tradables /= Void
+			auto_update_set: auto_update_on = auto_update
+		end
+
 feature -- Access
 
 	session: MAS_SESSION
+
+feature -- Status report
+
+	auto_update_on: BOOLEAN
+			-- Is the feature for automatically updating the tradable
+			-- source data on?
 
 feature {NONE} -- Hook routine implementations
 
@@ -105,9 +130,11 @@ feature {NONE} -- Hook routine implementations
 
 	post_process_session is
 		do
-			-- Clearing the cache when a new login occurs ensures that
-			-- a new client will receive up-to-date data.
-			tradables.clear_caches
+			if not auto_update_on then
+				-- Clearing the cache when a new login occurs ensures that
+				-- a new client will receive up-to-date data.
+				tradables.clear_caches
+			end
 		end
 
 feature {NONE} -- Implementation

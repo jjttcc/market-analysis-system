@@ -40,6 +40,12 @@ feature -- Access
 			create Result.make
 		end
 
+	global_configuration: GLOBAL_CONFIGURATION is
+			-- General, global configuration settings
+		once
+			Result := (create {CONFIGURATION_FACTORY}.make).global_configuration
+		end
+
 	file_name_expander: FILE_NAME_EXPANDER is
 			-- File name expander for current OS
 		local

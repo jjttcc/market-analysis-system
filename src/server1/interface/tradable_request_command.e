@@ -11,6 +11,8 @@ deferred class TRADABLE_REQUEST_COMMAND inherit
 	MAS_REQUEST_COMMAND
 		rename
 			make as rcmake
+		export
+			{NONE} rcmake, initialize
 		end
 
 feature {NONE} -- Initialization

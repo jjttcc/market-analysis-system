@@ -9,7 +9,7 @@ indexing
 
 class DATABASE_CONFIGURATION inherit
 
-	APP_CONFIGURATION
+	DATA_RETRIEVAL_CONFIGURATION
 		rename
 			make as ac_make
 		redefine

@@ -110,6 +110,8 @@ cluster
 
 	extended_server:		"$MAS/src/extended_server"
 
+	server_configuration (extended_server):		"$/server_configuration"
+
 	root_cluster (extended_server):		"$/root"
 
 	extended_global (extended_server):		"$/global"

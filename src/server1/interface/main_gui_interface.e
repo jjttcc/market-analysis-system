@@ -97,7 +97,9 @@ feature {NONE} -- Implementation
 			rh.extend (create {INDICATOR_LIST_REQUEST_CMD}.make (
 				tradable_list_handler), Indicator_list_request)
 			rh.extend (create {MAS_LOGIN_REQUEST_CMD}.make (
-				tradable_list_handler), Login_request)
+				tradable_list_handler,
+--!!!!!! @@@@@ !!!!!
+global_configuration.auto_data_update_on), Login_request)
 			rh.extend (create {EVENT_LIST_REQUEST_CMD}.make (
 				tradable_list_handler), Event_list_request)
 			rh.extend (create {EVENT_DATA_REQUEST_CMD}.make (

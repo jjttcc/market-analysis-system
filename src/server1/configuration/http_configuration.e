@@ -16,7 +16,7 @@ indexing
 
 class HTTP_CONFIGURATION inherit
 
-	APP_CONFIGURATION
+	DATA_RETRIEVAL_CONFIGURATION
 		redefine
 			use_customized_setting, do_customized_setting, reset_dates,
 			set_symbol

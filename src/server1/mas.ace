@@ -110,6 +110,8 @@ cluster
 
 	server_extensions (server):		"$/extensions"
 
+	server_configuration (server):		"$/server_configuration"
+
 	client_lib:		"$MAS/src/client_library"
 
 	client_support (client_lib):		"$/support"

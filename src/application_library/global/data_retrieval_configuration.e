@@ -1,12 +1,13 @@
 indexing
-	description: "Common configuration tools for the application"
+	description: "Configuration settings and features related to %
+		%tradable data retrieval"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-deferred class APP_CONFIGURATION inherit
+deferred class DATA_RETRIEVAL_CONFIGURATION inherit
 
 	CONFIGURATION_UTILITIES
 		export
@@ -68,7 +69,7 @@ feature -- Access
 		end
 
 	intraday_start_date: DATE is
-			-- The end-of-day start date for the requested data
+			-- The intraday start date for the requested data
 		do
 			if
 				cached_intraday_start_date = Void and
@@ -81,7 +82,7 @@ feature -- Access
 		end
 
 	intraday_end_date: DATE is
-			-- The end-of-day end date for the requested data
+			-- The intraday end date for the requested data
 		do
 			if
 				cached_intraday_end_date = Void and
