@@ -19,7 +19,7 @@ class MARKET_EVENT_GENERATOR_BUILDER inherit
 			{ANY} function_library
 		end
 
-	UI_UTILITIES
+	COMMAND_LINE_UTILITIES [MARKET_EVENT_GENERATOR]
 		export
 			{NONE} all
 		end

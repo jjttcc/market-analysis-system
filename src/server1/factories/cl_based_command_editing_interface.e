@@ -7,9 +7,15 @@ indexing
 
 class COMMAND_BUILDER inherit
 
-	UI_UTILITIES
+	COMMAND_LINE_UTILITIES [COMMAND]
+		rename
+			print_object_tree as print_command_tree,
+			print_component_trees as print_operand_trees,
+			print_message as show_message
 		export
 			{NONE} all
+		redefine
+			print_operand_trees
 		end
 
 	PRINTING
@@ -19,108 +25,7 @@ class COMMAND_BUILDER inherit
 
 	COMMAND_EDITING_INTERFACE
 
-feature -- Miscellaneous
-
-	print_command_tree (cmd: COMMAND; level: INTEGER) is
-			-- Print the type name of `cmd' and, recursively, that of all
-			-- of its operands.
-		local
-			i: INTEGER
-		do
-			from
-				i := 1
-			until
-				i = level
-			loop
-				print ("  ")
-				i := i + 1
-			end
-			print_list (<<cmd.generator, "%N">>)
-			debug ("command_editing")
-			print_list (<<"(", cmd.out, ")%N">>)
-			end
-			print_operand_trees (cmd, level + 1)
-		end
-
-feature {APPLICATION_COMMAND_EDITOR} -- Access
-
-	integer_selection (msg: STRING): INTEGER is
-		do
-			print_list (<<"Enter an integer value for ", msg, ": ">>)
-			read_integer
-			Result := last_integer
-		end
-
-	real_selection (msg: STRING): REAL is
-		do
-			print_list (<<"Enter a real value for ", msg, ": ">>)
-			read_real
-			Result := last_real
-		end
-
-	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
-		do
-			-- !!!May need to retrieve market function from user?
-			check
-				mf_not_void: market_function /= Void
-			end
-			Result := market_function.output
-		end
-
-	show_message (msg: STRING) is
-		do
-			print_list (<<msg, "%N">>)
-		end
-
 feature {NONE} -- Hook methods
-
-	do_choice (descr: STRING; choices: LIST [PAIR [STRING, BOOLEAN]];
-				allowed_selections: INTEGER) is
-		local
-			finished, choice_made: BOOLEAN
-			slimit: INTEGER
-			names: ARRAYED_LIST [STRING]
-		do
-			from
-				slimit := allowed_selections
-				print_list (<<descr, "%N(Up to ",
-							allowed_selections, " choices)%N">>)
-				from
-					!!names.make (choices.count)
-					choices.start
-				until
-					choices.exhausted
-				loop
-					names.extend (choices.item.left)
-					choices.forth
-				end
-			until
-				slimit = 0 or finished
-			loop
-				from
-					choice_made := false
-				until
-					choice_made
-				loop
-					print ("Select an item (0 to end):%N")
-					print_names_in_1_column (names, 1)
-					read_integer
-					if last_integer <= -1 or last_integer > choices.count then
-						print_list (<<"Selection must be between 0 and ",
-									choices.count, "%N">>)
-					elseif last_integer = 0 then
-						finished := true
-						choice_made := true
-					else
-						print_list (<<"Added %"", names @ last_integer,
-									"%"%N">>)
-						choices.i_th (last_integer).set_right (true)
-						choice_made := true
-					end
-				end
-				slimit := slimit - 1
-			end
-		end
 
 	accepted_by_user (c: COMMAND): BOOLEAN is
 		do
