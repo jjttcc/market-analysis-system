@@ -37,6 +37,7 @@ default
 	disabled_debug ("object_editing")
 	disabled_debug ("persist")
 	disabled_debug ("data_request")
+	disabled_debug ("std_dev")
 	line_generation (no)
 	profile (no)
 	trace (no)
