@@ -6,3 +6,4 @@ as spec files for the config_tool to produce linux (mctrc.linux) and
 windows (mctrc.windows) mctrc files from the template file mctrc.template.
 This allows settings common to linux and windows to be stored in one file
 (mctrc.template).
+test
