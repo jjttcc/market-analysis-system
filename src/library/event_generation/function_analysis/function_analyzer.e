@@ -21,9 +21,12 @@ feature -- Access
 			-- will result in an event being generated.
 
 	period_type: TIME_PERIOD_TYPE
-			-- The period type to be analyzed - daily, weekly, etc.
+			-- Period type specifying what type of data from tradable will be
+			-- analyzed - daily, weekly, etc. - that is,
+			-- `tradable'.`tuple_list' (`period_type'.name).
 
 	tradable: TRADABLE [BASIC_MARKET_TUPLE]
+			-- The market whose data is to be analyzed
 
 feature -- Status setting
 

@@ -79,6 +79,19 @@ feature -- Access
 			append_to_array (Result, right_guts, Result.count + 1)
 		end
 
+feature -- Status report
+
+	is_equal (other: like Current): BOOLEAN is
+		do
+			Result := other.type = type and other.left.is_equal (left) and
+						other.right.is_equal (right)
+		end
+
+feature {NONE} -- Implementation
+
+	cached_time_stamp: DATE_TIME
+			-- Implementation attribute to save processing time
+
 	append_to_array (dest, source: ARRAY [STRING]; start_index: INTEGER) is
 		local
 			i: INTEGER
@@ -92,19 +105,6 @@ feature -- Access
 				i := i + 1
 			end
 		end
-
-feature -- Status report
-
-	is_equal (other: like Current): BOOLEAN is
-		do
-			Result := other.type = type and other.left.is_equal (left) and
-						other.right.is_equal (right)
-		end
-
-feature {NONE} -- Implementation
-
-	cached_time_stamp: DATE_TIME
-			-- Implementation attribute to save processing time
 
 invariant
 

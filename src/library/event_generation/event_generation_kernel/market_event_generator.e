@@ -29,6 +29,8 @@ feature -- Status setting
 
 	set_tradable (f: TRADABLE [BASIC_MARKET_TUPLE]) is
 			-- Set the tradable to be used for analysis to `f'.
+		require
+			not_void: f /= Void
 		deferred
 		end
 

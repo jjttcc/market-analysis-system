@@ -1,7 +1,8 @@
 indexing
 	description:
-		"An event coordinator that uses event generators to generate events %
-		%and passes a queue of the generated events to a dispatcher"
+		"An event coordinator that uses market event generators to generate %
+		%market events and passes a queue of the generated events to a %
+		%dispatcher"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"

@@ -1,6 +1,5 @@
 indexing
-	description:
-		"An simple, atomiac market event"
+	description: "A simple, atomic market event"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -45,6 +44,8 @@ feature -- Access
 		do
 			!ARRAYED_LIST [MARKET_EVENT]!Result.make (0)
 			Result.extend (Current)
+		ensure then
+			Result.count = 1 and Result @ 1 = Current
 		end
 
 	guts: ARRAY [STRING] is

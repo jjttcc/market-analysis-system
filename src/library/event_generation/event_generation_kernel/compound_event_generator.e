@@ -3,13 +3,16 @@ indexing
 		"A function analyzer that combines the events of a pair of function %
 		%analyzers.  Provides a means of implementing 'and' conditions %
 		%between different types of events."
-	example:
-		"Contains 2 function analyzers:  a 1-var function analyzer for %
-		%generating signals from stochastic, and a compound function %
-		%analyzer that contains a 2-var function analyzer for generating %
-		%signals from MACD signal/difference crossover and a 2-var function %
-		%analyzer for generating signals from price vs. moving average. %
-		%!!!Move this example somewhere else."
+	detailed_description:
+		"Compound events are generated on the results of the `right_analyzer' %
+		%(right events) with respect to the results of the `left_analyzer' %
+		%(left events) in the following manner:  A time interval is created %
+		%by adding `before_extension' (which will be negative) and %
+		%`after_extension' to each right event's time stamp and creating a %
+		%MARKET_EVENT_PAIR for each intersection of a left event %
+		%with the interval formed from a right event, and setting the %
+		%MARKET_EVENT_PAIR's left and right components to the left and right %
+		%events that formed the intersection."
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -62,12 +65,15 @@ feature -- Access
 feature -- Status setting
 
 	set_tradable (f: TRADABLE [BASIC_MARKET_TUPLE]) is
+			-- Set `left_analyzer' and `right_analyzer' tradables to `f'.
 		do
 			left_analyzer.set_tradable (f)
 			right_analyzer.set_tradable (f)
 		end
 
 	set_start_date_time (d: DATE_TIME) is
+			-- Set `left_analyzer' and `right_analyzer' `start_date_time's
+			-- to `d'.
 		do
 			left_analyzer.set_start_date_time (d)
 			right_analyzer.set_start_date_time (d)
@@ -112,6 +118,11 @@ feature -- Status setting
 feature -- Basic operations
 
 	execute is
+			-- For each event resulting from the execution of right_analyzer
+			-- whose time interval - formed from before_extension and
+			-- after_extension - intersects with an event resulting from
+			-- the execution of left_analyzer, generate a compound event
+			-- made of this pair of left and right events.
 		local
 			left_events, right_events: CHAIN [MARKET_EVENT]
 		do
