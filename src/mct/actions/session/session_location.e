@@ -126,13 +126,30 @@ feature {NONE} -- Implementation
 	host_and_port_diagnosis (host, port: STRING): STRING is
 			-- Diagnosis of validity of `host' and `port' - Void if they
 			-- both are valid; otherwise a description of the problem
+		local
+			connection: CLIENT_CONNECTION
 		do
 			if not port.is_integer then
 				Result := "Invalid port number: " + port
 			end
 			-- !!!Check that host is valid.
-			-- !!!If valid, Connect/disconnect to the MAS server as a
-			-- client to test that it is running and reachable - report if not.
+			if Result = Void then
+				create connection.make (host, port.to_integer)
+				if connection.last_communication_succeeded then
+					connection.ping_server
+					if not connection.last_communication_succeeded then
+						Result := "Communication with server (host: " +
+						host + ", port; " + port + ") failed:%N" +
+						connection.error_report + "."
+					end
+				else
+					Result := "Could not connect to server at host: " +
+						host + ", port; " + port
+					if not connection.error_report.is_empty then
+						Result.append ("%N(" + connection.error_report + ").")
+					end
+				end
+			end
 		end
 
 end

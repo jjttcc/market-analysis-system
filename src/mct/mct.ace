@@ -65,6 +65,8 @@ cluster
 
 	mas_server_util (mas_server): "$/utility"
 
+	mas_server_protocols (mas_server): "$/protocols"
+
 	ise:		"$ISE_EIFFEL/library"
 
 	all base (ise):		"$/base"
@@ -78,6 +80,7 @@ cluster
 
 	date_tools (date_format):		"$/english"
 
+	all net (ise):		"$/net"
 
 	gel:		"$ISE_EIFFEL/library/gel"
 		exclude
@@ -100,6 +103,7 @@ external
 
 	object:
 		"/${MAS}/src/eiffel_library/lib/utilities.o",
+		"${ISE_EIFFEL}/library/net/spec/${ISE_PLATFORM}/lib/libnet.a",
 		"${ISE_EIFFEL}/library/time/spec/${ISE_PLATFORM}/lib/libdatetime.a",
 		"$(ISE_EIFFEL)/library/vision2/spec/$(ISE_PLATFORM)/lib/gtk_eiffel.o",
 		"$(ISE_EIFFEL)/library/vision2/spec/$(ISE_PLATFORM)/lib/load_pixmap.o `gtk-config --libs`",
