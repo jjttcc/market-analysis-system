@@ -1,9 +1,9 @@
 Thu Dec 10 10:34:30 MST 1998
 
-                       Applications Using TAL
+                       Applications Using MAL
 
 
-Currently, the only application written for TAL is a test application,
+Currently, the only application written for MAL is a test application,
 which resides in the directory main_test_app under the main source
 directory.
 
@@ -25,7 +25,7 @@ The factories cluster contains the following classes:
 FUNCTION_BUILDER creates a hard-coded set of technical indicators
 for testing purposes.  In the future, the mechanism for building
 technical indicators will be extended to allow new indicators to be
-added at run-time.  This facility will probably be placed in the TAL
+added at run-time.  This facility will probably be placed in the MAL
 itself rather than in an application.
 
 The root cluster contains the root class, FINANCE_ROOT, and

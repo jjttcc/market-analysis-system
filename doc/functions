@@ -1,9 +1,9 @@
 .\"Formatted with the ms macro package.
-.ds LH TAL
-.ds CH Technical Analysis Library - Function Definitions
+.ds LH MAL
+.ds CH Market Analysis Library - Function Definitions
 .ds RH \*(DY
 .ds CF Page %
-.tl ''\s+1\fBTechnical Analysis Library - Function Definitions\fP\s-1''
+.tl ''\s+1\fBMarket Analysis Library - Function Definitions\fP\s-1''
 .EQ
 delim #
 .EN

@@ -1,17 +1,17 @@
-The files in this directory provide documentation for the Technical Analysis
-Library (TAL) and applications that use it.  The directory currently contains
+The files in this directory provide documentation for the Market Analysis
+Library (MAL) and applications that use it.  The directory currently contains
 the following files:
 
     README - This file
 
-    TAL_design_document - Documentation of the design of TAL
+    MAL_design_document - Documentation of the design of MAL
 
     eiffel_library_document - Documentation of the Eiffel Component Library,
-        used by TAL
+        used by MAL
 
-    intro - Introduction to TAL
+    intro - Introduction to MAL
 
-    applications - Documentation of applications using TAL
+    applications - Documentation of applications using MAL
 
     functions.ps - An attempt to give a precise specification to some of
-        the technical analysis functions that can be constructed with TAL
+        the technical analysis functions that can be constructed with MAL
