@@ -83,6 +83,7 @@ feature {NONE} -- Hook routines
 		require
 			not_void: f /= Void
 			tradable_set: tradable /= Void
+			period_type_set: f.trading_period_type /= Void
 			-- tradable has been set to the current tradable.
 		deferred
 		end

@@ -272,6 +272,8 @@ feature {MARKET_FUNCTION_EDITOR}
 		do
 			if tradable /= Void then
 				create {STOCK} dummy_tradable.make ("dummy", Void, Void)
+				dummy_tradable.set_trading_period_type (
+					period_types @ (period_type_names @ Daily))
 				-- Set innermost input to an empty tradable to force it
 				-- to clear its contents.
 				input1.set_innermost_input (dummy_tradable)
