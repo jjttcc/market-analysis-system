@@ -52,6 +52,13 @@ class CL_BASED_FUNCTION_EDITING_INTERFACE inherit
 			print
 		end
 
+	FUNCTION_MENU_VALUES
+		export
+			{NONE} all
+		undefine
+			print
+		end
+
 creation
 
 	make
@@ -161,14 +168,19 @@ feature {NONE} -- Implementation of hook methods
 		end
 
 	accepted_by_user (c: MARKET_FUNCTION): BOOLEAN is
+		local
+			desc_chc, another_chc, choice_chc: FUNCTION_MENU_CHOICE
 		do
+			create desc_chc.make_description; create another_chc.make_another;
+			create choice_chc.make_choice
 			print_list (<<"Select:%N     Print description of ",
-						c.generator + name_for (c), "? (d)%N",
-						"     Choose ", c.generator + name_for (c),
-						" (c) Make another choice (a) ", eom>>)
+						c.generator + name_for (c), "? (", desc_chc.item.out,
+						")%N", "     Choose ", c.generator + name_for (c),
+						" (", choice_chc.item.out, ") Make another choice (",
+						another_chc.item.out, ") ", eom>>)
 			inspect
 				character_selection (Void)
-			when 'd', 'D' then
+			when description, description_upper then
 				print_list (<<"%N", function_description (c),
 					"%N%NChoose ", c.generator + name_for (c),
 						"? (y/n) ", eom>>)
@@ -179,7 +191,7 @@ feature {NONE} -- Implementation of hook methods
 				else
 					check Result = False end
 				end
-			when 'c', 'C' then
+			when choose, choose_upper then
 				Result := True
 			else
 				check Result = False end
