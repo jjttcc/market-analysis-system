@@ -47,6 +47,12 @@ feature {NONE} -- Initialization
 		do
 			create settings.make (0)
 			initialize_common_settings
+
+			-- Ensure that the end-date settings default to "now" if
+			-- they are not set in the configuration file.
+			settings.replace (Now, EOD_end_date_specifier)
+			settings.replace (Now, Intraday_end_date_specifier)
+
 			settings.extend ("", Data_source_specifier)
 			settings.extend ("", User_id_specifier)
 			settings.extend ("", Password_specifier)
