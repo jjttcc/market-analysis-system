@@ -64,8 +64,12 @@ class MarketSelection implements ActionListener {
 		GUI_Utilities.busy_cursor(false, main_frame);
 	}
 
-	String current_market() {
+	public String current_market() {
 		return selection.getSelectedItem();
+	}
+
+	public void remove_selection(String s) {
+		selection.remove(s);
 	}
 
 	private List selection;
