@@ -191,7 +191,7 @@ feature {NONE}
 		do
 			from
 				analyzers := market_event_generation_library
-				!!names.make (analyzers.count)
+				create names.make (analyzers.count)
 				from
 					analyzers.start
 				until
@@ -274,7 +274,7 @@ feature {NONE}
 			finished: BOOLEAN
 			registrar: EVENT_REGISTRATION
 		do
-			!!registrar.make (event_coordinator.dispatcher)
+			create registrar.make (event_coordinator.dispatcher)
 			from
 			until
 				finished or end_program
@@ -364,8 +364,8 @@ feature {NONE}
 			finished, set_date: BOOLEAN
 			indicator: MARKET_FUNCTION
 		do
-			!!date.make_now
-			!!time.make_now
+			create date.make_now
+			create time.make_now
 			from
 			until
 				finished or end_program
@@ -404,7 +404,7 @@ feature {NONE}
 				print ("%N%N")
 			end
 			if set_date then
-				!!date_time.make_by_date_time (date, time)
+				create date_time.make_by_date_time (date, time)
 				print_list (<<"Setting date and time for processing to ",
 							date_time.out, "%N">>)
 				event_coordinator.set_start_date_time (date_time)
@@ -416,7 +416,7 @@ feature {NONE}
 		do
 			print ("Enter the date to use for analysis or %
 				%hit <Enter> to use the%Ncurrent date (dd/mm/yyyy): ")
-			!!Result.make_now
+			create Result.make_now
 			from
 				read_line
 			until
@@ -426,7 +426,7 @@ feature {NONE}
 				read_line
 			end
 			if not last_string.empty then
-				!!Result.make_from_string (last_string)
+				create Result.make_from_string (last_string)
 			end
 			print_list (<<"Using date of ", Result, ".%N">>)
 		end
@@ -437,7 +437,7 @@ feature {NONE}
 			period: CHARACTER
 			period_name: STRING
 		do
-			!!Result.make_now
+			create Result.make_now
 			from
 			until
 				period = 'd' or period = 'm' or period = 'y'
@@ -484,7 +484,7 @@ feature {NONE}
 	time_choice: TIME is
 			-- Time obtained from user.
 		do
-			!!Result.make (0, 0, 0)
+			create Result.make (0, 0, 0)
 			print ("Enter the hour to use for analysis: ")
 			from
 				read_integer
@@ -630,7 +630,7 @@ feature {NONE}
 			names: ARRAYED_LIST [STRING]
 		do
 			from
-				!!names.make (indicators.count)
+				create names.make (indicators.count)
 				from
 					indicators.start
 				until
@@ -703,8 +703,8 @@ feature {NONE}
 			current_period_type := period_types @ (period_type_names @ Daily)
 			market_list := factory_builder.market_list
 			input_file_names := factory_builder.input_file_names
-			!!help.make
-			!!event_generator_builder.make (factory_builder.command_builder)
+			create help.make
+			create event_generator_builder.make (factory_builder.command_builder)
 		ensure
 			curr_period_not_void: current_period_type /= Void
 			market_list_not_void: market_list /= Void

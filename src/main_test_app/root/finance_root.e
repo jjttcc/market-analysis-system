@@ -39,13 +39,13 @@ feature -- Initialization
 	make is
 		local
 			ui: TEST_USER_INTERFACE
-			functions: MARKET_FUNCTIONS -- !!For test compile
+			functions: MARKET_FUNCTIONS -- For test compile
 		do
-			!!functions
-			!!ui
+			create functions
+			create ui
 			ui.set_output_field_separator ("%T")
 			ui.set_date_field_separator ("/")
-			!!factory_builder.make
+			create factory_builder.make
 			ui.set_factory_builder (factory_builder)
 			ui.execute
 		end
@@ -61,103 +61,103 @@ feature -- Initialization
 			trueop: TRUE_COMMAND
 			falseop: FALSE_COMMAND
 		do
-			!!trueop; !!falseop
-			!!andop.make (trueop, trueop)
+			create trueop; create falseop
+			create andop.make (trueop, trueop)
 			andop.execute (Void)
 			check
 				result1_true: andop.value = true
 			end
-			!!andop.make (trueop, falseop)
+			create andop.make (trueop, falseop)
 			andop.execute (Void)
 			check
 				result2_false: andop.value = false
 			end
-			!!andop.make (falseop, trueop)
+			create andop.make (falseop, trueop)
 			andop.execute (Void)
 			check
 				result3_false: andop.value = false
 			end
-			!!andop.make (falseop, falseop)
+			create andop.make (falseop, falseop)
 			andop.execute (Void)
 			check
 				result4_false: andop.value = false
 			end
-			!!orop.make (trueop, trueop)
+			create orop.make (trueop, trueop)
 			orop.execute (Void)
 			check
 				result5_true: orop.value = true
 			end
-			!!orop.make (trueop, falseop)
+			create orop.make (trueop, falseop)
 			orop.execute (Void)
 			check
 				result6_true: orop.value = true
 			end
-			!!orop.make (falseop, trueop)
+			create orop.make (falseop, trueop)
 			orop.execute (Void)
 			check
 				result7_true: orop.value = true
 			end
-			!!orop.make (falseop, falseop)
+			create orop.make (falseop, falseop)
 			orop.execute (Void)
 			check
 				result8_false: orop.value = false
 			end
-			!!xorop.make (trueop, trueop)
+			create xorop.make (trueop, trueop)
 			xorop.execute (Void)
 			check
 				result9_false: xorop.value = false
 			end
-			!!xorop.make (trueop, falseop)
+			create xorop.make (trueop, falseop)
 			xorop.execute (Void)
 			check
 				result10_true: xorop.value = true
 			end
-			!!xorop.make (falseop, trueop)
+			create xorop.make (falseop, trueop)
 			xorop.execute (Void)
 			check
 				result11_true: xorop.value = true
 			end
-			!!xorop.make (falseop, falseop)
+			create xorop.make (falseop, falseop)
 			xorop.execute (Void)
 			check
 				result12_false: xorop.value = false
 			end
-			!!impop.make (trueop, trueop)
+			create impop.make (trueop, trueop)
 			impop.execute (Void)
 			check
 				result13_true: impop.value = true
 			end
-			!!impop.make (trueop, falseop)
+			create impop.make (trueop, falseop)
 			impop.execute (Void)
 			check
 				result14_false: impop.value = false
 			end
-			!!impop.make (falseop, trueop)
+			create impop.make (falseop, trueop)
 			impop.execute (Void)
 			check
 				result15_true: impop.value = true
 			end
-			!!impop.make (falseop, falseop)
+			create impop.make (falseop, falseop)
 			impop.execute (Void)
 			check
 				result16_true: impop.value = true
 			end
-			!!equivop.make (trueop, trueop)
+			create equivop.make (trueop, trueop)
 			equivop.execute (Void)
 			check
 				result17_true: equivop.value = true
 			end
-			!!equivop.make (trueop, falseop)
+			create equivop.make (trueop, falseop)
 			equivop.execute (Void)
 			check
 				result18_false: equivop.value = false
 			end
-			!!equivop.make (falseop, trueop)
+			create equivop.make (falseop, trueop)
 			equivop.execute (Void)
 			check
 				result19_false: equivop.value = false
 			end
-			!!equivop.make (falseop, falseop)
+			create equivop.make (falseop, falseop)
 			equivop.execute (Void)
 			check
 				result20_true: equivop.value = true
