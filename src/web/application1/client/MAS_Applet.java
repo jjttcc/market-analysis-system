@@ -14,12 +14,12 @@ import support.ErrorBox;
 import support.Tokenizer;
 import support.SelfContainedConfiguration;
 
-// Test applet that communicates with the servlet via serialization
+// The Market Analysis System charting applet
 public class MAS_Applet extends Applet {
 
 	public void init() {
 		log("init: Starting ...");
-		log("Compiled at Tue Feb 18 15:43:59 MST 2003");
+		log("Compiled at Wed Feb 19 15:57:40 MST 2003");
 		try {
 			log("init: A");
 			initialize_configuration();
