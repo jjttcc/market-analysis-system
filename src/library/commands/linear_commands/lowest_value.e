@@ -53,7 +53,7 @@ feature -- Initialization
 
 feature -- Access
 
-	operand: BASIC_NUMERIC_COMMAND
+	operand: RESULT_COMMAND [REAL]
 			-- Operand that determines which field in each tuple to
 			-- examine for the lowest value
 
