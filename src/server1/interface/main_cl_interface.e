@@ -62,6 +62,8 @@ feature -- Initialization
 		do
 			mai_initialize (fb)
 			initialize
+			create event_registrar.make (event_coordinator.dispatcher,
+				input_device, output_device)
 		end
 
 	make_io (input_dev, output_dev: IO_MEDIUM; fb: FACTORY_BUILDER) is
@@ -72,6 +74,8 @@ feature -- Initialization
 			initialize
 			set_input_device (input_dev)
 			set_output_device (output_dev)
+			create event_registrar.make (event_coordinator.dispatcher,
+				input_device, output_device)
 		ensure
 			iodev_set: input_device = input_dev and output_device = output_dev
 		end
@@ -89,6 +93,8 @@ feature -- Access
 	event_generator_builder: CL_BASED_MEG_EDITING_INTERFACE
 
 	function_builder: CL_BASED_FUNCTION_EDITING_INTERFACE
+
+	event_registrar: EVENT_REGISTRATION
 
 feature -- Status setting
 
@@ -154,7 +160,7 @@ feature -- Basic operations
 				when 'm', 'M' then
 					event_generator_builder.edit_event_generator_menu
 				when 'r', 'R' then
-					registrant_menu
+					event_registrar.registrant_menu
 				when 'a', 'A' then
 					if event_coordinator.start_date_time = Void then
 						print ("%NError: Start date must be set before %
@@ -210,6 +216,7 @@ feature -- Basic operations
 feature {NONE} -- Implementation
 
 	registrant_menu is
+--!!!Obsolete
 			-- Menu for adding, removing, editing, and viewing event
 			-- registrants
 		local
@@ -527,7 +534,6 @@ feature {NONE} -- Implementation - utilities
 					raise ("Data retrieval error")
 				end
 			end
-			working_function_library := deep_clone (function_library)
 		ensure
 			curr_period_not_void: current_period_type /= Void
 		end
@@ -577,10 +583,6 @@ feature {NONE} -- Implementation - attributes
 
 	exit_server: BOOLEAN
 			-- Has the user requested to terminate the server?
-
-	working_function_library: STORABLE_LIST [MARKET_FUNCTION]
-			-- List of indicators used for editing until the user saves
-			-- the current changes
 
 	saved_mklist_index: INTEGER
 
