@@ -1,0 +1,19 @@
+#!/bin/bash
+# Buile the MAS rpm package.
+
+Progname=$(basename $0)
+result=0
+if [ "$(id -nu)" != root ]; then
+	echo "You need to be root to run $Progname." >&2
+	exit 1
+fi
+
+cd /usr/src/redhat/SPECS &&
+rpm -ba mas.spec
+if [ $? -ne 0 ]; then
+	echo "$Progname failed." >&2
+	result=2
+else
+	echo "$Progname succeeded." >&2
+fi
+exit $result
