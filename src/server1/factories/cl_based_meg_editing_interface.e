@@ -119,16 +119,16 @@ feature {NONE} -- Implementation
 					"%N     Create a new market analyzer (c) %
 					%Remove a market analyzer (r) %
 					%%N     View a market analyzer (v) %
-					%Edit market-analysis indicators (e) %N%
-					%     Previous (-) Help (h) ", eom>>)
+					%Edit market analyzers (e) %N%
+					%     Previous (-) ", eom>>)
 			else
 				msg := concatenation (<<"Select action:",
 					"%N     Create a new market analyzer (c) %
 					%Remove a market analyzer (r) %
 					%%N     View a market analyzer (v) %
-					%Edit market-analysis indicators (e) %N%
+					%Edit market analyzers (e) %N%
 					%     Save changes (s) %
-					%Previous - abort changes (-) Help (h) ", eom>>)
+					%Previous - abort changes (-) ", eom>>)
 			end
 			from
 				Result := Null_value

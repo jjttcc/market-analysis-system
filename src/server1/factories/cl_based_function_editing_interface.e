@@ -114,17 +114,17 @@ feature {NONE} -- Implementation of hook methods
 			end
 			if not dirty or not ok_to_save then
 				msg := concatenation (<<"Select action:",
-					"%N     Create a new market-data indicator (c) %
-					%Remove a market-data indicator (r) %N%
-					%     Edit market-data indicators (e) %
-					%Previous (-) Help (h) ", eom>>)
+					"%N     Create a new indicator (c) %
+					%Remove an indicator (r) %N%
+					%     Edit indicators (e) %
+					%Previous (-) ", eom>>)
 			else
 				msg := concatenation (<<"Select action:",
-					"%N     Create a new market-data indicator (c) %
-					%Remove a market-data indicator (r) %N%
-					%     Edit market-data indicators (e) %
+					"%N     Create a new indicator (c) %
+					%Remove an indicator (r) %N%
+					%     Edit indicators (e) %
 					%Save changes (s) %N%
-					%     Previous - abort changes (-) Help (h) ", eom>>)
+					%     Previous - abort changes (-) ", eom>>)
 			end
 			from
 				Result := Null_value

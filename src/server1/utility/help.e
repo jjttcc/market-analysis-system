@@ -26,41 +26,28 @@ feature -- Initialization
 			arr_make (Edit_event_generators,
 				Compound_event_generator_left_target_type)
 			s :=
-"%NSelect market: Select a market out of the current list for viewing.%N%
-%View data: View the selected markets's data, or one or more technical%N%
-%   indicators for that market.%N%
-%Edit indicators: Edit technical indicators used directly on market data or%N%
-%   technical indicators used for market analysis.%N%
-%Run market analysis: Run an analysis of all markets for each registrant%N%
+"%NSelect tradable: Select a tradable out of the current list for viewing.%N%
+%View data: View the selected tradable's data, or one or more technical%N%
+%   indicators for that tradable.%N%
+%Edit indicators: Create, edit, or remove technical indicators.%N%
+%Edit market analyzers: Create, edit, or remove market analyzers.%N%
+%Run market analysis: Run an analysis of all tradables for each registrant%N%
 %   using the parameters configured for the registrant.%N%
 %Set date for market analysis: Set the date of the earliest trading period %N%
 %   to be processed in market analysis.%N%
 %Edit event registrants: Add, remove, view, or edit registrants for%N%
 %   notification of events detected during market analysis.%N%
-%Memory usage: view information on memory used by the program.%N"
+%End client session: Exit this command-line client session.%N"
 			put (s, Main)
 			s :=
 "%NView market data: View data of the selected trading period for the %
-%current %N   market.%N%
+%current %N   tradable.%N%
 %View an indicator: Select a technical indicator and view its results on %N%
-%   the current market or view its description.%N%
+%   the current tradable or view its description.%N%
+%View name: View the name of the currently selected tradable.%N%
 %Change data period type: Change the type of trading period (daily, weekly, %N%
-%    etc.) to use for the current market.%N"
+%    etc.) to use for the current tradable.%N"
 			put (s, View_data)
-			s :=
-"%NEdit market-data indicators: Edit the technical indicators that are %N%
-%   used directly on market data.%N%
-%Edit market-analysis indicators: Edit the technical indicators that are %N%
-%   used on the market data for market analysis.%N"
-			put (s, Edit_indicators)
-			s :=
-"%NSet date: Set the date at which to begin market analysis.%N%
-%Set time: Set the time at which to begin market analysis.%N%
-%Set date relative to current date: Set the date a specified number of %N%
-%   days, months, or years back from the current date.%N%
-%Set market analysis date to currently selected date: Update the system %N%
-%   the newly selected date and time for market analysis.%N"
-			put (s, Set_analysis_date)
 			s :=
 "%NAdd registrants: Add one or more registrants (users or log files) who %N%
 %   will receive notification of market analysis events.%N%
@@ -87,10 +74,10 @@ feature -- Initialization
 			put (s, Edit_registrant)
 			s :=
 "%NPrint indicator: Print the result of processing the data for the current %N%
-%   market using the selected indicator.%N%
+%   tradable using the selected indicator.%N%
 %View description: View a short description of the currently selected %N%
 %   indicator.%N%
-%View long description: View a detailed description of the curretnly %N%
+%View long description: View a detailed description of the currently %N%
 %   selected indicator.%N"
 			put (s, View_indicator)
 			s := "(This will soon be 'edit event generators' help)%N"
