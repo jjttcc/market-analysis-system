@@ -16,8 +16,6 @@ class MA_SERVER inherit
 			{NONE} all
 		end
 
-GLOBAL_SERVICES
-
 creation
 
 	make
@@ -102,39 +100,4 @@ feature {NONE}
 
 	current_sockets: LIST [SOCKET]
 
-testmfline is
-local
-	date1, date2: DATE_TIME
-	startp, endp, p: MARKET_POINT
-	line: MARKET_FUNCTION_LINE
-	i: INTEGER
-do
-	!!date1.make (1999, 2, 2, 0, 0, 0); !!date2.make (1999, 2, 8, 0, 0, 0)
-	!!startp.make; !!endp.make
-	startp.set_x_y_date (1, 50, date1); endp.set_x_y_date (7, 61, date2)
-	!!line.make_from_2_points (startp, endp, period_types @ "daily")
-	from
-		line.output.start
-		i := 1
-	until
-		i = 100
-	loop
-		p := line.output.item
-print_list (<<"i: ", i, ", p.x: ", p.x, ", p.y: ", p.y, ", p.date", p.date_time, "%N">>)
-		i := i + 1
-		line.output.forth
-	end
-	line.make (startp, 0.01, period_types @ "weekly")
-	from
-		line.output.start
-		i := 1
-	until
-		i = 100
-	loop
-		p := line.output.item
-print_list (<<"i: ", i, ", p.x: ", p.x, ", p.y: ", p.y, ", p.date", p.date_time, "%N">>)
-		i := i + 1
-		line.output.forth
-	end
- end
 end -- MA_SERVER
