@@ -34,6 +34,11 @@ feature -- Basic operations
 	execute (options: INSTALL_TOOL_COMMAND_LINE) is
 		local
 		do
+			if is_pre_nt then
+				print ("This is a pre-NT system.%N")
+			else
+				print ("This is an NT system.%N")
+			end
 		end
 
 feature {NONE} -- Implementation
