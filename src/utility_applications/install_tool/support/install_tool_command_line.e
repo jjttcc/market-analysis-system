@@ -23,6 +23,7 @@ feature {NONE} -- Initialization
 
 	process_remaining_arguments is
 		do
+			application_dir := ""
 			from
 				main_setup_procedures.start
 			until
@@ -55,7 +56,7 @@ feature {NONE} -- Implementation
 			from
 				contents.start
 			until
-				application_dir /= Void or else contents.exhausted
+				not application_dir.is_empty or else contents.exhausted
 			loop
 				if not contents.item.is_empty then
 					application_dir := clone (contents.item)
