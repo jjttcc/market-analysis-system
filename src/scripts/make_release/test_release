@@ -160,7 +160,7 @@ test_client_source() {
 	cd *${release_number}/src/clients/GUI1 >/dev/null || {
 		fail "Failed to cd to client source directory"; return 1
 	}
-	javac */*java *java >/dev/null 2>&1 || {
+	javac MA_Client.java >/dev/null 2>&1 || {
 		fail "Failed to compile client source code"; return 1
 	}
 	echo -e "..\c"
