@@ -58,7 +58,8 @@ feature {NONE} -- Implementation
 				TRADABLE [BASIC_MARKET_TUPLE] is
 			-- The tradable corresponding to `symbol' and `period_type' -
 			-- `session.last_tradable' is used, if it matches; otherwise
-			-- tradables.tradable (symbol, period_type).
+			-- tradables.tradable (symbol, period_type).  Result is
+			-- Void if either of `symbol' or `period_type' is not valid.
 		require
 			not_void: symbol /= Void and period_type /= Void
 		do
@@ -67,7 +68,10 @@ feature {NONE} -- Implementation
 				Result = Void or not (Result.symbol.is_equal (symbol) and
 				Result.period_types.has (period_type.name))
 			then
-				Result := tradables.tradable (symbol, period_type)
+				Result := Void
+				if tradables.valid_period_type (symbol, period_type) then
+					Result := tradables.tradable (symbol, period_type)
+				end
 				session.set_last_tradable (Result)
 			end
 		ensure

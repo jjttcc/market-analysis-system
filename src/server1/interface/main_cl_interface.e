@@ -444,10 +444,15 @@ feature {NONE} -- Implementation
 				if
 					not t.valid_period_type (per_type_choice)
 				then
-					-- Set `t' to the appropriate tradable according to
-					-- `per_type_choice', intraday or non-intraday.
-					t := market_list_handler.tradable (t.symbol,
-						per_type_choice)
+					if
+						market_list_handler.valid_period_type (t.symbol,
+							per_type_choice)
+					then
+						-- Set `t' to the appropriate tradable according to
+						-- `per_type_choice', intraday or non-intraday.
+						t := market_list_handler.tradable (t.symbol,
+							per_type_choice)
+					end
 				end
 				if t = Void then
 					print_list (<<"The chosen period type of ",
