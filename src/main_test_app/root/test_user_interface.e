@@ -702,7 +702,7 @@ feature {NONE}
 			market_list := factory_builder.market_list
 			input_file_names := factory_builder.input_file_names
 			!!help.make
-			!!event_generator_builder.make
+			!!event_generator_builder.make (factory_builder.command_builder)
 		ensure
 			curr_period_not_void: current_period_type /= Void
 			market_list_not_void: market_list /= Void

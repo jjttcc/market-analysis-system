@@ -53,6 +53,8 @@ feature -- Access
 	event_coordinator: MARKET_EVENT_COORDINATOR
 			-- Object in charge of event generation and dispatch
 
+	command_builder: COMMAND_EDITING_INTERFACE
+
 feature {NONE}
 
 	usage is
@@ -140,6 +142,7 @@ feature {NONE}
 			!VIRTUAL_TRADABLE_LIST!market_list.make (input_file_names,
 														tradable_factories)
 			!!dispatcher.make
+			!COMMAND_BUILDER!command_builder
 			register_event_registrants (dispatcher)
 			!MARKET_EVENT_COORDINATOR!event_coordinator.make (
 							active_event_generators, market_list, dispatcher)

@@ -35,13 +35,17 @@ creation
 
 feature -- Initialization
 
-	make is
+	make (op_maker: COMMAND_EDITING_INTERFACE) is
+		require
+			arg_not_void: op_maker /= Void
 		do
-			!COMMAND_BUILDER!operator_maker
+			operator_maker := op_maker
 			!!cmd_editor
 			operator_maker.set_editor (cmd_editor)
 			cmd_editor.set_user_interface (operator_maker)
 			!!help.make
+		ensure
+			opmkr_set: operator_maker = op_maker
 		end
 
 feature -- Access
