@@ -46,18 +46,20 @@ feature {NONE} -- Hook routine implementations
 			target := msg -- set up for tokenization
 			fields := tokens (Message_field_separator)
 			if
-				fields.count /= expected_field_count and
-				additional_field_constraints (fields)
+				fields.count = expected_field_count and
+				additional_field_constraints_fulfilled (fields)
 			then
-				report_error (Error, <<field_constraint_error>>)
-			else
 				parse_symbol_and_period_type (symbol_index, period_type_index,
 					fields)
-				parse_remainder (fields)
+				if not parse_error then
+					parse_remainder (fields)
+				end
 				if not parse_error then
 					prepare_response (fields)
 					create_and_send_response
 				end
+			else
+				report_msg_fields_error (fields)
 			end
 		end
 
@@ -68,7 +70,7 @@ feature {NONE} -- Hook routines
 		deferred
 		end
 
-	additional_field_constraints (fields: LIST [STRING]): BOOLEAN is
+	additional_field_constraints_fulfilled (fields: LIST [STRING]): BOOLEAN is
 			-- Are the additional constraints, if any, for `fields' fulfilled?
 		do
 			Result := True -- Yes - Redefine if needed.
@@ -79,7 +81,13 @@ feature {NONE} -- Hook routines
 			-- the fields extracted from the argument passed to `do_execute'
 			-- fails
 		once
-			Result := "Wrong number of fields." -- Redefine if needed.
+		end
+
+	additional_field_constraints_msg: STRING is
+			-- Error message for violation of the
+			-- `additional_field_constraints_fulfilled' check
+		once
+			Result := "" -- Redefine if needed.
 		end
 
 	symbol_index: INTEGER is
@@ -104,7 +112,7 @@ feature {NONE} -- Hook routines
 		end
 
 	prepare_response (fields: LIST [STRING]) is
-			-- Perform any needed preparation (using `fields', if appropriate
+			-- Perform any needed preparation (using `fields', if appropriate)
 			-- before calling `create_and_send_response'.
 		require
 			fields_exist: fields /= Void
@@ -205,6 +213,15 @@ feature {NONE} -- Utility
 			end
 		end
 
+	report_msg_fields_error (fields: LIST [STRING]) is
+		do
+			if fields.count /= expected_field_count then
+				report_error (Error, <<wrong_number_of_fields_msg>>)
+			else
+				report_error (Error, <<additional_field_constraints_msg>>)
+			end
+		end
+
 feature {NONE} -- Implementation - string constants
 
 	symbol_not_found_prefix: STRING is "Symbol "
@@ -214,5 +231,7 @@ feature {NONE} -- Implementation - string constants
 	invalid_period_type_prefix: STRING is "Invalid period type: "
 
 	bad_period_type_msg: STRING is "Bad period type"
+
+	wrong_number_of_fields_msg: STRING is "Wrong number of fields."
 
 end -- class DATA_REQUEST_CMD

@@ -46,45 +46,6 @@ feature {NONE} -- Hook routine implementations
 
 feature {NONE} -- Basic operations
 
-	old_remove_do_execute (msg: STRING) is
-		local
-			fields: LIST [STRING]
-		do
-			target := msg
-			fields := tokens (Message_field_separator)
-			if fields.count /= 2 then
-				report_error (Error, <<"Wrong number of fields.">>)
-			else
-				parse_symbol_and_period_type (1, 2, fields)
-				if not parse_error then
-					old_remove_send_response
-				end
-			end
-		end
-
-	old_remove_send_response is
-			-- Obtain the list of all valid market events for `market_symbol'
-			-- and `trading_period_type' and send it to the client.
-		local
-			tradable: TRADABLE [BASIC_MARKET_TUPLE]
-		do
-			tradable := cached_tradable (market_symbol, trading_period_type)
-			if tradable = Void then
-				if server_error then
-					report_server_error
-				elseif not tradables.symbols.has (market_symbol) then
-					report_error (Invalid_symbol, <<"Symbol not in database.">>)
-				else
-					report_error (Invalid_period_type,
-						<<"Invalid period type: ", trading_period_type.name>>)
-				end
-			else
-				put_ok
-				find_and_put_event_list (tradable)
-				put (eom)
-			end
-		end
-
 	find_and_put_event_list (t: TRADABLE [BASIC_MARKET_TUPLE]) is
 			-- Find list of all event types valid for `t' and
 			-- `trading_period_type' and "put" them.

@@ -31,24 +31,6 @@ feature {NONE} -- Hook routine implementations
 			Result := concatenation (<<error_context_prefix, market_symbol>>)
 		end
 
-feature {NONE} -- Basic operations
-
-	old_remove_do_execute (msg: STRING) is
-		local
-			fields: LIST [STRING]
-		do
-			target := msg -- set up for tokenization
-			fields := tokens (Message_field_separator)
-			if fields.count /= 2 then
-				report_error (Error, <<"Fields count wrong.">>)
-			else
-				parse_symbol_and_period_type (1, 2, fields)
-				if not parse_error then
-					create_and_send_response
-				end
-			end
-		end
-
 feature {NONE}
 
 	create_and_send_response is
