@@ -1,16 +1,22 @@
 #!/bin/bash
 # Make a NetworkProtocol class for the MAS server protocol.
 
-eiffel_protocol_files ()
-{
+eiffel_protocol_files() {
 	echo $proto_dir/gui_network_protocol.e \
-		$proto_dir/network_protocol.e
+		$proto_dir/network_protocol.e \
+		$extended_dir/extended_gui_network_protocol.e
+}
+
+eiffel_date_time_protocol_files() {
+	echo $proto_dir/date_time_protocol.e
 }
 
 proto_dir=../../client_server/protocols
+extended_dir=../../client_server/extended_protocols/
 proto_files=$(eiffel_protocol_files)
+date_time_files=$(eiffel_date_time_protocol_files)
 awk 'BEGIN {
-	print "/* Copyright 1998 - 2001: Jim Cochrane - see file forum.txt */\n"
+	print "/* Copyright 1998 - 2004: Jim Cochrane - see file forum.txt */\n"
 	print "package common;\n"
 	print "/** Constants specifying the components of the Market Analysis \
 System \nnetwork communication protocol */"
@@ -46,5 +52,21 @@ System \nnetwork communication protocol */"
 END {
 	print "\n\t// daily period type is needed for initialization."
 	print "\tfinal String daily_period_type = \"daily\";"
-	print "}"
+# !!!!Remove:	print "}"
 }' $proto_files >../common/NetworkProtocol.java
+
+perl -n -e '
+BEGIN {
+	print "\n\t// Field separators for date-time components of " .
+"client requests\n";
+}
+if (/_separator: *STRING/) {
+	chomp;
+	s/\b([a-z_]+): *STRING *is *(".*")/final String client_request_$1 = $2;/;
+	print;
+	print "\n";
+}
+END {
+	print "}\n";
+}
+' $date_time_files >>../common/NetworkProtocol.java
