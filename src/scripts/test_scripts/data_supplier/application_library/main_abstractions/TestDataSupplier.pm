@@ -87,7 +87,7 @@ print "starting 'process'\n";
 		print "'process' received socket request: $client_request\n";
 print "A\n";
 		$socket->send("Here is my response.  " .
-			"What are you going to do about it?\n" . $self->eom);
+			"OK?\n" . $self->eom);
 print "B\n";
 		$socket->flush;
 		$socket->close;
