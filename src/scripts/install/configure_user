@@ -1,0 +1,64 @@
+#!/bin/bash
+# Set up a personalized configuration for a specific MAS user.
+
+Progname=$(basename $0)
+Mas_root_dir=<mas_root_dir>
+
+fatal() {
+	if [ ! -z "$*" ]; then
+		echo "Fatal error encountered: $*" >&2
+	fi
+	echo "Exiting ..." >&2
+	cleanup
+	exit -1
+}
+
+usage() {
+	echo "Usage: $Progname [options] <user_config_directory>"
+	echo "Options:"
+	echo "  -h    Display a help message and exit."
+}
+
+help() {
+	echo "This script copies configuration files into the specified "
+	echo "<user_config_directory>, allowing the user that owns that"
+	echo "directory to modify his or her own MAS configuration files."
+}
+
+# Copy the configuration files to $1.
+copy_config_files() {
+	if [ ! -e "$config_dir" ]; then
+			mkdir "$config_dir" || fatal "Could not create $'config_dir'."
+	elif [ ! -d $config_dir ]; then
+			echo "Error: $config_dir exists and is not a directory" >&2
+			exit 1
+	fi
+	cd $config_dir
+	cp $Mas_root_dir/lib/indicators_persist .
+	cp $Mas_root_dir/lib/generators_persist .
+	cp $Mas_root_dir/lib/.ma_clientrc .
+	cp $Mas_root_dir/lib/mas_dbrc .
+	cp $Mas_root_dir/lib/mas_httprc .
+	cp $Mas_root_dir/lib/symbols .
+	cp $Mas_root_dir/lib/mctrc .
+	for f in $Mas_root_dir/lib/*; do if [ -d $f ]; then ln -s $f . ; fi; done
+}
+
+config_dir=
+while [ $# -ne 0 ]; do
+	case $1 in
+		-h) help; exit 0
+		;;
+		-*) usage; exit 1
+		;;
+		*) config_dir=$1
+		;;
+	esac
+	shift
+done
+
+if [ -z "$config_dir" ]; then
+	usage; exit 1
+fi
+
+copy_config_files $config_dir
