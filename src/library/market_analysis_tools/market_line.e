@@ -19,6 +19,7 @@ feature -- Initialization
 		require
 			not_void: p1 /= Void and p2 /= Void
 			p1_left_of_p2: p1.x < p2.x
+			p1x_gt_0: p1.x > 0
 		do
 			start_point := p1
 			end_point := p2
@@ -69,5 +70,6 @@ feature {NONE} -- Implementation
 invariant
 
 	start_left_of_end: start_point.x < end_point.x
+	start_point_x_gt_0: start_point.x > 0
 
 end -- class MARKET_POINT
