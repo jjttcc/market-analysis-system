@@ -2,6 +2,7 @@ package graph;
 
 import java.awt.*;
 import java.util.*;
+import java_library.support.*;
 import graph_library.DataSet;
 
 
@@ -34,7 +35,8 @@ import graph_library.DataSet;
  * To be used in conjunction with the Graph class and Axis 
  * class for plotting 2D graphs.
  */
-public class DrawableDataSet extends BasicDataSet {
+public class DrawableDataSet extends BasicDataSet
+	implements AssertionConstants {
 
 // Initialization
 
@@ -47,13 +49,13 @@ public class DrawableDataSet extends BasicDataSet {
 	*     data != null && dates != null && times != null
 	*     size() == 0 */
 	public DrawableDataSet(BasicDrawer d) {
-		if (d  == null) {
-			throw new Error("DataSet constructor: precondition violated");
-		}
+		assert d != null: PRECONDITION;
 		drawer = d;
 		data = new ArrayList();
 		dates = new ArrayList();
 		times = new ArrayList();
+		drawer.set_dates(dates);
+		drawer.set_times(times);
 		date_drawer = new DateDrawer(d);
 		time_drawer = new TimeDrawer(d);
 		dates_needed = true;
@@ -82,11 +84,14 @@ public class DrawableDataSet extends BasicDataSet {
 	*     size() == data_points() */
 	public DrawableDataSet(double d[], int n, BasicDrawer drwr) throws Error {
 		super(d, n);
+		assert d != null && n > 0 && drwr != null: PRECONDITION;
 		if (drwr == null) {
 			throw new Error("DrawableDataSet constructor: " +
 				"precondition violated - drwr is null");
 		}
 		drawer = drwr;
+		drawer.set_dates(dates);
+		drawer.set_times(times);
 		date_drawer = new DateDrawer(drawer);
 		time_drawer = new TimeDrawer(drawer);
 		dates_needed = true;
@@ -98,6 +103,7 @@ public class DrawableDataSet extends BasicDataSet {
 
 // Access
 
+	// The object used by 'this' to draw itself
 	public BasicDrawer drawer() { return drawer; }
 
 	// Do dates need to be drawn?
@@ -272,6 +278,12 @@ public class DrawableDataSet extends BasicDataSet {
 		drawer.draw_data(g, bounds, hline_data, vline_data, color);
 	}
 
+// Class invariant
+
+	public boolean invariant() {
+		return drawer() != null;
+	}
+
 // Implementation
 
 	// set g2d to `b'.
@@ -296,14 +308,15 @@ public class DrawableDataSet extends BasicDataSet {
 	* @param w Data Window
 	*/
 	protected void draw_dates(Graphics g, Rectangle w) {
-		TemporalDrawer drawer = temporal_drawer();
-		if (drawer != null && drawer.main_data_processed()) {
-			drawer.set_xaxis(xaxis);
-			drawer.set_yaxis(yaxis);
-			drawer.set_maxes(xmax, ymax, xmin, ymin);
-			drawer.set_ranges(xrange, yrange);
-			drawer.set_clipping(clipping);
-			drawer.draw_data(g, w);
+		TemporalDrawer temporal_drawer = temporal_drawer();
+		if (temporal_drawer != null && temporal_drawer.main_data_processed()) {
+
+			temporal_drawer.set_xaxis(xaxis);
+			temporal_drawer.set_yaxis(yaxis);
+			temporal_drawer.set_maxes(xmax, ymax, xmin, ymin);
+			temporal_drawer.set_ranges(xrange, yrange);
+			temporal_drawer.set_clipping(clipping);
+			temporal_drawer.draw_data(g, w);
 		}
 	}
 
