@@ -185,6 +185,11 @@ feature -- Access
 		deferred
 		end
 
+	derivative_data: DERIVATIVE_DATA is
+			-- Miscellaneous derivative-instrument information from database
+		deferred
+		end
+
 	last_error: STRING
 			-- Description of last error that occured
 
