@@ -361,16 +361,6 @@ feature {NONE} -- Implementation
 
 	symbol_list_clone: LIST [STRING]
 
-feature {NONE} -- Implementation
-
-	ignore_cache: BOOLEAN is
-			-- Should the data cache be ignored?
-		require
-			last_tradable_set: last_tradable /= Void
-		once
-			-- Default to False - redefine if needed.
-		end
-
 feature {NONE} -- Inapplicable
 
 	compare_references is
