@@ -114,15 +114,14 @@ feature -- Status setting
 		end
 
 	set_symbol (arg: STRING) is
-			-- Set symbol to a clone of `arg', with upper-case letters
-			-- changed to lower-case.
+			-- Set symbol to `arg'.
 		require
 			arg_not_void: arg /= Void
+			-- arg contains no upper-case characters
 		do
-			symbol := clone (arg)
-			symbol.to_lower
+			symbol := arg
 		ensure
-			symbol_set: symbol /= Void
+			symbol_set: symbol /= Void and symbol = arg
 		end
 
 	set_time_period_type (arg: TIME_PERIOD_TYPE) is
