@@ -619,6 +619,7 @@ feature {NONE} -- Implementation
 				from
 					i := 1
 					types := current_tradable.tuple_list_names
+types := market_list_handler.period_types (current_tradable.symbol)
 				until
 					i > types.count
 				loop
@@ -754,7 +755,7 @@ feature {NONE} -- Implementation - utilities
 			create event_generator_builder.make
 			create function_builder.make
 			-- For now, only use non-intraday data.
-			daily_market_list := market_list_handler.daily_market_list
+--!!!daily_market_list := market_list_handler.daily_market_list
 		ensure
 			curr_period_not_void: current_period_type /= Void
 		end
