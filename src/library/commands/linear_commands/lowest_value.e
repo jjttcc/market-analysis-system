@@ -28,6 +28,6 @@ feature {NONE} -- Basic operations
 
 feature {NONE}
 
-	target: ARRAYED_LIST [BASIC_MARKET_TUPLE]
+	target: LIST [BASIC_MARKET_TUPLE]
 
 end -- class LOWEST_LOW

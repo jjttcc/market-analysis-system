@@ -97,7 +97,7 @@ feature {NONE} -- Implementation
 	offset: INTEGER
 			-- Offset from current cursor/index
 
-	target: ARRAYED_LIST [MARKET_TUPLE]
+	target: LIST [MARKET_TUPLE]
 
 feature {MARKET_FUNCTION}
 

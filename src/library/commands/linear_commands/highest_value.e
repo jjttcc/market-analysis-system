@@ -28,6 +28,6 @@ feature {NONE} -- Implementation
 
 feature {NONE}
 
-	target: ARRAYED_LIST [BASIC_MARKET_TUPLE]
+	target: LIST [BASIC_MARKET_TUPLE]
 
 end -- class HIGHEST_HIGH
