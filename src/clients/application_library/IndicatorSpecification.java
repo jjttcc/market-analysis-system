@@ -56,7 +56,6 @@ abstract public class IndicatorSpecification extends DataSpecification {
 				data.remove_last_record();
 			} else {
 				// No records removed.
-				System.out.println(new Error("Possible code defect detected"));
 			}
 		} else {
 			data.remove_last_record();

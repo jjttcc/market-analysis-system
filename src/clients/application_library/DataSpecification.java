@@ -7,7 +7,8 @@ import graph_library.DataSet;
 /**
 * General specification for a tradable data request to the server
 **/
-abstract public class DataSpecification implements AssertionConstants {
+abstract public class DataSpecification extends Logic
+	implements AssertionConstants {
 
 // Access
 

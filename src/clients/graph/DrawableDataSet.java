@@ -77,14 +77,14 @@ public class DrawableDataSet extends BasicDataSet
 	* @param n Number of tuples in the array.
 	* @param drwr object used to draw the data.<br>
 	* precondition:<br>
-	*     d != null && n > 0 && drwr != null<br>
+	*     d != null && n >= 0 && drwr != null<br>
 	* postcondition:<br>
 	*     dates_needed() && drawer() == drwr<br>
 	*     data != null && dates != null && times != null
 	*     size() == data_points() */
 	public DrawableDataSet(double d[], int n, BasicDrawer drwr) throws Error {
 		super(d, n);
-		assert d != null && n > 0 && drwr != null: PRECONDITION;
+		assert d != null && n >= 0 && drwr != null: PRECONDITION;
 		if (drwr == null) {
 			throw new Error("DrawableDataSet constructor: " +
 				"precondition violated - drwr is null");

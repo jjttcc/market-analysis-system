@@ -61,20 +61,24 @@ abstract public class TradableSpecification extends DataSpecification {
 	/**
 	* Append data set `d' to the `current_data'.
 	* Precondition: d != null && d.size() > 0
-	# Precondition: current_data().last_date_time_matches_first(d);
+	# Precondition: current_data().size() > 0 implies
+	*	               current_data().last_date_time_matches_first(d)
 	**/
 	public void append_data(DataSet d) {
 		assert d != null && d.size() > 0: PRECONDITION;
-		assert current_data().last_date_time_matches_first(d): PRECONDITION;
+		assert implies(current_data().size() > 0,
+			current_data().last_date_time_matches_first(d)): PRECONDITION;
 		DataSet data = current_data();
 		last_append_changed_state = false;
-		assert data.last_date_time_matches_first(d);
+		assert implies(data.size() > 0, data.last_date_time_matches_first(d));
 		if (d.size() > 1 || ! data.last_tuple_matches_first(d)) {
-			// Since the last record of `data' is for the same time period as
-			// the first record of `d', it needs to be replaced by the
-			// first record of `d'.  (I.e., remove the last record of `data'
-			// before appending `d' to `data'.)
-			data.remove_last_record();
+			if (data.size() > 0) {
+				// Since the last record of `data' is for the same time period
+				// as the first record of `d', it needs to be replaced by the
+				// first record of `d'.  (I.e., remove the last record of
+				// `data' before appending `d' to `data'.)
+				data.remove_last_record();
+			}
 			data.append(d);
 			last_append_changed_state = true;
 		} else {
