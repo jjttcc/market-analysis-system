@@ -31,12 +31,16 @@ feature {NONE} -- Initialization
 			op_not_void_if_used: operator_used implies op /= Void
 			in_output_not_void: in.output /= Void
 		do
-			!!output.make (in.output.count)
 			set_input (in)
 			if op /= Void then
 				set_operator (op)
 				operator.initialize (Current)
 			end
+			check
+				target_not_void: target /= Void
+				-- make_output uses target.
+			end
+			make_output
 		ensure
 			set: input = in and operator = op
 		end
@@ -137,7 +141,7 @@ feature {FACTORY} -- Status setting
 			end
 		end
 
-feature {NONE}
+feature {NONE} -- Implementation
 
 	input: MARKET_FUNCTION
 
@@ -153,6 +157,11 @@ feature {NONE}
 			input_set_to_in: input = in
 			parameter_list_void: parameter_list = Void
 			not_processed: not processed
+		end
+
+	make_output is
+		do
+			!!output.make (target.count)
 		end
 
 invariant
