@@ -2,58 +2,84 @@ BNF Grammar for the protocol between the data-supplier server and its
 client, the MAS server
 
 
-message         -> msg end_of_message
-msg             -> client_req | server_response
-client_req      -> request_id "\t" cl_req_body "\n"
-server_response -> status_id "\t" srv_resp_body
-cl_req_body     -> symbol_list_req | data_req | stock_split_req
-data_req        -> date_time_range "\t" data_flags "\t" mkt_symbol
-stock_split_req -> TBD
-srv_resp_body   -> srvr_data | error_msg
-error_msg       -> ta_string
-mkt_symbol      -> ta_string
-data_flags      -> intraday_flag | <null>
-srvr_data       -> mkt_data "\n"
-mkt_data        -> { mkt_tuple "\n" ... }
-mkt_tuple       -> datetime "," mkt_fields
-intraday_flag   -> 'i'
-symbol_list     -> { symbol "\n" ... }
-mkt_fields      -> { ta_real "," ... }+ [ "," volume [ "," open_interest ] ]
-volume          -> ta_real
-open_interest   -> ta_real
-true_or_false   -> 'T' | 'F'
-request_id      -> sym_list_id | data_id
-symbol_list_req -> <null>
-datetime        -> date [ "," time ]
-date            -> year<>month<>day
-time            -> hour<>minute [<>second ]
-year            -> digit digit digit digit
-month           -> digit digit
-day             -> digit digit
-hour            -> digit digit
-minute          -> digit digit
-second          -> digit digit
-natural_integer -> +('0'..'9')
-ta_real         -> +('0'..'9') '.' *('0'..'9')
-digit           -> ('0'..'9')
-end_of_message  -> <null>
-ta_string       -> +(ta_char)
-ta_char         -> Any character other than tab or newline
-<null>          -> Empty string (0-length contents)
-status_id       -> ok_id | error_id
-ok_id           -> '101'
-error_id        -> '102'
-sym_list_id     -> '1'
-data_id         -> '2'
+message            -> msg end_of_message
+msg                -> client_req | server_response
+client_req         -> request_id [ mfs cl_req_body ] "\n"
+server_response    -> status_id mfs srv_resp_body
+cl_req_body        -> symbol_list_req | data_req | stock_split_req
+data_req           -> date_time_range mfs data_flags mfs mkt_symbol
+stock_split_req    -> TBD
+srv_resp_body      -> normal_response | error_msg
+error_msg          -> ta_string
+mkt_symbol         -> ta_string
+data_flags         -> intraday_flag | <null>
+normal_response    -> srvr_data "\n"
+srvr_data          -> mkt_data | symbol_list
+mkt_data           -> { mkt_tuple "\n" ... }
+intraday_flag      -> 'i'
+symbol_list        -> { symbol "\n" ... }
+mkt_fields         -> { ta_real dfs ... }+ [ dfs volume [ dfs open_interest ] ]
+volume             -> ta_real
+open_interest      -> ta_real
+true_or_false      -> 'T' | 'F'
+request_id         -> sym_list_req_id | data_req_id | data_type_req_id
+symbol_list_req    -> <null>
+date               -> year<>month<>day
+time               -> hour<>minute [<>second ]
+year               -> digit digit digit digit
+month              -> digit digit
+day                -> digit digit
+hour               -> digit digit
+minute             -> digit digit
+second             -> digit digit
+natural_integer    -> +('0'..'9')
+ta_real            -> +('0'..'9') '.' *('0'..'9')
+digit              -> ('0'..'9')
+end_of_message     -> <null>
+ta_string          -> +(ta_char)
+ta_char            -> Any character other than tab or newline
+<null>             -> Empty string (0-length contents)
+status_id          -> ok_id | error_id
+ok_id              -> '101'
+error_id           -> '102'
+sym_list_req_id    -> '1'
+data_req_id        -> '2'
+data_type_req_id   -> daily_avail_req_id | intra_avail_req_id
+daily_avail_req_id -> '3'
+intra_avail_req_id -> '4'
+mfs                -> "\t"
+dfs                -> ","
 
 
-Client-Request Definitions:
+Definitions:
+
+sym_list_req_id:    Request for the symbol of each tradable available from
+                    the server
+
+data_req_id:        Request for tradable data
+
+daily_avail_req_id  Request whether "daily" data is available from the server
+
+intra_avail_req_id  Request whether "intraday" data is available from
+                    the server
+
+mfs:                Message field separator
+
+dfs:                Data field separator
 
 Expected Responses for (successfully executed) Client-Requests:
 
+sym_list_req_id    -> '1'
+data_req_id        -> '2'
+data_type_req_id   -> daily_avail_req_id | intra_avail_req_id
+daily_avail_req_id -> '3'
+intra_avail_req_id -> '4'
+
+
 Notes:
 
-See shared_protocol_grammar for the definition of date_time_range.
+See shared_protocol_grammar for the definition of components not
+defined in this file.
 
 A 'start_date_spec' and 'end_date_spec', as with the server_protocol_grammar,
 may be introduced for efficiency - to prevent receiving more data than is

@@ -1,9 +1,9 @@
 BNF Grammar for the Protocol Between the Server and a GUI Client
 
 
-message         -> msgID "\t" msg end_of_message
+message         -> msgID mfs msg end_of_message
 msg             -> client_req | server_response
-client_req      -> session_key "\t" client_req_spec | login_req
+client_req      -> session_key mfs client_req_spec | login_req
 client_req_spec -> [compress_flag] client_data_req
 client_data_req -> mkt_data_req | ind_data_req | symbol_list_req |
                      ind_list_req | trad_pertyp_req | change_session_req |
@@ -11,44 +11,43 @@ client_data_req -> mkt_data_req | ind_data_req | symbol_list_req |
                      all_ind_req | param_req | param_set_req |
 					 time_delimited_mkt_data_req | time_delimited_ind_data_req
 compress_flag   -> "<@z@>"
-mkt_data_req    -> mkt_symbol "\t" trad_per_type
-event_data_req  -> mkt_symbol "\t" start_date "\t" end_date "\t" event_id_list
-ind_data_req    -> indID "\t" mkt_symbol "\t" trad_per_type
+mkt_data_req    -> mkt_symbol mfs trad_per_type
+event_data_req  -> mkt_symbol mfs start_date mfs end_date mfs event_id_list
+ind_data_req    -> indID mfs mkt_symbol mfs trad_per_type
 all_ind_req     -> <null>
 param_req       -> ind_name
 param_set_req   -> To Be Defined!!!
 trad_pertyp_req -> mkt_symbol
-login_req       -> { login_spec "\t" ... }
+login_req       -> { login_spec mfs ... }
 login_spec      -> start_date_spec | end_date_spec
 logout_req      -> <null>
-start_date_spec -> "start_date" "\t" trad_per_type "\t" date_spec
-end_date_spec   -> "end_date" "\t" trad_per_type "\t" date_spec
+start_date_spec -> "start_date" mfs trad_per_type mfs date_spec
+end_date_spec   -> "end_date" mfs trad_per_type mfs date_spec
 date_spec       -> date_with_sep | "0" | "now" [ now_modifier ]
 now_modifier    -> "-" natural_integer now_mod_type
 now_mod_type    -> "days" | "months"
 server_response -> srvr_data | error_msg | login_response
-login_response  -> session_key [ "\t" session_state ]
+login_response  -> session_key [ mfs session_state ]
 error_msg       -> ta_string
 mkt_symbol      -> ta_string
 srvr_data       -> mkt_data | ind_data | symbol_list | ind_list |
                      trad_per_types | event_list | event_data |
                      ind_param_list | <null>
 mkt_data        -> { [open_int_flag] mkt_tuple "\n" ... }
-mkt_tuple       -> datetime "\t" mkt_fields
 open_int_flag   -> "oi"
 ind_data        -> { ind_tuple "\n" ... }
-ind_tuple       -> datetime "\t" ta_real
+ind_tuple       -> datetime dfs ta_real
 symbol_list     -> { symbol "\n" ... }
 ind_list        -> { ind_name "\n" ... }
 ind_param_list  -> To Be Defined
 event_list      -> { event_specifier "\n" ... }
 event_data      -> { event_tuple "\n" ... }
-event_tuple     -> datetime "\t" eventID "\t" event_type
+event_tuple     -> datetime dfs eventID dfs event_type
 event_type      -> "b" | "s" | "n" | "o"
 trad_per_types  -> { trad_per_type "\n" ... }
-event_id_list   -> { eventID "\t" ... }+
-event_specifier -> event_name "\t" eventID
-mkt_fields      -> { ta_real "\t" ... }+ [ "\t" volume [ "\t" open_interest ] ]
+event_id_list   -> { eventID dfs ... }+
+event_specifier -> event_name dfs eventID
+mkt_fields      -> { ta_real dfs ... }+ [ dfs volume [ dfs open_interest ] ]
 trad_per_type   -> "daily" | "weekly" | "monthly" | "quarterly" | "yearly" |
                      "hourly" | "1-minute" | "2-minute" | "5-minute" |
                      "10-minute" | "15-minute" | "20-minute" | "30-minute"
@@ -64,11 +63,10 @@ no_open_spec    -> "no_open"
 true_or_false   -> 'T' | 'F'
 msgID           -> natural_integer
 symbol_list_req -> <null>
-ind_list_req    -> mkt_symbol "\t" trad_per_type
-event_list_req  -> mkt_symbol "\t" trad_per_type
+ind_list_req    -> mkt_symbol mfs trad_per_type
+event_list_req  -> mkt_symbol mfs trad_per_type
 start_date      -> date_spec
 end_date        -> date_spec
-datetime        -> date [ "\t" time ]
 date            -> year<>month<>day
 time            -> hour<>minute [<>second ]
 year            -> digit digit digit digit
@@ -84,9 +82,11 @@ end_of_message  -> ''
 ta_string       -> +(ta_char)
 ta_char         -> Any character other than tab or newline
 <null>          -> Empty string (0-length contents)
+mfs             -> "\t"
+dfs             -> "\t"
 
 
-Client-Request Definitions:
+Definitions:
 
 login_req:          Login request - initial client request that begins
                     a session
@@ -136,6 +136,10 @@ event_data_req:     Request for the data resulting from the analysis of
 
 logout_req:         Request to end the current login session
 
+mfs:                Message field separator
+
+dfs:                Data field separator
+
 
 Expected Responses for (successfully executed) Client-Requests:
 
@@ -153,6 +157,9 @@ event_data_req:     event_data
 logout_req:         <null>
 
 Notes:
+
+See shared_protocol_grammar for the definition of components not
+defined in this file.
 
 !!!The grammars for param_set_req and ind_param_list are not yet defined.
 'ind_param_list' will probably be a list of function parameters, where
@@ -207,5 +214,3 @@ until it receives a request from the client.  Usually this will be a
 symbol_list_req, followed by a ind_list_req; but if the client is a new window
 (possibly in a new thread) in an existing process, it may already have a copy
 of the list of markets and of the list of indicators.
-
-See shared_protocol_grammar for the definition of 'date_with_sep'.
