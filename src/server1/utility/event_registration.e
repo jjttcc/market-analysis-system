@@ -55,8 +55,7 @@ feature -- Initialization
 			input_device := in_dev
 			output_device := out_dev
 			create help.make
-			-- !!!Satisfy invariant - editor is currently not used; it may
-			-- be used later - if not, might want to change the invariant or?
+			-- Satisfy invariant (editor is currently not used.)
 			create editor
 		ensure
 			set: dispatcher = disp
