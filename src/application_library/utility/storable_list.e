@@ -68,10 +68,11 @@ feature -- Utility
 			debug ("persist")
 				print("cleanup Storing ");
 				print(app_env.file_name_with_app_directory (
-					persistent_file_name)); print (".%N")
+					persistent_file_name, False)); print (".%N")
 			end
 			create outfile.make_open_write (
-				app_env.file_name_with_app_directory (persistent_file_name))
+				app_env.file_name_with_app_directory (
+				persistent_file_name, False))
 			independent_store (outfile)
 			outfile.close
 		end

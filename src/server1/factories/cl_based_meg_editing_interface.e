@@ -536,7 +536,7 @@ feature {NONE} -- Implementation of hook routines
 	do_initialize_lock is
 		do
 			lock := file_lock (file_name_with_app_directory (
-				generators_file_name))
+				generators_file_name, False))
 		end
 
 end -- CL_BASED_MEG_EDITING_INTERFACE

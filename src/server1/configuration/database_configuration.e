@@ -633,9 +633,10 @@ feature {NONE} -- Implementation - Hook routine implementations
 		do
 			if db_config_file_name = Void then
 				Result := file_name_with_app_directory (
-					Default_database_config_file_name)
+					Default_database_config_file_name, True)
 			else
-				Result := file_name_with_app_directory (db_config_file_name)
+				Result := file_name_with_app_directory (
+					db_config_file_name, True)
 			end
 		end
 

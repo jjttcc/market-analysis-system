@@ -268,7 +268,7 @@ feature {NONE} -- Implementation
 			full_path_name: STRING
 		do
 			full_path_name := app_env.file_name_with_app_directory (
-				indicators_file_name)
+				indicators_file_name, False)
 			if retrieval_failed then
 				if exception = Retrieve_exception then
 					log_errors (<<"Retrieval of indicator library file ",
@@ -307,7 +307,7 @@ feature {NONE} -- Implementation
 			full_path_name: STRING
 		do
 			full_path_name := app_env.file_name_with_app_directory (
-				generators_file_name)
+				generators_file_name, False)
 			if retrieval_failed then
 				if exception = Retrieve_exception then
 					log_errors (<<"Retrieval of market analysis library%
@@ -344,7 +344,7 @@ feature {NONE} -- Implementation
 			full_path_name: STRING
 		do
 			full_path_name := app_env.file_name_with_app_directory (
-				registrants_file_name)
+				registrants_file_name, False)
 			if retrieval_failed then
 				if exception = Retrieve_exception then
 					log_errors (<<"Retrieval of event registrants file ",

@@ -223,7 +223,7 @@ feature -- Access
 	symbol_file: STRING is
 		do
 			Result := file_name_with_app_directory (
-				settings @ Symbol_file_specifier)
+				settings @ Symbol_file_specifier, False)
 		end
 
 	post_process_command: STRING is
@@ -287,7 +287,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 	configuration_file_name: STRING is
 		do
 			Result := file_name_with_app_directory (
-				Default_http_config_file_name)
+				Default_http_config_file_name, False)
 		end
 
 	use_customized_setting (key_token, value_token: STRING): BOOLEAN is

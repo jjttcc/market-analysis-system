@@ -194,7 +194,7 @@ feature {NONE} -- Implementation of hook methods
 	do_initialize_lock is
 		do
 			lock := file_lock (file_name_with_app_directory (
-				indicators_file_name))
+				indicators_file_name, False))
 		end
 
 	end_save is

@@ -90,7 +90,7 @@ feature -- Basic operations
 				event_history.compare_objects
 			elseif hfile_name /= Void then
 				create hfile.make (
-					env.file_name_with_app_directory (hfile_name))
+					env.file_name_with_app_directory (hfile_name, False))
 				if hfile.exists then
 					hfile.open_read
 					hfile.set_field_separator (field_separator)
@@ -128,7 +128,7 @@ feature -- Basic operations
 			-- save all elements of `event_history' into the file.
 			if hfile_name /= Void then
 				create {INPUT_FILE} hfile.make_create_read_write (
-					env.file_name_with_app_directory (hfile_name))
+					env.file_name_with_app_directory (hfile_name, False))
 				from
 					event_history.start
 				until

@@ -37,10 +37,10 @@ feature -- Access
 					"management system.%NDatabase configuration file:%N"
 				if env.db_config_file_name /= Void then
 					Result.append (env.file_name_with_app_directory (
-							env.db_config_file_name))
+							env.db_config_file_name, True))
 				else
 					Result.append (env.file_name_with_app_directory (
-						constants.Default_database_config_file_name))
+						constants.Default_database_config_file_name, False))
 				end
 			else
 				if command_line.use_external_data_source then
@@ -54,10 +54,10 @@ feature -- Access
 					"%NStock split file:%N"
 				if env.stock_split_file_name /= Void then
 					Result.append (env.file_name_with_app_directory (
-							env.stock_split_file_name))
+							env.stock_split_file_name, False))
 				else
 					Result.append (env.file_name_with_app_directory (
-						constants.Default_stock_split_file_name))
+						constants.Default_stock_split_file_name, False))
 				end
 			end
 		end

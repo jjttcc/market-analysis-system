@@ -59,9 +59,10 @@ feature {TRADABLE_FACTORY} -- Implementation
 		once
 			if stock_split_file_name = Void then
 				Result := file_name_with_app_directory (
-					constants.Default_stock_split_file_name)
+					constants.Default_stock_split_file_name, False)
 			else
-				Result := file_name_with_app_directory (stock_split_file_name)
+				Result := file_name_with_app_directory (
+					stock_split_file_name, False)
 			end
 		end
 

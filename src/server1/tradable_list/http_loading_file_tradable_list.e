@@ -123,7 +123,7 @@ feature {NONE} -- Hook routine implementations
 			env: expanded APP_ENVIRONMENT
 		once
 			Result := env.file_name_with_app_directory (
-				parameters.data_cache_subdirectory)
+				parameters.data_cache_subdirectory, False)
 		end
 
 	latest_date_for (symbol: STRING): DATE is

@@ -144,7 +144,7 @@ feature {NONE} -- Administrative
 				-- Attempt to lock the `function_library' persistent file and
 				-- save `function_library' to it.
 				lock := file_lock (env.file_name_with_app_directory (
-					indicators_file_name))
+					indicators_file_name, False))
 				lock.try_lock
 				if lock.locked then
 					function_library.save

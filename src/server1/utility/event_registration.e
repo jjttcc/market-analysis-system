@@ -544,7 +544,7 @@ feature {NONE} -- Implementation of hook routines
 	do_initialize_lock is
 		do
 			lock := file_lock (file_name_with_app_directory (
-				registrants_file_name))
+				registrants_file_name, False))
 		end
 
 end -- class EVENT_REGISTRATION

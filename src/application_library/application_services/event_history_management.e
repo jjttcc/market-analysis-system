@@ -98,7 +98,8 @@ feature
 				market_event_registrants.exhausted
 			loop
 				hfname := market_event_registrants.item.hfile_name
-				l := make_lock (env.file_name_with_app_directory (hfname))
+				l := make_lock (env.file_name_with_app_directory (hfname,
+					False))
 				event_locks.put (l, hfname)
 				market_event_registrants.forth
 			end

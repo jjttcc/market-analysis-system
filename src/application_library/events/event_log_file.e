@@ -56,7 +56,8 @@ feature {NONE} -- Initialization
 			-- `global_event_types'.  (Originally they will be the same
 			-- instance.)
 			event_types.compare_objects
-			create logfile.make (env.file_name_with_app_directory (fname))
+			create logfile.make (env.file_name_with_app_directory (fname,
+				False))
 			if not logfile.exists then
 				-- Create the log file.
 				logfile.open_write

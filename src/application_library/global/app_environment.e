@@ -49,17 +49,29 @@ feature -- Access
 			Result := get (env_names.mailer_subject_flag_name)
 		end
 
-	file_name_with_app_directory (fname: STRING): STRING is
-			-- A full path name constructed from `app_directory' and `fname'
+	file_name_with_app_directory (fname: STRING; use_absolute_path: BOOLEAN):
+		STRING is
+			-- A full path name constructed from `app_directory' and `fname' -
+			-- If `use_absolute_path' and `fname' starts with a directory
+			-- separator, interpret `fname' as an absolute path instead
+			-- of preceding it with `app_directory'.
 		require
 			not_void: fname /= Void
 		do
 			create Result.make (0)
-			if app_directory /= Void and not app_directory.is_empty then
+			if
+				not (use_absolute_path and not fname.is_empty and
+				fname @ 1 = Directory_separator) and
+				app_directory /= Void and not app_directory.is_empty
+			then
 				Result.append (app_directory)
 				Result.extend (Directory_separator)
 			end
 			Result.append (fname)
+		ensure
+			absolute_path_condition: (use_absolute_path and
+				not fname.is_empty and fname @ 1 = Directory_separator) implies
+				equal (Result, fname)
 		end
 
 feature {NONE} -- Implementation
