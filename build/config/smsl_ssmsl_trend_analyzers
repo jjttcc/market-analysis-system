@@ -15,6 +15,7 @@ y
 weekly
 above-to-below
 n
+s
 [Slope of MACD, Slope of Slope of MACD] Downtrend
 c
 s
@@ -28,6 +29,7 @@ y
 weekly
 below-to-above
 n
+b
 [Slope of MACD, Slope of Slope of MACD] Uptrend
 c
 s
@@ -49,6 +51,7 @@ c
 CONSTANT
 c
 -1
+n
 [Slope of MACD, Slope of Slope of MACD] Sidelined: 2 to 0
 c
 s
@@ -70,6 +73,7 @@ c
 CONSTANT
 c
 1
+n
 [Slope of MACD, Slope of Slope of MACD] Sidelined: -2 to 0
 s
 -

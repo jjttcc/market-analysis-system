@@ -14,6 +14,7 @@ y
 weekly
 above-to-below
 n
+s
 Slope of MACD Signal Line Downtrend
 c
 s
@@ -27,6 +28,7 @@ y
 weekly
 below-to-above
 n
+b
 Slope of MACD Signal Line Uptrend
 c
 s
@@ -48,7 +50,8 @@ c
 CONSTANT
 c
 -0.5
-Slope of MACD Signal Line Sideways: 1 to 0
+n
+Slope of MACD Signal Line Trend Sideways: 1 to 0
 c
 s
 t
@@ -69,7 +72,8 @@ c
 CONSTANT
 c
 0.5
-Slope of MACD Signal Line Sideways: -1 to 0
+n
+Slope of MACD Signal Line Trend Sideways: -1 to 0
 s
 -
 x
