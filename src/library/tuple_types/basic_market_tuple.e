@@ -99,7 +99,6 @@ feature -- {WHO?} Element change
 
 	set (o, h, l, c: REAL) is
 			-- Set the open, high, low, and close values.
-			--!!!Change args to type REAL - soon
 		require
 			h_l_c_valid: h >= l and l <= c and c <= h
 			open_valid: o >= 0 implies l <= o and o <= h
