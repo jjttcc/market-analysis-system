@@ -8,6 +8,8 @@ indexing
 deferred class N_RECORD_COMMAND inherit
 
 	NUMERIC_COMMAND
+		export {MARKET_FUNCTION}
+			initialize
 		redefine
 			initialize
 		end

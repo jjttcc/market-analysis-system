@@ -7,6 +7,8 @@ indexing
 deferred class LINEAR_COMMAND inherit
 
 	NUMERIC_COMMAND
+		export {MARKET_FUNCTION}
+			initialize
 		redefine
 			execute
 		end
@@ -16,17 +18,6 @@ deferred class LINEAR_COMMAND inherit
 			all
 				{FACTORY}
 			set_target
-		end
-
-feature -- Initialization
-
-	make (t: like target) is
-		require
-			t_not_void: t /= Void
-		do
-			set_target (t)
-		ensure
-			target_set: target = t
 		end
 
 feature -- Basic operations

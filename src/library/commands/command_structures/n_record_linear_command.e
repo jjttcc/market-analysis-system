@@ -4,7 +4,7 @@ indexing
 	note:
 		"By default, the execute routine will process the last n trading %
 		%periods from the current period (that is, from the current %
-		%item - n + 1 to the current item.  Descendants may override this %
+		%item - n + 1 to the current item).  Descendants may override this %
 		%behavior"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
@@ -17,15 +17,11 @@ class N_RECORD_LINEAR_COMMAND inherit
 			make as nrc_make_unused
 		export {NONE}
 			nrc_make_unused
-		select
-			initialize
 		end
 
 	LINEAR_COMMAND
-		rename
-			make as lc_make_unused, initialize as initialize_unused
-		export {NONE}
-			lc_make_unused, initialize_unused
+		undefine
+			initialize
 		redefine
 			forth, action, start, exhausted, invariant_value, target
 		end
@@ -53,10 +49,8 @@ feature -- Basic operations
 feature -- Status report
 
 	arg_mandatory: BOOLEAN is
-		do
+		once
 			Result := false
-		ensure then
-			not_used: Result = false
 		end
 
 	target_cursor_not_affected: BOOLEAN is
