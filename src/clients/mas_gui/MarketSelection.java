@@ -15,9 +15,9 @@ class MarketSelection implements ActionListener {
 		dialog.add(panel);
 		panel.add(selection, "Center");
 		panel.add(close_button, "South");
-		dialog.setSize(140, 373);
-		selection.setSize(140, 348);
-		close_button.setSize(140, 25);
+		dialog.setSize(85, 373);
+		selection.setSize(85, 348);
+		close_button.setSize(85, 25);
 		Vector ml = main_frame.markets();
 		for (int i = 0; i < ml.size(); ++i) {
 			selection.add((String) ml.elementAt(i));
