@@ -9,10 +9,17 @@ indexing
 deferred class MEG_EDITING_INTERFACE inherit
 
 	GLOBAL_APPLICATION
+		export
+			{NONE} all
+			{ANY} function_library
+		end
 
 	EDITING_INTERFACE
 
 	GLOBAL_SERVICES
+		export
+			{NONE} all
+		end
 
 feature -- Access
 
