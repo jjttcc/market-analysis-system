@@ -114,7 +114,7 @@ feature {NONE} -- Implementation
 				io_devices_not_void: input_device /= Void and
 										output_device /= Void
 			end
-			if not changed or not ok_to_save then
+			if not dirty or not ok_to_save then
 				msg := concatenation (<<"Select action:",
 					"%N     Create a new market analyzer (c) %
 					%Remove a market analyzer (r) %
@@ -147,7 +147,7 @@ feature {NONE} -- Implementation
 				when 'e', 'E' then
 					Result := Edit_value
 				when 's', 'S' then
-					if not changed or not ok_to_save then
+					if not dirty or not ok_to_save then
 						print ("Invalid selection%N")
 					else
 						Result := Save_value

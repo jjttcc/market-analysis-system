@@ -19,9 +19,6 @@ class CL_BASED_FUNCTION_EDITING_INTERFACE inherit
 		end
 
 	FUNCTION_EDITING_INTERFACE
-		export
-			{NONE} all
-			{ANY} edit_indicator_menu
 		undefine
 			print
 		redefine
@@ -115,7 +112,7 @@ feature {NONE} -- Implementation of hook methods
 				io_devices_not_void: input_device /= Void and
 					output_device /= Void
 			end
-			if not changed or not ok_to_save then
+			if not dirty or not ok_to_save then
 				msg := concatenation (<<"Select action:",
 					"%N     Create a new market-data indicator (c) %
 					%Remove a market-data indicator (r) %N%
@@ -144,7 +141,7 @@ feature {NONE} -- Implementation of hook methods
 				when 'e', 'E' then
 					Result := Edit_value
 				when 's', 'S' then
-					if not changed or not ok_to_save then
+					if not dirty or not ok_to_save then
 						print ("Invalid selection%N")
 					else
 						Result := Save_value
