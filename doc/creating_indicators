@@ -3,9 +3,9 @@ Creating Technical Indicators with the Market Analysis Server
 This document provides a tutorial on creating technical indicators with
 the Market Analysis Server (MAS).  It consists of a brief introduction
 to the concepts used by the MAS command-line interface for creating
-technical indicators, as well as two specific examples of creating an
-indicator - creating a Relative Strength Index indicator, and creating
-Elder's Force Index indicator.
+technical indicators, as well as some specific examples of creating an
+indicator - Relative Strength Index indicator, Elder's Force Index
+indicator, and an Exponential Moving Average of Volume indicator.
 
 The MAS command-line interface uses the concepts of data records
 (sometimes called tuples), functions (sometimes called market functions),
@@ -78,13 +78,14 @@ and operators that provide a set value, such as "constant", "true", and
 one time in a menu in the command-line interface, since many operators
 are only applicable in a particular context.
 
-Following are two examples of creating a technical indicator with the
+Following are some examples of creating a technical indicator with the
 MAS command-line interface.  The first example, Relative Strength Index,
 shows how a complex indicator can be created.  The second example,
 illustrates the creation of a much simpler indicator, Elder's Force
 Index.  The first example provides a fairly thorough introduction the
 MAS indicator creation functionality; but if you like to start with a
 simpler introduction, you might want to read example 2 first.
+
 
 Example 1:  Creating a Relative Strength Index Indicator
 
@@ -448,3 +449,25 @@ following algorithm:
 
 This gives volume * (current close - previous close), which is the
 formula given at the beginning of this example.
+
+
+Example 3: Exponential Moving Average of Volume
+
+This example will show how to create an indicator that provides the
+exponential moving average of volume.  From the "Create a new market-data
+indicator" menu, select EXPONENTIAL_MOVING_AVERAGE as the root function.
+Choose and appropriate name for the function, such as "EMA of Volume".
+
+You will be prompted for the input function for the EMA of Volume function.
+Since EMA of volume will operate directly on the market data, rather than
+on the results of a function, select "No Input Function".
+
+For the main operator, select VOLUME.  For the exponential operator, select
+MA_EXPONENTIAL, which is an operator that simplies uses the standard
+2 / (n + 1) exponential value.  Enter any positive number for the
+MA_EXPONENTIAL's n-value.  Then enter the n-value you want for the EMA
+of volume; for example, for a 5-period exponential moving average of volume,
+enter 5.  This value will be used as the function's n-value as well as the
+n-value for the MA_EXPONENTIAL operator.
+
+This completes the creation of the EMA of Volume indicator.

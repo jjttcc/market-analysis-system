@@ -3,7 +3,7 @@ Creating Market Analyzers with the Market Analysis Server
 This document provides a tutorial on creating market analyzers with the
 Market Analysis Server (MAS).  It consists of a brief introduction to
 the concepts used by the MAS command-line interface for creating market
-analyzers, as well as a specific example of creating an analyzer.
+analyzers, as well as some specific examples of creating an analyzer.
 
 A market analyzer, also referred to as an event type, is a set of
 criteria to be used in analysis of market data, resulting in notification
@@ -136,8 +136,14 @@ MACD difference.
 Example 3:  Volume Spike Detector
 
 This example shows the creation of a market analyzer that will produce
-a signal if the daily volume is more than 3 times greater than for the
-previous day.
+a signal if the daily volume is more than x times greater than the
+exponential moving average of the volume for the previous day, where x
+is a (possibly fractional) value that you will choose.
+
+Before following this example to create the volume spike detector, you
+will need to make sure an "EMA of Volume" indicator has been created.
+If this indicator has not yet been created, follow the instructions in
+"Example 3: Exponential Moving Average of Volume", in creating_indicators.
 
 To get to the market analyzer creation menu, from the main menu,
 choose 'm' (Edit market analyzers), then choose 'c' (Create a new market
@@ -148,10 +154,17 @@ analyzer needs to do and then draw a picture of it before creating it.
 We will do this in this example.
 
 First, since the analyzer will be processing only one stream of data -
-market volume - it will need to be both a simple (non-compound)
-analyzer and it will analyze one indicator, rather than two.  Second,
-an operator will be needed for this analyzer, since the expression
-"volume > last_period_volume * 3" needs to be evaluated for each period.
+market volume - it will need to be both a simple (non-compound) analyzer
+and it will analyze one indicator, rather than two.  Second, an operator
+will be needed for this analyzer, since the expression "volume > (previous
+period's EMA of volume) * x" needs to be evaluated for each period.
+
+Third, there is a complication that we want to compare one type of data,
+volume, with another type of data, EMA of volume.  This will require the
+use of the FUNCTION_BASED_COMMAND, will allows the results of a function
+to be used in a composite operator, and will allow the needed comparison
+of volume with EMA of volume.
+
 This will require a composite operator that can be drawn as a tree:
 
 
@@ -159,19 +172,25 @@ This will require a composite operator that can be drawn as a tree:
                            /       \
                       VOLUME     MULTIPLICATION
                                    /        \
-                  SETTABLE_OFFSET_COMMAND  CONSTANT (3)
+                  SETTABLE_OFFSET_COMMAND  CONSTANT (x)
                              |
-                           VOLUME
+                   FUNCTION_BASED_COMMAND
+                             |
+                    BASIC_NUMERIC_COMMAND
 
 GT_OPERATOR (greater-than operator) provides the boolean greater than
-operation needed to express "volume > last_period_volume * 3".  VOLUME
-obtains the volume for the current period as GT_OPERATOR's left operand.
-MULTIPLICATION, GT_OPERATOR's right operand, provides the multiplication
-operation for "last_period_volume * 3".  SETTABLE_OFFSET_COMMAND,
-MULTIPLICATION's left operand, will be used to access the previous
-period's data.  SETTABLE_OFFSET_COMMAND's operand, VOLUME, will
-extract the volume from the record from the previous period.  CONSTANT,
-MULTIPLICATION's right operand, provides the 3 in "last_period_volume * 3".
+operation needed to express "volume > (previous period's EMA of volume)
+* x".  VOLUME obtains the volume for the current period as GT_OPERATOR's
+left operand.  MULTIPLICATION, GT_OPERATOR's right operand, provides the
+multiplication operation for "(previous period's EMA of volume) * x".
+SETTABLE_OFFSET_COMMAND, MULTIPLICATION's left operand, will be used to
+access the previous period's data.  SETTABLE_OFFSET_COMMAND's operand,
+FUNCTION_BASED_COMMAND, will use its operator BASIC_NUMERIC_COMMAND,
+to extract the EMA of volume value for the previous period.
+(FUNCTION_BASED_COMMAND will also use the EMA of Volume function, defined
+in the creating_indicators example, to obtain the EMA of volume values.)
+CONSTANT, MULTIPLICATION's right operand, provides the x in "(previous
+period's EMA of volume) * x".
 
 Now that we have a picture of what we need to create, we can proceed to
 build our market analyzer.  After choosing 'c' (Create a new market analyzer),
@@ -194,47 +213,37 @@ we need MULTIPLICATION.
 
 For MULTIPLICATION's left operand, according to the diagram, choose
 SETTABLE_OFFSET_COMMAND.  For SETTABLE_OFFSET_COMMAND's operand, we
-see that VOLUME is needed.
+see that FUNCTION_BASED_COMMAND is needed.
 
-In this case, you can choose the volume object from the first list
-(labeled "Valid objects from current tree").  This tells the system that
-the same VOLUME object should be shared by both the GT_OPERATOR and the
-SETTABLE_OFFSET_COMMAND.  This is acceptable because the VOLUME operator
-simply extracts the volume field from the record given to it by its
-owner (GT_OPERATOR and SETTABLE_OFFSET_COMMAND).  It doesn't hold any
-information itself, so sharing the same VOLUME object will not cause
-any problems.  (This is also true of the OPENING_PRICE, HIGH_PRICE,
-LOW_PRICE, CLOSING_PRICE, and OPEN_INTEREST operators, each of which
-retrieves its respective field from the record given to it by its owner.)
-Sharing an object saves a small amount of memory.  This can improve system
-performance - in particular, when there are a large number of market
-analyzers with operator hierarchies, if a substantial number of objects
-are shared, the system will use noticeably less memory and may run faster.
+The system will ask for an indicator for FUNCTION_BASED_COMMAND's input.
+Select "EMA of Volume".  For FUNCTION_BASED_COMMAND's operand, choose
+BASIC_NUMERIC_COMMAND, which will simply retrieve the current value of
+the EMA of volume data.
 
 The system then asks for the left offset value for the
-SETTABLE_OFFSET_COMMAND.  Since the SETTABLE_OFFSET_COMMAND is being used
-to access the previous period data - one period to the left - enter 1.
+SETTABLE_OFFSET_COMMAND.  Since the SETTABLE_OFFSET_COMMAND is being
+used to access the previous period data (the volume EMA for the previous
+period, from the FUNCTION_BASED_COMMAND) - one period to the left -
+enter 1.
 
 For MULTIPLICATION's right operand, according to the diagram, choose the
-CONSTANT object.  For its value (since we want to multiply the previous
-period's volume by 3), enter 3.
+CONSTANT object.  Its value will be the value you choose for x in the
+formula: "volume > (previous period's EMA of volume) * x".  For example,
+if you want to detect if the current period's volume is 2.5 times greater
+than the volume EMA of the previous period, choose 2.5.
 
 The system then asks for the type of trading period.  Since we want to
 check for volume spikes on a daily basis, choose "daily".  Choose a good
-descriptive name for the analyzer, such as "Volume spike".  Since the
-name is short, you might want to include the criteria for the spike in
-parentheses as part of the name, such as:
+descriptive name for the analyzer, such as "Volume/Volume-EMA spike".
 
-Volume spike (volume > 3 * previous volume)
-
-That concludes the creation of the volume spike market analyzer.
-You may wish to test the analyzer by choosing a data file that has no
-existing volume spikes (or editing one so that it has no spikes) and
-then changing the volume field of one or more records of the file to be
-more than 3 times greater than the previous day's volume.  Then you can
-run the market analysis, making sure that the start date for processing
-is set to a date that is before the dates of the records you changed;
-you should receive a signal for each of the records you changed.
+This concludes the creation of the volume spike market analyzer.
+You may wish to test the analyzer by choosing a data file that has
+no existing volume spikes (or editing one so that it has no spikes)
+and then changing the volume field of one or more records of the file
+to be more than x times greater than the previous day's EMA of volume.
+Then you can run the market analysis, making sure that the start date for
+processing is set to a date that is before the dates of the records you
+changed; you should receive a signal for each of the records you changed.
 (Don't forget that you need to set up an event registrant - 'r' from
 the main menu - before you can receive signals for this new event.)
 
