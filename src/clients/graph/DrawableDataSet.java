@@ -294,8 +294,11 @@ public class DrawableDataSet extends BasicDataSet
 	protected TemporalDrawer temporal_drawer() {
 		TemporalDrawer result = null;
 
-		if (times != null) result = time_drawer;
-		else if (dates != null) result = date_drawer;
+		if (times != null && ! times.isEmpty()) {
+			result = time_drawer;
+		} else if (dates != null) {
+			result = date_drawer;
+		}
 
 		return result;
 	}
