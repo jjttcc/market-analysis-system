@@ -3,6 +3,7 @@
 package support;
 
 import java.util.*;
+import java.text.*;
 import java.io.*;
 
 /** General utilities */
@@ -116,4 +117,52 @@ public class Utilities
 	static protected boolean valid_index (String dates[], int i) {
 		return i >= 0 && i < dates.length;
 	}
+
+	// double values formatted for display
+	static public String[] formatted_doubles(Vector values,
+			boolean right_justify) {
+		String[] result = new String[values.size()];
+		final double billion = 1000000000.0;
+		final double million = 1000000.0;
+		final double thousand = 1000.0;
+		double d;
+		int size, longest_length = 0;
+
+		for (int i = 0; i < values.size(); ++i) {
+			d = ((Double) values.elementAt(i)).doubleValue();
+			if (d >= billion) {
+				result[i] = formatter.format(d / billion);
+				result[i] += "b";
+			} else if (d >= million) {
+				result[i] = formatter.format(d / million);
+				result[i] += "m";
+			} else if (d >= thousand) {
+				result[i] = formatter.format(d / thousand);
+				result[i] += "k";
+			} else {
+				result[i] = formatter.format(d);
+			}
+			size = result[i].length();
+			if (size > longest_length) {
+				longest_length = size;
+			}
+		}
+
+		if (right_justify) {
+			// Ensure that all elements of `result' are right-justified
+			// according to the size of the longest element.
+			for (int i = 0; i < result.length; ++i) {
+				size = result[i].length();
+				if (size < longest_length) {
+					for (int j = size; j < longest_length; ++j) {
+						result[i] = " " + result[i];
+					}
+				}
+			}
+		}
+
+		return result;
+	}
+
+	static NumberFormat formatter = NumberFormat.getInstance();
 }
