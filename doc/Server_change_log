@@ -55,6 +55,16 @@ Verified that file logging for generated trading signals now works on both
 Linux and Windows.  [!!!Try to get some feedback from other users to make
 sure it also works for them.]
 
+Fixed the yahoo data-format bug: yahoo.com changed its data format by
+adding an HTML comment to the data.  This was causing the server to fail
+when retrieving data while run with the web (-w) option.  HTML comments
+are now ignored.
+
+Changed the option processing mechanism to allow the same option to be
+specified more than once.  The previous behavior was to fail with an
+"Invalid option" report if the same option was specified more than once.
+
+
 SIGNIFICANT SERVER CHANGES IN RELEASE 1.6.5
 
 Added the ability to retrieve market data from a web server using the http
