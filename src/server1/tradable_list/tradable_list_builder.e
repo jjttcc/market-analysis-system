@@ -32,7 +32,7 @@ feature -- Initialization
 
 feature -- Access
 
-	product: TRADABLE_LIST_HANDLER
+	product: TRADABLE_DISPENSER
 
 	function_library: LIST [MARKET_FUNCTION]
 
@@ -49,13 +49,14 @@ feature -- Basic operations
 				create db_list_builder.make (input_entity_names,
 					tradable_factory)
 				db_list_builder.execute
-				create product.make (db_list_builder.daily_list,
-					db_list_builder.intraday_list)
+				create {TRADABLE_LIST_HANDLER} product.make (
+					db_list_builder.daily_list, db_list_builder.intraday_list)
 			else
 				create daily_file_based_list.make (input_entity_names,
 					tradable_factory)
 				-- !!!Make intraday list Void for now.
-				create product.make (daily_file_based_list, Void)
+				create {TRADABLE_LIST_HANDLER} product.make (
+					daily_file_based_list, Void)
 			end
 		end
 
