@@ -24,7 +24,7 @@ creation
 
 feature
 
-	make (s: NETWORK_STREAM_SOCKET; fb: FACTORY_BUILDER) is
+	make (s: COMPRESSED_SOCKET; fb: FACTORY_BUILDER) is
 		require
 			not_void: s /= Void and fb /= Void
 		do
@@ -39,11 +39,11 @@ feature
 
 feature
 
-	active_medium: NETWORK_STREAM_SOCKET
+	active_medium: COMPRESSED_SOCKET
 			-- The socket used for establishing a connection and creating
 			-- io_socket
 
-	io_socket: NETWORK_STREAM_SOCKET
+	io_socket: COMPRESSED_SOCKET
 			-- The socket that will be used for input and output
 
 	is_gui: BOOLEAN
@@ -63,6 +63,7 @@ feature
 				gui_interface.set_io_medium (io_socket)
 				interface := gui_interface
 			else
+				io_socket.set_compression (false)
 				cl_interface.set_input_device (io_socket)
 				cl_interface.set_output_device (io_socket)
 				interface := cl_interface
