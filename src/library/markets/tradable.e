@@ -37,14 +37,15 @@ feature -- Access
 		end
 
 	indicators: LIST [MARKET_FUNCTION]
-			-- Technical indicators associated with this tradable
+			-- Technical indicators that will process the data from
+			-- `tuple_list' (`target_period_type'.name)
 
 	indicator_groups: HASH_TABLE [LIST [MARKET_FUNCTION], STRING]
-			-- Groupings of the above technical indicators
+			-- Groupings of `indicators'
 			-- Each group has a unique name
 
 	indicator_group_names: ARRAY [STRING] is
-			-- The name (key) of each group in indicator_groups
+			-- The name (key) of each group in `indicator_groups'
 		do
 			Result := indicator_groups.current_keys
 		end
@@ -74,7 +75,7 @@ feature -- Access
 		end
 
 	tuple_list_names: ARRAY [STRING] is
-			-- The period-type name (key) of each tuple_list associated
+			-- The period-type name (key) of each `tuple_list' associated
 			-- with `Current'
 		do
 			Result := tuple_lists.current_keys
@@ -171,7 +172,6 @@ feature -- Removal
 			indicators.prune (f)
 		ensure
 			removed: not indicators.has (f)
-			one_less: indicators.count = old indicators.count - 1
 		end
 
 feature -- Basic operations

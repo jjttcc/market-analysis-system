@@ -23,7 +23,8 @@ feature -- Initialization
 			tradable_initialize (type)
 		ensure
 			symbol_set: symbol = s
-			trading_period_type = type
+			period_type_set: trading_period_type = type
+			target_period_type_set: target_period_type = trading_period_type
 		end
 
 feature -- Access
