@@ -11,6 +11,8 @@ editing indicators.  For example, the bollinger-band's "number of standard
 deviations" value can now be changed.  Also, fixed some minor problems
 with the indicator editing facility.
 
+Added the "date-spec" option to the server, allowing it to be configured
+to read the date field of its data in one of several different formats.
 
 SIGNIFICANT SERVER CHANGES IN RELEASE 1.6.5
 
