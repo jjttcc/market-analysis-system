@@ -168,7 +168,6 @@ feature -- Basic operations
 			ui_set: user_interface /= Void
 		local
 			rr_cmd: RESULT_COMMAND [REAL]
-			bnc_cmd: BASIC_NUMERIC_COMMAND
 		do
 			rr_cmd ?= user_interface.command_selection_from_type (
 						user_interface.Real_result_command,
