@@ -130,12 +130,19 @@ feature {NONE} -- Hook routine implementation
 
 	start is
 		do
+print("begin start - start_date_time is ");print(start_date_time);print("%N")
+print ("tgt1 and tgt2 last dates: "); print (target1.last.date_time)
+print (", "); print (target2.last.date_time); print ("%N")
 			from
 				Precursor
 			until
 				target1.exhausted or target2.exhausted or
 				target1.item.date_time >= start_date_time
 			loop
+print ("tgt1, tgt2 item date_time: "); print (target1.item.date_time)
+print (", "); print (target2.item.date_time);print("%N")
+print ("tgt1, tgt2 index: "); print (target1.index)
+print (", "); print (target2.index);print("%N")
 				target1.forth; target2.forth
 			end
 			if not target1.exhausted and not target2.exhausted then
@@ -147,6 +154,12 @@ feature {NONE} -- Hook routine implementation
 				target1_above := target1.item.value >= target2.item.value
 				forth
 			end
+if not target1.exhausted and not target2.exhausted then
+print ("(END of start) tgt1, tgt2 item date_time: ");
+print (target1.item.date_time) print (target2.item.date_time); print ("%N")
+print ("tgt1, tgt2 index: "); print (target1.index)
+print (target2.index); print ("%N")
+end
 		ensure then
 			above_set: not target1.exhausted and not target2.exhausted implies
 				target1_above = (target1.i_th (target1.index - 1).value >=
