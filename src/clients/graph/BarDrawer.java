@@ -2,6 +2,7 @@ package graph;
 
 import java.awt.*;
 import java.util.*;
+import support.*;
 
 /**
  *  Abstraction for drawing price bars
@@ -18,11 +19,14 @@ public class BarDrawer extends Drawer {
 		double x,y;
 		int x0, y0;
 		int x1, y1;
+		Configuration conf = Configuration.instance();
+		Color line_color = conf.line_color();
 
 		// Is there any data to draw? Sometimes the draw command will
 		// will be called before any data has been placed in the class.
 		if( data == null || data.length < Stride ) return;
 
+		g.setColor(line_color);
 		x0 = (int)(bounds.x + ((data[0]-xmin)/xrange)*bounds.width);
 		y0 = (int)(bounds.y + (1.0 - (data[1]-ymin)/yrange)*bounds.height);
 

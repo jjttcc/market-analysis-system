@@ -2,6 +2,7 @@ package graph;
 
 import java.awt.*;
 import java.util.*;
+import support.*;
 
 /**
  *  Abstraction for drawing candles
@@ -20,8 +21,11 @@ public class CandleDrawer extends Drawer {
 		int x_s[] = new int[Stride], y_s[] = new int[Stride];
 		int lngth = data.length;
 		int candlewidth = bounds.width / lngth + 5;
-		Color original_color = g.getColor();
-		boolean white;
+		Configuration conf = Configuration.instance();
+		Color black = conf.black_candle_color();
+		Color white = conf.white_candle_color();
+		Color wick_color = conf.stick_color();
+		boolean is_white;
 		double width_factor, height_factor;
 
 System.err.println("candle data length: " + lngth);
@@ -51,22 +55,22 @@ xmin+", "+bounds.x+", "+bounds.width+", "+xrange);
 			// For candle color, relation is reversed (< -> >) because
 			// of the coordinate system used - higher coordinates have
 			// a lower value.
-			white = closey > openy? false: true;
+			is_white = closey > openy? false: true;
 System.err.println("x, middle_x, candlewidth: "+x+", "+middle_x+", "+
 candlewidth);
-System.err.println("openy, highy, lowy, closey, x, middle_x, white: "+
-openy+", "+highy+", "+lowy+", "+closey+", "+x+", "+middle_x+", "+white);
+System.err.println("openy, highy, lowy, closey, x, middle_x, is_white: "+
+openy+", "+highy+", "+lowy+", "+closey+", "+x+", "+middle_x+", "+is_white);
 System.err.println("row, data["+i+".."+(i+3)+"]: "+row+", "+data[i]+", "+
 (data[i+1])+", "+(data[i+2])+", "+(data[i+3]));
-			g.setColor(white? Color.green: Color.red);
+			g.setColor(is_white? white: black);
 			y_s[0] = openy; y_s[1] = openy; y_s[2] = closey; y_s[3] = closey;
 			x_s[0] = x; x_s[1] = x + candlewidth;
 			x_s[2] = x + candlewidth; x_s[3] = x;
 			// Candle body
 			g.fillPolygon(x_s, y_s, Stride);
-			g.setColor(original_color);
+			g.setColor(wick_color);
 			// Stems
-			if (white) {
+			if (is_white) {
 				g.drawLine(middle_x, closey, middle_x, highy);
 				g.drawLine(middle_x, openy, middle_x, lowy);
 			}

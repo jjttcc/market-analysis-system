@@ -2,6 +2,7 @@ package graph;
 
 import java.awt.*;
 import java.util.*;
+import support.*;
 
 /**
  *  Abstraction for drawing data tuples as points connected by lines
@@ -19,6 +20,8 @@ public class LineDrawer extends Drawer {
 		int x1, y1;
 		int lngth = data.length;
 		double width_factor, height_factor;
+		Configuration conf = Configuration.instance();
+		Color line_color = conf.line_color();
 
 System.err.println("line data length: " + lngth);
 
@@ -26,6 +29,7 @@ System.err.println("line data length: " + lngth);
 		// will be called before any data has been placed in the class.
 		if (data == null || lngth < Stride) return;
 
+		g.setColor(line_color);
 		width_factor = bounds.width / xrange;
 		height_factor = bounds.height / yrange;
 System.err.println("width factor for lines: " + width_factor);
