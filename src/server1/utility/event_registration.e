@@ -269,12 +269,12 @@ feature {NONE} -- Implementation
 			Result.add_email_address (s2)
 			s1 := mailer
 			if s1 = Void then -- Set to default
-				s1 := "elm"
+				s1 := constants.Default_mailer
 			end
 			Result.set_mailer (s1)
 			s1 := mailer_subject_flag
 			if s1 = Void then -- Set to default
-				s1 := "-s"
+				s1 := constants.Default_mailer_subject_flag
 			end
 			Result.set_email_subject_flag (s1)
 			print_list (<<"User was created with the following properties:%N",
