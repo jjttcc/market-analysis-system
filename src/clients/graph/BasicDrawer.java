@@ -68,11 +68,6 @@ abstract public class BasicDrawer extends Drawer {
 		ymin = ymin_v;
 	}
 
-	public void set_ranges (double x, double y) {
-		xrange = x;
-		yrange = y;
-	}
-
 	private void draw_boundaries(Graphics g, Rectangle bounds) {
 		int Y_fill_value = 0;
 		Rectangle right_bounds = right_reference_bounds(bounds);
