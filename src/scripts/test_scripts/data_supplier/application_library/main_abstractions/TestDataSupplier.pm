@@ -8,7 +8,7 @@ use Carp;
 use File::Spec::Functions;
 use FileHandle;
 use IO::Socket;
-use base qw(Any);
+use base qw(NetworkProtocol);
 
 
 =head1 NAME
@@ -34,15 +34,15 @@ Fake socket-based data-supplier for the MAS server, for testing
 	sub execute {
 		my ($self) = @_;
 		my $socket = $self->field_value_for(qw(socket));
-print "I, $self, am executing\n";
 print "My socket is: $socket\n";
-if ($socket->connected) {
-print "Socket is connected.\n";
-} else {
-print "Socket is NOT connected.\n";
-}
-		$socket->listen;
-		my $active_socket = $socket->accept;
+		while (1) {
+			my $active_socket = $socket->accept;
+			if (not $active_socket) {
+				$self->report_error;
+			} else {
+				$self->process($active_socket);
+			}
+		}
 	}
 
 # --------------- Non-public features ---------------
@@ -52,7 +52,7 @@ print "Socket is NOT connected.\n";
 	sub initialize {
 		my ($self, %args) = @_;
 		my $new_socket = IO::Socket::INET->new(
-			LocalAddr => 'localhost', LocalPort => 39412, Proto => 'tcp',
+			LocalAddr => 'localhost', LocalPort => 39414, Proto => 'tcp',
 			Listen => 5);
 		die "$!" unless $new_socket;
 		$self->set_field(qw(socket), $new_socket);
@@ -71,5 +71,27 @@ print "Socket was created: ", $self->field_value_for(qw(socket)), "\n";
 	}
 
 # Implementation
+
+	# Report the last error that occurred.
+	sub report_error {
+		my ($self) = @_;
+		print STDERR "Error occurred: $!";
+	}
+
+	# Process the client request associated with the specified socket.
+	sub process {
+		my ($self, $socket) = @_;
+print "starting 'process'\n";
+		my $client_request = <$socket>;
+		chomp $client_request;
+		print "'process' received socket request: $client_request\n";
+print "A\n";
+		$socket->send("Here is my response.  " .
+			"What are you going to do about it?\n" . $self->eom);
+print "B\n";
+		$socket->flush;
+		$socket->close;
+print "C\n";
+	}
 
 1;
