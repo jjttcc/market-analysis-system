@@ -1,3 +1,5 @@
+/* Copyright 1998, 1999: Jim Cochrane - see file forum.txt */
+
 import java.io.*;
 import java.net.*;
 import java.util.*;

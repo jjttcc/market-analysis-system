@@ -1,3 +1,5 @@
+/* Copyright 1998, 1999: Jim Cochrane - see file forum.txt */
+
 package graph;
 
 /**

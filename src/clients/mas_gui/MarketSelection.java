@@ -1,3 +1,5 @@
+/* Copyright 1998, 1999: Jim Cochrane - see file forum.txt */
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.*;

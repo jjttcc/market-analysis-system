@@ -1,3 +1,5 @@
+/* Copyright 1998, 1999: Jim Cochrane - see file forum.txt */
+
 import java.awt.*;
 import graph.*;
 import java.util.Vector;

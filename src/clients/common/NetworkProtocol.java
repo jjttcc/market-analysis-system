@@ -1,3 +1,5 @@
+/* Copyright 1998, 1999: Jim Cochrane - see file forum.txt */
+
 package common;
 
 /** Constants specifying the components of the Market Analysis network 
