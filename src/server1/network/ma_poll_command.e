@@ -1,12 +1,12 @@
 indexing
 
 	description:
-		"A poll command specialized for a TAL application"
+		"A poll command specialized for the Market Analysis server"
 	status: "See notice at end of class";
 	date: "$Date$";
 	revision: "$Revision$"
 
-deferred class TA_POLL_COMMAND
+deferred class MA_POLL_COMMAND
 
 inherit
 
@@ -30,4 +30,4 @@ invariant
 
 	not_void: active_medium /= Void and factory_builder /= Void
 
-end -- class TA_POLL_COMMAND
+end -- class MA_POLL_COMMAND

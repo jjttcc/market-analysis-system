@@ -12,7 +12,7 @@ class CONSOLE_READER
 
 inherit
 
-	TA_POLL_COMMAND
+	MA_POLL_COMMAND
 		rename
 			active_medium as output_device
 		redefine
@@ -35,7 +35,8 @@ feature -- Initialization
 			!!interface.make_io (input_device, output_device, factory_builder)
 			-- Input from the user is needed to trigger the MEDIUM_POLLER.
 			output_device.put_string (
-				"Welcome to the TA Server console! (Hit <Enter> to continue)%N")
+				"Welcome to the Market Analysis Server console! %
+				%(Hit <Enter> to continue)%N")
 		ensure
 			set: input_device = io.input and output_device = io.output and
 					factory_builder = fb

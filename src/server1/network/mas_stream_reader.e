@@ -11,7 +11,7 @@ class STREAM_READER
 
 inherit
 
-	TA_POLL_COMMAND
+	MA_POLL_COMMAND
 		redefine
 			active_medium
 		end
