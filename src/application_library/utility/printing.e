@@ -80,7 +80,7 @@ feature -- Basic operations
 				t.indicators.after
 			loop
 				f := t.indicators.item
-				print_mf_info (f)
+				if verbose then print_mf_info (f) end
 				print_market_tuples (f.output)
 				t.indicators.forth
 			end
@@ -89,7 +89,7 @@ feature -- Basic operations
 	print_indicator (i: MARKET_FUNCTION) is
 			-- Print the fields of each tuple of indicator `i'.
 		do
-			print_mf_info (i)
+			if verbose then print_mf_info (i) end
 			print_market_tuples (i.output)
 		end
 
@@ -145,12 +145,12 @@ feature {NONE} -- Implementation
 			if not l.empty then
 				if l.first.open_available then
 					print_open := true
-					print ("date, open, high, low, close:%N%N")
+					-- format: date, open, high, low, close
 				else
 					check
 						no_open: print_open = false
 					end
-					print ("date, high, low, close:%N%N")
+					-- format: date, high, low, close
 				end
 			end
 			from
@@ -183,12 +183,12 @@ feature {NONE} -- Implementation
 			if not l.empty then
 				if l.first.open_available then
 					print_open := true
-					print ("date, open, high, low, close:%N%N")
+					-- format: date, open, high, low, close
 				else
 					check
 						no_open: print_open = false
 					end
-					print ("date, high, low, close:%N%N")
+					-- format: date, high, low, close
 				end
 			end
 			from
@@ -223,12 +223,12 @@ feature {NONE} -- Implementation
 			if not l.empty then
 				if l.first.open_available then
 					print_open := true
-					print ("date, open, high, low, close, volume:%N%N")
+					-- format: date, open, high, low, close, volume
 				else
 					check
 						no_open: print_open = false
 					end
-					print ("date, high, low, close, volume:%N%N")
+					-- format: date, high, low, close, volume
 				end
 			end
 			from
@@ -265,12 +265,12 @@ feature {NONE} -- Implementation
 			if not l.empty then
 				if l.first.open_available then
 					print_open := true
-					print ("date, open, high, low, close, volume:%N%N")
+					-- format: date, open, high, low, close, volume
 				else
 					check
 						no_open: print_open = false
 					end
-					print ("date, high, low, close, volume:%N%N")
+					-- format: date, high, low, close, volume
 				end
 			end
 			from
@@ -380,4 +380,9 @@ feature {NONE} -- Implementation
 			print ("%N")
 		end
 
+	verbose: BOOLEAN is
+			-- Print more information than usual? - default: no
+		do
+			Result := false
+		end
 end -- PRINTING
