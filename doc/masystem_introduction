@@ -208,7 +208,7 @@ or pico, etc.) to enter the symbols for the stocks you wish to analyze
 (either upper or lower-case is fine).  Or you can copy the list of
 symbols from another file, as long as you make sure that the result in
 symbols.mas has one symbol per line and has no other garbage in it.
-(There is a sample symbols.mas file in /masdir/lib.)
+(There is a sample symbols.mas file in /masdir/lib/data.)
 
 At this point, you should be able to start MAS using the external
 data retrieval mechanism hooked to QuoteMonster with the command:
