@@ -72,7 +72,8 @@ feature {NONE} -- Implementation
 			end
 		ensure
 			last_tradable_set: session.last_tradable = Result
-			matches_period_type: Result.period_types.has (period_type.name)
+			matches_period_type: Result /= Void implies
+				Result.period_types.has (period_type.name)
 		end
 
 invariant
