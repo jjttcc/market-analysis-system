@@ -175,11 +175,22 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 				is_complex and not processed implies output.is_empty
 		end
 
-feature {MARKET_FUNCTION}
+feature {MARKET_FUNCTION, MARKET_FUNCTION_EDITOR}
 
 	is_complex: BOOLEAN is
 			-- Is the run-time type a complex function?
 		deferred
+		end
+
+feature {MARKET_FUNCTION_EDITOR, MARKET_FUNCTION}
+
+	reset_parameters is
+			-- Reset the cached parameter list to ensure it is up to date
+			-- after a change in the composite function's structure - that
+			-- is, after one of the (direct or indirect) input functions
+			-- has been changed.
+		do
+			-- Default to null action - redefine as needed.
 		end
 
 invariant
