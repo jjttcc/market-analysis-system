@@ -131,8 +131,16 @@ feature -- Status setting
 			-- Set symbol to `arg'.
 		require
 			arg_not_void: arg /= Void
+		local
+			sym: ANY
 		do
 			symbol := arg
+			sym := symbol.to_c
+			retrieve_data (external_handle, $sym, intraday)
+			if external_error (external_handle) then
+				set_error_message ("Error occurred reading from external %
+					%data source", true, false)
+			end
 		ensure
 			symbol_set: symbol = arg and symbol /= Void
 		end
@@ -140,22 +148,18 @@ feature -- Status setting
 	set_intraday (arg: BOOLEAN) is
 			-- Set intraday to `arg'.
 		require
-			arg_not_void: arg /= Void
 			intraday_rule: arg implies intraday_data_available
 		do
 			intraday := arg
 		ensure
-			intraday_set: intraday = arg and intraday /= Void
+			intraday_set: intraday = arg
 		end
 
 feature -- Cursor movement
 
 	start is
-		local
-			sym: ANY
 		do
-			sym := symbol.to_c
-			start_implementation (external_handle, $sym, intraday)
+			start_implementation (external_handle)
 			if external_error (external_handle) then
 				set_error_message ("Error occurred reading from external %
 					%data source", true, false)
@@ -498,7 +502,14 @@ feature {NONE} -- Implementation - externals
 			"C"
 		end
 
-	start_implementation (handle: POINTER; sym: POINTER; intrad: BOOLEAN) is
+	retrieve_data (handle: POINTER; sym: POINTER; intrad: BOOLEAN) is
+		require
+			args_valid: handle /= Void and sym /= Void
+		external
+			"C"
+		end
+
+	start_implementation (handle: POINTER) is
 		require
 			handle_valid: handle /= Void
 		external
