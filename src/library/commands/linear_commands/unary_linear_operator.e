@@ -63,7 +63,8 @@ feature -- Basic operations
 				target.go_i_th (old_i)
 			end
 		ensure then
-			target_cursor_not_changed: old target.index = target.index
+			target_cursor_constraint: target_cursor_not_affected implies
+				old target.index = target.index
 		end
 
 feature -- Status report

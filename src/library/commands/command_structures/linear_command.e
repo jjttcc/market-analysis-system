@@ -34,7 +34,7 @@ feature -- Basic operations
 		deferred
 		ensure then
 			target_cursor_internal_contract:
-			target_cursor_not_affected = (target.index = old target.index)
+			target_cursor_not_affected implies (target.index = old target.index)
 		end
 
 feature -- Status report
