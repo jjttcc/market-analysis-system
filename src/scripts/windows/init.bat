@@ -7,12 +7,13 @@ if %maketmp% == y md \tmp
 :loop
 if exist c5 goto end
 if exist finished goto end
-.\sleep 3
+echo cleaning up ...
+.\sleep 2
 %comspec% /c count
 goto loop
 :end
 del c?
 del bash.exe cp.exe cygwin1.dll mkdir.exe sed.exe repl_spec bash_init
-del sleep.exe config_tool.exe nt_repl_spec pre_nt_repl_spec
+del sleep.exe config_tool.exe nt_repl_spec pre_nt_repl_spec count.bat
 del finished
 if %maketmp% == y rmdir \tmp
