@@ -51,7 +51,6 @@ feature -- Initialization
 		local
 			l: LIST [STRING]
 		do
-timing_on := True --!!!Check timing for a while.
 			http_initialize
 			if file_ext /= Void then file_extension := file_ext end
 			l := symbols_from_file
