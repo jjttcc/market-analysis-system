@@ -28,18 +28,10 @@ public class CandleDrawer extends Drawer {
 		boolean is_white;
 		double width_factor, height_factor;
 
-System.err.println("candle data length: " + lngth);
-System.err.println("xmin, xmax, bounds.x, bounds.width, xrange: " +
-xmin+", "+xmax+", "+bounds.x+", "+bounds.width+", "+xrange);
-
 		if (data == null || lngth < Stride) return;
 
 		width_factor = bounds.width / xrange;
 		height_factor = bounds.height / yrange;
-System.err.println("width_factor for candles: " + width_factor);
-System.err.println("height_factor for candles: " + width_factor);
-System.err.println("xmin, bounds.x, bounds.width, xrange: " +
-xmin+", "+bounds.x+", "+bounds.width+", "+xrange);
 		for (i = 0, row = 1; i < lngth; i += Stride, ++row) {
 			openy = (int) (bounds.height - (data[i] - ymin) * height_factor +
 						bounds.y);
@@ -50,18 +42,11 @@ xmin+", "+bounds.x+", "+bounds.width+", "+xrange);
 			closey = (int)(bounds.height - (data[i+3] - ymin) * height_factor +
 						bounds.y);
 			x = (int)((row - xmin) * width_factor + bounds.x);
-//!!!experiment: x = (int)(bounds.x + (row-xmin)*(xrange/bounds.width));
 			middle_x = x + candlewidth / 2;
 			// For candle color, relation is reversed (< -> >) because
 			// of the coordinate system used - higher coordinates have
 			// a lower value.
 			is_white = closey > openy? false: true;
-System.err.println("x, middle_x, candlewidth: "+x+", "+middle_x+", "+
-candlewidth);
-System.err.println("openy, highy, lowy, closey, x, middle_x, is_white: "+
-openy+", "+highy+", "+lowy+", "+closey+", "+x+", "+middle_x+", "+is_white);
-System.err.println("row, data["+i+".."+(i+3)+"]: "+row+", "+data[i]+", "+
-(data[i+1])+", "+(data[i+2])+", "+(data[i+3]));
 			g.setColor(is_white? white: black);
 			y_s[0] = openy; y_s[1] = openy; y_s[2] = closey; y_s[3] = closey;
 			x_s[0] = x; x_s[1] = x + candlewidth;
