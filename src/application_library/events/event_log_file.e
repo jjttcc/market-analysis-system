@@ -9,13 +9,6 @@ indexing
 
 class EVENT_LOG_FILE inherit
 
-	PLAIN_TEXT_FILE
-		rename
-			make as file_make_unused
-		export {NONE}
-			all
-		end
-
 	MARKET_EVENT_REGISTRANT
 		rename
 			make as er_make
@@ -39,7 +32,7 @@ creation
 
 	make
 
-feature -- Initialization
+feature {NONE} -- Initialization
 
 	make (fname, event_history_file_name, field_sep, record_sep: STRING) is
 			-- Create the file with `fname' as the file `name' and
@@ -63,13 +56,25 @@ feature -- Initialization
 			-- `global_event_types'.  (Originally they will be the same
 			-- instance.)
 			event_types.compare_objects
-			make_open_append (env.file_name_with_app_directory (fname))
+			create logfile.make (env.file_name_with_app_directory (fname))
+			if not logfile.exists then
+				-- Create the log file.
+				logfile.open_write
+				logfile.close
+			end
 		ensure
 			names_set: name.is_equal (fname) and
 				hfile_name.is_equal (event_history_file_name)
-			appendable: is_open_append
 			separators_set: field_separator = field_sep and
 				record_separator = record_sep
+			logfile.exists
+		end
+
+feature -- Access
+
+	name: STRING is
+		do
+			Result := logfile.name
 		end
 
 feature -- Basic operations
@@ -78,16 +83,22 @@ feature -- Basic operations
 		local
 			e: MARKET_EVENT
 		do
+			logfile.open_append
 			from
 				event_cache.start
 			until
 				event_cache.exhausted
 			loop
 				e := event_cache.item
-				put_string (event_information (e))
-				put_string ("%N")
+				logfile.put_string (event_information (e))
+				logfile.put_string ("%N")
 				event_cache.forth
 			end
+			logfile.close
 		end
+
+feature {NONE} -- Implementation
+
+	logfile: PLAIN_TEXT_FILE
 
 end -- EVENT_LOG_FILE
