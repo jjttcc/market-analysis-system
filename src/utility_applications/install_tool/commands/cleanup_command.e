@@ -43,6 +43,7 @@ feature -- Basic operations
 			create instalL_dir.make (install_dir_name)
 			if install_dir.exists then
 				install_dir.delete_content
+				install_dir.delete
 			end
 		end
 
