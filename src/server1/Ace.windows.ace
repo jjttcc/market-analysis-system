@@ -9,7 +9,7 @@ root
 
 default
 
-	assertion (no);
+	assertion (all);
 	--debug ("editing");
 	--debug ("persist");
 	--debug ("command line");
