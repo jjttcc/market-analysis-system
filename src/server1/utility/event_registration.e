@@ -80,7 +80,7 @@ feature -- Basic operations
 				print_list (<<"Select registrant type:%N     ",
 					"User (u) Log file (l) Previous (-) Help (h) ", eom>>)
 				inspect
-					selected_character
+					character_selection (Void)
 				when 'u', 'U' then
 					new_registrant := new_user
 				when 'l', 'L' then
@@ -277,7 +277,7 @@ feature {NONE} -- Implementation
 			loop
 				print_list (<<"Selection must be between 1 and ",
 							i - 1, " - Abort selection? (y/n) ", eom>>)
-				c := selected_character
+				c := character_selection (Void)
 				if c = 'y' or c = 'Y' then
 					abort := true
 				else
@@ -317,7 +317,7 @@ feature {NONE} -- Implementation
 			loop
 				print_list (<<"Selection must be between 1 and ",
 							i - 1, " - Abort selection? (y/n) ", eom>>)
-				c := selected_character
+				c := character_selection (Void)
 				if c = 'y' or c = 'Y' then
 					abort := true
 				else
@@ -371,7 +371,7 @@ feature {NONE} -- Implementation
 					"%N     Remove event type (r) Add event types (a) %
 					%Previous (-) Help (h) ", eom>>)
 				inspect
-					selected_character
+					character_selection (Void)
 				when 'r', 'R' then
 					t := event_type_selection (r)
 					if t /= Void then
