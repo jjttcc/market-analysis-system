@@ -8,10 +8,6 @@ terminal_name;MAS Control Panel
 quitbutton;
 # subterminal for mas server process
 begin subterminal
-# Python module import specification:  (What to do with this?)
-import_module;mas_tools
-# Use ";add" to specify that the setting should be added.
-#import_module;tools2;add
 prompt;Start a MAS server
 # Command to start the subprocess:
 startup_cmd_class;NewServer
@@ -20,7 +16,6 @@ config_file_name;server_ct_config
 end subterminal
 # subterminal for connecting with a running MAS server
 begin subterminal
-import_module;mas_tools
 prompt;Connect to a running MAS server
 # Command to start the subprocess:
 startup_cmd_class;NewCommandLineClient
@@ -28,7 +23,6 @@ startup_cmd_method;execute
 end subterminal
 # subterminal for terminating a server
 begin subterminal
-import_module;mas_tools
 prompt;Terminate a Server
 # Command to start the subprocess:
 startup_cmd_class;ServerTermination
@@ -36,9 +30,6 @@ startup_cmd_method;execute
 end subterminal
 # subterminal for mas GUI
 begin subterminal
-import_module;mas_tools
-import_module;red;add
-import_module;green;add
 prompt;Start a GUI
 # Command to start the subprocess:
 startup_cmd_class;NewGUI
