@@ -9,6 +9,10 @@ indexing
 class INDICATOR_DATA_REQUEST_CMD inherit
 
 	DATA_REQUEST_CMD
+		redefine
+			error_context
+		end
+
 
 creation
 
@@ -75,6 +79,12 @@ feature {NONE}
 				set_appendix (eom)
 				print_indicator (indicator)
 			end
+		end
+
+	error_context (msg: STRING): STRING is
+		do
+			Result := concatenation (<<"retrieving indicator data for ",
+				market_symbol>>)
 		end
 
 end -- class INDICATOR_DATA_REQUEST_CMD

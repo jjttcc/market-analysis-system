@@ -11,6 +11,10 @@ indexing
 class TRADING_PERIOD_TYPE_REQUEST_CMD inherit
 
 	TRADABLE_REQUEST_COMMAND
+		redefine
+			error_context
+		end
+
 
 	GLOBAL_SERVICES
 		export
@@ -21,7 +25,7 @@ creation
 
 	make
 
-feature -- Basic operations
+feature {NONE} -- Basic operations
 
 	do_execute (msg: STRING) is
 		local
@@ -66,6 +70,12 @@ feature -- Basic operations
 				ptypes.forth
 			end
 			Result.put (ptypes.item, i)
+		end
+
+	error_context (msg: STRING): STRING is
+		do
+			Result := concatenation (<<"retrieving trading period types for ",
+				msg>>)
 		end
 
 end -- class TRADING_PERIOD_TYPE_REQUEST_CMD

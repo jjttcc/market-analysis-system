@@ -20,6 +20,11 @@ deferred class REQUEST_COMMAND inherit
 			{NONE} all
 		end
 
+	MAS_EXCEPTION
+		export
+			{NONE} all
+		end
+
 feature -- Initialization
 
 	make is
@@ -67,12 +72,25 @@ feature -- Basic operations
 			-- Call `do_execute' with `msg' and `send_data'.
 		local
 			timer: TIMER
+			exception_occurred: BOOLEAN
 		do
-			if output_buffer_used then
+			if exception_occurred then
 				output_buffer.clear_all
+				-- If `handle_exception' in the rescue clause didn't exit,
+				-- the exception was non-fatal.
+				report_error (Warning, <<"Error occurred", error_context (msg),
+					".">>)
+			else
+				if output_buffer_used then
+					output_buffer.clear_all
+				end
+				do_execute (msg)
 			end
-			do_execute (msg)
 			send_data
+		rescue
+			handle_exception ("REQUEST_COMMAND.execute")
+			exception_occurred := true
+			retry
 		end
 
 feature {NONE} -- Hook routines
@@ -80,6 +98,12 @@ feature {NONE} -- Hook routines
 	do_execute (msg: STRING) is
 			-- produce response from `msg' and place it into `output_buffer'.
 		deferred
+		end
+
+	error_context (msg: STRING): STRING is
+			-- Context for the current error - redefine as appropriate.
+		do
+			Result := ""
 		end
 
 feature {NONE}

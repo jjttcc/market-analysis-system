@@ -9,12 +9,16 @@ indexing
 class INDICATOR_LIST_REQUEST_CMD inherit
 
 	DATA_REQUEST_CMD
+		redefine
+			error_context
+		end
+
 
 creation
 
 	make
 
-feature -- Basic operations
+feature {NONE} -- Basic operations
 
 	do_execute (msg: STRING) is
 		local
@@ -66,6 +70,12 @@ feature -- Basic operations
 				end
 				put (eom)
 			end
+		end
+
+	error_context (msg: STRING): STRING is
+		do
+			Result := concatenation (<<"retrieving indicator list for ",
+				market_symbol>>)
 		end
 
 end -- class INDICATOR_LIST_REQUEST_CMD

@@ -10,12 +10,16 @@ indexing
 class MARKET_LIST_REQUEST_CMD inherit
 
 	TRADABLE_REQUEST_COMMAND
+		redefine
+			error_context
+		end
+
 
 creation
 
 	make
 
-feature -- Basic operations
+feature {NONE} -- Basic operations
 
 	do_execute (msg: STRING) is
 		local
@@ -36,6 +40,11 @@ feature -- Basic operations
 				put (symbols.last)
 			end
 			put (eom)
+		end
+
+	error_context (msg: STRING): STRING is
+		do
+			Result := "retrieving symbol list"
 		end
 
 end -- class MARKET_LIST_REQUEST_CMD
