@@ -47,25 +47,35 @@ public class DataSetBuilder extends AbstractDataSetBuilder {
 	}
 
 	protected void post_process_market_data(DataSet data, String symbol,
-			String period_type, boolean new_data_set) {
+			String period_type, boolean is_update) {
 
-		((DrawableDataSet) data).set_drawer(main_drawer);
-	}
+System.out.println("POST_PROCESS_MARKET_DATA called");
 
-	protected void post_process_indicator_data(DataSet data, String symbol,
-			String period_type, boolean new_data_set) {
+		if (! is_update) {
+			((DrawableDataSet) data).set_drawer(main_drawer);
+		}
 	}
 
 	protected void post_process_volume_data(DataSet data,
-			String symbol, String period_type, boolean new_data_set) {
+			String symbol, String period_type, boolean is_update) {
 
-		((DrawableDataSet) data).set_drawer(volume_drawer);
+System.out.println("POST_PROCESS_VOLUME_DATA called");
+		if (! is_update) {
+			((DrawableDataSet) data).set_drawer(volume_drawer);
+		}
 	}
 
 	protected void post_process_open_interest_data(DataSet data,
-			String symbol, String period_type, boolean new_data_set) {
+			String symbol, String period_type, boolean is_update) {
 
-		((DrawableDataSet) data).set_drawer(open_interest_drawer);
+System.out.println("POST_PROCESS_OI_DATA called");
+		if (! is_update) {
+			((DrawableDataSet) data).set_drawer(open_interest_drawer);
+		}
+	}
+
+	protected void post_process_indicator_data(DataSet data, String symbol,
+			String period_type, boolean is_update) {
 	}
 
 	protected AbstractParser new_main_parser() {

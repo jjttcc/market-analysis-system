@@ -150,50 +150,19 @@ System.out.println("AbstractDataSetBuilder(AbstractDataSetBuilder ) called");
 	// Send a request for data for the tradable `symbol' with `period_type'.
 	public void send_market_data_request(String symbol, String period_type)
 			throws Exception {
-		connection.send_request(Market_data_request,
-			symbol + Message_field_separator + period_type);
-		if (connection.last_received_message_ID() == Ok) {
-			String results = connection.result().toString();
-			results = setup_parser_fieldspecs(results);
-			prepare_parser_for_market_data();
-			data_parser.parse(results);
-			last_market_data = data_parser.result();
-			post_process_market_data(last_market_data, symbol, period_type,
-true);
-			last_volume = data_parser.volume_result();
-			if (last_volume != null) {
-				post_process_volume_data(last_volume, symbol, period_type,
-true);
-			}
-			last_open_interest = data_parser.open_interest_result();
-			if (last_open_interest != null) {
-				post_process_open_interest_data(last_open_interest, symbol,
-					period_type,
-true);
-			}
-			Calendar date = data_parser.latest_date_time();
-			if (date != null) {
-				last_latest_date_time = date;
-			}
-System.out.println("smdr - last ldt: " + last_latest_date_time);
-		}
+
+		dispatch_market_data_request(Market_data_request, symbol,
+			period_type, null, false);
 	}
 
 	// Send a request for data for indicator `ind' for the tradable
 	// `symbol' with `period_type'.
 	public void send_indicator_data_request(int ind, String symbol,
 		String period_type) throws Exception {
-		connection.send_request(Indicator_data_request,
-			ind + Message_field_separator + symbol +
-			Message_field_separator + period_type);
-		prepare_parser_for_indicator_data();
-		indicator_parser.parse(connection.result().toString());
-		last_indicator_data = indicator_parser.result();
-		post_process_indicator_data(last_indicator_data, symbol, period_type,
-true);
-	}
 
-//!!!!!!!!!!Clean this mess up - Need to factor out common stuff, etc.:
+		dispatch_indicator_data_request(Indicator_data_request, ind, symbol,
+			period_type, null, false);
+	}
 
 	// Send a time-delimited request for data for the tradable `symbol' with
 	// `period_type' with the date-time range `start_date_time' ..
@@ -204,36 +173,10 @@ true);
 			throws Exception {
 System.out.println("sending request with " + symbol + ", " + period_type +
 ", " + start_date_time);
-		connection.send_request(Time_delimited_market_data_request, symbol +
-			Message_field_separator + period_type + Message_field_separator +
-			date_time_range(start_date_time, end_date_time));
-		if (connection.last_received_message_ID() == Ok) {
-			String results = connection.result().toString();
-			results = setup_parser_fieldspecs(results);
-			prepare_parser_for_market_data();
-			data_parser.parse(results);
 
-//!!!Need to append the new data to the current data set.
-			last_market_data = data_parser.result();
-//!!!:			last_market_data.set_drawer(main_drawer);
-			post_process_market_data(last_market_data, symbol, period_type,
-true);
-			last_volume = data_parser.volume_result();
-			if (last_volume != null) {
-				post_process_volume_data(last_volume, symbol, period_type,
-true);
-//!!!:				last_volume.set_drawer(volume_drawer);
-			}
-			last_open_interest = data_parser.open_interest_result();
-			if (last_open_interest != null) {
-//!!!:				last_open_interest.set_drawer(open_interest_drawer);
-			}
-			Calendar date = data_parser.latest_date_time();
-			if (date != null) {
-				last_latest_date_time = date;
-			}
-System.out.println("smdr - last ldt: " + last_latest_date_time);
-		}
+		dispatch_market_data_request(Time_delimited_market_data_request,
+			symbol, period_type, date_time_range(start_date_time,
+			end_date_time), true);
 	}
 
 	// Send a time-delimited request for data for indicator `ind' for
@@ -243,41 +186,10 @@ System.out.println("smdr - last ldt: " + last_latest_date_time);
 	public void send_time_delimited_indicator_data_request(int ind,
 		String symbol, String period_type, Calendar start_date_time,
 		Calendar end_date_time) throws Exception {
-		connection.send_request(Time_delimited_indicator_data_request,
-			ind + Message_field_separator + symbol +
-			Message_field_separator + period_type + Message_field_separator +
-			date_time_range(start_date_time, end_date_time));
-		prepare_parser_for_indicator_data();
-		indicator_parser.parse(connection.result().toString());
-		last_indicator_data = indicator_parser.result();
-		post_process_indicator_data(last_indicator_data, symbol, period_type,
-true);
-	}
 
-	// Send a time-delimited request for data for indicator `ind' for
-	// the tradable `symbol' with `period_type' with the date-time range
-	// `start_date_time' .. `end_date_time'.  If `end_date_time' is null,
-	// the current date-time is used.
-//!!!:
-	public void old_remove_send_time_delimited_indicator_data_request(int ind,
-		String symbol, String period_type, Calendar start_date_time,
-		Calendar end_date_time) throws Exception {
-		connection.send_request(Time_delimited_indicator_data_request,
-			ind + Message_field_separator + symbol +
-			Message_field_separator + period_type + Message_field_separator +
-			date_time_range(start_date_time, end_date_time));
-// Note that a new indicator drawer is created each time parse is
-// called, since indicator drawers should not be shared.
-
-//!!!Need to append the new data to the current data set.
-//!!!!: (the drawer)
-
-
-		prepare_parser_for_indicator_data();
-		indicator_parser.parse(connection.result().toString());
-		last_indicator_data = indicator_parser.result();
-		post_process_indicator_data(last_indicator_data, symbol, period_type,
-true);
+		dispatch_indicator_data_request(Time_delimited_indicator_data_request,
+			ind, symbol, period_type,
+			date_time_range(start_date_time, end_date_time), true);
 	}
 
 	// Send a request for the list of indicators for tradable `symbol'.
@@ -306,19 +218,31 @@ true);
 
 	// Perform any needed post processing on `data', the parsed result of
 	// of a market data request.
+	// `is_update' indicates whether `data' is the result of an update of
+	// existing data (as opposed to a fresh set of data for a new tradable).
 	abstract protected void post_process_market_data(DataSet data,
-		String symbol, String period_type, boolean new_data_set);
+		String symbol, String period_type, boolean is_update);
 
+	// Perform any needed post processing on `data', the parsed
+	//  volume-data result of of a market data request.
+	// `is_update' indicates whether `data' is the result of an update of
+	// existing data (as opposed to a fresh set of data for a new tradable).
 	abstract protected void post_process_volume_data(DataSet data,
-		String symbol, String period_type, boolean new_data_set);
+		String symbol, String period_type, boolean is_update);
 
+	// Perform any needed post processing on `data', the parsed
+	//  open-interest-data result of of a market data request.
+	// `is_update' indicates whether `data' is the result of an update of
+	// existing data (as opposed to a fresh set of data for a new tradable).
 	abstract protected void post_process_open_interest_data(DataSet data,
-		String symbol, String period_type, boolean new_data_set);
+		String symbol, String period_type, boolean is_update);
 
 	// Perform any needed post processing on `data', the parsed result of
 	// of an indicator data request.
+	// `is_update' indicates whether `data' is the result of an update of
+	// existing data (as opposed to a fresh set of data for a new tradable).
 	abstract protected void post_process_indicator_data(DataSet data,
-		String symbol, String period_type, boolean new_data_set);
+		String symbol, String period_type, boolean is_update);
 
 	protected void prepare_parser_for_market_data() {
 		// do nothing - redefine if needed.
@@ -333,6 +257,71 @@ true);
 	abstract protected AbstractParser new_indicator_parser(int [] field_specs);
 
 // Implementation
+
+	// Dispatch the data request for tradable with `symbol', `period_type',
+	// and, optionally, `appendix' to the server and parse and process
+	// the result.
+	// `is_update' indicates whether the request is for an update of existing
+	// data (as opposed to being for a fresh set of data for a new tradable).
+	public void dispatch_market_data_request(int request_id, String symbol,
+			String period_type, String appendix, boolean is_update)
+			throws Exception {
+
+		String request = symbol + Message_field_separator + period_type;
+		if (appendix != null && appendix.length() > 0) {
+			request += Message_field_separator + appendix;
+		}
+		connection.send_request(request_id, request);
+		if (connection.last_received_message_ID() == Ok) {
+			String results = connection.result().toString();
+			results = setup_parser_fieldspecs(results);
+			prepare_parser_for_market_data();
+			data_parser.parse(results);
+			last_market_data = data_parser.result();
+			post_process_market_data(last_market_data, symbol, period_type,
+				is_update);
+			last_volume = data_parser.volume_result();
+			if (last_volume != null) {
+				post_process_volume_data(last_volume, symbol, period_type,
+					is_update);
+			}
+			last_open_interest = data_parser.open_interest_result();
+			if (last_open_interest != null) {
+				post_process_open_interest_data(last_open_interest, symbol,
+					period_type, is_update);
+			}
+			Calendar date = data_parser.latest_date_time();
+			if (date != null) {
+				last_latest_date_time = date;
+			}
+		}
+	}
+
+	// Dispatch the request for indicator data with indicator ID
+	// `indicator_id' for tradable with `symbol', `period_type', and,
+	// optionally, `appendix' to the server and parse and process the result.
+	// `is_update' indicates whether the request is for an update of existing
+	// data (as opposed to being for a fresh set of data for a new tradable).
+	public void dispatch_indicator_data_request(int request_id,
+			int indicator_id, String symbol, String period_type,
+			String appendix, boolean is_update) throws Exception {
+
+		String request = indicator_id + Message_field_separator + symbol +
+			Message_field_separator + period_type;
+		if (appendix != null && appendix.length() > 0) {
+			request += Message_field_separator + appendix;
+		}
+		connection.send_request(request_id, request);
+		if (connection.last_received_message_ID() == Ok) {
+			prepare_parser_for_indicator_data();
+			indicator_parser.parse(connection.result().toString());
+			last_indicator_data = indicator_parser.result();
+			post_process_indicator_data(last_indicator_data, symbol,
+				period_type, is_update);
+		}
+	}
+
+// Implementation - initialization
 
 	// Initialize main_field_specs - Include AbstractParser.Open_interest if
 	// `open_interest' is true.
@@ -373,23 +362,15 @@ true);
 		open_interest = false;
 		initialize_fieldspecs();
 		data_parser = new_main_parser();
-//was: data_parser = new Parser(main_field_specs, Message_record_separator,
-//							Message_field_separator);
+
 		// Set up the indicator parser to expect just a date and a float
 		// (close) value.
 		int indicator_field_specs[] = new int[2];
 		indicator_field_specs[0] = AbstractParser.Date;
 		indicator_field_specs[1] = AbstractParser.Close;
 		indicator_parser = new_indicator_parser(indicator_field_specs);
-//was: indicator_parser = new Parser(indicator_field_specs,
-// Message_record_separator, Message_field_separator);
 
 		postinit();
-//!!! was:		main_drawer = new_main_drawer();
-//!!!:		volume_drawer = new BarDrawer(main_drawer);
-//!!!:		data_parser.set_volume_drawer(volume_drawer);
-//!!!:		open_interest_drawer = new LineDrawer(main_drawer);
-//!!!:		data_parser.set_open_interest_drawer(open_interest_drawer);
 		login_failed = false;
 	}
 
@@ -424,6 +405,8 @@ true);
 
 		return result;
 	}
+
+// Implementation - attributes
 
 	// tradables is shared by all windows
 	protected static Vector tradables;	// Cached list of tradables
