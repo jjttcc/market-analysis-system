@@ -121,30 +121,6 @@ feature -- Access
 			Result := cached_period_types
 		end
 
-feature -- Access
-
-	yearly_high: PRICE is
-			-- Highest closing price for the past year (52-week high)
-		require
-			not_empty: not data.empty
-		do
-			if y_high = Void then
-				calc_y_high_low
-			end
-			Result := y_high
-		end
-
-	yearly_low: PRICE is
-			-- Lowest closing price for the past year (52-week low)
-		require
-			not_empty: not data.empty
-		do
-			if y_low = Void then
-				calc_y_high_low
-			end
-			Result := y_low
-		end
-
 feature -- Status report
 
 	indicators_processed: BOOLEAN is
@@ -316,12 +292,6 @@ feature {NONE} -- Initialization
 
 feature {NONE}
 
-	y_high: PRICE
-			-- Cached yearly high value
-
-	y_low: PRICE
-			-- Cached yearly low value
-
 	tuple_lists: HASH_TABLE [SIMPLE_FUNCTION [BASIC_MARKET_TUPLE], STRING]
 			-- Lists whose tuples are made from the base data (e.g., weekly,
 			-- monthy, if primary is daily)
@@ -329,52 +299,6 @@ feature {NONE}
 	cached_period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING]
 
 feature {NONE}
-
-	calc_y_high_low is
-			-- Set y_high to the 52-week high closing price and y_low
-			-- to the 52-week low closing price.
-		require
-			not_empty: not empty
-		local
-			--calculator: N_BOOLEAN_LINEAR_COMMAND
-			greater_than: GT_OPERATOR
-			less_than: LT_OPERATOR
-			close_extractor: CLOSING_PRICE
-			original_cursor: CURSOR
-		do
-			--NOTE:  It may be a little cleaner to use the HIGHEST_VALUE
-			--and LOWEST_VALUE classes; perform a binary search (good for
-			--efficiency since this is an ARRAYED_LIST) to find the element
-			--whose date is 1 year less than the last element's date; get
-			--the n value (for HV and LV) from that element's position; set
-			--the cursor to the last element and put HV and LV into action.
-			--!!greater_than; !!less_than; !!close_extractor
-			if y_high = Void then
-				create y_high; create y_low
-			end
-			original_cursor := cursor
-			finish -- Set cursor to last position
-			-- Initialize calculator to find the highest close value.
-			--NOTE:  Not correct yet - needs to either what count needs
-			--to be to go back exactly 52 weeks, or create a sublist that
-			--contains the past 52-weeks worth of Current's data and
-			--pass that sublist and sublist.count to calculator.make.
-			--!!calculator.make (Current, count, greater_than, close_extractor)
-			check
-				islast
-				--calculator.target_cursor_not_affected
-			end
-			--calculator.execute (Void)
-			--y_high.set_value (calculator.value)
-			-- Re-set calculator to find the lowest close value.
-			--calculator.set_boolean_operator (less_than)
-			--calculator.set_initial_value (99999999)
-			--calculator.execute (Void)
-			--y_low.set_value (calculator.value)
-			go_to (original_cursor)
-		ensure
-			not_void: y_high /= Void and y_low /= Void
-		end
 
 	process_composite_list (type: TIME_PERIOD_TYPE):
 				SIMPLE_FUNCTION [COMPOSITE_TUPLE] is
