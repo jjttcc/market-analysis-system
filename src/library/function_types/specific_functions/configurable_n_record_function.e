@@ -22,7 +22,7 @@ class CONFIGURABLE_N_RECORD_FUNCTION inherit
 			forth, do_process, direct_operators
 		redefine
 			set_n, short_description, start, initialize_operators, target,
-			strict_n_count
+			strict_n_count, action
 		end
 
 	FUNCTION_WITH_FIRST_AND_PREVIOUS_OPERATORS
@@ -31,7 +31,7 @@ class CONFIGURABLE_N_RECORD_FUNCTION inherit
 		undefine
 			immediate_direct_parameters, set_operator
 		redefine
-			short_description, start, initialize_operators, target
+			short_description, start, initialize_operators, target, action
 		end
 
 creation {FACTORY, MARKET_FUNCTION_EDITOR}
@@ -76,6 +76,7 @@ feature {NONE} -- Basic operations
 			check
 				output_empty: output.is_empty
 			end
+			initialize_previous_operator_attached
 			if target.count < effective_n then
 				-- There are not enough elements in target to process;
 				-- ensure that exhausted is True:
@@ -124,6 +125,18 @@ feature {NONE} -- Basic operations
 				implies output.islast
 		end
 
+	action is
+		do
+			if not previous_operator_attached then
+				-- Because `previous_operator' is not a component of
+				-- `operator's command tree, it will not be executed when
+				-- `operator.execute' is called.  Therefore,
+				-- `previous_operator' must be executed explicitly.
+				previous_operator.execute (target.item)
+			end
+			Precursor
+		end
+
 feature {MARKET_FUNCTION_EDITOR}
 
 	set_n (value: INTEGER) is
@@ -152,6 +165,27 @@ feature {NONE} -- Implementation
 		end
 
 	strict_n_count: BOOLEAN is False
+
+	previous_operator_attached: BOOLEAN
+			-- Is `previous_operator' a component of `operator's tree?
+
+	initialize_previous_operator_attached is
+		local
+			l: LIST [COMMAND]
+		do
+			previous_operator_attached := previous_operator = operator
+			if not previous_operator_attached then
+				l := operator.descendants
+				from
+					l.start
+				until
+					previous_operator_attached or l.exhausted
+				loop
+					previous_operator_attached := previous_operator = l.item
+					l.forth
+				end
+			end
+		end
 
 invariant
 
