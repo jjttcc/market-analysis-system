@@ -34,15 +34,19 @@ feature -- Basic operations
 
 	edit_binary_boolean (cmd: BINARY_OPERATOR [ANY, BOOLEAN]) is
 			-- Edit a BINARY_OPERATOR that takes BOOLEAN operands.
+		require
+			ui_set: user_interface /= Void
 		local
 			left, right: RESULT_COMMAND [BOOLEAN]
 		do
 			left ?= user_interface.command_selection (
 						user_interface.Boolean_result_command,
-										<<c.generator, "'s left operand">>)
+										<<cmd.generator, "'s left operand">>,
+										false)
 			right ?= user_interface.command_selection (
 						user_interface.Boolean_result_command,
-										<<c.generator, "'s right operand">>)
+										<<cmd.generator, "'s right operand">>,
+										false)
 			check
 				selections_valid: left /= Void and right /= Void
 			end
@@ -51,24 +55,30 @@ feature -- Basic operations
 
 	edit_binary_real (cmd: BINARY_OPERATOR [ANY, REAL]) is
 			-- Edit a BINARY_OPERATOR that takes REAL operands.
+		require
+			ui_set: user_interface /= Void
 		local
 			left, right: RESULT_COMMAND [REAL]
 		do
 			left ?= user_interface.command_selection (
 						user_interface.Real_result_command,
-										<<c.generator, "'s left operand">>)
+										<<cmd.generator, "'s left operand">>,
+										false)
 			right ?= user_interface.command_selection (
 						user_interface.Real_result_command,
-										<<c.generator, "'s right operand">>)
+										<<cmd.generator, "'s right operand">>,
+										false)
 			check
 				selections_valid: left /= Void and right /= Void
 			end
 			cmd.set_operands (left, right)
 		end
 
-	edit_mtlist_resultreal_n (c: COMMAND) is
+	edit_mtlist_resultreal_n (c: UNARY_OPERATOR [ANY, REAL]) is
 			-- Edit `c's market tuple list, operator (
 			-- RESULT_COMMAND [REAL]), and n-value.
+		require
+			ui_set: user_interface /= Void
 		do
 			edit_n (c)
 			edit_mtlist (c)
@@ -77,6 +87,8 @@ feature -- Basic operations
 
 	edit_n (c: COMMAND) is
 			-- Edit `c's n-value.
+		require
+			ui_set: user_interface /= Void
 		local
 			cmd: N_RECORD_COMMAND
 		do
@@ -90,6 +102,8 @@ feature -- Basic operations
 
 	edit_mtlist (c: COMMAND) is
 			-- Edit `c's market tuple list target.
+		require
+			ui_set: user_interface /= Void
 		local
 			cmd: LINEAR_COMMAND
 		do
@@ -103,6 +117,8 @@ feature -- Basic operations
 
 	edit_unaryop (cmd: UNARY_OPERATOR [ANY, REAL]) is
 			-- Edit a UNARY_OPERATOR that takes a REAL operand.
+		require
+			ui_set: user_interface /= Void
 		local
 			hv: HIGHEST_VALUE
 			lv: LOWEST_VALUE
@@ -116,7 +132,8 @@ feature -- Basic operations
 			if hv /= Void then
 				bnc_cmd ?= user_interface.command_selection (
 							user_interface.Basic_numeric_command,
-								<<c.generator, "'s operand">>)
+								<<cmd.generator, "'s operand">>,
+								false)
 				check
 					selection_valid: bnc_cmd /= Void
 				end
@@ -124,7 +141,8 @@ feature -- Basic operations
 			elseif lv /= Void then
 				bnc_cmd ?= user_interface.command_selection (
 							user_interface.Basic_numeric_command,
-								<<c.generator, "'s operand">>)
+								<<cmd.generator, "'s operand">>,
+								false)
 				check
 					selection_valid: bnc_cmd /= Void
 				end
@@ -132,7 +150,8 @@ feature -- Basic operations
 			else
 				rr_cmd ?= user_interface.command_selection (
 							user_interface.Real_result_command,
-									<<c.generator, "'s operand">>)
+									<<cmd.generator, "'s operand">>,
+									false)
 				check
 					selection_valid: rr_cmd /= Void
 				end
@@ -140,9 +159,130 @@ feature -- Basic operations
 			end
 		end
 
+	edit_offset (cmd: SETTABLE_OFFSET_COMMAND) is
+			-- Edit a SETTABLE_OFFSET_COMMAND.
+		local
+			unop: UNARY_OPERATOR [ANY, REAL]
+		do
+			unop ?= cmd
+			check
+				cmd_is_a_unop_real: unop /= Void
+			end
+			edit_unaryop (unop)
+			edit_mtlist (cmd)
+			cmd.set_offset (user_interface.integer_selection (
+							<<cmd.generator, "'s offset value">>))
+		end
+
+	edit_boolean_numeric_client (cmd: BOOLEAN_NUMERIC_CLIENT) is
+			-- Edit a BOOLEAN_NUMERIC_CLIENT.
+		local
+			binop: BINARY_OPERATOR [BOOLEAN, REAL]
+			result_cmd: RESULT_COMMAND [REAL]
+		do
+			-- Obtain and set cmd's boolean operator.
+			binop ?= user_interface.command_selection (
+						user_interface.Binary_boolean_real_command,
+								<<cmd.generator, "'s boolean operator">>,
+								false)
+			check
+				selection_valid: binop /= Void
+			end
+			cmd.set_boolean_operator (binop)
+			-- Obtain and set cmd's true command.
+			result_cmd ?= user_interface.command_selection (
+						user_interface.Real_result_command,
+									<<cmd.generator, "'s true command">>,
+									false)
+			check
+				selection_valid: result_cmd /= Void
+			end
+			cmd.set_true_cmd (result_cmd)
+			-- Obtain and set cmd's false command.
+			result_cmd ?= user_interface.command_selection (
+						user_interface.Real_result_command,
+									<<cmd.generator, "'s false command">>,
+									false)
+			check
+				selection_valid: result_cmd /= Void
+			end
+			cmd.set_false_cmd (result_cmd)
+		end
+
+	edit_sign_analyzer (cmd: SIGN_ANALYZER) is
+			-- Edit a SIGN_ANALYZER.
+		require
+			ui_set: user_interface /= Void
+		local
+			left, right: RESULT_COMMAND [REAL]
+			sign_spec: ARRAY [INTEGER]
+			sign_spec_vector: ARRAY [ARRAY [INTEGER]]
+			choices: LIST [PAIR [STRING, BOOLEAN]]
+			pair: PAIR [STRING, BOOLEAN]
+		do
+			!!sign_spec_vector.make (1, 6)
+			sign_spec_vector.put (<<-1, 1>>, 1)
+			sign_spec_vector.put (<<1, -1>>, 2)
+			sign_spec_vector.put (<<-1, 0>>, 3)
+			sign_spec_vector.put (<<1, 0>>, 4)
+			sign_spec_vector.put (<<0, -1>>, 5)
+			sign_spec_vector.put (<<0, 1>>, 6)
+			left ?= user_interface.command_selection (
+						user_interface.Real_result_command,
+										<<cmd.generator, "'s left operand">>,
+										false)
+			right ?= user_interface.command_selection (
+						user_interface.Real_result_command,
+										<<cmd.generator, "'s right operand">>,
+										false)
+			check
+				selections_valid: left /= Void and right /= Void
+			end
+			cmd.set_operands (left, right)
+			!LINKED_LIST [PAIR [STRING, BOOLEAN]]!choices.make
+			!!pair.make ("negative to positive", false)
+			choices.extend (pair)
+			!!pair.make ("positive to negative", false)
+			choices.extend (pair)
+			!!pair.make ("negative to zero", false)
+			choices.extend (pair)
+			!!pair.make ("positive to zero", false)
+			choices.extend (pair)
+			!!pair.make ("zero to negative", false)
+			choices.extend (pair)
+			!!pair.make ("zero to positive", false)
+			choices.extend (pair)
+			user_interface.choice (<<"slope specification for ",
+				cmd.generator>>, choices, choices.count)
+			from
+				choices.start
+			until
+				choices.exhausted
+			loop
+				if choices.item.right then
+					cmd.add_sign_change_spec (sign_spec_vector @ choices.index)
+				end
+				choices.forth
+			end
+			debug
+				print ("sign analyzer's sign spec:%N")
+				from
+					cmd.sign_change_spec.start
+				until
+					cmd.sign_change_spec.exhausted
+				loop
+					print (cmd.sign_change_spec.item)
+					print ("%N")
+					cmd.sign_change_spec.forth
+				end
+			end
+		end
+
 	edit_constant (cmd: CONSTANT) is
 			-- Edit a simple command that takes a REAL value
 			-- (such as CONSTANT).
+		require
+			ui_set: user_interface /= Void
 		local
 			x: REAL
 		do

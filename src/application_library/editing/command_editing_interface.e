@@ -6,7 +6,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class COMMAND_EDITING_INTERFACE inherit
+deferred class COMMAND_EDITING_INTERFACE inherit
 
 	COMMANDS
 		export
@@ -15,38 +15,38 @@ class COMMAND_EDITING_INTERFACE inherit
 
 feature -- Access
 
-	editor: APPLICATION_COMMAND_EDITOR
-			-- Editor used to set COMMANDs' operands and parameters
-
-	command_selection (type: STRING; msg: ARRAY [STRING]): COMMAND is
+	command_selection (type: STRING; msg: ARRAY [STRING]; top: BOOLEAN):
+				COMMAND is
 			-- User-selected command whose type conforms to `type'
+			-- `top' specifies whether the returned instance will be
+			-- the top of a command tree.
 		require
 			type_is_valid: command_types @ type /= Void
+			editor_set: editor /= Void
 		local
 			op_names: ARRAYED_LIST [STRING]
 			cmd_list: ARRAYED_LIST [COMMAND]
 		do
 			cmd_list := command_types @ type
-			Result := user_command_selection (cmd_list)
+			if not top then
+				-- Not cloned - one instance is shared:
+				Result := current_command_selection (cmd_list, msg)
+			end
+			if Result = Void then
+				-- Do a deep clone so the user-created COMMAND are
+				-- not shared.
+				Result := deep_clone (user_command_selection (cmd_list, msg))
+			end
+			if top then
+				-- List of commands is no longer needed.
+				current_commands.wipe_out
+			else
+				current_commands.extend (Result)
+			end
 			initialize_command (Result)
 		ensure
 			result_not_void: Result /= Void
 		end
-
-		integer_selection (msg: ARRAY [STRING]): INTEGER is
-				-- User-selected integer value
-			deferred
-			end
-
-		market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
-				-- User-selected list of market tuples
-			deferred
-			end
-
-		real_selection (msg: ARRAY [STRING]): REAL is
-				-- User-selected real value
-			deferred
-			end
 
 	command_types: HASH_TABLE [ARRAYED_LIST [COMMAND], STRING] is
 			-- Hash table of lists of command instances - each list contains
@@ -56,8 +56,8 @@ feature -- Access
 			l: ARRAYED_LIST [COMMAND]
 		once
 			!!Result.make (0)
-			!!l.make (12)
-			Result.extend (l, "RESULT_COMMAND [BOOLEAN]")
+			!!l.make (13)
+			Result.extend (l, Boolean_result_command)
 			l.extend (command_with_generator ("LE_OPERATOR"))
 			l.extend (command_with_generator ("GE_OPERATOR"))
 			l.extend (command_with_generator ("EQ_OPERATOR"))
@@ -70,8 +70,9 @@ feature -- Access
 			l.extend (command_with_generator ("AND_OPERATOR"))
 			l.extend (command_with_generator ("TRUE_COMMAND"))
 			l.extend (command_with_generator ("FALSE_COMMAND"))
-			!!l.make (19)
-			Result.extend (l, "RESULT_COMMAND [REAL]")
+			l.extend (command_with_generator ("SIGN_ANALYZER"))
+			!!l.make (22)
+			Result.extend (l, Real_result_command)
 			l.extend (command_with_generator ("SUBTRACTION"))
 			l.extend (command_with_generator ("MULTIPLICATION"))
 			l.extend (command_with_generator ("DIVISION"))
@@ -89,17 +90,45 @@ feature -- Access
 			l.extend (command_with_generator ("LOW_PRICE"))
 			l.extend (command_with_generator ("HIGH_PRICE"))
 			l.extend (command_with_generator ("CLOSING_PRICE"))
+			l.extend (command_with_generator ("OPENING_PRICE"))
+			l.extend (command_with_generator ("OPEN_INTEREST"))
 			l.extend (command_with_generator ("BASIC_LINEAR_COMMAND"))
 			l.extend (command_with_generator ("BOOLEAN_NUMERIC_CLIENT"))
+			l.extend (command_with_generator ("SLOPE_ANALYZER"))
+			!!l.make (6)
+			Result.extend (l, Binary_boolean_real_command)
+			l.extend (command_with_generator ("LE_OPERATOR"))
+			l.extend (command_with_generator ("GE_OPERATOR"))
+			l.extend (command_with_generator ("EQ_OPERATOR"))
+			l.extend (command_with_generator ("LT_OPERATOR"))
+			l.extend (command_with_generator ("GT_OPERATOR"))
+			l.extend (command_with_generator ("SIGN_ANALYZER"))
+			!!l.make (9)
+			Result.extend (l, Basic_numeric_command)
+			l.extend (command_with_generator ("BASIC_NUMERIC_COMMAND"))
+			l.extend (command_with_generator ("OPENING_PRICE"))
+			l.extend (command_with_generator ("OPEN_INTEREST"))
+			l.extend (command_with_generator ("VOLUME"))
+			l.extend (command_with_generator ("LOW_PRICE"))
+			l.extend (command_with_generator ("HIGH_PRICE"))
+			l.extend (command_with_generator ("CLOSING_PRICE"))
+			l.extend (command_with_generator ("OPENING_PRICE"))
+			l.extend (command_with_generator ("OPEN_INTEREST"))
 		end
+
+	editor: APPLICATION_COMMAND_EDITOR
+			-- Editor used to set COMMANDs' operands and parameters
 
 feature -- Constants
 
 	Boolean_result_command: STRING is "RESULT_COMMAND [BOOLEAN]"
-			-- Name of BOOLEAN result command type
+			-- Name of result command with a BOOLEAN generic parameter
 
 	Real_result_command: STRING is "RESULT_COMMAND [REAL]"
-			-- Name of REAL result command type
+			-- Name of result command with a REAL generic parameter
+
+	Binary_boolean_real_command: STRING is "BINARY_OPERATOR [BOOLEAN, REAL]"
+			-- Name of binary command with BOOLEAN, REAL generic parameters
 
 	Basic_numeric_command: STRING is "BASIC_NUMERIC_COMMAND"
 			-- Name of BASIC_NUMERIC_COMMAND
@@ -117,10 +146,67 @@ feature -- Status setting
 				editor /= Void
 		end
 
+feature {APPLICATION_COMMAND_EDITOR} -- Access
+
+	integer_selection (msg: ARRAY [STRING]): INTEGER is
+			-- User-selected integer value
+		deferred
+		end
+
+	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
+			-- User-selected list of market tuples
+		deferred
+		end
+
+	real_selection (msg: ARRAY [STRING]): REAL is
+			-- User-selected real value
+		deferred
+		end
+
+	choice (descr: ARRAY [STRING]; choices: LIST [PAIR [STRING, BOOLEAN]];
+				allowed_selections: INTEGER) is
+			-- The user's selections of the specified choices -
+			-- from 1 to choices.count selections (with `descr' providing
+			-- a description of the choices to the user)
+		require
+			not_void: choices /= Void
+			as_valid: allowed_selections > 0 and allowed_selections <=
+				choices.count
+		do
+			-- Initialize all `right' elements of `choices' to false
+			from
+				choices.start
+			until
+				choices.exhausted
+			loop
+				choices.item.set_right (false)
+				choices.forth
+			end
+			do_choice (descr, choices, allowed_selections)
+		ensure
+			-- For each user-selection of an element of `choices', the
+			-- right member of that pair is set to true; the right
+			-- member of all other elements of `choices' is false.
+		end
+
 feature {NONE} -- Implementation
 
-	user_command_selection (cmd_list: ARRAYED_LIST [COMMAND]) is
+	current_command_selection (cmd_list: LIST [COMMAND];
+				msg: ARRAY [STRING]): COMMAND is
+			-- User's selection from existing commands - Void if user
+			-- chooses not to use an existing command.
+		deferred
+		end
+
+	user_command_selection (cmd_list: LIST [COMMAND];
+				msg: ARRAY [STRING]): COMMAND is
 			-- User's selection of a member of `cmd_list'
+		deferred
+		end
+
+	do_choice (descr: ARRAY [STRING]; choices: LIST [PAIR [STRING, BOOLEAN]];
+				allowed_selections: INTEGER) is
+			-- Implementation of `choice'
 		deferred
 		end
 
@@ -130,9 +216,10 @@ feature {NONE} -- Implementation
 	Other,				-- Classes that need no initialization
 	Mtlist_resultreal_n,-- Classes that need a market tuple list, a
 						-- RESULT_COMMAND [REAL], and an n-value
-	N_command,			-- Classes that need an n-value
-	Mtlist,				-- Classes that need a market tuple list
-	Settable_offset,	-- the SETTABLE_OFFSET_COMMAND
+	N_command,			-- Classes that (only) need an n-value
+	Mtlist,				-- Classes that (only) need a market tuple list
+	Settable_offset,	-- SETTABLE_OFFSET_COMMAND
+	Sign_analyzer,		-- SIGN_ANALYZER
 	Boolean_num_client	-- BOOLEAN_NUMERIC_CLIENT
 	:
 				INTEGER is unique
@@ -310,32 +397,117 @@ feature {NONE} -- Implementation
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Boolean_num_client, name)
+			name := "SIGN_ANALYZER"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Sign_analyzer, name)
+			name := "SLOPE_ANALYZER"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Mtlist, name)
 		end
 
 	initialize_command (c: COMMAND) is
 			-- Set command parameters - operands, etc.
+		require
+			editor_set: editor /= Void
+		local
+			const: CONSTANT
+			bin_bool_op: BINARY_OPERATOR [ANY, BOOLEAN]
+			bin_real_op: BINARY_OPERATOR [ANY, REAL]
+			unop_real: UNARY_OPERATOR [ANY, REAL]
+			offset_cmd: SETTABLE_OFFSET_COMMAND
+			bnc: BOOLEAN_NUMERIC_CLIENT
+			sign_an: SIGN_ANALYZER
 		do
 			inspect
 				initialization_map @ c.generator
 			when Binary_boolean then
-				editor.edit_binary_boolean (c)
+				bin_bool_op ?= c
+				check
+					c_is_a_binary_boolean: bin_bool_op /= Void
+				end
+				editor.edit_binary_boolean (bin_bool_op)
 			when Binary_real then
-				editor.edit_binary_real (c)
+				bin_real_op ?= c
+				check
+					c_is_a_binary_realean: bin_real_op /= Void
+				end
+				editor.edit_binary_real (bin_real_op)
 			when Constant then
-				editor.edit_constant (c)
+				const ?= c
+				check
+					c_is_a_constant: const /= Void
+				end
+				editor.edit_constant (const)
 			when Mtlist_resultreal_n then
-				editor.edit_mtlist_resultreal_n (c)
+				unop_real ?= c
+				check
+					c_is_a_unary_operator_real: unop_real /= Void
+				end
+				editor.edit_mtlist_resultreal_n (unop_real)
 			when Other then
 				-- No initialization needed.
 			when N_command then
-				print ("n-command initialization to be defined ...%N")
+				editor.edit_n (c)
 			when Mtlist then
-				print ("market-tuple-list initialization to be defined ...%N")
+				editor.edit_mtlist (c)
 			when Settable_offset then
-				print ("Settable offset initialization to be defined ...%N")
+				offset_cmd ?= c
+				check
+					c_is_a_settable_offset_cmd: offset_cmd /= Void
+				end
+				editor.edit_offset (offset_cmd)
 			when Boolean_num_client then
-				print ("boolean-num-client initialization to be defined ...%N")
+				bnc ?= c
+				check
+					c_is_a_boolean_numeric_client: bnc /= Void
+				end
+				editor.edit_boolean_numeric_client (bnc)
+			when Sign_analyzer then
+				sign_an ?= c
+				check
+					c_is_a_sign_analyzer: sign_an /= Void
+				end
+				editor.edit_sign_analyzer (sign_an)
 			end
 		end
+
+	valid_types (ref_list, cmd_list: LIST [COMMAND]): LIST [COMMAND] is
+			-- All elements of `cmd_list' whose type matches that of
+			-- an element of `ref_list'
+		do
+			!LINKED_LIST [COMMAND]!Result.make
+			from
+				cmd_list.start
+			until
+				cmd_list.exhausted
+			loop
+				from
+					ref_list.start
+				until
+					ref_list.exhausted
+				loop
+					if cmd_list.item.same_type (ref_list.item) then
+						Result.extend (cmd_list.item)
+						ref_list.finish
+					end
+					ref_list.forth
+				end
+				cmd_list.forth
+			end
+		end
+
+	current_commands: LIST [COMMAND] is
+		do
+			if command_list = Void then
+				!LINKED_LIST [COMMAND]!command_list.make
+			end
+			Result := command_list
+		end
+
+	command_list: LIST [COMMAND]
 
 end -- COMMAND_EDITING_INTERFACE
