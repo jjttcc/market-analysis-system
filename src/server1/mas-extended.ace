@@ -6,7 +6,7 @@ root
 
 default
 	assertion (all)
-	arguments ("-f , 9922 -i 15-minute /tmp/bond_10_year.15-minute -no-volume")
+	arguments ("-f , 7733 -i 15-minute /tmp/bond_10_year.15-minute -no-volume")
 	arguments ("-f , 9922 -nonstd -i 15-minute /tmp/dtst1.15-minute -no-volume")
 	arguments ("-f , -i 15-minute /tmp/dtst1.15-minute -no-volume")
 	arguments ("-f , -nonstd /tmp/ibm.txt")

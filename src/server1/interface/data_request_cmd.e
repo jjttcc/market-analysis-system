@@ -111,6 +111,7 @@ feature {NONE} -- Hook routines
 			-- Parse any remaining fields of `fields' after calling
 			-- `parse_symbol_and_period_type'
 		require
+			no_error: not parse_error
 			fields_exist: fields /= Void
 			field_count_valid: fields.count = expected_field_count
 			additional_constraints_hold:
@@ -118,7 +119,6 @@ feature {NONE} -- Hook routines
 		do
 			do_nothing -- Redefine is something needs to be done.
 		ensure
-			parsed_iff_no_error: not parse_error = fields_parsed
 			additional_constraints_fulfilled: not parse_error implies
 				additional_post_parse_constraints_fulfilled
 		end
@@ -171,6 +171,9 @@ feature {NONE} -- Utility
 			parse_symbol_and_period_type (fields)
 			if not parse_error then
 				parse_remainder (fields)
+				if not parse_error then
+					fields_parsed := True
+				end
 			end
 		ensure
 			parsed_iff_no_error: not parse_error = fields_parsed
