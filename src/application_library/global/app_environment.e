@@ -9,8 +9,15 @@ indexing
 class APP_ENVIRONMENT inherit
 
 	EXECUTION_ENVIRONMENT
+		export
+			{NONE} all
+			{ANY} current_working_directory
+		end
 
 	OPERATING_ENVIRONMENT
+		export
+			{NONE} all
+		end
 
 feature -- Access
 
