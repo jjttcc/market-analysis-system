@@ -33,25 +33,28 @@ feature -- Status setting
 
 feature {NONE} -- Implementation
 
+	input_sequence: DB_INPUT_SEQUENCE
+
 	setup_input_medium is
 		local
-			inp_seq: DB_INPUT_SEQUENCE
 			exc: EXCEPTIONS
 			global_server: expanded GLOBAL_SERVER
 			mds: MAS_DB_SERVICES
 		do
 			mds := global_server.database_services
-			mds.connect
+			if not mds.connected then
+				mds.connect
+			end
 			if not mds.fatal_error then
 				if intraday then
-					inp_seq := mds.intraday_stock_data (current_symbol)
+					input_sequence := mds.intraday_stock_data (current_symbol)
 				else
-					inp_seq := mds.daily_stock_data (current_symbol)
+					input_sequence := mds.daily_stock_data (current_symbol)
 				end
-				if inp_seq = Void or mds.fatal_error then
+				if input_sequence = Void or mds.fatal_error then
 					fatal_error := true
 				else
-					tradable_factory.set_input (inp_seq)
+					tradable_factory.set_input (input_sequence)
 				end
 			else
 				fatal_error := true
@@ -66,11 +69,19 @@ feature {NONE} -- Implementation
 		local
 			global_server: expanded GLOBAL_SERVER
 			mds: MAS_DB_SERVICES
+			gs: expanded GLOBAL_SERVER
 		do
-			mds := global_server.database_services
-			mds.disconnect
-			if mds.fatal_error then
-				fatal_error := true
+			input_sequence.close
+			if input_sequence.error_occurred then
+				log_error (input_sequence.error_string)
+			end
+			if not gs.command_line_options.keep_db_connection then
+				mds := global_server.database_services
+				mds.disconnect
+				if mds.fatal_error then
+					fatal_error := true
+					log_error (mds.last_error)
+				end
 			end
 		end
 
