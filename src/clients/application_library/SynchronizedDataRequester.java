@@ -1,6 +1,7 @@
 package application_library;
 
 import java.util.*;
+import java_library.support.*;
 import common.*;
 import graph_library.DataSet;
 
@@ -9,7 +10,8 @@ import graph_library.DataSet;
 * server in a thread-safe manner, using the given data builder's lock/unlock
 * facilities
 **/
-public class SynchronizedDataRequester implements NetworkProtocol {
+public class SynchronizedDataRequester extends Logic
+	implements NetworkProtocol {
 
 // Initialization
 
@@ -26,6 +28,13 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 	}
 
 // Access
+
+	/**
+	* Symbol of the current tradable for which data is being requested
+	**/
+	public String current_symbol() {
+		return symbol;
+	}
 
 	/**
 	* Maximum number of times to try to lock the data builder before
@@ -120,16 +129,18 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 		if (data_builder.is_locked_by(this)) {
 			data_builder.send_market_data_request(symbol, period_type);
 			request_result_id = data_builder.request_result_id();
-			if (request_result_id != Ok) {
+			if (! data_builder.request_succeeded()) {
 				request_failed = true;
-				//@@@Check if throwing an exception is appropriate here.
-				throw new Exception(main_request_failed_message);
+//!!!!Obsolete - remove:
+////@@@Check if throwing an exception is appropriate here.
+//throw new Exception(main_request_failed_message);
 			} else {
 				// 'send_market_data_request' was successful.
 				tradable_result = data_builder.last_market_data();
 				volume_result = data_builder.last_volume();
 				open_interest_result = data_builder.last_open_interest();
 				latest_date_time = data_builder.last_latest_date_time();
+				assert ! request_failed(): "data request succeeded";
 			}
 			data_builder.unlock(this);
 		} else {
@@ -138,6 +149,8 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 			request_failure_message = main_lock_request_failed_message;
 //!!!: System.out.println("Would previously have thrown an exception here [main data]");
 		}
+		assert ! data_builder.is_locked_by(this): "builder not locked";
+		assert implies(! data_builder.request_succeeded(), request_failed());
 	}
 
 	/**
@@ -152,12 +165,14 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 			data_builder.send_indicator_data_request(indicator_id, symbol,
 				period_type);
 			request_result_id = data_builder.request_result_id();
-			if (request_result_id != Ok) {
+			if (! data_builder.request_succeeded()) {
 				request_failed = true;
-				//@@@Check if throwing an exception is appropriate here.
-				throw new Exception(indicator_request_failed_message);
+//!!!!Obsolete - remove:
+////@@@Check if throwing an exception is appropriate here.
+//throw new Exception(indicator_request_failed_message);
 			} else {
 				indicator_result = data_builder.last_indicator_data();
+				assert ! request_failed(): "data request succeeded";
 			}
 			data_builder.unlock(this);
 		} else {
@@ -166,6 +181,8 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 			request_failure_message = indicator_lock_request_failed_message;
 //!!!: System.out.println("Would previously have thrown an exception here [indicator data]");
 		}
+		assert ! data_builder.is_locked_by(this): "builder not locked";
+		assert implies(! data_builder.request_succeeded(), request_failed());
 	}
 
 	/**
@@ -179,12 +196,14 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 		if (data_builder.is_locked_by(this)) {
 			data_builder.send_indicator_list_request(symbol, period_type);
 			request_result_id = data_builder.request_result_id();
-			if (request_result_id != Ok) {
+			if (! data_builder.request_succeeded()) {
 				request_failed = true;
-				//@@@Check if throwing an exception is appropriate here.
-				throw new Exception(indicator_list_request_failed_message);
+//!!!!Obsolete - remove:
+////@@@Check if throwing an exception is appropriate here.
+//throw new Exception(indicator_list_request_failed_message);
 			} else {
 				indicator_list_result = data_builder.last_indicator_list();
+				assert ! request_failed(): "data request succeeded";
 			}
 			data_builder.unlock(this);
 		} else {
@@ -194,6 +213,8 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 				indicator_list_lock_request_failed_message;
 //!!!: System.out.println("Would previously have thrown an exception here [indicator list data]");
 		}
+		assert ! data_builder.is_locked_by(this): "builder not locked";
+		assert implies(! data_builder.request_succeeded(), request_failed());
 	}
 
 // Implementation
