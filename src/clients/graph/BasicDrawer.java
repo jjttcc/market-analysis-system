@@ -253,11 +253,15 @@ abstract public class BasicDrawer extends Drawer {
 			y_values.addElement(new Double(y));
 		}
 		y_strings = Utilities.formatted_doubles(y_values, ! is_lower());
-		for (int i = 0; i < y_strings.length; ++i) {
-			d = (Double) y_values.elementAt(i);
-			display_reference_value(d.doubleValue(),
-				y_strings[i], g, main_bounds, ref_bounds, lines_needed);
+		if (y_values.size() > 0) {
+			display_reference_values(y_values, y_strings, g, main_bounds,
+				ref_bounds, lines_needed);
 		}
+//		for (int i = 0; i < y_strings.length; ++i) {
+//			d = (Double) y_values.elementAt(i);
+//			display_reference_value(d.doubleValue(),
+//				y_strings[i], g, main_bounds, ref_bounds, lines_needed);
+//		}
 		g.setFont(old_font);
 	}
 
@@ -283,6 +287,74 @@ abstract public class BasicDrawer extends Drawer {
 				g.drawString(ystr,
 					ref_bounds.x + ref_bounds.width + Ref_text_offset,
 					adjusted_y + Y_text_adjust);
+			}
+		}
+	}
+
+	// Precondition: yvalues != null && yvalues.size() > 0 &&
+	//    yvalues.size() == ystrs.length
+	protected void display_reference_values(Vector yvalues, String[] ystrs,
+			Graphics g, Rectangle main_bounds, Rectangle ref_bounds,
+			boolean lines) {
+		final int Y_text_adjust = 3, margin = 5, margin_for_text = 8;
+		final int Min_vertical_space = 15;
+		int step = 1;
+		int adj_ys[] = new int[yvalues.size() + 1];
+		String[] ystrings = new String[ystrs.length];
+		Configuration config = Configuration.instance();
+		adj_ys[0] = (int) (ref_bounds.y + (1.0 -
+			(((Double) yvalues.elementAt(0)).doubleValue() - ymin) / yrange) *
+			ref_bounds.height);
+		ystrings[0] = ystrs[0];
+		if (yvalues.size() > 1) {
+			int i;
+			int adjusted_y = (int) (ref_bounds.y + (1.0 -
+				(((Double) yvalues.elementAt(1)).doubleValue() - ymin) /
+				yrange) * ref_bounds.height);
+			// If the first two elements of yvalues are too close together:
+			if (adj_ys[0] - adjusted_y < Min_vertical_space) {
+				// Ensure that every other value is skipped.
+				int start = 2;
+				if (adj_ys[0] <= ref_bounds.y + margin_for_text || adj_ys[0] >=
+						ref_bounds.y + ref_bounds.height - margin_for_text) {
+					// The first element of yvalues is out of bounds, so
+					// start with the second element.
+					start = 1;
+				}
+				for (i = start; i < yvalues.size(); i += 2) {
+					adj_ys[i / 2] = (int) (ref_bounds.y + (1.0 -
+						(((Double) yvalues.elementAt(i)).doubleValue() -
+						ymin) / yrange) * ref_bounds.height);
+					ystrings[i / 2] = ystrs[i];
+				}
+				adj_ys[i / 2] = -1;
+			} else {
+				// Ensure that every value is displayed.
+				for (i = 1; i < yvalues.size(); ++i) {
+					adj_ys[i] = (int) (ref_bounds.y + (1.0 -
+						(((Double) yvalues.elementAt(i)).doubleValue() -
+						ymin) / yrange) * ref_bounds.height);
+					ystrings[i] = ystrs[i];
+				}
+				adj_ys[i] = -1;
+			}
+		}
+
+		for (int i = 0; adj_ys[i] >= 0; ++i) {
+			if (adj_ys[i] > ref_bounds.y + margin &&
+					adj_ys[i] < ref_bounds.y + ref_bounds.height - margin) {
+				if (lines) {
+					g.setColor(Color.black);
+					g.drawLine(main_bounds.x - X_left_line_adjust, adj_ys[i],
+						main_bounds.x + main_bounds.width, adj_ys[i]);
+				}
+				if (adj_ys[i] > ref_bounds.y + margin_for_text && adj_ys[i] <
+						ref_bounds.y + ref_bounds.height - margin_for_text) {
+					g.setColor(config.text_color());
+					g.drawString(ystrings[i],
+						ref_bounds.x + ref_bounds.width + Ref_text_offset,
+						adj_ys[i] + Y_text_adjust);
+				}
 			}
 		}
 	}
