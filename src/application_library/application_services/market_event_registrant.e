@@ -77,7 +77,6 @@ feature -- Basic operations
 	cleanup is
 		local
 			hfile: PLAIN_TEXT_FILE
-			input: INPUT_FILE
 			scanner: MARKET_EVENT_SCANNER
 			env: expanded APP_ENVIRONMENT
 		do
@@ -86,12 +85,6 @@ feature -- Basic operations
 			if hfile_name /= Void then
 				create {INPUT_FILE} hfile.make_create_read_write (
 					env.file_name_with_app_directory (hfile_name))
-				input ?= hfile
-				check input /= Void end
-				-- Make the scanner to get its field separator.
-				!!scanner.make (input)
---fld_sep := scanner.field_separator
---record_sep := scanner.record_separator
 				from
 					event_history.start
 				until
