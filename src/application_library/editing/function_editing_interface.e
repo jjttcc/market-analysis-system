@@ -241,6 +241,7 @@ feature {EDITING_INTERFACE}
 	edit_indicator_list (l: LIST [MARKET_FUNCTION]) is
 			-- Editing of indicators in `l'
 		require
+			not_void: l /= Void
 			readonly_or_saveable: readonly or ok_to_save
 		local
 			selection: INTEGER
@@ -257,7 +258,7 @@ feature {EDITING_INTERFACE}
 				if selection /= Exit_value then
 					indicator := l @ selection
 					check indicator /= Void end
-					edit_parameter_menu (indicator.parameters, indicator.name)
+					edit_indicator (indicator)
 				end
 			end
 		end
@@ -457,6 +458,28 @@ feature {NONE} -- Implementation
 			end
 		end
 
+	editable_children (indicator: MARKET_FUNCTION):
+				LINKED_LIST [MARKET_FUNCTION] is
+			-- Children of `indicator' that have parameters
+		local
+			c: LIST [MARKET_FUNCTION]
+		do
+			create Result.make
+			c := indicator.children
+			from
+				c.start
+			until
+				c.exhausted
+			loop
+				if not c.item.parameters.empty then
+					Result.extend (c.item)
+				end
+				c.forth
+			end
+		ensure
+			not_void: Result /= Void
+		end
+
 feature {NONE} -- Implementation - indicator editing
 
 	do_edit is
@@ -534,6 +557,8 @@ feature {NONE} -- Implementation - indicator editing
 	edit_parameter_menu (parameters: LIST [FUNCTION_PARAMETER];
 				name: STRING) is
 			-- Menu for editing `parameters'
+		require
+			not_void: parameters /= Void
 		local
 			selection: INTEGER
 			p: FUNCTION_PARAMETER
@@ -541,7 +566,11 @@ feature {NONE} -- Implementation - indicator editing
 		do
 			from
 				selection := Null_value
-				if name /= Void then
+				if parameters.empty then
+					show_message (concatenation (<<"No parameters to edit ",
+						"for ", name>>))
+					selection := Exit_value
+				elseif name /= Void then
 					query := concatenation (<<"Select a parameter to edit",
 						" for ", name>>)
 				else
@@ -581,6 +610,54 @@ feature {NONE} -- Implementation - indicator editing
 			dirty := true
 			show_message (concatenation (
 				<<"New value set to ", p.current_value, "%N">>))
+		end
+
+	edit_indicator (i: MARKET_FUNCTION) is
+			-- Edit indicator `i'.
+		require
+			not_void: i /= Void
+		local
+			has_children_to_edit, has_immediate_parameters: BOOLEAN
+			query, choice_str: STRING
+			children: LIST [MARKET_FUNCTION]
+			quit: BOOLEAN
+		do
+			children := editable_children (i)
+			has_children_to_edit := not children.empty
+			has_immediate_parameters := not i.immediate_parameters.empty
+			if has_children_to_edit and has_immediate_parameters then
+				query := concatenation (<<"Indicator ",
+					i.name, ":%NEdit children or edit immediate parameters?",
+					" (c[hildren]/i[mmediate]/q[uit]) ">>)
+				choice_str := "cCiIqQ"
+			elseif has_children_to_edit and not has_immediate_parameters then
+				show_message (concatenation (<<"Indicator %"", i.name,
+					"'s%" children:">>))
+				edit_indicator_list (i.children)
+			elseif not has_children_to_edit and has_immediate_parameters then
+				edit_parameter_menu (i.immediate_parameters, i.name)
+			else
+				show_message (concatenation (<<"Indicator ", i.name,
+					" has no editable parameters.">>))
+			end
+			if has_children_to_edit and has_immediate_parameters then
+				from
+				until
+					quit
+				loop
+					inspect
+						character_choice (query, choice_str)
+					when 'c', 'C' then
+						show_message (concatenation (<<"Indicator %"", i.name,
+							"'s%" children:">>))
+						edit_indicator_list (i.children)
+					when 'i', 'I' then
+						edit_parameter_menu (i.immediate_parameters, i.name)
+					when 'q', 'Q' then
+						quit := true
+					end
+				end
+			end
 		end
 
 	remove_from_working_copy (f: MARKET_FUNCTION) is
