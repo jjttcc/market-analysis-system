@@ -26,13 +26,13 @@ feature -- Access
 			-- The components of the version number
 			-- Components are strings to allow mixed numbers and letters.
 		once
-			Result := <<"1", "6", "5b">>
+			Result := <<"1", "6", "5c">>
 		end
 
 	date: DATE is
 			-- The last date that `number' was updated
 		once
-			create Result.make (2002, 11, 08)
+			create Result.make (2002, 11, 18)
 		end
 
 	release_description: STRING is
