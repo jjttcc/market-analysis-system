@@ -1,7 +1,7 @@
 Procedure for adding a new COMMAND class:
 
 Add an instance of the new COMMAND class, with a description, to the list
-in the routine `commands_and_descriptions' in the COMMANDS class, following
+in the routine `instances_and_descriptions' in the COMMANDS class, following
 the same simple procedure used to add the existing COMMAND instances.
 
 Add the command's name in the `initialization_map' function in the
