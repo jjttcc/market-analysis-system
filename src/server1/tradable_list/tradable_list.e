@@ -30,28 +30,32 @@ creation
 
 feature -- Initialization
 
-	make (s_list: LINEAR [STRING]; factory: TRADABLE_FACTORY) is
+	make (s_list: LIST [STRING]; factory: TRADABLE_FACTORY) is
 		require
 			not_void: s_list /= Void and factory /= Void
 		do
-			symbol_list := s_list
+			setup_symbols (s_list)
+			symbols.compare_objects
 			tradable_factory := factory
 			object_comparison := true
-			symbol_list.start
+			symbols.start
 			create cache.make (Cache_size)
 			caching_on := true
 		ensure
-			set: symbol_list = s_list and tradable_factory = factory
+			sym_set: symbols /= Void and symbols.count = s_list.count
+			factory_set: tradable_factory = factory
 			implementation_init: last_tradable = Void and old_index = 0
 			cache_initialized: cache /= Void
 			cache_on: caching_on
+			-- All elements of `s_list' have been copied into `symbols',
+			-- with upper-case characters changed to lower case.
 		end
 
 feature -- Access
 
 	index: INTEGER is
 		do
-			Result := symbol_list.index
+			Result := symbols.index
 		end
 
 	count: INTEGER is
@@ -102,29 +106,8 @@ feature -- Access
 			good_if_no_error: not fatal_error implies Result /= Void
 		end
 
-	symbols: ARRAYED_LIST [STRING] is
+	symbols: LIST [STRING]
 			-- The symbol of each tradable
-			-- Note: a new copy will be created each time this feature is
-			-- called.
-		require
-			no_error: not fatal_error
-		local
-			snames: LINEAR [STRING]
-		do
-			snames := symbol_list
-			create Result.make (0)
-			from snames.start until snames.exhausted loop
-				Result.extend(snames.item)
-				snames.forth
-			end
-			Result.compare_objects
-		ensure then
-			not_void: Result /= Void
-			object_comparison: Result.object_comparison
-			-- Result.count = symbol_list.count
-			-- The contents of Result are in the same order as the
-			-- corresponding contents of `symbol_list'.
-		end
 
 	changeable_comparison_criterion: BOOLEAN is false
 
@@ -134,12 +117,12 @@ feature -- Status report
 
 	after: BOOLEAN is
 		do
-			Result := symbol_list.after
+			Result := symbols.after
 		end
 
 	empty: BOOLEAN is
 		do
-			Result := symbol_list.empty
+			Result := symbols.empty
 		end
 
 	fatal_error: BOOLEAN
@@ -182,41 +165,37 @@ feature -- Cursor movement
 
 	start is
 		do
-			symbol_list.start
+			symbols.start
 		end
 
 	finish is
 		do
-			symbol_list.finish
+			symbols.finish
 		end
 
 	forth is
 		do
-			symbol_list.forth
+			symbols.forth
 		end
 
 feature -- Basic operations
 
 	search_by_symbol (s: STRING) is
 			-- Find the tradable whose associated symbol matches `s'.
-		require
-			has_symbol: symbols.has (s)
-		local
-			slist: LIST [STRING]
+			-- Note: If `s' contains any upper-case characters, no matching
+			-- tradable will be found.
 		do
 			from
-				slist := symbols
-				slist.start
 				start
 			until
-				after or else slist.item.is_equal (s)
+				after or else symbols.item.is_equal (s)
 			loop
-				slist.forth
 				forth
 			end
 		ensure
+			after_if_not_found: not symbols.has (s) implies after
 			current_symbol_equals_s: not fatal_error and
-				not (item = Void) implies item.symbol.is_equal (s)
+				not after implies item.symbol.is_equal (s)
 		end
 
 	clear_cache is
@@ -231,8 +210,6 @@ feature {FACTORY} -- Access
 			-- Manufacturers of tradables
 
 feature {NONE} -- Implementation
-
-	symbol_list: LINEAR [STRING]
 
 	report_errors (symbol: STRING; l: LIST [STRING]) is
 		do
@@ -297,7 +274,28 @@ feature {NONE} -- Implementation
 
 	current_symbol: STRING is
 		do
-			Result := symbol_list.item
+			Result := symbols.item
+		end
+
+	setup_symbols (s_list: LINEAR [STRING]) is
+			-- Create `symbols' and copy elements of s_list into it,
+			-- converting any upper-case characters to lower-case.
+		local
+			s: STRING
+			list: LINKED_LIST [STRING]
+		do
+			create list.make
+			from
+				s_list.start
+			until
+				s_list.exhausted
+			loop
+				s := clone (s_list.item)
+				s.to_lower
+				list.extend (s)
+				s_list.forth
+			end
+			symbols := list
 		end
 
 feature {NONE} -- Inapplicable
@@ -314,9 +312,10 @@ invariant
 
 	factory_not_void: tradable_factory /= Void
 	always_compare_objects: object_comparison = true
+	object_comparison_for_symbols: symbols.object_comparison
 	cache_exists: cache /= Void
 	cache_not_too_large: cache.count <= Cache_size
-	symbol_list_not_void: symbol_list /= Void
-	index_definition: index = symbol_list.index
+	symbols_not_void: symbols /= Void
+	index_definition: index = symbols.index
 
 end -- class TRADABLE_LIST
