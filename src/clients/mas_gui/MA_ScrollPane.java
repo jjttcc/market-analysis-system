@@ -12,8 +12,7 @@ import java.awt.event.ItemEvent;
 import common.*;
 
 /** Scroll pane that holds the Market Analysis graph and buttons */
-public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
-{
+public class MA_ScrollPane extends ScrollPane implements NetworkProtocol {
 	static Properties print_properties;
 	static { print_properties = new Properties(); }
 
