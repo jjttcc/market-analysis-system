@@ -83,11 +83,26 @@ public class MA_MenuBar extends MenuBar {
 		// View menu items
 		final MenuItem replace_toggle;
 		final Menu period_menu = new Menu();
+		final MenuItem indicator_colors_item = new MenuItem("Indicator Colors",
+			new MenuShortcut(KeyEvent.VK_C));
 		view_menu.add(replace_toggle = new MenuItem("",
 							new MenuShortcut(KeyEvent.VK_R)));
+		view_menu.add(indicator_colors_item);
 		set_replace_indicator_label(replace_toggle);
 		view_menu.add(period_menu);
 		setup_period_menu(period_menu, period_types);
+		final IndicatorColors indicator_colors = new IndicatorColors(parent);
+		// Connect the indicator colors dialog/list with the corresponding
+		// menu item:
+		indicator_colors_item.addActionListener(indicator_colors);
+		// Set up so that the indicator colors dialog/list will be updated
+		// whenever an indicator is selected from the indicator menu item.
+		indicator_listener.addActionListener(indicator_colors);
+		// Set up so that the indicator colors dialog/list will be
+		// updated whenever an indicator is selected from `indicator_menu':
+		for (int i = 0; i < indicator_menu.getItemCount(); ++i) {
+			indicator_menu.getItem(i).addActionListener(indicator_colors);
+		}
 
 		// Action listeners for view menu items
 		replace_toggle.addActionListener(new ActionListener() {
