@@ -29,7 +29,7 @@ creation
 
 feature -- Initialization
 
-	make (fb: FACTORY_BUILDER) is
+	make (fb: GLOBAL_OBJECT_BUILDER) is
 		require
 			not_void: fb /= Void
 		do

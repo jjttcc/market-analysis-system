@@ -14,7 +14,7 @@ inherit
 
 feature -- Access
 
-	factory_builder: FACTORY_BUILDER
+	factory_builder: GLOBAL_OBJECT_BUILDER
 			-- Builder of objects to be used by an interface
 
 feature {NONE}

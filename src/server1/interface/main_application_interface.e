@@ -14,7 +14,7 @@ feature {NONE} -- Access
 
 	event_coordinator: MARKET_EVENT_COORDINATOR
 
-	factory_builder: FACTORY_BUILDER
+	factory_builder: GLOBAL_OBJECT_BUILDER
 
 	tradable_list_handler: TRADABLE_DISPENSER
 
@@ -24,7 +24,7 @@ feature {NONE} -- Access
 
 feature {NONE}
 
-	initialize (fb: FACTORY_BUILDER) is
+	initialize (fb: GLOBAL_OBJECT_BUILDER) is
 		require
 			fb_not_void: fb /= Void
 		do

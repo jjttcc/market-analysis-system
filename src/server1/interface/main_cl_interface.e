@@ -72,7 +72,7 @@ creation
 
 feature -- Initialization
 
-	make (fb: FACTORY_BUILDER) is
+	make (fb: GLOBAL_OBJECT_BUILDER) is
 		require
 			not_void: fb /= Void
 		do
@@ -80,7 +80,7 @@ feature -- Initialization
 			initialize
 		end
 
-	make_io (input_dev, output_dev: IO_MEDIUM; fb: FACTORY_BUILDER) is
+	make_io (input_dev, output_dev: IO_MEDIUM; fb: GLOBAL_OBJECT_BUILDER) is
 		require
 			not_void: input_dev /= Void and output_dev /= Void and fb /= Void
 		do

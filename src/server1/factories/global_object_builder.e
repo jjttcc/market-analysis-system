@@ -1,13 +1,13 @@
 indexing
-	description:
-		"Abstraction that builds the appropriate instances of factories"
+	description: "Builder of objects used more or less globally throughout %
+		%the system, of which there is usually only one instance"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class FACTORY_BUILDER inherit
+class GLOBAL_OBJECT_BUILDER inherit
 
 	EXCEPTIONS
 		export {NONE}
@@ -53,6 +53,12 @@ feature -- Access
 	dispatcher: EVENT_DISPATCHER
 			-- Event dispatcher used in market event analysis
 
+	persistent_connection_interface: PERSISTENT_CONNECTION_INTERFACE
+			-- The interface used for persistent connections
+
+	non_persistent_connection_interface: NON_PERSISTENT_CONNECTION_INTERFACE
+			-- The interface used for non-persistent connections
+
 feature -- Basic operations
 
 	make_dispatcher is
@@ -87,6 +93,13 @@ feature {NONE}
 			tradable_list_handler := list_builder.product
 			create {TRADABLE_LIST_EVENT_COORDINATOR} event_coordinator.make (
 				tradable_list_handler)
+			-- Note: The connection interfaces must be built after the above
+			-- objects are build because the former depends on the latter
+			-- having already been created.
+			create {MAIN_CL_INTERFACE} persistent_connection_interface.make (
+				Current)
+			create {MAIN_GUI_INTERFACE}
+				non_persistent_connection_interface.make (Current)
 		end
 
 	register_event_registrants is

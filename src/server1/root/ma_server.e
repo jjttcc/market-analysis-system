@@ -123,7 +123,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	factory_builder: FACTORY_BUILDER is
+	factory_builder: GLOBAL_OBJECT_BUILDER is
 		once
 			create Result.make
 		end

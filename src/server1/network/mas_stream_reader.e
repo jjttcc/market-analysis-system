@@ -20,9 +20,7 @@ inherit
 			persistent_connection_flag as Console_flag
 		redefine
 			active_medium, io_socket,
-			prepare_for_persistent_connection, interface,
-			persistent_connection_interface,
-			non_persistent_connection_interface
+			prepare_for_persistent_connection, interface
 		end
 
 	NETWORK_PROTOCOL
@@ -36,14 +34,16 @@ creation
 
 feature
 
-	make (s: COMPRESSED_SOCKET; fb: FACTORY_BUILDER) is
+	make (s: COMPRESSED_SOCKET; fb: GLOBAL_OBJECT_BUILDER) is
 		require
 			not_void: s /= Void and fb /= Void
 		do
 			initialize_components (s)
 			factory_builder := fb
-			create persistent_connection_interface.make (factory_builder)
-			create non_persistent_connection_interface.make (factory_builder)
+			persistent_connection_interface :=
+				factory_builder.persistent_connection_interface
+			non_persistent_connection_interface :=
+				factory_builder.non_persistent_connection_interface
 		ensure
 			set: active_medium = s and factory_builder = fb
 		end
@@ -58,10 +58,6 @@ feature -- Access
 			-- The socket that will be used for input and output
 
 	interface: MAIN_APPLICATION_INTERFACE
-
-	persistent_connection_interface: MAIN_CL_INTERFACE
-
-	non_persistent_connection_interface: MAIN_GUI_INTERFACE
 
 feature {NONE} -- Hook routine Implementations
 
