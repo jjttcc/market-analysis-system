@@ -27,7 +27,6 @@ public class TA_Connection implements NetworkProtocol
 			if (args.length > 1)
 			{
 				port_number = new Integer(port_number.parseInt(args[1]));
-				System.out.println("port number set to: " + port_number);
 			}
 			else
 			{
@@ -177,7 +176,7 @@ public class TA_Connection implements NetworkProtocol
 
 	void close_connection() throws IOException
 	{
-		out.close(); in.close(); echoSocket.close();
+		out.close(); in.close(); socket.close();
 	}
 
 	private void connect()
@@ -186,11 +185,10 @@ public class TA_Connection implements NetworkProtocol
 		{
 			//It appears that the only way to connect a client socket is
 			//to create a new one!
-			System.out.println(hostname + ", " + port_number);
-			echoSocket = new Socket(hostname, port_number.intValue());
-			out = new PrintWriter(echoSocket.getOutputStream(), true);
+			socket = new Socket(hostname, port_number.intValue());
+			out = new PrintWriter(socket.getOutputStream(), true);
 			in = new BufferedReader(
-						new InputStreamReader(echoSocket.getInputStream()));
+						new InputStreamReader(socket.getInputStream()));
 			scanner.setReader(in);
 		}
 		catch (UnknownHostException e)
@@ -209,12 +207,12 @@ public class TA_Connection implements NetworkProtocol
 
 	private String hostname;
 	private Integer port_number;
-	private Socket echoSocket;		// socket connection to server
+	private Socket socket;			// socket connection to server
 	private PrintWriter out;		// output to server via socket
 	private BufferedReader in;		// input from server via socket
 	private DataInspector scanner;	// for scanning server messages
 	private int last_rec_msgID;		// last message ID received from server
-	private Vector markets;		// Cached list of markets
+	private Vector markets;			// Cached list of markets
 		// result of last market data request
 	private DataSet _last_market_data;
 		// result of last indicator data request

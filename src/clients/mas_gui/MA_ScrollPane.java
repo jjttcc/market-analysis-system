@@ -1,21 +1,23 @@
 import java.awt.*;
 import graph.*;
 import java.util.Vector;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 /** Scroll pane that holds the TA graph and buttons */
 public class TA_ScrollPane extends ScrollPane
 {
-	public TA_ScrollPane(Vector period_types, int scrollbarDisplayPolicy)
+	public TA_ScrollPane(Vector period_types, int scrollbarDisplayPolicy,
+				TA_Chart parent_chart)
 	{
 		super(scrollbarDisplayPolicy);
 
+		chart = parent_chart;
 		drawer = new BarDrawer();
 		_main_graph = new G2Dint();
 		_indicator_graph = new G2Dint();
 		period_type_choice = new Choice();
-		for (int i = 0; i < period_types.size(); ++i) {
-			period_type_choice.add((String) period_types.elementAt(i));
-		}
+		initialize_period_type_choice(period_types);
 
 		Panel main_panel = new Panel(new BorderLayout());
 		add(main_panel, "Center");
@@ -69,8 +71,26 @@ public class TA_ScrollPane extends ScrollPane
 
 // Implementation
 
+	void initialize_period_type_choice(Vector period_types) {
+		for (int i = 0; i < period_types.size(); ++i) {
+			period_type_choice.add((String) period_types.elementAt(i));
+		}
+		period_type_choice.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				String per_type;
+				per_type = (String) e.getItem();
+				if (! per_type.equals(_last_period_type)) {
+					chart.notify_period_type_changed();
+				}
+				_last_period_type = per_type;
+			}
+		});
+	}
+
 	private G2Dint _main_graph, _indicator_graph;
 	DataSet data;
 	BarDrawer drawer;
 	Choice period_type_choice;
+	TA_Chart chart;
+	String _last_period_type;
 }
