@@ -18,6 +18,16 @@ class EXTERNAL_INPUT_SEQUENCE inherit
 			dispose
 		end
 
+	EXCEPTIONS
+		export
+			{NONE} all
+		end
+
+	APP_ENVIRONMENT
+		export
+			{NONE} all
+		end
+
 	GENERAL_UTILITIES
 		export
 			{NONE} all
@@ -30,8 +40,18 @@ creation
 feature {NONE} -- Initialization
 
 	make is
+		local
+			c_string: ANY
 		do
-			external_handle := initialize_external_input_routines
+			lock_external
+			c_string := working_directories.to_c
+			external_handle := initialize_external_input_routines ($c_string)
+			if initialization_error then
+				raise (concatenation (<<"Fatal error occurred initializing ",
+					"external data source:%N", string_from_pointer (
+					initialization_error_reason)>>))
+			end
+			unlock_external
 			create field.make (0)
 			initialize_symbols
 		ensure
@@ -131,6 +151,10 @@ feature -- Cursor movement
 	start is
 		do
 			start_implementation (external_handle, symbol, intraday)
+			if external_error (external_handle) then
+				set_error_message ("Error occurred reading from external %
+					%data source", true)
+			end
 			field_index := 1
 			record_index := 1
 		end
@@ -138,12 +162,20 @@ feature -- Cursor movement
 	advance_to_next_field is
 		do
 			advance_to_next_field_implementation (external_handle)
+			if external_error (external_handle) then
+				set_error_message ("Error occurred reading from external %
+					%data source", true)
+			end
 			field_index := field_index + 1
 		end
 
 	advance_to_next_record is
 		do
 			advance_to_next_record_implementation (external_handle)
+			if external_error (external_handle) then
+				set_error_message ("Error occurred reading from external %
+					%data source", true)
+			end
 			record_index := record_index + 1
 			field_index := 1
 		end
@@ -164,12 +196,13 @@ feature -- Input
 				else
 					error_occurred := true
 					last_error_fatal := true
-					error_string := "Error in reading integer value"
+					error_string := "Error reading integer value"
 					if external_error (external_handle) then
-						error_string := concatenation (<<error_string, ": ",
+						error_string := concatenation (<<error_string, ":%N",
 							string_from_pointer (
 								last_external_error(external_handle))>>)
 					end
+					raise (error_string)
 				end
 			end
 		end
@@ -178,8 +211,12 @@ feature -- Input
 			-- Read the current character in the current field and advance
 			-- to the next character.
 		do
+			error_occurred := false
 			last_character := current_character (external_handle)
-			-- !!!Error handling?
+			if external_error (external_handle) then
+				set_error_message ("Error occurred reading from external %
+					%data source", true)
+			end
 		end
 
 	read_string is
@@ -195,8 +232,13 @@ feature -- Input
 			else
 				error_occurred := true
 				last_error_fatal := true
-				error_string :=
-					"Error in read_string in EXTERNAL_INPUT_SEQUENCE ... !!!"
+				error_string := "Error reading string value"
+				if external_error (external_handle) then
+					error_string := concatenation (<<error_string, ": ",
+						string_from_pointer (
+							last_external_error(external_handle))>>)
+				end
+				raise (error_string)
 			end
 		ensure then
 			last_string_not_void_if_no_error:
@@ -212,8 +254,13 @@ feature -- Input
 				else
 					error_occurred := true
 					last_error_fatal := true
-					error_string := "Error in read_double in %
-						%EXTERNAL_INPUT_SEQUENCE ... !!!"
+					error_string := "Error reading double value"
+					if external_error (external_handle) then
+						error_string := concatenation (<<error_string, ": ",
+							string_from_pointer (
+								last_external_error(external_handle))>>)
+					end
+					raise (error_string)
 				end
 			end
 		end
@@ -227,13 +274,74 @@ feature -- Input
 				else
 					error_occurred := true
 					last_error_fatal := true
-					error_string := "Error in read_real in %
-						%EXTERNAL_INPUT_SEQUENCE ... !!!"
+					error_string := "Error reading real value"
+					if external_error (external_handle) then
+						error_string := concatenation (<<error_string, ": ",
+							string_from_pointer (
+								last_external_error(external_handle))>>)
+					end
+					raise (error_string)
 				end
 			end
 		end
 
 feature {NONE} -- Implementation
+
+	working_directories: STRING is
+			-- The working directories for external data retrieval, each
+			-- ending with `directory_separator' and separated by ':'.
+			-- The following directories are included in the listed order,
+			-- if the directory exists and is writable: The `app_directory'
+			-- and the current directory.
+		local
+			d1, d2: DIRECTORY
+			no_write_permission: BOOLEAN
+			s: STRING
+			env: expanded APP_ENVIRONMENT_VARIABLE_NAMES
+		do
+			create d1.make (current_working_directory)
+			if not d1.is_writable then
+				if app_directory /= Void then
+					create d2.make (app_directory)
+					if not d2.exists or not d2.is_writable then
+						no_write_permission := true
+						s := concatenation (<<"Neither the current directory ",
+							"(", current_working_directory, ") nor the MAS %
+							%application directory (", app_directory,
+							") is writable - external data source %
+							%retrieval cannot be used.">>)
+					else
+						Result := clone (app_directory)
+					end
+				else
+					no_write_permission := true
+					s := concatenation (<<"Current directory (",
+						current_working_directory, ") is not writable and ",
+						env.application_directory_name, " is not set - %
+						%external data source retrieval cannot be used.">>)
+				end
+			else
+				Result := clone (current_working_directory)
+			end
+			if no_write_permission then
+				raise (s)
+			end
+			Result.extend (directory_separator)
+		ensure
+			not_void: Result /= Void
+		end
+
+	lock_external is
+			-- When multi-threading is in place, this will lock the use
+			-- of the external routines to prevent race conditions.
+		do
+		end
+
+	unlock_external is
+			-- When multi-threading is in place, this will unlock the use
+			-- of the external routines.
+		do
+		end
 
 	dispose is
 		do
@@ -256,11 +364,8 @@ feature {NONE} -- Implementation
 		do
 			make_available_symbols (external_handle)
 			if external_error (external_handle) then
-				error_occurred := true
-				error_string := concatenation (<<"Error occurred obtaining %
-					%symbol list: ",
-					string_from_pointer (
-						last_external_error(external_handle))>>)
+				set_error_message ("Error occurred obtaining symbol list",
+					true)
 			else
 				create su.make (string_from_pointer (
 					available_symbols (external_handle)))
@@ -277,25 +382,56 @@ feature {NONE} -- Implementation
 	field: STRING
 
 	external_handle: POINTER
-			-- Handle for external input sequence data used by external
-			-- routines
+			-- Handle for external input sequence data used by
+			-- external routines
+
+	set_error_message (msg: STRING; exc: BOOLEAN) is
+			-- Set `error_string' from current error message from
+			-- external module, prepended with `msg'.  If `exc',
+			-- raise an exception with the resulting message.
+		require
+			msg_valid: msg /= Void
+		local
+			s: STRING
+		do
+			error_occurred := true
+			last_error_fatal := true
+			s := string_from_pointer (last_external_error (external_handle))
+			if not msg.empty then
+				error_string := concatenation (<<msg, ":%N", s>>)
+			else
+				error_string := s
+			end
+			if exc then
+				raise (error_string)
+			end
+		ensure
+			error: error_occurred and last_error_fatal
+			valid: error_string /= Void
+		end
 
 feature {NONE} -- Implementation - externals
 
 	is_open_implementation (handle: POINTER): BOOLEAN is
 			-- Is the input sequence open for use?
+		require
+			handle_valid: handle /= Void
 		external
 			"C"
 		end
 
 	current_field (handle: POINTER): POINTER is
 			-- Current field value as a non-null-terminated C string
+		require
+			handle_valid: handle /= Void
 		external
 			"C"
 		end
 
 	current_field_length (handle: POINTER): INTEGER is
 			-- Length of `current_field'
+		require
+			handle_valid: handle /= Void
 		external
 			"C"
 		end
@@ -305,66 +441,96 @@ feature {NONE} -- Implementation - externals
 			-- is advanced to the next character.
 		require
 			readable: readable
+			handle_valid: handle /= Void
 		external
 			"C"
 		end
 
 	advance_to_next_field_implementation (handle: POINTER) is
+		require
+			handle_valid: handle /= Void
 		external
 			"C"
 		end
 
 	advance_to_next_record_implementation (handle: POINTER) is
+		require
+			handle_valid: handle /= Void
 		external
 			"C"
 		end
 
 	field_count_implementation (handle: POINTER): INTEGER is
+		require
+			handle_valid: handle /= Void
 		external
 			"C"
 		end
 
 	readable_implementation (handle: POINTER): BOOLEAN is
+		require
+			handle_valid: handle /= Void
 		external
 			"C"
 		end
 
 	after_last_record_implementation (handle: POINTER): BOOLEAN is
+		require
+			handle_valid: handle /= Void
 		external
 			"C"
 		end
 
 	start_implementation (handle: POINTER; sym: STRING; intrad: BOOLEAN) is
+		require
+			handle_valid: handle /= Void
 		external
 			"C"
 		end
 
 	make_available_symbols (handle: POINTER) is
 			-- Create `available_symbols'.
+		require
+			handle_valid: handle /= Void
 		external
 			"C"
 		end
 
 	available_symbols (handle: POINTER): POINTER is
 			-- All available symbols, separated by newlines
+		require
+			handle_valid: handle /= Void
 		external
 			"C"
 		end
 
-	initialize_external_input_routines: POINTER is
+	initialize_external_input_routines (working_dir: POINTER): POINTER is
 			-- Perform any needed initialization by the external routines
+			-- and return a handle for use by the other external routines.
+			-- If the initialization failed, `initialization_error' will
+			-- be true and `initialization_error_reason' will contain the
+			-- reason for the failure; otherwise, `initialization_error'
+			-- will be false.
+		require
+			working_dir_not_void: working_dir /= Void
+			-- working_dir_valid: The last character of `working_dir' is
+			-- directory_separator.
 		external
 			"C"
 		end
 
 	external_error (handle: POINTER): BOOLEAN is
 			-- Did an error occur in the last external "C" call?
+		require
+			handle_valid: handle /= Void
 		external
 			"C"
 		end
 
 	last_external_error (handle: POINTER): POINTER is
 			-- The last error that occurred in an external "C" call
+		require
+			handle_valid: handle /= Void
 		external
 			"C"
 		end
@@ -373,6 +539,7 @@ feature {NONE} -- Implementation - externals
 			-- Perform any needed cleanup operations for garbage collection.
 		require
 			open: is_open
+			handle_valid: handle /= Void
 		external
 			"C"
 		ensure
@@ -381,6 +548,20 @@ feature {NONE} -- Implementation - externals
 
 	intraday_data_available_implementation (handle: POINTER): BOOLEAN is
 			-- Is a source of intraday data available?
+		require
+			handle_valid: handle /= Void
+		external
+			"C"
+		end
+
+	initialization_error: BOOLEAN is
+			-- Did an error occur in `initialize_external_input_routines'?
+		external
+			"C"
+		end
+
+	initialization_error_reason: POINTER is
+			-- Reason for the last `initialization_error'?
 		external
 			"C"
 		end
