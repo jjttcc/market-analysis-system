@@ -34,7 +34,6 @@ feature -- Element change
 		require
 			arg_not_void: arg /= Void
 		do
-print ("set_host_name called with " + arg + "%N")
 			host_name := arg
 		ensure
 			host_name_set: host_name = arg and host_name /= Void
@@ -45,7 +44,6 @@ print ("set_host_name called with " + arg + "%N")
 		require
 			arg_not_void: arg /= Void
 		do
-print ("set_port_number called with " + arg + "%N")
 			port_number := arg
 			set_title (title + " (" + port_number.out + ")")
 		ensure

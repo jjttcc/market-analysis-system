@@ -111,7 +111,6 @@ feature {NONE} -- Implementation
 			if not port_numbers_in_use.has (supplier.port_number) then
 				port_numbers_in_use.extend (supplier.port_number)
 			end
-print ("sw host, port: " + session_window.host_name + ", " + session_window.port_number + "%N")
 			session_window.show
 		end
 
