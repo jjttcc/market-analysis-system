@@ -19,11 +19,15 @@ inherit
 			{NONE} all
 		end
 
+	TIMING_SERVICES
+		export
+			{NONE} all
+		end
+
 feature {NONE} -- Initialization
 
 	initialize is
 		do
-			if timing_needed then create timer.make end
 			create data_retrieved_table.make (0)
 			create parameters.make
 			create url.http_make (parameters.host, "")
@@ -39,8 +43,6 @@ feature {NONE} -- Initialization
 feature {NONE} -- Implementation - attributes
 
 	parameters: HTTP_CONFIGURATION
-
-	timer: TIMER
 
 	url: SETTABLE_HTTP_URL
 
@@ -65,7 +67,7 @@ feature {NONE} -- Implementation
 		do
 			create result_string.make (0)
 			url.set_path (parameters.path)
-			if timing_needed then timer.start end
+			start_timer
 			if not http_request.error then
 				http_request.open
 				if not http_request.error then
@@ -91,10 +93,7 @@ feature {NONE} -- Implementation
 						"%N")
 				end
 				http_request.close
-				if timing_needed then
-					add_timing_data ("retrieving data for " +
-						parameters.symbol)
-				end
+				add_timing_data ("retrieving data for " + parameters.symbol)
 				convert_and_save_result (result_string)
 			else
 				print ("Error occurred initializing http request: " +
@@ -165,31 +164,24 @@ feature {NONE} -- Implementation
 			file: PLAIN_TEXT_FILE
 			output: STRING
 		do
-			if timing_needed then timer.start end
+			start_timer
 			if
 				s /= Void and then
 				parameters.post_processing_routine /= Void
 			then
-				if timing_needed then
-					add_timing_data ("opening file for " + parameters.symbol)
-					timer.start
-				end
+				add_timing_data ("opening file for " + parameters.symbol)
+				start_timer
 				output := parameters.post_processing_routine.item ([s])
-				if timing_needed then
-					add_timing_data ("converting data for " +
-						parameters.symbol)
-				end
+				add_timing_data ("converting data for " + parameters.symbol)
 				if output = Void or else output.is_empty then
 					log_error ("Result for " + parameters.symbol +
 						" is empty - symbol may be invalid.%N")
 				else
-					if timing_needed then timer.start end
+					start_timer
 					create file.make_open_write (output_file_name (
 						parameters.symbol))
 					file.put_string (output)
-					if timing_needed then
-						add_timing_data ("writing data to " + file.name)
-					end
+					add_timing_data ("writing data to " + file.name)
 					file.close
 				end
 			end
@@ -200,17 +192,6 @@ feature {NONE} -- Implementation
 		do
 			Result := data_retrieved_table.has (parameters.symbol) and then
 				data_retrieved_table @ parameters.symbol
-		end
-
-	add_timing_data (msg: STRING) is
-		do
-			timing_information.append ("Time taken for " + msg + ":%N" +
-				timer.elapsed_time.time.fine_seconds_count.out + "%N")
-		end
-
-	timing_information: STRING is
-		once
-			Result := ""
 		end
 
 	time_to_eod_udpate: BOOLEAN is
@@ -227,11 +208,6 @@ feature {NONE} -- Implementation
 		end
 
 feature {NONE} -- Hook routines
-
-	timing_needed: BOOLEAN is
-			-- Does the data retrieval need to be timed?
-		deferred
-		end
 
 	output_file_path: STRING is
 			-- Directory path of output file - redefine if needed
