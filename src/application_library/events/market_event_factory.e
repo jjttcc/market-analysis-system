@@ -1,8 +1,8 @@
 indexing
 	description:
-		"Factory that parses an input file and creates a MARKET_EVENT with %
+		"Factory that parses an input sequence and creates a MARKET_EVENT with %
 		%the result"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -32,10 +32,8 @@ deferred class MARKET_EVENT_FACTORY inherit
 
 feature -- Access
 
-	input_file: FILE is
+	input: BILINEAR_INPUT_SEQUENCE
 			-- File containing input data from which to create MARKET_EVENTs
-		deferred
-		end
 
 	product: MARKET_EVENT
 
@@ -59,15 +57,15 @@ feature {NONE} -- Implementation
 		local
 			ID: INTEGER
 		do
-			input_file.read_integer
-			ID := input_file.last_integer
+			input.read_integer
+			ID := input.last_integer
 			current_event_type := event_types_by_key @ ID
 			if current_event_type = Void then
 				last_error := concatenation (
 					<<"Error occurred inputting event ID:",
 					"  ID for non-existent event: ",
 					ID, " - from file ",
-					input_file.name, " at character ", input_file.index>>)
+					input.name, " at character ", input.index>>)
 				error_occurred := true
 				raise ("scan_event failed with invalid ID")
 			end
@@ -83,14 +81,14 @@ feature {NONE} -- Implementation
 	skip_field_separator is
 			-- Scan the current character - expected to match field_separator.
 		do
-			input_file.read_character
-			if input_file.last_character /= field_separator then
+			input.read_character
+			if input.last_character /= field_separator then
 				last_error := concatenation (
 					<<"Expected input field separator, '", field_separator,
 					"', not encountered while reading ",
-						input_file.name, " at character ", input_file.index,
+						input.name, " at character ", input.index,
 						"%N(Actual character encountered was ",
-						input_file.last_character>>)
+						input.last_character>>)
 				error_occurred := true
 				raise ("skip_field_separator failed with invalid field %
 						%separator")
