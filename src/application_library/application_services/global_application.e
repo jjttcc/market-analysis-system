@@ -56,7 +56,7 @@ feature -- Access
 	termination_registrants: LIST [TERMINABLE] is
 			-- Registrants for termination cleanup notification
 		once
-			create {LINKED_LIST [TERMINABLE]} result.make
+			create {LINKED_LIST [TERMINABLE]} Result.make
 		end
 
 	event_types: ARRAY [EVENT_TYPE] is
