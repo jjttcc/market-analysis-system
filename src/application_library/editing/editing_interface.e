@@ -68,6 +68,24 @@ feature -- Access
 			-- member of all other elements of `choices' is False.
 		end
 
+	choices_from (l: LINEAR [PAIR [STRING, BOOLEAN]]): LIST [STRING] is
+			-- Choices from `l' - items marked as True
+		require
+			not_void: l /= Void
+		do
+			create {LINKED_LIST [STRING]} Result.make
+			from
+				l.start
+			until
+				l.exhausted
+			loop
+				if l.item.right then Result.extend (l.item.left) end
+				l.forth
+			end
+		ensure
+			Result_exists: Result /= Void
+		end
+
 	character_choice (msg, chars: STRING): CHARACTER is
 		do
 			from
