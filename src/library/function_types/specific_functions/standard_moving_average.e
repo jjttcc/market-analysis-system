@@ -85,7 +85,7 @@ feature {NONE} -- Basic operations
 				check target.index = effective_offset + 1 end
 				sum.execute (Void)
 				check
-					target.index - 1 = effective_n
+					target_cursor_advanced: target.index - 1 = effective_n
 				end
 				-- The first trading period of the output is the nth trading
 				-- period of the input (target).
