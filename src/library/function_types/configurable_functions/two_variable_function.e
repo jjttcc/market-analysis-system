@@ -22,18 +22,17 @@ inherit
 		redefine
 			forth, action, start
 		select
-			target1, forth, action, start
+			target1
 		end
 
 	LINEAR_ANALYZER
 		rename
 			target as target2, -- y in "z = f(x, y)"
-			forth as forth_unused,
-			action as action_unused,
-			start as start_unused,
 			set_target as set_target_unused
 		export {NONE}
 			set_target_unused
+		redefine
+			forth, action, start
 		end
 
 creation {FACTORY}
@@ -126,7 +125,7 @@ feature {NONE}
 				input2.process (Void)
 			end
 		ensure then
-			input1_1_processed: input1.processed and input2.processed
+			inputs_processed: input1.processed and input2.processed
 		end
 
 feature {NONE}
@@ -212,7 +211,7 @@ feature {NONE}
 
 invariant
 
-	processed_constraint:
+	processed_constraint1:
 		 processed implies input1.processed and input2.processed
 	inputs_not_void: input1 /= Void and input2 /= Void
 	target2_not_void: target2 /= Void
