@@ -13,17 +13,21 @@ Record = false
 Recordfile = 'mas_session'
 
 def usage():
-	print "Usage: " + argv[0] + " [-h hostname] [-record [outfile]] port"
+	print "Usage: " + argv[0] + " [options] port_number" + "\nOptions:\n" + \
+		"   -h <hostname>   Connect to server on host <hostname>\n" +\
+		"   -r <file>       Record user input and save to <file>\n" +\
+		"   -i <file>       Obtain input from <file> instead of the console\n"
 
 def abort(msg):
 	if msg != None:
 		print msg + " - ",
 	print "Exiting ..."
-	connection.send_message(Exit_string)
-	connection.receive_message()
-	print "Closing ..."
-	connection.close()
-	sys.exit(-1)
+	if connection != 0:
+		connection.send_message(Exit_string)
+		connection.receive_message()
+		print "Closing ..."
+		connection.close()
+	exit(-1)
 
 # Obtain user response, skipping comments (# ...)
 def user_response():
@@ -38,7 +42,9 @@ if len(argv) < 2:
 	usage()
 	exit(-1)
 
+connection = 0
 host = ""
+port = -1
 argcount = len(argv)
 i = 1
 while i < argcount:
@@ -53,6 +59,18 @@ while i < argcount:
 		if i + 1 < argcount and argv[i+1][:1] != '-':
 			i = i + 1
 			Recordfile = argv[i]
+		else:
+			abort("Output file for record option was not specified.")
+	elif argv[i][:2] == '-i':
+		if i + 1 < argcount and argv[i+1][:1] != '-':
+			i = i + 1
+			try:
+				input_file = open(argv[i], 'r', 000)
+			except:
+				abort("Attempt to open input file " + argv[i] + " failed")
+			stdin = input_file
+		else:
+			abort("Output file for record option was not specified.")
 	else:
 		try:
 			port = eval(argv[i])
@@ -60,6 +78,9 @@ while i < argcount:
 			usage(); exit(-1)
 	i = i + 1
 
+if port == -1:
+	usage()
+	abort("Missing port number")
 if host == "":
 	f = os.popen("hostname")
 	host = f.readline()[:-1]
