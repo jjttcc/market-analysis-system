@@ -419,6 +419,7 @@ feature {NONE} -- Implementation
 			-- Create `stock_function_library' and place all members of
 			-- `l' that are `valid_stock_function's into it.
 		do
+			stock_function_library.wipe_out
 			from l.start until l.exhausted loop
 				if valid_stock_function (l.item) then
 					stock_function_library.extend (l.item)
