@@ -2,7 +2,12 @@
 	date: "$Date$";
 	revision: "$Revision$"
 */
+/*
 body { background-color: #eadfbd; }
+*/
+body { background-color: #0000ff; }
+body { background-color: #b5dee9; }
+body { background-color: #d0eed0; }
 :link { color: blue; }
 :visited { color: purple; }
 :active { color: black; }
@@ -13,8 +18,10 @@ body { background-color: #eadfbd; }
 	height: 200%;
 	border-right: 1px dotted;
 	border-top: 1px dotted;
-	background-color: #92959a;
+	background-color: #a2a5aa;
 	/*
+	old color:
+	background-color: #92959a;
 	margin-left: 0.15em;
 	*/
 }
