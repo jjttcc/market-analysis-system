@@ -1,4 +1,4 @@
-class SOMETHING_OR_OTHER inherit
+class COMPOSITE_TUPLE_BUILDER inherit
 
 	FACTORY
 		rename
@@ -145,4 +145,4 @@ feature
 			duration_set: duration = d and duration /= Void
 		end
 
-end -- SOMETHING_OR_OTHER
+end -- COMPOSITE_TUPLE_BUILDER
