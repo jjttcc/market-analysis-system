@@ -40,9 +40,6 @@ public class CandleDrawer extends MarketDrawer {
 		_x_values = new int[tuple_count()];
 		width_factor = width_factor_value(bounds, lngth / 4);
 		height_factor = height_factor_value(bounds);
-//System.out.println("(" + this.getClass().getName() + ")");
-//System.out.println("wd factor, ht factor: " + width_factor + ", " +
-//height_factor);
 		row = first_row();
 		for (i = row - 1; i < lngth; i += Stride, ++row) {
 			openy = (int) (bounds.height - (_data[i] - ymin) * height_factor +
@@ -51,10 +48,8 @@ public class CandleDrawer extends MarketDrawer {
 						bounds.y);
 			lowy = (int)(bounds.height - (_data[i+2] - ymin) * height_factor +
 						bounds.y);
-//System.out.println("closey (before): " + (_data[i+3] - ymin));
 			closey = (int)(bounds.height - (_data[i+3] - ymin) * height_factor +
 						bounds.y);
-//System.out.println("closey (after): " + closey);
 			x = (int)((row - xmin) * width_factor + bounds.x) + x_adjust;
 			middle_x = x + _bar_width / 2;
 			_x_values[row-1] = x;
@@ -62,7 +57,6 @@ public class CandleDrawer extends MarketDrawer {
 			// of the coordinate system used - higher coordinates have
 			// a lower value.
 			is_white = closey > openy? false: true;
-//System.out.println("x, y: " + x + ", " + closey);
 			if (openy == closey) {	// If it's a doji
 				draw_doji_line(g, x, closey, _bar_width);
 			}

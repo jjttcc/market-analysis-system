@@ -93,11 +93,8 @@ abstract public class BasicDrawer extends Drawer {
 		}
 
 		if (Math.abs(ymax - ymin) < min_max_epsilon) {
-//System.out.println(this.getClass().getName() + ".draw_data: ymin = ymax");
-//System.out.println("ymin, ymax (before): " + ymin + ", " + ymax);
 			ymin -= min_border_boundary;
 			ymax += min_border_boundary;
-//System.out.println("ymin, ymax (after): " + ymin + ", " + ymax);
 		}
 		xrange = xmax - xmin;
 		yrange = ymax - ymin;
@@ -337,13 +334,8 @@ abstract public class BasicDrawer extends Drawer {
 	// Calculation of height factor for drawing based on window height
 	// and yrange.
 	protected double height_factor_value(Rectangle bounds) {
-//System.out.println("(" + this.getClass().getName() + ")");
-//System.out.println("(hfv) yrange: " + yrange + ", bnds.ht: " + bounds.height);
-//System.out.println("(hfv) ymin, ymax: " + ymin + ", " + ymax +
-//", bnds.y: " + bounds.y);
 		double result;
 		result = bounds.height / yrange;
-//System.out.println("(hfv) result: " + result);
 		return result;
 	}
 
