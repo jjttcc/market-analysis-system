@@ -6,7 +6,10 @@ indexing
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class PRODUCT_INFO inherit
+class MAS_PRODUCT_INFO inherit
+--!!!Remember to rename this file to correspond to the new class name.
+
+	PRODUCT_INFO
 
 	GENERAL_UTILITIES
 		export
@@ -20,24 +23,6 @@ feature -- Access
 			Result := "Market Analysis Server"
 		end
 
-	number: STRING is
-			-- The version number as a string
-		local
-			i: INTEGER
-		once
-			create Result.make(0)
-			from
-				i := 1
-			until
-				i = number_components.count
-			loop
-				Result.append (number_components @ i)
-				Result.append (".")
-				i := i + 1
-			end
-			Result.append (number_components @ i)
-		end
-
 	number_components: ARRAY [STRING] is
 			-- The components of the version number
 			-- Components are strings to allow mixed numbers and letters.
@@ -49,14 +34,6 @@ feature -- Access
 			-- The last date that `number' was updated
 		once
 			create Result.make (2001, 10, 10)
-		end
-
-	informal_date: STRING is
-			-- Date in the format 'month, dd, yyyy', where month is a
-			-- month name in English - January, February, ...
-		once
-			Result := concatenation (<<months @ date.month, " ",
-						date.day, ", ", date.year>>)
 		end
 
 	copyright: STRING is
@@ -88,16 +65,4 @@ feature -- Access
 %a certification mark of the Open Source Initiative."
 		end
 
-feature {NONE} -- Implementation
-
-	months: TABLE [STRING, INTEGER] is
-		local
-			r: ARRAY [STRING]
-		once
-			r := <<"January", "February", "March", "April",
-					"May", "June", "July", "August",
-					"September", "October", "November", "December">>
-			Result := r
-		end
-
-end -- class PRODUCT_INFO
+end -- class MAS_PRODUCT_INFO
