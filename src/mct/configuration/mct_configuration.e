@@ -329,7 +329,6 @@ feature {NONE} -- Implementation - Hook routine implementations
 					env.put (append_str, key)
 				end
 			end
-print ("env var. " + key + ": " + env.get (key) + "%N")
 		end
 
 	process_block (key, value: STRING) is
@@ -527,27 +526,21 @@ feature {NONE} -- Implementation - Utilities
 			regexp: RX_PCRE_REGULAR_EXPRESSION
 			new_s: STRING
 		do
-print ("cwd processing '" + s + "'%N")
 			create regexp.make
 			-- Set up to match, e.g., "<cwdir> [/home/workdir]"
 			regexp.compile (Token_start_delimiter.out +
 				Working_directory_specifier + Token_end_delimiter.out +
 				" *\[([^]]*)\]")
 			if regexp.is_compiled then
-print ("compile succeeded.%N")
 				regexp.set_anchored (False)
 				regexp.match (s)
 				if regexp.has_matched then
 					Result := regexp.captured_substring (1)
-print ("Captured Result: " + Result + "%N")
 					-- Do a `replace_all' - Remove all occurrences
 					new_s := regexp.replace_all ("")
 					s.copy (new_s)
 				else
-print ("match failed.%N")
 				end
-			else
-print ("compile failed.%N")
 			end
 		end
 
