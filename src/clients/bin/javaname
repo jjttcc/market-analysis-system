@@ -1,0 +1,6 @@
+#!/usr/bin/perl -wp
+# Convert tokens in the input with the pattern /[a-z]*_[a-z][a-z]*/ to
+# conform to the Java coding standards: begin with a lower case letter,
+# remove "_"s, and convert letters following _ to uppercase.
+
+s/_([a-z])([a-z]*)/\u$1$2/g;
