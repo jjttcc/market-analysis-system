@@ -16,7 +16,7 @@ creation
 
 feature -- Access
 
-	product: SIMPLE_FUNCTION [MARKET_TUPLE]
+	product: TRADABLE [BASIC_MARKET_TUPLE]
 
 	tuple_maker: BASIC_TUPLE_FACTORY
 
@@ -24,11 +24,40 @@ feature -- Status report
 
 	arg_used: BOOLEAN is false
 
+feature {FACTORY} -- Element change
+
+	set_product_instance (arg: TRADABLE [BASIC_MARKET_TUPLE]) is
+			-- Set product_instance to `arg'.
+			-- This will be used to set `product' when execute is called
+			-- instead of instantiating it.  Note that execute will
+			-- reset product_instance to Void.
+		require
+			arg /= Void
+		do
+			product_instance := arg
+		ensure
+			product_instance_set: product_instance = arg and
+				product_instance /= Void
+		end
+
+feature {FACTORY}
+
+	product_instance: TRADABLE [BASIC_MARKET_TUPLE]
+
 feature {NONE} -- Hook method implementations
 
 	create_product is
 		do
-			!!product.make (0)
+			if product_instance /= Void then
+				product := product_instance
+				product_instance := Void
+			else
+				check
+					need_to_redesign_a_bit: false
+					--!!!Probably need a mechanism to make sure
+					--!!!product_instance is never Void
+				end
+			end
 		end
 
 	open_tuple (t: BASIC_MARKET_TUPLE) is
