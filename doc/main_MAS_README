@@ -29,15 +29,17 @@ installed MAS), which will gather some information about your system
 and email it to me.  This script will determine what version of MAS
 you are using, the version of Linux you are running (uname -a), get cpu
 information from /proc/cpuinfo, and ask you what desktop environment and
-version you are using and email this information to me.  If you don't
-like the idea of a script obtaining this information automatically,
-you can, alternatively, simply gather the information yourself by saving
-the output of "/path_of_mas_executable/mas -v", "uname -a", and "cat
-/proc/cpuinfo" into a file; include the name and version number of the
-deskstop environment (such as KDE 1.1.2) you are running; and send this
-file to me at: jtc@dimensional.com.  I will use this information to
-keep a record of what systems MAS has successfully been run on; your name
-and email address will not be included in this record.
+version you are using and email this information to me.  If you don't like
+the idea of a script obtaining this information automatically, you can,
+alternatively, simply gather the information yourself by saving the output
+of "/path_of_mas_executable/mas -v", "uname -a", and "cat /proc/cpuinfo"
+into a file; include the name of the Linux distribution you are running
+and the name and version number of the deskstop environment (such as KDE
+1.1.2) you are running; and send this file to me at: jtc@dimensional.com.
+(Make sure you include mas or MAS in the subject line to get past my
+spam filter.)  I will use this information to keep a record of what
+systems MAS has successfully been run on; your name and email address
+will not be included in this record.
 
 
 DOWNLOADING THE CURRENT VERSION OF MAS
@@ -134,14 +136,8 @@ me at:
 
 jtc@dimensional.com
 
-I will try my best to respond promptly.  If you do email me about a
-problem, please include as much background information as possible with
-your email, including, if possible, a precise description of what you
-were doing when the problem occurred.
-
-Also, if you are running MAS on a Linux system I would appreciate a short
-email letting me know what version of MAS you are running and what Linux
-distribution and version you are running it on, and whether or not MAS
-installed and runs properly on that distribution.  I will use this
-information to compile a list of Linux distributions on which MAS has
-been know to run successfully.
+Make sure you include mas or MAS in the subject line to get past my
+spam filter.  I will try my best to respond promptly.  If you do email
+me about a problem, please include as much background information as
+possible with your email, including, if possible, a precise description
+of what you were doing when the problem occurred.
