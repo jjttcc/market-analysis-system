@@ -280,6 +280,7 @@ feature {NONE} -- Implementation
 			target_tradable_set: not fatal_error = (target_tradable /= Void)
 		end
 
+--!!!:
 	load_data is
 			-- Load the data for `current_symbol' and close the input medium.
 			-- `setup_input_medium' must have been called to open the
@@ -287,6 +288,7 @@ feature {NONE} -- Implementation
 			-- Set `target_tradable' to the resulting TRADABLE.
 		require
 		do
+print ("load_data calling setup input medium" + "%N")
 			setup_input_medium
 			if not fatal_error then
 				tradable_factory.set_symbol (current_symbol)
