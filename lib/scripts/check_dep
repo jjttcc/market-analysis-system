@@ -3,6 +3,8 @@
 
 Pname=$(basename $0)
 chkprg=search_dependencies
+resultfile=/tmp/$Pname.$$
+Result=0
 
 usage() {
 	echo "Usage: $Pname dependency_spec_file"
@@ -21,6 +23,7 @@ if [ ! -r $depfile ]; then abort "Cannot read spec file: $depfile."; fi
 awk 'BEGIN {
 Highest_rank = 0
 Lowest_rank = 9999999
+resultfile = "'$resultfile'"
 }
 /#/ { next }
 (NF != 2) {next}
@@ -49,7 +52,11 @@ function check (higher, lower) {
 		for (m in ldirs) {
 			print "CHECKING " hdirs[n] " (rank " higher ") AGAINST " \
 				ldirs[m] " (rank " lower ")."
-			system("'$chkprg' " hdirs[n] " " ldirs[m])
+			result = system("'$chkprg' " hdirs[n] " " ldirs[m])
+			if (result != 0 && ! failure) {
+				system("echo " result " > " resultfile)
+				failure = 1
+			}
 		}
 	}
 }
@@ -67,3 +74,7 @@ END {
 		}
 	}
 }' $depfile
+
+if [ -r $resultfile ]; then Result=$(tail -1 $resultfile); fi
+rm -f $resultfile
+exit $Result

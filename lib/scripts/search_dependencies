@@ -3,6 +3,8 @@
 # Search for dependencies of classes in clusterA upon classes in clusterB
 
 Progname=$(basename $0)
+Result=0
+
 usage() {
 	echo "Search for dependencies of clusterA upon clusterB."
 	echo "Usage: $Progname clusterA clusterB"
@@ -35,5 +37,8 @@ do
 	then
 			echo -e classes: \"$(grep -l "\<$classname\>" $afiles)\" "\c"
 			echo "depend on $clusterB/$f"
+			Result=1
 	fi
 done
+
+exit $Result
