@@ -37,7 +37,7 @@ brings up a session window for the adopted server process.  The connection
 attempt may fail for various reaons, including if an invalid or incorrect
 host name or port number is entered, if the server is not accepting
 connections at the specified port number, etc.
-%hdg2Terminating a MAS Session
+%hdg2Terminate a MAS Session
 This feature allows terminating a running MAS server that is not
 currently under management of the MCT.
 %hdg2Quit
