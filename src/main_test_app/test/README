@@ -1,2 +1,8 @@
 This directory contains test scripts and test data for the main_test
-application.
+application.  It contains the following files and directories:
+
+     README    - This file
+     bin       - bin directory where scripts are stored
+     input     - input data for tests
+     reference - reference output data for tests
+     run_tests - script to run a set of tests
