@@ -206,6 +206,7 @@ feature -- Basic operations
 		local
 			scanner: MARKET_TUPLE_DATA_SCANNER
 			intraday_scanner: INTRADAY_TUPLE_DATA_SCANNER
+			gsf: expanded GLOBAL_SERVER_FACILITIES
 		do
 			error_occurred := False
 			check_for_open_interest
@@ -219,7 +220,8 @@ feature -- Basic operations
 			make_tuple_maker
 			if intraday then
 				create intraday_scanner.make (
-					product, input, tuple_maker, value_setters)
+					product, input, tuple_maker, value_setters,
+					gsf.command_line_options.allow_non_standard_period_types)
 				scanner := intraday_scanner
 			else
 				create scanner.make (product, input, tuple_maker, value_setters)

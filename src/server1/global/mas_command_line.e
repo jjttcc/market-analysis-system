@@ -61,8 +61,11 @@ feature -- Access
 				"  -x                   Use an external data source%N",
 				"  -n                   No caching of intraday data%N",
 				"  -b                   Run in Background%N",
-				"  -debug               Debug mode - print internal %
-				%calculation state, etc.%N",
+				"  -" + debug_option + "               Debug mode - print %
+				%internal calculation state, etc.%N",
+				"  -" + non_std_period_types_option +
+				"              Allow non-standard time periods %
+				%(e.g., 3-minute)%N",
 				"  ", no_volume_spec,
 				"           Data has no volume field%N",
 				"  ", no_open_spec,
@@ -159,6 +162,9 @@ feature -- Access -- settings
 	port_for_startup_report: INTEGER
 			-- Port number to use for sending a status report back to
 			-- the process that started up this process
+
+	allow_non_standard_period_types: BOOLEAN
+			-- Are non-standard time-period types (e.g., 3-minute) allowed?
 
 feature -- Status report
 
@@ -334,7 +340,7 @@ feature {NONE} -- Implementation
 		do
 			-- Continue to loop until all debug options are removed so
 			-- that none is confused with the -d option.
-			from until not option_string_in_contents (Debug_option) loop
+			from until not option_string_in_contents (debug_option) loop
 				-- @@For now, set all debugging options on.  In the future,
 				-- different options will be set according to the contents of
 				-- the option.
@@ -343,7 +349,28 @@ feature {NONE} -- Implementation
 			end
 		ensure
 			debugging_options_removed:
-				not option_string_in_contents (Debug_option)
+				not option_string_in_contents (debug_option)
+		end
+
+	set_non_standard_period_types is
+		local
+			gs: expanded GLOBAL_SERVICES
+		do
+			-- Continue to loop until all nonstd options are removed.
+			from
+			until
+				not option_string_in_contents (non_std_period_types_option)
+			loop
+				check
+					option_found:
+						option_string_in_contents (non_std_period_types_option)
+				end
+				allow_non_standard_period_types := True
+				contents.remove
+			end
+		ensure
+			nonstd_options_removed:
+				not option_string_in_contents (non_std_period_types_option)
 		end
 
 	set_port_numbers is
@@ -546,7 +573,9 @@ feature {NONE} -- Implementation queries
 	no_volume_spec: STRING is "-no-volume"
 			-- No-volume specifier
 
-	Debug_option: STRING is "debug"
+	debug_option: STRING is "debug"
+
+	non_std_period_types_option: STRING is "nonstd"
 
 	symbol_list_implementation: LIST [STRING]
 
@@ -555,6 +584,7 @@ feature {NONE} -- Implementation queries
 			-- unconditionally - for convenience
 		do
 			create Result.make
+			Result.extend (agent set_non_standard_period_types)
 			Result.extend (agent set_debugging)
 			Result.extend (agent set_special_formatting)
 			Result.extend (agent set_field_separator)

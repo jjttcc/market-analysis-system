@@ -148,6 +148,8 @@ feature -- Access
 					until
 						l.exhausted
 					loop
+-- !!!!If non-standard ptypes are not allowed, and l.item is non-standard
+-- don't insert it into the list.
 						tbl.extend (True, l.item.name)
 						l.forth
 					end

@@ -8,16 +8,21 @@ indexing
 
 class TIME_PERIOD_TYPE inherit
 
+	TIME_PERIOD_TYPE_CONSTANTS
+		undefine
+			is_equal
+		end
+
 	PART_COMPARABLE
 		redefine
 			is_equal
 		end
 
-creation
+creation {PERIOD_TYPE_FACILITIES}
 
 	make
 
-feature -- Initialization
+feature {NONE} -- Initialization
 
 	make (dur: DATE_TIME_DURATION) is
 		require
@@ -64,19 +69,13 @@ feature -- Access
 				duration.day = 0
 		end
 
-feature -- Access - pre-defined names
+feature -- Status report
 
-	Yearly: STRING is "yearly"
-
-	Quarterly: STRING is "quarterly"
-
-	Monthly: STRING is "monthly"
-
-	Weekly: STRING is "weekly"
-
-	Daily: STRING is "daily"
-
-	Hourly: STRING is "hourly"
+	is_valid: BOOLEAN is
+			-- Is Current a valid period type?
+		do
+			Result := not equal (name, invalid_name)
+		end
 
 feature -- Comparison
 
@@ -116,35 +115,35 @@ feature {NONE} -- Implementation
 			create name.make (0)
 			if duration.day /= 0 then
 				if duration.day = 1 then
-					name.append (Daily)
+					name.append (daily_name)
 				elseif duration.day = 7 then
-					name.append (Weekly)
+					name.append (weekly_name)
 				else
 					name.append (duration.day.out)
 					name.append ("-day")
 				end
 			elseif duration.month /= 0 then
 				if duration.month = 1 then
-					name.append (Monthly)
+					name.append (monthly_name)
 				elseif
 					duration.month = 3 and duration.day = 0 and
 					duration.year = 0
 				then
-					name.append (Quarterly)
+					name.append (quarterly_name)
 				else
 					name.append (duration.month.out)
 					name.append ("-month")
 				end
 			elseif duration.year /= 0 then
 				if duration.year = 1 then
-					name.append (Yearly)
+					name.append (yearly_name)
 				else
 					name.append (duration.year.out)
 					name.append ("-year")
 				end
 			elseif duration.hour /= 0 then
 				if duration.hour = 1 then
-					name.append (Hourly)
+					name.append (hourly_name)
 				else
 					name.append (duration.hour.out)
 					name.append ("-hour")
@@ -153,13 +152,14 @@ feature {NONE} -- Implementation
 				name.append (duration.minute.out)
 				name.append ("-minute")
 			else
-				name.append ("Invalid type")
+				name.append (invalid_name)
 			end
 		end
 
 invariant
 
-	duration_not_void: duration /= Void
+	duration_exists: duration /= Void
+	name_exists: name /= Void
 	irregular_not_definite: irregular = not duration.definite
 	no_seconds: duration.second = 0
 	not_hours_and_minutes: not (duration.hour /= 0 and duration.minute /= 0)
@@ -183,5 +183,6 @@ invariant
 		duration.day = 0 and duration.month = 0 and duration.year = 0
 	intraday_less_than_day: intraday implies
 		duration.time.seconds_count < duration.time.seconds_in_day
+	invalid_name_if_not_valid: not is_valid = equal (name, invalid_name)
 
 end -- TIME_PERIOD_TYPE

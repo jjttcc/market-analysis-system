@@ -82,7 +82,7 @@ feature -- Access
 					Result := process_composite_list (
 													period_types @ period_type)
 				end
-				tuple_lists.replace (Result, period_type)
+				tuple_lists.force (Result, period_type)
 			end
 		ensure
 			Result = tuple_lists @ period_type
@@ -117,7 +117,7 @@ feature -- Access
 						types.forth
 					end
 				else
-					cached_period_types := nonintraday_period_types
+					cached_period_types := non_intraday_period_types
 				end
 			end
 			Result := cached_period_types
@@ -195,7 +195,7 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 	set_trading_period_type (arg: TIME_PERIOD_TYPE) is
 		require
 			daily_if_not_intraday: not arg.intraday implies
-				arg.name.is_equal (arg.Daily)
+				arg.name.is_equal (arg.daily_name)
 		do
 			trading_period_type := arg
 			target_period_type := trading_period_type
@@ -365,7 +365,7 @@ invariant
 		valid_period_type (target_period_type)
 	trading_period_daily_if_not_intraday:
 		loaded and then not trading_period_type.intraday implies
-			trading_period_type.name.is_equal (trading_period_type.Daily)
+			trading_period_type.name.is_equal (trading_period_type.daily_name)
 	symbol_not_void: symbol /= Void
 
 end -- class TRADABLE
