@@ -383,14 +383,14 @@ feature {NONE} -- Implementation
 	initialize_symbols is
 		local
 			i: INTEGER
-			su: STRING_UTILITIES
+			su: expanded STRING_UTILITIES
 		do
 			make_available_symbols (external_handle)
 			if external_error (external_handle) then
 				set_error_message ("Error occurred obtaining symbol list",
 					true, true)
 			else
-				create su.make (string_from_pointer (
+				su.set_target (string_from_pointer (
 					available_symbols (external_handle)))
 				symbols := su.tokens ("%N")
 			end

@@ -20,7 +20,7 @@ feature {NONE} -- Implementation
 			-- the client
 		local
 			date_maker: DATE_TIME_SERVICES
-			sutil: STRING_UTILITIES
+			sutil: expanded STRING_UTILITIES
 			tokens: LIST [STRING]
 			n: INTEGER
 		do
@@ -32,7 +32,7 @@ feature {NONE} -- Implementation
 				-- Set Result to 2 years in the future.
 				Result.set_year (Result.year + 2)
 			else
-				create sutil.make (s)
+				sutil.set_target (s)
 				tokens := sutil.tokens (" ")
 				if tokens.count = 1 then
 					Result := date_maker.date_from_string (s,

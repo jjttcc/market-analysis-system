@@ -57,6 +57,7 @@ feature -- Access
 feature -- Status report
 
 	error: BOOLEAN
+			-- Did an error occur while reading the input file?
 
 	exhausted: BOOLEAN
 			-- Has structure been completely explored?
@@ -84,7 +85,7 @@ feature -- Basic operations
 			-- Tokenize based on field_separator.
 		do
 			if contents /= Void then
-				create su.make (contents)
+				su.set_target (contents)
 				tokens := su.tokens (field_separator)
 				tokens.start
 				item := tokens.item
@@ -95,7 +96,7 @@ feature {NONE}
 
 	pf: PLAIN_TEXT_FILE
 
-	su: STRING_UTILITIES
+	su: expanded STRING_UTILITIES
 
 	tokens: LIST [STRING]
 
