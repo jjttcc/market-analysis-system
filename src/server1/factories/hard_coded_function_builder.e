@@ -67,8 +67,8 @@ feature -- Basic operations
 			create l.make
 			l.extend (simple_ma (f, Simple_MA_n, "Simple Moving Average"))
 			l.extend (ema (f, EMA_n, "Exponential Moving Average"))
-			cf1 := ma_diff (ema (f, Smaller_MACD_EMA_n, "Short EMA"),
-								ema (f, Larger_MACD_EMA_n, "Long EMA"),
+			cf1 := ma_diff (ema (f, Smaller_MACD_EMA_n, "EMA, Short"),
+								ema (f, Larger_MACD_EMA_n, "EMA, Long"),
 								"MACD Difference")
 			l.extend (cf1)
 			cf2 := ema (l.last, MACD_Signal_Line_EMA_n,
@@ -334,12 +334,16 @@ feature {NONE} -- Hard-coded market function building procedures
 			create sub2.make (highest, lowest)
 			create close_low_function.make (f, sub1, inner_n)
 			create high_low_function.make (f, sub2, inner_n)
-			close_low_function.set_name ("Close minus lowest low")
-			high_low_function.set_name ("Highest high minus lowest low")
+			close_low_function.set_name (
+				"Stochastic: 'close' - 'n-period low'")
+			high_low_function.set_name (
+				"Stochastic: 'n-period high' - 'n-period low'")
 			create ma1.make (close_low_function, cmd, outer_n)
 			create ma2.make (high_low_function, cmd, outer_n)
-			ma1.set_name ("Moving Average of close minus lowest low")
-			ma2.set_name ("Moving Average of highest high minus lowest low")
+			ma1.set_name (
+				"Stochastic: moving average of 'close' - 'n-period low'")
+			ma2.set_name ("Stochastic: moving average of %
+				%'n-period high' - 'n-period low'")
 			create basic1.make (ma1.output)
 			create basic2.make (ma2.output)
 			create div.make (basic1, basic2)
