@@ -29,13 +29,13 @@ public class TimeDrawer extends TemporalDrawer {
 	}
 
 	// The data to be drawn
-	public Vector data() { return market_drawer.times(); }
+	public ArrayList data() { return market_drawer.times(); }
 
 	// The dates associated with the principle (market) data
-	public Vector dates() { return market_drawer.dates(); }
+	public ArrayList dates() { return market_drawer.dates(); }
 
 	// The dates associated with the principle (market) data
-	public Vector times() { return market_drawer.times(); }
+	public ArrayList times() { return market_drawer.times(); }
 
 	public int data_length() {
 		int result;
@@ -74,8 +74,8 @@ public class TimeDrawer extends TemporalDrawer {
 		FontManager fontmgr = new FontManager(g);
 		String old_hour_string;
 		int[] x_values = x_values();
-		Vector times = times();
-		Vector dates = dates();
+		ArrayList times = times();
+		ArrayList dates = dates();
 		IntPair hours[] = new IntPair[times.size()],
 			days[] = new IntPair[times.size()];
 
@@ -87,10 +87,10 @@ public class TimeDrawer extends TemporalDrawer {
 		}
 		Hour_x_offset = 10;
 		// Determine the first hour in `times'.
-		String hour_string = ((String) times.elementAt(0)).substring(0,2);
-		String day_string = ((String) dates.elementAt(0)).substring(6,8);
+		String hour_string = ((String) times.get(0)).substring(0,2);
+		String day_string = ((String) dates.get(0)).substring(6,8);
 		hour = Integer.valueOf(hour_string).intValue();
-		day_of_week = week_day_for((String) dates.elementAt(0));
+		day_of_week = week_day_for((String) dates.get(0));
 		hour_idx = 0; day_idx = 0;
 		hours[hour_idx] = new IntPair(hour, 0);
 		days[day_idx] = new IntPair(day_of_week, 0);
@@ -98,7 +98,7 @@ public class TimeDrawer extends TemporalDrawer {
 		old_hour_string = hour_string;
 		// Map out all hours (from times) and days (from dates) with IntPairs.
 		for (i = 1; i < times.size(); ++i) {
-			hour_string = ((String) times.elementAt(i)).substring(0,2);
+			hour_string = ((String) times.get(i)).substring(0,2);
 			if (! hour_string.equals(old_hour_string)) {
 				hour = Integer.valueOf(hour_string).intValue();
 				hours[hour_idx++] = new IntPair(hour, i);
@@ -106,7 +106,7 @@ public class TimeDrawer extends TemporalDrawer {
 				// If current hour is less than previous hour,
 				// a new day has begun.
 				if (hour < hours[hour_idx-2].left()) {
-					day_of_week = week_day_for((String) dates.elementAt(i));
+					day_of_week = week_day_for((String) dates.get(i));
 					days[day_idx++] = new IntPair(day_of_week, i);
 				}
 			}

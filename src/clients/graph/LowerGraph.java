@@ -18,19 +18,19 @@ public class LowerGraph extends InteractiveGraph {
 
 		// Only the last dataset's boundaries and reference values
 		// need to be drawn, since they are all the same.
-		last_dataset = (DrawableDataSet) dataset.elementAt(dataset.size() - 1);
+		last_dataset = (DrawableDataSet) dataset.get(dataset.size() - 1);
 		last_dataset.set_reference_values_needed(true);
 		last_dataset.drawer().set_lower(true);
 		last_dataset.drawer().set_boundaries_needed(true);
 		for (i = 0; i < dataset.size() - 1; ++i) {
-			d = (DrawableDataSet) dataset.elementAt(i);
+			d = (DrawableDataSet) dataset.get(i);
 			d.drawer().set_lower(true);
 			d.draw_data(g, r);
 		}
 		last_dataset.draw_data(g, r);
 		// Call draw_dates on the last element of dataset that has dates:
 		for (i = dataset.size() - 1; i >= 0; --i) {
-			d = (DrawableDataSet) dataset.elementAt(i);
+			d = (DrawableDataSet) dataset.get(i);
 			if (d.dates != null && d.drawer().data_processed()) {
 				d.draw_dates(g, r);
 				break;

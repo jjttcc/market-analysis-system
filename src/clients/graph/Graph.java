@@ -73,7 +73,7 @@ abstract public class Graph extends Canvas {
  *  @see Graph#attachAxis()
  */
 
-	private Vector axis          = new Vector(4);
+	private ArrayList axis          = new ArrayList(4);
 
 /**
  *  A vector list of All the DrawableDataSets attached
@@ -81,7 +81,7 @@ abstract public class Graph extends Canvas {
  *  @see DataSet
  */
 
-	protected Vector dataset       = new Vector(10);
+	protected ArrayList dataset       = new ArrayList(10);
 
 /**
  *  The markers that may have been loaded
@@ -237,7 +237,7 @@ abstract public class Graph extends Canvas {
 
 	public void attachDataSet(DrawableDataSet d) {
 		if( d != null) {
-			dataset.addElement(d);
+			dataset.add(d);
 			d.set_g2d(this);
 		}
 	}
@@ -252,7 +252,7 @@ abstract public class Graph extends Canvas {
 		if(d != null) {
 			if(d.xaxis() != null) d.xaxis().detachDataSet(d);
 			if(d.yaxis() != null) d.yaxis().detachDataSet(d);
-			dataset.removeElement(d);
+			dataset.remove(d);
 		}
 	}
 /**
@@ -266,11 +266,11 @@ abstract public class Graph extends Canvas {
 		if(dataset == null | dataset.isEmpty() ) return;
 
 		for (i=0; i<dataset.size(); i++) {
-			d = ((DrawableDataSet)dataset.elementAt(i));
+			d = ((DrawableDataSet)dataset.get(i));
 			if(d.xaxis() != null) d.xaxis().detachDataSet(d);
 			if(d.yaxis() != null) d.yaxis().detachDataSet(d);
 		}
-		dataset.removeAllElements();
+		dataset.clear();
 	}
 
 	// Set symbol to be displayed to `s'.
@@ -291,7 +291,7 @@ public Axis createAxis( int position ) {
 	try { 
 		a =  new Axis(position);
 		a.set_g2d(this);
-		axis.addElement( a );
+		axis.add( a );
 	}
 	catch (Exception e) { 
 		System.err.println("Failed to create Axis");
@@ -311,7 +311,7 @@ public void attachAxis( Axis a ) {
 	if(a == null) return;
 
 	try { 
-		axis.addElement( a );
+		axis.add( a );
 		a.set_g2d(this);
 	}
 	catch (Exception e) { 
@@ -328,7 +328,7 @@ public void attachAxis( Axis a ) {
 		if(a != null) {
 			a.detachAll();
 			a.set_g2d(null);
-			axis.removeElement(a);
+			axis.remove(a);
 		}
 	}
 
@@ -341,10 +341,10 @@ public void attachAxis( Axis a ) {
 		if(axis == null | axis.isEmpty() ) return;
 
 		for (i=0; i<axis.size(); i++) {
-			((Axis)axis.elementAt(i)).detachAll();
-			((Axis)axis.elementAt(i)).set_g2d(null);
+			((Axis)axis.get(i)).detachAll();
+			((Axis)axis.get(i)).set_g2d(null);
 		}
-		axis.removeAllElements();
+		axis.clear();
 	}
 
 /**
@@ -357,7 +357,7 @@ public void attachAxis( Axis a ) {
 
 		if(dataset == null | dataset.isEmpty() ) return max;
 		for (int i=0; i<dataset.size(); i++) {
-			d = ((DataSet)dataset.elementAt(i));
+			d = ((DataSet)dataset.get(i));
 			if(i==0) max = d.maximum_x();
 			else max = Math.max(max,d.maximum_x());
 		}
@@ -375,7 +375,7 @@ public void attachAxis( Axis a ) {
 
 		if(dataset == null | dataset.isEmpty() ) return max;
 		for (int i=0; i<dataset.size(); i++) {
-			d = ((DataSet)dataset.elementAt(i));
+			d = ((DataSet)dataset.get(i));
 			if(i==0) max = d.maximum_y();
 			else max = Math.max(max,d.maximum_y());
 		}
@@ -394,7 +394,7 @@ public void attachAxis( Axis a ) {
 
 		if(dataset == null | dataset.isEmpty() ) return min;
 		for (int i=0; i<dataset.size(); i++) {
-			d = ((DataSet)dataset.elementAt(i));
+			d = ((DataSet)dataset.get(i));
 			if(i==0) min = d.minimum_x();
 			else     min = Math.min(min,d.minimum_x());
 		}
@@ -413,7 +413,7 @@ public double minimum_y() {
 
 	if(dataset == null | dataset.isEmpty() ) return min;
 	for (int i=0; i<dataset.size(); i++) {
-		d = ((DataSet)dataset.elementAt(i));
+		d = ((DataSet)dataset.get(i));
 		if(i==0) min = d.minimum_y();
 		else     min = Math.min(min,d.minimum_y());
 	}
@@ -677,7 +677,7 @@ public void startedloading() {
 		**          is a bit pointless.
 		*/
 		for (int i=0; i<axis.size(); i++) {
-			a = (Axis)axis.elementAt(i);
+			a = (Axis)axis.get(i);
 			range = a.maximum() - a.minimum();
 			if(a.isVertical()) {
 				yrange = Math.max(range, yrange);
@@ -692,7 +692,7 @@ public void startedloading() {
 		else range = yrange;
 
 		for (int i=0; i<axis.size(); i++) {
-			a = (Axis)axis.elementAt(i);
+			a = (Axis)axis.get(i);
 			a.set_maximum(a.minimum() + range);
 		}
 		// Get the new data rectangle.
@@ -721,7 +721,7 @@ public void startedloading() {
 		int height = r.height;
 
 		for (int i=0; i<axis.size(); i++) {
-			a = ((Axis)axis.elementAt(i));
+			a = ((Axis)axis.get(i));
 			waxis = a.getAxisWidth(g);
 
 			switch (a.getAxisPos()) {
@@ -781,7 +781,7 @@ public void startedloading() {
 		// Now draw the axis in the order specified aligning them
 		// with the final data area.
 		for (int i=0; i<axis.size(); i++) {
-			a = ((Axis)axis.elementAt(i));
+			a = ((Axis)axis.get(i));
 			a.set_data_window(new Dimension(width,height));
 
 			switch (a.getAxisPos()) {

@@ -14,13 +14,13 @@ abstract public class MarketDrawer extends BasicDrawer {
 		return Stride;
 	}
 
-	public Vector data() { return data; }
+	public ArrayList data() { return data; }
 
 	// The dates associated with the principle (market) data
-	public Vector dates() { return dates; }
+	public ArrayList dates() { return dates; }
 
 	// The times associated with the principle (market) data
-	public Vector times() { return times; }
+	public ArrayList times() { return times; }
 
 	public MarketDrawer market_drawer() { return this; }
 
@@ -36,13 +36,13 @@ abstract public class MarketDrawer extends BasicDrawer {
 	}
 
 	// Set the dates.
-	public void set_dates(Vector d) { dates = d; }
+	public void set_dates(ArrayList d) { dates = d; }
 
 	// Set the times.
-	public void set_times(Vector t) { times = t; }
+	public void set_times(ArrayList t) { times = t; }
 
 	// Set data to `d'.
-	public void set_data(Vector d) { data = d; }
+	public void set_data(ArrayList d) { data = d; }
 
 	public void set_reference_values_needed(boolean b) {
 		ref_values_needed = b;
@@ -66,9 +66,9 @@ abstract public class MarketDrawer extends BasicDrawer {
 
 	protected int x_values[];
 	protected int _bar_width;
-	protected Vector data;		// double
-	protected Vector dates;		// String
-	protected Vector times;		// String
+	protected ArrayList data;		// double
+	protected ArrayList dates;		// String
+	protected ArrayList times;		// String
 	protected final int Stride = 4;
 	boolean ref_values_needed;
 }

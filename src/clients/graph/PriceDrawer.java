@@ -38,16 +38,16 @@ public class PriceDrawer extends MarketDrawer {
 		row = first_row();
 		for (i = row - 1; i < lngth; i += Stride, ++row) {
 			openy = (int) (bounds.height -
-				(((Double) data.elementAt(i)).doubleValue() - ymin) *
+				(((Double) data.get(i)).doubleValue() - ymin) *
 				height_factor + bounds.y);
 			highy = (int)(bounds.height -
-				(((Double) data.elementAt(i+1)).doubleValue() - ymin) *
+				(((Double) data.get(i+1)).doubleValue() - ymin) *
 				height_factor + bounds.y);
 			lowy = (int)(bounds.height -
-				(((Double) data.elementAt(i+2)).doubleValue() - ymin) *
+				(((Double) data.get(i+2)).doubleValue() - ymin) *
 				height_factor + bounds.y);
 			closey = (int)(bounds.height -
-				(((Double) data.elementAt(i+3)).doubleValue() - ymin) *
+				(((Double) data.get(i+3)).doubleValue() - ymin) *
 				height_factor + bounds.y);
 			x = (int)((row - xmin) * width_factor + bounds.x) + x_adjust;
 			x_values[row-1] = x;

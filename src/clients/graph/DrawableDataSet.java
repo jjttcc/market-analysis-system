@@ -58,7 +58,7 @@ public class DrawableDataSet extends DataSet {
 			throw new Error("DataSet constructor: precondition violated");
 		}
 		drawer = d;
-		data = new Vector();
+		data = new ArrayList();
 		date_drawer = new DateDrawer(d);
 		time_drawer = new TimeDrawer(d);
 		dates_needed = true;
@@ -91,7 +91,7 @@ public class DrawableDataSet extends DataSet {
 		drawer = drwr;
 		date_drawer = new DateDrawer(drawer);
 		time_drawer = new TimeDrawer(drawer);
-		data = new Vector(d.length);
+		data = new ArrayList(d.length);
 		for (int i = 0; i < d.length; ++i) {
 			data.add(new Double(d[i]));
 		}
@@ -151,7 +151,7 @@ public class DrawableDataSet extends DataSet {
 		}
 
 		for (int j=0; j<strd; j++) {
-			point[j] = ((Double) data.elementAt(i+j)).doubleValue();
+			point[j] = ((Double) data.get(i+j)).doubleValue();
 		}
 
 		return point;
@@ -169,19 +169,19 @@ public class DrawableDataSet extends DataSet {
 		double xdiff, ydiff, dist2;
 		int strd = stride();
 
-		xdiff = ((Double) data.elementAt(0)).doubleValue() - x;
-		ydiff = ((Double) data.elementAt(1)).doubleValue() - y;
-		point[0] = ((Double) data.elementAt(0)).doubleValue();
-		point[1] = ((Double) data.elementAt(1)).doubleValue();
+		xdiff = ((Double) data.get(0)).doubleValue() - x;
+		ydiff = ((Double) data.get(1)).doubleValue() - y;
+		point[0] = ((Double) data.get(0)).doubleValue();
+		point[1] = ((Double) data.get(1)).doubleValue();
 		point[2] = xdiff*xdiff + ydiff*ydiff;
 
 		for(i=strd; i<length()-1; i+=strd) {
-			xdiff = ((Double) data.elementAt(i)).doubleValue() - x;
-			ydiff = ((Double) data.elementAt(i+1)).doubleValue() - y;
+			xdiff = ((Double) data.get(i)).doubleValue() - x;
+			ydiff = ((Double) data.get(i+1)).doubleValue() - y;
 			dist2 = xdiff*xdiff + ydiff*ydiff;
 			if(dist2 < point[2]) {
-				point[0] = ((Double) data.elementAt(i)).doubleValue();
-				point[1] = ((Double) data.elementAt(i+1)).doubleValue();
+				point[0] = ((Double) data.get(i)).doubleValue();
+				point[1] = ((Double) data.get(i+1)).doubleValue();
 				point[2] = dist2;
 			}
 		}
@@ -205,18 +205,18 @@ public class DrawableDataSet extends DataSet {
 		drawer = d;
 	}
 
-	public void set_dates(Vector d) {
+	public void set_dates(ArrayList d) {
 		dates = d;
 		drawer.set_dates(d);
 	}
 
-	public void set_times(Vector t) {
+	public void set_times(ArrayList t) {
 		times = t;
 		drawer.set_times(t);
 	}
 
 	public void set_dates(String[] d) {
-		dates = new Vector(d.length);
+		dates = new ArrayList(d.length);
 		for (int i = 0; i < d.length; ++i) {
 			dates.add(d[i]);
 		}
@@ -224,7 +224,7 @@ public class DrawableDataSet extends DataSet {
 	}
 
 	public void set_times(String[] t) {
-		times = new Vector(t.length);
+		times = new ArrayList(t.length);
 		for (int i = 0; i < t.length; ++i) {
 			times.add(t[i]);
 		}
@@ -241,14 +241,14 @@ public class DrawableDataSet extends DataSet {
 
 	// Add y1, y2 values for a horizontal line.
 	public void add_hline(DoublePair p) {
-		if (hline_data == null) hline_data = new Vector();
-		hline_data.addElement(p);
+		if (hline_data == null) hline_data = new ArrayList();
+		hline_data.add(p);
 	}
 
 	// Add x1, x2 values for a vertical line.
 	public void add_vline(DoublePair p) {
-		if (vline_data == null) vline_data = new Vector();
-		vline_data.addElement(p);
+		if (vline_data == null) vline_data = new ArrayList();
+		vline_data.add(p);
 	}
 
 	public void set_reference_values_needed(boolean b) {
@@ -325,7 +325,7 @@ public class DrawableDataSet extends DataSet {
 		int stride = stride();
 
 		if (lnth >= stride ) {
-			dymax = ((Double) data.elementAt(0)).doubleValue();
+			dymax = ((Double) data.get(0)).doubleValue();
 			dymin = dymax;
 			// The range for x follows the data index - starts at 1
 			// and ends at data.length.
@@ -340,11 +340,11 @@ public class DrawableDataSet extends DataSet {
 
 		// `data' holds only y values - find the largest and smallest.
 		for (i = 0; i < lnth; ++i) {
-			if (dymax < ((Double) data.elementAt(i)).doubleValue()) {
-				dymax = ((Double) data.elementAt(i)).doubleValue();
+			if (dymax < ((Double) data.get(i)).doubleValue()) {
+				dymax = ((Double) data.get(i)).doubleValue();
 			}
-			else if ( dymin > ((Double) data.elementAt(i)).doubleValue() ) {
-				dymin = ((Double) data.elementAt(i)).doubleValue();
+			else if ( dymin > ((Double) data.get(i)).doubleValue() ) {
+				dymin = ((Double) data.get(i)).doubleValue();
 			}
 		}
 		if ( yaxis_ == null) {
@@ -438,13 +438,13 @@ public class DrawableDataSet extends DataSet {
 	private boolean clipping = false;
 
 	// Main data
-	private Vector data;	// double
+	private ArrayList data;	// double
 
 	// Date data
-	protected Vector dates;	// String
+	protected ArrayList dates;	// String
 
 	// Time data
-	protected Vector times;	// String
+	protected ArrayList times;	// String
 
 	/**
 	* Drawer of price bars - e.g., tic bars or candles
@@ -486,8 +486,8 @@ public class DrawableDataSet extends DataSet {
 	private double dymin;
 
 	// Horizontal, vertical line data
-	private Vector hline_data;
-	private Vector vline_data;
+	private ArrayList hline_data;
+	private ArrayList vline_data;
 
 	/**
 	*    The X range of the clipped data

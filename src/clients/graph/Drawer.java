@@ -14,7 +14,7 @@ abstract public class Drawer {
 	public abstract int drawing_stride();
 
 	// The data to be drawn
-	public abstract Vector data();
+	public abstract ArrayList data();
 
 	public abstract MarketDrawer market_drawer();
 
@@ -30,7 +30,7 @@ abstract public class Drawer {
 	abstract public int data_length();
 
 	// Set data to `d'.
-	public void set_data(Vector d) {}
+	public void set_data(ArrayList d) {}
 
 	public void set_xaxis(Axis a) {
 		xaxis = a;

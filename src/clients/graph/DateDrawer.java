@@ -18,7 +18,7 @@ public class DateDrawer extends TemporalDrawer {
 	}
 
 	// The data to be drawn
-	public Vector data() { return market_drawer.dates(); }
+	public ArrayList data() { return market_drawer.dates(); }
 
 	// 1 coordinate for each point - no x coordinate
 	public int drawing_stride() { return 1; }

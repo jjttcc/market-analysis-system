@@ -439,7 +439,7 @@ public boolean mouseMove(Event e, int x, int y) {
 
 //System.out.println("closest_point: x="+x+", y="+y);
 		for (i=0; i<dataset.size(); i++) {
-			ds = (DrawableDataSet)(dataset.elementAt(i));
+			ds = (DrawableDataSet)(dataset.get(i));
 			a = ds.closest_point(x,y);
 			if ( distsq < 0.0 || distsq > a[2] ) {
 				data[0] = a[0];

@@ -68,7 +68,7 @@ public class Markers extends Object {
  *    An array of vectors. Each element in the array contains the vertex
  *    vectors for a marker. Marker 1 is at element vert[0].
  */
-      protected Vector vert[];
+      protected ArrayList vert[];
 
 /*
 *******************
@@ -81,7 +81,7 @@ public class Markers extends Object {
  */
       public Markers() {
           last = 0;
-          vert = new Vector[max];
+          vert = new ArrayList[max];
       }
 
 /**
@@ -123,7 +123,7 @@ public class Markers extends Object {
           
           m--;
           last = m;
-          vert[m] = new Vector();
+          vert[m] = new ArrayList();
           
           for(i=0; i<n; i++) {
                v = new MarkerVertex();
@@ -132,7 +132,7 @@ public class Markers extends Object {
                v.x    = x[i];
                v.y    = y[i];
                
-               vert[m].addElement(v);
+               vert[m].add(v);
           }
 
       }
@@ -214,7 +214,7 @@ scan:
               case StreamTokenizer.TT_WORD:
 
                    if ("start".equals(st.sval)) {
-                        vert[last] = new Vector();
+                        vert[last] = new ArrayList();
                    } else
                    if ("end".equals(st.sval)) {
                         last++;
@@ -226,7 +226,7 @@ scan:
                            v.x = (int)st.nval;
                            if (st.nextToken() == StreamTokenizer.TT_NUMBER) {
                                v.y = (int)st.nval;
-                               vert[last].addElement(v);
+                               vert[last].add(v);
                            }
                         }
                    } else
@@ -237,7 +237,7 @@ scan:
                            v.x = (int)st.nval;
                            if (st.nextToken() == StreamTokenizer.TT_NUMBER) {
                                v.y = (int)st.nval;
-                               vert[last].addElement(v);
+                               vert[last].add(v);
                            }
                         }
                     }
@@ -263,7 +263,7 @@ scan:
           int i;
           MarkerVertex mv;
           int x0 = x, x1 = x, y0 = y, y1 = y;
-          Vector v;
+          ArrayList v;
           
           
           if(m < 1 || m > max ) return;
@@ -273,7 +273,7 @@ scan:
           if( v == null) return;
 
           for (i=0; i<v.size(); i++) {
-             mv = (MarkerVertex)v.elementAt(i);
+             mv = (MarkerVertex)v.get(i);
 
              if( mv.draw ) {
                  x1 = x + (int)(mv.x*scale);

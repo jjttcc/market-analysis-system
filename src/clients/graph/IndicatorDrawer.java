@@ -17,11 +17,11 @@ abstract public class IndicatorDrawer extends BasicDrawer {
 
 	public int drawing_stride() { return 1; }
 
-	public Vector data() { return data; }
+	public ArrayList data() { return data; }
 
-	public Vector dates() { return _market_drawer.dates(); }
+	public ArrayList dates() { return _market_drawer.dates(); }
 
-	public Vector times() { return _market_drawer.times(); }
+	public ArrayList times() { return _market_drawer.times(); }
 
 	public MarketDrawer market_drawer() { return _market_drawer; }
 
@@ -36,11 +36,11 @@ abstract public class IndicatorDrawer extends BasicDrawer {
 		return result;
 	}
 
-	public void set_dates(Vector d) { indicator_dates = d; }
+	public void set_dates(ArrayList d) { indicator_dates = d; }
 
-	public void set_times(Vector t) { indicator_times = t; }
+	public void set_times(ArrayList t) { indicator_times = t; }
 
-	public void set_data(Vector d) { data = d; }
+	public void set_data(ArrayList d) { data = d; }
 
 	public void set_reference_values_needed(boolean b) {
 		ref_values_needed = b;
@@ -67,36 +67,36 @@ abstract public class IndicatorDrawer extends BasicDrawer {
 
 	protected int first_date_index() {
 		int result;
-		Vector dates = dates();
-		Vector times = times();
+		ArrayList dates = dates();
+		ArrayList times = times();
 
-		if (indicator_dates.elementAt(0).equals(dates.elementAt(0))) {
+		if (indicator_dates.get(0).equals(dates.get(0))) {
 			result = 0;
 		} else {
 			result = Utilities.index_at_date((String)
-				indicator_dates.elementAt(0), dates, 1, 0, dates.size() - 1);
+				indicator_dates.get(0), dates, 1, 0, dates.size() - 1);
 		}
 		if (
 				indicator_times != null && indicator_times.size() > 0) {
 			// Since the data is intraday, there are duplicate dates in
 			// the dates array.  Find the first element of dates that
-			// matches indicator_dates.elementAt(0).
-			while (result > 0 && dates.elementAt(result-1).equals(
-					indicator_dates.elementAt(0))) {
+			// matches indicator_dates.get(0).
+			while (result > 0 && dates.get(result-1).equals(
+					indicator_dates.get(0))) {
 				--result;
 			}
-			if (! indicator_times.elementAt(0).equals(
-					times.elementAt(result))) {
-				// If indicator_times.elementAt(0) is less than
-				// times.elementAt(result), increment result until
-				// times.elementAt(result) is the first time of the
+			if (! indicator_times.get(0).equals(
+					times.get(result))) {
+				// If indicator_times.get(0) is less than
+				// times.get(result), increment result until
+				// times.get(result) is the first time of the
 				// following day.
 				while (result < times.size() &&
-						((String) indicator_times.elementAt(0)).compareTo(
-							times.elementAt(result)) < 0) {
+						((String) indicator_times.get(0)).compareTo(
+							times.get(result)) < 0) {
 					++result;
 				}
-				result = first_time_match(indicator_times.elementAt(0),
+				result = first_time_match(indicator_times.get(0),
 					times, result);
 			}
 		}
@@ -104,11 +104,11 @@ abstract public class IndicatorDrawer extends BasicDrawer {
 	}
 
 	// The index of the first element of `times' beginning at
-	// times.elementAt(startix) that matches `time'
-	protected int first_time_match(Object time, Vector times, int startix) {
+	// times.get(startix) that matches `time'
+	protected int first_time_match(Object time, ArrayList times, int startix) {
 		int result = 0;
 		for (int i = startix; i < times.size(); ++i) {
-			if (((String) times.elementAt(i)).compareTo((String) time) == 0) {
+			if (((String) times.get(i)).compareTo((String) time) == 0) {
 				result = i;
 				break;
 			}
@@ -124,9 +124,9 @@ abstract public class IndicatorDrawer extends BasicDrawer {
 
 // Implementation - attributes
 
-	protected Vector data;				// double
-	protected Vector indicator_dates;	// String
-	protected Vector indicator_times;	// String
+	protected ArrayList data;				// double
+	protected ArrayList indicator_dates;	// String
+	protected ArrayList indicator_times;	// String
 	protected MarketDrawer _market_drawer;
 	protected boolean ref_values_needed;
 	protected boolean lower_indicator;

@@ -39,12 +39,12 @@ public class LineDrawer extends IndicatorDrawer {
 		height_factor = height_factor_value(bounds);
 		row = first_row() - 1;
 		x0 = x_values[row] + right_adjust;
-		y0 = (int)(bounds.height - (((Double) data.elementAt(0)).doubleValue()-ymin) * height_factor + bounds.y);
+		y0 = (int)(bounds.height - (((Double) data.get(0)).doubleValue()-ymin) * height_factor + bounds.y);
 		++row;
 
 		for (i = 1; row < x_values.length && i < lngth; ++i, ++row) {
 			x1 = x_values[row] + right_adjust;
-			y1 = (int)(bounds.height - (((Double) data.elementAt(i)).doubleValue()-ymin) * height_factor +
+			y1 = (int)(bounds.height - (((Double) data.get(i)).doubleValue()-ymin) * height_factor +
 					bounds.y);
 			g.drawLine(x0,y0,x1,y1);
 

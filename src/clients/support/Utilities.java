@@ -41,7 +41,7 @@ public class Utilities implements Constants
 		if (! result && l1 != null && l2 != null && l1.size() == l2.size()) {
 			result = true;
 			for (int i = 0; result && i < l1.size(); ++i) {
-				if (! l1.elementAt(i).equals(l1.elementAt(i))) result = false;
+				if (! l1.get(i).equals(l1.get(i))) result = false;
 			}
 		}
 		return result;
@@ -148,7 +148,7 @@ public class Utilities implements Constants
 
 	// (See index_at_date(String d, String dates[], int search_spec,
 	//    int bottom, int top.)
-	static public int index_at_date(String d, Vector dates, int search_spec,
+	static public int index_at_date(String d, ArrayList dates, int search_spec,
 			int bottom, int top) {
 		int i, comparison, result = -1;
 
@@ -160,7 +160,7 @@ public class Utilities implements Constants
 		while (result == -1 && top >= bottom) {
 			i = (bottom + top) / 2;
 			// assert: i >= 0 and bottom <= i and i <= top
-			comparison = d.compareTo(dates.elementAt(i));
+			comparison = d.compareTo(dates.get(i));
 			if (comparison == 0) result = i;
 			else if (comparison > 0) bottom = i + 1;
 			else if (comparison < 0) top = i - 1;
@@ -203,7 +203,7 @@ public class Utilities implements Constants
 	static public boolean vector_has(Vector v, String s) {
 		boolean result = false;
 		for (int i = 0; i < v.size() && ! result; ++i) {
-			if (((String) v.elementAt(i)).equals(s)) {
+			if (((String) v.get(i)).equals(s)) {
 				result = true;
 			}
 		}
@@ -231,12 +231,12 @@ public class Utilities implements Constants
 		return i >= 0 && i < dates.length;
 	}
 
-	static protected boolean valid_index(Vector dates, int i) {
+	static protected boolean valid_index(ArrayList dates, int i) {
 		return i >= 0 && i < dates.size();
 	}
 
 	// double values formatted for display
-	static public String[] formatted_doubles(Vector values,
+	static public String[] formatted_doubles(ArrayList values,
 			boolean right_justify) {
 		String[] result = new String[values.size()];
 		final double billion = 1000000000.0;
@@ -247,7 +247,7 @@ public class Utilities implements Constants
 
 		formatter.setMaximumFractionDigits(8);
 		for (int i = 0; i < values.size(); ++i) {
-			d = ((Double) values.elementAt(i)).doubleValue();
+			d = ((Double) values.get(i)).doubleValue();
 			if (d >= billion) {
 				result[i] = formatter.format(d / billion);
 				result[i] += "b";

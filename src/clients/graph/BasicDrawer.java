@@ -13,10 +13,10 @@ import application_support.*;
 abstract public class BasicDrawer extends Drawer {
 
 	// The dates associated with the principle (market) data
-	public abstract Vector dates();
+	public abstract ArrayList dates();
 
 	// The times (if any) associated with the principle (market) data
-	public abstract Vector times();
+	public abstract ArrayList times();
 
 	public boolean data_processed() {
 		return x_values() != null && x_values().length > 0;
@@ -33,10 +33,10 @@ abstract public class BasicDrawer extends Drawer {
 	}
 
 	// Set the dates.
-	public void set_dates(Vector d) {}
+	public void set_dates(ArrayList d) {}
 
 	// Set the times.
-	public void set_times(Vector t) {}
+	public void set_times(ArrayList t) {}
 
 	// Number of tuples in the data
 	public int tuple_count() {
@@ -76,8 +76,8 @@ abstract public class BasicDrawer extends Drawer {
 	* @param g Graphics state
 	* @param bounds The data window to draw into
 	*/
-	public void draw_data(Graphics g, Rectangle bounds, Vector hlines,
-		Vector vlines, Color c) {
+	public void draw_data(Graphics g, Rectangle bounds, ArrayList hlines,
+		ArrayList vlines, Color c) {
 		draw_color = c;
 		Rectangle main_bounds = main_bounds(bounds);
 		Rectangle right_bounds = right_reference_bounds(bounds);
@@ -174,7 +174,7 @@ abstract public class BasicDrawer extends Drawer {
 	}
 
 	private void draw_horizontal_lines(Graphics g, Rectangle bounds,
-			Vector hline_data) {
+			ArrayList hline_data) {
 		if (hline_data == null) return;
 		int bounds_x_value = bounds.x - X_left_line_adjust;
 
@@ -186,8 +186,8 @@ abstract public class BasicDrawer extends Drawer {
 		boolean lower = is_lower_indicator();
 		Rectangle btm_bounds = bottom_reference_bounds(bounds);
 		for (int i = 0; i < hline_data.size(); ++i) {
-			d1 = ((DoublePair) hline_data.elementAt(i)).left();
-			d2 = ((DoublePair) hline_data.elementAt(i)).right();
+			d1 = ((DoublePair) hline_data.get(i)).left();
+			d2 = ((DoublePair) hline_data.get(i)).right();
 			y1 = (int)(bounds.y + (1.0 - (d1-ymin) / yrange) * bounds.height);
 			y2 = (int)(bounds.y + (1.0 - (d2-ymin) / yrange) * bounds.height);
 			if (y1 > bounds.y + vert_margin && y2 > bounds.y + vert_margin &&
@@ -199,7 +199,7 @@ abstract public class BasicDrawer extends Drawer {
 	}
 
 	private void draw_vertical_lines(Graphics g, Rectangle bounds,
-			Vector vline_data) {
+			ArrayList vline_data) {
 		if (vline_data == null) return;
 
 		MA_Configuration config = MA_Configuration.application_instance();
@@ -207,8 +207,8 @@ abstract public class BasicDrawer extends Drawer {
 		double d1, d2;
 		g.setColor(config.reference_line_color());
 		for (int i = 0; i < vline_data.size(); ++i) {
-			d1 = ((DoublePair) vline_data.elementAt(i)).left();
-			d2 = ((DoublePair) vline_data.elementAt(i)).right();
+			d1 = ((DoublePair) vline_data.get(i)).left();
+			d2 = ((DoublePair) vline_data.get(i)).right();
 			x1 = (int)(bounds.x + ((d1-xmin) / xrange) * bounds.width);
 			x2 = (int)(bounds.x + ((d2-xmin) / xrange) * bounds.width);
 			g.drawLine(x1, bounds.y, x2, bounds.y + bounds.height);
@@ -225,7 +225,7 @@ abstract public class BasicDrawer extends Drawer {
 		final int small_step_multiplier = 25;
 		final double step_thresh_hold = 0.05;
 		double y;
-		Vector y_values = new Vector();	// Double
+		ArrayList y_values = new ArrayList();	// Double
 		String[] y_strings;
 		Double d;
 		boolean lines_needed = reference_lines_needed();
@@ -257,7 +257,7 @@ abstract public class BasicDrawer extends Drawer {
 //System.out.println("start, step, ymax: " + start + ", " + step + ", " + ymax);
 		for (y = start; y < ymax; y += step) {
 //System.out.println("adding " + y);
-			y_values.addElement(new Double(y));
+			y_values.add(new Double(y));
 		}
 		y_strings = Utilities.formatted_doubles(y_values, ! is_lower());
 		if (y_values.size() > 0) {
@@ -269,7 +269,7 @@ abstract public class BasicDrawer extends Drawer {
 
 	// Precondition: yvalues != null && yvalues.size() > 0 &&
 	//    yvalues.size() == ystrs.length
-	protected void display_reference_values(Vector yvalues, String[] ystrs,
+	protected void display_reference_values(ArrayList yvalues, String[] ystrs,
 			Graphics g, Rectangle main_bounds, Rectangle ref_bounds,
 			boolean lines) {
 		final int Y_text_adjust = 3, margin = 5, margin_for_text = 8;
@@ -283,13 +283,13 @@ abstract public class BasicDrawer extends Drawer {
 		String[] ystrings = new String[ystrs.length];
 		MA_Configuration config = MA_Configuration.application_instance();
 		adj_ys[0] = (int) (ref_bounds.y + (1.0 -
-			(((Double) yvalues.elementAt(0)).doubleValue() - ymin) / yrange) *
+			(((Double) yvalues.get(0)).doubleValue() - ymin) / yrange) *
 			ref_bounds.height);
 		ystrings[0] = ystrs[0];
 		if (yvalues.size() > 1) {
 			int i;
 			int adjusted_y = (int) (ref_bounds.y + (1.0 -
-				(((Double) yvalues.elementAt(1)).doubleValue() - ymin) /
+				(((Double) yvalues.get(1)).doubleValue() - ymin) /
 				yrange) * ref_bounds.height);
 			// If the first two elements of yvalues are too close together:
 			if (adj_ys[0] - adjusted_y < Min_vertical_space) {
@@ -303,7 +303,7 @@ abstract public class BasicDrawer extends Drawer {
 				}
 				for (i = start; i < yvalues.size(); i += 2) {
 					adj_ys[i / 2] = (int) (ref_bounds.y + (1.0 -
-						(((Double) yvalues.elementAt(i)).doubleValue() -
+						(((Double) yvalues.get(i)).doubleValue() -
 						ymin) / yrange) * ref_bounds.height);
 					ystrings[i / 2] = ystrs[i];
 				}
@@ -312,7 +312,7 @@ abstract public class BasicDrawer extends Drawer {
 				// Ensure that every value is displayed.
 				for (i = 1; i < yvalues.size(); ++i) {
 					adj_ys[i] = (int) (ref_bounds.y + (1.0 -
-						(((Double) yvalues.elementAt(i)).doubleValue() -
+						(((Double) yvalues.get(i)).doubleValue() -
 						ymin) / yrange) * ref_bounds.height);
 					ystrings[i] = ystrs[i];
 				}

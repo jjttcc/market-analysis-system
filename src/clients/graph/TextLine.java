@@ -165,10 +165,10 @@ public class TextLine extends Object {
    */
      protected Graphics lg = null;
   /**
-   * The parsed string. Each element in the vector represents
+   * The parsed string. Each element in the array represents
    * a change of context in the string ie font change and offset.
    */
-     protected Vector list = new Vector(8,4);
+     protected ArrayList list = new ArrayList(8);
 
 /*
 **********************
@@ -511,14 +511,14 @@ public class TextLine extends Object {
 
          if( text == null || g == null) return;
 
-         list.removeAllElements();
+         list.clear();
 
 
          if(font == null) current.f = g.getFont();
          else             current.f = font;
 
          state.push(current);
-         list.addElement(current);
+         list.add(current);
 
          fm = g.getFontMetrics(current.f);
 
@@ -539,7 +539,7 @@ public class TextLine extends Object {
                       w = current.getWidth(g);
                       if(!current.isEmpty()) {
                            current = current.copyState();
-                           list.addElement(current);
+                           list.add(current);
 		      }
 
                       state.push(current);
@@ -553,14 +553,14 @@ public class TextLine extends Object {
                       w = current.x + current.getWidth(g);
                       state.pop();
                       current = ((TextState)state.peek()).copyState();
-                      list.addElement(current);
+                      list.add(current);
                       current.x = w;
                       break;
 	     case '^':
                       w = current.getWidth(g);
                       if(!current.isEmpty()) {
                            current = current.copyState();
-                           list.addElement(current);
+                           list.add(current);
 		      }
                       current.f = getScriptFont(current.f);
                       current.x += w;
@@ -570,7 +570,7 @@ public class TextLine extends Object {
                       w = current.getWidth(g);
                       if(!current.isEmpty()) {
                            current = current.copyState();
-                           list.addElement(current);
+                           list.add(current);
 		      }
                       current.f = getScriptFont(current.f);
                       current.x += w;
@@ -586,7 +586,7 @@ public class TextLine extends Object {
 
 
          for(int i=0; i<list.size(); i++) {
-            current = ((TextState)(list.elementAt(i)));
+            current = ((TextState)(list.get(i)));
 
             if( !current.isEmpty() ) {
                width  += current.getWidth(g);
@@ -665,7 +665,7 @@ public class TextLine extends Object {
          if(color != null) lg.setColor(color);
 
          for(int i=0; i<list.size(); i++) {
-              ts = ((TextState)(list.elementAt(i)));
+              ts = ((TextState)(list.get(i)));
               if(ts.f != null) lg.setFont(ts.f);
               if(ts.s != null)
                    lg.drawString(ts.toString(),ts.x+xoffset,ts.y+yoffset);

@@ -41,11 +41,11 @@ public class BarDrawer extends IndicatorDrawer {
 		row = first_row() - 1;
 		for (i = 0; row < lngth; ++i, ++row) {
 			// Prevent drawing bars for 0 values:
-			if (((Double) data.elementAt(i)).doubleValue() == 0) continue;
+			if (((Double) data.get(i)).doubleValue() == 0) continue;
 
 			x = x_values[row] + 1;
 			y = (int)(bounds.height -
-				(((Double) data.elementAt(i)).doubleValue() - ymin) *
+				(((Double) data.get(i)).doubleValue() - ymin) *
 				height_factor + bounds.y);
 			x_s[0] = x; x_s[1] = x + _bar_width;
 			x_s[2] = x_s[1]; x_s[3] = x_s[0];

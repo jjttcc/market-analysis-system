@@ -432,17 +432,17 @@ public class Axis extends Object {
 
 		if( orientation == HORIZONTAL ) {
 			for (i=0; i<dataset.size(); i++) {
-				d = (DrawableDataSet)(dataset.elementAt(i));
+				d = (DrawableDataSet)(dataset.get(i));
 				d.set_xaxis(null);
 			}
 		} else {
 			for (i=0; i<dataset.size(); i++) {
-				d = (DrawableDataSet)(dataset.elementAt(i));
+				d = (DrawableDataSet)(dataset.get(i));
 				d.set_yaxis(null);
 			}
 		}
 
-		dataset.removeAllElements();
+		dataset.clear();
 
 		minimum_ = 0.0;
 		maximum_ = 0.0;
@@ -983,7 +983,7 @@ public class Axis extends Object {
 	*/
 	protected void attachXdata( DrawableDataSet d ) {
 		d.range();
-		dataset.addElement(d);
+		dataset.add(d);
 		d.set_xaxis(this);
 
 		if( dataset.size() == 1 ) {
@@ -1001,7 +1001,7 @@ public class Axis extends Object {
 	*/
 	protected void attachYdata( DrawableDataSet d ) {
 		d.range();
-		dataset.addElement(d);
+		dataset.add(d);
 		d.set_yaxis(this);
 
 		if (dataset.size() == 1) {

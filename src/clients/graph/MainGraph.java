@@ -16,7 +16,7 @@ public class MainGraph extends InteractiveGraph {
 	public DrawableDataSet market_data() {
 		DrawableDataSet result = null;
 		if (dataset.size() > 0) {
-			result = (DrawableDataSet) dataset.elementAt(0);
+			result = (DrawableDataSet) dataset.get(0);
 		}
 
 		return result;
@@ -28,11 +28,11 @@ public class MainGraph extends InteractiveGraph {
 
 		// Only the first dataset's boundaries and reference values
 		// need to be drawn, since they are all the same.
-		first_dataset = (DrawableDataSet) dataset.elementAt(0);
+		first_dataset = (DrawableDataSet) dataset.get(0);
 		first_dataset.drawer().set_boundaries_needed(true);
 		first_dataset.set_reference_values_needed(true);
 		for (i = 0; i < dataset.size(); ++i) {
-			((DrawableDataSet) dataset.elementAt(i)).draw_data(g, r);
+			((DrawableDataSet) dataset.get(i)).draw_data(g, r);
 		}
 		if (first_dataset.drawer().data_processed()) {
 			first_dataset.draw_dates(g, r);
