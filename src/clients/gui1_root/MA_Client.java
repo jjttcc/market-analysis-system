@@ -1,5 +1,7 @@
 /* Copyright 1998 - 2003: Jim Cochrane - see file forum.txt */
 
+package gui1_root;
+
 import java.io.*;
 import java.net.*;
 import mas_gui.*;
