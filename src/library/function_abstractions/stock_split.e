@@ -5,11 +5,16 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class
-
-	STOCK_SPLIT inherit
+class STOCK_SPLIT inherit
 
 	ANY
+		redefine
+			is_equal
+		end
+
+	MATH_CONSTANTS
+		export
+			{NONE} all
 		redefine
 			is_equal
 		end
@@ -20,29 +25,22 @@ creation
 
 feature -- Initialization
 
-	make (num, denom: INTEGER; d: DATE) is
+	make (v: REAL; d: DATE) is
 		require
-			gt_0: num > 0 and denom > 0
+			gt_0: v > 0
 			date_not_void: d /= Void
 		do
-			numerator := num
-			denominator := denom
+			value := v
 			date := d
 		ensure
-			nd_set: numerator = num and denominator = denom
+			value_set: rabs (value - v) < epsilon
 			date_set: date = d
 		end
 
 feature -- Access
 
-	numerator: INTEGER
-			-- numerator of the value of the split
-
-	denominator: INTEGER
-			-- denominator of the value of the split
-
 	value: REAL
-			-- numerator / denominator
+			-- value of the split
 
 	date: DATE
 			-- The date the split became effective
@@ -51,13 +49,15 @@ feature -- Status report
 
 	is_equal (other: like Current): BOOLEAN is
 		do
-			Result := other.date.is_equal (date)
+			Result := other.date.is_equal (date) and
+						rabs (value - other.value) < epsilon
 		ensure then
-			Result = other.date.is_equal (date)
+			date_value_equal: Result = other.date.is_equal (date) and
+						rabs (value - other.value) < epsilon
 		end
 
 invariant
 
-	num_denom_gt_0: numerator > 0 and denominator > 0
+	value_gt_0: value > 0
 
 end -- class STOCK_SPLIT
