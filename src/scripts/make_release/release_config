@@ -7,8 +7,8 @@ release_name mas-1.5
 package serversrc1.5	# source code for the MA server
 package clientsrc1.5	# source code for the MA client
 package mas_linux1.5	# MA server and client executables for Linux
-package mas_windows1.5	# MA server and client executables for Windows
+#package mas_windows1.5	# MA server and client executables for Windows
 package mac1.5			# MA client executables only
 # No updates to scripts in 1.x - Don't forget to uncomment the following line
 # for a release that does have updated scripts.
-package scripts1.5		# miscellaneous scripts - informal release
+#package scripts1.5		# miscellaneous scripts - informal release
