@@ -257,8 +257,8 @@ feature -- Access
 
 feature -- Status report
 
-	valid_stock_function (f: MARKET_FUNCTION): BOOLEAN is
-			-- Is `f' a valid function for a STOCK instance - that is,
+	valid_stock_processor (f: MARKET_PROCESSOR): BOOLEAN is
+			-- Is `f' a valid processor for a STOCK instance - that is,
 			-- are all of its `operators' valid for a STOCK?
 		local
 			cmds: LIST [COMMAND]
