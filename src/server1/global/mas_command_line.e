@@ -203,7 +203,7 @@ feature {NONE} -- Implementation
 			from
 				contents.start
 			until
-				contents.exhausted or background
+				contents.exhausted
 			loop
 				if not (contents.item.item (1) = option_sign) then
 					file_names.extend (contents.item)
