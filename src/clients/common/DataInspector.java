@@ -19,7 +19,7 @@ import java.io.*;
  * System.out.println( "sum is "+ (first+second) );
  * </pre>
  * [Note: This code was written by Graham Perkins.  He didn't copyright it or
- * event put his name on it, but I think he deserves to be credited.]
+ * even put his name on it, but I think he deserves to be credited.]
  */
 public class DataInspector {
 
