@@ -1,0 +1,20 @@
+#!/usr/bin/env python
+# Make a release of the Market Analysis System.
+
+from string import *
+from release_functions import *
+
+util = ReleaseUtilities()
+util.check_settings()
+map_file = open('release_file_map')
+for line in map_file.readlines():
+	files = split(line)
+	if files[0][0] == '#':
+		continue	# Skip comment.
+	util.add_source_file(files[0])
+	util.add_target_file(files[1])
+	util.add_to_packages(files[0], files[1], files[2:])
+map_file.close()
+util.copy()
+util.make_packages()
+util.cleanup()

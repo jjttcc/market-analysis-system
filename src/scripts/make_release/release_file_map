@@ -1,0 +1,205 @@
+# Mapping of source files/directories to target files/directories
+# Format:
+#sourcepath targetpath pkg1 [pkg2 ...]
+# Note: targetpath of '.' means the relative source path will be included
+# at the end of the target path.
+# Note3: path names with special shell characters (such as '$') should
+# escape the characters with a backslash.
+# Market Analysis Server source code
+src/application_library . serversrc1.2
+src/library . serversrc1.2
+src/eiffel_library . serversrc1.2
+src/server1/abstractions . serversrc1.2
+src/server1/doc . serversrc1.2
+src/server1/factories . serversrc1.2
+src/server1/global . serversrc1.2
+src/server1/interface . serversrc1.2
+src/server1/network . serversrc1.2
+src/server1/root . serversrc1.2
+src/server1/utility . serversrc1.2
+src/server1/system_specific . serversrc1.2
+src/server1/Ace.ace . serversrc1.2
+src/server1/test/README . serversrc1.2
+src/server1/test/run_tests . serversrc1.2
+src/server1/test/bin/compare_numbers . serversrc1.2
+src/server1/test/bin/pr_dataset . serversrc1.2
+src/server1/test/bin/testlib . serversrc1.2
+src/server1/test/input/force_index . serversrc1.2
+src/server1/test/input/ma . serversrc1.2
+src/server1/test/input/momentum . serversrc1.2
+src/server1/test/input/roc . serversrc1.2
+src/server1/test/input/rsi . serversrc1.2
+src/server1/test/input/rsi_colby . serversrc1.2
+src/server1/test/input/stoch . serversrc1.2
+src/server1/test/input/test_data . serversrc1.2
+src/server1/test/input/williams . serversrc1.2
+src/server1/test/lib/rsi.awk . serversrc1.2
+src/server1/test/lib/test_files.1 . serversrc1.2
+src/server1/test/lib/test_files.2 . serversrc1.2
+src/server1/test/reference/README . serversrc1.2
+src/server1/test/reference/ema . serversrc1.2
+src/server1/test/reference/force_index . serversrc1.2
+src/server1/test/reference/ma . serversrc1.2
+src/server1/test/reference/macd . serversrc1.2
+src/server1/test/reference/macd_hist . serversrc1.2
+src/server1/test/reference/macd_sig . serversrc1.2
+src/server1/test/reference/momentum . serversrc1.2
+src/server1/test/reference/roc . serversrc1.2
+src/server1/test/reference/rsi4 . serversrc1.2
+src/server1/test/reference/rsi7 . serversrc1.2
+src/server1/test/reference/slow_stochD3 . serversrc1.2
+src/server1/test/reference/stochD5 . serversrc1.2
+src/server1/test/reference/stochK5 . serversrc1.2
+src/server1/test/reference/test_data.one_field . serversrc1.2
+src/server1/test/reference/williams . serversrc1.2
+/home2/jtc/lib/ma_library/indicators_persist.1999-07-08 src/server1/test/indicators_persist serversrc1.2
+/home2/jtc/lib/ma_library/generators_persist.1999-06-24 src/server1/test/generators_persist serversrc1.2
+doc/mal_intro src/doc/ serversrc1.2
+doc/MAL_design_document src/doc/MAL_design_document serversrc1.2
+doc/MAL_README src/doc/README serversrc1.2
+doc/src_README src/README serversrc1.2
+doc/applications/server_protocol_grammar src/doc/ serversrc1.2
+doc/functions.ps src/doc/ serversrc1.2
+doc/eiffel_library_document src/doc/ serversrc1.2
+# Market Analysis Client source code
+src/clients/common/NetworkProtocol.java . clientsrc1.2
+src/clients/common/DataInspector.java . clientsrc1.2
+src/clients/support/FileReaderUtilities.java . clientsrc1.2
+src/clients/support/IntPair.java . clientsrc1.2
+src/clients/support/Utilities.java . clientsrc1.2
+src/clients/support/Configuration.java . clientsrc1.2
+src/clients/CL/CL_Client.java . clientsrc1.2
+src/clients/GUI1/Chart.java . clientsrc1.2
+src/clients/GUI1/MA_Client.java . clientsrc1.2
+src/clients/GUI1/Connection.java . clientsrc1.2
+src/clients/GUI1/Parser.java . clientsrc1.2
+src/clients/GUI1/MA_ScrollPane.java . clientsrc1.2
+src/clients/GUI1/MarketSelection.java . clientsrc1.2
+src/clients/GUI1/graph/DataSet.java . clientsrc1.2
+src/clients/GUI1/DataSetBuilder.java . clientsrc1.2
+src/clients/GUI1/graph/Drawer.java . clientsrc1.2
+src/clients/GUI1/graph/DateDrawer.java . clientsrc1.2
+src/clients/GUI1/graph/Markers.java . clientsrc1.2
+src/clients/GUI1/graph/BarDrawer.java . clientsrc1.2
+src/clients/GUI1/graph/CandleDrawer.java . clientsrc1.2
+src/clients/GUI1/graph/RTextLine.java . clientsrc1.2
+src/clients/GUI1/graph/SpecialFunction.java . clientsrc1.2
+src/clients/GUI1/graph/LineDrawer.java . clientsrc1.2
+src/clients/GUI1/graph/TextLine.java . clientsrc1.2
+src/clients/GUI1/graph/PriceDrawer.java . clientsrc1.2
+src/clients/GUI1/graph/Graph.java . clientsrc1.2
+src/clients/GUI1/graph/InteractiveGraph.java . clientsrc1.2
+src/clients/GUI1/graph/Axis.java . clientsrc1.2
+src/clients/GUI1/graph/DoublePair.java . clientsrc1.2
+src/clients/GUI1/graph/Line.java . clientsrc1.2
+src/clients/GUI1/graph/IndicatorDrawer.java . clientsrc1.2
+src/clients/GUI1/graph/MarketDrawer.java . clientsrc1.2
+# Market Analysis System executables and accompanying files (server and client)
+# (First the GUI java classes)
+src/clients/GUI1/MarketSelection.class lib/classes/ mas1.2 mac1.2
+src/clients/GUI1/graph/Drawer.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/CandleDrawer.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/BarDrawer.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/Axis.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/DoublePair.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/RTextLine.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/FileFormatException.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/LoadMessage.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/RotateTextFilter.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/TextLine.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/TextState.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/DataSet.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/DataSetBuilder.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/SpecialFunction.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/Markers.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/MarkerVertex.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/Line.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/Graph.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/LineDrawer.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/PriceDrawer.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/Gin.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/Range.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/InteractiveGraph.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/DateDrawer.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/RefSpec.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/MarketDrawer.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/graph/IndicatorDrawer.class lib/classes/graph/ mas1.2 mac1.2
+src/clients/GUI1/MarketSelection\$1.class lib/classes/ mas1.2 mac1.2
+src/clients/GUI1/MarketSelection\$2.class lib/classes/ mas1.2 mac1.2
+src/clients/GUI1/MarketSelection\$3.class lib/classes/ mas1.2 mac1.2
+src/clients/GUI1/MarketSelection\$4.class lib/classes/ mas1.2 mac1.2
+src/clients/GUI1/Chart.class lib/classes/ mas1.2 mac1.2
+src/clients/GUI1/Chart\$1.class lib/classes/ mas1.2 mac1.2
+src/clients/GUI1/Chart\$2.class lib/classes/ mas1.2 mac1.2
+src/clients/GUI1/Chart\$3.class lib/classes/ mas1.2 mac1.2
+src/clients/GUI1/Chart\$4.class lib/classes/ mas1.2 mac1.2
+src/clients/GUI1/Chart\$IndicatorListener.class lib/classes/ mas1.2 mac1.2
+src/clients/GUI1/MA_Client.class lib/classes/ mas1.2 mac1.2
+src/clients/GUI1/Connection.class lib/classes/ mas1.2 mac1.2
+src/clients/GUI1/Parser.class lib/classes/ mas1.2 mac1.2
+src/clients/GUI1/MA_ScrollPane.class lib/classes/ mas1.2 mac1.2
+src/clients/GUI1/MA_ScrollPane\$1.class lib/classes/ mas1.2 mac1.2
+src/clients/CL/CL_Client.class lib/classes/ mas1.2 mac1.2
+src/clients/common/NetworkProtocol.class lib/classes/common/ mas1.2 mac1.2
+src/clients/common/DataInspector.class lib/classes/common/ mas1.2 mac1.2
+src/clients/support/Configuration.class lib/classes/support/ mas1.2 mac1.2
+src/clients/support/Configuration\$DateSetting.class lib/classes/support/ mas1.2 mac1.2
+src/clients/support/FileReaderUtilities.class lib/classes/support/ mas1.2 mac1.2
+src/clients/support/Utilities.class lib/classes/support/ mas1.2 mac1.2
+src/clients/support/IntPair.class lib/classes/support/ mas1.2 mac1.2
+# (GUI config. file)
+src/clients/GUI1/.ma_clientrc lib/classes/ mas1.2 mac1.2
+# (Scripts)
+bin/magc . mas1.2 clientsrc1.2 mac1.2
+src/clients/CL/macl bin/ mas1.2 clientsrc1.2 mac1.2
+src/clients/CL/maclj bin/ mas1.2 clientsrc1.2 mac1.2
+# (Server executables)
+src/server1/EIFGEN/F_code/mas_no_assert bin/mas mas1.2
+src/server1/EIFGEN/F_code/mas_assert bin/mas_assert mas1.2
+# (MAS Documentation)
+doc/GUI_introduction . mas1.2 mac1.2
+doc/masystem_introduction . mas1.2 mac1.2
+doc/java_info . mas1.2 mac1.2
+doc/feature_list . mas1.2 mac1.2
+doc/creating_indicators . mas1.2 mac1.2
+doc/creating_market_analyzers . mas1.2 mac1.2
+doc/other_market_analyzer_examples . mas1.2 mac1.2
+doc/market_analysis . mas1.2 mac1.2
+doc/MAS_README doc/README mas1.2 mac1.2
+doc/main_MAS_README ./README mas1.2 mac1.2
+doc/env_settings ./doc/environment mas1.2 mac1.2
+doc/INSTALL  ./ mas1.2
+src/scripts/install/install ./ mas1.2
+src/scripts/install/install_config ./ mas1.2
+# Shared libraries needed by mas1.2 (Are these still needed with glibc?
+# Check on nextrade.org.)
+# /usr/X11R6/lib/libXext.so.6.3 lib/libXext.so.6 mas1.2
+# /usr/X11R6/lib/libSM.so.6.0 lib/libSM.so.6 mas1.2
+# /usr/X11R6/lib/libICE.so.6.3 lib/libICE.so.6 mas1.2
+# /lib/libm.so.5.0.6 lib/libm.so.5 mas1.2
+# /lib/libc.so.5.3.12 lib/libc.so.5 mas1.2
+# /usr/X11R6/lib/libX11.so.6.1 lib/libX11.so.6 mas1.2
+# Persistent object and data files needed by mas1.2
+/home2/jtc/lib/ma_library/indicators_persist.1999-08-01 lib/indicators_persist mas1.2
+/home2/jtc/lib/ma_library/generators_persist.1999-06-24 lib/generators_persist mas1.2
+/home2/jtc/lib/ma_library/stock_splits lib mas1.2
+build/data lib mas1.2
+forum.txt . mas1.2 mac1.2 serversrc1.2 clientsrc1.2
+doc/THANKS . mas1.2 mac1.2 serversrc1.2 clientsrc1.2
+doc/GUI_client_change_log ./GUI_CHANGE_LOG mac1.2
+doc/Server_change_log ./MAS_CHANGE_LOG mas1.2
+# Scripts
+/home2/finance/lib/python/obtain_eod_data src/scripts/ scripts
+/home2/finance/bin/run_market_analysis src/scripts/ scripts
+/home2/finance/bin/distribute_data src/scripts/ scripts
+/home2/finance/bin/process_stock_splits src/scripts/ scripts
+/home2/finance/bin/analyze_watch_lists src/scripts/ scripts
+/home2/finance/bin/analyze_stocks src/scripts/ scripts
+/home2/finance/bin/extract_data src/scripts/ scripts
+/home2/finance/bin/loss src/scripts/ scripts
+/home2/finance/lib/.marketenv src/scripts/lib/ scripts
+/home2/finance/lib/.mas_env src/scripts/lib/ scripts
+doc/scripts_README ./src/scripts/README scripts
+/usr/local/bin/cnvrt_fromdos src/scripts/ scripts
+/usr/local/bin/fromdos src/scripts/ scripts
+/home2/jtc/bin/startmas src/scripts scripts

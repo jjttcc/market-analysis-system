@@ -1,0 +1,10 @@
+# Specify source and target directories:
+source_directory /home2/jtc/development/finance
+target_directory /usr2/release/mas_v1.2
+# Define packages:
+package serversrc1.2	# source code for the MA server
+package clientsrc1.2	# source code for the MA client
+package mas1.2			# MA server and client executables
+package mac1.2			# MA client executables only
+package scripts			# miscellaneous scripts - informal release
+package_dir /usr2/release
