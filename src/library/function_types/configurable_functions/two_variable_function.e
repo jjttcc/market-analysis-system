@@ -218,7 +218,7 @@ feature {NONE}
 			end
 		end
 
-feature {FACTORY} -- Element change (Export to test class for now.)
+feature {FACTORY} -- Status setting
 
 	set_input (f1: like input1; f2: like input2) is
 		require

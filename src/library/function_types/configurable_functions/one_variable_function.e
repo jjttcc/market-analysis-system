@@ -64,8 +64,6 @@ feature -- Access
 			Result.append (input.full_description)
 		end
 
-feature -- Element change
-
 feature -- Status report
 
 	processed: BOOLEAN is
@@ -115,7 +113,7 @@ feature {NONE}
 
 	input: MARKET_FUNCTION
 
-feature {FACTORY} -- Element change
+feature {FACTORY} -- Status setting
 
 	set_input (in: like input) is
 		require
