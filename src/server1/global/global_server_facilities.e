@@ -32,7 +32,7 @@ feature -- Access
 			Result := platform_factory.database_services
 		end
 
-	database_configuration: MAS_DB_INFO is
+	database_configuration: DATABASE_CONFIGURATION is
 			-- Database configuration settings
 		once
 			create Result.make

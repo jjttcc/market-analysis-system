@@ -292,7 +292,7 @@ feature {NONE} -- Implementation
 	daily_stock_query (symbol: STRING): STRING is
 			-- Query for daily stock data
 		local
-			db_info: MAS_DB_INFO
+			db_info: DATABASE_CONFIGURATION
 			global_server: expanded GLOBAL_SERVER
 		do
 			db_info := global_server.database_configuration
@@ -315,7 +315,7 @@ feature {NONE} -- Implementation
 	intraday_stock_query (symbol: STRING): STRING is
 			-- Query for intraday stock data
 		local
-			db_info: MAS_DB_INFO
+			db_info: DATABASE_CONFIGURATION
 			global_server: expanded GLOBAL_SERVER
 		do
 			db_info := global_server.database_configuration
@@ -340,7 +340,7 @@ feature {NONE} -- Implementation
 	daily_derivative_query (symbol: STRING): STRING is
 			-- Query for daily derivative data
 		local
-			db_info: MAS_DB_INFO
+			db_info: DATABASE_CONFIGURATION
 			global_server: expanded GLOBAL_SERVER
 		do
 			db_info := global_server.database_configuration
@@ -365,7 +365,7 @@ feature {NONE} -- Implementation
 	intraday_derivative_query (symbol: STRING): STRING is
 			-- Query for intraday derivative data
 		local
-			db_info: MAS_DB_INFO
+			db_info: DATABASE_CONFIGURATION
 			global_server: expanded GLOBAL_SERVER
 		do
 			db_info := global_server.database_configuration
@@ -426,7 +426,7 @@ feature {NONE} -- Implementation
 			not_void_if_ok: not fatal_error implies Result /= Void
 		end
 
-	open_string (db_info: MAS_DB_INFO): STRING is
+	open_string (db_info: DATABASE_CONFIGURATION): STRING is
 			-- Open field string needed for query - empty if
 			-- not command_line_options.opening_price
 		local
