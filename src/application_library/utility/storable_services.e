@@ -56,17 +56,20 @@ feature -- Basic operations
 
 	edit_list is
 			-- Allow user to edit the list and save the changes.
+		local
+			at_end: BOOLEAN
 		do
 			begin_edit
 			if not abort_edit then
 				do_edit
+				at_end := true
 				end_edit
 			end
 		ensure
 			not_changed: not changed
 			not_locked: not lock.locked
 		rescue
-			if not abort_edit then
+			if not abort_edit and not at_end then
 				end_edit
 			end
 		end
