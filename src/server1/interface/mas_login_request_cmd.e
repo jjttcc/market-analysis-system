@@ -170,4 +170,4 @@ feature {NONE} -- Implementation
 
 	sutil: expanded STRING_UTILITIES
 
-end -- class LOGIN_REQUEST_CMD
+end
