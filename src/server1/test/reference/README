@@ -13,8 +13,6 @@ slow_stochD3, stochD5, and stochK5.  Corresponding input data for the
 files ma, momentum, roc, rsi7, and williams, are in files with the same names
 under ../input (minus the 7 for the rsi file).
 
-Note:  The RSI data in the example in Elder's book appears to have been
-calculated with a slightly different formula than is written in the book.
-Until I figure out the formula most commonly used, the data in the
-current rsi7 file, which was constructured with the rsi.awk script and is
-different from the values in Elder's book, will remain as the reference.
+Note:  The RSI reference values in rsi7 were calculated using the awk script
+../lib/rsi.awk.  They are less rounded versions of the values listed in
+"Trading for a Living", page 163.
