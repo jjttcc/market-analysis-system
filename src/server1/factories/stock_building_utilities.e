@@ -21,6 +21,16 @@ class STOCK_FACTORY inherit
 			{NONE} all
 		end
 
+	GLOBAL_SERVER
+		export
+			{NONE} all
+		end
+
+	GENERAL_UTILITIES
+		export
+			{NONE} all
+		end
+
 creation
 
 	make
@@ -34,7 +44,7 @@ feature -- Access
 			create {VOLUME_TUPLE_FACTORY} Result
 		end
 
-feature {NONE}
+feature {NONE} -- Implementation
 
 	make_product is
 		local
@@ -62,9 +72,22 @@ feature {NONE}
 		local
 			constants: expanded APPLICATION_CONSTANTS
 		once
-			create {STOCK_SPLIT_FILE} Result.make (
-				constants.Stock_split_field_separator,
-				constants.Stock_split_record_separator, stock_split_file)
+			-- Use stock splits from the database, if they exist; otherwise
+			-- input them from the stock-split file.
+			Result := db_stock_splits
+			if Result = Void then
+				create {STOCK_SPLIT_FILE} Result.make (
+					constants.Stock_split_field_separator,
+					constants.Stock_split_record_separator, stock_split_file)
+			end
+		end
+
+	db_stock_splits: STOCK_SPLITS is
+			-- Stock splits from database
+		do
+			if command_line_options.use_db then
+				Result := database_services.stock_splits
+			end
 		end
 
 	stock_split_file: STRING is
