@@ -19,7 +19,7 @@ feature -- Initialization
 		require
 			not_void: p1 /= Void and p2 /= Void
 			p1_left_of_p2: p1.x < p2.x
-			p1x_gt_0: p1.x > 0
+			p1x_gt_0: p1.x >= 0
 		do
 			start_point := p1
 			calculate_slope (p2)
@@ -91,6 +91,6 @@ feature {NONE} -- Implementation
 
 invariant
 
-	start_point_x_gt_0: start_point.x > 0
+	start_point_x_ge_0: start_point.x >= 0
 
 end -- class MARKET_LINE
