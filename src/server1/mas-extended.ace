@@ -10,6 +10,8 @@ default
 	assertion (ensure)
 	assertion (loop)
 	assertion (invariant)
+	arguments ("-p 2345 1234")
+	arguments ("-p")
 	arguments ("-o -p")
 	arguments ("-o -p -debug")
 	arguments ("-o -p -z -report_back jupiter.milkyway.org^41516")
