@@ -20,9 +20,12 @@ public class PCT_Main {
 
 	public static void main(String[] args) {
 		try {
+//!!This call can probably go away:
 			initialize_application();
+
 			ProgramControlTerminal pct =
 				new ProgramControlTerminal(null, null, null);
+			ApplicationContext.set_root_window(pct.window);
 			pct.execute();
 		}
 		catch (Exception e) {
@@ -30,9 +33,11 @@ public class PCT_Main {
 		}
 	}
 
+//!!This feature can probably go away:
 	public final static String application_init_class_name =
 		"pct.application.SpecializedApplicationInitialization";
 
+//!!This feature can probably go away:
 	static void initialize_application() {
 		Class app_init_class = null;
 		ApplicationInitialization ai = null;
