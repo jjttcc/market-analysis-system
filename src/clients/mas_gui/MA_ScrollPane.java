@@ -15,8 +15,8 @@ public class MA_ScrollPane extends ScrollPane
 		super(scrollbarDisplayPolicy);
 
 		chart = parent_chart;
-		_main_graph = new MA_GraphInteractive();
-		_indicator_graph = new MA_GraphInteractive();
+		_main_graph = new InteractiveGraph();
+		_indicator_graph = new InteractiveGraph();
 		GridBagLayout gblayout = new GridBagLayout();
 		GridBagConstraints gbconstraints = new GridBagConstraints();
 		period_type_choice = new Choice();
@@ -71,12 +71,12 @@ public class MA_ScrollPane extends ScrollPane
 	}
 
 	// The main graph - where the principal market data is displayed
-	public MA_Graph main_graph() {
+	public Graph main_graph() {
 		return _main_graph;
 	}
 
 	// The indicator graph - where the indicator data is displayed
-	public MA_Graph indicator_graph() {
+	public Graph indicator_graph() {
 		return _indicator_graph;
 	}
 
@@ -141,8 +141,8 @@ public class MA_ScrollPane extends ScrollPane
 		});
 	}
 
-	private MA_GraphInteractive _main_graph;
-	private MA_GraphInteractive _indicator_graph;
+	private InteractiveGraph _main_graph;
+	private InteractiveGraph _indicator_graph;
 	// Did _main_graph change since it was last repainted?
 	boolean main_graph_changed;
 	// Did _indicator_graph change since it was last repainted?
