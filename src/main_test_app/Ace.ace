@@ -17,8 +17,12 @@ cluster
 		-- Application (test) clusters
 	root_cluster: 	"$FINANCE/src/main_test_app/root";
 	factories:		"$FINANCE/src/main_test_app/factories";
-	app_tools:			"$FINANCE/src/main_test_app/tools";
-	app_library:	"$FINANCE/src/main_test_app/app_library";
+
+		-- Application library clusters
+	app_library:	"$FINANCE/src/application_library";
+	app_events (app_library): "$/events";
+	app_global (app_library): "$/global";
+	app_utility (app_library): "$/utility";
 
 		-- Technical Analysis Library
 	function_abstractions:
