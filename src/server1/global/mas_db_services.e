@@ -297,8 +297,7 @@ feature {NONE} -- Implementation
 		do
 			db_info := global_server.database_configuration
 			if db_info.using_daily_stock_data_command then
-				Result := inserted_symbol (db_info.daily_stock_data_command,
-					symbol)
+				Result := db_info.daily_stock_data_command
 			else
 				Result := concatenation (<<"select ",
 					db_info.daily_stock_date_field_name, ", ",
@@ -320,8 +319,7 @@ feature {NONE} -- Implementation
 		do
 			db_info := global_server.database_configuration
 			if db_info.using_intraday_stock_data_command then
-				Result := inserted_symbol (db_info.intraday_stock_data_command,
-					symbol)
+				Result := db_info.intraday_stock_data_command
 			else
 				Result := concatenation (<<"select ",
 					db_info.intraday_stock_date_field_name, ", ",
@@ -345,8 +343,7 @@ feature {NONE} -- Implementation
 		do
 			db_info := global_server.database_configuration
 			if db_info.using_daily_derivative_data_command then
-				Result := inserted_symbol (
-					db_info.daily_derivative_data_command, symbol)
+				Result := db_info.daily_derivative_data_command
 			else
 				Result := concatenation (<<"select ",
 					db_info.daily_derivative_date_field_name, ", ",
@@ -370,8 +367,7 @@ feature {NONE} -- Implementation
 		do
 			db_info := global_server.database_configuration
 			if db_info.using_intraday_derivative_data_command then
-				Result := inserted_symbol (
-					db_info.intraday_derivative_data_command, symbol)
+				Result := db_info.intraday_derivative_data_command
 			else
 				Result := concatenation (<<"select ",
 					db_info.intraday_derivative_date_field_name, ", ",
@@ -397,7 +393,7 @@ feature {NONE} -- Implementation
 		do
 			q := global_server.database_configuration.stock_name_query
 			if not q.is_empty then
-				Result := inserted_symbol (q, symbol)
+				Result := q
 			else
 				fatal_error := true
 				last_error :=
@@ -416,7 +412,7 @@ feature {NONE} -- Implementation
 		do
 			q := global_server.database_configuration.derivative_name_query
 			if not q.is_empty then
-				Result := inserted_symbol (q, symbol)
+				Result := q
 			else
 				fatal_error := true
 				last_error := "Missing derivative name query in %
@@ -442,6 +438,8 @@ feature {NONE} -- Implementation
 
 	inserted_symbol (query, symbol: STRING): STRING is
 			-- Result of replacing "<symbol>" with `symbol'
+--!!!!!!!This is obsolete - remove it when its replacement is thoroughly
+--tested.
 		local
 			start_index, end_index: INTEGER
 			sym, upper: STRING

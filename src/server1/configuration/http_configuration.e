@@ -2,6 +2,13 @@ indexing
 	description: "Configurations for obtaining tradable data from an http %
 		%connection, read from a configuration file"
 	author: "Jim Cochrane"
+	note: "@@Note: It may be appropriate at some point to change the name %
+		%of this class to something like DATA_RETRIEVAL_CONFIGURATION - %
+		%configuration for retrieval of data from an external %
+		%source - http, socket, etc - Much of the existing logic in this %
+		%class (and in HTTP_DATA_RETRIEVAL - see equivalent note in that %
+		%class) can probably be applied (as is or with little change) to %
+		%retrieval from other external sources besides an http server."
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
@@ -9,11 +16,9 @@ indexing
 
 class HTTP_CONFIGURATION inherit
 
-	CONFIGURATION_UTILITIES
-		export
-			{NONE} all
+	APP_CONFIGURATION
 		redefine
-			use_customized_setting, do_customized_setting
+			use_customized_setting, do_customized_setting, reset_dates
 		end
 
 	APP_ENVIRONMENT
@@ -31,16 +36,6 @@ class HTTP_CONFIGURATION inherit
 			{NONE} all
 		end
 
-	GENERAL_UTILITIES
-		export
-			{NONE} all
-		end
-
-	DATE_PARSING_UTILITIES
-		export
-			{NONE} all
-		end
-
 create
 
 	make
@@ -52,8 +47,7 @@ feature {NONE} -- Initialization
 			i: INTEGER
 		do
 			create settings.make (0)
-			settings.extend ("", EOD_start_date_specifier)
-			settings.extend ("", EOD_end_date_specifier)
+			initialize_common_settings
 			settings.extend ("", Host_specifier)
 			settings.extend ("", Path_specifier)
 			settings.extend ("", Symbol_file_specifier)
@@ -77,17 +71,11 @@ feature -- Access
 			-- @@Note: This feature uses eod_start_date for end-of-day
 			-- data; if intraday data also needs to be processed, some
 			-- redesign will be needed.
---!!!!Note: This and replace_tokens can probably be also used for database
---configuration - that is, move them up to CONFIGURATION_UTILITIES.
 		do
 			if cached_path = Void then
 				cached_path := clone (original_path)
-				replace_tokens (cached_path, <<symbol_token, start_day_token,
-					start_month_token, start_year_token, end_day_token,
-					end_month_token, end_year_token>>, <<symbol,
-					eod_start_date.day.out, eod_start_date.month.out,
-					eod_start_date.year.out, eod_end_date.day.out,
-					eod_end_date.month.out, eod_end_date.year.out>>)
+				replace_tokens_using_dates (cached_path, eod_start_date,
+					eod_end_date, False)
 			end
 			Result := cached_path
 		end
@@ -97,54 +85,7 @@ feature -- Access
 			-- instead of `start_date' (not cached)
 		do
 			Result := clone (original_path)
-			replace_tokens (Result, <<symbol_token, start_day_token,
-				start_month_token, start_year_token, end_day_token,
-				end_month_token, end_year_token>>, <<symbol,
-				alt_sd.day.out, alt_sd.month.out,
-				alt_sd.year.out, eod_end_date.day.out,
-				eod_end_date.month.out, eod_end_date.year.out>>)
-		end
-
-	replace_tokens (target: STRING; tokens: ARRAY [STRING];
-		values: ARRAY [STRING]) is
-			-- Replace all occurrences of `tokens' in `target' with
-			-- the respective specified `values'.
-		require
-			args_exists: target /= Void and tokens /= Void and values /= Void
-			same_number_of_tokens_and_values: tokens.count = values.count
-			same_index_settings: tokens.lower = values.lower and
-				tokens.upper = values.upper
-		local
-			i: INTEGER
-		do
-			from
-				i := tokens.lower
-			until
-				i = tokens.upper + 1
-			loop
-				replace_token_all (target, tokens @ i, values @ i,
-					token_start_delimiter, token_end_delimiter)
-				i := i + 1
-			end
-		end
-
-	eod_start_date: DATE is
-			-- The end-of-day start date for the requested data
-		do
-			if cached_eod_start_date = Void then
-				cached_eod_start_date := date_from_string (
-					eod_start_date_string)
-			end
-			Result := cached_eod_start_date
-		end
-
-	eod_end_date: DATE is
-			-- The end-of-day end date for the requested data
-		do
-			if cached_eod_end_date = Void then
-				cached_eod_end_date := date_from_string (eod_end_date_string)
-			end
-			Result := cached_eod_end_date
+			replace_tokens_using_dates (Result, alt_sd, eod_end_date, False)
 		end
 
 	eod_turnover_time: TIME is
@@ -163,9 +104,6 @@ feature -- Access
 			end
 			Result := cached_eod_turnover_time
 		end
-
-	symbol: STRING
-			-- The current symbol for which data is being retrieved
 
 	post_processing_routine: FUNCTION [ANY, TUPLE [STRING], STRING] is
 			-- Routine to be used to post process the retrieved data -
@@ -260,16 +198,6 @@ print ("latest_tradable_date_before_today: " + Result.out + "%N")
 
 feature -- Access
 
-	eod_start_date_string: STRING is
-		do
-			Result := settings @ EOD_start_date_specifier
-		end
-
-	eod_end_date_string: STRING is
-		do
-			Result := settings @ EOD_end_date_specifier
-		end
-
 	host: STRING is
 		do
 			Result := settings @ Host_specifier
@@ -332,13 +260,8 @@ feature -- Element change
 feature -- Basic operations
 
 	reset_dates is
-			-- For dates that use the "now" construct, reset them so that
-			-- the next time any "now" date is used, it is recalculated
-			-- from the current date, which may have changed since the
-			-- last calculation.
 		do
-			cached_eod_start_date := Void
-			cached_eod_end_date := Void
+			Precursor
 			cached_path := Void -- Force `path' to use new dates.
 		end
 
@@ -346,18 +269,10 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	configuration_type: STRING is "http"
 
-	key_index: INTEGER is 1
-
-	value_index: INTEGER is 2
-
 	configuration_file_name: STRING is
 		do
 			Result := file_name_with_app_directory (
 				Default_http_config_file_name)
-		end
-
-	check_results is
-		do
 		end
 
 	use_customized_setting (key_token, value_token: STRING): BOOLEAN is
@@ -379,44 +294,6 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 feature {NONE} -- Implementation
 
-	check_for_missing_specs (ftbl: ARRAY[ANY]) is
---!!!Can this be moved to CONFIGURATION_UTILITIES?
---!!!!Note: This is currently not called - probably it should be - or delete it.
-			-- Check for missing http field specs in `ftbl'.   Expected
-			-- types of ftbl's contents are: <<BOOLEAN, STRING,
-			-- BOOLEAN, STRING, ...>>.
-		require
-			count_even: ftbl.count \\ 2 = 0
-		local
-			s: STRING
-			i: INTEGER
-			emtpy: BOOLEAN_REF
-			all_empty, problem: BOOLEAN
-			es: expanded EXCEPTION_SERVICES
-			ex: expanded EXCEPTIONS
-		do
-			from i := 1; all_empty := true until i > ftbl.count loop
-				emtpy ?= ftbl @ i
-				check
-					correct_type: emtpy /= Void
-				end
-				if emtpy.item then
-					s := concatenation (<<s, "Missing specification in ",
-						"http configuration file:%N",
-						ftbl @ (i+1), ".%N">>)
-					problem := true
-				else
-					all_empty := false
-				end
-				i := i + 2
-			end
-			if problem and not all_empty then
-				log_error (s)
-				es.last_exception_status.set_fatal (true)
-				ex.raise ("Fatal error reading http configuration file")
-			end
-		end
-
 	add_ignored_day_of_week (wday: STRING) is
 		local
 			d: STRING
@@ -437,37 +314,9 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - attributes
 
-	cached_eod_start_date: DATE
-
-	cached_eod_end_date: DATE
-
 	cached_path: STRING
 
 	cached_eod_turnover_time: TIME
-
-	Date_field_separator: STRING is "/"
-
-	Time_field_separator: STRING is ":"
-
-	Specification_field_separator: STRING is ":"
-
-feature {NONE} -- Implementation - token-related constants
-
-	symbol_token: STRING is "symbol"
-			-- The token which is to be replaced at data-retrieval time
-			-- with the current tradable symbol
-
-	start_day_token: STRING is "startday"
-
-	start_month_token: STRING is "startmonth"
-
-	start_year_token: STRING is "startyear"
-
-	end_day_token: STRING is "endday"
-
-	end_month_token: STRING is "endmonth"
-
-	end_year_token: STRING is "endyear"
 
 invariant
 

@@ -9,9 +9,11 @@ indexing
 
 class DATABASE_CONFIGURATION inherit
 
-	CONFIGURATION_UTILITIES
-		export
-			{NONE} all
+	APP_CONFIGURATION
+		rename
+			make as ac_make
+		redefine
+			check_results
 		end
 
 	APP_ENVIRONMENT
@@ -29,20 +31,22 @@ class DATABASE_CONFIGURATION inherit
 			{NONE} all
 		end
 
-	GENERAL_UTILITIES
-		export
-			{NONE} all
-		end
-
 creation
 
 	make
 
-feature -- Initialization
+feature {NONE} -- Initialization
+
+	make is
+		do
+			symbol := "[NONE]"
+			ac_make
+		end
 
 	initialize_settings_table is
 		do
 			create settings.make (0)
+			initialize_common_settings
 			settings.extend ("", Data_source_specifier)
 			settings.extend ("", User_id_specifier)
 			settings.extend ("", Password_specifier)
@@ -141,7 +145,12 @@ feature -- Access
 
 	stock_name_query: STRING is
 		do
-			Result := settings @ Stock_name_query_specifier
+			Result := clone (settings @ Stock_name_query_specifier)
+			-- Replace the <symbol> and <uppersymbol> tokens with
+			-- `symbol' and uppercase (`symbol').
+			replace_tokens (Result, <<symbol_token, upper_symbol_token>>,
+				<<symbol, uppercase_symbol>>)
+print ("stock_name_query returning " + Result + ".%N")
 		ensure
 			not_void: Result /= Void
 		end
@@ -150,7 +159,15 @@ feature -- Access
 		require
 			ok_to_use_this_spec: using_daily_stock_data_command
 		do
-			Result := settings @ Daily_stock_data_command_specifier
+			Result := clone (settings @ Daily_stock_data_command_specifier)
+			if eod_start_date /= Void and eod_end_date /= Void then
+				-- Replace the <symbol> token and date tokens with the
+				-- `symbol' and the corresponding components of eod_start_date
+				-- and eod_end_date.
+				replace_tokens_using_dates (Result, eod_start_date,
+					eod_end_date, False)
+			end
+print ("daily_stock_... returning " + Result + ".%N")
 		ensure
 			not_void: Result /= Void
 		end
@@ -222,7 +239,15 @@ feature -- Access
 		require
 			ok_to_use_this_spec: using_intraday_stock_data_command
 		do
-			Result := settings @ Intraday_stock_data_command_specifier
+			Result := clone (settings @ Intraday_stock_data_command_specifier)
+			if intraday_start_date /= Void and intraday_end_date /= Void then
+				-- Replace the <symbol> token and date tokens with the
+				-- `symbol' and the corresponding components of
+				-- intraday_start_date and intraday_end_date.
+				replace_tokens_using_dates (Result, intraday_start_date,
+					intraday_end_date, True)
+			end
+print ("intraday_stock... returning " + Result + ".%N")
 		ensure
 			not_void: Result /= Void
 		end
@@ -331,7 +356,12 @@ feature -- Access
 
 	derivative_name_query: STRING is
 		do
-			Result := settings @ Derivative_name_query_specifier
+			Result := clone (settings @ Derivative_name_query_specifier)
+			-- Replace the <symbol> and <uppersymbol> tokens with
+			-- `symbol' and uppercase (`symbol').
+			replace_tokens (Result, <<symbol_token, upper_symbol_token>>,
+				<<symbol, uppercase_symbol>>)
+print ("derivative_name_query returning " + Result + ".%N")
 		ensure
 			not_void: Result /= Void
 		end
@@ -340,7 +370,16 @@ feature -- Access
 		require
 			ok_to_use_this_spec: using_daily_derivative_data_command
 		do
-			Result := settings @ Daily_derivative_data_command_specifier
+			Result := clone (
+				settings @ Daily_derivative_data_command_specifier)
+			if eod_start_date /= Void and eod_end_date /= Void then
+				-- Replace the <symbol> token and date tokens with the
+				-- `symbol' and the corresponding components of eod_start_date
+				-- and eod_end_date.
+				replace_tokens_using_dates (Result, eod_start_date,
+					eod_end_date, False)
+			end
+print ("daily_derivative... returning " + Result + ".%N")
 		ensure
 			not_void: Result /= Void
 		end
@@ -406,7 +445,16 @@ feature -- Access
 		require
 			ok_to_use_this_spec: using_intraday_derivative_data_command
 		do
-			Result := settings @ Intraday_derivative_data_command_specifier
+			Result := clone (
+				settings @ Intraday_derivative_data_command_specifier)
+			if intraday_start_date /= Void and intraday_end_date /= Void then
+				-- Replace the <symbol> token and date tokens with the
+				-- `symbol' and the corresponding components of
+				-- intraday_start_date and intraday_end_date.
+				replace_tokens_using_dates (Result, intraday_start_date,
+					intraday_end_date, True)
+			end
+print ("intraday_derivative... returning " + Result + ".%N")
 		ensure
 			not_void: Result /= Void
 		end
@@ -579,10 +627,6 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	configuration_type: STRING is "database"
 
-	key_index: INTEGER is 1
-
-	value_index: INTEGER is 2
-
 	configuration_file_name: STRING is
 		do
 			if db_config_file_name = Void then
@@ -590,43 +634,6 @@ feature {NONE} -- Implementation - Hook routine implementations
 					Default_database_config_file_name)
 			else
 				Result := file_name_with_app_directory (db_config_file_name)
-			end
-		end
-
-	check_for_missing_specs (ftbl: ARRAY[ANY]) is
---!!!Can this be moved to CONFIGURATION_UTILITIES?
-			-- Check for missing database field specs in `ftbl'.   Expected
-			-- types of ftbl's contents are: <<BOOLEAN, STRING,
-			-- BOOLEAN, STRING, ...>>.
-		require
-			count_even: ftbl.count \\ 2 = 0
-		local
-			s: STRING
-			i: INTEGER
-			emtpy: BOOLEAN_REF
-			all_empty, problem: BOOLEAN
-			gs: expanded EXCEPTION_SERVICES
-			ex: expanded EXCEPTIONS
-		do
-			from i := 1; all_empty := true until i > ftbl.count loop
-				emtpy ?= ftbl @ i
-				check
-					correct_type: emtpy /= Void
-				end
-				if emtpy.item then
-					s := concatenation (<<s, "Missing specification in ",
-						"database configuration file:%N",
-						ftbl @ (i+1), ".%N">>)
-					problem := true
-				else
-					all_empty := false
-				end
-				i := i + 2
-			end
-			if problem and not all_empty then
-				log_error (s)
-				gs.last_exception_status.set_fatal (true)
-				ex.raise ("Fatal error reading database configuration file")
 			end
 		end
 
@@ -652,7 +659,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 							daily_stock_close_field_name.is_empty,
 								Daily_stock_close_field_specifier,
 							daily_stock_volume_field_name.is_empty,
-							Daily_stock_volume_field_specifier>>)
+							Daily_stock_volume_field_specifier>>, True)
 						daily_stock_data_available := true
 					end
 				else
@@ -675,7 +682,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 							intraday_stock_close_field_name.is_empty,
 								Intraday_stock_close_field_specifier,
 							intraday_stock_volume_field_name.is_empty,
-							Intraday_stock_volume_field_specifier>>)
+							Intraday_stock_volume_field_specifier>>, True)
 						intraday_stock_data_available := true
 					end
 				else
@@ -703,7 +710,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 								Daily_derivative_volume_field_specifier,
 							daily_derivative_open_interest_field_name.is_empty,
 								Daily_derivative_open_interest_field_specifier
-							>>)
+							>>, True)
 						daily_derivative_data_available := true
 					end
 				else
@@ -730,7 +737,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 							intraday_derivative_open_interest_field_name.
 								is_empty,
 							Intraday_derivative_open_interest_field_specifier
-							>>)
+							>>, True)
 						intraday_derivative_data_available := true
 					end
 				else

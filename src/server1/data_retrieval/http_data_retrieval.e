@@ -3,6 +3,13 @@ indexing
 		"Abstraction of an algorithm for retrieving tradable data %
 		%from a web site with the HTTP GET construct"
 	author: "Jim Cochrane"
+	note: "@@Note: It may be appropriate at some point to change the name %
+		%of this class to something like EXTERNAL_DATA_RETRIEVAL - %
+		%tools and algorithms for retrieval of data from an external %
+		%source - http, socket, etc - Much of the existing logic in this %
+		%class (and in HTTP_CONFIGURATION - see equivalent note in that %
+		%class) can probably be applied (as is or with little change) to %
+		%retrieval from other external sources besides an http server."
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
