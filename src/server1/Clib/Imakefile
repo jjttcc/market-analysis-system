@@ -1,0 +1,21 @@
+INCLUDES = -I.
+
+HDRS = external_input_sequence_plug_in_module.h
+
+SRCS = external_input_sequence.c
+
+OBJS = external_input_sequence.o
+
+LIBDIR = ../lib/
+
+LIB = $(LIBDIR)/external_input_sequence.o
+
+AllTarget ($(LIB))
+
+$(OBJS): $(HDRS)
+
+$(LIB): $(OBJS)
+
+all:: $(LIB)
+	mkdir -p $(LIBDIR); cp $(OBJS) $(LIB)
+
