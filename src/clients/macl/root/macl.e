@@ -14,6 +14,8 @@ class MACL inherit
 			print as output_message
 		export
 			{NONE} all
+		redefine
+			output_device
 		end
 
 	EXCEPTION_SERVICES
@@ -54,8 +56,6 @@ feature {NONE} -- Initialization
 						processor.fatal_error or command_line.input_from_file
 					then
 						abort (Invalid_input_message)
-					else
-						print (Invalid_input_message)
 					end
 				end
 				processor.process_request (user_response)
@@ -158,6 +158,7 @@ feature {NONE} -- Utilities
 		do
 			if command_line.quiet_mode then
 				output_message (".")
+				output_device.flush
 			else
 				output_message (a)
 			end
@@ -181,6 +182,10 @@ feature {NONE} -- Utilities
 			retry
 		end
 
+feature {NONE} -- Attribute redefinitions
+
+	output_device: PLAIN_TEXT_FILE
+
 feature {NONE} -- Implementation
 
 	command_line: expanded MACL_COMMAND_LINE
@@ -201,12 +206,13 @@ feature {NONE} -- Implementation
 
 	application_name: STRING is "client"
 
-	Abnormal_termination_message: STRING is "Unexpected exception occurred.%N"
+	Abnormal_termination_message: STRING is
+		"%NUnexpected exception occurred.%N"
 
 	Invalid_input_message: STRING is
 		do
-			Result := "Invalid or incorrect user input on line " +
-				last_input_line_number.out
+			Result := "%NInvalid or incorrect user input on line " +
+				last_input_line_number.out + "%N"
 		end
 
 end
