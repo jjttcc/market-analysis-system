@@ -39,6 +39,7 @@ feature -- Initialization
 		do
 			user_interface := ui
 			operator_maker := om
+			operator_maker.set_exclude_list (exclude_cmds)
 			operator_maker.set_market_tuple_selector (user_interface)
 		ensure
 			set: user_interface = ui and operator_maker = om
@@ -296,6 +297,14 @@ feature {NONE} -- Implementation
 						concatenation (<<f.generator,
 							"'s effective offset value">>)))
 			end
+		end
+
+	exclude_cmds: LIST [COMMAND] is
+			-- Commands not allowed as operators for market functions
+		once
+			!LINKED_LIST [COMMAND]!Result.make
+			Result.extend (operator_maker.command_with_generator (
+				"FUNCTION_BASED_COMMAND"))
 		end
 
 invariant
