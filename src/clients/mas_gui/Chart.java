@@ -119,17 +119,11 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			s = (String) _tradables.elementAt(0);
 		}
 		initialize_GUI_components(s);
-//!!!!!:		new Thread(this).start();
 	}
 
 	public StartupOptions options() {
 		return options_;
 	}
-
-//!!!	// From parent Runnable - for threading
-//!!!	public void run() {
-//!!!		// null method
-//!!!	}
 
 	// List of all tradables in the server's database
 	public Vector tradables() {
@@ -302,69 +296,51 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 	// Take action when notified that period type changed.
 	void notify_period_type_changed(String new_period_type) {
-System.out.println("notify_period_type_changed");
 		if (! current_period_type.equals(new_period_type)) {
-System.out.println("! current_period_type.equals(new_period_type)");
 			current_period_type = new_period_type;
 			period_type_change = true;
 			if (current_tradable != null) {
-System.out.println("current_tradable != null");
-request_data(current_tradable);
+				request_data(current_tradable);
+//!!!Replace with:
 //				send_data_request(current_tradable);
+//if it turns out needing to not be threaded.
 			}
 		}
 	}
 
-//!!!!!!!!!XXXXXXXXXXXXXXXXXXX
 	// Request data for the specified tradable and display it, using
 	// a thread for efficiency.
 	void request_data(String tradable) {
 		requested_tradable = tradable;
-System.out.println("Attempting to request data within a separate thread.");
 		new Thread(this).start();
-System.out.println("Finished attempting to request data within a separate thread.");
 	}
-
-private Boolean requesting_data = Boolean.FALSE;
-	private String requested_tradable;
-//!!!!!!!!!XXXXXXXXXXXXXXXXXXX
 
 	public void run() {
 		//@@In the future, if needed, this routine can call one of a
 		//set of routines, based on a flag.
-//!!!		String tradable = requested_tradable;
 		synchronized(requesting_data) {
 			if (! requesting_data.booleanValue()) {
-System.out.println("requesting data ...");
-System.out.println("period_type_change: " + period_type_change);
-System.out.println("requested_tradable, current_tradable: " +
-requested_tradable + ", " + current_tradable);
 				Thread.yield();
 				requesting_data = Boolean.TRUE;
 				send_data_request(requested_tradable);
 				requesting_data = Boolean.FALSE;
 			} else {
-	System.out.println("Giving up request");
 			}
 		}	// end synchronized block
-System.out.println("run finished");
 	}
 
 	void send_data_request(String tradable) {
-System.out.println("run was called - let's see what happens!");
 		DataSet dataset, main_dataset;
 		Configuration conf = Configuration.instance();
 		int count;
 		String current_indicator;
 		// Don't redraw the data if it's for the same tradable as before.
 		if (period_type_change || ! tradable.equals(current_tradable)) {
-System.out.println("A");
 			GUI_Utilities.busy_cursor(true, this);
 			try {
 				data_builder.send_market_data_request(tradable,
 					current_period_type);
 				if (request_result_id() == OK) {
-System.out.println("B");
 					// Ensure that the indicator list is up-to-date with
 					// respect to `tradable'.
 					data_builder.send_indicator_list_request(tradable,
@@ -374,7 +350,6 @@ System.out.println("B");
 					new_indicators = true;
 					indicators();
 				} else {
-System.out.println("C");
 					if (request_result_id() == Invalid_symbol) {
 						handle_nonexistent_sybmol(tradable);
 					} else if (request_result_id() == Warning ||
@@ -457,7 +432,6 @@ System.out.println("C");
 					}
 				}
 			}
-System.out.println("D");
 			main_pane.repaint_graphs();
 			GUI_Utilities.busy_cursor(false, this);
 			period_type_change = false;
@@ -786,4 +760,10 @@ System.out.println("D");
 	// Did the previously retrieved data from the server contain an
 	// open interest field?
 	private boolean previous_open_interest;
+
+	// Is data being requested? - state flag used for threading data requests
+	private Boolean requesting_data = Boolean.FALSE;
+
+	// Currently requested tradable - used for threading data requests
+	private String requested_tradable;
 }
