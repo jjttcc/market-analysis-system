@@ -16,8 +16,7 @@ feature
 	open_interest: INTEGER
 			-- Number of existing contracts
 
-feature {VALUE_SETTER} -- !!!This should be the export status of all
-					   -- !!!set_... routines of all ..._TUPLE classes.
+feature {VALUE_SETTER} -- Element change
 
 	set_open_interest (i: INTEGER) is
 			-- Set open_interest to `i'.

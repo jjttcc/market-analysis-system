@@ -38,14 +38,14 @@ feature
 			-- (For now, this is an attribute that holds the price's
 			-- value.  Need to design this.)
 
-feature -- ??
+feature -- Comparison
 
 	infix "<" (other: like Current): BOOLEAN is
 		do
 			Result := value < other.value
 		end
 
-feature -- {??}
+feature {MARKET_TUPLE} -- Element change
 
 	set_value (v: REAL) is
 			-- Is this the best way to set the price value?

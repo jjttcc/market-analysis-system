@@ -11,7 +11,7 @@ feature -- Access
 
 	value: REAL
 
-feature -- {WHOSHOULDTHISBE} -- Element change
+feature {MARKET_FUNCTION} -- Element change
 
 	set_value (v: REAL) is
 			-- Set value to `v'.

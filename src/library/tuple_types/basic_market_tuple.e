@@ -107,7 +107,7 @@ feature -- Status setting
 			prices_valid: price_relationships_correct
 		end
 
-feature -- {WHO?} Element change
+feature {VALUE_SETTER} -- Element change
 
 	set (o, h, l, c: REAL) is
 			-- Set the open, high, low, and close values.
@@ -178,6 +178,8 @@ feature -- {WHO?} Element change
 		ensure
 			low_set: low.value = p
 		end
+
+feature {DATA_SCANNER} -- Element adjustment
 
 	fix_price_relationships is
 			-- Change prices so that price_relationships_correct is
