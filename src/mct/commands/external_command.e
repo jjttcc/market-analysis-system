@@ -20,9 +20,19 @@ feature {NONE} -- Initialization
 		require
 			args_exist: id /= Void and cmd /= Void
 			id_not_empty: not id.is_empty
+		local
+			regutil: expanded REGULAR_EXPRESSION_UTILITIES
+			cmd_components: ARRAY [STRING]
 		do
 			identifier := id
 			command_string := cmd
+			cmd_components := regutil.split (" +", command_string)
+			if cmd_components.is_empty then
+				-- Report empty command error.
+			else
+				program := cmd_components @ 1
+				arguments := cmd_components.subarray (2, cmd_components.upper)
+			end
 		ensure
 			items_set: identifier = id and command_string = cmd
 		end
@@ -30,7 +40,13 @@ feature {NONE} -- Initialization
 feature -- Access
 
 	command_string: STRING
-			-- The actual command to be delegated to the OS
+			-- The complete command, with arguments, to be delegated to the OS
+
+	program: STRING
+			-- The name of the program to execute
+
+	arguments: ARRAY [STRING]
+			-- The arguments to pass to `program'
 
 	working_directory: STRING
 			-- Directory in which the command is to be executed
@@ -54,23 +70,37 @@ feature -- Basic operations
 		do
 --print ("(EXTCMD - " + name + ") Attempting to execute:%N'" +
 --command_string + "'%N")
-			launch (command_string)
+			launch (program, arguments)
 		end
 
-	launch (cmd: STRING) is
+	launch (prog: STRING; args: ARRAY [STRING]) is
 			-- "Launch" the command.
 		local
 			env: expanded EXECUTION_ENVIRONMENT
+			proc: EPX_EXEC_PROCESS
+gu: expanded GENERAL_UTILITIES
 			previous_directory: STRING
 		do
 			if working_directory /= Void then
 				previous_directory := env.current_working_directory
 				env.change_working_directory (working_directory)
 			end
-			env.launch (cmd)
+--print ("Executing: '" + cmd + "'%N")
+--			env.launch (cmd)
+print ("Executing:%N" + prog + "%N")
+gu.print_list (args)
+print ("%N")
+			create proc.make_capture_output (prog, args)
+			proc.execute
+--env.launch ("sleep 8")
 			if working_directory /= Void then
 				env.change_working_directory (previous_directory)
 			end
 		end
+
+invariant
+
+	program_begins_with_command_string:
+		equal (command_string.substring (1, program.count), program)
 
 end

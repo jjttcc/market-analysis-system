@@ -134,6 +134,22 @@ cluster
 
 	all gobo_structure (gobo):		"$/structure"
 
+	eposix_win:		"$EPOSIX/src/windows"
+
+	eposix_stdc:			"$EPOSIX/src/standardc"
+
+	eposix_wapi:			"$EPOSIX/src/wapi"
+
+	eposix_capi:			"$EPOSIX/src/capi"
+
+	eposix_abstract:			"$EPOSIX/src/abstract"
+
+	eposix_support:			"$EPOSIX/src/support"
+
+	eposix_c:			"$EPOSIX/src/epxc"
+
+	eposix_ise:			"$EPOSIX/src/spec/ise"
+
 external
 
 	include_path:
@@ -145,6 +161,7 @@ external
 		"${MAS}/src/eiffel_library/lib/utilities.obj",
 		"${ISE_EIFFEL}/library/time/spec/bcb/lib/datetime.lib",
 		"${ISE_EIFFEL}/library/net/spec/bcb/lib/net.lib",
+		"${EPOSIX}/lib/libeposix_ise_bcc.lib",
 		"$(ISE_EIFFEL)/library/vision2/spec/$(ISE_C_COMPILER)/lib/vision2.lib",
 		"$(ISE_EIFFEL)/library/wel/spec/$(ISE_C_COMPILER)/lib/wel.lib",
  		"$(ISE_EIFFEL)/library/vision2/spec/$(ISE_C_COMPILER)/lib/libpng.lib",

@@ -135,9 +135,26 @@ cluster
 
 	re_support (regexp):		"$/support"
 
+
 	all gobo_utility (gobo):		"$/utility"
 
 	all gobo_structure (gobo):		"$/structure"
+
+	eposix:			"$EPOSIX/src/posix"
+
+	eposix_stdc:			"$EPOSIX/src/standardc"
+
+	eposix_papi:			"$EPOSIX/src/papi"
+
+	eposix_capi:			"$EPOSIX/src/capi"
+
+	eposix_abstract:			"$EPOSIX/src/abstract"
+
+	eposix_support:			"$EPOSIX/src/support"
+
+	eposix_c:			"$EPOSIX/src/epxc"
+
+	eposix_ise:			"$EPOSIX/src/spec/ise"
 
 external
 
@@ -152,6 +169,6 @@ external
 		"${ISE_EIFFEL}/library/time/spec/${ISE_PLATFORM}/lib/libdatetime.a",
 		"$(ISE_EIFFEL)/library/vision2/spec/$(ISE_PLATFORM)/lib/gtk_eiffel.o",
 		"$(ISE_EIFFEL)/library/vision2/spec/$(ISE_PLATFORM)/lib/load_pixmap.o `gtk-config --libs`",
-		"-lpng -lz -lXtst"
+		"-L $(EPOSIX)/lib -lpthread -leposix_ise -lpng -lz -lXtst"
 
 end

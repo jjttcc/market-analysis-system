@@ -35,15 +35,14 @@ feature -- Basic operations
 
 	execute (window: SESSION_WINDOW) is
 		local
-			cmd: STRING
+			args: ARRAY [STRING]
 		do
-			cmd := clone (command_string)
-			replace_tokens (cmd, <<Port_number_specifier, Hostname_specifier>>,
+			args := deep_clone (arguments)
+			args.linear_representation.do_all (agent replace_tokens (?,
+				<<Port_number_specifier, Hostname_specifier>>,
 				<<window.port_number, window.host_name>>,
-				Token_start_delimiter, Token_end_delimiter)
---print ("(SESSION_COMMAND - " + name + ") Attempting to execute:%N'" +
---cmd + "'%N")
-			launch (cmd)
+				Token_start_delimiter, Token_end_delimiter))
+			launch (program, args)
 		end
 
 end
