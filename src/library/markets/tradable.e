@@ -283,9 +283,9 @@ feature {NONE}
 				-- !IRREGULAR_COMPOSITE_TUPLE_BUILDER!ctbuilder.make (
 				--										Current, ctf, type)
 			else
-				!!ctbuilder.make (Current, ctf, type)
+				!!ctbuilder.make (Current, ctf, type, start_date_time)
 			end
-			ctbuilder.process (start_date_time)
+			ctbuilder.process (Void)
 			Result := ctbuilder.output
 		end
 
