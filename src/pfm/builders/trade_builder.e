@@ -21,7 +21,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (field_sep: STRING; in: INPUT_SEQUENCE) is
+	make (field_sep: STRING; in: like input) is
 		require
 			in_not_void: in /= Void
 			separators_not_void: field_sep /= Void
