@@ -724,7 +724,6 @@ class Range extends Frame {
 ** Handle the events
 */
    public boolean keyDown(Event e, int key) {
-
          if(e.target instanceof TextField) {
 
             if( ( key == 10 || e.key == 13 ) ) {

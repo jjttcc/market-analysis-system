@@ -213,17 +213,16 @@ public class Graph extends Canvas {
 *******************/
 
 /**
- *   Attach a DataSet to the graph. By attaching the data set the class
- *   can draw the data through its paint method.
+ * Attach a DataSet to the graph. By attaching the data set the class
+ * can draw the data through its paint method.
  */
 
-    public void attachDataSet( DataSet d ) {
-
-       if( d != null) {
-             dataset.addElement( d );
-             d.g2d = this;
-       }
-    }
+	public void attachDataSet(DataSet d) {
+	if( d != null) {
+		dataset.addElement(d);
+		d.g2d = this;
+	}
+}
 /**
  *    Detach the DataSet from the class. Data associated with the DataSet
  *    will nolonger be plotted.
@@ -278,7 +277,7 @@ public class Graph extends Canvas {
              axis.addElement( a );
             }
        catch (Exception e) { 
-         System.out.println("Failed to create Axis");
+         System.err.println("Failed to create Axis");
          e.printStackTrace();
          return null;
        }
@@ -300,7 +299,7 @@ public class Graph extends Canvas {
              a.g2d = this;
             }
        catch (Exception e) { 
-         System.out.println("Failed to attach Axis");
+         System.err.println("Failed to attach Axis");
          e.printStackTrace();
        }
 
@@ -465,7 +464,7 @@ public class Graph extends Canvas {
         Rectangle r = bounds();
 
         /* The r.x and r.y returned from bounds is relative to the
-	** parents space so set them equal to zero.
+		** parents space so set them equal to zero.
         */
         r.x = 0;
         r.y = 0;
@@ -487,7 +486,7 @@ public class Graph extends Canvas {
         else  {
                if(clearAll ) {
                  Color c = g.getColor();
-	         g.setColor(DataBackground);
+				 g.setColor(DataBackground);
                  g.fillRect(r.x,r.y,r.width,r.height);
                  g.setColor(c);
                }
@@ -801,11 +800,11 @@ public class Graph extends Canvas {
                g.setColor(c);
             }
 
-// Draw a frame around the data area (If requested)
+			// Draw a frame around the data area (If requested)
             if(frame) drawFrame(g,x,y,width,height);
 
-// Now draw the axis in the order specified aligning them with the final
-// data area.
+			// Now draw the axis in the order specified aligning them
+			// with the final data area.
             for (int i=0; i<axis.size(); i++) {
                a = ((Axis)axis.elementAt(i));
 
@@ -897,11 +896,7 @@ public class Graph extends Canvas {
         g.drawRect(x,y,width,height);
 
         g.setColor(c);
-
-
      }
-
-
 }
 
 /**

@@ -1006,7 +1006,7 @@ public class Axis extends Object {
    * @param d dataset to attach.
    */
       protected void attachXdata( DataSet d ) {
-
+			d.range();
             dataset.addElement(d);
             d.xaxis = this;
 
@@ -1025,7 +1025,7 @@ public class Axis extends Object {
    * @param d dataset to attach.
    */
       protected void attachYdata( DataSet d ) {
-
+			d.range();
             dataset.addElement(d);
             d.yaxis = this;
 
@@ -1036,7 +1036,6 @@ public class Axis extends Object {
                if(minimum > d.dymin) minimum = d.dymin;
                if(maximum < d.dymax) maximum = d.dymax;
             }
-
       }
 
 
@@ -1128,5 +1127,3 @@ public class Axis extends Object {
       }                  
 
 }
-
-

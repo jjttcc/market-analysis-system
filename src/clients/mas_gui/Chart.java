@@ -19,23 +19,27 @@ import common.*;
 
 class ChartSettings implements Serializable {
 	public ChartSettings(Dimension sz, Properties printprop, Point loc,
-			String upperind, String lowerind) {
+			Vector upperind, Vector lowerind, boolean replace_ind) {
 		size_ = sz;
 		print_properties_ = printprop;
 		location_ = loc;
-		upper_indicator_ = upperind;
-		lower_indicator_ = lowerind;
+		upper_indicators_ = upperind;
+		lower_indicators_ = lowerind;
+		replace_indicators_ = replace_ind;
 	}
 	public Dimension size() { return size_; }
 	public Point location() { return location_; }
 	public Properties print_properties() { return print_properties_; }
-	public String upper_indicator() { return upper_indicator_;}
-	public String lower_indicator() { return lower_indicator_;}
+	public Vector upper_indicators() { return upper_indicators_;}
+	public Vector lower_indicators() { return lower_indicators_;}
+	public boolean replace_indicators() { return replace_indicators_; }
+
 	private Dimension size_;
 	private Properties print_properties_;
 	private Point location_;
-	private String upper_indicator_;
-	private String lower_indicator_;
+	private Vector upper_indicators_;
+	private Vector lower_indicators_;
+	private boolean replace_indicators_;
 }
 
 /** Market analysis GUI chart component */
@@ -109,6 +113,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			quit(-1);
 		}
 		initialize_GUI_components();
+replace_indicators = false;
 		current_period_type = main_pane.current_period_type();
 		if (_markets.size() > 0) {
 			if (data_builder.options().print_on_startup() && num_windows == 1) {
@@ -117,6 +122,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			// Show the graph of the first symbol in the selection list.
 			request_data((String) _markets.elementAt(0));
 		}
+System.out.println("replace_indicators: " + replace_indicators);
 		new Thread(this).start();
 	}
 
@@ -156,6 +162,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	// Request data for the specified market and display it.
 	void request_data(String market) {
 		DataSet dataset, main_dataset;
+		int count;
+		String current_indicator;
 		// Don't redraw the data if it's for the same market as before.
 		if (period_type_change || ! market.equals(current_market)) {
 			GUI_Utilities.busy_cursor(true, this);
@@ -175,52 +183,62 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			//change later.)
 			main_pane.clear_main_graph();
 			main_dataset = data_builder.last_market_data();
+			link_with_axis(main_dataset, null);
 			main_pane.add_main_data_set(main_dataset);
-			if (current_upper_indicator != null &&
-					! current_upper_indicator.equals(No_upper_indicator)) {
-				// Retrieve the data for the newly selected market for the
+			if (! current_upper_indicators.isEmpty()) {
+				// Retrieve the data for the newly requested market for the
 				// upper indicator, add it to the upper graph and draw
 				// the new indicator data and the market data.
-				try {
-					data_builder.send_indicator_data_request(
-						((Integer) _indicators.get(current_upper_indicator)).
-							intValue(), market, current_period_type);
-				} catch (Exception e) {
-					System.err.println("Exception occurred: " + e +
-						" - Exiting ...");
-					e.printStackTrace();
-					quit(-1);
-				}
-				dataset = data_builder.last_indicator_data();
-				dataset.set_dates_needed(false);
-				dataset.set_y_min_max(main_dataset);
-				main_pane.add_main_data_set(dataset);
-			}
-			current_market = market;
-			set_window_title();
-			if (current_lower_indicator != null &&
-					! current_lower_indicator.equals(No_lower_indicator)) {
-				// Retrieve the indicator data for the newly selected market
-				// for the lower indicator and draw it.
-				main_pane.clear_indicator_graph();
-				if (current_lower_indicator.equals(Volume)) {
-					// (Nothing to retrieve from server)
-					dataset = data_builder.last_volume();
-				} else {
+				count = current_upper_indicators.size();
+				for (int i = 0; i < count; ++i) {
+					current_indicator = (String)
+						current_upper_indicators.elementAt(i);
 					try {
-						data_builder.send_indicator_data_request(
-						((Integer) _indicators.get(current_lower_indicator)).
+						data_builder.send_indicator_data_request(((Integer)
+							_indicators.get(current_indicator)).
 								intValue(), market, current_period_type);
 					} catch (Exception e) {
-						System.err.println(
-							"Exception occurred: " + e + "- Exiting ...");
+						System.err.println("Exception occurred: " + e +
+							" - Exiting ...");
 						e.printStackTrace();
 						quit(-1);
 					}
 					dataset = data_builder.last_indicator_data();
+					dataset.set_dates_needed(false);
+					link_with_axis(dataset, current_indicator);
+					main_pane.add_main_data_set(dataset);
 				}
-				add_indicator_lines(dataset);
-				main_pane.add_indicator_data_set(dataset);
+			}
+			current_market = market;
+			set_window_title();
+			if (! current_lower_indicators.isEmpty()) {
+				// Retrieve the indicator data for the newly requested market
+				// for the lower indicator and draw it.
+				main_pane.clear_indicator_graph();
+				count = current_lower_indicators.size();
+				for (int i = 0; i < count; ++i) {
+					current_indicator = (String)
+						current_lower_indicators.elementAt(i);
+					if (current_lower_indicators.elementAt(i).equals(Volume)) {
+						// (Nothing to retrieve from server)
+						dataset = data_builder.last_volume();
+					} else {
+						try {
+						data_builder.send_indicator_data_request(((Integer)
+							_indicators.get(current_indicator)).
+								intValue(), market, current_period_type);
+						} catch (Exception e) {
+						System.err.println(
+							"Exception occurred: " + e + "- Exiting ...");
+						e.printStackTrace();
+						quit(-1);
+						}
+						dataset = data_builder.last_indicator_data();
+					}
+					link_with_axis(dataset, current_indicator);
+					add_indicator_lines(dataset, current_indicator);
+					main_pane.add_indicator_data_set(dataset);
+				}
 			}
 			main_pane.repaint_graphs();
 			GUI_Utilities.busy_cursor(false, this);
@@ -231,27 +249,27 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 	// Add any extra lines to the indicator graph - specified in the
 	// configuration.
-	private void add_indicator_lines(DataSet dataset) {
-		if (current_lower_indicator == null ||
-			current_lower_indicator.equals(No_lower_indicator)) {
+	private void add_indicator_lines(DataSet dataset, String indicator) {
+		if (current_lower_indicators.isEmpty()) {
 			return;
 		}
+
 		Vector lines;
 		double d1, d2;
 		Configuration conf = Configuration.instance();
-		lines = conf.vertical_indicator_lines_at(current_lower_indicator);
+		lines = conf.vertical_indicator_lines_at(indicator);
 		if (lines != null && lines.size() > 0) {
-			for (int i = 0; i < lines.size(); i += 2) {
-				d1 = ((Float) lines.elementAt(i)).floatValue();
-				d2 = ((Float) lines.elementAt(i+1)).floatValue();
+			for (int j = 0; j < lines.size(); j += 2) {
+				d1 = ((Float) lines.elementAt(j)).floatValue();
+				d2 = ((Float) lines.elementAt(j+1)).floatValue();
 				dataset.add_vline(new DoublePair(d1, d2));
 			}
 		}
-		lines = conf.horizontal_indicator_lines_at(current_lower_indicator);
+		lines = conf.horizontal_indicator_lines_at(indicator);
 		if (lines != null && lines.size() > 0) {
-			for (int i = 0; i < lines.size(); i += 2) {
-				d1 = ((Float) lines.elementAt(i)).floatValue();
-				d2 = ((Float) lines.elementAt(i+1)).floatValue();
+			for (int j = 0; j < lines.size(); j += 2) {
+				d1 = ((Float) lines.elementAt(j)).floatValue();
+				d2 = ((Float) lines.elementAt(j+1)).floatValue();
 				dataset.add_hline(new DoublePair(d1, d2));
 			}
 		}
@@ -266,10 +284,13 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			main_pane.setSize(window_settings.size().width,
 				window_settings.size().height + 2);
 			setLocation(window_settings.location());
-			current_upper_indicator = window_settings.upper_indicator();
-			current_lower_indicator = window_settings.lower_indicator();
+			current_upper_indicators = window_settings.upper_indicators();
+			current_lower_indicators = window_settings.lower_indicators();
+			replace_indicators = window_settings.replace_indicators();
 		} else {
 			main_pane.setSize(800, 460);
+			current_upper_indicators = new Vector();
+			current_lower_indicators = new Vector();
 		}
 		add(main_pane, "Center");
 		market_selection = new MarketSelection(this);
@@ -362,13 +383,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			imenu.add(menu_item);
 			menu_item.addActionListener(listener);
 		}
-		//!!Note: When you get there, the listener(s) that is used to
-		//process events for the above menu items can probably use the
-		//menu item name, which will be the indicator name, as a key
-		//in a hash table that will give the "indicator ID".  The menu
-		//item name will be available from the getActionCommand
-		//method of the ActionEvent argument to ActionListener's
-		//actionPerformed method.  This will probably be set here.
 	}
 
 	/** Close a window.  If this is the last open window, just quit. */
@@ -394,12 +408,18 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		data_builder.logout(true, status);
 	}
 
-	// Set the window title using current_market and current_lower_indicator.
+	// Set the window title using current_market and current_lower_indicators.
 	private void set_window_title() {
-		if (current_lower_indicator != null &&
-				! current_lower_indicator.equals(No_lower_indicator)) {
-			setTitle(current_market.toUpperCase() + " - " +
-				current_lower_indicator);
+		if (! current_lower_indicators.isEmpty()) {
+			StringBuffer newtitle = new
+				StringBuffer (current_market.toUpperCase() + " - ");
+			int i;
+			for (i = 0; i < current_lower_indicators.size() - 1; ++i) {
+				newtitle.append(current_lower_indicators.elementAt(i));
+				newtitle.append(", ");
+			}
+			newtitle.append(current_lower_indicators.elementAt(i));
+			setTitle(newtitle.toString());
 		}
 		else {
 			setTitle(current_market.toUpperCase());
@@ -423,7 +443,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			ObjectOutputStream oos = new ObjectOutputStream(chartfile);
 			ChartSettings cs = new ChartSettings(main_pane.getSize(),
 				main_pane.print_properties, getLocation(),
-				current_upper_indicator, current_lower_indicator);
+				current_upper_indicators, current_lower_indicators,
+				replace_indicators);
 			oos.writeObject(cs);
 			oos.flush();
 			oos.close();
@@ -432,6 +453,22 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			System.err.println("Could not save file " + serialize_filename);
 			System.err.println(e);
 		}
+		}
+	}
+
+	// Link `d' with the appropriate data set group, using `indicator_name'
+	// as a key.  If `indicator_name' is null, the group for the main
+	// (upper) graph will be used.  If `indicator_name' specifies an
+	// indicator that is not a group member, no action is taken.
+	private void link_with_axis(DataSet d, String indicator_name) {
+		IndicatorGroups groups = Configuration.instance().indicator_groups();
+		IndicatorGroup group;
+		if (indicator_name == null) {
+			indicator_name = groups.Maingroup;
+		}
+		group = groups.at(indicator_name);
+		if (group != null) {
+			group.attach_data_set(d);
 		}
 	}
 
@@ -449,6 +486,10 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		}
 		System.err.println("Exiting ...");
 		quit(-1);
+	}
+
+	private boolean vector_has(Vector v, String s) {
+		return Utilities.vector_has(v, s);
 	}
 
 	private DataSetBuilder data_builder;
@@ -477,11 +518,13 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	// Has the period type just been changed?
 	protected boolean period_type_change;
 
-	// Current selected market
-	protected String current_upper_indicator;
+	protected Vector current_upper_indicators;
 
-	// Current selected market
-	protected String current_lower_indicator;
+	protected Vector current_lower_indicators;
+
+	// Should new indicator selections replace, rather than be added to,
+	// existing indicators?
+	boolean replace_indicators;
 
 	protected MarketSelection market_selection;
 
@@ -496,14 +539,16 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	static ChartSettings window_settings;
 
 /** Listener for indicator selection */
-class IndicatorListener implements java.awt.event.ActionListener {
+class IndicatorListener implements
+		java.awt.event.ActionListener {
 	public void actionPerformed(java.awt.event.ActionEvent e) {
 		String selection = e.getActionCommand();
 		DataSet dataset, main_dataset;
 		try {
 			String market = current_market;
-			if (market == null || selection.equals(current_upper_indicator) ||
-				selection.equals(current_lower_indicator)) {
+			if (market == null ||
+				vector_has(current_upper_indicators, selection) ||
+				vector_has(current_lower_indicators, selection)) {
 				// If no market is selected or the selection hasn't changed,
 				// there is nothing to display.
 				return;
@@ -528,41 +573,48 @@ class IndicatorListener implements java.awt.event.ActionListener {
 		if (Configuration.instance().upper_indicators().containsKey(selection))
 		{
 			main_dataset = data_builder.last_market_data();
-			if (current_upper_indicator != null) {
+			if (! current_upper_indicators.isEmpty() && replace_indicators) {
 				// Remove the old indicator data from the graph (and the
 				// market data).
 				main_pane.clear_main_graph();
 				// Re-attach the market data.
+				link_with_axis(main_dataset, null);
 				main_pane.add_main_data_set(main_dataset);
+				current_upper_indicators.removeAllElements();
 			}
-			current_upper_indicator = selection;
+			current_upper_indicators.addElement(selection);
 			dataset = data_builder.last_indicator_data();
 			dataset.set_dates_needed(false);
-			dataset.set_y_min_max(main_dataset);
+			link_with_axis(dataset, selection);
 			main_pane.add_main_data_set(dataset);
 		}
 		else if (selection.equals(No_upper_indicator)) {
 			// Remove the old indicator and market data from the graph.
 			main_pane.clear_main_graph();
 			// Re-attach the market data without the indicator data.
+			link_with_axis(data_builder.last_market_data(), null);
 			main_pane.add_main_data_set(data_builder.last_market_data());
-			current_upper_indicator = selection;
+			current_upper_indicators.removeAllElements();
 		}
 		else if (selection.equals(No_lower_indicator)) {
 			main_pane.clear_indicator_graph();
-			current_lower_indicator = selection;
+			current_lower_indicators.removeAllElements();
 			set_window_title();
 		}
 		else {
-			main_pane.clear_indicator_graph();
-			current_lower_indicator = selection;
-			set_window_title();
 			if (selection.equals(Volume)) {
 				dataset = data_builder.last_volume();
 			} else {
 				dataset = data_builder.last_indicator_data();
 			}
-			add_indicator_lines(dataset);
+			if (replace_indicators) {
+				main_pane.clear_indicator_graph();
+				current_lower_indicators.removeAllElements();
+			}
+			link_with_axis(dataset, selection);
+			current_lower_indicators.addElement(selection);
+			set_window_title();
+			add_indicator_lines(dataset, selection);
 			main_pane.add_indicator_data_set(dataset);
 		}
 		main_pane.repaint_graphs();

@@ -84,6 +84,17 @@ public class Utilities
 		return result;
 	}
 
+	// Does `v' contain string `s'?
+	static public boolean vector_has(Vector v, String s) {
+		boolean result = false;
+		for (int i = 0; i < v.size() && ! result; ++i) {
+			if (((String) v.elementAt(i)).equals(s)) {
+				result = true;
+			}
+		}
+		return result;
+	}
+
 	private static String[] months = new String[12];
 
 	static {

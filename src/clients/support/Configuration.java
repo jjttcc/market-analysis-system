@@ -99,6 +99,41 @@ public class Configuration implements NetworkProtocol
 		return _main_graph_drawer;
 	}
 
+	public IndicatorGroups indicator_groups() {
+if (indicator_groups == null) {
+indicator_groups = new IndicatorGroups();
+IndicatorGroup macd = new IndicatorGroup();
+macd.add_indicator("MACD Difference");
+macd.add_indicator("Slope of MACD Difference");
+macd.add_indicator("Slope of Slope of MACD Difference");
+macd.add_indicator("Slope of Slope of Slope of MACD Difference");
+macd.add_indicator("MACD Signal Line (EMA of MACD Difference)");
+macd.add_indicator("MACD Histogram");
+macd.add_indicator("Slope of MACD Signal Line");
+macd.add_indicator("Slope of Slope of MACD Signal Line");
+indicator_groups.add_group(macd);
+
+IndicatorGroup main_group = new IndicatorGroup();
+main_group.add_indicator("Simple Moving Average");
+main_group.add_indicator("Exponential Moving Average");
+main_group.add_indicator(IndicatorGroups.Maingroup);
+indicator_groups.add_group(main_group);
+
+IndicatorGroup volume = new IndicatorGroup();
+volume.add_indicator("EMA of Volume");
+volume.add_indicator("Volume");
+indicator_groups.add_group(volume);
+
+IndicatorGroup stochastic = new IndicatorGroup();
+stochastic.add_indicator("Stochastic %K");
+stochastic.add_indicator("Stochastic %D");
+stochastic.add_indicator("Slow Stochastic %D");
+indicator_groups.add_group(stochastic);
+}
+
+		return indicator_groups;
+	}
+
 	// The singleton instance
 	public static Configuration instance() {
 		if (_instance == null) {
@@ -302,6 +337,7 @@ public class Configuration implements NetworkProtocol
 	private Hashtable _vertical_indicator_lines;
 	private Hashtable _horizontal_indicator_lines;
 	private Hashtable _color_table;
+	private IndicatorGroups indicator_groups;
 
 	// Configuration Keywords
 	private final String Upper_indicator = "upper_indicator";

@@ -222,7 +222,7 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 
 	private Drawer new_indicator_drawer() {
 		if (main_drawer == null) {
-			System.out.println("Code defect: main_drawer is null");
+			System.err.println("Code defect: main_drawer is null");
 			System.exit(-2);
 		}
 		return new LineDrawer(main_drawer);

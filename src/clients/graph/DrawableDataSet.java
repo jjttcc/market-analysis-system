@@ -63,22 +63,6 @@ public class DataSet {
 
 	public void set_dates_needed(boolean b) { _dates_needed = b; }
 
-	// Set ymin and ymax `min' and `max', respectively from the
-	// corresponding values in `ds'.
-	public void set_y_min_max(DataSet ds) {
-		if (! ds.range_set) {
-			ds.range();
-		}
-		ymin = ds.ymin; ymax = ds.ymax;
-		// range() needs to be called if it hasn't yet been called to
-		// set the other parts of the range - but y_min_max_set needs to
-		// be true first so that range() does not overwrite ymin/ymax.
-		// This is basically an optimization to prevent ymin/ymax from
-		// being calculated needlessly.
-		y_min_max_set = true;
-		if (! range_set) range();
-	}
-
 /*
 ***********************
 ** Public Variables      
@@ -331,7 +315,7 @@ public class DataSet {
 			date_drawer.set_maxes(xmax, ymax, xmin, ymin);
 			date_drawer.set_ranges(xrange, yrange);
 			date_drawer.set_clipping(clipping);
-			date_drawer.draw_data(g, w, hline_data, vline_data);
+			date_drawer.draw_data(g, w, null, null);
 		}
       }
 
@@ -359,17 +343,15 @@ public class DataSet {
 			dymax = 0.0;
 		}
 
-		if (! y_min_max_set) {
-			// `data' holds only y values - find the largest and smallest.
-			for (i = 0; i < lnth; ++i) {
-				if( dymax < data[i] ) { dymax = data[i]; }
-				else if( dymin > data[i] ) { dymin = data[i]; }
-			}
-			if ( yaxis == null) {
-				ymin = dymin;
-				ymax = dymax;
-			}
+		// `data' holds only y values - find the largest and smallest.
+		for (i = 0; i < lnth; ++i) {
+			if( dymax < data[i] ) { dymax = data[i]; }
+			else if( dymin > data[i] ) { dymin = data[i]; }
 		}
+			if ( yaxis == null) {
+			ymin = dymin;
+			ymax = dymax;
+			}
 
 		if ( xaxis == null) {
 			xmin = dxmin;
@@ -440,8 +422,6 @@ public class DataSet {
 
 	// Has range() been called to set the range?
 	protected boolean range_set = false;
-
-	protected boolean y_min_max_set = false;
 
 	// Number of tuples in the data
 	protected int tuple_count;
