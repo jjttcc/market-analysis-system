@@ -1,21 +1,25 @@
-INCLUDES = -I.
+INCLUDES = -I.  -I$(EIFFEL_INCLUDE)
+
+CCOPTIONS = -Wall
 
 HDRS = external_input_sequence_plug_in_module.h
 
-SRCS = external_input_sequence.c
+SRCS = external_input_sequence.c plug_in_module_1.c
 
-OBJS = external_input_sequence.o
+OBJS = external_input_sequence.o plug_in_module_1.o
 
 LIBDIR = ../lib/
 
-LIB = $(LIBDIR)/external_input_sequence.o
+EIFFEL_INCLUDE = ${EIFFEL4}/bench/spec/${PLATFORM}/include
+
+LIB = $(LIBDIR)/external_input_sequence.a
 
 AllTarget ($(LIB))
 
 $(OBJS): $(HDRS)
 
 $(LIB): $(OBJS)
+	ar crv $(LIB) $(OBJS)
 
 all:: $(LIB)
-	mkdir -p $(LIBDIR); cp $(OBJS) $(LIB)
 
