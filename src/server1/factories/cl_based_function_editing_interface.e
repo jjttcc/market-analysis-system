@@ -116,14 +116,14 @@ feature {NONE} -- Implementation of hook methods
 					"%N     Create a new indicator (c) %
 					%Remove an indicator (r) %N%
 					%     View an indicator (v) %
-					%Edit indicators (e) %
+					%Edit an indicator (e) %
 					%Previous (-) ", eom>>)
 			else
 				msg := concatenation (<<"Select action:",
 					"%N     Create a new indicator (c) %
 					%Remove an indicator (r) %N%
 					%     View an indicator (v) %
-					%Edit indicators (e) %
+					%Edit an indicator (e) %
 					%Save changes (s) %N%
 					%     Previous - abort changes (-) ", eom>>)
 			end
