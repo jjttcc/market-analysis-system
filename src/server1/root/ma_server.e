@@ -18,7 +18,7 @@ class MA_SERVER inherit
 			{NONE} all
 		end
 
-	MAS_EXCEPTION
+	EXCEPTION_SERVICES
 		export
 			{NONE} all
 		end
