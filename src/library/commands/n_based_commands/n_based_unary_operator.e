@@ -38,7 +38,7 @@ feature -- Initialization
 		do
 			operand := op
 			-- operand must be set before calling n_make, which calls set_n.
-			n_make (n)
+			n_make (i)
 		ensure
 			set: operand = op and n = i
 		end
