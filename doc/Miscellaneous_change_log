@@ -1,0 +1,7 @@
+[Change log for miscellaneous MAS components]
+
+Re-implemented the MAS Control Terminal (MCT) in Eiffel (was in Java) and
+made it more functional.
+
+Re-implemented the MAS Command Line client (macl) in Eiffel (was in Python)
+and added a couple additional features to it.

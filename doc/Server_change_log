@@ -14,6 +14,25 @@ with the indicator editing facility.
 Added the "date-spec" option to the server, allowing it to be configured
 to read the date field of its data in one of several different formats.
 
+Fixed a couple bugs in the component that services the command-line client,
+eliminating some bad behavior that occurs in unexpected situations.  (For
+example, the server used to loop forever obtaining non-existent input
+from the client in some situations where the client breaks off the
+communication, eating up more and more memory.)
+
+Removed the unecessary restriction for the boolean-numeric-client command:
+It used to only be able to take boolean operators that compared two real
+values (such as gt-operator, lt-operator, etc.).  It can now accept any
+operator whose result is boolean (and, or, etc.).  This increases the
+power of the indicator creation functionality of the server with respect
+to the use of boolean operators.
+
+Made the function-based command (which previously was only available for
+the creation of market analyzers) available for creating indicators.
+This feature allows for the creation of complex indicators that use
+one or more existing indicators in ways that could not be implemented
+before the change.
+
 SIGNIFICANT SERVER CHANGES IN RELEASE 1.6.5
 
 Added the ability to retrieve market data from a web server using the http
