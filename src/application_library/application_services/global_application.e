@@ -331,14 +331,34 @@ feature -- Constants
 feature {NONE} -- Implementation
 
 	new_event_type (name: STRING): EVENT_TYPE is
-			-- Create a new EVENT_TYPE with name `name'.
+			-- Create a new EVENT_TYPE with name `name' and a unique ID.
 			-- Note: A new MARKET_EVENT_GENERATOR should be created with
 			-- this new event type and added to market_event_generation_library
 			-- before the next event type is created.
+		local
+			unique_id: INTEGER
+			l: LIST [MARKET_EVENT_GENERATOR]
 		do
-			!!Result.make (name, market_event_generation_library.count + 1)
+			unique_id := maximum_id_value (market_event_generation_library) + 1
+			!!Result.make (name, unique_id)
 		ensure
 			not event_types.has (Result)
+		end
+
+	maximum_id_value (l: LIST [MARKET_EVENT_GENERATOR]): INTEGER is
+			-- The largest EVENT_TYPE ID value in `l'
+		do
+			from
+				Result := 1
+				l.start
+			until
+				l.exhausted
+			loop
+				if l.item.event_type.id > Result then
+					Result := l.item.event_type.id
+				end
+				l.forth
+			end
 		end
 
 end -- GLOBAL_APPLICATION
