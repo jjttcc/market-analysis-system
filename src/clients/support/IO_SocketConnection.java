@@ -33,12 +33,12 @@ public class IO_SocketConnection extends IO_Connection
 // Basic operations
 
 	public void close() throws IOException {
-		System.out.println("IO_SocketConnection.close called");
+//		System.out.println("IO_SocketConnection.close called");
 		socket.close();
 	}
 
 	public void open() throws IOException {
-		System.out.println("IO_SocketConnection.open called");
+//		System.out.println("IO_SocketConnection.open called");
 		try {
 			//It appears that the only way to connect a client socket is
 			//to create a new one.
