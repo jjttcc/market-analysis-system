@@ -64,29 +64,29 @@ feature -- Access
 			-- Message: how to invoke the program from the command-line
 		do
 			Result := concatenation (<<"Usage: ", command_name,
-				" [options] [input_file...]%NOptions:%N",
-				"  <number>                ",
+				" [options] [input_file ...]%NOptions:%N",
+				"  <number>             ",
 				"Use port <number> for socket communication%N",
-				"  -f <sep>                Use Field separator <sep>%N",
-				"  -i <ext>                ",
+				"  -f <sep>             Use Field separator <sep>%N",
+				"  -i <ext>             ",
 				"Include Intraday data from files with %
 				%extension <ext>%N",
-				"  -d <ext>                Include Daily data from files %
+				"  -d <ext>             Include Daily data from files %
 				%with extension <ext>%N",
-				"  -v                      Print Version number%N",
-				"  -h                      Print this Help message%N",
-				"  -s                      Use Strict error checking%N",
-				"  -p                      ",
+				"  -v                   Print Version number%N",
+				"  -h                   Print this Help message%N",
+				"  -s                   Use Strict error checking%N",
+				"  -p                   ",
 				"Get data from database (Persistent store)%N",
-				"  -w                      ",
+				"  -w                   ",
 				"Get data from the Web (HTTP request)%N",
-				"  -x                      Use an external data source%N",
-				"  -n                      No caching of intraday data%N",
-				"  -b                      Run in Background%N",
+				"  -x                   Use an external data source%N",
+				"  -n                   No caching of intraday data%N",
+				"  -b                   Run in Background%N",
 				"  ", no_volume_spec,
-				"              Data has no volume field%N",
+				"           Data has no volume field%N",
 				"  ", no_open_spec,
-				"                Data has no open field%N",
+				"             Data has no open field%N",
 				usage_indent, special_format_option_spec, "%N">>)
 		end
 
@@ -425,7 +425,7 @@ feature {NONE} -- Implementation queries
 
 	usage_indent: STRING is "  "
 
-	usage_description_column: INTEGER is 27
+	usage_description_column: INTEGER is 24
 
 	special_format_description: STRING is
 		local
@@ -434,7 +434,7 @@ feature {NONE} -- Implementation queries
 			s := " "
 			s.multiply (usage_description_column - 1)
 			Result := "Use special date specification <spec>%N" + s +
-                             "  (See documentation for date specificaton.)"
+				"  (See documentation for date specificaton.)"
 		end
 
 	current_contents_match (s: STRING): BOOLEAN is
