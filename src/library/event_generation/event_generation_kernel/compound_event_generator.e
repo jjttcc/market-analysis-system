@@ -27,7 +27,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (la, ra: MARKET_EVENT_GENERATOR; event_type_name: STRING) is
+	make (la, ra: MARKET_EVENT_GENERATOR; ev_type: EVENT_TYPE) is
 		require
 			not_void: la /= Void and ra /= Void
 		do
@@ -35,13 +35,14 @@ feature {NONE} -- Initialization
 			right_analyzer := ra
 			!!before_extension.make (0, 0, 0, 0, 0, 0)
 			!!after_extension.make (0, 0, 0, 0, 0, 0)
-			set_event_type (event_type_name)
+			event_type := ev_type
 		ensure
 			analyzers_set: left_analyzer = la and right_analyzer = ra
 			extensions_set_to_0:
 				before_extension.is_equal (before_extension.zero) and
 				after_extension.is_equal (before_extension.zero)
 			left_target_type_void: left_target_type = Void
+			event_type_set: event_type = ev_type
 		end
 
 feature -- Access

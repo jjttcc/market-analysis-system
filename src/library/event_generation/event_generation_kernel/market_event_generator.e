@@ -41,18 +41,6 @@ feature -- Status setting
 		deferred
 		end
 
-feature {NONE} -- Implementation
-
-	set_event_type (name: STRING) is
-			-- Create an event type with name `name', add it to the global
-			-- event table, and set attribute event_type to it.
-		do
-			create_event_type (name)
-			event_type := last_event_type
-		ensure
-			event_type /= Void
-		end
-
 invariant
 
 	event_type_not_void: event_type /= Void
