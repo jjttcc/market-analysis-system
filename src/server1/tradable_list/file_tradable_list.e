@@ -84,6 +84,9 @@ feature -- Access
 			loop
 				forth
 			end
+		ensure then
+			-- `file_names' contains `name' implies
+			--	file_names.item.is_equal (name)
 		end
 
 	file_names: LINEAR [STRING]
