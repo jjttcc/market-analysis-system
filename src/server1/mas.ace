@@ -10,6 +10,7 @@ default
 	assertion (ensure)
 	assertion (loop)
 	assertion (invariant)
+	arguments ("-o -f , /tmp/ibm.txt")
 	arguments ("-o -f , -w 12346")
 	arguments ("-o -p")
 	arguments ("-o -p 12345")
@@ -162,11 +163,11 @@ cluster
 
 	eiflib_data_scanning (eiffel_components):		"$/data_scanning"
 
-	data_scanning_main (eiflib_data_scanning ):	"$/main_abstractions"
+	data_scanning_main (eiflib_data_scanning):		"$/main_abstractions"
 
-	data_scanning_input (eiflib_data_scanning ):	"$/input_mechanisms"
+	data_scanning_input (eiflib_data_scanning):		"$/input_mechanisms"
 
-	eiflib_value_setters (eiffel_components): 	"$/data_scanning/value_setters"
+	eiflib_value_setters (eiffel_components):		"$/data_scanning/value_setters"
 
 	operators (eiffel_components):		"$/commands/operators"
 
