@@ -47,6 +47,8 @@ feature -- Basic operations
 			error_msg: STRING
 			fatal: BOOLEAN
 		do
+print_list (<<"exception: ", exception, "meaning: ", meaning (exception),
+"%N">>)
 			-- An exception may have caused a lock to have been left open -
 			-- ensure that clean-up occurs to remove the lock:
 			no_cleanup := false
@@ -54,25 +56,28 @@ feature -- Basic operations
 				handle_assertion_violation
 			elseif exception /= Signal_exception then
 				if is_developer_exception then
-					error_msg := developer_exception_name
+					error_msg := concatenation (<<":%N",
+						developer_exception_name, "%N">>)
 					fatal := last_exception_status.fatal
 				else
-					error_msg := meaning (exception)
+					error_msg := "%N"
 					fatal := last_exception_status.fatal or
 						fatal_exception (exception)
 				end
 				log_errors (<<"%NError encountered - ", routine_description,
-							":%N", error_msg, "%N">>)
+					error_msg, error_information ("Exception", false)>>)
 			elseif
 				signal = Sigterm or signal = Sigabrt or signal = Sigquit
 			then
 				log_errors (<<"%NCaught kill signal in ", routine_description,
 					":%N", signal_meaning (signal), " (", signal, ")",
-					" - exiting ...%N">>)
+					"%NDetails: ", error_information ("Exception ", true),
+					"%Nexiting ...%N">>)
 				fatal := true
 			else
 				log_errors (<<"%NCaught signal in ", routine_description,
-					":%N", signal_meaning (signal), " (", signal, ")">>)
+					":%N", signal_meaning (signal), " (", signal, ")",
+					"%NDetails: ", error_information ("Exception ", true)>>)
 				fatal := last_exception_status.fatal
 				if fatal then
 					log_error(" - exiting ...%N")
@@ -123,33 +128,50 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
+	error_information (errname: STRING; stack_trace: BOOLEAN): STRING is
+			-- Information about the current exception, with a stack
+			-- trace if `stack_trace'
+		do
+			if exception = Void_call_target then
+				-- Feature call on void target is a special case that can
+				-- cause problems (specifically, OS signal when calling
+				-- class_name) - so handle it separately.
+				Result := concatenation (<<errname, " occurred: ",
+					meaning (exception), "%N[Exception trace:%N",
+					exception_trace, "]%N">>)
+			else
+				Result := concatenation (<<errname, " occurred in ",
+					"routine `", recipient_name, "' with tag%N%"", tag_name,
+					"%" from class %"", class_name,
+					"%".%NType of ", errname, ": ",
+					meaning (exception), "%N">>)
+				if not recipient_name.is_equal(original_recipient_name) then
+					Result := concatenation (<<Result,
+					"(Original routine where the violation occurred: ",
+					original_recipient_name, ".)%N">>)
+				end
+				if not tag_name.is_equal(original_tag_name) then
+					Result := concatenation (<<Result,
+					"(Original tag name: ",
+					original_tag_name, ".)%N">>)
+				end
+				if not class_name.is_equal(original_class_name) then
+					Result := concatenation (<<Result,
+					"(Original class name: ",
+					original_class_name, ".)%N">>)
+				end
+				if stack_trace then
+					Result := concatenation (<<Result, "%N[Exception trace:%N",
+						exception_trace, "]%N">>)
+				end
+			end
+		end
+
 	handle_assertion_violation is
 		local
 			msg: STRING
 		do
-			msg := concatenation (<<"Assertion violation occurred in ",
-				"routine `", recipient_name, "' with tag%N%"", tag_name,
-				"%" from class %"", class_name,
-				"%".%NType of assertion violation: ",
-				meaning (exception), "%N">>)
-			if not recipient_name.is_equal(original_recipient_name) then
-				msg := concatenation (<<msg,
-				"(Original routine where the violation occurred: ",
-				original_recipient_name, ".)%N">>)
-			end
-			if not tag_name.is_equal(original_tag_name) then
-				msg := concatenation (<<msg,
-				"(Original tag name: ",
-				original_tag_name, ".)%N">>)
-			end
-			if not class_name.is_equal(original_class_name) then
-				msg := concatenation (<<msg,
-				"(Original class name: ",
-				original_class_name, ".)%N">>)
-			end
-			msg := concatenation (<<msg, "%N[Exception trace:%N",
-				exception_trace, "]%N">>)
-			log_error (msg)
+			log_error (error_information ("Assertion violation", true))
 			exit (Error_exit_status)
 		end
 
