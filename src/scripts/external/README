@@ -1,0 +1,3 @@
+In here go scripts that implement the external data retrieval component
+used by the mas EXTERNAL_INPUT_SEQUENCE to retrieve market data from an
+outside source (such as the free yahoo.com stock quotes).
