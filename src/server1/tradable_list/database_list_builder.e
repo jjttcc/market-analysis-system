@@ -14,7 +14,7 @@ creation
 
 feature -- Initialization
 
-	make (symbols: LINEAR [STRING]; factory: TRADABLE_FACTORY) is
+	make (symbols: LIST [STRING]; factory: TRADABLE_FACTORY) is
 			-- Initialize symbol_list and tradable factories.  A separate
 			-- tradable factory for intraday data is used for efficiency.
 		require
@@ -39,7 +39,7 @@ feature -- Access
 
 	intraday_list: DB_TRADABLE_LIST
 
-	symbol_list: LINEAR [STRING]
+	symbol_list: LIST [STRING]
 
 	tradable_factory: TRADABLE_FACTORY
 
