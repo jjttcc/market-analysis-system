@@ -97,7 +97,7 @@ public class MAS_Applet extends JApplet {
 		if (compression()) {
 			result = new CompressedConnection(io_connection);
 		} else {
-			result = new Connection(io_connection);
+			result = new MA_Connection(io_connection);
 		}
 
 		return result;
