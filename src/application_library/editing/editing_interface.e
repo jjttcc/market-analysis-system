@@ -141,6 +141,12 @@ feature -- Access
 		deferred
 		end
 
+	enum_menu_string (enum: ENUMERATED [CHARACTER]; desc: STRING): STRING is
+			-- Menu selection string constructed from `enum', `desc'
+		do
+			Result := desc + " (" + enum.item.out + ")"
+		end
+
 feature -- Basic operations
 
 	show_message (msg: STRING) is

@@ -115,12 +115,6 @@ feature {NONE} -- Implementation
 
 	tradable_dispenser: TRADABLE_DISPENSER
 
---!!!
-choice_for (enum: ENUMERATED [CHARACTER]; desc: STRING): STRING is
-	do
-		Result := desc + " (" + enum.item.out + ")"
-	end
-
 feature {NONE} -- Implementation of hook methods
 
 	main_indicator_edit_selection: INTEGER is
@@ -136,19 +130,19 @@ feature {NONE} -- Implementation of hook methods
 			end
 			if not dirty or not ok_to_save then
 				msg := "Select action:%N     " +
-					choice_for (cr, cr.item_description) + " " +
-					choice_for (rm, rm.item_description) + "%N     " +
-					choice_for (ed, ed.item_description) + " " +
-					choice_for (vw, vw.item_description) + " " +
-					choice_for (prev, prev.item_description) + " " + eom
+					enum_menu_string (cr, cr.item_description) + " " +
+					enum_menu_string (rm, rm.item_description) + "%N     " +
+					enum_menu_string (ed, ed.item_description) + " " +
+					enum_menu_string (vw, vw.item_description) + " " +
+					enum_menu_string (prev, prev.item_description) + " " + eom
 			else
 				msg := "Select action:%N     " +
-					choice_for (cr, cr.item_description) + " " +
-					choice_for (rm, rm.item_description) + "%N     " +
-					choice_for (ed, ed.item_description) + " " +
-					choice_for (vw, vw.item_description) + " " +
-					choice_for (sv, sv.item_description) + "%N     " +
-					choice_for (prev, prev.item_description +
+					enum_menu_string (cr, cr.item_description) + " " +
+					enum_menu_string (rm, rm.item_description) + "%N     " +
+					enum_menu_string (ed, ed.item_description) + " " +
+					enum_menu_string (vw, vw.item_description) + " " +
+					enum_menu_string (sv, sv.item_description) + "%N     " +
+					enum_menu_string (prev, prev.item_description +
 						" - abort changes") + " " + eom
 			end
 			from
