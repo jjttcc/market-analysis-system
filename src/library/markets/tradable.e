@@ -49,31 +49,35 @@ feature -- Access
 			Result := indicator_groups.current_keys
 		end
 
-	composite_tuple_list (period_type: STRING): LIST [COMPOSITE_TUPLE] is
+	tuple_list (period_type: STRING): SIMPLE_FUNCTION [BASIC_MARKET_TUPLE] is
 			-- List associated with `period_type' whose tuples are
 			-- made from `data'
 		require
-			has_type: composite_list_names.has (period_type)
+			not_void: period_type /= Void
+			has_type: tuple_list_names.has (period_type)
 		do
-			Result := composite_tuple_lists @ period_type
+			Result := tuple_lists @ period_type
 			-- If the list has not been created and there is enough
-			-- data, create/process the list of composite tuples.
-			if Result = Void and data.count > 1 then
-				Result := process_composite_list (period_types @ period_type)
-				composite_tuple_lists.replace (Result, period_type)
-				check
-					item_was_replaced: composite_tuple_lists.replaced
+			-- data, create/process the list of tuples.
+			if Result = Void then
+				if period_type.is_equal (trading_period_type.name) then
+					-- No processing needed - just assign to base data.
+					Result := Current
+				elseif Current.count > 1 then
+					Result := process_composite_list (
+													period_types @ period_type)
 				end
+				tuple_lists.replace (Result, period_type)
 			end
 		ensure
-			Result = composite_tuple_lists @ period_type
+			Result = tuple_lists @ period_type
 		end
 
-	composite_list_names: ARRAY [STRING] is
-			-- The name (key) of each composite_tuple_list associated
+	tuple_list_names: ARRAY [STRING] is
+			-- The name (key) of each tuple_list associated
 			-- with `Current'
 		do
-			Result := composite_tuple_lists.current_keys
+			Result := tuple_lists.current_keys
 		end
 
 feature -- Access
@@ -170,26 +174,28 @@ feature {NONE} -- Initialization
 		do
 			!LINKED_LIST [MARKET_FUNCTION]!indicators.make
 			!!indicator_groups.make (0)
-			!!composite_tuple_lists.make (0)
+			!!tuple_lists.make (0)
 			sf_make (type)
-			initialize_composite_lists
+			initialize_tuple_lists
 		ensure
 			containers_not_void:
 				indicators /= Void and indicator_groups /= Void and
-					composite_tuple_lists /= Void
+					tuple_lists /= Void
 			type_set: trading_period_type = type
 		end
 
-	initialize_composite_lists is
-			-- Add elements composite_tuple_lists.
+	initialize_tuple_lists is
+			-- Add elements to tuple_lists.
 			-- Since composite tuples can only be made from tuples whose
-			-- trading periods are smaller, composite_tuple_lists will
+			-- trading periods are smaller, tuple_lists will
 			-- contain a list for each trading period type with a duration
-			-- greater than that of trading_period_type (which corresponds
-			-- to the duration of tuples in `data').
+			-- greater than or equal to that of trading_period_type (which
+			-- corresponds to the duration of tuples in `data').  The
+			-- relation is "greater than or equal to" rather than "greater
+			-- than" because `data' is also added to the list.
 		require
 			type_set: trading_period_type /= Void
-			table_empty: composite_tuple_lists.empty
+			table_empty: tuple_lists.empty
 		local
 			types: LINEAR [TIME_PERIOD_TYPE]
 		do
@@ -200,15 +206,15 @@ feature {NONE} -- Initialization
 				types.exhausted
 			loop
 				if
-					types.item.duration > trading_period_type.duration
+					types.item.duration >= trading_period_type.duration
 				then
-					composite_tuple_lists.extend (Void, types.item.name)
+					tuple_lists.extend (Void, types.item.name)
 				end
 				types.forth
 			end
 		ensure
-			all_void: composite_tuple_lists.occurrences (Void) =
-						composite_tuple_lists.count
+			all_void: tuple_lists.occurrences (Void) =
+						tuple_lists.count
 		end
 
 feature {NONE}
@@ -219,7 +225,7 @@ feature {NONE}
 	y_low: PRICE
 			-- Cached yearly low value
 
-	composite_tuple_lists: HASH_TABLE [LIST [COMPOSITE_TUPLE], STRING]
+	tuple_lists: HASH_TABLE [SIMPLE_FUNCTION [BASIC_MARKET_TUPLE], STRING]
 			-- Lists whose tuples are made from `data' (e.g., weekly,
 			-- monthy, if primary is daily)
 
@@ -271,7 +277,8 @@ feature {NONE}
 			not_void: y_high /= Void and y_low /= Void
 		end
 
-	process_composite_list (type: TIME_PERIOD_TYPE): LIST [COMPOSITE_TUPLE] is
+	process_composite_list (type: TIME_PERIOD_TYPE):
+				SIMPLE_FUNCTION [COMPOSITE_TUPLE] is
 			-- Create a list of composite tuples, using `data' as input.
 		require
 			not_empty: data.count > 1
@@ -307,6 +314,6 @@ feature {NONE} -- Hook methods
 invariant
 
 	containers_not_void: indicators /= Void and indicator_groups /= Void and
-							composite_tuple_lists /= Void
+							tuple_lists /= Void
 
 end -- class TRADABLE
