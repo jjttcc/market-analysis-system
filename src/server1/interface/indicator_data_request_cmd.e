@@ -4,34 +4,28 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-deferred class INDICATOR_DATA_REQUEST_CMD inherit
+class INDICATOR_DATA_REQUEST_CMD inherit
 
 	DATA_REQUEST_CMD
+
+creation
+
+	make
 
 feature -- Basic operations
 
 	execute (msg: STRING) is
-		require
-			market_list.item /= Void
 		local
-			fields: ARRAY [STRING]
-			pt_name: STRING
+			fields: LIST [STRING]
 		do
-			target := msg
-			fields := target.tokens (field_separator)
-			-- Expected contents of `msg':
-			-- indicatorID and trading_period_type
-			if fields.count /= 3 or not fields.item (1).is_integer then
+			target := msg -- set up for tokenization
+			fields := tokens (input_field_separator)
+			if fields.count /= 3 or not fields.first.is_integer then
 				report_error (<<"fields count wrong ...">>)
 			else
-				indicatorID := fields.item (1).to_integer
-				pt_name := fields @ 2
-				if not period_type_names.has (pt_name) then
-					report_error (<<"...">>)
-				else
-					trading_period_type := period_types @ pt_name
-					send_response
-				end
+				parse_symbol_and_period_type (2, 3, fields)
+				indicatorID := fields.first.to_integer
+				send_response
 			end
 		end
 
@@ -50,18 +44,27 @@ feature {NONE}
 				trading_period_type /= Void and market_symbol /= Void
 			-- indicatorID is valid
 		local
-			data: STRING
 			indicator: MARKET_FUNCTION
-			market: TRADABLE
+			market: TRADABLE [BASIC_MARKET_TUPLE]
 		do
-			market := market_list.item
-			market.set_trading_period_type (trading_period_type)
-			indicator := market.indicators @ indicatorID
-			if not indicator.processed then
-				indicator.process
+			market_list.search_by_symbol (market_symbol)
+			if market_list.off then
+				report_error (<<"Symbol not in database">>)
+			else
+				market := market_list.item
+				if
+					indicatorID < 1 or indicatorID > market.indicators.count
+				then
+					report_error (<<"Invalid indicator ID">>)
+				else
+					market.set_target_period_type (trading_period_type)
+					indicator := market.indicators @ indicatorID
+					if not indicator.processed then
+						indicator.process
+					end
+					print_indicator (indicator)
+				end
 			end
-			data := formatted_results (indicator)
-			active_medium.put_string (data)
 		end
 
 end -- class INDICATOR_DATA_REQUEST_CMD

@@ -17,29 +17,14 @@ feature -- Basic operations
 	execute (msg: STRING) is
 		local
 			fields: LIST [STRING]
-			pt_name: STRING
-			pt_names: ARRAY [STRING]
-			object_comparison: BOOLEAN
 		do
 			target := msg -- set up for tokenization
 			fields := tokens (input_field_separator)
-			pt_names := period_type_names
-			object_comparison := pt_names.object_comparison
-			pt_names.compare_objects
 			if fields.count /= 2 then
 				report_error (<<"fields count wrong ...">>)
 			else
-				market_symbol := fields @ 1
-				pt_name := fields @ 2
-				if not pt_names.has (pt_name) then
-					report_error (<<"something or other - error...">>)
-				else
-					trading_period_type := period_types @ pt_name
-					send_response
-				end
-			end
-			if not object_comparison then
-				pt_names.compare_references
+				parse_symbol_and_period_type (1, 2, fields)
+				send_response
 			end
 		end
 

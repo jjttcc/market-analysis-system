@@ -115,6 +115,8 @@ feature {NONE}
 			!!rh.make (0)
 			!MARKET_DATA_REQUEST_CMD!cmd.make (factory_builder.market_list)
 			rh.extend (cmd, Market_data_request)
+			!INDICATOR_DATA_REQUEST_CMD!cmd.make (factory_builder.market_list)
+			rh.extend (cmd, Indicator_data_request)
 			request_handlers := rh
 		ensure
 			rh_set: request_handlers /= Void and not request_handlers.empty

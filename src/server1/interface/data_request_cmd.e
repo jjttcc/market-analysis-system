@@ -54,6 +54,32 @@ feature -- Status setting
 			market_list_set: market_list = arg and market_list /= Void
 		end
 
+feature {NONE} -- Utility
+
+	parse_symbol_and_period_type (sindx, ptindx: INTEGER;
+				fields: LIST [STRING]) is
+			-- Extract the symbol and trading period type and place the
+			-- results into `market_symbol' and `trading_period_type'.
+		local
+			pt_names: ARRAY [STRING]
+			pt_name: STRING
+			object_comparison: BOOLEAN
+		do
+			pt_names := period_type_names
+			object_comparison := pt_names.object_comparison
+			pt_names.compare_objects
+			market_symbol := fields @ sindx
+			pt_name := fields @ ptindx
+			if not pt_names.has (pt_name) then
+				report_error (<<"something or other - error...">>)
+			else
+				trading_period_type := period_types @ pt_name
+			end
+			if not object_comparison then
+				pt_names.compare_references
+			end
+		end
+
 invariant
 
 	not_void: market_list /= Void
