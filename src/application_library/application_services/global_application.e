@@ -18,16 +18,6 @@ class GLOBAL_APPLICATION inherit
 
 feature -- Utility
 
-	current_date: DATE is
-		do
-			!!Result.make_now
-		end
-
-	current_time: TIME is
-		do
-			!!Result.make_now
-		end
-
 	register_for_termination (v: TERMINABLE) is
 			-- Add `v' to termination_registrants.
 		require
