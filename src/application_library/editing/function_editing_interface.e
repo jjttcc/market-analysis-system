@@ -2,9 +2,11 @@ indexing
 	description:
 		"Abstraction user interface that obtains selections needed for %
 		%editing of MARKET_FUNCTIONs"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 deferred class FUNCTION_EDITING_INTERFACE inherit
 

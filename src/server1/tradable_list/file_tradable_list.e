@@ -7,10 +7,11 @@ indexing
 		%in memory.  The purpose of this scheme is to avoid using the %
 		%large amount of memory that would be required to hold a large %
 		%list of tradables in memory at once."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - %
-		%see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class FILE_TRADABLE_LIST inherit
 

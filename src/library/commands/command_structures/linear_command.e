@@ -1,8 +1,10 @@
 indexing
 	description: "A result command that is also a linear analyzer"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 deferred class LINEAR_COMMAND inherit
 

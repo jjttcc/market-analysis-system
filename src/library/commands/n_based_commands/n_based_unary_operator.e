@@ -3,9 +3,11 @@ indexing
 		"N-based calculation that takes an operand"
 	detailed_description: "The operand is only executed on initialization %
 		%and it's execute routine must not expect a valid argument."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class N_BASED_UNARY_OPERATOR inherit
 

@@ -5,9 +5,11 @@ indexing
 		%target based on this cursor position, and then restoring the %
 		%target to the original cursor position.  The operation performed %
 		%is determined by the run-time type of its operand."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class MINUS_N_COMMAND inherit
 

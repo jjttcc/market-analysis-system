@@ -2,11 +2,12 @@ indexing
 	description:
 		"FACTORY_BUILDER that produces factories for a command-line-based %
 		%application"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - %
-		%see file forum.txt"
 	status2: "Obsolete"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class CL_BASED_FACTORY_BUILDER inherit
 

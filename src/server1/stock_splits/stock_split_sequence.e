@@ -1,9 +1,11 @@
 indexing
 	description:
 		"STOCK_SPLITS implemented as an INPUT_RECORD_SEQUENCE"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 deferred class STOCK_SPLIT_SEQUENCE inherit
 

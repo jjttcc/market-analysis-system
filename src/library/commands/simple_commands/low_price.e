@@ -1,11 +1,13 @@
 indexing
-	description: 
+	description:
 		"An abstraction for a numeric command that produces the low %
 		%price for the current trading period (extracted from the argument %
 		%to the execute routine)"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class LOW_PRICE inherit
 

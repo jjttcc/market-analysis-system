@@ -2,9 +2,11 @@ indexing
 	description:
 		"A unary operator that uses its operand to process the current %
 		%item of a linear structure of market tuples"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class UNARY_LINEAR_OPERATOR inherit
 

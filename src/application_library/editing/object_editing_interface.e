@@ -2,9 +2,11 @@ indexing
 	description:
 		"Abstraction for a user interface that obtains selections needed for %
 		%creation of a recursive structure (or tree) of objects of type G"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 deferred class OBJECT_EDITING_INTERFACE [G] inherit
 

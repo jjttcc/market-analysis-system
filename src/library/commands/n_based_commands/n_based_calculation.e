@@ -1,9 +1,11 @@
 indexing
 	description:
 		"Calculation based on the n-value from an n-record structure";
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 deferred class N_BASED_CALCULATION inherit
 

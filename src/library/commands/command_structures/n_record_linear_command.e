@@ -6,9 +6,11 @@ indexing
 		%periods from the current period (that is, from the current %
 		%item - n + 1 to the current item).  Descendants may override this %
 		%behavior"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class N_RECORD_LINEAR_COMMAND inherit
 

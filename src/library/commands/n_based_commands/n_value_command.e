@@ -2,9 +2,11 @@ indexing
 	description:
 		"A command that simply gives as its `value', the value of its %
 		%`n' feature";
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class N_VALUE_COMMAND inherit
 

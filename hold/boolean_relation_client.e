@@ -5,9 +5,11 @@ indexing
 		%BINARY_OPERATOR [BOOLEAN] and, when the operator evaluates to true, %
 		%executing a 'true command', and when false, executing a 'false %
 		%command'."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class BOOLEAN_RELATION_CLIENT inherit
 

@@ -3,9 +3,11 @@ indexing
 		"A linear command that changes the cursor of the target according %
 		%to an offset value, operates on the target at that cursor %
 		%position, and restores the cursor to the original value."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 deferred class LINEAR_OFFSET_COMMAND inherit
 

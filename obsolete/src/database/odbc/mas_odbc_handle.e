@@ -1,8 +1,10 @@
 indexing
-	description: "Database handle for MAS functionality"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	description: "ODBC Database handle for MAS functionality"
+	author: "Eirik Mangseth"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Eirik Mangseth and Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class MAS_ODBC_HANDLE inherit
 

@@ -2,9 +2,11 @@ indexing
 	description:
 		"A numeric command that operates on a market tuple that is passed in %
 		%as an argument to the execute feature"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class BASIC_NUMERIC_COMMAND inherit
 

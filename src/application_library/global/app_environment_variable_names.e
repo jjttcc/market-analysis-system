@@ -10,9 +10,11 @@ indexing
 		%way to do this and make these values globally available %
 		%via once functions (without getting a segmentation violation - %
 		%may be a bug in the ISE compiler)."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class APP_ENVIRONMENT_VARIABLE_NAMES
 

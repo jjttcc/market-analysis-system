@@ -3,11 +3,11 @@ indexing
 	description:
 		"Command executed by the polling server when data is available %
 		%for reading on the console";
-
-	status:
-		"Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class CONSOLE_READER
 

@@ -1,13 +1,15 @@
 indexing
 	description:
 		"Implementation of STOCK_SPLIT_SEQUENCE as an ECLI_INPUT_SEQUENCE"
+	author: "Jim Cochrane"
 	note:
 		"It is assumed that the for each symbol that occurs in the input %
 		%file, the splits in the file for that symbol are sorted by %
 		%date ascending"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class ECLI_STOCK_SPLITS inherit
 

@@ -1,9 +1,10 @@
 indexing
 	description: "Information about the current version of the application"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others and others, %
-		%see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class PRODUCT_INFO inherit
 
@@ -41,13 +42,13 @@ feature -- Access
 			-- The components of the version number
 			-- Components are strings to allow mixed numbers and letters.
 		once
-			Result := <<"1", "3">>
+			Result := <<"1", "4">>
 		end
 
 	date: DATE is
 			-- The last date that `number' was updated
 		once
-			create Result.make (2000, 8, 1)
+			create Result.make (2000, 10, 14)
 		end
 
 	informal_date: STRING is
@@ -60,7 +61,7 @@ feature -- Access
 
 	copyright: STRING is
 		once
-			Result := "Copyright 1998 - 2000: Jim Cochrane and others"
+			Result := "Copyright 1998 - 2000: Jim Cochrane"
 		end
 
 	license_information: STRING is

@@ -3,10 +3,11 @@ indexing
 	description:
 		"Constants specifying the basic components of the MA server %
 		%communication protocol"
-	status:
-		"Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 deferred class
 

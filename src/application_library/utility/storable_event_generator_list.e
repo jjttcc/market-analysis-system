@@ -2,9 +2,11 @@ indexing
 	description:
 		"A storable list of MARKET_EVENT_GENERATORs that wipes out each %
 		%generator before saving it to persistent store."
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class STORABLE_EVENT_GENERATOR_LIST inherit
 

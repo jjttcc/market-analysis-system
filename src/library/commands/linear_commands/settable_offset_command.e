@@ -1,9 +1,11 @@
 indexing
 	description:
 		"A linear offset command whose offset is a settable attribute"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
+	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
+	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class SETTABLE_OFFSET_COMMAND inherit
 
