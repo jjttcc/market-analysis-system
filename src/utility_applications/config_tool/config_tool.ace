@@ -1,0 +1,101 @@
+system
+	"config_tool"
+
+root
+	CONFIGURATION_TOOL: make
+
+default
+	assertion (check)
+	assertion (require)
+	assertion (ensure)
+	assertion (loop)
+	assertion (invariant)
+	arguments ("-c /tmp/cmd")
+	arguments ("-h")
+	arguments (" ")
+	disabled_debug (yes)
+	disabled_debug ("persist")
+	debug (no)
+	line_generation (no)
+	profile (no)
+	trace (no)
+	check_vape (yes)
+	console_application (no)
+	address_expression (no)
+	array_optimization (no)
+	dead_code_removal (yes)
+	dynamic_runtime (no)
+	exception_trace (no)
+	inlining (no)
+	multithreaded (no)
+
+
+--	assertion (check)
+--	assertion (require)
+--	assertion (ensure)
+--	assertion (loop)
+--	assertion (invariant)
+
+cluster
+	config_tool:		"$MAS/src/utility_applications/config_tool"
+
+
+	root_cluster (config_tool):		"$/root"
+
+	support (config_tool):		"$/support"
+
+	configuration (config_tool):		"$/configuration"
+
+	eiflib:		"$MAS/src/eiffel_library"
+
+	libarch (eiflib):		"$/architectural"
+
+	libsupport (eiflib):		"$/support"
+
+	libserver (eiflib):		"$/server"
+
+	liberror (eiflib):		"$/error"
+
+	ise:		"$ISE_EIFFEL/library"
+
+	all base (ise):		"$/base"
+		exclude
+			"table_eiffel3"; "desc"; "CVS"; 
+		end
+
+	date (ise):		"$/time"
+
+	date_format (date):		"$/format"
+
+	date_tools (date_format):		"$/english"
+
+	gobo:		"$GOBO/library"
+
+	all gobo_kernel (gobo):		"$/kernel"
+		exclude
+			"se"; "ve"; "hact"; 
+		end
+
+	regexp (gobo):		"$/regexp"
+
+	pcre (regexp):		"$/pcre"
+
+	re_interface (regexp):		"$/interface"
+
+	re_support (regexp):		"$/support"
+
+	all gobo_utility (gobo):		"$/utility"
+
+	all gobo_structure (gobo):		"$/structure"
+
+external
+
+	include_path:
+		"$ISE_EIFFEL/library/time/Clib"
+
+	object:
+		"/${MAS}/src/eiffel_library/lib/utilities.o",
+		"${ISE_EIFFEL}/library/time/spec/${ISE_PLATFORM}/lib/libdatetime.a",
+		"-lz"
+
+end
