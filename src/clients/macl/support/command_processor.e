@@ -99,7 +99,7 @@ feature -- Basic operations
 			work_string := r
 			if match (shared_pattern, r) then
 				otable := shared_objects
-				debug ("xprocess")
+				debug ("process")
 					print ("Using shared list%N")
 				end
 				debug ("very verbose")
@@ -107,14 +107,14 @@ feature -- Basic operations
 					print (otable.linear_representation.out)
 				end
 				work_string := sub (shared_pattern, "", r)
-				debug ("xprocess")
+				debug ("process")
 					print ("after sub - work_string: " + work_string + "%N")
 				end
 				shared := True
 			else
 				otable := objects
 			end
-			debug ("xprocess")
+			debug ("process")
 				print ("Checking '" + work_string + "' with:%N")
 			end
 			debug ("very verbose")
@@ -125,13 +125,13 @@ feature -- Basic operations
 				server_response_is_selection_list and otable.has (work_string)
 			then
 				product := otable @ work_string
-				debug ("xprocess")
+				debug ("process")
 					print ("Matched: " + product)
 				end
 				key_matched := True
 			else
 				product := work_string
-				debug ("xprocess")
+				debug ("process")
 					print ("No match: " + product)
 				end
 			end
@@ -151,7 +151,7 @@ feature {NONE} -- Implementation
 			patterns: LINEAR [STRING]
 		do
 			Result := False
-			debug ("xosm")
+			debug ("osm")
 				print ("%NChecking for match of '" + s + "'%N")
 			end
 			from
@@ -160,7 +160,7 @@ feature {NONE} -- Implementation
 			until
 				Result or patterns.exhausted
 			loop
-				debug ("xosm")
+				debug ("osm")
 					print ("with '" + patterns.item + "'%N")
 				end
 				if match (patterns.item, s) then
@@ -271,8 +271,6 @@ feature {NONE} -- Implementation
 				debug ("ri")
 					print ("adding " +  s + " to input record%N")
 				end
---!!!Remove the line below - it was changed to the one below it:
---				input_record := input_record + product + "%N"
 				input_record := input_record + s + "%N"
 			end
 		end
@@ -317,12 +315,12 @@ feature {NONE} -- Implementation - Regular expressions
 				regexp.match (s)
 				Result :=  regexp.has_matched
 			else
---!				debug ("match")
+--!!!				debug ("match")
 					io.error.print (
 						"Defect: regular expression compilation failed.%N")
 					io.error.print (regexp.error_message + "%N(position: " +
 						regexp.error_position.out + "%N")
---!				end
+--!!!				end
 				fatal_error := True
 				error := True
 			end

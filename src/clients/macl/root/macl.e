@@ -167,21 +167,14 @@ feature {NONE} -- Utilities
 		local
 			retried: BOOLEAN
 		do
-print ("handle_fatal_exception  - retried: " + retried.out + "%N")
 			if not retried then
 				print (Abnormal_termination_message)
-print ("handle_fatal_exception A%N")
 				last_exception_status.set_fatal (True)
-print ("handle_fatal_exception B%N")
 				exit_and_close_connection
-print ("handle_fatal_exception C%N")
 				if command_line.is_debug then
-print ("handle_fatal_exception D%N")
 					handle_exception ("")
 				end
-print ("handle_fatal_exception E%N")
 			end
-print ("handle_fatal_exception F%N")
 			exit (1)
 		rescue
 			retried := True
