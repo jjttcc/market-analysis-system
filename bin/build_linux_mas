@@ -19,7 +19,7 @@ export Targetdir=$MAS/lib/binaries/linux
 export Projectdir=$MAS/../projects/${appname}
 export Executable_name=${appname}
 export C_Compile_options=
-export Ace_file_name=$MAS/ace_files/${appname}.ace
+export Ace_file_name=$MAS/src/ace_files/${appname}.ace
 export Stripcmd=
 export Compile_wait=0
 
