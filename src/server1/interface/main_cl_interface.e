@@ -349,7 +349,7 @@ feature {NONE} -- Implementation
 				print_list (<<"Select action:%N%
 						%     Print indicator (p) View description (d) %N%
 						%     View long description (l) Exit (x) Previous (-) %
-						% Help (h) ", eom>>)
+						%Help (h) ", eom>>)
 				inspect
 					character_selection (Void)
 				when 'p', 'P' then

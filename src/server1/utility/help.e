@@ -80,8 +80,6 @@ feature -- Initialization
 %View long description: View a detailed description of the currently %N%
 %   selected indicator.%N"
 			put (s, View_indicator)
-			s := "(This will soon be 'edit event generators' help)%N"
-			put (s, Edit_event_generators)
 			s := "(This will soon be help for setting CEG time extensions)%N"
 			put (s, Compound_event_generator_time_extensions)
 			s := "(This will soon be help for setting CEG left target type)%N"

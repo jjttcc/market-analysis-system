@@ -152,8 +152,6 @@ feature {NONE} -- Implementation
 					else
 						Result := Save_value
 					end
-				when 'h', 'H' then
-					Result := Show_help_value
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
