@@ -36,7 +36,7 @@ feature -- Basic operations
 
 	load_history is
 		local
-			hfile: PLAIN_TEXT_FILE
+			hfile: INPUT_FILE
 			scanner: MARKET_EVENT_SCANNER
 			exception_occurred: BOOLEAN
 			env: expanded APP_ENVIRONMENT
@@ -69,6 +69,7 @@ feature -- Basic operations
 	cleanup is
 		local
 			hfile: PLAIN_TEXT_FILE
+			input: BILINEAR_INPUT_SEQUENCE
 			scanner: MARKET_EVENT_SCANNER
 			fld_sep, record_sep: STRING
 			env: expanded APP_ENVIRONMENT
@@ -76,10 +77,12 @@ feature -- Basic operations
 			-- Open the event history file, delete its current contents and
 			-- save all elements of `event_history' into the file.
 			if hfile_name /= Void then
-				!!hfile.make_create_read_write (
+				create {INPUT_FILE} hfile.make_create_read_write (
 					env.file_name_with_app_directory (hfile_name))
+				input ?= hfile
+				check input /= Void end
 				-- Make the scanner to get its field separator.
-				!!scanner.make (hfile)
+				!!scanner.make (input)
 				fld_sep := scanner.field_separator
 				record_sep := scanner.record_separator
 				from
