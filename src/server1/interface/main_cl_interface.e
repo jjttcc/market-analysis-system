@@ -513,7 +513,7 @@ feature {NONE} -- Implementation - utilities
 
 	initialize is
 		do
-			no_cleanup := true
+			no_cleanup := false
 			-- Start out with non-intraday data:
 			current_period_type := period_types @ (period_type_names @ Daily)
 			create event_generator_builder.make
