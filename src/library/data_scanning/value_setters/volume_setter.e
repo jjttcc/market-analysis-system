@@ -50,8 +50,9 @@ feature {NONE}
 	do_set (stream: INPUT_SEQUENCE; tuple: BASIC_VOLUME_TUPLE) is
 		do
 			if stream.last_real + epsilon < 0 then
-				handle_input_error (concatenation (<<"Volume is < 0: ",
-					stream.last_real.out, ", adjusting to 0.">>), Void)
+				handle_input_error (concatenation (<<"Numeric input value %
+					%for volume is less than 0: ",
+					stream.last_real.out, "%Nadjusting to 0.">>), Void)
 				-- conform to the postondition:
 				tuple.set_volume (0)
 			else
