@@ -4,7 +4,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2001: Eirik Mangseth and Jim Cochrane - %
-		%Released under the Eiffel Forum Freeware License; see file forum.txt"
+		%Released under the Eiffel Forum License; see file forum.txt"
 
 class MAS_ODBC_HANDLE inherit
 

@@ -5,7 +5,7 @@ NOTE: Not used any more - move to obsolete directory.
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
-		%Released under the Eiffel Forum Freeware License; see file forum.txt"
+		%Released under the Eiffel Forum License; see file forum.txt"
 
 deferred class DERIVATIVE_DATA
 

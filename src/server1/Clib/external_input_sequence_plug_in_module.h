@@ -16,7 +16,7 @@ struct input_sequence_plug_in;
 /* Allowed field-separator characters - fields for a particular data set
  * can be separated by any one of the characters in this string
 */
-const char* Field_separator_characters = ",\t;\a!@$%^&|";
+#define Field_separator_characters ",\t;\a!@$%^&|"
 
 /* A new handle for access to the input-sequence-plug-in interface -
  * `paths' is a list of paths, separated by ':', in which to create temporary
