@@ -83,7 +83,7 @@ feature -- Basic operations
 			end
 			proc.wait_for (True)
 			remove_process (window.host_name, window.port_number)
-		ensure
+		ensure then
 			process_removed: not has_process (window.host_name,
 				window.port_number) and current_processes.count = 
 				old current_processes.count - 1

@@ -68,7 +68,7 @@ feature -- Basic operations
 				<<window.port_number, window.host_name>>,
 				Token_start_delimiter, Token_end_delimiter))
 			launch (program, args, window)
-		ensure
+		ensure then
 			process_managed: has_process (window.host_name,
 				window.port_number)
 		end
