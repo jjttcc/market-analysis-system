@@ -53,8 +53,9 @@ feature -- Basic operations
 	process is
 			-- Process the output from the input.
 		do
+print ("COMPLEX_FUNCTION.process - name: " + name + ":%N")
 			if
-True or --!!!!For experimentation/testing - remove this line soon.
+--!!!!True or --!!!!For experimentation/testing - remove this line soon.
 				not processed then
 				pre_process
 				if debugging then
@@ -62,9 +63,10 @@ True or --!!!!For experimentation/testing - remove this line soon.
 				end
 				do_process
 --!!!:
-print ("complex function, name: " + name +
-": process - do_process was just called." + "%N")
+print ("do_process was called." + "%N")
 				update_processed_date_time
+else
+print ("processed was FALSE." + "%N")
 			end
 			debug
 				print (name); print (" just became processed, output size: ")
