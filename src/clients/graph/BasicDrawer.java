@@ -48,26 +48,6 @@ abstract public class BasicDrawer extends Drawer {
 
 	public void set_boundaries_needed(boolean b) { boundaries_needed = b; }
 
-	public void set_xaxis(Axis a) {
-		xaxis = a;
-	}
-
-	public void set_yaxis(Axis a) {
-		yaxis = a;
-	}
-
-	public void set_clipping(boolean b) {
-		clipping = b;
-	}
-
-	public void set_maxes(double xmax_v, double ymax_v,
-		double xmin_v, double ymin_v) {
-		xmax = xmax_v;
-		ymax = ymax_v;
-		xmin = xmin_v;
-		ymin = ymin_v;
-	}
-
 	private void draw_boundaries(Graphics g, Rectangle bounds) {
 		int Y_fill_value = 0;
 		Rectangle right_bounds = right_reference_bounds(bounds);
@@ -112,6 +92,13 @@ abstract public class BasicDrawer extends Drawer {
 			ymin = yaxis.minimum();
 		}
 
+		if (Math.abs(ymax - ymin) < min_max_epsilon) {
+			ymin -= min_border_boundary;
+			ymax += min_border_boundary;
+			if (ymin < 0 && ymax > 0) {
+				ymin = 0;
+			}
+		}
 		xrange = xmax - xmin;
 		yrange = ymax - ymin;
 
@@ -348,7 +335,13 @@ abstract public class BasicDrawer extends Drawer {
 	// Calculation of height factor for drawing based on window height
 	// and yrange.
 	protected double height_factor_value(Rectangle bounds) {
-		return bounds.height / yrange;
+System.out.println("(hfv) yrange: " + yrange + ", bnds.ht: " + bounds.height);
+System.out.println("(hfv) ymin, ymax: " + ymin + ", " + ymax +
+", bnds.y: " + bounds.y);
+		double result;
+		result = bounds.height / yrange;
+System.out.println("(hfv) result: " + result);
+		return result;
 	}
 
 	protected int base_bar_width(Rectangle bounds, int bar_count) {
@@ -403,18 +396,17 @@ abstract public class BasicDrawer extends Drawer {
 			9000000000000000000L, 50000000000000L);
 	}
 
-	protected Axis xaxis;
-	protected Axis yaxis;
-	protected double xmax, ymax, xmin, ymin;
-	protected double xrange, yrange;
-	protected boolean clipping;
 	protected boolean boundaries_needed;
-	// Color to draw data in
-	protected Color draw_color;
 	final int Reference_rect_width = 50;	// Width of right reference bar
 	final int Bottom_ref_rect_height = 25;	// Height of bottom reference bar
 	final int X_left_line_adjust = 9;	// Ensures that line starts flush left.
 	final int Ref_text_offset = -42;	// Offset for reference text
+
+	// "epsilon" value for determining if ymin and ymax are almost equal
+	private static double min_max_epsilon = 0.01;
+
+	// boundary value to use if ymin and ymax are almost equal
+	private static double min_border_boundary = 0.25;
 }
 
 class RefSpec {

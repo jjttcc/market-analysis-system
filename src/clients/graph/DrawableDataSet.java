@@ -498,7 +498,4 @@ public class DataSet {
 	}
 
 	private boolean _dates_needed;
-
-	private static double min_max_epsilon = 0.01;
-	private static double min_border_boundary = 2.5;
 }
