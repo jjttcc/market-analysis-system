@@ -15,14 +15,13 @@ deferred class FUNCTION_EDITING_INTERFACE inherit
 
 	OBJECT_EDITING_INTERFACE [MARKET_FUNCTION]
 		rename
-			object_selection as function_selection,
+			object_selection_from_type as function_selection_from_type,
 			object_types as function_types,
 			user_object_selection as user_function_selection,
 			initialize_object as initialize_function,
-			current_objects as current_functions,
-			object_list as function_list
+			current_objects as current_functions
 		redefine
-			editor
+			editor, function_types
 		end
 
 feature -- Access
@@ -132,20 +131,9 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			l.extend (command_with_generator ("OPEN_INTEREST"))
 		end
 
---!!!!Question: Should any of these queries be moved up to the parent???
-	integer_selection (msg: STRING): INTEGER is
-			-- User-selected integer value
-		deferred
-		end
-
 	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
-			-- User-selected list of market tuples
-		deferred
-		end
-
-	real_selection (msg: STRING): REAL is
-			-- User-selected real value
-		deferred
+		do
+			--!!!What will go here?
 		end
 
 feature {NONE} -- Implementation
@@ -412,5 +400,11 @@ feature {NONE} -- Implementation
 				editor.edit_sign_analyzer (sign_an)
 			end
 		end
+
+feature -- Implementation - options
+
+	initialization_needed: BOOLEAN is true
+
+	clone_needed: BOOLEAN is true
 
 end -- FUNCTION_EDITING_INTERFACE

@@ -18,6 +18,9 @@ class APPLICATION_COMMAND_EDITOR inherit
 		end
 
 	GLOBAL_SERVICES
+		export
+			{NONE} all
+		end
 
 feature -- Access
 
