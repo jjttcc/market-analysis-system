@@ -130,7 +130,10 @@ feature -- Access
 		local
 			time_util: expanded DATE_TIME_SERVICES
 		do
-			if cached_eod_turnover_time = Void then
+			if
+				cached_eod_turnover_time = Void and
+					not eod_turnover_time_value.is_empty
+			then
 				cached_eod_turnover_time := time_util.time_from_string (
 					eod_turnover_time_value, ":")
 			end
