@@ -192,15 +192,24 @@ feature -- Basic operations
 			end
 		end
 
+prd (msg: STRING; d: ANY) is
+do
+	if d = Void then
+		print (msg + "Void%N")
+	else
+		print (msg + d.out + "%N")
+	end
+end
+
 	print_tuples_with_time (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
 		local
 			first, last, i: INTEGER
 		do
 print ("print_tuples_with_time%N")
-print ("print_end_date/time: " + print_end_date.out +
-"," + print_end_time.out + "%N")
-print ("print_start_date/time: " + print_start_date.out +
-"," + print_start_time.out + "%N")
+prd ("print_start_date: ", print_start_date)
+prd ("print_start_time: ", print_start_time)
+prd ("print_end_date: ", print_end_date)
+prd ("print_end_time: ", print_end_time)
 			first := first_date_time_index (l)
 			last := last_date_time_index (l)
 print ("print_tuples_with_time - first, last: " + first.out + ", " + last.out +
