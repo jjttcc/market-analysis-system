@@ -68,7 +68,7 @@ feature {NONE} -- Implementation - initialization
 			Result.extend (list)
 			set_max_list_widths
 			list.set_minimum_size (max_list_width * Estimated_character_width,
-				(rows.count + 1) * Estimated_character_height)
+				Extra_height + (rows.count + 1) * Estimated_character_height)
 		end
 
 	add_row (l: LIST [STRING]) is
@@ -139,6 +139,8 @@ feature {NONE} -- Implementation - constants
 	Estimated_character_width: INTEGER is 8
 
 	Estimated_character_height: INTEGER is 24
+
+	Extra_height: INTEGER is 18
 
 feature {NONE} -- Implementation - GUI callback routines
 
