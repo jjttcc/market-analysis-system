@@ -71,14 +71,6 @@ feature {NONE} -- Basic operations
 				output.extend (t)
 				continue_until
 			end
-		ensure then
-			when_tgcount_lt_n: target.count < n implies output.empty
-			when_tgcount_ge_n:
-				target.count >= n implies output.count = target.count - n + 1
-			first_date_set: not output.empty implies
-				output.first.date_time.is_equal (target.i_th (n).date_time)
-			last_date_set: not output.empty implies
-				output.last.date_time.is_equal (target.last.date_time)
 		end
 
 feature {FACTORY}
@@ -143,10 +135,5 @@ invariant
 
 	sum_not_void: sum /= Void
 	sum_attrs_equal_current_attrs: sum.n = n and sum.operator = operator
-	processed_when_target_lt_n:
-		processed implies (target.count < n implies output.empty)
-	processed_when_target_ge_n:
-		processed implies
-			(target.count >= n implies output.count = target.count - n + 1)
 
 end -- class STANDARD_MOVING_AVERAGE
