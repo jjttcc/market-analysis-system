@@ -9,6 +9,8 @@ class ONE_VARIABLE_FUNCTION inherit
 	MARKET_FUNCTION
 
 	LINEAR_ANALYZER
+		rename
+			set_input as set_target
 		redefine
 			action
 		end
@@ -39,7 +41,7 @@ feature {NONE}
 			operator.execute (target.item)
 			!!t
 			t.set_value (operator.value)
-			t.set_trading_period (target.item.trading_period)
+			t.set_date_time (target.item.date_time)
 			output.extend (t)
 		ensure then
 			-- output.count = old (output.count) + 1
@@ -69,10 +71,11 @@ feature {TEST_FUNCTION_FACTORY} -- Element change
 			not_void: in /= Void and in.output /= Void
 		do
 			input := in
-			target := input.output
+			set_target (input.output)
 			reset_state
 		ensure
-			input_set: input = in and input /= Void
+			input_set_to_in: input = in
+			input_set: input_set
 			not_processed: not processed
 		end
 

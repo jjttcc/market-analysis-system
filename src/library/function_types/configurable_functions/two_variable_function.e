@@ -12,11 +12,14 @@ inherit
 
 	LINEAR_ANALYZER
 		rename
-			target as target1 -- x in "z = f(x, y)"
+			target as target1, -- x in "z = f(x, y)"
+			set_input as set_input_unused
+		export {NONE}
+			set_input_unused
 		redefine
-			forth, action, start
+			forth, action, start, input_set
 		select
-			target1, forth, action, start
+			target1, forth, action, start, input_set
 		end
 
 	LINEAR_ANALYZER
@@ -24,7 +27,11 @@ inherit
 			target as target2, -- y in "z = f(x, y)"
 			forth as forth_unused,
 			action as action_unused,
-			start as start_unused
+			start as start_unused,
+			set_input as set_input_unused,
+			input_set as input_set_unused
+		export {NONE}
+			set_input_unused
 		end
 
 creation
@@ -46,6 +53,13 @@ feature -- Access
 
 	output: MARKET_TUPLE_LIST [MARKET_TUPLE]
 
+feature -- Status report
+
+	input_set: BOOLEAN is
+		do
+			Result := target1 /= Void and target2 /= Void
+		end
+
 feature {NONE}
 
 	forth is
@@ -58,8 +72,8 @@ feature {NONE}
 		do
 			line_up (target1, target2)
 			check
-				target1.item.trading_period.is_equal (
-					target2.item.trading_period)
+				target1.item.date_time.is_equal (
+					target2.item.date_time)
 			end
 		end
 
@@ -67,14 +81,14 @@ feature {NONE}
 		local
 			t: SIMPLE_TUPLE
 		do
-			operator.execute (Current)
+			operator.execute (Void)
 			!!t
 			t.set_value (operator.value)
 			check
-				target1.item.trading_period.is_equal (
-					target2.item.trading_period)
+				target1.item.date_time.is_equal (
+					target2.item.date_time)
 			end
-			t.set_trading_period (target1.item.trading_period)
+			t.set_date_time (target1.item.date_time)
 			output.extend (t)
 		ensure then
 			-- output.count = old (output.count) + 1
@@ -109,8 +123,8 @@ feature {NONE}
 					Result or l1.after or l2.after
 				loop
 					if
-						not l1.item.trading_period.is_equal (
-												l2.item.trading_period)
+						not l1.item.date_time.is_equal (
+												l2.item.date_time)
 					then
 						Result := true
 					end
@@ -134,7 +148,7 @@ feature {NONE}
 		do
 			t1.start; t2.start
 			from
-				if t1.item.trading_period < t2.item.trading_period then
+				if t1.item.date_time < t2.item.date_time then
 					l1 := t1
 					l2 := t2
 				else
@@ -142,7 +156,7 @@ feature {NONE}
 					l2 := t1
 				end
 			until
-				not (l1.item.trading_period < l2.item.trading_period)
+				not (l1.item.date_time < l2.item.date_time)
 			loop
 				l1.forth
 			end
@@ -161,8 +175,9 @@ feature {TEST_FUNCTION_FACTORY} -- Element change (Export to test class for now.
 			target2 := f2.output
 			reset_state
 		ensure
-			input1 = f1 and input2 = f2
-			input1 /= Void and input2 /= Void
+			functions_set: input1 = f1 and input2 = f2 and
+							input1 /= Void and input2 /= Void
+			input_set: input_set
 			not_processed: not processed
 		end
 

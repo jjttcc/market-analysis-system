@@ -25,7 +25,6 @@ feature
 
 	make is
 		do
-			init_n
 			Precursor
 		end
 
