@@ -17,7 +17,7 @@ feature {NONE}
 	do_auxiliary_work (tuples: LIST [MARKET_TUPLE]) is
 			-- Set product's volume to sum of all volumes in `tuples'.
 		local
-			operator: VOLUME_COMMAND
+			operator: VOLUME
 		do
 			if volume_adder = Void then
 				!!operator
