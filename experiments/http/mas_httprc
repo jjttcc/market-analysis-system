@@ -1,0 +1,23 @@
+# Prototype http configuration file
+
+start_date	now - 3 years
+end_date	now
+# The host component of the http URL used to retrieve market data
+host	chart.yahoo.com
+# The path component of the http URL used to retrieve market data
+path	table.csv?s=<symbol>&a=<month>&b=<day>&c=<year>&d=<month>&e=<day>&f=<year>&g=d&q=q&y=0&z=<symbol>&x=.csv
+symbol_file	symbols
+
+# The format of the resulting end-of-day data sent back from the http data-
+# source site
+eod_result_format	ignore_lines:1;<day>-<month_abbr3>-<yy>,<o>,<h>,<l>,<c>,<v>
+# Example from yahoo:
+# Date,Open,High,Low,Close,Volume
+# 9-Jul-02,71.40,72.25,69.45,69.67,11165600
+
+# The time at which to attempt to retrieve the latest end-of-day data from
+# the http data-source site.  It should be in the user's local time.
+# This needs to be set carefully: Too early and a lot of time will be wasted
+# trying to retrieve data that doesn't exist yet; too late and your data
+# will not be as up-to-date as it could be.
+eod_turnover_time	6 pm

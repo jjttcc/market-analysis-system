@@ -44,52 +44,6 @@ feature -- Access
 
 feature -- Element change
 
-	set_host (arg: STRING) is
-			-- Set `host' to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			host := arg
-		ensure
-			host_set: host = arg and host /= Void
-		end
-
-	set_symbol (arg: STRING) is
-			-- Set `symbol' to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			symbol := arg
-		ensure
-			symbol_set: symbol = arg and symbol /= Void
-		end
-
-	set_start_date (arg: DATE) is
-			-- Set `start_date' to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			start_date := arg
-		ensure
-			start_date_set: start_date = arg and start_date /= Void
-		end
-
-	set_end_date (arg: DATE) is
-			-- Set `end_date' to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			end_date := arg
-		ensure
-			end_date_set: end_date = arg and end_date /= Void
-		end
-
-	set_end_date_to_now is
-			-- Set `end_date' to the current date.
-		do
-			create end_date.make_now
-		end
-
 feature {NONE} -- Implementation
 
 	start_date_month_prefix: STRING is "&a="
