@@ -7,11 +7,16 @@ indexing
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
-deferred class TRADABLE_FACTORY inherit
+class TRADABLE_FACTORY inherit
 
 	FACTORY
 		redefine
 			product
+		end
+
+	TRADABLE_FACTORY_CONSTANTS
+		export
+			{NONE} all
 		end
 
 	GLOBAL_SERVICES
@@ -19,8 +24,14 @@ deferred class TRADABLE_FACTORY inherit
 			all
 		end
 
---!!!Remove when done:
-GENERAL_UTILITIES
+	GLOBAL_APPLICATION
+		export {NONE}
+			all
+		end
+
+creation
+
+	make
 
 feature -- Initialization
 
@@ -29,6 +40,8 @@ feature -- Initialization
 			field_separator := "%T"
 			record_separator := "%N"
 			time_period_type := period_types @ (period_type_names @ Daily)
+			create stock_builder
+			create derivative_builder
 		ensure
 			daily_type: time_period_type.name.is_equal (
 				period_type_names @ Daily)
@@ -60,9 +73,6 @@ feature -- Access
 	time_period_type: TIME_PERIOD_TYPE
 			-- The period type, such as daily, that will be assigned
 			-- to the manufactured tradable
-
-	indicators: LIST [MARKET_FUNCTION]
-			-- List of TA indicators to provide to the tradable
 
 feature -- Status report
 
@@ -146,16 +156,6 @@ feature -- Status setting
 				record_separator /= Void
 		end
 
-	set_indicators (arg: LIST [MARKET_FUNCTION]) is
-			-- Set indicators to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			indicators := arg
-		ensure
-			indicators_set: indicators = arg and indicators /= Void
-		end
-
 	set_strict_error_checking (arg: BOOLEAN) is
 			-- Set strict_error_checking to `arg'.
 		do
@@ -184,7 +184,6 @@ feature -- Basic operations
 		do
 			error_occurred := False
 			check_for_open_interest
-print_list (<<"tradable factory - has open interest: ", open_interest, "%N">>)
 			make_product
 			make_tuple_maker
 			if intraday then
@@ -219,7 +218,7 @@ print_list (<<"tradable factory - has open interest: ", open_interest, "%N">>)
 			end
 			product.set_trading_period_type (time_period_type)
 			product.finish_loading
-			add_indicators (product, indicators)
+			add_indicators (product)
 		ensure then
 			product_not_void: product /= Void
 			product_type_set: product.trading_period_type = time_period_type
@@ -228,19 +227,28 @@ print_list (<<"tradable factory - has open interest: ", open_interest, "%N">>)
 feature {NONE}
 
 	make_product is
-		deferred
+		do
+			if open_interest then
+				product := derivative_builder.new_item (symbol)
+			else
+				product := stock_builder.new_item (symbol)
+			end
 		ensure
 			not_vod: product /= Void
 		end
 
 feature {NONE} -- Implementation
 
+	stock_builder: STOCK_BUILDING_UTILITIES
+
+	derivative_builder: DERIVATIVE_BUILDING_UTILITIES
+
 	make_tuple_maker is
 		do
 			if open_interest then
-				create {OI_TUPLE_FACTORY} tuple_maker
+				tuple_maker := derivative_builder.tuple_factory
 			else
-				create {VOLUME_TUPLE_FACTORY} tuple_maker
+				tuple_maker := stock_builder.tuple_factory
 			end
 		ensure
 			tm_not_void: tuple_maker /= Void
@@ -248,7 +256,12 @@ feature {NONE} -- Implementation
 
 	index_vector: ARRAY [INTEGER] is
 			-- To be defined by descendants to specify desired field order.
-		deferred
+		do
+			if open_interest then
+				Result := derivative_builder.index_vector (no_open, intraday)
+			else
+				Result := stock_builder.index_vector (no_open, intraday)
+			end
 		ensure
 			at_least_one: Result.count > 0
 		end
@@ -310,13 +323,22 @@ feature {NONE} -- Implementation
 			end
 		end
 
---!!!This will probably need modifying re. derivative stuff:
-	add_indicators (t: TRADABLE [BASIC_MARKET_TUPLE];
-					flst: LIST [MARKET_FUNCTION]) is
+	add_indicators (t: TRADABLE [BASIC_MARKET_TUPLE]) is
 			-- Add `flst' to `t'.
 		require
-			not_void: t /= Void and flst /= Void
+			not_void: t /= Void
+		local
+			flst: LIST [MARKET_FUNCTION]
 		do
+			flst := function_library
+			if open_interest then
+				-- t is a derivative instrument - all functions are valid,
+				-- so leave flst set to `function_library'.
+			else
+				-- t is a stock - use valid stock functions.
+				flst := stock_function_library
+			end
+			check flst /= Void end
 			from
 				flst.start
 			until
@@ -344,8 +366,6 @@ feature {NONE} -- Implementation
 				expected_fields := expected_fields + 1
 			end
 			open_interest := input.field_count = expected_fields
-print_list (<<"chk for oi - expected_fields, i.fld_count: ",
-expected_fields, ", ", input.field_count, "%N">>)
 		end
 
 	open_interest: BOOLEAN
@@ -353,18 +373,6 @@ expected_fields, ", ", input.field_count, "%N">>)
 
 	old_open_interest_setting: BOOLEAN
 			-- Previous state of `open_interest'
-
-feature {NONE} -- Tuple field-key constants
-
-	Date_index: INTEGER is 1
-	Time_index: INTEGER is 2
-	Open_index: INTEGER is 3
-	High_index: INTEGER is 4
-	Low_index: INTEGER is 5
-	Close_index: INTEGER is 6
-	Volume_index: INTEGER is 7
-	OI_index: INTEGER is 8
-	Last_index: INTEGER is 8
 
 invariant
 
@@ -374,5 +382,6 @@ invariant
 		time_period_type /= Void
 	error_constraint:
 		error_occurred implies error_list /= Void and not error_list.empty
+	builders_not_void: stock_builder /= Void and derivative_builder /= Void
 
 end -- TRADABLE_FACTORY
