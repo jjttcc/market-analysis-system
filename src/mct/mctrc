@@ -37,7 +37,8 @@ define	doc_dir:~/home~/development~/jtc~/finance~/doc
 define	mas_directory_setting:/suse_6_3/home2/finance/.mas/charting
 
 # Set the MAS_DIRECTORY environment variable
-environment_variable	MAS_DIRECTORY:/suse_6_3/home2/finance/.mas/charting
+#environment_variable	MAS_DIRECTORY:/suse_6_3/home2/finance/.mas/charting
+environment_variable	MAS_DIRECTORY:<mas_directory_setting>
 
 # Valid port numbers for use by the MAS server
 valid_portnumbers	10101,10102,10103,10104,20102,20103,20104,30101,30102,\
@@ -46,17 +47,22 @@ valid_portnumbers	10101,10102,10103,10104,20102,20103,20104,30101,30102,\
 # Network host name
 hostname	localhost
 
+# NOTE: <cwdir>, used below, means to use the bracketed path that follows
+# it as the Current Working Directory when the command that follows
+# it is executed.
+
 # Command to start the server - short version
 #start_server_command	cd <data_dir>; <bin_dir>/mas -o -f , -b <portnumber> *.txt
 
 # Detailed version of command to start the server: data from files
 begin	start_server_command
-command	<bin_dir>/mas -o -f , -b <portnumber> <data_dir>/*.txt
+#command	<bin_dir>/mas -o -f , -b <portnumber> <data_dir>/*.txt
+command	<cwdir> [<mas_directory_setting>] mas -o -f , -b <portnumber> <data_dir>/*.txt
 command_description	Get data from files
 command_name	File-based
 end
 
-# Detailed version of command to start the server: data from a database
+# Dummy version of command to start the server (for testing)
 begin	dummy
 foo	cd <data_dir>; <bin_dir>/mas -o -b <portnumber> -p
 bar	Get data from database
@@ -89,9 +95,6 @@ add_to_environment_variable	CLASSPATH::/opt/mas/lib/classes
 
 # Command to start the charting application
 #chart_command	<bin_dir>/magc <portnumber> -h <hostname>
-
-# <cwdir> means to use the bracketed path that follows it as the
-# Current Working Directory when the command is executed.
 chart_command	<cwdir> [<mas_directory_setting>] java MA_Client \
 <hostname> <portnumber> >/tmp/errs 2>&1
 
