@@ -17,9 +17,9 @@ public class Utilities
 		return months[m-1];
 	}
 
-	// Index of the element of `dates' whose date_time matches `d',
-	// assuming that `dates' and `d' are in the format "yyyymmdd" for
-	// lexicographical comparison.
+	// Index of the element of `dates[bottom..top]' whose date/time matches
+	// `d', assuming that `dates' and `d' are dates in the format "yyyymmdd"
+	// or times in the format "hhmmss" for lexicographical comparison.
 	// If no element's date_time matches `d':
 	//   search_spec < 0: Index of latest element whose date_time < `d'
 	//   search_spec > 0: Index of earliest element whose date_time > `d'
@@ -31,13 +31,14 @@ public class Utilities
 	// Precondition:
 	//   d != null
 	//   All elements of `dates' and `d' are in the format "yyyymmdd".
+	//	bottom >= 0;
+	//	top <= dates.length - 1;
+	//   `dates' is sorted in ascending order.
 	static public int index_at_date (String d, String dates[],
-			int search_spec) {
-		int top, bottom, i, comparison, result = -1;
+			int search_spec, int bottom, int top) {
+		int i, comparison, result = -1;
 
 		// Perform a binary search.
-		bottom = 0;
-		top = dates.length - 1;
 		// invariant:
 		//	must_be_in: in_range_or_not_in_array (d, dates, bottom, top)
 		// variant:
