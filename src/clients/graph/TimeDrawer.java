@@ -66,10 +66,11 @@ public class TimeDrawer extends TemporalDrawer {
 	* names at the appropriate places.
 	*/
 	protected void draw_tuples(Graphics g, Rectangle bounds) {
-		int hi, di, i;
+		int hour_idx, day_idx, i;
 		int hour, day_of_week;
-		final int Draw_all_hour_limit = 16;
-		boolean draw_all_hours;
+		final int Draw_all_hour_limit = 16, Too_many_hours = 200,
+			Too_many_days = 200;
+		boolean draw_all_hours, draw_day_line;
 		String old_hour_string;
 		int[] _x_values = x_values();
 		String[] times = times();
@@ -89,28 +90,28 @@ public class TimeDrawer extends TemporalDrawer {
 		String day_string = dates[0].substring(6,8);
 		hour = Integer.valueOf(hour_string).intValue();
 		day_of_week = week_day_for(dates[0]);
-		hi = 0; di = 0;
-		hours[hi] = new IntPair(hour, 0);
-		days[di] = new IntPair(day_of_week, 0);
-		++hi; ++di;
+		hour_idx = 0; day_idx = 0;
+		hours[hour_idx] = new IntPair(hour, 0);
+		days[day_idx] = new IntPair(day_of_week, 0);
+		++hour_idx; ++day_idx;
 		old_hour_string = hour_string;
 		// Map out all hours (from times) and days (from dates) with IntPairs.
 		for (i = 1; i < times.length; ++i) {
 			hour_string = times[i].substring(0,2);
 			if (! hour_string.equals(old_hour_string)) {
 				hour = Integer.valueOf(hour_string).intValue();
-				hours[hi++] = new IntPair(hour, i);
+				hours[hour_idx++] = new IntPair(hour, i);
 				old_hour_string = hour_string;
 				// If current hour is less than previous hour,
 				// a new day has begun.
-				if (hour < hours[hi-2].left()) {
+				if (hour < hours[hour_idx-2].left()) {
 					day_of_week = week_day_for(dates[i]);
-					days[di++] = new IntPair(day_of_week, i);
+					days[day_idx++] = new IntPair(day_of_week, i);
 				}
 			}
 		}
 
-		if (hi > 1 && _x_values.length > 1 &&
+		if (hour_idx > 1 && _x_values.length > 1 &&
 			hours[0] != null && hours[1] != null &&
 			hours[0].right() >= 0 && hours[1].right() >= 0) {
 			// Set the hour x offset according to the distance between
@@ -121,17 +122,20 @@ public class TimeDrawer extends TemporalDrawer {
 			Day_x_offset = Hour_x_offset;
 		}
 		i = 0;
-		draw_all_hours = hi <= Draw_all_hour_limit;
-		// Draw hours.
-		while (i < hi) {
-			if (drawable_hour(hours, hi, i, draw_all_hours)) {
-				draw_hour(g, bounds, hours[i], _x_values);
+		draw_all_hours = hour_idx <= Draw_all_hour_limit;
+		if (hour_idx < Too_many_hours) {
+			// Draw hours.
+			while (i < hour_idx) {
+				if (drawable_hour(hours, hour_idx, i, draw_all_hours)) {
+					draw_hour(g, bounds, hours[i], _x_values);
+				}
+				++i;
 			}
-			++i;
 		}
 		i = 0;
-		while (i < di) {
-			draw_day(g, bounds, days[i], _x_values);
+		draw_day_line = day_idx <= Too_many_days;
+		while (i < day_idx) {
+			draw_day(g, bounds, days[i], _x_values, draw_day_line);
 			++i;
 		}
 	}
@@ -163,7 +167,7 @@ public class TimeDrawer extends TemporalDrawer {
 	//    p.left() specifies the day
 	//    p.right() specifies the x-index
 	protected void draw_day(Graphics g, Rectangle bounds, IntPair p,
-			int[] x_values) {
+			int[] x_values, boolean draw_line) {
 		int x, day_x;
 		final int Line_offset = -2;
 		double width_factor;
@@ -171,7 +175,7 @@ public class TimeDrawer extends TemporalDrawer {
 		width_factor = width_factor_value(bounds, dates().length);
 		x = x_values[p.right()];
 		day_x = x + Day_x_offset;
-		if (x > Too_far_left) {
+		if (draw_line && x > Too_far_left) {
 			g.setColor(conf.reference_line_color());
 			g.drawLine(x + Line_offset, bounds.y,
 				x + Line_offset, bounds.y + bounds.height);
