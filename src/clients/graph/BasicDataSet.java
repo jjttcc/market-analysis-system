@@ -24,12 +24,7 @@ import graph_library.DataSet;
 **    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 **************************************************************************
 **    Adapted from the original DataSet class by Jim Cochrane,
-**    last changed in October, 2004
-**************************************************************************
-**
-**    This class is designed to be used in conjunction with 
-**    the Graph class and Axis class for plotting 2D graphs.
-**
+**    last changed in 2004.
 *************************************************************************/
 
 
@@ -46,6 +41,7 @@ public class BasicDataSet extends DataSet {
 	*     d != null<br>
 	* @postcondition<br>
 	*     size() == 0 */
+//!!!!Remove??:
 	public BasicDataSet() {
 		data = new ArrayList();
 //!!!:		dates_needed = true;
@@ -66,12 +62,18 @@ public class BasicDataSet extends DataSet {
 	* @param d Array containing the (y1,y2,...) data tuples.
 	* @param n Number of tuples in the array.
 	* precondition:<br>
-	*     d != null && d.length > 0 && n > 0<br>
+	*     d != null && n >= 0<br>
 	* postcondition:<br>
 	*     size() == data_points() */
 	public BasicDataSet(double d[], int n) throws Error {
-		if ( d  == null || d.length == 0 || n <= 0) {
-			throw new Error("DataSet constructor: precondition violated");
+		if (d  == null || n < 0) {
+			String msg = "BasicDataSet constructor: precondition violated:\n";
+			if (d == null) {
+				msg += "Argument d is null.";
+			} else {
+				msg += "Argument n is less than 0.";
+			}
+			throw new Error(msg);
 		}
 		data = new ArrayList(d.length);
 		for (int i = 0; i < d.length; ++i) {
@@ -101,10 +103,10 @@ public class BasicDataSet extends DataSet {
 	}
 
 	// x axis
-	public Axis xaxis() { return xaxis; }
+//!!!:	public Axis xaxis() { return xaxis; }
 
 	// y axis
-	public Axis yaxis() { return yaxis; }
+//!!!:	public Axis yaxis() { return yaxis; }
 
 //	/**
 //	* The number of data points in the DataSet
@@ -166,8 +168,8 @@ public class BasicDataSet extends DataSet {
 //	}
 
 	public String toString() {
-		String result = "";
-		System.out.println("BasicDataSet - data size: " + data.size());
+		String result = super.toString();
+		System.out.println(" - data size: " + data.size());
 		Iterator i = dates.iterator();
 		Iterator j = times.iterator();
 		Iterator k = data.iterator();
@@ -191,15 +193,12 @@ public class BasicDataSet extends DataSet {
 		throw new Error("Code defect: Unimplemented procedure called: 'append");
 	}
 
-/*
 	public void set_dates(ArrayList d) {
 		dates = d;
-		drawer.set_dates(d);
 	}
 
 	public void set_times(ArrayList t) {
 		times = t;
-		drawer.set_times(t);
 	}
 
 	public void set_dates(String[] d) {
@@ -207,7 +206,6 @@ public class BasicDataSet extends DataSet {
 		for (int i = 0; i < d.length; ++i) {
 			dates.add(d[i]);
 		}
-		drawer.set_dates(dates);
 	}
 
 	public void set_times(String[] t) {
@@ -215,18 +213,17 @@ public class BasicDataSet extends DataSet {
 		for (int i = 0; i < t.length; ++i) {
 			times.add(t[i]);
 		}
-		drawer.set_times(times);
 	}
-*/
 
 //!!!:	public void set_dates_needed(boolean b) { dates_needed = b; }
 
 	// Set the x axis to `a'.
-	public void set_xaxis(Axis a) { xaxis = a; }
+//!!!:	public void set_xaxis(Axis a) { xaxis = a; }
 
 	// Set the y axis to `a'.
-	public void set_yaxis(Axis a) { yaxis = a; }
+//!!!:	public void set_yaxis(Axis a) { yaxis = a; }
 
+/*!!!:
 	// Add y1, y2 values for a horizontal line.
 	public void add_hline(DoublePair p) {
 		if (hline_data == null) hline_data = new ArrayList();
@@ -238,6 +235,7 @@ public class BasicDataSet extends DataSet {
 		if (vline_data == null) vline_data = new ArrayList();
 		vline_data.add(p);
 	}
+*/
 
 /*
 	public void set_reference_values_needed(boolean b) {
@@ -277,7 +275,7 @@ System.out.println("DDS dd back");
 // Implementation
 
 	// set g2d to `b'.
-	protected void set_g2d(Graph g) { g2d = g; }
+//!!!:	protected void set_g2d(Graph g) { g2d = g; }
 
 	/**
 	* Calculate the range of the data. This modifies dxmin,dxmax,dymin,dymax
@@ -345,72 +343,72 @@ System.out.println("DDS dd back");
 	*    The Graphics canvas that is driving the whole show.
 	* @see graph.Graph
 	*/
-	private Graph g2d;
+//!!!:	private Graph g2d;
 
 	/**
 	*    The color of the straight line segments
 	*/
-	private Color linecolor     = null;
+//!!!:	private Color linecolor     = null;
 
 	/**
 	*    The marker color
 	*/
-	private Color  markercolor  = null;
+//!!!:	private Color  markercolor  = null;
 
 	/**
 	*    The scaling factor for the marker. Default value is 1.
 	*/
-	private double markerscale  = 1.0;
+//!!!:	private double markerscale  = 1.0;
 
 	/**
 	*    The Axis object the X data is attached to. From the Axis object
 	*    the scaling for the data can be derived.
 	* @see graph.Axis
 	*/
-	private Axis xaxis;
+//!!!:	private Axis xaxis;
 
 	/**
 	*    The Axis object the Y data is attached to.
 	* @see graph.Axis
 	*/
-	private Axis yaxis;
+//!!!:	private Axis yaxis;
 
 	/**
 	* The current plottable X maximum of the data. 
 	* This can be very different from
 	* true data X maximum. The data is clipped when plotted.
 	*/
-	private double xmax; 
+//!!!:	private double xmax; 
 
 	/**
 	* The current plottable X minimum of the data. 
 	* This can be very different from
 	* true data X minimum. The data is clipped when plotted.
 	*/
-	private double xmin;
+//!!!:	private double xmin;
 
 	/**
 	* The current plottable Y maximum of the data. 
 	* This can be very different from
 	* true data Y maximum. The data is clipped when plotted.
 	*/
-	private double ymax; 
+//!!!:	private double ymax; 
 
 	/**
 	* The current plottable Y minimum of the data. 
 	* This can be very different from
 	* true data Y minimum. The data is clipped when plotted.
 	*/
-	private double ymin;
+//!!!:	private double ymin;
 
 	/**
 	* Boolean to control clipping of the data window.
 	* Default value is <em>true</em>, clip the data window.
 	*/
-	private boolean clipping = false;
+//!!!:	private boolean clipping = false;
 
 	// Main data
-	private ArrayList data;	// Double
+	protected ArrayList data;	// Double
 
 	// Date data
 	protected ArrayList dates;	// String
@@ -422,45 +420,47 @@ System.out.println("DDS dd back");
 	* The data X maximum. 
 	* Once the data is loaded this will never change.
 	*/
-	private double dxmax;
+	protected double dxmax;
 
 	/**
 	* The data X minimum. 
 	* Once the data is loaded this will never change.
 	*/
-	private double dxmin;
+	protected double dxmin;
 
 	/**
 	* The data Y maximum. 
 	* Once the data is loaded this will never change.
 	*/
-	private double dymax;
+	protected double dymax;
 
 	/**
 	* The data Y minimum. 
 	* Once the data is loaded this will never change.
 	*/
-	private double dymin;
+	protected double dymin;
 
+/*!!!:
 	// Horizontal, vertical line data
 	private ArrayList hline_data;
 	private ArrayList vline_data;
+*/
 
 	/**
 	*    The X range of the clipped data
 	*/
-	private double xrange;
+//!!!:	private double xrange;
 
 	/**
 	*    The Y range of the clipped data
 	*/
-	private double yrange;
+//!!!:	private double yrange;
 
-	// Has range() been called to set the range?
-	private boolean range_set = false;
+//	// Has range() been called to set the range?
+//!!!:	private boolean range_set = false;
 
 	// Number of tuples in the data
-	private int tuple_count;
+	protected int tuple_count;
 
 //!!!:	private boolean dates_needed;
 }
