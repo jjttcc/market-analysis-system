@@ -11,8 +11,8 @@ the following files:
 
     mal_intro - Introduction to MAL
 
-	server_protocol_grammar - BNF specification for the protocol between
-	    the server and a GUI client
+    server_protocol_grammar - BNF specification for the protocol between
+        the server and a GUI client
 
     functions.ps - An attempt to give a precise specification to some of
         the technical analysis functions that can be constructed with MAL
