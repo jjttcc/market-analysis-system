@@ -93,6 +93,13 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 		return request_failed;
 	}
 
+	/**
+	* If `request_failed', information about the failure
+	**/
+	public String request_failure_message() {
+		return request_failure_message;
+	}
+
 // Element change
 
 	// Set the maximum number of times to attempt a lock to `arg'.
@@ -108,6 +115,7 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 	**/
 	public void execute_tradable_request() throws Exception {
 		request_failed = false;
+		request_failure_message = "";
 		lock_data_builder();
 		if (data_builder.is_locked_by(this)) {
 			data_builder.send_market_data_request(symbol, period_type);
@@ -127,8 +135,8 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 		} else {
 			request_failed = true;
 			// Lock attempts failed.
-			//@@@Check if throwing an exception is appropriate here.
-			throw new Exception(main_request_failed_message);
+			request_failure_message = main_lock_request_failed_message;
+System.out.println("Would previously have thrown an exception here [main data]");
 		}
 	}
 
@@ -138,6 +146,7 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 	**/
 	public void execute_indicator_request(int indicator_id) throws Exception {
 		request_failed = false;
+		request_failure_message = "";
 		lock_data_builder();
 		if (data_builder.is_locked_by(this)) {
 			data_builder.send_indicator_data_request(indicator_id, symbol,
@@ -154,8 +163,8 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 		} else {
 			request_failed = true;
 			// Lock attempts failed.
-			//@@@Check if throwing an exception is appropriate here.
-			throw new Exception(indicator_request_failed_message);
+			request_failure_message = indicator_lock_request_failed_message;
+System.out.println("Would previously have thrown an exception here [indicator data]");
 		}
 	}
 
@@ -165,6 +174,7 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 	**/
 	public void execute_indicator_list_request() throws Exception {
 		request_failed = false;
+		request_failure_message = "";
 		lock_data_builder();
 		if (data_builder.is_locked_by(this)) {
 			data_builder.send_indicator_list_request(symbol, period_type);
@@ -180,8 +190,9 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 		} else {
 			request_failed = true;
 			// Lock attempts failed.
-			//@@@Check if throwing an exception is appropriate here.
-			throw new Exception(indicator_list_request_failed_message);
+			request_failure_message =
+				indicator_list_lock_request_failed_message;
+System.out.println("Would previously have thrown an exception here [indicator list data]");
 		}
 	}
 
@@ -221,6 +232,7 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 	private Vector indicator_list_result = null;
 	private Calendar latest_date_time = null;
 	private int request_result_id = -1;
+	public String request_failure_message = "";
 
 	private final String indicator_request_failed_message =
 		"Indicator request failed";
@@ -228,4 +240,10 @@ public class SynchronizedDataRequester implements NetworkProtocol {
 		"Main data request failed";
 	private final String indicator_list_request_failed_message =
 		"Indicator list request failed";
+	private final String indicator_lock_request_failed_message =
+		"Indicator lock request failed";
+	private final String main_lock_request_failed_message =
+		"Main data lock request failed";
+	private final String indicator_list_lock_request_failed_message =
+		"Indicator list lock request failed";
 }
