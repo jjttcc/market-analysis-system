@@ -43,13 +43,13 @@ feature -- Access
 			-- Descendant classes may choose not to use this attribute for
 			-- efficiency.
 
+feature -- Status report
+
 	operator_used: BOOLEAN is
 			-- Is operator used by this function?
 		once
 			Result := true
 		end
-
-feature -- Status report
 
 	processed: BOOLEAN is
 			-- Has this function been processed?
@@ -62,7 +62,8 @@ feature -- Status report
 						(operator_used implies operator /= Void)
 		ensure then
 			not_processed_and_opset_if_opused:
-				not processed and (operator_used implies operator /= Void)
+				Result implies
+					not processed and (operator_used implies operator /= Void)
 		end
 
 feature -- Basic operations
