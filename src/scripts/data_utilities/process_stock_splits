@@ -61,12 +61,27 @@ check_dirs() {
 process_splits() {
 python <<EOPY
 from string import split, join
+def pct_split_calc(s):
+	# Remove '%' at end of s.
+	if s[len(s) - 1] == '%': s = s[:-1]
+	if s[0] == '-':
+		pctval = eval(s[1:])
+		result = 100.0 / (100.0 - pctval)
+	else:
+		pctval = eval(s)
+		result = 100.0 / pctval
+	return result
 input = open("$1", 'r')
 for line in input.readlines():
 	fields = split(line)
 	symbol = fields[0]
-	s = split(fields[3], '-')
-	split_value = float(eval(s[0])) / float(eval(s[1]))
+	if len(fields) >= 4:
+		s = split(fields[3], '-')
+		split_value = float(eval(s[0])) / float(eval(s[1]))
+	elif len(fields) == 3:
+		split_value = pct_split_calc(fields[2])
+	else:  # Missing split value - Skip to next split record.
+		continue
 	year = fields[1][:4]
 	month = fields[1][4:6]
 	day = fields[1][6:]
