@@ -73,6 +73,9 @@ feature -- Status setting
 			-- data to be analyzed.
 		do
 			input.set_innermost_input (f)
+			set_target (input.output)
+			-- Operator may need to obtain `target' from Current.
+			operator.initialize (Current)
 		end
 
 	set_input (in: like input) is
@@ -104,6 +107,7 @@ feature -- Basic operations
 				input.process
 			end
 			if not target.empty then
+print ("last date: "); print (target.last.date_time); print ("%N")
 				do_all
 			end
 		end

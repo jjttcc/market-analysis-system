@@ -108,6 +108,8 @@ feature -- Status setting
 		do
 			input1.set_innermost_input (f)
 			input2.set_innermost_input (f)
+			target1 := input1.output
+			target2 := input2.output
 		end
 
 feature -- Basic operations
