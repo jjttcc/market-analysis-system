@@ -54,7 +54,7 @@ feature {NONE}
 				then
 					tuple_list := t.tuple_list (trading_period_type.name)
 				end
-				if t.has_open_interest then
+				if t /= Void and t.has_open_interest then
 					pref := concatenation(<<clone(pref), Open_interest_flag>>)
 				end
 			elseif
@@ -69,11 +69,11 @@ feature {NONE}
 				session.set_last_tradable (tradables.last_tradable)
 			end
 			if tuple_list = Void then
-				if not tradables.symbols.has (market_symbol) then
+				if server_error then
+					report_server_error
+				elseif not tradables.symbols.has (market_symbol) then
 					report_error (Invalid_symbol, <<"Symbol '", market_symbol,
 						"' not in database.">>)
-				elseif server_error then
-					report_server_error
 				else
 					report_error (Error, <<"Invalid period type: ",
 						trading_period_type>>)
