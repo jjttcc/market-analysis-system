@@ -176,6 +176,7 @@ feature {FACTORY} -- Status setting
 	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
 			-- Both `input1' and `input2' will be changed.
 		do
+			processed_date_time := Void
 			input1.set_innermost_input (in)
 			input2.set_innermost_input (in)
 			output.wipe_out

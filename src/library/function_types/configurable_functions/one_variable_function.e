@@ -163,6 +163,7 @@ feature {FACTORY} -- Status setting
 
 	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
 		do
+			processed_date_time := Void
 			if input.is_complex then
 				input.set_innermost_input (in)
 			else
