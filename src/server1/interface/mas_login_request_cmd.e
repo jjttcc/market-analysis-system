@@ -12,7 +12,7 @@ class MAS_LOGIN_REQUEST_CMD inherit
 		rename
 			make as lrc_make_unused
 		redefine
-			session, put_session_state, pre_process_session, process,
+			session, put_session_state, pre_process_session,
 			post_process_session
 		end
 
