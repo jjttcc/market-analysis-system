@@ -87,7 +87,8 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 			not_void: in /= Void
 		do
 		ensure
-			output_empty_if_complex: is_complex implies output.empty
+			output_empty_if_complex_and_not_processed:
+				is_complex and not processed implies output.empty
 		end
 
 feature {MARKET_FUNCTION}
