@@ -61,7 +61,8 @@ feature {NONE} -- Implementation
 		do
 			s := ex_env.get (command_variable_name)
 			if s /= Void and then not s.is_empty then
-				last_dirsep := s.last_index_of (op_env.directory_separator, 1)
+				last_dirsep := s.last_index_of (op_env.directory_separator,
+					s.count)
 				command_name := s.substring (last_dirsep + 1, s.count)
 				if not command_name.is_empty then
 					nt_cmd := clone (nt_command_name)
