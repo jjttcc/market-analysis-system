@@ -53,9 +53,17 @@ feature -- Initialization
 feature -- Basic operations
 
 	execute (arg: ANY) is
+		local
+			old_i: INTEGER
 		do
+			old_i := target.index
 			operand.execute (target.item)
 			value := operand.value
+			if old_i /= target.index then
+				target.go_i_th (old_i)
+			end
+		ensure then
+			target_cursor_not_changed: old target.index = target.index
 		end
 
 feature -- Status report
