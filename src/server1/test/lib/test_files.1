@@ -1,7 +1,8 @@
 # List of test input/output-reference files for test 1
 # Format:
-#   test_name,in_file,out_ref_file,index,epsilon
-# (epsilon is optional).
+#   test_name,in_file,out_ref_file,index,epsilon,period_type
+# (epsilon is optional; period_type defaults to 1 - daily).
+# period_types: 1 (daily), 2 (weekly), 3 (monthly), 4 (yearly)
 MACD Difference,test_data,macd,3
 MACD Signal,test_data,macd_sig,4
 MACD Histogram,test_data,macd_hist,5
@@ -14,3 +15,6 @@ Stochastic %D,stoch,stochD5,10,.01
 Slow Stochastic %D,stoch,slow_stochD3,11,.01
 Williams %R,williams,williams,8,.01
 RSI,rsi,rsi7,12,.001
+RSIsun,sunw,rsi_sunw,12,.0001
+RSIsunmnthly,sunw,rsi_sunw_mnthly,12,.0001,3
+Monthly Stochastic %K,sunw,sunw_mnthly_stch%K,9,.000001,3
