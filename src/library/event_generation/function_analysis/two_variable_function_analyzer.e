@@ -124,7 +124,6 @@ feature -- Status setting
 			input2.set_innermost_input (f)
 			target1 := input1.output
 			target2 := input2.output
-			-- !!!Added 1/29/2001 - check it (next 3 lines):
 			if operator /= Void then
 				operator.initialize (Current)
 			end
