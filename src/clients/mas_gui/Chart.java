@@ -13,6 +13,7 @@ public class TA_Chart extends Frame
 {
 	public TA_Chart(TA_Connection conn)
 	{
+
 		super("TA_Chart");		// Create the main window frame.
 		connection = conn;
 		num_windows++;			// Count it.
