@@ -245,11 +245,9 @@ feature {NONE} -- Implementation
 			if server_response_is_selection_list then
 				if key_match then
 					if shared then
--- !!Check use of s here:
 						input_record := input_record +
 							shared_string + s + "%N"
 					else
--- !!Check use of s here:
 						input_record := input_record + s + "%N"
 					end
 				elseif objects.has_item (s) then
@@ -317,12 +315,11 @@ feature {NONE} -- Implementation - Regular expressions
 				regexp.match (s)
 				Result :=  regexp.has_matched
 			else
---!!!				debug ("match")
-					io.error.print (
-						"Defect: regular expression compilation failed.%N")
-					io.error.print (regexp.error_message + "%N(position: " +
-						regexp.error_position.out + "%N")
---!!!				end
+				io.error.print (
+					"Defect: regular expression compilation failed.%N")
+				io.error.print (regexp.error_message + "%N(position: " +
+					regexp.error_position.out + "%NPlease report this bug %
+					%bug to the MAS developers.%N")
 				fatal_error := True
 				error := True
 			end

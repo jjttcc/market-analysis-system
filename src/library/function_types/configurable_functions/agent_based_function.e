@@ -43,7 +43,6 @@ feature {NONE} -- Initialization
 		ensure
 			set: operator = op and calculator_key = key and
 				(ins /= Void implies inputs = ins)
-			no_op_init: not operator_needs_initializing
 		end
 
 feature -- Access
@@ -170,11 +169,6 @@ feature -- Status report
 			Result := operator /= Void
 		end
 
---!!!!!!!Obsolete?:
-	operator_needs_initializing: BOOLEAN
-			-- Does `operator' need initializing when `set_innermost_input'
-			-- is called?
-
 feature {NONE}
 
 	do_process is
@@ -219,8 +213,6 @@ feature {FACTORY} -- Element change
 				end
 			end
 			if operator /= Void then
-				-- !!!Check if the operator_needs_initializing
-				-- construct is adequate or if it's even needed.
 				operator.initialize (Current)
 			end
 			output.wipe_out
@@ -266,17 +258,6 @@ feature {MARKET_FUNCTION_EDITOR} -- Element change
 		ensure
 			one_more: inputs.count = old inputs.count + 1
 			added: inputs.last = f
-		end
-
---!!!!!!!Obsolete?:
-	set_operator_needs_initializing (arg: BOOLEAN) is
-			-- Set `operator_needs_initializing' to `arg'.
-		require
-			op_exists: operator /= Void
-		do
-			operator_needs_initializing := arg
-		ensure
-			operator_needs_initializing_set: operator_needs_initializing = arg
 		end
 
 feature {MARKET_FUNCTION_EDITOR, MARKET_AGENTS}
