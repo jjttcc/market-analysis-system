@@ -56,8 +56,12 @@ awk -f $html_tools -f $format_tools --source 'BEGIN {
 	if ("'$xname'" == "'$null_xname'") Extensions = FALSE
 	else Extensions = TRUE
 	if (true_str("'$list'")) Dolist = TRUE		# format lists
-	if (groff()) printf("%s\n%s\n%s\n", ".SA 0", ".S 11", ".ll 6.4i")
-#	if (groff()) printf("%s\n", ".hy 0")		# hyphenation off
+	if (groff()) {
+		printf("%s\n%s\n%s\n", ".SA 0", ".S 11", ".ll 6.4i")
+#		printf("%s\n", ".hy 0")		# hyphenation off
+	} else {
+		print_html_header_material()
+	}
 	if (true_str("'$has_title'") || true_str("'$has_header'")) {
 		# Parse the title and/or header.
 		x = 0
@@ -439,6 +443,17 @@ function print_heading(hdg, level) {
 	}
 }
 
+# Print expected html header material so that Microsoft products will
+# recognize the output as an html document.
+function print_html_header_material() {
+	print "<html>\n<head>\n</head>\n<body>"
+}
+
+# Print expected html footer material.
+function print_html_footer_material() {
+	print "</body>\n</html>"
+}
+
 function html() {
 	result = 0
 	if (true_str("'$html'")) result = 1
@@ -468,5 +483,9 @@ function true_str(s) {
 
 function warn(s) {
 	system("echo " s)
+}
+
+END {
+	if (html()) print_html_footer_material()
 }
 ' $files
