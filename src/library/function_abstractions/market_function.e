@@ -86,6 +86,8 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 		require
 			not_void: in /= Void
 		do
+		ensure
+			output_empty: output.empty
 		end
 
 feature {MARKET_FUNCTION}
