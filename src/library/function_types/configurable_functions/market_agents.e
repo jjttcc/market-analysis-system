@@ -77,6 +77,7 @@ feature -- Agents
 		require
 			f_output_empty: f.output /= Void and f.output.is_empty
 		do
+print ("std dev called with f.name: " + f.name + "%N")
 			n_based_accumulation (f, integer_parameter_value (f, 5),
 				agent sum_of_squares_of_avg_divided_by_n, addition_operator,
 				subtraction_operator)
