@@ -44,8 +44,7 @@ feature {MARKET_FUNCTION_EDITOR} -- Status setting
 				fop: like first_element_operator) is
 			-- Set `operator' to `op' and `previous_operator' to `pop'.
 		require
-			not_void: op /= Void and pop /= Void and fop /= Void
---!!!Remove (probably): left_operand_is_pop: op.operand1 = pop
+			op_fop_not_void: op /= Void and fop /= Void
 		do
 			operator := op
 			previous_operator := pop
@@ -73,7 +72,6 @@ feature {NONE}
 invariant
 
 	op_not_void: operator /= Void
---!!!Remove (probably): op_left_operand_is_prev_op: operator.operand1 = previous_operator
 	firstop_not_void: first_element_operator /= Void
 
 end -- class FUNCTION_WITH_FIRST_AND_PREVIOUS_OPERATORS
