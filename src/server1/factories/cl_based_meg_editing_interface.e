@@ -25,6 +25,20 @@ class CL_BASED_MEG_EDITING_INTERFACE inherit
 			operator_maker, function_editor, help
 		end
 
+	GLOBAL_SERVER
+		export
+			{NONE} all
+		undefine
+			print
+		end
+
+	APP_ENVIRONMENT
+		export
+			{NONE} all
+		undefine
+			print
+		end
+
 	EXECUTION_ENVIRONMENT
 		export
 			{NONE} all
@@ -94,7 +108,7 @@ feature {NONE} -- Implementation
 				io_devices_not_void: input_device /= Void and
 										output_device /= Void
 			end
-			if not changed then
+			if not changed or not ok_to_save then
 				msg := concatenation (<<"Select action:",
 					"%N     Create a new market analyzer (c) %
 					%Remove a market analyzer (r) %
@@ -127,7 +141,11 @@ feature {NONE} -- Implementation
 				when 'e', 'E' then
 					Result := Edit_value
 				when 's', 'S' then
-					Result := Save_value
+					if not changed or not ok_to_save then
+						print ("Invalid selection%N")
+					else
+						Result := Save_value
+					end
 				when 'h', 'H' then
 					Result := Show_help_value
 				when '!' then
@@ -510,5 +528,13 @@ feature {NONE} -- Implementation
 		end
 
 	help: HELP
+
+feature {NONE} -- Implementation of hook routines
+
+	initialize_lock is
+		do
+			lock := file_lock (file_name_with_app_directory (
+				market_event_generation_library.persistent_file_name))
+		end
 
 end -- CL_BASED_MEG_EDITING_INTERFACE
