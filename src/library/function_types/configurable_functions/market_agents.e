@@ -300,26 +300,6 @@ feature {NONE} -- Utilities
 			Result := sum / n
 		end
 
---!!!:
-	old_remove_please_integer_parameter_value (f: AGENT_BASED_FUNCTION; deflt: INTEGER):
-		INTEGER is
-			-- f's first parameter value if it exists and is an integer -
-			-- otherwise, `deflt'
-		local
-			plist: LIST [FUNCTION_PARAMETER]
-		do
-			plist := f.parameters
-			if
-				not plist.is_empty and
-				plist.first.current_value.is_integer
-			then
---!!!				Result := plist.first.current_value.to_integer
-Result := plist.last.current_value.to_integer
-			else
-				Result := deflt
-			end
-		end
-
 	integer_parameter_value (f: AGENT_BASED_FUNCTION; deflt: INTEGER):
 		INTEGER is
 			-- f's first immediate integer parameter value if it exists -
