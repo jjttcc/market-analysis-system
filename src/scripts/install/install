@@ -63,7 +63,7 @@ fatal() {
 
 handle_signal() {
 	case $(query "\nCaught signal - terminate program? (y/n) \c") in
-		y*|Y*) echo "Exiting ..." >&2; cleanup; exit 0 ;;
+		y*|Y*) echo "Exiting ..." >&2; cleanup; exit 1 ;;
 		*) echo "Continuing ..." >&2 ;;
 	esac
 }
