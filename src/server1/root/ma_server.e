@@ -23,6 +23,11 @@ class MA_SERVER inherit
 			{NONE} all
 		end
 
+	TERMINABLE
+		export
+			{NONE} all
+		end
+
 creation
 
 	make
@@ -46,6 +51,7 @@ feature -- Initialization
 				print_list (<<version.name, ", Version ", version.number, ", ",
 					version.informal_date, "%N">>)
 			else
+				register_for_termination (Current)
 				create poller.make_read_only
 				create factory_builder.make
 				create {LINKED_LIST [SOCKET]} current_sockets.make
@@ -78,13 +84,13 @@ feature -- Initialization
 				loop
 					poller.execute (15, 20000)
 				end
-				close_sockets
+				exit (0)
 			end
 		rescue
-			close_sockets
 			-- Let assertion violations be handled by the run-time environment.
 			if not assertion_violation then
 				handle_exception ("main routine")
+				check no_cleanup = false end
 				exit (Error_exit_status)
 			end
 		end
@@ -97,7 +103,7 @@ feature {NONE}
 	poller: MEDIUM_POLLER
 			-- Poller for client socket connections
 
-	close_sockets is
+	cleanup is
 			-- Close all unclosed sockets.
 		do
 			if current_sockets /= Void then
