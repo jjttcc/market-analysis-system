@@ -49,13 +49,18 @@ feature {NONE} -- Initialization
 		local
 			connection: SERVER_RESPONSE_CONNECTION
 			cl: EXTENDED_MAS_COMMAND_LINE
+f: PLAIN_TEXT_FILE
 		do
+create f.make_open_write ("/tmp/debugxmas")
+f.put_string ("report_back called " + (create {DATE_TIME}.make_now).out + "%N")
 			cl := extended_command_line
 			if cl.report_back then
 				create connection.make (cl.host_name_for_startup_report,
 					cl.port_for_startup_report)
 				-- If `errs.is_empty', the startup process will assume
 				-- that this process started succefully.
+f.put_string ("sent: '" + errs + "' ("
++ (create {DATE_TIME}.make_now).out + ")%N")
 				connection.send_one_time_request (errs, False)
 			end
 		end
