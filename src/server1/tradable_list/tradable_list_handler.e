@@ -29,8 +29,10 @@ feature -- Initialization
 feature -- Access
 
 	daily_market_list: TRADABLE_LIST
+			-- Tradables whose base data period-type is daily
 
 	intraday_market_list: TRADABLE_LIST
+			-- Tradables whose base data period-type is intraday
 
 	list_for (period_type: TIME_PERIOD_TYPE): TRADABLE_LIST is
 			-- The tradable list that holds data for `period_type'
