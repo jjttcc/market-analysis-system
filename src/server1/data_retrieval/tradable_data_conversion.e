@@ -165,25 +165,35 @@ feature {NONE} -- Implemenation
 	converted_yahoo_line (l: STRING): STRING is
 			-- Converted yahoo stock data record - example yahoo data:
 			-- 17-Jul-02,71.00,71.60,69.62,70.69,11537300
+		require
+			l_exists: l /= Void
 		local
 			day, month, year: STRING
 			date: ARRAY [STRING]
 			su: expanded STRING_UTILITIES
 			date_util: expanded DATE_TIME_SERVICES
 		do
-			su.set_target (l.substring (1, l.index_of (
-				yahoo_field_separator, 1) - 1))
-			date := su.tokens ("-")
-			day := forced_two_digits (date @ 1)
-			month := forced_two_digits (
-				date_util.month_from_3_letter_abbreviation (date @ 2).out)
-			year := four_digit_year (date @ 3)
-			Result := year + month + day + l.substring (
-				l.index_of (yahoo_field_separator, 1), l.count) + "%N"
-			if output_field_separator /= yahoo_field_separator then
-				Result.replace_substring_all (yahoo_field_separator.out,
-					output_field_separator.out)
+			if l.is_empty or else not (l @ 1).is_digit then
+				Result := ""
+			else
+				su.set_target (l.substring (1, l.index_of (
+					yahoo_field_separator, 1) - 1))
+				date := su.tokens ("-")
+				day := forced_two_digits (date @ 1)
+				month := forced_two_digits (
+					date_util.month_from_3_letter_abbreviation (date @ 2).out)
+				year := four_digit_year (date @ 3)
+				Result := year + month + day + l.substring (
+					l.index_of (yahoo_field_separator, 1), l.count) + "%N"
+				if output_field_separator /= yahoo_field_separator then
+					Result.replace_substring_all (yahoo_field_separator.out,
+						output_field_separator.out)
+				end
 			end
+		ensure
+			exists: Result /= Void
+			empty_if_not_valid: l.is_empty or not (l @ 1).is_digit implies
+				Result.is_empty
 		end
 
 end
