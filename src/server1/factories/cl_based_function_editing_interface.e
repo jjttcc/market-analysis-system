@@ -21,6 +21,15 @@ class CL_BASED_FUNCTION_EDITING_INTERFACE inherit
 	FUNCTION_EDITING_INTERFACE
 		undefine
 			print
+		redefine
+			help
+		end
+
+	EXECUTION_ENVIRONMENT
+		export
+			{NONE} all
+		undefine
+			print
 		end
 
 creation
@@ -33,6 +42,7 @@ feature -- Initialization
 		do
 			create operator_maker.make (false)
 			create editor.make (Current, operator_maker)
+			create help.make
 		ensure
 			editor_exists: editor /= Void
 		end
@@ -65,7 +75,63 @@ feature -- Status setting
 			output_device_set: output_device = arg and output_device /= Void
 		end
 
-feature {NONE} -- Hook methods
+feature {NONE} -- Implementation
+
+	help: HELP
+
+feature {NONE} -- Implementation of hook methods
+
+	main_indicator_edit_selection: INTEGER is
+		local
+			msg: STRING
+		do
+			check
+				io_devices_not_void: input_device /= Void and
+					output_device /= Void
+			end
+			if not changed then
+				msg := concatenation (<<"Select action:",
+					"%N     Create a new market-data indicator (c) %
+					%Remove a market-data indicator (r) %N%
+					%     Edit market-data indicators (e) %
+					%Previous (-) Help (h) ", eom>>)
+			else
+				msg := concatenation (<<"Select action:",
+					"%N     Create a new market-data indicator (c) %
+					%Remove a market-data indicator (r) %N%
+					%     Edit market-data indicators (e) %
+					%Save changes (s) %N%
+					%     Previous - abort changes (-) Help (h) ", eom>>)
+			end
+			from
+				Result := Null_value
+			until
+				Result /= Null_value
+			loop
+				print (msg)
+				inspect
+					character_selection (Void)
+				when 'c', 'C' then
+					Result := Create_new_value
+				when 'r', 'R' then
+					Result := Remove_value
+				when 'e', 'E' then
+					Result := Edit_value
+				when 's', 'S' then
+					Result := Save_value
+				when 'h', 'H' then
+					Result := Show_help_value
+				when '!' then
+					print ("Type exit to return to main program.%N")
+					system ("")
+				when '-' then
+					Result := Exit_menu_value
+				else
+					print ("Invalid selection%N")
+				end
+				print ("%N%N")
+			end
+		end
 
 	accepted_by_user (c: MARKET_FUNCTION): BOOLEAN is
 		do
@@ -128,6 +194,5 @@ feature {NONE} -- Hook methods
 				end
 			end
 		end
-
 
 end -- CL_BASED_FUNCTION_EDITING_INTERFACE
