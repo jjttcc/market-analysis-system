@@ -10,8 +10,8 @@ body { background-color: #e9dcd5; }
 	/*
 	margin-left: 0.15em;
 	*/
-	padding: 0 0 0 0.9em;
-	width: 7.1em; height: 100%;
+	padding: 0 0 0 0.8em;
+	width: 7.2em; height: 100%;
 	background-color: #b2c5ca;
 	border-right: 1px solid;
 	/*
@@ -32,7 +32,7 @@ body { background-color: #e9dcd5; }
 }
 
 h1.header {
-	color: red;
+	color: blue;
 	font-size: 100%;
 }
 
