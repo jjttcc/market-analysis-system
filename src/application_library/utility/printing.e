@@ -7,6 +7,9 @@ indexing
 class PRINTING inherit
 
 	GLOBAL_SERVICES
+		export {NONE}
+			all
+		end
 
 feature -- Access
 
@@ -49,6 +52,8 @@ feature -- Status setting
 feature -- Basic operations
 
 	print_list (l: ARRAY [ANY]) is
+		require
+			not_void: l /= Void
 		local
 			i: INTEGER
 		do
