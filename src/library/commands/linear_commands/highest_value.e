@@ -12,6 +12,10 @@ class HIGHEST_HIGH inherit
 			start_init, sub_action, target
 		end
 
+creation
+
+	make
+
 feature {NONE} -- Implementation
 
 	start_init is

@@ -8,11 +8,23 @@ indexing
 class BASIC_LINEAR_COMMAND inherit
 
 	NUMERIC_COMMAND
-		redefine
-			execute_precondition
-		end
 
 	LINEAR_ANALYZER
+
+creation
+
+	make
+
+feature -- Initialization
+
+	make (t: like target) is
+		require
+			t_not_void: t /= Void
+		do
+			set_target (t)
+		ensure
+			target_set: target = t
+		end
 
 feature -- Basic operations
 
@@ -24,18 +36,6 @@ feature -- Basic operations
 
 feature -- Status report
 
-	arg_used: BOOLEAN is
-		do
-			Result := false
-		ensure then
-			not_used: Result = false
-		end
-
-	execute_precondition: BOOLEAN is
-		do
-			Result := target_set
-		ensure then
-			target_set: Result = target_set
-		end
+	arg_used: BOOLEAN is false
 
 end -- class BASIC_LINEAR_COMMAND

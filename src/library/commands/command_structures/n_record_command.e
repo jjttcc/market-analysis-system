@@ -16,7 +16,7 @@ deferred class N_RECORD_COMMAND inherit
 
 	NUMERIC_COMMAND
 		redefine
-			initialize, execute_precondition
+			initialize
 		end
 
 	N_RECORD_STRUCTURE
@@ -24,6 +24,19 @@ deferred class N_RECORD_COMMAND inherit
 	LINEAR_ANALYZER
 		redefine
 			forth, action, start, exhausted, invariant_value, target
+		end
+
+feature -- Initialization
+
+	make (t: LINEAR [MARKET_TUPLE]; i: like n) is
+		require
+			t_not_void: t /= Void
+			i_gt_0: i > 0
+		do
+			set_target (t)
+			set_n (i)
+		ensure
+			set: target = t and n = i
 		end
 
 feature -- Basic operations
@@ -40,13 +53,6 @@ feature -- Status report
 			Result := false
 		ensure then
 			not_used: Result = false
-		end
-
-	execute_precondition: BOOLEAN is
-		do
-			Result := n_set and target_set
-		ensure then
-			n_target_set: Result = (n_set and target_set)
 		end
 
 feature {NONE} -- Implementation
@@ -77,8 +83,11 @@ feature {NONE} -- Implementation
 
 	invariant_value: BOOLEAN is
 		do
-			Result := target /= Void and not exhausted implies
+			Result := not exhausted implies
 						target.valid_index (target.index - offset)
+		ensure then
+			Result = (not exhausted implies
+						target.valid_index (target.index - offset))
 		end
 
 feature {NONE} -- Implementation
@@ -98,7 +107,6 @@ feature {MARKET_FUNCTION}
 			set_owner (arg)
 		ensure then
 			n_set_to_argn: n = arg.n
-			n_set: n_set
 		end
 
 feature {NONE}
@@ -126,7 +134,6 @@ feature {NONE}
 
 invariant
 
-	loop_inv_valid: target /= Void and then not target.off implies
-					invariant_value
+	loop_inv_valid: not target.off implies invariant_value
 
 end -- class N_RECORD_COMMAND

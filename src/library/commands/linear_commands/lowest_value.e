@@ -12,6 +12,10 @@ class LOWEST_LOW inherit
 			start_init, sub_action, target
 		end
 
+creation
+
+	make
+
 feature {NONE} -- Basic operations
 
 	sub_action (current_index: INTEGER) is

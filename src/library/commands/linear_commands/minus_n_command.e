@@ -14,6 +14,10 @@ class MINUS_N_COMMAND inherit
 			execute
 		end
 
+creation
+
+	make
+
 feature
 
 	execute (arg: ANY) is

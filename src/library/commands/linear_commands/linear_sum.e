@@ -7,17 +7,37 @@ class LINEAR_SUM inherit
 
 	NUMERIC_COMMAND
 		redefine
-			initialize, execute_precondition
+			initialize
 		end
 
 	LINEAR_ANALYZER
+		export {NONE}
+			all
+				{FACTORY}
+			set_target
 		redefine
 			test, action, forth, invariant_value
 		end
 
 	N_RECORD_STRUCTURE
 
-feature -- Initialization
+creation
+
+	make
+
+feature {FACTORY} -- Initialization
+
+	make (t: like target; op: BASIC_NUMERIC_COMMAND; i: like n) is
+		require
+			args_not_void: t /= Void and op /= Void
+			i_gt_0: i > 0
+		do
+			set_target (t)
+			set_operator (op)
+			set_n (i)
+		ensure
+			set: target = t operator = op and n = i
+		end
 
 	initialize (arg: N_RECORD_STRUCTURE) is
 		do
@@ -43,26 +63,11 @@ feature -- Basic operations
 
 feature -- Status report
 
-	operator_set: BOOLEAN is
-			-- Has the operator used for the operation been set?
-		do
-			Result := operator /= Void
-		ensure
-			true_if_op_not_void: Result = (operator /= Void)
-		end
-
 	arg_used: BOOLEAN is
 		do
 			Result := false
 		ensure then
 			not_used: Result = false
-		end
-
-	execute_precondition: BOOLEAN is
-		do
-			Result := operator_set and target_set and n_set
-		ensure then
-			op_target_n_set: Result = (operator_set and target_set and n_set)
 		end
 
 feature {NONE}
@@ -79,14 +84,13 @@ feature {FACTORY} -- Element change
 			-- the current item).
 		require
 			not_void: op /= Void
-			ready_to_execute: op.execute_precondition
 		do
 			operator := op
 		ensure
 			set: operator = op
-			op_set: operator_set
-			ready_to_execute: op.execute_precondition
 		end
+
+feature {FACTORY} -- Access
 
 	operator: BASIC_NUMERIC_COMMAND
 
@@ -118,5 +122,9 @@ feature {NONE}
 feature {NONE}
 
 	internal_index: INTEGER
+
+invariant
+
+	operator_not_void: operator /= Void
 
 end -- class LINEAR_SUM
