@@ -19,7 +19,7 @@ $Final_msg_file = "";
 
 # Settings variables
 my %settings = ();
-@tags = ("mas_tar_file", "deployment_dir", "version", "server_port_number",
+@tags = ("mas_tar_file", "mas_deployment_dir", "version", "server_port_number",
 	"cl_options", "mas_dir", "data_dir", "mas_applet_file", "mas_servlet_file",
 	"applet_deployment_path", "servlet_deployment_dir"
 );
