@@ -240,6 +240,9 @@ class Parser {
 		boolean has_dates = false;
 		boolean has_times = false;
 
+		volume_data = null;
+		oi_data = null;
+
 		try {
 			has_dates = dates != null && ! dates.isEmpty();
 			has_times = times != null && ! times.isEmpty();
