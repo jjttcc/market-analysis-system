@@ -39,13 +39,13 @@ feature -- Initialization
 		do
 			set_up
 		ensure
-			ml_not_void: market_list_handler /= Void
+			ml_not_void: tradable_list_handler /= Void
 		end
 
 feature -- Access
 
-	market_list_handler: TRADABLE_DISPENSER
-			-- Manager of all available market lists
+	tradable_list_handler: TRADABLE_DISPENSER
+			-- Manager of all available tradable lists
 
 	event_coordinator: MARKET_EVENT_COORDINATOR
 			-- Object in charge of event generation and dispatch
@@ -84,9 +84,9 @@ feature {NONE}
 		do
 			create list_builder.make
 			list_builder.execute
-			market_list_handler := list_builder.product
+			tradable_list_handler := list_builder.product
 			create {TRADABLE_LIST_EVENT_COORDINATOR} event_coordinator.make (
-				market_list_handler)
+				tradable_list_handler)
 		end
 
 	register_event_registrants is

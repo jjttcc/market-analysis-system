@@ -71,12 +71,12 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 			port_number = new Integer(port_number.parseInt(args[1]));
 			for (int i = 2; i < args.length; ++i) {
 				if (args[i].equals(symbol_option)) {
-					markets = new Vector();
+					tradables = new Vector();
 					for (i = i + 1; i < args.length; ++i) {
 						if (args[i].charAt(0) == flag_character) {
 							break;
 						}
-						markets.addElement(args[i]);
+						tradables.addElement(args[i]);
 					}
 				}
 				if (i < args.length && args[i].equals(printall_option)) {
@@ -167,7 +167,7 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 		_last_indicator_data = indicator_parser.result();
 	}
 
-	// Send a request for the list of indicators for market `symbol'.
+	// Send a request for the list of indicators for tradable `symbol'.
 	public void send_indicator_list_request(String symbol,
 			String period_type) throws IOException {
 		StringBuffer mlist;
@@ -208,32 +208,32 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 		return _last_indicator_list;
 	}
 
-	// List of available markets
-	public Vector market_list() throws IOException {
+	// List of available tradables
+	public Vector tradable_list() throws IOException {
 		StringBuffer mlist;
 
 		synchronized ("x") {
-			if (markets == null) {
-				markets = new Vector();
+			if (tradables == null) {
+				tradables = new Vector();
 				connection.send_request(Market_list_request, "");
 				mlist = connection.result();
 				StringTokenizer t = new StringTokenizer(mlist.toString(),
 					Output_record_separator, false);
 				for (int i = 0; t.hasMoreTokens(); ++i) {
-					markets.addElement(t.nextToken());
+					tradables.addElement(t.nextToken());
 				}
 			}
 		}
-		return markets;
+		return tradables;
 	}
 
-	// List of all valid trading period types for `market'
-	public Vector trading_period_type_list(String market) throws IOException {
+	// List of all valid trading period types for `tradable'
+	public Vector trading_period_type_list(String tradable) throws IOException {
 		StringBuffer tpt_list;
 		Vector result;
 
 		result = new Vector();
-		connection.send_request(Trading_period_type_request, market);
+		connection.send_request(Trading_period_type_request, tradable);
 		tpt_list = connection.result();
 		StringTokenizer t = new StringTokenizer(tpt_list.toString(),
 			Output_record_separator, false);
@@ -368,8 +368,8 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 		return result;
 	}
 
-	// markets is shared by all windows
-	private static Vector markets;	// Cached list of markets
+	// tradables is shared by all windows
+	private static Vector tradables;	// Cached list of tradables
 
 	protected Connection connection;
 		// result of last market data request

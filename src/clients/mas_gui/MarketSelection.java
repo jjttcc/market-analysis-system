@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.*;
 import support.*;
 
-// Listener that allows user to select a market to be displayed.
+// Listener that allows user to select a tradable to be displayed.
 class MarketSelection extends DialogSelection {
 	public MarketSelection(Chart f) {
 		super(f);
@@ -15,7 +15,7 @@ class MarketSelection extends DialogSelection {
 		if (! size_was_set) {
 			setSize(window_width, 373);
 		}
-		Vector ml = chart.markets();
+		Vector ml = chart.tradables();
 		for (int i = 0; i < ml.size(); ++i) {
 			selection_list.add((String) ml.elementAt(i));
 		}
@@ -28,7 +28,7 @@ class MarketSelection extends DialogSelection {
 		add_close_listener();
 	}
 
-	public String current_market() {
+	public String current_tradable() {
 		return selection_list.getSelectedItem();
 	}
 

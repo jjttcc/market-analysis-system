@@ -175,7 +175,7 @@ feature -- Access
 			create {LINEAR_SUM} cmd.make (default_market_tuple_list,
 				bnc_dummy, 1)
 			create pair.make (cmd,
-				"Operator that sums a subsequence of n market records")
+				"Operator that sums a subsequence of n records")
 			Result.extend (pair)
 			create {MINUS_N_COMMAND} cmd.make (default_market_tuple_list,
 				bnc_dummy, 1)
@@ -263,7 +263,7 @@ feature -- Access
 			Result.extend (pair)
 			create {FUNCTION_BASED_COMMAND} cmd.make (stock, real_dummy)
 			create pair.make (cmd,
-				"Operator that processes a sequence of market records %
+				"Operator that processes a sequence of records %
 				%obtained from a%Nmarket function - only used by %
 				%ONE_VARIABLE_FUNCTION_ANALYZER")
 			Result.extend (pair)

@@ -20,9 +20,9 @@ public class IndicatorListener implements ActionListener {
 		DataSet dataset, main_dataset;
 		Configuration conf = Configuration.instance();
 		try {
-			String market = chart.current_market;
-			if (market == null || no_change(selection)) {
-				// If no market is selected or the selection hasn't changed,
+			String tradable = chart.current_tradable;
+			if (tradable == null || no_change(selection)) {
+				// If no tradable is selected or the selection hasn't changed,
 				// there is nothing to display.
 				return;
 			}
@@ -33,7 +33,7 @@ public class IndicatorListener implements ActionListener {
 				GUI_Utilities.busy_cursor(true, chart);
 				data_builder.send_indicator_data_request(
 					((Integer) chart.indicators().get(selection)).intValue(),
-					market, chart.current_period_type);
+					tradable, chart.current_period_type);
 				GUI_Utilities.busy_cursor(false, chart);
 			}
 		}

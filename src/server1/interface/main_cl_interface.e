@@ -94,7 +94,7 @@ feature -- Access
 				current_tradable /= last_tradable_for_period_types and
 				current_tradable /= Void
 			then
-				last_period_types := market_list_handler.period_types (
+				last_period_types := tradable_list_handler.period_types (
 					current_tradable.symbol)
 				last_tradable_for_period_types := current_tradable
 			end
@@ -165,7 +165,7 @@ feature -- Basic operations
 			until
 				end_client or exit_server
 			loop
-				print_list (<<"Select action:%N", "     Select market (s) ",
+				print_list (<<"Select action:%N", "     Select tradable (s) ",
 							"View data (v) Edit indicators (e)",
 							"%N     Edit market analyzers (m) ",
 							"Run market analysis (a)%N",
@@ -178,7 +178,7 @@ feature -- Basic operations
 				inspect
 					character_selection (Void)
 				when 's', 'S' then
-					select_market
+					select_tradable
 				when 'v', 'V' then
 					view_menu
 				when 'e', 'E' then
@@ -186,9 +186,9 @@ feature -- Basic operations
 					if
 						function_builder.changed and current_tradable /= Void
 					then
-						market_list_handler.clear_caches
+						tradable_list_handler.clear_caches
 						current_tradable := 
-						market_list_handler.tradable (current_tradable.symbol,
+						tradable_list_handler.tradable (current_tradable.symbol,
 							current_period_type)
 					end
 				when 'm', 'M' then
@@ -246,7 +246,7 @@ feature {NONE} -- Implementation
 			finished: BOOLEAN
 			indicator: MARKET_FUNCTION
 		do
-			if market_list_handler.is_empty then
+			if tradable_list_handler.is_empty then
 				print ("There are currently no markets to view.%N")
 				finished := True
 			end
@@ -315,7 +315,7 @@ feature {NONE} -- Implementation
 			if event_coordinator.start_date_time = Void then
 				log_error ("%NError: Start date must be set before %
 					%running analysis.%N")
-			elseif market_list_handler.is_empty then
+			elseif tradable_list_handler.is_empty then
 				print ("%NNo tradables to analyze - tradable list is empty.%N")
 			else
 				-- Ensure that the market event generators and event
@@ -380,10 +380,10 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	select_market is
-			-- Allow the user to select the current market so that
-			-- market_list_handler.item (current_period_type) is the
-			-- selected market.
+	select_tradable is
+			-- Allow the user to select the current tradable so that
+			-- tradable_list_handler.item (current_period_type) is the
+			-- selected tradable.
 		local
 			symbol: STRING
 			symbols: LIST [STRING]
@@ -391,9 +391,9 @@ feature {NONE} -- Implementation
 			err: STRING
 		do
 			old_tradable := current_tradable
-			if not market_list_handler.is_empty then
+			if not tradable_list_handler.is_empty then
 				from
-					symbols := market_list_handler.symbols
+					symbols := tradable_list_handler.symbols
 				until
 					symbol /= Void
 				loop
@@ -411,21 +411,21 @@ feature {NONE} -- Implementation
 					end
 				end
 				check
-					symbol_in_list: market_list_handler.symbols.has (symbol)
+					symbol_in_list: tradable_list_handler.symbols.has (symbol)
 				end
-				current_tradable := market_list_handler.tradable (symbol,
+				current_tradable := tradable_list_handler.tradable (symbol,
 					current_period_type)
 				if
-					market_list_handler.error_occurred or
+					tradable_list_handler.error_occurred or
 					current_tradable = Void
 				then
-					if market_list_handler.error_occurred then
+					if tradable_list_handler.error_occurred then
 						err := concatenation (
-							<<market_list_handler.last_error, ".%N">>)
+							<<tradable_list_handler.last_error, ".%N">>)
 					else
 						check
 							not_valid:
-							not market_list_handler.valid_period_type (symbol,
+							not tradable_list_handler.valid_period_type (symbol,
 							current_period_type)
 						end
 						err := concatenation (
@@ -446,7 +446,7 @@ feature {NONE} -- Implementation
 					end
 				end
 			else
-				print ("There are no markets available to select from.%N")
+				print ("There are no tradables available to select from.%N")
 			end
 		end
 
@@ -459,7 +459,7 @@ feature {NONE} -- Implementation
 			per_type_choice: TIME_PERIOD_TYPE
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 		do
-			if not market_list_handler.is_empty then
+			if not tradable_list_handler.is_empty then
 				from
 					i := 1
 					types := available_period_types
@@ -486,12 +486,12 @@ feature {NONE} -- Implementation
 					not t.valid_period_type (per_type_choice)
 				then
 					if
-						market_list_handler.valid_period_type (t.symbol,
+						tradable_list_handler.valid_period_type (t.symbol,
 							per_type_choice)
 					then
 						-- Set `t' to the appropriate tradable according to
 						-- `per_type_choice', intraday or non-intraday.
-						t := market_list_handler.tradable (t.symbol,
+						t := tradable_list_handler.tradable (t.symbol,
 							per_type_choice)
 					end
 				end
@@ -507,7 +507,7 @@ feature {NONE} -- Implementation
 						current_period_type)
 				end
 			else
-				print ("There are no markets to select a period type for.%N")
+				print ("There are no tradables to select a period type for.%N")
 			end
 		end
 
@@ -559,7 +559,7 @@ feature {NONE} -- Implementation - utilities
 			-- Start out with non-intraday data:
 			current_period_type := period_types @ (period_type_names @ Daily)
 			create event_generator_builder.make
-			create function_builder.make (market_list_handler)
+			create function_builder.make (tradable_list_handler)
 		ensure
 			curr_period_not_void: current_period_type /= Void
 		end
@@ -568,29 +568,29 @@ feature {NONE} -- Implementation - utilities
 		require
 			cpt_set: current_period_type /= Void
 		do
-			if market_list_handler.is_empty then
+			if tradable_list_handler.is_empty then
 				current_tradable := Void
 			else
-				market_list_handler.start
+				tradable_list_handler.start
 				current_tradable :=
-					market_list_handler.item (current_period_type)
-				if market_list_handler.error_occurred then
-					log_errors (<<market_list_handler.last_error, "%N">>)
+					tradable_list_handler.item (current_period_type)
+				if tradable_list_handler.error_occurred then
+					log_errors (<<tradable_list_handler.last_error, "%N">>)
 					terminate (Error_exit_status)
 				elseif current_tradable = Void then
 					-- No daily data, so use intraday data.
-					if not market_list_handler.error_occurred then
+					if not tradable_list_handler.error_occurred then
 						current_period_type := period_types @ (
-							market_list_handler.period_types (
-								market_list_handler.current_symbol) @ 1)
-						current_tradable := market_list_handler.item (
+							tradable_list_handler.period_types (
+								tradable_list_handler.current_symbol) @ 1)
+						current_tradable := tradable_list_handler.item (
 							current_period_type)
 					end
 				end
 			end
 		ensure
-			mlh_at_first: not market_list_handler.is_empty implies
-				market_list_handler.isfirst
+			mlh_at_first: not tradable_list_handler.is_empty implies
+				tradable_list_handler.isfirst
 		rescue
 			-- Exceptions caught during initialization are considered fatal.
 			last_exception_status.set_fatal (true)

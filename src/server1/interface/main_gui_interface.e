@@ -198,21 +198,21 @@ feature {NONE} -- Implementation
 		do
 			create rh.make (0)
 			rh.extend (create {MARKET_DATA_REQUEST_CMD}.make (
-				market_list_handler), Market_data_request)
+				tradable_list_handler), Market_data_request)
 			rh.extend ( create {INDICATOR_DATA_REQUEST_CMD}.make (
-				market_list_handler), Indicator_data_request)
+				tradable_list_handler), Indicator_data_request)
 			rh.extend (create {TRADING_PERIOD_TYPE_REQUEST_CMD}.make (
-				market_list_handler), Trading_period_type_request)
+				tradable_list_handler), Trading_period_type_request)
 			rh.extend (create {MARKET_LIST_REQUEST_CMD}.make (
-				market_list_handler), Market_list_request)
+				tradable_list_handler), Market_list_request)
 			rh.extend (create {INDICATOR_LIST_REQUEST_CMD}.make (
-				market_list_handler), Indicator_list_request)
+				tradable_list_handler), Indicator_list_request)
 			rh.extend (create {LOGIN_REQUEST_CMD}.make (
-				market_list_handler), Login_request)
+				tradable_list_handler), Login_request)
 			rh.extend (create {EVENT_LIST_REQUEST_CMD}.make (
-				market_list_handler), Event_list_request)
+				tradable_list_handler), Event_list_request)
 			rh.extend (create {EVENT_DATA_REQUEST_CMD}.make (
-				market_list_handler), Event_data_request)
+				tradable_list_handler), Event_data_request)
 			rh.extend (create {ERROR_RESPONSE_CMD}.make, Error)
 			request_handlers := rh
 		ensure
@@ -222,7 +222,7 @@ feature {NONE} -- Implementation
 	initialize is
 		do
 			create event_generator_builder.make
-			create function_builder.make (market_list_handler)
+			create function_builder.make (tradable_list_handler)
 			make_request_handlers
 		end
 

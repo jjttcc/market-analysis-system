@@ -117,7 +117,7 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 	public void print(boolean all) {
 		Toolkit tk = getToolkit();
 		PrintJob pj = tk.getPrintJob(chart,
-			all? "All charts": chart.current_market, print_properties);
+			all? "All charts": chart.current_tradable, print_properties);
 		if (pj != null) {
 			if (all) {
 				Vector selections = chart.market_selections.selections();
@@ -139,7 +139,7 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 			Graphics page = pj.getGraphics();
 			Dimension size = graph_panel.getSize();
 			Dimension pagesize = pj.getPageDimension();
-			_main_graph.set_symbol(chart.current_market.toUpperCase());
+			_main_graph.set_symbol(chart.current_tradable.toUpperCase());
 			if (size.width <= pagesize.width) {
 				// Center the output on the page.
 				page.translate((pagesize.width - size.width)/2,

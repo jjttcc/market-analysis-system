@@ -67,7 +67,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		++window_count;
 		data_builder = builder;
 		this_chart = this;
-		Vector _markets = null;
+		Vector _tradables = null;
 		saved_dialogs = new Vector();
 		_indicators = null;
 
@@ -90,14 +90,14 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			}
 		}
 		try {
-			if (_markets == null) {
-				_markets = data_builder.market_list();
-				if (! _markets.isEmpty()) {
-					// Each market has its own period type list; but for now,
-					// just retrieve the list for the first market and use
-					// it for all markets.
+			if (_tradables == null) {
+				_tradables = data_builder.tradable_list();
+				if (! _tradables.isEmpty()) {
+					// Each tradable has its own period type list; but for now,
+					// just retrieve the list for the first tradable and use
+					// it for all tradables.
 					_period_types = data_builder.trading_period_type_list(
-						(String) _markets.elementAt(0));
+						(String) _tradables.elementAt(0));
 					if (data_builder.connection.error_occurred()) {
 						abort(data_builder.connection.result().toString(),
 							null);
@@ -114,8 +114,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			quit(-1);
 		}
 		String s = null;
-		if (_markets != null && _markets.size() > 0) {
-			s = (String) _markets.elementAt(0);
+		if (_tradables != null && _tradables.size() > 0) {
+			s = (String) _tradables.elementAt(0);
 		}
 		initialize_GUI_components(s);
 		new Thread(this).start();
@@ -126,11 +126,11 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		// null method
 	}
 
-	// List of all markets in the server's database
-	public Vector markets() {
+	// List of all tradables in the server's database
+	public Vector tradables() {
 		Vector result = null;
 		try {
-			result = data_builder.market_list();
+			result = data_builder.tradable_list();
 		}
 		catch (IOException e) {
 			System.err.println("IO exception occurred, bye ...");
@@ -288,29 +288,29 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		if (! current_period_type.equals(new_period_type)) {
 			current_period_type = new_period_type;
 			period_type_change = true;
-			if (current_market != null) {
-				request_data(current_market);
+			if (current_tradable != null) {
+				request_data(current_tradable);
 			}
 			period_type_change = false;
 		}
 	}
 
-	// Request data for the specified market and display it.
-	void request_data(String market) {
+	// Request data for the specified tradable and display it.
+	void request_data(String tradable) {
 		DataSet dataset, main_dataset;
 		Configuration conf = Configuration.instance();
 		int count;
 		String current_indicator;
-		// Don't redraw the data if it's for the same market as before.
-		if (period_type_change || ! market.equals(current_market)) {
+		// Don't redraw the data if it's for the same tradable as before.
+		if (period_type_change || ! tradable.equals(current_tradable)) {
 			GUI_Utilities.busy_cursor(true, this);
 			try {
-				data_builder.send_market_data_request(market,
+				data_builder.send_market_data_request(tradable,
 					current_period_type);
 				if (request_result() == OK) {
 					// Ensure that the indicator list is up-to-date with
-					// respect to `market'.
-					data_builder.send_indicator_list_request(market,
+					// respect to `tradable'.
+					data_builder.send_indicator_list_request(tradable,
 						current_period_type);
 					// Force call to `indicators()' to create new indicator
 					// lists with the result of the above request.
@@ -318,10 +318,10 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 					indicators();
 				} else {
 					if (request_result() == Invalid_symbol) {
-						handle_nonexistent_sybmol(market);
+						handle_nonexistent_sybmol(tradable);
 					} else if (request_result() == Warning) {
 						new ErrorBox("Warning", "Error occurred retrieving " +
-							"data for " + market, this_chart);
+							"data for " + tradable, this_chart);
 					}
 					GUI_Utilities.busy_cursor(false, this);
 					return;
@@ -338,9 +338,9 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			link_with_axis(main_dataset, null);
 			main_pane.add_main_data_set(main_dataset);
 			if (! current_upper_indicators.isEmpty()) {
-				// Retrieve the data for the newly requested market for the
+				// Retrieve the data for the newly requested tradable for the
 				// upper indicators, add it to the upper graph and draw
-				// the new indicator data and the market data.
+				// the new indicator data and the tradable data.
 				count = current_upper_indicators.size();
 				for (int i = 0; i < count; ++i) {
 					current_indicator = (String)
@@ -348,7 +348,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 					try {
 						data_builder.send_indicator_data_request(((Integer)
 							indicators().get(current_indicator)).
-								intValue(), market, current_period_type);
+								intValue(), tradable, current_period_type);
 					} catch (Exception e) {
 						fatal("Exception occurred", e);
 					}
@@ -360,11 +360,11 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 					main_pane.add_main_data_set(dataset);
 				}
 			}
-			current_market = market;
+			current_tradable = tradable;
 			set_window_title();
 			if (! current_lower_indicators.isEmpty()) {
-				// Retrieve the indicator data for the newly requested market
-				// for the lower indicators and draw it.
+				// Retrieve the indicator data for the newly requested
+				// tradable for the lower indicators and draw it.
 				count = current_lower_indicators.size();
 				for (int i = 0; i < count; ++i) {
 					current_indicator = (String)
@@ -380,7 +380,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 						try {
 							data_builder.send_indicator_data_request(((Integer)
 								indicators().get(current_indicator)).
-									intValue(), market, current_period_type);
+									intValue(), tradable, current_period_type);
 						} catch (Exception e) {
 							fatal("Exception occurred", e);
 						}
@@ -471,11 +471,11 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 		show();
 	}
 
-	// Set the window title using current_market and current_lower_indicators.
+	// Set the window title using current_tradable and current_lower_indicators.
 	protected void set_window_title() {
 		if (! current_lower_indicators.isEmpty()) {
 			StringBuffer newtitle = new
-				StringBuffer (current_market.toUpperCase() + " - ");
+				StringBuffer (current_tradable.toUpperCase() + " - ");
 			int i;
 			for (i = 0; i < current_lower_indicators.size() - 1; ++i) {
 				newtitle.append(current_lower_indicators.elementAt(i));
@@ -485,7 +485,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			setTitle(newtitle.toString());
 		}
 		else {
-			setTitle(current_market.toUpperCase());
+			setTitle(current_tradable.toUpperCase());
 		}
 	}
 
@@ -580,8 +580,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	// Print fatal error and exit after saving settings.
 	protected void fatal(String s, Exception e) {
 		System.err.println("Fatal error: " + s);
-		if (current_market != null) {
-			System.err.println("Current symbol is " + current_market);
+		if (current_tradable != null) {
+			System.err.println("Current symbol is " + current_tradable);
 		}
 		if (e != null) {
 			System.err.println("(" + e + ")");
@@ -594,8 +594,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	// Same as `fatal' except `save_settings' is not called.
 	protected void abort(String s, Exception e) {
 		System.err.println("Fatal error: " + s);
-		if (current_market != null) {
-			System.err.println("Current symbol is " + current_market);
+		if (current_tradable != null) {
+			System.err.println("Current symbol is " + current_tradable);
 		}
 		if (e != null) {
 			System.err.println("(" + e + ")");
@@ -670,8 +670,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 	// volume, and open-interest indicators
 	private static Vector ordered_indicator_list;	// Vector of String
 
-	// Current selected market
-	protected String current_market;
+	// Current selected tradable
+	protected String current_tradable;
 
 	// Current selected period type
 	protected String current_period_type;

@@ -40,13 +40,13 @@ feature -- Access
 
 	factory_builder: FACTORY_BUILDER
 	
-	market_list: TRADABLE_LIST
+	tradable_list: TRADABLE_LIST
 
 	input_file_names: LIST [STRING]
 
 	current_tradable: TRADABLE [BASIC_MARKET_TUPLE] is
 		do
-			Result := market_list.item
+			Result := tradable_list.item
 		end
 
 	current_period_type: TIME_PERIOD_TYPE
@@ -95,7 +95,7 @@ feature {NONE}
 			until
 				end_program
 			loop
-				print_list (<<"Select action:%N", "     Select market (s) ",
+				print_list (<<"Select action:%N", "     Select tradable (s) ",
 							"View data (v) Edit indicators (e)",
 							"%N     Edit market analyzers (m) ",
 							"Run market analysis (a)%N",
@@ -105,7 +105,7 @@ feature {NONE}
 				inspect
 					selected_character
 				when 's', 'S' then
-					select_market
+					select_tradable
 				when 'v', 'V' then
 					view_menu
 				when 'e', 'E' then
@@ -558,9 +558,9 @@ feature {NONE}
 			end
 		end
 
-	select_market is
-			-- Allow the user to select the current market so that
-			-- market_list.item is the selected market.
+	select_tradable is
+			-- Allow the user to select the current tradable so that
+			-- tradable_list.item is the selected tradable.
 		local
 			fname: STRING
 		do
@@ -580,10 +580,11 @@ feature {NONE}
 					fname := input_file_names @ last_integer
 				end
 			end
-			market_list.search_by_file_name (fname)
-			-- current_tradable will be set to the current item of market_list
-			-- (which, because of the above call, corresponds to file fname).
-			-- Update the current_tradable's target period type, if needed.
+			tradable_list.search_by_file_name (fname)
+			-- current_tradable will be set to the current item of
+			-- tradable_list (which, because of the above call, corresponds
+			-- to file fname).  Update the current_tradable's target period
+			-- type, if needed.
 			if current_tradable.target_period_type /= current_period_type then
 				current_tradable.set_target_period_type (current_period_type)
 			end
@@ -676,24 +677,24 @@ feature {NONE}
 feature {NONE}
 
 	save_mklist_position is
-			-- Save the current position of `market_list' for later restoring.
+			-- Save the current position of `tradable_list' for later restoring.
 		do
-			saved_mklist_index := market_list.index
+			saved_mklist_index := tradable_list.index
 		end
 
 	restore_mklist_position is
-			-- Restore `market_list' cursor to last saved position
+			-- Restore `tradable_list' cursor to last saved position
 		require
 			saved_mklist_index > 0
 		do
 			from
-				if saved_mklist_index < market_list.index then
-					market_list.start
+				if saved_mklist_index < tradable_list.index then
+					tradable_list.start
 				end
 			until
-				market_list.index = saved_mklist_index
+				tradable_list.index = saved_mklist_index
 			loop
-				market_list.forth
+				tradable_list.forth
 			end
 		end
 
@@ -701,13 +702,14 @@ feature {NONE}
 		do
 			event_coordinator := factory_builder.event_coordinator
 			current_period_type := period_types @ (period_type_names @ Daily)
-			market_list := factory_builder.market_list
+			tradable_list := factory_builder.tradable_list
 			input_file_names := factory_builder.input_file_names
 			create help.make
-			create event_generator_builder.make (factory_builder.command_builder)
+			create event_generator_builder.make (
+				factory_builder.command_builder)
 		ensure
 			curr_period_not_void: current_period_type /= Void
-			market_list_not_void: market_list /= Void
+			tradable_list_not_void: tradable_list /= Void
 			input_file_names_not_void: input_file_names /= Void
 			event_coordinator_not_void: event_coordinator /= Void
 		end
