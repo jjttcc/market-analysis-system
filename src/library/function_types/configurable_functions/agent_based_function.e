@@ -24,7 +24,7 @@ feature {NONE} -- Initialization
 
 	make (key: like calculator_key; op: like operator; ins: like inputs) is
 		require
-			f_exists: key /= Void
+			key_exists: key /= Void
 		do
 			if op /= Void then
 				set_operator (op)
@@ -150,7 +150,6 @@ feature -- Status report
 	processed: BOOLEAN is
 		do
 			Result := processed_date_time /= Void
-			--!!!!!Check if this implementation is adequate.
 		end
 
 	has_children: BOOLEAN is True
@@ -201,7 +200,7 @@ feature {FACTORY} -- Status setting
 			end
 			if operator /= Void and operator_needs_initializing then
 				-- !!!Check if the operator_needs_initializing
-				-- construct is adequate.
+				-- construct is adequate or if it's even needed.
 				operator.initialize (Current)
 			end
 			output.wipe_out
