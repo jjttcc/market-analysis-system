@@ -44,7 +44,7 @@ feature {NONE} -- Initialization
 			nrovf_set_n (i)
 		end
 
-feature -- Basic operations
+feature {NONE} -- Basic operations
 
 	do_process is
 		local
@@ -55,7 +55,7 @@ feature -- Basic operations
 			sum.execute (Void)
 			check
 				target.index - 1 = n
-				-- (or target.exhausted)!
+				-- (or target.exhausted)!!
 			end
 			!!t
 			t.set_value (sum.value / (target.index - 1))
@@ -101,13 +101,14 @@ feature {NONE}
 			-- Intended to be redefined by descenants for more complex MAs.
 		local
 			t: SIMPLE_TUPLE
+			expired_value, latest_value: REAL
 		do
-			--!!!Bug:  instead of using target.(expr).value directly,
-			--!!!should be using operator.  A local double variable
-			--!!!will need to be used.
 			!!t
-			last_sum := last_sum - target.i_th(target.index - n).value +
-							target.item.value
+			operator.execute (target.i_th (target.index - n))
+			expired_value := operator.value
+			operator.execute (target.item)
+			latest_value := operator.value
+			last_sum := last_sum - expired_value + latest_value
 			t.set_value (last_sum / n)
 			t.set_date_time (target.item.date_time)
 			output.extend (t)

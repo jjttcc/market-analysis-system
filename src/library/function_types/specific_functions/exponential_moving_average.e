@@ -63,12 +63,13 @@ feature {NONE}
 			tgindex_gt_n: target.index > n
 		local
 			t: SIMPLE_TUPLE
+			latest_value: REAL
 		do
-			--!!!Bug:  instead of using target.(expr).value directly,
-			--!!!should be using operator.
 			exp.execute (Void)
 			!!t
-			t.set_value (target.item.value * exp.value +
+			operator.execute (target.item)
+			latest_value := operator.value
+			t.set_value (latest_value * exp.value +
 							output.last.value * (1 - exp.value))
 			t.set_date_time (target.item.date_time)
 			output.extend (t)
