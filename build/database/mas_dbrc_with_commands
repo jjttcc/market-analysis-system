@@ -15,6 +15,9 @@ order by symbol
 derivative symbol query	select symbol from derivative_information \
 order by symbol
 
+eod_start_date	now - 3 years
+intraday_start_date	now - 5 days
+
 # Query for stock splits
 # Note: query result fields must be: date, symbol, split-value; and the
 # results must be sorted by date, ascending
@@ -31,14 +34,16 @@ derivative name query	select name from derivative_information where \
 symbol = <symbol>
 
 daily stock data command	select date, open_price, high_price, low_price, \
-close_price, volume from daily_stock_data where symbol = <symbol> and \
-date > 19960101
+close_price, volume from daily_stock_data where symbol = '<symbol>' and \
+date >= <eod_start_date>
 intraday stock data command	select date, time, open_price, high_price, \
 low_price, close_price, volume from intraday_stock_data where symbol = \
-<symbol> and date > 19960101
+'<symbol>' and date >= <intraday_start_date>
 daily derivative data command	select date, open_price, high_price, \
 low_price, close_price, volume, open_interest from \
-daily_derivative_instrument_data where symbol = <symbol> and  date > 19960101
+daily_derivative_instrument_data where symbol = '<symbol>' and \
+date >= <eod_start_date>
 intraday derivative data command	select date, time, open_price, \
 high_price, low_price, close_price, volume, open_interest from \
-intraday_derivative_instrument_data where symbol = <symbol> and date > 19981101
+intraday_derivative_instrument_data where symbol = '<symbol>' and date >= \
+<intraday_start_date>
