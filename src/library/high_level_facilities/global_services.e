@@ -10,7 +10,7 @@ class
 
 feature -- Access
 
-	period_types: TABLE [TIME_PERIOD_TYPE, STRING] is
+	period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
 			-- All time period types used by the system
 		local
 			type: TIME_PERIOD_TYPE
@@ -40,6 +40,14 @@ feature -- Access
 			end
 			tbl.extend (type, type.name)
 			Result := tbl
+		end
+
+	period_type_names: ARRAY [STRING] is
+			-- The name of each element of `period_types'
+		do
+			Result := period_types.current_keys
+		ensure
+			Result.count = period_types.count
 		end
 
 	--!!!Probably, event type stuff should go into a separate class.
