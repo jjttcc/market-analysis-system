@@ -34,6 +34,14 @@ mark	default
 end
 
 # Detailed version of command to start the server: data from a database
+begin	dummy
+foo	cd <data_dir>; <bin_dir>/mas -o -b <portnumber> -p
+bar	Get data from database
+egg	Database-based
+mark	default
+end
+
+# Detailed version of command to start the server: data from a database
 begin	start_server_command
 command	cd <data_dir>; <bin_dir>/mas -o -b <portnumber> -p
 command_description	Get data from database
