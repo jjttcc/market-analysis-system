@@ -61,13 +61,13 @@ feature -- Basic operations
 			fields: LIST [STRING]
 			d: DATE
 		do
-			parse_error := false
+			parse_error := False
 			target := msg -- set up for tokenization
 			fields := tokens (input_field_separator)
 			if fields.count < 4 then
 				report_error (Error, <<"Fields count wrong for ",
 					"trading-signal event request.">>)
-				parse_error := true
+				parse_error := True
 			end
 			if not parse_error then
 				symbol := fields @ 1
@@ -75,7 +75,7 @@ feature -- Basic operations
 				if d = Void then
 					report_error (Error, <<"Invalid start-date specification %
 						%for trading signals request: ", fields @ 2>>)
-					parse_error := true
+					parse_error := True
 				else
 					create analysis_start_date.make_by_date (d)
 				end
@@ -85,7 +85,7 @@ feature -- Basic operations
 				if d = Void then
 					report_error (Error, <<"Invalid end-date specification %
 						%for trading signals request: ", fields @ 3>>)
-					parse_error := true
+					parse_error := True
 				else
 					if (fields @ 3).is_equal (Now) then
 						-- Set "now" date to 2 years in the future.
@@ -145,7 +145,7 @@ feature {NONE}
 				if not f.is_integer then
 					report_error (Error, <<"Invalid event ID ",
 						"for trading signals request - non-integer: ", f>>)
-					parse_error := true
+					parse_error := True
 				else
 					id := f.to_integer
 					requested_event_types.put (id, id)
