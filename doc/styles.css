@@ -13,8 +13,6 @@ body { background-color: #e9dcd5; }
 	*/
 	padding: 0 0 0 0.8em;
 	width: 7.2em; height: 100%;
-	/*
-	*/
 }
 
 html>body #navigation {
@@ -25,11 +23,12 @@ html>body #navigation {
 #navheader {
 	margin: 0 0 0 0;
 	color: #e9dcd5;
+	display: none;
+	display/**/: block;
 }
 
 html>body #navheader {
 	margin: 1em 0 0 -.35em;
-	display: normal;
 	color: black;
 }
 
