@@ -1,5 +1,15 @@
 indexing
 	description: "Environment variable values used by the application"
+	usage:
+		"Configure the features of this class to return the appropriate %
+		%values for the listed environment variable names."
+	note:
+		"It would be better to separate this configuration from the %
+		%application_library by defining a class that inherits from this %
+		%one and redefines these features, but I could not figure out a %
+		%way to do this and make these values globally available %
+		%via once functions (without getting a segmentation violation - %
+		%may be a bug in the ISE compiler."
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -11,20 +21,20 @@ feature -- Access
 	application_directory_name: STRING is
 			-- Default name of the application directory environment variable
 		do
-			Result := "APP_DIRECTORY"
+			Result := "MASS_DIRECTORY"
 		end
 
 	stock_split_file_name: STRING is
 			-- Default name of the stock_split_file_name environment variable
 		do
-			Result := "APP_STOCK_SPLIT_FILE"
+			Result := "MASS_STOCK_SPLIT_FILE"
 		end
 
 	mailer_name: STRING is
 			-- Default name of the environment variable for the executable
 			-- to use for sending email
 		do
-			Result := "APP_MAILER"
+			Result := "MASS_MAILER"
 		end
 
 	mailer_subject_flag_name: STRING is
@@ -32,7 +42,7 @@ feature -- Access
 			-- to use to indicate to the mailer that the following
 			-- argument is the subject
 		do
-			Result := "APP_MAILER_SUBJECT_FLAG"
+			Result := "MASS_MAILER_SUBJECT_FLAG"
 		end
 
 end -- APP_ENVIRONMENT_VARIABLE_NAMES

@@ -24,7 +24,6 @@ feature -- Initialization
 			if command_line_options.help then
 				command_line_options.usage
 			else
-				initialize
 				!!poller.make_read_only
 				!!factory_builder.make
 				!LINKED_LIST [SOCKET]!current_sockets.make
@@ -92,15 +91,5 @@ feature {NONE}
 		end
 
 	current_sockets: LIST [SOCKET]
-
-	initialize is
-			-- Set up to use MASS environment variable names.
-		local
-			tae: expanded APP_ENVIRONMENT
-			env_names: APP_ENVIRONMENT_VARIABLE_NAMES
-		do
-			!MASS_ENVIRONMENT_VARIABLE_NAMES!env_names
-			tae.set_env_name_service(env_names)
-		end
 
 end -- MAS_SERVER
