@@ -167,20 +167,24 @@ feature {NONE} -- Hard-coded market function building procedures
 				N_RECORD_ONE_VARIABLE_FUNCTION is
 			-- A Williams %R function
 		local
+			m: MULTIPLICATION -- Used to convert value to percent.
 			d: DIVISION
 			s1: SUBTRACTION
 			s2: SUBTRACTION
 			highest: HIGHEST_HIGH
 			lowest: LOWEST_LOW
 			close: CLOSING_PRICE
+			constant: CONSTANT
 		do
 			!!close
+			!!constant.make (100) -- factor for conversion to percentage
 			!!highest.make (f.output, n)
 			!!lowest.make (f.output, n)
 			!!s1.make (highest, close)
 			!!s2.make (highest, lowest)
 			!!d.make (s1, s2)
-			!!Result.make (f, d, n)
+			!!m.make (d, constant)
+			!!Result.make (f, m, n)
 			Result.set_name (name)
 			check Result.n = highest.n and Result.n = lowest.n end
 		ensure
@@ -192,19 +196,23 @@ feature {NONE} -- Hard-coded market function building procedures
 			-- A Stochastic %K function
 		local
 			d: DIVISION
+			m: MULTIPLICATION -- Used to convert value to percent.
 			s1: SUBTRACTION
 			s2: SUBTRACTION
 			highest: HIGHEST_HIGH
 			lowest: LOWEST_LOW
 			close: CLOSING_PRICE
+			constant: CONSTANT
 		do
 			!!close
+			!!constant.make (100) -- factor for conversion to percentage
 			!!highest.make (f.output, n)
 			!!lowest.make (f.output, n)
 			!!s1.make (close, lowest);
 			!!s2.make (highest, lowest)
 			!!d.make (s1, s2)
-			!!Result.make (f, d, n)
+			!!m.make (d, constant)
+			!!Result.make (f, m, n)
 			Result.set_name (name)
 			check Result.n = lowest.n and Result.n = highest.n end
 		ensure
@@ -216,6 +224,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			-- Make a Stochastic %D calculation function for testing.
 		local
 			div: DIVISION
+			mult: MULTIPLICATION -- Used to convert value to percent.
 			sub1: SUBTRACTION
 			sub2: SUBTRACTION
 			basic1: BASIC_LINEAR_COMMAND
@@ -227,8 +236,10 @@ feature {NONE} -- Hard-coded market function building procedures
 			highest: HIGHEST_HIGH
 			lowest: LOWEST_LOW
 			close: CLOSING_PRICE
+			constant: CONSTANT
 		do
 			!!cmd
+			!!constant.make (100) -- factor for conversion to percentage
 			!!highest.make (f.output, inner_n)
 			!!lowest.make (f.output, inner_n)
 			!!close
@@ -244,7 +255,8 @@ feature {NONE} -- Hard-coded market function building procedures
 			ma2.set_name ("Moving Average of close minus highest high")
 			!!basic1.make (ma1.output); !!basic2.make (ma2.output)
 			!!div.make (basic1, basic2)
-			!!Result.make (ma1, ma2, div)
+			!!mult.make (div, constant)
+			!!Result.make (ma1, ma2, mult)
 			Result.set_name (name)
 		ensure
 			initialized: Result /= Void and Result.name = name
