@@ -54,6 +54,8 @@ feature {NONE}
 			if market = Void then
 				if not market_list_handler.symbols.has (market_symbol) then
 					report_error (Invalid_symbol, <<"Symbol not in database.">>)
+				elseif server_error then
+					report_server_error
 				else
 					report_error (Error, <<"Invalid period type">>)
 				end

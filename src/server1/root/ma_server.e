@@ -16,6 +16,11 @@ class MA_SERVER inherit
 			{NONE} all
 		end
 
+	MAS_EXCEPTION
+		export
+			{NONE} all
+		end
+
 creation
 
 	make
@@ -29,7 +34,11 @@ feature -- Initialization
 			factory_builder: FACTORY_BUILDER
 			version: expanded PRODUCT_INFO
 		do
-			if command_line_options.help then
+			if command_line_options.error_occurred then
+				print_list (<<"Error occurred during initialization - ",
+					"exiting ...%N">>)
+				exit (Error_exit_status)
+			elseif command_line_options.help then
 				command_line_options.usage
 			elseif command_line_options.version_request then
 				print_list (<<version.name, ", Version ", version.number, ", ",
@@ -70,6 +79,8 @@ feature -- Initialization
 			end
 		rescue
 			close_sockets
+			handle_exception ("main routine")
+			exit (Error_exit_status)
 		end
 
 feature {NONE}

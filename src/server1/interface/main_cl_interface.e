@@ -34,21 +34,9 @@ class MAIN_CL_INTERFACE inherit
 			print
 		end
 
-	EXCEPTIONS
+	MAS_EXCEPTION
 		export
 			{NONE} all
-		undefine
-			print
-		end
-
-	UNIX_SIGNALS
-		rename
-			meaning as signal_meaning, ignore as ignore_signal,
-			catch as catch_signal
-		export
-			{NONE} all
-		undefine
-			print
 		end
 
 	MAIN_APPLICATION_INTERFACE
@@ -94,6 +82,9 @@ feature -- Access
 				Result := Void
 			else
 				Result := daily_market_list.item
+				if daily_market_list.fatal_error then
+					raise ("Data retrieval error")
+				end
 			end
 		end
 
@@ -139,8 +130,6 @@ feature -- Basic operations
 
 	main_menu is
 			-- Display the main menu and respond to the user's commands.
-		local
-			error_msg: STRING
 		do
 			check
 				io_devices_not_void: input_device /= Void and
@@ -212,26 +201,15 @@ feature -- Basic operations
 				print ("(Hit <Enter> to restart the command-line client.)%N")
 			end
 		rescue
+			handle_exception ("main menu")
 			if not assertion_violation then
-				if not is_signal then
-					if developer_exception_name /= Void then
-						error_msg := developer_exception_name
-					else
-						error_msg := meaning (exception)
-					end
-					print_list (<<"Error encounted in main menu: ",
-								error_msg, "%N">>)
-				else
-					print_list (<<"%NCaught signal: ", signal,
-									", continuing ...%N">>)
-				end
 				if not end_client then
 					retry
 				end
 			end
 		end
 
-feature {NONE}
+feature {NONE} -- Implementation
 
 	main_edit_indicator_menu is
 			-- Menu for editing technical indicators (market functions)
@@ -722,7 +700,7 @@ feature {NONE}
 			print_list (<<"New value set to ", p.current_value, "%N">>)
 		end
 
-feature {NONE}
+feature {NONE} -- Implementation - utilities
 
 	remove_indicator (f: MARKET_FUNCTION) is
 			-- Remove all occurrences of `f' from `function_library'.
@@ -778,17 +756,6 @@ feature {NONE}
 			curr_period_not_void: current_period_type /= Void
 		end
 
-	exit (status: INTEGER) is
-			-- Exit the server with the specified status
-		do
-			if status /= 0 then
-				io.print ("Aborting the server.%N")
-			else
-				io.print ("Terminating the server.%N")
-			end
-			die (status)
-		end
-
 	product_info: STRING is
 		local
 			version: expanded PRODUCT_INFO
@@ -799,7 +766,7 @@ feature {NONE}
 				"%NLicence:%N%N", version.license_information>>)
 		end
 
-feature {NONE}
+feature {NONE} -- Implementation - attributes
 
 	end_client: BOOLEAN
 			-- Has the user requested to terminate the command-line

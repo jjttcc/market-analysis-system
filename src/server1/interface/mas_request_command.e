@@ -108,6 +108,12 @@ feature {NONE}
 			print (eom)
 		end
 
+	report_server_error is
+		do
+			report_error (Error, <<"Server error: ",
+				market_list_handler.last_error>>)
+		end
+
 	print (o: GENERAL) is
 			-- Redefinition of output method inherited from GENERAL to
 			-- send output to active_medium
@@ -115,6 +121,12 @@ feature {NONE}
 			if o /= Void then
 				active_medium.put_string (o.out)
 			end
+		end
+
+	server_error: BOOLEAN is
+			-- Did an error occur in the server?
+		do
+			Result := market_list_handler.error_occurred
 		end
 
 end -- class REQUEST_COMMAND

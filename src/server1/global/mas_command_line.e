@@ -91,6 +91,9 @@ feature -- Access
 			-- Use strict error checking?
 			-- True if "-s" is found.
 
+	error_occurred: BOOLEAN
+			-- Did an error occur while processing options?
+
 feature -- Basic operations
 
 	usage is
@@ -230,8 +233,20 @@ feature {NONE} -- Implementation
 		do
 			db_services := global_server.database_services
 			db_services.connect
-			symbol_list := db_services.symbols
-			db_services.disconnect
+			if db_services.fatal_error then
+				error_occurred := true
+			else
+				symbol_list := db_services.symbols
+				if db_services.fatal_error then
+					error_occurred := true
+				else
+					db_services.disconnect
+					error_occurred := db_services.fatal_error
+				end
+			end
+			if error_occurred then
+				log_errors (<<db_services.last_error, "%N">>)
+			end
 		end
 
 	option_in_contents (c: CHARACTER): BOOLEAN is
@@ -259,7 +274,9 @@ feature {NONE} -- Implementation
 invariant
 
 	port_numbers_not_void: port_numbers /= Void
-	use_db: use_db implies file_names = Void and symbol_list /= Void
-	use_files: not use_db implies symbol_list = Void and file_names /= Void
+	use_db: use_db and not error_occurred implies
+		file_names = Void and symbol_list /= Void
+	use_files: not use_db and not error_occurred implies
+		symbol_list = Void and file_names /= Void
 
 end -- class MAS_COMMAND_LINE

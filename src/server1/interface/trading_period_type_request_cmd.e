@@ -30,7 +30,11 @@ feature -- Basic operations
 			-- `msg' is expected to contain (only) the market symbol
 			ptypes := market_list_handler.period_types (msg)
 			if ptypes = Void then
-				report_error (Invalid_symbol, <<"Symbol not in database">>)
+				if server_error then
+					report_server_error
+				else
+					report_error (Invalid_symbol, <<"Symbol not in database">>)
+				end
 			else
 				send_ok
 				print_list (with_record_separators (ptypes))
