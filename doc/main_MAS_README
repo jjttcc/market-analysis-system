@@ -39,6 +39,10 @@ conditions may give extra useful information to help pinpoint the problem.
 If you do this, please capture the results and email them to me at my
 email address at the end of this file.
 
+The lib directory contains two subdirectories: classes, which contains
+the Java class files needed by the GUI client; and data, which contains
+some sample data files.
+
 
 MAS DATA FILES AND FORMAT
 
@@ -57,6 +61,9 @@ volume (in that order), which provides for stock and index data (with
 volume of 0).  It expects the date field to follow the format:  yyyymmdd.
 For example, 19990701, for July 1, 1999.  Future versions should handle
 more fields, such as open interest, and time - for intraday data.
+
+There are some sample data files included in the correct format in lib/data
+so that you can try out MAS without having to obtain data files.
 
 
 RUNNING MAS
