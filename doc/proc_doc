@@ -51,7 +51,10 @@ awk 'BEGIN {
 	if ("'$has_title'" == "TRUE") {	# Parse the title.
 		x = 0
 		while (getline) {
-			if ($1 ~ /%title/) {
+			if ($1 ~ /^#/) {
+				# skip comment
+			}
+			else if ($1 ~ /%title/) {
 				main_title = $2
 			}
 			else if ($1 ~ /%'$end_title'/) {
@@ -70,6 +73,17 @@ awk 'BEGIN {
 /^$/ { next } # skip blank lines
 
 /^#/ { next } # skip #comment...
+
+groff() && /\\/ {
+	# groff will "eat" a single backslash - translate to double ...
+	# !!!May need to filter out uses of backslash as escape character -
+	# or make sure backslashes are not used as escape characters.
+	gsub(/\\/, "&&")
+}
+
+/\*\^font/ {
+	gsub(/\*\^font/, "\\f")
+}
 
 html() && /\\fB/ {
 	gsub(/\\fB/, "<B>")
