@@ -29,7 +29,7 @@ public class CompressedConnection extends Connection
 		Reader result = null;
 		try {
 			result = new BufferedReader(new InputStreamReader(
-				new InflaterInputStream(io_connection.input_stream(),
+				new InflaterInputStream(io_connection.inputStream(),
 				new Inflater(), 850000)));
 		} catch (Exception e) {
 			System.err.println("Failed to read from server (" + e + ")");

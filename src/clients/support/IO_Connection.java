@@ -2,24 +2,20 @@
 
 package support;
 
-import java.util.*;
 import java.io.*;
-import common.*;
-import support.*;
-import java.awt.*;
 
 /** Abstraction for an input/output connection */
 abstract public class IO_Connection
 {
 	// The IO connection's input stream
-	abstract public InputStream input_stream();
+	abstract public InputStream inputStream() throws IOException;
 
 	// The IO connection's output stream
-	abstract public OutputStream output_stream();
+	abstract public OutputStream outputStream() throws IOException;
 
 	// Close the connection.
-	abstract public void close();
+	abstract public void close() throws IOException;
 
 	// Open the connection.
-	abstract public void open();
+	abstract public void open() throws IOException;
 }

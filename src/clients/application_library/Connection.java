@@ -157,7 +157,7 @@ public class Connection implements NetworkProtocol
 
 	private void connect() throws IOException {
 		io_connection.open();
-		out = new PrintWriter(io_connection.output_stream(), true);
+		out = new PrintWriter(io_connection.outputStream(), true);
 		in = null;
 	}
 
@@ -171,7 +171,7 @@ public class Connection implements NetworkProtocol
 		Reader result = null;
 		try {
 			result = new BufferedReader(new InputStreamReader(
-				new BufferedInputStream(io_connection.input_stream())));
+				new BufferedInputStream(io_connection.inputStream())));
 		} catch (Exception e) {
 			System.err.println("Failed to read from server (" + e + ")");
 			System.exit(1);
