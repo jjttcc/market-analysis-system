@@ -144,7 +144,9 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 				l.forth
 			end
 			check not l.exhausted end
-			f := l.item
+			-- Clone the original because its innermost function may be
+			-- changed during processing; so the original won't be changed.
+			f := deep_clone (l.item)
 			!!slope_analyzer.make (f.output)
 			!!previous_cmd.make (f.output, slope_analyzer)
 			previous_cmd.set_offset (Previous_slope_offset)
@@ -187,7 +189,9 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 				l.forth
 			end
 			check not l.exhausted end
-			f1 := l.item
+			-- Clone the original because its innermost function may be
+			-- changed during processing; so the original won't be changed.
+			f1 := deep_clone (l.item)
 			from
 				l.start
 			until
@@ -198,7 +202,9 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 				l.forth
 			end
 			check not l.exhausted end
-			f2 := l.item
+			-- Clone the original because its innermost function may be
+			-- changed during processing; so the original won't be changed.
+			f2 := deep_clone (l.item)
 			!!Result.make (f1, f2, name, period_types @ "weekly")
 			--!!!!!!!!!!!!!!Remember that Result's start_date_time needs
 			--!!!!!!!!to be set to a reasonable value!!!!!!!!!!
@@ -220,7 +226,9 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 				l.forth
 			end
 			check not l.exhausted end
-			f1 := l.item
+			-- Clone the original because its innermost function may be
+			-- changed during processing; so the original won't be changed.
+			f1 := deep_clone (l.item)
 			from
 				l.start
 			until
@@ -229,7 +237,9 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 				l.forth
 			end
 			check not l.exhausted end
-			f2 := l.item
+			-- Clone the original because its innermost function may be
+			-- changed during processing; so the original won't be changed.
+			f2 := deep_clone (l.item)
 			!!Result.make (f1, f2,
 				"Closing Price/Moving Average crossover event",
 				period_types @ "daily")
