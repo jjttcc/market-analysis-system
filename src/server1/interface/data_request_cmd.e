@@ -14,7 +14,7 @@ deferred class DATA_REQUEST_CMD inherit
 		export
 			{NONE} all
 		undefine
-			print, active_medium
+			print
 		end
 
 	STRING_UTILITIES
