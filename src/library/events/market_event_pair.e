@@ -46,9 +46,13 @@ feature -- Access
 
 	description: STRING is
 		do
-			Result := "Pair of events:%N"
+			Result := "Pair of events:%Nleft event: "
+			Result.append (left.time_stamp.out)
+			Result.append (", ")
 			Result.append (left.description)
-			Result.extend ('%N')
+			Result.append ("%Nright event: ")
+			Result.append (right.time_stamp.out)
+			Result.append (", ")
 			Result.append (right.description)
 		end
 

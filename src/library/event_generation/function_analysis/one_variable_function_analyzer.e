@@ -43,7 +43,7 @@ feature -- Initialization
 						event_type.name.is_equal (event_type_name)
 			period_type_set: period_type = per_type
 			offset_0: offset = 0
-			start_date_set_to_now: -- start_date_time is set to current time
+			-- start_date_set_to_now: start_date_time is set to current time
 		end
 
 feature -- Access

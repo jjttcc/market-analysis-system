@@ -75,8 +75,8 @@ feature -- Status setting
 			before_extension := -arg
 		ensure
 			not_void: before_extension /= Void
-			;(before_extension + arg).is_equal (arg.zero)
-			--before_extension_opposite: before_extension = -arg
+			before_extension_opposite: (before_extension + arg).is_equal (
+											arg.zero)
 		end
 
 	set_after_extension (arg: DATE_TIME_DURATION) is

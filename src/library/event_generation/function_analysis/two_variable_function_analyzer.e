@@ -1,6 +1,9 @@
 indexing
 	description:
-		"Market analyzer that analyzes two market functions"
+		"Market analyzer that analyzes two market functions, input1 and %
+		%input2, generating an event if input1 crosses (below-to-above, %
+		%above-to-below, or both, depending on configuration) input2 with %
+		%an optional additional condition provided by an operator"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -15,6 +18,9 @@ class TWO_VARIABLE_FUNCTION_ANALYZER inherit
 		end
 
 	MATH_CONSTANTS
+		export {NONE}
+			all
+		end
 
 creation
 
@@ -38,11 +44,14 @@ feature -- Initialization
 			-- place to create this new EVENT_TYPE instance.
 			set_event_type (event_type_name)
 			period_type := per_type
+			below_to_above := true
+			above_to_below := true
 		ensure
 			set: input1 = in1 and input2 = in2 and event_type /= Void and
 					event_type.name.is_equal (event_type_name)
 			period_type_set: period_type = per_type
-			start_date_set_to_now: -- start_date_time is set to current time
+			both_directions: above_to_below and below_to_above
+			-- start_date_set_to_now: start_date_time is set to current time
 		end
 
 feature -- Access
@@ -50,7 +59,44 @@ feature -- Access
 	input1, input2: MARKET_FUNCTION
 			-- The two market functions to be analyzed
 
+feature -- Status report
+
+	below_to_above: BOOLEAN
+			-- Will events be generated if the output from `input1'
+			-- crosses from below input2 to above it?
+
+	above_to_below: BOOLEAN
+			-- Will events be generated if the output from `input1'
+			-- crosses from above input2 to below it?
+
 feature -- Status setting
+
+	set_below_to_above_only is
+			-- Set `below_to_above' to true and `above_to_below' to false.
+		do
+			below_to_above := true
+			above_to_below := false
+		ensure
+			below_to_above_only: below_to_above and not above_to_below
+		end
+
+	set_above_to_below_only is
+			-- Set `above_to_below' to true and `below_to_above' to false.
+		do
+			above_to_below := true
+			below_to_above := false
+		ensure
+			above_to_below_only: above_to_below and not below_to_above
+		end
+
+	set_below_and_above is
+			-- Set both `above_to_below' and `below_to_above' to true.
+		do
+			above_to_below := true
+			below_to_above := true
+		ensure
+			both: above_to_below and below_to_above
+		end
 
 	set_innermost_function (f: SIMPLE_FUNCTION [MARKET_TUPLE]) is
 			-- Set the innermost function, which contains the basic
@@ -105,7 +151,6 @@ feature {NONE} -- Hook routine implementation
 
 	action is
 		local
-			crossed_over: BOOLEAN
 			ev_desc: STRING
 		do
 			-- The crossover_in_effect variable and the check for the
@@ -118,7 +163,14 @@ feature {NONE} -- Hook routine implementation
 					(not crossover_in_effect or
 					rabs (target1.item.value - target2.item.value) >= epsilon)
 				then
-					crossed_over := true
+					if above_to_below and additional_condition then
+						generate_event (target1.item.date_time, "crossover",
+							concatenation (<<"Crossover event for ",
+							period_type.name,
+							" trading period with indicators ", input1.name,
+							" and ", input2.name, ", values: ",
+							target1.item.value, ", ", target2.item.value>>))
+					end
 					target1_above := false
 					crossover_in_effect := true
 				else
@@ -131,25 +183,19 @@ feature {NONE} -- Hook routine implementation
 					(not crossover_in_effect or
 					rabs (target1.item.value - target2.item.value) >= epsilon)
 				then
-					crossed_over := true
+					if below_to_above and additional_condition then
+						generate_event (target1.item.date_time, "crossover",
+							concatenation (<<"Crossover event for ",
+							period_type.name,
+							" trading period with indicators ", input1.name,
+							" and ", input2.name, ", values: ",
+							target1.item.value, ", ", target2.item.value>>))
+					end
 					target1_above := true
 					crossover_in_effect := true
 				else
 					crossover_in_effect := crossover_in_effect and
 					rabs (target1.item.value - target2.item.value) < epsilon
-				end
-			end
-			if crossed_over then
-				if operator /= Void then
-					operator.execute (Void)
-				end
-				if operator = Void or else operator.value then
-					ev_desc := concatenation (<<"Crossover event for ",
-						period_type.name, " trading period with indicators ",
-						input1.name, " and ", input2.name, ", values: ",
-						target1.item.value, ", ", target2.item.value>>)
-					generate_event (target1.item.date_time, "crossover",
-										ev_desc)
 				end
 			end
 		end
@@ -161,6 +207,15 @@ feature {NONE} -- Implementation
 
 	crossover_in_effect: BOOLEAN
 			-- Is the last crossover still in effect?
+
+	additional_condition: BOOLEAN is
+			-- Is operator Void or is its execution result true?
+		do
+			if operator /= Void then
+				operator.execute (Void)
+			end
+			Result := operator = Void or else operator.value
+		end
 
 	set_input1 (in: like input1) is
 		require
@@ -191,5 +246,6 @@ invariant
 	input_not_void: input1 /= Void and input1 /= Void
 	event_type_not_void: event_type /= Void
 	date_not_void: start_date_time /= Void
+	above_or_below: below_to_above or above_to_below
 
 end -- class TWO_VARIABLE_FUNCTION_ANALYZER

@@ -34,7 +34,7 @@ feature -- Initialization
 	make (filenames: LINEAR [STRING]; factories: LINEAR [TRADABLE_FACTORY]) is
 		require
 			not_void: filenames /= Void and factories /= Void
-			counts_equal: -- filenames.count = factories.count
+			-- counts_equal: filenames.count = factories.count
 		do
 			file_names := filenames
 			tradable_factories := factories
