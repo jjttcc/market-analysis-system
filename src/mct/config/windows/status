@@ -1,0 +1,5 @@
+This mctrc file is tuned for windows 98.  The "browse_*command" settings
+work.  The "start_cl_client_command" command behaves like it should work, but
+doesn't: It starts up a DOS window, but the macl/mas menu never appears -
+it just hangs.  The "chart_command" has not yet been worked with.  (i.e.,
+it currently doesn't work.)

@@ -1,0 +1,119 @@
+# MAS Control Terminal configuration file
+# Format: "label_string<tab>setting"
+
+# Special symbols:
+#   <portnumber> -       The MAS server port number for the current session
+#   <hostname> -         The name of the network host upon which the server is
+#                        running; has the value specified by the
+#                        hostname setting.
+#   <terminate_server> - The built-in command for terminating the server
+
+# The escape character: The tilde (~) functions as an escape character,
+# meaning that it protects the character following it from being
+# interpreted - changed into another character.  One situation where this
+# is useful is to prevent a slash (/) or backslash (\) from being
+# intrepeted as directory separator in a file path.  To produce a literal
+# tilde - that is, to prevent a tilde from being interpreted as an escape
+# character -, use two tildes (~~).  For example: "homedir	~~user"
+
+# User-defined variables: A user-defined "variable" can be defined using
+# the "define" label, with the format: "define<tab>var-name:value-name"
+# where var-name specifies the variable name and value-name specifies the
+# value for the variable.  The variable can then be used in definitions
+# that follow by surrounding it with <>, e.g.: <var1>/<var2>.
+
+# The main mas directory
+define	main_mas_dir:C:/Program Files/mas1.6.7
+
+# The mas 'lib' directory
+define	mas_lib_dir:<main_mas_dir>/lib
+
+# The directory in which the Java files reside
+define	java_dir:<mas_lib_dir>/classes
+
+# The location of the Java executables
+define	java_path:<java_dir>/mascharts.jar
+
+# The location of the Java chart-configuration directory
+define	chart_dir:<java_dir>
+
+# OS-dependent path separator (e.g., used for Java CLASSPATH)
+define	path_separator:;
+
+# Directory where file-based data resides
+define	data_dir:<mas_lib_dir>/data
+
+# Directory where the MAS executables reside
+define	bin_dir:<main_mas_dir>/bin
+
+# Directory where the documentation files reside
+define	doc_dir:<main_mas_dir>/doc
+
+# Shell to use to run macl, if any
+define	macl-shell:command ~/c start "macl" command ~/c 
+
+# mas_directory environment variable setting
+define	mas_directory_setting:<mas_lib_dir>
+
+# Set the MAS_DIRECTORY environment variable
+environment_variable	MAS_DIRECTORY:<mas_directory_setting>
+
+# Valid port numbers for use by the MAS server
+valid_portnumbers	20102,20103,20104,30101,30102,\
+30103,30104,30105,30106,30107,30108,30109
+
+# The port number to be used to receive a status message back from the
+# MAS server when it is started
+server_report_port_number	41512
+
+# Network host name
+hostname	localhost
+
+# NOTE: <cwdir>, used below, means to use the bracketed path that follows
+# it as the Current Working Directory when the command that follows
+# it is executed.
+
+# Command to start the server - short version
+#start_server_command	cd <data_dir>; <bin_dir>/mas -o -f , -b <portnumber> *.txt
+
+# Detailed version of command to start the server: data from files
+begin	start_server_command
+command	<cwdir> [<data_dir>]<bin_dir>/mas -o -f , -b <portnumber> *.txt
+command_description	Get data from files
+command_name	File-based
+mark	default
+end
+
+# Detailed version of command to start the server: data from a database
+begin	start_server_command
+command	<bin_dir>/mas -o -b <portnumber> -p
+command_description	Get data from database
+command_name	Database-based
+end
+
+# Detailed version of command to start the server: data from the web
+begin	start_server_command
+command	<bin_dir>/mas -o -b <portnumber> -f , -w
+command_description	Get data from the web
+command_name	Web-based
+end
+
+# Command to start a command-line client to connect to the server
+start_cl_client_command	<cwdir>[<bin_dir>]start macl -h <hostname> <portnumber>
+#start_cl_client_command	command start "<bin_dir>/macl" -h <hostname> <portnumber>
+
+# Command to start the charting application
+chart_command	<cwdir>[<chart_dir>]java -cp "<java_path>" \
+MA_Client <hostname> <portnumber> >/tmp/errs 2>&1
+
+# Command to terminate the server
+termination_command	<terminate_server>
+
+# Command to start the user's browser for viewing documentation
+browse_docs_command	<cwdir> [<doc_dir>]start ~/min index.html
+
+# Command to start the user's browser for viewing the "MCT Introduction"
+browse_intro_command	<cwdir> [<doc_dir>]start ~/min mct_introduction.html
+
+# Command to start the user's browser for viewing the FAQ
+browse_faq_command	<cwdir> [<doc_dir>]start ~/min FAQ.html
