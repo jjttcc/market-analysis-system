@@ -23,8 +23,8 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 		if (print_props != null) print_properties = print_props;
 		Configuration config = Configuration.instance();
 		chart = parent_chart;
-		_main_graph = new InteractiveGraph(false);
-		_indicator_graph = new InteractiveGraph(true);
+		_main_graph = new MainGraph();
+		_indicator_graph = new LowerGraph(_main_graph);
 		GridBagLayout gblayout = new GridBagLayout();
 		GridBagConstraints gbconstraints = new GridBagConstraints();
 
@@ -86,7 +86,6 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 	// Delete all data from the indicator graph.
 	public void clear_indicator_graph() {
 		_indicator_graph.detachDataSets();
-		indicator_graph_changed = true;
 	}
 
 	// Add a data set to the main graph.
@@ -98,7 +97,6 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 	// Add a data set to the indicator graph.
 	public void add_indicator_data_set(DataSet d) {
 		_indicator_graph.attachDataSet(d);
-		indicator_graph_changed = true;
 	}
 
 	// Repaint the graphs.
@@ -109,10 +107,7 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 			_main_graph.repaint();
 			main_graph_changed = false;
 		}
-		if (indicator_graph_changed) {
-			_indicator_graph.repaint();
-			indicator_graph_changed = false;
-		}
+		_indicator_graph.repaint();
 	}
 
 	//If all is true, loop through all selections in chart, asking it to
@@ -166,14 +161,12 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 
 // Implementation
 
-	private InteractiveGraph _main_graph;
-	private InteractiveGraph _indicator_graph;
+	private MainGraph _main_graph;
+	private LowerGraph _indicator_graph;
 	private Panel main_panel;
 	private Panel graph_panel;
 	// Did _main_graph change since it was last repainted?
 	boolean main_graph_changed;
-	// Did _indicator_graph change since it was last repainted?
-	boolean indicator_graph_changed;
 	Choice period_type_choice;
 	Chart chart;
 	String _last_period_type;
