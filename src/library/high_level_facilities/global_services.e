@@ -10,6 +10,16 @@ class
 
 	GLOBAL_SERVICES
 
+inherit
+
+	GENERIC_SORTING [TIME_PERIOD_TYPE, INTEGER]
+		rename
+			duplicates as sorted_duplicates
+		export
+			{NONE} all
+			{ANY} is_sorted_ascending
+		end
+
 feature -- Access
 
 	One_minute: INTEGER is 1
@@ -217,12 +227,16 @@ feature -- Access
 			type_names := period_type_names
 			from
 				i := 1
+			invariant
+				sorted: i > 2 implies Result @ (i - 1) > Result @ (i - 2)
 			until
 				i = type_names.count + 1
 			loop
 				Result.extend (period_types @ (type_names @ i))
 				i := i + 1
 			end
+		ensure
+			sorted: is_sorted_ascending (Result)
 		end
 
 	period_type_names: ARRAY [STRING] is
