@@ -16,8 +16,7 @@ public class SynchronizedDataRequester extends Logic
 // Initialization
 
 	/**
-	* Initialize data builder, symbol, period type, and number of times
-	* to attempt the lock.
+	* Initialize data builder, symbol, and period type.
 	**/
 	public SynchronizedDataRequester(AbstractDataSetBuilder b, String sym,
 			String pertype) {
@@ -104,6 +103,7 @@ public class SynchronizedDataRequester extends Logic
 
 	/**
 	* If `request_failed', information about the failure
+	* Postcondition: result != null
 	**/
 	public String request_failure_message() {
 		return request_failure_message;
@@ -143,7 +143,7 @@ public class SynchronizedDataRequester extends Logic
 		} else {
 			request_failed = true;
 			// Lock attempts failed.
-			request_failure_message = main_lock_request_failed_message;
+			request_failure_message = MAIN_LOCK_REQUEST_FAILED_MESSAGE;
 		}
 		assert ! data_builder.is_locked_by(this): "builder not locked";
 		assert implies(! data_builder.request_succeeded(), request_failed());
@@ -171,7 +171,7 @@ public class SynchronizedDataRequester extends Logic
 		} else {
 			request_failed = true;
 			// Lock attempts failed.
-			request_failure_message = indicator_lock_request_failed_message;
+			request_failure_message = INDICATOR_LOCK_REQUEST_FAILED_MESSAGE;
 		}
 		assert ! data_builder.is_locked_by(this): "builder not locked";
 		assert implies(! data_builder.request_succeeded(), request_failed());
@@ -199,7 +199,7 @@ public class SynchronizedDataRequester extends Logic
 			request_failed = true;
 			// Lock attempts failed.
 			request_failure_message =
-				indicator_list_lock_request_failed_message;
+				INDICATOR_LIST_LOCK_REQUEST_FAILED_MESSAGE;
 		}
 		assert ! data_builder.is_locked_by(this): "builder not locked";
 		assert implies(! data_builder.request_succeeded(), request_failed());
@@ -241,18 +241,18 @@ public class SynchronizedDataRequester extends Logic
 	private Vector indicator_list_result = null;
 	private Calendar latest_date_time = null;
 	private int request_result_id = -1;
-	public String request_failure_message = "";
+	private String request_failure_message = "";
 
-	private final String indicator_request_failed_message =
+	private static final String INDICATOR_REQUEST_FAILED_MESSAGE =
 		"Indicator request failed";
-	private final String main_request_failed_message =
+	private static final String MAIN_REQUEST_FAILED_MESSAGE =
 		"Main data request failed";
-	private final String indicator_list_request_failed_message =
+	private static final String INDICATOR_LIST_REQUEST_FAILED_MESSAGE =
 		"Indicator list request failed";
-	private final String indicator_lock_request_failed_message =
+	private static final String INDICATOR_LOCK_REQUEST_FAILED_MESSAGE =
 		"Indicator lock request failed";
-	private final String main_lock_request_failed_message =
+	private static final String MAIN_LOCK_REQUEST_FAILED_MESSAGE =
 		"Main data lock request failed";
-	private final String indicator_list_lock_request_failed_message =
+	private static final String INDICATOR_LIST_LOCK_REQUEST_FAILED_MESSAGE =
 		"Indicator list lock request failed";
 }

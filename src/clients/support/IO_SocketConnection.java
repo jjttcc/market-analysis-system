@@ -37,6 +37,8 @@ public class IO_SocketConnection extends IO_Connection
 		socket.close();
 	}
 
+//!!!:
+int open_count = 0;
 	public void open() throws IOException {
 //		System.out.println("IO_SocketConnection.open called");
 		try {
@@ -55,6 +57,11 @@ public class IO_SocketConnection extends IO_Connection
 			throw new IOException("Couldn't get I/O for the connection to: " +
 				hostname + "\n(" + e + ")");
 		}
+//!!!:
+++open_count;
+if (open_count > 10) {
+	timeout_value = 300;
+}
 	}
 
 	// Report on 'socket' state for debugging.

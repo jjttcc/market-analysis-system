@@ -47,11 +47,10 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 				}
 				reinitialize_current_period_type();
 			} else {
-				facilities.abort("Server's list of tradables is empty.",
-					null);
+				facilities.abort(TRADABLE_LIST_EMPTY_ERROR, null);
 			}
 		} catch (IOException e) {
-			System.err.println("IO exception occurred: " + e + " - aborting");
+			System.err.println(IO_EXCEPTION_ERROR + e + ABORTING_SUFFIX);
 			e.printStackTrace();
 			quit(-1);
 		}
@@ -75,7 +74,7 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 			result = data_builder.tradable_list();
 		}
 		catch (IOException e) {
-			System.err.println("IO exception occurred, bye ...");
+			System.err.println(IO_EXCEPTION_ERROR + e + ABORTING_SUFFIX);
 			quit(-1);
 		}
 		return result;
@@ -171,7 +170,11 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 	* Result of last request to the server
 	**/
 	public int request_result_id() {
-		return request_result_id;
+		int result = 0;
+		if (data_requester != null) {
+				result = data_requester.request_result_id();
+		}
+		return result;
 	}
 
 // Element change
@@ -205,7 +208,7 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 		try {
 			period_types = data_builder.trading_period_type_list(tradable);
 		} catch (IOException e) {
-			String errmsg = "IO exception occurred: " + e + " - aborting";
+			String errmsg = IO_EXCEPTION_ERROR + e + ABORTING_SUFFIX;
 			owner.display_warning(errmsg);
 			System.err.println(errmsg);
 			e.printStackTrace();
@@ -219,11 +222,10 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 		last_data_request_succeeded = true;
 		DrawableDataSet main_dataset;
 		List upper_indicator_datasets = null, lower_indicator_datasets = null;
-		data_requester = new SynchronizedDataRequester(data_builder, tradable,
-			current_period_type());
-
-		owner.turn_off_refresh();	// Prevent auto-refresh conflicts.
 		if (period_type_change || ! tradable.equals(current_tradable())) {
+			data_requester = new SynchronizedDataRequester(data_builder,
+				tradable, current_period_type());
+			owner.turn_off_refresh();	// Prevent auto-refresh conflicts.
 			GUI_Utilities.busy_cursor(true, owner);
 			if (individual_period_type_sets &&
 					! tradable.equals(current_tradable())) {
@@ -252,8 +254,8 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 				period_type_change = false;
 			}
 			GUI_Utilities.busy_cursor(false, owner);
+			owner.turn_on_refresh();
 		}
-		owner.turn_on_refresh();
 	}
 
 // Package-level access
@@ -418,7 +420,7 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 			previous_open_interest = data_builder.has_open_interest();
 		}
 		if (data_builder.connection().error_occurred()) {
-			owner.display_warning("Error occurred retrieving indicator list.");
+			owner.display_warning(INDICATOR_LIST_RETRIEVAL_FAILURE_ERROR);
 		}
 	}
 
@@ -443,11 +445,11 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 		ind_iter = MA_Configuration.application_instance().indicator_order().
 			elements();
 		Vector special_indicators = new Vector();
-		special_indicators.addElement(No_lower_indicator);
-		special_indicators.addElement(No_upper_indicator);
-		special_indicators.addElement(Volume);
+		special_indicators.addElement(NO_LOWER_INDICATOR);
+		special_indicators.addElement(NO_UPPER_INDICATOR);
+		special_indicators.addElement(VOLUME);
 		if (data_builder.has_open_interest()) {
-			special_indicators.addElement(Open_interest);
+			special_indicators.addElement(OPEN_INTEREST);
 		}
 		// Insert into the indicator list all "user-configured" indicators
 		// that are either in the list returned by the server or are one of
@@ -543,35 +545,23 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 
 	// Request and return the main (date/time,open,high,...) tradable data
 	// set from the server.
+	// Precondition: last_data_request_succeeded
+	// Precondition: data_requester != null
+	// Postcondition: implies(last_data_request_succeeded, result != null)
 	private DrawableDataSet main_tradable_data() {
 		DrawableDataSet result = null;
 		assert last_data_request_succeeded: PRECONDITION;
+		assert data_requester != null: PRECONDITION;
 		try {
 			data_requester.execute_tradable_request();
 			if (! data_requester.request_failed()) {
 				result = (DrawableDataSet) data_requester.tradable_result();
 			} else {
-//!!!!May need to share some error reporting/handling code, eh?
-				request_result_id = data_requester.request_result_id();
-				new ErrorBox("Warning", "Error occurred retrieving " +
-					"data for " + data_requester.current_symbol() + ": " +
-					data_requester.request_failure_message, owner);
-				// Handle request error.
-				if (request_result_id == Invalid_symbol) {
-					handle_nonexistent_sybmol(data_requester.current_symbol());
-				} else if (request_result_id == Invalid_period_type) {
-					facilities.handle_invalid_period_type(
-						data_requester.current_symbol());
-					individual_period_type_sets = true;
-				} else if (request_result_id == Warning ||
-						request_result_id == Error) {
-					owner.display_warning("Error occurred retrieving " +
-						"data for " + data_requester.current_symbol());
-				}
+				handle_main_data_request_error();
 				last_data_request_succeeded = false;
 			}
 		} catch (Exception e) {
-			facilities.fatal("Request to server failed: ", e);
+			facilities.fatal(SERVER_REQUEST_FAILURE_ERROR, e);
 		}
 		assert implies(last_data_request_succeeded, result != null):
 			POSTCONDITION;
@@ -581,35 +571,38 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 	// Request and return the "upper indicator" data sets from the server as
 	// a list of "Pair"s, where the first member of the pair is the
 	// indicator name and the second member of the pair is the data set.
+	// Precondition: last_data_request_succeeded
+	// Precondition: data_requester != null
+	// Postcondition: result != null
+	// Postcondition: implies(last_data_request_succeeded,
+	//                   current_upper_indicators.size() == result.size())
 	private List upper_indicator_data() {
 		assert last_data_request_succeeded: PRECONDITION;
+		assert data_requester != null: PRECONDITION;
 		List result = new LinkedList();
 		int count;
 		String current_indicator;
-		DrawableDataSet dataset;
 
 		if (! current_upper_indicators.isEmpty()) {
-			// Retrieve the data for the newly requested tradable for
-			// the upper indicators, add it to the upper graph and
-			// draw the new indicator data and the tradable data.
 			count = current_upper_indicators.size();
 			for (int i = 0; last_data_request_succeeded && i < count; ++i) {
-
 				current_indicator = (String)
 					current_upper_indicators.elementAt(i);
 				try {
 					data_requester.execute_indicator_request(
 						indicator_id_for(current_indicator));
 					if (! data_requester.request_failed()) {
-						dataset = (DrawableDataSet)
-							data_requester.indicator_result();
-						result.add(new Pair(current_indicator, dataset));
+						result.add(new Pair(current_indicator, (DrawableDataSet)
+							data_requester.indicator_result()));
 					} else {
 						last_data_request_succeeded = false;
-						//@@@Set up or report an error message?
+						owner.display_warning(
+							INDICATOR_DATA_RETRIEVAL_FAILURE_ERROR +
+							current_indicator);
 					}
 				} catch (Exception e) {
-					facilities.fatal("Indicator data request failed", e);
+					facilities.fatal(INDICATOR_DATA_RETRIEVAL_FAILURE_ERROR +
+						current_indicator , e);
 				}
 			}
 		}
@@ -622,44 +615,47 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 	// Request and return the "lower indicator" data sets from the server as
 	// a list of "Pair"s, where the first member of the pair is the
 	// indicator name and the second member of the pair is the data set.
+	// Precondition: last_data_request_succeeded
+	// Precondition: data_requester != null
+	// Postcondition: result != null
+	// Postcondition: implies(last_data_request_succeeded,
+	//                current_lower_indicators.size() == result.size())
 	private List lower_indicator_data() {
 		assert last_data_request_succeeded: PRECONDITION;
+		assert data_requester != null: PRECONDITION;
 		List result = new LinkedList();
 		int count;
 		String current_indicator;
-		DrawableDataSet dataset;
-		MA_Configuration conf = MA_Configuration.application_instance();
 
 		if (! current_lower_indicators.isEmpty()) {
-			// Retrieve the indicator data for the newly requested
-			// tradable for the lower indicators and draw it.
 			count = current_lower_indicators.size();
 			for (int i = 0; last_data_request_succeeded && i < count; ++i) {
 				current_indicator = (String)
 					current_lower_indicators.elementAt(i);
-				if (current_indicator.equals(Volume)) {
+				if (current_indicator.equals(VOLUME)) {
 					// (Nothing to retrieve from server)
-					dataset = (DrawableDataSet) data_requester.volume_result();
-					result.add(new Pair(current_indicator, dataset));
-				} else if (current_indicator.equals(Open_interest)) {
+					result.add(new Pair(current_indicator, (DrawableDataSet)
+						data_requester.volume_result()));
+				} else if (current_indicator.equals(OPEN_INTEREST)) {
 					// (Nothing to retrieve from server)
-					dataset = (DrawableDataSet)
-						data_requester.open_interest_result();
-					result.add(new Pair(current_indicator, dataset));
+					result.add(new Pair(current_indicator, (DrawableDataSet)
+						data_requester.open_interest_result()));
 				} else {
 					try {
 						data_requester.execute_indicator_request(
 							indicator_id_for(current_indicator));
 						if (! data_requester.request_failed()) {
-							dataset = (DrawableDataSet)
-									data_requester.indicator_result();
-							result.add(new Pair(current_indicator, dataset));
+							result.add(new Pair(current_indicator,
+								(DrawableDataSet)
+								data_requester.indicator_result()));
 						} else {
 							last_data_request_succeeded = false;
-							//@@@Set up or report an error message?
+							owner.display_warning(
+								INDICATOR_DATA_RETRIEVAL_FAILURE_ERROR +
+								current_indicator);
 						}
 					} catch (Exception e) {
-						facilities.fatal("Exception occurred", e);
+						facilities.fatal(EXCEPTION_ERROR, e);
 					}
 				}
 			}
@@ -671,8 +667,11 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 	}
 
 	// Update `owner's main data set to `d' and perform related state changes.
+	// Precondition: d != null
+	// Precondition: data_requester != null
 	public void update_main_dataset(DrawableDataSet d) {
 		assert d != null: PRECONDITION;
+		assert data_requester != null: PRECONDITION;
 		//Ensure that all graph's data sets are removed.
 		owner.main_pane().clear_main_graph();
 		owner.main_pane().clear_indicator_graph();
@@ -685,6 +684,7 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 	// Update `owner's indicator data sets - upper indicators if `upper',
 	// otherwise, lower indicators - to `datasets' and perform related
 	// state changes.
+	// Precondition: datasets != null
 	public void update_indicator_datasets(List datasets, boolean upper) {
 		assert datasets != null: PRECONDITION;
 		MA_Configuration conf = MA_Configuration.application_instance();
@@ -711,7 +711,11 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 
 	// Ensure that the indicator list is up-to-date with respect to
 	// the current tradable.
+	// Precondition: last_data_request_succeeded
+	// Precondition: data_requester != null
 	private void update_indicator_list() {
+		assert last_data_request_succeeded: PRECONDITION;
+		assert data_requester != null: PRECONDITION;
 		try {
 			data_requester.execute_indicator_list_request();
 			if (! data_requester.request_failed()) {
@@ -721,9 +725,31 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 				rebuild_indicators_if_needed();
 			} else {
 				last_data_request_succeeded = false;
-				//@@@Set up or report an error message?
+				owner.display_warning(INDICATOR_LIST_RETRIEVAL_FAILURE_ERROR);
 			}
 		} catch (Exception e) {
+		}
+	}
+
+// Implementation - utilities
+
+	// Handle main tradable data request error - report the error and take
+	// any necessary actions.
+	// Precondition: data_requester != null
+	private void handle_main_data_request_error() {
+		assert data_requester != null: PRECONDITION;
+
+		String suffix = data_requester.request_failure_message().length() != 0?
+			": " + data_requester.request_failure_message(): "";
+		if (request_result_id() == Invalid_symbol) {
+			handle_nonexistent_sybmol(data_requester.current_symbol());
+		} else if (request_result_id() == Invalid_period_type) {
+			facilities.handle_invalid_period_type(
+				data_requester.current_symbol());
+			individual_period_type_sets = true;
+		} else {
+			owner.display_warning(DATA_RETRIEVAL_FAILURE_ERROR +
+				data_requester.current_symbol() + suffix);
 		}
 	}
 
@@ -762,14 +788,6 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 	// individually (because the sets differ between tradables)?
 	boolean individual_period_type_sets;
 
-	private final String No_upper_indicator = "No upper indicator";
-
-	private final String No_lower_indicator = "No lower indicator";
-
-	private final String Volume = "Volume";
-
-	private final String Open_interest = "Open interest";
-
 	IndicatorGroups indicator_groups;
 
 	// Saved result of data_builder.last_indicator_list(), used by
@@ -789,9 +807,39 @@ public class ChartDataManager extends Logic implements NetworkProtocol,
 	// The chart that "owns" this data manager
 	private Chart owner;
 
-	private int request_result_id;
-
 	SynchronizedDataRequester data_requester = null;
 
 	private boolean last_data_request_succeeded;
+
+// Implementation - constants
+
+	private static final String NO_UPPER_INDICATOR = "No upper indicator";
+
+	private static final String NO_LOWER_INDICATOR = "No lower indicator";
+
+	private static final String VOLUME = "Volume";
+
+	private static final String OPEN_INTEREST = "Open interest";
+
+
+	private static final String TRADABLE_LIST_EMPTY_ERROR =
+		"Server's list of tradables is empty.";
+
+	private static final String IO_EXCEPTION_ERROR = "IO exception occurred: ";
+
+	private static final String ABORTING_SUFFIX = " - aborting";
+
+	private static final String INDICATOR_LIST_RETRIEVAL_FAILURE_ERROR =
+		"Error occurred retrieving indicator list.";
+
+	private static final String DATA_RETRIEVAL_FAILURE_ERROR =
+		"Error occurred retrieving data for ";
+
+	private static final String SERVER_REQUEST_FAILURE_ERROR =
+		"Request to server failed: ";
+
+	private static final String INDICATOR_DATA_RETRIEVAL_FAILURE_ERROR =
+		"Indicator data request failed for ";
+
+	private static final String EXCEPTION_ERROR = "Exception occurred";
 }
