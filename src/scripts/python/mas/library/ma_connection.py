@@ -13,7 +13,7 @@ class Connection(Protocol):
 		self.Buffersize = 1
 		self.init_protocol()
 		self.socket = socket(AF_INET, SOCK_STREAM)
-		self.socket.connect(host, port)
+		self.socket.connect((host, port))
 		if self.verbose: print 'Connected to ' + host
 		self.termination_requested = 0
 		self.last_message = ''
