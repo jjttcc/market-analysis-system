@@ -102,7 +102,8 @@ feature {NONE}
 			t: SIMPLE_TUPLE
 		do
 			operator.execute (target.item)
-			!!t.make (target.item.date_time, operator.value)
+			!!t.make (target.item.date_time, target.item.end_date,
+						operator.value)
 			output.extend (t)
 		ensure then
 			output.count = old (output.count) + 1

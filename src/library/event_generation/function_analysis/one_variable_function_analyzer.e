@@ -148,12 +148,10 @@ feature {NONE} -- Hook routine implementation
 		do
 			operator.execute (target.item)
 			if operator.value then
-				ev_desc := concatenation (<<"Event for ", period_type.name,
-					" trading period with indicator ",
-					input.name, " (%N", input.full_description, ")%N",
-					", value: ", target.item.value>>)
-				generate_event (target.item.date_time,
-								"Single-indicator event", ev_desc)
+				ev_desc := concatenation (<<period_type.name,
+					" trading period with indicator ", input.name,
+					"%Nvalue: ", target.item.value>>)
+				generate_event (target.item, ev_desc)
 			end
 		end
 
@@ -173,6 +171,10 @@ feature {MARKET_FUNCTION_EDITOR}
 			product := Void
 			tradable := Void
 		end
+
+feature -- Implementation
+
+	event_name: STRING is "Single-indicator event"
 
 invariant
 

@@ -107,7 +107,8 @@ feature {NONE} -- Hook methods
 				t1_t2_dates_equal: target1.item.date_time.is_equal (
 									target2.item.date_time)
 			end
-			!!t.make (target1.item.date_time, operator.value)
+			!!t.make (target1.item.date_time, target1.item.end_date,
+						operator.value)
 			output.extend (t)
 		ensure then
 			output.count = old (output.count) + 1

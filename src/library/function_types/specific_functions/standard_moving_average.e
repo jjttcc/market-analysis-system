@@ -77,7 +77,8 @@ feature {NONE} -- Basic operations
 				end
 				-- The first trading period of the output is the nth trading
 				-- period of the input (target).
-				!!t.make (target.i_th (n).date_time, sum.value / n)
+				!!t.make (target.i_th (n).date_time, target.i_th (n).end_date,
+							sum.value / n)
 				last_sum := sum.value
 				check
 					target_index_correct: target.index = n + 1
@@ -128,7 +129,8 @@ feature {NONE}
 			operator.execute (target.item)
 			latest_value := operator.value
 			last_sum := last_sum - expired_value + latest_value
-			!!t.make (target.item.date_time, last_sum / n)
+			!!t.make (target.item.date_time, target.item.end_date,
+						last_sum / n)
 			output.extend (t)
 		ensure then
 			one_more_in_output: output.count = old output.count + 1

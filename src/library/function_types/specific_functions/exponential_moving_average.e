@@ -79,8 +79,9 @@ feature {NONE}
 			exp.execute (Void)
 			operator.execute (target.item)
 			latest_value := operator.value
-			!!t.make (target.item.date_time, latest_value * exp.value +
-						output.last.value * (1 - exp.value))
+			!!t.make (target.item.date_time, target.item.end_date,
+						latest_value * exp.value +
+							output.last.value * (1 - exp.value))
 			output.extend (t)
 		ensure then
 			-- output.last.value = P[curr] * exp + EMA[curr-1] * (1 - exp)

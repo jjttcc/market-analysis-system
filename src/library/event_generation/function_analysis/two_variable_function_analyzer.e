@@ -168,14 +168,7 @@ feature {NONE} -- Hook routine implementation
 					rabs (target1.item.value - target2.item.value) >= epsilon)
 				then
 					if above_to_below and additional_condition then
-						generate_event (target1.item.date_time, "crossover",
-							concatenation (<<"Crossover event for ",
-							period_type.name,
-							" trading period with indicators:%N", input1.name,
-							" (", input1.full_description, ") and%N",
-							input2.name, " (", input2.full_description, ")%N",
-							", values: ",
-							target1.item.value, ", ", target2.item.value>>))
+						generate_event (target1.item, event_description)
 					end
 					target1_above := false
 					crossover_in_effect := true
@@ -190,14 +183,7 @@ feature {NONE} -- Hook routine implementation
 					rabs (target1.item.value - target2.item.value) >= epsilon)
 				then
 					if below_to_above and additional_condition then
-						generate_event (target1.item.date_time, "crossover",
-							concatenation (<<"Crossover event for ",
-							period_type.name,
-							" trading period with indicators:%N", input1.name,
-							" (", input1.full_description, ") and%N",
-							input2.name, " (", input2.full_description, ")%N",
-							", values: ",
-							target1.item.value, ", ", target2.item.value>>))
+						generate_event (target1.item, event_description)
 					end
 					target1_above := true
 					crossover_in_effect := true
@@ -223,6 +209,15 @@ feature {NONE} -- Implementation
 				operator.execute (Void)
 			end
 			Result := operator = Void or else operator.value
+		end
+
+	event_description: STRING is
+			-- Constructed description for current event
+		do
+			Result := concatenation (<<"Crossover for ", period_type.name,
+						" trading period with indicators:%N", input1.name,
+						" and%N", input2.name, "%Nvalues: ",
+						target1.item.value, ", ", target2.item.value>>)
 		end
 
 	set_input1 (in: like input1) is
@@ -266,6 +261,10 @@ feature {MARKET_FUNCTION_EDITOR}
 			product := Void
 			tradable := Void
 		end
+
+feature -- Implementation
+
+	event_name: STRING is "crossover"
 
 invariant
 

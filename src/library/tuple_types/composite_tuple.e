@@ -13,7 +13,7 @@ class COMPOSITE_TUPLE inherit
 			begin_editing, end_editing, set, set_open, set_close, set_high,
 			set_low
 		redefine
-			make
+			make, end_date
 		end
 
 creation
@@ -35,6 +35,11 @@ feature -- Access
 
 	last: MARKET_TUPLE
 			-- Last (chronologically) tuple used to create Current
+
+	end_date: DATE is
+		do
+			Result := last.date_time.date
+		end
 
 feature {COMPOSITE_TUPLE_FACTORY} -- Status setting
 

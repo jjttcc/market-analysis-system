@@ -63,15 +63,27 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	generate_event (time_stamp: DATE_TIME; name, description: STRING) is
+	generate_event (tuple: MARKET_TUPLE; description: STRING) is
 		require
-			not_void: time_stamp /= Void and name /= Void and
-						description /= Void
+			not_void: tuple /= Void and description /= Void
 		local
 			s: STRING
 			event: ATOMIC_MARKET_EVENT
 		do
-			!!event.make (name, tradable.symbol, time_stamp, event_type)
+			check
+				tuple.date_time /= Void and tuple.end_date /= Void
+			end
+			!!event.make (event_name, tradable.symbol,
+							tuple.date_time, event_type)
+			-- For weekly, montly, etc. data, this will be the date of
+			-- the last trading period of which the tuple is composed; for
+			-- daily, and intraday data, this will simply be the date
+			-- of the tuple's date_time:
+			event.set_date (tuple.end_date)
+			-- Time is only needed for intraday data.
+			if tuple.is_intraday then
+				event.set_time (tuple.date_time.time)
+			end
 			s := concatenation (<<"Event for market ", tradable.name, ": ">>)
 			description.prepend (s)
 			event.set_description (description)
@@ -82,6 +94,13 @@ feature {NONE} -- Hook routines
 
 	set_innermost_function (f: SIMPLE_FUNCTION [MARKET_TUPLE]) is
 		deferred
+		end
+
+	event_name: STRING is
+			-- Name to give to the event when it is created
+		deferred
+		ensure
+			Result /= Void
 		end
 
 invariant

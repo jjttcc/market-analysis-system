@@ -7,8 +7,9 @@ indexing
 class SIMPLE_TUPLE inherit
 
 	MARKET_TUPLE
-
-	MATH_CONSTANTS
+		redefine
+			end_date
+		end
 
 creation
 
@@ -16,18 +17,21 @@ creation
 
 feature -- Initialization
 
-	make (d: DATE_TIME; v: REAL) is
+	make (d: DATE_TIME; end_dt: DATE; v: REAL) is
 		do
 			date_time := d
 			value := v
+			end_date := end_dt
 		ensure
-			date_set: date_time = d
+			dates_set: date_time = d and end_date = end_dt
 			-- value_set: rabs (value - v) < epsilon
 		end
 
 feature -- Access
 
 	value: REAL
+
+	end_date: DATE
 
 feature {MARKET_FUNCTION} -- Status setting
 
@@ -37,6 +41,16 @@ feature {MARKET_FUNCTION} -- Status setting
 			value := v
 		ensure
 			-- value_set: rabs (value - v) < epsilon
+		end
+
+	set_end_date (arg: DATE) is
+			-- Set end_date to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			end_date := arg
+		ensure
+			end_date_set: end_date = arg and end_date /= Void
 		end
 
 end -- class SIMPLE_TUPLE
