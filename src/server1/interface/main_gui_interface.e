@@ -124,6 +124,9 @@ feature {NONE}
 			rh.extend (cmd, Market_data_request)
 			!INDICATOR_DATA_REQUEST_CMD!cmd.make (factory_builder.market_list)
 			rh.extend (cmd, Indicator_data_request)
+			!TRADING_PERIOD_TYPE_REQUEST_CMD!cmd.make (
+				factory_builder.market_list)
+			rh.extend (cmd, Trading_period_type_request)
 			!MARKET_LIST_REQUEST_CMD!cmd.make (factory_builder.market_list)
 			rh.extend (cmd, Market_list_request)
 			!INDICATOR_LIST_REQUEST_CMD!cmd.make (factory_builder.market_list)
