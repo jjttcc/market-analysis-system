@@ -133,6 +133,11 @@ feature {NONE} -- Implementation
 			selection: INTEGER
 		do
 			from
+				-- Make function_editor read-only and ensure its
+				-- edit_indicator_list precondition - readonly because
+				-- it will be saved as part of the market event generator
+				-- list, not the indicator list.
+				function_editor.set_save_state (false)
 				selection := Null_value
 			until
 				selection = Exit_value
