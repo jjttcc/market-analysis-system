@@ -224,7 +224,7 @@ start_server() {
 	serverproc=$!
 }
 
-# Usage: wait_with_dots time
+# Usage: sleep_with_dots time
 sleep_with_dots() {
 	sleeptime=$1
 	sleepaccum=0
