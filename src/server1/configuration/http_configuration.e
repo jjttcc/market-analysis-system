@@ -48,6 +48,9 @@ feature -- Initialization
 			settings.extend ("", End_date_specifier)
 			settings.extend ("", Host_specifier)
 			settings.extend ("", Path_specifier)
+			settings.extend ("", Symbol_file_specifier)
+			settings.extend ("", EOD_result_format_specifier)
+			settings.extend ("", EOD_turnover_time_specifier)
 		end
 
 feature -- Access
@@ -135,6 +138,21 @@ feature -- Access
 	original_path: STRING is
 		do
 			Result := settings @ Path_specifier
+		end
+
+	symbol_file: STRING is
+		do
+			Result := settings @ Symbol_file_specifier
+		end
+
+	eod_result_format: STRING is
+		do
+			Result := settings @ EOD_result_format_specifier
+		end
+
+	eod_turnover_time: STRING is
+		do
+			Result := settings @ EOD_turnover_time_specifier
 		end
 
 feature -- Element change
