@@ -1,0 +1,45 @@
+# MAS database configuration file
+# Format: "label_string<tab>setting"
+# ODBC data source name for MAS database
+data_source_name	mas_test
+# ID of user for MAS database
+user id	
+# Password for above user
+password	
+# Query for stock symbols
+stock symbol query	select symbol from stock_information order by symbol
+# Query for stock splits
+# Note: query result fields must be: date, symbol, split-value; and the
+# results must be sorted by date, ascending
+stock split query	select date, symbol, value from stock_split order by date
+# Query for stock name
+# <symbol> indicates where to plug in the actual stock symbol and must
+# occur somewhere in the query string.
+stock name query	select name from stock_information where symbol = <symbol>
+# field names for daily stock data table
+# NOTE: All specified fields must be defined in the database as "not null".
+daily stock symbol field	symbol
+daily stock date field	date
+daily stock open field	open_price
+daily stock high field	high_price
+daily stock low field	low_price
+daily stock close field	close_price
+daily stock volume field	volume
+intraday stock symbol field	symbol
+intraday stock date field	date
+intraday stock time field	time
+intraday stock open field	open_price
+intraday stock high field	high_price
+intraday stock low field	low_price
+intraday stock close field	close_price
+intraday stock volume field	volume
+# Specify tail of query (part that occurs after the where clause) for
+# daily stock data.
+daily stock query tail	order by date
+# Specify tail of query (part that occurs after the where clause) for
+# intraday stock data.
+intraday stock query tail	order by date, time
+# Name of table for daily stock data
+daily stock table	daily_stock_data
+# Name of table for intraday stock data (Only specify if table exists.)
+intraday stock table	intraday_stock_data
