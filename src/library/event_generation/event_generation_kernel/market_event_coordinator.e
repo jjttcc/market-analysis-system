@@ -64,6 +64,7 @@ feature -- Status setting
 			-- on each one with `start_date_time'.
 		require
 			arg_not_void: arg /= Void
+			date_not_void: start_date_time /= Void
 		do
 			event_generators := arg
 			update_generators_date_time
