@@ -98,7 +98,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	public Calendar start_date() {
 		Calendar result = data_manager.latest_date_time();
 		if (result != null) {
-			result = protocol_util.one_second_later(result);
+//!!!!:			result = protocol_util.one_second_later(result);
 		}
 		return result;
 	}
@@ -115,6 +115,10 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	public AbstractDataSetBuilder data_builder() {
 		return data_manager.data_builder();
 	}
+
+// Status report - TimeDelimitedDataRequestClient API
+
+	public boolean is_exiting() { return is_exiting; }
 
 // Element change
 
@@ -531,4 +535,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	private AutoRefreshSetup auto_refresh_handler;
 
 	private ChartDataManager data_manager;
+
+	private static boolean is_exiting = false;
 }
