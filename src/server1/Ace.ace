@@ -8,9 +8,9 @@ root
 default
 
 	assertion (all);
-	debug ("editing");
-	debug ("persist");
-	debug ("command line");
+	--debug ("editing");
+	--debug ("persist");
+	--debug ("command line");
 	profile (no);
 
 	--precompiled ("$EIFFEL4/precomp/spec/$PLATFORM/base");
