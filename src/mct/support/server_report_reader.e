@@ -65,7 +65,7 @@ feature -- Basic operations
 					response := Connection_failed
 				end
 			end
-		ensure
+		ensure then
 			response_exists: response /= Void
 		end
 

@@ -67,7 +67,7 @@ feature {NONE} -- Initialization
 			settings.extend ("", Browse_faq_cmd_specifier)
 			create user_defined_variables.make (1, 0)
 			create user_defined_values.make (1, 0)
-		ensure
+		ensure then
 			zero_counts: user_defined_variables.count = 0 and
 				user_defined_values.count = 0
 		end
