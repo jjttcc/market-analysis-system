@@ -597,7 +597,6 @@ public class Graph2D extends Canvas {
            datarect.height = r.height;
 
            for (i=0; i<dataset.size(); i++) {
-			 System.out.println("drawing data set # " + i);
              ((DataSet)dataset.elementAt(i)).draw_data(lg,r);
            }
 	}
