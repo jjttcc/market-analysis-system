@@ -48,6 +48,12 @@ feature -- Access
 	time_field_separator: STRING
 			-- Field separator used for output between time fields
 
+	preface: STRING
+			-- Data to be printed first when `execute' is called.
+
+	appendix: STRING
+			-- Data to be printed last when `execute' is called.
+
 feature -- Status setting
 
 	set_output_medium (arg: IO_MEDIUM) is
@@ -109,16 +115,42 @@ feature -- Status setting
 				date_field_separator /= Void
 		end
 
+	set_preface (arg: STRING) is
+			-- Set preface to `arg'.
+		do
+			preface := arg
+		ensure
+			preface_set: preface = arg
+		end
+
+	set_appendix (arg: STRING) is
+			-- Set appendix to `arg'.
+		do
+			appendix := arg
+		ensure
+			appendix_set: appendix = arg
+		end
+
 feature -- Basic operations
 
 	execute (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
-			-- Output each tuple in `l' to `output_medium'.
+			-- Output each tuple in `l' to `output_medium'.  If `preface'
+			-- is not empty, output it first.  If `appendix' is not empty,
+			-- output it last.
 		do
+			create print_buffer.make (Buffer_init_size)
+			if preface /= Void and not preface.empty then
+				put (preface)
+			end
 			if not l.empty and l.first.is_intraday then
 				print_tuples_with_time (l)
 			else
 				print_tuples (l)
 			end
+			if appendix /= Void and not appendix.empty then
+				put (appendix)
+			end
+			flush_buffer
 		end
 
 	print_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
@@ -134,7 +166,7 @@ feature -- Basic operations
 					i = last + 1
 				loop
 					print_fields (l @ i)
-					output_medium.put_string (record_separator)
+					put (record_separator)
 					i := i + 1
 				end
 			end
@@ -153,7 +185,7 @@ feature -- Basic operations
 					i = last + 1
 				loop
 					print_fields_with_time (l @ i)
-					output_medium.put_string (record_separator)
+					put (record_separator)
 					i := i + 1
 				end
 			end
@@ -168,17 +200,17 @@ feature {NONE} -- Implementation
 	print_fields (t: MARKET_TUPLE) is
 		do
 			print_date (t.end_date, 'y', 'm', 'd')
-			output_medium.put_string (field_separator)
-			output_medium.put_string (t.value.out)
+			put (field_separator)
+			put (t.value.out)
 		end
 
 	print_fields_with_time (t: MARKET_TUPLE) is
 		do
 			print_date (t.end_date, 'y', 'm', 'd')
-			output_medium.put_string (field_separator)
+			put (field_separator)
 			print_time (t.date_time.time, 'h', 'm', 's')
-			output_medium.put_string (field_separator)
-			output_medium.put_string (t.value.out)
+			put (field_separator)
+			put (t.value.out)
 		end
 
 	print_date (date: DATE; f1, f2, f3: CHARACTER) is
@@ -221,11 +253,11 @@ feature {NONE} -- Implementation
 				check f3 = 'd' end
 				i3 := date.day
 			end
-			output_medium.put_string (fmtr.formatted (i1))
-			output_medium.put_string (date_field_separator)
-			output_medium.put_string (fmtr.formatted (i2))
-			output_medium.put_string (date_field_separator)
-			output_medium.put_string (fmtr.formatted (i3))
+			put (fmtr.formatted (i1))
+			put (date_field_separator)
+			put (fmtr.formatted (i2))
+			put (date_field_separator)
+			put (fmtr.formatted (i3))
 		end
 
 	print_time (time: TIME; f1, f2, f3: CHARACTER) is
@@ -268,11 +300,11 @@ feature {NONE} -- Implementation
 				check f3 = 's' end
 				i3 := time.second
 			end
-			output_medium.put_string (fmtr.formatted (i1))
-			output_medium.put_string (time_field_separator)
-			output_medium.put_string (fmtr.formatted (i2))
-			output_medium.put_string (time_field_separator)
-			output_medium.put_string (fmtr.formatted (i3))
+			put (fmtr.formatted (i1))
+			put (time_field_separator)
+			put (fmtr.formatted (i2))
+			put (time_field_separator)
+			put (fmtr.formatted (i3))
 		end
 
 	first_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER is
@@ -312,10 +344,28 @@ feature {NONE} -- Implementation
 			void_date_result: print_end_date = Void implies Result = l.count
 		end
 
+	put (s: STRING) is
+			-- Append `s' to `print_buffer'
+		do
+			print_buffer.append (s)
+		end
+
+	flush_buffer is
+			-- Send `print_buffer' to the output medium
+		do
+			output_medium.put_string (print_buffer)
+		end
+
+
 	print_start_date, print_end_date: DATE
 			-- Start and end date to use for printing, if not void
 
 	output_medium: IO_MEDIUM
 			-- Medium that will be used for output
+
+	print_buffer: STRING
+			-- Buffer used to collect output to be printed
+
+	Buffer_init_size: INTEGER is 15000
 
 end -- MARKET_TUPLE_PRINTER

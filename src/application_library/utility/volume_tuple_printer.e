@@ -21,8 +21,8 @@ feature {NONE} -- Implementation
 
 	print_other_fields (t: VOLUME_TUPLE) is
 		do
-			output_medium.put_string (field_separator)
-			output_medium.put_string (t.volume.out)
+			put (field_separator)
+			put (t.volume.out)
 		end
 
 end -- VOLUME_TUPLE_PRINTER

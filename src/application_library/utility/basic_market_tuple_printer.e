@@ -22,34 +22,34 @@ feature {NONE} -- Implementation
 	print_fields (t: BASIC_MARKET_TUPLE) is
 		do
 			print_date (t.end_date, 'y', 'm', 'd')
-			output_medium.put_string (field_separator)
+			put (field_separator)
 			if t.open_available then
-				output_medium.put_string (t.open.value.out)
-				output_medium.put_string (field_separator)
+				put (t.open.value.out)
+				put (field_separator)
 			end
-			output_medium.put_string (t.high.value.out)
-			output_medium.put_string (field_separator)
-			output_medium.put_string (t.low.value.out)
-			output_medium.put_string (field_separator)
-			output_medium.put_string (t.close.value.out)
+			put (t.high.value.out)
+			put (field_separator)
+			put (t.low.value.out)
+			put (field_separator)
+			put (t.close.value.out)
 			print_other_fields (t)
 		end
 
 	print_fields_with_time (t: BASIC_MARKET_TUPLE) is
 		do
 			print_date (t.end_date, 'y', 'm', 'd')
-			output_medium.put_string (field_separator)
+			put (field_separator)
 			print_time (t.date_time.time, 'h', 'm', 's')
-			output_medium.put_string (field_separator)
+			put (field_separator)
 			if t.open_available then
-				output_medium.put_string (t.open.value.out)
-				output_medium.put_string (field_separator)
+				put (t.open.value.out)
+				put (field_separator)
 			end
-			output_medium.put_string (t.high.value.out)
-			output_medium.put_string (field_separator)
-			output_medium.put_string (t.low.value.out)
-			output_medium.put_string (field_separator)
-			output_medium.put_string (t.close.value.out)
+			put (t.high.value.out)
+			put (field_separator)
+			put (t.low.value.out)
+			put (field_separator)
+			put (t.close.value.out)
 			print_other_fields (t)
 		end
 
@@ -59,7 +59,7 @@ feature {NONE} -- Implementation
 			-- field_separator before the first 'other' field, and to
 			-- not print the field_separator after the last field.
 		do
-			output_medium.put_string (field_separator)
+			put (field_separator)
 		end
 
 end -- BASIC_MARKET_TUPLE_PRINTER
