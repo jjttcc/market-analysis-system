@@ -55,6 +55,15 @@ feature -- Access
 			title_set: Result.title.is_equal (Session_window_title)
 		end
 
+	configured_session_window (hostname, portnumber: STRING): SESSION_WINDOW is
+			-- A new SESSION_WINDOW with port number and host name set to
+			-- the specified values
+		do
+			Result := mas_session_window
+			Result.set_host_name (hostname)
+			Result.set_port_number (portnumber)
+		end
+
 feature {NONE} -- Main-window components
 
 	main_window_menu_bar: EV_MENU_BAR is
