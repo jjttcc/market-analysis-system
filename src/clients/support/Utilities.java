@@ -11,6 +11,19 @@ public class Utilities
 {
 	public Utilities() {}
 
+	// Do Vectors `l1' and `l2' have the same contents, compared by object
+	// (not by reference)?
+	public static boolean lists_match(Vector l1, Vector l2) {
+		boolean result = l1 == l2;
+		if (! result && l1 != null && l2 != null && l1.size() == l2.size()) {
+			result = true;
+			for (int i = 0; result && i < l1.size(); ++i) {
+				if (! l1.elementAt(i).equals(l1.elementAt(i))) result = false;
+			}
+		}
+		return result;
+	}
+
 	// The month `m' as a string
 	// Precondition:
 	//   m >= 1 && m <= 12
