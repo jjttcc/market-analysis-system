@@ -17,22 +17,26 @@ creation
 
 feature -- Initialization
 
-	make (s: STRING; type: TIME_PERIOD_TYPE;
-				stock_splits: DYNAMIC_CHAIN [STOCK_SPLIT]) is
+	make (sym: STRING; type: TIME_PERIOD_TYPE;
+				stock_splits: DYNAMIC_CHAIN [STOCK_SPLIT];
+				sd: STOCK_DATA) is
 		require
-			not_void: s /= Void and type /= Void
+			not_void: sym /= Void and type /= Void
+			symbol_not_empty: not sym.empty
 			splits_sorted_by_date: stock_splits /= Void and
 				not stock_splits.empty implies
 					splits_sorted_by_date (stock_splits)
 		do
-			symbol := s
+			symbol := sym
 			tradable_initialize (type)
 			splits := stock_splits
+			stock_info := sd
 		ensure
-			symbol_set: symbol = s
+			symbol_set: symbol = sym
 			period_type_set: trading_period_type = type
 			target_period_type_set: target_period_type = trading_period_type
 			splits_built: stock_splits /= Void implies splits /= Void
+			info_set: stock_info = sd
 		end
 
 feature -- Access
@@ -41,6 +45,15 @@ feature -- Access
 			-- List of all (recorded) stock splits for the stock
 
 	symbol: STRING
+
+	name: STRING is
+		do
+			if cached_name = Void then
+				stock_info.set_symbol (symbol)
+				cached_name := stock_info.name
+			end
+			Result := cached_name
+		end
 
 	short_description: STRING is "Stock"
 
@@ -176,6 +189,10 @@ feature {NONE} -- Implementation
 		once
 			!COMPOSITE_VOLUME_TUPLE_FACTORY!Result
 		end
+
+	stock_info: STOCK_DATA
+
+	cached_name: STRING
 
 invariant
 
