@@ -18,6 +18,16 @@ inherit
 			active_medium
 		end
 
+	CLEANUP_SERVICES
+		export
+			{NONE} all
+		end
+
+	TERMINABLE
+		export
+			{NONE} all
+		end
+
 creation
 
 	make
@@ -33,6 +43,7 @@ feature
 			factory_builder := fb
 			create cl_interface.make (factory_builder)
 			create gui_interface.make (factory_builder)
+			register_for_termination (Current)
 		ensure
 			set: active_medium = s and factory_builder = fb
 		end
@@ -76,11 +87,32 @@ feature
 			active_medium.accept
 			io_socket := active_medium.accepted
 			io_socket.read_character
-			if io_socket.last_character.is_equal ('C') then
+			if io_socket.last_character.is_equal (Console_flag) then
 				is_gui := false
 			else
 				is_gui := true
 			end
 		end
+
+feature {NONE}
+
+	cleanup is
+		do
+			if io_socket /= Void and then not io_socket.is_closed then
+				if not is_gui then
+					terminate_command_line_client
+				end
+				io_socket.close
+			end
+		end
+
+	terminate_command_line_client is
+		local
+			platform: expanded PLATFORM_DEPENDENT_OBJECTS
+		do
+			io_socket.put_character (platform.Eod_of_file_character)
+		end
+
+	Console_flag: CHARACTER is 'C'
 
 end -- class STREAM_READER
