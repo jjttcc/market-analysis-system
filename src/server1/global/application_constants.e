@@ -13,6 +13,9 @@ feature -- Access
 	stock_split_field_separator: STRING is "%T"
 			-- Field separator for stock split data
 
+	stock_split_record_separator: STRING is "%N"
+			-- Record separator for stock split data
+
 	event_history_field_separator: STRING is "%/1/"
 			-- Field separator for event history file
 
