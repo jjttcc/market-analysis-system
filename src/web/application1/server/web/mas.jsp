@@ -11,7 +11,7 @@ Market Analysis System Charts
 Welcome to the Market Analysis System Charts.
 </h3>
 <P>
-	<applet codebase="." archive="mas_client.jar" code="MAS_Applet.class"
+	<applet codebase="classes" archive="maslib.jar" code="MAS_Applet.class"
 	name="MAS Charts" ID="MAS Charts"
 	width=2 height=2>
 

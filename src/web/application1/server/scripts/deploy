@@ -1,0 +1,9 @@
+#!/bin/sh
+
+warfile=/jupiter/home/development/jtc/finance/src/web/application1/server/dist/mas-0.1-dev.war
+webdir=/usr/java/jakarta-tomcat-5.0.27/webapps/mas
+
+cd $webdir
+jar xvf $warfile
+mkdir classes
+ln ./WEB-INF/lib/maslib.jar ./classes

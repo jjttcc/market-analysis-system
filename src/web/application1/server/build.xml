@@ -468,11 +468,17 @@
     <copy todir="${build.home}/WEB-INF/lib" file="${mas-common.jar}"/>
     <copy todir="${build.home}/WEB-INF/lib" file="${mas-support.jar}"/>
 -->
+
+<!-- Client applet and shared library classes currently reside in the
+same file: -->
+
     <copy todir="${build.home}/WEB-INF/lib" file="${maslib.jar}"/>
 
     <!-- Client applet -->
+<!-- Obsolete!!!: Remove:
     <copy tofile="${build.home}/mas_client.jar"
 		file="../client/dist/mas_client-0.1-dev.jar"/>
+-->
 
 
     <!-- Copy static files from external dependencies as needed -->
