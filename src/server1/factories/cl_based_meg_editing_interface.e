@@ -525,8 +525,10 @@ feature {NONE} -- Implementation
 					print ("(No operator)%N")
 				end
 			end
-			print_list (<<"(Hit <Return> to continue.) ", eom>>)
-			read_line
+			if
+				string_selection ("(Hit <Enter> to continue ...)") = "dummy"
+			then
+			end
 		end
 
 	help: HELP

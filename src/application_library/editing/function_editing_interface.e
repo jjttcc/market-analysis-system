@@ -312,7 +312,7 @@ feature {EDITING_INTERFACE}
 					show_message (indicator.node_names)
 					if
 						string_selection (
-							"Hit <Enter> to continue ...") = "dummy"
+							"(Hit <Enter> to continue ...)") = "dummy"
 					then
 					end
 				end
