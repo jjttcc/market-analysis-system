@@ -337,7 +337,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			!!ma1.make (close_low_function, cmd, outer_n)
 			!!ma2.make (high_low_function, cmd, outer_n)
 			ma1.set_name ("Moving Average of close minus lowest low")
-			ma2.set_name ("Moving Average of close minus highest high")
+			ma2.set_name ("Moving Average of highest high minus lowest low")
 			!!basic1.make (ma1.output)
 			!!basic2.make (ma2.output)
 			!!div.make (basic1, basic2)
