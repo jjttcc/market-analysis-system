@@ -251,6 +251,8 @@ src/scripts/external/mas_external_retrieve.pl lib/ mas_linux1.6 mas_windows1.6
 src/scripts/windows/runmas.bat bin/ mas_windows1.6
 src/scripts/windows/runmacl.bat bin/ mas_windows1.6
 src/scripts/windows/runmasgui.bat bin/ mas_windows1.6
+# contrib
+src/contrib src/ contrib
 # (macl configuration files)
 build/config lib/ mas_linux1.6 mas_windows1.6 mac1.6
 # (Server executables and needed libraries)
