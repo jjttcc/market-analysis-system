@@ -104,7 +104,8 @@ feature {NONE} -- Hook methods
 			enum := msg_enum.right
 			editable_state := False; editing_needed := False
 			inspect
-				character_enumeration_selection (msg, enum.all_members).item
+				character_enumeration_selection (msg, "%NInvalid selection%N",
+					enum.all_members).item
 			when description, description_u then
 				print ("%N" + command_description (c) + "%N%NChoose " +
 					c.generator + name_for (c) + "? (y/n) " + eom)

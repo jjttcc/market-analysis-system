@@ -155,7 +155,8 @@ feature {NONE} -- Implementation
 				Result /= Null_value
 			loop
 				inspect
-					character_enumeration_selection (msg, cr.all_members).item
+					character_enumeration_selection (msg,
+						"%NInvalid selection%N", cr.all_members).item
 				when creat, creat_u then
 					Result := Create_new_value
 				when remove, remove_u then
@@ -417,7 +418,7 @@ feature {NONE} -- Implementation
 					which + " the right analyzer? (" +
 					yes_choice.abbreviation + ") " + eom
 				selection := character_enumeration_selection (msg,
-					yes_choice.all_members)
+					"%NInvalid selection%N", yes_choice.all_members)
 				inspect
 					selection.item
 				when yes, yes_u then
@@ -487,7 +488,7 @@ feature {NONE} -- Implementation
 					"as target for the left analyzer's date/time? (" +
 					yes_choice.abbreviation + ") " + eom
 				selection := character_enumeration_selection (msg,
-					yes_choice.all_members)
+					"%NInvalid selection%N", yes_choice.all_members)
 				inspect
 					selection.item
 				when yes, yes_u then

@@ -151,7 +151,8 @@ feature {NONE} -- Implementation of hook methods
 				Result /= Null_value
 			loop
 				inspect
-					character_enumeration_selection (msg, cr.all_members).item
+					character_enumeration_selection (msg,
+						"%NInvalid selection%N", cr.all_members).item
 				when creat, creat_u then
 					Result := Create_new_value
 				when remove, remove_u then
@@ -192,7 +193,8 @@ feature {NONE} -- Implementation of hook methods
 				choice_chc.item.out + ") Make another choice (" +
 				another_chc.item.out + ") " + eom
 			inspect
-				character_enumeration_selection (msg, desc_chc.all_members).item
+				character_enumeration_selection (msg, "%NInvalid selection%N",
+					desc_chc.all_members).item
 			when description, description_u then
 				print ("%N" + function_description (c) + "%N%NChoose " +
 					c.generator + name_for (c) + "? (y/n) " + eom)
