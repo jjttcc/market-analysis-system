@@ -30,7 +30,7 @@
      set to the current working directory.
 -->
 
-<project name="MAS Servlet" default="compile" basedir=".">
+<project name="MAS Applet Charting Client" default="compile" basedir=".">
 
 
 
@@ -119,7 +119,7 @@
   <property name="dist.home"     value="${basedir}/dist"/>
   <property name="docs.home"     value="${basedir}/docs"/>
   <property name="manager.url"   value="http://localhost:8080/manager"/>
-  <property name="src.home"      value="${basedir}/src"/>
+  <property name="src.home"      value="${basedir}"/>
   <property name="web.home"      value="${basedir}/web"/>
 
 
@@ -274,8 +274,6 @@
 
   The "compile" target transforms source files (from your "src" directory)
   into object files in the appropriate location in the build directory.
-  This example assumes that you will be including your classes in an
-  unpacked directory hierarchy under "/WEB-INF/classes".
 
 -->
 
@@ -283,9 +281,9 @@
    description="Compile Java sources">
 
     <!-- Compile Java classes as necessary -->
-    <mkdir    dir="${build.home}/WEB-INF/classes"/>
+    <mkdir    dir="${build.home}/classes"/>
     <javac srcdir="${src.home}"
-		destdir="${build.home}/WEB-INF/classes"
+		destdir="${build.home}/classes"
 		debug="${compile.debug}"
 		deprecation="${compile.deprecation}"
 		source="${compile.source}"
@@ -293,12 +291,13 @@
         <classpath refid="compile.classpath"/>
     </javac>
 
-    <!-- Copy application resources -->
-    <copy  todir="${build.home}/WEB-INF/classes">
+    <!-- Copy application resources
+    <copy  todir="${build.home}/classes">
       <fileset dir="${src.home}" excludes="**/*.java"/>
     </copy>
+	-->
 	<exec executable="cp">
-	<arg line="${build.home}/WEB-INF/classes/mas/MAS.class srvlt_deployment"/>
+	<arg line="${build.home}/classes/MAS_Applet.class deployment"/>
 	</exec>
 
   </target>
@@ -436,18 +435,19 @@
 
     <!-- Create build directories as needed -->
     <mkdir  dir="${build.home}"/>
-    <mkdir  dir="${build.home}/WEB-INF"/>
-    <mkdir  dir="${build.home}/WEB-INF/classes"/>
+    <mkdir  dir="${build.home}/classes"/>
 
 
     <!-- Copy static content of this web application -->
-    <copy todir="${build.home}">
-      <fileset dir="${web.home}"/>
+    <copy todir="${build.home}/classes">
+      <fileset file="${build.home}/MAS_Applet.class"/>
     </copy>
 
     <!-- Copy external dependencies as required -->
     <!-- *** !!!!!CUSTOMIZE HERE AS REQUIRED BY YOUR APPLICATION *** -->
+    <!-- !!!Remove:
     <mkdir  dir="${build.home}/WEB-INF/lib"/>
+	-->
 <!--
     <copy todir="${build.home}/WEB-INF/lib" file="${foo.jar}"/>
 -->
