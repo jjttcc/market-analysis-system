@@ -1,26 +1,33 @@
 BNF grammar for the protocol between the server and a GUI client
 
 
-message         -> msgID msg end_of_message
+message         -> msgID "\t" msg end_of_message
 msg             -> client_req | server_response
 client_req      -> mkt_data_req | ind_data_req | mkt_list_req | ind_list_req
 mk_data_req     -> mkt_symbol "\t" trad_per_type
 ind_data_req    -> indID "\t" mkt_symbol "\t" trad_per_type
+trad_pertyp_req -> mkt_symbol
 server_response -> srvr_data | error_msg
 error_msg       -> ta_string
-srvr_data       -> mkt_data | ind_data | symbol_list | ind_list
-mkt_data        -> date "\t" mkt_fields
-ind_data        -> date "\t" ta_real
-symbol_list     -> { symbol "\t" ... }+
-ind_list        -> { ind_specifier "\t" ... }
+mkt_symbol      -> ta_string
+srvr_data       -> mkt_data | ind_data | symbol_list | ind_list |
+                     trad_per_types
+mkt_data        -> { mkt_tuple "\n" ... }
+mkt_tuple       -> date "\t" mkt_fields
+ind_data        -> { ind_tuple "\n" ... }
+ind_tuple       -> date "\t" ta_real
+symbol_list     -> { symbol "\n" ... }
+ind_list        -> { ind_specifier "\n" ... }
+trad_per_types  -> { trad_per_type "\n" ... }
 ind_specifier   -> ind_name "\t" indID
 mkt_fields      -> { ta_real "\t" ... }+ [ "\t" volume [ "\t" open_interest ] ]
+trad_per_type   -> "daily" | "weekly"
 indID           -> natural_integer
 volume          -> natural_integer
 open_interest   -> natural_integer
 msgID           -> natural_integer
 mkt_list_req    -> <null>
-ind_list_req    -> <null>
+ind_list_req    -> mkt_symbol
 date            -> year "/" month "/" day
 year            -> digit digit digit digit
 month           -> digit digit
@@ -29,6 +36,8 @@ natural_integer -> +('0'..'9')
 ta_real         -> +('0'..'9') '.' *('0'..'9')
 digit           -> ('0'..'9')
 end_of_message  -> ''
+ta_string       -> +(ta_char)
+ta_char         -> Any character other than tab or newline
 
 
 
@@ -48,11 +57,13 @@ the types of messages are those containing data in response to a client
 request (srvr_data) and those containing error message information
 (error_msg).  For the client, the types of messages are:
 
-	- mkt_data_req (request for market data)
-	- ind_data_req (request for indicator data)
-	- mkt_list_req (request for a list of the symbols of all markets in the
-	               database)
-	- ind_list_req (request for a list of all indicators in the database)
+    - mkt_data_req (request for market data)
+    - ind_data_req (request for indicator data)
+    - trad_per_type_req (request for list of trading period types valid for
+                   the specified market)
+    - mkt_list_req (request for a list of the symbols of all markets in the
+                   database)
+    - ind_list_req (request for a list of all indicators in the database)
 
 A client market data request always includes the symbol for the desired
 market and the desired trading period type.  A client indicator data request
