@@ -27,15 +27,47 @@ Analysis System client and server.
 Note: The term {mas_dir}, used below, stands for the directory into which
 you installed MAS.
 
+
+STOCK SPLITS
+
+The MAS server can obtain the data it needs for stock splits either from
+a file or from a database.  If you are not using MAS with a database
+system (See "USING MAS WITH A DATABASE MANAGEMENT SYSTEM ON LINUX"
+for a description of how to use MAS with a database system.), you will
+probably want to create a file with the required stock split information.
+(The server can run without this stock split data, but any data for a
+stock that has split, if the split has not been adjusted for in the data
+file itself, will not be adjusted for the split by the server and thus
+incorrect values will be used when the data for that stock is processed.)
+The format of the stock split file is simple:
+
+date<tab>symbol<tab>value
+
+where date is the date of the split in the format yyyymmdd, <tab> stands
+for a tab character, symbol is the symbol for the stock, and value is the
+split value.  (For example, for a 2-for-1 split, value will be 2.)
+
+An example of a line in the stock split file that follows this format is:
+
+19980408	F	1.5
+
+The current distribution of MAS includes a file (lib/stock_splits) with
+some sample stock split data in the required format.
+
+
 RUNNING MAS
 
 Note that before running the Market Analysis Server for the first time,
 you will need to set up a few environment variables for it.  See the
 file environment for an explanation of these variables.  Also,
-the current version of MAS supports any data format that includes
-volume.  Open interest is not supported in the current version.
-The expected order of fields, when opening price is included is:
-date,open,high,low,close,volume.
+the current version of MAS supports the following data formats:
+
+date,open,high,low,close,volume
+date,high,low,close,volume
+date,time,open,high,low,close,volume
+date,time,high,low,close,volume
+
+Open interest is not supported in the current version.
 
 Note that there are some sample data files in {mas_dir}/lib/data that
 you can use to begin with.
@@ -64,7 +96,9 @@ command line by changing the current directory to:
 
 {mas_dir}/lib/classes
 
-java MA_Client hostname port_number
+and entering the command:
+
+jre MA_Client hostname port_number
 
 where hostname stands for the network name of the computer the server is
 running on and port_number is the socket port number the server is using
@@ -72,7 +106,8 @@ running on and port_number is the socket port number the server is using
 you will need to have the Java Runtime Environment (JRE) installed on
 your system.  The JRE is available for free for most operating systems.
 See the file java_info for information on obtaining the JRE for your
-system.
+system.  (If you have the Java Development Kit installed, you can replace
+jre with java in the above command, if you like.)
 
 On UNIX systems, you can start a java GUI client by running the magc
 command.  For example:
@@ -89,7 +124,7 @@ when the server is running on a machine named boston.com.
 
 See the file GUI_introduction for more information on running the GUI client.
 
-You can also run the server on intraday data.  One intradata data file
+You can also run the server on intraday data.  One intraday data file
 is included in {mas_dir}/lib/data: ibm.5-minute, 5-minute data for IBM.
 (Note that this is artificial - made-up - data, since real intraday data
 is expensive.)  You can run the server on the daily and intraday data
@@ -99,6 +134,42 @@ mas -o -f , 2425 -b -d txt -i 5-minute ibm.* &
 
 Then start the GUI the same way as before.
 
+USING MAS WITH A DATABASE MANAGEMENT SYSTEM ON LINUX
+
+If you have a DBMS with ODBC support, you may be able to store your data in
+a database and have MAS obtain its market data from there instead of from
+files.  I have MAS set up on my system to talk to a Postgres database using
+unixODBC, a package for Linux and UNIX systems.  unixODBC is available at
+http://www.unixodbc.org/.
+
+To configure MAS to connect to a database, you will first need to
+create a database and the necessary tables to store market data.
+(I have included some scripts I use to create tables in the scripts
+package (in the src/scripts/database/postgres directory), which you
+can use for suggestions as to needed table structures, if you wish.)
+And you will need to make sure that your ODBC libraries and drivers are
+installed and a data source name configured for the MAS database.
+
+Once the database is created and ODBC configured properly, you will need
+to create a database configuration file for MAS.  The default name for
+this file is mas_dbrc.  This file will need to reside in the directory
+specified by the MAS_DIRECTORY environment variable.
+
+The mas_dbrc file contains settings that tell MAS how to query for the
+data it needs.  For example, it tells MAS the name of the table in
+which daily stock data is stored.
+
+I have included the mas_dbrc file I use on my system in the MAS package.
+You will find it in the lib directory.  The file is commented and,
+hopefully, you will be able to figure out from the settings and
+comments in the file how to set it up for your particular system
+configuration.
+
+Once you have everything set up properly, you can start MAS and use the -p
+option to tell it to use the database for its data.
+
+
+NOTES
 
 [1] For those not familiar with technical analysis, it is a set of
 techniques for analyzing market data, using indicators such as trend

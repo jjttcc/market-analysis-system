@@ -91,67 +91,7 @@ the doc directory, with instructions on how to configure MAS to work with
 ODBC.
 
 
-GENERAL INSTALLATION INSTRUCTIONS
+USING MAS
 
-After installation, you should read the file doc/environment for
-instructions on setting environment variables needed by the server.
-
-Also, you will need to create a file with stock split information, which
-the server will read to adjust its stock data for splits.  (The server
-can run without this file, but any data for a stock that has split,
-if the split has not been adjusted for in the data file itself, will not
-be adjusted for the split by the server and thus incorrect values will
-be used when the data for that stock is processed.)  The format of the
-stock split file is simple:
-
-date<tab>symbol<tab>value
-
-where date is the date of the split in the format yyyymmdd, <tab> stands
-for a tab character, symbol is the symbol for the stock, and value is the
-split value.  (For example, for a 2-for-1 split, value will be 2.)
-
-An example of a line in the stock split file that follows this format is:
-
-19980408	F	1.5
-
-The current distribution of MAS includes a file (lib/stock_splits) with
-some sample stock split data in the required format.
-
-To test that the installation succeeded, you can run mas on the example data
-files in lib/data.  (See the file doc/masystem_introduction for instructions
-on how to start mas.)
-
-
-USING MAS WITH A DATABASE MANAGEMENT SYSTEM ON LINUX
-
-If you have a DBMS with ODBC support, you may be able to store your data in
-a database and have MAS obtain its market data from there instead of from
-files.  I have MAS set up on my system to talk to a Postgres database using
-unixODBC, a package for Linux and UNIX systems.  unixODBC is available at
-http://www.unixodbc.org/.
-
-To configure MAS to connect to a database, you will first need to
-create a database and the necessary tables to store market data.
-(I have included some scripts I use to create tables in the scripts
-package (in the src/scripts/database/postgres directory), which you
-can use for suggestions as to needed table structures, if you wish.)
-And you will need to make sure that your ODBC libraries and drivers are
-installed and a data source name configured for the MAS database.
-
-Once the database is created and ODBC configured properly, you will need
-to create a database configuration file for MAS.  The default name for
-this file is mas_dbrc.  This file will need to reside in the directory
-specified by the MAS_DIRECTORY environment variable.
-
-The mas_dbrc file contains settings that tell MAS how to query for the
-data it needs.  For example, it tells MAS the name of the table in
-which daily stock data is stored.
-
-I have included the mas_dbrc file I use on my system in the MAS package.
-You will find it in the lib/database directory.  The file is commented and,
-hopefully, you will be able to figure out from the settings and
-comments in the file how to set it up for your particular system
-configuration.
-
-Once you have everything set up properly, you can start MAS and use the -p
-option to tell it to use the database for its data.
+See the files doc/MAIN_README and doc/masystem_introduction for instructions
+on how to setup and use MAS.
