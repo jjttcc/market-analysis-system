@@ -153,8 +153,8 @@ some sample data files.
 
 %hdg1MAS Data Files and Format
 
-@windows*^fontBNote:*^fontP If you are using the "MAS Server (web)" icon to start
-@windowsthe server, you can ignore this section.
+@windows*^fontBNote:*^fontP If you have configured the system to get its
+@windowsdata from the web, you can ignore this section.
 @windows%par
 When the MAS server is run such that its data is obtained from files,
 you will need to obtain one file with
@@ -175,24 +175,13 @@ There are some sample data files included in the correct format in
 @windowslib\data
 so that you can try out MAS without having to obtain data files.
 
-%hdg1Running MAS
+%hdg1Accessing the Advanced Features of MAS
 
-@begin:windows
-*^fontBNote:*^fontP
-If you are using the "MAS Server (web)" icon to start the server,
-you can ignore this section.
-%par
-@end:windows
-MAS is intended to be run as a server, servicing requests via a socket.
-To do this, you will need to start the MAS executable from the command
-line, giving it the port number you wish to use for the socket connection
-(as well as a list of market data files for it to process, if you are
-running the server in the mode where it obtains its data from files).
-(You can give
-it any port number above 1023.)  You can then start one or more client
-programs to use MAS's services.  See the file masystem_introduction,
-in the doc directory, for more information on how to start the server
-and the client.
+If you need more control over how the server is started, or other aspects
+of the system, you can bypass the MCT and start the server from the command
+line.
+See the file masystem_introduction, in the doc directory, for more information
+on how to start the server and the client programs from the command line.
 %par
 @begin:linux
 To access the MAS functionality for creating new indicators or new event
@@ -203,8 +192,8 @@ or the maclj script.
 @begin:windows
 To access the MAS functionality for creating new indicators or new event
 generators, you can use the command-line interface to the server by
-double-clicking on the "MAS Command Line" icon, after
-starting the server.
+clicking on the "Start command-line client" button in the MAS session
+window.
 @end:windows
 
 %hdg1License
