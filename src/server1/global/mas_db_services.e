@@ -22,6 +22,7 @@ feature -- Access
 		deferred
 		ensure
 			not_void_if_no_error: not fatal_error implies Result /= Void
+			still_connected: connected
 		end
 
 	stock_splits: STOCK_SPLITS is
@@ -37,6 +38,7 @@ feature -- Access
 		deferred
 		ensure
 			not_void_if_no_error: not fatal_error implies Result /= Void
+			still_connected: connected
 		end
 
 	intraday_stock_data (symbol: STRING): DB_INPUT_SEQUENCE is
@@ -46,6 +48,7 @@ feature -- Access
 		deferred
 		ensure
 			not_void_if_no_error: not fatal_error implies Result /= Void
+			still_connected: connected
 		end
 
 	stock_name (symbol: STRING): STRING is
@@ -65,6 +68,7 @@ feature -- Access
 			end
 		ensure
 			not_void_if_ok: (not fatal_error) = (Result /= Void)
+			still_connected: connected
 		end
 
 	single_string_query_result (query: STRING): STRING is
@@ -78,6 +82,7 @@ feature -- Access
 		deferred
 		ensure
 			void_if_error: fatal_error implies Result = Void
+			still_connected: connected
 		end
 
 	stock_data: STOCK_DATA is
