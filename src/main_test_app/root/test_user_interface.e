@@ -54,18 +54,17 @@ feature {NONE}
 			until
 				end_program
 			loop
-				print ("Select action:  ")
-				print (tradable.name)
-				print ("View data (v) Edit parameters (e) Exit (x) %
-						%Admin (a) ")
+				print_list (<<"Select action:  ", tradable.name,
+							"View data (v) Edit parameters (e) Exit (x) %
+							%Memory usage (m) ">>)
 				inspect
 					selected_character
 				when 'v', 'V' then
 					view_menu
 				when 'e', 'E' then
 					edit_menu
-				when 'a', 'A' then
-					admin_menu
+				when 'm', 'M' then
+					display_memory_values
 				when 'x', 'X' then
 					end_program := true
 				else
@@ -90,19 +89,17 @@ feature {NONE}
 			until
 				finished
 			loop
-				print ("Select a parameter for ");
-				print (indicator.name); print (" (0 to end):%N")
+				print_list (<<"Select a parameter for ", indicator.name,
+							" (0 to end):%N">>)
 				from
 					i := 1
 					parameters.start
 				until
 					parameters.after
 				loop
-					print (i.out); print (") ")
-					print (parameters.item.function.name)
-					print (" - value: ")
-					print (parameters.item.current_value)
-					print ("%N")
+					print_list (<<i, ") ", parameters.item.function.name,
+								" - value: ", parameters.item.current_value,
+								"%N">>)
 					parameters.forth
 					i := i + 1
 				end
@@ -111,8 +108,8 @@ feature {NONE}
 					last_integer <= -1 or
 						last_integer > parameters.count
 				then
-					print ("Selection must be between 0 and ")
-					print (parameters.count); print ("%N")
+					print_list (<<"Selection must be between 0 and ",
+								parameters.count, "%N">>)
 				elseif last_integer = 0 then
 					finished := true
 				else
@@ -131,8 +128,8 @@ feature {NONE}
 			until
 				done or end_program
 			loop
-				print ("Select action:%N")
-				print ("     View market data (m) View an indicator (i)%N%
+				print ("Select action:%N%
+						%     View market data (m) View an indicator (i)%N%
 						%     View composite data (c) Exit (x) Previous (-) ")
 				inspect
 					selected_character
@@ -155,39 +152,12 @@ feature {NONE}
 			end
 		end
 
-	admin_menu is
-		local
-			done: BOOLEAN
+	display_memory_values is
 		do
-			from
-			until
-				done or end_program
-			loop
-				update (Total_memory)
-				print ("Select action:%N")
-				print ("     Available memory (m) Total memory used %
-						% [u + o] (t)%N%
-						%     Overhead (o) Memory used (u)%N%
-						%     Exit (x) Previous (-) ")
-				inspect
-					selected_character
-				when 'm', 'M' then
-					print (total); print (" bytes free%N")
-				when 't', 'T' then
-					print (used + overhead); print (" total bytes used%N")
-				when 'o', 'O' then
-					print (overhead); print (" overhead bytes used%N")
-				when 'u', 'U' then
-					print (used); print (" bytes used%N")
-				when 'x', 'X' then
-					end_program := true
-				when '-' then
-					done := true
-				else
-					print ("Invalid selection%N")
-				end
-				print ("%N%N")
-			end
+			update (Total_memory)
+			print_list (<<total, " bytes free%N", used + overhead,
+						" total bytes used%N", overhead,
+						" overhead bytes used%N", used, " bytes used%N">>)
 		end
 
 	view_indicator_menu (indicator: MARKET_FUNCTION) is
@@ -198,15 +168,14 @@ feature {NONE}
 			until
 				done or end_program
 			loop
-				print ("Select action:%N")
-				print ("     Print indicator (p) View description (d) %N%
+				print ("Select action:%N%
+						%     Print indicator (p) View description (d) %N%
 						%     View long description (l) Exit (x) previous (-) ")
 				inspect
 					selected_character
 				when 'p', 'P' then
 					if not indicator.processed then
-						print ("Processing ")
-						print (indicator.name); print (" ...%N")
+						print_list (<<"Processing ", indicator.name, " ...%N">>)
 						indicator.process
 					end
 					print_indicator (indicator)
@@ -243,9 +212,7 @@ feature {NONE}
 				until
 					indicators.after
 				loop
-					print (i.out); print (") ")
-					print (indicators.item.name)
-					print ("%N")
+					print_list (<<i, ") ", indicators.item.name, "%N">>)
 					indicators.forth
 					i := i + 1
 				end
@@ -254,8 +221,8 @@ feature {NONE}
 					last_integer <= 0 or
 						last_integer > indicators.count
 				then
-					print ("Selection must be between 1 and ")
-					print (indicators.count); print ("%N")
+					print_list (<<"Selection must be between 1 and ",
+								indicators.count, "%N">>)
 				else
 					Result := indicators @ last_integer
 				end
@@ -264,22 +231,18 @@ feature {NONE}
 
 	edit_parameter (p: FUNCTION_PARAMETER) is
 		do
-			print ("The current value for ")
-			print (p.function.name); print (" is ")
-			print (p.current_value); print (" - new value? ")
+			print_list (<<"The current value for ", p.function.name, " is ",
+						p.current_value, " - new value? ">>)
 			from
 				read_integer
 			until
 				p.valid_value (last_integer)
 			loop
-				print (last_integer.out)
-				print (" is not valid, try again%N")
+				print_list (<<last_integer, " is not valid, try again%N">>)
 				read_integer
 			end
 			p.change_value (last_integer)
-			print ("New value set to ")
-			print (p.current_value)
-			print ("%N")
+			print_list (<<"New value set to ", p.current_value, "%N">>)
 		end
 
 feature {NONE}
