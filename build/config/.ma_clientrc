@@ -14,7 +14,9 @@ start_date	15-minute	2000/08/14
 start_date	10-minute	2000/08/14
 start_date	5-minute	2000/08/14
 # Weekly start and end date settings
-start_date	weekly	now - 3 years
+start_date	weekly	now - 4 years
+start_date	monthly	now - 8 years
+start_date	quarterly	now - 10 years
 # Specify which indicators to include in the selection list, the order
 # in which to display them, whether to draw them in the upper or the lower
 # graph, and, optionally, each one's color.
@@ -45,6 +47,11 @@ lower_indicator	Slope of Slope of MACD Signal Line Trend	blue
 lower_indicator	[Slope of MACD, Slope of Slope of MACD] Trend	red
 lower_indicator	No lower indicator
 lower_indicator	No upper indicator
+lower_indicator	WMA of Midpoint	oliveGreen
+lower_indicator	WMA of Midpoint 2	red
+lower_indicator	Midpoint	gray
+lower_indicator	MACD of Volume	blue
+lower_indicator	MACD of OBV	gray
 # Horizontal and vertical line configurations - specifies horizontal
 # (indicator_line_h) and vertical (indicator_line_v) reference lines for
 # indicator graph.  Format:
@@ -85,6 +92,8 @@ indicator_line_h	[Slope of MACD, Slope of Slope of MACD] Trend	1 1
 indicator_line_h	[Slope of MACD, Slope of Slope of MACD] Trend	-1 -1
 indicator_line_h	Slope of MACD Signal Line Trend	0 0
 indicator_line_h	Slope of Slope of MACD Signal Line Trend	0 0
+indicator_line_h	MACD of Volume	0 0
+indicator_line_h	MACD of OBV	0 0
 # indicator_line_v	Indicator name	50 50
 # color settings - Valid colors are:
 # white, lightGray, gray, darkGray, black, red, pink, orange, yellow, green,
