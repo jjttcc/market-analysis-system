@@ -499,7 +499,7 @@ feature -- Basic operations
 	edit_value_at_index_command (cmd: VALUE_AT_INDEX_COMMAND) is
 			-- Edit a VALUE_AT_INDEX_COMMAND.
 		local
-			nvc: NUMERIC_VALUE_COMMAND
+			nvc: RESULT_COMMAND [REAL]
 		do
 			nvc ?= user_interface.command_selection_from_type (
 				user_interface.Real_result_cmd, cmd.generator +
