@@ -169,6 +169,12 @@ feature -- Basic operations
 			flush_buffer
 		end
 
+feature -- Status report
+
+	arg_mandatory: BOOLEAN is True
+
+feature {NONE} -- Implementation
+
 	print_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
 		local
 			first, last, i: INTEGER
@@ -192,6 +198,7 @@ feature -- Basic operations
 			end
 		end
 
+--!!!:
 prd (msg: STRING; d: ANY) is
 do
 	if d = Void then
@@ -202,6 +209,11 @@ do
 end
 
 	print_tuples_with_time (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
+		require
+			start_date_if_start_time:
+				print_start_time /= Void implies print_start_date /= Void
+			end_date_if_end_time:
+				print_end_time /= Void implies print_end_date /= Void
 		local
 			first, last, i: INTEGER
 		do
@@ -210,8 +222,16 @@ prd ("print_start_date: ", print_start_date)
 prd ("print_start_time: ", print_start_time)
 prd ("print_end_date: ", print_end_date)
 prd ("print_end_time: ", print_end_time)
-			first := first_date_time_index (l)
-			last := last_date_time_index (l)
+			if print_start_time /= Void then
+				first := first_date_time_index (l)
+			else
+				first := first_index (l)
+			end
+			if print_end_time /= Void then
+				last := last_date_time_index (l)
+			else
+				last := last_index (l)
+			end
 print ("print_tuples_with_time - first, last: " + first.out + ", " + last.out +
 "%N")
 			if last >= first then
@@ -230,12 +250,6 @@ print ("print_tuples_with_time - first, last: " + first.out + ", " + last.out +
 				end
 			end
 		end
-
-feature -- Status report
-
-	arg_mandatory: BOOLEAN is True
-
-feature {NONE} -- Implementation
 
 	print_fields (t: MARKET_TUPLE) is
 		do

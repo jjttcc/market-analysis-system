@@ -130,6 +130,7 @@ feature {NONE} -- Implementation
 	create_and_send_response is
 			-- Create the requested data and send them to the client.
 		require
+			no_parse_error: not parse_error
 			tpt_ms_not_void: trading_period_type /= Void and
 				market_symbol /= Void
 		local

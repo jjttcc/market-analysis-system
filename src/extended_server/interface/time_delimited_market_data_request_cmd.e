@@ -30,6 +30,8 @@ feature {NONE} -- Hook routine implementations
 			start_date_time_string, end_date_time_string: STRING
 		do
 			parse_error := False
+			start_date_time := Void
+			end_date_time := Void
 			date_time_range := fields @ date_time_spec_index
 			if date_time_range /= Void then
 				split_result := date_time_range.split (
@@ -106,14 +108,17 @@ feature {NONE} -- Redefined routines
 
 	set_print_parameters is
 		do
+			print_end_date := Void
+			print_end_time := Void
+			check
+				expected_parse_remainder_result: not parse_error and then
+					start_date_time /= Void
+			end
 			print_start_date := start_date_time.date
 			print_start_time := start_date_time.time
-			if end_date_time.date /= Void then
+			if end_date_time /= Void then
 				print_end_date := end_date_time.date
 				print_end_time := end_date_time.time
-			else
-				print_end_date := Void
-				print_end_time := Void
 			end
 		end
 
