@@ -111,7 +111,7 @@ feature {NONE} -- Implementation
 				Result.open_read
 			else
 				log_errors (<<"Failed to open input file ",
-					file_names.item, "%N">>)
+					file_names.item, " - file does not exist.%N">>)
 				fatal_error := true
 			end
 		end
