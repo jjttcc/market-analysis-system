@@ -169,7 +169,9 @@ feature -- Basic operations
 					view_menu
 				when 'e', 'E' then
 					function_builder.edit_indicator_menu
-					if function_builder.changed then
+					if
+						function_builder.changed and current_tradable /= Void
+					then
 						market_list_handler.clear_caches
 						current_tradable := 
 						market_list_handler.tradable (current_tradable.symbol,
