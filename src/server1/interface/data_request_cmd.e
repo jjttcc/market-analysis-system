@@ -7,9 +7,6 @@ indexing
 deferred class DATA_REQUEST_CMD inherit
 
 	REQUEST_COMMAND
-		rename
-			make as rc_make_unused
-		end
 
 	STRING_UTILITIES
 		rename
@@ -20,17 +17,6 @@ deferred class DATA_REQUEST_CMD inherit
 			print
 		end
 
-feature -- Initialization
-
-	make (ml: TRADABLE_LIST) is
-		require
-			not_void: ml /= Void
-		do
-			market_list := ml
-		ensure
-			set: market_list = ml
-		end
-
 feature -- Access
 
 	market_symbol: STRING
@@ -38,21 +24,6 @@ feature -- Access
 
 	trading_period_type: TIME_PERIOD_TYPE
 			-- Selected trading period type
-
-	market_list: TRADABLE_LIST
-			-- List of all markets currently in the `database'
-
-feature -- Status setting
-
-	set_market_list (arg: TRADABLE_LIST) is
-			-- Set market_list to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			market_list := arg
-		ensure
-			market_list_set: market_list = arg and market_list /= Void
-		end
 
 feature {NONE} -- Utility
 

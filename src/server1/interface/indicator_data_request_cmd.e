@@ -62,7 +62,9 @@ feature {NONE}
 					if not indicator.processed then
 						indicator.process
 					end
+					send_ok
 					print_indicator (indicator)
+					print (eom)
 				end
 			end
 		end
