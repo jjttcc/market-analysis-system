@@ -9,7 +9,7 @@ indexing
 
 class MARKET_LIST_REQUEST_CMD inherit
 
-	REQUEST_COMMAND
+	TRADABLE_REQUEST_COMMAND
 
 creation
 

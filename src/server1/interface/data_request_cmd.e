@@ -8,7 +8,7 @@ indexing
 
 deferred class DATA_REQUEST_CMD inherit
 
-	REQUEST_COMMAND
+	TRADABLE_REQUEST_COMMAND
 
 	PRINTING
 		rename
