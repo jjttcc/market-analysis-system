@@ -74,7 +74,7 @@ log("Ending 'service' thread " + tag);
 
 	// MAS_Proxy reserved for this thread
 	// Postcondition: result != null && proxy_cache.reserved(result)
-	private synchronized MAS_Proxy reserved_proxy() {
+	private MAS_Proxy reserved_proxy() {
 		log("MAS servlet reserving a proxy");
 		MAS_Proxy result = null;
 		if (proxy_cache.size() < Max_cache_size) {
@@ -135,5 +135,5 @@ log("Ending 'service' thread " + tag);
 	private ManagedCache proxy_cache;
 
 	// Maximum allowed size of 'proxy_cache'
-	private final int Max_cache_size = 5;
+	private final int Max_cache_size = 2;
 }
