@@ -309,7 +309,7 @@ abstract public class BasicDrawer extends Drawer {
 			}
 		}
 
-		for (int i = 0; adj_ys[i] >= 0; ++i) {
+		for (int i = 0; i < adj_ys.length && adj_ys[i] >= 0; ++i) {
 			if (adj_ys[i] > ref_bounds.y + margin &&
 					adj_ys[i] < ref_bounds.y + ref_bounds.height - margin) {
 				if (lines) {
