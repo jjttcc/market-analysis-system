@@ -116,10 +116,10 @@ feature -- Access
 				indicators_file_name)
 			if retrieval_failed then
 				if exception = Retrieve_exception then
-					print_list (<<"Retrieval of function library file ",
+					log_errors (<<"Retrieval of function library file ",
 								full_path_name, " failed%N">>)
 				else
-					print_list (<<"Error occurred while retrieving function %
+					log_errors (<<"Error occurred while retrieving function %
 									%library: ", meaning(exception), "%N">>)
 				end
 				die (-1)
@@ -152,10 +152,10 @@ feature -- Access
 				generators_file_name)
 			if retrieval_failed then
 				if exception = Retrieve_exception then
-					print_list (<<"Retrieval of market analysis library%
+					log_errors (<<"Retrieval of market analysis library%
 								% file ", full_path_name, " failed%N">>)
 				else
-					print_list (<<"Error occurred while retrieving market %
+					log_errors (<<"Error occurred while retrieving market %
 							%analysis library: ", meaning(exception), "%N">>)
 				end
 				die (-1)
@@ -225,10 +225,10 @@ feature -- Access
 				registrants_file_name)
 			if retrieval_failed then
 				if exception = Retrieve_exception then
-					print_list (<<"Retrieval of event registrants file ",
+					log_errors (<<"Retrieval of event registrants file ",
 								full_path_name, " failed%N">>)
 				else
-					print_list (<<"Error occurred while retrieving event %
+					log_errors (<<"Error occurred while retrieving event %
 								%registrants: ", meaning(exception), "%N">>)
 				end
 				die (-1)
