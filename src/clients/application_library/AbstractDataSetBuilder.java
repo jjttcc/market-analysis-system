@@ -218,9 +218,6 @@ abstract public class AbstractDataSetBuilder extends Lockable
 	public void send_time_delimited_market_data_request(String symbol,
 		String period_type, Calendar start_date_time, Calendar end_date_time)
 			throws Exception {
-//!!!:
-System.out.println("sending request with " + symbol + ", " + period_type +
-", " + start_date_time);
 
 		dispatch_market_data_request(Time_delimited_market_data_request,
 			symbol, period_type, nwutil.date_time_range(start_date_time,
@@ -321,6 +318,9 @@ System.out.println("sending request with " + symbol + ", " + period_type +
 			String period_type, String appendix, boolean is_update)
 			throws Exception {
 
+//!!!:
+System.out.println("sending request with " + symbol + ", " + period_type +
+", " + appendix);
 		String request = symbol + Message_field_separator + period_type;
 		if (appendix != null && appendix.length() > 0) {
 			request += Message_field_separator + appendix;
@@ -360,6 +360,9 @@ System.out.println("sending request with " + symbol + ", " + period_type +
 			int indicator_id, String symbol, String period_type,
 			String appendix, boolean is_update) throws Exception {
 
+//!!!:
+System.out.println("sending indicator request with " + indicator_id + ", " +
+symbol + ", " + period_type + ", " + appendix);
 		String request = indicator_id + Message_field_separator + symbol +
 			Message_field_separator + period_type;
 		if (appendix != null && appendix.length() > 0) {
