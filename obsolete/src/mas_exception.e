@@ -120,8 +120,6 @@ feature -- Basic operations
 			-- exit
 		external
 			"C"
-		alias
-			"exit"
 		end
 
 	fatal_exception (e: INTEGER): BOOLEAN is
@@ -237,4 +235,4 @@ feature {NONE} -- Implementation
 			exit (Error_exit_status)
 		end
 
-end -- GLOBAL_SERVER
+end -- MAS_EXCEPTION
