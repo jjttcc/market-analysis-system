@@ -8,7 +8,7 @@ package deploy;
 	deployment_directory tarfile applet_archive servlet_archive
 	applet_deployment_path servlet_deployment_directory
 	mas_directory_var data_directory data_from_files process_args
-	setup cleanup set_cleanup_workdir
+	setup cleanup set_cleanup_workdir abort
 );
 
 # Constants
@@ -80,13 +80,11 @@ sub setup {
 		die "Do not have permission to use directory $setup_dir.\n";
 	}
 	chdir $setup_dir;
-	for my $sig ('INT', 'HUP', 'QUIT', 'TERM') {
-		$SIG{$sig} = 'signal_handler';
-	}
 }
 
 # Cleanup - remove the work directory, etc.
 sub cleanup {
+print "cleanup called - cwd: $Clean_work_dir\n";
 	chdir $origdir;
 	if ($Clean_work_dir) {
 		print "Removing work directory, $work_directory.\n";
@@ -129,9 +127,9 @@ sub check_config {
 	}
 }
 
-sub signal_handler {
+sub abort {
 	&cleanup;
-	exit 0;
+	die @_;
 }
 
 ### Configuration settings

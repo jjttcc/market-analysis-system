@@ -6,7 +6,7 @@
 use deploy('configure', 'mas_port', 'mas_options', 'version',
 	'deployment_directory', 'tarfile', 'mas_directory_var', 'data_directory',
 	'data_from_files', 'process_args', 'setup', 'cleanup',
-	'set_cleanup_workdir'
+	'set_cleanup_workdir', 'abort'
 );
 
 # Constants
@@ -15,6 +15,7 @@ my $stop_mas_script = "shutdown_mas_server";
 my $python_path_var = "PYTHONPATH";
 
 &set_cleanup_workdir;
+&set_signal_handler;
 &process_args;
 &configure;
 &setup;
@@ -28,26 +29,27 @@ my $python_path_var = "PYTHONPATH";
 # Intall MAS into the deployment directory.
 sub install {
 	chdir "mas-" . &version;
-	! system(&install_cmd) || die "Failed to install MAS into " .
-		&deployment_directory . ".\n";
+	! system(&install_cmd) || &abort("Failed to install MAS into " .
+		&deployment_directory . ".\n");
 }
 
 sub untar {
 	# Make sure the tar file exists and is readable.
-	open(TAR, &tarfile) || die "Cannot open file: " . &tarfile .
-		" for reading.\n";
+	open(TAR, &tarfile) || &abort("Cannot open file: " . &tarfile .
+		" for reading.\n");
 	close(TAR);
 	print "Untarring " . &tarfile. "\n";
-	! system("tar zxf " . &tarfile) || die "Failed to untar " . &tarfile . "\n";
+	! system("tar zxf " . &tarfile) ||
+		&abort("Failed to untar " . &tarfile . "\n");
 }
 
 sub make_driver_scripts {
 	$f = &deployment_directory . "/bin/" . $start_mas_script;
-	open(F, "> " . $f) || die "Cannot create startup script $f";
+	open(F, "> " . $f) || &abort("Cannot create startup script $f");
 	print F &mas_startup_command . "\n";
 	chmod 0500, $f;
 	$f = &deployment_directory . "/bin/" . $stop_mas_script;
-	open(F, "> " . $f) || die "Cannot create shutdown script $f";
+	open(F, "> " . $f) || &abort("Cannot create shutdown script $f");
 	print F &mas_shutdown_command . "\n";
 	chmod 0500, $f;
 }
@@ -88,4 +90,15 @@ sub cd_data_command {
 
 sub install_cmd {
 	return "./install --rootdir " . &deployment_directory;
+}
+
+sub set_signal_handler {
+	for my $sig ('INT', 'HUP', 'QUIT', 'TERM') {
+		$SIG{$sig} = 'signal_handler';
+	}
+}
+
+sub signal_handler {
+	&cleanup;
+	exit 1;
 }
