@@ -15,7 +15,10 @@ class STOCK_SPLIT_FILE inherit
 
 	DATA_SCANNER
 		rename
-			make as ds_make_unused
+			make as ds_make_unused, field_separator as fs_unused,
+			record_separator as rs_unused,
+			set_record_separator as set_record_separator_unused,
+			set_field_separator as set_field_separator_unused
 		export
 			{NONE} all
 		redefine
@@ -25,10 +28,6 @@ class STOCK_SPLIT_FILE inherit
 	INPUT_FILE
 		rename
 			name as file_name, make as ptf_make_unused,
-			record_separator as if_record_separator,
-			field_separator as if_field_separator,
-			set_record_separator as set_if_record_separator,
-			set_field_separator as set_if_field_separator,
 			advance_to_next_field as if_advance_to_next_field,
 			advance_to_next_record as if_advance_to_next_record
 		export
@@ -58,8 +57,7 @@ feature {NONE} -- Initialization
 		do
 			field_separator := field_sep
 			record_separator := "%N"
-			if_field_separator := field_sep
-			if_record_separator := "%N"
+--Add rec. sep. parameter?
 			file_name := input_file_name
 			open_file (file_name)
 			!!product.make (100)
@@ -87,7 +85,7 @@ feature {NONE} -- Initialization
 				make_open_read (file_name)
 			end
 		rescue
-			open_failed := true
+			open_failed := True
 			retry
 		end
 
