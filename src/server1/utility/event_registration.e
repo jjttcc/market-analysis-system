@@ -167,7 +167,7 @@ feature {NONE} -- Implementation
 			s2.append (input_string)
 			!!s3.make (s2.count + 8)
 			s3.append (s2); s3.append (".history")
-			!!Result.make (file_name_with_app_directory (s3))
+			!!Result.make (s3)
 			Result.set_name (s1)
 			Result.add_email_address (s2)
 			s1 := mailer
@@ -199,8 +199,7 @@ feature {NONE} -- Implementation
 			!!history_file_name.make (file_name.count + 8)
 			history_file_name.append (file_name)
 			history_file_name.append (".history")
-			!!Result.make (file_name_with_app_directory (file_name),
-						file_name_with_app_directory (history_file_name))
+			!!Result.make (file_name, history_file_name)
 			print_list (<<"Log file was created with the following %
 						%properties:%N", "name: ", Result.name, "%N">>)
 		end
