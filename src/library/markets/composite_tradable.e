@@ -199,12 +199,14 @@ feature {NONE} -- Implementation - Hook routines
 			-- `accumulation_operator.value'.
 		local
 			operator: RESULT_COMMAND [REAL]
+			variable: NUMERIC_VALUE_COMMAND
 		do
 			operator := operator_for_current_component (field_extractor.name)
+			variable := variable_for_current_component (field_extractor.name)
 			-- Extract the current field:
 			field_extractor.execute (components.item.data.item)
-			work_tuple.set_value (field_extractor.value)
-			operator.execute (work_tuple)
+			variable.set_value (field_extractor.value)
+			operator.execute (components.item.data.item)
 			-- The following instruction allows the `accumulation_operator'
 			-- to take the result, operator.value, from the above
 			-- calculation and "accumulate" it.  The result of this
@@ -222,6 +224,17 @@ feature {NONE} -- Implementation - Hook routines
 			-- Specialization on `field_extractor_name' will most likely
 			-- only occur for "volume", with the other field extractors
 			-- sharing the same operator.
+		end
+
+	variable_for_current_component (field_extractor_name: STRING):
+		NUMERIC_VALUE_COMMAND is
+			-- The "variable" to be operated on for `component.item',
+			-- possibly specialized with `field_extractor_name'
+		deferred
+		ensure
+			belongs_to_current_operator_or_current_volume_operator:
+				operator_for_current_component (
+				field_extractor_name).descendants.has (Result)
 		end
 
 	post_processing_operator (field_extractor_name: STRING):
