@@ -10,6 +10,7 @@ default
 	assertion (ensure)
 	assertion (loop)
 	assertion (invariant)
+	arguments ("-p 8884 -b")
 	arguments ("-p 8888 -b")
 	arguments ("-p 8888")
 	arguments ("-p 2345 1234")
@@ -87,7 +88,6 @@ default
 	multithreaded (no)
 
 
---	assertion (no)
 --	debug (no)
 --debug ("editing");
 --debug ("persist");
