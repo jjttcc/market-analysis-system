@@ -38,9 +38,6 @@ feature {NONE} -- Initialization
 				inputs := ins
 			end
 			create immediate_direct_parameters.make
-			--!!!Experimental:
-			create {LINKED_LIST [RESULT_COMMAND [REAL]]}
-				secondary_operators.make
 		ensure
 			set: operator = op and calculator_key = key and
 				(ins /= Void implies inputs = ins)
@@ -228,10 +225,6 @@ feature {MARKET_FUNCTION_EDITOR, MARKET_AGENTS}
 
 	inputs: LIST [MARKET_FUNCTION]
 			-- All inputs to be used for processing
-
-	secondary_operators: LIST [like operator]
-			-- Operators that fulfill a secondary role to `operator'
-			--!!!!Experimental
 
 feature {NONE} -- Implementation
 
