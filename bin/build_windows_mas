@@ -12,6 +12,6 @@ if [ $? -ne 0 ]; then abort "Failed to load $lib_script.";fi
 export Targetdir=$MASBUILD/lib/binaries
 export Projectdir=$MASPROJ/mas
 export Executable_name=mas.exe
-export Ace_file_name=$MASDEV/mas-windows.ace
+export Ace_file_name=$MASDEV\\mas-windows.ace
 
 execute $*
