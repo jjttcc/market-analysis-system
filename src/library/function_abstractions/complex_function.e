@@ -98,5 +98,6 @@ feature {NONE} -- Implementation
 invariant
 
 	op_used_constraint: operator_used implies operator /= Void
+	trading_period_type_not_void: trading_period_type /= Void
 
 end -- class COMPLEX_FUNCTION
