@@ -15,7 +15,7 @@ creation
 
 	make
 
-feature -- Initialization
+feature {NONE} -- Initialization
 
 	make (sym: STRING; stock_splits: DYNAMIC_CHAIN [STOCK_SPLIT];
 				sd: STOCK_DATA) is
