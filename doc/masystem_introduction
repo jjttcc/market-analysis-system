@@ -242,14 +242,13 @@ option to tell it to use the database for its data.
 @end:linux
 
 
-@begin:obsolete
-USING MAS WITH THE QuoteMonster SCRIPT
-
+%hdg2Using MAS with the QuoteMonster Script
+%par
 You can configure MAS to use the popular QuoteMonster perl script to
 obtain its stock data from yahoo.com's free historical stock data service.
 To do this, you will first need to download the QuoteMonster script from:
 http://xmlworks.com/quotemonster/
-
+%par
 After downloading QuoteMonster, follow the instructions for installation
 in the readme file.  (You will need to obtain the Perl interpreter
 if it is not already on your system - if you type "perl -v" at the
@@ -261,7 +260,7 @@ is /usr/local/bin/qm".  If you get an error message instead, it is not
 in your path.  If you're not sure how to change your path variable,
 http://sunsite.dk/linux-newbie/FAQ2.htm#PATH_change gives a pretty good
 descriptionn of how to do this.)
-
+%par
 After installing QuoteMonster, you will need to make sure that the wrapper
 script that calls QuoteMonster, named mas_external_retrieve.pl, resides
 in the directory specified by the MAS_DIRECTORY environment variable.
@@ -269,7 +268,7 @@ in the directory specified by the MAS_DIRECTORY environment variable.
 environment variable.)  The mas_external_retrieve.pl file is installed
 in /masdir/lib (where /masdir stands for the parent directory into which
 you installed MAS).
-
+%par
 After making sure mas_external_retrieve.pl is in your MAS_DIRECTORY,
 you will need to create a symbols.mas file, which also needs to reside
 in the directory specified by the MAS_DIRECTORY variable.  This file
@@ -280,23 +279,21 @@ or pico, etc.) to enter the symbols for the stocks you wish to analyze
 symbols from another file, as long as you make sure that the result in
 symbols.mas has one symbol per line and has no other garbage in it.
 (There is a sample symbols.mas file in /masdir/lib/data.)
-
+%par
 At this point, you should be able to start MAS using the external
 data retrieval mechanism hooked to QuoteMonster with the command:
-
+%par
 mas -o -x -b 2345 &
-
+%par
 (The -o tells MAS that the data includes an "open" field; -x tells MAS
 to use the external-data-retrieval mechanism; -b tells MAS it is being
 run in the background; and 2345 is the port number to be used by the
 GUI and command-line clients to communicate with the MAS server.)
-
+%par
 There are some settings within the mas_external_retrieve.pl script that
 can be changed to alter settings such as how many years worth of data
 to obtain.  See the documentation (comments) in the script for instructions
 on what settings can be changed and what they are for.
-@end:obsolete
-
 
 %hdg2Notes
 
