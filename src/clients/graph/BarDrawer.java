@@ -1,11 +1,6 @@
 package graph;
 
 import java.awt.*;
-//Remove?: import java.applet.*;
-//Remove?: import java.util.*;
-//Remove?: import java.lang.*;
-
-
 
 /**
  *  Abstraction for drawing price bars
