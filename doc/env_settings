@@ -16,18 +16,23 @@ to specify that the next argument is the email message subject.  If this
 variable is not set, a default of "-s" will be used.
 
 MAS_STOCK_SPLIT_FILE specifies the name of a file containing stock split
-information.  If this variable is not set, a default of "ma_stock_splits"
+information.  If this variable is not set, a default of "mas_stock_splits"
 will be used.
 
+MAS_DB_CONFIG_FILE specifies the name of a file containing database
+configuration information.  If this variable is not set, a default of
+"mas_dbrc" will be used.
+
 MAS_DIRECTORY specifies the directory MAS will look in for its configuration
-files, such as user-defined indicators and the stock split file.  If
-this variable is not set, MAS will look in the current directory for this
-information.
+files, such as user-defined indicators, the stock split file, and the
+database configuration file.  If this variable is not set, MAS will look in
+the current directory for this information.
 
-MAS uses the following configuration files:
+MAS uses the following files to store market analysis objects such as
+technical indicators:
 
-generators_persist - used to store market analyzers
 indicators_persist - used to store technical indicators
+generators_persist - used to store market analyzers
 registrants_persist - used to store registrants of market analysis events
 
 IMPORTANT:  To use the current configuration of indicators and rules for
