@@ -349,11 +349,13 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 						}
 						dataset = data_builder.last_indicator_data();
 					}
-					dataset.set_color(
-						conf.indicator_color(current_indicator, false));
-					link_with_axis(dataset, current_indicator);
-					add_indicator_lines(dataset, current_indicator);
-					main_pane.add_indicator_data_set(dataset);
+					if (dataset != null) {
+						dataset.set_color(
+							conf.indicator_color(current_indicator, false));
+						link_with_axis(dataset, current_indicator);
+						add_indicator_lines(dataset, current_indicator);
+						main_pane.add_indicator_data_set(dataset);
+					}
 				}
 			}
 			main_pane.repaint_graphs();
