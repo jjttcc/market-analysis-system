@@ -1,0 +1,94 @@
+# Buy and sell market analyzers using Slope of Slope of MACD, ADX,
+# and EMA >= 10
+# NOTE: This script saves each new analyzer right after it is created in
+# order to ensure that each has its own copy of its subcomponents.  For
+# example, each compound market analyzer created by this script will have
+# its own "EMA >= 10" analyzer so that changing the EMA n-value of that
+# subcomponent for one analyzer will not affect the EMA n-value of any of
+# the other compound analyzers created by this script.  If you want the
+# "EMA >= 10" analyzer to be shared so that changing the EMA n-value will
+# affect that of the other compound analyzers, remove the 's' (save command)
+# just before the last three "Start: ..." comments, so that the compound
+# analyzers are saved only after the last one is created.
+m
+# Start: EMA >= 10
+c
+s
+o
+Exponential Moving Average
+y
+GE_OPERATOR
+c
+BASIC_LINEAR_COMMAND
+c
+CONSTANT
+c
+10
+daily
+n
+EMA >= 10
+s
+# Edit the new "EMA >= 10" analyzer to use a 5-period EMA.
+e
+EMA >= 10
+Exponential Moving Average
+1
+5
+0
+0
+0
+s
+# Start: Buy signal with ADX Trend
+c
+c
+Slope of Slope of MACD Crossed Above 0 and Strong ADX Trend (Buy)
+y
+EMA >= 10
+y
+n
+n
+n
+b
+Slope of Slope of MACD Crossed Above 0 and ADX Trend and EMA >= 10
+s
+# Start: Buy signal with ADX Upslope
+c
+c
+Slope of Slope of MACD Crossed Above 0 and Strong ADX Upslope (Buy)
+y
+EMA >= 10
+y
+n
+n
+n
+b
+Slope of Slope of MACD Crossed Above 0 and ADX Upslope and EMA >= 10
+s
+# Start: Sell signal with ADX Trend
+c
+c
+Slope of Slope of MACD Crossed Below 0 and Strong ADX Trend (Sell)
+y
+EMA >= 10
+y
+n
+n
+n
+s
+Slope of Slope of MACD Crossed Below 0 and ADX Trend and EMA >= 10
+s
+# Start: Sell signal with ADX Upslope
+c
+c
+Slope of Slope of MACD Crossed Below 0 and Strong ADX Upslope (Sell)
+y
+EMA >= 10
+y
+n
+n
+n
+s
+Slope of Slope of MACD Crossed Below 0 and ADX Upslope and EMA >= 10
+s
+-
+x
