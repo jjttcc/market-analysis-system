@@ -249,11 +249,9 @@ abstract public class BasicDrawer extends Drawer {
 			start = (long) (Math.floor(ymin / step) * step + step);
 		} else {
 			start = ymin - step * small_step_multiplier;
-System.out.println("start before manip: " + start);
 			start = Math.floor(start * 1 / step) * step;
-System.out.println("start after manip: " + start);
 		}
-System.out.println("start, step, ymax: " + start + ", " + step + ", " + ymax);
+//System.out.println("start, step, ymax: " + start + ", " + step + ", " + ymax);
 		for (y = start; y < ymax; y += step) {
 //System.out.println("adding " + y);
 			y_values.addElement(new Double(y));
