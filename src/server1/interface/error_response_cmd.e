@@ -1,5 +1,6 @@
 indexing
-	description: "A command that responds to a GUI client data request"
+	description: "A request command that responds to an invalid client data %
+		%request"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -14,7 +15,6 @@ feature -- Basic operations
 
 	execute (msg: STRING) is
 		do
-			-- Simple stub for now:
 			print_list (<<Error.out, output_field_separator, msg, eom>>)
 		end
 
