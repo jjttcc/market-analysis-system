@@ -22,3 +22,5 @@ creating_market_analyzers as the left analyzer.  Choose the "Daily Volume
 Say "no" to adding time extensions before and after the left/right analyzers.
 Say "no" to specifying and event type as target for the left analyzer's
 date/time.  Choose a good name for the analyzer.
+
+[cvs TEST]
