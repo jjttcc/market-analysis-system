@@ -388,6 +388,7 @@ feature {NONE} -- Implementation
 			symbol: STRING
 			symbols: LIST [STRING]
 			old_tradable: TRADABLE [BASIC_MARKET_TUPLE]
+			err: STRING
 		do
 			old_tradable := current_tradable
 			if not market_list_handler.empty then
@@ -414,8 +415,24 @@ feature {NONE} -- Implementation
 				end
 				current_tradable := market_list_handler.tradable (symbol,
 					current_period_type)
-				if market_list_handler.error_occurred then
-					log_errors (<<market_list_handler.last_error, ".%N">>)
+				if
+					market_list_handler.error_occurred or
+					current_tradable = Void
+				then
+					if market_list_handler.error_occurred then
+						err := concatenation (
+							<<market_list_handler.last_error, ".%N">>)
+					else
+						check
+							not_valid:
+							not market_list_handler.valid_period_type (symbol,
+							current_period_type)
+						end
+						err := concatenation (
+							<<"Invalid period type for ", symbol,
+							": ", current_period_type.name, ".%N">>)
+					end
+					log_error (err)
 					current_tradable := old_tradable
 				else
 					-- Update the current_tradable's target period type,
