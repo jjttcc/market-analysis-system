@@ -126,6 +126,51 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
+	exception_routine_string: STRING is
+		do
+			Result := recipient_name
+			if Result /= Void and not Result.empty then
+				Result := concatenation (<<"in ", "routine `", Result, "' ">>)
+			else
+				Result := ""
+			end
+		end
+
+	tag_string: STRING is
+		do
+			Result := tag_name
+			if Result /= Void and not Result.empty then
+				Result := concatenation (<<"with tag:%N%"", Result, "%"%N">>)
+			else
+				Result := ""
+			end
+		end
+
+	class_name_string: STRING is
+		do
+			Result := class_name
+			if Result /= Void and not Result.empty then
+				Result := concatenation (<<"from class %"", Result, "%".%N">>)
+			else
+				Result := ""
+			end
+		end
+
+	exception_meaning_string (errname: STRING): STRING is
+		do
+			Result := meaning (exception)
+			if Result /= Void and not Result.empty then
+				if errname /= Void and not errname.empty then
+					Result := concatenation (<<"Type of ", errname, ": ",
+						Result>>)
+				else
+					Result := concatenation (<<"(", Result, ")">>)
+				end
+			else
+				Result := ""
+			end
+		end
+
 	error_information (errname: STRING; stack_trace: BOOLEAN): STRING is
 			-- Information about the current exception, with a stack
 			-- trace if `stack_trace'
@@ -138,11 +183,9 @@ feature {NONE} -- Implementation
 					meaning (exception), "%N[Exception trace:%N",
 					exception_trace, "]%N">>)
 			else
-				Result := concatenation (<<errname, " occurred in ",
-					"routine `", recipient_name, "' with tag%N%"", tag_name,
-					"%" from class %"", class_name,
-					"%".%NType of ", errname, ": ",
-					meaning (exception), "%N">>)
+				Result := concatenation (<<errname, " occurred ",
+					exception_routine_string, tag_string, class_name_string,
+					exception_meaning_string (errname), "%N">>)
 				if
 					recipient_name /= Void and original_recipient_name /= Void
 					and not recipient_name.is_equal(original_recipient_name)
