@@ -80,7 +80,6 @@ feature -- Basic operations
 				-- client's session.
 				sessions.remove (session_key)
 			else
-print ("sessions.count: ") print (sessions.count.out) print ("%N")
 				cmd := request_handlers @ message_ID
 				cmd.set_active_medium (io_medium)
 				if
