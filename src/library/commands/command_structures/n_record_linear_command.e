@@ -24,7 +24,7 @@ class N_RECORD_LINEAR_COMMAND inherit
 		undefine
 			children
 		redefine
-			initialize
+			initialize, set_n
 		select
 			initialize
 		end
@@ -96,6 +96,14 @@ feature {MARKET_FUNCTION} -- Initialization
 			uo_initialize (arg)
 		end
 
+feature {COMMAND_EDITOR} -- Initialization
+
+	set_n (i: INTEGER) is
+		do
+			Precursor (i)
+			index_offset := initial_index_offset
+		end
+
 feature -- Basic operations
 
 	execute (arg: ANY) is
@@ -154,6 +162,13 @@ feature {NONE} -- Implementation
 			-- Offset from current cursor/index - used for iteration
 
 	target: LIST [MARKET_TUPLE]
+
+	initial_index_offset: INTEGER is
+		require
+			n_set: n > 0
+		do
+			Result := -1
+		end
 
 feature {NONE}
 
