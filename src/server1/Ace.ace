@@ -180,7 +180,7 @@ external
 --			"${EIFFEL4}/library/store/spec/$(PLATFORM)/lib/libsupport.a",
 --			"$(ECLI)/src/spec/ise/linux/libecli_c.a",
 --			"/usr/local/lib/libodbc.a",
---			"${MAS}/lib/binaries/mas_utilities.o",
+--			"$(MAS)/src/eiffel_library/lib/utilities.o",
 --			"/usr/lib/libdl.a";
 
  -- Version with odbc dynamically linked:
@@ -188,7 +188,7 @@ external
 			"${EIFFEL4}/library/net/spec/$(PLATFORM)/lib/libnet.a",
 			"${EIFFEL4}/library/store/spec/$(PLATFORM)/lib/libsupport.a",
 			"$(ECLI)/src/spec/ise/linux/libecli_c.a",
-			"${MAS}/lib/binaries/mas_utilities.o",
+			"$(MAS)/src/eiffel_library/lib/utilities.o",
 			"-lodbc"; 
 
 end
