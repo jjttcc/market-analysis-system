@@ -16,7 +16,7 @@ class MCT_CONFIGURATION inherit
 			{NONE} all
 		redefine
 			post_process_settings, use_customized_setting,
-			do_customized_setting, config_file, log_error
+			do_customized_setting, config_file, log_error, cleanup
 		end
 
 	MCT_CONFIGURATION_PROPERTIES
@@ -183,6 +183,8 @@ feature {NONE} -- Implementation - Hook routine implementations
 			check
 				env_specs_exist: environment_variable_set_specifications /=
 					Void and environment_variable_append_specifications /= Void
+				user_defined_arrays_exist: user_defined_variables /= Void and
+					user_defined_values /= Void
 			end
 			-- Replace all "non-dynamic" tokens in `user_defined_values'
 			-- with their specified values:
@@ -242,12 +244,6 @@ feature {NONE} -- Implementation - Hook routine implementations
 			end
 			do_platform_conversion
 			remove_escape_characters
-			-- These data structures are no longer used - reclaim the
-			-- memory they were using:
-			user_defined_variables := Void
-			user_defined_values := Void
-			environment_variable_set_specifications := Void
-			environment_variable_append_specifications := Void
 		end
 
 	check_results is
@@ -273,6 +269,16 @@ feature {NONE} -- Implementation - Hook routine implementations
 					config_file.Configuration_file_path + "):%N")
 				publish_error (error_report)
 			end
+		end
+
+	cleanup is
+		do
+			-- These data structures are no longer used - reclaim the
+			-- memory they were using:
+			user_defined_variables := Void
+			user_defined_values := Void
+			environment_variable_set_specifications := Void
+			environment_variable_append_specifications := Void
 		end
 
 	use_customized_setting (key, value: STRING): BOOLEAN is
@@ -708,9 +714,8 @@ invariant
 		start_command_line_client_command /= Void
 	chart_command_exists: chart_command /= Void
 	termination_command_exists: termination_command /= Void
-	user_defined_arrays_exist: user_defined_variables /= Void and
-		user_defined_values /= Void
-	user_defined_arrays_match:
+	user_defined_arrays_match: (user_defined_variables /= Void and
+		user_defined_values /= Void) implies
 		user_defined_variables.lower = user_defined_values.lower and
 		user_defined_variables.upper = user_defined_values.upper
 
