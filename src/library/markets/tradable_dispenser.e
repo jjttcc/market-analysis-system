@@ -11,14 +11,16 @@ deferred class TRADABLE_DISPENSER
 feature -- Access
 
 	item (period_type: TIME_PERIOD_TYPE): TRADABLE [BASIC_MARKET_TUPLE] is
-			-- Tradable for `period_type' at the current cursor position
+			-- Tradable for `period_type' at the current cursor position -
+			-- Void if `period_type' is not a valid type for the current
+			-- symbol
 		require
 			type_not_void: period_type /= Void
 			cursor_valid: not off
 		do
 			Result := tradable (current_symbol, period_type)
 		ensure
-			Result = tradable (current_symbol, period_type)
+			result_definition: Result = tradable (current_symbol, period_type)
 		end
 
 	index: INTEGER is
@@ -31,10 +33,12 @@ feature -- Access
 			-- The tradable for `period_type' associated with `symbol' -
 			-- Void if the tradable for `symbol' is not found or if
 			-- `period_type' is not a valid type for `symbol'
+		require
+			not_void: symbol /= Void and period_type /= Void
 		deferred
 		ensure
 			period_type_valid: Result /= Void implies
-				Result.tuple_list_names.has (period_type.name)
+				Result.period_types.has (period_type.name)
 		end
 
 	tuple_list (symbol: STRING; period_type: TIME_PERIOD_TYPE):
@@ -42,6 +46,8 @@ feature -- Access
 			-- Tuple list for `period_type' for tradable with `symbol' -
 			-- Void if the tradable for `symbol' is not found or if
 			-- `period_type' is not a valid type for `symbol'
+		require
+			not_void: symbol /= Void and period_type /= Void
 		deferred
 		ensure
 			same_period_type: Result /= Void implies
@@ -51,13 +57,17 @@ feature -- Access
 	symbols: LIST [STRING] is
 			-- The symbol of each tradable
 		deferred
-		ensure then
+		ensure
+			result_exists: Result /= Void
 			object_comparison: Result.object_comparison
 		end
 
 	period_types (symbol: STRING): ARRAYED_LIST [STRING] is
-			-- Names of all period types available for `symbol' -
+			-- Names of all period types available for `symbol', sorted in
+			-- ascending order according to period-type duration -
 			-- Void if the tradable for `symbol' is not found
+		require
+			not_void: symbol /= Void
 		deferred
 		end
 
