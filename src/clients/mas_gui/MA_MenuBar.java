@@ -145,7 +145,9 @@ public class MA_MenuBar extends MenuBar {
 
 	private void setup_period_menu(final Menu period_menu, Vector ptypes) {
 		MenuItem daily = null, weekly = null, monthly = null,
-			quarterly = null, yearly = null;
+			quarterly = null, yearly = null, one_minute = null,
+			two_minute = null, five_minute = null, ten_minute = null,
+			fifteen_minute = null, thirty_minute = null, hourly = null;
 		Vector items = new Vector();
 		Vector other_items = new Vector();
 		String s;
@@ -178,6 +180,43 @@ public class MA_MenuBar extends MenuBar {
 					new MenuShortcut(KeyEvent.VK_Y));
 				items.addElement(yearly);
 			}
+			else if (s.toLowerCase().equals(one_minute_period.toLowerCase())) {
+				one_minute = new MenuItem(s,
+					new MenuShortcut(KeyEvent.VK_F));
+				items.addElement(one_minute);
+			}
+			else if (s.toLowerCase().equals(two_minute_period.toLowerCase())) {
+				two_minute = new MenuItem(s,
+					new MenuShortcut(KeyEvent.VK_G));
+				items.addElement(two_minute);
+			}
+			else if (s.toLowerCase().equals(five_minute_period.toLowerCase())) {
+				five_minute = new MenuItem(s,
+					new MenuShortcut(KeyEvent.VK_H));
+				items.addElement(five_minute);
+			}
+			else if (s.toLowerCase().equals(ten_minute_period.toLowerCase())) {
+				ten_minute = new MenuItem(s,
+					new MenuShortcut(KeyEvent.VK_J));
+				items.addElement(ten_minute);
+			}
+			else if (s.toLowerCase().equals(
+					fifteen_minute_period.toLowerCase())) {
+				fifteen_minute = new MenuItem(s,
+					new MenuShortcut(KeyEvent.VK_K));
+				items.addElement(fifteen_minute);
+			}
+			else if (s.toLowerCase().equals(
+					thirty_minute_period.toLowerCase())) {
+				thirty_minute = new MenuItem(s,
+					new MenuShortcut(KeyEvent.VK_L));
+				items.addElement(thirty_minute);
+			}
+			else if (s.toLowerCase().equals(hourly_period.toLowerCase())) {
+				hourly = new MenuItem(s,
+					new MenuShortcut(KeyEvent.VK_O));
+				items.addElement(hourly);
+			}
 			else {
 				MenuItem other;
 				other = new MenuItem(s);
@@ -185,7 +224,9 @@ public class MA_MenuBar extends MenuBar {
 				other_items.addElement(other);
 			}
 		}
-		MenuItem menuitems[] = { daily, weekly, monthly, quarterly, yearly };
+		MenuItem menuitems[] = { daily, weekly, monthly, quarterly, yearly,
+			one_minute, two_minute, five_minute, ten_minute, fifteen_minute,
+			thirty_minute, hourly };
 		for (int i = 0; i < menuitems.length; ++i) {
 			if (menuitems[i] != null) period_menu.add(menuitems[i]);
 		}
@@ -239,4 +280,11 @@ public class MA_MenuBar extends MenuBar {
 	public static final String monthly_period = "Monthly";
 	public static final String quarterly_period = "Quarterly";
 	public static final String yearly_period = "Yearly";
+	public static final String one_minute_period = "1-minute";
+	public static final String two_minute_period = "2-minute";
+	public static final String five_minute_period = "5-minute";
+	public static final String ten_minute_period = "10-minute";
+	public static final String fifteen_minute_period = "15-minute";
+	public static final String thirty_minute_period = "30-minute";
+	public static final String hourly_period = "Hourly";
 }
