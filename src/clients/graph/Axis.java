@@ -651,11 +651,11 @@ public class Axis extends Object {
 
 		if (!redraw) return;
 		if (minimum_ == maximum_) {
-			System.out.println(
+			System.err.println(
 				"Axis: data minimum_==maximum_ Trying to reset range!");
 			resetRange();
 			if (minimum_ == maximum_) {
-				System.out.println(
+				System.err.println(
 					"Axis: Reseting Range failed!  Axis not drawn!");
 				return;
 			}
