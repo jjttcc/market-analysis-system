@@ -618,35 +618,37 @@ feature {NONE} -- Implementation - indicator editing
 			not_void: i /= Void
 		local
 			has_children_to_edit, has_immediate_parameters: BOOLEAN
-			query, choice_str: STRING
 			children: LIST [MARKET_FUNCTION]
 			quit: BOOLEAN
 		do
 			children := editable_children (i)
 			has_children_to_edit := not children.empty
 			has_immediate_parameters := not i.immediate_parameters.empty
-			if has_children_to_edit and has_immediate_parameters then
-				query := concatenation (<<"Indicator ",
-					i.name, ":%NEdit children or edit immediate parameters?",
-					" (c[hildren]/i[mmediate]/q[uit]) ">>)
-				choice_str := "cCiIqQ"
+			if i.parameters.empty then
+				show_message (concatenation (<<"Indicator ", i.name,
+					" has no editable parameters.">>))
+			elseif i.parameters.count = 1 then
+				edit_parameter_menu (i.parameters, i.name)
+			elseif not has_children_to_edit and has_immediate_parameters then
+				edit_parameter_menu (i.immediate_parameters, i.name)
 			elseif has_children_to_edit and not has_immediate_parameters then
 				show_message (concatenation (<<"Indicator %"", i.name,
 					"'s%" children:">>))
 				edit_indicator_list (i.children)
-			elseif not has_children_to_edit and has_immediate_parameters then
-				edit_parameter_menu (i.immediate_parameters, i.name)
 			else
-				show_message (concatenation (<<"Indicator ", i.name,
-					" has no editable parameters.">>))
-			end
-			if has_children_to_edit and has_immediate_parameters then
+				check
+					children_and_immediate_params:
+						has_children_to_edit and has_immediate_parameters
+				end
 				from
 				until
 					quit
 				loop
 					inspect
-						character_choice (query, choice_str)
+						character_choice (concatenation (<<"Indicator ",
+							i.name, ":%NEdit children or edit immediate ",
+							"parameters? (c[hildren]/i[mmediate]/q[uit]) ">>),
+							"cCiIqQ")
 					when 'c', 'C' then
 						show_message (concatenation (<<"Indicator %"", i.name,
 							"'s%" children:">>))
