@@ -9,3 +9,6 @@ deployment_dir	/tmp/test_it_here
 
 # MAS version number
 version	1.6.5
+
+# Port number the MAS server uses to accept client requests
+server_port_number	2004
