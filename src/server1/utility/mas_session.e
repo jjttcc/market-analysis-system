@@ -1,12 +1,15 @@
 indexing
-	description: "Abstraction for holding session-specific data"
+	description: "Session-specific data for MAS"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class SESSION inherit
+class MAS_SESSION inherit
+--!!!Remember to change the file name to fit the new class name.
+
+	SESSION
 
 creation
 
@@ -64,4 +67,4 @@ feature -- Element change
 			caching_off: caching_on = false
 		end
 
-end -- class SESSION
+end -- class MAS_SESSION
