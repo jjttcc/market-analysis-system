@@ -128,17 +128,6 @@ feature -- Access
 			-- of function_library.
 		once
 			Result := retrieved_function_library
---!!!Clean up
-from Result.start until Result.exhausted loop
-if valid_stock_function (Result.item) then
-	print_list (<<"function ", Result.item.name, " was valid.%N">>)
-else
-	print_list (<<"function ", Result.item.name, " was INvalid.%N">>)
- end
- Result.forth
- end
-print_list (<<"flib size: ", function_library.count, ", stock flib size: ",
-stock_function_library.count, "%N">>)
 		ensure
 			not_void: Result /= Void
 		end
