@@ -9,8 +9,13 @@ indexing
 deferred class MAS_DB_SERVICES inherit
 
 	GENERAL_UTILITIES
-		export {NONE}
-			all
+		export
+			{NONE} all
+		end
+
+	TRADABLE_TYPE_VALUES
+		export
+			{NONE} all
 		end
 
 feature -- Access
@@ -498,9 +503,9 @@ feature {NONE} -- Implementation
 			end
 			inspect
 				tradable_type.item
-			when feature {TRADABLE_TYPE}.stock then
+			when stock then
 				expected_count := expected_count + 5
-			when feature {TRADABLE_TYPE}.derivative then
+			when derivative then
 				expected_count := expected_count + 6
 			end
 			if intraday then

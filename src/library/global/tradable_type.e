@@ -10,6 +10,8 @@ class TRADABLE_TYPE inherit
 
 	ENUMERATED
 
+	TRADABLE_TYPE_VALUES
+
 create
 
 	make_stock, make_derivative
@@ -24,15 +26,13 @@ feature {NONE} -- Initialization
 		do
 			value_index := stock
 		end
-	
+
 	make_derivative is
 		do
 			value_index := derivative
 		end
 
 feature -- Access
-
-	stock, derivative: INTEGER is unique
 
 	value_set: INTEGER_INTERVAL is
 			-- Allowable values
