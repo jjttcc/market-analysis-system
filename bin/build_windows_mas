@@ -10,9 +10,11 @@ lib_script=$MASBUILD/lib/scripts/build_eiffel_application
 .  $lib_script
 if [ $? -ne 0 ]; then abort "Failed to load $lib_script.";fi
 export Targetdir=$MASBUILD/lib/binaries
-export Projectdir=$MASPROJ/mas
+export Projectdir=$MASPROJ/mas_current
 export Executable_name=mas.exe
 export C_Compile_options=-batch
 export Ace_file_name=$MASDEV\\mas-windows.ace
+export Stripcmd=none
+export Compile_wait=50
 
 execute $*
