@@ -54,10 +54,16 @@ body { background-color: #e9dcd5; }
 .inner_right {
 	font-size: 90%;
 	margin-right: 9%;
+	/*
+	background-color: #d9acd5;
 	margin-left: 2%;
+	*/
 }
 .inner_left {
 	font-size: 90%;
+	/*
+	background-color: #a9acd5;
+	*/
 }
 .right_part {
 	font-size: 90%;
@@ -78,9 +84,9 @@ body { background-color: #e9dcd5; }
 */
 }
 .page {
-/*
+	/*
 	background-color: #09acd5;
-*/
+	*/
 }
 .vwide { width: 2000px; }
 .smallish { font-family:sans-serif; font-size: 70% }
