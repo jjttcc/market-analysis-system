@@ -7,11 +7,13 @@ class DATE_SETTER inherit
 
 	VALUE_SETTER
 
-feature
+feature {NONE}
 
-	set (stream: IO_MEDIUM; tuple: MARKET_TUPLE) is
+	do_set (stream: IO_MEDIUM; tuple: MARKET_TUPLE) is
 		do
 			--Stub!!!
+			--!!!Note:  Use a default expected format for date in this
+			--class and define descendants to extract other formats.
 		end
 
 end -- class DATE_SETTER
