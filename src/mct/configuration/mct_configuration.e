@@ -754,7 +754,7 @@ feature {NONE} -- Implementation
 		do
 			settings.linear_representation.do_all (agent
 			platform.convert_path)
-			start_server_commands.linear_representation.do_all (
+			all_commands.linear_representation.do_all (
 				agent convert_command_path)
 		end
 
