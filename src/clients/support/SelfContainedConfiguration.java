@@ -46,14 +46,14 @@ public class SelfContainedConfiguration {
 "lower_indicator\tSlope of MACD Signal Line Trend\tred\n" +
 "lower_indicator\tSlope of Slope of MACD Signal Line Trend\tblue\n" +
 "lower_indicator\t[Slope of MACD, Slope of Slope of MACD] Trend\tred\n" +
-"lower_indicator\tNo lower indicator\n" +
-"lower_indicator\tNo upper indicator\n" +
 "lower_indicator\tWMA of Midpoint\toliveGreen\n" +
 "lower_indicator\tWMA of Midpoint 2\tred\n" +
 "lower_indicator\tMidpoint\tgray\n" +
 "lower_indicator\tMACD of Volume\tblue\n" +
 "lower_indicator\tMACD of OBV\tgray\n" +
 "lower_indicator\tclose\tgreen\n" +
+"lower_indicator\tNo lower indicator\n" +
+"lower_indicator\tNo upper indicator\n" +
 "indicator_line_h\tStochastic %K\t80 80\n" +
 "indicator_line_h\tStochastic %K\t20 20\n" +
 "indicator_line_h\tStochastic %D\t80 80\n" +
