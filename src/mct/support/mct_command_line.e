@@ -54,7 +54,7 @@ feature {NONE} -- Implementation queries
 			-- unconditionally - for convenience
 		once
 			create Result.make
-			-- No setup procedures yet.
+			Result.extend (agent set_debug)
 		end
 
 	initialization_complete: BOOLEAN
