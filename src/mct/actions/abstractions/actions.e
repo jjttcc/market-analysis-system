@@ -43,6 +43,14 @@ feature -- Actions
 
 	exit is
 		do
+			configuration.set_terminate_sessions_on_exit (True)
+			termination_cleanup;
+			(create {EV_ENVIRONMENT}).application.destroy
+		end
+
+	exit_without_session_termination is
+		do
+			configuration.set_terminate_sessions_on_exit (False)
 			termination_cleanup;
 			(create {EV_ENVIRONMENT}).application.destroy
 		end

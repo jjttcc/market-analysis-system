@@ -99,6 +99,24 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
+feature -- Status report
+
+	terminate_sessions_on_exit: BOOLEAN
+			-- Should all owned MAS sessions be terminated on exit?
+
+feature -- Status setting
+
+	set_terminate_sessions_on_exit (arg: BOOLEAN) is
+			-- Set `terminate_sessions_on_exit' to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			terminate_sessions_on_exit := arg
+		ensure
+			terminate_sessions_on_exit_set: terminate_sessions_on_exit = arg
+				and terminate_sessions_on_exit /= Void
+		end
+
 feature {NONE} -- Implementation - Hook routine implementations
 
 	key_index: INTEGER is 1

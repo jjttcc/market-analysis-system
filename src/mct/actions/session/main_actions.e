@@ -83,6 +83,13 @@ feature -- Actions
 			print ("Configure server startup Stub!!!%N")
 		end
 
+	edit_preferences is
+			-- Edit "Preferences".
+		do
+			print ("Stub!!! (Will allow setting of (not) " +
+				"%Nterminate on Quitting, among other things)%N")
+		end
+
 feature {NONE} -- Implementation - Callback routines
 
 	respond_to_session_location (supplier: LOCATE_SESSION_WINDOW) is

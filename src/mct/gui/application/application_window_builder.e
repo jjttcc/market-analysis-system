@@ -73,7 +73,11 @@ feature {NONE} -- Main-window components
 			action_set := action_sets.terminate_arbitrary_session_set
 			c.extend (widget_builder.new_button (action_set.widget_label,
 				action_set.actions))
-			action_set := action_sets.exit_set
+--!!!!!!!!!!!!!!!!!!!!!
+			action_set := action_sets.exit_with_termination_set
+			c.extend (widget_builder.new_button (action_set.widget_label,
+				action_set.actions))
+			action_set := action_sets.exit_without_termination_set
 			c.extend (widget_builder.new_button (action_set.widget_label,
 				action_set.actions))
 		end
@@ -116,17 +120,9 @@ feature {NONE} -- Menu components
 		require
 			current_actions_exist: current_main_actions /= Void or
 				current_mas_session_actions /= Void
-		local
-			actions: ACTIONS
 		do
-			if current_main_actions /= Void then
-				actions := current_main_actions
-			else
-				actions := current_mas_session_actions
-			end
 			create Result.make_with_text ("&File")
-			Result.extend (widget_builder.new_menu_item ("E&xit",
-				<<agent actions.exit>>))
+			common_file_menu_items.do_all (agent Result.extend)
 		end
 
 	advanced_menu: EV_MENU is
@@ -134,10 +130,13 @@ feature {NONE} -- Menu components
 		require
 			current_main_actions_exist: current_main_actions /= Void
 		do
-			create Result.make_with_text ("&Advanced")
+			create Result.make_with_text ("&Edit")
 			Result.extend (widget_builder.new_menu_item (
 				"&Server startup configuration",
 				<<agent current_main_actions.configure_server_startup>>))
+			Result.extend (widget_builder.new_menu_item (
+				"&Preferences",
+				<<agent current_main_actions.edit_preferences>>))
 		end
 
 	help_menu: EV_MENU is
@@ -156,6 +155,24 @@ feature {NONE} -- Menu components
 			create Result.make_with_text ("&Help")
 			Result.extend (widget_builder.new_menu_item ("&About",
 				<<agent actions.show_about_box>>))
+		end
+
+	common_file_menu_items: SEQUENCE [EV_MENU_ITEM] is
+			-- "File" menu items used in all windows
+		local
+			actions: ACTIONS
+		do
+			if current_main_actions /= Void then
+				actions := current_main_actions
+			else
+				actions := current_mas_session_actions
+			end
+			create {LINKED_LIST [EV_MENU_ITEM]} Result.make
+			Result.extend (widget_builder.new_menu_item ("&Quit",
+				<<agent actions.exit>>))
+			Result.extend (widget_builder.new_menu_item (
+				"Q&uit without terminating sessions",
+				<<agent actions.exit_without_session_termination>>))
 		end
 
 feature {NONE} -- Implementation

@@ -88,8 +88,10 @@ feature {NONE} -- Implementation - Hook routines
 
 	cleanup is
 		do
-			if not owner_window.is_destroyed then
-				terminate_session
+			if configuration.terminate_sessions_on_exit then
+				if not owner_window.is_destroyed then
+					terminate_session
+				end
 			end
 		end
 
