@@ -17,9 +17,9 @@ run_proc_doc() {
 		if [ "$platform" = any ]; then
 			xopts=""
 		else
-			xopts="-x $platform"
+			xopts="-t $platform"
 		fi
-		./proc_doc $input_file $fopt -l $xopts \
+		procdoc $input_file $fopt -l $xopts \
 			>$workdir/$input_file-$platform.$format
 		if [ "$format" = groff ]; then
 			groff -mm $workdir/$input_file-$platform.$format \
