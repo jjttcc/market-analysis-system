@@ -21,6 +21,17 @@ creation
 
 feature {NONE} -- Hook routines
 
+	compile_this is
+		local
+			--!!!WARNING: This is a "proprietary" component.  It needs to be
+			-- removed before the open-source version of the code can be
+			-- released.  A method needs to be developed for only including
+			-- "proprietary" components in "proprietary" releases.
+			composite_tradable: COMPOSITE_TRADABLE
+			basic_composite_tradable: BASIC_COMPOSITE_TRADABLE
+		do
+		end
+
 	prepare_for_listening is
 		local
 			socket: COMPRESSED_SOCKET
