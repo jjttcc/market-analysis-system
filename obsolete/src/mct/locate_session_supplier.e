@@ -24,4 +24,21 @@ feature -- Access
 	action_code: INTEGER
 			-- The action code specified by the last call to `register_client'
 
+	client: LOCATE_SESSION_CLIENT
+
+feature -- Client services
+
+	register_client (c: LOCATE_SESSION_CLIENT; actn_code: INTEGER) is
+			-- Register `c' as a "session-location" client with `actn_code'
+			-- spcifying what action for the client to take on callback.
+		require
+			arg_exists: c /= Void
+		do
+			client := c
+			action_code := actn_code
+		ensure
+			client_set: client = c
+			code_set: action_code = actn_code
+		end
+
 end

@@ -10,6 +10,11 @@ class LIST_SELECTION_WINDOW inherit
 
 	EV_TITLED_WINDOW
 
+	EVENT_SUPPLIER
+		undefine
+			default_create, copy
+		end
+
 create
 
 	make
@@ -25,7 +30,7 @@ feature {NONE} -- Initialization
 			create_contents (rows)
 		end
 
-feature {NONE} -- Access
+feature -- Access
 
 	selected_item: EV_MULTI_COLUMN_LIST_ROW is
 			-- Row selected by the user
@@ -158,13 +163,14 @@ feature {NONE} -- Implementation
 	register_selection is
 		do
 			destroy
-			--!!!Callback to notify client that item was selected goes here.
 if selected_item /= Void then
 print ("Selection was made.%Nfirst column of selected item: " +
 selected_item.first + "%N")
 else
 print ("No selection.%N")
 end
+			--!!!Callback to notify client that item was selected goes here.
+			client.respond_to_event (Current)
 		end
 
 invariant

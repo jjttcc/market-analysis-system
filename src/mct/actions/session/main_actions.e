@@ -12,6 +12,11 @@ class MAIN_ACTIONS inherit
 
 	LOCATE_SESSION_CLIENT
 
+	EVENT_CLIENT
+		rename
+			respond_to_event as respond_to_server_selection_event
+		end
+
 create
 
 	make
@@ -76,18 +81,45 @@ feature -- Actions
 	configure_server_startup is
 			-- Configure how the server is to be started up.
 		local
-			selected_command: EXTERNAL_COMMAND
+			cmds: LINEAR [EXTERNAL_COMMAND]
+			window: LIST_SELECTION_WINDOW
+			rows: LINKED_LIST [LIST [STRING]]
+			label: STRING
 		do
-			print ("Configure server startup Stub!!!%N")
-			selected_command := selected_start_server_command
-			check
-				start_srvr_cmd_set: selected_command /= Void and
-				selected_command.identifier.is_equal (
-					configuration.Start_server_cmd_specifier) and
-				external_commands.has (selected_command.identifier)
+print ("Configure server startup Stub!!!%N")
+			create rows.make
+			rows.extend (create {LINKED_LIST [STRING]}.make)
+			-- Add muli-list column titles.
+			rows.first.extend ("Command name")
+			rows.first.extend ("Description")
+			create server_cmd_table.make (
+				configuration.start_server_commands.count)
+			cmds := configuration.start_server_commands
+			-- Add one row to `rows' for each element of `cmds'.
+			from
+				cmds.start
+			until
+				cmds.exhausted
+			loop
+				-- Add new row.
+				rows.extend (create {LINKED_LIST [STRING]}.make)
+				if cmds.item.name = Void or else cmds.item.name.is_empty then
+					label := cmds.item.identifier
+				else
+					label := cmds.item.name
+				end
+				rows.last.extend (label)
+				server_cmd_table.put (cmds.item, label)
+				if cmds.item.description = Void then
+					rows.last.extend ("")
+				else
+					rows.last.extend (cmds.item.description)
+				end
+				cmds.forth
 			end
-			external_commands.replace (selected_command,
-				selected_command.identifier)
+			create window.make ("Start-server selection", rows)
+			window.show
+			window.register_client (Current, 0)
 		end
 
 	edit_preferences is
@@ -130,6 +162,33 @@ feature {NONE} -- Implementation - Callback routines
 			-- Null routine
 		end
 
+	respond_to_server_selection_event (supplier: LIST_SELECTION_WINDOW) is
+			-- Respond to a "start-server-selection" event.
+		local
+			selected_command: EXTERNAL_COMMAND
+		do
+			if supplier.selected_item /= Void then
+print ("[respond_to_event] supplier.selected_item.first: " +
+supplier.selected_item.first + "%N")
+				selected_command := server_cmd_table @
+					supplier.selected_item.first
+				check
+					start_srvr_cmd_set: selected_command /= Void and
+					selected_command.identifier.is_equal (
+						configuration.Start_server_cmd_specifier) and
+					external_commands.has (selected_command.identifier)
+				end
+				external_commands.replace (selected_command,
+					selected_command.identifier)
+			else
+print ("[respond_to_event] supplier.selected_item is Void%N")
+			end
+			-- !!Need to modify the mctrc file to mark the selected command
+			-- as the default.
+		end
+
+feature {NONE} -- Implementation
+
 	connect_to_located_session (supplier: LOCATE_SESSION_WINDOW) is
 			-- Connect to the session whose host name and port number are
 			-- specified by `supplier'.
@@ -157,8 +216,6 @@ feature {NONE} -- Implementation - Callback routines
 			session_actions.set_owner_window (supplier)
 			session_actions.terminate_session
 		end
-
-feature {NONE} -- Implementation
 
 	reserved_port_number: STRING is
 		local
@@ -200,49 +257,9 @@ feature {NONE} -- Implementation
 			-- client to test that it is running and reachable - report if not.
 		end
 
-	selected_start_server_command: EXTERNAL_COMMAND is
-			-- New "start-server" command obtained from the user.
-		local
-			cmds: LINEAR [EXTERNAL_COMMAND]
-			window: LIST_SELECTION_WINDOW
-			rows: LINKED_LIST [LIST [STRING]]
-		do
-			create rows.make
-			rows.extend (create {LINKED_LIST [STRING]}.make)
-			-- Add muli-list column titles.
-			rows.first.extend ("Command name")
-			rows.first.extend ("Description")
-			cmds := configuration.start_server_commands
-			-- Add one row to `rows' for each element of `cmds'.
-			from
-				cmds.start
-			until
-				cmds.exhausted
-			loop
-				-- Add new row.
-				rows.extend (create {LINKED_LIST [STRING]}.make)
-				if cmds.item.name = Void or else cmds.item.name.is_empty then
-					rows.last.extend (cmds.item.identifier)
-				else
-					rows.last.extend (cmds.item.name)
-				end
-				if cmds.item.description = Void then
-					rows.last.extend ("")
-				else
-					rows.last.extend (cmds.item.description)
-				end
-				cmds.forth
-			end
-			create window.make ("Start-server selection", rows)
-			window.show
-			-- !!!Stub: Fake obtaining of the command from the user until
-			-- there's time to implement it.
-			if cmds.off then
-				cmds.start
-			end
-			Result := cmds.item
-			cmds.forth
-		end
+feature {NONE} -- Implementation - attributes
+
+	server_cmd_table: HASH_TABLE [EXTERNAL_COMMAND, STRING]
 
 feature {NONE} -- Implementation - constants
 

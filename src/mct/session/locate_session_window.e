@@ -16,6 +16,8 @@ class LOCATE_SESSION_WINDOW inherit
 	LOCATE_SESSION_SUPPLIER
 		undefine
 			default_create, copy
+		redefine
+			register_client
 		end
 
 create
@@ -33,18 +35,9 @@ feature {NONE} -- Initialization
 feature -- Client services
 
 	register_client (c: LOCATE_SESSION_CLIENT; actn_code: INTEGER) is
-			-- Register `c' as a "session-location" client with `actn_code'
-			-- spcifying what action for the client to take on callback.
-		require
-			arg_exists: c /= Void
 		do
-			client := c
-			action_code := actn_code
 			ok.select_actions.extend (agent ok_response)
 			cancel.select_actions.extend (agent cancel_response)
-		ensure
-			client_set: client = c
-			code_set: action_code = actn_code
 		end
 
 feature {NONE} -- Implementation - initialization
@@ -100,8 +93,6 @@ feature {NONE} -- Implementation - initialization
 		end
 
 feature {NONE} -- Implementation - attributes
-
-	client: LOCATE_SESSION_CLIENT
 
 	ok, cancel: EV_BUTTON
 
