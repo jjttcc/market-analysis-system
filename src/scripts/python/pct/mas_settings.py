@@ -1,8 +1,12 @@
-datadir = '/home/finance/data/current_local'
-mascmd = '/home/jtc/bin/mas'
+#datadir = '/home/finance/data/current_local'
+datadir = '/home2/finance/data/current'
+#mascmd = '/home/jtc/bin/mas'
+mascmd = '/home2/jtc/bin/mas'
 maclcmd = '/usr/bin/xterm'
-maguicmd = '/home/jtc/bin/magc'
-maclpath = '/home/jtc/bin/macl'
+#maguicmd = '/home/jtc/bin/magc'
+maguicmd = 'magc'
+#maclpath = '/home/jtc/bin/macl'
+maclpath = '/home2/finance/bin/macl'
 maclargs = ['-e', maclpath]
 maguiargs = []
 masargs = ['mas', '-o', '-f', ',', '-b', 'aa.txt']

@@ -17,18 +17,18 @@ def obtain_port_number():
 		try:
 			print "Enter the server's port number. ",
 			port = sys.stdin.readline()[:-1]
-			num = eval(port)
+			result = int(port)
 		except:
 			print 'Invalid input.'
 			continue
-		if num < 1024:
+		if result < 1024:
 			print 'You entered ' + port + ' (less than 1024).'
 			print 'Do you really want to use that port number? ',
 			answer = sys.stdin.readline()
 			if regex.match("^[yY]", answer) != -1:
 				break
 		else: break
-	return port
+	return result
 
 # Start the MAS server with a random port number.
 def start_server():
@@ -45,7 +45,7 @@ def start_server():
 # Start the MAS command-line client.  If `port' is not -1, it specifies the
 # server's port number; otherwise, the port number is obtained from the user.
 def start_client(port = -1):
-	if port == -1: port = eval(obtain_port_number())
+	if port == -1: port = obtain_port_number()
 	if fork() == 0:
 		args = maclargs
 		args.append('%d' % port)
@@ -58,7 +58,7 @@ def start_client(port = -1):
 # Start the MAS GUI.  If `port' is not -1, it specifies the server's
 # port number; otherwise, the port number is obtained from the user.
 def start_gui(port = -1):
-	if port == -1: port = eval(obtain_port_number())
+	if port == -1: port = obtain_port_number()
 	if fork() == 0:
 		args = maguiargs
 		args.append('%d' % port)
@@ -72,7 +72,7 @@ def start_gui(port = -1):
 # port number; otherwise, the port number is obtained from the user.
 # If `exit', exit this process.
 def terminate_server(port = -1, exit = 0):
-	if port == -1: port = eval(obtain_port_number())
+	if port == -1: port = obtain_port_number()
 	if fork() == 0:
 		cmd = 'echo |' + maclpath + ' ' + '%d' % port + ' >>/dev/null 2>&1'
 		result = system(cmd)
