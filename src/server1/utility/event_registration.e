@@ -1,7 +1,6 @@
 indexing
 	description: "User interface for event registration"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
-	note: "!!!Needs to be converted to use the editing interface."
 	date: "$Date$";
 	revision: "$Revision$"
 
