@@ -1,0 +1,15 @@
+r
+a
+u
+Finance - Buy signals
+finance
+Slope of Slope of MACD Crossed Above 0 and ADX Trend and EMA >= 10
+# Apparently macl does not yet completely handle parsing registrant menus,
+# so the number needs to be specified here - using the name won't work until
+# this capability has been added to macl:
+26
+q
+-
+s
+-
+x

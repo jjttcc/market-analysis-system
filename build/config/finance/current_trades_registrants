@@ -1,0 +1,15 @@
+r
+a
+u
+Finance - Buy/Sell signals for current trades
+finance
+Slope of Slope of MACD Signal Line Cross Below 0 (Sell)
+# Apparently macl does not yet completely handle parsing registrant menus,
+# so the number needs to be specified here - using the name won't work until
+# this capability has been added to macl:
+7
+q
+-
+s
+-
+x
