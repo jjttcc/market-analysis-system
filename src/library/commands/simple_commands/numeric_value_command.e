@@ -28,17 +28,21 @@ feature
 	make (r: REAL) is
 		do
 			value := r
+			is_editable := True
 		ensure
 			set: rabs (value - r) < epsilon
+			editable: is_editable
 		end
 
 feature -- Access
 
 	name: STRING is
 		do
-			Result := "{" + Precursor + "}"
+			Result := Precursor
 			if Result.is_empty then
 				Result := "{Constant}"
+			else
+				Result := "{" + Result + "}"
 			end
 		end
 
@@ -46,7 +50,7 @@ feature -- Status report
 
 	arg_mandatory: BOOLEAN is False
 
-	is_editable: BOOLEAN is True
+	is_editable: BOOLEAN
 
 feature -- Status setting
 
@@ -58,6 +62,16 @@ feature -- Status setting
 			value := arg
 		ensure
 			value_set: rabs (value - arg) < epsilon
+		end
+
+	set_is_editable (arg: BOOLEAN) is
+			-- Set `is_editable' to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			is_editable := arg
+		ensure
+			is_editable_set: is_editable = arg and is_editable /= Void
 		end
 
 feature -- Basic operations
