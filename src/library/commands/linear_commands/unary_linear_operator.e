@@ -58,6 +58,9 @@ feature -- Status report
 
 	arg_mandatory: BOOLEAN is false
 
-	target_cursor_not_affected: BOOLEAN is true
+	target_cursor_not_affected: BOOLEAN is
+		once
+			Result := true
+		end
 
 end -- class UNARY_LINEAR_OPERATOR
