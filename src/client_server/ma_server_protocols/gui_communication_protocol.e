@@ -11,9 +11,16 @@ class GUI_SERVER_PROTOCOL inherit
 
 	SERVER_PROTOCOL
 
-feature -- Access
+feature -- Client request IDs
 
 	Market_data_request: INTEGER is 1
-	Error: INTEGER is 2
+	Indicator_data_request: INTEGER is 2
+	Market_list_request: INTEGER is 3
+	Indicator_list_request: INTEGER is 4
+
+feature -- Server response IDs
+
+	Error: INTEGER is 5
+	OK: INTEGER is 6
 
 end -- class GUI_SERVER_PROTOCOL
