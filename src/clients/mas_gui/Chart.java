@@ -787,6 +787,7 @@ System.out.println("FINISHED requesting " + requested_tradable);
 	// Valid trading period types
 	protected Vector _period_types;	// Vector of String
 
+//!!!!!Replace with tradable_specification's indicators:
 	// Table of market indicators
 	protected static Hashtable _indicators;	// key: String, value: Integer
 
