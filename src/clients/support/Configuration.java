@@ -55,7 +55,7 @@ public class Configuration implements NetworkProtocol
 		return (Vector) _horizontal_indicator_lines.get(indicator);
 	}
 
-	//!!!Note: These colors should be made configurable.
+//!!!Note: These colors should be made configurable.
 
 	// Color to use for "black" candles
 	public Color black_candle_color() {
@@ -70,6 +70,11 @@ public class Configuration implements NetworkProtocol
 	// Color to use for straight "sticks" (bar lines, etc.)
 	public Color stick_color() {
 		return Color.white;
+	}
+
+	// Color to use for bar graphs
+	public Color bar_color() {
+		return Color.green;
 	}
 
 	// Color to use for connecting lines (indicators)
