@@ -18,7 +18,9 @@ feature -- Access
 			-- Weekly index for `period_type_names'
 	Monthly: INTEGER is 4
 			-- Monthly index for `period_type_names'
-	Yearly: INTEGER is 5
+	Quarterly: INTEGER is 5
+			-- Quarterly index for `period_type_names'
+	Yearly: INTEGER is 6
 			-- Yearly index for `period_type_names'
 
 	period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
@@ -29,6 +31,7 @@ feature -- Access
 			tbl: HASH_TABLE [TIME_PERIOD_TYPE, STRING]
 		once
 			!!tbl.make (3)
+			-- hourly
 			!!duration.make (0, 0, 0, 1, 0, 0)
 			check duration.hour = 1 end
 			!!type.make (duration)
@@ -36,6 +39,7 @@ feature -- Access
 				not_in_table1: not tbl.has (type.name)
 			end
 			tbl.extend (type, type.name)
+			-- daily
 			!!duration.make (0, 0, 1, 0, 0, 0)
 			check duration.day = 1 end
 			!!type.make (duration)
@@ -43,6 +47,7 @@ feature -- Access
 				not_in_table2: not tbl.has (type.name)
 			end
 			tbl.extend (type, type.name)
+			-- weekly
 			!!duration.make (0, 0, 7, 0, 0, 0)
 			check duration.day = 7 end
 			!!type.make (duration)
@@ -50,6 +55,7 @@ feature -- Access
 				not_in_table3: not tbl.has (type.name)
 			end
 			tbl.extend (type, type.name)
+			-- monthly
 			!!duration.make (0, 1, 0, 0, 0, 0)
 			check duration.month = 1 end
 			!!type.make (duration)
@@ -57,6 +63,15 @@ feature -- Access
 				not_in_table4: not tbl.has (type.name)
 			end
 			tbl.extend (type, type.name)
+			-- quarterly
+			!!duration.make (0, 3, 0, 0, 0, 0)
+			check duration.month = 3 end
+			!!type.make (duration)
+			check
+				not_in_table4: not tbl.has (type.name)
+			end
+			tbl.extend (type, type.name)
+			-- yearly
 			!!duration.make (1, 0, 0, 0, 0, 0)
 			check duration.year = 1 end
 			!!type.make (duration)
@@ -98,6 +113,7 @@ feature -- Access
 			Result.force (tpt.Daily, Daily)
 			Result.force (tpt.Weekly, Weekly)
 			Result.force (tpt.Monthly, Monthly)
+			Result.force (tpt.Quarterly, Quarterly)
 			Result.force (tpt.Yearly, Yearly)
 		end
 
@@ -114,6 +130,9 @@ feature -- Basic operations
 				end
 			elseif equal (type.name, (period_type_names @ Monthly)) then
 				dt.date.set_day (1)
+			elseif equal (type.name, (period_type_names @ Quarterly)) then
+				dt.date.set_day (1)
+				dt.date.set_month ((dt.month - 1) // 3 * 3 + 1)
 			elseif equal (type.name, (period_type_names @ Yearly)) then
 				dt.date.set_day (1)
 				dt.date.set_month (1)
@@ -149,16 +168,6 @@ feature -- Basic operations
 			end
 		ensure
 			weekday: d.date.day_of_the_week > 1 and d.date.day_of_the_week < 7
-		end
-
-	set_to_first_day_of_month (d: DATE_TIME) is
-			-- Set `d' to the first day of `d's month.
-		require
-			d_not_void: d /= Void
-		do
-			d.date.set_day (1)
-		ensure
-			first_of_month: d.date.day = 1
 		end
 
 end -- class GLOBAL_SERVICES
