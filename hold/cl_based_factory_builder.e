@@ -145,6 +145,7 @@ feature {NONE}
 	build_components (tradable_factories: LINKED_LIST [TRADABLE_FACTORY]) is
 		local
 			meg_builder: MARKET_EVENT_GENERATOR_BUILDER
+			dispatcher: EVENT_DISPATCHER
 		do
 			!VIRTUAL_TRADABLE_LIST!market_list.make (input_file_names,
 														tradable_factories)
@@ -160,14 +161,36 @@ feature {NONE}
 				-- generation library.
 				meg_builder.execute
 			end
-			!!registration_builder
-			-- registration_builder will use the
-			-- market_event_generation_library to create and register event
-			-- registrants to event types of the members of the library.
-			registration_builder.execute
+			-- (If market_event_registrants is not empty, it has
+			-- been retrieved from persistent store.)
+			if market_event_registrants.empty then
+				!!registration_builder
+				-- registration_builder will use the
+				-- market_event_generation_library to create and register event
+				-- registrants to event types of the members of the library.
+				registration_builder.execute
+				market_event_registrants.append (registration_builder.product)
+			end
+			!!dispatcher.make
+			register_event_registrants (dispatcher)
 			!MARKET_EVENT_COORDINATOR!event_coordinator.make (
 								market_event_generation_library, market_list,
-								registration_builder.product)
+								dispatcher)
+		end
+
+	register_event_registrants (dispatcher: EVENT_DISPATCHER) is
+			-- Register global `market_event_registrants' to `dispatcher'
+		do
+			from
+				market_event_registrants.start
+			until
+				market_event_registrants.exhausted
+			loop
+				dispatcher.register (market_event_registrants.item)
+				market_event_registrants.forth
+			end
+		ensure
+			dispatcher.registrants.count = market_event_registrants.count
 		end
 
 end -- FACTORY_BUILDER
