@@ -101,6 +101,13 @@ feature -- Access
 			!DIVISION!cmd.make (real_dummy, real_dummy)
 			!!pair.make (cmd, "Division operator")
 			Result.extend (pair)
+			!SAFE_DIVISION!cmd.make (real_dummy, real_dummy)
+			!!pair.make (cmd,
+				"Division operator that handles division by zero safely")
+			Result.extend (pair)
+			!ABSOLUTE_VALUE!cmd.make (real_dummy)
+			!!pair.make (cmd, "Absolute value operator")
+			Result.extend (pair)
 			----------------- Create/insert TAL COMMANDs -----------------
 			!!bnc_dummy -- Fulfills requirement for type RESULT_COMMAND [REAL].
 			-- Create a pair for the BASIC_NUMERIC_COMMAND instance
@@ -173,6 +180,12 @@ feature -- Access
 			!BASIC_LINEAR_COMMAND!cmd.make (default_market_tuple_list)
 			!!pair.make (cmd,
 				"Operator that retrieves the price at the current %
+				%trading period")
+			Result.extend (pair)
+			!UNARY_LINEAR_OPERATOR!cmd.make (default_market_tuple_list,
+				real_dummy)
+			!!pair.make (cmd,
+				"Operator that uses an operand to operate on the current %
 				%trading period")
 			Result.extend (pair)
 			!BOOLEAN_NUMERIC_CLIENT!cmd.make (bool_real_dummy, real_dummy,

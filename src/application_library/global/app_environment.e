@@ -48,9 +48,13 @@ feature -- Access
 			not_void: fname /= Void
 		do
 			!!Result.make (0)
-			if app_directory /= Void then
+			if app_directory /= Void and not app_directory.empty then
 				Result.append (app_directory)
 				Result.extend (Directory_separator)
+			end
+			debug ("persist")
+				print("file_name_with_app_directory: fname: ");
+				print (fname); print ("%N")
 			end
 			Result.append (fname)
 		end

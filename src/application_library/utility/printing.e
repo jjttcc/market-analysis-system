@@ -1,5 +1,5 @@
 indexing
-	description: "Printing services - for testing"
+	description: "TA Printing services"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -7,6 +7,11 @@ indexing
 deferred class PRINTING inherit
 
 	GLOBAL_SERVICES
+		export {NONE}
+			all
+		end
+
+	GENERAL_UTILITIES
 		export {NONE}
 			all
 		end
@@ -29,25 +34,6 @@ feature -- Access
 		end
 
 feature -- Basic operations
-
-	print_list (l: ARRAY [ANY]) is
-			-- Print all members of `l'.
-		require
-			not_void: l /= Void
-		local
-			i: INTEGER
-		do
-			from
-				i := 1
-			until
-				i = l.count + 1
-			loop
-				if l @ i /= Void then
-					print (l @ i)
-				end
-				i := i + 1
-			end
-		end
 
 	print_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
 			-- Print the fields of each tuple in `l'.  If `print_start_date'
@@ -415,7 +401,10 @@ feature {NONE} -- Implementation
 			-- First index for printing, according to print_start_date
 		do
 			if print_start_date /= Void and not l.empty then
-				Result := l.index_at_date (print_start_date)
+				-- Set Result to the index of the element whose date matches
+				-- print_start_date, or, if no match, to the first element
+				-- whose date > print_start_date.
+				Result := l.index_at_date (print_start_date, 1)
 				if Result = 0 then
 					-- Indicate that no elements of l fall after
 					-- print_start_date by setting Result to one past
@@ -434,22 +423,10 @@ feature {NONE} -- Implementation
 			-- Last index for printing, according to print_end_date
 		do
 			if print_end_date /= Void and not l.empty then
-				Result := l.index_at_date (print_end_date)
-				if Result = 0 then
-					-- Result = 0 means that print_end_date > all dates in l.
-					-- Therefore, set Result to the last element of l.
-					Result := l.count
-				elseif
-					not l.i_th (Result).date_time.date.is_equal (print_end_date)
-				then
-					-- if no date in l matches print_end_date,
-					-- indext_at_date will return the index of the first
-					-- element whose date > print_end_date.  Since no dates
-					-- are to be printed that are later than the end date,
-					-- adjust Result to the previous element, which will
-					-- be earlier than print_end_date.
-					Result := Result - 1
-				end
+				-- Set Result to the index of the element whose date matches
+				-- print_end_date, or, if no match, to the last element
+				-- whose date < print_end_date.
+				Result := l.index_at_date (print_end_date, -1)
 			else
 				Result := l.count
 			end

@@ -11,7 +11,7 @@ class GLOBAL_APPLICATION inherit
 			{NONE} all
 		end
 
-	PRINTING
+	GENERAL_UTILITIES
 		export
 			{NONE} all
 		end
@@ -336,13 +336,6 @@ feature {NONE} -- Implementation
 			!!Result.make (name, market_event_generation_library.count + 1)
 		ensure
 			not event_types.has (Result)
-		end
-
-	output_field_separator, output_date_field_separator,
-	output_record_separator: STRING is
-			-- Inherited from PRINTING
-		once
-			Result := ""
 		end
 
 end -- GLOBAL_APPLICATION

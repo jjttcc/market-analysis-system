@@ -30,10 +30,12 @@ feature -- Access
 			stock: STOCK
 			complex_function: COMPLEX_FUNCTION
 			volume: VOLUME
+			addition: ADDITION
 			exponential: MA_EXPONENTIAL
 			point1, point2: MARKET_POINT
 			pair: PAIR [MARKET_FUNCTION, STRING]
 			earlier, later: DATE_TIME
+			linear_cmd: BASIC_LINEAR_COMMAND
 		once
 			!!Result.make (0)
 			!!exponential.make (1)
@@ -45,7 +47,9 @@ feature -- Access
 			point1.set_x_y_date (1, 1, earlier)
 			point2.set_x_y_date (5, 1, later)
 			!!stock.make ("DUMMY",
-				period_types @ (period_type_names @ Daily))
+				period_types @ (period_type_names @ Daily), Void)
+			!!linear_cmd.make(stock)
+			!!addition.make (linear_cmd, volume)
 			!ONE_VARIABLE_FUNCTION!complex_function.make (
 				stock, volume)
 			!!pair.make (complex_function,
@@ -71,10 +75,17 @@ feature -- Access
 				"Market function that provides an n-period exponential %
 				%moving average of another function")
 			Result.extend (pair)
+			!ACCUMULATION!f.make (stock, addition, linear_cmd, volume)
+			!!pair.make (f,
+				"Market function that accumulates its values")
+			Result.extend (pair)
 			!MARKET_FUNCTION_LINE!f.make (point1, point2,
 				period_types @ (period_type_names @ daily))
 			!!pair.make (f,
 				"Market function that functions as a trend line")
+			Result.extend (pair)
+			!!pair.make (stock,
+				"Represents a dummy function that does not take input")
 			Result.extend (pair)
 		end
 
