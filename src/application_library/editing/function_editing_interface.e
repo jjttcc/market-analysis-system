@@ -57,23 +57,56 @@ feature -- Status report
 feature -- Basic operations
 
 	edit_indicator_menu (l: LIST [MARKET_FUNCTION]) is
-			-- Menu for editing indicators in `l'
+			-- Menu for editing indicators in `function_library' - If
+			-- the user saves the changes, `function_library' is saved to
+			-- persistent store and if `l' is not Void it is replaced
+			-- (deep copy) with the contents of `function_library'.
 		local
 			selection: INTEGER
 			indicator: MARKET_FUNCTION
 		do
 			changed := false
+			if working_function_library = Void then
+				working_function_library := deep_clone (function_library)
+			end
 			from
 				selection := Null_value
 			until
 				selection = Exit_menu_value
 			loop
-				selection := list_selection_with_backout (
-					names_from_function_list(l),
-					"Select an indicator to edit")
-				if selection /= Exit_menu_value then
-					indicator := l @ selection
-					edit_parameter_menu (indicator.parameters)
+				selection := main_indicator_edit_selection
+				inspect
+					selection
+				when Create_new_value then
+					create_new_indicator
+				when Edit_value then
+					if function_library.empty then
+						show_message ("Indicator list is empty.%N")
+					else
+						edit_indicator_list (working_function_library)
+					end
+				when Remove_value then
+					remove_indicator
+				when Save_value then
+					function_library.copy (working_function_library)
+					function_library.save
+					show_message ("The changes have been saved.")
+					working_function_library := deep_clone (function_library)
+					if l /= Void then l.deep_copy (working_function_library) end
+					changed := false
+				when Show_help_value then
+					show_message (help @ help.Edit_indicators)
+				when Exit_menu_value then
+					if changed then
+						-- User is aborting changes - restore working copy of
+						-- function library to a deep copy of the original.
+						working_function_library := deep_clone (
+							function_library)
+					end
+				end
+				if error_occurred then
+					show_message (last_error)
+					error_occurred := false
 				end
 			end
 		end
@@ -117,6 +150,34 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			Result := user_function_selection (function_instances, msg).output
 		end
 
+	function_selection (msg: STRING; l: LIST [MARKET_FUNCTION];
+				backout_allowed: BOOLEAN): MARKET_FUNCTION is
+			-- User-selected MARKET_FUNCTION from the 'l' - if
+			-- `backout_allowed', the user is allowed to "back out" -
+			-- not choose a function - in which case Result is Void.
+		local
+			i: INTEGER
+		do
+			from
+				if backout_allowed then
+					i := list_selection_with_backout (
+						names_from_function_list (l),
+						concatenation(<<"Select ", msg>>))
+				else
+					i := list_selection (names_from_function_list (l),
+						concatenation(<<"Select ", msg>>))
+				end
+				l.start
+			until
+				i = Exit_menu_value or i = l.index
+			loop
+				l.forth
+			end
+			if i /= Exit_menu_value then
+				Result := l.item
+			end
+		end
+
 	market_function_selection (msg: STRING): MARKET_FUNCTION is
 			-- User-selected MARKET_FUNCTION from the function library
 		local
@@ -126,16 +187,7 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			create l.make
 			l.append (function_library)
 			l.extend (function_with_generator ("STOCK"))
-			from
-				i := list_selection (names_from_function_list (l),
-					concatenation(<<"Select ", msg>>))
-				l.start
-			until
-				i = l.index
-			loop
-				l.forth
-			end
-			Result := l.item
+			Result := function_selection (msg, l, false)
 		end
 
 	complex_function_selection (msg: STRING): COMPLEX_FUNCTION is
@@ -314,10 +366,20 @@ feature {NONE} -- Hook routines
 			-- slected item of `l'.  No backout is allowed - that is,
 			-- the user must select one item in `l' in order to continue.
 		deferred
+		ensure
+			valid: Result >= 1 and Result <= l.count
 		end
 
 	list_selection_with_backout (l: LIST [STRING]; msg: STRING): INTEGER is
 			-- User's selection from `l' with backout allowed.
+		deferred
+		ensure
+			valid_or_exit: Result >= 1 and Result <= l.count or
+				Result = Exit_menu_value
+		end
+
+	main_indicator_edit_selection: INTEGER is
+			-- User's selection from the indicator editing/creation main menu
 		deferred
 		end
 
@@ -326,6 +388,12 @@ feature {NONE} -- Implementation
 	clone_needed: BOOLEAN is true
 
 	name_needed: BOOLEAN is true
+
+	help: APPLICATION_HELP
+
+	working_function_library: STORABLE_LIST [MARKET_FUNCTION]
+			-- List of indicators used for editing until the user saves
+			-- the current changes
 
 	set_new_name (o: COMPLEX_FUNCTION; msg: STRING) is
 		local
@@ -385,6 +453,68 @@ feature {NONE} -- Implementation
 			end
 		end
 
+feature {NONE} -- Implementation - indicator editing
+
+	create_new_indicator is
+		local
+			f: MARKET_FUNCTION
+		do
+			f := function_selection_from_type (market_function,
+				"root function", true)
+			working_function_library.extend (f)
+			changed := true
+		end
+
+	edit_indicator_list (l: LIST [MARKET_FUNCTION]) is
+			-- Editing of indicators in `l'
+		local
+			selection: INTEGER
+			indicator: MARKET_FUNCTION
+		do
+			from
+				selection := Null_value
+			until
+				selection = Exit_menu_value
+			loop
+				selection := list_selection_with_backout (
+					names_from_function_list(l),
+					"Select an indicator to edit")
+				if selection /= Exit_menu_value then
+					indicator := l @ selection
+					edit_parameter_menu (indicator.parameters)
+				end
+			end
+		end
+
+	remove_indicator is
+		local
+			indicator: MARKET_FUNCTION
+			l: LIST [MARKET_FUNCTION]
+			finished: BOOLEAN
+		do
+			from
+				l := working_function_library
+				indicator := Void
+			until
+				finished
+			loop
+				indicator := function_selection (" to remove", l, true)
+				if indicator /= Void then
+					inspect character_choice (concatenation (<<"Remove ",
+						indicator.name, "? (y[es]/n[o]/q[uit]) ">>), "yYnNqQ")
+					when 'y', 'Y' then
+						remove_from_working_copy (indicator)
+						changed := true
+					when 'n', 'N' then
+					when 'q', 'Q' then
+						finished := true
+					end
+				else
+					finished := true
+				end
+			end
+		end
+
 	edit_parameter_menu (parameters: LIST [FUNCTION_PARAMETER]) is
 			-- Menu for editing `parameters'
 		local
@@ -429,5 +559,28 @@ feature {NONE} -- Implementation
 			show_message (concatenation (
 				<<"New value set to ", p.current_value, "%N">>))
 		end
+
+	remove_from_working_copy (f: MARKET_FUNCTION) is
+			-- Remove all occurrences of `f' from `working_function_library'.
+		local
+			l: STORABLE_LIST [MARKET_FUNCTION]
+		do
+			l := working_function_library
+			from
+				l.start
+			until
+				l.exhausted
+			loop
+				if l.item = f then
+					l.remove
+				else
+					l.forth
+				end
+			end
+		end
+
+invariant
+
+	help_not_void: help /= Void
 
 end -- FUNCTION_EDITING_INTERFACE
