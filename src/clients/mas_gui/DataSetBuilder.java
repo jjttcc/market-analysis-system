@@ -136,16 +136,14 @@ public class DataSetBuilder implements NetworkProtocol {
 	public Vector tradable_list() throws IOException {
 		StringBuffer mlist;
 
-		synchronized ("x") {
-			if (tradables == null) {
-				tradables = new Vector();
-				connection_.send_request(Market_list_request, "");
-				mlist = connection_.result();
-				StringTokenizer t = new StringTokenizer(mlist.toString(),
-					Message_record_separator, false);
-				for (int i = 0; t.hasMoreTokens(); ++i) {
-					tradables.addElement(t.nextToken());
-				}
+		if (tradables == null) {
+			tradables = new Vector();
+			connection_.send_request(Market_list_request, "");
+			mlist = connection_.result();
+			StringTokenizer t = new StringTokenizer(mlist.toString(),
+				Message_record_separator, false);
+			for (int i = 0; t.hasMoreTokens(); ++i) {
+				tradables.addElement(t.nextToken());
 			}
 		}
 		return tradables;
