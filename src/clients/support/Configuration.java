@@ -96,6 +96,11 @@ public class Configuration implements NetworkProtocol
 	}
 
 	// Color to use for connecting lines (indicators)
+	public Color reference_line_color() {
+		return _reference_line_color;
+	}
+
+	// Color to use for connecting lines (indicators)
 	public Color text_color() {
 		return _text_color;
 	}
@@ -269,6 +274,9 @@ public class Configuration implements NetworkProtocol
 		else if (color_tag.equals(Line_color)) {
 			_line_color = (Color) _color_table.get(color);
 		}
+		else if (color_tag.equals(Reference_line_color)) {
+			_reference_line_color = (Color) _color_table.get(color);
+		}
 		else if (color_tag.equals(Text_color)) {
 			_text_color = (Color) _color_table.get(color);
 		}
@@ -374,6 +382,12 @@ public class Configuration implements NetworkProtocol
 		_color_table.put("darkBlue", new Color(red, green, blue));
 		red = (float) 0.425; green = (float) 0.425; blue = (float) 0.9;
 		_color_table.put("lightBlue", new Color(red, green, blue));
+		red = (float) 0.6; green = (float) 0.6; blue = (float) 0.7;
+		_color_table.put("softBlue", new Color(red, green, blue));
+		red = (float) 0.9; green = (float) 0.6; blue = (float) 0.6;
+		_color_table.put("softRed", new Color(red, green, blue));
+		red = (float) 0.55; green = (float) 0.75; blue = (float) 0.55;
+		_color_table.put("softGreen", new Color(red, green, blue));
 		_color_table.put("purple", new Color(204, 0, 102));
 
 		// Set default colors.
@@ -383,6 +397,7 @@ public class Configuration implements NetworkProtocol
 		_stick_color = Color.white;
 		_bar_color = Color.green;
 		_line_color = Color.cyan;
+		_reference_line_color = (Color) _color_table.get("softBlue");
 
 		red = (float) 0.001; green = (float) 0.999; blue = (float) 0.0015;
 		_null_color = new Color(red, green, blue);
@@ -423,6 +438,7 @@ public class Configuration implements NetworkProtocol
 	private final String Stick_color = "stick_color";
 	private final String Bar_color = "bar_color";
 	private final String Line_color = "line_color";
+	private final String Reference_line_color = "reference_line_color";
 	private final String Text_color = "text_color";
 	private final String Main_graph_style = "main_graph_style";
 	private final String Candle_style = "candle";
@@ -437,6 +453,7 @@ public class Configuration implements NetworkProtocol
 	private Color _stick_color;
 	private Color _bar_color;
 	private Color _line_color;
+	private Color _reference_line_color;
 	private Color _text_color;
 	// "null" color - needed because dorky Java doesn't allow a null value
 	// in a hash table.
