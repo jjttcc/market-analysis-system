@@ -95,6 +95,10 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 					// it for all markets.
 					_period_types = data_builder.trading_period_type_list(
 						(String) _markets.elementAt(0));
+					if (data_builder.connection.error_occurred()) {
+						abort(data_builder.connection.result().toString(),
+							null);
+					}
 					current_period_type = initial_period_type(_period_types);
 					GUI_Utilities.busy_cursor(true, this);
 					// Each market has its own indicator list; but for now,
