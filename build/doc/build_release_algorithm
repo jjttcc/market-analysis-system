@@ -25,17 +25,18 @@ Final Steps:
 6.  Run make_docs in the doc directory.
 7.  Run make_chart_gui to freshly compile all the java files for the
     charting GUI and put them into a jar file.
-8.  Make sure the current release directory is empty and run make_release.
-9.  Do a test install of mas_linux*.tar.gz and make sure it installs
-    correctly.
-10. Run build_rpm to make the mas rpm file and verify that it was built
-    correctly.
-11. Make sure the latest version of the indicators_persist and
+8.  Make sure the latest version of the indicators_persist and
     generators_persist files (in build/config) are up to date (by running
     make_indicators or by copying these files after the final Linux test
-    install) and make sure the latest version is checked into cvs.
-    And update the cvs work directory on the Windows machine so that these
-    files are up to date there.
+    install) and make sure the latest version is checked into cvs.  These
+    files will be copied, in the 'make_release' step below, into the
+    ~release/mas-{vrsn#}/mas_windows{vrsn#}.tar.gz file, which will be
+    used by inno setup when it builds the windows setup*.exe file.
+9.  Make sure the current release directory is empty and run make_release.
+10. Do a test install of mas_linux*.tar.gz and make sure it installs
+    correctly.
+11. Run build_rpm to make the mas rpm file and verify that it was built
+    correctly.
 12. On the windows machine, run prepare_windows_setup to copy the tar file
     of the windows release over to the windows machine and extract it into
     the source directory for the inno setup process.
