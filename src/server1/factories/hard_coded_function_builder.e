@@ -93,8 +93,6 @@ feature -- Basic operations
 			l.extend (wma (f, WMA_n, "Weighted Moving Average"))
 			l.extend (market_data (f, "Market Data"))
 			l.extend (market_function_line (f, "Line"))
---!!!Remove when finisehd testing:
-l.extend (wma_of_midpoint (f, WMA_n, "WMA of Midpoint"))
 			product := l
 		end
 
