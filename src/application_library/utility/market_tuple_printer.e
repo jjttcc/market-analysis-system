@@ -69,6 +69,39 @@ feature -- Status setting
 			print_end_date_set: print_end_date = arg
 		end
 
+	set_field_separator (arg: STRING) is
+			-- Set field_separator to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			field_separator := arg
+		ensure
+			field_separator_set: field_separator = arg and
+				field_separator /= Void
+		end
+
+	set_record_separator (arg: STRING) is
+			-- Set record_separator to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			record_separator := arg
+		ensure
+			record_separator_set: record_separator = arg and
+				record_separator /= Void
+		end
+
+	set_date_field_separator (arg: STRING) is
+			-- Set date_field_separator to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			date_field_separator := arg
+		ensure
+			date_field_separator_set: date_field_separator = arg and
+				date_field_separator /= Void
+		end
+
 feature -- Basic operations
 
 	execute (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
@@ -93,7 +126,7 @@ feature -- Basic operations
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is true
+	arg_mandatory: BOOLEAN is True
 
 feature {NONE} -- Implementation
 
