@@ -5,6 +5,7 @@
 # close to 0 (>-.175 and <.175); otherwise, the total is either 1 or -1.
 e
 c
+n
 ONE_VARIABLE_FUNCTION
 c
 # Will be -1 if true, otherwise 0
@@ -30,6 +31,7 @@ c
 0
 s
 c
+n
 ONE_VARIABLE_FUNCTION
 c
 # Will be 1 if true, otherwise 0
@@ -55,6 +57,7 @@ c
 0
 s
 c
+n
 TWO_VARIABLE_FUNCTION
 c
 Slope of MACD Signal Line Close to Zero

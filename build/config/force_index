@@ -1,6 +1,7 @@
 # macl input file to create the "Force Index" indicator
 e
 c
+n
 N_RECORD_ONE_VARIABLE_FUNCTION
 c
 Force Index

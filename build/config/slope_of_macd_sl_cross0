@@ -13,6 +13,7 @@ y
 weekly
 below-to-above
 n
+b
 Slope of MACD Signal Line Cross Above 0 (Buy)
 s
 c
@@ -27,6 +28,7 @@ y
 weekly
 above-to-below
 n
+s
 Slope of MACD Signal Line Cross Below 0 (Sell)
 s
 -

@@ -1,6 +1,7 @@
 # macl input file to create the "Slope of Slope MACD Signal Line" indicator
 e
 c
+n
 ONE_VARIABLE_FUNCTION
 c
 Slope of Slope of MACD Signal Line

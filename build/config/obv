@@ -1,6 +1,7 @@
 # macl input file to create the "On Balance Volume" indicator
 e
 c
+n
 ACCUMULATION
 c
 On Balance Volume

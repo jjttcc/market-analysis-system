@@ -24,6 +24,7 @@ CONSTANT
 c
 3.5
 daily
+b
 Volume > Yesterday's Volume EMA (5) * 3.5
 s
 -

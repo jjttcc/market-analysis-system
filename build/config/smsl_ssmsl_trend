@@ -1,6 +1,7 @@
 # [Slope of MACD, Slope of Slope of MACD] Trend indicator
 e
 c
+n
 ONE_VARIABLE_FUNCTION
 c
 Slope of MACD Signal Line >= 0
@@ -25,6 +26,7 @@ c
 -1
 s
 c
+n
 ONE_VARIABLE_FUNCTION
 c
 Slope of Slope of MACD Signal Line >= 0
@@ -50,6 +52,7 @@ c
 -1
 s
 c
+n
 TWO_VARIABLE_FUNCTION
 c
 [Slope of MACD, Slope of Slope of MACD] Trend

@@ -5,6 +5,7 @@
 # close to 0 (>-.25 and <.25); otherwise, the total is 1.
 e
 c
+n
 ONE_VARIABLE_FUNCTION
 c
 # Will be 0 if true, otherwise 1
@@ -30,6 +31,7 @@ c
 1
 s
 c
+n
 ONE_VARIABLE_FUNCTION
 c
 # Will be 0 if true, otherwise 1
@@ -55,6 +57,7 @@ c
 1
 s
 c
+n
 TWO_VARIABLE_FUNCTION
 c
 EMA of Slope of EMA Close to Zero

@@ -1,6 +1,7 @@
 # Slope of EMA and EMA of Slope of EMA indicators
 e
 c
+n
 ONE_VARIABLE_FUNCTION
 c
 Slope of EMA
@@ -13,6 +14,7 @@ Exponential Moving Average
 y
 s
 c
+n
 EXPONENTIAL_MOVING_AVERAGE
 c
 EMA of Slope of EMA

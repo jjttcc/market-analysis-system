@@ -13,6 +13,7 @@ y
 daily
 above-to-below
 n
+b
 Stochastic %D Crossover (Buy)
 s
 c
@@ -27,6 +28,7 @@ y
 daily
 below-to-above
 n
+s
 Stochastic %D Crossover (Sell)
 s
 -

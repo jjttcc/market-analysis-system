@@ -11,7 +11,8 @@ y
 weekly
 below-to-above
 n
-MACD Crossover (Buy)
+b
+MACD Crossover (Buy) [test]
 s
 c
 s
@@ -23,7 +24,8 @@ y
 weekly
 above-to-below
 n
-MACD Crossover (Sell)
+s
+MACD Crossover (Sell) [test]
 s
 -
 x

@@ -14,6 +14,7 @@ y
 daily
 below-to-above
 n
+b
 Slope of Slope of MACD Signal Line Cross Above 0 (Buy)
 s
 c
@@ -28,6 +29,7 @@ y
 daily
 above-to-below
 n
+s
 Slope of Slope of MACD Signal Line Cross Below 0 (Sell)
 s
 -

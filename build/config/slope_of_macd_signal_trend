@@ -8,6 +8,7 @@
 # is less than or equal to -.175 and the trend is downward.
 e
 c
+n
 ONE_VARIABLE_FUNCTION
 c
 # Will be -1 if true, otherwise 0
@@ -33,6 +34,7 @@ c
 0
 s
 c
+n
 ONE_VARIABLE_FUNCTION
 c
 # Will be 1 if true, otherwise 0
@@ -58,6 +60,7 @@ c
 0
 s
 c
+n
 TWO_VARIABLE_FUNCTION
 c
 Slope of MACD Signal Line Trend

@@ -1,6 +1,7 @@
 # macl input file to create the "Accumulation/Distribution" indicator
 e
 c
+n
 ACCUMULATION
 c
 Accumulation/Distribution

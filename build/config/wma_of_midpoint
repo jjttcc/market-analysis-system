@@ -5,6 +5,7 @@
 # First, the Midpoint indicator [(H+L) / 2]:
 e
 c
+n
 ONE_VARIABLE_FUNCTION
 c
 Midpoint
@@ -26,6 +27,7 @@ s
 # Next, the WMA of Midpoint indicator:
 e
 c
+n
 N_RECORD_ONE_VARIABLE_FUNCTION
 c
 WMA of Midpoint

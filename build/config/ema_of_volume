@@ -1,6 +1,7 @@
 # macl input file to create the "EMA of Volume" indicator
 e
 c
+n
 EXPONENTIAL_MOVING_AVERAGE
 c
 EMA of Volume
