@@ -24,7 +24,7 @@ feature -- Access
 	response: STRING
 			-- The response from the server
 
-feature {MEDIUM_POLLER} -- Basic operations
+feature -- Basic operations
 
 	execute (arg: ANY) is
 		local
@@ -32,7 +32,8 @@ feature {MEDIUM_POLLER} -- Basic operations
 			response_received: BOOLEAN
 		do
 			response := ""
-			active_medium.set_non_blocking
+--active_medium.set_non_blocking
+			active_medium.set_blocking
 			active_medium.set_timeout (Timeout_interval)
 			active_medium.listen (1)
 			if active_medium.socket_ok and active_medium.ready_for_reading then

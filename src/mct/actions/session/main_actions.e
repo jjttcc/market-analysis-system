@@ -127,6 +127,46 @@ feature {NONE} -- Implementation
 			-- A server process's report back on its startup status
 		local
 			socket: NETWORK_STREAM_SOCKET
+			read_cmd: SERVER_REPORT_READER
+			failed: BOOLEAN
+		do
+			if not failed then
+				create socket.make_server_by_port (portnumber)
+--socket.set_blocking
+				if socket.socket_ok then
+					create read_cmd.make (socket)
+					read_cmd.execute (Void)
+					if read_cmd.response /= Void then
+						Result := read_cmd.response
+					else
+						Result := Connection_failed
+					end
+				else
+					Result := Connection_failed + ":%N" + socket.error
+				end
+				if not socket.is_closed then
+					socket.close
+				end
+			else
+				Result := Connection_failed
+				if socket /= Void and not socket.socket_ok then
+					Result := Result + ":%N" + socket.error
+				end
+			end
+		ensure
+			result_exists: Result /= Void
+		rescue
+			if not socket.is_closed then
+				socket.close
+			end
+			failed := True
+			retry
+		end
+
+	old_server_report (portnumber: INTEGER): STRING is
+			-- A server process's report back on its startup status
+		local
+			socket: NETWORK_STREAM_SOCKET
 			poller: MEDIUM_POLLER
 			read_cmd: SERVER_REPORT_READER
 			failed: BOOLEAN
