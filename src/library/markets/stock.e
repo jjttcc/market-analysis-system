@@ -20,7 +20,6 @@ feature -- Initialization
 	make (s: STRING; type: TIME_PERIOD_TYPE) is
 		do
 			symbol := s
-			arrayed_list_make (300)
 			tradable_initialize (type)
 		ensure
 			symbol_set: symbol = s
