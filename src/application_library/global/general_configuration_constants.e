@@ -34,4 +34,8 @@ feature -- Access
 	Intraday_end_date_specifier: STRING is "intraday_end_date"
 			-- Specifier token for the intraday-data 'end-date' setting
 
+	January_is_zero_specifier: STRING is "months_start_at_zero"
+			-- Specifier token for indicating if months start at zero
+			-- instead of 1
+
 end

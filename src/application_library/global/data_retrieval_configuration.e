@@ -34,6 +34,7 @@ feature {NONE} -- Initialization
 			settings.extend ("", EOD_end_date_specifier)
 			settings.extend ("", Intraday_start_date_specifier)
 			settings.extend ("", Intraday_end_date_specifier)
+			settings.extend ("", January_is_zero_specifier)
 		end
 
 feature -- Access
@@ -119,6 +120,23 @@ feature -- Access
 			Result := settings @ Intraday_end_date_specifier
 		end
 
+	january_is_zero_string: STRING is
+		do
+			Result := settings @ january_is_zero_specifier
+		end
+
+feature -- Status report
+
+	january_is_zero: BOOLEAN is
+			-- Does the protocol for months start at zero - that is, does
+			-- 0 represent January and 11 represent December?
+		do
+			-- 't' or 'T' for "True"
+			Result := not january_is_zero_string.is_empty and then
+				january_is_zero_string @ 1 = 't' or
+				january_is_zero_string @ 1 = 'T'
+		end
+
 feature -- Element change
 
 	set_symbol (arg: STRING) is
@@ -179,6 +197,7 @@ feature -- Basic operations
 		local
 			dts: expanded DATE_TIME_SERVICES
 			start_date_specifier, end_date_specifier: STRING
+			month_adjustment: INTEGER
 		do
 			if intraday then
 				start_date_specifier := Intraday_start_date_specifier
@@ -187,14 +206,17 @@ feature -- Basic operations
 				start_date_specifier := EOD_start_date_specifier
 				end_date_specifier := EOD_end_date_specifier
 			end
+			if january_is_zero then
+				month_adjustment := -1
+			end
 			replace_tokens (target, <<symbol_token, upper_symbol_token,
 				start_day_token, start_month_token, start_year_token,
 				end_day_token, end_month_token, end_year_token,
 				start_date_specifier, end_date_specifier>>,
 				<<symbol, uppercase_symbol, start_date.day.out,
-				start_date.month.out, start_date.year.out, end_date.day.out,
-				end_date.month.out, end_date.year.out,
-				dts.date_as_yyyymmdd (start_date),
+				(start_date.month + month_adjustment).out, start_date.year.out,
+				end_date.day.out, (end_date.month + month_adjustment).out,
+				end_date.year.out, dts.date_as_yyyymmdd (start_date),
 				dts.date_as_yyyymmdd (end_date)>>)
 		end
 
