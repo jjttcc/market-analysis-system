@@ -78,7 +78,7 @@ feature -- Basic operations
 				output_buffer.clear_all
 				-- If `handle_exception' in the rescue clause didn't exit,
 				-- the exception was non-fatal.
-				report_error (Warning, <<"Error occurred", error_context (msg),
+				report_error (Warning, <<"Error occurred ", error_context (msg),
 					".">>)
 			else
 				if output_buffer_used then
