@@ -2,7 +2,7 @@ indexing
 	description: 
 		"Abstraction for a monetary value or any other value that %
 		%can be represented as a whole and a fraction."
-	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
+	status: "Copyright 1998, 1999: Jim Cochrane - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

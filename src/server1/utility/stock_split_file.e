@@ -5,7 +5,7 @@ indexing
 		"It is assumed that the for each symbol that occurs in the input %
 		%file, the splits in the file for that symbol are sorted by %
 		%date ascending"
-	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
+	status: "Copyright 1998, 1999: Jim Cochrane - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

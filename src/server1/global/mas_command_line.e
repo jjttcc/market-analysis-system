@@ -1,7 +1,7 @@
 indexing
 	description: "Parser of command-line arguments for Market Analysis %
 		%System server application"
-	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
+	status: "Copyright 1998, 1999: Jim Cochrane - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

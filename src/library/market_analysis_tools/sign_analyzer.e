@@ -4,7 +4,7 @@ indexing
 		%first operand as compared to that of its second operand. %
 		%Specifications of sign changes to be detected (- to +, - to 0, etc.) %
 		%are set by calling `add_sign_change_spec'."
-	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
+	status: "Copyright 1998, 1999: Jim Cochrane - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -2,7 +2,7 @@ indexing
 	description:
 		"Abstraction for objects that create a market tuple based on %
 		%the values in a list of market tuples";
-	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
+	status: "Copyright 1998, 1999: Jim Cochrane - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

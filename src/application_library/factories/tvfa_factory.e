@@ -5,7 +5,7 @@ indexing
 		"Features left_function, right_function, period_type, and event_type %
 		%should all be non-Void when execute is called.  (operator may be %
 		%Void.)"
-	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
+	status: "Copyright 1998, 1999: Jim Cochrane - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

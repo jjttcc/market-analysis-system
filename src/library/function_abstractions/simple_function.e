@@ -3,7 +3,7 @@ indexing
 		"A market function that is also an sequence of market tuples. %
 		%Its purpose is to act as the innermost function in a composition %
 		%of functions."
-	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
+	status: "Copyright 1998, 1999: Jim Cochrane - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

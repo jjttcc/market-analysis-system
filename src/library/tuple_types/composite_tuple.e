@@ -2,7 +2,7 @@ indexing
 	description:
 		"A tuple that is created from a sequence of tuples of smaller %
 		%duration, such as a weekly tuple from (usually 5) daily tuples";
-	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
+	status: "Copyright 1998, 1999: Jim Cochrane - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 

@@ -13,7 +13,7 @@ indexing
 		%to add a factory reference to tradable_factories for each element %
 		%of file_names (although they will still need to add the Void %
 		%elements)."
-	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
+	status: "Copyright 1998, 1999: Jim Cochrane - see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
