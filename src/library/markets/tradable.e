@@ -68,7 +68,6 @@ feature -- Access
 			Result := indicator_groups.current_keys
 		end
 
---!!!!!:
 	tuple_list (period_type: STRING): SIMPLE_FUNCTION [BASIC_MARKET_TUPLE] is
 			-- List associated with `period_type' whose tuples are
 			-- made from the base data
@@ -77,33 +76,17 @@ feature -- Access
 			period_type_valid: period_types.has (period_type)
 			loaded: loaded
 		do
-print ("tuple_list called with per type: " + period_type + "%N")
-print ("(trading period type: " + trading_period_type.name + ")%N")
 			Result := tuple_lists @ period_type
---!!!!Temporary solution to the "read new data problem" here - need to
--- find an efficient method for updating the composite tradables, such as
--- keeping the old data and adding composite records based on new data.
---!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!:
---Result := Void -- Force a new tuple list to always be created.!!!
---create tuple_lists.make (0)
---initialize_tuple_lists
 			-- If the list has not been created and there is enough
 			-- data, create/process the list of tuples.
 			if Result = Void then
 				if period_type.is_equal (trading_period_type.name) then
 					-- No processing needed - just assign to base data.
 					Result := Current
---!!!:
-print ("tuple list result is Current, with period type: " +
-trading_period_type.name + "%N")
 				else
 					Result := process_composite_list (
 						period_types @ period_type)
---!!!:
-print ("tuple list result is composite " + "; its period type is: " +
-Result.trading_period_type.name + "%N")
 				end
-print ("added " + Result.name + " to tuple_lists" + "%N")
 				tuple_lists.force (Result, period_type)
 			end
 		ensure
@@ -196,8 +179,6 @@ feature -- Status setting
 			until
 				indicators.exhausted
 			loop
---!!!:
-print ("set tgt period type calling 'tuple_list'" + "%N")
 				indicators.item.set_innermost_input (
 					tuple_list (target_period_type.name))
 				indicators.forth
@@ -212,7 +193,6 @@ print ("set tgt period type calling 'tuple_list'" + "%N")
 			-- indicators are shared with another tradable object.
 		do
 			set_target_period_type (target_period_type)
-print ("TRADABLE.flush_indicators was called" + "%N")
 		end
 
 feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
@@ -222,8 +202,6 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 			daily_if_not_intraday: not arg.intraday implies
 				arg.name.is_equal (arg.daily_name)
 		do
---!!!:
-print ("TRADABLE.set trd per. type called with " + arg.name + "%N")
 			trading_period_type := arg
 			target_period_type := trading_period_type
 		ensure then
@@ -233,18 +211,14 @@ print ("TRADABLE.set trd per. type called with " + arg.name + "%N")
 
 	finish_loading is
 		do
---!!!:
-print ("TRADABLE.finish_loading called" + "%N")
 			Precursor
---!!!Remove:			if tuple_lists = Void or else tuple_lists.is_empty then
 			--@@@Note: With auto-refresh the following command will cause
 			--all of the composite data sets to be recalculated.  It would
 			--be more efficient to process just the newly arrived data and
 			--only the least number of existing composite records needed for
-			--the result to be correct.
+			--the result to be correct (i.e., possible optimization).
 			tuple_lists.clear_all
 			initialize_tuple_lists
---!!!Remove:			end
 		end
 
 feature -- Element change
@@ -259,8 +233,6 @@ feature -- Element change
 			loaded: loaded
 		do
 			indicators.extend (f)
---!!!:
-print ("add_indicator calling 'tuple_list'" + "%N")
 			f.set_innermost_input (tuple_list (target_period_type.name))
 		ensure
 			f_target_added: indicators.has (f)
@@ -341,10 +313,6 @@ feature {NONE} -- Initialization
 				tuple_lists.extend (Void, types.item.name)
 				types.forth
 			end
---!!! Turn into a check:
-if tuple_lists.count /= 0 and tuple_lists.count /= 4 then
-print ("tuple lists count is invalid" + "%N")
-end
 		ensure
 			all_void: tuple_lists.occurrences (Void) =
 						tuple_lists.count
@@ -399,8 +367,10 @@ feature {NONE} -- Inapplicable
 
 	sf_set_trading_period_type (arg: TIME_PERIOD_TYPE) is
 		do
---!!!:
-print ("PROBLEM: sf_set_trading_period_type called with " + arg.name + "%N")
+			check
+				TRADABLE_sf_set_trading_period_type_not_called: False
+				-- That is, this routine should never be called
+			end
 		end
 
 invariant
