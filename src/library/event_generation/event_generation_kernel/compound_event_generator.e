@@ -77,13 +77,6 @@ feature -- Access
 
 feature -- Status setting
 
-	set_tradable (f: TRADABLE [BASIC_MARKET_TUPLE]) is
-			-- Set `left_analyzer' and `right_analyzer' tradables to `f'.
-		do
-			left_analyzer.set_tradable (f)
-			right_analyzer.set_tradable (f)
-		end
-
 	set_start_date_time (d: DATE_TIME) is
 			-- Set `left_analyzer' and `right_analyzer' `start_date_time's
 			-- to `d'.

@@ -87,13 +87,31 @@ feature -- Status setting
 feature -- Basic operations
 
 	execute is
+		local
+			t: TRADABLE [BASIC_MARKET_TUPLE]
+			s: STRING
 		do
 			create {LINKED_LIST [MARKET_EVENT]} product.make
-			if not input.processed then
-				input.process
-			end
-			if not target.empty then
-				do_all
+			t := tradables.item (period_type)
+			if t /= Void and not tradables.error_occurred then
+				set_tradable (t)
+				if not input.processed then
+					input.process
+				end
+				if not target.empty then
+					do_all
+				end
+			else
+				if tradables.error_occurred then
+					s := concatenation (<<
+						"Error occurred during event processing: ",
+						tradables.last_error>>)
+				else
+					s := concatenation (<< "Error occurred during event ",
+						"processing - failed to process item # ",
+						tradables.index>>)
+				end
+				log_error (s)
 			end
 		end
 
@@ -119,8 +137,7 @@ feature {MARKET_FUNCTION_EDITOR}
 			dummy_tradable: TRADABLE [BASIC_MARKET_TUPLE]
 		do
 			if tradable /= Void then
-				create {STOCK} dummy_tradable.make ("dummy",
-					tradable.trading_period_type, Void, Void)
+				create {STOCK} dummy_tradable.make ("dummy", Void, Void)
 				-- Set innermost input to an empty tradable to force it
 				-- to clear its contents.
 				input.set_innermost_input (dummy_tradable)

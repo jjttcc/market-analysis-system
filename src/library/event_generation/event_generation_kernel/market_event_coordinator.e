@@ -11,7 +11,7 @@ class MARKET_EVENT_COORDINATOR inherit
 
 	EVENT_COORDINATOR
 		redefine
-			event_generators, initialize
+			event_generators
 		end
 
 creation
@@ -21,16 +21,16 @@ creation
 feature -- Initialization
 
 	make (egs: LINEAR [MARKET_EVENT_GENERATOR];
-			markets: LINEAR [TRADABLE [BASIC_MARKET_TUPLE]];
-			disp: EVENT_DISPATCHER) is
+			dispenser: TRADABLE_DISPENSER; disp: EVENT_DISPATCHER) is
 		require
-			not_void: egs /= Void and markets /= Void and disp /= Void
+			not_void: egs /= Void and dispenser /= Void and disp /= Void
 		do
 			event_generators := egs
-			market_list := markets
+			tradables := dispenser
 			dispatcher := disp
+			set_eg_tradables
 		ensure
-			set: event_generators = egs and market_list = markets and
+			set: event_generators = egs and tradables = dispenser and
 					dispatcher = disp
 		end
 
@@ -38,8 +38,8 @@ feature -- Access
 
 	event_generators: LINEAR [MARKET_EVENT_GENERATOR]
 
-	market_list: LINEAR [TRADABLE [BASIC_MARKET_TUPLE]]
-			-- Markets to be analyzed by `event_generators'
+	tradables: TRADABLE_DISPENSER
+			-- Tradable entities to be analyzed by `event_generators'
 
 	start_date_time: DATE_TIME
 			-- Date and time that the generators are to begin their
@@ -67,6 +67,7 @@ feature -- Status setting
 		do
 			event_generators := arg
 			update_generators_date_time
+			set_eg_tradables
 		ensure
 			event_generators_set: event_generators = arg and
 				event_generators /= Void
@@ -74,28 +75,17 @@ feature -- Status setting
 
 feature {NONE} -- Implementation
 
-	initialize (g: MARKET_EVENT_GENERATOR) is
-		do
-			g.set_tradable (current_tradable)
-		end
-
 	generate_events is
-			-- For each element, m, of market_list, execute all elements
-			-- of event_generators on m.
+			-- For each element, e, of tradables, execute all elements
+			-- of event_generators on e.
 		do
 			from
-				market_list.start
+				tradables.start
 			until
-				market_list.exhausted
+				tradables.exhausted
 			loop
-				current_tradable := market_list.item
-				if
-					current_tradable /= Void and not
-					current_tradable.data.empty
-				then
-					execute_event_generators
-				end
-				market_list.forth
+				execute_event_generators
+				tradables.forth
 			end
 		end
 
@@ -113,10 +103,22 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	current_tradable: TRADABLE [BASIC_MARKET_TUPLE]
+	set_eg_tradables is
+			-- Set the `tradables' attribute of all `event_generators' to
+			-- `tradables'.
+		do
+			from
+				event_generators.start
+			until
+				event_generators.exhausted
+			loop
+				event_generators.item.set_tradables (tradables)
+				event_generators.forth
+			end
+		end
 
 invariant
 
-	ml_not_void: market_list /= Void
+	tradables_not_void: tradables /= Void
 
 end -- class MARKET_EVENT_COORDINATOR

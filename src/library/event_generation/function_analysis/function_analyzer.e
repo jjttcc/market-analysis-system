@@ -35,19 +35,6 @@ feature -- Access
 
 feature -- Status setting
 
-	set_tradable (f: TRADABLE [BASIC_MARKET_TUPLE]) is
-			-- Set the tradable whose market data is to be analyzed.
-		do
-			check
-				-- Unfortunately, this cannot be a precondition.
-				f_has_period_type: f.tuple_list_names.has (period_type.name)
-			end
-			tradable := f
-			set_innermost_function (f.tuple_list (period_type.name))
-		ensure then
-			set: tradable = f
-		end
-
 	set_start_date_time (d: DATE_TIME) is
 		do
 			start_date_time := d
@@ -105,6 +92,19 @@ feature {NONE} -- Hook routines
 		deferred
 		ensure
 			Result /= Void
+		end
+
+feature {NONE} -- Implementation
+
+	set_tradable (t: TRADABLE [BASIC_MARKET_TUPLE]) is
+			-- Set the tradable whose market data is to be analyzed.
+		require
+			f_has_period_type: t.tuple_list_names.has (period_type.name)
+		do
+			tradable := t
+			set_innermost_function (t.tuple_list (period_type.name))
+		ensure then
+			set: tradable = t
 		end
 
 invariant
