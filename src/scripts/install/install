@@ -8,6 +8,20 @@ cleanup() {
 	rm -f $config
 }
 
+# Clean up child processes left running.
+cleanup_after_config_failure() {
+	procs=$(ps -t | awk '/python/ { print $1}')
+	kill $procs >/dev/null 2>&1
+	kill -9 $procs >/dev/null 2>&1
+	rm -f $libdir/.*persist.lock
+}
+
+query() {
+	echo -e "$*\c" >&2
+	read answer
+	echo $answer
+}
+
 fault() {
 	echo "Programming error encountered: $*" >&2
 	echo "Exiting ..." >&2
@@ -16,15 +30,64 @@ fault() {
 }
 
 fatal() {
-	echo "Fatal error encountered: $*" >&2
+	if [ ! -z "$*" ]; then
+		echo "Fatal error encountered: $*" >&2
+	fi
 	echo "Exiting ..." >&2
 	cleanup
 	exit -1
 }
 
+handle_signal() {
+	case $(query "\nCaught signal - terminate program? (y/n) \c") in
+		y*|Y*) echo "Exiting ..." >&2; cleanup; exit 0 ;;
+		*) echo "Continuing ..." >&2 ;;
+	esac
+}
+
 user_is_administrator() {
 	id="$(id -un)"
 	return $([ "$id" = root -o "$id" = bin ])
+}
+
+# If $1 does not exist or is not a file:
+#    If $2 = true terminate the process; else return 1
+#    If $3 is not empty print it as an error message.
+# else return 0
+check_file_exists() {
+	if [ -z "$1" -o ! -f "$1" ]; then
+		if [ ! -z "$3" ]; then
+			echo "$3" >&2
+		fi
+		if [ "$2" = true ]; then
+			fatal
+		fi
+		return 1
+	else
+		return 0
+	fi
+}
+
+# If $1 is not executable:
+#    If $2 = true terminate the process; else return 1
+#    If $3 is not empty print it as an error message.
+# else return 0
+check_exe_file() {
+	if [ -z "$1" ]; then
+		fault "Missing argument for check_exe_file function."
+	fi
+	type $1 >/dev/null 2>&1
+	if [ $? -ne 0 ]; then
+		if [ ! -z "$3" ]; then
+			echo "$3" >&2
+		fi
+		if [ "$2" = true ]; then
+			fatal
+		fi
+		return 1
+	else
+		return 0
+	fi
 }
 
 # Usage: set_dir dirname "message"
@@ -48,9 +111,7 @@ set_dir() {
 		fi
 		if [ ! -z "$dir" ]; then
 			if [ -d $dir ]; then
-				echo -e "Use $dir (y/n/q[uit])? \c" >&2
-				read answer
-				case "$answer" in
+				case $(query "Use $dir (y/n/q[uit])? \c") in
 					y*|Y*) ;;
 					q*|Q*)
 						echo -e "Aborting the installation ..." >&2
@@ -61,9 +122,8 @@ set_dir() {
 				echo -e "$dir is not a directory - try again: " >&2
 				dir=
 			else
-				echo -e "$dir does not exist - create it (y/n/q[uit])? \c" >&2
-				read answer
-				case "$answer" in
+				case $(query \
+						"$dir does not exist - create it (y/n/q[uit])? \c") in
 					y*|Y*) mkdir -p $dir
 						if [ $? -ne 0 ]; then
 							echo -e "Failed to create $dir - try again: " >&2
@@ -90,6 +150,67 @@ set_dir() {
 	echo "$1: $dir" >>$config
 }
 
+# Start the server in the background (with "-o -f ,").
+# Usage: start_server mas_exec_file_path [extra_options] [datafiles]
+start_server() {
+	if [ -z "$1" ]; then
+		fault "Missing argument for start_server function."
+	fi
+	cd $libdir/data
+	if [ $? -ne 0 ]; then fatal "Could not cd to $libdir/data."; fi
+	cmd=$1; shift
+	MAS_DIRECTORY=$libdir $cmd -o -f , $* >/dev/null 2>&1 &
+	serverproc=$!
+}
+
+# Usage: wait_with_dots time
+sleep_with_dots() {
+	sleeptime=$1
+	sleepaccum=0
+	while [ $sleepaccum -lt $sleeptime ]; do
+		echo -e ".\c" >&2
+		sleep 1
+		sleepaccum=$(expr $sleepaccum + 1)
+	done
+	echo >&2 # Clean up
+}
+
+# Monitor the specified processes and kill them if they take longer than the
+# specified time.
+# Usage: monitor time -p procid ... [procname]
+monitor() {
+	result=0
+	# Set to exit if parent finishes first and sends a signal:
+	trap "exit 0" SIGUSR2
+	if [ -z "$2" ]; then
+		fault "Missing argument for monitor function."
+	fi
+	time=$1; shift
+	pids=
+	while :; do
+		case $1 in
+			-p) shift; pids="$pids $1"; shift ;;
+			*) break ;;
+		esac
+	done
+	sleep_with_dots $time
+	kill $pids >/dev/null 2>&1
+	if [ $? -eq 0 ]; then
+		echo -e "\n$* took too long.\nAssuming something went wrong\c" >&2
+		echo -e " - Aborting ..." >&2
+		result=1
+	fi
+	# In case the first kill didn't work, wait a bit then do an absolute kill.
+	sleep 1
+	kill -9 $pids >/dev/null 2>&1
+	if [ $? -eq 0 -a $result = 0 ]; then
+		result=1
+	fi
+	if [ $result -ne 0 ]; then
+		kill -SIGUSR1 $$ >/dev/null 2>&1
+	fi
+}
+
 config() {
 	>$config
 	if user_is_administrator; then
@@ -102,7 +223,82 @@ config() {
 	set_dir lib "Enter the directory for library files" >&2
 }
 
-trap "rm -f $config" SIGINT SIGQUIT SIGABRT SIGBUS SIGILL SIGHUP SIGKILL
+config_cmd() {
+	portnumber=$1
+	config="$macl $portnumber -i $ifile && $macl $portnumber -i $mfile"
+	# Command to stop the server:
+	stop_cmd="(echo |macl $portnumber)"
+	echo -e "($config; $stop_cmd) >/dev/null 2>&1"
+}
+
+show_config_information() {
+	indfile=$libdir/indicators_persist
+	mkanafile=$libdir/generators_persist
+	echo -e "\nNOTE: If you set your MAS_DIRECTORY environment variable \c" >&2
+	echo -e "to some other\ndirectory than $libdir, you will want to \c" >&2
+	echo -e "move the configuration files:\n$indfile and $mkanafile\c" >&2
+	echo -e "\nto this directory.\n" >&2
+}
+
+# Configure MAS indicators, etc.
+# (Should be last task, if possible.)
+configure_mas() {
+	configresult=0
+	maximum_allowed_time=90
+	export PYTHONPATH=$libdir/python
+	ifile=$libdir/config/indicators
+	mfile=$libdir/config/market_analyzers
+	macl=$bindir/macl
+	mas=$bindir/mas
+	port=$RANDOM
+	config_example="$macl $port -i $ifile && $macl $port -i $mfile"
+	if [ -z "$port" ]; then port=23491; elif [ $port -lt 1024 ]; then
+		port=$(expr $port + 1024)
+	fi
+	echo -e "\nThe MAS library includes a set of technical indicators and" \
+		"market analyzers." >&2
+	case $(query \
+			"Would you like to have these components added to" \
+			"the MAS configuration? (y/n) ") in
+		y*|Y*) ;;
+		*)
+	echo -e "\nIf you wish, you may add these components later by starting" \
+		"the server\nand then executing the macl script with the" \
+		"configuration files as input." >&2
+	echo -e "For example, if the server was started with port $port:\n" \
+		"$config_example $port\n" >&2
+			return $configresult;;
+	esac
+	check_file_exists $ifile true "Indicator file $ifile not found."
+	check_file_exists $mfile true "Market analyzer file $mfile not found."
+	check_exe_file $mas true "Script file $mas not found."
+	check_exe_file $macl true "Script file $macl not found."
+	echo "Starting the server." >&2
+	start_server $mas -b $port
+	sleep 1 # Wait for server to start up.
+	echo -e "Configuring - \c" >&2
+	(eval $(config_cmd $port)) >/dev/null 2>&1 &
+	configproc=$!
+	trap "configresult=1" SIGUSR1
+	monitor $maximum_allowed_time -p $configproc -p $serverproc \
+		"MAS component configuration" &
+	monproc=$!
+	wait $configproc
+	sleep 5 # Wait for monitor's signal, if the config. took too long.
+	if [ $configresult -ne 0 ]; then
+		echo -e "\nComponent configuration failed." >&2
+		configresult=1
+		wait $monproc
+		cleanup_after_config_failure
+	else
+		kill -SIGUSR2 $monproc >/dev/null 2>&1
+		echo -e "\nComponent configuration succeeded." >&2
+		show_config_information
+	fi
+	return $configresult
+}
+
+trap "handle_signal" SIGINT SIGQUIT SIGABRT SIGBUS SIGILL SIGHUP SIGKILL
 config
 
 libdir=$(awk '/lib:/ { print $2}' $config)
@@ -126,11 +322,25 @@ if [ ! -d $bindir -o ! -w $bindir ]; then
 	fatal "$Progname: Cannot write to target dir $bindir" >&2
 fi
 
+result=0
 cp bin/* $bindir
-result=$?
+binresult=$?
 cp -R lib/* $libdir
+libresult=$?
+if [ "$binresult" -ne 0 ]; then
+	echo "Error encountered installing executable files." >&2
+	result=$binresult
+elif [ "$libresult" -ne 0 ]; then
+	echo "Error encountered installing library files." >&2
+	result=$libresult
+fi
 if [ "$result" -eq 0 ]; then
+	echo -e "Installation of MAS executable and library files succeeded." >&2
+	configure_mas
 	result=$?
+fi
+if [ "$result" -eq 0 ]; then
+	echo -e "Installation complete." >&2
 fi
 
 cleanup
