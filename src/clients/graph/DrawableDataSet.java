@@ -63,6 +63,22 @@ public class DataSet {
 
 	public void set_dates_needed(boolean b) { _dates_needed = b; }
 
+	// Set ymin and ymax `min' and `max', respectively from the
+	// corresponding values in `ds'.
+	public void set_y_min_max(DataSet ds) {
+		if (! ds.range_set) {
+			ds.range();
+		}
+		ymin = ds.ymin; ymax = ds.ymax;
+		// range() needs to be called if it hasn't yet been called to
+		// set the other parts of the range - but y_min_max_set needs to
+		// be true first so that range() does not overwrite ymin/ymax.
+		// This is basically an optimization to prevent ymin/ymax from
+		// being calculated needlessly.
+		y_min_max_set = true;
+		if (! range_set) range();
+	}
+
 /*
 ***********************
 ** Public Variables      
@@ -144,9 +160,9 @@ public class DataSet {
 	public DataSet(Drawer d) {
 		_drawer = d;
 		data = null;
-		range(stride(), 0);
 		date_drawer = new DateDrawer(d.market_drawer(), d.is_indicator());
 		_dates_needed = true;
+		tuple_count = 0;
 	}
 
 	/**
@@ -178,8 +194,7 @@ public class DataSet {
 										drawer.is_indicator());
 		data = d;
 
-		// Calculate the data range.
-		range(stride(), n);
+		tuple_count = n;
 		_dates_needed = true;
 	}
 
@@ -209,6 +224,7 @@ public class DataSet {
    * @param bounds The data window to draw into
    */
 	public void draw_data(Graphics g, Rectangle bounds) {
+		if (! range_set) range();
 		if ( linecolor != null) g.setColor(linecolor);
 		_drawer.set_data(data);
 		_drawer.set_xaxis(xaxis);
@@ -322,17 +338,19 @@ public class DataSet {
 	/**
 	* Calculate the range of the data. This modifies dxmin,dxmax,dymin,dymax
 	* and xmin,xmax,ymin,ymax
+	* Precondition: tuple_count has been set
 	*/
-	protected void range(int stride, int element_count) {
+	protected void range() {
 		int i;
 		int lnth = length();
+		int stride = stride();
 
 		if (lnth >= stride ) {
 			dymax = data[0];
 			dymin = dymax;
 			// The range for x follows the data index - starts at 1
 			// and ends at data.length.
-			dxmax = element_count;
+			dxmax = tuple_count;
 			dxmin = 1;
 		} else {
 			dxmin = 0.0;
@@ -341,20 +359,23 @@ public class DataSet {
 			dymax = 0.0;
 		}
 
-		// `data' holds only y values - find the largest and smallest.
-		for (i = 0; i < lnth; ++i) {
-			if( dymax < data[i] ) { dymax = data[i]; }
-			else if( dymin > data[i] ) { dymin = data[i]; }
+		if (! y_min_max_set) {
+			// `data' holds only y values - find the largest and smallest.
+			for (i = 0; i < lnth; ++i) {
+				if( dymax < data[i] ) { dymax = data[i]; }
+				else if( dymin > data[i] ) { dymin = data[i]; }
+			}
+			if ( yaxis == null) {
+				ymin = dymin;
+				ymax = dymax;
+			}
 		}
 
 		if ( xaxis == null) {
 			xmin = dxmin;
 			xmax = dxmax;
 		}
-		if ( yaxis == null) {
-			ymin = dymin;
-			ymax = dymax;
-		}
+		range_set = true;
 	}
 
 /*
@@ -416,6 +437,14 @@ public class DataSet {
    *    used.
    */
       protected int increment = 100;
+
+	// Has range() been called to set the range?
+	protected boolean range_set = false;
+
+	protected boolean y_min_max_set = false;
+
+	// Number of tuples in the data
+	protected int tuple_count;
 
   /**
    * Number of components in a data tuple - for example, 2 (x, y) for

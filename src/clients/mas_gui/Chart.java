@@ -78,7 +78,7 @@ public class TA_Chart extends Frame {
 
 	// Request data for the specified market and display it.
 	void request_data(String market) {
-		DataSet dataset;
+		DataSet dataset, main_dataset;
 		// Don't redraw the data if it's for the same market as before.
 		if (period_type_change || ! market.equals(current_market)) {
 			try {
@@ -93,7 +93,8 @@ public class TA_Chart extends Frame {
 			//Ensure that all graph's data sets are removed.  (May need to
 			//change later.)
 			main_pane.clear_main_graph();
-			main_pane.add_main_data_set(connection.last_market_data());
+			main_dataset = connection.last_market_data();
+			main_pane.add_main_data_set(main_dataset);
 			if (current_upper_indicator != null &&
 					! current_upper_indicator.equals(No_upper_indicator)) {
 				// Retrieve the data for the newly selected market for the
@@ -111,6 +112,7 @@ public class TA_Chart extends Frame {
 				}
 				dataset = connection.last_indicator_data();
 				dataset.set_dates_needed(false);
+				dataset.set_y_min_max(main_dataset);
 				main_pane.add_main_data_set(dataset);
 			}
 			setTitle(market);
@@ -316,7 +318,7 @@ public class TA_Chart extends Frame {
 class IndicatorListener implements java.awt.event.ActionListener {
 	public void actionPerformed(java.awt.event.ActionEvent e) {
 		String selection = e.getActionCommand();
-		DataSet dataset;
+		DataSet dataset, main_dataset;
 		try {
 			String market = current_market;
 			if (market == null || selection.equals(current_upper_indicator) ||
@@ -342,16 +344,18 @@ class IndicatorListener implements java.awt.event.ActionListener {
 		// configured to go in the upper (main) or lower (indicator) graph.
 		if (Configuration.instance().upper_indicators().containsKey(selection))
 		{
+			main_dataset = connection.last_market_data();
 			if (current_upper_indicator != null) {
 				// Remove the old indicator data from the graph (and the
 				// market data).
 				main_pane.clear_main_graph();
 				// Re-attach the market data.
-				main_pane.add_main_data_set(connection.last_market_data());
+				main_pane.add_main_data_set(main_dataset);
 			}
 			current_upper_indicator = selection;
 			dataset = connection.last_indicator_data();
 			dataset.set_dates_needed(false);
+			dataset.set_y_min_max(main_dataset);
 			main_pane.add_main_data_set(dataset);
 		}
 		else if (selection.equals(No_upper_indicator)) {
