@@ -86,19 +86,6 @@ feature {NONE} -- Initialization
 			end
 		end
 
-	old_open_file (fname: STRING) is
-			-- Open file safely - if it fails, is_open_read is false.
-		local
-			open_failed: BOOLEAN
-		do
-			if not open_failed then
-				make_open_read (file_name)
-			end
-		rescue
-			open_failed := True
-			retry
-		end
-
 feature {SPLIT_SYMBOL_SETTER} -- Implementation - access
 
 	set_current_symbol (arg: STRING) is
