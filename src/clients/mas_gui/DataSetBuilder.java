@@ -68,8 +68,7 @@ public class DataSetBuilder implements NetworkProtocol
 	// Send a request for data for indicator `ind' for market `symbol' with
 	// `period_type'.
 	public void send_indicator_data_request(int ind, String symbol,
-		String period_type) throws Exception
-	{
+		String period_type) throws Exception {
 		connection.send_request(Indicator_data_request,
 			ind + Input_field_separator + symbol +
 			Input_field_separator + period_type);
@@ -81,8 +80,7 @@ public class DataSetBuilder implements NetworkProtocol
 	}
 
 	// Send a request for the list of indicators for market `symbol'.
-	public void send_indicator_list_request(String symbol) throws IOException
-	{
+	public void send_indicator_list_request(String symbol) throws IOException {
 		StringBuffer mlist;
 		_last_indicator_list = new Vector();
 		connection.send_request(Indicator_list_request, symbol);
@@ -96,44 +94,41 @@ public class DataSetBuilder implements NetworkProtocol
 	}
 
 	// Data from last market data request
-	public DataSet last_market_data()
-	{
+	public DataSet last_market_data() {
 		return _last_market_data;
 	}
 
 	// Data from last indicator data request
-	public DataSet last_indicator_data()
-	{
+	public DataSet last_indicator_data() {
 		return _last_indicator_data;
 	}
 
 	// Volume data from last market data request
-	public DataSet last_volume()
-	{
+	public DataSet last_volume() {
 		return _last_volume;
 	}
 
 	// Last requested indicator list
-	public Vector last_indicator_list()
-	{
+	public Vector last_indicator_list() {
 		return _last_indicator_list;
 	}
 
 	// List of markets available from the server
-	public Vector market_list() throws IOException
-	{
+	public Vector market_list() throws IOException {
 		StringBuffer mlist;
 
-		if (markets == null)
-		{
-			markets = new Vector();
-			connection.send_request(Market_list_request, "");
-			mlist = connection.result();
-			StringTokenizer t = new StringTokenizer(mlist.toString(),
-				Output_record_separator, false);
-			for (int i = 0; t.hasMoreTokens(); ++i)
+		synchronized ("x") {
+			if (markets == null)
 			{
-				markets.addElement(t.nextToken());
+				markets = new Vector();
+				connection.send_request(Market_list_request, "");
+				mlist = connection.result();
+				StringTokenizer t = new StringTokenizer(mlist.toString(),
+					Output_record_separator, false);
+				for (int i = 0; t.hasMoreTokens(); ++i)
+				{
+					markets.addElement(t.nextToken());
+				}
 			}
 		}
 		return markets;
@@ -209,8 +204,10 @@ public class DataSetBuilder implements NetworkProtocol
 		data_parser.set_volume_drawer(volume_drawer);
 	}
 
+	// markets is shared by all windows
+	private static Vector markets;	// Cached list of markets
+
 	private Connection connection;
-	private Vector markets;			// Cached list of markets
 		// result of last market data request
 	private DataSet _last_market_data;
 		// volume result from last market data request
