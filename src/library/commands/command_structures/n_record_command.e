@@ -43,6 +43,8 @@ feature -- Basic operations
 			do_all
 		end
 
+feature {NONE} -- Implementation
+
 	forth is
 		do
 			offset := offset - 1

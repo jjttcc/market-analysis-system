@@ -1,5 +1,7 @@
 indexing
 	description: "Minimum data set needed for charting and analysis"
+	date: "$Date$";
+	revision: "$Revision$"
 
 class STANDARD_MARKET_TUPLE inherit
 

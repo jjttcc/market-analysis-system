@@ -17,6 +17,8 @@ indexing
 		%array's cursor - OR: use the input array's cursor and restore it to%
 		%its original value when finished.  (2nd solution will disallow%
 		%concurrency during highest high processing, but that is probably OK.)}"
+	date: "$Date$";
+	revision: "$Revision$"
 
 class HIGHEST_HIGH inherit
 

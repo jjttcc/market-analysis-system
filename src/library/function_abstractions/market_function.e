@@ -2,6 +2,8 @@ indexing
 	description: 
 		"A function that outputs an array of market tuples.  Specifications for function%
 		%input are provided by descendant classes."
+	date: "$Date$";
+	revision: "$Revision$"
 
 deferred class MARKET_FUNCTION
 
@@ -45,6 +47,18 @@ feature -- {FINANCE_ROOT} -- Element change -- Export to test class for now.
 			operator := op
 		ensure
 			operator = op
+		end
+
+feature {test_function_factory} -- Element change
+
+	set_name (n: STRING) is
+			-- Set the function's name to n.
+		require
+			not_void: n /= Void
+		do
+			name := n
+		ensure
+			is_set: name = n
 		end
 
 feature {NONE} -- Implementation

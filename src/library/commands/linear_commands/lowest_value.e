@@ -1,3 +1,10 @@
+indexing
+	description:
+		"An abstraction for a market vector analyzer that finds%
+		%the lowest low value in the last n trading periods."
+	date: "$Date$";
+	revision: "$Revision$"
+
 class LOWEST_LOW inherit
 
 	N_RECORD_COMMAND

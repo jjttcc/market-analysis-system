@@ -2,6 +2,8 @@ indexing
 	description: 
 		"Basic abstraction for a market-related value (or tuple of values) that%
 		%has an associated trading period."
+	date: "$Date$";
+	revision: "$Revision$"
 
 deferred class MARKET_TUPLE
 

@@ -10,6 +10,8 @@ indexing
 		%to increment a counter), action (which will store the current highest%
 		%value in an attribute), and test (to always returne true - unless that is%
 		%the default implementation)."
+	date: "$Date$";
+	revision: "$Revision$"
 
 deferred class VECTOR_ANALYZER
 

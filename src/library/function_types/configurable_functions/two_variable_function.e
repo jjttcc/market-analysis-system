@@ -2,6 +2,8 @@ indexing
 	description: 
 		"A market function that takes two arguments or variables%
 		%(that is, analyzes two vectors)."
+	date: "$Date$";
+	revision: "$Revision$"
 
 class TWO_VECTOR_FUNCTION
 
@@ -71,7 +73,7 @@ feature {NONE}
 			processed := false
 		end
 
-feature {FINANCE_ROOT} -- Element change (Export to test class for now.)
+feature {TEST_FUNCTION_FACTORY} -- Element change (Export to test class for now.)
 
 	set_input2 (the_input: ARRAYED_LIST [MARKET_TUPLE]) is
 			-- Set input2 vector to `the_input'.

@@ -2,6 +2,8 @@ indexing
 	description: 
 		"An abstraction for a numeric command that produces the%
 		%closing price for the current trading period."
+	date: "$Date$";
+	revision: "$Revision$"
 
 class CLOSING_PRICE inherit
 

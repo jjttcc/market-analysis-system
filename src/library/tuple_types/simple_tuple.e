@@ -1,5 +1,7 @@
 indexing
 	description: "A simple tuple that functions as a single value."
+	date: "$Date$";
+	revision: "$Revision$"
 
 class SIMPLE_TUPLE
 

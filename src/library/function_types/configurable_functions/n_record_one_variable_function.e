@@ -2,17 +2,14 @@ indexing
 	description: 
 		"A market function that provides a concept of an n-length%
 		%sub-vector of the main input vector."
+	date: "$Date$";
+	revision: "$Revision$"
 
 class N_RECORD_ONE_VECTOR_FUNCTION inherit
 
-	MARKET_FUNCTION
+	ONE_VECTOR_FUNCTION
 		redefine
-			output
-		end
-
-	VECTOR_ANALYZER
-		redefine
-			action
+			process
 		end
 
 	N_RECORD_STRUCTURE
@@ -37,27 +34,6 @@ feature -- Basic operations
 			input.go_i_th (n)
 			continue_until
 			processed := true
-		end
-
-feature
-
-	output: ARRAYED_LIST [SIMPLE_TUPLE]
-
-feature {NONE}
-
-	reset_state is
-		do
-			processed := false
-		end
-
-	action is
-		local
-			t: SIMPLE_TUPLE
-		do
-			operator.execute (input.item)
-			!!t
-			t.set_value (operator.value)
-			output.extend (t)
 		end
 
 end -- class N_RECORD_ONE_VECTOR_FUNCTION

@@ -1,5 +1,7 @@
 indexing
 	description: "So-called moving average exponential"
+	date: "$Date$";
+	revision: "$Revision$"
 
 class MA_EXPONENTIAL inherit
 

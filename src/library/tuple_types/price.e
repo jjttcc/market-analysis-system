@@ -2,6 +2,8 @@ indexing
 	description: 
 		"Abstraction for a monetary value or any other value that%
 		%can be represented as a whole and a fraction."
+	date: "$Date$";
+	revision: "$Revision$"
 
 class PRICE inherit
 

@@ -11,21 +11,11 @@ indexing
 
 class STANDARD_MOVING_AVERAGE inherit
 
-	MARKET_FUNCTION
+	N_RECORD_ONE_VECTOR_FUNCTION
 		export {NONE}
 			set_operator
 		redefine
-			output
-		end
-
-	VECTOR_ANALYZER
-		redefine
-			action, reset_state, set_input
-		end
-
-	N_RECORD_STRUCTURE
-		redefine
-			set_n
+			action, set_input, set_n, process
 		end
 
 creation
@@ -66,10 +56,6 @@ feature
 			Precursor (v)
 		end
 
-feature
-
-	output: ARRAYED_LIST [SIMPLE_TUPLE]
-
 feature {NONE}
 
 	action is
@@ -83,13 +69,6 @@ feature {NONE}
 							input.item.value
 			t.set_value (last_sum / n)
 			output.extend (t)
-		end
-
-	reset_state is
-			-- Reset to initial state.
-			-- Intended to be redefined as needed.
-		do
-			processed := false
 		end
 
 feature {NONE} -- Implementation

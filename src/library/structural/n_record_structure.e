@@ -1,6 +1,8 @@
 indexing
 	description: 
 		"A abstraction that provides a concept of an n-lenth record"
+	date: "$Date$";
+	revision: "$Revision$"
 
 class
 	N_RECORD_STRUCTURE

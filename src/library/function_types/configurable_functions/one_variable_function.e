@@ -2,10 +2,15 @@ indexing
 	description: 
 		"A market function that takes two arguments or variables%
 		%(that is, analyzes two vectors)."
+	date: "$Date$";
+	revision: "$Revision$"
 
 class ONE_VECTOR_FUNCTION inherit
 
 	MARKET_FUNCTION
+		redefine
+			output
+		end
 
 	VECTOR_ANALYZER
 		redefine
@@ -30,6 +35,10 @@ feature -- Basic operations
 			do_all
 			processed := true
 		end
+
+feature
+
+	output: ARRAYED_LIST [SIMPLE_TUPLE]
 
 feature {NONE}
 
