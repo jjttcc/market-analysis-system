@@ -43,8 +43,7 @@ feature -- Initialization
 			create {CL_BASED_COMMAND_EDITING_INTERFACE}
 				operator_maker.make (True)
 			create help.make
-			-- !!!Satisfy invariant - editor is currently not used; it may
-			-- be used later - if not, might want to change the invariant or?
+			-- Satisfy invariant (editor is currently not used.)
 			create editor
 			create function_editor.make
 			operator_maker.set_market_tuple_selector (function_editor)
