@@ -34,7 +34,7 @@ deferred class MAS_EXCEPTION inherit
 
 feature -- Access
 
-	Error_exit_status: INTEGER is -1
+	Error_exit_status: INTEGER is 1
 			-- Error status for exit
 
 	no_cleanup: BOOLEAN
