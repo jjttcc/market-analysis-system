@@ -216,6 +216,7 @@ feature -- Element change
 			-- whose begin-value matches `begin_value'.
 		require
 			has_been_tokenized: contents /= Void
+			args_exist: tag /= Void value /= Void begin_value /= Void
 		local
 			exc: expanded EXCEPTION_SERVICES
 			exception_occurred: BOOLEAN
@@ -256,6 +257,8 @@ feature {NONE} -- Implementation
 	remove_default_marks (begin_value: STRING) is
 			-- Remove the "default marks" from all blocks whose begin-value
 			-- matches `begin_value'.
+		require
+			arg_exists: begin_value /= Void
 		local
 			new_records: ARRAYED_LIST [STRING]
 			-- begin-end indices of all targeted blocks:
@@ -305,6 +308,7 @@ feature {NONE} -- Implementation
 			-- matches `begin_value' and b contains `tag +
 			-- line_field_separator + value') as the "default block".
 		require
+			args_exist: tag /= Void value /= Void begin_value /= Void
 			at_least_one_target: matching_indices (
 				matching_block_boundaries (begin_value, records),
 				records, tag + line_field_separator + value).count > 0
@@ -378,6 +382,8 @@ feature {NONE} -- Implementation - utilities
 
 	write_line (s: STRING) is
 			-- Write `s' appended with '%N' to `target'.
+		require
+			s_exists: s /= Void
 		do
 			if
 				is_end_of_block (s) and
@@ -412,7 +418,9 @@ feature {NONE} -- Implementation - utilities
 		end
 
 	begin_record (begin_value: STRING): STRING is
-		once
+		require
+			begin_value_exists: begin_value /= Void
+		do
 			Result := Begin_tag + line_field_separator + begin_value
 		ensure
 			definition: Result.is_equal (Begin_tag + line_field_separator +
