@@ -11,7 +11,7 @@ class ONE_VARIABLE_FUNCTION inherit
 
 	COMPLEX_FUNCTION
 		redefine
-			set_innermost_input, operators
+			set_innermost_input, operators, reset_parameters
 		end
 
 	LINEAR_ANALYZER
@@ -101,6 +101,19 @@ feature -- Access
 			Result.append (input.operators)
 		end
 
+	leaf_functions: LIST [COMPLEX_FUNCTION] is
+		local
+			f: COMPLEX_FUNCTION
+		do
+			create {LINKED_LIST [COMPLEX_FUNCTION]} Result.make
+			if input.is_complex then
+				f ?= input
+				Result.append (f.leaf_functions)
+			else
+				Result.extend (Current)
+			end
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is
@@ -174,6 +187,12 @@ feature {MARKET_FUNCTION_EDITOR}
 			input_set_to_in: input = in
 			parameter_list_void: parameter_list = Void
 			not_processed: not processed
+		end
+
+	reset_parameters is
+		do
+			parameter_list := Void
+			input.reset_parameters
 		end
 
 feature {MARKET_FUNCTION_EDITOR}

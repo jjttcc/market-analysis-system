@@ -13,7 +13,7 @@ inherit
 
 	COMPLEX_FUNCTION
 		redefine
-			set_innermost_input, operators
+			set_innermost_input, operators, reset_parameters
 		end
 
 	TWO_VARIABLE_LINEAR_ANALYZER
@@ -104,6 +104,16 @@ feature -- Access
 			Result := Precursor
 			Result.append (input1.operators)
 			Result.append (input2.operators)
+		end
+
+	leaf_functions: LIST [COMPLEX_FUNCTION] is
+		do
+			create {LINKED_LIST [COMPLEX_FUNCTION]} Result.make
+			check
+				both_inputs_complex: input1.is_complex and input2.is_complex
+			end
+			Result.append (input1.leaf_functions)
+			Result.append (input2.leaf_functions)
 		end
 
 feature -- Status report
@@ -225,6 +235,13 @@ feature {MARKET_FUNCTION_EDITOR}
 			target_set: target1 = in1.output and target2 = in2.output
 			parameter_list_void: parameter_list = Void
 			not_processed: not processed
+		end
+
+	reset_parameters is
+		do
+			parameter_list := Void
+			input1.reset_parameters
+			input2.reset_parameters
 		end
 
 feature {MARKET_FUNCTION_EDITOR}
