@@ -504,8 +504,6 @@ feature {NONE} -- Implementation - utilities
 			create function_builder.make (market_list_handler)
 			initialize_current_tradable
 			if not market_list_handler.exhausted then
-				available_period_types := market_list_handler.period_types (
-					market_list_handler.current_symbol)
 				if market_list_handler.error_occurred then
 					log_errors (<<market_list_handler.last_error, "%N">>)
 					raise ("Data retrieval error")
@@ -525,16 +523,19 @@ feature {NONE} -- Implementation - utilities
 				market_list_handler.start
 				current_tradable :=
 					market_list_handler.item (current_period_type)
+				available_period_types := market_list_handler.period_types (
+					market_list_handler.current_symbol)
 				if market_list_handler.error_occurred then
 					log_errors (<<market_list_handler.last_error, "%N">>)
 					raise ("Data retrieval error")
 				elseif current_tradable = Void then
 					-- No daily data, so use intraday data.
-					current_period_type := period_types @ (
-						market_list_handler.period_types (
-						market_list_handler.current_symbol) @ 1)
-					current_tradable := market_list_handler.item (
-						current_period_type)
+					if not market_list_handler.error_occurred then
+						current_period_type := period_types @ (
+							available_period_types @ 1)
+						current_tradable := market_list_handler.item (
+							current_period_type)
+					end
 				end
 			end
 		ensure
