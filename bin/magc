@@ -6,7 +6,10 @@ basedir=$(dirname $0)/..
 classdir=$basedir/lib/classes
 
 usage() {
-	echo "Usage: $pname [cl] [-h hostname] port_number"
+	echo "Usage: $pname [cl] [no_cd] [-h hostname] port_number"
+	echo "where:"
+	echo "   cl = run command-line client instead of GUI"
+	echo "   no_cd = do change directories - stay in the current directory"
 }
 
 check_settings() {
@@ -27,6 +30,7 @@ while [ $# -gt 0 ]
 do
 	case $1 in
 		cl) main=CL_Client; shift ;;
+		n*) no_cd=true; shift ;;
 		-h) shift; host=$1; shift ;;
 		-*) usage; exit 0 ;;
 		*) port_number=$1; shift ;;
@@ -39,5 +43,9 @@ if [ -z "$port_number" ]; then
 fi
 
 check_settings
-cd $classdir
+if [ "$no_cd" = true ]; then
+	export CLASSPATH=$classdir
+else
+	cd $classdir
+fi
 java $main $host $port_number
