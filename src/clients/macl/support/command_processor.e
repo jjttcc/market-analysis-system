@@ -410,7 +410,8 @@ feature {NONE} -- Implementation - Attributes
 	selection_list_pattern: STRING is "^[1-9][0-9]*\)"
 			-- Pattern indicating that the server has sent a "selection list"
 
-	two_column_selection_list_pattern: STRING is "^[1-9][0-9]*\).*[1-9][0-9]*\)"
+	two_column_selection_list_pattern: STRING is
+		"^[1-9][0-9]*\).*[ %T][1-9][0-9]*\)"
 			-- Pattern indicating that the server has sent a 2-column
 			-- "selection list"
 
