@@ -5,17 +5,10 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class MARKET_LINE inherit
+class
 
-	MARKET_TUPLE_LIST [MARKET_POINT]
-		rename
-			make as mtl_make
-		export {NONE}
-			mtl_make
-		end
---!!Consider changing make and set_points to take two int indexes and
---two market_tuples.  Create the points (they may become expanded) with
---these objects - Client doesn't need to create points.
+	MARKET_LINE
+
 creation
 
 	make
@@ -30,7 +23,6 @@ feature -- Initialization
 			start_point := p1
 			end_point := p2
 			calculate_slope
-			mtl_make (p2.x.rounded - p1.x.rounded + 1)
 		ensure
 			set: start_point = p1 and end_point = p2
 		end
@@ -41,6 +33,13 @@ feature -- Access
 			-- The two points that define the line
 
 	slope: REAL
+			-- Slope of the line
+
+	y_at (x: INTEGER): REAL is
+			-- y value at index (x-value) `x'
+		do
+			Result := (x - start_point.x) * slope + start_point.y
+		end
 
 feature {FACTORY} -- Status setting
 
