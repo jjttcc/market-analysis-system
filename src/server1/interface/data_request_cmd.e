@@ -1,5 +1,5 @@
 indexing
-	description: "A command that responds to a GUI client data request"
+	description: "A command that responds to a client data request"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

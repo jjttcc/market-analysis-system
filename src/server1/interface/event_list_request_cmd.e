@@ -1,5 +1,5 @@
 indexing
-	description: "A command that responds to a GUI event list request - %
+	description: "A command that responds to an event list request - %
 		%a request for a list of all valid market event types for the %
 		%specified tradable and period type"
 	author: "Jim Cochrane"

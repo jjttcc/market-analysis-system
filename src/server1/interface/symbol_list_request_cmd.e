@@ -1,5 +1,5 @@
 indexing
-	description: "A command that responds to a GUI client request for all %
+	description: "A command that responds to a client request for all %
 		%available market symbols"
 	author: "Jim Cochrane"
 	date: "$Date$";

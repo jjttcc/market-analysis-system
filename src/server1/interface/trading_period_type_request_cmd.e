@@ -1,7 +1,7 @@
 indexing
 	description:
-		"A command that responds to a GUI client request for a list of all %
-		%trading period types valid for a specified market"
+		"A command that responds to a client request for a list of all %
+		%trading period types valid for a specified tradable"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

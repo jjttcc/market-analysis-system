@@ -1,5 +1,5 @@
 indexing
-	description: "A command that responds to a GUI event-data request - a %
+	description: "A command that responds to an event-data request - a %
 		%request for trading signals for a particular tradable"
 	author: "Jim Cochrane"
 	date: "$Date$";

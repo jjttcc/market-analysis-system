@@ -1,6 +1,6 @@
 indexing
 	description:
-		"A MAS server command that responds to a GUI client data request"
+		"A MAS server command that responds to a client request"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
