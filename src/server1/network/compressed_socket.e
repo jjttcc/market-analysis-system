@@ -15,7 +15,7 @@ class COMPRESSED_SOCKET inherit
 
 	NETWORK_STREAM_SOCKET
 		redefine
-			putstring, put_string
+			putstring, put_string, readline, read_line
 		end
 
 	GUI_NETWORK_PROTOCOL
@@ -73,6 +73,23 @@ feature -- Output
 		end
 
 	putstring (s: STRING) is do put_string (s) end
+
+feature -- Input
+
+	readline, read_line is
+		do
+			-- Redefined to prevent reading forever when the client has
+			-- unexpectedly died.
+			create last_string.make (512);
+			read_character
+			from
+			until
+				last_character = '%N' or last_character = '%U'
+			loop
+				last_string.extend (last_character);
+				read_character
+			end
+		end
 
 feature {NONE} -- Implementation
 
