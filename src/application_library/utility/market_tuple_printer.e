@@ -224,6 +224,41 @@ feature {NONE} -- Implementation
 			fields_unique: f1 /= f2 and f2 /= f3 and f3 /= f1
 			not_void: date /= Void
 		local
+			date_util: expanded DATE_TIME_SERVICES
+		do
+			put (date_util.formatted_date (date, f1, f2, f3,
+				date_field_separator))
+		end
+
+	print_time (time: TIME; f1, f2, f3: CHARACTER) is
+			-- Print `time', using f1, f2, and f3 to specify the order
+			-- of the hour, minute, and second fields.
+		require
+			fields_y_m_or_d:
+				(f1 = 'h' or f1 = 'm' or f1 = 's') and
+				(f2 = 'h' or f2 = 'm' or f2 = 's') and
+				(f3 = 'h' or f3 = 'm' or f3 = 's')
+			fields_unique: f1 /= f2 and f2 /= f3 and f3 /= f1
+			not_void: time /= Void
+		local
+			time_util: expanded DATE_TIME_SERVICES
+		do
+			put (time_util.formatted_time (time, f1, f2, f3,
+				time_field_separator))
+		end
+
+--!!Remove obsolete routine:
+	oprint_date (date: DATE; f1, f2, f3: CHARACTER) is
+			-- Print `date', using f1, f2, and f3 to specify the order
+			-- of the year, month, and day fields.
+		require
+			fields_y_m_or_d:
+				(f1 = 'y' or f1 = 'm' or f1 = 'd') and
+				(f2 = 'y' or f2 = 'm' or f2 = 'd') and
+				(f3 = 'y' or f3 = 'm' or f3 = 'd')
+			fields_unique: f1 /= f2 and f2 /= f3 and f3 /= f1
+			not_void: date /= Void
+		local
 			fmtr: FORMAT_INTEGER
 			i1, i2, i3: INTEGER
 		do
@@ -260,7 +295,8 @@ feature {NONE} -- Implementation
 			put (fmtr.formatted (i3))
 		end
 
-	print_time (time: TIME; f1, f2, f3: CHARACTER) is
+--!!Remove obsolete routine:
+	oprint_time (time: TIME; f1, f2, f3: CHARACTER) is
 			-- Print `time', using f1, f2, and f3 to specify the order
 			-- of the hour, minute, and second fields.
 		require
