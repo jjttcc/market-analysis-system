@@ -50,10 +50,8 @@ feature {NONE} -- Implementation
 		local
 			i, last_sep_index: INTEGER
 		do
-			--!!!For now, set the name and symbol to `symbol'.
 			create product.make (symbol, time_period_type,
-				stock_splits @ symbol)
-			product.set_name (symbol)
+				stock_splits @ symbol, stock_data)
 		end
 
 	index_vector: ARRAY [INTEGER] is
@@ -79,6 +77,13 @@ feature {NONE} -- Implementation
 				create {STOCK_SPLIT_FILE} Result.make (
 					constants.Stock_split_field_separator,
 					constants.Stock_split_record_separator, stock_split_file)
+			end
+		end
+
+	stock_data: STOCK_DATA is
+		do
+			if command_line_options.use_db then
+				Result := database_services.stock_data
 			end
 		end
 
