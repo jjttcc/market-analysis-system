@@ -10,7 +10,8 @@ class MAIN_CL_INTERFACE inherit
 		export {NONE}
 			all
 		undefine
-			print
+			print, output_field_separator, output_record_separator,
+			output_date_field_separator
 		end
 
 	EXECUTION_ENVIRONMENT
@@ -23,6 +24,23 @@ class MAIN_CL_INTERFACE inherit
 	COMMAND_LINE_UTILITIES [ANY]
 		export
 			{NONE} all
+		end
+
+	EXCEPTIONS
+		export
+			{NONE} all
+		undefine
+			print
+		end
+
+	UNIX_SIGNALS
+		rename
+			meaning as signal_meaning, ignore as ignore_signal,
+			catch as catch_signal
+		export
+			{NONE} all
+		undefine
+			print
 		end
 
 	MAIN_APPLICATION_INTERFACE
@@ -169,6 +187,20 @@ feature -- Basic operations
 			-- Ensure that all objects registered for cleanup on termination
 			-- are notified of termination.
 			termination_cleanup
+		rescue
+			if not assertion_violation then
+				if is_signal and signal = Sigint then
+					die (0) -- Exit normally on interrupt signal.
+				else
+					print_list (<<"Error encounted in main menu: ",
+								meaning(exception), "%N">>)
+					if not end_program then
+						retry
+					else
+						die (-1)
+					end
+				end
+			end
 		end
 
 feature {NONE}
