@@ -13,40 +13,57 @@ class MARKET_FUNCTION_LINE inherit
 		export
 			{NONE} sf_make
 		redefine
-			item, valid_index
+			item, valid_index, after
 		end
 
 	MARKET_LINE
 		rename
-			make as ml_make
+			make_from_2_points as ml_make_from_2_points
 		export
-			{NONE} ml_make
+			{NONE} make_from_slope, ml_make_from_2_points
 		undefine
 			is_equal, copy, setup
 		end
 
 creation
 
-	make
+	make, make_from_2_points
 
-feature {NONE} -- Initialization
+feature -- Initialization
 
-	make (p1, p2: MARKET_POINT; period_type: TIME_PERIOD_TYPE) is
+	make (p1: MARKET_POINT; sl: REAL; period_type: TIME_PERIOD_TYPE) is
+			-- Make the line with p1 as the start point, sl as the slope,
+			-- and period_type as the trading_period_type.
 		require
-			not_void: p1 /= Void and p2 /= Void
-			p1_left_of_p2: p1.x < p2.x
+			not_void: p1 /= Void
 			p1_x_gt_0: p1.x > 0
+			p1_x_is_1: p1.x.floor = 1
 			not_irregular: not period_type.irregular
 		do
-			ml_make (p1, p2)
+			make_from_slope (p1, sl)
 			trading_period_type := period_type
---remove: sf_make (period_type)
 			initialize
 --print ("trad. per type is definite: ");
 --print (trading_period_type.duration.definite)
 --print("%Nlower, upper: ");print(lower);print(", ");print(upper);print("%N")
 		ensure
-			set: start_point = p1 and end_point = p2
+			set: start_point = p1
+			trading_period_type_set: trading_period_type = period_type
+			-- slope = sl
+		end
+
+	make_from_2_points (p1, p2: market_point; period_type: TIME_PERIOD_TYPE) is
+			-- Make the line with p1 as the start point; obtain the slope
+			-- from p1 and p2.
+		require
+			p1_x_is_1: p1.x.floor = 1
+		do
+			ml_make_from_2_points (p1, p2)
+			trading_period_type := period_type
+			initialize
+		ensure
+			set: start_point = p1
+			trading_period_type_set: trading_period_type = period_type
 		end
 
 feature -- Access
@@ -108,17 +125,29 @@ feature {NONE} -- Implemetation
 
 	initialize is
 		do
-			-- Create `area' and enforce the ARRAYED_LIST invariant that
-			-- lower = 1.
-			array_make (1, end_point.x.floor)
+			-- Create `area' and enforce the ARRAYED_LIST
+			-- invariant that lower = 1.
+			array_make (1, 1)
 			count := upper - lower + 1
 			force_i_th (start_point, start_point.x.floor)
-			force_i_th (end_point, end_point.x.floor)
+			index := 0
 		end
+
+feature {NONE} -- Redefined
 
 	valid_index (i: INTEGER): BOOLEAN is
 		do
 			Result := true
+		end
+
+	after: BOOLEAN is
+			-- The line never ends.
+		do
+			if index = count + 1 then
+				force_i_th (point_at_current_index, index)
+				count := upper - lower + 1
+			end
+			Result := false
 		end
 
 --	initialize is

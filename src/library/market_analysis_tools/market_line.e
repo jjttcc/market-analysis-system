@@ -11,26 +11,36 @@ class
 
 creation
 
-	make
+	make_from_slope, make_from_2_points
 
 feature -- Initialization
 
-	make (p1, p2: MARKET_POINT) is
+	make_from_2_points (p1, p2: MARKET_POINT) is
 		require
 			not_void: p1 /= Void and p2 /= Void
 			p1_left_of_p2: p1.x < p2.x
 			p1x_gt_0: p1.x > 0
 		do
 			start_point := p1
-			end_point := p2
-			calculate_slope
+			calculate_slope (p2)
 		ensure
-			set: start_point = p1 and end_point = p2
+			set: start_point = p1
+		end
+
+	make_from_slope (startp: MARKET_POINT; s: REAL) is
+		require
+			startp /= Void and startp.x > 0
+		do
+			start_point := startp
+			slope := s
+		ensure
+			start_point_set: start_point = startp
+			-- slope = s
 		end
 
 feature -- Access
 
-	start_point, end_point: MARKET_POINT
+	start_point: MARKET_POINT
 			-- The two points that define the line
 
 	slope: REAL
@@ -42,34 +52,17 @@ feature -- Access
 			Result := (x - start_point.x) * slope + start_point.y
 		end
 
-feature {FACTORY} -- Status setting
-
-	set_points (p1, p2: MARKET_POINT) is
-			-- Set start_point to `p1' and end_point to `p2'.
-		require
-			not_void: p1 /= Void and p2 /= Void
-			p1_left_of_p2: p1.x < p2.x
-		do
-			start_point := p1
-			end_point := p2
-			calculate_slope
-		ensure
-			start_point: start_point = p1 and start_point /= Void
-			end_point_set: end_point = p2 and end_point /= Void
-		end
-
 feature {NONE} -- Implementation
 
-	calculate_slope is
+	calculate_slope (other_point: MARKET_POINT) is
 			-- Slope of the line
 		do
-			slope := (end_point.y - start_point.y) /
-						(end_point.x - start_point.x)
+			slope := (other_point.y - start_point.y) /
+						(other_point.x - start_point.x)
 		end
 
 invariant
 
-	start_left_of_end: start_point.x < end_point.x
 	start_point_x_gt_0: start_point.x > 0
 
 end -- class MARKET_LINE
