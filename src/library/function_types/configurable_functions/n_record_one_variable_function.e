@@ -12,7 +12,8 @@ class N_RECORD_ONE_VARIABLE_FUNCTION inherit
 		rename
 			make as ovf_make
 		redefine
-			do_process, target, processed, short_description
+			do_process, target, short_description,
+			immediate_parameters
 		end
 
 	N_RECORD_STRUCTURE
@@ -41,14 +42,6 @@ feature -- Access
 			Result := n
 		end
 
-feature -- Status report
-
-	processed: BOOLEAN is
-		do
-			Result := (input.processed and target.count < effective_n) or
-						Precursor
-		end
-
 feature {NONE}
 
 	make (in: like input; op: like operator; i: INTEGER) is
@@ -69,9 +62,6 @@ feature {NONE} -- Basic operations
 	do_process is
 			-- Execute the function.
 		do
-			check
-				output_empty: output.empty
-			end
 			if target.count < effective_n then
 				-- null statement
 			else
@@ -94,7 +84,16 @@ feature {NONE}
 
 	target: ARRAYED_LIST [MARKET_TUPLE]
 
-feature {FACTORY}
+	immediate_parameters: LIST [FUNCTION_PARAMETER] is
+		local
+			fp: N_RECORD_FUNCTION_PARAMETER
+		do
+			!LINKED_LIST [FUNCTION_PARAMETER]!Result.make
+			!!fp.make (Current)
+			Result.extend (fp)
+		end
+
+feature {N_RECORD_FUNCTION_PARAMETER}
 
 	set_n (value: INTEGER) is
 		do
@@ -102,6 +101,11 @@ feature {FACTORY}
 			if operator /= Void then
 				operator.initialize (Current)
 			end
+			output.wipe_out
+			processed_date_time := Void
+		ensure then
+			output_empty: output.empty
+			not_processed: not processed
 		end
 
 invariant

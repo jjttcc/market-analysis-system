@@ -9,7 +9,7 @@ class ONE_VARIABLE_FUNCTION inherit
 
 	MARKET_FUNCTION
 		redefine
-			pre_process
+			pre_process, update_processed_date_time
 		end
 
 	LINEAR_ANALYZER
@@ -64,12 +64,34 @@ feature -- Access
 			Result.append (input.full_description)
 		end
 
+	parameters: LIST [FUNCTION_PARAMETER] is
+		local
+			parameter_set: LINKED_SET [FUNCTION_PARAMETER]
+		do
+			if parameter_list = Void then
+				!!parameter_list.make
+				!!parameter_set.make
+				if immediate_parameters /= Void then
+					parameter_set.fill (immediate_parameters)
+				end
+				check
+					input_parameters_not_void: input.parameters /= Void
+				end
+				parameter_set.fill (input.parameters)
+				parameter_list.append (parameter_set)
+			end
+			Result := parameter_list
+		end
+
+	processed_date_time: DATE_TIME
+
 feature -- Status report
 
 	processed: BOOLEAN is
 		do
 			Result := input.processed and then
-				(target.empty or not output.empty)
+						processed_date_time /= Void and then
+						processed_date_time >= input.processed_date_time
 		end
 
 	arg_mandatory: BOOLEAN is false
@@ -102,6 +124,9 @@ feature {NONE}
 
 	pre_process is
 		do
+			if not output.empty then
+				output.wipe_out
+			end
 			if not input.processed then
 				input.process (Void)
 			end
@@ -109,9 +134,24 @@ feature {NONE}
 			input_processed: input.processed
 		end
 
+	update_processed_date_time is
+		do
+			if processed_date_time = Void then
+				!!processed_date_time.make_now
+			else
+				processed_date_time.make_now
+			end
+		end
+
 feature {NONE}
 
 	input: MARKET_FUNCTION
+
+	immediate_parameters: LIST [FUNCTION_PARAMETER] is
+		once
+		end
+
+	parameter_list: LINKED_LIST [FUNCTION_PARAMETER]
 
 feature {FACTORY} -- Status setting
 
@@ -123,9 +163,13 @@ feature {FACTORY} -- Status setting
 			input := in
 			set_target (input.output)
 			output.wipe_out
+			parameter_list := Void
+			processed_date_time := Void
 		ensure
 			input_set_to_in: input = in
 			output_empty: output.empty
+			parameter_list_void: parameter_list = Void
+			not_processed: not processed
 		end
 
 invariant

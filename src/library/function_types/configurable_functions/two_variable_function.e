@@ -11,7 +11,7 @@ inherit
 
 	MARKET_FUNCTION
 		redefine
-			pre_process
+			pre_process, update_processed_date_time
 		end
 
 	LINEAR_ANALYZER
@@ -82,19 +82,45 @@ feature -- Access
 			Result.append (input2.full_description)
 		end
 
+	parameters: LIST [FUNCTION_PARAMETER] is
+		local
+			parameter_set: LINKED_SET [FUNCTION_PARAMETER]
+		do
+			if parameter_list = Void then
+				!!parameter_list.make
+				!!parameter_set.make
+				if immediate_parameters /= Void then
+					parameter_set.fill (immediate_parameters)
+				end
+				check
+					input_parameters_not_void:
+						input1.parameters /= Void and
+						input2.parameters /= Void
+				end
+				parameter_set.fill (input1.parameters)
+				parameter_set.fill (input2.parameters)
+				parameter_list.append (parameter_set)
+			end
+			Result := parameter_list
+		end
+
+	processed_date_time: DATE_TIME
+
 feature -- Status report
 
 	processed: BOOLEAN is
 		do
 			Result := (input1.processed and input2.processed) and then
-				(target1.empty or target2.empty or not output.empty)
+					processed_date_time /= Void and then
+					processed_date_time >= input1.processed_date_time and then
+					processed_date_time >= input2.processed_date_time
 		end
 
 	arg_mandatory: BOOLEAN is false
 
 	operator_used: BOOLEAN is true
 
-feature {NONE}
+feature {NONE} -- Hook methods
 
 	forth is
 		do
@@ -133,9 +159,6 @@ feature {NONE}
 
 	do_process is
 		do
-			check
-				output_empty: output.empty
-			end
 			if target1.empty or target2.empty then
 				-- null statement
 			else
@@ -148,6 +171,9 @@ feature {NONE}
 
 	pre_process is
 		do
+			if not output.empty then
+				output.wipe_out
+			end
 			if not input1.processed then
 				input1.process (Void)
 			end
@@ -156,6 +182,15 @@ feature {NONE}
 			end
 		ensure then
 			inputs_processed: input1.processed and input2.processed
+		end
+
+	update_processed_date_time is
+		do
+			if processed_date_time = Void then
+				!!processed_date_time.make_now
+			else
+				processed_date_time.make_now
+			end
 		end
 
 feature {NONE}
@@ -232,15 +267,25 @@ feature {FACTORY} -- Status setting
 			target2 := f2.output
 			check output /= Void end
 			output.wipe_out
+			parameter_list := Void
+			processed_date_time := Void
 		ensure
 			functions_set: input1 = f1 and input2 = f2 and
 							input1 /= Void and input2 /= Void
 			output_empty: output.empty
+			parameter_list_void: parameter_list = Void
+			not_processed: not processed
 		end
 
 feature {NONE}
 
 	input1, input2: MARKET_FUNCTION
+
+	immediate_parameters: LIST [FUNCTION_PARAMETER] is
+		once
+		end
+
+	parameter_list: LINKED_LIST [FUNCTION_PARAMETER]
 
 invariant
 
