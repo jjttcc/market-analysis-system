@@ -1,0 +1,65 @@
+Requested by Stockpoint (email dialog with Eirik Mangseth):
+[Fri Aug 18 2000; revised Mon Aug 28]
+
+
+Input Data Validation
+
+The validation of input data in MAS will be extended to include the following:
+
+1. All errors, including input data errors, will be reported on the standard
+error stream.  We can add more sophisticated error logging later, if we
+decide it's needed.  (Note that this involves a change, since errors are
+currently reported on standard output, rather than standard error.  I think
+this change makes sense, but if you think of reasons not to do it (perhaps
+it won't work well on Windows?), let me know.)
+
+2. For a particular record, if the constraint "low <= close <= high and
+low <= open <= high" does not hold and the offending field is greater than
+0, the field values will be changed with the following algorithm so that
+the constraint does hold:
+
+    if low > close then low := close end
+    if high < close then high := close end
+    if open_available then
+        if low > open then low := open end
+        if high < open then high := open end
+    end
+
+3.  If the volume field of a record has a value less than 0, it will be
+changed to 0.
+
+4.  If any of the following errors occur within a record, the record will
+be discarded and processing will continue:
+
+   - An empty field is found (two field separators with nothing in between).
+
+   - The record has too many or two few field separators.
+
+   - Characters other than [0-9] occur in the date, volume, or open interest
+     fields.
+
+   - A field of real type (open, high, low, and close [and, if
+     added, and any other real type]) contains something other
+     than the characters [0-9] with an optional '.'.  [I came across your
+     email that mentioned the European notation that uses ',', but I'm
+     assuming that for market data '.' is standard and ',' will never be
+     encountered.  If you think this is incorrect, let me know and MAS can
+     be changed to allow ','.]
+
+   - The open, high, low, or close field has a value less than or equal to 0.
+
+   - The date field has less than 5 digits.
+
+   - The value of the date field is earlier than that of the previous record.
+
+5. There will be two error checking modes, a normal error checking mode, with
+the behavior described in 1 - 4, and a strict error checking mode, where the
+errors in 1 - 4 will be checked and reported, but if one or more errors occur
+for a particular record set (such as the data for IBM), the entire data set
+will be discarded - it will not be available for processing until the data is
+fixed.  [I think this is better than the three different modes we decided on
+earlier, as long as the performance when reading data for the "normal" mode
+is not noticeably slower than MAS's performance with the current limited
+error checking.  If it is noticeably slower, we should probably have the three
+modes, with the default being limited error checking - and the "normal" mode
+would be renamed something like "semi-strict".]
