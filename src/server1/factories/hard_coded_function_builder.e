@@ -2,8 +2,7 @@ indexing
 	description:
 		"Builder of a list of hard-coded market functions"
 	note:
-		"Hard-coded for testing for now, but may evolve into a legitimate %
-		%class"
+		"Hard-coded standard indicators"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -108,7 +107,7 @@ feature {NONE} -- Hard-coded market function building procedures
 
 	ema (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
 				EXPONENTIAL_MOVING_AVERAGE is
-			-- Make an exponential moving average function for testing.
+			-- Make an exponential moving average function.
 		local
 			cmd: BASIC_NUMERIC_COMMAND
 			exp: N_BASED_UNARY_OPERATOR
@@ -140,9 +139,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			sub: SUBTRACTION
 			cmd1: BASIC_LINEAR_COMMAND
 			cmd2: BASIC_LINEAR_COMMAND
-			close: CLOSING_PRICE
 		do
-			create close
 			create cmd1.make (f1.output)
 			create cmd2.make (f2.output)
 			create sub.make (cmd1, cmd2)
@@ -309,7 +306,7 @@ feature {NONE} -- Hard-coded market function building procedures
 
 	stochastic_percent_D (f: MARKET_FUNCTION; inner_n, outer_n: INTEGER;
 				name: STRING): TWO_VARIABLE_FUNCTION is
-			-- Make a Stochastic %D calculation function for testing.
+			-- Make a Stochastic %D calculation function.
 		local
 			div: DIVISION
 			mult: MULTIPLICATION -- Used to convert value to percent.
