@@ -4,6 +4,9 @@
 Progname=$(basename $0)
 config=/tmp/install_config
 non_interactive=
+libdir=./lib
+
+. $libdir/utilities
 
 usage() {
 	echo "Usage: $Progname [--rootdir rootpath]" >&2
@@ -37,80 +40,6 @@ else
 fi
 echo $libs
 return 0
-}
-
-query() {
-	echo -e "$*\c" >&2
-	read answer
-	echo $answer
-}
-
-fault() {
-	echo "Programming error encountered: $*" >&2
-	echo "Exiting ..." >&2
-	cleanup
-	exit -2
-}
-
-fatal() {
-	if [ ! -z "$*" ]; then
-		echo "Fatal error encountered: $*" >&2
-	fi
-	echo "Exiting ..." >&2
-	cleanup
-	exit -1
-}
-
-handle_signal() {
-	case $(query "\nCaught signal - terminate program? (y/n) \c") in
-		y*|Y*) echo "Exiting ..." >&2; cleanup; exit 1 ;;
-		*) echo "Continuing ..." >&2 ;;
-	esac
-}
-
-user_is_administrator() {
-	id="$(id -un)"
-	return $([ "$id" = root -o "$id" = bin ])
-}
-
-# If $1 does not exist or is not a file:
-#    If $2 = true terminate the process; else return 1
-#    If $3 is not empty print it as an error message.
-# else return 0
-check_file_exists() {
-	if [ -z "$1" -o ! -f "$1" ]; then
-		if [ ! -z "$3" ]; then
-			echo "$3" >&2
-		fi
-		if [ "$2" = true ]; then
-			fatal
-		fi
-		return 1
-	else
-		return 0
-	fi
-}
-
-# If $1 is not executable:
-#    If $2 = true terminate the process; else return 1
-#    If $3 is not empty print it as an error message.
-# else return 0
-check_exe_file() {
-	if [ -z "$1" ]; then
-		fault "Missing argument for check_exe_file function."
-	fi
-	type $1 >/dev/null 2>&1
-	if [ $? -ne 0 ]; then
-		if [ ! -z "$3" ]; then
-			echo "$3" >&2
-		fi
-		if [ "$2" = true ]; then
-			fatal
-		fi
-		return 1
-	else
-		return 0
-	fi
 }
 
 # Usage: set_dir dirname "message"
@@ -222,54 +151,6 @@ start_server() {
 	cmd=$1; shift
 	MAS_DIRECTORY="$libdir" $cmd -o -f , $* >/dev/null 2>&1 &
 	serverproc=$!
-}
-
-# Usage: sleep_with_dots time
-sleep_with_dots() {
-	sleeptime=$1
-	sleepaccum=0
-	while [ $sleepaccum -lt $sleeptime ]; do
-		echo -e ".\c" >&2
-		sleep 1
-		sleepaccum=$(expr $sleepaccum + 1)
-	done
-	echo >&2 # Clean up
-}
-
-# Monitor the specified processes and kill them if they take longer than the
-# specified time.
-# Usage: monitor time -p procid ... [procname]
-monitor() {
-	result=0
-	# Set to exit if parent finishes first and sends a signal:
-	trap "exit 0" SIGUSR2
-	if [ -z "$2" ]; then
-		fault "Missing argument for monitor function."
-	fi
-	time=$1; shift
-	pids=
-	while :; do
-		case $1 in
-			-p) shift; pids="$pids $1"; shift ;;
-			*) break ;;
-		esac
-	done
-	sleep_with_dots $time
-	kill $pids >/dev/null 2>&1
-	if [ $? -eq 0 ]; then
-		echo -e "\n$* took too long.\nAssuming something went wrong\c" >&2
-		echo -e " - Aborting ..." >&2
-		result=1
-	fi
-	# In case the first kill didn't work, wait a bit then do an absolute kill.
-	sleep 1
-	kill -9 $pids >/dev/null 2>&1
-	if [ $? -eq 0 -a $result = 0 ]; then
-		result=1
-	fi
-	if [ $result -ne 0 ]; then
-		kill -SIGUSR1 $$ >/dev/null 2>&1
-	fi
 }
 
 config() {
