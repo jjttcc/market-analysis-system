@@ -11,7 +11,7 @@ class BASIC_LINEAR_COMMAND inherit
 
 	LINEAR_COMMAND
 		redefine
-		root_suppliers
+			root_suppliers
 		end
 
 creation
