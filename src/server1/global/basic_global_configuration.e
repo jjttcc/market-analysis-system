@@ -21,6 +21,11 @@ feature -- Access
 			create Result
 		end
 
+	tradable_cache_size: INTEGER is
+		once
+			Result := default_tradable_cache_size
+		end
+
 feature -- Status report
 
 	auto_data_update_on: BOOLEAN is False
