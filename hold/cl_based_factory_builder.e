@@ -23,51 +23,63 @@ creation
 
 feature -- Initialization
 
-	make (fname: STRING) is
+	make (default_input_fname: STRING) is
 		do
-			if fname /= Void then
-				default_input_file_name := fname
+			if default_input_fname /= Void then
+				default_input_file_name := default_input_fname
 			end
+			!LINKED_LIST [STRING]!input_file_names.make
+			process_args
 		ensure
-			default_file_name: default_input_file_name = fname
+			default_file_name: default_input_file_name = default_input_fname
+			ml_not_void: market_list /= Void
 		end
 
 feature -- Access
 
-	tradable_factory: TRADABLE_FACTORY is
-			-- Factory to make tradables - stocks, commodities, etc.
-			-- (Hard-coded to make a STOCK_FACTORY for now.)
-		do
-			Result := process_args
-		end
-
-	function_list_factory (t: TRADABLE [BASIC_MARKET_TUPLE]):
-				FUNCTION_BUILDER is
+	function_list_factory: FUNCTION_BUILDER is
 			-- Builder of a list of composite functions
-		do
-			!!Result.make (t)
+		once
+			!!Result.make
 		end
 
 	default_input_file_name: STRING
 
-	input_file: PLAIN_TEXT_FILE
+	input_file_names: LIST [STRING]
+
+	market_list: TRADABLE_LIST
+
+	event_coordinator: EVENT_COORDINATOR
 
 feature {NONE}
 
 	usage is
 		do
 			print ("Usage: "); print (argument (0))
-			print (" [input_file] [-o] [-f field_separator]%N%
+			print (" [input_file ...] [-o] [-f field_separator]%N%
 				%    Where:%N        -o = data has an open field%N")
 		end
 
-	process_args: TRADABLE_FACTORY is
+	process_args is
+			-- Process command-line arguments, including, for each input
+			-- file name in the arguments, adding the name to the
+			-- input_file_names list.  Also, make a factory list for the
+			-- market_list.  For now, these will all be STOCK_FACTORYs.
 		local
+			fa_builder: FUNCTION_ANALYZER_BUILDER
 			i: INTEGER
 			no_open: BOOLEAN
 			fs: STRING
+			file: PLAIN_TEXT_FILE
+			tradable_factories: LINKED_LIST [TRADABLE_FACTORY]
+			tradable_factory: TRADABLE_FACTORY
 		do
 			no_open := true
+			!STOCK_FACTORY!tradable_factory.make
+			function_list_factory.execute
+			tradable_factory.set_indicators (function_list_factory.product)
+			!!tradable_factories.make
+			!!fa_builder.make (function_list_factory.product)
 			from
 				i := 1
 			until
@@ -86,22 +98,32 @@ feature {NONE}
 						die (-1) -- kludgey exit for now
 					end
 				else
-					!!input_file.make_open_read (argument (i))
+					input_file_names.extend (argument (i))
+					-- Add a factory for each file name.  Since some files
+					-- may be for different types of markets, in the future,
+					-- different types of factories may be created and
+					-- added to the tradable_factories list.
+					tradable_factories.extend (tradable_factory)
 				end
 				i := i + 1
 			end
-			if input_file = Void then
+			if input_file_names.empty then
 				if default_input_file_name /= Void then
-					!!input_file.make_open_read (default_input_file_name)
+					input_file_names.extend (default_input_file_name)
+					tradable_factories.extend (tradable_factory)
 				else
 					raise ("No input file name specified")
 				end
 			end
-			!STOCK_FACTORY!Result.make (input_file)
-			Result.set_no_open (no_open)
+			tradable_factory.set_no_open (no_open)
 			if fs /= Void then
-				Result.set_field_separator (fs)
+				tradable_factory.set_field_separator (fs)
 			end
+			!VIRTUAL_TRADABLE_LIST!market_list.make (input_file_names,
+														tradable_factories)
+			fa_builder.execute
+			!MARKET_EVENT_COORDINATOR!event_coordinator.make (
+											fa_builder.product, market_list)
 		end
 
 end -- FACTORY_BUILDER

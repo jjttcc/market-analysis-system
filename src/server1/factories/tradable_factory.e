@@ -1,5 +1,6 @@
 indexing
 	description: "Factory class that manufactures TRADABLEs"
+	note: "input_file must be set (non-Void) before execute is called."
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -12,21 +13,20 @@ deferred class TRADABLE_FACTORY inherit
 		end
 
 	GLOBAL_SERVICES
+		export {NONE}
+			all
+		end
 
 feature -- Initialization
 
-	make (in_file: FILE) is
+	make is
 		require
-			open_for_reading: in_file /= Void and in_file.exists and
-								in_file.is_open_read
 		do
 			field_separator := "%T"
-			input_file := in_file
 			time_period_type := period_types @ "daily"
 		ensure
 			daily_type: time_period_type.name.is_equal ("daily")
 			fs_tab: field_separator.is_equal ("%T")
-			set: input_file = in_file and input_file /= Void
 		end
 
 feature -- Access
@@ -49,6 +49,9 @@ feature -- Access
 			-- The period type, such as daily, that will be assigned
 			-- to the manufactured tradable
 
+	indicators: LIST [MARKET_FUNCTION]
+			-- List of TA indicators to provide to the tradable
+
 feature -- Status report
 
 	no_open: BOOLEAN
@@ -59,16 +62,6 @@ feature -- Status report
 
 	error_list: LIST [STRING]
 			-- List of all errors if error_occurred
-
-feature -- Status setting
-
-	set_no_open (arg: BOOLEAN) is
-			-- Set no_open to `arg'.
-		do
-			no_open := arg
-		ensure
-			no_open_set: no_open = arg
-		end
 
 feature -- Basic operations
 
@@ -85,6 +78,7 @@ feature -- Basic operations
 			end
 			-- Input data from input_file and stuff it into product.
 			scanner.execute
+			add_indicators (product, indicators)
 			check
 				product_set_to_scanner_result: product = scanner.product
 			end
@@ -99,10 +93,18 @@ feature -- Basic operations
 
 feature -- Status setting
 
+	set_no_open (arg: BOOLEAN) is
+			-- Set no_open to `arg'.
+		do
+			no_open := arg
+		ensure
+			no_open_set: no_open = arg
+		end
+
 	set_input_file (arg: FILE) is
 			-- Set input_file to `arg'.
 		require
-			arg /= Void
+			open_for_reading: arg /= Void and arg.exists and arg.is_open_read
 		do
 			input_file := arg
 		ensure
@@ -112,7 +114,7 @@ feature -- Status setting
 	set_time_period_type (arg: TIME_PERIOD_TYPE) is
 			-- Set time_period_type to `arg'.
 		require
-			arg /= Void
+			arg_not_void: arg /= Void
 		do
 			time_period_type := arg
 		ensure
@@ -123,12 +125,22 @@ feature -- Status setting
 	set_field_separator (arg: STRING) is
 			-- Set field_separator to `arg'.
 		require
-			arg /= Void
+			arg_not_void: arg /= Void
 		do
 			field_separator := arg
 		ensure
 			field_separator_set: field_separator = arg and
 				field_separator /= Void
+		end
+
+	set_indicators (arg: LIST [MARKET_FUNCTION]) is
+			-- Set indicators to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			indicators := arg
+		ensure
+			indicators_set: indicators = arg and indicators /= Void
 		end
 
 feature {NONE}
@@ -139,7 +151,7 @@ feature {NONE}
 			not_vod: product /= Void
 		end
 
-feature {NONE} -- Scanning-related utility features
+feature {NONE} -- Implementation
 
 	index_vector: ARRAY [INTEGER] is
 			-- To be defined by descendants to specify desired field order.
@@ -199,6 +211,22 @@ feature {NONE} -- Scanning-related utility features
 			end
 		end
 
+	add_indicators (t: TRADABLE [BASIC_MARKET_TUPLE];
+					flst: LIST [MARKET_FUNCTION]) is
+			-- Add `flst' to `t'.
+		require
+			not_void: t /= Void and flst /= Void
+		do
+			from
+				flst.start
+			until
+				flst.after
+			loop
+				t.add_indicator (flst.item)
+				flst.forth
+			end
+		end
+
 feature {NONE} -- Tuple field-key constants
 
 	Date_index: INTEGER is 1
@@ -212,7 +240,7 @@ feature {NONE} -- Tuple field-key constants
 invariant
 
 	these_fields_not_void:
-		field_separator /= Void and input_file /= Void and
+		field_separator /= Void and
 		tuple_maker /= Void and time_period_type /= Void
 	error_constraint:
 		error_occurred implies error_list /= Void and not error_list.empty

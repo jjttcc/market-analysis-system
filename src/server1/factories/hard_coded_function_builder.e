@@ -15,19 +15,22 @@ class FUNCTION_BUILDER inherit
 			product
 		end
 
+	GLOBAL_SERVICES
+		export {NONE}
+			all
+		end
+
 creation
 
 	make
 
 feature
 
-	make (f: MARKET_FUNCTION) is
-		require
-			not_void: f /= Void
+	make is
 		do
-			innermost_function := f
+			!STOCK!innermost_function.make ("dummy", period_types @ "daily")
 		ensure
-			set: innermost_function = f and innermost_function /= Void
+			not_void: innermost_function /= Void
 		end
 
 feature -- Access
@@ -35,8 +38,7 @@ feature -- Access
 	product: LIST [MARKET_FUNCTION]
 
 	innermost_function: MARKET_FUNCTION
-			-- The function that provides input data to all manufactured
-			-- functions
+			-- Dummy for innermost function for complex functions
 
 	Simple_MA_n: INTEGER is 10
 	EMA_n: INTEGER is 10
@@ -50,36 +52,26 @@ feature -- Access
 	Williams_n: INTEGER is 7
 	RSI_n: INTEGER is 7
 
-feature -- Status setting
-
-	set_innermost_function (arg: MARKET_FUNCTION) is
-			-- Set innermost_function to `arg'.
-		require
-			arg /= Void
-		do
-			innermost_function := arg
-		ensure
-			innermost_function_set: innermost_function = arg and
-									innermost_function /= Void
-		end
-
 feature -- Basic operations
 
 	execute is
 		local
 			l: LINKED_LIST [MARKET_FUNCTION]
 			f: MARKET_FUNCTION
+			cf1, cf2: COMPLEX_FUNCTION
 		do
 			f := innermost_function
 			!!l.make
 			l.extend (simple_ma (f, Simple_MA_n, "Simple Moving Average"))
 			l.extend (ema (f, EMA_n, "Exponential Moving Average"))
-			l.extend (ma_diff ((ema (f, Smaller_MACD_EMA_n, "Short EMA")),
-								(ema (f, Larger_MACD_EMA_n, "Long EMA")),
-								"MACD Difference"))
-			l.extend (ema (l.last, MACD_Signal_Line_EMA_n,
-						"MACD Signal Line (EMA of MACD Difference)"))
-			l.extend (ma_diff (l.i_th (l.count - 1), l.last, "MACD Histogram"))
+			cf1 := ma_diff (ema (f, Smaller_MACD_EMA_n, "Short EMA"),
+								ema (f, Larger_MACD_EMA_n, "Long EMA"),
+								"MACD Difference")
+			l.extend (cf1)
+			cf2 := ema (l.last, MACD_Signal_Line_EMA_n,
+						"MACD Signal Line (EMA of MACD Difference)")
+			l.extend (cf2)
+			l.extend (ma_diff (cf1, cf2, "MACD Histogram"))
 			l.extend (momentum (f, Momentum_n, "Momentum", "SUBTRACTION"))
 			l.extend (momentum (f, Rate_of_Change_n, "Rate of Change",
 						"DIVISION"))
@@ -123,7 +115,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			initialized: Result /= Void and Result.n = n and Result.name = name
 		end
 
-	ma_diff (f1, f2: MARKET_FUNCTION; name: STRING): TWO_VARIABLE_FUNCTION is
+	ma_diff (f1, f2: COMPLEX_FUNCTION; name: STRING): TWO_VARIABLE_FUNCTION is
 			-- A function that gives the difference between -- `f1' and `f2'
 			-- Uses a BASIC_LINEAR_COMMAND to obtain the values from `f1'
 			-- and `f2' to be subtracted.

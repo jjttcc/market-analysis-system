@@ -11,6 +11,11 @@ class STOCK_FACTORY inherit
 			product
 		end
 
+	GLOBAL_APPLICATION
+		-- !!!Needed for Dir_separator constant.  NOTE: If this class is
+		-- !!!moved into TAL, the dependency on GLOBAL_APPLICATION must be
+		-- !!!removed.
+
 creation
 
 	make
@@ -27,8 +32,29 @@ feature -- Access
 feature {NONE}
 
 	make_product is
+		local
+			name: STRING
+			i, last_sep_index: INTEGER
 		do
-			!!product.make ("symbol goes here", time_period_type)
+			name := clone (input_file.name)
+			-- Strip directory path from the file name:
+			from
+				i := 1
+				last_sep_index := 0
+			until
+				i = 0
+			loop
+				i := name.index_of (Dir_separator, i + 1)
+				if i /= 0 then
+					last_sep_index := i
+				end
+			end
+			if last_sep_index > 0 then
+				name.tail (name.count - last_sep_index)
+			end
+			--!!!For now, set the name and symbol to the file name.
+			!!product.make (name, time_period_type)
+			product.set_name (name)
 		end
 
 	index_vector: ARRAY [INTEGER] is
