@@ -1,6 +1,6 @@
 # $Revision$ $Date$
 
-package NetworkProtocol;
+package CommunicationProtocol;
 $VERSION = 1.00;
 use strict;
 use warnings;
@@ -13,7 +13,7 @@ use base qw(Any);
 
 =head1 NAME
 
-NetworkProtocol
+CommunicationProtocol
 
 =head1 SYNOPSIS
 

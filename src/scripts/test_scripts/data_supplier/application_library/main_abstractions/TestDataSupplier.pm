@@ -8,7 +8,7 @@ use Carp;
 use File::Spec::Functions;
 use FileHandle;
 use IO::Socket;
-use base qw(NetworkProtocol);
+use base qw(CommunicationProtocol);
 
 
 =head1 NAME
