@@ -93,6 +93,7 @@ feature -- Basic operations
 			l.extend (wma (f, WMA_n, "Weighted Moving Average"))
 			l.extend (market_data (f, "Market Data"))
 			l.extend (market_function_line (f, "Line"))
+--!!!Remove when finisehd testing:
 l.extend (wma_of_midpoint (f, WMA_n, "WMA of Midpoint"))
 			product := l
 		end
@@ -128,7 +129,7 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	ma_diff (f1, f2: COMPLEX_FUNCTION; name: STRING): TWO_VARIABLE_FUNCTION is
-			-- A function that gives the difference between -- `f1' and `f2'
+			-- A function that gives the difference between `f1' and `f2'
 			-- Uses a BASIC_LINEAR_COMMAND to obtain the values from `f1'
 			-- and `f2' to be subtracted.
 		require
@@ -219,42 +220,6 @@ feature {NONE} -- Hard-coded market function building procedures
 			create firstop.make (sum, ncmd)
 			create Result.make (f, plus, firstop, n)
 			Result.set_operators (plus, prevcmd, firstop)
-			Result.set_name (name)
-		end
-
-	old_wma (f: MARKET_FUNCTION; n: INTEGER; name: STRING): --!!!!!!!
-				N_RECORD_ONE_VARIABLE_FUNCTION is
-		local
-			plus: ADDITION
-			leftmult, rightmult: MULTIPLICATION
-			outerdiv, innerdiv: DIVISION
-			ncmd: N_VALUE_COMMAND
-			sum: LINEAR_SUM
-			close: CLOSING_PRICE
-			minus_n: MINUS_N_COMMAND
-			k: N_BASED_UNARY_OPERATOR
-			one, two: CONSTANT
-			ix: INDEX_EXTRACTOR
-		do
-			create one.make (1); create two.make (2)
-			create ncmd.make (n)
-			create close
-			create ix.make (Void)
-			create leftmult.make (close, ix)
-			create sum.make (f.output, leftmult, n)
-			ix.set_indexable (sum)
-			create minus_n.make (f.output, sum, n)
-			-- minus_n's offset needs to be adjusted to 1 less than n
-			-- because the cursor needs to move back 4 (n-1) periods in
-			-- order to sum the last 5 periods (relative to the
-			-- current period - i.e., target.item).
-			minus_n.set_n_adjustment (-1)
-			create plus.make (ncmd, one)
-			create rightmult.make (ncmd, plus)
-			create innerdiv.make (rightmult, two)
-			create k.make (innerdiv, n)
-			create outerdiv.make (minus_n, k)
-			create Result.make (f, outerdiv, n)
 			Result.set_name (name)
 		end
 
@@ -530,50 +495,12 @@ feature {NONE} -- Hard-coded market function building procedures
 			Result.set_effective_offset (1)
 		end
 
-feature -- temporary experiment!!!!!!
+feature {NONE} -- Functions currently not used
 
 	wma_of_midpoint (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
 				N_RECORD_ONE_VARIABLE_FUNCTION is
 		do
 			Result := wma (midpoint (f), n, name)
-		end
-
-	old_wma_of_midpoint (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
-				N_RECORD_ONE_VARIABLE_FUNCTION is
-		local
-			plus: ADDITION
-			leftmult, rightmult: MULTIPLICATION
-			outerdiv, innerdiv: DIVISION
-			ncmd: N_VALUE_COMMAND
-			sum: LINEAR_SUM
-			cmd: BASIC_LINEAR_COMMAND
-			minus_n: MINUS_N_COMMAND
-			k: N_BASED_UNARY_OPERATOR
-			one, two: CONSTANT
-			ix: INDEX_EXTRACTOR
-			mp: MARKET_FUNCTION
-		do
-			mp := midpoint (f)
-			create one.make (1); create two.make (2)
-			create ncmd.make (n)
-create cmd.make (f.output) -- test 'f'
-			create ix.make (Void)
-			create leftmult.make (cmd, ix)
-			create sum.make (mp.output, leftmult, n)
-			ix.set_indexable (sum)
-			create minus_n.make (mp.output, sum, n)
-			-- minus_n's offset needs to be adjusted to 1 less than n
-			-- because the cursor needs to move back 4 (n-1) periods in
-			-- order to sum the last 5 periods (relative to the
-			-- current period - i.e., target.item).
-			minus_n.set_n_adjustment (-1)
-			create plus.make (ncmd, one)
-			create rightmult.make (ncmd, plus)
-			create innerdiv.make (rightmult, two)
-			create k.make (innerdiv, n)
-			create outerdiv.make (minus_n, k)
-			create Result.make (mp, outerdiv, n)
-			Result.set_name (name)
 		end
 
 	midpoint (f: MARKET_FUNCTION): ONE_VARIABLE_FUNCTION is
