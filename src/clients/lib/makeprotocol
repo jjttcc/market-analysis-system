@@ -4,7 +4,7 @@
 eiffel_protocol_files ()
 {
 	echo ../../server1/network/gui_network_protocol.e \
-		../../server1/network/network_protrocol.e
+		../../server1/network/network_protocol.e
 }
 
 files=$(eiffel_protocol_files)
@@ -23,7 +23,18 @@ communication protocol */"
 }
 /: *STRING/ {
 	sub (/:/, "")
-	print "\tString " $1 " = " $4 ";"
+	# Change Eiffel tab char to java tab char.
+	if ($4 == "\"%T\"") {
+		value = "\"\\t\""
+	}
+	# Change Eiffel newline char to java newline char.
+	else if ($4 == "\"%N\"") {
+		value = "\"\\n\""
+	}
+	else {
+		value = $4
+	}
+	print "\tString " $1 " = " value ";"
 }
 END {
 	print "}"
