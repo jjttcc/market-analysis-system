@@ -43,6 +43,8 @@ feature -- Access
 	function_library: LIST [MARKET_FUNCTION] is
 			-- All defined market functions
 		once
+			-- !!!Temporary implementation - until persistence is implemented:
+			Result := internal_function_library
 		end
 
 feature -- Basic operations
@@ -72,5 +74,10 @@ feature -- Basic operations
 		ensure
 			set_to_monday: d.date.day_of_the_week = 2
 		end
+
+feature {NONE}
+
+	internal_function_library: LIST [MARKET_FUNCTION]
+			-- !!!Temporary
 
 end -- GLOBAL_SERVICES

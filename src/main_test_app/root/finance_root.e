@@ -11,6 +11,8 @@ class FINANCE_ROOT inherit
 			all
 		end
 
+	GLOBAL_SERVICES
+
 creation
 
 	make
@@ -48,6 +50,8 @@ feature -- Initialization
 			print ("Building indicators ...%N")
 			function_builder.execute
 			add_indicators (tradable, function_builder.product)
+			--!!Temporary hack until global function library is implemented:
+			internal_function_library := function_builder.product
 			ui.set_tradable (tradable)
 			ui.execute
 		end
