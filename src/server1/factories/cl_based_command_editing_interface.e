@@ -11,13 +11,9 @@ class CL_BASED_COMMAND_EDITING_INTERFACE inherit
 
 	MAS_COMMAND_LINE_UTILITIES
 		rename
---			print_object_tree as print_command_tree,
---			print_component_trees as print_operand_trees,
 			print_message as show_message
 		export
 			{NONE} all
-		redefine
---			print_operand_trees
 		end
 
 	COMMAND_EDITING_INTERFACE
