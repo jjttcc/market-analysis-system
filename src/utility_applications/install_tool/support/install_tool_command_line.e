@@ -39,66 +39,29 @@ feature -- Access
 	usage: STRING is
 			-- Message: how to invoke the program from the command-line
 		do
-			Result := "Usage: " + command_name + " [options]" +
-				"%NOptions:%N" +
-				"   -cmdfile <file>   Obtain instructions from <file> %N" +
-				"   -file <target>    Operate on the file with path %
-					%<target>%N" +
-				"   -h                Print this help message%N"
+			Result := "Usage: " + command_name + " <application_directory>%N"
 		end
 
 feature -- Access -- settings
 
-	command_file_path: STRING
-			-- Path of the file from which instructions (commands) will be read
-
-	target_file_path: STRING
-			-- Path of the file to be modified
+	application_dir: STRING
+			-- Full path of the application directory
 
 feature {NONE} -- Implementation
 
-	set_command_file_path is
-			-- Set `command_file_path' and remove its settings from `contents'.
+	set_application_dir is
+			-- Set `application_dir' and remove its settings from `contents'.
 		do
-			if option_in_contents ('c') then
-				if contents.item.count > 2 then
-					create command_file_path.make (contents.item.count - 2)
-					command_file_path.append (contents.item.substring (
-						3, contents.item.count))
+			from
+				contents.start
+			until
+				application_dir /= Void or else contents.exhausted
+			loop
+				if not contents.item.is_empty then
+					application_dir := clone (contents.item)
 					contents.remove
 				else
-					contents.remove
-					if not contents.exhausted then
-						create command_file_path.make (contents.item.count)
-						command_file_path.append (contents.item)
-						contents.remove
-					else
-						error_occurred := True
-						log_errors (<<Command_file_error>>)
-					end
-				end
-			end
-		end
-
-	set_target_file_path is
-			-- Set `target_file_path' and remove its settings from `contents'.
-		do
-			if option_in_contents ('f') then
-				if contents.item.count > 2 then
-					create target_file_path.make (contents.item.count - 2)
-					target_file_path.append (contents.item.substring (
-						3, contents.item.count))
-					contents.remove
-				else
-					contents.remove
-					if not contents.exhausted then
-						create target_file_path.make (contents.item.count)
-						target_file_path.append (contents.item)
-						contents.remove
-					else
-						error_occurred := True
-						log_errors (<<Target_file_error>>)
-					end
+					contents.forth
 				end
 			end
 		end
@@ -110,19 +73,15 @@ feature {NONE} -- Implementation queries
 			-- unconditionally - for convenience
 		once
 			create Result.make
-			Result.extend (agent set_command_file_path)
-			Result.extend (agent set_target_file_path)
+			Result.extend (agent set_application_dir)
 		end
 
 	initialization_complete: BOOLEAN
 
 feature {NONE} -- Implementation - Constants
 
-	Command_file_error: STRING is
-		"File path for -cmdfile option was not specified.%N"
-
-	Target_file_error: STRING is
-		"File path for -file option was not specified.%N"
+	Application_dir_error: STRING is
+		"Application direcotry was not specified.%N"
 
 invariant
 
