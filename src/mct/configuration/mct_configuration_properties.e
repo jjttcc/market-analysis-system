@@ -1,13 +1,13 @@
 indexing
-	description: "Constants used for processing the MAS Control Terminal %
-		%configuration file"
+	description: "Constants and other properties used for processing the %
+		%MAS Control Terminal configuration file"
 	author: "Jim Cochrane"
 	date: "$Date$"
 	revision: "$Revision$"
 	licensing: "Copyright 2003: Jim Cochrane - %
 		%License to be determined"
 
-class MCT_CONFIGURATION_CONSTANTS inherit
+class MCT_CONFIGURATION_PROPERTIES inherit
 
 	GENERAL_CONFIGURATION_CONSTANTS
 

@@ -18,7 +18,7 @@ class SESSION_COMMAND inherit
 			{NONE} all
 		end
 
-	MCT_CONFIGURATION_CONSTANTS
+	MCT_CONFIGURATION_PROPERTIES
 		export
 			{NONE} all
 		end
