@@ -206,6 +206,11 @@ feature -- Basic operations
 						period_type_names @ Hourly)
 				end
 			end
+			check
+				period_type_not_greater_than_day:
+					not time_period_type.intraday implies time_period_type =
+					period_types @ (period_type_names @ Daily)
+			end
 			product.set_trading_period_type (time_period_type)
 			add_indicators (product, indicators)
 			product.finish_loading
