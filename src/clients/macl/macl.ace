@@ -17,7 +17,7 @@ default
 	disabled_debug ("ev_gtk_destroy")
 	disabled_debug ("ev_gtk_dispose")
 	disabled_debug ("persist")
-	debug (all)
+	debug (no)
 	line_generation (no)
 	profile (no)
 	trace (no)

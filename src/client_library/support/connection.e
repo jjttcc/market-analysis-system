@@ -107,7 +107,7 @@ feature {NONE} -- Implementation
 	end_of_message (c: CHARACTER): BOOLEAN is
 		do
 			Result := c = Eom @ 1 or c = Eot @ 1
---!!!Probably needed: termination_requested := c = Eot @ 1
+			termination_requested := c = Eot @ 1
 		end
 
 feature {NONE} -- Implementation - Constants

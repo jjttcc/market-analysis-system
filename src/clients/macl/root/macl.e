@@ -95,7 +95,7 @@ feature {NONE} -- Initialization
 --				i := i + 1
 
 --!!!tmp test:
-port := 2003
+port := 3001
 			if port = -1 then
 				print (usage())
 				abort ("Missing port number", Void)
@@ -120,7 +120,7 @@ port := 2003
 							abort ("Invalid user input", connection)
 						end
 					end
---!!!					processor.process (user_response())
+					processor.process (user_response())
 					connection.send_message (processor.product)
 	--!!!remove:			connection.receive_message()
 				end

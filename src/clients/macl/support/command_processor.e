@@ -111,7 +111,10 @@ True--!!!
 			end
 --			print "Checking '" + response + "' with:%N"
 --			print otable.items()
-			if selection and otable.has (response) then
+			if
+False and --!!Short circuit, for now
+				selection and otable.has (response)
+			then
 				product := otable @ response
 --				print "Matched: " + product
 				key_matched := true
