@@ -8,7 +8,7 @@ user id
 password	
 # Query for stock symbols
 #stock symbol query	select symbol from stock_information order by symbol
-# ('\' at the end of the line continues the command on the next line)
+# ('\' at the end of the line continues the specification on the next line)
 stock symbol query	select symbol from watch_list where category = 'all' \
 order by symbol
 # Query for derivatives symbols
@@ -30,8 +30,6 @@ derivative name query	select name from derivative_information where \
 symbol = <uppersymbol>
 
 #
-daily stock data command	select date, open_price, high_price, low_price, \
-close_price, volume from daily_stock_data where symbol = <uppersymbol>
 # Field names for daily stock data table
 # NOTE: All specified fields must be defined in the database as "not null".
 daily stock symbol field	symbol
