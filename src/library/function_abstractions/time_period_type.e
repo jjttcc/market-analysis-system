@@ -8,7 +8,7 @@ indexing
 
 class TIME_PERIOD_TYPE inherit
 
-	ANY
+	PART_COMPARABLE
 		redefine
 			is_equal
 		end
@@ -83,6 +83,27 @@ feature -- Comparison
 	is_equal (other: like Current): BOOLEAN is
 		do
 			Result := other.name.is_equal (name)
+		end
+
+	infix "<" (other: like Current): BOOLEAN is
+		do
+			if duration.definite and other.duration.definite then
+				Result := duration < other.duration
+			else
+				if intraday xor other.intraday then
+					Result := intraday
+				else
+					if duration.year = other.duration.year then
+						if duration.month = other.duration.month then
+							Result := duration.day < other.duration.day
+						else
+							Result := duration.month < other.duration.month
+						end
+					else
+						Result := duration.year < other.duration.year
+					end
+				end
+			end
 		end
 
 feature {NONE} -- Implementation
