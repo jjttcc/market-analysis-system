@@ -66,7 +66,7 @@ feature -- Utility
 			end
 			create outfile.make_open_write (
 				app_env.file_name_with_app_directory (persistent_file_name))
-			basic_store (outfile)
+			independent_store (outfile)
 			outfile.close
 		end
 
