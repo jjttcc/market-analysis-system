@@ -66,7 +66,7 @@ feature -- Access
 			l.extend (command_with_generator ("FALSE_COMMAND"))
 			l.extend (command_with_generator ("SIGN_ANALYZER"))
 
-			create l.make (34)
+			create l.make (35)
 			Result.extend (l, Real_result_command)
 			l.extend (command_with_generator ("SUBTRACTION"))
 			l.extend (command_with_generator ("MULTIPLICATION"))
@@ -102,6 +102,7 @@ feature -- Access
 			l.extend (command_with_generator ("LOG10"))
 			l.extend (command_with_generator ("N_BASED_UNARY_OPERATOR"))
 			l.extend (command_with_generator ("FUNCTION_BASED_COMMAND"))
+			l.extend (command_with_generator ("INDEX_EXTRACTOR"))
 
 			create l.make (7)
 			Result.extend (l, Binary_real_real_command)
@@ -159,6 +160,12 @@ feature -- Access
 			l.extend (command_with_generator ("N_VALUE_COMMAND"))
 			l.extend (command_with_generator ("N_BASED_UNARY_OPERATOR"))
 			l.extend (command_with_generator ("MINUS_N_COMMAND"))
+
+			create l.make (3)
+			Result.extend (l, Indexed)
+			l.extend (command_with_generator ("LOWEST_VALUE"))
+			l.extend (command_with_generator ("HIGHEST_VALUE"))
+			l.extend (command_with_generator ("LINEAR_SUM"))
 		end
 
 feature -- Constants
@@ -186,6 +193,9 @@ feature -- Constants
 
 	Linear_command: STRING is "LINEAR_COMMAND"
 			-- Name of LINEAR_COMMAND
+
+	Indexed: STRING is "INDEXED"
+			-- Name of INDEXED
 
 feature -- Status report
 
@@ -297,6 +307,8 @@ feature {NONE} -- Implementation
 						-- RESULT_COMMAND [REAL]
 	Mtlist_resultreal_n,-- Classes that need a market tuple list, a
 						-- RESULT_COMMAND [REAL], and an n-value
+	Minus_n,			-- MINUS_N_COMMAND
+						-- RESULT_COMMAND [REAL], and an n-value
 	N_command,			-- Classes that (only) need an n-value
 	Mtlist,				-- Classes that (only) need a market tuple list
 	Resultreal_n,		-- Classes that need a RESULT_COMMAND [REAL] and
@@ -304,7 +316,8 @@ feature {NONE} -- Implementation
 	Settable_offset,	-- SETTABLE_OFFSET_COMMAND
 	Sign_analyzer,		-- SIGN_ANALYZER
 	Boolean_num_client,	-- BOOLEAN_NUMERIC_CLIENT
-	Function_command    -- FUNCTION_BASED_COMMAND
+	Function_command,   -- FUNCTION_BASED_COMMAND
+	Index				-- INDEX_EXTRACTOR
 	:
 				INTEGER is unique
 			-- Constants identifying initialization routines required for
@@ -475,7 +488,7 @@ feature {NONE} -- Implementation
 			check
 				valid_name: command_names.has (name)
 			end
-			Result.extend (Mtlist_resultreal_n, name)
+			Result.extend (Minus_n, name)
 			name := "UNARY_LINEAR_OPERATOR"
 			check
 				valid_name: command_names.has (name)
@@ -556,6 +569,11 @@ feature {NONE} -- Implementation
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Function_command, name)
+			name := "INDEX_EXTRACTOR"
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Index, name)
 		end
 
 	initialize_command (c: COMMAND) is
@@ -571,6 +589,8 @@ feature {NONE} -- Implementation
 			bnc: BOOLEAN_NUMERIC_CLIENT
 			sign_an: SIGN_ANALYZER
 			fcmd: FUNCTION_BASED_COMMAND
+			minus_n_cmd: MINUS_N_COMMAND
+			ix: INDEX_EXTRACTOR
 		do
 			inspect
 				initialization_map @ c.generator
@@ -616,6 +636,12 @@ feature {NONE} -- Implementation
 					c_is_a_unary_operator_real: unop_real /= Void
 				end
 				editor.edit_mtlist_resultreal_n (unop_real)
+			when Minus_n then
+				minus_n_cmd ?= c
+				check
+					c_is_a_minus_n_command: minus_n_cmd /= Void
+				end
+				editor.edit_minus_n (minus_n_cmd)
 			when Resultreal_n then
 				unop_real ?= c
 				check
@@ -652,6 +678,12 @@ feature {NONE} -- Implementation
 					c_is_a_function_based_command: fcmd /= Void
 				end
 				editor.edit_function_based_command (fcmd)
+			when Index then
+				ix ?= c
+				check
+					c_is_a_function_based_command: ix /= Void
+				end
+				editor.edit_index_extractor (ix)
 			end
 		end
 
