@@ -1,0 +1,216 @@
+<?php
+$headers = getallheaders();
+?>
+<STYLE TYPE="text/css">
+  <!--
+  .indented
+     {
+     padding-left: 20pt;
+     padding-right: 20pt;
+     }
+  -->
+</STYLE>
+<HTML>
+<META NAME=KEYWORDS CONTENT="technical analysis, stock, stocks, Linux,
+windows, charting, charts, automated signals, market, Eiffel, Java,
+freeware, free software, trading, investing, client/server, market analysis,
+open source, moving average, stochastic, MACD, RSI, relative strength index,
+on balance volume, technical indicators, buy signal, sell signal,
+candlesticks, traders, financial markets, trading tools, subscription">
+<HEAD>
+<TITLE>Market Analysis System - Frequently Asked Questions</TITLE>
+</HEAD>
+<BODY bgcolor=#FFFFFF topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" marginheight="0" marginwidth="0">
+<tr>
+<td>&nbsp;
+<center>
+<h2>
+Market Analysis System (MAS):  Frequently Asked Questions
+</h2>
+</center>
+<DIV CLASS="indented">
+<P>
+<br><br>
+<B>Once the server is started in the background, how do I end / stop the
+server.  (I have been just using the kill command ie kill -9 procid.)
+Is there another way to have the server stop?</B>
+<P>
+You can stop the server by starting up the command-line client (either
+macl - or maclj, if you don't have Python installed but do have Java)
+and then entering a Control-E and a newline.  I didn't document this
+clearly because it's a potential security risk - if mas is running on
+the internet, anyone can connect and stop the server.  Of course, this
+is a little silly (not to document it); probably the best solution is to
+add some user verification functionality.
+<P><B>
+I haven't had much luck with the log file for sending the market analysis -
+it produces a core dump when I try and do this.
+</B><P>
+File logging is broken, apparently due to a bug in the Eiffel
+library I'm using.
+I plan to remove the feature soon, unless I can fix it.
+In the meantime, an alternative
+is to write a script to filter the mas
+"emails" and put them into a file instead of emailing them.
+See the question below about receiving signals without having them
+emailed.
+<P><B>
+Is there anyway to get buy/sell signals without emailing them to
+someone - for example, just listing them to STDOUT.
+This will allow me
+to use the data how I would like in perl or what ever, instead of
+perl going to my email and parsing the data.
+</B><P>
+You can do this by replacing the MAS "mailer" program with a script to
+do whatever you want with the signals sent from MAS.
+Just write the script to do whatever you want with the data, parsing it
+according to the
+format that shows up in email messages when MAS uses a regular mailer.
+Once you
+write the script, you can tell mas to use it as your mailer by setting
+the MAS_MAILER environment variable (documented in the file
+env_settings) to the path of the script, making sure it is executable,
+of course.
+Then use the event registration feature of MAS (from the command-line
+client) to register a new user that will receive signals using your
+script.
+Here's a simple example:
+<P>
+#!/bin/bash
+<P><I>
+mas_dir=/path_where_mas_signals_are_stored
+<br>
+/bin/cat  >> $mas_dir/events$(/bin/date +%Y%m%d)
+<P></I>
+Of course, you can do more sophisticated filtering, such as putting buy
+and sell signals into separate files according to the subject line.
+I've written a Python script that adds or removes stock symbols from
+watchlists according to whether a signal arrives indicating that the
+stock is in a long-term uptrend, downtrend, or is going sideways.
+<P><B>
+<P>
+When I change the data files after the server is run, it will not 
+pick up any newly named files.  (For example, if ibm.txt and qqq.txt
+were listed when I ran the mas server, and I added nt.txt later, mas
+will not pick up 'nt'.)  Is there any way without resetting (shutdown
+and restart) the server for it to pick up the new data files?
+<P></B>
+Currently, the only way to add new files is to shut down and restart the
+server.  This is a feature I've thought of adding and, if there is
+enough demand for it, probably will in the future.
+<P><B>
+I'm running into problems with MAS not using the new mailer I've set up -
+it is still trying to use elm.  I have set the MAS_MAILER variable:
+MAS_MAILER=/home/masuser/masconfig/masfilter.
+masfilter is executable.
+When I do the market analysis study, I get
+<I>
+sh: elm not found
+</I>
+(since I do not have elm installed on my machine).
+What am I doing wrong?
+<P></B>
+Most likely you did not export the MAS_MAILER environment variable.
+For example, if you are setting the variable in your .profile (or whatever
+login initialization file you're using with your bash/sh-compatible shell),
+you would add the following line to your .profile file:
+<P><I>
+export MAS_MAILER=/mailerpath
+</I>
+<P>
+or, for csh-compatible shells:
+<P><I>
+setenv MAS_MAILER &nbsp;/mailerpath
+</I>
+<P>
+Of course, you also need to export the MAS_DIRECTORY variable if you are
+setting it.
+<P>
+If this is not the problem - if you've already exported the
+MAS_MAILER variable, then the problem could be that you are using a user
+(event registrant) for your events that was set up with a previous MAS_MAILER
+setting.
+The design of MAS has an idiosyncracy where once a user (event registrant)
+has been registered, the MAS_MAILER that was set at that point is the
+one that is used for that user - it gets saved to a file, and it can't
+be edited.
+So for that "user" the mailer can't be changed.
+The way to
+get around this when you change mailers is to delete the original user
+and add a new user while running mas with the MAS_MAILER variable set
+to the new mailer, in this case to the path of your script.
+<P><B>
+I'm running into problems with MAS not using the
+MAS_DIRECTORY variable.
+I added:
+MAS_DIRECTORY=/home/masuser/masconfig/
+to my .profile.
+But mas doesn't use the indicators and other settings
+files I've set up in that directory.
+What am I doing wrong?
+<P></B>
+Most likely you did not export the MAS_DIRECTORY environment variable.
+See the question above about MAS not using the mailer set up with MAS_MAILER
+for an example of how to export an environment variable.
+<P>
+<P><B>
+I'm getting the following error from the server:
+<P>
+Error occurred while reading /home/user/data/x.txt: I/O error.
+<br>
+Error encountered - obtaining data for GUI client:
+<br>
+Routine failure.
+<br>
+Fatal error: Error occurred retrieving trading period types for x.
+<br>
+Exiting ...
+<P>
+Everything looks OK to me - the permissions on the file and the directory
+that contains it are correct;
+the content and format of x.txt looks correct.
+What is going wrong?
+<P></B>
+The problem is most likely that the data in x.txt is reversed.
+Some programs output data in the opposite order that MAS expects, with the
+latest date at the beginning of the file and the earliest date at the end.
+MAS wants the latest date at the end and the earliest date at the beginning.
+You can use the following script to reverse the order of the lines in a
+data file:
+<P><I><TT>
+#!/usr/bin/env bash
+<br>
+#  Reverse the order of lines in infile and output the result to outfile.
+<br>
+<br>
+pname=$(basename $0)
+<br>
+<br>
+usage() {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;echo "Usage: $pname infile outfile"
+<br>
+}
+<br>
+<br>
+if [ $# -ne 2 ]; then
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;usage; exit 1
+<br>
+fi
+<br>
+<br>
+awk '{
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;lines[i++] = $0
+<br>
+} END {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;for (j = i - 1; j >= 0; --j) {
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print lines[j]
+<br>
+&nbsp;&nbsp;&nbsp;&nbsp;}
+<br>
+}' $1 > $2
+<P></I></TT>

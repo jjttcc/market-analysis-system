@@ -1,0 +1,214 @@
+SIGNIFICANT SERVER CHANGES IN RELEASE 1.7
+
+[Describe the html, etc. changes.]
+
+Added a Weighted Moving Average indicator; and added a new operator that
+was used for this indicator, INDEX_EXTRACTOR, which extracts the current
+index of a sequence.  This allows, for example, the index value to be
+used in a summation for the current period (in an indicator calculation),
+which is needed to calculate the Weighted Moving Average.
+
+Changed the database configuration to allow complete queries to be specified
+for retrieving market data, instead of the old, more constrained
+specification scheme; this allows, for example, a complex join to be
+performed to retrieve stock data.  Also, changed the database configuration
+rules to allow the symbol being quried on to be in either upper or lower
+case, which allows the user to store symbols in upper case in the database.
+(Previously, they had to be lower case.)
+
+Fixed the problem with the market-event log file mechanism, allowing
+generated buy and sell signals to be written to a user-specified file
+instead of being emailed.
+
+Extended the client/server protocol to allow GUI clients to request
+trading signals for a tradable from the server.  Implemented this
+functionality in the server.
+
+Added three new operators: natural logarithm, base-2 logarithm, and base-10
+logarithm.
+
+Ported the server to Windows.  The port includes most of the functionality
+of the Linux release, including reading from an external data source.
+Obtaining data from a database is not yet ported to Windows.
+
+SIGNIFICANT SERVER CHANGES IN RELEASE 1.6
+
+Added a new "plug-in" mechanism that provides the capability for MAS to
+obtain its data from an external source instead of from files or from
+a database.  This mechanism is implemented in C, using the 'external "C"'
+mechanism.  Used this new mechanism to implement a "plug-in" component that
+wraps the free Quotemonster perl script, allowing users to retrieve stock
+data from the internet (using yahoo's free historical stock data service)
+directly in MAS, instead of having to download end-of-day data into files
+or a database every weekday.  This "plug-in" mechanism could also be used
+to obtain data from a "real-time" data service by writing a component that
+grabs the data from the service and translates it into the format expected
+by MAS.
+
+Changed client/server protocol (and implementation) such that the server
+notifies the GUI client when there is no open field, so that the GUI
+can deal with this special case.
+
+Added capability to handle an open interest field in the input data
+and thus the ability to process futures data.  Made a change (similar
+to the above change for no open field) in the client/server protocol
+to notify the GUI if the current tradable has an open-interest field.
+Extended the input-from-database functionality to handle the new
+open-interest field: Extended the database configuration protocol (and
+supporting database query functionality) to include specifications for
+derivative instrument (daily and intraday) tables.  Added functionality
+to ensure that indicators that use an open-interest field (such as EMA
+of open interest) are not used with stock data.
+
+Added a "Show settings" option in the main command-line menu, to make
+it easier for a user to check what settings - MAS environment variables,
+etc. - are being used in the current mas process.
+
+Fixed bug that occurred when data file names are in upper case: The
+associated stock splits for a file were not found because the symbol
+name was stored as is (with the upper case letters) while the stock
+split symbol was stored as all lower case.  Fixed by converting all
+symbols, including those obtained from a file with upper-case letters,
+to lower case.  For data obtained from files, symbols are mapped to file
+names so that the file name is not changed.
+
+In the exponential moving average classe, changed the 1 - exp.value
+calculation into an attribute for efficiency.
+
+SIGNIFICANT SERVER CHANGES IN RELEASE 1.5
+
+New operators: rounded value, square root, power.
+
+New market function:  CONFIGURABLE_N_RECORD_FUNCTION
+
+Changed the function editing interface to number duplicates among currently
+selected operators to allow the user to tell which operator he is selecting
+when he chooses an operator to be "shared."
+
+Added capability to compress data when requested by the GUI client (via
+an addition to the client/server protocol) to speed up data transfer over
+a network.
+
+Changed database access scheme to keep a database connection open during the
+entire process's life and disconnect on exit.  This noticeably speeds up
+data access.
+
+
+SIGNIFICANT SERVER CHANGES IN RELEASE 1.4
+
+Added database capability for the Linux version, using Paul Crismer's
+ECLI package.  MAS can now obtain its market data from a database instead
+of from files, on both Linux and Windows.
+
+Improved error handling and error recovery logic.
+
+Extended validation of input data to be much more robust.  Added strict
+checking option to specify that all records with errors are to be discarded.
+
+Added capability to convert daily data to quarterly data (in addition to
+weekly, monthly, and yearly).
+
+Fixed bug in handling of composite data when there are missing input records.
+
+Improved the command-line interface for adding, editing, and removing
+technical indicators, market analyzers, and market event registrants:
+Added locking of persistent files to prevent problems when two MAS servers
+are used to change the same files.  Changed to allow the user to either
+save or abort changes after editing - the previous version simply saved
+the changes to disk when the process terminated.  Made indicator editing
+hierarchical if there are duplicate indicator parameters (parameters with
+the same name/description) so that the user will know which member of a
+complex tree of indicators he is editing.
+
+Added capability to handle intraday data.  The server can now produce
+10-, 15-, 20-, 30-minute, and hourly data from 5-minute data and the same
+set plus 2-minute data from 1-minute data.
+
+Several minor bug fixes.
+
+
+SIGNIFICANT SERVER CHANGES IN RELEASE 1.3
+
+Added Invalid_symbol as a server response key to allow the GUI to print an
+error message and continue when this error occurs instead of having to
+exit.
+
+Added capability to convert daily data to monthly data and to yearly data.
+
+Changed the internal type of volume from integer to real to prevent overflow
+with the larger period types.
+
+
+SIGNIFICANT SERVER CHANGES IN RELEASE 1.2
+
+Ported to ISE Eiffel 4.4 (from 4.2) on Linux 2.2 kernel and glibc libraries.
+
+Ported to ISE Eiffel 4.4 (from 4.2) on Windows NT.  Port done by Eirik
+Mangseth.
+
+Fixed some bugs that became apparent while porting to Eiffel 4.4.  One was
+due to a change in ISE's implementation of the DATE and TIME classes.  The
+others were due to incorrect code that worked on the old compiler but not
+on the new compiler.
+
+Implemented a new design for printing market tuples to fix a bug that showed
+up after porting to Eiffel 4.4 - essentially some of the assignment attempts
+(run-time type checking) failed with the 4.4 compiler and resulted in
+calling a method on a void reference.  The new design eliminated these
+assignment attempts.
+
+Fixed a bug that showed up in saving event data (in the *.history* files)
+due to an assumption I was making about output formatting of the TIME class.
+This assumption was not documented as part of the class interface - it was
+a correct assumption with the 4.2 compiler, but incorrect with 4.4.  Fixed
+by removing the assumption and specifying an explicit output format.
+
+Modified the command-line interface to be more consistent.  For example,
+the interfaces for removing indicators and for removing market analyzers
+were different.  Now they are consistent, and both ask the user for
+verification before removing the chosen object.
+
+Fixed a bug that caused a core dump when the "Line" indicator was used (either
+from the GUI client or the command-line client).  (This had to do with the
+new market tuple printing design mentioned above.)
+
+Fixed a bug that caused a core dump when a data file with 0 records (i.e.,
+empty) was processed with an accumulation indicator (such as On Balance Volume
+or Accumulation/Distribution).
+
+Fixed a bug that caused a core dump when a data file with 0 or 1 records
+was processed with weekly data.
+
+Changed the reporting of market analysis events for stocks to include the
+stock symbol at the beginning of the report and ensure the symbol is
+captitalized to make it easier for the user to know which stock the event
+is for.
+
+
+SIGNIFICANT SERVER CHANGES IN RELEASE 1.1
+
+Added capability to define lines (MARKET_FUNCTION_LINE) for market analysis,
+which are useful for criteria for checking whether a function (such as
+stochastic) crosses above or below a specified value.
+
+Fixed bug: core dump if an empty data file is processed in market analysis;
+will now skip over empty files.
+
+Fixed bug: Event history in some cases was not being loaded properly
+because an event type ID was being used as an index when it should have
+been used as a key (i.e., a hash table key).
+
+Added a new indicator type - MARKET_DATA, to allow market analysis directly
+on market data.  Previously analysis could only be done on market functions,
+which process market data.  An example use of this new feature is to
+check for volume spikes, where the volume of the current period is greater
+than x times the volume of the previous period.
+
+Added FUNCTION_BASED_COMMAND to the market analysis subsystem to allow
+the use of an operator to compare two different functions.  An example
+of how this would be used is "Example 3:  Volume Spike Detector" from
+the file creating_market_analyzers, which compares the current period's
+volume with the EMA of volume for the previous period.
+
+Some improvements in the creation and editing of technical indicators and
+market analyzers.

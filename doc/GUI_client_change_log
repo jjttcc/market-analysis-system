@@ -1,0 +1,131 @@
+SIGNIFICANT GUI CLIENT CHANGES IN RELEASE 1.6 OF MAS
+
+Changed to accept the change in protocol from the server regarding
+notification of no open field in the data, and changes to handle this
+by setting the open value to be the same as the close value.
+
+Changed to handle the new open-interest field available from the server:
+Uses the new "open-interest" flag in the client/server protocol to
+determine if there is an open interest field and allows displaying of
+data and indicators accordingly.
+
+Increased precision of "reference value" display so that, for example,
+charts for penny stocks can be viewed with better price context
+information.
+
+SIGNIFICANT GUI CLIENT CHANGES IN RELEASE 1.5 OF MAS
+
+Added option to request data from the server to be compressed, and uncompress
+the data in the client, using the server's new compression option.  This
+sometimes decreases wait time when obtaining new charting data, especially
+over a slow network connection.
+
+SIGNIFICANT GUI CLIENT CHANGES IN RELEASE 1.4 OF MAS
+
+Added quarterly data.
+
+Fixed bug that caused the year to be drawn in the wrong place for monthly,
+quarterly, and yearly data.
+
+Added support for intraday data.
+
+GUI Improvements: Added bars in the right and bottom margins and moved the
+date and numeric reference values to within these bars to clean up the
+clutter they were causing when they were inside the graph.  Added display
+of reference values for indicators in the bottom right margin - values for
+the last indicator selected are displayed.
+
+Changed to allow specifying the reference-value line color.
+
+Improved the arrangement of the data bars at the right and left borders.
+The previous version would often draw them too close to the margin so that
+part of the bar was obscured.  The improvment fixed this problem.
+
+Changed the configuration file (.ma_clientrc) specification to allow the
+start and end dates to use a format such as "now - 10 months" to allow
+displaying the same amount of data as time passes and removes the need
+to update the configuration file with later dates.
+
+Some minor bug fixes.
+
+SIGNIFICANT GUI CLIENT CHANGES IN RELEASE 1.3 OF MAS
+
+Added the capability to specify which stocks to hold in the selection list
+on start up.
+
+Added the capability to print all stocks in the selection list, either
+from the GUI or on the command-line during start up.
+
+Changed to save current settings (such as window size and location, selected
+indicators, print settings, etc.) when the GUI exits and restore these
+values the next time the GUI is started.
+
+Changed to look for the new Invalid_symbol response from the server and if
+it occurs display an error dialog, remove the symbol from the selection list,
+and continue.
+
+Added the capability to display more than one indicator at a time and to
+configure the display color for each indicator so that a user can tell them
+apart.
+
+Added the capability to configure groupings of indicators so that each
+indicator in the group is displayed in the same scale.  This allows indicators
+with common lines configured (such as 20%/80% for the stochastic indicators)
+to have their lines drawn in the same location and for the indicators to be
+drawn in the same scale.
+
+Removed the Choice button for period types (daily, weekly, ...) and added
+a menu selection instead, which allowed configuring shortcut keys so that the
+period type can be changed without needing to move the hands from the keyboard
+to the mouse.  It also freed up some more space for the graph, since the panel
+the choice button was placed on could now go away.
+
+Added "Replace Indicators" toggle menu item to allow the user to switch
+between piling indicators on top of each other and only displaying one at a
+time.
+
+Added "Select Indicator" menu item, which pops up a selection list of
+available indicators (similar to the "Market Selection" menu item).
+
+Added an "Indicator Colors" menu item that will pop up a table of the
+currently chosen indicators along with the color of each so that the user can
+tell which indicator is which.
+
+Added a "Next" and "Previous" menu item to allow the user to switch to the
+next/previous stock in the selection list.
+
+SIGNIFICANT GUI CLIENT CHANGES IN RELEASE 1.2 OF MAS
+
+Added multithreading - each window now runs in its own thread.  Not tested
+yet because my jdk installation does not yet have threads enabled.
+
+Changed the market selection list dialog window to stay up unless the user
+explicitly closes it (added a close button) by pressing the close button
+or hitting the escape key.
+
+Changed cursor to wait cursor while client is retrieving data from server.
+
+Added the current selected indicator in the bottom graph to the window title.
+
+Added code to deal with boundary conditions with small data sets - eliminates
+errors (array index out-of-bounds, etc.) when charting stocks with a small
+amount of records.
+
+Added chart printing capability.
+
+Made background color configurable; added more color choices.
+
+
+SIGNIFICANT GUI CLIENT CHANGES IN RELEASE 1.1 OF MAS
+
+Bug: upper and lower indicators were sharing the same drawer object and
+thus sharing the same dates.  The symptom was that, when two indicators with
+different n values were used (upper and lower indicators) and the start
+date requested from the server was the first date available, the upper
+indicator, when redrawn, was using the lower indicator's dates, resulting in
+it being drawn too far to the right (when its n value was smaller than lower
+indicator's n value) and an array out-of-bounds error.  Fixed by giving
+upper and lower indicators each their own drawing object.  (July 15, 1999)
+
+Changed float parsing routine to handle the "NaN" (not a number) value
+sometimes sent by the server by replacing it with 0.

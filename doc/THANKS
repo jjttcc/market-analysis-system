@@ -1,0 +1,29 @@
+I would like to thank the following people, who directly or indirectly
+contributed to MAS:
+
+Leigh Brookshaw - whose GPL Java 2D graph package I used and modified in
+the MA GUI Client.
+
+Bob Vanzant - who allowed me to use his Linux server over the internet
+for testing MAS.
+
+Paula Decker - who suggested I use the GridBagLayout class to allow the
+GUI graph components to be resized the way I wanted and provided other
+helpful suggestions for improvements to the GUI.
+
+Ravinder Bahra - who provided feedback on MAS and its documentation.
+
+Eirik Mangseth - who did the original port of MAS to Windows, wrote some
+of the code in the database layer, and sent me many helpful suggestions
+and bug reports.
+
+Bertrand Meyer - whose excellent Eiffel language and development guidelines
+helped me to implement MAS with a good design and with minimal bugs.
+
+Paul Crismer - whose excellent ECLI library allowed me to add database
+capability on Linux.
+
+Jordan Russell - whose excellent Inno Setup (
+http://www.jrsoftware.org/isinfo.php) package made it possible to
+package MAS into a self-installing setup.exe file, making installation on
+Windows systems much easier than before.
