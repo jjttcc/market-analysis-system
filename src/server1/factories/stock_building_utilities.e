@@ -34,13 +34,6 @@ creation
 
 	make
 
-feature -- Access
-
---!!!	tuple_maker: BASIC_TUPLE_FACTORY is
---		do
---			create {VOLUME_TUPLE_FACTORY} Result
---		end
-
 feature {NONE} -- Implementation
 
 	make_product is
