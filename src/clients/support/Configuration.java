@@ -37,11 +37,15 @@ public class Configuration implements NetworkProtocol {
 // Element change
 
 	// Set the input source to be used for configuration input.
+	// Note: either, but not both of, set_input_source or set_instance
+	//   should be called before using the other features.
 	public static void set_input_source(Tokenizer insrc) {
 		input_source = insrc;
 	}
 
 	// Set the singleton instance to 'instance'.
+	// Note: either, but not both of, set_input_source or set_instance
+	//   should be called before using the other features.
 	public static void set_instance(Configuration instance) {
 		_instance = instance;
 	}
