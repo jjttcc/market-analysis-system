@@ -232,7 +232,11 @@ cluster
 
 	kernel (ise):		"$/base/kernel"
 
+	kernel_classic (ise):		"$/base/kernel/classic"
+
 	support (ise):		"$/base/support"
+
+	support_classic (ise):		"$/base/support/classic"
 
 	access (ise):		"$/base/structures/access"
 
@@ -346,6 +350,6 @@ external
 		"/${MAS}/src/eiffel_library/support/spec/${ISE_PLATFORM}/lib/utilities.o",
 		"${ISE_EIFFEL}/C_library/zlib/libz.a",
 		"${MAS}/src/server1/spec/${ISE_PLATFORM}/lib/external_input_sequence.a",
-		"-lodbc"
+		"-lodbc", "${MAS_LINK_OPTIONS}"
 
 end
