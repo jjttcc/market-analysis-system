@@ -55,4 +55,10 @@ feature {FACTORY, VALUE_SETTER} -- Status setting
 			set: date_time = t and date_time /= Void
 		end
 
+invariant
+
+	non_intraday_time_is_midnight:
+		date_time /= Void and not is_intraday implies
+			date_time.time.is_equal (midnight)
+
 end -- class MARKET_TUPLE
