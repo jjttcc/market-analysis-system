@@ -1,0 +1,33 @@
+m
+c
+s
+t
+Commodity Channel Index
+y
+Line
+y
+100
+0
+daily
+below-to-above
+n
+b
+CCI Crossed above x
+s
+c
+s
+t
+Commodity Channel Index
+y
+Line
+y
+-100
+0
+daily
+above-to-below
+n
+b
+CCI Crossed below -x
+s
+-
+x
