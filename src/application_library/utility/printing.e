@@ -93,7 +93,7 @@ do end
 				printer := tuple_printers.linear_representation @ 1
 			end
 --!!!:
-setup_correct_number_of_records_test (printer)
+--setup_correct_number_of_records_test (printer)
 			printer.set_print_start_date (print_start_date)
 			printer.set_print_end_date (print_end_date)
 			printer.set_print_start_time (print_start_time)

@@ -119,11 +119,11 @@ feature {NONE} -- Hook routine implementations
 			current_file_status: TRADABLE_FILE_STATUS
 		do
 			current_file_status := file_status_cache @ index
-print ("app new dta calling setup input medium" + "%N")
+--print ("app new dta calling setup input medium" + "%N")
 			setup_input_medium
-print ("[3] sim - cif - indexes - field, record: " +
-current_input_file.field_index.out + ", " +
-current_input_file.record_index.out + "%N")
+--print ("[3] sim - cif - indexes - field, record: " +
+--current_input_file.field_index.out + ", " +
+--current_input_file.record_index.out + "%N")
 			check
 				current_input_file.readable
 			end

@@ -288,7 +288,7 @@ feature {NONE} -- Implementation
 			-- Set `target_tradable' to the resulting TRADABLE.
 		require
 		do
-print ("load_data calling setup input medium" + "%N")
+--print ("load_data calling setup input medium" + "%N")
 			setup_input_medium
 			if not fatal_error then
 				tradable_factory.set_symbol (current_symbol)

@@ -22,7 +22,7 @@ feature {NONE}
 				tuple.set_close (stream.last_real)
 			end
 --!!!:
-print ("stream readable: " + stream.readable.out + "%N")
+--print ("stream readable: " + stream.readable.out + "%N")
 		ensure then
 			close_set_to_last_real_if_valid:
 				stream.last_real >= 0 implies

@@ -268,8 +268,8 @@ old_prod_count := product.count
 				add_indicators (product)
 			end
 			update_current_product := False
-print ("old prod count, prod count: " + old_prod_count.out + ", " +
-product.count.out + "%N")
+--print ("old prod count, prod count: " + old_prod_count.out + ", " +
+--product.count.out + "%N")
 		ensure then
 			product_not_void: product /= Void
 			product_type_set: product.trading_period_type = time_period_type
