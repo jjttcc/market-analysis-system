@@ -90,7 +90,6 @@ feature -- Initialization
 			-- Let assertion violations be handled by the run-time environment.
 			if not assertion_violation then
 				handle_exception ("main routine")
-				check no_cleanup = false end
 				exit (Error_exit_status)
 			end
 		end
