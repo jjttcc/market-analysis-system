@@ -3,6 +3,8 @@
 package gui1_root;
 
 import java.io.*;
+import java.awt.*;
+import java.awt.event.*;
 import support.*;
 import application_support.*;
 import application_library.*;
@@ -16,8 +18,19 @@ public class MA_Client {
 		mas_gui.DataSetBuilder data_builder =
 			new mas_gui.DataSetBuilder(connection(), command_line_options);
 		mas_gui.Chart chart;
-		chart = new mas_gui.Chart(data_builder, chart_filename,
-			command_line_options);
+		try {
+			chart = new mas_gui.Chart(data_builder, chart_filename,
+				command_line_options);
+		} catch (Exception e) {
+			String msg = "Abnormal event occurred.  Please check that the " +
+				configuration_file_name + " file\nis in the appropriate " +
+				"directory and that it is configured correctly.";
+			msg += "\n[Diagnostics: " + e + "]";
+			System.err.println(msg);
+			ErrorBox b = new ErrorBox("Startup error", msg, new Frame());
+			b.set_exit_on_close(1);
+			e.printStackTrace();
+		}
 	}
 
 	// Configure Configuration.instance() with applicable options
