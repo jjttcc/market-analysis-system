@@ -68,6 +68,11 @@ public class DataSet {
 
 	public void set_dates_needed(boolean b) { _dates_needed = b; }
 
+	// Number of records in this data set
+	public int count() {
+		return tuple_count;
+	}
+
 /*
 ***********************
 ** Variables      
