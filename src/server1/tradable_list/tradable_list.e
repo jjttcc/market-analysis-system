@@ -172,8 +172,8 @@ feature -- Basic operations
 				forth
 			end
 		ensure
-			current_symbol_equals_s:
-				not fatal_error implies item.symbol.is_equal (s)
+			current_symbol_equals_s: not fatal_error and
+				not (item = Void) implies item.symbol.is_equal (s)
 		end
 
 	clear_cache is
