@@ -138,7 +138,7 @@ feature -- Access
 			if retrieval_failed then
 				if exception = Retrieve_exception then
 					print_list (<<"Retrieval of market analysis library%
-								% file ", indicators_file_name, " failed%N">>)
+								% file ", generators_file_name, " failed%N">>)
 				else
 					print_list (<<"Error occurred while retrieving market %
 							%analysis library: ", meaning(exception), "%N">>)
@@ -207,7 +207,7 @@ feature -- Access
 			if retrieval_failed then
 				if exception = Retrieve_exception then
 					print_list (<<"Retrieval of event registrants file ",
-								indicators_file_name, " failed%N">>)
+								registrants_file_name, " failed%N">>)
 				else
 					print_list (<<"Error occurred while retrieving event %
 								%registrants: ", meaning(exception), "%N">>)
