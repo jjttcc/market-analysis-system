@@ -1,12 +1,14 @@
 indexing
 	description: "A simple, atomic market event"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
 class ATOMIC_MARKET_EVENT inherit
 
 	MARKET_EVENT
+		rename
+			tag as symbol
 		redefine
 			is_equal
 		end

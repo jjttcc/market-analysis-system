@@ -47,6 +47,11 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
+	tag: STRING is
+			-- Short identifying string for the event, such as a stock symbol
+		deferred
+		end
+
 feature {NONE} -- Implementation
 
 	cached_id: STRING

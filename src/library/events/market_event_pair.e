@@ -1,7 +1,7 @@
 indexing
 	description:
 		"A market event that contains a left/right pair of market events"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -34,6 +34,13 @@ feature -- Access
 
 	left, right: MARKET_EVENT
 			-- left and right elements of the pair
+
+	tag: STRING is
+		do
+			Result := left.tag
+		ensure then
+			left_tag: Result = left.tag
+		end
 
 	time_stamp: DATE_TIME is
 			-- The later of left.time_stamp and right.time_stamp
