@@ -24,6 +24,8 @@ feature -- Access
 
 	Stock_name_query_specifier: STRING is "stock name query"
 
+	Daily_stock_data_command_specifier: STRING is "daily stock data command"
+
 	Daily_stock_symbol_field_specifier: STRING is "daily stock symbol field"
 
 	Daily_stock_date_field_specifier: STRING is "daily stock date field"
