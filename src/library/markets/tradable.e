@@ -10,8 +10,23 @@ class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 	SIMPLE_FUNCTION [G]
 
 	MATH_CONSTANTS
+		export {NONE}
+			all
 		undefine
 			is_equal, copy, setup
+		end
+
+feature {NONE} -- Initialization
+
+	tradable_initialize is
+		do
+			!LINKED_LIST [MARKET_FUNCTION]!indicators.make
+			!!indicator_groups.make (0)
+			!!composite_tuple_lists.make (0)
+		ensure
+			containers_not_void:
+				indicators /= Void and indicator_groups /= Void and
+					composite_tuple_lists /= Void
 		end
 
 feature -- Access
@@ -79,6 +94,22 @@ feature -- Access
 			Result := y_low
 		end
 
+feature -- Status report
+
+	indicators_processed: BOOLEAN is
+			-- Have all elements of indicators been processed?
+		do
+			from
+				Result := true
+				indicators.start
+			until
+				not Result or indicators.after
+			loop
+				Result := indicators.item.processed
+				indicators.forth
+			end
+		end
+
 feature -- Element change
 
 	add_indicator (f: MARKET_FUNCTION) is
@@ -97,6 +128,28 @@ feature -- Element change
 		ensure
 			removed: not indicators.has (f)
 			one_less: indicators.count = old indicators.count - 1
+		end
+
+feature -- Basic operations
+
+	process_indicators is
+			-- Ensure that all elements of `indicators' have been processed.
+		do
+			from
+				indicators.start
+			until
+				indicators.after
+			loop
+				if not indicators.item.processed then
+					indicators.item.process (Void)
+				end
+				check
+					processed: indicators.item.processed
+				end
+				indicators.forth
+			end
+		ensure
+			processed: indicators_processed
 		end
 
 feature {NONE}
@@ -142,5 +195,10 @@ feature {NONE}
 			y_low.set_value (calculator.value)
 			go_to (original_cursor)
 		end
+
+invariant
+
+	containers_not_void: indicators /= Void and indicator_groups /= Void and
+							composite_tuple_lists /= Void
 
 end -- class TRADABLE

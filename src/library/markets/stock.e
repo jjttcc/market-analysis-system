@@ -22,6 +22,7 @@ feature -- Initialization
 		do
 			symbol := s
 			arrayed_list_make (300)
+			tradable_initialize
 		ensure
 			symbol_set: symbol = s
 		end
@@ -39,7 +40,7 @@ feature -- Element change
 			-- Add `s' to `splits' such that splits remains sorted by date.
 		require
 			not_void: s /= Void
-			not_in_splits: not splits.has (s)
+			not_in_splits: splits = Void or else not splits.has (s)
 		do
 			if splits = Void then
 				!!splits.make
@@ -64,7 +65,7 @@ feature -- Basic operations
 		local
 			first_item_date: DATE
 		do
-			if not empty and not splits.empty then
+			if not empty and splits /= Void and not splits.empty then
 				-- Since the date of some or all of the elements of splits may
 				-- precede the date of the first element, move splits' cursor
 				-- to the first element whose date > first.date_time.date.
@@ -92,7 +93,7 @@ feature {NONE} -- Implementation
 
 	do_split_adjustment is
 		require
-			lists_not_empty: not empty and not splits.empty
+			lists_not_empty: not empty and splits /= Void and not splits.empty
 			not_splits_off: not splits.off
 			splt_date_gt_first: splits.item.date > first.date_time.date
 			prev_splt_date_le_first: not splits.isfirst implies
@@ -147,6 +148,8 @@ feature {NONE} -- Implementation
 
 	splits_sorted_by_date: BOOLEAN is
 			-- Is attribute `splits' sorted by date ascending?
+		require
+			not_void_or_empty: splits /= Void and not splits.empty
 		local
 			previous_date: DATE
 		do
@@ -182,6 +185,7 @@ feature {NONE} -- Implementation
 
 invariant
 
-	splits_sorted_by_date: splits /= Void implies splits_sorted_by_date
+	splits_sorted_by_date:
+		splits /= Void and not splits.empty implies splits_sorted_by_date
 
 end -- class STOCK
