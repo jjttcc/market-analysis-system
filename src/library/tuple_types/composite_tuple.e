@@ -15,20 +15,12 @@ class COMPOSITE_TUPLE inherit
 			begin_editing, end_editing, set, set_open, set_close, set_high,
 			set_low
 		redefine
-			make, end_date
+			end_date
 		end
 
 creation
 
 	make
-
-feature -- Initialization
-
-	make is
-		do
-			-- Set first and last
-			Precursor
-		end
 
 feature -- Access
 
