@@ -52,7 +52,7 @@ set_up()
 		exec=../EIFGEN/F_code/main_test
 	elif [ -d ../EIFGEN/W_code -a -x ../EIFGEN/W_code/main_test ]; then
 		exec=../EIFGEN/W_code/main_test
-		ln -s ../EIFGEN/W_code/melted.eif .
+		ln -f -s ../EIFGEN/W_code/melted.eif .
 	else
 		echo "Cannot find executable in ../EIFGEN/F_code or ../EIFGEN/W_code."
 		echo "exiting ..."
