@@ -161,6 +161,7 @@ feature -- Basic operations
 							concatenation (<<f.generator,
 								"'s first element operator">>), false)
 			f.set_operators (mainop, prevop, firstop)
+			edit_n (f)
 		end
 
 	edit_one_fn_op_n (f: N_RECORD_ONE_VARIABLE_FUNCTION) is
