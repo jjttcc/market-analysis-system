@@ -83,6 +83,10 @@ feature {NONE} -- Hook methods
 			end
 		end
 
+feature {MARKET_FUNCTION} -- Status report
+
+	is_complex: BOOLEAN is true
+
 feature {NONE} -- Implementation
 
 	parameter_list: LINKED_LIST [FUNCTION_PARAMETER]

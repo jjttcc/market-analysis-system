@@ -80,7 +80,20 @@ feature {FACTORY} -- Status setting
 			is_set: name = n and name /= Void
 		end
 
-feature {NONE} -- Hook methods
+	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
+			-- If the run-time type is a complex function, set the innermost
+			-- input attribute to `in', else do nothing.
+		require
+			not_void: in /= Void
+		do
+		end
+
+feature {MARKET_FUNCTION}
+
+	is_complex: BOOLEAN is
+			-- Is the run-time type a complex function?
+		deferred
+		end
 
 invariant
 

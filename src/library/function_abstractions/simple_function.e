@@ -84,6 +84,10 @@ feature -- Status report
 			Result = (output /= Void)
 		end
 
+feature {MARKET_FUNCTION} -- Status report
+
+	is_complex: BOOLEAN is false
+
 feature {NONE} -- Basic operations
 
 	process is
