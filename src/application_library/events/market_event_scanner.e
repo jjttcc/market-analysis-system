@@ -12,7 +12,7 @@ class MARKET_EVENT_SCANNER inherit
 		export {NONE}
 			data_scanner_make
 		redefine
-			product, parser, make_tuple, advance_to_next_record
+			product, parser, make_tuple, advance_to_next_record, input
 		end
 
 	EXCEPTIONS
@@ -50,6 +50,8 @@ feature -- Access
 	product: LINKED_LIST [MARKET_EVENT]
 
 	parser: MARKET_EVENT_PARSER
+
+	input: INPUT_FILE
 
 feature {NONE} -- Hook method implementations
 
@@ -91,13 +93,13 @@ feature {NONE} -- Hook method implementations
 			from
 				i := 1
 			variant
-				record_separator.count + 1 - i
+				input.record_separator.count + 1 - i
 			until
-				i > record_separator.count
+				i > input.record_separator.count
 			loop
 				input.read_character
 				if
-					input.last_character /= record_separator @ i
+					input.last_character /= input.record_separator @ i
 				then
 					error_list.extend (
 							"Incorrect record separator detected.")
