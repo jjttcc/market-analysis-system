@@ -25,7 +25,7 @@ creation {FACTORY}
 
 feature {NONE} -- Initialization
 
-	make (in1: like input1; in2: like input2; op: NUMERIC_COMMAND)  is
+	make (in1: like input1; in2: like input2; op: like operator)  is
 		require
 			args_not_void: in1 /= Void and in2 /= Void
 			op_not_void_if_used: operator_used implies op /= Void
