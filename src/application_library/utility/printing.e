@@ -52,6 +52,7 @@ feature -- Status setting
 feature -- Basic operations
 
 	print_list (l: ARRAY [ANY]) is
+			-- Print all members of `l'.
 		require
 			not_void: l /= Void
 		local
@@ -121,30 +122,37 @@ feature -- Basic operations
 		local
 			names: ARRAY [STRING]
 			i: INTEGER
-			l: LIST [COMPOSITE_TUPLE]
+			l: LIST [BASIC_MARKET_TUPLE]
 			cvt: COMPOSITE_VOLUME_TUPLE
+			cl: LIST [COMPOSITE_TUPLE]
 			vl: LIST [COMPOSITE_VOLUME_TUPLE]
 		do
 			from
-				names := t.composite_list_names
+				names := t.tuple_list_names
 				i := 1
 			until
 				i > names.count
 			loop
-				print ("Composite tuple list for "); print (t.symbol)
-				print (", Trading period: "); print (names @ i); print ("%N")
-				l := t.composite_tuple_list (names @ i)
-				if l /= Void and not l.empty then
-					cvt ?= l.first
-					if cvt /= Void then
-						vl ?= l
-						check vl /= Void end
-						print_composite_volume_tuples (vl)
+				-- Don't print the list if its trading period type is the
+				-- same as t's - that is, if it's not composite.
+				if not equal (t.trading_period_type.name, names @ i) then
+					print_list (<<"Composite tuple list for ", t.symbol,
+					", Trading period: ", names @ i, "%N">>)
+					l := t.tuple_list (names @ i)
+					if l /= Void and not l.empty then
+						cvt ?= l.first
+						if cvt /= Void then
+							vl ?= l
+							check vl /= Void end
+							print_composite_volume_tuples (vl)
+						else
+							cl ?= l
+							check cl /= Void end
+							print_composite_tuples (cl)
+						end
 					else
-						print_composite_tuples (l)
+						print ("(Empty)%N")
 					end
-				else
-					print ("(Empty)%N")
 				end
 				i := i + 1
 			end
