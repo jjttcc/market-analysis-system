@@ -13,6 +13,7 @@ import javax.servlet.GenericServlet;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.ServletConfig;
+import java_library.support.*;
 import support.IO_SocketConnection;
 import support.ServerResponseUtilities;
 
@@ -173,5 +174,5 @@ public final class MAS extends GenericServlet {
 	private final String Default_server_hostname = "localhost";
 
 	// Default MAS server port, in case init. parameter not set
-	private final int Default_server_port = 1;
+	private final int Default_server_port = 2004;
 }
