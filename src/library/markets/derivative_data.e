@@ -23,11 +23,6 @@ feature -- Access
 		deferred
 		end
 
-	sector: STRING is
-			-- Name of sector of instrument associated with `symbol'
-		deferred
-		end
-
 feature -- Status setting
 
 	set_symbol (arg: STRING) is
