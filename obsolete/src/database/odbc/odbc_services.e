@@ -48,7 +48,7 @@ feature -- Access
 			fatal_error := false
 			db_result := db_mgr.retrieve (db_info.stock_symbol_query)
 			if db_result /= Void then
-				create {LINKED_LIST [STRING]} Result.make
+				create {ARRAYED_LIST [STRING]} Result.make (0)
 				create symbol.make (0)
 				from
 					db_result.start
