@@ -85,7 +85,8 @@ feature {NONE} -- Implementation
 		require
 			not_void: symbol /= Void and period_type /= Void
 		do
-print ("TRC.cached_tradable called (" + generating_type + ")" + "%N")
+--!!!:
+--print ("TRC.cached_tradable called (" + generating_type + ")" + "%N")
 			Result := session.last_tradable
 			if
 				ignore_tradable_cache or else Result = Void or
@@ -94,12 +95,14 @@ print ("TRC.cached_tradable called (" + generating_type + ")" + "%N")
 			then
 				Result := Void
 				if tradables.valid_period_type (symbol, period_type) then
-print ("TRC.cached_tradable calling TD.tradable (" + generating_type + ")" + "%N")
+--!!!:
+--print ("TRC.cached_tradable calling TD.tradable (" + generating_type + ")" + "%N")
 					Result := tradables.tradable (symbol, period_type,
 						update_retrieved_tradable)
 				end
 				session.set_last_tradable (Result)
-print ("TRC.cached_tradable returning (" + generating_type + ")" + "%N")
+--!!!:
+--print ("TRC.cached_tradable returning (" + generating_type + ")" + "%N")
 			end
 		ensure
 			last_tradable_set: session.last_tradable = Result
