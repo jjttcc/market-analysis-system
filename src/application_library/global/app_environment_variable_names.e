@@ -1,5 +1,5 @@
 indexing
-	description: "Environment variable values used by the application"
+	description: "Names of environment variables used by the application"
 	usage:
 		"Configure the features of this class to return the appropriate %
 		%values for the listed environment variable names."
