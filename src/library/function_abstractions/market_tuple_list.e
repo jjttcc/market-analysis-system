@@ -21,7 +21,7 @@ feature -- Access
 			--   search_spec < 0: Index of latest element whose date_time < `d'
 			--   search_spec > 0: Index of earliest element whose
 			--                    date_time > `d'
-			--   search_spec = 0: -1
+			--   search_spec = 0: 0
 			-- If there is no element whose date_time is earlier than `d' for
 			-- search_spec < 0 or no element whose date_time is later than `d'
 			-- for search_spec > 0, result is 0.
@@ -100,7 +100,7 @@ feature -- Access
 			-- If no element's date matches `d':
 			--   search_spec < 0: Index of latest element whose date < `d'
 			--   search_spec > 0: Index of earliest element whose date > `d'
-			--   search_spec = 0: -1
+			--   search_spec = 0: 0
 			-- If there is no element whose date is earlier than `d' for
 			-- search_spec < 0 or no element whose date is later than `d'
 			-- for search_spec > 0, result is 0.
