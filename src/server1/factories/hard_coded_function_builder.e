@@ -105,7 +105,7 @@ feature {NONE} -- Hard-coded market function building procedures
 		do
 			!!cmd1.make (f1.output)
 			!!cmd2.make (f2.output)
-			!!sub.make_with_operands (cmd1, cmd2)
+			!!sub.make (cmd1, cmd2)
 			!!Result.make (f1, f2, sub)
 			Result.set_name (name)
 		ensure
@@ -122,10 +122,10 @@ feature {NONE} -- Hard-coded market function building procedures
 		do
 			!!close; !!close_minus_n.make (f.output, n)
 			if operator_type.is_equal ("SUBTRACTION") then
-				!SUBTRACTION!operator.make_with_operands (close, close_minus_n)
+				!SUBTRACTION!operator.make (close, close_minus_n)
 			else
 				check operator_type.is_equal ("DIVISION") end
-				!DIVISION!operator.make_with_operands (close, close_minus_n)
+				!DIVISION!operator.make (close, close_minus_n)
 			end
 			!!Result.make (f, operator, close_minus_n, n)
 			Result.set_name (name)
@@ -147,9 +147,9 @@ feature {NONE} -- Hard-coded market function building procedures
 			!!close
 			!!highest.make (f.output, n)
 			!!lowest.make (f.output, n)
-			!!s1.make_with_operands (highest, close)
-			!!s2.make_with_operands (highest, lowest)
-			!!d.make_with_operands (s1, s2)
+			!!s1.make (highest, close)
+			!!s2.make (highest, lowest)
+			!!d.make (s1, s2)
 			!!Result.make (f, d, n)
 			Result.set_name (name)
 			check Result.n = highest.n and Result.n = lowest.n end
@@ -171,9 +171,9 @@ feature {NONE} -- Hard-coded market function building procedures
 			!!close
 			!!highest.make (f.output, n)
 			!!lowest.make (f.output, n)
-			!!s1.make_with_operands (close, lowest);
-			!!s2.make_with_operands (highest, lowest)
-			!!d.make_with_operands (s1, s2)
+			!!s1.make (close, lowest);
+			!!s2.make (highest, lowest)
+			!!d.make (s1, s2)
 			!!Result.make (f, d, n)
 			Result.set_name (name)
 			check Result.n = lowest.n and Result.n = highest.n end
@@ -202,8 +202,8 @@ feature {NONE} -- Hard-coded market function building procedures
 			!!highest.make (f.output, inner_n)
 			!!lowest.make (f.output, inner_n)
 			!!close
-			!!sub1.make_with_operands (close, lowest);
-			!!sub2.make_with_operands (highest, lowest)
+			!!sub1.make (close, lowest);
+			!!sub2.make (highest, lowest)
 			!!close_low_function.make (f, sub1, inner_n)
 			!!high_low_function.make (f, sub2, inner_n)
 			close_low_function.process (Void)
@@ -213,7 +213,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			ma1.process (Void)
 			ma2.process (Void)
 			!!basic1.make (ma1.output); !!basic2.make (ma2.output)
-			!!div.make_with_operands (basic1, basic2)
+			!!div.make (basic1, basic2)
 			!!Result.make (ma1, ma2, div)
 			Result.set_name (name)
 		ensure
