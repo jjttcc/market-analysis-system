@@ -103,15 +103,14 @@ feature -- Initialization
 
 feature -- Access
 
-	Main: INTEGER is 2
-	View_data: INTEGER is 3
-	Set_analysis_date: INTEGER is 4
-	Edit_event_registrants: INTEGER is 5
-	Add_registrants: INTEGER is 6
-	Edit_registrant: INTEGER is 7
-	View_indicator: INTEGER is 8
-	Edit_indicators: INTEGER is 9
-	Compound_event_generator_time_extensions: INTEGER is 10
-	Compound_event_generator_left_target_type: INTEGER is 11
+	Main: INTEGER is 3
+	View_data: INTEGER is 4
+	Set_analysis_date: INTEGER is 5
+	Edit_event_registrants: INTEGER is 6
+	Add_registrants: INTEGER is 7
+	Edit_registrant: INTEGER is 8
+	View_indicator: INTEGER is 9
+	Compound_event_generator_time_extensions: INTEGER is 11
+	Compound_event_generator_left_target_type: INTEGER is 12
 
 end -- class HELP
