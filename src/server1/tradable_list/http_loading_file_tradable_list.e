@@ -128,7 +128,6 @@ feature {NONE} -- Hook routine implementations
 
 	latest_date_for (symbol: STRING): DATE is
 		do
-print ("latest_date_for called.%N")
 			if not current_symbol.is_equal (symbol) then
 				search_by_symbol (symbol)
 			end
@@ -136,7 +135,6 @@ print ("latest_date_for called.%N")
 				last_tradable /= Void and then not last_tradable.data.is_empty
 			then
 				Result := last_tradable.data.last.end_date
-print ("latest_date_for result: " + Result.out + "%N")
 			end
 		end
 
