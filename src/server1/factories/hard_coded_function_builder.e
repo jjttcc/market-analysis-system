@@ -84,6 +84,7 @@ feature -- Basic operations
 											"Slow Stochastic %%D"))
 			l.extend (rsi (f, RSI_n, "Relative Strength Index"))
 			l.extend (market_close_data (f, "Market Close Data"))
+			l.extend (market_function_line ("Trend Line"))
 			product := l
 		end
 
@@ -327,6 +328,21 @@ feature {NONE} -- Hard-coded market function building procedures
 			Result.set_name (name)
 		ensure
 			initialized: Result /= Void and Result.name = name
+		end
+
+	market_function_line (name: STRING): MARKET_FUNCTION_LINE is
+			-- Dummy line
+		local
+			p1, p2: MARKET_POINT
+			now: DATE_TIME
+		do
+			!!p1.make
+			!!p2.make
+			!!now.make_now
+			p1.set_x_y_date (1, 1, now)
+			p2.set_x_y_date (1, 1, now)
+			!!Result.make (p1, p2, period_types @ (period_type_names @ Daily))
+			Result.set_name (name)
 		end
 
 invariant
