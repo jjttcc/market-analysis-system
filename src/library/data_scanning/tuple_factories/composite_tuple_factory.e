@@ -65,6 +65,9 @@ feature -- Basic operations
 feature {NONE}
 
 	do_main_work (tuples: LIST [BASIC_MARKET_TUPLE]) is
+			-- Set `product's open, high, low, and close values from the
+			-- open, highest high, lowest low, and close values, respectively,
+			-- from tuples.
 		local
 			h, l, o, c: REAL
 			high: expanded HIGH_PRICE
