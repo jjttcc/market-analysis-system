@@ -67,7 +67,7 @@ feature -- Access
 				if period_type.is_equal (trading_period_type.name) then
 					-- No processing needed - just assign to base data.
 					Result := Current
-				elseif Current.count > 1 then
+				else
 					Result := process_composite_list (
 													period_types @ period_type)
 				end
@@ -333,16 +333,18 @@ feature {NONE}
 	process_composite_list (type: TIME_PERIOD_TYPE):
 				SIMPLE_FUNCTION [COMPOSITE_TUPLE] is
 			-- Create a list of composite tuples from the base data.
-		require
-			not_empty: count > 1
 		local
 			ctf: COMPOSITE_TUPLE_FACTORY
 			ctbuilder: COMPOSITE_TUPLE_BUILDER
 			start_date_time: DATE_TIME
 		do
 			ctf := make_ctf
-			start_date_time := clone (first.date_time)
-			adjust_start_time (start_date_time, type)
+			if not empty then
+				start_date_time := clone (first.date_time)
+				adjust_start_time (start_date_time, type)
+			else
+				create start_date_time.make_now
+			end
 			if type.irregular then
 				--when ready:
 				-- !IRREGULAR_COMPOSITE_TUPLE_BUILDER!ctbuilder.make (
