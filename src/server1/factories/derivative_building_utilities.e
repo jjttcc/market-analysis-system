@@ -72,7 +72,7 @@ feature {TRADABLE_FACTORY} -- Implementation
 			at_least_one: Result.count > 0
 		end
 
-	derivative_data: DERIVATIVE_DATA is
+	derivative_data: TRADABLE_DATA is
 		do
 			if command_line_options.use_db then
 				Result := database_services.derivative_data

@@ -8,7 +8,7 @@ indexing
 
 class DB_DERIVATIVE_DATA inherit
 
-	DERIVATIVE_DATA
+	TRADABLE_DATA
 
 	GENERAL_UTILITIES
 		export {NONE}

@@ -86,7 +86,7 @@ feature -- Access
 			create {DB_STOCK_DATA} Result
 		end
 
-	derivative_data: DERIVATIVE_DATA is
+	derivative_data: TRADABLE_DATA is
 		once
 			create {DB_DERIVATIVE_DATA} Result
 		end

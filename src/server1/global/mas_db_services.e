@@ -185,7 +185,7 @@ feature -- Access
 		deferred
 		end
 
-	derivative_data: DERIVATIVE_DATA is
+	derivative_data: TRADABLE_DATA is
 			-- Miscellaneous derivative-instrument information from database
 		deferred
 		end
