@@ -14,26 +14,11 @@ public class Configuration implements NetworkProtocol {
 	// Graph styles
 	public final static int Candle_graph = 1, Regular_graph = 2;
 
-	// Set the input source to be used for configuration input.
-	public static void set_input_source(Tokenizer insrc) {
-		input_source = insrc;
-	}
-
-	// Should calls to 'terminate' be ignored?  (Defaults to false.)
-	public static void set_ignore_termination(boolean value) {
-		ignore_termination_ = value;
-	}
+// Access
 
 	// Should a call to 'terminate' be ignored?
 	public static boolean ignore_termination() {
 		return ignore_termination_;
-	}
-
-	// If not ignore_termination(), terminate the process.
-	public static void terminate(int status) {
-		if (! ignore_termination_) {
-			System.exit(status);
-		}
 	}
 
 	public String session_settings() {
@@ -113,17 +98,17 @@ public class Configuration implements NetworkProtocol {
 		return _bar_color;
 	}
 
-	// Color to use for connecting lines (indicators)
+	// Color to use for indicator lines
 	public Color line_color() {
 		return _line_color;
 	}
 
-	// Color to use for connecting lines (indicators)
+	// Color to use for reference lines
 	public Color reference_line_color() {
 		return _reference_line_color;
 	}
 
-	// Color to use for connecting lines (indicators)
+	// Color to use for text
 	public Color text_color() {
 		return _text_color;
 	}
@@ -147,7 +132,7 @@ public class Configuration implements NetworkProtocol {
 		return (String) reverse_color_table.get(c);
 	}
 
-	// Color for `color_name'
+	// Color for `color_name' - null if `color_name' is not valid
 	public Color color(String color_name) {
 		return (Color) _color_table.get(color_name);
 	}
@@ -173,6 +158,95 @@ public class Configuration implements NetworkProtocol {
 		return _instance;
 	}
 
+// Element change
+
+	// Set the input source to be used for configuration input.
+	public static void set_input_source(Tokenizer insrc) {
+		input_source = insrc;
+	}
+
+	// Set the configuration modifier to 'm'.
+	public static void set_modifier(ConfigurationModifier m) {
+		modifier = m;
+	}
+
+	// Should calls to 'terminate' be ignored?  (Defaults to false.)
+	public static void set_ignore_termination(boolean value) {
+		ignore_termination_ = value;
+	}
+
+	// Set the background color go 'color'.
+	public void set_color(String color_tag, String color) {
+		if (! _color_table.containsKey(color)) {
+			System.err.println("Invalid color setting for " + color_tag +
+								": '" + color + "'");
+		}
+		else if (color_tag.equals(Background_color)) {
+			_background_color = (Color) _color_table.get(color);
+		}
+		else if (color_tag.equals(Black_candle_color)) {
+			_black_candle_color = (Color) _color_table.get(color);
+		}
+		else if (color_tag.equals(White_candle_color)) {
+			_white_candle_color = (Color) _color_table.get(color);
+		}
+		else if (color_tag.equals(Stick_color)) {
+			_stick_color = (Color) _color_table.get(color);
+		}
+		else if (color_tag.equals(Bar_color)) {
+			_bar_color = (Color) _color_table.get(color);
+		}
+		else if (color_tag.equals(Line_color)) {
+			_line_color = (Color) _color_table.get(color);
+		}
+		else if (color_tag.equals(Reference_line_color)) {
+			_reference_line_color = (Color) _color_table.get(color);
+		}
+		else if (color_tag.equals(Text_color)) {
+			_text_color = (Color) _color_table.get(color);
+		}
+		else {
+			System.err.println("Invalid color tag: " + color_tag);
+		}
+	}
+
+	// Set the main graph style to 'style'.
+	// Precondition: style.equals(Candle_style) || style.equals(Regular_style)
+	public void set_main_graph_style(String style) {
+		set_graph_style(Main_graph_style, style);
+	}
+
+// Basic operations
+
+	// If not ignore_termination(), terminate the process.
+	public static void terminate(int status) {
+		if (! ignore_termination_) {
+			System.exit(status);
+		}
+	}
+
+// Constants
+
+	// Configuration Keywords
+	public static final String Upper_indicator = "upper_indicator";
+	public static final String Lower_indicator = "lower_indicator";
+	public static final String Horiz_indicator_line = "indicator_line_h";
+	public static final String Vert_indicator_line = "indicator_line_v";
+	public static final String Color_tag = "color";
+	public static final String Background_color = "background_color";
+	public static final String Black_candle_color = "black_candle_color";
+	public static final String White_candle_color = "white_candle_color";
+	public static final String Stick_color = "stick_color";
+	public static final String Bar_color = "bar_color";
+	public static final String Line_color = "line_color";
+	public static final String Reference_line_color = "reference_line_color";
+	public static final String Text_color = "text_color";
+	public static final String Main_graph_style = "main_graph_style";
+	public static final String Candle_style = "candle";
+	public static final String Regular_style = "regular";
+	public static final String Indicator_group = "indicator_group";
+	public static final String End_block = "end_block";
+
 // Implementation
 
 	protected Configuration(Tokenizer in_source) {
@@ -189,6 +263,9 @@ public class Configuration implements NetworkProtocol {
 		main_indicator_group.add_indicator(IndicatorGroups.Maingroup);
 		load_settings(in_source);
 		indicator_groups.add_group(main_indicator_group);
+		if (modifier != null) {
+			modifier.execute(this);
+		}
 	}
 
 	private void load_settings(Tokenizer input) {
@@ -225,7 +302,7 @@ public class Configuration implements NetworkProtocol {
 							s.equals(Vert_indicator_line)) {
 					add_indicator_line(s, t);
 				} else if (s.endsWith(Color_tag)) {
-					set_color(s, t);
+					set_color(s, t.nextToken());
 				} else if (s.equals(Main_graph_style)) {
 					set_graph_style(s, t.nextToken());
 				} else if (s.equals(Indicator_group)) {
@@ -262,41 +339,6 @@ public class Configuration implements NetworkProtocol {
 		if (lines != null) {
 			lines.addElement(n1);
 			lines.addElement(n2);
-		}
-	}
-
-	private void set_color(String color_tag, StringTokenizer t) {
-		String color = t.nextToken();
-		if (! _color_table.containsKey(color)) {
-			System.err.println("Invalid color setting for " + color_tag +
-								": '" + color + "'");
-		}
-		else if (color_tag.equals(Background_color)) {
-			_background_color = (Color) _color_table.get(color);
-		}
-		else if (color_tag.equals(Black_candle_color)) {
-			_black_candle_color = (Color) _color_table.get(color);
-		}
-		else if (color_tag.equals(White_candle_color)) {
-			_white_candle_color = (Color) _color_table.get(color);
-		}
-		else if (color_tag.equals(Stick_color)) {
-			_stick_color = (Color) _color_table.get(color);
-		}
-		else if (color_tag.equals(Bar_color)) {
-			_bar_color = (Color) _color_table.get(color);
-		}
-		else if (color_tag.equals(Line_color)) {
-			_line_color = (Color) _color_table.get(color);
-		}
-		else if (color_tag.equals(Reference_line_color)) {
-			_reference_line_color = (Color) _color_table.get(color);
-		}
-		else if (color_tag.equals(Text_color)) {
-			_text_color = (Color) _color_table.get(color);
-		}
-		else {
-			System.err.println("Invalid color tag: " + color_tag);
 		}
 	}
 
@@ -426,9 +468,12 @@ public class Configuration implements NetworkProtocol {
 		}
 	}
 
+// Implementation - attributes
+
 	private static boolean ignore_termination_ = false;
 	private static Configuration _instance;
 	private static Tokenizer input_source;
+	private static ConfigurationModifier modifier = null;
 
 	private Vector start_date_settings;
 	private Vector end_date_settings;
@@ -441,26 +486,6 @@ public class Configuration implements NetworkProtocol {
 	private Hashtable reverse_color_table;
 	private IndicatorGroups indicator_groups;
 	private IndicatorGroup main_indicator_group;
-
-	// Configuration Keywords
-	private final String Upper_indicator = "upper_indicator";
-	private final String Lower_indicator = "lower_indicator";
-	private final String Horiz_indicator_line = "indicator_line_h";
-	private final String Vert_indicator_line = "indicator_line_v";
-	private final String Color_tag = "color";
-	private final String Background_color = "background_color";
-	private final String Black_candle_color = "black_candle_color";
-	private final String White_candle_color = "white_candle_color";
-	private final String Stick_color = "stick_color";
-	private final String Bar_color = "bar_color";
-	private final String Line_color = "line_color";
-	private final String Reference_line_color = "reference_line_color";
-	private final String Text_color = "text_color";
-	private final String Main_graph_style = "main_graph_style";
-	private final String Candle_style = "candle";
-	private final String Regular_style = "regular";
-	private final String Indicator_group = "indicator_group";
-	private final String End_block = "end_block";
 
 	// Color settings for graph components
 	private Color _background_color;
