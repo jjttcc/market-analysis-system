@@ -51,8 +51,7 @@ feature {MARKET_FUNCTION_EDITOR} -- Status setting
 			first_element_operator := fop
 		ensure
 			operator_set: operator = op and operator /= Void
-			previous_operator_set: previous_operator = pop and
-				previous_operator /= Void
+			previous_operator_set: previous_operator = pop
 			first_element_operator_set: first_element_operator = fop and
 				first_element_operator /= Void
 		end
