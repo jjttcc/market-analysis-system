@@ -5,7 +5,17 @@ root
 	MACL: make
 
 default
-	assertion (all)
+	assertion (check)
+	assertion (require)
+	assertion (ensure)
+	assertion (loop)
+	assertion (invariant)
+	arguments (" 4444 -te -r /tmp/maclbug.1")
+	arguments (" 4444 -te")
+	arguments ("-i /tmp/parabolic_sar4 4444 -te")
+	arguments ("-i /tmp/parabolic_sar4 4444 -t")
+	arguments ("-i /tmp/parabolic_sar4 4444")
+	arguments ("-i /tmp/parabolic_sar4 3333")
 	arguments ("-r /tmp/z 4001")
 	arguments ("-i /tmp/x 4001")
 	arguments ("-i /tmp/market_analyzers 4001")
