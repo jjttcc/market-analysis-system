@@ -26,7 +26,6 @@ feature -- Initialization
 		require
 			not_void: p1 /= Void and p2 /= Void
 			p1_left_of_p2: p1.x < p2.x
-			p1_earlier_than_p2: p1.date_time < p2.date_time
 		do
 			start_point := p1
 			end_point := p2
@@ -71,6 +70,5 @@ feature {NONE} -- Implementation
 invariant
 
 	start_left_of_end: start_point.x < end_point.x
-	start_earlier_than_end: start_point.date_time < end_point.date_time
 
 end -- class MARKET_POINT
