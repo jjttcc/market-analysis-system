@@ -95,6 +95,8 @@ cluster
 
 	client_server:		"$MAS/src/client_server"
 
+	shared_protocols (client_server):		"$/shared_protocols"
+
 	ma_server_protocols (client_server):		"$/ma_server_protocols"
 
 	ise:		"$ISE_EIFFEL/library"

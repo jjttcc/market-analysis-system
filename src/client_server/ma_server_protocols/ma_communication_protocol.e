@@ -9,9 +9,12 @@ indexing
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-deferred class
+deferred class NETWORK_PROTOCOL inherit
 
-	NETWORK_PROTOCOL
+	BASIC_COMMUNICATION_PROTOCOL
+		rename
+			message_component_separator as message_field_separator
+		end
 
 feature -- String constants
 
@@ -27,12 +30,6 @@ feature -- String constants
 	compression_on_flag: STRING is "<@z@>"
 			-- Flag (at beginning of a message) that indicates that
 			-- the message is compressed
-
-	message_field_separator: STRING is "%T"
-			-- Field separator for messages sent and received by the server
-
-	message_record_separator: STRING is "%N"
-			-- Record separator for messages sent and received by the server
 
 	message_date_field_separator: STRING is deferred end
 			-- Sub-field separator for date fields contained in messages

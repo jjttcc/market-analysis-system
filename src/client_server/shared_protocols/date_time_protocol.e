@@ -1,5 +1,6 @@
 indexing
-	description: "Constants specifying date and time parsing components"
+	description:
+		"Constants specifying date- and time-communication-protocol components"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -19,10 +20,10 @@ feature -- Access
 	date_time_range_separator: STRING is ";"
 			-- Default character used to separate the start-date-time field
 			-- from the end-date-time field in a date-time range
-			-- specification in input received from a client
+			-- specification
 
 	date_time_separator: STRING is ","
 			-- Default character used to separate the date field from
-			-- the time field in input received from a client
+			-- the time field
 
 end

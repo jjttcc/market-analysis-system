@@ -32,6 +32,7 @@ ifo: OPTIMIZED_INPUT_FILE
 -- operators using them are implemented:
 r: RANDOM
 f: FIBONACCI
+bcp: BASIC_COMMUNICATION_PROTOCOL
 
 	read_command_for (medium: COMPRESSED_SOCKET): POLL_COMMAND is
 		do
