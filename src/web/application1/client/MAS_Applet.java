@@ -19,7 +19,7 @@ import support.ParameterBasedConfigurationModifier;
 public class MAS_Applet extends Applet {
 
 	public void init() {
-		log("Compiled at Sat Feb 22 22:17:09 MST 2003");
+		log("Compiled at Thu Mar  6 00:41:09 MST 2003");
 		try {
 			initialize_applet();
 			initialize_configuration();
