@@ -1,6 +1,7 @@
 indexing
 	description: "Information about the current version of the application"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others and others, see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others and others, %
+		%see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -40,13 +41,13 @@ feature -- Access
 			-- The components of the version number
 			-- Components are strings to allow mixed numbers and letters.
 		once
-			Result := <<"1", "1">>
+			Result := <<"1", "2">>
 		end
 
 	date: DATE is
 			-- The last date that `number' was updated
 		once
-			!!Result.make (1999, 8, 31)
+			!!Result.make (2000, 6, 29)
 		end
 
 	informal_date: STRING is
