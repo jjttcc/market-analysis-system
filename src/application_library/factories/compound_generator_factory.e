@@ -71,9 +71,6 @@ feature -- Basic operations
 			!!product.make (left_generator, right_generator, event_type)
 			if before_extension /= Void then
 				product.set_before_extension (before_extension)
-				print ("CGF: set before extension to:%N")
-				print (product.before_extension)
-				print ("%N")
 			end
 			if after_extension /= Void then
 				product.set_after_extension (after_extension)
