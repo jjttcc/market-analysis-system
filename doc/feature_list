@@ -18,7 +18,8 @@ Functionality:
   - Provides services to GUI or command-line clients using a socket-based
     protocol.
   - One server process can service several GUI clients.
-  - Allows market data to be input from files or from a database.
+  - Allows market data to be input from files, from the web, or from a
+    database.
 
 System-defined technical indicators:
 
