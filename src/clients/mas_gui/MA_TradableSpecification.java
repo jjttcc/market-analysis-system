@@ -17,6 +17,10 @@ public class MA_TradableSpecification extends TradableSpecification {
 
 // Access
 
+	public DataSet current_data() {
+		return data;
+	}
+
 	// All 'IndicatorSpecification's, including
 	// `special_indicator_specifications', valid for the assocaited tradable
 	public Collection all_indicator_specifications() {
@@ -129,21 +133,16 @@ public class MA_TradableSpecification extends TradableSpecification {
 		}
 	}
 
-	public void append_data(DataSet d) {
+//!!!!:
+	public void old_remove_me_please_append_data(DataSet d) {
 		data.append(d);
 	}
 
 // Removal
 
-	/**
-	* Clear all data.
-	**/
 	public void clear_data() {
 		data.clear_all();
 	}
-
-// Implementation - attributes
-// Removal
 
 	void clear_all_indicators() {
 		indicator_specs.clear();

@@ -12,6 +12,12 @@ public class MA_IndicatorSpecification extends IndicatorSpecification {
 		super(the_id, the_name);
 	}
 
+// Access
+
+	public DataSet current_data() {
+		return data;
+	}
+
 // Element change
 
 	/** Set the data set associated with the indicator to `d' */
@@ -19,8 +25,15 @@ public class MA_IndicatorSpecification extends IndicatorSpecification {
 		data = d;
 	}
 
-	public void append_data(DataSet d) {
+//!!!!:
+	public void old_remove_me_please_append_data(DataSet d) {
 		data.append(d);
+	}
+
+// Removal
+
+	public void clear_data() {
+		data.clear_all();
 	}
 
 // Implementation - attributes

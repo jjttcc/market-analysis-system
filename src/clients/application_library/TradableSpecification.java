@@ -6,7 +6,7 @@ import graph_library.DataSet;
 /**
 * Specification for a data request to the server for data for a "tradable"
 **/
-abstract public class TradableSpecification {
+abstract public class TradableSpecification extends DataSpecification {
 
 // Initialization
 
@@ -55,21 +55,6 @@ abstract public class TradableSpecification {
 		}
 		return result;
 	}
-
-// Element change
-
-	/**
-	* Append data set `d' to the current main (date,open,high,low,close,...)
-	* tradable data.
-	**/
-	public abstract void append_data(DataSet d);
-
-// Removal
-
-	/**
-	* Clear all data.
-	**/
-	public abstract void clear_data();
 
 // Implementation - attributes
 
