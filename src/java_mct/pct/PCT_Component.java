@@ -3,7 +3,7 @@ package pct;
 import java.util.Vector;
 import java.lang.reflect.*;
 import pct.ProgramControlTerminal;
-import org.apache.regexp.*;
+//import org.apache.regexp.*;
 import plugins.*;
 
 // ProgramControlTerminal Component
@@ -131,6 +131,7 @@ System.out.println("A1");
 					owner.program_name);
 System.out.println("A2 - pct: " + pct);
 			pct.set_args(exe_result);
+			pct.main_loop();
 System.out.println("A3");
 		}
 	}

@@ -24,7 +24,7 @@ public class ProgramControlTerminal extends PCT_Tools {
 			throws Exception {
 		config_file_name = cfg_filename;
 		program_name_setting = prog_name;
-//System.out.println("PCT A");
+System.out.println("PCT A");
 		FileReaderUtilities cfgfile = config_file();
 		Vector lines = lines_from_file(cfgfile);
 		String sep = separator(lines);
@@ -32,7 +32,7 @@ public class ProgramControlTerminal extends PCT_Tools {
 		quitbutton_setting = false;
 		parse_and_process(lines, sep);
 //print_state();
-//System.out.println("PCT B");
+System.out.println("PCT B");
 		window = new PCT_Window(terminal_name_setting, subcomponents.size());
 		for (int i = 0; i < subcomponents.size(); ++i) {
 			window.add_button((PCT_Component) subcomponents.elementAt(i));

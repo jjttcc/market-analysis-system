@@ -11,6 +11,7 @@ import java.awt.event.*;
 class PCT_Window extends FrameWindowListener {
 	PCT_Window(String title, int component_count) {
 		super(title);
+		++window_count;
 //setSize(800, 460);
 		setLayout(new GridLayout(0, component_count / 4 + 1));
 		addWindowListener(this);
@@ -60,6 +61,11 @@ button + ", " + button.component);
 
 	protected void close() {
 		dispose();
-		System.exit(0);
+		--window_count;
+		if (window_count == 0) {
+			System.exit(0);
+		}
 	}
+
+	static int window_count = 0;
 }
