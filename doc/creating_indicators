@@ -471,3 +471,167 @@ enter 5.  This value will be used as the function's n-value as well as the
 n-value for the MA_EXPONENTIAL operator.
 
 This completes the creation of the EMA of Volume indicator.
+
+
+Example 4: On Balance Volume
+
+This example shows how to create an on balance volume indicator.
+On balance volume (OBV) is simply an accumulation of the volume for
+each period based on whether the current period's close is higher or
+lower than the previous period's close.  If the current close is higher,
+the current period's volume is added to the OBV of the previous period
+to obtain the current OBV; if the current close is lower, the current
+period's volume is subtracted from the OBV of the previous period.
+
+The ACCUMULATION object will be used to obtain this accumulation
+functionality.  One way to express mathematically the condition from
+the above paragraph that volume is added or subtracted depending on
+the relation of the current close to the previous close is to use the
+expression:
+
+    volume * [(curr_close - prev_close) / (|curr_close - prev_close|)]
+
+This expression evaluates to the volume value that will be added to the
+previous OBV to obtain the current OBV.  If the current close is lower
+than the previous close, the expression within the [] pair will evaluate
+to negative one ( |x| means take the absolute value of x), which when
+multiplied by volume and added to the previous OBV is equivalent to
+subtracting the volume from the previous OBV.  When current close is
+higher than the previous close, the result, of course, will be that
+volume is added to the previous OBV value.
+
+The structure of the main operator tree for the OBV function will be:
+
+
+                    ADDITION
+                    /      \
+ BASIC_LINEAR_COMMAND  MULTIPLICATION
+                        /          \
+                   VOLUME       SAFE_DIVISION
+                                /           \
+                      SUBTRACTION        ABSOLUTE_VALUE
+                      /       \                   |
+          CLOSING_PRICE SETTABLE_OFFSET_COMMAND  [SUBTRACTION]
+                               |
+                        CLOSING_PRICE
+
+
+The above tree expresses the formula:
+
+curr_obv = prev_obv+volume*[(curr_close-prev_close)/(|curr_close-prev_close|)]
+
+where curr_obv is the OBV value for the current period and prev_obv
+is the OBV value for the previous period; curr_close is the closing
+price for the current period and prev_close is the closing price for
+the previous period.  The child of ABSOLUTE_VALUE is enclosed in square
+brackets to denote that ABSOLUTE_VALUE will share the same subtraction
+object as SAFE_DIVISION's left oeprand.  This is correct, since the
+subtraction subtree provides the difference of the closing price and
+the previous closing price, and this calculation is needed both as the
+left operand of SAFE_DIVISION and as the only operand of ABSOLUTE_VALUE.
+The reason SAFE_DIVISION is used instead of DIVISION is that the divisor
+will sometimes be 0 - when the closing price and the previous closing
+price are equal.  SAFE_DIVISION allows division by 0 and gives 0 as the
+result, which is what we want in this case.
+
+The ACCUMULATION object requres two other operators:  An operator, called
+the previous operator, to retrieve the value from the previous period
+that is to be used (added in this case) as part of the calculation for
+the current period.  (It is actually a little more complicated than that.
+Essentially, this operator is used to keep the "array" that holds the
+calculated (OBV) values lined up - but one behind, because it's for the
+previous period - the "array" that holds the current closing prices.
+This allows the ACCUMULATION object to be able to retrieve the correct
+previous OBV value - instead of, for example, always retrieving the first
+one, which is incorrect.)  Since the BASIC_LINEAR_COMMAND from the above
+tree is used to retrieve the previous period's OBV, this object will
+also be used for this operator.
+
+The other operator, called the first element operator, is used simply to
+retrieve the first value to be used for the accumulation.  This is needed
+because for the first period there is no previous value to work with.
+For OBV, the first value is simply the volume of the first period.
+Thus the VOLUME operator will be used here.
+
+Now, to actually create the OBV function.  From the main menu, select
+"Edit indicators"; then select "Create a new market-data indicator".
+For the root function, select ACCUMULATION.  Choose an appropriate name
+for the function, such as "On Balance Volume".  Since the OBV function
+will take its input directly from the market data (close prices and
+volume) rather than another function, choose "No Input Function" as the
+OBV input function.
+
+For the main operator, choose ADDITION.  For ADDITION's left operand,
+choose BASIC_LINEAR_COMMAND.  For BASIC_LINEAR_COMMAND's input
+indicator, again choose "No Input Function".  For ADDITION's right
+operand, choose MULTIPLICATION.  For MULTIPLICATION's left operand,
+choose VOLUME.  For MULTIPLICATION's right operand, choose SAFE_DIVISION.
+For SAFE_DIVISION's left operand, choose SUBTRACTION.
+
+For SUBTRACTION's left operand, choose CLOSING_PRICE.  For
+SUBTRACTION's right operand, choose SETTABLE_OFFSET_COMMAND.  For
+SETTABLE_OFFSET_COMMAND's operand, choose CLOSING_PRICE.  (You may select
+the same CLOSING_PRICE as you did for SUBTRACTION's left operand, since
+it's OK to share this kind of operator.)  For SETTABLE_OFFSET_COMMAND's
+input indicator, again choose "No Input Function".  Enter 1 as
+SETTABLE_OFFSET_COMMAND's offset value.  (This will be used to retrieve
+the previous closing price.)
+
+For SAFE_DIVISION's right operand, select ABSOLUTE_VALUE.  For
+ABSOLUTE_VALUE's operand, choose the SUBTRACTION object you selected
+before as SAFE_DIVISION's left operand (from the first object list,
+not the second one.)
+
+For ACCUMULATION's previous operator, as explained above, choose
+BASIC_LINEAR_COMMAND from the first list (not the second one).  For
+ACCUMULATION's first element operator, as explained above, choose VOLUME.
+
+This completes the creation of the On Balance Volume indicator.
+
+
+Example 5: Accumulation/Distribution
+
+There appear to be different formulas for accumulation/distribution (A/D).
+The formula I am using is from "Trading for a Living", by Alexander Elder.
+The formula is:
+
+    A/D = volume * [(close - open) / (high - low)]
+
+Like on balance volume, it is an accumulation function.  For each period
+the value from the above formula is added to the A/D of the previous period.
+
+Since A/D is an accumulation function, the ACCUMULATION object should be used
+as the root function.  The structure of the main operator tree is:
+
+               ADDITION
+               /      \
+ BASIC_LINEAR_COMMAND MULTIPLICATION
+                       /          \
+                    VOLUME      SAFE_DIVISION
+                                 /         \
+                       SUBTRACTION         SUBTRACTION
+                       /         \         /         \
+            CLOSING_PRICE OPENING_PRICE  HIGH_PRICE  LOW_PRICE
+
+The 'previous' operator should be the same BASIC_LINEAR_COMMAND as
+ADDITION's left operand.  The first element operator should be the
+MULTIPLICATION object used as ADDITION's right operand.
+
+ACCUMULATION's input function should be "No Input Function".
+BASIC_LINEAR_COMMAND's input indicator should also be "No Input Function".
+The two SUBTRACTION operators need to be different, not shared, because,
+unlike for On Balance Volume, they are used for different calculations.
+
+
+Example 6: Slope of MACD Signal Line
+
+This function gives the slope of the MACD Signal Line, which can be
+used to determine if the MACD Signal Line changes slope from negative to
+positive or vice versa.
+
+From the indicator creation menu select ONE_VARIABLE_FUNCTION as the root
+function and choose an appropriate name.  For the function's input function,
+select "MACD Signal Line".  For ONE_VARIABLE_FUNCTION's operator, select
+SLOPE_ANALYZER.  For SLOPE_ANALYZER's input, select "MACD Signal Line".
+
+This concludes the creation of Slope of MACD Signal Line.
