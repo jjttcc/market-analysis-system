@@ -69,6 +69,8 @@ cluster
 
 	platform (mct):		"$/system_specific/unix"
 
+	macl_connection:	"$MAS/src/clients/macl/library"
+
 	eiflib:		"$MAS/src/eiffel_library"
 
 	libarch (eiflib):		"$/architectural"

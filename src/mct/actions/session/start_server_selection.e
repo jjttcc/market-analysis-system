@@ -23,7 +23,7 @@ create
 feature {NONE} -- Initialization
 
 	make (conf: MCT_CONFIGURATION;
-			ext_cmds: HASH_TABLE [EXTERNAL_COMMAND, STRING]) is
+			ext_cmds: HASH_TABLE [MCT_COMMAND, STRING]) is
 		require
 			conf_exists: conf /= Void and ext_cmds /= Void
 		do
@@ -39,7 +39,7 @@ feature -- Basic operations
 	execute is
 			-- Configure how the server is to be started up.
 		local
-			cmds: LINEAR [EXTERNAL_COMMAND]
+			cmds: LINEAR [MCT_COMMAND]
 			window: LIST_SELECTION_WINDOW
 			rows: LINKED_LIST [LIST [STRING]]
 			label: STRING
@@ -82,12 +82,12 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	server_cmd_table: HASH_TABLE [EXTERNAL_COMMAND, STRING]
+	server_cmd_table: HASH_TABLE [MCT_COMMAND, STRING]
 
 	respond_to_server_selection_event (supplier: LIST_SELECTION_WINDOW) is
 			-- Respond to a "start-server-selection" event.
 		local
-			selected_command: EXTERNAL_COMMAND
+			selected_command: MCT_COMMAND
 		do
 			if supplier.selected_item /= Void then
 				selected_command := server_cmd_table @

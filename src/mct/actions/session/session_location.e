@@ -28,7 +28,7 @@ create
 feature {NONE} -- Initialization
 
 	make (conf: MCT_CONFIGURATION;
-			ext_cmds: HASH_TABLE [EXTERNAL_COMMAND, STRING]) is
+			ext_cmds: HASH_TABLE [MCT_COMMAND, STRING]) is
 		require
 			conf_exists: conf /= Void and ext_cmds /= Void
 		do

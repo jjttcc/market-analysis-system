@@ -26,7 +26,7 @@ feature {NONE} -- Initialization
 
 	post_initialize is
 		local
-			cmd: EXTERNAL_COMMAND
+			cmd: MCT_COMMAND
 		do
 			cmd := configuration.default_start_server_command
 			external_commands.put (cmd, cmd.identifier)

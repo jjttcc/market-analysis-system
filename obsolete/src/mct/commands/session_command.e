@@ -38,9 +38,9 @@ feature -- Basic operations
 			cmd: STRING
 		do
 			cmd := clone (command_string)
-			replace_tokens (cmd, <<Port_number_specifier>>,
-				<<window.port_number>>, Token_start_delimiter,
-				Token_end_delimiter)
+			replace_tokens (cmd, <<Port_number_specifier, Hostname_specifier>>,
+				<<window.port_number, window.host_name>>,
+				Token_start_delimiter, Token_end_delimiter)
 --print ("(SESSION_COMMAND - " + name + ") Attempting to execute:%N'" +
 --cmd + "'%N")
 			launch (cmd)

@@ -46,6 +46,8 @@ feature -- Access
 
 	Termination_cmd_specifier: STRING is "termination_command"
 
+	Built_in_termination_cmd_specifier: STRING is "terminate_server"
+
 	Browse_docs_cmd_specifier: STRING is "browse_docs_command"
 
 	Browse_intro_cmd_specifier: STRING is "browse_intro_command"

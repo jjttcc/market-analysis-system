@@ -104,28 +104,28 @@ feature -- Access
 
 feature -- Commands
 
-	default_start_server_command: EXTERNAL_COMMAND
+	default_start_server_command: MCT_COMMAND
 			-- Specified default 'start-server' command
 
-	start_server_commands: LINKED_SET [EXTERNAL_COMMAND]
+	start_server_commands: LINKED_SET [MCT_COMMAND]
 			-- Configured 'start-server' commands
 
-	start_command_line_client_command: EXTERNAL_COMMAND
+	start_command_line_client_command: MCT_COMMAND
 			-- Command to start the command-line client
 
-	chart_command: EXTERNAL_COMMAND
+	chart_command: MCT_COMMAND
 			-- Command to start the charting client
 
-	termination_command: EXTERNAL_COMMAND
+	termination_command: MCT_COMMAND
 			-- Command to terminate a server
 
-	browse_documentation_command: EXTERNAL_COMMAND
+	browse_documentation_command: MCT_COMMAND
 			-- Command to browse the MCT documentation
 
-	browse_intro_command: EXTERNAL_COMMAND
+	browse_intro_command: MCT_COMMAND
 			-- Command to browse the "MCT introduction"
 
-	browse_faq_command: EXTERNAL_COMMAND
+	browse_faq_command: MCT_COMMAND
 			-- Command to browse the FAQ
 
 feature -- Status report
@@ -163,7 +163,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	save_command_as_default (cmd: EXTERNAL_COMMAND) is
+	save_command_as_default (cmd: MCT_COMMAND) is
 			-- Save `cmd' in the configuration file as a default command.
 		do
 			config_file.mark_block_as_default (Command_name_specifier,
@@ -217,9 +217,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 					Chart_cmd_specifier, settings @ Chart_cmd_specifier)
 			end
 			if settings.has (Termination_cmd_specifier) then
-				termination_command := new_session_command (
-					Termination_cmd_specifier,
-					settings @ Termination_cmd_specifier)
+				termination_command := new_termination_command
 			end
 			if settings.has (Browse_docs_cmd_specifier) then
 				browse_documentation_command := new_external_command (
@@ -589,6 +587,23 @@ feature {NONE} -- Implementation - Utilities
 			end
 		end
 
+	new_termination_command: MCT_COMMAND is
+		local
+			term_cmd_value: STRING
+		do
+			term_cmd_value := settings @ Termination_cmd_specifier
+			if
+				term_cmd_value.is_equal (token_from (
+				Built_in_termination_cmd_specifier))
+			then
+				create {TERMINATE_SERVER_COMMAND} Result.make (
+					Termination_cmd_specifier)
+			else
+				Result := new_session_command (Termination_cmd_specifier,
+					term_cmd_value)
+			end
+		end
+
 	new_session_command (cmd_id, cmd_string: STRING): SESSION_COMMAND is
 			-- A new SESSION_COMMAND, with the work_directory set, if
 			-- specified in `cmd_string'
@@ -635,7 +650,6 @@ feature {NONE} -- Implementation
 			-- `s' + " " + report_back_option
 		do
 			Result := s + " " + report_back_option
-print ("rpa result: " + Result + "%N")
 		ensure
 			result_exists: Result /= Void
 			definition: Result.is_equal (s + " " + report_back_option)
@@ -662,7 +676,8 @@ print ("rpa result: " + Result + "%N")
 			-- "<word>" tokens that are to be converted on the fly, rather
 			-- than converted on start-up - without the surrounding "<>"
 		once
-			Result := (<<Port_number_specifier, Working_directory_specifier>>)
+			Result := (<<Port_number_specifier, Working_directory_specifier,
+			Built_in_termination_cmd_specifier>>)
 		end
 
 	user_defined_variables: ARRAY [STRING]

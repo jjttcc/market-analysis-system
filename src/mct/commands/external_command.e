@@ -8,7 +8,7 @@ indexing
 
 class EXTERNAL_COMMAND inherit
 
-	COMMAND
+	MCT_COMMAND
 
 create
 
@@ -29,36 +29,13 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	identifier: STRING
-			-- String that uniquely identifies the command
-
 	command_string: STRING
 			-- The actual command to be delegated to the OS
-
-	description: STRING
-			-- Description of the command
 
 	working_directory: STRING
 			-- Directory in which the command is to be executed
 
-feature -- Status report
-
-	arg_mandatory: BOOLEAN is
-		once
-			Result := False
-		end
-
 feature -- Element change
-
-	set_description (arg: STRING) is
-			-- Set `description' to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			description := arg
-		ensure
-			description_set: description = arg and description /= Void
-		end
 
 	set_working_directory (arg: STRING) is
 			-- Set `working_directory' to `arg'.
@@ -95,9 +72,5 @@ feature -- Basic operations
 				env.change_working_directory (previous_directory)
 			end
 		end
-
-invariant
-
-	identifier_not_empty: identifier /= Void and not identifier.is_empty
 
 end

@@ -117,7 +117,7 @@ feature {NONE} -- Initialization
 			external_commands_exists: external_commands /= Void
 			configuration_exists: configuration /= Void
 		local
-			cmd: EXTERNAL_COMMAND
+			cmd: MCT_COMMAND
 		do
 			cmd := configuration.browse_documentation_command
 			external_commands.put (cmd, cmd.identifier)
@@ -150,7 +150,7 @@ feature {NONE} -- Implementation - utilities
 
 feature {NONE} -- Implementation
 
-	external_commands: HASH_TABLE [EXTERNAL_COMMAND, STRING]
+	external_commands: HASH_TABLE [MCT_COMMAND, STRING]
 
 	configuration: MCT_CONFIGURATION
 
