@@ -41,6 +41,7 @@ feature -- Initialization
 			!!cmd_editor
 			operator_maker.set_editor (cmd_editor)
 			cmd_editor.set_user_interface (operator_maker)
+			!!help.make
 		end
 
 feature -- Basic operations
@@ -309,6 +310,7 @@ feature {NONE} -- Implementation
 				function_choice_clone ("technical indicator"))
 			fa_maker.set_operator (operator_choice (fa_maker.function))
 			fa_maker.set_period_type (period_type_choice)
+			fa_maker.set_left_offset (operator_maker.left_offset)
 			create_event_generator (fa_maker, new_event_type_name)
 		end
 
@@ -400,6 +402,7 @@ feature {NONE} -- Implementation
 
 	operator_choice (function: MARKET_FUNCTION): RESULT_COMMAND [BOOLEAN] is
 		do
+			operator_maker.set_left_offset (0) -- Important.
 			operator_maker.set_market_function (function)
 			Result ?= operator_maker.command_selection (
 						operator_maker.Boolean_result_command,
@@ -502,5 +505,10 @@ feature {NONE}
 	help: HELP
 	operator_maker: COMMAND_BUILDER
 	cmd_editor: APPLICATION_COMMAND_EDITOR
+
+invariant
+
+	field_not_void: operator_maker /= Void and cmd_editor /= Void and
+		help /= Void
 
 end -- MARKET_EVENT_GENERATOR_BUILDER

@@ -81,10 +81,16 @@ feature -- Basic operations
 			-- RESULT_COMMAND [REAL]), and n-value.
 		require
 			ui_set: user_interface /= Void
+		local
+			offset_cmd: LINEAR_OFFSET_COMMAND
 		do
 			edit_n (c)
 			edit_mtlist (c)
 			edit_unaryop (c)
+			offset_cmd ?= c
+			if offset_cmd /= Void then
+				record_lowest_offset (offset_cmd)
+			end
 		end
 
 	edit_n (c: COMMAND) is
@@ -165,6 +171,7 @@ feature -- Basic operations
 			-- Edit a SETTABLE_OFFSET_COMMAND.
 		local
 			unop: UNARY_OPERATOR [ANY, REAL]
+			offset: INTEGER
 		do
 			unop ?= cmd
 			check
@@ -172,8 +179,34 @@ feature -- Basic operations
 			end
 			edit_unaryop (unop)
 			edit_mtlist (cmd)
-			cmd.set_offset (user_interface.integer_selection (
-						concatenation (<<cmd.generator, "'s offset value">>)))
+			from
+				offset := user_interface.integer_selection (
+						concatenation (<<cmd.generator,
+						"'s (left) offset value (must be non-negative)">>))
+			until
+				offset >= 0
+			loop
+				user_interface.show_message ("Negative value entered.")
+				offset := user_interface.integer_selection (
+						concatenation (<<cmd.generator,
+						"'s (left) offset value (must be non-negative)">>))
+			end
+			cmd.set_offset (-offset)
+			record_lowest_offset (cmd)
+		end
+
+	record_lowest_offset (cmd: LINEAR_OFFSET_COMMAND) is
+			-- If `cmd's offset value (expected to be negative or 0) is
+			-- lower than the current offset value, record the offset
+			-- value so that the lowest (or highest-magnitude) value can
+			-- be used to keep objects needing it consistent.
+		do
+			-- Important: The arithmetic negation of the `cmd.offset'
+			-- (which is expected to be negative) is used - the
+			-- `left_offset' value being set must be positive.
+			if -cmd.offset > user_interface.left_offset then
+				user_interface.set_left_offset (-cmd.offset)
+			end
 		end
 
 	edit_boolean_numeric_client (cmd: BOOLEAN_NUMERIC_CLIENT) is

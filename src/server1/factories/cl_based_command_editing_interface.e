@@ -47,6 +47,11 @@ feature -- Access
 			Result := market_function.output
 		end
 
+	show_message (msg: STRING) is
+		do
+			print_list (<<msg, "%N">>)
+		end
+
 feature -- Status setting
 
 	set_market_function (arg: MARKET_FUNCTION) is

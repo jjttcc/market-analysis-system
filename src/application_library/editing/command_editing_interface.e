@@ -119,6 +119,12 @@ feature -- Access
 	editor: APPLICATION_COMMAND_EDITOR
 			-- Editor used to set COMMANDs' operands and parameters
 
+	left_offset: INTEGER
+			-- Largest left offset value used by any of the created operators
+			-- for a particular operator "tree" - Note that this value must
+			-- be explicitly set to 0 before the creation/editing of a new
+			-- operator "tree".
+
 feature -- Constants
 
 	Boolean_result_command: STRING is "RESULT_COMMAND [BOOLEAN]"
@@ -142,8 +148,17 @@ feature -- Status setting
 		do
 			editor := arg
 		ensure
-			editor_set: editor = arg and
-				editor /= Void
+			editor_set: editor = arg and editor /= Void
+		end
+
+	set_left_offset (arg: INTEGER) is
+			-- Set left_offset to `arg'.
+		require
+			arg_not_negative: arg >= 0
+		do
+			left_offset := arg
+		ensure
+			left_offset_set: left_offset = arg and left_offset >= 0
 		end
 
 feature {APPLICATION_COMMAND_EDITOR} -- Access
@@ -160,6 +175,12 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 
 	real_selection (msg: STRING): REAL is
 			-- User-selected real value
+		deferred
+		end
+
+	show_message (msg: STRING) is
+			-- Display `msg' to user -for example, as an error, warning, or
+			-- informational message.
 		deferred
 		end
 

@@ -27,6 +27,9 @@ feature -- Access
 	operator: RESULT_COMMAND [BOOLEAN]
 			-- The operator to be associated with the new OVFA
 
+	left_offset: INTEGER
+			-- Left offset value to provide to the new OVFA
+
 feature -- Status setting
 
 	set_function (arg: MARKET_FUNCTION) is
@@ -59,11 +62,33 @@ feature -- Status setting
 			operator_set: operator = arg and operator /= Void
 		end
 
+	set_left_offset (arg: INTEGER) is
+			-- Set left_offset to `arg'.
+		require
+			arg_not_negative: arg >= 0
+		do
+			left_offset := arg
+			debug ("editing")
+				print ("OVFA_FCT left offset set to: "); print (left_offset)
+				print ("%N")
+			end
+		ensure
+			left_offset_set: left_offset = arg and left_offset >= 0
+		end
+
 feature -- Basic operations
 
 	execute is
 		do
 			!!product.make (function, operator, event_type, period_type)
+			if left_offset > 0 then
+				product.set_left_offset (left_offset)
+				debug ("editing")
+					print ("OVFA_FCT created OVFA and set its offset to: ")
+					print (product.left_offset)
+					print ("%N")
+				end
+			end
 		end
 
 end -- OVFA_FACTORY
