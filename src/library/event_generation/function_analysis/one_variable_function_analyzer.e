@@ -93,6 +93,9 @@ feature -- Basic operations
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 			s: STRING
 		do
+			check
+				tradables_not_void: tradables /= Void
+			end
 			create {LINKED_LIST [MARKET_EVENT]} product.make
 			t := tradables.item (period_type)
 			if t /= Void and not tradables.error_occurred then
