@@ -85,9 +85,9 @@ feature -- Miscellaneous
 				i := i + 1
 			end
 			print_list (<<cmd.generator, "%N">>)
-			--DEBUG
+			debug ("command_editing")
 			print_list (<<"(", cmd.out, ")%N">>)
-			--END
+			end
 			print_operand_trees (cmd, level + 1)
 		end
 
@@ -145,7 +145,7 @@ feature {NONE} -- Hook methods
 					inspect
 						selected_character
 					when 'd', 'D' then
-						print_list (<<"%N", description (
+						print_list (<<"%N", command_description (
 							cmds @ last_integer),
 							"%N%NChoose ", op_names @ last_integer,
 								"? (y/n) ">>)

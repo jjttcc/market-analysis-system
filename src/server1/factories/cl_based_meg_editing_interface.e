@@ -44,6 +44,11 @@ feature -- Initialization
 			!!help.make
 		end
 
+feature -- Access
+
+	last_event_generator: MARKET_EVENT_GENERATOR
+			-- The last MARKET_EVENT_GENERATOR that was built
+
 feature -- Basic operations
 
 	edit_event_generator_menu is
@@ -192,6 +197,7 @@ feature {NONE} -- Implementation
 		local
 			c: CHARACTER
 		do
+			last_event_generator := Void
 			from
 			until
 				c /= '%U'
@@ -210,6 +216,10 @@ feature {NONE} -- Implementation
 			when 'c', 'C' then
 				create_new_compound_event_generator
 			end
+			if last_event_generator /= Void then
+				print ("New market analyzer created:%N")
+				print_event_generator (last_event_generator)
+			end
 		end
 
 	create_new_compound_event_generator is
@@ -222,7 +232,17 @@ feature {NONE} -- Implementation
 			eg_maker.set_generators (
 				event_generator_selection ("left component"),
 				event_generator_selection ("right component"))
+			eg_maker.set_before_extension (
+				ceg_date_time_extension ("BEFORE"))
+			eg_maker.set_after_extension (
+				ceg_date_time_extension ("AFTER"))
+			eg_maker.set_left_target_type (
+				ceg_left_target_type)
 			create_event_generator (eg_maker, new_event_type_name)
+			last_event_generator := eg_maker.product
+		ensure
+			-- last_event_generator references the newly created
+			-- COMPOUND_EVENT_GENERATOR
 		end
 
 	event_generator_selection (msg: STRING): MARKET_EVENT_GENERATOR is
@@ -251,7 +271,7 @@ feature {NONE} -- Implementation
 			until
 				finished
 			loop
-				print_list (<<"Select an event generator for ", msg, ":%N">>)
+				print_list (<<"Select a market analyzer for ", msg, ":%N">>)
 				print_names_in_1_column (names)
 				read_integer
 				if
@@ -312,6 +332,10 @@ feature {NONE} -- Implementation
 			fa_maker.set_period_type (period_type_choice)
 			fa_maker.set_left_offset (operator_maker.left_offset)
 			create_event_generator (fa_maker, new_event_type_name)
+			last_event_generator := fa_maker.product
+		ensure
+			-- last_event_generator references the newly created
+			-- ONE_VARIABLE_FUNCTION_ANALYZER
 		end
 
 	create_new_two_variable_function_analyzer is
@@ -365,6 +389,10 @@ feature {NONE} -- Implementation
 				end
 			end
 			create_event_generator (fa_maker, new_event_type_name)
+			last_event_generator := fa_maker.product
+		ensure
+			-- last_event_generator references the newly created
+			-- ONE_VARIABLE_FUNCTION_ANALYZER
 		end
 
 	function_choice_clone (msg: STRING): MARKET_FUNCTION is
@@ -412,7 +440,6 @@ feature {NONE} -- Implementation
 			check
 				cmd_selection_valid: Result /= Void
 			end
-			operator_maker.print_command_tree (Result, 1)
 		end
 
 	new_event_type_name: STRING is
@@ -520,6 +547,131 @@ feature {NONE} -- Implementation
 			end
 		end
 
+	ceg_date_time_extension (which: STRING): DATE_TIME_DURATION is
+			-- User's choice (if any) of a date/time extension for a
+			-- compound event generator
+		local
+			finished, yes: BOOLEAN
+			days, months, years: INTEGER
+		do
+			from
+			until
+				finished
+			loop
+				print_list (<<"Would you like to add a time extension ",
+					"to match events from the left%Nanalyzer that occur ",
+					which, " the right analyzer? (y/n/h) ">>)
+				inspect
+					selected_character
+				when 'y', 'Y' then
+					yes := true
+					finished := true
+				when 'n', 'N' then
+					finished := true
+				when 'h', 'H' then
+					print (help @
+						help.Compound_event_generator_time_extensions)
+				else
+					print ("Invalid response.%N")
+				end
+			end
+			from
+				if yes then
+					finished := false
+				end
+			until
+				finished
+			loop
+				print ("Select: days (d) months (m) years (y) End (e) ")
+				inspect
+					selected_character
+				when 'd', 'D' then
+					print ("Enter the number of days: ")
+					read_integer
+					days := last_integer
+				when 'm', 'M' then
+					print ("Enter the number of months: ")
+					read_integer
+					months := last_integer
+				when 'y', 'Y' then
+					print ("Enter the number of years: ")
+					read_integer
+					years := last_integer
+				when 'e', 'E' then
+					finished := true
+				else
+					print ("Invalid response.%N")
+				end
+				print_list (<<"Current settings: ", days, " days, ",
+							months, " months, ", years, " years.%N">>)
+			end
+			if yes then
+				!!Result.make (years, months, days, 0, 0, 0)
+				print_list (<<"Duration set to ", Result, ".%N">>)
+			end
+		end
+
+	ceg_left_target_type: EVENT_TYPE is
+			-- User's choice for the left target type (if any) of a
+			-- compound event generator
+		local
+			finished, yes: BOOLEAN
+			names: LINKED_LIST [STRING]
+			i: INTEGER
+		do
+			from
+			until
+				finished
+			loop
+				print_list (<<"Would you like to specify an event type ",
+					"as target for the left analyzer's date/time? ",
+					" (y/n/h) ">>)
+				inspect
+					selected_character
+				when 'y', 'Y' then
+					yes := true
+					finished := true
+				when 'n', 'N' then
+					finished := true
+				when 'h', 'H' then
+					print (help @
+						help.Compound_event_generator_left_target_type)
+				else
+					print ("Invalid response.%N")
+				end
+			end
+			from
+				if yes then
+					finished := false
+					from
+						!!names.make
+						i := 1
+					until
+						i = event_types.count + 1
+					loop
+						names.extend ((event_types @ i).name)
+						i := i + 1
+					end
+				end
+			until
+				finished
+			loop
+				print ("Select an event type:%N")
+				print_names_in_1_column (names)
+				read_integer
+				if
+					last_integer < 1 or
+						last_integer > names.count
+				then
+					print_list (<<"Selection must be between 1 and ",
+								names.count, "%N">>)
+				else
+					Result := event_types @ last_integer
+					finished := true
+				end
+			end
+		end
+
 	print_event_generator (eg: MARKET_EVENT_GENERATOR) is
 			-- Print the contents of `eg'.
 		local
@@ -541,6 +693,9 @@ feature {NONE} -- Implementation
 				check
 					eg_is_fa: fa /= Void
 				end
+				print_list (<<"has period type ", fa.period_type.name,
+							", has start date/time ", fa.start_date_time,
+							"%N">>)
 				ovfa ?= fa
 				tvfa ?= fa
 				if ovfa /= Void then
@@ -553,6 +708,9 @@ feature {NONE} -- Implementation
 					print_list (<<"Operates on two indicators:%N  ",
 								tvfa.input1.name, "%N  ",
 								tvfa.input2.name, "%N">>)
+					print_list (<<"above/below, below/above: ",
+							tvfa.above_to_below, ", ", tvfa.below_to_above,
+							"%N">>)
 				end
 				if fa.operator /= Void then
 					print ("Uses an operator:%N")
