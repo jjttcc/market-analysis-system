@@ -71,10 +71,16 @@ feature -- Basic operations
 					fill_event_history (scanner.product)
 					event_history.compare_objects
 					hfile.close
+				else
+					create event_history.make (0)
+					event_history.compare_objects
 				end
+			else
+				create event_history.make (0)
+				event_history.compare_objects
 			end
 		ensure then
-			event_history.object_comparison
+			object_comparison: event_history.object_comparison
 		rescue
 			exception_occurred := True
 			retry
