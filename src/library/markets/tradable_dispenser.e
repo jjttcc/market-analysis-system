@@ -97,6 +97,11 @@ feature -- Access
 			not_void_if_no_error: not error_occurred implies Result /= Void
 		end
 
+	indicators: SEQUENCE [MARKET_FUNCTION] is
+			-- All indicators currently known to the system
+		deferred
+		end
+
 	current_symbol: STRING is
 			-- Symbol at the current cursor position
 		require
@@ -209,7 +214,7 @@ feature -- Basic operations
 invariant
 
 	after_constraint: after implies off
-
 	empty_constraint: is_empty implies off
+	indicators_exist: not error_occurred implies indicators /= Void
 
 end -- class TRADABLE_DISPENSER
