@@ -118,6 +118,11 @@ feature {NONE} -- Hook routine implementations
 					current_file_status.last_modification_time and
 					status_work_file.count > current_file_status.file_size
 			end
+if Result then
+print ("tgt is out of date%N")
+else
+print ("tgt is NOT out of date%N")
+end
 		end
 
 	append_new_data is
@@ -140,6 +145,8 @@ feature {NONE} -- Hook routine implementations
 				tradable_factory.turn_start_input_from_beginning_off
 				-- Advance the file cursor to the beginning of the new
 				-- data.  Note: file position numbering starts a 0.
+--!!!:
+print ("app new d - before - tt count: " + target_tradable.count.out + "%N")
 				current_input_file.position_cursor (
 					current_file_status.file_size)
 				tradable_factory.set_product (target_tradable)
@@ -152,6 +159,7 @@ feature {NONE} -- Hook routine implementations
 						fatal_error := True
 					end
 				end
+print ("app new d - after - tt count: " + target_tradable.count.out + "%N")
 				tradable_factory.turn_start_input_from_beginning_on
 				close_input_medium
 			else

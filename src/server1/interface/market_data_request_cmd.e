@@ -55,6 +55,9 @@ feature {NONE}
 				print ("%N%NSending data for '" + market_symbol + "' (" +
 				(create {DATE}.make_now).out + ")%N")
 			end
+--!!!:
+print ("casr - symbol, period type: " + market_symbol + ", " +
+trading_period_type.name + "%N")
 			pref := ok_string
 			if session.caching_on then
 				t := cached_tradable (market_symbol, trading_period_type)
@@ -79,7 +82,11 @@ feature {NONE}
 			end
 			if tuple_list = Void then
 				send_tradable_not_found_response
+--!!!:
+print ("tuple list was void" + "%N")
 			else
+print ("sending back response with tuple list of size: " +
+tuple_list.count.out + "%N")
 				set_print_parameters
 				-- Ensure ok string is printed first.
 				set_preface (pref)
