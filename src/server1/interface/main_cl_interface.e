@@ -215,7 +215,7 @@ feature -- Basic operations
 			handle_exception ("main menu")
 			if not end_client and not exit_server then
 				if not assertion_violation then
-						retry
+					retry
 				end
 			else
 				terminate (Error_exit_status)
