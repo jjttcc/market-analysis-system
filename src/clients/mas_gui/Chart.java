@@ -326,8 +326,12 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		MA_Configuration conf = MA_Configuration.application_instance();
 		int count;
 		String current_indicator;
-		// Don't redraw the data if it's for the same tradable as before.
 		if (period_type_change || ! tradable.equals(current_tradable)) {
+			// Redraw the data.
+			if (individual_period_type_sets &&
+					! tradable.equals(current_tradable)) {
+				reset_period_types(tradable, false);
+			}
 			GUI_Utilities.busy_cursor(true, this);
 			try {
 				data_builder.send_market_data_request(tradable,
@@ -347,6 +351,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 						handle_nonexistent_sybmol(tradable);
 					} else if (request_result_id() == Invalid_period_type) {
 						handle_invalid_period_type(tradable);
+						individual_period_type_sets = true;
 					} else if (request_result_id() == Warning ||
 							request_result_id() == Error) {
 						new ErrorBox("Warning",
@@ -533,18 +538,45 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	// Notify the user that the symbol chosen does not exist and then
 	// remove the symbol from the selection list.
 	private void handle_invalid_period_type(String tradable) {
+		reset_period_types(tradable, true);
+		if (_period_types.size() > 0) {
+			current_period_type = initial_period_type(_period_types);
+			send_data_request(tradable);
+		} else {
+			new ErrorBox("Warning", "No valid period types for " +
+				tradable, this_chart);
+		}
+	}
+
+	// Reset `_period_types' and rebuild the period-types menu item based
+	// on `tradable'.
+	private void reset_period_types(String tradable,
+			boolean force_current_type_change) {
+		boolean change_current_type = true;
 		try {
 			_period_types = data_builder.trading_period_type_list(tradable);
 			if (_period_types.size() > 0) {
-				current_period_type = initial_period_type(_period_types);
-				ma_menu_bar.reset_period_types(_period_types);
-				send_data_request(tradable);
-			} else {
-				new ErrorBox("Warning", "No valid period types for " +
-					tradable, this_chart);
+				if (! force_current_type_change) {
+					// Set change_current_type to false if
+					// `current_period_type' is in `_period_types'.
+					Enumeration types = _period_types.elements();
+					while (types.hasMoreElements()) {
+						String s = (String) types.nextElement();
+						if (current_period_type.equals(s)) {
+							change_current_type = false;
+							break;
+						}
+					}
+				}
+				if (change_current_type) {
+					current_period_type = initial_period_type(_period_types);
+				}
 			}
+			ma_menu_bar.reset_period_types(_period_types);
 		} catch (IOException e) {
-			System.err.println("IO exception occurred: " + e + " - aborting");
+			String errmsg = "IO exception occurred: " + e + " - aborting";
+			new ErrorBox("Warning", errmsg, this_chart);
+			System.err.println(errmsg);
 			e.printStackTrace();
 			quit(-1);
 		}
@@ -746,6 +778,10 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	// Should new indicator selections replace, rather than be added to,
 	// existing indicators?
 	boolean replace_indicators;
+
+	// Is the set of period types for each tradable to be handled
+	// individually (because the sets differ between tradables)?
+	boolean individual_period_type_sets;
 
 	protected MarketSelection market_selections;
 
