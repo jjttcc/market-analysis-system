@@ -18,6 +18,7 @@ feature -- Tuple field-key constants
 	Close_index: INTEGER is 6
 	Volume_index: INTEGER is 7
 	OI_index: INTEGER is 8
-	Last_index: INTEGER is 8
+	Configurable_date_index: INTEGER is 9
+	Last_index: INTEGER is 9
 
 end -- TRADABLE_FACTORY_CONSTANTS
