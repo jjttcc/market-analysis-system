@@ -26,6 +26,14 @@ feature -- Access
 	last_event_generator: MARKET_EVENT_GENERATOR
 			-- The last MARKET_EVENT_GENERATOR that was built
 
+	last_error: STRING
+			-- Description of last error that occurred
+
+feature -- Status report
+
+	error_occurred: BOOLEAN
+			-- Did an error occur during the last operation?
+
 feature -- Basic operations
 
 	edit_event_generator_menu is
@@ -52,6 +60,10 @@ feature -- Basic operations
 				when Show_help_value then
 					show_help (help @ help.Edit_event_generators)
 				else
+				end
+				if error_occurred then
+					show_message (last_error)
+					error_occurred := false
 				end
 			end
 		end
@@ -124,8 +136,10 @@ feature {NONE} -- Implementation
 			when Compound_eg_type_value then
 				create_new_compound_event_generator
 			end
-			show_message (concatenation (
-						<<last_event_generator.event_type.name, " added.">>))
+			if not error_occurred then
+				show_message (concatenation (
+					<<last_event_generator.event_type.name, " added.">>))
+			end
 		end
 
 	create_new_compound_event_generator is
@@ -133,20 +147,27 @@ feature {NONE} -- Implementation
 			-- market_event_generation_library.
 		local
 			eg_maker: COMPOUND_GENERATOR_FACTORY
+			left, right: MARKET_EVENT_GENERATOR
 		do
 			create eg_maker
-			eg_maker.set_generators (
-				event_generator_selection ("left component"),
-				event_generator_selection ("right component"))
-			eg_maker.set_before_extension (ceg_date_time_extension ("BEFORE"))
-			eg_maker.set_after_extension (ceg_date_time_extension ("AFTER"))
-			eg_maker.set_left_target_type (ceg_left_target_type)
-			if eg_maker.left_target_type /= Void then
-				show_message (concatenation (<<eg_maker.left_target_type.name,
-												" added.">>))
+			left := event_generator_selection ("left component")
+			if left /= Void then
+				right := event_generator_selection ("right component")
+				eg_maker.set_generators (left, right)
+				eg_maker.set_before_extension (
+					ceg_date_time_extension ("BEFORE"))
+				eg_maker.set_after_extension (ceg_date_time_extension ("AFTER"))
+				eg_maker.set_left_target_type (ceg_left_target_type)
+				if eg_maker.left_target_type /= Void then
+					show_message (concatenation (<<
+						eg_maker.left_target_type.name, " added.">>))
+				end
+				create_event_generator (eg_maker, new_event_type_name)
+				last_event_generator := eg_maker.product
+			else
+				error_occurred := true
+				last_error := "There are no event generators to select from."
 			end
-			create_event_generator (eg_maker, new_event_type_name)
-			last_event_generator := eg_maker.product
 		ensure
 			-- last_event_generator references the newly created
 			-- COMPOUND_EVENT_GENERATOR
@@ -247,7 +268,7 @@ feature {NONE} -- Implementation
 			Result := new_event_type_name_selection (names)
 		end
 
-feature -- Hook methods
+feature {NONE} -- Hook methods
 
 	show_help (msg: STRING) is
 			-- Display `msg' as help information for the user.
@@ -255,7 +276,8 @@ feature -- Hook methods
 		end
 
 	event_generator_selection (msg: STRING): MARKET_EVENT_GENERATOR is
-			-- User's event generator selection
+			-- User's event generator selection - Void if there are no
+			-- event generators to select from.
 		deferred
 		end
 
