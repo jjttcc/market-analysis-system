@@ -2,6 +2,11 @@ indexing
 	description:
 		"A command that responds to a client request for indicator data %
 		%delimited by a start date-time and an end date-time"
+	note: "The default value of false is kept for `update_retrieved_tradable' %
+		%to cut down on unecessary processing, since > 99%% of the time an %
+		%indicator request will be accompanied by a market data request - %
+		%`update_retrieved_tradable' is true in %
+		%TIME_DELIMITED_MARKET_DATA_REQUEST_CMD."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -16,7 +21,7 @@ class TIME_DELIMITED_INDICATOR_DATA_REQUEST_CMD inherit
 			indicator_id_valid
 		undefine
 			expected_field_count, parse_remainder, set_print_parameters,
-			additional_post_parse_constraints_fulfilled, ignore_tradable_cache
+			ignore_tradable_cache, additional_post_parse_constraints_fulfilled
 		redefine
 			additional_field_constraints_msg
 		end
@@ -25,6 +30,8 @@ class TIME_DELIMITED_INDICATOR_DATA_REQUEST_CMD inherit
 		undefine
 			send_response_for_tradable,
 			additional_field_constraints_msg
+--!!!Temporary debugging item:
+,setup_correct_number_of_records_test
 		redefine
 			parse_remainder,
 			additional_field_constraints_fulfilled
