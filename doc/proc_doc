@@ -1,0 +1,213 @@
+#!/bin/ksh
+#  Pre-process a pre-groff-formatted document into groff.
+
+Progname=$(basename $0)
+
+usage() {
+	echo Usage: $Progname [options] [file ...] >&2
+	echo "Options:"
+	echo "   -x extension_name    include text marked with 'extension_name'"
+	echo "   -l                   format list constructs"
+	if [ "$1" = "x" ]; then exit 1;fi
+}
+
+if [ $# -lt 1 ]
+then
+	usage x
+fi
+
+files=
+list=false
+null_xname="__0@not_used0@__"
+end_title="end_title"
+
+while [ $# -gt 0 ]; do
+	case $1 in
+		-x) shift; if [ $# -lt 1 ]; then usage x;fi
+			xname=$1; shift ;;
+		-l*) list=TRUE; shift ;;
+		*) files="$files $1"; shift ;;
+	esac
+done
+
+if [ -z "$xname" ]; then xname="$null_xname";fi
+has_title=FALSE
+if [ ! -z "$files" ] && grep "%$end_title" $files >/dev/null; then
+	has_title=TRUE
+fi
+
+awk 'BEGIN {
+	TRUE = 1
+	FALSE = 0
+	FS = ""
+	In_extended_section = FALSE
+	if ("'$xname'" == "'$null_xname'") Extensions = FALSE
+	else Extensions = TRUE
+	if ("'$list'" == "TRUE") Dolist = TRUE		# format lists
+	printf("%s\n%s\n%s\n", ".SA 0", ".S 11", ".ll 6.4i")
+#	printf("%s\n", ".hy 0")		# hyphenation off
+	if ("'$has_title'" == "TRUE") {	# Parse the title.
+		x = 0
+		while (getline) {
+			if ($1 ~ /%title/) {
+				main_title = $2
+			}
+			else if ($1 ~ /%'$end_title'/) {
+				printheader(main_title, sub_title, x)
+				break
+			} else {
+				sub_title[x + 1] = $0
+				++x
+			}
+		}
+	} else {
+		print ".de TP\n.."
+	}
+}
+
+/^$/ { next } # skip blank lines
+
+/^#/ { next } # skip #comment...
+
+/^@begin/ {
+	In_extended_section = TRUE
+	Ignore_extended_section = TRUE
+	fields = split($0, a, ":")
+	if (fields > 1 && a[2] == "'$xname'") {
+		Ignore_extended_section = FALSE
+	}
+}
+
+/^@end/ {
+	In_extended_section = FALSE
+}
+
+(In_extended_section) {
+	if (Ignore_extended_section) {
+		next
+	}
+}
+
+/^@/ {
+	# Lines starting with @ indicate an "extension"
+	if (! Extensions) {
+		# Skip the line because 'Extensions' are off.
+		next
+	} else if ($0 !~ "^@'$xname'") {
+		# Skip because 'Extensions' are on and $0 does not match 'xname'.
+		next
+	}
+}
+
+/%date/ {
+	date = $2
+	next
+}
+
+/%hdg1/ {
+	printhdg1($2)
+	date = ""
+	next
+}
+
+/%br/ {
+	print ".br"
+	next
+}
+
+/%startlist/ {
+	if (Dolist) {
+		printf(".BL\n")
+		++list_nesting
+	}
+	next
+}
+
+/%listitem/ {
+	if (Dolist)
+		printf(".LI\n")
+	next
+}
+
+/%endlist/ {
+	if (list_nesting > 0) {
+		if (Dolist)
+			printf(".LE\n.P\n")
+			#printf(".LE\n")
+		--list_nesting
+		next
+	} else {
+		system("echo Warning: %endlist with no corresponding %startlist >&2")
+	}
+}
+
+/%par/ {
+	printf(".P\n")
+	next
+}
+
+(NR > 20 && ! newTP) {
+	newTP = TRUE
+	printf(".de TP\n.sp 0.5\n")
+	printf(".tl '\''\\fBPage \\\\nP'\'''\''%s'\''\\fP\n", main_title)
+#	printf(".tl '\''\\fBPage \\\\nP\\fP'\'''\'''\''\n")
+	printf(".sp 3\n..\n")
+}
+
+/^@'$xname'/ {
+	if (Extensions) print $2
+	next
+}
+
+/^%/ {
+	# Unrecognized key word - skip.
+	next
+}
+
+{		# must be text, so print it
+	print
+}
+
+function fooheader(main, subt, sub_line_count) {
+	printf(".de TP\n.sp 1.25\n.ce\n")
+	if (main != "") {
+		printf("\\s+1\\fB%s\\fP\\s-1", main)
+	}
+	for (i = 1; i <= sub_line_count; ++i) {
+		printf("%s", subt[i])
+	}
+	printf("\n.sp 1.25\n..\n")
+}
+
+function printheader(main, subt, sub_line_count) {
+	printf("%s\n%s\n", ".de TP", ".sp 1.25")
+	if (main != "") {
+		printf(".ce\n\\s+1\\fB%s\\s-1\n", main)
+	}
+	for (i = 1; i <= sub_line_count; ++i) {
+		printf(".ce\n%s\n", subt[i])
+	}
+	printf("\\fP\n.sp 1.25\n..\n")
+}
+
+function printhdg1(hdg) {
+	printf(".br\n.ne 7\n")
+	printf(".P\n\\fB")
+	if (DATEFIRST)
+	{
+		if (date)
+			printf("%s, ", date)
+		printf("%s\n", hdg)
+	}
+	else
+	{
+		printf("%s", hdg)
+		if (date)
+			printf(", %s", date)
+		printf("\n")
+	}
+	printf("\\fP\n")
+	#printf(".P\n", hdg)
+}
+
+' $files
