@@ -185,7 +185,7 @@ feature {NONE}
 			end
 		end
 
-feature {TEST_FUNCTION_FACTORY} -- Element change (Export to test class for now.)
+feature {FACTORY} -- Element change (Export to test class for now.)
 
 	set_input (f1: like input1; f2: like input2) is
 		require

@@ -95,7 +95,7 @@ feature {NONE}
 
 	input: MARKET_FUNCTION
 
-feature {TEST_FUNCTION_FACTORY} -- Element change
+feature {FACTORY} -- Element change
 
 	set_input (in: like input) is
 		require
