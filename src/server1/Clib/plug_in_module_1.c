@@ -101,7 +101,6 @@ enum Error_type initialize(char* working_directory) {
 	enum Error_type result = 0;
 	char cmdpath[Buffer_size];
 
-fprintf(stderr, "initialize - wkdir: %s\n", working_directory);
 	if (Data_retrieval_command == 0) {
 		if (system(0) == 0) {
 			result = Shell_not_available;
@@ -148,7 +147,6 @@ char** directories(const char* paths, int* count, char path_sep) {
 	char** result = 0;
 	int sepcount, i, onedot = 0;
 
-fprintf(stderr, "directories - paths: %s\n", paths);
 	assert(paths != 0 && paths[strlen(paths)] == '\0');
 	if (paths[0] != '\0') {
 		start = paths;
@@ -370,7 +368,6 @@ struct input_sequence_plug_in* new_input_sequence_plug_in_handle(
 	} else {
 		error = Memory;
 	}
-fprintf(stderr, "new_ispih - dir: %s\n", dir);
 	if (dir != 0) {
 		result = malloc(sizeof (struct input_sequence_plug_in));
 		if (result != 0) {
@@ -425,7 +422,6 @@ int obtain_data(struct input_sequence_plug_in* handle,
 	char cmd[Buffer_size * 3 + 512];
 	int cmdresult;
 
-fprintf(stderr, "obtain_data - A\n");
 /*!!!Add use of is_intraday.*/
 	assert(Data_retrieval_command != 0 && strlen(Data_retrieval_command) > 0 &&
 		strlen(Data_retrieval_command) < Buffer_size &&
@@ -436,7 +432,6 @@ fprintf(stderr, "obtain_data - A\n");
 		handle->errorbuffer = concat2strings("Symbol name is too long: ",
 			symbol);
 		cmdresult = -1;
-fprintf(stderr, "obtain_data - B\n");
 	} else {
 		strcpy(cmd, Data_retrieval_command);
 		assert(Data_retrieval_command[strlen(Data_retrieval_command) - 1] ==
@@ -453,10 +448,9 @@ fprintf(stderr, "obtain_data - B\n");
 		strcat(cmd, handle->data_file_name);
 		strcat(cmd, " ");
 		strcat(cmd, symbol);
-fprintf(stderr, "obtain_data - C\n");
-printf("executing %s (current dir: %s)\n", cmd, getcwd(0, 0));
+/*printf("executing %s (current dir: %s)\n", cmd, getcwd(0, 0));*/
 		cmdresult = system(cmd);
-printf("cmdresult: %d (current dir: %s)\n", cmdresult, getcwd(0, 0));
+/*printf("cmdresult: %d (current dir: %s)\n", cmdresult, getcwd(0, 0));*/
 	}
 
 	return cmdresult;
@@ -493,7 +487,6 @@ char* symbol_list(struct input_sequence_plug_in* handle) {
 	handle->errorbuffer = 0;
 	slist[0] = "Failed to read symbols file ";
 	slist[1] = handle->symbol_file_name;
-fprintf(stderr, "handle->symbol_file_name: %s\n", handle->symbol_file_name);
 	result = malloc(handle->symbol_file_size + 1);
 	buffer = malloc(handle->symbol_file_size + 1);
 	if (result == 0 || buffer == 0) {
@@ -536,48 +529,38 @@ char* tradable_data(struct input_sequence_plug_in* handle,
 	handle->errorbuffer = 0;
 	slist[0] = "Failed to read data file ";
 	slist[1] = handle->data_file_name;
-fprintf(stderr, "handle->data_file_name: %s\n", handle->data_file_name);
 	if (obtain_data(handle, symbol, is_intraday) == 0) {
 		file_size = file_length(handle->data_file_name);
 		if (file_size == -1) {
 			slist[2] = ": ";
 			slist[3] = strerror(errno);
 			handle->errorbuffer = concatenation(slist, 4);
-fprintf(stderr, "tradable_data - A\n");
 		} else if (access(handle->data_file_name, R_OK) != 0) {
 			slist[2] = ": ";
 			slist[3] = strerror(errno);
 			handle->errorbuffer = concatenation(slist, 4);
-fprintf(stderr, "tradable_data - B\n");
 		} else {
 			result = malloc(file_size + 1);
 			if (result == 0) {
 				slist[0] = strerror(errno);
 				handle->errorbuffer = concatenation(slist, 1);
-fprintf(stderr, "tradable_data - C\n");
 			}
 		}
 		if (result != 0) {
 			FILE* f = fopen(handle->data_file_name, "r");
-fprintf(stderr, "tradable_data - D\n");
 			if (f == 0) {
 				slist[0] = strerror(errno);
 				handle->errorbuffer = concatenation(slist, 1);
-fprintf(stderr, "tradable_data - E\n");
 			} else {
 				if (fread(result, 1, file_size, f) != file_size) {
 					handle->errorbuffer = concatenation(slist, 2);
-fprintf(stderr, "tradable_data - F\n");
 				} else {
 					*size = file_size;
-fprintf(stderr, "tradable_data - G\n");
 				}
 				fclose(f);
 			}
 		}
 	}
 
-fprintf(stderr, "tradable_data - result: %s, hdl->errbfr: %s\n",
-result, handle->errorbuffer);
 	return result;
 }

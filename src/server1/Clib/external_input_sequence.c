@@ -183,7 +183,6 @@ void initialize_Fs_char_table() {
 
 void retrieve_data(struct input_sequence_handle* handle,
 		EIF_POINTER symbol, EIF_BOOLEAN is_intraday) {
-fprintf(stderr, "retrieve_data - is_intraday: %d\n", is_intraday);
 	handle->error_occurred = 0;
 	if (Fs_char_table == 0) {
 		initialize_Fs_char_table();
