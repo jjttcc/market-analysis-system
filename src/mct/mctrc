@@ -17,7 +17,7 @@ data_dir	/opt/mas/lib/data/tradables
 bin_dir	/opt/mas/bin
 
 # Valid port numbers for use by the MAS server
-valid_portnumbers	5432,2345,2222,2223,2224
+valid_portnumbers	9999,2345,2222,2223,2224
 
 # Network host name
 hostname	localhost
