@@ -9,6 +9,8 @@ class BASIC_MARKET_TUPLE inherit
 
 	MARKET_TUPLE
 
+	MATH_CONSTANTS
+
 creation
 
 	make
