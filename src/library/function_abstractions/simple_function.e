@@ -66,6 +66,17 @@ feature -- Access
 			Result.append (" records")
 		end
 
+	parameters: LIST [FUNCTION_PARAMETER] is
+		once
+			!LINKED_LIST [FUNCTION_PARAMETER]!Result.make
+		end
+
+	processed_date_time: DATE_TIME is
+		once
+			-- Very early date
+			!!Result.make (-500, 1, 1, 0, 0, 0)
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is
@@ -91,9 +102,5 @@ feature {NONE} -- Basic operations
 			-- Null action
 		do
 		end
-
-invariant
-
-	trading_period_type_not_void: trading_period_type /= Void
 
 end -- class SIMPLE_FUNCTION
