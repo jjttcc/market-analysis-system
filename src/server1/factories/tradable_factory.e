@@ -201,6 +201,10 @@ feature -- Basic operations
 			end
 			if intraday then
 				time_period_type := intraday_scanner.period_type
+				if time_period_type = Void then -- empty input data
+					time_period_type := period_types @ (
+						period_type_names @ Hourly)
+				end
 			end
 			product.set_trading_period_type (time_period_type)
 			add_indicators (product, indicators)
