@@ -150,6 +150,9 @@ feature -- Commands
 	browse_faq_command: MCT_COMMAND
 			-- Command to browse the FAQ
 
+	all_commands: LINKED_LIST [MCT_COMMAND]
+			-- All existent MCT_COMMANDs
+
 feature -- Status report
 
 	fatal_error_status: BOOLEAN
@@ -627,7 +630,9 @@ feature {NONE} -- Implementation - Utilities
 				Result := new_unmanaged_command (Termination_cmd_specifier,
 					term_cmd_value)
 			end
+			add_to_all_commands (Result)
 		ensure
+			exists: Result /= Void
 			debugging_state: command_line.is_debug implies
 				Result.debugging_on
 		end
@@ -640,6 +645,7 @@ feature {NONE} -- Implementation - Utilities
 			create Result.make (cmd_id, cmd_string)
 			initialize_external_command (Result, cmd_id)
 		ensure
+			exists: Result /= Void
 			debugging_state: command_line.is_debug implies
 				Result.debugging_on
 		end
@@ -652,12 +658,15 @@ feature {NONE} -- Implementation - Utilities
 			create Result.make (cmd_id, cmd_string)
 			initialize_external_command (Result, cmd_id)
 		ensure
+			exists: Result /= Void
 			debugging_state: command_line.is_debug implies
 				Result.debugging_on
 		end
 
 	initialize_external_command (cmd: EXTERNAL_COMMAND; cmd_id: STRING) is
-			-- Initialize `cmd'.
+			-- Initialize `cmd' and add it to `all_commands'.
+		require
+			args_exist: cmd /= Void and cmd_id /= Void
 		local
 			workdir: STRING
 		do
@@ -668,9 +677,19 @@ feature {NONE} -- Implementation - Utilities
 			if workdir /= Void then
 				cmd.set_working_directory (workdir)
 			end
+			add_to_all_commands (cmd)
 		ensure
 			debugging_state: command_line.is_debug implies
 				cmd.debugging_on
+		end
+
+	add_to_all_commands (cmd: MCT_COMMAND) is
+			-- Add `cmd' to `all_commands'.
+		do
+			if all_commands = Void then
+				create all_commands.make
+			end
+			all_commands.extend (cmd)
 		end
 
 feature {NONE} -- Implementation
@@ -746,10 +765,15 @@ feature {NONE} -- Implementation
 				agent remove_character (?, Escape_character @ 1))
 		end
 
-	convert_command_path (cmd: MANAGED_EXTERNAL_COMMAND) is
+	convert_command_path (cmd: MCT_COMMAND) is
 			-- Call `platform.convert_path' on `cmd.command_string'.
+		local
+			extcmd: EXTERNAL_COMMAND
 		do
-			platform.convert_path (cmd.command_string)
+			extcmd ?= cmd
+			if extcmd /= Void then
+				platform.convert_path (extcmd.command_string)
+			end
 		end
 
 	remove_character (s: STRING; c: CHARACTER) is
