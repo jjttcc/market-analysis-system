@@ -11,3 +11,13 @@ http://list.opera.com/pipermail/opera-linux/2001-September/001080.html
 or this one might be better (or reference both):
 
 http://www.sunmanagers.org/pipermail/summaries/2001-February/000205.html
+
+
+People will probably run into the following problem:
+
+Using http-based data retrieval, if today is Saturday (perhaps this also
+occurs on Sunday) and data for "symbol" is only missing for the last day,
+yahoo does not give yesterday's data (even though the http query sent by
+MAS is correct).  The fix is to remove the data file for "symbol" so that
+the data will be retrieved from scratch.  (Deleting the last line in the
+data file does not work.)
