@@ -10,11 +10,13 @@
 // will start the program and tell it to look for the configuration file
 // in the current directory and that its name is x_config.
 
+package pct;
+
 import pct.ProgramControlTerminal;
 import pct.ApplicationInitialization;
 import pct.application.*;
 
-class PCT_Main {
+public class PCT_Main {
 
 	public static void main(String[] args) {
 		try {
@@ -48,7 +50,7 @@ class PCT_Main {
 		}
 	}
 
-	private static void abort(String msg) {
+	public static void abort(String msg) {
 		if (msg != null) {
 			msg = msg + " - ";
 		}
