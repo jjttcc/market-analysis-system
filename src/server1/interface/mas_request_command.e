@@ -155,8 +155,7 @@ feature {NONE}
 		end
 
 	send_data is
-			-- Redefinition of output method inherited from GENERAL to
-			-- send output to active_medium
+			-- Send `output_buffer' to the `active_medium'.
 		do
 			if output_buffer /= Void and not output_buffer.empty then
 				active_medium.put_string (output_buffer)
