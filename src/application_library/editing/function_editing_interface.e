@@ -82,6 +82,8 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			l.extend (function_with_generator ("STANDARD_MOVING_AVERAGE"))
 			l.extend (function_with_generator ("EXPONENTIAL_MOVING_AVERAGE"))
 			l.extend (function_with_generator ("ACCUMULATION"))
+			l.extend (function_with_generator (
+				"CONFIGURABLE_N_RECORD_FUNCTION"))
 			l.extend (function_with_generator ("MARKET_FUNCTION_LINE"))
 			l.extend (function_with_generator ("MARKET_DATA_FUNCTION"))
 			l.extend (function_with_generator ("STOCK"))
@@ -94,6 +96,8 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			l.extend (function_with_generator ("STANDARD_MOVING_AVERAGE"))
 			l.extend (function_with_generator ("EXPONENTIAL_MOVING_AVERAGE"))
 			l.extend (function_with_generator ("ACCUMULATION"))
+			l.extend (function_with_generator (
+				"CONFIGURABLE_N_RECORD_FUNCTION"))
 			l.extend (function_with_generator ("MARKET_DATA_FUNCTION"))
 		end
 
@@ -186,6 +190,7 @@ feature {EDITING_INTERFACE}
 			mfl: MARKET_FUNCTION_LINE
 			ovf: ONE_VARIABLE_FUNCTION
 			accum: ACCUMULATION
+			conf_nrf: CONFIGURABLE_N_RECORD_FUNCTION
 			nrovf: N_RECORD_ONE_VARIABLE_FUNCTION
 			tvf: TWO_VARIABLE_FUNCTION
 		do
@@ -227,6 +232,12 @@ feature {EDITING_INTERFACE}
 					c_is_an_accum: accum /= Void
 				end
 				editor.edit_accumulation (accum)
+			when Configurable_nrfn then
+				conf_nrf ?= f
+				check
+					c_is_an_accum: conf_nrf /= Void
+				end
+				editor.edit_configurable_nrf (conf_nrf)
 			when Two_cplx_fn_op then
 				tvf ?= f
 				check
@@ -294,6 +305,7 @@ feature {NONE} -- Implementation
 						-- market function, a RESULT_COMMAND [REAL],
 						-- an N_BASED_CALCULATION, and an n-value.
 	Mkt_fnctn_line,		-- a MARKET_FUNCTION_LINE.
+	Configurable_nrfn,	-- CONFIGURABLE_N_RECORD_FUNCTION
 	Other				-- Classes that need no initialization
 	:
 				INTEGER is unique
@@ -337,6 +349,11 @@ feature {NONE} -- Implementation
 				valid_name: function_names.has (name)
 			end
 			Result.extend (Accumulation, name)
+			name := "CONFIGURABLE_N_RECORD_FUNCTION"
+			check
+				valid_name: function_names.has (name)
+			end
+			Result.extend (Configurable_nrfn, name)
 			name := "MARKET_FUNCTION_LINE"
 			check
 				valid_name: function_names.has (name)
