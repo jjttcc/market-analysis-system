@@ -34,11 +34,4 @@ feature -- Status report
 			is_true: Result = true
 		end
 
-	execute_postcondition: BOOLEAN is
-		do
-			Result := true
-		ensure then
-			is_true: Result = true
-		end
-
 end -- class BASIC_NUMERIC_COMMAND

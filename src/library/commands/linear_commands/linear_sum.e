@@ -35,6 +35,10 @@ feature -- Basic operations
 			internal_index := 0
 			value := 0
 			until_continue
+		ensure then
+			target.index = old target.index + n
+			-- value = sum (target[old target.index .. old target.index+n-1])
+			int_index_eq_n: internal_index = n
 		end
 
 feature -- Status report
@@ -59,17 +63,6 @@ feature -- Status report
 			Result := operator_set and target_set and n_set
 		ensure then
 			op_target_n_set: Result = (operator_set and target_set and n_set)
-		end
-
-	execute_postcondition: BOOLEAN is
-		do
-			Result := internal_index = n
-		ensure then
-			-- target.index = old target.index + n and
-			-- value =
-			--  sum (target[old target.index .. old target.index+n-1])
-			--    [where operation is the operation to be performed]
-			int_index_eq_n: Result = (internal_index = n)
 		end
 
 feature {NONE}

@@ -46,13 +46,6 @@ feature -- Status report
 			n_set: Result = n_set
 		end
 
-	execute_postcondition: BOOLEAN is
-		do
-			Result := true
-		ensure then
-			is_true: Result = true
-		end
-
 feature -- Basic operations
 
 	execute (arg: ANY) is

@@ -49,13 +49,6 @@ feature -- Status report
 			n_target_set: Result = (n_set and target_set)
 		end
 
-	execute_postcondition: BOOLEAN is
-		do
-			Result := true
-		ensure then
-			is_true: Result = true
-		end
-
 feature {NONE} -- Implementation
 
 	forth is
