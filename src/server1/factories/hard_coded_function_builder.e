@@ -117,17 +117,9 @@ feature {NONE} -- Hard-coded market function building procedures
 			-- Make an exponential moving average function.
 		local
 			cmd: BASIC_NUMERIC_COMMAND
-			exp: N_BASED_UNARY_OPERATOR
-			div: DIVISION
-			two, one: CONSTANT
-			add: ADDITION
-			n_cmd: N_VALUE_COMMAND
+			exp: MA_EXPONENTIAL
 		do
-			create two.make (2); create one.make (1)
-			create n_cmd.make (n)
-			create add.make (n_cmd, one)
-			create div.make (two, add)
-			create exp.make (div, n)
+			create exp.make (n)
 			create cmd
 			create Result.make (f, cmd, exp, n)
 			Result.set_name (name)
