@@ -49,15 +49,18 @@ public class TA_Connection implements NetworkProtocol
 		}
 	}
 
-	public void send_login_request()
+	// Send a request for a login session key.
+	// Postcondition: The key value received from the server is returned.
+	public int send_login_request()
 	{
 		String session_key_str = "";
+		int session_key = 0;
 		Configuration conf = Configuration.instance();
 
 		connect();
 		System.out.println("Sending settings:\n'" +
 							conf.session_settings() + "'");
-		send_msg(Login_request, conf.session_settings());
+		send_msg(Login_request, conf.session_settings(), 0);
 		try {
 			session_key_str = receive_msg().toString();
 		}
@@ -74,15 +77,28 @@ public class TA_Connection implements NetworkProtocol
 				"server: " + session_key_str);
 			System.exit(-1);
 		}
+
+		return session_key;
+	}
+
+	// Send a logout request to the server to end the current session
+	// and, if `exit' is true, exit with `status'.
+	public void logout(boolean exit, int status, int session_key)
+	{
+		connect();
+System.err.println("Sending " + Logout_request);
+		send_msg(Logout_request, "", session_key);
+		if (exit) System.exit(status);
 	}
 
 	// Send a request for data for market `symbol' with `period_type'.
-	public void send_market_data_request(String symbol, String period_type)
-		throws IOException
+	public void send_market_data_request(String symbol, String period_type,
+			int session_key)
+		throws Exception
 	{
 		connect();
 		send_msg(Market_data_request, symbol + Input_field_separator +
-					period_type);
+					period_type, session_key);
 		data_parser.parse(receive_msg().toString(), main_drawer);
 		_last_market_data = data_parser.result();
 		_last_market_data.set_drawer(main_drawer);
@@ -92,11 +108,11 @@ public class TA_Connection implements NetworkProtocol
 	// Send a request for data for indicator `ind' for market `symbol' with
 	// `period_type'.
 	public void send_indicator_data_request(int ind, String symbol,
-		String period_type) throws IOException
+		String period_type, int session_key) throws Exception
 	{
 		connect();
 		send_msg(Indicator_data_request, ind + Input_field_separator +
-					symbol + Input_field_separator + period_type);
+				symbol + Input_field_separator + period_type, session_key);
 		indicator_parser.parse(receive_msg().toString(), indicator_drawer);
 		_last_indicator_data = indicator_parser.result();
 		_last_indicator_data.set_drawer(indicator_drawer);
@@ -104,12 +120,13 @@ public class TA_Connection implements NetworkProtocol
 	}
 
 	// Send a request for the list of indicators for market `symbol'.
-	public void send_indicator_list_request(String symbol) throws IOException
+	public void send_indicator_list_request(String symbol,
+		int session_key) throws IOException
 	{
 		StringBuffer mlist;
 		_last_indicator_list = new Vector();
 		connect();
-		send_msg(Indicator_list_request, symbol);
+		send_msg(Indicator_list_request, symbol, session_key);
 		mlist = receive_msg();
 		close_connection();
 		StringTokenizer t = new StringTokenizer(mlist.toString(),
@@ -140,7 +157,7 @@ public class TA_Connection implements NetworkProtocol
 
 	// List of markets available from the server
 	// !!!Q: Is it better not to cache - i.e., retrieve each time?
-	public Vector market_list() throws IOException
+	public Vector market_list(int session_key) throws IOException
 	{
 		StringBuffer mlist;
 
@@ -148,7 +165,7 @@ public class TA_Connection implements NetworkProtocol
 		{
 			markets = new Vector();
 			connect();
-			send_msg (Market_list_request, "");
+			send_msg (Market_list_request, "", session_key);
 			mlist = receive_msg();
 			close_connection();
 			StringTokenizer t = new StringTokenizer(mlist.toString(),
@@ -162,13 +179,14 @@ public class TA_Connection implements NetworkProtocol
 	}
 
 	// List of all valid trading period types for `market'
-	public Vector trading_period_type_list(String market) throws IOException {
+	public Vector trading_period_type_list(String market,
+			int session_key) throws IOException {
 		StringBuffer tpt_list;
 		Vector result;
 
 		result = new Vector();
 		connect();
-		send_msg(Trading_period_type_request, market);
+		send_msg(Trading_period_type_request, market, session_key);
 		tpt_list = receive_msg();
 		close_connection();
 		StringTokenizer t = new StringTokenizer(tpt_list.toString(),
@@ -212,17 +230,21 @@ public class TA_Connection implements NetworkProtocol
 			// error (probably in the client), it is treated as fatal.
 			System.exit(-1);
 		}
-//!!!System.out.println(result.toString());
+System.out.println(result.toString());
 		return result;
 	}
 
 	// Send the `msgID', the session key, and `msg' - with field delimiters.
-	void send_msg (int msgID, String msg)
+	void send_msg (int msgID, String msg, int session_key)
 	{
 		out.print(msgID);
 		out.print(Input_field_separator + session_key);
 		out.print(Input_field_separator + msg);
 		out.print(Eom);
+System.err.print(msgID);
+System.err.print(Input_field_separator + session_key);
+System.err.print(Input_field_separator + msg);
+System.err.print(Eom);
 		out.flush();
 	}
 
@@ -245,13 +267,13 @@ public class TA_Connection implements NetworkProtocol
 		}
 		catch (UnknownHostException e)
 		{
-			System.err.println("Don't know about host:");
+			System.err.println("Don't know about host: ");
 			System.err.println(hostname);
 			System.exit(1);
 		}
 		catch (IOException e)
 		{
-			System.err.println("Couldn't get I/O for the connection to:");
+			System.err.println("Couldn't get I/O for the connection to: ");
 			System.err.println(hostname);
 			System.exit(1);
 		}
@@ -274,7 +296,6 @@ public class TA_Connection implements NetworkProtocol
 	private PrintWriter out;		// output to server via socket
 	private BufferedReader in;		// input from server via socket
 	private DataInspector scanner;	// for scanning server messages
-	private int session_key;		// key or ID for current client session
 	private int last_rec_msgID;		// last message ID received from server
 	private Vector markets;			// Cached list of markets
 		// result of last market data request

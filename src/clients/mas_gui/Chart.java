@@ -25,20 +25,20 @@ public class TA_Chart extends Frame
 		Vector inds;
 
 		try {
-			connection.send_login_request();
+			session_key = connection.send_login_request();
 			if (_markets == null) {
-				_markets = connection.market_list();
+				_markets = connection.market_list(session_key);
 				if (! _markets.isEmpty()) {
 					// Each market has its own period type list; but for now,
 					// just retrieve the list for the first market and use
 					// it for all markets.
 					_period_types = connection.trading_period_type_list(
-						(String) _markets.elementAt(0));
+						(String) _markets.elementAt(0), session_key);
 					// Each market has its own indicator list; but for now,
 					// just retrieve the list for the first market and use
 					// it for all markets.
 					connection.send_indicator_list_request(
-						(String) _markets.elementAt(0));
+						(String) _markets.elementAt(0), session_key);
 					inds = connection.last_indicator_list();
 					_indicators = new Hashtable(inds.size());
 					int i;
@@ -55,7 +55,7 @@ public class TA_Chart extends Frame
 		}
 		catch (IOException e) {
 			System.err.println("IO exception occurred, bye ...");
-			System.exit(-1);
+			quit(-1);
 		}
 		initialize_GUI_components();
 		current_period_type = main_pane.current_period_type();
@@ -70,7 +70,9 @@ public class TA_Chart extends Frame
 	void notify_period_type_changed() {
 		current_period_type = main_pane.current_period_type();
 		period_type_change = true;
-		request_data(current_market);
+		if (current_market != null) {
+			request_data(current_market);
+		}
 		period_type_change = false;
 	}
 
@@ -82,11 +84,11 @@ public class TA_Chart extends Frame
 			Graph2D graph = main_pane.main_graph();
 			try {
 				connection.send_market_data_request(market,
-					current_period_type);
+					current_period_type, session_key);
 			}
-			catch (IOException e2) {
-				System.err.println("IO exception occurred, bye ...");
-				System.exit(-1);
+			catch (Exception e) {
+				System.err.println("Exception occurred: "+e+", bye ...");
+				quit(-1);
 			}
 			//Ensure that all graph's data sets are removed.  (May need to
 			//change later.)
@@ -100,10 +102,11 @@ public class TA_Chart extends Frame
 				try {
 					connection.send_indicator_data_request(
 						((Integer) _indicators.get(current_upper_indicator)).
-							intValue(), market, current_period_type);
-				} catch (IOException i) {
-					System.err.println("IO exception occurred, bye ...");
-					System.exit(-1);
+							intValue(), market, current_period_type,
+							session_key);
+				} catch (Exception e) {
+					System.err.println("Exception occurred: "+e+", bye ...");
+					quit(-1);
 				}
 				graph.attachDataSet(connection.last_indicator_data());
 			}
@@ -119,10 +122,11 @@ public class TA_Chart extends Frame
 				try {
 					connection.send_indicator_data_request(
 						((Integer) _indicators.get(current_lower_indicator)).
-							intValue(), market, current_period_type);
-				} catch (IOException i) {
-					System.err.println("IO exception occurred, bye ...");
-					System.exit(-1);
+							intValue(), market, current_period_type,
+							session_key);
+				} catch (Exception e) {
+					System.err.println("Exception occurred: "+e+", bye ...");
+					quit(-1);
 				}
 				dataset = connection.last_indicator_data();
 				add_indicator_lines(dataset);
@@ -180,10 +184,10 @@ public class TA_Chart extends Frame
 		add_indicators(indicator_menu);
 
 		// Create three menu items, with menu shortcuts, and add to the menu.
-		MenuItem newwin, closewin, ss, quit;
+		MenuItem newwin, closewin, mkt_selection, quit;
 		file_menu.add(newwin = new MenuItem("New Window",
 							new MenuShortcut(KeyEvent.VK_N)));
-		file_menu.add(ss = new MenuItem("Select Market",
+		file_menu.add(mkt_selection = new MenuItem("Select Market",
 							new MenuShortcut(KeyEvent.VK_S)));
 		file_menu.add(closewin = new MenuItem("Close Window",
 							new MenuShortcut(KeyEvent.VK_W)));
@@ -196,14 +200,14 @@ public class TA_Chart extends Frame
 		public void actionPerformed(ActionEvent e) { new TA_Chart(connection); }
 		});
 
-		ss.addActionListener(market_selection);
+		mkt_selection.addActionListener(market_selection);
 
 		closewin.addActionListener(new ActionListener() {// Close this window.
 		public void actionPerformed(ActionEvent e) { close(); }
 		});
 
 		quit.addActionListener(new ActionListener() {     // Quit the program.
-		public void actionPerformed(ActionEvent e) { System.exit(0); }
+		public void actionPerformed(ActionEvent e) { quit(0); }
 		});
 
 		// Another event listener, this one to handle window close requests.
@@ -238,14 +242,32 @@ public class TA_Chart extends Frame
 
 	/** Close a window.  If this is the last open window, just quit. */
 	void close() {
-		if (--num_windows == 0) System.exit(0);
-		else this.dispose();
+		if (--num_windows == 0) {
+			connection.logout(true, 0, session_key);
+		}
+		else {
+			connection.logout(false, 0, session_key);
+			this.dispose();
+		}
+	}
+
+	/** Quit gracefully, sending a logout request for each open window. */
+	void quit(int status) {
+		// Log out the corresponding session for all but one window.
+		for (int i = 0; i < num_windows - 1; ++i) {
+			connection.logout(false, 0, session_key);
+		}
+		// Log out the remaining window and exit with `status'.
+		connection.logout(true, status, session_key);
 	}
 
 	private TA_Connection connection;
 
 	// # of open windows - so program can exit when last one is closed
 	protected static int num_windows = 0;
+
+	// Key for the session associated with this window
+	protected int session_key;
 
 	// Main window pane
 	TA_ScrollPane main_pane;
@@ -298,12 +320,12 @@ class IndicatorListener implements java.awt.event.ActionListener {
 					selection.equals(No_lower_indicator))) {
 				connection.send_indicator_data_request(
 					((Integer) _indicators.get(selection)).intValue(),
-					market, current_period_type);
+					market, current_period_type, session_key);
 			}
 		}
-		catch (IOException ex) {
-			System.err.println("IO exception occurred, bye ...");
-			System.exit(-1);
+		catch (Exception ex) {
+			System.err.println("Exception occurred: " + ex + ", bye ...");
+			quit(-1);
 		}
 		// Set graph according to whether the selected indicator is
 		// configured to go in the upper (main) or lower (indicator) graph.
