@@ -52,8 +52,6 @@ feature -- Basic operations
 		do
 			internal_index := 0
 			value := 0
-print ("ls.exe - index: ") print (index) print("%N")
-print ("ls.exe - target.index: ") print (target.index) print("%N")
 			if target.count >= n then
 				until_continue
 			else
@@ -91,8 +89,6 @@ feature {NONE}
 
 	action is
 		do
-print ("ls.action - index: ") print (index) print("%N")
-print ("ls.action - target.index: ") print (target.index) print("%N")
 			operand.execute (target.item)
 			value := value + operand.value
 		ensure then

@@ -128,14 +128,12 @@ feature {NONE} -- Implementation
 
 	start is
 		do
-print ("in start - target index: ") print (target.index) print ("%N")
 			index_offset := n - 1
 			start_init
 		end
 
 	action is
 		do
-print ("in action - current index: ") print (index) print ("%N")
 			sub_action (target.index - index_offset)
 		end
 
