@@ -19,7 +19,7 @@ export Targetdir=$MASBUILD/lib/binaries
 export Projectdir=$MASPROJ/${appname}_current
 export Executable_name=${appname}.exe
 export C_Compile_options=-batch
-export Ace_file_name=$MASDEV\\${appname}-windows.ace
+export Ace_file_name=$MASACES\\${appname}-windows.ace
 export Stripcmd=none
 export Compile_wait=50
 
