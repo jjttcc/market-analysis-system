@@ -7,7 +7,7 @@ import java.util.*;
 import support.*;
 
 /**
- *  Abstraction for drawing data tuples
+ *  Abstraction for drawing indicator tuples
  */
 abstract public class IndicatorDrawer extends Drawer {
 
