@@ -130,30 +130,6 @@ print ("F%N")
 			old_index_updated: index = old_index
 		end
 
--- !!!!Remove:
-	old_item_remove: TRADABLE [BASIC_MARKET_TUPLE] is
-			-- Current tradable.  `fatal_error' will be True if an error
-			-- occurs.
-		do
-			fatal_error := False
-			-- Create a new tradable (or get it from the cache) if
-			-- the cursor has moved since the last tradable creation.
-			if
-				index /= old_index
-			then
-				old_index := 0
-				target_tradable := cached_item (index)
-				update_and_load_data
-				old_index := index
-			end
-			Result := target_tradable
-			if Result = Void and not fatal_error then
-				fatal_error := True
-			end
-		ensure then
-			good_if_no_error: not fatal_error implies Result /= Void
-		end
-
 	symbols: LIST [STRING] is
 			-- The symbol of each tradable
 		do
@@ -297,30 +273,16 @@ feature {FACTORY} -- Access
 
 feature {NONE} -- Implementation
 
--- !!!!!!! OBSOLETE - Remove:
-	update_and_load_data is
-			-- Make sure, if appropriate, that the data in the data
-			-- source is up to date, and then load the data.
-		do
-			if target_tradable = Void then
-				load_data
-			else
-				-- Ensure that old indicator data from the previous
-				-- `target_tradable' is not re-used.
-				target_tradable.flush_indicators
-			end
-		end
-
 	load_target_tradable is
 			-- Load the data for `current_symbol' and set `target_tradable'
 			-- to the resulting TRADABLE.
 		require
+			target_tradable_void: target_tradable = Void
 			current_cached_item_void: cached_item (index) = Void
+			no_error: not fatal_error
 		do
 print ("Data for " + current_symbol + " not in cache - loading%N")
-			pre_process_data_load
 			load_data
-			post_process_data_load
 		ensure
 			target_tradable_set: not fatal_error = (target_tradable /= Void)
 		end
@@ -483,30 +445,17 @@ print ("Starting 'load_data' for " + current_symbol + "%N")
 
 feature {NONE} -- Hook routines
 
-	pre_process_data_load is
-			-- Do any needed processing before calling `load_data'.
-		do
-			-- Null procedure - redefine if needed.
-		end
-
-	post_process_data_load is
-			-- Do any needed processing after calling `load_data'.
-		do
-			-- Null procedure - redefine if needed.
-		end
-
 	target_tradable_out_of_date: BOOLEAN is
 			-- Have new data become available for `target_tradable' since
 			-- `target_tradable' was last updated?
 		require
 			target_tradable_exists: target_tradable /= Void
-			current_item_is_cached: cached_item (index) /= Void
+			current_item_is_cached_if_caching_on: caching_on implies
+				cached_item (index) /= Void
 		do
 			-- Default: Data is never out of date - Redefine in descendant
 			-- (along with `append_new_data') if update behavior is required.
 			Result := False
---!!!! temporary - force append for testing.
-Result := True
 		end
 
 	append_new_data is
@@ -516,7 +465,8 @@ Result := True
 			-- appending to it.)
 		require
 			target_tradable_exists: target_tradable /= Void
-			current_item_is_cached: cached_item (index) /= Void
+			current_item_is_cached_if_caching_on: caching_on implies
+				cached_item (index) /= Void
 			symbols_correspond: equal (target_tradable.symbol, current_symbol)
 			out_of_date: target_tradable_out_of_date
 		do
