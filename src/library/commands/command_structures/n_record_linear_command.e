@@ -14,11 +14,15 @@ indexing
 
 class N_RECORD_LINEAR_COMMAND inherit
 
+	INDEXED
+
 	N_RECORD_COMMAND
 		rename
 			make as nrc_make_unused
 		export {NONE}
 			nrc_make_unused
+		undefine
+			children
 		redefine
 			initialize
 		select
@@ -28,8 +32,23 @@ class N_RECORD_LINEAR_COMMAND inherit
 	LINEAR_COMMAND
 		rename
 			initialize as lc_initialize
+		export {NONE}
+			lc_initialize
+		undefine
+			children
 		redefine
 			forth, action, start, exhausted, invariant_value, target
+		end
+
+	UNARY_OPERATOR [REAL, REAL]
+		rename
+			initialize as uo_initialize
+		export {NONE}
+			uo_initialize
+		undefine
+			arg_mandatory, execute
+		redefine
+			operand
 		end
 
 creation {NONE} -- Hidden creation routine to prevent instantiation
@@ -49,6 +68,19 @@ feature {NONE} -- Initialization
 			set: target = t and n = i
 		end
 
+feature -- Access
+
+	index: INTEGER is
+			-- The index of the current item being processed - from 1 to `n'
+		do
+			Result := n - index_offset
+		end
+
+	operand: RESULT_COMMAND [REAL]
+			-- Operand that determines which field in each tuple to
+			-- examine for the highest value
+
+
 feature {MARKET_FUNCTION} -- Initialization
 
 	initialize (arg: N_RECORD_STRUCTURE) is
@@ -61,6 +93,7 @@ feature {MARKET_FUNCTION} -- Initialization
 				arg_conforms_to_linear_analyzer: l /= Void
 			end
 			lc_initialize (l)
+			uo_initialize (arg)
 		end
 
 feature -- Basic operations
@@ -87,16 +120,20 @@ feature {NONE} -- Implementation
 	forth is
 		do
 			index_offset := index_offset - 1
+		ensure then
+			index_incremented: index = old index + 1
 		end
 
 	start is
 		do
+print ("in start - target index: ") print (target.index) print ("%N")
 			index_offset := n - 1
 			start_init
 		end
 
 	action is
 		do
+print ("in action - current index: ") print (index) print ("%N")
 			sub_action (target.index - index_offset)
 		end
 
@@ -130,5 +167,10 @@ feature {NONE}
 			-- Action taken by descendant class - null by default
 		do
 		end
+
+invariant
+
+	exhausted_if_large_index: index = n + 1 implies exhausted
+	index_constraint: index >= 1 and index <= n + 1
 
 end -- class N_RECORD_LINEAR_COMMAND
