@@ -96,12 +96,6 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 			connection = new Connection(hostname, port_number);
 		}
 		initialize();
-		try {
-			connection.login();
-		} catch (Exception e) {
-			System.err.println(e);
-			System.exit(1);
-		}
 	}
 
 	public DataSetBuilder(DataSetBuilder dsb) {
@@ -113,12 +107,6 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 			connection = new Connection(dsb.hostname(), dsb.port_number());
 		}
 		initialize();
-		try {
-			connection.login();
-		} catch (Exception e) {
-			System.err.println(e);
-			System.exit(1);
-		}
 	}
 
 	// Options passed in via the command line
@@ -281,15 +269,27 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 		);
 	}
 
+	// Login to the server and initialize fields.
+	// Precondition: connection != null && ! connection.logged_in()
+	// Postcondition: connection.logged_in()
 	private void initialize() {
+		try {
+			connection.login();
+		} catch (Exception e) {
+			System.err.println(e);
+			System.exit(1);
+		}
 		int field_specs[] = new int[6];
+		int i = 0;
 		// Hard-code these for now:
-		field_specs[0] = Parser.Date;
-		field_specs[1] = Parser.Open;
-		field_specs[2] = Parser.High;
-		field_specs[3] = Parser.Low;
-		field_specs[4] = Parser.Close;
-		field_specs[5] = Parser.Volume;
+		field_specs[i++] = Parser.Date;
+		if (connection.session_state().open_field()) {
+			field_specs[i++] = Parser.Open;
+		}
+		field_specs[i++] = Parser.High;
+		field_specs[i++] = Parser.Low;
+		field_specs[i++] = Parser.Close;
+		field_specs[i++] = Parser.Volume;
 		data_parser = new Parser(field_specs, Output_record_separator,
 									Output_field_separator);
 		// Set up the indicator parser to expect just a date and a float
