@@ -1,9 +1,22 @@
-SIGNIFICANT SERVER CHANGES IN RELEASE 1.7
+SIGNIFICANT SERVER CHANGES IN RELEASE 1.6.7
 
-Added several enhancements to the indicator-creation mechanism, allowing
-more complex indicators, such as Parabolic SAR, to be created.  (A new
-"command-sequence" operator, in particular, allows the use of sequences of
-"commands" that weren't possible before.)
+Added several enhancements to the indicator-creation mechanism, including
+serval new operator types, allowing
+more complex indicators, such as Parabolic SAR, to be created.
+Some of the new operator types are:
+
+   - command-sequence: Provides for the execution of sequences of
+     commands.
+   - loop-command: Allows indicators to be constructed
+     with more flexible and powerful loop-based algorithms than before.
+   - numeric-assignment command: Provides for the emulation of
+     variable-assignment operations.
+   - value-at-index command: A "linear command" that uses a "current-index"
+     operator to operate on the tuple of its target data sequence
+     specified by the index.
+   - numeric-valued command wrapper: A "numeric" command that wraps
+     another command, thus allowing a non-numeric (e.g., boolean-result)
+	 command to be used in a context that requires a numeric result.
 
 Added a new "agent-based" function that allows creation of some kinds
 of indicators not previously possible and used this new function to create
