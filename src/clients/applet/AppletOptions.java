@@ -1,8 +1,9 @@
 /* Copyright 1998 - 2003: Jim Cochrane - see file forum.txt */
 
-package mas_gui;
+package applet;
 
 import java.util.*;
+import mas_gui.*;
 
 // User-specified options for the applet version
 public class AppletOptions extends StartupOptions {
