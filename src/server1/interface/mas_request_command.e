@@ -9,7 +9,7 @@ indexing
 
 deferred class MAS_REQUEST_COMMAND inherit
 
-	CLIENT_REQUEST_COMMAND
+	IO_BASED_CLIENT_REQUEST_COMMAND
 		rename
 			do_post_processing as respond_to_client
 		redefine
@@ -41,29 +41,15 @@ feature -- Initialization
 
 feature -- Access
 
-	active_medium: IO_MEDIUM
-			-- Medium for output
-
 	session: MAS_SESSION
 
 feature -- Status report
 
 	arg_mandatory: BOOLEAN is True
 
-feature -- Status setting
-
-	set_active_medium (arg: IO_MEDIUM) is
-			-- Set active_medium to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			active_medium := arg
-		ensure
-			active_medium_set: active_medium = arg and active_medium /= Void
-		end
-
 feature {NONE}
 
+--!!!!Move up?
 	output_buffer: STRING
 			-- Buffer containing output to be sent to the client
 
@@ -131,11 +117,12 @@ feature {NONE} -- Hook routine implementations
 			warn_client (<<"Error occurred ", error_context (arg), ".">>)
 		end
 
+--!!!!Move up?
 	respond_to_client (arg: ANY) is
-			-- Send `output_buffer' to the `active_medium'.
+			-- Send `output_buffer' to the `output_medium'.
 		do
 			if not output_buffer.is_empty then
-				active_medium.put_string (output_buffer)
+				output_medium.put_string (output_buffer)
 			end
 		end
 

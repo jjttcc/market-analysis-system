@@ -49,7 +49,7 @@ feature {NONE} -- Hook routine implementations
 	additional_read_commands: LINEAR [POLL_COMMAND] is
 		local
 			cmds: LINKED_LIST [POLL_COMMAND]
-		do
+		once
 			create cmds.make
 			Result := cmds
 			if not command_line_options.background then

@@ -19,7 +19,9 @@ feature -- Access
 
 feature {NONE}
 
-	interface: MAIN_APPLICATION_INTERFACE
+	interface: MAIN_APPLICATION_INTERFACE is
+		deferred
+		end
 
 invariant
 

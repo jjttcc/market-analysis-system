@@ -8,6 +8,13 @@ indexing
 
 class MAIN_CL_INTERFACE inherit
 
+	PERSISTENT_CONNECTION_INTERFACE
+		rename
+			execute as main_menu
+		undefine
+			print
+		end
+
 	EXECUTION_ENVIRONMENT
 		export {NONE}
 			all

@@ -8,6 +8,8 @@ indexing
 
 deferred class MAIN_APPLICATION_INTERFACE inherit
 
+	CONNECTION_INTERFACE
+
 feature {NONE} -- Access
 
 	event_coordinator: MARKET_EVENT_COORDINATOR
@@ -19,12 +21,6 @@ feature {NONE} -- Access
 	event_generator_builder: MEG_EDITING_INTERFACE
 
 	function_builder: FUNCTION_EDITING_INTERFACE
-
-feature -- Basic operations
-
-	execute is
-		deferred
-		end
 
 feature {NONE}
 

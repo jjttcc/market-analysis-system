@@ -12,7 +12,6 @@ deferred class DATA_REQUEST_CMD inherit
 
 	PRINTING
 		rename
-			output_medium as active_medium,
 			output_record_separator as Message_record_separator,
 			output_field_separator as Message_field_separator,
 			output_date_field_separator as Message_date_field_separator,
