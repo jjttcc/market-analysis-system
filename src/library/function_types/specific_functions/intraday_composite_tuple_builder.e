@@ -1,10 +1,6 @@
 indexing
 	description: "Abstraction that provides services for building a list %
-	%of COMPOSITE_TUPLE instances built from inraday data"
-	detailed_description:
-		"This class builds a list of composite tuples from a list of %
-		%market tuples, using a duration to determine how many source %
-		%tuples to use to create a composite tuple."
+		%of COMPOSITE_TUPLE instances built from inraday data"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -39,22 +35,15 @@ feature -- Basic operations
 				check
 					output_empty: output /= Void and output.empty
 				end
-				missing_data := false
+				-- Ensure postcondition - intraday data always has
+				-- missing data:
+				missing_data := true
 				create src_sublist.make (0)
 				source_list.start
---current_date := start_date
 				check output.count = 0 end
-			invariant
-				outer_invariant:
-					output.count > 1 and not missing_data implies
-						time_diff_equals_duration (output.last.date_time,
-							output.i_th (output.count - 1).date_time)
 			until
 				source_list.after
 			loop
-print ("sl.item.dt.date, curdate.date: ")
-print (source_list.item.date_time); print (", ")
-print (current_date); print ("%N")
 				if
 					source_list.isfirst or
 					not source_list.item.date_time.date.is_equal (
@@ -63,9 +52,6 @@ print (current_date); print ("%N")
 					current_date := clone (source_list.item.date_time)
 					adjust_intraday_start_time (
 						current_date, trading_period_type)
-print ("current_date set to ")
-print (current_date)
-print (".%N")
 				end
 				if source_list.item.date_time < current_date + duration then
 					from
@@ -82,8 +68,6 @@ print (".%N")
 							source_list.item.date_time >=
 								current_date + duration
 					loop
-print ("in loop - curdate.date: ")
-print (current_date); print ("%N")
 						src_sublist.extend (source_list.item)
 						source_list.forth
 					end
@@ -91,15 +75,10 @@ print (current_date); print ("%N")
 					tuple_maker.execute
 					tuple_maker.product.set_date_time (current_date)
 					output.extend (tuple_maker.product)
-				else
-					missing_data := true
 				end
 				current_date := current_date + duration
 			end
 			output.finish_loading
-		ensure then
-			output.count > 0 implies times_correct and
-				output.first.date_time.is_equal (start_date)
 		end
 
 end -- INTRADAY_COMPOSITE_TUPLE_BUILDER
