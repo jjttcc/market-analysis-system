@@ -233,7 +233,7 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			-- Create a ONE_VARIABLE_FUNCTION_ANALYZER that will analyze
 			-- daily data from f.
 			!!Result.make (f, and_op, new_event_type (name),
-							period_types @ "daily")
+							period_types @ (period_type_names @ Daily))
 			-- Set offset such that the cursor position used by previous_cmd,
 			-- which has a negative offset, will always be valid.
 			Result.set_offset (Previous_slope_offset.abs)
@@ -288,7 +288,7 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			end
 			!!and_op.make (sign_analyzer, relation)
 			!!Result.make (f, and_op, new_event_type (name),
-							period_types @ "daily")
+							period_types @ (period_type_names @ Daily))
 			-- Set offset such that the cursor position used by previous_cmd,
 			-- which has a negative offset, will always be valid.
 			Result.set_offset (Previous_slope_offset.abs)
@@ -343,7 +343,7 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			end
 			!!and_op.make (sign_analyzer, relation)
 			!!Result.make (f, and_op, new_event_type (name),
-							period_types @ "daily")
+							period_types @ (period_type_names @ Daily))
 			-- Set offset such that the cursor position used by previous_cmd,
 			-- which has a negative offset, will always be valid.
 			Result.set_offset (Previous_slope_offset.abs)
@@ -385,7 +385,7 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			-- Create a TWO_VARIABLE_FUNCTION_ANALYZER that will analyze
 			-- weekly data from f using the event type created above.
 			!!Result.make (f1, f2, new_event_type (name),
-							period_types @ "weekly")
+							period_types @ (period_type_names @ Weekly))
 			market_event_generation_library.extend (Result)
 		end
 
@@ -421,7 +421,7 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			f2 := deep_clone (l.item)
 			!!Result.make (f1, f2, new_event_type (
 				"Closing Price/Moving Average crossover event"),
-					period_types @ "daily")
+					period_types @ (period_type_names @ Daily))
 			market_event_generation_library.extend (Result)
 		end
 

@@ -682,7 +682,7 @@ feature {NONE}
 	initialize is
 		do
 			event_coordinator := factory_builder.event_coordinator
-			current_period_type := period_types @ "daily"
+			current_period_type := period_types @ (period_type_names @ Daily)
 			market_list := factory_builder.market_list
 			input_file_names := factory_builder.input_file_names
 		ensure

@@ -10,6 +10,9 @@ class
 
 feature -- Access
 
+	Hourly, Daily, Weekly, Monthly: INTEGER is unique
+			-- Indexes for `period_type_names'
+
 	period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
 			-- All time period types used by the system
 		local
@@ -20,23 +23,30 @@ feature -- Access
 			!!tbl.make (3)
 			!!duration.make (0, 0, 0, 1, 0, 0)
 			check duration.hour = 1 end
-			!!type.make ("hourly", duration, false)
+			!!type.make (period_type_names @ Hourly, duration, false)
 			check
 				not_in_table1: not tbl.has (type.name)
 			end
 			tbl.extend (type, type.name)
 			!!duration.make (0, 0, 1, 0, 0, 0)
 			check duration.day = 1 end
-			!!type.make ("daily", duration, false)
+			!!type.make (period_type_names @ Daily, duration, false)
 			check
 				not_in_table2: not tbl.has (type.name)
 			end
 			tbl.extend (type, type.name)
 			!!duration.make (0, 0, 7, 0, 0, 0)
 			check duration.day = 7 end
-			!!type.make ("weekly", duration, false)
+			!!type.make (period_type_names @ Weekly, duration, false)
 			check
 				not_in_table3: not tbl.has (type.name)
+			end
+			tbl.extend (type, type.name)
+			!!duration.make (0, 1, 0, 0, 0, 0)
+			check duration.month = 1 end
+			!!type.make (period_type_names @ Monthly, duration, false)
+			check
+				not_in_table4: not tbl.has (type.name)
 			end
 			tbl.extend (type, type.name)
 			Result := tbl
@@ -44,10 +54,21 @@ feature -- Access
 
 	period_type_names: ARRAY [STRING] is
 			-- The name of each element of `period_types'
-		do
-			Result := period_types.current_keys
-		ensure
-			Result.count = period_types.count
+		once
+			-- Instructions for adding a new period type name:
+			-- Add a new index as part of the unique period type name index
+			-- definition above; keep the index definitions in order from
+			-- smallest duration to largest.  If the new index is for a
+			-- time period that is smaller than any existing one, use it
+			-- for the minindex argument for the array creation below; if
+			-- the new index is for a larger time period than any existing
+			-- one, use it for the maxindex argument.  Add a Result.put call
+			-- for the new index and time period name.
+			!!Result.make (Hourly, Monthly)
+			Result.put ("hourly", Hourly)
+			Result.put ("daily", Daily)
+			Result.put ("weekly", Weekly)
+			Result.put ("monthly", Monthly)
 		end
 
 	concatenation (a: ARRAY [ANY]): STRING is
@@ -74,7 +95,7 @@ feature -- Basic operations
 			-- Adjust the starting date/time for a composite tuple list
 			-- according to `type'.
 		do
-			if equal (type.name, "weekly") then
+			if equal (type.name, (period_type_names @ Weekly)) then
 				set_to_previous_monday (dt)
 				check
 					is_monday: dt.date.day_of_the_week = 2

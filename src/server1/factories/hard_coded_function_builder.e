@@ -28,7 +28,8 @@ feature
 
 	make is
 		do
-			!!innermost_function.make ("dummy", period_types @ "daily")
+			!!innermost_function.make ("dummy",
+				period_types @ (period_type_names @ Daily))
 		ensure
 			not_void: innermost_function /= Void
 		end

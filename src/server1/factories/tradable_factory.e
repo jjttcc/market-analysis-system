@@ -23,9 +23,10 @@ feature -- Initialization
 		require
 		do
 			field_separator := "%T"
-			time_period_type := period_types @ "daily"
+			time_period_type := period_types @ (period_type_names @ Daily)
 		ensure
-			daily_type: time_period_type.name.is_equal ("daily")
+			daily_type: time_period_type.name.is_equal ((
+				period_type_names @ Daily))
 			fs_tab: field_separator.is_equal ("%T")
 		end
 
