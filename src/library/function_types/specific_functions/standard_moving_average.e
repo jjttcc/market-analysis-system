@@ -32,6 +32,9 @@ class STANDARD_MOVING_AVERAGE inherit
 
 	COMMAND_EDITOR -- To allow editing of `sum'
 
+GENERAL_UTILITIES
+--!!!cleanup.
+
 creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 	make
@@ -66,7 +69,79 @@ feature {NONE} -- Initialization
 
 feature {NONE} -- Basic operations
 
+	out_index: INTEGER
+			-- Current array index for `output'
+
+	resize_output (sz: INTEGER) is
+		do
+			if output.count /= sz then
+				output.make_filled (sz)
+			end
+		ensure
+			resized: output.count = sz
+		end
+
 	do_process is
+			-- Sum the first n elements of target, then call continue_until
+			-- to do the remaining work.
+		local
+			t: SIMPLE_TUPLE
+		do
+			if target.count < effective_n then
+				out_index := 0
+			else
+				check target.count >= effective_n end
+				target.go_i_th (effective_offset + 1)
+				check target.index = effective_offset + 1 end
+				sum.execute (Void)
+				check
+					target.index - 1 = effective_n
+				end
+				-- The first trading period of the output is the nth trading
+				-- period of the input (target).
+				create t.make (target.i_th (effective_n).date_time,
+							target.i_th (effective_n).end_date, sum.value / n)
+				last_sum := sum.value
+				check
+					target_index_correct: target.index = effective_n + 1
+				end
+				-- sum.value = sum applied to
+				--   target[effective_offset+1 .. effective_n]
+				resize_output (target.count - effective_n + 1)
+				out_index := 1
+				check
+					out_index_valid: output.count > out_index
+				end
+				output.put_i_th (t, out_index)
+				finish_processing (target, output)
+			end
+		end
+
+	finish_processing (t, o: ARRAYED_LIST [MARKET_TUPLE]) is
+		local
+			tcount, ocount: INTEGER
+			st: SIMPLE_TUPLE
+		do
+			from
+				ocount := o.count
+				tcount := t.count
+			until
+				t.index > tcount
+			loop
+				st := current_result (t, o, out_index)
+				out_index := out_index + 1
+				if not (out_index > ocount) then
+					o.put_i_th (st, out_index)
+				else
+print_list (<<"Calling o.extend at oidx ", out_index, ".%N">>)
+					o.extend (st)
+					ocount := o.count
+				end
+				t.forth
+			end
+		end
+
+	old_do_process is
 			-- Sum the first n elements of target, then call continue_until
 			-- to do the remaining work.
 		local
@@ -129,6 +204,28 @@ feature {MARKET_FUNCTION_EDITOR}
 		end
 
 feature {NONE}
+
+	current_result (t, o: ARRAYED_LIST [MARKET_TUPLE]; last_oindex: INTEGER):
+		SIMPLE_TUPLE is
+			-- Tuple produced from the current item of `t'
+			-- Default to simple moving average.
+			-- Intended to be redefined by descenants for more complex MAs.
+			-- `o' is a reference to the `output' attribute (for efficiency)
+			-- and `last_oindex' is the last valid index of `o'.
+		local
+			expired_value, latest_value: REAL
+		do
+			operator.execute (t.i_th (t.index - n))
+			expired_value := operator.value
+			operator.execute (t.item)
+			latest_value := operator.value
+			last_sum := last_sum - expired_value + latest_value
+			create Result.make (t.item.date_time, t.item.end_date,
+						last_sum / n)
+		ensure then
+			date_time_correspondence:
+				Result.date_time.is_equal (t.item.date_time)
+		end
 
 	action is
 			-- Default to simple moving average.
