@@ -40,14 +40,42 @@ feature {NONE} -- Implementation
 	generate_events is
 			-- For each element, e, of tradables, execute all elements
 			-- of event_generators on e.
+		local
+			gs: expanded GLOBAL_SERVICES
+			gu: expanded GENERAL_UTILITIES
+			exception_occurred: BOOLEAN
 		do
 			from
-				tradables.start
+				if not exception_occurred then
+					tradables.start
+				end
 			until
 				tradables.exhausted
 			loop
 				execute_event_generators
 				tradables.forth
+			end
+		rescue
+			if not gs.last_exception_status.fatal then
+				if not tradables.exhausted then
+					-- The exception most likely occurred when the current
+					-- tradable (tradables.item) was being processed by
+					-- `execute_event_generators', so assume there was a
+					-- problem with this tradable and skip to the next one.
+					tradables.forth
+				end
+				exception_occurred := true
+				if
+					gs.last_exception_status.description /= Void and
+					not gs.last_exception_status.description.empty
+				then
+					-- Since the exception is caught here and not allowed
+					-- to percolate up further, take responsibility for
+					-- reporting of the error description.
+					gu.log_errors (<<gs.last_exception_status.description,
+						"%N">>)
+				end
+				retry
 			end
 		end
 
