@@ -13,3 +13,15 @@ as of Feb 8, 2005) since I've checked in any changes to the Eiffel code,
 but the open-source GUI was modified and checked into cvs last night.
 However, I regard this version of the GUI, which includes the
 auto-data-refresh changes for Orest, as stable.
+
+
+tradable_cache_optimization_experiment:
+
+Originally named data_scanning_redesign_experiment before it was renamed
+(with admin -noldname:newname; admin -n oldname) to
+tradable_cache_optimization_experiment, this tag is for a branch created to
+hold the changes I made several days ago for experimenting with a cache of
+STORABLE tradables.  It also had some changes to the new schme in
+INPUT_FILE such that all lines are read into an array, which is then used
+to parse each record into fields in order; and it had a few small
+changes/improvements.
