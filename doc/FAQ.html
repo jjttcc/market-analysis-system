@@ -29,10 +29,41 @@ Market Analysis System (MAS):  Frequently Asked (or Anticipated) Questions
 </h2>
 </center>
 <DIV CLASS="indented">
+<br>
+<h3>
+Contents
+</h3>
 <P>
+<A href="#server operation">
+Operating the Server
+<br>
+</A>
+<A href="#administration">
+Administration and Setup
+</A>
+<br>
+<A href="#data">
+Data-related Problems
+</A>
+<br>
+<A href="#database">
+Database Problems
+</A>
+<br>
+<A href="#signal generation">
+Signal Generation
+</A>
+<!--
+<br>
+<A href="#debugging">
+Debugging
+</A>
+-->
 <br><br>
 <h3>
+<A name="server operation">
 Operating the Server
+</A>
 </h3>
 <B>Once the server is started in the background, how do I end / stop the
 server.  (I have been just using the kill command ie kill -9 procid.)
@@ -40,11 +71,7 @@ Is there another way to have the server stop?</B>
 <P>
 You can stop the server by starting up the command-line client (either
 macl - or maclj, if you don't have Python installed but do have Java)
-and then entering a Control-E and a newline.  I didn't document this
-clearly because it's a potential security risk - if MAS is running on
-the internet, anyone can connect and stop the server.  Of course, this
-is a little silly (not to document it); probably the best solution is to
-add some user verification functionality.
+and then entering a Control-E and a newline.
 <P><B>
 When I change the data files after the server is run, it will not 
 pick up any newly named files.  (For example, if ibm.txt and qqq.txt
@@ -56,84 +83,10 @@ Currently, the only way to add new files is to shut down and restart the
 server.  The capability to add new tradables while the server is
 running is a feature that may be added in the future if there is
 enough demand for it.
-<P><B>
-When I try to download data off the internet using the -w parameter I get a lot
-of error messages that look like this: 
-<br>Date input value is invalid.
-<br>Error occurred after record 871 (with date/time 05/12/2003 12:00:00.0 AM).
-<br>Discarding corrupted record.
-<P></B>
-Since the yahoo data has an open-price field (as I
-suppose all data sources do these days), you need to add the -o option when
-you start the MAS server.
-(The upcoming release defaults to using open fields, so the -o will not
-longer be needed.)  Also, the data is saved in comma-separated format,
-so you also need to include the option <B><I> -f ',' </I></B>
-to specify that the field
-separator is a comma.  (Tip: If someone has data in a different format,
-such as separated by semi-colons, you can get MAS to read the data with
-the option <B><I>-f ';'</I></B>.
-[The quotes are needed with UNIX/Linux to protect
-the semi-colon from being eaten by the shell.])
-<p>
-So the easiest way to start it for yahoo data would be something like:
-<I>
-<P>
-mas -f , -o -w 5555
-</I>
-<P>
-(where 5555 is the port number and should be replaced by the port number
-you are using).
 <h3>
-Signal Generation
-</h3>
-<P><B>
-I haven't had much luck with the log file for sending the market analysis -
-it produces a core dump when I try and do this.
-</B><P>
-File logging is broken, apparently due to a bug in the
-library component I'm using.
-I plan to remove the feature soon, unless I can fix it.
-In the meantime, an alternative
-is to write a script to filter the MAS
-"emails" and put them into a file instead of emailing them.
-See the question below about receiving signals without having them
-emailed.
-<P><B>
-Is there anyway to get buy/sell signals without emailing them to
-someone - for example, just listing them to STDOUT.
-This will allow me
-to use the data how I would like in perl or what ever, instead of
-perl going to my email and parsing the data.
-</B><P>
-You can do this by replacing the MAS "mailer" program with a script to
-do whatever you want with the signals sent from MAS.
-Just write the script to do whatever you want with the data, parsing it
-according to the
-format that shows up in email messages when MAS uses a regular mailer.
-Once you
-write the script, you can tell MAS to use it as your mailer by setting
-the MAS_MAILER environment variable (documented in the file
-env_settings) to the path of the script, making sure it is executable,
-of course.
-Then use the event registration feature of MAS (from the command-line
-client) to register a new user that will receive signals using your
-script.
-Here's a simple example:
-<P>
-#!/bin/bash
-<P><I>
-mas_dir=/path_where_mas_signals_are_stored
-<br>
-/bin/cat  >> $mas_dir/events$(/bin/date +%Y%m%d)
-<P></I>
-Of course, you can do more sophisticated filtering, such as putting buy
-and sell signals into separate files according to the subject line.
-I've written a Python script that adds or removes stock symbols from
-watchlists according to whether a signal arrives indicating that the
-stock is in a long-term uptrend, downtrend, or is going sideways.
-<h3>
+<A name="administration">
 Administration and Setup
+</A>
 </h3>
 <P><B>
 I'm running into problems with MAS not using the new mailer I've set up -
@@ -239,8 +192,38 @@ and
 </I>
 is, again, the port number with which you started the server.
 <h3>
+<A name="data">
 Data-related Problems
+</A>
 </h3>
+<P><B>
+When I try to download data off the internet using the -w parameter I get a lot
+of error messages that look like this: 
+<br>Date input value is invalid.
+<br>Error occurred after record 871 (with date/time 05/12/2003 12:00:00.0 AM).
+<br>Discarding corrupted record.
+<P></B>
+Since the yahoo data has an open-price field (as I
+suppose all data sources do these days), you need to add the -o option when
+you start the MAS server.
+(The upcoming release defaults to using open fields, so the -o will not
+longer be needed.)  Also, the data is saved in comma-separated format,
+so you also need to include the option <B><I> -f ',' </I></B>
+to specify that the field
+separator is a comma.  (Tip: If someone has data in a different format,
+such as separated by semi-colons, you can get MAS to read the data with
+the option <B><I>-f ';'</I></B>.
+[The quotes are needed with UNIX/Linux to protect
+the semi-colon from being eaten by the shell.])
+<p>
+So the easiest way to start it for yahoo data would be something like:
+<I>
+<P>
+mas -f , -o -w 5555
+</I>
+<P>
+(where 5555 is the port number and should be replaced by the port number
+you are using).
 <P><B>
 I'm getting the following error from the server:
 <P>
@@ -303,7 +286,9 @@ awk '{
 }' $1 > $2
 <P></I></TT>
 <h3>
+<A name="database">
 Database Problems
+</A>
 </h3>
 <B>
 I get this error when I start MAS using my odbc database connection: 
@@ -339,9 +324,61 @@ query to convert them to a MAS supported format.  (Some database systems
 may have a date-to-integer conversion function, which will likely also
 work, as long as the result is in YYYYMMDD format.)
 </UL>
+<h3>
+<A name="signal generation">
+Signal Generation
+</A>
+</h3>
+<P><B>
+I haven't had much luck with the log file for sending the market analysis -
+it produces a core dump when I try and do this.
+</B><P>
+File logging is broken, apparently due to a bug in the
+library component I'm using.
+I plan to remove the feature soon, unless I can fix it.
+In the meantime, an alternative
+is to write a script to filter the MAS
+"emails" and put them into a file instead of emailing them.
+See the question below about receiving signals without having them
+emailed.
+<P><B>
+Is there anyway to get buy/sell signals without emailing them to
+someone - for example, just listing them to STDOUT.
+This will allow me
+to use the data how I would like in perl or what ever, instead of
+perl going to my email and parsing the data.
+</B><P>
+You can do this by replacing the MAS "mailer" program with a script to
+do whatever you want with the signals sent from MAS.
+Just write the script to do whatever you want with the data, parsing it
+according to the
+format that shows up in email messages when MAS uses a regular mailer.
+Once you
+write the script, you can tell MAS to use it as your mailer by setting
+the MAS_MAILER environment variable (documented in the file
+env_settings) to the path of the script, making sure it is executable,
+of course.
+Then use the event registration feature of MAS (from the command-line
+client) to register a new user that will receive signals using your
+script.
+Here's a simple example:
+<P>
+#!/bin/bash
+<P><I>
+mas_dir=/path_where_mas_signals_are_stored
+<br>
+/bin/cat  >> $mas_dir/events$(/bin/date +%Y%m%d)
+<P></I>
+Of course, you can do more sophisticated filtering, such as putting buy
+and sell signals into separate files according to the subject line.
+I've written a Python script that adds or removes stock symbols from
+watchlists according to whether a signal arrives indicating that the
+stock is in a long-term uptrend, downtrend, or is going sideways.
 <!-- Include this when version 1.7 is released:
 <h3>
+<A name="debugging">
 Debugging
+</A>
 </h3>
 <P><B>
 When I use the debugging option and print a moving average indicator, the
