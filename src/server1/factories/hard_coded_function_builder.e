@@ -28,8 +28,9 @@ feature
 
 	make is
 		do
-			create innermost_function.make ("dummy",
-				period_types @ (period_type_names @ Daily), Void, Void)
+			create innermost_function.make ("dummy", Void, Void)
+			innermost_function.set_trading_period_type (
+				period_types @ (period_type_names @ Daily))
 		ensure
 			not_void: innermost_function /= Void
 		end
