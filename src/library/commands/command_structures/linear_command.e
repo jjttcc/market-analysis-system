@@ -18,7 +18,7 @@ deferred class LINEAR_COMMAND inherit
 	LINEAR_ANALYZER
 		export
 			{NONE} all
-			{COMMAND_EDITOR} set
+			{COMMAND_EDITOR, MARKET_FUNCTION_EDITOR} set
 		end
 
 feature -- Initialization
