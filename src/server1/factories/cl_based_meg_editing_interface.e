@@ -16,6 +16,7 @@ class MARKET_EVENT_GENERATOR_BUILDER inherit
 		end
 
 	GLOBAL_SERVICES
+	--!!!change to GLOBAL_APPLICATION
 		export {NONE}
 			all
 				{ANY}
@@ -238,9 +239,10 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 				set_slope_spec (sign_analyzer, Pos_to_neg)
 			end
 			!!and_op.make (sign_analyzer, relation)
+			create_event_type (name)
 			-- Create a ONE_VARIABLE_FUNCTION_ANALYZER that will analyze
 			-- daily data from f.
-			!!Result.make (f, and_op, name, period_types @ "daily")
+			!!Result.make (f, and_op, last_event_type, period_types @ "daily")
 			-- Set offset such that the cursor position used by previous_cmd,
 			-- which has a negative offset, will always be valid.
 			Result.set_offset (Previous_slope_offset.abs)
@@ -293,7 +295,8 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 				set_slope_spec (sign_analyzer, Pos_to_neg)
 			end
 			!!and_op.make (sign_analyzer, relation)
-			!!Result.make (f, and_op, name, period_types @ "daily")
+			create_event_type (name)
+			!!Result.make (f, and_op, last_event_type, period_types @ "daily")
 			-- Set offset such that the cursor position used by previous_cmd,
 			-- which has a negative offset, will always be valid.
 			Result.set_offset (Previous_slope_offset.abs)
@@ -346,7 +349,8 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 				set_slope_spec (sign_analyzer, Pos_to_neg)
 			end
 			!!and_op.make (sign_analyzer, relation)
-			!!Result.make (f, and_op, name, period_types @ "daily")
+			create_event_type (name)
+			!!Result.make (f, and_op, last_event_type, period_types @ "daily")
 			-- Set offset such that the cursor position used by previous_cmd,
 			-- which has a negative offset, will always be valid.
 			Result.set_offset (Previous_slope_offset.abs)
@@ -384,9 +388,10 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			-- Clone the original because its innermost function may be
 			-- changed during processing; so the original won't be changed.
 			f2 := deep_clone (l.item)
+			create_event_type (name)
 			-- Create a TWO_VARIABLE_FUNCTION_ANALYZER that will analyze
-			-- weekly data from f.
-			!!Result.make (f1, f2, name, period_types @ "weekly")
+			-- weekly data from f using the event type created above.
+			!!Result.make (f1, f2, last_event_type, period_types @ "weekly")
 		end
 
 	close_MA_analyzer: TWO_VARIABLE_FUNCTION_ANALYZER is
@@ -419,9 +424,8 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			-- Clone the original because its innermost function may be
 			-- changed during processing; so the original won't be changed.
 			f2 := deep_clone (l.item)
-			!!Result.make (f1, f2,
-				"Closing Price/Moving Average crossover event",
-				period_types @ "daily")
+			create_event_type ("Closing Price/Moving Average crossover event")
+			!!Result.make (f1, f2, last_event_type, period_types @ "daily")
 		end
 
 	compound_analyzer (left, right: MARKET_EVENT_GENERATOR; name: STRING;
@@ -437,7 +441,8 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 		do
 			-- Hard-code duration to 4 weeks:
 			!!before.make (0, 0, 28, 0, 0, 0)
-			!!Result.make (left, right, name)
+			create_event_type (name)
+			!!Result.make (left, right, last_event_type)
 			Result.set_before_extension (before)
 			if left_target_type /= Void then
 				Result.set_left_target_type (left_target_type)
