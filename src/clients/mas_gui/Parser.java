@@ -49,6 +49,7 @@ class MA_Parser {
 			StringTokenizer fields = new StringTokenizer(recs.nextToken(),
 													_field_separator, false);
 			for (int j = 0; fields.hasMoreTokens(); ++j) {
+				try {
 				switch (parsetype[j]) {
 					case Date:
 						dates.addElement(fields.nextToken());
@@ -77,6 +78,14 @@ class MA_Parser {
 						open_interests[oi_index++] =
 							parse_double(fields.nextToken());
 						break;
+				}
+				}
+				catch (Exception e) {
+					System.err.println("Error occurred for parsetype " +
+						parsetype[j] + ", last date: " +
+						dates.elementAt(dates.size() - 1));
+					System.err.println("Fatal error - exiting ...");
+					System.exit(-3);
 				}
 			}
 		}
@@ -108,8 +117,23 @@ class MA_Parser {
 
 // Implementation
 
-	double parse_double(String s) {
-		return Float.valueOf(s).floatValue();
+	double parse_double(String s) throws Exception {
+		double result;
+		try {
+			result = Float.valueOf(s).floatValue();
+		}
+		catch (Exception e) {
+			if (s.equals("NaN")) {
+				System.err.println("NaN encountered - substituting 0.");
+				result = 0;
+			}
+			else {
+				System.err.println("Error occurred in formatting value " + s +
+					" (" + e + ")");
+				throw e;
+			}
+		}
+		return result;
 	}
 
 	Integer parse_int(String s) {
