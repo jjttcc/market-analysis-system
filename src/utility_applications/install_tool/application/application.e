@@ -19,7 +19,7 @@ feature {NONE} -- Initialization
 			-- Initialize and launch application
 		do
 			default_create
-			prepare
+--			prepare
 --			launch
 			finish_installation
 		end
@@ -48,7 +48,7 @@ feature {NONE} -- Implementation
 		require
 			cmd_exists: cmd /= Void
 		do
-			first_window.set_status (cmd.description)
+--remove:			first_window.set_status (cmd.description)
 			cmd.execute (options)
 		end
 
