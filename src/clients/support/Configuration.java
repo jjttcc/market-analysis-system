@@ -10,7 +10,7 @@ import java.awt.*;
 public class Configuration implements NetworkProtocol
 {
 	// Graph styles
-	public final int Candle_graph = 1, Regular_graph = 2, Line_graph = 3;
+	public final int Candle_graph = 1, Regular_graph = 2;
 
 	public String session_settings() {
 		StringBuffer result = new StringBuffer();
@@ -57,8 +57,6 @@ public class Configuration implements NetworkProtocol
 	public Vector horizontal_indicator_lines_at(String indicator) {
 		return (Vector) _horizontal_indicator_lines.get(indicator);
 	}
-
-//!!!Note: These colors should be made configurable.
 
 	// Color to use for "black" candles
 	public Color black_candle_color() {
@@ -244,9 +242,6 @@ public class Configuration implements NetworkProtocol
 			else if (style.equals(Regular_style)) {
 				_main_graph_drawer = Regular_graph;
 			}
-			else if (style.equals(Line_style)) {
-				_main_graph_drawer = Line_graph;
-			}
 		}
 		else {
 			// no other graph styles for now
@@ -301,7 +296,6 @@ public class Configuration implements NetworkProtocol
 	private final String Main_graph_style = "main_graph_style";
 	private final String Candle_style = "candle";
 	private final String Regular_style = "regular";
-	private final String Line_style = "line";
 
 	// Color settings for graph components
 	private Color _black_candle_color;
