@@ -31,7 +31,7 @@ class N_RECORD_LINEAR_COMMAND inherit
 
 feature -- Initialization
 
-	make (t: LINEAR [MARKET_TUPLE]; i: like n) is
+	make (t: CHAIN [MARKET_TUPLE]; i: like n) is
 		require
 			t_not_void: t /= Void
 			i_gt_0: i > 0
