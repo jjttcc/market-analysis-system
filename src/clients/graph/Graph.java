@@ -8,6 +8,7 @@ import java.io.StreamTokenizer;
 import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
+import support.Configuration;
 
 /*
 **************************************************************************
@@ -104,6 +105,10 @@ public class Graph extends Canvas {
  * The background color for the data window
  */
     protected Color DataBackground = null;
+
+
+	// Symbol to display, if any
+	protected String symbol;
 
 /*
 **********************
@@ -252,6 +257,10 @@ public class Graph extends Canvas {
            dataset.removeAllElements();
     }
 
+	// Set symbol to be displayed to `s'.
+	public void set_symbol(String s) {
+		symbol = s;
+	}
 
 /**
  *    Create and attach an Axis to the graph. The position of the axis
@@ -497,8 +506,11 @@ public class Graph extends Canvas {
            for (i=0; i<dataset.size(); i++) {
              ((DataSet)dataset.elementAt(i)).draw_data(lg,r);
            }
-	}
+		}
 
+		if (symbol != null && symbol.length() > 0) {
+			display_text("[" + symbol + "]", g);
+		}
         paintLast(lg,r);
 
         lg.dispose();
@@ -640,6 +652,12 @@ public class Graph extends Canvas {
 ** Protected Methods
 **
 *******************/
+
+	// Display `s' near the upper right corner of the graph.
+	protected void display_text(String s, Graphics g) {
+		g.setColor(Configuration.instance().text_color());
+		g.drawString(s, 23, 23);
+	}
 
 /**
  *  Force the plot to have an aspect ratio of 1 by forcing the
