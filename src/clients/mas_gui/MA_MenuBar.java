@@ -144,7 +144,7 @@ public class MA_MenuBar extends MenuBar {
 	}
 
 	private void setup_period_menu(final Menu period_menu, Vector ptypes) {
-		MenuItem daily, weekly, monthly, yearly;
+		MenuItem daily, weekly, monthly, quarterly, yearly;
 		Vector items = new Vector();
 		String s;
 
@@ -165,6 +165,11 @@ public class MA_MenuBar extends MenuBar {
 				period_menu.add(monthly = new MenuItem(s,
 					new MenuShortcut(KeyEvent.VK_M)));
 				items.addElement(monthly);
+			}
+			else if (s.toLowerCase().equals(quarterly_period.toLowerCase())) {
+				period_menu.add(quarterly = new MenuItem(s,
+					new MenuShortcut(KeyEvent.VK_U)));
+				items.addElement(quarterly);
 			}
 			else if (s.toLowerCase().equals(yearly_period.toLowerCase())) {
 				period_menu.add(yearly = new MenuItem(s,
@@ -222,5 +227,6 @@ public class MA_MenuBar extends MenuBar {
 	private static final String daily_period = "Daily";
 	private static final String weekly_period = "Weekly";
 	private static final String monthly_period = "Monthly";
+	private static final String quarterly_period = "Quarterly";
 	private static final String yearly_period = "Yearly";
 }
