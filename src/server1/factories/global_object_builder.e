@@ -72,8 +72,8 @@ feature {NONE}
 			check
 				flist_not_void: function_library /= Void
 			end
-			-- (If function_library does not contain the hard-coded functions,
-			-- make them and append them to function_library.)
+			-- If function_library does not contain the hard-coded functions,
+			-- make them and append them to function_library.
 			append_hard_coded_functions_to_library
 			build_components
 		end
@@ -114,6 +114,8 @@ feature {NONE} -- Administrative
 		local
 			hc_function_factory: HARD_CODED_FUNCTION_BUILDER
 			f: MARKET_FUNCTION
+			lock: FILE_LOCK
+			env: expanded APP_ENVIRONMENT
 		do
 			if
 				function_library.empty or function_library.count < 5
@@ -138,6 +140,15 @@ feature {NONE} -- Administrative
 				-- append them.
 				if function_library.exhausted then
 					function_library.append (hc_function_factory.product)
+				end
+				-- Attempt to lock the `function_library' persistent file and
+				-- save `function_library' to it.
+				lock := file_lock (env.file_name_with_app_directory (
+					indicators_file_name))
+				lock.try_lock
+				if lock.locked then
+					function_library.save
+					lock.unlock
 				end
 			end
 		end
