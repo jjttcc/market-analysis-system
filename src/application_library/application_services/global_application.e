@@ -427,7 +427,7 @@ feature {NONE} -- Implementation
 			unique_id := maximum_id_value (l) + 1
 			create Result.make (name, unique_id)
 		ensure
-			not event_types_by_key.has (Result.id)
+			new_type: not event_types_by_key.has (Result.id)
 		end
 
 	maximum_id_value (l: LIST [MARKET_EVENT_GENERATOR]): INTEGER is
