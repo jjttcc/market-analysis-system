@@ -4,9 +4,10 @@ package application_support;
 
 import java.util.*;
 import java.io.*;
+import java.awt.*;
 import common.*;
 import support.*;
-import java.awt.*;
+import application_library.ChartInterface;
 
 /** Global configuration settings - singleton */
 public class MA_Configuration extends Configuration implements NetworkProtocol,
@@ -23,6 +24,7 @@ public class MA_Configuration extends Configuration implements NetworkProtocol,
 		_indicator_order = new Vector();
 		_vertical_indicator_lines = new Hashtable();
 		_horizontal_indicator_lines = new Hashtable();
+		charts = new LinkedList();
 		setup_colors();
 		indicator_groups = new IndicatorGroups();
 		main_indicator_group = new MonoAxisIndicatorGroup();
@@ -82,6 +84,10 @@ public class MA_Configuration extends Configuration implements NetworkProtocol,
 				ds.time_period() + Message_field_separator + ds.date());
 		}
 		return result.toString();
+	}
+
+	public Iterator active_charts() {
+		return charts.listIterator();
 	}
 
 	// Is 'c' a valid color to use for set_color?
@@ -233,6 +239,10 @@ public class MA_Configuration extends Configuration implements NetworkProtocol,
 	// Precondition: style.equals(Candle_style) || style.equals(Regular_style)
 	public void set_main_graph_style(String style) {
 		set_graph_style(Main_graph_style, style);
+	}
+
+	public void add_chart(ChartInterface c) {
+		charts.add(c);
 	}
 
 // Constants
@@ -465,6 +475,7 @@ public class MA_Configuration extends Configuration implements NetworkProtocol,
 
 	private static ConfigurationModifier modifier = null;
 
+	private LinkedList charts;
 	private Vector start_date_settings;
 	private Vector end_date_settings;
 	private Hashtable _upper_indicators;

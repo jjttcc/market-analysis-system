@@ -174,13 +174,24 @@ return true; //???!!!!!!!!!!!!!!!!!!!!!
 
 	/** Log out of all sessions and exit. */
 	public void log_out_and_exit(int status) {
-		turn_off_refresh();
+//!!!: turn_off_refresh(); //!!!!Wrong place!
+		MA_Configuration conf = MA_Configuration.application_instance();
+		Iterator charts = conf.active_charts();
+		while (charts.hasNext()) {
+			Chart c = (Chart) charts.next();
+			if (c != this) {
+				c.close();
+			}
+		}
+		this.close();
+/*!!!!:
 		// Log out the corresponding session for all but one window.
 		for (int i = 0; i < window_count - 1; ++i) {
 			data_manager.data_builder().logout(false, 0);
 		}
 		// Log out the remaining window and exit with `status'.
 		data_manager.data_builder().logout(true, status);
+*/
 	}
 
 	/** Quit gracefully, sending a logout request for each open window. */
@@ -464,6 +475,7 @@ return true; //???!!!!!!!!!!!!!!!!!!!!!
 	// `initialize_GUI_components' has been called.
 	private void post_initialize() {
 		MA_Configuration conf = MA_Configuration.application_instance();
+		conf.add_chart(this);
 		if (conf.auto_refresh()) {
 			auto_refresh_handler = new AutoRefreshSetup(this);
 			turn_on_refresh();
@@ -487,16 +499,20 @@ return true; //???!!!!!!!!!!!!!!!!!!!!!
 		main_pane.print(true);
 	}
 
-	/** Close a window.  If this is the last open window, just quit. */
+	/**
+	* Close this chart window.
+	* If this is the last open window, terminate the process. */
 	protected void close() {
 		turn_off_refresh();
 		if (window_count == 1) {	// Close last remaining window, exit.
 			save_settings();
+System.out.println("this (" + this + ")\nlogging out - EXITING");
 			data_manager.data_builder().logout(true, 0);
 			dispose();
 		}
 		else {		// More than 1 windows remain, close this one.
 			--window_count;
+System.out.println("this (" + this + ")\nlogging out - NOT exiting");
 			data_manager.data_builder().logout(false, 0);
 			dispose();
 		}
