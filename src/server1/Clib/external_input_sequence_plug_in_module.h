@@ -10,7 +10,7 @@ struct input_sequence_plug_in;
  * path in which the needed input files (if any, according to the specific
  * plug-in implementation being used) are found will be used - for the
  * input files and any needed temporary files.  If the initialization fails,
- * 0 is returned and an error description, no longer than buffer_size - 1
+ * 0 is returned and an error description no longer than buffer_size - 1
  * is copied into error_buffer.
  * Precondition: paths != 0
 */
