@@ -38,14 +38,15 @@ session_key     -> natural_integer
 msgID           -> natural_integer
 login_id        -> natural_integer
 mkt_list_req    -> <null>
-ind_list_req    -> mkt_symbol
+ind_list_req    -> mkt_symbol "\t" trad_per_type
 date            -> year "/" month "/" day [ "\t" time ]
-time            -> hour ":" minute
+time            -> hour ":" minute [ ":" second ]
 year            -> digit digit digit digit
 month           -> digit digit
 day             -> digit digit
 hour            -> digit digit
 minute          -> digit digit
+second          -> digit digit
 natural_integer -> +('0'..'9')
 ta_real         -> +('0'..'9') '.' *('0'..'9')
 digit           -> ('0'..'9')
