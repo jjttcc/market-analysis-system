@@ -1,16 +1,20 @@
-# Compute RSI
+# Compute RSI - from Colby and Meyers
 BEGIN {
-n = 7
+if (n_value == 0) n_value = 7 # default n
+n = n_value
 }
+/^#/ {next}
 {
 	closes [i++] = $4
 	recs = i
 }
 END {
-	for (j = n; j < recs; ++j)
-	{
-		upv = upavg(closes, j - n, j)
-		downv = downavg(closes, j - n, j)
+	upv = upsum(closes, 0, n) / n
+	downv = downsum(closes, 0, n) / n
+	printf("%f, %f, %f, %.5f\n", closes [n], upv, downv, rsi(upv / downv))
+	for (j = n + 1; j < recs; ++j) {
+		upv = (upv * (n-1) + rsidiff(closes[j], closes[j-1])) / n
+		downv = (downv * (n-1) + rsidiff(closes[j-1], closes[j])) / n
 		printf("%f, %f, %f, %.5f\n",
 				closes [j], upv, downv, rsi(upv / downv))
 	}
@@ -21,32 +25,33 @@ function rsi (rs)
 	return 100 - (100 / (1 + rs))
 }
 
-function upavg (arr, start, end)
-{
-	upsum = 0
-	for (i = start + 1; i <= end; ++i)
-	{
-		#print closes [i] ", " closes [i-1]
-		if (closes [i] > closes [i-1])
-		{
-			upsum += closes [i] - closes [i-1]
-		}
-	}
-	#print "end, start: " end ", " start ", upsum: " upsum
-	return upsum / (end - start)
+# If v1 <= v2: 0; otherwise v1 - v2
+function rsidiff(v1, v2) {
+	return v1 <= v2? 0: v1 - v2
 }
 
-function downavg (arr, start, end)
+function upsum (arr, start, end)
 {
-	downsum = 0
+	result = 0
 	for (i = start + 1; i <= end; ++i)
 	{
-		#print closes [i] ", " closes [i-1]
-		if (closes [i] < closes [i-1])
+		if (closes [i] > closes [i-1])
 		{
-			downsum += closes [i-1] - closes [i]
+			result += closes [i] - closes [i-1]
 		}
 	}
-	#print "end, start: " end ", " start ", downsum: " downsum
-	return downsum / (end - start)
+	return result
+}
+
+function downsum (arr, start, end)
+{
+	result = 0
+	for (i = start + 1; i <= end; ++i)
+	{
+		if (closes [i] < closes [i-1])
+		{
+			result += closes [i-1] - closes [i]
+		}
+	}
+	return result
 }
