@@ -162,14 +162,9 @@ public class DateDrawer extends Drawer {
 		width_factor = width_factor_value(bounds);
 		x = _x_values[p.right()];
 		month_x = x + Month_x_offset;
-//!!!Fix the color setting - and in draw_year.
-		//g.setXORMode(conf.stick_color());
-//g.setXORMode(conf.line_color());
-		//g.setColor(conf.line_color());
-g.setColor(Color.black);
+		g.setColor(Color.black);
 		g.drawLine(x, bounds.y, x, bounds.y + bounds.height);
 		g.setColor(conf.text_color());
-		//g.setXORMode(conf.stick_color());
 		if (! is_indicator) {
 			g.drawString(Utilities.month_at(p.left()).substring(0, month_ln),
 							month_x, Month_y);
@@ -187,7 +182,6 @@ g.setColor(Color.black);
 		year_x = (int)((p.right() - xmin) * width_factor + bounds.x) +
 					Year_x_offset;
 		g.setColor(conf.text_color());
-		//g.setXORMode(conf.stick_color());
 		g.drawString(String.valueOf(p.left()), year_x, Year_y);
 	}
 

@@ -171,7 +171,6 @@ public class MA_Connection implements NetworkProtocol
 	}
 
 	// List of markets available from the server
-	// !!!Q: Is it better not to cache - i.e., retrieve each time?
 	public Vector market_list(int session_key) throws IOException
 	{
 		StringBuffer mlist;
