@@ -61,11 +61,10 @@ feature -- Constants
 
 feature -- Basic operations
 
-	edit_indicator_menu (l: LIST [MARKET_FUNCTION]) is
+	edit_indicator_menu is
 			-- Menu for editing indicators in `function_library' - If
 			-- the user saves the changes, `function_library' is saved to
-			-- persistent store and if `l' is not Void it is replaced
-			-- (deep copy) with the contents of `function_library'.
+			-- persistent store.
 		local
 			selection: INTEGER
 			indicator: MARKET_FUNCTION
@@ -88,9 +87,6 @@ feature -- Basic operations
 				when Save_value then
 					check changed and ok_to_save end
 					save
-					if l /= Void then
-						l.deep_copy (working_function_library)
-					end
 				when Show_help_value then
 					show_message (help @ help.Edit_indicators)
 				when Exit_value then
