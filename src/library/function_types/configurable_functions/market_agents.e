@@ -13,7 +13,7 @@ class
 
 feature -- Access
 
-	sma (f: AGENT_BASED_FUNCTION): MARKET_TUPLE_LIST [MARKET_TUPLE] is
+	old_sma (f: AGENT_BASED_FUNCTION): MARKET_TUPLE_LIST [MARKET_TUPLE] is
 			-- Standard moving average
 		local
 			ml: LIST [MARKET_TUPLE]
@@ -67,7 +67,93 @@ print ("param was set to " + n.out + "%N")
 print ("test_function end%N")
 		end
 
+	sma (f: AGENT_BASED_FUNCTION): MARKET_TUPLE_LIST [MARKET_TUPLE] is
+			-- Standard moving average
+		do
+print ("sma called%N")
+			Result := sma_based_calculation (f, agent sum_divided_by_n)
+		end
+
 	standard_deviation (f: AGENT_BASED_FUNCTION):
+		MARKET_TUPLE_LIST [MARKET_TUPLE] is
+			-- Standard deviation
+		do
+print ("standard_deviation called%N")
+			Result := sma_based_calculation (f,
+				agent sum_of_squares_of_avg_divided_by_n)
+		end
+
+	sma_based_calculation (f: AGENT_BASED_FUNCTION; calculation:
+		FUNCTION [ANY, TUPLE [DOUBLE, INTEGER, ARRAYED_LIST [DOUBLE]],
+		DOUBLE]): MARKET_TUPLE_LIST [MARKET_TUPLE] is
+			-- Calculation that follows the pattern of a
+			-- standard moving average calculation, using an agent to
+			-- allow some degree of configuration
+		local
+			ml: LIST [MARKET_TUPLE]
+			op: RESULT_COMMAND [REAL]
+			sum, latest_value: DOUBLE
+			n: INTEGER
+			values: ARRAYED_LIST [DOUBLE]
+		do
+print ("sma_based_calculation start%N")
+			create Result.make (0)
+			create values.make (0)
+			if f.inputs.is_empty or else f.inputs.first.output.is_empty then
+				if f.inputs.is_empty then
+					-- !!! Report error condition.
+				end
+			else
+				n := integer_parameter_value (f, 10)
+				ml := f.inputs.first.output
+				if f.operator /= Void then
+					op := f.operator
+				else
+					create {BASIC_NUMERIC_COMMAND} op
+				end
+				from
+					from
+						ml.start
+						sum := 0
+					invariant
+						values_ml_index_relation1: values.count + 1 = ml.index
+					until
+						ml.index = n or ml.exhausted
+					loop
+						op.execute (ml.item)
+						sum := sum + op.value
+						values.extend (op.value)
+						ml.forth
+					end
+					op.execute (ml.item)
+					sum := sum + op.value
+					values.extend (op.value)
+					Result.extend (create {SIMPLE_TUPLE}.make (
+						ml.item.date_time, ml.item.end_date,
+						calculation.item ([sum, n, values])))
+					if not ml.exhausted then ml.forth end
+					check
+						values_ml_index_relation2: values.count + 1 = ml.index
+					end
+				invariant
+					values_ml_index_relation3: values.count + 1 = ml.index
+				until
+					ml.exhausted
+				loop
+					op.execute (ml.item)
+					latest_value := op.value
+					sum := sum - values.i_th (ml.index - n) + latest_value
+					values.extend (latest_value)
+					Result.extend (create {SIMPLE_TUPLE}.make (
+						ml.item.date_time, ml.item.end_date,
+						calculation.item ([sum, n, values])))
+					ml.forth
+				end
+			end
+print ("sma_based_calculation end%N")
+		end
+
+	old_standard_deviation (f: AGENT_BASED_FUNCTION):
 		MARKET_TUPLE_LIST [MARKET_TUPLE] is
 			-- Standard deviation
 		local
@@ -81,8 +167,10 @@ print ("test_function end%N")
 print ("standard_deviation start%N")
 			create Result.make (0)
 			create values.make (0)
-			if f.inputs.count < 1 then
-				-- !!! Report error condition.
+			if f.inputs.is_empty or else f.inputs.first.output.is_empty then
+				if f.inputs.is_empty then
+					-- !!! Report error condition.
+				end
 			else
 				n := integer_parameter_value (f, 5)
 				ml := f.inputs.first.output
@@ -108,7 +196,6 @@ print ("standard_deviation start%N")
 					values.extend (op.value)
 					avg := sum / n
 					sos := sum_of_squares (1, n, avg, values)
---print (avg.out + " " + sos.out + " " + math.sqrt(sos / n).out + "%N")
 					Result.extend (create {SIMPLE_TUPLE}.make (
 						ml.item.date_time, ml.item.end_date,
 						math.sqrt (sos / n)))
@@ -122,7 +209,6 @@ print ("standard_deviation start%N")
 					values.extend (latest_value)
 					avg := sum / n
 					sos := sum_of_squares (ml.index + 1 - n, n, avg, values)
---print (avg.out + " " + sos.out + " " + math.sqrt(sos / n).out + "%N")
 					Result.extend (create {SIMPLE_TUPLE}.make (
 						ml.item.date_time, ml.item.end_date,
 						math.sqrt (sos / n)))
@@ -158,6 +244,8 @@ feature {NONE} -- Utilities
 
 	sum_of_squares (starti, n: INTEGER; avg: DOUBLE;
 			values: ARRAYED_LIST [DOUBLE]): DOUBLE is
+		require
+			starti_valid: starti + n - 1 <= values.count
 		local
 			i, j: INTEGER
 		do
@@ -169,9 +257,31 @@ feature {NONE} -- Utilities
 			until
 				j > n
 			loop
+--print ("i, j: " + i.out + ", " + j.out + "%N")
 				Result := Result + (values @ i - avg) ^ 2
 				j := j + 1; i := i + 1
 			end
+		end
+
+	sum_of_squares_of_avg_divided_by_n (sum: DOUBLE; n: INTEGER;
+		values: ARRAYED_LIST [DOUBLE]): DOUBLE is
+			-- Sum of squares of sum / n, using `values'
+		local
+			avg, sos: DOUBLE
+			math: expanded SINGLE_MATH
+		do
+--print ("sum_of_squares_of_avg_divided_by_n called%N")
+			avg := sum / n
+--print ("sum, n, avg: " + sum.out + ", " + n.out + ", " + avg.out + "%N")
+			sos := sum_of_squares (values.count + 1 - n, n, avg, values)
+			Result := math.sqrt (sos / n)
+		end
+
+	sum_divided_by_n (sum: DOUBLE; n: INTEGER; values: ARRAYED_LIST [DOUBLE]):
+		DOUBLE is
+			-- `sum' / `n'
+		do
+			Result := sum / n
 		end
 
 	integer_parameter_value (f: AGENT_BASED_FUNCTION; deflt: INTEGER):
