@@ -12,7 +12,7 @@ class
 
 feature -- Access
 
-	Comment_character: CHARACTER is '#'
+	comment_character: CHARACTER is '#'
 			-- Character that, when occurring at the beginning of a line,
 			-- denotes a comment
 
@@ -22,19 +22,19 @@ feature -- Access
 	token_end_delimiter: CHARACTER is '>'
 			-- Delimiter indicating the end of a replacable token
 
-	EOD_start_date_specifier: STRING is "eod_start_date"
+	eod_start_date_specifier: STRING is "eod_start_date"
 			-- Specifier token for the end-of-day-data 'start-date' setting
 
-	EOD_end_date_specifier: STRING is "eod_end_date"
+	eod_end_date_specifier: STRING is "eod_end_date"
 			-- Specifier token for the end-of-day-data 'end-date' setting
 
-	Intraday_start_date_specifier: STRING is "intraday_start_date"
+	intraday_start_date_specifier: STRING is "intraday_start_date"
 			-- Specifier token for the intraday-data 'start-date' setting
 
-	Intraday_end_date_specifier: STRING is "intraday_end_date"
+	intraday_end_date_specifier: STRING is "intraday_end_date"
 			-- Specifier token for the intraday-data 'end-date' setting
 
-	January_is_zero_specifier: STRING is "months_start_at_zero"
+	january_is_zero_specifier: STRING is "months_start_at_zero"
 			-- Specifier token for indicating if months start at zero
 			-- instead of 1
 

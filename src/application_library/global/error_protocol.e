@@ -24,46 +24,46 @@ inherit
 
 feature -- Access
 
-	Generic_error_code: INTEGER is 1
+	generic_error_code: INTEGER is 1
 
-	Database_error_code: INTEGER is 2
+	database_error_code: INTEGER is 2
 
-	Internal_system_error_code: INTEGER is 3
+	internal_system_error_code: INTEGER is 3
 
-	Initialization_error_code: INTEGER is 4
+	initialization_error_code: INTEGER is 4
 
-	Data_file_does_not_exist_error_code: INTEGER is 5
+	data_file_does_not_exist_error_code: INTEGER is 5
 
-	Data_cache_directory_creation_failure_error_code: INTEGER is 6
+	data_cache_directory_creation_failure_error_code: INTEGER is 6
 
-	Database_error: STRING is
+	database_error: STRING is
 		do
-			Result := errors @ Database_error_code
+			Result := errors @ database_error_code
 		end
 
-	Generic_error: STRING is
+	generic_error: STRING is
 		do
-			Result := errors @ Generic_error_code
+			Result := errors @ generic_error_code
 		end
 
-	Internal_system_error: STRING is
+	internal_system_error: STRING is
 		do
-			Result := errors @ Internal_system_error_code
+			Result := errors @ internal_system_error_code
 		end
 
-	Initialization_error: STRING is
+	initialization_error: STRING is
 		do
-			Result := errors @ Initialization_error_code
+			Result := errors @ initialization_error_code
 		end
 
-	Data_file_does_not_exist_error: STRING is
+	data_file_does_not_exist_error: STRING is
 		do
-			Result := errors @ Data_file_does_not_exist_error_code
+			Result := errors @ data_file_does_not_exist_error_code
 		end
 
-	Data_cache_directory_creation_failure_error: STRING is
+	data_cache_directory_creation_failure_error: STRING is
 		do
-			Result := errors @ Data_cache_directory_creation_failure_error_code
+			Result := errors @ data_cache_directory_creation_failure_error_code
 		end
 
 	largest_error_code: INTEGER is
@@ -85,16 +85,16 @@ feature -- Access
 			-- All error descriptions
 		once
 			create Result.make (0)
-			Result.extend ("Database error", Database_error_code)
-			Result.extend ("Undetermined error", Generic_error_code)
-			Result.extend ("Internal system error", Internal_system_error_code)
+			Result.extend ("Database error", database_error_code)
+			Result.extend ("Undetermined error", generic_error_code)
+			Result.extend ("Internal system error", internal_system_error_code)
 			Result.extend ("System initialization error",
-				Initialization_error_code)
+				initialization_error_code)
 			Result.extend (concatenation (<<"Data file for ",
 				token_start_delimiter, error_token, token_end_delimiter,
-				" does not exist">>), Data_file_does_not_exist_error_code)
+				" does not exist">>), data_file_does_not_exist_error_code)
 			Result.extend ("Failed to create data-cache directory",
-				Data_cache_directory_creation_failure_error_code)
+				data_cache_directory_creation_failure_error_code)
 		end
 
 feature -- Constants
