@@ -133,9 +133,9 @@ feature {NONE} -- Hook methods
 					Result := True
 				end
 			when another_choice, another_choice_u then
-				print ("Invalid selection%N")
 				check Result = False end
 			else
+				print ("%NInvalid selection%N%N")
 				check Result = False end
 			end
 		end
