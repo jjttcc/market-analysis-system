@@ -15,12 +15,14 @@ public class MA_ScrollPane extends ScrollPane
 		chart = parent_chart;
 		_main_graph = new MA_GraphInteractive();
 		_indicator_graph = new MA_GraphInteractive();
+		GridBagLayout gblayout = new GridBagLayout();
+		GridBagConstraints gbconstraints = new GridBagConstraints();
 		period_type_choice = new Choice();
 		initialize_period_type_choice(period_types);
 
 		Panel main_panel = new Panel(new BorderLayout());
 		add(main_panel, "Center");
-		Panel graph_panel = new Panel(new BorderLayout());
+		Panel graph_panel = new Panel(gblayout);
 		main_panel.add (graph_panel, "Center");
 		Panel button_panel = new Panel(new BorderLayout());
 		Panel top_button_panel = new Panel(new GridLayout(3, 2));
@@ -32,15 +34,30 @@ public class MA_ScrollPane extends ScrollPane
 		top_button_panel.add(period_type_choice);
 		//bottom_button_panel.add(new Button("Dummy2"));
 
-		graph_panel.add(_main_graph, "North");
-		graph_panel.add(_indicator_graph, "South");
+		// Set GridBagLayout constraints such that the main graph is at
+		// the top and takes about 2/3 of available height and the
+		// indicator graph is below the main graph and takes the remaining
+		// 1/3 of the height and both graph panels grow/shrink when the
+		// window is resized.
+		gbconstraints.gridx = 0; gbconstraints.gridy = 0;
+		gbconstraints.gridwidth = 9; gbconstraints.gridheight = 6;
+		gbconstraints.weightx = 1; gbconstraints.weighty = 1;
+		gbconstraints.fill = GridBagConstraints.BOTH;
+		gblayout.setConstraints(_main_graph, gbconstraints);
+		graph_panel.add(_main_graph);
+		gbconstraints.gridx = 0; gbconstraints.gridy = 6;
+		gbconstraints.gridwidth = 9; gbconstraints.gridheight = 3;
+		gbconstraints.weightx = 1; gbconstraints.weighty = 1;
+		gbconstraints.fill = GridBagConstraints.BOTH;
+		gblayout.setConstraints(_indicator_graph, gbconstraints);
+		graph_panel.add(_indicator_graph);
 		_main_graph.framecolor = new Color(0,0,0);
 		_main_graph.borderTop = 0;
 		_main_graph.borderBottom = 1;
 		_main_graph.borderLeft = 0;
 		_main_graph.borderRight = 1;
 		_main_graph.setGraphBackground(new Color(50,50,200));
-		_main_graph.setSize(300, 250);
+		_main_graph.setSize(400, 310);
 
 		_indicator_graph.framecolor = new Color(0,0,0);
 		_indicator_graph.borderTop = 0;
@@ -48,7 +65,7 @@ public class MA_ScrollPane extends ScrollPane
 		_indicator_graph.borderLeft = 0;
 		_indicator_graph.borderRight = 1;
 		_indicator_graph.setGraphBackground(new Color(50,50,200));
-		_indicator_graph.setSize(300, 160);
+		_indicator_graph.setSize(400, 150);
 	}
 
 	// The main graph - where the principal market data is displayed

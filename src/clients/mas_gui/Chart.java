@@ -180,7 +180,7 @@ public class MA_Chart extends Frame {
 		// Create the main scroll pane, size it, and center it.
 		main_pane = new MA_ScrollPane(_period_types,
 			MA_ScrollPane.SCROLLBARS_NEVER, this);
-		main_pane.setSize(610, 410);
+		main_pane.setSize(800, 460);
 		add(main_pane, "Center");
 		market_selection = new MarketSelection(this);
 
@@ -231,7 +231,7 @@ public class MA_Chart extends Frame {
 		});
 
 		// Set the window size and pop it up.
-		setSize(610, 410);
+		setSize(800, 460);
 		pack();
 		show();
 	}
