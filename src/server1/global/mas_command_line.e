@@ -86,8 +86,6 @@ feature -- Access
 			-- Has the user requested the version number?
 			-- True if "-v" is found.
 
---	db_info: MAS_DB_INFO
-
 feature -- Basic operations
 
 	usage is
@@ -274,43 +272,16 @@ feature {NONE} -- Implementation
 	set_symbol_list is
 		require
 			use_db
---		local
---			db_handle: MAS_ODBC_HANDLE
---			data	 : DATABASE_DATA[DATABASE]
---			symbol   : STRING
+		local
+			db_services: MAS_DB_SERVICES
 		do
---			create db_info.make ("ms_dbsrvrc") --remember to make file name a constant
---			create db_handle.make(db_info.db_name, db_info.trades_tables.item)
---			db_handle.login(db_info.user_name, db_info.password)
---			db_handle.connect
---			if db_handle.connected then
---				db_handle.set_current_query(db_info.symbol_select)
---				db_handle.make_selection
---				if db_handle.last_result /= void then
---					create {LINKED_LIST[STRING]} symbol_list.make
---					!!symbol.make(0)
---					from
---						db_handle.last_result.start
---					until 
---						db_handle.last_result.after
---					loop
---						data ?= db_handle.last_result.item.data
---						if data /= void then
---							if data.item(data.count).conforms_to(symbol) then
---								symbol ?= data.item(data.count)
---								symbol_list.extend(clone(symbol))
---							end	
---						end
---						db_handle.last_result.forth
---					end
---				end
---			end
+			symbol_list := db_services.symbols
 		end
 
 invariant
 
 	port_numbers_not_void: port_numbers /= Void
-	use_db implies file_names = Void and symbol_list /= Void
-	not use_db implies symbol_list = Void and file_names /= Void
+	use_db: use_db implies file_names = Void and symbol_list /= Void
+	use_files: not use_db implies symbol_list = Void and file_names /= Void
 
 end -- class MAS_COMMAND_LINE
