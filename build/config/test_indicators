@@ -1,0 +1,64 @@
+# macl input file to create indicators used for testing - running the
+# "run_tests" script
+e
+c
+n
+EXPONENTIAL_MOVING_AVERAGE
+c
+# Name:
+EMA of Volume
+No Input Function
+y
+VOLUME
+c
+MA_EXPONENTIAL
+c
+1
+5
+s
+c
+n
+EXPONENTIAL_MOVING_AVERAGE
+c
+# Name:
+EMA of Open interest
+No Input Function
+y
+OPEN_INTEREST
+c
+MA_EXPONENTIAL
+c
+1
+5
+s
+# Set n-value of EMA of Open interest to 13.
+e
+EMA of Open interest
+1
+13
+q
+0
+s
+c
+n
+ONE_VARIABLE_FUNCTION
+c
+Volume
+No Input Function
+y
+VOLUME
+c
+s
+c
+e
+MACD Signal Line (EMA of MACD Difference)
+y
+Volume
+y
+Volume
+y
+# Name:
+MACD of Volume
+s
+-
+x
