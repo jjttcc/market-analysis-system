@@ -100,37 +100,6 @@ public class Configuration implements NetworkProtocol
 	}
 
 	public IndicatorGroups indicator_groups() {
-if (indicator_groups == null) {
-indicator_groups = new IndicatorGroups();
-IndicatorGroup macd = new IndicatorGroup();
-macd.add_indicator("MACD Difference");
-macd.add_indicator("Slope of MACD Difference");
-macd.add_indicator("Slope of Slope of MACD Difference");
-macd.add_indicator("Slope of Slope of Slope of MACD Difference");
-macd.add_indicator("MACD Signal Line (EMA of MACD Difference)");
-macd.add_indicator("MACD Histogram");
-macd.add_indicator("Slope of MACD Signal Line");
-macd.add_indicator("Slope of Slope of MACD Signal Line");
-indicator_groups.add_group(macd);
-
-IndicatorGroup main_group = new IndicatorGroup();
-main_group.add_indicator("Simple Moving Average");
-main_group.add_indicator("Exponential Moving Average");
-main_group.add_indicator(IndicatorGroups.Maingroup);
-indicator_groups.add_group(main_group);
-
-IndicatorGroup volume = new IndicatorGroup();
-volume.add_indicator("EMA of Volume");
-volume.add_indicator("Volume");
-indicator_groups.add_group(volume);
-
-IndicatorGroup stochastic = new IndicatorGroup();
-stochastic.add_indicator("Stochastic %K");
-stochastic.add_indicator("Stochastic %D");
-stochastic.add_indicator("Slow Stochastic %D");
-indicator_groups.add_group(stochastic);
-}
-
 		return indicator_groups;
 	}
 
@@ -149,7 +118,11 @@ indicator_groups.add_group(stochastic);
 		_vertical_indicator_lines = new Hashtable();
 		_horizontal_indicator_lines = new Hashtable();
 		setup_colors();
+		indicator_groups = new IndicatorGroups();
+		main_indicator_group = new IndicatorGroup();
+		main_indicator_group.add_indicator(IndicatorGroups.Maingroup);
 		load_settings(configuration_file);
+		indicator_groups.add_group(main_indicator_group);
 	}
 
 	private void load_settings(String fname) {
@@ -201,7 +174,9 @@ indicator_groups.add_group(stochastic);
 					end_date_settings.addElement(ds);
 				}
 				else if (s.equals(Upper_indicator)) {
-					_upper_indicators.put(t.nextToken(), new Boolean(true));
+					String i = t.nextToken();
+					_upper_indicators.put(i, new Boolean(true));
+					main_indicator_group.add_indicator(i);
 				}
 				else if (s.equals(Horiz_indicator_line) ||
 							s.equals(Vert_indicator_line)) {
@@ -212,6 +187,10 @@ indicator_groups.add_group(stochastic);
 				}
 				else if (s.equals(Main_graph_style)) {
 					set_graph_style(s, t.nextToken());
+				}
+				else if (s.equals(Indicator_group)) {
+					file_util.forth();
+					create_indicator_group(file_util);
 				}
 				file_util.forth();
 			}
@@ -279,6 +258,23 @@ indicator_groups.add_group(stochastic);
 		}
 	}
 
+	// Create an indicator group for the indicators listed at f's current
+	// position and add it to `indicator_groups'.
+	// Precondition: f.item() is the line following the line with the
+	// Indicator_group token that begins a group definition.
+	private void create_indicator_group(FileReaderUtilities f) {
+		IndicatorGroup g = new IndicatorGroup();
+		while (! f.exhausted() && !f.item().equals(End_block)) {
+			g.add_indicator(f.item());
+			f.forth();
+		}
+		indicator_groups.add_group(g);
+		if (f.exhausted()) {
+			System.err.println("Missing " + End_block + " token in " +
+				"configuration file.");
+		}
+	}
+
 	private void set_graph_style(String tag, String style) {
 		if (tag.equals(Main_graph_style)) {
 			if (style.equals(Candle_style)) {
@@ -338,6 +334,7 @@ indicator_groups.add_group(stochastic);
 	private Hashtable _horizontal_indicator_lines;
 	private Hashtable _color_table;
 	private IndicatorGroups indicator_groups;
+	private IndicatorGroup main_indicator_group;
 
 	// Configuration Keywords
 	private final String Upper_indicator = "upper_indicator";
@@ -354,6 +351,8 @@ indicator_groups.add_group(stochastic);
 	private final String Main_graph_style = "main_graph_style";
 	private final String Candle_style = "candle";
 	private final String Regular_style = "regular";
+	private final String Indicator_group = "indicator_group";
+	private final String End_block = "end_block";
 
 	// Color settings for graph components
 	private Color _background_color;
