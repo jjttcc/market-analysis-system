@@ -4,20 +4,23 @@
 # Expected format of input:
 # msgID\amsg
 
-print "I'm the new server tester.\n";
 use IO::Socket;
+
+
+$Progname = "srvrtstr";
 $Error = 101;
 $Login_code = 6;
 $Logout_code = 8;
 
 $EOM = '';
 
-$port = shift || die "Port not specified.";
+$port = shift || usage("Port not specified.") && abort();
 $host = shift || "localhost";
 
 $key = login();
 print "Key is $key.\n";
 while ($line = <>) {
+	if ($line =~ /^#/) { next; }
 	chop($line);
 	print "Read: '$line'\n";
 	$socket = sendmsg($line);
@@ -28,14 +31,18 @@ while ($line = <>) {
 logout($key);
 
 sub new_socket {
-$socket = new IO::Socket::INET(PeerAddr => $host, PeerPort => $port, 
-	Proto => 'tcp') or die "Could not connect $!"; 
+	$socket = new IO::Socket::INET(PeerAddr => $host, PeerPort => $port, 
+		Proto => 'tcp') or die "Could not connect $!"; 
 }
 
 sub abort {
 	my $s = $_[0];
 	if ($s ne '') { print "$s\n"; }
 	exit(1);
+}
+
+sub usage {
+	print "Usage: $Progname port [hostname]\n";
 }
 
 sub login {
