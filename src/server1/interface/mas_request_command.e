@@ -71,15 +71,8 @@ feature -- Basic operations
 			if output_buffer_used then
 				output_buffer.clear_all
 			end
-			create timer.make
 			do_execute (msg)
-			print_list (<<"Elapsed time in seconds since response to client ",
-				"began processing: ",
-				timer.elapsed_time.fine_seconds_count, "%N">>);
 			send_data
-			print_list (<<"Total elapsed time in seconds since response to ",
-				"client began processing, after sending response: ",
-				timer.elapsed_time.fine_seconds_count, "%N">>);
 		end
 
 feature {NONE} -- Hook routines
