@@ -6,13 +6,13 @@ creation of technical analysis (TA) applications.  Examples of typical
 applications that would use the library include charting programs (such
 as the well-known commercial program MetaStock) and technical analysis
 engines that can be run periodically to generate buy and sell signals.
-(For example, on a UNIX system, a cron job can be scheduled to run every
+(For example, on a UNIX system, a cron job could be scheduled to run every
 night to process current market data and send email to the user listing
 each market for which a buy or sell signal is generated, according to
 specifications set by the user.)
 
 One of the main goals of the TAL is to provide a flexible mechanism that
-developers can use to provide powerful, high quality technical analysis
+developers can use to create powerful, high quality technical analysis
 applications, such as the two examples above, with minimal effort.
 This goal will be accomplished by fulfilling the following requirements:
 
