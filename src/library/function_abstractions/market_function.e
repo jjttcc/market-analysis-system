@@ -71,6 +71,7 @@ feature -- Basic operations
 	process (arg: ANY) is
 			-- Process the output from the input.
 		do
+			pre_process
 			do_process
 			set_processed (true)
 		ensure then
@@ -99,7 +100,7 @@ feature {FACTORY} -- Element change
 			is_set: name = n and name /= Void
 		end
 
-feature {NONE}
+feature {NONE} -- Hook methods
 
 	reset_state is
 			-- Reset to initial state.
@@ -108,6 +109,11 @@ feature {NONE}
 			set_processed (false)
 		ensure
 			not_processed: not processed
+		end
+
+	pre_process is
+			-- Do any pre-processing required before calling do_process.
+		do
 		end
 
 	do_process is
