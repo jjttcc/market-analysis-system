@@ -8,7 +8,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class FUNCTION_ANALYZER_BUILDER inherit
+class MARKET_EVENT_GENERATOR_BUILDER inherit
 
 	FACTORY
 		redefine
@@ -37,17 +37,47 @@ feature -- Initialization
 
 feature -- Access
 
-	product: LIST [FUNCTION_ANALYZER]
+	product: LIST [MARKET_EVENT_GENERATOR]
 
 	function_library: LIST [MARKET_FUNCTION]
 
 feature -- Basic operations
 
 	execute is
+		local
+			test_left_target: BOOLEAN
 		do
-			!LINKED_LIST [FUNCTION_ANALYZER]!product.make
+			!LINKED_LIST [MARKET_EVENT_GENERATOR]!product.make
+			test_left_target := true
 			product.extend (stochastic_analyzer)
 			product.extend (macd_analyzer)
+			product.extend (close_MA_analyzer)
+			-- For testing, simply re-use the stochastic analyzer and the
+			-- macd analyzer in the compound analyzer.
+			if test_left_target then
+				product.extend (compound_analyzer (product @ 2, product @ 1,
+							concatenation (<<"[",
+								(product @ 2).event_type.name, "] / [",
+								(product @ 1).event_type.name, "]">>),
+								(product @ 2).event_type))
+			else
+				product.extend (compound_analyzer (product @ 2, product @ 1,
+							concatenation (<<"[",
+								(product @ 2).event_type.name, "] / [",
+								(product @ 1).event_type.name, "]">>), Void))
+			end
+			if test_left_target then
+				product.extend (compound_analyzer (product @ 4, product @ 3,
+							concatenation (<<"[",
+								(product @ 4).event_type.name, "] / [",
+								(product @ 3).event_type.name, "]">>),
+								(product @ 1).event_type))
+			else
+				product.extend (compound_analyzer (product @ 4, product @ 3,
+							concatenation (<<"[",
+								(product @ 4).event_type.name, "] / [",
+								(product @ 3).event_type.name, "]">>), Void))
+			end
 		end
 
 feature {NONE} -- Hard-coded market analyzer building procedures
@@ -123,8 +153,6 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			end
 			check not l.exhausted end
 			f1 := l.item
-			l := function_library
-			check l /= Void end
 			from
 				l.start
 			until
@@ -143,4 +171,58 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			--!!!!!!!!to be set to a reasonable value!!!!!!!!!!
 		end
 
-end -- FUNCTION_ANALYZER_BUILDER
+	close_MA_analyzer: TWO_VARIABLE_FUNCTION_ANALYZER is
+			-- Analyzer of closing price crossing MA
+		local
+			l: LIST [MARKET_FUNCTION]
+			f1, f2: MARKET_FUNCTION
+		do
+			l := function_library
+			check l /= Void end
+			from
+				l.start
+			until
+				l.item.name.is_equal ("Market Close Data") or l.exhausted
+			loop
+				l.forth
+			end
+			check not l.exhausted end
+			f1 := l.item
+			from
+				l.start
+			until
+				l.item.name.is_equal ("Simple Moving Average") or l.exhausted
+			loop
+				l.forth
+			end
+			check not l.exhausted end
+			f2 := l.item
+			!!Result.make (f1, f2,
+				"Closing Price/Moving Average crossover event",
+				period_types @ "daily")
+			--!!!!!!!!!!!!!!Remember that Result's start_date_time needs
+			--!!!!!!!!to be set to a reasonable value!!!!!!!!!!
+		end
+
+	compound_analyzer (left, right: MARKET_EVENT_GENERATOR; name: STRING;
+		left_target_type: EVENT_TYPE):
+				COMPOUND_EVENT_GENERATOR is
+			-- Compound analyzer with `left' and `right' as its components
+			-- If left_target_type is not Void, set Result's left_target_type
+			-- to it.
+		require
+			not_void: left /= Void and right /= Void and name /= Void
+		local
+			before: DATE_TIME_DURATION
+		do
+			-- Hard-code duration to 4 weeks:
+			!!before.make (0, 0, 28, 0, 0, 0)
+			!!Result.make (left, right, name)
+			Result.set_before_extension (before)
+			if left_target_type /= Void then
+				Result.set_left_target_type (left_target_type)
+			end
+			-- Leave Result's after extension as 0.
+		end
+
+end -- MARKET_EVENT_GENERATOR_BUILDER

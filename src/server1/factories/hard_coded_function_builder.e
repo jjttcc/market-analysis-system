@@ -28,7 +28,7 @@ feature
 
 	make is
 		do
-			!STOCK!innermost_function.make ("dummy", period_types @ "daily")
+			!!innermost_function.make ("dummy", period_types @ "daily")
 		ensure
 			not_void: innermost_function /= Void
 		end
@@ -37,7 +37,7 @@ feature -- Access
 
 	product: LIST [MARKET_FUNCTION]
 
-	innermost_function: MARKET_FUNCTION
+	innermost_function: STOCK
 			-- Dummy for innermost function for complex functions
 
 	Simple_MA_n: INTEGER is 10
@@ -57,7 +57,7 @@ feature -- Basic operations
 	execute is
 		local
 			l: LINKED_LIST [MARKET_FUNCTION]
-			f: MARKET_FUNCTION
+			f: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
 			cf1, cf2: COMPLEX_FUNCTION
 		do
 			f := innermost_function
@@ -82,6 +82,7 @@ feature -- Basic operations
 			l.extend (simple_ma (l.last, StochasticD_n,
 											"Slow Stochastic %%D"))
 			l.extend (rsi (f, RSI_n, "Relative Strength Index"))
+			l.extend (market_close_data (f, "Market Close Data"))
 			product := l
 		end
 
@@ -308,6 +309,20 @@ feature {NONE} -- Hard-coded market function building procedures
 			!!div.make (basic1, basic2)
 			!!mult.make (div, constant)
 			!!Result.make (ma1, ma2, mult)
+			Result.set_name (name)
+		ensure
+			initialized: Result /= Void and Result.name = name
+		end
+
+	market_close_data (f: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]; name: STRING):
+						ONE_VARIABLE_FUNCTION is
+			-- Make a function that simply gives the closing price of
+			-- each tuple.
+		local
+			close_cmd: CLOSING_PRICE
+		do
+			!!close_cmd
+			!!Result.make (f, close_cmd)
 			Result.set_name (name)
 		ensure
 			initialized: Result /= Void and Result.name = name

@@ -130,7 +130,7 @@ feature {NONE}
 
 	build_components (tradable_factories: LINKED_LIST [TRADABLE_FACTORY]) is
 		local
-			fa_builder: FUNCTION_ANALYZER_BUILDER
+			fa_builder: MARKET_EVENT_GENERATOR_BUILDER
 		do
 			!!fa_builder.make (function_list_factory.product)
 			!VIRTUAL_TRADABLE_LIST!market_list.make (input_file_names,
