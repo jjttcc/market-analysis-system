@@ -26,6 +26,12 @@ eod_end_date	now
 # The host component of the http URL used to retrieve market data
 host	chart.yahoo.com
 
+# If a proxy needs to be used - for example, to get through a firewall -,
+# the following two settings need to be uncommented and the correct values
+# filled in for the proxy you are using.
+#proxy_address	123.456.789.123
+#proxy_port_number	8002
+
 # The path component of the http URL used to retrieve market data
 path	table.csv?s=<symbol>&a=<startmonth>&b=<startday>&c=<startyear>&d=<endmonth>&e=<endday>&f=<endyear>&g=d&q=q&y=0&z=<symbol>&x=.csv
 
