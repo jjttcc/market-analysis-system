@@ -41,7 +41,10 @@ feature {NONE} -- Initialization
 			if not use_db then
 				set_use_external_data_source
 				if not use_external_data_source then
-					set_file_names
+					set_use_web
+					if not use_web then
+						set_file_names
+					end
 				end
 			else
 				set_keep_db_connection
@@ -84,6 +87,10 @@ feature -- Access
 			-- Is a database to be used for market data?
 			-- True if "-p" is found (p = persistent store)
 
+	use_web: BOOLEAN
+			-- Are HTTP GET requests to be used to retrieve market data?
+			-- True if "-w" is found
+
 	use_external_data_source: BOOLEAN
 			-- Is an external data source to be used to obtain market data?
 
@@ -116,7 +123,8 @@ feature -- Basic operations
 				"  -v        Print Version number%N",
 				"  -h        Print this Help message%N",
 				"  -s        Use Strict error checking%N",
-				"  -p        Use database (Persistent store)%N",
+				"  -p        Get data from database (Persistent store)%N",
+				"  -w        Get data from the Web (HTTP request)%N",
 				"  -x        Use an external data source%N",
 				"  -n        No caching of intraday data%N",
 				"  -b        Run in Background%N">>)
@@ -185,6 +193,14 @@ feature {NONE} -- Implementation
 		do
 			if option_in_contents ('p') then
 				use_db := true
+				contents.remove
+			end
+		end
+
+	set_use_web is
+		do
+			if option_in_contents ('w') then
+				use_web := true
 				contents.remove
 			end
 		end
@@ -311,7 +327,7 @@ invariant
 	port_numbers_not_void: port_numbers /= Void
 	use_db: use_db and not error_occurred implies
 		file_names = Void and symbol_list /= Void
-	use_files: not use_db and not use_external_data_source and
+	use_files: not use_db and not use_external_data_source and not use_web and
 		not error_occurred implies symbol_list = Void and file_names /= Void
 
 end -- class MAS_COMMAND_LINE

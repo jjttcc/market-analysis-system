@@ -36,6 +36,7 @@ feature -- Basic operations
 		local
 			db_list_builder: DATABASE_LIST_BUILDER
 			file_list_builder: FILE_LIST_BUILDER
+			http_list_builder: HTTP_FILE_LIST_BUILDER
 			external_list_builder: EXTERNAL_LIST_BUILDER
 			ilist: TRADABLE_LIST
 		do
@@ -56,7 +57,19 @@ feature -- Basic operations
 						db_list_builder.daily_list,
 						db_list_builder.intraday_list)
 					ilist := db_list_builder.intraday_list
-				else
+				elseif command_line_options.use_web then
+					--@NOTE: May want to pass in valid file extensions
+					--when/if http intraday data retrieval is added.
+					create http_list_builder.make (tradable_factory, Void,
+						Void)
+--!!!!Test to see if extension is used - delete when done:
+create http_list_builder.make (tradable_factory, "daily", "intraday")
+					http_list_builder.execute
+					create {TRADABLE_LIST_HANDLER} product.make (
+						http_list_builder.daily_list,
+						http_list_builder.intraday_list)
+					ilist := http_list_builder.intraday_list
+				else	-- Use regular files.
 					create file_list_builder.make (input_entity_names,
 						tradable_factory, command_line_options.daily_extension,
 						command_line_options.intraday_extension)
