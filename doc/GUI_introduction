@@ -19,6 +19,9 @@ java MA_Client hostname port_number
 
 where hostname stands for the network name of the computer the server is
 running on and port_number is the socket port number the server is using.
+(If you're running Windows and this doesn't work, try replacing hostname
+with an empty argument - two double quotes - e.g.: java MA_Client "" 12345;
+no guarantee, but this works with Windows on my laptop.)
 
 Once the client GUI is running, you can select a market from the server's
 database by choosing "Select Market" from the File menu.  Then you can
