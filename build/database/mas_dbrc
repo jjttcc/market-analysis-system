@@ -7,7 +7,10 @@ user id
 # Password for above user
 password	
 # Query for stock symbols
-stock symbol query	select symbol from stock_information order by symbol
+#stock symbol query	select symbol from stock_information order by symbol
+stock symbol query	select symbol from watch_list where category = 'all' order by symbol
+# Query for derivatives symbols
+derivative symbol query	select symbol from derivative_information order by symbol
 # Query for stock splits
 # Note: query result fields must be: date, symbol, split-value; and the
 # results must be sorted by date, ascending
@@ -25,6 +28,8 @@ daily stock high field	high_price
 daily stock low field	low_price
 daily stock close field	close_price
 daily stock volume field	volume
+# Comment-out the following intraday field specifications if you don't
+# have intraday data.
 intraday stock symbol field	symbol
 intraday stock date field	date
 intraday stock time field	time
@@ -35,7 +40,7 @@ intraday stock close field	close_price
 intraday stock volume field	volume
 # Specify tail of query (part that occurs after the where clause) for
 # daily stock data.
-daily stock query tail	order by date
+daily stock query tail	and date > 20000301 order by date
 # Specify tail of query (part that occurs after the where clause) for
 # intraday stock data.
 intraday stock query tail	order by date, time
