@@ -12,7 +12,6 @@ factories	5
 global	5
 interface	5
 network	5
-protocols	3
 root	10
 stock_splits	5
 system_specific	5
