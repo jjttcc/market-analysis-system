@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from sys import *
+from os import *
 from socket import *
 from math import *
 from string import *
@@ -8,7 +9,7 @@ from string import *
 Buffersize = 1
 
 def usage():
-	print "Usage: " + argv[0] + " host port"
+	print "Usage: " + argv[0] + " [-h hostname] port"
 
 def as_number(s):
 	result = 0
@@ -19,12 +20,30 @@ def as_number(s):
 		result = result + digits[s[slen - i - 1]]  * pow(10, i)
 	return int(result)
 
-if len(argv) < 3:
+if len(argv) < 2:
 	usage()
 	exit(-1)
 
-host = argv[1]
-port = as_number(argv[2])
+host = ""
+argcount = len(argv)
+i = 1
+while i < argcount:
+	if argv[i][:2] == '-h':
+		if i + 1 < argcount:
+			i = i + 1
+			host = argv[i]
+		else:
+			usage(); exit(-1)
+	else:
+		try:
+			port = eval(argv[i])
+		except:
+			usage(); exit(-1)
+	i = i + 1
+
+if host == "":
+	f = popen("hostname")
+	host = f.readline()[:-1]
 
 s = socket(AF_INET, SOCK_STREAM)
 message = []
