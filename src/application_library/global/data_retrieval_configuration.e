@@ -166,29 +166,6 @@ feature -- Basic operations
 			cached_eod_end_date := Void
 		end
 
-	replace_tokens (target: STRING; tokens: ARRAY [STRING];
-		values: ARRAY [STRING]) is
-			-- Replace all occurrences of `tokens' in `target' with
-			-- the respective specified `values'.
-		require
-			args_exists: target /= Void and tokens /= Void and values /= Void
-			same_number_of_tokens_and_values: tokens.count = values.count
-			same_index_settings: tokens.lower = values.lower and
-				tokens.upper = values.upper
-		local
-			i: INTEGER
-		do
-			from
-				i := tokens.lower
-			until
-				i = tokens.upper + 1
-			loop
-				replace_token_all (target, tokens @ i, values @ i,
-					token_start_delimiter, token_end_delimiter)
-				i := i + 1
-			end
-		end
-
 	replace_tokens_using_dates (target: STRING; start_date, end_date: DATE;
 		intraday: BOOLEAN) is
 			-- Replace the following tokens in `target' with `symbol' and the
@@ -222,7 +199,8 @@ feature -- Basic operations
 				(start_date.month + month_adjustment).out, start_date.year.out,
 				end_date.day.out, (end_date.month + month_adjustment).out,
 				end_date.year.out, dts.date_as_yyyymmdd (start_date),
-				dts.date_as_yyyymmdd (end_date)>>)
+				dts.date_as_yyyymmdd (end_date)>>, token_start_delimiter,
+				token_end_delimiter)
 		end
 
 	check_results is
