@@ -167,6 +167,13 @@ feature {FACTORY} -- Status setting
 				input.set_innermost_input (in)
 			else
 				set_input (in)
+				-- Allow all linear commands in the operator hierarchy to
+				-- update their targets with the new `input' object.
+				-- It's only when 'not input.is_complex' that this needs to
+				-- done (that is, Current is a complex leaf function) -
+				-- the linear operators of non-leaf functions need to keep
+				-- their existing targets, which are the `output's of
+				-- complex functions, to maintain the functions semantics.
 				initialize_operators
 			end
 			output.wipe_out
