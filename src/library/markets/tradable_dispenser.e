@@ -12,9 +12,8 @@ deferred class TRADABLE_DISPENSER
 feature -- Access
 
 	item (period_type: TIME_PERIOD_TYPE): TRADABLE [BASIC_MARKET_TUPLE] is
-			-- Tradable for `period_type' at the current cursor position -
-			-- Void if `period_type' is not a valid type for the current
-			-- symbol
+			-- The tradable at the current cursor position - Void if
+			-- `period_type' is not a valid type for the current symbol
 		require
 			type_not_void: period_type /= Void
 			cursor_valid: not off
@@ -25,6 +24,8 @@ feature -- Access
 		ensure
 			result_definition: Result = tradable (current_symbol, period_type)
 			last_tradable_set: last_tradable = Result
+			void_if_not_valid: not valid_period_type (
+				current_symbol, period_type) implies Result = Void
 		end
 
 	index: INTEGER is
@@ -181,12 +182,13 @@ feature -- Status report
 		end
 
 	valid_period_type (symbol: STRING; t: TIME_PERIOD_TYPE): BOOLEAN is
-			-- does `t' for `symbol' match a member of `period_types'?
+			-- Is `t' a valid period type for the tradable with symbol
+			-- `symbol'?
 		require
 			not_void: symbol /= Void and t /= Void
 			not_empty: not is_empty
 		local
-			change_back: BOOLEAN
+			restore_reference_comparison: BOOLEAN
 			ptypes: LIST [STRING]
 			error: BOOLEAN
 		do
@@ -196,11 +198,11 @@ feature -- Status report
 				ptypes := period_type_names_for (symbol)
 				if ptypes /= Void then
 					if not ptypes.object_comparison then
-						change_back := True
+						restore_reference_comparison := True
 						ptypes.compare_objects
 					end
 					Result := ptypes.has (t.name)
-					if change_back then
+					if restore_reference_comparison then
 						ptypes.compare_references
 					end
 				end
