@@ -11,4 +11,4 @@ class
 
 	THREAD
 
-end -- THREAD
+end
