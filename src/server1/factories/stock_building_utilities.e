@@ -44,7 +44,11 @@ feature {NONE}
 			until
 				i = 0
 			loop
-				i := name.index_of (Directory_separator, i + 1)
+				if i + 1 <= name.count then
+					i := name.index_of (Directory_separator, i + 1)
+				else
+					i := 0
+				end
 				if i /= 0 then
 					last_sep_index := i
 				end
