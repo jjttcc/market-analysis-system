@@ -49,6 +49,13 @@ feature -- Access
 	duration: DATE_TIME_DURATION
 			-- Duration of the time period - approximate if irregular = true
 
+	intraday: BOOLEAN is
+			-- Is this an intraday time-period type?
+		do
+			Result := duration.year = 0 and duration.month = 0 and
+				duration.day = 0
+		end
+
 feature -- Access - pre-defined names
 
 	Yearly: STRING is "yearly"
