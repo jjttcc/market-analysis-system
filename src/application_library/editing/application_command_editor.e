@@ -369,7 +369,7 @@ feature -- Basic operations
 		local
 			x: REAL
 		do
-			cmd.set_constant_value (user_interface.real_selection (
+			cmd.set_value (user_interface.real_selection (
 								concatenation (<<cmd.generator, "'s value">>)))
 		end
 
