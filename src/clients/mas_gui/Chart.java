@@ -41,12 +41,15 @@ public class TA_Chart extends Frame
 						(String) _markets.elementAt(0));
 					inds = connection.last_indicator_list();
 					_indicators = new Hashtable(inds.size());
+					int i;
 					// Initialize _indicators table with each indicator name
 					// in the list, associating each indicator name with its
 					// respective index in the list (starting at 1).
-					for (int i = 0; i < inds.size(); ++i) {
+					for (i = 0; i < inds.size(); ++i) {
 						_indicators.put(inds.elementAt(i), new Integer(i + 1));
 					}
+					_indicators.put(No_upper_indicator, new Integer(i + 1));
+					_indicators.put(No_lower_indicator, new Integer(i + 2));
 				}
 			}
 		}
@@ -55,6 +58,7 @@ public class TA_Chart extends Frame
 			System.exit(-1);
 		}
 		initialize_GUI_components();
+		current_period_type = main_pane.current_period_type();
 	}
 
 	// List of all markets in the server's database
@@ -62,32 +66,67 @@ public class TA_Chart extends Frame
 		return _markets;
 	}
 
-	// The currently selected period type
-	String current_period_type() {
-		return main_pane.current_period_type();
-	}
-
 	// Take action when notified that period type changed.
 	void notify_period_type_changed() {
-		request_data(market_selection.current_market());
+		current_period_type = main_pane.current_period_type();
+		period_type_change = true;
+		request_data(current_market);
+		period_type_change = false;
 	}
 
 	// Request data for the specified market and display it.
 	void request_data(String market) {
-		Graph2D graph = main_pane.main_graph();
-		try {
-			connection.send_market_data_request(market, current_period_type());
+		// Don't redraw the data if it's for the same market as before.
+		if (period_type_change || ! market.equals(current_market)) {
+			Graph2D graph = main_pane.main_graph();
+			try {
+				connection.send_market_data_request(market,
+					current_period_type);
+			}
+			catch (IOException e2) {
+				System.err.println("IO exception occurred, bye ...");
+				System.exit(-1);
+			}
+			//Ensure that all graph's data sets are removed.  (May need to
+			//change later.)
+			graph.detachDataSets();
+			graph.attachDataSet(connection.last_market_data());
+			if (current_upper_indicator != null &&
+					! current_upper_indicator.equals(No_upper_indicator)) {
+				// Retrieve the data for the newly selected market for the
+				// upper indicator, add it to the upper graph and draw
+				// the new indicator data and the market data.
+				try {
+					connection.send_indicator_data_request(
+						((Integer) _indicators.get(current_upper_indicator)).
+							intValue(), market, current_period_type);
+				} catch (IOException i) {
+					System.err.println("IO exception occurred, bye ...");
+					System.exit(-1);
+				}
+				graph.attachDataSet(connection.last_indicator_data());
+			}
+			graph.repaint();
+			setTitle(market);
+			current_market = market;
+			if (current_lower_indicator != null &&
+					! current_lower_indicator.equals(No_lower_indicator)) {
+				// Retrieve the indicator data for the newly selected market
+				// for the lower indicator and draw it.
+				graph = main_pane.indicator_graph();
+				graph.detachDataSets();
+				try {
+					connection.send_indicator_data_request(
+						((Integer) _indicators.get(current_lower_indicator)).
+							intValue(), market, current_period_type);
+				} catch (IOException i) {
+					System.err.println("IO exception occurred, bye ...");
+					System.exit(-1);
+				}
+				graph.attachDataSet(connection.last_indicator_data());
+				graph.repaint();
+			}
 		}
-		catch (IOException e2) {
-			System.err.println("IO exception occurred, bye ...");
-			System.exit(-1);
-		}
-		//Ensure that all graph's data sets are removed.  (May need to
-		//change later.)
-		graph.detachDataSets();
-		graph.attachDataSet(connection.last_market_data());
-		graph.repaint();
-		setTitle(market);
 	}
 
 // Implementation
@@ -167,8 +206,7 @@ public class TA_Chart extends Frame
 	}
 
 	/** Close a window.  If this is the last open window, just quit. */
-	void close()
-	{
+	void close() {
 		if (--num_windows == 0) System.exit(0);
 		else this.dispose();
 	}
@@ -190,43 +228,87 @@ public class TA_Chart extends Frame
 	// Cached list of market indicators
 	protected static Hashtable _indicators;	// table of String
 
-	MarketSelection market_selection;
+	// Current selected market
+	protected String current_market;
+
+	// Current selected period type
+	protected String current_period_type;
+
+	// Has the period type just been changed?
+	protected boolean period_type_change;
+
+	// Current selected market
+	protected String current_upper_indicator;
+
+	// Current selected market
+	protected String current_lower_indicator;
+
+	protected MarketSelection market_selection;
+
+	protected final String No_upper_indicator = "No upper indicator";
+
+	protected final String No_lower_indicator = "No lower indicator";
 
 /** Listener for indicator selection */
 class IndicatorListener implements java.awt.event.ActionListener {
 	public void actionPerformed(java.awt.event.ActionEvent e) {
 		Graph2D graph;
 		String selection = e.getActionCommand();
-		System.out.println("indicator " + selection + " was selected");
-		System.out.println("Index: " + _indicators.get(selection));
+System.out.println("indicator " + selection + " was selected");
+System.out.println("Index: " + _indicators.get(selection));
 		try {
-			String market = market_selection.current_market();
-			if (market == null)
-			{
-				// No market is currently selected, so there is nothing
-				// to display.
+			String market = current_market;
+			if (market == null || selection.equals(current_upper_indicator) ||
+				selection.equals(current_lower_indicator)) {
+				// If no market is selected or the selection hasn't changed,
+				// there is nothing to display.
 				return;
 			}
-			connection.send_indicator_data_request(
-				((Integer) _indicators.get(selection)).intValue(),
-				market, current_period_type());
+			if (! (selection.equals(No_upper_indicator) ||
+					selection.equals(No_lower_indicator))) {
+				connection.send_indicator_data_request(
+					((Integer) _indicators.get(selection)).intValue(),
+					market, current_period_type);
+			}
 		}
 		catch (IOException ex) {
 			System.err.println("IO exception occurred, bye ...");
 			System.exit(-1);
 		}
 		// Set graph according to whether the selected indicator is
-		// configured to go in the upper or lower graph.
+		// configured to go in the upper (main) or lower (indicator) graph.
 		if (Configuration.instance().upper_indicators().containsKey(selection))
 		{
 			graph = main_pane.main_graph();
+			if (current_upper_indicator != null) {
+				// Remove the old indicator data from the graph (and the
+				// market data).
+				graph.detachDataSets();
+				// Re-attach the market data.
+				graph.attachDataSet(connection.last_market_data());
+			}
+			current_upper_indicator = selection;
+			graph.attachDataSet(connection.last_indicator_data());
 		}
-		else
-		{
+		else if (selection.equals(No_upper_indicator)) {
+			graph = main_pane.main_graph();
+			// Remove the old indicator and market data from the graph.
+			graph.detachDataSets();
+			// Re-attach the market data without the indicator data.
+			graph.attachDataSet(connection.last_market_data());
+			current_upper_indicator = selection;
+		}
+		else if (selection.equals(No_lower_indicator)) {
 			graph = main_pane.indicator_graph();
 			graph.detachDataSets();
+			current_lower_indicator = selection;
 		}
-		graph.attachDataSet(connection.last_indicator_data());
+		else {
+			graph = main_pane.indicator_graph();
+			graph.detachDataSets();
+			current_lower_indicator = selection;
+			graph.attachDataSet(connection.last_indicator_data());
+		}
 		graph.repaint();
 	}
 }

@@ -88,7 +88,8 @@ public class Configuration implements NetworkProtocol
 			{
 				StringTokenizer t = new StringTokenizer(file_util.item(), "\t");
 				s = t.nextToken();
-				if (s.equals(Start_date))
+				if (s.charAt(0) == '#') {}	// skip comment line
+				else if (s.equals(Start_date))
 				{
 					pertype = t.nextToken();
 					date = t.nextToken();
