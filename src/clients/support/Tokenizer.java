@@ -8,24 +8,27 @@ import java.io.*;
 /** Abstraction for tokenizing an input stream, with an iterable interface */
 public class Tokenizer {
 
-// Constructors
+// Initialization
 
 	// Precondition: r != null && r.ready()
-	// Postcondition: desc != null implies description().equals(desc)
+	// Postcondition:
+	//   desc != null implies description().equals(desc)
+	//   reader == r
 	public Tokenizer(Reader r, String desc) throws IOException {
 //		assert r != null && r.ready(): "Precondition";
 		reader = r;
-		description_ = desc;
+		description = desc;
 //		assert desc == null || description().equals(desc): "Postcondition";
+//		assert reader == r;
 	}
 
-// Basic operations
-
-	/** Tokenize the contents of the file */
+	/** Tokenize (or re-tokenize) the contents of the input stream */
 	// Postcondition: item returns the first tokenized field.
 	public void tokenize(String field_separators) throws IOException {
+		contents = null;
+		exhausted = false;
 		tokens = new StringTokenizer(contents(), field_separators);
-		item_ = tokens.nextToken();
+		forth();
 	}
 
 // Access
@@ -33,44 +36,60 @@ public class Tokenizer {
 	// Brief, user-understandable, description of this object
 	public String description() {
 		String result = "";
-		if (description_ != null) {
-			result = description_;
+		if (description != null) {
+			result = description;
 		}
 		return result;
 	}
 
 	/** The current tokenized item */
 	public String item() {
-		return item_;
+		return item;
 	}
+
+	/** Contents of the input stream */
+	public String contents() throws IOException {
+		if (contents == null) {
+			contents = Utilities.input_string(reader, true);
+		}
+		return contents;
+	}
+
+// Status report
+
+	/** Are there no more tokenized items? */
+	public boolean exhausted() {
+		return exhausted;
+	}
+
+	// Has the input stream been modified since `tokenize' was last called?
+	public boolean was_modified() {
+		return false;	// No - Redefine in descendant if needed.
+	}
+
+// Cursor movement
 
 	/** Advance to the next tokenized item. */
 	public void forth() {
 		if (tokens.hasMoreTokens()) {
-			item_ = tokens.nextToken();
+			item = tokens.nextToken();
 		} else {
-			exhausted_ = true;
-			item_ = null;
+			exhausted = true;
+			item = null;
 		}
 	}
 
-	/** Are there no more tokenized items? */
-	public boolean exhausted() {
-		return exhausted_;
+// Implementation
+
+	protected Tokenizer() {
 	}
 
-	/** Contents of the file */
-	public String contents() throws IOException {
-		if (contents_ == null) {
-			contents_ = Utilities.input_string(reader, true);
-		}
-		return contents_;
-	}
+// Implementation - attributes
 
-	private Reader reader;
-	private StringTokenizer tokens;
-	private String contents_;
-	private String item_;
-	private boolean exhausted_;
-	private String description_;
+	protected Reader reader;
+	protected StringTokenizer tokens;
+	protected String contents;
+	protected String item;
+	protected boolean exhausted;
+	protected String description;
 }

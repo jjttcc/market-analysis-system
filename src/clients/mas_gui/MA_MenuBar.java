@@ -25,14 +25,12 @@ public class MA_MenuBar extends MenuBar {
 		add(view_menu);
 
 		// File menu items, with shortcuts
-		MenuItem new_window, close_window, reload, mkt_selection, print_cmd;
+		MenuItem new_window, close_window, mkt_selection, print_cmd;
 		MenuItem indicator_selection_menu, print_all, quit;
 		file_menu.add(new_window = new MenuItem("New Window",
 			new MenuShortcut(KeyEvent.VK_N)));
 		file_menu.add(close_window = new MenuItem("Close Window",
 			new MenuShortcut(KeyEvent.VK_W)));
-		file_menu.add(reload = new MenuItem("Reload settings",
-			new MenuShortcut(KeyEvent.VK_Z)));
 		file_menu.addSeparator();
 		file_menu.add(mkt_selection = new MenuItem("Select Tradable",
 			new MenuShortcut(KeyEvent.VK_S)));
@@ -59,11 +57,6 @@ public class MA_MenuBar extends MenuBar {
 		indicator_selection_menu.addActionListener(indicator_selection);
 		close_window.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { chart.close(); }
-		});
-		reload.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				MA_Configuration.application_instance().reload();
-			}
 		});
 		print_cmd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

@@ -15,6 +15,7 @@ public class MA_Configuration extends Configuration implements NetworkProtocol,
 // Initialization
 	public MA_Configuration(Tokenizer in_source) {
 		super(in_source);
+		input_source = in_source;
 		start_date_settings = new Vector();
 		end_date_settings = new Vector();
 		_upper_indicators = new Hashtable();
@@ -30,6 +31,13 @@ public class MA_Configuration extends Configuration implements NetworkProtocol,
 		indicator_groups.add_group(main_indicator_group);
 		if (modifier != null) {
 			modifier.execute(this);
+		}
+	}
+
+	// Refresh configuration settings from the input source, if it has changed.
+	public void reload() {
+		if (input_source.was_modified()) {
+			load_settings(input_source);
 		}
 	}
 
@@ -176,6 +184,8 @@ public class MA_Configuration extends Configuration implements NetworkProtocol,
 	public IndicatorGroups indicator_groups() {
 		return indicator_groups;
 	}
+
+// Element change
 
 	// Set the configuration modifier to 'm'.
 	public static void set_modifier(ConfigurationModifier m) {
@@ -448,6 +458,8 @@ public class MA_Configuration extends Configuration implements NetworkProtocol,
 	}
 
 // Implementation - attributes
+
+	Tokenizer input_source;
 
 	private static ConfigurationModifier modifier = null;
 

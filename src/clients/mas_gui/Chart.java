@@ -90,12 +90,13 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 					_period_types = data_builder.trading_period_type_list(
 						(String) _tradables.elementAt(0));
 					if (data_builder.connection().error_occurred()) {
-						facilities.abort(data_builder.connection().result().toString(),
-							null);
+						facilities.abort(data_builder.connection().
+							result().toString(), null);
 					}
 					current_period_type = initial_period_type(_period_types);
 				} else {
-					facilities.abort("Server's list of tradables is empty.", null);
+					facilities.abort("Server's list of tradables is empty.",
+						null);
 				}
 			}
 		} catch (IOException e) {
