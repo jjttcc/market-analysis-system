@@ -6,6 +6,12 @@ flexibility in the future.  Used this new function to create a standard
 deviation indicator.  Used the standard deviation indicator to create
 a bollinger bands indicator.
 
+Made constant operators into editable parameters for more flexibility in
+editing indicators.  For example, the bollinger-band's "number of standard
+deviations" value can now be changed.  Also, fixed some minor problems
+with the indicator editing facility.
+
+
 SIGNIFICANT SERVER CHANGES IN RELEASE 1.6.5
 
 Added the ability to retrieve market data from a web server using the http
@@ -62,6 +68,7 @@ of the Linux release, including reading from an external data source
 (-x option) and from the web (-w option).  Obtaining data from a database
 is not yet ported to Windows.
 
+
 SIGNIFICANT SERVER CHANGES IN RELEASE 1.6
 
 Added a new "plug-in" mechanism that provides the capability for MAS to
@@ -105,6 +112,7 @@ names so that the file name is not changed.
 
 In the exponential moving average class, changed the 1 - exp.value
 calculation into an attribute for efficiency.
+
 
 SIGNIFICANT SERVER CHANGES IN RELEASE 1.5
 
