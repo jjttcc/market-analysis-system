@@ -62,7 +62,7 @@ feature -- Initialization
 feature -- Basic operations
 
 	perform_notify (elist: LIST [MARKET_EVENT]) is
-			-- Notify user of events in `elist' or print an error message
+			-- Notify user of events in `elist' or log the error
 			-- if notification failed.
 		local
 			msg: STRING
@@ -85,18 +85,18 @@ feature -- Basic operations
 					current_time, " (Notification to ", name, ")">>))
 			else
 				if email_addresses.empty then
-					print (concatenation (<<"User ", name,
-							" has no email address set.%N">>))
+					log_errors (<<"User ", name,
+						" has no email address set.%N">>)
 				else
 					check
 						mailer_void: mailer = Void
 					end
-					print (concatenation (<<"User ", name,
-							" has no mailer set.%N">>))
+					log_errors (<<"User ", name,
+						" has no mailer set.%N">>)
 				end
 			end
 			if last_error /= Void then
-				print_list (<<"Notification to user ", name,
+				log_errors (<<"Notification to user ", name,
 					" failed with error: ", last_error, "%N">>)
 			end
 		end
