@@ -279,7 +279,8 @@ doc/other_market_analyzer_examples . mas_linux1.6.5 mac1.6.5
 doc/market_analysis . mas_linux1.6.5 mac1.6.5
 doc/MAS_README doc/README mas_linux1.6.5 mac1.6.5
 doc/README_compile src/doc/README_compile serversrc1.6.5
-doc/main_MAS_README doc/MAIN_README mas_linux1.6.5 mac1.6.5
+doc/main_MAS_README-linux.ps doc/INTRODUCTION.ps mas_linux1.6.5 mac1.6.5
+doc/main_MAS_README-linux.html doc/INTRODUCTION.html mas_linux1.6.5 mac1.6.5
 doc/env_settings ./doc/environment mas_linux1.6.5 mac1.6.5
 doc/INSTALL  ./ mas_linux1.6.5
 doc/THANKS . mas_linux1.6.5 mac1.6.5 serversrc1.6.5 clientsrc1.6.5
@@ -288,7 +289,6 @@ doc/Server_change_log doc/MAS_CHANGE_LOG mas_linux1.6.5
 # (MAS Documentation, Windows style)
 doc/GUI_introduction doc/GUI_introduction.txt[dos] mas_windows1.6.5
 doc/masystem_introduction doc/masystem_introduction.txt[dos] mas_windows1.6.5
-doc/java_info doc/java_info.txt[dos] mas_windows1.6.5
 doc/feature_list doc/feature_list.txt[dos] mas_windows1.6.5
 doc/creating_indicators doc/creating_indicators.txt[dos] mas_windows1.6.5
 doc/creating_market_analyzers doc/creating_market_analyzers.txt[dos] mas_windows1.6.5
@@ -296,6 +296,8 @@ doc/other_market_analyzer_examples doc/other_market_analyzer_examples.txt[dos] m
 doc/market_analysis doc/market_analysis.txt[dos] mas_windows1.6.5
 doc/MAS_README doc/README.txt[dos] mas_windows1.6.5
 doc/main_MAS_README ./README.txt[dos] mas_windows1.6.5
+doc/main_MAS_README-windows.ps doc/INTRODUCTION.ps mas_windows1.6.5
+doc/main_MAS_README-windows.html doc/INTRODUCTION.html mas_windows1.6.5
 doc/env_settings ./doc/environment.txt[dos] mas_windows1.6.5
 doc/INSTALL  ./INSTALL.txt[dos] mas_windows1.6.5
 doc/THANKS doc/THANKS.txt[dos] mas_windows1.6.5
