@@ -135,16 +135,13 @@ feature {NONE} -- Implementation - utility
 			setter: VALUE_SETTER
 			i: INTEGER
 		do
-			i := 1
 			!!value_setter_vector.make (1, Last_index)
 			!DAY_DATE_SETTER!setter.make
-			value_setter_vector.put (setter, i)
-			i := i + 1
+			value_setter_vector.put (setter, Date_index)
 			!SPLIT_SYMBOL_SETTER!setter.make (Current, field_separator @ 1)
-			value_setter_vector.put (setter, i)
-			i := i + 1
+			value_setter_vector.put (setter, Symbol_index)
 			!SPLIT_SETTER!setter
-			value_setter_vector.put (setter, i)
+			value_setter_vector.put (setter, Split_index)
 			from
 				i := 1
 			until
