@@ -210,12 +210,6 @@ feature {NONE} -- Implementation - Hook routine implementations
 			then
 				default_start_server_command := start_server_commands.first
 			end
-print ("%N<<<<BEGIN PRINT SETTINGS.%N>>>>")
-settings.linear_representation.do_all (agent print_str)
-print ("%N<<<<END PRINT SETTINGS.%N>>>>")
-print ("%N<<<<BEGIN start_server_commands SETTINGS.%N>>>>")
-start_server_commands.linear_representation.do_all (agent print_cmd)
-print ("%N<<<<END start_server_commands SETTINGS.%N>>>>")
 		end
 
 	check_results is
@@ -412,7 +406,6 @@ feature {NONE} -- Implementation - Utilities
 			empties: ARRAY [STRING]
 			i: INTEGER
 		do
-print ("Checking '" + s + "'%N")
 			-- Eliminate side effects on `s':
 			work_s := clone (s)
 			create empties.make (1, dynamic_tokens.upper)
@@ -424,14 +417,9 @@ print ("Checking '" + s + "'%N")
 				empties.put ("", i)
 				i := i + 1
 			end
-print ("dynamic tokens: '")
-dynamic_tokens.linear_representation.do_all (agent print_str)
-print ("'%N")
-print ("Before replace - work_s: '" + work_s + "'%N")
 			-- In `work_s', replace all `dynamic_tokens' with empty strings.
 			replace_tokens (work_s, dynamic_tokens, empties,
 				Token_start_delimiter, Token_end_delimiter)
-print ("After replace - work_s: '" + work_s + "'%N")
 			i := work_s.index_of (Token_start_delimiter, 1)
 			if i > 0 and work_s.index_of (Token_end_delimiter, i) > 0 then
 				error_report.append ("The setting '" + s + "' contains one %
@@ -444,19 +432,8 @@ print ("After replace - work_s: '" + work_s + "'%N")
 		require
 			c_valid: c /= Void and c.command_string /= Void
 		do
-print ("Checking cmd: '" + c.command_string + "'%N")
 			check_for_unreplaced_tokens (c.command_string)
 		end
-
-print_str (s: STRING) is
-do
-	 print ("'" + s + "'%N")
-end
-
-print_cmd (c: EXTERNAL_COMMAND) is
-do
-	 print ("cmd: " + c.name + ": '" + c.command_string + "'%N")
-end
 
 feature {NONE} -- Implementation
 
