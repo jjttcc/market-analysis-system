@@ -1,0 +1,71 @@
+LINEAR_SUM can be improved by changing it to use a COMMAND class to do the
+summing, given the two values to be summed.  This class can allow
+LINEAR_SUM (whose name should be changed to LINEAR_OPERATION if this is
+done) to be customized by providing an instance of a descendant that adds,
+subtracts, multiplies, etc. the two (NUMERIC) values.  I'm currently leaving
+it as is because summing directly is more efficient and because I do not
+currently see a need for applying an operation other than addition in this
+context.  If this changes and a need is seen for other operations, the
+above change can be made.  If efficiency becomes a problem (It may, since
+LINEAR_SUM is used for moving averages, which will be very common in the
+application), a descendant class can be created that doesn't use the
+abstract (addition, subtraction, ...) operator, but does the summing
+directly.  (So that we will have LINEAR_SUM inheriting from
+LINEAR_OPERATION.)
+
+TECHNICAL INDICATOR LIBRARY REQUIREMENT
+
+To fulfill the requirement of a technical indicator "library", a singleton
+list of all indicators can be available.  This list will be used when a user
+wants to add a new indicator to one or more stocks (tradables).  (If the list
+gets unreasonably large, probably some of it can be stored on disk.)
+
+When a user "adds" an indicator to one or more stocks, it will need to be
+cloned for each stock, since the application will allow more than one stock
+to be viewed at a time.  (Thus an indicator can't be shared because its
+input data and resulting output data will be needed for a particular stock.)
+NOTE:  This will not be true if the system is designed such that an indicator
+(market function) as used by a client to process its data and after processing
+is finished the client saves the data so that the indicator can be reused
+immediately after by another client.  If the system is ever made concurrent,
+this design may not be appropriate.
+
+COMPOSITE FUNCTION COMPONENTS OF OTHER COMPOSITE FUNCTIONS
+
+Need to allow for a composite function that appears in a tradable's function
+list to be part of another composite function that appears in the same
+tradable's list.  (Example, the MACD difference can be used in the MACD signal
+line (EMA of the difference).)  In other words, we want to avoid duplicating
+that already appears in the list rather than referring to the original, since
+the duplication is wasteful.
+
+PROCESS AND PROCESSED IN TRADABLE
+
+It may be useful for TRADABLE to redefine processed and process:  processed
+would be an attribute and process would simply set processed to True.
+Whenever a TRADABLE instance changes, such as when a new tuple/trading period
+is added to its list, processed would be reset to False.  This would force all
+functions using this TRADABLE to to have the state not processed, so that they
+would have to be re-processed to be up-to-date with the TRADABLE.
+
+TA INDICATOR SINGLETON HASH TABLE
+
+It may be useful to make the singleton list of all technical indicators into a
+hash table - hash on the function's name.  (name will need to be enforced to
+be unique for each function.)  The list of keys (names) available from the
+hash table can be used to present a list of all functions to the user.  This
+may also be useful in associating rules from events/triggers/... with
+functions.
+
+EVENT/TRIGGER ASSOCIATIONS
+
+It may be useful to allow an event/trigger/rule/... to be associated with a
+list of tradables (or all stocks, all commodities, ...), selectable by the
+user, rather than all tradables.
+
+EXPORT OF SET_... PROCEDURES
+
+Exporting of set_... (such as set_n) should be further examined when the
+design is extended to allow the user to change parameters of indicators.  (Is
+n the only parameter that can change?)  Perhaps add some kind of EDITOR class
+and export {EDITOR} for set_n ...
