@@ -19,7 +19,7 @@ public class MAS_Applet extends Applet {
 
 	public void init() {
 		log("init: Starting ...");
-		log("Compiled at Wed Feb 19 15:57:40 MST 2003");
+		log("Compiled at Thu Feb 20 17:32:20 MST 2003");
 		try {
 			log("init: A");
 			initialize_configuration();
