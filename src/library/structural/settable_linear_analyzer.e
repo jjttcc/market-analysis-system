@@ -2,14 +2,16 @@ indexing
 	description:
 		"Objects that provide services for processing a sequential %
 		%structure of market tuples."
-	note: "!!!!!!Add note (credit) about use of linear_iterator from Eiffel 4."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "!!!!Need to change this, since it uses code from %
-		%LINEAR_ITERATOR from EiffelBase 4.x.%
-		%Copyright 1998 - 2001: Jim Cochrane - %
+	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
+	licensing_addendum: "Part of this class was copied directly from the %
+		%LINEAR_ITERATOR class from the EiffelBase 4.x library, which %
+		%is released under the The ISE Free Eiffel Library License (IFELL).%
+		%This license can be found online at:%
+		%http://www.eiffel.com/products/base/license.html"
 
 class
 
