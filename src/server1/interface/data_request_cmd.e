@@ -13,7 +13,7 @@ deferred class DATA_REQUEST_CMD inherit
 	PRINTING
 		rename
 			output_record_separator as message_record_separator,
-			output_field_separator as message_field_separator,
+			output_field_separator as message_component_separator,
 			output_date_field_separator as message_date_field_separator,
 			output_time_field_separator as message_time_field_separator
 		export
@@ -44,7 +44,7 @@ feature {NONE} -- Hook routine implementations
 			parse_error := False
 			fields_parsed := False
 			target := msg -- set up for tokenization
-			fields := tokens (message_field_separator)
+			fields := tokens (message_component_separator)
 			if
 				fields.count = expected_field_count and then
 				additional_field_constraints_fulfilled (fields)

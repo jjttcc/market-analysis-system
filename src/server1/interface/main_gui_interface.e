@@ -23,6 +23,8 @@ class MAIN_GUI_INTERFACE inherit
 		end
 
 	GUI_COMMUNICATION_PROTOCOL
+		rename
+			message_component_separator as message_field_separator
 		export
 			{NONE} all
 		end

@@ -16,6 +16,8 @@ class CONNECTION inherit
 			end_of_message
 		end
 
+	MA_COMMUNICATION_PROTOCOL
+
 create
 
 	make_connected, start_conversation

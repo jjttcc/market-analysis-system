@@ -113,7 +113,7 @@ feature {NONE} -- Implementation
 			l: LIST [STRING]
 		do
 			su.set_target (s)
-			l := su.tokens (message_field_separator)
+			l := su.tokens (message_component_separator)
 			process_error (l, s)
 			if last_communication_succeeded then
 				server_response := l @ 2
@@ -156,22 +156,27 @@ feature {NONE} -- Implementation - constants
 	login_request_msg: STRING is
 			-- Login request to the server
 		once
-			Result := Login_request.out + message_field_separator + "0" +
-				message_field_separator + eom
+			Result := Login_request.out + message_component_separator + "0" +
+				message_component_separator + eom
 		end
 
 	logout_request_msg: STRING is
 			-- Logout request to the server
 		do
-			Result := Logout_request.out + message_field_separator +
-				session_key.out + message_field_separator + eom
+			Result := Logout_request.out + message_component_separator +
+				session_key.out + message_component_separator + eom
 		end
 
 	all_indicators_request_msg: STRING is
 			-- "all-indicators" request to the server
 		do
-			Result := All_indicators_request.out + message_field_separator +
-				session_key.out + message_field_separator + eom
+			Result := All_indicators_request.out + message_component_separator +
+				session_key.out + message_component_separator + eom
+		end
+
+	end_of_message (c: CHARACTER): BOOLEAN is
+		do
+			Result := c = eom @ 1
 		end
 
 invariant

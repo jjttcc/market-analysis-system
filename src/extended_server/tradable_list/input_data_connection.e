@@ -18,6 +18,11 @@ deferred class INPUT_DATA_CONNECTION inherit
 			socket, server_type
 		end
 
+	DATA_SUPPLIER_COMMUNICATION_PROTOCOL
+		export
+			{NONE} all
+		end
+
 feature -- Access
 
 	socket: INPUT_SOCKET
@@ -79,18 +84,17 @@ feature {NONE} -- Hook routine implementations
 
 	server_type: STRING is "data server "
 
+	end_of_message (c: CHARACTER): BOOLEAN is
+		do
+			Result := False -- Not used (I think!!!!)
+		end
+
 feature {NONE} -- Implementation - Constants
 
 	Timeout_seconds: INTEGER is
 		once
 			Result := 10
 		end
-
-feature {NONE} -- Unused
-
-	Message_date_field_separator: STRING is ""
-
-	Message_time_field_separator: STRING is ""
 
 invariant
 

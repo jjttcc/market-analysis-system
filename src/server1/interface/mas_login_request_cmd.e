@@ -89,7 +89,7 @@ feature {NONE} -- Hook routine implementations
 			tokens: LIST [STRING]
 		do
 			sutil.set_target (message)
-			tokens := sutil.tokens (message_field_separator)
+			tokens := sutil.tokens (message_component_separator)
 			from
 				tokens.start
 			until
@@ -121,7 +121,7 @@ feature {NONE} -- Hook routine implementations
 			-- to the client/server communication protocol) to the client.
 		do
 			if not command_line_options.opening_price then
-				put (message_field_separator)
+				put (message_component_separator)
 				put (no_open_session_state)
 			end
 		end

@@ -78,7 +78,7 @@ feature {NONE} -- Basic operations
 					eglist.islast
 				loop
 					put (concatenation (<<eglist.item.event_type.name,
-						message_field_separator, eglist.item.event_type.id,
+						message_component_separator, eglist.item.event_type.id,
 						message_record_separator>>))
 					eglist.forth
 				end
@@ -86,7 +86,7 @@ feature {NONE} -- Basic operations
 					last: eglist.islast
 				end
 				put (concatenation (<<eglist.item.event_type.name,
-						message_field_separator, eglist.item.event_type.id>>))
+						message_component_separator, eglist.item.event_type.id>>))
 			end
 		end
 

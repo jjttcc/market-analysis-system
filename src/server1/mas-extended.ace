@@ -6,6 +6,7 @@ root
 
 default
 	assertion (no)
+	arguments ("-w -f , -b 5555")
 	arguments ("-f , 2735 /tmp/ibm.txt")
 	arguments ("-f , 2733 -i 15-minute /tmp/bond_10_year.15-minute -no-volume")
 	arguments ("-f , 2735 -b ibm-sddb.txt")
@@ -14,7 +15,6 @@ default
 	arguments ("-f , -nonstd /tmp/ibm.txt")
 	arguments ("-f , nonexistent.txt")
 	arguments ("-p 30001 -b")
-	arguments ("-w -f , -b 5555")
 	arguments (" -o -b 12345 -f , -w -report_back jupiter.milkyway.org^41512")
 	arguments (" ")
 	arguments ("-o -f , -w 12345")
@@ -171,6 +171,8 @@ cluster
 	shared_protocols (client_server):		"$/shared_protocols"
 
 	ma_server_protocols (client_server):		"$/ma_server_protocols"
+
+	data_supplier_protocols (client_server):		"$/data_supplier_protocols"
 
 	extended_protocols (client_server):		"$/extended_protocols"
 

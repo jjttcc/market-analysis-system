@@ -12,9 +12,6 @@ indexing
 deferred class MA_COMMUNICATION_PROTOCOL inherit
 
 	BASIC_COMMUNICATION_PROTOCOL
-		rename
-			message_component_separator as message_field_separator
-		end
 
 feature -- String constants
 

@@ -8,7 +8,7 @@ indexing
 
 deferred class CLIENT_CONNECTION inherit
 
-	MA_COMMUNICATION_PROTOCOL
+	BASIC_COMMUNICATION_PROTOCOL
 
 feature -- Access
 
@@ -258,8 +258,7 @@ feature {NONE} -- Implementation
 	end_of_message (c: CHARACTER): BOOLEAN is
 			-- Does `c' indicate that the end of the data from the server
 			-- has been reached?
-		do
-			Result := c = eom @ 1
+		deferred
 		end
 
 	Connection_failed_msg: STRING is 

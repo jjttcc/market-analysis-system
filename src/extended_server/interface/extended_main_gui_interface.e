@@ -16,6 +16,8 @@ class EXTENDED_MAIN_GUI_INTERFACE inherit
 		end
 
 	EXTENDED_GUI_COMMUNICATION_PROTOCOL
+		rename
+			message_component_separator as message_field_separator
 		export
 			{NONE} all
 		end

@@ -127,6 +127,8 @@ cluster
 
 	ma_server_protocols (client_server):		"$/ma_server_protocols"
 
+	data_supplier_protocols (client_server):		"$/data_supplier_protocols"
+
 	extended_protocols (client_server):		"$/extended_protocols"
 
 	app_library:		"$MAS/src/application_library"
