@@ -50,10 +50,14 @@ feature -- Basic operations
 			db_info: MAS_DB_INFO
 		do
 			db_info := global_server.database_configuration
-			if not db_info.daily_stock_table_name.empty then
+			if
+				db_info.daily_stock_data_available
+			then
 				create_daily_list
 			end
-			if not db_info.intraday_stock_table_name.empty then
+			if
+				db_info.intraday_stock_data_available
+			then
 				create_intraday_list
 			end
 		end
