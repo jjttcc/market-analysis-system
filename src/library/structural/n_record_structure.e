@@ -8,9 +8,10 @@ indexing
 		%Released under the Eiffel Forum License; see file forum.txt"
 
 class
+
 	N_RECORD_STRUCTURE
 
-feature
+feature -- Access
 
 	n: INTEGER
 			-- The length of the sub-list to be analyzed
