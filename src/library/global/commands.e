@@ -251,7 +251,8 @@ feature -- Access
 				%the value of executing its%Nboolean operator - if the %
 				%result is true, value is set to the result of%Nexecuting %
 				%its 'true command'; otherwise, value is set to the %
-				%result of%Nexecuting its 'false command'.")
+				%result of%Nexecuting its 'false command'.  This operator %
+				%can thus function as%Nan if/else block.%N")
 			Result.extend (pair)
 			create {SIGN_ANALYZER} cmd.make (real_dummy, real_dummy, False)
 			create pair.make (cmd,
