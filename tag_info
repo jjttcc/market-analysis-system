@@ -25,3 +25,21 @@ STORABLE tradables.  It also had some changes to the new schme in
 INPUT_FILE such that all lines are read into an array, which is then used
 to parse each record into fields in order; and it had a few small
 changes/improvements.
+
+
+data_scanning_input_redesign_feb-2005
+
+Branch for experimenting with a redesign/refactoring of the components in
+eiffel_library/data_scanning/input_mechanisms and the tradable_list-related
+components for the purpose of "plugging in" input using a network socket.
+(See the files:
+eiffel_library/data_scanning/input_mechanisms/input_socket.e
+finance/src/extended_server/tradable_list/input_socket_connection.e
+finance/src/extended_server/tradable_list/socket_tradable_list.e
+finance/src/extended_server/tradable_list_builders/socket_list_builder.e
+.)
+
+On Sat Feb 12 12:18:38 MST 2005, these changes were tested successfully
+with file, database, and web-based input source functionality to make
+sure that no defects were introduced; and then the changes were merged into
+the main branch.  Therefore, development on the branch will probably cease.
