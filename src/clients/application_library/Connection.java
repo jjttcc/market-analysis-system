@@ -104,7 +104,8 @@ public class Connection implements NetworkProtocol
 		last_rec_msgID = scanner.lastInt();
 		if (last_rec_msgID == Error)
 		{
-			request_result = new StringBuffer("Fatal request protocol error: ");
+			request_result =
+				new StringBuffer("Fatal request protocol error:\n");
 		}
 		else
 		{
