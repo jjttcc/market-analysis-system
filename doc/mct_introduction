@@ -52,4 +52,5 @@ This menu option (under the Edit menu) pops up a list-selection window
 that allows the selection of how the server is to be run.  By default,
 the options available allow running the server such that either it gets
 its data from files, from a database (using an ODBC connection), or
-from the web.
+from the web.  Note: Obtaining data from a database is currently not
+officially supported on Windows systems.
