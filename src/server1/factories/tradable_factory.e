@@ -38,6 +38,9 @@ feature -- Access
 	input_file: FILE
 			-- File containing data to be scanned into tuples
 
+	symbol: STRING
+			-- Symbol to give the newly created tradable
+
 	tuple_maker: BASIC_TUPLE_FACTORY is
 			-- Factory to create the appropriate type of tuples
 		deferred
@@ -110,6 +113,16 @@ feature -- Status setting
 			input_file := arg
 		ensure
 			input_file_set: input_file = arg and input_file /= Void
+		end
+
+	set_symbol (arg: STRING) is
+			-- Set symbol to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			symbol := arg
+		ensure
+			symbol_set: symbol = arg and symbol /= Void
 		end
 
 	set_time_period_type (arg: TIME_PERIOD_TYPE) is

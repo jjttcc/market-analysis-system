@@ -33,23 +33,11 @@ feature {NONE}
 
 	make_product is
 		local
-			name: STRING
 			i, last_sep_index: INTEGER
-			strutil: STRING_UTILITIES
 		do
-			!!strutil.make (clone (input_file.name))
-			if strutil.target.has (Directory_separator) then
-				-- Strip directory path from the file name:
-				strutil.tail (Directory_separator)
-			end
-			if strutil.target.has ('.') then
-				-- Strip off "suffix":
-				strutil.head ('.')
-			end
-			name := strutil.target
-			--!!!For now, set the name and symbol to the file name.
-			!!product.make (name, time_period_type)
-			product.set_name (name)
+			--!!!For now, set the name and symbol to `symbol'.
+			!!product.make (symbol, time_period_type)
+			product.set_name (symbol)
 		end
 
 	index_vector: ARRAY [INTEGER] is
