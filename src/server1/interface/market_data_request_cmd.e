@@ -42,6 +42,7 @@ feature {NONE} -- Hook routine implementations
 			Result := concatenation (<<error_context_prefix, market_symbol>>)
 		end
 
+--!!!:
 setup_correct_number_of_records_test (printer: MARKET_TUPLE_PRINTER) is
 do
 	printer.set_period_type_debug (trading_period_type)
@@ -49,7 +50,6 @@ end
 
 feature {NONE}
 
---!!!:
 	create_and_send_response is
 			-- Obtain the market corresponding to `market_symbol' and
 			-- dispatch the data for that market for `trading_period_type'
@@ -63,15 +63,12 @@ feature {NONE}
 				print ("%N%NSending data for '" + market_symbol + "' (" +
 				(create {DATE}.make_now).out + ")%N")
 			end
-print ("casr - symbol, period type: " + market_symbol + ", " +
-trading_period_type.name + "%N")
 			print_preface := ok_string
 			if session.caching_on then
 				t := cached_tradable (market_symbol, trading_period_type)
 				if
 					t /= Void and t.period_types.has (trading_period_type.name)
 				then
-print ("[1] MDRC.create_and_send... calling tradables.tuple_list (...)" + "%N")
 					tuple_list := t.tuple_list (trading_period_type.name)
 				end
 				if t /= Void and t.has_open_interest then
@@ -82,11 +79,8 @@ print ("[1] MDRC.create_and_send... calling tradables.tuple_list (...)" + "%N")
 				tradables.valid_period_type (market_symbol,
 					trading_period_type)
 			then
-print ("[2] MDRC.create_and_send... calling tradables.tuple_list (...)" + "%N")
 				tuple_list := tradables.tuple_list (market_symbol,
-					trading_period_type, True)
---!!!!Replace the above line with and test:
---					trading_period_type, update_retrieved_tradable)
+					trading_period_type, update_retrieved_tradable)
 				if tradables.last_tradable.has_open_interest then
 					print_preface := concatenation(<<clone(print_preface),
 						Open_interest_flag>>)
@@ -95,10 +89,7 @@ print ("[2] MDRC.create_and_send... calling tradables.tuple_list (...)" + "%N")
 			end
 			if tuple_list = Void then
 				send_tradable_not_found_response
-print ("tuple list was void" + "%N")
 			else
-print ("sending back response with tuple list of size: " +
-tuple_list.count.out + "%N")
 				set_print_parameters
 				-- Ensure ok string is printed first.
 				set_preface (print_preface)
