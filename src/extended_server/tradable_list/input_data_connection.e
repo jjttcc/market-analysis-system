@@ -1,8 +1,8 @@
 indexing
 	description: "Socket-based connections to an outside data supplier - %
-		%Intended as a parent class INPUT_DATA_CONNECTION descendants implementing a protocol %
-		%based on the data supplier they are associated with - i.e., the %
-		%strategy pattern"
+		%Intended as a parent class INPUT_DATA_CONNECTION descendants %
+		%implementing a protocol based on the data supplier they are %
+		%associated with - i.e., the strategy pattern"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -12,17 +12,11 @@ indexing
 deferred class INPUT_DATA_CONNECTION inherit
 
 	CLIENT_CONNECTION
---		export
---			{ANY} close, send_request, make_connected_with_socket
+		export
+			{ANY} close, send_request, make_connected_with_socket
 		redefine
 			socket, server_type
 		end
-
---!!!!Temporary
-SOCKET_DEBUGGER
-export
-	{NONE} all
-end
 
 feature -- Access
 
@@ -49,11 +43,6 @@ feature -- Basic operations
 			-- Initiate the connection to the data supplier.
 		do
 			connect_to_supplier
-print ("after connnect_to_supplier:%N" + report (socket) + "%N")
---!!!Remove?:
---			if last_communication_succeeded then
---				send_request (data_request_for (requester), False)
---			end
 		ensure
 			socket_exists_if_no_error:
 				last_communication_succeeded implies socket /= Void
@@ -67,11 +56,9 @@ print ("after connnect_to_supplier:%N" + report (socket) + "%N")
 			connected: connected
 			last_communication_succeeded: last_communication_succeeded
 		do
-print ("before send_request:%N" + report (socket) + "%N")
 			if last_communication_succeeded then
 				send_request (data_request, False)
 			end
-print ("after send_request:%N" + report (socket) + "%N")
 		ensure
 			socket_exists_if_no_error:
 				last_communication_succeeded implies socket /= Void

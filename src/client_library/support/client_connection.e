@@ -158,9 +158,7 @@ feature {NONE} -- Implementation
 			last_communication_succeeded := False
 			socket.put_string (r)
 			if socket.socket_ok then
-				if wait_for_response
---!!!!: or True
-then
+				if wait_for_response then
 					create s.make (0)
 					if socket.ready_for_reading then
 						from

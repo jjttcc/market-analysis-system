@@ -25,8 +25,6 @@ feature {SOCKET_LIST_BUILDER} -- Initialization
 		do
 			parent_make (the_symbols, factory)
 			connection := conn
---!!!!Temporary, for testing - in future it will be passed in.
---create {EXPERIMENTAL_INPUT_DATA_CONNECTION} connection.make
 		end
 
 feature {SOCKET_LIST_BUILDER} -- Access
@@ -50,8 +48,6 @@ feature {NONE} -- Implementation
 
 	initialize_input_medium is
 		do
-print (generating_type + ": init input med started" + "%N")
-print ("intraday: " + intraday.out + "%N")
 			connection.initiate_connection
 			if not connection.last_communication_succeeded then
 				fatal_error := True
@@ -68,8 +64,6 @@ print ("Error occurred requesting data:%N" +
 connection.error_report + "%N")
 				end
 			end
-print (generating_type + ": init input med ended, data requested" + "%N")
-print ("intraday: " + intraday.out + "%N")
 		end
 
 invariant

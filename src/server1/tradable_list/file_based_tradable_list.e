@@ -76,8 +76,6 @@ feature {NONE} -- Implementation
 					file_names.item, " - file does not exist.%N">>)
 				fatal_error := True
 			end
-print (generating_type + ": init input med returning type: " +
-input_medium.generating_type + "%N")
 		end
 
 	input_medium: INPUT_FILE

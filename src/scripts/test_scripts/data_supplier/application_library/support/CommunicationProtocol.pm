@@ -30,13 +30,10 @@ Protocol for communication with the client
 
 # Access
 
-	# End of message specifier
-	use constant eom => '';
+	# OK status_id
+	use constant ok_id => '1';
 
-	# Field separator for messages sent and received by the server
-	use constant message_field_separator => "%T";
-
-	# Record separator for messages sent and received by the server
-	use constant message_record_separator => "%N";
+	# Error status_id
+	use constant error_id => '2';
 
 1;

@@ -87,12 +87,12 @@ print "starting 'process'\n";
 			"20050215,8.4,8.7,8.2,8.5,1123428\n" .
 			"20050216,8.5,8.875,8.15,8.25,1121234\n" .
 			"20050217,8.6,9.9,8.6,9.25,1131233\n" .
-			"20050218,8.9,9.8,8.9,9.45,1012334\n\n";
+			"20050218,8.9,9.8,8.9,9.45,1012334\n";
 		chomp $client_request;
 		print "'process' received socket request: $client_request\n";
 print "A\n";
-print "sending: '" . $test_data .  $self->eom, "'\n";
-		$socket->send($test_data .  $self->eom);
+print "sending: '" . $test_data, "'\n";
+		$socket->send($test_data . "\n");
 print "B\n";
 		$socket->flush;
 		$socket->close;

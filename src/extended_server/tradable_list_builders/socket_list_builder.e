@@ -29,7 +29,7 @@ feature -- Basic operations
 		do
 			daily_list := new_tradable_list (tradable_factory)
 			intraday_list := new_tradable_list (intraday_tradable_factory)
---!!!Temporary:
+--!!!Temporary - for socket-based experimentation:
 			intraday_list := Void
 		end
 

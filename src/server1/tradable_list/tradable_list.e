@@ -300,7 +300,7 @@ feature {NONE} -- Implementation
 				target_tradable := tradable_factory.product
 				add_to_cache (target_tradable, index)
 				if tradable_factory.error_occurred then
-print ("I - (ERROR OCCURRED!!)" + "%N")
+print ("I - (ERROR OCCURRED!!!!)" + "%N")
 					report_errors (target_tradable.symbol,
 						tradable_factory.error_list)
 					if tradable_factory.last_error_fatal then
