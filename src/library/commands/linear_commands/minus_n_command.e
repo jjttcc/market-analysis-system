@@ -24,6 +24,8 @@ feature
 		do
 			check target.index > n end
 			value := target.i_th (target.index - n).value
+		ensure then
+			value = target.i_th (target.index - n).value
 		end
 
 end -- class MINUS_N_COMMAND

@@ -90,6 +90,8 @@ feature {MARKET_FUNCTION}
 		do
 			set_n (arg.n)
 			set_owner (arg)
+		ensure then
+			n_set: n = arg.n
 		end
 
 feature {NONE}

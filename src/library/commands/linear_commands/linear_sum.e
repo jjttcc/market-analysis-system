@@ -31,6 +31,8 @@ feature -- Initialization
 	initialize (arg: N_RECORD_STRUCTURE) is
 		do
 			set_n (arg.n)
+		ensure then
+			n = arg.n
 		end
 
 feature -- Basic operations
@@ -46,7 +48,7 @@ feature -- Basic operations
 			int_index_eq_n: internal_index = n
 		end
 
-feature
+feature {NONE}
 
 	invariant_value: BOOLEAN is
 		do
