@@ -143,10 +143,10 @@ public class DateDrawer extends TemporalDrawer {
 		i = 0;
 		while (i < yi) {
 			boolean short_years = do_months && mi >= Many_months;
-			if (is_indicator()) {
+			if (is_indicator() && years[i].right() < _x_values.length) {
 				draw_year(g, bounds, years[i], ! do_months, true, _x_values,
 					short_years);
-			} else if (! do_months) {
+			} else if (! do_months && years[i].right() < _x_values.length) {
 				draw_year(g, bounds, years[i], true, false, _x_values,
 					short_years);
 			}
