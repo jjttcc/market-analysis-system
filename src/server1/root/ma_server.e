@@ -36,31 +36,8 @@ f: FIBONACCI
 			create {MAS_STREAM_READER} Result.make (medium, factory_builder)
 		end
 
-test_pt is local
-ptf: expanded PERIOD_TYPE_FACILITIES
-dts: expanded DATE_TIME_SERVICES
-do
-ptreport (ptf.period_type_at_index (ptf.hourly))
-ptreport (ptf.period_type_at_index (ptf.five_minute))
-ptreport (ptf.period_type_at_index (ptf.ten_minute))
-ptreport (ptf.period_type_at_index (ptf.daily))
-ptreport (ptf.period_type_at_index (ptf.weekly))
-ptreport (ptf.period_type_at_index (ptf.monthly))
-ptreport (ptf.period_type_at_index (ptf.quarterly))
-ptreport (ptf.period_type_at_index (ptf.yearly))
-end
-
-ptreport (t: TIME_PERIOD_TYPE) is
-local
-dts: expanded DATE_TIME_SERVICES
-do
-print ("ptype: " + t.name + "%N")
-print ("min: " + dts.date_time_duration_in_minutes (t.duration).out + "%N")
-end
-
 	make_current_media is
 		do
-test_pt
 			create {LINKED_LIST [SOCKET]} current_media.make
 			from
 				command_line_options.port_numbers.start
