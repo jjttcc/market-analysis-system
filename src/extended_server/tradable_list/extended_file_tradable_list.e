@@ -44,7 +44,7 @@ feature -- Initialization
 			-- `symbols' will be created from `fnames'
 		do
 			ftl_make (fnames, factory)
-create file_status_cache.make (cache_size)
+			create file_status_cache.make (cache_size)
 		ensure
 			symbols_set_from_fnames:
 				symbols /= Void and symbols.count = fnames.count
