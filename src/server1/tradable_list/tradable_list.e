@@ -125,6 +125,9 @@ feature -- Status report
 	caching_on: BOOLEAN
 			-- Is caching of tradable data turned on?
 
+	timing_on: BOOLEAN
+			-- Is timing of operations turned on?
+
 feature -- Status setting
 
 	turn_caching_on is
@@ -153,6 +156,16 @@ feature -- Status setting
 			fatal_error := false
 		ensure
 			no_error: fatal_error = false
+		end
+
+	set_timing_on (arg: BOOLEAN) is
+			-- Set `timing_on' to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			timing_on := arg
+		ensure
+			timing_on_set: timing_on = arg and timing_on /= Void
 		end
 
 feature -- Cursor movement

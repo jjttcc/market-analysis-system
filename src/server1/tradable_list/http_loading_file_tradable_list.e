@@ -18,7 +18,7 @@ class HTTP_LOADING_FILE_TRADABLE_LIST inherit
 		rename
 			make as parent_make
 		redefine
-			timing_on, update_and_load_data
+			update_and_load_data
 		end
 
 	HTTP_DATA_RETRIEVAL
@@ -103,18 +103,6 @@ feature -- Access
 			good_if_no_error: not fatal_error implies last_tradable /= Void
 		end
 
-feature -- Status setting
-
-	set_timing_on (arg: BOOLEAN) is
-			-- Set `timing_on' to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
-			timing_on := arg
-		ensure
-			timing_on_set: timing_on = arg and timing_on /= Void
-		end
-
 feature {NONE} -- Implementation
 
 	file_names_from_symbols: LIST [STRING] is
@@ -129,8 +117,6 @@ feature {NONE} -- Implementation
 		end
 
 feature {NONE} -- Hook routine implementations
-
-	timing_on: BOOLEAN
 
 	output_file_path: STRING is
 			-- Directory path of output file - redefine if needed

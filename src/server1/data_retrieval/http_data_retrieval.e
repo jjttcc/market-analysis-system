@@ -31,6 +31,7 @@ feature {NONE} -- Initialization
 			create parameters.make
 			create url.http_make (parameters.host, "")
 			create http_request.make (url)
+			create retrieved_symbols.make (0)
 			http_request.set_read_mode
 			file_extension := Default_file_extension
 		ensure
@@ -52,16 +53,17 @@ feature {NONE} -- Attributes
 	Default_file_extension: STRING is "txt"
 			-- Default value for `file_extension'
 
+	retrieved_symbols: HASH_TABLE [BOOLEAN, STRING]
+			-- Symbols for which data has been retrieved
+
 feature {NONE} -- Basic operations
 
 	retrieve_data is
 			-- Retrieve data for `parameters.symbol'.
-		local
-			result_string: STRING
 		do
 			retrieval_failed := False
-			create result_string.make (0)
 			append_to_output_file := False
+			http_request.reset_error
 			if
 				use_day_after_latest_date_as_start_date and
 				alternate_start_date /= Void
@@ -78,59 +80,61 @@ print ("Using configured start date.%N")
 			-- call to retrieve_data.
 			alternate_start_date := Void
 			start_timer
-			if not http_request.error then
-				http_request.open
-				if not http_request.error then
-					from
-						http_request.initiate_transfer
-					until
-						not http_request.is_packet_pending or
-						http_request.error
-					loop
-						http_request.read
-						result_string.append_string (http_request.last_packet)
-					end
-					if http_request.error then
-						print ("Error occurred initiating transfer: " +
-							http_request.error_text (http_request.error_code) +
-							"%N")
-						retrieval_failed := True
-					end
-				else
-					print ("Error occurred opening http request: " +
-						http_request.error_text (http_request.error_code) +
-						"%N")
-					retrieval_failed := True
-				end
-				http_request.close
-				add_timing_data ("Retrieving data for " + parameters.symbol)
-				convert_and_save_result (result_string)
-			else
-				print ("Error occurred initializing http request: " +
-					http_request.error_text (http_request.error_code) +
-					"%N")
-				retrieval_failed := True
+			perform_http_retrieval
+			if not retrieval_failed then
+				mark_as_retrieved (parameters.symbol)
 			end
 		ensure
-			output_file_exists_if_successful:
-				not retrieval_failed implies output_file_exists
+			output_file_exists_if_successful: not retrieval_failed and
+				converted_result /= Void and then
+				not converted_result.is_empty implies output_file_exists
 			alternate_start_date_reset_to_void: alternate_start_date = Void
 		end
 
 	check_if_data_is_out_of_date is
-			-- Check if the current data for `parameters.symbols' are out
+			-- Check if the current data for `parameters'.symbol are out
 			-- of date with respect to the current date and the http
 			-- configuration.  If true, `data_out_of_date' is set to True
 			-- and `alternate_start_date' is set to the day after the date
 			-- of the latest current data.
+		local
+			eod_update_time: BOOLEAN
+			latest_date: DATE
 		do
 			--@@NOTE: This algorithm is for EOD data.  If the ability to
 			--handle intraday data is added, a separate algorithm will
 			--be needed for that.
+			data_out_of_date := False
 			alternate_start_date := Void
-			data_out_of_date := time_to_eod_update and
-				not parameters.ignore_today and
-				current_date_is_later_than_latest_daily_data
+			eod_update_time := time_to_eod_update
+			latest_date := latest_date_for (parameters.symbol)
+			if latest_date /= Void then
+				if
+					not (retrieved_symbols @ parameters.symbol) and
+					(not eod_update_time or parameters.ignore_today)
+				then
+					-- This path catches the case where it's not time
+					-- to EOD-update (or it's a weekend), but the cached
+					-- data is not up to date with the latest trading day
+					-- before today.
+					data_out_of_date := latest_date <
+						parameters.latest_tradable_date_before_today
+print ("latestdt, latest_tradable...: " + latest_date.out + ", " +
+parameters.latest_tradable_date_before_today.out + "%N")
+				else
+					data_out_of_date := eod_update_time and
+						not parameters.ignore_today and
+						create {DATE}.make_now > latest_date
+				end
+				if data_out_of_date then
+					-- Set the alternate start date to the day after the
+					-- latest date in the current data set so that there
+					-- is no overlap between the current data set and
+					-- freshly retrieved data.  Clone to prevent side effects.
+					alternate_start_date := clone (latest_date)
+					alternate_start_date.day_add (1)
+				end
+			end
 		ensure
 			data_out_of_date = (alternate_start_date /= Void)
 		end
@@ -154,17 +158,9 @@ feature {NONE} -- Status report
 			-- Are data for the current symbol (`parameters.symbol')
 			-- out of date with respect to today's date?
 
-	data_retrieval_needed: BOOLEAN is
--- !!!Remove this feature?
-		do
-			--@@NOTE: This algorithm is for EOD data.  If the ability to
-			--handle intraday data is added, a separate algorithm will
-			--be needed for that.
-			alternate_start_date := Void
-			Result := not output_file_exists or (time_to_eod_update and
-				not parameters.ignore_today and
-				current_date_is_later_than_latest_daily_data)
-		end
+	converted_result: STRING
+			-- Retrieval result converted into the expecte format
+			-- by `convert_and_save_result'
 
 	output_file_name (symbol: STRING): STRING is
 			-- Output file name constructed from `symbol'
@@ -215,7 +211,6 @@ feature {NONE} -- Status report
 				Void and then not parameters.symbol.is_empty
 		local
 			file: PLAIN_TEXT_FILE
-			output: STRING
 		do
 			start_timer
 			if
@@ -224,9 +219,12 @@ feature {NONE} -- Status report
 			then
 				add_timing_data ("Opening file for " + parameters.symbol)
 				start_timer
-				output := parameters.post_processing_routine.item ([s])
+				converted_result :=
+					parameters.post_processing_routine.item ([s])
 				add_timing_data ("Converting data for " + parameters.symbol)
-				if output = Void or else output.is_empty then
+				if
+					converted_result = Void or else converted_result.is_empty
+				then
 					log_error ("Result for " + parameters.symbol +
 						" is empty - symbol may be invalid.%N")
 				else
@@ -238,7 +236,7 @@ feature {NONE} -- Status report
 						create file.make_open_write (output_file_name (
 							parameters.symbol))
 					end
-					file.put_string (output)
+					file.put_string (converted_result)
 					add_timing_data ("Writing data to " + file.name)
 					file.close
 				end
@@ -247,7 +245,7 @@ feature {NONE} -- Status report
 
 	time_to_eod_update: BOOLEAN is
 			-- Is it time to update end-of-day data according to the
-			-- eod_turnover_time specification?
+			-- `parameters.eod_turnover_time' specification?
 		do
 			if parameters.eod_turnover_time = Void then
 				-- No turnover time specified - always update.
@@ -255,30 +253,6 @@ feature {NONE} -- Status report
 			else
 				Result := create {TIME}.make_now > parameters.eod_turnover_time
 			end
-		end
-
-	current_date_is_later_than_latest_daily_data: BOOLEAN is
-			-- Are the daily data cached for `parameters.symbol' out
-			-- of date with respect to the current date?
-		require
-			alternate_start_date_void: alternate_start_date = Void
-		local
-			d: DATE
-		do
-			d := clone (latest_date_for (parameters.symbol))
-			Result := d /= Void and then d < create {DATE}.make_now
-			if Result then
-				-- Set the alternate start date to the day after the
-				-- latest date in the current data set so that there
-				-- is no overlap between the current data set and
-				-- freshly retrieved data.
-				alternate_start_date := d
-				alternate_start_date.day_add (1)
-			end
-		ensure
-			no_alternate_start_date_if_not_out_of_date: not Result implies
-				alternate_start_date = Void
---!!!!!Change to: Result = (alternate_start_date /= Void)?
 		end
 
 	alternate_start_date: DATE
@@ -316,9 +290,9 @@ feature {NONE} -- Hook routines
 
 	use_day_after_latest_date_as_start_date: BOOLEAN is
 			-- When a retrieval is needed because
-			-- `current_date_is_later_than_latest_daily_data', should the day
-			-- after the latest date of the current data set be used as the
-			-- start date for retrieval so that there is no overlap
+			-- check_if_data_is_out_of_date set data_out_of_date to True,
+			-- should the day after the latest date of the current data set be
+			-- used as the start date for retrieval so that there is no overlap
 			-- between the current data set and freshly retrieved data?
 		once
 			Result := True -- Redefine if needed.
@@ -328,6 +302,62 @@ feature {NONE} -- Hook routines
 			-- Precondition for `latest_date_for'
 		once
 			Result := True -- Redefine if a specific condition is needed.
+		end
+
+feature {NONE} -- Implementation
+
+	perform_http_retrieval is
+		local
+			result_string: STRING
+		do
+			if not http_request.error then
+				http_request.open
+				if not http_request.error then
+					create result_string.make (0)
+					from
+						http_request.initiate_transfer
+					until
+						not http_request.is_packet_pending or
+						http_request.error
+					loop
+						http_request.read
+						result_string.append_string (http_request.last_packet)
+					end
+					if http_request.error then
+						print ("Error occurred initiating transfer: " +
+							http_request.error_text (http_request.error_code) +
+							"%N")
+						retrieval_failed := True
+					end
+				else
+					print ("Error occurred opening http request: " +
+						http_request.error_text (http_request.error_code) +
+						"%N")
+					retrieval_failed := True
+				end
+				http_request.close
+				add_timing_data ("Retrieving data for " + parameters.symbol)
+				convert_and_save_result (result_string)
+			else
+				print ("Error occurred initializing http request: " +
+					http_request.error_text (http_request.error_code) +
+					"%N")
+				retrieval_failed := True
+			end
+		ensure
+			output_file_exists_if_successful: not retrieval_failed and
+				converted_result /= Void and then
+				not converted_result.is_empty implies output_file_exists
+		end
+
+	mark_as_retrieved (symbol: STRING) is
+			-- Ensure `retrieved_symbols @ symbol'
+		do
+			if not retrieved_symbols.has (symbol) then
+				retrieved_symbols.put (True, symbol)
+			end
+		ensure
+			symbol_marked: retrieved_symbols @ symbol
 		end
 
 end

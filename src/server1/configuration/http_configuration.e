@@ -48,18 +48,24 @@ create
 feature {NONE} -- Initialization
 
 	initialize_settings_table is
+		local
+			i: INTEGER
 		do
 			create settings.make (0)
-			settings.extend ("", Start_date_specifier)
-			settings.extend ("", End_date_specifier)
+			settings.extend ("", EOD_start_date_specifier)
+			settings.extend ("", EOD_end_date_specifier)
 			settings.extend ("", Host_specifier)
 			settings.extend ("", Path_specifier)
 			settings.extend ("", Symbol_file_specifier)
 			settings.extend ("", Post_process_command_specifier)
 			settings.extend ("", Output_field_separator_specifier)
-			settings.extend ("", Ignore_weekday_specifier)
+			settings.extend ("", Ignore_day_of_week_specifier)
 			settings.extend ("", EOD_turnover_time_specifier)
-			create ignored_weekdays.make (0)
+			create ignored_days_of_week.make (7)
+			from i := 1 until i > 7 loop
+				ignored_days_of_week.put (False, i)
+				i := i + 1
+			end
 		end
 
 feature -- Access
@@ -68,6 +74,9 @@ feature -- Access
 			-- The processed path component of the URL for the http request,
 			-- with all occurrences of "<symbol>" replaced with `symbol'
 			-- and of the date tokens with their respective values.
+			-- @@Note: This feature uses eod_start_date for end-of-day
+			-- data; if intraday data also needs to be processed, some
+			-- redesign will be needed.
 --!!!!Note: This and replace_tokens can probably be also used for database
 --configuration - that is, move them up to CONFIGURATION_UTILITIES.
 		do
@@ -76,9 +85,9 @@ feature -- Access
 				replace_tokens (cached_path, <<symbol_token, start_day_token,
 					start_month_token, start_year_token, end_day_token,
 					end_month_token, end_year_token>>, <<symbol,
-					start_date.day.out, start_date.month.out,
-					start_date.year.out, end_date.day.out,
-					end_date.month.out, end_date.year.out>>)
+					eod_start_date.day.out, eod_start_date.month.out,
+					eod_start_date.year.out, eod_end_date.day.out,
+					eod_end_date.month.out, eod_end_date.year.out>>)
 			end
 			Result := cached_path
 		end
@@ -92,8 +101,8 @@ feature -- Access
 				start_month_token, start_year_token, end_day_token,
 				end_month_token, end_year_token>>, <<symbol,
 				alt_sd.day.out, alt_sd.month.out,
-				alt_sd.year.out, end_date.day.out,
-				end_date.month.out, end_date.year.out>>)
+				alt_sd.year.out, eod_end_date.day.out,
+				eod_end_date.month.out, eod_end_date.year.out>>)
 		end
 
 	replace_tokens (target: STRING; tokens: ARRAY [STRING];
@@ -119,22 +128,23 @@ feature -- Access
 			end
 		end
 
-	start_date: DATE is
-			-- The start date for the requested data
+	eod_start_date: DATE is
+			-- The end-of-day start date for the requested data
 		do
-			if cached_start_date = Void then
-				cached_start_date := date_from_string (start_date_string)
+			if cached_eod_start_date = Void then
+				cached_eod_start_date := date_from_string (
+					eod_start_date_string)
 			end
-			Result := cached_start_date
+			Result := cached_eod_start_date
 		end
 
-	end_date: DATE is
-			-- The end date for the requested data
+	eod_end_date: DATE is
+			-- The end-of-day end date for the requested data
 		do
-			if cached_end_date = Void then
-				cached_end_date := date_from_string (end_date_string)
+			if cached_eod_end_date = Void then
+				cached_eod_end_date := date_from_string (eod_end_date_string)
 			end
-			Result := cached_end_date
+			Result := cached_eod_end_date
 		end
 
 	eod_turnover_time: TIME is
@@ -185,19 +195,79 @@ feature -- Access
 			end
 		end
 
-	ignored_weekdays: ARRAYED_LIST [INTEGER]
-			-- Days of the week during which data retrieval should not be done
+	ignored_days_of_week: HASH_TABLE [BOOLEAN, INTEGER]
+			-- Days of the week during which data retrieval should not be done,
+			-- where the keys are: 1 for Sunday .. 7 for Saturday
+
+	most_recent_tradable_day_of_the_week: INTEGER is
+			-- Most recent day of the week (1 = Sunday .. 7 = Saturday)
+			-- that is not marked to be ignored
+		local
+			i, today: INTEGER
+		do
+			today := (create {DATE}.make_now).day_of_the_week
+		end
+
+	distance_of_first_tradable_day_from_today: INTEGER is
+			-- Number of days back from today of the latest date before
+			-- today whose day of the week is not marked to be ignored:
+			-- 1 if yesterday is not marked ignored; 2 if the day before
+			-- yesterday is not marked ignored; etc.  Result is -1 if all
+			-- days of the week are marked to be ignored.
+		local
+			i, today, day_of_week: INTEGER
+		do
+			today := (create {DATE}.make_now).day_of_the_week
+			Result := -1
+			from
+				i := 1
+			until
+				i > 7 or Result >= 1
+			loop
+				day_of_week := (today + 7 - i) \\ 7
+				if day_of_week = 0 then day_of_week := 7 end
+				if not (ignored_days_of_week @ day_of_week) then
+					Result := i
+				end
+				i := i + 1
+			end
+print ("distance_of_first...: " + Result.out + "%N")
+		ensure
+			one_to_seven_days: Result /= -1 implies Result >= 1 and
+				Result <= 7
+		end
+
+	latest_tradable_date_before_today: DATE is
+			-- The latest date before today whose day of the week is not
+			-- marked to be ignored:  yesterday if yesterday is not marked
+			-- ignored; otherwise, the day before yesterday if it is not
+			-- marked ignored; etc.  Result is Void if all days of the week
+			-- are marked ignored.
+		local
+			days_back: INTEGER
+		do
+			days_back := -distance_of_first_tradable_day_from_today
+			if days_back /= 1 then
+				create Result.make_now
+				Result.day_add (days_back)
+			end
+print ("latest_tradable_date_before_today: " + Result.out + "%N")
+		ensure
+			void_if_all_days_ignored:
+				distance_of_first_tradable_day_from_today = -1 implies
+				Result = Void
+		end
 
 feature -- Access
 
-	start_date_string: STRING is
+	eod_start_date_string: STRING is
 		do
-			Result := settings @ Start_date_specifier
+			Result := settings @ EOD_start_date_specifier
 		end
 
-	end_date_string: STRING is
+	eod_end_date_string: STRING is
 		do
-			Result := settings @ End_date_specifier
+			Result := settings @ EOD_end_date_specifier
 		end
 
 	host: STRING is
@@ -240,12 +310,10 @@ feature -- Status report
 
 	ignore_today: BOOLEAN is
 			-- Should data retrieval not be done today becuase it is
-			-- specified as a day of the week to ignore?
-		local
-			today: DATE
+			-- specified as a non-trading day?
 		do
-			create today.make_now
-			Result := ignored_weekdays.has (today.day_of_the_week)
+			Result := ignored_days_of_week @ (
+				(create {DATE}.make_now).day_of_the_week)
 		end
 
 feature -- Element change
@@ -269,8 +337,8 @@ feature -- Basic operations
 			-- from the current date, which may have changed since the
 			-- last calculation.
 		do
-			cached_start_date := Void
-			cached_end_date := Void
+			cached_eod_start_date := Void
+			cached_eod_end_date := Void
 			cached_path := Void -- Force `path' to use new dates.
 		end
 
@@ -295,7 +363,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 	use_customized_setting (key_token, value_token: STRING): BOOLEAN is
 		do
 			-- Default to always true - redefine if needed.
-			Result := key_token.is_equal (Ignore_weekday_specifier)
+			Result := key_token.is_equal (Ignore_day_of_week_specifier)
 		end
 
 	do_customized_setting (key_token, value_token: STRING) is
@@ -303,9 +371,9 @@ feature {NONE} -- Implementation - Hook routine implementations
 			-- Default to null procedure - redefine if needed.
 			if
 				key_token /= Void and then key_token.is_equal (
-				Ignore_weekday_specifier)
+				Ignore_day_of_week_specifier)
 			then
-				add_ignored_weekday (value_token)
+				add_ignored_day_of_week (value_token)
 			end
 		end
 
@@ -349,7 +417,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	add_ignored_weekday (wday: STRING) is
+	add_ignored_day_of_week (wday: STRING) is
 		local
 			d: STRING
 			time_util: expanded DATE_TIME_SERVICES
@@ -360,18 +428,18 @@ feature {NONE} -- Implementation
 				d := wday.substring (1, 3)
 				d.to_lower
 				d.put ((d @ 1).upper, 1)
-				if time_util.weekday_table.has (d) then
-					ignored_weekdays.extend (
-						time_util.weekday_from_3_letter_abbreviation (d))
+				if time_util.day_of_week_table.has (d) then
+					ignored_days_of_week.replace (True,
+						time_util.day_of_week_from_3_letter_abbreviation (d))
 				end
 			end
 		end
 
 feature {NONE} -- Implementation - attributes
 
-	cached_start_date: DATE
+	cached_eod_start_date: DATE
 
-	cached_end_date: DATE
+	cached_eod_end_date: DATE
 
 	cached_path: STRING
 

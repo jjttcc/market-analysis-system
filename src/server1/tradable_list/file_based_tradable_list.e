@@ -104,9 +104,6 @@ feature {NONE} -- Implementation
 
 	current_input_file: INPUT_FILE
 
-timing_on: BOOLEAN is once Result := True end
-		-- !!!!Needs to become a settable attribute.
-
 invariant
 
 	file_names_correspond_to_symbols:

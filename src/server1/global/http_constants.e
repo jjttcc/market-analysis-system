@@ -19,11 +19,17 @@ inherit
 
 feature -- Access
 
-	Start_date_specifier: STRING is "start_date"
-			-- Specifier token for the 'start-date' setting
+	EOD_start_date_specifier: STRING is "eod_start_date"
+			-- Specifier token for the end-of-day-data 'start-date' setting
 
-	End_date_specifier: STRING is "end_date"
-			-- Specifier token for the 'end-date' setting
+	EOD_end_date_specifier: STRING is "eod_end_date"
+			-- Specifier token for the end-of-day-data 'end-date' setting
+
+	Intraday_start_date_specifier: STRING is "intraday_start_date"
+			-- Specifier token for the intraday-data 'start-date' setting
+
+	Intraday_end_date_specifier: STRING is "intraday_end_date"
+			-- Specifier token for the intraday-data 'end-date' setting
 
 	Host_specifier: STRING is "host"
 			-- Specifier token for the host component of the http address
@@ -45,7 +51,7 @@ feature -- Access
 	Output_field_separator_specifier: STRING is "output_field_separator"
 			-- Specifier token for the output-field-separator setting
 
-	Ignore_weekday_specifier: STRING is "ignore_weekday"
-			-- Specifier token for "ignore-weekday" settings
+	Ignore_day_of_week_specifier: STRING is "ignore_day_of_week"
+			-- Specifier token for "ignore-day_of_week" settings
 
 end

@@ -17,7 +17,7 @@ class HTTP_DATA_RETRIEVER inherit
 			{NONE} all
 		end
 
-	EXCEPTIONS
+	EXCEPTION_SERVICES
 		export
 			{NONE} all
 		end
@@ -32,7 +32,11 @@ feature {NONE} -- Initialization
 		do
 			initialize
 			initialize_symbols
-			execute
+			if symbols /= Void and then not symbols.is_empty then
+				execute
+			end
+		rescue
+			handle_exception ("main routine")
 		end
 
 	initialize_symbols is
@@ -74,6 +78,22 @@ feature {NONE} -- Implementation
 				symbols.forth
 			end
 			report_timing
+		end
+
+	data_retrieval_needed: BOOLEAN is
+			-- Does up-to-date data need to be retrieved for
+			-- `parameters.symbol', based on the existence of the
+			-- associated data cache file, the configuration settings,
+			-- and the current date?
+		do
+			--@@NOTE: This algorithm is for EOD data.  If the ability to
+			--handle intraday data is added, a separate algorithm will
+			--be needed for that.
+			Result := not output_file_exists
+			if not Result then
+				check_if_data_is_out_of_date
+				Result := data_out_of_date
+			end
 		end
 
 end
