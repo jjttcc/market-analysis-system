@@ -10,6 +10,22 @@ class MARKET_TUPLE_DATA_SCANNER inherit
 			product, tuple_maker, open_tuple, close_tuple
 		end
 
+creation
+
+	make
+
+feature -- Initialization
+
+	make (in_file: like input_file; tm: like tuple_maker;
+			vs: like value_setters; field_sep, record_sep: STRING) is
+		do
+			input_file := in_file
+			tuple_maker := tm
+			value_setters := vs
+			field_separator := field_sep
+			record_separator := record_sep
+		end
+
 feature -- Access
 
 	product: SIMPLE_FUNCTION [MARKET_TUPLE]
