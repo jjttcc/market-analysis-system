@@ -37,40 +37,28 @@ public class Connection implements NetworkProtocol, Constants {
 	// Precondition: ! logged_in()
 	// Postcondition: logged_in() && session_state() != null
 	public void login() throws IOException {
-System.out.println("Connection.login A");
 		String s = "";
 		Configuration conf = Configuration.instance();
-System.out.println("Connection.login B");
 
 		connect();
-System.out.println("Connection.login C");
 		send_msg(Login_request, conf.session_settings(), 0);
 		try {
-System.out.println("Connection.login D");
 			s = receive_msg().toString();
-System.out.println("Connection.login E");
 			if (error_occurred()) {
-System.out.println("Connection.login F");
 				// Failure of login request is a fatal error.
 				throw new IOException (request_result.toString());
 			}
 			_session_state = new SessionState(s);
-System.out.println("Connection.login G");
 		} catch (Exception e) {
-System.out.println("Connection.login H");
 			throw new IOException("Attempt to login to server " +
 				"failed: " + e);
 		}
 		try {
-System.out.println("Connection.login I");
 			close_connection();
-System.out.println("Connection.login J");
 		} catch (Exception e) {
-System.out.println("Connection.login K");
 			throw new IOException("Close connection failed");
 		}
 		_logged_in = true;
-System.out.println("Connection.login L");
 	}
 
 	// Send a logout request to the server to end the current session.
@@ -113,26 +101,18 @@ System.out.println("Connection.login L");
 		char c;
 		int i;
 
-System.out.println("Connection.receive_msg A");
 		in = new_reader();
-System.out.println("Connection.receive_msg B");
 		scanner.setReader(in);
-System.out.println("Connection.receive_msg C");
 		scanner.getInt();
-System.out.println("Connection.receive_msg D");
 		last_rec_msgID = scanner.lastInt();
-System.out.println("Connection.receive_msg E");
 		if (! valid_server_response(last_rec_msgID)) {
 			System.err.println("Fatal error: received invalid " +
 				"message ID from server: " + last_rec_msgID);
-System.out.println("Connection.receive_msg F");
 			System.exit(-1);
 		} else {
-System.out.println("Connection.receive_msg G");
 			request_result = new StringBuffer();
 		}
 		i = 0;
-System.out.println("Connection.receive_msg H");
 		do {
 			c = (char) in.read();
 			if (c == Eom_char) break;
@@ -140,33 +120,24 @@ System.out.println("Connection.receive_msg H");
 			++i;
 		} while (true);
 
-System.out.println("Connection.receive_msg I");
 		if (last_rec_msgID == Error) {
-System.out.println("Connection.receive_msg J");
 			System.err.println(request_result);
 			// This error means there is a problem with the protocol of the
 			// last request passed to the server.  Since this is a coding
 			// error (probably in the client), it is treated as fatal.
 			System.exit(-1);
 		}
-System.out.println("Connection.receive_msg K");
 //System.out.println("'"  + request_result.toString() + "'");
 		return request_result;
 	}
 
 	// Send the `msgID', the session key, and `msg' - with field delimiters.
 	void send_msg(int msgID, String msg, int session_key) {
-System.out.println("Connection.send_msg A");
 		out.print(msgID);
-System.out.println("Connection.send_msg B");
 		out.print(Input_field_separator + session_key);
-System.out.println("Connection.send_msg C");
 		out.print(Input_field_separator + msg);
-System.out.println("Connection.send_msg D");
 		out.print(Eom);
-System.out.println("Connection.send_msg E");
 		out.flush();
-System.out.println("Connection.send_msg F");
 	}
 
 	// Precondition: out != null && io_connection != null
