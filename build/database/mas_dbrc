@@ -11,6 +11,7 @@ password
 stock symbol query	select symbol from watch_list where category = 'all' order by symbol
 # Query for derivatives symbols
 derivative symbol query	select symbol from derivative_information order by symbol
+
 # Query for stock splits
 # Note: query result fields must be: date, symbol, split-value; and the
 # results must be sorted by date, ascending
@@ -19,7 +20,12 @@ stock split query	select date, symbol, value from stock_split order by date
 # <symbol> indicates where to plug in the actual stock symbol and must
 # occur somewhere in the query string.
 stock name query	select name from stock_information where symbol = <symbol>
-# field names for daily stock data table
+# Query for derivative instrument name
+# <symbol> indicates where to plug in the actual stock symbol and must
+# occur somewhere in the query string.
+derivative name query	select name from derivative_information where symbol = <symbol>
+
+# Field names for daily stock data table
 # NOTE: All specified fields must be defined in the database as "not null".
 daily stock symbol field	symbol
 daily stock date field	date
@@ -28,6 +34,7 @@ daily stock high field	high_price
 daily stock low field	low_price
 daily stock close field	close_price
 daily stock volume field	volume
+# Field names for intraday stock data table
 # Comment-out the following intraday field specifications if you don't
 # have intraday data.
 intraday stock symbol field	symbol
@@ -38,13 +45,46 @@ intraday stock high field	high_price
 intraday stock low field	low_price
 intraday stock close field	close_price
 intraday stock volume field	volume
-# Specify tail of query (part that occurs after the where clause) for
+# Field names for daily derivative instruments data table
+daily derivative symbol field	symbol
+daily derivative date field	date
+daily derivative open field	open_price
+daily derivative high field	high_price
+daily derivative low field	low_price
+daily derivative close field	close_price
+daily derivative volume field	volume
+daily derivative open_interest field	open_interest
+# Field names for intraday stock data table
+# Comment-out the following intraday field specifications if you don't
+# have intraday data.
+intraday derivative symbol field	symbol
+intraday derivative date field	date
+intraday derivative time field	time
+intraday derivative open field	open_price
+intraday derivative high field	high_price
+intraday derivative low field	low_price
+intraday derivative close field	close_price
+intraday derivative volume field	volume
+intraday derivative open_interest field	open_interest
+
+# Tail of query (part that occurs after the where clause) for
 # daily stock data.
 daily stock query tail	and date > 20000301 order by date
-# Specify tail of query (part that occurs after the where clause) for
+# Tail of query (part that occurs after the where clause) for
 # intraday stock data.
 intraday stock query tail	order by date, time
+# Tail of query (part that occurs after the where clause) for
+# daily derivatives data.
+daily derivative query tail	and date > 20000301 order by date
+# Tail of query (part that occurs after the where clause) for
+# intraday stock data.
+intraday derivative query tail	order by date, time
+
 # Name of table for daily stock data
 daily stock table	daily_stock_data
 # Name of table for intraday stock data (Only specify if table exists.)
 intraday stock table	intraday_stock_data
+# Name of table for daily derivative data (Only specify if table exists.)
+daily derivative table	daily_derivative_instrument_data
+# Name of table for intraday derivative data (Only specify if table exists.)
+intraday derivative table	intraday_derivative_instrument_data
