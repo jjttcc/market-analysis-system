@@ -20,48 +20,55 @@ class TEST_USER_INTERFACE inherit
 			all
 		end
 
-feature -- Access
-
-	test_line is
-		local
-			indicator: MARKET_FUNCTION
-			l: MARKET_TUPLE_LIST [MARKET_TUPLE]
-			i: INTEGER
-		do
-			indicator := indicator_selection
-			if not indicator.processed then indicator.process end
-			l := indicator.output
-			print_list (<<"value at ", 1, ": ", (l @ 1).value, "%N">>)
-			from
-				i := 2
-			until
-				i = 50 or i = l.count
-			loop
-				print_list (<<"value at ", i, ": ", (l @ i).value,
-							", slope at ", i, ": ", l.slope_at (i), "%N">>)
-				i := i + 1
-			end
-			print_list (<<"value at ", i, ": ", (l @ i).value, "%N">>)
+	GLOBAL_APPLICATION
+		export {NONE}
+			all
 		end
 
-	tradable: TRADABLE [BASIC_MARKET_TUPLE]
+feature -- Access
+
+	event_coordinator: EVENT_COORDINATOR
+
+	factory_builder: FACTORY_BUILDER
+	
+	market_list: TRADABLE_LIST
+
+	input_file_names: LIST [STRING]
+
+	current_tradable: TRADABLE [BASIC_MARKET_TUPLE] is
+		do
+			Result := market_list.item
+		end
 
 feature -- Status setting
 
-	set_tradable (arg: TRADABLE [BASIC_MARKET_TUPLE]) is
-			-- Set tradable to `arg'.
+	set_factory_builder (arg: FACTORY_BUILDER) is
+			-- Set factory_builder to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			factory_builder := arg
+		ensure
+			factory_builder_set: factory_builder = arg and
+									factory_builder /= Void
+		end
+
+	set_event_coordinator (arg: EVENT_COORDINATOR) is
+			-- Set event_coordinator to `arg'.
 		require
 			arg /= Void
 		do
-			tradable := arg
+			event_coordinator := arg
 		ensure
-			tradable_set: tradable = arg and tradable /= Void
+			event_coordinator_set: event_coordinator = arg and
+									event_coordinator /= Void
 		end
 
 feature -- Basic operations
 
 	execute is
 		do
+			initialize
 			tradable_menu
 		end
 
@@ -76,19 +83,22 @@ feature {NONE}
 			until
 				end_program
 			loop
-				print_list (<<"Select action:  ", tradable.name,
-							"View data (v) Edit parameters (e) Exit (x) %
-							%Memory usage (m) ">>)
+				print_list (<<"Select action:  ", "Select market (s) ",
+							"View data (v) Edit parameters (e) ",
+							"Run market analysis (r) %N",
+							"Memory usage (m) Exit (x) ">>)
 				inspect
 					selected_character
+				when 's', 'S' then
+					select_market
 				when 'v', 'V' then
 					view_menu
 				when 'e', 'E' then
 					edit_menu
 				when 'm', 'M' then
 					display_memory_values
-				when 'l', 'L' then
-					test_line
+				when 'r', 'R' then
+					event_coordinator.execute
 				when 'x', 'X' then
 					end_program := true
 				else
@@ -152,15 +162,15 @@ feature {NONE}
 			until
 				done or end_program
 			loop
-				print ("Select action:%N%
-						%     View market data (m) View an indicator (i)%N%
-						%     View composite data (c) Exit (x) Previous (-) ")
+				print_list (<<"Select action for ", current_tradable.name,
+					":%N     View market data (m) View an indicator (i)%N%
+					%     View composite data (c) Exit (x) Previous (-) ">>)
 				inspect
 					selected_character
 				when 'm', 'M' then
-					print_tuples (tradable.data)
+					print_tuples (current_tradable.data)
 				when 'c', 'C' then
-					print_composite_lists (tradable)
+					print_composite_lists (current_tradable)
 				when 'i', 'I' then
 					print ("Select indicator to view%N")
 					indicator := indicator_selection
@@ -218,15 +228,48 @@ feature {NONE}
 			end
 		end
 
+	select_market is
+		local
+			i: INTEGER
+			fname: STRING
+		do
+			from
+			until
+				fname /= Void
+			loop
+				from
+					i := 1
+					input_file_names.start
+				until
+					input_file_names.after
+				loop
+					print_list (<<i, ") ", input_file_names.item, "%N">>)
+					input_file_names.forth
+					i := i + 1
+				end
+				read_integer
+				if
+					last_integer <= 0 or
+						last_integer > input_file_names.count
+				then
+					print_list (<<"Selection must be between 1 and ",
+								input_file_names.count, "%N">>)
+				else
+					fname := input_file_names @ last_integer
+				end
+			end
+			market_list.search_by_file_name (fname)
+		end
+
 	indicator_selection: MARKET_FUNCTION is
 		require
-			not_trdble_empty: not tradable.indicators.empty
+			not_trdble_empty: not current_tradable.indicators.empty
 		local
 			i: INTEGER
 			indicators: LIST [MARKET_FUNCTION]
 		do
 			from
-				indicators := tradable.indicators
+				indicators := current_tradable.indicators
 			until
 				Result /= Void
 			loop
@@ -284,6 +327,14 @@ feature {NONE}
 					Result := laststring @ 1
 				end
 			end
+		end
+
+	initialize is
+		do
+			event_coordinator := factory_builder.event_coordinator
+			market_list := factory_builder.market_list
+			input_file_names := factory_builder.input_file_names
+			event_coordinator := factory_builder.event_coordinator
 		end
 
 feature {NONE}

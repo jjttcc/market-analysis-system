@@ -12,6 +12,14 @@ class FINANCE_ROOT inherit
 		end
 
 	GLOBAL_SERVICES
+		export {NONE}
+			all
+		end
+
+	GLOBAL_APPLICATION
+		export {NONE}
+			all
+		end
 
 creation
 
@@ -21,9 +29,6 @@ feature -- Initialization
 
 	make is
 		local
-			tradable: TRADABLE [BASIC_MARKET_TUPLE]
-			tradable_builder: TRADABLE_FACTORY
-			function_builder: FUNCTION_BUILDER
 			ui: TEST_USER_INTERFACE
 		do
 			!!ui
@@ -32,28 +37,7 @@ feature -- Initialization
 			print (", "); print (current_time); print ("%N")
 			test_bool_operators
 			!!factory_builder.make (default_input_file_name)
-			tradable_builder :=
-				factory_builder.tradable_factory
-			print ("Loading data file ")
-			print (factory_builder.input_file.name)
-			if tradable_builder.no_open then
-				print (" with no open field ...%N")
-			else
-				print (" with open field ...%N")
-			end
-			tradable_builder.execute
-			tradable := tradable_builder.product
-			if tradable_builder.error_occurred then
-				print_errors (tradable, tradable_builder.error_list)
-			end
-			function_builder :=
-				factory_builder.function_list_factory (tradable)
-			print ("Building indicators ...%N")
-			function_builder.execute
-			add_indicators (tradable, function_builder.product)
-			--!!Temporary hack until global function library is implemented:
-			internal_function_library := function_builder.product
-			ui.set_tradable (tradable)
+			ui.set_factory_builder (factory_builder)
 			ui.execute
 		end
 
@@ -178,58 +162,9 @@ feature -- Initialization
 			print ("Boolean operators test passed%N")
 		end
 
-feature {NONE} -- Utility
-
-	add_indicators (t: TRADABLE [BASIC_MARKET_TUPLE];
-					flst: LIST [MARKET_FUNCTION]) is
-			-- Add `flst' to `t'.
-		require
-			not_void: t /= Void and flst /= Void
-		do
-			from
-				flst.start
-			until
-				flst.after
-			loop
-				t.add_indicator (flst.item)
-				flst.forth
-			end
-		end
-
-	print_errors (t: TRADABLE [BASIC_MARKET_TUPLE]; l: LIST [STRING]) is
-		do
-			if l.count > 1 then
-				print ("Errors occurred while processing ")
-			else
-				print ("Error occurred while processing ")
-			end
-			print (t.symbol); print (":%N")
-			from
-				l.start
-			until
-				l.after
-			loop
-				print (l.item)
-				print ("%N")
-				l.forth
-			end
-		end
-
 feature {NONE}
-
-	current_date: DATE is
-		do
-			!!Result.make_now
-		end
-
-	current_time: TIME is
-		do
-			!!Result.make_now
-		end
 
 	factory_builder: FACTORY_BUILDER
 			-- Can be redefined by descendants to specialize factory building.
-
-	default_input_file_name: STRING is "/tmp/tatest"
 
 end -- FINANCE_ROOT
