@@ -1,6 +1,5 @@
 indexing
-	description:
-		"An n-record command that finds the highest value in the %
+	description: "N-record commands that find the highest value in the %
 		%last n trading periods"
 	author: "Jim Cochrane"
 	date: "$Date$";

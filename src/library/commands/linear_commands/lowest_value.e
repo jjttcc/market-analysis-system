@@ -1,6 +1,5 @@
 indexing
-	description:
-		"An n-record command that finds the lowest value in the last %
+	description: "N-record commands that find the lowest value in the last %
 		%n trading periods"
 	author: "Jim Cochrane"
 	date: "$Date$";

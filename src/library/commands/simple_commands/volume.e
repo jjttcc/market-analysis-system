@@ -1,6 +1,5 @@
 indexing
-	description:
-		"A basic numeric command that produces the volume for the current %
+	description: "Numeric commands that produce the volume for the current %
 		%trading period."
 	note: "An instance of this class can be safely shared within a command %
 		%tree."

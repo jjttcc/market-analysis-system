@@ -1,6 +1,6 @@
 indexing
 	description:
-		"Calculation based on the n-value from an n-record structure";
+		"Calculations based on the n-value from an n-record structure";
 	note: "The calculation is done by `make' and by `initialize'.";
 	author: "Jim Cochrane"
 	date: "$Date$";

@@ -1,5 +1,5 @@
 indexing
-	description: "Sum of n sequential elements";
+	description: "Commands that sum n sequential elements"
 	note: "If target.count < n, all of target's elements will be summed and %
 		%target.exhausted will be true."
 	author: "Jim Cochrane"

@@ -1,6 +1,5 @@
 indexing
-	description:
-		"A result command that is also an n-record structure"
+	description: "Result commands that are also n-record structures"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

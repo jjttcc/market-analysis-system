@@ -1,6 +1,5 @@
 indexing
-	description:
-		"A command that retrieves the value of the current item of %
+	description: "Commands that retrieve the value of the current item of %
 		%a linear structure of market tuples"
 	author: "Jim Cochrane"
 	date: "$Date$";

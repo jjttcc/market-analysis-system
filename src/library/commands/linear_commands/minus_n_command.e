@@ -1,6 +1,5 @@
 indexing
-	description:
-		"An n-record command that operates on a target list by setting %
+	description: "N-record commands that operate on a target list by setting %
 		%the target's cursor n positions to the left, operating on the %
 		%target based on this cursor position, and then restoring the %
 		%target to the original cursor position.  The operation performed %

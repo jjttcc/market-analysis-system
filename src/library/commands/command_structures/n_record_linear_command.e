@@ -1,6 +1,5 @@
 indexing
-	description:
-		"A linear command that processes n market tuples at a time"
+	description: "Linear commands that process n market tuples at a time"
 	note:
 		"By default, the execute routine will process the last n trading %
 		%periods from the current period (that is, from the current %

@@ -1,7 +1,6 @@
 indexing
-	description:
-		"A command that simply gives as its `value', the value of its %
-		%`n' feature";
+	description: "Command that simply give as their `value', the value of %
+		%their `n' feature";
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

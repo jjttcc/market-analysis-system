@@ -1,6 +1,5 @@
 indexing
-	description:
-		"A linear offset command whose offset is a settable attribute"
+	description: "Linear offset commands whose offset is a settable attribute"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

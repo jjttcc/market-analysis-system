@@ -1,7 +1,6 @@
 indexing
-	description:
-		"A unary operator that uses its operand to process the current %
-		%item of a linear structure of market tuples"
+	description: "Unary operators that use their operand to process the %
+		%current item of a linear structure of market tuples"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

@@ -1,6 +1,5 @@
 indexing
-	description:
-		"A numeric command that evaluates to a constant value"
+	description: "Numeric commands that evaluate to a constant value"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

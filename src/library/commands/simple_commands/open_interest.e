@@ -1,6 +1,5 @@
 indexing
-	description:
-		"A basic numeric command that produces the open interest for the %
+	description: "Numeric commands that produce the open interest for the %
 		%current trading period."
 	note: "An instance of this class can be safely shared within a command %
 		%tree."

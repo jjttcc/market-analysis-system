@@ -1,5 +1,5 @@
 indexing
-	description: "So-called moving average exponential"
+	description: "So-called moving average exponentials"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

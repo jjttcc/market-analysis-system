@@ -1,6 +1,5 @@
 indexing
-	description:
-		"N-based calculation that takes an operand"
+	description: "N-based calculations that take an operand"
 	detailed_description: "The operand is only executed on initialization %
 		%and it's execute routine must not expect a valid argument."
 	author: "Jim Cochrane"
