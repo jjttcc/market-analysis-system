@@ -33,14 +33,13 @@ open_int_flag   -> "oi"
 ind_data        -> { ind_tuple "\n" ... }
 ind_tuple       -> datetime "\t" ta_real
 symbol_list     -> { symbol "\n" ... }
-ind_list        -> { ind_specifier "\n" ... }
+ind_list        -> { ind_name "\n" ... }
 event_list      -> { event_specifier "\n" ... }
 event_data      -> { event_tuple "\n" ... }
 event_tuple     -> datetime "\t" eventID "\t" event_type
 event_type      -> "b" | "s" | "n" | "o"
 trad_per_types  -> { trad_per_type "\n" ... }
 event_id_list   -> { eventID "\t" ... }+
-ind_specifier   -> ind_name "\t" indID
 event_specifier -> event_name "\t" eventID
 mkt_fields      -> { ta_real "\t" ... }+ [ "\t" volume [ "\t" open_interest ] ]
 trad_per_type   -> "daily" | "weekly" | "monthly" | "quarterly" | "yearly" |
@@ -97,6 +96,12 @@ ind_list_req:       Request for all technical indicators available for the
 ind_data_req:       Request for the data resulting from the application of
                     the specified technical indicator to the specified
                     tradable with the specified trading-period type
+                    NOTE: The 'indID' part of this request is obtained from
+                    the order in which the 'ind_list' is received from the
+                    server from a corresponding 'ind_list_req'.  For
+                    example, if the 5th indicator in the 'ind_list'
+                    response is "Momentum", the 'indID' for requesting the
+                    Momentum indicator from the server is 5.
 
 trad_pertyp_req:    Request for all trading-period types available for the
                     specified tradable
@@ -116,10 +121,10 @@ logout_req:         Request to end the current login session
 Expected Responses for Client-Requests:
 
 login_req:          login_response
-mkt_data_req:       mkt_data
-ind_data_req:       ind_data
 symbol_list_req:    symbol_list
+mkt_data_req:       mkt_data
 ind_list_req:       ind_list
+ind_data_req:       ind_data
 trad_pertyp_req:    trad_per_types
 event_list_req:     event_list
 event_data_req:     event_data
