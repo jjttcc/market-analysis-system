@@ -14,10 +14,9 @@ deferred class LINEAR_COMMAND inherit
 		end
 
 	LINEAR_ANALYZER
-		export {NONE}
-			all
-				{FACTORY}
-			set_target
+		export
+			{NONE} all
+			{COMMAND_EDITOR} set_target
 		end
 
 feature -- Initialization

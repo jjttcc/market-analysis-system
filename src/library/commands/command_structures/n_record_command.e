@@ -8,13 +8,16 @@ indexing
 deferred class N_RECORD_COMMAND inherit
 
 	RESULT_COMMAND [REAL]
-		export {MARKET_FUNCTION}
-			initialize
+		export
+			{MARKET_FUNCTION} initialize
 		redefine
 			initialize
 		end
 
 	N_RECORD_STRUCTURE
+		export
+			{COMMAND_EDITOR} set_n
+		end
 
 feature -- Initialization
 

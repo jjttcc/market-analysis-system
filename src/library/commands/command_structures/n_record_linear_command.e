@@ -1,6 +1,6 @@
 indexing
 	description:
-		"A linear command that processes n market tuples"
+		"A linear command that processes n market tuples at a time"
 	note:
 		"By default, the execute routine will process the last n trading %
 		%periods from the current period (that is, from the current %
@@ -29,6 +29,10 @@ class N_RECORD_LINEAR_COMMAND inherit
 		redefine
 			forth, action, start, exhausted, invariant_value, target
 		end
+
+creation {NONE} -- Hidden creation routine to prevent instantiation
+
+	make
 
 feature -- Initialization
 
