@@ -84,7 +84,7 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 			-- If the run-time type is a complex function, set the innermost
 			-- input attribute to `in', else do nothing.
 		require
-			not_void: in /= Void
+			not_void: in /= Void and in.trading_period_type /= Void
 		do
 		ensure
 			output_empty_if_complex_and_not_processed:
@@ -101,7 +101,6 @@ feature {MARKET_FUNCTION}
 invariant
 
 	output_not_void: output /= Void
-	trading_period_type_not_void: trading_period_type /= Void
 	parameters_not_void: parameters /= Void
 	date_time_not_void_when_processed:
 		processed implies processed_date_time /= Void
