@@ -47,15 +47,18 @@ feature -- Initialization
 
 feature {FACTORY} -- Initialization
 
-	initialize (arg: N_RECORD_STRUCTURE) is
+	initialize (arg: ANY) is
+		local
+			ns: N_RECORD_STRUCTURE
 		do
 			uo_initialize (arg)
 			-- uo_initialize must be called before set_n, since set_n calls
 			-- calculate, which requires the operand to be initialized to
 			-- the new value.
-			set_n (arg.n)
-		ensure then
-			new_n: n = arg.n
+			ns ?= arg
+			if ns /= Void then
+				set_n (ns.n)
+			end
 		end
 
 feature {NONE} -- Implmentation

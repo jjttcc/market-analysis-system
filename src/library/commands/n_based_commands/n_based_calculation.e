@@ -26,11 +26,14 @@ feature {FACTORY} -- Initialization
 			value = calculate
 		end
 
-	initialize (arg: N_RECORD_STRUCTURE) is
+	initialize (arg: ANY) is
+		local
+			nstruct: N_RECORD_STRUCTURE
 		do
-			set_n (arg.n)
-		ensure then
-			new_n: n = arg.n
+			nstruct ?= arg
+			if nstruct /= Void then
+				set_n (nstruct.n)
+			end
 		end
 
 feature -- Status report

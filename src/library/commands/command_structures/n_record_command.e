@@ -34,11 +34,15 @@ feature -- Initialization
 
 feature {MARKET_FUNCTION}
 
-	initialize (arg: N_RECORD_STRUCTURE) is
+	initialize (arg: ANY) is
+			-- If `arg' conforms to N_RECORD_STRUCTURE, set `n' to arg.n.
+		local
+			ns: N_RECORD_STRUCTURE
 		do
-			set_n (arg.n)
-		ensure then
-			n_set_to_argn: n = arg.n
+			ns ?= arg
+			if ns /= Void then
+				set_n (ns.n)
+			end
 		end
 
 end -- class N_RECORD_COMMAND
