@@ -22,6 +22,10 @@ public interface NetworkProtocol
 	int OK = 102;
 	int Invalid_symbol = 103;
 
+	// Server response strings
+	String No_open_session_state = "no_open";
+	String Open_interest_flag = "oi";
+
 	// Subtokens
 	String Start_date = "start_date";
 	String End_date = "end_date";
