@@ -46,6 +46,9 @@ feature -- Basic operations
 			else
 				target.go_i_th (1)
 			end
+			check
+				target_not_off: not target.off
+			end
 			operate (arg)
 			target.go_i_th (old_i) -- Restore cursor.
 		end
