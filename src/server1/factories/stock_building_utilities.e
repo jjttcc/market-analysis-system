@@ -23,30 +23,6 @@ feature {TRADABLE_FACTORY} -- Implementation
 			create {VOLUME_TUPLE_FACTORY} Result
 		end
 
-	index_vector (intraday: BOOLEAN):
-		ARRAY [INTEGER] is
-			-- Index vector for setting up value setters for a STOCK (no
-			-- open interest field)
-		do
-			if not command_line_options.opening_price then
-				if intraday then
-					Result := << Date_index, Time_index, High_index,
-						Low_index, CLose_index, Volume_index >>
-				else
-					Result := << Date_index, High_index, Low_index,
-						CLose_index, Volume_index >>
-				end
-			else
-				if intraday then
-					Result := << Date_index, Time_index, Open_index,
-						High_index, Low_index, Close_index, Volume_index >>
-				else
-					Result := << Date_index, Open_index, High_index,
-						Low_index, Close_index, Volume_index >>
-				end
-			end
-		end
-
 	stock_splits: STOCK_SPLITS is
 		local
 			constants: expanded APPLICATION_CONSTANTS
@@ -88,5 +64,9 @@ feature {TRADABLE_FACTORY} -- Implementation
 				Result := file_name_with_app_directory (stock_split_file_name)
 			end
 		end
+
+feature {NONE} -- Hook routine implementations
+
+	has_open_interest: BOOLEAN is False
 
 end

@@ -44,9 +44,44 @@ feature {TRADABLE_FACTORY} -- Access
 
 	index_vector (intraday: BOOLEAN): ARRAY [INTEGER] is
 			-- Index vector for setting up value setters for a TRADABLE
-		deferred
+		local
+			vector: ARRAYED_LIST [INTEGER]
+		do
+			create vector.make (0)
+			vector.extend (Date_index)
+			if intraday then
+				vector.extend (Time_index)
+			end
+			if command_line_options.opening_price then
+				vector.extend (Open_index)
+			end
+			if not command_line_options.no_high then
+				vector.extend (High_index)
+			end
+			if not command_line_options.no_low then
+				vector.extend (Low_index)
+			end
+			vector.extend (Close_index)
+			if not command_line_options.no_volume then
+				vector.extend (Volume_index)
+			end
+			if has_open_interest then
+				vector.extend (OI_index)
+			end
+			Result := vector
 		ensure
 			at_least_one: Result /= Void and then Result.count > 0
+			date_is_first: Result @ 1 = Date_index
+			time_is_second: intraday implies Result @ 2 = Time_index
+			open_interest_is_second: has_open_interest implies
+				Result.item (Result.upper) = OI_index
+		end
+
+feature {NONE} -- Hook routines
+
+	has_open_interest: BOOLEAN is
+			-- Does the data entity being built have an open interest field?
+		deferred
 		end
 
 end
