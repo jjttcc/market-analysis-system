@@ -35,7 +35,9 @@ feature -- Basic operations
 			then
 				-- hfile.make_open_read failed because the file does not
 				-- exist.  This is not really an error, so continue.
-				!!event_history.make
+				check
+					eh_created: event_history /= Void
+				end
 				event_history.compare_objects
 			elseif hfile_name /= Void then
 				!!hfile.make_open_read (hfile_name)
