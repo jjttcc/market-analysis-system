@@ -28,6 +28,15 @@ files, such as user-defined indicators, the stock split file, and the
 database configuration file.  If this variable is not set, MAS will look in
 the current directory for this information.
 
+Also, in order to use macl, the MAS command-line client, you will need to
+have Python installed and will need to change the PYTHONPATH environment
+varialbe to include the directory where the python library files used by the
+macl script are stored.  If you performed a normal installation, these
+files should reside in a sub-directory named "python", under the "lib"
+directory in which you chose to install the library files.  For example,
+if your home directory is /home/joe and you chose to put the lib directory
+under your home directory, the python directory will be /home/joe/lib/python.
+
 MAS uses the following files to store market analysis objects such as
 technical indicators:
 

@@ -9,25 +9,17 @@ the intensive math processing it does may make it sluggish on older hardware.
 INSTALLATION ON LINUX SYSTEMS
 
 To install the server executables and the client (Java) class files on
-a Linux system, first edit the install_config file in this directory
-(that is, the same directory where this INSTALL file resides).  In the
-line that begins "bin:", change the second field to the absolute path of
-the directory where you want to put the executable files.  In the line
-that begins "lib:", change the second field to the absolute path of the
-directory where you want to put the MAS library files, including the Java
-class files used by the GUI client.
-
-Be sure that you have permission to write to the directories you specified
-in the install_config file.  Often the easiest way to do this is to
-use su to become root, if you have permission to do that.  Typical choices
-for the bin and lib directories are /usr/local/bin and /usr/local/lib,
-but you can specify any directory that you think is appropriate, although
-it is probably not wise to use a system directory, such as /usr/bin or
-/usr/lib.
-
-Then run the install script from this directory:
+a Linux system, run the install script from this directory:
 
 ./install
+
+The script will ask you to enter the path of the directory in which to
+place the executable files.  You can either accept the default choice
+by hitting <Enter>, or you can enter an absolute path of an appropriate
+directory.  Next it will ask you to enter the path of the directory in
+which to place the library files (including the Java class files for the
+MAS GUI).  Again, you can either accept the default choice by hitting
+<Enter>, or you can enter an absolute path of an appropriate directory.
 
 If it is not already, you will need to make sure that the bin directory
 you installed to is included in your path.
@@ -106,7 +98,7 @@ An example of a line in the stock split file that follows this format is:
 19980408	F	1.5
 
 The current distribution of MAS includes a file (lib/stock_splits) with
-some stock split data in the required format.
+some sample stock split data in the required format.
 
 To test that the installation succeeded, you can run mas on the example data
 files in lib/data.  (See the file doc/masystem_introduction for instructions

@@ -45,6 +45,13 @@ also be composite, allowing for very powerful operation combinations.
 The Relative Strength Index indicator example below gives a good example
 of how composite operators can be created to provide required behavior.
 
+Note that the behavior of the following operator types does not depend on
+the context in which they occur, meaning that a particular operator of
+one of these types can be safely shared (as opposed to using two different
+instances of the same operator type) without affecting the resulting
+calculation: BASIC_NUMERIC_COMMAND, OPENING_PRICE OPEN_INTEREST,
+VOLUME, LOW_PRICE, HIGH_PRICE, CLOSING_PRICE.
+
 MAS provides the following basic types of functions:
 
 ONE_VARIABLE_FUNCTION  A function that uses the result of one other
@@ -262,6 +269,9 @@ matter what you enter, since during calculation, the EMA's n-value will
 be used.  Finally the system will ask for the EXPONENTIAL_MOVING_AVERAGE's
 n value, which does matter.  Enter a 7 for a 7-period RSI.
 
+At this point you should enter 's' to save the newly created P-value
+indicator.
+
 The exponential operator will use its division operator to obtain
 the 1/n value used in the formula for P.  This value will be used
 by the EXPONENTIAL_MOVING_AVERAGE to smooth the result of the
@@ -324,6 +334,9 @@ the result of subtracting the current close from the previous close;
 if not, the result will be 0.  As with the P function, this result will
 be smoothed with the same 1/n "exponential" value.
 
+At this point you should enter 's' to save the newly created N-value
+indicator.
+
 The last step is to create the function that will use the two functions
 defined above to apply the remainder of the RSI formula.  Again, choose
 'c' ("Create a new market-data indicator") from the current menu.
@@ -359,6 +372,9 @@ function.  Thus when the system asks for it's input function, you should
 select the P function you created above.  For DIVISION's right operand,
 again select a (new) BASIC_LINEAR_COMMAND.  And choose the N function
 for its input function.
+
+Again, at this point you should enter 's' to save the newly created
+relative strength index indicator.
 
 This completes the creation of the Relative Strength Index function.
 Briefly, what we did was to create a two-variable function to operate on,
@@ -539,7 +555,7 @@ the previous operator, to retrieve the value from the previous period
 that is to be used (added in this case) as part of the calculation for
 the current period.  (It is actually a little more complicated than that.
 Essentially, this operator is used to keep the "array" that holds the
-calculated (OBV) values lined up - but one behind, because it's for the
+calculated (OBV) values lined up with - but one behind, because it's for the
 previous period - the "array" that holds the current closing prices.
 This allows the ACCUMULATION object to be able to retrieve the correct
 previous OBV value - instead of, for example, always retrieving the first
