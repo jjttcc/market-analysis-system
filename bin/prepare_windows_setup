@@ -1,0 +1,56 @@
+#!/bin/bash
+# Prepare for the creation of the setup-mas*.exe file by copying the latest
+# version of all files needed by the Inno setup configuration tool to create
+# the setup*.exe file.
+
+Progname=$(basename $0)
+
+usage() {
+	echo "Usage: $Progname version"
+}
+
+fail() {
+	if [ $# -gt 0 ]; then echo $* >&2;fi
+	exit 2
+}
+
+if [ $# -ne 1 ]; then usage; exit 1; fi
+
+if [ -z "$MAS_SOURCE_DIR" -o -z "$MAS" ]; then
+	fail "MAS_SOURCE_DIR or MAS environment variables not set."
+fi
+Version=$1
+if [ -z "$MAS_WORK_DIR" ]; then
+	MAS_WORK_DIR=e:/mas_work
+fi
+
+mastar=mas_windows${Version}.tar.gz
+mas_tar_dest=mas-${Version}
+mas_exe_src=mas_no_assert_v1.6.5
+persist_files="generators_persist indicators_persist"
+
+cd $MAS_WORK_DIR || fail "Could not 'cd' to $MAS_WORK_DIR."
+if [ ! -r $mastar ]; then fail "Cannot read $mastar."; fi
+pwd
+df ./
+tar zxvf $mastar || fail "Untarring of $mastar failed."
+cd $mas_tar_dest || fail "Could not cd to $mas_tar_dest."
+(
+	cd $MAS_SOURCE_DIR || fail "Could not 'cd' to $MAS_SOURCE_DIR."
+	pwd
+	rm -rf *
+)
+pwd
+cp -av . $MAS_SOURCE_DIR
+cd $MAS_SOURCE_DIR || fail "Could not 'cd' to $MAS_SOURCE_DIR."
+cp $MAS/build/config/windows/inno_config.iss . ||
+	fail "Failed to copy $MAS/build/config/windows/inno_config."
+cp $MAS/lib/binaries/$mas_exe_src bin/mas.exe ||
+	fail "Failed to copy $MAS/lib/binaries/$mas_exe_src."
+for f in $persist_files;do
+	cp $MAS/build/config/$f lib ||
+		fail "Failed to copy $MAS/build/config/$f."
+done
+# clean up:
+cd $MAS_WORK_DIR || fail "Could not 'cd' to $MAS_WORK_DIR."
+rm -rf $mas_tar_dest
