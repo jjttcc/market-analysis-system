@@ -28,4 +28,4 @@ invariant
 
 	n_positive: n > 0
 
-end -- class N_RECORD_ANALYZER
+end -- class N_RECORD_STRUCTURE
