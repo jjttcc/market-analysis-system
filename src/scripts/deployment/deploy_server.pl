@@ -5,7 +5,8 @@
 
 use deploy('configure', 'mas_port', 'mas_options', 'version',
 	'deployment_directory', 'tarfile', 'mas_directory_var', 'data_directory',
-	'data_from_files', 'process_args', 'setup', 'cleanup'
+	'data_from_files', 'process_args', 'setup', 'cleanup',
+	'set_cleanup_workdir'
 );
 
 # Constants
@@ -13,6 +14,7 @@ my $start_mas_script = "start_mas_server";
 my $stop_mas_script = "shutdown_mas_server";
 my $python_path_var = "PYTHONPATH";
 
+&set_cleanup_workdir;
 &process_args;
 &configure;
 &setup;
@@ -33,7 +35,7 @@ sub install {
 sub untar {
 	# Make sure the tar file exists and is readable.
 	open(TAR, &tarfile) || die "Cannot open file: " . &tarfile .
-		"for reading.\n";
+		" for reading.\n";
 	close(TAR);
 	print "Untarring " . &tarfile. "\n";
 	! system("tar zxf " . &tarfile) || die "Failed to untar " . &tarfile . "\n";
