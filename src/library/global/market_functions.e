@@ -4,6 +4,8 @@ indexing
 		%be used to construct a technical indicator"
 	author: "Jim Cochrane"
 	date: "$Date$";
+	note: "@@This class does not depend on any specialized classes and %
+		%can probably be cleanly moved to the ma_library cluster."
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
@@ -55,7 +57,7 @@ feature -- Access
 			stock.set_trading_period_type (period_types @ (
 				period_type_names @ Daily))
 			stock.set_function_name ("No Input Function")
-			create linear_cmd.make(stock)
+			create linear_cmd.make (stock)
 			create addition.make (linear_cmd, volume)
 			create {ONE_VARIABLE_FUNCTION} complex_function.make (
 				stock, volume)
