@@ -3,6 +3,8 @@ provides tools for analysis of financial markets, with the goal of
 helping its user make better buying and selling decisions and to help
 save time by automating some tasks that would otherwise be done by hand.
 
+See the file INSTALL for instructions on how to install MAS.
+
 The two main components of MAS are the Market Analysis System Server (also
 known as Market Analysis Server) and the Market Analysis GUI Client.
 
@@ -14,4 +16,43 @@ The MAS installation includes the following directories:
 
     doc - Documentation of MAS features and how to use MAS
 
-See the file INSTALL for instructions on how to install MAS.
+The bin directory has the following executable files:
+
+    macl - MA command-line client - connects to the server over the network
+	       and uses its command-line interface - implemented in Python
+
+    maclj - MA command-line client - wapper script for Java implementation
+
+    magc - MA GUI Client - wrapper script for Java GUI client
+
+    mas - Market Analysis Server
+
+    mas_assert - Market Analysis Server with assertions
+
+If you encounter a fatal error with mas, running mas_assert under the same
+conditions may give extra useful information to help pinpoint the problem.
+If you do this, please capture the results and email them to me at my
+email address at the end of this file.
+
+MAS is intended to be run as a server, servicing requests via a socket.
+To do this, you will need to start the mas executable from the command
+line, giving it the port number you wish to use for the socket connection,
+as well as a list of market data files for it to process.  (You can give
+it any number above 1023.)  You can then start one or more client programs
+to use mas's services.  See the file masystem_introduction, in the doc
+directory, for more information on how to start the server and the client.
+
+To access the MAS functionality for creating new indicators or new event
+generators, you can either run mas at a terminal and use its command-line
+interface directly or you can run the macl (if you have Python installed)
+or the maclj script.
+
+If you have problems or questions about MAS, you are welcome to email me at:
+
+jtc@dimensional.com
+
+I will try to respond promply, though I can't guarantee a response,
+being often busy.  If you do email me about a problem, please include
+as much background information as possible with your email, including,
+if possible, a precise description of what you were doing when the
+problem occurred.
