@@ -5,7 +5,16 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-deferred class MARKET_FUNCTION
+deferred class MARKET_FUNCTION inherit
+
+	FACTORY
+		rename
+			product as output
+		export {NONE}
+			execute -- not used
+		redefine
+			output
+		end
 
 feature -- Access
 
@@ -30,6 +39,17 @@ feature -- Access
 		deferred
 		end
 
+	operator: NUMERIC_COMMAND
+			-- operator that will perform the main work of the function.
+			-- Descendant classes may choose not to use this attribute for
+			-- efficiency.
+
+	operator_used: BOOLEAN is
+			-- Is operator used by this function?
+		once
+			Result := true
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is
@@ -42,15 +62,16 @@ feature -- Basic operations
 	process is
 			-- Process the output from the input.
 		require
-			not processed
+			not_processed: not processed
+			opset_if_opused: operator_used implies operator /= Void
 		do
 			do_process
 			set_processed (true)
 		ensure
-			processed
+			processed: processed
 		end
 
-feature {TEST_FUNCTION_FACTORY} -- Administration
+feature {FACTORY} -- Administration
 
 	set_operator (op: NUMERIC_COMMAND) is
 		require
@@ -70,17 +91,6 @@ feature {TEST_FUNCTION_FACTORY} -- Administration
 		ensure
 			is_set: name = n and name /= Void
 		end
-
-	operator_used: BOOLEAN is
-			-- Is operator used by this function?
-		once
-			Result := true
-		end
-
-	operator: NUMERIC_COMMAND
-			-- operator that will perform the main work of the function.
-			-- Descendant classes may choose not to use this attribute for
-			-- efficiency.
 
 feature {NONE}
 
@@ -103,7 +113,13 @@ feature {NONE}
 			-- Hook method to set processed state to the specified value
 		deferred
 		ensure
-			processed = b
+			is_set: processed = b
+		end
+
+feature {NONE} -- Not used
+
+	execute (arg: ANY) is
+		do
 		end
 
 invariant

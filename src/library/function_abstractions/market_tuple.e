@@ -1,7 +1,7 @@
 indexing
 	description: 
-		"Basic abstraction for a market-related value (or tuple of values) that%
-		% has an associated trading period."
+		"Basic abstraction for a market-related value (or tuple of values) %
+		%that has an associated date/time."
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -9,22 +9,24 @@ deferred class MARKET_TUPLE
 
 feature -- Access
 
-	trading_period: DATE_TIME
+	date_time: DATE_TIME
+			-- The start date and time of the tuple
 
 	value: REAL is
+			-- Main value of the tuple
 		deferred
 		end
 
-feature {TEST_FUNCTION_FACTORY, VALUE_SETTER, MARKET_FUNCTION} -- Element change
+feature {FACTORY, VALUE_SETTER, MARKET_FUNCTION} -- Element change
 
-	set_trading_period (t: DATE_TIME) is
-			-- Set trading_period to `t'.
+	set_date_time (t: DATE_TIME) is
+			-- Set date_time to `t'.
 		require
 			not_void: t /= Void
 		do
-			trading_period := t
+			date_time := t
 		ensure
-			set: trading_period = t and trading_period /= Void
+			set: date_time = t and date_time /= Void
 		end
 
 end -- class MARKET_TUPLE

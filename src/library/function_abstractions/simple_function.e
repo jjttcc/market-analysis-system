@@ -16,6 +16,11 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 		end
 
 	MARKET_TUPLE_LIST [G]
+		export {NONE}
+			all
+				{ANY}
+			extend
+		end
 
 creation
 
@@ -36,6 +41,13 @@ feature -- Status report
 			Result := output /= Void
 		end
 
+	operator_used: BOOLEAN is
+		once
+			Result := false
+		ensure then
+			Result = false
+		end
+
 feature -- Basic operations
 
 	do_process is
@@ -53,11 +65,6 @@ feature {NONE}
 	set_processed (b: BOOLEAN) is
 			-- Null action, since processed state cannot be set
 		do
-		end
-
-	operator_used: BOOLEAN is
-		once
-			Result := false
 		end
 
 end -- class SIMPLE_FUNCTION
