@@ -6,9 +6,22 @@ indexing
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class LOGIN_REQUEST_CMD inherit
+class MAS_LOGIN_REQUEST_CMD inherit
+
+	LOGIN_REQUEST_CMD
+		rename
+			make as lrc_make_unused
+		redefine
+			session, put_session_state, pre_process_session, process,
+			post_process_session
+		end
 
 	TRADABLE_REQUEST_COMMAND
+		redefine
+			session
+		select
+			rcmake
+		end
 
 	GLOBAL_SERVER_FACILITIES
 		export
@@ -29,14 +42,13 @@ creation
 
 	make
 
-feature -- Status report
+feature -- Access
 
-	error_occurred: BOOLEAN
-			-- Did an error occur the last time `execute' was called?
+	session: MAS_SESSION
 
 feature -- Basic operations
 
-	do_execute (msg: STRING) is
+	old_do_execute (msg: STRING) is
 			-- Extract any settings from `msg', create a MAS_SESSION and add
 			-- it to `sessions', apply the settings from `msg', and send
 			-- a unique session ID to the requesting client.
@@ -102,34 +114,70 @@ feature -- Basic operations
 				session /= Void and sessions.has_item (session)
 		end
 
-feature {NONE} -- Implementation
+feature {NONE} -- Hook routine implementations
 
-	new_key: INTEGER is
-			-- A new key not currently used in `sessions'
-		local
-			keys: ARRAY [INTEGER]
-			i: INTEGER
+	create_session is
 		do
-			keys := sessions.current_keys
-			if keys.count = 0 then
-				Result := 1
-			else
-				-- Set Result to one greater than the highest key value.
-				from
-					i := 1
-				until
-					i > keys.count
-				loop
-					if keys @ i > Result then
-						Result := keys @ i
-					end
-					i := i + 1
-				end
-				Result := Result + 1
-			end
-		ensure
-			new_key: not sessions.has (Result)
+			create session.make
 		end
+
+	process (message: STRING) is
+		local
+			setting_type, error_msg: STRING
+			tokens: LIST [STRING]
+		do
+			tokens := sutil.tokens (Message_field_separator)
+			from
+				tokens.start
+			until
+				tokens.exhausted or error_occurred
+			loop
+				-- Settings follow the pattern "setting_type%Tvalues", 
+				-- where 'values' represents one or more fields and fields
+				-- are separated by a tab character; extract the
+				-- setting type (name) first and then 'values'.
+				setting_type := tokens.item
+				tokens.forth
+				if tokens.exhausted then
+					error_occurred := True
+					error_msg := "Missing value for setting: "
+					error_msg.append (setting_type)
+				else
+					error_msg := change_setting (setting_type, tokens)
+					if error_msg = Void then
+						tokens.forth
+					else
+						error_occurred := True
+					end
+				end
+			end
+		end
+
+	put_session_state is
+			-- Send the "session state" information (formatted according
+			-- to the client/server communication protocol) to the client.
+		do
+			if not command_line_options.opening_price then
+				put (Message_field_separator)
+				put (No_open_session_state)
+			end
+		end
+
+	pre_process_session is
+		do
+			if not command_line_options.intraday_caching then
+				session.turn_caching_off
+			end
+		end
+
+	post_process_session is
+		do
+			-- Clearing the cache when a new login occurs ensures that
+			-- a new client will receive up-to-date data.
+			tradables.clear_caches
+		end
+
+feature {NONE} -- Implementation
 
 	change_setting (type: STRING; settings: LIST [STRING]): STRING is
 			-- Extract the current setting value from `settings' and
@@ -188,17 +236,5 @@ feature {NONE} -- Implementation
 		end
 
 	sutil: expanded STRING_UTILITIES
-
-feature {NONE} -- Implementation - session state
-
-	put_session_state is
-			-- Send the "session state" information (formatted according
-			-- to the client/server communication protocol) to the client.
-		do
-			if not command_line_options.opening_price then
-				put (Message_field_separator)
-				put (No_open_session_state)
-			end
-		end
 
 end -- class LOGIN_REQUEST_CMD

@@ -96,7 +96,7 @@ feature {NONE} -- Implementation
 				tradable_list_handler), Market_list_request)
 			rh.extend (create {INDICATOR_LIST_REQUEST_CMD}.make (
 				tradable_list_handler), Indicator_list_request)
-			rh.extend (create {LOGIN_REQUEST_CMD}.make (
+			rh.extend (create {MAS_LOGIN_REQUEST_CMD}.make (
 				tradable_list_handler), Login_request)
 			rh.extend (create {EVENT_LIST_REQUEST_CMD}.make (
 				tradable_list_handler), Event_list_request)
