@@ -9,7 +9,9 @@ deferred class MARKET_FUNCTION inherit
 
 	FACTORY
 		rename
-			product as output, execute as process
+			product as output, execute as process, initialize as init_notused
+		export {NONE}
+			init_notused
 		redefine
 			output
 		end
