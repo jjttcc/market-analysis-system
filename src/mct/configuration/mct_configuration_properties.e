@@ -16,12 +16,6 @@ class MCT_CONFIGURATION_PROPERTIES inherit
 
 feature -- Constants
 
-	Data_directory_specifier: STRING is "data_dir"
-
-	Bin_directory_specifier: STRING is "bin_dir"
-
-	Doc_directory_specifier: STRING is "doc_dir"
-
 	Valid_port_numbers_specifier: STRING is "valid_portnumbers"
 
 	Hostname_specifier: STRING is "hostname"

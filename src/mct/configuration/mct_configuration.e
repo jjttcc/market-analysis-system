@@ -46,9 +46,6 @@ feature {NONE} -- Initialization
 			create settings.make (0)
 			create start_server_commands.make
 
-			settings.extend ("", Data_directory_specifier)
-			settings.extend ("", Bin_directory_specifier)
-			settings.extend ("", Doc_directory_specifier)
 			settings.extend ("", Valid_port_numbers_specifier)
 			settings.extend ("", Hostname_specifier)
 			settings.extend ("", Start_server_cmd_specifier)
@@ -66,27 +63,6 @@ feature {NONE} -- Initialization
 		end
 
 feature -- Access
-
-	data_directory: STRING is
-		do
-			Result := settings @ Data_directory_specifier
-		ensure
-			not_void: Result /= Void
-		end
-
-	bin_directory: STRING is
-		do
-			Result := settings @ Bin_directory_specifier
-		ensure
-			not_void: Result /= Void
-		end
-
-	doc_directory: STRING is
-		do
-			Result := settings @ Doc_directory_specifier
-		ensure
-			not_void: Result /= Void
-		end
 
 	valid_portnumbers: LIST [STRING] is
 		do
@@ -181,7 +157,6 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	post_process_settings is
 		do
-report (user_defined_variables, user_defined_values)
 			settings.linear_representation.do_all (
 				agent replace_configuration_tokens)
 			if not settings.item (Start_server_cmd_specifier).is_empty then
@@ -301,7 +276,6 @@ feature {NONE} -- Implementation
 			keys, values: ARRAY [STRING]
 			cp_start_index: INTEGER
 		do
-print ("rct started - s: " + s + "%N")
 			keys := <<Hostname_specifier>>
 			values := <<hostname>>
 			cp_start_index := keys.upper + 1
@@ -313,7 +287,6 @@ print ("rct started - s: " + s + "%N")
 				user_defined_variables.upper, cp_start_index)
 			replace_tokens (s, keys, values,
 				Token_start_delimiter, Token_end_delimiter)
-print ("rct finished - s: " + s + "%N")
 		end
 
 	process_start_server_cmd (key, value: STRING) is
@@ -358,7 +331,6 @@ print ("rct finished - s: " + s + "%N")
 		local
 			i: INTEGER
 		do
-print ("Processing user def - value: " + value + "%N")
 			i := value.index_of (User_definition_separator, 1)
 			if i < 2 then
 				error_report.append ("Incorrect format for user-defined %
@@ -374,15 +346,6 @@ print ("Processing user def - value: " + value + "%N")
 						user_defined_variables.upper).count > 0
 				end
 			end
-print ("user def result - var name: '" + user_defined_variables.item (
-user_defined_variables.upper) + "'%N")
-print ("user def result - value: '" + user_defined_values.item (
-user_defined_values.upper) + "'%N")
-print ("(array bounds now: " +
-user_defined_values.lower.out + ", " +
-user_defined_values.upper.out + "; " +
-user_defined_values.lower.out + ", " +
-user_defined_values.upper.out + ")%N")
 		end
 
 	check_field (key: STRING) is
@@ -435,20 +398,6 @@ user_defined_values.upper.out + ")%N")
 	user_defined_values: ARRAY [STRING]
 			-- User-defined values, one for each element
 			-- of `user_defined_variables'
-
-report (vars, vals: ARRAY [STRING]) is
-local
-	i: INTEGER
-do
-	from
-		i := vars.lower
-	until
-		i > vars.upper
-	loop
-		print (vars @ i + " set to: " + vals @ i + "%N")
-		i := i + 1
-	end
-end
 
 invariant
 
