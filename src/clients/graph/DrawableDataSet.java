@@ -45,28 +45,12 @@ import java.lang.*;
  */
 public class DataSet extends Object {
 
-	public void set_drawer (BarDrawer d)
+	public void set_drawer (Drawer d)
 	{
 		_drawer = d;
 	}
 
-	public BarDrawer drawer() { return _drawer; }
-
-/*
-***************************
-** Public Static Values     
-**************************/
-/**
- *    A constant value flag used to specify no straight line segment
- *    is to join the data points
- */
-      public final static int NOLINE    =  0;
-/**
- *    A constant value flag used to specify that a straight line segment
- *    is to join the data points.
- */
-      public final static int LINE      =  1;
-
+	public Drawer drawer() { return _drawer; }
 
 
 /*
@@ -153,7 +137,7 @@ public class DataSet extends Object {
   /**
    * Drawer of price bars - e.g., tic bars or candles
    */
-	protected BarDrawer _drawer;
+	protected Drawer _drawer;
   /**
    * The data X maximum. 
    * Once the data is loaded this will never change.
