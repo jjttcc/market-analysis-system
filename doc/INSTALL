@@ -26,6 +26,14 @@ where you want to put the executable files.  In the line that begins
 where you want to put the MAS library files, including the Java class
 files used by the GUI client.
 
+Be sure that you have permission to write to the directories you specified
+in the install_config file.  Often the easiest way to do this is to
+use su to become root, if you have permission to do that.  Typical choices
+for the bin and lib directories are /usr/local/bin and /usr/local/lib,
+but you can specify any directory that you think is appropriate, although
+it is probably not wise to use a system directory, such as /usr/bin or
+/usr/lib.
+
 Then run the install script from this directory:
 
 ./install
