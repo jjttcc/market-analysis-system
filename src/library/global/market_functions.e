@@ -48,7 +48,7 @@ feature -- Access
 			point2.set_x_y_date (5, 1, later)
 			!!stock.make ("DUMMY",
 				period_types @ (period_type_names @ Daily), Void)
-			stock.set_name ("Dummy")
+			stock.set_name ("No Input Function")
 			!!linear_cmd.make(stock)
 			!!addition.make (linear_cmd, volume)
 			!ONE_VARIABLE_FUNCTION!complex_function.make (
