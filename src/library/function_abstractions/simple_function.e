@@ -75,7 +75,7 @@ feature -- Access
 	processed_date_time: DATE_TIME is
 		once
 			-- Very early date
-			!!Result.make (-500, 1, 1, 0, 0, 0)
+			!!Result.make (0, 1, 1, 0, 0, 0)
 		end
 
 feature {FACTORY} -- Status setting
