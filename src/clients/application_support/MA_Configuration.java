@@ -8,7 +8,6 @@ import common.*;
 import support.*;
 import java.awt.*;
 
-//!!!Diverging class - needs to move to a new cluster.
 /** Global configuration settings - singleton */
 public class MA_Configuration extends Configuration implements NetworkProtocol,
 		MA_ConfigurationInterface {
