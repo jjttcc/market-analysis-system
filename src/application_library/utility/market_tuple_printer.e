@@ -55,23 +55,18 @@ feature -- Status setting
 
 	set_print_start_date (arg: DATE) is
 			-- Set print_start_date to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			print_start_date := arg
 		ensure
-			print_start_date_set: print_start_date = arg and
-				print_start_date /= Void
+			print_start_date_set: print_start_date = arg
 		end
 
 	set_print_end_date (arg: DATE) is
 			-- Set print_end_date to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			print_end_date := arg
 		ensure
-			print_end_date_set: print_end_date = arg and print_end_date /= Void
+			print_end_date_set: print_end_date = arg
 		end
 
 feature -- Basic operations
