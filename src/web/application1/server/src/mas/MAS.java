@@ -189,10 +189,6 @@ if (waited) log("Got a proxy with hash code: " + result.hashCode());
 
 // Implementation - attributes
 
-//!!!!Remove:
-	// Proxy that forwards requests to the MAS server and returns responses
-	private MAS_Proxy proxy_;
-
 	// Address information used to connect to the MAS server
 	private ServerAddress server_address_;
 
