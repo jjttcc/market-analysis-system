@@ -1,17 +1,14 @@
 indexing
-	description: "Composite tuple with volume";
+	description: "A basic market tuple with a volume attribute";
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
-class COMPOSITE_VOLUME_TUPLE inherit
+class BASIC_VOLUME_TUPLE inherit
 
-	COMPOSITE_TUPLE
+	BASIC_MARKET_TUPLE
 
 	VOLUME_TUPLE
-		undefine
-			make, end_date
-		end
 
 creation
 
@@ -21,15 +18,16 @@ feature -- Access
 
 	volume: INTEGER
 
-feature {COMPOSITE_TUPLE_FACTORY}
+feature {VALUE_SETTER, FACTORY}
 
-	set_volume (arg: INTEGER) is
+	set_volume (v: INTEGER) is
+			-- Set volume to `v'.
 		require
-			arg /= Void
+			v >= 0
 		do
-			volume := arg
+			volume := v
 		ensure
-			volume_set: volume = arg and volume /= Void
+			volume = v
 		end
 
 feature {NONE}
@@ -39,4 +37,4 @@ feature {NONE}
 			volume := (volume * r).floor
 		end
 
-end -- class COMPOSITE_VOLUME_TUPLE
+end -- class BASIC_VOLUME_TUPLE

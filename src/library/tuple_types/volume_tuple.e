@@ -4,18 +4,16 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class VOLUME_TUPLE inherit
+deferred class VOLUME_TUPLE inherit
 
 	BASIC_MARKET_TUPLE
 
-creation
-
-	make
-
 feature -- Access
 
-	volume: INTEGER
+	volume: INTEGER is
 			-- Number of shares
+		deferred
+		end
 
 feature -- Element change
 
@@ -28,23 +26,19 @@ feature -- Element change
 			high.set_value (high.value * ratio)
 			low.set_value (low.value * ratio)
 			close.set_value (close.value * ratio)
+			adjust_volume_for_split (1 / ratio)
 		ensure
-			rabs (open.value - ratio * old open.value) < epsilon
-			rabs (high.value - ratio * old high.value) < epsilon
-			rabs (low.value - ratio * old low.value) < epsilon
-			rabs (close.value - ratio * old close.value) < epsilon
+			new_open: rabs (open.value - ratio * old open.value) < epsilon
+			new_high: rabs (high.value - ratio * old high.value) < epsilon
+			new_low: rabs (low.value - ratio * old low.value) < epsilon
+			new_close: rabs (close.value - ratio * old close.value) < epsilon
+			new_volume: rabs (volume - old volume / ratio) < epsilon
 		end
 
-feature {VALUE_SETTER, FACTORY}
+feature {NONE} -- Implementation
 
-	set_volume (v: INTEGER) is
-			-- Set volume to `v'.
-		require
-			v >= 0
-		do
-			volume := v
-		ensure
-			volume = v
+	adjust_volume_for_split (r: REAL) is
+		deferred
 		end
 
 invariant

@@ -4,29 +4,15 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class OPEN_INTEREST_TUPLE inherit
+deferred class OPEN_INTEREST_TUPLE inherit
 
 	VOLUME_TUPLE
 
-creation
-
-	make
-
 feature -- Access
 
-	open_interest: INTEGER
+	open_interest: INTEGER is
 			-- Number of existing contracts
-
-feature {VALUE_SETTER} -- Status setting
-
-	set_open_interest (i: INTEGER) is
-			-- Set open_interest to `i'.
-		require
-			i >= 0
-		do
-			open_interest := i
-		ensure
-			open_interest = i
+		deferred
 		end
 
 invariant

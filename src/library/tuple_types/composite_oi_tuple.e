@@ -8,6 +8,8 @@ class COMPOSITE_OI_TUPLE inherit
 
 	COMPOSITE_VOLUME_TUPLE
 
+	OPEN_INTEREST_TUPLE
+
 feature -- Access
 
 	open_interest: INTEGER
