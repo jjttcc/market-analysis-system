@@ -16,7 +16,7 @@ class STOCK_FACTORY inherit
 			{NONE} all
 		end
 
-	TAL_APP_ENVIRONMENT
+	APP_ENVIRONMENT
 		export
 			{NONE} all
 		end

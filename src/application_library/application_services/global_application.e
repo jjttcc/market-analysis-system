@@ -102,7 +102,7 @@ feature -- Access
 			storable: STORABLE
 			mflist: STORABLE_LIST [MARKET_FUNCTION]
 			retrieval_failed: BOOLEAN
-			ta_env: expanded TAL_APP_ENVIRONMENT
+			ta_env: expanded APP_ENVIRONMENT
 			full_path_name: STRING
 		once
 			full_path_name := ta_env.file_name_with_app_directory (
@@ -138,7 +138,7 @@ feature -- Access
 			storable: STORABLE
 			meg_list: STORABLE_LIST [MARKET_EVENT_GENERATOR]
 			retrieval_failed: BOOLEAN
-			ta_env: expanded TAL_APP_ENVIRONMENT
+			ta_env: expanded APP_ENVIRONMENT
 			full_path_name: STRING
 		once
 			full_path_name := ta_env.file_name_with_app_directory (
@@ -211,7 +211,7 @@ feature -- Access
 			storable: STORABLE
 			reg_list: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
 			retrieval_failed: BOOLEAN
-			ta_env: expanded TAL_APP_ENVIRONMENT
+			ta_env: expanded APP_ENVIRONMENT
 			full_path_name: STRING
 		once
 			full_path_name := ta_env.file_name_with_app_directory (

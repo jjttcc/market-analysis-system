@@ -21,7 +21,7 @@ class EVENT_REGISTRATION inherit
 			print
 		end
 
-	TAL_APP_ENVIRONMENT
+	APP_ENVIRONMENT
 		export
 			{NONE} all
 		undefine

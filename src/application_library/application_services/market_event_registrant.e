@@ -39,7 +39,7 @@ feature -- Basic operations
 			hfile: PLAIN_TEXT_FILE
 			scanner: MARKET_EVENT_SCANNER
 			exception_occurred: BOOLEAN
-			talenv: expanded TAL_APP_ENVIRONMENT
+			talenv: expanded APP_ENVIRONMENT
 		do
 			if
 				exception_occurred and exception = Operating_system_exception
@@ -71,7 +71,7 @@ feature -- Basic operations
 			hfile: PLAIN_TEXT_FILE
 			scanner: MARKET_EVENT_SCANNER
 			fld_sep, record_sep: STRING
-			talenv: expanded TAL_APP_ENVIRONMENT
+			talenv: expanded APP_ENVIRONMENT
 		do
 			-- Open the event history file, delete its current contents and
 			-- save all elements of `event_history' into the file.

@@ -47,7 +47,7 @@ feature -- Initialization
 		require
 			not_void_and_not_empty: fname /= Void and not fname.empty
 		local
-			talenv: TAL_APP_ENVIRONMENT
+			talenv: APP_ENVIRONMENT
 		do
 			!!talenv
 			hfile_name := event_history_file_name

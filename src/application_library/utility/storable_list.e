@@ -53,7 +53,7 @@ feature -- Utility
 			-- the application directory, if set; if not set, store in the
 			-- current directory.
 		local
-			ta_env: expanded TAL_APP_ENVIRONMENT
+			ta_env: expanded APP_ENVIRONMENT
 		do
 			debug ("persist")
 				print("cleanup Storing ");

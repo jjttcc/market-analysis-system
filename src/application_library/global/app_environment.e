@@ -4,7 +4,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class TAL_APP_ENVIRONMENT inherit
+class APP_ENVIRONMENT inherit
 
 	EXECUTION_ENVIRONMENT
 
@@ -15,7 +15,7 @@ feature -- Access
 	app_directory: STRING is
 			-- Full path of the working directory for the application -
 			-- where configuration and data files are stored.
-			-- Void if environment variable "TAL_APP_DIRECTORY" is not set.
+			-- Void if the associated environment variable is not set.
 		once
 			Result := get (env_names.application_directory_name)
 		end
@@ -31,10 +31,6 @@ feature -- Access
 			-- argument is the subject
 		once
 			Result := get (env_names.mailer_subject_flag_name)
-		ensure
-			set_correctly_if_env_var_is_set:
-				Result = Void or
-					Result.is_equal (get ("TAL_APP_MAILER_SUBJECT_FLAG"))
 		end
 
 	file_name_with_app_directory (fname: STRING): STRING is
@@ -77,4 +73,4 @@ feature {NONE} -- Implementation
 
 	env_name_service: APP_ENVIRONMENT_VARIABLE_NAMES
 	
-end -- TAL_APP_ENVIRONMENT
+end -- APP_ENVIRONMENT

@@ -11,14 +11,14 @@ feature -- Access
 	application_directory_name: STRING is
 			-- Default name of the application directory environment variable
 		do
-			Result := "TAL_APP_DIRECTORY"
+			Result := "APP_DIRECTORY"
 		end
 
 	mailer_name: STRING is
 			-- Default name of the environment variable for the executable
 			-- to use for sending email
 		do
-			Result := "TAL_APP_MAILER"
+			Result := "APP_MAILER"
 		end
 
 	mailer_subject_flag_name: STRING is
@@ -26,7 +26,7 @@ feature -- Access
 			-- to use to indicate to the mailer that the following
 			-- argument is the subject
 		do
-			Result := "TAL_APP_MAILER_SUBJECT_FLAG"
+			Result := "APP_MAILER_SUBJECT_FLAG"
 		end
 
 end -- APP_ENVIRONMENT_VARIABLE_NAMES

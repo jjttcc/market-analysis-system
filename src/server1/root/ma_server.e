@@ -96,7 +96,7 @@ feature {NONE}
 	initialize is
 			-- Set up to use MASS environment variable names.
 		local
-			tae: expanded TAL_APP_ENVIRONMENT
+			tae: expanded APP_ENVIRONMENT
 			env_names: APP_ENVIRONMENT_VARIABLE_NAMES
 		do
 			!MASS_ENVIRONMENT_VARIABLE_NAMES!env_names
