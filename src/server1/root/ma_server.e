@@ -8,22 +8,9 @@ indexing
 
 class MA_SERVER inherit
 
+	SERVER
+
 	GLOBAL_SERVER
-		export
-			{NONE} all
-		end
-
-	GENERAL_UTILITIES
-		export
-			{NONE} all
-		end
-
-	EXCEPTION_SERVICES
-		export
-			{NONE} all
-		end
-
-	TERMINABLE
 		export
 			{NONE} all
 		end
@@ -34,74 +21,58 @@ creation
 
 feature -- Initialization
 
-	make is
+	prepare_for_listening is
 		local
 			socket: COMPRESSED_SOCKET
 			readcmd: POLL_COMMAND
 			factory_builder: FACTORY_BUILDER
-			version: expanded MAS_PRODUCT_INFO
 		do
-			if command_line_options.error_occurred then
-				log_errors (<<"Error occurred during initialization - ",
-					"exiting ...%N">>)
-				exit (Error_exit_status)
-			elseif command_line_options.help then
-				command_line_options.usage
-			elseif command_line_options.version_request then
-				print_list (<<version.name, ", Version ", version.number, ", ",
-					version.informal_date, "%N">>)
-			elseif configuration_error then
-				log_errors (<<"Error occurred during initialization:%N",
-					config_error_description, ".%N">>)
-				exit (Error_exit_status)
-			else
-				register_for_termination (Current)
-				create poller.make_read_only
-				create factory_builder.make
-				create {LINKED_LIST [SOCKET]} current_sockets.make
-				-- Make a socket for each port number provided in the
-				-- command line, create a STREAM_READER to handle it,
-				-- and add it to the poller's list of read commands.
-				-- (Allows concurrent processing - in a future version.)
-				from
-					command_line_options.port_numbers.start
-				until
-					command_line_options.port_numbers.exhausted
-				loop
-					create socket.make_server_by_port (
-						command_line_options.port_numbers.item)
-					create {STREAM_READER} readcmd.make (socket,
-						factory_builder)
-					poller.put_read_command (readcmd)
-					current_sockets.extend (socket)
-					command_line_options.port_numbers.forth
-				end
-				-- If background is not specified, add a reader to respond to
-				-- console commands.
-				if not command_line_options.background then
-					create {CONSOLE_READER} readcmd.make (factory_builder)
-					poller.put_read_command (readcmd)
-				end
-				from
-				until
-					finished
-				loop
-					poller.execute (15, 20000)
-				end
-				exit (0)
+			create poller.make_read_only
+			create factory_builder.make
+			create {LINKED_LIST [SOCKET]} current_sockets.make
+			-- Make a socket for each port number provided in the
+			-- command line, create a STREAM_READER to handle it,
+			-- and add it to the poller's list of read commands.
+			-- (Allows concurrent processing - in a future version.)
+			from
+				command_line_options.port_numbers.start
+			until
+				command_line_options.port_numbers.exhausted
+			loop
+				create socket.make_server_by_port (
+					command_line_options.port_numbers.item)
+				create {STREAM_READER} readcmd.make (socket,
+					factory_builder)
+				poller.put_read_command (readcmd)
+				current_sockets.extend (socket)
+				command_line_options.port_numbers.forth
 			end
-		rescue
-			handle_exception ("main routine")
-			exit (Error_exit_status)
+			-- If background is not specified, add a reader to respond to
+			-- console commands.
+			if not command_line_options.background then
+				create {CONSOLE_READER} readcmd.make (factory_builder)
+				poller.put_read_command (readcmd)
+			end
 		end
 
 feature {NONE}
 
-	finished: BOOLEAN
-			-- Is it time to exit the server?
+	listen is
+			-- Listen for and respond to client requests.
+		do
+			check
+				poller: poller /= Void
+			end
+			poller.execute (15, 20000)
+		end
 
 	poller: MEDIUM_POLLER
 			-- Poller for client socket connections
+
+	version: MAS_PRODUCT_INFO is
+		once
+			create Result
+		end
 
 	cleanup is
 			-- Close all unclosed sockets.
@@ -141,8 +112,6 @@ feature {NONE}
 				end
 			end
 		end
-
-	config_error_description: STRING
 
 	current_sockets: LIST [SOCKET]
 
