@@ -13,20 +13,15 @@ The server provides the capability to apply technical analysis[1]
 indicators to market data.  Additionally, the server allows the user
 to specify a set of criteria (using one more more technical indicators)
 and apply those criteria to market data, generating buy and sell signals
-for markets that meet the criteria.[2]
+for tradables that meet the criteria.[2]
 
-The current version of the MAS server runs on Linux/Intel systems.
-The GUI Client is written in Java and should run on any system with a
-Java runtime environment (JRE).  An earlier version of the MAS server
-has been ported to Windows, although the Windows version is more limited
-than the Linux version[3].
+The current version of the MAS server runs on Linux/Intel and Windows
+systems.  The GUI Client is written in Java and should run on any system
+with a Java runtime environment (JRE).
 
 The Market Analysis GUI Client (MAGC) provides basic charting facilities,
 using the server to obtain market and indicator data.  MAGC currently
 displays price data using either standard bar charts or candle charts.
-
-MAS currently accepts daily stock and index data.  In the future it will
-probably be expanded to accept other kinds of data, such as futures data.
 
 Below is a summary of MAS's features.
 
@@ -47,7 +42,8 @@ Functionality:
   - Provides services to GUI or command-line clients using a socket-based
     protocol.
   - One server process can service several GUI clients.
-  - Allows market data to be input from files or from a database.
+  - Allows market data to be input from files, from the web, or from a
+    database.
 
 System-defined technical indicators:
 
@@ -63,6 +59,8 @@ System-defined technical indicators:
   - Stochastic %D
   - Slow Stochastic %D
   - Relative Strength Index
+  - Wilder Moving Average
+  - Weighted Moving Average
 
 Current list of user-configured technical indicators:
 
@@ -72,6 +70,13 @@ Current list of user-configured technical indicators:
   - Slope of Slope of MACD Signal Line
   - EMA of Volume
   - Slope of MACD Signal Line Trend
+  - Force Index
+  - EMA of Open interest
+  - Slope of EMA of Volume
+  - Slope of EMA of Open interest
+  - Midpoint
+  - Weighted Moving Average of Midpoint
+  - MACD of Volume
 
 Current list of market-analysis rules:
 
@@ -91,9 +96,9 @@ Market Analysis GUI Client (MAGC)
 Functionality:
 
 Provides charts of market and indicator data.
-Obtains market and indicator data from the MAS via a network connection.
+Obtains market and indicator data from the MAS server via a network connection.
 Provides choice of candles or price bars.
-Provides selection of markets.
+Provides selection of tradables.
 Provides choice of all period types available from the server (daily,
    weekly, monthly, etc.)
 Displays reference dates and values based on current data.
@@ -102,7 +107,6 @@ Provides configuration of colors for graph components.
 Provides configuration of date range for data.
 Allows configuration of user-defined reference lines.
 Allows printing of charts.
-
 
 
 [1] For those not familiar with technical analysis, it is a set of
@@ -120,11 +124,3 @@ line crossed above the weekly MACD signal line (indicating that the stock
 may be in a long-term uptrend), as well as to issue a sell signal for the
 opposite event - Stochastic %D crosses above 65% and weekly MACD difference
 line crosses below weekly MACD signal line.
-
-[3] The latest Windows version can only be used for charting of stocks
-with the system-defined indicators.  It cannot do batch processing.  Also,
-it cannot read the stock split data file; so to use it for charting you will
-need stock data that has already been adjusted for splits.  There is a
-description of the reasons for these limitations included in the files that
-contain the Windows release (README_WINDOWS.txt in mas_windows1.2.zip or
-mas_windows1.2.tar.gz).
