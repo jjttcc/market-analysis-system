@@ -119,8 +119,8 @@ feature {MARKET_FUNCTION_EDITOR}
 			dummy_tradable: TRADABLE [BASIC_MARKET_TUPLE]
 		do
 			if tradable /= Void then
-				!STOCK!dummy_tradable.make ("dummy",
-											tradable.trading_period_type, Void)
+				create {STOCK} dummy_tradable.make ("dummy",
+					tradable.trading_period_type, Void, Void)
 				-- Set innermost input to an empty tradable to force it
 				-- to clear its contents.
 				input.set_innermost_input (dummy_tradable)
