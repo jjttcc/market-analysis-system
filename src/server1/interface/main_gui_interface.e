@@ -107,7 +107,7 @@ feature {NONE}
 			create s.make (0)
 			from
 			until
-				io_medium.last_character = eom @ 1
+				io_medium.last_character = eom @ 1 or not io_medium.readable
 			loop
 				s.extend (io_medium.last_character)
 				io_medium.read_character
@@ -121,19 +121,24 @@ feature {NONE}
 				message_ID := Error
 				message_body := "Invalid message format: "
 				message_body.append(s)
+			elseif io_medium.last_character /= eom @ 1 then
+				s.extend (io_medium.last_character)
+				message_ID := Error
+				message_body := "End of message string not received with:%N"
+				message_body.append(s)
 			else
 				-- Extract the message ID.
 				number := s.substring (1, i - 1)
 				if not number.is_integer then
 					message_body := "Message ID is not a valid integer: "
-					message_body.append (message_ID.out)
+					message_body.append (number)
 					message_ID := Error
 				elseif
 					not request_handlers.has (number.to_integer) and
 					number.to_integer /= Logout_request
 				then
 					message_body := "Invalid message ID: "
-					message_body.append (message_ID.out)
+					message_body.append (number)
 					message_ID := Error
 				else
 					message_ID := number.to_integer
@@ -190,6 +195,8 @@ feature {NONE}
 			rh.extend (cmd, Indicator_list_request)
 			create {LOGIN_REQUEST_CMD} cmd.make (market_list_handler)
 			rh.extend (cmd, Login_request)
+			create {ERROR_RESPONSE_CMD} cmd
+			rh.extend (cmd, Error)
 			request_handlers := rh
 		ensure
 			rh_set: request_handlers /= Void and not request_handlers.empty
