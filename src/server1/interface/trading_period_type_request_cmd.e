@@ -31,15 +31,17 @@ feature -- Basic operations
 			else
 				market_list.search_by_symbol (msg)
 				send_ok
-				-- Since only daily, weekly, and monthly trading period types
-				-- are allowed in the current version (for all markets), the
-				-- response is simply hard-coded here.  This will probably
-				-- change in the future.
+				-- Since only daily, weekly, quarterly, and monthly trading
+				-- period types are allowed in the current version (for
+				-- all markets), the response is simply hard-coded here.
+				-- This will probably change in the future.
 				print_list (<<period_type_names @ Daily, 
 							Output_record_separator,
 							period_type_names @ Weekly,
 							Output_record_separator,
 							period_type_names @ Monthly,
+							Output_record_separator,
+							period_type_names @ Quarterly,
 							Output_record_separator,
 							period_type_names @ Yearly>>)
 				print (eom)
