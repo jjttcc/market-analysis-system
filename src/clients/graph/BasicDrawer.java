@@ -32,10 +32,10 @@ abstract public class BasicDrawer extends Drawer {
 		return is_indicator() && is_lower();
 	}
 
-	// Set the dates.
+	// Set `dates' to `d'.
 	public void set_dates(ArrayList d) {}
 
-	// Set the times.
+	// Set the `times' to `t'.
 	public void set_times(ArrayList t) {}
 
 	public void set_boundaries_needed(boolean b) { boundaries_needed = b; }
