@@ -36,7 +36,10 @@ Source: "bin\runmasf.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\runmasgui.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\fake_mailer.bat"; DestDir: "{app}\bin"; CopyMode: alwaysoverwrite
 Source: "bin\run_command.bat"; DestDir: "{app}\bin\"; CopyMode: alwaysoverwrite
-Source: "bin\init.bat"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
+;!!!remove:
+;Source: "bin\init.bat"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
+Source: "bin\install_tool.exe"; DestDir: "{app}\lib"; CopyMode: alwaysoverwrite
+Source: "bin\cleanup.bat"; DestDir: "{app}\lib"; CopyMode: alwaysoverwrite
 ; bash, sed, cygwin1.dll, etc. are needed for the bash_init init. script.
 Source: "bin\bash.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
 Source: "bin\sed.exe"; DestDir: "{app}\lib\install"; CopyMode: alwaysoverwrite
@@ -124,7 +127,9 @@ Name: "{userdesktop}\Main MAS Terminal"; Filename: "{app}\bin\mct.exe"; MinVersi
 FinishedLabel=Setup has finished installing [name] on your computer. The application may be launched by selecting the installed icons.%n%nNote: The [name] environment settings may not take effect right away.  If the [name] fails to run at first on your system, this may be the cause.  This can be fixed on Windows 95, 98, and Me systems by rebooting and on Windows NT, 2000, and XP systems by doing either of the following:%n%nLog out and then log back in or%n%nRight-click on "My Computer", select "Properties", Select the "Environment" settings, and left-click on the "OK" button.
 
 [Run]
-Filename: "{app}\lib\install_tool.exe"; Parameters: "{app}"; Flags: shellexec
+;Filename: "{app}\lib\install_tool.exe"; Parameters: "{app}"; Flags: shellexec
+Filename: "{app}\lib\install_tool.exe"; Parameters: "{app}";
+Filename: "{app}\lib\cleanup"; Parameters: ""; Flags: shellexec runminimized
 ; Filename: "{app}\bin\runmas.bat"; Description: "Launch Market Analysis System"; Flags: nowait postinstall skipifsilent
 
 ;!!!!!!!NOTE: These registry settings are probably no longer needed -
