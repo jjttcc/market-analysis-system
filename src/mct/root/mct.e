@@ -21,9 +21,10 @@ feature {NONE} -- Initialization
         local
             application: EV_APPLICATION
             main_window: EV_TITLED_WINDOW
-			builder: expanded APPLICATION_WINDOW_BUILDER
+			builder: APPLICATION_WINDOW_BUILDER
         do
             create application
+            create builder
             main_window := builder.main_window
             main_window.show
             application.launch

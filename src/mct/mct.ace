@@ -35,6 +35,12 @@ cluster
 
 	root_cluster: "$MAS/src/mct"
 
+	eiflib: "$MAS/src/eiffel_library"
+
+	libarch (eiflib): "$/architectural"
+
+	libsupport (eiflib): "$/support"
+
 	all base:		"$ISE_EIFFEL/library/base"
 		exclude
 			"table_eiffel3"; "desc"; "CVS"; 
@@ -59,6 +65,7 @@ external
 		"\$(ISE_EIFFEL)/library/vision2/implementation/gtk/Clib `gtk-config --cflags`"
 
 	object:
+		"/${MAS}/src/eiffel_library/lib/utilities.o",
 		"$(ISE_EIFFEL)/library/vision2/spec/$(ISE_PLATFORM)/lib/gtk_eiffel.o",
 		"$(ISE_EIFFEL)/library/vision2/spec/$(ISE_PLATFORM)/lib/load_pixmap.o `gtk-config --libs`",
 		"-lpng -lz -lXtst"

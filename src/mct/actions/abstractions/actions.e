@@ -6,7 +6,7 @@ indexing
 	licensing: "Copyright 2003: Jim Cochrane - %
 		%License to be determined"
 
-class ACTIONS
+deferred class ACTIONS
 
 feature -- Access
 
@@ -15,7 +15,7 @@ feature -- Access
 
 feature -- Element change
 
-	set_owner_window (arg: EV_WINDOW) is
+	set_owner_window (arg: like owner_window) is
 			-- Set `owner_window' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -25,11 +25,27 @@ feature -- Element change
 			owner_window_set: owner_window = arg and owner_window /= Void
 		end
 
+feature -- Access
+
+	port_numbers_in_use: LINKED_SET [STRING] is
+			-- Port numbers currently used by running MAS sessions
+		once
+			create Result.make
+			Result.compare_objects
+		end
+
 feature -- Actions
+
+	exit is
+		do
+			(create {EV_ENVIRONMENT}).application.destroy
+		end
 
 	close_window is
 		do
-			(create {EV_ENVIRONMENT}).application.destroy
+			if owner_window /= Void then
+				owner_window.destroy
+			end
 		end
 
 	show_about_box is
@@ -40,57 +56,15 @@ feature -- Actions
 			create about_dialog.make_with_text (
 				-- !!!Use the KDE apps' "about" box as a model to make
 				-- this look more polished.
-				"MAS Control Terminal%N%N(c) 2003%NAuthor: Jim Cochrane")
+				"MAS Control Panel%N%N(c) 2003%NAuthor: Jim Cochrane")
 			about_dialog.set_title ("About MCT")
 			about_dialog.show_modal_to_window (owner_window)
 		end
 
-	start_charting_app is
-			-- Start the MAS Charting application - Start the MAS server
-			-- first if it is not currently running.
-		do
-			if not server_is_running then
-				start_server
-			end
-			print ("Start MAS charting app. Stub!!!%N")
-		end
-
-	connect_to_session is
-			-- Connect to an existing MAS "session".
-		do
-			print ("Connect to MAS session Stub!!!%N")
-		end
-
-	terminate_session is
-			-- Terminate an existing MAS "session".
-		do
-			print ("Terminate a MAS session Stub!!!%N")
-		end
-
-	start_server is
-			-- Start the MAS server.
-		do
-			print ("Start MAS server Stub!!!%N")
-			server_is_running := True
-		end
-
-	start_command_line is
-			-- Start the MAS command-line client.
-		do
-			print ("Start MAS command-line Stub!!!%N")
-		end
-
-	configure_server_startup is
-			-- Configure how the server is to be started up.
-		do
-			print ("Configure server startup Stub!!!%N")
-		end
-
-feature {NONE} -- Implementation - Status report
-
-	server_is_running: BOOLEAN
-			-- Is the MAS server currently running?
-
 feature {NONE} -- Implementation
+
+	external_commands: HASH_TABLE [EXTERNAL_COMMAND, STRING]
+
+	configuration: MCT_CONFIGURATION
 
 end

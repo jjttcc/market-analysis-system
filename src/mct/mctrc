@@ -1,0 +1,35 @@
+# MAS Control Terminal configuration file
+# Format: "label_string<tab>setting"
+
+# Special symbols:
+#   <portnumber> - The MAS server port number for the current session
+#   <data_dir> - The directory where data files reside; has the value
+#                specified by the data_dir setting
+#   <bin_dir> - The directory where the MAS executables reside; has the
+#               value specified by the bin_dir setting
+#   <hostname> - The name of the network host upon which the server is
+#                running; has the value specified by the hostname setting.
+
+# Directory where file-based data resides
+data_dir	/opt/mas/lib/data/tradables
+
+# Directory where the MAS executables reside
+bin_dir	/opt/mas/bin
+
+# Valid port numbers for use by the MAS server
+valid_portnumbers	5432,2345,2222
+
+# Network host name
+hostname	localhost
+
+# Command to start the server
+start_server_command	cd <data_dir>; <bin_dir>/mas -o -f , -b <portnumber> *.txt
+
+# Command to start a command-line client to connect to the server
+start_cl_client_command	xterm -e <bin_dir>/macl -h <hostname> <portnumber>
+
+# Command to start the charting application
+chart_command	<bin_dir>/magc <portnumber> -h <hostname>
+
+# Command to terminate the server
+termination_command	echo |<bin_dir>/macl -h <hostname> <portnumber>
