@@ -3,9 +3,7 @@
 package support;
 
 import java.util.*;
-import java.io.*;
 import common.*;
-import support.*;
 import java.awt.*;
 
 /** Interface for MAS global configuration settings - singleton */

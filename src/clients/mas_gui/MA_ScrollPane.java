@@ -4,11 +4,8 @@ package mas_gui;
 
 import java.awt.*;
 import graph.*;
-import support.*;
 import java.util.Vector;
 import java.util.Properties;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
 import common.*;
 import application_support.*;
 

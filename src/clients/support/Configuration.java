@@ -2,13 +2,7 @@
 
 package support;
 
-import java.util.*;
-import java.io.*;
-import java.net.*;
 import common.*;
-import support.*;
-//import java.awt.*;
-//import javax.swing.*;
 
 /** Global configuration settings - singleton */
 public class Configuration implements NetworkProtocol {

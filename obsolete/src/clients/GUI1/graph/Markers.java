@@ -2,10 +2,7 @@ package graph;
 
 import java.awt.*;
 import java.util.*;
-import java.lang.*;
-import java.io.StreamTokenizer;
-import java.io.InputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 
 

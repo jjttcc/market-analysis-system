@@ -2,7 +2,6 @@
 
 package support;
 
-import java.util.*;
 import java.io.*;
 
 /** Tokenizer that reads a text file */

@@ -2,10 +2,7 @@
 
 package mas_gui;
 
-import java.awt.event.*;
-import java.awt.*;
 import java.util.*;
-import support.*;
 
 // Listener that allows user to select an indicator to be displayed.
 class IndicatorSelection extends DialogSelection {

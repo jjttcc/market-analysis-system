@@ -3,8 +3,6 @@
 package graph;
 
 import java.awt.*;
-import java.util.*;
-import support.Configuration;
 
 /**
  *  Abstraction for drawing data tuples

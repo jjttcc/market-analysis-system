@@ -1,9 +1,6 @@
 package graph;
 
 import java.awt.*;
-import java.applet.*;
-import java.net.URL;
-import java.util.*;
 
 /*
 **************************************************************************

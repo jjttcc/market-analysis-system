@@ -2,9 +2,6 @@
 
 package graph;
 
-import java.awt.*;
-import java.util.*;
-import support.*;
 
 /**
  *  Drawer of market basic data - open, high, low, close, etc.

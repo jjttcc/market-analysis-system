@@ -3,7 +3,6 @@
 package mas_gui;
 
 import java.io.*;
-import java.net.*;
 import java.util.*;
 import common.*;
 import graph.*;

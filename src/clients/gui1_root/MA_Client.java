@@ -3,8 +3,6 @@
 package gui1_root;
 
 import java.io.*;
-import java.net.*;
-import mas_gui.*;
 import support.*;
 import application_support.*;
 import application_library.*;

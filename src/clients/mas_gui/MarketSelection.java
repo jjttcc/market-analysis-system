@@ -3,9 +3,7 @@
 package mas_gui;
 
 import java.awt.event.*;
-import java.awt.*;
 import java.util.*;
-import support.*;
 
 // Listener that allows user to select a tradable to be displayed.
 class MarketSelection extends DialogSelection {
