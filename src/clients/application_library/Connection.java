@@ -8,7 +8,8 @@ import support.*;
 /** Provides an interface for connecting and communicating with the server */
 public class MA_Connection implements NetworkProtocol
 {
-	MA_Connection(String[] args)
+	// args[0]: hostname, args[1]: port_number
+	public MA_Connection(String[] args)
 	{
 		int field_specs[] = new int[6];
 		// Hard-code these for now:
@@ -35,14 +36,14 @@ public class MA_Connection implements NetworkProtocol
 		//Process args for the host, port.
 		if (args.length > 0)
 		{
-			hostname = args[0];
+			_hostname = args[0];
 			if (args.length > 1)
 			{
-				port_number = new Integer(port_number.parseInt(args[1]));
+				_port_number = new Integer(_port_number.parseInt(args[1]));
 			}
 			else
 			{
-				port_number = new Integer(33333);
+				_port_number = new Integer(33333);
 			}
 		}
 		else
@@ -51,6 +52,10 @@ public class MA_Connection implements NetworkProtocol
 			System.exit(1);
 		}
 	}
+
+	public String hostname() { return _hostname; }
+
+	public Integer port_number() { return _port_number; }
 
 	// Send a request for a login session key.
 	// Postcondition: The key value received from the server is returned.
@@ -265,7 +270,7 @@ public class MA_Connection implements NetworkProtocol
 		{
 			//It appears that the only way to connect a client socket is
 			//to create a new one!
-			socket = new Socket(hostname, port_number.intValue());
+			socket = new Socket(_hostname, _port_number.intValue());
 			out = new PrintWriter(socket.getOutputStream(), true);
 			in = new BufferedReader(
 						new InputStreamReader(socket.getInputStream()));
@@ -274,13 +279,13 @@ public class MA_Connection implements NetworkProtocol
 		catch (UnknownHostException e)
 		{
 			System.err.println("Don't know about host: ");
-			System.err.println(hostname);
+			System.err.println(_hostname);
 			System.exit(1);
 		}
 		catch (IOException e)
 		{
 			System.err.println("Couldn't get I/O for the connection to: " +
-								hostname);
+								_hostname);
 			System.exit(1);
 		}
 	}
@@ -299,11 +304,11 @@ public class MA_Connection implements NetworkProtocol
 
 	private void usage()
 	{
-		System.err.println("Usage: ta_server hostname port_number");
+		System.err.println("Usage: MA_Client hostname port_number");
 	}
 
-	private String hostname;
-	private Integer port_number;
+	private String _hostname;
+	private Integer _port_number;
 	private Socket socket;			// socket connection to server
 	private PrintWriter out;		// output to server via socket
 	private BufferedReader in;		// input from server via socket

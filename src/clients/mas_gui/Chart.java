@@ -207,7 +207,12 @@ public class MA_Chart extends Frame {
 
 		// Create and register action listener objects for the three menu items.
 		newwin.addActionListener(new ActionListener() {	// Open a new window
-		public void actionPerformed(ActionEvent e) { new MA_Chart(connection); }
+		public void actionPerformed(ActionEvent e) {
+				String[] args = new String[2];
+				args[0] = connection.hostname();
+				args[1] = connection.port_number().toString();
+				new MA_Chart(new MA_Connection(args));
+			}
 		});
 
 		mkt_selection.addActionListener(market_selection);
