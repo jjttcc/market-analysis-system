@@ -204,8 +204,14 @@ feature {NONE} -- Implementation
 			-- A clone of a user-selected member of `function_library'
 		local
 			names: ARRAYED_LIST [STRING]
+			s: STRING
 		do
 			Result := deep_clone (function_choice (msg))
+			s := string_selection (concatenation (
+				<<"Edit ", Result.generator, "? (y/n) ">>))
+			if s @ 1 = 'y' or s @ 1 = 'Y' then
+				function_editor.initialize_function (Result)
+			end
 		end
 
 	operator_choice (function: MARKET_FUNCTION): RESULT_COMMAND [BOOLEAN] is
@@ -325,6 +331,8 @@ feature {NONE}
 
 	operator_maker: COMMAND_EDITING_INTERFACE
 
+	function_editor: FUNCTION_EDITING_INTERFACE
+
 	Create_new_eg_value, Remove_eg_value, View_eg_value,
 	Show_help_value, Two_value, One_value, Compound_eg_type_value,
 	Simple_eg_type_value: INTEGER is unique
@@ -342,6 +350,7 @@ feature {NONE}
 
 invariant
 
-	fields_not_void: operator_maker /= Void and help /= Void
+	fields_not_void: operator_maker /= Void and help /= Void and
+		function_editor /= Void
 
 end -- MEG_EDITING_INTERFACE

@@ -149,6 +149,68 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			result_not_void: Result /= Void
 		end
 
+feature {EDITING_INTERFACE}
+
+	initialize_function (f: MARKET_FUNCTION) is
+			-- Set function parameters - operands, etc.
+		local
+			ema: EXPONENTIAL_MOVING_AVERAGE
+			sma: STANDARD_MOVING_AVERAGE
+			mfl: MARKET_FUNCTION_LINE
+			ovf: ONE_VARIABLE_FUNCTION
+			accum: ACCUMULATION
+			nrovf: N_RECORD_ONE_VARIABLE_FUNCTION
+			tvf: TWO_VARIABLE_FUNCTION
+		do
+			inspect
+				initialization_map @ f.generator
+			when ema_function then
+				ema ?= f
+				check
+					c_is_a_exp_ma: ema /= Void
+				end
+				editor.edit_ema (ema)
+			when One_fn_bnc_n then
+				sma ?= f
+				check
+					c_is_a_ma: sma /= Void
+				end
+				editor.edit_one_fn_bnc_n (sma)
+			when Mkt_fnctn_line then
+				mfl ?= f
+				check
+					c_is_a_line: mfl /= Void
+				end
+				editor.edit_market_function_line (mfl)
+			when One_fn_op_n then
+				nrovf ?= f
+				check
+					c_is_a_n_rec_1vf: nrovf /= Void
+				end
+				editor.edit_one_fn_op_n (nrovf)
+			when One_fn_op then
+				ovf ?= f
+				check
+					c_is_a_1vf: ovf /= Void
+				end
+				editor.edit_one_fn_op (ovf)
+			when Accumulation then
+				accum ?= f
+				check
+					c_is_an_accum: accum /= Void
+				end
+				editor.edit_accumulation (accum)
+			when Two_cplx_fn_op then
+				tvf ?= f
+				check
+					c_is_a_2vf: tvf /= Void
+				end
+				editor.edit_two_cplx_fn_op (tvf)
+			when Other then
+				-- No initialization needed.
+			end
+		end
+
 feature {NONE} -- Implementation
 
 	One_fn_op,			-- Takes one market function and an operator.
@@ -161,7 +223,7 @@ feature {NONE} -- Implementation
 	ema_function,	    -- EXPONENTIAL_MOVING_AVERAGE function - takes one
 						-- market function, a RESULT_COMMAND [REAL],
 						-- an N_BASED_CALCULATION, and an n-value.
-	Two_points_pertype,	-- Takes two market points and a period type.
+	Mkt_fnctn_line,		-- a MARKET_FUNCTION_LINE.
 	Other				-- Classes that need no initialization
 	:
 				INTEGER is unique
@@ -209,72 +271,12 @@ feature {NONE} -- Implementation
 			check
 				valid_name: function_names.has (name)
 			end
-			Result.extend (Two_points_pertype, name)
+			Result.extend (Mkt_fnctn_line, name)
 			name := "STOCK"
 			check
 				valid_name: function_names.has (name)
 			end
 			Result.extend (Other, name)
-		end
-
-	initialize_function (f: MARKET_FUNCTION) is
-			-- Set function parameters - operands, etc.
-		local
-			ema: EXPONENTIAL_MOVING_AVERAGE
-			sma: STANDARD_MOVING_AVERAGE
-			mfl: MARKET_FUNCTION_LINE
-			ovf: ONE_VARIABLE_FUNCTION
-			accum: ACCUMULATION
-			nrovf: N_RECORD_ONE_VARIABLE_FUNCTION
-			tvf: TWO_VARIABLE_FUNCTION
-		do
-			inspect
-				initialization_map @ f.generator
-			when ema_function then
-				ema ?= f
-				check
-					c_is_a_exp_ma: ema /= Void
-				end
-				editor.edit_ema (ema)
-			when One_fn_bnc_n then
-				sma ?= f
-				check
-					c_is_a_ma: sma /= Void
-				end
-				editor.edit_one_fn_bnc_n (sma)
-			when Two_points_pertype then
-				mfl ?= f
-				check
-					c_is_a_line: mfl /= Void
-				end
-				editor.edit_two_points_pertype (mfl)
-			when One_fn_op_n then
-				nrovf ?= f
-				check
-					c_is_a_n_rec_1vf: nrovf /= Void
-				end
-				editor.edit_one_fn_op_n (nrovf)
-			when One_fn_op then
-				ovf ?= f
-				check
-					c_is_a_1vf: ovf /= Void
-				end
-				editor.edit_one_fn_op (ovf)
-			when Accumulation then
-				accum ?= f
-				check
-					c_is_an_accum: accum /= Void
-				end
-				editor.edit_accumulation (accum)
-			when Two_cplx_fn_op then
-				tvf ?= f
-				check
-					c_is_a_2vf: tvf /= Void
-				end
-				editor.edit_two_cplx_fn_op (tvf)
-			when Other then
-				-- No initialization needed.
-			end
 		end
 
 feature {NONE} -- Hook routines
