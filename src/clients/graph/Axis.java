@@ -612,7 +612,7 @@ public class Axis {
 		double val;
 		double minor;
 
-		//          System.out.println("Drawing Horizontal Axis!");
+//System.out.println("Drawing Horizontal Axis!");
 		if (axiscolor != null) {
 			g.setColor(axiscolor);
 		}
@@ -736,7 +736,7 @@ public class Axis {
 		double scale  = (amax.y - amin.y)/(maximum - minimum);
 		double val;
 
-		//          System.out.println("Drawing Vertical Axis!");
+//System.out.println("Drawing Vertical Axis!");
 
 		if (axiscolor != null) {
 			g.setColor(axiscolor);

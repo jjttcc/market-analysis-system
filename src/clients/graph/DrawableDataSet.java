@@ -278,7 +278,6 @@ public class DrawableDataSet extends BasicDataSet
 // Class invariant
 
 	public boolean invariant() {
-System.out.println("drawer() != null: " + drawer() != null);
 		return drawer() != null && super.invariant();
 	}
 

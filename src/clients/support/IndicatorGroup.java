@@ -37,7 +37,7 @@ abstract public class IndicatorGroup implements Cloneable {
 	// Set the group's name to 'arg'.
 	public void set_name(String arg) {
 		name = arg;
-		//System.out.println("Setting name: "+name);
+//System.out.println("Setting name: "+name);
 	}
 
 	private String name = new String();

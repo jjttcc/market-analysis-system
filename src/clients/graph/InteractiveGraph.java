@@ -277,7 +277,7 @@ abstract public class InteractiveGraph extends Graph {
 				userlimits = true;
 				return true;
 			default:
-// System.out.println("KeyPress "+e.key);
+//System.out.println("KeyPress "+e.key);
 				return false;
 		}
 	}

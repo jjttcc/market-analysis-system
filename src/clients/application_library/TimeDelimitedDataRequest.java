@@ -81,10 +81,8 @@ class TimeDelimitedDataRequest extends TimerTask {
 				// request, resulting in different ranges.)
 				end_date = builder.last_latest_date_time();
 				assert builder.last_market_data().size() > 0;
-System.out.println("A");
 				spec.append_data(builder.last_market_data());
 				if (spec.last_append_changed_state()) {
-System.out.println("TDDR - spec state changed - continuing");
 					indicators = spec.selected_indicators().iterator();
 					while (indicators.hasNext()) {
 						ispec = (IndicatorSpecification) indicators.next();
@@ -94,7 +92,6 @@ System.out.println("TDDR - spec state changed - continuing");
 								period_type, start_date, end_date);
 							if (builder.request_succeeded()) {
 								assert builder.last_indicator_data().size() > 0;
-System.out.println("B");
 								ispec.append_data(
 									builder.last_indicator_data());
 							} else {
@@ -105,7 +102,6 @@ System.out.println("B");
 					client.update_start_date(builder);
 					client.notify_of_update();
 				}
-else { System.out.println("TDDR - spec state did NOT change"); }
 			} else {
 				// builder.send_time_delimited_market_data_request failed or
 				// obtained an empty result, so indicator requests are skipped.
