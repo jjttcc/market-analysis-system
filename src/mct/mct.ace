@@ -114,6 +114,25 @@ cluster
 			"mswin"; "components"; "obsolete"; 
 		end
 
+	gobo:		"$GOBO/library"
+
+	all gobo_kernel (gobo):		"$/kernel"
+		exclude
+			"se"; "ve"; "hact"; 
+		end
+
+	regexp (gobo):		"$/regexp"
+
+	pcre (regexp):		"$/pcre"
+
+	re_interface (regexp):		"$/interface"
+
+	re_support (regexp):		"$/support"
+
+	all gobo_utility (gobo):		"$/utility"
+
+	all gobo_structure (gobo):		"$/structure"
+
 external
 
 	include_path:
