@@ -1,0 +1,66 @@
+BNF grammar for the protocol between the server and a GUI client
+
+
+message         -> msgID msg end_of_message
+msg             -> client_req | server_response
+client_req      -> mkt_data_req | ind_data_req | mkt_list_req | ind_list_req
+mk_data_req     -> mkt_symbol "\t" trad_per_type
+ind_data_req    -> indID "\t" mkt_symbol "\t" trad_per_type
+server_response -> srvr_data | error_msg
+error_msg       -> ta_string
+srvr_data       -> mkt_data | ind_data | symbol_list | ind_list
+mkt_data        -> date "\t" mkt_fields
+ind_data        -> date "\t" ta_real
+symbol_list     -> { symbol "\t" ... }+
+ind_list        -> { ind_specifier "\t" ... }
+ind_specifier   -> ind_name "\t" indID
+mkt_fields      -> { ta_real "\t" ... }+ [ "\t" volume [ "\t" open_interest ] ]
+indID           -> natural_integer
+volume          -> natural_integer
+open_interest   -> natural_integer
+msgID           -> natural_integer
+mkt_list_req    -> <null>
+ind_list_req    -> <null>
+date            -> year "/" month "/" day
+year            -> digit digit digit digit
+month           -> digit digit
+day             -> digit digit
+natural_integer -> +('0'..'9')
+ta_real         -> +('0'..'9') '.' *('0'..'9')
+digit           -> ('0'..'9')
+end_of_message  -> ''
+
+
+
+Notes:
+
+All tokens are constructed from a stream of ASCII characters.
+
+Date components must follow the usual rules for dates.
+
+end_of_message is the Control-G (bell) character.
+
+mkt_list_req and ind_list_req are null because the msgID alone gives enough
+information with respect to these requests.
+
+msgID is an integer identifying the type of message - for the server,
+the types of messages are those containing data in response to a client
+request (srvr_data) and those containing error message information
+(error_msg).  For the client, the types of messages are:
+
+	- mkt_data_req (request for market data)
+	- ind_data_req (request for indicator data)
+	- mkt_list_req (request for a list of the symbols of all markets in the
+	               database)
+	- ind_list_req (request for a list of all indicators in the database)
+
+A client market data request always includes the symbol for the desired
+market and the desired trading period type.  A client indicator data request
+always includes the indicator ID, the symbol for the desired market, and the
+desired trading period type.
+
+When a client first connects with a server, the server will not send anything
+until it receives a request from the client.  Usually this will be a
+mkt_list_req, followed by a ind_list_req; but if the client is a new window
+(possibly in a new thread) in an existing process, it may already have a copy
+of the list of markets and of the list of indicators.

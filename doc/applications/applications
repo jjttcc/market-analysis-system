@@ -1,0 +1,40 @@
+Thu Dec 10 10:34:30 MST 1998
+
+                       Applications Using TAL
+
+
+Currently, the only application written for TAL is a test application,
+which resides in the directory main_test_app under the main source
+directory.
+
+The factories cluster contains the following classes:
+
+    - FACTORY_BUILDER, which builds the other factories used in the
+      application.
+
+    - FUNCTION_BUILDER, which builds the different technical indicators
+      (such as Moving Average and Momentum) used in the application.
+
+    - TRADABLE_FACTORY, which builds an instance of a descendant of
+      TRADABLE, such as STOCK, and loads its market tuple list from an
+      input file.
+
+    - STOCK_FACTORY, a descendant of TRADABLE_FACTORY that instantiates a
+      STOCK.
+
+FUNCTION_BUILDER creates a hard-coded set of technical indicators
+for testing purposes.  In the future, the mechanism for building
+technical indicators will be extended to allow new indicators to be
+added at run-time.  This facility will probably be placed in the TAL
+itself rather than in an application.
+
+The root cluster contains the root class, FINANCE_ROOT, and
+TEST_USER_INTERFACE, which provides the command-line user interface
+functionality.
+
+The utility cluster contains classes EVENT_REGISTRATION, providing
+functionality for registration for events and HELP, a simple class
+providing help instructions used by the user interface.
+
+
+Copyright 1998 Jim Cochrane and others, see file "forum.txt"
