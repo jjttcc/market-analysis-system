@@ -564,6 +564,8 @@ feature {NONE} -- Implementation
 				if fa.operator /= Void then
 					print ("Uses an operator:%N")
 					operator_maker.print_command_tree (fa.operator, 1)
+				else
+					print ("(No operator)%N")
 				end
 			end
 			print_list (<<"(Hit <Return> to continue.) ", eom>>)
