@@ -21,7 +21,7 @@ class MCT_PLATFORM inherit
 
 feature -- Access
 
-	Default_configuration_file_location: STRING is "C:\Program Files\mas\"
+	Default_configuration_file_location: STRING is "C:\Program Files\mct\"
 			-- Default location (complete path) of the MCT configuration
 			-- file (with a directory separator on the end)
 
