@@ -16,6 +16,13 @@ inherit
 
 feature -- Access
 
+	product_info: MAS_PRODUCT_INFO is
+		do
+			create Result
+		end
+
+feature -- Status report
+
 	auto_data_update_on: BOOLEAN is False
 
 end

@@ -188,15 +188,16 @@ feature -- Basic operations
 			error_occurred := False
 			check_for_open_interest
 			if not update_current_product then
-print ("TF execute - update_current_product is FAlSE.%N")
+print ("TF execute - update_current_product is FALSE.%N")
 				make_product
 			else
+print ("TF execute - update_current_product is TRUE.%N")
+			end
+			check
+				product_exists:  product /= Void
+			end
 print ("TF execute - BEFORE - product.count: " + product.count.out + "%N")
 --print ("TF execute - BEFORE - product.out: " + product.out + "%N")
-				check
-					product_already_exists:  product /= Void
-				end
-			end
 			make_tuple_maker
 			if intraday then
 				create intraday_scanner.make (
@@ -234,9 +235,9 @@ print ("TF execute - BEFORE - product.count: " + product.count.out + "%N")
 			-- already been set up.
 			if not update_current_product then
 				add_indicators (product)
+			end
 print ("TF execute - AFTER - product.count: " + product.count.out + "%N")
 --print ("TF execute - AFTER - product.out: " + product.out + "%N")
-			end
 			update_current_product := False
 		ensure then
 			product_not_void: product /= Void

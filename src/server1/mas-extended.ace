@@ -5,11 +5,13 @@ root
 	EXTENDED_MA_SERVER: make
 
 default
-	assertion (check)
-	assertion (require)
-	assertion (ensure)
-	assertion (loop)
-	assertion (invariant)
+	assertion (all)
+--	assertion (check)
+--	assertion (require)
+--	assertion (ensure)
+--	assertion (loop)
+--	assertion (invariant)
+	arguments ("-w -f , -b 5555")
 	arguments (" -o -b 12345 -f , -w -report_back jupiter.milkyway.org^41512")
 	arguments (" ")
 	arguments ("-o -f , -w 12345")
@@ -117,6 +119,10 @@ cluster
 	extended_global (extended_server):		"$/global"
 
 	extended_sys (extended_server):		"$/system_specific/unix"
+
+	extended_utility (extended_server):		"$/utility"
+
+	extended_tradable_list (extended_server):		"$/tradable_list"
 
 	open_source_root_cluster (server):		"$/root"
 

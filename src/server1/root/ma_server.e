@@ -58,8 +58,10 @@ feature {NONE} -- Hook routine implementations
 		end
 
 	version: MAS_PRODUCT_INFO is
+		local
+			gs: expanded GLOBAL_SERVER_FACILITIES
 		once
-			create Result
+			Result := gs.global_configuration.product_info
 		end
 
 	configuration_error: BOOLEAN is

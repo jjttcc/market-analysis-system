@@ -4,7 +4,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
-		%Released under the Eiffel Forum License; see file forum.txt"
+		%License to be determined - will be non-public"
 
 class
 
@@ -15,6 +15,13 @@ inherit
 	GLOBAL_CONFIGURATION
 
 feature -- Access
+
+	product_info: EXTENDED_PRODUCT_INFO is
+		do
+			create Result
+		end
+
+feature -- Status report
 
 	auto_data_update_on: BOOLEAN is True
 

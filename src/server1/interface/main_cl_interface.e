@@ -643,8 +643,10 @@ feature {NONE} -- Implementation - utilities
 
 	product_info: STRING is
 		local
-			version: expanded MAS_PRODUCT_INFO
+			version: MAS_PRODUCT_INFO
+			gs: expanded GLOBAL_SERVER_FACILITIES
 		do
+			version := gs.global_configuration.product_info
 			Result := "%N" + version.name + "%NVersion: " + version.number +
 				"%N" + version.copyright + "%NVersion date: " +
 				version.informal_date + "%N" + version.assertion_report +

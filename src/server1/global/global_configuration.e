@@ -10,7 +10,14 @@ deferred class
 
 	GLOBAL_CONFIGURATION
 
-feature
+feature -- Access
+
+	product_info: MAS_PRODUCT_INFO is
+			-- Product information for the current release
+		deferred
+		end
+
+feature -- Status report
 
 	auto_data_update_on: BOOLEAN is
 			-- Is the automated data update functionality available?
