@@ -21,18 +21,14 @@ deferred class COMPOSITE_TRADABLE inherit
 
 feature {NONE} -- Initialization
 
-	make (accum_op: RESULT_COMMAND [REAL];
-		accum_variable: NUMERIC_VALUE_COMMAND) is
+	make (accum_op: RESULT_COMMAND [REAL]) is
 		require
-			args_exists: accum_op /= Void and accum_variable /= Void
-			accum_op_has_accum_var: accum_op.descendants.has (accum_variable)
+			args_exists: accum_op /= Void
 		do
 			accumulation_operator := accum_op
-			accumulation_variable := accum_variable
 			--@@@Remainder to be determined.
 		ensure
 			accumulation_op_set: accumulation_operator = accum_op
-			accumulation_var_set: accumulation_variable = accum_variable
 		end
 
 feature -- Access
@@ -65,16 +61,6 @@ feature -- Access
 			--`operator_for_current_component'; it seems though that it
 			--may be better to keep the accumulation operator to separate
 			--"weighting" calculations from "accumulation" calculations.
-
-	accumulation_variable: NUMERIC_VALUE_COMMAND
-			-- The "variable" that will be set to the result of applying
-			-- the main calculation to the current field of the current
-			-- tuple - It is expected to be one of
-			-- `accumulation_operator.descendants' so that
-			-- `accumulation_operator' can use its value to perform its
-			-- "accumulation".  (It will most likely be the "left-most"
-			-- operator of a COMMAND_SEQUENCE belonging to
-			-- `accumulation_operator'.)
 
 feature -- Status report
 
@@ -156,6 +142,7 @@ feature {NONE} -- Implementation
 			extractors: LINEAR [BASIC_NUMERIC_COMMAND]
 		do
 			create current_tuple.make
+			current_tuple.set_date_time (components.item.data.first.date_time)
 			main_field_extractor_array := <<open, high, low, close, volume>>
 			extractors := main_field_extractor_array.linear_representation
 			extractors.do_all (agent process_components_for_current_tuple)
@@ -170,10 +157,8 @@ feature {NONE} -- Implementation
 			-- value to be used for the current output tuple.
 		local
 			post_operator: RESULT_COMMAND [REAL]
-			post_variable: NUMERIC_VALUE_COMMAND
 		do
 			post_operator := post_processing_operator (field_extractor.name)
-			post_variable := post_processing_variable (field_extractor.name)
 			from
 				components.start
 			until
@@ -182,25 +167,28 @@ feature {NONE} -- Implementation
 				calculate_field (field_extractor)
 				components.forth
 			end
-			post_variable.set_value (accumulation_operator.value)
-			post_operator.execute (post_variable.value)
-			-- Need a 'postprocessing_operator.execute ...' - e.g., to
-			-- divide a "divisor" for a stock index.  Set a
-			-- 'postprocessing_variable' to accumulation_operator.value,
-			-- then execute the postprocessing_operator, and use its
-			-- value for the tuple, below, instead of
-			-- accumulation_operator.value.
+			-- Obtain the "accumulated" value resulting from processing
+			-- each component and execute the post_operator with it.
+			work_tuple.set_value (accumulation_operator.value)
+			post_operator.execute (work_tuple)
+			-- Use the post_operator's value to set the value of the
+			-- appropriate field of `current_tuple'.
 			--!!!Check if this call is set up right.
 			field_setters.item (field_extractor.name).call ([current_tuple,
-				accumulation_operator.value])
+				post_operator.value])
 		end
 
 feature {NONE} -- Implementation - Hook routines
 
 	prepare_for_processing is
 			-- Perform any needed initialization before making `data'.
+		local
+			now: DATE_TIME
 		do
-			-- Null routine - redefine if needed.
+			create now.make_now
+			create work_tuple.make (now, now.date, 0)
+		ensure
+			work_tuple_exists: work_tuple /= Void
 		end
 
 --!!!Check this and make_current_tuple and add comments/advice about
@@ -224,8 +212,8 @@ feature {NONE} -- Implementation - Hook routines
 			-- calculation and "accumulate" it.  The result of this
 			-- accumulation can then be obtained from
 			-- accumulation_operator.value.
-			accumulation_variable.set_value (operator.value)
-			accumulation_operator.execute (components.item.data.item)
+			work_tuple.set_value (operator.value)
+			accumulation_operator.execute (work_tuple)
 		end
 
 	operator_for_current_component (field_extractor_name: STRING):
@@ -260,19 +248,7 @@ feature {NONE} -- Implementation - Hook routines
 			-- sharing the same operator.
 		end
 
-	post_processing_variable (field_extractor_name: STRING):
-		NUMERIC_VALUE_COMMAND is
-			-- The variable to be operated on for any needed post-processing
-			-- for the current field of the current tuple (possibly
-			-- specialized with `field_extractor_name')
-		deferred
-		ensure
-			belongs_to_current_operator_or_current_volume_operator:
-				operator_for_current_component (
-				field_extractor_name).descendants.has (Result)
-		end
-
-feature {NONE} -- Implementation - Utility attributes
+feature {NONE} -- Implementation - Utility queries
 
 	current_tuple: BASIC_VOLUME_TUPLE
 			-- Current value of the current tuple - used for calculation
@@ -332,6 +308,8 @@ feature {NONE} -- Implementation - Utility attributes
 			Result.extend (agent {BASIC_VOLUME_TUPLE}.set_close, close.name)
 			Result.extend (agent {BASIC_VOLUME_TUPLE}.set_volume, volume.name)
 		end
+
+	work_tuple: SIMPLE_TUPLE
 
 feature {NONE} -- Implementation - Utility routines
 
@@ -438,9 +416,6 @@ feature {NONE} -- Implementation - Utility routines
 invariant
 
 	components_exist: components /= Void
-	operators_exists: accumulation_operator /= Void and
-		accumulation_variable /= Void
-	accumulation_op_has_accumulation_var:
-		accumulation_operator.descendants.has (accumulation_variable)
+	operators_exists: accumulation_operator /= Void
 
 end
