@@ -27,24 +27,11 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 		_indicator_graph = new InteractiveGraph();
 		GridBagLayout gblayout = new GridBagLayout();
 		GridBagConstraints gbconstraints = new GridBagConstraints();
-//!!Remove choice, left-button panel stuff if/when it's determined it
-//!!is not needed.
-//period_type_choice = new Choice();
-//initialize_period_type_choice(period_types);
 
 		main_panel = new Panel(new BorderLayout());
 		add(main_panel, "Center");
 		graph_panel = new Panel(gblayout);
 		main_panel.add (graph_panel, "Center");
-//_left_button_panel = new Panel(new BorderLayout());
-//Panel top_button_panel = new Panel(new GridLayout(3, 2));
-//Panel bottom_button_panel = new Panel(new GridLayout(3, 2));
-//main_panel.add (_left_button_panel, "West");
-//_left_button_panel.add (top_button_panel, "North");
-//_left_button_panel.add (bottom_button_panel, "South");
-//top_button_panel.add(new Button("Dummy1"));
-//top_button_panel.add(period_type_choice);
-//bottom_button_panel.add(new Button("Dummy2"));
 
 		// Set GridBagLayout constraints such that the main graph is at
 		// the top and takes about 2/3 of available height and the
@@ -177,32 +164,12 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 			_main_graph.set_symbol(null);
 	}
 
-//// The left button panel component
-//public Panel left_button_panel() { return _left_button_panel; }
-
 // Implementation
-
-void initialize_period_type_choice(Vector period_types) {
-for (int i = 0; i < period_types.size(); ++i) {
-period_type_choice.add((String) period_types.elementAt(i));
-}
-period_type_choice.addItemListener(new ItemListener() {
-public void itemStateChanged(ItemEvent e) {
-String per_type;
-per_type = (String) e.getItem();
-if (! per_type.equals(_last_period_type)) {
-//chart.notify_period_type_changed();
-}
-_last_period_type = per_type;
-}
-});
-}
 
 	private InteractiveGraph _main_graph;
 	private InteractiveGraph _indicator_graph;
 	private Panel main_panel;
 	private Panel graph_panel;
-//private Panel _left_button_panel;
 	// Did _main_graph change since it was last repainted?
 	boolean main_graph_changed;
 	// Did _indicator_graph change since it was last repainted?
