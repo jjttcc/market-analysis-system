@@ -256,11 +256,18 @@ feature {NONE} -- Implementation
 				when 'c', 'C' then
 					select_period_type
 				when 'i', 'I' then
-					print ("Select indicator to view (0 to end):%N")
-					indicator := indicator_selection
-									(current_tradable.indicators)
-					if indicator /= Void then
-						view_indicator_menu (indicator)
+					if
+						current_tradable.indicators = Void or
+						current_tradable.indicators.empty
+					then
+						print ("There are currently no indicators to view.%N")
+					else
+						print ("Select indicator to view (0 to end):%N")
+						indicator := indicator_selection
+										(current_tradable.indicators)
+						if indicator /= Void then
+							view_indicator_menu (indicator)
+						end
 					end
 				when 'n', 'N' then
 					print_list (<<"%N", current_tradable.name>>)
