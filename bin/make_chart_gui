@@ -8,6 +8,7 @@ Gui_dir=$MAS/src/clients/GUI1
 Jarfile=mascharts.jar
 Main_file=MA_Client.java
 Main_class_files=MA_Client.class
+CL_classes=CL_Client.java
 
 utilpath=$Basedir/../../script_library/support/utilities
 . $utilpath || (
@@ -22,4 +23,9 @@ find . -follow -name '*.class' -exec rm {} ';'
 echo Compiling ...
 javac $Main_file || fatal "Compilation of $Main_file failed."
 echo Creating jar file: $Jarfile ...
+rm -f $Jarfile
 jar cvf $Jarfile $Main_class_files $(for d in $guidirs;do ls -1 $d/*.class;done)
+
+# Make the CL program.
+cd ../CL
+javac $CL_classes
