@@ -11,8 +11,7 @@ class EVENT_REGISTRATION inherit
 		export
 			{NONE} all
 		undefine
-			print, output_field_separator, output_record_separator,
-			output_date_field_separator
+			print
 		end
 
 	EXECUTION_ENVIRONMENT
