@@ -43,6 +43,12 @@ feature -- Initialization
 			hfile_name := event_history_file_name
 			u_make
 			er_make
+			-- Object comparison is required because of the persistence
+			-- mechanism - on retrieval from storage a member of `event_types'
+			-- may be a different instance than the respective member of
+			-- `global_event_types'.  (Originally they will be the same
+			-- instance.)
+			event_types.compare_objects
 		end
 
 feature -- Basic operations
