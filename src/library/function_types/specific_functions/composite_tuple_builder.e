@@ -18,6 +18,10 @@ class COMPOSITE_TUPLE_BUILDER inherit
 			operator_used, input
 		end
 
+creation
+
+	make
+
 feature -- Basic operations
 
 	process (start_date: DATE_TIME) is
@@ -27,12 +31,7 @@ feature -- Basic operations
 			current_date: DATE_TIME
 		do
 			from
-				if output = Void then
-					!!output.make (1) --!!!??
-				else
-					-- Remove any previously inserted items.
-					output.wipe_out
-				end
+				check output /= Void and output.empty end
 				!!src_sublist.make (0)
 				source_list.start
 				current_date := start_date
@@ -68,7 +67,6 @@ feature -- Basic operations
 				current_date := current_date + duration
 				output.extend (tuple_maker.product)
 			end
-			set_processed (true)
 		ensure then
 			output.count > 0 implies times_correct and
 				output.first.date_time.is_equal (start_date)
@@ -186,5 +184,9 @@ feature -- Element change
 feature {NONE}
 
 	input: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
+
+invariant
+
+	input_equals_source_list: input = source_list
 
 end -- COMPOSITE_TUPLE_BUILDER
