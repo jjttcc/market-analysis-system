@@ -135,6 +135,77 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 		}
 	}
 
+	public void doLayout() {
+		super.doLayout();
+		if (getScrollbarDisplayPolicy() == SCROLLBARS_NEVER) {
+			// Use this class's calculateChildSize() and re-do layout of child
+			Component c = getComponent(0);
+			Dimension cs = calculateChildSize();
+			Insets i = getInsets();
+			c.setBounds(i.left, i.top, cs.width, cs.height);
+		}
+	}
+
+// Implementation
+
+    /**
+     * Determine the size to allocate the child component.
+     * Overrides calculateChildSize() in ScollPane.
+     * If the viewport area is bigger than the child's
+     * preferred size then the child is allocated enough
+     * to fill the viewport, otherwise the child is given
+     * its preferred size.
+     * Calls super.calculateChildSize().
+     * If scrolling is disabled, the child is allocated enough
+     * to fill the viewport.
+     */
+    Dimension calculateChildSize() {
+		// Calculate the view size, accounting for border but not scrollbars
+		// - don't use right/bottom insets since they vary depending
+		//   on whether or not scrollbars were displayed on last resize.
+		Dimension	size = getSize();
+		Insets		insets = getInsets();
+		int 		viewWidth = size.width - insets.left*2;
+		int 		viewHeight = size.height - insets.top*2;
+
+		// Determine whether or not horz or vert scrollbars will be displayed.
+		boolean vbarOn;
+		boolean hbarOn;
+		Component child = getComponent(0);
+		Dimension childSize = new Dimension(child.getPreferredSize());
+
+		if (getScrollbarDisplayPolicy() == SCROLLBARS_AS_NEEDED) {
+			vbarOn = childSize.height > viewHeight;
+			hbarOn = childSize.width  > viewWidth;
+		} else if (getScrollbarDisplayPolicy() == SCROLLBARS_ALWAYS) {
+			vbarOn = hbarOn = true;
+		} else { // SCROLLBARS_NEVER
+			vbarOn = hbarOn = false;
+		}
+
+		// Adjust predicted view size to account for scrollbars.
+		int vbarWidth = getVScrollbarWidth();
+		int hbarHeight = getHScrollbarHeight();
+		if (vbarOn) {
+			viewWidth -= vbarWidth;
+		}
+		if (hbarOn) {
+			viewHeight -= hbarHeight;
+		}
+
+		// If child is smaller than view, size it up.
+		if ((childSize.width < viewWidth)
+			|| (getScrollbarDisplayPolicy() == SCROLLBARS_NEVER)) {
+			childSize.width = viewWidth;
+		}
+		if ((childSize.height < viewHeight)
+			|| (getScrollbarDisplayPolicy() == SCROLLBARS_NEVER)) {
+			childSize.height = viewHeight;
+		}
+
+		return childSize;
+    }
+
 	private void print_current_chart(PrintJob pj) {
 			Graphics page = pj.getGraphics();
 			Dimension size = graph_panel.getSize();
