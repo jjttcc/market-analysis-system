@@ -90,6 +90,7 @@ feature -- Basic operations
 				error_list := scanner.error_list
 				error_occurred := true
 			end
+			product.finish_loading
 		ensure then
 			product_not_void: product /= Void
 			product_type_set: product.trading_period_type = time_period_type

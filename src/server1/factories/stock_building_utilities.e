@@ -16,6 +16,11 @@ class STOCK_FACTORY inherit
 			{NONE} all
 		end
 
+	TAL_APP_ENVIRONMENT
+		export
+			{NONE} all
+		end
+
 creation
 
 	make
@@ -36,8 +41,7 @@ feature {NONE}
 			i, last_sep_index: INTEGER
 		do
 			--!!!For now, set the name and symbol to `symbol'.
-			--!!!Void stock splits for now.
-			!!product.make (symbol, time_period_type, Void)
+			!!product.make (symbol, time_period_type, stock_splits @ symbol)
 			product.set_name (symbol)
 		end
 
@@ -51,6 +55,21 @@ feature {NONE}
 				Result := << Date_index, Open_index, High_index, Low_index,
 								Close_index, Volume_index >>
 			end
+		end
+
+	stock_splits: STOCK_SPLITS is
+		once
+			!STOCK_SPLIT_FILE!Result.make (
+				split_field_separator, stock_split_file)
+		end
+
+	split_field_separator: STRING is "%T"
+			-- !!!Hard code for now.
+	
+	stock_split_file: STRING is
+			-- !!!Hard code for now.
+		once
+			Result := file_name_with_app_directory ("ta_stock_splits")
 		end
 
 end -- STOCK_FACTORY
