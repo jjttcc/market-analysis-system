@@ -33,7 +33,6 @@ set_up()
 	successes=0
 	test_count=0
 	unset MAS_DIRECTORY
-	flags=""
 	if [ ! -d bin ]; then
 		echo "Where's the bin directory?"
 		exit -1
@@ -103,10 +102,10 @@ $1"
 }
 
 filter_output()
-# Filter the output of a test into for processing.
-# Print only the 2nd field of data extracted from the file.
+# Filter the output of a test for processing.
+# Print only the last field of data extracted from the file.
 {
-	awk '/^[0-9][0-9][0-9][0-9]\// { print $2 }'
+	awk '/^[0-9][0-9][0-9][0-9]\// { print $NF }'
 }
 
 run_at_index()
@@ -124,7 +123,7 @@ i
 $Tindex
 p
 -
-"|$exec $flags input/$Tinput>output/rawtest.out
+"|$exec $Toptions input/$Tinput>output/rawtest.out
 	result=$?
 	if [ "$result" = 0 ]; then
 		filter_output <output/rawtest.out
