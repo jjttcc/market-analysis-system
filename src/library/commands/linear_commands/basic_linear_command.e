@@ -9,22 +9,14 @@ class BASIC_LINEAR_COMMAND inherit
 
 	NUMERIC_COMMAND
 
+	LINEAR_ANALYZER
+
 feature -- Basic operations
 
 	execute (arg: ANY) is
 				-- Can be redefined by ancestors.
 		do
 			value := target.item.value
-		end
-
-feature {TEST_FUNCTION_FACTORY} -- Element change
-
-	set_target (in: LINEAR [MARKET_TUPLE]) is
-		do
-			target := in
-		ensure then
-			target = in
-			target /= Void
 		end
 
 feature -- Status report
@@ -38,13 +30,9 @@ feature -- Status report
 
 	execute_precondition: BOOLEAN is
 		do
-			Result := true
+			Result := target_set
 		ensure then
-			is_true: Result = true
+			target_set: Result = target_set
 		end
-
-feature {NONE}
-
-	target: LINEAR [MARKET_TUPLE]
 
 end -- class BASIC_LINEAR_COMMAND

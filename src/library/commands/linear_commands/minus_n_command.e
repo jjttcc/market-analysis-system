@@ -1,6 +1,6 @@
 indexing
 	description:
-		"An n-record command that simply retrieves the value at the%
+		"An n-record command that simply retrieves the value at the %
 		%current position minus n of the input";
 	date: "$Date$";
 	revision: "$Revision$"
