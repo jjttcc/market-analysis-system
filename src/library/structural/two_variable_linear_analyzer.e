@@ -12,11 +12,6 @@ class TWO_VARIABLE_LINEAR_ANALYZER inherit
 	LINEAR_ANALYZER
 		rename
 			target as target1, -- x in "z = f(x, y)"
---!!!!!An adjustment will probably be needed because LINEAR_ITERATOR depends
---on 'set' being called; perhaps: call this set1 and call it to set target1,
---and call the other one set2 and call it to set target2.
---!!!!!The above has been fixed - see set1 and set2 - Check/test that it is
---correct.
 			set as set_unused
 		export {NONE}
 			set_unused
