@@ -87,9 +87,6 @@ feature {NONE} -- Hook methods
 
 	accepted_by_user (c: COMMAND): BOOLEAN is
 		local
-			text: ARRAY [STRING]
-			margin: STRING
-			line_length: INTEGER
 			editable: CONFIGURABLE_EDITABLE_COMMAND
 		do
 			print (display_for_accepted_by_user (c) + eom)

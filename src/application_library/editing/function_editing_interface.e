@@ -442,7 +442,6 @@ feature {NONE} -- Implementation
 		local
 			spiel: STRING
 			fnames: LIST [STRING]
-			name: STRING
 		do
 			create spiel.make (0)
 			from
