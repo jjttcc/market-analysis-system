@@ -47,7 +47,7 @@ feature -- Initialization
 		do
 			start_date_time := a.start_date_time
 			left_offset := a.left_offset
-			input.set_innermost_input (a.tradable)
+			input.set_innermost_input (a.current_tradable)
 			if not input.processed then
 				input.process
 			end
