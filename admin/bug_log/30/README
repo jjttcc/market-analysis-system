@@ -1,1 +1,6 @@
 Logs for task 30 - mas server panic bug
+
+Files:
+
+aug06 - Output of the finance run_market_analysis cron job, with the
+        "panic" messages near the bottom.  Also includes top output.

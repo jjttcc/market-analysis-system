@@ -1,0 +1,2624 @@
+From finance  Fri Aug  6 17:42:59 2004
+Return-Path: <finance@jupiter.milkyway.org>
+Received: (from finance@localhost)
+	by jupiter.milkyway.org (8.11.6/8.11.6) id i76Nb2n00314
+	for finance; Fri, 6 Aug 2004 17:37:02 -0600
+Date: Fri, 6 Aug 2004 17:37:02 -0600
+Message-Id: <200408062337.i76Nb2n00314@jupiter.milkyway.org>
+From: root@jupiter.milkyway.org (Cron Daemon)
+To: finance@jupiter.milkyway.org
+Subject: Cron <finance@jupiter> ~/bin/run_market_analysis
+X-Cron-Env: <SHELL=/bin/sh>
+X-Cron-Env: <HOME=/suse_6_3/home2/finance>
+X-Cron-Env: <PATH=/usr/bin:/bin>
+X-Cron-Env: <LOGNAME=finance>
+Status: O
+
+getting coord
+coord:  <EOD_DownloadCoordinator.EOD_DownloadCoordinator instance at 80e2828>
+downloading eod.20040806 from store
+run_market_analysis: Download of end-of-day data succeeded at Fri Aug  6 17:37:02 MDT 2004
+/suse_6_3/home2/finance/data/end_of_day
+Scanning eod.20040806
+    1 Base64  (1/1) 040806s.zip
+1 Files processed and 1 files found.
+Archive:  040806s.zip
+  inflating: 040806.stk              
+dos2unix: converting file 040806.stk to UNIX format ...
+Appending 20040806,22.170,22.380,21.770,21.850,1899700 for a
+Appending 20040806,30.260,31.000,29.650,29.950,4493200 for aa
+Appending 20040806,52.190,53.150,52.101,52.820,258500 for aaa
+Appending 20040806,10.000,10.010,9.600,9.670,2146500 for aai
+Appending 20040806,30.900,31.100,29.700,29.780,8631500 for aapl
+Appending 20040806,8.520,8.550,8.020,8.050,1335400 for abgx
+Appending 20040806,70.120,70.120,69.210,69.450,495400 for abk
+Appending 20040806,38.630,38.930,38.350,38.690,3548100 for abt
+Appending 20040806,3.590,3.590,3.590,3.590,000 for acai
+Appending 20040806,72.300,73.140,70.150,73.000,896900 for acl
+Appending 20040806,42.980,43.450,42.180,42.290,2206100 for adbe
+Appending 20040806,2.300,2.310,2.250,2.250,4444600 for adct
+Appending 20040806,37.980,37.980,35.860,36.200,5409800 for adi
+Appending 20040806,9.400,9.450,9.160,9.250,605300 for adic
+Appending 20040806,6.940,7.060,6.780,6.780,682900 for adpt
+Appending 20040806,3.050,3.060,2.750,2.860,314400 for aeth
+Appending 20040806,16.400,16.790,16.030,16.250,2857300 for afci
+Appending 20040806,26.230,26.260,25.100,25.220,672700 for affx
+Appending 20040806,71.880,72.250,71.000,71.220,989400 for agn
+Appending 20040806,46.480,46.760,46.000,46.220,2037800 for all
+Appending 20040806,4.071,4.250,3.980,4.000,135900 for alsc
+Appending 20040806,20.600,20.720,20.000,20.040,6655200 for altr
+Appending 20040806,16.530,16.850,16.220,16.330,29356500 for amat
+Appending 20040806,3.270,3.320,3.100,3.140,6435600 for amcc
+Appending 20040806,11.550,11.590,11.170,11.260,7166300 for amd
+Appending 20040806,54.800,55.080,53.800,53.800,9276900 for amgn
+Appending 20040806,7.400,7.724,7.180,7.540,5702300 for amr
+Appending 20040806,35.250,36.670,34.850,35.490,11439500 for amzn
+Appending 20040806,4.050,4.240,3.940,3.960,141900 for anad
+Appending 20040806,9.570,9.590,9.300,9.400,2261600 for andw
+Appending 20040806,44.010,44.150,42.750,42.850,2108300 for apa
+Appending 20040806,15.250,15.500,15.150,15.250,4206200 for apcc
+Appending 20040806,8.070,8.100,7.900,8.010,756400 for arba
+Appending 20040806,0.890,0.940,0.880,0.920,158700 for artg
+Appending 20040806,3.600,3.800,3.510,3.620,6759600 for atml
+Appending 20040806,3.231,3.231,3.200,3.210,6600 for awre
+Appending 20040806,25.600,25.700,24.600,24.600,49700 for b
+Appending 20040806,49.970,49.970,48.270,48.330,3664400 for ba
+Appending 20040806,5.630,5.630,5.500,5.540,17100 for baby
+Appending 20040806,83.850,84.690,83.400,83.910,5168400 for bac
+Appending 20040806,19.200,19.900,19.200,19.900,9300 for bak
+Appending 20040806,23.050,23.050,23.050,23.050,4000 for bb
+Appending 20040806,34.820,34.850,33.880,33.890,2144600 for bbby
+Appending 20040806,12.600,12.670,12.480,12.500,569800 for bbi
+Appending 20040806,44.910,45.350,44.540,44.880,4170100 for bby
+Appending 20040806,6.140,6.300,6.040,6.090,7010400 for beas
+Appending 20040806,39.650,39.680,38.150,38.390,2591000 for bhi
+Appending 20040806,28.080,28.350,27.950,28.050,2186400 for bk
+Appending 20040806,14.450,14.670,14.150,14.430,2030400 for bmc
+Appending 20040806,18.540,18.670,18.010,18.100,1003900 for bobj
+Appending 20040806,3.440,3.440,3.440,3.440,000 for boom
+Appending 20040806,7.490,7.490,7.300,7.400,21600 for boot
+Appending 20040806,35.800,36.440,35.140,35.140,2248200 for br
+Appending 20040806,32.870,33.520,31.800,31.920,12407700 for brcm
+Appending 20040806,8.200,8.200,7.650,7.750,88100 for brkt
+Appending 20040806,43.610,43.930,42.990,43.190,15499700 for c
+Appending 20040806,24.150,24.250,23.730,23.760,4072900 for ca
+Appending 20040806,6.060,6.130,5.870,5.980,630200 for cacs
+Appending 20040806,4.802,4.802,4.800,4.800,200 for cafe
+Appending 20040806,43.700,44.110,43.400,44.010,3792400 for cah
+Appending 20040806,39.060,39.100,38.450,38.750,907700 for cake
+Appending 20040806,3.940,3.960,3.850,3.860,36500 for cald
+Appending 20040806,5.510,5.590,5.220,5.270,209600 for camp
+Appending 20040806,69.150,70.900,68.500,70.250,4741100 for cat
+Appending 20040806,65.600,66.130,65.370,65.410,1026100 for cb
+Appending 20040806,48.250,48.880,47.940,48.260,1093100 for cbh
+Appending 20040806,8.380,8.540,8.120,8.170,163100 for ccrd
+Appending 20040806,36.160,36.500,35.850,36.390,2887000 for ccu
+Appending 20040806,22.030,22.030,21.340,21.460,7013500 for cd
+Appending 20040806,60.510,61.040,59.220,59.250,991400 for cdwc
+Appending 20040806,50.950,50.980,49.000,49.760,1225800 for celg
+Appending 20040806,48.740,48.840,47.740,48.080,1049400 for ceph
+Appending 20040806,17.460,17.830,17.240,17.350,4094700 for chkp
+Appending 20040806,14.620,14.710,14.050,14.250,190400 for chp
+Appending 20040806,42.740,42.800,41.140,41.220,898000 for chrw
+Appending 20040806,59.590,60.110,58.930,59.200,969900 for ci
+Appending 20040806,2.070,2.080,2.010,2.050,13547200 for cien
+Appending 20040806,33.710,33.810,33.660,33.730,555200 for cima
+Appending 20040806,50.370,50.630,49.680,50.140,878200 for clx
+Appending 20040806,58.260,58.260,56.640,56.650,1784000 for cma
+Appending 20040806,1.360,1.450,1.310,1.350,2437200 for cmgi
+Appending 20040806,0.610,0.700,0.610,0.640,35700 for cmrc
+Appending 20040806,6.530,6.930,6.300,6.300,35400 for cmtn
+Appending 20040806,16.140,16.510,15.880,15.980,1555300 for cmvt
+Appending 20040806,8.020,8.120,7.700,7.750,1386900 for cnet
+Appending 20040806,1.500,1.650,1.470,1.530,12432200 for cnxt
+Appending 20040806,66.470,66.910,65.550,65.950,2300600 for cof
+Appending 20040806,55.890,56.520,52.500,53.150,5200 for coke
+Appending 20040806,4.500,4.550,4.340,4.480,6274800 for coms
+Appending 20040806,40.490,40.510,39.620,39.740,3858800 for cost
+Appending 20040806,33.240,33.319,33.050,33.150,4238500 for cox
+Appending 20040806,3.450,3.450,3.310,3.360,6094500 for cpn
+Appending 20040806,1.640,1.710,1.488,1.500,513200 for cpst
+Appending 20040806,11.000,11.000,10.660,10.730,407500 for cra
+Appending 20040806,44.250,44.520,43.550,43.560,1026300 for csc
+Appending 20040806,20.220,20.600,19.870,19.930,57734600 for csco
+Appending 20040806,10.500,10.550,10.100,10.220,2865300 for cy
+Appending 20040806,63.210,64.050,63.050,63.310,1386400 for d
+Appending 20040806,16.280,16.320,16.160,16.160,16800 for da
+Appending 20040806,16.340,16.340,16.040,16.100,30300 for dab
+Appending 20040806,49.750,49.950,49.100,49.930,271500 for dade
+Appending 20040806,4.100,4.350,3.910,4.110,6158500 for dal
+Appending 20040806,4.900,4.970,4.800,4.860,1590300 for dclk
+Appending 20040806,34.680,34.740,34.140,34.140,14269100 for dell
+Appending 20040806,49.000,49.090,48.500,48.670,1179800 for dhr
+Appending 20040806,1.210,1.240,1.180,1.180,104700 for digl
+Appending 20040806,22.030,22.250,21.850,21.990,6208900 for dis
+Appending 20040806,27.800,28.450,27.590,27.890,3119200 for dish
+Appending 20040806,24.380,24.720,23.610,23.760,2204700 for dltr
+Appending 20040806,44.630,44.630,43.150,43.600,4527700 for dna
+Appending 20040806,0.410,0.410,0.360,0.370,48900 for dpac
+Appending 20040806,21.880,22.280,21.770,22.150,4807000 for duk
+Appending 20040806,66.610,66.880,65.350,65.350,1175900 for dvn
+Appending 20040806,102.220,102.450,100.700,100.730,52800 for e
+Appending 20040806,1.220,1.250,1.200,1.210,104700 for easy
+Appending 20040806,72.980,75.600,72.570,73.760,13940100 for ebay
+Appending 20040806,10.460,10.520,10.300,10.340,8827800 for emc
+Appending 20040806,60.900,61.070,60.130,60.510,1567100 for emr
+Appending 20040806,60.250,60.300,58.180,58.400,1283600 for eog
+Appending 20040806,29.930,29.930,29.330,29.480,276800 for erf
+Appending 20040806,25.910,26.070,25.260,25.410,3549300 for ericy
+Appending 20040806,58.100,59.080,58.100,58.880,1722500 for etr
+Appending 20040806,13.190,13.260,12.730,12.830,467500 for exar
+Appending 20040806,5.000,5.030,4.840,4.850,2028500 for extr
+Appending 20040806,19.620,19.650,18.750,18.890,970600 for eye
+Appending 20040806,14.000,14.240,13.900,14.070,9154100 for f
+Appending 20040806,60.540,60.540,58.490,58.530,668300 for fast
+Appending 20040806,8.420,8.500,7.720,7.910,878600 for fcel
+Appending 20040806,23.700,23.870,22.940,23.170,940700 for ffiv
+Appending 20040806,33.180,33.250,32.370,32.440,1729700 for fisv
+Appending 20040806,48.210,48.490,47.620,47.860,1461900 for fitb
+Appending 20040806,11.850,11.960,11.250,11.270,6661500 for flex
+Appending 20040806,12.900,13.040,12.500,12.500,442300 for flsh
+Appending 20040806,17.940,18.260,17.800,18.080,6137100 for fon
+Appending 20040806,67.140,68.100,67.050,67.730,950300 for fpl
+Appending 20040806,45.280,45.720,44.440,45.490,2329100 for frx
+Appending 20040806,39.770,39.960,39.470,39.780,3154700 for g
+Appending 20040806,7.810,7.840,7.640,7.740,121500 for gab
+Appending 20040806,31.800,31.960,31.420,31.520,24637300 for ge
+Appending 20040806,49.890,50.430,47.980,48.500,2542400 for genz
+Appending 20040806,5.760,5.830,5.330,5.330,578000 for gern
+Appending 20040806,62.940,63.600,61.500,61.630,3281200 for gild
+Appending 20040806,11.600,11.660,11.000,11.120,10093400 for glw
+Appending 20040806,42.370,42.380,41.370,41.490,6878000 for gm
+Appending 20040806,4.500,4.820,4.210,4.690,2611700 for gmst
+Appending 20040806,31.070,31.080,29.990,30.110,614800 for gr
+Appending 20040806,6.180,6.380,6.180,6.220,38500 for ha
+Appending 20040806,32.550,33.250,32.390,32.900,7786400 for hd
+Appending 20040806,57.100,57.490,56.420,56.800,1693000 for hdi
+Appending 20040806,9.000,9.040,8.620,8.820,1013900 for hgsi
+Appending 20040806,62.600,62.610,61.160,61.330,1932100 for hig
+Appending 20040806,5.100,5.270,5.100,5.220,1355800 for hl
+Appending 20040806,5.870,5.890,5.600,5.660,1181200 for hlit
+Appending 20040806,24.500,24.500,24.050,24.200,492800 for hp
+Appending 20040806,11.600,11.660,11.480,11.570,729900 for hpc
+Appending 20040806,46.630,46.920,46.450,46.660,596000 for hsy
+Appending 20040806,84.380,84.760,83.420,83.480,5241100 for ibm
+Appending 20040806,4.690,5.030,4.350,4.380,218000 for imgn
+Appending 20040806,34.250,36.000,33.420,33.870,2475000 for insp
+Appending 20040806,23.240,23.470,22.690,22.770,55395900 for intc
+Appending 20040806,37.810,38.110,37.010,37.020,1438200 for intu
+Appending 20040806,43.850,44.450,43.690,43.930,272600 for invn
+Appending 20040806,2.710,3.030,2.500,3.020,147900 for iona
+Appending 20040806,36.370,36.380,35.040,35.450,883200 for irf
+Appending 20040806,7.650,7.800,7.470,7.500,893200 for issi
+Appending 20040806,14.200,14.350,13.730,13.940,809700 for issx
+Appending 20040806,89.000,89.000,87.210,87.550,1439800 for itw
+Appending 20040806,23.150,24.000,23.000,24.000,2161500 for ivx
+Appending 20040806,6.810,6.950,6.650,6.670,197600 for iwov
+Appending 20040806,4.950,5.090,4.900,5.040,4500 for jaco
+Appending 20040806,3.160,3.360,2.770,2.770,74900 for jade
+Appending 20040806,20.790,20.970,20.200,20.280,1027900 for jbl
+Appending 20040806,3.230,3.250,3.060,3.070,26283200 for jdsu
+Appending 20040806,55.220,55.220,54.400,54.600,6040500 for jnj
+Appending 20040806,21.370,22.090,21.000,21.060,12876700 for jnpr
+Appending 20040806,48.120,48.300,47.800,48.070,796000 for jp
+Appending 20040806,40.800,41.250,40.450,40.760,1130100 for k
+Appending 20040806,19.810,19.990,19.670,19.810,26300 for kai
+Appending 20040806,1.400,1.450,1.360,1.379,123200 for kana
+Appending 20040806,7.600,7.800,6.400,6.650,409200 for kfrc
+Appending 20040806,39.330,39.600,38.090,38.380,7726900 for klac
+Appending 20040806,7.090,7.240,6.930,6.980,758000 for klic
+Appending 20040806,43.740,43.890,43.230,43.500,8565200 for ko
+Appending 20040806,3.560,3.750,3.310,3.310,344300 for kopn
+Appending 20040806,36.630,37.130,36.460,36.660,453200 for kse
+Appending 20040806,8.500,8.520,8.400,8.450,6773300 for l
+Appending 20040806,67.820,68.780,67.250,68.070,2928600 for leh
+Appending 20040806,38.260,38.470,37.170,37.250,7320300 for lltc
+Appending 20040806,1.660,1.870,1.650,1.810,191700 for lnux
+Appending 20040806,21.720,21.920,21.150,21.400,3633600 for lrcx
+Appending 20040806,4.590,4.710,4.440,4.490,731800 for lscc
+Appending 20040806,2.890,2.940,2.780,2.780,7059300 for lvlt
+Appending 20040806,85.500,85.600,82.710,83.050,1470100 for lxk
+Appending 20040806,30.860,30.870,30.460,30.520,2378400 for mas
+Appending 20040806,49.530,49.720,48.500,49.010,3278600 for mdt
+Appending 20040806,102.050,102.230,100.800,101.250,1372900 for mdy
+Appending 20040806,22.570,22.640,22.030,22.160,1667900 for medi
+Appending 20040806,5.260,5.260,4.940,4.990,939300 for medx
+Appending 20040806,33.750,33.930,32.780,32.950,3420700 for merq
+Appending 20040806,10.590,10.830,10.220,10.360,2074100 for mlnm
+Appending 20040806,43.000,43.030,42.370,42.470,1966900 for mmc
+Appending 20040806,80.760,81.190,79.650,79.870,3223600 for mmm
+Appending 20040806,28.840,28.930,27.900,27.930,1010900 for molx
+Appending 20040806,15.110,15.200,14.620,14.740,10224000 for mot
+Appending 20040806,44.000,44.200,43.460,43.600,6085900 for mrk
+Appending 20040806,2.500,2.570,2.320,2.330,1154300 for mrvc
+Appending 20040806,27.400,27.860,27.060,27.140,74750900 for msft
+Appending 20040806,93.570,94.200,92.490,92.570,319600 for mtb
+Appending 20040806,68.160,68.360,65.840,65.900,1683700 for mtg
+Appending 20040806,7.870,7.950,7.620,7.780,142900 for mtsn
+Appending 20040806,12.540,12.720,12.330,12.430,9343700 for mu
+Appending 20040806,22.040,22.170,20.890,20.910,397500 for mvsn
+Appending 20040806,47.500,48.090,46.650,46.800,5469300 for mwd
+Appending 20040806,45.890,46.190,43.950,44.230,9689300 for mxim
+Appending 20040806,45.200,45.300,43.770,44.250,1345900 for nbr
+Appending 20040806,37.120,37.230,36.320,36.710,1593000 for ne
+Appending 20040806,3.500,3.540,3.370,3.540,15700 for neon
+Appending 20040806,6.110,6.150,5.960,6.010,245400 for nete
+Appending 20040806,12.800,13.100,12.750,12.780,440100 for newp
+Appending 20040806,56.020,56.120,54.800,55.140,490100 for nfx
+Appending 20040806,11.412,11.412,11.180,11.240,14161500 for nok
+Appending 20040806,6.670,6.860,6.500,6.600,4616000 for novl
+Appending 20040806,19.770,19.770,18.310,18.770,122900 for novn
+Appending 20040806,14.810,15.000,14.280,14.700,732800 for nsit
+Appending 20040806,16.350,16.350,15.630,15.810,5489000 for nsm
+Appending 20040806,3.560,3.620,3.500,3.590,15632400 for nt
+Appending 20040806,17.600,17.600,16.770,16.810,4834800 for ntap
+Appending 20040806,3.400,3.470,3.180,3.220,140600 for ntpa
+Appending 20040806,10.100,10.200,9.300,9.430,42301000 for nvda
+Appending 20040806,25.450,25.600,24.750,24.900,5375700 for nvls
+Appending 20040806,22.250,22.490,21.300,21.440,16258300 for nxtl
+Appending 20040806,40.700,41.220,40.320,40.530,144000 for o
+Appending 20040806,7.710,7.920,7.430,7.470,705900 for oats
+Appending 20040806,51.000,51.000,51.000,51.000,000 for one
+Appending 20040806,16.750,16.920,16.690,16.690,4800 for onyx
+Appending 20040806,10.400,10.480,10.270,10.480,288000 for oo
+Appending 20040806,10.430,10.540,10.190,10.190,38003000 for orcl
+Appending 20040806,16.980,17.490,16.980,17.300,2100 for orct
+Appending 20040806,29.500,29.740,29.060,29.220,4211800 for payx
+Appending 20040806,18.680,18.680,17.420,18.400,1831900 for pcln
+Appending 20040806,16.190,16.470,15.650,15.800,1584600 for pdli
+Appending 20040806,39.960,40.900,39.960,40.620,1220700 for peg
+Appending 20040806,31.300,31.620,30.990,31.180,21356800 for pfe
+Appending 20040806,75.600,75.650,74.230,74.670,1010900 for pgr
+Appending 20040806,19.900,23.400,19.001,21.790,81500 for pgtv
+Appending 20040806,3.000,3.180,3.000,3.070,278500 for pkd
+Appending 20040806,13.500,13.850,13.430,13.610,479800 for plab
+Appending 20040806,17.590,17.970,17.220,17.850,2583300 for plcm
+Appending 20040806,10.790,10.910,10.610,10.760,434300 for plxs
+Appending 20040806,10.900,10.990,10.520,10.640,4467600 for pmcs
+Appending 20040806,41.000,41.730,41.000,41.050,1113800 for pnw
+Appending 20040806,9.500,9.550,9.200,9.260,140800 for ppco
+Appending 20040806,0.790,0.809,0.750,0.750,1426300 for prox
+Appending 20040806,2.400,2.450,2.370,2.380,296900 for prsf
+Appending 20040806,1.920,1.970,1.720,1.760,1492800 for prtl
+Appending 20040806,16.470,16.660,15.970,15.970,3023700 for psft
+Appending 20040806,16.650,16.970,16.290,16.480,2878500 for pten
+Appending 20040806,13.350,13.490,13.160,13.200,1897200 for pvn
+Appending 20040806,5.250,5.310,5.050,5.070,904500 for pwav
+Appending 20040806,6.030,6.260,5.970,6.110,584700 for pwr
+Appending 20040806,2.690,2.800,2.603,2.690,10644100 for q
+Appending 20040806,69.260,69.890,67.550,67.550,10473300 for qcom
+Appending 20040806,22.530,23.060,22.200,22.620,2758600 for qlgc
+Appending 20040806,33.400,33.410,32.000,32.720,148537900 for qqq
+Appending 20040806,23.890,25.880,20.310,25.260,000 for qqv__x
+Appending 20040806,43.500,43.500,42.330,42.430,837000 for r
+Appending 20040806,27.640,27.680,27.440,27.570,335500 for ra
+Appending 20040806,4.550,4.710,4.340,4.640,3722600 for rad
+Appending 20040806,5.100,5.370,4.970,5.140,796300 for rbak
+Appending 20040806,32.260,32.540,32.030,32.380,807600 for rbk
+Appending 20040806,16.520,16.670,16.430,16.600,57200 for rdy
+Appending 20040806,5.640,5.710,5.450,5.490,7299800 for rfmd
+Appending 20040806,16.250,16.440,15.210,15.300,6737200 for rhat
+Appending 20040806,26.530,26.530,25.050,25.110,1997900 for rhi
+Appending 20040806,26.540,26.690,25.940,26.210,2834400 for rig
+Appending 20040806,15.410,15.550,14.830,15.100,1279200 for rmbs
+Appending 20040806,5.240,5.380,5.190,5.190,771500 for rnwk
+Appending 20040806,33.900,34.360,33.630,33.860,1578400 for rtn
+Appending 20040806,35.750,35.750,35.140,35.190,2638900 for s
+Appending 20040806,7.180,7.210,6.760,6.800,6082000 for sanm
+Appending 20040806,6.600,6.710,6.350,6.400,981800 for sape
+Appending 20040806,12.330,12.450,12.150,12.250,912300 for sbl
+Appending 20040806,8.400,8.550,8.270,8.320,5687700 for sch
+Appending 20040806,3.320,3.490,3.290,3.400,1671800 for scmr
+Appending 20040806,0.890,0.900,0.850,0.850,911200 for scon
+Appending 20040806,4.990,5.080,4.250,4.600,186100 for scox
+Appending 20040806,6.270,6.360,6.100,6.180,473000 for scur
+Appending 20040806,7.380,7.460,7.120,7.180,10597200 for sebl
+Appending 20040806,43.700,43.790,42.800,43.060,1141300 for sepr
+Appending 20040806,27.150,27.350,26.700,26.830,2097000 for sfa
+Appending 20040806,4.970,5.000,4.750,4.900,45800 for sfp
+Appending 20040806,1.510,1.530,1.490,1.530,1776600 for sgi
+Appending 20040806,17.820,17.950,17.580,17.850,9716900 for sgp
+Appending 20040806,54.880,55.190,52.040,52.970,1985000 for sii
+Appending 20040806,10.830,10.900,10.260,10.380,790100 for simg
+Appending 20040806,5.290,5.350,5.200,5.250,3649600 for slr
+Appending 20040806,22.630,22.860,22.100,22.190,4612000 for sndk
+Appending 20040806,6.080,6.090,5.720,5.800,844400 for snwl
+Appending 20040806,7.790,7.800,7.340,7.590,440500 for sone
+Appending 20040806,14.770,14.930,14.500,14.510,321100 for srna
+Appending 20040806,64.300,64.410,62.250,63.490,1969400 for stj
+Appending 20040806,3.730,3.750,3.500,3.510,29775500 for sunw
+Appending 20040806,20.500,20.660,20.260,20.350,2304000 for swy
+Appending 20040806,33.400,33.500,32.980,33.250,2014300 for syy
+Appending 20040806,14.120,14.720,14.100,14.190,6081600 for t
+Appending 20040806,37.300,37.360,35.810,36.010,383600 for tech
+Appending 20040806,15.700,15.700,15.200,15.260,2704900 for ter
+Appending 20040806,1.550,1.570,1.450,1.450,728500 for tern
+Appending 20040806,28.440,28.820,27.770,28.330,6910300 for teva
+Appending 20040806,31.950,31.950,31.240,31.430,1175500 for tif
+Appending 20040806,5.000,5.020,4.640,4.780,1521500 for tivo
+Appending 20040806,8.820,8.860,8.540,8.540,8245800 for tlab
+Appending 20040806,8.120,8.120,7.900,7.950,56600 for tlgd
+Appending 20040806,3.710,3.780,3.530,3.580,1125000 for tqnt
+Appending 20040806,25.750,26.160,25.100,25.640,517500 for trmb
+Appending 20040806,1.480,1.480,1.410,1.440,351000 for txcc
+Appending 20040806,19.790,20.000,19.500,19.670,12992600 for txn
+Appending 20040806,5.950,6.080,5.800,6.080,1312600 for ucoma
+Appending 20040806,74.700,76.940,73.300,75.740,455700 for uopx
+Appending 20040806,90.600,91.000,89.800,90.050,2498200 for utx
+Appending 20040806,24.120,24.120,23.640,23.800,191700 for v
+Appending 20040806,21.100,21.240,20.060,20.300,425400 for veco
+Appending 20040806,1.170,1.250,1.100,1.110,430500 for vert
+Appending 20040806,33.880,34.020,33.600,33.720,231500 for via
+Appending 20040806,1.270,1.340,1.230,1.310,909700 for vign
+Appending 20040806,67.500,68.200,66.750,67.700,3724800 for vlo
+Appending 20040806,16.880,16.930,16.280,16.440,2337600 for vrsn
+Appending 20040806,8.500,8.540,8.300,8.370,515600 for vrtx
+Appending 20040806,12.970,13.000,12.620,12.810,3410000 for vsh
+Appending 20040806,2.320,2.430,2.270,2.380,6408600 for vtss
+Appending 20040806,17.620,17.700,16.980,17.030,179200 for wab
+Appending 20040806,40.250,40.550,39.680,39.780,1215500 for wat
+Appending 20040806,56.250,56.890,56.120,56.360,3424500 for wfc
+Appending 20040806,4.850,5.090,4.800,5.040,1878300 for wfii
+Appending 20040806,45.600,45.700,44.200,44.930,1682200 for wft
+Appending 20040806,52.000,52.020,51.140,51.330,11435200 for wmt
+Appending 20040806,24.810,24.840,23.750,24.480,1472500 for wwca
+Appending 20040806,35.610,35.800,33.500,34.100,4239900 for x
+Appending 20040806,1.000,1.000,0.910,0.940,21100 for xla
+Appending 20040806,28.370,29.000,27.860,27.960,6465700 for xlnx
+Appending 20040806,27.700,27.700,26.620,26.820,2431300 for xto
+Appending 20040806,269.500,277.000,268.750,274.000,2900 for y
+Appending 20040806,26.410,26.700,25.770,26.020,30001100 for yhoo
+Appending 20040806,37.000,37.160,36.580,36.790,951200 for yum
+Appending 20040806,60.750,60.750,60.750,60.750,100 for zap
+Inserting 345 records.
+Database insert succeeded.
+/suse_6_3/home2/finance/bin/add_stock_splits
+Select action:
+     Select tradable (s) View data (v) Edit indicators (e)
+     Edit market analyzers (m) Run market analysis (a)
+     Set date for market analysis (d) Edit event registrants (r)
+     End client session (x) Help (h) Product information (p)
+     Show settings (w) 
+Please selecte a date and time for market analysis.
+Currently selected date and time: 08/06/2004, 5:37:39.512 PM
+Select action:
+     Set date (d) Set time (t) Set date relative to current date (r)
+     Set market analysis date to currently selected date (s) Select period length:
+     day (d) month (m) year (y) Enter the number of days to set date back relative to today: Using date of 08/02/2004.
+
+
+Currently selected date and time: 08/02/2004, 5:37:39.512 PM
+Select action:
+     Set date (d) Set time (t) Set date relative to current date (r)
+     Set market analysis date to currently selected date (s) 
+
+Setting date and time for processing to 08/02/2004 5:37:39.513 PM
+
+
+Select action:
+     Select tradable (s) View data (v) Edit indicators (e)
+     Edit market analyzers (m) Run market analysis (a)
+     Set date for market analysis (d) Edit event registrants (r)
+     End client session (x) Help (h) Product information (p)
+     Show settings (w) 
+No tradables to analyze - tradable list is empty.
+
+
+Select action:
+     Select tradable (s) View data (v) Edit indicators (e)
+     Edit market analyzers (m) Run market analysis (a)
+     Set date for market analysis (d) Edit event registrants (r)
+     End client session (x) Help (h) Product information (p)
+Terminating the server.
+     Show settings (w) Select action:
+     Select tradable (s) View data (v) Edit indicators (e)
+     Edit market analyzers (m) Run market analysis (a)
+     Set date for market analysis (d) Edit event registrants (r)
+     End client session (x) Help (h) Product information (p)
+     Show settings (w) 
+Please selecte a date and time for market analysis.
+Currently selected date and time: 08/06/2004, 5:37:55.293 PM
+Select action:
+     Set date (d) Set time (t) Set date relative to current date (r)
+     Set market analysis date to currently selected date (s) Select period length:
+     day (d) month (m) year (y) Enter the number of days to set date back relative to today: Using date of 02/08/2004.
+
+
+Currently selected date and time: 02/08/2004, 5:37:55.293 PM
+Select action:
+     Set date (d) Set time (t) Set date relative to current date (r)
+     Set market analysis date to currently selected date (s) 
+
+Setting date and time for processing to 02/08/2004 5:37:55.293 PM
+
+
+Select action:
+     Select tradable (s) View data (v) Edit indicators (e)
+     Edit market analyzers (m) Run market analysis (a)
+     Set date for market analysis (d) Edit event registrants (r)
+     End client session (x) Help (h) Product information (p)
+Mail command with subject 996 TA Events Received at 08/06/2004, 5:41:14.478 PM (Notification to Finance - long-term trend signals) failed.
+Updating trend lists for signal "symbol: 'VRTS', date: '3/26/2004', buy/sell/sidel: sidelined, event: 'Event for: VRTS, date: 03/26/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+VRTS is a sideline
+Updating trend lists for signal "symbol: 'YUM', date: '5/28/2004', buy/sell/sidel: sidelined, event: 'Event for: YUM, date: 05/28/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+YUM is a sideline
+Updating trend lists for signal "symbol: 'CALD', date: '5/7/2004', buy/sell/sidel: sidelined, event: 'Event for: CALD, date: 05/07/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+CALD is a sideline
+Updating trend lists for signal "symbol: 'VSH', date: '5/7/2004', buy/sell/sidel: sidelined, event: 'Event for: VSH, date: 05/07/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+VSH is a sideline
+Updating trend lists for signal "symbol: 'CSCO', date: '3/19/2004', buy/sell/sidel: sidelined, event: 'Event for: CSCO, date: 03/19/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+CSCO is a sideline
+Updating trend lists for signal "symbol: 'DADE', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: DADE, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+DADE is a sideline
+Updating trend lists for signal "symbol: 'SIMG', date: '4/30/2004', buy/sell/sidel: sidelined, event: 'Event for: SIMG, date: 04/30/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+SIMG is a sideline
+Updating trend lists for signal "symbol: 'GENZ', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: GENZ, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+GENZ is a sideline
+Updating trend lists for signal "symbol: 'PPCO', date: '6/4/2004', buy/sell/sidel: sidelined, event: 'Event for: PPCO, date: 06/04/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+PPCO is a sideline
+Updating trend lists for signal "symbol: 'BHI', date: '7/30/2004', buy/sell/sidel: sidelined, event: 'Event for: BHI, date: 07/30/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+BHI is a sideline
+Updating trend lists for signal "symbol: 'IRF', date: '7/23/2004', buy/sell/sidel: sidelined, event: 'Event for: IRF, date: 07/23/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+IRF is a sideline
+Updating trend lists for signal "symbol: 'DHR', date: '7/9/2004', buy/sell/sidel: sidelined, event: 'Event for: DHR, date: 07/09/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+DHR is a sideline
+Updating trend lists for signal "symbol: 'UOPX', date: '7/30/2004', buy/sell/sidel: sell, event: 'Event for: UOPX, date: 07/30/2004, type: Slope of MACD Signal Line Downtrend'"
+UOPX is a sell
+Updating trend lists for signal "symbol: 'UTX', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: UTX, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+UTX is a sideline
+Updating trend lists for signal "symbol: 'MTB', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: MTB, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+MTB is a sideline
+Updating trend lists for signal "symbol: 'ABT', date: '4/30/2004', buy/sell/sidel: sidelined, event: 'Event for: ABT, date: 04/30/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+ABT is a sideline
+Updating trend lists for signal "symbol: 'CAT', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: CAT, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+CAT is a sideline
+Updating trend lists for signal "symbol: 'INTU', date: '3/26/2004', buy/sell/sidel: sidelined, event: 'Event for: INTU, date: 03/26/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+INTU is a sideline
+Updating trend lists for signal "symbol: 'BEAS', date: '5/28/2004', buy/sell/sidel: sidelined, event: 'Event for: BEAS, date: 05/28/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+BEAS is a sideline
+Updating trend lists for signal "symbol: 'STJ', date: '6/25/2004', buy/sell/sidel: sell, event: 'Event for: STJ, date: 06/25/2004, type: Slope of MACD Signal Line Downtrend'"
+STJ is a sell
+Updating trend lists for signal "symbol: 'DELL', date: '4/16/2004', buy/sell/sidel: sidelined, event: 'Event for: DELL, date: 04/16/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+DELL is a sideline
+Updating trend lists for signal "symbol: 'PFE', date: '4/2/2004', buy/sell/sidel: sidelined, event: 'Event for: PFE, date: 04/02/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+PFE is a sideline
+Updating trend lists for signal "symbol: 'ABK', date: '7/16/2004', buy/sell/sidel: sidelined, event: 'Event for: ABK, date: 07/16/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+ABK is a sideline
+Updating trend lists for signal "symbol: 'COKE', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: COKE, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+COKE is a sideline
+Updating trend lists for signal "symbol: 'FPL', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: FPL, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+FPL is a sideline
+Updating trend lists for signal "symbol: 'CACS', date: '7/23/2004', buy/sell/sidel: sell, event: 'Event for: CACS, date: 07/23/2004, type: Slope of MACD Signal Line Downtrend'"
+CACS is a sell
+Updating trend lists for signal "symbol: 'E', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: E, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+E is a sideline
+Updating trend lists for signal "symbol: 'FLEX', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: FLEX, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+FLEX is a sideline
+Updating trend lists for signal "symbol: 'A', date: '7/9/2004', buy/sell/sidel: sidelined, event: 'Event for: A, date: 07/09/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+A is a sideline
+Updating trend lists for signal "symbol: 'ISSX', date: '5/14/2004', buy/sell/sidel: sidelined, event: 'Event for: ISSX, date: 05/14/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+ISSX is a sideline
+Updating trend lists for signal "symbol: 'CELG', date: '7/2/2004', buy/sell/sidel: sell, event: 'Event for: CELG, date: 07/02/2004, type: Slope of MACD Signal Line Downtrend'"
+CELG is a sell
+Updating trend lists for signal "symbol: 'HIG', date: '7/16/2004', buy/sell/sidel: sell, event: 'Event for: HIG, date: 07/16/2004, type: Slope of MACD Signal Line Downtrend'"
+HIG is a sell
+Updating trend lists for signal "symbol: 'PGR', date: '7/9/2004', buy/sell/sidel: sell, event: 'Event for: PGR, date: 07/09/2004, type: Slope of MACD Signal Line Downtrend'"
+PGR is a sell
+Updating trend lists for signal "symbol: 'ONE', date: '7/9/2004', buy/sell/sidel: sidelined, event: 'Event for: ONE, date: 07/09/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+ONE is a sideline
+Updating trend lists for signal "symbol: 'ISSI', date: '7/23/2004', buy/sell/sidel: sidelined, event: 'Event for: ISSI, date: 07/23/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+ISSI is a sideline
+Updating trend lists for signal "symbol: 'CAMP', date: '5/28/2004', buy/sell/sidel: sidelined, event: 'Event for: CAMP, date: 05/28/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+CAMP is a sideline
+Updating trend lists for signal "symbol: 'ORCT', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: ORCT, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+ORCT is a sideline
+Updating trend lists for signal "symbol: 'APCC', date: '7/2/2004', buy/sell/sidel: sidelined, event: 'Event for: APCC, date: 07/02/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+APCC is a sideline
+Updating trend lists for signal "symbol: 'DAB', date: '4/23/2004', buy/sell/sidel: sidelined, event: 'Event for: DAB, date: 04/23/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+DAB is a sideline
+Updating trend lists for signal "symbol: 'NSM', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: NSM, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+NSM is a sideline
+Updating trend lists for signal "symbol: 'CIMA', date: '3/19/2004', buy/sell/sidel: sidelined, event: 'Event for: CIMA, date: 03/19/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+CIMA is a sideline
+Updating trend lists for signal "symbol: 'TXN', date: '5/14/2004', buy/sell/sidel: sidelined, event: 'Event for: TXN, date: 05/14/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+TXN is a sideline
+Updating trend lists for signal "symbol: 'DIS', date: '5/14/2004', buy/sell/sidel: sidelined, event: 'Event for: DIS, date: 05/14/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+DIS is a sideline
+Updating trend lists for signal "symbol: 'BAK', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: BAK, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+BAK is a sideline
+Updating trend lists for signal "symbol: 'NEWP', date: '3/26/2004', buy/sell/sidel: sidelined, event: 'Event for: NEWP, date: 03/26/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+NEWP is a sideline
+Updating trend lists for signal "symbol: 'WFII', date: '3/26/2004', buy/sell/sidel: sidelined, event: 'Event for: WFII, date: 03/26/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+WFII is a sideline
+Updating trend lists for signal "symbol: 'DISH', date: '4/8/2004', buy/sell/sidel: sidelined, event: 'Event for: DISH, date: 04/08/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+DISH is a sideline
+Updating trend lists for signal "symbol: 'FLSH', date: '6/25/2004', buy/sell/sidel: sidelined, event: 'Event for: FLSH, date: 06/25/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+FLSH is a sideline
+Updating trend lists for signal "symbol: 'MXIM', date: '7/23/2004', buy/sell/sidel: sidelined, event: 'Event for: MXIM, date: 07/23/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+MXIM is a sideline
+Updating trend lists for signal "symbol: 'MTSN', date: '4/8/2004', buy/sell/sidel: sidelined, event: 'Event for: MTSN, date: 04/08/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+MTSN is a sideline
+Updating trend lists for signal "symbol: 'CAH', date: '5/21/2004', buy/sell/sidel: sell, event: 'Event for: CAH, date: 05/21/2004, type: Slope of MACD Signal Line Downtrend'"
+CAH is a sell
+Updating trend lists for signal "symbol: 'ERF', date: '7/16/2004', buy/sell/sidel: sidelined, event: 'Event for: ERF, date: 07/16/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+ERF is a sideline
+Updating trend lists for signal "symbol: 'INSP', date: '7/30/2004', buy/sell/sidel: sidelined, event: 'Event for: INSP, date: 07/30/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+INSP is a sideline
+Updating trend lists for signal "symbol: 'DA', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: DA, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+DA is a sideline
+Updating trend lists for signal "symbol: 'AAI', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: AAI, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+AAI is a sideline
+Updating trend lists for signal "symbol: 'MVSN', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: MVSN, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+MVSN is a sideline
+Updating trend lists for signal "symbol: 'X', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: X, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+X is a sideline
+Updating trend lists for signal "symbol: 'IBM', date: '7/16/2004', buy/sell/sidel: sidelined, event: 'Event for: IBM, date: 07/16/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+IBM is a sideline
+Updating trend lists for signal "symbol: 'AAA', date: '6/18/2004', buy/sell/sidel: sell, event: 'Event for: AAA, date: 06/18/2004, type: Slope of MACD Signal Line Downtrend'"
+AAA is a sell
+Updating trend lists for signal "symbol: 'CMTN', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: CMTN, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+CMTN is a sideline
+Updating trend lists for signal "symbol: 'V', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: V, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+V is a sideline
+Updating trend lists for signal "symbol: 'MOLX', date: '3/26/2004', buy/sell/sidel: sidelined, event: 'Event for: MOLX, date: 03/26/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+MOLX is a sideline
+Updating trend lists for signal "symbol: 'SBL', date: '6/10/2004', buy/sell/sidel: sidelined, event: 'Event for: SBL, date: 06/10/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+SBL is a sideline
+Updating trend lists for signal "symbol: 'ADIC', date: '3/26/2004', buy/sell/sidel: sidelined, event: 'Event for: ADIC, date: 03/26/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+ADIC is a sideline
+Updating trend lists for signal "symbol: 'ITW', date: '7/16/2004', buy/sell/sidel: sell, event: 'Event for: ITW, date: 07/16/2004, type: Slope of MACD Signal Line Downtrend'"
+ITW is a sell
+Updating trend lists for signal "symbol: 'MTG', date: '7/2/2004', buy/sell/sidel: sell, event: 'Event for: MTG, date: 07/02/2004, type: Slope of MACD Signal Line Downtrend'"
+MTG is a sell
+Updating trend lists for signal "symbol: 'JNPR', date: '7/23/2004', buy/sell/sidel: sidelined, event: 'Event for: JNPR, date: 07/23/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+JNPR is a sideline
+Updating trend lists for signal "symbol: 'RHAT', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: RHAT, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+RHAT is a sideline
+Updating trend lists for signal "symbol: 'MMM', date: '7/23/2004', buy/sell/sidel: sell, event: 'Event for: MMM, date: 07/23/2004, type: Slope of MACD Signal Line Downtrend'"
+MMM is a sell
+Updating trend lists for signal "symbol: 'EBAY', date: '7/2/2004', buy/sell/sidel: sell, event: 'Event for: EBAY, date: 07/02/2004, type: Slope of MACD Signal Line Downtrend'"
+EBAY is a sell
+Updating trend lists for signal "symbol: 'KO', date: '7/16/2004', buy/sell/sidel: sell, event: 'Event for: KO, date: 07/16/2004, type: Slope of MACD Signal Line Downtrend'"
+KO is a sell
+Updating trend lists for signal "symbol: 'FCEL', date: '7/16/2004', buy/sell/sidel: sidelined, event: 'Event for: FCEL, date: 07/16/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+FCEL is a sideline
+Updating trend lists for signal "symbol: 'LEH', date: '7/23/2004', buy/sell/sidel: sidelined, event: 'Event for: LEH, date: 07/23/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+LEH is a sideline
+Updating trend lists for signal "symbol: 'MLNM', date: '5/21/2004', buy/sell/sidel: sidelined, event: 'Event for: MLNM, date: 05/21/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+MLNM is a sideline
+Updating trend lists for signal "symbol: 'NOVL', date: '3/19/2004', buy/sell/sidel: sidelined, event: 'Event for: NOVL, date: 03/19/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+NOVL is a sideline
+Updating trend lists for signal "symbol: 'ALL', date: '5/28/2004', buy/sell/sidel: sidelined, event: 'Event for: ALL, date: 05/28/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+ALL is a sideline
+Updating trend lists for signal "symbol: 'NOVN', date: '5/28/2004', buy/sell/sidel: sidelined, event: 'Event for: NOVN, date: 05/28/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+NOVN is a sideline
+Updating trend lists for signal "symbol: 'CHRW', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: CHRW, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+CHRW is a sideline
+Updating trend lists for signal "symbol: 'ADI', date: '7/2/2004', buy/sell/sidel: sell, event: 'Event for: ADI, date: 07/02/2004, type: Slope of MACD Signal Line Downtrend'"
+ADI is a sell
+Updating trend lists for signal "symbol: 'PRTL', date: '3/12/2004', buy/sell/sidel: sidelined, event: 'Event for: PRTL, date: 03/12/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+PRTL is a sideline
+Updating trend lists for signal "symbol: 'TER', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: TER, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+TER is a sideline
+Updating trend lists for signal "symbol: 'SEBL', date: '3/19/2004', buy/sell/sidel: sidelined, event: 'Event for: SEBL, date: 03/19/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+SEBL is a sideline
+Updating trend lists for signal "symbol: 'FRX', date: '6/25/2004', buy/sell/sidel: sell, event: 'Event for: FRX, date: 06/25/2004, type: Slope of MACD Signal Line Downtrend'"
+FRX is a sell
+Updating trend lists for signal "symbol: 'EXAR', date: '5/7/2004', buy/sell/sidel: sidelined, event: 'Event for: EXAR, date: 05/07/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+EXAR is a sideline
+Updating trend lists for signal "symbol: 'XTO', date: '7/9/2004', buy/sell/sidel: sidelined, event: 'Event for: XTO, date: 07/09/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+XTO is a sideline
+Updating trend lists for signal "symbol: 'NETE', date: '2/20/2004', buy/sell/sidel: sidelined, event: 'Event for: NETE, date: 02/20/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+NETE is a sideline
+Updating trend lists for signal "symbol: 'BBY', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: BBY, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+BBY is a sideline
+Updating trend lists for signal "symbol: 'CLX', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: CLX, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+CLX is a sideline
+Updating trend lists for signal "symbol: 'IONA', date: '5/14/2004', buy/sell/sidel: sidelined, event: 'Event for: IONA, date: 05/14/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+IONA is a sideline
+Updating trend lists for signal "symbol: 'CY', date: '5/21/2004', buy/sell/sidel: sidelined, event: 'Event for: CY, date: 05/21/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+CY is a sideline
+Updating trend lists for signal "symbol: 'CEPH', date: '7/23/2004', buy/sell/sidel: sidelined, event: 'Event for: CEPH, date: 07/23/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+CEPH is a sideline
+Updating trend lists for signal "symbol: 'CD', date: '5/14/2004', buy/sell/sidel: sidelined, event: 'Event for: CD, date: 05/14/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+CD is a sideline
+Updating trend lists for signal "symbol: 'ONYX', date: '6/10/2004', buy/sell/sidel: sidelined, event: 'Event for: ONYX, date: 06/10/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+ONYX is a sideline
+Updating trend lists for signal "symbol: 'CB', date: '5/14/2004', buy/sell/sidel: sidelined, event: 'Event for: CB, date: 05/14/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+CB is a sideline
+Updating trend lists for signal "symbol: 'GILD', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: GILD, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+GILD is a sideline
+Updating trend lists for signal "symbol: 'F', date: '2/20/2004', buy/sell/sidel: sidelined, event: 'Event for: F, date: 02/20/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+F is a sideline
+Updating trend lists for signal "symbol: 'DNA', date: '6/4/2004', buy/sell/sidel: sell, event: 'Event for: DNA, date: 06/04/2004, type: Slope of MACD Signal Line Downtrend'"
+DNA is a sell
+Updating trend lists for signal "symbol: 'LLTC', date: '4/2/2004', buy/sell/sidel: sidelined, event: 'Event for: LLTC, date: 04/02/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+LLTC is a sideline
+Updating trend lists for signal "symbol: 'CI', date: '7/2/2004', buy/sell/sidel: sell, event: 'Event for: CI, date: 07/02/2004, type: Slope of MACD Signal Line Downtrend'"
+CI is a sell
+Updating trend lists for signal "symbol: 'SEPR', date: '7/16/2004', buy/sell/sidel: sell, event: 'Event for: SEPR, date: 07/16/2004, type: Slope of MACD Signal Line Downtrend'"
+SEPR is a sell
+Updating trend lists for signal "symbol: 'RA', date: '7/2/2004', buy/sell/sidel: sidelined, event: 'Event for: RA, date: 07/02/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+RA is a sideline
+Updating trend lists for signal "symbol: 'NT', date: '3/26/2004', buy/sell/sidel: sidelined, event: 'Event for: NT, date: 03/26/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+NT is a sideline
+Updating trend lists for signal "symbol: 'ANDW', date: '7/9/2004', buy/sell/sidel: sell, event: 'Event for: ANDW, date: 07/09/2004, type: Slope of MACD Signal Line Downtrend'"
+ANDW is a sell
+Updating trend lists for signal "symbol: 'CAKE', date: '7/30/2004', buy/sell/sidel: sidelined, event: 'Event for: CAKE, date: 07/30/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+CAKE is a sideline
+Updating trend lists for signal "symbol: 'BBBY', date: '7/2/2004', buy/sell/sidel: sidelined, event: 'Event for: BBBY, date: 07/02/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+BBBY is a sideline
+Updating trend lists for signal "symbol: 'NSIT', date: '5/14/2004', buy/sell/sidel: sidelined, event: 'Event for: NSIT, date: 05/14/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+NSIT is a sideline
+Updating trend lists for signal "symbol: 'TECH', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: TECH, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+TECH is a sideline
+Updating trend lists for signal "symbol: 'MDY', date: '7/16/2004', buy/sell/sidel: sell, event: 'Event for: MDY, date: 07/16/2004, type: Slope of MACD Signal Line Downtrend'"
+MDY is a sell
+Updating trend lists for signal "symbol: 'PWAV', date: '4/2/2004', buy/sell/sidel: sidelined, event: 'Event for: PWAV, date: 04/02/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+PWAV is a sideline
+Updating trend lists for signal "symbol: 'FAST', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: FAST, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+FAST is a sideline
+Updating trend lists for signal "symbol: 'NE', date: '7/23/2004', buy/sell/sidel: sidelined, event: 'Event for: NE, date: 07/23/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+NE is a sideline
+Updating trend lists for signal "symbol: 'SNDK', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: SNDK, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+SNDK is a sideline
+Updating trend lists for signal "symbol: 'DLTR', date: '6/25/2004', buy/sell/sidel: sidelined, event: 'Event for: DLTR, date: 06/25/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+DLTR is a sideline
+Updating trend lists for signal "symbol: 'NBR', date: '7/16/2004', buy/sell/sidel: sidelined, event: 'Event for: NBR, date: 07/16/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+NBR is a sideline
+Updating trend lists for signal "symbol: 'JBL', date: '7/30/2004', buy/sell/sidel: sidelined, event: 'Event for: JBL, date: 07/30/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+JBL is a sideline
+Updating trend lists for signal "symbol: 'R', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: R, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+R is a sideline
+Updating trend lists for signal "symbol: 'COF', date: '7/16/2004', buy/sell/sidel: sidelined, event: 'Event for: COF, date: 07/16/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+COF is a sideline
+Updating trend lists for signal "symbol: 'PCOP', date: '3/5/2004', buy/sell/sidel: sell, event: 'Event for: PCOP, date: 03/05/2004, type: Slope of MACD Signal Line Downtrend'"
+PCOP is a sell
+Updating trend lists for signal "symbol: 'FISV', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: FISV, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+FISV is a sideline
+Updating trend lists for signal "symbol: 'COST', date: '7/2/2004', buy/sell/sidel: sidelined, event: 'Event for: COST, date: 07/02/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+COST is a sideline
+Updating trend lists for signal "symbol: 'ACL', date: '7/30/2004', buy/sell/sidel: sell, event: 'Event for: ACL, date: 07/30/2004, type: Slope of MACD Signal Line Downtrend'"
+ACL is a sell
+Updating trend lists for signal "symbol: 'NXTL', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: NXTL, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+NXTL is a sideline
+Updating trend lists for signal "symbol: 'AMGN', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: AMGN, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+AMGN is a sideline
+Updating trend lists for signal "symbol: 'MERQ', date: '7/9/2004', buy/sell/sidel: sell, event: 'Event for: MERQ, date: 07/09/2004, type: Slope of MACD Signal Line Downtrend'"
+MERQ is a sell
+Updating trend lists for signal "symbol: 'INTC', date: '7/30/2004', buy/sell/sidel: sidelined, event: 'Event for: INTC, date: 07/30/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+INTC is a sideline
+Updating trend lists for signal "symbol: 'DVN', date: '7/23/2004', buy/sell/sidel: sidelined, event: 'Event for: DVN, date: 07/23/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+DVN is a sideline
+Updating trend lists for signal "symbol: 'PGTV', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: PGTV, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+PGTV is a sideline
+Updating trend lists for signal "symbol: 'ETR', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: ETR, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+ETR is a sideline
+Updating trend lists for signal "symbol: 'ALTR', date: '7/23/2004', buy/sell/sidel: sidelined, event: 'Event for: ALTR, date: 07/23/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+ALTR is a sideline
+Updating trend lists for signal "symbol: 'IVX', date: '3/26/2004', buy/sell/sidel: sidelined, event: 'Event for: IVX, date: 03/26/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+IVX is a sideline
+Updating trend lists for signal "symbol: 'NTPA', date: '7/2/2004', buy/sell/sidel: sidelined, event: 'Event for: NTPA, date: 07/02/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+NTPA is a sideline
+Updating trend lists for signal "symbol: 'QQQ', date: '3/26/2004', buy/sell/sidel: sidelined, event: 'Event for: QQQ, date: 03/26/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+QQQ is a sideline
+Updating trend lists for signal "symbol: 'NVDA', date: '7/2/2004', buy/sell/sidel: sell, event: 'Event for: NVDA, date: 07/02/2004, type: Slope of MACD Signal Line Downtrend'"
+NVDA is a sell
+Updating trend lists for signal "symbol: 'SCUR', date: '7/2/2004', buy/sell/sidel: sidelined, event: 'Event for: SCUR, date: 07/02/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+SCUR is a sideline
+Updating trend lists for signal "symbol: 'TLGD', date: '5/21/2004', buy/sell/sidel: sidelined, event: 'Event for: TLGD, date: 05/21/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+TLGD is a sideline
+Updating trend lists for signal "symbol: 'MU', date: '5/21/2004', buy/sell/sidel: sidelined, event: 'Event for: MU, date: 05/21/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+MU is a sideline
+Updating trend lists for signal "symbol: 'MOT', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: MOT, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+MOT is a sideline
+Updating trend lists for signal "symbol: 'BAC', date: '6/18/2004', buy/sell/sidel: sidelined, event: 'Event for: BAC, date: 06/18/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+BAC is a sideline
+Updating trend lists for signal "symbol: 'DCLK', date: '5/14/2004', buy/sell/sidel: sidelined, event: 'Event for: DCLK, date: 05/14/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+DCLK is a sideline
+Updating trend lists for signal "symbol: 'MEDI', date: '3/5/2004', buy/sell/sidel: sidelined, event: 'Event for: MEDI, date: 03/05/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+MEDI is a sideline
+Updating trend lists for signal "symbol: 'CBH', date: '7/2/2004', buy/sell/sidel: sell, event: 'Event for: CBH, date: 07/02/2004, type: Slope of MACD Signal Line Downtrend'"
+CBH is a sell
+Updating trend lists for signal "symbol: 'NOK', date: '7/9/2004', buy/sell/sidel: sidelined, event: 'Event for: NOK, date: 07/09/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+NOK is a sideline
+Updating trend lists for signal "symbol: 'NFX', date: '7/16/2004', buy/sell/sidel: sidelined, event: 'Event for: NFX, date: 07/16/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+NFX is a sideline
+Updating trend lists for signal "symbol: 'PSFT', date: '4/2/2004', buy/sell/sidel: sidelined, event: 'Event for: PSFT, date: 04/02/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+PSFT is a sideline
+Updating trend lists for signal "symbol: 'YHOO', date: '7/9/2004', buy/sell/sidel: sell, event: 'Event for: YHOO, date: 07/09/2004, type: Slope of MACD Signal Line Downtrend'"
+YHOO is a sell
+Updating trend lists for signal "symbol: 'ERICY', date: '5/28/2004', buy/sell/sidel: sidelined, event: 'Event for: ERICY, date: 05/28/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+ERICY is a sideline
+Updating trend lists for signal "symbol: 'QCOM', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: QCOM, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+QCOM is a sideline
+Updating trend lists for signal "symbol: 'S', date: '6/25/2004', buy/sell/sidel: sidelined, event: 'Event for: S, date: 06/25/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+S is a sideline
+Updating trend lists for signal "symbol: 'WFT', date: '7/23/2004', buy/sell/sidel: sidelined, event: 'Event for: WFT, date: 07/23/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+WFT is a sideline
+Updating trend lists for signal "symbol: 'ADBE', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: ADBE, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+ADBE is a sideline
+Updating trend lists for signal "symbol: 'CSC', date: '7/9/2004', buy/sell/sidel: sidelined, event: 'Event for: CSC, date: 07/09/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+CSC is a sideline
+Updating trend lists for signal "symbol: 'FFIV', date: '6/25/2004', buy/sell/sidel: sidelined, event: 'Event for: FFIV, date: 06/25/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+FFIV is a sideline
+Updating trend lists for signal "symbol: 'PMCS', date: '5/14/2004', buy/sell/sidel: sidelined, event: 'Event for: PMCS, date: 05/14/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+PMCS is a sideline
+Updating trend lists for signal "symbol: 'WWCA', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: WWCA, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+WWCA is a sideline
+Updating trend lists for signal "symbol: 'QQV__X', date: '7/16/2004', buy/sell/sidel: buy, event: 'Event for: QQV__X, date: 07/16/2004, type: Slope of MACD Signal Line Uptrend'"
+QQV__X is a buy
+Updating trend lists for signal "symbol: 'AFFX', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: AFFX, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+AFFX is a sideline
+Updating trend lists for signal "symbol: 'G', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: G, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+G is a sideline
+Updating trend lists for signal "symbol: 'BOBJ', date: '7/16/2004', buy/sell/sidel: sidelined, event: 'Event for: BOBJ, date: 07/16/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+BOBJ is a sideline
+Updating trend lists for signal "symbol: 'C', date: '5/28/2004', buy/sell/sidel: sidelined, event: 'Event for: C, date: 05/28/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+C is a sideline
+Updating trend lists for signal "symbol: 'NVLS', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: NVLS, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+NVLS is a sideline
+Updating trend lists for signal "symbol: 'AMR', date: '4/2/2004', buy/sell/sidel: sidelined, event: 'Event for: AMR, date: 04/02/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+AMR is a sideline
+Updating trend lists for signal "symbol: 'O', date: '7/9/2004', buy/sell/sidel: sidelined, event: 'Event for: O, date: 07/09/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+O is a sideline
+Updating trend lists for signal "symbol: 'PCLN', date: '7/9/2004', buy/sell/sidel: sell, event: 'Event for: PCLN, date: 07/09/2004, type: Slope of MACD Signal Line Downtrend'"
+PCLN is a sell
+Updating trend lists for signal "symbol: 'VRSN', date: '3/26/2004', buy/sell/sidel: sidelined, event: 'Event for: VRSN, date: 03/26/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+VRSN is a sideline
+Updating trend lists for signal "symbol: 'PDLI', date: '6/25/2004', buy/sell/sidel: sidelined, event: 'Event for: PDLI, date: 06/25/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+PDLI is a sideline
+Updating trend lists for signal "symbol: 'TEVA', date: '6/25/2004', buy/sell/sidel: sell, event: 'Event for: TEVA, date: 06/25/2004, type: Slope of MACD Signal Line Downtrend'"
+TEVA is a sell
+Updating trend lists for signal "symbol: 'INVN', date: '7/30/2004', buy/sell/sidel: sell, event: 'Event for: INVN, date: 07/30/2004, type: Slope of MACD Signal Line Downtrend'"
+INVN is a sell
+Updating trend lists for signal "symbol: 'SWY', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: SWY, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+SWY is a sideline
+Updating trend lists for signal "symbol: 'AMD', date: '7/30/2004', buy/sell/sidel: sidelined, event: 'Event for: AMD, date: 07/30/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+AMD is a sideline
+Updating trend lists for signal "symbol: 'RDY', date: '4/2/2004', buy/sell/sidel: sidelined, event: 'Event for: RDY, date: 04/02/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+RDY is a sideline
+Updating trend lists for signal "symbol: 'VLO', date: '7/30/2004', buy/sell/sidel: sell, event: 'Event for: VLO, date: 07/30/2004, type: Slope of MACD Signal Line Downtrend'"
+VLO is a sell
+Updating trend lists for signal "symbol: 'PLXS', date: '5/21/2004', buy/sell/sidel: sidelined, event: 'Event for: PLXS, date: 05/21/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+PLXS is a sideline
+Updating trend lists for signal "symbol: 'BMC', date: '5/21/2004', buy/sell/sidel: sidelined, event: 'Event for: BMC, date: 05/21/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+BMC is a sideline
+Updating trend lists for signal "symbol: 'AFCI', date: '7/2/2004', buy/sell/sidel: sidelined, event: 'Event for: AFCI, date: 07/02/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+AFCI is a sideline
+Updating trend lists for signal "symbol: 'HDI', date: '7/23/2004', buy/sell/sidel: sell, event: 'Event for: HDI, date: 07/23/2004, type: Slope of MACD Signal Line Downtrend'"
+HDI is a sell
+Updating trend lists for signal "symbol: 'CCRD', date: '4/23/2004', buy/sell/sidel: sidelined, event: 'Event for: CCRD, date: 04/23/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+CCRD is a sideline
+Updating trend lists for signal "symbol: 'RBAK', date: '5/21/2004', buy/sell/sidel: sidelined, event: 'Event for: RBAK, date: 05/21/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+RBAK is a sideline
+Updating trend lists for signal "symbol: 'EMR', date: '7/9/2004', buy/sell/sidel: sidelined, event: 'Event for: EMR, date: 07/09/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+EMR is a sideline
+Updating trend lists for signal "symbol: 'KLAC', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: KLAC, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+KLAC is a sideline
+Updating trend lists for signal "symbol: 'CRA', date: '5/21/2004', buy/sell/sidel: sidelined, event: 'Event for: CRA, date: 05/21/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+CRA is a sideline
+Updating trend lists for signal "symbol: 'AMAT', date: '5/7/2004', buy/sell/sidel: sidelined, event: 'Event for: AMAT, date: 05/07/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+AMAT is a sideline
+Updating trend lists for signal "symbol: 'KSE', date: '5/21/2004', buy/sell/sidel: sidelined, event: 'Event for: KSE, date: 05/21/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+KSE is a sideline
+Updating trend lists for signal "symbol: 'CMA', date: '7/30/2004', buy/sell/sidel: sidelined, event: 'Event for: CMA, date: 07/30/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+CMA is a sideline
+Updating trend lists for signal "symbol: 'CHKP', date: '7/9/2004', buy/sell/sidel: sell, event: 'Event for: CHKP, date: 07/09/2004, type: Slope of MACD Signal Line Downtrend'"
+CHKP is a sell
+Updating trend lists for signal "symbol: 'HP', date: '5/28/2004', buy/sell/sidel: sidelined, event: 'Event for: HP, date: 05/28/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+HP is a sideline
+Updating trend lists for signal "symbol: 'XLNX', date: '5/21/2004', buy/sell/sidel: sidelined, event: 'Event for: XLNX, date: 05/21/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+XLNX is a sideline
+Updating trend lists for signal "symbol: 'AA', date: '7/9/2004', buy/sell/sidel: sidelined, event: 'Event for: AA, date: 07/09/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+AA is a sideline
+Updating trend lists for signal "symbol: 'GMST', date: '5/14/2004', buy/sell/sidel: sidelined, event: 'Event for: GMST, date: 05/14/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+GMST is a sideline
+Updating trend lists for signal "symbol: 'SCOX', date: '3/26/2004', buy/sell/sidel: sidelined, event: 'Event for: SCOX, date: 03/26/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+SCOX is a sideline
+Updating trend lists for signal "symbol: 'ZAP', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: ZAP, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+ZAP is a sideline
+Updating trend lists for signal "symbol: 'LXK', date: '7/9/2004', buy/sell/sidel: sell, event: 'Event for: LXK, date: 07/09/2004, type: Slope of MACD Signal Line Downtrend'"
+LXK is a sell
+Updating trend lists for signal "symbol: 'APA', date: '7/23/2004', buy/sell/sidel: sidelined, event: 'Event for: APA, date: 07/23/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+APA is a sideline
+Updating trend lists for signal "symbol: 'JNJ', date: '5/14/2004', buy/sell/sidel: sidelined, event: 'Event for: JNJ, date: 05/14/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+JNJ is a sideline
+Updating trend lists for signal "symbol: 'BRKT', date: '5/28/2004', buy/sell/sidel: sidelined, event: 'Event for: BRKT, date: 05/28/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+BRKT is a sideline
+Updating trend lists for signal "symbol: 'BRCM', date: '7/9/2004', buy/sell/sidel: sell, event: 'Event for: BRCM, date: 07/09/2004, type: Slope of MACD Signal Line Downtrend'"
+BRCM is a sell
+Updating trend lists for signal "symbol: 'PTEN', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: PTEN, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+PTEN is a sideline
+Updating trend lists for signal "symbol: 'RHI', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: RHI, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+RHI is a sideline
+Updating trend lists for signal "symbol: 'SFP', date: '5/28/2004', buy/sell/sidel: sidelined, event: 'Event for: SFP, date: 05/28/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+SFP is a sideline
+Updating trend lists for signal "symbol: 'PLCM', date: '3/26/2004', buy/sell/sidel: sidelined, event: 'Event for: PLCM, date: 03/26/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+PLCM is a sideline
+Updating trend lists for signal "symbol: 'WAT', date: '7/23/2004', buy/sell/sidel: sell, event: 'Event for: WAT, date: 07/23/2004, type: Slope of MACD Signal Line Downtrend'"
+WAT is a sell
+Updating trend lists for signal "symbol: 'SCON', date: '3/19/2004', buy/sell/sidel: sidelined, event: 'Event for: SCON, date: 03/19/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+SCON is a sideline
+Updating trend lists for signal "symbol: 'OATS', date: '7/30/2004', buy/sell/sidel: sell, event: 'Event for: OATS, date: 07/30/2004, type: Slope of MACD Signal Line Downtrend'"
+OATS is a sell
+Updating trend lists for signal "symbol: 'PEG', date: '5/28/2004', buy/sell/sidel: sidelined, event: 'Event for: PEG, date: 05/28/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+PEG is a sideline
+Updating trend lists for signal "symbol: 'COX', date: '2/27/2004', buy/sell/sidel: sidelined, event: 'Event for: COX, date: 02/27/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+COX is a sideline
+Updating trend lists for signal "symbol: 'GM', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: GM, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+GM is a sideline
+Updating trend lists for signal "symbol: 'VECO', date: '5/21/2004', buy/sell/sidel: sidelined, event: 'Event for: VECO, date: 05/21/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+VECO is a sideline
+Updating trend lists for signal "symbol: 'LRCX', date: '7/2/2004', buy/sell/sidel: sidelined, event: 'Event for: LRCX, date: 07/02/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+LRCX is a sideline
+Updating trend lists for signal "symbol: 'ARBA', date: '7/2/2004', buy/sell/sidel: buy, event: 'Event for: ARBA, date: 07/02/2004, type: Slope of MACD Signal Line Uptrend'"
+ARBA is a buy
+Updating trend lists for signal "symbol: 'TRMB', date: '7/30/2004', buy/sell/sidel: sidelined, event: 'Event for: TRMB, date: 07/30/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+TRMB is a sideline
+Updating trend lists for signal "symbol: 'GE', date: '4/2/2004', buy/sell/sidel: sidelined, event: 'Event for: GE, date: 04/02/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+GE is a sideline
+Updating trend lists for signal "symbol: 'HD', date: '5/14/2004', buy/sell/sidel: sidelined, event: 'Event for: HD, date: 05/14/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+HD is a sideline
+Updating trend lists for signal "symbol: 'CHP', date: '6/25/2004', buy/sell/sidel: sidelined, event: 'Event for: CHP, date: 06/25/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+CHP is a sideline
+Updating trend lists for signal "symbol: 'HLIT', date: '5/21/2004', buy/sell/sidel: sidelined, event: 'Event for: HLIT, date: 05/21/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+HLIT is a sideline
+Updating trend lists for signal "symbol: 'FITB', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: FITB, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+FITB is a sideline
+Updating trend lists for signal "symbol: 'WMT', date: '7/16/2004', buy/sell/sidel: sidelined, event: 'Event for: WMT, date: 07/16/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+WMT is a sideline
+Updating trend lists for signal "symbol: 'GR', date: '7/9/2004', buy/sell/sidel: sidelined, event: 'Event for: GR, date: 07/09/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+GR is a sideline
+Updating trend lists for signal "symbol: 'EYE', date: '7/23/2004', buy/sell/sidel: sell, event: 'Event for: EYE, date: 07/23/2004, type: Slope of MACD Signal Line Downtrend'"
+EYE is a sell
+Updating trend lists for signal "symbol: 'TIF', date: '6/25/2004', buy/sell/sidel: sidelined, event: 'Event for: TIF, date: 06/25/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+TIF is a sideline
+Updating trend lists for signal "symbol: 'TIVO', date: '5/7/2004', buy/sell/sidel: sidelined, event: 'Event for: TIVO, date: 05/07/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+TIVO is a sideline
+Updating trend lists for signal "symbol: 'HSY', date: '3/12/2004', buy/sell/sidel: sidelined, event: 'Event for: HSY, date: 03/12/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+HSY is a sideline
+Updating trend lists for signal "symbol: 'MRK', date: '7/23/2004', buy/sell/sidel: sidelined, event: 'Event for: MRK, date: 07/23/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+MRK is a sideline
+Updating trend lists for signal "symbol: 'RIG', date: '7/16/2004', buy/sell/sidel: sidelined, event: 'Event for: RIG, date: 07/16/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+RIG is a sideline
+Updating trend lists for signal "symbol: 'KLIC', date: '3/19/2004', buy/sell/sidel: sidelined, event: 'Event for: KLIC, date: 03/19/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+KLIC is a sideline
+Updating trend lists for signal "symbol: 'Y', date: '7/16/2004', buy/sell/sidel: sell, event: 'Event for: Y, date: 07/16/2004, type: Slope of MACD Signal Line Downtrend'"
+Y is a sell
+Updating trend lists for signal "symbol: 'QLGC', date: '7/9/2004', buy/sell/sidel: sidelined, event: 'Event for: QLGC, date: 07/09/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+QLGC is a sideline
+Updating trend lists for signal "symbol: 'PAYX', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: PAYX, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+PAYX is a sideline
+Updating trend lists for signal "symbol: 'RBK', date: '5/28/2004', buy/sell/sidel: sidelined, event: 'Event for: RBK, date: 05/28/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+RBK is a sideline
+Updating trend lists for signal "symbol: 'SANM', date: '3/26/2004', buy/sell/sidel: sidelined, event: 'Event for: SANM, date: 03/26/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+SANM is a sideline
+Updating trend lists for signal "symbol: 'SFA', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: SFA, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+SFA is a sideline
+Updating trend lists for signal "symbol: 'SII', date: '7/23/2004', buy/sell/sidel: sidelined, event: 'Event for: SII, date: 07/23/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+SII is a sideline
+Updating trend lists for signal "symbol: 'B', date: '3/12/2004', buy/sell/sidel: sidelined, event: 'Event for: B, date: 03/12/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+B is a sideline
+Updating trend lists for signal "symbol: 'CDWC', date: '7/23/2004', buy/sell/sidel: sidelined, event: 'Event for: CDWC, date: 07/23/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+CDWC is a sideline
+Updating trend lists for signal "symbol: 'VIA', date: '2/27/2004', buy/sell/sidel: sidelined, event: 'Event for: VIA, date: 02/27/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+VIA is a sideline
+Updating trend lists for signal "symbol: 'SRNA', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: SRNA, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+SRNA is a sideline
+Updating trend lists for signal "symbol: 'ABGX', date: '7/23/2004', buy/sell/sidel: sidelined, event: 'Event for: ABGX, date: 07/23/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+ABGX is a sideline
+Updating trend lists for signal "sERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ymbol: 'BK', date: '5/7/2004', buy/sell/sidel: sidelined, event: 'Event for: BK, date: 05/07/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+BK is a sideline
+Updating trend lists for signal "symbol: 'RMBS', date: '8/6/2004', buy/sell/sidel: sidelined, event: 'Event for: RMBS, date: 08/06/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+RMBS is a sideline
+Updating trend lists for signal "symbol: 'MWD', date: '7/23/2004', buy/sell/sidel: sidelined, event: 'Event for: MWD, date: 07/23/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+MWD is a sideline
+Updating trend lists for signal "symbol: 'JP', date: '5/28/2004', buy/sell/sidel: sidelined, event: 'Event for: JP, date: 05/28/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+JP is a sideline
+Updating trend lists for signal "symbol: 'AAPL', date: '7/2/2004', buy/sell/sidel: sidelined, event: 'Event for: AAPL, date: 07/02/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+AAPL is a sideline
+Updating trend lists for signal "symbol: 'AMZN', date: '7/16/2004', buy/sell/sidel: sell, event: 'Event for: AMZN, date: 07/16/2004, type: Slope of MACD Signal Line Downtrend'"
+AMZN is a sell
+Updating trend lists for signal "symbol: 'CCU', date: '3/26/2004', buy/sell/sidel: sidelined, event: 'Event for: CCU, date: 03/26/2004, type: Slope of MACD Signal Line Trend Sideways: -1 to 0'"
+CCU is a sideline
+Updating trend lists for signal "symbol: 'BB', date: '4/30/2004', buy/sell/sidel: sidelined, event: 'Event for: BB, date: 04/30/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+BB is a sideline
+Updating trend lists for signal "symbol: 'BA', date: '7/2/2004', buy/sell/sidel: sidelined, event: 'Event for: BA, date: 07/02/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+BA is a sideline
+Updating trend lists for signal "symbol: 'EOG', date: '7/16/2004', buy/sell/sidel: sidelined, event: 'Event for: EOG, date: 07/16/2004, type: Slope of MACD Signal Line Trend Sideways: 1 to 0'"
+EOG is a sideline
+Updating trend lists for signal "symbol: 'AGN', date: '7/2/2004', buy/sell/sidel: sell, event: 'Event for: AGN, date: 07/02/2004, type: Slope of MACD Signal Line Downtrend'"
+AGN is a sell
+cmds: insert into watch_list (symbol, category) values ('vrts', 'sidelined');
+insert into watch_list (symbol, category) values ('yum', 'sidelined');
+insert into watch_list (symbol, category) values ('cald', 'sidelined');
+insert into watch_list (symbol, category) values ('vsh', 'sidelined');
+insert into watch_list (symbol, category) values ('csco', 'sidelined');
+insert into watch_list (symbol, category) values ('dade', 'sidelined');
+insert into watch_list (symbol, category) values ('simg', 'sidelined');
+insert into watch_list (symbol, category) values ('genz', 'sidelined');
+insert into watch_list (symbol, category) values ('ppco', 'sidelined');
+insert into watch_list (symbol, category) values ('bhi', 'sidelined');
+insert into watch_list (symbol, category) values ('irf', 'sidelined');
+insert into watch_list (symbol, category) values ('dhr', 'sidelined');
+insert into watch_list (symbol, category) values ('uopx', 'downtrend');
+insert into watch_list (symbol, category) values ('utx', 'sidelined');
+insert into watch_list (symbol, category) values ('mtb', 'sidelined');
+insert into watch_list (symbol, category) values ('abt', 'sidelined');
+insert into watch_list (symbol, category) values ('cat', 'sidelined');
+insert into watch_list (symbol, category) values ('intu', 'sidelined');
+insert into watch_list (symbol, category) values ('beas', 'sidelined');
+insert into watch_list (symbol, category) values ('stj', 'downtrend');
+insert into watch_list (symbol, category) values ('dell', 'sidelined');
+insert into watch_list (symbol, category) values ('pfe', 'sidelined');
+insert into watch_list (symbol, category) values ('abk', 'sidelined');
+insert into watch_list (symbol, category) values ('coke', 'sidelined');
+insert into watch_list (symbol, category) values ('fpl', 'sidelined');
+insert into watch_list (symbol, category) values ('cacs', 'downtrend');
+insert into watch_list (symbol, category) values ('e', 'sidelined');
+insert into watch_list (symbol, category) values ('flex', 'sidelined');
+insert into watch_list (symbol, category) values ('a', 'sidelined');
+insert into watch_list (symbol, category) values ('issx', 'sidelined');
+insert into watch_list (symbol, category) values ('celg', 'downtrend');
+insert into watch_list (symbol, category) values ('hig', 'downtrend');
+insert into watch_list (symbol, category) values ('pgr', 'downtrend');
+insert into watch_list (symbol, category) values ('one', 'sidelined');
+insert into watch_list (symbol, category) values ('issi', 'sidelined');
+insert into watch_list (symbol, category) values ('camp', 'sidelined');
+insert into watch_list (symbol, category) values ('orct', 'sidelined');
+insert into watch_list (symbol, category) values ('apcc', 'sidelined');
+insert into watch_list (symbol, category) values ('dab', 'sidelined');
+insert into watch_list (symbol, category) values ('nsm', 'sidelined');
+insert into watch_list (symbol, category) values ('cima', 'sidelined');
+insert into watch_list (symbol, category) values ('txn', 'sidelined');
+insert into watch_list (symbol, category) values ('dis', 'sidelined');
+insert into watch_list (symbol, category) values ('bak', 'sidelined');
+insert into watch_list (symbol, category) values ('newp', 'sidelined');
+insert into watch_list (symbol, category) values ('wfii', 'sidelined');
+insert into watch_list (symbol, category) values ('dish', 'sidelined');
+insert into watch_list (symbol, category) values ('flsh', 'sidelined');
+insert into watch_list (symbol, category) values ('mxim', 'sidelined');
+insert into watch_list (symbol, category) values ('mtsn', 'sidelined');
+insert into watch_list (symbol, category) values ('cah', 'downtrend');
+insert into watch_list (symbol, category) values ('erf', 'sidelined');
+insert into watch_list (symbol, category) values ('insp', 'sidelined');
+insert into watch_list (symbol, category) values ('da', 'sidelined');
+insert into watch_list (symbol, category) values ('aai', 'sidelined');
+insert into watch_list (symbol, category) values ('mvsn', 'sidelined');
+insert into watch_list (symbol, category) values ('x', 'sidelined');
+insert into watch_list (symbol, category) values ('ibm', 'sidelined');
+insert into watch_list (symbol, category) values ('aaa', 'downtrend');
+insert into watch_list (symbol, category) values ('cmtn', 'sidelined');
+insert into watch_list (symbol, category) values ('v', 'sidelined');
+insert into watch_list (symbol, category) values ('molx', 'sidelined');
+insert into watch_list (symbol, category) values ('sbl', 'sidelined');
+insert into watch_list (symbol, category) values ('adic', 'sidelined');
+insert into watch_list (symbol, category) values ('itw', 'downtrend');
+insert into watch_list (symbol, category) values ('mtg', 'downtrend');
+insert into watch_list (symbol, category) values ('jnpr', 'sidelined');
+insert into watch_list (symbol, category) values ('rhat', 'sidelined');
+insert into watch_list (symbol, category) values ('mmm', 'downtrend');
+insert into watch_list (symbol, category) values ('ebay', 'downtrend');
+insert into watch_list (symbol, category) values ('ko', 'downtrend');
+insert into watch_list (symbol, category) values ('fcel', 'sidelined');
+insert into watch_list (symbol, category) values ('leh', 'sidelined');
+insert into watch_list (symbol, category) values ('mlnm', 'sidelined');
+insert into watch_list (symbol, category) values ('novl', 'sidelined');
+insert into watch_list (symbol, category) values ('all', 'sidelined');
+insert into watch_list (symbol, category) values ('novn', 'sidelined');
+insert into watch_list (symbol, category) values ('chrw', 'sidelined');
+insert into watch_list (symbol, category) values ('adi', 'downtrend');
+insert into watch_list (symbol, category) values ('prtl', 'sidelined');
+insert into watch_list (symbol, category) values ('ter', 'sidelined');
+insert into watch_list (symbol, category) values ('sebl', 'sidelined');
+insert into watch_list (symbol, category) values ('frx', 'downtrend');
+insert into watch_list (symbol, category) values ('exar', 'sidelined');
+insert into watch_list (symbol, category) values ('xto', 'sidelined');
+insert into watch_list (symbol, category) values ('nete', 'sidelined');
+insert into watch_list (symbol, category) values ('bby', 'sidelined');
+insert into watch_list (symbol, category) values ('clx', 'sidelined');
+insert into watch_list (symbol, category) values ('iona', 'sidelined');
+insert into watch_list (symbol, category) values ('cy', 'sidelined');
+insert into watch_list (symbol, category) values ('ceph', 'sidelined');
+insert into watch_list (symbol, category) values ('cd', 'sidelined');
+insert into watch_list (symbol, category) values ('onyx', 'sidelined');
+insert into watch_list (symbol, category) values ('cb', 'sidelined');
+insert into watch_list (symbol, category) values ('gild', 'sidelined');
+insert into watch_list (symbol, category) values ('f', 'sidelined');
+insert into watch_list (symbol, category) values ('dna', 'downtrend');
+insert into watch_list (symbol, category) values ('lltc', 'sidelined');
+insert into watch_list (symbol, category) values ('ci', 'downtrend');
+insert into watch_list (symbol, category) values ('sepr', 'downtrend');
+insert into watch_list (symbol, category) values ('ra', 'sidelined');
+insert into watch_list (symbol, category) values ('nt', 'sidelined');
+insert into watch_list (symbol, category) values ('andw', 'downtrend');
+insert into watch_list (symbol, category) values ('cake', 'sidelined');
+insert into watch_list (symbol, category) values ('bbby', 'sidelined');
+insert into watch_list (symbol, category) values ('nsit', 'sidelined');
+insert into watch_list (symbol, category) values ('tech', 'sidelined');
+insert into watch_list (symbol, category) values ('mdy', 'downtrend');
+insert into watch_list (symbol, category) values ('pwav', 'sidelined');
+insert into watch_list (symbol, category) values ('fast', 'sidelined');
+insert into watch_list (symbol, category) values ('ne', 'sidelined');
+insert into watch_list (symbol, category) values ('sndk', 'sidelined');
+insert into watch_list (symbol, category) values ('dltr', 'sidelined');
+insert into watch_list (symbol, category) values ('nbr', 'sidelined');
+insert into watch_list (symbol, category) values ('jbl', 'sidelined');
+insert into watch_list (symbol, category) values ('r', 'sidelined');
+insert into watch_list (symbol, category) values ('cof', 'sidelined');
+insert into watch_list (symbol, category) values ('pcop', 'downtrend');
+insert into watch_list (symbol, category) values ('fisv', 'sidelined');
+insert into watch_list (symbol, category) values ('cost', 'sidelined');
+insert into watch_list (symbol, category) values ('acl', 'downtrend');
+insert into watch_list (symbol, category) values ('nxtl', 'sidelined');
+insert into watch_list (symbol, category) values ('amgn', 'sidelined');
+insert into watch_list (symbol, category) values ('merq', 'downtrend');
+insert into watch_list (symbol, category) values ('intc', 'sidelined');
+insert into watch_list (symbol, category) values ('dvn', 'sidelined');
+insert into watch_list (symbol, category) values ('pgtv', 'sidelined');
+insert into watch_list (symbol, category) values ('etr', 'sidelined');
+insert into watch_list (symbol, category) values ('altr', 'sidelined');
+insert into watch_list (symbol, category) values ('ivx', 'sidelined');
+insert into watch_list (symbol, category) values ('ntpa', 'sidelined');
+insert into watch_list (symbol, category) values ('qqq', 'sidelined');
+insert into watch_list (symbol, category) values ('nvda', 'downtrend');
+insert into watch_list (symbol, category) values ('scur', 'sidelined');
+insert into watch_list (symbol, category) values ('tlgd', 'sidelined');
+insert into watch_list (symbol, category) values ('mu', 'sidelined');
+insert into watch_list (symbol, category) values ('mot', 'sidelined');
+insert into watch_list (symbol, category) values ('bac', 'sidelined');
+insert into watch_list (symbol, category) values ('dclk', 'sidelined');
+insert into watch_list (symbol, category) values ('medi', 'sidelined');
+insert into watch_list (symbol, category) values ('cbh', 'downtrend');
+insert into watch_list (symbol, category) values ('nok', 'sidelined');
+insert into watch_list (symbol, category) values ('nfx', 'sidelined');
+insert into watch_list (symbol, category) values ('psft', 'sidelined');
+insert into watch_list (symbol, category) values ('yhoo', 'downtrend');
+insert into watch_list (symbol, category) values ('ericy', 'sidelined');
+insert into watch_list (symbol, category) values ('qcom', 'sidelined');
+insert into watch_list (symbol, category) values ('s', 'sidelined');
+insert into watch_list (symbol, category) values ('wft', 'sidelined');
+insert into watch_list (symbol, category) values ('adbe', 'sidelined');
+insert into watch_list (symbol, category) values ('csc', 'sidelined');
+insert into watch_list (symbol, category) values ('ffiv', 'sidelined');
+insert into watch_list (symbol, category) values ('pmcs', 'sidelined');
+insert into watch_list (symbol, category) values ('wwca', 'sidelined');
+insert into watch_list (symbol, category) values ('qqv__x', 'uptrend');
+insert into watch_list (symbol, category) values ('affx', 'sidelined');
+insert into watch_list (symbol, category) values ('g', 'sidelined');
+insert into watch_list (symbol, category) values ('bobj', 'sidelined');
+insert into watch_list (symbol, category) values ('c', 'sidelined');
+insert into watch_list (symbol, category) values ('nvls', 'sidelined');
+insert into watch_list (symbol, category) values ('amr', 'sidelined');
+insert into watch_list (symbol, category) values ('o', 'sidelined');
+insert into watch_list (symbol, category) values ('pcln', 'downtrend');
+insert into watch_list (symbol, category) values ('vrsn', 'sidelined');
+insert into watch_list (symbol, category) values ('pdli', 'sidelined');
+insert into watch_list (symbol, category) values ('teva', 'downtrend');
+insert into watch_list (symbol, category) values ('invn', 'downtrend');
+insert into watch_list (symbol, category) values ('swy', 'sidelined');
+insert into watch_list (symbol, category) values ('amd', 'sidelined');
+insert into watch_list (symbol, category) values ('rdy', 'sidelined');
+insert into watch_list (symbol, category) values ('vlo', 'downtrend');
+insert into watch_list (symbol, category) values ('plxs', 'sidelined');
+insert into watch_list (symbol, category) values ('bmc', 'sidelined');
+insert into watch_list (symbol, category) values ('afci', 'sidelined');
+insert into watch_list (symbol, category) values ('hdi', 'downtrend');
+insert into watch_list (symbol, category) values ('ccrd', 'sidelined');
+insert into watch_list (symbol, category) values ('rbak', 'sidelined');
+insert into watch_list (symbol, category) values ('emr', 'sidelined');
+insert into watch_list (symbol, category) values ('klac', 'sidelined');
+insert into watch_list (symbol, category) values ('cra', 'sidelined');
+insert into watch_list (symbol, category) values ('amat', 'sidelined');
+insert into watch_list (symbol, category) values ('kse', 'sidelined');
+insert into watch_list (symbol, category) values ('cma', 'sidelined');
+insert into watch_list (symbol, category) values ('chkp', 'downtrend');
+insert into watch_list (symbol, category) values ('hp', 'sidelined');
+insert into watch_list (symbol, category) values ('xlnx', 'sidelined');
+insert into watch_list (symbol, category) values ('aa', 'sidelined');
+insert into watch_list (symbol, category) values ('gmst', 'sidelined');
+insert into watch_list (symbol, category) values ('scox', 'sidelined');
+insert into watch_list (symbol, category) values ('zap', 'sidelined');
+insert into watch_list (symbol, category) values ('lxk', 'downtrend');
+insert into watch_list (symbol, category) values ('apa', 'sidelined');
+insert into watch_list (symbol, category) values ('jnj', 'sidelined');
+insert into watch_list (symbol, category) values ('brkt', 'sidelined');
+insert into watch_list (symbol, category) values ('brcm', 'downtrend');
+insert into watch_list (symbol, category) values ('pten', 'sidelined');
+insert into watch_list (symbol, category) values ('rhi', 'sidelined');
+insert into watch_list (symbol, category) values ('sfp', 'sidelined');
+insert iERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+ERROR:  duplicate key violates unique constraint "watch_list_pkey"
+nto watch_list (symbol, category) values ('plcm', 'sidelined');
+insert into watch_list (symbol, category) values ('wat', 'downtrend');
+insert into watch_list (symbol, category) values ('scon', 'sidelined');
+insert into watch_list (symbol, category) values ('oats', 'downtrend');
+insert into watch_list (symbol, category) values ('peg', 'sidelined');
+insert into watch_list (symbol, category) values ('cox', 'sidelined');
+insert into watch_list (symbol, category) values ('gm', 'sidelined');
+insert into watch_list (symbol, category) values ('veco', 'sidelined');
+insert into watch_list (symbol, category) values ('lrcx', 'sidelined');
+insert into watch_list (symbol, category) values ('arba', 'uptrend');
+insert into watch_list (symbol, category) values ('trmb', 'sidelined');
+insert into watch_list (symbol, category) values ('ge', 'sidelined');
+insert into watch_list (symbol, category) values ('hd', 'sidelined');
+insert into watch_list (symbol, category) values ('chp', 'sidelined');
+insert into watch_list (symbol, category) values ('hlit', 'sidelined');
+insert into watch_list (symbol, category) values ('fitb', 'sidelined');
+insert into watch_list (symbol, category) values ('wmt', 'sidelined');
+insert into watch_list (symbol, category) values ('gr', 'sidelined');
+insert into watch_list (symbol, category) values ('eye', 'downtrend');
+insert into watch_list (symbol, category) values ('tif', 'sidelined');
+insert into watch_list (symbol, category) values ('tivo', 'sidelined');
+insert into watch_list (symbol, category) values ('hsy', 'sidelined');
+insert into watch_list (symbol, category) values ('mrk', 'sidelined');
+insert into watch_list (symbol, category) values ('rig', 'sidelined');
+insert into watch_list (symbol, category) values ('klic', 'sidelined');
+insert into watch_list (symbol, category) values ('y', 'downtrend');
+insert into watch_list (symbol, category) values ('qlgc', 'sidelined');
+insert into watch_list (symbol, category) values ('payx', 'sidelined');
+insert into watch_list (symbol, category) values ('rbk', 'sidelined');
+insert into watch_list (symbol, category) values ('sanm', 'sidelined');
+insert into watch_list (symbol, category) values ('sfa', 'sidelined');
+insert into watch_list (symbol, category) values ('sii', 'sidelined');
+insert into watch_list (symbol, category) values ('b', 'sidelined');
+insert into watch_list (symbol, category) values ('cdwc', 'sidelined');
+insert into watch_list (symbol, category) values ('via', 'sidelined');
+insert into watch_list (symbol, category) values ('srna', 'sidelined');
+insert into watch_list (symbol, category) values ('abgx', 'sidelined');
+insert into watch_list (symbol, category) values ('bk', 'sidelined');
+insert into watch_list (symbol, category) values ('rmbs', 'sidelined');
+insert into watch_list (symbol, category) values ('mwd', 'sidelined');
+insert into watch_list (symbol, category) values ('jp', 'sidelined');
+insert into watch_list (symbol, category) values ('aapl', 'sidelined');
+insert into watch_list (symbol, category) values ('amzn', 'downtrend');
+insert into watch_list (symbol, category) values ('ccu', 'sidelined');
+insert into watch_list (symbol, category) values ('bb', 'sidelined');
+insert into watch_list (symbol, category) values ('ba', 'sidelined');
+insert into watch_list (symbol, category) values ('eog', 'sidelined');
+insert into watch_list (symbol, category) values ('agn', 'downtrend');
+
+cmds: delete from watch_list where symbol = 'vrts' and category = 'uptrend';
+delete from watch_list where symbol = 'vrts' and category = 'downtrend';
+delete from watch_list where symbol = 'yum' and category = 'uptrend';
+delete from watch_list where symbol = 'yum' and category = 'downtrend';
+delete from watch_list where symbol = 'cald' and category = 'uptrend';
+delete from watch_list where symbol = 'cald' and category = 'downtrend';
+delete from watch_list where symbol = 'vsh' and category = 'uptrend';
+delete from watch_list where symbol = 'vsh' and category = 'downtrend';
+delete from watch_list where symbol = 'csco' and category = 'uptrend';
+delete from watch_list where symbol = 'csco' and category = 'downtrend';
+delete from watch_list where symbol = 'dade' and category = 'uptrend';
+delete from watch_list where symbol = 'dade' and category = 'downtrend';
+delete from watch_list where symbol = 'simg' and category = 'uptrend';
+delete from watch_list where symbol = 'simg' and category = 'downtrend';
+delete from watch_list where symbol = 'genz' and category = 'uptrend';
+delete from watch_list where symbol = 'genz' and category = 'downtrend';
+delete from watch_list where symbol = 'ppco' and category = 'uptrend';
+delete from watch_list where symbol = 'ppco' and category = 'downtrend';
+delete from watch_list where symbol = 'bhi' and category = 'uptrend';
+delete from watch_list where symbol = 'bhi' and category = 'downtrend';
+delete from watch_list where symbol = 'irf' and category = 'uptrend';
+delete from watch_list where symbol = 'irf' and category = 'downtrend';
+delete from watch_list where symbol = 'dhr' and category = 'uptrend';
+delete from watch_list where symbol = 'dhr' and category = 'downtrend';
+delete from watch_list where symbol = 'uopx' and category = 'uptrend';
+delete from watch_list where symbol = 'uopx' and category = 'sidelined';
+delete from watch_list where symbol = 'utx' and category = 'uptrend';
+delete from watch_list where symbol = 'utx' and category = 'downtrend';
+delete from watch_list where symbol = 'mtb' and category = 'uptrend';
+delete from watch_list where symbol = 'mtb' and category = 'downtrend';
+delete from watch_list where symbol = 'abt' and category = 'uptrend';
+delete from watch_list where symbol = 'abt' and category = 'downtrend';
+delete from watch_list where symbol = 'cat' and category = 'uptrend';
+delete from watch_list where symbol = 'cat' and category = 'downtrend';
+delete from watch_list where symbol = 'intu' and category = 'uptrend';
+delete from watch_list where symbol = 'intu' and category = 'downtrend';
+delete from watch_list where symbol = 'beas' and category = 'uptrend';
+delete from watch_list where symbol = 'beas' and category = 'downtrend';
+delete from watch_list where symbol = 'stj' and category = 'uptrend';
+delete from watch_list where symbol = 'stj' and category = 'sidelined';
+delete from watch_list where symbol = 'dell' and category = 'uptrend';
+delete from watch_list where symbol = 'dell' and category = 'downtrend';
+delete from watch_list where symbol = 'pfe' and category = 'uptrend';
+delete from watch_list where symbol = 'pfe' and category = 'downtrend';
+delete from watch_list where symbol = 'abk' and category = 'uptrend';
+delete from watch_list where symbol = 'abk' and category = 'downtrend';
+delete from watch_list where symbol = 'coke' and category = 'uptrend';
+delete from watch_list where symbol = 'coke' and category = 'downtrend';
+delete from watch_list where symbol = 'fpl' and category = 'uptrend';
+delete from watch_list where symbol = 'fpl' and category = 'downtrend';
+delete from watch_list where symbol = 'cacs' and category = 'uptrend';
+delete from watch_list where symbol = 'cacs' and category = 'sidelined';
+delete from watch_list where symbol = 'e' and category = 'uptrend';
+delete from watch_list where symbol = 'e' and category = 'downtrend';
+delete from watch_list where symbol = 'flex' and category = 'uptrend';
+delete from watch_list where symbol = 'flex' and category = 'downtrend';
+delete from watch_list where symbol = 'a' and category = 'uptrend';
+delete from watch_list where symbol = 'a' and category = 'downtrend';
+delete from watch_list where symbol = 'issx' and category = 'uptrend';
+delete from watch_list where symbol = 'issx' and category = 'downtrend';
+delete from watch_list where symbol = 'celg' and category = 'uptrend';
+delete from watch_list where symbol = 'celg' and category = 'sidelined';
+delete from watch_list where symbol = 'hig' and category = 'uptrend';
+delete from watch_list where symbol = 'hig' and category = 'sidelined';
+delete from watch_list where symbol = 'pgr' and category = 'uptrend';
+delete from watch_list where symbol = 'pgr' and category = 'sidelined';
+delete from watch_list where symbol = 'one' and category = 'uptrend';
+delete from watch_list where symbol = 'one' and category = 'downtrend';
+delete from watch_list where symbol = 'issi' and category = 'uptrend';
+delete from watch_list where symbol = 'issi' and category = 'downtrend';
+delete from watch_list where symbol = 'camp' and category = 'uptrend';
+delete from watch_list where symbol = 'camp' and category = 'downtrend';
+delete from watch_list where symbol = 'orct' and category = 'uptrend';
+delete from watch_list where symbol = 'orct' and category = 'downtrend';
+delete from watch_list where symbol = 'apcc' and category = 'uptrend';
+delete from watch_list where symbol = 'apcc' and category = 'downtrend';
+delete from watch_list where symbol = 'dab' and category = 'uptrend';
+delete from watch_list where symbol = 'dab' and category = 'downtrend';
+delete from watch_list where symbol = 'nsm' and category = 'uptrend';
+delete from watch_list where symbol = 'nsm' and category = 'downtrend';
+delete from watch_list where symbol = 'cima' and category = 'uptrend';
+delete from watch_list where symbol = 'cima' and category = 'downtrend';
+delete from watch_list where symbol = 'txn' and category = 'uptrend';
+delete from watch_list where symbol = 'txn' and category = 'downtrend';
+delete from watch_list where symbol = 'dis' and category = 'uptrend';
+delete from watch_list where symbol = 'dis' and category = 'downtrend';
+delete from watch_list where symbol = 'bak' and category = 'uptrend';
+delete from watch_list where symbol = 'bak' and category = 'downtrend';
+delete from watch_list where symbol = 'newp' and category = 'uptrend';
+delete from watch_list where symbol = 'newp' and category = 'downtrend';
+delete from watch_list where symbol = 'wfii' and category = 'uptrend';
+delete from watch_list where symbol = 'wfii' and category = 'downtrend';
+delete from watch_list where symbol = 'dish' and category = 'uptrend';
+delete from watch_list where symbol = 'dish' and category = 'downtrend';
+delete from watch_list where symbol = 'flsh' and category = 'uptrend';
+delete from watch_list where symbol = 'flsh' and category = 'downtrend';
+delete from watch_list where symbol = 'mxim' and category = 'uptrend';
+delete from watch_list where symbol = 'mxim' and category = 'downtrend';
+delete from watch_list where symbol = 'mtsn' and category = 'uptrend';
+delete from watch_list where symbol = 'mtsn' and category = 'downtrend';
+delete from watch_list where symbol = 'cah' and category = 'uptrend';
+delete from watch_list where symbol = 'cah' and category = 'sidelined';
+delete from watch_list where symbol = 'erf' and category = 'uptrend';
+delete from watch_list where symbol = 'erf' and category = 'downtrend';
+delete from watch_list where symbol = 'insp' and category = 'uptrend';
+delete from watch_list where symbol = 'insp' and category = 'downtrend';
+delete from watch_list where symbol = 'da' and category = 'uptrend';
+delete from watch_list where symbol = 'da' and category = 'downtrend';
+delete from watch_list where symbol = 'aai' and category = 'uptrend';
+delete from watch_list where symbol = 'aai' and category = 'downtrend';
+delete from watch_list where symbol = 'mvsn' and category = 'uptrend';
+delete from watch_list where symbol = 'mvsn' and category = 'downtrend';
+delete from watch_list where symbol = 'x' and category = 'uptrend';
+delete from watch_list where symbol = 'x' and category = 'downtrend';
+delete from watch_list where symbol = 'ibm' and category = 'uptrend';
+delete from watch_list where symbol = 'ibm' and category = 'downtrend';
+delete from watch_list where symbol = 'aaa' and category = 'uptrend';
+delete from watch_list where symbol = 'aaa' and category = 'sidelined';
+delete from watch_list where symbol = 'cmtn' and category = 'uptrend';
+delete from watch_list where symbol = 'cmtn' and category = 'downtrend';
+delete from watch_list where symbol = 'v' and category = 'uptrend';
+delete from watch_list where symbol = 'v' and category = 'downtrend';
+delete from watch_list where symbol = 'molx' and category = 'uptrend';
+delete from watch_list where symbol = 'molx' and category = 'downtrend';
+delete from watch_list where symbol = 'sbl' and category = 'uptrend';
+delete from watch_list where symbol = 'sbl' and category = 'downtrend';
+delete from watch_list where symbol = 'adic' and category = 'uptrend';
+delete from watch_list where symbol = 'adic' and category = 'downtrend';
+delete from watch_list where symbol = 'itw' and category = 'uptrend';
+delete from watch_list where symbol = 'itw' and category = 'sidelined';
+delete from watch_list where symbol = 'mtg' and category = 'uptrend';
+delete from watch_list where symbol = 'mtg' and category = 'sidelined';
+delete from watch_list where symbol = 'jnpr' and category = 'uptrend';
+delete from watch_list where symbol = 'jnpr' and category = 'downtrend';
+delete from watch_list where symbol = 'rhat' and category = 'uptrend';
+delete from watch_list where symbol = 'rhat' and category = 'downtrend';
+delete from watch_list where symbol = 'mmm' and category = 'uptrend';
+delete from watch_list where symbol = 'mmm' and category = 'sidelined';
+delete from watch_list where symbol = 'ebay' and category = 'uptrend';
+delete from watch_list where symbol = 'ebay' and category = 'sidelined';
+delete from watch_list where symbol = 'ko' and category = 'uptrend';
+delete from watch_list where symbol = 'ko' and category = 'sidelined';
+delete from watch_list where symbol = 'fcel' and category = 'uptrend';
+delete from watch_list where symbol = 'fcel' and category = 'downtrend';
+delete from watch_list where symbol = 'leh' and category = 'uptrend';
+delete from watch_list where symbol = 'leh' and category = 'downtrend';
+delete from watch_list where symbol = 'mlnm' and category = 'uptrend';
+delete from watch_list where symbol = 'mlnm' and category = 'downtrend';
+delete from watch_list where symbol = 'novl' and category = 'uptrend';
+delete from watch_list where symbol = 'novl' and category = 'downtrend';
+delete from watch_list where symbol = 'all' and category = 'uptrend';
+delete from watch_list where symbol = 'all' and category = 'downtrend';
+delete from watch_list where symbol = 'novn' and category = 'uptrend';
+delete from watch_list where symbol = 'novn' and category = 'downtrend';
+delete from watch_list where symbol = 'chrw' and category = 'uptrend';
+delete from watch_list where symbol = 'chrw' and category = 'downtrend';
+delete from watch_list where symbol = 'adi' and category = 'uptrend';
+delete from watch_list where symbol = 'adi' and category = 'sidelined';
+delete from watch_list where symbol = 'prtl' and category = 'uptrend';
+delete from watch_list where symbol = 'prtl' and category = 'downtrend';
+delete from watch_list where symbol = 'ter' and category = 'uptrend';
+delete from watch_list where symbol = 'ter' and category = 'downtrend';
+delete from watch_list where symbol = 'sebl' and category = 'uptrend';
+delete from watch_list where symbol = 'sebl' and category = 'downtrend';
+delete from watch_list where symbol = 'frx' and category = 'uptrend';
+delete from watch_list where symbol = 'frx' and category = 'sidelined';
+delete from watch_list where symbol = 'exar' and category = 'uptrend';
+delete from watch_list where symbol = 'exar' and category = 'downtrend';
+delete from watch_list where symbol = 'xto' and category = 'uptrend';
+delete from watch_list where symbol = 'xto' and category = 'downtrend';
+delete from watch_list where symbol = 'nete' and category = 'uptrend';
+delete from watch_list where symbol = 'nete' and category = 'downtrend';
+delete from watch_list where symbol = 'bby' and category = 'uptrend';
+delete from watch_list where symbol = 'bby' and category = 'downtrend';
+delete from watch_list where symbol = 'clx' and category = 'uptrend';
+delete from watch_list where symbol = 'clx' and category = 'downtrend';
+delete from watch_list where symbol = 'iona' and category = 'uptrend';
+delete from watch_list where symbol = 'iona' and category = 'downtrend';
+delete from watch_list where symbol = 'cy' and category = 'uptrend';
+delete from watch_list where symbol = 'cy' and category = 'downtrend';
+delete from watch_list where symbol = 'ceph' and category = 'uptrend';
+delete from watch_list where symbol = 'ceph' and category = 'downtrend';
+delete from watch_list where symbol = 'cd' and category = 'uptrend';
+delete from watch_list where symbol = 'cd' and category = 'downtrend';
+delete from watch_list where symbol = 'onyx' and category = 'uptrend';
+delete from watch_list where symbol = 'onyx' and category = 'downtrend';
+delete from watch_list where symbol = 'cb' and category = 'uptrend';
+delete from watch_list where symbol = 'cb' and category = 'downtrend';
+delete from watch_list where symbol = 'gild' and category = 'uptrend';
+delete from watch_list where symbol = 'gild' and category = 'downtrend';
+delete from watch_list where symbol = 'f' and category = 'uptrend';
+delete from watch_list where symbol = 'f' and category = 'downtrend';
+delete from watch_list where symbol = 'dna' and category = 'uptrend';
+delete from watch_list where symbol = 'dna' and category = 'sidelined';
+delete from watch_list where symbol = 'lltc' and category = 'uptrend';
+delete from watch_list where symbol = 'lltc' and category = 'downtrend';
+delete from watch_list where symbol = 'ci' and category = 'uptrend';
+delete from watch_list where symbol = 'ci' and category = 'sidelined';
+delete from watch_list where symbol = 'sepr' and category = 'uptrend';
+delete from watch_list where symbol = 'sepr' and category = 'sidelined';
+delete from watch_list where symbol = 'ra' and category = 'uptrend';
+delete from watch_list where symbol = 'ra' and category = 'downtrend';
+delete from watch_list where symbol = 'nt' and category = 'uptrend';
+delete from watch_list where symbol = 'nt' and category = 'downtrend';
+delete from watch_list where symbol = 'andw' and category = 'uptrend';
+delete from watch_list where symbol = 'andw' and category = 'sidelined';
+delete from watch_list where symbol = 'cake' and category = 'uptrend';
+delete from watch_list where symbol = 'cake' and category = 'downtrend';
+delete from watch_list where symbol = 'bbby' and category = 'uptrend';
+delete from watch_list where symbol = 'bbby' and category = 'downtrend';
+delete from watch_list where symbol = 'nsit' and category = 'uptrend';
+delete from watch_list where symbol = 'nsit' and category = 'downtrend';
+delete from watch_list where symbol = 'tech' and category = 'uptrend';
+delete from watch_list where symbol = 'tech' and category = 'downtrend';
+delete from watch_list where symbol = 'mdy' and category = 'uptrend';
+delete from watch_list where symbol = 'mdy' and category = 'sidelined';
+delete from watch_list where symbol = 'pwav' and category = 'uptrend';
+delete from watch_list where symbol = 'pwav' and category = 'downtrend';
+delete from watch_list where symbol = 'fast' and category = 'uptrend';
+delete from watch_list where symbol = 'fast' and category = 'downtrend';
+delete from watch_list where symbol = 'ne' and category = 'uptrend';
+delete from watch_list where symbol = 'ne' and category = 'downtrend';
+delete from watch_list where symbol = 'sndk' and category = 'uptrend';
+delete from watch_list where symbol = 'sndk' and category = 'downtrend';
+delete from watch_list where symbol = 'dltr' and category = 'uptrend';
+delete from watch_list where symbol = 'dltr' and category = 'downtrend';
+delete from watch_list where symbol = 'nbr' and category = 'uptrend';
+delete from watch_list where symbol = 'nbr' and category = 'downtrend';
+delete from watch_list where symbol = 'jbl' and category = 'uptrend';
+delete from watch_list where symbol = 'jbl' and category = 'downtrend';
+delete from watch_list where symbol = 'r' and category = 'uptrend';
+delete from watch_list where symbol = 'r' and category = 'downtrend';
+delete from watch_list where symbol = 'cof' and category = 'uptrend';
+delete from watch_list where symbol = 'cof' and category = 'downtrend';
+delete from watch_list where symbol = 'pcop' and category = 'uptrend';
+delete from watch_list where symbol = 'pcop' and category = 'sidelined';
+delete from watch_list where symbol = 'fisv' and category = 'uptrend';
+delete from watch_list where symbol = 'fisv' and category = 'downtrend';
+delete from watch_list where symbol = 'cost' and category = 'uptrend';
+delete from watch_list where symbol = 'cost' and category = 'downtrend';
+delete from watch_list where symbol = 'acl' and category = 'uptrend';
+delete from watch_list where symbol = 'acl' and category = 'sidelined';
+delete from watch_list where symbol = 'nxtl' and category = 'uptrend';
+delete from watch_list where symbol = 'nxtl' and category = 'downtrend';
+delete from watch_list where symbol = 'amgn' and category = 'uptrend';
+delete from watch_list where symbol = 'amgn' and category = 'downtrend';
+delete from watch_list where symbol = 'merq' and category = 'uptrend';
+delete from watch_list where symbol = 'merq' and category = 'sidelined';
+delete from watch_list where symbol = 'intc' and category = 'uptrend';
+delete from watch_list where symbol = 'intc' and category = 'downtrend';
+
+cmds: delete from watch_list where symbol = 'dvn' and category = 'uptrend';
+delete from watch_list where symbol = 'dvn' and category = 'downtrend';
+delete from watch_list where symbol = 'pgtv' and category = 'uptrend';
+delete from watch_list where symbol = 'pgtv' and category = 'downtrend';
+delete from watch_list where symbol = 'etr' and category = 'uptrend';
+delete from watch_list where symbol = 'etr' and category = 'downtrend';
+delete from watch_list where symbol = 'altr' and category = 'uptrend';
+delete from watch_list where symbol = 'altr' and category = 'downtrend';
+delete from watch_list where symbol = 'ivx' and category = 'uptrend';
+delete from watch_list where symbol = 'ivx' and category = 'downtrend';
+delete from watch_list where symbol = 'ntpa' and category = 'uptrend';
+delete from watch_list where symbol = 'ntpa' and category = 'downtrend';
+delete from watch_list where symbol = 'qqq' and category = 'uptrend';
+delete from watch_list where symbol = 'qqq' and category = 'downtrend';
+delete from watch_list where symbol = 'nvda' and category = 'uptrend';
+delete from watch_list where symbol = 'nvda' and category = 'sidelined';
+delete from watch_list where symbol = 'scur' and category = 'uptrend';
+delete from watch_list where symbol = 'scur' and category = 'downtrend';
+delete from watch_list where symbol = 'tlgd' and category = 'uptrend';
+delete from watch_list where symbol = 'tlgd' and category = 'downtrend';
+delete from watch_list where symbol = 'mu' and category = 'uptrend';
+delete from watch_list where symbol = 'mu' and category = 'downtrend';
+delete from watch_list where symbol = 'mot' and category = 'uptrend';
+delete from watch_list where symbol = 'mot' and category = 'downtrend';
+delete from watch_list where symbol = 'bac' and category = 'uptrend';
+delete from watch_list where symbol = 'bac' and category = 'downtrend';
+delete from watch_list where symbol = 'dclk' and category = 'uptrend';
+delete from watch_list where symbol = 'dclk' and category = 'downtrend';
+delete from watch_list where symbol = 'medi' and category = 'uptrend';
+delete from watch_list where symbol = 'medi' and category = 'downtrend';
+delete from watch_list where symbol = 'cbh' and category = 'uptrend';
+delete from watch_list where symbol = 'cbh' and category = 'sidelined';
+delete from watch_list where symbol = 'nok' and category = 'uptrend';
+delete from watch_list where symbol = 'nok' and category = 'downtrend';
+delete from watch_list where symbol = 'nfx' and category = 'uptrend';
+delete from watch_list where symbol = 'nfx' and category = 'downtrend';
+delete from watch_list where symbol = 'psft' and category = 'uptrend';
+delete from watch_list where symbol = 'psft' and category = 'downtrend';
+delete from watch_list where symbol = 'yhoo' and category = 'uptrend';
+delete from watch_list where symbol = 'yhoo' and category = 'sidelined';
+delete from watch_list where symbol = 'ericy' and category = 'uptrend';
+delete from watch_list where symbol = 'ericy' and category = 'downtrend';
+delete from watch_list where symbol = 'qcom' and category = 'uptrend';
+delete from watch_list where symbol = 'qcom' and category = 'downtrend';
+delete from watch_list where symbol = 's' and category = 'uptrend';
+delete from watch_list where symbol = 's' and category = 'downtrend';
+delete from watch_list where symbol = 'wft' and category = 'uptrend';
+delete from watch_list where symbol = 'wft' and category = 'downtrend';
+delete from watch_list where symbol = 'adbe' and category = 'uptrend';
+delete from watch_list where symbol = 'adbe' and category = 'downtrend';
+delete from watch_list where symbol = 'csc' and category = 'uptrend';
+delete from watch_list where symbol = 'csc' and category = 'downtrend';
+delete from watch_list where symbol = 'ffiv' and category = 'uptrend';
+delete from watch_list where symbol = 'ffiv' and category = 'downtrend';
+delete from watch_list where symbol = 'pmcs' and category = 'uptrend';
+delete from watch_list where symbol = 'pmcs' and category = 'downtrend';
+delete from watch_list where symbol = 'wwca' and category = 'uptrend';
+delete from watch_list where symbol = 'wwca' and category = 'downtrend';
+delete from watch_list where symbol = 'qqv__x' and category = 'downtrend';
+delete from watch_list where symbol = 'qqv__x' and category = 'sidelined';
+delete from watch_list where symbol = 'affx' and category = 'uptrend';
+delete from watch_list where symbol = 'affx' and category = 'downtrend';
+delete from watch_list where symbol = 'g' and category = 'uptrend';
+delete from watch_list where symbol = 'g' and category = 'downtrend';
+delete from watch_list where symbol = 'bobj' and category = 'uptrend';
+delete from watch_list where symbol = 'bobj' and category = 'downtrend';
+delete from watch_list where symbol = 'c' and category = 'uptrend';
+delete from watch_list where symbol = 'c' and category = 'downtrend';
+delete from watch_list where symbol = 'nvls' and category = 'uptrend';
+delete from watch_list where symbol = 'nvls' and category = 'downtrend';
+delete from watch_list where symbol = 'amr' and category = 'uptrend';
+delete from watch_list where symbol = 'amr' and category = 'downtrend';
+delete from watch_list where symbol = 'o' and category = 'uptrend';
+delete from watch_list where symbol = 'o' and category = 'downtrend';
+delete from watch_list where symbol = 'pcln' and category = 'uptrend';
+delete from watch_list where symbol = 'pcln' and category = 'sidelined';
+delete from watch_list where symbol = 'vrsn' and category = 'uptrend';
+delete from watch_list where symbol = 'vrsn' and category = 'downtrend';
+delete from watch_list where symbol = 'pdli' and category = 'uptrend';
+delete from watch_list where symbol = 'pdli' and category = 'downtrend';
+delete from watch_list where symbol = 'teva' and category = 'uptrend';
+delete from watch_list where symbol = 'teva' and category = 'sidelined';
+delete from watch_list where symbol = 'invn' and category = 'uptrend';
+delete from watch_list where symbol = 'invn' and category = 'sidelined';
+delete from watch_list where symbol = 'swy' and category = 'uptrend';
+delete from watch_list where symbol = 'swy' and category = 'downtrend';
+delete from watch_list where symbol = 'amd' and category = 'uptrend';
+delete from watch_list where symbol = 'amd' and category = 'downtrend';
+delete from watch_list where symbol = 'rdy' and category = 'uptrend';
+delete from watch_list where symbol = 'rdy' and category = 'downtrend';
+delete from watch_list where symbol = 'vlo' and category = 'uptrend';
+delete from watch_list where symbol = 'vlo' and category = 'sidelined';
+delete from watch_list where symbol = 'plxs' and category = 'uptrend';
+delete from watch_list where symbol = 'plxs' and category = 'downtrend';
+delete from watch_list where symbol = 'bmc' and category = 'uptrend';
+delete from watch_list where symbol = 'bmc' and category = 'downtrend';
+delete from watch_list where symbol = 'afci' and category = 'uptrend';
+delete from watch_list where symbol = 'afci' and category = 'downtrend';
+delete from watch_list where symbol = 'hdi' and category = 'uptrend';
+delete from watch_list where symbol = 'hdi' and category = 'sidelined';
+delete from watch_list where symbol = 'ccrd' and category = 'uptrend';
+delete from watch_list where symbol = 'ccrd' and category = 'downtrend';
+delete from watch_list where symbol = 'rbak' and category = 'uptrend';
+delete from watch_list where symbol = 'rbak' and category = 'downtrend';
+delete from watch_list where symbol = 'emr' and category = 'uptrend';
+delete from watch_list where symbol = 'emr' and category = 'downtrend';
+delete from watch_list where symbol = 'klac' and category = 'uptrend';
+delete from watch_list where symbol = 'klac' and category = 'downtrend';
+delete from watch_list where symbol = 'cra' and category = 'uptrend';
+delete from watch_list where symbol = 'cra' and category = 'downtrend';
+delete from watch_list where symbol = 'amat' and category = 'uptrend';
+delete from watch_list where symbol = 'amat' and category = 'downtrend';
+delete from watch_list where symbol = 'kse' and category = 'uptrend';
+delete from watch_list where symbol = 'kse' and category = 'downtrend';
+delete from watch_list where symbol = 'cma' and category = 'uptrend';
+delete from watch_list where symbol = 'cma' and category = 'downtrend';
+delete from watch_list where symbol = 'chkp' and category = 'uptrend';
+delete from watch_list where symbol = 'chkp' and category = 'sidelined';
+delete from watch_list where symbol = 'hp' and category = 'uptrend';
+delete from watch_list where symbol = 'hp' and category = 'downtrend';
+delete from watch_list where symbol = 'xlnx' and category = 'uptrend';
+delete from watch_list where symbol = 'xlnx' and category = 'downtrend';
+delete from watch_list where symbol = 'aa' and category = 'uptrend';
+delete from watch_list where symbol = 'aa' and category = 'downtrend';
+delete from watch_list where symbol = 'gmst' and category = 'uptrend';
+delete from watch_list where symbol = 'gmst' and category = 'downtrend';
+delete from watch_list where symbol = 'scox' and category = 'uptrend';
+delete from watch_list where symbol = 'scox' and category = 'downtrend';
+delete from watch_list where symbol = 'zap' and category = 'uptrend';
+delete from watch_list where symbol = 'zap' and category = 'downtrend';
+delete from watch_list where symbol = 'lxk' and category = 'uptrend';
+delete from watch_list where symbol = 'lxk' and category = 'sidelined';
+delete from watch_list where symbol = 'apa' and category = 'uptrend';
+delete from watch_list where symbol = 'apa' and category = 'downtrend';
+delete from watch_list where symbol = 'jnj' and category = 'uptrend';
+delete from watch_list where symbol = 'jnj' and category = 'downtrend';
+delete from watch_list where symbol = 'brkt' and category = 'uptrend';
+delete from watch_list where symbol = 'brkt' and category = 'downtrend';
+delete from watch_list where symbol = 'brcm' and category = 'uptrend';
+delete from watch_list where symbol = 'brcm' and category = 'sidelined';
+delete from watch_list where symbol = 'pten' and category = 'uptrend';
+delete from watch_list where symbol = 'pten' and category = 'downtrend';
+delete from watch_list where symbol = 'rhi' and category = 'uptrend';
+delete from watch_list where symbol = 'rhi' and category = 'downtrend';
+delete from watch_list where symbol = 'sfp' and category = 'uptrend';
+delete from watch_list where symbol = 'sfp' and category = 'downtrend';
+delete from watch_list where symbol = 'plcm' and category = 'uptrend';
+delete from watch_list where symbol = 'plcm' and category = 'downtrend';
+delete from watch_list where symbol = 'wat' and category = 'uptrend';
+delete from watch_list where symbol = 'wat' and category = 'sidelined';
+delete from watch_list where symbol = 'scon' and category = 'uptrend';
+delete from watch_list where symbol = 'scon' and category = 'downtrend';
+delete from watch_list where symbol = 'oats' and category = 'uptrend';
+delete from watch_list where symbol = 'oats' and category = 'sidelined';
+delete from watch_list where symbol = 'peg' and category = 'uptrend';
+delete from watch_list where symbol = 'peg' and category = 'downtrend';
+delete from watch_list where symbol = 'cox' and category = 'uptrend';
+delete from watch_list where symbol = 'cox' and category = 'downtrend';
+delete from watch_list where symbol = 'gm' and category = 'uptrend';
+delete from watch_list where symbol = 'gm' and category = 'downtrend';
+delete from watch_list where symbol = 'veco' and category = 'uptrend';
+delete from watch_list where symbol = 'veco' and category = 'downtrend';
+delete from watch_list where symbol = 'lrcx' and category = 'uptrend';
+delete from watch_list where symbol = 'lrcx' and category = 'downtrend';
+delete from watch_list where symbol = 'arba' and category = 'downtrend';
+delete from watch_list where symbol = 'arba' and category = 'sidelined';
+delete from watch_list where symbol = 'trmb' and category = 'uptrend';
+delete from watch_list where symbol = 'trmb' and category = 'downtrend';
+delete from watch_list where symbol = 'ge' and category = 'uptrend';
+delete from watch_list where symbol = 'ge' and category = 'downtrend';
+delete from watch_list where symbol = 'hd' and category = 'uptrend';
+delete from watch_list where symbol = 'hd' and category = 'downtrend';
+delete from watch_list where symbol = 'chp' and category = 'uptrend';
+delete from watch_list where symbol = 'chp' and category = 'downtrend';
+delete from watch_list where symbol = 'hlit' and category = 'uptrend';
+delete from watch_list where symbol = 'hlit' and category = 'downtrend';
+delete from watch_list where symbol = 'fitb' and category = 'uptrend';
+delete from watch_list where symbol = 'fitb' and category = 'downtrend';
+delete from watch_list where symbol = 'wmt' and category = 'uptrend';
+delete from watch_list where symbol = 'wmt' and category = 'downtrend';
+delete from watch_list where symbol = 'gr' and category = 'uptrend';
+delete from watch_list where symbol = 'gr' and category = 'downtrend';
+delete from watch_list where symbol = 'eye' and category = 'uptrend';
+delete from watch_list where symbol = 'eye' and category = 'sidelined';
+delete from watch_list where symbol = 'tif' and category = 'uptrend';
+delete from watch_list where symbol = 'tif' and category = 'downtrend';
+delete from watch_list where symbol = 'tivo' and category = 'uptrend';
+delete from watch_list where symbol = 'tivo' and category = 'downtrend';
+delete from watch_list where symbol = 'hsy' and category = 'uptrend';
+delete from watch_list where symbol = 'hsy' and category = 'downtrend';
+delete from watch_list where symbol = 'mrk' and category = 'uptrend';
+delete from watch_list where symbol = 'mrk' and category = 'downtrend';
+delete from watch_list where symbol = 'rig' and category = 'uptrend';
+delete from watch_list where symbol = 'rig' and category = 'downtrend';
+delete from watch_list where symbol = 'klic' and category = 'uptrend';
+delete from watch_list where symbol = 'klic' and category = 'downtrend';
+delete from watch_list where symbol = 'y' and category = 'uptrend';
+delete from watch_list where symbol = 'y' and category = 'sidelined';
+delete from watch_list where symbol = 'qlgc' and category = 'uptrend';
+delete from watch_list where symbol = 'qlgc' and category = 'downtrend';
+delete from watch_list where symbol = 'payx' and category = 'uptrend';
+delete from watch_list where symbol = 'payx' and category = 'downtrend';
+delete from watch_list where symbol = 'rbk' and category = 'uptrend';
+delete from watch_list where symbol = 'rbk' and category = 'downtrend';
+delete from watch_list where symbol = 'sanm' and category = 'uptrend';
+delete from watch_list where symbol = 'sanm' and category = 'downtrend';
+delete from watch_list where symbol = 'sfa' and category = 'uptrend';
+delete from watch_list where symbol = 'sfa' and category = 'downtrend';
+delete from watch_list where symbol = 'sii' and category = 'uptrend';
+delete from watch_list where symbol = 'sii' and category = 'downtrend';
+delete from watch_list where symbol = 'b' and category = 'uptrend';
+delete from watch_list where symbol = 'b' and category = 'downtrend';
+delete from watch_list where symbol = 'cdwc' and category = 'uptrend';
+delete from watch_list where symbol = 'cdwc' and category = 'downtrend';
+delete from watch_list where symbol = 'via' and category = 'uptrend';
+delete from watch_list where symbol = 'via' and category = 'downtrend';
+delete from watch_list where symbol = 'srna' and category = 'uptrend';
+delete from watch_list where symbol = 'srna' and category = 'downtrend';
+delete from watch_list where symbol = 'abgx' and category = 'uptrend';
+delete from watch_list where symbol = 'abgx' and category = 'downtrend';
+delete from watch_list where symbol = 'bk' and category = 'uptrend';
+delete from watch_list where symbol = 'bk' and category = 'downtrend';
+delete from watch_list where symbol = 'rmbs' and category = 'uptrend';
+delete from watch_list where symbol = 'rmbs' and category = 'downtrend';
+delete from watch_list where symbol = 'mwd' and category = 'uptrend';
+delete from watch_list where symbol = 'mwd' and category = 'downtrend';
+delete from watch_list where symbol = 'jp' and category = 'uptrend';
+delete from watch_list where symbol = 'jp' and category = 'downtrend';
+delete from watch_list where symbol = 'aapl' and category = 'uptrend';
+delete from watch_list where symbol = 'aapl' and category = 'downtrend';
+delete from watch_list where symbol = 'amzn' and category = 'uptrend';
+delete from watch_list where symbol = 'amzn' and category = 'sidelined';
+delete from watch_list where symbol = 'ccu' and category = 'uptrend';
+delete from watch_list where symbol = 'ccu' and category = 'downtrend';
+delete from watch_list where symbol = 'bb' and category = 'uptrend';
+delete from watch_list where symbol = 'bb' and category = 'downtrend';
+delete from watch_list where symbol = 'ba' and category = 'uptrend';
+delete from watch_list where symbol = 'ba' and category = 'downtrend';
+delete from watch_list where symbol = 'eog' and category = 'uptrend';
+delete from watch_list where symbol = 'eog' and category = 'downtrend';
+delete from watch_list where symbol = 'agn' and category = 'uptrend';
+delete from watch_list where symbol = 'agn' and category = 'sidelined';
+
+     Show settings (w) 
+
+Select action:
+     Select tradable (s) View data (v) Edit indicators (e)
+     Edit market analyzers (m) Run market analysis (a)
+     Set date for market analysis (d) Edit event registrants (r)
+     End client session (x) Help (h) Product information (p)
+Terminating the server.
+     Show settings (w) Select action:
+     Select tradable (s) View data (v) Edit indicators (e)
+     Edit market analyzers (m) Run market analysis (a)
+     Set date for market analysis (d) Edit event registrants (r)
+     End client session (x) Help (h) Product information (p)
+     Show settings (w) 
+Please selecte a date and time for market analysis.
+Currently selected date and time: 08/06/2004, 5:41:35.168 PM
+Select action:
+     Set date (d) Set time (t) Set date relative to current date (r)
+     Set market analysis date to currently selected date (s) Select period length:
+     day (d) month (m) year (y) Enter the number of days to set date back relative to today: Using date of 07/31/2004.
+
+
+Currently selected date and time: 07/31/2004, 5:41:35.168 PM
+Select action:
+     Set date (d) Set time (t) Set date relative to current date (r)
+     Set market analysis date to currently selected date (s) 
+
+Setting date and time for processing to 07/31/2004 5:41:35.169 PM
+
+
+Select action:
+     Select tradable (s) View data (v) Edit indicators (e)
+     Edit market analyzers (m) Run market analysis (a)
+     Set date for market analysis (d) Edit event registrants (r)
+     End client session (x) Help (h) Product information (p)
+     Show settings (w) 
+
+Select action:
+     Select tradable (s) View data (v) Edit indicators (e)
+     Edit market analyzers (m) Run market analysis (a)
+     Set date for market analysis (d) Edit event registrants (r)
+     End client session (x) Help (h) Product information (p)
+Terminating the server.
+     Show settings (w) Select action:
+     Select tradable (s) View data (v) Edit indicators (e)
+     Edit market analyzers (m) Run market analysis (a)
+     Set date for market analysis (d) Edit event registrants (r)
+     End client session (x) Help (h) Product information (p)
+     Show settings (w) 
+Please selecte a date and time for market analysis.
+Currently selected date and time: 08/06/2004, 5:41:57.319 PM
+Select action:
+     Set date (d) Set time (t) Set date relative to current date (r)
+     Set market analysis date to currently selected date (s) Select period length:
+     day (d) month (m) year (y) Enter the number of days to set date back relative to today: Using date of 07/31/2004.
+
+
+Currently selected date and time: 07/31/2004, 5:41:57.319 PM
+Select action:
+     Set date (d) Set time (t) Set date relative to current date (r)
+     Set market analysis date to currently selected date (s) 
+
+Setting date and time for processing to 07/31/2004 5:41:57.319 PM
+
+
+Select action:
+     Select tradable (s) View data (v) Edit indicators (e)
+     Edit market analyzers (m) Run market analysis (a)
+     Set date for market analysis (d) Edit event registrants (r)
+     End client session (x) Help (h) Product information (p)
+Failed to lock event history file /suse_6_3/home2/finance/.mas/downtrend/finance.history1492583539 - results will not be saved.
+
+mas: PANIC: unexpected harmful signal ...
+
+mas: system execution failed.
+Following is the set of recorded exceptions.
+NB: The raised panic may have induced completely inconsistent information:
+
+-------------------------------------------------------------------------------
+Class / Object      Routine                Nature of exception           Effect
+-------------------------------------------------------------------------------
+MA_SERVER           root's creation        unexpected harmful signal:   
+<406CE028>                                 Eiffel run-time panic.        Bye
+-------------------------------------------------------------------------------
+MA_SERVER           root's creation                                     
+<406CE028>                                 Routine failure.              Bye
+-------------------------------------------------------------------------------
+MA_SERVER           root's creation                                     
+<406CE028>                                 Routine failure.              Bye
+-------------------------------------------------------------------------------
+MA_SERVER           root's creation                                     
+<406CE028>                                 Routine failure.              Bye
+-------------------------------------------------------------------------------
+MA_SERVER           root's creation                                     
+<406CE028>                                 Routine failure.              Bye
+-------------------------------------------------------------------------------
+
+mas: dumping core to generate debugging information...
+
+mas: PANIC CASCADE: unexpected harmful signal -- Giving up...
+     Show settings (w) 
+macl: PANIC: unexpected harmful signal ...
+
+macl: system execution failed.
+Following is the set of recorded exceptions.
+NB: The raised panic may have induced completely inconsistent information:
+
+-------------------------------------------------------------------------------
+Class / Object      Routine                Nature of exception           Effect
+-------------------------------------------------------------------------------
+MACL                root's creation        unexpected harmful signal:   
+<405C9028>                                 Eiffel run-time panic.        Bye
+-------------------------------------------------------------------------------
+MACL                root's creation                                     
+<405C9028>                                 Routine failure.              Bye
+-------------------------------------------------------------------------------
+MACL                root's creation                                     
+<405C9028>                                 Routine failure.              Bye
+-------------------------------------------------------------------------------
+
+macl: dumping core to generate debugging information...
+
+macl: PANIC CASCADE: unexpected harmful signal -- Giving up...
+
+macl: FINAL PANIC: Cannot reclaim Eiffel objects -- Giving up...
+
+mas: FINAL PANIC: Cannot reclaim Eiffel objects -- Giving up...
+
+
+  5:42pm  up 8 days, 10:36, 11 users,  load average: 1.03, 0.79, 0.38
+186 processes: 178 sleeping, 5 running, 3 zombie, 0 stopped
+CPU states:  1.5% user,  1.5% system,  0.0% nice,  2.6% idle
+Mem:   255912K av,  232544K used,   23368K free,       0K shrd,    3276K buff
+Swap:  655088K av,  253652K used,  401436K free                   96892K cached
+
+  PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME COMMAND
+ 4996 finance   16   0   988  988   716 R    11.9  0.3   0:00 top
+    1 root      15   0   464  424   408 S     0.0  0.1   0:04 init
+    2 root      15   0     0    0     0 SW    0.0  0.0   0:09 keventd
+    3 root      15   0     0    0     0 SW    0.0  0.0   0:00 kapmd
+    4 root      34  19     0    0     0 SWN   0.0  0.0   0:00 ksoftirqd_CPU0
+    5 root      15   0     0    0     0 SW    0.0  0.0   2:38 kswapd
+    6 root      15   0     0    0     0 SW    0.0  0.0   0:00 bdflush
+    7 root      15   0     0    0     0 SW    0.0  0.0   0:05 kupdated
+    8 root      24   0     0    0     0 SW    0.0  0.0   0:00 mdrecoveryd
+   12 root      15   0     0    0     0 SW    0.0  0.0   0:03 kjournald
+  139 root      15   0     0    0     0 SW    0.0  0.0   0:04 kjournald
+  140 root      15   0     0    0     0 SW    0.0  0.0   0:07 kjournald
+  141 root      15   0     0    0     0 SW    0.0  0.0   0:01 kjournald
+  633 root      15   0   540  492   452 S     0.0  0.1   0:03 syslogd
+  638 root      15   0   420  364   364 S     0.0  0.1   0:00 klogd
+  658 rpc       15   0   564  484   484 S     0.0  0.1   0:00 portmap
+  686 rpcuser   18   0   576  484   484 S     0.0  0.1   0:00 rpc.statd
+  710 root      15   0  4144  844   824 S     0.0  0.3   0:01 httpd
+  771 postgres  15   0  1108  856   816 S     0.0  0.3   0:00 postmaster
+  783 postgres  15   0  1056  732   732 S     0.0  0.2   0:00 postmaster
+  784 postgres  15   0  1132  848   848 S     0.0  0.3   0:00 postmaster
+  847 root      15   0   596  500   500 S     0.0  0.1   0:00 rpc.rquotad
+  852 root      15   0   756  528   528 S     0.0  0.2   0:00 rpc.mountd
+  857 root      15   0     0    0     0 SW    0.0  0.0   0:06 nfsd
+  858 root      15   0     0    0     0 SW    0.0  0.0   0:04 nfsd
+  859 root      15   0     0    0     0 SW    0.0  0.0   0:04 nfsd
+  860 root      15   0     0    0     0 SW    0.0  0.0   0:06 nfsd
+  861 root      15   0     0    0     0 SW    0.0  0.0   0:06 nfsd
+  862 root      15   0     0    0     0 SW    0.0  0.0   0:05 nfsd
+  863 root      15   0     0    0     0 SW    0.0  0.0   0:05 nfsd
+  864 root      15   0     0    0     0 SW    0.0  0.0   0:06 nfsd
+  865 root      18   0     0    0     0 SW    0.0  0.0   0:00 lockd
+  866 root      15   0     0    0     0 SW    0.0  0.0   0:10 rpciod
+  915 root      15   0   592  432   432 S     0.0  0.1   0:00 cardmgr
+ 1041 root      15   0   456  404   404 S     0.0  0.1   0:00 apmd
+ 1107 root      15   0   520  444   432 S     0.0  0.1   0:00 automount
+ 1124 root      15   0   524  448   436 S     0.0  0.1   0:00 automount
+ 1147 root      15   0  1176  548   548 S     0.0  0.2   0:00 smbd
+ 1152 root      15   0  1296  816   724 S     0.0  0.3   0:00 nmbd
+ 1170 root      16   0   728  524   524 S     0.0  0.2   0:00 sshd
+ 1231 root      15   0   708  508   508 S     0.0  0.1   0:00 xinetd
+ 1278 lp        15   0  1224  620   588 S     0.0  0.2   0:00 lpd
+ 1308 root      15   0  1284  820   736 S     0.0  0.3   0:00 sendmail
+ 1327 root      15   0   416  380   360 S     0.0  0.1   0:00 gpm
+ 1357 root      15   0   568  528   492 S     0.0  0.2   0:02 crond
+ 1413 xfs       15   0 16072 2236  1484 S     0.0  0.8   2:21 xfs
+ 1449 daemon    15   0   516  492   476 S     0.0  0.1   0:00 atd
+ 1512 root      16   0   384  332   332 S     0.0  0.1   0:00 mingetty
+ 1513 root      16   0   384  332   332 S     0.0  0.1   0:00 mingetty
+ 1514 root      16   0   384  332   332 S     0.0  0.1   0:00 mingetty
+ 1515 root      16   0   384  332   332 S     0.0  0.1   0:00 mingetty
+ 1516 root      16   0   384  332   332 S     0.0  0.1   0:00 mingetty
+ 1517 root      16   0   384  332   332 S     0.0  0.1   0:00 mingetty
+ 1518 root      15   0   468  380   380 S     0.0  0.1   0:00 kdm
+ 1526 root      15   0 72032  33M 20952 S     0.0 13.4 399:55 X
+ 1527 root      16   0   908  680   680 S     0.0  0.2   0:00 kdm
+ 1548 jtc       15   0   916  752   752 S     0.0  0.2   0:00 startkde
+ 1642 jtc       15   0  2508 1764  1744 S     0.0  0.6   0:02 kdeinit
+ 1645 jtc       15   0  2664 1936  1752 S     0.0  0.7   0:44 kdeinit
+ 1648 jtc       15   0  3380 2644  2644 S     0.0  1.0   0:00 kdeinit
+ 1650 jtc       15   0  3576 2680  2440 S     0.0  1.0   1:45 kdeinit
+ 1660 jtc       15   0  1844  848   640 S     0.0  0.3   8:40 artsd
+ 1670 jtc       15   0  3824 2736  2476 S     0.0  1.0   0:59 kdeinit
+ 1675 jtc       15   0   300  260   248 S     0.0  0.1   0:00 kwrapper
+ 1677 jtc       15   0  3684 2768  2604 S     0.0  1.0   0:09 kdeinit
+ 1687 jtc       15   0  7796 5024  3640 S     0.0  1.9   6:44 kdeinit
+ 1688 jtc       15   0  2680 1408  1240 S     0.0  0.5   0:23 xterm
+ 1689 jtc       15   0  2436 1264  1112 S     0.0  0.4   0:10 xterm
+ 1690 jtc       15   0  2864 1244  1088 S     0.0  0.4   0:01 xterm
+ 1691 jtc       15   0  2904 1468  1276 S     0.0  0.5   0:12 xterm
+ 1692 jtc       15   0  2420 1376  1228 S     0.0  0.5   0:25 xterm
+ 1693 jtc       15   0  2408 1232  1080 S     0.0  0.4   0:09 xterm
+ 1694 jtc       15   0  2620 1476  1320 S     0.0  0.5   0:04 xterm
+ 1696 jtc       15   0  2760 1356  1204 S     0.0  0.5   0:07 xterm
+ 1697 jtc       15   0  8336 2516  1828 S     0.0  0.9   0:37 exmh
+ 1699 jtc       15   0  7400 5472  4404 R     0.0  2.1   9:55 kdeinit
+ 1710 jtc       15   0  1984  896   896 S     0.0  0.3   0:00 bash
+ 1711 jtc       17   0  2160  900   900 S     0.0  0.3   0:02 bash
+ 1712 jtc       16   0  2216 1320  1116 S     0.0  0.5   0:04 bash
+ 1713 jtc       15   0  2168  916   916 S     0.0  0.3   0:02 bash
+ 1714 jtc       15   0  2288 1512  1236 S     0.0  0.5   0:10 bash
+ 1715 jtc       15   0  2032 1072  1064 S     0.0  0.4   0:01 bash
+ 1716 jtc       15   0  2304 1464  1268 S     0.0  0.5   0:05 bash
+ 1717 jtc       15   0  2256 1280  1180 S     0.0  0.5   0:02 bash
+ 1773 jtc       15   0   504  392   376 S     0.0  0.1   1:59 autorun
+ 2012 jtc       15   0 12228   9M  6356 S     0.0  3.9   7:28 kdeinit
+ 2071 jtc       15   0  6272 4608  4276 S     0.0  1.8   2:03 kdeinit
+ 2072 jtc       15   0  4152 2696  2572 S     0.0  1.0   0:06 kdeinit
+ 2073 jtc       15   0  4028 2716  2524 S     0.0  1.0   0:07 korgac
+ 2078 jtc       15   0  4264 3188  2816 S     0.0  1.2   0:29 kworldclock
+ 2084 jtc       15   0  2100 1136  1052 S     0.0  0.4   0:00 bash
+ 2088 jtc       15   0  3432 2340  2164 S     0.0  0.9   0:07 kalarmd
+ 9199 jtc       15   0  2948 1636  1496 S     0.0  0.6   0:07 wish
+ 6747 apache    15   0  4188  824   824 S     0.0  0.3   0:00 httpd
+ 6748 apache    15   0  4152  828   828 S     0.0  0.3   0:00 httpd
+ 6749 apache    17   0  4152  828   828 S     0.0  0.3   0:00 httpd
+ 6750 apache    17   0  4152  828   828 S     0.0  0.3   0:00 httpd
+ 6751 apache    17   0  4152  828   828 S     0.0  0.3   0:00 httpd
+ 6752 apache    17   0  4152  828   828 S     0.0  0.3   0:00 httpd
+ 6753 apache    17   0  4152  828   828 S     0.0  0.3   0:00 httpd
+ 6754 apache    17   0  4152  828   828 S     0.0  0.3   0:00 httpd
+24290 jtc       16   0   880  728   728 S     0.0  0.2   0:00 bash
+24291 jtc       16   0   884  728   728 S     0.0  0.2   0:00 pppconnected
+24292 jtc       15   0   588  496   476 S     0.0  0.1   0:00 ping
+ 1028 jtc       15   0  6744 3816  3364 S     0.0  1.4   0:26 kdeinit
+25448 jtc       16   0   880  728   728 S     0.0  0.2   0:00 bash
+25449 jtc       16   0   884  728   728 S     0.0  0.2   0:00 pppconnected
+25450 jtc       15   0   560  476   456 S     0.0  0.1   0:00 ping
+10118 jtc       15   0  4676 3116  2980 S     0.0  1.2   0:03 kdeinit
+10133 jtc       15   0  3512 2516  2392 S     0.0  0.9   0:02 kdeinit
+15043 jtc       15   0  4340 1552  1388 S     0.0  0.6   0:18 xterm
+15051 jtc       15   0  2144 1056  1056 S     0.0  0.4   0:00 bash
+15172 root      15   0   548  452   452 S     0.0  0.1   0:00 automount
+15250 root      15   0     0    0     0 Z     0.0  0.0   0:00 mount <defunct>
+15399 root      15   0   704  660   608 S     0.0  0.2   0:00 mount
+19692 jtc       15   0  2476 1716  1700 S     0.0  0.6   0:00 kdesud
+24418 jtc       16   0  1092  876   876 S     0.0  0.3   0:00 run-mozilla.sh
+24424 jtc       15   0 42740  21M 18680 S     0.0  8.6   3:08 mozilla-bin
+24426 jtc       15   0 42740  21M 18680 S     0.0  8.6   0:00 mozilla-bin
+24427 jtc       15   0 42740  21M 18680 S     0.0  8.6   0:00 mozilla-bin
+24428 jtc       15   0 42740  21M 18680 S     0.0  8.6   0:00 mozilla-bin
+24429 jtc       15   0 42740  21M 18680 S     0.0  8.6   0:00 mozilla-bin
+24578 jtc       15   0  3324 1732  1732 S     0.0  0.6   0:00 mct
+24579 jtc       15   0 10064 4948  4836 S     0.0  1.9   0:11 mas
+24583 postgres  15   0 10916  10M 10668 S     0.0  4.1   0:06 postmaster
+24584 jtc       15   0     0    0     0 Z     0.0  0.0   0:01 java <defunct>
+24852 jtc       15   0  4604  800   736 S     0.0  0.3   0:00 mas
+24854 postgres  15   0  2036 1244  1244 S     0.0  0.4   0:00 postmaster
+32045 jtc       15   0 42740  21M 18680 S     0.0  8.6   0:00 mozilla-bin
+32444 jtc       16   0     0    0     0 Z     0.0  0.0   0:00 netstat <defunct>
+28709 jtc       15   0   720  496   496 S     0.0  0.1   0:00 eclipse
+28710 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:37 java
+28711 jtc       15   0 74844  30M 19156 R     0.0 12.1   0:00 java
+28712 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:10 java
+28713 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28714 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28715 jtc       20   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28716 jtc       20   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28717 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:06 java
+28718 jtc       15   0 74844  30M 19156 R     0.0 12.1   0:00 java
+28721 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28722 jtc       19   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28724 jtc       20   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28725 jtc       20   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28726 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:01 java
+28730 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:01 java
+28732 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28802 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28853 jtc       15   0  5468 1740  1692 S     0.0  0.6   0:01 mas
+29450 jtc       15   0  5396 3552  3236 S     0.0  1.3   0:01 gvim
+29467 jtc       15   0  5336 3696  3232 S     0.0  1.4   0:00 gvim
+30091 jtc       16   0  2228  972   972 S     0.0  0.3   0:00 bash
+30092 jtc       25   0 17756 8380  7916 S     0.0  3.2   0:01 java
+30093 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30094 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30095 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30096 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30097 jtc       20   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30098 jtc       20   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30099 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30100 jtc       15   0 17756 8380  7916 R     0.0  3.2   0:00 java
+30102 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30103 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30104 jtc       20   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30105 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30136 jtc       16   0  2228  972   972 S     0.0  0.3   0:00 bash
+30137 jtc       24   0 17880  11M  8572 S     0.0  4.7   0:01 java
+30138 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30139 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30140 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30141 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30142 jtc       20   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30143 jtc       20   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30144 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30145 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30147 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30148 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30149 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30150 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+32741 root      15   0   736  736   604 S     0.0  0.2   0:00 wvdial
+32742 root      15   0   816  816   680 S     0.0  0.3   0:00 pppd
+  301 root      15   0   664  664   580 S     0.0  0.2   0:00 crond
+  303 finance   15   0   888  888   764 S     0.0  0.3   0:00 run_market_anal
+  314 root      15   0  2012 2012  1468 S     0.0  0.7   0:00 sendmail
+ 4850 finance   15   0  1280 1280   856 S     0.0  0.5   0:00 python
+ 4901 jtc       15   0  1644 1644  1332 S     0.0  0.6   0:00 ssh
+
+  5:42pm  up 8 days, 10:36, 11 users,  load average: 0.95, 0.78, 0.38
+186 processes: 179 sleeping, 4 running, 3 zombie, 0 stopped
+CPU states:  2.3% user,  2.5% system,  0.0% nice, 95.1% idle
+Mem:   255912K av,  232600K used,   23312K free,       0K shrd,    3308K buff
+Swap:  655088K av,  253652K used,  401436K free                   96916K cached
+
+  PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME COMMAND
+ 4996 finance   16   0   996  996   724 R     3.0  0.3   0:00 top
+ 1526 root      15   0 72032  33M 20952 S     0.9 13.4 399:55 X
+    1 root      15   0   464  424   408 S     0.0  0.1   0:04 init
+    2 root      15   0     0    0     0 SW    0.0  0.0   0:09 keventd
+    3 root      15   0     0    0     0 SW    0.0  0.0   0:00 kapmd
+    4 root      34  19     0    0     0 SWN   0.0  0.0   0:00 ksoftirqd_CPU0
+    5 root      15   0     0    0     0 SW    0.0  0.0   2:38 kswapd
+    6 root      15   0     0    0     0 SW    0.0  0.0   0:00 bdflush
+    7 root      15   0     0    0     0 SW    0.0  0.0   0:05 kupdated
+    8 root      24   0     0    0     0 SW    0.0  0.0   0:00 mdrecoveryd
+   12 root      15   0     0    0     0 SW    0.0  0.0   0:03 kjournald
+  139 root      15   0     0    0     0 SW    0.0  0.0   0:04 kjournald
+  140 root      15   0     0    0     0 SW    0.0  0.0   0:07 kjournald
+  141 root      15   0     0    0     0 SW    0.0  0.0   0:01 kjournald
+  633 root      15   0   540  492   452 S     0.0  0.1   0:03 syslogd
+  638 root      15   0   420  364   364 S     0.0  0.1   0:00 klogd
+  658 rpc       15   0   564  484   484 S     0.0  0.1   0:00 portmap
+  686 rpcuser   18   0   576  484   484 S     0.0  0.1   0:00 rpc.statd
+  710 root      15   0  4144  844   824 S     0.0  0.3   0:01 httpd
+  771 postgres  15   0  1108  856   816 S     0.0  0.3   0:00 postmaster
+  783 postgres  15   0  1056  732   732 S     0.0  0.2   0:00 postmaster
+  784 postgres  15   0  1132  848   848 S     0.0  0.3   0:00 postmaster
+  847 root      15   0   596  500   500 S     0.0  0.1   0:00 rpc.rquotad
+  852 root      15   0   756  528   528 S     0.0  0.2   0:00 rpc.mountd
+  857 root      15   0     0    0     0 SW    0.0  0.0   0:06 nfsd
+  858 root      15   0     0    0     0 SW    0.0  0.0   0:04 nfsd
+  859 root      15   0     0    0     0 SW    0.0  0.0   0:04 nfsd
+  860 root      15   0     0    0     0 SW    0.0  0.0   0:06 nfsd
+  861 root      15   0     0    0     0 SW    0.0  0.0   0:06 nfsd
+  862 root      15   0     0    0     0 SW    0.0  0.0   0:05 nfsd
+  863 root      15   0     0    0     0 SW    0.0  0.0   0:05 nfsd
+  864 root      15   0     0    0     0 SW    0.0  0.0   0:06 nfsd
+  865 root      18   0     0    0     0 SW    0.0  0.0   0:00 lockd
+  866 root      15   0     0    0     0 SW    0.0  0.0   0:10 rpciod
+  915 root      15   0   592  432   432 S     0.0  0.1   0:00 cardmgr
+ 1041 root      15   0   456  404   404 S     0.0  0.1   0:00 apmd
+ 1107 root      15   0   520  444   432 S     0.0  0.1   0:00 automount
+ 1124 root      15   0   524  448   436 S     0.0  0.1   0:00 automount
+ 1147 root      15   0  1176  548   548 S     0.0  0.2   0:00 smbd
+ 1152 root      15   0  1296  816   724 S     0.0  0.3   0:00 nmbd
+ 1170 root      16   0   728  524   524 S     0.0  0.2   0:00 sshd
+ 1231 root      15   0   708  508   508 S     0.0  0.1   0:00 xinetd
+ 1278 lp        15   0  1224  620   588 S     0.0  0.2   0:00 lpd
+ 1308 root      15   0  1284  820   736 S     0.0  0.3   0:00 sendmail
+ 1327 root      15   0   416  380   360 S     0.0  0.1   0:00 gpm
+ 1357 root      15   0   568  528   492 S     0.0  0.2   0:02 crond
+ 1413 xfs       15   0 16072 2236  1484 S     0.0  0.8   2:21 xfs
+ 1449 daemon    15   0   516  492   476 S     0.0  0.1   0:00 atd
+ 1512 root      16   0   384  332   332 S     0.0  0.1   0:00 mingetty
+ 1513 root      16   0   384  332   332 S     0.0  0.1   0:00 mingetty
+ 1514 root      16   0   384  332   332 S     0.0  0.1   0:00 mingetty
+ 1515 root      16   0   384  332   332 S     0.0  0.1   0:00 mingetty
+ 1516 root      16   0   384  332   332 S     0.0  0.1   0:00 mingetty
+ 1517 root      16   0   384  332   332 S     0.0  0.1   0:00 mingetty
+ 1518 root      15   0   468  380   380 S     0.0  0.1   0:00 kdm
+ 1527 root      16   0   908  680   680 S     0.0  0.2   0:00 kdm
+ 1548 jtc       15   0   916  752   752 S     0.0  0.2   0:00 startkde
+ 1642 jtc       15   0  2508 1764  1744 S     0.0  0.6   0:02 kdeinit
+ 1645 jtc       15   0  2664 1936  1752 S     0.0  0.7   0:44 kdeinit
+ 1648 jtc       15   0  3380 2644  2644 S     0.0  1.0   0:00 kdeinit
+ 1650 jtc       15   0  3576 2680  2440 S     0.0  1.0   1:45 kdeinit
+ 1660 jtc       15   0  1844  848   640 S     0.0  0.3   8:40 artsd
+ 1670 jtc       15   0  3824 2736  2476 S     0.0  1.0   0:59 kdeinit
+ 1675 jtc       15   0   300  260   248 S     0.0  0.1   0:00 kwrapper
+ 1677 jtc       15   0  3684 2768  2604 S     0.0  1.0   0:09 kdeinit
+ 1687 jtc       15   0  7796 5024  3640 S     0.0  1.9   6:44 kdeinit
+ 1688 jtc       15   0  2680 1408  1240 S     0.0  0.5   0:23 xterm
+ 1689 jtc       15   0  2436 1264  1112 S     0.0  0.4   0:10 xterm
+ 1690 jtc       15   0  2864 1244  1088 S     0.0  0.4   0:01 xterm
+ 1691 jtc       15   0  2904 1468  1276 S     0.0  0.5   0:12 xterm
+ 1692 jtc       15   0  2420 1376  1228 S     0.0  0.5   0:25 xterm
+ 1693 jtc       15   0  2408 1232  1080 S     0.0  0.4   0:09 xterm
+ 1694 jtc       15   0  2620 1476  1320 S     0.0  0.5   0:04 xterm
+ 1696 jtc       15   0  2760 1356  1204 S     0.0  0.5   0:07 xterm
+ 1697 jtc       15   0  8336 2516  1828 S     0.0  0.9   0:37 exmh
+ 1699 jtc       15   0  7400 5472  4404 S     0.0  2.1   9:55 kdeinit
+ 1710 jtc       15   0  1984  896   896 S     0.0  0.3   0:00 bash
+ 1711 jtc       17   0  2160  900   900 S     0.0  0.3   0:02 bash
+ 1712 jtc       16   0  2216 1320  1116 S     0.0  0.5   0:04 bash
+ 1713 jtc       15   0  2168  916   916 S     0.0  0.3   0:02 bash
+ 1714 jtc       15   0  2288 1512  1236 S     0.0  0.5   0:10 bash
+ 1715 jtc       15   0  2032 1072  1064 S     0.0  0.4   0:01 bash
+ 1716 jtc       15   0  2304 1464  1268 S     0.0  0.5   0:05 bash
+ 1717 jtc       15   0  2256 1280  1180 S     0.0  0.5   0:02 bash
+ 1773 jtc       15   0   504  392   376 S     0.0  0.1   1:59 autorun
+ 2012 jtc       15   0 12228   9M  6356 S     0.0  3.9   7:28 kdeinit
+ 2071 jtc       15   0  6272 4608  4276 S     0.0  1.8   2:03 kdeinit
+ 2072 jtc       15   0  4152 2696  2572 S     0.0  1.0   0:06 kdeinit
+ 2073 jtc       15   0  4028 2716  2524 S     0.0  1.0   0:07 korgac
+ 2078 jtc       15   0  4264 3188  2816 S     0.0  1.2   0:29 kworldclock
+ 2084 jtc       15   0  2100 1136  1052 S     0.0  0.4   0:00 bash
+ 2088 jtc       15   0  3432 2340  2164 S     0.0  0.9   0:07 kalarmd
+ 9199 jtc       15   0  2948 1636  1496 S     0.0  0.6   0:07 wish
+ 6747 apache    15   0  4188  824   824 S     0.0  0.3   0:00 httpd
+ 6748 apache    15   0  4152  828   828 S     0.0  0.3   0:00 httpd
+ 6749 apache    17   0  4152  828   828 S     0.0  0.3   0:00 httpd
+ 6750 apache    17   0  4152  828   828 S     0.0  0.3   0:00 httpd
+ 6751 apache    17   0  4152  828   828 S     0.0  0.3   0:00 httpd
+ 6752 apache    17   0  4152  828   828 S     0.0  0.3   0:00 httpd
+ 6753 apache    17   0  4152  828   828 S     0.0  0.3   0:00 httpd
+ 6754 apache    17   0  4152  828   828 S     0.0  0.3   0:00 httpd
+24290 jtc       16   0   880  728   728 S     0.0  0.2   0:00 bash
+24291 jtc       16   0   884  728   728 S     0.0  0.2   0:00 pppconnected
+24292 jtc       15   0   588  496   476 S     0.0  0.1   0:00 ping
+ 1028 jtc       15   0  6744 3816  3364 S     0.0  1.4   0:26 kdeinit
+25448 jtc       16   0   880  728   728 S     0.0  0.2   0:00 bash
+25449 jtc       16   0   884  728   728 S     0.0  0.2   0:00 pppconnected
+25450 jtc       15   0   560  476   456 S     0.0  0.1   0:00 ping
+10118 jtc       15   0  4676 3116  2980 S     0.0  1.2   0:03 kdeinit
+10133 jtc       15   0  3512 2516  2392 S     0.0  0.9   0:02 kdeinit
+15043 jtc       15   0  4340 1552  1388 S     0.0  0.6   0:18 xterm
+15051 jtc       15   0  2144 1056  1056 S     0.0  0.4   0:00 bash
+15172 root      15   0   548  452   452 S     0.0  0.1   0:00 automount
+15250 root      15   0     0    0     0 Z     0.0  0.0   0:00 mount <defunct>
+15399 root      15   0   704  660   608 S     0.0  0.2   0:00 mount
+19692 jtc       15   0  2476 1716  1700 S     0.0  0.6   0:00 kdesud
+24418 jtc       16   0  1092  876   876 S     0.0  0.3   0:00 run-mozilla.sh
+24424 jtc       15   0 42740  21M 18680 S     0.0  8.6   3:08 mozilla-bin
+24426 jtc       15   0 42740  21M 18680 S     0.0  8.6   0:00 mozilla-bin
+24427 jtc       15   0 42740  21M 18680 S     0.0  8.6   0:00 mozilla-bin
+24428 jtc       15   0 42740  21M 18680 S     0.0  8.6   0:00 mozilla-bin
+24429 jtc       15   0 42740  21M 18680 S     0.0  8.6   0:00 mozilla-bin
+24578 jtc       15   0  3324 1732  1732 S     0.0  0.6   0:00 mct
+24579 jtc       15   0 10064 4948  4836 S     0.0  1.9   0:11 mas
+24583 postgres  15   0 10916  10M 10668 S     0.0  4.1   0:06 postmaster
+24584 jtc       15   0     0    0     0 Z     0.0  0.0   0:01 java <defunct>
+24852 jtc       15   0  4604  800   736 S     0.0  0.3   0:00 mas
+24854 postgres  15   0  2036 1244  1244 S     0.0  0.4   0:00 postmaster
+32045 jtc       15   0 42740  21M 18680 S     0.0  8.6   0:00 mozilla-bin
+32444 jtc       16   0     0    0     0 Z     0.0  0.0   0:00 netstat <defunct>
+28709 jtc       15   0   720  496   496 S     0.0  0.1   0:00 eclipse
+28710 jtc       15   0 74844  30M 19156 R     0.0 12.1   0:37 java
+28711 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28712 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:10 java
+28713 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28714 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28715 jtc       20   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28716 jtc       20   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28717 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:06 java
+28718 jtc       15   0 74844  30M 19156 R     0.0 12.1   0:00 java
+28721 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28722 jtc       19   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28724 jtc       20   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28725 jtc       20   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28726 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:01 java
+28730 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:01 java
+28732 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28802 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28853 jtc       15   0  5468 1740  1692 S     0.0  0.6   0:01 mas
+29450 jtc       15   0  5396 3552  3236 S     0.0  1.3   0:01 gvim
+29467 jtc       15   0  5336 3696  3232 S     0.0  1.4   0:00 gvim
+30091 jtc       16   0  2228  972   972 S     0.0  0.3   0:00 bash
+30092 jtc       25   0 17756 8380  7916 S     0.0  3.2   0:01 java
+30093 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30094 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30095 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30096 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30097 jtc       20   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30098 jtc       20   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30099 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30100 jtc       15   0 17756 8380  7916 R     0.0  3.2   0:00 java
+30102 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30103 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30104 jtc       20   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30105 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30136 jtc       16   0  2228  972   972 S     0.0  0.3   0:00 bash
+30137 jtc       24   0 17880  11M  8572 S     0.0  4.7   0:01 java
+30138 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30139 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30140 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30141 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30142 jtc       20   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30143 jtc       20   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30144 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30145 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30147 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30148 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30149 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30150 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+32741 root      15   0   736  736   604 S     0.0  0.2   0:00 wvdial
+32742 root      15   0   816  816   680 S     0.0  0.3   0:00 pppd
+  301 root      15   0   664  664   580 S     0.0  0.2   0:00 crond
+  303 finance   15   0   888  888   764 S     0.0  0.3   0:00 run_market_anal
+  314 root      15   0  2012 2012  1468 S     0.0  0.7   0:00 sendmail
+ 4850 finance   15   0  1280 1280   856 S     0.0  0.5   0:00 python
+ 4901 jtc       15   0  1644 1644  1332 S     0.0  0.6   0:00 ssh
+
+  5:42pm  up 8 days, 10:36, 11 users,  load average: 1.03, 0.80, 0.39
+186 processes: 177 sleeping, 6 running, 3 zombie, 0 stopped
+CPU states:  2.3% user,  3.2% system,  0.0% nice, 94.3% idle
+Mem:   255912K av,  232648K used,   23264K free,       0K shrd,    3336K buff
+Swap:  655088K av,  253652K used,  401436K free                   96936K cached
+
+  PID USER     PRI  NI  SIZE  RSS SHARE STAT %CPU %MEM   TIME COMMAND
+ 4996 finance   16   0   996  996   724 R     2.9  0.3   0:00 top
+ 1526 root      15   0 72032  33M 20952 S     0.9 13.4 399:55 X
+ 1716 jtc       15   0  2304 1464  1268 S     0.3  0.5   0:05 bash
+ 1692 jtc       15   0  2420 1376  1228 S     0.1  0.5   0:25 xterm
+  314 root      15   0  2012 2012  1468 S     0.1  0.7   0:00 sendmail
+    1 root      15   0   464  424   408 S     0.0  0.1   0:04 init
+    2 root      15   0     0    0     0 SW    0.0  0.0   0:09 keventd
+    3 root      15   0     0    0     0 SW    0.0  0.0   0:00 kapmd
+    4 root      34  19     0    0     0 SWN   0.0  0.0   0:00 ksoftirqd_CPU0
+    5 root      15   0     0    0     0 SW    0.0  0.0   2:38 kswapd
+    6 root      15   0     0    0     0 SW    0.0  0.0   0:00 bdflush
+    7 root      15   0     0    0     0 SW    0.0  0.0   0:05 kupdated
+    8 root      24   0     0    0     0 SW    0.0  0.0   0:00 mdrecoveryd
+   12 root      15   0     0    0     0 SW    0.0  0.0   0:03 kjournald
+  139 root      15   0     0    0     0 SW    0.0  0.0   0:04 kjournald
+  140 root      15   0     0    0     0 SW    0.0  0.0   0:07 kjournald
+  141 root      15   0     0    0     0 SW    0.0  0.0   0:01 kjournald
+  633 root      15   0   540  492   452 S     0.0  0.1   0:03 syslogd
+  638 root      15   0   420  364   364 S     0.0  0.1   0:00 klogd
+  658 rpc       15   0   564  484   484 S     0.0  0.1   0:00 portmap
+  686 rpcuser   18   0   576  484   484 S     0.0  0.1   0:00 rpc.statd
+  710 root      15   0  4144  844   824 S     0.0  0.3   0:01 httpd
+  771 postgres  15   0  1108  856   816 S     0.0  0.3   0:00 postmaster
+  783 postgres  15   0  1056  732   732 S     0.0  0.2   0:00 postmaster
+  784 postgres  15   0  1132  848   848 S     0.0  0.3   0:00 postmaster
+  847 root      15   0   596  500   500 S     0.0  0.1   0:00 rpc.rquotad
+  852 root      15   0   756  528   528 S     0.0  0.2   0:00 rpc.mountd
+  857 root      15   0     0    0     0 SW    0.0  0.0   0:06 nfsd
+  858 root      15   0     0    0     0 SW    0.0  0.0   0:04 nfsd
+  859 root      15   0     0    0     0 SW    0.0  0.0   0:04 nfsd
+  860 root      15   0     0    0     0 SW    0.0  0.0   0:06 nfsd
+  861 root      15   0     0    0     0 SW    0.0  0.0   0:06 nfsd
+  862 root      15   0     0    0     0 SW    0.0  0.0   0:05 nfsd
+  863 root      15   0     0    0     0 SW    0.0  0.0   0:05 nfsd
+  864 root      15   0     0    0     0 SW    0.0  0.0   0:06 nfsd
+  865 root      18   0     0    0     0 SW    0.0  0.0   0:00 lockd
+  866 root      15   0     0    0     0 SW    0.0  0.0   0:10 rpciod
+  915 root      15   0   592  432   432 S     0.0  0.1   0:00 cardmgr
+ 1041 root      15   0   456  404   404 S     0.0  0.1   0:00 apmd
+ 1107 root      15   0   520  444   432 S     0.0  0.1   0:00 automount
+ 1124 root      15   0   524  448   436 S     0.0  0.1   0:00 automount
+ 1147 root      15   0  1176  548   548 S     0.0  0.2   0:00 smbd
+ 1152 root      15   0  1296  816   724 S     0.0  0.3   0:00 nmbd
+ 1170 root      16   0   728  524   524 S     0.0  0.2   0:00 sshd
+ 1231 root      15   0   708  508   508 S     0.0  0.1   0:00 xinetd
+ 1278 lp        15   0  1224  620   588 S     0.0  0.2   0:00 lpd
+ 1308 root      15   0  1284  820   736 S     0.0  0.3   0:00 sendmail
+ 1327 root      15   0   416  380   360 S     0.0  0.1   0:00 gpm
+ 1357 root      15   0   568  528   492 S     0.0  0.2   0:02 crond
+ 1413 xfs       15   0 16072 2236  1484 S     0.0  0.8   2:21 xfs
+ 1449 daemon    15   0   516  492   476 S     0.0  0.1   0:00 atd
+ 1512 root      16   0   384  332   332 S     0.0  0.1   0:00 mingetty
+ 1513 root      16   0   384  332   332 S     0.0  0.1   0:00 mingetty
+ 1514 root      16   0   384  332   332 S     0.0  0.1   0:00 mingetty
+ 1515 root      16   0   384  332   332 S     0.0  0.1   0:00 mingetty
+ 1516 root      16   0   384  332   332 S     0.0  0.1   0:00 mingetty
+ 1517 root      16   0   384  332   332 S     0.0  0.1   0:00 mingetty
+ 1518 root      15   0   468  380   380 S     0.0  0.1   0:00 kdm
+ 1527 root      16   0   908  680   680 S     0.0  0.2   0:00 kdm
+ 1548 jtc       15   0   916  752   752 S     0.0  0.2   0:00 startkde
+ 1642 jtc       15   0  2508 1764  1744 S     0.0  0.6   0:02 kdeinit
+ 1645 jtc       15   0  2664 1936  1752 S     0.0  0.7   0:44 kdeinit
+ 1648 jtc       15   0  3380 2644  2644 S     0.0  1.0   0:00 kdeinit
+ 1650 jtc       15   0  3576 2680  2440 S     0.0  1.0   1:45 kdeinit
+ 1660 jtc       15   0  1844  848   640 S     0.0  0.3   8:40 artsd
+ 1670 jtc       15   0  3824 2736  2476 S     0.0  1.0   0:59 kdeinit
+ 1675 jtc       15   0   300  260   248 S     0.0  0.1   0:00 kwrapper
+ 1677 jtc       15   0  3684 2768  2604 S     0.0  1.0   0:09 kdeinit
+ 1687 jtc       15   0  7796 5024  3640 S     0.0  1.9   6:44 kdeinit
+ 1688 jtc       15   0  2680 1408  1240 S     0.0  0.5   0:23 xterm
+ 1689 jtc       15   0  2436 1264  1112 S     0.0  0.4   0:10 xterm
+ 1690 jtc       15   0  2864 1244  1088 S     0.0  0.4   0:01 xterm
+ 1691 jtc       15   0  2904 1468  1276 S     0.0  0.5   0:12 xterm
+ 1693 jtc       15   0  2408 1232  1080 S     0.0  0.4   0:09 xterm
+ 1694 jtc       15   0  2620 1476  1320 S     0.0  0.5   0:04 xterm
+ 1696 jtc       15   0  2760 1356  1204 S     0.0  0.5   0:07 xterm
+ 1697 jtc       15   0  8336 2516  1828 S     0.0  0.9   0:37 exmh
+ 1699 jtc       15   0  7400 5472  4404 S     0.0  2.1   9:55 kdeinit
+ 1710 jtc       15   0  1984  896   896 S     0.0  0.3   0:00 bash
+ 1711 jtc       17   0  2160  900   900 S     0.0  0.3   0:02 bash
+ 1712 jtc       16   0  2216 1320  1116 S     0.0  0.5   0:04 bash
+ 1713 jtc       15   0  2168  916   916 S     0.0  0.3   0:02 bash
+ 1714 jtc       15   0  2288 1512  1236 S     0.0  0.5   0:10 bash
+ 1715 jtc       15   0  2032 1072  1064 S     0.0  0.4   0:01 bash
+ 1717 jtc       15   0  2256 1280  1180 S     0.0  0.5   0:02 bash
+ 1773 jtc       15   0   504  392   376 S     0.0  0.1   1:59 autorun
+ 2012 jtc       15   0 12228   9M  6356 S     0.0  3.9   7:28 kdeinit
+ 2071 jtc       15   0  6272 4608  4276 S     0.0  1.8   2:03 kdeinit
+ 2072 jtc       15   0  4152 2696  2572 S     0.0  1.0   0:06 kdeinit
+ 2073 jtc       15   0  4028 2716  2524 S     0.0  1.0   0:07 korgac
+ 2078 jtc       15   0  4264 3188  2816 S     0.0  1.2   0:29 kworldclock
+ 2084 jtc       15   0  2100 1136  1052 S     0.0  0.4   0:00 bash
+ 2088 jtc       15   0  3432 2340  2164 S     0.0  0.9   0:07 kalarmd
+ 9199 jtc       15   0  2948 1636  1496 S     0.0  0.6   0:07 wish
+ 6747 apache    15   0  4188  824   824 S     0.0  0.3   0:00 httpd
+ 6748 apache    15   0  4152  828   828 S     0.0  0.3   0:00 httpd
+ 6749 apache    17   0  4152  828   828 S     0.0  0.3   0:00 httpd
+ 6750 apache    17   0  4152  828   828 S     0.0  0.3   0:00 httpd
+ 6751 apache    17   0  4152  828   828 S     0.0  0.3   0:00 httpd
+ 6752 apache    17   0  4152  828   828 S     0.0  0.3   0:00 httpd
+ 6753 apache    17   0  4152  828   828 S     0.0  0.3   0:00 httpd
+ 6754 apache    17   0  4152  828   828 S     0.0  0.3   0:00 httpd
+24290 jtc       16   0   880  728   728 S     0.0  0.2   0:00 bash
+24291 jtc       16   0   884  728   728 S     0.0  0.2   0:00 pppconnected
+24292 jtc       15   0   588  496   476 S     0.0  0.1   0:00 ping
+ 1028 jtc       15   0  6744 3816  3364 S     0.0  1.4   0:26 kdeinit
+25448 jtc       16   0   880  728   728 S     0.0  0.2   0:00 bash
+25449 jtc       16   0   884  728   728 S     0.0  0.2   0:00 pppconnected
+25450 jtc       15   0   560  476   456 S     0.0  0.1   0:00 ping
+10118 jtc       15   0  4676 3116  2980 S     0.0  1.2   0:03 kdeinit
+10133 jtc       15   0  3512 2516  2392 S     0.0  0.9   0:02 kdeinit
+15043 jtc       15   0  4340 1552  1388 S     0.0  0.6   0:18 xterm
+15051 jtc       15   0  2144 1056  1056 S     0.0  0.4   0:00 bash
+15172 root      15   0   548  452   452 S     0.0  0.1   0:00 automount
+15250 root      15   0     0    0     0 Z     0.0  0.0   0:00 mount <defunct>
+15399 root      15   0   704  660   608 S     0.0  0.2   0:00 mount
+19692 jtc       15   0  2476 1716  1700 S     0.0  0.6   0:00 kdesud
+24418 jtc       16   0  1092  876   876 S     0.0  0.3   0:00 run-mozilla.sh
+24424 jtc       15   0 42740  21M 18680 S     0.0  8.6   3:08 mozilla-bin
+24426 jtc       15   0 42740  21M 18680 S     0.0  8.6   0:00 mozilla-bin
+24427 jtc       15   0 42740  21M 18680 S     0.0  8.6   0:00 mozilla-bin
+24428 jtc       15   0 42740  21M 18680 S     0.0  8.6   0:00 mozilla-bin
+24429 jtc       15   0 42740  21M 18680 S     0.0  8.6   0:00 mozilla-bin
+24578 jtc       15   0  3324 1732  1732 S     0.0  0.6   0:00 mct
+24579 jtc       15   0 10064 4948  4836 S     0.0  1.9   0:11 mas
+24583 postgres  15   0 10916  10M 10668 S     0.0  4.1   0:06 postmaster
+24584 jtc       15   0     0    0     0 Z     0.0  0.0   0:01 java <defunct>
+24852 jtc       15   0  4604  800   736 S     0.0  0.3   0:00 mas
+24854 postgres  15   0  2036 1244  1244 S     0.0  0.4   0:00 postmaster
+32045 jtc       15   0 42740  21M 18680 S     0.0  8.6   0:00 mozilla-bin
+32444 jtc       16   0     0    0     0 Z     0.0  0.0   0:00 netstat <defunct>
+28709 jtc       15   0   720  496   496 S     0.0  0.1   0:00 eclipse
+28710 jtc       15   0 74844  30M 19156 R     0.0 12.1   0:37 java
+28711 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28712 jtc       15   0 74844  30M 19156 R     0.0 12.1   0:10 java
+28713 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28714 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28715 jtc       20   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28716 jtc       20   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28717 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:06 java
+28718 jtc       15   0 74844  30M 19156 R     0.0 12.1   0:00 java
+28721 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28722 jtc       19   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28724 jtc       20   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28725 jtc       20   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28726 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:01 java
+28730 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:01 java
+28732 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28802 jtc       15   0 74844  30M 19156 S     0.0 12.1   0:00 java
+28853 jtc       15   0  5468 1740  1692 S     0.0  0.6   0:01 mas
+29450 jtc       15   0  5396 3552  3236 S     0.0  1.3   0:01 gvim
+29467 jtc       15   0  5336 3696  3232 S     0.0  1.4   0:00 gvim
+30091 jtc       16   0  2228  972   972 S     0.0  0.3   0:00 bash
+30092 jtc       25   0 17756 8380  7916 S     0.0  3.2   0:01 java
+30093 jtc       15   0 17756 8380  7916 R     0.0  3.2   0:00 java
+30094 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30095 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30096 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30097 jtc       20   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30098 jtc       20   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30099 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30100 jtc       15   0 17756 8380  7916 R     0.0  3.2   0:00 java
+30102 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30103 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30104 jtc       20   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30105 jtc       15   0 17756 8380  7916 S     0.0  3.2   0:00 java
+30136 jtc       16   0  2228  972   972 S     0.0  0.3   0:00 bash
+30137 jtc       24   0 17880  11M  8572 S     0.0  4.7   0:01 java
+30138 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30139 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30140 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30141 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30142 jtc       20   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30143 jtc       20   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30144 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30145 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30147 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30148 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30149 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+30150 jtc       15   0 17880  11M  8572 S     0.0  4.7   0:00 java
+32741 root      15   0   736  736   604 S     0.0  0.2   0:00 wvdial
+32742 root      15   0   816  816   680 S     0.0  0.3   0:00 pppd
+  301 root      15   0   664  664   580 S     0.0  0.2   0:00 crond
+  303 finance   15   0   888  888   764 S     0.0  0.3   0:00 run_market_anal
+ 4850 finance   15   0  1280 1280   856 S     0.0  0.5   0:00 python
+ 4901 jtc       15   0  1644 1644  1332 S     0.0  0.6   0:00 ssh
+command ' MAS_DIRECTORY=~/.mas/downtrend analyze_stocks -p 30004 -d 6 ' failed with status:  512
+Process status report from top:
+
