@@ -53,6 +53,6 @@ Final Steps:
     the new release on published files, such as the files accessible on
     sf.net.  Do any needed backups.
 17. Put the files for the new release, from the current release directory,
-    onto the download section on sourceforge.  Post announcements to
-    sourceforge and the appropriate newsgroups - comp.os.linux.announce,
-    misc.invest.*, the windows groups, etc.
+    onto the download section on sourceforge (ftp upload.sourceforge.net).
+    Post announcements to sourceforge and the appropriate newsgroups -
+    comp.os.linux.announce, misc.invest.*, the windows groups, etc.
