@@ -415,14 +415,12 @@ Signal Generation and Market Analyzers
 I haven't had much luck with the log file for sending the market analysis -
 it produces a core dump when I try and do this.
 </B><P>
-File logging is broken, apparently due to a bug in the
-library component I'm using.
-I plan to remove the feature soon, unless I can fix it.
-In the meantime, an alternative
-is to write a script to filter the MAS
-"emails" and put them into a file instead of emailing them.
-See the question below about receiving signals without having them
-emailed.
+File logging is broken in older versions of MAS.
+However, it appears to be fixed in the 1.6.5 version and later.
+My tests of file logging with these later versions of MAS were successful,
+but I have not tested it extensively.
+If anyone has a problem with using a log file for market analysis (storing
+trading signals in a file), please let me know.
 <P><B>
 Is there anyway to get buy/sell signals without emailing them to
 someone - for example, just listing them to STDOUT.
@@ -430,10 +428,12 @@ This will allow me
 to use the data how I would like in perl or what ever, instead of
 perl going to my email and parsing the data.
 </B><P>
-You can do this by replacing the MAS "mailer" program with a script to
+You can do this either by using the file logging mechanism for delivering
+signals (by choosing "Log file" instead of "User" for the registrant type),
+or by replacing the MAS "mailer" program with a script to
 do whatever you want with the signals sent from MAS.
-Just write the script to do whatever you want with the data, parsing it
-according to the
+For the latter solution, just write the script to do whatever you want
+with the data, parsing it according to the
 format that shows up in email messages when MAS uses a regular mailer.
 Once you
 write the script, you can tell MAS to use it as your mailer by setting

@@ -38,6 +38,10 @@ This feature allows for the creation of complex indicators that use
 one or more existing indicators in ways that could not be implemented
 before the change.
 
+Verified that file logging for generated trading signals now works on both
+Linux and Windows.  [!!!Try to get some feedback from other users to make
+sure it also works for them.]
+
 SIGNIFICANT SERVER CHANGES IN RELEASE 1.6.5
 
 Added the ability to retrieve market data from a web server using the http
