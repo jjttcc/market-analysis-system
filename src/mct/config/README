@@ -1,1 +1,5 @@
 Configuration files are stored here.
+
+replacement_spec is an example replacement specification for config_tool to
+replace "variable settings" in the mctrc file with appropriate values for a
+user's configuration.
