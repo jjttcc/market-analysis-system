@@ -13,7 +13,7 @@ class MARKET_FUNCTION_LINE inherit
 		export
 			{NONE} ovf_make
 		redefine
-			action, operator_used, start
+			action, operator_used, start, immediate_parameters
 		end
 
 	MARKET_LINE
@@ -21,6 +21,8 @@ class MARKET_FUNCTION_LINE inherit
 			make_from_2_points as ml_make_from_2_points
 		export
 			{NONE} make_from_slope, ml_make_from_2_points
+			{SLOPE_FUNCTION_PARAMETER, MARKET_FUNCTION_EDITOR} set_slope
+			{START_Y_FUNCTION_PARAMETER, MARKET_FUNCTION_EDITOR} set_start_y
 		undefine
 			is_equal, copy, setup
 		end
@@ -79,5 +81,18 @@ feature {NONE} -- Implemetation
 		end
 
 	operator_used: BOOLEAN is false
+
+	immediate_parameters: LIST [FUNCTION_PARAMETER] is
+		local
+			sfp: SLOPE_FUNCTION_PARAMETER
+			syfp: START_Y_FUNCTION_PARAMETER
+		do
+			!LINKED_LIST [FUNCTION_PARAMETER]!Result.make
+			!!sfp.make (Current)
+			Result.extend (sfp)
+			!!syfp.make (Current)
+			Result.extend (syfp)
+		end
+
 
 end -- class MARKET_FUNCTION_LINE
