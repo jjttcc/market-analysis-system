@@ -64,6 +64,12 @@ if not posixpath.isdir(list_dir):
 if not posixpath.isdir(data_dir):
 	fatal(data_dir + " is not a directory.")
 
+# Output current process status, for debugging purposes.
+def do_process_report(cmd, cmd_result):
+	print "command '", cmd, "' failed with status: ", cmd_result
+	print "Process status report from top:"
+	os.system('top -n 3 -b')
+
 # Return the names of all *.txt files in data_dir.
 def all_data_files():
 	prev_dir = os.getcwd()
@@ -102,7 +108,8 @@ def process_list(watchfile, env_dir, days, portnum):
 	if not use_database():
 		cmd = cmd + ' ' + watchfile_list(watchfile)
 	#print 'processing with command line: ' + cmd
-	os.system(cmd)
+	cmd_result = os.system(cmd)
+	if cmd_result != 0: do_process_report(cmd_result)
 
 os.chdir(list_dir)
 mapf_name = Map_file_name

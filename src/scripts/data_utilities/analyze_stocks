@@ -83,3 +83,4 @@ d
 s
 a
 '|cl_client
+exit $?
