@@ -2,14 +2,14 @@ The files in this directory provide documentation for the Market Analysis
 Library (MAL) and applications that use it.  The directory currently contains
 the following files:
 
-    README - This file
+    MAL_README - This file
 
     MAL_design_document - Documentation of the design of MAL
 
     eiffel_library_document - Documentation of the Eiffel Component Library,
         used by MAL
 
-    intro - Introduction to MAL
+    mal_intro - Introduction to MAL
 
     applications - Documentation of applications using MAL
 
