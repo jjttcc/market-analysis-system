@@ -74,9 +74,6 @@ feature -- Status report
 		do
 			Result := (low <= high and low <= close and close <= high) and
 						(open_available implies low <= open and open <= high)
-		ensure
-			Result = (low <= high and low <= close and close <= high) and
-						(open_available implies low <= open and open <= high)
 		end
 
 feature -- Status setting
