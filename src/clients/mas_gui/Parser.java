@@ -140,7 +140,7 @@ class Parser extends AbstractParser {
 		int float_index = 0, volume_index = 0, oi_index = 0;
 		while (recs.hasMoreTokens()) {
 			StringTokenizer fields = new StringTokenizer(recs.nextToken(),
-													field_separator, false);
+				field_separator, false);
 			int open_field_index = -1;
 			for (int j = 0; fields.hasMoreTokens(); ++j) {
 				try {
