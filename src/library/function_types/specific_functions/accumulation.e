@@ -106,6 +106,9 @@ feature {NONE}
 			-- Important - previous operator will operate on the current
 			-- item of `output', which will always be the last inserted item.
 			previous_operator.set (output)
+			if debugging then
+				print_status_report
+			end
 		ensure then
 			empty_if_empty: target.is_empty = output.is_empty
 			output_at_last: not output.is_empty implies output.islast

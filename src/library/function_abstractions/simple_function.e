@@ -83,9 +83,9 @@ feature -- Access
 			create Result.make (1, 1, 1, 0, 0, 0)
 		end
 
-	children: LIST [MARKET_FUNCTION] is
+	children: LINKED_LIST [MARKET_FUNCTION] is
 		once
-			Result := Void
+			create Result.make
 		end
 
 	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE] is

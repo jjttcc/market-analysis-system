@@ -36,7 +36,7 @@ feature {NONE} -- Initialization
 
 	make (in: like input; op: like operand) is
 		require
-			not_void: input /= Void and op /= Void
+			not_void: in /= Void and op /= Void
 		do
 			input := in
 			set (input.output)

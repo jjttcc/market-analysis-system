@@ -116,6 +116,9 @@ feature {NONE} -- Basic operations
 					previous_operator.set (output)
 				end
 			end
+			if debugging then
+				print_status_report
+			end
 		ensure then
 			output_at_last: not output.is_empty and previous_operator /= Void
 				implies output.islast

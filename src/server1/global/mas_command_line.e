@@ -83,6 +83,8 @@ feature -- Access
 				"  -x                   Use an external data source%N",
 				"  -n                   No caching of intraday data%N",
 				"  -b                   Run in Background%N",
+				"  -debug               Debug mode - print internal %
+				%calculation state, etc.%N",
 				"  ", no_volume_spec,
 				"           Data has no volume field%N",
 				"  ", no_open_spec,
@@ -161,6 +163,9 @@ feature -- Access -- settings
 
 	intraday_caching: BOOLEAN
 			-- Cache intraday data?
+
+	debugging: BOOLEAN
+			-- Is debugging mode on?
 
 	special_date_settings: DATE_FORMAT_SPECIFICATION
 			-- Special date-format settings
@@ -280,6 +285,18 @@ feature {NONE} -- Implementation
 				keep_db_connection := False
 				contents.remove
 			end
+		end
+
+	set_debugging is
+		do
+			-- Continue to loop until all debug options are removed so
+			-- that none is confused with the -d option.
+			from until not option_string_in_contents ("deb") loop
+				debugging := True
+				contents.remove
+			end
+		ensure
+			debugging_options_removed: not option_string_in_contents ("deb")
 		end
 
 	set_port_numbers is
@@ -408,6 +425,7 @@ feature {NONE} -- Implementation queries
 			Result.extend (agent set_port_numbers)
 			Result.extend (agent set_strict)
 			Result.extend (agent set_intraday_caching)
+			Result.extend (agent set_debugging)
 		end
 
 	initialization_complete: BOOLEAN

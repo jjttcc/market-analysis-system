@@ -114,6 +114,9 @@ feature {NONE} -- Implementation
 						latest_value * exp.value +
 							output.last.value * (exp_inverse))
 			output.extend (t)
+			if debugging then
+				print_status_report
+			end
 		ensure then
 			-- output.last.value = P[curr] * exp + EMA[curr-1] * (1 - exp)
 			--   where P[curr] is the result (from `operator') for the current

@@ -21,6 +21,11 @@ deferred class MARKET_EVENT_GENERATOR inherit
 			product
 		end
 
+	TREE_NODE
+		redefine
+			children
+		end
+
 	GLOBAL_SERVICES
 		export {NONE}
 			all
@@ -79,6 +84,12 @@ feature -- Access
 				Result.append (l.item.parameters)
 				l.forth
 			end
+		end
+
+	children: LIST [MARKET_EVENT_GENERATOR] is
+		do
+			-- Empty by default - redefine if needed.
+			create {LINKED_LIST [MARKET_EVENT_GENERATOR]} Result.make
 		end
 
 feature -- Status report

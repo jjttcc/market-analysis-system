@@ -55,6 +55,9 @@ feature -- Basic operations
 		do
 			if not processed then
 				pre_process
+				if debugging then
+					print_debugging_header
+				end
 				do_process
 				update_processed_date_time
 			end
@@ -106,6 +109,15 @@ feature {NONE} -- Hook methods
 			end
 		end
 
+	print_current_record_info is
+		do
+			if not output.is_empty then
+				io.error.print ("Output record " + output.count.out +
+					", date/time: " + output.last.date_time.out +
+					", value: " + output.last.value.out + "%N")
+			end
+		end
+
 feature {MARKET_FUNCTION} -- Status report
 
 	is_complex: BOOLEAN is True
@@ -131,6 +143,28 @@ feature {NONE} -- Implementation
 			Result.append (op.descendants)
 		ensure
 			exists: Result /= Void
+		end
+
+	print_status_report is
+		local
+			ops: LIST [COMMAND]
+		do
+			print_current_record_info
+			if operator_used then
+				ops := immediate_operators
+				from ops.start until ops.exhausted loop
+					io.error.print (ops.item.status_report)
+					ops.forth
+				end
+			end
+		end
+
+	print_debugging_header is
+			-- Print debugging header information for the beginning
+			-- of processing
+		do
+			io.error.print ("Processing data with " + name + " (at " +
+				(create {DATE_TIME}.make_now).out + ").%N")
 		end
 
 invariant

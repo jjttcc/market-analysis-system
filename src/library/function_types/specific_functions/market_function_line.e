@@ -71,6 +71,9 @@ feature {NONE} -- Implemetation
 			end
 			Precursor
 			check target.index = 1 end
+			if debugging then
+				print_status_report
+			end
 		end
 
 	action is
@@ -81,6 +84,9 @@ feature {NONE} -- Implemetation
 			t.set_x_y_date (target.index, y_at (target.index),
 							target.item.date_time)
 			output.extend (t)
+			if debugging then
+				print_status_report
+			end
 		end
 
 	operator_used: BOOLEAN is False

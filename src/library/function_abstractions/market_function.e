@@ -19,10 +19,22 @@ deferred class MARKET_FUNCTION inherit
 
 	MARKET_PROCESSOR
 
+	TREE_NODE
+		redefine
+			name, copy_of_children, descendant_comparison_is_by_objects
+		end
+
 feature -- Access
 
-	name: STRING
+	name: STRING is
 			-- Function name
+		do
+			if name_implementation /= Void then
+				Result := name_implementation
+			else
+				Result := ""
+			end
+		end
 
 	short_description: STRING is
 			-- Short description of the function
@@ -69,29 +81,6 @@ feature -- Access
 		deferred
 		end
 
-	descendants: LIST [MARKET_FUNCTION] is
-			-- This function's descendants, if this is a composite function -
-			-- children, children's children, etc.
-		local
-			l: LIST [MARKET_FUNCTION]
-			function_set: LINKED_SET [MARKET_FUNCTION]
-		do
-			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
-			l := clone (children)
-			if l /= Void then
-				create function_set.make
-				function_set.compare_objects
-				from l.start until l.exhausted loop
-					function_set.extend (l.item)
-					function_set.fill (l.item.descendants)
-					l.forth
-				end
-				Result.append (function_set)
-			end
-		ensure
-			not_void: Result /= Void
-		end
-
 	functions: LIST [MARKET_FUNCTION] is
 		do
 			Result := descendants
@@ -102,7 +91,8 @@ feature -- Access
 		local
 			l: LIST [MARKET_FUNCTION]
 		do
-			Result := clone (immediate_operators)
+			create {LINKED_SET [COMMAND]} Result.make
+			Result.append (immediate_operators)
 			l := children
 			if l /= Void then
 				from l.start until l.exhausted loop
@@ -148,6 +138,65 @@ feature -- Access
 		deferred
 		end
 
+feature -- Status report
+
+	processed: BOOLEAN is
+			-- Has this function been processed?
+		deferred
+		end
+
+	has_children: BOOLEAN is
+			-- Does this function have children?
+		deferred
+		ensure
+			Result implies children /= Void and not children.is_empty
+		end
+
+	debugging: BOOLEAN
+			-- Is debugging mode on?
+
+feature {MARKET_FUNCTION_EDITOR, MARKET_FUNCTION} -- Status setting
+
+	turn_debugging_on is
+			-- Set `debugging' to True for Current and its `descendants'.
+		local
+			l: SEQUENCE [MARKET_FUNCTION]
+		do
+			debugging := True
+			from
+				l := children
+				l.start
+			until
+				l.exhausted
+			loop
+				l.item.turn_debugging_on
+				l.forth
+			end
+		ensure
+			debugging_on: debugging
+			-- descendants.for_all (agent debugging)
+		end
+
+	turn_debugging_off is
+			-- Set `debugging' to False for Current and its `descendants'.
+		local
+			l: SEQUENCE [MARKET_FUNCTION]
+		do
+			debugging := False
+			from
+				l := children
+				l.start
+			until
+				l.exhausted
+			loop
+				l.item.turn_debugging_off
+				l.forth
+			end
+		ensure
+			debugging_off: not debugging
+			-- descendants.for_all (agent (debugging = False))
+		end
+
 feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Element change
 
 	set_name (n: STRING) is
@@ -155,7 +204,7 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Element change
 		require
 			not_void: n /= Void
 		do
-			name := n
+			name_implementation := n
 		ensure
 			is_set: name = n and name /= Void
 		end
@@ -169,20 +218,6 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Element change
 		ensure
 			output_empty_if_complex_and_not_processed:
 				is_complex and not processed implies output.is_empty
-		end
-
-feature -- Status report
-
-	processed: BOOLEAN is
-			-- Has this function been processed?
-		deferred
-		end
-
-	has_children: BOOLEAN is
-			-- Does this function have children?
-		deferred
-		ensure
-			Result implies children /= Void and not children.is_empty
 		end
 
 feature -- Basic operations
@@ -308,6 +343,18 @@ feature {NONE} -- Implementation
 				op.prepare_for_editing (l)
 			end
 		end
+
+	copy_of_children: LIST [MARKET_FUNCTION] is
+		do
+			Result := clone (children)
+		end
+
+	descendant_comparison_is_by_objects: BOOLEAN is
+		do
+			Result := True
+		end
+
+	name_implementation: STRING
 
 invariant
 

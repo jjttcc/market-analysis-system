@@ -18,7 +18,7 @@ class ONE_VARIABLE_FUNCTION inherit
 		export {NONE}
 			set
 		redefine
-			action
+			action, start
 		end
 
 creation {FACTORY, MARKET_FUNCTION_EDITOR}
@@ -142,10 +142,21 @@ feature {NONE}
 			create t.make (target.item.date_time, target.item.end_date,
 						operator.value)
 			output.extend (t)
+			if debugging then
+				print_status_report
+			end
 		ensure then
 			one_more_in_output: output.count = old output.count + 1
 			date_time_correspondence:
 				output.last.date_time.is_equal (target.item.date_time)
+		end
+
+	start is
+		do
+			Precursor
+			if debugging then
+				print_status_report
+			end
 		end
 
 	do_process is

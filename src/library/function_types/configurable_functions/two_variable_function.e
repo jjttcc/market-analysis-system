@@ -18,7 +18,7 @@ inherit
 
 	TWO_VARIABLE_LINEAR_ANALYZER
 		redefine
-			action
+			action, start
 		end
 
 creation {FACTORY, MARKET_FUNCTION_EDITOR}
@@ -118,8 +118,19 @@ feature {NONE} -- Hook methods
 			create t.make (target1.item.date_time, target1.item.end_date,
 						operator.value)
 			output.extend (t)
+			if debugging then
+				print_status_report
+			end
 		ensure then
 			output.count = old (output.count) + 1
+		end
+
+	start is
+		do
+			Precursor
+			if debugging then
+				print_status_report
+			end
 		end
 
 	do_process is

@@ -52,6 +52,13 @@ class MAIN_CL_INTERFACE inherit
 			print
 		end
 
+	MARKET_FUNCTION_EDITOR
+		export
+			{NONE} all
+		undefine
+			print
+		end
+
 creation
 
 	make_io, make
@@ -368,6 +375,7 @@ feature {NONE} -- Implementation
 			-- Menu for viewing market function data
 		local
 			finished: BOOLEAN
+			gs: expanded GLOBAL_SERVER_FACILITIES
 		do
 			from
 			until
@@ -382,6 +390,9 @@ feature {NONE} -- Implementation
 				when 'p', 'P' then
 					if not indicator.processed then
 						print_list (<<"Processing ", indicator.name, " ...%N">>)
+						if gs.command_line_options.debugging then
+							indicator.turn_debugging_on
+						end
 						indicator.process
 					end
 					print_indicator (indicator)

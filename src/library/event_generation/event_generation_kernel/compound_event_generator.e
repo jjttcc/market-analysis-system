@@ -22,6 +22,9 @@ indexing
 class COMPOUND_EVENT_GENERATOR inherit
 
 	MARKET_EVENT_GENERATOR
+		redefine
+			children
+		end
 
 	GENERAL_UTILITIES
 		export
@@ -83,6 +86,13 @@ feature -- Access
 	immediate_operators: LIST [COMMAND] is
 		do
 			create {LINKED_LIST [COMMAND]} Result.make
+		end
+
+	children: LIST [MARKET_EVENT_GENERATOR] is
+		do
+			create {LINKED_LIST [MARKET_EVENT_GENERATOR]} Result.make
+			Result.extend (left_analyzer)
+			Result.extend (right_analyzer)
 		end
 
 feature -- Status report

@@ -98,6 +98,9 @@ feature {NONE} -- Basic operations
 				-- sum.value = sum applied to
 				--   target[effective_offset+1 .. effective_n]
 				output.extend (t)
+				if debugging then
+					print_status_report
+				end
 				continue_until
 			end
 		end
@@ -145,6 +148,9 @@ feature {NONE}
 			create t.make (target.item.date_time, target.item.end_date,
 						last_sum / n)
 			output.extend (t)
+			if debugging then
+				print_status_report
+			end
 		ensure then
 			one_more_in_output: output.count = old output.count + 1
 			date_time_correspondence:
