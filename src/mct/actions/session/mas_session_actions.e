@@ -26,17 +26,14 @@ feature {NONE} -- Initialization
 
 	make (config: MCT_CONFIGURATION) is
 		local
-			cmd: SESSION_COMMAND
+			cmd: EXTERNAL_COMMAND
 		do
 			create external_commands.make (0)
-			create cmd.make (config.Chart_cmd_specifier,
-				config.chart_command)
+			cmd := config.chart_command
 			external_commands.put (cmd, cmd.identifier)
-			create cmd.make (config.Start_cl_client_cmd_specifier,
-				config.start_command_line_client_command)
+			cmd := config.start_command_line_client_command
 			external_commands.put (cmd, cmd.identifier)
-			create cmd.make (config.Termination_cmd_specifier,
-				config.termination_command)
+			cmd := config.termination_command
 			external_commands.put (cmd, cmd.identifier)
 			configuration := config
 			register_for_termination (Current)

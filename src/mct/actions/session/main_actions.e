@@ -23,11 +23,7 @@ feature {NONE} -- Initialization
 			cmd: EXTERNAL_COMMAND
 		do
 			create external_commands.make (0)
-			create {SESSION_COMMAND} cmd.make (
-				config.Start_server_cmd_specifier, config.start_server_command)
-			external_commands.put (cmd, cmd.identifier)
-			create cmd.make (config.Termination_cmd_specifier,
-				config.termination_command)
+			cmd := config.default_start_server_command
 			external_commands.put (cmd, cmd.identifier)
 			configuration := config
 		end

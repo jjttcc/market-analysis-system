@@ -32,7 +32,7 @@ begin	start_server_command
 command	cd <data_dir>; <bin_dir>/mas -o -f , -b <portnumber> *.txt
 command_description	Get data from files
 command_name	File-based
-# Make this command the default.
+# Make this command the default:
 mark	default
 end	start_server_command
 
@@ -47,7 +47,7 @@ end	start_server_command
 begin	start_server_command
 command	cd <data_dir>; <bin_dir>/mas -o -b <portnumber> -f , -w
 command_description	Get data from the web
-command_name	Database-based
+command_name	Web-based
 end	start_server_command
 
 # Command to start a command-line client to connect to the server

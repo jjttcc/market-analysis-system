@@ -34,11 +34,26 @@ feature -- Access
 	command_string: STRING
 			-- The actual command to be delegated to the OS
 
+	description: STRING
+			-- Description of the command
+
 feature -- Status report
 
 	arg_mandatory: BOOLEAN is
 		once
 			Result := False
+		end
+
+feature -- Element change
+
+	set_description (arg: STRING) is
+			-- Set `description' to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			description := arg
+		ensure
+			description_set: description = arg and description /= Void
 		end
 
 feature -- Basic operations
@@ -47,7 +62,8 @@ feature -- Basic operations
 		local
 			env: expanded EXECUTION_ENVIRONMENT
 		do
---!!!print ("Attempting to execute '" + command_string + "'%N")
+print ("(EXTCMD - " + name + ") Attempting to execute:%N'" +
+command_string + "'%N")
 			env.launch (command_string)
 		end
 

@@ -30,6 +30,7 @@ feature {NONE} -- Initialization
 	initialize_settings_table is
 		do
 			create settings.make (0)
+			create start_server_commands.make
 
 			settings.extend ("", Data_directory_specifier)
 			settings.extend ("", Bin_directory_specifier)
@@ -72,33 +73,20 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	start_server_command: STRING is
-		do
-			Result := settings @ Start_server_cmd_specifier
-		ensure
-			not_void: Result /= Void
-		end
+	default_start_server_command: EXTERNAL_COMMAND
+			-- Specified default 'start-server' command
 
-	start_command_line_client_command: STRING is
-		do
-			Result := settings @ Start_cl_client_cmd_specifier
-		ensure
-			not_void: Result /= Void
-		end
+	start_server_commands: LINKED_SET [EXTERNAL_COMMAND]
+			-- Configured 'start-server' commands
 
-	chart_command: STRING is
-		do
-			Result := settings @ Chart_cmd_specifier
-		ensure
-			not_void: Result /= Void
-		end
+	start_command_line_client_command: EXTERNAL_COMMAND
+			-- Command to start the command-line client
 
-	termination_command: STRING is
-		do
-			Result := settings @ Termination_cmd_specifier
-		ensure
-			not_void: Result /= Void
-		end
+	chart_command: EXTERNAL_COMMAND
+			-- Command to start the charting client
+
+	termination_command: EXTERNAL_COMMAND
+			-- Command to terminate a server
 
 feature -- Status report
 
@@ -128,15 +116,41 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	configuration_file_name: STRING is "mctrc"
 
-	check_results is
-		do
-			-- Null routine
-		end
-
 	post_process_settings is
 		do
 			settings.linear_representation.do_all (
 				agent replace_configuration_tokens)
+			if settings.has (Start_server_cmd_specifier) then
+				start_server_commands.extend (create {SESSION_COMMAND}.make (
+				Start_server_cmd_specifier,
+				settings @ Start_server_cmd_specifier))
+			end
+			if settings.has (Start_cl_client_cmd_specifier) then
+				create {SESSION_COMMAND}
+					start_command_line_client_command.make (
+						Start_cl_client_cmd_specifier,
+						settings @ Start_cl_client_cmd_specifier)
+			end
+			if settings.has (Chart_cmd_specifier) then
+				create {SESSION_COMMAND} chart_command.make (
+					Chart_cmd_specifier, settings @ Chart_cmd_specifier)
+			end
+			if settings.has (Termination_cmd_specifier) then
+				create {SESSION_COMMAND} termination_command.make (
+					Termination_cmd_specifier,
+					settings @ Termination_cmd_specifier)
+			end
+			if
+				default_start_server_command = Void and then
+				not start_server_commands.is_empty
+			then
+				default_start_server_command := start_server_commands.first
+			end
+		end
+
+	check_results is
+		do
+			--!!!Stub
 		end
 
 	use_customized_setting (key, value: STRING): BOOLEAN is
@@ -152,6 +166,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 						value.is_equal (Start_server_cmd_specifier)
 					then
 						in_start_server_cmd := True
+						current_cmd_is_default := False
 					end
 				end
 			end
@@ -162,6 +177,9 @@ feature {NONE} -- Implementation - Hook routine implementations
 			if in_begin_block then
 				if key.is_equal (End_tag) then
 					in_begin_block := False
+					if in_start_server_cmd then
+						make_start_server_cmd
+					end
 				elseif in_start_server_cmd then
 					process_start_server_cmd (key, value)
 				end
@@ -203,23 +221,37 @@ feature {NONE} -- Implementation
 	process_start_server_cmd (key, value: STRING) is
 			-- Process a block-definition of a start-server command.
 		do
-			--!!!Stub
-			-- Need to maintain a set of "commands" (SET [EXTERNAL_COMMAND]
-			-- might do - need to add 'description') and update that
-			-- set here, according to the specs.
 			if key.is_equal (Command_specifier) then
-				-- Create a command and add it to the "command set".
-				-- Will need to "hold on to it" until end of block.
+				current_cmd_string := value
 			elseif key.is_equal (Command_description_specifier) then
-				-- current.command.set_description (value)
+				current_cmd_desc := value
 			elseif key.is_equal (Command_name_specifier) then
-				-- current.command.set_name (value)
+				current_cmd_name := value
 			elseif
 				key.is_equal (Mark_specifier) and
 				value.is_equal (Default_mark)
 			then
-				-- default_command := current_command
+				current_cmd_is_default := True
 			end
 		end
+
+	make_start_server_cmd is
+			-- Make a 'start-server' command and add it to `external_commands'.
+		local
+			c: SESSION_COMMAND
+		do
+			replace_configuration_tokens (current_cmd_string)
+			create c.make (Start_server_cmd_specifier, current_cmd_string)
+			c.set_name (current_cmd_name)
+			c.set_description (current_cmd_desc)
+			if current_cmd_is_default then
+				default_start_server_command := c
+			end
+			start_server_commands.extend (c)
+		end
+
+	current_cmd_string, current_cmd_desc, current_cmd_name: STRING
+
+	current_cmd_is_default: BOOLEAN
 
 end
