@@ -84,6 +84,9 @@ feature {NONE}
 				-- Default to newline.
 				tradable_factory.set_record_separator ("%N")
 			end
+			if command_line_options.strict then
+				tradable_factory.set_strict_error_checking (true)
+			end
 			check
 				flist_not_void: function_library /= Void
 			end
@@ -92,7 +95,7 @@ feature {NONE}
 			append_hard_coded_functions_to_library
 			tradable_factory.set_indicators (function_library)
 			!!tradable_factories.make
-			-- Add a factory for each file name.  Since some files
+			-- Add a factory for each input entity.  Since some entities
 			-- may be for different types of markets, in the future,
 			-- different types of factories may be created and
 			-- added to the tradable_factories list.
