@@ -146,6 +146,8 @@ feature -- Basic operations
 		end
 
 	create_new_compound_event_generator is
+			-- Create a new compound event generator and add it to 
+			-- market_event_generation_library.
 		local
 			eg_maker: COMPOUND_GENERATOR_FACTORY
 		do
@@ -203,6 +205,8 @@ feature -- Basic operations
 		end
 
 	create_new_simple_event_generator is
+			-- Create a new atomic event generator and add it to 
+			-- market_event_generation_library.
 		local
 			c: CHARACTER
 		do
@@ -229,25 +233,30 @@ feature -- Basic operations
 		end
 
 	create_new_one_variable_function_analyzer is
+			-- Create a new one-variable function analyzer and add it to 
+			-- market_event_generation_library.
 		local
 			fa_maker: OVFA_FACTORY
 		do
 			!!fa_maker
-			fa_maker.set_function (function_choice ("technical indicator"))
+			fa_maker.set_function (
+				function_choice_clone ("technical indicator"))
 			fa_maker.set_operator (operator_choice)
 			fa_maker.set_period_type (period_type_choice)
 			create_event_generator (fa_maker, new_event_type_name)
 		end
 
 	create_new_two_variable_function_analyzer is
+			-- Create a new two-variable function analyzer and add it to 
+			-- market_event_generation_library.
 		local
 			c: CHARACTER
 			fa_maker: TVFA_FACTORY
 		do
 			!!fa_maker
 			fa_maker.set_functions (
-				function_choice ("left technical indicator"),
-					function_choice ("right technical indicator"))
+				function_choice_clone ("left technical indicator"),
+					function_choice_clone ("right technical indicator"))
 			fa_maker.set_period_type (period_type_choice)
 			from
 			until
@@ -267,7 +276,8 @@ feature -- Basic operations
 			create_event_generator (fa_maker, new_event_type_name)
 		end
 
-	function_choice (msg: STRING): MARKET_FUNCTION is
+	function_choice_clone (msg: STRING): MARKET_FUNCTION is
+			-- A clone of a user-selected member of `function_library'
 		local
 			names: ARRAYED_LIST [STRING]
 		do
@@ -295,7 +305,7 @@ feature -- Basic operations
 					print_list (<<"Selection must be between 1 and ",
 								function_library.count, "%N">>)
 				else
-					Result := function_library @ last_integer
+					Result := deep_clone (function_library @ last_integer)
 				end
 			end
 		end
