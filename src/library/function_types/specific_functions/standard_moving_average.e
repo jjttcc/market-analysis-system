@@ -46,7 +46,7 @@ feature {FACTORY}
 
 	set_input (in: MARKET_FUNCTION) is
 		do
-			sum.set_input (in.output)
+			sum.set_target (in.output)
 			Precursor (in)
 		end
 

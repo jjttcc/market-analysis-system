@@ -13,13 +13,14 @@ inherit
 	LINEAR_ANALYZER
 		rename
 			target as target1, -- x in "z = f(x, y)"
-			set_input as set_input_unused
+			set_target as set_target_unused,
+			target_set as target_set_unused
 		export {NONE}
-			set_input_unused
+			set_target_unused, target_set_unused
 		redefine
-			forth, action, start, input_set
+			forth, action, start
 		select
-			target1, forth, action, start, input_set
+			target1, forth, action, start
 		end
 
 	LINEAR_ANALYZER
@@ -28,10 +29,10 @@ inherit
 			forth as forth_unused,
 			action as action_unused,
 			start as start_unused,
-			set_input as set_input_unused,
-			input_set as input_set_unused
+			set_target as set_target_unused,
+			target_set as target_set_unused
 		export {NONE}
-			set_input_unused
+			set_target_unused, target_set_unused
 		end
 
 creation

@@ -9,8 +9,6 @@ class ONE_VARIABLE_FUNCTION inherit
 	MARKET_FUNCTION
 
 	LINEAR_ANALYZER
-		rename
-			set_input as set_target
 		redefine
 			action
 		end
@@ -66,7 +64,7 @@ feature {NONE}
 
 feature {TEST_FUNCTION_FACTORY} -- Element change
 
-	set_input (in: MARKET_FUNCTION) is
+	set_input (in: like input) is
 		require
 			not_void: in /= Void and in.output /= Void
 		do
@@ -75,7 +73,7 @@ feature {TEST_FUNCTION_FACTORY} -- Element change
 			reset_state
 		ensure
 			input_set_to_in: input = in
-			input_set: input_set
+			input_set: target_set
 			not_processed: not processed
 		end
 
