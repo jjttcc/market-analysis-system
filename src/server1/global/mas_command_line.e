@@ -31,13 +31,23 @@ feature {NONE} -- Initialization
 		do
 			create {LINKED_LIST [INTEGER]} port_numbers.make
 			cl_make
-			set_field_separator
-			set_opening_price
-			set_background
-			set_use_db
-			set_port_numbers
-			set_strict
-			set_intraday_caching
+--			main_setup_procedures.do_all (
+--				agent {PROCEDURE [ANY, TUPLE []]}.call)
+			from
+				main_setup_procedures.start
+			until
+				main_setup_procedures.exhausted
+			loop
+				main_setup_procedures.item.call ([])
+				main_setup_procedures.forth
+			end
+--set_field_separator
+--set_opening_price
+--set_background
+--set_use_db
+--set_port_numbers
+--set_strict
+--set_intraday_caching
 			if not use_db then
 				set_use_external_data_source
 				if not use_external_data_source then
@@ -49,6 +59,7 @@ feature {NONE} -- Initialization
 			else
 				set_keep_db_connection
 			end
+			initialization_complete := True
 		end
 
 feature -- Access
@@ -142,8 +153,30 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
+	set_special_formatting is
+			-- Set "special" formatting options.
+		do
+			-- Look for "-special-format=..."
+			from
+				contents.start
+			until
+				contents.exhausted
+			loop
+				if
+					contents.item.substring (1, special_format_string.count).
+						is_equal (special_format_string)
+				
+				then
+					--!!!!!Set the appropriate special-formatting flags.
+					contents.remove
+				else
+					contents.forth
+				end
+			end
+		end
+
 	set_field_separator is
-			-- Set `field_separator' and remove its settings from `contents'
+			-- Set `field_separator' and remove its settings from `contents'.
 			-- Void if no field separator is specified
 		do
 			if option_in_contents ('f') then
@@ -164,7 +197,7 @@ feature {NONE} -- Implementation
 		end
 
 	set_opening_price is
-			-- Set `opening_price' and remove its setting from `contents'
+			-- Set `opening_price' and remove its setting from `contents'.
 			-- false if opening price option is not found
 		do
 			if option_in_contents ('o') then
@@ -233,7 +266,7 @@ feature {NONE} -- Implementation
 		end
 
 	set_port_numbers is
-			-- Set `port_numbers' and remove its settings from `contents'
+			-- Set `port_numbers' and remove its settings from `contents'.
 			-- Empty if no port numbers are specified
 		do
 			from
@@ -251,7 +284,7 @@ feature {NONE} -- Implementation
 		end
 
 	set_file_names is
-			-- Set `file_names' and remove its settings from `contents'
+			-- Set `file_names' and remove its settings from `contents'.
 			-- Empty if no file names are specified
 			-- Must be called last because it expects all other arguments
 			-- to have been removed from `contents'.
@@ -333,15 +366,40 @@ feature {NONE} -- Implementation
 			symbol_list_initialized := True
 		end
 
+feature {NONE} -- Implementation attributes
+
 	symbol_list_implementation: LIST [STRING]
+
+	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]] is
+			-- List of the set_... procedures that are called
+			-- unconditionally - for convenience
+		once
+			create Result.make
+			Result.extend (agent set_special_formatting)
+			Result.extend (agent set_field_separator)
+			Result.extend (agent set_opening_price)
+			Result.extend (agent set_background)
+			Result.extend (agent set_use_db)
+			Result.extend (agent set_port_numbers)
+			Result.extend (agent set_strict)
+			Result.extend (agent set_intraday_caching)
+		end
+
+	initialization_complete: BOOLEAN
+
+feature {NONE} -- Implementation constants
+
+	special_format_string: STRING is "-special-format"
 
 invariant
 
 	port_numbers_not_void: port_numbers /= Void
-	use_db: use_db and not error_occurred implies file_names = Void and
-		(symbol_list_initialized implies symbol_list_implementation /= Void)
-	use_files: not use_db and not use_external_data_source and not use_web and
+	use_db: initialization_complete implies (
+		use_db and not error_occurred implies file_names = Void and
+		(symbol_list_initialized implies symbol_list_implementation /= Void))
+	use_files:  initialization_complete implies (
+		not use_db and not use_external_data_source and not use_web and
 		not error_occurred implies symbol_list_implementation = Void and
-		file_names /= Void
+		file_names /= Void)
 
 end -- class MAS_COMMAND_LINE
