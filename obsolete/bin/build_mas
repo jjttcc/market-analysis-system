@@ -1,0 +1,73 @@
+#!/bin/bash
+# Build and store the mas executable.
+
+Progname=$(basename $0)
+eifdir=EIFGEN
+olddir=EIFGEN.old
+bindir=$MAS/lib/binaries
+
+usage() {
+	echo "Usage: $Progname version"
+}
+
+save_old_directories() {
+	if [ -e $olddir ]; then
+		echo -e "Delete $olddir? \c"
+		read answer
+		if [ "$answer" = y -o "$answer" = Y ]; then
+			rm -rf $olddir
+		else
+			mv $olddir $olddir.$$
+			echo -e "Moved $olddir to $olddir.$$."
+		fi
+	fi
+
+	if [ -e $eifdir ]; then mv $eifdir $olddir; fi
+	echo -e "Moved $eifdir to $olddir."
+}
+
+finalize() {
+	if ec -finalize $1 -ace mas.ace; then
+		:
+	else
+		echo "Finalization with ec failed."
+		exit 1
+	fi
+}
+
+make_assert_version() {
+	finalize -keep
+	cd $eifdir/F_code
+	if finish_freezing; then
+		strip mas
+		mv mas $bindir/mas_assert${version}
+		cd ../..
+	else
+		echo "'finish_freezing' failed."
+		exit 1
+	fi
+}
+
+make_non_assert_version() {
+	finalize
+	cd $eifdir/F_code
+	if finish_freezing; then
+		strip mas
+		mv mas $bindir/mas_no_assert${version}
+		cd ../..
+	else
+		echo "'finish_freezing' failed."
+		exit 1
+	fi
+}
+
+if [ $# -ne 1 ]; then
+	usage; exit 1
+fi
+version=_v$1
+cd $MAS/../projects/current
+save_old_directories
+make_assert_version
+rm -rf EIFGEN
+make_non_assert_version
+echo "Build of MAS succeeded."
