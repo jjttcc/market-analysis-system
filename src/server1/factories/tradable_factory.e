@@ -226,7 +226,7 @@ feature {NONE} -- Implementation
 			end
 		end
 --!!!Perhaps add an is_intraday state - if true, use DATE_TIME SETTER instead
---of DATE_SETTER
+--of DATE_SETTER (for intraday data capability)
 
 	add_indicators (t: TRADABLE [BASIC_MARKET_TUPLE];
 					flst: LIST [MARKET_FUNCTION]) is

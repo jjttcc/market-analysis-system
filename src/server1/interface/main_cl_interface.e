@@ -386,7 +386,7 @@ feature {NONE}
 				print ("Select indicator to remove%N")
 				indicator := indicator_selection (function_library)
 				print_list (<<"Remove ", indicator.name,
-					"? (y[es]/n[o]/q[uit]) ">>)
+					"? (y[es]/n[o]/q[uit]) ", eom>>)
 				inspect
 					selected_character
 				when 'y', 'Y' then
@@ -914,6 +914,6 @@ feature {NONE}
 	exit_server: BOOLEAN
 			-- Has the user requested to terminate the server?
 
-	saved_mklist_index: INTEGER --!!!Is this ever used????
+	saved_mklist_index: INTEGER
 
 end -- class MAIN_CL_INTERFACE

@@ -70,13 +70,13 @@ feature {NONE} -- Hook methods
 			print_list (<<"Select:%N     Print description of ",
 						c.generator, "? (d)%N",
 						"     Choose ", c.generator,
-						" (c) Make another choice (a) ">>)
+						" (c) Make another choice (a) ", eom>>)
 			inspect
 				selected_character
 			when 'd', 'D' then
 				print_list (<<"%N", function_description (c),
 					"%N%NChoose ", c.generator,
-						"? (y/n) ">>)
+						"? (y/n) ", eom>>)
 				inspect
 					selected_character
 				when 'y', 'Y' then
