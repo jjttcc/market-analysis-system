@@ -15,6 +15,11 @@ class FUNCTION_ANALYZER_BUILDER inherit
 			product
 		end
 
+	GLOBAL_SERVICES
+		rename
+			function_library as flib_not_currently_used_but_may_be_later --!!!
+		end
+
 creation
 
 	make
@@ -88,7 +93,7 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			!!less_than.make (blc, bottom_limit)
 			!!and_op.make (sign_analyzer, less_than)
 			!ONE_VARIABLE_FUNCTION_ANALYZER!Result.make (f, and_op,
-				"Stochastic - -> + slope change event")
+				"Stochastic - -> + slope change event", period_types @ "daily")
 			--!!!!!!!!!!!!!!Remember that Result's start_date_time needs
 			--!!!!!!!!to be set to a reasonable value!!!!!!!!!!
 		end
@@ -124,7 +129,8 @@ feature {NONE} -- Hard-coded market analyzer building procedures
 			check not l.exhausted end
 			f2 := l.item
 			!TWO_VARIABLE_FUNCTION_ANALYZER!Result.make (f1, f2,
-				"MACD difference/signal crossover event")
+				"MACD difference/signal crossover event",
+				period_types @ "weekly")
 			--!!!!!!!!!!!!!!Remember that Result's start_date_time needs
 			--!!!!!!!!to be set to a reasonable value!!!!!!!!!!
 		end

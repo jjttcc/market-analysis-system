@@ -44,12 +44,20 @@ feature -- Access
 		end
 
 	default_input_file_name: STRING
+			-- File name to use if none are specified by the user
 
 	input_file_names: LIST [STRING]
+			-- List of all specified input file names
 
 	market_list: TRADABLE_LIST
+			-- Tradable list made from input file data
 
 	event_coordinator: EVENT_COORDINATOR
+			-- Object in charge of event generation and dispatch
+
+	registration_builder: EVENT_REGISTRATION_BUILDER
+			-- Builder that sets up event registrations and produces
+			-- an event dispatcher
 
 feature {NONE}
 
@@ -66,7 +74,6 @@ feature {NONE}
 			-- input_file_names list.  Also, make a factory list for the
 			-- market_list.  For now, these will all be STOCK_FACTORYs.
 		local
-			fa_builder: FUNCTION_ANALYZER_BUILDER
 			i: INTEGER
 			no_open: BOOLEAN
 			fs: STRING
@@ -79,7 +86,6 @@ feature {NONE}
 			function_list_factory.execute
 			tradable_factory.set_indicators (function_list_factory.product)
 			!!tradable_factories.make
-			!!fa_builder.make (function_list_factory.product)
 			from
 				i := 1
 			until
@@ -119,11 +125,22 @@ feature {NONE}
 			if fs /= Void then
 				tradable_factory.set_field_separator (fs)
 			end
+			build_components (tradable_factories)
+		end
+
+	build_components (tradable_factories: LINKED_LIST [TRADABLE_FACTORY]) is
+		local
+			fa_builder: FUNCTION_ANALYZER_BUILDER
+		do
+			!!fa_builder.make (function_list_factory.product)
 			!VIRTUAL_TRADABLE_LIST!market_list.make (input_file_names,
 														tradable_factories)
 			fa_builder.execute
+			!!registration_builder.make (fa_builder.product)
+			registration_builder.execute
 			!MARKET_EVENT_COORDINATOR!event_coordinator.make (
-											fa_builder.product, market_list)
+								fa_builder.product, market_list,
+								registration_builder.product)
 		end
 
 end -- FACTORY_BUILDER

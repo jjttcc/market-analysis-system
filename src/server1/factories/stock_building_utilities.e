@@ -11,10 +11,7 @@ class STOCK_FACTORY inherit
 			product
 		end
 
-	GLOBAL_APPLICATION
-		-- !!!Needed for Dir_separator constant.  NOTE: If this class is
-		-- !!!moved into TAL, the dependency on GLOBAL_APPLICATION must be
-		-- !!!removed.
+	OPERATING_ENVIRONMENT
 
 creation
 
@@ -44,7 +41,7 @@ feature {NONE}
 			until
 				i = 0
 			loop
-				i := name.index_of (Dir_separator, i + 1)
+				i := name.index_of (Directory_separator, i + 1)
 				if i /= 0 then
 					last_sep_index := i
 				end
