@@ -50,7 +50,7 @@ feature -- Status report
 		once
 			Result := false
 		ensure then
-			Result = false
+			not_used: Result = false
 		end
 
 	arg_used: BOOLEAN is false
