@@ -176,8 +176,14 @@ feature {NONE} -- Implementation
 					calculate_field (field_extractors.item, operator, variable)
 					components.forth
 				end
+				-- Need a 'postprocessing_operator.execute ...' - e.g., to
+				-- divide a "divisor" for a stock index.  Set a
+				-- 'postprocessing_variable' to accumulation_operator.value,
+				-- then execute the postprocessing_operator, and use its
+				-- value for the tuple, below, instead of
+				-- accumulation_operator.value.
 				field_setters.item.call ([current_tuple,
-					field_extractors.item.value])
+					accumulation_operator.value])
 				field_extractors.forth
 				field_setters.forth
 			end
@@ -223,6 +229,8 @@ feature {NONE} -- Implementation - Hook routines
 				components.first.data.item.date_time))
 		end
 
+--!!!Check this and make_current_tuple and add comments/advice about
+--using sequence commands
 	calculate_field (field: BASIC_NUMERIC_COMMAND;
 		operator: RESULT_COMMAND [REAL]; variable: NUMERIC_VALUE_COMMAND) is
 			-- Calculate the value for `field' with `components.item'.
