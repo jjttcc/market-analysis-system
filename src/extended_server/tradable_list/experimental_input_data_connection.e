@@ -43,7 +43,7 @@ feature {NONE} -- Hook routine implementations
 	initlialized_socket (port: INTEGER; host: STRING): like socket is
 			-- A new socket initialized with `port' and `host'
 		do
-			create Result.make_with_connection_tool (port, host, Current)
+			create Result.make_client_by_port (port, host)
 		end
 
 feature {NONE} -- Implementation
