@@ -16,7 +16,7 @@ class COMPOSITE_TUPLE_BUILDER inherit
 			target as source_list, make as ovf_make
 		redefine
 			do_process, output, source_list, operator_used, input,
-			trading_period_type
+			trading_period_type, make_output
 		end
 
 creation {FACTORY}
@@ -34,9 +34,9 @@ feature {NONE} -- Initialization
 			duration_gt_in_duration:
 				time_period_type.duration > in.trading_period_type.duration
 		do
+			set_trading_period_type (time_period_type)
 			ovf_make (in, Void)
 			set_tuple_maker (ctf)
-			set_trading_period_type (time_period_type)
 			start_date := date
 		ensure
 			set: tuple_maker = ctf and tuple_maker /= Void and
@@ -204,6 +204,11 @@ feature -- Basic operations
 feature {NONE}
 
 	input: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
+
+	make_output is
+		do
+			!!output.make (trading_period_type)
+		end
 
 invariant
 
