@@ -85,64 +85,39 @@ feature -- Access
 			Result = tuple_lists @ period_type
 		end
 
-	tuple_list_names: ARRAY [STRING] is
-			-- The period-type name (key) of each `tuple_list' associated
-			-- with `Current'
-		require
-			loaded: loaded
-		local
-			l: LIST [TIME_PERIOD_TYPE]
-			i: INTEGER
-			daily_name, stop_name: STRING
-		do
-			create Result.make (1, 1)
-			Result.compare_objects
-			daily_name := period_type_names @ Daily
-			from
-				l := period_types_in_order
-				i := 1
-				l.start
-				if not trading_period_type.intraday then
-					-- Skip over intraday period names.
-					from
-					until
-						l.item.name.is_equal (daily_name)
-					loop
-						l.forth
-					end
-					stop_name := ""
-				else
-					stop_name := daily_name
-				end
-			until
-				l.exhausted or l.item.name.is_equal (stop_name)
-			loop
-				if
-					period_types.has (l.item.name)
-				then
-					Result.force (l.item.name, i)
-					i := i + 1
-				end
-				l.forth
-			end
-		ensure
-			object_comparison: Result.object_comparison
-		end
-
 	target_period_type: TIME_PERIOD_TYPE
 			-- Type of data (daily, weekly, etc.) specifying which
 			-- `tuple_list' will be processed by `indicators'.
 
 	period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
-			-- Period types available for this tradable
+			-- Valid period types for this tradable
 		require
 			loaded: loaded
+		local
+			types: LIST [TIME_PERIOD_TYPE]
 		do
-			if trading_period_type.intraday then
-				Result := intraday_period_types
-			else
-				Result := nonintraday_period_types
+			if cached_period_types = Void then
+				create cached_period_types.make (0)
+				if trading_period_type.intraday then
+					types := intraday_period_types.linear_representation
+					from
+						types.start
+					until
+						types.exhausted
+					loop
+						if
+							types.item.duration >= trading_period_type.duration
+						then
+							cached_period_types.put (types.item,
+								types.item.name)
+						end
+						types.forth
+					end
+				else
+					cached_period_types := nonintraday_period_types
+				end
 			end
+			Result := cached_period_types
 		end
 
 feature -- Access
@@ -188,12 +163,9 @@ feature -- Status report
 	valid_period_type (t: TIME_PERIOD_TYPE): BOOLEAN is
 			-- Is `t' a valid period type for this tradable?
 		do
-			if trading_period_type.intraday then
-				Result := t.intraday and
-					t.duration >= trading_period_type.duration
-			else
-				Result := not t.intraday
-			end
+			Result := period_types.has (t.name)
+		ensure
+			valid_if_in_period_types: Result = period_types.has (t.name)
 		end
 
 feature -- Status setting
@@ -349,6 +321,8 @@ feature {NONE}
 			-- Lists whose tuples are made from the base data (e.g., weekly,
 			-- monthy, if primary is daily)
 
+	cached_period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING]
+
 feature {NONE}
 
 	calc_y_high_low is
@@ -432,6 +406,9 @@ invariant
 	containers_not_void:
 		indicators /= Void and indicator_groups /= Void and tuple_lists /= Void
 	target_type_valid: loaded implies target_period_type /= Void and
-		tuple_list_names.has (target_period_type.name)
+		valid_period_type (target_period_type)
+	trading_period_daily_if_not_intraday:
+		loaded and then not trading_period_type.intraday implies
+			trading_period_type.name.is_equal (trading_period_type.Daily)
 
 end -- class TRADABLE
