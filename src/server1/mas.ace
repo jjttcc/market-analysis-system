@@ -77,6 +77,7 @@ default
 	disabled_debug ("http")
 	disabled_debug ("object_editing")
 	disabled_debug ("persist")
+	disabled_debug ("data_request")
 	line_generation (no)
 	profile (no)
 	trace (no)

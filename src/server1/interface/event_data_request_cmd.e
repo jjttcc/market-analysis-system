@@ -91,7 +91,7 @@ feature -- Basic operations
 					if (fields @ 3).is_equal (Now) then
 						-- Set "now" date to 2 years in the future.
 						--@@@(Check if this is needed here.)
-						d.set_year (d.year + 2)
+						d := future_date
 					end
 					create analysis_end_date.make_by_date (d)
 				end

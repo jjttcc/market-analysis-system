@@ -34,6 +34,11 @@ class MAS_LOGIN_REQUEST_CMD inherit
 			{NONE} all
 		end
 
+	GLOBAL_APPLICATION
+		export
+			{NONE} all
+		end
+
 	GLOBAL_SERVICES
 		export
 			{NONE} all
@@ -184,7 +189,7 @@ feature {NONE} -- Implementation
 						if settings.item.is_equal (Now) then
 							-- Set "now" date to 100 years in the future to
 							-- imitate an "eternal now".
-							date.set_year (date.year + 100)
+							date := future_date
 						end
 						session.end_dates.force (date, time_period)
 					end

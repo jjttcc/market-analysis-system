@@ -101,9 +101,11 @@ feature {NONE} -- Hook methods
 			-- Update `processed_date_time' to now - can be used by
 			-- descendants as part of `processed' implementation and
 			-- redefined if needed.
+		local
+			util: expanded GENERAL_UTILITIES
 		do
 			if processed_date_time = Void then
-				create processed_date_time.make_now
+				processed_date_time := util.now_date_time
 			else
 				processed_date_time.make_now
 			end
@@ -179,9 +181,11 @@ feature {NONE} -- Implementation
 	print_debugging_header is
 			-- Print debugging header information for the beginning
 			-- of processing
+		local
+			util: expanded GENERAL_UTILITIES
 		do
 			io.error.print ("Processing data with " + name + " (at " +
-				(create {DATE_TIME}.make_now).out + ").%N")
+				util.now_date_time.out + ").%N")
 		end
 
 invariant

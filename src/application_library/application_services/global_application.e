@@ -257,6 +257,32 @@ feature -- Constants
 			Result := "registrants_persist"
 		end
 
+	future_years: INTEGER is 100
+			-- Number of years in the future for `future_date' and
+			-- `future_date_time'
+
+	future_date: DATE is
+			-- A date some time in the future - used to implement an
+			-- "eternal now" (a date that will always be larger than any
+			-- realistic market tuple date)
+		once
+			create Result.make_now
+			Result.set_year (Result.year + future_years)
+		ensure
+			exists: Result /= Void
+		end
+
+	future_date_time: DATE_TIME is
+			-- A date/time some time in the future - used to implement an
+			-- "eternal now" (a date/time that will always be larger than any
+			-- realistic market tuple date)
+		once
+			create Result.make_now
+			Result.date.set_year (Result.year + future_years)
+		ensure
+			exists: Result /= Void
+		end
+
 feature {NONE} -- Implementation
 
 	retrieved_function_library: STORABLE_LIST [MARKET_FUNCTION] is

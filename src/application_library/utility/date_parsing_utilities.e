@@ -25,12 +25,13 @@ feature {NONE} -- Implementation
 			sutil: expanded STRING_UTILITIES
 			tokens: LIST [STRING]
 			n: INTEGER
+			gutil: expanded GENERAL_UTILITIES
 		do
 			create date_maker
 			if s.is_equal ("0") then
 				create Result.make (0, 0, 0)
 			elseif s.is_equal (Now) then
-				create Result.make_now
+				Result := gutil.now_date
 			else
 				sutil.set_target (s)
 				tokens := sutil.tokens (" ")
@@ -43,7 +44,7 @@ feature {NONE} -- Implementation
 					tokens.i_th (3).is_integer and tokens.count = 4
 				then
 					n := -tokens.i_th (3).to_integer
-					create Result.make_now
+					Result := gutil.now_date
 					if tokens.i_th (4).substring(1, 3).is_equal("day") then
 						Result.day_add (n)
 					elseif
