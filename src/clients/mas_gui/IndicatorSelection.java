@@ -24,7 +24,7 @@ class IndicatorSelection extends DialogSelection {
 		selection_list.addActionListener(indicator_listener);
 
 		if (resize) {
-			int window_width = chart.main_pane.getSize().width / 3 + 14;
+			int window_width = chart.main_pane().getSize().width / 3 + 14;
 			final int Min_window_height = 40, Hfactor = 16;
 			setSize(window_width, (selection_list.getItemCount() + 1) *
 				Hfactor + Min_window_height);

@@ -47,6 +47,6 @@ public class AutoRefreshSetup {
 	private Timer timer;
 
 	// Timer delay in milliseconds (!!!Make configurable.)
-	private static long refresh_delay = 100 * 60;
+	private static long refresh_delay = 100 * 6;
 //private static long refresh_delay = 1000 * 60;
 }

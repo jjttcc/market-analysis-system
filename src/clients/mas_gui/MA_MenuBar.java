@@ -57,10 +57,10 @@ public class MA_MenuBar extends MenuBar {
 			public void actionPerformed(ActionEvent e) {
 				MA_Configuration.application_instance().reload();
 				Chart new_chart = new Chart(new DataSetBuilder(data_builder),
-					chart.serialize_filename, chart.options());
+					chart.serialize_filename(), chart.options());
 			}
 		});
-		mkt_selection.addActionListener(chart.market_selections);
+		mkt_selection.addActionListener(chart.tradable_selections());
 		indicator_selection_menu.addActionListener(indicator_selection);
 		close_window.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) { chart.close(); }
@@ -75,7 +75,7 @@ public class MA_MenuBar extends MenuBar {
 			public void actionPerformed(ActionEvent e) {
 				if (! (chart.current_tradable() == null ||
 						chart.current_tradable().length() == 0)) {
-					chart.main_pane.print(false);
+					chart.main_pane().print(false);
 				}
 				else {
 					final ErrorBox errorbox = new ErrorBox("Printing error",
@@ -174,7 +174,7 @@ public class MA_MenuBar extends MenuBar {
 	}
 
 	private void set_replace_indicator_label(MenuItem item) {
-		if (chart.replace_indicators) {
+		if (chart.replace_indicators()) {
 			item.setLabel("Replace Indicators [on]");
 		} else {
 			item.setLabel("Replace Indicators [off]");
@@ -285,7 +285,7 @@ public class MA_MenuBar extends MenuBar {
 	// Change the current tradable to the next one in the tradable list or,
 	// if it is the last one, to the first item in the tradable list.
 	private void next_tradable() {
-		List mlist = chart.market_selections.selection_list;
+		List mlist = chart.tradable_selections().selection_list;
 		int i = mlist.getSelectedIndex();
 		if (i < 0) {
 			if (mlist.getItemCount() >= 2) i = 1;
@@ -303,7 +303,7 @@ public class MA_MenuBar extends MenuBar {
 	// Change the current tradable to the previous one in the tradable list or,
 	// if it is the first one, to the last item in the tradable list.
 	private void previous_tradable() {
-		List mlist = chart.market_selections.selection_list;
+		List mlist = chart.tradable_selections().selection_list;
 		int i = mlist.getSelectedIndex();
 		if (i <= 0) {
 			i = mlist.getItemCount() - 1;

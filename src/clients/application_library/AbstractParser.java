@@ -86,13 +86,18 @@ abstract public class AbstractParser extends NetworkProtocolUtilities {
 	// data (as opposed to being for a fresh set of data for a new tradable).
 	// result() gives the new DataSet.
 	// Postcondition: result() != null
-	public void parse(String s, boolean is_update) throws Exception {
+//!!!Try locking the data builder instead of synchronizing this routine!!
+	public synchronized void parse(String s, boolean is_update)
+			throws Exception {
+
 		for_update = is_update;
 		is_intraday = contains_time_field(s);
 		prepare_for_parse();
 		StringTokenizer recs = new StringTokenizer(s, record_separator, false);
 		clear_vectors();
 		do_main_parse(recs);
+System.out.println(this.getClass().getName() + " - parse: result() type: " +
+result().getClass().getName());
 	}
 
 // Potential hook routines

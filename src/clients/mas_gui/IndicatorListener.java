@@ -7,6 +7,7 @@ import java.util.*;
 import support.*;
 import common.NetworkProtocol;
 import application_support.*;
+import application_library.*;
 import graph_library.DataSet;
 import graph.DrawableDataSet;
 
@@ -14,19 +15,29 @@ import graph.DrawableDataSet;
 public class IndicatorListener implements ActionListener, NetworkProtocol {
 	public IndicatorListener(Chart c) {
 		chart = c;
-		data_builder = chart.data_builder;
-		main_pane = chart.main_pane;
+		chart_manager = chart.data_manager();
+		data_builder = (DataSetBuilder) chart.data_builder();
+		main_pane = chart.main_pane();
 	}
 
 	public void actionPerformed(java.awt.event.ActionEvent e) {
+		synchronized (data_builder) {
+			retrieve_and_load_data(e);
+		}
+	}
+
+//!!!: (obsolete)
+	private void old_remove_retrieve_and_load_data(java.awt.event.ActionEvent e) {
 		String selection = e.getActionCommand();
-		DrawableDataSet dataset, main_dataset;
-		boolean retrieve_failied = false;
-		MA_Configuration conf = MA_Configuration.application_instance();
+		ChartableSpecification chartspec = chart.specification();
+		TradableSpecification trspec =
+			chartspec.specification_for(chart.current_tradable());
+		DrawableDataSet dataset = null;
+		boolean retrieve_failed = false;
 		try {
-			String tradable = chart.current_tradable();
-			if (tradable == null || no_change(selection)) {
-				// If no tradable is selected or the selection hasn't changed,
+String tradable = chart.current_tradable();
+			if (trspec == null || no_change(selection)) {
+				// No tradable is selected or the selection hasn't changed,
 				// there is nothing to display.
 				return;
 			}
@@ -35,100 +46,162 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 					selection.equals(chart.Volume) ||
 					selection.equals(chart.Open_interest))) {
 				GUI_Utilities.busy_cursor(true, chart);
-				data_builder.send_indicator_data_request(
-					chart.indicator_id_for(selection), tradable,
-					chart.current_period_type());
+//!!!: (This procedure is obsolete.)
+data_builder.send_indicator_data_request(
+	chart.indicator_id_for(selection), tradable,
+	chart.current_period_type());
 				GUI_Utilities.busy_cursor(false, chart);
 				if (data_builder.request_result_id() == Warning ||
 						data_builder.request_result_id() == Error) {
 					new ErrorBox("Warning", "Error occurred retrieving " +
 						"data for " + selection, chart);
-					retrieve_failied = true;
+					retrieve_failed = true;
+				} else {
+					dataset = (DrawableDataSet)
+						data_builder.last_indicator_data();
 				}
 			}
 		}
 		catch (Exception ex) {
 			chart.fatal("Exception occurred: ", ex);
 		}
-		if (retrieve_failied) {
-			// null statement
+		if (! retrieve_failed) {
+			process_data(dataset, selection);
 		}
+	}
+
+	private void retrieve_and_load_data(java.awt.event.ActionEvent e) {
+		String selection = e.getActionCommand();
+		DrawableDataSet dataset = null;
+		boolean retrieve_failed = false;
+		try {
+			if (chart.current_tradable() == null || no_change(selection)) {
+				// No tradable is selected or the selection hasn't changed,
+				// there is nothing to display.
+				return;
+			}
+			if (! (selection.equals(chart.No_upper_indicator) ||
+					selection.equals(chart.No_lower_indicator) ||
+					selection.equals(chart.Volume) ||
+					selection.equals(chart.Open_interest))) {
+
+				SynchronizedDataRequester data_requester =
+					new SynchronizedDataRequester(data_builder,
+					chart.current_tradable(), chart.current_period_type());
+				GUI_Utilities.busy_cursor(true, chart);
+				data_requester.execute_indicator_request(
+					chart.indicator_id_for(selection));
+				GUI_Utilities.busy_cursor(false, chart);
+				if (data_requester.request_failed()) {
+					new ErrorBox("Warning", "Error occurred retrieving " +
+						"data for " + selection, chart);
+					retrieve_failed = true;
+				} else {
+					dataset = (DrawableDataSet)
+						data_requester.indicator_result();
+System.out.println("the NEW ret and LD - dataset size: " + dataset.size());
+				}
+			}
+		}
+		catch (Exception ex) {
+			chart.fatal("Exception occurred: ", ex);
+		}
+		if (! retrieve_failed) {
+			process_data(dataset, selection);
+		}
+	}
+
+	private void process_data(DrawableDataSet dataset, String selection) {
+		DrawableDataSet maindata = main_pane.main_graph().first_data_set();
+		MA_Configuration conf = MA_Configuration.application_instance();
 		// Set graph data according to whether the selected indicator is
 		// configured to go in the upper (main) or lower (indicator) graph.
-		else if (MA_Configuration.application_instance().
+		if (MA_Configuration.application_instance().
 				upper_indicators().containsKey(selection)) {
-			main_dataset = (DrawableDataSet) data_builder.last_market_data();
-			if (! chart.current_upper_indicators.isEmpty() &&
-					chart.replace_indicators) {
+System.out.println("lmd type: " +
+data_builder.last_market_data().getClass().getName());
+//!!!: main_dataset = (DrawableDataSet) data_builder.last_market_data();
+			if (! chart_manager.current_upper_indicators().isEmpty() &&
+					chart_manager.replace_indicators()) {
 				// Remove the old indicator data from the graph (and the
 				// market data).
 //!!!! Refactor into one or more procedures in Chart and call them here:
 				main_pane.clear_main_graph();
 				// Re-attach the market data.
-				chart.link_with_axis(main_dataset, null);
-				main_pane.add_main_data_set(main_dataset);
+				chart_manager.link_with_axis(maindata, null);
+				main_pane.add_main_data_set(maindata);
 //!!!I believe this is not needed because its main data is up to date,
 //!!!but verify that this is so:
-//chart.tradable_specification.set_data(main_dataset);
-				chart.unselect_upper_indicators();
-				chart.current_upper_indicators.removeAllElements();
+//chart.tradable_specification.set_data(maindata);
+				chart_manager.unselect_upper_indicators();
+				chart_manager.current_upper_indicators().removeAllElements();
 // End refactor
 			}
 //!!!! Refactor into one or more procedures in Chart and call them here:
-			chart.current_upper_indicators.addElement(selection);
-			chart.tradable_specification.select_indicator(selection);
-			dataset = (DrawableDataSet) data_builder.last_indicator_data();
+			chart_manager.current_upper_indicators().addElement(selection);
+			chart_manager.tradable_specification().select_indicator(selection);
+//!!!:dataset = (DrawableDataSet) data_builder.last_indicator_data();
 			dataset.set_dates_needed(false);
 			dataset.setColor(conf.indicator_color(selection, true));
-			chart.link_with_axis(dataset, selection);
+			chart_manager.link_with_axis(dataset, selection);
 			main_pane.add_main_data_set(dataset);
-			chart.tradable_specification.set_indicator_data(dataset, selection);
+			chart_manager.tradable_specification().set_indicator_data(dataset, selection);
 // End refactor
 		} else if (selection.equals(chart.No_upper_indicator)) {
 //!!!! Refactor into one or more procedures in Chart and call them here:
+//!!!!Is this really the main data?
 			// Remove the old indicator and market data from the graph.
 			main_pane.clear_main_graph();
-			// Re-attach the market data without the indicator data.
-			DrawableDataSet data = (DrawableDataSet)
-				data_builder.last_market_data();
-			chart.link_with_axis(data, null);
-			main_pane.add_main_data_set(data);
+/*!!!:
+DrawableDataSet data = (DrawableDataSet)
+data_builder.last_market_data();
+*/
+			// Re-attach the old market data without the indicator data.
+			chart_manager.link_with_axis(maindata, null);
+			main_pane.add_main_data_set(maindata);
 //!!!(See note above about main data.)
-//chart.tradable_specification.set_data(main_dataset);
-			chart.unselect_upper_indicators();
-			chart.current_upper_indicators.removeAllElements();
+//chart.tradable_specification.set_data(maindata);
+			chart_manager.unselect_upper_indicators();
+			chart_manager.current_upper_indicators().removeAllElements();
 // End refactor
 		} else if (selection.equals(chart.No_lower_indicator)) {
 //!!!! Refactor into one or more procedures in Chart and call them here:
 			main_pane.clear_indicator_graph();
-			chart.unselect_lower_indicators();
-			chart.current_lower_indicators.removeAllElements();
+			chart_manager.unselect_lower_indicators();
+			chart_manager.current_lower_indicators().removeAllElements();
 			chart.set_window_title();
 // End refactor
 		} else {
 			if (selection.equals(chart.Volume)) {
+				// !!!Need to store the 'last volume' somewhere else -
+				// data_builder.last_volume will get steppend on by the
+				// auto-refresh thread.
 				dataset = (DrawableDataSet) data_builder.last_volume();
 			} else if (selection.equals(chart.Open_interest)) {
+				// !!!Need to store the 'last open interest' somewhere else -
+				// data_builder.last_open_interest will get steppend on by the
+				// auto-refresh thread.
 				dataset = (DrawableDataSet) data_builder.last_open_interest();
 			} else {
-				dataset = (DrawableDataSet) data_builder.last_indicator_data();
+//!!!: dataset = (DrawableDataSet) data_builder.last_indicator_data();
 			}
-			if (chart.replace_indicators) {
+			if (chart_manager.replace_indicators()) {
 //!!!! Refactor into one or more procedures in Chart and call them here:
 				main_pane.clear_indicator_graph();
-				chart.unselect_lower_indicators();
-				chart.current_lower_indicators.removeAllElements();
+				chart_manager.unselect_lower_indicators();
+				chart_manager.current_lower_indicators().removeAllElements();
 // End refactor
 			}
 //!!!! Refactor into one or more procedures in Chart and call them here:
 			dataset.setColor(conf.indicator_color(selection, false));
-			chart.link_with_axis(dataset, selection);
-			chart.current_lower_indicators.addElement(selection);
-			chart.tradable_specification.select_indicator(selection);
+			chart_manager.link_with_axis(dataset, selection);
+			chart_manager.current_lower_indicators().addElement(selection);
+			chart_manager.tradable_specification().select_indicator(selection);
 			chart.set_window_title();
 			chart.add_indicator_lines(dataset, selection);
 			main_pane.add_indicator_data_set(dataset);
-			chart.tradable_specification.set_indicator_data(dataset, selection);
+			chart_manager.tradable_specification().set_indicator_data(dataset,
+				selection);
 // End refactor
 		}
 		main_pane.repaint_graphs();
@@ -143,16 +216,16 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 	private boolean no_change(String s) {
 		boolean result = false;
 
-		if (! chart.replace_indicators) {
-			if (vector_has(chart.current_upper_indicators, s) ||
-					vector_has(chart.current_lower_indicators, s)) {
+		if (! chart_manager.replace_indicators()) {
+			if (vector_has(chart_manager.current_upper_indicators(), s) ||
+					vector_has(chart_manager.current_lower_indicators(), s)) {
 				result = true;
 			}
 		} else {
-			if ((vector_has(chart.current_upper_indicators, s) &&
-					chart.current_upper_indicators.size() == 1) ||
-					(vector_has(chart.current_lower_indicators, s) &&
-					chart.current_lower_indicators.size() == 1)) {
+			if ((vector_has(chart_manager.current_upper_indicators(), s) &&
+					chart_manager.current_upper_indicators().size() == 1) ||
+					(vector_has(chart_manager.current_lower_indicators(), s) &&
+					chart_manager.current_lower_indicators().size() == 1)) {
 				result = true;
 			}
 		}
@@ -161,6 +234,7 @@ public class IndicatorListener implements ActionListener, NetworkProtocol {
 	}
 
 	private Chart chart;
+	private ChartDataManager chart_manager;
 	private DataSetBuilder data_builder;
 	private MA_ScrollPane main_pane;
 }

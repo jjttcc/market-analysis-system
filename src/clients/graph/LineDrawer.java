@@ -30,8 +30,6 @@ public class LineDrawer extends IndicatorDrawer {
 			draw_color = conf.line_color();
 		}
 		int[] x_values = x_values();
-System.out.println("BarDrawer draw tuples - data size: " + data.size());
-System.out.println("BarDrawer xvalues size: " + x_values.length);
 
 		// Is there any data to draw? Sometimes the draw command will
 		// will be called before any data has been placed in the class.
@@ -41,13 +39,14 @@ System.out.println("BarDrawer xvalues size: " + x_values.length);
 		height_factor = height_factor_value(bounds);
 		row = first_row() - 1;
 		x0 = x_values[row] + right_adjust;
-		y0 = (int)(bounds.height - (((Double) data.get(0)).doubleValue()-ymin) * height_factor + bounds.y);
+		y0 = (int)(bounds.height - (((Double)
+			data.get(0)).doubleValue()-ymin) * height_factor + bounds.y);
 		++row;
 
 		for (i = 1; row < x_values.length && i < lngth; ++i, ++row) {
 			x1 = x_values[row] + right_adjust;
-			y1 = (int)(bounds.height - (((Double) data.get(i)).doubleValue()-ymin) * height_factor +
-					bounds.y);
+			y1 = (int)(bounds.height - (((Double)
+				data.get(i)).doubleValue()-ymin) * height_factor + bounds.y);
 			g.drawLine(x0,y0,x1,y1);
 
 			x0 = x1;

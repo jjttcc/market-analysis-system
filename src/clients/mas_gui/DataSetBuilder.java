@@ -49,8 +49,10 @@ public class DataSetBuilder extends AbstractDataSetBuilder {
 	protected void post_process_market_data(DataSet data, String symbol,
 			String period_type, boolean is_update) {
 
-System.out.println("POST_PROCESS_MARKET_DATA called");
-
+//!!!:
+System.out.println("DSB post proc md - data type: " +
+data.getClass().getName());
+System.out.println("is_update: " + is_update);
 		if (! is_update) {
 			((DrawableDataSet) data).set_drawer(main_drawer);
 		}
@@ -59,7 +61,6 @@ System.out.println("POST_PROCESS_MARKET_DATA called");
 	protected void post_process_volume_data(DataSet data,
 			String symbol, String period_type, boolean is_update) {
 
-System.out.println("POST_PROCESS_VOLUME_DATA called");
 		if (! is_update) {
 			((DrawableDataSet) data).set_drawer(volume_drawer);
 		}
@@ -68,7 +69,6 @@ System.out.println("POST_PROCESS_VOLUME_DATA called");
 	protected void post_process_open_interest_data(DataSet data,
 			String symbol, String period_type, boolean is_update) {
 
-System.out.println("POST_PROCESS_OI_DATA called");
 		if (! is_update) {
 			((DrawableDataSet) data).set_drawer(open_interest_drawer);
 		}

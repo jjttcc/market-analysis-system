@@ -15,15 +15,13 @@ public class NetworkProtocolUtilities extends DateTimeServices
 
 	// The date-time range, formatted according to the protocol, for a
 	// time-delimited data request starting at `start' and ending at `end'
-	public String date_time_range(Calendar start, Calendar end) {
+	public static String date_time_range(Calendar start, Calendar end) {
 		String result;
 		String end_string;
-System.out.println("x");
 		String start_string = standard_formatted_date(start,
 			Client_request_date_field_separator) +
 			Client_request_date_time_separator +
 			standard_formatted_time(start, Client_request_time_field_separator);
-System.out.println("y");
 		if (end == null) {
 			end_string = "";
 		} else {
@@ -31,18 +29,16 @@ System.out.println("y");
 				Client_request_date_field_separator) +
 				Client_request_date_time_separator + standard_formatted_time(
 				end, Client_request_time_field_separator);
-System.out.println("z");
 		}
 		result = start_string + Client_request_date_time_range_separator +
 			end_string;
-System.out.println("dtrange result: " + result);
 		return result;
 	}
 
 	// A calander representing the date `d', where `d' is in the format
 	// used for data sets: yyyymmdd (no field separator)
 	// Precondition: d != null
-	public Calendar date_from_dataset_string(String d) {
+	public static Calendar date_from_dataset_string(String d) {
 		return date_from_string(d, "");
 	}
 
@@ -50,7 +46,7 @@ System.out.println("dtrange result: " + result);
 	// set to 0), where `t' is in the format used for data sets: yyyymmdd
 	// (no field separator)
 	// Precondition: t != null
-	public Calendar time_from_dataset_string(String t) {
+	public static Calendar time_from_dataset_string(String t) {
 		return time_from_string(t, separator_from_time(t));
 	}
 
@@ -58,16 +54,15 @@ System.out.println("dtrange result: " + result);
 	// `d' is in the date format used for data sets: yyyymmdd and `t' is
 	// in the time format used for data sets: hhmmdd (no field separators)
 	// Precondition: d != null && t != null
-	public Calendar date_time_from_dataset_strings(String d, String t) {
+	public static Calendar date_time_from_dataset_strings(String d, String t) {
 		Calendar date = date_from_string(d, "");
 		Calendar time = time_from_string(t, separator_from_time(t));
-System.out.println("dtfds - date, time: " + date + ", " + time);
 		return date_time_from_date_and_time(date, time);
 	}
 
 	// A date-time one second later than `date'
 	// Preconditiion: date != null
-	public Calendar one_second_later(Calendar date) {
+	public static Calendar one_second_later(Calendar date) {
 		int y, m, d, h, min, s;
 		y = date.get(date.YEAR);
 		m = date.get(date.MONTH);
@@ -79,7 +74,9 @@ System.out.println("dtfds - date, time: " + date + ", " + time);
 		return new GregorianCalendar(y, m, d, h, min, s);
 	}
 
-	public Calendar date_time_from_date_and_time(Calendar date, Calendar time) {
+	public static Calendar date_time_from_date_and_time(Calendar date,
+			Calendar time) {
+
 		int y, m, d, h, min, s;
 		y = date.get(date.YEAR);
 		m = date.get(date.MONTH);
@@ -93,19 +90,15 @@ System.out.println("dtfds - date, time: " + date + ", " + time);
 
 	// The component separator used in time `t' - empty string if no separator
 	// Precondition: t != null
-	public String separator_from_time(String t) {
-System.out.println("sep from time called with: " + t);
+	public static String separator_from_time(String t) {
 		String result = null;
 		if (t.length() == 4 || t.length() == 6) {
 			// Assume no separator - hhmm or hhmmss
 			result = "";
 		} else {
-System.out.println("A");
 			for (int i = 0; result == null && i < t.length(); ++i) {
 				char c = t.charAt(i);
-System.out.println("i, c: " + i + ", " + c);
 				if (c < '0' || c > '9') {
-System.out.println(c + " not in 0 .. 9");
 					result = t.substring(i, i + 1);
 				}
 			}
@@ -114,14 +107,13 @@ System.out.println(c + " not in 0 .. 9");
 					t + "' has the wrong number of digits");
 			}
 		}
-System.out.println("sep from time returning: " + result);
 		return result;
 	}
 
 	// The component separator used in date `d' (in yyyyxmmxdd) format -
 	// empty string if no separator
 	// Precondition: d != null
-	public String separator_from_date(String d) {
+	public static String separator_from_date(String d) {
 		String result = null;
 		if (d.length() == 8) {
 			// Assume no separator - yyyymmdd

@@ -5,15 +5,21 @@ package application_library;
 import java.io.*;
 import java.util.*;
 import support.*;
+import common.NetworkProtocol;
 import graph_library.DataSet;
 
-/** Abstraction for managing a connection and building DataSet
-    instances from data returned from connection requests */
-abstract public class AbstractDataSetBuilder extends NetworkProtocolUtilities {
+/**
+* Abstraction for managing a connection and building DataSet
+* instances from data returned from connection requests
+**/
+abstract public class AbstractDataSetBuilder extends Lockable
+	implements NetworkProtocol {
 
 // Initialization
 
-	// Precondition: conn != null && opts != null
+	/**
+	* Precondition: conn != null && opts != null
+	**/
 	public AbstractDataSetBuilder(Connection conn, StartupOptions opts) {
 //		assert conn != null && opts != null;
 		connection = conn;
@@ -36,42 +42,58 @@ abstract public class AbstractDataSetBuilder extends NetworkProtocolUtilities {
 
 // Access
 
-	// The current connection to the server
+	/**
+	* The current connection to the server
+	**/
 	public Connection connection() {
 		return connection;
 	}
 
-	// Data from last market data request
+	/**
+	* Data from last market data request
+	**/
 	public DataSet last_market_data() {
 		return last_market_data;
 	}
 
-	// Data from last indicator data request
+	/**
+	* Data from last indicator data request
+	**/
 	public DataSet last_indicator_data() {
 		return last_indicator_data;
 	}
 
-	// Volume data from last market data request
+	/**
+	* Volume data from last market data request
+	**/
 	public DataSet last_volume() {
 		return last_volume;
 	}
 
-	// Open interest data from last market data request
+	/**
+	* Open interest data from last market data request
+	**/
 	public DataSet last_open_interest() {
 		return last_open_interest;
 	}
 
-	// Latest date-time from last market data request
+	/**
+	* Latest date-time from last market data request
+	**/
 	public Calendar last_latest_date_time() {
 		return last_latest_date_time;
 	}
 
-	// Last requested indicator list
+	/**
+	* Last requested indicator list
+	**/
 	public Vector last_indicator_list() {
 		return last_indicator_list;
 	}
 
-	// List of available tradables
+	/**
+	* List of available tradables
+	**/
 	public Vector tradable_list() throws IOException {
 		StringBuffer mlist;
 
@@ -88,7 +110,9 @@ abstract public class AbstractDataSetBuilder extends NetworkProtocolUtilities {
 		return tradables;
 	}
 
-	// List of all valid trading period types for `tradable'
+	/**
+	* List of all valid trading period types for `tradable'
+	**/
 	public Vector trading_period_type_list(String tradable) throws IOException {
 		StringBuffer tpt_list;
 		Vector result;
@@ -104,12 +128,16 @@ abstract public class AbstractDataSetBuilder extends NetworkProtocolUtilities {
 		return result;
 	}
 
-	// Message ID of last response from the server
+	/**
+	* Message ID of last response from the server
+	**/
 	public int request_result_id() {
 		return connection.last_received_message_ID();
 	}
 
-	// Result of the last request to the server
+	/**
+	* Result of the last request to the server
+	**/
 	public String server_response() {
 		String result = null;
 		if (connection.result() != null) {
@@ -120,25 +148,33 @@ abstract public class AbstractDataSetBuilder extends NetworkProtocolUtilities {
 
 // Status report
 
-	// Did the login process fail?
+	/**
+	* Did the login process fail?
+	**/
 	public boolean login_failed() {
 		return login_failed;
 	}
 
-	// Does the last received market data contain an open interest field?
+	/**
+	* Does the last received market data contain an open interest field?
+	**/
 	public boolean has_open_interest() {
 		return open_interest;
 	}
 
-	// Did the last data request succeed?
+	/**
+	* Did the last data request succeed?
+	**/
 	public boolean request_succeeded() {
 		return request_result_id() == Ok;
 	}
 
 // Basic operations
 
-	// Send a logout request to the server to end the current session
-	// and, if `exit' is true, exit with `status'.
+	/**
+	* Send a logout request to the server to end the current session
+	* and, if `exit' is true, exit with `status'.
+	**/
 	public void logout(boolean exit, int status) {
 		try {
 			connection.logout();
@@ -149,8 +185,10 @@ abstract public class AbstractDataSetBuilder extends NetworkProtocolUtilities {
 		if (exit) Configuration.terminate(status);
 	}
 
-	// Send a request for data for the tradable `symbol' with `period_type'.
-	// Postcondition: request_succeeded() implies last_market_data() != null
+	/**
+	* Send a request for data for the tradable `symbol' with `period_type'.
+	* Postcondition: request_succeeded() implies last_market_data() != null
+	**/
 	public void send_market_data_request(String symbol, String period_type)
 			throws Exception {
 
@@ -158,9 +196,11 @@ abstract public class AbstractDataSetBuilder extends NetworkProtocolUtilities {
 			period_type, null, false);
 	}
 
-	// Send a request for data for indicator `ind' for the tradable
-	// `symbol' with `period_type'.
-	// Postcondition: request_succeeded() implies last_indicator_data() != null
+	/**
+	* Send a request for data for indicator `ind' for the tradable
+	* `symbol' with `period_type'.
+	* Postcondition: request_succeeded() implies last_indicator_data() != null
+	**/
 	public void send_indicator_data_request(int ind, String symbol,
 		String period_type) throws Exception {
 
@@ -168,11 +208,13 @@ abstract public class AbstractDataSetBuilder extends NetworkProtocolUtilities {
 			period_type, null, false);
 	}
 
-	// Send a time-delimited request for data for the tradable `symbol' with
-	// `period_type' with the date-time range `start_date_time' ..
-	// `end_date_time'.  If `end_date_time' is null, the current date-time
-	// is used.
-	// Postcondition: request_succeeded() implies last_market_data() != null
+	/**
+	* Send a time-delimited request for data for the tradable `symbol' with
+	* `period_type' with the date-time range `start_date_time' ..
+	* `end_date_time'.  If `end_date_time' is null, the current date-time
+	* is used.
+	* Postcondition: request_succeeded() implies last_market_data() != null
+	**/
 	public void send_time_delimited_market_data_request(String symbol,
 		String period_type, Calendar start_date_time, Calendar end_date_time)
 			throws Exception {
@@ -180,25 +222,29 @@ System.out.println("sending request with " + symbol + ", " + period_type +
 ", " + start_date_time);
 
 		dispatch_market_data_request(Time_delimited_market_data_request,
-			symbol, period_type, date_time_range(start_date_time,
+			symbol, period_type, nwutil.date_time_range(start_date_time,
 			end_date_time), true);
 	}
 
-	// Send a time-delimited request for data for indicator `ind' for
-	// the tradable `symbol' with `period_type' with the date-time range
-	// `start_date_time' .. `end_date_time'.  If `end_date_time' is null,
-	// the current date-time is used.
-	// Postcondition: request_succeeded() implies last_indicator_data() != null
+	/**
+	* Send a time-delimited request for data for indicator `ind' for
+	* the tradable `symbol' with `period_type' with the date-time range
+	* `start_date_time' .. `end_date_time'.  If `end_date_time' is null,
+	* the current date-time is used.
+	* Postcondition: request_succeeded() implies last_indicator_data() != null
+	**/
 	public void send_time_delimited_indicator_data_request(int ind,
 		String symbol, String period_type, Calendar start_date_time,
 		Calendar end_date_time) throws Exception {
 
 		dispatch_indicator_data_request(Time_delimited_indicator_data_request,
 			ind, symbol, period_type,
-			date_time_range(start_date_time, end_date_time), true);
+			nwutil.date_time_range(start_date_time, end_date_time), true);
 	}
 
-	// Send a request for the list of indicators for tradable `symbol'.
+	/**
+	* Send a request for the list of indicators for tradable `symbol'.
+	**/
 	public void send_indicator_list_request(String symbol,
 			String period_type) throws IOException {
 
@@ -285,8 +331,12 @@ System.out.println("sending request with " + symbol + ", " + period_type +
 			prepare_parser_for_market_data();
 			data_parser.parse(results, is_update);
 			last_market_data = data_parser.result();
+System.out.println("dispatch... - lmd type: " +
+last_market_data.getClass().getName());
 			post_process_market_data(last_market_data, symbol, period_type,
 				is_update);
+System.out.println("dispatch..., after post.proc... - lmd type: " +
+last_market_data.getClass().getName());
 			last_volume = data_parser.volume_result();
 			if (last_volume != null) {
 				post_process_volume_data(last_volume, symbol, period_type,
@@ -447,4 +497,5 @@ System.out.println("sending request with " + symbol + ", " + period_type +
 	// User-specified options
 	private StartupOptions options;
 	private boolean login_failed;
+	private static NetworkProtocolUtilities nwutil;
 }

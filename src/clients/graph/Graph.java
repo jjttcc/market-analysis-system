@@ -52,159 +52,23 @@ import graph_library.DataSet;
 
 abstract public class Graph extends Canvas {
 
+// Initialization
+
 	public Graph () {}
 
-/*
-** Default Background Color
-*/
-	private Color DefaultBackground = null;
+// Access
 
+	// The data set stored in the first "slot" - null if no data sets
+	public DrawableDataSet first_data_set() {
+		DrawableDataSet result = null;
 
+		if (dataset != null && dataset.size() > 0) {
+			result = (DrawableDataSet ) dataset.get(0);
+		}
+		return result;
+	}
 
-/*
-*********************
-**
-** Protected Variables
-**
-*********************/
-
-/**
- *  A vector list of All the axes attached
- *  @see Graph#attachAxis()
- */
-
-	private ArrayList axes          = new ArrayList(4);
-
-/**
- *  A vector list of All the DrawableDataSets attached
- *  @see Graph#attachDataSet()
- *  @see DataSet
- */
-
-	protected ArrayList dataset       = new ArrayList(10);
-
-/**
- * The background color for the data window
- */
-	protected Color DataBackground = null;
-
-
-	// Symbol to display, if any
-	protected String symbol;
-
-/*
-**********************
-**
-** Variables
-**
-*********************/
-
-/**
- *  If this is greater than zero it means that
- *  data loading threads are active so the message "loading data"
- *  is flashed on the plot canvas. When it is back to zero the plot
- *  progresses normally
- */
-	private int  loadingData  = 0;
-
-
-/**
- *  The width of the border at the top of the canvas. This allows 
- *  slopover from axis labels, legends etc.
- */
-	private int     borderTop          = 20;
-
-/**
- *  The width of the border at the bottom of the canvas. This allows 
- *  slopover from axis labels, legends etc.
- */
-	private int     borderBottom       = 20;
-
-/**
- *  The width of the border at the left of the canvas. This allows 
- *  slopover from axis labels, legends etc.
- */
-	private int     borderLeft         = 20;
-
-/**
- *  The width of the border at the right of the canvas. This allows 
- *  slopover from axis labels, legends etc.
- */
-	private int     borderRight        = 20;
-
-/**
- *  If set <I>true</I> a frame will be drawn around the data window.
- *  Any axes will overlay this frame.
- */
-	private boolean frame        = true;
-
-/**
- *  The color of the frame to be drawn
- */
-	private Color   framecolor;
-
-/**
- * If set <I>true</I> (the default) a grid will be drawn over the data window.
- * The grid will align with the major tic marks of the Innermost axes.
- */
-	private boolean drawgrid     = true; 
-
-/**
- * The color of the grid to be drawn
- */
-	private Color   gridcolor    = Color.pink;
-
-/**
- *  If set <I>true</I> (the default) a grid line will be drawn 
- *  across the data window
- *  at the zeros of the innermost axes.
- */
-	private boolean drawzero     = true;
-
-/**
- *  The color of the zero grid lines.
- */ 
-	private Color   zerocolor    = Color.orange;
-
-/**
- *  The rectangle that the data will be plotted within. This is an output
- *  variable only.
-*/
-	protected Rectangle datarect   = new Rectangle();
-
-/**
- *  If set <I>true</I> (the default) the canvas will be set to the background
- *  color (erasing the plot) when the update method is called.
- *  This would only be changed for special effects.
- */
-	protected boolean clearAll     = true;
-
-/**
- *  If set <I>true</I> (the default) everything associated with the plot
- *  will be drawn when the update method or paint method are called.
- *  Normally
- *  only modified for special effects
-*/
-	protected boolean paintAll     = true;
-
-/**
- *  Modify the position of the axis and the range of the axis so that
- *  the aspect ratio of the major tick marks are 1 and the plot is square
- *  on the screen
-*/
-	private boolean square = false;
-
-  /**
-   * Text to be painted Last onto the Graph Canvas.
-   */
-	private TextLine lastText = null;
-
-/*
-*******************
-**
-**  Public Methods
-**
-*******************/
+// Element change
 
 	public void set_framecolor(Color c) { framecolor = c; }
 
@@ -216,24 +80,23 @@ abstract public class Graph extends Canvas {
 
 	public void set_borderRight(int i) { borderRight = i; }
 
-/**
- * Attach a DrawableDataSet to the graph. By attaching the data set the class
- * can draw the data through its paint method.
- */
-
+	/**
+	* Attach a DrawableDataSet to the graph. By attaching the data set the
+	* class can draw the data through its paint method.
+	*/
 	public void attachDataSet(DrawableDataSet d) {
 		if( d != null) {
 			dataset.add(d);
 			d.set_g2d(this);
 		}
 	}
-/**
- *    Detach the DrawableDataSet from the class. Data associated with the DrawableDataSet
- *    will nolonger be plotted.
- *
- *    @param d    The DataSet to detach.
- */
 
+	/**
+	* Detach the DrawableDataSet from the class. Data associated with
+	* the DrawableDataSet will nolonger be plotted.
+	*
+	* @param d    The DataSet to detach.
+	*/
 	public void detachDataSet( DrawableDataSet d ) {
 		if(d != null) {
 			if(d.xaxis() != null) d.xaxis().detachDataSet(d);
@@ -241,10 +104,10 @@ abstract public class Graph extends Canvas {
 			dataset.remove(d);
 		}
 	}
-/**
- *    Detach All the DataSets from the class.
-*/
 
+	/**
+	* Detach All the DataSets from the class.
+	*/
 	public void detachDataSets() {
 		DrawableDataSet d;
 		int i;
@@ -264,52 +127,52 @@ abstract public class Graph extends Canvas {
 		symbol = s;
 	}
 
-/**
- *    Create and attach an Axis to the graph. The position of the axis
- *    is one of Axis.TOP, Axis.BOTTOM, Axis.LEFT or Axis.RIGHT.
- *
- *    @param position   Position of the axis in the drawing window.
- *
-*/
-public Axis createAxis( int position ) {
-	Axis a;
+	/**
+	*    Create and attach an Axis to the graph. The position of the axis
+	*    is one of Axis.TOP, Axis.BOTTOM, Axis.LEFT or Axis.RIGHT.
+	*
+	*    @param position   Position of the axis in the drawing window.
+	*/
+	public Axis createAxis( int position ) {
+		Axis a;
 
-	try { 
-		a =  new Axis(position);
-		a.set_g2d(this);
-		axes.add( a );
-	}
-	catch (Exception e) { 
-		System.err.println("Failed to create Axis");
-		e.printStackTrace();
-		return null;
+		try { 
+			a =  new Axis(position);
+			a.set_g2d(this);
+			axes.add( a );
+		}
+		catch (Exception e) { 
+			System.err.println("Failed to create Axis");
+			e.printStackTrace();
+			return null;
+		}
+
+		return a;
 	}
 
-	return a;
-}
-/**
- *  Attach a previously created Axis. Only Axes that have been attached will
- *  be drawn 
- *
- *    @param the Axis to attach.
-*/
-public void attachAxis( Axis a ) {
-	if(a == null) return;
+	/**
+	*  Attach a previously created Axis. Only Axes that have been attached will
+	*  be drawn 
+	*
+	*    @param the Axis to attach.
+	*/
+	public void attachAxis( Axis a ) {
+		if(a == null) return;
 
-	try { 
-		axes.add( a );
-		a.set_g2d(this);
+		try { 
+			axes.add( a );
+			a.set_g2d(this);
+		}
+		catch (Exception e) { 
+			System.err.println("Failed to attach Axis");
+			e.printStackTrace();
+		}
 	}
-	catch (Exception e) { 
-		System.err.println("Failed to attach Axis");
-		e.printStackTrace();
-	}
-}
 
-/**
- * Detach a previously attached Axis.
- *    @param the Axis to dettach.
-*/
+	/**
+	* Detach a previously attached Axis.
+	* @param the Axis to dettach.
+	*/
 	public void detachAxis( Axis a ) {
 		if(a != null) {
 			a.detachAll();
@@ -318,9 +181,9 @@ public void attachAxis( Axis a ) {
 		}
 	}
 
-/**
- * Detach All attached Axes.
-*/
+	/**
+	* Detach All attached Axes.
+	*/
 	public void detachAxes() {
 		int i;
 
@@ -333,10 +196,10 @@ public void attachAxis( Axis a ) {
 		axes.clear();
 	}
 
-/**
- * Get the Maximum X value of all attached DataSets.
- *  @return  The maximum value
-*/
+	/**
+	* Get the Maximum X value of all attached DataSets.
+	*  @return  The maximum value
+	*/
 	public double maximum_x() {
 		DataSet d;
 		double max=0.0;
@@ -351,10 +214,10 @@ public void attachAxis( Axis a ) {
 		return max;
 	}
 
-/**
- * Get the Maximum Y value of all attached DataSets.
- *  @return  The maximum value
-*/
+	/**
+	* Get the Maximum Y value of all attached DataSets.
+	*  @return  The maximum value
+	*/
 	public double maximum_y() {
 		DataSet d;
 		double max=0.0;
@@ -369,11 +232,10 @@ public void attachAxis( Axis a ) {
 		return max;
 	}
 
-/**
- * Get the Minimum X value of all attached DataSets.
- *  @return  The minimum value
-*/
-
+	/**
+	* Get the Minimum X value of all attached DataSets.
+	*  @return  The minimum value
+	*/
 	public double minimum_x() {
 		DataSet d;
 		double min = 0.0;
@@ -388,51 +250,48 @@ public void attachAxis( Axis a ) {
 		return min;
 	}
 
-/**
- * Get the Minimum Y value of all attached DataSets.
- *  @return  The minimum value
-*/
+	/**
+	* Get the Minimum Y value of all attached DataSets.
+	*  @return  The minimum value
+	*/
+	public double minimum_y() {
+		DataSet d;
+		double min=0.0;
 
-public double minimum_y() {
-	DataSet d;
-	double min=0.0;
+		if(dataset == null | dataset.isEmpty() ) return min;
+		for (int i=0; i<dataset.size(); i++) {
+			d = ((DataSet)dataset.get(i));
+			if(i==0) min = d.minimum_y();
+			else     min = Math.min(min,d.minimum_y());
+		}
 
-	if(dataset == null | dataset.isEmpty() ) return min;
-	for (int i=0; i<dataset.size(); i++) {
-		d = ((DataSet)dataset.get(i));
-		if(i==0) min = d.minimum_y();
-		else     min = Math.min(min,d.minimum_y());
+		return min;
 	}
 
-	return min;
-}
-
-
-
-/**
- * Set the background color for the entire canvas.
- * @params c The color to set the canvas
- */
+	/**
+	* Set the background color for the entire canvas.
+	* @params c The color to set the canvas
+	*/
 	public void setGraphBackground(Color c) {
 		if(c == null) return;
 		setBackground(c);
 	}
 
-/**
- * Set the background color for the data window.
- * @params c The color to set the data window. 
- */
+	/**
+	* Set the background color for the data window.
+	* @params c The color to set the data window. 
+	*/
 	public void setDataBackground(Color c) {
 		if(c == null) return;
 		DataBackground = c;
 	}
 
-/**
- *  This paints the entire plot. It calls the draw methods of all the
- *  attached axis and data sets.
- *  The order of drawing is - Axis first, data legends next, data last.
- *  @params g Graphics state.
- */
+	/**
+	*  This paints the entire plot. It calls the draw methods of all the
+	*  attached axis and data sets.
+	*  The order of drawing is - Axis first, data legends next, data last.
+	*  @params g Graphics state.
+	*/
 	public void paint(Graphics g) {
 		Graphics lg  = g.create();
 		Rectangle r = getBounds();
@@ -493,44 +352,44 @@ public double minimum_y() {
 	// Precondition: dataset.size() == 0
 	abstract void draw_as_empty(Graphics g, Rectangle r);
 
-/**
- *  A hook into the paint method. This is called before
- *  anything is plotted. The rectangle passed is the dimension of
- *  the canvas minus the border dimensions.
- *  @params g Graphics state
- *  @params r Rectangle containing the graph
- */
+	/**
+	*  A hook into the paint method. This is called before
+	*  anything is plotted. The rectangle passed is the dimension of
+	*  the canvas minus the border dimensions.
+	*  @params g Graphics state
+	*  @params r Rectangle containing the graph
+	*/
 	public void paintFirst( Graphics g, Rectangle r) {}
 
-/**
- *  A hook into the paint method. This is called before
- *  the data is drawn but after the axis. 
- *  The rectangle passed is the dimension of
- *  the data window.
- *  @params g Graphics state
- *  @params r Rectangle containing the data
- */
+	/**
+	*  A hook into the paint method. This is called before
+	*  the data is drawn but after the axis. 
+	*  The rectangle passed is the dimension of
+	*  the data window.
+	*  @params g Graphics state
+	*  @params r Rectangle containing the data
+	*/
 	public void paintBeforeData( Graphics g, Rectangle r) {}
 
-/**
- *  A hook into the paint method. This is called after
- *  everything has been drawn. 
- *  The rectangle passed is the dimension of
- *  the data window.
- *  @params g Graphics state
- *  @params r Rectangle containing the data
- */
+	/**
+	*  A hook into the paint method. This is called after
+	*  everything has been drawn. 
+	*  The rectangle passed is the dimension of
+	*  the data window.
+	*  @params g Graphics state
+	*  @params r Rectangle containing the data
+	*/
 	public void paintLast( Graphics g, Rectangle r) {
 		if( lastText != null ) {
 			lastText.draw(g,r.width/2, r.height/2, TextLine.CENTER);
 		}
 	}
 
-/**
- * This method is called via the repaint() method.
- * All it does is blank the canvas (with the background color)
- * before calling paint.
- */
+	/**
+	* This method is called via the repaint() method.
+	* All it does is blank the canvas (with the background color)
+	* before calling paint.
+	*/
 	public void update(Graphics g) {
 		if( clearAll ) {
 			Color c = g.getColor();
@@ -549,10 +408,11 @@ public double minimum_y() {
 
 		if( paintAll ) paint(g);
 	}
-/**
- * Handle  keyDown events. Only one event is handled the pressing
- * of the key 'r' - this will repaint the canvas.
- */
+
+	/**
+	* Handle  keyDown events. Only one event is handled the pressing
+	* of the key 'r' - this will repaint the canvas.
+	*/
 	public boolean keyDown(Event e, int key) {
 		if( key == 'r' ) {
 			repaint();
@@ -562,25 +422,22 @@ public double minimum_y() {
 		}
 	}                                               
 
-/*
-*******************
-**
-** Protected Methods
-**
-*******************/
+// Implementation
 
-	// Display `s' near the upper right corner of the graph.
+	/**
+	* Display `s' near the upper right corner of the graph.
+	**/
 	protected void display_text(String s, Graphics g) {
 		g.setColor(MA_Configuration.application_instance().text_color());
 		g.drawString(s, 23, 23);
 	}
 
-/**
- *  Force the plot to have an aspect ratio of 1 by forcing the
- *  axes to have the same range. If the range of the axes
- *  are very different some extremely odd things can occur. All axes are
- *  forced to have the same range, so more than 2 axis is pointless.
- */
+	/**
+	*  Force the plot to have an aspect ratio of 1 by forcing the
+	*  axes to have the same range. If the range of the axes
+	*  are very different some extremely odd things can occur. All axes are
+	*  forced to have the same range, so more than 2 axis is pointless.
+	*/
 	protected Rectangle ForceSquare(Graphics g, Rectangle r) {
 		Axis a;
 		Rectangle dr;
@@ -631,10 +488,10 @@ public double minimum_y() {
 
 		return new Rectangle(x,y,width,height);
 	}
-/**
- *  Calculate the rectangle occupied by the data
- */
 
+	/**
+	*  Calculate the rectangle occupied by the data
+	*/
 	protected Rectangle getDataRectangle(Graphics g, Rectangle r) {
 		Axis a;
 		int waxis;
@@ -668,12 +525,12 @@ public double minimum_y() {
 		return new Rectangle(x, y, width, height);
 	}
 
-/**
- *
- *  Draw the Axis. As each axis is drawn and aligned less of the canvas
- *  is avaliable to plot the data. The returned Rectangle is the canvas
- *  area that the data is plotted in.
- */
+	/**
+	*
+	*  Draw the Axis. As each axis is drawn and aligned less of the canvas
+	*  is avaliable to plot the data. The returned Rectangle is the canvas
+	*  area that the data is plotted in.
+	*/
 	protected Rectangle drawAxis(Graphics g, Rectangle r) {
 		Axis axis;
 		int waxis;
@@ -767,15 +624,147 @@ public double minimum_y() {
 
 		return r;
 	}
-/*
- *  Draws a frame around the data area.
- */
+
+	/*
+	*  Draws a frame around the data area.
+	*/
 	protected void drawFrame(Graphics g, int x, int y, int width, int height) {
 		Color c = g.getColor();
 		if( framecolor != null ) g.setColor(framecolor);
 		g.drawRect(x,y,width,height);
 		g.setColor(c);
 	}
+
+// Implementation - Attributes
+
+	/*
+	** Default Background Color
+	*/
+	private Color DefaultBackground = null;
+
+	/**
+	*  A vector list of All the axes attached
+	*  @see Graph#attachAxis()
+	*/
+	private ArrayList axes          = new ArrayList(4);
+
+	/**
+	*  A vector list of All the DrawableDataSets attached
+	*  @see Graph#attachDataSet()
+	*  @see DataSet
+	*/
+	protected ArrayList dataset       = new ArrayList(10);
+
+	/**
+	* The background color for the data window
+	*/
+	protected Color DataBackground = null;
+
+
+	/**
+	* Symbol to display, if any
+	**/
+	protected String symbol;
+
+	/**
+	*  If this is greater than zero it means that
+	*  data loading threads are active so the message "loading data"
+	*  is flashed on the plot canvas. When it is back to zero the plot
+	*  progresses normally
+	*/
+	private int  loadingData  = 0;
+
+	/**
+	*  The width of the border at the top of the canvas. This allows 
+	*  slopover from axis labels, legends etc.
+	*/
+	private int     borderTop          = 20;
+
+	/**
+	*  The width of the border at the bottom of the canvas. This allows 
+	*  slopover from axis labels, legends etc.
+	*/
+	private int     borderBottom       = 20;
+
+	/**
+	*  The width of the border at the left of the canvas. This allows 
+	*  slopover from axis labels, legends etc.
+	*/
+	private int     borderLeft         = 20;
+
+	/**
+	*  The width of the border at the right of the canvas. This allows 
+	*  slopover from axis labels, legends etc.
+	*/
+	private int     borderRight        = 20;
+
+	/**
+	*  If set <I>true</I> a frame will be drawn around the data window.
+	*  Any axes will overlay this frame.
+	*/
+	private boolean frame        = true;
+
+	/**
+	*  The color of the frame to be drawn
+	*/
+	private Color   framecolor;
+
+	/**
+	* If set <I>true</I> (the default) a grid will be drawn over the
+	* data window.
+	* The grid will align with the major tic marks of the Innermost axes.
+	*/
+	private boolean drawgrid     = true; 
+
+	/**
+	* The color of the grid to be drawn
+	*/
+	private Color   gridcolor    = Color.pink;
+
+	/**
+	*  If set <I>true</I> (the default) a grid line will be drawn 
+	*  across the data window
+	*  at the zeros of the innermost axes.
+	*/
+	private boolean drawzero     = true;
+
+	/**
+	*  The color of the zero grid lines.
+	*/ 
+	private Color   zerocolor    = Color.orange;
+
+	/**
+	*  The rectangle that the data will be plotted within. This is an output
+	*  variable only.
+	*/
+	protected Rectangle datarect   = new Rectangle();
+
+	/**
+	*  If set <I>true</I> (the default) the canvas will be set to the background
+	*  color (erasing the plot) when the update method is called.
+	*  This would only be changed for special effects.
+	*/
+	protected boolean clearAll     = true;
+
+	/**
+	*  If set <I>true</I> (the default) everything associated with the plot
+	*  will be drawn when the update method or paint method are called.
+	*  Normally
+	*  only modified for special effects
+	*/
+	protected boolean paintAll     = true;
+
+	/**
+	*  Modify the position of the axis and the range of the axis so that
+	*  the aspect ratio of the major tick marks are 1 and the plot is square
+	*  on the screen
+	*/
+	private boolean square = false;
+
+	/**
+	* Text to be painted Last onto the Graph Canvas.
+	*/
+	private TextLine lastText = null;
 }
 
 /**

@@ -29,6 +29,8 @@ abstract public class TradableSpecification {
 	**/
 	public IndicatorSpecification indicator_spec_for(
 			String indicator_name) {
+
+System.out.println("isf = ispecs.size: " + indicator_specs.size());
 		return (IndicatorSpecification) indicator_specs.get(indicator_name);
 	}
 

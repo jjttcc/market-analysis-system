@@ -29,6 +29,24 @@ abstract public class ChartableSpecification {
 	public abstract Collection tradable_specifications();
 
 	/**
+	* TradableSpecification from `tradable_specifications' with the
+	* symbol `symbol', if any, otherwise, null
+	**/
+	public TradableSpecification specification_for(String symbol) {
+		Iterator specs = tradable_specifications().iterator();
+		TradableSpecification spec, result = null;
+		if (symbol != null) {
+			while (result == null && specs.hasNext()) {
+				spec = (TradableSpecification) specs.next();
+				if (symbol.equals(result.symbol())) {
+					result = spec;
+				}
+			}
+		}
+		return result;
+	}
+
+	/**
 	* All "selected" indicator specifications for all tradables
 	**/
 	public Collection selected_indicators() {

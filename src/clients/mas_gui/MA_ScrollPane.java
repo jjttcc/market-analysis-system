@@ -23,8 +23,8 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol {
 		if (print_props != null) print_properties = print_props;
 		MA_Configuration config = MA_Configuration.application_instance();
 		chart = parent_chart;
-		_main_graph = new MainGraph();
-		_indicator_graph = new LowerGraph(_main_graph);
+		main_graph = new MainGraph();
+		indicator_graph = new LowerGraph(main_graph);
 		GridBagLayout gblayout = new GridBagLayout();
 		GridBagConstraints gbconstraints = new GridBagConstraints();
 
@@ -42,70 +42,70 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol {
 		gbconstraints.gridwidth = 9; gbconstraints.gridheight = 6;
 		gbconstraints.weightx = 1; gbconstraints.weighty = 1;
 		gbconstraints.fill = GridBagConstraints.BOTH;
-		gblayout.setConstraints(_main_graph, gbconstraints);
-		graph_panel.add(_main_graph);
+		gblayout.setConstraints(main_graph, gbconstraints);
+		graph_panel.add(main_graph);
 		gbconstraints.gridx = 0; gbconstraints.gridy = 6;
 		gbconstraints.gridwidth = 9; gbconstraints.gridheight = 3;
 		gbconstraints.weightx = 1; gbconstraints.weighty = 1;
 		gbconstraints.fill = GridBagConstraints.BOTH;
-		gblayout.setConstraints(_indicator_graph, gbconstraints);
-		graph_panel.add(_indicator_graph);
-		_main_graph.set_framecolor(new Color(0,0,0));
-		_main_graph.set_borderTop(0);
-		_main_graph.set_borderBottom(1);
-		_main_graph.set_borderLeft(0);
-		_main_graph.set_borderRight(1);
-		_main_graph.setGraphBackground(config.background_color());
-		_main_graph.setSize(400, 310);
+		gblayout.setConstraints(indicator_graph, gbconstraints);
+		graph_panel.add(indicator_graph);
+		main_graph.set_framecolor(new Color(0,0,0));
+		main_graph.set_borderTop(0);
+		main_graph.set_borderBottom(1);
+		main_graph.set_borderLeft(0);
+		main_graph.set_borderRight(1);
+		main_graph.setGraphBackground(config.background_color());
+		main_graph.setSize(400, 310);
 
-		_indicator_graph.set_framecolor(new Color(0,0,0));
-		_indicator_graph.set_borderTop(0);
-		_indicator_graph.set_borderBottom(1);
-		_indicator_graph.set_borderLeft(0);
-		_indicator_graph.set_borderRight(1);
-		_indicator_graph.setGraphBackground(config.background_color());
-		_indicator_graph.setSize(400, 150);
+		indicator_graph.set_framecolor(new Color(0,0,0));
+		indicator_graph.set_borderTop(0);
+		indicator_graph.set_borderBottom(1);
+		indicator_graph.set_borderLeft(0);
+		indicator_graph.set_borderRight(1);
+		indicator_graph.setGraphBackground(config.background_color());
+		indicator_graph.setSize(400, 150);
 	}
 
 	// The main graph - where the principal market data is displayed
 	public Graph main_graph() {
-		return _main_graph;
+		return main_graph;
 	}
 
 	// The indicator graph - where the indicator data is displayed
 	public Graph indicator_graph() {
-		return _indicator_graph;
+		return indicator_graph;
 	}
 
 	// Delete all data from the main graph.
 	public void clear_main_graph() {
-		_main_graph.detachDataSets();
+		main_graph.detachDataSets();
 		main_graph_changed = true;
 	}
 
 	// Delete all data from the indicator graph.
 	public void clear_indicator_graph() {
-		_indicator_graph.detachDataSets();
+		indicator_graph.detachDataSets();
 	}
 
 	// Add a data set to the main graph.
 	public void add_main_data_set(DrawableDataSet d) {
-		_main_graph.attachDataSet(d);
+		main_graph.attachDataSet(d);
 		main_graph_changed = true;
 	}
 
 	// Add a data set to the indicator graph.
 	public void add_indicator_data_set(DrawableDataSet d) {
-		_indicator_graph.attachDataSet(d);
+		indicator_graph.attachDataSet(d);
 	}
 
 	// Force the graphs to be repainted.
 	public void force_repaint_graphs() {
 		// The order matters - first repaint the main graph, then
 		// the indicator graph.
-		_main_graph.repaint();
+		main_graph.repaint();
 		main_graph_changed = false;
-		_indicator_graph.repaint();
+		indicator_graph.repaint();
 	}
 
 	// Repaint the graphs.
@@ -113,10 +113,10 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol {
 		// The order matters - first repaint the main graph, then
 		// the indicator graph.
 		if (main_graph_changed) {
-			_main_graph.repaint();
+			main_graph.repaint();
 			main_graph_changed = false;
 		}
-		_indicator_graph.repaint();
+		indicator_graph.repaint();
 	}
 
 	//If all is true, loop through all selections in chart, asking it to
@@ -127,7 +127,7 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol {
 			all? "All charts": chart.current_tradable(), print_properties);
 		if (pj != null) {
 			if (all) {
-				Vector selections = chart.market_selections.selections();
+				Vector selections = chart.tradable_selections().selections();
 				for (int i = 0; i < selections.size(); ++i) {
 					chart.request_data((String) selections.elementAt(i));
 					if (chart.request_result_id() == Ok) {
@@ -217,7 +217,7 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol {
 			Graphics page = pj.getGraphics();
 			Dimension size = graph_panel.getSize();
 			Dimension pagesize = pj.getPageDimension();
-			_main_graph.set_symbol(chart.current_tradable().toUpperCase());
+			main_graph.set_symbol(chart.current_tradable().toUpperCase());
 			if (size.width <= pagesize.width) {
 				// Center the output on the page.
 				page.translate((pagesize.width - size.width)/2,
@@ -236,18 +236,18 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol {
 			}
 			graph_panel.printAll(page);
 			page.dispose();
-			_main_graph.set_symbol(null);
+			main_graph.set_symbol(null);
 	}
 
 // Implementation
 
-	private MainGraph _main_graph;
-	private LowerGraph _indicator_graph;
+	private MainGraph main_graph;
+	private LowerGraph indicator_graph;
 	private Panel main_panel;
 	private Panel graph_panel;
-	// Did _main_graph change since it was last repainted?
+	// Did main_graph change since it was last repainted?
 	boolean main_graph_changed;
 	Choice period_type_choice;
 	Chart chart;
-	String _last_period_type;
+	String last_period_type;
 }

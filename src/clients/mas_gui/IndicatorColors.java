@@ -11,6 +11,7 @@ public class IndicatorColors extends MA_Dialog {
 
 	public IndicatorColors(Chart c) {
 		super(c);
+		chart_manager = c.data_manager();
 		panel = new Panel();
 		gblayout = new GridBagLayout();
 		panel.setLayout(gblayout);
@@ -39,7 +40,7 @@ public class IndicatorColors extends MA_Dialog {
 		// If the newly chosen item is already in the current list, there
 		// is nothing to do.
 		if (cmd_is_indicator && current_entries.containsKey(cmd) &&
-				! chart.replace_indicators) {
+				! chart.replace_indicators()) {
 			return;
 		}
 		int j = 0, ilength, longest_ilength = 30;
@@ -48,14 +49,18 @@ public class IndicatorColors extends MA_Dialog {
 		gbconstraints.gridx = 0; gbconstraints.gridy = gbconstraints.RELATIVE;
 		panel.removeAll();
 		current_entries.clear();
-		for (int i = 0; i < chart.current_upper_indicators.size(); ++i, ++j) {
-			s = (String) chart.current_upper_indicators.elementAt(i);
+		for (int i = 0; i < chart_manager.current_upper_indicators().size();
+				++i, ++j) {
+
+			s = (String) chart_manager.current_upper_indicators().elementAt(i);
 			add_indicator(s, true, j);
 			ilength = s.length();
 			if (ilength > longest_ilength) longest_ilength = ilength;
 		}
-		for (int i = 0; i < chart.current_lower_indicators.size(); ++i, ++j) {
-			s = (String) chart.current_lower_indicators.elementAt(i);
+		for (int i = 0; i < chart_manager.current_lower_indicators().size();
+				++i, ++j) {
+
+			s = (String) chart_manager.current_lower_indicators().elementAt(i);
 			add_indicator(s, false, j);
 			ilength = s.length();
 			if (ilength > longest_ilength) longest_ilength = ilength;
@@ -85,15 +90,21 @@ public class IndicatorColors extends MA_Dialog {
 	boolean is_in_current_indicator_list(String s) {
 		boolean result = false;
 		int i;
-		for (i = 0; ! result && i < chart.current_upper_indicators.size(); ++i)
-		{
-			if (s.equals(chart.current_upper_indicators.elementAt(i))) {
+		for (i = 0; ! result &&
+				i < chart_manager.current_upper_indicators().size(); ++i) {
+
+			if (s.equals(chart_manager.current_upper_indicators().elementAt(
+					i))) {
+
 				result = true;
 			}
 		}
-		for (i = 0; ! result && i < chart.current_lower_indicators.size(); ++i)
-		{
-			if (s.equals(chart.current_lower_indicators.elementAt(i))) {
+		for (i = 0; ! result &&
+				i < chart_manager.current_lower_indicators().size(); ++i) {
+
+			if (s.equals(chart_manager.current_lower_indicators().elementAt(
+						i))) {
+
 				result = true;
 			}
 		}
@@ -146,9 +157,11 @@ public class IndicatorColors extends MA_Dialog {
 		return result;
 	}
 
-	Panel panel;
-	Hashtable current_entries;
-	GridBagLayout gblayout;
+	private Panel panel;
+	private Hashtable current_entries;
+	private GridBagLayout gblayout;
+	private ChartDataManager chart_manager;
+
 	// Needed for ugly kludge in actionPerformed:
 	static int inc = 1;
 }

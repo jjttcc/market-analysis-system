@@ -9,7 +9,7 @@ import java.util.*;
 class MarketSelection extends DialogSelection {
 	public MarketSelection(Chart f) {
 		super(f);
-		int window_width = f.main_pane.getSize().width / 10 - 4;
+		int window_width = f.main_pane().getSize().width / 10 - 4;
 		if (! size_was_set) {
 			setSize(window_width, 373);
 		}
