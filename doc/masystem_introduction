@@ -91,6 +91,14 @@ the server and -b tells the server it is to be run in the background.
 to communicate with one or more GUI clients.  (You can enter "mas -h"
 to print a short summary of the server's command-line options.)
 
+You may want to use the new feature of the server (as of version 1.6.5) to
+retrieve the latest end-of-day data from yahoo.com.  To do this, make sure
+the mas_httprc configuration file resides in $MAS_DIRECTORY and use the
+-w option; for example, adapting the above example of starting the server
+to read from files to instead retrieve data from yahoo.com results in:
+
+mas -o -f , -w -b 13579 &
+
 Once you have started the server, you can start a GUI client from the
 command line by changing the current directory to:
 
