@@ -1,5 +1,5 @@
 indexing
-	description: "Tuple factory that creates a VOLUME_TUPLE";
+	description: "Tuple factory that creates a BASIC_VOLUME_TUPLE";
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -20,6 +20,6 @@ feature
 
 feature -- Access
 
-	product: VOLUME_TUPLE
+	product: BASIC_VOLUME_TUPLE
 
 end -- class VOLUME_TUPLE_FACTORY

@@ -20,6 +20,6 @@ feature
 
 feature -- Access
 
-	product: OPEN_INTEREST_TUPLE
+	product: BASIC_OPEN_INTEREST_TUPLE
 
 end -- class OI_TUPLE_FACTORY
