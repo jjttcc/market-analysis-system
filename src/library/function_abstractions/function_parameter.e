@@ -25,7 +25,8 @@ feature -- Access
 		end
 
 	name: STRING is
-			-- The name of the parameter
+			-- The name of the parameter - unique among parameters belonging
+			-- to a particular MARKET_FUNCTION
 		deferred
 		end
 
