@@ -4,10 +4,7 @@ package mas_gui;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Vector;
-import java.util.Hashtable;
-import java.util.Enumeration;
-import java.util.Properties;
+import java.util.*;
 import java.io.*;
 import graph.*;
 import support.*;
@@ -53,7 +50,7 @@ class ChartSettings implements Serializable {
 
 /** Market analysis GUI chart component */
 public class Chart extends Frame implements Runnable, NetworkProtocol,
-	AssertionConstants {
+	AssertionConstants, ChartInterface {
 
 	public Chart(DataSetBuilder builder, String sfname, StartupOptions opt) {
 		super("Chart");
@@ -67,6 +64,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 
 		serialize_filename = sfname;
 
+		facilities = new ChartFacilities(this);
 		if (window_count == 1 && serialize_filename != null) {
 			ChartSettings settings = null;
 			try {
@@ -92,12 +90,12 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 					_period_types = data_builder.trading_period_type_list(
 						(String) _tradables.elementAt(0));
 					if (data_builder.connection().error_occurred()) {
-						abort(data_builder.connection().result().toString(),
+						facilities.abort(data_builder.connection().result().toString(),
 							null);
 					}
 					current_period_type = initial_period_type(_period_types);
 				} else {
-					abort("Server's list of tradables is empty.", null);
+					facilities.abort("Server's list of tradables is empty.", null);
 				}
 			}
 		} catch (IOException e) {
@@ -112,6 +110,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		initialize_GUI_components(s);
 	}
 
+	// Startup options
 	public StartupOptions options() {
 		return options_;
 	}
@@ -149,8 +148,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 			previous_open_interest = data_builder.open_interest();
 		}
 		if (data_builder.connection().error_occurred()) {
-			new ErrorBox("Warning",
-				"Error occurred retrieving indicator list.", this_chart);
+			display_warning("Error occurred retrieving indicator list.");
 		}
 		if (_indicators != null) {
 			result = _indicators;
@@ -159,6 +157,213 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		}
 //		assert result != null: "Postcondition violation";
 		return _indicators;
+	}
+
+
+	// Indicators in user-specified order
+	public Vector ordered_indicators() {
+		if (ordered_indicator_list == null) {
+			// Force creation of ordered_indicator_list.
+			indicators();
+		}
+		return ordered_indicator_list;
+	}
+
+	// Result of last request to the server
+	public int request_result_id() {
+		return data_builder.request_result_id();
+	}
+
+	// Register `d' to save its size and location on exit with its title
+	// as a key.
+	public void register_dialog_for_save_settings(Dialog d) {
+		saved_dialogs.addElement(d);
+	}
+
+	// Settings for dialog with title `s'
+	public WindowSettings settings_for(String s) {
+		WindowSettings result = null;
+		if (window_settings != null) {
+			result = window_settings.wsettings(s);
+		}
+		return result;
+	}
+
+	// Update the period-types menu to synchronize with `period_types'.
+	public void reset_period_types_menu() {
+		ma_menu_bar.reset_period_types(_period_types);
+	}
+
+	// Display the specified warning message.
+	public void display_warning(String msg) {
+		new ErrorBox("Warning", msg, this_chart);
+	}
+
+	/** Log out of all sessions and exit. */
+	public void log_out_and_exit(int status) {
+		// Log out the corresponding session for all but one window.
+		for (int i = 0; i < window_count - 1; ++i) {
+			data_builder.logout(false, 0);
+		}
+		// Log out the remaining window and exit with `status'.
+		data_builder.logout(true, status);
+	}
+
+	/** Quit gracefully, sending a logout request for each open window. */
+	public void quit(int status) {
+		if (main_pane != null) save_settings();
+		log_out_and_exit(status);
+	}
+
+	// Current selected tradable
+	public String current_tradable() {
+		return current_tradable;
+	}
+
+	// Current selected period_type
+	public String current_period_type() {
+		return current_period_type;
+	}
+
+	// Valid trading period types for the current tradable
+	public Vector period_types() {
+		return _period_types;
+	}
+
+	// Request a new set of period types for tradable and, if the request
+	// was successful, set `period_types' to the result.
+	public void send_period_types_request(String tradable) {
+		try {
+			_period_types = data_builder.trading_period_type_list(tradable);
+		} catch (IOException e) {
+			String errmsg = "IO exception occurred: " + e + " - aborting";
+			display_warning(errmsg);
+			System.err.println(errmsg);
+			e.printStackTrace();
+			quit(-1);
+		}
+	}
+
+	// Reset the `current_period_type' to a reasonable value.
+	public void reinitialize_current_period_type() {
+		current_period_type = initial_period_type(_period_types);
+	}
+
+	// Send a data request for the specified tradable.
+	public void send_data_request(String tradable) {
+		DataSet dataset, main_dataset;
+		MA_Configuration conf = MA_Configuration.application_instance();
+		int count;
+		String current_indicator;
+		if (period_type_change || ! tradable.equals(current_tradable)) {
+			// Redraw the data.
+			if (individual_period_type_sets &&
+					! tradable.equals(current_tradable)) {
+				facilities.reset_period_types(tradable, false);
+			}
+			GUI_Utilities.busy_cursor(true, this);
+			try {
+				data_builder.send_market_data_request(tradable,
+					current_period_type);
+				if (request_result_id() == OK) {
+					// Ensure that the indicator list is up-to-date with
+					// respect to `tradable'.
+					data_builder.send_indicator_list_request(tradable,
+						current_period_type);
+					// Force call to `indicators()' to create new indicator
+					// lists with the result of the above request.
+					new_indicators = true;
+					indicators();
+				} else {
+					// Handle request error.
+					if (request_result_id() == Invalid_symbol) {
+						handle_nonexistent_sybmol(tradable);
+					} else if (request_result_id() == Invalid_period_type) {
+						facilities.handle_invalid_period_type(tradable);
+						individual_period_type_sets = true;
+					} else if (request_result_id() == Warning ||
+							request_result_id() == Error) {
+						display_warning("Error occurred retrieving " +
+							"data for " + tradable);
+					}
+					GUI_Utilities.busy_cursor(false, this);
+					return;
+				}
+			}
+			catch (Exception e) {
+				facilities.fatal("Request to server failed: ", e);
+			}
+			//Ensure that all graph's data sets are removed.  (May need to
+			//change later.)
+			main_pane.clear_main_graph();
+			main_pane.clear_indicator_graph();
+			main_dataset = data_builder.last_market_data();
+			link_with_axis(main_dataset, null);
+			main_pane.add_main_data_set(main_dataset);
+			if (! current_upper_indicators.isEmpty()) {
+				// Retrieve the data for the newly requested tradable for
+				// the upper indicators, add it to the upper graph and
+				// draw the new indicator data and the tradable data.
+				count = current_upper_indicators.size();
+				for (int i = 0; i < count; ++i) {
+					current_indicator = (String)
+						current_upper_indicators.elementAt(i);
+					try {
+						data_builder.send_indicator_data_request(((Integer)
+							indicators().get(current_indicator)).
+								intValue(), tradable, current_period_type);
+					} catch (Exception e) {
+						facilities.fatal("Exception occurred", e);
+					}
+					dataset = data_builder.last_indicator_data();
+					dataset.set_dates_needed(false);
+					dataset.set_color(
+						conf.indicator_color(current_indicator, true));
+					link_with_axis(dataset, current_indicator);
+					main_pane.add_main_data_set(dataset);
+				}
+			}
+			current_tradable = tradable;
+			set_window_title();
+			if (! current_lower_indicators.isEmpty()) {
+				// Retrieve the indicator data for the newly requested
+				// tradable for the lower indicators and draw it.
+				count = current_lower_indicators.size();
+				for (int i = 0; i < count; ++i) {
+					current_indicator = (String)
+						current_lower_indicators.elementAt(i);
+					if (current_lower_indicators.elementAt(i).equals(
+							Volume)) {
+						// (Nothing to retrieve from server)
+						dataset = data_builder.last_volume();
+					} else if (current_lower_indicators.elementAt(i).equals(
+							Open_interest)) {
+						// (Nothing to retrieve from server)
+						dataset = data_builder.last_open_interest();
+					} else {
+						try {
+							data_builder.send_indicator_data_request(
+								((Integer) indicators().get(
+									current_indicator)).intValue(),
+									tradable, current_period_type);
+						} catch (Exception e) {
+							facilities.fatal("Exception occurred", e);
+						}
+						dataset = data_builder.last_indicator_data();
+					}
+					if (dataset != null) {
+						dataset.set_color(conf.indicator_color(
+							current_indicator, false));
+						link_with_axis(dataset, current_indicator);
+						add_indicator_lines(dataset, current_indicator);
+						main_pane.add_indicator_data_set(dataset);
+					}
+				}
+			}
+			main_pane.repaint_graphs();
+			GUI_Utilities.busy_cursor(false, this);
+			period_type_change = false;
+		}
 	}
 
 	private void make_indicator_lists(Vector inds_from_server) {
@@ -257,35 +462,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		if (ma_menu_bar != null) ma_menu_bar.update_indicators();
 	}
 
-	// Indicators in user-specified order
-	public Vector ordered_indicators() {
-		if (ordered_indicator_list == null) {
-			// Force creation of ordered_indicator_list.
-			indicators();
-		}
-		return ordered_indicator_list;
-	}
-
-	// Result of last request to the server
-	public int request_result_id() {
-		return data_builder.request_result_id();
-	}
-
-	// Register `d' to save its size and location on exit with its title
-	// as a key.
-	public void register_dialog_for_save_settings(Dialog d) {
-		saved_dialogs.addElement(d);
-	}
-
-	// Settings for dialog with title `s'
-	public WindowSettings settings_for(String s) {
-		WindowSettings result = null;
-		if (window_settings != null) {
-			result = window_settings.wsettings(s);
-		}
-		return result;
-	}
-
 	// Take action when notified that period type changed.
 	void notify_period_type_changed(String new_period_type) {
 		if (! current_period_type.equals(new_period_type)) {
@@ -319,123 +495,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 			} else {
 			}
 		}	// end synchronized block
-	}
-
-	void send_data_request(String tradable) {
-		DataSet dataset, main_dataset;
-		MA_Configuration conf = MA_Configuration.application_instance();
-		int count;
-		String current_indicator;
-		if (period_type_change || ! tradable.equals(current_tradable)) {
-			// Redraw the data.
-			if (individual_period_type_sets &&
-					! tradable.equals(current_tradable)) {
-				reset_period_types(tradable, false);
-			}
-			GUI_Utilities.busy_cursor(true, this);
-			try {
-				data_builder.send_market_data_request(tradable,
-					current_period_type);
-				if (request_result_id() == OK) {
-					// Ensure that the indicator list is up-to-date with
-					// respect to `tradable'.
-					data_builder.send_indicator_list_request(tradable,
-						current_period_type);
-					// Force call to `indicators()' to create new indicator
-					// lists with the result of the above request.
-					new_indicators = true;
-					indicators();
-				} else {
-					// Handle request error.
-					if (request_result_id() == Invalid_symbol) {
-						handle_nonexistent_sybmol(tradable);
-					} else if (request_result_id() == Invalid_period_type) {
-						handle_invalid_period_type(tradable);
-						individual_period_type_sets = true;
-					} else if (request_result_id() == Warning ||
-							request_result_id() == Error) {
-						new ErrorBox("Warning",
-							"Error occurred retrieving " +
-							"data for " + tradable, this_chart);
-					}
-					GUI_Utilities.busy_cursor(false, this);
-					return;
-				}
-			}
-			catch (Exception e) {
-				fatal("Request to server failed: ", e);
-			}
-			//Ensure that all graph's data sets are removed.  (May need to
-			//change later.)
-			main_pane.clear_main_graph();
-			main_pane.clear_indicator_graph();
-			main_dataset = data_builder.last_market_data();
-			link_with_axis(main_dataset, null);
-			main_pane.add_main_data_set(main_dataset);
-			if (! current_upper_indicators.isEmpty()) {
-				// Retrieve the data for the newly requested tradable for
-				// the upper indicators, add it to the upper graph and
-				// draw the new indicator data and the tradable data.
-				count = current_upper_indicators.size();
-				for (int i = 0; i < count; ++i) {
-					current_indicator = (String)
-						current_upper_indicators.elementAt(i);
-					try {
-						data_builder.send_indicator_data_request(((Integer)
-							indicators().get(current_indicator)).
-								intValue(), tradable, current_period_type);
-					} catch (Exception e) {
-						fatal("Exception occurred", e);
-					}
-					dataset = data_builder.last_indicator_data();
-					dataset.set_dates_needed(false);
-					dataset.set_color(
-						conf.indicator_color(current_indicator, true));
-					link_with_axis(dataset, current_indicator);
-					main_pane.add_main_data_set(dataset);
-				}
-			}
-			current_tradable = tradable;
-			set_window_title();
-			if (! current_lower_indicators.isEmpty()) {
-				// Retrieve the indicator data for the newly requested
-				// tradable for the lower indicators and draw it.
-				count = current_lower_indicators.size();
-				for (int i = 0; i < count; ++i) {
-					current_indicator = (String)
-						current_lower_indicators.elementAt(i);
-					if (current_lower_indicators.elementAt(i).equals(
-							Volume)) {
-						// (Nothing to retrieve from server)
-						dataset = data_builder.last_volume();
-					} else if (current_lower_indicators.elementAt(i).equals(
-							Open_interest)) {
-						// (Nothing to retrieve from server)
-						dataset = data_builder.last_open_interest();
-					} else {
-						try {
-							data_builder.send_indicator_data_request(
-								((Integer) indicators().get(
-									current_indicator)).intValue(),
-									tradable, current_period_type);
-						} catch (Exception e) {
-							fatal("Exception occurred", e);
-						}
-						dataset = data_builder.last_indicator_data();
-					}
-					if (dataset != null) {
-						dataset.set_color(conf.indicator_color(
-							current_indicator, false));
-						link_with_axis(dataset, current_indicator);
-						add_indicator_lines(dataset, current_indicator);
-						main_pane.add_indicator_data_set(dataset);
-					}
-				}
-			}
-			main_pane.repaint_graphs();
-			GUI_Utilities.busy_cursor(false, this);
-			period_type_change = false;
-		}
 	}
 
 // Implementation
@@ -530,56 +589,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	// Notify the user that the symbol chosen does not exist and then
 	// remove the symbol from the selection list.
 	private void handle_nonexistent_sybmol(String symbol) {
-		ErrorBox errorbox = new ErrorBox("",
-			"Symbol " + symbol + " is not in the database.", this_chart);
+		display_warning("Symbol " + symbol + " is not in the database.");
 		market_selections.remove_selection(symbol);
-	}
-
-	// Notify the user that the symbol chosen does not exist and then
-	// remove the symbol from the selection list.
-	private void handle_invalid_period_type(String tradable) {
-		reset_period_types(tradable, true);
-		if (_period_types.size() > 0) {
-			current_period_type = initial_period_type(_period_types);
-			send_data_request(tradable);
-		} else {
-			new ErrorBox("Warning", "No valid period types for " +
-				tradable, this_chart);
-		}
-	}
-
-	// Reset `_period_types' and rebuild the period-types menu item based
-	// on `tradable'.
-	private void reset_period_types(String tradable,
-			boolean force_current_type_change) {
-		boolean change_current_type = true;
-		try {
-			_period_types = data_builder.trading_period_type_list(tradable);
-			if (_period_types.size() > 0) {
-				if (! force_current_type_change) {
-					// Set change_current_type to false if
-					// `current_period_type' is in `_period_types'.
-					Enumeration types = _period_types.elements();
-					while (types.hasMoreElements()) {
-						String s = (String) types.nextElement();
-						if (current_period_type.equals(s)) {
-							change_current_type = false;
-							break;
-						}
-					}
-				}
-				if (change_current_type) {
-					current_period_type = initial_period_type(_period_types);
-				}
-			}
-			ma_menu_bar.reset_period_types(_period_types);
-		} catch (IOException e) {
-			String errmsg = "IO exception occurred: " + e + " - aborting";
-			new ErrorBox("Warning", errmsg, this_chart);
-			System.err.println(errmsg);
-			e.printStackTrace();
-			quit(-1);
-		}
 	}
 
 	// Save persistent settings as a serialized file.
@@ -648,53 +659,6 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 		}
 	}
 
-	/** Quit gracefully, sending a logout request for each open window. */
-	protected void quit(int status) {
-		if (main_pane != null) save_settings();
-		log_out_and_exit(status);
-	}
-
-	/** Log out of all sessions and exit. */
-	protected void log_out_and_exit(int status) {
-		// Log out the corresponding session for all but one window.
-		for (int i = 0; i < window_count - 1; ++i) {
-			data_builder.logout(false, 0);
-		}
-		// Log out the remaining window and exit with `status'.
-		data_builder.logout(true, status);
-	}
-
-	// Print fatal error and exit after saving settings.
-	protected void fatal(String s, Exception e) {
-		System.err.println("Fatal error: " + s);
-		if (current_tradable != null) {
-			System.err.println("Current symbol is " + current_tradable);
-		}
-		if (e != null) {
-			System.err.println("(" + e + ")");
-			e.printStackTrace();
-		}
-		System.err.println("Exiting ...");
-		quit(-1);
-	}
-
-	// Same as `fatal' except `save_settings' is not called.
-	protected void abort(String s, Exception e) {
-		System.err.println("Fatal error: " + s);
-		if (current_tradable != null) {
-			System.err.println("Current symbol is " + current_tradable);
-		}
-		if (e != null) {
-			System.err.println("(" + e + ")");
-			e.printStackTrace();
-		}
-		System.err.println("Exiting ...");
-		log_out_and_exit(-1);
-		// If still running, ignore-termination flag is on -
-		// Display the error message.
-		new ErrorBox("Warning", s != null? s: "Error encountered", this_chart);
-	}
-
 	// Link `d' with the appropriate indicator group, using `indicator_name'
 	// as a key.  If `indicator_name' is null, the group for the main
 	// (upper) graph will be used.  If `indicator_name' specifies an
@@ -741,9 +705,8 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 	// The menu bar for this chart
 	MA_MenuBar ma_menu_bar;
 
-	// Valid trading period types - static for now, since it is currently
-	// hard-coded in the server
-	protected static Vector _period_types;	// Vector of String
+	// Valid trading period types
+	protected Vector _period_types;	// Vector of String
 
 	// Table of market indicators
 	protected static Hashtable _indicators;	// key: String, value: Integer
@@ -814,4 +777,86 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 
 	// Currently requested tradable - used for threading data requests
 	private String requested_tradable;
+
+	private ChartFacilities facilities;
+
+/* !!!! OLD: REMOVE:
+
+	// Print fatal error and exit after saving settings.
+	protected void fatal(String s, Exception e) {
+		System.err.println("Fatal error: " + s);
+		if (current_tradable != null) {
+			System.err.println("Current symbol is " + current_tradable);
+		}
+		if (e != null) {
+			System.err.println("(" + e + ")");
+			e.printStackTrace();
+		}
+		System.err.println("Exiting ...");
+		quit(-1);
+	}
+
+	// Same as `fatal' except `save_settings' is not called.
+	protected void abort(String s, Exception e) {
+		System.err.println("Fatal error: " + s);
+		if (current_tradable != null) {
+			System.err.println("Current symbol is " + current_tradable);
+		}
+		if (e != null) {
+			System.err.println("(" + e + ")");
+			e.printStackTrace();
+		}
+		System.err.println("Exiting ...");
+		log_out_and_exit(-1);
+		// If still running, ignore-termination flag is on -
+		// Display the error message.
+		display_warning(s != null? s: "Error encountered");
+	}
+
+	// Notify the user that the symbol chosen does not exist and then
+	// remove the symbol from the selection list.
+	private void handle_invalid_period_type(String tradable) {
+		reset_period_types(tradable, true);
+		if (_period_types.size() > 0) {
+			current_period_type = initial_period_type(_period_types);
+			send_data_request(tradable);
+		} else {
+			display_warning("No valid period types for " + tradable);
+		}
+	}
+
+	// Reset `_period_types' and rebuild the period-types menu item based
+	// on `tradable'.
+	private void reset_period_types(String tradable,
+			boolean force_current_type_change) {
+		boolean change_current_type = true;
+		try {
+			_period_types = data_builder.trading_period_type_list(tradable);
+			if (_period_types.size() > 0) {
+				if (! force_current_type_change) {
+					// Set change_current_type to false if
+					// `current_period_type' is in `_period_types'.
+					Enumeration types = _period_types.elements();
+					while (types.hasMoreElements()) {
+						String s = (String) types.nextElement();
+						if (current_period_type.equals(s)) {
+							change_current_type = false;
+							break;
+						}
+					}
+				}
+				if (change_current_type) {
+					current_period_type = initial_period_type(_period_types);
+				}
+			}
+			ma_menu_bar.reset_period_types(_period_types);
+		} catch (IOException e) {
+			String errmsg = "IO exception occurred: " + e + " - aborting";
+			display_warning(errmsg);
+			System.err.println(errmsg);
+			e.printStackTrace();
+			quit(-1);
+		}
+	}
+*/
 }
