@@ -131,6 +131,7 @@ feature {NONE} -- Implementation
 		ensure
 			locked_read_or_abort:
 				ok_to_save and lock.locked or readonly or abort_edit
+			working_list_set: working_list /= Void
 		end
 
 	report_errors is
@@ -224,6 +225,8 @@ feature {NONE} -- Hook routines
 
 	do_edit is
 			-- Hook method called by edit_list
+		require
+			working_list_set: working_list /= Void
 		deferred
 		end
 
@@ -250,6 +253,8 @@ feature {NONE} -- Hook routines
 
 	initialize_working_list is
 		deferred
+		ensure
+			list_set: working_list /= Void
 		end
 
 	end_save is
