@@ -21,6 +21,13 @@ class FINANCE_ROOT inherit
 			all
 		end
 
+	TAL_APP_ENVIRONMENT
+		rename
+			command_line as exenv_command_line
+		export {NONE}
+			all
+		end
+
 creation
 
 	make
@@ -32,6 +39,11 @@ feature -- Initialization
 			ui: TEST_USER_INTERFACE
 			mfl: MARKET_FUNCTION_LINE -- for test compile
 		do
+			-- Set the working directory where all application files will
+			-- be created.
+			if app_directory /= Void then
+				change_working_directory (app_directory)
+			end
 			!!ui
 			ui.set_output_field_separator ("%T")
 			ui.set_date_field_separator ("/")
