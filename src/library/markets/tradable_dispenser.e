@@ -154,7 +154,9 @@ feature -- Status report
 		local
 			change_back: BOOLEAN
 			ptypes: LIST [STRING]
+			error: BOOLEAN
 		do
+			error := error_occurred
 			if symbols.has (symbol) then
 				ptypes := period_types (symbol)
 				if ptypes /= Void then
@@ -168,6 +170,10 @@ feature -- Status report
 					end
 				end
 			end
+			-- `error_occurred' may have been reset to false by one of the
+			-- routines called above; being a simple query, this routine
+			-- needs to restore it to its original value.
+			error_occurred := error
 		end
 
 feature -- Cursor movement
