@@ -148,29 +148,22 @@ feature {NONE} -- Implementation - GUI callback routines
 			keys: expanded EV_KEY_CONSTANTS
 		do
 			if key.code = keys.key_enter then
-				register_selection
+				respond_to_selection
 			end
 		end
 
 	double_click_response (i, j, k: INTEGER; x, y, z: DOUBLE; l, m: INTEGER) is
 			-- Response to double-click event
 		do
-			register_selection
+			respond_to_selection
 		end
 
 feature {NONE} -- Implementation
 
-	register_selection is
+	respond_to_selection is
 		do
+			notify_clients
 			destroy
-if selected_item /= Void then
-print ("Selection was made.%Nfirst column of selected item: " +
-selected_item.first + "%N")
-else
-print ("No selection.%N")
-end
-			--!!!Callback to notify client that item was selected goes here.
-			client.respond_to_event (Current)
 		end
 
 invariant

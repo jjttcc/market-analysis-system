@@ -13,11 +13,9 @@ class LOCATE_SESSION_WINDOW inherit
 			{NONE} set_port_number
 		end
 
-	LOCATE_SESSION_SUPPLIER
+	EVENT_SUPPLIER
 		undefine
 			default_create, copy
-		redefine
-			register_client
 		end
 
 create
@@ -30,15 +28,14 @@ feature {NONE} -- Initialization
 		do
 			make_with_title (Locate_session_window_title)
 			create_contents
-		end
-
-feature -- Client services
-
-	register_client (c: LOCATE_SESSION_CLIENT; actn_code: INTEGER) is
-		do
 			ok.select_actions.extend (agent ok_response)
 			cancel.select_actions.extend (agent cancel_response)
 		end
+
+feature -- Status report
+
+	state_changed: BOOLEAN
+			-- Did the state change when the last event occurred?
 
 feature {NONE} -- Implementation - initialization
 
@@ -112,17 +109,17 @@ feature {NONE} -- Implementation - GUI callback routines
 		do
 			host_name := host_field.text
 			port_number := port_number_field.text
+			state_changed := True
+			notify_clients
 			destroy
-			client.respond_to_session_location (Current)
 		end
 
 	cancel_response is
 			-- Response to pressing of "Cancel" button
 		do
-			host_name := host_field.text
-			port_number := port_number_field.text
+			state_changed := False
+			notify_clients
 			destroy
-			client.respond_to_session_location_cancellation (Current)
 		end
 
 invariant

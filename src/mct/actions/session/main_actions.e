@@ -10,13 +10,6 @@ class MAIN_ACTIONS inherit
 
 	ACTIONS
 
-	LOCATE_SESSION_CLIENT
-
-	EVENT_CLIENT
-		rename
-			respond_to_event as respond_to_server_selection_event
-		end
-
 create
 
 	make
@@ -41,7 +34,7 @@ feature -- Actions
 			window: LOCATE_SESSION_WINDOW
 		do
 			create window.make
-			window.register_client (Current, Connect_to)
+			window.register_client (agent respond_to_connection_request)
 			window.show
 		end
 
@@ -51,7 +44,7 @@ feature -- Actions
 			window: LOCATE_SESSION_WINDOW
 		do
 			create window.make
-			window.register_client (Current, Terminate)
+			window.register_client (agent respond_to_termination_request)
 			window.show
 		end
 
@@ -86,7 +79,6 @@ feature -- Actions
 			rows: LINKED_LIST [LIST [STRING]]
 			label: STRING
 		do
-print ("Configure server startup Stub!!!%N")
 			create rows.make
 			rows.extend (create {LINKED_LIST [STRING]}.make)
 			-- Add muli-list column titles.
@@ -119,7 +111,7 @@ print ("Configure server startup Stub!!!%N")
 			end
 			create window.make ("Start-server selection", rows)
 			window.show
-			window.register_client (Current, 0)
+			window.register_client (agent respond_to_server_selection_event)
 		end
 
 	edit_preferences is
@@ -131,35 +123,38 @@ print ("Configure server startup Stub!!!%N")
 
 feature {NONE} -- Implementation - Callback routines
 
-	respond_to_session_location (supplier: LOCATE_SESSION_WINDOW) is
+	respond_to_connection_request (supplier: LOCATE_SESSION_WINDOW) is
 		local
-			dialog: EV_WIDGET
 			err: STRING
-			wbldr: expanded WIDGET_BUILDER
 		do
-			err := host_and_port_diagnosis (supplier.host_name,
-				supplier.port_number)
-			if
-				err = Void
-			then
-				if supplier.action_code = Terminate then
-					terminate_located_session (supplier)
-				else
-					check
-						connect_to: supplier.action_code = Connect_to
-					end
+			if supplier.state_changed then
+				err := host_and_port_diagnosis (supplier.host_name,
+					supplier.port_number)
+				if
+					err = Void
+				then
 					connect_to_located_session (supplier)
+				else
+					display_error (err)
 				end
-			else
-				dialog := wbldr.new_error_dialog (err)
-				dialog.show
 			end
 		end
 
-	respond_to_session_location_cancellation (
-			supplier: LOCATE_SESSION_WINDOW) is
+	respond_to_termination_request (supplier: LOCATE_SESSION_WINDOW) is
+		local
+			err: STRING
 		do
-			-- Null routine
+			if supplier.state_changed then
+				err := host_and_port_diagnosis (supplier.host_name,
+					supplier.port_number)
+				if
+					err = Void
+				then
+					terminate_located_session (supplier)
+				else
+					display_error (err)
+				end
+			end
 		end
 
 	respond_to_server_selection_event (supplier: LIST_SELECTION_WINDOW) is
@@ -168,8 +163,6 @@ feature {NONE} -- Implementation - Callback routines
 			selected_command: EXTERNAL_COMMAND
 		do
 			if supplier.selected_item /= Void then
-print ("[respond_to_event] supplier.selected_item.first: " +
-supplier.selected_item.first + "%N")
 				selected_command := server_cmd_table @
 					supplier.selected_item.first
 				check
@@ -180,8 +173,6 @@ supplier.selected_item.first + "%N")
 				end
 				external_commands.replace (selected_command,
 					selected_command.identifier)
-			else
-print ("[respond_to_event] supplier.selected_item is Void%N")
 			end
 			-- !!Need to modify the mctrc file to mark the selected command
 			-- as the default.
@@ -257,12 +248,18 @@ feature {NONE} -- Implementation
 			-- client to test that it is running and reachable - report if not.
 		end
 
+	display_error (s: STRING) is
+			-- Display error message `s'.
+		local
+			dialog: EV_WIDGET
+			wbldr: expanded WIDGET_BUILDER
+		do
+			dialog := wbldr.new_error_dialog (s)
+			dialog.show
+		end
+
 feature {NONE} -- Implementation - attributes
 
 	server_cmd_table: HASH_TABLE [EXTERNAL_COMMAND, STRING]
-
-feature {NONE} -- Implementation - constants
-
-	Terminate, Connect_to: INTEGER is unique
 
 end
