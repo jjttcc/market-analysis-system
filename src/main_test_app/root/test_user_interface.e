@@ -140,6 +140,73 @@ feature {NONE}
 
 	edit_menu is
 		local
+			finished: BOOLEAN
+		do
+			print_list (<<"Select action:",
+				"%N     Edit market-data indicators (m) %
+				%Edit market-analysis indicators (a) %
+				%%N     Exit (x) Previous (-) ">>)
+			inspect
+				selected_character
+			when 'm', 'M' then
+				edit_indicator_menu (current_tradable.indicators)
+			when 'a', 'A' then
+				edit_event_generator_menu
+			when 'x', 'X' then
+				end_program := true
+			when '!' then
+				print ("Type exit to return to main program.%N")
+				system ("")
+			when '-' then
+				finished := true
+			else
+				print ("Invalid selection%N")
+			end
+		end
+
+	edit_event_generator_menu is
+		local
+			analyzer: MARKET_EVENT_GENERATOR
+			analyzers: LIST [MARKET_EVENT_GENERATOR]
+			finished: BOOLEAN
+			i: INTEGER
+		do
+			from
+				analyzers := market_event_generation_library
+			until
+				finished
+			loop
+				print_list (<<"Select a market analyzer to edit ",
+							" (0 to end):%N">>)
+				from
+					i := 1
+					analyzers.start
+				until
+					analyzers.after
+				loop
+					print_list (<<i, ") ", analyzers.item.event_type.name,
+								"%N">>)
+					analyzers.forth
+					i := i + 1
+				end
+				read_integer
+				if
+					last_integer <= -1 or
+						last_integer > analyzers.count
+				then
+					print_list (<<"Selection must be between 0 and ",
+								analyzers.count, "%N">>)
+				elseif last_integer = 0 then
+					finished := true
+				else
+					analyzer := analyzers @ last_integer
+					edit_indicator_menu (analyzer.indicators)
+				end
+			end
+		end
+
+	edit_indicator_menu (indicators: LIST [MARKET_FUNCTION]) is
+		local
 			indicator: MARKET_FUNCTION
 			finished: BOOLEAN
 			parameter: FUNCTION_PARAMETER
@@ -148,7 +215,7 @@ feature {NONE}
 		do
 			from
 				print ("Select indicator to edit%N")
-				indicator := indicator_selection
+				indicator := indicator_selection (indicators)
 				parameters := indicator.parameters
 			until
 				finished
@@ -185,13 +252,13 @@ feature {NONE}
 
 	registrant_menu is
 		local
-			done: BOOLEAN
+			finished: BOOLEAN
 			registrar: EVENT_REGISTRATION
 		do
 			!!registrar.make (event_coordinator.dispatcher)
 			from
 			until
-				done or end_program
+				finished or end_program
 			loop
 				print_list (<<"Select action:",
 					"%N     Add registrants (a) Remove registrants (r) %
@@ -213,7 +280,7 @@ feature {NONE}
 					print ("Type exit to return to main program.%N")
 					system ("")
 				when '-' then
-					done := true
+					finished := true
 				else
 					print ("Invalid selection%N")
 				end
@@ -223,12 +290,12 @@ feature {NONE}
 
 	view_menu is
 		local
-			done: BOOLEAN
+			finished: BOOLEAN
 			indicator: MARKET_FUNCTION
 		do
 			from
 			until
-				done or end_program
+				finished or end_program
 			loop
 				print_list (<<"Select action for ", current_tradable.name,
 					":%N     View market data (m) View an indicator (i)%N%
@@ -245,6 +312,7 @@ feature {NONE}
 				when 'i', 'I' then
 					print ("Select indicator to view%N")
 					indicator := indicator_selection
+									(current_tradable.indicators)
 					view_indicator_menu (indicator)
 				when 'x', 'X' then
 					end_program := true
@@ -252,7 +320,7 @@ feature {NONE}
 					print ("Type exit to return to main program.%N")
 					system ("")
 				when '-' then
-					done := true
+					finished := true
 				else
 					print ("Invalid selection%N")
 				end
@@ -267,14 +335,14 @@ feature {NONE}
 			date: DATE
 			time: TIME
 			date_time: DATE_TIME
-			done: BOOLEAN
+			finished: BOOLEAN
 			indicator: MARKET_FUNCTION
 		do
 			!!date.make_now
 			!!time.make_now
 			from
 			until
-				done or end_program
+				finished or end_program
 			loop
 				print_list (<<"Current date and time: ", date, ", ",
 								time, "%N">>)
@@ -297,7 +365,7 @@ feature {NONE}
 					print ("Type exit to return to main program.%N")
 					system ("")
 				when 's', 'S' then
-					done := true
+					finished := true
 				else
 					print ("Invalid selection%N")
 				end
@@ -415,11 +483,11 @@ feature {NONE}
 
 	view_indicator_menu (indicator: MARKET_FUNCTION) is
 		local
-			done: BOOLEAN
+			finished: BOOLEAN
 		do
 			from
 			until
-				done or end_program
+				finished or end_program
 			loop
 				print ("Select action:%N%
 						%     Print indicator (p) View description (d) %N%
@@ -442,7 +510,7 @@ feature {NONE}
 					print ("Type exit to return to main program.%N")
 					system ("")
 				when '-' then
-					done := true
+					finished := true
 				else
 					print ("Invalid selection%N")
 				end
@@ -521,15 +589,15 @@ feature {NONE}
 						current_period_type)
 		end
 
-	indicator_selection: MARKET_FUNCTION is
+	indicator_selection (indicators: LIST [MARKET_FUNCTION]):
+				MARKET_FUNCTION is
+			-- User-selected indicator
 		require
 			not_trdble_empty: not current_tradable.indicators.empty
 		local
 			i: INTEGER
-			indicators: LIST [MARKET_FUNCTION]
 		do
 			from
-				indicators := current_tradable.indicators
 			until
 				Result /= Void
 			loop
