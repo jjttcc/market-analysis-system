@@ -10,6 +10,9 @@ indexing
 class EXPERIMENTAL_INPUT_DATA_CONNECTION inherit
 
 	INPUT_DATA_CONNECTION
+		redefine
+			initlialized_socket
+		end
 
 create
 
@@ -32,9 +35,15 @@ feature {NONE} -- Hook routine implementations
 			make_connected (target_socket_hostname, target_socket_port_number)
 		end
 
-	data_request_for (requester: TRADABLE_LIST): STRING is
+	data_request: STRING is
 		do
-			Result := requester.symbols.item + "%N"
+			Result := tradable_list.symbols.item + "%N"
+		end
+
+	initlialized_socket (port: INTEGER; host: STRING): like socket is
+			-- A new socket initialized with `port' and `host'
+		do
+			create Result.make_with_connection_tool (port, host, Current)
 		end
 
 feature {NONE} -- Implementation

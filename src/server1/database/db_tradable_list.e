@@ -17,20 +17,6 @@ creation
 
 	make
 
-feature -- Status report
-
-	intraday: BOOLEAN
-
-feature -- Status setting
-
-	set_intraday (arg: BOOLEAN) is
-			-- Set intraday to `arg'.
-		do
-			intraday := arg
-		ensure
-			intraday_set: intraday = arg
-		end
-
 feature {NONE} -- Implementation
 
 	input_medium: DB_INPUT_SEQUENCE

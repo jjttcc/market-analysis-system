@@ -43,6 +43,8 @@ feature -- Initialization
 			create stock_builder
 			create derivative_builder
 			start_input_from_beginning := True
+			-- Fulfill a mysterious assertion (unhelpful IDE):
+			create {STOCK} product.make ("ibm", Void, Void)
 		ensure
 			daily_type: time_period_type.name.is_equal (
 				period_type_names @ Daily)

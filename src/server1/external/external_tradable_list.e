@@ -45,23 +45,10 @@ feature {NONE} -- Initialization
 
 feature -- Status report
 
-	intraday: BOOLEAN
-			-- Do the tradables in this list contain intraday data?
-
 	intraday_data_available: BOOLEAN is
 			-- Is intraday data available from the external source?
 		do
 			Result := input_medium.intraday_data_available
-		end
-
-feature -- Status setting
-
-	set_intraday (arg: BOOLEAN) is
-			-- Set intraday to `arg'.
-		do
-			intraday := arg
-		ensure
-			intraday_set: intraday = arg
 		end
 
 feature {NONE} -- Implementation

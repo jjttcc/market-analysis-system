@@ -137,6 +137,10 @@ feature -- Status report
 	timing_on: BOOLEAN
 			-- Is timing of operations turned on?
 
+feature -- Status report
+
+	intraday: BOOLEAN
+
 feature -- Status setting
 
 	turn_caching_on is
@@ -178,6 +182,14 @@ feature -- Status setting
 			timing_on_set: timing_on = arg and timing_on /= Void
 		end
 
+	set_intraday (arg: BOOLEAN) is
+			-- Set intraday to `arg'.
+		do
+			intraday := arg
+		ensure
+			intraday_set: intraday = arg
+		end
+
 feature -- Cursor movement
 
 	start is
@@ -216,8 +228,6 @@ feature -- Basic operations
 			end
 		ensure
 			after_if_not_found: not symbols.has (s) implies after
-			current_symbol_equals_s: item /= Void and
-				not after implies item.symbol.is_equal (s)
 		end
 
 	update_item is
@@ -290,6 +300,7 @@ feature {NONE} -- Implementation
 				target_tradable := tradable_factory.product
 				add_to_cache (target_tradable, index)
 				if tradable_factory.error_occurred then
+print ("I - (ERROR OCCURRED!!)" + "%N")
 					report_errors (target_tradable.symbol,
 						tradable_factory.error_list)
 					if tradable_factory.last_error_fatal then

@@ -36,6 +36,7 @@ feature -- Access -- settings
 
 --!!!!Stub for testing:
 	use_sockets: BOOLEAN is True
+--use_sockets: BOOLEAN is False --!!!!Use Files
 
 feature {NONE} -- Implementation
 

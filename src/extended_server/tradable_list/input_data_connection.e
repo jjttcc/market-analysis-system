@@ -1,6 +1,6 @@
 indexing
 	description: "Socket-based connections to an outside data supplier - %
-		%Intended as a parent class for descendants implementing a protocol %
+		%Intended as a parent class INPUT_DATA_CONNECTION descendants implementing a protocol %
 		%based on the data supplier they are associated with - i.e., the %
 		%strategy pattern"
 	author: "Jim Cochrane"
@@ -18,19 +18,60 @@ deferred class INPUT_DATA_CONNECTION inherit
 			socket, server_type
 		end
 
+--!!!!Temporary
+SOCKET_DEBUGGER
+export
+	{NONE} all
+end
+
 feature -- Access
 
 	socket: INPUT_SOCKET
 
+	tradable_list: TRADABLE_LIST
+			-- The tradable list associated with this connection
+
+feature -- Element change
+
+	set_tradable_list (arg: TRADABLE_LIST) is
+			-- Set `tradable_list' to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			tradable_list := arg
+		ensure
+			tradable_list_set: tradable_list = arg and tradable_list /= Void
+		end
+
 feature -- Basic operations
 
-	request_data (requester: TRADABLE_LIST) is
-			-- Request data for `requester's current tradable.
+	initiate_connection is
+			-- Initiate the connection to the data supplier.
 		do
 			connect_to_supplier
+print ("after connnect_to_supplier:%N" + report (socket) + "%N")
+--!!!Remove?:
+--			if last_communication_succeeded then
+--				send_request (data_request_for (requester), False)
+--			end
+		ensure
+			socket_exists_if_no_error:
+				last_communication_succeeded implies socket /= Void
+			socket_connected_iff_no_error:
+				last_communication_succeeded = connected
+		end
+
+	request_data is
+			-- Request data for `requester's current tradable.
+		require
+			connected: connected
+			last_communication_succeeded: last_communication_succeeded
+		do
+print ("before send_request:%N" + report (socket) + "%N")
 			if last_communication_succeeded then
-				send_request (data_request_for (requester), False)
+				send_request (data_request, False)
 			end
+print ("after send_request:%N" + report (socket) + "%N")
 		ensure
 			socket_exists_if_no_error:
 				last_communication_succeeded implies socket /= Void
@@ -46,9 +87,9 @@ feature {NONE} -- Hook routines
 		deferred
 		end
 
-	data_request_for (requester: TRADABLE_LIST): STRING is
+	data_request: STRING is
 			-- Request string to send to data-supplier server for the
-			-- data for `requester's current tradable.
+			-- data for `tradable_list's current tradable.
 		deferred
 		end
 

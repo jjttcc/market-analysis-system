@@ -50,14 +50,26 @@ feature {NONE} -- Implementation
 
 	initialize_input_medium is
 		do
-			connection.request_data (Current)
+print (generating_type + ": init input med started" + "%N")
+print ("intraday: " + intraday.out + "%N")
+			connection.initiate_connection
 			if not connection.last_communication_succeeded then
 				fatal_error := True
 --!!!!Where/when should this error be reported?:
 print ("Error occurred connecting to data supplier:%N" +
 connection.error_report + "%N")
+			else
+				input_medium := connection.socket
+				connection.request_data
+				if not connection.last_communication_succeeded then
+					fatal_error := True
+--!!!!Where/when should this error be reported?:
+print ("Error occurred requesting data:%N" +
+connection.error_report + "%N")
+				end
 			end
-			input_medium := connection.socket
+print (generating_type + ": init input med ended, data requested" + "%N")
+print ("intraday: " + intraday.out + "%N")
 		end
 
 invariant

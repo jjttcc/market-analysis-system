@@ -25,7 +25,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	execute is
+	build_lists is
 		do
 			check
 				not_intraday: not tradable_factory.intraday
@@ -37,19 +37,8 @@ feature -- Basic operations
 						intraday: intraday_tradable_factory.intraday
 					end
 					create intraday_list.make (intraday_tradable_factory)
-					intraday_list.set_intraday (True)
 				end
 			end
-		end
-
-feature {NONE} -- Implementation
-
-	create_daily_list is
-		do
-		end
-
-	create_intraday_list is
-		do
 		end
 
 invariant

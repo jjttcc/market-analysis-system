@@ -14,6 +14,9 @@ deferred class FILE_LIST_BUILDER_FACILITIES inherit
 		end
 
 	LIST_BUILDER
+		redefine
+			descendant_build_lists_precondition
+		end
 
 feature -- Initialization
 
@@ -39,8 +42,7 @@ feature -- Initialization
 				tradable_factory /= Void and not tradable_factory.intraday
 			intraday_factory_set: intraday_tradable_factory /= Void and
 				intraday_tradable_factory.intraday
-			fnames_set:
-				daily_file_names /= Void or intraday_file_names /= Void
+			fnames_set: daily_file_names /= Void or intraday_file_names /= Void
 		end
 
 feature -- Access
@@ -63,10 +65,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	execute is
-		require
-			input_items_set: (daily_file_names /= Void or
-				intraday_file_names /= Void) and tradable_factory /= Void
+	build_lists is
 		do
 			if daily_file_names /= Void then
 				check
@@ -82,6 +81,13 @@ feature -- Basic operations
 				intraday_list := new_tradable_list (intraday_file_names,
 					intraday_tradable_factory)
 			end
+		end
+
+feature {NONE} -- Hook routine implementations
+
+	descendant_build_lists_precondition: BOOLEAN is
+		do
+			Result := daily_file_names /= Void or intraday_file_names /= Void
 		end
 
 feature {NONE} -- Implementation

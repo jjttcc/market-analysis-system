@@ -54,9 +54,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	execute is
-		require
-			input_items_set: tradable_factory /= Void
+	build_lists is
 		do
 			daily_list := new_tradable_list (tradable_factory, daily_extension)
 			if use_intraday then

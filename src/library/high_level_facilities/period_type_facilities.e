@@ -242,6 +242,7 @@ feature -- Access
 				fifteen_minute, twenty_minute, thirty_minute, hourly,
 				daily, weekly, monthly, quarterly, yearly>>
 		ensure
+			exists: Result /= Void
 			bounds_definition: Result.lower = 1 and
 				Result.lower = one_minute and Result.upper = yearly
 			first_item_one_minute: Result.item (1) = one_minute

@@ -9,6 +9,9 @@ indexing
 class DATABASE_LIST_BUILDER inherit
 
 	LIST_BUILDER
+		redefine
+			descendant_build_lists_precondition
+		end
 
 creation
 
@@ -42,9 +45,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	execute is
-		require
-			input_lists_set: symbol_list /= Void and tradable_factory /= Void
+	build_lists is
 		local
 			global_server: expanded GLOBAL_SERVER_FACILITIES
 			db_info: DATABASE_CONFIGURATION
@@ -60,6 +61,13 @@ feature -- Basic operations
 			then
 				create_intraday_list
 			end
+		end
+
+feature {NONE} -- Hook routine implementations
+
+	descendant_build_lists_precondition: BOOLEAN is
+		do
+			Result := symbol_list /= Void
 		end
 
 feature {NONE} -- Implementation
@@ -78,7 +86,6 @@ feature {NONE} -- Implementation
 				intraday: intraday_tradable_factory.intraday
 			end
 			create intraday_list.make (symbol_list, intraday_tradable_factory)
-			intraday_list.set_intraday (True)
 		end
 
 end -- class DATABASE_LIST_BUILDER

@@ -37,4 +37,45 @@ feature -- Access
 
 	intraday_tradable_factory: TRADABLE_FACTORY
 
+feature -- Basic operations
+
+	execute is
+			-- Build and configure `daily_list' and `intraday_list'.
+		do
+			build_lists
+			if intraday_list /= Void then
+				intraday_list.set_intraday (True)
+			end
+		ensure
+			at_least_one_list_exists: daily_list /= Void or
+				intraday_list /= Void
+			intraday_status_set_correctly: (daily_list /= Void implies 
+				not daily_list.intraday) and (intraday_list /= Void implies 
+				intraday_list.intraday)
+		end
+
+feature {NONE} -- Hook routines
+
+	build_lists is
+			-- Build `daily_list' and `intraday_list'.
+		require
+			factories_exist: tradable_factory /= Void and
+				intraday_tradable_factory /= Void
+			descendant_build_lists_precondition
+		deferred
+		ensure
+			at_least_one_list_exists: daily_list /= Void or
+				intraday_list /= Void
+			intraday_not_set: (daily_list /= Void implies 
+				not daily_list.intraday) and (intraday_list /= Void implies 
+				not intraday_list.intraday)
+		end
+
+	descendant_build_lists_precondition: BOOLEAN is
+			-- Additional precondition for `build_lists' in descendant
+			-- classes
+		do
+			Result := True -- Redefine if needed.
+		end
+
 end -- class LIST_BUILDER

@@ -81,7 +81,7 @@ feature {NONE} -- Initialization
 			port_number := port
 			server_response := ""
 			-- Cause an exception to be thrown if host/port are invalid:
-			create socket.make_client_by_port (port_number, hostname)
+			socket := initlialized_socket (port_number, hostname)
 			if socket.socket_ok then
 				last_communication_succeeded := True
 				close
@@ -131,7 +131,7 @@ feature {NONE} -- Initialization
 			host_port_exist: hostname /= Void and port_number /= Void
 		do
 			if socket = Void then
-				create socket.make_client_by_port (port_number, hostname)
+				socket := initlialized_socket (port_number, hostname)
 			end
 			if socket.socket_ok then
 				socket.set_blocking
@@ -159,7 +159,7 @@ feature {NONE} -- Implementation
 			socket.put_string (r)
 			if socket.socket_ok then
 				if wait_for_response
-or True
+--!!!!: or True
 then
 					create s.make (0)
 					if socket.ready_for_reading then
@@ -280,6 +280,12 @@ feature {NONE} -- Hook routines
 			-- Short description of the server
 		once
 			Result := "sever " -- Redefine if needed - add a space at the end.
+		end
+
+	initlialized_socket (port: INTEGER; host: STRING): like socket is
+			-- A new socket initialized with `port' and `host'
+		do
+			create Result.make_client_by_port (port, host)
 		end
 
 invariant
