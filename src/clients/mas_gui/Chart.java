@@ -119,17 +119,17 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 			s = (String) _tradables.elementAt(0);
 		}
 		initialize_GUI_components(s);
-		new Thread(this).start();
+//!!!!!:		new Thread(this).start();
 	}
 
 	public StartupOptions options() {
 		return options_;
 	}
 
-	// From parent Runnable - for threading
-	public void run() {
-		// null method
-	}
+//!!!	// From parent Runnable - for threading
+//!!!	public void run() {
+//!!!		// null method
+//!!!	}
 
 	// List of all tradables in the server's database
 	public Vector tradables() {
@@ -302,99 +302,105 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 
 	// Take action when notified that period type changed.
 	void notify_period_type_changed(String new_period_type) {
+System.out.println("notify_period_type_changed");
 		if (! current_period_type.equals(new_period_type)) {
+System.out.println("! current_period_type.equals(new_period_type)");
 			current_period_type = new_period_type;
 			period_type_change = true;
 			if (current_tradable != null) {
-				request_data(current_tradable);
+System.out.println("current_tradable != null");
+				do_request_data(current_tradable, false);
 			}
 			period_type_change = false;
 		}
 	}
 
+//!!!!!!!!!XXXXXXXXXXXXXXXXXXX
 	// Request data for the specified tradable and display it.
 	void request_data(String tradable) {
-		DataSet dataset, main_dataset;
-		Configuration conf = Configuration.instance();
-		int count;
-		String current_indicator;
-		// Don't redraw the data if it's for the same tradable as before.
-		if (period_type_change || ! tradable.equals(current_tradable)) {
-			GUI_Utilities.busy_cursor(true, this);
-			try {
-				data_builder.send_market_data_request(tradable,
-					current_period_type);
-				if (request_result_id() == OK) {
-					// Ensure that the indicator list is up-to-date with
-					// respect to `tradable'.
-					data_builder.send_indicator_list_request(tradable,
+		do_request_data(tradable, true);
+	}
+
+	// Request data for the specified tradable and display it.
+	void do_request_data(String tradable, boolean use_thread) {
+		requested_tradable = tradable;
+		if (use_thread) {
+System.out.println("Attempting to request data within a separate thread.");
+				new Thread(this).start();
+System.out.println("Finished attempting to request data within a separate thread.");
+		} else {
+			run();
+		}
+	}
+
+private Boolean requesting_data = Boolean.FALSE;
+	private String requested_tradable;
+//!!!!!!!!!XXXXXXXXXXXXXXXXXXX
+
+	public void run() {
+System.out.println("run was called - let's see what happens!");
+		String tradable = requested_tradable;
+		synchronized(requesting_data) {
+		if (! requesting_data.booleanValue()) {
+System.out.println("requesting data ...");
+System.out.println("period_type_change: " + period_type_change);
+System.out.println("tradable, current_tradable: " +
+tradable + ", " + current_tradable);
+			Thread.yield();
+			requesting_data = Boolean.TRUE;
+			DataSet dataset, main_dataset;
+			Configuration conf = Configuration.instance();
+			int count;
+			String current_indicator;
+			// Don't redraw the data if it's for the same tradable as before.
+			if (period_type_change || ! tradable.equals(current_tradable)) {
+System.out.println("A");
+				GUI_Utilities.busy_cursor(true, this);
+				try {
+					data_builder.send_market_data_request(tradable,
 						current_period_type);
-					// Force call to `indicators()' to create new indicator
-					// lists with the result of the above request.
-					new_indicators = true;
-					indicators();
-				} else {
-					if (request_result_id() == Invalid_symbol) {
-						handle_nonexistent_sybmol(tradable);
-					} else if (request_result_id() == Warning ||
-							request_result_id() == Error) {
-						new ErrorBox("Warning", "Error occurred retrieving " +
-							"data for " + tradable, this_chart);
-					}
-					GUI_Utilities.busy_cursor(false, this);
-					return;
-				}
-			}
-			catch (Exception e) {
-				fatal("Request to server failed: ", e);
-			}
-			//Ensure that all graph's data sets are removed.  (May need to
-			//change later.)
-			main_pane.clear_main_graph();
-			main_pane.clear_indicator_graph();
-			main_dataset = data_builder.last_market_data();
-			link_with_axis(main_dataset, null);
-			main_pane.add_main_data_set(main_dataset);
-			if (! current_upper_indicators.isEmpty()) {
-				// Retrieve the data for the newly requested tradable for the
-				// upper indicators, add it to the upper graph and draw
-				// the new indicator data and the tradable data.
-				count = current_upper_indicators.size();
-				for (int i = 0; i < count; ++i) {
-					current_indicator = (String)
-						current_upper_indicators.elementAt(i);
-					try {
-						data_builder.send_indicator_data_request(((Integer)
-							indicators().get(current_indicator)).
-								intValue(), tradable, current_period_type);
-					} catch (Exception e) {
-						fatal("Exception occurred", e);
-					}
-					dataset = data_builder.last_indicator_data();
-					dataset.set_dates_needed(false);
-					dataset.set_color(
-						conf.indicator_color(current_indicator, true));
-					link_with_axis(dataset, current_indicator);
-					main_pane.add_main_data_set(dataset);
-				}
-			}
-			current_tradable = tradable;
-			set_window_title();
-			if (! current_lower_indicators.isEmpty()) {
-				// Retrieve the indicator data for the newly requested
-				// tradable for the lower indicators and draw it.
-				count = current_lower_indicators.size();
-				for (int i = 0; i < count; ++i) {
-					current_indicator = (String)
-						current_lower_indicators.elementAt(i);
-					if (current_lower_indicators.elementAt(i).equals(Volume)) {
-						// (Nothing to retrieve from server)
-						dataset = data_builder.last_volume();
-					} else if (current_lower_indicators.elementAt(i).equals(
-							Open_interest)) {
-						// (Nothing to retrieve from server)
-						dataset = data_builder.last_open_interest();
+					if (request_result_id() == OK) {
+System.out.println("B");
+						// Ensure that the indicator list is up-to-date with
+						// respect to `tradable'.
+						data_builder.send_indicator_list_request(tradable,
+							current_period_type);
+						// Force call to `indicators()' to create new indicator
+						// lists with the result of the above request.
+						new_indicators = true;
+						indicators();
 					} else {
+System.out.println("C");
+						if (request_result_id() == Invalid_symbol) {
+							handle_nonexistent_sybmol(tradable);
+						} else if (request_result_id() == Warning ||
+								request_result_id() == Error) {
+							new ErrorBox("Warning",
+								"Error occurred retrieving " +
+								"data for " + tradable, this_chart);
+						}
+						GUI_Utilities.busy_cursor(false, this);
+						return;
+					}
+				}
+				catch (Exception e) {
+					fatal("Request to server failed: ", e);
+				}
+				//Ensure that all graph's data sets are removed.  (May need to
+				//change later.)
+				main_pane.clear_main_graph();
+				main_pane.clear_indicator_graph();
+				main_dataset = data_builder.last_market_data();
+				link_with_axis(main_dataset, null);
+				main_pane.add_main_data_set(main_dataset);
+				if (! current_upper_indicators.isEmpty()) {
+					// Retrieve the data for the newly requested tradable for
+					// the upper indicators, add it to the upper graph and
+					// draw the new indicator data and the tradable data.
+					count = current_upper_indicators.size();
+					for (int i = 0; i < count; ++i) {
+						current_indicator = (String)
+							current_upper_indicators.elementAt(i);
 						try {
 							data_builder.send_indicator_data_request(((Integer)
 								indicators().get(current_indicator)).
@@ -403,19 +409,60 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 							fatal("Exception occurred", e);
 						}
 						dataset = data_builder.last_indicator_data();
-					}
-					if (dataset != null) {
+						dataset.set_dates_needed(false);
 						dataset.set_color(
-							conf.indicator_color(current_indicator, false));
+							conf.indicator_color(current_indicator, true));
 						link_with_axis(dataset, current_indicator);
-						add_indicator_lines(dataset, current_indicator);
-						main_pane.add_indicator_data_set(dataset);
+						main_pane.add_main_data_set(dataset);
 					}
 				}
+				current_tradable = tradable;
+				set_window_title();
+				if (! current_lower_indicators.isEmpty()) {
+					// Retrieve the indicator data for the newly requested
+					// tradable for the lower indicators and draw it.
+					count = current_lower_indicators.size();
+					for (int i = 0; i < count; ++i) {
+						current_indicator = (String)
+							current_lower_indicators.elementAt(i);
+						if (current_lower_indicators.elementAt(i).equals(
+								Volume)) {
+							// (Nothing to retrieve from server)
+							dataset = data_builder.last_volume();
+						} else if (current_lower_indicators.elementAt(i).equals(
+								Open_interest)) {
+							// (Nothing to retrieve from server)
+							dataset = data_builder.last_open_interest();
+						} else {
+							try {
+								data_builder.send_indicator_data_request(
+									((Integer) indicators().get(
+										current_indicator)).intValue(),
+										tradable, current_period_type);
+							} catch (Exception e) {
+								fatal("Exception occurred", e);
+							}
+							dataset = data_builder.last_indicator_data();
+						}
+						if (dataset != null) {
+							dataset.set_color(conf.indicator_color(
+								current_indicator, false));
+							link_with_axis(dataset, current_indicator);
+							add_indicator_lines(dataset, current_indicator);
+							main_pane.add_indicator_data_set(dataset);
+						}
+					}
+				}
+System.out.println("D");
+				main_pane.repaint_graphs();
+				GUI_Utilities.busy_cursor(false, this);
 			}
-			main_pane.repaint_graphs();
-			GUI_Utilities.busy_cursor(false, this);
+			requesting_data = Boolean.FALSE;
+		} else {
+System.out.println("Giving up request");
 		}
+		}	// end synchronized block
+System.out.println("run finished");
 	}
 
 // Implementation
@@ -474,7 +521,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol {
 				print_all_charts();
 			}
 			// Show the graph of the first symbol in the selection list.
-			request_data(symbol);
+			do_request_data(symbol, false);
 		}
 		market_selections = new MarketSelection(this);
 		ma_menu_bar = new MA_MenuBar(this, data_builder, _period_types);
