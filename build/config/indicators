@@ -155,30 +155,34 @@ MACD Difference
 5
 0
 MACD Histogram
-1
+3
 6
 2
 5
-3
+1
 13
 0
 MACD Signal Line (EMA of MACD Difference)
+1
+13
+2
+5
 3
 6
 0
 Slope of MACD Signal Line
-1
+3
 6
 2
-13
-3
 5
+1
+13
 0
 Slope of Slope of MACD Signal Line
 1
-5
-2
 13
+2
+5
 3
 6
 0
