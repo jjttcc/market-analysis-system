@@ -105,7 +105,14 @@ feature -- Access
 			l.extend (log_cmd)
 			l.extend (log2_cmd)
 			l.extend (log10_cmd)
+			l.extend (ceiling_cmd)
+			l.extend (floor_cmd)
 			l.extend (sine_cmd)
+			l.extend (cosine_cmd)
+			l.extend (tangent_cmd)
+			l.extend (arc_sine_cmd)
+			l.extend (arc_cosine_cmd)
+			l.extend (arc_tangent_cmd)
 			l.extend (absolute_value)
 			l.extend (rounded_value)
 			l.extend (slope_analyzer)
@@ -510,7 +517,42 @@ feature {NONE} -- Implementation
 				valid_name: command_names.has (name)
 			end
 			Result.extend (Unary_real, name)
+			name := ceiling_cmd.generator
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Unary_real, name)
+			name := floor_cmd.generator
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Unary_real, name)
 			name := sine_cmd.generator
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Unary_real, name)
+			name := cosine_cmd.generator
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Unary_real, name)
+			name := tangent_cmd.generator
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Unary_real, name)
+			name := arc_sine_cmd.generator
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Unary_real, name)
+			name := arc_cosine_cmd.generator
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Unary_real, name)
+			name := arc_tangent_cmd.generator
 			check
 				valid_name: command_names.has (name)
 			end

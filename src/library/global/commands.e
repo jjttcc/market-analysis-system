@@ -172,8 +172,22 @@ feature -- Access
 				"Base-2 logarithm operator"))
 			Result.extend (create {PAIR [COMMAND, STRING]}.make (log10_cmd,
 				"Base-10 logarithm operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (ceiling_cmd,
+				"Least integral value greater than or equal to the operand"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (floor_cmd,
+				"Greatest integral value less than or equal to the operand"))
 			Result.extend (create {PAIR [COMMAND, STRING]}.make (sine_cmd,
 				"Trigonometric sine operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (cosine_cmd,
+				"Trigonometric cosine operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (tangent_cmd,
+				"Trigonometric tangent operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (arc_sine_cmd,
+				"Trigonometric arcsine operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (arc_cosine_cmd,
+				"Trigonometric arccosine operator"))
+			Result.extend (create {PAIR [COMMAND, STRING]}.make (
+				arc_tangent_cmd, "Trigonometric arctangent operator"))
 			Result.extend (create {PAIR [COMMAND, STRING]}.make (
 				absolute_value, "Absolute value operator"))
 			Result.extend (create {PAIR [COMMAND, STRING]}.make (rounded_value,
@@ -372,7 +386,42 @@ feature -- Access - an instance of each command
 			create Result.make (numeric_value_command)
 		end
 
+	ceiling_cmd: CEILING is
+		once
+			create Result.make (numeric_value_command)
+		end
+
+	floor_cmd: FLOOR is
+		once
+			create Result.make (numeric_value_command)
+		end
+
 	sine_cmd: SINE is
+		once
+			create Result.make (numeric_value_command)
+		end
+
+	cosine_cmd: COSINE is
+		once
+			create Result.make (numeric_value_command)
+		end
+
+	tangent_cmd: TANGENT is
+		once
+			create Result.make (numeric_value_command)
+		end
+
+	arc_sine_cmd: ARC_SINE is
+		once
+			create Result.make (numeric_value_command)
+		end
+
+	arc_cosine_cmd: ARC_COSINE is
+		once
+			create Result.make (numeric_value_command)
+		end
+
+	arc_tangent_cmd: ARC_TANGENT is
 		once
 			create Result.make (numeric_value_command)
 		end
