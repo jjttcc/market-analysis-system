@@ -28,8 +28,8 @@ feature -- Access
 		require
 			f_output_empty: f.output /= Void and f.output.is_empty
 		do
---!!!Test: Change to call n_based_calculation.
-			sma_based_calculation (f, agent sum_divided_by_n)
+			n_based_calculation (f, integer_parameter_value (f, 10), agent
+				sum_divided_by_n, addition_operator, subtraction_operator)
 		end
 
 	standard_deviation (f: AGENT_BASED_FUNCTION) is
@@ -37,7 +37,24 @@ feature -- Access
 		require
 			f_output_empty: f.output /= Void and f.output.is_empty
 		do
---!!!Test: Change to call n_based_calculation.
+			n_based_calculation (f, integer_parameter_value (f, 10),
+				agent sum_of_squares_of_avg_divided_by_n, addition_operator,
+				subtraction_operator)
+		end
+
+	original_sma (f: AGENT_BASED_FUNCTION) is --!!!!Put back after experiment
+			-- Standard moving average
+		require
+			f_output_empty: f.output /= Void and f.output.is_empty
+		do
+			sma_based_calculation (f, agent sum_divided_by_n)
+		end
+
+	original_standard_deviation (f: AGENT_BASED_FUNCTION) is --!!!!Put back after experiment
+			-- Standard deviation
+		require
+			f_output_empty: f.output /= Void and f.output.is_empty
+		do
 			sma_based_calculation (f, agent sum_of_squares_of_avg_divided_by_n)
 		end
 
@@ -115,7 +132,7 @@ feature -- Access
 --!!!For compile-testing
 call_n_based_calculation is
  do
-	n_based_calculation (Void, 0, Void, agent addition, agent subtraction)
+	n_based_calculation (Void, 0, Void, addition_operator, subtraction_operator)
  end
 
 addition (x, y: DOUBLE): DOUBLE is do Result := x + y end
@@ -123,10 +140,8 @@ subtraction (x, y: DOUBLE): DOUBLE is do Result := x - y end
 
 	n_based_calculation (f: AGENT_BASED_FUNCTION; n: INTEGER;
 		main_function: FUNCTION [ANY, TUPLE [DOUBLE, INTEGER,
-		ARRAYED_LIST [DOUBLE]], DOUBLE]; accumulation_function:
-		FUNCTION [ANY, TUPLE [DOUBLE, DOUBLE], DOUBLE];
-		drop_off_function:
-		FUNCTION [ANY, TUPLE [DOUBLE, DOUBLE], DOUBLE]) is
+		ARRAYED_LIST [DOUBLE]], DOUBLE]; accum_op,
+		drop_off_op: BINARY_OPERATOR [REAL, REAL]) is
 			-- !!!Calculation that ...
 			-- `drop_off_function' is used to "drop-off" the last "obsolete"
 			-- calculation; when accumulation_function is addition, this
@@ -140,9 +155,10 @@ subtraction (x, y: DOUBLE): DOUBLE is do Result := x - y end
 		local
 			ml: LIST [MARKET_TUPLE]
 			extraction_operator: RESULT_COMMAND [REAL]
-			current_value, latest_value: DOUBLE
+			current_value, latest_extracted_value: DOUBLE
 			values: ARRAYED_LIST [DOUBLE]
 		do
+print ("n_based_calculation called.%N")
 			create values.make (0)
 			if
 				f.inputs.is_empty or else f.inputs.first.output.is_empty or
@@ -155,7 +171,7 @@ subtraction (x, y: DOUBLE): DOUBLE is do Result := x - y end
 					-- !!! Report error condition.
 				end
 			else
---				n := integer_parameter_value (f, 10)
+--!!!!???				n := integer_parameter_value (f, 10)
 				ml := f.inputs.first.output
 				if f.operator /= Void then
 					extraction_operator := f.operator
@@ -172,15 +188,15 @@ subtraction (x, y: DOUBLE): DOUBLE is do Result := x - y end
 						ml.index = n or ml.exhausted
 					loop
 						extraction_operator.execute (ml.item)
-						current_value := accumulation_function.item (
-							[current_value, extraction_operator.value])
+						current_value := binary_double_operation (Void,
+							current_value, extraction_operator.value)
 						values.extend (extraction_operator.value)
 						ml.forth
 					end
 					if not ml.exhausted then
 						extraction_operator.execute (ml.item)
-						current_value := accumulation_function.item (
-							[current_value, extraction_operator.value])
+						current_value := binary_double_operation (Void,
+							current_value, extraction_operator.value)
 						values.extend (extraction_operator.value)
 						f.output.extend (create {SIMPLE_TUPLE}.make (
 							ml.item.date_time, ml.item.end_date,
@@ -197,18 +213,19 @@ subtraction (x, y: DOUBLE): DOUBLE is do Result := x - y end
 					ml.exhausted
 				loop
 					extraction_operator.execute (ml.item)
-					latest_value := extraction_operator.value
-					current_value := accumulation_function.item (
-						[current_value, latest_value])
-					current_value := drop_off_function.item ([current_value,
-						values.i_th (ml.index - n)])
-					values.extend (latest_value)
+					latest_extracted_value := extraction_operator.value
+					current_value := binary_double_operation (accum_op,
+						current_value, latest_extracted_value)
+					current_value := binary_double_operation (drop_off_op,
+						current_value, values.i_th (ml.index - n))
+					values.extend (latest_extracted_value)
 					f.output.extend (create {SIMPLE_TUPLE}.make (
 						ml.item.date_time, ml.item.end_date,
 						main_function.item ([current_value, n, values])))
 					ml.forth
 				end
 			end
+print ("n_based_calculation ending.%N")
 		end
 
 feature {NONE} -- Implementation
@@ -259,18 +276,29 @@ feature {NONE} -- !!!!!What to call these???
 			Result := y_value_implementation
 		end
 
-	default_binary_operator: ADDITION is
+	addition_operator: ADDITION is
 		do
-			if default_binary_operator_implementation = Void then
-				create default_binary_operator_implementation.make (
+			if addition_operator_implementation = Void then
+				create addition_operator_implementation.make (
 					x_value, y_value)
 			end
-			Result := default_binary_operator_implementation
+			Result := addition_operator_implementation
+		end
+
+	subtraction_operator: SUBTRACTION is
+		do
+			if subtraction_operator_implementation = Void then
+				create subtraction_operator_implementation.make (
+					x_value, y_value)
+			end
+			Result := subtraction_operator_implementation
 		end
 
 	x_value_implementation, y_value_implementation: CONSTANT
 
-	default_binary_operator_implementation: ADDITION
+	addition_operator_implementation: ADDITION
+
+	subtraction_operator_implementation: SUBTRACTION
 
 feature {NONE} -- Utilities
 
