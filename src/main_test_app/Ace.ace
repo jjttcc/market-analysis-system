@@ -26,6 +26,7 @@ cluster
 	function_types:	"$FINANCE/src/library/function_types";
 	commands:		"$FINANCE/src/library/commands";
 	markets:		"$FINANCE/src/library/markets";
+	market_analysis:"$FINANCE/src/library/market_analysis";
 	structural:		"$FINANCE/src/library/structural";
 	tuple_types:	"$FINANCE/src/library/tuple_types";
 	data_scanning:	"$FINANCE/src/library/data_scanning";
