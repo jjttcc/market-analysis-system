@@ -1,4 +1,4 @@
-/* Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt */
+/* Copyright 1998 - 2001: Jim Cochrane - see file forum.txt */
 
 package support;
 
@@ -164,5 +164,30 @@ public class Utilities
 		return result;
 	}
 
+	static public boolean isdigit(byte c) {
+		byte zero = '0', nine = '9';
+		return c >= zero && c <= nine;
+	}
+
+	// b at offset of length `length' as a positive integer.  -1 if
+	// length <= 0 or the specified partition does not start with a digit.
+	// Sets Last_int_length to the number of digits in the result or to
+	// 0 if the result is -1.
+	static public int int_from_bytes(byte b[], int offset, int length) {
+		int result = -1;
+		Last_int_length = 0;
+		String buffer = null;
+		if (length > 0 && isdigit(b[offset])) {
+			int i;
+			for (i = offset + 1; i < length + offset && isdigit(b[i]); ++i) {
+			}
+			Last_int_length = i - offset;
+			buffer = new String(b, offset, Last_int_length);
+			result = Integer.parseInt(buffer);
+		}
+		return result;
+	}
+
+	public static int Last_int_length;
 	static NumberFormat formatter = NumberFormat.getInstance();
 }
