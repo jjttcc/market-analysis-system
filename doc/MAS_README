@@ -1,29 +1,34 @@
 The files in this directory provide documentation for the Market Analysis
 System (MAS) server and client.  The directory currently contains
 the following files:
-
-    README - This file
-
-    INTRODUCTION.html - A short introduction to MAS (html format)
-
-    INTRODUCTION.ps - A short introduction to MAS (Postscript format)
-
-    masystem_introduction - A brief description of how to run MAS, with
-       more detail than the INTRODUCTION document
-
-    GUI_introduction - Introduction to the GUI client
-
-    java_info - Information on obtaining the Java Runtime Environment for
-       running the GUI client
-
-    feature_list - List of MAS's features
-
-    creating_indicators - A tutorial on creating new technical indicators
-       with MAS
-
-    market_analysis - A brief description of how to analyze markets with MAS
-
-    creating_market_analyzers - A tutorial on creating new market analyzers
-
-    environment - Description of environment variables and configuration
-       files used by MAS
+%par
+%startlist
+%listitem
+README - This file
+%listitem
+INTRODUCTION.html - A short introduction to MAS (html format)
+%listitem
+INTRODUCTION.ps - A short introduction to MAS (Postscript format)
+%listitem
+masystem_introduction - A brief description of how to run MAS, with
+more detail than the INTRODUCTION document
+%listitem
+GUI_introduction - Introduction to the GUI client
+@begin:linux
+%listitem
+java_info - Information on obtaining the Java Runtime Environment for
+running the GUI client
+@end:linux
+%listitem
+feature_list - List of MAS's features
+%listitem
+creating_indicators - A tutorial on creating new technical indicators
+with MAS
+%listitem
+market_analysis - A brief description of how to analyze markets with MAS
+%listitem
+creating_market_analyzers - A tutorial on creating new market analyzers
+%listitem
+environment - Description of environment variables and configuration
+files used by MAS
+%endlist
