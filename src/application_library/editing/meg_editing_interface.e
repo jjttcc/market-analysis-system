@@ -415,8 +415,6 @@ feature {NONE} -- Implementation
 				operator_maker.N_record_command)
 			Result.append (operator_maker.command_types @
 				operator_maker.Linear_command)
-			Result.extend (operator_maker.command_with_generator (
-				"FUNCTION_BASED_COMMAND"))
 		end
 
 	reset_error is
