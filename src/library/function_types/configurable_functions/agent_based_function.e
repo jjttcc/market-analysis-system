@@ -21,16 +21,16 @@ creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 feature {NONE} -- Initialization
 
-	make (f: like function; op: like operator; ins: like inputs) is
+	make (fkey: like function_key; op: like operator; ins: like inputs) is
 		require
-			f_exists: f /= Void
+			f_exists: fkey /= Void
 		do
 			if op /= Void then
 				set_operator (op)
 				operator.initialize (Current)
 			end
 			make_output
-			function := f
+			function_key := fkey
 			if ins = Void then
 				create inputs.make (0)
 			else
@@ -38,15 +38,24 @@ feature {NONE} -- Initialization
 			end
 print ("function was set to: " + function.out + "%N")
 		ensure
-			set: operator = op and function = f and
+			set: operator = op and function_key = fkey and
 				(ins /= Void implies inputs = ins)
 		end
 
 feature -- Access
 
+	agent_table: expanded MARKET_AGENTS
+			-- Table of available "market-agent" functions
+
 	function: FUNCTION [ANY, TUPLE [LIST [MARKET_FUNCTION]],
-		MARKET_TUPLE_LIST [MARKET_TUPLE]]
+		MARKET_TUPLE_LIST [MARKET_TUPLE]] is
 			-- Agent to be used for processing
+		do
+			Result := agent_table @ function_key
+		end
+
+	function_key: INTEGER
+			-- Key to Current's function
 
 	trading_period_type: TIME_PERIOD_TYPE is
 		local
@@ -214,5 +223,6 @@ invariant
 	has_inputs_count_children: children.count = inputs.count
 	operator_used_definition: operator_used = (operator /= Void)
 	function_exists: function /= Void
+	function_definition: function = agent_table @ function_key
 
 end -- class ONE_VARIABLE_FUNCTION

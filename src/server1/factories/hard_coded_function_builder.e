@@ -95,12 +95,11 @@ feature -- Basic operations
 			l.extend (market_function_line (f, "Line"))
 --!!!Temporary test/experiment:
 l.extend (agent_experiment ("Agent-based function"))
---!!!NOTE: There appears to be a problem with storing the AGENT_BASED_FUNCTION
---into the indicators_persist file, caused by the agent attribute -
---POINTER values (which are valid when the object is created) get set to 0.
---Possible solution: Change the FUNCTION attribute of AGENT_BASED_FUNCTION
---into a key that will be used to retrieve the appropriate function
---from a table of available functions.
+--!!!NOTE: The attempt to fix the problem with AGENT_BASED_FUNCTION (caused
+--by the agent attribute) by replacing the FUNCTION attribute with a
+--key into a table still needs some work - There is currently a floating
+--point exception when a newly created indicators_persist (with the new
+--AGENT_BASED_FUNCTION) is read.
 			product := l
 		end
 
@@ -502,28 +501,12 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	agent_experiment (name: STRING): AGENT_BASED_FUNCTION is
+		local
+			agents: expanded MARKET_AGENTS
 		do
-			create Result.make (agent test_function, Void, Void)
+			create Result.make (agents.one_hundreds_key, Void, Void)
 			Result.set_name (name)
 		end
-
---!!!Temporary - test function for agent experiment:
-test_function (l: LIST [MARKET_FUNCTION]): MARKET_TUPLE_LIST [MARKET_TUPLE] is
-	local
-		ml: LIST [MARKET_TUPLE]
-	do
-print ("test_function start%N")
-		create Result.make (0)
-		if not l.is_empty and then not l.first.output.is_empty then
-			ml := l.first.output
-			from ml.start until ml.exhausted loop
-				Result.extend (create {SIMPLE_TUPLE}.make (ml.item.date_time,
-					ml.item.date_time.date, 100))
-				ml.forth
-			end
-		end
-print ("test_function end%N")
-	end
 
 feature {NONE} -- Functions currently not used
 
