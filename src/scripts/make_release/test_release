@@ -72,13 +72,13 @@ y"| ./install >/dev/null 2>&1 || {
 	export PYTHONPATH=$masdir/lib/python
 	echo -e "Running server using data files."
 	(p=$(random_port); $masdir/bin/mas -o -f , -b $p data/*txt >/dev/null &
-	$masdir/bin/magc $p; sleep 2
+	$masdir/bin/magc $p && sleep 2 &&
 	echo  | $masdir/bin/macl >/dev/null $p) || {
 		fail; return 1
 	}
 	echo -e "Running server using database."
 	(p=$(random_port); $masdir/bin/mas -o -f , -b $p -p >/dev/null &
-	$masdir/bin/magc $p; sleep 2
+	$masdir/bin/magc $p && sleep 2 &&
 	echo  | $masdir/bin/macl >/dev/null $p) || {
 		fail; return 1
 	}
