@@ -469,4 +469,4 @@ invariant
 		file_names /= Void)
 	special_date_settings_exists: special_date_settings /= Void
 
-end -- class MAS_COMMAND_LINE
+end
