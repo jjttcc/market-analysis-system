@@ -49,7 +49,7 @@ public class Connection implements NetworkProtocol, Constants {
 				throw new IOException (request_result.toString());
 			}
 			_session_state = new SessionState(s);
-		} catch (Exception e) {
+		} catch (IOException e) {
 			throw new IOException("Attempt to login to server " +
 				"failed: " + e);
 		}
