@@ -1,103 +1,91 @@
 <?php
 $headers = getallheaders();
 ?>
-<STYLE TYPE="text/css">
-  <!--
-  .indented
-     {
-     padding-left: 20pt;
-     padding-right: 20pt;
-     }
-  -->
-</STYLE>
-<HTML>
-<META NAME=KEYWORDS CONTENT="technical analysis, stock, stocks, Linux,
+<link rel="stylesheet" href="faq.css" type="text/css">
+<html>
+<head>
+<meta name="keywords" content="technical analysis, stock, stocks, Linux,
 windows, charting, charts, automated signals, market, Eiffel, Java,
 freeware, free software, trading, investing, client/server, market analysis,
 open source, moving average, stochastic, MACD, RSI, relative strength index,
 on balance volume, technical indicators, buy signal, sell signal,
 candlesticks, traders, financial markets, trading tools, subscription">
-<HEAD>
-<TITLE>Market Analysis System - Frequently Asked Questions</TITLE>
-</HEAD>
-<BODY bgcolor=#FFFFFF topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" marginheight="0" marginwidth="0">
-<tr>
-<td>&nbsp;
-<center>
+<title>Market Analysis System - Frequently Asked Questions</title>
+</head>
+<body>
+<div id="content">
+<h1>
+Market Analysis System (MAS): Frequently Asked
+(or&nbsp;Anticipated)&nbsp;Questions
+</h1>
 <h2>
-Market Analysis System (MAS):  Frequently Asked (or Anticipated) Questions
-</h2>
-</center>
-<DIV CLASS="indented">
-<br>
-<h3>
 Contents
-</h3>
-<P>
-<A href="#server operation">
+</h2>
+<p>
+<a href="#server operation">
 Operating the Server (General)
 <br>
-</A>
-<A href="#windows server operation">
+</a>
+<a href="#windows server operation">
 Operating the Server (Windows)
 <br>
-</A>
-<A href="#administration">
+</a>
+<a href="#administration">
 Administration and Setup
-</A>
+</a>
 <br>
-<A href="#data">
+<a href="#data">
 Data-related Problems
-</A>
+</a>
 <br>
-<A href="#charting GUI">
+<a href="#charting GUI">
 The MAS Charting GUI
 </A>
 <br>
-<A href="#database">
+<a href="#database">
 Database Problems
-</A>
+</a>
 <br>
-<A href="#technical indicators">
+<a href="#technical indicators">
 Technical Analysis Indicators
-</A>
+</a>
 <br>
-<A href="#signal generation">
+<a href="#signal generation">
 Signal Generation and Market Analyzers
-</A>
+</a>
 <!--
 <br>
-<A href="#debugging">
+<a href="#debugging">
 Debugging
-</A>
+</a>
 -->
 <br><br>
-<A name="server operation">
-<h3>
+<a name="server operation">
+<h2>
 Operating the Server (General)
-</h3>
-</A>
-<B>
+</h2>
+</a>
+<strong>
 Once the server is started in the background, how do I stop it.
-</B>
-<P>
+</strong>
+<p>
 You can stop the server by starting up the command-line client (either
 macl - or maclj, if you don't have Python installed but do have Java)
 and then entering a Control-E and a newline.
-<P><B>
+<p><strong>
 When I change the data files after the server is run, it will not 
 pick up any newly named files.  (For example, if ibm.txt and qqq.txt
 were listed when I ran the MAS server, and I added nt.txt later, MAS
 will not pick up 'nt'.)  Is there any way without resetting (shutdown
 and restart) the server for it to pick up the new data files?
-<P></B>
+<p></strong>
 Currently, the only way to add new files is to shut down and restart the
 server.  The capability to add new tradables while the server is
 running is a feature that may be added in the future if there is
 enough demand for it.
-<P><B>
+<p><strong>
 What are the -d and -i options for?
-<P></B>
+<p></strong>
 The -d and -i options are intended to be used together.
 When the data is being read from files, it allows the server to figure
 out whether a file holds daily or intraday data.
@@ -105,25 +93,25 @@ For example, if daily data lives in files with the pattern *.daily and
 intraday data in files with the pattern *.5-minute (for 5-minute data
 in this example), you would include the options "-d daily -i 5-minute"
 when you start the server.
-<h3>
+<h2>
 <A name="windows server operation">
 Operating the Server (Windows)
 </A>
-</h3>
-<P><B>
+</h2>
+<p><strong>
 I`ve tried to install MAS 1.6.5 for Windows but am not able to get
 the charting application working.
 I installed Java, as instructed in the readme file, but
 when I click on the "MAS Charts" icon I get this error message:
-<P>
+<p>
 c:\MAS\mas1.6.5\lib\classes>java MA_Client localhorst 18273
 <br>
 java.io.IOException: Couldn't get I/O for the connection to: localhorst
-<P></B>
+<p></strong>
 This error message indicates that the MAS charting application
 cannot connect with the MAS server.
 Most likely this is because you have not started the server.
-<P>
+<p>
 In order to start the charting application you first need to start the
 component called the MAS server.  (This is the component of MAS that
 does most of the calculations.)  This is done by double-clicking on the
@@ -131,81 +119,82 @@ does most of the calculations.)  This is done by double-clicking on the
 "MAS Server (files)" icon (if your data resides on files on your computer)
 to start the server.  After the server has started, double-click on the
 "MAS Charts" icon to start the charting application.
-<h3>
+<h2>
 <A name="administration">
 Administration and Setup
 </A>
-</h3>
-<P><B>
+</h2>
+<p><strong>
 I installed MAS and when I try to run it, I get the following error [or
 something similar]: 
-<P>
-<I>
+<p>
+<em>
 mas: error while loading shared libraries: libodbc.so.1: cannot open
 shared object file: No such file or directory
-</I>
-<P></B>
-The cause of this error is that the shared library file <I>libodbc.so.1</I>
+</em>
+<p></strong>
+The cause of this error is that the shared library file
+<em>libodbc.so.1</em>
 is not where MAS expects it to be.  (Usually it's in /usr/lib.)
 Unless you're using an old Linux distribution, there's a very good
 chance that this file is included in the distribution, but you probably
 did not install the package that includes the file.  So the first thing
 to do is to start up your distribution's package install program, look
-for the package that contains the <I>libodbc.so.1</I> file, and install it.
+for the package that contains the <em>libodbc.so.1</em> file, and install it.
 (Note: Since libodbc is an ODBC library used with database systems,
 you're likely to find it in a database-related package.  For example,
 one Redhat 8.0 user apparently found it in the "databases" package.)
-<P>
+<p>
 If you can't find the file in your distribution, you can try searching
 for it on the web.
 google.com may work for this purpose, but a better solution is probably
 <A href="http://rpmfind.net/">
 rpmfind
 </A>
-(and search for "<I>libodbc.so</I>" or "<I>libodbc.so.1</I>").
-Chances are good that you will be able to find a <I>libodbc.so.1</I> that
+(and search for "<em>libodbc.so</em>" or "<em>libodbc.so.1</em>").
+Chances are good that you will be able to find a <em>libodbc.so.1</em> that
 works with your system, but if not, one last thing to try is to use the
-<I>libodbc.so.1</I> file that comes with the MAS installation.
+<em>libodbc.so.1</em> file that comes with the MAS installation.
 Once you find that file (by default, the rpm installation puts it in
 /opt/mas/lib), you need to log in as root and do the following:
-<P><I>
+<p><em>
 ln -s /opt/mas/lib/libodbc.so.1 /usr/lib
-<P></I>
-(Substitute /opt/mas/lib/<I>libodbc.so.1</I> with the path for this file
+<p></em>
+(Substitute /opt/mas/lib/<em>libodbc.so.1</em> with the path for this file
 on your system.)
-If MAS still gives an error about <I>libodbc.so.1</I>, then the version
+If MAS still gives an error about <em>libodbc.so.1</em>, then the version
 of the file that came with MAS is probably not compatible with your system.
 The only fix is to find a version that is compatible with your system
 and install it.
-<P>
-<P><B>
+<p>
+<p><strong>
 I'm running into problems with MAS not using the new mailer I've set up -
 it is still trying to use elm.  I have set the MAS_MAILER variable:
 MAS_MAILER=/home/masuser/masconfig/masfilter.
 masfilter is executable.
 When I do the market analysis study, I get
-<I>
+<em>
 sh: elm not found
-</I>
+</em>
 (since I do not have elm installed on my machine).
 What am I doing wrong?
-<P></B>
+<p></strong>
 Most likely you did not export the MAS_MAILER environment variable.
 For example, if you are setting the variable in your .profile (or whatever
 login initialization file you're using with your bash/sh-compatible shell),
 you would add the following line to your .profile file:
-<P><I>
+<p><em>
 export MAS_MAILER=/mailerpath
-</I>
-<P>
+</em>
+<p>
 or, for csh-compatible shells:
-<P><I>
+<p><em>
 setenv MAS_MAILER &nbsp;/mailerpath
-</I>
-<P>
+</em>
+<p>
 Of course, you also need to export the MAS_DIRECTORY variable if you are
 setting it.
-<P>
+<p>
 If this is not the problem - if you've already exported the
 MAS_MAILER variable, then the problem could be that you are using a user
 (event registrant) for your events that was set up with a previous MAS_MAILER
@@ -219,7 +208,7 @@ The way to
 get around this when you change mailers is to delete the original user
 and add a new user while running MAS with the MAS_MAILER variable set
 to the new mailer, in this case to the path of your script.
-<P><B>
+<p><strong>
 I'm running into problems with MAS not using the
 MAS_DIRECTORY variable.
 I added:
@@ -228,17 +217,17 @@ to my .profile.
 But MAS doesn't use the indicators and other settings
 files I've set up in that directory.
 What am I doing wrong?
-<P></B>
+<p></strong>
 Most likely you did not export the MAS_DIRECTORY environment variable.
 See the question above about MAS not using the mailer set up with MAS_MAILER
 for an example of how to export an environment variable.
-<P><B>
+<p><strong>
 I updated to a new version of MAS and when the server starts up it
 prints the following error and exits:
 "Retrieval of indicator library file indicators_persist failed.
 The file may be corrupted or you may have an incompatible version."
 How can I use the old indicators I have created with the new server?
-<P></B>
+<p></strong>
 This problem occurs when a new version of MAS incorporates a change to
 the structure of the indicator code that is not compatible with the old
 version.  As a result, the old indicator file, indicators_persist, cannot
@@ -250,48 +239,48 @@ used to overcome the problem: Whenever you create a new indicator, start
 the server in the background (-b option) and use the command-line client
 program, macl, to talk to the server and "record" the conversation with
 the command:
-<P><I>
+<p><em>
 macl -r output_file &lt;portnumber&gt;
-<P></I>
+<p></em>
 where
-<I>
+<em>
 output_file
-</I>
+</em>
 is the name of the file to which you wish to save the recorded output
 and
-<I>
+<em>
 &lt;portnumber&gt;
-</I>
+</em>
 is the port number with which you started the server.
 Keep this file in a safe place.  It would probably also be a good idea
 to keep it backed up.
-<P>
+<p>
 Whenever you upgrade to a new version of MAS and get the above error
 message, you can restore the indicators you have created by running
 the following command on each of your recorded output files:
-<P><I>
+<p><em>
 macl -i file &lt;portnumber&gt;
-<P></I>
+<p></em>
 where
-<I>
+<em>
 file
-</I>
+</em>
 is the name of a file created earlier with the -r option
 and
-<I>
+<em>
 &lt;portnumber&gt;
-</I>
+</em>
 is, again, the port number with which you started the server.
 This solution works for both indicators and market analyzers.
-<h3>
+<h2>
 <A name="data">
 Data-related Problems
 </A>
-</h3>
-<P><B>
+</h2>
+<p><strong>
 I'm not able to view daily data in the charting GUI - only periods of
 weekly intervals and longer are viewable.
-<P></B>
+<p></strong>
 Most likely you are not able to see daily data on the chart because the
 start and end dates for daily data configured in the GUI do not fall
 within the date range of the data you're using (for example, the last date
@@ -299,37 +288,37 @@ in your data is 1/2/2002 and the start date is configured as 12/1/2002).
 To fix this, either update your data so that it includes data up to the
 current date (or last trading day) or change the start and end date settings
 for daily data in the GUI.
-<P><B>
+<p><strong>
 When I try to download data off the internet using the -w parameter I get a lot
 of error messages that look like this: 
 <br>Date input value is invalid.
 <br>Error occurred after record 871 (with date/time 05/12/2003 12:00:00.0 AM).
 <br>Discarding corrupted record.
-<P></B>
+<p></strong>
 Since the yahoo data has an open-price field (as I
 suppose all data sources do these days), you need to add the -o option when
 you start the MAS server.
 (The upcoming release defaults to using open fields, so the -o will not
 longer be needed.)  Also, the data is saved in comma-separated format,
-so you also need to include the option <B><I> -f ',' </I></B>
+so you also need to include the option <strong><em> -f ',' </em></strong>
 to specify that the field
 separator is a comma.  (Tip: If someone has data in a different format,
 such as separated by semi-colons, you can get MAS to read the data with
-the option <B><I>-f ';'</I></B>.
+the option <strong><em>-f ';'</em></strong>.
 [The quotes are needed with UNIX/Linux to protect
 the semi-colon from being eaten by the shell.])
 <p>
 So the easiest way to start it for yahoo data would be something like:
-<I>
-<P>
+<em>
+<p>
 mas -f , -o -w 5555
-</I>
-<P>
+</em>
+<p>
 (where 5555 is the port number and should be replaced by the port number
 you are using).
-<P><B>
+<p><strong>
 I'm getting the following error from the server:
-<P>
+<p>
 Error occurred while reading /home/user/data/x.txt: I/O error.
 <br>
 Error encountered - obtaining data for GUI client:
@@ -339,19 +328,19 @@ Routine failure.
 Fatal error: Error occurred retrieving trading period types for x.
 <br>
 Exiting ...
-<P>
+<p>
 Everything looks OK to me - the permissions on the file and the directory
 that contains it are correct;
 the content and format of x.txt looks correct.
 What is going wrong?
-<P></B>
+<p></strong>
 The problem is most likely that the data in x.txt is reversed.
 Some programs output data in the opposite order that MAS expects, with the
 latest date at the beginning of the file and the earliest date at the end.
 MAS wants the latest date at the end and the earliest date at the beginning.
 You can use the following script to reverse the order of the lines in a
 data file:
-<P><I><TT>
+<p><em><TT>
 #!/usr/bin/env bash
 <br>
 #  Reverse the order of lines in infile and output the result to outfile.
@@ -387,17 +376,17 @@ awk '{
 &nbsp;&nbsp;&nbsp;&nbsp;}
 <br>
 }' $1 > $2
-<P></I></TT>
-<h3>
+<p></em></TT>
+<h2>
 <A name="charting GUI">
 The MAS Charting GUI
 </A>
-</h3>
-<B>
+</h2>
+<strong>
 I'm trying to run MAS on a Linux system.
 I got the server running OK, but the GUI charting client refuses to come up.
 I get the error message:
-<P><I><TT>
+<p><em><TT>
 java.lang.NullPointerException
 <br>
 &nbsp;&nbsp;&nbsp;at java.awt.Menu.add(Menu.java:39)
@@ -409,9 +398,9 @@ java.lang.NullPointerException
 &nbsp;&nbsp;&nbsp;at mas_gui.Chart.&lt;init&gt;(Chart.java:120)
 <br>
 &nbsp;&nbsp;&nbsp;at MA_Client.main(MA_Client.java:12)
-<P></I></TT>
+<p></em></TT>
 I am using the Kaffe implementation of the Java Virtual Machine (JVM).
-<P></B>
+<p></strong>
 This is very likely the same problem that other Linux users have
 encountered who are using the Kaffe JVM.
 This implementation apparently has a bug that causes this "null pointer
@@ -419,14 +408,14 @@ exception".
 Aside from contacting kaffe.org and convincing them to fix the problem, the
 easiest solution is probably to install and use an alternative JVM, such as
 Sun's or IBM's JVM.
-<P>
-<B>
+<p>
+<strong>
 I got a really weird error from the charting GUI:
 <br>
 "NaN encountered - substituting 0."
 <br>
 It didn't seem to have any effect on processing.
-<P></B>
+<p></strong>
 What is happening here is that the server is producing NaN (Not a Number)
 as a value, probably because of some impossible calculation, such as
 3.5 / 0, which can happen inadvertently for some indicators.
@@ -436,8 +425,8 @@ displayed value is not really correct.
 Since this phenomenon is unusual, but not totally
 unexpected, you can regard this as an informational message rather
 than an error message.
-<P>
-<B>
+<p>
+<strong>
 <A name="new indicator in GUI">
 I tried adding a new indicator to MAS.  It worked in the command prompt
 and is showing in the list of indicators. But when I try to load the
@@ -445,7 +434,7 @@ Java Charts the new indicator is not there in the list of indicators.
 I followed the instructions in the creating_indicators.txt file.  Do I
 need to do something extra for the new indicator to show up in the
 java charts?
-<P></B>
+<p></strong>
 Yes, there is one more step you need to get the new indicator to show
 up in the charting GUI.  You need to edit the .ma_clientrc file and add
 a line in that file for the new indicator.  This file resides in the
@@ -453,52 +442,52 @@ lib/classes directory, under the main MAS directory - the directory in
 which you installed MAS.  This is not very user friendly and the GUI will
 probably be enhanced in the future with a feature to make the task of
 adding a new indicator much easier.  But for now it must be done by hand.
-<P>
+<p>
 To add the new indicator, you need to find a 3-line comment
 in the .ma_clientrc file that begins:
-<P>
+<p>
 # Specify which indicators to include in the selection list, the order ...
-<P>
+<p>
 After the comment are specifications for indicators that the GUI will
 request from the server.  The easiest way to add a line for your new
 indicator is to copy an existing line and change it to fit your new
 indicator.  For example, for a Force Index indicator (which you want
 to appear in the lower chart rather than the main chart) you could
 copy and change the line:
-<P>
+<p>
 lower_indicator	MACD Difference	red
-<P>
+<p>
 to:
-<P>
+<p>
 lower_indicator	Force Index	red
-<P>
+<p>
 (Change lower_indicator to upper_indicator if you want the indicator to
 appear in the main chart.)
 If you want the indicator to be drawn in a color other than red, pick one
 of the colors listed in the comment lines that begin:
-<P>
+<p>
 # color settings - Valid colors are:
-<P>
+<p>
 and change the string "red" to the string for the color you picked.  There
 are two things to note here: First, the format of an indicator specification
 line is:
-<P>
+<p>
 &lt;indicator-location&gt;{tab}&lt;indicator-name&gt;{tab}&lt;indicator-color&gt;
-<P>
+<p>
 where:
-<P><I>
-&lt;indicator-location&gt;</I> is either
-<I>lower_indicator</I> or <I>upper_indicator</I>
+<p><em>
+&lt;indicator-location&gt;</em> is either
+<em>lower_indicator</em> or <em>upper_indicator</em>
 <br>
-<I>{tab}</I> is a tab character
+<em>{tab}</em> is a tab character
 <br>
-<I>&lt;indicator-name&gt;</I> is the name of the indicator
+<em>&lt;indicator-name&gt;</em> is the name of the indicator
 <br>
-<I>&lt;indicator-color&gt;</I> is the color of the indicator
-<P>
+<em>&lt;indicator-color&gt;</em> is the color of the indicator
+<p>
 The second thing is that the indicator name has to match exactly the name
 you gave the indicator when you created it with the MAS program.
-<P>
+<p>
 One more obstacle you may encounter is that the file is in UNIX text
 format, which means that many Windows-based editors (since they require
 both a newline and linefeed character to indicate a new line) will
@@ -520,31 +509,31 @@ that appears to handle UNIX text files.)
 I'm aware that dealing with this obstacle will be a major inconvenience for
 some people.  This is one reason I'm hoping to be able to add a feature to
 the GUI to make it easy to add a new indicator.
-<h3>
+<h2>
 <A name="database">
 Database Problems
 </A>
-</h3>
-<P><B>
+</h2>
+<p><strong>
 I installed MAS and when I try to run it, I get the following error [or
 something similar]: 
-<P>
-<I>
+<p>
+<em>
 mas: error while loading shared libraries: libodbc.so.1: cannot open
 shared object file: No such file or directory
-</I>
-<P></B>
+</em>
+<p></strong>
 See
 <A href="#administration">
 Administration and Setup
 </A>
 for the solution to this problem.
-<P><B>
+<p><strong>
 I get this error when I start MAS using my odbc database connection: 
 "Error occurred retrieving non-intraday period types for a" (a being
 the first stock symbol on my list).
 (This answer covers some other SQL errors as well.)
-<P></B>
+<p></strong>
 Possible solutions are as follows:
 <UL>
 <LI>
@@ -553,9 +542,9 @@ MAS currently has a bug that causes upper case symbols to not be handled
 correctly.
 (Alternatively, you can use a function to
 convert to lower case in the symbol query specified in your mas_dbrc file
-and use the <I>&lt;uppersymbol&gt;</I> construct in your data query if
+and use the <em>&lt;uppersymbol&gt;</em> construct in your data query if
 the query uses the symbol as a key; see the comments in the mas_dbrc file
-for how to use <I>&lt;uppersymbol&gt;</I>.)
+for how to use <em>&lt;uppersymbol&gt;</em>.)
 <LI>
 Make sure there are no trailing characters after your symbols, if you are
 using a postgres database make sure the symbols are in a varchar field,
@@ -574,13 +563,13 @@ query to convert them to a MAS supported format.  (Some database systems
 may have a date-to-integer conversion function, which will likely also
 work, as long as the result is in YYYYMMDD format.)
 </UL>
-<P><B>
+<p><strong>
 I wish to set MAS up to work with a database with ODBC.
 I am trying to create the needed database tables for MAS and from the
 sysadmin docs it is mentioned that there are Postgres scripts for doing so.
 However, I have looked and looked in the files that were installed with
 MAS but have not found them.
-<P></B>
+<p></strong>
 The example script files for creating MAS tables reside in a file separate
 from the main MAS installation file.
 You will find them in the scripts archive file in the
@@ -600,16 +589,16 @@ scripts1.6.5.zip</A>.)
 Several people have asked me this question, so I've concluded that I need
 to include the database scripts with the main installation file.
 I will probably do this for the next official (non-beta) release.
-<h3>
+<h2>
 <A name="technical indicators">
 Technical Analysis Indicators
 </A>
-</h3>
-<P><B>
+</h2>
+<p><strong>
 How do I change the parameter settings of a technical indicator?
 (For example, how would I change the parameter settings of
 "Slow Stochastic %D" from 5, 3, 3, to 11, 9, 8?)
-</B><P>
+</strong><p>
 In the current version of MAS, you can change the parameter settings of
 an indicator by starting up the MAS command-line client (either
 macl or maclj) and entering 'e' (Edit indicators) and then 'e'
@@ -628,8 +617,8 @@ Enter '0' again to leave the edit-indicator menu.
 Enter 's' (Save changes) to save the changes you have just made.
 Enter '-' (Previous) to leave the edit-indicators menu.
 Enter 'x' to exit the command-line client.
-<P>
-<B>
+<p>
+<strong>
 <A name="new indicator in GUI">
 I tried adding a new indicator to MAS.  It worked in the command prompt
 and is showing in the list of indicators. But when I try to load the
@@ -637,32 +626,32 @@ Java Charts the new indicator is not there in the list of indicators.
 I followed the instructions in the creating_indicators.txt file.  Do I
 need to do something extra for the new indicator to show up in the
 java charts?
-<P></B>
+<p></strong>
 <A href="#new indicator in GUI">
 This question is covered</A> in the
-<I>MAS Charting GUI</I> section.
-<h3>
+<em>MAS Charting GUI</em> section.
+<h2>
 <A name="signal generation">
 Signal Generation and Market Analyzers
 </A>
-</h3>
-<P><B>
+</h2>
+<p><strong>
 I haven't had much luck with the log file for sending the market analysis -
 it produces a core dump when I try and do this.
-</B><P>
+</strong><p>
 File logging is broken in older versions of MAS.
 However, it appears to be fixed in the 1.6.5 version and later.
 My tests of file logging with these later versions of MAS were successful,
 but I have not tested it extensively.
 If anyone has a problem with using a log file for market analysis (storing
 trading signals in a file), please let me know.
-<P><B>
+<p><strong>
 Is there anyway to get buy/sell signals without emailing them to
 someone - for example, just listing them to STDOUT.
 This will allow me
 to use the data how I would like in perl or what ever, instead of
 perl going to my email and parsing the data.
-</B><P>
+</strong><p>
 You can do this either by using the file logging mechanism for delivering
 signals (by choosing "Log file" instead of "User" for the registrant type),
 or by replacing the MAS "mailer" program with a script to
@@ -679,25 +668,25 @@ Then use the event registration feature of MAS (from the command-line
 client) to register a new user that will receive signals using your
 script.
 Here's a simple example:
-<P>
+<p>
 #!/bin/bash
-<P><I>
+<p><em>
 mas_dir=/path_where_mas_signals_are_stored
 <br>
 /bin/cat  >> $mas_dir/events$(/bin/date +%Y%m%d)
-<P></I>
+<p></em>
 Of course, you can do more sophisticated filtering, such as putting buy
 and sell signals into separate files according to the subject line.
 I've written a Python script that adds or removes stock symbols from
 watchlists according to whether a signal arrives indicating that the
 stock is in a long-term uptrend, downtrend, or is going sideways.
-<P><B>
+<p><strong>
 When building compound generators (market analyzers) are the links to
 the lower level generators static or dynamic?  For example, if I build
 an RSI generator and use it in a further generator do changes to the
 original RSI generator affect the compound generator - is it statically
 or dynamically linked?
-</B><P>
+</strong><p>
 It is, to use your words, dynamic.
 A more precise way of putting it is that a when a compound generator uses
 an existing generator it gets a copy of that generator rather than
@@ -716,15 +705,15 @@ save the changes), and then use the "market analyzer" editing function
 to view the parameters for the "MACD Crossover
 (Buy)" and "Stochastic %D Crossover (Buy)" generators you will see that
 their values have not changed.
-<P><B>
+<p><strong>
 Having studied the doc
-<I>
+<em>
 Creating Market Analyzers .....
-</I>
+</em>
 I have run into
 a brick wall!
 Using your diagram convention what I want to do is:
-<P><TT>
+<p><TT>
 &nbsp;&nbsp;&nbsp;&nbsp;GT_OPERATOR
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/ \
@@ -732,19 +721,19 @@ Using your diagram convention what I want to do is:
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/&nbsp;&nbsp; \
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;RSI&nbsp;&nbsp;&nbsp;Constant
-<P></TT>
+<p></TT>
 The question is:
-<I>
+<em>
 How do I get RSI as the left Operand?
-</I>
+</em>
 I have played with most of the really obvious and not so obvious
 selections and have drawn a blank!
-</B><P>
+</strong><p>
 Either the basic linear command or the basic numeric command will work
 here.
 So, using the basic linear command, your diagram would change to (where BLC
 is the basic linear command):
-<P><TT>
+<p><TT>
 &nbsp;&nbsp;&nbsp;&nbsp;GT_OPERATOR
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/ \
@@ -753,18 +742,18 @@ is the basic linear command):
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;BLC&nbsp;&nbsp;&nbsp;Constant
 <br>
-<P></TT>
+<p></TT>
 Note: In the latest version of mas, Constant has been renamed as
 Numeric-value-command.  (Since it can function as either a constant or as a
 variable whose value can change during a run.)
-<P><B>
+<p><strong>
 I have been trying to get MAS to give me MACD data that matches BigCharts.
 They both use MACD values of 26, 12, & 9.
 MAS defaults, when installed, to 13, 5, & 6.
 I modified all of the MACD analyzer values to long = 26, short = 12,
 and average = 9, to match BigCharts.
 This morning I got this signal:
-<P>
+<p>
 Event for: BHI, date: 05/19/2003, type: MACD Crossover (Buy)
 <br>
 description: Crossover for weekly trading period with indicators:
@@ -774,11 +763,11 @@ MACD Difference and
 MACD Signal Line (EMA of MACD Difference)
 <br>
 values: -0.285593, -0.325897
-<P>
+<p>
 Looking at BigCharts, it shows that the last MACD buy crossover happened
 at about 3 May, not 19 May.
 How can MAS give me an answer so dramatically different than BigCharts?
-</B><P>
+</strong><p>
 It looks like you are using the existing MACD market analyzers
 that come with the MAS release.
 These analyzers operate on weekly data - that is, they operate on data
@@ -790,20 +779,22 @@ If you want to apply market analyzers to daily data, you'll need to use the
 MAS command-line to create your own analyzers and select "daily" as the
 period type.
 <!-- Include this when version 1.7 is released:
-<h3>
+<h2>
 <A name="debugging">
 Debugging
 </A>
-</h3>
-<P><B>
+</h2>
+<p><strong>
 When I use the debugging option and print a moving average indicator, the
 debug output shows that the value of the LINEAR_SUM operator is always the
 same, from the first record to the last.  Is this a bug?
-<P></B>
+<p></strong>
 No, it's not a bug.  The main moving average functions, Simple Moving 
 Average and Exponential Moving Average, are optimized to only use the
 LINEAR_SUM operator to produce the first output record.  Thus, since it
 is only executed one time, the LINEAR_SUM operator's value will remain
 the same throughout a run.
 -->
-</BODY>
+</div>
+</body>
+</html>

@@ -1,0 +1,26 @@
+body { background-color: #e9dcd5; }
+:link { color: blue; }
+:visited { color: purple; }
+:active { color: black; }
+#content {
+	margin: 0 .5em 0 .5em;
+	font-size: 90%;
+}
+.justified {
+    text-align: justify;
+}
+h1 {
+	margin-top: 0cm; margin-bottom: 0cm; border-bottom: none;
+	border-left: none; border-right: none; padding-top: 0.04cm;
+	padding-bottom: 0cm; padding-left: 0cm; padding-right: 0cm;
+	color: #000000; text-align: center; widows: 2; orphans: 2;
+	font-size: 160%
+}
+h2 {
+	font-family: "Times New Roman", serif; font-size: 130%; so-language: en-US;
+}
+h3 {
+	font-family: "Times New Roman", serif; font-size: 90%; so-language: en-US
+}
+#sf-logos {
+}
