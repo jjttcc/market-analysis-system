@@ -53,20 +53,13 @@ feature -- Basic operations
 	process is
 			-- Process the output from the input.
 		do
-print ("COMPLEX_FUNCTION.process - name: " + name + ":%N")
-			if
---!!!!True or --!!!!For experimentation/testing - remove this line soon.
-				not processed then
+			if not processed then
 				pre_process
 				if debugging then
 					print_debugging_header
 				end
 				do_process
---!!!:
-print ("do_process was called." + "%N")
 				update_processed_date_time
-else
-print ("processed was FALSE." + "%N")
 			end
 			debug
 				print (name); print (" just became processed, output size: ")
