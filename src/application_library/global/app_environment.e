@@ -27,6 +27,13 @@ feature -- Access
 			Result := get (env_names.stock_split_file_name)
 		end
 
+	db_config_file_name: STRING is
+			-- Name of the database configuration file, if any
+			-- Void if the associated environment variable is not set.
+		once
+			Result := get (env_names.db_config_file_name)
+		end
+
 	mailer: STRING is
 			-- Name of the executable to use for sending email
 		once

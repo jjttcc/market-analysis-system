@@ -30,6 +30,13 @@ feature -- Access
 			Result := "MAS_STOCK_SPLIT_FILE"
 		end
 
+	db_config_file_name: STRING is
+			-- Default name of the database config file
+			-- environment variable
+		do
+			Result := "MAS_DB_CONFIG_FILE"
+		end
+
 	mailer_name: STRING is
 			-- Default name of the environment variable for the executable
 			-- to use for sending email
