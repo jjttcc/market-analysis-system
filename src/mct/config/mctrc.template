@@ -23,19 +23,19 @@
 # that follow by surrounding it with <>, e.g.: <var1>/<var2>.
 
 # The main mas directory
-define	main_mas_dir:{main_mas_dir}
+define	main_mas_dir:{main_mas_dir}{mas_version}
 
 # The mas 'lib' directory
 define	mas_lib_dir:<main_mas_dir>/lib
 
-# The location of the Java 'classes' directory
-define	classes_dir:<mas_lib_dir>/classes
+# The directory in which the Java files reside
+define	java_dir:<mas_lib_dir>/classes
+
+# The location of the Java executables
+define	java_path:<java_dir>{java_jar}
 
 # The location of the Java chart-configuration directory
 define	chart_dir:{chart_dir}
-
-# [Temporary:]
-define	projdir:{projdir}
 
 # OS-dependent path separator (e.g., used for Java CLASSPATH)
 define	path_separator:{path_separator}
@@ -50,7 +50,7 @@ define	bin_dir:<main_mas_dir>/bin
 define	doc_dir:<main_mas_dir>/doc
 
 # Shell to use to run macl, if any
-define	macl-shell:xterm -e 
+define	macl-shell:{macl_shell}
 
 # mas_directory environment variable setting
 define	mas_directory_setting:{mas_directory_setting}
@@ -78,7 +78,7 @@ hostname	localhost
 
 # Detailed version of command to start the server: data from files
 begin	start_server_command
-command	<cwdir> [<data_dir>]<projdir>/mas -o -f , -b <portnumber> *.txt
+command	<cwdir> [<data_dir>]<bin_dir>/mas -o -f , -b <portnumber> *.txt
 command_description	Get data from files
 command_name	File-based
 mark	default
@@ -102,17 +102,17 @@ end
 start_cl_client_command	<macl-shell><bin_dir>/macl -h <hostname> <portnumber>
 
 # Command to start the charting application
-chart_command	<cwdir> [<chart_dir>]java -cp <classes_dir> \
+chart_command	<cwdir> [<chart_dir>]java -cp <java_path> \
 MA_Client <hostname> <portnumber> >/tmp/errs 2>&1
 
 # Command to terminate the server
 termination_command	<terminate_server>
 
 # Command to start the user's browser for viewing documentation
-browse_docs_command	ps x |grep -q '[m]ozilla' && /usr/local/mozilla/mozilla -remote "openURL(<doc_dir>~/index.html, new-window)" || /usr/local/mozilla/mozilla "<doc_dir>~/index.html"
+browse_docs_command	{browse_docs_cmd}
 
 # Command to start the user's browser for viewing the "MCT Introduction"
-browse_intro_command	ps x |grep -q '[m]ozilla' && /usr/local/mozilla/mozilla -remote "openURL(<doc_dir>~/mct_introduction-linux.html, new-window)" || /usr/local/mozilla/mozilla "<doc_dir>~/mct_introduction-linux.html"
+browse_intro_command	{browse_intro_command}
 
 # Command to start the user's browser for viewing the FAQ
-browse_faq_command	ps x |grep -q '[m]ozilla' && /usr/local/mozilla/mozilla -remote "openURL(<doc_dir>~/FAQ.html, new-window)" || /usr/local/mozilla/mozilla "<doc_dir>~/FAQ.html"
+browse_faq_command	{browse_faq_command}

@@ -5,4 +5,10 @@ replacestart
 {path_separator}:
 {data_dir}<mas_lib_dir>/data/tradables
 {mas_directory_setting}<chart_dir>
+{mas_version}
+{macl_shell}xterm -e
+{java_jar}
+{browse_docs_cmd}ps x |grep -q '[m]ozilla' && /usr/local/mozilla/mozilla -remote "openURL(<doc_dir>~/index.html, new-window)" || /usr/local/mozilla/mozilla "<doc_dir>~/index.html"
+{browse_intro_command}ps x |grep -q '[m]ozilla' && /usr/local/mozilla/mozilla -remote "openURL(<doc_dir>~/mct_introduction-linux.html, new-window)" || /usr/local/mozilla/mozilla "<doc_dir>~/mct_introduction-linux.html"
+{browse_faq_command}ps x |grep -q '[m]ozilla' && /usr/local/mozilla/mozilla -remote "openURL(<doc_dir>~/FAQ.html, new-window)" || /usr/local/mozilla/mozilla "<doc_dir>~/FAQ.html"
 replaceend
