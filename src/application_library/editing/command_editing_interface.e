@@ -106,6 +106,9 @@ feature -- Access
 			l.extend (index_extractor)
 			l.extend (numeric_assignment_command)
 			l.extend (numeric_valued_command_wrapper)
+			l.extend (loop_command)
+			l.extend (loop_with_assertions)
+			l.extend (value_at_index_command)
 
 			create l.make (7)
 			Result.extend (l, Binary_real_real_command)
@@ -147,6 +150,7 @@ feature -- Access
 			l.extend (highest_value)
 			l.extend (basic_linear_command)
 			l.extend (function_based_command)
+			l.extend (value_at_index_command)
 
 			create l.make (3)
 			Result.extend (l, N_based_calculation)
@@ -175,6 +179,7 @@ feature -- Access
 			l.extend (unary_linear_operator)
 			l.extend (function_based_command)
 			l.extend (basic_linear_command)
+			l.extend (value_at_index_command)
 
 			create l.make (1)
 			Result.extend (l, Numeric_value_command.generator)
@@ -188,7 +193,7 @@ feature -- Access
 feature -- Constants
 
 	Any_command: STRING is "[Any Command]"
-			-- Name of result command with a BOOLEAN generic parameter
+			-- Name of type of any command
 
 	Boolean_result_command: STRING is "RESULT_COMMAND [BOOLEAN]"
 			-- Name of result command with a BOOLEAN generic parameter
@@ -339,13 +344,15 @@ feature {NONE} -- Implementation
 	Resultreal_n,		-- Classes that need a RESULT_COMMAND [REAL] and
 						-- an n-value
 	Settable_offset,	-- SETTABLE_OFFSET_COMMAND
-	Sign_analyzer_key,	-- SIGN_ANALYZER
+	Sign_analyzer_cmd,	-- SIGN_ANALYZER
 	Numeric_cond,		-- NUMERIC_CONDITIONAL_COMMAND
 	Function_command,   -- FUNCTION_BASED_COMMAND
 	Index,				-- INDEX_EXTRACTOR
-	Numeric_assignment,		-- NUMERIC_ASSIGNMENT_COMMAND
+	Value_at_index,		-- VALUE_AT_INDEX_COMMAND
+	Numeric_assignment,	-- NUMERIC_ASSIGNMENT_COMMAND
+	Loop_cmd,			-- LOOP_COMMAND
 	Numeric_wrapper,	-- NUMERIC_VALUED_COMMAND_WRAPPER
-	Command_sequence_key-- COMMAND_SEQUENCE
+	Cmd_sequence		-- COMMAND_SEQUENCE
 	:
 				INTEGER is unique
 			-- Constants identifying initialization routines required for
@@ -586,7 +593,7 @@ feature {NONE} -- Implementation
 			check
 				valid_name: command_names.has (name)
 			end
-			Result.extend (Sign_analyzer_key, name)
+			Result.extend (Sign_analyzer_cmd, name)
 			name := slope_analyzer.generator
 			check
 				valid_name: command_names.has (name)
@@ -616,7 +623,22 @@ feature {NONE} -- Implementation
 			check
 				valid_name: command_names.has (name)
 			end
-			Result.extend (Command_sequence_key, name)
+			Result.extend (Cmd_sequence, name)
+			name := loop_command.generator
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Loop_cmd, name)
+			name := loop_with_assertions.generator
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Loop_cmd, name)
+			name := value_at_index_command.generator
+			check
+				valid_name: command_names.has (name)
+			end
+			Result.extend (Value_at_index, name)
 		end
 
 	initialize_command (c: COMMAND) is
@@ -637,6 +659,8 @@ feature {NONE} -- Implementation
 			mv: NUMERIC_ASSIGNMENT_COMMAND
 			nvcw: NUMERIC_VALUED_COMMAND_WRAPPER
 			cmd_seq: COMMAND_SEQUENCE
+			loopcmd: LOOP_COMMAND
+			value_at_idx: VALUE_AT_INDEX_COMMAND
 		do
 			inspect
 				initialization_map @ c.generator
@@ -712,7 +736,7 @@ feature {NONE} -- Implementation
 					c_is_a_numeric_conditional_command: conditional /= Void
 				end
 				editor.edit_numeric_conditional_command (conditional)
-			when Sign_analyzer_key then
+			when Sign_analyzer_cmd then
 				sign_an ?= c
 				check
 					c_is_a_sign_analyzer: sign_an /= Void
@@ -742,12 +766,24 @@ feature {NONE} -- Implementation
 					c_is_a_numeric_wrapper_command: nvcw /= Void
 				end
 				editor.edit_numeric_wrapper (nvcw)
-			when Command_sequence_key then
+			when Cmd_sequence then
 				cmd_seq ?= c
 				check
 					c_is_a_command_sequence: cmd_seq /= Void
 				end
 				editor.edit_command_sequence (cmd_seq)
+			when Loop_cmd then
+				loopcmd ?= c
+				check
+					c_is_a_loop: loopcmd /= Void
+				end
+				editor.edit_loop_command (loopcmd)
+			when Value_at_index then
+				value_at_idx ?= c
+				check
+					c_is_a_value_at_idx: value_at_idx /= Void
+				end
+				editor.edit_value_at_index_command (value_at_idx)
 			end
 		end
 

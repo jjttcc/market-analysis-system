@@ -454,7 +454,7 @@ feature -- Basic operations
 		end
 
 	edit_command_sequence (cmd: COMMAND_SEQUENCE) is
-			-- Edit a .COMMAND_SEQUENCE
+			-- Edit a COMMAND_SEQUENCE.
 		local
 			child: COMMAND
 			finished: BOOLEAN
@@ -486,6 +486,24 @@ feature -- Basic operations
 			end
 		end
 
+	edit_loop_command (cmd: LOOP_COMMAND) is
+			-- Edit a LOOP_COMMAND.
+		local
+			assertion_loop: LOOP_WITH_ASSERTIONS
+		do
+			--loop_command init...!!!!
+			assertion_loop ?= cmd
+			if assertion_loop /= Void then
+				edit_loop_assertions (assertion_loop)
+			end
+		end
+
+	edit_value_at_index_command (cmd: VALUE_AT_INDEX_COMMAND) is
+			-- Edit a VALUE_AT_INDEX_COMMAND.
+		do
+			edit_mtlist_resultreal (cmd)
+		end
+
 	add_cmd_seq_child (cmd_seq: COMMAND_SEQUENCE; child: COMMAND) is
 			-- Add `child' to `cmd_seq'.
 		require
@@ -503,6 +521,11 @@ feature -- Basic operations
 					cmd_seq.set_main_operator (child)
 				end
 			end
+		end
+
+	edit_loop_assertions (cmd: LOOP_WITH_ASSERTIONS) is
+			-- Edit the assertion operators of `cmd'.
+		do
 		end
 
 end
