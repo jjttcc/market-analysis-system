@@ -2,6 +2,7 @@ package pct.application;
 
 import java.util.*;
 import support.FileReaderUtilities;
+import util.*;
 
 // Plug-in to start a new MAS server process
 public class NewServer extends MCT_Constants {
@@ -63,6 +64,7 @@ System.out.println("Trying to execute: " + cmd);
 					directory = ".";
 				}
 				String[] files = FileReaderUtilities.globlist(directory, glob);
+				ArraySorter.sort(files, new ASCIIComparer());
 				for (int i = 0; i < files.length; ++i) {
 					result = result + directory + sep + files[i] + " ";
 				}
