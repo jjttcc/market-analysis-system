@@ -27,6 +27,8 @@ feature -- Access
 
 	Hostname_specifier: STRING is "hostname"
 
+	Local_hostname: STRING is "localhost"
+
 	Working_directory_specifier: STRING is "cwdir"
 
 	Environment_variable_specifier: STRING is "environment_variable"
@@ -74,6 +76,11 @@ feature {NONE} -- Implementation - Hook routines
 			-- The name of the local host for this process
 		do
 			Result := (create {HOST_ADDRESS}.make).local_host_name
+			if Result = Void or else Result.is_empty then
+				Result := Local_hostname
+			end
+		ensure
+			result_exists: Result /= Void
 		end
 
 feature -- Utilities

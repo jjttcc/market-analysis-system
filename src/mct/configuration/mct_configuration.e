@@ -370,6 +370,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 feature {NONE} -- Implementation - Utilities
 
 	replace_configuration_tokens (s: STRING) is
+			-- Replace all "configuration tokens" in `s'.
 		local
 			keys, values: ARRAY [STRING]
 			cp_start_index: INTEGER
@@ -383,8 +384,8 @@ feature {NONE} -- Implementation - Utilities
 				user_defined_variables.upper, cp_start_index)
 			values.subcopy (user_defined_values, 1,
 				user_defined_variables.upper, cp_start_index)
-			replace_tokens (s, keys, values,
-				Token_start_delimiter, Token_end_delimiter)
+			replace_tokens (s, keys, values, Token_start_delimiter,
+				Token_end_delimiter)
 		end
 
 	replace_command_string_tokens (c: EXTERNAL_COMMAND) is
@@ -392,6 +393,9 @@ feature {NONE} -- Implementation - Utilities
 			-- values.
 		do
 			replace_configuration_tokens (c.command_string)
+			if c.working_directory /= Void then
+				replace_configuration_tokens (c.working_directory)
+			end
 		end
 
 	process_start_server_cmd (key, value: STRING) is
@@ -587,6 +591,7 @@ feature {NONE} -- Implementation
 			-- `s' + " " + report_back_option
 		do
 			Result := s + " " + report_back_option
+print ("rpa result: " + Result + "%N")
 		ensure
 			result_exists: Result /= Void
 			definition: Result.is_equal (s + " " + report_back_option)
