@@ -1,0 +1,103 @@
+(This description was also entered into the task database for task 30.
+I'm including it here because the formatting is changed when it is entered
+into the database.)
+
+Sometimes a "panic" is triggered when the server is doing a market analysis
+(i.e., for buy/sell signal generation).  This has happened a few times
+with the automated run_market_analysis job for the finance login.  There's
+a fair chance that the panic is being caused by running out of memory
+due to other piggish processes currently running.
+
+Possible diagnosis steps:
+
+Do a test run of market analysis and see if the server uses significantly
+more memory while the analysis runs.
+
+On a day that the panic occurs for the finance login:
+Check the top output from the run_market_analysis run to see what processes
+were running.  Assuming that some memory hogs were running, try to
+simulate the memory state from the top log by, if necessary, starting up
+some pig processes.  Then force an analysis for the finance login and see
+if the panic reoccors.  If it does, try terminating the pig processes and
+run the analysis again and see what happens.  If there is no panic, start
+the pig processes again and run aother analysis to verify that this causes
+the panic.
+
+Similar to the above procedure, but do it over time - simply make sure that
+the "pig" processes are running sometimes for the automated analysis, and
+other times not.  After several days, check to see if the panic only
+happened when the "pig" processes were running.  If a panic happened when
+the memory was fairly free, it's less likely that running out of memory is
+the cause of the panic.
+
+Here is some relevant output from the last time this happened.  See the
+log file in /home/development/jtc/finance/admin/bug_log for more detailed
+info.  (Note: The "Failed to lock event history file ..." message is not
+likely to be related to the cause of the panic.  Rather the panic causes
+the lock file to not be removed and, as a result, subsequent runs issue
+the "failed to lock" message.  I.e., this "failed" message was caused by
+a previous panic.)
+
+Select action:
+     Select tradable (s) View data (v) Edit indicators (e)
+     Edit market analyzers (m) Run market analysis (a)
+     Set date for market analysis (d) Edit event registrants (r)
+     End client session (x) Help (h) Product information (p)
+Failed to lock event history file /suse_6_3/home2/finance/.mas/downtrend/finance.history1492583539 - results will not be saved.
+
+mas: PANIC: unexpected harmful signal ...
+
+mas: system execution failed.
+Following is the set of recorded exceptions.
+NB: The raised panic may have induced completely inconsistent information:
+
+-------------------------------------------------------------------------------
+Class / Object      Routine                Nature of exception           Effect
+-------------------------------------------------------------------------------
+MA_SERVER           root's creation        unexpected harmful signal:   
+<406CE028>                                 Eiffel run-time panic.        Bye
+-------------------------------------------------------------------------------
+MA_SERVER           root's creation                                     
+<406CE028>                                 Routine failure.              Bye
+-------------------------------------------------------------------------------
+MA_SERVER           root's creation                                     
+<406CE028>                                 Routine failure.              Bye
+-------------------------------------------------------------------------------
+MA_SERVER           root's creation                                     
+<406CE028>                                 Routine failure.              Bye
+-------------------------------------------------------------------------------
+MA_SERVER           root's creation                                     
+<406CE028>                                 Routine failure.              Bye
+-------------------------------------------------------------------------------
+
+mas: dumping core to generate debugging information...
+
+mas: PANIC CASCADE: unexpected harmful signal -- Giving up...
+     Show settings (w) 
+macl: PANIC: unexpected harmful signal ...
+
+macl: system execution failed.
+Following is the set of recorded exceptions.
+NB: The raised panic may have induced completely inconsistent information:
+
+-------------------------------------------------------------------------------
+Class / Object      Routine                Nature of exception           Effect
+-------------------------------------------------------------------------------
+MACL                root's creation        unexpected harmful signal:   
+<405C9028>                                 Eiffel run-time panic.        Bye
+-------------------------------------------------------------------------------
+MACL                root's creation                                     
+<405C9028>                                 Routine failure.              Bye
+-------------------------------------------------------------------------------
+MACL                root's creation                                     
+<405C9028>                                 Routine failure.              Bye
+-------------------------------------------------------------------------------
+
+macl: dumping core to generate debugging information...
+
+macl: PANIC CASCADE: unexpected harmful signal -- Giving up...
+
+macl: FINAL PANIC: Cannot reclaim Eiffel objects -- Giving up...
+
+mas: FINAL PANIC: Cannot reclaim Eiffel objects -- Giving up...
+
