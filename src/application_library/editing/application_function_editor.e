@@ -123,7 +123,7 @@ feature -- Basic operations
 			check
 				lc_set_correctly: cmd.operand1 = lc
 			end
-			f.set_operators (cmd, lc, rc)
+			f.set_required_operators (cmd, lc, rc)
 		end
 
 	edit_one_fn_op_n (f: N_RECORD_ONE_VARIABLE_FUNCTION) is
