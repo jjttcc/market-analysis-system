@@ -63,7 +63,7 @@ feature {NONE} -- Implementation
 					"%N     Create a new market analyzer (c) %
 					%Remove a market analyzer (r) %
 					%%N     View a market analyzer (v) %
-					%Previous (-) Help (h) ", eot>>)
+					%Previous (-) Help (h) ", eom>>)
 				inspect
 					selected_character
 				when 'c', 'C' then
@@ -111,7 +111,7 @@ feature {NONE} -- Implementation
 			loop
 				print_list (<<"Select a market analyzer",
 							msg, " (0 to end):%N">>)
-				print_names_in_1_column (meg_names, 1); print (eot)
+				print_names_in_1_column (meg_names, 1); print (eom)
 				read_integer
 				if
 					last_integer < 0 or
@@ -142,7 +142,7 @@ feature {NONE} -- Implementation
 				c /= '%U'
 			loop
 				print_list (<<"Select analyzer type: ",
-							"Simple (s) Compound (c) ", eot>>)
+							"Simple (s) Compound (c) ", eom>>)
 				c := selected_character
 				if not (c = 's' or c = 'S' or c = 'c' or c = 'C') then
 					c := '%U'
@@ -172,7 +172,7 @@ feature {NONE} -- Implementation
 				finished
 			loop
 				print_list (<<"Select a market analyzer for ", msg, ":%N">>)
-				print_names_in_1_column (meg_names, 1); print (eot)
+				print_names_in_1_column (meg_names, 1); print (eom)
 				read_integer
 				if
 					last_integer < 1 or
@@ -202,7 +202,7 @@ feature {NONE} -- Implementation
 			loop
 				print_list (<<"Would you like this analyzer to use one ",
 							"or two technical indicators?%N",
-							"     One (o) Two (t) ", eot>>)
+							"     One (o) Two (t) ", eom>>)
 				c := selected_character
 				if not (c = 'o' or c = 'O' or c = 't' or c = 'T') then
 					c := '%U'
@@ -228,7 +228,7 @@ feature {NONE} -- Implementation
 				c /= '%U'
 			loop
 				print_list (<<"Would you like to define an operator for this %
-							%market analyzer? (y/n) ", eot>>)
+							%market analyzer? (y/n) ", eom>>)
 				c := selected_character
 				if not (c = 'y' or c = 'Y' or c = 'n' or c = 'N') then
 					c := '%U'
@@ -244,7 +244,7 @@ feature {NONE} -- Implementation
 					print_list (<<"Should the operator operate on the left ",
 							"function (", f.left_function.name,
 							") or the right function (",
-							f.right_function.name, ")? (l/r) ", eot>>)
+							f.right_function.name, ")? (l/r) ", eom>>)
 					c := selected_character
 					if not (c = 'l' or c = 'L' or c = 'r' or c = 'R') then
 						c := '%U'
@@ -268,7 +268,7 @@ feature {NONE} -- Implementation
 			loop
 				print_list (<<"Select the ", msg,
 							":%N">>)
-				print_names_in_1_column (function_names, 1); print (eot)
+				print_names_in_1_column (function_names, 1); print (eom)
 				read_integer
 				if
 					last_integer < 1 or
@@ -291,9 +291,9 @@ feature {NONE} -- Implementation
 				if names.count > 0 then
 					print_names_in_1_column (names, 1)
 					print_list (<<"Type a name for the new event that does %
-							%not match any of the above names:%N", eot>>)
+							%not match any of the above names:%N", eom>>)
 				else
-					print_list (<<"Type a name for the new event: ", eot>>)
+					print_list (<<"Type a name for the new event: ", eom>>)
 				end
 				read_line
 				if names.has (last_string) then
@@ -328,7 +328,7 @@ feature {NONE} -- Implementation
 			loop
 				print ("Select the desired trading period type %
 						%for the new market analyzer:%N")
-				print_names_in_1_column (names, 1); print (eot)
+				print_names_in_1_column (names, 1); print (eom)
 				read_integer
 				if
 					last_integer < 1 or
@@ -357,7 +357,7 @@ feature {NONE} -- Implementation
 			loop
 				print_list (<<"Select specification for crossover detection:%N%
 						%below-to-above (1) above-to-below (2) both (3) ",
-						eot>>)
+						eom>>)
 				inspect
 					selected_character
 				when '1' then
@@ -388,7 +388,7 @@ feature {NONE} -- Implementation
 			loop
 				print_list (<<"Would you like to add a time extension ",
 					"to match events from the left%Nanalyzer that occur ",
-					which, " the right analyzer? (y/n/h) ", eot>>)
+					which, " the right analyzer? (y/n/h) ", eom>>)
 				inspect
 					selected_character
 				when 'y', 'Y' then
@@ -411,19 +411,19 @@ feature {NONE} -- Implementation
 				finished
 			loop
 				print_list (<<"Select: days (d) months (m) years (y) End (e) ",
-							eot>>)
+							eom>>)
 				inspect
 					selected_character
 				when 'd', 'D' then
-					print_list (<<"Enter the number of days: ", eot>>)
+					print_list (<<"Enter the number of days: ", eom>>)
 					read_integer
 					days := last_integer
 				when 'm', 'M' then
-					print_list (<<"Enter the number of months: ", eot>>)
+					print_list (<<"Enter the number of months: ", eom>>)
 					read_integer
 					months := last_integer
 				when 'y', 'Y' then
-					print_list (<<"Enter the number of years: ", eot>>)
+					print_list (<<"Enter the number of years: ", eom>>)
 					read_integer
 					years := last_integer
 				when 'e', 'E' then
@@ -453,7 +453,7 @@ feature {NONE} -- Implementation
 			loop
 				print_list (<<"Would you like to specify an event type ",
 					"as target for the left analyzer's date/time? ",
-					" (y/n/h) ", eot>>)
+					" (y/n/h) ", eom>>)
 				inspect
 					selected_character
 				when 'y', 'Y' then
@@ -476,7 +476,7 @@ feature {NONE} -- Implementation
 				finished
 			loop
 				print ("Select an event type:%N")
-				print_names_in_1_column (event_type_names, 1); print (eot)
+				print_names_in_1_column (event_type_names, 1); print (eom)
 				read_integer
 				if
 					last_integer < 1 or
@@ -536,7 +536,7 @@ feature {NONE} -- Implementation
 					operator_maker.print_command_tree (fa.operator, 1)
 				end
 			end
-			print_list (<<"(Hit <Return> to continue.) ", eot>>)
+			print_list (<<"(Hit <Return> to continue.) ", eom>>)
 			read_line
 		end
 

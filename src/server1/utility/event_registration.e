@@ -54,6 +54,9 @@ feature -- Initialization
 			set_input_device (in_dev)
 			set_output_device (out_dev)
 			!!help.make
+			-- !!!Satisfy invariant - editor is currently not used; it may
+			-- be used later - if not, might want to change the invariant or?
+			!!editor
 		ensure
 			set: dispatcher = disp
 			iodev_set: input_device = in_dev and output_device = out_dev
@@ -76,7 +79,7 @@ feature -- Basic operations
 			loop
 				new_registrant := Void
 				print_list (<<"Select registrant type:%N     ",
-					"User (u) Log file (l) Previous (-) Help (h) ", eot>>)
+					"User (u) Log file (l) Previous (-) Help (h) ", eom>>)
 				inspect
 					selected_character
 				when 'u', 'U' then
@@ -158,9 +161,9 @@ feature {NONE} -- Implementation
 			s1, s2, s3: STRING
 		do
 			!!s1.make (0); !!s2.make (0)
-			print_list (<<"Enter the user's full name: ", eot>>)
+			print_list (<<"Enter the user's full name: ", eom>>)
 			s1.append (input_string)
-			print_list (<<"Enter the user's email address: ", eot>>)
+			print_list (<<"Enter the user's email address: ", eom>>)
 			s2.append (input_string)
 			!!s3.make (s2.count + 8)
 			s3.append (s2); s3.append (".history")
@@ -191,7 +194,7 @@ feature {NONE} -- Implementation
 			file_name, s2, history_file_name: STRING
 		do
 			!!file_name.make (0); !!s2.make (0)
-			print_list (<<"Enter the file name: ", eot>>)
+			print_list (<<"Enter the file name: ", eom>>)
 			file_name.append (input_string)
 			!!history_file_name.make (file_name.count + 8)
 			history_file_name.append (file_name)
@@ -228,14 +231,14 @@ feature {NONE} -- Implementation
 					i := i + 1
 				end
 				from
-					print (eot)
+					print (eom)
 					read_integer
 				until
 					last_integer >= 0 and last_integer <= i - 1
 				loop
 					print_list (<<"Selection must be between 0 and ",
 								i - 1, " - try again: %N">>)
-					print (eot)
+					print (eom)
 					read_integer
 				end
 				if last_integer = 0 then
@@ -267,18 +270,18 @@ feature {NONE} -- Implementation
 				regs.forth
 			end
 			from
-				print (eot)
+				print (eom)
 				read_integer
 			until
 				last_integer > 0 and last_integer < i or abort
 			loop
 				print_list (<<"Selection must be between 1 and ",
-							i - 1, " - Abort selection? (y/n) ", eot>>)
+							i - 1, " - Abort selection? (y/n) ", eom>>)
 				c := selected_character
 				if c = 'y' or c = 'Y' then
 					abort := true
 				else
-					print (eot)
+					print (eom)
 					read_integer
 				end
 			end
@@ -307,18 +310,18 @@ feature {NONE} -- Implementation
 				types.forth
 			end
 			from
-				print (eot)
+				print (eom)
 				read_integer
 			until
 				last_integer > 0 and last_integer < i or abort
 			loop
 				print_list (<<"Selection must be between 1 and ",
-							i - 1, " - Abort selection? (y/n) ", eot>>)
+							i - 1, " - Abort selection? (y/n) ", eom>>)
 				c := selected_character
 				if c = 'y' or c = 'Y' then
 					abort := true
 				else
-					print (eot)
+					print (eom)
 					read_integer
 				end
 			end
@@ -366,7 +369,7 @@ feature {NONE} -- Implementation
 			loop
 				print_list (<<"Select action for ", r.name, ": ",
 					"%N     Remove event type (r) Add event types (a) %
-					%Previous (-) Help (h) ", eot>>)
+					%Previous (-) Help (h) ", eom>>)
 				inspect
 					selected_character
 				when 'r', 'R' then
