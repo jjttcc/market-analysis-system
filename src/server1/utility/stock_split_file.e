@@ -198,3 +198,4 @@ invariant
 		file_name /= Void and value_setters /= Void and product /= Void
 
 end -- STOCK_SPLIT_FILE
+x
