@@ -32,6 +32,12 @@ feature -- String constants
 	date_field_separator: STRING is "/"
 			-- Internal field separator for dates
 
+	output_time_field_separator: STRING is deferred end
+			-- Field separator for time output produced by the server
+
+	time_field_separator: STRING is ":"
+			-- Internal field separator for times
+
 invariant
 
 	eom_size: eom.count = 1
