@@ -128,11 +128,9 @@ feature {NONE} -- Implementation
 			not_void: type /= Void and settings /= Void
 			session_not_void: session /= Void
 		local
-			date_maker: DATE_TIME_SERVICES
 			time_period: STRING
 			date: DATE
 		do
-			create date_maker
 			if type.is_equal (Start_date) or type.is_equal (End_date) then
 				time_period := settings.item
 				settings.forth
@@ -149,19 +147,10 @@ feature {NONE} -- Implementation
 					Result.append (": ")
 					Result.append (time_period)
 				else
-					if settings.item.is_equal ("0") then
-						create date.make (0, 0, 0)
-					elseif settings.item.is_equal ("now") then
-						create date.make_now
-						-- Set date to 2 years in the future.
-						date.set_year (date.year + 2)
-					else
-						date := date_maker.date_from_string (
-									settings.item, Date_field_separator)
-					end
+					date := date_from_setting (settings.item)
 					if date = Void then
 						create Result.make (0)
-						Result.append ("Invalid date for date %
+						Result.append ("Invalid date specification for date %
 							%setting of type ")
 						Result.append (type)
 						Result.append (": ")
@@ -176,6 +165,51 @@ feature {NONE} -- Implementation
 				create Result.make (0)
 				Result.append ("Invalid type for setting: ")
 				Result.append (type)
+			end
+		end
+
+	date_from_setting (s: STRING): DATE is
+		local
+			date_maker: DATE_TIME_SERVICES
+			sutil: STRING_UTILITIES
+			tokens: LIST [STRING]
+			n: INTEGER
+		do
+			create date_maker
+			if s.is_equal ("0") then
+				create Result.make (0, 0, 0)
+			elseif s.is_equal ("now") then
+				create Result.make_now
+				-- Set Result to 2 years in the future.
+				Result.set_year (Result.year + 2)
+			else
+				create sutil.make (s)
+				tokens := sutil.tokens (" ")
+				if tokens.count = 1 then
+					Result := date_maker.date_from_string (s,
+						Date_field_separator)
+				elseif
+					tokens.i_th (1).is_equal ("now") and
+					tokens.i_th (2).is_equal ("-") and
+					tokens.i_th (3).is_integer and tokens.count = 4
+				then
+					n := -tokens.i_th (3).to_integer
+					create Result.make_now
+					if tokens.i_th (4).substring(1, 3).is_equal("day") then
+						Result.day_add (n)
+					elseif
+						tokens.i_th (4).substring(1, 5).is_equal("month")
+					then
+						Result.month_add (n)
+					elseif
+						tokens.i_th (4).substring(1, 4).is_equal("year")
+					then
+						Result.year_month_add (n, 0)
+					else
+						-- Invalid specification
+						Result := Void
+					end
+				end
 			end
 		end
 
