@@ -129,6 +129,8 @@ feature {NONE} -- Implementation
 				prepare_for_processing
 				start_data_cursors
 				synchronize_component_cursors
+				-- Iterate over the tuples of the data set for each
+				-- element of `components', in parallel.
 				from
 					-- Use the data sequence from the first element of
 					-- `components' to control the iteration.
@@ -149,6 +151,65 @@ feature {NONE} -- Implementation
 	make_current_tuple is
 			-- Use the tuple at the current cursor position of each element
 			-- of `components' to make `current_tuple'.
+		local
+			operator: RESULT_COMMAND [REAL]
+			variable: NUMERIC_VALUE_COMMAND
+		do
+			operator := operator_for_current_component
+			variable := variable_for_current_component
+			create current_tuple.make
+			-- Iterate over each field extractor - open, high, ...
+			from
+				field_extractors.start
+				field_setters.start
+			until
+				field_extractors.exhausted
+			loop
+				-- For the current field extractor, extract, operate on,
+				-- and "accumulate" the corresponding field the current
+				-- tuple of each element of `components'.
+				from
+					components.start
+				until
+					components.exhausted
+				loop
+					calculate_field (field_extractors.item, operator, variable)
+					components.forth
+				end
+				field_setters.item.call ([current_tuple,
+					field_extractors.item.value])
+				field_extractors.forth
+				field_setters.forth
+			end
+		ensure
+			current_tuple_exists: current_tuple /= Void
+		end
+
+	xold_update_current_tuple (t: TRADABLE [VOLUME_TUPLE]) is
+			-- Update `current_tuple' according to the data at
+			-- `t's current cursor -- position.
+		local
+			operator: RESULT_COMMAND [REAL]
+			variable: NUMERIC_VALUE_COMMAND
+		do
+			operator := operator_for_current_component
+			variable := variable_for_current_component
+			calculate_field (open, operator, variable)
+			current_tuple.set_open (accumulation_operator.value)
+			calculate_field (high, operator, variable)
+			current_tuple.set_high (accumulation_operator.value)
+			calculate_field (low, operator, variable)
+			current_tuple.set_low (accumulation_operator.value)
+			calculate_field (close, operator, variable)
+			current_tuple.set_close (accumulation_operator.value)
+			calculate_field (volume, operator_for_current_component_volume,
+				variable)
+			current_tuple.set_volume (accumulation_operator.value)
+		end
+
+	old_make_current_tuple is
+			-- Use the tuple at the current cursor position of each element
+			-- of `components' to make `current_tuple'.
 		do
 			from
 				create current_tuple.make
@@ -156,7 +217,7 @@ feature {NONE} -- Implementation
 			until
 				components.exhausted
 			loop
-				update_current_tuple (components.item)
+--				update_current_tuple (components.item)
 				components.forth
 			end
 		ensure
@@ -201,7 +262,7 @@ feature {NONE} -- Implementation - Hook routines
 				components.first.data.item.date_time))
 		end
 
-	update_current_tuple (t: TRADABLE [VOLUME_TUPLE]) is
+	old_update_current_tuple (t: TRADABLE [VOLUME_TUPLE]) is
 			-- Update `current_tuple' according to the data at
 			-- `t's current cursor -- position.
 		local
@@ -292,6 +353,27 @@ feature {NONE} -- Implementation - Utility attributes
 	volume: VOLUME
 			-- Operator used to extract the volume of the input
 			-- tuple currently being processed
+
+	field_extractors: LINKED_LIST [BASIC_NUMERIC_COMMAND] is
+		once
+			create Result.make
+			Result.extend (open)
+			Result.extend (high)
+			Result.extend (low)
+			Result.extend (close)
+			Result.extend (volume)
+		end
+
+	field_setters: LINKED_LIST [PROCEDURE [ANY, TUPLE [
+			BASIC_VOLUME_TUPLE, REAL]]] is
+		once
+			create Result.make
+			Result.extend (agent {BASIC_VOLUME_TUPLE}.set_open (?))
+			Result.extend (agent {BASIC_VOLUME_TUPLE}.set_high (?))
+			Result.extend (agent {BASIC_VOLUME_TUPLE}.set_low (?))
+			Result.extend (agent {BASIC_VOLUME_TUPLE}.set_close (?))
+			Result.extend (agent {BASIC_VOLUME_TUPLE}.set_volume (?))
+		end
 
 feature {NONE} -- Implementation - Utility routines
 
