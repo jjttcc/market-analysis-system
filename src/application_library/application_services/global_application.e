@@ -50,42 +50,35 @@ feature {NONE} -- Access
 			!LINKED_LIST [TERMINABLE]!result.make
 		end
 
-	--!!!Probably, event type stuff should go into a separate class.
-	--!!!GS may use that class to make them globally available.
-	--event_types: TABLE [EVENT_TYPE, INTEGER] is
 	event_types: ARRAY [EVENT_TYPE] is
 			-- All event types known to the system
-		once
-			!ARRAY [EVENT_TYPE]!Result.make (1, 0)
-		end
-
-	create_event_type (name: STRING) is
-			-- Create a new EVENT_TYPE with name `name' and add it to
-			-- the `event_types' table.
-			--!!!More design work needed here re. event type management.
 		local
-			et: EVENT_TYPE
 			i: INTEGER
 		do
-			i := last_event_ID.item + 1
-			last_event_ID.set_item (i)
-			!!et.make (name, last_event_ID.item)
-			event_types.force (et, last_event_ID.item)
-		end
-
-	last_event_type: EVENT_TYPE is
-			-- Last created event type
-		do
-			if last_event_ID.item > 0 then
-				Result := event_types @ last_event_ID.item
+			!ARRAY [EVENT_TYPE]!Result.make (1,
+				market_event_generation_library.count)
+			from
+				i := 1
+				market_event_generation_library.start
+			until
+				market_event_generation_library.exhausted
+			loop
+				Result.put (market_event_generation_library.item.event_type, i)
+				market_event_generation_library.forth
+				i := i + 1
 			end
 		end
 
-	last_event_ID: INTEGER_REF is
-			-- !!!Temporary hack
-		once
-			!!Result
-			Result.set_item (0)
+	new_event_type (name: STRING): EVENT_TYPE is
+			-- Create a new EVENT_TYPE with name `name'.
+			-- !!!with a unique ID - not in m_e_g_l ...
+			-- Note: A new MARKET_EVENT_GENERATOR should be created with
+			-- this new event type and added to market_event_generation_library
+			-- before the next event type is created.
+		do
+			!!Result.make (name, market_event_generation_library.count + 1)
+		ensure
+			not event_types.has (Result)
 		end
 
 	function_library: LIST [MARKET_FUNCTION] is
@@ -95,13 +88,29 @@ feature {NONE} -- Access
 			mflist: STORABLE_LIST [MARKET_FUNCTION]
 		once
 			!!storable
-			mflist ?= storable.retrieve_by_name (storable_file_name)
+			mflist ?= storable.retrieve_by_name (indicators_file_name)
 			if mflist = Void then
 				!STORABLE_MARKET_FUNCTION_LIST!mflist.make (
-														storable_file_name)
+					indicators_file_name)
 			end
 			register_for_termination (mflist)
 			Result := mflist
+		end
+
+	market_event_generation_library: LIST [MARKET_EVENT_GENERATOR] is
+			-- All defined market functions
+		local
+			storable: STORABLE
+			meg_list: STORABLE_LIST [MARKET_EVENT_GENERATOR]
+		once
+			!!storable
+			meg_list ?= storable.retrieve_by_name (generators_file_name)
+			if meg_list = Void then
+				!STORABLE_EVENT_GENERATOR_LIST!meg_list.make (
+					generators_file_name)
+			end
+			register_for_termination (meg_list)
+			Result := meg_list
 		end
 
 feature {NONE} -- Constants
@@ -109,12 +118,20 @@ feature {NONE} -- Constants
 	default_input_file_name: STRING is "/tmp/tatest"
 			-- Name of default input file if none is specified by the user
 
-	storable_file_name: STRING is
-			-- Name of the file containing persistent data
+	indicators_file_name: STRING is
+			-- Name of the file containing persistent data for indicators
 		local
 			ta_env: expanded TAL_APP_ENVIRONMENT
 		once
-			Result := ta_env.file_name_with_app_directory ("ta_persist")
+			Result := ta_env.file_name_with_app_directory ("indicators_persist")
+		end
+
+	generators_file_name: STRING is
+			-- Name of the file containing persistent data for event generators
+		local
+			ta_env: expanded TAL_APP_ENVIRONMENT
+		once
+			Result := ta_env.file_name_with_app_directory ("generators_persist")
 		end
 
 end -- GLOBAL_APPLICATION
