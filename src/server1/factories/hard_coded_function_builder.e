@@ -84,7 +84,7 @@ feature -- Basic operations
 											"Slow Stochastic %%D"))
 			l.extend (rsi (f, RSI_n, "Relative Strength Index"))
 			l.extend (market_close_data (f, "Market Close Data"))
-			l.extend (market_function_line ("Line"))
+			l.extend (market_function_line (f, "Line"))
 			product := l
 		end
 
@@ -362,7 +362,8 @@ feature {NONE} -- Hard-coded market function building procedures
 			initialized: Result /= Void and Result.name = name
 		end
 
-	market_function_line (name: STRING): MARKET_FUNCTION_LINE is
+	market_function_line (f: MARKET_FUNCTION; name: STRING):
+				MARKET_FUNCTION_LINE is
 			-- Dummy line
 		local
 			p1, p2: MARKET_POINT
@@ -374,8 +375,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			p1.set_x_y_date (earlier.day, 1, earlier)
 			!!p2.make
 			p2.set_x_y_date (later.day, 1, later)
-			!!Result.make_from_2_points (p1, p2,
-				period_types @ (period_type_names @ Daily))
+			!!Result.make_from_2_points (p1, p2, f)
 			Result.set_name (name)
 		end
 
