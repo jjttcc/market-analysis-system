@@ -187,7 +187,7 @@ feature {NONE} -- Implementation
 
 	make_ctf: COMPOSITE_TUPLE_FACTORY is
 		once
-			!COMPOSITE_VOLUME_TUPLE_FACTORY!Result
+			create {COMPOSITE_VOLUME_TUPLE_FACTORY} Result
 		end
 
 	stock_info: STOCK_DATA

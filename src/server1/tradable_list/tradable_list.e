@@ -37,7 +37,7 @@ feature -- Initialization
 			tradable_factory := factory
 			object_comparison := True
 			symbol_list.start
-			!! cache.make (Cache_size)
+			create cache.make (Cache_size)
 		ensure
 			set: symbol_list = s_list and tradable_factory = factory
 			implementation_init: last_tradable = Void and old_index = 0

@@ -26,7 +26,7 @@ feature -- Access
 
 	short_description: STRING is
 		do
-			!!Result.make (38)
+			create Result.make (38)
 			Result.append (n.out)
 			Result.append ("-Period Exponential Moving Average that operates %
 							%on a data sequence")
@@ -86,7 +86,7 @@ feature {NONE}
 			exp.execute (Void)
 			operator.execute (target.item)
 			latest_value := operator.value
-			!!t.make (target.item.date_time, target.item.end_date,
+			create t.make (target.item.date_time, target.item.end_date,
 						latest_value * exp.value +
 							output.last.value * (1 - exp.value))
 			output.extend (t)

@@ -19,7 +19,7 @@ feature -- Initialization
 			not_void: sp_file /= Void
 		do
 			splits := sp_file
-			!!symbol.make (6)
+			create symbol.make (6)
 		ensure
 			set: splits = sp_file
 		end

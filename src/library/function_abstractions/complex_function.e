@@ -77,7 +77,7 @@ feature {NONE} -- Hook methods
 	update_processed_date_time is
 		do
 			if processed_date_time = Void then
-				!!processed_date_time.make_now
+				create processed_date_time.make_now
 			else
 				processed_date_time.make_now
 			end

@@ -77,7 +77,7 @@ feature {NONE} -- Implementation
 		require
 			duration /= Void
 		do
-			!!name.make (0)
+			create name.make (0)
 			if duration.day /= 0 then
 				if duration.day = 1 then
 					name.append (Daily)

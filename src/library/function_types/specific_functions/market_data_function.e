@@ -36,7 +36,7 @@ feature -- Access
 
 	full_description: STRING is
 		do
-			!!Result.make (65)
+			create Result.make (65)
 			Result.append (short_description)
 			Result.append (":%N")
 			Result.append (input.full_description)
@@ -45,7 +45,7 @@ feature -- Access
 	parameters: LIST [FUNCTION_PARAMETER] is
 			-- Empty list - no parameters
 		once
-			!LINKED_LIST [FUNCTION_PARAMETER]!Result.make
+			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 		end
 
 feature -- Status report

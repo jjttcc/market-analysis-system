@@ -32,7 +32,7 @@ feature {NONE}
 				handle_input_error ("Date input value is invalid.", Void)
 				unrecoverable_error := true
 			else
-				!!date_time.make_by_date (date)
+				create date_time.make_by_date (date)
 				tuple.set_date_time (date_time)
 			end
 		end

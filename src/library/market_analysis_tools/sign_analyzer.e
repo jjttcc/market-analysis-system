@@ -33,12 +33,12 @@ feature -- Initialization
 		local
 			a: ARRAY [INTEGER]
 		do
-			!!sign_change_spec.make
+			create sign_change_spec.make
 			if init_sign_spec then
-				!!a.make (1, 2)
+				create a.make (1, 2)
 				a := <<1, -1>>
 				sign_change_spec.extend (a)
-				!!a.make (1, 2)
+				create a.make (1, 2)
 				a := <<-1, 1>>
 				sign_change_spec.extend (a)
 			end

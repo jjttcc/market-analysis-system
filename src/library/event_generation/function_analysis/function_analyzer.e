@@ -78,7 +78,7 @@ feature -- Basic operations
 			check
 				tuple.date_time /= Void and tuple.end_date /= Void
 			end
-			!!event.make (event_name, tradable.symbol,
+			create event.make (event_name, tradable.symbol,
 							tuple.date_time, event_type)
 			-- For weekly, monthly, etc. data, this will be the date of
 			-- the last trading period of which the tuple is composed; for

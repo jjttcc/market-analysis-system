@@ -112,7 +112,7 @@ feature -- Access
 		local
 			dt: DATE_TIME
 		do
-			!!dt.make_by_date (d)
+			create dt.make_by_date (d)
 			check
 				dt.hour = 0 and dt.minute = 0 and dt.second = 0
 			end

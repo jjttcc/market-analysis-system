@@ -44,9 +44,9 @@ feature -- Initialization
 				print_list (<<version.name, ", Version ", version.number, ", ",
 					version.informal_date, "%N">>)
 			else
-				!!poller.make_read_only
-				!!factory_builder.make
-				!LINKED_LIST [SOCKET]!current_sockets.make
+				create poller.make_read_only
+				create factory_builder.make
+				create {LINKED_LIST [SOCKET]} current_sockets.make
 				-- Make a socket for each port number provided in the
 				-- command line, create a STREAM_READER to handle it,
 				-- and add it to the poller's list of read commands.
@@ -56,9 +56,10 @@ feature -- Initialization
 				until
 					command_line_options.port_numbers.exhausted
 				loop
-					!!socket.make_server_by_port (
+					create socket.make_server_by_port (
 						command_line_options.port_numbers.item)
-					!STREAM_READER!readcmd.make (socket, factory_builder)
+					create {STREAM_READER} readcmd.make (socket,
+						factory_builder)
 					poller.put_read_command (readcmd)
 					current_sockets.extend (socket)
 					command_line_options.port_numbers.forth
@@ -66,7 +67,7 @@ feature -- Initialization
 				-- If background is not specified, add a reader to respond to
 				-- console commands.
 				if not command_line_options.background then
-					!CONSOLE_READER!readcmd.make (factory_builder)
+					create {CONSOLE_READER} readcmd.make (factory_builder)
 					poller.put_read_command (readcmd)
 				end
 				from

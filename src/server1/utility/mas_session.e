@@ -14,8 +14,8 @@ feature {NONE} -- Initialization
 
 	make is
 		do
-			!!start_dates.make(1)
-			!!end_dates.make(1)
+			create start_dates.make(1)
+			create end_dates.make(1)
 		ensure
 			dates_not_void: start_dates /= Void and end_dates /= Void
 		end

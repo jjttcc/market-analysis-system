@@ -36,7 +36,7 @@ feature -- Access
 
 	short_description: STRING is
 		do
-			!!Result.make (33)
+			create Result.make (33)
 			Result.append (n.out)
 			Result.append ("-Period Simple Moving Average that operates %
 							%on a data sequence")
@@ -47,8 +47,8 @@ feature {NONE} -- Initialization
 	make (in: like input; op: like operator; i: INTEGER) is
 		do
 			check operator_used end
-			!!sum.make (in.output, op, i)
-			!!output.make (in.output.count)
+			create sum.make (in.output, op, i)
+			create output.make (in.output.count)
 			nrovf_set_input (in)
 			nrovf_set_operator (op)
 			nrovf_set_n (i)
@@ -79,7 +79,7 @@ feature {NONE} -- Basic operations
 				end
 				-- The first trading period of the output is the nth trading
 				-- period of the input (target).
-				!!t.make (target.i_th (effective_n).date_time,
+				create t.make (target.i_th (effective_n).date_time,
 							target.i_th (effective_n).end_date, sum.value / n)
 				last_sum := sum.value
 				check
@@ -132,7 +132,7 @@ feature {NONE}
 			operator.execute (target.item)
 			latest_value := operator.value
 			last_sum := last_sum - expired_value + latest_value
-			!!t.make (target.item.date_time, target.item.end_date,
+			create t.make (target.item.date_time, target.item.end_date,
 						last_sum / n)
 			output.extend (t)
 		ensure then

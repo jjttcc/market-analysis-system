@@ -24,7 +24,7 @@ feature -- Access
 		local
 			i: INTEGER
 		once
-			!!Result.make(0)
+			create Result.make(0)
 			from
 				i := 1
 			until
@@ -47,7 +47,7 @@ feature -- Access
 	date: DATE is
 			-- The last date that `number' was updated
 		once
-			!!Result.make (2000, 8, 1)
+			create Result.make (2000, 8, 1)
 		end
 
 	informal_date: STRING is

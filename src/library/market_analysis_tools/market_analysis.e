@@ -44,8 +44,8 @@ feature -- Access
 				mt := c.i_th (i)
 			end
 			p3.set_x_y_date (i + 1, mt.value, mt.date_time)
-			!!line1.make_from_2_points (p1, p2)
-			!!line2.make_from_2_points (p2, p3)
+			create line1.make_from_2_points (p1, p2)
+			create line2.make_from_2_points (p2, p3)
 			Result := (line1.slope + line2.slope) / 2
 		end
 

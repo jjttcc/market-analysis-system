@@ -63,7 +63,7 @@ feature -- Access
 
 	full_description: STRING is
 		do
-			!!Result.make (40)
+			create Result.make (40)
 			Result.append (short_description)
 			Result.append (" with ")
 			Result.append (count.out)
@@ -72,13 +72,13 @@ feature -- Access
 
 	parameters: LIST [FUNCTION_PARAMETER] is
 		once
-			!LINKED_LIST [FUNCTION_PARAMETER]!Result.make
+			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 		end
 
 	processed_date_time: DATE_TIME is
 		once
 			-- Very early date
-			!!Result.make (1, 1, 1, 0, 0, 0)
+			create Result.make (1, 1, 1, 0, 0, 0)
 		end
 
 feature {FACTORY} -- Status setting

@@ -27,7 +27,7 @@ feature -- Initialization
 						per_type /= Void
 		do
 			set_input (in)
-			!!start_date_time.make_now
+			create start_date_time.make_now
 			operator := op
 			-- EVENT_TYPE instances have a one-to-one correspondence to
 			-- FUNTION_ANALYZER instances.  Thus this is the appropriate
@@ -48,7 +48,7 @@ feature -- Access
 
 	indicators: LIST [MARKET_FUNCTION] is
 		do
-			!LINKED_LIST [MARKET_FUNCTION]!Result.make
+			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 			Result.extend (input)
 		end
 
@@ -88,7 +88,7 @@ feature -- Basic operations
 
 	execute is
 		do
-			!LINKED_LIST [MARKET_EVENT]!product.make
+			create {LINKED_LIST [MARKET_EVENT]} product.make
 			if not input.processed then
 				input.process
 			end

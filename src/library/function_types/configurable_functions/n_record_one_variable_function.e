@@ -44,7 +44,7 @@ feature -- Access
 
 	short_description: STRING is
 		do
-			!!Result.make (60)
+			create Result.make (60)
 			Result.append (n.out)
 			Result.append ("-Period ")
 			Result.append (Precursor)
@@ -120,8 +120,8 @@ feature {NONE}
 		local
 			fp: N_RECORD_FUNCTION_PARAMETER
 		do
-			!LINKED_LIST [FUNCTION_PARAMETER]!Result.make
-			!!fp.make (Current)
+			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
+			create fp.make (Current)
 			Result.extend (fp)
 		end
 

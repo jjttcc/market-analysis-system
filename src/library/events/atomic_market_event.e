@@ -44,7 +44,7 @@ feature -- Access
 
 	components: LIST [MARKET_EVENT] is
 		do
-			!ARRAYED_LIST [MARKET_EVENT]!Result.make (0)
+			create {ARRAYED_LIST [MARKET_EVENT]} Result.make (0)
 			Result.extend (Current)
 		ensure then
 			Result.count = 1 and Result @ 1 = Current
@@ -57,7 +57,7 @@ feature -- Access
 		local
 			date_time: STRING
 		do
-			!!date_time.make (21)
+			create date_time.make (21)
 			date_time.append (time_stamp.year.out)
 			if time_stamp.month < 10 then
 				date_time.extend ('0')

@@ -40,7 +40,7 @@ feature -- Access
 
 	midnight: TIME is
 		once
-			!!Result.make (0, 0, 0)
+			create Result.make (0, 0, 0)
 		end
 
 feature {FACTORY, VALUE_SETTER} -- Status setting

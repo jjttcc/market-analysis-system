@@ -61,7 +61,7 @@ feature -- Access
 
 	full_description: STRING is
 		do
-			!!Result.make (25)
+			create Result.make (25)
 			Result.append (short_description)
 			Result.append (":%N")
 			Result.append (input.full_description)
@@ -72,8 +72,8 @@ feature -- Access
 			parameter_set: LINKED_SET [FUNCTION_PARAMETER]
 		do
 			if parameter_list = Void then
-				!!parameter_list.make
-				!!parameter_set.make
+				create parameter_list.make
+				create parameter_set.make
 				if immediate_parameters /= Void then
 					parameter_set.fill (immediate_parameters)
 				end
@@ -102,7 +102,7 @@ feature {NONE}
 			t: SIMPLE_TUPLE
 		do
 			operator.execute (target.item)
-			!!t.make (target.item.date_time, target.item.end_date,
+			create t.make (target.item.date_time, target.item.end_date,
 						operator.value)
 			output.extend (t)
 		ensure then
@@ -167,7 +167,7 @@ feature {NONE} -- Implementation
 
 	make_output is
 		do
-			!!output.make (target.count)
+			create output.make (target.count)
 		end
 
 invariant

@@ -29,7 +29,7 @@ feature -- Access
 			i: INTEGER
 			keys: ARRAY [STRING]
 		once
-			!!Result.make (1)
+			create Result.make (1)
 			from
 				keys := nonintraday_period_types.current_keys
 				i := 1
@@ -58,43 +58,43 @@ feature -- Access
 			duration: DATE_TIME_DURATION
 			tbl: HASH_TABLE [TIME_PERIOD_TYPE, STRING]
 		once
-			!!tbl.make (3)
+			create tbl.make (3)
 			-- daily
-			!!duration.make (0, 0, 1, 0, 0, 0)
+			create duration.make (0, 0, 1, 0, 0, 0)
 			check duration.day = 1 end
-			!!type.make (duration)
+			create type.make (duration)
 			check
 				not_in_table2: not tbl.has (type.name)
 			end
 			tbl.extend (type, type.name)
 			-- weekly
-			!!duration.make (0, 0, 7, 0, 0, 0)
+			create duration.make (0, 0, 7, 0, 0, 0)
 			check duration.day = 7 end
-			!!type.make (duration)
+			create type.make (duration)
 			check
 				not_in_table3: not tbl.has (type.name)
 			end
 			tbl.extend (type, type.name)
 			-- monthly
-			!!duration.make (0, 1, 0, 0, 0, 0)
+			create duration.make (0, 1, 0, 0, 0, 0)
 			check duration.month = 1 end
-			!!type.make (duration)
+			create type.make (duration)
 			check
 				not_in_table4: not tbl.has (type.name)
 			end
 			tbl.extend (type, type.name)
 			-- quarterly
-			!!duration.make (0, 3, 0, 0, 0, 0)
+			create duration.make (0, 3, 0, 0, 0, 0)
 			check duration.month = 3 end
-			!!type.make (duration)
+			create type.make (duration)
 			check
 				not_in_table4: not tbl.has (type.name)
 			end
 			tbl.extend (type, type.name)
 			-- yearly
-			!!duration.make (1, 0, 0, 0, 0, 0)
+			create duration.make (1, 0, 0, 0, 0, 0)
 			check duration.year = 1 end
-			!!type.make (duration)
+			create type.make (duration)
 			check
 				not_in_table4: not tbl.has (type.name)
 			end
@@ -110,11 +110,11 @@ feature -- Access
 			duration: DATE_TIME_DURATION
 			tbl: HASH_TABLE [TIME_PERIOD_TYPE, STRING]
 		once
-			!!tbl.make (3)
+			create tbl.make (3)
 			-- hourly
-			!!duration.make (0, 0, 0, 1, 0, 0)
+			create duration.make (0, 0, 0, 1, 0, 0)
 			check duration.hour = 1 end
-			!!type.make (duration)
+			create type.make (duration)
 			check
 				not_in_table1: not tbl.has (type.name)
 			end
@@ -129,7 +129,7 @@ feature -- Access
 			type_names: ARRAY [STRING]
 			i: INTEGER
 		once
-			!LINKED_LIST [TIME_PERIOD_TYPE]!Result.make
+			create {LINKED_LIST [TIME_PERIOD_TYPE]} Result.make
 			type_names := period_type_names
 			from
 				i := 1
@@ -146,7 +146,7 @@ feature -- Access
 		local
 			tpt: TIME_PERIOD_TYPE
 		once
-			!!Result.make (1, 1)
+			create Result.make (1, 1)
 			period_types.start
 			tpt := period_types.item_for_iteration
 			Result.force (tpt.Hourly, Hourly)

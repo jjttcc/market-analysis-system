@@ -163,7 +163,7 @@ feature -- Basic operations
 					output_empty: output /= Void and output.empty
 				end
 				missing_data := false
-				!!src_sublist.make (0)
+				create src_sublist.make (0)
 				source_list.start
 				current_date := start_date
 				check output.count = 0 end
@@ -213,7 +213,7 @@ feature {NONE}
 
 	make_output is
 		do
-			!!output.make (trading_period_type)
+			create output.make (trading_period_type)
 		end
 
 	time_diff_equals_duration (d1, d2: DATE_TIME): BOOLEAN is

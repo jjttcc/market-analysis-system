@@ -38,8 +38,8 @@ feature {NONE} -- Initialization
 		do
 			left_analyzer := la
 			right_analyzer := ra
-			!!before_extension.make (0, 0, 0, 0, 0, 0)
-			!!after_extension.make (0, 0, 0, 0, 0, 0)
+			create before_extension.make (0, 0, 0, 0, 0, 0)
+			create after_extension.make (0, 0, 0, 0, 0, 0)
 			event_type := ev_type
 		ensure
 			analyzers_set: left_analyzer = la and right_analyzer = ra
@@ -70,7 +70,7 @@ feature -- Access
 
 	indicators: LIST [MARKET_FUNCTION] is
 		do
-			!LINKED_LIST [MARKET_FUNCTION]!Result.make
+			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 			Result.append (left_analyzer.indicators)
 			Result.append (right_analyzer.indicators)
 		end
@@ -139,7 +139,7 @@ feature -- Basic operations
 		local
 			left_events, right_events: CHAIN [MARKET_EVENT]
 		do
-			!LINKED_LIST [MARKET_EVENT]!product.make
+			create {LINKED_LIST [MARKET_EVENT]} product.make
 			left_analyzer.execute
 			right_analyzer.execute
 			left_events := left_analyzer.product
@@ -186,7 +186,7 @@ feature {NONE} -- Implementation
 			-- depends on this value to terminate to avoid the possibility
 			-- of an infinite loop.
 			if Result = Void then
-				!!Result.make (9999, 1, 1, 0, 0, 0)
+				create Result.make (9999, 1, 1, 0, 0, 0)
 				log_errors (<<"Error occurred in ", generator,
 					" in feature target_date: left_target_type ",
 					left_target_type.name, " (ID: ", left_target_type.id,
@@ -270,7 +270,7 @@ feature {NONE} -- Implementation
 		require
 			e /= Void
 		do
-			!!Result.make (e.time_stamp + before_extension,
+			create Result.make (e.time_stamp + before_extension,
 							e.time_stamp + after_extension)
 		end
 
@@ -282,7 +282,7 @@ feature {NONE} -- Implementation
 		local
 			e: MARKET_EVENT_PAIR
 		do
-			!!e.make (left, right, "Event pair", event_type)
+			create e.make (left, right, "Event pair", event_type)
 			product.extend (e)
 		end
 

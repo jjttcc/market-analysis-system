@@ -79,7 +79,7 @@ feature -- Access
 
 	components: LIST [MARKET_EVENT] is
 		do
-			!ARRAYED_LIST [MARKET_EVENT]!Result.make (2)
+			create {ARRAYED_LIST [MARKET_EVENT]} Result.make (2)
 			Result.append (left.components)
 			Result.append (right.components)
 		ensure then
@@ -91,7 +91,7 @@ feature -- Access
 		local
 			left_guts, right_guts: ARRAY [STRING]
 		do
-			!!Result.make (1, 2)
+			create Result.make (1, 2)
 			left_guts := left.guts
 			right_guts := right.guts
 			Result.put ("MEP", 1)

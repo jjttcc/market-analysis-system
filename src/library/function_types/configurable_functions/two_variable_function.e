@@ -31,7 +31,7 @@ feature {NONE} -- Initialization
 			op_not_void: op /= Void
 			in_output_not_void: in1.output /= Void and in2.output /= Void
 		do
-			!!output.make (in1.output.count)
+			create output.make (in1.output.count)
 			set_input1 (in1)
 			set_input2 (in2)
 			set_operator (op)
@@ -56,7 +56,7 @@ feature -- Access
 
 	full_description: STRING is
 		do
-			!!Result.make (25)
+			create Result.make (25)
 			Result.append (short_description)
 			Result.append (":%N")
 			Result.append (input1.full_description)
@@ -69,8 +69,8 @@ feature -- Access
 			parameter_set: LINKED_SET [FUNCTION_PARAMETER]
 		do
 			if parameter_list = Void then
-				!!parameter_list.make
-				!!parameter_set.make
+				create parameter_list.make
+				create parameter_set.make
 				if immediate_parameters /= Void then
 					parameter_set.fill (immediate_parameters)
 				end
@@ -107,7 +107,7 @@ feature {NONE} -- Hook methods
 				t1_t2_dates_equal: target1.item.date_time.is_equal (
 									target2.item.date_time)
 			end
-			!!t.make (target1.item.date_time, target1.item.end_date,
+			create t.make (target1.item.date_time, target1.item.end_date,
 						operator.value)
 			output.extend (t)
 		ensure then

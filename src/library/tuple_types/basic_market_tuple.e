@@ -22,7 +22,7 @@ feature -- Initialization
 
 	make is
 		do
-			!!open; !!close; !!high; !!low
+			create open; create close; create high; create low
 			open.set_value (-1)
 		ensure
 			not open_available

@@ -74,7 +74,7 @@ feature {NONE} -- Implemetation
 		local
 			t: MARKET_POINT
 		do
-			!!t.make
+			create t.make
 			t.set_x_y_date (target.index, y_at (target.index),
 							target.item.date_time)
 			output.extend (t)
@@ -87,10 +87,10 @@ feature {NONE} -- Implemetation
 			sfp: SLOPE_FUNCTION_PARAMETER
 			syfp: START_Y_FUNCTION_PARAMETER
 		do
-			!LINKED_LIST [FUNCTION_PARAMETER]!Result.make
-			!!sfp.make (Current)
+			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
+			create sfp.make (Current)
 			Result.extend (sfp)
-			!!syfp.make (Current)
+			create syfp.make (Current)
 			Result.extend (syfp)
 		end
 

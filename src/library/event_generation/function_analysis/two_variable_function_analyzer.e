@@ -35,7 +35,7 @@ feature -- Initialization
 		do
 			set_input1 (in1)
 			set_input2 (in2)
-			!!start_date_time.make_now
+			create start_date_time.make_now
 			-- EVENT_TYPE instances have a one-to-one correspondence to
 			-- FUNTION_ANALYZER instances.  Thus this is the appropriate
 			-- place to create this new EVENT_TYPE instance.
@@ -58,7 +58,7 @@ feature -- Access
 
 	indicators: LIST [MARKET_FUNCTION] is
 		do
-			!LINKED_LIST [MARKET_FUNCTION]!Result.make
+			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 			Result.extend (input1)
 			Result.extend (input2)
 		end
@@ -116,7 +116,7 @@ feature -- Basic operations
 
 	execute is
 		do
-			!LINKED_LIST [MARKET_EVENT]!product.make
+			create {LINKED_LIST [MARKET_EVENT]} product.make
 			if not input1.processed then
 				input1.process
 			end

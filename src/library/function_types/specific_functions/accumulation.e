@@ -34,7 +34,7 @@ feature -- Access
 
 	short_description: STRING is
 		do
-			!!Result.make (33)
+			create Result.make (33)
 			Result.append ("Accumulation function that operates %
 							%on a data sequence")
 		end
@@ -102,7 +102,7 @@ feature {NONE}
 			target.start
 			if not target.empty then
 				first_element_operator.execute (target.item)
-				!!t.make (target.item.date_time, target.item.end_date,
+				create t.make (target.item.date_time, target.item.end_date,
 							first_element_operator.value)
 				output.extend (t)
 				target.forth
