@@ -13,22 +13,9 @@ class LINEAR_SUM inherit
 	N_RECORD_LINEAR_COMMAND
 		rename
 			index_offset as internal_index, make as nrlc_make_unused
-		undefine
-			children
 		redefine
 			execute, target_cursor_not_affected, exhausted, action,
-			forth, invariant_value, start, initialize
-		select
-			initialize
-		end
-
-	UNARY_OPERATOR [REAL, REAL]
-		rename
-			initialize as uo_initialize
-		export {FACTORY}
-			set_operand
-		undefine
-			arg_mandatory, execute
+			forth, invariant_value, start, index
 		end
 
 creation
@@ -50,10 +37,11 @@ feature {FACTORY} -- Initialization
 			target_set: target = t
 		end
 
-	initialize (arg: N_RECORD_STRUCTURE) is
+feature -- Access
+
+	index: INTEGER is
 		do
-			{N_RECORD_LINEAR_COMMAND} Precursor (arg)
-			uo_initialize (arg)
+			Result := internal_index + 1
 		end
 
 feature -- Basic operations
@@ -64,6 +52,8 @@ feature -- Basic operations
 		do
 			internal_index := 0
 			value := 0
+print ("ls.exe - index: ") print (index) print("%N")
+print ("ls.exe - target.index: ") print (target.index) print("%N")
 			if target.count >= n then
 				until_continue
 			else
@@ -100,6 +90,8 @@ feature {NONE}
 
 	action is
 		do
+print ("ls.action - index: ") print (index) print("%N")
+print ("ls.action - target.index: ") print (target.index) print("%N")
 			operand.execute (target.item)
 			value := value + operand.value
 		ensure then
