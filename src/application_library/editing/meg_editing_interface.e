@@ -27,7 +27,7 @@ deferred class MEG_EDITING_INTERFACE inherit
 			edit_list as edit_event_generator_menu
 		export
 			{NONE} all
-			{ANY} edit_event_generator_menu
+			{ANY} edit_event_generator_menu, changed
 		end
 
 	GLOBAL_SERVICES
@@ -98,7 +98,7 @@ feature {NONE} -- Implementation
 							working_meg_library @ selection)
 						show_message (concatenation (<<"Market analyzer for ",
 									meg.event_type.name, " removed.">>))
-						changed := true
+						dirty := true
 					when 'n', 'N' then
 					when 'q', 'Q' then
 						selection := Exit_value
@@ -141,10 +141,10 @@ feature {NONE} -- Implementation
 				if selection /= Exit_value then
 					function_editor.edit_indicator_list ((
 						working_meg_library @ selection).indicators)
-					if not changed then
-						changed := function_editor.changed
+					if not dirty then
+						dirty := function_editor.dirty
 					end
-					function_editor.reset_changed
+					function_editor.reset_dirty
 				end
 			end
 		end
@@ -166,7 +166,7 @@ feature {NONE} -- Implementation
 			if not error_occurred then
 				show_message (concatenation (
 					<<last_event_generator.event_type.name, " added.">>))
-				changed := true
+				dirty := true
 			end
 		end
 

@@ -35,8 +35,8 @@ deferred class FUNCTION_EDITING_INTERFACE inherit
 			edit_list as edit_indicator_menu
 		export
 			{NONE} all
-			{EDITING_INTERFACE} changed
-			{ANY} edit_indicator_menu
+			{EDITING_INTERFACE} dirty
+			{ANY} edit_indicator_menu, changed
 		end
 
 	MARKET_TUPLE_LIST_SELECTOR
@@ -259,11 +259,11 @@ feature {EDITING_INTERFACE}
 			end
 		end
 
-	reset_changed is
+	reset_dirty is
 		do
-			changed := false
+			dirty := false
 		ensure
-			not_changed: not changed
+			not_dirty: not dirty
 		end
 
 feature {NONE} -- Implementation
@@ -468,7 +468,7 @@ feature {NONE} -- Implementation - indicator editing
 				when Remove_value then
 					remove_indicator
 				when Save_value then
-					check changed and ok_to_save end
+					check dirty and ok_to_save end
 					save
 				when Show_help_value then
 					show_message (help @ help.Edit_indicators)
@@ -485,7 +485,7 @@ feature {NONE} -- Implementation - indicator editing
 			f := function_selection_from_type (market_function,
 				"root function", true)
 			working_function_library.extend (f)
-			changed := true
+			dirty := true
 		end
 
 	remove_indicator is
@@ -506,7 +506,7 @@ feature {NONE} -- Implementation - indicator editing
 						indicator.name, "? (y[es]/n[o]/q[uit]) ">>), "yYnNqQ")
 					when 'y', 'Y' then
 						remove_from_working_copy (indicator)
-						changed := true
+						dirty := true
 					when 'n', 'N' then
 					when 'q', 'Q' then
 						finished := true
@@ -557,7 +557,7 @@ feature {NONE} -- Implementation - indicator editing
 			-- Since a member of the function library is being changed,
 			-- it needs to be marked as dirty to ensure it gets saved.
 			p.change_value (value)
-			changed := true
+			dirty := true
 			show_message (concatenation (
 				<<"New value set to ", p.current_value, "%N">>))
 		end

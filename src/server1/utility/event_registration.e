@@ -67,7 +67,7 @@ class EVENT_REGISTRATION inherit
 			edit_list as registrant_menu
 		export
 			{NONE} all
-			{ANY} registrant_menu
+			{ANY} registrant_menu, changed
 		undefine
 			print
 		end
@@ -136,7 +136,7 @@ feature {NONE} -- Implementation
 				when 'e', 'E' then
 					edit_registrants
 				when 's', 'S' then
-					if not changed or not ok_to_save then
+					if not dirty or not ok_to_save then
 						print ("Invalid selection%N")
 					else
 						save
@@ -153,7 +153,7 @@ feature {NONE} -- Implementation
 				end
 				print ("%N%N")
 				report_errors
-				if changed and ok_to_save then
+				if dirty and ok_to_save then
 					msg := main_changed_msg
 				else
 					msg := main_msg
@@ -193,7 +193,7 @@ feature {NONE} -- Implementation
 				if new_registrant /= Void then
 					add_event_types (new_registrant)
 					working_event_registrants.extend (new_registrant)
-					changed := true
+					dirty := true
 					print_list (<<new_registrant.name,
 						" added as a new event registrant.%N">>)
 				end
@@ -209,7 +209,7 @@ feature {NONE} -- Implementation
 				r := registrant_selection
 				if r /= Void then
 					working_event_registrants.prune_all (r)
-					changed := true
+					dirty := true
 					print_list (<<"Event registrant ", r.name, " removed.%N">>)
 				end
 			else
@@ -348,7 +348,7 @@ feature {NONE} -- Implementation
 				else
 					current_type := types @ last_integer
 					r.add_event_type (current_type)
-					changed := true
+					dirty := true
 					print_list (<<"Added type ", current_type.name, ".%N">>)
 				end
 			end
@@ -474,7 +474,7 @@ feature {NONE} -- Implementation
 					t := event_type_selection (r)
 					if t /= Void then
 						r.event_types.prune_all (t)
-						changed := true
+						dirty := true
 						print_list (<<"Event type ", t.name, " removed.%N">>)
 					end
 				when 'a', 'A' then
