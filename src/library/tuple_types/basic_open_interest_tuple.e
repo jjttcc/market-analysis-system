@@ -18,12 +18,12 @@ creation
 
 feature -- Access
 
-	open_interest: INTEGER
+	open_interest: REAL
 			-- Number of existing contracts
 
 feature {VALUE_SETTER} -- Status setting
 
-	set_open_interest (i: INTEGER) is
+	set_open_interest (i: REAL) is
 			-- Set open_interest to `i'.
 		require
 			i >= 0

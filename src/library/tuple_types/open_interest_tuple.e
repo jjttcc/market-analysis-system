@@ -12,7 +12,7 @@ deferred class OPEN_INTEREST_TUPLE inherit
 
 feature -- Access
 
-	open_interest: INTEGER is
+	open_interest: REAL is
 			-- Number of existing contracts
 		deferred
 		end
