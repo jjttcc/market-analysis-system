@@ -4,7 +4,7 @@ indexing
 	author: "Eirik Mangseth"
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2001: Eirik Mangseth and Jim Cochrane - %
+	licensing: "Copyright 1998 - 2003: Eirik Mangseth and Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
 class DATABASE_CONFIGURATION inherit
@@ -156,7 +156,6 @@ feature -- Access
 			-- `symbol' and uppercase (`symbol').
 			replace_tokens (Result, <<symbol_token, upper_symbol_token>>,
 				<<symbol, uppercase_symbol>>)
-print ("stock_name_query returning " + Result + ".%N")
 		ensure
 			not_void: Result /= Void
 		end
@@ -173,7 +172,6 @@ print ("stock_name_query returning " + Result + ".%N")
 				replace_tokens_using_dates (Result, eod_start_date,
 					eod_end_date, False)
 			end
-print ("daily_stock_... returning " + Result + ".%N")
 		ensure
 			not_void: Result /= Void
 		end
@@ -253,7 +251,6 @@ print ("daily_stock_... returning " + Result + ".%N")
 				replace_tokens_using_dates (Result, intraday_start_date,
 					intraday_end_date, True)
 			end
-print ("intraday_stock... returning " + Result + ".%N")
 		ensure
 			not_void: Result /= Void
 		end
@@ -367,7 +364,6 @@ print ("intraday_stock... returning " + Result + ".%N")
 			-- `symbol' and uppercase (`symbol').
 			replace_tokens (Result, <<symbol_token, upper_symbol_token>>,
 				<<symbol, uppercase_symbol>>)
-print ("derivative_name_query returning " + Result + ".%N")
 		ensure
 			not_void: Result /= Void
 		end
@@ -385,7 +381,6 @@ print ("derivative_name_query returning " + Result + ".%N")
 				replace_tokens_using_dates (Result, eod_start_date,
 					eod_end_date, False)
 			end
-print ("daily_derivative... returning " + Result + ".%N")
 		ensure
 			not_void: Result /= Void
 		end
@@ -460,7 +455,6 @@ print ("daily_derivative... returning " + Result + ".%N")
 				replace_tokens_using_dates (Result, intraday_start_date,
 					intraday_end_date, True)
 			end
-print ("intraday_derivative... returning " + Result + ".%N")
 		ensure
 			not_void: Result /= Void
 		end

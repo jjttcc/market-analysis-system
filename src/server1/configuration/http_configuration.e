@@ -11,7 +11,7 @@ indexing
 		%retrieval from other external sources besides an http server."
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
+	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
 class HTTP_CONFIGURATION inherit
@@ -171,7 +171,6 @@ feature -- Access
 				end
 				i := i + 1
 			end
-print ("distance_of_first...: " + Result.out + "%N")
 		ensure
 			one_to_seven_days: Result /= -1 implies Result >= 1 and
 				Result <= 7
@@ -191,7 +190,6 @@ print ("distance_of_first...: " + Result.out + "%N")
 				create Result.make_now
 				Result.day_add (days_back)
 			end
-print ("latest_tradable_date_before_today: " + Result.out + "%N")
 		ensure
 			void_if_all_days_ignored:
 				distance_of_first_tradable_day_from_today = -1 implies
