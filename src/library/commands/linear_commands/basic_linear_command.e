@@ -1,7 +1,7 @@
 indexing
 	description:
-		"A numeric command that operates on the current item of a linear %
-		%structure of market tuples"
+		"A numeric command that operates on a linear structure without %
+		%changing its cursor position"
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -17,7 +17,8 @@ creation
 feature -- Basic operations
 
 	execute (arg: ANY) is
-				-- Can be redefined by ancestors.
+				-- Default: set value to current item - can be redefined
+				-- by ancestors.
 		do
 			value := target.item.value
 		end
