@@ -9,16 +9,17 @@ import support.ErrorBox;
 public class MA_MenuBar extends MenuBar {
 	MA_MenuBar(Chart c, DataSetBuilder builder, Vector period_types) {
 		data_builder = builder;
-		parent = c;
+		chart = c;
+		menu_bar = this;
 		Menu file_menu = new Menu("File");
 		Menu indicator_menu = new Menu("Indicators");
 		Menu view_menu = new Menu("View");
-		IndicatorSelection indicator_listener = new IndicatorSelection(parent);
+		IndicatorSelection indicator_listener = new IndicatorSelection(chart);
 
 		add(file_menu);
 		add(indicator_menu);
 		add(view_menu);
-		parent.add_indicators(indicator_menu);
+		chart.add_indicators(indicator_menu);
 
 		// File menu items, with shortcuts
 		MenuItem new_window, close_window, mkt_selection, print_cmd;
@@ -47,37 +48,37 @@ public class MA_MenuBar extends MenuBar {
 				Chart chart = new Chart(new DataSetBuilder(data_builder), null);
 			}
 		});
-		mkt_selection.addActionListener(parent.market_selections);
+		mkt_selection.addActionListener(chart.market_selections);
 		indicator_selection.addActionListener(indicator_listener);
 		close_window.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) { parent.close(); }
+		public void actionPerformed(ActionEvent e) { chart.close(); }
 		});
 		print_cmd.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			if (! (parent.current_market == null ||
-					parent.current_market.length() == 0)) {
-				parent.main_pane.print(false);
+			if (! (chart.current_market == null ||
+					chart.current_market.length() == 0)) {
+				chart.main_pane.print(false);
 			}
 			else {
 				final ErrorBox errorbox = new ErrorBox("Printing error",
-					"Nothing to print", parent);
+					"Nothing to print", chart);
 			}
 		}});
 		print_all.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-			if (! (parent.current_market == null ||
-					parent.current_market.length() == 0)) {
-				String original_market = parent.current_market;
-				parent.print_all_charts();
-				parent.request_data((String) original_market);
+			if (! (chart.current_market == null ||
+					chart.current_market.length() == 0)) {
+				String original_market = chart.current_market;
+				chart.print_all_charts();
+				chart.request_data((String) original_market);
 			}
 			else {
 				final ErrorBox errorbox = new ErrorBox("Printing error",
-					"Nothing to print", parent);
+					"Nothing to print", chart);
 			}
 		}});
 		quit.addActionListener(new ActionListener() {
-		public void actionPerformed(ActionEvent e) { parent.quit(0); }
+		public void actionPerformed(ActionEvent e) { chart.quit(0); }
 		});
 
 		// View menu items
@@ -85,13 +86,19 @@ public class MA_MenuBar extends MenuBar {
 		final Menu period_menu = new Menu();
 		final MenuItem indicator_colors_item = new MenuItem("Indicator Colors",
 			new MenuShortcut(KeyEvent.VK_C));
+		MenuItem next = new MenuItem("Next",
+			new MenuShortcut(KeyEvent.VK_CLOSE_BRACKET));
+		MenuItem previous = new MenuItem("Previous",
+			new MenuShortcut(KeyEvent.VK_OPEN_BRACKET));
 		view_menu.add(replace_toggle = new MenuItem("",
 							new MenuShortcut(KeyEvent.VK_R)));
 		view_menu.add(indicator_colors_item);
 		set_replace_indicator_label(replace_toggle);
 		view_menu.add(period_menu);
+		view_menu.add(next);
+		view_menu.add(previous);
 		setup_period_menu(period_menu, period_types);
-		final IndicatorColors indicator_colors = new IndicatorColors(parent);
+		final IndicatorColors indicator_colors = new IndicatorColors(chart);
 		// Connect the indicator colors dialog/list with the corresponding
 		// menu item:
 		indicator_colors_item.addActionListener(indicator_colors);
@@ -107,19 +114,29 @@ public class MA_MenuBar extends MenuBar {
 		// Action listeners for view menu items
 		replace_toggle.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
-				parent.toggle_indicator_replacement();
+				chart.toggle_indicator_replacement();
 				set_replace_indicator_label(replace_toggle);
+			}
+		});
+		next.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+				menu_bar.next_market();
+			}
+		});
+		previous.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+				menu_bar.previous_market();
 			}
 		});
 	}
 
 	private void set_period_type_label(Menu m) {
 		m.setLabel("Period Type (" +
-			parent.current_period_type + ")");
+			chart.current_period_type + ")");
 	}
 
 	private void set_replace_indicator_label(MenuItem item) {
-		if (parent.replace_indicators) {
+		if (chart.replace_indicators) {
 			item.setLabel("Replace Indicators [on]");
 		} else {
 			item.setLabel("Replace Indicators [off]");
@@ -159,15 +176,44 @@ public class MA_MenuBar extends MenuBar {
 			final MenuItem item = (MenuItem) items.elementAt(i);
 			item.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					parent.notify_period_type_changed(item.getLabel());
+					chart.notify_period_type_changed(item.getLabel());
 					set_period_type_label(period_menu);
 				}
 			});
 		}
 	}
 
+	// Change the current market to the next one in the market list or, if it
+	// is the last one, to the first item in the market list.
+	private void next_market() {
+		List ind_list = chart.market_selections.selection_list;
+		int i = ind_list.getSelectedIndex();
+		if (i < 0 || ind_list.getItemCount() - 1 == i) {
+			i = 0;
+		} else {
+			++i;
+		}
+		ind_list.select(i);
+		chart.request_data(ind_list.getItem(i));
+	}
+
+	// Change the current market to the previous one in the market list or,
+	// if it is the first one, to the last item in the market list.
+	private void previous_market() {
+		List ind_list = chart.market_selections.selection_list;
+		int i = ind_list.getSelectedIndex();
+		if (i <= 0) {
+			i = ind_list.getItemCount() - 1;
+		} else {
+			--i;
+		}
+		ind_list.select(i);
+		chart.request_data(ind_list.getItem(i));
+	}
+
 	private DataSetBuilder data_builder;
-	private Chart parent;
+	private Chart chart;
+	private MA_MenuBar menu_bar;
 	private static final String daily_period = "Daily";
 	private static final String weekly_period = "Weekly";
 	private static final String monthly_period = "Monthly";
