@@ -110,7 +110,6 @@ termination_command	<terminate_server>
 
 # Command to start the user's browser for viewing documentation
 browse_docs_command	<cwdir>[<doc_dir>]cmd ~/c start ~/b index.html
-##browse_docs_command	cmd ~/c cd "<doc_dir>" && start ~/b index.html
 
 # Command to start the user's browser for viewing the "MCT Introduction"
 browse_intro_command	<cwdir>[<doc_dir>]cmd ~/c start ~/b mct_introduction.html
