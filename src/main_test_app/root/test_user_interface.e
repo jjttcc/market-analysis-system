@@ -26,7 +26,7 @@ class TEST_USER_INTERFACE inherit
 			all
 		end
 
-	UI_UTILITIES
+	COMMAND_LINE_UTILITIES [ANY]
 		export
 			{NONE} all
 			{ANY} set_output_field_separator, set_date_field_separator
