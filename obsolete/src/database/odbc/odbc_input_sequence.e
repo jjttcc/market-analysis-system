@@ -3,7 +3,7 @@ indexing
 	author: "Eirik Mangseth"
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2000: Eirik Mangseth and Jim Cochrane - %
+	licensing: "Copyright 1998 - 2001: Eirik Mangseth and Jim Cochrane - %
 		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class ODBC_INPUT_SEQUENCE inherit

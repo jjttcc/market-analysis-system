@@ -8,7 +8,7 @@ indexing
 		%date ascending"
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class ECLI_STOCK_SPLITS inherit

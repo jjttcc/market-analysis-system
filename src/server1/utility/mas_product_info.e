@@ -3,7 +3,7 @@ indexing
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2000: Jim Cochrane - %
+	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum Freeware License; see file forum.txt"
 
 class PRODUCT_INFO inherit
@@ -61,7 +61,7 @@ feature -- Access
 
 	copyright: STRING is
 		once
-			Result := "Copyright 1998 - 2000: Jim Cochrane"
+			Result := "Copyright 1998 - 2001: Jim Cochrane"
 		end
 
 	license_information: STRING is
