@@ -30,6 +30,7 @@ find_test_dir()
 
 set_up()
 {
+	indfile=./indicators_persist
 	successes=0
 	test_count=0
 	unset MAS_DIRECTORY
@@ -89,6 +90,10 @@ set_up()
 	elif [ ! -e output ]; then
 		mkdir output
 	fi
+	rm -f $indfile
+	# Force mas to create the indicators_persist file:
+	echo "
+"|$exec >/dev/null 2>&1
 }
 
 period_type_cmd()
