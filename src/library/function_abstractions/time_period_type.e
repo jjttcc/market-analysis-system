@@ -29,6 +29,7 @@ feature -- Initialization
 				dur.day /= 0 implies dur.hour = 0 and dur.minute = 0
 			year_month_day_hour_or_minute: dur.year /= 0 or dur.month /= 0 or
 				dur.day /= 0 or dur.hour /= 0 or dur.minute /=0
+			positive_if_definite: dur.definite implies dur > dur.zero
 		do
 			duration := dur
 			irregular := not duration.definite
