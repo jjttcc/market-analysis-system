@@ -73,38 +73,6 @@ feature -- Status setting
 			io_medium_set: io_medium = arg and io_medium /= Void
 		end
 
-feature -- Basic operations
-
---!!!Remove soon:
---	execute is
---			-- Note: It is expected that the first character of the input
---			-- of io_medium has been read.
---		local
---			cmd: REQUEST_COMMAND
---		do
---			check
---				medium_set: io_medium /= Void
---			end
---			tokenize_message
---			if message_ID = Logout_request then
---				-- Logout requests are handled specially - simply remove the
---				-- client's session.
---				sessions.remove (session_key)
---			else
---				cmd := request_handlers @ message_ID
---				cmd.set_active_medium (io_medium)
---				if
---					message_ID /= Login_request and
---					sessions.has (session_key)
---					-- A session is not needed for the login request command,
---					-- since it will create one.
---				then
---					cmd.set_session(sessions @ session_key)
---				end
---				cmd.execute (message_body)
---			end
---		end
-
 feature {NONE} -- Hook routine implementation
 
 	setup_command (cmd: MAS_REQUEST_COMMAND) is
