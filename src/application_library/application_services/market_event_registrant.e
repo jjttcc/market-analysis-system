@@ -1,6 +1,6 @@
 indexing
 	description: "Abstraction for a registrant of MARKET_EVENTs"
-	status: "Copyright 1998 - 2000: Jim Cochrane and others - see file forum.txt"
+	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
 
@@ -32,6 +32,12 @@ feature -- Access
 
 	event_history: HASH_TABLE [MARKET_EVENT, STRING]
 
+	field_separator: STRING
+			-- Field separator for history file
+
+	record_separator: STRING
+			-- Record separator for history file
+
 feature -- Basic operations
 
 	load_history is
@@ -53,6 +59,8 @@ feature -- Basic operations
 			elseif hfile_name /= Void then
 				!!hfile.make_open_read (
 					env.file_name_with_app_directory (hfile_name))
+				hfile.set_field_separator (field_separator)
+				hfile.set_record_separator (record_separator)
 				!!scanner.make (hfile)
 				scanner.execute
 				fill_event_history (scanner.product)
@@ -62,16 +70,15 @@ feature -- Basic operations
 		ensure then
 			event_history.object_comparison
 		rescue
-			exception_occurred := true
+			exception_occurred := True
 			retry
 		end
 
 	cleanup is
 		local
 			hfile: PLAIN_TEXT_FILE
-			input: INPUT_SEQUENCE
+			input: INPUT_FILE
 			scanner: MARKET_EVENT_SCANNER
-			fld_sep, record_sep: STRING
 			env: expanded APP_ENVIRONMENT
 		do
 			-- Open the event history file, delete its current contents and
@@ -83,16 +90,16 @@ feature -- Basic operations
 				check input /= Void end
 				-- Make the scanner to get its field separator.
 				!!scanner.make (input)
-				fld_sep := scanner.field_separator
-				record_sep := scanner.record_separator
+--fld_sep := scanner.field_separator
+--record_sep := scanner.record_separator
 				from
 					event_history.start
 				until
 					event_history.after
 				loop
 					hfile.put_string (event_guts (
-						event_history.item_for_iteration, fld_sep))
-					hfile.put_string (record_sep)
+						event_history.item_for_iteration, field_separator))
+					hfile.put_string (record_separator)
 					event_history.forth
 				end
 				hfile.close
@@ -168,5 +175,10 @@ feature {NONE} -- Implementation
 										"%Ndescription: ", e.description>>)
 			end
 		end
+
+
+invariant
+
+	separators_set: field_separator /= Void and record_separator /= Void
 
 end -- MARKET_EVENT_REGISTRANT
