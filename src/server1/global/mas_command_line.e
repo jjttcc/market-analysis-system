@@ -65,6 +65,12 @@ feature -- Access
 	record_separator: STRING
 			-- Record separator for (input) market data - Void if not set
 
+	intraday_extension: STRING
+			-- File-name extension for intraday data
+
+	daily_extension: STRING
+			-- File-name extension for daily data
+
 	file_names: LIST [STRING]
 			-- Market data input file names
 
@@ -100,15 +106,19 @@ feature -- Basic operations
 			-- Message: how to invoke the program from the comman-line
 		do
 			print (concatenation (<<"Usage: ", command_name,
-				" [port_number ...] [-b] [-p]%
-				% [input_file ...] [-o] %H%N[-f field_separator]%
-				% [-h] [-v]%N%
-				%    Where:%N        -o = data has an open field%N",
-				            "        -v = print version number%N",
-				            "        -h = print this help message%N",
-				            "        -s = strict error checking%N",
-				            "        -p = use database (persistent store)%N",
-				            "        -b = run in background%N">>))
+				" [options] [input_file...]%NOptions:%N",
+				"  <number>  Use port <number> for socket communication%N",
+				"  -o        Data has an open field%N",
+				"  -f <sep>  Use field separator <sep>%N",
+				"  -i <ext>  Include intraday data from files with %
+				%extension <ext>%N",
+				"  -d <ext>  Include daily data from files with %
+				%extension <ext>%N",
+				"  -v        Print version number%N",
+				"  -h        Print this help message%N",
+				"  -s        Use strict error checking%N",
+				"  -p        Use database (persistent store)%N",
+				"  -b        Run in background%N">>))
 		end
 
 feature {NONE} -- Implementation
@@ -141,7 +151,7 @@ feature {NONE} -- Implementation
 			-- false if opening price option is not found
 		do
 			if option_in_contents ('o') then
-				opening_price := True
+				opening_price := true
 				contents.remove
 			end
 		end
@@ -149,7 +159,7 @@ feature {NONE} -- Implementation
 	set_background is
 		do
 			if option_in_contents ('b') then
-				background := True
+				background := true
 				contents.remove
 			end
 		end
@@ -157,7 +167,7 @@ feature {NONE} -- Implementation
 	set_strict is
 		do
 			if option_in_contents ('s') then
-				strict := True
+				strict := true
 				contents.remove
 			end
 		end
@@ -165,7 +175,7 @@ feature {NONE} -- Implementation
 	set_use_db is
 		do
 			if option_in_contents ('p') then
-				use_db := True
+				use_db := true
 				contents.remove
 			end
 		end
@@ -173,10 +183,10 @@ feature {NONE} -- Implementation
 	set_help is
 		do
 			if option_in_contents ('h') then
-				help := True
+				help := true
 				contents.remove
 			elseif option_in_contents ('?') then
-					help := True
+					help := true
 					contents.remove
 			end
 		end
@@ -184,7 +194,7 @@ feature {NONE} -- Implementation
 	set_version_request is
 		do
 			if option_in_contents ('v') then
-				version_request := True
+				version_request := true
 				contents.remove
 			end
 		end
@@ -219,6 +229,37 @@ feature {NONE} -- Implementation
 			global_server: expanded GLOBAL_SERVER
 			expander: FILE_NAME_EXPANDER
 		do
+			-- If -i option is specified, create the intraday extension.
+			if option_in_contents ('i') then
+				if contents.item.count > 2 then
+					create intraday_extension.make (contents.item.count - 2)
+					intraday_extension.append (contents.item.substring (
+						3, contents.item.count))
+					contents.remove
+				else
+					contents.remove
+					if not contents.exhausted then
+						create intraday_extension.make (contents.item.count)
+						intraday_extension.append (contents.item)
+						contents.remove
+					end
+				end
+			end
+			if option_in_contents ('d') then
+				if contents.item.count > 2 then
+					create daily_extension.make (contents.item.count - 2)
+					daily_extension.append (contents.item.substring (
+						3, contents.item.count))
+					contents.remove
+				else
+					contents.remove
+					if not contents.exhausted then
+						create daily_extension.make (contents.item.count)
+						daily_extension.append (contents.item)
+						contents.remove
+					end
+				end
+			end
 			expander := global_server.file_name_expander
 			expander.execute (contents, option_sign)
 			file_names := expander.results
@@ -261,7 +302,7 @@ feature {NONE} -- Implementation
 					contents.item.item (1) = option_sign and
 					contents.item.item (2) = c
 				then
-					Result := True
+					Result := true
 				else
 					contents.forth
 				end
