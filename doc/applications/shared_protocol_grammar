@@ -8,5 +8,16 @@ date_time_spec              -> date_with_sep "," time_with_sep
 time_with_sep               -> hour ":" minute ":" second
 
 
-!!!!Specify somewhere that in some cases (data supplier) the
-start_date_time can be null and in others (extended server) it cannot.!!!
+Regarding the 'date_time_range' construct:
+
+If the optional 'end_date_time' parameter is not included, the server
+uses the current date and time ("now") as the ending date-time.  If the
+'start_date_time' parameter is empty (<null>):
+
+   - If there is no start-date setting on the server side, the date-time of
+     the earliest record of the requested data-set is used.
+
+   - If there is a start-date setting on the server side for the requested
+     data set, that start date is used.  (See the protocol-grammar file
+     for the specific application components for more information on the
+     specification and properties of the start-date setting.)

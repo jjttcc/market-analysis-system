@@ -25,11 +25,10 @@ time_delimited_ind_data_req:    ind_data
 
 Notes:
 
-See shared_protocol_grammar for the definition of date_time_range.
+See shared_protocol_grammar for the definition of date_time_range,
+with the following addendum with respect to the case where the
+'start_date_time' parameter is empty (<null>) and there is a "start-date
+setting on the server side for the requested data set":
 
-For the 'date_time_range' component of 'time_delimited_mkt_data_req' and
-'time_delimited_ind_data_req', if the optional 'end_date_time' parameter
-is not included, the server uses the current date and time ("now") as the
-ending date-time.  If the 'start_date_time' parameter is empty (<null>),
-the start date setting for the specified period type (trad_per_type) is
-used as the starting date, with 00:00 (midnight) as the time.
+   The start date setting for the specified period type (trad_per_type) is
+   used as the starting date, with 00:00 (midnight) as the time.
