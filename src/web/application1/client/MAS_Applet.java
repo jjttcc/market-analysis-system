@@ -17,25 +17,28 @@ public class MAS_Applet extends Applet {
 
 	public void init() {
 		log("init: Starting ...");
-		log("Compiled at Mon Feb 17 03:52:08 MST 2003");
+		log("Compiled at Mon Feb 17 17:44:58 MST 2003");
 		try {
 			Configuration.set_ignore_termination(true);
 			StartupOptions options = new AppletOptions();
 			log("init: A");
 			initialize_server_address();
-			log("init: B");
-			Chart chart;
 			// Can't read files from an applet.
 			Configuration.set_use_config_file(false);
 			log("init: C");
-			DataSetBuilder data_builder = new DataSetBuilder(connection(),
-				options);
+			DataSetBuilder data_builder =
+				new DataSetBuilder(connection(), options);
 			log("init: D");
-			chart = new Chart(data_builder, null, options);
+			if (data_builder.login_failed()) {
+				report_error("Login to the server failed");
+			} else {
+				Chart chart = new Chart(data_builder, null, options);
+			}
 			log("init: E");
 		} catch (Exception e) {
-			log("Connection failed: " + e.toString());
-			report_error("Connection failed: " + e.toString());
+			log("Login failed: " + e.toString());
+			e.printStackTrace();
+			report_error("Login failed: " + e.toString());
 			destroy();
 		}
 		log("init: Exiting ...");
