@@ -93,6 +93,43 @@ feature -- Basic operations
 			cmd.set_operands (left, right)
 		end
 
+	edit_minus_n (c: MINUS_N_COMMAND) is
+			-- Edit a MINUS_N_COMMAND.
+		require
+			ui_set: user_interface /= Void
+		local
+			uop: UNARY_OPERATOR [ANY, REAL]
+		do
+			uop ?= c
+			check
+				c_is_valid_type: uop /= Void
+			end
+			inspect
+				user_interface.character_choice (concatenation (<<"Adjust %
+					%the ", c.generator, "'s n-value? (y/n) ">>), "yYnN")
+			when 'y', 'Y' then
+				c.set_n_adjustment (user_interface.integer_selection (
+					concatenation (<<c.generator, "'s n-adjustment value">>)))
+			end
+			edit_mtlist_resultreal_n (uop)
+		end
+
+	edit_index_extractor (cmd: INDEX_EXTRACTOR) is
+			-- Edit an INDEX_EXTRACTOR.
+		require
+			ui_set: user_interface /= Void
+		local
+			ix_cmd: INDEXED
+		do
+			ix_cmd ?= user_interface.command_selection_from_type (
+				user_interface.Indexed, concatenation (<<cmd.generator,
+					"'s operand">>), false)
+			check
+				selection_valid: ix_cmd /= Void
+			end
+			cmd.set_indexable (ix_cmd)
+		end
+
 	edit_mtlist_resultreal (c: UNARY_OPERATOR [REAL, REAL]) is
 			-- Edit `c's market tuple list and operator
 			-- (RESULT_COMMAND [REAL]).
@@ -252,8 +289,8 @@ feature -- Basic operations
 			-- Important: The arithmetic negation of the `cmd.offset'
 			-- (which is expected to be negative) is used - the
 			-- `left_offset' value being set must be positive.
-			if -cmd.offset > user_interface.left_offset then
-				user_interface.set_left_offset (-cmd.offset)
+			if -cmd.external_offset > user_interface.left_offset then
+				user_interface.set_left_offset (-cmd.external_offset)
 			end
 		end
 
