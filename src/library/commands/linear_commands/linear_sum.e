@@ -60,7 +60,7 @@ feature {NONE}
 			Result := 0 <= internal_index and internal_index <= n
 		end
 
-feature {FACTORY} -- Element change
+feature {FACTORY} -- Status setting
 
 	set_operator (op: BASIC_NUMERIC_COMMAND) is
 			-- Set operator that provides the value to be summed (from
