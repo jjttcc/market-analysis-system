@@ -18,7 +18,7 @@ cleanup_after_config_failure() {
 	procs=$(ps -t | awk '/python/ { print $1}')
 	kill $procs >/dev/null 2>&1
 	kill -9 $procs >/dev/null 2>&1
-	rm -f $libdir/.*persist.lock
+	rm -f "$libdir"/.*persist.lock
 }
 
 interactive() {
@@ -33,7 +33,7 @@ missing_dynamic_libraries() {
 if [ $# -lt 1 ]; then
 	return 1
 else
-	libs=$((ldd $1)|sed -n 's/[	 ]*\(.*\) *=> *not *found/\1/p')
+	libs=$((ldd "$1")|sed -n 's/[	 ]*\(.*\) *=> *not *found/\1/p')
 fi
 echo $libs
 return 0
@@ -116,26 +116,26 @@ check_exe_file() {
 # Usage: set_dir dirname "message"
 set_dir() {
 	dir=
-	defaultdir=$basedir/$1
+	defaultdir="$basedir/$1"
 	if [ $# -ne 2 ]; then fault "set_dir: wrong number of arguments"; fi
 	while [ -z "$dir" ]; do
 		if interactive; then
-			echo -e "$2 ($defaultdir): \c" >&2
+			echo -e "$2 ("$defaultdir"): \c" >&2
 			read dir
 			case "$dir" in
 				\$PWD*)
-					dir=$PWD/$(echo "$dir"|sed 's/.PWD//')
+					dir="$PWD/$(echo $dir|sed 's/.PWD//')"
 				;;
 			esac
 		fi
 		if [ -z "$dir" ]; then
-			dir=$defaultdir
+			dir="$defaultdir"
 		elif expr "$dir" : "[^/]" >/dev/null 2>&1; then
 			echo -e "Entry must start with / - try again: " >&2
 			dir=
 		fi
 		if [ ! -z "$dir" ]; then
-			if [ -d $dir ]; then
+			if [ -d "$dir" ]; then
 				if interactive; then
 					case $(query "Use $dir (y/n/q[uit])? \c") in
 						y*|Y*) ;;
@@ -145,7 +145,7 @@ set_dir() {
 						*) dir= ;;
 					esac
 				fi
-			elif [ -e $dir ]; then
+			elif [ -e "$dir" ]; then
 				if interactive; then
 					echo -e "$dir is not a directory - try again: " >&2
 					dir=
@@ -155,7 +155,7 @@ set_dir() {
 			elif interactive; then
 				case $(query \
 						"$dir does not exist - create it (y/n/q[uit])? \c") in
-					y*|Y*) mkdir -p $dir
+					y*|Y*) mkdir -p "$dir"
 						if [ $? -ne 0 ]; then
 							echo -e "Failed to create $dir - try again: " >&2
 							dir=
@@ -165,17 +165,17 @@ set_dir() {
 						echo -e "Aborting the installation ..." >&2
 						exit 0 ;;
 					*) dir=
-						echo -e "$2 ($defaultdir): \c" >&2
+						echo -e "$2 ("$defaultdir"): \c" >&2
 					;;
 				esac
 			else
-				if ! mkdir -p $dir; then
+				if ! mkdir -p "$dir"; then
 					fatal "Failed to create $dir."
 				fi
 			fi
 		fi
 		if [ ! -z "$dir" ]; then
-			[ -w $dir -a -x $dir ]
+			[ -w "$dir" -a -x "$dir" ]
 			if [ $? -ne 0 ]; then
 				if interactive; then
 					echo -e "Don't have permission to install in $dir " \
@@ -187,7 +187,7 @@ set_dir() {
 			fi
 		fi
 	done
-	echo "$1: $dir" >>$config
+	echo "$1:$dir" >>$config
 }
 
 # Check whether any of the dynamic libraries needed by the mas executable
@@ -195,8 +195,8 @@ set_dir() {
 check_dynamic_libs() {
 	result=0
 	echo -e "Using ldd to check for required dynamic libraries ...\c" >&2
-	mas=$bindir/mas
-	mlibs=$(missing_dynamic_libraries $mas)
+	mas="$bindir"/mas
+	mlibs=$(missing_dynamic_libraries "$mas")
 	if [ ! -z "$mlibs" ]; then
 		echo -e "\nThe following library files were not found:" >&2
 		echo -e "$mlibs" >&2
@@ -217,10 +217,10 @@ start_server() {
 	if [ -z "$1" ]; then
 		fault "Missing argument for start_server function."
 	fi
-	cd $libdir/data
+	cd "$libdir"/data
 	if [ $? -ne 0 ]; then fatal "Could not cd to $libdir/data."; fi
 	cmd=$1; shift
-	MAS_DIRECTORY=$libdir $cmd -o -f , $* >/dev/null 2>&1 &
+	MAS_DIRECTORY="$libdir" $cmd -o -f , $* >/dev/null 2>&1 &
 	serverproc=$!
 }
 
@@ -276,7 +276,7 @@ config() {
 	>$config
 	if [ $# -gt 0 ]; then
 		if [ "$1" = "--rootdir" -a ! -z "$2" ]; then
-			basedir=$2
+			basedir="$2"
 			non_interactive=y
 		else
 			usage; fatal
@@ -284,9 +284,10 @@ config() {
 	elif user_is_administrator; then
 		basedir=/opt/mas
 	else
-		basedir=$HOME
+		basedir="$HOME"
 	fi
 	if [ $? -ne 0 ]; then fatal "Cannot create configuration file $config"; fi
+	echo "NOTE: It is recommended not to use spaces in directory names." >&2
 	set_dir bin "Enter the directory for executables" >&2
 	set_dir lib "Enter the directory for library files" >&2
 	set_dir doc "Enter the directory for documentation files" >&2
@@ -301,8 +302,8 @@ config_cmd() {
 }
 
 show_config_information() {
-	indfile=$libdir/indicators_persist
-	mkanafile=$libdir/generators_persist
+	indfile="$libdir"/indicators_persist
+	mkanafile="$libdir"/generators_persist
 	echo -e "\nNOTE: If you set your MAS_DIRECTORY environment variable \c" >&2
 	echo -e "to some\nother directory than $libdir, you will want\nto \c" >&2
 	echo -e "move the configuration files:\n$indfile and $mkanafile\c" >&2
@@ -314,11 +315,11 @@ show_config_information() {
 configure_mas() {
 	configresult=0
 	maximum_allowed_time=90
-	export PYTHONPATH=$libdir/python
-	ifile=$libdir/config/indicators
-	mfile=$libdir/config/market_analyzers
-	macl=$bindir/macl
-	mas=$bindir/mas
+	export PYTHONPATH="$libdir"/python
+	ifile="$libdir"/config/indicators
+	mfile="$libdir"/config/market_analyzers
+	macl="$bindir"/macl
+	mas="$bindir"/mas
 	port=$RANDOM
 	config_example="$macl $port -i $ifile && $macl $port -i $mfile"
 	if [ -z "$port" ]; then port=23491; elif [ $port -lt 1024 ]; then
@@ -372,38 +373,38 @@ configure_mas() {
 trap "handle_signal" SIGINT SIGQUIT SIGABRT SIGBUS SIGILL SIGHUP SIGKILL
 config $*
 
-libdir=$(awk '/lib:/ { print $2}' $config)
-bindir=$(awk '/bin:/ { print $2}' $config)
-docdir=$(awk '/doc:/ { print $2}' $config)
+libdir="$(awk 'BEGIN {FS=":"}/lib:/ { print $2}' $config)"
+bindir="$(awk 'BEGIN {FS=":"}/bin:/ { print $2}' $config)"
+docdir="$(awk 'BEGIN {FS=":"}/doc:/ { print $2}' $config)"
 
 install_files() {
-	if [ ! -e $libdir ]; then mkdir -p $libdir; fi
+	if [ ! -e "$libdir" ]; then mkdir -p "$libdir"; fi
 	if [ $? -ne 0 ]; then
 		fatal "$Progname: Failed to create directory $libdir" >&2
 	fi
 
-	if [ ! -d $libdir -o ! -w $libdir ]; then
+	if [ ! -d "$libdir" -o ! -w "$libdir" ]; then
 		fatal "$Progname: Cannot write to target dir $libdir" >&2
 	fi
 
-	if [ ! -e $bindir ]; then mkdir -p $bindir; fi
+	if [ ! -e "$bindir" ]; then mkdir -p "$bindir"; fi
 	if [ $? -ne 0 ]; then
 		fatal "$Progname: Failed to create directory $bindir" >&2
 	fi
 
-	if [ ! -d $bindir -o ! -w $bindir ]; then
+	if [ ! -d "$bindir" -o ! -w "$bindir" ]; then
 		fatal "$Progname: Cannot write to target dir $bindir" >&2
 	fi
 
 	install_result=0
-	if [ -d "$basedir" ]; then cp -f forum.txt $basedir; fi
-	cp -f bin/* $bindir
+	if [ -d "$basedir" ]; then cp -f forum.txt "$basedir"; fi
+	cp -f bin/* "$bindir"
 	binresult=$?
 	if [ "$binresult" -eq 0 ]; then
-		(cd lib; find . -type f -print | cpio -pdmv $libdir)
+		(cd lib; find . -type f -print | cpio -pdmv "$libdir")
 		libresult=$?
 		if [ "$libresult" -eq 0 ]; then
-			(cd doc; find . -type f -print | cpio -pdmv $docdir)
+			(cd doc; find . -type f -print | cpio -pdmv "$docdir")
 			docresult=$?
 		fi
 	fi
