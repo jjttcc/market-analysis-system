@@ -192,7 +192,7 @@ feature {NONE} -- Implementation
 			until
 				l.after
 			loop
-				print_date (l.item.last.date_time.date, 'y', 'm', 'd')
+				print_date (l.item.end_date, 'y', 'm', 'd')
 				io.put_string (output_field_separator)
 				if print_open then
 					io.put_string (real_formatter.formatted(l.item.open.value))
@@ -230,7 +230,7 @@ feature {NONE} -- Implementation
 			until
 				l.after
 			loop
-				print_date (l.item.date_time.date, 'y', 'm', 'd')
+				print_date (l.item.end_date, 'y', 'm', 'd')
 				io.put_string (output_field_separator)
 				if print_open then
 					io.put_string (real_formatter.formatted(l.item.open.value))
@@ -270,7 +270,7 @@ feature {NONE} -- Implementation
 			until
 				l.after
 			loop
-				print_date (l.item.date_time.date, 'y', 'm', 'd')
+				print_date (l.item.end_date, 'y', 'm', 'd')
 				io.put_string (output_field_separator)
 				if print_open then
 					io.put_string (real_formatter.formatted(l.item.open.value))
@@ -312,7 +312,7 @@ feature {NONE} -- Implementation
 			until
 				l.after
 			loop
-				print_date (l.item.last.date_time.date, 'y', 'm', 'd')
+				print_date (l.item.end_date, 'y', 'm', 'd')
 				io.put_string (output_field_separator)
 				if print_open then
 					io.put_string (real_formatter.formatted(l.item.open.value))
@@ -340,7 +340,7 @@ feature {NONE} -- Implementation
 			until
 				l.after
 			loop
-				print_date (l.item.date_time.date, 'y', 'm', 'd')
+				print_date (l.item.end_date, 'y', 'm', 'd')
 				io.put_string (output_field_separator)
 				io.put_string (real_formatter.formatted(l.item.value))
 				io.put_string ("%N")
