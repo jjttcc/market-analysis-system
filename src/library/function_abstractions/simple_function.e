@@ -15,7 +15,7 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 			output, reset_state, operator_used
 		end
 
-	ARRAYED_LIST [G]
+	MARKET_TUPLE_LIST [G]
 
 creation
 
@@ -23,7 +23,7 @@ creation
 
 feature -- Access
 
-	output: ARRAYED_LIST [G] is
+	output: MARKET_TUPLE_LIST [G] is
 		do
 			Result := Current
 		end

@@ -25,7 +25,7 @@ feature -- Access
 			Result := "Stub: to be defined"
 		end
 
-	output: ARRAYED_LIST [MARKET_TUPLE] is
+	output: MARKET_TUPLE_LIST [MARKET_TUPLE] is
 			-- y of function "y = f(x)"
 		deferred
 		end

@@ -9,7 +9,7 @@ deferred class MARKET_TUPLE
 
 feature -- Access
 
-	trading_period: TIME_PERIOD
+	trading_period: DATE_TIME
 
 	value: REAL is
 		deferred
@@ -17,7 +17,7 @@ feature -- Access
 
 feature {TEST_FUNCTION_FACTORY, VALUE_SETTER, MARKET_FUNCTION} -- Element change
 
-	set_trading_period (t: TIME_PERIOD) is
+	set_trading_period (t: DATE_TIME) is
 			-- Set trading_period to `t'.
 		require
 			not_void: t /= Void
