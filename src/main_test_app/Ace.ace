@@ -25,6 +25,7 @@ cluster
 	app_global (app_library): "$/global";
 	app_utility (app_library): "$/utility";
 	app_factories (app_library): "$/factories";
+	app_editing (app_library): "$/editing";
 
 		-- Technical Analysis Library
 	function_abstractions:
