@@ -32,7 +32,6 @@ feature -- Initialization
 			factory_builder: FACTORY_BUILDER
 			version: expanded PRODUCT_INFO
 		do
-testmfline
 			if command_line_options.help then
 				command_line_options.usage
 			elseif command_line_options.version_request then
