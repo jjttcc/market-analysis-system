@@ -220,7 +220,7 @@ src/clients/GUI1/MA_Dialog.class lib/classes/mas_gui/ mas_linux1.6 mas_windows1.
 src/clients/GUI1/MA_Dialog\$1.class lib/classes/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
 src/clients/GUI1/MAS_Options.class lib/classes/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
 src/clients/GUI1/OptionFlags.class lib/classes/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
-src/clients/CL/CL_Client.class lib/classes/mas_gui/ mas_linux1.6 mas_windows1.6 mac1.6
+src/clients/CL/CL_Client.class lib/classes/ mas_linux1.6 mas_windows1.6 mac1.6
 src/clients/common/NetworkProtocol.class lib/classes/common/ mas_linux1.6 mas_windows1.6 mac1.6
 src/clients/common/DataInspector.class lib/classes/common/ mas_linux1.6 mas_windows1.6 mac1.6
 src/clients/support/Configuration.class lib/classes/support/ mas_linux1.6 mas_windows1.6 mac1.6
