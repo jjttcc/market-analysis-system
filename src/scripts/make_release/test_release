@@ -2,12 +2,15 @@
 # Test a new release to see if it compiles, passes all tests, etc.
 
 wkdir=/tmp/work$$
+finoutfile=/tmp/finalize.out$$
+masdir=$wkdir/testdir
+keep_src=false
 Progname=$(basename $0)
 testcount=0
 passed_tests=0
 
 usage() {
-	echo "Usage: $Progname release_number"
+	echo "Usage: $Progname release_number [-k[eep_source]]"
 }
 
 # Print fatal error message and exit
@@ -21,6 +24,27 @@ fatal() {
 fail() {
 	echo -e "Test failed\c"
 	if [ $# -gt 0 ]; then echo ": $*."; else echo "."; fi
+}
+
+query() {
+	echo -e "$*\c" >&2
+	read answer
+	echo $answer
+}
+
+cleanup() {
+	if [ "$keep_src" = true ]; then
+		echo "Leaving source code in directory: $wkdir"
+	else
+		rm -rf $wkdir
+	fi
+}
+
+handle_signal() {
+	case $(query "\nCaught signal - terminate program? (y/n) \c") in
+		y*|Y*) echo "Exiting ..." >&2; cleanup; exit 0 ;;
+		*) echo "Continuing ..." >&2 ;;
+	esac
 }
 
 random_port() {
@@ -43,18 +67,16 @@ report() {
 test_binaries() {
 	testcount="$(expr $testcount + 1)"
 	(
-	rm -rf $wkdir/*
 	sbintarfile=$release_dir/mas_linux${release_number}.tar.gz
 	echo -e "Testing server binary release ..\c"
 	tar zxf $sbintarfile || {
 		fail "Failed to untar $sbintarfile"; return 1
 	}
 	echo -e "..\c"
-	mkdir -p testdir/bin testdir/lib testdir/doc
+	mkdir -p $masdir/bin $masdir/lib $masdir/doc
 	cd *${release_number} >/dev/null || {
 		fail "Failed to cd to mas directory"; return 1
 	}
-	masdir=$wkdir/testdir
 	echo "$masdir/bin
 y
 $masdir/lib
@@ -71,14 +93,16 @@ y"| ./install >/dev/null 2>&1 || {
 	export MAS_DIRECTORY=$PWD
 	export PYTHONPATH=$masdir/lib/python
 	echo -e "Running server using data files."
-	(p=$(random_port); $masdir/bin/mas -o -f , -b $p data/*txt >/dev/null &
-	$masdir/bin/magc $p && sleep 2 &&
+	p=$(random_port)
+	($masdir/bin/mas -o -f , -b $p data/*txt >/dev/null &
+	sleep 6; $masdir/bin/magc $p && sleep 2 &&
 	echo  | $masdir/bin/macl >/dev/null $p) || {
 		fail; return 1
 	}
 	echo -e "Running server using database."
-	(p=$(random_port); $masdir/bin/mas -o -f , -b $p -p >/dev/null &
-	$masdir/bin/magc $p && sleep 2 &&
+	p=$(expr $p + 1)
+	($masdir/bin/mas -o -f , -b $p -p >/dev/null &
+	sleep 6; $masdir/bin/magc $p && sleep 2 &&
 	echo  | $masdir/bin/macl >/dev/null $p) || {
 		fail; return 1
 	}
@@ -87,12 +111,22 @@ y"| ./install >/dev/null 2>&1 || {
 }
 
 finalize() {
-	if es4 -finalize $1 -ace Ace.ace >/dev/null 2>&1; then
-		:
-	else
-		echo "Finalization with es4 failed."
-		return 1
-	fi
+	rm -f $finoutfile
+	for i in 1 2; do
+		# Loop twice, in case it core dumps the first time.
+		echo "Finalization - try $i ..."
+		if echo y|es4 -finalize $1 -ace Ace.ace >>$finoutfile 2>&1; then
+			result=0
+			echo "Finalization (try $i) with es4 succeeded."
+			break
+		else
+			echo "Finalization (try $i) with es4 failed - output saved" \
+				"to $finoutfile."
+			rm -f core
+			result=1
+		fi
+	done
+	return $result
 }
 
 freeze() {
@@ -105,10 +139,9 @@ freeze() {
 
 run_server_tests() {
 	cd test >/dev/null
-	./run_tests>/tmp/mastestresults.$$
+	./run_tests>$wkdir/mastestresults.$$
 	result=$?
-	egrep 'out of .*tests succeeded' /tmp/mastestresults.$$
-	rm -f /tmp/mastestresults.$$
+	egrep 'out of .*tests succeeded' $wkdir/mastestresults.$$
 	return $result
 }
 
@@ -116,7 +149,7 @@ run_server_tests() {
 test_server_source() {
 	testcount="$(expr $testcount + 1)"
 	(
-	rm -rf $wkdir/*
+	rm -rf $wkdir/*${release_number}/src
 	srctarfile=$release_dir/serversrc${release_number}.tar.gz
 	echo -e "Testing server source release .."
 	tar zxf $srctarfile || {
@@ -177,18 +210,31 @@ test_client_source() {
 	)
 }
 
-if [ $# -ne 1 ]; then usage; exit -1; fi
+if [ $# -lt 1 ]; then usage; exit -1; fi
 release_number=$1
 release_dir="$(ls -d ~release/*${release_number})"
 if [ $? -ne 0 ]; then
 	fatal "Cannot find directory for release $release_number"
 fi
+if [ $# -gt 1 ]; then
+	case $2 in
+		-k*) keep_src=true ;;
+	esac
+fi
+
+trap "handle_signal" SIGINT SIGQUIT SIGABRT SIGBUS SIGILL SIGHUP SIGKILL
 
 rm -rf $wkdir
 mkdir $wkdir
 cd $wkdir
-if test_binaries; then incr_passed_tests; fi
-if test_server_source; then incr_passed_tests; fi
-if test_client_source; then incr_passed_tests; fi
+if test_binaries; then
+	incr_passed_tests
+	if test_server_source; then
+		incr_passed_tests
+		if test_client_source; then
+			incr_passed_tests
+		fi
+	fi
+fi
 report
-rm -rf $wkdir
+cleanup
