@@ -1,0 +1,108 @@
+.\"Formatted with the ms macro package.
+.ds LH TAL
+.ds CH Technical Analysis Library - Function Definitions
+.ds RH \*(DY
+.ds CF Page %
+.tl ''\s+1\fBTechnical Analysis Library - Function Definitions\fP\s-1''
+.EQ
+delim #
+.EN
+.LP
+.SH
+Introduction
+.LP
+This document gives definitions for indicators used in technical analysis.
+Each indicator is defined as a function or set of functions.
+.LP
+In each location where it appears, the symbol \fIS\fP is defined as a
+sequence, #left ( t sub i, t sub i+1,..., m right ) roman ,
+that is an element of the set
+#left { (t sub 1 ,~t sub 2 ,...,~t sub x )~|~t sub i~is~in~R~and~x > 0 right } .
+Also, in each location where it appears (including the text above),
+the symbol \fIt\fP stands for the
+general concept of a tuple, usually having at least the attributes open, high,
+low, and close.
+.SH
+Moving Average
+.LP
+The definition of
+an \fIn\fP-period moving average,
+#n <= x roman ,
+is:
+.LP
+.EQ
+f(S)~=~left ( { sum from {i=1} to n t sub i } over n ,~
+{ sum from {i=2} to n+1 t sub i } over n ,...,~
+{ sum from {i=x-n+1} to x t sub i } over n right )
+.EN
+.SH
+Fast and Slow Stochastic
+.LP
+Fast Stochastic is a set of two functions:
+A composite function called %K and a function that
+averages the result of the %K, called %D.
+Slow Stochastic is a set of two functions:
+The %D of Fast
+Stochastic - for Slow Stochastic this is renamed as %K - and
+a further smoothing of the Fast Stochastic %D
+(Slow Stochastic %K), which is called (Slow
+Stochastic) %D.
+.SH 3
+\fIFast Stochastic %K\fP
+.LP
+The definition of Stochastic %K for \fIn\fP periods,
+#n <= x roman ,
+is:
+.LP
+.EQ
+gsize -1
+f(S)~=~left ( { cl(S, n) - lw(S, 1, n) } over { hg(S, 1, n) - lw(S, 1, n) } times 100,~
+{ cl(S, n+1) - lw(S, 2, n+1) } over { hg(S, 2, n+1) - lw(S, 2, n+1) } times 100,...,~
+{ cl(S, x) - lw(S, x-n+1, x) } over { hg(S, x-n+1, x) - lw(S, x-n+1, x) } times 100 right )
+.EN
+.EQ
+gsize +1
+.EN
+.LP
+.in +0.25i
+Where cl, lw, and hg are functions defined as:
+.sp
+.in +0.15i
+#cl(S, i)~=~closing~price~of~t sub i
+.br
+#lw(S, i, j)~=~lowest~low~in~left ( t sub i, t sub i+1,..., t sub j right )
+.br
+#hg(S, i, j)~=~highest~high~in~left ( t sub i, t sub i+1,..., t sub j right )
+.br
+.ne 22
+.SH 3
+\fIFast Stochastic %D (Slow Stochastic %K)\fP
+.LP
+The Stochastic %D is a \fIv\fP-period average of the 
+\fIn\fP-period %K
+#roman ( n <= x roman ) roman ,
+where \fIv\fP usually has the value 3, with the definition:
+.EQ
+f(S)~=~left ( { sum from i=0 to v-1 { cl_fnc - lw_fnc } } over
+{ sum from i=0 to v-1 { hg_fnc - lw_fnc } } times 100 ,
+{ sum from i=1 to v { cl_fnc - lw_fnc } } over
+{ sum from i=1 to v { hg_fnc - lw_fnc } } times 100 ,...,
+{ sum from i=x-n-v+1 to x-n { cl_fnc - lw_fnc } } over
+{ sum from i=x-n-v+1 to x-n { hg_fnc - lw_fnc } } times 100
+right )
+.EN
+.sp
+.in +0.25i
+Where
+.sp
+.in +0.15i
+\fIcl_fnc\fP stands for #cl(S, n+i) roman ,
+.br
+lw_fnc stands for #lw(S, i+1, n+i) roman ,
+.br
+and hg_fnc stands for #hg(S, i+1, n+i) roman ;
+.in
+.sp
+and \fIcl\fP, \fIlw\fP, and \fIhg\fP are as defined above for
+Fast Stochastic %K.
+.LP

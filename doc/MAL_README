@@ -1,0 +1,12 @@
+The files in this directory provide documentation for the Technical Analysis
+Library (TAL) and applications that use it.  The directory currently contains
+the following files:
+
+	README - This file
+	TAL_design_document - Documentation of the design of TAL
+	eiffel_library_document - Documentation of the small component library
+	    used by TAL
+	intro - Introduction to TAL
+	applications - Documentation of applications using TAL
+	functions.ps - An attempt to give a precise specification to some of
+	    the technical analysis functions that can be constructed with TAL

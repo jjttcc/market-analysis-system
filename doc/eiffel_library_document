@@ -1,0 +1,53 @@
+                Eiffel Component Library - Design Document
+
+
+The Eiffel Component Library consists of a set of classes that provide
+abstractions that can be used in many different kinds of applications.
+The classes in this library originated as part of the Technical Analysis
+Library (TAL), but when it became evident that they provided abstractions
+usable outside of the financial domain, I moved them into a separate
+library.  Because the classes in this library are new, they have not yet
+proved their usefulness in applications outside of TAL.  (One exception
+to this is that I use the data scanning component in another application
+I am working on, a family tree application.)  Thus it is likely the
+library will grow and evolve as more applications are written that use it.
+
+CLUSTER architectural
+
+The classes in this cluster provide architectural abstractions typically used
+in design pattern implementations.  COMMAND is the basic abstraction for the
+command pattern and NUMERIC_COMMAND is a command that produces a numeric
+(REAL) value as a result of its execution.  FACTORY provides the principal
+abstraction for the factory pattern.  It consists of an execute procedure
+(thus it inherits from COMMAND) and a feature, product that is produced as a
+result of calling execute.  This class will be used by providing descendants
+that implement execute to instantiate and initialize an object of the
+appropriate class.
+
+CLUSTER commands
+
+commands currently contains one subcluster, operators, whose classes
+are based on the concept of a binary operator that operates on two
+operands and that produces a result.  The principal abstractions in this
+cluster are BINARY_OPERATOR; BOOLEAN_OPERATOR, a binary operator that produces
+a boolean result, and BINARY_NUMERIC_OPERATOR, a binary operator that produces
+a numeric result.
+
+CLUSTER data_scanning
+
+This cluster currently contains two classes that provide basic data
+scanning functionality, DATA_SCANNER and VALUE_SETTER.  DATA_SCANNER
+inherits from FACTORY and provides a basic algorithm for scanning an input
+file whose data is structured into records and fields.  It uses a set of
+VALUE_SETTER instances to read the current field of the current record
+and set the appropriate field of the tuple passed to its set routine.
+VALUE_SETTER is deferred and is used by providing a class that inherits
+from it and defines the do_set and read_value routines to read from the
+input file and set a field in the tuple according to the specifications
+of the particular application for which the class is designed.
+
+CLUSTER support
+
+This cluster is for classes that provide general utility functions.  It
+currently only contains one class, MATH_CONSTANTS, which currently provides a
+feature named epsilon for the purpose of comparing floating point numbers.
