@@ -12,13 +12,10 @@ class STORABLE_EVENT_GENERATOR_LIST inherit
 
 	STORABLE_LIST [MARKET_EVENT_GENERATOR]
 		redefine
-			cleanup
+			save
 		end
 
 	MARKET_FUNCTION_EDITOR
-		export {NONE}
-			all
-		end
 
 creation
 
@@ -26,9 +23,10 @@ creation
 
 feature -- Utility
 
-	cleanup is
+	save is
 			-- Call wipe_out on each item to ensure that no extra data
-			-- is stored to the file; then call precursor.
+			-- is stored to the file; then call precursor to save the
+			-- remaining contents.
 		do
 			from
 				start
