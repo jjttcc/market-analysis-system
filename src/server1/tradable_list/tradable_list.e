@@ -70,11 +70,14 @@ feature -- Access
 			-- occurs.
 		do
 			fatal_error := False
-			if index = old_index then
+			if index = old_index and cache.count > 0 then
 				check
 					target_tradable_exists: target_tradable /= Void
 				end
-				if target_tradable_out_of_date then
+				if
+					cached_item (index) /= Void and then
+					target_tradable_out_of_date
+				then
 					append_new_data
 				end
 			else
@@ -230,10 +233,12 @@ feature -- Basic operations
 			-- Empty the cache.
 		do
 			cache.clear_all
+			cache_index_queue.wipe_out
 			if count > 0 then
 				start; back
 			end
 		ensure
+			cache_is_empty: cache_index_queue.is_empty and cache.is_empty
 			before: count > 0 implies before and index = 0
 		end
 

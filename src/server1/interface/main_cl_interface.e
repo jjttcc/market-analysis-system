@@ -234,11 +234,9 @@ feature -- Basic operations
 						function_builder.changed and current_tradable /= Void
 					then
 						tradable_list_handler.clear_caches
-						tradable_list_handler.turn_caching_off
 						current_tradable := 
 						tradable_list_handler.tradable (current_tradable.symbol,
 							current_period_type)
-						tradable_list_handler.turn_caching_on
 					end
 				when 'm', 'M' then
 					event_generator_builder.edit_event_generator_menu

@@ -30,6 +30,8 @@ feature {NONE} -- Initialization
 				not daily_list.is_empty and then intraday_list /= Void and then
 				not intraday_list.is_empty implies
 				intraday_list.count = daily_list.count
+			consistent_caching: daily_list /= Void and intraday_list /= Void
+				implies daily_list.caching_on = intraday_list.caching_on
 			-- for_all i member_of 1 .. daily_list.count it_holds
 			--    (daily_list.symbols @ i).is_equal (intraday_list.symbols @ i)
 		do
@@ -196,6 +198,13 @@ feature -- Status report
 				is_empty
 		end
 
+	caching_on: BOOLEAN is
+		do
+			Result := (daily_market_list = Void or else
+				daily_market_list.caching_on) and (intraday_market_list = Void
+				or else intraday_market_list.caching_on)
+		end
+
 feature -- Cursor movement
 
 	finish is
@@ -327,6 +336,9 @@ invariant
 		not (daily_market_list = Void and intraday_market_list = Void)
 	counts_equal_if_both_valid: both_lists_valid implies
 		daily_market_list.count = intraday_market_list.count
+	consistent_caching: daily_market_list /= Void and
+		intraday_market_list /= Void implies
+		daily_market_list.caching_on = intraday_market_list.caching_on
 	-- for_all i member_of 1 .. daily_market_list.count it_holds
 	--    (daily_market_list.symbols @ i).is_equal (
 	--       intraday_market_list.symbols @ i)

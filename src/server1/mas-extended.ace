@@ -6,13 +6,13 @@ root
 
 default
 	assertion (all)
+	arguments ("-f , /tmp/ibm.txt")
 	arguments ("-f , nonexistent.txt")
 	arguments ("-p 30001 -b")
 	arguments ("-w -f , -b 5555")
 	arguments (" -o -b 12345 -f , -w -report_back jupiter.milkyway.org^41512")
 	arguments (" ")
 	arguments ("-o -f , -w 12345")
-	arguments ("-o -f , /tmp/ibm.txt")
 	arguments ("-p 8888 -b")
 	arguments ("-p 8886 -b")
 	arguments ("-p 8884 -b")
