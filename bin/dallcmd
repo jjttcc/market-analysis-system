@@ -18,6 +18,7 @@ cvs diff java_library/ 2>&1;res3=$?
 cvs diff perl_library/ 2>&1;res4=$?
 cvs diff relatives 2>&1;res5=$?
 cvs diff script_library 2>&1;res6=$?
+cvs diff applications 2>&1;res6=$?
 }  >/tmp/dall
 #if [ "$res1" = 0 -a "$res2" = 0 ]; then
 #	echo  $res2
