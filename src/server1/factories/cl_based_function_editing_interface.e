@@ -29,7 +29,7 @@ feature -- Initialization
 
 	make is
 		do
-			!!operator_maker.make
+			!!operator_maker.make (false)
 			!!editor.make (Current, operator_maker)
 		ensure
 			editor_exists: editor /= Void
