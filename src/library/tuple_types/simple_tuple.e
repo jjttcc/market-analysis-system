@@ -8,6 +8,8 @@ class SIMPLE_TUPLE inherit
 
 	MARKET_TUPLE
 
+	MATH_CONSTANTS
+
 creation
 
 	make
@@ -19,7 +21,8 @@ feature -- Initialization
 			date_time := d
 			value := v
 		ensure
-			set: date_time = d and value = v
+			date_set: date_time = d
+			value_set: rabs (value - v) < epsilon
 		end
 
 feature -- Access
@@ -33,7 +36,7 @@ feature {MARKET_FUNCTION} -- Status setting
 		do
 			value := v
 		ensure
-			value = v
+			value_set: rabs (value - v) < epsilon
 		end
 
 end -- class SIMPLE_TUPLE
