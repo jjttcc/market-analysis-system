@@ -23,6 +23,7 @@ public class LineDrawer extends IndicatorDrawer {
 		int x0, y0;
 		int x1, y1;
 		int lngth = 0;
+		int right_adjust = bar_width() / 2;
 		if (_data != null) lngth = _data.length;
 		double height_factor;
 		Configuration conf = Configuration.instance();
@@ -38,12 +39,12 @@ public class LineDrawer extends IndicatorDrawer {
 		g.setColor(draw_color);
 		height_factor = height_factor_value(bounds);
 		row = first_row() - 1;
-		x0 = _x_values[row];
+		x0 = _x_values[row] + right_adjust;
 		y0 = (int)(bounds.height - (_data[0]-ymin) * height_factor + bounds.y);
 		++row;
 
-		for (i = 1; i < lngth; ++i, ++row) {
-			x1 = _x_values[row];
+		for (i = 1; row < _x_values.length && i < lngth; ++i, ++row) {
+			x1 = _x_values[row] + right_adjust;
 			y1 = (int)(bounds.height - (_data[i]-ymin) * height_factor +
 					bounds.y);
 			g.drawLine(x0,y0,x1,y1);
