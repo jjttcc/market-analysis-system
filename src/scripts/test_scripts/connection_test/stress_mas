@@ -43,7 +43,7 @@ if len(argv) < 2:
 	exit(-1)
 
 Errorcode = '101'
-sleeptime = 0.35
+sleeptime = 0.05
 silent = false
 host = ""
 port = -1
@@ -97,6 +97,7 @@ while 1:
 	# directive.
 	if not loop:
 		s = user_response()
+		sleep(sleeptime)
 	else: sleep(sleeptime)
 	if s == "" or s == "<end>":
 		connection.close()
