@@ -25,25 +25,22 @@ feature -- Initialization
 			-- all of them, including the socket port numbers, or should
 			-- a new class do all CL processing, or ??? - Perhaps use
 			-- one of the free Eiffel Forum CL parsing libraries.
-			if argv.count < 2 then
-				!CONSOLE_READER!readcmd.make (factory_builder)
+			!CONSOLE_READER!readcmd.make (factory_builder)
+			poller.put_read_command (readcmd)
+			-- Make a socket for each port number provided in the
+			-- command line, create a STREAM_READER to handle it,
+			-- and add it to the poller's list of read commands.
+			-- (Allows concurrent processing - in a future version.)
+			from
+				i := 1
+			until
+				i = argv.upper + 1 or else not (argv @ i).is_integer
+			loop
+				!!socket.make_server_by_port (
+					argv.item (i).to_integer)
+				!STREAM_READER!readcmd.make (socket, factory_builder)
 				poller.put_read_command (readcmd)
-			else
-				-- Make a socket for each port number provided in the
-				-- command line, create a STREAM_READER to handle it,
-				-- and add it to the poller's list of read commands.
-				-- (Allows concurrent processing - in a future version.)
-				from
-					i := 1
-				until
-					i = argv.upper + 1 or else not (argv @ i).is_integer
-				loop
-					!!socket.make_server_by_port (
-						argv.item (i).to_integer)
-					!STREAM_READER!readcmd.make (socket, factory_builder)
-					poller.put_read_command (readcmd)
-					i := i + 1
-				end
+				i := i + 1
 			end
 			from
 			until
