@@ -1,12 +1,13 @@
 indexing
-	description: "Main MAS Control Terminal actions for GUI-event responses"
+	description:
+		"Objects that perform an action based on locating an unowned session"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 2003: Jim Cochrane - %
 		%License to be determined"
 
-class MAIN_ACTIONS inherit
+class SESSION_LOCATON inherit
 
 	ACTIONS
 
@@ -16,30 +17,21 @@ create
 
 feature {NONE} -- Initialization
 
-	make (config: MCT_CONFIGURATION) is
+	make (conf: MCT_CONFIGURATION;
+			ext_cmds: HASH_TABLE [EXTERNAL_COMMAND, STRING]) is
 		require
-			config_exists: config /= Void
-		local
-			cmd: EXTERNAL_COMMAND
+			conf_exists: conf /= Void and ext_cmds /= Void
 		do
-			create external_commands.make (0)
-			cmd := config.default_start_server_command
-			external_commands.put (cmd, cmd.identifier)
-			configuration := config
+			configuration := conf
+			external_commands := ext_cmds
+		ensure
+			configuration_set: configuration = conf
+			external_commands_set: external_commands = ext_cmds
 		end
 
-feature -- Actions
+feature -- Basic operations
 
 	connect_to_session is
-			-- Connect to an existing MAS "session".
-		local
-			cmd: SESSION_LOCATON
-		do
-			create cmd.make (configuration, external_commands)
-			cmd.connect_to_session
-		end
-
-	old_connect_to_session is
 			-- Connect to an existing MAS "session".
 		local
 			window: LOCATE_SESSION_WINDOW
@@ -52,58 +44,11 @@ feature -- Actions
 	terminate_arbitrary_session is
 			-- Terminate an arbitrary MAS "session".
 		local
-			cmd: SESSION_LOCATON
-		do
-			create cmd.make (configuration, external_commands)
-			cmd.terminate_arbitrary_session
-		end
-
-	old_terminate_arbitrary_session is
-			-- Terminate an arbitrary MAS "session".
-		local
 			window: LOCATE_SESSION_WINDOW
 		do
 			create window.make
 			window.register_client (agent respond_to_termination_request)
 			window.show
-		end
-
-	start_server is
-			-- Start the MAS server.
-		local
-			cmd: COMMAND
-			portnumber: STRING
-			wbldr: expanded WIDGET_BUILDER
-			dialog: EV_WIDGET
-			session_window: SESSION_WINDOW
-		do
-			portnumber := reserved_port_number
-			if portnumber = Void then
-				dialog := wbldr.new_error_dialog (
-					"Port numbers are all in use.")
-				dialog.show
-			else
-				session_window := new_session_window (
-					configuration.hostname, portnumber)
-				cmd := external_commands @
-					configuration.Start_server_cmd_specifier
-				cmd.execute (session_window)
-			end
-		end
-
-	configure_server_startup is
-		local
-			server_selection: START_SERVER_SELECTION
-		do
-			create server_selection.make (configuration, external_commands)
-			server_selection.execute
-		end
-
-	edit_preferences is
-			-- Edit "Preferences".
-		do
-			print ("Stub!!! (Will allow setting of (not) " +
-				"%Nterminate on Quitting, among other things)%N")
 		end
 
 feature {NONE} -- Implementation - Callback routines
@@ -156,6 +101,7 @@ feature {NONE} -- Implementation
 				port_numbers_in_use.extend (supplier.port_number)
 			end
 			session_window.show
+print ("NEW connect-to-loc...%N")
 		end
 
 	terminate_located_session (supplier: LOCATE_SESSION_WINDOW) is
@@ -170,24 +116,7 @@ feature {NONE} -- Implementation
 			create session_actions.make (configuration)
 			session_actions.set_owner_window (supplier)
 			session_actions.terminate_session
-		end
-
-	reserved_port_number: STRING is
-		local
-			pnums: LIST [STRING]
-		do
-			from
-				pnums := configuration.valid_portnumbers
-				pnums.start
-			until
-				Result /= Void or pnums.exhausted
-			loop
-				if not port_numbers_in_use.has (pnums.item) then
-					Result := pnums.item
-					port_numbers_in_use.extend (pnums.item)
-				end
-				pnums.forth
-			end
+print ("NEW terminate-loc...%N")
 		end
 
 	new_session_window (hostname, portnumber: STRING): SESSION_WINDOW is
