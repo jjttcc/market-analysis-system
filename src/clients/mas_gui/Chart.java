@@ -271,7 +271,7 @@ public class Chart extends Frame implements Runnable, NetworkProtocol,
 			try {
 				data_builder.send_market_data_request(tradable,
 					current_period_type);
-				if (request_result_id() == OK) {
+				if (request_result_id() == Ok) {
 					// Ensure that the indicator list is up-to-date with
 					// respect to `tradable'.
 					data_builder.send_indicator_list_request(tradable,

@@ -45,7 +45,7 @@ public class MA_Connection extends Connection implements NetworkProtocol {
 	}
 
 	protected int ok_code() {
-		return OK;
+		return Ok;
 	}
 
 	protected int warning_code() {

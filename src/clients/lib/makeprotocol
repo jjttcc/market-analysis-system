@@ -20,7 +20,7 @@ awk 'BEGIN {
 	print "package common;\n"
 	print "/** Constants specifying the components of the Market Analysis \
 System \nnetwork communication protocol */"
-	print "public interface NetworkProtocol\n{"
+	print "public interface NetworkProtocol {"
 }
 
 # Ignore deferred features.
@@ -31,10 +31,12 @@ System \nnetwork communication protocol */"
 	print "\n\t// " $0
 }
 /: *INTEGER/ {
+	sub(/\<[a-z]/, toupper(substr($1, 1, 1)), $1) # First letter upper case.
 	sub (/:/, "")
 	print "\tfinal int " $1 " = " $4 ";"
 }
 /: *STRING/ {
+	sub(/\<[a-z]/, toupper(substr($1, 1, 1)), $1) # First letter upper case.
 	sub (/:/, "")
 	# Change Eiffel tab char to java tab char.
 	if ($4 == "\"%T\"") {
@@ -51,7 +53,7 @@ System \nnetwork communication protocol */"
 }
 END {
 	print "\n\t// daily period type is needed for initialization."
-	print "\tfinal String daily_period_type = \"daily\";"
+	print "\tfinal String Daily_period_type = \"daily\";"
 # !!!!Remove:	print "}"
 }' $proto_files >../common/NetworkProtocol.java
 
@@ -62,7 +64,7 @@ BEGIN {
 }
 if (/_separator: *STRING/) {
 	chomp;
-	s/\b([a-z_]+): *STRING *is *(".*")/final String client_request_$1 = $2;/;
+	s/\b([a-z_]+): *STRING *is *(".*")/final String Client_request_$1 = $2;/;
 	print;
 	print "\n";
 }

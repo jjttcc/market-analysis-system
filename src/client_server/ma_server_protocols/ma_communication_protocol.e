@@ -15,23 +15,23 @@ deferred class
 
 feature -- String constants
 
-	Eom: STRING is ""
+	eom: STRING is ""
 			-- End of message specifier
 
-	Eot: STRING is ""
+	eot: STRING is ""
 			-- End of transmission specifier - for command-line clients
 
-	Console_flag: CHARACTER is 'C'
+	console_flag: CHARACTER is 'C'
 			-- Flag indicating that the client is a console
 
-	Compression_on_flag: STRING is "<@z@>"
+	compression_on_flag: STRING is "<@z@>"
 			-- Flag (at beginning of a message) that indicates that
 			-- the message is compressed
 
-	Message_field_separator: STRING is "%T"
+	message_field_separator: STRING is "%T"
 			-- Field separator for messages sent and received by the server
 
-	Message_record_separator: STRING is "%N"
+	message_record_separator: STRING is "%N"
 			-- Record separator for messages sent and received by the server
 
 	message_date_field_separator: STRING is deferred end

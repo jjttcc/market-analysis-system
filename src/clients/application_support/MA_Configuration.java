@@ -60,24 +60,26 @@ public class MA_Configuration extends Configuration implements NetworkProtocol,
 			for (i = 0; i < start_date_settings.size() - 1; ++i)
 			{
 				ds = (DateSetting) start_date_settings.elementAt(i);
-				result.append(Start_date + "\t" + ds.time_period() + "\t" +
-								ds.date() + "\t");
+				result.append(Start_date + Message_field_separator +
+					ds.time_period() + Message_field_separator + ds.date() +
+					Message_field_separator);
 			}
 			ds = (DateSetting) start_date_settings.elementAt(i);
-			result.append(Start_date + "\t" + ds.time_period() + "\t" +
-							ds.date());
+			result.append(Start_date + Message_field_separator +
+				ds.time_period() + Message_field_separator + ds.date());
 		}
 		if (end_date_settings.size() > 0) {
-			result.append("\t");
+			result.append(Message_field_separator);
 			for (i = 0; i < end_date_settings.size() - 1; ++i)
 			{
 				ds = (DateSetting) end_date_settings.elementAt(i);
-				result.append(End_date + "\t" + ds.time_period() + "\t" +
-								ds.date() + "\t");
+				result.append(End_date + Message_field_separator +
+					ds.time_period() + Message_field_separator + ds.date() +
+					Message_field_separator);
 			}
 			ds = (DateSetting) end_date_settings.elementAt(i);
-			result.append(End_date + "\t" + ds.time_period() + "\t" +
-							ds.date());
+			result.append(End_date + Message_field_separator +
+				ds.time_period() + Message_field_separator + ds.date());
 		}
 		return result.toString();
 	}
@@ -262,9 +264,9 @@ public class MA_Configuration extends Configuration implements NetworkProtocol,
 		if (input == null) {
 			// No input source - use default settings.
 			DateSetting ds = new DateSetting("1998/05/01",
-				daily_period_type);
+				Daily_period_type);
 			start_date_settings.addElement(ds);
-			ds = new DateSetting("now", daily_period_type);
+			ds = new DateSetting("now", Daily_period_type);
 			end_date_settings.addElement(ds);
 		} else {
 			try {

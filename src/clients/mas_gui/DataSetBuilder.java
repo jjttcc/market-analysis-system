@@ -61,7 +61,7 @@ public class DataSetBuilder implements NetworkProtocol {
 			throws Exception {
 		connection_.send_request(Market_data_request,
 			symbol + Message_field_separator + period_type);
-		if (connection_.last_received_message_ID() == OK) {
+		if (connection_.last_received_message_ID() == Ok) {
 			String results = connection_.result().toString();
 			results = setup_parser_fieldspecs(results);
 			data_parser.parse(results, main_drawer);
