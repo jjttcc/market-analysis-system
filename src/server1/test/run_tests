@@ -32,6 +32,7 @@ set_up()
 {
 	successes=0
 	test_count=0
+	unset MASS_DIRECTORY
 	flags=""
 	if [ ! -d bin ]; then
 		echo "Where's the bin directory?"
