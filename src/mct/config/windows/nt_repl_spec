@@ -1,0 +1,4 @@
+{macl_shell}cmd ~/c start "macl" cmd ~/c 
+{start_cl_client_command}<cwdir>[<bin_dir>]<macl-shell> macl -h <hostname> <portnumber>
+{java_prefix}
+{browser_cmd}cmd ~/c start ~/b

@@ -6,9 +6,10 @@ replacestart
 {mas_directory_setting}<mas_lib_dir>
 xterm -e *
 {macl_shell}{cmd} ~/c start "macl" {cmd} ~/c 
-{chart_command_suffix>
-{browse_docs_cmd}{cmd} ~/c cd "<doc_dir>" && start ~/b index.html
-{browse_intro_command}{cmd} ~/c cd "<doc_dir>" && start ~/b mct_introduction.html
-{browse_faq_command}{cmd} ~/c cd "<doc_dir>" && start ~/b FAQ.html
+{chart_command_suffix}
+{browse_docs_cmd}<cwdir>[<doc_dir>]{browser_cmd} index.html
+{browse_intro_command}<cwdir>[<doc_dir>]{browser_cmd} mct_introduction.html
+{browse_faq_command}<cwdir>[<doc_dir>]{browser_cmd} FAQ.html
 {java_jar}/mascharts.jar
+{jpquote}"
 replaceend

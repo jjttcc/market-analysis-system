@@ -1,0 +1,4 @@
+{macl_shell}
+{start_cl_client_command}<cwdir>[<bin_dir>]start "<bin_dir>"/run_command.bat macl -h <hostname> <portnumber>
+{java_prefix}start ~/min "<bin_dir>"/run_command.bat 
+{browser_cmd}start ~/min
