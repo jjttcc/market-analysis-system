@@ -95,7 +95,7 @@ feature {NONE} -- Main-window components
 		do
 			create Result
 			Result.extend (main_file_menu)
-			Result.extend (advanced_menu)
+			Result.extend (edit_menu)
 			Result.extend (help_menu)
 		end
 
@@ -154,7 +154,7 @@ feature {NONE} -- Session-window components
 feature {NONE} -- Menu components
 
 	main_file_menu: EV_MENU is
-			-- The file menu for the main window
+			-- The 'File' menu for the main window
 		require
 			current_actions_exist: current_main_actions /= Void or
 				current_mas_session_actions /= Void
@@ -164,7 +164,7 @@ feature {NONE} -- Menu components
 		end
 
 	session_file_menu: EV_MENU is
-			-- The file menu for session windows
+			-- The 'File' menu for session windows
 		require
 			current_actions_exist: current_mas_session_actions /= Void
 		do
@@ -175,8 +175,8 @@ feature {NONE} -- Menu components
 			common_file_menu_items.do_all (agent Result.extend)
 		end
 
-	advanced_menu: EV_MENU is
-			-- The 'advanced' menu
+	edit_menu: EV_MENU is
+			-- The 'Edit' menu
 		require
 			current_main_actions_exist: current_main_actions /= Void
 		do
@@ -184,13 +184,17 @@ feature {NONE} -- Menu components
 			Result.extend (widget_builder.new_menu_item (
 				Server_startup_menu_item_title,
 				<<agent current_main_actions.configure_server_startup>>))
-			Result.extend (widget_builder.new_menu_item (
-				Preferences_menu_item_title,
-				<<agent current_main_actions.edit_preferences>>))
+			-- @@Remove this guard when "Edit preferences" feature
+			-- is implemented.
+			if False then
+				Result.extend (widget_builder.new_menu_item (
+					Preferences_menu_item_title,
+					<<agent current_main_actions.edit_preferences>>))
+			end
 		end
 
 	help_menu: EV_MENU is
-			-- The help menu
+			-- The 'Help' menu
 		require
 			current_actions_exist: current_main_actions /= Void or
 				current_mas_session_actions /= Void
