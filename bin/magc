@@ -4,6 +4,7 @@
 Progname=$(basename $0)
 basedir=$(dirname $0)/..
 classdir=$basedir/lib/classes
+cmd=java
 
 usage() {
 	echo "Usage: $pname [-cl] [-no_cd] [-h hostname] port_number -s symbol ..."
@@ -24,6 +25,15 @@ check_settings() {
 		echo "$Progname: Cannot access java class file: " \
 				"${classdir}/${main}.class" >&2
 		exit -1
+	fi
+	if ! type java >/dev/null 2>&1; then
+		if ! type jre >/dev/null 2>&1; then
+			echo "$Progname: Neither java nor jre can be found in your" \
+					"path - Aborting." >&2
+			exit -1
+		else
+			cmd="jre -cp ."
+		fi
 	fi
 }
 
@@ -57,4 +67,4 @@ if [ "$no_cd" = true ]; then
 else
 	cd $classdir
 fi
-java $main $host $port_number $args
+$cmd $main $host $port_number $args
