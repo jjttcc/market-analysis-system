@@ -178,13 +178,13 @@ feature -- Basic operations
 				when 'd', 'D' then
 					mkt_analysis_set_date_menu
 				when 'x', 'X' then
-					end_client := true
+					end_client := True
 				when 'h', 'H' then
 					print (help @ help.Main)
 				when 'p', 'P' then
 					print (product_info)
 				when '%/5/' then -- ^E, for exit
-					exit_server := true
+					exit_server := True
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
@@ -245,7 +245,7 @@ feature {NONE}
 				when 'c', 'C' then
 					f := function_builder.function_selection_from_type (
 							function_builder.market_function, "root function",
-							true)
+							True)
 					function_library.extend (f)
 				when 'r', 'R' then
 					if not function_library.empty then
@@ -266,16 +266,16 @@ feature {NONE}
 				when 'a', 'A' then
 					edit_event_generator_indicator_menu
 				when 'x', 'X' then
-					end_client := true
+					end_client := True
 				when 'h', 'H' then
 					print (help @ help.Edit_indicators)
 				when '%/5/' then -- ^E, for exit
-					exit_server := true; finished := true
+					exit_server := True; finished := True
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
 				when '-' then
-					finished := true
+					finished := True
 				else
 					print ("Invalid selection%N")
 				end
@@ -317,7 +317,7 @@ feature {NONE}
 					print_list (<<"Selection must be between 0 and ",
 								analyzers.count, "%N">>)
 				elseif last_integer = 0 then
-					finished := true
+					finished := True
 				else
 					analyzer := analyzers @ last_integer
 					edit_indicator_menu (analyzer.indicators)
@@ -383,7 +383,7 @@ feature {NONE}
 					print_list (<<"Selection must be between 0 and ",
 								parameters.count, "%N">>)
 				elseif last_integer = 0 then
-					finished := true
+					finished := True
 				else
 					parameter := parameters @ last_integer
 					edit_parameter (parameter)
@@ -412,7 +412,7 @@ feature {NONE}
 						remove_indicator (indicator)
 					when 'n', 'N' then
 					when 'q', 'Q' then
-						finished := true
+						finished := True
 					else
 						print ("Invalid selection%N")
 					end
@@ -452,16 +452,16 @@ feature {NONE}
 				when 'e', 'E' then
 					registrar.edit_registrants
 				when 'x', 'X' then
-					end_client := true
+					end_client := True
 				when 'h', 'H' then
 					print (help @ help.Edit_event_registrants)
 				when '%/5/' then -- ^E, for exit
-					exit_server := true; finished := true
+					exit_server := True; finished := True
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
 				when '-' then
-					finished := true
+					finished := True
 				else
 					print ("Invalid selection%N")
 				end
@@ -478,7 +478,7 @@ feature {NONE}
 		do
 			if market_list.empty then
 				print ("There are currently no markets to view.%N")
-				finished := true
+				finished := True
 			end
 			from
 			until
@@ -504,16 +504,16 @@ feature {NONE}
 						view_indicator_menu (indicator)
 					end
 				when 'x', 'X' then
-					end_client := true
+					end_client := True
 				when 'h', 'H' then
 					print (help @ help.View_data)
 				when '%/5/' then -- ^E, for exit
-					exit_server := true; finished := true
+					exit_server := True; finished := True
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
 				when '-' then
-					finished := true
+					finished := True
 				else
 					print ("Invalid selection%N")
 				end
@@ -556,16 +556,16 @@ feature {NONE}
 				when 'l', 'L' then
 					print (indicator.full_description)
 				when 'x', 'X' then
-					end_client := true
+					end_client := True
 				when 'h', 'H' then
 					print (help @ help.View_indicator)
 				when '%/5/' then -- ^E, for exit
-					exit_server := true; finished := true
+					exit_server := True; finished := True
 				when '!' then
 					print ("Type exit to return to main program.%N")
 					system ("")
 				when '-' then
-					finished := true
+					finished := True
 				else
 					print ("Invalid selection%N")
 				end
