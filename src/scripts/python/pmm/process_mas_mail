@@ -13,6 +13,8 @@ import os
 from utilities import contents
 from pmm import *
 
+Use_db_envname = 'MAS_DATA_IN_DB'
+
 def send_mail(msg, args):
 	otherargs = ""
 	subject = ""
@@ -32,14 +34,28 @@ def send_mail(msg, args):
 		print "Mail command with subject " + subject + " failed."
 	return subject
 
+def use_database():
+	result = 0
+	try:
+		if os.environ[Use_db_envname] != '': result = 1
+	except:
+		None
+	return result
+
 longterm = 0
 message = sys.stdin.readlines()
 subject = send_mail(message, sys.argv[1:])
 longterm = match(long_term_string, subject) != -1
+watch_flags = [uptrend_flag, downtrend_flag, sidelined_flag]
 if longterm:
 	signals = unique_signals(message)
-	uptrend_file_path = list_file_directory + path_sep + uptrend_file_name
-	downtrend_file_path = list_file_directory + path_sep + downtrend_file_name
-	sidelined_file_path = list_file_directory + path_sep + sidelined_file_name
-	update_trend_lists(signals, uptrend_file_path, downtrend_file_path,
-		sidelined_file_path)
+	if not use_database():
+		uptrend_file_path = list_file_directory + path_sep + uptrend_file_name
+		downtrend_file_path = list_file_directory + \
+			path_sep + downtrend_file_name
+		sidelined_file_path = list_file_directory + \
+			path_sep + sidelined_file_name
+		update_trend_lists(signals, uptrend_file_path, downtrend_file_path,
+			sidelined_file_path)
+	else:
+		db_update_trend_lists(signals, watch_flags)

@@ -14,16 +14,20 @@ list_file_directory = "/home2/finance/data/etc"
 uptrend_file_name = "up_watch"
 downtrend_file_name = "down_watch"
 sidelined_file_name = "sidelined"
+# Strings flagging uptrend, downtrend, etc. watch lists in database
+uptrend_flag = "uptrend"
+downtrend_flag = "downtrend"
+sidelined_flag = "sidelined"
 # Strings specifying (regular expression) text matches:
 long_term_string = ".*long-term.*"
 # Event header
 event_string = "Event for:"
 # uptrend specifier
-buy_string = ".*\[Slope of MACD, Slope of Slope of MACD\] Uptrend"
+buy_string = ".*Uptrend"
 # downtrend specifier
-sell_string = ".*\[Slope of MACD, Slope of Slope of MACD\] Downtrend"
+sell_string = ".*Downtrend"
 # sideline specifier
-sideline_string = ".*\[Slope of MACD, Slope of Slope of MACD\] Sidelined"
+sideline_string = ".*Sideways.*"
 # regex string to match symbol from event line
 symbol_regex = "Event for: *\([^,]*\),.*"
 # string to use on event line to produce symbol from symbol_regex match

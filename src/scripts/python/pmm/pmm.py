@@ -5,6 +5,7 @@ from utilities import Date
 from string import lower
 from pmm_settings import *
 from posixpath import exists
+from db_utilities import *
 
 Debugging_on = 1
 
@@ -98,6 +99,7 @@ def remove_from_file(path, sym):
 	else:
 		debug(path + " does not exist - doing nothing.")
 
+# Add `sym' to file `path'.
 def add_to_file(path, sym):
 	symbol = lower(sym)
 	debug("Adding " + symbol + " to " + path)
@@ -145,3 +147,45 @@ def update_trend_lists(signals, upfile_path, downfile_path, sidefile_path):
 			print 'Warning: event for ' + s.symbol + ' does not match ' +\
 				'buy, sell or sidelined specification:'
 			print s
+
+# Update trend lists in the database.
+# If signal is a buy signal, add it to the uptrend list and (if it's there)
+# remove it from the downtrend list; if it is a sell signal, add it to the
+# downtrend list and remove it from the uptrend list.  If it is a sidelined
+# signal, remove it from the buy/sell lists and add it to the sidelined list.
+# watch_flags[0] is the flag for the uptrend list; watch_flags[1] is the
+# flag for the downtrend list; watch_flags[2] is the flag for the sidelined
+# list.
+# Precondition: len(watch_flags) == 3
+def db_update_trend_lists(signals, watch_flags):
+	assert(len(watch_flags) == 3)
+	upflag = watch_flags[0]
+	downflag = watch_flags[1]
+	sideflag = watch_flags[2]
+	remove_list = []
+	add_list = []
+	for s in signals:
+		debug('Updating trend lists for signal "' + s.__str__() + '"')
+		# Symbols are stored in lower case.
+		symbol = lower(s.symbol)
+		if s.is_buy():
+			debug(s.symbol + ' is a buy')
+			remove_list.append((symbol, downflag))
+			remove_list.append((symbol, sideflag))
+			add_list.append((symbol, upflag))
+		elif s.is_sell():
+			debug(s.symbol + ' is a sell')
+			remove_list.append((symbol, upflag))
+			remove_list.append((symbol, sideflag))
+			add_list.append((symbol, downflag))
+		elif s.is_sidelined():
+			debug(s.symbol + ' is a sideline')
+			remove_list.append((symbol, upflag))
+			remove_list.append((symbol, downflag))
+			add_list.append((symbol, sideflag))
+		else:
+			print 'Warning: event for ' + s.symbol + ' does not match ' +\
+				'buy, sell or sidelined specification:'
+			print s
+	add_to_watch_list(add_list)
+	remove_from_watch_list(remove_list)
