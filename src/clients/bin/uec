@@ -36,9 +36,13 @@ update_files() {
 	for f; do
 		if cmp -s $f $src_dir/$f; then
 			:
-		else
-			echo Updating $PWD/$f.
+		elif [ -e $f ]; then
+			echo Updating $PWD/$f. >&2
 			cp $src_dir/$f $f
+		else
+			if [ ! "$silent" ]; then
+				echo $PWD/$f does not yet exist. >&2
+			fi
 		fi
 	done
 }
@@ -54,5 +58,7 @@ update_os_files() {
 	update_files $dest_os $os_srcdir $(os_files)
 }
 
+if [ "$1" = -q ]; then silent=y;fi
+
 update_os_files
-update_commercial_files
+#update_commercial_files
