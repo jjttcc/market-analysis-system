@@ -60,13 +60,15 @@ feature -- Access
 			if is_stock_symbol (s) then
 				Result := daily_stock_data (s)
 				if Result /= Void then
-					check_field_count (Result, Stock, False,
+					check_field_count (Result,
+						create {TRADABLE_TYPE}.make_stock, False,
 						"daily stock data")
 				end
 			elseif is_derivative_symbol (s) then
 				Result := daily_derivative_data (s)
 				if Result /= Void then
-					check_field_count (Result, Derivative, False,
+					check_field_count (Result,
+						create {TRADABLE_TYPE}.make_derivative, False,
 						"daily derivative data")
 				end
 			else
@@ -91,13 +93,15 @@ feature -- Access
 			if is_stock_symbol (s) then
 				Result := intraday_stock_data (s)
 				if Result /= Void then
-					check_field_count (Result, Stock, True,
+					check_field_count (Result,
+						create {TRADABLE_TYPE}.make_stock, True,
 						"intraday stock data")
 				end
 			elseif is_derivative_symbol (s) then
 				Result := intraday_derivative_data (s)
 				if Result /= Void then
-					check_field_count (Result, Derivative, True,
+					check_field_count (Result,
+						create {TRADABLE_TYPE}.make_derivative, True,
 						"intraday derivative data")
 				end
 			else
@@ -479,15 +483,12 @@ feature {NONE} -- Implementation
 			empty_if_q_empty: old q.is_empty implies Result.is_empty
 		end
 
-	check_field_count (seq: DB_INPUT_SEQUENCE; tradable_type: INTEGER;
+	check_field_count (seq: DB_INPUT_SEQUENCE; tradable_type: TRADABLE_TYPE;
 		intraday: BOOLEAN; data_descr: STRING) is
 			-- Check the field count of `seq' according to whether it is
 			-- for a Stock or Derivative and whether its
 			-- data is intraday, and if the field count is wrong.
 			-- Set fatal_error and last_error accordingly.
-		require
-			valid_tradable_type: tradable_type = Stock or
-				tradable_type = Derivative
 		local
 			global_server: expanded GLOBAL_SERVER_FACILITIES
 			expected_count: INTEGER
@@ -496,10 +497,10 @@ feature {NONE} -- Implementation
 				expected_count := 1
 			end
 			inspect
-				tradable_type
-			when Stock then
+				tradable_type.item
+			when feature {TRADABLE_TYPE}.stock then
 				expected_count := expected_count + 5
-			when Derivative then
+			when feature {TRADABLE_TYPE}.derivative then
 				expected_count := expected_count + 6
 			end
 			if intraday then
@@ -515,7 +516,5 @@ feature {NONE} -- Implementation
 		end
 
 	stock_symbol_table, derivative_symbol_table: HASH_TABLE [ANY, STRING]
-
-	Stock, Derivative: INTEGER is unique
 
 end -- class MAS_DB_SERVICES
