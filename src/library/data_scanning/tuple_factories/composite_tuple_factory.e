@@ -62,13 +62,15 @@ feature {NONE}
 	do_main_work (tuples: LIST [BASIC_MARKET_TUPLE]) is
 		local
 			h, l, o, c: REAL
+			high: expanded HIGH_PRICE
+			low: expanded LOW_PRICE
 		do
 			o := tuples.first.open.value
 			c := tuples.last.close.value
 			if high_finder = Void then
 				check low_finder = Void end
-				!!high_finder.make (tuples, tuples.count)
-				!!low_finder.make (tuples, tuples.count)
+				!!high_finder.make (tuples, high, tuples.count)
+				!!low_finder.make (tuples, low, tuples.count)
 			else
 				check low_finder /= Void end
 				high_finder.set_target (tuples)
@@ -113,8 +115,8 @@ feature {NONE}
 
 feature {NONE}
 
-	high_finder: HIGHEST_HIGH
+	high_finder: HIGHEST_VALUE
 
-	low_finder: LOWEST_LOW
+	low_finder: LOWEST_VALUE
 
 end -- class COMPOSITE_TUPLE_FACTORY
