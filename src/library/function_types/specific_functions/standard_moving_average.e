@@ -9,7 +9,8 @@ class STANDARD_MOVING_AVERAGE inherit
 
 	N_RECORD_ONE_VARIABLE_FUNCTION
 		redefine
-			set_operator, action, set_input, set_n, do_process, make
+			set_operator, action, set_input, set_n, do_process, make,
+			short_description
 		select
 			set_operator, set_input, set_n, make
 		end
@@ -21,12 +22,22 @@ class STANDARD_MOVING_AVERAGE inherit
 			set_n as nrovf_set_n, set_operator as nrovf_set_operator,
 			set_input as nrovf_set_input, make as nrovf_make
 		redefine
-			action, do_process
+			action, do_process, short_description
 		end
 
 creation {FACTORY}
 
 	make
+
+feature -- Access
+
+	short_description: STRING is
+		do
+			!!Result.make (33)
+			Result.append (n.out)
+			Result.append ("-Period Simple Moving Average that operates %
+							%on a data sequence")
+		end
 
 feature {NONE} -- Initialization
 

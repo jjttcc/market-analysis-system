@@ -10,12 +10,22 @@ class EXPONENTIAL_MOVING_AVERAGE inherit
 		rename
 			make as sma_make
 		redefine
-			action, set_n
+			action, set_n, short_description
 		end
 
 creation {FACTORY}
 
 	make
+
+feature -- Access
+
+	short_description: STRING is
+		do
+			!!Result.make (38)
+			Result.append (n.out)
+			Result.append ("-Period Exponential Moving Average that operates %
+							%on a data sequence")
+		end
 
 feature {NONE} -- Initialization
 

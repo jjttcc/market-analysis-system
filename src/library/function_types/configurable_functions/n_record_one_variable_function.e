@@ -11,7 +11,7 @@ class N_RECORD_ONE_VARIABLE_FUNCTION inherit
 		rename
 			make as ovf_make
 		redefine
-			do_process, target, processed
+			do_process, target, processed, short_description
 		end
 
 	N_RECORD_STRUCTURE
@@ -22,6 +22,16 @@ class N_RECORD_ONE_VARIABLE_FUNCTION inherit
 creation {FACTORY}
 
 	make
+
+feature -- Access
+
+	short_description: STRING is
+		do
+			!!Result.make (60)
+			Result.append (n.out)
+			Result.append ("-Period ")
+			Result.append (Precursor)
+		end
 
 feature -- Status report
 

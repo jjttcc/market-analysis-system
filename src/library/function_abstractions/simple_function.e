@@ -51,6 +51,20 @@ feature -- Access
 
 	trading_period_type: TIME_PERIOD_TYPE
 
+	short_description: STRING is
+		once
+			Result := "Simple Function"
+		end
+
+	full_description: STRING is
+		do
+			!!Result.make (40)
+			Result.append (short_description)
+			Result.append (" with ")
+			Result.append (count.out)
+			Result.append (" records")
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is
@@ -80,4 +94,5 @@ feature {NONE} -- Basic operations
 invariant
 
 	trading_period_type_not_void: trading_period_type /= Void
+
 end -- class SIMPLE_FUNCTION

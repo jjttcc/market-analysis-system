@@ -19,19 +19,17 @@ deferred class MARKET_FUNCTION inherit
 feature -- Access
 
 	name: STRING
-			-- function name
+			-- Function name
 
 	short_description: STRING is
-			-- short description of the function
-		do
-			Result := "Stub: to be defined"
+			-- Short description of the function
+		deferred
 		end
 
 	full_description: STRING is
-			-- full description of the function, including descriptions
+			-- Full description of the function, including descriptions
 			-- of contained functions, if any
-		do
-			Result := "Stub: to be defined"
+		deferred
 		end
 
 	output: MARKET_TUPLE_LIST [MARKET_TUPLE] is
@@ -40,7 +38,7 @@ feature -- Access
 		end
 
 	operator: NUMERIC_COMMAND
-			-- operator that will perform the main work of the function.
+			-- Operator that will perform the main work of the function.
 			-- Descendant classes may choose not to use this attribute for
 			-- efficiency.
 

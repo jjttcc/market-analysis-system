@@ -66,6 +66,21 @@ feature -- Access
 			Result = input1.trading_period_type
 		end
 
+	short_description: STRING is
+		once
+			Result := "Indicator that operates on two data sequences"
+		end
+
+	full_description: STRING is
+		do
+			!!Result.make (25)
+			Result.append (short_description)
+			Result.append (":%N")
+			Result.append (input1.full_description)
+			Result.append ("; and:%N")
+			Result.append (input2.full_description)
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is

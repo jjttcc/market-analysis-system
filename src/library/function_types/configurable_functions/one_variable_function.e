@@ -50,6 +50,21 @@ feature -- Access
 			Result = input.trading_period_type
 		end
 
+	short_description: STRING is
+		once
+			Result := "Indicator that operates on a data sequence"
+		end
+
+	full_description: STRING is
+		do
+			!!Result.make (25)
+			Result.append (short_description)
+			Result.append (":%N")
+			Result.append (input.full_description)
+		end
+
+feature -- Element change
+
 feature -- Status report
 
 	processed: BOOLEAN is
