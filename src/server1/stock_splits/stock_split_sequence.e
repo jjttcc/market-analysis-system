@@ -68,7 +68,7 @@ feature {NONE} -- Implementation - access
 
 	tuple_maker: STOCK_SPLIT_FACTORY
 
-	product: HASH_TABLE [ DYNAMIC_CHAIN [STOCK_SPLIT], STRING]
+	product: HASH_TABLE [DYNAMIC_CHAIN [STOCK_SPLIT], STRING]
 
 feature {NONE} -- Implementation - utility
 
@@ -116,8 +116,10 @@ feature {NONE} -- Implementation - utility
 feature {NONE} -- Implementation - hooks
 
 	close_tuple (t: STOCK_SPLIT) is
-			-- Add the new tuple to the list at `product' @ `current_symbol';
-			-- create a list if not product.has (current_symbol)
+			-- Add the new tuple to the list at `product' @ `current_symbol',
+			-- with `current_symbol' converted to lower case; create a
+			-- list and place it into `product' if not
+			-- product.has (current_symbol)
 		local
 			l: DYNAMIC_CHAIN [STOCK_SPLIT]
 			s: STRING
