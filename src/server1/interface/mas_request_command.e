@@ -32,7 +32,7 @@ deferred class REQUEST_COMMAND inherit
 			print
 		end
 
-feature -- Initialization
+feature {NONE} -- Initialization
 
 	make (ml: TRADABLE_LIST) is
 		require
@@ -40,7 +40,7 @@ feature -- Initialization
 		do
 			market_list := ml
 		ensure
-			set: market_list = ml
+			set: market_list = ml and market_list /= Void
 		end
 
 feature -- Access
