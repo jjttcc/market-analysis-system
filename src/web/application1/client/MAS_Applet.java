@@ -10,15 +10,17 @@ import java.io.*;
 import mas_gui.*;
 import support.IO_URL_Connection;
 import support.Configuration;
+import support.ErrorBox;
 
 // Test applet that communicates with the servlet via serialization
 public class MAS_Applet extends Applet {
 
 	public void init() {
 		log("init: Starting ...");
-		log("Compiled at Sun Feb 16 17:55:29 MST 2003");
-		MAS_Options options = new AppletOptions();
+		log("Compiled at Mon Feb 17 03:52:08 MST 2003");
 		try {
+			Configuration.set_ignore_termination(true);
+			StartupOptions options = new AppletOptions();
 			log("init: A");
 			initialize_server_address();
 			log("init: B");
@@ -33,6 +35,7 @@ public class MAS_Applet extends Applet {
 			log("init: E");
 		} catch (Exception e) {
 			log("Connection failed: " + e.toString());
+			report_error("Connection failed: " + e.toString());
 			destroy();
 		}
 		log("init: Exiting ...");
@@ -78,6 +81,10 @@ public class MAS_Applet extends Applet {
 	private boolean compression() {
 		// @@For now, default to no compression.
 		return false;
+	}
+
+	private void report_error(String msg) {
+		new ErrorBox("Error", msg, new Frame());
 	}
 
 // Implementation - attributes
