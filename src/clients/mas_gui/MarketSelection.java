@@ -26,7 +26,6 @@ class MarketSelection implements ActionListener {
 		// stock selection from list.
 		selection.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//dialog.setVisible(false);
 				main_frame.request_data(selection.getSelectedItem());
 		}});
 		// Add action listener (anonymous class) to respond to
