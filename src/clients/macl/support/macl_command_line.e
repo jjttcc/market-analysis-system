@@ -39,7 +39,7 @@ feature -- Access
 				"   -timing         Time each request/response to/from " +
 					"the server%N" +
 				"   -q              Quiet mode - suppress output - for " +
-				"use with -r%N" +
+				"use with -i%N" +
 				"   -debug          Debug mode - print input line numbers%N" +
 				"   -?              Print this help message%N"
 		end
