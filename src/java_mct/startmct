@@ -1,4 +1,4 @@
-#export MAS_DIRECTORY=/home2/finance/.mas/charting
+export MAS_DIRECTORY=/home2/finance/.mas/charting
 maindir=/home/development/jtc/finance/src/mct
 #export CLASSPATH=$PWD:$PWD/..:$PWD/application
 export CLASSPATH=$maindir:$maindir/pct:$maindir/pct/application
