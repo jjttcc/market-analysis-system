@@ -9,3 +9,5 @@ cp mctrc.template mctrc.$platform
 chmod +w mctrc.$platform
 $ct -c mctrc-spec.$platform -f mctrc.$platform
 done
+unix2dos mctrc.windows
+chmod +r mctrc.windows
