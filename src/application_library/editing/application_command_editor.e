@@ -33,11 +33,11 @@ feature -- Basic operations
 		local
 			left, right: RESULT_COMMAND [BOOLEAN]
 		do
-			left ?= user_interface.command_selection (
+			left ?= user_interface.command_selection_from_type (
 						user_interface.Boolean_result_command,
 							concatenation (<<cmd.generator,
 								"'s left operand">>), false)
-			right ?= user_interface.command_selection (
+			right ?= user_interface.command_selection_from_type (
 						user_interface.Boolean_result_command,
 							concatenation (<<cmd.generator,
 								"'s right operand">>), false)
@@ -54,11 +54,11 @@ feature -- Basic operations
 		local
 			left, right: RESULT_COMMAND [REAL]
 		do
-			left ?= user_interface.command_selection (
+			left ?= user_interface.command_selection_from_type (
 						user_interface.Real_result_command,
 							concatenation (<<cmd.generator,
 								"'s left operand">>), false)
-			right ?= user_interface.command_selection (
+			right ?= user_interface.command_selection_from_type (
 						user_interface.Real_result_command,
 							concatenation (<<cmd.generator,
 								"'s right operand">>), false)
@@ -130,7 +130,7 @@ feature -- Basic operations
 			-- If cmd conforms to HIGHEST_VALUE or LOWEST_VALUE, it
 			-- needs an operand of type BASIC_NUMERIC_COMMAND.
 			if hv /= Void then
-				bnc_cmd ?= user_interface.command_selection (
+				bnc_cmd ?= user_interface.command_selection_from_type (
 							user_interface.Basic_numeric_command,
 							concatenation (<<cmd.generator, "'s operand">>),
 							false)
@@ -139,7 +139,7 @@ feature -- Basic operations
 				end
 				hv.set_operand (bnc_cmd)
 			elseif lv /= Void then
-				bnc_cmd ?= user_interface.command_selection (
+				bnc_cmd ?= user_interface.command_selection_from_type (
 							user_interface.Basic_numeric_command,
 							concatenation (<<cmd.generator, "'s operand">>),
 							false)
@@ -148,7 +148,7 @@ feature -- Basic operations
 				end
 				lv.set_operand (bnc_cmd)
 			else
-				rr_cmd ?= user_interface.command_selection (
+				rr_cmd ?= user_interface.command_selection_from_type (
 							user_interface.Real_result_command,
 							concatenation (<<cmd.generator, "'s operand">>),
 							false)
@@ -208,7 +208,7 @@ feature -- Basic operations
 			result_cmd: RESULT_COMMAND [REAL]
 		do
 			-- Obtain and set cmd's boolean operator.
-			binop ?= user_interface.command_selection (
+			binop ?= user_interface.command_selection_from_type (
 						user_interface.Binary_boolean_real_command,
 							concatenation (<<cmd.generator,
 								"'s boolean operator">>), false)
@@ -217,7 +217,7 @@ feature -- Basic operations
 			end
 			cmd.set_boolean_operator (binop)
 			-- Obtain and set cmd's true command.
-			result_cmd ?= user_interface.command_selection (
+			result_cmd ?= user_interface.command_selection_from_type (
 						user_interface.Real_result_command,
 							concatenation (<<cmd.generator,
 								"'s true command">>), false)
@@ -226,7 +226,7 @@ feature -- Basic operations
 			end
 			cmd.set_true_cmd (result_cmd)
 			-- Obtain and set cmd's false command.
-			result_cmd ?= user_interface.command_selection (
+			result_cmd ?= user_interface.command_selection_from_type (
 						user_interface.Real_result_command,
 							concatenation (<<cmd.generator,
 								"'s false command">>), false)
@@ -254,11 +254,11 @@ feature -- Basic operations
 			sign_spec_vector.put (<<1, 0>>, 4)
 			sign_spec_vector.put (<<0, -1>>, 5)
 			sign_spec_vector.put (<<0, 1>>, 6)
-			left ?= user_interface.command_selection (
+			left ?= user_interface.command_selection_from_type (
 						user_interface.Real_result_command,
 								concatenation (<<cmd.generator,
 									"'s left operand">>), false)
-			right ?= user_interface.command_selection (
+			right ?= user_interface.command_selection_from_type (
 						user_interface.Real_result_command,
 								concatenation (<<cmd.generator,
 									"'s right operand">>), false)

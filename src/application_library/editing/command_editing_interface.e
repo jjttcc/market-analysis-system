@@ -15,14 +15,13 @@ deferred class COMMAND_EDITING_INTERFACE inherit
 
 	TREE_EDITING_INTERFACE [COMMAND]
 		rename
-			object_selection as command_selection,
+			object_selection_from_type as command_selection_from_type,
 			object_types as command_types,
 			user_object_selection as user_command_selection,
 			initialize_object as initialize_command,
-			current_objects as current_commands,
-			object_list as command_list
+			current_objects as current_commands
 		redefine
-			editor
+			editor, command_types
 		end
 
 feature -- Access
@@ -437,5 +436,15 @@ feature {NONE} -- Implementation
 				editor.edit_sign_analyzer (sign_an)
 			end
 		end
+
+feature -- Implementation - options
+
+	initialization_needed: BOOLEAN is true
+
+	clone_needed: BOOLEAN is true
+
+invariant
+
+	init_clone_needed: initialization_needed = true and clone_needed = true
 
 end -- COMMAND_EDITING_INTERFACE

@@ -17,16 +17,16 @@ deferred class TREE_EDITING_INTERFACE [G] inherit
 
 feature -- Access
 
-	object_selection (type: STRING; msg: STRING; top: BOOLEAN): G is
+	object_selection_from_type (type: STRING; msg: STRING; top: BOOLEAN): G is
 			-- User-selected object whose type conforms to `type'.
 			-- `top' specifies whether the returned instance will be
 			-- the top of the tree.
 		require
+			types_not_void: object_types /= Void
 			type_is_valid: object_types @ type /= Void
 			editor_set: editor /= Void
 		local
-			op_names: ARRAYED_LIST [STRING]
-			obj_list: ARRAYED_LIST [G]
+			obj_list: LIST [G]
 		do
 			if top then
 				-- Clear current object list for the new tree.
@@ -35,16 +35,36 @@ feature -- Access
 			obj_list := object_types @ type
 			Result := user_object_selection (obj_list, msg)
 			current_objects.extend (Result)
-			initialize_object (Result)
+			if initialization_needed then
+				initialize_object (Result)
+			end
 		ensure
 			result_not_void: Result /= Void
+		end
+
+	object_selection_from_list (obj_list: LIST [G]; msg: STRING): G is
+			-- Object selected by user from `obj_list'.  If
+			-- initialization_needed = true, then Result will be
+			-- initialized.
+		require
+			ol_not_void: obj_list /= Void
+		do
+			Result := user_object_selection (obj_list, msg)
+			--!!!???: current_objects.extend (Result)
+			if initialization_needed then
+				initialize_object (Result)
+			end
+		ensure
+			result_not_void_if_ol_not_empty:
+				not obj_list.empty implies Result /= Void
 		end
 
 	object_types: HASH_TABLE [ARRAYED_LIST [G], STRING] is
 			-- Hash table of lists of class instances - each list contains
 			-- instances of all classes whose type conforms to the Hash
-			-- table key.
-		deferred
+			-- table key.  Defaults to Void for the convenience of
+			-- descendants that don't need to find objects by their type.
+		do
 		end
 
 feature {NONE} -- Implementation
@@ -52,6 +72,8 @@ feature {NONE} -- Implementation
 	user_object_selection (objects: LIST [G]; msg: STRING): G is
 			-- User's selection of a member of `objects' (deep-cloned) or
 			-- a member of `current_objects' that is in `objects' (shared)
+		require
+			objs_not_void: objects /= Void
 		local
 			obj_names, tree_names: ARRAYED_LIST [STRING]
 			tree_objects: LIST [G]
@@ -60,11 +82,6 @@ feature {NONE} -- Implementation
 			do_clone: BOOLEAN
 			general_msg: STRING
 		do
-			general_msg := concatenation (<<
-							"Select an object for the ", msg, ":%N",
-							"(Objects selected from current tree will be %
-							%shared; objects selected%Nfrom the list of all %
-							%objects will be copied.)%N">>)
 			!LINKED_SET [G]!tree_objects.make
 			tree_objects.fill (valid_types (objects, current_objects))
 			from
@@ -85,6 +102,16 @@ feature {NONE} -- Implementation
 				obj_names.extend (objects.item.generator)
 				objects.forth
 			end
+			if tree_names.empty then
+				general_msg := concatenation (<<
+							"Select an object for the ", msg, ":%N">>)
+			else
+				general_msg := concatenation (<<
+							"Select an object for the ", msg, ":%N",
+							"(Objects selected from current tree will be %
+							%shared; objects selected%Nfrom the list of all %
+							%objects will be copied.)%N">>)
+			end
 			!!first_pair.make (tree_names,
 								"[Valid objects from current tree:]%N")
 			!!second_pair.make (obj_names, "[List of all valid objects:]%N")
@@ -96,7 +123,7 @@ feature {NONE} -- Implementation
 					do_clone := false
 				else
 					Result := objects @ (selection - tree_objects.count)
-					do_clone := true
+					do_clone := clone_needed
 				end
 			until
 				accepted_by_user (Result)
@@ -108,7 +135,7 @@ feature {NONE} -- Implementation
 					do_clone := false
 				else
 					Result := objects @ (selection - tree_objects.count)
-					do_clone := true
+					do_clone := clone_needed
 				end
 			end
 			if do_clone then
@@ -124,7 +151,7 @@ feature {NONE} -- Implementation
 		end
 
 	initialize_object (arg: G) is
-			-- Set object parameters - operands, etc.
+			-- Set object parameters.
 		require
 			editor_set: editor /= Void
 			arg_not_void: arg /= Void
@@ -158,16 +185,30 @@ feature {NONE} -- Implementation
 
 	current_objects: LIST [G] is
 		do
-			if object_list = Void then
-				!LINKED_LIST [G]!object_list.make
+			if current_object_list = Void then
+				!LINKED_LIST [G]!current_object_list.make
 			end
-			Result := object_list
+			Result := current_object_list
+		ensure
+			Result /= Void
 		end
 
-	object_list: LIST [G]
+	current_object_list: LIST [G]
 
 	accepted_by_user (o: G): BOOLEAN is
 			-- Does the user want to select `o'?
+		deferred
+		end
+
+feature -- Implementation - options
+
+	clone_needed: BOOLEAN is
+			-- Do selected objects need to be cloned?
+		deferred
+		end
+
+	initialization_needed: BOOLEAN is
+			-- Does the selected object need to be initialized?
 		deferred
 		end
 
