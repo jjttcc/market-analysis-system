@@ -290,7 +290,7 @@ feature {NONE} -- Implementation
 					cache.clear_all
 					check cache.count = 0 end
 				end
-				cache.put(t, idx)
+				cache.force (t, idx)
 			end
 		end
 
