@@ -77,9 +77,9 @@ feature -- Actions
 			about_dialog: EV_INFORMATION_DIALOG
 		do
 			create about_dialog.make_with_text (
-				-- !!!Use the KDE apps' "about" box as a model to make
+				-- @@Use the KDE apps' "about" box as a model to make
 				-- this look more polished.
-				"MAS Control Terminal%N%N(c) 2003%NAuthor: Jim Cochrane")
+				"MAS Control Terminal%N%N(c) 2004%NAuthor: Jim Cochrane")
 			about_dialog.set_title ("About MAS Control Terminal")
 			about_dialog.show_modal_to_window (owner_window)
 		end
