@@ -6,10 +6,13 @@ basedir=$(dirname $0)/..
 classdir=$basedir/lib/classes
 
 usage() {
-	echo "Usage: $pname [cl] [no_cd] [-h hostname] port_number"
+	echo "Usage: $pname [-cl] [-no_cd] [-h hostname] port_number -s symbol ..."
 	echo "where:"
-	echo "   cl = run command-line client instead of GUI"
-	echo "   no_cd = do not change directories - stay in the current directory"
+	echo "   -cl              Run command-line client instead of GUI."
+	echo "   -no_cd           \
+Use the configuration files in the current directory."
+	echo "   -s symbol ...    \
+Include only the specified symbols in the selection list."
 }
 
 check_settings() {
@@ -29,8 +32,8 @@ args=
 main=MA_Client
 while [ $# -gt 0 ]; do
 	case $1 in
-		cl) main=CL_Client; shift ;;
-		n*) no_cd=true; shift ;;
+		-c*) main=CL_Client; shift ;;
+		-n*) no_cd=true; shift ;;
 		-h) shift; host=$1; shift ;;
 		-s)
 		while [ $# -gt 0 ]; do
