@@ -123,7 +123,7 @@ public class MA_ScrollPane extends ScrollPane implements NetworkProtocol
 				Vector selections = chart.market_selections.selections();
 				for (int i = 0; i < selections.size(); ++i) {
 					chart.request_data((String) selections.elementAt(i));
-					if (chart.request_result() != Invalid_symbol) {
+					if (chart.request_result() == OK) {
 						print_current_chart(pj);
 					}
 				}
