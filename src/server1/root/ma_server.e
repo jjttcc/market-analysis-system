@@ -88,7 +88,6 @@ feature {NONE} -- Hook routine implementation
 		local
 			ex_srv: expanded EXCEPTION_SERVICES
 		do
-print ("cleanup called%N")
 			if not ex_srv.last_exception_status.description.is_empty then
 				if errors.is_empty then
 					errors := ex_srv.last_exception_status.description
@@ -97,7 +96,6 @@ print ("cleanup called%N")
 						ex_srv.last_exception_status.description
 				end
 			end
-print ("errors: " + errors + "%N")
 			if current_sockets /= Void then
 				from
 					current_sockets.start
@@ -176,21 +174,13 @@ feature {NONE} -- Implementation
 		local
 			connection: SERVER_RESPONSE_CONNECTION
 			cl: MAS_COMMAND_LINE
-f: PLAIN_TEXT_FILE
 		do
-create f.make_open_write ("/tmp/debugmas2")
-f.put_string ("report_back called " + (create {DATE_TIME}.make_now).out + "%N")
-f.put_string ("errs: " + errs + "%N")
-f.flush
 			cl := command_line_options
 			if cl.report_back then
 				create connection.make (cl.host_name_for_startup_report,
 					cl.port_for_startup_report)
 				-- If `errs.is_empty', the startup process will assume
 				-- that this process started succefully.
-f.put_string ("sent: '" + errs + "' ("
-+ (create {DATE_TIME}.make_now).out + ")%N")
-f.flush
 				connection.send_one_time_request (errs, False)
 			end
 		end

@@ -168,27 +168,15 @@ feature {NONE} -- Implementation
 			-- `server_response'.
 		require
 			r_exists: r /= Void
-local
-f: PLAIN_TEXT_FILE
 		do
-create f.make_open_write ("/tmp/masdebug")
-f.put_string ("send_one_time_request - port#, host: " + port_number.out + ", " +
-hostname + "%NSending: " + r + "(" + (create {DATE_TIME}.make_now).out + ")%N")
-f.flush
 			last_communication_succeeded := False
 			make_socket
 			if connected then
 				send_request (r, wait_for_response)
-f.put_string ("send_one_time_request - send response" + "(" + (create {DATE_TIME}.make_now).out + ")%N")
-f.flush
 			else
 				error_report := last_socket_error
-f.put_string ("error: " + error_report + "%N" + "(" + (create {DATE_TIME}.make_now).out + ")%N")
-f.flush
 			end
 			close
-f.put_string ("send_one_time_request - returning%N" + "(" + (create {DATE_TIME}.make_now).out + ")%N")
-f.flush
 		ensure
 			not_connected: not connected
 			server_response_exists_if_no_error:
