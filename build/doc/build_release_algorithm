@@ -41,6 +41,9 @@ Final Steps:
 17. Run a test install of the Windows setup-mas* exe file on Windows and
     of the mas-*.rpm on Linux.  Fix any problems that come up and, if
     necessary, go back to a previous step.
+    NOTE: rpm runs "strip -R .comment -R .note" on the executables, so they
+    are not going to be the same as the ones used to build the rpm package.
+since it will probably pop up again.
 18. Do a cvs tag, using the current release number as a label.
 19. Create a new release-announcement file, perform any needed updates for
     the new release on published files, such as the files accessible on
