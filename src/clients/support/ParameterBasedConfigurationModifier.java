@@ -28,7 +28,6 @@ public class ParameterBasedConfigurationModifier extends ConfigurationModifier {
 	}
 
 	public void execute(Configuration c) {
-System.out.println("PBCM.execute called");
 		Enumeration e = contents.keys();
 		SettingChanger changer;
 		while (e.hasMoreElements()) {
@@ -102,13 +101,13 @@ abstract class ColorChanger extends SettingChanger {
 		return key_value;
 	}
 	void execute(Configuration c, String value) {
-System.out.println("Setting " + key() + " to " + value);
+//System.out.println("Setting " + key() + " to " + value);
 		if (c.valid_color(value)) {
 			c.set_color(key(), value);
 		} else {
 			report_error("Invalid color for " + key() + " specified: " +
 				value);
-System.out.println("Invalid color for " + key() + " specified: " + value);
+//System.out.println("Invalid color for " + key() + " specified: " + value);
 		}
 	}
 }
@@ -123,11 +122,11 @@ class GraphStyleChanger extends SettingChanger {
 		String v = value.toLowerCase();
 		if (v.equals(Configuration.Candle_style) ||
 				v.equals(Configuration.Regular_style)) {
-System.out.println("Setting " + key() + " to " + value);
+//System.out.println("Setting " + key() + " to " + value);
 			c.set_main_graph_style(value);
 		} else {
 			report_error("Invalid graph style specified: " + value);
-System.out.println("Invalid graph style specified: " + value);
+//System.out.println("Invalid graph style specified: " + value);
 		}
 	}
 }

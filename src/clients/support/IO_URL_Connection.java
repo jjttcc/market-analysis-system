@@ -34,13 +34,13 @@ public class IO_URL_Connection extends IO_Connection
 
 	public void close() {
 		// Null routine
-System.out.println("IO_URL_Connection.close called");
+//System.out.println("IO_URL_Connection.close called");
 	}
 
 	public void open() throws IOException {
 //		assert url != null;
-System.out.println("IO_URL_Connection.open called");
-System.out.println("(server_address: " + server_address + ")");
+//System.out.println("IO_URL_Connection.open called");
+//System.out.println("(server_address: " + server_address + ")");
 
 		connection = url.openConnection();
 		connection.setDoInput(true);
@@ -49,7 +49,7 @@ System.out.println("(server_address: " + server_address + ")");
 		connection.setRequestProperty ("Content-Type",
 			"application/octet-stream");
 		connection.connect();
-System.out.println("IO_URL_Connection.open returning");
+//System.out.println("IO_URL_Connection.open returning");
 	}
 
 // Implementation

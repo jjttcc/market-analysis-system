@@ -26,7 +26,6 @@ public class CompressedConnection extends Connection
 // Implementation
 
 	protected Reader new_reader() {
-System.out.println("CompressedConnection new_reader called.");
 		Reader result = null;
 		try {
 			result = new BufferedReader(new InputStreamReader(
@@ -44,7 +43,6 @@ System.out.println("CompressedConnection new_reader called.");
 	// and `msg' - with field delimiters according to the client/server
 	// protocol.
 	void send_msg(int msgID, String msg, int session_key) {
-System.out.println("CompressedConnection send_msg called.");
 		out.print(msgID);
 		out.print(Message_field_separator + session_key);
 		out.print(Message_field_separator + Compression_on_flag + msg);
