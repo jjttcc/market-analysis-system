@@ -1,8 +1,8 @@
 indexing
 	description: "Socket-based connections to an outside data supplier - %
-		%Intended as a parent class INPUT_DATA_CONNECTION descendants %
-		%implementing a protocol based on the data supplier they are %
-		%associated with - i.e., the strategy pattern"
+		%Intended as a parent class to descendants implementing a protocol %
+		%based on the data supplier they are associated with - i.e., using %
+		%the strategy pattern"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
