@@ -35,9 +35,7 @@ public class IndicatorListener implements ActionListener {
 			}
 		}
 		catch (Exception ex) {
-			System.err.println("Exception occurred: " + ex + ", bye ...");
-			ex.printStackTrace();
-			chart.quit(-1);
+			chart.fatal("Exception occurred: ", ex);
 		}
 		// Set graph data according to whether the selected indicator is
 		// configured to go in the upper (main) or lower (indicator) graph.
