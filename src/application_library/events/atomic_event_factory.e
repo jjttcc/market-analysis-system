@@ -118,6 +118,11 @@ feature {NONE} -- Implementation
 			-- Scan the time and set `last_time' to it.
 		do
 			scan_field
+			if not last_string.has ('.') then
+				-- The string-time conversion routine requires the format
+				-- "00:00:00.000", so append the missing part.
+				last_string.append (".000")
+			end
 			last_time := date_scanner.time_from_string (last_string)
 			if last_time = Void then
 				last_error := concatenation (
