@@ -14,22 +14,33 @@ public class Configuration implements NetworkProtocol
 	// Graph styles
 	public final static int Candle_graph = 1, Regular_graph = 2;
 
+	// Specify whether the configuration file is to be used.
+	public static void set_use_config_file(boolean value) {
+		_use_config_file = value;
+	}
+
+	// Is the configuration file to be used?  (Defaults to true.)
+	public static boolean use_config_file(boolean value) {
+		return _use_config_file;
+	}
+
 	public String session_settings() {
 		StringBuffer result = new StringBuffer();
 		int i;
 		DateSetting ds;
 
-		for (i = 0; i < start_date_settings.size() - 1; ++i)
-		{
+		if (start_date_settings.size() > 0) {
+			for (i = 0; i < start_date_settings.size() - 1; ++i)
+			{
+				ds = (DateSetting) start_date_settings.elementAt(i);
+				result.append(Start_date + "\t" + ds.time_period() + "\t" +
+								ds.date() + "\t");
+			}
 			ds = (DateSetting) start_date_settings.elementAt(i);
 			result.append(Start_date + "\t" + ds.time_period() + "\t" +
-							ds.date() + "\t");
+							ds.date());
 		}
-		ds = (DateSetting) start_date_settings.elementAt(i);
-		result.append(Start_date + "\t" + ds.time_period() + "\t" +
-						ds.date());
-		if (end_date_settings.size() > 0)
-		{
+		if (end_date_settings.size() > 0) {
 			result.append("\t");
 			for (i = 0; i < end_date_settings.size() - 1; ++i)
 			{
@@ -167,57 +178,57 @@ public class Configuration implements NetworkProtocol
 	}
 
 	private void load_settings(String fname) {
-		String s;
-		File f = new File(fname);
-		if (! f.exists()) {
-			//Default settings
-			DateSetting ds = new DateSetting("1998/05/01", daily_period_type);
-			start_date_settings.addElement(ds);
-			ds = new DateSetting("now", daily_period_type);
-			end_date_settings.addElement(ds);
-		}
-		else {
-			FileReaderUtilities file_util = null;
-			try {
-				file_util = new FileReaderUtilities(fname);
-				file_util.tokenize("\n");
+		//!!!May need to make this more flexible - e.g., use a
+		//settings-source abstraction to read the configuration from
+		//instead of a file.
+		if (_use_config_file) {
+			String s;
+			File f = new File(fname);
+			if (! f.exists()) {
+				//Default settings
+				DateSetting ds = new DateSetting("1998/05/01",
+					daily_period_type);
+				start_date_settings.addElement(ds);
+				ds = new DateSetting("now", daily_period_type);
+				end_date_settings.addElement(ds);
 			}
-			catch (IOException e) {
-				System.err.println("I/O error occurred while reading file " +
-					fname + ": " + e);
-				System.exit(-1);
-			}
-			while (! file_util.exhausted()) {
-				StringTokenizer t = new StringTokenizer(file_util.item(), "\t");
-				s = t.nextToken();
-				if (s.charAt(0) == '#') {}	// skip comment line
-				else if (s.equals(Start_date)) {
-					add_date(t, true);
+			else {
+				FileReaderUtilities file_util = null;
+				try {
+					file_util = new FileReaderUtilities(fname);
+					file_util.tokenize("\n");
 				}
-				else if (s.equals(End_date)) {
-					add_date(t, false);
+				catch (IOException e) {
+					System.err.println("I/O error occurred while " +
+						"reading file " + fname + ": " + e);
+					System.exit(-1);
 				}
-				else if (s.equals(Upper_indicator)) {
-					configure_indicator(t, true);
-				}
-				else if (s.equals(Lower_indicator)) {
-					configure_indicator(t, false);
-				}
-				else if (s.equals(Horiz_indicator_line) ||
-							s.equals(Vert_indicator_line)) {
-					add_indicator_line(s, t);
-				}
-				else if (s.endsWith(Color_tag)) {
-					set_color(s, t);
-				}
-				else if (s.equals(Main_graph_style)) {
-					set_graph_style(s, t.nextToken());
-				}
-				else if (s.equals(Indicator_group)) {
+				while (! file_util.exhausted()) {
+					StringTokenizer t =
+						new StringTokenizer(file_util.item(), "\t");
+					s = t.nextToken();
+					if (s.charAt(0) == '#') {	// skip comment line
+					} else if (s.equals(Start_date)) {
+						add_date(t, true);
+					} else if (s.equals(End_date)) {
+						add_date(t, false);
+					} else if (s.equals(Upper_indicator)) {
+						configure_indicator(t, true);
+					} else if (s.equals(Lower_indicator)) {
+						configure_indicator(t, false);
+					} else if (s.equals(Horiz_indicator_line) ||
+								s.equals(Vert_indicator_line)) {
+						add_indicator_line(s, t);
+					} else if (s.endsWith(Color_tag)) {
+						set_color(s, t);
+					} else if (s.equals(Main_graph_style)) {
+						set_graph_style(s, t.nextToken());
+					} else if (s.equals(Indicator_group)) {
+						file_util.forth();
+						create_indicator_group(file_util);
+					}
 					file_util.forth();
-					create_indicator_group(file_util);
 				}
-				file_util.forth();
 			}
 		}
 	}
@@ -411,6 +422,8 @@ public class Configuration implements NetworkProtocol
 			reverse_color_table.put(_color_table.get(s), s);
 		}
 	}
+
+	private static boolean _use_config_file = true;
 
 	private static Configuration _instance;
 
