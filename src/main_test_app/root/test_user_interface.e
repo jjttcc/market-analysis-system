@@ -83,9 +83,9 @@ feature {NONE}
 			until
 				end_program
 			loop
-				print_list (<<"Select action:  ", "Select market (s) ",
-							"View data (v) Edit parameters (e) ",
-							"Run market analysis (r) %N",
+				print_list (<<"Select action:%N", "     Select market (s) ",
+							"View data (v) Edit parameters (e)",
+							"%N     Run market analysis (r) ",
 							"Memory usage (m) Exit (x) ">>)
 				inspect
 					selected_character
