@@ -195,6 +195,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			pos_ema, neg_ema: EXPONENTIAL_MOVING_AVERAGE
 		do
 			create one.make (1); create one_hundred.make (100)
+			one.set_is_editable (False); one_hundred.set_is_editable (False)
 			pos_ema := rs_average (f, n, true)
 			neg_ema := rs_average (f, n, false)
 			create positive_average.make (pos_ema.output)
@@ -250,6 +251,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			ix: INDEX_EXTRACTOR
 		do
 			create one.make (1); create two.make (2)
+			one.set_is_editable (False); two.set_is_editable (False)
 			create ncmd.make (n)
 			create close
 			create ix.make (Void)
@@ -291,6 +293,9 @@ feature {NONE} -- Hard-coded market function building procedures
 		do
 			create close; create zero.make (0)
 			create one_hundred.make (100); create one.make (1);
+			zero.set_is_editable (False)
+			one_hundred.set_is_editable (False); one.set_is_editable (False);
+			create nvalue.make (n); create offset1.make (f.output, close);
 			create nvalue.make (n); create offset1.make (f.output, close);
 			create offset2.make (f.output, close)
 			offset2.set_offset (1)
@@ -331,16 +336,17 @@ feature {NONE} -- Hard-coded market function building procedures
 			high: HIGH_PRICE
 			low: LOW_PRICE
 			close: CLOSING_PRICE
-			constant: CONSTANT
+			one_hundred: CONSTANT
 		do
 			create close; create low; create high
-			create constant.make (100) -- factor for conversion to percentage
+			create one_hundred.make (100) -- factor for conversion to percentage
+			one_hundred.set_is_editable (False)
 			create highest.make (f.output, high, n)
 			create lowest.make (f.output, low, n)
 			create s1.make (highest, close)
 			create s2.make (highest, lowest)
 			create d.make (s1, s2)
-			create m.make (d, constant)
+			create m.make (d, one_hundred)
 			create Result.make (f, m, n)
 			Result.set_name (name)
 			check Result.n = highest.n and Result.n = lowest.n end
@@ -361,16 +367,17 @@ feature {NONE} -- Hard-coded market function building procedures
 			high: HIGH_PRICE
 			low: LOW_PRICE
 			close: CLOSING_PRICE
-			constant: CONSTANT
+			one_hundred: CONSTANT
 		do
 			create close; create low; create high
-			create constant.make (100) -- factor for conversion to percentage
+			create one_hundred.make (100) -- factor for conversion to percentage
+			one_hundred.set_is_editable (False)
 			create highest.make (f.output, high, n)
 			create lowest.make (f.output, low, n)
 			create s1.make (close, lowest);
 			create s2.make (highest, lowest)
 			create d.make (s1, s2)
-			create m.make (d, constant)
+			create m.make (d, one_hundred)
 			create Result.make (f, m, n)
 			Result.set_name (name)
 			check Result.n = lowest.n and Result.n = highest.n end
@@ -397,11 +404,12 @@ feature {NONE} -- Hard-coded market function building procedures
 			high: HIGH_PRICE
 			low: LOW_PRICE
 			close: CLOSING_PRICE
-			constant: CONSTANT
+			one_hundred: CONSTANT
 		do
 			create cmd
 			create close; create low; create high
-			create constant.make (100) -- factor for conversion to percentage
+			create one_hundred.make (100) -- factor for conversion to percentage
+			one_hundred.set_is_editable (False)
 			create highest.make (f.output, high, inner_n)
 			create lowest.make (f.output, low, inner_n)
 			create sub1.make (close, lowest);
@@ -421,7 +429,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			create basic1.make (ma1.output)
 			create basic2.make (ma2.output)
 			create div.make (basic1, basic2)
-			create mult.make (div, constant)
+			create mult.make (div, one_hundred)
 			create Result.make (ma1, ma2, mult)
 			Result.set_name (name)
 		ensure
@@ -516,6 +524,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			fname: STRING
 		do
 			create one.make (1); create zero.make (0)
+			one.set_is_editable (False); zero.set_is_editable (False)
 			create close
 			create offset_minus_1.make (f.output, close)
 			offset_minus_1.set_offset (-1)
@@ -578,6 +587,7 @@ feature {NONE} -- Functions currently not used
 			two: CONSTANT
 		do
 			create high; create low; create two.make (2)
+			two.set_is_editable (False)
 			create add.make (high, low)
 			create div.make (add, two)
 			create Result.make (f, div)
