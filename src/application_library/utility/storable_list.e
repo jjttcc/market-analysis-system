@@ -54,6 +54,7 @@ feature -- Utility
 			-- current directory.
 		local
 			app_env: expanded APP_ENVIRONMENT
+			outfile: RAW_FILE
 		do
 			debug ("persist")
 				print("cleanup Storing ");
@@ -61,8 +62,10 @@ feature -- Utility
 					app_env.file_name_with_app_directory (persistent_file_name))
 				print (".%N")
 			end
-			store_by_name (
+			create outfile.make_open_write (
 				app_env.file_name_with_app_directory (persistent_file_name))
+			basic_store (outfile)
+			outfile.close
 		end
 
 end -- STORABLE_LIST
