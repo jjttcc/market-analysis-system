@@ -203,6 +203,8 @@ feature {NONE}
 						dt_util.formatted_time (event_cache.item.time,
 							'h', 'm', 's', ""),
 						Output_field_separator,
+						event_cache.item.type.id,
+						Output_field_separator,
 						event_cache.item.type_abbreviation,
 						Output_record_separator>>))
 					event_cache.forth
@@ -213,6 +215,8 @@ feature {NONE}
 					Output_field_separator,
 					dt_util.formatted_time (event_cache.item.time,
 						'h', 'm', 's', ""),
+					Output_field_separator,
+					event_cache.item.type.id,
 					Output_field_separator,
 					event_cache.item.type_abbreviation>>))
 			end
