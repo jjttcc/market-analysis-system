@@ -9,8 +9,6 @@ class LINEAR_SUM inherit
 		rename
 			offset as internal_index, make as nrlc_make_unused
 		redefine
-			initialize, --!!!??? - Can be removed if owner is removed
-						-- from NRLC
 			execute, target_cursor_not_affected,
 			exhausted, action, forth, invariant_value,
 			start
@@ -32,13 +30,6 @@ feature {FACTORY} -- Initialization
 			set_n (i)
 		ensure
 			set: target = t operator = op and n = i
-		end
-
-	initialize (arg: N_RECORD_STRUCTURE) is
-		do
-			set_n (arg.n)
-		ensure then
-			n = arg.n
 		end
 
 feature -- Basic operations
