@@ -33,7 +33,7 @@ class EXTERNAL_INPUT_SEQUENCE inherit
 			{NONE} all
 		end
 
-	GLOBAL_SERVICES
+	EXCEPTION_SERVICES
 		export
 			{NONE} all
 		end

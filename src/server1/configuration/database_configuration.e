@@ -670,7 +670,7 @@ feature {NONE} -- Implementation
 
 	raise_fatal_exception is
 		local
-			gs: expanded GLOBAL_SERVICES
+			gs: expanded EXCEPTION_SERVICES
 			ex: expanded EXCEPTIONS
 		do
 			gs.last_exception_status.set_fatal (true)
@@ -688,7 +688,7 @@ feature {NONE} -- Implementation
 			i: INTEGER
 			emtpy: BOOLEAN_REF
 			all_empty, problem: BOOLEAN
-			gs: expanded GLOBAL_SERVICES
+			gs: expanded EXCEPTION_SERVICES
 			ex: expanded EXCEPTIONS
 		do
 			from i := 1; all_empty := true until i > ftbl.count loop

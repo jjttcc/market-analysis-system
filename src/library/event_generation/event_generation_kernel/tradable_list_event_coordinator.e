@@ -41,7 +41,7 @@ feature {NONE} -- Implementation
 			-- For each element, e, of tradables, execute all elements
 			-- of event_generators on e.
 		local
-			gs: expanded GLOBAL_SERVICES
+			gs: expanded EXCEPTION_SERVICES
 			gu: expanded GENERAL_UTILITIES
 			exception_occurred: BOOLEAN
 		do
