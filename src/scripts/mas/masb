@@ -1,0 +1,27 @@
+#!/bin/bash
+# Run mas in the background with a random port number.
+
+progname=$(basename $0)
+
+usage()
+{
+	echo "Usage: $progname [-no_gui] file ..."
+}
+
+no_gui=
+case $1 in
+	-n*) no_gui=true
+		shift ;;
+	-h*|-?) usage; exit 0 ;;
+esac
+
+port=$RANDOM
+if [ $port -lt 1024 ]; then
+	port=$(expr $port + 1024)
+fi
+echo using port $port
+mas $port -b -o -f , $* &
+sleep 1
+if [ ! "$no_gui" = true ]; then
+	magc $port&
+fi

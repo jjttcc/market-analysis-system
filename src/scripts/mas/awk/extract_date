@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# Extract the market events for a specified date.
+
+pname=$(basename $0)
+
+if [ $# -lt 2 ]; then
+	echo "Usage: $pname dd/mm/yyyy input_file"
+	exit -1
+fi
+
+date=$(echo $1|sed 'sz/z\\/zg')
+awk '/Event name.*'$date'/ {
+valid=1
+}
+/^$/ {
+	if (valid) {
+		print ""
+		valid=0
+	}
+	next
+}
+(valid) {
+	print
+}' $2

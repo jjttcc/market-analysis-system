@@ -1,0 +1,104 @@
+# calculate the highest potential loss for a buy.
+# account_equity is the amount available for investing plus the total
+# currently invested; stop is the sell stop value; buy_limit is the
+# top limit for a buy, shares is the number of shares to be
+# purchased, and commision is the commision that will be charged for
+# the buy.
+# NOTE: Needs to be extended for short selling.
+function calculate_potential_loss(account_equity, stop, buy_limit, shares,
+		commision)
+{
+	return (loss(buy_limit, stop, shares) + commision) / account_equity
+}
+
+# return (buy value minus sell stop value) times number of shares
+function loss(buy, stop, shares)
+{
+	return (buy - stop) * shares
+}
+
+# These date functions expect date to be in the following format:
+# yymmdd
+function get_year(date)
+{
+	yr = substr(date, 1, 2)
+	if (yr < 20)	# arbitrary choice for year > 2000
+	{
+		yr += 2000
+	}
+	else
+	{
+		yr += 1900
+	}
+
+	return yr
+}
+
+function get_month(date)
+{
+	mnth = substr(date, 3, 2)
+	
+	return mnth
+}
+
+function get_day(date)
+{
+	dy = substr(date, 5, 2)
+
+	return dy
+}
+
+# date is of the form yymmdd.
+# Expects days (associative array) to have been initialized.
+function get_day_of_week(date)
+{
+	return days[date]
+}
+
+# Return the day of the week as a string.  Year must be in yyyy format.
+# Side Effects: Changes $0
+function Old_get_day_of_week(year, month, day)
+{
+	WeekDays[1] = "Sunday"
+	WeekDays[2] = "Monday"
+	WeekDays[3] = "Tuesday"
+	WeekDays[4] = "Wednesday"
+	WeekDays[5] = "Thursday"
+	WeekDays[6] = "Friday"
+	WeekDays[7] = "Saturday"
+
+	"cal " month " " year "|grep '\\<" day "\\>'"|getline
+	if (NF == 0)
+	{
+		print "Error in function get_day_of_week"
+		exit(-1)
+	}
+	fldcount = split($0, fields)
+	for (dwix = 1; dwix <= fldcount; ++dwix)
+	{
+		if (day == fields[dwix])
+		{
+			target_field = dwix
+			break
+		}
+	}
+	if (fldcount != 7 && $0 ~ /^  /)
+	{
+		for (dwix = 1; dwix <= fldcount; ++dwix)
+		{
+			WDays[dwix] = WeekDays[7 - fldcount + dwix]
+		}
+		result = WDays[target_field]
+	}
+	else
+	{
+		result = WeekDays[target_field]
+	}
+
+	return result
+}
+
+function max_riskable_shares(equity, max_buy, min_sell, risk, commission)
+{
+	return (equity * risk - commission) / (max_buy - min_sell)
+}

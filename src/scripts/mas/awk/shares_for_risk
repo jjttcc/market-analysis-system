@@ -1,0 +1,11 @@
+BEGIN {
+	if (ARGC != 6)
+	{
+		print "Need 5 arguments: acct_eq max_buy min_sell risk commission"
+		exit(-1)
+	}
+	equity = ARGV[1]; max_buy = ARGV[2]; min_sell = ARGV[3]; risk = ARGV[4]
+	commission = ARGV[5]
+	printf("%d\n",
+			max_riskable_shares(equity, max_buy, min_sell, risk, commission))
+}

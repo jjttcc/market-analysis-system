@@ -1,0 +1,6 @@
+# General environment variables for market analysis
+export MARKET_DATA_DIRECTORY=~/data/current
+export EOD_DIRECTORY=~/data/end_of_day
+export PYTHONPATH=~/lib/python/obtain_eod_data:~/lib/python/mas
+PYTHONPATH=$PYTHONPATH:~/lib/python/utilities:~/lib/python/pmm:~/lib/python
+PATH=$PATH:/usr4/java/jdk117_v1a/bin

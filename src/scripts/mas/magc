@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+# Market Analysis GUI Client (MAGC)
+
+Progname=$(basename $0)
+basedir=$(dirname $0)/..
+classdir=$basedir/lib/classes
+cmd=java
+
+usage() {
+	echo "Usage: $pname [-cl] [-no_cd] [-h hostname] port_number -s symbol ..."
+	echo "where:"
+	echo "   -cl              Run command-line client instead of GUI."
+	echo "   -no_cd           \
+Use the configuration files in the current directory."
+	echo "   -s symbol ...    \
+Include only the specified symbols in the selection list."
+}
+
+check_settings() {
+	if [ ! -d $classdir -o ! -x $classdir ]; then
+		echo "$Progname: Cannot access class directory: $classdir" >&2
+		exit -1
+	fi
+	if [ ! -r ${classdir}/${main}.class ]; then
+		echo "$Progname: Cannot access java class file: " \
+				"${classdir}/${main}.class" >&2
+		exit -1
+	fi
+	if ! type java >/dev/null 2>&1; then
+		if ! type jre >/dev/null 2>&1; then
+			echo "$Progname: Neither java nor jre can be found in your" \
+					"path - Aborting." >&2
+			exit -1
+		else
+			cmd="jre -cp ."
+		fi
+	fi
+}
+
+host=$(hostname)
+args=
+main=MA_Client
+while [ $# -gt 0 ]; do
+	case $1 in
+		-c*) main=CL_Client; shift ;;
+		-n*) no_cd=true; shift ;;
+		-h) shift; host=$1; shift ;;
+		-s)
+		while [ $# -gt 0 ]; do
+			args="$args $1"
+			shift
+		done
+		;;
+		-*) usage; exit 0 ;;
+		*) port_number=$1; shift ;;
+	esac
+done
+
+if [ -z "$port_number" ]; then
+	usage
+	exit -1
+fi
+
+check_settings
+if [ "$no_cd" = true ]; then
+	export CLASSPATH=$classdir
+else
+	cd $classdir
+fi
+$cmd $main $host $port_number $args

@@ -1,0 +1,9 @@
+# Environment variables for MAS
+export MAS_MAILER=~/bin/process_mas_mail
+export MAS_DIRECTORY=~/.mas/charting
+export MAS_STOCK_SPLIT_FILE=stock_splits
+export MAS_MAILER_SUBJECT_FLAG=-s
+export MAS_CLIENT_DIR=~/mas/src/clients/CL
+#export MAS_DATA_IN_FILES=x
+export MAS_DATA_IN_DB=x
+export MAS_ARGS="-o -f , -p"

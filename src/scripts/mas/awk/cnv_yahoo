@@ -1,0 +1,36 @@
+#!/bin/bash
+# Convert historical data from yahoo into MAS format.
+
+awk 'BEGIN { FS = ","
+months["Jan"] = "01"
+months["Feb"] = "02"
+months["Mar"] = "03"
+months["Apr"] = "04"
+months["May"] = "05"
+months["Jun"] = "06"
+months["Jul"] = "07"
+months["Aug"] = "08"
+months["Sep"] = "09"
+months["Oct"] = "10"
+months["Nov"] = "11"
+months["Dec"] = "12"
+idx = 0
+}
+{
+	record[idx++] = sprintf("%s,%s,%s,%s,%s,%s", date($1), $2, $3, $4, $5, $6)
+}
+
+function date(s)
+{
+	split(s, dateflds, "-")
+	if (dateflds[3] < 30) year = "20" dateflds[3]
+	else year = "19" dateflds[3]
+	month = months[dateflds[2]]
+	day = dateflds[1]
+	if (length(day) == 1) day = "0" day
+	
+	return year month day
+}
+END {
+	for (i = NR - 1; i >= 0; --i) print record[i]
+}' $*

@@ -1,0 +1,8 @@
+#!/bin/bash
+# Convert split-adjusted data from yahoo to non-split-adjusted data.
+
+awk 'BEGIN { FS = ","
+}
+{
+	printf("%s,%s,%s,%s,%s,%s\n", $1, $2 * 2, $3 * 2, $4 * 2, $5 * 2, $6)
+}' $*
