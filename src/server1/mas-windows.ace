@@ -162,6 +162,8 @@ cluster
 
 	component_support (eiffel_components):		"$/support"
 
+	system_specific_support (eiffel_components):		"$/support/windows"
+
 	eiflib_data_scanning (eiffel_components):		"$/data_scanning"
 
 	operators (eiffel_components):		"$/commands/operators"
