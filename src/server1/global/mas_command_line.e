@@ -10,6 +10,9 @@ indexing
 class MAS_COMMAND_LINE inherit
 
 	ARGUMENTS
+		export
+			{NONE} all
+		end
 
 	GENERAL_UTILITIES
 		export
