@@ -44,8 +44,11 @@ print ("function was set to: " + function.out + "%N")
 
 feature -- Access
 
-	agent_table: expanded MARKET_AGENTS
+	agent_table: MARKET_AGENTS is
 			-- Table of available "market-agent" functions
+		once
+			create Result
+		end
 
 	function: FUNCTION [ANY, TUPLE [LIST [MARKET_FUNCTION]],
 		MARKET_TUPLE_LIST [MARKET_TUPLE]] is

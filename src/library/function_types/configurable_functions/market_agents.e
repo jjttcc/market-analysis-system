@@ -29,6 +29,7 @@ print ("test_function start%N")
 				ml.forth
 			end
 		end
+print ("l.count, Result.count: " + l.count.out + ", " + Result.count.out + "%N")
 print ("test_function end%N")
 	end
 
