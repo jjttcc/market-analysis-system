@@ -10,7 +10,7 @@ class STOCK inherit
 
 	TRADABLE [VOLUME_TUPLE]
 		export {ANY}
-			valid_stock_function
+			valid_stock_processor
 		redefine
 			symbol, make_ctf, short_description, finish_loading,
 			valid_indicator
@@ -67,9 +67,9 @@ feature -- Status report
 
 	valid_indicator (f: MARKET_FUNCTION): BOOLEAN is
 		do
-			Result := valid_stock_function (f)
+			Result := valid_stock_processor (f)
 		ensure then
-			valid_for_stock: Result = valid_stock_function (f)
+			valid_for_stock: Result = valid_stock_processor (f)
 		end
 
 	has_open_interest: BOOLEAN is false
