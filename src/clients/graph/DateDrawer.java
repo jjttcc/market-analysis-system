@@ -133,6 +133,11 @@ public class DateDrawer extends Drawer {
 								_x_values[months[0].right()]) * .10);
 		}
 		// Draw months and years.
+		boolean do_months = true;
+		if (months.length > 1 && months[0].right() == months[1].right()) {
+			do_months = false;
+		}
+		if (do_months) {
 		i = 0;
 		while (i < mi) {
 			if (months[i].right() < 0) {
@@ -141,10 +146,15 @@ public class DateDrawer extends Drawer {
 			draw_month(g, bounds, months[i], _x_values);
 			++i;
 		}
+		}
 
 		i = 0;
 		while (i < yi) {
-			if (! is_indicator) draw_year(g, bounds, years[i]);
+			if (! is_indicator) {
+				draw_year(g, bounds, years[i], ! do_months, true);
+			} else if (! do_months) {
+				draw_year(g, bounds, years[i], true, false);
+			}
 			++i;
 		}
 	}
@@ -186,17 +196,25 @@ public class DateDrawer extends Drawer {
 	}
 
 	// Precondition:
-	//    p.left() specifies the month
+	//    p.left() specifies the year
 	//    p.right() specifies the index
-	protected void draw_year(Graphics g, Rectangle bounds, IntPair p) {
-		int year_x;
+	protected void draw_year(Graphics g, Rectangle bounds, IntPair p,
+			boolean line, boolean year) {
+		int year_x, x;
+		final int Line_offset = -3;
 		double width_factor;
 
 		width_factor = width_factor_value(bounds);
-		year_x = (int)((p.right() - xmin) * width_factor + bounds.x) +
-					Year_x_offset;
+		x = (int)((p.right() - xmin) * width_factor + bounds.x);
+		year_x = x + Year_x_offset;
 		g.setColor(conf.text_color());
-		g.drawString(String.valueOf(p.left()), year_x, Year_y);
+		if (line) {
+			g.drawLine(x + Line_offset, bounds.y,
+				x + Line_offset, bounds.y + bounds.height);
+		}
+		if (year) {
+			g.drawString(String.valueOf(p.left()), year_x, Year_y);
+		}
 	}
 
 	// Do y-coordinate reference values need to be displayed for this data?
