@@ -20,7 +20,7 @@ name: Event log file - retrieving from persistent store.
 description: When an EVENT_LOG_FILE is retrieved via the STORABLE mechanism
 (called from market_event_registrants), it is retrieved in an inconsistent
 state such that the class invariant will be violated (detail: invariant will
-invoke count, which will through a "bad file number" exception) the first
+invoke count, which will throw a "bad file number" exception) the first
 time that a feature is called on the object.  Explicitly closing the file
 before storing it doesn't seem to help.
 status: open
