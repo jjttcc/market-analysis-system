@@ -9,6 +9,9 @@ indexing
 class MAIN_ACTIONS inherit
 
 	ACTIONS
+		redefine
+			post_initialize
+		end
 
 create
 
@@ -16,16 +19,12 @@ create
 
 feature {NONE} -- Initialization
 
-	make (config: MCT_CONFIGURATION) is
-		require
-			config_exists: config /= Void
+	post_initialize is
 		local
 			cmd: EXTERNAL_COMMAND
 		do
-			create external_commands.make (0)
-			cmd := config.default_start_server_command
+			cmd := configuration.default_start_server_command
 			external_commands.put (cmd, cmd.identifier)
-			configuration := config
 		end
 
 feature -- Actions

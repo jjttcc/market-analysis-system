@@ -77,14 +77,65 @@ feature -- Actions
 			about_dialog.show_modal_to_window (owner_window)
 		end
 
-	show_help_introduction is
-			-- Display the "Help -> MCT Introduction".
-		local
-			help_tools: expanded HELP_TOOLS
-			intro_window: EV_WINDOW
+	show_documentation is
+			-- Display the main MCT documentation.
 		do
-			intro_window := help_tools.introduction
-			intro_window.show
+			external_commands.item (
+				configuration.Browse_docs_cmd_specifier).execute (Void)
+		end
+
+	show_introduction is
+			-- Display the "MCT Introduction".
+		do
+			external_commands.item (
+				configuration.Browse_intro_cmd_specifier).execute (Void)
+		end
+
+	show_faq is
+			-- Display the FAQ.
+		do
+			external_commands.item (
+				configuration.Browse_faq_cmd_specifier).execute (Void)
+		end
+
+feature {NONE} -- Initialization
+
+	make (config: MCT_CONFIGURATION) is
+			-- Creation routine for descendants
+		require
+			config_exists: config /= Void
+		local
+			cmd: EXTERNAL_COMMAND
+		do
+			create external_commands.make (0)
+			configuration := config
+			add_common_commands
+			post_initialize
+		end
+
+	add_common_commands is
+			-- Add commands common to most contexts to `external_commands'.
+		require
+			external_commands_exists: external_commands /= Void
+			configuration_exists: configuration /= Void
+		local
+			cmd: EXTERNAL_COMMAND
+		do
+			cmd := configuration.browse_documentation_command
+			external_commands.put (cmd, cmd.identifier)
+			cmd := configuration.browse_intro_command
+			external_commands.put (cmd, cmd.identifier)
+			cmd := configuration.browse_faq_command
+			external_commands.put (cmd, cmd.identifier)
+		end
+
+	post_initialize is
+			-- Do any needed initialization of the descendant.
+		require
+			external_commands_exists: external_commands /= Void
+			configuration_exists: configuration /= Void
+		do
+			-- Null routine - redefine if needed.
 		end
 
 feature {NONE} -- Implementation - utilities

@@ -144,7 +144,7 @@ feature {NONE} -- Menu components
 			current_actions_exist: current_mas_session_actions /= Void
 		do
 			create Result.make_with_text (file_menu_title)
-			Result.extend (widget_builder.new_menu_item (close_menu_item_title,
+			Result.extend (widget_builder.new_menu_item (Close_menu_item_title,
 				<<agent current_mas_session_actions.close_window>>))
 			Result.extend (create {EV_MENU_SEPARATOR})
 			common_file_menu_items.do_all (agent Result.extend)
@@ -157,10 +157,10 @@ feature {NONE} -- Menu components
 		do
 			create Result.make_with_text (edit_menu_title)
 			Result.extend (widget_builder.new_menu_item (
-				server_startup_menu_item_title,
+				Server_startup_menu_item_title,
 				<<agent current_main_actions.configure_server_startup>>))
 			Result.extend (widget_builder.new_menu_item (
-				preferences_menu_item_title,
+				Preferences_menu_item_title,
 				<<agent current_main_actions.edit_preferences>>))
 		end
 
@@ -179,10 +179,16 @@ feature {NONE} -- Menu components
 			end
 			create Result.make_with_text (help_menu_title)
 			Result.extend (widget_builder.new_menu_item (
-				introduction_menu_item_title,
-				<<agent actions.show_help_introduction>>))
+				Introduction_menu_item_title,
+				<<agent actions.show_introduction>>))
+			Result.extend (widget_builder.new_menu_item (
+				Documentation_menu_item_title,
+				<<agent actions.show_documentation>>))
+			Result.extend (widget_builder.new_menu_item (
+				FAQ_menu_item_title,
+				<<agent actions.show_faq>>))
 			Result.extend (create {EV_MENU_SEPARATOR})
-			Result.extend (widget_builder.new_menu_item (about_menu_item_title,
+			Result.extend (widget_builder.new_menu_item (About_menu_item_title,
 				<<agent actions.show_about_box>>))
 		end
 
@@ -197,10 +203,10 @@ feature {NONE} -- Menu components
 				actions := current_mas_session_actions
 			end
 			create {LINKED_LIST [EV_MENU_ITEM]} Result.make
-			Result.extend (widget_builder.new_menu_item (quit_menu_item_title,
+			Result.extend (widget_builder.new_menu_item (Quit_menu_item_title,
 				<<agent actions.exit>>))
 			Result.extend (widget_builder.new_menu_item (
-				quit_without_menu_item_title,
+				Quit_without_menu_item_title,
 				<<agent actions.exit_without_session_termination>>))
 		end
 
@@ -235,7 +241,12 @@ feature {NONE} -- Miscellaneous
 			-- Add an 'introduction' accelerator.
 			accelerator := widget_builder.default_accelerator (
 				key_constants.key_i)
-			accelerator.actions.extend (agent actions.show_help_introduction)
+			accelerator.actions.extend (agent actions.show_introduction)
+			w.accelerators.extend (accelerator)
+			-- Add a 'documentation' accelerator.
+			accelerator := widget_builder.default_accelerator (
+				key_constants.key_d)
+			accelerator.actions.extend (agent actions.show_documentation)
 			w.accelerators.extend (accelerator)
 		end
 
@@ -308,29 +319,33 @@ feature {NONE} -- Implementation - Constants
 	Session_window_title: STRING is "MAS"
 			-- Title of mas-session windows
 
-	file_menu_title: STRING is "&File"
+	File_menu_title: STRING is "&File"
 
-	close_menu_item_title: STRING is
+	Close_menu_item_title: STRING is
 		"&Close Window Ctl+W"
 
-	quit_menu_item_title: STRING is 
+	Quit_menu_item_title: STRING is 
 		"&Quit Ctl+Q"
 
-	quit_without_menu_item_title: STRING is
+	Quit_without_menu_item_title: STRING is
 		"Q&uit without terminating sessions Ctl+U"
 
-	help_menu_title: STRING is "&Help"
+	Help_menu_title: STRING is "&Help"
 
-	about_menu_item_title: STRING is "&About"
+	About_menu_item_title: STRING is "&About"
 
-	introduction_menu_item_title: STRING is "MCT &Introduction Ctl+I"
+	Introduction_menu_item_title: STRING is "MCT &Introduction Ctl+I"
 
-	edit_menu_title: STRING is "&Edit"
+	FAQ_menu_item_title: STRING is "&Frequenty Asked Questions (FAQ)"
 
-	server_startup_menu_item_title: STRING is
+	Documentation_menu_item_title: STRING is "MCT &Documentation Ctl+D"
+
+	Edit_menu_title: STRING is "&Edit"
+
+	Server_startup_menu_item_title: STRING is
 		"&Server startup configuration Ctl+S"
 
-	preferences_menu_item_title: STRING is "&Preferences"
+	Preferences_menu_item_title: STRING is "&Preferences"
 
 invariant
 

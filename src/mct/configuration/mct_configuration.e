@@ -37,12 +37,16 @@ feature {NONE} -- Initialization
 
 			settings.extend ("", Data_directory_specifier)
 			settings.extend ("", Bin_directory_specifier)
+			settings.extend ("", Doc_directory_specifier)
 			settings.extend ("", Valid_port_numbers_specifier)
 			settings.extend ("", Hostname_specifier)
 			settings.extend ("", Start_server_cmd_specifier)
 			settings.extend ("", Start_cl_client_cmd_specifier)
 			settings.extend ("", Chart_cmd_specifier)
 			settings.extend ("", Termination_cmd_specifier)
+			settings.extend ("", Browse_docs_cmd_specifier)
+			settings.extend ("", Browse_intro_cmd_specifier)
+			settings.extend ("", Browse_faq_cmd_specifier)
 		end
 
 feature -- Access
@@ -57,6 +61,13 @@ feature -- Access
 	bin_directory: STRING is
 		do
 			Result := settings @ Bin_directory_specifier
+		ensure
+			not_void: Result /= Void
+		end
+
+	doc_directory: STRING is
+		do
+			Result := settings @ Doc_directory_specifier
 		ensure
 			not_void: Result /= Void
 		end
@@ -76,6 +87,8 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
+feature -- Commands
+
 	default_start_server_command: EXTERNAL_COMMAND
 			-- Specified default 'start-server' command
 
@@ -90,6 +103,15 @@ feature -- Access
 
 	termination_command: EXTERNAL_COMMAND
 			-- Command to terminate a server
+
+	browse_documentation_command: EXTERNAL_COMMAND
+			-- Command to browse the MCT documentation
+
+	browse_intro_command: EXTERNAL_COMMAND
+			-- Command to browse the "MCT introduction"
+
+	browse_faq_command: EXTERNAL_COMMAND
+			-- Command to browse the FAQ
 
 feature -- Status report
 
@@ -162,6 +184,21 @@ feature {NONE} -- Implementation - Hook routine implementations
 					Termination_cmd_specifier,
 					settings @ Termination_cmd_specifier)
 			end
+			if settings.has (Browse_docs_cmd_specifier) then
+				create {EXTERNAL_COMMAND} browse_documentation_command.make (
+					Browse_docs_cmd_specifier,
+					settings @ Browse_docs_cmd_specifier)
+			end
+			if settings.has (Browse_intro_cmd_specifier) then
+				create {EXTERNAL_COMMAND} browse_intro_command.make (
+					Browse_intro_cmd_specifier,
+					settings @ Browse_intro_cmd_specifier)
+			end
+			if settings.has (Browse_faq_cmd_specifier) then
+				create {EXTERNAL_COMMAND} browse_faq_command.make (
+					Browse_faq_cmd_specifier,
+					settings @ Browse_faq_cmd_specifier)
+			end
 			if
 				default_start_server_command = Void and then
 				not start_server_commands.is_empty
@@ -209,27 +246,12 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 feature {NONE} -- Implementation
 
-	has_token (s: STRING): BOOLEAN is
-			-- Does `s' have a "<...>" token?
-		do
-			if
-				s.has (Token_start_delimiter) and
-				s.has (Token_end_delimiter)
-			then
-				Result :=
-					s.substring_index (
-						token_from (Data_directory_specifier), 1) > 0 or
-					s.substring_index (
-						token_from (Bin_directory_specifier), 1) > 0 or
-					s.substring_index (token_from (Hostname_specifier), 1) > 0
-			end
-		end
-
 	replace_configuration_tokens (s: STRING) is
 		do
 			replace_tokens (s, <<Data_directory_specifier,
-				Bin_directory_specifier, Hostname_specifier>>,
-				<<data_directory, bin_directory, hostname>>,
+				Bin_directory_specifier, Hostname_specifier,
+				Doc_directory_specifier>>,
+				<<data_directory, bin_directory, hostname, doc_directory>>,
 				Token_start_delimiter, Token_end_delimiter)
 		end
 
@@ -253,7 +275,8 @@ feature {NONE} -- Implementation
 		end
 
 	make_start_server_cmd is
-			-- Make a 'start-server' command and add it to `external_commands'.
+			-- Make a 'start-server' command and add it to
+			-- `start_server_commands'.
 		require
 			at_end_of_block: config_file.at_end_of_block
 		local

@@ -10,7 +10,7 @@ class MAS_SESSION_ACTIONS inherit
 
 	ACTIONS
 		redefine
-			owner_window
+			owner_window, post_initialize
 		end
 
 	TERMINABLE
@@ -24,20 +24,16 @@ create
 
 feature {NONE} -- Initialization
 
-	make (config: MCT_CONFIGURATION) is
-		require
-			config_exists: config /= Void
+	post_initialize is
 		local
 			cmd: EXTERNAL_COMMAND
 		do
-			create external_commands.make (0)
-			cmd := config.chart_command
+			cmd := configuration.chart_command
 			external_commands.put (cmd, cmd.identifier)
-			cmd := config.start_command_line_client_command
+			cmd := configuration.start_command_line_client_command
 			external_commands.put (cmd, cmd.identifier)
-			cmd := config.termination_command
+			cmd := configuration.termination_command
 			external_commands.put (cmd, cmd.identifier)
-			configuration := config
 			register_for_termination (Current)
 		end
 
@@ -52,8 +48,7 @@ feature -- Actions
 		local
 			cmd: COMMAND
 		do
-			cmd := external_commands @
-				configuration.Chart_cmd_specifier
+			cmd := external_commands @ configuration.Chart_cmd_specifier
 			cmd.execute (owner_window)
 		end
 

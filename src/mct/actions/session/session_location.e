@@ -10,6 +10,11 @@ indexing
 class SESSION_LOCATON inherit
 
 	ACTIONS
+		rename
+			make as a_make_unused
+		export
+			{NONE} a_make_unused
+		end
 
 create
 

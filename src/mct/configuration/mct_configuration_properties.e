@@ -17,6 +17,8 @@ feature -- Constants
 
 	Bin_directory_specifier: STRING is "bin_dir"
 
+	Doc_directory_specifier: STRING is "doc_dir"
+
 	Valid_port_numbers_specifier: STRING is "valid_portnumbers"
 
 	Hostname_specifier: STRING is "hostname"
@@ -30,6 +32,12 @@ feature -- Constants
 	Chart_cmd_specifier: STRING is "chart_command"
 
 	Termination_cmd_specifier: STRING is "termination_command"
+
+	Browse_docs_cmd_specifier: STRING is "browse_docs_command"
+
+	Browse_intro_cmd_specifier: STRING is "browse_intro_command"
+
+	Browse_faq_cmd_specifier: STRING is "browse_faq_command"
 
 	Command_specifier: STRING is "command"
 
