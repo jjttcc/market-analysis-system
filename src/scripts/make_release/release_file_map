@@ -260,11 +260,14 @@ src/contrib src/ contrib
 # (macl configuration files)
 build/config lib/ mas_linux1.6.7 mas_windows1.6.7 mac1.6.7
 # (Server executables and needed libraries)
-lib/binaries/mas_no_assert_v1.6.7 bin/mas mas_linux1.6.7
-lib/binaries/mas_assert_v1.6.7 bin/mas_assert mas_linux1.6.7
+lib/binaries/linux/mas_no_assert_v1.6.7 bin/mas mas_linux1.6.7
+lib/binaries/linux/mas_assert_v1.6.7 bin/mas_assert mas_linux1.6.7
+lib/binaries/windows/mas_no_assert_v1.6.7 bin/mas.exe mas_windows1.6.7
+lib/binaries/windows/mas_assert_v1.6.7 bin/mas_assert.exe mas_windows1.6.7
+# !!Add macl, mct, etc. binaries here.
 # Include this odbc library if the executable was not statically
 # linked with it:
-lib/binaries/libodbc.so.1 lib mas_linux1.6.7 serversrc1.6.7
+lib/binaries/linux/libodbc.so.1 lib mas_linux1.6.7 serversrc1.6.7
 # (MAS Documentation)
 doc/GUI_introduction . mas_linux1.6.7 mac1.6.7
 doc/masystem_introduction-linux.txt doc/masystem_introduction.txt mas_linux1.6.7 mac1.6.7
