@@ -51,24 +51,13 @@ rm -fr $RPM_BUILD_ROOT
 
 %post
 cd %{rootdir}
+find . -type d -exec chmod +rx {} ';'
 if [ "$(id -un)" = root ]; then
 	find . -exec chown root {} ';'
 	find . -exec chgrp root {} ';'
 fi
 
 %files
-%{rootdir}/bin/macl
-%{rootdir}/bin/maclj
-%{rootdir}/bin/magc
-%{rootdir}/bin/mas
-%{rootdir}/bin/mas_assert
-%{rootdir}/bin/masb
-%{rootdir}/lib/classes
-%{rootdir}/lib/config
-%{rootdir}/lib/data
-%{rootdir}/lib/mas_dbrc
-%{rootdir}/lib/libodbc.so.1
-%{rootdir}/lib/python
-%{rootdir}/lib/indicators_persist
-%{rootdir}/lib/generators_persist
+%{rootdir}/bin
+%{rootdir}/lib
 %{rootdir}/doc
