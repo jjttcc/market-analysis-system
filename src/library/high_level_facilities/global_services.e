@@ -249,6 +249,28 @@ feature -- Access
 			create Result.make (1, 1)
 		end
 
+feature -- Status report
+
+	valid_stock_function (f: MARKET_FUNCTION): BOOLEAN is
+			-- Is `f' a valid function for a STOCK instance - that is,
+			-- are all of its `operators' valid for a STOCK?
+		local
+			cmds: LIST [COMMAND]
+			oi: OPEN_INTEREST
+		do
+			cmds := f.operators
+			Result := true
+			from cmds.start until not Result or cmds.exhausted loop
+				oi ?= cmds.item
+				-- Currently, the only invalid operator for a STOCK is
+				-- open interest.
+				if oi /= Void then
+					Result := false
+				end
+				cmds.forth
+			end
+		end
+
 feature -- Basic operations
 
 	adjust_start_time (dt: DATE_TIME; type: TIME_PERIOD_TYPE) is
