@@ -22,6 +22,7 @@ feature -- Access
 			Result := tradable (current_symbol, period_type)
 		ensure
 			result_definition: Result = tradable (current_symbol, period_type)
+			last_tradable_set: last_tradable = Result
 		end
 
 	index: INTEGER is
@@ -40,16 +41,24 @@ feature -- Access
 		ensure
 			period_type_valid: Result /= Void implies
 				Result.period_types.has (period_type.name)
+			last_tradable_set: last_tradable = Result
 		end
 
 	tuple_list (symbol: STRING; period_type: TIME_PERIOD_TYPE):
 				SIMPLE_FUNCTION [BASIC_MARKET_TUPLE] is
-			-- Tuple list for `period_type' for tradable with `symbol' -
-			-- Void if the tradable for `symbol' is not found or if
-			-- `period_type' is not a valid type for `symbol'
+			-- Tuple list for `period_type' for tradable with `symbol' - Void
+			-- if the tradable for `symbol' is not found or if `period_type'
+			-- is not a valid type for `symbol'.  `last_tradable' will be set
+			-- to `tradable (symbol, period_type)'.
 		require
 			not_void: symbol /= Void and period_type /= Void
-		deferred
+		local
+			t: TRADABLE [BASIC_MARKET_TUPLE]
+		do
+			t := tradable (symbol, period_type)
+			if t /= Void then
+				Result := t.tuple_list (period_type.name)
+			end
 		ensure
 			same_period_type: Result /= Void implies
 				Result.trading_period_type.is_equal (period_type)
@@ -81,6 +90,8 @@ feature -- Access
 			result_valid: Result /= Void
 		end
 
+	last_tradable: TRADABLE [BASIC_MARKET_TUPLE]
+			-- Last tradable accessed
 
 	last_error: STRING
 			-- Description of last error
