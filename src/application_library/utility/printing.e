@@ -4,7 +4,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 
-class PRINTING inherit
+deferred class PRINTING inherit
 
 	GLOBAL_SERVICES
 		export {NONE}
@@ -15,38 +15,12 @@ feature -- Access
 
 	output_field_separator: STRING is
 			-- Field separator used when printing output
-		once
-			!!ofs.make (1)
-			Result := ofs
+		deferred
 		end
 
 	date_field_separator: STRING is
 			-- Field separator used for output between date fields
-		once
-			!!dfs.make (1)
-			Result := dfs
-		end
-
-feature -- Status setting
-
-	set_output_field_separator (s: STRING) is
-		require
-			not_void: s /= Void
-		do
-			output_field_separator.wipe_out
-			output_field_separator.append (s)
-		ensure
-			output_field_separator.is_equal (s)
-		end
-
-	set_date_field_separator (s: STRING) is
-		require
-			not_void: s /= Void
-		do
-			date_field_separator.wipe_out
-			date_field_separator.append (s)
-		ensure
-			date_field_separator.is_equal (s)
+		deferred
 		end
 
 feature -- Basic operations
@@ -159,14 +133,6 @@ feature -- Basic operations
 				i := i + 1
 			end
 		end
-
-feature {NONE} -- Implementation
-
-	ofs: STRING
-			-- output field separator
-
-	dfs: STRING
-			-- date field separator
 
 feature {NONE} -- Implementation
 
