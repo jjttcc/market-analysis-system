@@ -108,15 +108,10 @@ feature -- Basic operations
 			check
 				medium_set: io_medium /= Void
 			end
-			from
-			until
-				end_session
-			loop
-				tokenize_message
-				cmd := request_handlers @ message_ID
-				cmd.set_active_medium (io_medium)
-				cmd.execute (message_body)
-			end
+			tokenize_message
+			cmd := request_handlers @ message_ID
+			cmd.set_active_medium (io_medium)
+			cmd.execute (message_body)
 		end
 
 feature {NONE}
@@ -176,9 +171,6 @@ feature {NONE}
 		end
 
 feature {NONE}
-
-	end_session: BOOLEAN
-			-- Has session termination been requested?
 
 	request_handlers: TABLE [REQUEST_COMMAND, INTEGER]
 			-- Handers of client requests received via io_medium
