@@ -14,7 +14,23 @@ class OPEN_INTEREST inherit
 
 	BASIC_NUMERIC_COMMAND
 		redefine
-			execute
+			execute, root_suppliers
+		end
+
+feature -- Access
+
+	root_suppliers: SET [ANY] is
+		local
+			tuples: expanded MARKET_TUPLES
+		do
+			create {LINKED_SET [ANY]} Result.make
+			-- This class actually depends on a OPEN_INTEREST_TUPLE, but a
+			-- OPEN_INTEREST_TUPLE is not instantiable and a
+			-- BASIC_OPEN_INTEREST_TUPLE conforms to OPEN_INTEREST_TUPLE
+			-- with respect to the intended semantics of this feature.
+			Result.extend (tuples.basic_open_interest_tuple)
+		ensure
+			not_void: Result /= Void
 		end
 
 feature -- Basic operations

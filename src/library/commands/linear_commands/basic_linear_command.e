@@ -11,6 +11,9 @@ indexing
 class BASIC_LINEAR_COMMAND inherit
 
 	LINEAR_COMMAND
+		redefine
+		root_suppliers
+		end
 
 creation
 
@@ -25,6 +28,22 @@ feature -- Initialization
 			set (tgt)
 		ensure
 			target = tgt
+		end
+
+feature -- Access
+
+	root_suppliers: SET [ANY] is
+		local
+			tuples: expanded MARKET_TUPLES
+		do
+			create {LINKED_SET [ANY]} Result.make
+			-- This class actually depends on a MARKET_TUPLE, but a
+			-- MARKET_TUPLE is not instantiable and a SIMPLE_TUPLE
+			-- conforms to MARKET_TUPLE with respect to the
+			-- intended semantics of this feature.
+			Result.extend (tuples.simple_tuple)
+		ensure
+			not_void: Result /= Void
 		end
 
 feature -- Basic operations

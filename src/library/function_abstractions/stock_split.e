@@ -10,7 +10,7 @@ class STOCK_SPLIT inherit
 
 	MARKET_TUPLE
 		redefine
-			is_equal
+			is_equal, has_additional_queries
 		end
 
 	MATH_CONSTANTS
@@ -34,6 +34,8 @@ feature -- Access
 		end
 
 feature -- Status report
+
+	has_additional_queries: BOOLEAN is True
 
 	is_equal (other: like Current): BOOLEAN is
 		do

@@ -12,6 +12,8 @@ class MARKET_POINT inherit
 	MARKET_TUPLE
 		rename
 			value as y
+		redefine
+			has_additional_queries
 		end
 
 creation
@@ -40,6 +42,10 @@ feature -- Access
 
 	y: REAL
 			-- y coordinate
+
+feature -- Status report
+
+	has_additional_queries: BOOLEAN is True
 
 feature -- Status setting
 

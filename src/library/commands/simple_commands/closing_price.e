@@ -15,7 +15,19 @@ class CLOSING_PRICE inherit
 
 	BASIC_NUMERIC_COMMAND
 		redefine
-			execute
+			execute, root_suppliers
+		end
+
+feature -- Access
+
+	root_suppliers: SET [ANY] is
+		local
+			tuples: expanded MARKET_TUPLES
+		do
+			create {LINKED_SET [ANY]} Result.make
+			Result.extend (tuples.basic_market_tuple)
+		ensure
+			not_void: Result /= Void
 		end
 
 feature -- Basic operations

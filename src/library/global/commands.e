@@ -2,6 +2,8 @@ indexing
 	description: "An instance of each instantiable COMMAND class"
 	author: "Jim Cochrane"
 	date: "$Date$";
+	note: "@@This class does not depend on any specialized classes and %
+		%can probably be cleanly moved to the ma_library cluster."
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"

@@ -56,6 +56,12 @@ feature -- Access
 	operator_maker: COMMAND_EDITING_INTERFACE
 			-- Interface used to obtain operator selections from user
 
+feature -- Status report
+
+	exclude_operators: BOOLEAN
+			-- Should the editing of a MARKET_FUNCTION not include setting
+			-- of the function's operators?
+
 feature -- Status setting
 
 	set_operator_maker (arg: COMMAND_EDITING_INTERFACE) is
@@ -69,6 +75,17 @@ feature -- Status setting
 				operator_maker /= Void
 		end
 
+	set_exclude_operators (arg: BOOLEAN) is
+			-- Set `exclude_operators' to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			exclude_operators := arg
+		ensure
+			exclude_operators_set: exclude_operators = arg and
+				exclude_operators /= Void
+		end
+
 feature -- Basic operations
 
 	edit_one_fn_op (f: ONE_VARIABLE_FUNCTION) is
@@ -79,15 +96,22 @@ feature -- Basic operations
 		local
 			cmd: RESULT_COMMAND [REAL]
 		do
-			operator_maker.reset
 			f.set_input (user_interface.market_function_selection (
 							concatenation (<<f.name, "'s (", f.generator,
-							") input function">>)))
-			cmd ?= operator_maker.command_selection_from_type (
-						operator_maker.Real_result_command,
-							concatenation (<<f.generator,
-								"'s operator">>), false)
-			f.set_operator (cmd)
+							") input function">>), Void))
+--!!!!!NOTE: operator_maker.reset call was moved from the beginning of
+--this procedure.  Check to make sure this does not cause unwanted side
+--effects.
+			if not exclude_operators then
+print ("edit_one_fn_op was called - CHECK IF RESULTS ARE CORRECT " +
+"- See NOTE%N")
+				operator_maker.reset
+				cmd ?= operator_maker.command_selection_from_type (
+							operator_maker.Real_result_command,
+								concatenation (<<f.generator,
+									"'s operator">>), false)
+				f.set_operator (cmd)
+			end
 		end
 
 	edit_accumulation (f: ACCUMULATION) is
@@ -101,29 +125,36 @@ feature -- Basic operations
 			lc: LINEAR_COMMAND
 			rc: RESULT_COMMAND [REAL]
 		do
-			operator_maker.reset
 			f.set_input (user_interface.market_function_selection (
 							concatenation (<<f.name, "'s (", f.generator,
-								") input function">>)))
-			cmd ?= operator_maker.command_selection_from_type (
-						operator_maker.Binary_real_real_command,
-							concatenation (<<f.generator,
-								"'s main operator">>), false)
-			lc ?= operator_maker.command_selection_from_type (
-						operator_maker.Linear_command,
-							concatenation (<<f.generator,
-								"'s 'previous' operator">>), false)
-			rc ?= operator_maker.command_selection_from_type (
-						operator_maker.Real_result_command,
-							concatenation (<<f.generator,
-								"'s first element operator">>), false)
-			-- set_operators in ACCUMULATION requires that cmd's left
-			-- operand is attached to the same object as lc.
-			cmd.set_operands (lc, cmd.operand2)
-			check
-				lc_set_correctly: cmd.operand1 = lc
+								") input function">>), Void))
+--!!!!!NOTE: operator_maker.reset call was moved from the beginning of
+--this procedure.  Check to make sure this does not cause unwanted side
+--effects.
+			if not exclude_operators then
+print ("edit_accumulation was called - CHECK IF RESULTS ARE CORRECT " +
+"- See NOTE%N")
+				operator_maker.reset
+				cmd ?= operator_maker.command_selection_from_type (
+							operator_maker.Binary_real_real_command,
+								concatenation (<<f.generator,
+									"'s main operator">>), false)
+				lc ?= operator_maker.command_selection_from_type (
+							operator_maker.Linear_command,
+								concatenation (<<f.generator,
+									"'s 'previous' operator">>), false)
+				rc ?= operator_maker.command_selection_from_type (
+							operator_maker.Real_result_command,
+								concatenation (<<f.generator,
+									"'s first element operator">>), false)
+				-- set_operators in ACCUMULATION requires that cmd's left
+				-- operand is attached to the same object as lc.
+				cmd.set_operands (lc, cmd.operand2)
+				check
+					lc_set_correctly: cmd.operand1 = lc
+				end
+				f.set_required_operators (cmd, lc, rc)
 			end
-			f.set_required_operators (cmd, lc, rc)
 		end
 
 	edit_configurable_nrf (f: CONFIGURABLE_N_RECORD_FUNCTION) is
@@ -138,29 +169,36 @@ feature -- Basic operations
 			firstop: RESULT_COMMAND [REAL]
 			response: STRING
 		do
-			operator_maker.reset
 			f.set_input (user_interface.market_function_selection (
 							concatenation (<<f.name, "'s (", f.generator,
-								") input function">>)))
-			mainop ?= operator_maker.command_selection_from_type (
-						operator_maker.Real_result_command,
-							concatenation (<<f.generator,
-								"'s main operator">>), false)
-			response := user_interface.string_selection(concatenation(<<
-				"Would you like to choose a previous operator for ",
-				f.name, "? ">>))
-			response.to_lower
-			if response @ 1 = 'y' then
-				prevop ?= operator_maker.command_selection_from_type (
-							operator_maker.Linear_command,
+								") input function">>), Void))
+--!!!!!NOTE: operator_maker.reset call was moved from the beginning of
+--this procedure.  Check to make sure this does not cause unwanted side
+--effects.
+			if not exclude_operators then
+print ("edit_configurable_nrf was called - CHECK IF RESULTS ARE CORRECT " +
+"- See NOTE%N")
+				operator_maker.reset
+				mainop ?= operator_maker.command_selection_from_type (
+							operator_maker.Real_result_command,
 								concatenation (<<f.generator,
-									"'s 'previous' operator">>), false)
+									"'s main operator">>), false)
+				response := user_interface.string_selection(concatenation(<<
+					"Would you like to choose a previous operator for ",
+					f.name, "? ">>))
+				response.to_lower
+				if response @ 1 = 'y' then
+					prevop ?= operator_maker.command_selection_from_type (
+								operator_maker.Linear_command,
+									concatenation (<<f.generator,
+										"'s 'previous' operator">>), false)
+				end
+				firstop ?= operator_maker.command_selection_from_type (
+							operator_maker.Real_result_command,
+								concatenation (<<f.generator,
+									"'s first element operator">>), false)
+				f.set_operators (mainop, prevop, firstop)
 			end
-			firstop ?= operator_maker.command_selection_from_type (
-						operator_maker.Real_result_command,
-							concatenation (<<f.generator,
-								"'s first element operator">>), false)
-			f.set_operators (mainop, prevop, firstop)
 			response := user_interface.string_selection(concatenation(<<
 				"Would you like to set ", f.name, "'s n-value? ",
 				"%N(Note that this may change operator n-values.) ">>))
@@ -179,24 +217,36 @@ feature -- Basic operations
 		local
 			cmd: RESULT_COMMAND [REAL]
 		do
-			operator_maker.reset
 			f.set_input (user_interface.market_function_selection (
 							concatenation (<<f.name, "'s (", f.generator,
-								") input function">>)))
-			cmd ?= operator_maker.command_selection_from_type (
-						operator_maker.Real_result_command,
-							concatenation (<<f.generator,
-								"'s operator">>), false)
-			f.set_operator (cmd)
+								") input function">>), Void))
+--!!!!!NOTE: operator_maker.reset call was moved from the beginning of
+--this procedure.  Check to make sure this does not cause unwanted side
+--effects.
+			if not exclude_operators then
+print ("edit_one_fn_op_n was called - CHECK IF RESULTS ARE CORRECT " +
+"- See NOTE%N")
+				operator_maker.reset
+				cmd ?= operator_maker.command_selection_from_type (
+							operator_maker.Real_result_command,
+								concatenation (<<f.generator,
+									"'s operator">>), false)
+				f.set_operator (cmd)
+				-- Ensure that f's effective offset is set to the absolute
+				-- value of the largest left offset (or highest magnitude of
+				-- negative offset) used by `cmd' and any members of its
+				-- tree - for example, if a SETTABLE_OFFSET_COMMAND occurs
+				-- in `cmd's tree and its offset is -3 and there is no smaller
+				-- (e.g., -4) offset used by a command in the tree, set f's
+				-- effective offset to 3.
+print ("edit_one_fn_op_n was called - CHECK IF RESULTS ARE CORRECT " +
+"- See SECOND NOTE%N")
+--!!!!!NOTE: f.set_effective_offset call was moved from the end of
+--this procedure.  Check to make sure this does not cause unwanted side
+--effects.
+				f.set_effective_offset (operator_maker.left_offset)
+			end
 			edit_n (f)
-			-- Ensure that f's effective offset is set to the absolute
-			-- value of the largest left offset (or highest magnitude of
-			-- negative offset) used by `cmd' and any members of its
-			-- tree - for example, if a SETTABLE_OFFSET_COMMAND occurs
-			-- in `cmd's tree and its offset is -3 and there is no smaller
-			-- (e.g., -4) offset used by a command in the tree, set f's
-			-- effective offset to 3.
-			f.set_effective_offset (operator_maker.left_offset)
 		end
 
 	edit_two_cplx_fn_op (f: TWO_VARIABLE_FUNCTION) is
@@ -209,7 +259,6 @@ feature -- Basic operations
 			cmd: RESULT_COMMAND [REAL]
 			i1, i2: COMPLEX_FUNCTION
 		do
-			operator_maker.reset
 			i1 ?= user_interface.complex_function_selection (
 							concatenation (<<f.name, "'s (", f.generator,
 								") left input function">>))
@@ -217,11 +266,19 @@ feature -- Basic operations
 							concatenation (<<f.name, "'s (", f.generator,
 								") right input function">>))
 			f.set_inputs (i1, i2)
-			cmd ?= operator_maker.command_selection_from_type (
-						operator_maker.Real_result_command,
-							concatenation (<<f.generator,
-								"'s operator">>), false)
-			f.set_operator (cmd)
+			if not exclude_operators then
+print ("edit_two_cplx_fn_op was called - CHECK IF RESULTS ARE CORRECT " +
+"- See NOTE%N")
+--!!!!!NOTE: operator_maker.reset call was moved from the beginning of
+--this procedure.  Check to make sure this does not cause unwanted side
+--effects.
+				operator_maker.reset
+				cmd ?= operator_maker.command_selection_from_type (
+							operator_maker.Real_result_command,
+								concatenation (<<f.generator,
+									"'s operator">>), false)
+				f.set_operator (cmd)
+			end
 		end
 
 	edit_one_fn_bnc_n (f: STANDARD_MOVING_AVERAGE) is
@@ -233,24 +290,36 @@ feature -- Basic operations
 		local
 			cmd: RESULT_COMMAND [REAL]
 		do
-			operator_maker.reset
 			f.set_input (user_interface.market_function_selection (
 							concatenation (<<f.name, "'s (", f.generator,
-								") input function">>)))
-			cmd ?= operator_maker.command_selection_from_type (
-						operator_maker.Real_result_command,
-							concatenation (<<f.generator,
-								"'s operator">>), false)
-			f.set_operator (cmd)
+								") input function">>), Void))
+			if not exclude_operators then
+print ("edit_one_fn_bnc_n was called - CHECK IF RESULTS ARE CORRECT " +
+"- See NOTE%N")
+--!!!!!NOTE: operator_maker.reset call was moved from the beginning of
+--this procedure.  Check to make sure this does not cause unwanted side
+--effects.
+				operator_maker.reset
+				cmd ?= operator_maker.command_selection_from_type (
+							operator_maker.Real_result_command,
+								concatenation (<<f.generator,
+									"'s operator">>), false)
+				f.set_operator (cmd)
+				-- Ensure that f's effective offset is set to the absolute
+				-- value of the largest left offset (or highest magnitude of
+				-- negative offset) used by `cmd' and any members of its
+				-- tree - for example, if a SETTABLE_OFFSET_COMMAND occurs
+				-- in `cmd's tree and its offset is -3 and there is no smaller
+				-- (e.g., -4) offset used by a command in the tree, set f's
+				-- effective offset to 3.
+print ("edit_one_fn_bnc_n was called - CHECK IF RESULTS ARE CORRECT " +
+"- See SECOND NOTE%N")
+--!!!!!NOTE: f.set_effective_offset call was moved from the end of
+--this procedure.  Check to make sure this does not cause unwanted side
+--effects.
+				f.set_effective_offset (operator_maker.left_offset)
+			end
 			edit_n (f)
-			-- Ensure that f's effective offset is set to the absolute
-			-- value of the largest left offset (or highest magnitude of
-			-- negative offset) used by `cmd' and any members of its
-			-- tree - for example, if a SETTABLE_OFFSET_COMMAND occurs
-			-- in `cmd's tree and its offset is -3 and there is no smaller
-			-- (e.g., -4) offset used by a command in the tree, set f's
-			-- effective offset to 3.
-			f.set_effective_offset (operator_maker.left_offset)
 		end
 
 	edit_ema (f: EXPONENTIAL_MOVING_AVERAGE) is
@@ -264,30 +333,43 @@ feature -- Basic operations
 			cmd: RESULT_COMMAND [REAL]
 			exp: N_BASED_CALCULATION
 		do
-			operator_maker.reset
 			f.set_input (user_interface.market_function_selection (
 							concatenation (<<f.name, "'s (", f.generator,
-								") input function">>)))
-			cmd ?= operator_maker.command_selection_from_type (
-						operator_maker.Real_result_command,
-							concatenation (<<f.generator,
-								"'s main operator">>), false)
-			f.set_operator (cmd)
-			exp ?= operator_maker.command_selection_from_type (
-						operator_maker.N_based_calculation,
-							concatenation (<<f.generator,
-								"'s exponential operator">>), false)
-			f.set_exponential (exp)
+								") input function">>), Void))
+			if not exclude_operators then
+print ("edit_ema was called - CHECK IF RESULTS ARE CORRECT " +
+"- See NOTE%N")
+--!!!!!NOTE: operator_maker.reset call was moved from the beginning of
+--this procedure.  Check to make sure this does not cause unwanted side
+--effects.
+				operator_maker.reset
+				cmd ?= operator_maker.command_selection_from_type (
+							operator_maker.Real_result_command,
+								concatenation (<<f.generator,
+									"'s main operator">>), false)
+				f.set_operator (cmd)
+				exp ?= operator_maker.command_selection_from_type (
+							operator_maker.N_based_calculation,
+								concatenation (<<f.generator,
+									"'s exponential operator">>), false)
+				f.set_exponential (exp)
+				-- Ensure that f's effective offset is set to the absolute
+				-- value of the largest left offset (or highest magnitude of
+				-- negative offset) used by `cmd' and any members of its
+				-- tree - for example, if a SETTABLE_OFFSET_COMMAND occurs
+				-- in `cmd's tree and its offset is -3 and there is no smaller
+				-- (e.g., -4) offset used by a command in the tree, set f's
+				-- effective offset to 3.
+print ("edit_ema was called - CHECK IF RESULTS ARE CORRECT " +
+"- See NOTE%N")
+--!!!!!NOTE: f.set_effective_offset call was moved from the end of
+--this procedure.  Check to make sure this does not cause unwanted side
+--effects.
+				f.set_effective_offset (operator_maker.left_offset)
+			end
 			edit_n (f)
-			-- Ensure that f's effective offset is set to the absolute
-			-- value of the largest left offset (or highest magnitude of
-			-- negative offset) used by `cmd' and any members of its
-			-- tree - for example, if a SETTABLE_OFFSET_COMMAND occurs
-			-- in `cmd's tree and its offset is -3 and there is no smaller
-			-- (e.g., -4) offset used by a command in the tree, set f's
-			-- effective offset to 3.
-			f.set_effective_offset (operator_maker.left_offset)
 		end
+--!!!!!!!Need to set the fnc name, too!!!!!!!
 
 	edit_market_function_line (f: MARKET_FUNCTION_LINE) is
 			-- Edit a MARKET_FUNCTION_LINE.

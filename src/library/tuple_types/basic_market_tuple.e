@@ -10,6 +10,9 @@ indexing
 class BASIC_MARKET_TUPLE inherit
 
 	MARKET_TUPLE
+		redefine
+			has_additional_queries
+		end
 
 	MATH_CONSTANTS
 		export {NONE}
@@ -51,6 +54,8 @@ feature -- Access
 		end
 
 feature -- Status report
+
+	has_additional_queries: BOOLEAN is True
 
 	open_available: BOOLEAN is
 			-- Is opening price datum available?  (Included because

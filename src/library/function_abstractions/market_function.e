@@ -98,6 +98,37 @@ feature -- Access
 			create {LINKED_LIST [COMMAND]} Result.make
 		end
 
+	required_tuple_types: SET [MARKET_TUPLE] is
+			-- One instance of each MARKET_TUPLE descendant used by Current
+			-- or one of its operators
+		local
+			ops: LIST [COMMAND]
+			suppliers: LINEAR [ANY]
+			tuple: MARKET_TUPLE
+		do
+			create {LINKED_SET [MARKET_TUPLE]} Result.make
+			from
+				ops := operators
+				ops.start
+			until
+				ops.exhausted
+			loop
+				from
+					suppliers := ops.item.suppliers.linear_representation
+					suppliers.start
+				until
+					suppliers.exhausted
+				loop
+					tuple ?= suppliers.item
+					if tuple /= Void then
+						Result.extend (tuple)
+					end
+					suppliers.forth
+				end
+				ops.forth
+			end
+		end
+
 feature -- Status report
 
 	processed: BOOLEAN is

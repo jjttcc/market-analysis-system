@@ -289,7 +289,7 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 				use_market_function_selection or market_function = Void
 			then
 				Result := market_tuple_selector.market_function_selection (
-							msg)
+							msg, Void)
 			else
 				Result := market_function
 			end

@@ -45,6 +45,14 @@ feature -- Access
 			create Result.make (0, 0, 0)
 		end
 
+feature -- Status report
+
+	has_additional_queries: BOOLEAN is
+			-- Does the run-time type of Current have additional query
+			-- features besides the ones in the ancestor, MARKET_TUPLE?
+		do
+		end
+
 feature {FACTORY, VALUE_SETTER} -- Status setting
 
 	set_date_time (t: DATE_TIME) is

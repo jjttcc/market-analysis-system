@@ -18,8 +18,11 @@ feature -- Access
 		deferred
 		end
 
-	market_function_selection (msg: STRING): MARKET_FUNCTION is
-			-- User-selected MARKET_FUNCTION from the function library
+	market_function_selection (msg: STRING;
+		validity_checker: FUNCTION [ANY, TUPLE [MARKET_FUNCTION], BOOLEAN]):
+		MARKET_FUNCTION is
+			-- User-selected MARKET_FUNCTION from the function library,
+			-- filtered with `validity_checker' if it's not Void.
 		deferred
 		ensure
 			result_not_void: Result /= Void

@@ -14,7 +14,23 @@ class VOLUME inherit
 
 	BASIC_NUMERIC_COMMAND
 		redefine
-			execute
+			execute, root_suppliers
+		end
+
+feature -- Access
+
+	root_suppliers: SET [ANY] is
+		local
+			tuples: expanded MARKET_TUPLES
+		do
+			create {LINKED_SET [ANY]} Result.make
+			-- This class actually depends on a VOLUME_TUPLE, but a
+			-- VOLUME_TUPLE is not instantiable and a BASIC_VOLUME_TUPLE
+			-- conforms to VOLUME_TUPLE with respect to the
+			-- intended semantics of this feature.
+			Result.extend (tuples.basic_volume_tuple)
+		ensure
+			not_void: Result /= Void
 		end
 
 feature -- Basic operations

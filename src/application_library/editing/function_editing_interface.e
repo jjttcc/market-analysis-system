@@ -107,7 +107,7 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 		end
 
 	function_selection (msg: STRING; l: LIST [MARKET_FUNCTION];
-				backout_allowed: BOOLEAN): MARKET_FUNCTION is
+		backout_allowed: BOOLEAN): MARKET_FUNCTION is
 			-- User-selected MARKET_FUNCTION from the 'l' - if
 			-- `backout_allowed', the user is allowed to "back out" -
 			-- not choose a function - in which case Result is Void.
@@ -134,14 +134,53 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			end
 		end
 
-	market_function_selection (msg: STRING): MARKET_FUNCTION is
+	function_selection_from_library (msg: STRING): MARKET_FUNCTION is
+				-- User-selected MARKET_FUNCTION from the function library
+		do
+			Result := deep_clone (market_function_selection (msg,
+				agent valid_root_function))
+print ("name of selected function: " + Result.name + "%N")
+			editor.set_exclude_operators (True)
+			-- In this flow, only Result's input function should be set, not
+			-- its operator - because the user has selected an existing
+			-- indicator and wants to use its operator rather than choose a
+			-- new one.
+			initialize_function (Result)
+			editor.set_exclude_operators (False)
+			set_new_name (Result, msg)
+		end
+
+	market_function_selection (msg: STRING; validity_checker:
+		FUNCTION [ANY, TUPLE [MARKET_FUNCTION], BOOLEAN]): MARKET_FUNCTION is
 			-- User-selected MARKET_FUNCTION from the function library
 		local
 			l: LINKED_LIST [MARKET_FUNCTION]
+			stock: MARKET_FUNCTION
 		do
 			create l.make
-			l.append (function_library)
-			l.extend (function_with_generator ("STOCK"))
+			stock := function_with_generator ("STOCK")
+			if validity_checker = Void then
+				l.append (function_library)
+				l.extend (stock)
+			else
+				from
+					function_library.start
+				until
+					function_library.exhausted
+				loop
+					if
+						validity_checker.item ([function_library.item])
+					then
+						l.extend (function_library.item)
+					end
+					function_library.forth
+				end
+				if
+					validity_checker.item ([stock])
+				then
+					l.extend (stock)
+				end
+			end
 			Result := function_selection (msg, l, false)
 		end
 
@@ -263,8 +302,7 @@ feature {EDITING_INTERFACE}
 				selection = Exit_value
 			loop
 				selection := list_selection_with_backout (
-					names_from_function_list(l),
-					"Select an indicator to edit")
+					names_from_function_list(l), "Select an indicator to edit")
 				if selection /= Exit_value then
 					indicator := l @ selection
 					check indicator /= Void end
@@ -406,7 +444,7 @@ feature {NONE} -- Implementation
 			-- List of indicators used for editing until the user saves
 			-- the current changes
 
-	set_new_name (o: COMPLEX_FUNCTION; msg: STRING) is
+	set_new_name (o: MARKET_FUNCTION; msg: STRING) is
 		local
 			spiel: ARRAYED_LIST [STRING]
 			fnames: LIST [STRING]
@@ -438,7 +476,7 @@ feature {NONE} -- Implementation
 		end
 
 	names_from_function_list (l: LIST [MARKET_FUNCTION]):
-				ARRAYED_LIST [STRING] is
+		ARRAYED_LIST [STRING] is
 			-- Name of each function in `l'
 		do
 			create Result.make (1)
@@ -510,6 +548,37 @@ feature {NONE} -- Implementation
 			not_void: Result /= Void
 		end
 
+	valid_root_function (f: MARKET_FUNCTION): BOOLEAN is
+			-- Is `f' allowed to be used as a root function?
+		local
+			l: LINEAR [MARKET_TUPLE]
+			cf: COMPLEX_FUNCTION
+			mdf: MARKET_DATA_FUNCTION
+		do
+			cf ?= f
+			mdf ?= f
+			if cf /= Void and mdf = Void then
+				-- To be a root function `f' is required to be complex, but
+				-- not a MARKET_DATA_FUNCTION, since a MARKET_DATA_FUNCTION
+				-- (which simply outputs its input) would not be useful 
+				-- as a root function.
+				Result := True
+				l := f.required_tuple_types.linear_representation
+				-- `f' is valid only if all of its required tuple types
+				-- don't have additional queries (compared to MARKET_TUPLE)
+				-- in their interface.  This prevents, for example, a
+				-- run-time type error caused by trying to access the
+				-- (non-existent) high field of a SIMPLE_TUPLE (which will be
+				-- the tuple type of the root function's input).
+				from l.start until not Result or l.exhausted loop
+					if l.item.has_additional_queries then
+						Result := False
+					end
+					l.forth
+				end
+			end
+		end
+
 feature {NONE} -- Implementation - indicator editing
 
 	do_edit is
@@ -548,10 +617,22 @@ feature {NONE} -- Implementation - indicator editing
 		local
 			f: MARKET_FUNCTION
 		do
-			f := function_selection_from_type (market_function,
-				"root function", true)
-			working_function_library.extend (f)
-			dirty := true
+			inspect
+				character_choice ("Use an existing indicator as the " +
+					"root function or use a new object?%N" +
+					"(e[xisting]/n[ew]/q[uit]) ", "eEnNqQ")
+			when 'e', 'E' then
+				f := function_selection_from_library ("the root function")
+				dirty := true
+			when 'n', 'N' then
+				f := function_selection_from_type (market_function,
+					"root function", true)
+				dirty := true
+			when 'q', 'Q' then
+			end
+			if dirty then
+				working_function_library.extend (f)
+			end
 		end
 
 	remove_indicator is

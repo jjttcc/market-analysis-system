@@ -13,6 +13,29 @@ indexing
 class BASIC_NUMERIC_COMMAND inherit
 
 	NUMERIC_COMMAND
+		redefine
+			root_suppliers
+		end
+
+feature -- Access
+
+	root_suppliers: SET [ANY] is
+		local
+			tuples: expanded MARKET_TUPLES
+		do
+			create {LINKED_SET [ANY]} Result.make
+			-- This class actually depends on a MARKET_TUPLE, but a
+			-- MARKET_TUPLE is not instantiable and a SIMPLE_TUPLE
+			-- conforms to MARKET_TUPLE with respect to the
+			-- intended semantics of this feature.
+			Result.extend (tuples.simple_tuple)
+		ensure
+			not_void: Result /= Void
+		end
+
+feature -- Status report
+
+	arg_mandatory: BOOLEAN is true
 
 feature -- Basic operations
 
@@ -22,9 +45,5 @@ feature -- Basic operations
 		do
 			value := arg.value
 		end
-
-feature -- Status report
-
-	arg_mandatory: BOOLEAN is true
 
 end -- class BASIC_NUMERIC_COMMAND
