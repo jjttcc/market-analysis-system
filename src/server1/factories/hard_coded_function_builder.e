@@ -162,6 +162,7 @@ feature {NONE} -- Hard-coded market function building procedures
 				!DIVISION!operator.make (close, close_minus_n)
 			end
 			!!Result.make (f, operator, n)
+			-- For momentum, effective_n needs to be 1 larger than n.
 			Result.set_effective_offset (1)
 			Result.set_name (name)
 		ensure
