@@ -60,6 +60,29 @@ feature -- Element change
 				working_directory /= Void
 		end
 
+feature -- Basic operations
+
+	execute (arg: ANY) is
+		local
+			env: expanded EXECUTION_ENVIRONMENT
+			previous_directory: STRING
+		do
+			if working_directory /= Void then
+				previous_directory := env.current_working_directory
+				env.change_working_directory (working_directory)
+			end
+			do_execute (command_string)
+			if working_directory /= Void then
+				env.change_working_directory (previous_directory)
+			end
+		end
+
+feature {NONE} -- Implementation
+
+	do_execute (arg: ANY) is
+		deferred
+		end
+
 invariant
 
 end

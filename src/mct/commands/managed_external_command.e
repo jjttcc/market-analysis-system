@@ -50,7 +50,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	execute (window: SESSION_WINDOW) is
+	do_execute (window: SESSION_WINDOW) is
 		local
 			args: ARRAY [STRING]
 		do
@@ -81,22 +81,15 @@ feature {NONE} -- Implementation
 			args_exist: prog /= Void and args /= Void and window /= Void
 		local
 			env: expanded EXECUTION_ENVIRONMENT
-			previous_directory: STRING
 		do
-			if working_directory /= Void then
-				previous_directory := env.current_working_directory
-				env.change_working_directory (working_directory)
-			end
 			if debugging_on then
 				print ("executing: " + program + " " + field_concatenation (
-					args.linear_representation, " ") + "%N")
+					args.linear_representation, " ") + "%N(current " +
+					"directory: " + env.current_working_directory + ")%N")
 			end
 			create last_process.make_capture_output (prog, args)
 			add_process (last_process, window.host_name, window.port_number)
 			last_process.execute
-			if working_directory /= Void then
-				env.change_working_directory (previous_directory)
-			end
 		ensure
 			process_managed: has_process (window.host_name, window.port_number)
 		end

@@ -20,22 +20,15 @@ feature -- Status report
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	do_execute (arg: ANY) is
 		local
 			env: expanded EXECUTION_ENVIRONMENT
-			previous_directory: STRING
 		do
-			if working_directory /= Void then
-				previous_directory := env.current_working_directory
-				env.change_working_directory (working_directory)
-			end
 			if debugging_on then
-				print ("executing: " + command_string + "%N")
+				print ("executing: " + command_string + "%N(current " +
+				"directory: " + env.current_working_directory + ")%N")
 			end
 			env.launch (command_string)
-			if working_directory /= Void then
-				env.change_working_directory (previous_directory)
-			end
 		end
 
 end
