@@ -65,31 +65,28 @@ feature -- Initialization
 	make_io (input_dev, output_dev: IO_MEDIUM; fb: FACTORY_BUILDER) is
 		require
 			not_void: input_dev /= Void and output_dev /= Void and fb /= Void
+local l: list [time_period_type]
 		do
 			mai_initialize (fb)
 			initialize
 			set_input_device (input_dev)
 			set_output_device (output_dev)
+from l := period_types_in_order l.start until l.exhausted loop
+ 	print_list (<<l.item.name, "%N">>); l.forth
+ end
 		ensure
 			iodev_set: input_device = input_dev and output_device = output_dev
 		end
 
 feature -- Access
 
-	current_tradable: TRADABLE [BASIC_MARKET_TUPLE] is
-		do
-			if daily_market_list.empty then
-				Result := Void
-			else
-				Result := daily_market_list.item
-				if daily_market_list.fatal_error then
-					raise ("Data retrieval error")
-				end
-			end
-		end
+	current_tradable: TRADABLE [BASIC_MARKET_TUPLE]
 
 	current_period_type: TIME_PERIOD_TYPE
 			-- Current data period type to be processed
+
+	available_period_types: ARRAYED_LIST [STRING]
+			-- List of all period types available for selection
 
 	event_generator_builder: CL_BASED_MEG_EDITING_INTERFACE
 
@@ -161,13 +158,11 @@ feature -- Basic operations
 				when 'r', 'R' then
 					registrant_menu
 				when 'a', 'A' then
-					save_mklist_position
 					-- Important - update the coordinator with the current
 					-- active event generators:
 					event_coordinator.set_event_generators (
 						active_event_generators)
 					event_coordinator.execute
-					restore_mklist_position
 				when 'd', 'D' then
 					mkt_analysis_set_date_menu
 				when 'x', 'X' then
@@ -463,7 +458,7 @@ feature {NONE} -- Implementation
 			finished: BOOLEAN
 			indicator: MARKET_FUNCTION
 		do
-			if daily_market_list.empty then
+			if market_list_handler.empty then
 				print ("There are currently no markets to view.%N")
 				finished := True
 			end
@@ -565,14 +560,15 @@ feature {NONE} -- Implementation
 
 	select_market is
 			-- Allow the user to select the current market so that
-			-- daily_market_list.item is the selected market.
+			-- market_list_handler.item (current_period_type) is the
+			-- selected market.
 		local
 			symbol: STRING
 			symbols: LIST [STRING]
 		do
-			if not daily_market_list.empty then
+			if not market_list_handler.empty then
 				from
-					symbols := daily_market_list.symbols
+					symbols := market_list_handler.symbols
 				until
 					symbol /= Void
 				loop
@@ -590,12 +586,10 @@ feature {NONE} -- Implementation
 					end
 				end
 				check
-					symbol_in_list: daily_market_list.symbols.has (symbol)
+					symbol_in_list: market_list_handler.symbols.has (symbol)
 				end
-				daily_market_list.search_by_symbol (symbol)
-				-- current_tradable will be set to the current item of
-				-- daily_market_list (which, because of the above call,
-				-- corresponds to file `symbol').
+				current_tradable := market_list_handler.tradable (symbol,
+					current_period_type)
 				-- Update the current_tradable's target period type, if needed.
 				if
 					current_tradable.target_period_type /= current_period_type
@@ -614,12 +608,13 @@ feature {NONE} -- Implementation
 		local
 			i: INTEGER
 			types: ARRAY [STRING]
+			per_type_choice: TIME_PERIOD_TYPE
+			t: TRADABLE [BASIC_MARKET_TUPLE]
 		do
-			if not daily_market_list.empty then
+			if not market_list_handler.empty then
 				from
 					i := 1
-					types := current_tradable.tuple_list_names
-types := market_list_handler.period_types (current_tradable.symbol)
+					types := available_period_types
 				until
 					i > types.count
 				loop
@@ -637,11 +632,25 @@ types := market_list_handler.period_types (current_tradable.symbol)
 					print (eom)
 					read_integer
 				end
-				current_period_type := period_types @ (types @ last_integer)
-				print_list (<<"Data period type set to ",
-							current_period_type.name, "%N">>)
-						current_tradable.set_target_period_type (
-							current_period_type)
+				per_type_choice := period_types @ (types @ last_integer)
+				t := current_tradable
+				if
+					not t.valid_period_type (per_type_choice)
+				then
+					t := market_list_handler.tradable (t.symbol,
+						per_type_choice)
+				end
+				if t = Void then
+					print_list (<<"The chosen period type of ",
+						per_type_choice.name, " is not valid.%N">>)
+				else
+					current_period_type := per_type_choice
+					current_tradable := t
+					print_list (<<"Data period type set to ",
+								current_period_type.name, "%N">>)
+					current_tradable.set_target_period_type (
+						current_period_type)
+				end
 			else
 				print ("There are no markets to select a period type for.%N")
 			end
@@ -726,38 +735,37 @@ feature {NONE} -- Implementation - utilities
 			end
 		end
 
-	save_mklist_position is
-			-- Save the current position of `daily_market_list' for
-			-- later restoring.
-		do
-			saved_mklist_index := daily_market_list.index
-		end
-
-	restore_mklist_position is
-			-- Restore `daily_market_list' cursor to last saved position
-		require
-			saved_mklist_index > 0
-		do
-			from
-				if saved_mklist_index < daily_market_list.index then
-					daily_market_list.start
-				end
-			until
-				daily_market_list.index = saved_mklist_index
-			loop
-				daily_market_list.forth
-			end
-		end
-
 	initialize is
 		do
 			current_period_type := period_types @ (period_type_names @ Daily)
 			create event_generator_builder.make
 			create function_builder.make
-			-- For now, only use non-intraday data.
---!!!daily_market_list := market_list_handler.daily_market_list
+			initialize_current_tradable
+			if not market_list_handler.exhausted then
+				available_period_types := market_list_handler.period_types (
+					market_list_handler.current_symbol)
+			end
 		ensure
 			curr_period_not_void: current_period_type /= Void
+		end
+
+	initialize_current_tradable is
+		require
+			cpt_set: current_period_type /= Void
+		do
+			if market_list_handler.empty then
+				current_tradable := Void
+			else
+				market_list_handler.start
+				current_tradable :=
+					market_list_handler.item (current_period_type)
+				if market_list_handler.error_occurred then
+					raise ("Data retrieval error")
+				end
+			end
+		ensure
+			mlh_at_first: not market_list_handler.empty implies
+				market_list_handler.isfirst
 		end
 
 	product_info: STRING is
@@ -780,7 +788,5 @@ feature {NONE} -- Implementation - attributes
 			-- Has the user requested to terminate the server?
 
 	saved_mklist_index: INTEGER
-
-	daily_market_list: TRADABLE_LIST
 
 end -- class MAIN_CL_INTERFACE
