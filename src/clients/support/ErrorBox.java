@@ -9,7 +9,7 @@ import java_library.support.*;
 public class ErrorBox extends Dialog {
 	public ErrorBox(String title, String msg, Frame parent) {
 		super(parent);
-//!!!!!!!!!!!!!!!!!!!:		make_contents(title, msg);
+		make_contents(title, msg);
 	}
 
 	// Specify that 'System.exit(exit_val)' is to be called when the
