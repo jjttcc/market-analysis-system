@@ -11,13 +11,6 @@ class TEST_USER_INTERFACE inherit
 			all
 		end
 
-	PRINTING
-		export {NONE}
-			all
-				{ANY}
-			set_output_field_separator, set_date_field_separator
-		end
-
 	MEM_INFO
 		export {NONE}
 			all
@@ -33,9 +26,10 @@ class TEST_USER_INTERFACE inherit
 			all
 		end
 
-	SINGLE_MATH
-		export {NONE}
-			all
+	UI_UTILITIES
+		export
+			{NONE} all
+			{ANY} set_output_field_separator, set_date_field_separator
 		end
 
 feature -- Access
@@ -55,6 +49,8 @@ feature -- Access
 
 	current_period_type: TIME_PERIOD_TYPE
 			-- Current data period type to be processed
+
+	event_generator_builder: MARKET_EVENT_GENERATOR_BUILDER
 
 feature -- Status setting
 
@@ -99,10 +95,11 @@ feature {NONE}
 			loop
 				print_list (<<"Select action:%N", "     Select market (s) ",
 							"View data (v) Edit indicators (e)",
+							"%N     Edit market analyzers (m)",
 							"%N     Run market analysis (a) ",
 							"Set date for market analysis (d)%N",
 							"     Edit event registrants (r) ",
-							"Memory usage (m) Exit (x) Help (h) ">>)
+							"Memory usage (u) Exit (x) Help (h) ">>)
 				inspect
 					selected_character
 				when 's', 'S' then
@@ -110,10 +107,12 @@ feature {NONE}
 				when 'v', 'V' then
 					view_menu
 				when 'e', 'E' then
-					edit_menu
+					main_edit_indicator_menu
+				when 'm', 'M' then
+					event_generator_builder.edit_event_generator_menu
 				when 'r', 'R' then
 					registrant_menu
-				when 'm', 'M' then
+				when 'u', 'U' then
 					display_memory_values
 				when 'a', 'A' then
 					save_mklist_position
@@ -145,13 +144,14 @@ feature {NONE}
 			termination_cleanup
 		end
 
-	edit_menu is
+	main_edit_indicator_menu is
+			-- Menu for editing technical indicators (market functions)
 		local
 			finished: BOOLEAN
 		do
 			from
 			until
-				finished
+				finished or end_program
 			loop
 				print_list (<<"Select action:",
 					"%N     Edit market-data indicators (m) %
@@ -162,7 +162,7 @@ feature {NONE}
 				when 'm', 'M' then
 					edit_indicator_menu (current_tradable.indicators)
 				when 'a', 'A' then
-					edit_event_generator_menu
+					edit_event_generator_indicator_menu
 				when 'x', 'X' then
 					end_program := true
 				when 'h', 'H' then
@@ -179,31 +179,31 @@ feature {NONE}
 			end
 		end
 
-	edit_event_generator_menu is
+	edit_event_generator_indicator_menu is
+			-- Menu for editing market functions owned by event generators
 		local
 			analyzer: MARKET_EVENT_GENERATOR
 			analyzers: LIST [MARKET_EVENT_GENERATOR]
 			finished: BOOLEAN
-			i: INTEGER
+			names: ARRAYED_LIST [STRING]
 		do
 			from
 				analyzers := market_event_generation_library
+				!!names.make (analyzers.count)
+				from
+					analyzers.start
+				until
+					analyzers.exhausted
+				loop
+					names.extend (analyzers.item.event_type.name)
+					analyzers.forth
+				end
 			until
 				finished
 			loop
 				print_list (<<"Select a market analyzer to edit ",
 							" (0 to end):%N">>)
-				from
-					i := 1
-					analyzers.start
-				until
-					analyzers.after
-				loop
-					print_list (<<i, ") ", analyzers.item.event_type.name,
-								"%N">>)
-					analyzers.forth
-					i := i + 1
-				end
+				print_names_in_1_column (names)
 				read_integer
 				if
 					last_integer <= -1 or
@@ -221,34 +221,34 @@ feature {NONE}
 		end
 
 	edit_indicator_menu (indicators: LIST [MARKET_FUNCTION]) is
+			-- Menu allowing user to select and edit an element
+			-- of `indicators'
 		local
 			indicator: MARKET_FUNCTION
 			finished: BOOLEAN
 			parameter: FUNCTION_PARAMETER
 			parameters: LIST [FUNCTION_PARAMETER]
-			i: INTEGER
+			names: ARRAYED_LIST [STRING]
 		do
 			from
 				print ("Select indicator to edit%N")
 				indicator := indicator_selection (indicators)
 				parameters := indicator.parameters
+				!!names.make (parameters.count)
+				from
+					parameters.start
+				until
+					parameters.exhausted
+				loop
+					names.extend (parameters.item.function.name)
+					parameters.forth
+				end
 			until
 				finished
 			loop
 				print_list (<<"Select a parameter for ", indicator.name,
 							" (0 to end):%N">>)
-				from
-					i := 1
-					parameters.start
-				until
-					parameters.after
-				loop
-					print_list (<<i, ") ", parameters.item.function.name,
-								" - value: ", parameters.item.current_value,
-								"%N">>)
-					parameters.forth
-					i := i + 1
-				end
+				print_names_in_1_column (names)
 				read_integer
 				if
 					last_integer <= -1 or
@@ -266,6 +266,8 @@ feature {NONE}
 		end
 
 	registrant_menu is
+			-- Menu for adding, removing, editing, and viewing event
+			-- registrants
 		local
 			finished: BOOLEAN
 			registrar: EVENT_REGISTRATION
@@ -308,6 +310,7 @@ feature {NONE}
 
 
 	view_menu is
+			-- Menu for viewing market and market function data
 		local
 			finished: BOOLEAN
 			indicator: MARKET_FUNCTION
@@ -504,6 +507,7 @@ feature {NONE}
 		end
 
 	display_memory_values is
+			-- Display free, used, etc. memory.
 		do
 			update (Total_memory)
 			print_list (<<total, " bytes free%N", used + overhead,
@@ -512,6 +516,7 @@ feature {NONE}
 		end
 
 	view_indicator_menu (indicator: MARKET_FUNCTION) is
+			-- Menu for viewing market function data
 		local
 			finished: BOOLEAN
 		do
@@ -552,6 +557,8 @@ feature {NONE}
 		end
 
 	select_market is
+			-- Allow the user to select the current market so that
+			-- market_list.item is the selected market.
 		local
 			fname: STRING
 		do
@@ -559,7 +566,7 @@ feature {NONE}
 			until
 				fname /= Void
 			loop
-				print_names (input_file_names)
+				print_names_in_4_columns (input_file_names)
 				read_integer
 				if
 					last_integer <= 0 or
@@ -584,18 +591,12 @@ feature {NONE}
 			-- Obtain selection for current_period_type from user and set
 			-- the current tradable's target_period_type to it.
 		local
-			i: INTEGER
 			types: ARRAY [STRING]
+			names: ARRAYED_LIST [STRING]
 		do
-			from
-				i := 1
-				types := current_tradable.tuple_list_names
-			until
-				i > types.count
-			loop
-				print_list (<<i, ") ", types @ i, "%N">>)
-				i := i + 1
-			end
+			!!names.make (current_tradable.tuple_list_names.count)
+			names.fill (current_tradable.tuple_list_names)
+			print_names_in_1_column (names)
 			from
 				read_integer
 			until
@@ -618,22 +619,22 @@ feature {NONE}
 		require
 			not_trdble_empty: not current_tradable.indicators.empty
 		local
-			i: INTEGER
+			names: ARRAYED_LIST [STRING]
 		do
 			from
+				!!names.make (indicators.count)
+				from
+					indicators.start
+				until
+					indicators.exhausted
+				loop
+					names.extend (indicators.item.name)
+					indicators.forth
+				end
 			until
 				Result /= Void
 			loop
-				from
-					i := 1
-					indicators.start
-				until
-					indicators.after
-				loop
-					print_list (<<i, ") ", indicators.item.name, "%N">>)
-					indicators.forth
-					i := i + 1
-				end
+				print_names_in_1_column (names)
 				read_integer
 				if
 					last_integer <= 0 or
@@ -648,6 +649,7 @@ feature {NONE}
 		end
 
 	edit_parameter (p: FUNCTION_PARAMETER) is
+			-- Allow the user to change the value of a function parameter.
 		do
 			print_list (<<"The current value for ", p.function.name, " is ",
 						p.current_value, " - new value? ">>)
@@ -664,92 +666,6 @@ feature {NONE}
 		end
 
 feature {NONE}
-
-	selected_character: CHARACTER is
-			-- Character selected by user
-		do
-			from
-				Result := '%U'
-			until
-				Result /= '%U'
-			loop
-				read_line
-				if laststring.count > 0 then
-					Result := laststring @ 1
-				end
-			end
-		end
-
-	spaces (i: INTEGER): STRING is
-			-- `i' spaces
-		do
-			!!Result.make (i)
-			Result.fill_blank
-		end
-
-	print_names (names: LIST [STRING]) is
-			-- Print `names' to the screen in 4 columns.
-		local
-			cols, width, interval, i, end_index: INTEGER
-		do
-			cols := 4
-			width := 76
-			interval := (names.count + cols - 1) // cols
-			end_index := interval * cols
-			i := 1
-			if names.count >= cols then
-				from
-				until
-					i = interval + 1
-				loop
-					print_list (<<i, ") ",
-						names @ i,
-						spaces ((width / cols - (floor (log10 (i)) + 3 +
-							names.i_th(i).count)).ceiling),
-						i + interval, ") ", names @ (i + interval),
-						spaces ((width / cols -
-							(floor (log10 (i + interval)) + 3 +
-								names.i_th(i + interval).count)).ceiling),
-						i + interval * 2, ") ", names @ (i + interval * 2)>>)
-					if i + interval * 3 <= names.count then
-						print_list (<<spaces ((width / cols -
-							(floor (log10 (i + interval * 2)) + 3 +
-								names.i_th(i + interval * 2).count)).ceiling),
-						i + interval * 3, ") ", names @ (i + interval * 3),
-						"%N">>)
-					else
-						print ("%N")
-					end
-					i := i + 1
-				end
-			else
-				if i <= names.count then
-					print_list (<<i, ") ",
-						names @ i,
-						spaces ((width / cols - (floor (log10 (i)) + 3 +
-							names.i_th(i).count)).ceiling)>>)
-				end
-				if i + interval <= names.count then
-					print_list (<<i + interval, ") ", names @ (i + interval),
-						spaces ((width / cols -
-							(floor (log10 (i + interval)) + 3 +
-								names.i_th(i + interval).count)).ceiling)>>)
-				end
-				if i + interval * 2 <= names.count then
-					print_list (<<i + interval * 2, ") ",
-						names @ (i + interval * 2),
-						spaces ((width / cols -
-							(floor (log10 (i + interval * 2)) + 3 +
-								names.i_th(i + interval *
-								2).count)).ceiling)>>)
-				end
-				if i + interval * 3 <= names.count then
-						print_list (<<i + interval * 3, ") ",
-							names @ (i + interval * 3), "%N">>)
-				end
-				print ("%N")
-			end
-		end
 
 	save_mklist_position is
 			-- Save the current position of `market_list' for later restoring.
@@ -780,6 +696,7 @@ feature {NONE}
 			market_list := factory_builder.market_list
 			input_file_names := factory_builder.input_file_names
 			!!help.make
+			!!event_generator_builder
 		ensure
 			curr_period_not_void: current_period_type /= Void
 			market_list_not_void: market_list /= Void
