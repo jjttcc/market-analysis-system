@@ -54,7 +54,7 @@ feature {NONE} -- Implementation
 			else
 				Result := ""
 			end
-print ("Spec body: '" + Result + "'%N")
+--print ("Spec body: '" + Result + "'%N")
 		end
 
 	spec_file: PLAIN_TEXT_FILE is
