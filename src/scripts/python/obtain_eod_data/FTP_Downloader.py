@@ -44,5 +44,5 @@ class FTP_Downloader:
 			# it's a fatal error.
 			#if find(sys.exc_value, 'No such file or directory') == -1:
 			#	self.fatal = 1
-			self.error_message = "ftp operation failed:\n" + sys.exc_info()[1]
+			self.error_message = 'ftp operation failed:\n' + sys.exc_info()[1]
 			if file_name != None: os.unlink(file_name)
