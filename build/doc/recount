@@ -1,5 +1,6 @@
 #!/bin/bash
-# Recount the build_release_algorithm numbering.
+# Recount the numbered items in a text document where the numbering has
+# the pattern: /^[0-9]+/
 
 awk '/^[0-9]/ {
 	++number

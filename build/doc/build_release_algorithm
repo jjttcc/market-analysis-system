@@ -12,48 +12,47 @@ Go through the steps from below needed to test the Linux and Windows
 
 Final Steps:
 
-1.  On Linux, make sure all files in the cvs tree are checked in.
-2.  Make sure the cvs tree is completely updated on Linux.
+1.  On Linux and Windows, make sure all files in the cvs tree are checked in.
+2.  Make sure the cvs tree is completely updated on Linux and Windows.
 3.  Run build_linux_mas on Linux to build the Linux executables.
-4.  Make sure the cvs tree is completely updated on Windows.
-5.  Run build_windows_mas on the Windows machine and copy the resulting
+4.  Run build_windows_mas on the Windows machine and copy the resulting
     executables (from .../finance/lib/binaries/windows) to the equivalent
     location on the Linux machine.
-6.  Do a bit of testing on the built executables to catch any remaining
+5.  Do a bit of testing on the built executables to catch any remaining
     problems.  (Recommended, but not required.)
-7.  Run make_docs in the doc directory.
-8.  Run make_chart_gui to freshly compile all the java files for the
+6.  Run make_docs in the doc directory.
+7.  Run make_chart_gui to freshly compile all the java files for the
     charting GUI and put them into a jar file.
-9.  Make sure the current release directory is empty and run make_release.
-10. If any problems occurred during the make_release run, fix them and
+8.  Make sure the current release directory is empty and run make_release.
+9.  If any problems occurred during the make_release run, fix them and
     go back to step 1.
-11. Do a test install of mas_linux*.tar.gz and make sure it installs
+10. Do a test install of mas_linux*.tar.gz and make sure it installs
     correctly.
-12. Run build_rpm to make the mas rpm file and if any problems occur that
+11. Run build_rpm to make the mas rpm file and if any problems occur that
     require it, go back to a previous step.
-13. Make sure the latest version of the indicators_persist and
+12. Make sure the latest version of the indicators_persist and
     generators_persist files (in build/config) are up to date (by running
     make_indicators or by copying these files after the final Linux test
     install) and make sure the latest version is checked into cvs.
     And update the cvs work directory on the Windows machine so that these
     files are up to date there.
-14. On the windows machine, run prepare_windows_setup to copy the tar file
+13. On the windows machine, run prepare_windows_setup to copy the tar file
     of the windows release over to the windows machine and extract it into
     the source directory for the inno setup process.
-15. Run Inno config on the latest inno_config iss file using the source
+14. Run Inno config on the latest inno_config iss file using the source
     files set up by prepare_windows_setup.
-16. If any problems occurred during step 10. or 11. that require it (e.g.,
+15. If any problems occurred during step 10. or 11. that require it (e.g.,
     a CVS-ified file was changed and checked in), go back to step 1.
-17. Run a test install of the Windows setup-mas* exe file on Windows and
+16. Run a test install of the Windows setup-mas* exe file on Windows and
     of the mas-*.rpm on Linux.  Fix any problems that come up and, if
     necessary, go back to a previous step.
     NOTE: rpm runs "strip -R .comment -R .note" on the executables, so they
     are not going to be the same as the ones used to build the rpm package.
-18. Do a cvs tag, using the current release number as a label.
-19. Create a new release-announcement file, perform any needed updates for
+17. Do a cvs tag, using the current release number as a label.
+18. Create a new release-announcement file, perform any needed updates for
     the new release on published files, such as the files accessible on
     sf.net.  Do any needed backups.
-20. Put the files for the new release, from the current release directory,
+19. Put the files for the new release, from the current release directory,
     onto the download section on sourceforge.  Post announcements to
     sourceforge and the appropriate newsgroups - comp.os.linux.announce,
     misc.invest.*, the windows groups, etc.
