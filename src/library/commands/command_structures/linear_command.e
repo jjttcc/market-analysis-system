@@ -24,6 +24,8 @@ feature -- Initialization
 	initialize (a: LINEAR_ANALYZER) is
 		do
 			set_target (a.target)
+		ensure then
+			target_set: target = a.target
 		end
 
 feature -- Basic operations
