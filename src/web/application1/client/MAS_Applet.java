@@ -11,34 +11,37 @@ import mas_gui.*;
 import support.IO_URL_Connection;
 import support.Configuration;
 import support.ErrorBox;
+import support.Tokenizer;
+import support.SelfContainedConfiguration;
 
 // Test applet that communicates with the servlet via serialization
 public class MAS_Applet extends Applet {
 
 	public void init() {
 		log("init: Starting ...");
-		log("Compiled at Mon Feb 17 23:59:50 MST 2003");
+		log("Compiled at Tue Feb 18 15:27:12 MST 2003");
 		try {
-			Configuration.set_ignore_termination(true);
-			StartupOptions options = new AppletOptions();
 			log("init: A");
-			initialize_server_address();
-			// Can't read files from an applet.
-			Configuration.set_use_config_file(false);
-			log("init: C");
-			DataSetBuilder data_builder =
-				new DataSetBuilder(connection(), options);
-			log("init: D");
-			if (data_builder.login_failed()) {
-				if (data_builder.server_response() != null) {
-					report_error(data_builder.server_response());
+			initialize_configuration();
+			if (initialization_succeeded) {
+				StartupOptions options = new AppletOptions();
+				initialize_server_address();
+				// Can't read files from an applet.
+				log("init: C");
+				DataSetBuilder data_builder =
+					new DataSetBuilder(connection(), options);
+				log("init: D");
+				if (data_builder.login_failed()) {
+					if (data_builder.server_response() != null) {
+						report_error(data_builder.server_response());
+					} else {
+						report_error("Login to the server failed");
+					}
 				} else {
-					report_error("Login to the server failed");
+					Chart chart = new Chart(data_builder, null, options);
 				}
-			} else {
-				Chart chart = new Chart(data_builder, null, options);
+				log("init: E");
 			}
-			log("init: E");
 		} catch (Exception e) {
 			log("Login failed: " + e.toString());
 			e.printStackTrace();
@@ -46,6 +49,20 @@ public class MAS_Applet extends Applet {
 			destroy();
 		}
 		log("init: Exiting ...");
+	}
+
+// Implementation - initialization
+
+	// Postcondition: host_name != null && server_address != null && port > 0
+	private void initialize_server_address() throws Exception {
+		URL host_url = getCodeBase();
+		host_name = host_url.getHost();
+		port = host_url.getPort();
+		if (port == -1) {
+			port = 80;
+		}
+		server_address = "http://" + host_name + ":" + port + servlet_path;
+		assert host_name != null && server_address != null && port > 0;
 	}
 
 	private Connection connection() throws Exception {
@@ -64,18 +81,20 @@ public class MAS_Applet extends Applet {
 		return result;
 	}
 
-// Implementation - initialization
-
-	// Postcondition: host_name != null && server_address != null && port > 0
-	private void initialize_server_address() throws Exception {
-		URL host_url = getCodeBase();
-		host_name = host_url.getHost();
-		port = host_url.getPort();
-		if (port == -1) {
-			port = 80;
+	private void initialize_configuration() {
+		initialization_succeeded = false;
+System.out.println("initialize_configuration called");
+		try {
+			Configuration.set_input_source(new Tokenizer(new StringReader(
+				SelfContainedConfiguration.contents()),
+				"configuration settings"));
+			Configuration.set_ignore_termination(true);
+			initialization_succeeded = true;
+System.out.println("initialize_configuration succeeded");
+		} catch (IOException e) {
+			report_error("Initialization failed: " + e);
+System.out.println("initialize_configuration failed");
 		}
-		server_address = "http://" + host_name + ":" + port + servlet_path;
-		assert host_name != null && server_address != null && port > 0;
 	}
 
 // Implementation - utilities
@@ -102,4 +121,5 @@ public class MAS_Applet extends Applet {
 	//!!!!Needs to be made configurable:
 	private String servlet_path = "/mas/mas";
 	private String server_address = null;
+	private boolean initialization_succeeded;
 }

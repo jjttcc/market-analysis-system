@@ -14,22 +14,24 @@ public class Configuration implements NetworkProtocol {
 	// Graph styles
 	public final static int Candle_graph = 1, Regular_graph = 2;
 
-	// Specify whether the configuration file is to be used.
-	public static void set_use_config_file(boolean value) {
-		_use_config_file = value;
-	}
-
-	// Is the configuration file to be used?  (Defaults to true.)
-	public static boolean use_config_file(boolean value) {
-		return _use_config_file;
+	// Set the input source to be used for configuration input.
+	public static void set_input_source(Tokenizer insrc) {
+		input_source = insrc;
 	}
 
 	// Should calls to 'terminate' be ignored?  (Defaults to false.)
 	public static void set_ignore_termination(boolean value) {
-		ignore_termination = value;
+		ignore_termination_ = value;
 	}
+
+	// Should a call to 'terminate' be ignored?
+	public static boolean ignore_termination() {
+		return ignore_termination_;
+	}
+
+	// If not ignore_termination(), terminate the process.
 	public static void terminate(int status) {
-		if (! ignore_termination) {
+		if (! ignore_termination_) {
 			System.exit(status);
 		}
 	}
@@ -166,14 +168,14 @@ public class Configuration implements NetworkProtocol {
 	// The singleton instance
 	public static Configuration instance() {
 		if (_instance == null) {
-			_instance = new Configuration();
+			_instance = new Configuration(input_source);
 		}
 		return _instance;
 	}
 
 // Implementation
 
-	protected Configuration() {
+	protected Configuration(Tokenizer in_source) {
 		start_date_settings = new Vector();
 		end_date_settings = new Vector();
 		_upper_indicators = new Hashtable();
@@ -185,64 +187,60 @@ public class Configuration implements NetworkProtocol {
 		indicator_groups = new IndicatorGroups();
 		main_indicator_group = new IndicatorGroup();
 		main_indicator_group.add_indicator(IndicatorGroups.Maingroup);
-		load_settings(configuration_file);
+		load_settings(in_source);
 		indicator_groups.add_group(main_indicator_group);
 	}
 
-	private void load_settings(String fname) {
-		//!!!May need to make this more flexible - e.g., use a
-		//settings-source abstraction to read the configuration from
-		//instead of a file.
-		if (_use_config_file) {
-			String s;
-			File f = new File(fname);
-			if (! f.exists()) {
-				//Default settings
-				DateSetting ds = new DateSetting("1998/05/01",
-					daily_period_type);
-				start_date_settings.addElement(ds);
-				ds = new DateSetting("now", daily_period_type);
-				end_date_settings.addElement(ds);
+	private void load_settings(Tokenizer input) {
+		String s;
+System.out.println("load_settings: A");
+		if (input == null) {
+System.out.println("load_settings: B");
+			// No input source - use default settings.
+			DateSetting ds = new DateSetting("1998/05/01",
+				daily_period_type);
+			start_date_settings.addElement(ds);
+			ds = new DateSetting("now", daily_period_type);
+			end_date_settings.addElement(ds);
+System.out.println("load_settings: C");
+		} else {
+System.out.println("load_settings: D");
+			try {
+				input.tokenize("\n");
+			} catch (IOException e) {
+				System.err.println("I/O error occurred while " +
+					"reading " + input.description() + ": " + e);
+				terminate(-1);
 			}
-			else {
-				FileReaderUtilities file_util = null;
-				try {
-					file_util = new FileReaderUtilities(fname);
-					file_util.tokenize("\n");
+System.out.println("load_settings: E");
+			while (! input.exhausted()) {
+				StringTokenizer t =
+					new StringTokenizer(input.item(), "\t");
+				s = t.nextToken();
+				if (s.charAt(0) == '#') {	// skip comment line
+				} else if (s.equals(Start_date)) {
+					add_date(t, true, input.description());
+				} else if (s.equals(End_date)) {
+					add_date(t, false, input.description());
+				} else if (s.equals(Upper_indicator)) {
+					configure_indicator(t, true);
+				} else if (s.equals(Lower_indicator)) {
+					configure_indicator(t, false);
+				} else if (s.equals(Horiz_indicator_line) ||
+							s.equals(Vert_indicator_line)) {
+					add_indicator_line(s, t);
+				} else if (s.endsWith(Color_tag)) {
+					set_color(s, t);
+				} else if (s.equals(Main_graph_style)) {
+					set_graph_style(s, t.nextToken());
+				} else if (s.equals(Indicator_group)) {
+					input.forth();
+					create_indicator_group(input);
 				}
-				catch (IOException e) {
-					System.err.println("I/O error occurred while " +
-						"reading file " + fname + ": " + e);
-					terminate(-1);
-				}
-				while (! file_util.exhausted()) {
-					StringTokenizer t =
-						new StringTokenizer(file_util.item(), "\t");
-					s = t.nextToken();
-					if (s.charAt(0) == '#') {	// skip comment line
-					} else if (s.equals(Start_date)) {
-						add_date(t, true);
-					} else if (s.equals(End_date)) {
-						add_date(t, false);
-					} else if (s.equals(Upper_indicator)) {
-						configure_indicator(t, true);
-					} else if (s.equals(Lower_indicator)) {
-						configure_indicator(t, false);
-					} else if (s.equals(Horiz_indicator_line) ||
-								s.equals(Vert_indicator_line)) {
-						add_indicator_line(s, t);
-					} else if (s.endsWith(Color_tag)) {
-						set_color(s, t);
-					} else if (s.equals(Main_graph_style)) {
-						set_graph_style(s, t.nextToken());
-					} else if (s.equals(Indicator_group)) {
-						file_util.forth();
-						create_indicator_group(file_util);
-					}
-					file_util.forth();
-				}
+				input.forth();
 			}
 		}
+System.out.println("load_settings: F");
 	}
 
 	private void add_indicator_line(String line_type, StringTokenizer t) {
@@ -308,13 +306,13 @@ public class Configuration implements NetworkProtocol {
 		}
 	}
 
-	private void add_date(StringTokenizer t, boolean start) {
+	private void add_date(StringTokenizer t, boolean start,
+			String input_description) {
 		String pertype = t.nextToken();
 		String date = t.nextToken();
-		if (date == null || pertype == null)
-		{
-			System.err.println("Missing period type or date" +
-				"in configuration file " + configuration_file);
+		if (date == null || pertype == null) {
+			System.err.println("Missing period type or date in " +
+				input_description);
 			terminate(-1);
 		}
 		DateSetting ds = new DateSetting(date, pertype);
@@ -349,20 +347,20 @@ public class Configuration implements NetworkProtocol {
 		}
 	}
 
-	// Create an indicator group for the indicators listed at f's current
+	// Create an indicator group for the indicators listed at "input"'s current
 	// position and add it to `indicator_groups'.
-	// Precondition: f.item() is the line following the line with the
+	// Precondition: "input".item() is the line following the line with the
 	// Indicator_group token that begins a group definition.
-	private void create_indicator_group(FileReaderUtilities f) {
+	private void create_indicator_group(Tokenizer input) {
 		IndicatorGroup g = new IndicatorGroup();
-		while (! f.exhausted() && !f.item().equals(End_block)) {
-			g.add_indicator(f.item());
-			f.forth();
+		while (! input.exhausted() && !input.item().equals(End_block)) {
+			g.add_indicator(input.item());
+			input.forth();
 		}
 		indicator_groups.add_group(g);
-		if (f.exhausted()) {
+		if (input.exhausted()) {
 			System.err.println("Missing " + End_block + " token in " +
-				"configuration file.");
+				input.description());
 		}
 	}
 
@@ -434,14 +432,12 @@ public class Configuration implements NetworkProtocol {
 		}
 	}
 
-	private static boolean _use_config_file = true;
-	private static boolean ignore_termination = false;
-
+	private static boolean ignore_termination_ = false;
 	private static Configuration _instance;
+	private static Tokenizer input_source;
 
 	private Vector start_date_settings;
 	private Vector end_date_settings;
-	private final String configuration_file = ".ma_clientrc";
 	private Hashtable _upper_indicators;
 	private Hashtable _lower_indicators;
 	private Vector _indicator_order;
@@ -488,8 +484,7 @@ public class Configuration implements NetworkProtocol {
 	private int _main_graph_drawer;
 
 	private class DateSetting {
-		DateSetting(String dt, String period)
-		{
+		DateSetting(String dt, String period) {
 			_date = dt; _time_period = period;
 		}
 

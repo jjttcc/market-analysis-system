@@ -8,6 +8,7 @@ import support.*;
 /** Root class for the stand-alone Market Analysis client process */
 public class MA_Client {
 	public static void main(String[] args) {
+		initialize_configuration();
 		command_line_options = new mas_gui.CommandLineOptions(args);
 		mas_gui.DataSetBuilder data_builder =
 			new mas_gui.DataSetBuilder(connection(), command_line_options);
@@ -36,7 +37,18 @@ public class MA_Client {
 		return result;
 	}
 
+	private static void initialize_configuration() {
+		try {
+			Configuration.set_input_source(new FileReaderUtilities(
+				configuration_file_name));
+		} catch (IOException e) {
+			System.err.println("Failed to open configuration file: " +
+				configuration_file_name);
+		}
+	}
+
 	private static mas_gui.CommandLineOptions command_line_options;
 
 	private static final String chart_filename = ".ma_client_settings";
+	private static final String configuration_file_name = ".ma_clientrc";
 }
