@@ -4,20 +4,33 @@
 Progname=$(basename $0)
 config=/tmp/install_config
 
+cleanup() {
+	rm -f $config
+}
+
 fault() {
 	echo "Programming error encountered: $*" >&2
+	echo "Exiting ..." >&2
+	cleanup
 	exit -2
 }
 
 fatal() {
 	echo "Fatal error encountered: $*" >&2
+	echo "Exiting ..." >&2
+	cleanup
 	exit -1
+}
+
+user_is_administrator() {
+	id="$(id -un)"
+	return $([ "$id" = root -o "$id" = bin ])
 }
 
 # Usage: set_dir dirname "message"
 set_dir() {
 	dir=
-	defaultdir=$HOME/$1
+	defaultdir=$basedir/$1
 	if [ $# -ne 2 ]; then fault "set_dir: wrong number of arguments"; fi
 	echo -e "$2 ($defaultdir): \c" >&2
 	while [ -z "$dir" ]; do
@@ -32,28 +45,33 @@ set_dir() {
 		elif expr "$dir" : "[^/]" >/dev/null 2>&1; then
 			echo -e "Entry must start with / - try again: \c" >&2
 			dir=
-		elif [ -d $dir ]; then
-			echo -e "Use $dir? \c" >&2
-			read answer
-			case "$answer" in
-				y*|Y*) ;;
-				*) dir= ;;
-			esac
-		elif [ -e $dir ]; then
-			echo -e "$dir is not a directory - try again: \c" >&2
-			dir=
-		else
-			echo -e "$dir does not exist - create it? \c" >&2
-			read answer
-			case "$answer" in
-				y*|Y*) mkdir $dir
-					if [ $? -ne 0 ]; then
-						echo -e "Failed to create $dir - try again: \c" >&2
-						dir=
-					fi
-						;;
-				*) dir= ;;
-			esac
+		fi
+		if [ ! -z "$dir" ]; then
+			if [ -d $dir ]; then
+				echo -e "Use $dir? \c" >&2
+				read answer
+				case "$answer" in
+					y*|Y*) ;;
+					*) dir= ;;
+				esac
+			elif [ -e $dir ]; then
+				echo -e "$dir is not a directory - try again: \c" >&2
+				dir=
+			else
+				echo -e "$dir does not exist - create it? \c" >&2
+				read answer
+				case "$answer" in
+					y*|Y*) mkdir -p $dir
+						if [ $? -ne 0 ]; then
+							echo -e "Failed to create $dir - try again: \c" >&2
+							dir=
+						fi
+							;;
+					*) dir=
+						echo -e "$2 ($defaultdir): \c" >&2
+					;;
+				esac
+			fi
 		fi
 		if [ ! -z "$dir" ]; then
 			[ -w $dir -a -x $dir ]
@@ -67,8 +85,12 @@ set_dir() {
 }
 
 config() {
-	dir=
 	>$config
+	if user_is_administrator; then
+		basedir=/opt/mas
+	else
+		basedir=$HOME
+	fi
 	if [ $? -ne 0 ]; then fatal "Cannot create configuration file $config"; fi
 	set_dir bin "Enter the directory for executables" >&2
 	set_dir lib "Enter the directory for library files" >&2
@@ -82,28 +104,20 @@ bindir=$(awk '/bin:/ { print $2}' $config)
 
 if [ ! -e $libdir ]; then mkdir -p $libdir; fi
 if [ $? -ne 0 ]; then
-	echo "$Progname: Failed to create directory $libdir" >&2
-	echo "Exiting ..." >&2
-	exit -1
+	fatal "$Progname: Failed to create directory $libdir" >&2
 fi
 
 if [ ! -d $libdir -o ! -w $libdir ]; then
-	echo "$Progname: Cannot write to target dir $libdir" >&2
-	echo "Exiting ..." >&2
-	exit -1
+	fatal "$Progname: Cannot write to target dir $libdir" >&2
 fi
 
 if [ ! -e $bindir ]; then mkdir -p $bindir; fi
 if [ $? -ne 0 ]; then
-	echo "$Progname: Failed to create directory $bindir" >&2
-	echo "Exiting ..." >&2
-	exit -1
+	fatal "$Progname: Failed to create directory $bindir" >&2
 fi
 
 if [ ! -d $bindir -o ! -w $bindir ]; then
-	echo "$Progname: Cannot write to target dir $bindir" >&2
-	echo "Exiting ..." >&2
-	exit -1
+	fatal "$Progname: Cannot write to target dir $bindir" >&2
 fi
 
 cp bin/* $bindir
@@ -113,4 +127,5 @@ if [ "$result" -eq 0 ]; then
 	result=$?
 fi
 
+cleanup
 exit $result
