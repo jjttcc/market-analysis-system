@@ -1,5 +1,6 @@
 indexing
-	description: "Facilities for excpetion handling"
+	description: "Facilities for exception handling and program termination -%
+	% intended to be used via inheritance"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -11,8 +12,6 @@ deferred class MAS_EXCEPTION inherit
 	EXCEPTIONS
 		export
 			{NONE} all
-		undefine
-			print
 		end
 
 	UNIX_SIGNALS
@@ -21,21 +20,25 @@ deferred class MAS_EXCEPTION inherit
 			catch as catch_signal
 		export
 			{NONE} all
-		undefine
-			print
+		end
+
+	GLOBAL_APPLICATION
+		export
+			{NONE} all
 		end
 
 	GENERAL_UTILITIES
 		export
 			{NONE} all
-		undefine
-			print
 		end
 
 feature -- Access
 
 	Error_exit_status: INTEGER is -1
 			-- Error status for exit
+
+	no_cleanup: BOOLEAN
+			-- Should `termination_cleanup' NOT be called by `exit'?
 
 feature -- Basic operations
 
@@ -58,13 +61,21 @@ feature -- Basic operations
 		end
 
 	exit (status: INTEGER) is
-			-- Exit the server with the specified status
+			-- Exit the server with the specified status.  If `no_cleanup'
+			-- is false, call `termination_cleanup'.
 		do
 			if status /= 0 then
 				io.print ("Aborting the server.%N")
 			else
 				io.print ("Terminating the server.%N")
 			end
+			if not no_cleanup then
+				io.print ("Cleaning up ...%N")
+				termination_cleanup
+			end
+			die (status)
+		rescue
+			-- Make sure that program terminates when an exception occurs.
 			die (status)
 		end
 
