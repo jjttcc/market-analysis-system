@@ -2,7 +2,7 @@
 # Copy the MAS Windows tar file to the inno source directory and untar it
 # in prepration for making an inno setup file.
 
-$Progname=$(basename $0)
+Progname=$(basename $0)
 
 fatal() {
 	if [ ! -z "$*" ]; then
