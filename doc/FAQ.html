@@ -95,6 +95,16 @@ Currently, the only way to add new files is to shut down and restart the
 server.  The capability to add new tradables while the server is
 running is a feature that may be added in the future if there is
 enough demand for it.
+<P><B>
+What are the -d and -i options for?
+<P></B>
+The -d and -i options are intended to be used together.
+When the data is being read from files, it allows the server to figure
+out whether a file holds daily or intraday data.
+For example, if daily data lives in files with the pattern *.daily and
+intraday data in files with the pattern *.5-minute (for 5-minute data
+in this example), you would include the options "-d daily -i 5-minute"
+when you start the server.
 <h3>
 <A name="windows server operation">
 Operating the Server (Windows)
