@@ -114,6 +114,11 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 		return options_;
 	}
 
+	// Does the last received market data contain an open interest field?
+	public boolean open_interest() {
+		return _open_interest;
+	}
+
 	// Send a logout request to the server to end the current session
 	// and, if `exit' is true, exit with `status'.
 	public void logout(boolean exit, int status) {
@@ -132,12 +137,18 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 		connection.send_request(Market_data_request,
 			symbol + Input_field_separator + period_type);
 		if (connection.last_received_message_ID() == OK) {
-			data_parser.parse(connection.result().toString(), main_drawer);
+			String results = connection.result().toString();
+			results = setup_parser_fieldspecs(results);
+			data_parser.parse(results, main_drawer);
 			_last_market_data = data_parser.result();
 			_last_market_data.set_drawer(main_drawer);
 			_last_volume = data_parser.volume_result();
 			if (_last_volume != null) {
 				_last_volume.set_drawer(volume_drawer);
+			}
+			_last_open_interest = data_parser.open_interest_result();
+			if (_last_open_interest != null) {
+				_last_open_interest.set_drawer(open_interest_drawer);
 			}
 		}
 	}
@@ -185,6 +196,11 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 	// Volume data from last market data request
 	public DataSet last_volume() {
 		return _last_volume;
+	}
+
+	// Open interest data from last market data request
+	public DataSet last_open_interest() {
+		return _last_open_interest;
 	}
 
 	// Last requested indicator list
@@ -242,10 +258,12 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 		Configuration c = Configuration.instance();
 		MarketDrawer result;
 
-		switch (c.main_graph_drawer()) {
-			case c.Candle_graph: result = new CandleDrawer(); break;
-			case c.Regular_graph: result = new PriceDrawer(); break;
-			default: result = new PriceDrawer(); break;
+		if (c.main_graph_drawer() == c.Candle_graph) {
+			result = new CandleDrawer();
+		} else if (c.main_graph_drawer() == c.Regular_graph) {
+			result = new PriceDrawer();
+		} else {
+			result = new PriceDrawer();
 		}
 		return result;
 	}
@@ -269,6 +287,27 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 		);
 	}
 
+	// Initialize main_field_specs - Include Parser.Open_interest if
+	// `_open_interest' is true.
+	// Precondition: main_field_specs.length >= 7
+	private void initialize_fieldspecs() {
+		int i = 0;
+		for (int j = 0; j < main_field_specs.length; ++j) {
+			main_field_specs[j] = Parser.Not_set;
+		}
+		main_field_specs[i++] = Parser.Date;
+		if (connection.session_state().open_field()) {
+			main_field_specs[i++] = Parser.Open;
+		}
+		main_field_specs[i++] = Parser.High;
+		main_field_specs[i++] = Parser.Low;
+		main_field_specs[i++] = Parser.Close;
+		main_field_specs[i++] = Parser.Volume;
+		if (_open_interest) {
+			main_field_specs[i++] = Parser.Open_interest;
+		}
+	}
+
 	// Login to the server and initialize fields.
 	// Precondition: connection != null && ! connection.logged_in()
 	// Postcondition: connection.logged_in()
@@ -279,29 +318,52 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 			System.err.println(e);
 			System.exit(1);
 		}
-		int field_specs[] = new int[6];
-		int i = 0;
-		// Hard-code these for now:
-		field_specs[i++] = Parser.Date;
-		if (connection.session_state().open_field()) {
-			field_specs[i++] = Parser.Open;
-		}
-		field_specs[i++] = Parser.High;
-		field_specs[i++] = Parser.Low;
-		field_specs[i++] = Parser.Close;
-		field_specs[i++] = Parser.Volume;
-		data_parser = new Parser(field_specs, Output_record_separator,
+		_open_interest = false;
+		initialize_fieldspecs();
+		data_parser = new Parser(main_field_specs, Output_record_separator,
 									Output_field_separator);
 		// Set up the indicator parser to expect just a date and a float
 		// (close) value.
-		field_specs = new int[2];
-		field_specs[0] = Parser.Date;
-		field_specs[1] = Parser.Close;
-		indicator_parser = new Parser(field_specs, Output_record_separator,
-									Output_field_separator);
+		int indicator_field_specs[] = new int[2];
+		indicator_field_specs[0] = Parser.Date;
+		indicator_field_specs[1] = Parser.Close;
+		indicator_parser = new Parser(indicator_field_specs,
+			Output_record_separator, Output_field_separator);
 		main_drawer = new_main_drawer();
 		volume_drawer = new BarDrawer(main_drawer);
 		data_parser.set_volume_drawer(volume_drawer);
+		open_interest_drawer = new LineDrawer(main_drawer);
+		data_parser.set_open_interest_drawer(open_interest_drawer);
+	}
+
+	// Use `data' to determine whether there is an open-interest field
+	// and, if necessary, set data_parser's field specs accordingly.
+	String setup_parser_fieldspecs(String data) {
+		String result = data;
+		boolean oi = false;
+		String firstrecord = data.substring(0, data.indexOf('\n'));
+		if (firstrecord.length() > 1) {
+			if (firstrecord.substring(0, Open_interest_flag.length()).equals(
+					Open_interest_flag)) {
+				oi = true;
+				result = data.substring(Open_interest_flag.length());
+			}
+		}
+		if (oi) {
+			if (! _open_interest) {
+				_open_interest = true;
+				initialize_fieldspecs();
+				data_parser.set_field_specifications(main_field_specs);
+			}
+		} else {
+			if (_open_interest) {
+				_open_interest = false;
+				initialize_fieldspecs();
+				data_parser.set_field_specifications(main_field_specs);
+			}
+		}
+
+		return result;
 	}
 
 	// markets is shared by all windows
@@ -312,13 +374,19 @@ public class DataSetBuilder implements NetworkProtocol, OptionFlags {
 	private DataSet _last_market_data;
 		// volume result from last market data request
 	private DataSet _last_volume;
+		// open interest result from last market data request
+	private DataSet _last_open_interest;
 		// result of last indicator data request
 	private DataSet _last_indicator_data;
 		// result of last indicator list request
 	private Vector _last_indicator_list;
 	private Parser data_parser;
 	private Parser indicator_parser;
-	private MarketDrawer main_drawer;	// draws tuples in main graph
-	private IndicatorDrawer volume_drawer;	// draws volume tuples
+	private MarketDrawer main_drawer;	// draws data in main graph
+	private IndicatorDrawer volume_drawer;	// draws volume data
+	private IndicatorDrawer open_interest_drawer;	// draws open-interest
 	private MAS_Options options_;	// command-line options
+	private int main_field_specs[] = new int[7];
+	// Does the last received market data contain an open interest field?
+	private boolean _open_interest;
 }
