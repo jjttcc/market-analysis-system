@@ -21,8 +21,6 @@ feature -- Access
 			cursor_valid: not off
 		do
 			if valid_period_type (current_symbol, period_type) then
---!!!:
-print ("TD.item calling tradable with update: " + update.out + "%N")
 				Result := tradable (current_symbol, period_type, update)
 			end
 		ensure
@@ -74,8 +72,6 @@ print ("TD.item calling tradable with update: " + update.out + "%N")
 		local
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 		do
---!!!:
-print ("TD.tuple_list calling tradable" + "%N")
 			t := tradable (symbol, period_type, update)
 			if t /= Void then
 				Result := t.tuple_list (period_type.name)
