@@ -75,7 +75,7 @@ public class TimeDrawer extends Drawer {
 	*/
 	protected void draw_tuples(Graphics g, Rectangle bounds) {
 		int hi, di, i;
-		int hour, day_of_week, old_day_of_week;
+		int hour, day_of_week;
 		final int Draw_all_hour_limit = 16;
 		boolean draw_all_hours;
 		String old_hour_string;
@@ -85,28 +85,20 @@ public class TimeDrawer extends Drawer {
 		String[] times = times();
 		String[] dates = dates();
 
-System.out.println("time drawer - draw tuples was called - times:");
-System.out.println(times);
 		if (times == null || times.length == 0) return;
 
-System.out.println("time drawer.draw tuples A");
 		Hour_y = bounds.y + bounds.height - 15; Hour_x_offset = 10;
 		Day_y = Hour_y;
 		// Determine the first hour in `times'.
 		String hour_string = times[0].substring(0,2);
 		String day_string = dates[0].substring(6,8);
 		hour = Integer.valueOf(hour_string).intValue();
-		day_of_week = week_day_for(dates[0], -1);
+		day_of_week = week_day_for(dates[0]);
 		hi = 0; di = 0;
 		hours[hi] = new IntPair(hour, 0);
 		days[di] = new IntPair(day_of_week, 0);
 		++hi; ++di;
-System.out.println("Added hour " + hours[hi-1].left() + ", " +
-hours[hi-1].right() + " for " + times[0]);
-System.out.println("Added day " + days[di-1].left() + ", " +
-days[di-1].right() + " for " + dates[0]);
 		old_hour_string = hour_string;
-System.out.println("time drawer.draw tuples B");
 		// Map out all hours (from times) and days (from dates) with IntPairs.
 		for (i = 1; i < times.length; ++i) {
 			hour_string = times[i].substring(0,2);
@@ -114,24 +106,15 @@ System.out.println("time drawer.draw tuples B");
 				hour = Integer.valueOf(hour_string).intValue();
 				hours[hi++] = new IntPair(hour, i);
 				old_hour_string = hour_string;
-System.out.println("Added hour " + hours[hi-1].left() + ", " +
-hours[hi-1].right() + " for " + times[i]);
-System.out.println("hi, hln: " + hi + ", " + hours.length);
-System.out.println(hour < hours[hi-2].left());
-System.out.println(hour + ", " + hours[hi-2].left());
 				// If current hour is less than previous hour,
 				// a new day has begun.
 				if (hour < hours[hi-2].left()) {
-					old_day_of_week = day_of_week;
-					day_of_week = week_day_for(dates[i], old_day_of_week);
+					day_of_week = week_day_for(dates[i]);
 					days[di++] = new IntPair(day_of_week, i);
-System.out.println("Added day " + days[di-1].left() + ", " +
-days[di-1].right() + " for " + dates[i]);
 				}
 			}
 		}
 
-System.out.println("time drawer.draw tuples C");
 		if (hours.length > 1 && _x_values.length > 1 &&
 			hours[0] != null && hours[1] != null &&
 			hours[0].right() >= 0 && hours[1].right() >= 0) {
@@ -141,16 +124,10 @@ System.out.println("time drawer.draw tuples C");
 			Hour_x_offset = (int) ((_x_values[hours[1].right()] -
 								_x_values[hours[0].right()]) * .10);
 		}
-System.out.println("time drawer.draw tuples D - Hour_x_offset" + Hour_x_offset);
-System.out.println("time drawer.draw tuples e - hi" + hi);
 		i = 0;
 		draw_all_hours = hi <= Draw_all_hour_limit;
 		// Draw hours.
 		while (i < hi) {
-//Probably not needed!!!?
-//if (hours[i].right() < 0) {
-//	hours[i].set_right(0);
-//}
 			if (drawable_hour(hours, hi, i, draw_all_hours)) {
 				draw_hour(g, bounds, hours[i], _x_values);
 			}
@@ -158,10 +135,6 @@ System.out.println("time drawer.draw tuples e - hi" + hi);
 		}
 		i = 0;
 		while (i < di) {
-//Probably not needed!!!?
-//if (days[i].right() < 0) {
-//	days[i].set_right(0);
-//}
 			draw_day(g, bounds, days[i], _x_values);
 			++i;
 		}
@@ -232,22 +205,17 @@ System.out.println("time drawer.draw tuples e - hi" + hi);
 		return result;
 	}
 
-	// The day of the week for `date'.  Use last_week_day for optimization,
-	// if it is not negative.
-	protected int week_day_for(String date, int last_week_day) {
+	// The day of the week for `date'.
+	protected int week_day_for(String date) {
 		int result;
-		//if (last_week_day < 0) {
-			int year = Integer.valueOf(date.substring(0,4)).intValue();
-			// Java months start at 0.
-			int month = Integer.valueOf(date.substring(4,6)).intValue() - 1;
-			int day = Integer.valueOf(date.substring(6,8)).intValue();
-			GregorianCalendar cal = new GregorianCalendar(year, month, day);
-			result = cal.get(Calendar.DAY_OF_WEEK);
-System.out.println("day of week was " + result + " (" +
-day_table[result] + ") for " + date + "(" + year + ", " + month + ", " +
-day + ")");
-		//}
-		//!!Finish...
+
+		int year = Integer.valueOf(date.substring(0,4)).intValue();
+		// Java months start at 0.
+		int month = Integer.valueOf(date.substring(4,6)).intValue() - 1;
+		int day = Integer.valueOf(date.substring(6,8)).intValue();
+		GregorianCalendar cal = new GregorianCalendar(year, month, day);
+		result = cal.get(Calendar.DAY_OF_WEEK);
+
 		return result;
 	}
 
