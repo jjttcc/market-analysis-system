@@ -22,7 +22,8 @@ creation
 
 feature -- Initialization
 
-	make (in1, in2: like input1; event_type_name: STRING) is
+	make (in1, in2: like input1; event_type_name: STRING;
+			per_type: TIME_PERIOD_TYPE) is
 		require
 			not_void: in1 /= Void and in2 /= Void and event_type_name /= Void
 		do
@@ -36,9 +37,11 @@ feature -- Initialization
 			-- FUNTION_ANALYZER instances.  Thus this is the appropriate
 			-- place to create this new EVENT_TYPE instance.
 			set_event_type (event_type_name)
+			period_type := per_type
 		ensure
 			set: input1 = in1 and input2 = in2 and event_type /= Void and
 					event_type.name.is_equal (event_type_name)
+			period_type_set: period_type = per_type
 			start_date_set_to_now: -- start_date_time is set to current time
 		end
 
@@ -140,11 +143,10 @@ feature {NONE} -- Hook routine implementation
 					operator.execute (Void)
 				end
 				if operator = Void or else operator.value then
-					--!!ge needs work
-					ev_desc := concatenation (<<"Crossover event with %
-						%indicators ", input1.name, " and ", input2.name,
-						", values: ", target1.item.value, ", ",
-						target2.item.value>>)
+					ev_desc := concatenation (<<"Crossover event for ",
+						period_type.name, " trading period with indicators ",
+						input1.name, " and ", input2.name, ", values: ",
+						target1.item.value, ", ", target2.item.value>>)
 					generate_event (target1.item.date_time, "crossover",
 										ev_desc)
 				end

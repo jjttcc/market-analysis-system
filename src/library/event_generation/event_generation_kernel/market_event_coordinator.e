@@ -20,14 +20,17 @@ creation
 feature -- Initialization
 
 	make (egs: LINEAR [FUNCTION_ANALYZER];
-			markets: LINEAR [TRADABLE [BASIC_MARKET_TUPLE]]) is
+			markets: LINEAR [TRADABLE [BASIC_MARKET_TUPLE]];
+			disp: EVENT_DISPATCHER) is
 		require
-			not_void: egs /= Void and markets /= Void
+			not_void: egs /= Void and markets /= Void and disp /= Void
 		do
 			event_generators := egs
 			market_list := markets
+			dispatcher := disp
 		ensure
-			set: event_generators = egs and market_list = markets
+			set: event_generators = egs and market_list = markets and
+					dispatcher = disp
 		end
 
 feature -- Access
@@ -42,7 +45,7 @@ feature {NONE} -- Implementation
 
 	initialize (g: FUNCTION_ANALYZER) is
 		do
-			g.set_innermost_function (current_tradable)
+			g.set_inner_target (current_tradable)
 		end
 
 	generate_events is
@@ -65,12 +68,10 @@ feature {NONE} -- Implementation
 				execute_event_generators
 				market_list.forth
 			end
-			!!dispatcher.make (event_queue)
-			dispatcher.execute
 		end
 
 invariant
 
-	event_generators /= Void and market_list /= Void
+	ml_not_void: market_list /= Void
 
 end -- class MARKET_EVENT_COORDINATOR

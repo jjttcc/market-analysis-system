@@ -20,9 +20,11 @@ creation
 
 feature -- Initialization
 
-	make (in: like input; op: like operator; event_type_name: STRING) is
+	make (in: like input; op: like operator; event_type_name: STRING;
+			per_type: TIME_PERIOD_TYPE) is
 		require
-			not_void: in /= Void and op /= Void and event_type_name /= Void
+			not_void: in /= Void and op /= Void and event_type_name /= Void and
+						per_type /= Void
 		do
 			set_input (in)
 			!!start_date_time.make_now
@@ -34,10 +36,12 @@ feature -- Initialization
 			-- FUNTION_ANALYZER instances.  Thus this is the appropriate
 			-- place to create this new EVENT_TYPE instance.
 			set_event_type (event_type_name)
+			period_type := per_type
 		ensure
 			set: input = in and operator = op and start_date_time /= Void and
 					event_type /= Void and
 						event_type.name.is_equal (event_type_name)
+			period_type_set: period_type = per_type
 			start_date_set_to_now: -- start_date_time is set to current time
 		end
 
@@ -100,7 +104,8 @@ feature {NONE} -- Hook routine implementation
 		do
 			operator.execute (target.item)
 			if operator.value then
-				ev_desc := concatenation (<<"Event with indicator ",
+				ev_desc := concatenation (<<"Event for ", period_type.name,
+					" trading period with indicator ",
 					input.name, ", value: ", target.item.value>>)
 				generate_event (target.item.date_time,
 								"Single-indicator event", ev_desc)

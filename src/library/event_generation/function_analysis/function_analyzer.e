@@ -25,12 +25,17 @@ feature -- Access
 			-- Operator used to analyze each tuple - evaluation to true
 			-- will result in an event being generated.
 
+	period_type: TIME_PERIOD_TYPE
+			-- The period type to be analyzed - daily, weekly, etc.
+
 feature -- Status setting
 
-	set_innermost_function (f: SIMPLE_FUNCTION [MARKET_TUPLE]) is
-			-- Set the innermost function, which contains the basic
-			-- data to be analyzed.
-		deferred
+	set_inner_target (f: TRADABLE [BASIC_MARKET_TUPLE]) is
+			-- Set the innermost target data - the basic data to be analyzed.
+		require
+			f.tuple_list_names.has (period_type.name)
+		do
+			set_innermost_function (f.tuple_list (period_type.name))
 		end
 
 	set_start_date_time (arg: DATE_TIME) is
@@ -61,7 +66,6 @@ feature -- Basic operations
 			not_void: time_stamp /= Void and name /= Void and
 						description /= Void
 		local
-			debugstr: STRING
 			event: TYPED_EVENT
 		do
 			--!!!Do we need another date/time field in the event, so
@@ -72,11 +76,6 @@ feature -- Basic operations
 			!!event.make (name, time_stamp, event_type)
 			event.set_description (description)
 			product.extend (event)
-			debugstr := concatenation (<<"Event name: ", event.name,
-							", date/time: ", event.time_stamp,
-							", type: ", event_type.name,
-							", description:%N", event.description, "%N">>)
-			print (debugstr)
 		end
 
 feature {NONE} -- Implementation
@@ -90,5 +89,15 @@ feature {NONE} -- Implementation
 		ensure
 			event_type /= Void
 		end
+
+feature {NONE} -- Hook routines
+
+	set_innermost_function (f: SIMPLE_FUNCTION [MARKET_TUPLE]) is
+		deferred
+		end
+
+invariant
+
+	period_type_not_void: period_type /= Void
 
 end -- class FUNCTION_ANALYZER
