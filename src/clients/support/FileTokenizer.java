@@ -27,6 +27,31 @@ public class FileReaderUtilities
 		_item = tokens.nextToken();
 	}
 
+	// Result of expanding, in directory `dir', `glob' (e.g., "*.java")
+	// into a list of files
+	// Precondition: dir != null && glob != null
+     public static String[] globlist(String dir, final String glob) {
+		File directory = new File(dir);
+
+		String[] result = directory.list(new FilenameFilter() {
+			public boolean accept(File f, String s) {
+				boolean acc_result = false;
+				if (glob.equals("*")) acc_result = true;
+				else if (glob.endsWith("*")) {
+					String firstPart = glob.substring(0,glob.length()-1);
+					acc_result = s.startsWith(firstPart);
+				}
+				else if (glob.startsWith("*")) {
+					String lastPart = glob.substring(1,glob.length());
+					acc_result = s.endsWith(lastPart);
+				}
+				return acc_result;
+			}
+		});
+
+		return result;
+     }
+
 	/** The current tokenized item */
 	public String item()
 	{
