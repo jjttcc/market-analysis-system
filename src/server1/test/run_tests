@@ -170,6 +170,7 @@ run_test()
 			echo "Using epsilon of $Tepsilon"
 		fi
 		errors="$(compare_numbers $outputfile reference/$Toutputref -e $Tepsilon)"
+		result=$?
 	else
 		errors="Test execution of $* failed with return status $result"
 	fi
