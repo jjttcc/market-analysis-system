@@ -10,7 +10,7 @@ deferred class MARKET_EVENT_REGISTRANT inherit
 
 	EVENT_REGISTRANT_WITH_HISTORY
 		redefine
-			event_history
+			event_history, event_cache
 		end
 
 	EXCEPTIONS
@@ -31,6 +31,8 @@ deferred class MARKET_EVENT_REGISTRANT inherit
 feature -- Access
 
 	event_history: HASH_TABLE [MARKET_EVENT, STRING]
+
+	event_cache: LINKED_LIST [MARKET_EVENT]
 
 	field_separator: STRING
 			-- Field separator for history file
