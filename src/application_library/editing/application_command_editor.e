@@ -297,18 +297,18 @@ feature -- Basic operations
 	edit_boolean_numeric_client (cmd: BOOLEAN_NUMERIC_CLIENT) is
 			-- Edit a BOOLEAN_NUMERIC_CLIENT.
 		local
-			binop: BINARY_OPERATOR [BOOLEAN, REAL]
+			boolop: RESULT_COMMAND [BOOLEAN]
 			result_cmd: RESULT_COMMAND [REAL]
 		do
 			-- Obtain and set cmd's boolean operator.
-			binop ?= user_interface.command_selection_from_type (
-						user_interface.Binary_boolean_real_command,
+			boolop ?= user_interface.command_selection_from_type (
+						user_interface.Boolean_result_command,
 							concatenation (<<cmd.generator,
 								"'s boolean operator">>), false)
 			check
-				selection_valid: binop /= Void
+				selection_valid: boolop /= Void
 			end
-			cmd.set_boolean_operator (binop)
+			cmd.set_boolean_operator (boolop)
 			-- Obtain and set cmd's true command.
 			result_cmd ?= user_interface.command_selection_from_type (
 						user_interface.Real_result_command,
