@@ -99,7 +99,7 @@ feature {NONE} -- Implementation
 	set_tradable (t: TRADABLE [BASIC_MARKET_TUPLE]) is
 			-- Set the tradable whose market data is to be analyzed.
 		require
-			f_has_period_type: t.tuple_list_names.has (period_type.name)
+			period_type_valid_for_f: t.valid_period_type (period_type)
 		do
 			tradable := t
 			set_innermost_function (t.tuple_list (period_type.name))
