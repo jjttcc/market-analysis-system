@@ -9,9 +9,9 @@ abort() {
 lib_script=$MAS/lib/scripts/build_eiffel_application
 .  $lib_script
 if [ $? -ne 0 ]; then abort "Failed to load $lib_script.";fi
-export Targetdir=$MAS/lib/binaries
+export Targetdir=$MASBUILD/lib/binaries
 export Projectdir=$MASPROJ/mas
 export Executable_name=mas.exe
-export Ace_file_name=mas-windows.ace
+export Ace_file_name=$MASDEV/mas-windows.ace
 
 execute $*
