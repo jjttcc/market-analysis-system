@@ -222,8 +222,28 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 	configuration_type: STRING is "MAS Control Terminal"
 
+prsettings is
+local
+	keys: ARRAY [STRING]
+	i: INTEGER
+do
+	keys := settings.current_keys
+print ("BEGIN settings contents -------------------------------------------------------%N")
+	from
+		i := keys.lower
+	until
+		i > keys.upper
+	loop
+		print ("key: " + keys @ i + ", value: " + settings @ (keys @ i) + "%N")
+		i := i + 1
+	end
+print ("END settings contents -------------------------------------------------------%N")
+end
+
 	post_process_settings is
 		do
+print ("A%N")
+prsettings
 			check
 				env_specs_exist: environment_variable_set_specifications /=
 					Void and environment_variable_append_specifications /= Void
@@ -234,18 +254,28 @@ feature {NONE} -- Implementation - Hook routine implementations
 			-- with their specified values:
 			user_defined_values.linear_representation.do_all (
 				agent replace_configuration_tokens)
+print ("B%N")
+prsettings
 			-- Replace all "non-dynamic" tokens in `settings' with their
 			-- specified values:
 			settings.linear_representation.do_all (
 				agent replace_configuration_tokens)
+print ("C%N")
+prsettings
 			-- Replace all "non-dynamic" tokens in the `command_string' of
 			-- `start_server_commands' with their specified values:
 			start_server_commands.linear_representation.do_all (
 				agent replace_command_string_tokens)
+print ("D%N")
+prsettings
 			environment_variable_set_specifications.do_all (
 				agent process_environment_variable (?, False))
+print ("E%N")
+prsettings
 			environment_variable_append_specifications.do_all (
 				agent process_environment_variable (?, True))
+print ("F%N")
+prsettings
 			if not settings.item (Start_server_cmd_specifier).is_empty then
 				start_server_commands.extend (new_managed_command (
 				Start_server_cmd_specifier, report_back_appended (
@@ -455,8 +485,8 @@ feature {NONE} -- Implementation - Utilities
 			keys, values: ARRAY [STRING]
 			cp_start_index: INTEGER
 		do
-			keys := <<Hostname_specifier>>
-			values := <<hostname>>
+			keys := <<>>
+			values := <<>>
 			cp_start_index := keys.upper + 1
 			keys.resize (1, keys.upper + user_defined_variables.count)
 			values.resize (1, keys.upper)
@@ -464,6 +494,9 @@ feature {NONE} -- Implementation - Utilities
 				user_defined_variables.upper, cp_start_index)
 			values.subcopy (user_defined_values, 1,
 				user_defined_variables.upper, cp_start_index)
+print ("rep conf tok - keys, values: '" +
+field_concatenation (keys.linear_representation, ", ") + "'%N'" +
+field_concatenation (values.linear_representation, ", ") + "'%N")
 			replace_tokens (s, keys, values, Token_start_delimiter,
 				Token_end_delimiter)
 		end
@@ -757,8 +790,9 @@ feature {NONE} -- Implementation
 			-- "<word>" tokens that are to be converted on the fly, rather
 			-- than converted on start-up - without the surrounding "<>"
 		once
-			Result := (<<Port_number_specifier, Working_directory_specifier,
-			Built_in_termination_cmd_specifier>>)
+			Result := (<<Hostname_specifier, Port_number_specifier,
+				Working_directory_specifier,
+				Built_in_termination_cmd_specifier>>)
 		end
 
 	user_defined_variables: ARRAY [STRING]

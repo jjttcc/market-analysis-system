@@ -54,6 +54,8 @@ feature {NONE} -- Implementation
 		local
 			args: ARRAY [STRING]
 		do
+print ("do_execute called for " + name + " - window's host/port: " +
+window.host_name + ", " + window.port_number + "%N")
 			if program = Void then
 				process_components
 			end
@@ -80,12 +82,12 @@ feature {NONE} -- Implementation
 		local
 			env: expanded EXECUTION_ENVIRONMENT
 		do
-			if debugging_on then
+--			if debugging_on then
 				print ("executing [MEC]: " + program + " " +
 					field_concatenation (args.linear_representation, " ") +
 					"%N(current " + "directory: " +
 					env.current_working_directory + ")%N")
-			end
+--			end
 			create last_process.make_capture_output (prog, args)
 			add_process (last_process, window.host_name, window.port_number)
 			last_process.execute
@@ -98,6 +100,7 @@ feature {NONE} -- Implementation
 			cmd_components: ARRAY [STRING]
 			regutil: expanded REGULAR_EXPRESSION_UTILITIES
 		do
+print ("proc compo - cmstr: " + command_string + "%N")
 			cmd_components := regutil.split (" +", command_string)
 			if cmd_components.is_empty then
 				-- Report empty command error.
@@ -105,6 +108,7 @@ feature {NONE} -- Implementation
 				program := cmd_components @ 1
 				arguments := cmd_components.subarray (2, cmd_components.upper)
 			end
+print ("proc compo - cmstr: " + command_string + "%N")
 		end
 
 invariant

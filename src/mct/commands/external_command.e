@@ -30,6 +30,7 @@ feature {NONE} -- Initialization
 		do
 			identifier := id
 			command_string := cmd
+print ("extcmd make, cmd.string: " + command_string + "%N")
 		ensure
 			items_set: identifier = id and command_string = cmd
 		end
@@ -71,7 +72,9 @@ feature -- Basic operations
 				previous_directory := env.current_working_directory
 				env.change_working_directory (working_directory)
 			end
+print ("extcmd execute 1, cmd.string: " + command_string + "%N")
 			do_execute (arg)
+print ("extcmd execute 2, cmd.string: " + command_string + "%N")
 			if working_directory /= Void then
 				env.change_working_directory (previous_directory)
 			end
