@@ -7,7 +7,7 @@ indexing
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class MARKET_LIST_REQUEST_CMD inherit
+class SYMBOL_LIST_REQUEST_CMD inherit
 
 	TRADABLE_REQUEST_COMMAND
 		redefine
@@ -47,4 +47,4 @@ feature {NONE} -- Basic operations
 			Result := "retrieving symbol list"
 		end
 
-end -- class MARKET_LIST_REQUEST_CMD
+end -- class SYMBOL_LIST_REQUEST_CMD

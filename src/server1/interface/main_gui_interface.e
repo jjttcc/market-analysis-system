@@ -203,7 +203,7 @@ feature {NONE} -- Implementation
 				tradable_list_handler), Indicator_data_request)
 			rh.extend (create {TRADING_PERIOD_TYPE_REQUEST_CMD}.make (
 				tradable_list_handler), Trading_period_type_request)
-			rh.extend (create {MARKET_LIST_REQUEST_CMD}.make (
+			rh.extend (create {SYMBOL_LIST_REQUEST_CMD}.make (
 				tradable_list_handler), Market_list_request)
 			rh.extend (create {INDICATOR_LIST_REQUEST_CMD}.make (
 				tradable_list_handler), Indicator_list_request)
