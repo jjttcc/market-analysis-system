@@ -18,7 +18,7 @@ class FILE_TRADABLE_LIST inherit
 		rename
 			symbol_list as file_names
 		redefine
-			symbols, current_symbol, setup_input_medium
+			symbols, current_symbol, setup_input_medium, close_input_medium
 		end
 
 creation
@@ -93,17 +93,21 @@ feature {NONE} -- Implementation
 		end
 
 	setup_input_medium is
-		local
-			input_file: INPUT_FILE
-			exc: EXCEPTIONS
 		do
-			input_file := open_current_file
+			current_input_file := open_current_file
 			if not fatal_error then
-				tradable_factory.set_input (input_file)
-				input_file.set_field_separator (
+				tradable_factory.set_input (current_input_file)
+				current_input_file.set_field_separator (
 					tradable_factory.field_separator)
-				input_file.set_record_separator (
+				current_input_file.set_record_separator (
 					tradable_factory.record_separator)
+			end
+		end
+
+	close_input_medium is
+		do
+			if not current_input_file.is_closed then
+				current_input_file.close
 			end
 		end
 
@@ -111,5 +115,7 @@ feature {NONE} -- Implementation
 		do
 			Result := symbol_from_file_name (file_names.item)
 		end
+
+	current_input_file: INPUT_FILE
 
 end -- class FILE_TRADABLE_LIST
