@@ -93,7 +93,7 @@ feature -- Access
 			stmt: ECLI_STATEMENT
 			ecli_result: ECLI_VARCHAR
 		do
-			fatal_error := false
+			fatal_error := False
 			create stmt.make (session)
 			stmt.set_immediate_execution_mode
 			stmt.set_sql (query)
@@ -106,7 +106,7 @@ feature -- Access
 				debug ("database")
 					print_list (<<last_error, "%N">>)
 				end
-				fatal_error := true
+				fatal_error := True
 			else
 				-- Create result set 'value holders'.
 				create ecli_result.make (Max_varchar_length)
@@ -118,7 +118,7 @@ feature -- Access
 					debug ("database")
 						print_list (<<last_error, "%N">>)
 					end
-					fatal_error := true
+					fatal_error := True
 				else
 					stmt.set_cursor (<<ecli_result>>)
 					stmt.start
@@ -170,21 +170,21 @@ feature -- Basic operations
 					debug ("database")
 						print_list (<<last_error, "%N">>)
 					end
-					fatal_error := true
+					fatal_error := True
 				end
 			else
-				fatal_error := true
+				fatal_error := True
 			end
 		rescue
 			-- Caught exception from first call to `session'.
-			error := true
+			error := True
 			retry
 		end
 
 	disconnect is
 			-- Disconnect from database.
 		do
-			fatal_error := false
+			fatal_error := False
 			session.disconnect
 			if not session.is_connected then
 				debug ("database")
@@ -197,7 +197,7 @@ feature -- Basic operations
 				debug ("database")
 					print_list (<<last_error, "%N">>)
 				end
-				fatal_error := true
+				fatal_error := True
 			end
 		end
 
@@ -207,7 +207,7 @@ feature {NONE} -- Implementation
 			-- The ECLI database session - provides access to the database
 		once
 			if db_info.db_name.is_empty then
-				fatal_error := true
+				fatal_error := True
 				last_error := "Database session was not created."
 				raise (Void)
 			else
@@ -220,7 +220,7 @@ feature {NONE} -- Implementation
 				ECLI_STATEMENT is
 			-- Input ECLI_STATEMENT constructed with `query' and `value_holders'
 		do
-			fatal_error := false
+			fatal_error := False
 			create Result.make (session)
 			-- Change execution mode to immediate (no need to prepare).
 			Result.set_immediate_execution_mode
@@ -238,7 +238,7 @@ feature {NONE} -- Implementation
 				debug ("database")
 					print_list (<<last_error, "%N">>)
 				end
-				fatal_error := true
+				fatal_error := True
 			end
 			Result.set_cursor (value_holders)
 		end
@@ -249,7 +249,7 @@ feature {NONE} -- Implementation
 			ecli_string: ECLI_VARCHAR
 			s: STRING
 		do
-			fatal_error := false
+			fatal_error := False
 			create {ARRAYED_LIST [STRING]} Result.make (0)
 			if not q.is_empty then
 				-- definition of statement on session
@@ -266,7 +266,7 @@ feature {NONE} -- Implementation
 					debug ("database")
 						print_list (<<last_error, "%N">>)
 					end
-					fatal_error := true
+					fatal_error := True
 				else
 					-- Create result set 'value holders'.
 					create ecli_string.make (20)
