@@ -91,7 +91,7 @@ feature -- Basic operations
 					print ("Type exit to return to main program.%N")
 					system ("")
 				when '-' then
-					finished := true
+					finished := True
 				else
 					print ("Invalid selection%N")
 				end
@@ -248,7 +248,7 @@ feature {NONE} -- Implementation
 					read_integer
 				end
 				if last_integer = 0 then
-					finished := true
+					finished := True
 				else
 					current_type := types @ last_integer
 					r.add_event_type (current_type)
@@ -285,7 +285,7 @@ feature {NONE} -- Implementation
 							i - 1, " - Abort selection? (y/n) ", eom>>)
 				c := character_selection (Void)
 				if c = 'y' or c = 'Y' then
-					abort := true
+					abort := True
 				else
 					print (eom)
 					read_integer
@@ -325,7 +325,7 @@ feature {NONE} -- Implementation
 							i - 1, " - Abort selection? (y/n) ", eom>>)
 				c := character_selection (Void)
 				if c = 'y' or c = 'Y' then
-					abort := true
+					abort := True
 				else
 					print (eom)
 					read_integer
@@ -392,7 +392,7 @@ feature {NONE} -- Implementation
 					print ("Type exit to return to main program.%N")
 					system ("")
 				when '-' then
-					finished := true
+					finished := True
 				else
 					print ("Invalid selection%N")
 				end
