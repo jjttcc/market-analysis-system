@@ -187,8 +187,6 @@ feature {NONE} -- Implementation
 			-- The cached item with index `i' - Void if not in cache
 		do
 			Result := cache @ i
-		ensure
-			correct_result: cache.has (i) = (Result = cache @ i)
 		end
 
 	add_to_cache (t: TRADABLE [BASIC_MARKET_TUPLE]; idx: INTEGER) is
