@@ -2,6 +2,7 @@
 BEGIN {
 if (n_value == 0) n_value = 7 # default n
 n = n_value
+K = 1/n	# Constant or exp value
 }
 /^#/ {next}
 {
@@ -13,9 +14,8 @@ END {
 	downavgs[0] = downsum(closes, 0, n) / n
 	i = 1; j = n + 1
 	for ( ; j < recs; ++j) {
-		upavgs[i] = (upavgs[i-1] * (n-1) + rsidiff(closes[j], closes[j-1])) / n
-		downavgs[i] = \
-			(downavgs[i-1] * (n-1) + rsidiff(closes[j-1], closes[j])) / n
+		upavgs[i] = exp_calc(upavgs[i-1], rsidiff(closes[j], closes[j-1]))
+		downavgs[i] = exp_calc(downavgs[i-1], rsidiff(closes[j-1], closes[j]))
 		++i
 	}
 	for (k = 0; k < i; ++k) {
@@ -31,9 +31,9 @@ function rsi (rs)
 	return 100 - (100 / (1 + rs))
 }
 
-# If v1 <= v2: 0; otherwise v1 - v2
-function rsidiff(v1, v2) {
-	return v1 <= v2? 0: v1 - v2
+# If current <= previous: 0; otherwise current - previous
+function rsidiff(current, previous) {
+	return current <= previous? 0: current - previous
 }
 
 function upsum (arr, start, end)
@@ -60,4 +60,8 @@ function downsum (arr, start, end)
 		}
 	}
 	return result
+}
+
+function exp_calc(prev_result, current) {
+	return K * current + prev_result * (1 - K)
 }
