@@ -16,18 +16,21 @@ creation
 
 feature -- Initialization
 
-	make is
+	make (date_spec: DATE_FORMAT_SPECIFICATION) is
 		do
-			year_index := 3
-			month_index := 2
-			day_index := 1
-			field_separator := "-"
-			abbreviated_month := True
-			two_digit_year_partition := -1
+			year_index := date_spec.year_index
+			month_index := date_spec.month_index
+			day_index := date_spec.day_index
+			field_separator := date_spec.date_field_separator
+			abbreviated_month := date_spec.three_letter_month_abbreviation
+			if date_spec.convert_2_digit_year then
+				two_digit_year_partition := date_spec.year_partition_value
+			else
+				two_digit_year_partition := -1
+			end
 		ensure
-			default_settings: year_index = 3 and month_index = 2 and
-				day_index = 1 and field_separator = "-" and
-				abbreviated_month = True and two_digit_year_partition = -1
+			partition_correct_if_no_conversion: date_spec.convert_2_digit_year
+				implies two_digit_year_partition = -1
 		end
 
 feature -- Access
@@ -137,5 +140,10 @@ feature {NONE}
 				tuple.set_date_time (create {DATE_TIME}.make_by_date (date))
 			end
 		end
+
+invariant
+
+		year_partition_valid: two_digit_year_partition = -1 or
+			two_digit_year_partition > 0
 
 end
