@@ -7,6 +7,7 @@ indexing
 	licensing: "Copyright 1998 - 2001: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
+--!!!!Remember to rename the file to match the new name.
 class HTTP_DATA_RETRIEVER inherit
 
 	HTTP_DATA_RETRIEVAL
