@@ -94,7 +94,7 @@ feature -- Basic operations
 			l.extend (market_data (f, "Market Data"))
 			l.extend (market_function_line (f, "Line"))
 --!!!Temporary test/experiment:
-l.extend (agent_experiment ("Agent-based function"))
+l.extend (agent_experiment ("Agent-based simple moving average"))
 --!!!NOTE: The attempt to fix the problem with AGENT_BASED_FUNCTION (caused
 --by the agent attribute) by replacing the FUNCTION attribute with a
 --key into a table still needs some work - There is currently a floating
