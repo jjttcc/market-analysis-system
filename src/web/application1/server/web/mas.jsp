@@ -7,9 +7,10 @@ Market Analysis System Charts
 </TITLE>
 <p>
 <h3>
-Market Analysis System Charts
-</h3>
+<center>
 Welcome to the Market Analysis System Charts.
+</h3>
+<P>
 	<applet codebase="." code="MAS_Applet.class" width=250 height=130>
 
 	<!-- Uncomment and edit any of the following parameter settings
@@ -32,5 +33,6 @@ Welcome to the Market Analysis System Charts.
 	alt="Your browser understands the &lt;APPLET&gt; tag but isn't running the applet, for some reason."
 	Your browser is completely ignoring the &lt;APPLET&gt; tag!
 	</applet>
+</center>
 </body>
 </html>
