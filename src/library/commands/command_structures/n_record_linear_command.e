@@ -62,35 +62,35 @@ feature {NONE} -- Implementation
 
 	forth is
 		do
-			offset := offset - 1
+			index_offset := index_offset - 1
 		end
 
 	start is
 		do
-			offset := n - 1
+			index_offset := n - 1
 			start_init
 		end
 
 	action is
 		do
-			sub_action (target.index - offset)
+			sub_action (target.index - index_offset)
 		end
 
 	exhausted: BOOLEAN is
 		do
-			Result := offset = -1
+			Result := index_offset = -1
 		end
 
 	invariant_value: BOOLEAN is
 		do
 			Result := not exhausted implies
-						target.valid_index (target.index - offset)
+						target.valid_index (target.index - index_offset)
 		end
 
 feature {NONE} -- Implementation
 
-	offset: INTEGER
-			-- Offset from current cursor/index
+	index_offset: INTEGER
+			-- Offset from current cursor/index - used for iteration
 
 	target: LIST [MARKET_TUPLE]
 
