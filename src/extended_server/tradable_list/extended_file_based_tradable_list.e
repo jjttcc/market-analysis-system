@@ -77,8 +77,8 @@ feature {NONE} -- Implementation
 		local
 			file_status: TRADABLE_FILE_STATUS
 		do
-			file_status := file_status_cache @ idx
 			if caching_on then
+				file_status := file_status_cache @ idx
 				file_status.set_last_modification_time (current_input_file.date)
 				file_status.set_file_size (current_input_file.count)
 			end
