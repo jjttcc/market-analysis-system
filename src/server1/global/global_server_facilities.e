@@ -54,6 +54,13 @@ feature -- Access
 			Result := platform_factory.file_name_expander
 		end
 
+	startup_date_time: DATE_TIME is
+			-- Date/time the process was started - Note: This feature must
+			-- be called at start-up to set the result correctly, once.
+		once
+			create Result.make_now
+		end
+
 	file_lock (file_name: STRING): FILE_LOCK is
 			-- File locking services
 		local

@@ -26,6 +26,14 @@ feature -- Access
 	command_line: MAS_COMMAND_LINE
 			-- The command line from which the setting states are queried
 
+	process_report: STRING is
+			-- Report process info.
+		local
+			gsf: expanded GLOBAL_SERVER_FACILITIES
+		do
+			Result := "Process was started at " + gsf.startup_date_time.out
+		end
+
 	data_source_report: STRING is
 			-- Report on data-source settings
 		local
@@ -113,11 +121,23 @@ feature -- Access
 		end
 
 	local_host_name_report: STRING is
-			-- Report - host name on which this process is running.
+			-- Report - host name on which this process is running
 		do
 			Result := "Host name: " + local_host_name
 		ensure
 			exists: Result /= Void
+		end
+
+	miscellaneous_report: STRING is
+			-- Report on miscellaneous information
+		local
+			gsf: expanded GLOBAL_SERVER_FACILITIES
+		do
+			Result := "Cache size: " +
+				gsf.global_configuration.tradable_cache_size.out
+			if command_line.allow_non_standard_period_types then
+				Result := Result + "%NNon-standard period types allowed."
+			end
 		end
 
 	ports_report: STRING is

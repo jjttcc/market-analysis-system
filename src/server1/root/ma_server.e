@@ -12,7 +12,7 @@ class MA_SERVER inherit
 		rename
 			report_errors as report_back
 		redefine
-			report_back, current_media, read_command_for
+			report_back, current_media, read_command_for, initialize
 		end
 
 	GLOBAL_SERVER_FACILITIES
@@ -90,6 +90,15 @@ f: FIBONACCI
 					Result := True
 				end
 			end
+		end
+
+	initialize is
+		local
+			gsf: expanded GLOBAL_SERVER_FACILITIES
+			d: DATE_TIME
+		do
+			-- Force the startup time to be created at "start-up'.
+			d := gsf.startup_date_time
 		end
 
 feature {NONE} -- Implementation
