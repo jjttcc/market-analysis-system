@@ -1,0 +1,28 @@
+[Procedure for turning the debug-print option on for the MCT]
+
+(Note: These instructions are for NT.  This procedure may be slightly
+different on XP or Windows 2000.)
+
+Left-click on the "MAS" icon.
+Click on "Properties".
+Select the "Shortcut" tab.
+In the "Target" slot, add: " -debug".
+(Add everything within the double quotes, including the leading space - but
+not the quotes.)
+Click OK.
+Then start up the program by double-clicking on the "MAS" icon.
+
+A "DOS" window will appear with debugging information.
+Unfortunately, Windows does not provide a straightforward way to save the
+debugging output.  So you will need to note what is printed on the resulting
+"DOS" window and manually copy it into a file, or at least provide a
+good summary (unless you can figure out a way to redirect the information
+automatically into a file).
+
+Then click on "Start a MAS Session".
+This will result in more info. being printed in the "DOS" window.
+Include this additional info. in your report.
+Email me the resulting report.
+
+To turn off the debugging, follow the same procedure as above and remove
+" -debug" from the "Target" slot and hit "OK".
