@@ -1,5 +1,6 @@
 indexing
-	description: "A command that responds to a GUI client data request"
+	description: "A command that responds to a GUI client request for all %
+		%available market symbols"
 	status: "Copyright 1998 - 2000: Jim Cochrane and others; see file forum.txt"
 	date: "$Date$";
 	revision: "$Revision$"
