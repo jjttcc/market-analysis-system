@@ -310,6 +310,7 @@
 	  	includes="Constants.class,DataInspector.class,NetworkProtocol.class"
 	  />
     </copy>
+
     <copy    todir="${build.home}/graph">
 	  <fileset dir="${mas_gui.home}/graph"
 		includes="DataSet.class,BasicDrawer.class,Drawer.class,Axis.class,
@@ -322,14 +323,18 @@
 			BarDrawer.class,SpecialFunction.class,TextState.class,
 			MainGraph.class,CrossHair.class,DrawObject.class,LowerGraph.class,
 			DrawableObjects.class,ChartHandleMouse.class,FibonacciPrice.class,
-			FibonacciTime.class,TrendLine.class"
+			FibonacciTime.class,TrendLine.class, Gin.class,
+			InteractiveGraph.class, Range.class,
+			"
 	  />
     </copy>
+
     <copy    todir="${build.home}/java_library/support">
 	  <fileset dir="${mas_gui.home}/java_library/support"
 		includes="AssertionConstants.class,Logic.class"
 	  />
     </copy>
+
     <copy    todir="${build.home}/mas_gui">
 	  <fileset dir="${mas_gui.home}/mas_gui"
 		includes="
@@ -343,9 +348,19 @@
 			MA_ChartBar$1.class,MA_ChartBar$2.class,MA_ChartBar$3.class,
 			MA_ChartBar.class,MA_ChartDrawBar$1.class,MA_ChartDrawBar$2.class,
 			MA_ChartDrawBar.class,MA_PeriodBar$1.class,MA_PeriodBar.class,
-			Chart.class,MA_ScrollPane.class,ChartTransferHandler.class"
+			Chart.class,MA_ScrollPane.class,ChartTransferHandler.class,
+			Chart$1.class, DialogSelection$1.class, DialogSelection$2.class,
+			DialogSelection$3.class, IndicatorColors$1.class,
+			IndicatorColors$2.class, IndicatorColors.class,
+			IndicatorListener.class, MA_Dialog$1.class, MA_MenuBar$1.class,
+			MA_MenuBar$2.class, MA_MenuBar$3.class, MA_MenuBar$4.class,
+			MA_MenuBar$5.class, MA_MenuBar$6.class, MA_MenuBar$7.class,
+			MA_MenuBar$8.class, MA_MenuBar$9.class, MA_MenuBar.class,
+			MarketSelection$1.class,
+			"
 	  />
     </copy>
+
     <copy    todir="${build.home}/support">
 	  <fileset dir="${mas_gui.home}/support"
 		includes="IO_Connection.class,IO_URL_Connection.class,
@@ -362,34 +377,38 @@
 			IO_SocketConnection.class,FileTokenizer.class,Utilities$1.class,
 			Utilities.class,ErrorBox$1.class,ErrorBox$2.class,ErrorBox$3.class,
 			ErrorBox.class,GUI_Utilities.class,MA_ConfigurationInterface.class,
+			"
+	  />
+    </copy>
+
+    <copy    todir="${build.home}/application_support">
+	  <fileset dir="${mas_gui.home}/application_support"
+		includes="MA_Configuration.class, MA_Configuration$DateSetting.class,
 			BiAxisIndicatorGroup.class, MonoAxisIndicatorGroup.class,
 			"
 	  />
     </copy>
-    <copy    todir="${build.home}/application_support">
-	  <fileset dir="${mas_gui.home}/application_support"
-		includes="MA_Configuration.class, MA_Configuration$DateSetting.class,
-			"
-	  />
-    </copy>
+
     <copy    todir="${build.home}/applet">
 	  <fileset dir="${mas_gui.home}/applet"
 		includes="AppletOptions.class, AppletTools.class,
 			"
 	  />
     </copy>
+
     <copy    todir="${build.home}/appinit">
 	  <fileset dir="${mas_gui.home}/appinit"
 		includes="AppletInitialization.class,
 			"
 	  />
     </copy>
+
     <copy    todir="${build.home}/application_library">
 	  <fileset dir="${mas_gui.home}/application_library"
 		includes="CommandLineOptions.class, CompressedConnection.class,
 			Connection.class, MA_Connection.class, MA_SessionState.class,
 			OptionFlags.class, SessionState.class, StartupOptions.class,
-			WindowSettings.class,
+			WindowSettings.class, ChartInterface.class, ChartFacilities.class,
 		"
 	  />
     </copy>
