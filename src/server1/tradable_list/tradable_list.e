@@ -77,7 +77,6 @@ feature -- Access
 					setup_input_medium
 					if not fatal_error then
 						tradable_factory.set_symbol (current_symbol)
-print_list (<<"Obtaining input data for ", current_symbol, ".%N">>)
 						tradable_factory.execute
 						last_tradable := tradable_factory.product
 						add_to_cache (last_tradable, index)
