@@ -42,8 +42,8 @@ feature -- Status setting
 				-- Unfortunately, this cannot be a precondition.
 				f_has_period_type: f.tuple_list_names.has (period_type.name)
 			end
-			set_innermost_function (f.tuple_list (period_type.name))
 			tradable := f
+			set_innermost_function (f.tuple_list (period_type.name))
 		ensure then
 			set: tradable = f
 		end
@@ -100,6 +100,8 @@ feature {NONE} -- Hook routines
 	set_innermost_function (f: SIMPLE_FUNCTION [MARKET_TUPLE]) is
 		require
 			not_void: f /= Void
+			tradable_set: tradable /= Void
+			-- tradable has been set to the current tradable.
 		deferred
 		end
 
