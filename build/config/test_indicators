@@ -60,5 +60,434 @@ y
 # Name:
 MACD of Volume
 s
+c
+n
+ONE_VARIABLE_FUNCTION
+c
+Parabolic SAR
+No Input Function
+y
+NUMERIC_VALUED_COMMAND_WRAPPER
+e
+Root
+# This is the top-level command sequence, which includes an initialization
+# section, run only for the first period, a main body, three assignments to
+# update the previous AF, EP, and SAR, and the SAR value by itself to
+# provide the result of the calculation.
+COMMAND_SEQUENCE
+e
+Main sequence
+y
+NUMERIC_CONDITIONAL_COMMAND
+e
+If 1st period, Init; else main body
+EQ_OPERATOR
+e
+First period?
+UNARY_LINEAR_OPERATOR
+e
+Period number
+No Input Function
+y
+INDEX_EXTRACTOR
+c
+shared UNARY_LINEAR_OPERATOR (Period number)
+c
+NUMERIC_VALUE_COMMAND
+e
+One
+n
+1
+NUMERIC_VALUED_COMMAND_WRAPPER
+e
+Initialization
+# The Initialization sequence - only executed for the first period,
+# consisting of "variable" and "constant" initializations
+COMMAND_SEQUENCE
+e
+Initialization sequence
+y
+NUMERIC_VALUE_COMMAND
+e
+Previous SAR value
+n
+0
+n
+y
+NUMERIC_VALUE_COMMAND
+e
+Previous EP value
+n
+0
+n
+y
+NUMERIC_VALUE_COMMAND
+e
+Previous AF value
+n
+0
+n
+y
+NUMERIC_VALUE_COMMAND
+e
+short
+n
+-1
+n
+y
+NUMERIC_VALUE_COMMAND
+e
+AF increment
+y
+.02
+n
+y
+NUMERIC_VALUE_COMMAND
+e
+Maximum AF value
+y
+.1999
+n
+y
+NUMERIC_VALUE_COMMAND
+e
+Null operation
+n
+0
+n
+y
+NUMERIC_ASSIGNMENT_COMMAND
+e
+tradestate := long
+NUMERIC_VALUE_COMMAND
+e
+tradestate
+n
+0
+NUMERIC_VALUE_COMMAND
+e
+long
+n
+1
+n
+y
+NUMERIC_ASSIGNMENT_COMMAND
+e
+SAR := low
+NUMERIC_VALUE_COMMAND
+e
+SAR
+n
+0
+LOW_PRICE
+c
+n
+y
+NUMERIC_ASSIGNMENT_COMMAND
+e
+EP := high
+NUMERIC_VALUE_COMMAND
+e
+EP
+n
+0
+HIGH_PRICE
+c
+n
+y
+NUMERIC_ASSIGNMENT_COMMAND
+e
+AF := Initial AF value
+NUMERIC_VALUE_COMMAND
+e
+AF
+n
+0
+NUMERIC_VALUE_COMMAND
+e
+Initial AF value
+y
+.2
+n
+n
+# The main body, executed on periods 2 to the end of the data - Corresponds
+# to the 'execute' routine in the perl script.
+NUMERIC_CONDITIONAL_COMMAND
+e
+Main body
+EQ_OPERATOR
+e
+tradestate = long?
+shared NUMERIC_VALUE_COMMAND ({tradestate})
+c
+shared NUMERIC_VALUE_COMMAND ({long})
+c
+# Corresponds to the "long block" in the perl script.
+NUMERIC_CONDITIONAL_COMMAND
+e
+Long block
+OR_OPERATOR
+e
+Change direction?
+AND_OPERATOR
+c
+shared EQ_OPERATOR (tradestate = long?)
+c
+LT_OPERATOR
+c
+shared LOW_PRICE
+c
+shared NUMERIC_VALUE_COMMAND ({Previous SAR value})
+c
+AND_OPERATOR
+c
+EQ_OPERATOR
+e
+tradestate = short?
+shared NUMERIC_VALUE_COMMAND ({tradestate})
+c
+shared NUMERIC_VALUE_COMMAND ({short})
+c
+GT_OPERATOR
+c
+shared HIGH_PRICE
+c
+shared NUMERIC_VALUE_COMMAND ({Previous SAR value})
+c
+NUMERIC_VALUED_COMMAND_WRAPPER
+e
+Switch to short
+# This section orresponds to the 'switch_to_short' routine in the perl
+# script - executed when 'long' and 'Change direction?' is true.
+COMMAND_SEQUENCE
+e
+"Switch to short" sequence
+y
+NUMERIC_ASSIGNMENT_COMMAND
+e
+SAR := Previous EP value
+shared NUMERIC_VALUE_COMMAND ({SAR})
+c
+shared NUMERIC_VALUE_COMMAND ({Previous EP value})
+c
+n
+y
+NUMERIC_ASSIGNMENT_COMMAND
+e
+AF := AF increment
+shared NUMERIC_VALUE_COMMAND ({AF})
+c
+shared NUMERIC_VALUE_COMMAND ({AF increment})
+c
+n
+y
+NUMERIC_ASSIGNMENT_COMMAND
+e
+EP := low
+shared NUMERIC_VALUE_COMMAND ({EP})
+c
+shared LOW_PRICE
+c
+n
+y
+NUMERIC_ASSIGNMENT_COMMAND
+e
+tradestate := short
+shared NUMERIC_VALUE_COMMAND ({tradestate})
+c
+shared NUMERIC_VALUE_COMMAND ({short})
+c
+n
+n
+NUMERIC_VALUED_COMMAND_WRAPPER
+e
+Remain long
+# This section corresponds to the "remain long" block in the perl script.
+# It updates SAR and, conditionally, updates AF and EP.
+COMMAND_SEQUENCE
+e
+"Remain long" sequence
+y
+NUMERIC_ASSIGNMENT_COMMAND
+e
+Update SAR
+shared NUMERIC_VALUE_COMMAND ({SAR})
+c
+ADDITION
+e
+SAR calculation
+MULTIPLICATION
+c
+SUBTRACTION
+c
+shared NUMERIC_VALUE_COMMAND ({Previous EP value})
+c
+shared NUMERIC_VALUE_COMMAND ({Previous SAR value})
+c
+shared NUMERIC_VALUE_COMMAND ({Previous AF value})
+c
+shared NUMERIC_VALUE_COMMAND ({Previous SAR value})
+c
+n
+y
+NUMERIC_CONDITIONAL_COMMAND
+c
+GT_OPERATOR
+e
+High > Previous EP?
+shared HIGH_PRICE
+c
+shared NUMERIC_VALUE_COMMAND ({Previous EP value})
+c
+NUMERIC_VALUED_COMMAND_WRAPPER
+c
+COMMAND_SEQUENCE
+c
+y
+NUMERIC_CONDITIONAL_COMMAND
+e
+AF increment condition
+LT_OPERATOR
+e
+AF < Maximum AF value?
+shared NUMERIC_VALUE_COMMAND ({AF})
+c
+shared NUMERIC_VALUE_COMMAND ({Maximum AF value})
+c
+NUMERIC_ASSIGNMENT_COMMAND
+e
+Increment AF
+shared NUMERIC_VALUE_COMMAND ({AF})
+c
+ADDITION
+e
+AF + AF increment
+shared NUMERIC_VALUE_COMMAND ({AF})
+c
+shared NUMERIC_VALUE_COMMAND ({AF increment})
+c
+shared NUMERIC_VALUE_COMMAND ({Null operation})
+c
+n
+y
+shared NUMERIC_ASSIGNMENT_COMMAND (EP := high)
+c
+n
+n
+shared NUMERIC_VALUE_COMMAND ({Null operation})
+c
+n
+n
+# Corresponds to the "short block" section of the perl script.
+NUMERIC_CONDITIONAL_COMMAND
+e
+Short block
+shared OR_OPERATOR (Change direction?)
+c
+NUMERIC_VALUED_COMMAND_WRAPPER
+e
+Switch to long
+# This section orresponds to the 'switch_to_long' routine in the perl
+# script - executed when 'short' and 'Change direction?' is true.
+COMMAND_SEQUENCE
+e
+"Switch to long" sequence
+y
+shared NUMERIC_ASSIGNMENT_COMMAND (SAR := Previous EP value)
+c
+n
+y
+shared NUMERIC_ASSIGNMENT_COMMAND (AF := AF increment)
+c
+n
+y
+shared NUMERIC_ASSIGNMENT_COMMAND (EP := high)
+c
+n
+y
+shared NUMERIC_ASSIGNMENT_COMMAND (tradestate := long)
+c
+n
+n
+NUMERIC_VALUED_COMMAND_WRAPPER
+e
+Remain short
+# This section corresponds to the "remain short" block in the perl script.
+# It updates SAR and, conditionally, updates AF and EP.
+COMMAND_SEQUENCE
+e
+"Remain short" sequence
+y
+shared NUMERIC_ASSIGNMENT_COMMAND (Update SAR)
+c
+n
+y
+NUMERIC_CONDITIONAL_COMMAND
+c
+LT_OPERATOR
+e
+Low < Previous EP?
+shared LOW_PRICE
+c
+shared NUMERIC_VALUE_COMMAND ({Previous EP value})
+c
+NUMERIC_VALUED_COMMAND_WRAPPER
+c
+COMMAND_SEQUENCE
+c
+y
+shared NUMERIC_CONDITIONAL_COMMAND (AF increment condition)
+c
+n
+y
+shared NUMERIC_ASSIGNMENT_COMMAND (EP := low)
+c
+n
+n
+shared NUMERIC_VALUE_COMMAND ({Null operation})
+c
+n
+n
+n
+y
+# The three assignment constructs below are executed last for each
+# period.  They are equivalent to these lines from the perl script:
+#	$prev_sar = $sar;
+#	$prev_af = $af;
+#	$prev_ep = $ep;
+NUMERIC_ASSIGNMENT_COMMAND
+e
+Previous SAR := SAR
+shared NUMERIC_VALUE_COMMAND ({Previous SAR value})
+c
+shared NUMERIC_VALUE_COMMAND ({SAR})
+c
+n
+y
+NUMERIC_ASSIGNMENT_COMMAND
+e
+Previous AF := AF
+shared NUMERIC_VALUE_COMMAND ({Previous AF value})
+c
+shared NUMERIC_VALUE_COMMAND ({AF})
+c
+n
+y
+NUMERIC_ASSIGNMENT_COMMAND
+e
+Previous EP := EP
+shared NUMERIC_VALUE_COMMAND ({Previous EP value})
+c
+shared NUMERIC_VALUE_COMMAND ({EP})
+c
+n
+y
+# This last sub-operator of the main command sequence is required in order
+# to provide the resulting value of the calculation for the period: SAR.
+shared NUMERIC_VALUE_COMMAND ({SAR})
+c
+y
+n
+s
 -
 x
