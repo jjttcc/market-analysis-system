@@ -39,8 +39,9 @@ feature -- Initialization
 			tradable_factory := factory
 			object_comparison := True
 			symbol_list.start
+			cache_size := initial_cache_size
 			create cache.make (cache_size)
-			caching_on := True
+			create cache_index_queue.make (cache_size)
 		ensure
 			sym_set: symbols /= Void and symbols.count = s_list.count
 			factory_set: tradable_factory = factory
@@ -69,12 +70,10 @@ feature -- Access
 			-- occurs.
 		do
 			fatal_error := False
-			-- Create a new tradable (or get it from the cache) only if
-			-- caching is off, or the cursor has moved since the last
-			-- tradable creation, or the cache has been cleared.
+			-- Create a new tradable (or get it from the cache) if
+			-- the cursor has moved since the last tradable creation.
 			if
-				not caching_on or
-				index /= old_index or (cache_size > 0 and cache.count = 0)
+				index /= old_index
 			then
 				old_index := 0
 				last_tradable := cached_item (index)
@@ -100,7 +99,7 @@ feature -- Access
 
 	changeable_comparison_criterion: BOOLEAN is False
 
-	cache_size: INTEGER is 10
+	cache_size: INTEGER
 
 feature -- Status report
 
@@ -122,8 +121,11 @@ feature -- Status report
 	fatal_error: BOOLEAN
 			-- Did an unrecoverable error occur?
 
-	caching_on: BOOLEAN
+	caching_on: BOOLEAN is
 			-- Is caching of tradable data turned on?
+		do
+			Result := cache_index_queue.capacity > 0
+		end
 
 	timing_on: BOOLEAN
 			-- Is timing of operations turned on?
@@ -131,20 +133,21 @@ feature -- Status report
 feature -- Status setting
 
 	turn_caching_on is
-			-- Turn caching on.
+			-- Turn caching on if cache_size > 0.
 		do
 			if not caching_on then
-				caching_on := True
+				cache_index_queue.make (cache_size)
 			end
 		ensure
-			on: caching_on
+			on: cache_size > 0 implies caching_on
 		end
 
 	turn_caching_off is
 			-- Turn caching off.
 		do
 			if caching_on then
-				caching_on := False
+				cache.clear_all
+				cache_index_queue.make (0)
 			end
 		ensure
 			off: not caching_on
@@ -228,6 +231,7 @@ feature {NONE} -- Implementation
 			-- source is up to date, and then load the data.
 		do
 			if last_tradable = Void then
+print ("Data for " + current_symbol + " not in cache - loading%N")
 				load_data
 			else
 				-- Ensure that old indicator data from the previous
@@ -286,26 +290,30 @@ feature {NONE} -- Implementation
 			not_void: t /= Void
 		do
 			if caching_on then
-				if cache.count = cache_size then
-					cache.clear_all
-					check cache.count = 0 end
+				if cache_index_queue.full then
+					-- Remove oldest item.
+					cache.remove (cache_index_queue.item)
+					cache_index_queue.remove
 				end
 				cache.force (t, idx)
+				cache_index_queue.put (idx)
 			end
+		ensure
+			t_added_if_caching_on: caching_on implies cache @ idx = t
 		end
 
 	cached_item (i: INTEGER): TRADABLE [BASIC_MARKET_TUPLE] is
 			-- The cached item with index 'i' - Void if not in cache
 		do
-			if caching_on then
-				Result := cache @ i
-			end
+			Result := cache @ i
 		ensure
 			void_if_no_caching: not caching_on implies Result = Void
 		end
 
 	cache: HASH_TABLE [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]
 			-- Cache of tradable/index for efficiency
+
+	cache_index_queue: BOUNDED_QUEUE [INTEGER]
 
 	old_index: INTEGER
 
@@ -374,6 +382,11 @@ feature {NONE} -- Implementation
 
 	symbol_list_clone: LIST [STRING]
 
+	initial_cache_size: INTEGER is 10
+			-- The initial size of the tradable cache
+			-- @@Note: This feature should be moved to a globally accessible
+			-- class and the value should be configurable by the user.
+
 feature {NONE} -- Inapplicable
 
 	compare_references is
@@ -389,10 +402,11 @@ invariant
 	factory_not_void: tradable_factory /= Void
 	always_compare_objects: object_comparison = True
 	object_comparison_for_symbol_list: symbol_list.object_comparison
-	cache_exists: cache /= Void
+	cache_exists: cache /= Void and cache_index_queue /= Void
 	cache_not_too_large: cache.count <= cache_size
 	symbols_not_void: symbols /= Void
 	index_definition: index = symbol_list.index
 	non_negative_count: count >= 0
+	valid_cache_size: cache_size >= 0
 
 end -- class TRADABLE_LIST
