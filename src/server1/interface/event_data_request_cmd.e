@@ -1,6 +1,6 @@
 indexing
 	description: "A command that responds to a GUI event-data request - a %
-		%request for trading signals for a particular tradable and period type"
+		%request for trading signals for a particular tradable"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -158,23 +158,36 @@ feature {NONE}
 				requested_event_types /= Void
 		do
 			initialize_event_coordinator
-			if
+			if server_error then
+				report_server_error
+			elseif
 				event_coordinator.event_generators = Void or
 				event_coordinator.event_generators.empty
 			then
---!!!Need to check for tradable_pair having both tradables void - different
---error than this report.
-				report_error (Warning, <<"No requested trading signal %
-					%types were valid">>)
+				if
+					tradable_pair.left = Void and tradable_pair.right = Void
+				then
+					if not tradables.symbols.has (symbol) then
+						report_error (Invalid_symbol, <<"Symbol '",
+							symbol, "' not in database.">>)
+					else
+						report_error (Error, <<"No data found for symbol ",
+							symbol>>)
+					end
+				else
+					report_error (Warning, <<"No requested trading signal %
+						%types were valid">>)
+				end
 			else
 				put_ok
 				event_coordinator.execute
 				put (eom)
 			end
--- !!!Anything else?
 		end
 
 	perform_notify is
+		local
+			dt_util: expanded DATE_TIME_SERVICES
 		do
 			check
 				events_sorted: event_cache.sorted
@@ -185,15 +198,23 @@ feature {NONE}
 				until
 					event_cache.islast
 				loop
-					put (concatenation (<<event_cache.item.date,
-						Output_field_separator, event_cache.item.time,
+					put (concatenation (<<
+						dt_util.formatted_date (event_cache.item.date,
+							'y', 'm', 'd', ""),
+						Output_field_separator,
+						dt_util.formatted_time (event_cache.item.time,
+							'h', 'm', 's', ""),
 						Output_field_separator,
 						event_cache.item.type_abbreviation,
 						Output_record_separator>>))
 					event_cache.forth
 				end
-				put (concatenation (<<event_cache.item.date,
-					Output_field_separator, event_cache.item.time,
+				put (concatenation (<<
+					dt_util.formatted_date (event_cache.item.date,
+						'y', 'm', 'd', ""),
+					Output_field_separator,
+					dt_util.formatted_time (event_cache.item.time,
+						'h', 'm', 's', ""),
 					Output_field_separator,
 					event_cache.item.type_abbreviation>>))
 			end
@@ -226,6 +247,8 @@ feature {NONE}
 			-- end date, so just set the start date.
 			event_coordinator.set_start_date_time (analysis_start_date)
 			event_coordinator.set_event_generators (valid_event_generators)
+		ensure
+			pair_not_void: tradable_pair /= Void
 		end
 
 	valid_event_generators: LINKED_LIST [MARKET_EVENT_GENERATOR] is
@@ -270,6 +293,8 @@ feature {NONE}
 				period_types @ (period_type_names @ Hourly)),
 				tradables.tradable (symbol,
 				period_types @ (period_type_names @ Daily)))
+		ensure
+			not_void: Result /= Void
 		end
 
 	error_context (msg: STRING): STRING is
