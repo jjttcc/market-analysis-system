@@ -24,11 +24,12 @@ set_up()
 		exit -1
 	fi
 	PATH=$PATH:./bin
-	type pr_dataset >/dev/null 2>&1
-	if [ $? -ne 0 ]
+	if [ ! -r bin/testlib ]
 	then
-		echo "Script pr_dataset is not in bin directory - exiting ..."
+		echo "shell function definitions file testlib is not in bin directory - exiting ..."
 		exit -1
+	else
+		. bin/testlib
 	fi
 	type compare_numbers >/dev/null 2>&1
 	if [ $? -ne 0 ]
@@ -54,12 +55,17 @@ set_up()
 		echo "Cannot find test input file - exiting ..."
 		exit -1
 	else
-		macd_etc_in_file=input/test_data
-		ma_in_file=input/ma
-		momentum_in_file=input/momentum
-		stoch_in_file=input/stoch
-		williams_in_file=input/williams
-		roc_in_file=input/roc
+		if [ $# -eq 0 ]
+		then
+			file_name_table=lib/test_files.1
+		else
+			file_name_table=$1
+			if [ ! -r $file_name_table ]
+			then
+				echo "Cannot read $file_name_table - exiting ..."
+				exit -1
+			fi
+		fi
 	fi
 	if [ -e output -a ! -d output ]
 	then
@@ -72,11 +78,28 @@ set_up()
 	fi
 }
 
+filter_output()
+# Filter the output of a test into for processing.
+# Print only the 2nd field of data extracted from the file.
+{
+	awk '/^[0-9][0-9][0-9][0-9]\// { print $2 }'
+}
+
+run_at_index()
+# Run a test on file $Tinput for indicator at index $Tindex.
+{
+	echo "v
+i
+$Tindex
+p
+x"|$exec input/$Tinput|filter_output
+}
+
 run_test()
 {
 	test_count=$(expr $test_count + 1)
-	pr_dataset $outputfile "$*" >output/run_test.out
-	errors="$(compare_numbers output/run_test.out reference/$ref_file)"
+	run_at_index >$outputfile
+	errors="$(compare_numbers $outputfile reference/$Toutputref)"
 	if [ -z "$errors" ]
 	then
 		echo "$*" test succeeded
@@ -87,31 +110,25 @@ run_test()
 	fi
 }
 
-curdir=$(basename $PWD)
-if [ "$curdir" != test ]
+if [ "$(basename $PWD)" != test ]
 then
 	find_test_dir
 fi
 
-set_up
+if [ $# -gt 0 ]; then
+	set_up $1
+else
+	set_up
+fi
+
 outputfile=output/test1.out
-$exec $macd_etc_in_file >$outputfile
-ref_file=ema run_test "Exponential Moving Average"
-ref_file=macd run_test MACD
-ref_file=macd_sig run_test "MACD Signal"
-ref_file=macd_hist run_test "MACD Histogram"
-$exec $ma_in_file >$outputfile
-ref_file=ma run_test "Moving Average"
-$exec $momentum_in_file >$outputfile
-ref_file=momentum run_test "Momentum"
-$exec $stoch_in_file >$outputfile
-ref_file=stochK5 run_test "Stochastic %K"
-ref_file=stochD5 run_test "Stochastic %D"
-ref_file=slow_stochD3 run_test "Slow Stochastic %D"
-$exec $williams_in_file >$outputfile
-ref_file=williams run_test "Williams"
-$exec $roc_in_file >$outputfile
-ref_file=roc run_test "Rate of Change"
+
+set_next_test_params $file_name_table
+while [ ! "$Tfinished" = "true" ]; do
+	echo "Runing test for $Test_name"
+	run_test
+	set_next_test_params $file_name_table
+done
 
 echo "$successes out of $test_count tests succeeded."
 if [ "$successes" -eq "$test_count" ]
