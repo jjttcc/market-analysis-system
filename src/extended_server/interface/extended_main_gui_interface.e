@@ -33,11 +33,10 @@ feature {NONE} -- Implementation
 			request_handlers.extend (create {
 				TIME_DELIMITED_MARKET_DATA_REQUEST_CMD}.make (
 					tradable_list_handler), time_delimited_market_data_request)
---!!! Uncomment when ready:
---			request_handlers.extend (create {
---				TIME_DELIMITED_INDICATOR_DATA_REQUEST_CMD}.make (
---					tradable_list_handler),
---					time_delimited_indicator_data_request)
+			request_handlers.extend (create {
+				TIME_DELIMITED_INDICATOR_DATA_REQUEST_CMD}.make (
+					tradable_list_handler),
+					time_delimited_indicator_data_request)
 		end
 
 end

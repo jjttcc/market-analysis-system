@@ -23,7 +23,10 @@ creation
 
 feature {NONE} -- Hook routine implementations
 
-	expected_field_count: INTEGER is 3
+	expected_field_count: INTEGER is
+		once
+			Result := 3
+		end
 
 	symbol_index: INTEGER is 2
 
