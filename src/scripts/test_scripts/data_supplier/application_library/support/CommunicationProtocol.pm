@@ -37,11 +37,11 @@ Protocol for communication with the client
 	use constant error_id => '2';
 
 	# Character used to separate top-level message components
-	use constant message_component_separator => "%T";
+	use constant message_component_separator => "\t";
 
 	# Character used to separate "records" or "lines" within
 	# a message component
-	use constant message_record_separator => "%N";
+	use constant message_record_separator => "\n";
 
 	# Default field separator of date fields from input
 	use constant date_field_separator => "/";
