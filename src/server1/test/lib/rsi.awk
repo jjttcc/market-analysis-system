@@ -1,4 +1,4 @@
-# Compute RSI - from Colby and Meyers
+# Compute RSI - from Colby and Meyers (alternate method)
 BEGIN {
 if (n_value == 0) n_value = 7 # default n
 n = n_value
@@ -9,14 +9,20 @@ n = n_value
 	recs = i
 }
 END {
-	upv = upsum(closes, 0, n) / n
-	downv = downsum(closes, 0, n) / n
-	printf("%f, %f, %f, %.5f\n", closes [n], upv, downv, rsi(upv / downv))
-	for (j = n + 1; j < recs; ++j) {
-		upv = (upv * (n-1) + rsidiff(closes[j], closes[j-1])) / n
-		downv = (downv * (n-1) + rsidiff(closes[j-1], closes[j])) / n
-		printf("%f, %f, %f, %.5f\n",
-				closes [j], upv, downv, rsi(upv / downv))
+	upavgs[0] = upsum(closes, 0, n) / n
+	downavgs[0] = downsum(closes, 0, n) / n
+	i = 1; j = n + 1
+	for ( ; j < recs; ++j) {
+		upavgs[i] = (upavgs[i-1] * (n-1) + rsidiff(closes[j], closes[j-1])) / n
+		downavgs[i] = \
+			(downavgs[i-1] * (n-1) + rsidiff(closes[j-1], closes[j])) / n
+		++i
+	}
+	for (k = 0; k < i; ++k) {
+		#printf("k: %d, %f, %f, %f\n", k,
+		#	closes [k+n], upavgs[k], downavgs[k])
+		printf("%f, %f, %f, %.5f\n", closes [k+n], upavgs[k], downavgs[k],
+				rsi(upavgs[k] / downavgs[k]))
 	}
 }
 
