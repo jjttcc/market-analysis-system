@@ -209,9 +209,9 @@ src/clients/support/Utilities.class lib/classes/support/ mas_linux1.4 mas_window
 src/clients/support/IntPair.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/support/GUI_Utilities.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/support/ErrorBox.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
-src/clients/support/ErrorBox$1.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
-src/clients/support/ErrorBox$2.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
-src/clients/support/ErrorBox$3.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
+src/clients/support/ErrorBox\$1.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
+src/clients/support/ErrorBox\$2.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
+src/clients/support/ErrorBox\$3.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/support/IndicatorGroup.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/support/IndicatorGroups.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
 # (GUI config. file)
