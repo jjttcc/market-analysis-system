@@ -1,0 +1,173 @@
+Creating Market Analyzers with the Market Analysis Server
+
+This document provides a tutorial on creating market analyzers with the
+Market Analysis Server (MAS).  It consists of a brief introduction to
+the concepts used by the MAS command-line interface for creating market
+analyzers, as well as a specific example of creating an analyzer.
+
+A market analyzer, also referred to as an event type, is a set of
+criteria to be used in analysis of market data, resulting in notification
+(typically by email) of events that meet the criteria.  An example
+of such an event is when the MACD difference line crosses above the
+MACD signal line.  In order to use more than one criterion, composite
+market analyzers, made up of other market analyzers, can be constructed.
+Example 2 below shows how to do this.
+
+Example 1 shows how to create a market analyzer that checks if the
+stochastic %D value crosses from above to below 35% for daily data.
+Example 2 shows how to create a composite market analyzer that uses
+the one created in Example 1 combined with one that checks for the MACD
+difference line crossing from below to above the MACD signal line for
+weekly data.  This analyzer produces a buy signal for markets that meet
+the criteria - weekly MACD crossover shows an uptrend and daily stochastic
+below 35% shows an oversold condition.
+
+Example 3 shows how to create a market analyzer that checks for volume
+spikes.  This can be useful to detect stocks where a volume spike precedes
+a strong price breakout, which sometimes happens when knowledgeable
+investors act on news not yet readily available to the public.
+
+
+Example 1:  Stochastic %D Cross-below 35%
+
+First, make sure that the mas server is running.  You can either run it
+in the foreground and use its command-line interface directly, or you
+can run it in the background and connect with it using either the macl
+or maclj scripts.
+
+Once you have access to the MAS command-line interface, enter 'm'
+(Edit market analyzers) from the main menu.  Then enter 'c' (Create a
+new market analyzer).  Next choose 's' (Simple) to make a simple (not
+compound) market analyzer.  When it asks if you want to use one or two
+technical indicators, choose two.  (You want one for Stochastic %D and
+one for the 35% crossover value.)
+
+Next, for the left technical indicator, select "Stochastic %D".  For the
+right indicator, select "Line".  It will then ask for the Line's starting
+(leftmost) y value.  Since you want the crossover value to be 35%,
+enter 35.  When it asks for the Line's slope, enter 0.  Since a slope
+of 0 means the line does not rise or fall, this ensures that the y value
+of the line will remain 35 for the length of the line.
+
+The system will then ask for the trading period type for the new
+market analyzer.  Since you want the stochastic crossover criteria to
+be for daily data, select "daily".  It will then ask if the crossover
+detection should be below-to-above, above-to-below, or both.  Select
+"above-to-below".
+
+It will then ask if you want to define an operator (which will add extra
+criteria to the analyzer).  You don't need this, so answer no.
+
+The system will then ask for a name for the new market analyzer (event).
+Enter a name that you think is appropriate, such as:
+Stochastic %D/35% oversold crossover - Buy signal.
+This completes the definition of the
+stochastic %D above to below crossover market analyzer.
+
+
+Example 2:  MACD Difference/signal Crossover and Stochastic %D Cross-below 35%
+
+This example defines an analyzer that uses the one created in Example 1,
+combined with the weekly MACD difference/signal crossover
+analyzer.  (This analyzer should already exist if you are using the
+market analyzer library included with the current release.)
+
+From the main menu, choose 'm' (Edit market analyzers), then choose 'c'
+(Create a new market analyzer) to create a new market analyzer.  Then
+choose 'c' (Compound), since you want a compound or composite analyzer.
+Next the system asks for the left component of the compound analyzer.
+Since what we want is the long-range signal - weekly MACD crossover - to
+precede the short range oversold signal, the long range signal should
+be set to occur before the short range signal.  Since before-ness in
+time is conceptually to the left, the left analyzer will be the long
+range analyzer, the one whose signal is expected before the short range
+analyzer.  So choose the "MACD difference/signal crossover event - below
+to above", the bullish MACD signal.  This is a weekly signal that will
+be triggered when a market's MACD difference line crosses from below to
+above the MACD signal line.
+
+The system will then ask for the right component.  Choose the stochastic
+%D crossover analyzer that you created above.  It will then ask if you
+want to specify a time extension to match events from the left analyzer
+that occur before events from the right analyzer.  Since you want to
+know if the MACD corssover occurs before the stochastic oversold signal,
+you need to answer yes.  Choose an appropriate amount of time for
+the left signal to be included if it occurs before the right signal.
+You can choose to enter days, months, and/or years.  In my system,
+I chose 28 days.  When you are finished selecting days/months/years,
+enter 'e' to end.
+
+It will then ask if you want to add a time extension to match events
+from the left analyzer that occur after events from the right analyzer.
+Since you don't want to know about MACD crossover events that occur
+after stochastic oversold events, say no.
+
+Next it asks if you want to specify an event type as target for the left
+analyzer's date and time.  You don't need this here, so answer no.
+
+Finally, select a good name for the compound indicator, such as:
+[MACD below/above crossover] / [Stochastic%D/35% oversold crossover] <Buy>
+
+This completes the creation of a market analyzer that creates buy signals
+when the weekly MACD difference line crosses over the weekly MACD signal
+line within the specified period of time before the Stochastic %D function
+crosses below the 35% line.  If you wish to view the structure of the
+new analyzer, you can select 'v' (View a market analyzer) and then select
+the analyzer.
+
+You will probably want to also create a market analyzer for the reverse
+signal - weekly MACD difference line crossing below the weekly MACD signal
+line and stochstac %D crossing above the 65% line.  Using the above example,
+you should find this a straightforward process.
+
+Note that if you decide you want to change the 35% crossover value of the
+stochastic oversold part of the compound indicator you created, you can
+do this by, from the main menu, selecting 'e' (Edit indicators), and then
+'a' (Edit market-analysis indicators).  Then select the MACD crossover /
+stochastic oversold signal you created.  Then select "Line", which is
+the indicator that holds the 35% crossover value.  Then select to edit
+the y-value of the Line.  Enter a new value, such as 30.  And enter 0 to
+exit this menu, and 0 again to exit the market analyzer selection menu.
+You can also, if you like, use this procedure to edit the MACD crossover
+values - for example, the n-values used for the moving averages for
+MACD difference.
+
+
+Example 3:  Volume Spike Detector
+
+This example shows the creation of a market analyzer that will produce
+a signal if the daily volume is more than 3 times greater than for the
+previous day.
+
+From the main menu, choose 'm' (Edit market analyzers), then choose 'c'
+(Create a new market analyzer) to create a new market analyzer.
+
+When creating a market analyzer, it often helps to think about what the
+analyzer needs to do and then draw a picture of it before creating it.
+We will do this in this example.
+
+First, since the analyzer will be processing only one attribute of the
+market data, volume, it will need to be both a simple (non-compound)
+analyzer and it will analyze one indicator, rather than two.
+Second, an operator will be needed for this analyzer, since the expression
+"volume > last_period_volume * 3" needs to be evaluated for each period.
+This will require a composite operator that can be drawn as a tree:
+
+
+                          GT_OPERATOR
+                           /       \
+                      VOLUME     MULTIPLICATION
+                                   /        \
+                  SETTABLE_OFFSET_COMMAND  CONSTANT (3)
+                             |
+                           VOLUME
+
+GT_OPERATOR (greater-than operator) provides the boolean greater than
+operation needed to express "volume > last_period_volume * 3".  VOLUME
+obtains the volume for the current period as GT_OPERATOR's left operand.
+MULTIPLICATION, GT_OPERATOR's right operand, provides the multiplication
+operation for "last_period_volume * 3".  SETTABLE_OFFSET_COMMAND,
+MULTIPLICATION's left operand, will be used to obtain the volume of
+the previous period.  SETTABLE_OFFSET_COMMAND's operand, VOLUME, will
+extract the volume from the record from the previous period.  CONSTANT,
+MULTIPLICATION's right operand, provides the 3 in "last_period_volume * 3".
