@@ -104,7 +104,8 @@ feature -- Access
 					Result.count = intraday_market_list.count
 		end
 
-	period_type_names_for (symbol: STRING): ARRAYED_LIST [STRING] is
+--!!!!!remove:
+	old_remove_period_type_names_for (symbol: STRING): ARRAYED_LIST [STRING] is
 		local
 			l: LIST [TIME_PERIOD_TYPE]
 			t: TRADABLE [BASIC_MARKET_TUPLE]
@@ -163,6 +164,64 @@ feature -- Access
 			if tbl /= Void and not tbl.is_empty then
 				tbl.compare_objects
 				Result := period_types_sorted_by_duration (tbl)
+			end
+		end
+
+	period_type_names_for (symbol: STRING): ARRAYED_LIST [STRING] is
+		local
+			t: TRADABLE [BASIC_MARKET_TUPLE]
+			target_set: PART_SORTED_SET [TIME_PERIOD_TYPE]
+			std_types: LINKED_SET [TIME_PERIOD_TYPE]
+			g: expanded GLOBAL_SERVER_FACILITIES
+			ptypes: expanded PERIOD_TYPE_FACILITIES
+		do
+			reset_error_state
+			create target_set.make
+			create Result.make (0)
+			if intraday_market_list /= Void then
+				intraday_market_list.search_by_symbol (symbol)
+				if not intraday_market_list.fatal_error then
+					t := intraday_market_list.item
+				end
+				if not intraday_market_list.fatal_error then
+					target_set.fill (t.period_types.linear_representation)
+					if
+						not
+						g.command_line_options.allow_non_standard_period_types
+					then
+						create std_types.make
+						std_types.fill (ptypes.standard_period_types)
+						-- Since "non-standard" period types are not allowed,
+						-- remove from `target_set' all period types that
+						-- do not occur in `ptypes.standard_period_types'.
+						target_set.intersect (std_types)
+					end
+				else
+					error_occurred := True
+					last_error := concatenation (<<"Error occurred ",
+						"retrieving intraday period types for ", symbol>>)
+				end
+			end
+			if not error_occurred and daily_market_list /= Void then
+				daily_market_list.search_by_symbol (symbol)
+				if not daily_market_list.fatal_error then
+					t := daily_market_list.item
+				end
+				if not daily_market_list.fatal_error then
+					target_set.fill (t.period_types.linear_representation)
+				else
+					error_occurred := True
+					last_error := concatenation (<<"Error occurred ",
+						"retrieving non-intraday period types for ", symbol>>)
+				end
+			end
+			from
+				target_set.start
+			until
+				target_set.after
+			loop
+				Result.extend (target_set.item.name)
+				target_set.forth
 			end
 		end
 
@@ -296,6 +355,7 @@ feature {NONE} -- Implementation
 				not intraday_market_list.is_empty)
 		end
 
+--!!!!!remove:
 	period_types_sorted_by_duration (t: HASH_TABLE [BOOLEAN, STRING]):
 		ARRAYED_LIST [STRING] is
 			-- The result of a sort by duration, ascending, of the

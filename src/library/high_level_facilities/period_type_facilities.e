@@ -45,7 +45,7 @@ feature -- Access - Period-type indexes
 			-- Daily index for `period_type_names'
 	weekly: INTEGER is 10
 			-- Weekly index for `period_type_names'
-	Monthly: INTEGER is 11
+	monthly: INTEGER is 11
 			-- Monthly index for `period_type_names'
 	quarterly: INTEGER is 12
 			-- Quarterly index for `period_type_names'
@@ -61,6 +61,28 @@ feature -- Access
 			Result.fill (period_types.linear_representation)
 		ensure
 			exists: Result /= Void
+		end
+
+	standard_period_types: LINKED_LIST [TIME_PERIOD_TYPE] is
+			-- All "standard" period types (e.g., excluding 3-minute,
+			-- 4-minute, etc. types)
+		local
+			indexes: LINEAR [INTEGER]
+		do
+			from
+				indexes := standard_period_type_indexes.linear_representation
+				create Result.make
+				indexes.start
+			until
+				indexes.exhausted
+			loop
+				Result.extend (period_type_at_index (indexes.item))
+				indexes.forth
+			end
+		ensure
+			exists: Result /= Void
+			corresponds_to_standard_period_type_indexes: Result.count =
+				standard_period_type_indexes.count
 		end
 
 	period_type_at_index (i: INTEGER): TIME_PERIOD_TYPE is
@@ -244,6 +266,20 @@ feature -- Access
 			exists: Result /= Void
 		end
 
+	standard_period_type_indexes: ARRAY [INTEGER] is
+			-- All standard TIME_PERIOD_TYPE indexes in order:
+			-- one_minute .. yearly
+		once
+			Result := <<one_minute, two_minute, five_minute, ten_minute,
+				fifteen_minute, twenty_minute, thirty_minute, hourly,
+				daily, weekly, monthly, quarterly, yearly>>
+		ensure
+			bounds_definition: Result.lower = 1 and
+				Result.lower = one_minute and Result.upper = yearly
+			first_item_one_minute: Result.item (1) = one_minute
+			last_item_yearly: Result.item (Result.upper) = yearly
+		end
+
 	period_type_with_duration (d: DATE_TIME_DURATION): TIME_PERIOD_TYPE is
 			-- Period type whose duration matches `d' - Void if there
 			-- is no such period type.
@@ -380,35 +416,23 @@ feature -- Status report
 			type_pairs: ARRAY [PAIR [TIME_PERIOD_TYPE, INTEGER]]
 			pair: PAIR [TIME_PERIOD_TYPE, INTEGER]
 			i: INTEGER
+			indexes: LINEAR [INTEGER]
 		do
 			Result := True
 			ns_types := all_period_types
-			type_pairs := <<create {PAIR [TIME_PERIOD_TYPE, INTEGER]}.make (
-				period_types @ (period_type_names @ one_minute), one_minute),
-				create {PAIR [TIME_PERIOD_TYPE, INTEGER]}.make (
-				period_types @ (period_type_names @ two_minute), two_minute),
-				create {PAIR [TIME_PERIOD_TYPE, INTEGER]}.make (
-				period_types @ (period_type_names @ five_minute), five_minute),
-				create {PAIR [TIME_PERIOD_TYPE, INTEGER]}.make (
-				period_types @ (period_type_names @ ten_minute), ten_minute),
-				create {PAIR [TIME_PERIOD_TYPE, INTEGER]}.make (period_types @
-				(period_type_names @ fifteen_minute), fifteen_minute),
-				create {PAIR [TIME_PERIOD_TYPE, INTEGER]}.make (period_types @
-				(period_type_names @ twenty_minute), twenty_minute),
-				create {PAIR [TIME_PERIOD_TYPE, INTEGER]}.make (period_types @
-				(period_type_names @ thirty_minute), thirty_minute),
-				create {PAIR [TIME_PERIOD_TYPE, INTEGER]}.make (
-				period_types @ (period_type_names @ hourly), hourly),
-				create {PAIR [TIME_PERIOD_TYPE, INTEGER]}.make (
-				period_types @ (period_type_names @ daily), daily),
-				create {PAIR [TIME_PERIOD_TYPE, INTEGER]}.make (
-				period_types @ (period_type_names @ weekly), weekly),
-				create {PAIR [TIME_PERIOD_TYPE, INTEGER]}.make (
-				period_types @ (period_type_names @ monthly), monthly),
-				create {PAIR [TIME_PERIOD_TYPE, INTEGER]}.make (
-				period_types @ (period_type_names @ quarterly), quarterly),
-				create {PAIR [TIME_PERIOD_TYPE, INTEGER]}.make (
-				period_types @ (period_type_names @ yearly), yearly)>>
+			from
+				indexes := standard_period_type_indexes.linear_representation
+				create type_pairs.make (standard_period_type_indexes.lower,
+					standard_period_type_indexes.upper)
+				indexes.start
+			until
+				indexes.exhausted
+			loop
+				type_pairs.put (create {PAIR [TIME_PERIOD_TYPE, INTEGER]}.make (
+					period_types @ (period_type_names @ indexes.item),
+					indexes.item), indexes.item)
+				indexes.forth
+			end
 			from
 				i := type_pairs.lower
 			until
@@ -493,17 +517,11 @@ feature {NONE} -- Implementation
 
 	standard_period_type_correct (t: TIME_PERIOD_TYPE; type_index: INTEGER):
 		BOOLEAN is
-			-- Is `t' in a correct state for a period type of `type_index'?
+			-- Is `t' in a correct state for a standard period type
+			-- of `type_index'?
 		require
-			valid_type_index:
-				type_index = one_minute or else type_index = two_minute or else
-				type_index = five_minute or else type_index = ten_minute
-				or else type_index = fifteen_minute or else type_index =
-				twenty_minute or else type_index = thirty_minute or else
-				type_index = hourly or else type_index = daily or else
-				type_index = weekly or else type_index = monthly or else
-				type_index = quarterly or else type_index = yearly
-			type_index_exists: type_index /= Void
+			valid_type_index: standard_period_type_indexes.has (type_index)
+			t_exists: t /= Void
 		do
 			Result := equal (t, new_standard_period_type (type_index))
 		ensure
@@ -513,14 +531,7 @@ feature {NONE} -- Implementation
 	new_standard_period_type (type_index: INTEGER): TIME_PERIOD_TYPE is
 			-- A new 'standard' period type based on `type_index'
 		require
-			valid_type_index:
-				type_index = one_minute or else type_index = two_minute or else
-				type_index = five_minute or else type_index = ten_minute
-				or else type_index = fifteen_minute or else type_index =
-				twenty_minute or else type_index = thirty_minute or else
-				type_index = hourly or else type_index = daily or else
-				type_index = weekly or else type_index = monthly or else
-				type_index = quarterly or else type_index = yearly
+			valid_type_index: standard_period_type_indexes.has (type_index)
 		local
 			duration: DATE_TIME_DURATION
 		do
@@ -592,5 +603,13 @@ invariant
 	period_type_name_lists_correspond:
 		period_type_names.count = period_types.count and
 		intraday_period_type_names.count = intraday_period_types.count
+	std_indexes_bounds: standard_period_type_indexes.lower = 1 and
+				standard_period_type_indexes.lower = one_minute and
+				standard_period_type_indexes.upper = yearly
+				standard_period_type_indexes.count = yearly
+	first_std_index_one_minute:
+		standard_period_type_indexes.item (1) = one_minute
+	last_std_index_yearly: standard_period_type_indexes.item (
+		standard_period_type_indexes.upper) = yearly
 
 end
