@@ -38,7 +38,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_field_separator (arg: CHARACTER) is
+	set_field_separator (arg: like field_separator) is
 			-- Set field_separator to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -82,7 +82,7 @@ feature {NONE} -- Implementation
 					"  Empty field - from file ",
 					input.name, " at character ", input.index,
 					" - invalid input value: ", input.last_integer>>)
-				error_occurred := true
+				error_occurred := True
 				raise ("scan_symbol failed with empty field")
 			end
 		end
@@ -107,7 +107,7 @@ feature {NONE} -- Implementation
 					<<"Error occurred inputting date from file ",
 					input.name, " at character ", input.index,
 					" - invalid input value: ", input.last_integer>>)
-				error_occurred := true
+				error_occurred := True
 				raise ("scan_date failed")
 			end
 		end
@@ -127,7 +127,7 @@ feature {NONE} -- Implementation
 					input.name, " at character ", input.index,
 					" - invalid field separator for time: ",
 					input.last_character>>)
-				error_occurred := true
+				error_occurred := True
 				raise ("scan_time failed with invalid input")
 			else
 				input.read_integer
@@ -139,7 +139,7 @@ feature {NONE} -- Implementation
 						input.name, " at character ", input.index,
 						" - invalid field separator for time: ",
 						input.last_character>>)
-					error_occurred := true
+					error_occurred := True
 					raise ("scan_time failed with invalid input")
 				else
 					input.read_integer
@@ -157,7 +157,7 @@ feature {NONE} -- Implementation
 					<<"Error occurred inputting time from file ",
 					input.name, " at character ", input.index,
 					" - invalid time: ", hour, ":", minute, ":", second>>)
-				error_occurred := true
+				error_occurred := True
 				raise ("scan_time failed with invalid input")
 			end
 		end

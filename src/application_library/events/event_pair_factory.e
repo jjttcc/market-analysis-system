@@ -66,7 +66,7 @@ feature -- Basic operations
 			-- Add the factory product to the product list.
 			Result := parser.product.product
 		rescue
-			error_occurred := true
+			error_occurred := True
 			if parser.error_occurred then
 				last_error := parser.last_error
 			elseif parser.product.error_occurred then
