@@ -98,86 +98,6 @@ feature -- Access
 			old_index_updated: index = old_index
 		end
 
-	item2: TRADABLE [BASIC_MARKET_TUPLE] is
-			-- The current tradable.  `fatal_error' will be True if an error
-			-- occurs.
-		do
-			fatal_error := False
-			if index = old_index and cache.count > 0 then
-				check
-					target_tradable_exists: target_tradable /= Void
-				end
-				if
-					cached_item (index) /= Void and then
-					target_tradable_out_of_date
-				then
-					append_new_data
-				end
-			else
-				check
-					cursor_location_changed: index /= old_index
-				end
-				target_tradable := cached_item (index)
-				if target_tradable = Void then
-					load_target_tradable
-				else
-					if target_tradable_out_of_date then
-						append_new_data
-					end
-					target_tradable.flush_indicators
-				end
-				old_index := index
-			end
-			Result := target_tradable
-			if Result = Void then
-				fatal_error := True
-			end
-		ensure then
-			good_if_no_error: not fatal_error = (Result /= Void)
-			target_exists_if_no_error: not fatal_error implies
-				(target_tradable /= Void)
-			old_index_updated: index = old_index
-		end
-
-	old_item: TRADABLE [BASIC_MARKET_TUPLE] is
-			-- The current tradable.  `fatal_error' will be True if an error
-			-- occurs.
-		do
-			fatal_error := False
-			if index = old_index and cache.count > 0 then
-				check
-					target_tradable_exists: target_tradable /= Void
-				end
-				if
-					cached_item (index) /= Void and then
-					target_tradable_out_of_date
-				then
-					append_new_data
-				end
-			else
-				check
-					cursor_location_changed: index /= old_index
-				end
-				target_tradable := cached_item (index)
-				if target_tradable = Void then
-					load_target_tradable
-				else
-					if target_tradable_out_of_date then
-						append_new_data
-					end
-					target_tradable.flush_indicators
-				end
-				old_index := index
-			end
-			Result := target_tradable
-			if Result = Void then
-				fatal_error := True
-			end
-		ensure then
-			good_if_no_error: not fatal_error = (Result /= Void)
-			old_index_updated: index = old_index
-		end
-
 	symbols: LIST [STRING] is
 			-- The symbol of each tradable
 		do
@@ -326,11 +246,13 @@ end
 				if target_tradable_out_of_date then
 print ("update_item data was out of date, appending new data.%N")
 					append_new_data
+print ("update_item NOT flushing indicators" + "%N")
+-- !!!This command appears to have no effect on the results with respect to
+-- auto-refreshed data.  Verify and remove if so: [MAYBE NOT!]
+--					target_tradable.flush_indicators
 else
 print ("update_item data was NOT out of date, NOT appending.%N")
 				end
---!!!!!Check whether this should always be called here:
-				target_tradable.flush_indicators
 			end
 		end
 
