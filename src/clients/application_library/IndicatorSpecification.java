@@ -3,7 +3,7 @@ package application_library;
 import graph_library.DataSet;
 
 // Specification for an indicator data request to the server
-abstract public class IndicatorSpecification {
+abstract public class IndicatorSpecification extends DataSpecification {
 
 // Initialization
 
@@ -40,6 +40,25 @@ abstract public class IndicatorSpecification {
 
 // Element change
 
+	public void append_data(DataSet d) {
+		DataSet data = current_data();
+		if (! data.last_date_time_matches_first(d)) {
+			if (data.size() > 1 && data.need_a_name(d, data.size() - 2, 0)) {
+				data.remove_last_record();
+				data.remove_last_record();
+System.out.println("IS app_data - 2 records removed");
+			}
+else {
+System.out.println("IS app_data - NOTHING removed");
+}
+		} else {
+			data.remove_last_record();
+System.out.println("IS app_data - 1 record removed");
+		}
+		data.append(d);
+		last_append_changed_state = true;
+	}
+
 	/** Set `selected' to true. */
 	public void select() {
 		selected = true;
@@ -50,10 +69,11 @@ abstract public class IndicatorSpecification {
 		selected = false;
 	}
 
-	/**
-	* Append data set `d' to the current indicator data.
-	**/
-	public abstract void append_data(DataSet d);
+// Hook routine implementations
+
+	protected boolean bypass_append_data_guards() {
+		return true;
+	}
 
 // Implementation - attributes
 
