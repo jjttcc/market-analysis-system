@@ -202,14 +202,15 @@ feature -- Basic operations
 			edit_n (f)
 		end
 
-	edit_one_fn_bnc_nbc_n (f: EXPONENTIAL_MOVING_AVERAGE) is
-			-- Edit a function that takes one market function, a
-			-- BASIC_NUMERIC_COMMAND, an N_BASED_CALCULATION, and an n-value.
+	edit_ema (f: EXPONENTIAL_MOVING_AVERAGE) is
+			-- Edit an EXPONENTIAL_MOVING_AVERAGE - that takes one market
+			-- function, a RESULT_COMMAND [REAL], an N_BASED_CALCULATION,
+			-- and an n-value.
 		require
 			ui_set: user_interface /= Void
 			op_maker_set: operator_maker /= Void
 		local
-			cmd: BASIC_NUMERIC_COMMAND
+			cmd: RESULT_COMMAND [REAL]
 			exp: N_BASED_CALCULATION
 		do
 			f.set_input (user_interface.function_selection_from_type (
@@ -217,7 +218,7 @@ feature -- Basic operations
 							concatenation (<<f.generator,
 								"'s input function">>), false))
 			cmd ?= operator_maker.command_selection_from_type (
-						operator_maker.Basic_numeric_command,
+						operator_maker.Real_result_command,
 							concatenation (<<f.generator,
 								"'s main operator">>), false)
 			f.set_operator (cmd)

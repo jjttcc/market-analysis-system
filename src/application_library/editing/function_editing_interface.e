@@ -92,7 +92,8 @@ feature {NONE} -- Implementation
 	Two_cplx_fn_op,		-- Takes two complex functions and an operator.
 	One_fn_bnc_n,		-- Takes one market function, a BASIC_NUMERIC_COMMAND,
 						-- and an n-value.
-	One_fn_bnc_nbc_n,	-- Takes one market function, a BASIC_NUMERIC_COMMAND,
+	ema_function,	    -- EXPONENTIAL_MOVING_AVERAGE function - takes one
+						-- market function, a RESULT_COMMAND [REAL],
 						-- an N_BASED_CALCULATION, and an n-value.
 	Two_points_pertype,	-- Takes two market points and a period type.
 	Other				-- Classes that need no initialization
@@ -132,7 +133,7 @@ feature {NONE} -- Implementation
 			check
 				valid_name: function_names.has (name)
 			end
-			Result.extend (One_fn_bnc_nbc_n, name)
+			Result.extend (ema_function, name)
 			name := "ACCUMULATION"
 			check
 				valid_name: function_names.has (name)
@@ -163,12 +164,12 @@ feature {NONE} -- Implementation
 		do
 			inspect
 				initialization_map @ f.generator
-			when One_fn_bnc_nbc_n then
+			when ema_function then
 				ema ?= f
 				check
 					c_is_a_exp_ma: ema /= Void
 				end
-				editor.edit_one_fn_bnc_nbc_n (ema)
+				editor.edit_ema (ema)
 			when One_fn_bnc_n then
 				sma ?= f
 				check
