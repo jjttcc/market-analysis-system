@@ -52,7 +52,7 @@ feature -- Status setting
 			-- Set env_name_service to `arg'.
 		require
 			arg_not_void: arg /= Void
-		once
+		do
 			env_name_service := arg
 		ensure
 			env_name_service_set: env_name_service = arg and
