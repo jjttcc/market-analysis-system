@@ -72,7 +72,10 @@ class TimeDelimitedDataRequest extends TimerTask {
 			builder.send_time_delimited_market_data_request(
 				spec.symbol(), period_type, start_date, end_date);
 			if (builder.request_succeeded() &&
-					builder.last_market_data().size() > 0) {
+				builder.last_market_data().size() > 0 &&
+				(spec.current_data().size() == 0 ||
+				spec.current_data().last_date_time_matches_first(
+					builder.last_market_data()))) {
 
 				// Adjust the end date to the latest date of the main data
 				// to guarantee that the time range for indicator requests
@@ -103,6 +106,13 @@ class TimeDelimitedDataRequest extends TimerTask {
 					client.notify_of_update();
 				}
 			} else {
+//!!!debugging code:
+if (spec.current_data().size() > 0 &&
+	! spec.current_data().last_date_time_matches_first(
+	builder.last_market_data())) {
+System.out.println("TDDR, line 111 - curdata, lastmktdata: '" +
+spec.current_data() + "'\n\n'" + builder.last_market_data() + "'");
+}
 				// builder.send_time_delimited_market_data_request failed or
 				// obtained an empty result, so indicator requests are skipped.
 				if (! builder.request_succeeded()) {
