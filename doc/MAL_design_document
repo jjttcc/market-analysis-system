@@ -244,3 +244,6 @@ to be globally available.  It currently contains only one class,
 GLOBAL_SERVICES, which provides global services and globally available
 singletons (once functions).  In the future there may be a need to
 partition the global services into more than one class.
+
+
+Copyright 1998 Jim Cochrane and others, see file "forum.txt"
