@@ -62,6 +62,8 @@ awk -f $html_tools -f $format_tools --source 'BEGIN {
 		# Parse the title and/or header.
 		x = 0
 		while (getline) {
+			$0 = convert_directive($0)
+			if (groff()) { $0 = convert_html_chars($0) }
 			if ($1 ~ /^#/) {
 				# skip comment
 			} else if ($1 ~ /%title/) {
@@ -81,7 +83,8 @@ awk -f $html_tools -f $format_tools --source 'BEGIN {
 				if (End_intro) {
 					break
 				} else {
-					# If document has not title, it is time to break.
+					# If document has no title, header/title processing is
+					# finished.
 					if (! true_str("'$has_title'")) break
 					else End_intro = TRUE
 				}
@@ -90,7 +93,8 @@ awk -f $html_tools -f $format_tools --source 'BEGIN {
 				if (End_intro) {
 					break
 				} else {
-					# If document has not header, it is time to break.
+					# If document has no header, header/title processing is
+					# finished.
 					if (! true_str("'$has_header'")) break
 					else End_intro = TRUE
 				}
@@ -116,11 +120,11 @@ groff() && /\\/ {
 }
 
 /\*\^[a-z][a-z]*/ {
-	convert_directive()
+	$0 = convert_directive($0)
 }
 
 groff() && /\&#*[0-9a-z][0-9a-z]*;/ {
-	convert_html_chars()
+	$0 = convert_html_chars($0)
 }
 
 html() && /\\fB/ {
@@ -369,6 +373,8 @@ function print_header(name, addr1, addr2, phone, email) {
 
 function print_title(main, subt, sub_line_count) {
 	if (groff()) {
+		# Do not print both header and title:
+		if (true_str("'$has_header'")) return
 		printf("%s\n%s\n", ".de TP", ".sp 1.25")
 		if (main != "") {
 			printf(".ce\n\\s+1\\fB%s\\s-1\n", main)
@@ -383,10 +389,13 @@ function print_title(main, subt, sub_line_count) {
 		}
 		print "<TITLE>"
 		if (main != "") {
-			printf("%s -", main)
+			printf("%s", main)
 		}
-		for (i = 1; i <= sub_line_count; ++i) {
-			printf(" %s", subt[i])
+		if (subt[1] != "") {
+			printf(" -")
+			for (i = 1; i <= sub_line_count; ++i) {
+				printf(" %s", subt[i])
+			}
 		}
 		print "\n</TITLE>"
 	}
