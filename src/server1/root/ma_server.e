@@ -31,10 +31,8 @@ feature {NONE} -- Hook routine implementations
 			create {MAS_STREAM_READER} Result.make (medium, factory_builder)
 		end
 
-algorithms: expanded ALGORITHMS
 	make_current_media is
 		do
-algorithms.test_matp
 			create {LINKED_LIST [SOCKET]} current_media.make
 			from
 				command_line_options.port_numbers.start
