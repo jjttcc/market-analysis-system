@@ -20,6 +20,26 @@ trading system. Some of the features of MAS are:
      several clients at a time running on remote machines.
 
 
+REPORTING MAS SYSTEM INFORMATION
+
+Once you have successfully installed MAS and gotten it to run correctly,
+I would appreciate it if you would run the mas_dir/lib/report_system_info
+script (where mas_dir stands for the parent directory into which you
+installed MAS), which will gather some information about your system
+and email it to me.  This script will determine what version of MAS
+you are using, the version of Linux you are running (uname -a), get cpu
+information from /proc/cpuinfo, and ask you what desktop environment and
+version you are using and email this information to me.  If you don't
+like the idea of a script obtaining this information automatically,
+you can, alternatively, simply gather the information yourself by saving
+the output of "/path_of_mas_executable/mas -v", "uname -a", and "cat
+/proc/cpuinfo" into a file; include the name and version number of the
+deskstop environment (such as KDE 1.1.2) you are running; and send this
+file to me at: jtc@dimensional.com.  I will use this information to
+keep a record of what systems MAS has successfully been run on; your name
+and email address will not be included in this record.
+
+
 DOWNLOADING THE CURRENT VERSION OF MAS
 
 As of July, 2000, the current version of MAS can be downloaded from:
