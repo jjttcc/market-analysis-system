@@ -373,6 +373,90 @@ displayed value is not really correct.
 Since this phenomenon is unusual, but not totally
 unexpected, you can regard this as an informational message rather
 than an error message.
+<P>
+<B>
+<A name="new indicator in GUI">
+I tried adding a new indicator to MAS.  It worked in the command prompt
+and is showing in the list of indicators. But when I try to load the
+Java Charts the new indicator is not there in the list of indicators.
+I followed the instructions in the creating_indicators.txt file.  Do I
+need to do something extra for the new indicator to show up in the
+java charts?
+<P></B>
+Yes, there is one more step you need to get the new indicator to show
+up in the charting GUI.  You need to edit the .ma_clientrc file and add
+a line in that file for the new indicator.  This file resides in the
+lib/classes directory, under the main MAS directory - the directory in
+which you installed MAS.  This is not very user friendly and the GUI will
+probably be enhanced in the future with a feature to make the task of
+adding a new indicator much easier.  But for now it must be done by hand.
+<P>
+To add the new indicator, you need to find a 3-line comment
+in the .ma_clientrc file that begins:
+<P>
+# Specify which indicators to include in the selection list, the order ...
+<P>
+After the comment are specifications for indicators that the GUI will
+request from the server.  The easiest way to add a line for your new
+indicator is to copy an existing line and change it to fit your new
+indicator.  For example, for a Force Index indicator (which you want
+to appear in the lower chart rather than the main chart) you could
+copy and change the line:
+<P>
+lower_indicator	MACD Difference	red
+<P>
+to:
+<P>
+lower_indicator	Force Index	red
+<P>
+(Change lower_indicator to upper_indicator if you want the indicator to
+appear in the main chart.)
+If you want the indicator to be drawn in a color other than red, pick one
+of the colors listed in the comment lines that begin:
+<P>
+# color settings - Valid colors are:
+<P>
+and change the string "red" to the string for the color you picked.  There
+are two things to note here: First, the format of an indicator specification
+line is:
+<P>
+&lt;indicator-location&gt;{tab}&lt;indicator-name&gt;{tab}&lt;indicator-color&gt;
+<P>
+where:
+<P><I>
+&lt;indicator-location&gt;</I> is either
+<I>lower_indicator</I> or <I>upper_indicator</I>
+<br>
+<I>{tab}</I> is a tab character
+<br>
+<I>&lt;indicator-name&gt;</I> is the name of the indicator
+<br>
+<I>&lt;indicator-color&gt;</I> is the color of the indicator
+<P>
+The second thing is that the indicator name has to match exactly the name
+you gave the indicator when you created it with the MAS program.
+<P>
+One more obstacle you may encounter is that the file is in UNIX text
+format, which means that many Windows-based editors (since they require
+both a newline and linefeed character to indicate a new line) will
+display the file as one long line.  It will be very difficult to edit
+the file with such an editor.  To solve this problem, you can obtain
+an editor that recognizes UNIX format.  (I haven't researched it, but
+I would guess that there are several such editors available for free on
+the web.
+<A href="http://www.vim.org/index_real.php">
+Vim</A>, a VI clone, is one,
+and, most likely, a Windows version of emacs exists that can also do this.
+A quick search on google.com unearthed
+<A href="http://www.hsinlin.com/software/text_editors.html">
+this site</A>, which lists several Windows editors.
+One of the links on that site leads to
+<A href="http://www.newbie.net/NotesPad/notespad_32.html">
+a free Windows editor</A>
+that appears to handle UNIX text files.)
+I'm aware that dealing with this obstacle will be a major inconvenience for
+some people.  This is one reason I'm hoping to be able to add a feature to
+the GUI to make it easy to add a new indicator.
 <h3>
 <A name="database">
 Database Problems
@@ -467,6 +551,19 @@ Enter '0' again to leave the edit-indicator menu.
 Enter 's' (Save changes) to save the changes you have just made.
 Enter '-' (Previous) to leave the edit-indicators menu.
 Enter 'x' to exit the command-line client.
+<P>
+<B>
+<A name="new indicator in GUI">
+I tried adding a new indicator to MAS.  It worked in the command prompt
+and is showing in the list of indicators. But when I try to load the
+Java Charts the new indicator is not there in the list of indicators.
+I followed the instructions in the creating_indicators.txt file.  Do I
+need to do something extra for the new indicator to show up in the
+java charts?
+<P></B>
+<A href="#new indicator in GUI">
+This question is covered</A> in the
+<I>MAS Charting GUI</I> section.
 <h3>
 <A name="signal generation">
 Signal Generation and Market Analyzers
