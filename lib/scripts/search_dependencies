@@ -15,6 +15,18 @@ eiffel_files() {
 	find $1 -follow -name '*.e' -print
 }
 
+dependency_list() {
+	clname=$1; shift
+	files=$*
+	list=
+	for f in $files; do
+		if sed '/^[ 	]*--/d' $f|grep "\<$clname\>" >/dev/null; then
+			list="$list $f"
+		fi
+	done
+	echo $list
+}
+
 if [ $# -lt 2 ]; then
 	usage
 	exit -1
@@ -35,9 +47,11 @@ do
 	if
 		grep "\<$classname\>" $afiles >/dev/null
 	then
-			echo -e classes: \"$(grep -l "\<$classname\>" $afiles)\" "\c"
-			echo "depend on $clusterB/$f"
-			Result=1
+			l=$(dependency_list "$classname" $afiles)
+			if [ ! -z "$l" ]; then
+				echo -e classes: '"'$l'"' "depend on $clusterB/$f"
+				Result=1
+			fi
 	fi
 done
 
