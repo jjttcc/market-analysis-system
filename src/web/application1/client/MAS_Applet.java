@@ -18,7 +18,7 @@ import support.SelfContainedConfiguration;
 public class MAS_Applet extends Applet {
 
 	public void init() {
-		log("Compiled at Fri Feb 21 22:39:19 MST 2003");
+		log("Compiled at Sat Feb 22 22:17:09 MST 2003");
 		try {
 			initialize_configuration();
 			if (initialization_succeeded) {
