@@ -213,13 +213,16 @@ src/clients/support/Utilities.class lib/classes/support/ mas_linux1.4 mas_window
 src/clients/support/IntPair.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/support/GUI_Utilities.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/support/ErrorBox.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
+src/clients/support/ErrorBox$1.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
+src/clients/support/ErrorBox$2.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
+src/clients/support/ErrorBox$3.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/support/IndicatorGroup.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
 src/clients/support/IndicatorGroups.class lib/classes/support/ mas_linux1.4 mas_windows1.4 mac1.4
 # (GUI config. file)
 build/config/.ma_clientrc lib/classes/ mas_linux1.4 mas_windows1.4 mac1.4
 # (Scripts)
-bin/magc . mas_linux1.4 mas_windows1.4 clientsrc1.4 mac1.4
-bin/masb . mas_linux1.4 mas_windows1.4 clientsrc1.4 mac1.4
+src/scripts/mas/magc bin/ mas_linux1.4 mas_windows1.4 clientsrc1.4 mac1.4
+src/scripts/mas/masb bin/ mas_linux1.4 mas_windows1.4 clientsrc1.4 mac1.4
 src/scripts/python/mas/client/macl bin/ mas_linux1.4 mas_windows1.4 clientsrc1.4 mac1.4
 src/scripts/python/mas/client/CommandProcessor.py lib/python/ mas_linux1.4 mas_windows1.4 clientsrc1.4 mac1.4
 src/scripts/python/mas/library/constants.py lib/python/ mas_linux1.4 mas_windows1.4 clientsrc1.4 mac1.4
@@ -245,6 +248,9 @@ build/config/slope_of_slope_of_macd_sl_cross0 lib/config/ mas_linux1.4 mas_windo
 build/config/stoch_pctD_cross lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
 build/config/volume_gt_1million lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
 build/config/volume_spike lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config/editind lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config/smsl_ssmsl_trend lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
+build/config/smsl_ssmsl_trend_analyzers lib/config/ mas_linux1.4 mas_windows1.4 mac1.4
 # (Server executables and needed libraries)
 lib/binaries/mas_no_assert_v1.4 bin/mas mas_linux1.4
 lib/binaries/mas_assert_v1.4 bin/mas_assert mas_linux1.4
@@ -307,7 +313,6 @@ src/scripts/python/pmm src/scripts/ scripts
 /home2/finance/bin/extract_data src/scripts/ scripts
 /home2/finance/bin/loss src/scripts/ scripts
 /home2/finance/bin/process_mas_mail src/scripts/ scripts
-/home2/finance/bin/masb src/scripts/ scripts
 /home2/finance/lib/.marketenv src/scripts/lib/ scripts
 /home2/finance/lib/.mas_env src/scripts/lib/ scripts
 /home2/finance/lib/awk src/scripts/lib/ scripts
