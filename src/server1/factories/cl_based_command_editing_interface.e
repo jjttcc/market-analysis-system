@@ -95,48 +95,6 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 
 feature {NONE} -- Hook methods
 
-	multilist_selection (lists: ARRAY [PAIR [LIST [STRING], STRING]];
-				general_msg: STRING): INTEGER is
-		local
-			i, startnum: INTEGER
-		do
-			print (general_msg)
-			from
-			until
-				Result /= 0
-			loop
-				from
-					i := 1; startnum := 1
-				until
-					i = lists.count + 1
-				loop
-					if lists.item (i).left.count > 0 then
-						print (lists.item (i).right)
-						print_names_in_1_column (lists.item (i).left, startnum)
-					end
-					startnum := startnum + lists.item (i).left.count
-					i := i + 1
-				end
-				check
-					-- startnum = the sum of the count of all `left' elements
-					-- of lists
-				end
-				read_integer
-				if
-					last_integer < 1 or
-						last_integer >= startnum
-				then
-					print_list (<<"Selection must be between 1 and ",
-								startnum - 1, "%N">>)
-				else
-					Result := last_integer
-				end
-			end
-			check
-				Result < startnum
-			end
-		end
-
 	do_choice (descr: STRING; choices: LIST [PAIR [STRING, BOOLEAN]];
 				allowed_selections: INTEGER) is
 		local

@@ -38,7 +38,7 @@ feature -- Initialization
 
 feature -- Access
 
-	function_list_factory: FUNCTION_BUILDER is
+	function_list_factory: HARD_CODED_FUNCTION_BUILDER is
 			-- Builder of a list of composite functions
 		once
 			!!Result.make
