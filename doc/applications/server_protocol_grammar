@@ -6,7 +6,7 @@ msg             -> client_req | server_response
 client_req      -> session_key "\t" client_req_spec
 client_req_spec -> mkt_data_req | ind_data_req | mkt_list_req | ind_list_req |
                      trad_pertyp_req | login_req | change_session_req |
-					 logout_req
+                     logout_req
 mk_data_req     -> mkt_symbol "\t" trad_per_type
 ind_data_req    -> indID "\t" mkt_symbol "\t" trad_per_type
 trad_pertyp_req -> mkt_symbol
