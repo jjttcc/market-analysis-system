@@ -33,24 +33,20 @@ feature {MEDIUM_POLLER} -- Basic operations
 			i: INTEGER
 		do
 			response := ""
-print ("A (" + (create {DATE_TIME}.make_now).out + "%N")
 			active_medium.set_non_blocking
-			active_medium.set_timeout (1)
+			active_medium.set_timeout (9)
 			active_medium.listen (1)
-			if active_medium.socket_ok then
+			if active_medium.socket_ok and active_medium.ready_for_reading then
 				from i := 1 until response_received or i > Max_tries loop
-print ("E (i: " + i.out + ", " + (create {DATE_TIME}.make_now).out + "%N")
 					active_medium.accept
 					socket := active_medium.accepted
 					if socket /= Void and then socket.socket_ok then
-print ("H (" + (create {DATE_TIME}.make_now).out + "%N")
 						socket.read_stream (Buffer_size)
 						if socket.last_string /= Void then
 							response := socket.last_string
 						end
 						response_received := True
 					else
-print ("I (" + (create {DATE_TIME}.make_now).out + "%N")
 						if socket /= Void then
 							response := socket.error
 							response_received := True
@@ -80,7 +76,6 @@ print ("I (" + (create {DATE_TIME}.make_now).out + "%N")
 					response := Connection_failed
 				end
 			end
-print ("J (" + (create {DATE_TIME}.make_now).out + "%N")
 		ensure
 			response_exists: response /= Void
 		end
