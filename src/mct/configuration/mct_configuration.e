@@ -12,7 +12,8 @@ class MCT_CONFIGURATION inherit
 		export
 			{NONE} all
 		redefine
-			post_process_settings
+			post_process_settings, use_customized_setting,
+			do_customized_setting
 		end
 
 	MCT_CONFIGURATION_CONSTANTS
@@ -138,7 +139,42 @@ feature {NONE} -- Implementation - Hook routine implementations
 				agent replace_configuration_tokens)
 		end
 
+	use_customized_setting (key, value: STRING): BOOLEAN is
+		do
+			if in_begin_block then
+				Result := True
+			else
+				Result := key.is_equal (Begin_tag)
+				if Result then
+					in_begin_block := True
+					if
+						value /= Void and then
+						value.is_equal (Start_server_cmd_specifier)
+					then
+						in_start_server_cmd := True
+					end
+				end
+			end
+		end
+
+	do_customized_setting (key, value: STRING) is
+		do
+			if in_begin_block then
+				if key.is_equal (End_tag) then
+					in_begin_block := False
+				elseif in_start_server_cmd then
+					process_start_server_cmd (key, value)
+				end
+			end
+		end
+
 feature {NONE} -- Implementation
+
+	in_begin_block: BOOLEAN
+			-- Are we currently within a "begin" block?
+
+	in_start_server_cmd: BOOLEAN
+			-- Does the current block define a "start-server" command?
 
 	has_token (s: STRING): BOOLEAN is
 			-- Does `s' have a "<...>" token?
@@ -162,6 +198,30 @@ feature {NONE} -- Implementation
 				Bin_directory_specifier, Hostname_specifier>>,
 				<<data_directory, bin_directory, hostname>>,
 				Token_start_delimiter, Token_end_delimiter)
+		end
+
+	process_start_server_cmd (key, value: STRING) is
+			-- Process a block-definition of a start-server command.
+		do
+print ("process_start_server_cmd - key, value: '" + key +
+"', '" + value + "'%N")
+			--!!!Stub
+			-- Need to maintain a set of "commands" (SET [EXTERNAL_COMMAND]
+			-- might do - need to add 'description') and update that
+			-- set here, according to the specs.
+			if key.is_equal (Command_specifier) then
+				-- Create a command and add it to the "command set".
+				-- Will need to "hold on to it" until end of block.
+			elseif key.is_equal (Command_description_specifier) then
+				-- current.command.set_description (value)
+			elseif key.is_equal (Command_name_specifier) then
+				-- current.command.set_name (value)
+			elseif
+				key.is_equal (Mark_specifier) and
+				value.is_equal (Default_mark)
+			then
+				-- default_command := current_command
+			end
 		end
 
 end

@@ -31,7 +31,17 @@ feature -- Constants
 
 	Termination_cmd_specifier: STRING is "termination_command"
 
+	Command_specifier: STRING is "command"
+
+	Command_description_specifier: STRING is "command_description"
+
+	Command_name_specifier: STRING is "command_name"
+
+	Mark_specifier: STRING is "mark"
+
 	Valid_port_numbers_separator: CHARACTER is ','
+
+	Default_mark: STRING is "default"
 
 feature -- Utilities
 

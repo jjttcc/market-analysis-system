@@ -22,4 +22,10 @@ feature -- Access
 	Token_end_delimiter: CHARACTER is '>'
 			-- Delimiter indicating the end of a replacable token
 
+	Begin_tag: STRING is "begin"
+			-- Tag denoting beginning of a "block"
+
+	End_tag: STRING is "end"
+			-- Tag denoting ending of a "block"
+
 end

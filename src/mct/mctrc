@@ -17,13 +17,38 @@ data_dir	/opt/mas/lib/data/tradables
 bin_dir	/opt/mas/bin
 
 # Valid port numbers for use by the MAS server
-valid_portnumbers	5432,2345,2222
+valid_portnumbers	5432,2345,2222,2223,2224
 
 # Network host name
 hostname	localhost
 
-# Command to start the server
+# Command to start the server - short version
+#!!!When the "begin start_server_command" stuff is completed, this should
+# be commented out.
 start_server_command	cd <data_dir>; <bin_dir>/mas -o -f , -b <portnumber> *.txt
+
+# Detailed version of command to start the server: data from files
+begin	start_server_command
+command	cd <data_dir>; <bin_dir>/mas -o -f , -b <portnumber> *.txt
+command_description	Get data from files
+command_name	File-based
+# Make this command the default.
+mark	default
+end	start_server_command
+
+# Detailed version of command to start the server: data from a database
+begin	start_server_command
+command	cd <data_dir>; <bin_dir>/mas -o -b <portnumber> -p
+command_description	Get data from database
+command_name	Database-based
+end	start_server_command
+
+# Detailed version of command to start the server: data from the web
+begin	start_server_command
+command	cd <data_dir>; <bin_dir>/mas -o -b <portnumber> -f , -w
+command_description	Get data from the web
+command_name	Database-based
+end	start_server_command
 
 # Command to start a command-line client to connect to the server
 start_cl_client_command	xterm -e <bin_dir>/macl -h <hostname> <portnumber>
