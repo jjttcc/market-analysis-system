@@ -11,11 +11,6 @@ class FINANCE_ROOT inherit
 			all
 		end
 
-	PRINTING
-		export {NONE}
-			all
-		end
-
 creation
 
 	make
@@ -28,11 +23,13 @@ feature -- Initialization
 			tradable: TRADABLE [BASIC_MARKET_TUPLE]
 			tradable_builder: TRADABLE_FACTORY
 			function_builder: FUNCTION_BUILDER
+			ui: TEST_USER_INTERFACE
 		do
+			!!ui
 			if argument_count > 0 and argument (1) @ 1 = '-' then
 				usage
 			else
-				initialize
+				initialize (ui)
 				print ("Test execution: "); print (current_date)
 				print (", "); print (current_time); print ("%N")
 				if argument_count = 0 then
@@ -44,6 +41,7 @@ feature -- Initialization
 				tradable_builder :=
 					factory_builder.tradable_factory (input_file)
 				tradable_builder.set_no_open (true)
+				print ("Loading data file ...%N")
 				tradable_builder.execute (Void)
 				tradable := tradable_builder.product
 				if tradable_builder.error_occurred then
@@ -51,22 +49,18 @@ feature -- Initialization
 				end
 				function_builder :=
 					factory_builder.function_list_factory
+				print ("Building indicators ...%N")
 				function_builder.execute (tradable)
 				add_indicators (tradable, function_builder.product)
-				print_tuples (tradable)
-				if not tradable.indicators_processed then
-					tradable.process_indicators
-				end
-				print_indicators (tradable)
-				print_composite_lists (tradable)
-				--print contents of tradable, including tech. indicators...
+				ui.set_tradable (tradable)
+				ui.execute
 			end
 		end
 
-	initialize is
+	initialize (ui: TEST_USER_INTERFACE) is
 		do
-			set_output_field_separator ("%T")
-			set_date_field_separator ("/")
+			ui.set_output_field_separator ("%T")
+			ui.set_date_field_separator ("/")
 		end
 
 feature {NONE} -- Utility
