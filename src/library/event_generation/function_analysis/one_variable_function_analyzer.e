@@ -20,10 +20,10 @@ creation
 
 feature -- Initialization
 
-	make (in: like input; op: like operator; event_type_name: STRING;
+	make (in: like input; op: like operator; ev_type: EVENT_TYPE;
 			per_type: TIME_PERIOD_TYPE) is
 		require
-			not_void: in /= Void and op /= Void and event_type_name /= Void and
+			not_void: in /= Void and op /= Void and ev_type /= Void and
 						per_type /= Void
 		do
 			set_input (in)
@@ -32,12 +32,11 @@ feature -- Initialization
 			-- EVENT_TYPE instances have a one-to-one correspondence to
 			-- FUNTION_ANALYZER instances.  Thus this is the appropriate
 			-- place to create this new EVENT_TYPE instance.
-			set_event_type (event_type_name)
+			event_type := ev_type
 			period_type := per_type
 		ensure
 			set: input = in and operator = op and start_date_time /= Void and
-					event_type /= Void and
-						event_type.name.is_equal (event_type_name)
+					event_type /= Void and event_type = ev_type
 			period_type_set: period_type = per_type
 			offset_0: offset = 0
 			-- start_date_set_to_now: start_date_time is set to current time
