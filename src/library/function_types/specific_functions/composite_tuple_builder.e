@@ -151,8 +151,6 @@ feature -- Access
 	duration: DATE_TIME_DURATION
 			-- Duration of the composite tuples to be created
 
-feature {FACTORY} -- Access
-
 	source_list: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]
 			-- Tuples used to manufacture output
 
