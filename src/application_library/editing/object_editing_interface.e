@@ -280,7 +280,7 @@ feature {NONE} -- Implementation
 
 	current_object_list: LIST [G]
 
-feature -- Implementation - hook methods
+feature {NONE} -- Implementation - hook methods
 
 	accepted_by_user (o: G): BOOLEAN is
 			-- Does the user want to select `o'?
