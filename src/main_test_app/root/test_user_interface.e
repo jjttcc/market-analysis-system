@@ -123,6 +123,12 @@ feature {NONE}
 				end
 				print ("%N%N")
 			end
+			check
+				finished: end_program
+			end
+			-- Ensure that all objects registered for cleanup on termination
+			-- are notified of termination.
+			termination_cleanup
 		end
 
 	edit_menu is
