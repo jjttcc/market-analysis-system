@@ -132,11 +132,13 @@ System.out.println("Test of sending to stdout.");
 
 	private void display(String msg) {
 		display_message = msg;
+		System.out.println(msg + "\n");
 		showStatus(msg);
 	}
 
 	private void log(String msg) {
 		showStatus(msg);
+		System.out.println(msg + "\n");
 	}
 
 // Implementation - attributes
