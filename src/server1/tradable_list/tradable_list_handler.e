@@ -36,7 +36,6 @@ feature {NONE} -- Initialization
 			daily_market_list := daily_list
 			intraday_market_list := intraday_list
 			indicators := inds
-print ("TLH - indicators.count: " + indicators.count.out + "%N")
 		ensure
 			lists_set: daily_market_list = daily_list and
 				intraday_market_list = intraday_list
