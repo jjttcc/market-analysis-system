@@ -74,7 +74,7 @@ class ReleaseUtilities:
 	def add_to_packages(self, src_path, tgt_path, keys):
 		for k in keys:
 			if not self.packages.has_key(k):
-				print "Error: No package " + k + " found."
+				print "Warning: No package " + k + " found."
 			else:
 				self.packages[k].append((src_path, tgt_path))
 
