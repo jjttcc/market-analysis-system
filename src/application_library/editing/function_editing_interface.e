@@ -21,7 +21,16 @@ deferred class FUNCTION_EDITING_INTERFACE inherit
 			initialize_object as initialize_function,
 			current_objects as current_functions
 		redefine
-			editor, function_types
+			editor, function_types, set_new_name
+		end
+
+	MARKET_TUPLE_LIST_SELECTOR
+
+	GLOBAL_APPLICATION
+		rename
+			function_names as function_library_names
+		export
+			{NONE} all
 		end
 
 feature -- Access
@@ -68,7 +77,7 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 
 	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
 		do
-			--!!!What will go here?
+			Result := user_function_selection (function_instances, msg).output
 		end
 
 feature {NONE} -- Implementation
@@ -182,5 +191,28 @@ feature -- Implementation - options
 	initialization_needed: BOOLEAN is true --!!!??
 
 	clone_needed: BOOLEAN is true --!!!??
+
+	name_needed: BOOLEAN is true
+
+	set_new_name (o: MARKET_FUNCTION; msg: STRING) is
+		local
+			spiel: ARRAYED_LIST [STRING]
+			fnames: LIST [STRING]
+		do
+			!!spiel.make (0)
+			from
+				fnames := function_library_names
+				fnames.start
+			until
+				fnames.exhausted
+			loop
+				spiel.extend (fnames.item)
+				spiel.extend ("%N")
+				fnames.forth
+			end
+			spiel.extend (concatenation (<<"Choose a name for ", msg,
+						" that does not match any of the above names:%N">>))
+			o.set_name (string_selection (concatenation (spiel)))
+		end
 
 end -- FUNCTION_EDITING_INTERFACE

@@ -22,6 +22,21 @@ class APPLICATION_COMMAND_EDITOR inherit
 			{NONE} all
 		end
 
+creation
+
+	make
+
+feature -- Initialization
+
+	make (ui: COMMAND_EDITING_INTERFACE) is
+		require
+			not_void: ui /= Void
+		do
+			user_interface := ui
+		ensure
+			set: user_interface = ui
+		end
+
 feature -- Access
 
 	user_interface: COMMAND_EDITING_INTERFACE

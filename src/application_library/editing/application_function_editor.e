@@ -18,6 +18,27 @@ class APPLICATION_FUNCTION_EDITOR inherit
 		end
 
 	GLOBAL_SERVICES
+		export
+			{NONE} all
+		end
+
+creation
+
+	make
+
+feature -- Initialization
+
+	make (ui: FUNCTION_EDITING_INTERFACE; om: COMMAND_EDITING_INTERFACE) is
+		require
+			not_void: ui /= Void and om /= Void
+		do
+			user_interface := ui
+			operator_maker := om
+			operator_maker.set_market_tuple_selector (user_interface)
+		ensure
+			set: user_interface = ui and operator_maker = om
+			mts_set: operator_maker.market_tuple_selector = user_interface
+		end
 
 feature -- Access
 

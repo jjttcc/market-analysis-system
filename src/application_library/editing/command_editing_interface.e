@@ -38,6 +38,9 @@ feature -- Access
 	market_function: MARKET_FUNCTION
 			-- Market function to use for those commands that need it
 
+	market_tuple_selector: MARKET_TUPLE_LIST_SELECTOR
+			-- Interface that provides selection of a market tuple list
+
 feature -- Constants
 
 	Boolean_result_command: STRING is "RESULT_COMMAND [BOOLEAN]"
@@ -76,6 +79,17 @@ feature -- Status setting
 		ensure
 			market_function_set: market_function = arg and
 				market_function /= Void
+		end
+
+	set_market_tuple_selector (arg: MARKET_TUPLE_LIST_SELECTOR) is
+			-- Set market_tuple_selector to `arg'.
+		require
+			arg_not_void: arg /= Void
+		do
+			market_tuple_selector := arg
+		ensure
+			market_tuple_selector_set: market_tuple_selector = arg and
+				market_tuple_selector /= Void
 		end
 
 feature -- Miscellaneous
@@ -163,7 +177,7 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 			l.extend (command_with_generator ("OPEN_INTEREST"))
 
 			!!l.make (2)
-			Result.extend (l, Basic_numeric_command)
+			Result.extend (l, N_based_calculation)
 			l.extend (command_with_generator ("N_VALUE_COMMAND"))
 			l.extend (command_with_generator ("MA_EXPONENTIAL"))
 		end
@@ -171,9 +185,15 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
 		do
 			check
-				mf_not_void: market_function /= Void
+				mf_not_void: market_function /= Void or
+					market_tuple_selector /= Void
 			end
-			Result := market_function.output
+			if market_tuple_selector /= Void then
+				Result := market_tuple_selector.market_tuple_list_selection (
+							msg)
+			else
+				Result := market_function.output
+			end
 		end
 
 feature {NONE} -- Implementation
@@ -446,6 +466,8 @@ feature -- Implementation - options
 	initialization_needed: BOOLEAN is true
 
 	clone_needed: BOOLEAN is true
+
+	name_needed: BOOLEAN is false
 
 invariant
 

@@ -67,11 +67,6 @@ feature -- Access
 		do
 		end
 
-	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
-			-- User-selected list of market tuples
-		deferred
-		end
-
 feature {NONE} -- Implementation
 
 	user_object_selection (objects: LIST [G]; msg: STRING): G is
@@ -145,6 +140,9 @@ feature {NONE} -- Implementation
 			end
 			if do_clone then
 				Result := deep_clone (Result)
+				if name_needed then
+					set_new_name (Result, msg)
+				end
 			end
 		ensure
 			Result /= Void
@@ -200,12 +198,12 @@ feature {NONE} -- Implementation
 
 	current_object_list: LIST [G]
 
+feature -- Implementation - hook methods
+
 	accepted_by_user (o: G): BOOLEAN is
 			-- Does the user want to select `o'?
 		deferred
 		end
-
-feature -- Implementation - options
 
 	clone_needed: BOOLEAN is
 			-- Do selected objects need to be cloned?
@@ -215,6 +213,17 @@ feature -- Implementation - options
 	initialization_needed: BOOLEAN is
 			-- Does the selected object need to be initialized?
 		deferred
+		end
+
+	name_needed: BOOLEAN is
+			-- Do new objects need a name?
+		deferred
+		end
+
+	set_new_name (o: G; msg: STRING) is
+			-- Obtain a name from the user and set 'o's name to it.
+		do
+			-- default null implementation
 		end
 
 end -- OBJECT_EDITING_INTERFACE

@@ -71,6 +71,11 @@ feature -- Access
 		deferred
 		end
 
+	string_selection (msg: STRING): STRING is
+			-- User-selected real value
+		deferred
+		end
+
 feature {NONE} -- Implementation - Hook methods
 
 	do_choice (descr: STRING; choices: LIST [PAIR [STRING, BOOLEAN]];
@@ -94,5 +99,9 @@ feature {NONE} -- Implementation - Hook methods
 			high_enough: Result >= 1
 			-- Result <= total number of elements in `lists'
 		end
+
+invariant
+
+	editor_not_void: editor /= Void
 
 end -- EDITING_INTERFACE
