@@ -95,9 +95,12 @@ feature {NONE} -- Implementation
 				end
 				external_commands.replace (selected_command,
 					selected_command.identifier)
+				configuration.save_command_as_default (selected_command)
+				if configuration.save_command_as_default_failed then
+					display_error (
+						configuration.save_command_as_default_failure_reason)
+				end
 			end
-			-- !!Need to modify the mctrc file to mark the selected command
-			-- as the default.
 		end
 
 feature {NONE} -- Implementation - constants
