@@ -4,7 +4,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2003: Jim Cochrane - %
-		%Released under the Eiffel Forum License; see file forum.txt"
+		%License to be determined"
 
 class COMMAND_PROCESSOR inherit
 
