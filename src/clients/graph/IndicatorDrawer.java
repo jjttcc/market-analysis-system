@@ -71,9 +71,13 @@ abstract public class IndicatorDrawer extends BasicDrawer {
 		String[] dates = dates();
 		String[] times = times();
 
-		result = Utilities.index_at_date(_indicator_dates[0], dates, 1, 0,
-			dates.length - 1);
-		if (result > 0 &&
+		if (_indicator_dates[0].equals(dates[0])) {
+			result = 0;
+		} else {
+			result = Utilities.index_at_date(_indicator_dates[0], dates, 1, 0,
+				dates.length - 1);
+		}
+		if (
 				_indicator_times != null && _indicator_times.length > 0) {
 			// Since the data is intraday, there are duplicate dates in
 			// the dates array.  Find the first element of dates that
@@ -89,8 +93,20 @@ abstract public class IndicatorDrawer extends BasicDrawer {
 						_indicator_times[0].compareTo(times[result]) < 0) {
 					++result;
 				}
-				result = Utilities.index_at_date(_indicator_times[0], times,
-					1, result, times.length - 1);
+				result = first_time_match(_indicator_times[0], times, result);
+			}
+		}
+		return result;
+	}
+
+	// The index of the first element of `times' beginning at times[startix]
+	// that matches `time'
+	protected int first_time_match(String time, String[] times, int startix) {
+		int result = 0;
+		for (int i = startix; i < times.length; ++i) {
+			if (times[i].compareTo(time) == 0) {
+				result = i;
+				break;
 			}
 		}
 		return result;
