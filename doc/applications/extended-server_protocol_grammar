@@ -1,0 +1,35 @@
+Extensions to the BNF Grammar defined in server_protocol_grammar, for the
+Extended Server
+
+
+time_delimited_mkt_data_req -> mkt_symbol "\t" trad_per_type "\t" date_time_range
+time_delimited_ind_data_req ->
+         indID "\t" mkt_symbol "\t" trad_per_type "\t" date_time_range
+date_time_range             -> start_date_time [ "\t" end_date_time ]
+start_date_time             -> date_time_spec
+end_date_time               -> date_time_spec
+date_time_spec              -> date_with_sep "," time_with_sep
+time_with_sep               -> hour ":" minute ":" second
+
+Client-Request Definitions:
+
+time_delimited_mkt_data_req: Same as a 'mkt_data_req' except with an
+                    additional parameter: The date-time range into which
+					the returned data is expected to fall
+
+time_delimited_ind_data_req: Same as a 'ind_data_req' except with an
+                    additional parameter: The date-time range into which
+					the returned data is expected to fall
+
+Expected Responses for (successfully executed) Client-Requests:
+
+time_delimited_mkt_data_req:    mkt_data
+time_delimited_ind_data_req:    ind_data
+
+
+Notes:
+
+For the 'date_time_range' component of 'time_delimited_mkt_data_req' and
+'time_delimited_ind_data_req', if the optional 'end_date_time' parameter
+is not included, the server uses the current date and time ("now") as the
+ending date-time.

@@ -8,7 +8,8 @@ client_req_spec -> [compress_flag] client_data_req
 client_data_req -> mkt_data_req | ind_data_req | symbol_list_req |
                      ind_list_req | trad_pertyp_req | change_session_req |
                      event_data_req | event_list_req | logout_req |
-                     all_ind_req | param_req | param_set_req
+                     all_ind_req | param_req | param_set_req |
+					 time_delimited_mkt_data_req | time_delimited_ind_data_req
 compress_flag   -> "<@z@>"
 mkt_data_req    -> mkt_symbol "\t" trad_per_type
 event_data_req  -> mkt_symbol "\t" start_date "\t" end_date "\t" event_id_list
