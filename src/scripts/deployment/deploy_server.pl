@@ -50,10 +50,12 @@ sub make_driver_scripts {
 	$f = &deployment_directory . "/bin/" . $start_mas_script;
 	open(F, "> " . $f) || &abort("Cannot create startup script $f");
 	print F &mas_startup_command . "\n";
+	close(F);
 	chmod 0500, $f;
 	$f = &deployment_directory . "/bin/" . $stop_mas_script;
 	open(F, "> " . $f) || &abort("Cannot create shutdown script $f");
 	print F &mas_shutdown_command . "\n";
+	close(F);
 	chmod 0500, $f;
 }
 
@@ -61,10 +63,11 @@ sub make_driver_scripts {
 sub write_startup_instructions {
 	$f = &final_message_file;
 	open(F, "> " . $f) || &abort("Cannot create message file $f");
-	print F "\n\n\nNOTE:\n\nTo start the MAS server, run:\n",
-		&deployment_directory . "/bin/" . $start_mas_script, "\n";
+	print F "\n\n\nNOTE:\n\nTo start the MAS server, run:\n\n",
+		&deployment_directory . "/bin/" . $start_mas_script . "\n\n";
 	print F "To stop the MAS server, run:\n\n",
-		&deployment_directory . "/bin/" . $stop_mas_script, "\n";
+		&deployment_directory . "/bin/" . $stop_mas_script . "\n\n";
+	close(F);
 }
 
 ### General utilities

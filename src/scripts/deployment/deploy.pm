@@ -116,6 +116,7 @@ sub configure {
 		}
 		$settings{$fields[0]} = $fields[1];
 	}
+	close(CF);
 	&check_config;
 }
 

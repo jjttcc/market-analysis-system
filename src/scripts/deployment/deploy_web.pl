@@ -78,4 +78,5 @@ sub configure_servlet {
 	open(F, "> " . $config_file) || &abort("Cannot open file: " .
 		$config_file . " for writing.\n");
 	print F @new_contents;
+	close(F);
 }
