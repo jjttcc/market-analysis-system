@@ -10,6 +10,11 @@ deferred class FUNCTION_ANALYZER inherit
 
 	MARKET_EVENT_GENERATOR
 
+	GENERAL_UTILITIES
+		export
+			{NONE} all
+		end
+
 feature -- Access
 
 	start_date_time: DATE_TIME
