@@ -86,11 +86,24 @@ feature -- Status setting
 feature {NONE} -- Hook methods
 
 	accepted_by_user (c: COMMAND): BOOLEAN is
+		local
+			text: ARRAY [STRING]
+			margin: STRING
+			line_length: INTEGER
 		do
-			print_list (<<"Select:%N     Print description of ",
-						c.generator, "? (d)%N",
-						"     Choose ", c.generator,
-						" (c) Make another choice (a) ", eom>>)
+			line_length := 76
+			margin := "     "
+			text := <<"Select:%N     Print description of " + c.generator +
+				"? (d)", "Choose " + c.generator + " (c)",
+				"Choose and name " + c.generator + " (n)",
+				"Make another choice (a) ">>
+			print (text @ 1)
+			if (text @ 1).count + (text @ 2).count > line_length then
+				print ("%N" + margin + text @ 2)
+			else
+				print (" " + text @ 2)
+			end
+			print ("%N" + margin + text @ 3 + " " + text @ 4 + eom)
 			inspect
 				character_selection (Void)
 			when 'd', 'D' then
@@ -100,14 +113,18 @@ feature {NONE} -- Hook methods
 				inspect
 					character_selection (Void)
 				when 'y', 'Y' then
-					Result := true
+					Result := True
 				else
-					check Result = false end
+					check Result = False end
 				end
 			when 'c', 'C' then
-				Result := true
+				Result := True
+			when 'n', 'N' then
+				c.set_name (string_selection ("Enter a name for " +
+					c.generator + ": "))
+				Result := True
 			else
-				check Result = false end
+				check Result = False end
 			end
 		end
 

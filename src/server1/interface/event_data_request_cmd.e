@@ -11,7 +11,8 @@ class EVENT_DATA_REQUEST_CMD inherit
 
 	TRADABLE_REQUEST_COMMAND
 		rename
-			make as trc_make
+			make as trc_make, set_name as set_command_name,
+			name as command_name
 		redefine
 			error_context
 		end
