@@ -155,7 +155,7 @@ src/clients/GUI1/graph/TemporalDrawer.java . clientsrc1.6.6q
 src/clients/GUI1/graph/TimeDrawer.java . clientsrc1.6.6q
 # Market Analysis System executables and accompanying files (server and client)
 # (First the GUI java classes)
-src/clients/GUI1/mascharts.jar lib/classes/mas_gui/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
+src/clients/GUI1/mascharts.jar lib/classes/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
 src/clients/CL/CL_Client.class lib/classes/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
 # (GUI config. file)
 build/config/.ma_clientrc lib/ mas_linux1.6.6q mas_windows1.6.6q mac1.6.6q
@@ -230,6 +230,7 @@ lib/binaries/linux/macl_no_assert_v1.6.6q bin/macl mas_linux1.6.6q
 lib/binaries/linux/macl_assert_v1.6.6q bin/macl_assert mas_linux1.6.6q
 lib/binaries/linux/mct_no_assert_v1.6.6q bin/mct mas_linux1.6.6q
 lib/binaries/linux/mct_assert_v1.6.6q bin/mct_assert mas_linux1.6.6q
+lib/binaries/linux/config_tool_no_assert_v1.6.6q bin/config_tool mas_linux1.6.6q
 lib/binaries/windows/mas.exe_no_assert_v1.6.6q bin/mas.exe mas_windows1.6.6q
 lib/binaries/windows/mas.exe_assert_v1.6.6q bin/mas_assert.exe mas_windows1.6.6q
 lib/binaries/windows/mct.exe_no_assert_v1.6.6q bin/mct.exe mas_windows1.6.6q
@@ -284,6 +285,7 @@ doc/Server_change_log doc/MAS_CHANGE_LOG.txt[dos] mas_windows1.6.6q
 doc/README_WINDOWS.txt ./ mas_windows1.6.6q
 # (Scripts)
 src/scripts/install/install ./ mas_linux1.6.6q mas_windows1.6.6q
+src/scripts/install/configure_user bin/ mas_linux1.6.6q
 src/scripts/functions/utilities ./lib mas_linux1.6.6q
 #src/scripts/install/install_config ./ mas_linux1.6.6q mas_windows1.6.6q
 # Data and server-configuration files needed by mas1.6.6q
