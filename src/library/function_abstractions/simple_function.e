@@ -55,7 +55,7 @@ feature -- Status report
 
 	arg_used: BOOLEAN is false
 
-feature -- Basic operations
+feature {NONE} -- Basic operations
 
 	do_process is
 			-- Null action
