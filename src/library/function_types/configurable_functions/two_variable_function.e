@@ -147,6 +147,15 @@ feature {FACTORY} -- Status setting
 			input2.set_innermost_input (in)
 		end
 
+feature {MARKET_FUNCTION, MARKET_FUNCTION_EDITOR}
+
+	wipe_out is
+		do
+			output.wipe_out
+			input1.wipe_out
+			input2.wipe_out
+		end
+
 feature {NONE}
 
 	input1, input2: COMPLEX_FUNCTION

@@ -95,6 +95,14 @@ feature {MARKET_FUNCTION}
 		deferred
 		end
 
+feature {MARKET_FUNCTION, MARKET_FUNCTION_EDITOR}
+
+	wipe_out is
+			-- Remove all elements of output and, recursively, of all
+			-- nested MARKET_FUNCTIONs.
+		deferred
+		end
+
 invariant
 
 	output_not_void: output /= Void

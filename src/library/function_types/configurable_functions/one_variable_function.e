@@ -141,6 +141,14 @@ feature {FACTORY} -- Status setting
 			end
 		end
 
+feature {MARKET_FUNCTION, MARKET_FUNCTION_EDITOR}
+
+	wipe_out is
+		do
+			output.wipe_out
+			input.wipe_out
+		end
+
 feature {NONE} -- Implementation
 
 	input: MARKET_FUNCTION
