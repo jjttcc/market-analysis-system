@@ -35,7 +35,6 @@ cluster
 								"$/utility";
 	interface (server):			"$/interface";
 	server_global (server):		"$/global";
-	--system_specific (server):	"$/system_specific/unix";
 	system_specific (server):	"$/system_specific/win32";
 	database (server)		:	"$/database";
 	database_odbc (server)	:	"$/database/odbc";	
