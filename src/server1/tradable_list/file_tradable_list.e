@@ -17,46 +17,62 @@ class FILE_TRADABLE_LIST inherit
 
 	TRADABLE_LIST
 		rename
-			symbol_list as file_names
+			make as parent_make
 		redefine
-			symbols, current_symbol, setup_input_medium, close_input_medium
+			setup_input_medium, close_input_medium, start, forth, finish
 		end
 
 creation
 
 	make
 
-feature -- Access
+feature -- Initialization
 
-	symbols: ARRAYED_LIST [STRING] is
-			-- The symbol of each tradable, extracted from `file_names'
+	make (fnames: LIST [STRING]; factory: TRADABLE_FACTORY) is
+			-- `symbols' will be created from `fnames'
 		local
-			fnames: LINEAR [STRING]
+			slist: LINKED_LIST [STRING]
 		do
-			fnames := file_names
-			create Result.make (0)
+			file_names := fnames
+			create slist.make
 			from fnames.start until fnames.exhausted loop
-				Result.extend (symbol_from_file_name (fnames.item))
+				slist.extend (symbol_from_file_name (fnames.item))
 				fnames.forth
 			end
-			Result.compare_objects
+			file_names.start
+			parent_make (slist, factory)
+		ensure
+			symbols_set_from_fnames:
+				symbols /= Void and symbols.count = fnames.count
+			file_names_set: file_names = fnames
+		end
+
+feature -- Access
+
+	file_names: LIST [STRING]
+			-- Names of all files with tradable data to be processed
+
+feature -- Cursor movement
+
+	start is
+		do
+			file_names.start
+			Precursor
+		end
+
+	finish is
+		do
+			file_names.finish
+			Precursor
+		end
+
+	forth is
+		do
+			file_names.forth
+			Precursor
 		end
 
 feature {NONE} -- Implementation
-
-	search_by_file_name (name: STRING) is
-		do
-			from
-				start
-			until
-				file_names.item.is_equal (name) or after
-			loop
-				forth
-			end
-		ensure then
-			-- `file_names' contains `name' implies
-			--	file_names.item.is_equal (name)
-		end
 
 	symbol_from_file_name (fname: STRING): STRING is
 			-- Tradable symbol extracted from `fname' - directory component
@@ -112,11 +128,12 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	current_symbol: STRING is
-		do
-			Result := symbol_from_file_name (file_names.item)
-		end
-
 	current_input_file: INPUT_FILE
+
+invariant
+
+	file_names_correspond_to_symbols:
+		file_names /= Void and symbols.count = file_names.count and
+		symbols.index = file_names.index
 
 end -- class FILE_TRADABLE_LIST
