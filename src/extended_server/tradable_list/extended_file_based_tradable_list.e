@@ -5,7 +5,7 @@ indexing
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
-		%Released under the Eiffel Forum License; see file forum.txt"
+		%License to be determined - will be non-public"
 
 deferred class EXTENDED_FILE_BASED_TRADABLE_LIST inherit
 
