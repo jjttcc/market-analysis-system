@@ -83,7 +83,7 @@ feature {NONE}
 
 feature {NONE} -- Implementation
 
-	sum: expanded LINEAR_OPERATION
+	sum: expanded LINEAR_SUM
 			-- Provides sum of first n elements.
 
 	last_sum: REAL

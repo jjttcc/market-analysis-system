@@ -58,6 +58,6 @@ feature
 
 feature {NONE}
 
-	volume_adder: LINEAR_OPERATION
+	volume_adder: LINEAR_SUM
 
 end -- class COMPOSITE_VOLUME_TUPLE_FACTORY
