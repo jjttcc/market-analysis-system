@@ -1,6 +1,6 @@
 indexing
 	description:
-		"A market function that is also an array of market tuples. %
+		"A market function that is also an sequence of market tuples. %
 		%Its purpose is to act as the innermost function in a composition %
 		%of functions."
 	status: "Copyright 1998 Jim Cochrane and others, see file forum.txt"
@@ -10,6 +10,8 @@ indexing
 class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 
 	MARKET_FUNCTION
+		export {NONE}
+			copy, setup
 		undefine
 			is_equal, copy, setup
 		redefine
@@ -44,6 +46,7 @@ feature {NONE} -- Initialization
 feature -- Access
 
 	output: MARKET_TUPLE_LIST [G] is
+			-- Contents - market tuple data
 		do
 			Result := Current
 		end
