@@ -88,7 +88,7 @@ feature -- Basic operations
 			end
 			send_data
 		rescue
-			handle_exception ("REQUEST_COMMAND.execute")
+			handle_exception ("obtaining data for GUI client")
 			exception_occurred := true
 			retry
 		end
