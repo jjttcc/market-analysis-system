@@ -102,15 +102,15 @@ cluster
 
 	network (server):		"$/network"
 
-	server_extensions (server):		"$/extensions"
+	extended_server:		"$MAS/src/extended_server"
 
-	root_cluster (server_extensions):		"$/root"
+	root_cluster (extended_server):		"$/root"
 
-	extended_global (server_extensions):		"$/global"
+	extended_global (extended_server):		"$/global"
 
-	extended_support (server_extensions):		"$/support"
+	extended_support (extended_server):		"$/support"
 
-	extended_sys (server_extensions):		"$/system_specific/unix"
+	extended_sys (extended_server):		"$/system_specific/unix"
 
 	open_source_root_cluster (server):		"$/root"
 
