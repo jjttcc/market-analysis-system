@@ -4,11 +4,17 @@ output from the Eiffel version.  The file test_data.one_field (which
 contains one-field-per-record data extracted (closing prices) from the
 file ../input/test_data) was used for input.
 
-The files ma, momentum, roc, slow_stochD3, stochD5, stochK5, and
+The files ma, momentum, roc, slow_stochD3, stochD5, stochK5, rsi7, and
 williams contain data from examples in two books (ma from "Technical
 Analysis Explained", by Martin Pring and the rest from "Trading for a
 Living", by Alexander Elder) showing how to calculate these indicators.
 The file ../input/stoch contains the input test data corresponding to
 slow_stochD3, stochD5, and stochK5.  Corresponding input data for the
-files ma, momentum, roc, and williams, are in files with the same names
-under ../input.
+files ma, momentum, roc, rsi7, and williams, are in files with the same names
+under ../input (minus the 7 for the rsi file).
+
+Note:  The RSI data in the example in Elder's book appears to have been
+calculated with a slightly different formula than is written in the book.
+Until I figure out the formula most commonly used, the data in the
+current rsi7 file, which was constructured with the rsi.awk script and is
+different from the values in Elder's book, will remain as the reference.
