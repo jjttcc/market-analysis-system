@@ -1,3 +1,5 @@
 Fake socket-based data-supplier for the MAS server, for testing
 
 Note: '. ./.env' to set up needed environment state.
+
+Note: You probably want to cd to test-data/ before starting the script.
