@@ -33,13 +33,6 @@ my %req_handlers = (
 	CommunicationProtocol::intra_avail_req_id, \&process_intraday_avail_request
 );
 
-# !!!!remove:
-#print CommunicationProtocol::sym_list_req_id, "\n";
-#print CommunicationProtocol::data_req_id, "\n";
-#print CommunicationProtocol::daily_avail_req_id, "\n";
-#print CommunicationProtocol::intra_avail_req_id, "\n";
-#print join "\n", keys %req_handlers, "\n";
-#print join "\n", values %req_handlers, "\n";
 # --------------- Public features ---------------
 
 # Basic operations
@@ -68,7 +61,7 @@ print "My socket is: $socket\n";
 	sub initialize {
 		my ($self, %args) = @_;
 		my $new_socket = IO::Socket::INET->new(
-			LocalAddr => 'localhost', LocalPort => 39415, Proto => 'tcp',
+			LocalAddr => 'localhost', LocalPort => 49415, Proto => 'tcp',
 			Listen => 5);
 		die "$!" unless $new_socket;
 		$self->set_field(qw(socket), $new_socket);
@@ -122,20 +115,32 @@ print $req_handlers{$req_id}, "\n";
 
 	sub process_daily_avail_request {
 		my ($self, $socket, $fields) = @_;
-# Hard code 'true' for now.
-print "pDar sending ", $self->true, "\n";
-		$socket->send($self->true . "\n");
+		my $dispenser = $self->field_value_for(qw(data_dispenser));
+		my $answer = $dispenser->daily_data_available;
+print "pDar sending ", $self->boolean_response($answer), "\n";
+		$socket->send($self->boolean_response($answer) . "\n");
 		$socket->flush;
 		$socket->shutdown(2);
 	}
 
 	sub process_intraday_avail_request {
 		my ($self, $socket, $fields) = @_;
-# Hard code 'false' for now.
-print "piar sending ", $self->false, "\n";
-		$socket->send($self->false . "\n");
+		my $dispenser = $self->field_value_for(qw(data_dispenser));
+		my $answer = $dispenser->intraday_data_available;
+print "pDar sending ", $self->boolean_response($answer), "\n";
+		$socket->send($self->boolean_response($answer) . "\n");
 		$socket->flush;
 		$socket->shutdown(2);
+	}
+
+	# The response to the client for the specified boolean value
+	sub boolean_response {
+		my ($self, $boolvalue) = @_;
+		my $result = $self->false;
+		if ($boolvalue) {
+			$result = $self->true;
+		}
+		$result;
 	}
 
 	sub process_data_request {
