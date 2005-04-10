@@ -27,6 +27,9 @@ feature -- Client components - request IDs, etc.
 	intra_avail_req: INTEGER is 4
 			-- Request for whether intra-day data is available
 
+	intraday_data_flag: STRING is "i"
+			-- Flag indicating that indicator data is being requested
+
 	client_request_terminator: STRING is "%N"
 			-- Character indicating end of client request
 
