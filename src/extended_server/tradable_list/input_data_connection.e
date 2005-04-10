@@ -181,16 +181,16 @@ if not socket.is_closed then
 end
 		end
 
-	request_data_for (symbol: STRING) is
+	request_data_for (symbol: STRING; intraday: BOOLEAN) is
 			-- Request data for `requester's current tradable identified
-			-- by `symbol'.
+			-- by `symbol' - intraday data if `intraday'; otherwise daily
 		require
 			connected: connected
 			last_communication_succeeded: last_communication_succeeded
 		do
 --!!!!!????:
 --initiate_connection
-			send_request (tradable_data_request_msg (symbol), True)
+			send_request (tradable_data_request_msg (symbol, intraday), True)
 --!!!!!????:
 --if not socket.is_closed then
 --	socket.close
@@ -234,11 +234,12 @@ feature {NONE} -- Hook routine implementations
 
 feature {NONE} -- Implementation
 
-	tradable_data_request_msg (symbol: STRING): STRING is
+	tradable_data_request_msg (symbol: STRING; intraday: BOOLEAN): STRING is
 		do
 			Result := tradable_data_request.out + message_component_separator +
-			date_time_range + message_component_separator + data_flags +
-			message_component_separator + symbol + client_request_terminator
+			date_time_range + message_component_separator +
+			data_flags (intraday) + message_component_separator + symbol +
+			client_request_terminator
 		end
 
 	symbol_list_request_msg: STRING is
@@ -262,10 +263,13 @@ feature {NONE} -- Implementation
 			Result := "" -- !!!Empty, for now
 		end
 
-	data_flags: STRING is
+	data_flags (intraday: BOOLEAN): STRING is
 			-- intraday/non-intraday flag
 		do
-			Result := "" -- !!!Empty, for now
+			Result := "" -- Default to daily.
+			if intraday then
+				Result := intraday_data_flag
+			end
 		end
 
 feature {NONE} -- Implementation - Constants

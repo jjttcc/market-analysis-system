@@ -60,7 +60,7 @@ print ("Error occurred connecting to data supplier:%N" +
 connection.error_report + "%N")
 			else
 				input_medium := connection.socket
-				connection.request_data_for (current_symbol)
+				connection.request_data_for (current_symbol, intraday)
 				if not connection.last_communication_succeeded then
 					fatal_error := True
 --!!!!Where/when should this error be reported?:
@@ -74,7 +74,7 @@ connection.error_report + "%N")
 --!!!!A possible replacement for the above `initialize_input_medium'
 		do
 			input_medium := connection.socket
-			connection.request_data_for (current_symbol)
+			connection.request_data_for (current_symbol, intraday)
 			if not connection.last_communication_succeeded then
 				fatal_error := True
 --!!!!Where/when should this error be reported?:
