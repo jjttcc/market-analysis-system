@@ -45,7 +45,6 @@ print "symbols returning @result\n";
 		my $infile = FileHandle->new;
 		my $result;
 		my @lines;
-#!!!		my $filename = $symbol . ".txt";
 		my $filename = $self->daily_filename($symbol);
 print "reading DAILY data from " . $filename, "\n";
 		if (not $infile->open("< " . $filename)) {
@@ -66,7 +65,6 @@ print "result is $result\n";
 		my $infile = FileHandle->new;
 		my $result;
 		my @lines;
-#!!!		my $filename = $symbol . ".intraday.txt";
 		my $filename = $self->intraday_filename($symbol);
 print "reading INTRADAY data from " . $filename, "\n";
 		if (not $infile->open("< " . $filename)) {

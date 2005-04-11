@@ -97,7 +97,7 @@ print "Socket was created: ", $self->field_value_for(qw(socket)), "\n";
 print $debug_file "received msg: '$client_request'\n";
 		my @fields = split $self->message_component_separator, $client_request;
 print $debug_file "fields: '", join ", ", @fields, "'\n";
-# !!!		die "Wrong # of fields: @fields" if @fields <= 1;
+		warn "Wrong # of fields: " . scalar(@fields) . "\n" if @fields <= 1;
 		my $req_id = $fields[0];
 print $debug_file "req id: '$req_id'\n";
 $debug_file->flush;
@@ -159,23 +159,6 @@ $debug_file->flush;
 		} else {
 			$data = $dispenser->daily_data_for($symbol, 0);
 		}
-#print "sending: '" . $data, "'\n";
-		$socket->send($data . "\n");
-		$socket->flush;
-		$socket->shutdown(2);
-	}
-
-# !!!!:
-	sub old_remove_process_data_request {
-		my ($self, $socket, $fields) = @_;
-		my $date_time_range = $$fields[1];
-		my $data_flags = $$fields[2];
-		my $symbol = $$fields[3];
-print $debug_file "dtrange: '$date_time_range'\n";
-print $debug_file "flags: '$data_flags', symbol: '$symbol'\n";
-print "starting process with symbol '$symbol'\n";
-$debug_file->flush;
-		my $data = $self->data_for($symbol, 0);
 #print "sending: '" . $data, "'\n";
 		$socket->send($data . "\n");
 		$socket->flush;
