@@ -6,7 +6,7 @@ Client-request components:
 date_time_range   -> start_date_time [ ";" end_date_time ]
 start_date_time   -> date_time_spec | <null>
 end_date_time     -> date_time_spec
-date_time_spec    -> date_with_sep "," time_with_sep
+date_time_spec    -> date_with_sep [ "," time_with_sep ]
 time_with_sep     -> hour ":" minute ":" second
 date_with_sep     -> year "/" month "/" day
 
@@ -30,3 +30,8 @@ uses the current date and time ("now") as the ending date-time.  If the
      data set, that start date is used.  (See the protocol-grammar file
      for the specific application components for more information on the
      specification and properties of the start-date setting.)
+
+NOTE:
+
+According to the 'date_time_spec', the 'time_with_sep' component of a
+date-time is optional.

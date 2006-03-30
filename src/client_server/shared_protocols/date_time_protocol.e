@@ -26,6 +26,33 @@ feature -- Access
 
 	date_time_separator: STRING is ","
 			-- Default character used to separate the date field from
-			-- the time field
+			-- the time field in a date-time range specification
+
+feature -- Basic operations
+
+	date_time_range (start_time, end_time: DATE_TIME): STRING is
+			-- The date/time-range component of a client data request
+		local
+			date_tool: expanded DATE_TIME_SERVICES
+		do
+			Result := ""
+			if start_time /= Void then
+				Result.append (date_tool.formatted_date (
+					start_time.date, 'y', 'm', 'd', date_field_separator))
+				Result.append (date_time_separator)
+				Result.append (date_tool.formatted_time (
+					start_time.time, 'y', 'm', 'd', time_field_separator))
+			end
+			if end_time /= Void then
+				Result.append (date_time_range_separator)
+				Result.append (date_tool.formatted_date (
+					end_time.date, 'y', 'm', 'd', date_field_separator))
+				Result.append (date_time_separator)
+				Result.append (date_tool.formatted_time (
+					end_time.time, 'y', 'm', 'd', time_field_separator))
+			end
+		ensure
+			exists: Result /= Void
+		end
 
 end

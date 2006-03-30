@@ -24,6 +24,11 @@ deferred class INPUT_DATA_CONNECTION inherit
 
 	INPUT_SOCKET_CLIENT
 
+	DATE_TIME_PROTOCOL
+		export
+			{NONE} all
+		end
+
 feature -- Access
 
 	socket: INPUT_SOCKET_DEBUG
@@ -40,19 +45,6 @@ feature -- Access
 
 	intraday_data_available: BOOLEAN
 			-- Is intraday data available from the data supplier?
-
-feature -- Element change
-
---!!!!:
-	old_remove_set_tradable_list (arg: TRADABLE_LIST) is
-			-- Set `tradable_list' to `arg'.
-		require
-			arg_not_void: arg /= Void
-		do
---			tradable_list := arg
-		ensure
---			tradable_list_set: tradable_list = arg and tradable_list /= Void
-		end
 
 feature -- Basic operations
 
@@ -181,16 +173,21 @@ if not socket.is_closed then
 end
 		end
 
-	request_data_for (symbol: STRING; intraday: BOOLEAN) is
+	request_data_for (symbol: STRING; intraday: BOOLEAN;
+		start_date_time: DATE_TIME) is
 			-- Request data for `requester's current tradable identified
-			-- by `symbol' - intraday data if `intraday'; otherwise daily
+			-- by `symbol' - intraday data if `intraday'; otherwise daily.
+			-- Use `start_date_time' as the start date/time for the
+			-- request if it is not void; otherwise send an empty date
+			-- range (meaning obtain all available data for the tradable).
 		require
 			connected: connected
 			last_communication_succeeded: last_communication_succeeded
 		do
 --!!!!!????:
 --initiate_connection
-			send_request (tradable_data_request_msg (symbol, intraday), True)
+			send_request (tradable_data_request_msg (
+				symbol, intraday, start_date_time), True)
 --!!!!!????:
 --if not socket.is_closed then
 --	socket.close
@@ -234,10 +231,11 @@ feature {NONE} -- Hook routine implementations
 
 feature {NONE} -- Implementation
 
-	tradable_data_request_msg (symbol: STRING; intraday: BOOLEAN): STRING is
+	tradable_data_request_msg (symbol: STRING; intraday: BOOLEAN;
+			start_time: DATE_TIME): STRING is
 		do
 			Result := tradable_data_request.out + message_component_separator +
-			date_time_range + message_component_separator +
+			date_time_range (start_time, Void) + message_component_separator +
 			data_flags (intraday) + message_component_separator + symbol +
 			client_request_terminator
 		end
@@ -255,12 +253,6 @@ feature {NONE} -- Implementation
 	intraday_data_available_request_msg: STRING is
 		do
 			Result := intra_avail_req.out + client_request_terminator
-		end
-
-	date_time_range: STRING is
-			-- date/time range, for data request
-		do
-			Result := "" -- !!!Empty, for now
 		end
 
 	data_flags (intraday: BOOLEAN): STRING is

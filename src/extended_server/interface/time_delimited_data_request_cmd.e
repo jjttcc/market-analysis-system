@@ -25,15 +25,15 @@ feature {NONE} -- Hook routine implementations
 	parse_remainder (fields: LIST [STRING]) is
 		local
 			split_result: LIST [STRING]
-			date_time_range: STRING
+			datetime_range: STRING
 			start_date_time_string, end_date_time_string: STRING
 		do
 			parse_error := False
 			start_date_time := Void
 			end_date_time := Void
-			date_time_range := fields @ date_time_spec_index
-			if date_time_range /= Void then
-				split_result := date_time_range.split (
+			datetime_range := fields @ date_time_spec_index
+			if datetime_range /= Void then
+				split_result := datetime_range.split (
 					date_time_range_separator @ 1)
 				if split_result.count > 0 then
 					start_date_time_string := split_result @ 1
@@ -59,9 +59,9 @@ feature {NONE} -- Hook routine implementations
 			end
 			if parse_error then
 				last_field_parsing_error := invalid_date_spec
-				if date_time_range /= Void then
+				if datetime_range /= Void then
 					last_field_parsing_error := last_field_parsing_error +
-						": " + date_time_range
+						": " + datetime_range
 				end
 			end
 		end
