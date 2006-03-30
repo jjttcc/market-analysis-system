@@ -66,6 +66,9 @@ Protocol for communication with the client
 	# the time field
 	use constant date_time_separator => ",";
 
+	# Default character used to separate the fields of a data record
+	use constant data_field_separator => ",";
+
 # Client request IDs
 
 	# Request for a list of symbols for all available tradables

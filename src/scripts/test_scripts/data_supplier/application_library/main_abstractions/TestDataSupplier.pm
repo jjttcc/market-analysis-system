@@ -61,7 +61,7 @@ print "My socket is: $socket\n";
 	sub initialize {
 		my ($self, %args) = @_;
 		my $new_socket = IO::Socket::INET->new(
-			LocalAddr => 'localhost', LocalPort => 49415, Proto => 'tcp',
+			LocalAddr => 'localhost', LocalPort => 39415, Proto => 'tcp',
 			Listen => 5);
 		die "$!" unless $new_socket;
 		$self->set_field(qw(socket), $new_socket);
@@ -155,9 +155,9 @@ $debug_file->flush;
 		my $dispenser = $self->field_value_for(qw(data_dispenser));
 		my $data;
 		if ($data_flags =~ $self->intraday_flag) {
-			$data = $dispenser->intraday_data_for($symbol, 0);
+			$data = $dispenser->intraday_data_for($symbol, $date_time_range);
 		} else {
-			$data = $dispenser->daily_data_for($symbol, 0);
+			$data = $dispenser->daily_data_for($symbol, $date_time_range);
 		}
 #print "sending: '" . $data, "'\n";
 		$socket->send($data . "\n");
