@@ -58,32 +58,26 @@ feature -- Element change
 
 	set_year_index (arg: INTEGER) is
 			-- Set `year_index' to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			year_index := arg
 		ensure
-			year_index_set: year_index = arg and year_index /= Void
+			year_index_set: year_index = arg
 		end
 
 	set_month_index (arg: INTEGER) is
 			-- Set `month_index' to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			month_index := arg
 		ensure
-			month_index_set: month_index = arg and month_index /= Void
+			month_index_set: month_index = arg
 		end
 
 	set_day_index (arg: INTEGER) is
 			-- Set `day_index' to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			day_index := arg
 		ensure
-			day_index_set: day_index = arg and day_index /= Void
+			day_index_set: day_index = arg
 		end
 
 	set_field_separator (arg: STRING) is

@@ -26,7 +26,7 @@ class MARKET_FUNCTION_LINE inherit
 			{SLOPE_FUNCTION_PARAMETER, MARKET_FUNCTION_EDITOR} set_slope
 			{START_Y_FUNCTION_PARAMETER, MARKET_FUNCTION_EDITOR} set_start_y
 		undefine
-			is_equal, copy, setup
+			is_equal, copy
 		end
 
 creation

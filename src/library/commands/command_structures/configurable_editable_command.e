@@ -17,12 +17,10 @@ feature -- Status setting
 
 	set_is_editable (arg: BOOLEAN) is
 			-- Set `is_editable' to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			is_editable := arg
 		ensure
-			is_editable_set: is_editable = arg and is_editable /= Void
+			is_editable_set: is_editable = arg
 		end
 
 end

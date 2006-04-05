@@ -131,7 +131,7 @@ feature {NONE} -- Initialization
 			-- Make `socket', connected to the server, with `port_number'
 			-- and `hostname'.  Don't 'create' socket if it is not Void.
 		require
-			host_port_exist: hostname /= Void and port_number /= Void
+			host_port_exist: hostname /= Void
 local
 sdb: SOCKET_DEBUGGER
 		do

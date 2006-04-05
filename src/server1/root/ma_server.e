@@ -30,6 +30,7 @@ feature {NONE} -- Hook routine implementations
 -- operators using them are implemented:
 r: RANDOM
 f: FIBONACCI
+th: THREAD
 
 	read_command_for (medium: COMPRESSED_SOCKET): POLL_COMMAND is
 		do

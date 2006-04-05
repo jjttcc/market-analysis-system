@@ -174,12 +174,10 @@ feature -- Status setting
 
 	set_timing_on (arg: BOOLEAN) is
 			-- Set `timing_on' to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			timing_on := arg
 		ensure
-			timing_on_set: timing_on = arg and timing_on /= Void
+			timing_on_set: timing_on = arg
 		end
 
 	set_intraday (arg: BOOLEAN) is

@@ -19,7 +19,6 @@ feature -- Initialization
 
 	make_from_2_points (p1, p2: MARKET_POINT) is
 		require
-			not_void: p1 /= Void and p2 /= Void
 			p1_left_of_p2: p1.x < p2.x
 			p1x_gt_0: p1.x >= 0
 		do
@@ -31,7 +30,7 @@ feature -- Initialization
 
 	make_from_slope (startp: MARKET_POINT; s: REAL) is
 		require
-			startp /= Void and startp.x > 0
+			startp.x > 0
 		do
 			start_point := startp
 			slope := s
@@ -64,8 +63,6 @@ feature -- Status setting
 
 	set_slope (v: REAL) is
 			-- Set slope to `v'.
-		require
-			v_not_void: v /= Void
 		do
 			slope := v
 		ensure
@@ -74,8 +71,6 @@ feature -- Status setting
 
 	set_start_y (v: REAL) is
 			-- Set start_y to `v'.
-		require
-			v_not_void: v /= Void
 		do
 			start_point.set_y (v)
 		ensure

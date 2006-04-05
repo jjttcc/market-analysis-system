@@ -47,8 +47,9 @@ feature -- Basic operations
 			-- is thrown and error_occurred is set to True.
 		local
 			left, right: MARKET_EVENT
-			st: expanded SIGNAL_TYPES
+			st: SIGNAL_TYPES
 		do
+			create st.initialize_signal_type
 			error_init
 			scan_event_type
 			skip_field_separator

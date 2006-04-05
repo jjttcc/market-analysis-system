@@ -24,7 +24,7 @@ feature {NONE} -- Initialization
 	make is
 		do
 			output_field_separator := Default_output_field_separator
-		ensure
+		ensure then
 			default_field_separator: output_field_separator.is_equal (
 				Default_output_field_separator)
 		end
@@ -66,13 +66,10 @@ feature -- Element change
 
 	set_output_field_separator (arg: CHARACTER) is
 			-- Set `output_field_separator' to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			output_field_separator := arg
 		ensure
-			output_field_separator_set: output_field_separator = arg and
-				output_field_separator /= Void
+			output_field_separator_set: output_field_separator = arg
 		end
 
 feature -- Constants

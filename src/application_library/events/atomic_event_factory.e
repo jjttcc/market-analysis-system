@@ -42,13 +42,10 @@ feature -- Status setting
 
 	set_field_separator (arg: like field_separator) is
 			-- Set field_separator to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			field_separator := arg
 		ensure
-			field_separator_set: field_separator = arg and
-									field_separator /= Void
+			field_separator_set: field_separator = arg
 		end
 
 feature -- Basic operations
@@ -59,8 +56,9 @@ feature -- Basic operations
 			-- is thrown and error_occurred is set to True.
 		local
 			date_time: DATE_TIME
-			st: expanded SIGNAL_TYPES
+			st: SIGNAL_TYPES
 		do
+			create st.initialize_signal_type
 			error_init
 			scan_event_type
 			skip_field_separator

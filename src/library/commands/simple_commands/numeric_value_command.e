@@ -76,8 +76,6 @@ feature -- Status setting
 
 	set_value (arg: REAL) is
 			-- Set value to `arg'.
-		require
-			arg /= Void
 		do
 			value := arg
 		ensure

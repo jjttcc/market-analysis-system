@@ -51,7 +51,7 @@ feature {NONE} -- Implementation
 					period_type_exists: period_type /= Void
 				end
 			end
-		ensure
+		ensure then
 			period_type_set_if_start_input_and_not_first_record: (start_input
 				and old last_date_time /= Void) implies period_type /= Void
 		end

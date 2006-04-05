@@ -26,12 +26,10 @@ feature -- Access
 feature {COMPOSITE_TUPLE_FACTORY}
 
 	set_volume (arg: REAL) is
-		require
-			arg /= Void
 		do
 			volume := arg
 		ensure
-			volume_set: volume = arg and volume /= Void
+			volume_set: volume = arg
 		end
 
 feature {NONE}

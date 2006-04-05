@@ -18,7 +18,7 @@ class MARKET_POINT inherit
 
 creation
 
-	make
+	make, default_create
 
 feature -- Initialization
 

@@ -135,9 +135,11 @@ feature {NONE} -- Algorithm implementations used by agents
 			check_objects (<<f.inputs.first>>, <<"input function">>,
 				agent output_not_empty, agent handle_invalid_state,
 				Void, "is empty")
-			check_objects (<<n>>, <<"n value">>,
-				agent greater_than (?, 1), agent handle_invalid_state,
-				Void, "is not greater than 1")
+-- @@@!!!###%%%Fix/work needed here:
+-- !!!!!!!!!!!!Needs fixing - commented out temporarily for E 5.6 compile:
+--			check_objects (<<n>>, <<"n value">>,
+--				agent greater_than (?, 1), agent handle_invalid_state,
+--				Void, "is not greater than 1")
 			ml := f.inputs.first.output
 			if f.operator /= Void then
 				extraction_operator := f.operator

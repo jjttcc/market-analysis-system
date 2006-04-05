@@ -58,13 +58,10 @@ feature -- Status setting
 
 	set_field_separator (arg: CHARACTER) is
 			-- Set field_separator to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			field_separator := arg
 		ensure
-			field_separator_set: field_separator = arg and
-				field_separator /= Void
+			field_separator_set: field_separator = arg
 		end
 
 feature -- Basic operations

@@ -24,7 +24,7 @@ feature {NONE} -- Implementation
 
 	initialize_input_medium is
 		deferred
-		ensure
+		ensure then
 			result_open_if_no_error: not fatal_error implies
 				input_medium.exists and then not input_medium.is_closed
 			result_open_read: input_medium.is_open_read

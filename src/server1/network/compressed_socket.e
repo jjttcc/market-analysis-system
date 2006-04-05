@@ -45,12 +45,10 @@ feature -- Status setting
 
 	set_compression (arg: BOOLEAN) is
 			-- Set compression to `arg'.
-		require
-			arg_not_void: arg /= Void
 		do
 			compression := arg
 		ensure
-			compression_set: compression = arg and compression /= Void
+			compression_set: compression = arg
 		end
 
 feature -- Output

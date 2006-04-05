@@ -70,12 +70,13 @@ feature {NONE}
 			-- from tuples.
 		local
 			h, l, o, c: REAL
-			high: expanded HIGH_PRICE
-			low: expanded LOW_PRICE
+			high: HIGH_PRICE
+			low: LOW_PRICE
 		do
 			o := tuples.first.open.value
 			c := tuples.last.close.value
 			if high_finder = Void then
+				create high; create low
 				check low_finder = Void end
 				create high_finder.make (tuples, high, tuples.count)
 				create low_finder.make (tuples, low, tuples.count)

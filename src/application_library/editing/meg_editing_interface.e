@@ -311,12 +311,13 @@ feature {NONE} -- Implementation
 
 	signal_type_selection: INTEGER is
 		local
-			stypes: expanded SIGNAL_TYPES
+			stypes: SIGNAL_TYPES
 			snames: ARRAY [STRING]
 			scodes, code_selection_list: STRING
 			c: CHARACTER
 			i: INTEGER
 		do
+			create stypes.initialize_signal_type
 			snames := stypes.type_names
 			scodes := stypes.character_codes
 			create code_selection_list.make (0)

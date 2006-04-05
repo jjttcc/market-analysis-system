@@ -22,12 +22,12 @@ feature -- Access
 		deferred
 		end
 
-	real_list: STORABLE_LIST [G] is
+	real_list: STORABLE_LIST [ANY] is
 			-- The actual persistent list
 		deferred
 		end
 
-	working_list: STORABLE_LIST [G] is
+	working_list: STORABLE_LIST [ANY] is
 			-- Working list used for editing
 		deferred
 		end

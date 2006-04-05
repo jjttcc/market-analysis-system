@@ -63,7 +63,7 @@ feature {NONE} -- Initialization
 		ensure
 			field_set: not error_occurred implies field /= Void
 			symbols_set: not error_occurred implies symbols /= Void
-			handle_set: external_handle /= Void
+			handle_set: external_handle /= default_pointer
 		end
 
 feature -- Access
@@ -451,7 +451,7 @@ feature {NONE} -- Implementation - externals
 	is_open_implementation (handle: POINTER): BOOLEAN is
 			-- Is the input sequence open for use?
 		require
-			handle_valid: handle /= Void
+			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
@@ -459,7 +459,7 @@ feature {NONE} -- Implementation - externals
 	current_field (handle: POINTER): POINTER is
 			-- Current field value as a non-null-terminated C string
 		require
-			handle_valid: handle /= Void
+			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
@@ -467,7 +467,7 @@ feature {NONE} -- Implementation - externals
 	current_field_length (handle: POINTER): INTEGER is
 			-- Length of `current_field'
 		require
-			handle_valid: handle /= Void
+			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
@@ -477,56 +477,56 @@ feature {NONE} -- Implementation - externals
 			-- is advanced to the next character.
 		require
 			readable: readable
-			handle_valid: handle /= Void
+			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
 
 	advance_to_next_field_implementation (handle: POINTER) is
 		require
-			handle_valid: handle /= Void
+			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
 
 	advance_to_next_record_implementation (handle: POINTER) is
 		require
-			handle_valid: handle /= Void
+			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
 
 	field_count_implementation (handle: POINTER): INTEGER is
 		require
-			handle_valid: handle /= Void
+			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
 
 	readable_implementation (handle: POINTER): BOOLEAN is
 		require
-			handle_valid: handle /= Void
+			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
 
 	after_last_record_implementation (handle: POINTER): BOOLEAN is
 		require
-			handle_valid: handle /= Void
+			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
 
 	retrieve_data (handle: POINTER; sym: POINTER; intrad: BOOLEAN) is
 		require
-			args_valid: handle /= Void and sym /= Void
+			args_valid: handle /= default_pointer and sym /= default_pointer
 		external
 			"C"
 		end
 
 	start_implementation (handle: POINTER) is
 		require
-			handle_valid: handle /= Void
+			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
@@ -534,7 +534,7 @@ feature {NONE} -- Implementation - externals
 	make_available_symbols (handle: POINTER) is
 			-- Create `available_symbols'.
 		require
-			handle_valid: handle /= Void
+			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
@@ -542,7 +542,7 @@ feature {NONE} -- Implementation - externals
 	available_symbols (handle: POINTER): POINTER is
 			-- All available symbols, separated by newlines
 		require
-			handle_valid: handle /= Void
+			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
@@ -555,7 +555,7 @@ feature {NONE} -- Implementation - externals
 			-- reason for the failure; otherwise, `initialization_error'
 			-- will be False.
 		require
-			working_dir_not_void: working_dirs /= Void
+			working_dir_not_void: working_dirs /= default_pointer
 			-- working_dir_valid: The last character of `working_dir' is
 			-- directory_separator.
 		external
@@ -565,7 +565,7 @@ feature {NONE} -- Implementation - externals
 	external_error (handle: POINTER): BOOLEAN is
 			-- Did an error occur in the last external "C" call?
 		require
-			handle_valid: handle /= Void
+			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
@@ -573,7 +573,7 @@ feature {NONE} -- Implementation - externals
 	last_external_error (handle: POINTER): POINTER is
 			-- The last error that occurred in an external "C" call
 		require
-			handle_valid: handle /= Void
+			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
@@ -582,7 +582,7 @@ feature {NONE} -- Implementation - externals
 			-- Perform any needed cleanup operations for garbage collection.
 		require
 			open: is_open
-			handle_valid: handle /= Void
+			handle_valid: handle /= default_pointer
 		external
 			"C"
 		ensure
@@ -592,7 +592,7 @@ feature {NONE} -- Implementation - externals
 	intraday_data_available_implementation (handle: POINTER): BOOLEAN is
 			-- Is a source of intraday data available?
 		require
-			handle_valid: handle /= Void
+			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end

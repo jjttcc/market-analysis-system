@@ -1,6 +1,8 @@
 indexing
 	description:
 		"TRADABLE_LISTs that obtain their input data from files"
+		"(fix - change to:)"
+		"TRADABLE_LISTs that obtain their input data from sockets"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -72,7 +74,7 @@ print ("conn.connected: " + connection.connected.out + "%N")
 				-- Report error - Failed to connect.!!!!!
 			end
 print ("tgt t out of date result: " + Result.out + "%N")
-		ensure
+		ensure then
 			not_out_of_date_if_failed:
 				not connection.last_communication_succeeded implies not Result
 		end

@@ -27,9 +27,10 @@ feature -- Access
 			c.valid_index (i)
 		local
 			line1, line2: MARKET_LINE
-			p1, p2, p3: expanded MARKET_POINT
+			p1, p2, p3: MARKET_POINT
 			mt: MARKET_TUPLE
 		do
+			create p1; create p2; create p3
 			if i > 1 then
 				mt := c.i_th (i - 1)
 			else
