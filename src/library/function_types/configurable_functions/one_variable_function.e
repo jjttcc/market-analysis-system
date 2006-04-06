@@ -35,6 +35,7 @@ feature {NONE} -- Initialization
 			in_ptype_not_void: in.trading_period_type /= Void
 		do
 			set_input (in)
+			make_output
 			if op /= Void then
 				set_operator (op)
 				operator.initialize (Current)
@@ -43,7 +44,6 @@ feature {NONE} -- Initialization
 				target_not_void: target /= Void
 				-- make_output uses target.
 			end
-			make_output
 		ensure
 			set: input = in and operator = op
 		end

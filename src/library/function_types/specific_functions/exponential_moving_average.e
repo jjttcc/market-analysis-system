@@ -64,9 +64,14 @@ feature {NONE} -- Initialization
 			in_ptype_not_void: in.trading_period_type /= Void
 		do
 			check operator_used end
-			sma_make (in, op, i)
+			exp := e
+			exp.set_n (i)
+			create sum.make (in.output, op, i)
+			create output.make (in.output.count)
+			nrovf_set_input (in)
+			nrovf_set_operator (op)
+			nrovf_set_n (i)
 			check n = i end
-			set_exponential (e)
 		ensure
 			set: input = in and operator = op and n = i
 			e_n_set_to_i: e.n = i
