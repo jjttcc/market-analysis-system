@@ -43,6 +43,7 @@ set_up()
 	save_output=n
 	if [ ! -z "$MAS" ]; then
 		Basedir=$MAS/../projects/mas
+		Base_ex_dir=$MAS/../projects/mas-extended
 	else
 		Basedir=..
 	fi
@@ -68,6 +69,9 @@ set_up()
 	elif [ -d $Basedir/EIFGEN/W_code -a -x $Basedir/EIFGEN/W_code/mas ]; then
 		exec=$Basedir/EIFGEN/W_code/mas
 		ln -f -s $Basedir/EIFGEN/W_code/mas.melted .
+	elif [ -d $Base_ex_dir/EIFGEN/F_code -a \
+		-x $Base_ex_dir/EIFGEN/F_code/mas-extended ]; then
+		exec=$Base_ex_dir/EIFGEN/F_code/mas-extended
 	elif [ -d ../../../bin -a -x ../../../bin/mas ]; then
 		exec=../../../bin/mas
 	else
