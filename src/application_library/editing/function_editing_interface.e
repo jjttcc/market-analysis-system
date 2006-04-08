@@ -920,6 +920,20 @@ feature {NONE} -- Implementation - indicator editing
 				<<"New value set to ", p.current_value, "%N">>))
 		end
 
+	-- (Needed for compiler bug workaround - see note below)
+	gensrt: expanded GENERIC_SORTING [FUNCTION_PARAMETER, HASHABLE]
+
+-- @@@WARNING: Due to a bug in the 5.6 compiler, I had to make the following
+-- changes to 'edit_indicator' to get rid of code that was triggering the bug
+-- (causing a segmentation violation): Replaced all calls to
+-- 'edit_parameter_menu' with its implementation.  Then, in order to remove
+-- some code duplication, I changed the logic a bit so that the
+-- edit_parameter_menu code is only duplicated here twice.  (Before this
+-- change, I think it was duplicated three times.)  I also changed the
+-- original call to 'duplicates' with its implementation.  After the compiler
+-- bug is fixed, these changes need to be undone - calls to edit_parameter_menu
+-- put back, etc.  (Use an svn diff between rev. 4335 and rev. 4338 to see
+-- what changed.)
 	edit_indicator (i: MARKET_FUNCTION) is
 			-- Edit indicator `i'.
 		require
@@ -928,24 +942,30 @@ feature {NONE} -- Implementation - indicator editing
 			has_children_to_edit, has_immediate_parameters: BOOLEAN
 			children: LIST [MARKET_FUNCTION]
 			quit: BOOLEAN
-			parameters: LIST [FUNCTION_PARAMETER]
+			parameters, im_paramaters: LIST [FUNCTION_PARAMETER]
+			target_parameters: LIST [FUNCTION_PARAMETER]
+			selection: INTEGER
+			param: FUNCTION_PARAMETER
+			query: STRING
 		do
+			target_parameters := Void
 			children := editable_children (i)
 			has_children_to_edit := not children.is_empty
 			has_immediate_parameters := not i.immediate_parameters.is_empty
-			parameters := i.parameters
+			parameters := gensrt.sorted_set (i.parameters)
+			im_paramaters := gensrt.sorted_set (i.immediate_parameters)
 			if parameters.is_empty then
-				show_message (concatenation (<<"Indicator ", i.name,
-					" has no editable parameters.">>))
+				show_message ("Indicator " + i.name +
+					" has no editable parameters.")
 			elseif
-				parameters.count = 1 or not duplicates (parameters)
+				parameters.count = 1 or not gensrt.duplicates (
+					info_from_parameter_list (parameters, 's'))
 			then
-				edit_parameter_menu (parameters, i.name)
+				target_parameters := parameters
 			elseif not has_children_to_edit and has_immediate_parameters then
-				edit_parameter_menu (i.immediate_parameters, i.name)
+				target_parameters := im_paramaters
 			elseif has_children_to_edit and not has_immediate_parameters then
-				show_message (concatenation (<<"Indicator %"", i.name,
-					"'s%" children:">>))
+				show_message ("Indicator %"" + i.name + "'s%" children:")
 				edit_indicator_list (i.children)
 			else
 				check
@@ -957,18 +977,65 @@ feature {NONE} -- Implementation - indicator editing
 					quit
 				loop
 					inspect
-						character_choice (concatenation (<<"Indicator ",
-							i.name, ":%NEdit children or edit immediate ",
-							"parameters? (c[hildren]/i[mmediate]/q[uit]) ">>),
+						character_choice ("Indicator " + i.name +
+							":%NEdit children or edit immediate " +
+							"parameters? (c[hildren]/i[mmediate]/q[uit]) ",
 							"cCiIqQ")
 					when 'c', 'C' then
-						show_message (concatenation (<<"Indicator %"", i.name,
-							"'s%" children:">>))
+						show_message ("Indicator %"" + i.name +
+							"'s%" children:")
 						edit_indicator_list (i.children)
 					when 'i', 'I' then
-						edit_parameter_menu (i.immediate_parameters, i.name)
+						target_parameters := im_paramaters
+						from
+							selection := Null_value
+							if im_paramaters.is_empty then
+								show_message ("No parameters to edit for " +
+									i.name)
+								selection := Exit_value
+							elseif i.name /= Void then
+								query := "Select a parameter to edit for " +
+									i.name
+							else
+								query := "Select a parameter to edit"
+							end
+						until
+							selection = Exit_value
+						loop
+							selection := list_selection_with_backout (
+								info_from_parameter_list (target_parameters,
+									'l'), query)
+							if selection /= Exit_value then
+								param := target_parameters @ selection
+								edit_parameter (param)
+							end
+						end
 					when 'q', 'Q' then
 						quit := True
+					end
+				end
+				target_parameters := Void
+			end
+			if target_parameters /= Void then
+				from
+					selection := Null_value
+					if target_parameters.is_empty then
+						show_message ("No parameters to edit for " + i.name)
+						selection := Exit_value
+					elseif i.name /= Void then
+						query := "Select a parameter to edit for " + i.name
+					else
+						query := "Select a parameter to edit"
+					end
+				until
+					selection = Exit_value
+				loop
+					selection := list_selection_with_backout (
+						info_from_parameter_list (target_parameters, 'l'),
+							query)
+					if selection /= Exit_value then
+						param := target_parameters @ selection
+						edit_parameter (param)
 					end
 				end
 			end
