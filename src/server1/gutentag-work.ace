@@ -5,26 +5,68 @@ root
 	EXTENDED_MA_SERVER: make
 
 default
-	assertion (check)
-	assertion (require)
-	assertion (ensure)
-	assertion (loop)
-	assertion (invariant)
-	arguments (" -f , -i 15-minute  bond_10_year.15-minute -no-volume 2299 -b")
-	arguments (" -f , ibm.txt 2299 -b")
-	arguments (" -f , -w -o 18273")
-	arguments (" -f , -wbo 18273")
-	arguments ("-o -f , -w -b 18273")
-	arguments ("-o -f , *.txt 2345 -b")
-	arguments ("-o -f , aa.txt ibm.txt 2345 -b")
-	arguments ("-o -f , aa.txt ibm.txt 2345")
-	arguments ("-o -f , aa.txt ibm.txt")
+	assertion (no)
+	arguments ("-k:49415 -f ,")
+	arguments ("-f , 2735 /tmp/ibm.txt")
+	arguments ("-f , 2735 /tmp/ibm.txt.nothere")
+	arguments ("-w -f , -b 5555")
+	arguments ("-f , 2733 -i 15-minute /tmp/bond_10_year.15-minute -no-volume")
+	arguments ("-f , 2735 -b ibm-sddb.txt")
+	arguments ("-f , 9922 -nonstd -i 15-minute /tmp/dtst1.15-minute -no-volume")
+	arguments ("-f , -i 15-minute /tmp/dtst1.15-minute -no-volume")
+	arguments ("-f , -nonstd /tmp/ibm.txt")
+	arguments ("-f , nonexistent.txt")
+	arguments ("-p 30001 -b")
+	arguments (" -o -b 12345 -f , -w -report_back jupiter.milkyway.org^41512")
 	arguments (" ")
-	arguments ("-v")
-	arguments ("-h")
 	arguments ("-o -f , -w 12345")
-	arguments ("-o -f , sunw.txt  4002")
+	arguments ("-p 8888 -b")
+	arguments ("-p 8886 -b")
+	arguments ("-p 8884 -b")
+	arguments ("-p 8888")
+	arguments ("-p 2345 1234")
+	arguments ("-p")
 	arguments ("-o -p")
+	arguments ("-o -p -debug")
+	arguments ("-o -p -z -report_back jupiter.milkyway.org^41516")
+	arguments ("-o -f , /opt/mas/lib/data/tradables/aa.txt -report_back jupiter.milkyway.org^50173")
+	arguments ("-o -f , /opt/mas/lib/data/tradables/a*.txt -report_back jupiter.milkyway.org^50173")
+	arguments ("-o -f , sunw.txt -report_back jupiter.milkyway.org^50173")
+	arguments ("-o -f , /opt/mas/lib/a*.txt -report_back jupiter.milkyway.org^50173")
+	arguments ("-h")
+	arguments ("-o -f , /opt/mas/lib/data/tradables/aa.txt /opt/mas/lib/data/tradables/aapl.txt")
+	arguments ("-o -f , /opt/mas/lib/data/tradables/a*.txt")
+	arguments ("-o -f , /opt/mas/lib/a*.txt")
+	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4002 ")
+	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4002 -debug")
+	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4002")
+	arguments ("-o -f , sunw.txt  aapl.txt aa.txt abgx.txt 4001")
+	arguments ("-o -f , sunw.txt  4002")
+	arguments ("-o -f , sunw.txt  4001")
+	arguments ("-o -f , sunw.txt  4001 -r /tmp/fbc1")
+	arguments ("-o -f , sunw.txt 2223")
+	arguments ("-o -f , sunw.txt 2224")
+	arguments ("-o -f , sunw.txt 2225")
+	arguments ("-o -f , sunw.txt 2226")
+	arguments ("-o -f , sunw.txt 22222")
+	arguments ("-o -f , sunw.txt 1234")
+	arguments ("-o -f , sunw.txt 12345")
+	arguments ("-o -f , sunw.txt")
+	arguments ("-o -f , amzn.txt")
+	arguments ("-f ' '  /tmp/newfmt-novol.txt -no-volume -date-spec:date-format=dd#month3#yy,year-partition=80,date-sep=-")
+	arguments ("-f , /tmp/newfmt-novol.txt -no-volume -date-spec:date-format=dd#month3#yy,year-partition=80,date-sep=-")
+	arguments ("-o -f , /tmp/newfmt.txt -no-volume -date-spec:date-format=dd#month3#yy,year-partition=80,date-sep=-")
+	arguments ("-o -f , /tmp/ibm.txt -no-volume -date-spec:date-format=dd#month3#yy,year-partition=80,date-sep=-")
+	arguments ("-o -f , /tmp/ibm.txt -no-volume")
+	arguments ("-o -f , -s -i 5-minute  /tmp/ibm.5-minute -special-format")
+	arguments ("-o -f , -i 5-minute  /tmp/ibm.5-minute -special-format")
+	arguments ("-o -f , -i 5-minute  /tmp/ibm.5-minute")
+	arguments ("-o -f , /tmp/ibm.txt /tmp/aapl.txt /tmp/amzn.txt")
+	arguments ("-o -f , /tmp/boll/input /tmp/ibm.txt")
+	arguments ("-o -f , /tmp/boll/input")
+	arguments ("-o -f , /tmp/ibm.txt /tmp/aapl.txt /tmp/amzn.txt /tmp/sd_data.txt")
+	arguments ("-o -f , -w 12346")
+	arguments ("-o -p 12345")
 	arguments ("-o -p 3333")
 	arguments ("-o -p 3332")
 	arguments ("-o -f , amzn.txt none.txt ibm.txt")
@@ -35,19 +77,18 @@ default
 	arguments ("-o -f , aa.txt")
 	disabled_debug (yes)
 	disabled_debug ("compression")
+	disabled_debug ("data_request")
+	disabled_debug ("data_update_bug")
 	disabled_debug ("editing")
 	disabled_debug ("http")
 	disabled_debug ("object_editing")
 	disabled_debug ("persist")
-	disabled_debug ("data_request")
 	disabled_debug ("std_dev")
 	line_generation (no)
 	profile (no)
 	trace (no)
-	il_verifiable (yes)
-	msil_generation_type ("exe")
 	check_vape (yes)
-	console_application (yes)
+	console_application (no)
 	address_expression (no)
 	array_optimization (yes)
 	dead_code_removal (yes)
@@ -58,12 +99,18 @@ default
 	multithreaded (no)
 
 
---!!!!NOTE: This cluster is probably not needed - Remove it as soon as
---!!!!you can verify that the project compiles without it.
---!!!!NOTE: The following 6 clusters may not be needed - Remove them as soon as
---!!!!you can verify that the project compiles without them.
---!!!!NOTE: This cluster is probably not needed - Remove it as soon as
---!!!!you can verify that the project compiles without it.
+--	assertion (check)
+--	assertion (require)
+--	assertion (ensure)
+--	assertion (loop)
+--	assertion (invariant)
+--	debug (no)
+--debug ("editing");
+--debug ("persist");
+--debug ("command line");
+--debug ("database");
+--debug ("compression");
+--precompiled ("$ISE_EIFFEL/precomp/spec/$PLATFORM/base");
 
 cluster
 	server:		"$MAS/src/server1"
@@ -102,7 +149,7 @@ cluster
 
 	server_global (server):		"$/global"
 
-	system_specific (server):		"$/system_specific/win32"
+	system_specific (server):		"$/system_specific/unix"
 
 	configuration (server):		"$/configuration"
 
@@ -204,7 +251,7 @@ cluster
 
 	component_support (eiffel_components):		"$/support"
 
-	system_specific_support (eiffel_components):		"$/support/windows"
+	system_specific_support (eiffel_components):		"$/support/unix"
 
 	eiflib_data_scanning (eiffel_components):		"$/data_scanning"
 
@@ -228,7 +275,13 @@ cluster
 
 	kernel (ise):		"$/base/kernel"
 
+	kernel_classic (ise):		"$/base/kernel/classic"
+
+	refactoring (ise):		"$/base/refactoring"
+
 	support (ise):		"$/base/support"
+
+	support_classic (ise):		"$/base/support/classic"
 
 	access (ise):		"$/base/structures/access"
 
@@ -264,6 +317,10 @@ cluster
 
 	net (ise):		"$/net"
 
+--	thread (ise):		"$/thread"
+
+--	thread_classic (ise):		"$/thread/classic"
+
 	http_resources (net):		"$/transfer/resources"
 
 	http_addresses (net):		"$/transfer/addresses"
@@ -282,7 +339,7 @@ cluster
 
 	ecli_src:		"$ECLI/src"
 
-	abstract (ecli_src):		"$/abstract"
+--	abstract (ecli_src):		"$/abstract"
 
 	ecli_spec (ecli_src):		"$/spec"
 
@@ -334,7 +391,13 @@ cluster
 
 	eposix_stdc:		"$EPOSIX/src/standardc"
 
+	eposix_sus:		"$EPOSIX/src/sus"
+
+	eposix_gobo:		"$EPOSIX/src/epxc/gobo"
+
 	eposix_papi:		"$EPOSIX/src/papi"
+
+	eposix_sapi:		"$EPOSIX/src/sapi"
 
 	eposix_capi:		"$EPOSIX/src/capi"
 
@@ -352,12 +415,17 @@ external
 		"$ISE_EIFFEL/library/time/Clib"
 
 	object:
-		"${ISE_EIFFEL}/library/time/spec/bcb/lib/datetime.lib",
-		"${ISE_EIFFEL}/library/net/spec/bcb/lib/net.lib",
-		"${ECLI}/src/spec/Ise/windows/ecli_c.lib",
-		"${MAS}/src/eiffel_library/lib/utilities.obj",
-		"${ISE_EIFFEL}/library/vision2/spec/bcb/lib/zlib.lib",
-		"${MAS}/src/server1/lib/external_input_sequence.lib",
-		"${ISE_EIFFEL}/Bcc55/lib/Psdk/odbc32.lib"
+--		"${ISE_EIFFEL}/library/time/spec/${ISE_PLATFORM}/lib/libdatetime.a",
+-- non-multi-threaded:
+		"${ISE_EIFFEL}/library/net/spec/${ISE_PLATFORM}/lib/libnet.a",
+-- multi-threaded:
+--		"${ISE_EIFFEL}/library/net/spec/${ISE_PLATFORM}/lib/libmtnet.a",
+		"${ECLI}/src/spec/Ise/${ISE_PLATFORM}/libecli_c.a",
+		"/${MAS}/src/eiffel_library/support/spec/${ISE_PLATFORM}/lib/utilities.o",
+		"${ISE_EIFFEL}/C_library/zlib/libz.a",
+		"${MAS}/src/server1/spec/${ISE_PLATFORM}/lib/external_input_sequence.a",
+		"-lodbc",
+		"-L $(EPOSIX)/lib -leposix_ise", "-lrt",
+		"${MAS_LINK_OPTIONS}"
 
 end

@@ -116,7 +116,7 @@ cluster
 
 	client_support (client_lib):		"$/support"
 
-	abstractions (server):		"$/abstractions"
+	experimental_mt (server):		"$/experimental-non-mt"
 
 	factories (server):		"$/factories"
 

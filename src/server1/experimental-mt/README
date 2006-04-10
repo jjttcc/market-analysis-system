@@ -1,0 +1,4 @@
+Cluster for thread logic experiments - Meant to be kept separate from (not
+used in) the non-multi-threaded version of the system.  The plan is, at
+some point, to complete the threaded version and replace the non-threaded
+version with it.

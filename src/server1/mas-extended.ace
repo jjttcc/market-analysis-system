@@ -115,8 +115,7 @@ default
 cluster
 	server:		"$MAS/src/server1"
 
-
-	abstractions (server):		"$/abstractions"
+	experimental_mt (server):		"$/experimental-non-mt"
 
 	factories (server):		"$/factories"
 

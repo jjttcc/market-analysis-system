@@ -1,0 +1,3 @@
+Cluster for dummy (non-multi-threaded) thread logic - Used to allow
+experimentation with threads without causing the non-threaded version to
+fail to compile.
