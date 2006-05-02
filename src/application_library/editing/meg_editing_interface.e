@@ -459,11 +459,6 @@ feature {NONE} -- Implementation
 				operator_maker.Linear_cmd)
 		end
 
-	reset_error is
-		do
-			error_occurred := False
-		end
-
 	initialize_working_list is
 		do
 			working_meg_library := deep_clone (market_event_generation_library)

@@ -294,9 +294,9 @@ feature -- Miscellaneous
 	print_command_tree (cmd: COMMAND; level: INTEGER) is
 			-- Print the type name of `cmd' and, recursively, that of all
 			-- of its operands.
-        require
-            not_void: cmd /= Void
-            level_positive: level > 0
+		require
+			not_void: cmd /= Void
+			level_positive: level > 0
 		deferred
 		end
 

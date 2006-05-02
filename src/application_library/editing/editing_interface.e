@@ -149,7 +149,28 @@ feature -- Basic operations
 		deferred
 		end
 
+	report_errors is
+			-- If `error_occurred', report `last_error' and set
+			-- `error_occurred' to False.
+		do
+			if error_occurred then
+				show_message (last_error)
+				reset_error
+			end
+		ensure
+			no_more_error: not error_occurred
+		end
+
 feature {NONE} -- Implementation
+
+	reset_error is
+		do
+			error_occurred := False
+		ensure
+			no_error: not error_occurred
+		end
+
+feature {NONE} -- Implementation - constants
 
 	Exit_value: INTEGER is -1
 			-- Value indicating menu is to be exited - negative so as not

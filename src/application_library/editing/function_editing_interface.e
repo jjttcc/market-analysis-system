@@ -298,6 +298,8 @@ feature {EDITING_INTERFACE}
 		local
 			selection: INTEGER
 			indicator: MARKET_FUNCTION
+			functions: LIST [MARKET_FUNCTION]
+			complex_func: COMPLEX_FUNCTION
 		do
 			from
 				selection := Null_value
@@ -310,6 +312,20 @@ feature {EDITING_INTERFACE}
 					indicator := l @ selection
 					check indicator /= Void end
 					show_message (indicator.node_names)
+					-- Display all operator trees for each node in the
+					-- function tree.
+					from
+						functions := indicator.functions
+						functions.start
+					until
+						functions.exhausted
+					loop
+						complex_func ?= functions.item
+						if complex_func /= Void then
+							display_operators (complex_func)
+						end
+						functions.forth
+					end
 					if
 						string_selection (
 							"(Hit <Enter> to continue ...)") = "dummy"
@@ -502,11 +518,6 @@ feature {NONE} -- Implementation
 			spiel.append ("Choose a name for " + msg +
 						" that does not match any of the%Nabove names:")
 			o.set_name (visible_string_selection (spiel))
-		end
-
-	reset_error is
-		do
-			error_occurred := False
 		end
 
 	initialize_working_list is
@@ -769,6 +780,28 @@ feature {NONE} -- Implementation
 	synchronize_lists is
 		do
 			force_function_library_retrieval
+		end
+
+	display_operators (indicator: COMPLEX_FUNCTION) is
+		local
+			ops: LIST [COMMAND]
+		do
+			ops := indicator.direct_operators
+			if not ops.is_empty then
+				from
+					show_message ("operators for " + indicator.name + ":%N")
+					ops.start
+				until
+					ops.exhausted
+				loop
+					display_operator_tree (ops.item)
+					ops.forth
+				end
+			end
+		end
+
+	display_operator_tree (op: COMMAND) is
+		deferred
 		end
 
 feature {NONE} -- Implementation - indicator editing

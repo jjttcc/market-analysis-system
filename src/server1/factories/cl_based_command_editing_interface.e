@@ -39,11 +39,12 @@ feature -- Initialization
 
 feature -- Basic operations
 
-	print_command_tree (o: COMMAND; level: INTEGER) is
-			-- Print the type name of `o' and, recursively, that of all
+	print_command_tree (cmd: COMMAND; level: INTEGER) is
+			-- Print the type name of `cmd' and, recursively, that of all
 			-- of its operands.
 		local
 			i: INTEGER
+			s: STRING
 		do
 			from
 				i := 1
@@ -53,11 +54,15 @@ feature -- Basic operations
 				print ("  ")
 				i := i + 1
 			end
-			print_list (<<o.generator, "%N">>)
-			debug ("object_editing")
-				print_list (<<"(", o.out, ")%N">>)
+			s := cmd.generator
+			if cmd.name /= Void and then not cmd.name.is_empty then
+				s := s + " [" + cmd.name + "]"
 			end
-			print_operand_trees (o, level + 1)
+			print (s + "%N")
+			debug ("object_editing")
+				print_list (<<"(", cmd.out, ")%N">>)
+			end
+			print_operand_trees (cmd, level + 1)
 		end
 
 feature -- Status setting
@@ -133,6 +138,25 @@ feature {NONE} -- Hook methods
 
 feature {NONE} -- Utility routines
 
+	guarded_print_command_tree (cmd: COMMAND; level: INTEGER; opname: STRING;
+				parent: COMMAND) is
+			-- Call `print_command_tree' with a guard that ensures it is not
+			-- called if `cmd' is void.  Log an appropriate error message
+			-- (with `report_errors') if `cmd' is void.
+		do
+			if cmd = Void then
+				last_error := "[Warning: " + opname
+				if parent.name /= Void and then not parent.name.is_empty then
+					last_error := last_error + " (" + parent.name + ")"
+				end
+				last_error := last_error + " does not exist.]%N"
+				error_occurred := True
+				report_errors
+			else
+				print_command_tree (cmd, level)
+			end
+		end
+
 	print_operand_trees (cmd: COMMAND; level: INTEGER) is
 			-- Call print_command_tree on all of `cmd's operands, if
 			-- it has any.
@@ -141,19 +165,40 @@ feature {NONE} -- Utility routines
 			unop: UNARY_OPERATOR [ANY, ANY]
 			binop: BINARY_OPERATOR [ANY, ANY]
 			bool_client: NUMERIC_CONDITIONAL_COMMAND
+			num_wrapper: NUMERIC_VALUED_COMMAND_WRAPPER
+			cmd_seq: COMMAND_SEQUENCE
 		do
 			unop ?= cmd
 			binop ?= cmd
 			bool_client ?= cmd
+			num_wrapper ?= cmd
+			cmd_seq ?= cmd
 			if unop /= Void then
-				print_command_tree (unop.operand, level)
+				guarded_print_command_tree (unop.operand, level,
+					"unary operator's operand", unop)
 			elseif binop /= Void then
-				print_command_tree (binop.operand1, level)
-				print_command_tree (binop.operand2, level)
+				guarded_print_command_tree (binop.operand1, level,
+					"binary operator's left operand", binop)
+				guarded_print_command_tree (binop.operand2, level,
+					"binary operator's right operand", binop)
 			elseif bool_client /= Void then
-				print_command_tree (bool_client.boolean_operator, level)
-				print_command_tree (bool_client.false_cmd, level)
-				print_command_tree (bool_client.true_cmd, level)
+				guarded_print_command_tree (bool_client.boolean_operator, level,
+					"boolean client's boolean operator", bool_client)
+				guarded_print_command_tree (bool_client.false_cmd, level,
+					"boolean client's false command", bool_client)
+				guarded_print_command_tree (bool_client.true_cmd, level,
+					"boolean client's true command", bool_client)
+			elseif num_wrapper /= Void then
+				guarded_print_command_tree (num_wrapper.item, level,
+					"numeric command wrapper's operand", num_wrapper)
+			elseif cmd_seq /= Void then
+				cmd_seq.children.do_all (agent guarded_print_command_tree (?,
+					level, "command sequence's operand", cmd_seq))
+			else
+				debug ("operator-report")
+					print ("print_operand_trees: cmd (" + cmd.generator +
+						") assumed to have no children.%N")
+				end
 			end
 		end
 

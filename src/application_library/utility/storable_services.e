@@ -56,11 +56,6 @@ feature -- Status report
 			definition: Result = (not ok_to_save and not readonly)
 		end
 
-	error_occurred: BOOLEAN is
-			-- Did an error occur during the last operation?
-		deferred
-		end
-
 feature -- Basic operations
 
 	edit_list is
@@ -138,14 +133,6 @@ feature {NONE} -- Implementation
 			locked_read_or_abort:
 				ok_to_save and lock.locked or readonly or abort_edit
 			working_list_set: working_list /= Void
-		end
-
-	report_errors is
-		do
-			if error_occurred then
-				show_message (last_error)
-				reset_error
-			end
 		end
 
 	end_edit is
@@ -243,12 +230,6 @@ feature {NONE} -- Hook routines
 
 	prompt_for_char (msg, charselection: STRING): CHARACTER is
 		deferred
-		end
-
-	reset_error is
-		deferred
-		ensure
-			no_error: not error_occurred
 		end
 
 	retrieve_persistent_list is

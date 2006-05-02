@@ -41,6 +41,19 @@ feature -- Access
 			Result.append (operator_parameters)
 		end
 
+	direct_operators: LIST [COMMAND] is
+			-- All operators directly attached to Current
+		do
+			create {LINKED_LIST [COMMAND]} Result.make
+			if operator /= Void then
+				Result.extend (operator)
+			end
+		ensure
+			exists: Result /= Void
+			has_operator_if_it_exists:
+				operator /= Void implies Result.has (operator)
+		end
+
 feature -- Status report
 
 	operator_used: BOOLEAN is
@@ -118,19 +131,6 @@ feature {NONE} -- Hook methods
 					", date/time: " + output.last.date_time.out +
 					", value: " + output.last.value.out + "%N")
 			end
-		end
-
-	direct_operators: LIST [COMMAND] is
-			-- All operators directly attached to Current
-		do
-			create {LINKED_LIST [COMMAND]} Result.make
-			if operator /= Void then
-				Result.extend (operator)
-			end
-		ensure
-			exists: Result /= Void
-			has_operator_if_it_exists:
-				operator /= Void implies Result.has (operator)
 		end
 
 feature {MARKET_FUNCTION} -- Status report

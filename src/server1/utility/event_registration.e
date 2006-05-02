@@ -535,11 +535,6 @@ feature {NONE} -- Implementation
 			working_event_registrants := deep_clone (market_event_registrants)
 		end
 
-	reset_error is
-		do
-			error_occurred := False
-		end
-
 feature {NONE} -- Implementation of hook routines
 
 	do_initialize_lock is

@@ -206,4 +206,9 @@ feature {NONE} -- Implementation of hook methods
 			end
 		end
 
+	display_operator_tree (op: COMMAND) is
+		do
+			operator_maker.print_command_tree (op, 1)
+		end
+
 end -- CL_BASED_FUNCTION_EDITING_INTERFACE
