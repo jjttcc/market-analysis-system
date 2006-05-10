@@ -27,6 +27,8 @@ feature -- Access
 		end
 
 	tradable_cache_size: INTEGER is
+		indexing
+			once_status: global
 		local
 			value: STRING
 		once

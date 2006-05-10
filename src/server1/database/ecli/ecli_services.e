@@ -148,11 +148,13 @@ feature -- Access
 		end
 
 	stock_data: STOCK_DATA is
+-- !!!! indexing once_status: global??!!! [probaly not, but check]
 		once
 			create {DB_STOCK_DATA} Result
 		end
 
 	derivative_data: TRADABLE_DATA is
+-- !!!! indexing once_status: global??!!! [probaly not, but check]
 		once
 			create {DB_DERIVATIVE_DATA} Result
 		end
@@ -222,6 +224,7 @@ feature {NONE} -- Implementation
 
 	session: ECLI_SESSION is
 			-- The ECLI database session - provides access to the database
+-- !!!! indexing once_status: global??!!! [probaly not, but check]
 		once
 			if db_info.db_name.is_empty then
 				fatal_error := True

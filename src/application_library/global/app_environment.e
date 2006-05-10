@@ -25,6 +25,8 @@ feature -- Access
 			-- Path of the working directory for the application -
 			-- where configuration and data files are stored.
 			-- Void if the associated environment variable is not set.
+		indexing
+			once_status: global
 		once
 			Result := get (env_names.application_directory_name)
 		end
@@ -32,6 +34,8 @@ feature -- Access
 	stock_split_file_name: STRING is
 			-- Name of the file containing stock split data, if any
 			-- Void if the associated environment variable is not set.
+		indexing
+			once_status: global
 		once
 			Result := get (env_names.stock_split_file_name)
 		end
@@ -39,12 +43,16 @@ feature -- Access
 	db_config_file_name: STRING is
 			-- Name of the database configuration file, if any
 			-- Void if the associated environment variable is not set.
+		indexing
+			once_status: global
 		once
 			Result := get (env_names.db_config_file_name)
 		end
 
 	mailer: STRING is
 			-- Name of the executable to use for sending email
+		indexing
+			once_status: global
 		once
 			Result := get (env_names.mailer_name)
 		end
@@ -52,6 +60,8 @@ feature -- Access
 	mailer_subject_flag: STRING is
 			-- The flag to use to indicate to the mailer that the following
 			-- argument is the subject
+		indexing
+			once_status: global
 		once
 			Result := get (env_names.mailer_subject_flag_name)
 		end
@@ -84,6 +94,8 @@ feature -- Access
 feature {NONE} -- Implementation
 
 	env_names: APP_ENVIRONMENT_VARIABLE_NAMES is
+		indexing
+			once_status: global
 		once
 			create Result
 		end

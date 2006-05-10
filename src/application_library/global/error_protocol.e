@@ -67,6 +67,8 @@ feature -- Access
 		end
 
 	largest_error_code: INTEGER is
+		indexing
+			once_status: global
 		local
 			keys: ARRAY [INTEGER]
 			i: INTEGER
@@ -83,6 +85,8 @@ feature -- Access
 
 	errors: HASH_TABLE [STRING, INTEGER] is
 			-- All error descriptions
+		indexing
+			once_status: global
 		once
 			create Result.make (0)
 			Result.extend ("Database error", database_error_code)

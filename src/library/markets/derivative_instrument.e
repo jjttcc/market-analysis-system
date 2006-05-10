@@ -60,6 +60,7 @@ feature -- Status report
 feature {NONE} -- Implementation
 
 	make_ctf: COMPOSITE_TUPLE_FACTORY is
+-- !!!! indexing once_status: global??!!! [probaly not, but check]
 		once
 			create {COMPOSITE_OI_TUPLE_FACTORY} Result
 		end

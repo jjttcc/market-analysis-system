@@ -85,12 +85,16 @@ feature {NONE} -- Hook routines
 			-- The error message applicable when constraint checking for
 			-- the fields extracted from the argument passed to `do_execute'
 			-- fails
+		indexing
+			once_status: global
 		once
 		end
 
 	additional_field_constraints_msg: STRING is
 			-- Error message for violation of the
 			-- `additional_field_constraints_fulfilled' check
+		indexing
+			once_status: global
 		once
 			Result := "" -- Redefine if needed.
 		end

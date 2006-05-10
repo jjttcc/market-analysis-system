@@ -9,4 +9,12 @@ indexing
 
 class THREAD_EXPERIMENTS inherit
 
+create
+
+	make
+
+feature
+
+	make (b: BOOLEAN) is do end
+
 end

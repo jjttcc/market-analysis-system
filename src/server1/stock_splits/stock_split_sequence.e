@@ -73,6 +73,8 @@ feature {NONE} -- Implementation - access
 feature {NONE} -- Implementation - utility
 
 	index_vector: ARRAY [INTEGER] is
+		indexing
+			once_status: global
 		once
 			Result := <<Date_index, Symbol_index, Split_index>>
 		end

@@ -56,6 +56,8 @@ feature -- Access
 		end
 
 	short_description: STRING is
+		indexing
+			once_status: global
 		once
 			Result := "Indicator that operates on two data sequences"
 		end

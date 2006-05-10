@@ -359,6 +359,7 @@ feature {NONE} -- Hook methods
 			-- Create the appropriate type of tuple factory - intended
 			-- to be redefined in descendants - for example, to create
 			-- a COMPOSITE_VOLUME_TUPLE_FACTORY
+-- !!!! indexing once_status: global??!!! [probaly not, but check]
 		once
 			create Result
 		end

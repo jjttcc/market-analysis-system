@@ -18,6 +18,8 @@ class MAS_PRODUCT_INFO inherit
 feature -- Access
 
 	name: STRING is
+		indexing
+			once_status: global
 		once
 			Result := "Market Analysis Server"
 		end
@@ -25,28 +27,38 @@ feature -- Access
 	number_components: ARRAY [STRING] is
 			-- The components of the version number
 			-- Components are strings to allow mixed numbers and letters.
+		indexing
+			once_status: global
 		once
-			Result := <<"1", "7", "in-progress-1">>
+			Result := <<"1", "7", "in-progress-7">>
 		end
 
 	date: DATE is
 			-- The last date that `number' was updated
+		indexing
+			once_status: global
 		once
-			create Result.make (2006, 5, 2)
+			create Result.make (2006, 5, 9)
 		end
 
 	release_description: STRING is
 			-- Short description of the current release
+		indexing
+			once_status: global
 		once
 			Result := number + " - (Pre-beta release)"
 		end
 
 	copyright: STRING is
+		indexing
+			once_status: global
 		once
 			Result := "Copyright 1998 - 2004: Jim Cochrane"
 		end
 
 	license_information: STRING is
+		indexing
+			once_status: global
 		once
 			Result :=
 "Eiffel Forum License, version 1%N%N%

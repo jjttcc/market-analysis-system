@@ -49,6 +49,7 @@ feature -- Access
 
 	agent_table: MARKET_AGENTS is
 			-- Table of available "market-agents"
+-- !!!! indexing once_status: global??!!!
 		once
 			--@@If the application is made multi-threaded, this should be
 			--"once-per-thread".
@@ -291,6 +292,7 @@ feature {NONE} -- Implementation
 		end
 
 	default_target: CHAIN [MARKET_TUPLE] is
+-- !!!! indexing once_status: global??!!!
 		once
 			create {LINKED_LIST [MARKET_TUPLE]} Result.make
 		end

@@ -45,6 +45,7 @@ feature -- Access
 
 	instances_and_descriptions: ARRAYED_LIST [PAIR [MARKET_FUNCTION, STRING]] is
 			-- An instance and description of each MARKET_FUNCTION class
+-- !!!! indexing once_status: global??!!!
 		once
 			create Result.make (0)
 			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
@@ -87,11 +88,13 @@ feature -- Access
 		end
 
 	function_instances: ARRAYED_LIST [MARKET_FUNCTION] is
+-- !!!! indexing once_status: global??!!!
 		once
 			Result := Precursor
 		end
 
 	function_names: ARRAYED_LIST [STRING] is
+-- !!!! indexing once_status: global??!!!
 		once
 			Result := names
 		ensure
@@ -101,6 +104,8 @@ feature -- Access
 		end
 
 feature -- Access - an instance of each market function
+
+-- !!!! Use indexing once_status: global??!!! for these features:
 
 	one_variable_function: ONE_VARIABLE_FUNCTION is
 		local

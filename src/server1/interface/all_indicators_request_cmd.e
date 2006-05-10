@@ -45,6 +45,8 @@ feature {NONE} -- Basic operations
 		end
 
 	error_context (msg: STRING): STRING is
+		indexing
+			once_status: global
 		once
 			Result := ""
 		end

@@ -26,6 +26,8 @@ feature -- Status report
 
 	target_cursor_not_affected: BOOLEAN is
 			-- True
+		indexing
+			once_status: global
 		once
 			Result := True
 		end

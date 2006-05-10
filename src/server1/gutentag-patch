@@ -1,0 +1,4 @@
+333c333
+< 	abstract (ecli_src):		"$/abstract"
+---
+> --	abstract (ecli_src):		"$/abstract"

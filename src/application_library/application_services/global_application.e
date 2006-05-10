@@ -92,6 +92,7 @@ feature -- Access
 			-- create_stock_function_library is called (once) to fill
 			-- stock_function_library with valid (for a stock) members
 			-- of function_library.
+-- !!!! indexing once_status: global??!!!
 		once
 			Result := retrieved_function_library
 		ensure
@@ -103,6 +104,7 @@ feature -- Access
 			-- create_stock_market_event_generation_library is called (once)
 			-- to fill stock_market_event_generation_library with valid
 			-- (for a stock) members of function_library.
+-- !!!! indexing once_status: global??!!!
 		once
 			Result := retrieved_market_event_generation_library
 		ensure
@@ -111,6 +113,7 @@ feature -- Access
 
 	market_event_registrants: STORABLE_LIST [MARKET_EVENT_REGISTRANT] is
 			-- All defined event registrants
+-- !!!! indexing once_status: global??!!!
 		once
 			Result := retrieved_market_event_registrants
 		ensure
@@ -240,12 +243,16 @@ feature -- Constants
 
 	indicators_file_name: STRING is
 			-- Name of the file containing persistent data for indicators
+		indexing
+			once_status: global
 		once
 			Result := "indicators_persist"
 		end
 
 	generators_file_name: STRING is
 			-- Name of the file containing persistent data for event generators
+		indexing
+			once_status: global
 		once
 			Result := "generators_persist"
 		end
@@ -253,6 +260,8 @@ feature -- Constants
 	registrants_file_name: STRING is
 			-- Name of the file containing persistent data for event
 			-- registrants
+		indexing
+			once_status: global
 		once
 			Result := "registrants_persist"
 		end
@@ -265,6 +274,8 @@ feature -- Constants
 			-- A date some time in the future - used to implement an
 			-- "eternal now" (a date that will always be larger than any
 			-- realistic market tuple date)
+		indexing
+			once_status: global
 		once
 			create Result.make_now
 			Result.set_year (Result.year + future_years)
@@ -276,6 +287,8 @@ feature -- Constants
 			-- A date/time some time in the future - used to implement an
 			-- "eternal now" (a date/time that will always be larger than any
 			-- realistic market tuple date)
+		indexing
+			once_status: global
 		once
 			create Result.make_now
 			Result.date.set_year (Result.year + future_years)
@@ -396,6 +409,7 @@ feature {NONE} -- Implementation
 
 	stock_function_library: LIST [MARKET_FUNCTION] is
 			-- Members of `function_library' that are valid for stocks
+-- !!!! indexing once_status: global??!!!
 		once
 			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 		end
@@ -416,6 +430,7 @@ feature {NONE} -- Implementation
 	stock_market_event_generation_library: LIST [MARKET_EVENT_GENERATOR] is
 			-- Members of `market_event_generation_library' that are valid
 			-- for stocks
+-- !!!! indexing once_status: global??!!!
 		once
 			create {LINKED_LIST [MARKET_EVENT_GENERATOR]} Result.make
 		end

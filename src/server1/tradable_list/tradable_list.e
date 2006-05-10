@@ -298,7 +298,6 @@ feature {NONE} -- Implementation
 				target_tradable := tradable_factory.product
 				add_to_cache (target_tradable, index)
 				if tradable_factory.error_occurred then
-print ("I - (ERROR OCCURRED!!!!)" + "%N")
 					report_errors (target_tradable.symbol,
 						tradable_factory.error_list)
 					if tradable_factory.last_error_fatal then
@@ -432,6 +431,7 @@ print ("I - (ERROR OCCURRED!!!!)" + "%N")
 
 	initial_cache_size: INTEGER is
 			-- The initial size of the tradable cache
+-- !!!! indexing once_status: global??!!!
 		local
 			gsf: expanded GLOBAL_SERVER_FACILITIES
 		once

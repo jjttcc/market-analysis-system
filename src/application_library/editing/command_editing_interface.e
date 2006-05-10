@@ -44,6 +44,7 @@ feature -- Access
 			-- Hash table of lists of command instances - each list contains
 			-- instances of all classes whose type conforms to the Hash
 			-- table key.
+-- !!!! indexing once_status: global??!!!
 		local
 			l: ARRAYED_LIST [COMMAND]
 		once
@@ -228,11 +229,15 @@ feature -- Constants
 			-- Name of INDEXED
 
 	Basic_numeric_cmd: STRING is
+		indexing
+			once_status: global
 		once
 			Result := basic_numeric_command.generator
 		end
 
 	Numeric_value_cmd: STRING is
+		indexing
+			once_status: global
 		once
 			Result := numeric_value_command.generator
 		end
@@ -378,6 +383,7 @@ feature {NONE} -- Implementation
 
 	initialization_map: HASH_TABLE [INTEGER, STRING] is
 			-- Mapping of COMMAND names to initialization classifications
+-- !!!! indexing once_status: global??!!!
 		local
 			name: STRING
 		once

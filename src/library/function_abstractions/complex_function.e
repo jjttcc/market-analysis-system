@@ -57,6 +57,8 @@ feature -- Access
 feature -- Status report
 
 	operator_used: BOOLEAN is
+		indexing
+			once_status: global
 		once
 			Result := True
 		end

@@ -119,6 +119,8 @@ feature {NONE}
 	strict_n_count: BOOLEAN is
 			-- Is the `effective_n' value used to enforce a strict relation
 			-- between output.count and target.count after processing?
+		indexing
+			once_status: global
 		once
 			Result := True
 		end

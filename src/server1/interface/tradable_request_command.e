@@ -50,6 +50,8 @@ feature {NONE} -- Hook routines
 
 	ignore_tradable_cache: BOOLEAN is
 			-- Should `cached_tradable' ignore the "tradable cache"?
+		indexing
+			once_status: global
 		once
 			Result := False
 		end
@@ -57,6 +59,8 @@ feature {NONE} -- Hook routines
 	update_retrieved_tradable: BOOLEAN is
 			-- Should the tradable retrieved from `tradables' be "updated"
 			-- during retrieval?
+		indexing
+			once_status: global
 		once
 			Result := True
 		end

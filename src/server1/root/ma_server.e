@@ -33,8 +33,11 @@ f: FIBONACCI
 th_ex: THREAD_EXPERIMENTS
 
 	read_command_for (medium: COMPRESSED_SOCKET): POLL_COMMAND is
+		local
+			sock_acc: MAS_SOCKET_ACCEPTOR
 		do
-			create {MAS_STREAM_READER} Result.make (medium, factory_builder)
+			create sock_acc.make (medium, factory_builder)
+			create {SOCKET_BASED_POLL_COMMAND} Result.make (sock_acc)
 		end
 
 	make_current_media is
@@ -53,6 +56,7 @@ th_ex: THREAD_EXPERIMENTS
 		end
 
 	additional_read_commands: LINEAR [POLL_COMMAND] is
+-- !!!! indexing once_status: global??!!!
 		local
 			cmds: LINKED_LIST [POLL_COMMAND]
 		once
@@ -64,6 +68,8 @@ th_ex: THREAD_EXPERIMENTS
 		end
 
 	version: MAS_PRODUCT_INFO is
+		indexing
+			once_status: global
 		local
 			gs: expanded GLOBAL_SERVER_FACILITIES
 		once
@@ -125,6 +131,7 @@ feature {NONE} -- Implementation
 		end
 
 	factory_builder: GLOBAL_OBJECT_BUILDER is
+-- !!!! indexing once_status: global??!!!
 		once
 			create Result.make
 		end

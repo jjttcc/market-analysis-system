@@ -59,6 +59,8 @@ feature -- Access
 			-- Period type of `data'
 
 	short_description: STRING is
+		indexing
+			once_status: global
 		once
 			Result := "Simple Function"
 		end
@@ -73,17 +75,20 @@ feature -- Access
 		end
 
 	parameters: LIST [FUNCTION_PARAMETER] is
+-- !!!! indexing once_status: global??!!!
 		once
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 		end
 
 	processed_date_time: DATE_TIME is
+-- !!!! indexing once_status: global??!!!
 		once
 			-- Very early date
 			create Result.make (1, 1, 1, 0, 0, 0)
 		end
 
 	children: LINKED_LIST [MARKET_FUNCTION] is
+-- !!!! indexing once_status: global??!!!
 		once
 			create Result.make
 		end

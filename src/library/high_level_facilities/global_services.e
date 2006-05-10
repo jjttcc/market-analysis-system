@@ -26,6 +26,8 @@ feature -- Status report
 
 	debug_state: DEBUG_STATE is
 			-- Debugging settings
+		indexing
+			once_status: global
 		once
 			create Result.make
 		end

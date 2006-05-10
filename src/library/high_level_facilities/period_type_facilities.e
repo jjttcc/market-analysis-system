@@ -97,6 +97,8 @@ feature -- Access
 
 	period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
 			-- All time period types used by the system, indexed by name
+		indexing
+			once_status: global
 		local
 			i: INTEGER
 			keys: ARRAY [STRING]
@@ -127,6 +129,8 @@ feature -- Access
 	non_intraday_period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
 			-- All time period types used by the system, indexed by name,
 			-- whose duration is greater than or equal to a day.
+		indexing
+			once_status: global
 		local
 			type: TIME_PERIOD_TYPE
 			tbl: HASH_TABLE [TIME_PERIOD_TYPE, STRING]
@@ -150,6 +154,8 @@ feature -- Access
 	intraday_period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
 			-- All intraday period types used by the system, indexed by name,
 			-- whose duration is less than a day.
+		indexing
+			once_status: global
 		local
 			type: TIME_PERIOD_TYPE
 			tbl: HASH_TABLE [TIME_PERIOD_TYPE, STRING]
@@ -187,6 +193,8 @@ feature -- Access
 	period_types_in_order: PART_SORTED_SET [TIME_PERIOD_TYPE] is
 			-- All time period types sorted in ascending order by
 			-- duration.
+		indexing
+			once_status: global
 		once
 			create Result.make
 			Result.fill (all_period_types)
@@ -199,6 +207,8 @@ feature -- Access
 			-- The name of each element of `period_types' in ascending
 			-- order by duration (except that the names of any
 			-- non-standard period types are appended to the end)
+		indexing
+			once_status: global
 		local
 			tpt: TIME_PERIOD_TYPE
 			duration: DATE_TIME_DURATION
@@ -228,6 +238,8 @@ feature -- Access
 		end
 
 	intraday_period_type_names: ARRAY [STRING] is
+		indexing
+			once_status: global
 		once
 			create Result.make (1, 1)
 		ensure
@@ -237,6 +249,8 @@ feature -- Access
 	standard_period_type_indexes: ARRAY [INTEGER] is
 			-- All standard TIME_PERIOD_TYPE indexes in order:
 			-- one_minute .. yearly
+		indexing
+			once_status: global
 		once
 			Result := <<one_minute, two_minute, five_minute, ten_minute,
 				fifteen_minute, twenty_minute, thirty_minute, hourly,

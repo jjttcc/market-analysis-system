@@ -23,6 +23,8 @@ creation
 feature {NONE} -- Hook routine implementations
 
 	expected_field_count: INTEGER is
+		indexing
+			once_status: global
 		once
 			Result := 3
 		end

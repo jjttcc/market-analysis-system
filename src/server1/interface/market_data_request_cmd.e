@@ -21,16 +21,22 @@ creation
 feature {NONE} -- Hook routine implementations
 
 	expected_field_count: INTEGER is
+		indexing
+			once_status: global
 		once
 			Result := 2
 		end
 
 	symbol_index: INTEGER is
+		indexing
+			once_status: global
 		once
 			Result := 1
 		end
 
 	period_type_index: INTEGER is
+		indexing
+			once_status: global
 		once
 			Result := 2
 		end

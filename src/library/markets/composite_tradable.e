@@ -103,6 +103,7 @@ feature -- Basic operations
 feature {NONE} -- Implementation
 
 	make_ctf: COMPOSITE_TUPLE_FACTORY is
+-- !!!! indexing once_status: global??!!!
 		once
 			--@@@Check
 			create {COMPOSITE_VOLUME_TUPLE_FACTORY} Result
@@ -292,6 +293,9 @@ feature {NONE} -- Implementation - Utility queries
 			-- of `data'
 			--@@@Check on whether BASIC_VOLUME_TUPLE is the right type.
 
+-- !!!! indexing once_status: global??!!! - for the once functions below?
+-- [probaly not, but check]
+
 --@@May want to make the choice of fields to be processed configurable,
 --either by means of inheritance, or status setting by the client.
 	open: OPENING_PRICE is
@@ -339,6 +343,7 @@ feature {NONE} -- Implementation - Utility queries
 			-- Tuple field setters, corresponding to the tuple extractors
 			-- (open, high, low, etc.) - The key is the name of the
 			-- extractor.
+-- !!!! indexing once_status: global??!!!
 		once
 			create Result.make (0)
 			Result.extend (agent {BASIC_VOLUME_TUPLE}.set_open, open.name)

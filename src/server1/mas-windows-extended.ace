@@ -132,6 +132,9 @@ cluster
 
 	app_library:		"$MAS/src/application_library"
 
+-- Comment this out if the windows version will be multi-threaded:
+	dummies (app_library):		"$/dummies"
+
 	app_events (app_library):		"$/events"
 
 	app_global (app_library):		"$/global"

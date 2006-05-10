@@ -18,6 +18,8 @@ class EXTENDED_PRODUCT_INFO inherit
 feature -- Access
 
 	name: STRING is
+		indexing
+			once_status: global
 		once
 			Result := Precursor + " (Extended version)"
 		end
@@ -25,23 +27,31 @@ feature -- Access
 	number_components: ARRAY [STRING] is
 			-- The components of the version number
 			-- Components are strings to allow mixed numbers and letters.
+		indexing
+			once_status: global
 		once
 			Result := Precursor
 		end
 
 	date: DATE is
 			-- The last date that `number' was updated
+		indexing
+			once_status: global
 		once
 			Result := Precursor
 		end
 
 	release_description: STRING is
 			-- Short description of the current release
+		indexing
+			once_status: global
 		once
 			Result := Precursor
 		end
 
 	license_information: STRING is
+		indexing
+			once_status: global
 		once
 			Result := "To be determined%
 %%N%N%

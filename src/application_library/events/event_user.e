@@ -64,6 +64,8 @@ feature -- Initialization
 feature -- Access
 
 	type_description: STRING is
+		indexing
+			once_status: global
 		once
 			Result := "User"
 		end

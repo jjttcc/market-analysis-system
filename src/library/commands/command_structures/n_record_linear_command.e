@@ -89,6 +89,8 @@ feature -- Status report
 		end
 
 	arg_mandatory: BOOLEAN is
+		indexing
+			once_status: global
 		once
 			Result := False
 		end
@@ -96,6 +98,8 @@ feature -- Status report
 	target_cursor_not_affected: BOOLEAN is
 			-- True if `operand' does not change the cursor in its
 			-- `execute' routine
+		indexing
+			once_status: global
 		once
 			Result := True
 		end

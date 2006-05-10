@@ -160,6 +160,8 @@ cluster
 
 	app_library:		"$MAS/src/application_library"
 
+	dummies (app_library):		"$/dummies"
+
 	app_events (app_library):		"$/events"
 
 	app_global (app_library):		"$/global"

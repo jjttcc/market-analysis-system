@@ -640,6 +640,8 @@ feature {NONE} -- Implementation queries
 
 	date_format_prefix: STRING is
 			-- Prefix of the "special format" option
+		indexing
+			once_status: global
 		once
 			Result := "-date-spec" + option_component_separator.out
 		end
@@ -677,6 +679,8 @@ feature {NONE} -- Implementation queries
 	initialization_complete: BOOLEAN
 
 	special_format_option_spec: STRING is
+		indexing
+			once_status: global
 		local
 			s: STRING
 		once
@@ -692,6 +696,8 @@ feature {NONE} -- Implementation queries
 	usage_description_column: INTEGER is 24
 
 	special_format_description: STRING is
+		indexing
+			once_status: global
 		local
 			s: STRING
 		once

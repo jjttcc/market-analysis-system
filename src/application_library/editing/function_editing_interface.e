@@ -71,6 +71,7 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			-- Hash table of lists of function instances - each list contains
 			-- instances of all classes whose type conforms to the Hash
 			-- table key.
+-- !!!! indexing once_status: global??!!!
 		local
 			l: ARRAYED_LIST [MARKET_FUNCTION]
 		once
@@ -401,6 +402,7 @@ feature {NONE} -- Implementation
 	initialization_map: HASH_TABLE [INTEGER, STRING] is
 			-- Mapping of MARKET_FUNCTION names to
 			-- initialization classifications
+-- !!!! indexing once_status: global??!!!
 		local
 			name: STRING
 		once

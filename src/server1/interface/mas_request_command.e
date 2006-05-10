@@ -36,6 +36,8 @@ feature {NONE}
 
 	ok_string: STRING is
 			-- "OK" message ID and field separator
+		indexing
+			once_status: global
 		once
 			Result := OK.out + message_component_separator
 		end

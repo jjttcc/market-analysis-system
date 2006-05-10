@@ -1,9 +1,6 @@
 # Specification for cluster dependency checking with "check_dep"
 # Structure: "directory<Tab>rank"
-#  [First attempt - may need improvement and/or some clusters may need
-#  to be reorganized.]
 
-abstractions	5
 configuration	5
 database	5
 data_retrieval	5
@@ -18,3 +15,7 @@ stock_splits	5
 system_specific	5
 tradable_list	5
 utility	5
+experimental-mt	4
+experimental-non-mt	4
+server_configuration	5
+tradable_list_builders	5

@@ -26,6 +26,7 @@ feature -- Access
 		local
 			pair: PAIR [MARKET_TUPLE, STRING]
 			now: DATE_TIME
+-- !!!! indexing once_status: global??!!!
 		once
 			create Result.make_filled (Largest_index)
 			create now.make_now
@@ -64,6 +65,7 @@ feature -- Access
 		end
 
 	tuple_instances: ARRAYED_LIST [MARKET_TUPLE] is
+-- !!!! indexing once_status: global??!!!
 		once
 			Result := Precursor
 		end
@@ -137,6 +139,8 @@ feature -- Access
 	Composite_oi_tuple_index: INTEGER is 9
 
 	Largest_index: INTEGER is
+		indexing
+			once_status: global
 		once
 			Result := Composite_oi_tuple_index
 		end

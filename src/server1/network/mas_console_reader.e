@@ -18,11 +18,6 @@ inherit
 			make as cr_make
 		end
 
-	MA_POLL_COMMAND
-		redefine
-			interface
-		end
-
 creation
 
 	make
@@ -48,6 +43,8 @@ feature -- Initialization
 feature -- Access
 
 	interface: MAIN_CL_INTERFACE
+
+	factory_builder: GLOBAL_OBJECT_BUILDER
 
 feature -- Basic operations
 

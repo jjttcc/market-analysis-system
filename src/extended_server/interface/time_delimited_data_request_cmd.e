@@ -86,6 +86,8 @@ feature {NONE} -- Hook routine implementations
 		end
 
 	additional_field_constraints_msg: STRING is
+		indexing
+			once_status: global
 		once
 			Result := empty_date_range_msg
 		end

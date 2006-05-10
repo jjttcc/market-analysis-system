@@ -1,0 +1,8 @@
+#!/bin/bash
+# Convert from the old {...} Precursor syntax to the new Precursor {...}
+# syntax.
+
+for f;do
+	echo 'g/\({[^}]*}\) \(Precursor\)/s//\2 \1/g
+wq'|ed $f
+done

@@ -267,6 +267,8 @@ feature {NONE} -- Implementation
 feature {NONE} -- Implementation - Constants
 
 	Timeout_seconds: INTEGER is
+		indexing
+			once_status: global
 		once
 			Result := 10
 		end

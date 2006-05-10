@@ -107,6 +107,8 @@ feature -- Status report
 	target_cursor_not_affected: BOOLEAN
 
 	is_editable: BOOLEAN is
+		indexing
+			once_status: global
 		once
 			Result := True
 		end

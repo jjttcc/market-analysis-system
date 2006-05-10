@@ -12,14 +12,19 @@ class
 
 feature -- Access
 
+--!!!Needs to be made thread-safe or redesigned:
 	sessions: HASH_TABLE [MAS_SESSION, INTEGER] is
 			-- Registered GUI Client sessions
+		indexing
+			once_status: global
 		once
 			create Result.make(1)
 		end
 
 	command_line_options: MAS_COMMAND_LINE is
 			-- Command-line option services
+		indexing
+			once_status: global
 		local
 			platform_factory: expanded PLATFORM_DEPENDENT_OBJECTS
 		once
@@ -28,6 +33,7 @@ feature -- Access
 
 	database_services: MAS_DB_SERVICES is
 			-- Database services
+--@@@Change to once per process?
 		local
 			platform_factory: expanded PLATFORM_DEPENDENT_OBJECTS
 		once
@@ -36,6 +42,7 @@ feature -- Access
 
 	database_configuration: DATABASE_CONFIGURATION is
 			-- Database configuration settings
+--@@@Change to once per process?
 		once
 			create Result.make
 		end

@@ -41,6 +41,8 @@ feature -- Access
 		end
 
 	midnight: TIME is
+		indexing
+			once_status: global
 		once
 			create Result.make (0, 0, 0)
 		end

@@ -110,6 +110,8 @@ feature {NONE} -- Hook routine implementations
 
 	output_file_path: STRING is
 			-- Directory path of output file - redefine if needed
+		indexing
+			once_status: global
 		local
 			env: expanded APP_ENVIRONMENT
 		once

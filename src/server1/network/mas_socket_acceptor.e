@@ -1,31 +1,35 @@
 indexing
 
 	description:
-		"Command executed by the polling server when data is available %
-		%for reading on the socket";
+		"SOCKET_ACCEPTORs dedicated to processing MAS requrests"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
-class MAS_STREAM_READER
+class MAS_SOCKET_ACCEPTOR
 
 inherit
 
-	MA_POLL_COMMAND
-
-	STREAM_READER
+	SOCKET_ACCEPTOR
 		rename
 			persistent_connection_flag as Console_flag
+		undefine
+			process_socket
 		redefine
-			active_medium, io_socket,
-			prepare_for_persistent_connection, interface
+			server_socket, accepted_socket, prepare_for_persistent_connection,
+			interface, initialize_for_execution
 		end
 
 	MA_COMMUNICATION_PROTOCOL
 		export
 			{NONE} all
+		end
+
+	THREAD
+		rename
+			launch as process_socket
 		end
 
 creation
@@ -40,37 +44,52 @@ feature
 		do
 			initialize_components (s)
 			factory_builder := fb
-			persistent_connection_interface :=
-				factory_builder.persistent_connection_interface
-			non_persistent_connection_interface :=
-				factory_builder.non_persistent_connection_interface
+--!!!!!! Obsolete:
+--			persistent_connection_interface :=
+--				factory_builder.persistent_connection_interface
+--			non_persistent_connection_interface :=
+--				factory_builder.non_persistent_connection_interface
 		ensure
-			set: active_medium = s and factory_builder = fb
+			set: server_socket = s and factory_builder = fb
 		end
 
 feature -- Access
 
-	active_medium: COMPRESSED_SOCKET
+	server_socket: COMPRESSED_SOCKET
 			-- The socket used for establishing a connection and creating
-			-- io_socket
+			-- accepted_socket
 
-	io_socket: COMPRESSED_SOCKET
+	accepted_socket: COMPRESSED_SOCKET
 			-- The socket that will be used for input and output
 
 	interface: MAIN_APPLICATION_INTERFACE
+
+	factory_builder: GLOBAL_OBJECT_BUILDER
+			-- Builder of objects used by for input processing
 
 feature {NONE} -- Hook routine Implementations
 
 	prepare_for_persistent_connection is
 		do
-			io_socket.set_compression (False)
+			accepted_socket.set_compression (False)
 		end
 
 	connection_termination_character: CHARACTER is
+		indexing
+			once_status: global
 		local
 			constants: expanded APPLICATION_CONSTANTS
 		once
 			Result := constants.End_of_file_character
+		end
+
+	initialize_for_execution is
+		do
+			persistent_connection_interface :=
+				factory_builder.persistent_connection_interface
+			non_persistent_connection_interface :=
+				factory_builder.non_persistent_connection_interface
+			Precursor
 		end
 
 feature {NONE} -- Unused

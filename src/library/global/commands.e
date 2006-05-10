@@ -41,6 +41,7 @@ feature -- Access
 	instances_and_descriptions: ARRAYED_LIST [PAIR [COMMAND, STRING]] is
 			-- An instance and description of each COMMAND class used
 			-- in indicator or market-analyzer creation
+-- !!!! indexing once_status: global??!!!
 		once
 			create Result.make (0)
 			Result.extend (create {PAIR [COMMAND, STRING]}.make (
@@ -242,11 +243,13 @@ feature -- Access
 		end
 
 	command_instances: ARRAYED_LIST [COMMAND] is
+-- !!!! indexing once_status: global??!!!
 		once
 			Result := Precursor
 		end
 
 	command_names: ARRAYED_LIST [STRING] is
+-- !!!! indexing once_status: global??!!!
 		once
 			Result := names
 		ensure
@@ -256,6 +259,8 @@ feature -- Access
 		end
 
 feature -- Access - an instance of each command
+
+-- !!!! Use indexing once_status: global??!!! for the below features?
 
 	absolute_value: ABSOLUTE_VALUE is
 		once
@@ -609,6 +614,7 @@ feature {NONE} -- Implementation
 	default_market_tuple_list: LIST [MARKET_TUPLE] is
 			-- Default list of MARKET_TUPLE to provide to the make routines
 			-- of those COMMANDs that require such
+-- !!!! indexing once_status: global??!!!
 		once
 			create {LINKED_LIST [MARKET_TUPLE]} Result.make
 		end

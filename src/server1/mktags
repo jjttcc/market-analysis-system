@@ -1,0 +1,4 @@
+#!/bin/bash
+
+gutentag --format=vi --output=tags-mt gutentag-mt.ace
+gutentag --format=vi --output=tags-non-mt gutentag-non-mt.ace

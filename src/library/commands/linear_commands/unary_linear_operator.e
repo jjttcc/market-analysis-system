@@ -71,6 +71,8 @@ feature -- Status report
 	arg_mandatory: BOOLEAN is False
 
 	target_cursor_not_affected: BOOLEAN is
+		indexing
+			once_status: global
 		once
 			Result := True
 		end

@@ -62,6 +62,8 @@ feature -- Constants
 
 	type_names: ARRAY [STRING] is
 			-- Names corresponding to the valid signal types
+		indexing
+			once_status: global
 		once
 			Result := <<"Buy", "Sell", "Neutral", "Other">>
 		end

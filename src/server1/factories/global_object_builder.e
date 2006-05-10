@@ -53,11 +53,25 @@ feature -- Access
 	dispatcher: EVENT_DISPATCHER
 			-- Event dispatcher used in market event analysis
 
-	persistent_connection_interface: PERSISTENT_CONNECTION_INTERFACE
+--!!!!Redesign may be needed:
+	persistent_connection_interface: PERSISTENT_CONNECTION_INTERFACE is
 			-- The interface used for persistent connections
+		once
+			debug ("threading")
+				io.error.print ("PCI" + "%N")
+			end
+			Result := new_persistent_conn_if
+		end
 
-	non_persistent_connection_interface: NON_PERSISTENT_CONNECTION_INTERFACE
+--!!!!Redesign may be needed:
+	non_persistent_connection_interface: NON_PERSISTENT_CONNECTION_INTERFACE is
 			-- The interface used for non-persistent connections
+		once
+			debug ("threading")
+				io.error.print ("NPCI" + "%N")
+			end
+			Result := new_non_persistent_conn_if
+		end
 
 feature -- Basic operations
 
@@ -110,10 +124,10 @@ feature {NONE} -- Implementation
 			create {TRADABLE_LIST_EVENT_COORDINATOR} event_coordinator.make (
 				tradable_list_handler)
 			-- Note: The connection interfaces must be built after the above
-			-- objects are build because the former depends on the latter
+			-- objects are built because the former depends on the latter
 			-- having already been created.
-			persistent_connection_interface := new_persistent_conn_if
-			non_persistent_connection_interface := new_non_persistent_conn_if
+--!!!@@@!!!			persistent_connection_interface := new_persistent_conn_if
+--!!!			non_persistent_connection_interface := new_non_persistent_conn_if
 		end
 
 	register_event_registrants is

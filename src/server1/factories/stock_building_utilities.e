@@ -27,6 +27,14 @@ feature {TRADABLE_FACTORY} -- Implementation
 		local
 			constants: expanded APPLICATION_CONSTANTS
 			platform_objects: expanded PLATFORM_DEPENDENT_OBJECTS
+--!!!!It appears that the 'stock_splits' data structure is essentially a
+--"read-only" table, which implies that it can be "global", so setting the
+-- once-status to global is probably correct/appropriate; however, if this is
+-- done, make sure that it is not possible for more than one thread to access
+-- the Result until the routine has completed - this is probably guaranteed
+-- by the compiler's once [global-status] implementation.
+--		indexing
+--			once_status: global
 		once
 			-- Use stock splits from the database, if they exist; otherwise
 			-- input them from the stock-split file.
@@ -54,6 +62,9 @@ feature {TRADABLE_FACTORY} -- Implementation
 		end
 
 	stock_split_fname: STRING is
+--@@@Make sure global once status is correct:
+		indexing
+			once_status: global
 		local
 			constants: expanded APPLICATION_CONSTANTS
 		once

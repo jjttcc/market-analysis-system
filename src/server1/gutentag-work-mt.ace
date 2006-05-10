@@ -99,19 +99,6 @@ default
 	multithreaded (yes)
 
 
---	assertion (check)
---	assertion (require)
---	assertion (ensure)
---	assertion (loop)
---	assertion (invariant)
---	debug (no)
---debug ("editing");
---debug ("persist");
---debug ("command line");
---debug ("database");
---debug ("compression");
---precompiled ("$ISE_EIFFEL/precomp/spec/$PLATFORM/base");
-
 cluster
 	server:		"$MAS/src/server1"
 
@@ -415,10 +402,6 @@ external
 		"$ISE_EIFFEL/library/time/Clib"
 
 	object:
---		"${ISE_EIFFEL}/library/time/spec/${ISE_PLATFORM}/lib/libdatetime.a",
--- non-multi-threaded:
---		"${ISE_EIFFEL}/library/net/spec/${ISE_PLATFORM}/lib/libnet.a",
--- multi-threaded:
 		"${ISE_EIFFEL}/library/net/spec/${ISE_PLATFORM}/lib/libmtnet.a",
 		"${ECLI}/src/spec/Ise/${ISE_PLATFORM}/libecli_c.a",
 		"/${MAS}/src/eiffel_library/support/spec/${ISE_PLATFORM}/lib/utilities.o",

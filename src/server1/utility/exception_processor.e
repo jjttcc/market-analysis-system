@@ -42,6 +42,8 @@ feature {NONE} -- Implementation
 
 	fatal_command_line_tag_names: LINEAR [STRING] is
 			-- Tag names that are fatal for command-line processing
+		indexing
+			once_status: global
 		local
 			names: ARRAY [STRING]
 		once

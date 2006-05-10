@@ -25,6 +25,7 @@ feature -- Access
 
 	keys: ARRAY [STRING] is
 			-- Available agent keys
+-- !!!! indexing once_status: global??!!! [probably]
 		once
 			Result := <<Sma_key, Standard_deviation_key>>
 			Result.compare_objects
@@ -47,6 +48,7 @@ feature -- Access
 			-- FUNCTION_PARAMETER set
 		local
 			fp_set: LINKED_SET [FUNCTION_PARAMETER]
+-- !!!! indexing once_status: global??!!!
 		once
 			create Result.make (0)
 			create fp_set.make
@@ -256,6 +258,7 @@ feature {NONE} -- Implementation
 	agents: HASH_TABLE [PROCEDURE [ANY, TUPLE [AGENT_BASED_FUNCTION]],
 		STRING] is
 			-- Table of available "market-agents"
+-- !!!! indexing once_status: global??!!!
 		once
 			create Result.make (0)
 			Result.put (agent sma, Sma_key)

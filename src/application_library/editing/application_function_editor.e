@@ -410,6 +410,7 @@ feature {NONE} -- Implementation
 
 	exclude_cmds: LIST [COMMAND] is
 			-- Commands not allowed as operators for market functions
+-- !!!! indexing once_status: global??!!!
 		once
 			create {LINKED_LIST [COMMAND]} Result.make
 		end

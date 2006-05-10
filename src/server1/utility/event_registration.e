@@ -512,6 +512,8 @@ feature {NONE} -- Implementation
 	working_event_registrants: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
 
 	main_msg: STRING is
+		indexing
+			once_status: global
 		once
 			Result := concatenation (<<"Select action:",
 				"%N     Add registrants (a) Remove registrants (r) %
@@ -521,6 +523,8 @@ feature {NONE} -- Implementation
 		end
 
 	main_changed_msg: STRING is
+		indexing
+			once_status: global
 		once
 			Result := concatenation (<<"Select action:",
 				"%N     Add registrants (a) Remove registrants (r) %

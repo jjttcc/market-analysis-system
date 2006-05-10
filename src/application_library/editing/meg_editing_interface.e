@@ -443,6 +443,7 @@ feature {NONE} -- Implementation
 	one_var_exclude_cmds: LIST [COMMAND] is
 			-- Commands not allowed as operators for one-variable
 			-- function analyzers
+-- !!!! indexing once_status: global??!!!
 		once
 			Result := operator_maker.command_types @
 				operator_maker.N_record_cmd
@@ -451,6 +452,7 @@ feature {NONE} -- Implementation
 	two_var_exclude_cmds: LIST [COMMAND] is
 			-- Commands not allowed as operators for two-variable
 			-- function analyzers
+-- !!!! indexing once_status: global??!!!
 		once
 			create {LINKED_LIST [COMMAND]} Result.make
 			Result.append (operator_maker.command_types @

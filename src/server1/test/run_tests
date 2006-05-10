@@ -4,8 +4,10 @@ ExitStatus=0
 
 cleanup()
 {
-	rm -rf output
-	exit $ExitStatus
+	if [ ! "$SkipCleanup" ]; then
+		rm -rf output
+		exit $ExitStatus
+	fi
 }
 
 progname()
@@ -54,7 +56,8 @@ set_up()
 	fi
 	PATH=$PATH:./bin
 	if [ ! -r bin/testlib ]; then
-		echo "shell function definitions file testlib is not in bin directory - exiting ..."
+		echo "shell function definitions file testlib is not in bin" \
+			"directory - exiting ..."
 		abort
 	else
 		. bin/testlib
@@ -64,7 +67,13 @@ set_up()
 		echo "Script compare_numbers is not in bin directory - exiting ..."
 		abort
 	fi
-	if [ -d $Basedir/EIFGEN/F_code -a -x $Basedir/EIFGEN/F_code/mas ]; then
+	if [ ! -z "$MAS_EX" -a -x "$MAS_EX" ]; then
+		exec=$MAS_EX
+		mas_ex_dir=$(dirname $MAS_EX)
+		if [ "$(basename $mas_ex_dir)" = W_code ]; then
+			ln -f -s $mas_ex_dir/mas*.melted .
+		fi
+	elif [ -d $Basedir/EIFGEN/F_code -a -x $Basedir/EIFGEN/F_code/mas ]; then
 		exec=$Basedir/EIFGEN/F_code/mas
 	elif [ -d $Basedir/EIFGEN/W_code -a -x $Basedir/EIFGEN/W_code/mas ]; then
 		exec=$Basedir/EIFGEN/W_code/mas
@@ -98,7 +107,12 @@ set_up()
 	done
 
 	if [ -z "$test_parameter_file" ]; then
-		test_parameter_file=lib/test_files.1
+		testf1=lib/test_files.default
+		if [ -f $testf1 -a -r $testf1 ]; then
+			test_parameter_file=$testf1
+		else
+			test_parameter_file=lib/test_files.1
+		fi
 	fi
 
 	if [ -e output -a ! -d output ]; then

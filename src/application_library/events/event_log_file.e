@@ -79,9 +79,12 @@ feature -- Access
 		end
 
 	type_description: STRING is
+		indexing
+			once_status: global
 		once
 			Result := "Log file"
 		end
+
 feature -- Basic operations
 
 	perform_notify is
