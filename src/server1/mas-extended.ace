@@ -5,7 +5,7 @@ root
 	EXTENDED_MA_SERVER: make
 
 default
-	assertion (no)
+	assertion (all)
 	arguments ("-k:49415 -f ,")
 	arguments ("-f , 2735 /tmp/ibm.txt")
 	arguments ("-f , 2735 /tmp/ibm.txt.nothere")

@@ -30,7 +30,7 @@ feature -- Access
 		indexing
 			once_status: global
 		once
-			Result := <<"1", "7", "in-progress-7">>
+			Result := <<"1", "7", "1", "[es5.1]">>
 		end
 
 	date: DATE is
