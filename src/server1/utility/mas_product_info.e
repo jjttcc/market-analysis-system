@@ -29,8 +29,18 @@ feature -- Access
 			-- Components are strings to allow mixed numbers and letters.
 		indexing
 			once_status: global
+		local
+			s: STRING
 		once
-			Result := <<"1", "7", "1", "[es5.1]">>
+			Result := <<"1", "7", "1", "[es5.1">>
+			s := Result @ Result.upper
+			debug ("multi_threaded_version")
+				s.append ("MT")
+			end
+			debug ("non_multi_threaded_version")
+				s.append ("ST")
+			end
+			s.append ("]")
 		end
 
 	date: DATE is
