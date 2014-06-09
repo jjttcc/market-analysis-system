@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<system xmlns="http://www.eiffel.com/developers/xml/configuration-1-13-0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.eiffel.com/developers/xml/configuration-1-13-0 http://www.eiffel.com/developers/xml/configuration-1-13-0.xsd" name="mas" uuid="FBC320AE-E50C-422A-A1BF-272A15F1803F">
+	<target name="mas">
+		<description>--&#9;assertion (check)
+--&#9;assertion (require)
+--&#9;assertion (ensure)
+--&#9;assertion (loop)
+--&#9;assertion (invariant)
+--&#9;debug (no)
+--debug (&quot;editing&quot;);
+--debug (&quot;persist&quot;);
+--debug (&quot;command line&quot;);
+--debug (&quot;database&quot;);
+--debug (&quot;compression&quot;);
+-- Cover up a compiler bug.  (See note under the &quot;markets&quot;
+-- cluster.)
+-- There appears to be a bug - probably in the compiler rather
+-- than in the application code - that causes a segmentation
+-- violation in 'is_equal' calls in STOCK objects.  Turning
+-- off asssertions for STOCK gets rid of the problem.
+-- If the problem also shows up in STOCK's sibling,
+-- DERIVATIVE_INSTRUMENT, uncomment that line.
+--&#9;&#9;&#9;assertion (no): DERIVATIVE_INSTRUMENT;
+</description>
+		<root class="MA_SERVER" feature="make"/>
+		<option trace="false" profile="false" debug="true" warning="true">
+			<debug name="__unnamed_debug__" enabled="false"/>
+			<debug name="compression" enabled="false"/>
+			<debug name="data_request" enabled="false"/>
+			<debug name="editing" enabled="false"/>
+			<debug name="http" enabled="false"/>
+			<debug name="object_editing" enabled="false"/>
+			<debug name="persist" enabled="false"/>
+			<debug name="std_dev" enabled="false"/>
+			<assertions precondition="true" postcondition="true" check="true" invariant="true" loop="true"/>
+			<warning name="export_class_missing" enabled="false"/>
+			<warning name="syntax" enabled="false"/>
+			<warning name="vjrv" enabled="false"/>
+		</option>
+		<setting name="address_expression" value="false"/>
+		<setting name="array_optimization" value="true"/>
+		<setting name="check_vape" value="true"/>
+		<setting name="console_application" value="false"/>
+		<setting name="dead_code_removal" value="true"/>
+		<setting name="dynamic_runtime" value="false"/>
+		<setting name="exception_trace" value="false"/>
+		<setting name="inlining" value="true"/>
+		<setting name="inlining_size" value="0"/>
+		<setting name="line_generation" value="false"/>
+		<external_include location="$ISE_EIFFEL/library/time/Clib"/>
+		<external_object location="${ISE_EIFFEL}/library/time/spec/${ISE_PLATFORM}/lib/libdatetime.a"/>
+		<external_object location="${ISE_EIFFEL}/library/net/spec/${ISE_PLATFORM}/lib/libnet.a"/>
+		<external_object location="${ECLI}/src/spec/ise/${ISE_PLATFORM}/libecli_c.a"/>
+		<external_object location="/${MAS}/src/eiffel_library/support/spec/${ISE_PLATFORM}/lib/utilities.o"/>
+		<external_object location="${ISE_EIFFEL}/C_library/zlib/libz.a"/>
+		<external_object location="${MAS}/src/server1/spec/${ISE_PLATFORM}/lib/external_input_sequence.a"/>
+		<external_object location="-lodbc"/>
+		<external_object location="-L $(EPOSIX)/lib -leposix_ise"/>
+		<external_object location="${MAS_LINK_OPTIONS}"/>
+		<cluster name="app_library" location="$MAS/src/application_library/">
+			<cluster name="dummies" location="$|dummies/"/>
+			<cluster name="app_events" location="$|events/"/>
+			<cluster name="app_global" location="$|global/"/>
+			<cluster name="app_utility" location="$|utility/"/>
+			<cluster name="app_factories" location="$|factories/"/>
+			<cluster name="app_editing" location="$|editing/"/>
+			<cluster name="app_services" location="$|application_services/"/>
+		</cluster>
+		<cluster name="client_lib" location="$MAS/src/client_library/">
+			<cluster name="client_support" location="$|support/"/>
+		</cluster>
+		<cluster name="client_server" location="$MAS/src/client_server/">
+			<cluster name="shared_protocols" location="$|shared_protocols/"/>
+			<cluster name="ma_server_protocols" location="$|ma_server_protocols/"/>
+			<cluster name="data_supplier_protocols" location="$|data_supplier_protocols/"/>
+		</cluster>
+		<cluster name="ds_container" location="$GOBO/library/structure/container/"/>
+		<cluster name="ds_date" location="$GOBO/library/time/date/"/>
+		<cluster name="ds_dispenser" location="$GOBO/library/structure/dispenser/"/>
+		<cluster name="ds_list" location="$GOBO/library/structure/list/"/>
+		<cluster name="ds_sort" location="$GOBO/library/structure/sort/"/>
+		<cluster name="ds_support" location="$GOBO/library/structure/support/"/>
+		<cluster name="ds_table" location="$GOBO/library/structure/table/"/>
+		<cluster name="ecli_src" location="$ECLI/src/">
+			<cluster name="abstract" location="$|abstract/"/>
+			<cluster name="ecli_spec" location="$|spec/">
+				<cluster name="ecli_spec_ise" location="$|ise/"/>
+			</cluster>
+			<cluster name="ecli_data" location="$|data/"/>
+			<cluster name="ecli_pattern" location="$|pattern/"/>
+		</cluster>
+		<cluster name="eiffel_components" location="$MAS/src/eiffel_library/">
+			<cluster name="architectural" location="$|architectural/"/>
+			<cluster name="debugging" location="$|debug/"/>
+			<cluster name="component_support" location="$|support/"/>
+			<cluster name="system_specific_support" location="$|support/unix/"/>
+			<cluster name="eiflib_data_scanning" location="$|data_scanning/">
+				<cluster name="data_scanning_main" location="$|main_abstractions/"/>
+				<cluster name="data_scanning_input" location="$|input_mechanisms/"/>
+			</cluster>
+			<cluster name="eiflib_error" location="$|error/"/>
+			<cluster name="eiflib_value_setters" location="$|data_scanning/value_setters/"/>
+			<cluster name="operators" location="$|commands/operators/"/>
+			<cluster name="event_library" location="$|events/"/>
+			<cluster name="component_server" location="$|server/"/>
+			<cluster name="networking" location="$|networking/"/>
+		</cluster>
+		<cluster name="eposix" location="$EPOSIX/src/posix/"/>
+		<cluster name="eposix_abstract" location="$EPOSIX/src/abstract/"/>
+		<cluster name="eposix_c" location="$EPOSIX/src/epxc/"/>
+		<cluster name="eposix_capi" location="$EPOSIX/src/capi/"/>
+		<cluster name="eposix_ise" location="$EPOSIX/src/spec/ise/"/>
+		<cluster name="eposix_papi" location="$EPOSIX/src/papi/"/>
+		<cluster name="eposix_stdc" location="$EPOSIX/src/standardc/"/>
+		<cluster name="eposix_support" location="$EPOSIX/src/support/"/>
+		<cluster name="ise" location="$ISE_EIFFEL/library/">
+			<cluster name="exceptions" location="$|base/ise/kernel/exceptions/"/>
+			<cluster name="kernel" location="$|base/elks/kernel/"/>
+<!--			<cluster name="kernel_classic" location="$|base/kernel/classic/"/> -->
+			<cluster name="support" location="$|base/elks/support/"/>
+<!--			<cluster name="support_classic" location="$|base/support/classic/"/> -->
+			<cluster name="string" location="$|base/elks/kernel/string/"/>
+			<cluster name="access" location="$|base/elks/structures/access/"/>
+			<cluster name="cursors" location="$|base/elks/structures/cursors/"/>
+			<cluster name="cursor_tree" location="$|base/elks/structures/cursor_tree/"/>
+			<cluster name="dispenser" location="$|base/elks/structures/dispenser/"/>
+			<cluster name="iteration" location="$|base/elks/structures/iteration/"/>
+			<cluster name="list" location="$|base/elks/structures/list/"/>
+			<cluster name="set" location="$|base/elks/structures/set/"/>
+			<cluster name="setstrategies" location="$|base/elks/structures/set/strategies/"/>
+			<cluster name="sort" location="$|base/elks/structures/sort/"/>
+			<cluster name="storage" location="$|base/elks/structures/storage/"/>
+			<cluster name="table" location="$|base/elks/structures/table/"/>
+			<cluster name="traversing" location="$|base/elks/structures/traversing/"/>
+			<cluster name="tree" location="$|base/elks/structures/tree/"/>
+			<cluster name="date" location="$|time/">
+				<cluster name="date_format" location="$|format/">
+					<cluster name="date_tools" location="$|english/"/>
+				</cluster>
+			</cluster>
+			<cluster name="net" location="$|net/">
+				<cluster name="http_resources" location="$|transfer/resources/"/>
+				<cluster name="http_addresses" location="$|transfer/addresses/"/>
+				<cluster name="http_comparators" location="$|transfer/addresses/comparators/"/>
+				<cluster name="abstract_socket" location="$|abstract/socket/"/>
+				<cluster name="net_socket" location="$|network/socket/"/>
+				<cluster name="local_socket" location="$|local/socket/"/>
+				<cluster name="polling_abstract" location="$|polling/abstract/"/>
+				<cluster name="polling_implementation" location="$|polling/implementation/"/>
+			</cluster>
+		</cluster>
+		<cluster name="kl_basic" location="$GOBO/library/kernel/basic/"/>
+<!--		<cluster name="kl_elks" location="$GOBO/library/kernel/elks/"/> -->
+		<cluster name="kl_elks" location="$GOBO/library/free_elks/"/> <!-- !!!!????!!!! -->
+		<cluster name="kl_io" location="$GOBO/library/kernel/io/"/>
+		<cluster name="kl_kernel" location="$GOBO/library/kernel/"/>
+		<cluster name="kl_kernel_spec" location="$GOBO/library/kernel/spec/ise/"/>
+		<cluster name="kl_misc" location="$GOBO/library/kernel/misc/"/>
+		<cluster name="kl_support" location="$GOBO/library/kernel/support/"/>
+		<cluster name="kl_unicode" location="$GOBO/library/kernel/unicode/"/>
+		<cluster name="ma_library" location="$MAS/src/library/">
+			<cluster name="function_abstractions" location="$|function_abstractions/">
+				<class_option class="MARKET_TUPLE_LIST">
+					<assertions/>
+				</class_option>
+			</cluster>
+			<cluster name="high_level_facilities" location="$|high_level_facilities/"/>
+			<cluster name="function_types" location="$|function_types/">
+				<cluster name="configuragle_functions" location="$|configurable_functions/"/>
+				<cluster name="specific_functions" location="$|specific_functions/"/>
+			</cluster>
+			<cluster name="commands" location="$|commands/">
+				<cluster name="command_structures" location="$|command_structures/"/>
+				<cluster name="linear_commands" location="$|linear_commands/"/>
+				<cluster name="n_based_commands" location="$|n_based_commands/"/>
+				<cluster name="simple_commands" location="$|simple_commands/"/>
+			</cluster>
+			<cluster name="markets" location="$|markets/">
+				<class_option class="STOCK">
+					<assertions/>
+				</class_option>
+			</cluster>
+			<cluster name="structural" location="$|structural/"/>
+			<cluster name="tuple_types" location="$|tuple_types/"/>
+			<cluster name="data_scanning" location="$|data_scanning/">
+				<cluster name="value_setters" location="$|value_setters/"/>
+				<cluster name="tuple_factories" location="$|tuple_factories/"/>
+				<cluster name="data_scanners" location="$|data_scanners/"/>
+			</cluster>
+			<cluster name="events" location="$|events/"/>
+			<cluster name="global" location="$|global/"/>
+			<cluster name="event_generation" location="$|event_generation/">
+				<cluster name="event_generation_kernel" location="$|event_generation_kernel/"/>
+				<cluster name="function_analysis" location="$|function_analysis/"/>
+			</cluster>
+			<cluster name="market_analysis_tools" location="$|market_analysis_tools/"/>
+		</cluster>
+		<cluster name="server" location="$MAS/src/server1/">
+			<cluster name="server_configuration" location="$|server_configuration/"/>
+			<cluster name="experimental_mt" location="$|experimental-non-mt/"/>
+			<cluster name="factories" location="$|factories/"/>
+			<cluster name="network" location="$|network/"/>
+			<cluster name="root_cluster" location="$|root/"/>
+			<cluster name="app_server_utility" location="$|utility/"/>
+			<cluster name="interface" location="$|interface/"/>
+			<cluster name="server_global" location="$|global/"/>
+			<cluster name="system_specific" location="$|system_specific/unix/"/>
+			<cluster name="configuration" location="$|configuration/"/>
+			<cluster name="data_retrieval" location="$|data_retrieval/"/>
+			<cluster name="database" location="$|database/"/>
+			<cluster name="database_ecli" location="$|database/ecli/"/>
+			<cluster name="database_stub" location="$|database/stub/"/>
+			<cluster name="external_components" location="$|external/"/>
+			<cluster name="tradable_list" location="$|tradable_list/"/>
+			<cluster name="tradable_list_builders" location="$|tradable_list_builders/"/>
+			<cluster name="stock_splits" location="$|stock_splits/"/>
+		</cluster>
+		<cluster name="ut_command" location="$GOBO/library/pattern/command/"/>
+		<cluster name="ut_error" location="$GOBO/library/utility/error/"/>
+		<cluster name="ut_formatter" location="$GOBO/library/utility/formatter/"/>
+		<cluster name="ut_support" location="$GOBO/library/utility/support/"/>
+	</target>
+</system>
