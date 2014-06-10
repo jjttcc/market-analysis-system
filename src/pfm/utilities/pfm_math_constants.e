@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Useful mathematical constants for pfm not in ISE library";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,6 +12,6 @@ class PFM_MATH_CONSTANTS inherit
 
 feature
 
-	epsilon: REAL is 0.0001
+	epsilon: REAL = 0.0001
 
 end -- class PFM_MATH_CONSTANTS

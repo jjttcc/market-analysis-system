@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Poll command that reads a MAS server's startup status report"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -28,7 +28,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		local
 			socket: NETWORK_STREAM_SOCKET
 			response_received: BOOLEAN
@@ -75,15 +75,15 @@ feature {NONE} -- Implementation
 
 	active_medium: NETWORK_STREAM_SOCKET
 
-	Buffer_size: INTEGER is
+	Buffer_size: INTEGER
 		once
 			Result := (2 ^ 14).floor
 		end
 
-	Timeout_error: STRING is "Timed out waiting for the server to start."
+	Timeout_error: STRING = "Timed out waiting for the server to start."
 
-	Connection_failed: STRING is "Connection to server failed."
+	Connection_failed: STRING = "Connection to server failed."
 
-	Timeout_interval: INTEGER is 9
+	Timeout_interval: INTEGER = 9
 
 end

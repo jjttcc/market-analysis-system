@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Builder of FILE_TRADABLE_LISTs"
 	author: "Jim Cochrane"
 	date: "$Date$";

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Constants needed globally for the installation"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -10,15 +10,15 @@ class INSTALLATION_FACILITIES inherit
 
 feature -- Access
 
-	install_dir_name: STRING is "install"
+	install_dir_name: STRING = "install"
 			-- Directory where the installation specification files live
 
-	mctrc_file_name: STRING is "mctrc"
+	mctrc_file_name: STRING = "mctrc"
 
 	
-	mct_directory: STRING is "c:/Program Files/mct"
+	mct_directory: STRING = "c:/Program Files/mct"
 
-	directory_separator: CHARACTER is
+	directory_separator: CHARACTER
 			-- The directory separator used for this platform
 		local
 			op_env: expanded OPERATING_ENVIRONMENT
@@ -26,15 +26,15 @@ feature -- Access
 			Result := op_env.directory_separator
 		end
 
-	command_variable_name: STRING is "COMSPEC"
+	command_variable_name: STRING = "COMSPEC"
 			-- Name of the environment variable that specifies the
 			-- Windows system's shell
 
-	nt_command_name: STRING is "CMD"
+	nt_command_name: STRING = "CMD"
 
 feature -- Status report
 
-	is_nt: BOOLEAN is
+	is_nt: BOOLEAN
 			-- Is the system "NT or better" (as opposed to "pre-NT")?
 		local
 			ex_env: expanded EXECUTION_ENVIRONMENT

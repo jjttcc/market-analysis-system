@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Changeable slope parameter for MARKET_FUNCTION_LINE"
 	author: "Jim Cochrane"
@@ -22,30 +22,30 @@ feature -- Access
 
 	function: MARKET_FUNCTION_LINE
 
-	current_value: STRING is
+	current_value: STRING
 		do
 			Result := function.slope.out
 		end
 
-	name: STRING is "slope"
+	name: STRING = "slope"
 
-	value_type_description: STRING is "floating point value"
+	value_type_description: STRING = "floating point value"
 
-	current_value_equals (v: STRING): BOOLEAN is
+	current_value_equals (v: STRING): BOOLEAN
 		do
 			Result := v.to_real - function.slope < .001
 		end
 
 feature -- Element change
 
-	change_value (new_value: STRING) is
+	change_value (new_value: STRING)
 		do
 			function.set_slope (new_value.to_real)
 		end
 
 feature -- Basic operations
 
-	valid_value (v: STRING): BOOLEAN is
+	valid_value (v: STRING): BOOLEAN
 		do
 			Result := v /= Void and v.is_real
 		end

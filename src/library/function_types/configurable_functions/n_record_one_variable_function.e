@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A market function that provides a concept of an n-length %
 		%sub-list of the main input list."
@@ -28,7 +28,7 @@ creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 feature {NONE} -- Initialization
 
-	make (in: like input; op: like operator; i: INTEGER) is
+	make (in: like input; op: like operator; i: INTEGER)
 		require
 			in_not_void: in /= Void
 			op_not_void_if_used: operator_used implies op /= Void
@@ -45,7 +45,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	short_description: STRING is
+	short_description: STRING
 		do
 			create Result.make (60)
 			Result.append (n.out)
@@ -53,7 +53,7 @@ feature -- Access
 			Result.append (Precursor)
 		end
 
-	effective_n: INTEGER is
+	effective_n: INTEGER
 			-- 	The value that will be used to advance the cursor of the
 			-- 	target list at the beginning of processing - that is,
 			-- 	its cursor will be advanced to the `effective_n'th value.
@@ -69,7 +69,7 @@ feature -- Access
 
 feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 
-	set_effective_offset (arg: INTEGER) is
+	set_effective_offset (arg: INTEGER)
 			-- Set effective_offset to `arg'.
 		do
 			effective_offset := arg
@@ -79,7 +79,7 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 
 feature {N_RECORD_FUNCTION_PARAMETER, MARKET_FUNCTION_EDITOR} -- Status setting
 
-	set_n (value: INTEGER) is
+	set_n (value: INTEGER)
 		do
 			Precursor (value)
 			if operator /= Void then
@@ -92,7 +92,7 @@ feature {N_RECORD_FUNCTION_PARAMETER, MARKET_FUNCTION_EDITOR} -- Status setting
 
 feature {NONE} -- Basic operations
 
-	do_process is
+	do_process
 			-- Execute the function.
 		do
 			if target.count < effective_n then
@@ -116,10 +116,10 @@ feature {NONE} -- Basic operations
 
 feature {NONE}
 
-	strict_n_count: BOOLEAN is
+	strict_n_count: BOOLEAN
 			-- Is the `effective_n' value used to enforce a strict relation
 			-- between output.count and target.count after processing?
-		indexing
+		note
 			once_status: global
 		once
 			Result := True
@@ -127,7 +127,7 @@ feature {NONE}
 
 	target: ARRAYED_LIST [MARKET_TUPLE]
 
-	immediate_direct_parameters: LIST [FUNCTION_PARAMETER] is
+	immediate_direct_parameters: LIST [FUNCTION_PARAMETER]
 		do
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 			Result.extend (create {N_RECORD_FUNCTION_PARAMETER}.make (Current))

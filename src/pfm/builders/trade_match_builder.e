@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Builder of TRADE_MATCH objects"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -19,7 +19,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (tlist: LIST [TRADE]) is
+	make (tlist: LIST [TRADE])
 		require
 			tlist_not_void: tlist /= Void
 		do
@@ -32,7 +32,7 @@ feature -- Access
 
 	product: LIST [TRADE_MATCH]
 
-	open_trades: LINKED_LIST [OPEN_TRADE] is
+	open_trades: LINKED_LIST [OPEN_TRADE]
 			-- Remaining open trades - Void if none
 		local
 			ol: LINEAR [LIST [OPEN_TRADE]]
@@ -53,7 +53,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	execute is
+	execute
 		require
 			not_built: product = Void
 		do
@@ -67,7 +67,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	make_trades (l: LIST [TRADE]) is
+	make_trades (l: LIST [TRADE])
 		require
 			l_not_empty: not l.is_empty
 		local
@@ -89,7 +89,7 @@ feature {NONE} -- Implementation
 			trades := ttree.linear_representation
 		end
 
-	make_open_trades is
+	make_open_trades
 		do
 			from
 				trades.start
@@ -103,7 +103,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	add_open_trade (t: TRADE) is
+	add_open_trade (t: TRADE)
 		local
 			ot: OPEN_TRADE
 			otl: LINKED_LIST [OPEN_TRADE]
@@ -117,7 +117,7 @@ feature {NONE} -- Implementation
 			otl.extend (ot)
 		end
 
-	match_trades is
+	match_trades
 			-- Make a TRADE_MATCH for each close trade in `trades'.
 		do
 			from
@@ -132,7 +132,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	add_trade_match (t: TRADE) is
+	add_trade_match (t: TRADE)
 		local
 			ot: OPEN_TRADE
 			otl: LINKED_LIST [OPEN_TRADE]
@@ -182,14 +182,14 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	new_trade_match (ot: OPEN_TRADE; t: TRADE): TRADE_MATCH is
+	new_trade_match (ot: OPEN_TRADE; t: TRADE): TRADE_MATCH
 			-- A new TRADE_MATCH created from `ot' and `t'
 		do
 			create Result.make (ot.trade)
 			Result.set_closing_trade (t)
 		end
 
-	handle_error (s: STRING) is
+	handle_error (s: STRING)
 		do
 			print (s); print ("%N")
 		end

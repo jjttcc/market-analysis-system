@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Time period types, such as daily, weekly, etc."
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -24,7 +24,7 @@ creation {PERIOD_TYPE_FACILITIES}
 
 feature {NONE} -- Initialization
 
-	make (dur: DATE_TIME_DURATION) is
+	make (dur: DATE_TIME_DURATION)
 		require
 			not_void: dur /= Void
 			no_seconds: dur.second = 0
@@ -62,7 +62,7 @@ feature -- Access
 	duration: DATE_TIME_DURATION
 			-- Duration of the time period - approximate if irregular = True
 
-	intraday: BOOLEAN is
+	intraday: BOOLEAN
 			-- Is this an intraday time-period type?
 		do
 			Result := duration.year = 0 and duration.month = 0 and
@@ -71,7 +71,7 @@ feature -- Access
 
 feature -- Status report
 
-	is_valid: BOOLEAN is
+	is_valid: BOOLEAN
 			-- Is Current a valid period type?
 		do
 			Result := not equal (name, invalid_name)
@@ -79,12 +79,12 @@ feature -- Status report
 
 feature -- Comparison
 
-	is_equal (other: like Current): BOOLEAN is
+	is_equal (other: like Current): BOOLEAN
 		do
 			Result := other.name.is_equal (name)
 		end
 
-	infix "<" (other: like Current): BOOLEAN is
+	infix "<" (other: like Current): BOOLEAN
 		do
 			if duration.definite and other.duration.definite then
 				Result := duration < other.duration
@@ -107,7 +107,7 @@ feature -- Comparison
 
 feature {NONE} -- Implementation
 
-	set_name is
+	set_name
 			-- Set `name' according to the value of duration.
 		require
 			duration /= Void

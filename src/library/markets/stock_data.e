@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Miscellaneous information about a stock";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,7 +12,7 @@ deferred class STOCK_DATA inherit
 
 feature -- Access
 
-	sector: STRING is
+	sector: STRING
 			-- Name of sector of stock associated with `symbol'
 		deferred
 		end

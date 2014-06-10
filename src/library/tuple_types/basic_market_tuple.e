@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Minimum data set needed for charting and analysis of a market"
 	author: "Jim Cochrane"
@@ -25,7 +25,7 @@ creation
 
 feature -- Initialization
 
-	make is
+	make
 		do
 			create open; create close; create high; create low
 			open.set_value (-1)
@@ -48,16 +48,16 @@ feature -- Access
 	low: PRICE
 			-- lowest price
 
-	value: REAL is
+	value: REAL
 		do
 			Result := close.value
 		end
 
 feature -- Status report
 
-	has_additional_queries: BOOLEAN is True
+	has_additional_queries: BOOLEAN = True
 
-	open_available: BOOLEAN is
+	open_available: BOOLEAN
 			-- Is opening price datum available?  (Included because
 			-- some data formats exclude opening price.)
 		do
@@ -67,7 +67,7 @@ feature -- Status report
 	editing: BOOLEAN
 			-- Is this instance in the process of being edited?
 
-	price_relationships_correct: BOOLEAN is
+	price_relationships_correct: BOOLEAN
 		do
 			Result := (low <= high and low <= close and close <= high) and
 						(open_available implies low <= open and open <= high)
@@ -75,7 +75,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	begin_editing is
+	begin_editing
 			-- Set editing state to True to allow changing values
 			-- without violating the class invariant.  end_editing
 			-- should be called after setting values to allow them
@@ -88,7 +88,7 @@ feature -- Status setting
 			editing: editing
 		end
 
-	end_editing is
+	end_editing
 			-- Set editing state to False and ensure the class invariant.
 		require
 			prices_valid: 
@@ -103,7 +103,7 @@ feature -- Status setting
 
 feature {VALUE_SETTER, FACTORY} -- Status setting
 
-	set (o, h, l, c: REAL) is
+	set (o, h, l, c: REAL)
 			-- Set the open, high, low, and close values.
 		require
 			h_l_c_valid: h >= l and l <= c and c <= h
@@ -124,7 +124,7 @@ feature {VALUE_SETTER, FACTORY} -- Status setting
 			o_lt_0_not_open_available: o <= 0 implies not open_available
 		end
 
-	set_open (p: REAL) is
+	set_open (p: REAL)
 			-- Set open to `p'.
 		require
 			argument_valid:
@@ -137,7 +137,7 @@ feature {VALUE_SETTER, FACTORY} -- Status setting
 			open_available: open_available
 		end
 
-	set_close (p: REAL) is
+	set_close (p: REAL)
 			-- Set close to `p'.
 		require
 			argument_valid:
@@ -149,7 +149,7 @@ feature {VALUE_SETTER, FACTORY} -- Status setting
 			close_set: close.value = p
 		end
 
-	set_high (p: REAL) is
+	set_high (p: REAL)
 			-- Set high to `p'.
 		require
 			argument_valid:
@@ -161,7 +161,7 @@ feature {VALUE_SETTER, FACTORY} -- Status setting
 			high_set: high.value = p
 		end
 
-	set_low (p: REAL) is
+	set_low (p: REAL)
 			-- Set low to `p'.
 		require
 			argument_valid:
@@ -175,7 +175,7 @@ feature {VALUE_SETTER, FACTORY} -- Status setting
 
 feature {DATA_SCANNER} -- Element adjustment
 
-	fix_price_relationships is
+	fix_price_relationships
 			-- Change prices so that price_relationships_correct is
 			-- not violated.
 		do

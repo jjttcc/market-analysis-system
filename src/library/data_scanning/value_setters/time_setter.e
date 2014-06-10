@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Value setter that sets the time of a tuple";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,13 +16,13 @@ creation
 
 feature -- Initialization
 
-	make is
+	make
 		do
 		end
 
 feature {NONE}
 
-	do_set (stream: INPUT_SEQUENCE; tuple: MARKET_TUPLE) is
+	do_set (stream: INPUT_SEQUENCE; tuple: MARKET_TUPLE)
 			-- Expected format for time:  hh:mm or hh:mm:ss
 		local
 			time: TIME
@@ -44,6 +44,6 @@ feature {NONE}
 
 	time_util: expanded DATE_TIME_SERVICES
 
-	field_separator: STRING is ":"
+	field_separator: STRING = ":"
 
 end -- class TIME_SETTER

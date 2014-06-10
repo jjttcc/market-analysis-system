@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Windows associated with a MAS session"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -29,7 +29,7 @@ feature -- Access
 
 feature -- Element change
 
-	set_host_name (arg: STRING) is
+	set_host_name (arg: STRING)
 			-- Set `host_name' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -39,7 +39,7 @@ feature -- Element change
 			host_name_set: host_name = arg and host_name /= Void
 		end
 
-	set_port_number (arg: STRING) is
+	set_port_number (arg: STRING)
 			-- Set `port_number' to `arg'.
 		require
 			arg_not_void: arg /= Void

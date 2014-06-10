@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Editor of MARKET_FUNCTIONs to be used in a MAL application"
 	author: "Jim Cochrane"
@@ -35,7 +35,7 @@ creation
 
 feature -- Initialization
 
-	make (ui: FUNCTION_EDITING_INTERFACE; om: COMMAND_EDITING_INTERFACE) is
+	make (ui: FUNCTION_EDITING_INTERFACE; om: COMMAND_EDITING_INTERFACE)
 		require
 			not_void: ui /= Void and om /= Void
 		do
@@ -70,7 +70,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_operator_maker (arg: COMMAND_EDITING_INTERFACE) is
+	set_operator_maker (arg: COMMAND_EDITING_INTERFACE)
 			-- Set operator_maker to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -83,7 +83,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	edit_one_fn_op (f: ONE_VARIABLE_FUNCTION) is
+	edit_one_fn_op (f: ONE_VARIABLE_FUNCTION)
 			-- Edit a function that takes one market function and an operator.
 		require
 			ui_set: user_interface /= Void
@@ -100,7 +100,7 @@ feature -- Basic operations
 			f.set_operator (cmd)
 		end
 
-	edit_accumulation (f: ACCUMULATION) is
+	edit_accumulation (f: ACCUMULATION)
 			-- Edit an accumulation function (which takes a
 			-- BINARY_OPERATOR and a LINEAR_COMMAND).
 		require
@@ -134,7 +134,7 @@ feature -- Basic operations
 			f.set_required_operators (cmd, lc, rc)
 		end
 
-	edit_configurable_nrf (f: CONFIGURABLE_N_RECORD_FUNCTION) is
+	edit_configurable_nrf (f: CONFIGURABLE_N_RECORD_FUNCTION)
 			-- Edit a CONFIGURABLE_N_RECORD_FUNCTION function (which takes a
 			-- RESULT_COMMAND [REAL] and a LINEAR_COMMAND).
 		require
@@ -176,7 +176,7 @@ feature -- Basic operations
 			end
 		end
 
-	edit_one_fn_op_n (f: N_RECORD_ONE_VARIABLE_FUNCTION) is
+	edit_one_fn_op_n (f: N_RECORD_ONE_VARIABLE_FUNCTION)
 			-- Edit a function that takes one market function, an operator,
 			-- and an n-value.
 		require
@@ -203,7 +203,7 @@ feature -- Basic operations
 			edit_n (f)
 		end
 
-	edit_two_cplx_fn_op (f: TWO_VARIABLE_FUNCTION) is
+	edit_two_cplx_fn_op (f: TWO_VARIABLE_FUNCTION)
 			-- Edit a function that takes two complex functions
 			-- and an operator.
 		require
@@ -221,7 +221,7 @@ feature -- Basic operations
 			f.set_operator (cmd)
 		end
 
-	edit_one_fn_bnc_n (f: STANDARD_MOVING_AVERAGE) is
+	edit_one_fn_bnc_n (f: STANDARD_MOVING_AVERAGE)
 			-- Edit a function that takes one market function,
 			-- a RESULT_COMMAND [REAL], and an n-value.
 		require
@@ -248,7 +248,7 @@ feature -- Basic operations
 			edit_n (f)
 		end
 
-	edit_ema (f: EXPONENTIAL_MOVING_AVERAGE) is
+	edit_ema (f: EXPONENTIAL_MOVING_AVERAGE)
 			-- Edit an EXPONENTIAL_MOVING_AVERAGE - that takes one market
 			-- function, a RESULT_COMMAND [REAL], an N_BASED_CALCULATION,
 			-- and an n-value.
@@ -282,7 +282,7 @@ feature -- Basic operations
 			edit_n (f)
 		end
 
-	edit_market_function_line (f: MARKET_FUNCTION_LINE) is
+	edit_market_function_line (f: MARKET_FUNCTION_LINE)
 			-- Edit a MARKET_FUNCTION_LINE.
 		require
 			ui_set: user_interface /= Void
@@ -303,7 +303,7 @@ feature -- Basic operations
 			f.make (p, slope, user_interface.dummy_tradable)
 		end
 
-	edit_agent_based_function (f: AGENT_BASED_FUNCTION) is
+	edit_agent_based_function (f: AGENT_BASED_FUNCTION)
 			-- Edit an AGENT_BASED_FUNCTION.
 		require
 			ui_set: user_interface /= Void
@@ -320,7 +320,7 @@ feature -- Basic operations
 			f.set_operator (cmd)
 		end
 
-	set_ovf_input (f: ONE_VARIABLE_FUNCTION) is
+	set_ovf_input (f: ONE_VARIABLE_FUNCTION)
 			-- Set the input function for the ONE_VARIABLE_FUNCTION `f'.
 		do
 			last_selected_ovf_input :=
@@ -330,7 +330,7 @@ feature -- Basic operations
 			f.set_input (last_selected_ovf_input)
 		end
 
-	set_tvf_input (f: TWO_VARIABLE_FUNCTION) is
+	set_tvf_input (f: TWO_VARIABLE_FUNCTION)
 			-- Set the input functions for the TWO_VARIABLE_FUNCTION `f'.
 		local
 			i1, i2: COMPLEX_FUNCTION
@@ -346,7 +346,7 @@ feature -- Basic operations
 			last_selected_right_tvf_input := i2
 		end
 
-	set_abf_input (f: AGENT_BASED_FUNCTION) is
+	set_abf_input (f: AGENT_BASED_FUNCTION)
 			-- Set the input function for the AGENT_BASED_FUNCTION `f'.
 		local
 			key_selection: LINKED_LIST [PAIR [STRING, BOOLEAN]]
@@ -376,7 +376,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	edit_n (f: ONE_VARIABLE_FUNCTION) is
+	edit_n (f: ONE_VARIABLE_FUNCTION)
 			-- Edit `f's n-value.
 		require
 			ui_set: user_interface /= Void
@@ -392,7 +392,7 @@ feature {NONE} -- Implementation
 						concatenation (<<fnctn.generator, "'s n-value">>)))
 		end
 
-	edit_effective_offset (f: N_RECORD_ONE_VARIABLE_FUNCTION) is
+	edit_effective_offset (f: N_RECORD_ONE_VARIABLE_FUNCTION)
 			-- Edit `f's effective_offset value.
 		local
 			response: STRING
@@ -408,7 +408,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	exclude_cmds: LIST [COMMAND] is
+	exclude_cmds: LIST [COMMAND]
 			-- Commands not allowed as operators for market functions
 -- !!!! indexing once_status: global??!!!
 		once

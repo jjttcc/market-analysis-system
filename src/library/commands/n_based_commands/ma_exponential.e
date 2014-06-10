@@ -1,4 +1,4 @@
-indexing
+note
 	description: "So-called moving average exponentials"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,7 +16,7 @@ creation
 
 feature {NONE}
 
-	calculate: REAL is
+	calculate: REAL
 		do
 			Result := 2 / (n + 1)
 		end

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Configuration settings and features related to %
 		%tradable data retrieval"
 	author: "Jim Cochrane"
@@ -31,7 +31,7 @@ deferred class DATA_RETRIEVAL_CONFIGURATION inherit
 
 feature {NONE} -- Initialization
 
-	initialize_common_settings is
+	initialize_common_settings
 			-- Put common initial settings into the `settings' table.
 		require
 			settings_created: settings /= Void
@@ -45,7 +45,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	eod_start_date: DATE is
+	eod_start_date: DATE
 			-- The end-of-day start date for the requested data
 		do
 			if
@@ -57,7 +57,7 @@ feature -- Access
 			Result := cached_eod_start_date
 		end
 
-	eod_end_date: DATE is
+	eod_end_date: DATE
 			-- The end-of-day end date for the requested data
 		do
 			if
@@ -68,7 +68,7 @@ feature -- Access
 			Result := cached_eod_end_date
 		end
 
-	intraday_start_date: DATE is
+	intraday_start_date: DATE
 			-- The intraday start date for the requested data
 		do
 			if
@@ -81,7 +81,7 @@ feature -- Access
 			Result := cached_intraday_start_date
 		end
 
-	intraday_end_date: DATE is
+	intraday_end_date: DATE
 			-- The intraday end date for the requested data
 		do
 			if
@@ -97,48 +97,48 @@ feature -- Access
 	symbol: STRING
 			-- The current symbol for which data is being retrieved
 
-	uppercase_symbol: STRING is
+	uppercase_symbol: STRING
 			-- `symbol' in all upper-case
 		do
 			Result := clone (symbol)
 			Result.to_upper
 		end
 
-	additional_settings_report: STRING is
+	additional_settings_report: STRING
 		do
 			Result := ""
 		end
 
 feature -- Access
 
-	eod_start_date_string: STRING is
+	eod_start_date_string: STRING
 		do
 			Result := settings @ EOD_start_date_specifier
 		end
 
-	eod_end_date_string: STRING is
+	eod_end_date_string: STRING
 		do
 			Result := settings @ EOD_end_date_specifier
 		end
 
-	intraday_start_date_string: STRING is
+	intraday_start_date_string: STRING
 		do
 			Result := settings @ Intraday_start_date_specifier
 		end
 
-	intraday_end_date_string: STRING is
+	intraday_end_date_string: STRING
 		do
 			Result := settings @ Intraday_end_date_specifier
 		end
 
-	january_is_zero_string: STRING is
+	january_is_zero_string: STRING
 		do
 			Result := settings @ january_is_zero_specifier
 		end
 
 feature -- Status report
 
-	january_is_zero: BOOLEAN is
+	january_is_zero: BOOLEAN
 			-- Does the protocol for months start at zero - that is, does
 			-- 0 represent January and 11 represent December?
 		do
@@ -150,7 +150,7 @@ feature -- Status report
 
 feature -- Element change
 
-	set_symbol (arg: STRING) is
+	set_symbol (arg: STRING)
 			-- Set `symbol' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -162,7 +162,7 @@ feature -- Element change
 
 feature {NONE} -- Implementation
 
-	reset_dates is
+	reset_dates
 			-- For dates that use the "now" construct, reset them so that
 			-- the next time any "now" date is used, it is recalculated
 			-- from the current date, which may have changed since the
@@ -173,7 +173,7 @@ feature {NONE} -- Implementation
 		end
 
 	replace_tokens_using_dates (target: STRING; start_date, end_date: DATE;
-		intraday: BOOLEAN) is
+		intraday: BOOLEAN)
 			-- Replace the following tokens in `target' with `symbol' and the
 			-- corresponding components of `start_date' and `end_date':
 			-- symbol_token, start_day_token, start_month_token,
@@ -211,25 +211,25 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - Hook routine implementations
 
-	check_results is
+	check_results
 		do
 			check_for_missing_specs (<<eod_start_date_string.is_empty,
 					EOD_start_date_specifier, eod_end_date_string.is_empty,
 					EOD_end_date_specifier>>, False)
 		end
 
-	key_index: INTEGER is 1
+	key_index: INTEGER = 1
 
-	value_index: INTEGER is 2
+	value_index: INTEGER = 2
 
-	new_file_reader: FILE_READER is
+	new_file_reader: FILE_READER
 		do
 			create Result.make (configuration_file_name)
 		end
 
 feature {NONE} -- Implementation - Hook routines
 
-	configuration_file_name: STRING is
+	configuration_file_name: STRING
 			-- The path and name of the configuration file
 		deferred
 		end
@@ -246,25 +246,25 @@ feature {NONE} -- Implementation - attributes
 
 feature {NONE} -- Implementation - token-related constants
 
-	symbol_token: STRING is "symbol"
+	symbol_token: STRING = "symbol"
 			-- The token which is to be replaced at data-retrieval time
 			-- with the current tradable symbol
 
-	upper_symbol_token: STRING is "uppersymbol"
+	upper_symbol_token: STRING = "uppersymbol"
 			-- The token which is to be replaced at data-retrieval time
 			-- with the current tradable symbol, converted to upper case
 
-	start_day_token: STRING is "startday"
+	start_day_token: STRING = "startday"
 
-	start_month_token: STRING is "startmonth"
+	start_month_token: STRING = "startmonth"
 
-	start_year_token: STRING is "startyear"
+	start_year_token: STRING = "startyear"
 
-	end_day_token: STRING is "endday"
+	end_day_token: STRING = "endday"
 
-	end_month_token: STRING is "endmonth"
+	end_month_token: STRING = "endmonth"
 
-	end_year_token: STRING is "endyear"
+	end_year_token: STRING = "endyear"
 
 invariant
 

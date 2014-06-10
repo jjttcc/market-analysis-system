@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Application-based processing of caught exceptions"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -26,13 +26,13 @@ creation
 
 feature -- Initialization
 
-	make is
+	make
 		do
 		end
 
 feature -- Basic operations
 
-	abort_command_line_processing: BOOLEAN is
+	abort_command_line_processing: BOOLEAN
 			-- Should command-line processing be aborted?
 		do
 			Result := fatal_command_line_tag_names.has (tag_name)
@@ -40,9 +40,9 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	fatal_command_line_tag_names: LINEAR [STRING] is
+	fatal_command_line_tag_names: LINEAR [STRING]
 			-- Tag names that are fatal for command-line processing
-		indexing
+		note
 			once_status: global
 		local
 			names: ARRAY [STRING]

@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A binary operator that analyzes the sign of the result of its %
 		%first operand as compared to that of its second operand. %
@@ -27,7 +27,7 @@ creation
 
 feature -- Initialization
 
-	make (o1, o2: like operand1; init_sign_spec: BOOLEAN) is
+	make (o1, o2: like operand1; init_sign_spec: BOOLEAN)
 			-- Initialize operands and, if `init_sign_spec' is True,
 			-- initialize the contents of `sign_change_spec'.
 		require
@@ -71,7 +71,7 @@ feature -- Access
 
 feature -- Status setting
 
-	add_sign_change_spec (a: ARRAY [INTEGER]) is
+	add_sign_change_spec (a: ARRAY [INTEGER])
 			-- Add a sign change specification.
 		require
 			valid_size: a /= Void and a.count = 2
@@ -86,7 +86,7 @@ feature -- Status setting
 
 feature {NONE} -- Hook routine implementation
 
-	operate (v1, v2: REAL) is
+	operate (v1, v2: REAL)
 		do
 			value := False
 			from

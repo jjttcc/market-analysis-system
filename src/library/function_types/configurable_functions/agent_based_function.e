@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A market function that uses an agent for its calculations and %
 		%that takes a list of arguments"
@@ -24,7 +24,7 @@ creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 feature {NONE} -- Initialization
 
-	make (key: like calculator_key; op: like operator; ins: like inputs) is
+	make (key: like calculator_key; op: like operator; ins: like inputs)
 		require
 			key_exists: key /= Void
 		do
@@ -47,7 +47,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	agent_table: MARKET_AGENTS is
+	agent_table: MARKET_AGENTS
 			-- Table of available "market-agents"
 -- !!!! indexing once_status: global??!!!
 		once
@@ -56,7 +56,7 @@ feature -- Access
 			create Result
 		end
 
-	calculator: PROCEDURE [ANY, TUPLE [like Current]] is
+	calculator: PROCEDURE [ANY, TUPLE [like Current]]
 			-- Agent to be used for processing
 		do
 			Result := agent_table @ calculator_key
@@ -65,7 +65,7 @@ feature -- Access
 	calculator_key: STRING
 			-- Key to Current's calculator
 
-	trading_period_type: TIME_PERIOD_TYPE is
+	trading_period_type: TIME_PERIOD_TYPE
 		local
 			gs: expanded GLOBAL_SERVICES
 		do
@@ -81,13 +81,13 @@ feature -- Access
 				Result = inputs.first.trading_period_type)
 		end
 
-	short_description: STRING is
+	short_description: STRING
 		do
 			Result := "Indicator that operates on a configurable number %
 				%of data sequences%Nwith a configurable calculation procecure"
 		end
 
-	full_description: STRING is
+	full_description: STRING
 		do
 			Result := short_description + ":%N"
 			if not inputs.is_empty then
@@ -100,7 +100,7 @@ feature -- Access
 			end
 		end
 
-	children: LIST [MARKET_FUNCTION] is
+	children: LIST [MARKET_FUNCTION]
 		do
 			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 			from
@@ -113,7 +113,7 @@ feature -- Access
 			end
 		end
 
-	leaf_functions: LIST [COMPLEX_FUNCTION] is
+	leaf_functions: LIST [COMPLEX_FUNCTION]
 		local
 			f: COMPLEX_FUNCTION
 		do
@@ -137,7 +137,7 @@ feature -- Access
 
 	immediate_direct_parameters: LINKED_LIST [FUNCTION_PARAMETER]
 
-	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE] is
+	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE]
 		do
 			if not inputs.is_empty then
 				Result := inputs.first.innermost_input
@@ -147,7 +147,7 @@ feature -- Access
 				not inputs.is_empty implies Result /= Void
 		end
 
-	target: CHAIN [MARKET_TUPLE] is
+	target: CHAIN [MARKET_TUPLE]
 		do
 			if not inputs.is_empty then
 				Result := inputs.first.output
@@ -158,21 +158,21 @@ feature -- Access
 
 feature -- Status report
 
-	processed: BOOLEAN is
+	processed: BOOLEAN
 		do
 			Result := processed_date_time /= Void
 		end
 
-	has_children: BOOLEAN is True
+	has_children: BOOLEAN = True
 
-	operator_used: BOOLEAN is
+	operator_used: BOOLEAN
 		do
 			Result := operator /= Void
 		end
 
 feature {NONE}
 
-	do_process is
+	do_process
 			-- Execute the `calculator'.
 		do
 			check
@@ -182,7 +182,7 @@ feature {NONE}
 			calculator.call ([Current])
 		end
 
-	pre_process is
+	pre_process
 		do
 			check
 				innermost_input_set: inputs.count > 0 and
@@ -198,7 +198,7 @@ feature {NONE}
 
 feature {FACTORY} -- Element change
 
-	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
+	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE])
 		do
 			processed_date_time := Void
 			if
@@ -221,7 +221,7 @@ feature {FACTORY} -- Element change
 
 feature {MARKET_FUNCTION_EDITOR} -- Element change
 
-	set_calculator_key (arg: STRING) is
+	set_calculator_key (arg: STRING)
 			-- Set `calculator_key' to `arg' and add the associated `params'.
 		require
 			arg_not_void: arg /= Void
@@ -239,18 +239,18 @@ feature {MARKET_FUNCTION_EDITOR} -- Element change
 				agent_table.parameters_for (calculator_key).count
 		end
 
-	reset_parameters is
+	reset_parameters
 		do
 			inputs.do_all (agent reset_market_function_parameters)
 		end
 
-	add_parameter (p: FUNCTION_PARAMETER) is
+	add_parameter (p: FUNCTION_PARAMETER)
 			-- Add `p' to `parameters'.
 		do
 			immediate_direct_parameters.extend (p)
 		end
 
-	add_input (f: MARKET_FUNCTION) is
+	add_input (f: MARKET_FUNCTION)
 			-- Add `f' to `inputs'.
 		require
 			f_exists: f /= Void
@@ -268,7 +268,7 @@ feature {MARKET_FUNCTION_EDITOR, MARKET_AGENTS}
 
 feature {MARKET_FUNCTION_EDITOR} -- Removal
 
-	clear_inputs is
+	clear_inputs
 			-- Remove all elements of `inputs'.
 		do
 			inputs.wipe_out
@@ -276,7 +276,7 @@ feature {MARKET_FUNCTION_EDITOR} -- Removal
 
 feature {NONE} -- Implementation
 
-	initialize_operators is
+	initialize_operators
 			-- Initialize all operators that are not Void - default:
 			-- initialize `operator' if it's not Void.
 		do
@@ -286,12 +286,12 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	reset_market_function_parameters (mf: MARKET_FUNCTION) is
+	reset_market_function_parameters (mf: MARKET_FUNCTION)
 		do
 			mf.reset_parameters
 		end
 
-	default_target: CHAIN [MARKET_TUPLE] is
+	default_target: CHAIN [MARKET_TUPLE]
 -- !!!! indexing once_status: global??!!!
 		once
 			create {LINKED_LIST [MARKET_TUPLE]} Result.make

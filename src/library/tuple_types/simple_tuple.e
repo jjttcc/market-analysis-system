@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A single-value tuple."
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -19,7 +19,7 @@ creation
 
 feature -- Initialization
 
-	make (d: DATE_TIME; end_dt: DATE; v: REAL) is
+	make (d: DATE_TIME; end_dt: DATE; v: REAL)
 		do
 			date_time := d
 			value := v
@@ -37,7 +37,7 @@ feature -- Access
 
 feature {MARKET_FUNCTION} -- Status setting
 
-	set_value (v: REAL) is
+	set_value (v: REAL)
 			-- Set value to `v'.
 		do
 			value := v
@@ -45,7 +45,7 @@ feature {MARKET_FUNCTION} -- Status setting
 			-- value_set: rabs (value - v) < epsilon
 		end
 
-	set_end_date (arg: DATE) is
+	set_end_date (arg: DATE)
 			-- Set end_date to `arg'.
 		require
 			arg_not_void: arg /= Void

@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"TRADABLE_LISTs that obtain their input data from files"
 	author: "Jim Cochrane"
@@ -22,7 +22,7 @@ deferred class INPUT_MEDIUM_BASED_TRADABLE_LIST inherit
 
 feature {NONE} -- Implementation
 
-	initialize_input_medium is
+	initialize_input_medium
 		deferred
 		ensure then
 			open_if_no_error: not fatal_error implies
@@ -33,7 +33,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Hook routine implementations
 
-	close_input_medium is
+	close_input_medium
 		do
 			if not input_medium.is_closed then
 				input_medium.close
@@ -43,12 +43,12 @@ feature {NONE} -- Hook routine implementations
 			report_timing
 		end
 
-	pre_initialize_input_medium is
+	pre_initialize_input_medium
 		do
 			start_timer
 		end
 
-	post_initialize_input_medium is
+	post_initialize_input_medium
 		do
 			input_medium.set_field_separator (tradable_factory.field_separator)
 			input_medium.set_record_separator (

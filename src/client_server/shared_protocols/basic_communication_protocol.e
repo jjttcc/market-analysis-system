@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"Basic constants and queries specifying communication protocol %
@@ -15,10 +15,10 @@ deferred class
 
 feature -- String constants
 
-	message_component_separator: STRING is "%T"
+	message_component_separator: STRING = "%T"
 			-- Character used to separate top-level message components
 
-	message_record_separator: STRING is "%N"
+	message_record_separator: STRING = "%N"
 			-- Character used to separate "records" or "lines" within
 			-- a message component
 

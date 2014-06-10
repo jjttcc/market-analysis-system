@@ -56,7 +56,7 @@ feature {NONE} -- Initialization
 
 feature {NONE} -- Implementation
 
-	timing_on: BOOLEAN is True
+	timing_on: BOOLEAN = True
 
 	symbols: LIST [STRING]
 			-- The symbols for which data are to be retrieved
@@ -80,7 +80,7 @@ feature {NONE} -- Implementation
 			report_timing
 		end
 
-	data_retrieval_needed: BOOLEAN is
+	data_retrieval_needed: BOOLEAN
 			-- Does up-to-date data need to be retrieved for
 			-- `parameters.symbol', based on the existence of the
 			-- associated data cache file, the configuration settings,

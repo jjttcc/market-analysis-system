@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Additional MAS_PRODUCT_INFO information for the extended %
 		%version of the application"
 	author: "Jim Cochrane"
@@ -17,40 +17,40 @@ class EXTENDED_PRODUCT_INFO inherit
 
 feature -- Access
 
-	name: STRING is
-		indexing
+	name: STRING
+		note
 			once_status: global
 		once
 			Result := Precursor + " (Extended version)"
 		end
 
-	number_components: ARRAY [STRING] is
+	number_components: ARRAY [STRING]
 			-- The components of the version number
 			-- Components are strings to allow mixed numbers and letters.
-		indexing
+		note
 			once_status: global
 		once
 			Result := Precursor
 		end
 
-	date: DATE is
+	date: DATE
 			-- The last date that `number' was updated
-		indexing
+		note
 			once_status: global
 		once
 			Result := Precursor
 		end
 
-	release_description: STRING is
+	release_description: STRING
 			-- Short description of the current release
-		indexing
+		note
 			once_status: global
 		once
 			Result := Precursor
 		end
 
-	license_information: STRING is
-		indexing
+	license_information: STRING
+		note
 			once_status: global
 		once
 			Result := "To be determined%

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Enumerated '<object> editing' choices"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -17,50 +17,50 @@ deferred class OBJECT_EDITING_CHOICE inherit
 
 feature {NONE} -- Initialization
 
-	make_creat is
+	make_creat
 		do
 			make ('c')
 		end
 
-	make_remove is
+	make_remove
 		do
 			make ('r')
 		end
 
-	make_edit is
+	make_edit
 		do
 			make ('e')
 		end
 
-	make_view is
+	make_view
 		do
 			make ('v')
 		end
 
-	make_save is
+	make_save
 		do
 			make ('s')
 		end
 
-	make_previous is
+	make_previous
 		do
 			make ('-')
 		end
 
-	make_shell_escape is
+	make_shell_escape
 		do
 			make ('!')
 		end
 
 feature {NONE} -- Implementation
 
-	initial_allowable_values: ARRAY [CHARACTER] is
+	initial_allowable_values: ARRAY [CHARACTER]
 		do
 			Result := <<creat, creat_u, remove, remove_u, edit, edit_u,
 				view, view_u, sav, sav_u, previous, shell_escape>>
 		end
 
-	value_name_map: HASH_TABLE [STRING, CHARACTER] is
+	value_name_map: HASH_TABLE [STRING, CHARACTER]
 		do
 			create Result.make (11)
 			Result.put ("Create a new " + type_name, creat)

@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Abstraction for a persistent LINKED_LIST that is automatically %
 		%stored at program termination using the mechanism provided by %
@@ -31,7 +31,7 @@ creation
 
 feature -- Initialization
 
-	make (fname: STRING) is
+	make (fname: STRING)
 			-- Create the list with `fname' as the `persistent_file_name'.
 		require
 			not_void: fname /= Void
@@ -49,7 +49,7 @@ feature -- Access
 
 feature -- Duplication
 
-	copy (other: like Current) is
+	copy (other: like Current)
 		do
 			Precursor {LINKED_LIST} (other)
 			persistent_file_name := clone (other.persistent_file_name)
@@ -57,7 +57,7 @@ feature -- Duplication
 
 feature -- Utility
 
-	save is
+	save
 			-- Store the object in file with name `persistent_file_name' in
 			-- the application directory, if it's set; if it's not set,
 			-- store in the current directory.

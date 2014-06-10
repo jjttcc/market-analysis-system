@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A command that responds to a client request for a list %
 		%of indicators available for a specified tradable"
 	author: "Jim Cochrane"
@@ -20,13 +20,13 @@ creation
 
 feature {NONE} -- Hook routine implementations
 
-	expected_field_count: INTEGER is 2
+	expected_field_count: INTEGER = 2
 
-	symbol_index: INTEGER is 1
+	symbol_index: INTEGER = 1
 
-	period_type_index: INTEGER is 2
+	period_type_index: INTEGER = 2
 
-	send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE]) is
+	send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE])
 		local
 			ilist: LIST [MARKET_FUNCTION]
 		do
@@ -47,13 +47,13 @@ feature {NONE} -- Hook routine implementations
 			put (eom)
 		end
 
-	error_context (msg: STRING): STRING is
+	error_context (msg: STRING): STRING
 		do
 			Result := concatenation (<<error_context_prefix, market_symbol>>)
 		end
 
 feature {NONE} -- Implementation - constants
 
-	error_context_prefix: STRING is "retrieving indicator list for "
+	error_context_prefix: STRING = "retrieving indicator list for "
 
 end -- class INDICATOR_LIST_REQUEST_CMD

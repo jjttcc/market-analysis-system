@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"Command executed by the polling server when data is available %
@@ -24,7 +24,7 @@ creation
 
 feature -- Initialization
 
-	make (fb: GLOBAL_OBJECT_BUILDER) is
+	make (fb: GLOBAL_OBJECT_BUILDER)
 		require
 			not_void: fb /= Void
 		do
@@ -48,7 +48,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		do
 			-- When threads are added, this call will probably change to
 			-- "interface.launch" to run in a separate thread.
@@ -57,6 +57,6 @@ feature -- Basic operations
 
 feature {NONE} -- Hook routine Implementations
 
-	welcome_message: STRING is "Welcome to the Market Analysis Server console!"
+	welcome_message: STRING = "Welcome to the Market Analysis Server console!"
 
 end

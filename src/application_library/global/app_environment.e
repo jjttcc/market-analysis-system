@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Environment variable values used by the application"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,53 +21,53 @@ class APP_ENVIRONMENT inherit
 
 feature -- Access
 
-	app_directory: STRING is
+	app_directory: STRING
 			-- Path of the working directory for the application -
 			-- where configuration and data files are stored.
 			-- Void if the associated environment variable is not set.
-		indexing
+		note
 			once_status: global
 		once
 			Result := get (env_names.application_directory_name)
 		end
 
-	stock_split_file_name: STRING is
+	stock_split_file_name: STRING
 			-- Name of the file containing stock split data, if any
 			-- Void if the associated environment variable is not set.
-		indexing
+		note
 			once_status: global
 		once
 			Result := get (env_names.stock_split_file_name)
 		end
 
-	db_config_file_name: STRING is
+	db_config_file_name: STRING
 			-- Name of the database configuration file, if any
 			-- Void if the associated environment variable is not set.
-		indexing
+		note
 			once_status: global
 		once
 			Result := get (env_names.db_config_file_name)
 		end
 
-	mailer: STRING is
+	mailer: STRING
 			-- Name of the executable to use for sending email
-		indexing
+		note
 			once_status: global
 		once
 			Result := get (env_names.mailer_name)
 		end
 
-	mailer_subject_flag: STRING is
+	mailer_subject_flag: STRING
 			-- The flag to use to indicate to the mailer that the following
 			-- argument is the subject
-		indexing
+		note
 			once_status: global
 		once
 			Result := get (env_names.mailer_subject_flag_name)
 		end
 
 	file_name_with_app_directory (fname: STRING; use_absolute_path: BOOLEAN):
-		STRING is
+		STRING
 			-- A full path name constructed from `app_directory' and `fname' -
 			-- If `use_absolute_path' and `fname' starts with a directory
 			-- separator, interpret `fname' as an absolute path instead
@@ -93,8 +93,8 @@ feature -- Access
 
 feature {NONE} -- Implementation
 
-	env_names: APP_ENVIRONMENT_VARIABLE_NAMES is
-		indexing
+	env_names: APP_ENVIRONMENT_VARIABLE_NAMES
+		note
 			once_status: global
 		once
 			create Result

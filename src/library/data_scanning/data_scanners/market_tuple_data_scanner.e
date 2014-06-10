@@ -1,4 +1,4 @@
-indexing
+note
 	description: "DATA_SCANNER that scans MARKET_TUPLE fields"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -30,7 +30,7 @@ creation
 feature
 
 	make (prod: like product; in: like input;
-			tm: like tuple_maker; vs: like value_setters) is
+			tm: like tuple_maker; vs: like value_setters)
 		require
 			args_not_void: in /= Void and tm /= Void and vs /= Void and
 							prod /= Void
@@ -52,7 +52,7 @@ feature -- Access
 
 feature {FACTORY} -- Status setting
 
-	set_product (arg: like product) is
+	set_product (arg: like product)
 			-- Set product to `arg'.
 		require
 			arg /= Void
@@ -64,18 +64,18 @@ feature {FACTORY} -- Status setting
 
 feature {NONE} -- Hook method implementations
 
-	create_product is
+	create_product
 		do
 		end
 
-	open_tuple (t: BASIC_MARKET_TUPLE) is
+	open_tuple (t: BASIC_MARKET_TUPLE)
 		do
 			t.begin_editing
 		ensure then
 			t.editing
 		end
 
-	do_last_error_check (t: BASIC_MARKET_TUPLE) is
+	do_last_error_check (t: BASIC_MARKET_TUPLE)
 		do
 			if not discard_current_tuple then
 				-- If t.date_time is Void, the date_time error has already
@@ -87,14 +87,14 @@ feature {NONE} -- Hook method implementations
 			end
 		end
 
-	close_tuple (t: BASIC_MARKET_TUPLE) is
+	close_tuple (t: BASIC_MARKET_TUPLE)
 		do
 			t.end_editing
 		ensure then
 			not t.editing
 		end
 
-	handle_last_error is
+	handle_last_error
 		local
 			last_record_index: INTEGER
 			s: STRING
@@ -120,7 +120,7 @@ feature {NONE} -- Hook method implementations
 
 feature {NONE} -- Implementation
 
-	check_and_fix_prices (t: BASIC_MARKET_TUPLE) is
+	check_and_fix_prices (t: BASIC_MARKET_TUPLE)
 			-- Check `t's prices and fix them if they are not valid.
 		local
 			s: STRING
@@ -152,7 +152,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	check_date_time (t: BASIC_MARKET_TUPLE) is
+	check_date_time (t: BASIC_MARKET_TUPLE)
 		require
 			t_exists: t /= Void
 		local
@@ -181,7 +181,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Hook routines
 
-	auxiliary_check_date_time (t: BASIC_MARKET_TUPLE) is
+	auxiliary_check_date_time (t: BASIC_MARKET_TUPLE)
 		do
 		end
 

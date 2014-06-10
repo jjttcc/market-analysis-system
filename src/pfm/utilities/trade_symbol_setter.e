@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Value setter that sets the symbol of a TRADE"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,7 +16,7 @@ creation
 
 feature -- Initialization
 
-	make (field_sep: CHARACTER) is
+	make (field_sep: CHARACTER)
 		require
 			not_void: field_sep /= Void
 		do
@@ -29,7 +29,7 @@ feature -- Initialization
 
 feature {NONE}
 
-	read_value (stream: ITERABLE_INPUT_SEQUENCE) is
+	read_value (stream: ITERABLE_INPUT_SEQUENCE)
 		do
 			from
 				symbol.wipe_out
@@ -45,7 +45,7 @@ feature {NONE}
 			stream.back
 		end
 
-	do_set (stream: ITERABLE_INPUT_SEQUENCE; tuple: TRADE) is
+	do_set (stream: ITERABLE_INPUT_SEQUENCE; tuple: TRADE)
 			-- Not needed
 		do
 			tuple.set_symbol (clone (symbol))

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Information about the settings of the current MAS process"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -14,7 +14,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		local
 			gs: expanded GLOBAL_SERVER_FACILITIES
 		do
@@ -26,7 +26,7 @@ feature -- Access
 	command_line: MAS_COMMAND_LINE
 			-- The command line from which the setting states are queried
 
-	process_report: STRING is
+	process_report: STRING
 			-- Report process info.
 		local
 			gsf: expanded GLOBAL_SERVER_FACILITIES
@@ -34,7 +34,7 @@ feature -- Access
 			Result := "Process was started at " + gsf.startup_date_time.out
 		end
 
-	data_source_report: STRING is
+	data_source_report: STRING
 			-- Report on data-source settings
 		local
 			env: expanded APP_ENVIRONMENT
@@ -70,7 +70,7 @@ feature -- Access
 			end
 		end
 
-	app_directory_report: STRING is
+	app_directory_report: STRING
 			-- Report on the application directory (MAS_DIRECTORY)
 		local
 			env: expanded APP_ENVIRONMENT
@@ -87,7 +87,7 @@ feature -- Access
 			end
 		end
 
-	working_directory_report: STRING is
+	working_directory_report: STRING
 			-- Report on current working directory
 		local
 			env: expanded APP_ENVIRONMENT
@@ -100,7 +100,7 @@ feature -- Access
 			end
 		end
 
-	email_report: STRING is
+	email_report: STRING
 			-- Report on email-related settings
 		local
 			env: expanded APP_ENVIRONMENT
@@ -120,7 +120,7 @@ feature -- Access
 			end
 		end
 
-	local_host_name_report: STRING is
+	local_host_name_report: STRING
 			-- Report - host name on which this process is running
 		do
 			Result := "Host name: " + local_host_name
@@ -128,7 +128,7 @@ feature -- Access
 			exists: Result /= Void
 		end
 
-	miscellaneous_report: STRING is
+	miscellaneous_report: STRING
 			-- Report on miscellaneous information
 		local
 			gsf: expanded GLOBAL_SERVER_FACILITIES
@@ -140,7 +140,7 @@ feature -- Access
 			end
 		end
 
-	ports_report: STRING is
+	ports_report: STRING
 			-- Report on all port numbers being used
 		do
 			Result := "Port numbers: "
@@ -163,7 +163,7 @@ feature -- Access
 			exists: Result /= Void
 		end
 
-	local_host_name: STRING is
+	local_host_name: STRING
 		do
 			Result := (create {HOST_ADDRESS}.make).local_host_name
 			if Result = Void then

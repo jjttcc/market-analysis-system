@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Builder of TRADE objects"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,7 +21,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (field_sep: STRING; in: like input) is
+	make (field_sep: STRING; in: like input)
 		require
 			in_not_void: in /= Void
 			separators_not_void: field_sep /= Void
@@ -45,25 +45,25 @@ feature -- Access
 
 feature {NONE}
 
-	create_product is
+	create_product
 		do
 		end
 
-	index_vector: ARRAY [INTEGER] is
+	index_vector: ARRAY [INTEGER]
 		once
 			-- Hard code - make configurable later, if needed.
 			Result := <<Date_index, Buy_sell_index, Open_close_index,
 				Symbol_index, Units_index, Price_index, Commission_index>>
 		end
 
-	make_value_setters is
+	make_value_setters
 		do
 			create {LINKED_LIST [VALUE_SETTER]} value_setters.make
 			add_value_setters (value_setters, index_vector)
 		end
 
 	add_value_setters (vs: LIST [VALUE_SETTER];
-						i_vector: ARRAY [INTEGER]) is
+						i_vector: ARRAY [INTEGER])
 			-- i_vector indicates which value_setters to insert into
 			-- vs, in the order specified, using the xxx_index constants.
 		require
@@ -108,12 +108,12 @@ feature {NONE}
 
 feature {NONE} -- Tuple field-key constants
 
-	Date_index: INTEGER is 1
-	Buy_sell_index: INTEGER is 2
-	Open_close_index: INTEGER is 3
-	Symbol_index: INTEGER is 4
-	Units_index: INTEGER is 5
-	Price_index: INTEGER is 6
-	Commission_index: INTEGER is 7
+	Date_index: INTEGER = 1
+	Buy_sell_index: INTEGER = 2
+	Open_close_index: INTEGER = 3
+	Symbol_index: INTEGER = 4
+	Units_index: INTEGER = 5
+	Price_index: INTEGER = 6
+	Commission_index: INTEGER = 7
 
 end -- TRADE_BUILDER

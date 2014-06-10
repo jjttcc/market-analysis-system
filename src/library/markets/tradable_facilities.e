@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Facilities for processing TRADABLEs"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -14,7 +14,7 @@ inherit
 
 feature -- Status report
 
-	valid_stock_processor (f: MARKET_PROCESSOR): BOOLEAN is
+	valid_stock_processor (f: MARKET_PROCESSOR): BOOLEAN
 			-- Is `f' a valid processor for a STOCK instance - that is,
 			-- are all of its `operators' valid for a STOCK?
 		local

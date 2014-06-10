@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Socket connection facilities for Market Analysis %
 		%command-line clients."
 	author: "Jim Cochrane"
@@ -24,7 +24,7 @@ create
 
 feature {NONE} -- Initialization
 
-	start_conversation (host: STRING; port: INTEGER) is
+	start_conversation (host: STRING; port: INTEGER)
 			-- Setup initial state and begin the conversation with
 			-- the server.
 		do
@@ -46,7 +46,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	do_debug is
+	do_debug
 			-- Debug
 		local
 			old_timeout: INTEGER
@@ -71,7 +71,7 @@ feature -- Status setting
 			print ("not_connected: " + socket.not_connected.out + "%N")
 		end
 
-	set_timing (arg: BOOLEAN) is
+	set_timing (arg: BOOLEAN)
 			-- Set `timing' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -88,7 +88,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	send_message (msg: STRING) is
+	send_message (msg: STRING)
 			-- Send `msg' to the server and put the server's response
 			-- into `server_response'.
 		require
@@ -106,7 +106,7 @@ feature -- Basic operations
 				server_response /= Void
 		end
 
-	send_termination_request (wait_for_response: BOOLEAN) is
+	send_termination_request (wait_for_response: BOOLEAN)
 			-- Send a request to terminate the server process.
 		require
 			socket_ok: socket_ok
@@ -125,7 +125,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	end_of_message (c: CHARACTER): BOOLEAN is
+	end_of_message (c: CHARACTER): BOOLEAN
 		do
 			Result := c = Eom @ 1 or c = Eot @ 1
 			termination_requested := c = Eot @ 1
@@ -133,7 +133,7 @@ feature {NONE} -- Implementation
 
 	timer: TIMER
 
-	print_timing_report is
+	print_timing_report
 		do
 			print ("Last request/response took " +
 				timer.elapsed_time.fine_seconds_count.out + " seconds.%N")
@@ -141,30 +141,30 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - Constants
 
-	Buffersize: INTEGER is 1
+	Buffersize: INTEGER = 1
 
-	Timeout_seconds: INTEGER is
+	Timeout_seconds: INTEGER
 		once
 			Result := Seconds_in_a_day * 365
 		end
 
-	Seconds_in_an_hour: INTEGER is
+	Seconds_in_an_hour: INTEGER
 		once
 			Result := 60 * 60
 		end
 
-	Seconds_in_a_day: INTEGER is
+	Seconds_in_a_day: INTEGER
 		once
 			Result := Seconds_in_an_hour * 24
 		end
 
-	Termination_message: STRING is "%N"
+	Termination_message: STRING = "%N"
 
 feature {NONE} -- Unused
 
-	Message_date_field_separator: STRING is ""
+	Message_date_field_separator: STRING = ""
 
-	Message_time_field_separator: STRING is ""
+	Message_time_field_separator: STRING = ""
 
 invariant
 

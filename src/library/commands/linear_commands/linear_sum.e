@@ -1,6 +1,6 @@
-indexing
+note
 	description: "Commands that sum n sequential elements"
-	note: "If target.count < n, all of target's elements will be summed and %
+	note1: "If target.count < n, all of target's elements will be summed and %
 		%target.exhausted will be True."
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -24,7 +24,7 @@ creation
 
 feature {FACTORY} -- Initialization
 
-	make (t: like target; op: like operand; i: like n) is
+	make (t: like target; op: like operand; i: like n)
 		require
 			args_not_void: t /= Void and op /= Void
 			i_gt_0: i > 0
@@ -39,14 +39,14 @@ feature {FACTORY} -- Initialization
 
 feature -- Access
 
-	index: INTEGER is
+	index: INTEGER
 		do
 			Result := internal_index + 1
 		end
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 			-- Operate on the next n elements of the input, beginning
 			-- at the current cursor position.
 		do
@@ -69,25 +69,25 @@ feature -- Basic operations
 
 feature -- Status report
 
-	target_cursor_not_affected: BOOLEAN is False
+	target_cursor_not_affected: BOOLEAN = False
 			-- False
 
 feature {NONE}
 
-	invariant_value: BOOLEAN is
+	invariant_value: BOOLEAN
 		do
 			Result := 0 <= internal_index and internal_index <= n
 		end
 
 feature {NONE}
 
-	forth is
+	forth
 		do
 			internal_index := internal_index + 1
 			target.forth
 		end
 
-	action is
+	action
 		do
 			operand.execute (target.item)
 			value := value + operand.value
@@ -98,18 +98,18 @@ feature {NONE}
 			--   execute is called.
 		end
 
-	exhausted: BOOLEAN is
+	exhausted: BOOLEAN
 		do
 			Result := internal_index = n
 		end
 
-	start is
+	start
 			-- Should never be called.
 		do
 			check False end
 		end
 
-	low_count_action is
+	low_count_action
 			-- Action to take if target.count < n
 		require
 			count_lt_n: target.count < n
@@ -123,7 +123,7 @@ feature {NONE}
 			end
 		end
 
-	initial_index_offset: INTEGER is
+	initial_index_offset: INTEGER
 		do
 			Result := n
 		end

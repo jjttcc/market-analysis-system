@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Abstraction that provides services for analysis of market data"
 	author: "Jim Cochrane"
@@ -11,7 +11,7 @@ class MARKET_ANALYSIS inherit
 
 feature -- Access
 
-	slope (c: CHAIN [MARKET_TUPLE]): REAL is
+	slope (c: CHAIN [MARKET_TUPLE]): REAL
 			-- Approximation of slope or rate of change of `c' at its
 			-- current index
 		require
@@ -20,7 +20,7 @@ feature -- Access
 			Result := slope_at (c, c.index)
 		end
 
-	slope_at (c: CHAIN [MARKET_TUPLE]; i: INTEGER): REAL is
+	slope_at (c: CHAIN [MARKET_TUPLE]; i: INTEGER): REAL
 			-- Approximation of slope or rate of change of `c' at the point
 			-- (list element) specified by `i'
 		require

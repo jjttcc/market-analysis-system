@@ -1,4 +1,4 @@
-indexing
+note
 	description: "External commands that are not managed as processes"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,11 +16,11 @@ create
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is False
+	arg_mandatory: BOOLEAN = False
 
 feature {NONE} -- Implementation
 
-	do_execute (arg: ANY) is
+	do_execute (arg: ANY)
 		local
 			env: expanded EXECUTION_ENVIRONMENT
 		do

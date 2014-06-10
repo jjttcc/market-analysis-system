@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A MARKET_LINE that can be analyzed as a MARKET_FUNCTION"
 	author: "Jim Cochrane"
@@ -35,7 +35,7 @@ creation
 
 feature -- Initialization
 
-	make (p1: MARKET_POINT; sl: REAL; in: like input) is
+	make (p1: MARKET_POINT; sl: REAL; in: like input)
 			-- Make the line with p1 as the start point, sl as the slope.
 		require
 			not_void: p1 /= Void and in /= Void
@@ -49,7 +49,7 @@ feature -- Initialization
 			-- slope = sl
 		end
 
-	make_from_2_points (p1, p2: MARKET_POINT; in: like input) is
+	make_from_2_points (p1, p2: MARKET_POINT; in: like input)
 			-- Make the line with p1 as the start point; obtain the slope
 			-- from p1 and p2.
 		require
@@ -64,7 +64,7 @@ feature -- Initialization
 
 feature {NONE} -- Implemetation
 
-	start is
+	start
 		do
 			if not target.is_empty then
 				start_point.set_date (target.first.date_time)
@@ -73,7 +73,7 @@ feature {NONE} -- Implemetation
 			check target.index = 1 end
 		end
 
-	action is
+	action
 		local
 			t: MARKET_POINT
 		do
@@ -86,9 +86,9 @@ feature {NONE} -- Implemetation
 			end
 		end
 
-	operator_used: BOOLEAN is False
+	operator_used: BOOLEAN = False
 
-	immediate_direct_parameters: LIST [FUNCTION_PARAMETER] is
+	immediate_direct_parameters: LIST [FUNCTION_PARAMETER]
 		do
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 			Result.extend (create {SLOPE_FUNCTION_PARAMETER}.make (Current))

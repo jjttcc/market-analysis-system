@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Status of tradable data files"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -14,7 +14,7 @@ creation
 
 feature -- Initialization
 
-	make (name: STRING; size: INTEGER) is
+	make (name: STRING; size: INTEGER)
 		do
 			file_size := size
 			file_name := name
@@ -22,9 +22,9 @@ feature -- Initialization
 			fields_set: file_size = size and file_name = name
 		end
 
-	make_with_mod_time (name: STRING; modtime, size: INTEGER) is
+	make_with_mod_time (name: STRING; modtime, size: INTEGER)
 		do
-			--@@@note: `last_modification_time' may no longer be needed.
+			--@@@note1: `last_modification_time' may no longer be needed.
 			last_modification_time := modtime
 			file_size := size
 			file_name := name
@@ -46,7 +46,7 @@ feature -- Access
 
 feature -- Element change
 
-	set_last_modification_time (arg: INTEGER) is
+	set_last_modification_time (arg: INTEGER)
 			-- Set `last_modification_time' to `arg'.
 		require
 			arg_not_negative: arg >= 0
@@ -56,7 +56,7 @@ feature -- Element change
 			last_modification_time_set: last_modification_time = arg
 		end
 
-	set_file_size (arg: INTEGER) is
+	set_file_size (arg: INTEGER)
 			-- Set `file_size' to `arg'.
 		require
 			arg_not_negative: arg >= 0

@@ -1,8 +1,8 @@
-indexing
+note
 	description:
 		"Implementation of STOCK_SPLIT_SEQUENCE as an ECLI_INPUT_SEQUENCE"
 	author: "Jim Cochrane"
-	note:
+	note1:
 		"It is assumed that the for each symbol that occurs in the input %
 		%file, the splits in the file for that symbol are sorted by %
 		%date ascending"
@@ -39,7 +39,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (statement: ECLI_STATEMENT) is
+	make (statement: ECLI_STATEMENT)
 		require
 			statement_not_void: statement /= Void
 		do

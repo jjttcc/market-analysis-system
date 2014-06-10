@@ -1,7 +1,7 @@
-indexing
+note
 	description:
 		"Factory class that manufactures TWO_VARIABLE_FUNCTION_ANALYZERs"
-	note:
+	note1:
 		"Features left_function, right_function, period_type, and event_type %
 		%should all be non-Void when execute is called.  (operator may be %
 		%Void.)"
@@ -24,7 +24,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 			crossover_specification := Below_to_above
 			initialize_signal_type
@@ -47,7 +47,7 @@ feature -- Access
 
 	crossover_specification: INTEGER
 
-	Below_to_above, Above_to_below, Both: INTEGER is unique
+	Below_to_above, Above_to_below, Both: INTEGER = unique
 			-- Specifications for TVFA crossover detection
 
 	use_left_function: BOOLEAN
@@ -57,7 +57,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_functions (left, right: MARKET_FUNCTION) is
+	set_functions (left, right: MARKET_FUNCTION)
 			-- Set function to `arg'.
 		require
 			not_void: left /= Void and right /= Void
@@ -68,7 +68,7 @@ feature -- Status setting
 			functions_set: left_function = left and right_function = right
 		end
 
-	set_period_type (arg: TIME_PERIOD_TYPE) is
+	set_period_type (arg: TIME_PERIOD_TYPE)
 			-- Set period_type to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -78,7 +78,7 @@ feature -- Status setting
 			period_type_set: period_type = arg and period_type /= Void
 		end
 
-	set_operator (arg: RESULT_COMMAND [BOOLEAN]; use_left_func: BOOLEAN) is
+	set_operator (arg: RESULT_COMMAND [BOOLEAN]; use_left_func: BOOLEAN)
 			-- Set operator to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -90,7 +90,7 @@ feature -- Status setting
 			use_left_set: use_left_function = use_left_func
 		end
 
-	set_crossover_specification (arg: INTEGER) is
+	set_crossover_specification (arg: INTEGER)
 			-- Set crossover_specification to `arg'.
 		require
 			valid_spec: arg = Below_to_above or arg = Above_to_below or
@@ -103,7 +103,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute is
+	execute
 		do
 			create product.make (left_function, right_function, event_type,
 				signal_type, period_type)

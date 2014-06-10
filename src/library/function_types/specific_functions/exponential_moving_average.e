@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Exponential moving average";
 	detailed_description:
 		"Applies to each tuple the formula: K * C + EMA[p](1-K), where K is %
@@ -21,6 +21,8 @@ class EXPONENTIAL_MOVING_AVERAGE inherit
 		end
 
 	MATH_CONSTANTS
+		rename
+			exp as math_exp
 		export
 			{NONE} all
 		end
@@ -31,7 +33,7 @@ creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 feature -- Access
 
-	short_description: STRING is
+	short_description: STRING
 		do
 			create Result.make (38)
 			Result.append (n.out)
@@ -44,7 +46,7 @@ feature -- Access
 
 feature {NONE} -- Basic operations
 
-	do_process is
+	do_process
 		do
 			update_exp_inverse
 			check
@@ -57,7 +59,7 @@ feature {NONE} -- Basic operations
 feature {NONE} -- Initialization
 
 	make (in: like input; op: like operator; e: N_BASED_CALCULATION;
-			i: INTEGER) is
+			i: INTEGER)
 		require
 			args_not_void: in /= Void and e /= Void and op /= Void
 			i_gt_0: i > 0
@@ -81,7 +83,7 @@ feature {NONE} -- Initialization
 
 feature {MARKET_FUNCTION_EDITOR} -- Status setting
 
-	set_exponential (e: N_BASED_CALCULATION) is
+	set_exponential (e: N_BASED_CALCULATION)
 		require
 			e /= Void
 		do
@@ -91,7 +93,7 @@ feature {MARKET_FUNCTION_EDITOR} -- Status setting
 			exp_set: exp = e and exp /= Void
 		end
 
-	set_n (value: integer) is
+	set_n (value: integer)
 		do
 			Precursor (value)
 			exp.initialize (Current)
@@ -99,7 +101,7 @@ feature {MARKET_FUNCTION_EDITOR} -- Status setting
 
 feature {NONE} -- Implementation
 
-	action is
+	action
 			-- Calculate exponential MA value for the current period.
 		require else
 			output_not_empty: not output.is_empty
@@ -128,7 +130,7 @@ feature {NONE} -- Implementation
 			--   period and EMA[curr-1] is the EMA for the previous period.
 		end
 
-	direct_operators: LIST [COMMAND] is
+	direct_operators: LIST [COMMAND]
 			-- All operators directly attached to Current
 		do
 			Result := Precursor
@@ -140,7 +142,7 @@ feature {NONE} -- Implementation
 	exp_inverse: DOUBLE
 			-- 1 - exp.value, used for efficiency
 
-	update_exp_inverse is
+	update_exp_inverse
 			-- Update `exp_inverse' with the current `exp' value.
 		do
 			exp_inverse := 1 - exp.value

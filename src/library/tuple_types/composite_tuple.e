@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A tuple that is created from a sequence of tuples of smaller %
 		%duration, such as a weekly tuple from (usually 5) daily tuples";
@@ -30,14 +30,14 @@ feature -- Access
 	last: MARKET_TUPLE
 			-- Last (chronologically) tuple used to create Current
 
-	end_date: DATE is
+	end_date: DATE
 		do
 			Result := last.date_time.date
 		end
 
 feature {COMPOSITE_TUPLE_FACTORY} -- Status setting
 
-	set_first (arg: MARKET_TUPLE) is
+	set_first (arg: MARKET_TUPLE)
 			-- Set first to `arg'.
 		require
 			arg /= Void
@@ -47,7 +47,7 @@ feature {COMPOSITE_TUPLE_FACTORY} -- Status setting
 			first_set: first = arg and first /= Void
 		end
 
-	set_last (arg: MARKET_TUPLE) is
+	set_last (arg: MARKET_TUPLE)
 			-- Set last to `arg'.
 		require
 			arg /= Void

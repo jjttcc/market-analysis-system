@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Basic tools for GUI components"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -10,7 +10,7 @@ class GUI_TOOLS inherit
 
 feature -- Basic operations
 
-	close_on_esc (k: EV_KEY; window: EV_WINDOW) is
+	close_on_esc (k: EV_KEY; window: EV_WINDOW)
 			-- Close `window' if `k' is the escape key.
 		local
 			key_constants: expanded EV_KEY_CONSTANTS
@@ -20,7 +20,7 @@ feature -- Basic operations
 			end
 		end
 
-	add_close_window_accelerator (window: EV_TITLED_WINDOW) is
+	add_close_window_accelerator (window: EV_TITLED_WINDOW)
 			-- Add a "close-window" acceleartor to `window'.
 		local
 			wbldr: expanded WIDGET_BUILDER
@@ -32,7 +32,7 @@ feature -- Basic operations
 			accel.actions.extend (agent window.destroy)
 		end
 
-	set_busy_cursor (w: EV_WIDGET): EV_CURSOR is
+	set_busy_cursor (w: EV_WIDGET): EV_CURSOR
 			-- Set `w's cursor to a busy cursor and return the previous
 			-- cursor.
 		do
@@ -40,7 +40,7 @@ feature -- Basic operations
 			w.set_pointer_style ((create {EV_STOCK_PIXMAPS}).Busy_cursor)
 		end
 
-	restore_cursor (w: EV_WIDGET; c: EV_CURSOR) is
+	restore_cursor (w: EV_WIDGET; c: EV_CURSOR)
 			-- Restore `w's cursor to `c'.
 		do
 			w.set_pointer_style (c)

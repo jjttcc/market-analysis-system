@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Utilities for parsing date settings"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -10,12 +10,12 @@ deferred class DATE_PARSING_UTILITIES inherit
 
 feature -- Access
 
-	Now: STRING is "now"
+	Now: STRING = "now"
 			-- String that specifies the current date
 
 feature {NONE} -- Implementation
 
-	date_from_string (s: STRING): DATE is
+	date_from_string (s: STRING): DATE
 			-- The result of parsing a date specification received from
 			-- the client
 		require
@@ -65,7 +65,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - Hook routines
 
-	date_field_separator: STRING is
+	date_field_separator: STRING
 			-- Field separator for date components (e.g., '/' in 1995/03/17)
 		deferred
 		end

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Volume tuple with open interest";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,7 +12,7 @@ deferred class OPEN_INTEREST_TUPLE inherit
 
 feature -- Access
 
-	open_interest: REAL is
+	open_interest: REAL
 			-- Number of existing contracts
 		deferred
 		end

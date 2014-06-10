@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A command that responds to an event-data request - a %
 		%request for trading signals for a particular tradable"
 	author: "Jim Cochrane"
@@ -54,7 +54,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (dispenser: TRADABLE_DISPENSER) is
+	make (dispenser: TRADABLE_DISPENSER)
 		do
 			trc_make (dispenser)
 			mer_make
@@ -62,7 +62,7 @@ feature {NONE} -- Initialization
 
 feature -- Basic operations
 
-	do_execute (msg: STRING) is
+	do_execute (msg: STRING)
 		local
 			fields: LIST [STRING]
 			d: DATE
@@ -139,7 +139,7 @@ feature {NONE} -- Implementation
 
 feature {NONE}
 
-	create_event_types (fields: LIST [STRING]) is
+	create_event_types (fields: LIST [STRING])
 			-- Create `requested_event_types' from fields[4 .. fields.count].
 		local
 			i, id: INTEGER
@@ -160,7 +160,7 @@ feature {NONE}
 			end
 		end
 
-	send_response is
+	send_response
 			-- Run market analysis on for `symbol' for all event types
 			-- specified in `requested_event_types' between
 			-- `analysis_start_date' and `analysis_end_date'.
@@ -197,7 +197,7 @@ feature {NONE}
 			end
 		end
 
-	perform_notify is
+	perform_notify
 		local
 			dt_util: expanded DATE_TIME_SERVICES
 		do
@@ -236,7 +236,7 @@ feature {NONE}
 			end
 		end
 
-	initialize_event_coordinator is
+	initialize_event_coordinator
 		do
 			--Create an event coordinator that only operates on the tradable
 			--for `symbol'; initialize the dispatcher, event generators
@@ -258,7 +258,7 @@ feature {NONE}
 			pair_not_void: tradable_pair /= Void
 		end
 
-	valid_event_generators: LINKED_LIST [MARKET_EVENT_GENERATOR] is
+	valid_event_generators: LINKED_LIST [MARKET_EVENT_GENERATOR]
 			-- Event generators specified in `requested_event_types' that
 			-- are valid for `tradable_pair'
 		require
@@ -294,7 +294,7 @@ feature {NONE}
 		end
 
 	pair_for_current_symbol: PAIR [TRADABLE [BASIC_MARKET_TUPLE],
-			TRADABLE [BASIC_MARKET_TUPLE]] is
+			TRADABLE [BASIC_MARKET_TUPLE]]
 		do
 			create Result.make (tradables.tradable (symbol,
 				--@@@Check if 'update' (False) should be true:
@@ -306,12 +306,12 @@ feature {NONE}
 			not_void: Result /= Void
 		end
 
-	error_context (msg: STRING): STRING is
+	error_context (msg: STRING): STRING
 		do
 			Result := concatenation (<<"running market analysis for ",
 				symbol>>)
 		end
 
-	name: STRING is "Event-data request command"
+	name: STRING = "Event-data request command"
 
 end -- class EVENT_DATA_REQUEST_CMD

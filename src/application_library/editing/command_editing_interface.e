@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Abstraction for a user interface that obtains selections needed for %
 		%editing of COMMANDs"
@@ -40,7 +40,7 @@ feature -- Access
 	market_tuple_selector: MARKET_TUPLE_LIST_SELECTOR
 			-- Interface that provides selection of a market tuple list
 
-	command_types: HASH_TABLE [ARRAYED_LIST [COMMAND], STRING] is
+	command_types: HASH_TABLE [ARRAYED_LIST [COMMAND], STRING]
 			-- Hash table of lists of command instances - each list contains
 			-- instances of all classes whose type conforms to the Hash
 			-- table key.
@@ -201,42 +201,42 @@ feature -- Access
 
 feature -- Constants
 
-	Any_cmd: STRING is "[Any Command]"
+	Any_cmd: STRING = "[Any Command]"
 			-- Name of type of any command
 
-	Boolean_result_cmd: STRING is "RESULT_COMMAND [BOOLEAN]"
+	Boolean_result_cmd: STRING = "RESULT_COMMAND [BOOLEAN]"
 			-- Name of result command with a BOOLEAN generic parameter
 
-	Real_result_cmd: STRING is "RESULT_COMMAND [REAL]"
+	Real_result_cmd: STRING = "RESULT_COMMAND [REAL]"
 			-- Name of result command with a REAL generic parameter
 
-	Binary_boolean_real_cmd: STRING is "BINARY_OPERATOR [BOOLEAN, REAL]"
+	Binary_boolean_real_cmd: STRING = "BINARY_OPERATOR [BOOLEAN, REAL]"
 			-- Name of binary command with BOOLEAN, REAL generic parameters
 
-	Binary_real_real_cmd: STRING is "BINARY_OPERATOR [REAL, REAL]"
+	Binary_real_real_cmd: STRING = "BINARY_OPERATOR [REAL, REAL]"
 			-- Name of binary command with REAL, REAL generic parameters
 
-	N_based_calculation: STRING is "N_BASED_CALCULATION"
+	N_based_calculation: STRING = "N_BASED_CALCULATION"
 			-- Name of N_BASED_CALCULATION
 
-	N_record_cmd: STRING is "N_RECORD_COMMAND"
+	N_record_cmd: STRING = "N_RECORD_COMMAND"
 			-- Name of N_RECORD_COMMAND
 
-	Linear_cmd: STRING is "LINEAR_COMMAND"
+	Linear_cmd: STRING = "LINEAR_COMMAND"
 			-- Name of LINEAR_COMMAND
 
-	Indexed: STRING is "INDEXED"
+	Indexed: STRING = "INDEXED"
 			-- Name of INDEXED
 
-	Basic_numeric_cmd: STRING is
-		indexing
+	Basic_numeric_cmd: STRING
+		note
 			once_status: global
 		once
 			Result := basic_numeric_command.generator
 		end
 
-	Numeric_value_cmd: STRING is
-		indexing
+	Numeric_value_cmd: STRING
+		note
 			once_status: global
 		once
 			Result := numeric_value_command.generator
@@ -252,7 +252,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_left_offset (arg: INTEGER) is
+	set_left_offset (arg: INTEGER)
 			-- Set left_offset to `arg'.
 		require
 			arg_not_negative: arg >= 0
@@ -262,7 +262,7 @@ feature -- Status setting
 			left_offset_set: left_offset = arg and left_offset >= 0
 		end
 
-	set_market_function (arg: MARKET_FUNCTION) is
+	set_market_function (arg: MARKET_FUNCTION)
 			-- Set market_function to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -273,7 +273,7 @@ feature -- Status setting
 				market_function /= Void
 		end
 
-	set_market_tuple_selector (arg: MARKET_TUPLE_LIST_SELECTOR) is
+	set_market_tuple_selector (arg: MARKET_TUPLE_LIST_SELECTOR)
 			-- Set market_tuple_selector to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -285,7 +285,7 @@ feature -- Status setting
 		end
 
 	set_use_market_function_selection (
-				arg: like use_market_function_selection) is
+				arg: like use_market_function_selection)
 			-- Set use_market_function_selection to `arg'.
 		do
 			use_market_function_selection := arg
@@ -296,7 +296,7 @@ feature -- Status setting
 
 feature -- Miscellaneous
 
-	print_command_tree (cmd: COMMAND; level: INTEGER) is
+	print_command_tree (cmd: COMMAND; level: INTEGER)
 			-- Print the type name of `cmd' and, recursively, that of all
 			-- of its operands.
 		require
@@ -307,7 +307,7 @@ feature -- Miscellaneous
 
 feature {APPLICATION_COMMAND_EDITOR} -- Access
 
-	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
+	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE]
 		do
 			check
 				mf_not_void: market_function /= Void or
@@ -323,7 +323,7 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 			end
 		end
 
-	market_function_selection (msg: STRING): MARKET_FUNCTION is
+	market_function_selection (msg: STRING): MARKET_FUNCTION
 		do
 			check
 				mf_not_void: market_function /= Void or
@@ -340,7 +340,7 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 			end
 		end
 
-	name_for (o: COMMAND): STRING is
+	name_for (o: COMMAND): STRING
 		do
 			Result := ""
 			if o.name /= Void and then not o.name.is_empty then
@@ -377,11 +377,11 @@ feature {NONE} -- Implementation
 	Numeric_wrapper,	-- NUMERIC_VALUED_COMMAND_WRAPPER
 	Cmd_sequence		-- COMMAND_SEQUENCE
 	:
-				INTEGER is unique
+				INTEGER = unique
 			-- Constants identifying initialization routines required for
 			-- the different COMMAND types
 
-	initialization_map: HASH_TABLE [INTEGER, STRING] is
+	initialization_map: HASH_TABLE [INTEGER, STRING]
 			-- Mapping of COMMAND names to initialization classifications
 -- !!!! indexing once_status: global??!!!
 		local
@@ -705,7 +705,7 @@ feature {NONE} -- Implementation
 			Result.extend (Value_at_index, name)
 		end
 
-	initialize_command (c: COMMAND) is
+	initialize_command (c: COMMAND)
 			-- Set command parameters - operands, etc.
 		local
 			nvc: NUMERIC_VALUE_COMMAND
@@ -851,7 +851,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	edit_command (o: COMMAND; msg: STRING) is
+	edit_command (o: COMMAND; msg: STRING)
 			-- Set `o's name and editable attribute.
 		do
 			if user_specified_command_name /= Void then
@@ -862,7 +862,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation
 
-	descendant_reset is
+	descendant_reset
 			-- Reset descendant's state.
 		do
 			left_offset := 0
@@ -872,7 +872,7 @@ feature {NONE} -- Implementation
 
 	editable_state: BOOLEAN
 
-	set_editability (c: COMMAND) is
+	set_editability (c: COMMAND)
 			-- If `c' is a CONFIGURABLE_EDITABLE_COMMAND set its
 			-- editability to `editable_state'.
 		local
@@ -886,7 +886,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - options
 
-	clone_needed: BOOLEAN is True
+	clone_needed: BOOLEAN = True
 
 	editing_needed: BOOLEAN
 

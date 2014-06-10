@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A MAS server command that responds to a client request"
 	author: "Jim Cochrane"
@@ -30,13 +30,13 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is True
+	arg_mandatory: BOOLEAN = True
 
 feature {NONE}
 
-	ok_string: STRING is
+	ok_string: STRING
 			-- "OK" message ID and field separator
-		indexing
+		note
 			once_status: global
 		once
 			Result := OK.out + message_component_separator

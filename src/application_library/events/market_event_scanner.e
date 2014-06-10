@@ -1,4 +1,4 @@
-indexing
+note
 	description: "DATA_SCANNER that scans MARKET_EVENT fields"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -29,7 +29,7 @@ creation
 
 feature
 
-	make (in: like input) is
+	make (in: like input)
 		require
 			args_not_void: in /= Void
 			in_separators_not_void:
@@ -52,12 +52,12 @@ feature -- Access
 
 feature {NONE} -- Hook method implementations
 
-	create_product is
+	create_product
 		do
 			create {LINKED_LIST [MARKET_EVENT]} product.make
 		end
 
-	make_tuple is
+	make_tuple
 		local
 			exception_raised: BOOLEAN
 		do
@@ -83,7 +83,7 @@ feature {NONE} -- Hook method implementations
 			retry
 		end
 
-	advance_to_next_record is
+	advance_to_next_record
 		local
 			i: INTEGER
 		do
@@ -109,10 +109,10 @@ feature {NONE} -- Hook method implementations
 			end
 		end
 
-	value_setters_used: BOOLEAN is False
+	value_setters_used: BOOLEAN = False
 
 feature {NONE} -- Implementation
 
-	Field_count: INTEGER is 4
+	Field_count: INTEGER = 4
 
 end -- class MARKET_EVENT_SCANNER

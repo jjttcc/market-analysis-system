@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"An abstraction for the generation of events based on analysis %
 		%of market data"
@@ -45,16 +45,16 @@ feature -- Access
 	event_type: EVENT_TYPE
 			-- The type of the generated events
 
-	immediate_operators: LIST [COMMAND] is
+	immediate_operators: LIST [COMMAND]
 			-- Operators used directly by this event generator
 		deferred
-			-- Implementation note: Result is expected to be created each
+			-- Implementation note1: Result is expected to be created each
 			-- time this function is called.
 		ensure
 			not_void: Result /= Void
 		end
 
-	operators: LIST [COMMAND] is
+	operators: LIST [COMMAND]
 		local
 			l: LIST [MARKET_FUNCTION]
 		do
@@ -70,7 +70,7 @@ feature -- Access
 			end
 		end
 
-	parameters: LIST [FUNCTION_PARAMETER] is
+	parameters: LIST [FUNCTION_PARAMETER]
 		local
 			l: LIST [MARKET_FUNCTION]
 		do
@@ -86,7 +86,7 @@ feature -- Access
 			end
 		end
 
-	children: LIST [MARKET_EVENT_GENERATOR] is
+	children: LIST [MARKET_EVENT_GENERATOR]
 		do
 			-- Empty by default - redefine if needed.
 			create {LINKED_LIST [MARKET_EVENT_GENERATOR]} Result.make
@@ -94,7 +94,7 @@ feature -- Access
 
 feature -- Status report
 
-	valid_period_type (t: TIME_PERIOD_TYPE): BOOLEAN is
+	valid_period_type (t: TIME_PERIOD_TYPE): BOOLEAN
 			-- Is `t' a valid period type for a tradable to be processed
 			-- by this event generator?
 		require
@@ -104,7 +104,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_tradable_from_dispenser (d: TRADABLE_DISPENSER) is
+	set_tradable_from_dispenser (d: TRADABLE_DISPENSER)
 			-- Set the tradable whose data is to be used for processing from
 			-- the current item in `d'.  If no tradable from the current item
 			-- in `d' is valid for this event generator (for example, no
@@ -118,7 +118,7 @@ feature -- Status setting
 		end
 
 	set_tradable_from_pair (p: PAIR [TRADABLE [BASIC_MARKET_TUPLE],
-		TRADABLE [BASIC_MARKET_TUPLE]]) is
+		TRADABLE [BASIC_MARKET_TUPLE]])
 			-- Set the tradable whose data is to be used for processing from
 			-- the appropriate member of `p'.  If no member of `p' is valid
 			-- for this event generator (for example, its members are Void
@@ -137,7 +137,7 @@ feature -- Status setting
 		deferred
 		end
 
-	set_start_date_time (d: DATE_TIME) is
+	set_start_date_time (d: DATE_TIME)
 			-- Set the date and time to begin the analysis to `d'.
 		require
 			not_void: d /= Void
@@ -146,7 +146,7 @@ feature -- Status setting
 
 feature {MARKET_FUNCTION_EDITOR}
 
-	wipe_out is
+	wipe_out
 			-- Ensure that data is cleared before storage.
 		deferred
 		end

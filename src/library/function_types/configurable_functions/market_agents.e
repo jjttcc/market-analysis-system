@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Selection of agents for use in AGENT_BASED_FUNCTION"
 	author: "Jim Cochrane"
@@ -15,7 +15,7 @@ class MARKET_AGENTS inherit
 
 feature -- Access
 
-	infix "@" (key: STRING): PROCEDURE [ANY, TUPLE [AGENT_BASED_FUNCTION]] is
+	infix "@" (key: STRING): PROCEDURE [ANY, TUPLE [AGENT_BASED_FUNCTION]]
 			-- Current.agents @ key, for convenience
 		do
 			Result := agents @ key
@@ -23,7 +23,7 @@ feature -- Access
 			definition: Result = agents @ key
 		end
 
-	keys: ARRAY [STRING] is
+	keys: ARRAY [STRING]
 			-- Available agent keys
 -- !!!! indexing once_status: global??!!! [probably]
 		once
@@ -33,7 +33,7 @@ feature -- Access
 			object_comparison: Result.object_comparison
 		end
 
-	parameters_for (key: STRING): LINKED_SET [FUNCTION_PARAMETER] is
+	parameters_for (key: STRING): LINKED_SET [FUNCTION_PARAMETER]
 			-- Function parameters associated with `key'
 		require
 			valid_key: key /= Void and then keys.has (key)
@@ -43,7 +43,7 @@ feature -- Access
 			result_exists: Result /= Void
 		end
 
-	agent_parameter_map: HASH_TABLE [LINKED_SET [FUNCTION_PARAMETER], STRING] is
+	agent_parameter_map: HASH_TABLE [LINKED_SET [FUNCTION_PARAMETER], STRING]
 			-- Mapping of each agent key to its associated
 			-- FUNCTION_PARAMETER set
 		local
@@ -65,7 +65,7 @@ feature -- Access
 
 feature -- Agents
 
-	sma (f: AGENT_BASED_FUNCTION) is
+	sma (f: AGENT_BASED_FUNCTION)
 			-- Simple moving average
 		require
 			f_output_empty: f.output /= Void and f.output.is_empty
@@ -74,7 +74,7 @@ feature -- Agents
 				sum_divided_by_n, addition_operator, subtraction_operator)
 		end
 
-	standard_deviation (f: AGENT_BASED_FUNCTION) is
+	standard_deviation (f: AGENT_BASED_FUNCTION)
 			-- Standard deviation
 		require
 			f_output_empty: f.output /= Void and f.output.is_empty
@@ -89,9 +89,9 @@ feature -- Agents
 
 feature -- Agent keys
 
-	Sma_key: STRING is "Simple moving average"
+	Sma_key: STRING = "Simple moving average"
 
-	Standard_deviation_key: STRING is "Standard deviation"
+	Standard_deviation_key: STRING = "Standard deviation"
 
 feature {NONE} -- Algorithm implementations used by agents
 
@@ -108,7 +108,7 @@ feature {NONE} -- Algorithm implementations used by agents
 	n_based_accumulation (f: AGENT_BASED_FUNCTION; n: INTEGER;
 		calculation: FUNCTION [ANY, TUPLE [DOUBLE, INTEGER,
 		ARRAYED_LIST [DOUBLE]], DOUBLE]; accum_op, drop_off_op:
-		BINARY_OPERATOR [REAL, REAL]) is
+		BINARY_OPERATOR [REAL, REAL])
 			-- An "accumulation" - whose input is `f.inputs.first.output' -
 			-- based on applying the specified function, `calculation', to
 			-- n-sized subsets of the elements of the input (for example,
@@ -199,7 +199,7 @@ feature {NONE} -- Algorithm implementations used by agents
 feature {NONE} -- COMMAND-based utility routines
 
 	binary_double_operation (op: BINARY_OPERATOR [REAL, REAL];
-		x, y: DOUBLE): DOUBLE is
+		x, y: DOUBLE): DOUBLE
 		require
 			op_exists: op /= Void
 			no_arg_needed: not op.arg_mandatory
@@ -211,7 +211,7 @@ feature {NONE} -- COMMAND-based utility routines
 			Result := op.value
 		end
 
-	x_value: NUMERIC_VALUE_COMMAND is
+	x_value: NUMERIC_VALUE_COMMAND
 			-- Value for `x' used in binary operation - optimization
 		do
 			if x_value_implementation = Void then
@@ -220,7 +220,7 @@ feature {NONE} -- COMMAND-based utility routines
 			Result := x_value_implementation
 		end
 
-	y_value: NUMERIC_VALUE_COMMAND is
+	y_value: NUMERIC_VALUE_COMMAND
 			-- Value for `y' used in binary operation - optimization
 		do
 			if y_value_implementation = Void then
@@ -229,7 +229,7 @@ feature {NONE} -- COMMAND-based utility routines
 			Result := y_value_implementation
 		end
 
-	addition_operator: ADDITION is
+	addition_operator: ADDITION
 		do
 			if addition_operator_implementation = Void then
 				create addition_operator_implementation.make (
@@ -238,7 +238,7 @@ feature {NONE} -- COMMAND-based utility routines
 			Result := addition_operator_implementation
 		end
 
-	subtraction_operator: SUBTRACTION is
+	subtraction_operator: SUBTRACTION
 		do
 			if subtraction_operator_implementation = Void then
 				create subtraction_operator_implementation.make (
@@ -256,7 +256,7 @@ feature {NONE} -- COMMAND-based utility routines
 feature {NONE} -- Implementation
 
 	agents: HASH_TABLE [PROCEDURE [ANY, TUPLE [AGENT_BASED_FUNCTION]],
-		STRING] is
+		STRING]
 			-- Table of available "market-agents"
 -- !!!! indexing once_status: global??!!!
 		once
@@ -269,7 +269,7 @@ feature {NONE} -- Utilities
 
 --@@These can perhaps go into a separate class (perhaps MARKET_UTILITIES).
 	sum_of_squares (starti, n: INTEGER; avg: DOUBLE;
-			values: ARRAYED_LIST [DOUBLE]): DOUBLE is
+			values: ARRAYED_LIST [DOUBLE]): DOUBLE
 		require
 			starti_valid: starti + n - 1 <= values.count
 		local
@@ -287,7 +287,7 @@ feature {NONE} -- Utilities
 		end
 
 	sum_of_squares_of_avg_divided_by_n (sum: DOUBLE; n: INTEGER;
-		values: ARRAYED_LIST [DOUBLE]): DOUBLE is
+		values: ARRAYED_LIST [DOUBLE]): DOUBLE
 			-- Sum of squares of sum / n, using `values'
 		local
 			avg, sos: DOUBLE
@@ -299,14 +299,14 @@ feature {NONE} -- Utilities
 		end
 
 	sum_divided_by_n (sum: DOUBLE; n: INTEGER; values: ARRAYED_LIST [DOUBLE]):
-		DOUBLE is
+		DOUBLE
 			-- `sum' / `n'
 		do
 			Result := sum / n
 		end
 
 	integer_parameter_value (f: AGENT_BASED_FUNCTION; deflt: INTEGER):
-		INTEGER is
+		INTEGER
 			-- f's first immediate integer parameter value if it exists -
 			-- otherwise, `deflt'
 		local
@@ -331,25 +331,25 @@ feature {NONE} -- Utilities
 			end
 		end
 
-	has_elements (l: LIST [MARKET_FUNCTION]; n: INTEGER): BOOLEAN is
+	has_elements (l: LIST [MARKET_FUNCTION]; n: INTEGER): BOOLEAN
 			-- Does `l' have at least `n' elements?
 		do
 			Result := l /= Void and then l.count >= n
 		end
 
-	output_not_empty (f: MARKET_FUNCTION): BOOLEAN is
+	output_not_empty (f: MARKET_FUNCTION): BOOLEAN
 			-- Is `f.output' not empty?
 		do
 			Result := not f.output.is_empty
 		end
 
-	greater_than (target, n: INTEGER): BOOLEAN is
+	greater_than (target, n: INTEGER): BOOLEAN
 			-- Is `target' greater than `n'?
 		do
 			Result := target > n
 		end
 
-	handle_invalid_state (l: LIST [STRING]; arg: ANY; info: STRING) is
+	handle_invalid_state (l: LIST [STRING]; arg: ANY; info: STRING)
 			-- Handle an invalid state that occurred during processing.
 		local
 			ex_srv: expanded EXCEPTION_SERVICES
@@ -360,10 +360,10 @@ feature {NONE} -- Utilities
 
 feature {NONE} -- Constants
 
-	Sma_fp_default: INTEGER is 13
+	Sma_fp_default: INTEGER = 13
 			-- Default function-parameter value for the `sma' agent
 
-	Standard_deviation_fp_default: INTEGER is 5
+	Standard_deviation_fp_default: INTEGER = 5
 			-- Default function-parameter value for the
 			-- `standard_deviation' agent
 

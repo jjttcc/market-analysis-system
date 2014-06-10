@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Linear offset commands whose offset is a settable attribute"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -34,7 +34,7 @@ creation
 
 feature -- Initialization
 
-	make (tgt: like target; op: like operand) is
+	make (tgt: like target; op: like operand)
 		require
 			not_void: tgt /= Void and op /= Void
 		do
@@ -44,15 +44,15 @@ feature -- Initialization
 			set: target = tgt and operand = op
 		end
 
-	initialize (arg: LINEAR_ANALYZER) is
+	initialize (arg: LINEAR_ANALYZER)
 		do
-			{LINEAR_OFFSET_COMMAND} Precursor (arg)
+			Precursor {LINEAR_OFFSET_COMMAND} (arg)
 			uo_initialize (arg)
 		end
 
 feature -- Access
 
-	external_offset: INTEGER is
+	external_offset: INTEGER
 		do
 			Result := offset
 		ensure then
@@ -61,11 +61,11 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is False
+	arg_mandatory: BOOLEAN = False
 
 feature -- Status setting
 
-	set_offset (arg: INTEGER) is
+	set_offset (arg: INTEGER)
 			-- Set offset to `arg'.
 		do
 			offset := arg
@@ -76,7 +76,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	operate (arg: ANY) is
+	operate (arg: ANY)
 		do
 			operand.execute (target.item)
 			value := operand.value

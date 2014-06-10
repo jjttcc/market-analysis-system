@@ -1,7 +1,7 @@
-indexing
+note
 	description:
 		"Factory class that manufactures COMPOUND_EVENT_GENERATORs"
-	note: "Features left_generator, right_generator, and event_type should %
+	note1: "Features left_generator, right_generator, and event_type should %
 		%all be non-Void when execute is called."
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -37,7 +37,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_generators (left, right: MARKET_EVENT_GENERATOR) is
+	set_generators (left, right: MARKET_EVENT_GENERATOR)
 			-- Set left and right generators to `left' and `right'.
 		require
 			not_void: left /= Void and right /= Void
@@ -48,7 +48,7 @@ feature -- Status setting
 			set: left_generator = left and right_generator = right
 		end
 
-	set_left_target_type (arg: EVENT_TYPE) is
+	set_left_target_type (arg: EVENT_TYPE)
 			-- Set left_target_type to `arg'.
 		do
 			left_target_type := arg
@@ -56,7 +56,7 @@ feature -- Status setting
 			left_target_type_set: left_target_type = arg
 		end
 
-	set_before_extension (arg: DATE_TIME_DURATION) is
+	set_before_extension (arg: DATE_TIME_DURATION)
 			-- Set before_extension to `arg'.
 		do
 			before_extension := arg
@@ -64,7 +64,7 @@ feature -- Status setting
 			before_extension_set: before_extension = arg
 		end
 
-	set_after_extension (arg: DATE_TIME_DURATION) is
+	set_after_extension (arg: DATE_TIME_DURATION)
 			-- Set after_extension to `arg'.
 		do
 			after_extension := arg
@@ -74,7 +74,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute is
+	execute
 		do
 			create product.make (left_generator, right_generator, event_type,
 				signal_type)

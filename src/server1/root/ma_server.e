@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Root class for the Market Analysis Server using MAL"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -32,7 +32,7 @@ r: RANDOM
 f: FIBONACCI
 th_ex: THREAD_EXPERIMENTS
 
-	read_command_for (medium: COMPRESSED_SOCKET): POLL_COMMAND is
+	read_command_for (medium: COMPRESSED_SOCKET): POLL_COMMAND
 		local
 			sock_acc: MAS_SOCKET_ACCEPTOR
 		do
@@ -40,7 +40,7 @@ th_ex: THREAD_EXPERIMENTS
 			create {SOCKET_BASED_POLL_COMMAND} Result.make (sock_acc)
 		end
 
-	make_current_media is
+	make_current_media
 		do
 			create {LINKED_LIST [SOCKET]} current_media.make
 			from
@@ -55,7 +55,7 @@ th_ex: THREAD_EXPERIMENTS
 			end
 		end
 
-	additional_read_commands: LINEAR [POLL_COMMAND] is
+	additional_read_commands: LINEAR [POLL_COMMAND]
 -- !!!! indexing once_status: global??!!!
 		local
 			cmds: LINKED_LIST [POLL_COMMAND]
@@ -67,8 +67,8 @@ th_ex: THREAD_EXPERIMENTS
 			end
 		end
 
-	version: MAS_PRODUCT_INFO is
-		indexing
+	version: MAS_PRODUCT_INFO
+		note
 			once_status: global
 		local
 			gs: expanded GLOBAL_SERVER_FACILITIES
@@ -76,7 +76,7 @@ th_ex: THREAD_EXPERIMENTS
 			Result := gs.global_configuration.product_info
 		end
 
-	configuration_error: BOOLEAN is
+	configuration_error: BOOLEAN
 			-- Is there an error in the MAS configuration?  If so,
 			-- a description is placed into config_error_description.
 		local
@@ -99,7 +99,7 @@ th_ex: THREAD_EXPERIMENTS
 			end
 		end
 
-	initialize is
+	initialize
 		local
 			gsf: expanded GLOBAL_SERVER_FACILITIES
 			d: DATE_TIME
@@ -110,7 +110,7 @@ th_ex: THREAD_EXPERIMENTS
 
 feature {NONE} -- Implementation
 
-	report_back (errs: STRING) is
+	report_back (errs: STRING)
 			-- If command_line_options.report_back, send a status
 			-- report back to the startup process.
 		local
@@ -130,7 +130,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	factory_builder: GLOBAL_OBJECT_BUILDER is
+	factory_builder: GLOBAL_OBJECT_BUILDER
 -- !!!! indexing once_status: global??!!!
 		once
 			create Result.make

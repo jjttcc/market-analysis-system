@@ -1,8 +1,8 @@
-indexing
+note
 	description: "An instance of each instantiable MARKET_TUPLE class"
 	author: "Jim Cochrane"
 	date: "$Date$";
-	note: "@@This class does not depend on any specialized classes and %
+	note1: "@@This class does not depend on any specialized classes and %
 		%can probably be cleanly moved to the ma_library cluster."
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
@@ -21,7 +21,7 @@ class MARKET_TUPLES inherit
 
 feature -- Access
 
-	instances_and_descriptions: ARRAYED_LIST [PAIR [MARKET_TUPLE, STRING]] is
+	instances_and_descriptions: ARRAYED_LIST [PAIR [MARKET_TUPLE, STRING]]
 			-- An instance and description of each effective MARKET_TUPLE class
 		local
 			pair: PAIR [MARKET_TUPLE, STRING]
@@ -64,82 +64,82 @@ feature -- Access
 			Result.put_i_th (pair, Composite_oi_tuple_index)
 		end
 
-	tuple_instances: ARRAYED_LIST [MARKET_TUPLE] is
+	tuple_instances: ARRAYED_LIST [MARKET_TUPLE]
 -- !!!! indexing once_status: global??!!!
 		once
 			Result := Precursor
 		end
 
-	stock_split: MARKET_TUPLE is
+	stock_split: MARKET_TUPLE
 		do
 			Result := (instances_and_descriptions @ Stock_split_index).left
 		end
 
-	simple_tuple: MARKET_TUPLE is
+	simple_tuple: MARKET_TUPLE
 		do
 			Result := (instances_and_descriptions @ Simple_tuple_index).left
 		end
 
-	market_point: MARKET_TUPLE is
+	market_point: MARKET_TUPLE
 		do
 			Result := (instances_and_descriptions @ Market_point_index).left
 		end
 
-	basic_market_tuple: MARKET_TUPLE is
+	basic_market_tuple: MARKET_TUPLE
 		do
 			Result := (instances_and_descriptions @
 				Basic_market_tuple_index).left
 		end
 
-	basic_volume_tuple: MARKET_TUPLE is
+	basic_volume_tuple: MARKET_TUPLE
 		do
 			Result := (instances_and_descriptions @
 				Basic_volume_tuple_index).left
 		end
 
-	basic_open_interest_tuple: MARKET_TUPLE is
+	basic_open_interest_tuple: MARKET_TUPLE
 		do
 			Result := (instances_and_descriptions @
 				Basic_open_interest_tuple_index).left
 		end
 
-	composite_tuple: MARKET_TUPLE is
+	composite_tuple: MARKET_TUPLE
 		do
 			Result := (instances_and_descriptions @ Composite_tuple_index).left
 		end
 
-	composite_volume_tuple: MARKET_TUPLE is
+	composite_volume_tuple: MARKET_TUPLE
 		do
 			Result := (instances_and_descriptions @
 				Composite_volume_tuple_index).left
 		end
 
-	composite_oi_tuple: MARKET_TUPLE is
+	composite_oi_tuple: MARKET_TUPLE
 		do
 			Result := (instances_and_descriptions @
 				Composite_oi_tuple_index).left
 		end
 
-	Stock_split_index: INTEGER is 1
+	Stock_split_index: INTEGER = 1
 
-	Simple_tuple_index: INTEGER is 2
+	Simple_tuple_index: INTEGER = 2
 
-	Market_point_index: INTEGER is 3
+	Market_point_index: INTEGER = 3
 
-	Basic_market_tuple_index: INTEGER is 4
+	Basic_market_tuple_index: INTEGER = 4
 
-	Basic_volume_tuple_index: INTEGER is 5
+	Basic_volume_tuple_index: INTEGER = 5
 
-	Basic_open_interest_tuple_index: INTEGER is 6
+	Basic_open_interest_tuple_index: INTEGER = 6
 
-	Composite_tuple_index: INTEGER is 7
+	Composite_tuple_index: INTEGER = 7
 
-	Composite_volume_tuple_index: INTEGER is 8
+	Composite_volume_tuple_index: INTEGER = 8
 
-	Composite_oi_tuple_index: INTEGER is 9
+	Composite_oi_tuple_index: INTEGER = 9
 
-	Largest_index: INTEGER is
-		indexing
+	Largest_index: INTEGER
+		note
 			once_status: global
 		once
 			Result := Composite_oi_tuple_index

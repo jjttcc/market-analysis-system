@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Constants specifying date- and time-communication-protocol components"
 	author: "Jim Cochrane"
@@ -13,24 +13,24 @@ deferred class
 
 feature -- Access
 
-	date_field_separator: STRING is "/"
+	date_field_separator: STRING = "/"
 			-- Default field separator of date fields from input
 
-	time_field_separator: STRING is ":"
+	time_field_separator: STRING = ":"
 			-- Default field separator of time fields from input
 
-	date_time_range_separator: STRING is ";"
+	date_time_range_separator: STRING = ";"
 			-- Default character used to separate the start-date-time field
 			-- from the end-date-time field in a date-time range
 			-- specification
 
-	date_time_separator: STRING is ","
+	date_time_separator: STRING = ","
 			-- Default character used to separate the date field from
 			-- the time field in a date-time range specification
 
 feature -- Basic operations
 
-	date_time_range (start_time, end_time: DATE_TIME): STRING is
+	date_time_range (start_time, end_time: DATE_TIME): STRING
 			-- The date/time-range component of a client data request
 		local
 			date_tool: expanded DATE_TIME_SERVICES

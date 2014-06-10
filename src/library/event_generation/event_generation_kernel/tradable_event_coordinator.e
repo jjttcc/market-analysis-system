@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A market event coordinator that generates market events for a %
 		%pair of tradable objects for the same symbol - one for intraday %
@@ -25,7 +25,7 @@ creation
 feature -- Initialization
 
 	make (p: PAIR [TRADABLE [BASIC_MARKET_TUPLE],
-			TRADABLE [BASIC_MARKET_TUPLE]]) is
+			TRADABLE [BASIC_MARKET_TUPLE]])
 		require
 			not_void: p /= Void
 			left_intraday: p.left /= Void implies
@@ -48,7 +48,7 @@ feature -- Access
 
 feature {NONE} -- Implementation
 
-	initialize (eg: MARKET_EVENT_GENERATOR) is
+	initialize (eg: MARKET_EVENT_GENERATOR)
 			-- Set the tradable_pair for `eg' from `tradable_pair'.
 		do
 			eg.set_tradable_from_pair (tradable_pair)

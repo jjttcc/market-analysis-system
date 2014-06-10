@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Market analyzer that analyzes one market function"
 	author: "Jim Cochrane"
@@ -23,7 +23,7 @@ creation
 feature -- Initialization
 
 	make (in: like input; op: like operator; ev_type: EVENT_TYPE;
-			sig_type: INTEGER; per_type: TIME_PERIOD_TYPE) is
+			sig_type: INTEGER; per_type: TIME_PERIOD_TYPE)
 		require
 			not_void: in /= Void and op /= Void and ev_type /= Void and
 						per_type /= Void
@@ -50,7 +50,7 @@ feature -- Access
 
 	input: MARKET_FUNCTION
 
-	indicators: LIST [MARKET_FUNCTION] is
+	indicators: LIST [MARKET_FUNCTION]
 		do
 			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 			Result.extend (input)
@@ -58,7 +58,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_innermost_function (f: SIMPLE_FUNCTION [MARKET_TUPLE]) is
+	set_innermost_function (f: SIMPLE_FUNCTION [MARKET_TUPLE])
 			-- Set the innermost function, which contains the basic
 			-- data to be analyzed.
 		do
@@ -68,7 +68,7 @@ feature -- Status setting
 			operator.initialize (Current)
 		end
 
-	set_input (in: like input) is
+	set_input (in: like input)
 		require
 			in_not_void: in /= Void and in.output /= Void
 		do
@@ -78,7 +78,7 @@ feature -- Status setting
 			input_set_to_in: input = in
 		end
 
-	set_left_offset (arg: INTEGER) is
+	set_left_offset (arg: INTEGER)
 			-- Set left_offset to `arg'.
 		require
 			arg_not_negative: arg >= 0
@@ -90,7 +90,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute is
+	execute
 		do
 			create {LINKED_LIST [MARKET_EVENT]} product.make
 			if current_tradable /= Void then
@@ -105,7 +105,7 @@ feature -- Basic operations
 
 feature {NONE} -- Hook routine implementation
 
-	action is
+	action
 		local
 			ev_desc: STRING
 		do
@@ -120,7 +120,7 @@ feature {NONE} -- Hook routine implementation
 
 feature {MARKET_FUNCTION_EDITOR}
 
-	wipe_out is
+	wipe_out
 		local
 			dummy_tradable: TRADABLE [BASIC_MARKET_TUPLE]
 		do
@@ -137,7 +137,7 @@ feature {MARKET_FUNCTION_EDITOR}
 
 feature -- Implementation
 
-	event_name: STRING is "Single-indicator event"
+	event_name: STRING = "Single-indicator event"
 
 invariant
 

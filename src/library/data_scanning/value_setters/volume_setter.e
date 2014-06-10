@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Value setter that sets the volume of a tuple";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,7 +21,7 @@ creation
 
 feature
 
-	make is
+	make
 		do
 			multiplier := 1
 		ensure
@@ -36,7 +36,7 @@ feature -- Access
 
 feature {FACTORY}
 
-	set_multiplier (i: INTEGER) is
+	set_multiplier (i: INTEGER)
 		require
 			i > 0
 		do
@@ -47,7 +47,7 @@ feature {FACTORY}
 
 feature {NONE}
 
-	do_set (stream: INPUT_SEQUENCE; tuple: BASIC_VOLUME_TUPLE) is
+	do_set (stream: INPUT_SEQUENCE; tuple: BASIC_VOLUME_TUPLE)
 		do
 			if stream.last_real + epsilon < 0 then
 				handle_input_error (concatenation (<<"Numeric input value %

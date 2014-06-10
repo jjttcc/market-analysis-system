@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Allowed values for the tradable type enumeration"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -10,7 +10,7 @@ class TRADABLE_TYPE_VALUES inherit
 
 feature -- Access
 
-	stock, derivative: INTEGER is unique
+	stock, derivative: INTEGER = unique
 
 invariant
 

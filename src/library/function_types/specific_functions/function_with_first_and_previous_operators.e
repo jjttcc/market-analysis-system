@@ -1,9 +1,9 @@
-indexing
+note
 	description:
 		"One-variable function that adds a first-element operator and %
 		%a 'previous' operator - to be used to construct complex functions %
 		%such as accumulation functions and complex moving averages"
-	note:
+	note1:
 		"`previous_operator' is used to retrieve the previously calculated %
 		%value - that is, the last value placed into `output'.  Since the %
 		%type of these values will be SIMPLE_TUPLE (which has a `value' %
@@ -38,7 +38,7 @@ feature -- Access
 	first_element_operator: RESULT_COMMAND [REAL]
 			-- Operator that produces the first element of the output.
 
-	direct_operators: LIST [COMMAND] is
+	direct_operators: LIST [COMMAND]
 			-- All operators directly attached to Current
 		do
 			Result := Precursor
@@ -55,7 +55,7 @@ feature -- Access
 feature {MARKET_FUNCTION_EDITOR} -- Status setting
 
 	set_operators (op: like operator; pop: like previous_operator;
-				fop: like first_element_operator) is
+				fop: like first_element_operator)
 			-- Set `operator' to `op' and `previous_operator' to `pop'.
 		require
 			op_fop_not_void: op /= Void and fop /= Void
@@ -72,7 +72,7 @@ feature {MARKET_FUNCTION_EDITOR} -- Status setting
 
 feature {NONE}
 
-	forth is
+	forth
 		do
 			target.forth
 			-- Ensure that output, used by previous_operator, is set to

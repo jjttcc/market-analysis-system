@@ -1,4 +1,4 @@
-indexing
+note
 	description: "TA Printing services"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,7 +16,7 @@ creation
 
 feature -- Initialization
 
-	make (field_sep, date_field_sep, time_field_sep, record_sep: STRING) is
+	make (field_sep, date_field_sep, time_field_sep, record_sep: STRING)
 		require
 			not_void: field_sep /= Void and date_field_sep /= Void and
 				time_field_sep /= Void and record_sep /= Void
@@ -56,7 +56,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_output_medium (arg: IO_MEDIUM) is
+	set_output_medium (arg: IO_MEDIUM)
 			-- Set output_medium to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -66,7 +66,7 @@ feature -- Status setting
 			output_medium_set: output_medium = arg and output_medium /= Void
 		end
 
-	set_print_start_date (arg: DATE) is
+	set_print_start_date (arg: DATE)
 			-- Set print_start_date to `arg'.
 		do
 			print_start_date := arg
@@ -74,7 +74,7 @@ feature -- Status setting
 			print_start_date_set: print_start_date = arg
 		end
 
-	set_print_end_date (arg: DATE) is
+	set_print_end_date (arg: DATE)
 			-- Set print_end_date to `arg'.
 		do
 			print_end_date := arg
@@ -82,7 +82,7 @@ feature -- Status setting
 			print_end_date_set: print_end_date = arg
 		end
 
-	set_print_start_time (arg: TIME) is
+	set_print_start_time (arg: TIME)
 			-- Set print_start_time to `arg'.
 		do
 			print_start_time := arg
@@ -90,7 +90,7 @@ feature -- Status setting
 			print_start_time_set: print_start_time = arg
 		end
 
-	set_print_end_time (arg: TIME) is
+	set_print_end_time (arg: TIME)
 			-- Set print_end_time to `arg'.
 		do
 			print_end_time := arg
@@ -98,7 +98,7 @@ feature -- Status setting
 			print_end_time_set: print_end_time = arg
 		end
 
-	set_field_separator (arg: STRING) is
+	set_field_separator (arg: STRING)
 			-- Set field_separator to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -109,7 +109,7 @@ feature -- Status setting
 				field_separator /= Void
 		end
 
-	set_record_separator (arg: STRING) is
+	set_record_separator (arg: STRING)
 			-- Set record_separator to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -120,7 +120,7 @@ feature -- Status setting
 				record_separator /= Void
 		end
 
-	set_date_field_separator (arg: STRING) is
+	set_date_field_separator (arg: STRING)
 			-- Set date_field_separator to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -131,7 +131,7 @@ feature -- Status setting
 				date_field_separator /= Void
 		end
 
-	set_preface (arg: STRING) is
+	set_preface (arg: STRING)
 			-- Set preface to `arg'.
 		do
 			preface := arg
@@ -139,7 +139,7 @@ feature -- Status setting
 			preface_set: preface = arg
 		end
 
-	set_appendix (arg: STRING) is
+	set_appendix (arg: STRING)
 			-- Set appendix to `arg'.
 		do
 			appendix := arg
@@ -149,7 +149,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
+	execute (l: MARKET_TUPLE_LIST [MARKET_TUPLE])
 			-- Output each tuple in `l' to `output_medium'.  If `preface'
 			-- is not empty, output it first.  If `appendix' is not empty,
 			-- output it last.
@@ -171,11 +171,11 @@ feature -- Basic operations
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is True
+	arg_mandatory: BOOLEAN = True
 
 feature {NONE} -- Implementation
 
-	print_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
+	print_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE])
 		local
 			first, last, i: INTEGER
 		do
@@ -198,7 +198,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	print_tuples_with_time (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
+	print_tuples_with_time (l: MARKET_TUPLE_LIST [MARKET_TUPLE])
 		require
 			start_date_if_start_time:
 				print_start_time /= Void implies print_start_date /= Void
@@ -234,14 +234,14 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	print_fields (t: MARKET_TUPLE) is
+	print_fields (t: MARKET_TUPLE)
 		do
 			print_date (t.end_date, 'y', 'm', 'd')
 			put (field_separator)
 			put (t.value.out)
 		end
 
-	print_fields_with_time (t: MARKET_TUPLE) is
+	print_fields_with_time (t: MARKET_TUPLE)
 		do
 			print_date (t.end_date, 'y', 'm', 'd')
 			put (field_separator)
@@ -250,7 +250,7 @@ feature {NONE} -- Implementation
 			put (t.value.out)
 		end
 
-	print_date (date: DATE; f1, f2, f3: CHARACTER) is
+	print_date (date: DATE; f1, f2, f3: CHARACTER)
 			-- Print `date', using f1, f2, and f3 to specify the order
 			-- of the year, month, and day fields.
 		require
@@ -267,7 +267,7 @@ feature {NONE} -- Implementation
 				date_field_separator))
 		end
 
-	print_time (time: TIME; f1, f2, f3: CHARACTER) is
+	print_time (time: TIME; f1, f2, f3: CHARACTER)
 			-- Print `time', using f1, f2, and f3 to specify the order
 			-- of the hour, minute, and second fields.
 		require
@@ -284,7 +284,7 @@ feature {NONE} -- Implementation
 				time_field_separator))
 		end
 
-	first_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER is
+	first_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER
 			-- First index for printing, according to `print_start_date'
 		do
 			if print_start_date /= Void and not l.is_empty then
@@ -306,7 +306,7 @@ feature {NONE} -- Implementation
 			result_ge_1: Result >= 1
 		end
 
-	first_date_time_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER is
+	first_date_time_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER
 			-- First index for printing, according to `print_start_date' and
 			-- `print_start_time'
 		require
@@ -349,7 +349,7 @@ feature {NONE} -- Implementation
 			result_ge_1: Result >= 1
 		end
 
-	last_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER is
+	last_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER
 			-- Last index for printing, according to print_end_date
 		local
 			util: expanded GENERAL_UTILITIES
@@ -385,7 +385,7 @@ feature {NONE} -- Implementation
 			void_date_result: print_end_date = Void implies Result = l.count
 		end
 
-	last_date_time_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER is
+	last_date_time_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER
 			-- Last index for printing, according to print_end_date
 		local
 			util: expanded GENERAL_UTILITIES
@@ -430,13 +430,13 @@ feature {NONE} -- Implementation
 			void_date_result: print_end_date = Void implies Result = l.count
 		end
 
-	put (s: STRING) is
+	put (s: STRING)
 			-- Append `s' to `print_buffer'
 		do
 			print_buffer.append (s)
 		end
 
-	flush_buffer is
+	flush_buffer
 			-- Send `print_buffer' to the output medium
 		do
 			output_medium.put_string (print_buffer)
@@ -455,12 +455,12 @@ feature {NONE} -- Implementation
 	print_buffer: STRING
 			-- Buffer used to collect output to be printed
 
-	Buffer_init_size: INTEGER is 15000
+	Buffer_init_size: INTEGER = 15000
 
 feature {NONE} -- Debugging tools
 
 	print_start_end (l: MARKET_TUPLE_LIST [MARKET_TUPLE];
-		first, last: INTEGER) is
+		first, last: INTEGER)
 			-- Print the date/time of the starting and ending tuples,
 			-- according to first and last in `l'.
 		local
@@ -478,7 +478,7 @@ feature {NONE} -- Debugging tools
 			io.print ("%N")
 		end
 
-	print_requested_start_end_dates is
+	print_requested_start_end_dates
 			-- Print the requested start and end dates.
 		do
 			io.print ("   Requested start date: ")

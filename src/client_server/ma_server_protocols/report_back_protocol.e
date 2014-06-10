@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"Constants used for the 'report-back-on-startup' protocol"
@@ -14,9 +14,9 @@ deferred class
 
 feature -- String constants
 
-	Report_back_flag: STRING is "-report_back"
+	Report_back_flag: STRING = "-report_back"
 			-- Flag for the "report-back" option
 
-	Host_port_separator: CHARACTER is '^'
+	Host_port_separator: CHARACTER = '^'
 
 end

@@ -153,10 +153,10 @@ feature {NONE} -- Implementation / Constants
 	Window_title: STRING is "MAS Control Terminal"
 			-- Title of the window
 
-	Window_width: INTEGER is 350
+	Window_width: INTEGER = 350
 			-- Initial width for this window
 
-	Window_height: INTEGER is 335
+	Window_height: INTEGER = 335
 			-- Initial height for this window
 
 end

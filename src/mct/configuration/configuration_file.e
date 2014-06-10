@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Configuration file abstraction"
 	author: "Jim Cochrane"
 	date: "$Date$"
@@ -39,7 +39,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (line_field_sep: STRING; platfm: MCT_PLATFORM) is
+	make (line_field_sep: STRING; platfm: MCT_PLATFORM)
 		require
 			args_exist: line_field_sep /= Void and platfm /= Void
 		do
@@ -57,7 +57,7 @@ feature -- Access
 			-- The platform on which the executable for this process
 			-- is targeted
 
-	Configuration_file_path: STRING is
+	Configuration_file_path: STRING
 			-- The full path of the MCT configuration file
 		require
 			platform_exists: platform /= Void
@@ -82,7 +82,7 @@ feature -- Access
 			end
 		end
 
-	Configuration_file_name: STRING is "mctrc"
+	Configuration_file_name: STRING = "mctrc"
 			-- The name of the MCT configuration file
 
 feature -- Status report
@@ -105,7 +105,7 @@ feature -- Status report
 
 feature -- Cursor movement
 
-	forth is
+	forth
 		do
 			Precursor
 			post_process
@@ -113,7 +113,7 @@ feature -- Cursor movement
 
 feature -- Element change
 
-	mark_block_as_default (tag, value, begin_value: STRING) is
+	mark_block_as_default (tag, value, begin_value: STRING)
 			-- Mark the block containing `tag + line_field_separator + value'
 			-- whose begin-value matches `begin_value' as a default block by
 			-- inserting the string `Default_record' before the end of the
@@ -151,7 +151,7 @@ feature -- Element change
 
 feature -- Basic operations
 
-	tokenize (separator: STRING) is
+	tokenize (separator: STRING)
 		do
 			Precursor (separator)
 			post_process
@@ -159,7 +159,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	remove_default_marks (begin_value: STRING) is
+	remove_default_marks (begin_value: STRING)
 			-- Remove the "default marks" from all blocks whose begin-value
 			-- matches `begin_value'.
 		require
@@ -208,7 +208,7 @@ feature {NONE} -- Implementation
 				records, Default_record).count = 0
 		end
 
-	insert_default_mark (tag, value, begin_value: STRING) is
+	insert_default_mark (tag, value, begin_value: STRING)
 			-- Mark the first block, b, that satisfies: (b's begin-value
 			-- matches `begin_value' and b contains `tag +
 			-- line_field_separator + value') as the "default block".
@@ -248,7 +248,7 @@ feature {NONE} -- Implementation
 				records), records, tag + line_field_separator + value).i_th (1))
 		end
 
-	post_process is
+	post_process
 			-- Do application-specific processing
 		do
 			at_end_of_block := False
@@ -286,7 +286,7 @@ feature {NONE} -- Implementation
 feature {NONE} -- Implementation - utilities
 
 	matching_block_boundaries (begin_value: STRING;
-		target_list: LIST [STRING]): LIST [INTEGER_INTERVAL] is
+		target_list: LIST [STRING]): LIST [INTEGER_INTERVAL]
 			-- Begin/end indices of all blocks in `target_list'
 			-- whose "begin-value" matches `begin_value'
 		require
@@ -332,7 +332,7 @@ feature {NONE} -- Implementation - utilities
 		end
 
 	matching_indices (intervals: LIST [INTEGER_INTERVAL];
-		target_list: LIST [STRING]; tgt: STRING): LIST [INTEGER] is
+		target_list: LIST [STRING]; tgt: STRING): LIST [INTEGER]
 			-- For each block, b, in `target_list' whose
 			-- begin-end indices are specified in `intervals':
 			--   The indices, if any, of the records in b matching `tgt'
@@ -368,7 +368,7 @@ feature {NONE} -- Implementation - utilities
 		end
 
 	intervals_containing_target (intervals: LIST [INTEGER_INTERVAL];
-		target_list: LIST [STRING]; tgt: STRING): LIST [INTEGER_INTERVAL] is
+		target_list: LIST [STRING]; tgt: STRING): LIST [INTEGER_INTERVAL]
 			-- All elements of `intervals' that represent a block in
 			-- `target_list' that contains the record `tgt'
 		require
@@ -406,7 +406,7 @@ feature {NONE} -- Implementation - utilities
 	line_field_separator: STRING
 			-- Separator used to delimit fields in a line (record)
 
-	write_line (s: STRING) is
+	write_line (s: STRING)
 			-- Write `s' appended with '%N' to `target'.
 		require
 			s_exists: s /= Void
@@ -422,7 +422,7 @@ feature {NONE} -- Implementation - utilities
 			end
 		end
 
-	begin_record (begin_value: STRING): STRING is
+	begin_record (begin_value: STRING): STRING
 		require
 			begin_value_exists: begin_value /= Void
 		do
@@ -435,7 +435,7 @@ feature {NONE} -- Implementation - utilities
 feature {NONE} -- Implementation - status report utilities
 
 	within_range (index_range: INTEGER_INTERVAL;
-		target_list: LIST [STRING]): BOOLEAN is
+		target_list: LIST [STRING]): BOOLEAN
 			-- Is the specified pair of indices within the valid index
 			-- range of `target_list'?
 		require
@@ -446,21 +446,21 @@ feature {NONE} -- Implementation - status report utilities
 				target_list.count >= index_range.upper
 		end
 
-	not_last (s: STRING): BOOLEAN is
+	not_last (s: STRING): BOOLEAN
 		do
 			Result := not records.islast
 		ensure
 			not_last: Result = not records.islast
 		end
 
-	is_beginning_of_block (s: STRING): BOOLEAN is
+	is_beginning_of_block (s: STRING): BOOLEAN
 			-- Is `s' the beginning of a "block"?
 		do
 			Result := s /= Void and then
 				equal (s.substring (1, Begin_tag.count), Begin_tag)
 		end
 
-	is_end_of_block (s: STRING): BOOLEAN is
+	is_end_of_block (s: STRING): BOOLEAN
 			-- Is `s' the end of a "block"?
 		do
 			Result := s /= Void and then
@@ -469,13 +469,13 @@ feature {NONE} -- Implementation - status report utilities
 
 feature {NONE} -- Implementation - constants
 
-	Write_error: STRING is
+	Write_error: STRING
 		once
 			Result := "Error writing to configuration file " +
 				Configuration_file_path
 		end
 
-	Default_record: STRING is
+	Default_record: STRING
 		once
 			Result := Mark_specifier + line_field_separator + Default_mark
 		ensure

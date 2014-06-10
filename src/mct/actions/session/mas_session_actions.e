@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Actions for a MAS session for GUI-event responses"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -24,7 +24,7 @@ create
 
 feature {NONE} -- Initialization
 
-	post_initialize is
+	post_initialize
 		local
 			cmd: MCT_COMMAND
 		do
@@ -43,7 +43,7 @@ feature -- Access
 
 feature -- Actions
 
-	start_charting_app is
+	start_charting_app
 			-- Start the MAS Charting application
 		local
 			cmd: COMMAND
@@ -52,7 +52,7 @@ feature -- Actions
 			cmd.execute (owner_window)
 		end
 
-	terminate_session is
+	terminate_session
 			-- Terminate an existing MAS "session".
 		local
 			cmd: COMMAND
@@ -68,7 +68,7 @@ feature -- Actions
 			end
 		end
 
-	start_command_line is
+	start_command_line
 			-- Start the MAS command-line client.
 		local
 			cmd: COMMAND
@@ -80,7 +80,7 @@ feature -- Actions
 
 feature {NONE} -- Implementation - Hook routines
 
-	cleanup is
+	cleanup
 		do
 			if configuration.terminate_sessions_on_exit then
 				terminate_session

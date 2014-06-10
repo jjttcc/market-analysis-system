@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Abstraction for a user interface that obtains selections needed for %
 		%creation of a recursive structure (or tree) of objects of type G"
@@ -24,7 +24,7 @@ deferred class OBJECT_EDITING_INTERFACE [G] inherit
 
 feature -- Access
 
-	object_selection_from_type (type: STRING; msg: STRING; top: BOOLEAN): G is
+	object_selection_from_type (type: STRING; msg: STRING; top: BOOLEAN): G
 			-- User-selected object whose type conforms to `type' and is
 			-- not represented in `exclude_list'.
 			-- `top' specifies whether the returned instance will be
@@ -50,7 +50,7 @@ feature -- Access
 			result_not_void: Result /= Void
 		end
 
-	object_selection_from_list (obj_list: LIST [G]; msg: STRING): G is
+	object_selection_from_list (obj_list: LIST [G]; msg: STRING): G
 			-- Object selected by user from `obj_list'.  If
 			-- initialization_needed = True, then Result will be
 			-- initialized.
@@ -66,7 +66,7 @@ feature -- Access
 				not obj_list.is_empty implies Result /= Void
 		end
 
-	object_types: HASH_TABLE [ARRAYED_LIST [G], STRING] is
+	object_types: HASH_TABLE [ARRAYED_LIST [G], STRING]
 			-- Hash table of lists of class instances - each list contains
 			-- instances of all classes whose type conforms to the Hash
 			-- table key.  Defaults to Void for the convenience of
@@ -79,7 +79,7 @@ feature -- Access
 
 feature -- Status setting
 
-	reset is
+	reset
 			-- Initialize state and clear cached values.
 		do
 			initialization_needed := False
@@ -89,7 +89,7 @@ feature -- Status setting
 			descendant_reset
 		end
 
-	set_exclude_list (arg: like exclude_list) is
+	set_exclude_list (arg: like exclude_list)
 			-- Set exclude_list to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -101,7 +101,7 @@ feature -- Status setting
 
 feature {NONE} -- Implementation
 
-	user_object_selection (objects: LIST [G]; tag: STRING): G is
+	user_object_selection (objects: LIST [G]; tag: STRING): G
 			-- User's selection of a member of `objects' (deep-cloned) or
 			-- a member of `current_objects' that is in `objects' (shared)
 			-- If the selection is from `current_objects',
@@ -177,12 +177,12 @@ feature {NONE} -- Implementation
 			Result /= Void
 		end
 
-	initialization_map: HASH_TABLE [INTEGER, STRING] is
+	initialization_map: HASH_TABLE [INTEGER, STRING]
 			-- Mapping of G names to initialization classifications
 		deferred
 		end
 
-	initialize_object (arg: G) is
+	initialize_object (arg: G)
 			-- Set object parameters.
 		require
 			editor_set: editor /= Void
@@ -190,7 +190,7 @@ feature {NONE} -- Implementation
 		deferred
 		end
 
-	valid_types (obj_list, ref_list: LIST [G]): LIST [G] is
+	valid_types (obj_list, ref_list: LIST [G]): LIST [G]
 			-- All elements of `obj_list' whose type matches that of
 			-- an element of `ref_list'
 		require
@@ -217,7 +217,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	valid_types_exclude (obj_list, ref_list: LIST [G]): LIST [G] is
+	valid_types_exclude (obj_list, ref_list: LIST [G]): LIST [G]
 			-- All elements of `obj_list' whose type DOES NOT match that of
 			-- an element of `ref_list'
 		require
@@ -254,7 +254,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	current_objects: LIST [G] is
+	current_objects: LIST [G]
 		do
 			if current_object_list = Void then
 				create {LINKED_LIST [G]} current_object_list.make
@@ -266,7 +266,7 @@ feature {NONE} -- Implementation
 
 	current_object_list: LIST [G]
 
-	add_selection_tag (taglist: SEQUENCE [STRING]; o: G; with_name: BOOLEAN) is
+	add_selection_tag (taglist: SEQUENCE [STRING]; o: G; with_name: BOOLEAN)
 			-- Extract relevant information from `o' and add it to
 			-- `taglist'.  If `with_name', include `o's name.
 		require
@@ -281,12 +281,12 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - hook methods
 
-	accepted_by_user (o: G): BOOLEAN is
+	accepted_by_user (o: G): BOOLEAN
 			-- Does the user want to select `o'?
 		deferred
 		end
 
-	clone_needed: BOOLEAN is
+	clone_needed: BOOLEAN
 			-- Do selected objects need to be cloned?
 		deferred
 		end
@@ -298,12 +298,12 @@ feature {NONE} -- Implementation - hook methods
 	initialization_needed: BOOLEAN
 			-- Does the selected object need to be initialized?
 
-	editing_needed: BOOLEAN is
+	editing_needed: BOOLEAN
 			-- Does the newly selected object need editing?
 		deferred
 		end
 
-	edit_object (o: G; msg: STRING) is
+	edit_object (o: G; msg: STRING)
 			-- Perform any needed editing of `o'.
 		require
 			editing_needed: editing_needed
@@ -311,12 +311,12 @@ feature {NONE} -- Implementation - hook methods
 			-- default null implementation
 		end
 
-	descendant_reset is
+	descendant_reset
 			-- Reset descendant's state - null by default - redefine if needed.
 		do
 		end
 
-	name_for (o: G): STRING is
+	name_for (o: G): STRING
 			-- `o's name (preceded by a space and enclosed in parentheses),
 			-- or empty string if `o' has no name or if the name is not
 			-- relevant for editing purposes

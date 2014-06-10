@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Market Analysis Command-Line (MACL) client - accesses the %
 		%MA server command-line interface via a socket connection."
 	author: "Jim Cochrane"
@@ -35,7 +35,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		local
 			processor: COMMAND_PROCESSOR
 		do
@@ -70,7 +70,7 @@ feature {NONE} -- Initialization
 			handle_fatal_exception
 		end
 
-	initialize is
+	initialize
 		do
 			not_verbose_reporting := True
 			output_device := io.output
@@ -101,7 +101,7 @@ feature {NONE} -- Initialization
 
 feature {NONE} -- Utilities
 
-	abort (msg: STRING) is
+	abort (msg: STRING)
 		do
 			if msg /= Void then
 				print (msg + " - ")
@@ -110,7 +110,7 @@ feature {NONE} -- Utilities
 			exit (-1)
 		end
 
-	user_response: STRING is
+	user_response: STRING
 			-- Obtain user response, skipping comments (# ...) and
 			-- stripping off leading white space
 		local
@@ -145,7 +145,7 @@ feature {NONE} -- Utilities
 			Result_exists: Result /= Void
 		end
 
-	exit_and_close_connection is
+	exit_and_close_connection
 			-- Exit and close the connection.
 		do
 			print ("Exiting ...%N")
@@ -155,7 +155,7 @@ feature {NONE} -- Utilities
 			end
 		end
 
-	print (a: ANY) is
+	print (a: ANY)
 		do
 			if command_line.quiet_mode then
 				output_message (".")
@@ -165,7 +165,7 @@ feature {NONE} -- Utilities
 			end
 		end
 
-	handle_fatal_exception is
+	handle_fatal_exception
 		local
 			retried: BOOLEAN
 		do
@@ -183,7 +183,7 @@ feature {NONE} -- Utilities
 			retry
 		end
 
-	handle_error (processor: COMMAND_PROCESSOR) is
+	handle_error (processor: COMMAND_PROCESSOR)
 			-- If `processor.error', take appropriate action.
 		do
 			if processor.error then
@@ -197,7 +197,7 @@ feature {NONE} -- Utilities
 			end
 		end
 
-	output_current_input_record (processor: COMMAND_PROCESSOR) is
+	output_current_input_record (processor: COMMAND_PROCESSOR)
 			-- If `processor.record', output `processor.input_record' to
 			-- `command_line.output_file'.
 		require
@@ -213,7 +213,7 @@ feature {NONE} -- Utilities
 				processor.input_record.is_empty
 		end
 
-	close_output_file (processor: COMMAND_PROCESSOR) is
+	close_output_file (processor: COMMAND_PROCESSOR)
 			-- If `processor.record', close `command_line.output_file'.
 		require
 			no_more_output: processor.record implies
@@ -240,9 +240,9 @@ feature {NONE} -- Implementation
 
 	record_file: PLAIN_TEXT_FILE
 
-	Exit_string: STRING is "x%N"
+	Exit_string: STRING = "x%N"
 
-	Comment_character: CHARACTER is '#'
+	Comment_character: CHARACTER = '#'
 
 	host: STRING
 
@@ -250,12 +250,12 @@ feature {NONE} -- Implementation
 
 	last_input_line_number: INTEGER
 
-	application_name: STRING is "client"
+	application_name: STRING = "client"
 
-	Abnormal_termination_message: STRING is
+	Abnormal_termination_message: STRING
 		"%NUnexpected exception occurred.%N"
 
-	Invalid_input_message: STRING is
+	Invalid_input_message: STRING
 		do
 			Result := "%NInvalid or incorrect user input on line " +
 				last_input_line_number.out + "%N"

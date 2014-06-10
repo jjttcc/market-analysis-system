@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"An event coordinator that uses market event generators to generate %
 		%market events and passes a queue of the generated events to a %
@@ -27,7 +27,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_start_date_time (d: DATE_TIME) is
+	set_start_date_time (d: DATE_TIME)
 			-- For each member of `event_generators', set the date and time
 			-- for which to begin analysis to `d' and update `start_date_time'
 			-- to `d'.
@@ -38,7 +38,7 @@ feature -- Status setting
 			date_time_set: start_date_time = d
 		end
 
-	set_event_generators (arg: LINEAR [MARKET_EVENT_GENERATOR]) is
+	set_event_generators (arg: LINEAR [MARKET_EVENT_GENERATOR])
 			-- Set event_generators to `arg', call `set_start_date_time'
 			-- on each one with `start_date_time', and do any other
 			-- initialization needed on each event generator.
@@ -53,7 +53,7 @@ feature -- Status setting
 				event_generators /= Void
 		end
 
-	set_dispatcher (arg: EVENT_DISPATCHER) is
+	set_dispatcher (arg: EVENT_DISPATCHER)
 			-- Set dispatcher to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -65,7 +65,7 @@ feature -- Status setting
 
 feature {NONE} -- Implementation
 
-	update_generators_date_time is
+	update_generators_date_time
 			-- Call `set_start_date_time' on each generator with
 			-- `start_date_time'.
 		do

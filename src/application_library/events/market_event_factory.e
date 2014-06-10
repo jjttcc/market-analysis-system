@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Factory that parses an input sequence and creates a MARKET_EVENT with %
 		%the result"
@@ -53,7 +53,7 @@ feature {NONE} -- Implementation
 	current_event_type: EVENT_TYPE
 			-- Last EVENT_TYPE scanned by `scan_event_type'
 
-	scan_event_type is
+	scan_event_type
 			-- Scan the next event ID and set current_event_type to the event
 			-- specified by that ID.
 		local
@@ -73,14 +73,14 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	error_init is
+	error_init
 			-- Initialize error-handling attributes
 		do
 			last_error := Void
 			error_occurred := False
 		end
 
-	skip_field_separator is
+	skip_field_separator
 			-- Scan the current character - expected to match field_separator.
 		do
 			input.read_character

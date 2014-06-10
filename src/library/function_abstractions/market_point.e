@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A MARKET_TUPLE that functions as a point in a line"
 	author: "Jim Cochrane"
@@ -22,11 +22,11 @@ creation
 
 feature -- Initialization
 
-	make is
+	make
 		do
 		end
 
-	set_x_y_date (x_value, y_value: REAL; d: DATE_TIME) is
+	set_x_y_date (x_value, y_value: REAL; d: DATE_TIME)
 		do
 			x := x_value
 			y := y_value
@@ -45,11 +45,11 @@ feature -- Access
 
 feature -- Status report
 
-	has_additional_queries: BOOLEAN is True
+	has_additional_queries: BOOLEAN = True
 
 feature -- Status setting
 
-	set_x_y (x_value, y_value: REAL) is
+	set_x_y (x_value, y_value: REAL)
 			-- Set x and y coordinates.
 		do
 			x := x_value
@@ -58,7 +58,7 @@ feature -- Status setting
 			set: x = x_value and y = y_value
 		end
 
-	set_date (d: DATE_TIME) is
+	set_date (d: DATE_TIME)
 			-- Set the date.
 		require
 			not_void: d /= Void
@@ -68,7 +68,7 @@ feature -- Status setting
 			set: date_time = d
 		end
 
-	set_x (arg: REAL) is
+	set_x (arg: REAL)
 			-- Set x to `arg'.
 		do
 			x := arg
@@ -76,7 +76,7 @@ feature -- Status setting
 			-- x = arg
 		end
 
-	set_y (arg: REAL) is
+	set_y (arg: REAL)
 			-- Set y to `arg'.
 		do
 			y := arg

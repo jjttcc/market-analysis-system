@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Access to globally available singletons and other services"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -24,9 +24,9 @@ inherit
 
 feature -- Status report
 
-	debug_state: DEBUG_STATE is
+	debug_state: DEBUG_STATE
 			-- Debugging settings
-		indexing
+		note
 			once_status: global
 		once
 			create Result.make
@@ -34,7 +34,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	adjust_start_time (dt: DATE_TIME; type: TIME_PERIOD_TYPE) is
+	adjust_start_time (dt: DATE_TIME; type: TIME_PERIOD_TYPE)
 			-- Adjust `dt' to the starting date/time for a composite
 			-- tuple list according to `type'.
 		do
@@ -55,7 +55,7 @@ feature -- Basic operations
 			end
 		end
 
-	adjust_intraday_start_time (dt: DATE_TIME; type: TIME_PERIOD_TYPE) is
+	adjust_intraday_start_time (dt: DATE_TIME; type: TIME_PERIOD_TYPE)
 			-- Adjust `dt' to the starting date/time for an intraday
 			-- composite tuple list according to `type'.
 		require
@@ -81,7 +81,7 @@ feature -- Basic operations
 			dt.make (dt.year, dt.month, dt.day, hour, minute, 0)
 		end
 
-	set_to_previous_monday (d: DATE_TIME) is
+	set_to_previous_monday (d: DATE_TIME)
 			-- If `d' is not a Monday, set its value to the Monday
 			-- preceding its current value.
 		require
@@ -94,7 +94,7 @@ feature -- Basic operations
 			set_to_monday: d.date.day_of_the_week = 2
 		end
 
-	set_to_first_weekday_of_month (d: DATE_TIME) is
+	set_to_first_weekday_of_month (d: DATE_TIME)
 			-- Set `d' to the first weekday of `d's month.
 		require
 			d_not_void: d /= Void

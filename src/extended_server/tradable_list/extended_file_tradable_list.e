@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"An abstraction that provides a virtual list of tradables by %
 		%holding a list that contains the input data file name of each %
@@ -41,7 +41,7 @@ creation
 
 feature -- Initialization
 
-	make (fnames: LIST [STRING]; factory: TRADABLE_FACTORY) is
+	make (fnames: LIST [STRING]; factory: TRADABLE_FACTORY)
 			-- `symbols' will be created from `fnames'
 		do
 			ftl_make (fnames, factory)

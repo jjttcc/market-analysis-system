@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Factory that parses an input sequence and creates an %
 		%ATOMIC_MARKET_EVENT with the result"
@@ -23,7 +23,7 @@ creation
 
 feature -- Initialization
 
-	make (infile: like input; fs: like field_separator) is
+	make (infile: like input; fs: like field_separator)
 		require
 			args_not_void: infile /= Void
 			event_types_setup: event_types /= Void and event_types.count > 0
@@ -40,7 +40,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_field_separator (arg: like field_separator) is
+	set_field_separator (arg: like field_separator)
 			-- Set field_separator to `arg'.
 		do
 			field_separator := arg
@@ -50,7 +50,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute is
+	execute
 			-- Scan input and create an ATOMIC_MARKET_EVENT from it.
 			-- If a fatal error is encountered while scanning, an exception
 			-- is thrown and error_occurred is set to True.
@@ -73,7 +73,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	scan_symbol is
+	scan_symbol
 		do
 			scan_field
 			last_symbol := last_string
@@ -98,7 +98,7 @@ feature {NONE} -- Implementation
 	last_time: TIME
 			-- Last time scanned (represented as string)
 
-	scan_date is
+	scan_date
 			-- Scan the date and set `last_date' to it.
 		do
 			input.read_integer
@@ -113,7 +113,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	scan_time is
+	scan_time
 			-- Scan the time and set `last_time' to it - with the expected
 			-- format: h:m:s.
 		local
@@ -163,7 +163,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	scan_field is
+	scan_field
 			-- Scan the current field and place the result into `last_string'.
 		do
 			if last_string = Void then

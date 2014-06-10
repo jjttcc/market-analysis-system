@@ -1,4 +1,4 @@
-indexing
+note
 	description: "N-based calculations that take an operand"
 	detailed_description: "The operand is only executed on initialization %
 		%and it's execute routine must not expect a valid argument."
@@ -34,7 +34,7 @@ creation
 
 feature -- Initialization
 
-	make (op: like operand; i: like n) is
+	make (op: like operand; i: like n)
 		require
 			op_not_void: op /= Void
 			i_gt_0: i > 0
@@ -48,7 +48,7 @@ feature -- Initialization
 
 feature {FACTORY} -- Initialization
 
-	initialize (arg: ANY) is
+	initialize (arg: ANY)
 		local
 			ns: N_RECORD_STRUCTURE
 		do
@@ -64,7 +64,7 @@ feature {FACTORY} -- Initialization
 
 feature {NONE} -- Implmentation
 
-	calculate: REAL is
+	calculate: REAL
 			-- Perform the calculation based on n.
 		do
 			operand.execute (Void)

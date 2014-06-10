@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Allowed values for a 'yes/no/help' menu selection"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -10,22 +10,22 @@ deferred class YES_NO_HELP_VALUES inherit
 
 feature -- Access
 
-	yes: CHARACTER is 'y'
+	yes: CHARACTER = 'y'
 		-- Constant for 'yes' selection
 
-	yes_u: CHARACTER is 'Y'
+	yes_u: CHARACTER = 'Y'
 		-- Constant for 'yes' selection, uppercase
 
-	no: CHARACTER is 'n'
+	no: CHARACTER = 'n'
 		-- Constant for 'no' selection
 
-	no_u: CHARACTER is 'N'
+	no_u: CHARACTER = 'N'
 		-- Constant for 'no' selection, uppercase
 
-	help: CHARACTER is 'h'
+	help: CHARACTER = 'h'
 		-- Constant for 'help' selection
 
-	help_u: CHARACTER is 'H'
+	help_u: CHARACTER = 'H'
 		-- Constant for 'help' selection, uppercase
 
 end

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Configuration of MCT settings"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,22 +21,22 @@ create
 
 feature {NONE} -- Initialization
 
-	make is
+	make
         do
 			create config_command_line.make (spec_file_name, mctrc_file_name)
         end
 
 feature -- Access
 
-	description: STRING is "Configuring"
+	description: STRING = "Configuring"
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is True
+	arg_mandatory: BOOLEAN = True
 
 feature -- Basic operations
 
-	execute (options: INSTALL_TOOL_COMMAND_LINE) is
+	execute (options: INSTALL_TOOL_COMMAND_LINE)
 		local
 			file_processor: FILE_PROCESSOR
 		do
@@ -51,7 +51,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	spec_body: STRING is
+	spec_body: STRING
 		once
 			if not spec_guts_file.is_empty then
 				spec_guts_file.read_stream (spec_guts_file.count)
@@ -62,13 +62,13 @@ feature {NONE} -- Implementation
 --print ("Spec body: '" + Result + "'%N")
 		end
 
-	spec_file: PLAIN_TEXT_FILE is
+	spec_file: PLAIN_TEXT_FILE
 			-- The specification file to be created
 		once
 			create Result.make_open_write (spec_file_name)
 		end
 
-	spec_guts_file: PLAIN_TEXT_FILE is
+	spec_guts_file: PLAIN_TEXT_FILE
 			-- The file from which to obtain the 'guts' of the
 			-- specification file
 		once
@@ -81,7 +81,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	spec_file_intro (options: INSTALL_TOOL_COMMAND_LINE): STRING is
+	spec_file_intro (options: INSTALL_TOOL_COMMAND_LINE): STRING
 			-- Beginning of the MCT specification file
 		local
 			appdir_spec: STRING
@@ -92,17 +92,17 @@ feature {NONE} -- Implementation
 			Result := Result + appdir_spec
 		end
 
-	spec_file_conclusion: STRING is
+	spec_file_conclusion: STRING
 			-- End of the MCT specification file
 		once
 			Result := "replaceend%N"
 		end
 
-	spec_file_name: STRING is "repl_spec"
+	spec_file_name: STRING = "repl_spec"
 
-	nt_spec_file_name: STRING is "nt_repl_spec"
+	nt_spec_file_name: STRING = "nt_repl_spec"
 
-	pre_nt_spec_file_name: STRING is "pre_nt_repl_spec"
+	pre_nt_spec_file_name: STRING = "pre_nt_repl_spec"
 
 	config_command_line: HARD_CODED_CONFIG_TOOL_COMMAND_LINE
 

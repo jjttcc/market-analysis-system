@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Objects that provide services for processing a sequential %
 		%structure of market tuples."
 	author: "Jim Cochrane"
@@ -18,14 +18,14 @@ deferred class
 
 feature {FACTORY, COMMAND}
 
-	target: CHAIN [MARKET_TUPLE] is
+	target: CHAIN [MARKET_TUPLE]
 			-- The target sequence to be processed
 		deferred
 		end
 
 feature {NONE} -- Status report
 
-	invariant_value: BOOLEAN is
+	invariant_value: BOOLEAN
 			-- Is the invariant satisfied?
 			-- (Redefinitions of this feature will usually involve
 			-- `target'; if so, make sure that the result is defined
@@ -34,7 +34,7 @@ feature {NONE} -- Status report
 			Result := True
 		end
 
-	test: BOOLEAN is
+	test: BOOLEAN
 			-- Test to be applied to item at current position in `target'
 			-- (default: value of `item_test' on item)
 		require
@@ -46,7 +46,7 @@ feature {NONE} -- Status report
 			not_off: not target.off
 		end;
 
-	item_test (v: MARKET_TUPLE): BOOLEAN is
+	item_test (v: MARKET_TUPLE): BOOLEAN
 			-- Test to be applied to item `v'
 			-- (default: False)
 		do
@@ -54,7 +54,7 @@ feature {NONE} -- Status report
 
 feature {NONE} -- Cursor movement
 
-	do_all is
+	do_all
 			-- Apply `action' to every item of `target'.
 			-- (from the `start' of `target')
 		do
@@ -72,7 +72,7 @@ feature {NONE} -- Cursor movement
 			exhausted
 		end;
 
-	until_continue is
+	until_continue
 			-- Apply `action' to every item of `target' from current
 			-- position, up to but excluding first one satisfying `test'.
 		require
@@ -93,7 +93,7 @@ feature {NONE} -- Cursor movement
 			invariant_satisfied: invariant_value
 		end;
 
-	continue_until is
+	continue_until
 			-- Apply `action' to every item of `target' up to
 			-- and including first one satisfying `test'.
 			-- (from the current position of `target').
@@ -115,7 +115,7 @@ feature {NONE} -- Cursor movement
 			achieved: not exhausted implies test
 		end;
 
-	start is
+	start
 			-- Move to first position of `target'.
 		require
 			traversable_exists: target /= Void
@@ -123,7 +123,7 @@ feature {NONE} -- Cursor movement
 			target.start
 		end;
 
-	forth is
+	forth
 			-- Move to next position of `target'.
 		require
 			traversable_exists: target /= Void
@@ -131,7 +131,7 @@ feature {NONE} -- Cursor movement
 			target.forth
 		end;
 
-	off: BOOLEAN is
+	off: BOOLEAN
 			-- Is position of `target' off?
 		require
 			traversable_exists: target /= Void
@@ -139,7 +139,7 @@ feature {NONE} -- Cursor movement
 			Result := target.off
 		end;
 
-	exhausted: BOOLEAN is
+	exhausted: BOOLEAN
 			-- Is `target' exhausted?
 		require
 			traversable_exists: target /= Void
@@ -149,7 +149,7 @@ feature {NONE} -- Cursor movement
 
 feature {NONE} -- Element change
 
-	action is
+	action
 			-- Action to be applied to item at current position
 			-- in `target' (default: `item_action' on that item).
 			-- For iterators to work properly, redefined versions of
@@ -166,7 +166,7 @@ feature {NONE} -- Element change
 			invariant_satisfied: invariant_value
 		end;
 
-	item_action (v: MARKET_TUPLE) is
+	item_action (v: MARKET_TUPLE)
 			-- Action to be applied to item `v'
 			-- (Default: do nothing.)
 		do

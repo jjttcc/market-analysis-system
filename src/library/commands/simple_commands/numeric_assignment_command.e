@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Commands that provide an assignment instruction by %
 		%executing a `main_operator' and storing the resulting numeric %
 		%value in a `target'.  The result (`value') is then `target.value'."
@@ -28,7 +28,7 @@ create
 
 feature -- Initialization
 
-	make (main_op: RESULT_COMMAND [REAL]; target_op: NUMERIC_VALUE_COMMAND) is
+	make (main_op: RESULT_COMMAND [REAL]; target_op: NUMERIC_VALUE_COMMAND)
 		require
 			args_exist: main_op /= Void and target_op /= Void
 		do
@@ -46,7 +46,7 @@ feature -- Access
 	target: NUMERIC_VALUE_COMMAND
 			-- The "target" object - updated with the last calculated value.
 
-	children: LIST [COMMAND] is
+	children: LIST [COMMAND]
 		do
 			Result := Precursor
 			Result.extend (target)
@@ -54,7 +54,7 @@ feature -- Access
 
 feature -- Element change
 
-	set_target (arg: NUMERIC_VALUE_COMMAND) is
+	set_target (arg: NUMERIC_VALUE_COMMAND)
 			-- Set `target' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -66,7 +66,7 @@ feature -- Element change
 
 feature -- Basic operations
 
-	operate (v: REAL) is
+	operate (v: REAL)
 		do
 			value := v
 			target.set_value (value)

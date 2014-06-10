@@ -1,4 +1,4 @@
-indexing
+note
 	description: "COMMANDs specialized for MCT"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -18,7 +18,7 @@ feature -- Access
 	description: STRING
 			-- Description of the command
 
-	contents: STRING is
+	contents: STRING
 			-- Contents of the command to be executed
 		deferred
 		ensure
@@ -30,7 +30,7 @@ feature -- Access
 
 feature -- Status report
 
-	set_debugging_on (arg: BOOLEAN) is
+	set_debugging_on (arg: BOOLEAN)
 			-- Set `debugging_on' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -42,7 +42,7 @@ feature -- Status report
 
 feature -- Element change
 
-	set_description (arg: STRING) is
+	set_description (arg: STRING)
 			-- Set `description' to `arg'.
 		require
 			arg_not_void: arg /= Void

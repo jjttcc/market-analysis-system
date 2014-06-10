@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Builder of SOCKET_TRADABLE_LISTs"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,7 +16,7 @@ creation
 
 feature -- Initialization
 
-	make (factory: TRADABLE_FACTORY; portnum: INTEGER) is
+	make (factory: TRADABLE_FACTORY; portnum: INTEGER)
 		do
 			make_factories (factory)
 			port_number := portnum
@@ -32,7 +32,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	build_lists is
+	build_lists
 		local
 			input_connection: EXPERIMENTAL_INPUT_DATA_CONNECTION
 		do

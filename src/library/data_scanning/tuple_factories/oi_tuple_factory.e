@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Tuple factory that creates an OPEN_INTEREST_TUPLE";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -15,7 +15,7 @@ class OI_TUPLE_FACTORY inherit
 
 feature
 
-	execute is
+	execute
 		do
 			create product.make
 		end

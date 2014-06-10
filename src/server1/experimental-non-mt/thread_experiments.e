@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Dummy thread cxass - stand-in until threads are actually used"
 	author: "Jim Cochrane"
@@ -15,6 +15,6 @@ create
 
 feature
 
-	make (b: BOOLEAN) is do end
+	make (b: BOOLEAN) do end
 
 end

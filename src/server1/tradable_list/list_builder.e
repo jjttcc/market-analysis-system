@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Facilities needed by descendants - specific list builders"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -10,7 +10,7 @@ deferred class LIST_BUILDER
 
 feature {NONE} -- Initialization
 
-	make_factories (factory: TRADABLE_FACTORY) is
+	make_factories (factory: TRADABLE_FACTORY)
 			-- Initialize tradable factories from `factory'.  A separate
 			-- tradable factory for intraday data is used for efficiency.
 		require
@@ -29,9 +29,9 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	daily_list: TRADABLE_LIST is deferred end
+	daily_list: TRADABLE_LIST deferred end
 
-	intraday_list: TRADABLE_LIST is deferred end
+	intraday_list: TRADABLE_LIST deferred end
 
 	tradable_factory: TRADABLE_FACTORY
 
@@ -39,7 +39,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	execute is
+	execute
 			-- Build and configure `daily_list' and `intraday_list'.
 		do
 			build_lists
@@ -56,7 +56,7 @@ feature -- Basic operations
 
 feature {NONE} -- Hook routines
 
-	build_lists is
+	build_lists
 			-- Build `daily_list' and `intraday_list'.
 		require
 			factories_exist: tradable_factory /= Void and
@@ -71,7 +71,7 @@ feature {NONE} -- Hook routines
 				not intraday_list.intraday)
 		end
 
-	descendant_build_lists_precondition: BOOLEAN is
+	descendant_build_lists_precondition: BOOLEAN
 			-- Additional precondition for `build_lists' in descendant
 			-- classes
 		do

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A stock split";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -25,7 +25,7 @@ feature -- Access
 	value: REAL
 			-- value of the split
 
-	date: DATE is
+	date: DATE
 			-- The date the split became effective
 		do
 			if date_time /= Void then
@@ -35,9 +35,9 @@ feature -- Access
 
 feature -- Status report
 
-	has_additional_queries: BOOLEAN is True
+	has_additional_queries: BOOLEAN = True
 
-	is_equal (other: like Current): BOOLEAN is
+	is_equal (other: like Current): BOOLEAN
 		do
 			Result := other.date.is_equal (date) and
 						rabs (value - other.value) < epsilon
@@ -48,7 +48,7 @@ feature -- Status report
 
 feature {VALUE_SETTER}
 
-	set_value (v: REAL) is
+	set_value (v: REAL)
 			-- Set value to `v'.
 		require
 			gt_0: v > 0

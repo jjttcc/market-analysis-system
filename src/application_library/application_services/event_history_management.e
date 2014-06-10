@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Services for loading and saving event histories for %
 		%MARKET_EVENT_REGISTRANTs - intended to be used via inheritance"
 	author: "Jim Cochrane"
@@ -24,7 +24,7 @@ feature
 	last_error: STRING
 			-- Description of the last error that occurred
 
-	load_market_event_histories is
+	load_market_event_histories
 			-- Load event history for all MARKET_EVENT_REGISTRANTs.
 		local
 			l: LIST [MARKET_EVENT_REGISTRANT]
@@ -54,7 +54,7 @@ feature
 			on_error: error_occurred implies last_error /= Void
 		end
 
-	save_market_event_histories is
+	save_market_event_histories
 			-- Save event history for all MARKET_EVENT_REGISTRANTs.
 		local
 			l: FILE_LOCK
@@ -78,7 +78,7 @@ feature
 			unregister_for_termination (Current)
 		end
 
-	make_event_locks is
+	make_event_locks
 			-- Make locks for event history files.
 		local
 			l: FILE_LOCK
@@ -107,12 +107,12 @@ feature
 
 	event_locks: HASH_TABLE [FILE_LOCK, STRING]
 
-	make_lock (name: STRING): FILE_LOCK is
+	make_lock (name: STRING): FILE_LOCK
 			-- Create a new lock.
 		deferred
 		end
 
-	cleanup is
+	cleanup
 			-- Remove all `event_locks'.
 		local
 			l: FILE_LOCK

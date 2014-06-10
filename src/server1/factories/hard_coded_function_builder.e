@@ -1,6 +1,6 @@
-indexing
+note
 	description: "Builder of a list of hard-coded market functions"
-	note: "Hard-coded standard indicators"
+	note1: "Hard-coded standard indicators"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -30,7 +30,7 @@ creation
 
 feature
 
-	make is
+	make
 		do
 			create innermost_function.make ("dummy", Void, Void)
 			innermost_function.set_trading_period_type (
@@ -46,24 +46,24 @@ feature -- Access
 	innermost_function: STOCK
 			-- Dummy for innermost function for complex functions
 
-	Simple_MA_n: INTEGER is 10
-	EMA_n: INTEGER is 10
-	Smaller_MACD_EMA_n: INTEGER is 12
-	Larger_MACD_EMA_n: INTEGER is 26
-	MACD_Signal_Line_EMA_n: INTEGER is 9
-	Momentum_n: INTEGER is 7
-	Rate_of_Change_n: INTEGER is 10
-	StochasticK_n: INTEGER is 5
-	StochasticD_n: INTEGER is 3
-	Williams_n: INTEGER is 7
-	RSI_n: INTEGER is 7
-	Wilder_MA_n: INTEGER is 5
-	WMA_n: INTEGER is 5
-	SD_n: INTEGER is 5
+	Simple_MA_n: INTEGER = 10
+	EMA_n: INTEGER = 10
+	Smaller_MACD_EMA_n: INTEGER = 12
+	Larger_MACD_EMA_n: INTEGER = 26
+	MACD_Signal_Line_EMA_n: INTEGER = 9
+	Momentum_n: INTEGER = 7
+	Rate_of_Change_n: INTEGER = 10
+	StochasticK_n: INTEGER = 5
+	StochasticD_n: INTEGER = 3
+	Williams_n: INTEGER = 7
+	RSI_n: INTEGER = 7
+	Wilder_MA_n: INTEGER = 5
+	WMA_n: INTEGER = 5
+	SD_n: INTEGER = 5
 
 feature -- Basic operations
 
-	execute is
+	execute
 		local
 			l: LINKED_LIST [MARKET_FUNCTION]
 			f: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
@@ -101,7 +101,7 @@ feature -- Basic operations
 feature {NONE} -- Hard-coded market function building procedures
 
 	simple_ma (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
-						STANDARD_MOVING_AVERAGE is
+						STANDARD_MOVING_AVERAGE
 			-- Make a simple moving average function.
 		local
 			cmd: BASIC_NUMERIC_COMMAND
@@ -114,7 +114,7 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	ema (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
-				EXPONENTIAL_MOVING_AVERAGE is
+				EXPONENTIAL_MOVING_AVERAGE
 			-- Make an exponential moving average function.
 		local
 			cmd: BASIC_NUMERIC_COMMAND
@@ -128,7 +128,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			initialized: Result /= Void and Result.n = n and Result.name = name
 		end
 
-	ma_diff (f1, f2: COMPLEX_FUNCTION; name: STRING): TWO_VARIABLE_FUNCTION is
+	ma_diff (f1, f2: COMPLEX_FUNCTION; name: STRING): TWO_VARIABLE_FUNCTION
 			-- A function that gives the difference between `f1' and `f2'
 			-- Uses a BASIC_LINEAR_COMMAND to obtain the values from `f1'
 			-- and `f2' to be subtracted.
@@ -150,7 +150,7 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	momentum (f: MARKET_FUNCTION; n: INTEGER; name: STRING;
-				operator_type: STRING): N_RECORD_ONE_VARIABLE_FUNCTION is
+				operator_type: STRING): N_RECORD_ONE_VARIABLE_FUNCTION
 			-- A momentum function
 		local
 			operator: BINARY_OPERATOR [REAL, REAL]
@@ -173,7 +173,7 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	rsi (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
-				TWO_VARIABLE_FUNCTION is
+				TWO_VARIABLE_FUNCTION
 			-- RSI:  100 - (100 / (1 + RS))
 			-- RS:  (average n up closes ) / (average n down closes)
 		local
@@ -198,7 +198,7 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	wilder_ma (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
-				CONFIGURABLE_N_RECORD_FUNCTION is
+				CONFIGURABLE_N_RECORD_FUNCTION
 		local
 			plus: ADDITION
 			minus: SUBTRACTION
@@ -225,7 +225,7 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	wma (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
-				N_RECORD_ONE_VARIABLE_FUNCTION is
+				N_RECORD_ONE_VARIABLE_FUNCTION
 		local
 			plus: ADDITION
 			leftmult, rightmult: MULTIPLICATION
@@ -262,7 +262,7 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	obsolete_rsi (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
-				N_RECORD_ONE_VARIABLE_FUNCTION is
+				N_RECORD_ONE_VARIABLE_FUNCTION
 			-- RSI = 100 - (100 / (1 + RS))
 			-- RS = (average n up closes ) / (average n down closes)
 		local
@@ -312,7 +312,7 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	williams_percent_R (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
-				N_RECORD_ONE_VARIABLE_FUNCTION is
+				N_RECORD_ONE_VARIABLE_FUNCTION
 			-- A Williams %R function
 		local
 			m: MULTIPLICATION -- Used to convert value to percent.
@@ -343,7 +343,7 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	stochastic_percent_K (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
-				N_RECORD_ONE_VARIABLE_FUNCTION is
+				N_RECORD_ONE_VARIABLE_FUNCTION
 			-- A Stochastic %K function
 		local
 			d: DIVISION
@@ -374,7 +374,7 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	stochastic_percent_D (f: MARKET_FUNCTION; inner_n, outer_n: INTEGER;
-				name: STRING): TWO_VARIABLE_FUNCTION is
+				name: STRING): TWO_VARIABLE_FUNCTION
 			-- Make a Stochastic %D calculation function.
 		local
 			div: DIVISION
@@ -425,7 +425,7 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	market_data (f: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]; name: STRING):
-						MARKET_DATA_FUNCTION is
+						MARKET_DATA_FUNCTION
 			-- Make a function that simply gives the closing price of
 			-- each tuple.
 		do
@@ -436,7 +436,7 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	standard_deviation (f: MARKET_FUNCTION; n: INTEGER;
-			name: STRING): AGENT_BASED_FUNCTION is
+			name: STRING): AGENT_BASED_FUNCTION
 		local
 			agents: expanded MARKET_AGENTS
 			l: LINKED_LIST [MARKET_FUNCTION]
@@ -451,7 +451,7 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	abf_test (f: MARKET_FUNCTION; n: INTEGER;
-			name: STRING): AGENT_BASED_FUNCTION is
+			name: STRING): AGENT_BASED_FUNCTION
 		local
 			agents: expanded MARKET_AGENTS
 			l: LINKED_LIST [MARKET_FUNCTION]
@@ -469,7 +469,7 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	market_function_line (f: MARKET_FUNCTION; name: STRING):
-				MARKET_FUNCTION_LINE is
+				MARKET_FUNCTION_LINE
 			-- Dummy line
 		local
 			p1, p2: MARKET_POINT
@@ -486,7 +486,7 @@ feature {NONE} -- Hard-coded market function building procedures
 		end
 
 	rs_average (f: MARKET_FUNCTION; n: INTEGER; positive: BOOLEAN):
-				EXPONENTIAL_MOVING_AVERAGE is
+				EXPONENTIAL_MOVING_AVERAGE
 			-- Positive (`positive') or negative (not `positive') average
 			-- used in the quotient for RS for the RSI formula
 		local
@@ -537,7 +537,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			Result.set_effective_offset (1)
 		end
 
-	agent_experiment (name: STRING): AGENT_BASED_FUNCTION is
+	agent_experiment (name: STRING): AGENT_BASED_FUNCTION
 		local
 			agents: expanded MARKET_AGENTS
 		do
@@ -549,12 +549,12 @@ feature {NONE} -- Hard-coded market function building procedures
 feature {NONE} -- Functions currently not used
 
 	wma_of_midpoint (f: MARKET_FUNCTION; n: INTEGER; name: STRING):
-				N_RECORD_ONE_VARIABLE_FUNCTION is
+				N_RECORD_ONE_VARIABLE_FUNCTION
 		do
 			Result := wma (midpoint (f), n, name)
 		end
 
-	midpoint (f: MARKET_FUNCTION): ONE_VARIABLE_FUNCTION is
+	midpoint (f: MARKET_FUNCTION): ONE_VARIABLE_FUNCTION
 			-- Midpoint
 		local
 			div: DIVISION

@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"SOCKET_ACCEPTORs dedicated to processing MAS requrests"
@@ -38,7 +38,7 @@ creation
 
 feature
 
-	make (s: COMPRESSED_SOCKET; fb: GLOBAL_OBJECT_BUILDER) is
+	make (s: COMPRESSED_SOCKET; fb: GLOBAL_OBJECT_BUILDER)
 		require
 			not_void: s /= Void and fb /= Void
 		do
@@ -69,13 +69,13 @@ feature -- Access
 
 feature {NONE} -- Hook routine Implementations
 
-	prepare_for_persistent_connection is
+	prepare_for_persistent_connection
 		do
 			accepted_socket.set_compression (False)
 		end
 
-	connection_termination_character: CHARACTER is
-		indexing
+	connection_termination_character: CHARACTER
+		note
 			once_status: global
 		local
 			constants: expanded APPLICATION_CONSTANTS
@@ -83,7 +83,7 @@ feature {NONE} -- Hook routine Implementations
 			Result := constants.End_of_file_character
 		end
 
-	initialize_for_execution is
+	initialize_for_execution
 		do
 			persistent_connection_interface :=
 				factory_builder.persistent_connection_interface
@@ -94,8 +94,8 @@ feature {NONE} -- Hook routine Implementations
 
 feature {NONE} -- Unused
 
-	Message_date_field_separator: STRING is ""
+	Message_date_field_separator: STRING = ""
 
-	Message_time_field_separator: STRING is ""
+	Message_time_field_separator: STRING = ""
 
 end

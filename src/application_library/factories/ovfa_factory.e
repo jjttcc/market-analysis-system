@@ -1,7 +1,7 @@
-indexing
+note
 	description:
 		"Factory class that manufactures ONE_VARIABLE_FUNCTION_ANALYZERs"
-	note: "Features function, period_type, operator, and event_type should %
+	note1: "Features function, period_type, operator, and event_type should %
 		%all be non-Void when execute is called."
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -40,7 +40,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_function (arg: MARKET_FUNCTION) is
+	set_function (arg: MARKET_FUNCTION)
 			-- Set function to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -50,7 +50,7 @@ feature -- Status setting
 			function_set: function = arg and function /= Void
 		end
 
-	set_period_type (arg: TIME_PERIOD_TYPE) is
+	set_period_type (arg: TIME_PERIOD_TYPE)
 			-- Set period_type to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -60,7 +60,7 @@ feature -- Status setting
 			period_type_set: period_type = arg and period_type /= Void
 		end
 
-	set_operator (arg: RESULT_COMMAND [BOOLEAN]) is
+	set_operator (arg: RESULT_COMMAND [BOOLEAN])
 			-- Set operator to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -70,7 +70,7 @@ feature -- Status setting
 			operator_set: operator = arg and operator /= Void
 		end
 
-	set_left_offset (arg: INTEGER) is
+	set_left_offset (arg: INTEGER)
 			-- Set left_offset to `arg'.
 		require
 			arg_not_negative: arg >= 0
@@ -86,7 +86,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute is
+	execute
 		do
 			create product.make (function, operator, event_type,
 				signal_type, period_type)

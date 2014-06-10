@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Signal types for market events"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,7 +16,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	initialize_signal_type is
+	initialize_signal_type
 		do
 			signal_type := 1
 		end
@@ -26,19 +26,19 @@ feature -- Access
 	signal_type: INTEGER
 			-- Type of trading signal associated with this event
 
-	type_as_string: STRING is
+	type_as_string: STRING
 			-- Name for `signal_type'
 		do
 			Result := type_names @ signal_type
 		end
 
-	type_abbreviation: CHARACTER is
+	type_abbreviation: CHARACTER
 			-- One-letter abbreviation for signal-type name
 		do
 			Result := character_codes @ signal_type
 		end
 
-	signal_value_as_string (value: INTEGER): STRING is
+	signal_value_as_string (value: INTEGER): STRING
 			-- Name for signal associated with `value'
 		require
 			valid_value: value >= Buy_signal and value <= Other_signal
@@ -48,27 +48,27 @@ feature -- Access
 
 feature -- Constants
 
-	Buy_signal: INTEGER is 1
+	Buy_signal: INTEGER = 1
 			-- Buy
 
-	Sell_signal: INTEGER is 2
+	Sell_signal: INTEGER = 2
 			-- Sell
 
-	Neutral_signal: INTEGER is 3
+	Neutral_signal: INTEGER = 3
 			-- Neutral
 
-	Other_signal: INTEGER is 4
+	Other_signal: INTEGER = 4
 			-- Other
 
-	type_names: ARRAY [STRING] is
+	type_names: ARRAY [STRING]
 			-- Names corresponding to the valid signal types
-		indexing
+		note
 			once_status: global
 		once
 			Result := <<"Buy", "Sell", "Neutral", "Other">>
 		end
 
-	character_codes: STRING is "bsno"
+	character_codes: STRING = "bsno"
 			-- Unique One-character abbreviations for the signal types,
 			-- in one-to- one correspondence with (and in the same order as)
 			-- the names in `type_names'

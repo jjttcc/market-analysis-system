@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Implementation of STOCK_DATA using a database";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -17,7 +17,7 @@ class DB_STOCK_DATA inherit
 
 feature -- Access
 
-	name: STRING is
+	name: STRING
 		local
 			db_services: MAS_DB_SERVICES
 			gs: expanded GLOBAL_SERVER_FACILITIES
@@ -45,11 +45,11 @@ feature -- Access
 			end
 		end
 
-	description: STRING is
+	description: STRING
 		do
 		end
 
-	sector: STRING is
+	sector: STRING
 		do
 		end
 

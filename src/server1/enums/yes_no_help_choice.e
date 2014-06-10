@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Enumerated '<object> menu' choices"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -25,35 +25,35 @@ create {YES_NO_HELP_CHOICE}
 
 feature -- Access
 
-	abbreviation: STRING is "y/n/h"
+	abbreviation: STRING = "y/n/h"
 
 feature {NONE} -- Initialization
 
-	make_yes is
+	make_yes
 		do
 			make ('y')
 		end
 
-	make_no is
+	make_no
 		do
 			make ('n')
 		end
 
-	make_help is
+	make_help
 		do
 			make ('h')
 		end
 
-	type_name: STRING is "yes/no/help"
+	type_name: STRING = "yes/no/help"
 
 feature {NONE} -- Implementation
 
-	initial_allowable_values: ARRAY [CHARACTER] is
+	initial_allowable_values: ARRAY [CHARACTER]
 		do
 			Result := <<yes, yes_u, no, no_u, help, help_u>>
 		end
 
-	value_name_map: HASH_TABLE [STRING, CHARACTER] is
+	value_name_map: HASH_TABLE [STRING, CHARACTER]
 		do
 			create Result.make (6)
 			Result.put ("yes choice from " + type_name, yes)

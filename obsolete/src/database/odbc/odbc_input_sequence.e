@@ -43,12 +43,12 @@ feature -- Access
 
 feature -- Status report
 
-	after_last_record: BOOLEAN is
+	after_last_record: BOOLEAN
 		do
 			Result := tuple_sequence.after
 		end
 
-	readable: BOOLEAN is
+	readable: BOOLEAN
 		do
 			Result := not tuple_sequence.off
 		end

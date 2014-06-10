@@ -1,8 +1,8 @@
-indexing
+note
 	description:
 		"Market function that accumulates values by, when calculating the %
 		%current value for a period, using the previously calculated value"
-	note:
+	note1:
 		"`previous_operator' has some special constraints - See note in %
 		%parent, FUNCTION_WITH_FIRST_AND_PREVIOUS_OPERATORS."
 	author: "Jim Cochrane"
@@ -30,7 +30,7 @@ creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 feature -- Access
 
-	short_description: STRING is
+	short_description: STRING
 		do
 			create Result.make (33)
 			Result.append ("Accumulation function that operates %
@@ -45,7 +45,7 @@ feature -- Access
 feature {MARKET_FUNCTION_EDITOR} -- Status setting
 
 	set_required_operators (op: like operator; pop: like previous_operator;
-				fop: like first_element_operator) is
+				fop: like first_element_operator)
 			-- Set `operator' to `op' and `previous_operator' to `pop'.
 		require
 			not_void: op /= Void and pop /= Void and fop /= Void
@@ -65,7 +65,7 @@ feature {MARKET_FUNCTION_EDITOR} -- Status setting
 feature {NONE} -- Initialization
 
 	make (in: like input; op: like operator; prev_op: like previous_operator;
-				fop: like first_element_operator) is
+				fop: like first_element_operator)
 		require
 			not_void: in /= Void and op /= Void and prev_op /= Void and
 				fop /= Void
@@ -85,7 +85,7 @@ feature {NONE} -- Initialization
 
 feature {NONE}
 
-	start is
+	start
 		local
 			t: SIMPLE_TUPLE
 		do

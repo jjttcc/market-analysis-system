@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Utility routines for socket-based connections"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -15,14 +15,14 @@ class CONNECTION_UTILITIES inherit
 
 feature -- Access
 
-	initial_sleep_micro_seconds: INTEGER is
+	initial_sleep_micro_seconds: INTEGER
 			-- Number of microseconds to sleep before the first try with
 			-- `server_connection_attempts'
 		once
 			Result := 250000
 		end
 
-	sleep_micro_seconds: INTEGER is
+	sleep_micro_seconds: INTEGER
 			-- Number of microseconds to sleep in between tries with
 			-- `server_connection_attempts'
 		once
@@ -31,7 +31,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	server_connection_attempts (host, port: STRING; tries: INTEGER): STRING is
+	server_connection_attempts (host, port: STRING; tries: INTEGER): STRING
 			-- The result of `tries' attempts to "ping" the server
 			-- specified by `host' and `port' - Void if the ping succeeds;
 			-- otherwise a description of the problem
@@ -55,7 +55,7 @@ feature -- Basic operations
 			end
 		end
 
-	server_connection_diagnosis (host, port: STRING): STRING is
+	server_connection_diagnosis (host, port: STRING): STRING
 			-- Diagnosis of attempt to "ping" the server specified by
 			-- `host' and `port' - Void if the ping succeeds;
 			-- otherwise a description of the problem

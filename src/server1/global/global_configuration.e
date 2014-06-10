@@ -1,4 +1,4 @@
-indexing
+note
 	description: "General, global application configuration settings"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,12 +12,12 @@ deferred class
 
 feature -- Access
 
-	product_info: MAS_PRODUCT_INFO is
+	product_info: MAS_PRODUCT_INFO
 			-- Product information for the current release
 		deferred
 		end
 
-	tradable_cache_size: INTEGER is
+	tradable_cache_size: INTEGER
 			-- The size of the cache of TRADABLEs
 		deferred
 		ensure
@@ -26,13 +26,13 @@ feature -- Access
 
 feature -- Status report
 
-	auto_data_update_on: BOOLEAN is
+	auto_data_update_on: BOOLEAN
 			-- Is the automated data update functionality available?
 		deferred
 		end
 
 feature {NONE} -- Implementation
 
-	default_tradable_cache_size: INTEGER is 10
+	default_tradable_cache_size: INTEGER = 10
 
 end

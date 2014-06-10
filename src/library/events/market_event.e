@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"An event associated with a market such as a stock or bond"
 	author: "Jim Cochrane"
@@ -25,19 +25,19 @@ deferred class MARKET_EVENT inherit
 
 feature -- Access
 
-	components: LIST [MARKET_EVENT] is
+	components: LIST [MARKET_EVENT]
 			-- Contained events - Current if atomic
 		deferred
 		end
 
-	guts: ARRAY [STRING] is
+	guts: ARRAY [STRING]
 			-- For persistent storage, the guts of the class instance -
 			-- that is, the fields needed to determine if this instance
 			-- is_equal to another one - converted to an array of strings
 		deferred
 		end
 
-	unique_id: STRING is
+	unique_id: STRING
 		do
 			if cached_id = Void then
 				cached_id := concatenation (guts)
@@ -47,7 +47,7 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	tag: STRING is
+	tag: STRING
 			-- Short identifying string for the event, such as a stock symbol
 		deferred
 		end

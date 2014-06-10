@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A function analyzer that combines the events of a pair of function %
 		%analyzers.  Provides a means of implementing 'and' conditions %
@@ -38,7 +38,7 @@ creation
 feature {NONE} -- Initialization
 
 	make (la, ra: MARKET_EVENT_GENERATOR; ev_type: EVENT_TYPE;
-			sig_type: INTEGER) is
+			sig_type: INTEGER)
 		require
 			not_void: la /= Void and ra /= Void
 		do
@@ -76,19 +76,19 @@ feature -- Access
 			-- comparison.  If left_target_type is Void, the event's time
 			-- stamp will be used, rather than that of one of its components.
 
-	indicators: LIST [MARKET_FUNCTION] is
+	indicators: LIST [MARKET_FUNCTION]
 		do
 			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 			Result.append (left_analyzer.indicators)
 			Result.append (right_analyzer.indicators)
 		end
 
-	immediate_operators: LIST [COMMAND] is
+	immediate_operators: LIST [COMMAND]
 		do
 			create {LINKED_LIST [COMMAND]} Result.make
 		end
 
-	children: LIST [MARKET_EVENT_GENERATOR] is
+	children: LIST [MARKET_EVENT_GENERATOR]
 		do
 			create {LINKED_LIST [MARKET_EVENT_GENERATOR]} Result.make
 			Result.extend (left_analyzer)
@@ -97,7 +97,7 @@ feature -- Access
 
 feature -- Status report
 
-	valid_period_type (t: TIME_PERIOD_TYPE): BOOLEAN is
+	valid_period_type (t: TIME_PERIOD_TYPE): BOOLEAN
 		do
 			Result := left_analyzer.valid_period_type (t) or
 				right_analyzer.valid_period_type (t)
@@ -105,7 +105,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_start_date_time (d: DATE_TIME) is
+	set_start_date_time (d: DATE_TIME)
 			-- Set `left_analyzer' and `right_analyzer' `start_date_time's
 			-- to `d'.
 		do
@@ -113,7 +113,7 @@ feature -- Status setting
 			right_analyzer.set_start_date_time (d)
 		end
 
-	set_before_extension (arg: DATE_TIME_DURATION) is
+	set_before_extension (arg: DATE_TIME_DURATION)
 			-- Set before_extension to -`arg'.
 		require
 			arg_not_void: arg /= Void
@@ -125,7 +125,7 @@ feature -- Status setting
 											arg.zero)
 		end
 
-	set_after_extension (arg: DATE_TIME_DURATION) is
+	set_after_extension (arg: DATE_TIME_DURATION)
 			-- Set after_extension to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -136,7 +136,7 @@ feature -- Status setting
 									after_extension /= Void
 		end
 
-	set_left_target_type (arg: EVENT_TYPE) is
+	set_left_target_type (arg: EVENT_TYPE)
 			-- Set left_target_type to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -149,14 +149,14 @@ feature -- Status setting
 				left_target_type /= Void
 		end
 
-	set_tradable_from_dispenser (d: TRADABLE_DISPENSER) is
+	set_tradable_from_dispenser (d: TRADABLE_DISPENSER)
 		do
 			left_analyzer.set_tradable_from_dispenser (d)
 			right_analyzer.set_tradable_from_dispenser (d)
 		end
 
 	set_tradable_from_pair (p: PAIR [TRADABLE [BASIC_MARKET_TUPLE],
-			TRADABLE [BASIC_MARKET_TUPLE]]) is
+			TRADABLE [BASIC_MARKET_TUPLE]])
 		do
 			left_analyzer.set_tradable_from_pair (p)
 			right_analyzer.set_tradable_from_pair (p)
@@ -164,7 +164,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute is
+	execute
 			-- For each event resulting from the execution of right_analyzer
 			-- whose time interval - formed from before_extension and
 			-- after_extension - intersects with an event resulting from
@@ -191,7 +191,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	target_date (e: MARKET_EVENT): DATE_TIME is
+	target_date (e: MARKET_EVENT): DATE_TIME
 			-- The time stamp of the component of `e' that matches
 			-- left_target_type
 		require
@@ -230,7 +230,7 @@ feature {NONE} -- Implementation
 		end
 
 	three_way_comparison (rt_intrvl: INTERVAL [DATE_TIME];
-				left: MARKET_EVENT): INTEGER is
+				left: MARKET_EVENT): INTEGER
 			-- Comparison of `rt_intrvl' to the target time of event `left'.
 			-- Result is -1 if `rt_intrvl' comes before `left', 0 if it
 			-- intersects with `left', and 1 if it comes after `left'.
@@ -260,7 +260,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	generate_events (e: MARKET_EVENT; l: CHAIN [MARKET_EVENT]) is
+	generate_events (e: MARKET_EVENT; l: CHAIN [MARKET_EVENT])
 			-- Generate an event from each event in `l' that intersects with
 			-- `e's extended interval.
 		require
@@ -298,7 +298,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	extended_event_interval (e: MARKET_EVENT): INTERVAL [DATE_TIME] is
+	extended_event_interval (e: MARKET_EVENT): INTERVAL [DATE_TIME]
 			-- The interval formed from `e's time stamp plus
 			-- `before_extension' and `e's time stamp plus after_extension
 		require
@@ -308,7 +308,7 @@ feature {NONE} -- Implementation
 							e.time_stamp + after_extension)
 		end
 
-	generate_event_pair (left, right: MARKET_EVENT) is
+	generate_event_pair (left, right: MARKET_EVENT)
 			-- Generate a MARKET_EVENT_PAIR with left and right elements set
 			-- to `left' and `right', respectively and add it to `product'.
 		require
@@ -322,7 +322,7 @@ feature {NONE} -- Implementation
 
 feature {MARKET_FUNCTION_EDITOR}
 
-	wipe_out is
+	wipe_out
 		do
 			left_analyzer.wipe_out
 			right_analyzer.wipe_out

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Commands that retrieve the value of the current item of %
 		%a linear structure of market tuples"
 	author: "Jim Cochrane"
@@ -20,7 +20,7 @@ creation
 
 feature -- Initialization
 
-	make (tgt: like target) is
+	make (tgt: like target)
 		require
 			not_void: tgt /= Void
 		do
@@ -31,7 +31,7 @@ feature -- Initialization
 
 feature -- Access
 
-	root_suppliers: SET [ANY] is
+	root_suppliers: SET [ANY]
 		local
 			tuples: expanded MARKET_TUPLES
 		do
@@ -45,16 +45,16 @@ feature -- Access
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		do
 			value := target.item.value
 		end
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is False
+	arg_mandatory: BOOLEAN = False
 
-	target_cursor_not_affected: BOOLEAN is True
+	target_cursor_not_affected: BOOLEAN = True
 			-- True
 
 end -- class BASIC_LINEAR_COMMAND

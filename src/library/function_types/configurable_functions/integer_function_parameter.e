@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A function parameter with a settable integer value"
 	author: "Jim Cochrane"
@@ -17,7 +17,7 @@ creation {MARKET_FUNCTION, MARKET_FUNCTION_EDITOR}
 
 feature {NONE} -- Initialization
 
-	make (v: INTEGER) is
+	make (v: INTEGER)
 		require
 			valid_args: v > 0
 		do
@@ -33,35 +33,35 @@ feature -- Access
 
 feature -- Access
 
-	current_value: STRING is
+	current_value: STRING
 		do
 			Result := value.out
 		end
 
-	name: STRING is "integer-value"
+	name: STRING = "integer-value"
 
-	description: STRING is
+	description: STRING
 		do
 			Result := name
 		end
 
-	value_type_description: STRING is "integer value"
+	value_type_description: STRING = "integer value"
 
-	current_value_equals (v: STRING): BOOLEAN is
+	current_value_equals (v: STRING): BOOLEAN
 		do
 			Result := v.to_integer = value
 		end
 
 feature -- Element change
 
-	change_value (new_value: STRING) is
+	change_value (new_value: STRING)
 		do
 			value := new_value.to_integer
 		end
 
 feature -- Basic operations
 
-	valid_value (v: STRING): BOOLEAN is
+	valid_value (v: STRING): BOOLEAN
 		do
 			Result := v /= Void and v.is_integer and v.to_integer > 0
 		end

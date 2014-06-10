@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Value setter that sets the value of a stock split";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,7 +12,7 @@ class SPLIT_SETTER inherit
 
 feature {NONE}
 
-	do_set (stream: INPUT_SEQUENCE; tuple: STOCK_SPLIT) is
+	do_set (stream: INPUT_SEQUENCE; tuple: STOCK_SPLIT)
 		do
 			if stream.last_real <= 0 then
 				handle_input_error ("Numeric input value is <= 0: ",

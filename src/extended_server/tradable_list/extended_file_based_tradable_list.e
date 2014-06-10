@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"TRADABLE_LISTs that obtain their input data from files"
 	author: "Jim Cochrane"
@@ -22,7 +22,7 @@ deferred class EXTENDED_FILE_BASED_TRADABLE_LIST inherit
 
 feature -- Access
 
-	file_names: LIST [STRING] is
+	file_names: LIST [STRING]
 			-- Names of all files with tradable data to be processed
 		deferred
 		end
@@ -32,19 +32,19 @@ feature {NONE} -- Implementation
 	file_status_cache: HASH_TABLE [TRADABLE_FILE_STATUS, INTEGER]
 			-- File-status cache - mirrors `cache'
 
-	turn_caching_off is
+	turn_caching_off
 		do
 			Precursor
 			file_status_cache.clear_all
 		end
 
-	clear_cache is
+	clear_cache
 		do
 			Precursor
 			file_status_cache.clear_all
 		end
 
-	add_to_cache (t: TRADABLE [BASIC_MARKET_TUPLE]; idx: INTEGER) is
+	add_to_cache (t: TRADABLE [BASIC_MARKET_TUPLE]; idx: INTEGER)
 		do
 			Precursor (t, idx)
 			if caching_on then
@@ -63,7 +63,7 @@ feature {NONE} -- Implementation
 				(file_status_cache @ idx).file_size = input_medium.count
 		end
 
-	update_file_status_cache (idx: INTEGER) is
+	update_file_status_cache (idx: INTEGER)
 			-- If `caching_on', update the TRADABLE_FILE_STATUS at the
 			-- specified index `idx'.
 		require
@@ -92,7 +92,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Hook routine implementations
 
-	target_tradable_out_of_date: BOOLEAN is
+	target_tradable_out_of_date: BOOLEAN
 		local
 			current_file_status: TRADABLE_FILE_STATUS
 		do
@@ -113,7 +113,7 @@ feature {NONE} -- Hook routine implementations
 			end
 		end
 
-	append_new_data is
+	append_new_data
 		local
 			current_file_status: TRADABLE_FILE_STATUS
 		do

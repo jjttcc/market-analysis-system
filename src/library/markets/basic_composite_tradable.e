@@ -1,4 +1,4 @@
-indexing
+note
 	description: "COMPOSITE_TRADABLEs that use the same %"main%" %
 		%operators for all of their components";
 	author: "Jim Cochrane"
@@ -22,7 +22,7 @@ create
 feature {NONE} -- Initialization
 
 	make (main_op, accum_op, post_op: RESULT_COMMAND [REAL];
-			main_var, accum_var: NUMERIC_VALUE_COMMAND) is
+			main_var, accum_var: NUMERIC_VALUE_COMMAND)
 		require
 			args_exist: accum_op /= Void and main_op /= Void and
 				post_op /= Void and main_var /= Void and accum_var /= Void
@@ -63,19 +63,19 @@ feature -- Access
 feature {NONE} -- Implementation - Hook routine implementations
 
 	operator_for_current_component (field_extractor_name: STRING):
-			RESULT_COMMAND [REAL] is
+			RESULT_COMMAND [REAL]
 		do
 			Result := main_operator
 		end
 
 	variable_for_current_component (field_extractor_name: STRING):
-			NUMERIC_VALUE_COMMAND is
+			NUMERIC_VALUE_COMMAND
 		do
 			Result := main_variable
 		end
 
 	post_processing_operator_for_field (field_extractor_name: STRING):
-		RESULT_COMMAND [REAL] is
+		RESULT_COMMAND [REAL]
 			-- Operator to be used for any needed post-processing for the
 			-- current field of the current tuple (possibly specialized
 			-- with `field_extractor_name')

@@ -1,7 +1,7 @@
-indexing
+note
 	description: "Numeric commands that operate on a market tuple that is %
 		%passed in as an argument to the execute feature"
-	note: "An instance of this class can be safely shared within a command %
+	note1: "An instance of this class can be safely shared within a command %
 		%tree."
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -18,7 +18,7 @@ class BASIC_NUMERIC_COMMAND inherit
 
 feature -- Access
 
-	root_suppliers: SET [ANY] is
+	root_suppliers: SET [ANY]
 		local
 			tuples: expanded MARKET_TUPLES
 		do
@@ -32,11 +32,11 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is True
+	arg_mandatory: BOOLEAN = True
 
 feature -- Basic operations
 
-	execute (arg: MARKET_TUPLE) is
+	execute (arg: MARKET_TUPLE)
 			-- Sets its value from arg's value
 			-- Can be redefined by ancestors.
 		do

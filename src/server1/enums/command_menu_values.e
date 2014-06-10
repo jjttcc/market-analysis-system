@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Allowed values for a 'command menu' selection"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,13 +12,13 @@ class COMMAND_MENU_VALUES inherit
 
 feature -- Access
 
-	edit: CHARACTER is 'e'
+	edit: CHARACTER = 'e'
 		-- Constant for 'edit' selection
 
-	edit_u: CHARACTER is 'E'
+	edit_u: CHARACTER = 'E'
 		-- Constant for 'edit' selection, uppercase
 
-	type_name: STRING is "command"
+	type_name: STRING = "command"
 
 invariant
 

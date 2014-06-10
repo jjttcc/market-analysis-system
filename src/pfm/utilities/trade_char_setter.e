@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Value setter that sets the buy/sell or open/closed state %
 		%of a TRADE";
 	author: "Jim Cochrane"
@@ -13,7 +13,7 @@ class TRADE_CHAR_SETTER inherit
 
 feature {NONE}
 
-	do_set (stream: INPUT_SEQUENCE; tuple: TRADE) is
+	do_set (stream: INPUT_SEQUENCE; tuple: TRADE)
 			-- Expected format for date:  yyyymmdd
 			-- Redefine in descendant for different formats.
 		local
@@ -39,12 +39,12 @@ feature {NONE}
 			end
 		end
 
-	read_value (stream: INPUT_SEQUENCE) is
+	read_value (stream: INPUT_SEQUENCE)
 		do
 			-- Null action
 		end
 
-	use_up (stream: INPUT_SEQUENCE; word: STRING) is
+	use_up (stream: INPUT_SEQUENCE; word: STRING)
 		local
 			i, wsize: INTEGER
 			error: BOOLEAN
@@ -68,12 +68,12 @@ feature {NONE}
 			stream.read_character
 		end
 
-	Buy_string: STRING is "buy"
+	Buy_string: STRING = "buy"
 
-	Open_string: STRING is "open"
+	Open_string: STRING = "open"
 
-	Close_string: STRING is "close"
+	Close_string: STRING = "close"
 
-	Sell_string: STRING is "sell"
+	Sell_string: STRING = "sell"
 
 end -- class TRADE_CHAR_SETTER

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Abstraction for managing multiple tradable lists"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -22,7 +22,7 @@ creation
 feature {NONE} -- Initialization
 
 	make (daily_list, intraday_list: TRADABLE_LIST;
-			inds: SEQUENCE [MARKET_FUNCTION]) is
+			inds: SEQUENCE [MARKET_FUNCTION])
 		require
 			one_not_void: intraday_list /= Void or daily_list /= Void
 			inds_exist: inds /= Void
@@ -49,7 +49,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	index: INTEGER is
+	index: INTEGER
 		do
 			if symbol_list /= Void then
 				Result := symbol_list.index
@@ -57,7 +57,7 @@ feature -- Access
 		end
 
 	tradable (symbol: STRING; period_type: TIME_PERIOD_TYPE; update: BOOLEAN):
-				TRADABLE [BASIC_MARKET_TUPLE] is
+				TRADABLE [BASIC_MARKET_TUPLE]
 		local
 			l: TRADABLE_LIST
 			t: TRADABLE [BASIC_MARKET_TUPLE]
@@ -101,7 +101,7 @@ feature -- Access
 			end
 		end
 
-	symbols: LIST [STRING] is
+	symbols: LIST [STRING]
 		do
 			reset_error_state
 			if daily_market_list /= Void then
@@ -116,7 +116,7 @@ feature -- Access
 					Result.count = intraday_market_list.count
 		end
 
-	period_type_names_for (symbol: STRING): ARRAYED_LIST [STRING] is
+	period_type_names_for (symbol: STRING): ARRAYED_LIST [STRING]
 		local
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 			target_set: PART_SORTED_SET [TIME_PERIOD_TYPE]
@@ -173,7 +173,7 @@ feature -- Access
 			end
 		end
 
-	current_symbol: STRING is
+	current_symbol: STRING
 		do
 			Result := symbol_list.item
 		end
@@ -182,12 +182,12 @@ feature -- Access
 
 feature -- Status report
 
-	after: BOOLEAN is
+	after: BOOLEAN
 		do
 			Result := symbol_list = Void or else symbol_list.after
 		end
 
-	is_empty: BOOLEAN is
+	is_empty: BOOLEAN
 		do
 			if daily_market_list /= Void then
 				Result := daily_market_list.is_empty
@@ -196,18 +196,18 @@ feature -- Status report
 			end
 		end
 
-	isfirst: BOOLEAN is
+	isfirst: BOOLEAN
 		do
 			Result := symbol_list /= Void and symbol_list.isfirst
 		end
 
-	off: BOOLEAN is
+	off: BOOLEAN
 		do
 			Result := symbol_list = Void or else symbol_list.off or else
 				is_empty
 		end
 
-	caching_on: BOOLEAN is
+	caching_on: BOOLEAN
 		do
 			Result := (daily_market_list = Void or else
 				daily_market_list.caching_on) and (intraday_market_list = Void
@@ -216,17 +216,17 @@ feature -- Status report
 
 feature -- Cursor movement
 
-	finish is
+	finish
 		do
 			symbol_list.finish
 		end
 
-	forth is
+	forth
 		do
 			symbol_list.forth
 		end
 
-	start is
+	start
 		do
 			if symbol_list = Void then
 				symbol_list := symbols
@@ -236,7 +236,7 @@ feature -- Cursor movement
 
 feature -- Basic operations
 
-	clear_caches is
+	clear_caches
 			-- Clear the cache of all lists.
 		do
 			if daily_market_list /= Void then
@@ -248,7 +248,7 @@ feature -- Basic operations
 			symbol_list := Void
 		end
 
-	turn_caching_off is
+	turn_caching_off
 		do
 			if daily_market_list /= Void then
 				daily_market_list.turn_caching_off
@@ -258,7 +258,7 @@ feature -- Basic operations
 			end
 		end
 
-	turn_caching_on is
+	turn_caching_on
 		do
 			if daily_market_list /= Void then
 				daily_market_list.turn_caching_on
@@ -283,7 +283,7 @@ feature {NONE} -- Implementation
 			-- All "standard" period types (e.g., excluding 3-minute,
 			-- 4-minute, etc. types)
 
-	list_for (period_type: TIME_PERIOD_TYPE): TRADABLE_LIST is
+	list_for (period_type: TIME_PERIOD_TYPE): TRADABLE_LIST
 			-- The tradable list that holds data for `period_type'
 		do
 			if period_type.intraday then
@@ -293,7 +293,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	both_lists_valid: BOOLEAN is
+	both_lists_valid: BOOLEAN
 			-- Are both lists non-void and nonempty?
 		do
 			Result := daily_market_list /= Void and then
@@ -307,7 +307,7 @@ feature {NONE} -- Implementation
 				not intraday_market_list.is_empty)
 		end
 
-	reset_error_state is
+	reset_error_state
 			-- Reset internal error state to no errors.
 		do
 			error_occurred := False

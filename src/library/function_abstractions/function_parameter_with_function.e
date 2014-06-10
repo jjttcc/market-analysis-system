@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A market function parameter that refers back to its owning function"
 	author: "Jim Cochrane"
@@ -16,7 +16,7 @@ deferred class FUNCTION_PARAMETER_WITH_FUNCTION inherit
 
 feature {NONE} -- Initialization
 
-	make (f: MARKET_FUNCTION) is
+	make (f: MARKET_FUNCTION)
 		require
 			not_void: f /= Void
 		do
@@ -30,7 +30,7 @@ feature -- Access
 	function: MARKET_FUNCTION
 			-- The function that this parameter applies to
 
-	description: STRING is
+	description: STRING
 		do
 			if function.name /= Void then
 				Result := name + " - " + function.name
@@ -41,7 +41,7 @@ feature -- Access
 
 feature -- Comparison
 
-	is_equal (other: FUNCTION_PARAMETER): BOOLEAN is
+	is_equal (other: FUNCTION_PARAMETER): BOOLEAN
 		local
 			fpwf: like Current
 		do

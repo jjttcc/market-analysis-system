@@ -1,8 +1,8 @@
-indexing
+note
 	description: "Configurations for obtaining tradable data from an http %
 		%connection, read from a configuration file"
 	author: "Jim Cochrane"
-	note: "@@Note: It may be appropriate at some point to change the name %
+	note1: "@@Note: It may be appropriate at some point to change the name %
 		%of this class to something like DATA_RETRIEVAL_CONFIGURATION - %
 		%configuration for retrieval of data from an external %
 		%source - http, socket, etc - Much of the existing logic in this %
@@ -44,7 +44,7 @@ create
 
 feature {NONE} -- Initialization
 
-	initialize is
+	initialize
 		local
 			i: INTEGER
 		do
@@ -68,7 +68,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	path: STRING is
+	path: STRING
 			-- The processed path component of the URL for the http request,
 			-- with all occurrences of "<symbol>" replaced with `symbol'
 			-- and of the date tokens with their respective values.
@@ -84,7 +84,7 @@ feature -- Access
 			Result := cached_path
 		end
 
-	path_with_alternate_start_date (alt_sd: DATE): STRING is
+	path_with_alternate_start_date (alt_sd: DATE): STRING
 			-- Same as `path', but with `alt_sd' used as the start date
 			-- instead of `start_date' (not cached)
 		do
@@ -92,7 +92,7 @@ feature -- Access
 			replace_tokens_using_dates (Result, alt_sd, eod_end_date, False)
 		end
 
-	eod_turnover_time: TIME is
+	eod_turnover_time: TIME
 		-- The time at which to attempt to retrieve the latest end-of-day
 		-- data from the http data-source site, in the user's local time -
 		-- Void if the specified value is invalid
@@ -109,7 +109,7 @@ feature -- Access
 			Result := cached_eod_turnover_time
 		end
 
-	post_processing_routine: FUNCTION [ANY, TUPLE [STRING], STRING] is
+	post_processing_routine: FUNCTION [ANY, TUPLE [STRING], STRING]
 			-- Routine to be used to post process the retrieved data -
 			-- Void if the post-processing specification is invalid
 		local
@@ -141,7 +141,7 @@ feature -- Access
 			-- Days of the week during which data retrieval should not be done,
 			-- where the keys are: 1 for Sunday .. 7 for Saturday
 
-	most_recent_tradable_day_of_the_week: INTEGER is
+	most_recent_tradable_day_of_the_week: INTEGER
 			-- Most recent day of the week (1 = Sunday .. 7 = Saturday)
 			-- that is not marked to be ignored
 		local
@@ -150,7 +150,7 @@ feature -- Access
 			today := (create {DATE}.make_now).day_of_the_week
 		end
 
-	distance_of_first_tradable_day_from_today: INTEGER is
+	distance_of_first_tradable_day_from_today: INTEGER
 			-- Number of days back from today of the latest date before
 			-- today whose day of the week is not marked to be ignored:
 			-- 1 if yesterday is not marked ignored; 2 if the day before
@@ -178,7 +178,7 @@ feature -- Access
 				Result <= 7
 		end
 
-	latest_tradable_date_before_today: DATE is
+	latest_tradable_date_before_today: DATE
 			-- The latest date before today whose day of the week is not
 			-- marked to be ignored:  yesterday if yesterday is not marked
 			-- ignored; otherwise, the day before yesterday if it is not
@@ -200,38 +200,38 @@ feature -- Access
 
 feature -- Access
 
-	host: STRING is
+	host: STRING
 		do
 			Result := settings @ Host_specifier
 		end
 
-	proxy_address: STRING is
+	proxy_address: STRING
 		do
 			Result := settings @ Proxy_address_specifier
 		end
 
-	proxy_port_number: STRING is
+	proxy_port_number: STRING
 		do
 			Result := settings @ Proxy_port_number_specifier
 		end
 
-	original_path: STRING is
+	original_path: STRING
 		do
 			Result := settings @ Path_specifier
 		end
 
-	symbol_file: STRING is
+	symbol_file: STRING
 		do
 			Result := file_name_with_app_directory (
 				settings @ Symbol_file_specifier, False)
 		end
 
-	post_process_command: STRING is
+	post_process_command: STRING
 		do
 			Result := settings @ Post_process_command_specifier
 		end
 
-	output_field_separator: CHARACTER is
+	output_field_separator: CHARACTER
 		local
 			fs: STRING
 		do
@@ -242,14 +242,14 @@ feature -- Access
 			end
 		end
 
-	eod_turnover_time_value: STRING is
+	eod_turnover_time_value: STRING
 		do
 			Result := settings @ EOD_turnover_time_specifier
 		end
 
 feature -- Status report
 
-	ignore_today: BOOLEAN is
+	ignore_today: BOOLEAN
 			-- Should data retrieval not be done today becuase it is
 			-- specified as a non-trading day?
 		do
@@ -257,7 +257,7 @@ feature -- Status report
 				(create {DATE}.make_now).day_of_the_week)
 		end
 
-	proxy_used: BOOLEAN is
+	proxy_used: BOOLEAN
 			-- Has a proxy been specified?
 		do
 			Result := not proxy_address.is_empty
@@ -265,7 +265,7 @@ feature -- Status report
 
 feature -- Element change
 
-	set_symbol (arg: STRING) is
+	set_symbol (arg: STRING)
 			-- Set `symbol' to `arg'.
 		do
 			Precursor (arg)
@@ -274,7 +274,7 @@ feature -- Element change
 
 feature -- Basic operations
 
-	reset_dates is
+	reset_dates
 		do
 			Precursor
 			cached_path := Void -- Force `path' to use new dates.
@@ -282,20 +282,20 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation - Hook routine implementations
 
-	configuration_type: STRING is "http"
+	configuration_type: STRING = "http"
 
-	configuration_file_name: STRING is
+	configuration_file_name: STRING
 		do
 			Result := file_name_with_app_directory (
 				Default_http_config_file_name, False)
 		end
 
-	use_customized_setting (key_token, value_token: STRING): BOOLEAN is
+	use_customized_setting (key_token, value_token: STRING): BOOLEAN
 		do
 			Result := key_token.is_equal (Ignore_day_of_week_specifier)
 		end
 
-	do_customized_setting (key_token, value_token: STRING) is
+	do_customized_setting (key_token, value_token: STRING)
 		do
 			-- Default to null procedure - redefine if needed.
 			if
@@ -308,7 +308,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 feature {NONE} -- Implementation
 
-	add_ignored_day_of_week (wday: STRING) is
+	add_ignored_day_of_week (wday: STRING)
 		local
 			d: STRING
 			time_util: expanded DATE_TIME_SERVICES

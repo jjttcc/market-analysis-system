@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Numeric commands that simply hold a settable value - %
 		%Can function as constants or variables"
 	author: "Jim Cochrane"
@@ -36,7 +36,7 @@ creation
 
 feature
 
-	make (r: REAL) is
+	make (r: REAL)
 		do
 			value := r
 			is_editable := True
@@ -47,9 +47,9 @@ feature
 
 feature -- Access
 
-	Default_name: STRING is "{Numeric value}"
+	Default_name: STRING = "{Numeric value}"
 
-	name: STRING is
+	name: STRING
 		do
 			Result := Precursor
 			if Result.is_empty then
@@ -59,7 +59,7 @@ feature -- Access
 			end
 		end
 
-	description: STRING is
+	description: STRING
 		do
 			if name.is_equal (Default_name) then
 				Result := name
@@ -70,11 +70,11 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is False
+	arg_mandatory: BOOLEAN = False
 
 feature -- Status setting
 
-	set_value (arg: REAL) is
+	set_value (arg: REAL)
 			-- Set value to `arg'.
 		do
 			value := arg
@@ -84,37 +84,37 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		do
 		ensure then
 			value = old value
 		end
 
-	prepare_for_editing (l: LIST [FUNCTION_PARAMETER]) is
+	prepare_for_editing (l: LIST [FUNCTION_PARAMETER])
 		do
 			l.extend (Current)
 		end
 
 feature {NONE} -- FUNCTION_PARAMETER interface
 
-	valid_value (v: STRING): BOOLEAN is
+	valid_value (v: STRING): BOOLEAN
 		do
 			Result := v /= Void and v.is_real
 		end
 
-	current_value: STRING is
+	current_value: STRING
 		do
 			Result := value.out
 		end
 
-	current_value_equals (v: STRING): BOOLEAN is
+	current_value_equals (v: STRING): BOOLEAN
 		do
 			Result := valid_value (v) and then value - v.to_real < Epsilon
 		end
 
-	value_type_description: STRING is "real value"
+	value_type_description: STRING = "real value"
 
-	change_value (new_value: STRING) is
+	change_value (new_value: STRING)
 		do
 			set_value (new_value.to_real)
 		end

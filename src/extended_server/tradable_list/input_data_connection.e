@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Socket-based connections to an outside data supplier - %
 		%Intended as a parent class to descendants implementing a protocol %
 		%based on the data supplier they are associated with - i.e., using %
@@ -48,7 +48,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	initiate_connection is
+	initiate_connection
 			-- Initiate the connection to the data supplier.
 		do
 			connect_to_supplier
@@ -59,7 +59,7 @@ feature -- Basic operations
 				last_communication_succeeded = connected
 		end
 
-	request_initial_data is
+	request_initial_data
 			-- Request `daily_data_available', `intraday_data_available',
 			-- and `symbol_list' from the data supplier.
 		do
@@ -72,7 +72,7 @@ feature -- Basic operations
 				implies symbol_list /= Void
 		end
 
-	request_daily_and_intraday_data_status is
+	request_daily_and_intraday_data_status
 			-- Request from the data supplier whether daily and intraday
 			-- data are available.
 		require
@@ -84,7 +84,7 @@ feature -- Basic operations
 			end
 		end
 
-	request_symbols is
+	request_symbols
 			-- Request the symbol list from the data supplier
 		require
 			connected: connected
@@ -102,7 +102,7 @@ end
 				implies symbol_list /= Void
 		end
 
-	request_daily_data_status is
+	request_daily_data_status
 			-- Request from the data supplier whether daily data are available.
 		require
 			connected: connected
@@ -139,7 +139,7 @@ if not socket.is_closed then
 end
 		end
 
-	request_intraday_data_status is
+	request_intraday_data_status
 			-- Request from the data supplier whether intraday data
 			-- are available.
 		require
@@ -174,7 +174,7 @@ end
 		end
 
 	request_data_for (symbol: STRING; intraday: BOOLEAN;
-		start_date_time: DATE_TIME) is
+		start_date_time: DATE_TIME)
 			-- Request data for `requester's current tradable identified
 			-- by `symbol' - intraday data if `intraday'; otherwise daily.
 			-- Use `start_date_time' as the start date/time for the
@@ -201,7 +201,7 @@ end
 
 feature {NONE} -- Hook routines
 
-	connect_to_supplier is
+	connect_to_supplier
 			-- Create `socket' and use it to connect to the data supplier
 			-- as the first step in querying for new data.
 		deferred
@@ -209,9 +209,9 @@ feature {NONE} -- Hook routines
 
 feature {NONE} -- Hook routine implementations
 
-	server_type: STRING is "data server "
+	server_type: STRING = "data server "
 
-	end_of_message (c: CHARACTER): BOOLEAN is
+	end_of_message (c: CHARACTER): BOOLEAN
 		do
 			check
 				not_used: False --!!!Verify not used.
@@ -219,7 +219,7 @@ feature {NONE} -- Hook routine implementations
 			Result := False -- Not used (I think!!!!)
 		end
 
-	receive_and_process_response is
+	receive_and_process_response
 		do
 			socket.pre_process_input
 			server_response := socket.last_input_string
@@ -232,7 +232,7 @@ feature {NONE} -- Hook routine implementations
 feature {NONE} -- Implementation
 
 	tradable_data_request_msg (symbol: STRING; intraday: BOOLEAN;
-			start_time: DATE_TIME): STRING is
+			start_time: DATE_TIME): STRING
 		do
 			Result := tradable_data_request.out + message_component_separator +
 			date_time_range (start_time, Void) + message_component_separator +
@@ -240,22 +240,22 @@ feature {NONE} -- Implementation
 			client_request_terminator
 		end
 
-	symbol_list_request_msg: STRING is
+	symbol_list_request_msg: STRING
 		do
 			Result := symbol_list_request.out + client_request_terminator
 		end
 
-	daily_data_available_request_msg: STRING is
+	daily_data_available_request_msg: STRING
 		do
 			Result := daily_avail_req.out + client_request_terminator
 		end
 
-	intraday_data_available_request_msg: STRING is
+	intraday_data_available_request_msg: STRING
 		do
 			Result := intra_avail_req.out + client_request_terminator
 		end
 
-	data_flags (intraday: BOOLEAN): STRING is
+	data_flags (intraday: BOOLEAN): STRING
 			-- intraday/non-intraday flag
 		do
 			Result := "" -- Default to daily.
@@ -266,8 +266,8 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - Constants
 
-	Timeout_seconds: INTEGER is
-		indexing
+	Timeout_seconds: INTEGER
+		note
 			once_status: global
 		once
 			Result := 10

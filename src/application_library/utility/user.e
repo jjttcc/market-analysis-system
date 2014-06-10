@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Abstraction for a user with an email address, etc."
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -26,7 +26,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 			create email_addresses.make
 		end
@@ -45,7 +45,7 @@ feature -- Access
 	email_addresses: LINKED_LIST [STRING]
 			-- email addresses
 
-	primary_email_address: STRING is
+	primary_email_address: STRING
 		do
 			if not email_addresses.is_empty then
 				Result := email_addresses @ 1
@@ -57,7 +57,7 @@ feature -- Access
 
 feature -- Element change
 
-	add_email_address (arg: STRING) is
+	add_email_address (arg: STRING)
 			-- Add the email address `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -67,7 +67,7 @@ feature -- Element change
 			one_more: email_addresses.count = old email_addresses.count + 1
 		end
 
-	set_name (arg: STRING) is
+	set_name (arg: STRING)
 			-- Set name to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -77,7 +77,7 @@ feature -- Element change
 			name_set: name = arg and name /= Void
 		end
 
-	set_mailer (arg: STRING) is
+	set_mailer (arg: STRING)
 			-- Set mailer to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -87,7 +87,7 @@ feature -- Element change
 			mailer_set: mailer = arg and mailer /= Void
 		end
 
-	set_email_subject_flag (arg: STRING) is
+	set_email_subject_flag (arg: STRING)
 			-- Set email_subject_flag to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -100,7 +100,7 @@ feature -- Element change
 
 feature -- Basic operations
 
-	notify_by_email (s, subject: STRING) is
+	notify_by_email (s, subject: STRING)
 			-- Send message `s' to the user by email with `subject' as the
 			-- subject.  If the send fails, last_error will reference
 			-- an appropriate error message.
@@ -150,7 +150,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	temporary_file (s: STRING): PLAIN_TEXT_FILE is
+	temporary_file (s: STRING): PLAIN_TEXT_FILE
 			-- Temporary file for writing - new file
 		require
 			not_void: s /= Void
@@ -204,7 +204,7 @@ feature {NONE} -- Implementation
 
 	tmp_file_failed: BOOLEAN
 
-	set_last_error (a: ARRAY [STRING]) is
+	set_last_error (a: ARRAY [STRING])
 		local
 			i: INTEGER
 		do
@@ -221,7 +221,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - Constants
 
-	Input_redirect: STRING is " <"
+	Input_redirect: STRING = " <"
 
 invariant
 

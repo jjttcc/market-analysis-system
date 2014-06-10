@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Information on a trade that has not been completely closed"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -14,7 +14,7 @@ creation
 
 feature -- Initialization
 
-	make (t: TRADE) is
+	make (t: TRADE)
 		require
 			t_not_void: t /= Void
 			t_open: t.is_open
@@ -29,7 +29,7 @@ feature -- Access
 	trade: TRADE
 			-- Opening trade of the match
 
-	original_units: INTEGER is
+	original_units: INTEGER
 			-- Number of units traded
 		do
 			Result := trade.units
@@ -37,7 +37,7 @@ feature -- Access
 			Result = trade.units
 		end
 
-	open_units: INTEGER is
+	open_units: INTEGER
 			-- Number of units that have not been closed
 		do
 			Result := original_units - closed_units
@@ -48,7 +48,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	add_close (t: TRADE) is
+	add_close (t: TRADE)
 			-- Add `t' as a closing trade.
 		require
 			t_not_void: t /= Void

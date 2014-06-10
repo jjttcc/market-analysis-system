@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A command that responds to a client data request"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -37,7 +37,7 @@ feature {NONE} -- Implementation - essential properties
 
 feature {NONE} -- Hook routine implementations
 
-	do_execute (msg: STRING) is
+	do_execute (msg: STRING)
 		local
 			fields: LIST [STRING]
 		do
@@ -60,12 +60,12 @@ feature {NONE} -- Hook routine implementations
 
 feature {NONE} -- Hook routines
 
-	expected_field_count: INTEGER is
+	expected_field_count: INTEGER
 			-- The expected field count in the argument passed to `do_execute'
 		deferred
 		end
 
-	additional_field_constraints_fulfilled (fields: LIST [STRING]): BOOLEAN is
+	additional_field_constraints_fulfilled (fields: LIST [STRING]): BOOLEAN
 			-- Are the additional constraints, if any, for `fields' fulfilled?
 		require
 			fields_exists: fields /= Void
@@ -74,44 +74,44 @@ feature {NONE} -- Hook routines
 			Result := True -- Yes - Redefine if needed.
 		end
 
-	additional_post_parse_constraints_fulfilled: BOOLEAN is
+	additional_post_parse_constraints_fulfilled: BOOLEAN
 			-- Are the additional constraints required after calling
 			-- `parse_remainder', if not `parse_error', fulfilled?
 		do
 			Result := True -- Yes - Redefine if needed.
 		end
 
-	field_constraint_error: STRING is
+	field_constraint_error: STRING
 			-- The error message applicable when constraint checking for
 			-- the fields extracted from the argument passed to `do_execute'
 			-- fails
-		indexing
+		note
 			once_status: global
 		once
 		end
 
-	additional_field_constraints_msg: STRING is
+	additional_field_constraints_msg: STRING
 			-- Error message for violation of the
 			-- `additional_field_constraints_fulfilled' check
-		indexing
+		note
 			once_status: global
 		once
 			Result := "" -- Redefine if needed.
 		end
 
-	symbol_index: INTEGER is
+	symbol_index: INTEGER
 			-- Field index for the 'symbol' passed to
 			-- `parse_symbol_and_period_type'
 		deferred
 		end
 
-	period_type_index: INTEGER is
+	period_type_index: INTEGER
 			-- Field index for the 'period type' passed to
 			-- `parse_symbol_and_period_type'
 		deferred
 		end
 
-	parse_remainder (fields: LIST [STRING]) is
+	parse_remainder (fields: LIST [STRING])
 			-- Parse any remaining fields of `fields' after calling
 			-- `parse_symbol_and_period_type'
 		require
@@ -127,7 +127,7 @@ feature {NONE} -- Hook routines
 				additional_post_parse_constraints_fulfilled
 		end
 
-	send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE]) is
+	send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE])
 			-- Use `t' to obtain the requested data and send them
 			-- back to the client.
 		require
@@ -147,7 +147,7 @@ feature {NONE} -- Implementation
 	last_field_parsing_error: STRING
 			-- Description of last parsing error encountered
 
-	create_and_send_response is
+	create_and_send_response
 			-- Create the requested data and send them to the client.
 		require
 			fields_parsed: fields_parsed
@@ -167,7 +167,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Utility
 
-	parse_fields (fields: LIST [STRING]) is
+	parse_fields (fields: LIST [STRING])
 		require
 			fields_exist: fields /= Void
 			field_count_valid: fields.count = expected_field_count
@@ -191,7 +191,7 @@ feature {NONE} -- Utility
 				additional_post_parse_constraints_fulfilled
 		end
 
-	parse_symbol_and_period_type (fields: LIST [STRING]) is
+	parse_symbol_and_period_type (fields: LIST [STRING])
 			-- Extract the symbol and trading period type and place the
 			-- results into `market_symbol' and `trading_period_type'.
 		require
@@ -227,7 +227,7 @@ feature {NONE} -- Utility
 				additional_field_constraints_fulfilled (fields)
 		end
 
-	send_tradable_not_found_response is
+	send_tradable_not_found_response
 			-- Report to the client that the requested tradable was not found.
 		require
 			tpt_ms_not_void: trading_period_type /= Void and
@@ -244,7 +244,7 @@ feature {NONE} -- Utility
 			end
 		end
 
-	set_print_parameters is
+	set_print_parameters
 			-- Set parameters for printing.
 			-- `print_start_date' and `print_end_date' are set according to
 			-- the respective settings in `session' for `trading_period';
@@ -265,7 +265,7 @@ feature {NONE} -- Utility
 			end
 		end
 
-	report_msg_fields_error (fields: LIST [STRING]) is
+	report_msg_fields_error (fields: LIST [STRING])
 		do
 			if fields.count /= expected_field_count then
 				report_error (Error, <<wrong_number_of_fields_msg>>)
@@ -276,15 +276,15 @@ feature {NONE} -- Utility
 
 feature {NONE} -- Implementation - string constants
 
-	symbol_not_found_prefix: STRING is "Symbol "
+	symbol_not_found_prefix: STRING = "Symbol "
 
-	symbol_not_found_suffix: STRING is " not in database."
+	symbol_not_found_suffix: STRING = " not in database."
 
-	invalid_period_type_prefix: STRING is "Invalid period type: "
+	invalid_period_type_prefix: STRING = "Invalid period type: "
 
-	bad_period_type_msg: STRING is "Bad period type"
+	bad_period_type_msg: STRING = "Bad period type"
 
-	wrong_number_of_fields_msg: STRING is "Wrong number of fields."
+	wrong_number_of_fields_msg: STRING = "Wrong number of fields."
 
 invariant
 

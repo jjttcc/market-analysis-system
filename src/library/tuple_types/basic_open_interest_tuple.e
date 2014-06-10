@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Volume tuple with open interest redefined as an attribute";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -23,7 +23,7 @@ feature -- Access
 
 feature {VALUE_SETTER} -- Status setting
 
-	set_open_interest (i: REAL) is
+	set_open_interest (i: REAL)
 			-- Set open_interest to `i'.
 		require
 			i >= 0

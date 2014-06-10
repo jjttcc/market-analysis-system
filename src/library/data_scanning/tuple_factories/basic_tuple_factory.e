@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Tuple factory that produces a BASIC_MARKET_TUPLE";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -15,7 +15,7 @@ class BASIC_TUPLE_FACTORY inherit
 
 feature -- Basic operations
 
-	execute is
+	execute
 		do
 			create product.make
 		end

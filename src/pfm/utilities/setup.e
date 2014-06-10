@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Functionality for setting up portfolio management - %
 		%parsing command line, creating the trade list, etc."
 	author: "Jim Cochrane"
@@ -30,7 +30,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 			if argument_count = 0 then
 				usage
@@ -47,7 +47,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	usage is
+	usage
 		do
 			print (concatenation (<<"usage: ", command_name,
 				" portfolio_data_file%N">>))
@@ -55,7 +55,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	create_lists is
+	create_lists
 		local
 			trade_match_builder: TRADE_MATCH_BUILDER
 			trade_builder: TRADE_BUILDER

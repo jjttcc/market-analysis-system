@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A market event coordinator that generates market events for a %
 		%list of tradables"
@@ -21,7 +21,7 @@ creation
 
 feature -- Initialization
 
-	make (dispenser: TRADABLE_DISPENSER) is
+	make (dispenser: TRADABLE_DISPENSER)
 		require
 			not_void: dispenser /= Void
 		do
@@ -37,7 +37,7 @@ feature -- Access
 
 feature {NONE} -- Implementation
 
-	generate_events is
+	generate_events
 			-- For each element, e, of tradables, execute all elements
 			-- of event_generators on e.
 		local
@@ -79,7 +79,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	initialize (eg: MARKET_EVENT_GENERATOR) is
+	initialize (eg: MARKET_EVENT_GENERATOR)
 			-- Set the "tradable" of `eg' from `tradables'.
 		do
 			eg.set_tradable_from_dispenser (tradables)

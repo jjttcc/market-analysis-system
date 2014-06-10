@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Services for STORABLE_LISTs"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -17,17 +17,17 @@ deferred class STORABLE_SERVICES [G] inherit
 
 feature -- Access
 
-	last_error: STRING is
+	last_error: STRING
 			-- Description of last error that occurred
 		deferred
 		end
 
-	real_list: STORABLE_LIST [ANY] is
+	real_list: STORABLE_LIST [ANY]
 			-- The actual persistent list
 		deferred
 		end
 
-	working_list: STORABLE_LIST [ANY] is
+	working_list: STORABLE_LIST [ANY]
 			-- Working list used for editing
 		deferred
 		end
@@ -48,7 +48,7 @@ feature -- Status report
 	ok_to_save: BOOLEAN
 			-- Are changes allowed to be saved?
 
-	abort_edit: BOOLEAN is
+	abort_edit: BOOLEAN
 			-- Should the edit session be aborted?
 		do
 			Result := not ok_to_save and not readonly
@@ -58,7 +58,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	edit_list is
+	edit_list
 			-- Allow user to edit the list and save the changes.
 		local
 			at_end: BOOLEAN
@@ -81,7 +81,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	save is
+	save
 			-- Save user's changes to persistent store.
 		require
 			changed_and_ok_to_save: dirty and ok_to_save
@@ -100,7 +100,7 @@ feature {NONE} -- Implementation
 			changed: changed
 		end
 
-	begin_edit is
+	begin_edit
 			-- Perform actions necessary to begin the editing session,
 			-- including attempting to lock the persistent file.
 		do
@@ -135,7 +135,7 @@ feature {NONE} -- Implementation
 			working_list_set: working_list /= Void
 		end
 
-	end_edit is
+	end_edit
 			-- Perform actions necessary to end the editing session,
 			-- including ensuring that the file lock is released.
 		require
@@ -159,7 +159,7 @@ feature {NONE} -- Implementation
 
 	lock: FILE_LOCK
 
-	prompt_for_edit_state is
+	prompt_for_edit_state
 			-- Prompt the user as to whether to "edit" read-only, wait for
 			-- lock to clear, or abort edit.
 		local
@@ -185,7 +185,7 @@ feature {NONE} -- Implementation
 				(not readonly and not ok_to_save)
 		end
 
-	initialize_lock is
+	initialize_lock
 			-- Ensure `lock' has been created and is unlocked.
 		do
 			if lock /= Void and lock.locked then
@@ -197,7 +197,7 @@ feature {NONE} -- Implementation
 			lock_set: lock /= Void and not lock.locked
 		end
 
-	cleanup is
+	cleanup
 		local
 			unlock_failed: BOOLEAN
 		do
@@ -216,46 +216,46 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Hook routines
 
-	do_edit is
+	do_edit
 			-- Hook method called by edit_list
 		require
 			working_list_set: working_list /= Void
 		deferred
 		end
 
-	show_message (s: STRING) is
+	show_message (s: STRING)
 			-- Display `s' to the user.
 		deferred
 		end
 
-	prompt_for_char (msg, charselection: STRING): CHARACTER is
+	prompt_for_char (msg, charselection: STRING): CHARACTER
 		deferred
 		end
 
-	retrieve_persistent_list is
+	retrieve_persistent_list
 			-- Retrieve the current contents of the storable list from
 			-- persistent store.
 		deferred
 		end
 
-	initialize_working_list is
+	initialize_working_list
 		deferred
 		ensure
 			list_set: working_list /= Void
 		end
 
-	end_save is
+	end_save
 			-- Hook for end of save routine, if needed
 		do
 		end
 
-	do_initialize_lock is
+	do_initialize_lock
 		deferred
 		ensure
 			lock_not_void: lock /= Void and not lock.locked
 		end
 
-	synchronize_lists is
+	synchronize_lists
 			-- Perform any needed syncrhonization of in-memory lists
 			-- after changes have been saved to persistent store.
 		do

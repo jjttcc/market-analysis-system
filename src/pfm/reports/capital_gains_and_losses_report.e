@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Captital gains and losses report suitable for attaching %
 		%to Schedule D of the U.S. federal tax form - up-to-date as of %
 		%April 15, 2000"
@@ -23,11 +23,11 @@ creation
 
 feature {NONE} -- Initialization
 
-	make is do end
+	make do end
 
 feature -- Basic operations
 
-	execute is
+	execute
 		local
 			total, total_sales, buy_price, sell_price: DOUBLE
 			trade: TRADE
@@ -59,7 +59,7 @@ feature -- Basic operations
 
 feature {NONE} -- Initialization
 
-	print_header is
+	print_header
 			-- Print the schedule D report header
 		local
 			line: STRING
@@ -74,7 +74,7 @@ feature {NONE} -- Initialization
 			print_list (<<line, "%N">>)
 		end
 
-	right_pad (s: STRING; count: INTEGER) is
+	right_pad (s: STRING; count: INTEGER)
 			-- Right pad `s' with blanks to ensure that it is s.count =
 			-- `count'.  If s.count >= `count' no action is taken.
 		require
@@ -92,7 +92,7 @@ feature {NONE} -- Initialization
 			padded: old s.count < count implies s.count = count
 		end
 
-	left_pad (s: STRING; count: INTEGER) is
+	left_pad (s: STRING; count: INTEGER)
 			-- Left pad `s' with blanks to ensure that it is s.count =
 			-- `count'.  If s.count >= `count' no action is taken.
 		require
@@ -110,7 +110,7 @@ feature {NONE} -- Initialization
 			padded: old s.count < count implies s.count = count
 		end
 
-	formatted_date (d: DATE): STRING is
+	formatted_date (d: DATE): STRING
 		local
 			ifmt: FORMAT_INTEGER
 		do
@@ -121,7 +121,7 @@ feature {NONE} -- Initialization
 				ifmt.formatted (d.year \\ 100)>>)
 		end
 
-	strip_leading_char (s: STRING; c: CHARACTER) is
+	strip_leading_char (s: STRING; c: CHARACTER)
 			-- Strip all occurrences of `c' at the beginning of `s'
 		require
 			not_void: s /= Void
@@ -134,7 +134,7 @@ feature {NONE} -- Initialization
 			end
 		end
 
-	formatted_price (p: REAL; width: INTEGER; justify: BOOLEAN): STRING is
+	formatted_price (p: REAL; width: INTEGER; justify: BOOLEAN): STRING
 		local
 			df: FORMAT_DOUBLE
 		do
@@ -145,7 +145,7 @@ feature {NONE} -- Initialization
 			end
 		end
 
-	gain_or_loss (amount: REAL): STRING is
+	gain_or_loss (amount: REAL): STRING
 			-- Amount, formatted as a gain or loss - surrounded by
 			-- parentheses if a loss (negative)
 		do
@@ -160,7 +160,7 @@ feature {NONE} -- Initialization
 			end
 		end
 
-	report_trade (t: TRADE_MATCH; buy_price, sell_price: REAL) is
+	report_trade (t: TRADE_MATCH; buy_price, sell_price: REAL)
 			-- Output a Schedule B report on trade `t'.
 		local
 			line, s: STRING

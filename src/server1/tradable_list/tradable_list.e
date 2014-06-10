@@ -1,8 +1,8 @@
-indexing
+note
 	description: "An iterable list of tradables"
 	author: "Jim Cochrane"
 	date: "$Date$";
-	note: "@@@When multi-threading is added, some logic may need to be %
+	note1: "@@@When multi-threading is added, some logic may need to be %
 		%added for that in this class."
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
@@ -28,7 +28,7 @@ deferred class TRADABLE_LIST inherit
 
 feature -- Initialization
 
-	make (s_list: LIST [STRING]; factory: TRADABLE_FACTORY) is
+	make (s_list: LIST [STRING]; factory: TRADABLE_FACTORY)
 		require
 			not_void: s_list /= Void and factory /= Void
 		do
@@ -52,18 +52,18 @@ feature -- Initialization
 
 feature -- Access
 
-	index: INTEGER is
+	index: INTEGER
 		do
 			Result := symbol_list.index
 		end
 
-	count: INTEGER is
+	count: INTEGER
 			-- Number of items in the list
 		do
 			Result := symbol_list.count
 		end
 
-	item: TRADABLE [BASIC_MARKET_TUPLE] is
+	item: TRADABLE [BASIC_MARKET_TUPLE]
 			-- The current tradable.  `fatal_error' will be True if an error
 			-- occurs.
 		do
@@ -94,7 +94,7 @@ feature -- Access
 			old_index_updated: index = old_index
 		end
 
-	symbols: LIST [STRING] is
+	symbols: LIST [STRING]
 			-- The symbol of each tradable
 		do
 			if symbol_list_clone = Void then
@@ -103,24 +103,24 @@ feature -- Access
 			Result := symbol_list_clone
 		end
 
-	changeable_comparison_criterion: BOOLEAN is False
+	changeable_comparison_criterion: BOOLEAN = False
 
 	cache_size: INTEGER
 			-- The size of the cache of tradables
 
 feature -- Status report
 
-	before: BOOLEAN is
+	before: BOOLEAN
 		do
 			Result := symbol_list.before
 		end
 
-	after: BOOLEAN is
+	after: BOOLEAN
 		do
 			Result := symbol_list.after
 		end
 
-	is_empty: BOOLEAN is
+	is_empty: BOOLEAN
 		do
 			Result := symbol_list.is_empty
 		end
@@ -128,7 +128,7 @@ feature -- Status report
 	fatal_error: BOOLEAN
 			-- Did an unrecoverable error occur?
 
-	caching_on: BOOLEAN is
+	caching_on: BOOLEAN
 			-- Is caching of tradable data turned on?
 		do
 			Result := cache_index_queue.capacity > 0
@@ -143,7 +143,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	turn_caching_on is
+	turn_caching_on
 			-- Turn tradable caching on if cache_size > 0.
 		do
 			if not caching_on then
@@ -153,7 +153,7 @@ feature -- Status setting
 			on: cache_size > 0 implies caching_on
 		end
 
-	turn_caching_off is
+	turn_caching_off
 			-- Turn tradable caching off.
 		do
 			if caching_on then
@@ -164,7 +164,7 @@ feature -- Status setting
 			off: not caching_on
 		end
 
-	clear_error is
+	clear_error
 			-- Clear error state.
 		do
 			fatal_error := False
@@ -172,7 +172,7 @@ feature -- Status setting
 			no_error: fatal_error = False
 		end
 
-	set_timing_on (arg: BOOLEAN) is
+	set_timing_on (arg: BOOLEAN)
 			-- Set `timing_on' to `arg'.
 		do
 			timing_on := arg
@@ -180,7 +180,7 @@ feature -- Status setting
 			timing_on_set: timing_on = arg
 		end
 
-	set_intraday (arg: BOOLEAN) is
+	set_intraday (arg: BOOLEAN)
 			-- Set intraday to `arg'.
 		do
 			intraday := arg
@@ -190,29 +190,29 @@ feature -- Status setting
 
 feature -- Cursor movement
 
-	start is
+	start
 		do
 			symbol_list.start
 		end
 
-	finish is
+	finish
 		do
 			symbol_list.finish
 		end
 
-	forth is
+	forth
 		do
 			symbol_list.forth
 		end
 
-	back is
+	back
 		do
 			symbol_list.back
 		end
 
 feature -- Basic operations
 
-	search_by_symbol (s: STRING) is
+	search_by_symbol (s: STRING)
 			-- Find the tradable whose associated symbol matches `s'.
 			-- Note: If `s' contains any upper-case characters, no matching
 			-- tradable will be found.
@@ -228,7 +228,7 @@ feature -- Basic operations
 			after_if_not_found: not symbols.has (s) implies after
 		end
 
-	update_item is
+	update_item
 			-- If new data is available for `item' (the current tradable),
 			-- load the new data into `item'.
 		local
@@ -251,7 +251,7 @@ feature -- Basic operations
 			end
 		end
 
-	clear_cache is
+	clear_cache
 			-- Empty the tradable cache.
 		do
 			cache.clear_all
@@ -271,7 +271,7 @@ feature {FACTORY} -- Access
 
 feature {NONE} -- Implementation
 
-	load_target_tradable is
+	load_target_tradable
 			-- Load the data for `current_symbol' and set `target_tradable'
 			-- to the resulting TRADABLE.
 		require
@@ -284,7 +284,7 @@ feature {NONE} -- Implementation
 			target_tradable_set: not fatal_error = (target_tradable /= Void)
 		end
 
-	load_data is
+	load_data
 			-- Load the data for `current_symbol' and close the input medium.
 			-- `setup_input_medium' must have been called to open the
 			-- input medium before calling this procedure.
@@ -314,7 +314,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	report_errors (symbol: STRING; l: LIST [STRING]) is
+	report_errors (symbol: STRING; l: LIST [STRING])
 		do
 			log_error ("Errors occurred while processing ")
 			log_error (symbol); log_error (":%N")
@@ -329,7 +329,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	add_to_cache (t: TRADABLE [BASIC_MARKET_TUPLE]; idx: INTEGER) is
+	add_to_cache (t: TRADABLE [BASIC_MARKET_TUPLE]; idx: INTEGER)
 			-- Add 't' with its 'idx' to the cache if caching_on.  If not
 			-- caching_on do nothing.
 		require
@@ -350,7 +350,7 @@ feature {NONE} -- Implementation
 			t_added_if_caching_on: caching_on implies cache @ idx = t
 		end
 
-	cached_item (i: INTEGER): TRADABLE [BASIC_MARKET_TUPLE] is
+	cached_item (i: INTEGER): TRADABLE [BASIC_MARKET_TUPLE]
 			-- The cached item with index 'i' - Void if not in cache
 		do
 			Result := cache @ i
@@ -358,7 +358,7 @@ feature {NONE} -- Implementation
 			void_if_no_caching: not caching_on implies Result = Void
 		end
 
-	setup_input_medium is
+	setup_input_medium
 			-- Initialize `input_medium', call 
 			-- 'tradable_factory.set_input (input_medium)', and
 			-- perform any other needed intialization before reading and
@@ -379,17 +379,17 @@ feature {NONE} -- Implementation
 				tradable_factory.input = input_medium
 		end
 
-	close_input_medium is
+	close_input_medium
 			-- Perform any required cleanup of the input medium, if it exists.
 		do
 		end
 
-	current_symbol: STRING is
+	current_symbol: STRING
 		do
 			Result := symbol_list.item
 		end
 
-	setup_symbol_list (s_list: LINEAR [STRING]) is
+	setup_symbol_list (s_list: LINEAR [STRING])
 			-- Create `symbol_list' and copy elements of s_list into it,
 			-- converting any upper-case characters to lower-case.
 		local
@@ -410,7 +410,7 @@ feature {NONE} -- Implementation
 			symbol_list := list
 		end
 
-	remove_current_item is
+	remove_current_item
 			-- Remove the current item and leave symbol_list cursor at
 			-- the item after the removed item, if there is one; otherwise
 			-- ensure symbol_list.first if it's not empty.
@@ -429,7 +429,7 @@ feature {NONE} -- Implementation
 			symbol_list_clone := Void
 		end
 
-	initial_cache_size: INTEGER is
+	initial_cache_size: INTEGER
 			-- The initial size of the tradable cache
 -- !!!! indexing once_status: global??!!!
 		local
@@ -458,7 +458,7 @@ feature {NONE} -- Implementation - attributes
 
 feature {NONE} -- Hook routines
 
-	target_tradable_out_of_date: BOOLEAN is
+	target_tradable_out_of_date: BOOLEAN
 			-- Have new data become available for `target_tradable' since
 			-- `target_tradable' was last updated?
 		require
@@ -471,7 +471,7 @@ feature {NONE} -- Hook routines
 			Result := False
 		end
 
-	append_new_data is
+	append_new_data
 			-- Append newly available data to `target_tradable'.  (Note
 			-- the difference between this procedure and the `load_data'
 			-- procedure, which replaces the existing data instead of
@@ -495,7 +495,7 @@ feature {NONE} -- Hook routines
 				target_tradable.data.count >= old target_tradable.data.count
 		end
 
-	pre_initialize_input_medium is
+	pre_initialize_input_medium
 			-- Perform any needed preparation before calling
 			-- `initialize_input_medium'.
 		require
@@ -504,7 +504,7 @@ feature {NONE} -- Hook routines
 			do_nothing -- Redefine, if needed.
 		end
 
-	post_initialize_input_medium is
+	post_initialize_input_medium
 			-- Perform any needed preparation after calling
 			-- `initialize_input_medium'.
 		require
@@ -513,7 +513,7 @@ feature {NONE} -- Hook routines
 			do_nothing -- Redefine, if needed.
 		end
 
-	initialize_input_medium is
+	initialize_input_medium
 			-- Initialize `input_medium' so that it's ready to be read from.
 		deferred
 		ensure
@@ -524,7 +524,7 @@ feature {NONE} -- Hook routines
 
 feature {NONE} -- Debugging tools
 
-	print_cache is
+	print_cache
 		local
 			indexes: LIST [INTEGER]
 		do
@@ -545,11 +545,11 @@ feature {NONE} -- Debugging tools
 
 feature {NONE} -- Inapplicable
 
-	compare_references is
+	compare_references
 		do
 		end
 
-	compare_objects is
+	compare_objects
 		do
 		end
 

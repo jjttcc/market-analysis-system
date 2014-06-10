@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Value setter that sets the open interest of a tuple";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -13,7 +13,7 @@ class OPEN_INTEREST_SETTER inherit
 feature {NONE}
 
 	do_set (stream: INPUT_SEQUENCE;
-				tuple: BASIC_OPEN_INTEREST_TUPLE) is
+				tuple: BASIC_OPEN_INTEREST_TUPLE)
 		do
 			if stream.last_real + Epsilon < 0 then
 				handle_input_error (Concatenation (<<"Numeric input value %

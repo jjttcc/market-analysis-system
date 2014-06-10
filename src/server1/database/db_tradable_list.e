@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A TRADABLE_LIST for a database implementation"
 	author: "Eirik Mangseth"
 	date: "$Date$";
@@ -21,7 +21,7 @@ feature {NONE} -- Implementation
 
 	input_medium: DB_INPUT_SEQUENCE
 
-	old_remove_setup_input_medium is
+	old_remove_setup_input_medium
 		local
 			global_server: expanded GLOBAL_SERVER_FACILITIES
 			db: MAS_DB_SERVICES
@@ -55,7 +55,7 @@ feature {NONE} -- Implementation
 				input_medium /= Void implies not input_medium.is_open
 		end
 
-	initialize_input_medium is
+	initialize_input_medium
 		local
 			global_server: expanded GLOBAL_SERVER_FACILITIES
 			db: MAS_DB_SERVICES
@@ -87,7 +87,7 @@ feature {NONE} -- Implementation
 				input_medium /= Void implies not input_medium.is_open
 		end
 
-	close_input_medium is
+	close_input_medium
 		local
 			global_server: expanded GLOBAL_SERVER_FACILITIES
 			db: MAS_DB_SERVICES

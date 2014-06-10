@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Root test class for TA package"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -36,7 +36,7 @@ creation
 
 feature -- Initialization
 
-	make is
+	make
 		local
 			ui: TEST_USER_INTERFACE
 			functions: MARKET_FUNCTIONS -- For test compile
@@ -50,7 +50,7 @@ feature -- Initialization
 			ui.execute
 		end
 
-	test_bool_operators is
+	test_bool_operators
 			-- Assertions must be on in order for this test to take effect.
 		local
 			andop: AND_OPERATOR

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Information about the current version of the application"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -17,17 +17,17 @@ class MAS_PRODUCT_INFO inherit
 
 feature -- Access
 
-	name: STRING is
-		indexing
+	name: STRING
+		note
 			once_status: global
 		once
 			Result := "Market Analysis Server"
 		end
 
-	number_components: ARRAY [STRING] is
+	number_components: ARRAY [STRING]
 			-- The components of the version number
 			-- Components are strings to allow mixed numbers and letters.
-		indexing
+		note
 			once_status: global
 		local
 			s: STRING
@@ -43,31 +43,31 @@ feature -- Access
 			s.append ("]")
 		end
 
-	date: DATE is
+	date: DATE
 			-- The last date that `number' was updated
-		indexing
+		note
 			once_status: global
 		once
 			create Result.make (2006, 5, 9)
 		end
 
-	release_description: STRING is
+	release_description: STRING
 			-- Short description of the current release
-		indexing
+		note
 			once_status: global
 		once
 			Result := number + " - (Pre-beta release)"
 		end
 
-	copyright: STRING is
-		indexing
+	copyright: STRING
+		note
 			once_status: global
 		once
 			Result := "Copyright 1998 - 2004: Jim Cochrane"
 		end
 
-	license_information: STRING is
-		indexing
+	license_information: STRING
+		note
 			once_status: global
 		once
 			Result :=

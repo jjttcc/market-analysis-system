@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Child of THREAD - test/experiment 1"
 	author: "Jim Cochrane"
 	date: "$Date: 2006-04-04 19:10:39 -0600 (Tue, 04 Apr 2006) $";
@@ -12,7 +12,7 @@ class THREAD_CHILD_1 inherit
 
 feature
 
-	execute is
+	execute
 		local
 			i: INTEGER
 		do

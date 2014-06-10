@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A storable list of MARKET_EVENT_GENERATORs that wipes out each %
 		%generator before saving it to persistent store."
@@ -26,7 +26,7 @@ creation
 
 feature -- Utility
 
-	save is
+	save
 			-- Call wipe_out on each item to ensure that no extra data
 			-- is stored to the file; then call precursor to save the
 			-- remaining contents.

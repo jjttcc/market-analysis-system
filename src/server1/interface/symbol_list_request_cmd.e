@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A command that responds to a client request for all %
 		%available market symbols"
 	author: "Jim Cochrane"
@@ -21,7 +21,7 @@ creation
 
 feature {NONE} -- Basic operations
 
-	do_execute (msg: STRING) is
+	do_execute (msg: STRING)
 		local
 			symbols: LIST [STRING]
 		do
@@ -42,7 +42,7 @@ feature {NONE} -- Basic operations
 			put (eom)
 		end
 
-	error_context (msg: STRING): STRING is
+	error_context (msg: STRING): STRING
 		do
 			Result := "retrieving symbol list"
 		end

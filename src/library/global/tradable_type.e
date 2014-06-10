@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Enumerated tradable types"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -25,13 +25,13 @@ create {ENUMERATED}
 
 feature {NONE} -- Initialization
 
-	make_stock is
+	make_stock
 			-- Make as a `stock' type
 		do
 			make (stock)
 		end
 
-	make_derivative is
+	make_derivative
 			-- Make as a `derivative' type
 		do
 			make (derivative)
@@ -39,14 +39,14 @@ feature {NONE} -- Initialization
 
 feature {NONE} -- Implementation
 
-	value_name_map: HASH_TABLE [STRING, INTEGER] is
+	value_name_map: HASH_TABLE [STRING, INTEGER]
 		once
 			create Result.make (2)
 			Result.put ("Stock", stock)
 			Result.put ("Derivative", derivative)
 		end
 
-	initial_allowable_values: ARRAY [INTEGER] is
+	initial_allowable_values: ARRAY [INTEGER]
 			-- Allowable values
 		do
 			Result := <<stock, derivative>>

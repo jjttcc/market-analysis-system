@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Result commands that are also n-record structures"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -22,7 +22,7 @@ deferred class N_RECORD_COMMAND inherit
 
 feature -- Initialization
 
-	make (i: like n) is
+	make (i: like n)
 		require
 			i_gt_0: i > 0
 		do
@@ -33,7 +33,7 @@ feature -- Initialization
 
 feature {MARKET_FUNCTION}
 
-	initialize (arg: ANY) is
+	initialize (arg: ANY)
 			-- If `arg' conforms to N_RECORD_STRUCTURE, set `n' to arg.n.
 		local
 			ns: N_RECORD_STRUCTURE

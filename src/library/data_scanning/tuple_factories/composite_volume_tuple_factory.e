@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Composite tuple factory that includes the sum of the %
 		%volume of all elements in the market tuple list";
 	author: "Jim Cochrane"
@@ -16,7 +16,7 @@ class COMPOSITE_VOLUME_TUPLE_FACTORY inherit
 
 feature {NONE}
 
-	do_auxiliary_work (tuples: LIST [MARKET_TUPLE]) is
+	do_auxiliary_work (tuples: LIST [MARKET_TUPLE])
 			-- Set product's volume to sum of all volumes in `tuples'.
 		local
 			operator: VOLUME

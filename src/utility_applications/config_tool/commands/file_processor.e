@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Objects that process a target file according to a set of%
 		%specifications"
 	author: "Jim Cochrane"
@@ -27,7 +27,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make is
+	make
         do
         end
 
@@ -41,11 +41,11 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is True
+	arg_mandatory: BOOLEAN = True
 
 feature -- Basic operations
 
-	execute (options: CONFIG_TOOL_COMMAND_LINE) is
+	execute (options: CONFIG_TOOL_COMMAND_LINE)
 		local
 			configuration: CONFIGURATION
 			reader: FILE_READER
@@ -64,7 +64,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	make_target_file (path: STRING) is
+	make_target_file (path: STRING)
 		do
 			create target_file.make (path)
 			if not target_file.exists then
@@ -72,7 +72,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	do_replacement (key: STRING) is
+	do_replacement (key: STRING)
 		do
 			target_file_contents := gsub (
 				key, replacement_specs @ key, target_file_contents)

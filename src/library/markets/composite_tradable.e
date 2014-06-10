@@ -1,4 +1,4 @@
-indexing
+note
 	description: "TRADABLEs made up of other TRADABLEs";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,7 +21,7 @@ deferred class COMPOSITE_TRADABLE inherit
 
 feature {NONE} -- Initialization
 
-	make (accum_op: RESULT_COMMAND [REAL]) is
+	make (accum_op: RESULT_COMMAND [REAL])
 		require
 			arg_exists: accum_op /= Void
 		do
@@ -35,12 +35,12 @@ feature -- Access
 
 	symbol: STRING
 
-	name: STRING is
+	name: STRING
 		do
 			--@@@To be determined - probably an attribute
 		end
 
-	short_description: STRING is
+	short_description: STRING
 		do
 			--@@@To be determined - probably an attribute
 		end
@@ -56,7 +56,7 @@ feature -- Access
 			--@@@There may be a need for each element of `components' to
 			--be associated with its own accumulation_operator, but
 			--probably, and hopefully, not.
-			--@@@Implementation note: The accumulation can probably be done
+			--@@@Implementation note1: The accumulation can probably be done
 			--with an appropriate command structure for 
 			--`operator_for_current_component'; it seems though that it
 			--may be better (in terms of code clarity/understandability)
@@ -70,18 +70,18 @@ feature -- Access
 
 feature -- Status report
 
-	valid_indicator (f: MARKET_FUNCTION): BOOLEAN is
+	valid_indicator (f: MARKET_FUNCTION): BOOLEAN
 		do
 			--@@@To be determined
 		ensure then
 		end
 
-	has_open_interest: BOOLEAN is
+	has_open_interest: BOOLEAN
 		do
 			--@@@To be determined - possibly an attribute
 		end
 
-	source_data_is_intraday: BOOLEAN is
+	source_data_is_intraday: BOOLEAN
 			-- Is the source data used to create Current's data intraday data?
 		do
 			if not components.is_empty then
@@ -93,7 +93,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	finish_loading is
+	finish_loading
 		do
 			Precursor
 			--@@@This may be where the output needs to be calculated, if
@@ -102,14 +102,14 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	make_ctf: COMPOSITE_TUPLE_FACTORY is
+	make_ctf: COMPOSITE_TUPLE_FACTORY
 -- !!!! indexing once_status: global??!!!
 		once
 			--@@@Check
 			create {COMPOSITE_VOLUME_TUPLE_FACTORY} Result
 		end
 
-	make_data is
+	make_data
 			-- Use `components' to create Current's `data'.
 		local
 			first_input_sequence: MARKET_TUPLE_LIST [MARKET_TUPLE]
@@ -141,7 +141,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	make_current_tuple is
+	make_current_tuple
 			-- Use the tuple at the current cursor position of each element
 			-- of `components' to make `current_tuple'.
 		local
@@ -156,7 +156,7 @@ feature {NONE} -- Implementation
 		end
 
 	process_components_for_current_tuple (
-		field_extractor: BASIC_NUMERIC_COMMAND) is
+		field_extractor: BASIC_NUMERIC_COMMAND)
 			-- For each element, c, of `components', use the field obtained
 			-- by `field_extractor' of c's current tuple to calculate the
 			-- resulting output value and put this value into the associated
@@ -186,7 +186,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - Hook routines
 
-	prepare_for_processing is
+	prepare_for_processing
 			-- Perform any needed initialization before making `data'.
 		local
 			now: DATE_TIME
@@ -197,14 +197,14 @@ feature {NONE} -- Implementation - Hook routines
 			work_tuple_exists: work_tuple /= Void
 		end
 
-	field_extractors: ARRAY [BASIC_NUMERIC_COMMAND] is
+	field_extractors: ARRAY [BASIC_NUMERIC_COMMAND]
 			-- "commands" used to extract the fields (e.g., open, close, ...)
 			-- used for the calculation
 		do
 			Result := <<open, high, low, close, volume>>
 		end
 
-	calculate_field (field_extractor: BASIC_NUMERIC_COMMAND) is
+	calculate_field (field_extractor: BASIC_NUMERIC_COMMAND)
 			-- Calculate the value for `field_extractor' with
 			-- `components.item'.  The result will be stored in
 			-- `accumulation_operator.value'.
@@ -228,7 +228,7 @@ feature {NONE} -- Implementation - Hook routines
 		end
 
 	operator_for_current_component (field_extractor_name: STRING):
-		RESULT_COMMAND [REAL] is
+		RESULT_COMMAND [REAL]
 			-- Operator for `component.item', possibly specialized with
 			-- `field_extractor_name'
 		deferred
@@ -240,7 +240,7 @@ feature {NONE} -- Implementation - Hook routines
 		end
 
 	variable_for_current_component (field_extractor_name: STRING):
-		NUMERIC_VALUE_COMMAND is
+		NUMERIC_VALUE_COMMAND
 			-- The "variable" to be operated on for `component.item',
 			-- possibly specialized with `field_extractor_name'
 		deferred
@@ -251,7 +251,7 @@ feature {NONE} -- Implementation - Hook routines
 		end
 
 	post_processing_operator (field_extractor_name: STRING):
-		RESULT_COMMAND [REAL] is
+		RESULT_COMMAND [REAL]
 			-- Operator to be used for any needed post-processing for the
 			-- current field of the current tuple (possibly specialized
 			-- with `field_extractor_name')
@@ -265,7 +265,7 @@ feature {NONE} -- Implementation - Hook routines
 			result_exists: Result /= Void
 		end
 
-	initialize_accumulation_operator is
+	initialize_accumulation_operator
 			-- Initialize the 'result' variable of `accumulation_operator'
 			-- in preparation for starting the "accumulation" for the
 			-- current field of the current tuple.
@@ -278,7 +278,7 @@ feature {NONE} -- Implementation - Hook routines
 			end
 		end
 
-	accumulation_result_variable: NUMERIC_VALUE_COMMAND is
+	accumulation_result_variable: NUMERIC_VALUE_COMMAND
 			-- The "variable" that will hold the result of the "accumulation"
 		deferred
 		ensure
@@ -298,7 +298,7 @@ feature {NONE} -- Implementation - Utility queries
 
 --@@May want to make the choice of fields to be processed configurable,
 --either by means of inheritance, or status setting by the client.
-	open: OPENING_PRICE is
+	open: OPENING_PRICE
 			-- Operator used to extract the open price of the input
 			-- tuple currently being processed
 		once
@@ -306,7 +306,7 @@ feature {NONE} -- Implementation - Utility queries
 			Result.set_name ("open")
 		end
 
-	high: HIGH_PRICE is
+	high: HIGH_PRICE
 			-- Operator used to extract the high price of the input
 			-- tuple currently being processed
 		once
@@ -314,7 +314,7 @@ feature {NONE} -- Implementation - Utility queries
 			Result.set_name ("high")
 		end
 
-	low: LOW_PRICE is
+	low: LOW_PRICE
 			-- Operator used to extract the low price of the input
 			-- tuple currently being processed
 		once
@@ -322,7 +322,7 @@ feature {NONE} -- Implementation - Utility queries
 			Result.set_name ("low")
 		end
 
-	close: CLOSING_PRICE is
+	close: CLOSING_PRICE
 			-- Operator used to extract the close price of the input
 			-- tuple currently being processed
 		once
@@ -330,7 +330,7 @@ feature {NONE} -- Implementation - Utility queries
 			Result.set_name ("close")
 		end
 
-	volume: VOLUME is
+	volume: VOLUME
 			-- Operator used to extract the volume of the input
 			-- tuple currently being processed
 		once
@@ -339,7 +339,7 @@ feature {NONE} -- Implementation - Utility queries
 		end
 
 	field_setters: HASH_TABLE [PROCEDURE [ANY, TUPLE [
-		BASIC_VOLUME_TUPLE, REAL]], STRING] is
+		BASIC_VOLUME_TUPLE, REAL]], STRING]
 			-- Tuple field setters, corresponding to the tuple extractors
 			-- (open, high, low, etc.) - The key is the name of the
 			-- extractor.
@@ -357,7 +357,7 @@ feature {NONE} -- Implementation - Utility queries
 
 feature {NONE} -- Implementation - Utility routines
 
-	synchronize_component_cursors is
+	synchronize_component_cursors
 			-- For each element, c, of `components', ensure: equal (
 			-- c.data.item.date_time, l.data.item.date_time),
 			-- where l is the element of `components' such that
@@ -382,7 +382,7 @@ feature {NONE} -- Implementation - Utility routines
 		end
 
 	tradable_date_matches (t: TRADABLE [VOLUME_TUPLE];
-		dt: DATE_TIME): BOOLEAN is
+		dt: DATE_TIME): BOOLEAN
 			-- Is the date-time of `t.data.item' the same as `dt'?
 		require
 			args_exist: t /= Void and dt /= Void
@@ -390,7 +390,7 @@ feature {NONE} -- Implementation - Utility routines
 			Result := t.data.item.date_time.is_equal (dt)
 		end
 
-	date_times_match (dt1, dt2: DATE_TIME): BOOLEAN is
+	date_times_match (dt1, dt2: DATE_TIME): BOOLEAN
 			-- Do `dt1' and `dt2' specify the same date-time?
 		require
 			at_least_one_component: not components.is_empty
@@ -409,7 +409,7 @@ feature {NONE} -- Implementation - Utility routines
 			end
 		end
 
-	start_data_cursors is
+	start_data_cursors
 			-- Position the cursor of the `data' feature of each element of
 			-- `components' on the first element.
 		do
@@ -423,7 +423,7 @@ feature {NONE} -- Implementation - Utility routines
 			end
 		end
 
-	increment_data_cursors is
+	increment_data_cursors
 			-- Move the cursor of the `data' feature of each element of
 			-- `components' forward one element.  If a gap in the data is
 			-- found such that `data.item.date_time' of one element of

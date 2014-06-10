@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A command that responds to an event list request - %
 		%a request for a list of all valid market event types for the %
 		%specified tradable and period type"
@@ -26,27 +26,27 @@ creation
 
 feature {NONE} -- Hook routine implementations
 
-	expected_field_count: INTEGER is 2
+	expected_field_count: INTEGER = 2
 
-	symbol_index: INTEGER is 1
+	symbol_index: INTEGER = 1
 
-	period_type_index: INTEGER is 2
+	period_type_index: INTEGER = 2
 
-	send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE]) is
+	send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE])
 		do
 			put_ok
 			find_and_put_event_list (t)
 			put (eom)
 		end
 
-	error_context (msg: STRING): STRING is
+	error_context (msg: STRING): STRING
 		do
 			Result := concatenation (<<error_context_prefix, market_symbol>>)
 		end
 
 feature {NONE} -- Basic operations
 
-	find_and_put_event_list (t: TRADABLE [BASIC_MARKET_TUPLE]) is
+	find_and_put_event_list (t: TRADABLE [BASIC_MARKET_TUPLE])
 			-- Find list of all event types valid for `t' and
 			-- `trading_period_type' and "put" them.
 		local
@@ -92,6 +92,6 @@ feature {NONE} -- Basic operations
 
 feature {NONE} -- Implementation - constants
 
-	error_context_prefix: STRING is "retrieving event-type list for "
+	error_context_prefix: STRING = "retrieving event-type list for "
 
 end -- class EVENT_LIST_REQUEST_CMD

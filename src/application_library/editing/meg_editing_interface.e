@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Abstraction that allows the user to edit, build, and remove %
 		%market event generators"
@@ -42,7 +42,7 @@ feature -- Access
 
 feature {NONE} -- Implementation
 
-	do_edit is
+	do_edit
 			-- Menu for editing market event generators
 		local
 			selection: INTEGER
@@ -73,7 +73,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	remove_event_generator is
+	remove_event_generator
 			-- Allow user to remove a member of
 			-- `market_event_generation_library'.
 		local
@@ -107,7 +107,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	view_event_generator is
+	view_event_generator
 			-- Allow user to view a member of the
 			-- `market_event_generation_library'.
 		local
@@ -126,7 +126,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	edit_event_generator_indicator is
+	edit_event_generator_indicator
 			-- Edit the indicators for elements of the
 			-- `market_event_generation_library'.
 		local
@@ -154,7 +154,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	create_new_event_generator is
+	create_new_event_generator
 			-- Create a new event generator and add it to 
 			-- market_event_generation_library.
 		do
@@ -173,7 +173,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	create_new_compound_event_generator is
+	create_new_compound_event_generator
 			-- Create a new compound event generator and add it to 
 			-- market_event_generation_library.
 		local
@@ -214,7 +214,7 @@ feature {NONE} -- Implementation
 			-- COMPOUND_EVENT_GENERATOR
 		end
 
-	create_new_simple_event_generator is
+	create_new_simple_event_generator
 			-- Create a new atomic event generator and add it to 
 			-- market_event_generation_library.
 		do
@@ -227,7 +227,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	create_new_one_variable_function_analyzer is
+	create_new_one_variable_function_analyzer
 			-- Create a new one-variable function analyzer and add it to 
 			-- market_event_generation_library.
 		local
@@ -249,7 +249,7 @@ feature {NONE} -- Implementation
 			-- ONE_VARIABLE_FUNCTION_ANALYZER
 		end
 
-	create_new_two_variable_function_analyzer is
+	create_new_two_variable_function_analyzer
 			-- Create a new two-variable function analyzer and add it to 
 			-- market_event_generation_library.
 		local
@@ -275,7 +275,7 @@ feature {NONE} -- Implementation
 			-- ONE_VARIABLE_FUNCTION_ANALYZER
 		end
 
-	function_choice_clone (msg: STRING): MARKET_FUNCTION is
+	function_choice_clone (msg: STRING): MARKET_FUNCTION
 			-- A clone of a user-selected member of `function_library'
 		do
 			Result := deep_clone (function_choice (msg))
@@ -285,7 +285,7 @@ feature {NONE} -- Implementation
 		end
 
 	operator_choice (function: MARKET_FUNCTION; exclude_list: LIST [COMMAND]):
-				RESULT_COMMAND [BOOLEAN] is
+				RESULT_COMMAND [BOOLEAN]
 			-- User's choice of operator
 		do
 			operator_maker.set_left_offset (0) -- Important.
@@ -299,7 +299,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	new_event_type_name: STRING is
+	new_event_type_name: STRING
 		local
 			names: LIST [STRING]
 		do
@@ -309,7 +309,7 @@ feature {NONE} -- Implementation
 			Result := new_event_type_name_selection (names)
 		end
 
-	signal_type_selection: INTEGER is
+	signal_type_selection: INTEGER
 		local
 			stypes: SIGNAL_TYPES
 			snames: ARRAY [STRING]
@@ -347,24 +347,24 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Hook methods
 
-	event_generator_selection (msg: STRING): MARKET_EVENT_GENERATOR is
+	event_generator_selection (msg: STRING): MARKET_EVENT_GENERATOR
 			-- User's event generator selection
 		require
 			meg_library_not_empty: not market_event_generation_library.is_empty
 		deferred
 		end
 
-	main_menu_selection: INTEGER is
+	main_menu_selection: INTEGER
 			-- User's selection from the MEG-editing main menu
 		deferred
 		end
 
-	eg_selection (msg_tail: STRING): INTEGER is
+	eg_selection (msg_tail: STRING): INTEGER
 			-- User's selection of an MEG
 		deferred
 		end
 
-	event_generator_type_selection: INTEGER is
+	event_generator_type_selection: INTEGER
 			-- User's selection of MEG type - 
 		deferred
 		ensure
@@ -372,56 +372,56 @@ feature {NONE} -- Hook methods
 				Result = Compound_eg_type_value
 		end
 
-	one_or_two_market_function_selection: INTEGER is
+	one_or_two_market_function_selection: INTEGER
 		deferred
 		ensure
 			valid_result: Result = One_value or Result = Two_value
 		end
 
-	period_type_choice: TIME_PERIOD_TYPE is
+	period_type_choice: TIME_PERIOD_TYPE
 			-- User's choice of trading period type
 		deferred
 		ensure
 			not_void: Result /= Void
 		end
 
-	above_below_choice (fa_maker: TVFA_FACTORY): INTEGER is
+	above_below_choice (fa_maker: TVFA_FACTORY): INTEGER
 			-- User's choice of whether a 2-variable function analyzer
 			-- should look for below-to-above crossovers, above-to-below
 			-- crossovers, or both
 		deferred
 		end
 
-	ceg_date_time_extension (which: STRING): DATE_TIME_DURATION is
+	ceg_date_time_extension (which: STRING): DATE_TIME_DURATION
 			-- User's choice (if any) of a date/time extension for a
 			-- compound event generator
 		deferred
 		end
 
-	ceg_left_target_type: EVENT_TYPE is
+	ceg_left_target_type: EVENT_TYPE
 			-- User's choice for the left target type (if any) of a
 			-- compound event generator
 		deferred
 		end
 
-	function_choice (msg: STRING): MARKET_FUNCTION is
+	function_choice (msg: STRING): MARKET_FUNCTION
 			-- User's choice of a member of `function_library'
 		deferred
 		ensure
 			Result /= Void
 		end
 
-	new_event_type_name_selection (names: LIST [STRING]): STRING is
+	new_event_type_name_selection (names: LIST [STRING]): STRING
 		deferred
 		end
 
-	display_event_generator (eg: MARKET_EVENT_GENERATOR) is
+	display_event_generator (eg: MARKET_EVENT_GENERATOR)
 			-- Print the contents of `eg'.
 		deferred
 		end
 
 	two_var_function_operator_selection (f: TVFA_FACTORY):
-				RESULT_COMMAND [BOOLEAN] is
+				RESULT_COMMAND [BOOLEAN]
 			-- User's selection of an operator for the 2-variable
 			-- function analyzer
 		deferred
@@ -429,7 +429,7 @@ feature {NONE} -- Hook methods
 
 feature {NONE} -- Implementation
 
-	editable (f: MARKET_FUNCTION): BOOLEAN is
+	editable (f: MARKET_FUNCTION): BOOLEAN
 			-- Is `f' editable in this context?
 		local
 			line: MARKET_FUNCTION_LINE
@@ -440,7 +440,7 @@ feature {NONE} -- Implementation
 			Result := line /= Void
 		end
 
-	one_var_exclude_cmds: LIST [COMMAND] is
+	one_var_exclude_cmds: LIST [COMMAND]
 			-- Commands not allowed as operators for one-variable
 			-- function analyzers
 -- !!!! indexing once_status: global??!!!
@@ -449,7 +449,7 @@ feature {NONE} -- Implementation
 				operator_maker.N_record_cmd
 		end
 
-	two_var_exclude_cmds: LIST [COMMAND] is
+	two_var_exclude_cmds: LIST [COMMAND]
 			-- Commands not allowed as operators for two-variable
 			-- function analyzers
 -- !!!! indexing once_status: global??!!!
@@ -461,7 +461,7 @@ feature {NONE} -- Implementation
 				operator_maker.Linear_cmd)
 		end
 
-	initialize_working_list is
+	initialize_working_list
 		do
 			working_meg_library := deep_clone (market_event_generation_library)
 		end
@@ -479,10 +479,10 @@ feature {NONE} -- Implementation
 			-- operator, should it apply the operator to its left or
 			-- right function.
 
-	Two_value: INTEGER is 6
-	One_value: INTEGER is 7
-	Compound_eg_type_value: INTEGER is 8
-	Simple_eg_type_value: INTEGER is 9
+	Two_value: INTEGER = 6
+	One_value: INTEGER = 7
+	Compound_eg_type_value: INTEGER = 8
+	Simple_eg_type_value: INTEGER = 9
 			-- Menu selection values
 
 invariant

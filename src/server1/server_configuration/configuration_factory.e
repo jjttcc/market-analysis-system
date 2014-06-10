@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Factory class that manufactures CONFIGURATION objects"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -14,13 +14,13 @@ creation
 
 feature -- Initialization
 
-	make is
+	make
 		do
 		end
 
 feature -- Access
 
-	global_configuration: GLOBAL_CONFIGURATION is
+	global_configuration: GLOBAL_CONFIGURATION
 			-- GLOBAL_CONFIGURATION object
 		do
 			create {BASIC_GLOBAL_CONFIGURATION} Result

@@ -1,8 +1,8 @@
-indexing
+note
 	description: "Numeric commands that produce the opening price for the %
 		%current trading period (extracted from the argument to the %
 		%execute routine)"
-	note: "An instance of this class can be safely shared within a command %
+	note1: "An instance of this class can be safely shared within a command %
 		%tree."
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -19,7 +19,7 @@ class OPENING_PRICE inherit
 
 feature -- Access
 
-	root_suppliers: SET [ANY] is
+	root_suppliers: SET [ANY]
 		local
 			tuples: expanded MARKET_TUPLES
 		do
@@ -29,7 +29,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	execute (arg: BASIC_MARKET_TUPLE) is
+	execute (arg: BASIC_MARKET_TUPLE)
 		do
 			value := arg.open.value
 		ensure then

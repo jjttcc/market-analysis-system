@@ -1,4 +1,4 @@
-indexing
+note
 	description: "MAS_COMMAND_LINE with extensions"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -19,7 +19,7 @@ creation
 
 feature -- Access
 
-	usage: STRING is
+	usage: STRING
 			-- Message: how to invoke the program from the command-line
 		do
 			Result := Precursor +
@@ -40,13 +40,13 @@ feature -- Access -- settings
 
 feature {NONE} -- Implementation
 
-	set_polling_timeout_milliseconds is
+	set_polling_timeout_milliseconds
 		do
 			-- @@Hard code as 20 seconds for now - make it configurable later.
 			polling_timeout_milliseconds := 20000
 		end
 
-	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]] is
+	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]]
 		do
 			Result := Precursor
 			Result.extend (agent set_polling_timeout_milliseconds)

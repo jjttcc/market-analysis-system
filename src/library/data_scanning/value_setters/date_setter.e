@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Value setter that sets the date of a tuple";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,13 +16,13 @@ creation
 
 feature -- Initialization
 
-	make is
+	make
 		do
 		end
 
 feature {NONE}
 
-	do_set (stream: INPUT_SEQUENCE; tuple: MARKET_TUPLE) is
+	do_set (stream: INPUT_SEQUENCE; tuple: MARKET_TUPLE)
 			-- Expected format for date:  yyyymmdd
 			-- Redefine in descendant for different formats.
 		local

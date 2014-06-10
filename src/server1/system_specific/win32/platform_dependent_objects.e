@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Builder of objects that are platform-dependent"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -15,7 +15,7 @@ class PLATFORM_DEPENDENT_OBJECTS inherit
 
 feature -- Access
 
-	database_services: MAS_DB_SERVICES is
+	database_services: MAS_DB_SERVICES
 		local
 			gs: expanded GLOBAL_SERVICES
 		do
@@ -32,12 +32,12 @@ feature -- Access
 			end
 		end
 
-	file_name_expander: FILE_NAME_EXPANDER is
+	file_name_expander: FILE_NAME_EXPANDER
 		do
 			create {WINDOWS_FILE_NAME_EXPANDER} Result
 		end
 
-	file_lock (file_name: STRING): FILE_LOCK is
+	file_lock (file_name: STRING): FILE_LOCK
 		do
 			-- The file-locking mechanism for Windows is not yet
 			-- working, so use a "fake" lock for now.
@@ -45,18 +45,18 @@ feature -- Access
 		end
 
 	stock_split_file (field_sep, record_sep, input_file: STRING):
-			STOCK_SPLIT_FILE is
+			STOCK_SPLIT_FILE
 		do
 			create {WINDOWS_STOCK_SPLIT_FILE} Result.make (field_sep,
 				record_sep, input_file)
 		end
 
-	command_line: MAS_COMMAND_LINE is
+	command_line: MAS_COMMAND_LINE
 		do
 			Result := command_line_cell (Void).item
 		end
 
-	command_line_cell (deflt: MAS_COMMAND_LINE): CELL [MAS_COMMAND_LINE] is
+	command_line_cell (deflt: MAS_COMMAND_LINE): CELL [MAS_COMMAND_LINE]
 		once
 			if deflt /= Void then
 				create Result.put (deflt)

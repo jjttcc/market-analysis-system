@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Value setter that sets the close value of a tuple";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,7 +12,7 @@ class CLOSE_SETTER inherit
 
 feature {NONE}
 
-	do_set (stream: INPUT_SEQUENCE; tuple: BASIC_MARKET_TUPLE) is
+	do_set (stream: INPUT_SEQUENCE; tuple: BASIC_MARKET_TUPLE)
 		do
 			if stream.last_real < epsilon then
 				handle_le_0_error ("last price")

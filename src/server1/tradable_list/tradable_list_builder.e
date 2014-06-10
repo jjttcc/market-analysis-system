@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Builder of the TRADABLE_LIST_HANDLER and the tradable %
 		%lists that it manages"
 	author: "Jim Cochrane"
@@ -22,7 +22,7 @@ creation
 
 feature -- Initialization
 
-	make (all_indicators: SEQUENCE [MARKET_FUNCTION]) is
+	make (all_indicators: SEQUENCE [MARKET_FUNCTION])
 		require
 			all_indicators_exists: all_indicators /= Void
 		do
@@ -39,7 +39,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	execute is
+	execute
 		local
 			db_list_builder: DATABASE_LIST_BUILDER
 			file_list_builder: FILE_LIST_BUILDER
@@ -100,7 +100,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	tradable_factory: TRADABLE_FACTORY is
+	tradable_factory: TRADABLE_FACTORY
 		do
 			create Result.make
 			if command_line_options.field_separator /= Void then
@@ -119,7 +119,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-    retrieve_input_entity_names is
+    retrieve_input_entity_names
             -- List of all specified input data sources
 		do
 			if command_line_options.use_db then

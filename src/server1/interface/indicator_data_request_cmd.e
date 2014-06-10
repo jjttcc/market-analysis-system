@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A command that responds to a client request for indicator data"
 	author: "Jim Cochrane"
@@ -22,18 +22,18 @@ creation
 
 feature {NONE} -- Hook routine implementations
 
-	expected_field_count: INTEGER is
-		indexing
+	expected_field_count: INTEGER
+		note
 			once_status: global
 		once
 			Result := 3
 		end
 
-	symbol_index: INTEGER is 2
+	symbol_index: INTEGER = 2
 
-	period_type_index: INTEGER is 3
+	period_type_index: INTEGER = 3
 
-	additional_field_constraints_fulfilled (fields: LIST [STRING]): BOOLEAN is
+	additional_field_constraints_fulfilled (fields: LIST [STRING]): BOOLEAN
 		do
 			Result := fields.first.is_integer
 			if not Result then
@@ -42,7 +42,7 @@ feature {NONE} -- Hook routine implementations
 			end
 		end
 
-	send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE]) is
+	send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE])
 		local
 			indicator: MARKET_FUNCTION
 		do
@@ -63,24 +63,24 @@ feature {NONE} -- Hook routine implementations
 			end
 		end
 
-	parse_remainder (fields: LIST [STRING]) is
+	parse_remainder (fields: LIST [STRING])
 		do
 			parse_indicator_id (fields)
 		end
 
-	error_context (msg: STRING): STRING is
+	error_context (msg: STRING): STRING
 		do
 			Result := concatenation (<<error_context_prefix, market_symbol>>)
 		end
 
-	additional_field_constraints_msg: STRING is
+	additional_field_constraints_msg: STRING
 		do
 			Result := indicator_id_not_integer_msg
 		end
 
 feature {NONE} -- Implementation
 
-	parse_indicator_id (fields: LIST [STRING]) is
+	parse_indicator_id (fields: LIST [STRING])
 		do
 			indicator_id := fields.first.to_integer
 		end
@@ -92,12 +92,12 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - constants
 
-	invalid_indicator_id_msg: STRING is "Invalid indicator ID"
+	invalid_indicator_id_msg: STRING = "Invalid indicator ID"
 
-	error_context_prefix: STRING is "retrieving indicator data for "
+	error_context_prefix: STRING = "retrieving indicator data for "
 
-	indicator_id_msg_prefix: STRING is "Indicator ID "
+	indicator_id_msg_prefix: STRING = "Indicator ID "
 
-	indicator_id_msg_suffix: STRING is " is not an integer"
+	indicator_id_msg_suffix: STRING = " is not an integer"
 
 end -- class INDICATOR_DATA_REQUEST_CMD

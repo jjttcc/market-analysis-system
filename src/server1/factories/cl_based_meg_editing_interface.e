@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Builder/editor of MARKET_EVENT_GENERATORs using a command-line %
 		%interface"
@@ -56,7 +56,7 @@ creation
 
 feature -- Initialization
 
-	make is
+	make
 		do
 			create {CL_BASED_COMMAND_EDITING_INTERFACE}
 				operator_maker.make (True)
@@ -79,7 +79,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_input_device (arg: IO_MEDIUM) is
+	set_input_device (arg: IO_MEDIUM)
 			-- Set input_device to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -91,7 +91,7 @@ feature -- Status setting
 			input_device_set: input_device = arg and input_device /= Void
 		end
 
-	set_output_device (arg: IO_MEDIUM) is
+	set_output_device (arg: IO_MEDIUM)
 			-- Set output_device to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -105,7 +105,7 @@ feature -- Status setting
 
 feature {NONE} -- Implementation
 
-	main_menu_selection: INTEGER is
+	main_menu_selection: INTEGER
 		local
 			msg: STRING
 		do
@@ -162,14 +162,14 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	eg_selection (msg: STRING): INTEGER is
+	eg_selection (msg: STRING): INTEGER
 		do
 			Result := backoutable_selection (meg_names (working_meg_library),
 				concatenation (<<"Select a market analyzer", msg>>),
 				Exit_value)
 		end
 
-	event_generator_type_selection: INTEGER is
+	event_generator_type_selection: INTEGER
 		local
 			c: CHARACTER
 		do
@@ -194,7 +194,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	event_generator_selection (msg: STRING): MARKET_EVENT_GENERATOR is
+	event_generator_selection (msg: STRING): MARKET_EVENT_GENERATOR
 			-- User's event generator selection
 		local
 			finished: BOOLEAN
@@ -208,7 +208,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	one_or_two_market_function_selection: INTEGER is
+	one_or_two_market_function_selection: INTEGER
 		local
 			c: CHARACTER
 		do
@@ -235,7 +235,7 @@ feature {NONE} -- Implementation
 		end
 
 	two_var_function_operator_selection (f: TVFA_FACTORY):
-				RESULT_COMMAND [BOOLEAN] is
+				RESULT_COMMAND [BOOLEAN]
 		local
 			c: CHARACTER
 		do
@@ -280,13 +280,13 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	function_choice (msg: STRING): MARKET_FUNCTION is
+	function_choice (msg: STRING): MARKET_FUNCTION
 		do
 			Result := function_library @ list_selection (function_names,
 					concatenation (<<"Select the ", msg>>))
 		end
 
-	new_event_type_name_selection (names: LIST [STRING]): STRING is
+	new_event_type_name_selection (names: LIST [STRING]): STRING
 		do
 			from
 			until
@@ -311,7 +311,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	period_type_choice: TIME_PERIOD_TYPE is
+	period_type_choice: TIME_PERIOD_TYPE
 			-- User's choice of trading period type
 		local
 			names: LINKED_LIST [STRING]
@@ -347,7 +347,7 @@ feature {NONE} -- Implementation
 			print_list (<<"Using ", Result.name, " period type%N">>)
 		end
 
-	above_below_choice (fa_maker: TVFA_FACTORY): INTEGER is
+	above_below_choice (fa_maker: TVFA_FACTORY): INTEGER
 			-- User's choice of whether a 2-variable function analyzer
 			-- should look for below-to-above crossovers, above-to-below
 			-- crossovers, or both
@@ -379,7 +379,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	ceg_date_time_extension (which: STRING): DATE_TIME_DURATION is
+	ceg_date_time_extension (which: STRING): DATE_TIME_DURATION
 			-- User's choice (if any) of a date/time extension for a
 			-- compound event generator
 		local
@@ -444,7 +444,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	ceg_left_target_type: EVENT_TYPE is
+	ceg_left_target_type: EVENT_TYPE
 			-- User's choice for the left target type (if any) of a
 			-- compound event generator
 		local
@@ -477,7 +477,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	display_event_generator (eg: MARKET_EVENT_GENERATOR) is
+	display_event_generator (eg: MARKET_EVENT_GENERATOR)
 			-- Print the contents of `eg'.
 		local
 			compound_eg: COMPOUND_EVENT_GENERATOR
@@ -535,7 +535,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation of hook routines
 
-	do_initialize_lock is
+	do_initialize_lock
 		do
 			lock := file_lock (file_name_with_app_directory (
 				generators_file_name, False))

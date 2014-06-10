@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Session-specific data for MAS"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,7 +16,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 			create start_dates.make(1)
 			create end_dates.make(1)
@@ -48,7 +48,7 @@ feature -- Access
 
 feature -- Element change
 
-	set_last_tradable (arg: TRADABLE [BASIC_MARKET_TUPLE]) is
+	set_last_tradable (arg: TRADABLE [BASIC_MARKET_TUPLE])
 			-- Set last_tradable to `arg'.
 		do
 			last_tradable := arg
@@ -56,7 +56,7 @@ feature -- Element change
 			last_tradable_set: last_tradable = arg
 		end
 
-	turn_caching_on is
+	turn_caching_on
 			-- Turn caching on.
 		do
 			caching_on := True
@@ -64,7 +64,7 @@ feature -- Element change
 			caching_on: caching_on = True
 		end
 
-	turn_caching_off is
+	turn_caching_off
 			-- Turn caching off.
 		do
 			caching_on := False

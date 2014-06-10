@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A market function that takes the result of another market function %
 		%as input"
@@ -26,7 +26,7 @@ feature -- Access
 
 	processed_date_time: DATE_TIME
 
-	leaf_functions: LIST [COMPLEX_FUNCTION] is
+	leaf_functions: LIST [COMPLEX_FUNCTION]
 			-- All of Current's innermost, or leaf, COMPLEX_FUNCTIONs -
 			-- At least one because a complex function without any children
 			-- will be its own leaf function.
@@ -35,13 +35,13 @@ feature -- Access
 			at_least_one: Result /= Void and then Result.count >= 1
 		end
 
-	parameters: LIST [FUNCTION_PARAMETER] is
+	parameters: LIST [FUNCTION_PARAMETER]
 		do
 			Result := clone (direct_parameters)
 			Result.append (operator_parameters)
 		end
 
-	direct_operators: LIST [COMMAND] is
+	direct_operators: LIST [COMMAND]
 			-- All operators directly attached to Current
 		do
 			create {LINKED_LIST [COMMAND]} Result.make
@@ -56,8 +56,8 @@ feature -- Access
 
 feature -- Status report
 
-	operator_used: BOOLEAN is
-		indexing
+	operator_used: BOOLEAN
+		note
 			once_status: global
 		once
 			Result := True
@@ -65,7 +65,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	process is
+	process
 			-- Process the output from the input.
 		do
 			if not processed then
@@ -84,7 +84,7 @@ feature -- Basic operations
 
 feature {MARKET_FUNCTION_EDITOR} -- Status setting
 
-	set_operator (op: like operator) is
+	set_operator (op: like operator)
 		require
 			not_void: op /= Void
 		do
@@ -95,7 +95,7 @@ feature {MARKET_FUNCTION_EDITOR} -- Status setting
 
 feature {NONE} -- Hook methods
 
-	pre_process is
+	pre_process
 			-- Do any pre-processing required before calling do_process.
 		require
 			not_processed: not processed
@@ -104,7 +104,7 @@ feature {NONE} -- Hook methods
 			output_empty: output.is_empty
 		end
 
-	do_process is
+	do_process
 			-- Do the actual processing.
 			-- Hook method to be defined by descendants
 		require
@@ -112,7 +112,7 @@ feature {NONE} -- Hook methods
 		deferred
 		end
 
-	update_processed_date_time is
+	update_processed_date_time
 			-- Update `processed_date_time' to now - can be used by
 			-- descendants as part of `processed' implementation and
 			-- redefined if needed.
@@ -126,7 +126,7 @@ feature {NONE} -- Hook methods
 			end
 		end
 
-	print_current_record_info is
+	print_current_record_info
 		do
 			if not output.is_empty then
 				io.error.print ("Output record " + output.count.out +
@@ -137,11 +137,11 @@ feature {NONE} -- Hook methods
 
 feature {MARKET_FUNCTION} -- Status report
 
-	is_complex: BOOLEAN is True
+	is_complex: BOOLEAN = True
 
 feature {NONE} -- Implementation
 
-	immediate_operators: LIST [COMMAND] is
+	immediate_operators: LIST [COMMAND]
 		local
 			direct_ops: LIST [COMMAND]
 		do
@@ -166,7 +166,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	print_status_report is
+	print_status_report
 		local
 			ops: LIST [COMMAND]
 		do
@@ -180,7 +180,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	print_debugging_header is
+	print_debugging_header
 			-- Print debugging header information for the beginning
 			-- of processing
 		local

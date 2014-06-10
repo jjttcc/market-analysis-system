@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A market event factory that makes a MARKET_EVENT_PAIR"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -20,7 +20,7 @@ creation
 feature -- Initialization
 
 	make (infile: like input; p: like parser;
-			fsep: like field_separator) is
+			fsep: like field_separator)
 		require
 			not_void: infile /= Void and p /= Void
 		do
@@ -41,7 +41,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	execute is
+	execute
 			-- Scan input and create an MARKET_EVENT_PAIR from it.
 			-- If a fatal error is encountered while scanning, an exception
 			-- is thrown and error_occurred is set to True.
@@ -60,7 +60,7 @@ feature -- Basic operations
 				right.name>>), current_event_type, st.Buy_signal)
 		end
 
-	next_event: MARKET_EVENT is
+	next_event: MARKET_EVENT
 		do
 			-- Execute parser to make the appropriate kind of factory
 			-- according to the type spec. in the input.

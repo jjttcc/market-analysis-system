@@ -1,4 +1,4 @@
-indexing
+note
 	description: "User interface for testing"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -44,7 +44,7 @@ feature -- Access
 
 	input_file_names: LIST [STRING]
 
-	current_tradable: TRADABLE [BASIC_MARKET_TUPLE] is
+	current_tradable: TRADABLE [BASIC_MARKET_TUPLE]
 		do
 			Result := tradable_list.item
 		end
@@ -56,7 +56,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_factory_builder (arg: FACTORY_BUILDER) is
+	set_factory_builder (arg: FACTORY_BUILDER)
 			-- Set factory_builder to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -67,7 +67,7 @@ feature -- Status setting
 									factory_builder /= Void
 		end
 
-	set_event_coordinator (arg: MARKET_EVENT_COORDINATOR) is
+	set_event_coordinator (arg: MARKET_EVENT_COORDINATOR)
 			-- Set event_coordinator to `arg'.
 		require
 			arg /= Void
@@ -80,7 +80,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute is
+	execute
 		do
 			initialize
 			tradable_menu
@@ -88,7 +88,7 @@ feature -- Basic operations
 
 feature {NONE}
 
-	tradable_menu is
+	tradable_menu
 			-- Display the tradable menu and respond to the user's commands.
 		do
 			from
@@ -146,7 +146,7 @@ feature {NONE}
 			termination_cleanup
 		end
 
-	main_edit_indicator_menu is
+	main_edit_indicator_menu
 			-- Menu for editing technical indicators (market functions)
 		local
 			finished: BOOLEAN
@@ -181,7 +181,7 @@ feature {NONE}
 			end
 		end
 
-	edit_event_generator_indicator_menu is
+	edit_event_generator_indicator_menu
 			-- Menu for editing market functions owned by event generators
 		local
 			analyzer: MARKET_EVENT_GENERATOR
@@ -222,7 +222,7 @@ feature {NONE}
 			end
 		end
 
-	edit_indicator_menu (indicators: LIST [MARKET_FUNCTION]) is
+	edit_indicator_menu (indicators: LIST [MARKET_FUNCTION])
 		local
 			indicator: MARKET_FUNCTION
 			finished: BOOLEAN
@@ -267,7 +267,7 @@ feature {NONE}
 			end
 		end
 
-	registrant_menu is
+	registrant_menu
 			-- Menu for adding, removing, editing, and viewing event
 			-- registrants
 		local
@@ -311,7 +311,7 @@ feature {NONE}
 		end
 
 
-	view_menu is
+	view_menu
 			-- Menu for viewing market and market function data
 		local
 			finished: BOOLEAN
@@ -354,7 +354,7 @@ feature {NONE}
 			end
 		end
 
-	mkt_analysis_set_date_menu is
+	mkt_analysis_set_date_menu
 			-- Obtain the date and time to begin market analysis from the
 			-- user and pass it to the event generators.
 		local
@@ -411,7 +411,7 @@ feature {NONE}
 			end
 		end
 
-	date_choice: DATE is
+	date_choice: DATE
 			-- Date obtained from user.
 		do
 			print ("Enter the date to use for analysis or %
@@ -431,7 +431,7 @@ feature {NONE}
 			print_list (<<"Using date of ", Result, ".%N">>)
 		end
 
-	relative_date_choice: DATE is
+	relative_date_choice: DATE
 			-- Date obtained from user.
 		local
 			period: CHARACTER
@@ -481,7 +481,7 @@ feature {NONE}
 			print_list (<<"Using date of ", Result, ".%N">>)
 		end
 
-	time_choice: TIME is
+	time_choice: TIME
 			-- Time obtained from user.
 		do
 			create Result.make (0, 0, 0)
@@ -508,7 +508,7 @@ feature {NONE}
 			print_list (<<"Using time of ", Result, ".%N">>)
 		end
 
-	display_memory_values is
+	display_memory_values
 			-- Display free, used, etc. memory.
 		do
 			update (Total_memory)
@@ -517,7 +517,7 @@ feature {NONE}
 						" overhead bytes used%N", used, " bytes used%N">>)
 		end
 
-	view_indicator_menu (indicator: MARKET_FUNCTION) is
+	view_indicator_menu (indicator: MARKET_FUNCTION)
 			-- Menu for viewing market function data
 		local
 			finished: BOOLEAN
@@ -558,7 +558,7 @@ feature {NONE}
 			end
 		end
 
-	select_tradable is
+	select_tradable
 			-- Allow the user to select the current tradable so that
 			-- tradable_list.item is the selected tradable.
 		local
@@ -590,7 +590,7 @@ feature {NONE}
 			end
 		end
 
-	select_period_type is
+	select_period_type
 			-- Obtain selection for current_period_type from user and set
 			-- the current tradable's target_period_type to it.
 		local
@@ -623,7 +623,7 @@ feature {NONE}
 		end
 
 	indicator_selection (indicators: LIST [MARKET_FUNCTION]):
-				MARKET_FUNCTION is
+				MARKET_FUNCTION
 			-- User-selected indicator
 		require
 			not_trdble_empty: not current_tradable.indicators.is_empty
@@ -657,10 +657,10 @@ feature {NONE}
 			end
 		end
 
-	edit_parameter (p: FUNCTION_PARAMETER) is
+	edit_parameter (p: FUNCTION_PARAMETER)
 			-- Allow the user to change the value of a function parameter.
 		do
-			print_list (<<"The current value for ", p.function.name, " is ",
+			print_list (<<"The current value for ", p.function.name, " = ",
 						p.current_value, " - new value? ">>)
 			from
 				read_integer
@@ -676,13 +676,13 @@ feature {NONE}
 
 feature {NONE}
 
-	save_mklist_position is
+	save_mklist_position
 			-- Save the current position of `tradable_list' for later restoring.
 		do
 			saved_mklist_index := tradable_list.index
 		end
 
-	restore_mklist_position is
+	restore_mklist_position
 			-- Restore `tradable_list' cursor to last saved position
 		require
 			saved_mklist_index > 0
@@ -698,7 +698,7 @@ feature {NONE}
 			end
 		end
 
-	initialize is
+	initialize
 		do
 			event_coordinator := factory_builder.event_coordinator
 			current_period_type := period_types @ (period_type_names @ Daily)

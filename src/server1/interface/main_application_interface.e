@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Abstraction for top-level application interface"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -24,7 +24,7 @@ feature {NONE} -- Access
 
 feature {NONE}
 
-	initialize (fb: GLOBAL_OBJECT_BUILDER) is
+	initialize (fb: GLOBAL_OBJECT_BUILDER)
 		require
 			fb_not_void: fb /= Void
 		do

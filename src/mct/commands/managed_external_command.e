@@ -1,4 +1,4 @@
-indexing
+note
 	description: "External commands that are managed as processes"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -46,11 +46,11 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is True
+	arg_mandatory: BOOLEAN = True
 
 feature {NONE} -- Implementation
 
-	do_execute (window: SESSION_WINDOW) is
+	do_execute (window: SESSION_WINDOW)
 		local
 			args: ARRAY [STRING]
 		do
@@ -73,7 +73,7 @@ feature {NONE} -- Implementation
 				window.port_number)
 		end
 
-	launch (prog: STRING; args: ARRAY [STRING]; window: SESSION_WINDOW) is
+	launch (prog: STRING; args: ARRAY [STRING]; window: SESSION_WINDOW)
 			-- "Launch" the command.
 		require
 			args_exist: prog /= Void and args /= Void and window /= Void
@@ -93,7 +93,7 @@ feature {NONE} -- Implementation
 			process_managed: has_process (window.host_name, window.port_number)
 		end
 
-	process_components is
+	process_components
 		local
 			cmd_components: ARRAY [STRING]
 			regutil: expanded REGULAR_EXPRESSION_UTILITIES

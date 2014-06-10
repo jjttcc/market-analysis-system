@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Abstraction of market tuple manufacturer";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,7 +16,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	execute is
+	execute
 			-- Manufacture a tuple
 		deferred
 		end

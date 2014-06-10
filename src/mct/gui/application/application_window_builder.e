@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Builders of MAS Control Terminal application windows"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -20,7 +20,7 @@ class APPLICATION_WINDOW_BUILDER inherit
 
 feature -- Access
 
-	main_window: EV_TITLED_WINDOW is
+	main_window: EV_TITLED_WINDOW
 			-- The MAS Control Terminal main window
 		local
 			main_box: EV_VERTICAL_BOX
@@ -42,7 +42,7 @@ feature -- Access
 			title_set: Result.title.is_equal (Main_window_title)
 		end
 
-	mas_session_window: SESSION_WINDOW is
+	mas_session_window: SESSION_WINDOW
 			-- A MAS session window
 		local
 			main_box: EV_VERTICAL_BOX
@@ -64,7 +64,7 @@ feature -- Access
 			title_set: Result.title.is_equal (Session_window_title)
 		end
 
-	configured_session_window (hostname, portnumber: STRING): SESSION_WINDOW is
+	configured_session_window (hostname, portnumber: STRING): SESSION_WINDOW
 			-- A new SESSION_WINDOW with port number and host name set to
 			-- the specified values
 		do
@@ -73,13 +73,13 @@ feature -- Access
 			Result.set_port_number (portnumber)
 		end
 
-	configuration: MCT_CONFIGURATION is
+	configuration: MCT_CONFIGURATION
 			-- The configuration for this session
 		once
 			create Result.make (<<Current>>, command_line)
 		end
 
-	command_line: COMMAND_LINE is
+	command_line: COMMAND_LINE
 		once
 			create {MCT_COMMAND_LINE } Result.make
 		end
@@ -90,7 +90,7 @@ feature -- Access
 
 feature {NONE} -- Main-window components
 
-	main_window_menu_bar: EV_MENU_BAR is
+	main_window_menu_bar: EV_MENU_BAR
 			-- Menu bar for the main window
 		do
 			create Result
@@ -99,7 +99,7 @@ feature {NONE} -- Main-window components
 			Result.extend (help_menu)
 		end
 
-	add_main_window_components (c: EV_CONTAINER) is
+	add_main_window_components (c: EV_CONTAINER)
 			-- Add all components (buttons) needed for the main window
 		local
 			action_set: ACTION_SET
@@ -122,7 +122,7 @@ feature {NONE} -- Main-window components
 
 feature {NONE} -- Session-window components
 
-	mas_session_window_menu_bar: EV_MENU_BAR is
+	mas_session_window_menu_bar: EV_MENU_BAR
 			-- Menu bar for MAS session window
 		do
 			create Result
@@ -130,7 +130,7 @@ feature {NONE} -- Session-window components
 			Result.extend (help_menu)
 		end
 
-	add_mas_session_window_components (c: EV_CONTAINER) is
+	add_mas_session_window_components (c: EV_CONTAINER)
 			-- Add all components (buttons) needed for a MAS session window
 		local
 			action_set: ACTION_SET
@@ -153,7 +153,7 @@ feature {NONE} -- Session-window components
 
 feature {NONE} -- Menu components
 
-	main_file_menu: EV_MENU is
+	main_file_menu: EV_MENU
 			-- The 'File' menu for the main window
 		require
 			current_actions_exist: current_main_actions /= Void or
@@ -163,7 +163,7 @@ feature {NONE} -- Menu components
 			common_file_menu_items.do_all (agent Result.extend)
 		end
 
-	session_file_menu: EV_MENU is
+	session_file_menu: EV_MENU
 			-- The 'File' menu for session windows
 		require
 			current_actions_exist: current_mas_session_actions /= Void
@@ -175,7 +175,7 @@ feature {NONE} -- Menu components
 			common_file_menu_items.do_all (agent Result.extend)
 		end
 
-	edit_menu: EV_MENU is
+	edit_menu: EV_MENU
 			-- The 'Edit' menu
 		require
 			current_main_actions_exist: current_main_actions /= Void
@@ -193,7 +193,7 @@ feature {NONE} -- Menu components
 			end
 		end
 
-	help_menu: EV_MENU is
+	help_menu: EV_MENU
 			-- The 'Help' menu
 		require
 			current_actions_exist: current_main_actions /= Void or
@@ -217,7 +217,7 @@ feature {NONE} -- Menu components
 				<<agent actions.show_about_box>>))
 		end
 
-	common_file_menu_items: SEQUENCE [EV_MENU_ITEM] is
+	common_file_menu_items: SEQUENCE [EV_MENU_ITEM]
 			-- "File" menu items used in all windows
 		local
 			actions: ACTIONS
@@ -233,7 +233,7 @@ feature {NONE} -- Menu components
 
 feature {NONE} -- Miscellaneous
 
-	add_common_accelerators (w: EV_TITLED_WINDOW) is
+	add_common_accelerators (w: EV_TITLED_WINDOW)
 			-- Associate main MCT accelerators with `w'.
 		require
 			current_actions_exist: current_main_actions /= Void or
@@ -267,7 +267,7 @@ feature {NONE} -- Miscellaneous
 			w.accelerators.extend (accelerator)
 		end
 
-	add_main_accelerators (w: EV_TITLED_WINDOW) is
+	add_main_accelerators (w: EV_TITLED_WINDOW)
 			-- Associate main MCT accelerators with `w'.
 		require
 			current_actions_exist: current_main_actions /= Void or
@@ -288,7 +288,7 @@ feature {NONE} -- Miscellaneous
 			w.accelerators.extend (accelerator)
 		end
 
-	add_session_accelerators (w: EV_TITLED_WINDOW) is
+	add_session_accelerators (w: EV_TITLED_WINDOW)
 			-- Associate session accelerators with `w'.
 		require
 			current_actions_exist: current_main_actions /= Void or
@@ -309,7 +309,7 @@ feature {NONE} -- Miscellaneous
 
 feature {NONE} -- Implementation - Hook routine implementations
 
-	notify (errmsg: STRING) is
+	notify (errmsg: STRING)
 			-- Notify the user of errors that occurred while reading the
 			-- configuration file.
 		do
@@ -329,7 +329,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 feature {NONE} -- Implementation
 
-	current_actions: ACTIONS is
+	current_actions: ACTIONS
 			-- `current_main_actions', if its not Void - otherwise,
 			-- `current_mas_session_actions'
 		do
@@ -344,39 +344,39 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - Constants
 
-	Main_window_title: STRING is "MAS Control Panel"
+	Main_window_title: STRING = "MAS Control Panel"
 			-- Title of the main window
 
-	Session_window_title: STRING is "MAS"
+	Session_window_title: STRING = "MAS"
 			-- Title of mas-session windows
 
-	File_menu_title: STRING is "&File"
+	File_menu_title: STRING = "&File"
 
-	Close_menu_item_title: STRING is
+	Close_menu_item_title: STRING
 		"&Close Window Ctl+W"
 
 	Quit_menu_item_title: STRING is 
 		"&Quit Ctl+Q"
 
-	Quit_without_menu_item_title: STRING is
+	Quit_without_menu_item_title: STRING
 		"Q&uit without terminating sessions Ctl+U"
 
-	Help_menu_title: STRING is "&Help"
+	Help_menu_title: STRING = "&Help"
 
-	About_menu_item_title: STRING is "&About"
+	About_menu_item_title: STRING = "&About"
 
-	Introduction_menu_item_title: STRING is "MCT &Introduction Ctl+I"
+	Introduction_menu_item_title: STRING = "MCT &Introduction Ctl+I"
 
-	FAQ_menu_item_title: STRING is "&Frequenty Asked Questions (FAQ)"
+	FAQ_menu_item_title: STRING = "&Frequenty Asked Questions (FAQ)"
 
-	Documentation_menu_item_title: STRING is "MCT &Documentation Ctl+D"
+	Documentation_menu_item_title: STRING = "MCT &Documentation Ctl+D"
 
-	Edit_menu_title: STRING is "&Edit"
+	Edit_menu_title: STRING = "&Edit"
 
-	Server_startup_menu_item_title: STRING is
+	Server_startup_menu_item_title: STRING
 		"&Server startup configuration Ctl+S"
 
-	Preferences_menu_item_title: STRING is "&Preferences"
+	Preferences_menu_item_title: STRING = "&Preferences"
 
 invariant
 

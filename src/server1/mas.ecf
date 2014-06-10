@@ -23,7 +23,7 @@
 --&#9;&#9;&#9;assertion (no): DERIVATIVE_INSTRUMENT;
 </description>
 		<root class="MA_SERVER" feature="make"/>
-		<option trace="false" profile="false" debug="true" warning="true">
+		<option trace="false" profile="false" debug="true" warning="true" void_safety="none">
 			<debug name="__unnamed_debug__" enabled="false"/>
 			<debug name="compression" enabled="false"/>
 			<debug name="data_request" enabled="false"/>
@@ -57,6 +57,7 @@
 		<external_object location="-lodbc"/>
 		<external_object location="-L $(EPOSIX)/lib -leposix_ise"/>
 		<external_object location="${MAS_LINK_OPTIONS}"/>
+		<library name="base" location="$ISE_LIBRARY/library/base/base.ecf"/>
 		<cluster name="app_library" location="$MAS/src/application_library/">
 			<cluster name="dummies" location="$|dummies/"/>
 			<cluster name="app_events" location="$|events/"/>
@@ -87,7 +88,14 @@
 				<cluster name="ecli_spec_ise" location="$|ise/"/>
 			</cluster>
 			<cluster name="ecli_data" location="$|data/"/>
+			<cluster name="ecli_support" location="$|support/"/>
 			<cluster name="ecli_pattern" location="$|pattern/"/>
+			<cluster name="ecli_const" location="$|/spec/constants/"/>
+			<cluster name="ecli_meta" location="$|/metadata/"/>
+		</cluster>
+		<cluster name="safe_kernel" location="$ECLI/../kernel/">
+			<cluster name="safe_ext" location="$|/external/src"/>
+			<cluster name="safe_ext_spec" location="$|/external/src/spec/ise/"/>
 		</cluster>
 		<cluster name="eiffel_components" location="$MAS/src/eiffel_library/">
 			<cluster name="architectural" location="$|architectural/"/>
@@ -109,16 +117,23 @@
 		<cluster name="eposix_abstract" location="$EPOSIX/src/abstract/"/>
 		<cluster name="eposix_c" location="$EPOSIX/src/epxc/"/>
 		<cluster name="eposix_capi" location="$EPOSIX/src/capi/"/>
+		<cluster name="eposix_capi_ise" location="$EPOSIX/src/capi/spec/ise"/>
 		<cluster name="eposix_ise" location="$EPOSIX/src/spec/ise/"/>
 		<cluster name="eposix_papi" location="$EPOSIX/src/papi/"/>
+		<cluster name="eposix_papi_ise" location="$EPOSIX/src/papi/spec/ise"/>
 		<cluster name="eposix_stdc" location="$EPOSIX/src/standardc/"/>
 		<cluster name="eposix_support" location="$EPOSIX/src/support/"/>
+		<cluster name="eposix_sapi_spec" location="$EPOSIX/src/sapi/spec/ise/"/>
+		<cluster name="eposix_sus" location="$EPOSIX/src/sus/"/>
+		<cluster name="eposix_epxc" location="$EPOSIX/src/epxc/gobo/"/>
+		<cluster name="eposix_sapi" location="$EPOSIX/src/sapi/"/>
 		<cluster name="ise" location="$ISE_EIFFEL/library/">
+<!--
 			<cluster name="exceptions" location="$|base/ise/kernel/exceptions/"/>
 			<cluster name="kernel" location="$|base/elks/kernel/"/>
-<!--			<cluster name="kernel_classic" location="$|base/kernel/classic/"/> -->
+			<cluster name="kernel_classic" location="$|base/kernel/classic/"/>
 			<cluster name="support" location="$|base/elks/support/"/>
-<!--			<cluster name="support_classic" location="$|base/support/classic/"/> -->
+			<cluster name="support_classic" location="$|base/support/classic/"/>
 			<cluster name="string" location="$|base/elks/kernel/string/"/>
 			<cluster name="access" location="$|base/elks/structures/access/"/>
 			<cluster name="cursors" location="$|base/elks/structures/cursors/"/>
@@ -133,11 +148,22 @@
 			<cluster name="table" location="$|base/elks/structures/table/"/>
 			<cluster name="traversing" location="$|base/elks/structures/traversing/"/>
 			<cluster name="tree" location="$|base/elks/structures/tree/"/>
+-->
 			<cluster name="date" location="$|time/">
 				<cluster name="date_format" location="$|format/">
 					<cluster name="date_tools" location="$|english/"/>
 				</cluster>
 			</cluster>
+
+<!--
+/usr/local/Eiffel_14.05/compatible/library/time/classic/c_date.e
+/usr/local/Eiffel_14.05/compatible/library/time/dotnet/c_date.e
+/usr/local/Eiffel_14.05/contrib/library/gobo/library/free_elks/fake/c_date.e
+-->
+
+			<cluster name="time" location="$|time/classic/"/>
+			<cluster name="clock" location="$GOBO/library/time/clock/"/>
+
 			<cluster name="net" location="$|net/">
 				<cluster name="http_resources" location="$|transfer/resources/"/>
 				<cluster name="http_addresses" location="$|transfer/addresses/"/>
@@ -158,6 +184,7 @@
 		<cluster name="kl_misc" location="$GOBO/library/kernel/misc/"/>
 		<cluster name="kl_support" location="$GOBO/library/kernel/support/"/>
 		<cluster name="kl_unicode" location="$GOBO/library/kernel/unicode/"/>
+		<cluster name="gobo_math" location="$GOBO/library/math/decimal"/>
 		<cluster name="ma_library" location="$MAS/src/library/">
 			<cluster name="function_abstractions" location="$|function_abstractions/">
 				<class_option class="MARKET_TUPLE_LIST">

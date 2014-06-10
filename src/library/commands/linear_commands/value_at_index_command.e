@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Linear commands that obtain, via an operator, a %
 		%value from `target' at a specified index position - The index %
 		%value is index_operator.value.floor"
@@ -31,7 +31,7 @@ creation
 feature -- Initialization
 
 	make (tgt: like target; main_op: like main_operator;
-			index_op: like index_operator) is
+			index_op: like index_operator)
 		require
 			not_void: tgt /= Void and main_op /= Void and index_op /= Void
 		do
@@ -43,7 +43,7 @@ feature -- Initialization
 				index_operator = index_op
 		end
 
-	initialize (arg: LINEAR_ANALYZER) is
+	initialize (arg: LINEAR_ANALYZER)
 		do
 			Precursor (arg)
 			index_operator.initialize (arg)
@@ -53,7 +53,7 @@ feature -- Access
 
 	index_operator: RESULT_COMMAND [REAL]
 
-	children: LIST [COMMAND] is
+	children: LIST [COMMAND]
 		do
 			Result := Precursor
 			Result.extend (index_operator)
@@ -61,7 +61,7 @@ feature -- Access
 
 feature -- Element change
 
-	set_index_operator (arg: RESULT_COMMAND [REAL]) is
+	set_index_operator (arg: RESULT_COMMAND [REAL])
 			-- Set `index_operator' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -73,7 +73,7 @@ feature -- Element change
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		local
 			i, old_i: INTEGER
 		do

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "An execution of a buy or sell order"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -27,7 +27,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 		ensure
 			buy: is_buy
@@ -39,7 +39,7 @@ feature -- Access
 	date: DATE
 			-- Date the trade was entered
 
-	is_buy: BOOLEAN is
+	is_buy: BOOLEAN
 			-- Is the type of order for this trade a buy?
 		do
 			Result := not is_sell
@@ -48,7 +48,7 @@ feature -- Access
 	is_sell: BOOLEAN
 			-- Is the type of order for this trade a sell?
 
-	is_open: BOOLEAN is
+	is_open: BOOLEAN
 			-- Is this an opening trade?
 		do
 			Result := not is_close
@@ -69,7 +69,7 @@ feature -- Access
 
 feature -- Comparison
 
-	infix "<" (other: like Current): BOOLEAN is
+	infix "<" (other: like Current): BOOLEAN
 		do
 			if other = Current then
 				Result := false
@@ -80,18 +80,18 @@ feature -- Comparison
 			end
 		end
 
-	is_equal (other: like Current): BOOLEAN is
+	is_equal (other: like Current): BOOLEAN
 		do
 			if date = Void or other.date = Void then
 				Result := date = Void and other.date = Void
 			else
-				Result := {COMPARABLE} Precursor (other)
+				Result := Precursor {COMPARABLE} (other)
 			end
 		end
 
 feature -- Status setting
 
-	set_date (arg: DATE) is
+	set_date (arg: DATE)
 			-- Set date to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -101,7 +101,7 @@ feature -- Status setting
 			date_set: date = arg and date /= Void
 		end
 
-	set_to_buy is
+	set_to_buy
 			-- Set to a buy.
 		do
 			is_sell := false
@@ -109,7 +109,7 @@ feature -- Status setting
 			is_buy
 		end
 
-	set_to_sell is
+	set_to_sell
 			-- Set to a sell.
 		do
 			is_sell := true
@@ -117,7 +117,7 @@ feature -- Status setting
 			is_sell
 		end
 
-	set_to_open is
+	set_to_open
 			-- Set to an opening trade.
 		do
 			is_close := false
@@ -125,7 +125,7 @@ feature -- Status setting
 			is_open
 		end
 
-	set_to_close is
+	set_to_close
 			-- Set to a closing trade.
 		do
 			is_close := true
@@ -133,7 +133,7 @@ feature -- Status setting
 			is_close
 		end
 
-	set_symbol (arg: STRING) is
+	set_symbol (arg: STRING)
 			-- Set symbol to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -143,7 +143,7 @@ feature -- Status setting
 			symbol_set: symbol = arg and symbol /= Void
 		end
 
-	set_units (arg: INTEGER) is
+	set_units (arg: INTEGER)
 			-- Set units to `arg'.
 		do
 			units := arg
@@ -151,7 +151,7 @@ feature -- Status setting
 			units_set: units = arg
 		end
 
-	set_price (arg: REAL) is
+	set_price (arg: REAL)
 			-- Set price to `arg'.
 		do
 			price := arg
@@ -159,7 +159,7 @@ feature -- Status setting
 			price_set: price - arg < epsilon
 		end
 
-	set_commission (arg: REAL) is
+	set_commission (arg: REAL)
 			-- Set commission to `arg'.
 		do
 			commission := arg

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Tuple factory that produces a STOCK_SPLIT";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -15,7 +15,7 @@ class STOCK_SPLIT_FACTORY inherit
 
 feature -- Basic operations
 
-	execute is
+	execute
 		do
 			create product
 		end

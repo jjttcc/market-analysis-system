@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A request command that accesses tradables"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -17,7 +17,7 @@ deferred class TRADABLE_REQUEST_COMMAND inherit
 
 feature {NONE} -- Initialization
 
-	make (dispenser: TRADABLE_DISPENSER) is
+	make (dispenser: TRADABLE_DISPENSER)
 		require
 			not_void: dispenser /= Void
 		do
@@ -35,7 +35,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_tradables (arg: TRADABLE_DISPENSER) is
+	set_tradables (arg: TRADABLE_DISPENSER)
 			-- Set tradables to `arg'.
 		require
 				arg_not_void: arg /= Void
@@ -48,18 +48,18 @@ feature -- Status setting
 
 feature {NONE} -- Hook routines
 
-	ignore_tradable_cache: BOOLEAN is
+	ignore_tradable_cache: BOOLEAN
 			-- Should `cached_tradable' ignore the "tradable cache"?
-		indexing
+		note
 			once_status: global
 		once
 			Result := False
 		end
 
-	update_retrieved_tradable: BOOLEAN is
+	update_retrieved_tradable: BOOLEAN
 			-- Should the tradable retrieved from `tradables' be "updated"
 			-- during retrieval?
-		indexing
+		note
 			once_status: global
 		once
 			Result := True
@@ -67,19 +67,19 @@ feature {NONE} -- Hook routines
 
 feature {NONE} -- Implementation
 
-	report_server_error is
+	report_server_error
 		do
 			report_error (Warning, <<"Server error: ", tradables.last_error>>)
 		end
 
-	server_error: BOOLEAN is
+	server_error: BOOLEAN
 			-- Did an error occur in the server?
 		do
 			Result := tradables.error_occurred
 		end
 
 	cached_tradable (symbol: STRING; period_type: TIME_PERIOD_TYPE):
-				TRADABLE [BASIC_MARKET_TUPLE] is
+				TRADABLE [BASIC_MARKET_TUPLE]
 			-- The tradable corresponding to `symbol' and `period_type' -
 			-- `session.last_tradable' is used, if it matches; otherwise
 			-- tradables.tradable (symbol, period_type,

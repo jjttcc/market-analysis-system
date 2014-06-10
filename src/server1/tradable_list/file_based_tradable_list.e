@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"TRADABLE_LISTs that obtain their input data from files"
 	author: "Jim Cochrane"
@@ -21,32 +21,32 @@ deferred class FILE_BASED_TRADABLE_LIST inherit
 
 feature -- Access
 
-	file_names: LIST [STRING] is
+	file_names: LIST [STRING]
 			-- Names of all files with tradable data to be processed
 		deferred
 		end
 
 feature -- Cursor movement
 
-	start is
+	start
 		do
 			file_names.start
 			Precursor
 		end
 
-	finish is
+	finish
 		do
 			file_names.finish
 			Precursor
 		end
 
-	forth is
+	forth
 		do
 			file_names.forth
 			Precursor
 		end
 
-	back is
+	back
 		do
 			file_names.back
 			Precursor
@@ -54,7 +54,7 @@ feature -- Cursor movement
 
 feature {NONE} -- Implementation
 
-	remove_current_item is
+	remove_current_item
 		do
 			file_names.prune (file_names.item)
 			Precursor
@@ -63,7 +63,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	initialize_input_medium is
+	initialize_input_medium
 		local
 			file: INPUT_FILE
 		do

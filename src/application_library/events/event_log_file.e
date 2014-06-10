@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Abstraction for an event registrant that simply logs %
 				%events to a file"
 	author: "Jim Cochrane"
@@ -34,7 +34,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (fname, event_history_file_name, field_sep, record_sep: STRING) is
+	make (fname, event_history_file_name, field_sep, record_sep: STRING)
 			-- Create the file with `fname' as the file `name' and
 			-- `hfile_name' set to `event_history_file_name'
 			-- Open this file, with `fname', for appending in the application
@@ -73,13 +73,13 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	name: STRING is
+	name: STRING
 		do
 			Result := logfile.name
 		end
 
-	type_description: STRING is
-		indexing
+	type_description: STRING
+		note
 			once_status: global
 		once
 			Result := "Log file"
@@ -87,7 +87,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	perform_notify is
+	perform_notify
 		local
 			e: MARKET_EVENT
 		do
@@ -107,7 +107,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation - Hook routines
 
-	specialized_user_report: STRING is
+	specialized_user_report: STRING
 		do
 			Result := "File name: " + name
 		end

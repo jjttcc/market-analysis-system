@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"FILE_BASED_TRADABLE_LISTs that originally obtain their tradable %
 		%data via an http GET request and cache the data by saving it to a %
@@ -46,7 +46,7 @@ creation
 
 feature -- Initialization
 
-	make (factory: TRADABLE_FACTORY; file_ext: STRING) is
+	make (factory: TRADABLE_FACTORY; file_ext: STRING)
 		require
 			valid_factory: factory /= Void
 		local
@@ -73,7 +73,7 @@ feature -- Access
 	file_names: LIST [STRING]
 			-- Names of all files with tradable data to be processed
 
-	load_target_tradable is
+	load_target_tradable
 		do
 			parameters.set_symbol (current_symbol)
 			use_day_after_latest_date_as_start_date := True
@@ -95,7 +95,7 @@ feature -- Access
 
 feature {NONE} -- Implementation
 
-	file_names_from_symbols: LIST [STRING] is
+	file_names_from_symbols: LIST [STRING]
 		require
 			symbols_set: symbols /= Void
 		do
@@ -108,9 +108,9 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Hook routine implementations
 
-	output_file_path: STRING is
+	output_file_path: STRING
 			-- Directory path of output file - redefine if needed
-		indexing
+		note
 			once_status: global
 		local
 			env: expanded APP_ENVIRONMENT
@@ -119,7 +119,7 @@ feature {NONE} -- Hook routine implementations
 				parameters.data_cache_subdirectory, False)
 		end
 
-	latest_date_for (symbol: STRING): DATE is
+	latest_date_for (symbol: STRING): DATE
 		do
 			if not current_symbol.is_equal (symbol) then
 				search_by_symbol (symbol)
@@ -132,7 +132,7 @@ feature {NONE} -- Hook routine implementations
 			end
 		end
 
-	latest_date_requirement: BOOLEAN is
+	latest_date_requirement: BOOLEAN
 		do
 			Result := target_tradable /= Void
 		ensure then
@@ -141,7 +141,7 @@ feature {NONE} -- Hook routine implementations
 
 	use_day_after_latest_date_as_start_date: BOOLEAN
 
-	target_tradable_out_of_date: BOOLEAN is
+	target_tradable_out_of_date: BOOLEAN
 		do
 			parameters.set_symbol (current_symbol)
 			use_day_after_latest_date_as_start_date := True
@@ -163,7 +163,7 @@ feature {NONE} -- Hook routine implementations
 			end
 		end
 
-	append_new_data is
+	append_new_data
 		do
 			load_data
 		end

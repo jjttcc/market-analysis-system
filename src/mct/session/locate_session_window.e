@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Windows used to locate a running, 'unowned' MAS session"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -24,7 +24,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 			make_with_title (Locate_session_window_title)
 			create_contents
@@ -39,7 +39,7 @@ feature -- Status report
 
 feature {NONE} -- Implementation - initialization
 
-	create_contents is
+	create_contents
 		do
 			-- Avoid flicker on some platforms.
 			lock_update
@@ -48,7 +48,7 @@ feature {NONE} -- Implementation - initialization
 			unlock_update
 		end
 
-	components: EV_CONTAINER is
+	components: EV_CONTAINER
 		local
 			hnbox, portbox, button_box, ok_box, cancel_box: EV_HORIZONTAL_BOX
 			host_label, port_label: EV_LABEL
@@ -99,12 +99,12 @@ feature {NONE} -- Implementation - attributes
 
 feature {NONE} -- Implementation - constants
 
-	Locate_session_window_title: STRING is "Locate MAS session"
+	Locate_session_window_title: STRING = "Locate MAS session"
 			-- Title of locate-mas-session windows
 
 feature {NONE} -- Implementation - GUI callback routines
 
-	ok_response is
+	ok_response
 			-- Response to pressing of "OK" button
 		do
 			host_name := host_field.text
@@ -114,7 +114,7 @@ feature {NONE} -- Implementation - GUI callback routines
 			destroy
 		end
 
-	cancel_response is
+	cancel_response
 			-- Response to pressing of "Cancel" button
 		do
 			state_changed := False

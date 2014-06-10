@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Unary operators that use their operand to process the %
 		%current item of a linear structure of market tuples"
 	author: "Jim Cochrane"
@@ -33,7 +33,7 @@ creation
 
 feature -- Initialization
 
-	make (tgt: like target; op: like operand) is
+	make (tgt: like target; op: like operand)
 		require
 			not_void: tgt /= Void and op /= Void
 		do
@@ -43,15 +43,15 @@ feature -- Initialization
 			set: target = tgt and operand = op
 		end
 
-	initialize (arg: LINEAR_ANALYZER) is
+	initialize (arg: LINEAR_ANALYZER)
 		do
-			{LINEAR_COMMAND} Precursor (arg)
+			Precursor {LINEAR_COMMAND} (arg)
 			uo_initialize (arg)
 		end
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		local
 			old_i: INTEGER
 		do
@@ -68,10 +68,10 @@ feature -- Basic operations
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is False
+	arg_mandatory: BOOLEAN = False
 
-	target_cursor_not_affected: BOOLEAN is
-		indexing
+	target_cursor_not_affected: BOOLEAN
+		note
 			once_status: global
 		once
 			Result := True

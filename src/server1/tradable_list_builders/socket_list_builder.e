@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Dummy builder of SOCKET_TRADABLE_LISTs"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,7 +16,7 @@ creation
 
 feature -- Initialization
 
-	make (f: TRADABLE_FACTORY) is
+	make (f: TRADABLE_FACTORY)
 		do
 		end
 
@@ -28,7 +28,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	execute is
+	execute
 		do
 		end
 

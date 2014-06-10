@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Main MAS Control Terminal actions for GUI-event responses"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -24,7 +24,7 @@ create
 
 feature {NONE} -- Initialization
 
-	post_initialize is
+	post_initialize
 		local
 			cmd: MCT_COMMAND
 		do
@@ -34,7 +34,7 @@ feature {NONE} -- Initialization
 
 feature -- Actions
 
-	connect_to_session is
+	connect_to_session
 			-- Connect to an existing MAS "session".
 		local
 			cmd: SESSION_LOCATION
@@ -43,7 +43,7 @@ feature -- Actions
 			cmd.connect_to_session
 		end
 
-	terminate_arbitrary_session is
+	terminate_arbitrary_session
 			-- Terminate an arbitrary MAS "session".
 		local
 			cmd: SESSION_LOCATION
@@ -52,7 +52,7 @@ feature -- Actions
 			cmd.terminate_arbitrary_session
 		end
 
-	start_server is
+	start_server
 			-- Start the MAS server.
 		local
 			cmd: COMMAND
@@ -95,7 +95,7 @@ feature -- Actions
 			end
 		end
 
-	configure_server_startup is
+	configure_server_startup
 		local
 			server_selection: START_SERVER_SELECTION
 		do
@@ -103,14 +103,14 @@ feature -- Actions
 			server_selection.execute
 		end
 
-	edit_preferences is
+	edit_preferences
 			-- Edit "Preferences".
 		do
 		end
 
 feature {NONE} -- Implementation
 
-	reserved_port_number: STRING is
+	reserved_port_number: STRING
 		local
 			pnums: LIST [STRING]
 		do
@@ -128,7 +128,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	server_report (portnumber: INTEGER): STRING is
+	server_report (portnumber: INTEGER): STRING
 			-- A server process's report back on its startup status
 		local
 			socket: NETWORK_STREAM_SOCKET
@@ -167,6 +167,6 @@ feature {NONE} -- Implementation
 			retry
 		end
 
-	Connection_failed: STRING is "Connection to MAS server failed."
+	Connection_failed: STRING = "Connection to MAS server failed."
 
 end

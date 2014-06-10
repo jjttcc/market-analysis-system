@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Enumerated 'indicator editing' choices"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -25,6 +25,6 @@ create {ENUMERATED}
 
 feature -- Access
 
-	type_name: STRING is "indicator"
+	type_name: STRING = "indicator"
 
 end

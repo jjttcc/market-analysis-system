@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Selection of routines for converting data for a tradable input %
 		%from an outside source into the format expected by technical %
@@ -21,7 +21,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 			output_field_separator := Default_output_field_separator
 		ensure then
@@ -31,7 +31,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	routine_for (specifier: STRING): FUNCTION [ANY, TUPLE [STRING], STRING] is
+	routine_for (specifier: STRING): FUNCTION [ANY, TUPLE [STRING], STRING]
 			-- Conversion function associated with `specifier' - Throws an
 			-- exception if the conversion fails.
 		require
@@ -42,7 +42,7 @@ feature -- Access
 			result_exists: Result /= Void
 		end
 
-	null_conversion_routine: FUNCTION [ANY, TUPLE [STRING], STRING] is
+	null_conversion_routine: FUNCTION [ANY, TUPLE [STRING], STRING]
 			-- Conversion routine that leaves the data as is
 		do
 			Result := routine_table @ null_specifier
@@ -51,7 +51,7 @@ feature -- Access
 		end
 
 	routine_table: HASH_TABLE [FUNCTION [ANY, TUPLE [STRING], STRING],
-		STRING] is
+		STRING]
 			-- Table of available conversion routines, keyed by "specifier"
 		once
 			create Result.make (1)
@@ -64,7 +64,7 @@ feature -- Access
 
 feature -- Element change
 
-	set_output_field_separator (arg: CHARACTER) is
+	set_output_field_separator (arg: CHARACTER)
 			-- Set `output_field_separator' to `arg'.
 		do
 			output_field_separator := arg
@@ -74,18 +74,18 @@ feature -- Element change
 
 feature -- Constants
 
-	yahoo_specifier: STRING is "yahoo"
+	yahoo_specifier: STRING = "yahoo"
 			-- Specifier for data converter for yahoo.com
 
-	null_specifier: STRING is "[none]"
+	null_specifier: STRING = "[none]"
 			-- Specifier for "null" data converter
 
-	Default_output_field_separator: CHARACTER is ','
+	Default_output_field_separator: CHARACTER = ','
 			-- Output field separator to use if none is specified
 
 feature {NONE} -- Conversion functions
 
-	converted_yahoo_data (source_data: STRING): STRING is
+	converted_yahoo_data (source_data: STRING): STRING
 			-- Data from yahoo.com converted into MAS format
 		local
 			su: expanded STRING_UTILITIES
@@ -118,7 +118,7 @@ feature {NONE} -- Conversion functions
 			end
 		end
 
-	null_conversion (source_data: STRING): STRING is
+	null_conversion (source_data: STRING): STRING
 			-- Null conversion
 		do
 			Result := source_data
@@ -128,7 +128,7 @@ feature {NONE} -- Conversion functions
 
 feature -- Status report
 
-	valid_specifier (s: STRING): BOOLEAN is
+	valid_specifier (s: STRING): BOOLEAN
 		do
 			Result := s /= Void and then not s.is_empty and then
 				routine_table.has (s)
@@ -139,7 +139,7 @@ feature -- Status report
 
 feature {NONE} -- Implemenation
 
-	four_digit_year (s: STRING): STRING is
+	four_digit_year (s: STRING): STRING
 		do
 			if s.to_integer > 50 then
 				Result := "19" + s
@@ -148,7 +148,7 @@ feature {NONE} -- Implemenation
 			end
 		end
 
-	forced_two_digits (s: STRING): STRING is
+	forced_two_digits (s: STRING): STRING
 		do
 			if s.count = 1 then
 				Result := "0" + s
@@ -157,11 +157,11 @@ feature {NONE} -- Implemenation
 			end
 		end
 
-	yahoo_field_separator: CHARACTER is ','
+	yahoo_field_separator: CHARACTER = ','
 
-	expected_fs_occurrences: INTEGER is 5
+	expected_fs_occurrences: INTEGER = 5
 
-	converted_yahoo_line (l: STRING): STRING is
+	converted_yahoo_line (l: STRING): STRING
 			-- Converted yahoo stock data record - example yahoo data:
 			-- 17-Jul-02,71.00,71.60,69.62,70.69,11537300,70.69
 			-- Note: They have recently added a field at the end, which
@@ -172,7 +172,7 @@ feature {NONE} -- Implemenation
 		local
 			day, month, year: STRING
 			fs_count: INTEGER
-			date: ARRAY [STRING]
+			date: LIST [STRING]
 			su: expanded STRING_UTILITIES
 			date_util: expanded DATE_TIME_SERVICES
 		do

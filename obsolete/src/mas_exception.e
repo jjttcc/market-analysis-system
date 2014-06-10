@@ -34,7 +34,7 @@ deferred class MAS_EXCEPTION inherit
 
 feature -- Access
 
-	Error_exit_status: INTEGER is 1
+	Error_exit_status: INTEGER = 1
 			-- Error status for exit
 
 	no_cleanup: BOOLEAN
@@ -122,7 +122,7 @@ feature -- Basic operations
 			"C"
 		end
 
-	fatal_exception (e: INTEGER): BOOLEAN is
+	fatal_exception (e: INTEGER): BOOLEAN
 			-- Is `e' an exception that is considered fatal?
 		do
 			Result := true

@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"STOCK_SPLITS implemented as an INPUT_RECORD_SEQUENCE"
 	author: "Jim Cochrane"
@@ -24,7 +24,7 @@ deferred class STOCK_SPLIT_SEQUENCE inherit
 
 feature -- Access
 
-	infix "@" (symbol: STRING): DYNAMIC_CHAIN [STOCK_SPLIT] is
+	infix "@" (symbol: STRING): DYNAMIC_CHAIN [STOCK_SPLIT]
 		do
 			product.search (symbol)
 			if product.found then
@@ -34,7 +34,7 @@ feature -- Access
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		require
 			product_created: product /= Void
 		do
@@ -50,7 +50,7 @@ feature {NONE} -- Initialization
 
 feature {SPLIT_SYMBOL_SETTER} -- Implementation - access
 
-	set_current_symbol (arg: STRING) is
+	set_current_symbol (arg: STRING)
 			-- Set current_symbol to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -72,21 +72,21 @@ feature {NONE} -- Implementation - access
 
 feature {NONE} -- Implementation - utility
 
-	index_vector: ARRAY [INTEGER] is
-		indexing
+	index_vector: ARRAY [INTEGER]
+		note
 			once_status: global
 		once
 			Result := <<Date_index, Symbol_index, Split_index>>
 		end
 
-	make_value_setters is
+	make_value_setters
 		do
 			create {LINKED_LIST [VALUE_SETTER]} value_setters.make
 			add_value_setters (value_setters, index_vector)
 		end
 
 	add_value_setters (vs: LIST [VALUE_SETTER];
-						i_vector: ARRAY [INTEGER]) is
+						i_vector: ARRAY [INTEGER])
 			-- i_vector indicates which value_setters to insert into
 			-- vs, in the order specified, using the xxx_index constants.
 		require
@@ -115,7 +115,7 @@ feature {NONE} -- Implementation - utility
 
 feature {NONE} -- Implementation - hooks
 
-	close_tuple (t: STOCK_SPLIT) is
+	close_tuple (t: STOCK_SPLIT)
 			-- Add the new tuple to the list at `product' @ `current_symbol',
 			-- with `current_symbol' converted to lower case; create a
 			-- list and place it into `product' if not
@@ -138,20 +138,20 @@ feature {NONE} -- Implementation - hooks
 
 feature {NONE} -- Innapplicable
 
-	create_product is
+	create_product
 		do
 		end
 
-	add_tuple (t: ANY) is
+	add_tuple (t: ANY)
 		do
 		end
 
 feature {NONE} -- Tuple field-key constants
 
-	Date_index: INTEGER is 1
-	Symbol_index: INTEGER is 2
-	Split_index: INTEGER is 3
-	Last_index: INTEGER is 3
+	Date_index: INTEGER = 1
+	Symbol_index: INTEGER = 2
+	Split_index: INTEGER = 3
+	Last_index: INTEGER = 3
 
 invariant
 

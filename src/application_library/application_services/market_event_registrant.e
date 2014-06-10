@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Abstraction for a registrant of MARKET_EVENTs"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -43,7 +43,7 @@ deferred class MARKET_EVENT_REGISTRANT inherit
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 			histmake
 			cache_make
@@ -64,27 +64,27 @@ feature -- Access
 	hfile_name: STRING
 			-- Event history file name
 
-	user_report: STRING is
+	user_report: STRING
 			-- Information about Current relevant to the user
 		do
 			Result := "Registrant type: " + type_description + ". " +
 				specialized_user_report + "."
 		end
 
-	type_description: STRING is
+	type_description: STRING
 			-- Description of the type of registrant
 		deferred
 		end
 
 feature -- Basic operations
 
-	notify (e: TYPED_EVENT) is
+	notify (e: TYPED_EVENT)
 		do
-			{EVENT_REGISTRANT_WITH_CACHE} Precursor (e)
-			{EVENT_REGISTRANT_WITH_HISTORY} Precursor (e)
+			Precursor {EVENT_REGISTRANT_WITH_CACHE} (e)
+			Precursor {EVENT_REGISTRANT_WITH_HISTORY} (e)
 		end
 
-	load_history is
+	load_history
 		local
 			hfile: INPUT_FILE
 			scanner: MARKET_EVENT_SCANNER
@@ -130,7 +130,7 @@ feature -- Basic operations
 			retry
 		end
 
-	save_history is
+	save_history
 			-- Save event history to persistent store.
 		local
 			hfile: PLAIN_TEXT_FILE
@@ -163,7 +163,7 @@ feature -- Basic operations
 
 feature {NONE} -- Hook routines
 
-	specialized_user_report: STRING is
+	specialized_user_report: STRING
 			-- Component of user report specialized according to the
 			-- descendant type
 		deferred
@@ -171,7 +171,7 @@ feature {NONE} -- Hook routines
 
 feature {NONE} -- Implementation
 
-	event_guts (e: MARKET_EVENT; separator: STRING): STRING is
+	event_guts (e: MARKET_EVENT; separator: STRING): STRING
 		local
 			guts: ARRAY [STRING]
 			i: INTEGER
@@ -191,7 +191,7 @@ feature {NONE} -- Implementation
 			Result.append (guts @ i)
 		end
 
-	fill_event_history (l: LIST [MARKET_EVENT]) is
+	fill_event_history (l: LIST [MARKET_EVENT])
 			-- Create `event_history' and fill it with the contents of `l'.
 		do
 			from
@@ -205,7 +205,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	event_information (e: MARKET_EVENT): STRING is
+	event_information (e: MARKET_EVENT): STRING
 			-- Reporting information extracted from `e'
 		require
 			e_not_void: e /= Void

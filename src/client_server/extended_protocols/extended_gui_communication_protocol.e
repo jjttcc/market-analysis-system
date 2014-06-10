@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"Constants specifying components of the TA server protocol %
@@ -15,10 +15,10 @@ class EXTENDED_GUI_COMMUNICATION_PROTOCOL inherit
 
 feature -- Client request IDs
 
-	time_delimited_market_data_request: INTEGER is 12
+	time_delimited_market_data_request: INTEGER = 12
 			-- Time-delimited request for data for a specified tradable
 
-	time_delimited_indicator_data_request: INTEGER is 13
+	time_delimited_indicator_data_request: INTEGER = 13
 			-- Time-delimited request for indicator data for a
 			-- specified tradable
 

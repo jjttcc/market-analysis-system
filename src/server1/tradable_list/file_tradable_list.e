@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"An abstraction that provides a virtual list of tradables by %
 		%holding a list that contains the input data file name of each %
@@ -26,7 +26,7 @@ creation
 
 feature -- Initialization
 
-	make (fnames: LIST [STRING]; factory: TRADABLE_FACTORY) is
+	make (fnames: LIST [STRING]; factory: TRADABLE_FACTORY)
 			-- `symbols' will be created from `fnames'
 		local
 			slist: LINKED_LIST [STRING]
@@ -52,7 +52,7 @@ feature -- Access
 
 feature {NONE} -- Implementation
 
-	symbol_from_file_name (fname: STRING): STRING is
+	symbol_from_file_name (fname: STRING): STRING
 			-- Tradable symbol extracted from `fname' - directory component
 			-- and suffix ('.' and all characters that follow it) of the
 			-- file name are removed.  `fname' is not changed.

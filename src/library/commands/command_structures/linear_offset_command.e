@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Linear commands that change the cursor of the target according %
 		%to an offset value, operate on the target at that cursor %
@@ -15,7 +15,7 @@ deferred class LINEAR_OFFSET_COMMAND inherit
 
 feature -- Access
 
-	external_offset: INTEGER is
+	external_offset: INTEGER
 			-- Offset to be used externally, for example, to set the
 			-- `effective_n' value of an N_RECORD_ONE_VARIABLE_FUNCTION -
 			-- Will probably either be 0 or the value of `offset'.
@@ -24,9 +24,9 @@ feature -- Access
 
 feature -- Status report
 
-	target_cursor_not_affected: BOOLEAN is
+	target_cursor_not_affected: BOOLEAN
 			-- True
-		indexing
+		note
 			once_status: global
 		once
 			Result := True
@@ -34,7 +34,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		local
 			old_i: INTEGER
 		do
@@ -57,7 +57,7 @@ feature -- Basic operations
 
 feature {NONE}
 
-	offset: INTEGER is
+	offset: INTEGER
 			-- offset to current index specifying which relative
 			-- position of target to access - may be positive or negative,
 			-- but must never cause an out-of-bounds access on target -
@@ -67,7 +67,7 @@ feature {NONE}
 
 feature {NONE} -- Hook methods
 
-	operate (arg: ANY) is
+	operate (arg: ANY)
 			-- Operate on `target' at the current cursor position.
 		deferred
 		end

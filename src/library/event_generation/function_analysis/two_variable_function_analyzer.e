@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Market analyzer that analyzes two market functions, input1 and %
 		%input2, generating an event if input1 crosses (below-to-above, %
@@ -31,7 +31,7 @@ creation
 feature -- Initialization
 
 	make (in1, in2: like input1; ev_type: EVENT_TYPE; sig_type: INTEGER;
-			per_type: TIME_PERIOD_TYPE) is
+			per_type: TIME_PERIOD_TYPE)
 		require
 			not_void: in1 /= Void and in2 /= Void and ev_type /= Void
 		do
@@ -60,7 +60,7 @@ feature -- Access
 	input1, input2: MARKET_FUNCTION
 			-- The two market functions to be analyzed
 
-	indicators: LIST [MARKET_FUNCTION] is
+	indicators: LIST [MARKET_FUNCTION]
 		do
 			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 			Result.extend (input1)
@@ -71,7 +71,7 @@ feature -- Access
 			-- Should the operator, if it is not Void, be applied to
 			-- the left function?
 
-	use_right_function: BOOLEAN is
+	use_right_function: BOOLEAN
 			-- Should the operator, if it is not Void, be applied to
 			-- the right function?
 		do
@@ -90,7 +90,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_below_to_above_only is
+	set_below_to_above_only
 			-- Set `below_to_above' to True and `above_to_below' to False.
 		do
 			below_to_above := True
@@ -99,7 +99,7 @@ feature -- Status setting
 			below_to_above_only: below_to_above and not above_to_below
 		end
 
-	set_above_to_below_only is
+	set_above_to_below_only
 			-- Set `above_to_below' to True and `below_to_above' to False.
 		do
 			above_to_below := True
@@ -108,7 +108,7 @@ feature -- Status setting
 			above_to_below_only: above_to_below and not below_to_above
 		end
 
-	set_below_and_above is
+	set_below_and_above
 			-- Set both `above_to_below' and `below_to_above' to True.
 		do
 			above_to_below := True
@@ -117,7 +117,7 @@ feature -- Status setting
 			both: above_to_below and below_to_above
 		end
 
-	set_innermost_function (f: SIMPLE_FUNCTION [MARKET_TUPLE]) is
+	set_innermost_function (f: SIMPLE_FUNCTION [MARKET_TUPLE])
 			-- Set the innermost function, which contains the basic
 			-- data to be analyzed.
 		do
@@ -130,7 +130,7 @@ feature -- Status setting
 			end
 		end
 
-	set_function_for_operation (left: BOOLEAN) is
+	set_function_for_operation (left: BOOLEAN)
 			-- Specify the function whose output is to be operated on
 			-- if `operator' is not void - left (input1) or right (input2).
 		do
@@ -141,7 +141,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute is
+	execute
 		do
 			create {LINKED_LIST [MARKET_EVENT]} product.make
 			if current_tradable /= Void then
@@ -160,7 +160,7 @@ feature -- Basic operations
 
 feature {NONE} -- Hook routine implementation
 
-	start is
+	start
 		do
 			from
 				Precursor
@@ -185,7 +185,7 @@ feature {NONE} -- Hook routine implementation
 								target2.i_th (target2.index - 1).value)
 		end
 
-	action is
+	action
 		do
 			-- The crossover_in_effect variable and the check for the
 			-- equality (using epsilon) of the 2 values ensures that
@@ -235,7 +235,7 @@ feature {NONE} -- Implementation
 	operator_target: CHAIN [MARKET_TUPLE]
 			-- Target for `operator' to process.
 
-	additional_condition: BOOLEAN is
+	additional_condition: BOOLEAN
 			-- Is operator Void or is its execution result True?
 		do
 			if operator /= Void then
@@ -244,7 +244,7 @@ feature {NONE} -- Implementation
 			Result := operator = Void or else operator.value
 		end
 
-	event_description: STRING is
+	event_description: STRING
 			-- Constructed description for current event
 		do
 			Result := concatenation (<<"Crossover for ", period_type.name,
@@ -253,7 +253,7 @@ feature {NONE} -- Implementation
 						target1.item.value, ", ", target2.item.value>>)
 		end
 
-	set_input1 (in: like input1) is
+	set_input1 (in: like input1)
 		require
 			not_void: in /= Void
 			output_not_void: in.output /= Void
@@ -265,7 +265,7 @@ feature {NONE} -- Implementation
 			target_set: target1 = in.output
 		end
 
-	set_input2 (in: like input2) is
+	set_input2 (in: like input2)
 		require
 			not_void: in /= Void
 			output_not_void: in.output /= Void
@@ -277,7 +277,7 @@ feature {NONE} -- Implementation
 			target_set: target2 = in.output
 		end
 
-	set_operator_target is
+	set_operator_target
 			-- Set `operator_target' according to `use_left_function' and
 			-- `use_right_function'.  Must be called after set_tradable.
 		do
@@ -293,7 +293,7 @@ feature {NONE} -- Implementation
 
 feature {MARKET_FUNCTION_EDITOR}
 
-	wipe_out is
+	wipe_out
 		local
 			dummy_tradable: TRADABLE [BASIC_MARKET_TUPLE]
 		do
@@ -312,7 +312,7 @@ feature {MARKET_FUNCTION_EDITOR}
 
 feature -- Implementation
 
-	event_name: STRING is "crossover"
+	event_name: STRING = "crossover"
 
 invariant
 

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Factory class that manufactures MARKET_EVENT_GENERATORs"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -25,7 +25,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_event_type (arg: EVENT_TYPE) is
+	set_event_type (arg: EVENT_TYPE)
 			-- Set event_type to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -35,7 +35,7 @@ feature -- Status setting
 			event_type_set: event_type = arg and event_type /= Void
 		end
 
-	set_signal_type (i: INTEGER) is
+	set_signal_type (i: INTEGER)
 			-- Set signal_type to `i'.
 		require
 			type_names.valid_index (i)

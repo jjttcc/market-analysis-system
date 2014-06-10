@@ -43,7 +43,7 @@ feature -- Examples
 			-- Create the regular expression.
 			create regexp.make
 
-			-- Compile a pattern: look for character pairs (note: there
+			-- Compile a pattern: look for character pairs (note1: there
 			-- are two subexpressions).
 			regexp.compile ("((.)\2)")
 			check

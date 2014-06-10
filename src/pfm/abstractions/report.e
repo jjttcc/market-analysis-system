@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A portfolio report"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -20,7 +20,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_complete_trades (arg: LIST [TRADE_MATCH]) is
+	set_complete_trades (arg: LIST [TRADE_MATCH])
 			-- Set complete_trades to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -31,7 +31,7 @@ feature -- Status setting
 				complete_trades /= Void
 		end
 
-	set_open_trades (arg: LIST [OPEN_TRADE]) is
+	set_open_trades (arg: LIST [OPEN_TRADE])
 			-- Set open_trades to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -43,7 +43,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute is
+	execute
 			-- Execute the report.
 		deferred
 		end

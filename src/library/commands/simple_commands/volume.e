@@ -1,7 +1,7 @@
-indexing
+note
 	description: "Numeric commands that produce the volume for the current %
 		%trading period."
-	note: "An instance of this class can be safely shared within a command %
+	note1: "An instance of this class can be safely shared within a command %
 		%tree."
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -18,7 +18,7 @@ class VOLUME inherit
 
 feature -- Access
 
-	root_suppliers: SET [ANY] is
+	root_suppliers: SET [ANY]
 		local
 			tuples: expanded MARKET_TUPLES
 		do
@@ -32,7 +32,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	execute (arg: VOLUME_TUPLE) is
+	execute (arg: VOLUME_TUPLE)
 			-- Can be redefined by ancestors.
 		do
 			value := arg.volume

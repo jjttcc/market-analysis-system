@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Abstraction for objects that create a market tuple based on %
 		%the values in a list of market tuples";
@@ -29,7 +29,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_tuplelist (arg: LIST [BASIC_MARKET_TUPLE]) is
+	set_tuplelist (arg: LIST [BASIC_MARKET_TUPLE])
 			-- Set tuplelist to `arg'.
 		require
 			arg /= Void
@@ -41,7 +41,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute is
+	execute
 		do
 			check
 				tuplelist_not_void: tuplelist /= Void
@@ -64,7 +64,7 @@ feature -- Basic operations
 
 feature {NONE}
 
-	do_main_work (tuples: LIST [BASIC_MARKET_TUPLE]) is
+	do_main_work (tuples: LIST [BASIC_MARKET_TUPLE])
 			-- Set `product's open, high, low, and close values from the
 			-- open, highest high, lowest low, and close values, respectively,
 			-- from tuples.
@@ -113,7 +113,7 @@ feature {NONE}
 			-- product.close = close from last element of tuples
 		end
 
-	do_auxiliary_work (tuples: LIST [MARKET_TUPLE]) is
+	do_auxiliary_work (tuples: LIST [MARKET_TUPLE])
 			-- Hook method to be redefined by descendants
 		require
 			product_not_void: product /= Void

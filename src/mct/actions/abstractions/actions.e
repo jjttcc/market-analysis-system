@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Actions for GUI-event responses"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -20,7 +20,7 @@ feature -- Access
 
 feature -- Element change
 
-	set_owner_window (arg: like owner_window) is
+	set_owner_window (arg: like owner_window)
 			-- Set `owner_window' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -32,14 +32,14 @@ feature -- Element change
 
 feature -- Access
 
-	port_numbers_in_use: LINKED_SET [STRING] is
+	port_numbers_in_use: LINKED_SET [STRING]
 			-- Port numbers currently used by running MAS sessions
 		once
 			create Result.make
 			Result.compare_objects
 		end
 
-	current_default_start_server_command: MCT_COMMAND is
+	current_default_start_server_command: MCT_COMMAND
 			-- The currently-selected "default" start-server command
 		do
 			Result := external_commands @
@@ -48,7 +48,7 @@ feature -- Access
 
 feature -- Actions
 
-	exit is
+	exit
 			-- Exit the application, terminating all "owned" sessions.
 		do
 			configuration.set_terminate_sessions_on_exit (True)
@@ -56,7 +56,7 @@ feature -- Actions
 			(create {EV_ENVIRONMENT}).application.destroy
 		end
 
-	exit_without_session_termination is
+	exit_without_session_termination
 			-- Exit the application without terminating sessions.
 		do
 			configuration.set_terminate_sessions_on_exit (False)
@@ -64,14 +64,14 @@ feature -- Actions
 			(create {EV_ENVIRONMENT}).application.destroy
 		end
 
-	close_window is
+	close_window
 		do
 			if owner_window /= Void then
 				owner_window.destroy
 			end
 		end
 
-	show_about_box is
+	show_about_box
 			-- Display an "about" box.
 		local
 			about_dialog: EV_INFORMATION_DIALOG
@@ -84,21 +84,21 @@ feature -- Actions
 			about_dialog.show_modal_to_window (owner_window)
 		end
 
-	show_documentation is
+	show_documentation
 			-- Display the main MCT documentation.
 		do
 			external_commands.item (
 				configuration.Browse_docs_cmd_specifier).execute (owner_window)
 		end
 
-	show_introduction is
+	show_introduction
 			-- Display the "MCT Introduction".
 		do
 			external_commands.item (
 				configuration.Browse_intro_cmd_specifier).execute (owner_window)
 		end
 
-	show_faq is
+	show_faq
 			-- Display the FAQ.
 		do
 			external_commands.item (
@@ -107,7 +107,7 @@ feature -- Actions
 
 feature {NONE} -- Initialization
 
-	make (config: MCT_CONFIGURATION) is
+	make (config: MCT_CONFIGURATION)
 			-- Creation routine for descendants
 		require
 			config_exists: config /= Void
@@ -118,7 +118,7 @@ feature {NONE} -- Initialization
 			post_initialize
 		end
 
-	add_common_commands is
+	add_common_commands
 			-- Add commands common to most contexts to `external_commands'.
 		require
 			external_commands_exists: external_commands /= Void
@@ -134,7 +134,7 @@ feature {NONE} -- Initialization
 			external_commands.put (cmd, cmd.identifier)
 		end
 
-	post_initialize is
+	post_initialize
 			-- Do any needed initialization of the descendant.
 		require
 			external_commands_exists: external_commands /= Void
@@ -145,7 +145,7 @@ feature {NONE} -- Initialization
 
 feature {NONE} -- Implementation - utilities
 
-	display_error (s: STRING) is
+	display_error (s: STRING)
 			-- Display error message `s'.
 		local
 			dialog: EV_WIDGET

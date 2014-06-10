@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Enumerated 'command menu' choices"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -28,21 +28,21 @@ create {ENUMERATED}
 
 feature {NONE} -- Initialization
 
-	make_edit is
+	make_edit
 		do
 			make ('e')
 		end
 
 feature {NONE} -- Implementation
 
-	initial_allowable_values: ARRAY [CHARACTER] is
+	initial_allowable_values: ARRAY [CHARACTER]
 		do
 			Result := Precursor
 			Result.force (edit, Result.upper + 1)
 			Result.force (edit_u, Result.upper + 1)
 		end
 
-	value_name_map: HASH_TABLE [STRING, CHARACTER] is
+	value_name_map: HASH_TABLE [STRING, CHARACTER]
 		do
 			Result := Precursor
 			Result.put ("Edit a " + type_name, edit)

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Configurable value setter for setting the date of a tuple";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,7 +16,7 @@ creation
 
 feature -- Initialization
 
-	make (date_spec: DATE_FORMAT_SPECIFICATION) is
+	make (date_spec: DATE_FORMAT_SPECIFICATION)
 		do
 			year_index := date_spec.year_index
 			month_index := date_spec.month_index
@@ -56,7 +56,7 @@ feature -- Access
 
 feature -- Element change
 
-	set_year_index (arg: INTEGER) is
+	set_year_index (arg: INTEGER)
 			-- Set `year_index' to `arg'.
 		do
 			year_index := arg
@@ -64,7 +64,7 @@ feature -- Element change
 			year_index_set: year_index = arg
 		end
 
-	set_month_index (arg: INTEGER) is
+	set_month_index (arg: INTEGER)
 			-- Set `month_index' to `arg'.
 		do
 			month_index := arg
@@ -72,7 +72,7 @@ feature -- Element change
 			month_index_set: month_index = arg
 		end
 
-	set_day_index (arg: INTEGER) is
+	set_day_index (arg: INTEGER)
 			-- Set `day_index' to `arg'.
 		do
 			day_index := arg
@@ -80,7 +80,7 @@ feature -- Element change
 			day_index_set: day_index = arg
 		end
 
-	set_field_separator (arg: STRING) is
+	set_field_separator (arg: STRING)
 			-- Set `field_separator' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -91,7 +91,7 @@ feature -- Element change
 				field_separator /= Void
 		end
 
-	set_abbreviated_month (arg: BOOLEAN) is
+	set_abbreviated_month (arg: BOOLEAN)
 			-- Set `abbreviated_month' to `arg'.
 		do
 			abbreviated_month := arg
@@ -99,7 +99,7 @@ feature -- Element change
 			abbreviated_month_set: abbreviated_month = arg
 		end
 
-	set_two_digit_year_partition (arg: INTEGER) is
+	set_two_digit_year_partition (arg: INTEGER)
 			-- Set `two_digit_year_partition' to `arg'.
 		require
 			arg_valid: arg = -1 or arg > 0
@@ -111,7 +111,7 @@ feature -- Element change
 
 feature {NONE}
 
-	do_set (stream: INPUT_SEQUENCE; tuple: MARKET_TUPLE) is
+	do_set (stream: INPUT_SEQUENCE; tuple: MARKET_TUPLE)
 		local
 			date_util: expanded DATE_TIME_SERVICES
 			date: DATE

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A simple, atomic market event"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -22,7 +22,7 @@ creation
 feature {NONE} -- Initialization
 
 	make (nm, sym: STRING; time_stmp: DATE_TIME; e_type: EVENT_TYPE;
-			sig_type: INTEGER) is
+			sig_type: INTEGER)
 		require
 			not_void: nm /= Void and time_stmp /= Void and e_type /= Void and
 						sym /= Void
@@ -46,7 +46,7 @@ feature -- Access
 
 	description: STRING
 
-	components: LIST [MARKET_EVENT] is
+	components: LIST [MARKET_EVENT]
 		do
 			create {ARRAYED_LIST [MARKET_EVENT]} Result.make (0)
 			Result.extend (Current)
@@ -54,7 +54,7 @@ feature -- Access
 			Result.count = 1 and Result @ 1 = Current
 		end
 
-	guts: ARRAY [STRING] is
+	guts: ARRAY [STRING]
 			-- Class abbreviation ("AME"), event type ID, time_stamp,
 			-- and symbol - with time_stamp in the format:
 			-- yyyymmdd h:m:s.
@@ -86,7 +86,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_description (arg: STRING) is
+	set_description (arg: STRING)
 			-- Set description to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -96,7 +96,7 @@ feature -- Status setting
 			description_set: description = arg and description /= Void
 		end
 
-	set_date (arg: DATE) is
+	set_date (arg: DATE)
 			-- Set date to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -106,7 +106,7 @@ feature -- Status setting
 			date_set: date = arg and date /= Void
 		end
 
-	set_time (arg: TIME) is
+	set_time (arg: TIME)
 			-- Set time to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -118,7 +118,7 @@ feature -- Status setting
 
 feature -- Status report
 
-	is_equal (other: like Current): BOOLEAN is
+	is_equal (other: like Current): BOOLEAN
 		do
 			Result := Precursor (other) and symbol.is_equal (other.symbol)
 		ensure then

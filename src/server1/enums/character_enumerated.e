@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Enumerated types whose `item' type is CHARACTER"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -15,7 +15,7 @@ deferred class CHARACTER_ENUMERATED inherit
 
 feature -- Access
 
-	type_name: STRING is
+	type_name: STRING
 			-- Name of the type the enumeration represents
 		deferred
 		end

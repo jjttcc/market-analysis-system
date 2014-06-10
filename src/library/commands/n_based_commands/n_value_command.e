@@ -1,4 +1,4 @@
-indexing
+note
 	description: "N-record commands that simply give as their `value', %
 		%the value of their `n' feature";
 	author: "Jim Cochrane"
@@ -17,7 +17,7 @@ creation
 
 feature {NONE} -- Implmentation
 
-	calculate: REAL is
+	calculate: REAL
 			-- Perform the calculation based on n.
 		do
 			Result := n

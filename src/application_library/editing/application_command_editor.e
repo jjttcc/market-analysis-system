@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Editor of COMMANDs to be used in a MAL application"
 	author: "Jim Cochrane"
@@ -35,7 +35,7 @@ creation
 
 feature -- Initialization
 
-	make (ui: COMMAND_EDITING_INTERFACE) is
+	make (ui: COMMAND_EDITING_INTERFACE)
 		require
 			not_void: ui /= Void
 		do
@@ -51,7 +51,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	edit_binary_boolean (cmd: BINARY_OPERATOR [ANY, BOOLEAN]) is
+	edit_binary_boolean (cmd: BINARY_OPERATOR [ANY, BOOLEAN])
 			-- Edit a BINARY_OPERATOR that takes BOOLEAN operands.
 		require
 			ui_set: user_interface /= Void
@@ -70,7 +70,7 @@ feature -- Basic operations
 			cmd.set_operands (left, right)
 		end
 
-	edit_binary_real (cmd: BINARY_OPERATOR [ANY, REAL]) is
+	edit_binary_real (cmd: BINARY_OPERATOR [ANY, REAL])
 			-- Edit a BINARY_OPERATOR that takes REAL operands.
 		require
 			ui_set: user_interface /= Void
@@ -89,7 +89,7 @@ feature -- Basic operations
 			cmd.set_operands (left, right)
 		end
 
-	edit_minus_n (c: MINUS_N_COMMAND) is
+	edit_minus_n (c: MINUS_N_COMMAND)
 			-- Edit a MINUS_N_COMMAND.
 		require
 			ui_set: user_interface /= Void
@@ -110,7 +110,7 @@ feature -- Basic operations
 			edit_mtlist_resultreal_n (uop)
 		end
 
-	edit_index_extractor (cmd: INDEX_EXTRACTOR) is
+	edit_index_extractor (cmd: INDEX_EXTRACTOR)
 			-- Edit an INDEX_EXTRACTOR.
 		require
 			ui_set: user_interface /= Void
@@ -126,7 +126,7 @@ feature -- Basic operations
 			cmd.set_indexable (ix_cmd)
 		end
 
-	edit_numeric_assignment (cmd: NUMERIC_ASSIGNMENT_COMMAND) is
+	edit_numeric_assignment (cmd: NUMERIC_ASSIGNMENT_COMMAND)
 			-- Edit a NUMERIC_ASSIGNMENT_COMMAND.
 		require
 			ui_set: user_interface /= Void
@@ -143,7 +143,7 @@ feature -- Basic operations
 			edit_unaryop_real (cmd)
 		end
 
-	edit_mtlist_resultreal (c: UNARY_OPERATOR [REAL, REAL]) is
+	edit_mtlist_resultreal (c: UNARY_OPERATOR [REAL, REAL])
 			-- Edit `c's market tuple list and operator
 			-- (RESULT_COMMAND [REAL]).
 		require
@@ -153,7 +153,7 @@ feature -- Basic operations
 			edit_unaryop_real (c)
 		end
 
-	edit_mtlist_resultreal_n (c: UNARY_OPERATOR [ANY, REAL]) is
+	edit_mtlist_resultreal_n (c: UNARY_OPERATOR [ANY, REAL])
 			-- Edit `c's market tuple list, operator (
 			-- RESULT_COMMAND [REAL]), and n-value.
 		require
@@ -170,7 +170,7 @@ feature -- Basic operations
 			end
 		end
 
-	edit_resultreal_n (c: UNARY_OPERATOR [ANY, REAL]) is
+	edit_resultreal_n (c: UNARY_OPERATOR [ANY, REAL])
 			-- Edit `c's operator (RESULT_COMMAND [REAL]), and n-value.
 		require
 			ui_set: user_interface /= Void
@@ -179,7 +179,7 @@ feature -- Basic operations
 			edit_unaryop (c)
 		end
 
-	edit_n (c: COMMAND) is
+	edit_n (c: COMMAND)
 			-- Edit `c's n-value.
 		require
 			ui_set: user_interface /= Void
@@ -194,7 +194,7 @@ feature -- Basic operations
 				cmd.generator + "'s n-value"))
 		end
 
-	edit_mtlist (c: COMMAND) is
+	edit_mtlist (c: COMMAND)
 			-- Edit `c's market tuple list target.
 		require
 			ui_set: user_interface /= Void
@@ -210,7 +210,7 @@ feature -- Basic operations
 				"an indicator for " + cmd.generator + "'s input").output)
 		end
 
-	edit_unaryop (cmd: UNARY_OPERATOR [ANY, REAL]) is
+	edit_unaryop (cmd: UNARY_OPERATOR [ANY, REAL])
 			-- Edit a UNARY_OPERATOR that takes a RESULT_COMMAND [REAL]
 			-- operand.
 		require
@@ -227,7 +227,7 @@ feature -- Basic operations
 			cmd.set_operand (rr_cmd)
 		end
 
-	edit_unaryop_real (cmd: UNARY_OPERATOR [REAL, REAL]) is
+	edit_unaryop_real (cmd: UNARY_OPERATOR [REAL, REAL])
 			-- Edit a UNARY_OPERATOR that returns a REAL value and
 			-- takes a RESULT_COMMAND [REAL] operand.
 		require
@@ -244,7 +244,7 @@ feature -- Basic operations
 			cmd.set_operand (rr_cmd)
 		end
 
-	edit_unary_boolean (cmd: UNARY_OPERATOR [BOOLEAN, BOOLEAN]) is
+	edit_unary_boolean (cmd: UNARY_OPERATOR [BOOLEAN, BOOLEAN])
 			-- Edit a UNARY_OPERATOR that returns a BOOLEAN value and
 			-- takes a RESULT_COMMAND [BOOLEAN] operand.
 		require
@@ -261,7 +261,7 @@ feature -- Basic operations
 			cmd.set_operand (bool_cmd)
 		end
 
-	edit_offset (cmd: SETTABLE_OFFSET_COMMAND) is
+	edit_offset (cmd: SETTABLE_OFFSET_COMMAND)
 			-- Edit a SETTABLE_OFFSET_COMMAND.
 		local
 			unop: UNARY_OPERATOR [ANY, REAL]
@@ -287,7 +287,7 @@ feature -- Basic operations
 			record_lowest_offset (cmd)
 		end
 
-	record_lowest_offset (cmd: LINEAR_OFFSET_COMMAND) is
+	record_lowest_offset (cmd: LINEAR_OFFSET_COMMAND)
 			-- If `cmd's offset value (expected to be negative or 0) is
 			-- lower than the current offset value, record the offset
 			-- value so that the lowest (or highest-magnitude) value can
@@ -301,7 +301,7 @@ feature -- Basic operations
 			end
 		end
 
-	edit_numeric_conditional_command (cmd: NUMERIC_CONDITIONAL_COMMAND) is
+	edit_numeric_conditional_command (cmd: NUMERIC_CONDITIONAL_COMMAND)
 			-- Edit a NUMERIC_CONDITIONAL_COMMAND.
 		local
 			boolop: RESULT_COMMAND [BOOLEAN]
@@ -333,7 +333,7 @@ feature -- Basic operations
 			cmd.set_false_cmd (result_cmd)
 		end
 
-	edit_sign_analyzer (cmd: SIGN_ANALYZER) is
+	edit_sign_analyzer (cmd: SIGN_ANALYZER)
 			-- Edit a SIGN_ANALYZER.
 		require
 			ui_set: user_interface /= Void
@@ -399,7 +399,7 @@ feature -- Basic operations
 			end
 		end
 
-	edit_numeric_value (cmd: NUMERIC_VALUE_COMMAND) is
+	edit_numeric_value (cmd: NUMERIC_VALUE_COMMAND)
 			-- Edit a NUMERIC_VALUE_COMMAND.
 		require
 			ui_set: user_interface /= Void
@@ -408,7 +408,7 @@ feature -- Basic operations
 				cmd.generator + "'s value"))
 		end
 
-	edit_function_based_command (cmd: FUNCTION_BASED_COMMAND) is
+	edit_function_based_command (cmd: FUNCTION_BASED_COMMAND)
 			-- Edit a FUNCTION_BASED_COMMAND.
 		do
 			-- Always allow the user to select a FUNCTION_BASED_COMMAND's
@@ -419,7 +419,7 @@ feature -- Basic operations
 			edit_unaryop_real (cmd)
 		end
 
-	edit_numeric_wrapper (cmd: NUMERIC_VALUED_COMMAND_WRAPPER) is
+	edit_numeric_wrapper (cmd: NUMERIC_VALUED_COMMAND_WRAPPER)
 			-- Edit a NUMERIC_VALUED_COMMAND_WRAPPER.
 		local
 			subcmd: COMMAND
@@ -433,7 +433,7 @@ feature -- Basic operations
 			cmd.set_item (subcmd)
 		end
 
-	edit_command_sequence (cmd: COMMAND_SEQUENCE) is
+	edit_command_sequence (cmd: COMMAND_SEQUENCE)
 			-- Edit a COMMAND_SEQUENCE.
 		local
 			child: COMMAND
@@ -466,7 +466,7 @@ feature -- Basic operations
 			end
 		end
 
-	edit_loop_command (cmd: LOOP_COMMAND) is
+	edit_loop_command (cmd: LOOP_COMMAND)
 			-- Edit a LOOP_COMMAND.
 		local
 			assertion_loop: LOOP_WITH_ASSERTIONS
@@ -496,7 +496,7 @@ feature -- Basic operations
 			end
 		end
 
-	edit_value_at_index_command (cmd: VALUE_AT_INDEX_COMMAND) is
+	edit_value_at_index_command (cmd: VALUE_AT_INDEX_COMMAND)
 			-- Edit a VALUE_AT_INDEX_COMMAND.
 		local
 			nvc: RESULT_COMMAND [REAL]
@@ -511,7 +511,7 @@ feature -- Basic operations
 			edit_mtlist_resultreal (cmd)
 		end
 
-	add_cmd_seq_child (cmd_seq: COMMAND_SEQUENCE; child: COMMAND) is
+	add_cmd_seq_child (cmd_seq: COMMAND_SEQUENCE; child: COMMAND)
 			-- Add `child' to `cmd_seq'.
 		require
 			args_exist: cmd_seq /= Void and child /= Void
@@ -530,7 +530,7 @@ feature -- Basic operations
 			end
 		end
 
-	edit_loop_assertions (cmd: LOOP_WITH_ASSERTIONS) is
+	edit_loop_assertions (cmd: LOOP_WITH_ASSERTIONS)
 			-- Edit the assertion operators of `cmd'.
 		local
 			loop_invariant: RESULT_COMMAND [BOOLEAN]

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Objects that process a target file according to a set of%
 		%specifications"
 	author: "Jim Cochrane"
@@ -22,21 +22,21 @@ create
 
 feature {NONE} -- Initialization
 
-	make is
+	make
         do
         end
 
 feature -- Access
 
-	description: STRING is "Cleaning up"
+	description: STRING = "Cleaning up"
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is True
+	arg_mandatory: BOOLEAN = True
 
 feature -- Basic operations
 
-	execute (options: INSTALL_TOOL_COMMAND_LINE) is
+	execute (options: INSTALL_TOOL_COMMAND_LINE)
 		local
 			install_dir: DIRECTORY
 			delete_failed: BOOLEAN
@@ -62,6 +62,6 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	NT_file_name: STRING is "os_is_nt"
+	NT_file_name: STRING = "os_is_nt"
 
 end

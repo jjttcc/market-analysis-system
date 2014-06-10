@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Objects that allow the user to select one of the available %
 		%start-server commands"
 	author: "Jim Cochrane"
@@ -23,7 +23,7 @@ create
 feature {NONE} -- Initialization
 
 	make (conf: MCT_CONFIGURATION;
-			ext_cmds: HASH_TABLE [MCT_COMMAND, STRING]) is
+			ext_cmds: HASH_TABLE [MCT_COMMAND, STRING])
 		require
 			conf_exists: conf /= Void and ext_cmds /= Void
 		do
@@ -36,7 +36,7 @@ feature {NONE} -- Initialization
 
 feature -- Basic operations
 
-	execute is
+	execute
 			-- Configure how the server is to be started up.
 		local
 			cmds: LINEAR [MCT_COMMAND]
@@ -90,7 +90,7 @@ feature {NONE} -- Implementation
 
 	server_cmd_table: HASH_TABLE [MCT_COMMAND, STRING]
 
-	respond_to_server_selection_event (supplier: LIST_SELECTION_WINDOW) is
+	respond_to_server_selection_event (supplier: LIST_SELECTION_WINDOW)
 			-- Respond to a "start-server-selection" event.
 		local
 			selected_command: MCT_COMMAND
@@ -116,10 +116,10 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - constants
 
-	Name: STRING is "Command name"
+	Name: STRING = "Command name"
 
-	Description: STRING is "Description"
+	Description: STRING = "Description"
 
-	Window_title: STRING is "Start-server selection"
+	Window_title: STRING = "Start-server selection"
 
 end

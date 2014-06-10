@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Dummy/fake thread class - For non-multi-threaded version"
 	author: "Jim Cochrane"
@@ -11,12 +11,12 @@ deferred class THREAD inherit
 
 feature
 
-	launch is
+	launch
 		do
 			execute
 		end
 
-	execute is
+	execute
 		deferred
 		end
 

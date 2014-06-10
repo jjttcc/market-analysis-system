@@ -1,9 +1,9 @@
-indexing
+note
 	description: "Names of environment variables used by the application"
 	usage:
 		"Configure the features of this class to return the appropriate %
 		%values for the listed environment variable names."
-	note:
+	note1:
 		"It would be better to separate this configuration from the %
 		%application_library by defining a class that inherits from this %
 		%one and redefines these features, but I could not figure out a %
@@ -20,33 +20,33 @@ class APP_ENVIRONMENT_VARIABLE_NAMES
 
 feature -- Access
 
-	application_directory_name: STRING is
+	application_directory_name: STRING
 			-- Default name of the application directory environment variable
 		do
 			Result := "MAS_DIRECTORY"
 		end
 
-	stock_split_file_name: STRING is
+	stock_split_file_name: STRING
 			-- Default name of the stock_split_file_name environment variable
 		do
 			Result := "MAS_STOCK_SPLIT_FILE"
 		end
 
-	db_config_file_name: STRING is
+	db_config_file_name: STRING
 			-- Default name of the database config file
 			-- environment variable
 		do
 			Result := "MAS_DB_CONFIG_FILE"
 		end
 
-	mailer_name: STRING is
+	mailer_name: STRING
 			-- Default name of the environment variable for the executable
 			-- to use for sending email
 		do
 			Result := "MAS_MAILER"
 		end
 
-	mailer_subject_flag_name: STRING is
+	mailer_subject_flag_name: STRING
 			-- Default name of the environment variable for the flag
 			-- to use to indicate to the mailer that the following
 			-- argument is the subject

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "TA Printing services"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -19,7 +19,7 @@ creation
 
 feature {NONE} -- Implementation
 
-	print_other_fields (t: VOLUME_TUPLE) is
+	print_other_fields (t: VOLUME_TUPLE)
 		do
 			put (field_separator)
 			put (t.volume.out)

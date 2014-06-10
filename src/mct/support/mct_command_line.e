@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Parser of command-line arguments for the MAS Control %
 		%Terminal application"
 	author: "Jim Cochrane"
@@ -24,7 +24,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	usage: STRING is
+	usage: STRING
 			-- Message: how to invoke the program from the command-line
 		do
 			Result := concatenation (<<"Usage: ", command_name, "%N">>)
@@ -34,18 +34,18 @@ feature -- Access -- settings
 
 feature {NONE} -- Implementation - Hook routines
 
-	prepare_for_argument_processing is
+	prepare_for_argument_processing
 		do
 		end
 
-	finish_argument_processing is
+	finish_argument_processing
 		do
 			initialization_complete := True
 		end
 
 feature {NONE} -- Implementation queries
 
-	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]] is
+	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]]
 			-- List of the set_... procedures that are called
 			-- unconditionally - for convenience
 		once

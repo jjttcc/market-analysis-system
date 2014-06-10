@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Result commands that are also linear analyzers"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -25,21 +25,21 @@ deferred class LINEAR_COMMAND inherit
 
 feature -- Initialization
 
-	initialize (a: LINEAR_ANALYZER) is
+	initialize (a: LINEAR_ANALYZER)
 		do
 			set (a.target)
 		end
 
 feature -- Access
 
-	index: INTEGER is
+	index: INTEGER
 		do
 			Result := target.index
 		end
 
 feature -- Status report
 
-	index_is_target_based: BOOLEAN is
+	index_is_target_based: BOOLEAN
 			-- Is `index' derived from `target.index'?
 		do
 			-- Default to True; redefine if needed.
@@ -48,7 +48,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		deferred
 		ensure then
 			target_cursor_internal_contract:
@@ -57,7 +57,7 @@ feature -- Basic operations
 
 feature -- Status report
 
-	target_cursor_not_affected: BOOLEAN is
+	target_cursor_not_affected: BOOLEAN
 			-- Will target.index not change when execute is called?
 		deferred
 		end

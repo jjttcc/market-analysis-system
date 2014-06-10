@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Top-level application interface - command-line driven"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -72,7 +72,7 @@ creation
 
 feature -- Initialization
 
-	make (fb: GLOBAL_OBJECT_BUILDER) is
+	make (fb: GLOBAL_OBJECT_BUILDER)
 		require
 			not_void: fb /= Void
 		do
@@ -80,7 +80,7 @@ feature -- Initialization
 			initialize
 		end
 
-	make_io (input_dev, output_dev: IO_MEDIUM; fb: GLOBAL_OBJECT_BUILDER) is
+	make_io (input_dev, output_dev: IO_MEDIUM; fb: GLOBAL_OBJECT_BUILDER)
 		require
 			not_void: input_dev /= Void and output_dev /= Void and fb /= Void
 		do
@@ -100,7 +100,7 @@ feature -- Access
 	current_period_type: TIME_PERIOD_TYPE
 			-- Current data period type to be processed
 
-	available_period_types: ARRAYED_LIST [STRING] is
+	available_period_types: ARRAYED_LIST [STRING]
 			-- List of all period types available for selection for
 			-- current_tradable
 		do
@@ -124,7 +124,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_input_device (arg: IO_MEDIUM) is
+	set_input_device (arg: IO_MEDIUM)
 			-- Set input_device to `arg'.
 		do
 			input_device := arg
@@ -140,7 +140,7 @@ feature -- Status setting
 			registrar_in_set: event_registrar.input_device = arg
 		end
 
-	set_output_device (arg: IO_MEDIUM) is
+	set_output_device (arg: IO_MEDIUM)
 			-- Set output_device to `arg'.
 		do
 			output_device := arg
@@ -156,7 +156,7 @@ feature -- Status setting
 			registrar_out_set: event_registrar.output_device = arg
 		end
 
-	set_console is
+	set_console
 		do
 			Precursor
 			event_generator_builder.set_console
@@ -164,7 +164,7 @@ feature -- Status setting
 			event_registrar.set_console
 		end
 
-	set_no_console is
+	set_no_console
 		do
 			Precursor
 			event_generator_builder.set_no_console
@@ -174,7 +174,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	main_menu is
+	main_menu
 			-- Display the main menu and respond to the user's commands.
 		local
 			exception_processor: expanded EXCEPTION_PROCESSOR
@@ -198,7 +198,7 @@ feature -- Basic operations
 			end
 		end
 
-	process_main_menu is
+	process_main_menu
 		do
 			check
 				io_devices_not_void: input_device /= Void and
@@ -278,7 +278,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	view_menu is
+	view_menu
 			-- Menu for viewing market and market function data
 		local
 			finished: BOOLEAN
@@ -338,7 +338,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	mkt_analysis_set_date_menu is
+	mkt_analysis_set_date_menu
 			-- Obtain the date and time to begin market analysis from the
 			-- user and pass it to the event generators.
 		do
@@ -346,7 +346,7 @@ feature {NONE} -- Implementation
 				"%NPlease select a date and time for market analysis."))
 		end
 
-	run_market_analysis is
+	run_market_analysis
 			-- Run market analysis using event coordinator.
 		do
 			if event_coordinator.start_date_time = Void then
@@ -374,7 +374,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	view_indicator_menu (indicator: MARKET_FUNCTION) is
+	view_indicator_menu (indicator: MARKET_FUNCTION)
 			-- Menu for viewing market function data
 		local
 			finished: BOOLEAN
@@ -416,7 +416,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	select_tradable is
+	select_tradable
 			-- Allow the user to select the current tradable so that
 			-- tradable_list_handler.item (current_period_type) is the
 			-- selected tradable.
@@ -497,7 +497,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	select_period_type is
+	select_period_type
 			-- Obtain selection for current_period_type from user and set
 			-- the current tradable's target_period_type to it.
 		local
@@ -560,7 +560,7 @@ feature {NONE} -- Implementation
 		end
 
 	indicator_selection (indicators: LIST [MARKET_FUNCTION]):
-				MARKET_FUNCTION is
+				MARKET_FUNCTION
 			-- User-selected indicator by number - Void if user chooses 0
 		require
 			not_void_or_empty: indicators /= Void and not indicators.is_empty
@@ -601,7 +601,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - utilities
 
-	initialize is
+	initialize
 		do
 			no_cleanup := False
 			-- Start out with non-intraday data:
@@ -612,7 +612,7 @@ feature {NONE} -- Implementation - utilities
 			curr_period_not_void: current_period_type /= Void
 		end
 
-	initialize_current_tradable is
+	initialize_current_tradable
 		require
 			cpt_set: current_period_type /= Void
 		do
@@ -647,7 +647,7 @@ feature {NONE} -- Implementation - utilities
 			handle_exception ("Initialization error")
 		end
 
-	product_info: STRING is
+	product_info: STRING
 		local
 			version: MAS_PRODUCT_INFO
 			gs: expanded GLOBAL_SERVER_FACILITIES
@@ -659,7 +659,7 @@ feature {NONE} -- Implementation - utilities
 				"%NLicence:%N%N" + version.license_information
 		end
 
-	settings: STRING is
+	settings: STRING
 		local
 			ms: expanded MAS_SETTINGS
 		do
@@ -674,14 +674,14 @@ feature {NONE} -- Implementation - utilities
 				ms.miscellaneous_report + "%N"
 		end
 
-	make_lock (name: STRING): FILE_LOCK is
+	make_lock (name: STRING): FILE_LOCK
 		local
 			gs: expanded GLOBAL_SERVER_FACILITIES
 		do
 			Result := gs.file_lock (name)
 		end
 
-	terminate (status: INTEGER) is
+	terminate (status: INTEGER)
 			-- Notify client of termination and then exit.
 		do
 			print (Eot)
@@ -689,7 +689,7 @@ feature {NONE} -- Implementation - utilities
 		end
 
 	closest_valid_period_type (symbol: STRING; t: TIME_PERIOD_TYPE):
-		TIME_PERIOD_TYPE is
+		TIME_PERIOD_TYPE
 			-- If `t' is smaller than at least one valid period type
 			-- for `symbol':
 			--   The smallest valid period type that is larger than `t'

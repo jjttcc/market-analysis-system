@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Miscellaneous information about a tradable";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,19 +12,19 @@ feature -- Access
 
 	symbol: STRING
 
-	name: STRING is
+	name: STRING
 			-- Name of stock associated with `symbol'
 		deferred
 		end
 
-	description: STRING is
+	description: STRING
 			-- Description of stock associated with `symbol'
 		deferred
 		end
 
 feature -- Status setting
 
-	set_symbol (arg: STRING) is
+	set_symbol (arg: STRING)
 			-- Set symbol to `arg'.
 		require
 			arg_not_void: arg /= Void

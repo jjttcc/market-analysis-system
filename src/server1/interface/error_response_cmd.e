@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A request command that responds to an invalid client data %
 		%request"
 	author: "Jim Cochrane"
@@ -17,7 +17,7 @@ creation
 
 feature -- Basic operations
 
-	do_execute (msg: STRING) is
+	do_execute (msg: STRING)
 		do
 			put (concatenation (<<Error.out, message_component_separator,
 				msg, eom>>))

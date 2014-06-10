@@ -1,4 +1,4 @@
-indexing
+note
 	description: "External commands to be delegated to the operating system"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -23,7 +23,7 @@ deferred class EXTERNAL_COMMAND inherit
 
 feature {NONE} -- Initialization
 
-	make (id: STRING; cmd: STRING) is
+	make (id: STRING; cmd: STRING)
 		require
 			args_exist: id /= Void and cmd /= Void
 			id_not_empty: not id.is_empty
@@ -39,7 +39,7 @@ feature -- Access
 	command_string: STRING
 			-- The complete command, with arguments, to be delegated to the OS
 
-	contents: STRING is
+	contents: STRING
 		do
 			Result := command_string
 		end
@@ -49,7 +49,7 @@ feature -- Access
 
 feature -- Element change
 
-	set_working_directory (arg: STRING) is
+	set_working_directory (arg: STRING)
 			-- Set `working_directory' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -62,7 +62,7 @@ feature -- Element change
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		local
 			env: expanded EXECUTION_ENVIRONMENT
 			previous_directory: STRING
@@ -83,7 +83,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	do_execute (arg: ANY) is
+	do_execute (arg: ANY)
 		deferred
 		end
 

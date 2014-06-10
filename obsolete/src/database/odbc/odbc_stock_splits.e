@@ -2,7 +2,7 @@ indexing
 	description:
 		"Implementation of STOCK_SPLIT_SEQUENCE as an ODBC_INPUT_SEQUENCE"
 	author: "Jim Cochrane"
-	note:
+	note1:
 		"It is assumed that the for each symbol that occurs in the input %
 		%file, the splits in the file for that symbol are sorted by %
 		%date ascending"

@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A command that responds to a client request for a list of all %
 		%indicators currently known to the system"
@@ -21,7 +21,7 @@ creation
 
 feature {NONE} -- Basic operations
 
-	do_execute (msg: STRING) is
+	do_execute (msg: STRING)
 		local
 			indicators: SEQUENCE [MARKET_FUNCTION]
 		do
@@ -44,8 +44,8 @@ feature {NONE} -- Basic operations
 			put (eom)
 		end
 
-	error_context (msg: STRING): STRING is
-		indexing
+	error_context (msg: STRING): STRING
+		note
 			once_status: global
 		once
 			Result := ""

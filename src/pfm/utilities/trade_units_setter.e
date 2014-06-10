@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Value setter that sets the units of a TRADE";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,7 +12,7 @@ class TRADE_UNITS_SETTER inherit
 
 feature {NONE}
 
-	do_set (stream: INPUT_SEQUENCE; tuple: TRADE) is
+	do_set (stream: INPUT_SEQUENCE; tuple: TRADE)
 			-- Expected format for date:  yyyymmdd
 			-- Redefine in descendant for different formats.
 		do

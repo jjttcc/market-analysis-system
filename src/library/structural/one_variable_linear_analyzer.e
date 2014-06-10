@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A linear analyzer that processes one target list and uses a %
 		%start_date_time and left offset"
@@ -31,7 +31,7 @@ feature -- Access
 			-- of the current cursor is not supported (left_offset cannot be
 			-- negative).
 
-	start_date_time: DATE_TIME is
+	start_date_time: DATE_TIME
 			-- Date/time specifying which trading period to begin the
 			-- analysis of market data
 		deferred
@@ -39,7 +39,7 @@ feature -- Access
 
 feature {NONE} -- Basic operations
 
-	start is
+	start
 		local
 			i: INTEGER
 		do

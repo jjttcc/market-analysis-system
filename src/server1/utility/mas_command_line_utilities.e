@@ -1,4 +1,4 @@
-indexing
+note
 	description: "MAS Command-line user interface functionality"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -42,7 +42,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_console is
+	set_console
 			-- Set `is_console' to `True'.
 		do
 			is_console := True
@@ -50,7 +50,7 @@ feature -- Status setting
 			is_console: is_console
 		end
 
-	set_no_console is
+	set_no_console
 			-- Set `is_console' to `False'.
 		do
 			is_console := False
@@ -60,7 +60,7 @@ feature -- Status setting
 
 feature {NONE} -- Implementation - Access
 
-	date_time_selection (msg: STRING): DATE_TIME is
+	date_time_selection (msg: STRING): DATE_TIME
 			-- Obtain the date and time to begin market analysis from the
 			-- user and pass it to the event generators.
 		local
@@ -104,7 +104,7 @@ feature {NONE} -- Implementation - Access
 							Result.out, "%N">>)
 		end
 
-	eom: STRING is
+	eom: STRING
 			-- End of message indicator - "<Ctl>G" for stream socket,
 			-- "" (empty string) for files (including stdin) and other types
 		local
@@ -127,13 +127,13 @@ feature {NONE} -- Implementation - Access
 
 	eom_cache: STRING
 
-	output_date_field_separator: STRING is "/"
+	output_date_field_separator: STRING = "/"
 
-	output_time_field_separator: STRING is ":"
+	output_time_field_separator: STRING = ":"
 
 feature {NONE} -- Implementation - utility routines
 
-	execute_shell_command is
+	execute_shell_command
 			-- If NOT `is_console', print an error message.
 			-- Otherwise: [Execute `last_string' after removing an
 			-- initial '!' if there is one.  If last_string is empty
@@ -163,7 +163,7 @@ feature {NONE} -- Implementation - utility routines
 
 feature {NONE} -- Implementation - date-related routines
 
-	date_choice: DATE is
+	date_choice: DATE
 			-- Date obtained from user.
 		do
 			print_list (<<"Enter the date to use for analysis or %
@@ -184,7 +184,7 @@ feature {NONE} -- Implementation - date-related routines
 			print_list (<<"Using date of ", Result, ".%N">>)
 		end
 
-	relative_date_choice: DATE is
+	relative_date_choice: DATE
 			-- Date obtained from user.
 		local
 			period: CHARACTER
@@ -234,7 +234,7 @@ feature {NONE} -- Implementation - date-related routines
 			print_list (<<"Using date of ", Result, ".%N">>)
 		end
 
-	time_choice: TIME is
+	time_choice: TIME
 			-- Time obtained from user.
 		do
 			create Result.make (0, 0, 0)

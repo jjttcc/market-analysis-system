@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Basic abstraction for a market-related value (or tuple of values) %
 		%that has an associated date/time."
@@ -17,7 +17,7 @@ feature -- Access
 	date_time: DATE_TIME
 			-- The start date and time of the tuple
 
-	end_date: DATE is
+	end_date: DATE
 			-- The date of the last component if the tuple is associated
 			-- with a trading period size larger than a day - otherwise
 			-- (daily or intraday trading period size), date_time.date
@@ -25,12 +25,12 @@ feature -- Access
 			Result := date_time.date
 		end
 
-	value: REAL is
+	value: REAL
 			-- Main value of the tuple
 		deferred
 		end
 
-	is_intraday: BOOLEAN is
+	is_intraday: BOOLEAN
 			-- Is this tuple associated with an intraday trading period?
 			-- Assumption: There will never be an intraday tuple with
 			-- a time of midnight.
@@ -40,8 +40,8 @@ feature -- Access
 			Result = not date_time.time.is_equal (midnight)
 		end
 
-	midnight: TIME is
-		indexing
+	midnight: TIME
+		note
 			once_status: global
 		once
 			create Result.make (0, 0, 0)
@@ -49,7 +49,7 @@ feature -- Access
 
 feature -- Status report
 
-	has_additional_queries: BOOLEAN is
+	has_additional_queries: BOOLEAN
 			-- Does the run-time type of Current have additional query
 			-- features besides the ones in the ancestor, MARKET_TUPLE?
 		do
@@ -57,7 +57,7 @@ feature -- Status report
 
 feature {FACTORY, VALUE_SETTER} -- Status setting
 
-	set_date_time (t: DATE_TIME) is
+	set_date_time (t: DATE_TIME)
 			-- Set date_time to `t'.
 		require
 			not_void: t /= Void

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A basic market tuple with a volume feature";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,14 +12,14 @@ deferred class VOLUME_TUPLE inherit
 
 feature -- Access
 
-	volume: REAL is
+	volume: REAL
 			-- Number of shares
 		deferred
 		end
 
 feature -- Element change
 
-	adjust_for_split (v: REAL) is
+	adjust_for_split (v: REAL)
 			-- Adjust prices for stock split by `v' by dividing each
 			-- price field by `v' and multiplying volume by `v'.
 		require
@@ -40,7 +40,7 @@ feature -- Element change
 
 feature {NONE} -- Implementation
 
-	adjust_volume_for_split (r: REAL) is
+	adjust_volume_for_split (r: REAL)
 		deferred
 		end
 

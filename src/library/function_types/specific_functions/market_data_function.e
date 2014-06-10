@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A complex function whose input consists of market data and whose %
 		%output is simply its input"
@@ -23,22 +23,22 @@ feature -- Access
 
 	output: like input
 
-	trading_period_type: TIME_PERIOD_TYPE is
+	trading_period_type: TIME_PERIOD_TYPE
 		do
 			Result := input.trading_period_type
 		ensure then
 			Result = input.trading_period_type
 		end
 
-	short_description: STRING is
-		indexing
+	short_description: STRING
+		note
 			once_status: global
 		once
 			Result := "Indicator whose input is basic market data and %
 				%whose output is simply its input"
 		end
 
-	full_description: STRING is
+	full_description: STRING
 		do
 			create Result.make (65)
 			Result.append (short_description)
@@ -46,47 +46,47 @@ feature -- Access
 			Result.append (input.full_description)
 		end
 
-	children: LIST [MARKET_FUNCTION] is
+	children: LIST [MARKET_FUNCTION]
 		do
 			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 			Result.extend (input)
 		end
 
-	leaf_functions: LIST [COMPLEX_FUNCTION] is
+	leaf_functions: LIST [COMPLEX_FUNCTION]
 		do
 			create {LINKED_LIST [COMPLEX_FUNCTION]} Result.make
 			Result.extend (Current)
 		end
 
-	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE] is
+	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE]
 		do
 			Result := input
 		end
 
 feature -- Status report
 
-	processed: BOOLEAN is
+	processed: BOOLEAN
 		do
 			Result := True
 		end
 
-	operator_used: BOOLEAN is False
+	operator_used: BOOLEAN = False
 
-	has_children: BOOLEAN is True
+	has_children: BOOLEAN = True
 
 feature -- Basic operations
 
-	process is do end
+	process do end
 
 feature {NONE} -- Inapplicable
 
-	do_process is do end
+	do_process do end
 
-	pre_process is do end
+	pre_process do end
 
 feature {MARKET_FUNCTION_EDITOR}
 
-	set_input, make (in: like input) is
+	set_input, make (in: like input)
 		require else
 			in_not_void: in /= Void
 			in_ptype_not_void: in.trading_period_type /= Void
@@ -100,7 +100,7 @@ feature {MARKET_FUNCTION_EDITOR}
 			processed_date_time_not_void: processed_date_time /= Void
 		end
 
-	set_innermost_input (in: like input) is
+	set_innermost_input (in: like input)
 		require else
 			in_not_void: in /= Void
 			in_ptype_not_void: in.trading_period_type /= Void

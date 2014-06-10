@@ -1,6 +1,6 @@
-indexing
+note
 	description: "General facilities relevant to TIME_PERIOD_TYPEs"
-	note: "All TIME_PERIOD_TYPEs are immutable."
+	note1: "All TIME_PERIOD_TYPEs are immutable."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -25,36 +25,36 @@ inherit
 
 feature -- Access - Period-type indexes
 
-	one_minute: INTEGER is 1
+	one_minute: INTEGER = 1
 			-- 1-minute index for `period_type_names'
-	two_minute: INTEGER is 2
+	two_minute: INTEGER = 2
 			-- 2-minute index for `period_type_names'
-	five_minute: INTEGER is 3
+	five_minute: INTEGER = 3
 			-- 5-minute index for `period_type_names'
-	ten_minute: INTEGER is 4
+	ten_minute: INTEGER = 4
 			-- 10-minute index for `period_type_names'
-	fifteen_minute: INTEGER is 5
+	fifteen_minute: INTEGER = 5
 			-- 15-minute index for `period_type_names'
-	twenty_minute: INTEGER is 6
+	twenty_minute: INTEGER = 6
 			-- 20-minute index for `period_type_names'
-	thirty_minute: INTEGER is 7
+	thirty_minute: INTEGER = 7
 			-- 30-minute index for `period_type_names'
-	hourly: INTEGER is 8
+	hourly: INTEGER = 8
 			-- Hourly index for `period_type_names'
-	daily: INTEGER is 9
+	daily: INTEGER = 9
 			-- Daily index for `period_type_names'
-	weekly: INTEGER is 10
+	weekly: INTEGER = 10
 			-- Weekly index for `period_type_names'
-	monthly: INTEGER is 11
+	monthly: INTEGER = 11
 			-- Monthly index for `period_type_names'
-	quarterly: INTEGER is 12
+	quarterly: INTEGER = 12
 			-- Quarterly index for `period_type_names'
-	yearly: INTEGER is 13
+	yearly: INTEGER = 13
 			-- Yearly index for `period_type_names'
 
 feature -- Access
 
-	all_period_types: LINKED_SET [TIME_PERIOD_TYPE] is
+	all_period_types: LINKED_SET [TIME_PERIOD_TYPE]
 			-- All time period types
 		do
 			create Result.make
@@ -63,7 +63,7 @@ feature -- Access
 			exists: Result /= Void
 		end
 
-	standard_period_types: LINKED_LIST [TIME_PERIOD_TYPE] is
+	standard_period_types: LINKED_LIST [TIME_PERIOD_TYPE]
 			-- All "standard" period types (e.g., excluding 3-minute,
 			-- 4-minute, etc. types)
 		local
@@ -85,7 +85,7 @@ feature -- Access
 				standard_period_type_indexes.count
 		end
 
-	period_type_at_index (i: INTEGER): TIME_PERIOD_TYPE is
+	period_type_at_index (i: INTEGER): TIME_PERIOD_TYPE
 			-- Time period type at period-type index `i'
 		require
 			valid_index: i >= one_minute and i <= yearly
@@ -95,9 +95,9 @@ feature -- Access
 			exists: Result /= Void
 		end
 
-	period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
+	period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING]
 			-- All time period types used by the system, indexed by name
-		indexing
+		note
 			once_status: global
 		local
 			i: INTEGER
@@ -126,10 +126,10 @@ feature -- Access
 			exists: Result /= Void
 		end
 
-	non_intraday_period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
+	non_intraday_period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING]
 			-- All time period types used by the system, indexed by name,
 			-- whose duration is greater than or equal to a day.
-		indexing
+		note
 			once_status: global
 		local
 			type: TIME_PERIOD_TYPE
@@ -151,10 +151,10 @@ feature -- Access
 			exists: Result /= Void
 		end
 
-	intraday_period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
+	intraday_period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING]
 			-- All intraday period types used by the system, indexed by name,
 			-- whose duration is less than a day.
-		indexing
+		note
 			once_status: global
 		local
 			type: TIME_PERIOD_TYPE
@@ -190,10 +190,10 @@ feature -- Access
 			exists: Result /= Void
 		end
 
-	period_types_in_order: PART_SORTED_SET [TIME_PERIOD_TYPE] is
+	period_types_in_order: PART_SORTED_SET [TIME_PERIOD_TYPE]
 			-- All time period types sorted in ascending order by
 			-- duration.
-		indexing
+		note
 			once_status: global
 		once
 			create Result.make
@@ -203,11 +203,11 @@ feature -- Access
 			sorted: is_sorted_ascending (Result)
 		end
 
-	period_type_names: ARRAY [STRING] is
+	period_type_names: ARRAY [STRING]
 			-- The name of each element of `period_types' in ascending
 			-- order by duration (except that the names of any
 			-- non-standard period types are appended to the end)
-		indexing
+		note
 			once_status: global
 		local
 			tpt: TIME_PERIOD_TYPE
@@ -237,8 +237,8 @@ feature -- Access
 				equal (period_types.item (Result @ yearly).name, yearly_name)
 		end
 
-	intraday_period_type_names: ARRAY [STRING] is
-		indexing
+	intraday_period_type_names: ARRAY [STRING]
+		note
 			once_status: global
 		once
 			create Result.make (1, 1)
@@ -246,10 +246,10 @@ feature -- Access
 			exists: Result /= Void
 		end
 
-	standard_period_type_indexes: ARRAY [INTEGER] is
+	standard_period_type_indexes: ARRAY [INTEGER]
 			-- All standard TIME_PERIOD_TYPE indexes in order:
 			-- one_minute .. yearly
-		indexing
+		note
 			once_status: global
 		once
 			Result := <<one_minute, two_minute, five_minute, ten_minute,
@@ -263,7 +263,7 @@ feature -- Access
 			last_item_yearly: Result.item (Result.upper) = yearly
 		end
 
-	period_type_with_duration (d: DATE_TIME_DURATION): TIME_PERIOD_TYPE is
+	period_type_with_duration (d: DATE_TIME_DURATION): TIME_PERIOD_TYPE
 			-- Period type whose duration matches `d' - Void if there
 			-- is no such period type.
 		require
@@ -280,7 +280,7 @@ feature -- Access
 		end
 
 	closest_period_type_for_duration (d: DATE_TIME_DURATION):
-		TIME_PERIOD_TYPE is
+		TIME_PERIOD_TYPE
 			-- Period type whose duration is greater than or equal to,
 			-- and most closely matches, `d'
 		require
@@ -309,7 +309,7 @@ feature -- Access
 
 feature -- Status report
 
-	duration_is_intraday (d: DATE_TIME_DURATION): BOOLEAN is
+	duration_is_intraday (d: DATE_TIME_DURATION): BOOLEAN
 			-- Is `d' an intraday duration?
 		require
 			d_exists: d /= Void
@@ -319,7 +319,7 @@ feature -- Status report
 			Result = (d.day = 0 and d.month = 0 and d.year = 0)
 		end
 
-	valid_duration (d: DATE_TIME_DURATION): BOOLEAN is
+	valid_duration (d: DATE_TIME_DURATION): BOOLEAN
 			-- Is `d' a valid duration for a time-period type?
 		require
 			d_exists: d /= Void
@@ -354,7 +354,7 @@ feature -- Status report
 			end
 		end
 
-	standard_period_type (t: TIME_PERIOD_TYPE): BOOLEAN is
+	standard_period_type (t: TIME_PERIOD_TYPE): BOOLEAN
 			-- Is `t' a standard period type?
 		local
 			indexes: ARRAY [INTEGER]
@@ -380,7 +380,7 @@ feature -- Status report
 			true_if_not_intraday: not t.intraday implies Result
 		end
 
-	period_types_correct: BOOLEAN is
+	period_types_correct: BOOLEAN
 			-- Do all period types have the correct state?
 		local
 			ns_types: LINKED_SET [TIME_PERIOD_TYPE]
@@ -429,7 +429,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	add_non_standard_period_type (d: DATE_TIME_DURATION) is
+	add_non_standard_period_type (d: DATE_TIME_DURATION)
 			-- Add a "non-standard" period type with duration `d'.
 		require
 			d_exists: d /= Void
@@ -461,7 +461,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	non_standard_period_type_correct (t: TIME_PERIOD_TYPE): BOOLEAN is
+	non_standard_period_type_correct (t: TIME_PERIOD_TYPE): BOOLEAN
 			-- Is the non-standard period type `t' valid?
 		require
 			p_exists: t /= Void
@@ -482,7 +482,7 @@ feature {NONE} -- Implementation
 		end
 
 	standard_period_type_correct (t: TIME_PERIOD_TYPE; type_index: INTEGER):
-		BOOLEAN is
+		BOOLEAN
 			-- Is `t' in a correct state for a standard period type
 			-- of `type_index'?
 		require
@@ -494,7 +494,7 @@ feature {NONE} -- Implementation
 			Result = equal (t, new_standard_period_type (type_index))
 		end
 
-	new_standard_period_type (type_index: INTEGER): TIME_PERIOD_TYPE is
+	new_standard_period_type (type_index: INTEGER): TIME_PERIOD_TYPE
 			-- A new 'standard' period type based on `type_index'
 		require
 			valid_type_index: standard_period_type_indexes.has (type_index)

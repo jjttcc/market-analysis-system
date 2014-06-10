@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Facilities for building FILE_TRADABLE_LISTs"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,7 +21,7 @@ deferred class FILE_LIST_BUILDER_FACILITIES inherit
 feature -- Initialization
 
 	make (file_names: LIST [STRING]; factory: TRADABLE_FACTORY;
-		daily_ext, intra_ext: STRING) is
+		daily_ext, intra_ext: STRING)
 			-- Initialize file-name lists and tradable factories.  A separate
 			-- tradable factory for intraday data is used for efficiency.
 			-- If `daily_ext' and `intra_ext' are both void, initialization
@@ -65,7 +65,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	build_lists is
+	build_lists
 		do
 			if daily_file_names /= Void then
 				check
@@ -85,7 +85,7 @@ feature -- Basic operations
 
 feature {NONE} -- Hook routine implementations
 
-	descendant_build_lists_precondition: BOOLEAN is
+	descendant_build_lists_precondition: BOOLEAN
 		do
 			Result := daily_file_names /= Void or intraday_file_names /= Void
 		end
@@ -93,13 +93,13 @@ feature {NONE} -- Hook routine implementations
 feature {NONE} -- Implementation
 
 	new_tradable_list (fnames: LIST [STRING]; factory: TRADABLE_FACTORY):
-		FILE_TRADABLE_LIST is
+		FILE_TRADABLE_LIST
 			-- A new FILE_TRADABLE_LIST
 		do
 			create Result.make (fnames, factory)
 		end
 
-	make_file_name_lists (file_names: LIST [STRING]) is
+	make_file_name_lists (file_names: LIST [STRING])
 		local
 			l: PART_SORTED_TWO_WAY_LIST [STRING]
 			t: HASH_TABLE [BOOLEAN, STRING]
@@ -141,7 +141,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	name_without_extension (fname: STRING): STRING is
+	name_without_extension (fname: STRING): STRING
 			-- `fname' without its extension ('.' and all characters that
 			-- follow it)
 		do

@@ -1,8 +1,8 @@
-indexing
+note
 	description:
 		"N-period function that can be configured by choosing the %
 		%operators it will use.  (Usually used for complex moving averages.)"
-	note:
+	note1:
 		"`previous_operator' has some special constraints - See note in %
 		%parent, FUNCTION_WITH_FIRST_AND_PREVIOUS_OPERATORS."
 	author: "Jim Cochrane"
@@ -42,7 +42,7 @@ feature -- Access
 
 	target: ARRAYED_LIST [MARKET_TUPLE]
 
-	short_description: STRING is
+	short_description: STRING
 		do
 			create Result.make (33)
 			Result.append (n.out)
@@ -53,7 +53,7 @@ feature -- Access
 feature {NONE} -- Initialization
 
 	make (in: like input; op: like operator;
-				first_op: like first_element_operator; i: INTEGER) is
+				first_op: like first_element_operator; i: INTEGER)
 		require
 			input_ops_not_void: in /= Void and op /= Void and
 				first_op /= Void
@@ -68,7 +68,7 @@ feature {NONE} -- Initialization
 
 feature {NONE} -- Basic operations
 
-	start is
+	start
 		local
 			t: SIMPLE_TUPLE
 			tuple: MARKET_TUPLE
@@ -125,7 +125,7 @@ feature {NONE} -- Basic operations
 				implies output.islast
 		end
 
-	action is
+	action
 		do
 			if not previous_operator_attached then
 				-- Because `previous_operator' is not a component of
@@ -139,7 +139,7 @@ feature {NONE} -- Basic operations
 
 feature {MARKET_FUNCTION_EDITOR}
 
-	set_n (value: INTEGER) is
+	set_n (value: INTEGER)
 		do
 			Precursor (value)
 			check n = value end
@@ -151,7 +151,7 @@ feature {MARKET_FUNCTION_EDITOR}
 
 feature {NONE} -- Implementation
 
-	initialize_operators is
+	initialize_operators
 		do
 			if operator /= Void then
 				operator.initialize (Current)
@@ -164,12 +164,12 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	strict_n_count: BOOLEAN is False
+	strict_n_count: BOOLEAN = False
 
 	previous_operator_attached: BOOLEAN
 			-- Is `previous_operator' a component of `operator's tree?
 
-	initialize_previous_operator_attached is
+	initialize_previous_operator_attached
 		local
 			l: LIST [COMMAND]
 		do

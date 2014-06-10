@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A market event that contains a left/right pair of market events"
 	author: "Jim Cochrane"
@@ -20,7 +20,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (l, r: MARKET_EVENT; nm: STRING; tp: EVENT_TYPE; sig_type: INTEGER) is
+	make (l, r: MARKET_EVENT; nm: STRING; tp: EVENT_TYPE; sig_type: INTEGER)
 		require
 			not_void: l /= Void and r /= Void and nm /= Void and tp /= Void
 		do
@@ -39,14 +39,14 @@ feature -- Access
 	left, right: MARKET_EVENT
 			-- left and right elements of the pair
 
-	tag: STRING is
+	tag: STRING
 		do
 			Result := left.tag
 		ensure then
 			left_tag: Result = left.tag
 		end
 
-	time_stamp: DATE_TIME is
+	time_stamp: DATE_TIME
 			-- The later of left.time_stamp and right.time_stamp
 		do
 			if cached_time_stamp = Void then
@@ -55,7 +55,7 @@ feature -- Access
 			Result := cached_time_stamp
 		end
 
-	date: DATE is
+	date: DATE
 			-- The date of the time_stamp
 		do
 			Result := time_stamp.date
@@ -63,7 +63,7 @@ feature -- Access
 			time_stamp_date: Result = time_stamp.date
 		end
 
-	time: TIME is
+	time: TIME
 			-- The date of the time_stamp
 		do
 			Result := time_stamp.time
@@ -71,7 +71,7 @@ feature -- Access
 			time_stamp_date: Result = time_stamp.time
 		end
 
-	description: STRING is
+	description: STRING
 		do
 			Result := "Pair of events:%Nleft event: "
 			append_date_time (left, Result)
@@ -81,7 +81,7 @@ feature -- Access
 			Result.append (right.description)
 		end
 
-	components: LIST [MARKET_EVENT] is
+	components: LIST [MARKET_EVENT]
 		do
 			create {ARRAYED_LIST [MARKET_EVENT]} Result.make (2)
 			Result.append (left.components)
@@ -91,7 +91,7 @@ feature -- Access
 				left.components.count + right.components.count
 		end
 
-	guts: ARRAY [STRING] is
+	guts: ARRAY [STRING]
 		local
 			left_guts, right_guts: ARRAY [STRING]
 		do
@@ -106,7 +106,7 @@ feature -- Access
 
 feature -- Status report
 
-	is_equal (other: like Current): BOOLEAN is
+	is_equal (other: like Current): BOOLEAN
 		do
 			if
 				-- Guard against calling is_equal on different types.
@@ -125,7 +125,7 @@ feature {NONE} -- Implementation
 	cached_time_stamp: DATE_TIME
 			-- Implementation attribute to save processing time
 
-	append_to_array (dest, source: ARRAY [STRING]; start_index: INTEGER) is
+	append_to_array (dest, source: ARRAY [STRING]; start_index: INTEGER)
 		local
 			i: INTEGER
 		do
@@ -139,7 +139,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	append_date_time (e: MARKET_EVENT; s: STRING) is
+	append_date_time (e: MARKET_EVENT; s: STRING)
 			-- Append e's date (and time, if not void) to s; if e's date
 			-- and time are void, append its date_time instead.
 		do

@@ -1,9 +1,9 @@
-indexing
+note
 	description:
 		"Abstraction of an algorithm for retrieving tradable data %
 		%from a web site with the HTTP GET construct"
 	author: "Jim Cochrane"
-	note: "@@Note: It may be appropriate at some point to change the name %
+	note1: "@@Note: It may be appropriate at some point to change the name %
 		%of this class to something like EXTERNAL_DATA_RETRIEVAL - %
 		%tools and algorithms for retrieval of data from an external %
 		%source - http, socket, etc - Much of the existing logic in this %
@@ -33,7 +33,7 @@ inherit
 
 feature {NONE} -- Initialization
 
-	initialize is
+	initialize
 		do
 			create parameters.make
 			create url.http_make (parameters.host, "")
@@ -59,12 +59,12 @@ feature {NONE} -- Attributes
 	file_extension: STRING
 			-- Extension to file name of output cache file
 
-	Default_file_extension: STRING is "txt"
+	Default_file_extension: STRING = "txt"
 			-- Default value for `file_extension'
 
 feature {NONE} -- Basic operations
 
-	retrieve_data is
+	retrieve_data
 			-- Retrieve data for `parameters.symbol'.
 		do
 			retrieval_failed := False
@@ -96,7 +96,7 @@ feature {NONE} -- Basic operations
 			alternate_start_date_reset_to_void: alternate_start_date = Void
 		end
 
-	check_if_data_is_out_of_date is
+	check_if_data_is_out_of_date
 			-- Check if the current data for `parameters'.symbol are out
 			-- of date with respect to the current date and the http
 			-- configuration.  If True, `data_out_of_date' is set to True
@@ -148,7 +148,7 @@ feature {NONE} -- Status report
 
 	work_outputfile: PLAIN_TEXT_FILE
 
-	output_file_exists: BOOLEAN is
+	output_file_exists: BOOLEAN
 			-- Does the output file with name
 			-- `output_file_name (parameters.symbol)' exist?
 		do
@@ -169,7 +169,7 @@ feature {NONE} -- Status report
 			-- Retrieval result converted into the expecte format
 			-- by `convert_and_save_result'
 
-	output_file_name (symbol: STRING): STRING is
+	output_file_name (symbol: STRING): STRING
 			-- Output file name constructed from `symbol'
 		local
 			env: expanded OPERATING_ENVIRONMENT
@@ -192,7 +192,7 @@ feature {NONE} -- Status report
 				output_file_path, ".%N">>)
 		end
 
-	symbols_from_file: LIST [STRING] is
+	symbols_from_file: LIST [STRING]
 			-- List of symbols read from the specified input file.
 		require
 			parameters_exist: parameters /= Void
@@ -233,7 +233,7 @@ feature {NONE} -- Status report
 			Result := l
 		end
 
-	convert_and_save_result (s: STRING) is
+	convert_and_save_result (s: STRING)
 			-- Convert the retrieved data in `s' to MAS format and save the
 			-- result to a file named parameters.symbol"."file_extension.
 		require
@@ -273,7 +273,7 @@ feature {NONE} -- Status report
 			end
 		end
 
-	time_to_eod_update: BOOLEAN is
+	time_to_eod_update: BOOLEAN
 			-- Is it time to update end-of-day data according to the
 			-- `parameters.eod_turnover_time' specification?
 		do
@@ -298,7 +298,7 @@ feature {NONE} -- Status report
 
 feature {NONE} -- Hook routines
 
-	output_file_path: STRING is
+	output_file_path: STRING
 			-- Directory path of output file
 		once
 			Result := "." -- Default to current directory - redefine if needed.
@@ -306,7 +306,7 @@ feature {NONE} -- Hook routines
 			exists: Result /= Void
 		end
 
-	latest_date_for (symbol: STRING): DATE is
+	latest_date_for (symbol: STRING): DATE
 			-- The latest date-stamp of the data cached for `symbol',
 			-- for determining if this data is "out of date" -
 			-- Void indicates that it should NOT be considered out of date.
@@ -320,7 +320,7 @@ feature {NONE} -- Hook routines
 			-- Default to Void - redefine if needed.
 		end
 
-	use_day_after_latest_date_as_start_date: BOOLEAN is
+	use_day_after_latest_date_as_start_date: BOOLEAN
 			-- When a retrieval is needed because
 			-- check_if_data_is_out_of_date set data_out_of_date to True,
 			-- should the day after the latest date of the current data set be
@@ -330,7 +330,7 @@ feature {NONE} -- Hook routines
 			Result := True -- Redefine if needed.
 		end
 
-	latest_date_requirement: BOOLEAN is
+	latest_date_requirement: BOOLEAN
 			-- Precondition for `latest_date_for'
 		once
 			Result := True -- Redefine if a specific condition is needed.
@@ -338,7 +338,7 @@ feature {NONE} -- Hook routines
 
 feature {NONE} -- Implementation
 
-	perform_http_retrieval is
+	perform_http_retrieval
 		local
 			result_string: STRING
 			ex: expanded EXCEPTION_SERVICES
@@ -392,7 +392,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_proxy is
+	set_proxy
 			-- Set url's proxy
 		require
 			attributes_exist: url /= Void and parameters /= Void

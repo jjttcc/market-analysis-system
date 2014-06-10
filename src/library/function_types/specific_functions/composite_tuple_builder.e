@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Abstraction that provides services for building a list %
 	%of COMPOSITE_TUPLE instances"
 	detailed_description:
@@ -28,7 +28,7 @@ creation {FACTORY, MARKET_FUNCTION_EDITOR}
 feature {NONE} -- Initialization
 
 	make (in: like input; ctf: COMPOSITE_TUPLE_FACTORY;
-			time_period_type: TIME_PERIOD_TYPE; date: DATE_TIME) is
+			time_period_type: TIME_PERIOD_TYPE; date: DATE_TIME)
 		require
 			not_void:
 				in /= Void and ctf /= Void and time_period_type /= Void and
@@ -73,7 +73,7 @@ feature -- Access
 
 feature -- Status report
 
-	times_correct: BOOLEAN is
+	times_correct: BOOLEAN
 			-- Are the date/time values of elements of `output' correct
 			-- with respect to each other?
 		require
@@ -117,11 +117,11 @@ feature -- Status report
 			--   p.last.date_time < p.date_time + duration
 		end
 
-	operator_used: BOOLEAN is False
+	operator_used: BOOLEAN = False
 
 feature -- Status setting
 
-	set_tuple_maker (f: COMPOSITE_TUPLE_FACTORY) is
+	set_tuple_maker (f: COMPOSITE_TUPLE_FACTORY)
 			-- Set tuple_maker to `f'.
 		require
 			not_void: f /= Void
@@ -131,7 +131,7 @@ feature -- Status setting
 			set: tuple_maker = f and f /= Void
 		end
 
-	set_trading_period_type (arg: TIME_PERIOD_TYPE) is
+	set_trading_period_type (arg: TIME_PERIOD_TYPE)
 			-- Set trading_period_type to `arg'.
 		require
 			arg /= Void
@@ -142,7 +142,7 @@ feature -- Status setting
 				trading_period_type /= Void
 		end
 
-	set_start_date (arg: DATE_TIME) is
+	set_start_date (arg: DATE_TIME)
 			-- Set start_date to `arg'.
 		require
 			arg /= Void
@@ -155,7 +155,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	do_process is
+	do_process
 			-- Make a list of COMPOSITE_TUPLE
 		local
 			src_sublist: ARRAYED_LIST [BASIC_MARKET_TUPLE]
@@ -215,12 +215,12 @@ feature {NONE}
 
 	input: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
 
-	make_output is
+	make_output
 		do
 			create output.make (trading_period_type)
 		end
 
-	time_diff_equals_duration (d1, d2: DATE_TIME): BOOLEAN is
+	time_diff_equals_duration (d1, d2: DATE_TIME): BOOLEAN
 			-- Does the difference between `d1' and `d2' equal `duration'?
 		local
 			diff: DURATION

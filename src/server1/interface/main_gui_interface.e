@@ -1,8 +1,8 @@
-indexing
+note
 	description: "Interface to the GUI client"
 	author: "Jim Cochrane"
 	date: "$Date$";
-	note: "It is expected that, before `execute' is called, the first %
+	note1: "It is expected that, before `execute' is called, the first %
 		%character of the input of io_medium has been read."
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
@@ -45,7 +45,7 @@ creation
 
 feature -- Initialization
 
-	make (fb: GLOBAL_OBJECT_BUILDER) is
+	make (fb: GLOBAL_OBJECT_BUILDER)
 		require
 			not_void: fb /= Void
 		do
@@ -63,7 +63,7 @@ feature -- Access
 
 feature -- Status setting
 
-	post_process_io_medium is
+	post_process_io_medium
 		do
 			event_generator_builder.set_input_device (io_medium)
 			event_generator_builder.set_output_device (io_medium)
@@ -73,14 +73,14 @@ feature -- Status setting
 
 feature {NONE} -- Hook routine implementations
 
-	end_of_message (c: CHARACTER): BOOLEAN is
+	end_of_message (c: CHARACTER): BOOLEAN
 		do
 			Result := c = eom @ 1
 		end
 
 feature {NONE} -- Implementation
 
-	make_request_handlers is
+	make_request_handlers
 			-- Create the request handlers.
 		local
 			rh: like request_handlers
@@ -111,14 +111,14 @@ feature {NONE} -- Implementation
 			rh_set: request_handlers /= Void and not request_handlers.is_empty
 		end
 
-	initialize is
+	initialize
 		do
 			create event_generator_builder.make
 			create function_builder.make (tradable_list_handler)
 			make_request_handlers
 		end
 
-	set_message_body (s: STRING; index: INTEGER) is
+	set_message_body (s: STRING; index: INTEGER)
 			-- Set `message_body' from string extracted from `s' @ `index'
 			-- and set io_medium's compression on if specified in `s'.
 		do

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Pair of an opening trade with a matching closing trade"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -20,7 +20,7 @@ creation
 
 feature -- Initialization
 
-	make (trade: TRADE) is
+	make (trade: TRADE)
 		require
 			trade_not_void: trade /= Void
 			trade_open: trade.is_open
@@ -42,13 +42,13 @@ feature -- Access
 	name: STRING
 			-- Name of the traded item
 
-	symbol: STRING is
+	symbol: STRING
 			-- Symbol of the traded item
 		do
 			Result := opening_trade.symbol
 		end
 
-	start_date: DATE is
+	start_date: DATE
 			-- Date the trade was entered
 		do
 			Result := opening_trade.date
@@ -56,7 +56,7 @@ feature -- Access
 			Result = opening_trade.date
 		end
 
-	end_date: DATE is
+	end_date: DATE
 			-- Date the trade was closed
 		do
 			if closing_trade /= Void then
@@ -66,19 +66,19 @@ feature -- Access
 			is_closed implies Result = closing_trade.date
 		end
 
-	short: BOOLEAN is
+	short: BOOLEAN
 			-- Is this a short trade?
 		do
 			Result := opening_trade.is_sell
 		end
 
-	is_closed: BOOLEAN is
+	is_closed: BOOLEAN
 			-- Has the trade been closed?
 		do
 			Result := closing_trade /= Void
 		end
 
-	partial: BOOLEAN is
+	partial: BOOLEAN
 			-- Have not all units of the opening trade been closed?
 		do
 			Result := is_closed and units < opening_trade.units
@@ -86,7 +86,7 @@ feature -- Access
 			Result = is_closed and units < opening_trade.units
 		end
 
-	units: INTEGER is
+	units: INTEGER
 			-- Number of units traded
 		do
 			if is_closed then
@@ -101,7 +101,7 @@ feature -- Access
 				not is_closed implies Result = opening_trade.units
 		end
 
-	buy_price: REAL is
+	buy_price: REAL
 			-- Buy price, per unit
 		do
 			if short then
@@ -111,7 +111,7 @@ feature -- Access
 			end
 		end
 
-	buy_commission: REAL is
+	buy_commission: REAL
 			-- Commission that was charged for the buy
 		do
 			if short then
@@ -121,7 +121,7 @@ feature -- Access
 			end
 		end
 
-	sell_price: REAL is
+	sell_price: REAL
 			-- Sell price, per unit
 		do
 			if short then
@@ -131,7 +131,7 @@ feature -- Access
 			end
 		end
 
-	sell_commission: REAL is
+	sell_commission: REAL
 			-- Commission that was charged for the sale
 		do
 			if short then
@@ -141,19 +141,19 @@ feature -- Access
 			end
 		end
 
-	opening_price: REAL is
+	opening_price: REAL
 			-- Price per unit at which the trade opened
 		do
 			Result := opening_trade.price
 		end
 
-	closing_price: REAL is
+	closing_price: REAL
 			-- Price per unit at which the trade closed
 		do
 			Result := last_price
 		end
 
-	last_price: REAL is
+	last_price: REAL
 			-- Last price, per unit
 		do
 			if is_closed then
@@ -163,7 +163,7 @@ feature -- Access
 			end
 		end
 
-	balance_per_unit: REAL is
+	balance_per_unit: REAL
 			-- Amount made or lost per unit
 		do
 			Result := last_price - opening_price
@@ -172,7 +172,7 @@ feature -- Access
 			end
 		end
 
-	balance: REAL is
+	balance: REAL
 			-- Amount made or lost on the trade, including commissions
 		do
 			Result := balance_per_unit * units - opening_trade.commission
@@ -188,7 +188,7 @@ feature -- Access
 				opening_trade.commission) < epsilon
 		end
 
-	total_commissions: REAL is
+	total_commissions: REAL
 			-- Total commissions on the trade
 		do
 			Result := opening_trade.commission
@@ -203,7 +203,7 @@ feature -- Access
 				Result - opening_trade.commission < epsilon
 		end
 
-	percent_gain_or_loss: REAL is
+	percent_gain_or_loss: REAL
 			-- Percent gain or loss on the trade
 		do
 			Result := balance / (opening_price * units) * 100
@@ -212,7 +212,7 @@ feature -- Access
 				Result - (balance / (opening_price * units) * 100) < epsilon
 		end
 
-	report: STRING is
+	report: STRING
 			-- Default report of the trade-match status
 		local
 			usymbol: STRING
@@ -263,7 +263,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_closing_trade (trade: TRADE) is
+	set_closing_trade (trade: TRADE)
 			-- Set the exit price.
 		require
 			trade_not_void: trade /= Void
@@ -276,7 +276,7 @@ feature -- Status setting
 			closing_trade_set: closing_trade = trade
 		end
 
-	set_last_price (p: REAL) is
+	set_last_price (p: REAL)
 			-- Set the last price.
 		require
 			not_closed: not is_closed

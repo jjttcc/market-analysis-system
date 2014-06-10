@@ -1,7 +1,7 @@
-indexing
+note
 	description: "An instance of each instantiable class that conforms to G"
 	author: "Jim Cochrane"
-	note: "@@This class does not depend on any specialized classes and %
+	note1: "@@This class does not depend on any specialized classes and %
 		%can probably be cleanly moved to the ma_library cluster."
 	date: "$Date$";
 	revision: "$Revision$"
@@ -14,7 +14,7 @@ deferred class
 
 feature -- Access
 
-	instances_and_descriptions: ARRAYED_LIST [PAIR [G, STRING]] is
+	instances_and_descriptions: ARRAYED_LIST [PAIR [G, STRING]]
 			-- An instance and description of each instantiable class
 			-- that conforms to G
 		deferred
@@ -23,7 +23,7 @@ feature -- Access
 			one_of_each: one_of_each (Result)
 		end
 
-	instances: ARRAYED_LIST [G] is
+	instances: ARRAYED_LIST [G]
 			-- An instance of each instantiable class that conforms to G
 		do
 			create Result.make (instances_and_descriptions.count)
@@ -39,7 +39,7 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	description (instance: G): STRING is
+	description (instance: G): STRING
 			-- The description of the run-time type of `instance' -
 			-- Void if the type of `instance' does not match the type
 			-- of an element in `instances'
@@ -59,7 +59,7 @@ feature -- Access
 			end
 		end
 
-	instance_with_generator (name: STRING): G is
+	instance_with_generator (name: STRING): G
 			-- G instance whose generating type matches `name' -
 			-- Void if there is no G instance whose generator matches
 			-- name.
@@ -78,7 +78,7 @@ feature -- Access
 
 feature {NONE} -- Implementation
 
-	names: ARRAYED_LIST [STRING] is
+	names: ARRAYED_LIST [STRING]
 			-- The class name of each element of `instances'
 		do
 			create Result.make (instances.count)
@@ -97,7 +97,7 @@ feature {NONE} -- Implementation
 			Result.count = instances.count
 		end
 
-	one_of_each (l: ARRAYED_LIST [PAIR [G, STRING]]): BOOLEAN is
+	one_of_each (l: ARRAYED_LIST [PAIR [G, STRING]]): BOOLEAN
 			-- Is there just one object of each separate type in `l',
 			-- differentiated by l.item.right?
 		local

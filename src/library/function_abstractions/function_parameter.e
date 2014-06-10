@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A changeable parameter for a market function, such as n for an %
 		%n-period moving average."
@@ -19,27 +19,27 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	current_value: STRING is
+	current_value: STRING
 			-- Current value of the parameter
 		deferred
 		end
 
-	name: STRING is
+	name: STRING
 			-- The name of the parameter - unique among parameters belonging
 			-- to a particular MARKET_FUNCTION
 		deferred
 		end
 
-	description: STRING is
+	description: STRING
 		deferred
 		end
 
-	value_type_description: STRING is
+	value_type_description: STRING
 			-- Description of the type needed by `current_value'.
 		deferred
 		end
 
-	current_value_equals (v: STRING): BOOLEAN is
+	current_value_equals (v: STRING): BOOLEAN
 			-- Does `v' match the current value according to the
 			-- internal type of the value?
 		deferred
@@ -47,12 +47,12 @@ feature -- Access
 
 feature -- Comparison
 
-	infix "<" (other: FUNCTION_PARAMETER): BOOLEAN is
+	infix "<" (other: FUNCTION_PARAMETER): BOOLEAN
 		do
 			Result := description < other.description
 		end
 
-	is_equal (other: FUNCTION_PARAMETER): BOOLEAN is
+	is_equal (other: FUNCTION_PARAMETER): BOOLEAN
 		do
 			-- Redefined here to allow descendants to compare with other
 			-- FUNCTION_PARAMETERs instead of "like Current".
@@ -61,7 +61,7 @@ feature -- Comparison
 
 feature -- Element change
 
-	change_value (new_value: STRING) is
+	change_value (new_value: STRING)
 			-- Change the value of the parameter to `new_value'.
 		require
 			value_valid: valid_value (new_value)
@@ -72,7 +72,7 @@ feature -- Element change
 
 feature -- Basic operations
 
-	valid_value (i: STRING): BOOLEAN is
+	valid_value (i: STRING): BOOLEAN
 			-- Is `i' a valid value for this parameter?
 		deferred
 		end

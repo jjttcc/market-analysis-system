@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Constants and other properties used for processing the %
 		%configuration file"
 	author: "Jim Cochrane"
@@ -16,12 +16,12 @@ class CONFIGURATION_PROPERTIES inherit
 
 feature -- Access
 
-	Replacement_specifier: STRING is "replace"
+	Replacement_specifier: STRING = "replace"
 
-	Start_specifier: STRING is "start"
+	Start_specifier: STRING = "start"
 
-	End_specifier: STRING is "end"
+	End_specifier: STRING = "end"
 
-	Comment_character: CHARACTER is '#'
+	Comment_character: CHARACTER = '#'
 
 end

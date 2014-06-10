@@ -62,7 +62,7 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is
+	arg_mandatory: BOOLEAN
 		do
 			Result := boolean_operator.arg_mandatory or
 				true_cmd.arg_mandatory or false_cmd.arg_mandatory

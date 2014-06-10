@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Objects that perform an action based on locating an unowned session"
 	author: "Jim Cochrane"
@@ -28,7 +28,7 @@ create
 feature {NONE} -- Initialization
 
 	make (conf: MCT_CONFIGURATION;
-			ext_cmds: HASH_TABLE [MCT_COMMAND, STRING]) is
+			ext_cmds: HASH_TABLE [MCT_COMMAND, STRING])
 		require
 			conf_exists: conf /= Void and ext_cmds /= Void
 		do
@@ -41,7 +41,7 @@ feature {NONE} -- Initialization
 
 feature -- Basic operations
 
-	connect_to_session is
+	connect_to_session
 			-- Connect to an existing MAS "session".
 		local
 			window: LOCATE_SESSION_WINDOW
@@ -51,7 +51,7 @@ feature -- Basic operations
 			window.show
 		end
 
-	terminate_arbitrary_session is
+	terminate_arbitrary_session
 			-- Terminate an arbitrary MAS "session".
 		local
 			window: LOCATE_SESSION_WINDOW
@@ -63,7 +63,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation - Callback routines
 
-	respond_to_connection_request (supplier: LOCATE_SESSION_WINDOW) is
+	respond_to_connection_request (supplier: LOCATE_SESSION_WINDOW)
 		local
 			err: STRING
 		do
@@ -80,7 +80,7 @@ feature {NONE} -- Implementation - Callback routines
 			end
 		end
 
-	respond_to_termination_request (supplier: LOCATE_SESSION_WINDOW) is
+	respond_to_termination_request (supplier: LOCATE_SESSION_WINDOW)
 		local
 			err: STRING
 		do
@@ -99,7 +99,7 @@ feature {NONE} -- Implementation - Callback routines
 
 feature {NONE} -- Implementation
 
-	connect_to_located_session (supplier: LOCATE_SESSION_WINDOW) is
+	connect_to_located_session (supplier: LOCATE_SESSION_WINDOW)
 			-- Connect to the session whose host name and port number are
 			-- specified by `supplier'.
 		local
@@ -114,7 +114,7 @@ feature {NONE} -- Implementation
 			session_window.show
 		end
 
-	terminate_located_session (supplier: LOCATE_SESSION_WINDOW) is
+	terminate_located_session (supplier: LOCATE_SESSION_WINDOW)
 			-- Terminate the session whose host name and port number are
 			-- specified by `supplier'.
 		local

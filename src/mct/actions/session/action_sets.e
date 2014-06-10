@@ -1,4 +1,4 @@
-indexing
+note
 	description: "All ACTION_SETs used by the application"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,7 +12,7 @@ class
 
 feature -- Access
 
-	start_session_set: ACTION_SET is
+	start_session_set: ACTION_SET
 			-- ACTION_SET for starting a MAS session
 		require
 			actions_set: main_actions /= Void
@@ -23,7 +23,7 @@ feature -- Access
 			result_exists: Result /= Void
 		end
 
-	start_chart_set: ACTION_SET is
+	start_chart_set: ACTION_SET
 			-- ACTION_SET for starting a MAS charting application
 		require
 			actions_set: mas_session_actions /= Void
@@ -34,7 +34,7 @@ feature -- Access
 			result_exists: Result /= Void
 		end
 
-	start_command_line_set: ACTION_SET is
+	start_command_line_set: ACTION_SET
 			-- ACTION_SET for starting a MAS command_line
 		require
 			actions_set: mas_session_actions /= Void
@@ -46,7 +46,7 @@ feature -- Access
 			result_exists: Result /= Void
 		end
 
-	connect_to_session_set: ACTION_SET is
+	connect_to_session_set: ACTION_SET
 			-- ACTION_SET for connecting to a MAS session
 		require
 			actions_set: main_actions /= Void
@@ -58,7 +58,7 @@ feature -- Access
 			result_exists: Result /= Void
 		end
 
-	terminate_session_set: ACTION_SET is
+	terminate_session_set: ACTION_SET
 			-- ACTION_SET for terminating a MAS session
 		require
 			actions_set: mas_session_actions /= Void
@@ -71,7 +71,7 @@ feature -- Access
 			result_exists: Result /= Void
 		end
 
-	terminate_arbitrary_session_set: ACTION_SET is
+	terminate_arbitrary_session_set: ACTION_SET
 			-- ACTION_SET for terminating an arbitrary MAS session
 		require
 			actions_set: main_actions /= Void
@@ -83,7 +83,7 @@ feature -- Access
 			result_exists: Result /= Void
 		end
 
-	close_window_set: ACTION_SET is
+	close_window_set: ACTION_SET
 			-- ACTION_SET for closing an application window
 		require
 			actions_set: main_actions /= Void or mas_session_actions /= Void
@@ -100,7 +100,7 @@ feature -- Access
 			result_exists: Result /= Void
 		end
 
-	exit_set: ACTION_SET is
+	exit_set: ACTION_SET
 			-- ACTION_SET for terminating all sessions and exiting
 			-- the application
 		require
@@ -120,7 +120,7 @@ feature -- Access
 
 feature -- Element change
 
-	set_main_actions (arg: MAIN_ACTIONS) is
+	set_main_actions (arg: MAIN_ACTIONS)
 			-- Set `main_actions' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -130,7 +130,7 @@ feature -- Element change
 			main_actions_set: main_actions = arg and main_actions /= Void
 		end
 
-	set_mas_session_actions (arg: MAS_SESSION_ACTIONS) is
+	set_mas_session_actions (arg: MAS_SESSION_ACTIONS)
 			-- Set `mas_session_actions' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -143,22 +143,22 @@ feature -- Element change
 
 feature -- Constants
 
-	Start_session_token: STRING is "start-session"
+	Start_session_token: STRING = "start-session"
 			-- Token for the actions to start a MAS session
 
-	Connect_to_session_token: STRING is "connect-to-session"
+	Connect_to_session_token: STRING = "connect-to-session"
 			-- Token for the actions to connect to a MAS session
 
-	Terminate_session_token: STRING is "terminate-session"
+	Terminate_session_token: STRING = "terminate-session"
 			-- Token for the actions to terminate a MAS session
 
-	Terminate_arbitrary_session_token: STRING is "terminate-arbitrary-session"
+	Terminate_arbitrary_session_token: STRING = "terminate-arbitrary-session"
 			-- Token for the actions to terminate an arbitrary MAS session
 
-	Close_window_token: STRING is "close-window"
+	Close_window_token: STRING = "close-window"
 			-- Token for the actions to close an application window
 
-	Exit_token: STRING is "exit"
+	Exit_token: STRING = "exit"
 			-- Token for the actions to close an application window
 
 end

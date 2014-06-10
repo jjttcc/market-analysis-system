@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Editor of objects to be used in a MAL application"
 	author: "Jim Cochrane"
@@ -16,7 +16,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_user_interface (arg: like user_interface) is
+	set_user_interface (arg: like user_interface)
 			-- Set user_interface to `arg'.
 		require
 			arg_not_void: arg /= Void

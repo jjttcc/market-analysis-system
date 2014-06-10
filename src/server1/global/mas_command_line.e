@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Parser of command-line arguments for Market Analysis %
 		%System server application"
 	author: "Jim Cochrane"
@@ -38,7 +38,7 @@ creation {PLATFORM_DEPENDENT_OBJECTS}
 
 feature -- Access
 
-	usage: STRING is
+	usage: STRING
 			-- Message: how to invoke the program from the command-line
 		do
 			Result := concatenation (<<"Usage: ", command_name,
@@ -112,7 +112,7 @@ feature -- Access -- settings
 	file_names: LIST [STRING]
 			-- Market data input file names
 
-	symbol_list: LIST [STRING] is
+	symbol_list: LIST [STRING]
 			-- Market data input symbols
 		do
 			if symbol_list_implementation = Void and use_db then
@@ -155,7 +155,7 @@ feature -- Access -- settings
 	special_date_settings: DATE_FORMAT_SPECIFICATION
 			-- Special date-format settings
 
-	report_back: BOOLEAN is
+	report_back: BOOLEAN
 			-- Has a report been requested by the process that started
 			-- up this process on whether this process started successfully?
 		do
@@ -180,7 +180,7 @@ feature -- Status report
 
 feature {NONE} -- Hook routines implementations
 
-	prepare_for_argument_processing is
+	prepare_for_argument_processing
 		do
 			create {LINKED_LIST [INTEGER]} port_numbers.make
 			create special_date_settings.make (date_format_prefix)
@@ -188,7 +188,7 @@ feature {NONE} -- Hook routines implementations
 			opening_price := True
 		end
 
-	finish_argument_processing is
+	finish_argument_processing
 		local
 			setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]]
 		do
@@ -210,7 +210,7 @@ feature {NONE} -- Hook routines implementations
 
 feature {NONE} -- Implementation
 
-	set_special_formatting is
+	set_special_formatting
 			-- Set "special" formatting options.
 		do
 			-- Look for and process multi-character options
@@ -240,7 +240,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_field_separator is
+	set_field_separator
 			-- Set `field_separator' and remove its settings from `contents'.
 			-- Void if no field separator is specified
 		do
@@ -263,7 +263,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_open is
+	set_open
 		do
 			if option_in_contents ('o') then
 				-- Using an open field is now the default, so no state
@@ -275,7 +275,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_background is
+	set_background
 		do
 			if option_in_contents ('b') then
 				background := True
@@ -284,7 +284,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_strict is
+	set_strict
 		do
 			if option_in_contents ('s') then
 				strict := True
@@ -293,7 +293,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_intraday_caching is
+	set_intraday_caching
 		do
 			if option_in_contents ('n') then
 				intraday_caching := False
@@ -304,7 +304,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_use_db is
+	set_use_db
 		do
 			if option_in_contents ('p') then
 				use_db := True
@@ -313,7 +313,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_use_sockets is
+	set_use_sockets
 		local
 			portnum: STRING
 		do
@@ -354,7 +354,8 @@ feature {NONE} -- Implementation
 			end
 		end
 
-foo is do
+	foo
+		do
 			if option_in_contents ('d') then
 				if contents.item.count > 2 then
 					create daily_extension.make (contents.item.count - 2)
@@ -372,7 +373,7 @@ foo is do
 			end
 end
 
-	set_use_web is
+	set_use_web
 		do
 			if option_in_contents ('w') then
 				use_web := True
@@ -381,7 +382,7 @@ end
 			end
 		end
 
-	set_use_external_data_source is
+	set_use_external_data_source
 		do
 			if option_in_contents ('x') then
 				use_external_data_source := True
@@ -390,7 +391,7 @@ end
 			end
 		end
 
-	set_keep_db_connection is
+	set_keep_db_connection
 		do
 			keep_db_connection := True -- Default value
 			if option_string_in_contents ("reconnect") then
@@ -400,7 +401,7 @@ end
 			end
 		end
 
-	set_debugging is
+	set_debugging
 		local
 			gs: expanded GLOBAL_SERVICES
 		do
@@ -418,7 +419,7 @@ end
 				not option_string_in_contents (debug_option)
 		end
 
-	set_non_standard_period_types is
+	set_non_standard_period_types
 		do
 			-- Continue to loop until all nonstd options are removed.
 			from
@@ -437,7 +438,7 @@ end
 				not option_string_in_contents (non_std_period_types_option)
 		end
 
-	set_port_numbers is
+	set_port_numbers
 			-- Set `port_numbers' and remove its settings from `contents'.
 			-- Empty if no port numbers are specified
 		do
@@ -457,7 +458,7 @@ end
 			end
 		end
 
-	set_file_names is
+	set_file_names
 			-- Set `file_names' and remove its settings from `contents'.
 			-- Empty if no file names are specified
 			-- Must be called last because it expects all other arguments
@@ -515,7 +516,7 @@ end
 			end
 		end
 
-	set_symbol_list is
+	set_symbol_list
 		require
 			db_in_use: use_db
 		local
@@ -563,7 +564,7 @@ end
 			end
 		end
 
-	set_report_back_settings is
+	set_report_back_settings
 			-- Set settings used for the "report-back" option.
 		do
 			from
@@ -587,7 +588,7 @@ end
 			end
 		end
 
-	set_startup_settings is
+	set_startup_settings
 			-- Set `host_name_for_startup_report' and
 			-- `port_for_startup_report' from `contents.item'.
 		require
@@ -614,7 +615,7 @@ end
 
 feature {NONE} -- Implementation - Hook routines
 
-	log_errors (list: ARRAY [ANY]) is
+	log_errors (list: ARRAY [ANY])
 			-- Log `list' of error messages.  If any element of `list' is
 			-- longer than `Maximum_message_length', only the first
 			-- `Maximum_message_length' characters of that element will
@@ -626,39 +627,39 @@ feature {NONE} -- Implementation - Hook routines
 
 feature {NONE} -- Implementation queries
 
-	missing_port: STRING is "Missing port number"
+	missing_port: STRING = "Missing port number"
 
-	invalid_format: STRING is "Invalid format"
+	invalid_format: STRING = "Invalid format"
 
-	invalid_port_number: STRING is "Invalid port number"
+	invalid_port_number: STRING = "Invalid port number"
 
-	report_back_phrase: STRING is " for report-back option"
+	report_back_phrase: STRING = " for report-back option"
 
-	socket_data_source_phrase: STRING is " for socket-data-source option"
+	socket_data_source_phrase: STRING = " for socket-data-source option"
 
-	option_component_separator: CHARACTER is ':'
+	option_component_separator: CHARACTER = ':'
 
-	date_format_prefix: STRING is
+	date_format_prefix: STRING
 			-- Prefix of the "special format" option
-		indexing
+		note
 			once_status: global
 		once
 			Result := "-date-spec" + option_component_separator.out
 		end
 
-	no_open_spec: STRING is "-no-open"
+	no_open_spec: STRING = "-no-open"
 			-- No-open specifier
 
-	no_volume_spec: STRING is "-no-volume"
+	no_volume_spec: STRING = "-no-volume"
 			-- No-volume specifier
 
-	debug_option: STRING is "debug"
+	debug_option: STRING = "debug"
 
-	non_std_period_types_option: STRING is "nonstd"
+	non_std_period_types_option: STRING = "nonstd"
 
 	symbol_list_implementation: LIST [STRING]
 
-	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]] is
+	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]]
 			-- List of the set_... procedures that are called
 			-- unconditionally - for convenience
 		do
@@ -678,8 +679,8 @@ feature {NONE} -- Implementation queries
 
 	initialization_complete: BOOLEAN
 
-	special_format_option_spec: STRING is
-		indexing
+	special_format_option_spec: STRING
+		note
 			once_status: global
 		local
 			s: STRING
@@ -691,12 +692,12 @@ feature {NONE} -- Implementation queries
 			Result := Result + s + special_format_description
 		end
 
-	usage_indent: STRING is "  "
+	usage_indent: STRING = "  "
 
-	usage_description_column: INTEGER is 24
+	usage_description_column: INTEGER = 24
 
-	special_format_description: STRING is
-		indexing
+	special_format_description: STRING
+		note
 			once_status: global
 		local
 			s: STRING
@@ -707,7 +708,7 @@ feature {NONE} -- Implementation queries
 				"  (See documentation for date specificaton.)"
 		end
 
-	current_contents_match (s: STRING): BOOLEAN is
+	current_contents_match (s: STRING): BOOLEAN
 			-- Does `contents.item' match `s'?
 		do
 			Result := contents.item.substring (1, s.count).is_equal (s)
@@ -715,7 +716,7 @@ feature {NONE} -- Implementation queries
 
 feature {NONE} -- ERROR_SUBSCRIBER interface
 
-	notify (s: STRING) is
+	notify (s: STRING)
 		do
 			error_occurred := True
 			error_description := s

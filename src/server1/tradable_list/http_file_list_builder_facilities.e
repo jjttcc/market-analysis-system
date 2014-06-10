@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Facilities for building HTTP_LOADING_FILE_TRADABLE_LISTs"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -17,7 +17,7 @@ deferred class HTTP_FILE_LIST_BUILDER_FACILITIES inherit
 
 feature -- Initialization
 
-	make (factory: TRADABLE_FACTORY; daily_ext, intra_ext: STRING) is
+	make (factory: TRADABLE_FACTORY; daily_ext, intra_ext: STRING)
 			-- Initialize file-name lists and tradable factories.  A separate
 			-- tradable factory for intraday data is used for efficiency.
 			-- If `daily_ext' and `intra_ext' are both void, initialization
@@ -54,7 +54,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	build_lists is
+	build_lists
 		do
 			daily_list := new_tradable_list (tradable_factory, daily_extension)
 			if use_intraday then
@@ -69,7 +69,7 @@ feature -- Basic operations
 feature {NONE} -- Implementation
 
 	new_tradable_list (factory: TRADABLE_FACTORY; extension: STRING):
-		HTTP_LOADING_FILE_TRADABLE_LIST is
+		HTTP_LOADING_FILE_TRADABLE_LIST
 			-- A new HTTP_LOADING_FILE_TRADABLE_LIST
 		do
 			create Result.make (factory, extension)

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Client socket connections to a server"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -32,7 +32,7 @@ feature -- Status report
 	error_report: STRING
 			-- Report on last error if not `last_communication_succeeded'
 
-	connected: BOOLEAN is
+	connected: BOOLEAN
 			-- Is Current connected to the server?
 		do
 			Result := socket /= Void and then
@@ -41,7 +41,7 @@ feature -- Status report
 			definition: Result = (socket.is_open_read and socket.is_open_write)
 		end
 
-	socket_ok: BOOLEAN is
+	socket_ok: BOOLEAN
 			-- Is the socket "OK"?
 		do
 			 Result := socket.socket_ok
@@ -49,7 +49,7 @@ feature -- Status report
 
 feature {NONE} -- Initialization
 
-	make_connected_with_socket (skt: like socket) is
+	make_connected_with_socket (skt: like socket)
 			-- Make the connection, using the socket `skt'
 		require
 			skt_exists: skt /= Void
@@ -72,7 +72,7 @@ feature {NONE} -- Initialization
 			error_report := Invalid_address_msg
 		end
 
-	make_tested (host: STRING; port: INTEGER) is
+	make_tested (host: STRING; port: INTEGER)
 			-- Set `hostname' and `port_number' to the specified values
 			-- and test the connection.  If the test fails (likely because
 			-- the address is invalid, the connection times out, or the
@@ -97,7 +97,7 @@ feature {NONE} -- Initialization
 			error_report := Invalid_address_msg
 		end
 
-	make_connected (host: STRING; port: INTEGER) is
+	make_connected (host: STRING; port: INTEGER)
 			-- Set `hostname' and `port_number' to the specified values
 			-- and establish a connection to the server.  If the connection
 			-- fails (likely because the address is invalid, the connection
@@ -127,7 +127,7 @@ feature {NONE} -- Initialization
 			error_report := Invalid_address_msg
 		end
 
-	make_socket_connected is
+	make_socket_connected
 			-- Make `socket', connected to the server, with `port_number'
 			-- and `hostname'.  Don't 'create' socket if it is not Void.
 		require
@@ -154,7 +154,7 @@ create sdb.make_with_socket (socket)
 
 feature {NONE} -- Implementation
 
-	send_request (r: STRING; wait_for_response: BOOLEAN) is
+	send_request (r: STRING; wait_for_response: BOOLEAN)
 			-- Send request `r' to the server and, if `wait_for_response',
 			-- place the server's response into `server_response'.
 		require
@@ -188,7 +188,7 @@ create sdb.make_with_socket (socket)
 				last_communication_succeeded implies server_response /= Void
 		end
 
-	send_one_time_request (r: STRING; wait_for_response: BOOLEAN) is
+	send_one_time_request (r: STRING; wait_for_response: BOOLEAN)
 			-- Send `r' to the server as a one-time-per-connection request
 			-- and, if `wait_for_response', place the server's response into
 			-- `server_response'.
@@ -210,7 +210,7 @@ create sdb.make_with_socket (socket)
 				last_communication_succeeded implies server_response /= Void
 		end
 
-	process_response (s: STRING) is
+	process_response (s: STRING)
 			-- Process server response `s' - set `server_response' and
 			-- `last_communication_succeeded' accordingly.
 		require
@@ -224,7 +224,7 @@ create sdb.make_with_socket (socket)
 			server_response_set: server_response /= Void
 		end
 
-	close is
+	close
 			-- Close the connection.
 		do
 			if socket /= Void and not socket.is_closed then
@@ -232,7 +232,7 @@ create sdb.make_with_socket (socket)
 			end
 		end
 
-	last_socket_error: STRING is
+	last_socket_error: STRING
 		do
 			Result := socket.error
 			if Result = Void then
@@ -242,13 +242,13 @@ create sdb.make_with_socket (socket)
 
 feature {NONE} -- Implementation
 
-	Timeout_seconds: INTEGER is
+	Timeout_seconds: INTEGER
 			-- Number of seconds client will wait for server to respond
 			-- before reporting a "timed-out" message
 		deferred
 		end
 
-	end_of_message (c: CHARACTER): BOOLEAN is
+	end_of_message (c: CHARACTER): BOOLEAN
 			-- Does `c' indicate that the end of the data from the server
 			-- has been reached?
 		deferred
@@ -262,30 +262,30 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	Invalid_address_msg: STRING is "Invalid network address."
+	Invalid_address_msg: STRING = "Invalid network address."
 
 feature {NONE} -- Hook routines
 
-	server_type: STRING is
+	server_type: STRING
 			-- Short description of the server
 		once
 			Result := "sever " -- Redefine if needed - add a space at the end.
 		end
 
-	initialized_socket (port: INTEGER; host: STRING): like socket is
+	initialized_socket (port: INTEGER; host: STRING): like socket
 			-- A new socket initialized with `port' and `host'
 		do
 			create Result.make_client_by_port (port, host)
 		end
 
-	prepare_for_socket_connection is
+	prepare_for_socket_connection
 			-- Make any needed preparations before calling `socket.connect',
 			-- such as setting options on the `socket'.
 		do
 			do_nothing	-- Redefine if needed.
 		end
 
-	receive_and_process_response is
+	receive_and_process_response
 			-- Read response from the last request to the server and
 			-- place the result into `server_response'.
 		require

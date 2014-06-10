@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Builder of FILE_TRADABLE_LISTs"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -20,7 +20,7 @@ creation
 feature -- Access
 
 	new_tradable_list (fnames: LIST [STRING]; factory: TRADABLE_FACTORY):
-			EXTENDED_FILE_TRADABLE_LIST is
+			EXTENDED_FILE_TRADABLE_LIST
 		do
 			create Result.make (fnames, factory)
 		end

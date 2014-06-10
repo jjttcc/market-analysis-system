@@ -93,7 +93,7 @@ feature -- Access
 
 feature -- Status report
 
-	connected: BOOLEAN is
+	connected: BOOLEAN
 			-- Are we connected to the database?
 		do
 			Result := db_mgr.connected

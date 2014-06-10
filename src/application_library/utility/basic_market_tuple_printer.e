@@ -1,4 +1,4 @@
-indexing
+note
 	description: "TA Printing services"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -19,7 +19,7 @@ creation
 
 feature {NONE} -- Implementation
 
-	print_fields (t: BASIC_MARKET_TUPLE) is
+	print_fields (t: BASIC_MARKET_TUPLE)
 		do
 			print_date (t.end_date, 'y', 'm', 'd')
 			put (field_separator)
@@ -35,7 +35,7 @@ feature {NONE} -- Implementation
 			print_other_fields (t)
 		end
 
-	print_fields_with_time (t: BASIC_MARKET_TUPLE) is
+	print_fields_with_time (t: BASIC_MARKET_TUPLE)
 		do
 			print_date (t.end_date, 'y', 'm', 'd')
 			put (field_separator)
@@ -53,7 +53,7 @@ feature {NONE} -- Implementation
 			print_other_fields (t)
 		end
 
-	print_other_fields (t: BASIC_MARKET_TUPLE) is
+	print_other_fields (t: BASIC_MARKET_TUPLE)
 			-- Redefine for tuple printers that handle more than
 			-- date, open, high, low, close.  Be sure to print the
 			-- field_separator before the first 'other' field, and to

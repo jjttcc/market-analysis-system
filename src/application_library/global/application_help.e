@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Help messages for application"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,7 +12,7 @@ deferred class APPLICATION_HELP inherit
 
 feature -- Access
 
-	edit_event_generators: INTEGER is 1
-	edit_indicators: INTEGER is 2
+	edit_event_generators: INTEGER = 1
+	edit_indicators: INTEGER = 2
 
 end -- class APPLICATION_HELP

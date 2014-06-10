@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Composite tuple with volume";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -25,7 +25,7 @@ feature -- Access
 
 feature {COMPOSITE_TUPLE_FACTORY}
 
-	set_volume (arg: REAL) is
+	set_volume (arg: REAL)
 		do
 			volume := arg
 		ensure
@@ -34,7 +34,7 @@ feature {COMPOSITE_TUPLE_FACTORY}
 
 feature {NONE}
 
-	adjust_volume_for_split (r: REAL) is
+	adjust_volume_for_split (r: REAL)
 		do
 			volume := (volume * r)
 		end

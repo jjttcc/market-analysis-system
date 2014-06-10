@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Builder of objects used more or less globally throughout %
 		%the system, of which there is usually only one instance"
 	author: "Jim Cochrane"
@@ -20,7 +20,7 @@ creation
 
 feature {NONE} -- Hook routine implementations
 
-	new_non_persistent_conn_if: NON_PERSISTENT_CONNECTION_INTERFACE is
+	new_non_persistent_conn_if: NON_PERSISTENT_CONNECTION_INTERFACE
 		do
 			create {EXTENDED_MAIN_GUI_INTERFACE} Result.make (Current)
 		end

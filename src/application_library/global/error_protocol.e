@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Protocol and related utilities for reportable errors"
 	author: "Jim Cochrane"
 	date: "$Date$"
@@ -24,50 +24,50 @@ inherit
 
 feature -- Access
 
-	generic_error_code: INTEGER is 1
+	generic_error_code: INTEGER = 1
 
-	database_error_code: INTEGER is 2
+	database_error_code: INTEGER = 2
 
-	internal_system_error_code: INTEGER is 3
+	internal_system_error_code: INTEGER = 3
 
-	initialization_error_code: INTEGER is 4
+	initialization_error_code: INTEGER = 4
 
-	data_file_does_not_exist_error_code: INTEGER is 5
+	data_file_does_not_exist_error_code: INTEGER = 5
 
-	data_cache_directory_creation_failure_error_code: INTEGER is 6
+	data_cache_directory_creation_failure_error_code: INTEGER = 6
 
-	database_error: STRING is
+	database_error: STRING
 		do
 			Result := errors @ database_error_code
 		end
 
-	generic_error: STRING is
+	generic_error: STRING
 		do
 			Result := errors @ generic_error_code
 		end
 
-	internal_system_error: STRING is
+	internal_system_error: STRING
 		do
 			Result := errors @ internal_system_error_code
 		end
 
-	initialization_error: STRING is
+	initialization_error: STRING
 		do
 			Result := errors @ initialization_error_code
 		end
 
-	data_file_does_not_exist_error: STRING is
+	data_file_does_not_exist_error: STRING
 		do
 			Result := errors @ data_file_does_not_exist_error_code
 		end
 
-	data_cache_directory_creation_failure_error: STRING is
+	data_cache_directory_creation_failure_error: STRING
 		do
 			Result := errors @ data_cache_directory_creation_failure_error_code
 		end
 
-	largest_error_code: INTEGER is
-		indexing
+	largest_error_code: INTEGER
+		note
 			once_status: global
 		local
 			keys: ARRAY [INTEGER]
@@ -83,9 +83,9 @@ feature -- Access
 
 feature -- Access
 
-	errors: HASH_TABLE [STRING, INTEGER] is
+	errors: HASH_TABLE [STRING, INTEGER]
 			-- All error descriptions
-		indexing
+		note
 			once_status: global
 		once
 			create Result.make (0)
@@ -103,12 +103,12 @@ feature -- Access
 
 feature -- Constants
 
-	error_token: STRING is "?"
+	error_token: STRING = "?"
 			-- Token to be replaced in configurable error messages
 
 feature -- Basic operations
 
-	log_error_with_token (emsg, new: STRING) is
+	log_error_with_token (emsg, new: STRING)
 			-- Log `emsg' with the delimited `error_token' replaced by `new'.
 		local
 			gu: expanded GENERAL_UTILITIES

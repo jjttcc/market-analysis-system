@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A TRADABLE_LIST that uses the EXTERNAL_INPUT_SEQUENCE"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -28,7 +28,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (factory: TRADABLE_FACTORY) is
+	make (factory: TRADABLE_FACTORY)
 		require
 			not_void: factory /= Void
 		do
@@ -45,7 +45,7 @@ feature {NONE} -- Initialization
 
 feature -- Status report
 
-	intraday_data_available: BOOLEAN is
+	intraday_data_available: BOOLEAN
 			-- Is intraday data available from the external source?
 		do
 			Result := input_medium.intraday_data_available
@@ -55,7 +55,7 @@ feature {NONE} -- Implementation
 
 	input_medium: EXTERNAL_INPUT_SEQUENCE
 
-	initialize_input_medium is
+	initialize_input_medium
 		local
 		do
 			if intraday then

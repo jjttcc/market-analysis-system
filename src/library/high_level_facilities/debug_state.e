@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Debugging settings for the application"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,7 +16,7 @@ create
 
 feature -- Initialization
 
-	make_false is
+	make_false
 			-- Set all BOOLEAN queries to false.
 		do
 			market_functions := False
@@ -27,7 +27,7 @@ feature -- Initialization
 				not data_retrieval
 		end
 
-	make_true is
+	make_true
 			-- Set all BOOLEAN queries to true.
 		do
 			market_functions := True
@@ -40,7 +40,7 @@ feature -- Initialization
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 		ensure
 			all_false: not market_functions and not event_processing and
@@ -60,7 +60,7 @@ feature -- Access
 
 feature -- Element change
 
-	set_market_functions (arg: BOOLEAN) is
+	set_market_functions (arg: BOOLEAN)
 			-- Set `market_functions' to `arg'.
 		do
 			market_functions := arg
@@ -68,7 +68,7 @@ feature -- Element change
 			market_functions_set: market_functions = arg
 		end
 
-	set_event_processing (arg: BOOLEAN) is
+	set_event_processing (arg: BOOLEAN)
 			-- Set `event_processing' to `arg'.
 		do
 			event_processing := arg
@@ -76,7 +76,7 @@ feature -- Element change
 			event_processing_set: event_processing = arg
 		end
 
-	set_data_retrieval (arg: BOOLEAN) is
+	set_data_retrieval (arg: BOOLEAN)
 			-- Set `data_retrieval' to `arg'.
 		do
 			data_retrieval := arg

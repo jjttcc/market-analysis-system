@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Windows version of STOCK_SPLIT_FILE"
 	author: "Jim Cochrane"

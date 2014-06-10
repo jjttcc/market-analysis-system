@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Commands with a settable 'is_editable' feature"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -15,7 +15,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_is_editable (arg: BOOLEAN) is
+	set_is_editable (arg: BOOLEAN)
 			-- Set `is_editable' to `arg'.
 		do
 			is_editable := arg

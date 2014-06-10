@@ -1,4 +1,4 @@
-indexing
+note
 	description: "TA Printing services"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -20,22 +20,22 @@ deferred class PRINTING inherit
 
 feature -- Access
 
-	output_field_separator: STRING is
+	output_field_separator: STRING
 			-- Field separator used when printing output
 		deferred
 		end
 
-	output_record_separator: STRING is
+	output_record_separator: STRING
 			-- Record separator used when printing output
 		deferred
 		end
 
-	output_date_field_separator: STRING is
+	output_date_field_separator: STRING
 			-- Field separator used for output between date fields
 		deferred
 		end
 
-	output_time_field_separator: STRING is
+	output_time_field_separator: STRING
 			-- Field separator used for output between time fields
 		deferred
 		end
@@ -50,7 +50,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_preface (arg: STRING) is
+	set_preface (arg: STRING)
 			-- Set preface to `arg'.
 		do
 			preface := arg
@@ -58,7 +58,7 @@ feature -- Status setting
 			preface_set: preface = arg
 		end
 
-	set_appendix (arg: STRING) is
+	set_appendix (arg: STRING)
 			-- Set appendix to `arg'.
 		do
 			appendix := arg
@@ -68,7 +68,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	print_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE]) is
+	print_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE])
 			-- If `preface' is not empty, first print it; then print the
 			-- fields of each tuple in `l'.  If `print_start_date' is not
 			-- void, print all elements of `l' >= that date; otherwise,
@@ -107,7 +107,7 @@ feature -- Basic operations
 			printer.execute (l)
 		end
 
-	print_indicators (t: TRADABLE [BASIC_MARKET_TUPLE]) is
+	print_indicators (t: TRADABLE [BASIC_MARKET_TUPLE])
 			-- Print the fields of each tuple of each indicator of `t'.
 			-- by calling `print_tuples' on `output' of each of t's
 			-- indicators.
@@ -126,7 +126,7 @@ feature -- Basic operations
 			end
 		end
 
-	print_indicator (i: MARKET_FUNCTION) is
+	print_indicator (i: MARKET_FUNCTION)
 			-- Print the fields of each tuple of indicator `i'.  If
 			-- `preface' is not empty, print it first.  If `appendix' is
 			-- not empty, print it at the end.
@@ -135,7 +135,7 @@ feature -- Basic operations
 			print_tuples (i.output)
 		end
 
-	print_composite_lists (t: TRADABLE [BASIC_MARKET_TUPLE]) is
+	print_composite_lists (t: TRADABLE [BASIC_MARKET_TUPLE])
 			-- Print the fields of each tuple of each composite list of `t'
 			-- by calling `print_tuples' for each tuple_list of `t'.
 		local
@@ -167,7 +167,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	tuple_printers: HASH_TABLE [MARKET_TUPLE_PRINTER, STRING] is
+	tuple_printers: HASH_TABLE [MARKET_TUPLE_PRINTER, STRING]
 		local
 			st: SIMPLE_TUPLE
 			bmt: BASIC_MARKET_TUPLE
@@ -217,7 +217,7 @@ feature {NONE} -- Implementation
 			not_empty: Result /= Void and not Result.is_empty
 		end
 
-	print_mf_info (f: MARKET_FUNCTION) is
+	print_mf_info (f: MARKET_FUNCTION)
 		require
 			not_void: f /= Void
 		do
@@ -239,7 +239,7 @@ feature {NONE} -- Implementation
 			output_medium.put_string ("%N")
 		end
 
-	verbose: BOOLEAN is
+	verbose: BOOLEAN
 			-- Print more information than usual? - default: no
 		do
 			Result := False
@@ -251,7 +251,7 @@ feature {NONE} -- Implementation
 	print_start_time, print_end_time: TIME
 			-- Start and end time to use for printing, if not void
 
-	output_medium: IO_MEDIUM is
+	output_medium: IO_MEDIUM
 			-- Medium to use for output
 		deferred
 		end

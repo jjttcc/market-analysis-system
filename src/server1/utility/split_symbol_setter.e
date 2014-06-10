@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Value setter that sets the symbol of a stock split"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,7 +16,7 @@ creation
 
 feature -- Initialization
 
-	make (sp_file: STOCK_SPLIT_SEQUENCE) is
+	make (sp_file: STOCK_SPLIT_SEQUENCE)
 		require
 			not_void: sp_file /= Void
 		do
@@ -28,14 +28,14 @@ feature -- Initialization
 
 feature {NONE}
 
-	read_value (stream: INPUT_SEQUENCE) is
+	read_value (stream: INPUT_SEQUENCE)
 		do
 			stream.read_string
 			symbol := stream.last_string
 			splits.set_current_symbol (symbol)
 		end
 
-	do_set (stream: INPUT_SEQUENCE; tuple: STOCK_SPLIT) is
+	do_set (stream: INPUT_SEQUENCE; tuple: STOCK_SPLIT)
 			-- Not needed
 		do
 		end

@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"TRADABLE_LISTs that obtain their input data from files"
 		"(fix - change to:)"
@@ -25,7 +25,7 @@ create
 feature {SOCKET_LIST_BUILDER} -- Initialization
 
 	make (the_symbols: LIST [STRING]; factory: TRADABLE_FACTORY;
-			conn: INPUT_DATA_CONNECTION) is
+			conn: INPUT_DATA_CONNECTION)
 		do
 			parent_make (the_symbols, factory)
 			connection := conn
@@ -38,7 +38,7 @@ feature {SOCKET_LIST_BUILDER} -- Access
 
 feature {SOCKET_LIST_BUILDER} -- Element change
 
-	set_connection (arg: like connection) is
+	set_connection (arg: like connection)
 			-- Set `connection' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -50,7 +50,7 @@ feature {SOCKET_LIST_BUILDER} -- Element change
 
 feature {NONE} -- Hook routine implementations
 
-	target_tradable_out_of_date: BOOLEAN is
+	target_tradable_out_of_date: BOOLEAN
 		local
 			latest_date_time: DATE_TIME
 		do
@@ -79,7 +79,7 @@ print ("tgt t out of date result: " + Result.out + "%N")
 				not connection.last_communication_succeeded implies not Result
 		end
 
-	append_new_data is
+	append_new_data
 		do
 --!!! data has already been read into i_med:			setup_input_medium
 			check
@@ -113,7 +113,7 @@ print ("tgt t out of date result: " + Result.out + "%N")
 
 feature {NONE} -- Implementation
 
-	initialize_input_medium is
+	initialize_input_medium
 		do
 --!!!If INPUT_DATA_CONNECTION is modified so that `request_data_for'
 --"initiates" the connection, then this `initialize_input_medium'
@@ -137,7 +137,7 @@ connection.error_report + "%N")
 			end
 		end
 
-	possible_replacement___initialize_input_medium is
+	possible_replacement___initialize_input_medium
 --!!!!A possible replacement for the above `initialize_input_medium'
 		do
 			input_medium := connection.socket

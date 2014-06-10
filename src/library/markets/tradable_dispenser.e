@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Abstraction for a dispenser of tradables from the list %
 		%of all available tradables"
 	author: "Jim Cochrane"
@@ -12,7 +12,7 @@ deferred class TRADABLE_DISPENSER
 feature -- Access
 
 	item (period_type: TIME_PERIOD_TYPE; update: BOOLEAN):
-		TRADABLE [BASIC_MARKET_TUPLE] is
+		TRADABLE [BASIC_MARKET_TUPLE]
 			-- The tradable at the current cursor position - Void if
 			-- `period_type' is not a valid type for the current symbol;
 			-- updated with the latest data if `update'.
@@ -31,13 +31,13 @@ feature -- Access
 				current_symbol, period_type) implies Result = Void
 		end
 
-	index: INTEGER is
+	index: INTEGER
 			-- Index of current cursor position
 		deferred
 		end
 
 	tradable (symbol: STRING; period_type: TIME_PERIOD_TYPE; update: BOOLEAN):
-				TRADABLE [BASIC_MARKET_TUPLE] is
+				TRADABLE [BASIC_MARKET_TUPLE]
 			-- The tradable for `period_type' associated with `symbol' -
 			-- Void if the tradable for `symbol' is not found or if
 			-- `period_type' is not a valid type for `symbol'; updated with
@@ -59,7 +59,7 @@ feature -- Access
 		end
 
 	tuple_list (symbol: STRING; period_type: TIME_PERIOD_TYPE; update: BOOLEAN):
-				SIMPLE_FUNCTION [BASIC_MARKET_TUPLE] is
+				SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
 			-- Tuple list for `period_type' for tradable with `symbol' - Void
 			-- if the tradable for `symbol' is not found or if `period_type'
 			-- is not a valid type for `symbol'; updated with
@@ -82,7 +82,7 @@ feature -- Access
 			not_void_if_no_error: not error_occurred implies Result /= Void
 		end
 
-	symbols: LIST [STRING] is
+	symbols: LIST [STRING]
 			-- The symbol of each tradable
 		deferred
 		ensure
@@ -90,7 +90,7 @@ feature -- Access
 			not_void_if_no_error: not error_occurred implies Result /= Void
 		end
 
-	period_type_names_for (symbol: STRING): ARRAYED_LIST [STRING] is
+	period_type_names_for (symbol: STRING): ARRAYED_LIST [STRING]
 			-- Names of all period types available for `symbol', sorted in
 			-- ascending order according to period-type duration -
 			-- Void if the tradable for `symbol' is not found
@@ -103,7 +103,7 @@ feature -- Access
 			not_void_if_no_error: not error_occurred implies Result /= Void
 		end
 
-	period_types_for (symbol: STRING): LIST [TIME_PERIOD_TYPE] is
+	period_types_for (symbol: STRING): LIST [TIME_PERIOD_TYPE]
 			-- All period types available for `symbol', sorted in
 			-- ascending order according to period-type duration -
 			-- Void if the tradable for `symbol' is not found
@@ -132,12 +132,12 @@ feature -- Access
 			all_valid: Result.for_all (agent valid_period_type (symbol, ?))
 		end
 
-	indicators: SEQUENCE [MARKET_FUNCTION] is
+	indicators: SEQUENCE [MARKET_FUNCTION]
 			-- All indicators currently known to the system
 		deferred
 		end
 
-	current_symbol: STRING is
+	current_symbol: STRING
 			-- Symbol at the current cursor position
 		require
 			cursor_valid: not off
@@ -157,23 +157,23 @@ feature -- Status report
 	error_occurred: BOOLEAN
 			-- Did an error occur during the last operation?
 
-	after: BOOLEAN is
+	after: BOOLEAN
 			-- Is there no valid position to the right of the current
 			-- cursor position?
 		deferred
 		end
 
-	is_empty: BOOLEAN is
+	is_empty: BOOLEAN
 			-- Are there no tradables?
 		deferred
 		end
 
-	isfirst: BOOLEAN is
+	isfirst: BOOLEAN
 			-- Is the cursor at the first position?
 		deferred
 		end
 
-	exhausted: BOOLEAN is
+	exhausted: BOOLEAN
 			-- Has the dispenser been completely explored?
 		do
 			Result := off
@@ -181,17 +181,17 @@ feature -- Status report
 			exhausted_when_off: off implies Result
 		end
 
-	off: BOOLEAN is
+	off: BOOLEAN
 			-- Is there no current item?
 		deferred
 		end
 
-	caching_on: BOOLEAN is
+	caching_on: BOOLEAN
 			-- Is cahing of tradable data turned on?
 		deferred
 		end
 
-	valid_period_type (symbol: STRING; t: TIME_PERIOD_TYPE): BOOLEAN is
+	valid_period_type (symbol: STRING; t: TIME_PERIOD_TYPE): BOOLEAN
 			-- Is `t' a valid period type for the tradable with symbol
 			-- `symbol'?
 		require
@@ -228,7 +228,7 @@ feature -- Status report
 
 feature -- Cursor movement
 
-	forth is
+	forth
 			-- Move to next position; if no next position, ensure
 			-- `exhausted'.
 		require
@@ -238,7 +238,7 @@ feature -- Cursor movement
 			index_incremented: index = old index + 1
 		end
 
-	start is
+	start
 		deferred
 		ensure
 			not is_empty = not after
@@ -247,19 +247,19 @@ feature -- Cursor movement
 
 feature -- Basic operations
 
-	clear_caches is
+	clear_caches
 			-- Clear all caches - that is, force re-reading of tradable data.
 		deferred
 		end
 
-	turn_caching_off is
+	turn_caching_off
 			-- Turn off caching of tradable data.
 		deferred
 		ensure
 			caching_off: not caching_on
 		end
 
-	turn_caching_on is
+	turn_caching_on
 			-- Turn on caching of tradable data.
 		deferred
 		ensure

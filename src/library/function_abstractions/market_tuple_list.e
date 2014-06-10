@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A list of objects that conform to MARKET_TUPLE"
 	author: "Jim Cochrane"
@@ -20,7 +20,7 @@ creation
 
 feature -- Access
 
-	index_at_date_time (d: DATE_TIME; search_spec: INTEGER): INTEGER is
+	index_at_date_time (d: DATE_TIME; search_spec: INTEGER): INTEGER
 			-- Index of the element whose date_time matches `d'
 			-- If no element's date_time matches `d':
 			--   search_spec < 0: Index of latest element whose date_time < `d'
@@ -105,7 +105,7 @@ feature -- Access
 				has_date_time (d) implies i_th (Result).date_time.is_equal (d)
 		end
 
-	index_at_date (d: DATE; search_spec: INTEGER): INTEGER is
+	index_at_date (d: DATE; search_spec: INTEGER): INTEGER
 			-- Index of the element whose date matches `d'
 			-- If no element's date matches `d':
 			--   search_spec < 0: Index of latest element whose date < `d'
@@ -136,7 +136,7 @@ feature -- Access
 					i_th (Result).date_time.date >= (d)
 		end
 
-	out: STRING is
+	out: STRING
 		local
 			l: LINEAR [MARKET_TUPLE]
 		do
@@ -155,7 +155,7 @@ feature -- Access
 
 feature -- Status report
 
-	has_date_time (d: DATE_TIME): BOOLEAN is
+	has_date_time (d: DATE_TIME): BOOLEAN
 			-- Does date/time `d' occur in the data set?
 		require
 			not_void: d /= Void
@@ -166,7 +166,7 @@ feature -- Status report
 			Result := i /= 0
 		end
 
-	has_date (d: DATE): BOOLEAN is
+	has_date (d: DATE): BOOLEAN
 			-- Does date `d' occur in the data set?
 		require
 			not_void: d /= Void
@@ -177,7 +177,7 @@ feature -- Status report
 			Result := i /= 0
 		end
 
-	sorted_by_date_time: BOOLEAN is
+	sorted_by_date_time: BOOLEAN
 			-- Is Current sorted by date and time?
 		do
 			from
@@ -200,7 +200,7 @@ feature -- Status report
 
 feature -- Comparison
 
-	is_equal (other: like Current): BOOLEAN is
+	is_equal (other: like Current): BOOLEAN
 		local
 			this_type: like Current
 		do
@@ -212,7 +212,7 @@ feature -- Comparison
 
 feature {NONE}
 
-	in_range_or_not_in_array (d: DATE_TIME; bottom, top: INTEGER): BOOLEAN is
+	in_range_or_not_in_array (d: DATE_TIME; bottom, top: INTEGER): BOOLEAN
 			-- Does `d' match the date_time of a tuple within the (index)
 			-- range bottom .. top or does `d' not occur in the array?
 		local
@@ -249,7 +249,7 @@ feature {NONE}
 			-- 		i_th (i).date_time.is_equal (d)))
 		end
 
-	is_idx_dt_result_0 (r: INTEGER): INTEGER is
+	is_idx_dt_result_0 (r: INTEGER): INTEGER
 			-- Is Result from index_at_date_time 0 (for loop variant)?
 			-- 1 if r is 0, otherwise 0
 		do

@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Abstraction that allows the user to build MARKET_FUNCTIONs from %
 		%the command line"
@@ -58,7 +58,7 @@ creation
 
 feature -- Initialization
 
-	make (dispenser: TRADABLE_DISPENSER) is
+	make (dispenser: TRADABLE_DISPENSER)
 		do
 			create operator_maker.make (False)
 			create editor.make (Current, operator_maker)
@@ -71,7 +71,7 @@ feature -- Initialization
 
 feature -- Status setting
 
-	set_input_device (arg: IO_MEDIUM) is
+	set_input_device (arg: IO_MEDIUM)
 			-- Set input_device to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -82,7 +82,7 @@ feature -- Status setting
 			input_device_set: input_device = arg and input_device /= Void
 		end
 
-	set_output_device (arg: IO_MEDIUM) is
+	set_output_device (arg: IO_MEDIUM)
 			-- Set output_device to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -103,7 +103,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation of hook methods
 
-	main_indicator_edit_selection: INTEGER is
+	main_indicator_edit_selection: INTEGER
 		local
 			msg: STRING
 		do
@@ -160,7 +160,7 @@ feature {NONE} -- Implementation of hook methods
 			end
 		end
 
-	accepted_by_user (c: MARKET_FUNCTION): BOOLEAN is
+	accepted_by_user (c: MARKET_FUNCTION): BOOLEAN
 		do
 			print_list (<<"Select:%N     Print description of ",
 						c.generator + name_for (c), "? (d)%N",
@@ -186,18 +186,18 @@ feature {NONE} -- Implementation of hook methods
 			end
 		end
 
-	list_selection_with_backout (l: LIST [STRING]; msg: STRING): INTEGER is
+	list_selection_with_backout (l: LIST [STRING]; msg: STRING): INTEGER
 		do
 			Result := backoutable_selection (l, msg, Exit_value)
 		end
 
-	do_initialize_lock is
+	do_initialize_lock
 		do
 			lock := file_lock (file_name_with_app_directory (
 				indicators_file_name, False))
 		end
 
-	end_save is
+	end_save
 		do
 			-- Ensure current changes show up in the tradable_dispenser by
 			-- clearing its caches.
@@ -206,7 +206,7 @@ feature {NONE} -- Implementation of hook methods
 			end
 		end
 
-	display_operator_tree (op: COMMAND) is
+	display_operator_tree (op: COMMAND)
 		do
 			operator_maker.print_command_tree (op, 1)
 		end

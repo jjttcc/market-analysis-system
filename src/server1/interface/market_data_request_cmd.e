@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A command that responds to a client request for market data"
 	author: "Jim Cochrane"
@@ -20,35 +20,35 @@ creation
 
 feature {NONE} -- Hook routine implementations
 
-	expected_field_count: INTEGER is
-		indexing
+	expected_field_count: INTEGER
+		note
 			once_status: global
 		once
 			Result := 2
 		end
 
-	symbol_index: INTEGER is
-		indexing
+	symbol_index: INTEGER
+		note
 			once_status: global
 		once
 			Result := 1
 		end
 
-	period_type_index: INTEGER is
-		indexing
+	period_type_index: INTEGER
+		note
 			once_status: global
 		once
 			Result := 2
 		end
 
-	error_context (msg: STRING): STRING is
+	error_context (msg: STRING): STRING
 		do
 			Result := concatenation (<<error_context_prefix, market_symbol>>)
 		end
 
 feature {NONE}
 
-	create_and_send_response is
+	create_and_send_response
 			-- Obtain the market corresponding to `market_symbol' and
 			-- dispatch the data for that market for `trading_period_type'
 			-- to the client.
@@ -100,6 +100,6 @@ feature {NONE}
 
 feature {NONE} -- Implementation - constants
 
-	error_context_prefix: STRING is "retrieving data for "
+	error_context_prefix: STRING = "retrieving data for "
 
 end -- class MARKET_DATA_REQUEST_CMD

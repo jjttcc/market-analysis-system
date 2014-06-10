@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Builder of platform-dependent objects for the extended %
 		%version of MAS"
 	author: "Jim Cochrane"
@@ -11,7 +11,7 @@ class EXTENDED_PLATFORM_DEPENDENT_OBJECTS inherit
 
 feature -- Access
 
-	command_line: EXTENDED_MAS_COMMAND_LINE is
+	command_line: EXTENDED_MAS_COMMAND_LINE
 		do
 			create Result.make
 		end

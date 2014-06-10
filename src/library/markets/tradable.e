@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A tradable market entity, such as a stock or commodity";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -23,12 +23,12 @@ deferred class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 		export {NONE}
 			all
 		undefine
-			is_equal, copy, setup, out
+			is_equal, copy, out
 		end
 
 	TRADABLE_FACILITIES
 		undefine
-			is_equal, copy, setup, out
+			is_equal, copy, out
 		end
 
 	GLOBAL_SERVICES
@@ -37,19 +37,19 @@ deferred class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 		export {NONE}
 			all
 		undefine
-			is_equal, copy, setup, out
+			is_equal, copy, out
 		end
 
 feature -- Access
 
-	symbol: STRING is
+	symbol: STRING
 			-- The tradable's market symbol - example: IBM
 			-- Defaults to name.
 		do
 			Result := name
 		end
 
-	name: STRING is
+	name: STRING
 			-- The identifying name of the tradable
 		deferred
 		end
@@ -62,13 +62,13 @@ feature -- Access
 			-- Groupings of `indicators'
 			-- Each group has a unique name
 
-	indicator_group_names: ARRAY [STRING] is
+	indicator_group_names: ARRAY [STRING]
 			-- The name (key) of each group in `indicator_groups'
 		do
 			Result := indicator_groups.current_keys
 		end
 
-	tuple_list (period_type: STRING): SIMPLE_FUNCTION [BASIC_MARKET_TUPLE] is
+	tuple_list (period_type: STRING): SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
 			-- List associated with `period_type' whose tuples are
 			-- made from the base data
 		require
@@ -97,7 +97,7 @@ feature -- Access
 			-- Type of data (daily, weekly, etc.) specifying which
 			-- `tuple_list' will be processed by `indicators'.
 
-	period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING] is
+	period_types: HASH_TABLE [TIME_PERIOD_TYPE, STRING]
 			-- Valid period types for this tradable
 		require
 			loaded: loaded
@@ -130,7 +130,7 @@ feature -- Access
 
 feature -- Status report
 
-	indicators_processed: BOOLEAN is
+	indicators_processed: BOOLEAN
 			-- Have all elements of indicators been processed?
 		do
 			from
@@ -144,13 +144,13 @@ feature -- Status report
 			end
 		end
 
-	has_open_interest: BOOLEAN is
+	has_open_interest: BOOLEAN
 			-- Does the data returned by `data' and `tuple_list' contain
 			-- an open-interest field?
 		deferred
 		end
 
-	valid_period_type (t: TIME_PERIOD_TYPE): BOOLEAN is
+	valid_period_type (t: TIME_PERIOD_TYPE): BOOLEAN
 			-- Is `t' a valid period type for this tradable?
 		do
 			Result := period_types.has (t.name)
@@ -158,7 +158,7 @@ feature -- Status report
 			valid_if_in_period_types: Result = period_types.has (t.name)
 		end
 
-	valid_indicator (f: MARKET_FUNCTION): BOOLEAN is
+	valid_indicator (f: MARKET_FUNCTION): BOOLEAN
 			-- Is `f' a valid indicator for this tradable type?
 		do
 			Result := True
@@ -166,7 +166,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_target_period_type (arg: TIME_PERIOD_TYPE) is
+	set_target_period_type (arg: TIME_PERIOD_TYPE)
 			-- Set target_period_type to `arg' and update indicators so
 			-- that their inner input value is set to tuple_list (arg.name).
 		require
@@ -188,7 +188,7 @@ feature -- Status setting
 						and target_period_type /= Void
 		end
 
-	flush_indicators is
+	flush_indicators
 			-- Flush the contents of `indicators' - needed when the
 			-- indicators are shared with another tradable object.
 		do
@@ -197,7 +197,7 @@ feature -- Status setting
 
 feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 
-	set_trading_period_type (arg: TIME_PERIOD_TYPE) is
+	set_trading_period_type (arg: TIME_PERIOD_TYPE)
 		require
 			daily_if_not_intraday: not arg.intraday implies
 				arg.name.is_equal (arg.daily_name)
@@ -209,7 +209,7 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 			tpt_set: trading_period_type = arg
 		end
 
-	finish_loading is
+	finish_loading
 		do
 			Precursor
 			--@@@Note: With auto-refresh the following command will cause
@@ -223,7 +223,7 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 
 feature -- Element change
 
-	add_indicator (f: MARKET_FUNCTION) is
+	add_indicator (f: MARKET_FUNCTION)
 			-- Add `f' to `indicators' and set its inner input value
 			-- to tuple_list (target_period_type.name).
 		require
@@ -241,7 +241,7 @@ feature -- Element change
 
 feature -- Removal
 
-	remove_indicator (f: MARKET_FUNCTION) is
+	remove_indicator (f: MARKET_FUNCTION)
 			-- Remove `f' from `indicators'.
 		do
 			indicators.prune (f)
@@ -251,7 +251,7 @@ feature -- Removal
 
 feature -- Basic operations
 
-	process_indicators is
+	process_indicators
 			-- Ensure that all elements of `indicators' have been processed.
 		require
 			loaded: loaded
@@ -275,7 +275,7 @@ feature -- Basic operations
 
 feature {NONE} -- Initialization
 
-	tradable_initialize is
+	tradable_initialize
 			-- Establish the class invariant.
 		do
 			create {LINKED_LIST [MARKET_FUNCTION]} indicators.make
@@ -288,7 +288,7 @@ feature {NONE} -- Initialization
 					tuple_lists /= Void
 		end
 
-	initialize_tuple_lists is
+	initialize_tuple_lists
 			-- Add elements to tuple_lists.
 			-- Since composite tuples can only be made from tuples whose
 			-- trading periods are smaller, tuple_lists will
@@ -329,7 +329,7 @@ feature {NONE}
 feature {NONE}
 
 	process_composite_list (type: TIME_PERIOD_TYPE):
-				SIMPLE_FUNCTION [COMPOSITE_TUPLE] is
+				SIMPLE_FUNCTION [COMPOSITE_TUPLE]
 			-- Create a list of composite tuples from the base data.
 		local
 			ctf: COMPOSITE_TUPLE_FACTORY
@@ -355,7 +355,7 @@ feature {NONE}
 
 feature {NONE} -- Hook methods
 
-	make_ctf: COMPOSITE_TUPLE_FACTORY is
+	make_ctf: COMPOSITE_TUPLE_FACTORY
 			-- Create the appropriate type of tuple factory - intended
 			-- to be redefined in descendants - for example, to create
 			-- a COMPOSITE_VOLUME_TUPLE_FACTORY
@@ -366,7 +366,7 @@ feature {NONE} -- Hook methods
 
 feature {NONE} -- Inapplicable
 
-	sf_set_trading_period_type (arg: TIME_PERIOD_TYPE) is
+	sf_set_trading_period_type (arg: TIME_PERIOD_TYPE)
 		do
 			check
 				TRADABLE_sf_set_trading_period_type_not_called: False

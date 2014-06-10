@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A volume tuple with volume redefined as an attribute";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -22,7 +22,7 @@ feature -- Access
 
 feature {VALUE_SETTER, FACTORY}
 
-	set_volume (v: REAL) is
+	set_volume (v: REAL)
 			-- Set volume to `v'.
 		require
 			v >= 0
@@ -34,7 +34,7 @@ feature {VALUE_SETTER, FACTORY}
 
 feature {NONE}
 
-	adjust_volume_for_split (r: REAL) is
+	adjust_volume_for_split (r: REAL)
 		do
 			volume := (volume * r).floor
 		end

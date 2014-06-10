@@ -1,4 +1,4 @@
-indexing
+note
 	description: "An abstraction for a derivative instrument, which has %
 		%an open interest field, such as futures contracts for a commodity %
 		%or options contracts for a stock or stock index";
@@ -21,7 +21,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (sym: STRING; info: TRADABLE_DATA) is
+	make (sym: STRING; info: TRADABLE_DATA)
 		require
 			not_void: sym /= Void
 			symbol_not_empty: not sym.is_empty
@@ -38,7 +38,7 @@ feature -- Access
 
 	symbol: STRING
 
-	name: STRING is
+	name: STRING
 		do
 			if cached_name = Void then
 				if information /= Void then
@@ -51,15 +51,15 @@ feature -- Access
 			Result := cached_name
 		end
 
-	short_description: STRING is "Derivative instrument"
+	short_description: STRING = "Derivative instrument"
 
 feature -- Status report
 
-	has_open_interest: BOOLEAN is True
+	has_open_interest: BOOLEAN = True
 
 feature {NONE} -- Implementation
 
-	make_ctf: COMPOSITE_TUPLE_FACTORY is
+	make_ctf: COMPOSITE_TUPLE_FACTORY
 -- !!!! indexing once_status: global??!!! [probaly not, but check]
 		once
 			create {COMPOSITE_OI_TUPLE_FACTORY} Result

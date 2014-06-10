@@ -1,4 +1,4 @@
-indexing
+note
 	description: "MCT_COMMAND to terminate the server process"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,7 +21,7 @@ create
 
 feature -- Initialization
 
-	make (id: STRING) is
+	make (id: STRING)
 		require
 			id_exists: id /= Void
 			id_not_empty: not id.is_empty
@@ -33,15 +33,15 @@ feature -- Initialization
 
 feature -- Access
 
-	contents: STRING is ""
+	contents: STRING = ""
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is True
+	arg_mandatory: BOOLEAN = True
 
 feature -- Basic operations
 
-	execute (window: SESSION_WINDOW) is
+	execute (window: SESSION_WINDOW)
 		local
 			connection: CONNECTION
 			proc: EPX_EXEC_PROCESS

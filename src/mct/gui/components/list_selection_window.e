@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Windows that present a multi-column list for selection"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -28,7 +28,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (ttl: STRING; rows: LIST [LIST [STRING]]) is
+	make (ttl: STRING; rows: LIST [LIST [STRING]])
 		require
 			args_exist: ttl /= Void and rows /= Void
 			title_row_exists: rows.count > 0
@@ -43,7 +43,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	selected_item: EV_MULTI_COLUMN_LIST_ROW is
+	selected_item: EV_MULTI_COLUMN_LIST_ROW
 			-- Row selected by the user
 		do
 			Result := list.selected_item
@@ -54,7 +54,7 @@ feature -- Access
 
 feature {NONE} -- Implementation - initialization
 
-	create_contents (rows: LIST [LIST [STRING]]) is
+	create_contents (rows: LIST [LIST [STRING]])
 		do
 			-- Avoid flicker on some platforms.
 			lock_update
@@ -66,7 +66,7 @@ feature {NONE} -- Implementation - initialization
 			unlock_update
 		end
 
-	components (rows: LIST [LIST [STRING]]): EV_CONTAINER is
+	components (rows: LIST [LIST [STRING]]): EV_CONTAINER
 		do
 			create {EV_VERTICAL_BOX} Result
 			create list
@@ -86,7 +86,7 @@ feature {NONE} -- Implementation - initialization
 				Extra_height + (rows.count + 1) * Estimated_character_height)
 		end
 
-	add_row (l: LIST [STRING]) is
+	add_row (l: LIST [STRING])
 			-- Add row `l' to `list'.
 		local
 			r: EV_MULTI_COLUMN_LIST_ROW
@@ -97,7 +97,7 @@ feature {NONE} -- Implementation - initialization
 			list.extend (r)
 		end
 
-	add_titles (row: LIST [STRING]) is
+	add_titles (row: LIST [STRING])
 			-- Add the column titles for the selection list.
 		do
 			from
@@ -110,7 +110,7 @@ feature {NONE} -- Implementation - initialization
 			end
 		end
 
-	update_list_widths (l: LIST [STRING]) is
+	update_list_widths (l: LIST [STRING])
 		do
 			from
 				l.start
@@ -124,7 +124,7 @@ feature {NONE} -- Implementation - initialization
 			end
 		end
 
-	set_max_list_widths is
+	set_max_list_widths
 		local
 			i: INTEGER
 		do
@@ -149,15 +149,15 @@ feature {NONE} -- Implementation - attributes
 
 feature {NONE} -- Implementation - constants
 
-	Estimated_character_width: INTEGER is 8
+	Estimated_character_width: INTEGER = 8
 
-	Estimated_character_height: INTEGER is 24
+	Estimated_character_height: INTEGER = 24
 
-	Extra_height: INTEGER is 18
+	Extra_height: INTEGER = 18
 
 feature {NONE} -- Implementation - GUI callback routines
 
-	key_response (key: EV_KEY) is
+	key_response (key: EV_KEY)
 			-- Response to key-press event
 		local
 			keys: expanded EV_KEY_CONSTANTS
@@ -167,7 +167,7 @@ feature {NONE} -- Implementation - GUI callback routines
 			end
 		end
 
-	double_click_response (i, j, k: INTEGER; x, y, z: DOUBLE; l, m: INTEGER) is
+	double_click_response (i, j, k: INTEGER; x, y, z: DOUBLE; l, m: INTEGER)
 			-- Response to double-click event
 		do
 			respond_to_selection
@@ -175,7 +175,7 @@ feature {NONE} -- Implementation - GUI callback routines
 
 feature {NONE} -- Implementation
 
-	respond_to_selection is
+	respond_to_selection
 		do
 			notify_clients
 			destroy

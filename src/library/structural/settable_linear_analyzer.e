@@ -1,4 +1,4 @@
-indexing
+note
 	description: "LINEAR_ANALYZERs that have a settable `target' attribute"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,7 +21,7 @@ feature {FACTORY, COMMAND}
 
 feature -- Initialization
 
-	set (s: like target) is
+	set (s: like target)
 			-- Make `s' the new target of iterations.
 		require
 			target_exists: s /= Void

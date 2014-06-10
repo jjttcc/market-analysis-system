@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Configuration of environment/platform-dependent settings"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -28,13 +28,13 @@ create
 
 feature {NONE} -- Initialization
 
-	make (config_file_path: STRING) is
+	make (config_file_path: STRING)
 		do
 			create new_file_reader.make (config_file_path)
 			cu_make
 		end
 
-	initialize is
+	initialize
 		do
 			create replacement_specifications.make (0)
 			create settings.make (0)
@@ -44,7 +44,7 @@ feature -- Access
 
 	replacement_specifications: HASH_TABLE [STRING, STRING]
 
-	additional_settings_report: STRING is
+	additional_settings_report: STRING
 			-- Additional settings, if any, formatted as a string
 		do
 			Result := ""
@@ -59,17 +59,17 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation - Hook routine implementations
 
-	key_index: INTEGER is 1
+	key_index: INTEGER = 1
 
-	value_index: INTEGER is 2
+	value_index: INTEGER = 2
 
-	configuration_type: STRING is "Configuration Tool"
+	configuration_type: STRING = "Configuration Tool"
 
-	check_results is
+	check_results
 		do
 		end
 
-	use_customized_setting (key, value: STRING): BOOLEAN is
+	use_customized_setting (key, value: STRING): BOOLEAN
 		do
 			if
 				equal (key, Replacement_specifier) or in_replace_block
@@ -78,7 +78,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 			end
 		end
 
-	do_customized_setting (key, value: STRING) is
+	do_customized_setting (key, value: STRING)
 		do
 			if equal (key, Replacement_specifier) then
 				if equal (value, Start_specifier) then
@@ -98,7 +98,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 
 feature {NONE} -- Implementation
 
-	field_separator: STRING is ""
+	field_separator: STRING = ""
 
 	in_replace_block: BOOLEAN
 

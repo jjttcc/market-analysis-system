@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Root class for the MAS Control Terminal, an application to control %
 		%the MAS server, charting client, and other MAS components"
@@ -27,7 +27,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make is
+	make
         do
 			setup_application
 			if setup_succeeded then
@@ -35,7 +35,7 @@ feature {NONE} -- Initialization
 			end
         end
 
-	setup_application is
+	setup_application
         local
             main_window: EV_TITLED_WINDOW
 		do
@@ -63,7 +63,7 @@ feature {NONE} -- Initialization
 			launch
 		end
 
-	event_loop is
+	event_loop
 		do
 			launch
 		rescue
@@ -79,12 +79,12 @@ feature {NONE} -- Initialization
 			retry
 		end
 
-	command_line_options: COMMAND_LINE is
+	command_line_options: COMMAND_LINE
 		do
 			Result := builder.command_line
 		end
 
-	version: MAS_PRODUCT_INFO is
+	version: MAS_PRODUCT_INFO
 		once
 			create Result
 		end
@@ -94,19 +94,19 @@ feature {NONE} -- Initialization
 
 feature {NONE} -- Implementation
 
-	button_abort (i, j, k: INTEGER; x, y, z: DOUBLE; l, m: INTEGER) is
+	button_abort (i, j, k: INTEGER; x, y, z: DOUBLE; l, m: INTEGER)
 		do
 			exit (1)
 		end
 
-	key_abort (e: EV_KEY) is
+	key_abort (e: EV_KEY)
 		do
 			exit (1)
 		end
 
 	exit_needed: BOOLEAN
 
-	log_error (msg: STRING) is
+	log_error (msg: STRING)
 		local
 			wbldr: expanded WIDGET_BUILDER
 			dialog: EV_MESSAGE_DIALOG
@@ -124,10 +124,10 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - hook routine implementations
 
-	application_name: STRING is "application"
+	application_name: STRING = "application"
 
 feature {NONE} -- Implementation - constants
 
-	Setup_failed_msg: STRING is "Initialization failed."
+	Setup_failed_msg: STRING = "Initialization failed."
 
 end

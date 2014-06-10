@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Allowed values for an '<object> menu' selection"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -10,22 +10,22 @@ deferred class OBJECT_MENU_VALUES inherit
 
 feature -- Access
 
-	description: CHARACTER is 'd'
+	description: CHARACTER = 'd'
 		-- Constant for 'description' selection
 
-	description_u: CHARACTER is 'D'
+	description_u: CHARACTER = 'D'
 		-- Constant for 'description' selection, uppercase
 
-	choose: CHARACTER is 'c'
+	choose: CHARACTER = 'c'
 		-- Constant for 'choice' selection
 
-	choose_u: CHARACTER is 'C'
+	choose_u: CHARACTER = 'C'
 		-- Constant for 'choice' selection, uppercase
 
-	another_choice: CHARACTER is 'a'
+	another_choice: CHARACTER = 'a'
 		-- Constant for 'another choice' selection
 
-	another_choice_u: CHARACTER is 'A'
+	another_choice_u: CHARACTER = 'A'
 		-- Constant for 'another choice' selection, uppercase
 
 end

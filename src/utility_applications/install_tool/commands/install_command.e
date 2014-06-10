@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Objects that process a target file according to a set of%
 		%specifications"
 	author: "Jim Cochrane"
@@ -23,7 +23,7 @@ deferred class INSTALL_COMMAND inherit
 
 feature -- Access
 
-	description: STRING is
+	description: STRING
 		deferred
 		end
 

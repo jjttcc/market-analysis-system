@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A linear analyzer that processes two target lists"
 	author: "Jim Cochrane"
@@ -35,7 +35,7 @@ class TWO_VARIABLE_LINEAR_ANALYZER inherit
 
 feature {MARKET_FUNCTION_EDITOR} -- Hook routines
 
-	forth is
+	forth
 		do
 			target1.forth
 			target2.forth
@@ -45,7 +45,7 @@ feature {MARKET_FUNCTION_EDITOR} -- Hook routines
 				target2.index = old target2.index + 1
 		end
 
-	start is
+	start
 		do
 			line_up (target1, target2)
 		ensure then
@@ -56,13 +56,13 @@ feature {MARKET_FUNCTION_EDITOR} -- Hook routines
 
 feature {MARKET_FUNCTION_EDITOR} -- Implementation
 
-	set1 (t: like target1) is
+	set1 (t: like target1)
 			-- Replacement for `set' - set `target1'.
 		do
 			target1 := t
 		end
 
-	set2 (t: like target2) is
+	set2 (t: like target2)
 			-- Replacement for `set' - set `target2'.
 		do
 			target2 := t
@@ -70,7 +70,7 @@ feature {MARKET_FUNCTION_EDITOR} -- Implementation
 
 feature {MARKET_FUNCTION_EDITOR} -- Utility routines
 
-	missing_periods (l1, l2: LINEAR [MARKET_TUPLE]): BOOLEAN is
+	missing_periods (l1, l2: LINEAR [MARKET_TUPLE]): BOOLEAN
 			-- Are there missing periods in l1 and l2 with
 			-- respect to each other?
 		require
@@ -105,7 +105,7 @@ feature {MARKET_FUNCTION_EDITOR} -- Utility routines
 			void_gives_false: (l1 = Void and l2 = Void) implies (Result = False)
 		end
 
-	line_up (t1, t2: LINEAR [MARKET_TUPLE]) is
+	line_up (t1, t2: LINEAR [MARKET_TUPLE])
 			-- Line up t1 and t2 so that they start on the same time period.
 		require
 			not_empty: not t1.is_empty and not t2.is_empty

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Global features needed by the application"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -30,7 +30,7 @@ class GLOBAL_APPLICATION inherit
 
 feature -- Access
 
-	event_types: ARRAY [EVENT_TYPE] is
+	event_types: ARRAY [EVENT_TYPE]
 			-- All event types known to the system - in an array.
 		local
 			i: INTEGER
@@ -49,7 +49,7 @@ feature -- Access
 			end
 		end
 
-	event_types_by_key: HASH_TABLE [EVENT_TYPE, INTEGER] is
+	event_types_by_key: HASH_TABLE [EVENT_TYPE, INTEGER]
 			-- All event types known to the system in a hash table - key
 			-- is the event type ID.
 		do
@@ -68,7 +68,7 @@ feature -- Access
 
 	create_event_generator (eg_maker: EVENT_GENERATOR_FACTORY;
 				event_type_name: STRING;
-				meg_list: STORABLE_LIST [MARKET_EVENT_GENERATOR]) is
+				meg_list: STORABLE_LIST [MARKET_EVENT_GENERATOR])
 			-- Create a new MARKET_EVENT_GENERATOR and a new associated
 			-- EVENT_TYPE (with `event_type_name') and add the new
 			-- MARKET_EVENT_GENERATOR  to `meg_list'.
@@ -87,7 +87,7 @@ feature -- Access
 				meg_list.has (eg_maker.product)
 		end
 
-	function_library: STORABLE_LIST [MARKET_FUNCTION] is
+	function_library: STORABLE_LIST [MARKET_FUNCTION]
 			-- All defined market functions - Side effect:
 			-- create_stock_function_library is called (once) to fill
 			-- stock_function_library with valid (for a stock) members
@@ -99,7 +99,7 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	market_event_generation_library: STORABLE_LIST [MARKET_EVENT_GENERATOR] is
+	market_event_generation_library: STORABLE_LIST [MARKET_EVENT_GENERATOR]
 			-- All defined event generators - Side effect:
 			-- create_stock_market_event_generation_library is called (once)
 			-- to fill stock_market_event_generation_library with valid
@@ -111,7 +111,7 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	market_event_registrants: STORABLE_LIST [MARKET_EVENT_REGISTRANT] is
+	market_event_registrants: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
 			-- All defined event registrants
 -- !!!! indexing once_status: global??!!!
 		once
@@ -120,7 +120,7 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	active_event_generators: LIST [MARKET_EVENT_GENERATOR] is
+	active_event_generators: LIST [MARKET_EVENT_GENERATOR]
 			-- Event generators in which at least one event registrant
 			-- is interested.
 		local
@@ -160,7 +160,7 @@ feature -- Access
 		end
 
 	meg_names (meg_lib: LIST [MARKET_EVENT_GENERATOR]):
-				ARRAYED_LIST [STRING] is
+				ARRAYED_LIST [STRING]
 			-- Names of all elements of `meg_lib' if not Void; otherwise,
 			-- of `market_event_generation_library', in the same order
 		local
@@ -183,7 +183,7 @@ feature -- Access
 			end
 		end
 
-	function_names: ARRAYED_LIST [STRING] is
+	function_names: ARRAYED_LIST [STRING]
 			-- Names of all elements of `function_library', in the same order
 		do
 			create Result.make (function_library.count)
@@ -197,7 +197,7 @@ feature -- Access
 			end
 		end
 
-	event_type_names: ARRAYED_LIST [STRING] is
+	event_type_names: ARRAYED_LIST [STRING]
 			-- Names of all elements of `event_types', in the same order
 		local
 			etypes: LINEAR [EVENT_TYPE]
@@ -216,14 +216,14 @@ feature -- Access
 
 feature -- Basic operations
 
-	force_function_library_retrieval is
+	force_function_library_retrieval
 			-- Force function library to be re-retrieved by deep copying
 			-- `retrieved_function_library' into it.
 		do
 			deep_copy_list (function_library, retrieved_function_library)
 		end
 
-	force_meg_library_retrieval is
+	force_meg_library_retrieval
 			-- Force market event generator library to be re-retrieved by deep
 			-- copying `retrieved_market_event_generation_library' into it.
 		do
@@ -231,7 +231,7 @@ feature -- Basic operations
 				retrieved_market_event_generation_library)
 		end
 
-	force_event_registrant_retrieval is
+	force_event_registrant_retrieval
 			-- Force event registrants to be re-retrieved by deep copying
 			-- `retrieved_market_event_registrants' into it.
 		do
@@ -241,40 +241,40 @@ feature -- Basic operations
 
 feature -- Constants
 
-	indicators_file_name: STRING is
+	indicators_file_name: STRING
 			-- Name of the file containing persistent data for indicators
-		indexing
+		note
 			once_status: global
 		once
 			Result := "indicators_persist"
 		end
 
-	generators_file_name: STRING is
+	generators_file_name: STRING
 			-- Name of the file containing persistent data for event generators
-		indexing
+		note
 			once_status: global
 		once
 			Result := "generators_persist"
 		end
 
-	registrants_file_name: STRING is
+	registrants_file_name: STRING
 			-- Name of the file containing persistent data for event
 			-- registrants
-		indexing
+		note
 			once_status: global
 		once
 			Result := "registrants_persist"
 		end
 
-	future_years: INTEGER is 100
+	future_years: INTEGER = 100
 			-- Number of years in the future for `future_date' and
 			-- `future_date_time'
 
-	future_date: DATE is
+	future_date: DATE
 			-- A date some time in the future - used to implement an
 			-- "eternal now" (a date that will always be larger than any
 			-- realistic market tuple date)
-		indexing
+		note
 			once_status: global
 		once
 			create Result.make_now
@@ -283,11 +283,11 @@ feature -- Constants
 			exists: Result /= Void
 		end
 
-	future_date_time: DATE_TIME is
+	future_date_time: DATE_TIME
 			-- A date/time some time in the future - used to implement an
 			-- "eternal now" (a date/time that will always be larger than any
 			-- realistic market tuple date)
-		indexing
+		note
 			once_status: global
 		once
 			create Result.make_now
@@ -298,7 +298,7 @@ feature -- Constants
 
 feature {NONE} -- Implementation
 
-	retrieved_function_library: STORABLE_LIST [MARKET_FUNCTION] is
+	retrieved_function_library: STORABLE_LIST [MARKET_FUNCTION]
 		local
 			storable: STORABLE
 			mflist: STORABLE_LIST [MARKET_FUNCTION]
@@ -336,7 +336,7 @@ feature {NONE} -- Implementation
 		end
 
 	retrieved_market_event_generation_library:
-				STORABLE_LIST [MARKET_EVENT_GENERATOR] is
+				STORABLE_LIST [MARKET_EVENT_GENERATOR]
 			-- All defined event generators
 		local
 			storable: STORABLE
@@ -373,7 +373,7 @@ feature {NONE} -- Implementation
 		end
 
 	retrieved_market_event_registrants:
-				STORABLE_LIST [MARKET_EVENT_REGISTRANT] is
+				STORABLE_LIST [MARKET_EVENT_REGISTRANT]
 			-- All defined event registrants
 		local
 			storable: STORABLE
@@ -407,14 +407,14 @@ feature {NONE} -- Implementation
 			retry
 		end
 
-	stock_function_library: LIST [MARKET_FUNCTION] is
+	stock_function_library: LIST [MARKET_FUNCTION]
 			-- Members of `function_library' that are valid for stocks
 -- !!!! indexing once_status: global??!!!
 		once
 			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 		end
 
-	create_stock_function_library (l: LIST [MARKET_FUNCTION]) is
+	create_stock_function_library (l: LIST [MARKET_FUNCTION])
 			-- Create `stock_function_library' and place all members of
 			-- `l' that are `valid_stock_processor's into it.
 		do
@@ -427,7 +427,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	stock_market_event_generation_library: LIST [MARKET_EVENT_GENERATOR] is
+	stock_market_event_generation_library: LIST [MARKET_EVENT_GENERATOR]
 			-- Members of `market_event_generation_library' that are valid
 			-- for stocks
 -- !!!! indexing once_status: global??!!!
@@ -436,7 +436,7 @@ feature {NONE} -- Implementation
 		end
 
 	create_stock_market_event_generation_library (
-		l: LIST [MARKET_EVENT_GENERATOR]) is
+		l: LIST [MARKET_EVENT_GENERATOR])
 			-- Create `stock_market_event_generation_library' and place all
 			-- members of `l' that are `valid_stock_processor's into it.
 		do
@@ -450,7 +450,7 @@ feature {NONE} -- Implementation
 		end
 
 	new_event_type (name: STRING;
-		meg_library: STORABLE_LIST [MARKET_EVENT_GENERATOR]): EVENT_TYPE is
+		meg_library: STORABLE_LIST [MARKET_EVENT_GENERATOR]): EVENT_TYPE
 			-- Create a new EVENT_TYPE with name `name' and a unique ID -
 			-- and ID that does not occur in `meg_library', or if
 			-- `meg_library' is Void, that does not occur in
@@ -471,7 +471,7 @@ feature {NONE} -- Implementation
 			new_type: not event_types_by_key.has (Result.id)
 		end
 
-	maximum_id_value (l: LIST [MARKET_EVENT_GENERATOR]): INTEGER is
+	maximum_id_value (l: LIST [MARKET_EVENT_GENERATOR]): INTEGER
 			-- The largest EVENT_TYPE ID value in `l'
 		do
 			from
@@ -487,7 +487,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	file_errinfo: STRING is
+	file_errinfo: STRING
 			-- Standard error message for problems loading from files
 		do
 			Result := "The file may be corrupted or you may have %

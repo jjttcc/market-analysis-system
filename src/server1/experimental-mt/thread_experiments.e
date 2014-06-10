@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Manager of multi-threading experiments"
 		"Dummy thread class - stand-in until threads are actually used"
 	author: "Jim Cochrane"
@@ -15,7 +15,7 @@ create
 
 feature
 
-	make (run_test: BOOLEAN) is
+	make (run_test: BOOLEAN)
 		do
 			if run_test then
 				create thread

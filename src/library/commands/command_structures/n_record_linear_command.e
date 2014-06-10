@@ -1,6 +1,6 @@
-indexing
+note
 	description: "Linear commands that process n market tuples at a time"
-	note:
+	note1:
 		"By default, the execute routine will process the last n trading %
 		%periods from the current period (that is, from the current %
 		%item - n + 1 to the current item).  Descendants may override this %
@@ -51,7 +51,7 @@ deferred class N_RECORD_LINEAR_COMMAND inherit
 
 feature {NONE} -- Initialization
 
-	make (t: LIST [MARKET_TUPLE]; i: like n) is
+	make (t: LIST [MARKET_TUPLE]; i: like n)
 		require
 			t_not_void: t /= Void
 			i_gt_0: i > 0
@@ -64,7 +64,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	index: INTEGER is
+	index: INTEGER
 			-- The index of the current item being processed - from 1 to `n'
 		do
 			Result := n - index_offset
@@ -76,29 +76,29 @@ feature -- Access
 
 feature -- Status report
 
-	index_is_target_based: BOOLEAN is
+	index_is_target_based: BOOLEAN
 		do
 			Result := False
 		end
 
-	index_is_n_based: BOOLEAN is
+	index_is_n_based: BOOLEAN
 			-- Is `index' the current value in a numeric sequence
 			-- based on the value of `n'?
 		do
 			Result := True
 		end
 
-	arg_mandatory: BOOLEAN is
-		indexing
+	arg_mandatory: BOOLEAN
+		note
 			once_status: global
 		once
 			Result := False
 		end
 
-	target_cursor_not_affected: BOOLEAN is
+	target_cursor_not_affected: BOOLEAN
 			-- True if `operand' does not change the cursor in its
 			-- `execute' routine
-		indexing
+		note
 			once_status: global
 		once
 			Result := True
@@ -106,11 +106,11 @@ feature -- Status report
 
 feature {MARKET_FUNCTION} -- Initialization
 
-	initialize (arg: N_RECORD_STRUCTURE) is
+	initialize (arg: N_RECORD_STRUCTURE)
 		local
 			l: LINEAR_ANALYZER
 		do
-			{N_RECORD_COMMAND} Precursor (arg)
+			Precursor {N_RECORD_COMMAND} (arg)
 			l ?= arg
 			check
 				arg_conforms_to_linear_analyzer: l /= Void
@@ -121,7 +121,7 @@ feature {MARKET_FUNCTION} -- Initialization
 
 feature {COMMAND_EDITOR} -- Initialization
 
-	set_n (i: INTEGER) is
+	set_n (i: INTEGER)
 		do
 			Precursor (i)
 			index_offset := initial_index_offset
@@ -129,37 +129,37 @@ feature {COMMAND_EDITOR} -- Initialization
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		do
 			do_all
 		end
 
 feature {NONE} -- Implementation
 
-	forth is
+	forth
 		do
 			index_offset := index_offset - 1
 		ensure then
 			index_incremented: index = old index + 1
 		end
 
-	start is
+	start
 		do
 			index_offset := n - 1
 			start_init
 		end
 
-	action is
+	action
 		do
 			sub_action (target.index - index_offset)
 		end
 
-	exhausted: BOOLEAN is
+	exhausted: BOOLEAN
 		do
 			Result := index_offset = -1
 		end
 
-	invariant_value: BOOLEAN is
+	invariant_value: BOOLEAN
 		do
 			Result := not exhausted implies
 						target.valid_index (target.index - index_offset)
@@ -172,7 +172,7 @@ feature {NONE} -- Implementation
 
 	target: LIST [MARKET_TUPLE]
 
-	initial_index_offset: INTEGER is
+	initial_index_offset: INTEGER
 		require
 			n_set: n > 0
 		do
@@ -181,13 +181,13 @@ feature {NONE} -- Implementation
 
 feature {NONE}
 
-	start_init is
+	start_init
 			-- Extra initialization required by start
 			-- Defaults to do nothing.
 		do
 		end
 
-	sub_action (current_index: INTEGER) is
+	sub_action (current_index: INTEGER)
 			-- Action taken by descendant class - null by default
 		do
 		end

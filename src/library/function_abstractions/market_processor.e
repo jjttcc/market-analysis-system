@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Objects that perform processing on market data using one or %
 		%more MARKET_FUNCTIONs and COMMANDs"
@@ -12,7 +12,7 @@ deferred class MARKET_PROCESSOR inherit
 
 feature -- Access
 
-	functions: LIST [MARKET_FUNCTION] is
+	functions: LIST [MARKET_FUNCTION]
 			-- All functions used directly or indirectly by this market
 			-- processor, including itself, if it is a function
 		deferred
@@ -20,14 +20,14 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	parameters: LIST [FUNCTION_PARAMETER] is
+	parameters: LIST [FUNCTION_PARAMETER]
 			-- Changeable parameters for `functions'
 		deferred
 		ensure
 			not_void: Result /= Void
 		end
 
-	operators: LIST [COMMAND] is
+	operators: LIST [COMMAND]
 			-- All operators used directly or indirectly by this market
 			-- processor, including those used by `functions'
 		deferred

@@ -1,6 +1,6 @@
-indexing
+note
 	description: "A linear command that gets its input from a MARKET_FUNCTION"
-	note: "@@This class has recently been modified to be used for indicators %
+	note1: "@@This class has recently been modified to be used for indicators %
 		%in addition to its original use by ONE_VARIABLE_FUNCTION_ANALYZER.%
 		%Although this new functionality has been tested successfully, it %
 		%has not yet been tested thoroughly."
@@ -34,7 +34,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (in: like input; op: like operand) is
+	make (in: like input; op: like operand)
 		require
 			not_void: in /= Void and op /= Void
 		do
@@ -47,7 +47,7 @@ feature {NONE} -- Initialization
 
 feature -- Initialization
 
-	initialize (a: LINEAR_ANALYZER) is
+	initialize (a: LINEAR_ANALYZER)
 		local
 			analyzer: ONE_VARIABLE_FUNCTION_ANALYZER
 			function: MARKET_FUNCTION
@@ -106,8 +106,8 @@ feature -- Status report
 
 	target_cursor_not_affected: BOOLEAN
 
-	is_editable: BOOLEAN is
-		indexing
+	is_editable: BOOLEAN
+		note
 			once_status: global
 		once
 			Result := True
@@ -115,7 +115,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_input (arg: like input) is
+	set_input (arg: like input)
 			-- Set input to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -128,7 +128,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		do
 			if function_based then
 				synchronize_target_with_innermost_input
@@ -152,7 +152,7 @@ feature -- Basic operations
 			end
 		end
 
-	prepare_for_editing (l: LIST [FUNCTION_PARAMETER]) is
+	prepare_for_editing (l: LIST [FUNCTION_PARAMETER])
 		do
 			input.parameters.do_all (agent l.extend)
 		end
@@ -166,7 +166,7 @@ feature {NONE} -- Implementation
 	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE]
 			-- Innermost input sequence of `input' - used for efficiency
 
-	synchronize_target_with_innermost_input is
+	synchronize_target_with_innermost_input
 			-- Synchronize `target' with `innermost_input'.
 		require
 			innermost_input_not_off: not innermost_input.off

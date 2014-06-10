@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Abstraction for a user interface that allows the user to edit %
 		%application elements"
@@ -30,7 +30,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_editor (arg: like editor) is
+	set_editor (arg: like editor)
 			-- Set editor to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -43,7 +43,7 @@ feature -- Status setting
 feature -- Access
 
 	choice (descr: STRING; choices: LIST [PAIR [STRING, BOOLEAN]];
-				allowed_selections: INTEGER) is
+				allowed_selections: INTEGER)
 			-- The user's selections of the specified choices -
 			-- from 1 to choices.count selections (with `descr' providing
 			-- a description of the choices to the user)
@@ -68,7 +68,7 @@ feature -- Access
 			-- member of all other elements of `choices' is False.
 		end
 
-	choices_from (l: LINEAR [PAIR [STRING, BOOLEAN]]): LIST [STRING] is
+	choices_from (l: LINEAR [PAIR [STRING, BOOLEAN]]): LIST [STRING]
 			-- Choices from `l' - items marked as True
 		require
 			not_void: l /= Void
@@ -86,7 +86,7 @@ feature -- Access
 			Result_exists: Result /= Void
 		end
 
-	character_choice (msg, chars: STRING): CHARACTER is
+	character_choice (msg, chars: STRING): CHARACTER
 		do
 			from
 			until
@@ -96,27 +96,27 @@ feature -- Access
 			end
 		end
 
-	character_selection (msg: STRING): CHARACTER is
+	character_selection (msg: STRING): CHARACTER
 			-- User-selected character
 		deferred
 		end
 
-	integer_selection (msg: STRING): INTEGER is
+	integer_selection (msg: STRING): INTEGER
 			-- User-selected integer value
 		deferred
 		end
 
-	real_selection (msg: STRING): REAL is
+	real_selection (msg: STRING): REAL
 			-- User-selected real value
 		deferred
 		end
 
-	string_selection (msg: STRING): STRING is
+	string_selection (msg: STRING): STRING
 			-- User-selected string value
 		deferred
 		end
 
-	visible_string_selection (msg: STRING): STRING is
+	visible_string_selection (msg: STRING): STRING
 			-- User-selected string value with at least one visible character,
 			-- left-adjusted
 		local
@@ -136,20 +136,20 @@ feature -- Access
 			end
 		end
 
-	date_time_selection (msg: STRING): DATE_TIME is
+	date_time_selection (msg: STRING): DATE_TIME
 			-- User's selection of date/time
 		deferred
 		end
 
 feature -- Basic operations
 
-	show_message (msg: STRING) is
+	show_message (msg: STRING)
 			-- Display `msg' to user -for example, as an error, warning, or
 			-- informational message.
 		deferred
 		end
 
-	report_errors is
+	report_errors
 			-- If `error_occurred', report `last_error' and set
 			-- `error_occurred' to False.
 		do
@@ -163,7 +163,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	reset_error is
+	reset_error
 		do
 			error_occurred := False
 		ensure
@@ -172,45 +172,45 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - constants
 
-	Exit_value: INTEGER is -1
+	Exit_value: INTEGER = -1
 			-- Value indicating menu is to be exited - negative so as not
 			-- to conflict with the unique values or with the numbered
 			-- list selections
 
-	Null_value: INTEGER is -2
+	Null_value: INTEGER = -2
 			-- Value indicating nullness - negative so as not
 			-- to conflict with the unique values or with the numbered
 			-- list selections
 
-	Show_help_value: INTEGER is 0
+	Show_help_value: INTEGER = 0
 			-- Value indicating "Help" selection
 
-	Save_value: INTEGER is 1
+	Save_value: INTEGER = 1
 			-- Value indicating "Save data" selection
 
-	Create_new_value: INTEGER is 2
+	Create_new_value: INTEGER = 2
 			-- Value indicating "Create new item" selection
 
-	Remove_value: INTEGER is 3
+	Remove_value: INTEGER = 3
 			-- Value indicating "Remove item" selection
 
-	View_value: INTEGER is 4
+	View_value: INTEGER = 4
 			-- Value indicating "View item" selection
 
-	Edit_value: INTEGER is 5
+	Edit_value: INTEGER = 5
 			-- Value indicating "Edit item" selection
 
 
 feature {NONE} -- Implementation - Hook methods
 
 	do_choice (descr: STRING; choices: LIST [PAIR [STRING, BOOLEAN]];
-				allowed_selections: INTEGER) is
+				allowed_selections: INTEGER)
 			-- Implementation of `choice'
 		deferred
 		end
 
 	multilist_selection (lists: ARRAY [PAIR [LIST [STRING], STRING]];
-				general_msg: STRING): INTEGER is
+				general_msg: STRING): INTEGER
 			-- User's selection of one element from one of the `lists'.
 			-- Display all lists in `lists' that are not empty and return
 			-- the relative position of the selected item.  For example,
@@ -225,7 +225,7 @@ feature {NONE} -- Implementation - Hook methods
 			-- Result <= total number of elements in `lists'
 		end
 
-	distinguish_duplicates (l: LIST [STRING]) is
+	distinguish_duplicates (l: LIST [STRING])
 			-- Distinguish each duplicate string in `l' by appending
 			-- " [#{n}]" to the duplicate, where {n} is the number of the
 			-- duplicate according to its reverse order in the list - from

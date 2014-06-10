@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Root class for the extended version of the %
 		%Market Analysis Server"
 	author: "Jim Cochrane"
@@ -24,7 +24,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		local
 			platform: expanded PLATFORM_DEPENDENT_OBJECTS
 			cl_dummy: MAS_COMMAND_LINE
@@ -34,7 +34,7 @@ feature {NONE} -- Initialization
 			mas_make
 		end
 
-	compile_this is
+	compile_this
 		local
 			-- "proprietary" components that are not currently used.
 			composite_tradable: COMPOSITE_TRADABLE
@@ -44,21 +44,21 @@ feature {NONE} -- Initialization
 
 feature {NONE} -- Hood routine implementations
 
-	polling_timeout_milliseconds: INTEGER is
+	polling_timeout_milliseconds: INTEGER
 		do
 			Result := extended_command_line.polling_timeout_milliseconds
 		end
 
 feature {NONE} -- Implementation
 
-	factory_builder: EXTENDED_GLOBAL_OBJECT_BUILDER is
+	factory_builder: EXTENDED_GLOBAL_OBJECT_BUILDER
 		once
 			create Result.make
 		end
 
 feature {NONE} -- Implementation - Attributes
 
-	extended_command_line: EXTENDED_MAS_COMMAND_LINE is
+	extended_command_line: EXTENDED_MAS_COMMAND_LINE
 		local
 			platform: expanded EXTENDED_PLATFORM_DEPENDENT_OBJECTS
 		do

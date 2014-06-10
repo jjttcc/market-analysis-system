@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Client socket connection to the server"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -37,7 +37,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	ping_server is
+	ping_server
 			-- "Ping" the server by attempting to log in and log back out.
 		require
 			not_logged_in: not logged_in
@@ -50,7 +50,7 @@ feature -- Basic operations
 			not_logged_in: not logged_in
 		end
 
-	login is
+	login
 			-- Log in to the server.
 		require
 			not_logged_in: not logged_in
@@ -72,7 +72,7 @@ feature -- Basic operations
 				last_communication_succeeded = logged_in
 		end
 
-	logout is
+	logout
 			-- Log out from the server.
 		require
 			logged_in: logged_in
@@ -84,7 +84,7 @@ feature -- Basic operations
 			not_logged_in: not logged_in
 		end
 
-	request_indicators is
+	request_indicators
 			-- Request list of all available indicators from the server.
 		require
 			logged_in: logged_in
@@ -105,7 +105,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	process_response (s: STRING) is
+	process_response (s: STRING)
 			-- Process server response `s' - set `server_response' and
 			-- `last_communication_succeeded' accordingly.
 		local
@@ -120,7 +120,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	process_error (l: LIST [STRING]; msg: STRING) is
+	process_error (l: LIST [STRING]; msg: STRING)
 			-- Process any errors in the server response, `l'.  If there
 			-- are errors, update `last_communication_succeeded' and
 			-- error_report accordingly.  (`msg' is the entire message
@@ -149,32 +149,32 @@ feature {NONE} -- Implementation - attributes
 
 feature {NONE} -- Implementation - constants
 
-	timeout_seconds: INTEGER is 10
+	timeout_seconds: INTEGER = 10
 			-- Number of seconds client will wait for server to respond
 			-- before reporting a "timed-out" message
 
-	login_request_msg: STRING is
+	login_request_msg: STRING
 			-- Login request to the server
 		once
 			Result := Login_request.out + message_component_separator + "0" +
 				message_component_separator + eom
 		end
 
-	logout_request_msg: STRING is
+	logout_request_msg: STRING
 			-- Logout request to the server
 		do
 			Result := Logout_request.out + message_component_separator +
 				session_key.out + message_component_separator + eom
 		end
 
-	all_indicators_request_msg: STRING is
+	all_indicators_request_msg: STRING
 			-- "all-indicators" request to the server
 		do
 			Result := All_indicators_request.out + message_component_separator +
 				session_key.out + message_component_separator + eom
 		end
 
-	end_of_message (c: CHARACTER): BOOLEAN is
+	end_of_message (c: CHARACTER): BOOLEAN
 		do
 			Result := c = eom @ 1
 		end

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Allowed values for a 'function menu' selection"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,7 +12,7 @@ class FUNCTION_MENU_VALUES inherit
 
 feature -- Access
 
-	type_name: STRING is "function"
+	type_name: STRING = "function"
 
 feature {NONE} -- Implementation
 

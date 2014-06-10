@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Builder of HTTP_LOADING_FILE_TRADABLE_LISTs"
 	author: "Jim Cochrane"
 	date: "$Date$";

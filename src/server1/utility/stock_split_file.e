@@ -1,7 +1,7 @@
-indexing
+note
 	description:
 		"Implementation of STOCK_SPLITS that loads its contents from a file"
-	note:
+	note1:
 		"It is assumed that the for each symbol that occurs in the input %
 		%file, the splits in the file for that symbol are sorted by %
 		%date ascending"
@@ -39,7 +39,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (field_sep, record_sep, input_file_name: STRING) is
+	make (field_sep, record_sep, input_file_name: STRING)
 		require
 			not_void: field_sep /= Void and input_file_name /= Void
 			fsep_size_1: field_sep.count = 1
@@ -71,7 +71,7 @@ feature {NONE} -- Initialization
 			rec_sep_is_newline: record_separator.is_equal ("%N")
 		end
 
-	open_file (fname: STRING) is
+	open_file (fname: STRING)
 			-- Open file safely - if it fails, is_open_read is False.
 		do
 			ptf_make (file_name)

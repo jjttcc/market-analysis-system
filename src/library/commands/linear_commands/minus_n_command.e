@@ -1,4 +1,4 @@
-indexing
+note
 	description: "N-record commands that operate on a target list by setting %
 		%the target's cursor n positions to the left, operating on the %
 		%target based on this cursor position, and then restoring the %
@@ -51,7 +51,7 @@ creation
 
 feature -- Initialization
 
-	make (tgt: like target; op: like operand; i: like n) is
+	make (tgt: like target; op: like operand; i: like n)
 		require
 			args_not_void: tgt /= Void and op /= Void
 			i_gt_0: i > 0
@@ -65,11 +65,11 @@ feature -- Initialization
 			adjustment_0: n_adjustment = 0
 		end
 
-	initialize (arg: N_RECORD_STRUCTURE) is
+	initialize (arg: N_RECORD_STRUCTURE)
 		local
 			l: LINEAR_ANALYZER
 		do
-			{N_RECORD_COMMAND} Precursor (arg)
+			Precursor {N_RECORD_COMMAND} (arg)
 			uo_initialize (arg)
 			l ?= arg
 			check
@@ -80,7 +80,7 @@ feature -- Initialization
 
 feature -- Access
 
-	external_offset: INTEGER is 0
+	external_offset: INTEGER = 0
 
 	n_adjustment: INTEGER
 			-- Value that will be added to `n' when
@@ -88,11 +88,11 @@ feature -- Access
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is False
+	arg_mandatory: BOOLEAN = False
 
 feature -- Status report
 
-	set_n_adjustment (arg: INTEGER) is
+	set_n_adjustment (arg: INTEGER)
 			-- Set n_adjustment to `arg'.
 		do
 			n_adjustment := arg
@@ -102,12 +102,12 @@ feature -- Status report
 
 feature {NONE} -- Implementation
 
-	offset: INTEGER is
+	offset: INTEGER
 		do
 			Result := - (n + n_adjustment)
 		end
 
-	operate (arg: ANY) is
+	operate (arg: ANY)
 		do
 			operand.execute (target.item)
 			value := operand.value

@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"FILE_BASED_TRADABLE_LISTs that originally obtain their tradable %
 		%data via an http GET request and cache the data by saving it to a %
@@ -43,7 +43,7 @@ creation
 
 feature -- Initialization
 
-	make (factory: TRADABLE_FACTORY; file_ext: STRING) is
+	make (factory: TRADABLE_FACTORY; file_ext: STRING)
 		require
 			valid_factory: factory /= Void
 		do
@@ -60,10 +60,10 @@ feature -- Access
 
 feature {NONE} -- Hook routine implementations
 
-	target_tradable_out_of_date: BOOLEAN is
+	target_tradable_out_of_date: BOOLEAN
 		do
 			Result := http_out_of_date and then
-				{EXTENDED_FILE_BASED_TRADABLE_LIST} Precursor
+				Precursor {EXTENDED_FILE_BASED_TRADABLE_LIST}
 		end
 
 end

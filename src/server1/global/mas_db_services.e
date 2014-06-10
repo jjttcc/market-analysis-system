@@ -1,4 +1,4 @@
-indexing
+note
 	description: "MAS database services"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,7 +21,7 @@ deferred class MAS_DB_SERVICES inherit
 feature -- Access
 
 
-	stock_symbols: LIST [STRING] is
+	stock_symbols: LIST [STRING]
 			-- All stock symbols available in the database
 		require
 			connected: connected
@@ -35,7 +35,7 @@ feature -- Access
 			still_connected: connected
 		end
 
-	derivative_symbols: LIST [STRING] is
+	derivative_symbols: LIST [STRING]
 			-- All derivative-instrument symbols available in the database
 		require
 			connected: connected
@@ -49,13 +49,13 @@ feature -- Access
 			still_connected: connected
 		end
 
-	stock_splits: STOCK_SPLITS is
+	stock_splits: STOCK_SPLITS
 			-- All stock splits available in the database - Void if not
 			-- available.
 		deferred
 		end
 
-	daily_data_for_symbol (s: STRING): DB_INPUT_SEQUENCE is
+	daily_data_for_symbol (s: STRING): DB_INPUT_SEQUENCE
 			-- Daily data for symbol `s' - stock data if `s' is a stock
 			-- symbol (stock_symbols.has (s)), derivative data is `s' is
 			-- a derivative-instrument symbol (derivative_symbols.has (s)).
@@ -88,7 +88,7 @@ feature -- Access
 			still_connected: connected
 		end
 
-	intraday_data_for_symbol (s: STRING): DB_INPUT_SEQUENCE is
+	intraday_data_for_symbol (s: STRING): DB_INPUT_SEQUENCE
 			-- Intraday data for symbol `s' - stock data if `s' is a stock
 			-- symbol (stock_symbols.has (s)), derivative data is `s' is
 			-- a derivative-instrument symbol (derivative_symbols.has (s)).
@@ -121,7 +121,7 @@ feature -- Access
 			still_connected: connected
 		end
 
-	daily_stock_data (symbol: STRING): DB_INPUT_SEQUENCE is
+	daily_stock_data (symbol: STRING): DB_INPUT_SEQUENCE
 			-- Daily stock data for `symbol'
 		require
 			connected: connected
@@ -131,7 +131,7 @@ feature -- Access
 			still_connected: connected
 		end
 
-	intraday_stock_data (symbol: STRING): DB_INPUT_SEQUENCE is
+	intraday_stock_data (symbol: STRING): DB_INPUT_SEQUENCE
 			-- Intraday stock data for `symbol'
 		require
 			connected: connected
@@ -141,7 +141,7 @@ feature -- Access
 			still_connected: connected
 		end
 
-	daily_derivative_data (symbol: STRING): DB_INPUT_SEQUENCE is
+	daily_derivative_data (symbol: STRING): DB_INPUT_SEQUENCE
 			-- Daily derivative data for `symbol'
 		require
 			connected: connected
@@ -151,7 +151,7 @@ feature -- Access
 			still_connected: connected
 		end
 
-	intraday_derivative_data (symbol: STRING): DB_INPUT_SEQUENCE is
+	intraday_derivative_data (symbol: STRING): DB_INPUT_SEQUENCE
 			-- Intraday derivative data for `symbol'
 		require
 			connected: connected
@@ -161,7 +161,7 @@ feature -- Access
 			still_connected: connected
 		end
 
-	stock_name (symbol: STRING): STRING is
+	stock_name (symbol: STRING): STRING
 			-- Name for stock whose symbol is `symbol'
 		require
 			connected: connected
@@ -181,7 +181,7 @@ feature -- Access
 			still_connected: connected
 		end
 
-	derivative_name (symbol: STRING): STRING is
+	derivative_name (symbol: STRING): STRING
 			-- Name for derivative whose symbol is `symbol'
 		require
 			connected: connected
@@ -201,7 +201,7 @@ feature -- Access
 			still_connected: connected
 		end
 
-	single_string_query_result (query: STRING): STRING is
+	single_string_query_result (query: STRING): STRING
 			-- 1-record, 1-column string result of executing `query'.  If
 			-- the result is more than one record, the first record is
 			-- returned; if 0 records or the query result is null, Result
@@ -215,12 +215,12 @@ feature -- Access
 			still_connected: connected
 		end
 
-	stock_data: STOCK_DATA is
+	stock_data: STOCK_DATA
 			-- Miscellaneous stock information from database
 		deferred
 		end
 
-	derivative_data: TRADABLE_DATA is
+	derivative_data: TRADABLE_DATA
 			-- Miscellaneous derivative-instrument information from database
 		deferred
 		end
@@ -228,7 +228,7 @@ feature -- Access
 	last_error: STRING
 			-- Description of last error that occured
 
-	is_stock_symbol (s: STRING): BOOLEAN is
+	is_stock_symbol (s: STRING): BOOLEAN
 			-- Is `s' a symbol for a stock?
 		local
 			symbols: LIST [STRING]
@@ -255,7 +255,7 @@ feature -- Access
 			end
 		end
 
-	is_derivative_symbol (s: STRING): BOOLEAN is
+	is_derivative_symbol (s: STRING): BOOLEAN
 			-- Is `s' a symbol for a derivative instrument?
 		local
 			symbols: LIST [STRING]
@@ -284,7 +284,7 @@ feature -- Access
 
 feature -- Status report
 
-	connected: BOOLEAN is
+	connected: BOOLEAN
 			-- Are we connected to the database?
 		deferred
 		end
@@ -297,7 +297,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_debugging (arg: BOOLEAN) is
+	set_debugging (arg: BOOLEAN)
 			-- Set `debugging' to `arg'.
 		do
 			debugging := arg
@@ -307,7 +307,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	connect is
+	connect
 			-- Connect to the database.
 		require
 			not_connected: not connected
@@ -316,7 +316,7 @@ feature -- Basic operations
 			connected: connected or fatal_error
 		end
 
-	disconnect is
+	disconnect
 			-- Disconnect from database.
 		require
 			connected: connected
@@ -327,7 +327,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	daily_stock_query (symbol: STRING): STRING is
+	daily_stock_query (symbol: STRING): STRING
 			-- Query for daily stock data
 		local
 			db_info: DATABASE_CONFIGURATION
@@ -350,7 +350,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	intraday_stock_query (symbol: STRING): STRING is
+	intraday_stock_query (symbol: STRING): STRING
 			-- Query for intraday stock data
 		local
 			db_info: DATABASE_CONFIGURATION
@@ -375,7 +375,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	daily_derivative_query (symbol: STRING): STRING is
+	daily_derivative_query (symbol: STRING): STRING
 			-- Query for daily derivative data
 		local
 			db_info: DATABASE_CONFIGURATION
@@ -400,7 +400,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	intraday_derivative_query (symbol: STRING): STRING is
+	intraday_derivative_query (symbol: STRING): STRING
 			-- Query for intraday derivative data
 		local
 			db_info: DATABASE_CONFIGURATION
@@ -426,7 +426,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	stock_name_query (symbol: STRING): STRING is
+	stock_name_query (symbol: STRING): STRING
 			-- Query for stock name from symbol - Void if the user-specified
 			-- query is invalid or non-existent.
 		local
@@ -445,7 +445,7 @@ feature {NONE} -- Implementation
 			not_void_if_ok: not fatal_error implies Result /= Void
 		end
 
-	derivative_name_query (symbol: STRING): STRING is
+	derivative_name_query (symbol: STRING): STRING
 			-- Query for derivative name from symbol - Void if the
 			-- user-specified query is invalid or non-existent.
 		local
@@ -464,7 +464,7 @@ feature {NONE} -- Implementation
 			not_void_if_ok: not fatal_error implies Result /= Void
 		end
 
-	open_string (db_info: DATABASE_CONFIGURATION): STRING is
+	open_string (db_info: DATABASE_CONFIGURATION): STRING
 			-- Open field string needed for query - empty if
 			-- not command_line_options.opening_price
 		local
@@ -478,7 +478,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	list_from_query (q: STRING): LIST [STRING] is
+	list_from_query (q: STRING): LIST [STRING]
 			-- List of STRING from query `q' with 1-column result
 		require
 			not_void: q /= Void
@@ -489,7 +489,7 @@ feature {NONE} -- Implementation
 		end
 
 	check_field_count (seq: DB_INPUT_SEQUENCE; tradable_type: TRADABLE_TYPE;
-		intraday: BOOLEAN; data_descr: STRING) is
+		intraday: BOOLEAN; data_descr: STRING)
 			-- Check the field count of `seq' according to whether it is
 			-- for a Stock or Derivative and whether its
 			-- data is intraday, and if the field count is wrong.

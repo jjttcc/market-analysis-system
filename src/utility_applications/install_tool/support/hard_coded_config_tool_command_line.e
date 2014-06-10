@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Parser of command-line arguments for the Configuration Tool"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -23,7 +23,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (cmd_file_path, tgt_file_path: STRING) is
+	make (cmd_file_path, tgt_file_path: STRING)
 		require
 			args_exist: cmd_file_path /= Void and tgt_file_path /= Void
 		do
@@ -36,7 +36,7 @@ feature {NONE} -- Initialization
 
 feature {NONE} -- Implementation queries
 
-	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]] is
+	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]]
 			-- List of the set_... procedures that are called
 			-- unconditionally - for convenience
 		once

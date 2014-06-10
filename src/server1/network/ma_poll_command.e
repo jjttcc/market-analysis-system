@@ -1,4 +1,4 @@
-indexing
+note
 
 	description:
 		"A poll command specialized for the Market Analysis server"
@@ -19,7 +19,7 @@ feature -- Access
 
 feature {NONE}
 
-	interface: MAIN_APPLICATION_INTERFACE is
+	interface: MAIN_APPLICATION_INTERFACE
 		deferred
 		end
 

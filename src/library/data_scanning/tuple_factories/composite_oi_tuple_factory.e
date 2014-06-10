@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Composite volume tuple factory that includes the sum of %
 		%the open interest of all elements in the market tuple list";
 	author: "Jim Cochrane"
@@ -16,7 +16,7 @@ class COMPOSITE_OI_TUPLE_FACTORY inherit
 
 feature {NONE}
 
-	do_auxiliary_work (tuples: LIST [MARKET_TUPLE]) is
+	do_auxiliary_work (tuples: LIST [MARKET_TUPLE])
 			-- Set product's volume to sum of all volumes in `tuples'.
 		local
 			operator: OPEN_INTEREST

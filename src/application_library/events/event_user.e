@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Abstraction for a user who is an event registrant"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -40,7 +40,7 @@ creation
 
 feature -- Initialization
 
-	make (event_history_file_name, field_sep, record_sep: STRING) is
+	make (event_history_file_name, field_sep, record_sep: STRING)
 		require
 			not_void: field_sep /= Void and record_sep /= Void
 		do
@@ -63,8 +63,8 @@ feature -- Initialization
 
 feature -- Access
 
-	type_description: STRING is
-		indexing
+	type_description: STRING
+		note
 			once_status: global
 		once
 			Result := "User"
@@ -72,7 +72,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	perform_notify is
+	perform_notify
 			-- Notify user of events in `event_cache' or log the error
 			-- if notification failed.
 		local
@@ -114,7 +114,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation - Hook routines
 
-	specialized_user_report: STRING is
+	specialized_user_report: STRING
 		do
 			Result := "%N"
 			if email_addresses.is_empty then

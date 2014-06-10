@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Parser of command-line arguments for the Installation Tool"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,19 +21,19 @@ creation
 
 feature {NONE} -- Initialization
 
-	prepare_for_argument_processing is
+	prepare_for_argument_processing
 		do
 			application_dir := ""
 		end
 
-	finish_argument_processing is
+	finish_argument_processing
 		do
 			initialization_complete := True
 		end
 
 feature -- Access
 
-	usage: STRING is
+	usage: STRING
 			-- Message: how to invoke the program from the command-line
 		do
 			Result := "Usage: " + command_name + " <application_directory>%N"
@@ -49,7 +49,7 @@ feature -- Access -- settings
 
 feature -- Element change
 
-	set_mctrc_contents (arg: STRING) is
+	set_mctrc_contents (arg: STRING)
 			-- Set `mctrc_contents' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -61,7 +61,7 @@ feature -- Element change
 
 feature {NONE} -- Implementation
 
-	set_application_dir is
+	set_application_dir
 			-- Set `application_dir' and remove its settings from `contents'.
 		do
 			from
@@ -92,7 +92,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation queries
 
-	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]] is
+	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]]
 			-- List of the set_... procedures that are called
 			-- unconditionally - for convenience
 		once
@@ -104,7 +104,7 @@ feature {NONE} -- Implementation queries
 
 feature {NONE} -- Implementation - Constants
 
-	Application_dir_error: STRING is
+	Application_dir_error: STRING
 		"Application direcotry was not specified.%N"
 
 invariant

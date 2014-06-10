@@ -1,7 +1,7 @@
-indexing
+note
 	description:
 		"Calculations based on the n-value from an n-record structure";
-	note: "The calculation is done by `make' and by `initialize'.";
+	note1: "The calculation is done by `make' and by `initialize'.";
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -17,7 +17,7 @@ deferred class N_BASED_CALCULATION inherit
 
 feature {FACTORY} -- Initialization
 
-	set_n (i: like n) is
+	set_n (i: like n)
 		do
 			Precursor (i)
 			-- Calculate is called here for efficiency, since in most
@@ -27,7 +27,7 @@ feature {FACTORY} -- Initialization
 			value = calculate
 		end
 
-	initialize (arg: ANY) is
+	initialize (arg: ANY)
 		local
 			nstruct: N_RECORD_STRUCTURE
 		do
@@ -39,11 +39,11 @@ feature {FACTORY} -- Initialization
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is False
+	arg_mandatory: BOOLEAN = False
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 			-- Does nothing.
 		do
 			-- Empty
@@ -51,7 +51,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implmentation
 
-	calculate: REAL is
+	calculate: REAL
 			-- Perform the calculation based on n.
 		deferred
 		end

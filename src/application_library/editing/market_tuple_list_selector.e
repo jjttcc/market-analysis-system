@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Interface for selecting a MARKET_FUNCTION's market tuple list"
 	author: "Jim Cochrane"
@@ -13,14 +13,14 @@ deferred class
 
 feature -- Access
 
-	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE] is
+	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE]
 			-- User-selected list of market tuples
 		deferred
 		end
 
 	market_function_selection (msg: STRING;
 		validity_checker: FUNCTION [ANY, TUPLE [MARKET_FUNCTION], BOOLEAN]):
-		MARKET_FUNCTION is
+		MARKET_FUNCTION
 			-- User-selected MARKET_FUNCTION from the function library,
 			-- filtered with `validity_checker' if it's not Void.
 		deferred

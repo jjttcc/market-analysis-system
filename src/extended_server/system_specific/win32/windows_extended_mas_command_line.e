@@ -1,4 +1,4 @@
-indexing
+note
 	description: "MAS_COMMAND_LINE for Windows, with extensions"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -24,7 +24,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 			emcl_make
 			windows_make

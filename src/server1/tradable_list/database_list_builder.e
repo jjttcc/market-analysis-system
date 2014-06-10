@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Builder of DB_TRADABLE_LISTs used by MAS"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -19,7 +19,7 @@ creation
 
 feature -- Initialization
 
-	make (symbols: LIST [STRING]; factory: TRADABLE_FACTORY) is
+	make (symbols: LIST [STRING]; factory: TRADABLE_FACTORY)
 			-- Initialize symbol_list and tradable factories.  A separate
 			-- tradable factory for intraday data is used for efficiency.
 		require
@@ -45,7 +45,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	build_lists is
+	build_lists
 		local
 			global_server: expanded GLOBAL_SERVER_FACILITIES
 			db_info: DATABASE_CONFIGURATION
@@ -65,14 +65,14 @@ feature -- Basic operations
 
 feature {NONE} -- Hook routine implementations
 
-	descendant_build_lists_precondition: BOOLEAN is
+	descendant_build_lists_precondition: BOOLEAN
 		do
 			Result := symbol_list /= Void
 		end
 
 feature {NONE} -- Implementation
 
-	create_daily_list is
+	create_daily_list
 		do
 			check
 				not_intraday: not tradable_factory.intraday
@@ -80,7 +80,7 @@ feature {NONE} -- Implementation
 			create daily_list.make (symbol_list, tradable_factory)
 		end
 
-	create_intraday_list is
+	create_intraday_list
 		do
 			check
 				intraday: intraday_tradable_factory.intraday

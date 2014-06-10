@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Builder of HTTP_LOADING_FILE_TRADABLE_LISTs"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -20,7 +20,7 @@ creation
 feature -- Access
 
 	new_tradable_list (factory: TRADABLE_FACTORY; extension: STRING):
-		EXTENDED_HTTP_LOADING_FILE_TRADABLE_LIST is
+		EXTENDED_HTTP_LOADING_FILE_TRADABLE_LIST
 			-- A new HTTP_LOADING_FILE_TRADABLE_LIST
 		do
 			create Result.make (factory, extension)

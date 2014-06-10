@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A line whose two defining points are MARKET_POINTs"
 	author: "Jim Cochrane"
@@ -17,7 +17,7 @@ creation
 
 feature -- Initialization
 
-	make_from_2_points (p1, p2: MARKET_POINT) is
+	make_from_2_points (p1, p2: MARKET_POINT)
 		require
 			p1_left_of_p2: p1.x < p2.x
 			p1x_gt_0: p1.x >= 0
@@ -28,7 +28,7 @@ feature -- Initialization
 			set: start_point = p1
 		end
 
-	make_from_slope (startp: MARKET_POINT; s: REAL) is
+	make_from_slope (startp: MARKET_POINT; s: REAL)
 		require
 			startp.x > 0
 		do
@@ -44,7 +44,7 @@ feature -- Access
 	start_point: MARKET_POINT
 			-- The two points that define the line
 
-	start_y: REAL is
+	start_y: REAL
 			-- y value of the start point
 		do
 			Result := start_point.y
@@ -53,7 +53,7 @@ feature -- Access
 	slope: REAL
 			-- Slope of the line
 
-	y_at (x: INTEGER): REAL is
+	y_at (x: INTEGER): REAL
 			-- y value at index (x-value) `x'
 		do
 			Result := (x - start_point.x) * slope + start_point.y
@@ -61,7 +61,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_slope (v: REAL) is
+	set_slope (v: REAL)
 			-- Set slope to `v'.
 		do
 			slope := v
@@ -69,7 +69,7 @@ feature -- Status setting
 			-- slope = v
 		end
 
-	set_start_y (v: REAL) is
+	set_start_y (v: REAL)
 			-- Set start_y to `v'.
 		do
 			start_point.set_y (v)
@@ -79,7 +79,7 @@ feature -- Status setting
 
 feature {NONE} -- Implementation
 
-	calculate_slope (other_point: MARKET_POINT) is
+	calculate_slope (other_point: MARKET_POINT)
 			-- Slope of the line
 		do
 			slope := (other_point.y - start_point.y) /

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Value setter that sets the price of a TRADE";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,7 +12,7 @@ class TRADE_PRICE_SETTER inherit
 
 feature {NONE}
 
-	do_set (stream: INPUT_SEQUENCE; tuple: TRADE) is
+	do_set (stream: INPUT_SEQUENCE; tuple: TRADE)
 		do
 			if stream.last_real < 0 then
 				handle_input_error ("Numeric input value is < 0: ",

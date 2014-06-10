@@ -1,8 +1,8 @@
-indexing
+note
 	description:
 		"A command that responds to a client request for indicator data %
 		%delimited by a start date-time and an end date-time"
-	note: "The default value of false is kept for `update_retrieved_tradable' %
+	note1: "The default value of false is kept for `update_retrieved_tradable' %
 		%to cut down on unecessary processing, since > 99%% of the time an %
 		%indicator request will be accompanied by a market data request - %
 		%`update_retrieved_tradable' is true in %
@@ -43,20 +43,20 @@ creation
 
 feature {NONE} -- Hook routine implementations
 
-	parse_remainder (fields: LIST [STRING]) is
+	parse_remainder (fields: LIST [STRING])
 		do
 			parse_indicator_id (fields)
-			{TIME_DELIMITED_DATA_REQUEST_CMD} Precursor (fields)
+			Precursor {TIME_DELIMITED_DATA_REQUEST_CMD} (fields)
 		end
 
-	additional_field_constraints_fulfilled (fields: LIST [STRING]): BOOLEAN is
+	additional_field_constraints_fulfilled (fields: LIST [STRING]): BOOLEAN
 		do
 			Result := True
 			if not indicator_id_valid (fields) then
 				Result := False
 				additional_field_constraints_msg := indicator_id_not_integer_msg
 			elseif
-				not {TIME_DELIMITED_DATA_REQUEST_CMD} Precursor (fields)
+				not Precursor {TIME_DELIMITED_DATA_REQUEST_CMD} (fields)
 			then
 				Result := False
 				additional_field_constraints_msg := empty_date_range_msg
@@ -70,10 +70,10 @@ feature {NONE} -- Hook routine implementations
 
 feature {NONE} -- Redefined routines
 
-	expected_field_count: INTEGER is 4
+	expected_field_count: INTEGER = 4
 
 feature {NONE} -- Implementation - constants
 
-	date_time_spec_index: INTEGER is 4
+	date_time_spec_index: INTEGER = 4
 
 end

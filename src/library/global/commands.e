@@ -1,8 +1,8 @@
-indexing
+note
 	description: "An instance of each instantiable COMMAND class"
 	author: "Jim Cochrane"
 	date: "$Date$";
-	note: "`make_instances' must be called before using any of the command-%
+	note1: "`make_instances' must be called before using any of the command-%
 		%instance queries: true_command, false_command, etc."
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
@@ -26,7 +26,7 @@ class COMMANDS inherit
 
 feature -- Initialization
 
-	make_instances is
+	make_instances
 			-- Ensure that all "once" data are created.
 		local
 			i_and_d: ARRAYED_LIST [PAIR [COMMAND, STRING]]
@@ -38,7 +38,7 @@ feature -- Initialization
 
 feature -- Access
 
-	instances_and_descriptions: ARRAYED_LIST [PAIR [COMMAND, STRING]] is
+	instances_and_descriptions: ARRAYED_LIST [PAIR [COMMAND, STRING]]
 			-- An instance and description of each COMMAND class used
 			-- in indicator or market-analyzer creation
 -- !!!! indexing once_status: global??!!!
@@ -242,13 +242,13 @@ feature -- Access
 				%ONE_VARIABLE_FUNCTION_ANALYZER"))
 		end
 
-	command_instances: ARRAYED_LIST [COMMAND] is
+	command_instances: ARRAYED_LIST [COMMAND]
 -- !!!! indexing once_status: global??!!!
 		once
 			Result := Precursor
 		end
 
-	command_names: ARRAYED_LIST [STRING] is
+	command_names: ARRAYED_LIST [STRING]
 -- !!!! indexing once_status: global??!!!
 		once
 			Result := names
@@ -262,66 +262,66 @@ feature -- Access - an instance of each command
 
 -- !!!! Use indexing once_status: global??!!! for the below features?
 
-	absolute_value: ABSOLUTE_VALUE is
+	absolute_value: ABSOLUTE_VALUE
 		once
 			create Result.make (numeric_value_command)
 		end
 
-	addition: ADDITION is
+	addition: ADDITION
 		once
 			create Result.make (basic_linear_command, numeric_value_command)
 		end
 
-	and_operator: AND_OPERATOR is
+	and_operator: AND_OPERATOR
 		once
 			create Result.make (true_command, true_command)
 		end
 
-	basic_linear_command: BASIC_LINEAR_COMMAND is
+	basic_linear_command: BASIC_LINEAR_COMMAND
 		once
 			create Result.make (
 				default_market_tuple_list)
 		end
 
-	basic_numeric_command: BASIC_NUMERIC_COMMAND is
+	basic_numeric_command: BASIC_NUMERIC_COMMAND
 		once
 			create Result
 		end
 
-	closing_price: CLOSING_PRICE is
+	closing_price: CLOSING_PRICE
 		once
 			create Result
 		end
 
-	command_sequence: COMMAND_SEQUENCE is
+	command_sequence: COMMAND_SEQUENCE
 		once
 			create Result.make
 		end
 
-	division: DIVISION is
+	division: DIVISION
 		once
 			create Result.make (numeric_value_command,
 				numeric_value_command)
 		end
 
-	eq_operator: EQ_OPERATOR is
+	eq_operator: EQ_OPERATOR
 		once
 			create Result.make (numeric_value_command,
 				numeric_value_command)
 		end
 
-	equivalence_operator: EQUIVALENCE_OPERATOR is
+	equivalence_operator: EQUIVALENCE_OPERATOR
 		once
 			create Result.make (
 				true_command, true_command)
 		end
 
-	false_command: FALSE_COMMAND is
+	false_command: FALSE_COMMAND
 		once
 			create Result
 		end
 
-	function_based_command: FUNCTION_BASED_COMMAND is
+	function_based_command: FUNCTION_BASED_COMMAND
 		local
 			stock: STOCK
 		once
@@ -330,288 +330,288 @@ feature -- Access - an instance of each command
 				numeric_value_command)
 		end
 
-	ge_operator: GE_OPERATOR is
+	ge_operator: GE_OPERATOR
 		once
 			create Result.make (numeric_value_command,
 				numeric_value_command)
 		end
 
-	gt_operator: GT_OPERATOR is
+	gt_operator: GT_OPERATOR
 		once
 			create Result.make (numeric_value_command,
 				numeric_value_command)
 		end
 
-	highest_value: HIGHEST_VALUE is
+	highest_value: HIGHEST_VALUE
 		once
 			create Result.make (
 				default_market_tuple_list, basic_numeric_command, 1)
 		end
 
-	high_price: HIGH_PRICE is
+	high_price: HIGH_PRICE
 		once
 			create Result
 		end
 
-	implication_operator: IMPLICATION_OPERATOR is
+	implication_operator: IMPLICATION_OPERATOR
 		once
 			create Result.make (
 				true_command, true_command)
 		end
 
-	index_extractor: INDEX_EXTRACTOR is
+	index_extractor: INDEX_EXTRACTOR
 		once
 			create Result.make (Void)
 		end
 
-	le_operator: LE_OPERATOR is
+	le_operator: LE_OPERATOR
 		once
 			create Result.make (numeric_value_command,
 				numeric_value_command)
 		end
 
-	linear_sum: LINEAR_SUM is
+	linear_sum: LINEAR_SUM
 		once
 			create Result.make (default_market_tuple_list,
 				basic_numeric_command, 1)
 		end
 
-	log10_cmd: LOG10 is
+	log10_cmd: LOG10
 		once
 			create Result.make (numeric_value_command)
 		end
 
-	log2_cmd: LOG2 is
+	log2_cmd: LOG2
 		once
 			create Result.make (numeric_value_command)
 		end
 
-	log_cmd: LOG is
+	log_cmd: LOG
 		once
 			create Result.make (numeric_value_command)
 		end
 
-	ceiling_cmd: CEILING is
+	ceiling_cmd: CEILING
 		once
 			create Result.make (numeric_value_command)
 		end
 
-	floor_cmd: FLOOR is
+	floor_cmd: FLOOR
 		once
 			create Result.make (numeric_value_command)
 		end
 
-	sine_cmd: SINE is
+	sine_cmd: SINE
 		once
 			create Result.make (numeric_value_command)
 		end
 
-	cosine_cmd: COSINE is
+	cosine_cmd: COSINE
 		once
 			create Result.make (numeric_value_command)
 		end
 
-	tangent_cmd: TANGENT is
+	tangent_cmd: TANGENT
 		once
 			create Result.make (numeric_value_command)
 		end
 
-	arc_sine_cmd: ARC_SINE is
+	arc_sine_cmd: ARC_SINE
 		once
 			create Result.make (numeric_value_command)
 		end
 
-	arc_cosine_cmd: ARC_COSINE is
+	arc_cosine_cmd: ARC_COSINE
 		once
 			create Result.make (numeric_value_command)
 		end
 
-	arc_tangent_cmd: ARC_TANGENT is
+	arc_tangent_cmd: ARC_TANGENT
 		once
 			create Result.make (numeric_value_command)
 		end
 
-	loop_command: LOOP_COMMAND is
+	loop_command: LOOP_COMMAND
 		once
 			create Result.make (false_command, false_command,
 				numeric_value_command)
 		end
 
-	loop_with_assertions: LOOP_WITH_ASSERTIONS is
+	loop_with_assertions: LOOP_WITH_ASSERTIONS
 		once
 			create Result.make (false_command, false_command,
 				numeric_value_command)
 		end
 
-	lowest_value: LOWEST_VALUE is
+	lowest_value: LOWEST_VALUE
 		once
 			create Result.make (default_market_tuple_list,
 				basic_numeric_command, 1)
 		end
 
-	low_price: LOW_PRICE is
+	low_price: LOW_PRICE
 		once
 			create Result
 		end
 
-	lt_operator: LT_OPERATOR is
+	lt_operator: LT_OPERATOR
 		once
 			create Result.make (numeric_value_command,
 				numeric_value_command)
 		end
 
-	ma_exponential: MA_EXPONENTIAL is
+	ma_exponential: MA_EXPONENTIAL
 		once
 			create Result.make (1)
 		end
 
-	minus_n_command: MINUS_N_COMMAND is
+	minus_n_command: MINUS_N_COMMAND
 		once
 			create Result.make (
 				default_market_tuple_list, basic_numeric_command, 1)
 		end
 
-	multiplication: MULTIPLICATION is
+	multiplication: MULTIPLICATION
 		once
 			create Result.make (numeric_value_command,
 				numeric_value_command)
 		end
 
-	n_based_unary_operator: N_BASED_UNARY_OPERATOR is
+	n_based_unary_operator: N_BASED_UNARY_OPERATOR
 		once
 			create Result.make (
 				numeric_value_command, 1)
 		end
 
-	not_operator: NOT_OPERATOR is
+	not_operator: NOT_OPERATOR
 		once
 			create Result.make (true_command)
 		end
 
-	n_th_root: N_TH_ROOT is
+	n_th_root: N_TH_ROOT
 		once
 			create Result.make (numeric_value_command,
 				numeric_value_command)
 		end
 
-	numeric_assignment_command: NUMERIC_ASSIGNMENT_COMMAND is
+	numeric_assignment_command: NUMERIC_ASSIGNMENT_COMMAND
 		once
 			create Result.make (
 				basic_numeric_command, numeric_value_command)
 		end
 
-	numeric_conditional_command: NUMERIC_CONDITIONAL_COMMAND is
+	numeric_conditional_command: NUMERIC_CONDITIONAL_COMMAND
 		once
 			create Result.make (lt_operator,
 				numeric_value_command, numeric_value_command)
 		end
 
-	numeric_value_command: NUMERIC_VALUE_COMMAND is
+	numeric_value_command: NUMERIC_VALUE_COMMAND
 		once
 			create Result.make (0.0)
 		end
 
-	numeric_valued_command_wrapper: NUMERIC_VALUED_COMMAND_WRAPPER is
+	numeric_valued_command_wrapper: NUMERIC_VALUED_COMMAND_WRAPPER
 		once
 			create Result.make (numeric_value_command)
 		end
 
-	n_value_command: N_VALUE_COMMAND is
+	n_value_command: N_VALUE_COMMAND
 		once
 			create Result.make (1)
 		end
 
-	opening_price: OPENING_PRICE is
+	opening_price: OPENING_PRICE
 		once
 			create Result
 		end
 
-	open_interest: OPEN_INTEREST is
+	open_interest: OPEN_INTEREST
 		once
 			create Result
 		end
 
-	or_operator: OR_OPERATOR is
+	or_operator: OR_OPERATOR
 		once
 			create Result.make (true_command, true_command)
 		end
 
-	power: POWER is
+	power: POWER
 		once
 			create Result.make (numeric_value_command,
 				numeric_value_command)
 		end
 
-	rounded_value: ROUNDED_VALUE is
+	rounded_value: ROUNDED_VALUE
 		once
 			create Result.make (numeric_value_command)
 		end
 
-	safe_division: SAFE_DIVISION is
+	safe_division: SAFE_DIVISION
 		once
 			create Result.make (numeric_value_command,
 				numeric_value_command)
 		end
 
-	settable_offset_command: SETTABLE_OFFSET_COMMAND is
+	settable_offset_command: SETTABLE_OFFSET_COMMAND
 		once
 			create Result.make (
 				default_market_tuple_list, basic_numeric_command)
 		end
 
-	sign_analyzer: SIGN_ANALYZER is
+	sign_analyzer: SIGN_ANALYZER
 		once
 			create Result.make (numeric_value_command,
 				numeric_value_command, False)
 		end
 
-	slope_analyzer: SLOPE_ANALYZER is
+	slope_analyzer: SLOPE_ANALYZER
 		once
 			create Result.make (
 				default_market_tuple_list)
 		end
 
-	square_root: SQUARE_ROOT is
+	square_root: SQUARE_ROOT
 		once
 			create Result.make (numeric_value_command)
 		end
 
-	subtraction: SUBTRACTION is
+	subtraction: SUBTRACTION
 		once
 			create Result.make (numeric_value_command,
 				numeric_value_command)
 		end
 
-	true_command: TRUE_COMMAND is
+	true_command: TRUE_COMMAND
 		once
 			create Result
 		end
 
-	unary_linear_operator: UNARY_LINEAR_OPERATOR is
+	unary_linear_operator: UNARY_LINEAR_OPERATOR
 		once
 			create Result.make (default_market_tuple_list,
 				numeric_value_command)
 		end
 
-	value_at_index_command: VALUE_AT_INDEX_COMMAND is
+	value_at_index_command: VALUE_AT_INDEX_COMMAND
 		once
 			create Result.make (default_market_tuple_list,
 				numeric_value_command, numeric_value_command)
 		end
 
-	volume: VOLUME is
+	volume: VOLUME
 		once
 			create Result
 		end
 
-	xor_operator: XOR_OPERATOR is
+	xor_operator: XOR_OPERATOR
 		once
 			create Result.make (true_command, true_command)
 		end
 
 feature {NONE} -- Implementation
 
-	default_market_tuple_list: LIST [MARKET_TUPLE] is
+	default_market_tuple_list: LIST [MARKET_TUPLE]
 			-- Default list of MARKET_TUPLE to provide to the make routines
 			-- of those COMMANDs that require such
 -- !!!! indexing once_status: global??!!!

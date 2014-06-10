@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Enumerated '<object> menu' choices"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -19,30 +19,30 @@ feature -- Access
 
 feature {NONE} -- Initialization
 
-	make_description is
+	make_description
 		do
 			make ('d')
 		end
 
-	make_another is
+	make_another
 		do
 			make ('a')
 		end
 
-	make_choice is
+	make_choice
 		do
 			make ('c')
 		end
 
 feature {NONE} -- Implementation
 
-	initial_allowable_values: ARRAY [CHARACTER] is
+	initial_allowable_values: ARRAY [CHARACTER]
 		do
 			Result := <<description, description_u, choose, choose_u,
 				another_choice, another_choice_u>>
 		end
 
-	value_name_map: HASH_TABLE [STRING, CHARACTER] is
+	value_name_map: HASH_TABLE [STRING, CHARACTER]
 		do
 			create Result.make (6)
 			Result.put ("Description of the " + type_name, description)

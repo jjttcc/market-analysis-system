@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Builder/editor of COMMANDs using a command-line interface"
 	author: "Jim Cochrane"
@@ -27,7 +27,7 @@ creation
 
 feature -- Initialization
 
-	make (use_mktfnc_selection: BOOLEAN) is
+	make (use_mktfnc_selection: BOOLEAN)
 		do
 			create editor.make (Current)
 			use_market_function_selection := use_mktfnc_selection
@@ -39,7 +39,7 @@ feature -- Initialization
 
 feature -- Basic operations
 
-	print_command_tree (cmd: COMMAND; level: INTEGER) is
+	print_command_tree (cmd: COMMAND; level: INTEGER)
 			-- Print the type name of `cmd' and, recursively, that of all
 			-- of its operands.
 		local
@@ -67,7 +67,7 @@ feature -- Basic operations
 
 feature -- Status setting
 
-	set_input_device (arg: IO_MEDIUM) is
+	set_input_device (arg: IO_MEDIUM)
 			-- Set input_device to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -77,7 +77,7 @@ feature -- Status setting
 			input_device_set: input_device = arg and input_device /= Void
 		end
 
-	set_output_device (arg: IO_MEDIUM) is
+	set_output_device (arg: IO_MEDIUM)
 			-- Set output_device to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -90,7 +90,7 @@ feature -- Status setting
 
 feature {NONE} -- Hook methods
 
-	accepted_by_user (c: COMMAND): BOOLEAN is
+	accepted_by_user (c: COMMAND): BOOLEAN
 		local
 			editable: CONFIGURABLE_EDITABLE_COMMAND
 		do
@@ -139,7 +139,7 @@ feature {NONE} -- Hook methods
 feature {NONE} -- Utility routines
 
 	guarded_print_command_tree (cmd: COMMAND; level: INTEGER; opname: STRING;
-				parent: COMMAND) is
+				parent: COMMAND)
 			-- Call `print_command_tree' with a guard that ensures it is not
 			-- called if `cmd' is void.  Log an appropriate error message
 			-- (with `report_errors') if `cmd' is void.
@@ -157,7 +157,7 @@ feature {NONE} -- Utility routines
 			end
 		end
 
-	print_operand_trees (cmd: COMMAND; level: INTEGER) is
+	print_operand_trees (cmd: COMMAND; level: INTEGER)
 			-- Call print_command_tree on all of `cmd's operands, if
 			-- it has any.
 		local
@@ -202,7 +202,7 @@ feature {NONE} -- Utility routines
 			end
 		end
 
-	display_for_accepted_by_user (c: COMMAND): STRING is
+	display_for_accepted_by_user (c: COMMAND): STRING
 		local
 			text: LINKED_LIST [STRING]
 			margin: STRING

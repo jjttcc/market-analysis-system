@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Help messages for user interface"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -19,7 +19,7 @@ creation
 
 feature -- Initialization
 
-	make is
+	make
 		local
 			s: STRING
 		do
@@ -88,14 +88,14 @@ feature -- Initialization
 
 feature -- Access
 
-	Main: INTEGER is 3
-	View_data: INTEGER is 4
-	Set_analysis_date: INTEGER is 5
-	Edit_event_registrants: INTEGER is 6
-	Add_registrants: INTEGER is 7
-	Edit_registrant: INTEGER is 8
-	View_indicator: INTEGER is 9
-	Compound_event_generator_time_extensions: INTEGER is 11
-	Compound_event_generator_left_target_type: INTEGER is 12
+	Main: INTEGER = 3
+	View_data: INTEGER = 4
+	Set_analysis_date: INTEGER = 5
+	Edit_event_registrants: INTEGER = 6
+	Add_registrants: INTEGER = 7
+	Edit_registrant: INTEGER = 8
+	View_indicator: INTEGER = 9
+	Compound_event_generator_time_extensions: INTEGER = 11
+	Compound_event_generator_left_target_type: INTEGER = 12
 
 end -- class HELP

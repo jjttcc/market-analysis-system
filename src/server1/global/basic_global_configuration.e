@@ -1,4 +1,4 @@
-indexing
+note
 	description: "General, global application configuration settings"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,18 +16,18 @@ inherit
 
 feature -- Access
 
-	product_info: MAS_PRODUCT_INFO is
+	product_info: MAS_PRODUCT_INFO
 		do
 			create Result
 		end
 
-	tradable_cache_size: INTEGER is
+	tradable_cache_size: INTEGER
 		once
 			Result := default_tradable_cache_size
 		end
 
 feature -- Status report
 
-	auto_data_update_on: BOOLEAN is False
+	auto_data_update_on: BOOLEAN = False
 
 end

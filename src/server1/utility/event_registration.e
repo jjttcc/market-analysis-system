@@ -1,4 +1,4 @@
-indexing
+note
 	description: "User interface for event registration"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -77,7 +77,7 @@ creation
 
 feature -- Initialization
 
-	make (in_dev, out_dev: IO_MEDIUM) is
+	make (in_dev, out_dev: IO_MEDIUM)
 		require
 			not_void: in_dev /= Void and out_dev /= Void
 		do
@@ -93,7 +93,7 @@ feature -- Initialization
 
 feature -- Status setting
 
-	set_input_device (i: IO_MEDIUM) is
+	set_input_device (i: IO_MEDIUM)
 			-- Set `input_device' to `i'.
 		do
 			input_device := i
@@ -101,7 +101,7 @@ feature -- Status setting
 			set: input_device = i
 		end
 
-	set_output_device (i: IO_MEDIUM) is
+	set_output_device (i: IO_MEDIUM)
 			-- Set `output_device' to `i'.
 		do
 			output_device := i
@@ -111,7 +111,7 @@ feature -- Status setting
 
 feature {NONE} -- Implementation
 
-	do_edit is
+	do_edit
 			-- Menu for adding, removing, editing, and viewing event
 			-- registrants
 		local
@@ -159,7 +159,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	add_registrants is
+	add_registrants
 		local
 			finished: BOOLEAN
 			new_registrant: MARKET_EVENT_REGISTRANT
@@ -197,7 +197,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	remove_registrants is
+	remove_registrants
 		local
 			r: MARKET_EVENT_REGISTRANT
 		do
@@ -214,7 +214,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	view_registrants is
+	view_registrants
 		local
 			r: MARKET_EVENT_REGISTRANT
 		do
@@ -229,7 +229,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	edit_registrants is
+	edit_registrants
 		local
 			r: MARKET_EVENT_REGISTRANT
 		do
@@ -244,7 +244,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	new_user: EVENT_USER is
+	new_user: EVENT_USER
 			-- Create a user and input its properties from the real user.
 		local
 			s1, s2, hist_file_name: STRING
@@ -281,7 +281,7 @@ feature {NONE} -- Implementation
 				Result.email_subject_flag, "%N">>)
 		end
 
-	new_log_file: EVENT_LOG_FILE is
+	new_log_file: EVENT_LOG_FILE
 			-- Create a log file and input its properties from the user.
 		local
 			file_name, s2, history_file_name: STRING
@@ -300,7 +300,7 @@ feature {NONE} -- Implementation
 				%properties:%N", "name: ", Result.name, "%N">>)
 		end
 
-	add_event_types (r: EVENT_REGISTRANT_WITH_HISTORY) is
+	add_event_types (r: EVENT_REGISTRANT_WITH_HISTORY)
 			-- Input event types and add them to `r'.
 		local
 			i: INTEGER
@@ -350,7 +350,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	registrant_selection: MARKET_EVENT_REGISTRANT is
+	registrant_selection: MARKET_EVENT_REGISTRANT
 		local
 			i: INTEGER
 			regs: LIST [MARKET_EVENT_REGISTRANT]
@@ -390,7 +390,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	event_type_selection (r: MARKET_EVENT_REGISTRANT): EVENT_TYPE is
+	event_type_selection (r: MARKET_EVENT_REGISTRANT): EVENT_TYPE
 		local
 			i: INTEGER
 			types: CHAIN [EVENT_TYPE]
@@ -434,7 +434,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	display_registrant (r: MARKET_EVENT_REGISTRANT) is
+	display_registrant (r: MARKET_EVENT_REGISTRANT)
 		local
 			l: LINEAR [EVENT_TYPE]
 		do
@@ -453,7 +453,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	edit_registrant (r: MARKET_EVENT_REGISTRANT) is
+	edit_registrant (r: MARKET_EVENT_REGISTRANT)
 		local
 			finished: BOOLEAN
 			t: EVENT_TYPE
@@ -489,7 +489,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	input_string: STRING is
+	input_string: STRING
 			-- A string input by the user
 		do
 			from
@@ -511,8 +511,8 @@ feature {NONE} -- Implementation
 
 	working_event_registrants: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
 
-	main_msg: STRING is
-		indexing
+	main_msg: STRING
+		note
 			once_status: global
 		once
 			Result := concatenation (<<"Select action:",
@@ -522,8 +522,8 @@ feature {NONE} -- Implementation
 				%Help (h) ", eom>>)
 		end
 
-	main_changed_msg: STRING is
-		indexing
+	main_changed_msg: STRING
+		note
 			once_status: global
 		once
 			Result := concatenation (<<"Select action:",
@@ -534,14 +534,14 @@ feature {NONE} -- Implementation
 				%     Help (h) ", eom>>)
 		end
 
-	initialize_working_list is
+	initialize_working_list
 		do
 			working_event_registrants := deep_clone (market_event_registrants)
 		end
 
 feature {NONE} -- Implementation of hook routines
 
-	do_initialize_lock is
+	do_initialize_lock
 		do
 			lock := file_lock (file_name_with_app_directory (
 				registrants_file_name, False))

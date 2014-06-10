@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Root class for the Portfolio Management System"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -16,7 +16,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		local
 			trades: LIST [TRADE_MATCH]
 			otrades: LIST [OPEN_TRADE]

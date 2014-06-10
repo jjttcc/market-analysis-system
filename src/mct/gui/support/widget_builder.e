@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Tools for building widgets"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -11,7 +11,7 @@ class WIDGET_BUILDER inherit
 feature -- Access
 
 	new_menu_item (label: STRING; actions: CONTAINER [PROCEDURE [ANY, TUPLE]]):
-		EV_MENU_ITEM is
+		EV_MENU_ITEM
 			-- A new menu item with label `label' and actions `actions'
 		require
 			args_exist: label /= Void and actions /= Void
@@ -24,7 +24,7 @@ feature -- Access
 		end
 
 	new_button (label: STRING; actions: CONTAINER [PROCEDURE [ANY, TUPLE]]):
-		EV_BUTTON is
+		EV_BUTTON
 			-- A button with label `label' and actions `actions'
 		require
 			args_exist: label /= Void and actions /= Void
@@ -38,7 +38,7 @@ feature -- Access
 		end
 
 	new_error_dialog (text: STRING;
-		actions: ARRAY [PROCEDURE [ANY, TUPLE]]): EV_INFORMATION_DIALOG is
+		actions: ARRAY [PROCEDURE [ANY, TUPLE]]): EV_INFORMATION_DIALOG
 			-- Error reporting dialog, with `actions' as button-select
 			-- actions, if `actions' is not Void.
 		require
@@ -58,7 +58,7 @@ feature -- Access
 			text_set: Result.text.is_equal (text)
 		end
 
-	default_accelerator (key_code: INTEGER): EV_ACCELERATOR is
+	default_accelerator (key_code: INTEGER): EV_ACCELERATOR
 			-- Accelerator with default settings with the key specified
 			-- by `key_code'
 		do
@@ -69,7 +69,7 @@ feature -- Access
 feature -- Basic operations
 
 	add_actions (action_sequence: EV_NOTIFY_ACTION_SEQUENCE;
-		actions: CONTAINER [PROCEDURE [ANY, TUPLE]]) is
+		actions: CONTAINER [PROCEDURE [ANY, TUPLE]])
 			-- Add `actions' to `action_sequence'.
 		require
 			args_exist: action_sequence /= Void and actions /= Void

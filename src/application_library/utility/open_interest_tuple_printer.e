@@ -1,4 +1,4 @@
-indexing
+note
 	description: "TA Printing services"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -19,7 +19,7 @@ creation
 
 feature {NONE} -- Implementation
 
-	print_other_fields (t: OPEN_INTEREST_TUPLE) is
+	print_other_fields (t: OPEN_INTEREST_TUPLE)
 		do
 			Precursor (t)
 			put (field_separator)

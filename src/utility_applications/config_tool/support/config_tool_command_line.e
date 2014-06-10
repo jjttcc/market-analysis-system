@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Parser of command-line arguments for the Configuration Tool"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,18 +21,18 @@ creation
 
 feature {NONE} -- Initialization
 
-	prepare_for_argument_processing is
+	prepare_for_argument_processing
 		do
 		end
 
-	finish_argument_processing is
+	finish_argument_processing
 		do
 			initialization_complete := True
 		end
 
 feature -- Access
 
-	usage: STRING is
+	usage: STRING
 			-- Message: how to invoke the program from the command-line
 		do
 			Result := "Usage: " + command_name + " [options]" +
@@ -53,7 +53,7 @@ feature -- Access -- settings
 
 feature {NONE} -- Implementation
 
-	set_command_file_path is
+	set_command_file_path
 			-- Set `command_file_path' and remove its settings from `contents'.
 		do
 			if option_in_contents ('c') then
@@ -78,7 +78,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_target_file_path is
+	set_target_file_path
 			-- Set `target_file_path' and remove its settings from `contents'.
 		do
 			if option_in_contents ('f') then
@@ -105,7 +105,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation queries
 
-	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]] is
+	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]]
 			-- List of the set_... procedures that are called
 			-- unconditionally - for convenience
 		once
@@ -118,10 +118,10 @@ feature {NONE} -- Implementation queries
 
 feature {NONE} -- Implementation - Constants
 
-	Command_file_error: STRING is
+	Command_file_error: STRING
 		"File path for -cmdfile option was not specified.%N"
 
-	Target_file_error: STRING is
+	Target_file_error: STRING
 		"File path for -file option was not specified.%N"
 
 invariant

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "An abstraction for a stock, such as IBM stock";
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -23,7 +23,7 @@ creation
 feature {NONE} -- Initialization
 
 	make (sym: STRING; stock_splits: DYNAMIC_CHAIN [STOCK_SPLIT];
-				sd: STOCK_DATA) is
+				sd: STOCK_DATA)
 		require
 			not_void: sym /= Void
 			symbol_not_empty: not sym.is_empty
@@ -48,7 +48,7 @@ feature -- Access
 
 	symbol: STRING
 
-	name: STRING is
+	name: STRING
 		do
 			if cached_name = Void then
 				if stock_info /= Void then
@@ -61,20 +61,20 @@ feature -- Access
 			Result := cached_name
 		end
 
-	short_description: STRING is "Stock"
+	short_description: STRING = "Stock"
 
 feature -- Status report
 
-	valid_indicator (f: MARKET_FUNCTION): BOOLEAN is
+	valid_indicator (f: MARKET_FUNCTION): BOOLEAN
 		do
 			Result := valid_stock_processor (f)
 		ensure then
 			valid_for_stock: Result = valid_stock_processor (f)
 		end
 
-	has_open_interest: BOOLEAN is False
+	has_open_interest: BOOLEAN = False
 
-	splits_sorted_by_date (sp: like splits): BOOLEAN is
+	splits_sorted_by_date (sp: like splits): BOOLEAN
 			-- Is `sp' sorted by date ascending?
 		require
 			not_void_or_empty: sp /= Void and not sp.is_empty
@@ -113,7 +113,7 @@ feature -- Status report
 
 feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 
-	finish_loading is
+	finish_loading
 		do
 			Precursor
 			adjust_for_splits
@@ -121,7 +121,7 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 
 feature {NONE} -- Implementation
 
-	adjust_for_splits is
+	adjust_for_splits
 			-- Adjust tuples for stock splits.
 		local
 			first_item_date: DATE
@@ -150,7 +150,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	do_split_adjustment is
+	do_split_adjustment
 		require
 			lists_not_empty: not is_empty and splits /= Void and
 				not splits.is_empty
@@ -204,7 +204,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	make_ctf: COMPOSITE_TUPLE_FACTORY is
+	make_ctf: COMPOSITE_TUPLE_FACTORY
 -- !!!! indexing once_status: global??!!! [probaly not, but check]
 		once
 			create {COMPOSITE_VOLUME_TUPLE_FACTORY} Result

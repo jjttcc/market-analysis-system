@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Builder of EXTERNAL_TRADABLE_LISTs used by MAS"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -25,7 +25,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	build_lists is
+	build_lists
 		do
 			check
 				not_intraday: not tradable_factory.intraday

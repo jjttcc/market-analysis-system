@@ -1,4 +1,4 @@
-indexing
+note
 	description: "MAS database services - ECLI implmentation"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -39,7 +39,7 @@ creation
 
 feature -- Initialization
 
-	make (debug_on: BOOLEAN) is
+	make (debug_on: BOOLEAN)
 		do
 			debugging := debug_on
 			connect
@@ -60,21 +60,21 @@ feature -- Access
 
 	stock_splits: ECLI_STOCK_SPLITS
 
-	daily_stock_data (symbol: STRING): ECLI_INPUT_SEQUENCE is
+	daily_stock_data (symbol: STRING): ECLI_INPUT_SEQUENCE
 			-- Daily data for `symbol'
 		do
 			create Result.make (input_statement (
 				daily_stock_query (symbol), daily_stock_value_holders))
 		end
 
-	intraday_stock_data (symbol: STRING): ECLI_INPUT_SEQUENCE is
+	intraday_stock_data (symbol: STRING): ECLI_INPUT_SEQUENCE
 			-- Daily data for `symbol'
 		do
 			create Result.make (input_statement (
 				intraday_stock_query (symbol), intraday_stock_value_holders))
 		end
 
-	daily_derivative_data (symbol: STRING): ECLI_INPUT_SEQUENCE is
+	daily_derivative_data (symbol: STRING): ECLI_INPUT_SEQUENCE
 			-- Daily data for `symbol'
 		do
 			create Result.make (input_statement (
@@ -82,7 +82,7 @@ feature -- Access
 				daily_derivative_value_holders))
 		end
 
-	intraday_derivative_data (symbol: STRING): ECLI_INPUT_SEQUENCE is
+	intraday_derivative_data (symbol: STRING): ECLI_INPUT_SEQUENCE
 			-- Daily data for `symbol'
 		do
 			create Result.make (input_statement (
@@ -90,7 +90,7 @@ feature -- Access
 				intraday_derivative_value_holders))
 		end
 
-	single_string_query_result (query: STRING): STRING is
+	single_string_query_result (query: STRING): STRING
 		local
 			stmt: ECLI_STATEMENT
 			ecli_result: ECLI_VARCHAR
@@ -147,13 +147,13 @@ feature -- Access
 			stmt.close
 		end
 
-	stock_data: STOCK_DATA is
+	stock_data: STOCK_DATA
 -- !!!! indexing once_status: global??!!! [probaly not, but check]
 		once
 			create {DB_STOCK_DATA} Result
 		end
 
-	derivative_data: TRADABLE_DATA is
+	derivative_data: TRADABLE_DATA
 -- !!!! indexing once_status: global??!!! [probaly not, but check]
 		once
 			create {DB_DERIVATIVE_DATA} Result
@@ -161,7 +161,7 @@ feature -- Access
 
 feature -- Status report
 
-	connected: BOOLEAN is
+	connected: BOOLEAN
 			-- Are we connected to the database?
 		do
 			fatal_error := False
@@ -170,7 +170,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	connect is
+	connect
 			-- Connect to the database.
 		local
 			error: BOOLEAN
@@ -200,7 +200,7 @@ feature -- Basic operations
 			retry
 		end
 
-	disconnect is
+	disconnect
 			-- Disconnect from database.
 		do
 			fatal_error := False
@@ -222,7 +222,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	session: ECLI_SESSION is
+	session: ECLI_SESSION
 			-- The ECLI database session - provides access to the database
 -- !!!! indexing once_status: global??!!! [probaly not, but check]
 		once
@@ -237,7 +237,7 @@ feature {NONE} -- Implementation
 		end
 
 	input_statement (query: STRING; value_holders: ARRAY [ECLI_VALUE]):
-				ECLI_STATEMENT is
+				ECLI_STATEMENT
 			-- Input ECLI_STATEMENT constructed with `query' and `value_holders'
 		do
 			fatal_error := False
@@ -265,7 +265,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	list_from_query (q: STRING): LIST [STRING] is
+	list_from_query (q: STRING): LIST [STRING]
 		local
 			stmt: ECLI_STATEMENT
 			ecli_string: ECLI_VARCHAR
@@ -323,7 +323,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	daily_stock_value_holders: ARRAY [ECLI_VALUE] is
+	daily_stock_value_holders: ARRAY [ECLI_VALUE]
 			-- Array of value holders for statement execution results for
 			-- daily stock data
 		local
@@ -343,7 +343,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	intraday_stock_value_holders: ARRAY [ECLI_VALUE] is
+	intraday_stock_value_holders: ARRAY [ECLI_VALUE]
 			-- Array of value holders for statement execution results for
 			-- intraday stock data
 		local
@@ -366,7 +366,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	daily_derivative_value_holders: ARRAY [ECLI_VALUE] is
+	daily_derivative_value_holders: ARRAY [ECLI_VALUE]
 			-- Array of value holders for statement execution results for
 			-- daily derivative data
 		local
@@ -387,7 +387,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	intraday_derivative_value_holders: ARRAY [ECLI_VALUE] is
+	intraday_derivative_value_holders: ARRAY [ECLI_VALUE]
 			-- Array of value holders for statement execution results for
 			-- intraday derivative data
 		local
@@ -411,7 +411,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	stock_split_value_holders: ARRAY [ECLI_VALUE] is
+	stock_split_value_holders: ARRAY [ECLI_VALUE]
 			-- Array of value holders for statement execution results for
 			-- stock split data
 		local
@@ -425,7 +425,7 @@ feature {NONE} -- Implementation
 			Result := <<date, symbol, value>>
 		end
 
-	load_stock_splits is
+	load_stock_splits
 		require
 			connected: connected
 		local
@@ -442,7 +442,7 @@ feature {NONE} -- Implementation
 			still_connected: connected
 		end
 
-	cleanup is
+	cleanup
 		do
 			if connected then disconnect end
 			if session.is_valid and not session.is_closed then
@@ -450,7 +450,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	debug_report (stmt: ECLI_STATEMENT) is
+	debug_report (stmt: ECLI_STATEMENT)
 			-- Print information from `stmt' for debugging.
 		local
 			tag: STRING
@@ -467,6 +467,6 @@ feature {NONE} -- Implementation
 				stmt.result_column_count.out + "%N")
 		end
 
-	Max_varchar_length: INTEGER is 254
+	Max_varchar_length: INTEGER = 254
 
 end -- class ECLI_SERVICES

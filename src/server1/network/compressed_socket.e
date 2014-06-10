@@ -1,9 +1,9 @@
-indexing
+note
 
 	description:
 		"Network socket whose put_string feature compresses its output %
 		%before sending it"
-	note: "Object is created with compression off.  It must be turned on %
+	note1: "Object is created with compression off.  It must be turned on %
 		%with set_compression in order to invoke output compression."
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -34,7 +34,7 @@ feature -- Access
 	compression: BOOLEAN
 			-- Is compression turned on?
 
-	Minimum_size: INTEGER is 0
+	Minimum_size: INTEGER = 0
 			-- Minimum size for compression - buffers small than this
 			-- will not compress effectively.
 			-- Currently 0 - effectively not used - because of the
@@ -43,7 +43,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_compression (arg: BOOLEAN) is
+	set_compression (arg: BOOLEAN)
 			-- Set compression to `arg'.
 		do
 			compression := arg
@@ -53,7 +53,7 @@ feature -- Status setting
 
 feature -- Output
 
-	put_string (s: STRING) is
+	put_string (s: STRING)
 			-- If compression and s.count >= Minimum_size, output `s'
 			-- as compressed; otherwise, output it as is.
 		do
@@ -70,11 +70,11 @@ feature -- Output
 			end
 		end
 
-	putstring (s: STRING) is do put_string (s) end
+	putstring (s: STRING) do put_string (s) end
 
 feature -- Input
 
-	readline, read_line is
+	readline, read_line
 		do
 			-- Redefined to prevent reading forever when the client has
 			-- unexpectedly died.
@@ -91,7 +91,7 @@ feature -- Input
 
 feature {NONE} -- Implementation
 
-	put_compressed (s: STRING) is
+	put_compressed (s: STRING)
 		local
 			c: ZLIB_COMPRESSION
 			buffer: ANY

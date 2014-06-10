@@ -1,10 +1,10 @@
-indexing
+note
 	description:
 		"An instance of each instantiable MARKET_FUNCTION class that can %
 		%be used to construct a technical indicator"
 	author: "Jim Cochrane"
 	date: "$Date$";
-	note: "`make_instances' must be called before using any of the %
+	note1: "`make_instances' must be called before using any of the %
 		%market-function-instance queries: one_variable_function, %
 		%two_variable_function, etc."
 	revision: "$Revision$"
@@ -31,7 +31,7 @@ class MARKET_FUNCTIONS inherit
 
 feature -- Initialization
 
-	make_instances is
+	make_instances
 			-- Ensure that all "once" data are created.
 		local
 			i_and_d: ARRAYED_LIST [PAIR [MARKET_FUNCTION, STRING]]
@@ -43,7 +43,7 @@ feature -- Initialization
 
 feature -- Access
 
-	instances_and_descriptions: ARRAYED_LIST [PAIR [MARKET_FUNCTION, STRING]] is
+	instances_and_descriptions: ARRAYED_LIST [PAIR [MARKET_FUNCTION, STRING]]
 			-- An instance and description of each MARKET_FUNCTION class
 -- !!!! indexing once_status: global??!!!
 		once
@@ -87,13 +87,13 @@ feature -- Access
 				stock, "Represents a dummy function that does not take input"))
 		end
 
-	function_instances: ARRAYED_LIST [MARKET_FUNCTION] is
+	function_instances: ARRAYED_LIST [MARKET_FUNCTION]
 -- !!!! indexing once_status: global??!!!
 		once
 			Result := Precursor
 		end
 
-	function_names: ARRAYED_LIST [STRING] is
+	function_names: ARRAYED_LIST [STRING]
 -- !!!! indexing once_status: global??!!!
 		once
 			Result := names
@@ -107,21 +107,21 @@ feature -- Access - an instance of each market function
 
 -- !!!! Use indexing once_status: global??!!! for these features:
 
-	one_variable_function: ONE_VARIABLE_FUNCTION is
+	one_variable_function: ONE_VARIABLE_FUNCTION
 		local
 			commands: expanded COMMANDS
 		once
 			create Result.make (stock, commands.volume)
 		end
 
-	n_record_one_variable_function: N_RECORD_ONE_VARIABLE_FUNCTION is
+	n_record_one_variable_function: N_RECORD_ONE_VARIABLE_FUNCTION
 		local
 			commands: expanded COMMANDS
 		once
 			create Result.make (stock, commands.volume, 1)
 		end
 
-	two_variable_function: TWO_VARIABLE_FUNCTION is
+	two_variable_function: TWO_VARIABLE_FUNCTION
 		local
 			commands: expanded COMMANDS
 		once
@@ -129,14 +129,14 @@ feature -- Access - an instance of each market function
 				one_variable_function, commands.volume)
 		end
 
-	standard_moving_average: STANDARD_MOVING_AVERAGE is
+	standard_moving_average: STANDARD_MOVING_AVERAGE
 		local
 			commands: expanded COMMANDS
 		once
 			create Result.make (stock, commands.volume, 1)
 		end
 
-	exponential_moving_average: EXPONENTIAL_MOVING_AVERAGE is
+	exponential_moving_average: EXPONENTIAL_MOVING_AVERAGE
 		local
 			commands: expanded COMMANDS
 		once
@@ -144,7 +144,7 @@ feature -- Access - an instance of each market function
 				commands.ma_exponential, 1)
 		end
 
-	accumulation: ACCUMULATION is
+	accumulation: ACCUMULATION
 		local
 			commands: expanded COMMANDS
 		once
@@ -152,14 +152,14 @@ feature -- Access - an instance of each market function
 				commands.basic_linear_command, commands.volume)
 		end
 
-	configurable_n_record_function: CONFIGURABLE_N_RECORD_FUNCTION is
+	configurable_n_record_function: CONFIGURABLE_N_RECORD_FUNCTION
 		local
 			commands: expanded COMMANDS
 		once
 			create Result.make (stock, commands.addition, commands.volume, 1)
 		end
 
-	market_function_line: MARKET_FUNCTION_LINE is
+	market_function_line: MARKET_FUNCTION_LINE
 		local
 			point1, point2: MARKET_POINT
 			earlier, later: DATE_TIME
@@ -173,7 +173,7 @@ feature -- Access - an instance of each market function
 			create Result.make_from_2_points (point1, point2, stock)
 		end
 
-	agent_based_function: AGENT_BASED_FUNCTION is
+	agent_based_function: AGENT_BASED_FUNCTION
 		local
 			commands: expanded COMMANDS
 			agents: expanded MARKET_AGENTS
@@ -185,12 +185,12 @@ feature -- Access - an instance of each market function
 				commands.addition, flst)
 		end
 
-	market_data_function: MARKET_DATA_FUNCTION is
+	market_data_function: MARKET_DATA_FUNCTION
 		once
 			create Result.make (stock)
 		end
 
-	stock: STOCK is
+	stock: STOCK
 		once
 			create Result.make ("DUMMY", Void, Void)
 			Result.set_trading_period_type (period_types @ (

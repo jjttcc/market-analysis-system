@@ -1,4 +1,4 @@
-indexing
+note
 	description: "General, global application configuration settings"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,13 +21,13 @@ inherit
 
 feature -- Access
 
-	product_info: EXTENDED_PRODUCT_INFO is
+	product_info: EXTENDED_PRODUCT_INFO
 		do
 			create Result
 		end
 
-	tradable_cache_size: INTEGER is
-		indexing
+	tradable_cache_size: INTEGER
+		note
 			once_status: global
 		local
 			value: STRING
@@ -43,11 +43,11 @@ feature -- Access
 
 feature -- Status report
 
-	auto_data_update_on: BOOLEAN is True
+	auto_data_update_on: BOOLEAN = True
 
 feature {NONE} -- Implementation
 
-	tradable_cache_size_variable: STRING is "MAS_TRADABLE_CACHE_SIZE"
+	tradable_cache_size_variable: STRING = "MAS_TRADABLE_CACHE_SIZE"
 			-- Name of environment variable for the tradable_cache_size
 			-- setting
 

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Enumerated 'market-event-generator editing' choices"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -25,6 +25,6 @@ create {ENUMERATED}
 
 feature -- Access
 
-	type_name: STRING is "market analyzer"
+	type_name: STRING = "market analyzer"
 
 end

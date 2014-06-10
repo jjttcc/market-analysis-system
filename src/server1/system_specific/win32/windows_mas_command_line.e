@@ -1,4 +1,4 @@
-indexing
+note
 	description: "MAS_COMMAND_LINE adapted for Windows idiosyncrasies"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,13 +21,13 @@ creation {PLATFORM_DEPENDENT_OBJECTS}
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 			mcl_make
 			windows_make
 		end
 
-	windows_make is
+	windows_make
 		do
 			-- There is a problem with the CONSOLE class in Windows, so
 			-- force the system to always run in the "background" so that

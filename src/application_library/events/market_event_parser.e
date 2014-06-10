@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Abstraction that determines the type of a MARKET_EVENT being read %
 		%from an input sequence"
@@ -26,7 +26,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (in_file: like input) is
+	make (in_file: like input)
 		require
 			not_void: in_file /= Void
 		do
@@ -56,7 +56,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_field_separator (arg: CHARACTER) is
+	set_field_separator (arg: CHARACTER)
 			-- Set field_separator to `arg'.
 		do
 			field_separator := arg
@@ -66,7 +66,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute is
+	execute
 			-- If an error occurs during parsing, an exception is raised.
 		do
 			last_error.wipe_out
@@ -90,7 +90,7 @@ feature {NONE} -- Implementation
 	type_name: STRING
 			-- Input string specifying type information
 
-	read_type is
+	read_type
 			-- Read the current characters in the input (which specify type).
 		do
 			type_name.wipe_out
@@ -105,7 +105,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_error is
+	set_error
 		require
 			empty: last_error.is_empty
 		do
@@ -120,11 +120,11 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation
 
-	Atomic, Pair: INTEGER is unique
+	Atomic, Pair: INTEGER = unique
 
-	Atomic_market_event: STRING is "AME"
+	Atomic_market_event: STRING = "AME"
 
-	Market_event_pair: STRING is "MEP"
+	Market_event_pair: STRING = "MEP"
 
 invariant
 

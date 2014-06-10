@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A command that responds to a client log-in request"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -55,7 +55,7 @@ creation
 
 feature -- Initialization
 
-	make (dispenser: TRADABLE_DISPENSER; auto_update: BOOLEAN) is
+	make (dispenser: TRADABLE_DISPENSER; auto_update: BOOLEAN)
 		require
 			dispenser_exists: dispenser /= Void
 		do
@@ -78,12 +78,12 @@ feature -- Status report
 
 feature {NONE} -- Hook routine implementations
 
-	create_session is
+	create_session
 		do
 			create session.make
 		end
 
-	process (message: STRING) is
+	process (message: STRING)
 		local
 			setting_type: STRING
 			tokens: LIST [STRING]
@@ -116,7 +116,7 @@ feature {NONE} -- Hook routine implementations
 			end
 		end
 
-	put_session_state is
+	put_session_state
 			-- Send the "session state" information (formatted according
 			-- to the client/server communication protocol) to the client.
 		do
@@ -126,14 +126,14 @@ feature {NONE} -- Hook routine implementations
 			end
 		end
 
-	pre_process_session is
+	pre_process_session
 		do
 			if not command_line_options.intraday_caching then
 				session.turn_caching_off
 			end
 		end
 
-	post_process_session is
+	post_process_session
 		do
 			if not auto_update_on then
 				-- Clearing the cache when a new login occurs ensures that
@@ -144,7 +144,7 @@ feature {NONE} -- Hook routine implementations
 
 feature {NONE} -- Implementation
 
-	change_setting (type: STRING; settings: LIST [STRING]): STRING is
+	change_setting (type: STRING; settings: LIST [STRING]): STRING
 			-- Extract the current setting value from `settings' and
 			-- apply it to `sessions @ session_id'.  `settings.item' will
 			-- reference the last element read.

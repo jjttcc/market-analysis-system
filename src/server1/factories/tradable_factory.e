@@ -1,6 +1,6 @@
-indexing
+note
 	description: "Factory class that manufactures TRADABLEs"
-	note: "input must be set (non-Void) before execute is called."
+	note1: "input must be set (non-Void) before execute is called."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -35,7 +35,7 @@ creation
 
 feature -- Initialization
 
-	make is
+	make
 		do
 			field_separator := "%T"
 			record_separator := "%N"
@@ -100,7 +100,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_input (arg: like input) is
+	set_input (arg: like input)
 			-- Set input to `arg'.
 		require
 			open_for_reading: arg /= Void
@@ -110,7 +110,7 @@ feature -- Status setting
 			input_set: input = arg and input /= Void
 		end
 
-	set_symbol (arg: STRING) is
+	set_symbol (arg: STRING)
 			-- Set symbol to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -121,7 +121,7 @@ feature -- Status setting
 			symbol_set: symbol /= Void and symbol = arg
 		end
 
-	set_product (arg: TRADABLE [BASIC_MARKET_TUPLE]) is
+	set_product (arg: TRADABLE [BASIC_MARKET_TUPLE])
 			-- Set `product' to `arg', to be updated by `execute' instead
 			-- of creating a new product.
 		require
@@ -134,7 +134,7 @@ feature -- Status setting
 			update_current_product: update_current_product
 		end
 
-	set_time_period_type (arg: TIME_PERIOD_TYPE) is
+	set_time_period_type (arg: TIME_PERIOD_TYPE)
 			-- Set time_period_type to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -145,7 +145,7 @@ feature -- Status setting
 				time_period_type /= Void
 		end
 
-	set_field_separator (arg: STRING) is
+	set_field_separator (arg: STRING)
 			-- Set field_separator to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -156,7 +156,7 @@ feature -- Status setting
 				field_separator /= Void
 		end
 
-	set_record_separator (arg: STRING) is
+	set_record_separator (arg: STRING)
 			-- Set record_separator to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -167,7 +167,7 @@ feature -- Status setting
 				record_separator /= Void
 		end
 
-	set_strict_error_checking (arg: BOOLEAN) is
+	set_strict_error_checking (arg: BOOLEAN)
 			-- Set strict_error_checking to `arg'.
 		do
 			strict_error_checking := arg
@@ -175,7 +175,7 @@ feature -- Status setting
 			strict_error_checking_set: strict_error_checking = arg
 		end
 
-	set_intraday (arg: BOOLEAN) is
+	set_intraday (arg: BOOLEAN)
 			-- Set intraday to `arg'.
 		do
 			intraday := arg
@@ -183,7 +183,7 @@ feature -- Status setting
 			intraday_set: intraday = arg
 		end
 
-	turn_start_input_from_beginning_off is
+	turn_start_input_from_beginning_off
 			-- Set `start_input_from_beginning' to False.
 		do
 			start_input_from_beginning := False
@@ -191,7 +191,7 @@ feature -- Status setting
 			not_start_input_from_beginning: not start_input_from_beginning
 		end
 
-	turn_start_input_from_beginning_on is
+	turn_start_input_from_beginning_on
 			-- Set `start_input_from_beginning' to True.
 		do
 			start_input_from_beginning := True
@@ -201,7 +201,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute is
+	execute
 			-- Note: Once `execute' is called, set_intraday will have no
 			-- effect - the tradable's data will be intraday according to
 			-- the value of `intraday' the first time that execute is called.
@@ -278,7 +278,7 @@ feature -- Basic operations
 
 feature {NONE}
 
-	make_product is
+	make_product
 		do
 			if open_interest then
 				product := derivative_builder.new_item (symbol)
@@ -299,7 +299,7 @@ feature {NONE} -- Implementation
 			-- Should the current `product' be updated by `execute' rather
 			-- than created a new one?
 
-	make_tuple_maker is
+	make_tuple_maker
 		do
 			if open_interest then
 				tuple_maker := derivative_builder.tuple_factory
@@ -310,7 +310,7 @@ feature {NONE} -- Implementation
 			tm_not_void: tuple_maker /= Void
 		end
 
-	index_vector: ARRAY [INTEGER] is
+	index_vector: ARRAY [INTEGER]
 			-- Index vector for value setters
 		do
 			if open_interest then
@@ -322,7 +322,7 @@ feature {NONE} -- Implementation
 			at_least_one: Result.count > 0
 		end
 
-	value_setters: LINKED_LIST [VALUE_SETTER] is
+	value_setters: LINKED_LIST [VALUE_SETTER]
 		do
 			if
 				cached_value_setters = Void or
@@ -338,7 +338,7 @@ feature {NONE} -- Implementation
 		end
 
 	add_value_setters (vs: LINKED_LIST [VALUE_SETTER];
-						i_vector: ARRAY [INTEGER]) is
+						i_vector: ARRAY [INTEGER])
 			-- i_vector indicates which value_setters to insert into
 			-- vs, in the order specified, using the xxx_index constants.
 			-- For example, i_vector = << Date_index, Close_index >>
@@ -383,7 +383,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	add_indicators (t: TRADABLE [BASIC_MARKET_TUPLE]) is
+	add_indicators (t: TRADABLE [BASIC_MARKET_TUPLE])
 			-- Add `flst' to `t'.
 		require
 			not_void: t /= Void
@@ -411,7 +411,7 @@ feature {NONE} -- Implementation
 
 	cached_value_setters: LINKED_LIST [VALUE_SETTER]
 
-	check_for_open_interest is
+	check_for_open_interest
 			-- Check if `input' has an open interest field.
 		require
 			input_not_void: input /= Void

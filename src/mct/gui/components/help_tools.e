@@ -1,9 +1,9 @@
-indexing
+note
 	description: "Tools for displaying 'help' information"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
-	note: "This class is currently not used.  If that continues to be the %
+	note1: "This class is currently not used.  If that continues to be the %
 		%case, it should be obsoleted and moved."
 	licensing: "Copyright 2004: Jim Cochrane - %
 		%License to be determined"
@@ -21,13 +21,13 @@ create
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 		end
 
 feature -- Access
 
-	introduction: EV_TITLED_WINDOW is
+	introduction: EV_TITLED_WINDOW
 			-- MCT introduction
 		local
 			help: EV_TEXT
@@ -40,13 +40,13 @@ feature -- Access
 
 feature {NONE} -- Implementation - constants
 
-	Intro_title: STRING is "MAS Control Terminal Introduction"
+	Intro_title: STRING = "MAS Control Terminal Introduction"
 
-	Default_width: INTEGER is 450
+	Default_width: INTEGER = 450
 
 feature {NONE} -- Implementation
 
-	default_help (w: EV_TITLED_WINDOW): EV_TEXT is
+	default_help (w: EV_TITLED_WINDOW): EV_TEXT
 			-- A default help text object with `w' as its parent and
 			-- with default initialization performed on `w'
 		do

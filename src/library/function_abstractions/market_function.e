@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A function that outputs an array of market tuples.  Specifications %
 		%for function input are provided by descendant classes."
@@ -26,7 +26,7 @@ deferred class MARKET_FUNCTION inherit
 
 feature -- Access
 
-	name: STRING is
+	name: STRING
 			-- Function name
 		do
 			if name_implementation /= Void then
@@ -36,29 +36,29 @@ feature -- Access
 			end
 		end
 
-	short_description: STRING is
+	short_description: STRING
 			-- Short description of the function
 		deferred
 		end
 
-	full_description: STRING is
+	full_description: STRING
 			-- Full description of the function, including descriptions
 			-- of contained functions, if any
 		deferred
 		end
 
-	output: MARKET_TUPLE_LIST [MARKET_TUPLE] is
+	output: MARKET_TUPLE_LIST [MARKET_TUPLE]
 			-- y of function "y = f(x)"
 		deferred
 		end
 
-	trading_period_type: TIME_PERIOD_TYPE is
+	trading_period_type: TIME_PERIOD_TYPE
 			-- Type of trading period associated with each tuple:  hourly,
 			-- daily, weekly, etc.
 		deferred
 		end
 
-	immediate_parameters: LIST [FUNCTION_PARAMETER] is
+	immediate_parameters: LIST [FUNCTION_PARAMETER]
 			-- Changeable parameters for this function, exluding those
 			-- of `descendants'
 		do
@@ -71,23 +71,23 @@ feature -- Access
 				immediate_operator_parameters.count
 		end
 
-	processed_date_time: DATE_TIME is
+	processed_date_time: DATE_TIME
 			-- Date and time the function was last processed
 		deferred
 		end
 
-	children: LIST [MARKET_FUNCTION] is
+	children: LIST [MARKET_FUNCTION]
 			-- This function's children, if this is a composite function
 		deferred
 		end
 
-	functions: LIST [MARKET_FUNCTION] is
+	functions: LIST [MARKET_FUNCTION]
 		do
 			Result := descendants
 			Result.extend (Current)
 		end
 
-	operators: LIST [COMMAND] is
+	operators: LIST [COMMAND]
 		local
 			l: LIST [MARKET_FUNCTION]
 		do
@@ -102,7 +102,7 @@ feature -- Access
 			end
 		end
 
-	required_tuple_types: SET [MARKET_TUPLE] is
+	required_tuple_types: SET [MARKET_TUPLE]
 			-- One instance of each MARKET_TUPLE descendant used by Current
 			-- or one of its operators
 		local
@@ -133,26 +133,26 @@ feature -- Access
 			end
 		end
 
-	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE] is
+	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE]
 			-- The innermost input sequence to be processed
 		deferred
 		end
 
 feature -- Status report
 
-	processed: BOOLEAN is
+	processed: BOOLEAN
 			-- Has this function been processed?
 		deferred
 		end
 
-	has_children: BOOLEAN is
+	has_children: BOOLEAN
 			-- Does this function have children?
 		deferred
 		ensure
 			Result implies children /= Void and not children.is_empty
 		end
 
-	debugging: BOOLEAN is
+	debugging: BOOLEAN
 			-- Is debugging mode on?
 		local
 			gs: expanded GLOBAL_SERVICES
@@ -162,7 +162,7 @@ feature -- Status report
 
 feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Element change
 
-	set_name (n: STRING) is
+	set_name (n: STRING)
 			-- Set the function's name to n.
 		require
 			not_void: n /= Void
@@ -172,7 +172,7 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Element change
 			is_set: name = n and name /= Void
 		end
 
-	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
+	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE])
 			-- If the run-time type is a complex function, set the innermost
 			-- input attribute to `in', else do nothing.
 		require
@@ -185,7 +185,7 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Element change
 
 feature -- Basic operations
 
-	process is
+	process
 			-- Process the output from the input.
 		deferred
 		ensure then
@@ -194,14 +194,14 @@ feature -- Basic operations
 
 feature {MARKET_FUNCTION, MARKET_FUNCTION_EDITOR}
 
-	is_complex: BOOLEAN is
+	is_complex: BOOLEAN
 			-- Is the run-time type a complex function?
 		deferred
 		end
 
 feature {MARKET_FUNCTION_EDITOR, MARKET_FUNCTION}
 
-	reset_parameters is
+	reset_parameters
 			-- Reset the cached parameter list to ensure it is up to date
 			-- after a change in the composite function's structure - that
 			-- is, after one of the (direct or indirect) input functions
@@ -212,7 +212,7 @@ feature {MARKET_FUNCTION_EDITOR, MARKET_FUNCTION}
 
 feature {MARKET_FUNCTION}
 
-	immediate_direct_parameters: LIST [FUNCTION_PARAMETER] is
+	immediate_direct_parameters: LIST [FUNCTION_PARAMETER]
 			-- Parameters of Current, excluding `operator_parameters' and
 			-- exluding those of `descendants'
 		do
@@ -224,7 +224,7 @@ feature {MARKET_FUNCTION}
 
 feature {NONE} -- Implementation
 
-	direct_parameters: LINKED_LIST [FUNCTION_PARAMETER] is
+	direct_parameters: LINKED_LIST [FUNCTION_PARAMETER]
 			-- Parameters of Current, excluding `operator_parameters'
 		local
 			parameter_set: LINKED_SET [FUNCTION_PARAMETER]
@@ -246,7 +246,7 @@ feature {NONE} -- Implementation
 			result_exists: Result /= Void
 		end
 
-	immediate_operators: LIST [COMMAND] is
+	immediate_operators: LIST [COMMAND]
 			-- All operators that belong directly to this function, but not
 			-- to its descendants
 		do
@@ -256,7 +256,7 @@ feature {NONE} -- Implementation
 			exists: Result /= Void
 		end
 
-	operator_parameters: LIST [FUNCTION_PARAMETER] is
+	operator_parameters: LIST [FUNCTION_PARAMETER]
 			-- Parameters belonging to `operators'
 		local
 			ops: LIST [COMMAND]
@@ -277,7 +277,7 @@ feature {NONE} -- Implementation
 			result_exists: Result /= Void
 		end
 
-	immediate_operator_parameters: LIST [FUNCTION_PARAMETER] is
+	immediate_operator_parameters: LIST [FUNCTION_PARAMETER]
 			-- Parameters of `immediate_operators'
 		local
 			ops: LIST [COMMAND]
@@ -298,7 +298,7 @@ feature {NONE} -- Implementation
 			result_exists: Result /= Void
 		end
 
-	prepare_operator_for_editing (op: COMMAND; l: LIST [FUNCTION_PARAMETER]) is
+	prepare_operator_for_editing (op: COMMAND; l: LIST [FUNCTION_PARAMETER])
 			-- If `op' is editable, prepare it for editing
 			-- (as a FUNCTION_PARAMETER).
 		do
@@ -307,12 +307,12 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	copy_of_children: LIST [MARKET_FUNCTION] is
+	copy_of_children: LIST [MARKET_FUNCTION]
 		do
 			Result := clone (children)
 		end
 
-	descendant_comparison_is_by_objects: BOOLEAN is
+	descendant_comparison_is_by_objects: BOOLEAN
 		do
 			Result := True
 		end

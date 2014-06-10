@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A command that responds to a client request for market data %
 		%delimited by a start date-time and an end date-time"
@@ -31,14 +31,14 @@ creation
 
 feature {NONE} -- Hook routine implementations
 
-	update_retrieved_tradable: BOOLEAN is True
+	update_retrieved_tradable: BOOLEAN = True
 
 feature {NONE} -- Redefined routines
 
-	expected_field_count: INTEGER is 3
+	expected_field_count: INTEGER = 3
 
 feature {NONE} -- Implementation - constants
 
-	date_time_spec_index: INTEGER is 3
+	date_time_spec_index: INTEGER = 3
 
 end

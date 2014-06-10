@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"An empty class whose purpose is to allow access to some hidden %
 		%features of COMMAND descendants by inheriting from this class"

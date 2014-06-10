@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Root class for the production of portfolio reports"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -19,7 +19,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		local
 			set_up: SETUP
 			trade: TRADE

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Utilities for manufacturing STOCKs"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,18 +12,18 @@ class STOCK_BUILDING_UTILITIES inherit
 
 feature {TRADABLE_FACTORY} -- Implementation
 
-	new_item (symbol: STRING): STOCK is
+	new_item (symbol: STRING): STOCK
 			-- A new stock instance with symbol `symbol'
 		do
 			create Result.make (symbol, stock_splits @ symbol, stock_data)
 		end
 
-	tuple_factory: BASIC_TUPLE_FACTORY is
+	tuple_factory: BASIC_TUPLE_FACTORY
 		do
 			create {VOLUME_TUPLE_FACTORY} Result
 		end
 
-	stock_splits: STOCK_SPLITS is
+	stock_splits: STOCK_SPLITS
 		local
 			constants: expanded APPLICATION_CONSTANTS
 			platform_objects: expanded PLATFORM_DEPENDENT_OBJECTS
@@ -46,14 +46,14 @@ feature {TRADABLE_FACTORY} -- Implementation
 			end
 		end
 
-	stock_data: STOCK_DATA is
+	stock_data: STOCK_DATA
 		do
 			if command_line_options.use_db then
 				Result := database_services.stock_data
 			end
 		end
 
-	db_stock_splits: STOCK_SPLITS is
+	db_stock_splits: STOCK_SPLITS
 			-- Stock splits from database
 		do
 			if command_line_options.use_db then
@@ -61,9 +61,9 @@ feature {TRADABLE_FACTORY} -- Implementation
 			end
 		end
 
-	stock_split_fname: STRING is
+	stock_split_fname: STRING
 --@@@Make sure global once status is correct:
-		indexing
+		note
 			once_status: global
 		local
 			constants: expanded APPLICATION_CONSTANTS
@@ -79,6 +79,6 @@ feature {TRADABLE_FACTORY} -- Implementation
 
 feature {NONE} -- Hook routine implementations
 
-	has_open_interest: BOOLEAN is False
+	has_open_interest: BOOLEAN = False
 
 end

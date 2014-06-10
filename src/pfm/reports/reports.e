@@ -1,4 +1,4 @@
-indexing
+note
 	description: "List of all reports to be executed - Use via inheritance"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -12,7 +12,7 @@ deferred class
 
 feature {NONE} -- Initialization
 
-	execute_reports is
+	execute_reports
 			-- Execute all reports, using `open_trades' and `complete_trades'
 			-- as input data.
 		require
@@ -39,12 +39,12 @@ feature {NONE}
 	contents: LIST [REPORT]
 			-- All reports to be executed
 
-	complete_trades: LIST [TRADE_MATCH] is
+	complete_trades: LIST [TRADE_MATCH]
 			-- List of all TRADE_MATCHs
 		deferred
 		end
 
-	open_trades: LIST [OPEN_TRADE] is
+	open_trades: LIST [OPEN_TRADE]
 			-- List of all currently open trades
 		deferred
 		end

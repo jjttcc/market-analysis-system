@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Objects responsible for processing user-supplied commands"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -17,7 +17,7 @@ create
 
 feature -- Initialization
 
-	make (rec: BOOLEAN) is
+	make (rec: BOOLEAN)
 		do
 			record := rec
 			input_record := ""
@@ -66,7 +66,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	process_server_msg (s: STRING) is
+	process_server_msg (s: STRING)
 			-- Process the message `s' from the server - if it includes
 			-- an object selection list, save the list for processing.
 		require
@@ -85,7 +85,7 @@ feature -- Basic operations
 			end
 		end
 
-	process_request (r: STRING) is
+	process_request (r: STRING)
 			-- Process the request, `r', to send to the server according to
 			-- the stored object choice.  If there is no current choice,
 			-- `product' will equal `r'; else `product' will be the
@@ -150,7 +150,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	object_selection_match (s: STRING): BOOLEAN is
+	object_selection_match (s: STRING): BOOLEAN
 			-- Does `s' match one of `select_patterns'?
 		local
 			patterns: LINEAR [STRING]
@@ -184,7 +184,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	store_objects_from_selection_list (s: STRING) is
+	store_objects_from_selection_list (s: STRING)
 			-- Extract each "object" name and associated selection number
 			-- from `s' and store this pair as key (number) and value
 			-- (name) in either `objects' or `shared_objects' according
@@ -233,7 +233,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	record_input (s: STRING; shared, key_match: BOOLEAN) is
+	record_input (s: STRING; shared, key_match: BOOLEAN)
 			-- Process `s', according to `shared' (`s' matched
 			-- `shared_pattern') and `key_match' (a key associated with
 			-- `s' was contained in an object table) and append the
@@ -276,7 +276,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	key_for (s: STRING; objs: HASH_TABLE [STRING, STRING]): STRING is
+	key_for (s: STRING; objs: HASH_TABLE [STRING, STRING]): STRING
 			-- The key in `objs' for item `s'
 		local
 			l: LINEAR [STRING]
@@ -300,7 +300,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - Regular expressions
 
-	match (pattern, s: STRING): BOOLEAN is
+	match (pattern, s: STRING): BOOLEAN
 			-- Does `s' match the regular expression `pattern'?
 		do
 			Result := re_match (pattern, s)
@@ -318,7 +318,7 @@ feature {NONE} -- Implementation - Regular expressions
 			last_regular_expression_exists: last_regular_expression /= Void
 		end
 
-	invalid_pattern_match (target: STRING): BOOLEAN is
+	invalid_pattern_match (target: STRING): BOOLEAN
 			-- Does `target' match an "invalid" pattern?
 		do
 			Result := one_pattern_matches (
@@ -328,7 +328,7 @@ feature {NONE} -- Implementation - Regular expressions
 feature {NONE} -- Implementation - Utilities
 
 	process_selection_line (obj_table: HASH_TABLE [STRING, STRING];
-		line: STRING) is
+		line: STRING)
 			-- Process the current `line' (from a selection list received
 			-- from the server): Extract the "object number" and "object
 			-- name" and insert this pair into `obj_table', where "object
@@ -350,7 +350,7 @@ feature {NONE} -- Implementation - Utilities
 		end
 
 	process_2_column_selection_line (obj_table: HASH_TABLE [STRING, STRING];
-		line: STRING) is
+		line: STRING)
 			-- Process the current `line' (from a selection list received
 			-- from the server) as a line from a two-column selection list:
 			-- For each column: extract the "object number" and "object
@@ -381,19 +381,19 @@ feature {NONE} -- Implementation - Attributes
 			-- Is the last processed server response an
 			-- "object-selection-list"?
 
-	invalid_patterns: ARRAY [STRING] is
+	invalid_patterns: ARRAY [STRING]
 			-- Patterns for invalid or incorrect input
 		once
 			Result := <<"Invalid selection", "Selection must be between">>
 		end
 
-	non_shared_pattern: STRING is ".*List of valid non.shared objects:.*"
+	non_shared_pattern: STRING = ".*List of valid non.shared objects:.*"
 
-	shared_pattern: STRING is "shared *"
+	shared_pattern: STRING = "shared *"
 			-- Pattern indicating that the user response indicates a
 			-- "shared" object
 
-	shared_string: STRING is "shared "
+	shared_string: STRING = "shared "
 			-- String used to label a user response as specifying a
 			-- "shared" object
 
@@ -407,10 +407,10 @@ feature {NONE} -- Implementation - Attributes
 	shared_objects: HASH_TABLE [STRING, STRING]
 			-- Shared objects listed in the last "object-selection-list"
 
-	selection_list_pattern: STRING is "^[1-9][0-9]*\)"
+	selection_list_pattern: STRING = "^[1-9][0-9]*\)"
 			-- Pattern indicating that the server has sent a "selection list"
 
-	two_column_selection_list_pattern: STRING is
+	two_column_selection_list_pattern: STRING
 		"^[1-9][0-9]*\).*[ %T][1-9][0-9]*\)"
 			-- Pattern indicating that the server has sent a 2-column
 			-- "selection list"

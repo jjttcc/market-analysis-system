@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Configurations for obtaining tradable data from a database %
 		%with an ODBC connection, read from a configuration file"
 	author: "Eirik Mangseth"
@@ -37,13 +37,13 @@ creation
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		do
 			symbol := "[none]"
 			ac_make
 		end
 
-	initialize is
+	initialize
 		do
 			create settings.make (0)
 			initialize_common_settings
@@ -114,42 +114,42 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	db_name: STRING is
+	db_name: STRING
 		do
 			Result := settings @ Data_source_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	user_name: STRING is
+	user_name: STRING
 		do
 			Result := settings @ User_id_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	password: STRING is
+	password: STRING
 		do
 			Result := settings @ Password_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	stock_symbol_query: STRING is
+	stock_symbol_query: STRING
 		do
 			Result := settings @ Stock_symbol_query_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	stock_split_query: STRING is
+	stock_split_query: STRING
 		do
 			Result := settings @ Stock_split_query_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	stock_name_query: STRING is
+	stock_name_query: STRING
 		do
 			Result := clone (settings @ Stock_name_query_specifier)
 			-- Replace the <symbol> and <uppersymbol> tokens with
@@ -161,7 +161,7 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	daily_stock_data_command: STRING is
+	daily_stock_data_command: STRING
 		require
 			ok_to_use_this_spec: using_daily_stock_data_command
 		do
@@ -177,7 +177,7 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	daily_stock_symbol_field_name: STRING is
+	daily_stock_symbol_field_name: STRING
 		require
 			ok_to_use_this_spec: not using_daily_stock_data_command
 		do
@@ -186,7 +186,7 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	daily_stock_date_field_name: STRING is
+	daily_stock_date_field_name: STRING
 		require
 			ok_to_use_this_spec: not using_daily_stock_data_command
 		do
@@ -195,7 +195,7 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	daily_stock_open_field_name: STRING is
+	daily_stock_open_field_name: STRING
 		require
 			ok_to_use_this_spec: not using_daily_stock_data_command
 		do
@@ -204,7 +204,7 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	daily_stock_high_field_name: STRING is
+	daily_stock_high_field_name: STRING
 		require
 			ok_to_use_this_spec: not using_daily_stock_data_command
 		do
@@ -213,7 +213,7 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	daily_stock_low_field_name: STRING is
+	daily_stock_low_field_name: STRING
 		require
 			ok_to_use_this_spec: not using_daily_stock_data_command
 		do
@@ -222,7 +222,7 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	daily_stock_close_field_name: STRING is
+	daily_stock_close_field_name: STRING
 		require
 			ok_to_use_this_spec: not using_daily_stock_data_command
 		do
@@ -231,7 +231,7 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	daily_stock_volume_field_name: STRING is
+	daily_stock_volume_field_name: STRING
 		require
 			ok_to_use_this_spec: not using_daily_stock_data_command
 		do
@@ -240,7 +240,7 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	intraday_stock_data_command: STRING is
+	intraday_stock_data_command: STRING
 		require
 			ok_to_use_this_spec: using_intraday_stock_data_command
 		do
@@ -256,63 +256,63 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	intraday_stock_symbol_field_name: STRING is
+	intraday_stock_symbol_field_name: STRING
 		do
 			Result := settings @ Intraday_stock_symbol_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	intraday_stock_date_field_name: STRING is
+	intraday_stock_date_field_name: STRING
 		do
 			Result := settings @ Intraday_stock_date_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	intraday_stock_time_field_name: STRING is
+	intraday_stock_time_field_name: STRING
 		do
 			Result := settings @ Intraday_stock_time_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	intraday_stock_open_field_name: STRING is
+	intraday_stock_open_field_name: STRING
 		do
 			Result := settings @ Intraday_stock_open_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	intraday_stock_high_field_name: STRING is
+	intraday_stock_high_field_name: STRING
 		do
 			Result := settings @ Intraday_stock_high_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	intraday_stock_low_field_name: STRING is
+	intraday_stock_low_field_name: STRING
 		do
 			Result := settings @ Intraday_stock_low_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	intraday_stock_close_field_name: STRING is
+	intraday_stock_close_field_name: STRING
 		do
 			Result := settings @ Intraday_stock_close_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	intraday_stock_volume_field_name: STRING is
+	intraday_stock_volume_field_name: STRING
 		do
 			Result := settings @ Intraday_stock_volume_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	daily_stock_table_name: STRING is
+	daily_stock_table_name: STRING
 		require
 			ok_to_use_this_spec: not using_daily_stock_data_command
 		do
@@ -321,14 +321,14 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	intraday_stock_table_name: STRING is
+	intraday_stock_table_name: STRING
 		do
 			Result := settings @ Intraday_stock_table_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	daily_stock_query_tail: STRING is
+	daily_stock_query_tail: STRING
 		require
 			ok_to_use_this_spec: not using_daily_stock_data_command
 		do
@@ -337,28 +337,28 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	intraday_stock_query_tail: STRING is
+	intraday_stock_query_tail: STRING
 		do
 			Result := settings @ Intraday_stock_query_tail_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	derivative_symbol_query: STRING is
+	derivative_symbol_query: STRING
 		do
 			Result := settings @ Derivative_symbol_query_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	derivative_split_query: STRING is
+	derivative_split_query: STRING
 		do
 			Result := settings @ Derivative_split_query_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	derivative_name_query: STRING is
+	derivative_name_query: STRING
 		do
 			Result := clone (settings @ Derivative_name_query_specifier)
 			-- Replace the <symbol> and <uppersymbol> tokens with
@@ -370,7 +370,7 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	daily_derivative_data_command: STRING is
+	daily_derivative_data_command: STRING
 		require
 			ok_to_use_this_spec: using_daily_derivative_data_command
 		do
@@ -387,56 +387,56 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	daily_derivative_symbol_field_name: STRING is
+	daily_derivative_symbol_field_name: STRING
 		do
 			Result := settings @ Daily_derivative_symbol_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	daily_derivative_date_field_name: STRING is
+	daily_derivative_date_field_name: STRING
 		do
 			Result := settings @ Daily_derivative_date_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	daily_derivative_open_field_name: STRING is
+	daily_derivative_open_field_name: STRING
 		do
 			Result := settings @ Daily_derivative_open_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	daily_derivative_high_field_name: STRING is
+	daily_derivative_high_field_name: STRING
 		do
 			Result := settings @ Daily_derivative_high_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	daily_derivative_low_field_name: STRING is
+	daily_derivative_low_field_name: STRING
 		do
 			Result := settings @ Daily_derivative_low_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	daily_derivative_close_field_name: STRING is
+	daily_derivative_close_field_name: STRING
 		do
 			Result := settings @ Daily_derivative_close_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	daily_derivative_volume_field_name: STRING is
+	daily_derivative_volume_field_name: STRING
 		do
 			Result := settings @ Daily_derivative_volume_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	daily_derivative_open_interest_field_name: STRING is
+	daily_derivative_open_interest_field_name: STRING
 		do
 			Result :=
 				settings @ Daily_derivative_open_interest_field_specifier
@@ -444,7 +444,7 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	intraday_derivative_data_command: STRING is
+	intraday_derivative_data_command: STRING
 		require
 			ok_to_use_this_spec: using_intraday_derivative_data_command
 		do
@@ -461,63 +461,63 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	intraday_derivative_symbol_field_name: STRING is
+	intraday_derivative_symbol_field_name: STRING
 		do
 			Result := settings @ Intraday_derivative_symbol_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	intraday_derivative_date_field_name: STRING is
+	intraday_derivative_date_field_name: STRING
 		do
 			Result := settings @ Intraday_derivative_date_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	intraday_derivative_time_field_name: STRING is
+	intraday_derivative_time_field_name: STRING
 		do
 			Result := settings @ Intraday_derivative_time_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	intraday_derivative_open_field_name: STRING is
+	intraday_derivative_open_field_name: STRING
 		do
 			Result := settings @ Intraday_derivative_open_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	intraday_derivative_high_field_name: STRING is
+	intraday_derivative_high_field_name: STRING
 		do
 			Result := settings @ Intraday_derivative_high_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	intraday_derivative_low_field_name: STRING is
+	intraday_derivative_low_field_name: STRING
 		do
 			Result := settings @ Intraday_derivative_low_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	intraday_derivative_close_field_name: STRING is
+	intraday_derivative_close_field_name: STRING
 		do
 			Result := settings @ Intraday_derivative_close_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	intraday_derivative_volume_field_name: STRING is
+	intraday_derivative_volume_field_name: STRING
 		do
 			Result := settings @ Intraday_derivative_volume_field_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	intraday_derivative_open_interest_field_name: STRING is
+	intraday_derivative_open_interest_field_name: STRING
 		do
 			Result :=
 				settings @ Intraday_derivative_open_interest_field_specifier
@@ -525,28 +525,28 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	daily_derivative_table_name: STRING is
+	daily_derivative_table_name: STRING
 		do
 			Result := settings @ Daily_derivative_table_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	intraday_derivative_table_name: STRING is
+	intraday_derivative_table_name: STRING
 		do
 			Result := settings @ Intraday_derivative_table_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	daily_derivative_query_tail: STRING is
+	daily_derivative_query_tail: STRING
 		do
 			Result := settings @ Daily_derivative_query_tail_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	intraday_derivative_query_tail: STRING is
+	intraday_derivative_query_tail: STRING
 		do
 			Result := settings @ Intraday_derivative_query_tail_specifier
 		ensure
@@ -568,7 +568,7 @@ feature -- Status report
 			-- Does a specification exist for obtaining intraday
 			-- derivative data?
 
-	using_daily_stock_data_command: BOOLEAN is
+	using_daily_stock_data_command: BOOLEAN
 			-- Is the `daily_stock_data_command' being used to retrieve
 			-- daily stock data rather than contructing the command with
 			-- `daily_stock_symbol_field_name', etc.?
@@ -580,7 +580,7 @@ feature -- Status report
 				Result implies daily_stock_data_available
 		end
 
-	using_intraday_stock_data_command: BOOLEAN is
+	using_intraday_stock_data_command: BOOLEAN
 			-- Is the `intraday_stock_data_command' being used to retrieve
 			-- intraday stock data rather than contructing the command with
 			-- `intraday_stock_symbol_field_name', etc.?
@@ -592,7 +592,7 @@ feature -- Status report
 				Result implies intraday_stock_data_available
 		end
 
-	using_daily_derivative_data_command: BOOLEAN is
+	using_daily_derivative_data_command: BOOLEAN
 			-- Is the `daily_derivative_data_command' being used to retrieve
 			-- daily derivative data rather than contructing the command with
 			-- `daily_derivative_symbol_field_name', etc.?
@@ -604,7 +604,7 @@ feature -- Status report
 				Result implies daily_derivative_data_available
 		end
 
-	using_intraday_derivative_data_command: BOOLEAN is
+	using_intraday_derivative_data_command: BOOLEAN
 			-- Is the `intraday_derivative_data_command' being used to
 			-- retrieve intraday derivative data rather than contructing
 			-- the command with `intraday_derivative_symbol_field_name', etc.?
@@ -616,7 +616,7 @@ feature -- Status report
 				Result implies intraday_derivative_data_available
 		end
 
-	daily_stock_data_rule: BOOLEAN is
+	daily_stock_data_rule: BOOLEAN
 		do
 			Result := using_daily_stock_data_command implies
 				not daily_stock_data_command.is_empty
@@ -627,9 +627,9 @@ feature -- Status report
 
 feature {NONE} -- Implementation - Hook routine implementations
 
-	configuration_type: STRING is "database"
+	configuration_type: STRING = "database"
 
-	configuration_file_name: STRING is
+	configuration_file_name: STRING
 		do
 			if db_config_file_name = Void then
 				Result := file_name_with_app_directory (
@@ -640,7 +640,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 			end
 		end
 
-	check_results is
+	check_results
 		local
 			gs: expanded GLOBAL_SERVER_FACILITIES
 		do

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Parser of command-line arguments for Market Analysis %
 		%Command-Line client application"
 	author: "Jim Cochrane"
@@ -25,7 +25,7 @@ creation
 
 feature -- Access
 
-	usage: STRING is
+	usage: STRING
 			-- Message: how to invoke the program from the command-line
 		do
 			Result := "Usage: " + command_name + " [options] port_number" +
@@ -80,7 +80,7 @@ feature -- Status report
 
 feature {NONE} -- Implementation - Hook routine implementations
 
-	ambiguous_characters: LINEAR [CHARACTER] is
+	ambiguous_characters: LINEAR [CHARACTER]
 		local
 			a: ARRAY [CHARACTER]
 		once
@@ -88,22 +88,22 @@ feature {NONE} -- Implementation - Hook routine implementations
 			Result := a.linear_representation
 		end
 
-	prepare_for_argument_processing is
+	prepare_for_argument_processing
 		do
 			port_number := -1
 			host_name := ""
 		end
 
-	finish_argument_processing is
+	finish_argument_processing
 		do
 			initialization_complete := True
 		end
 
 feature {NONE} -- Implementation
 
-	Help_character: CHARACTER is 'H'
+	Help_character: CHARACTER = 'H'
 
-	set_host_name is
+	set_host_name
 			-- Set `host_name' and remove its settings from `contents'.
 		do
 			if option_in_contents ('h') then
@@ -128,7 +128,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_port_number is
+	set_port_number
 			-- Set `port_number' and remove its settings from `contents'.
 		do
 			from
@@ -146,7 +146,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_record_settings is
+	set_record_settings
 			-- Set `record' and `output_file' and remove their settings
 			-- from `contents'.
 		local
@@ -196,7 +196,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_input_from_file_settings is
+	set_input_from_file_settings
 			-- Set `input_from_file' and `input_file' and remove their
 			-- settings from `contents'.
 		local
@@ -247,7 +247,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_terminate_on_error is
+	set_terminate_on_error
 		do
 			if option_string_in_contents ("te") then
 				terminate_on_error := True
@@ -256,7 +256,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_timing_on is
+	set_timing_on
 		do
 			if option_string_in_contents ("ti") then
 				timing_on := True
@@ -265,7 +265,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_quiet_mode is
+	set_quiet_mode
 		do
 			if option_in_contents ('q') then
 				quiet_mode := True
@@ -276,7 +276,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation queries
 
-	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]] is
+	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]]
 			-- List of the set_... procedures that are called
 			-- unconditionally - for convenience
 		once
@@ -295,24 +295,24 @@ feature {NONE} -- Implementation queries
 
 feature {NONE} -- Implementation - Constants
 
-	Output_file_error: STRING is
+	Output_file_error: STRING
 		"Output file for -r option was not specified.%N"
 
-	Input_file_error: STRING is "Input file for -i option was not specified.%N"
+	Input_file_error: STRING = "Input file for -i option was not specified.%N"
 
-	Too_many_input_files_error: STRING is
+	Too_many_input_files_error: STRING
 		"Input file (-i option) was specified more than once.%N"
 
-	Too_many_output_files_error: STRING is
+	Too_many_output_files_error: STRING
 		"Output file (-r option) was specified more than once.%N"
 
-	Hostname_error: STRING is "Host name for -h option was not specified.%N"
+	Hostname_error: STRING = "Host name for -h option was not specified.%N"
 
-	debug_string: STRING is "deb"
+	debug_string: STRING = "deb"
 
 feature {NONE} -- ERROR_SUBSCRIBER interface
 
-	notify (s: STRING) is
+	notify (s: STRING)
 		do
 			error_occurred := True
 			error_description := s

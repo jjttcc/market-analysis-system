@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A abstraction that provides a concept of an n-lenth record"
 	author: "Jim Cochrane"
@@ -18,7 +18,7 @@ feature -- Access
 
 feature {FACTORY} -- Status setting
 
-	set_n (value: INTEGER) is
+	set_n (value: INTEGER)
 			-- Set n to `value'.
 		require
 			value_gt_0: value > 0

@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A command that responds to a client request for a list of all %
 		%trading period types valid for a specified tradable"
@@ -27,7 +27,7 @@ creation
 
 feature {NONE} -- Basic operations
 
-	do_execute (msg: STRING) is
+	do_execute (msg: STRING)
 		local
 			ptypes: LIST [STRING]
 		do
@@ -52,7 +52,7 @@ feature {NONE} -- Basic operations
 			end
 		end
 
-	with_record_separators (ptypes: LIST [STRING]): ARRAY [STRING] is
+	with_record_separators (ptypes: LIST [STRING]): ARRAY [STRING]
 		local
 			i: INTEGER
 		do
@@ -72,7 +72,7 @@ feature {NONE} -- Basic operations
 			Result.put (ptypes.item, i)
 		end
 
-	error_context (msg: STRING): STRING is
+	error_context (msg: STRING): STRING
 		do
 			Result := concatenation (<<"retrieving trading period types for ",
 				msg>>)

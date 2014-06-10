@@ -1,4 +1,4 @@
-indexing
+note
 	description: "An input record sequence that relies on an external C %
 		%implementation"
 	author: "Jim Cochrane"
@@ -44,7 +44,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make is
+	make
 		local
 			c_string: ANY
 		do
@@ -80,13 +80,13 @@ feature -- Access
 
 	last_date: DATE
 
-	name: STRING is "external input sequence"
+	name: STRING = "external input sequence"
 
 	field_index: INTEGER
 
 	record_index: INTEGER
 
-	field_count: INTEGER is
+	field_count: INTEGER
 		do
 			Result := field_count_implementation (external_handle)
 		end
@@ -97,7 +97,7 @@ feature -- Access
 	symbols: LIST [STRING]
 			-- The symbol of each tradable available to this input sequence
 
-	intraday_data_available: BOOLEAN is
+	intraday_data_available: BOOLEAN
 			-- Is a source of intraday data available?
 		do
 			Result := intraday_data_available_implementation (external_handle)
@@ -107,18 +107,18 @@ feature -- Status report
 
 	last_error_fatal: BOOLEAN
 
-	is_open: BOOLEAN is
+	is_open: BOOLEAN
 			-- Is the input sequence open for use?
 		do
 			Result := is_open_implementation (external_handle)
 		end
 
-	readable: BOOLEAN is
+	readable: BOOLEAN
 		do
 			Result := readable_implementation (external_handle)
 		end
 
-	after_last_record: BOOLEAN is
+	after_last_record: BOOLEAN
 		do
 			Result := after_last_record_implementation (external_handle)
 		end
@@ -129,7 +129,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_symbol (arg: STRING) is
+	set_symbol (arg: STRING)
 			-- Set symbol to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -148,7 +148,7 @@ feature -- Status setting
 			symbol_set: symbol = arg and symbol /= Void
 		end
 
-	set_intraday (arg: BOOLEAN) is
+	set_intraday (arg: BOOLEAN)
 			-- Set intraday to `arg'.
 		require
 			intraday_rule: arg implies intraday_data_available
@@ -160,7 +160,7 @@ feature -- Status setting
 
 feature -- Cursor movement
 
-	start is
+	start
 		do
 			start_implementation (external_handle)
 			if external_error (external_handle) then
@@ -172,7 +172,7 @@ feature -- Cursor movement
 			record_index := 1
 		end
 
-	advance_to_next_field is
+	advance_to_next_field
 		do
 			advance_to_next_field_implementation (external_handle)
 			if external_error (external_handle) then
@@ -183,7 +183,7 @@ feature -- Cursor movement
 			field_index := field_index + 1
 		end
 
-	advance_to_next_record is
+	advance_to_next_record
 		do
 			advance_to_next_record_implementation (external_handle)
 			if external_error (external_handle) then
@@ -195,14 +195,14 @@ feature -- Cursor movement
 			field_index := 1
 		end
 
-	discard_current_record is
+	discard_current_record
 		do
 			advance_to_next_record
 		end
 
 feature -- Input
 
-	read_integer is
+	read_integer
 		do
 			read_string
 			if not error_occurred then
@@ -223,7 +223,7 @@ feature -- Input
 			end
 		end
 
-	read_character is
+	read_character
 			-- Read the current character in the current field and advance
 			-- to the next character.
 		do
@@ -236,7 +236,7 @@ feature -- Input
 			end
 		end
 
-	read_string is
+	read_string
 			-- Read the current field as a string.
 		local
 			string: STRING
@@ -263,13 +263,13 @@ feature -- Input
 				not error_occurred implies last_string /= Void
 		end
 
-	read_date is
+	read_date
 			-- Read the current field as a date.
 		do
 			-- @@Stub - currently not used.
 		end
 
-	read_double is
+	read_double
 		do
 			read_string
 			if not error_occurred then
@@ -290,7 +290,7 @@ feature -- Input
 			end
 		end
 
-	read_real is
+	read_real
 		do
 			read_string
 			if not error_occurred then
@@ -313,9 +313,9 @@ feature -- Input
 
 feature {NONE} -- Implementation
 
-	path_separator: STRING is ""
+	path_separator: STRING = ""
 
-	working_directories: STRING is
+	working_directories: STRING
 			-- The working directories for external data retrieval, each
 			-- ending with `directory_separator' and separated by
 			-- `path_separator'.  The following directories are included
@@ -362,25 +362,25 @@ feature {NONE} -- Implementation
 			not_void: Result /= Void
 		end
 
-	lock_external is
+	lock_external
 			-- @@When/if multi-threading is in place, this will lock the use
 			-- of the external routines to prevent race conditions.
 		do
 		end
 
-	unlock_external is
+	unlock_external
 			-- @@When/if multi-threading is in place, this will unlock the use
 			-- of the external routines.
 		do
 		end
 
-	dispose is
+	dispose
 		do
 			external_dispose (external_handle)
 			Precursor
 		end
 
-	current_field_as_string: STRING is
+	current_field_as_string: STRING
 			-- A string created from `current_field'
 		do
 			field.from_c_substring (current_field (external_handle), 1,
@@ -388,7 +388,7 @@ feature {NONE} -- Implementation
 			Result := field
 		end
 
-	initialize_symbols is
+	initialize_symbols
 		local
 			su: expanded STRING_UTILITIES
 		do
@@ -403,7 +403,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	string_from_pointer (p: POINTER): STRING is
+	string_from_pointer (p: POINTER): STRING
 		do
 			create Result.make (0)
 			Result.from_c (p)
@@ -415,7 +415,7 @@ feature {NONE} -- Implementation
 			-- Handle for external input sequence data used by
 			-- external routines
 
-	set_error_message (msg: STRING; exc: BOOLEAN; fatal: BOOLEAN) is
+	set_error_message (msg: STRING; exc: BOOLEAN; fatal: BOOLEAN)
 			-- Set `error_string' from current error message from
 			-- external module, prepended with `msg'.  If `exc',
 			-- raise an exception with the resulting message.
@@ -448,7 +448,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - externals
 
-	is_open_implementation (handle: POINTER): BOOLEAN is
+	is_open_implementation (handle: POINTER): BOOLEAN
 			-- Is the input sequence open for use?
 		require
 			handle_valid: handle /= default_pointer
@@ -456,7 +456,7 @@ feature {NONE} -- Implementation - externals
 			"C"
 		end
 
-	current_field (handle: POINTER): POINTER is
+	current_field (handle: POINTER): POINTER
 			-- Current field value as a non-null-terminated C string
 		require
 			handle_valid: handle /= default_pointer
@@ -464,7 +464,7 @@ feature {NONE} -- Implementation - externals
 			"C"
 		end
 
-	current_field_length (handle: POINTER): INTEGER is
+	current_field_length (handle: POINTER): INTEGER
 			-- Length of `current_field'
 		require
 			handle_valid: handle /= default_pointer
@@ -472,7 +472,7 @@ feature {NONE} -- Implementation - externals
 			"C"
 		end
 
-	current_character (handle: POINTER): CHARACTER is
+	current_character (handle: POINTER): CHARACTER
 			-- The character at the current "cursor" location - the "cursor"
 			-- is advanced to the next character.
 		require
@@ -482,56 +482,56 @@ feature {NONE} -- Implementation - externals
 			"C"
 		end
 
-	advance_to_next_field_implementation (handle: POINTER) is
+	advance_to_next_field_implementation (handle: POINTER)
 		require
 			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
 
-	advance_to_next_record_implementation (handle: POINTER) is
+	advance_to_next_record_implementation (handle: POINTER)
 		require
 			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
 
-	field_count_implementation (handle: POINTER): INTEGER is
+	field_count_implementation (handle: POINTER): INTEGER
 		require
 			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
 
-	readable_implementation (handle: POINTER): BOOLEAN is
+	readable_implementation (handle: POINTER): BOOLEAN
 		require
 			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
 
-	after_last_record_implementation (handle: POINTER): BOOLEAN is
+	after_last_record_implementation (handle: POINTER): BOOLEAN
 		require
 			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
 
-	retrieve_data (handle: POINTER; sym: POINTER; intrad: BOOLEAN) is
+	retrieve_data (handle: POINTER; sym: POINTER; intrad: BOOLEAN)
 		require
 			args_valid: handle /= default_pointer and sym /= default_pointer
 		external
 			"C"
 		end
 
-	start_implementation (handle: POINTER) is
+	start_implementation (handle: POINTER)
 		require
 			handle_valid: handle /= default_pointer
 		external
 			"C"
 		end
 
-	make_available_symbols (handle: POINTER) is
+	make_available_symbols (handle: POINTER)
 			-- Create `available_symbols'.
 		require
 			handle_valid: handle /= default_pointer
@@ -539,7 +539,7 @@ feature {NONE} -- Implementation - externals
 			"C"
 		end
 
-	available_symbols (handle: POINTER): POINTER is
+	available_symbols (handle: POINTER): POINTER
 			-- All available symbols, separated by newlines
 		require
 			handle_valid: handle /= default_pointer
@@ -547,7 +547,7 @@ feature {NONE} -- Implementation - externals
 			"C"
 		end
 
-	initialize_external_input_routines (working_dirs: POINTER): POINTER is
+	initialize_external_input_routines (working_dirs: POINTER): POINTER
 			-- Perform any needed initialization by the external routines
 			-- and return a handle for use by the other external routines.
 			-- If the initialization failed, `initialization_error' will
@@ -562,7 +562,7 @@ feature {NONE} -- Implementation - externals
 			"C"
 		end
 
-	external_error (handle: POINTER): BOOLEAN is
+	external_error (handle: POINTER): BOOLEAN
 			-- Did an error occur in the last external "C" call?
 		require
 			handle_valid: handle /= default_pointer
@@ -570,7 +570,7 @@ feature {NONE} -- Implementation - externals
 			"C"
 		end
 
-	last_external_error (handle: POINTER): POINTER is
+	last_external_error (handle: POINTER): POINTER
 			-- The last error that occurred in an external "C" call
 		require
 			handle_valid: handle /= default_pointer
@@ -578,7 +578,7 @@ feature {NONE} -- Implementation - externals
 			"C"
 		end
 
-	external_dispose (handle: POINTER) is
+	external_dispose (handle: POINTER)
 			-- Perform any needed cleanup operations for garbage collection.
 		require
 			open: is_open
@@ -589,7 +589,7 @@ feature {NONE} -- Implementation - externals
 			closed: not is_open
 		end
 
-	intraday_data_available_implementation (handle: POINTER): BOOLEAN is
+	intraday_data_available_implementation (handle: POINTER): BOOLEAN
 			-- Is a source of intraday data available?
 		require
 			handle_valid: handle /= default_pointer
@@ -597,13 +597,13 @@ feature {NONE} -- Implementation - externals
 			"C"
 		end
 
-	initialization_error: BOOLEAN is
+	initialization_error: BOOLEAN
 			-- Did an error occur in `initialize_external_input_routines'?
 		external
 			"C"
 		end
 
-	initialization_error_reason: POINTER is
+	initialization_error_reason: POINTER
 			-- Reason for the last `initialization_error'?
 		external
 			"C"

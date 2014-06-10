@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Builder of all reports to be executed"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -17,7 +17,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	execute is
+	execute
 			-- Create the reports
 		local
 			report: REPORT

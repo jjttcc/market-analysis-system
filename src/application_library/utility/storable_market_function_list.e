@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A storable list of MARKET_FUNCTIONs that wipes out each market %
 		%function before saving it to persistent store"
@@ -33,7 +33,7 @@ creation
 
 feature -- Utility
 
-	save is
+	save
 			-- Ensure that the output data lists of each market function
 			-- are (recursively) cleared so that no extra data is stored to
 			-- the file; then call precursor to save the remaining contents.

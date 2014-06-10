@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 	"Simple n-period moving average.  Can be specialized by descendants to %
 	%provide different types of moving averages, such as exponential MA."
@@ -38,7 +38,7 @@ creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 feature -- Access
 
-	short_description: STRING is
+	short_description: STRING
 		do
 			create Result.make (33)
 			Result.append (n.out)
@@ -46,7 +46,7 @@ feature -- Access
 							%on a data sequence")
 		end
 
-	direct_operators: LIST [COMMAND] is
+	direct_operators: LIST [COMMAND]
 			-- All operators directly attached to Current
 		do
 			Result := Precursor
@@ -57,7 +57,7 @@ feature -- Access
 
 feature {NONE} -- Initialization
 
-	make (in: like input; op: like operator; i: INTEGER) is
+	make (in: like input; op: like operator; i: INTEGER)
 		do
 			check operator_used end
 			create sum.make (in.output, op, i)
@@ -69,7 +69,7 @@ feature {NONE} -- Initialization
 
 feature {NONE} -- Basic operations
 
-	do_process is
+	do_process
 			-- Sum the first n elements of target, then call continue_until
 			-- to do the remaining work.
 		local
@@ -110,20 +110,20 @@ feature {NONE} -- Basic operations
 
 feature {MARKET_FUNCTION_EDITOR}
 
-	set_input (in: MARKET_FUNCTION) is
+	set_input (in: MARKET_FUNCTION)
 		do
 			Precursor (in)
 			sum.set (in.output)
 		end
 
-	set_n (value: INTEGER) is
+	set_n (value: INTEGER)
 		do
 			Precursor (value)
 			check n = value end
 			sum.initialize (Current)
 		end
 
-	set_operator (op: like operator) is
+	set_operator (op: like operator)
 			-- operator will extract the appropriate field (close, high,
 			-- open, etc.) from the market tuples being averaged, according
 			-- to its type.
@@ -136,7 +136,7 @@ feature {MARKET_FUNCTION_EDITOR}
 
 feature {NONE}
 
-	action is
+	action
 			-- Default to simple moving average.
 			-- Intended to be redefined by descenants for more complex MAs.
 		local

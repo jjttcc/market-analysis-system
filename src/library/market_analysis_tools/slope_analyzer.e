@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A linear analyzer that determines the slope of the current item"
 	author: "Jim Cochrane"
@@ -25,7 +25,7 @@ creation
 
 feature -- Initialization
 
-	make (tgt: like target) is
+	make (tgt: like target)
 		require
 			not_void: tgt /= Void
 		do
@@ -36,14 +36,14 @@ feature -- Initialization
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is False
+	arg_mandatory: BOOLEAN = False
 
-	target_cursor_not_affected: BOOLEAN is True
+	target_cursor_not_affected: BOOLEAN = True
 			-- True
 
 feature -- Basic operations
 
-	execute (arg: ANY) is
+	execute (arg: ANY)
 		do
 			value := slope (target)
 		end

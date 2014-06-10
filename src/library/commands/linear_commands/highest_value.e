@@ -1,4 +1,4 @@
-indexing
+note
 	description: "N-record commands that find the highest value in the %
 		%last n trading periods"
 	author: "Jim Cochrane"
@@ -22,7 +22,7 @@ creation
 
 feature -- Initialization
 
-	make (t: LIST [MARKET_TUPLE]; o: like operand; i: like n) is
+	make (t: LIST [MARKET_TUPLE]; o: like operand; i: like n)
 		require
 			not_void: t /= Void and o /= Void
 			i_gt_0: i > 0
@@ -35,12 +35,12 @@ feature -- Initialization
 
 feature {NONE} -- Implementation
 
-	start_init is
+	start_init
 		do
 			value := 0
 		end
 
-	sub_action (current_index: INTEGER) is
+	sub_action (current_index: INTEGER)
 		do
 			operand.execute (target @ current_index)
 			if operand.value > value then

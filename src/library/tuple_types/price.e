@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Abstraction for a monetary value that can be compared with other %
 		%monetary values."
@@ -22,14 +22,14 @@ feature
 
 feature -- Comparison
 
-	infix "<" (other: like Current): BOOLEAN is
+	infix "<" (other: like Current): BOOLEAN
 		do
 			Result := value < other.value
 		end
 
 feature -- Status setting
 
-	set_value (v: REAL) is
+	set_value (v: REAL)
 		do
 			value := v
 		end

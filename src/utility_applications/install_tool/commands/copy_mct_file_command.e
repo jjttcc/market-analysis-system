@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Copying of MCT file to its official location"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,21 +21,21 @@ create
 
 feature {NONE} -- Initialization
 
-	make is
+	make
         do
         end
 
 feature -- Access
 
-	description: STRING is "Installing MCT configuration file"
+	description: STRING = "Installing MCT configuration file"
 
 feature -- Status report
 
-	arg_mandatory: BOOLEAN is True
+	arg_mandatory: BOOLEAN = True
 
 feature -- Basic operations
 
-	execute (options: INSTALL_TOOL_COMMAND_LINE) is
+	execute (options: INSTALL_TOOL_COMMAND_LINE)
 		local
 			mct_dir: DIRECTORY
 			mct_file: PLAIN_TEXT_FILE

@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Builder of objects used more or less globally throughout %
 		%the system, of which there is usually only one instance"
 	author: "Jim Cochrane"
@@ -35,7 +35,7 @@ creation
 
 feature -- Initialization
 
-	make is
+	make
 		do
 			set_up
 		ensure
@@ -54,7 +54,7 @@ feature -- Access
 			-- Event dispatcher used in market event analysis
 
 --!!!!Redesign may be needed:
-	persistent_connection_interface: PERSISTENT_CONNECTION_INTERFACE is
+	persistent_connection_interface: PERSISTENT_CONNECTION_INTERFACE
 			-- The interface used for persistent connections
 		once
 			debug ("threading")
@@ -64,7 +64,7 @@ feature -- Access
 		end
 
 --!!!!Redesign may be needed:
-	non_persistent_connection_interface: NON_PERSISTENT_CONNECTION_INTERFACE is
+	non_persistent_connection_interface: NON_PERSISTENT_CONNECTION_INTERFACE
 			-- The interface used for non-persistent connections
 		once
 			debug ("threading")
@@ -75,7 +75,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	make_dispatcher is
+	make_dispatcher
 			-- Create `dispatcher' with the current event registrants.
 		do
 			create dispatcher.make
@@ -86,14 +86,14 @@ feature -- Basic operations
 
 feature {NONE} -- Hook routines
 
-	new_persistent_conn_if: PERSISTENT_CONNECTION_INTERFACE is
+	new_persistent_conn_if: PERSISTENT_CONNECTION_INTERFACE
 			-- A new "persistent" connection interface of the
 			-- appropriate type
 		do
 			create {MAIN_CL_INTERFACE} Result.make (Current)
 		end
 
-	new_non_persistent_conn_if: NON_PERSISTENT_CONNECTION_INTERFACE is
+	new_non_persistent_conn_if: NON_PERSISTENT_CONNECTION_INTERFACE
 			-- A new "non-persistent" connection interface of the
 			-- appropriate type
 		do
@@ -102,7 +102,7 @@ feature {NONE} -- Hook routines
 
 feature {NONE} -- Implementation
 
-	set_up is
+	set_up
 			-- Build components and set up relationships.
 		do
 			check
@@ -114,7 +114,7 @@ feature {NONE} -- Implementation
 			build_components
 		end
 
-	build_components is
+	build_components
 		local
 			list_builder: TRADABLE_LIST_BUILDER
 		do
@@ -130,7 +130,7 @@ feature {NONE} -- Implementation
 --!!!			non_persistent_connection_interface := new_non_persistent_conn_if
 		end
 
-	register_event_registrants is
+	register_event_registrants
 			-- Register global `market_event_registrants' to `dispatcher'
 		require
 			dispatcher_not_void: dispatcher /= Void
@@ -149,7 +149,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Administrative
 
-	append_hard_coded_functions_to_library is
+	append_hard_coded_functions_to_library
 			-- If the hard-coded functions are not in the `function_library',
 			-- append them to `function_library'.
 		local
@@ -175,7 +175,7 @@ feature {NONE} -- Administrative
 				loop
 					function_library.forth
 				end
-				-- If the first function of hc_function_factory.product is
+				-- If the first function of hc_function_factory.product
 				-- not in function_library, assume no functions from
 				-- hc_function_factory.product are in function_library -
 				-- append them.
@@ -194,7 +194,7 @@ feature {NONE} -- Administrative
 			end
 		end
 
-	remove_functions (fnames: LIST [STRING]) is
+	remove_functions (fnames: LIST [STRING])
 			-- Delete all functions from the persistent `function_library'
 			-- whose name matches an element of `fnames'
 		local
@@ -221,7 +221,7 @@ feature {NONE} -- Administrative
 			end
 		end
 
-	remove_hard_coded_functions is
+	remove_hard_coded_functions
 			-- Delete all hard-coded functions from the persistent
 			-- `function_library'.
 		local

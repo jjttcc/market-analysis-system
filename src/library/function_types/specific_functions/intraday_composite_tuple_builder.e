@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Abstraction that provides services for building a list %
 		%of COMPOSITE_TUPLE instances built from inraday data"
 	author: "Jim Cochrane"
@@ -25,7 +25,7 @@ creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 feature -- Basic operations
 
-	do_process is
+	do_process
 			-- Make a list of COMPOSITE_TUPLE
 		local
 			src_sublist: ARRAYED_LIST [BASIC_MARKET_TUPLE]

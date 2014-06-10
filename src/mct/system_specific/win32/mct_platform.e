@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Platform-dependent features for Windows systems"
 	author: "Jim Cochrane"
 	date: "$Date$"
@@ -21,13 +21,13 @@ class MCT_PLATFORM inherit
 
 feature -- Access
 
-	Default_configuration_file_location: STRING is "C:\Program Files\mct\"
+	Default_configuration_file_location: STRING = "C:\Program Files\mct\"
 			-- Default location (complete path) of the MCT configuration
 			-- file (with a directory separator on the end)
 
 feature -- Basic operations
 
-	convert_path (s: STRING) is
+	convert_path (s: STRING)
 			-- Apply file-path modifications to `s'.
 		local
 			regexp_tool: expanded REGULAR_EXPRESSION_UTILITIES

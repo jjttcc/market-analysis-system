@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"Root class for the Configuration Tool, a program that allows %
 		%configuration actions to be carried out without the need of %
@@ -30,7 +30,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make is
+	make
         do
 			if options.error_occurred then
 				print (options.error_description)
@@ -46,14 +46,14 @@ feature {NONE} -- Initialization
 			end
         end
 
-	options: CONFIG_TOOL_COMMAND_LINE is
+	options: CONFIG_TOOL_COMMAND_LINE
 		once
 			create Result.make
 		end
 
 feature {NONE} -- Implementation
 
-	process_commands is
+	process_commands
 		local
 			file_changer: FILE_PROCESSOR
 		do
@@ -64,9 +64,9 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - hook routine implementations
 
-	application_name: STRING is "application"
+	application_name: STRING = "application"
 
-	notify (s: STRING) is
+	notify (s: STRING)
 		do
 			print (s)
 		end

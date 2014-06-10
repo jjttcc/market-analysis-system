@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A market function that takes one argument or variable"
 	author: "Jim Cochrane"
@@ -27,7 +27,7 @@ creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 feature {NONE} -- Initialization
 
-	make (in: like input; op: like operator) is
+	make (in: like input; op: like operator)
 		require
 			in_not_void: in /= Void
 			op_not_void_if_used: operator_used implies op /= Void
@@ -50,21 +50,21 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	trading_period_type: TIME_PERIOD_TYPE is
+	trading_period_type: TIME_PERIOD_TYPE
 		do
 			Result := input.trading_period_type
 		ensure then
 			Result = input.trading_period_type
 		end
 
-	short_description: STRING is
-		indexing
+	short_description: STRING
+		note
 			once_status: global
 		once
 			Result := "Indicator that operates on a data sequence"
 		end
 
-	full_description: STRING is
+	full_description: STRING
 		do
 			create Result.make (25)
 			Result.append (short_description)
@@ -72,13 +72,13 @@ feature -- Access
 			Result.append (input.full_description)
 		end
 
-	children: LIST [MARKET_FUNCTION] is
+	children: LIST [MARKET_FUNCTION]
 		do
 			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 			Result.extend (input)
 		end
 
-	leaf_functions: LIST [COMPLEX_FUNCTION] is
+	leaf_functions: LIST [COMPLEX_FUNCTION]
 		local
 			f: COMPLEX_FUNCTION
 		do
@@ -91,7 +91,7 @@ feature -- Access
 			end
 		end
 
-	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE] is
+	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE]
 		do
 			if input.is_complex then
 				Result := input.innermost_input
@@ -104,7 +104,7 @@ feature -- Access
 
 feature {FACTORY} -- Element change
 
-	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
+	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE])
 		do
 			processed_date_time := Void
 			if input.is_complex then
@@ -125,18 +125,18 @@ feature {FACTORY} -- Element change
 
 feature -- Status report
 
-	processed: BOOLEAN is
+	processed: BOOLEAN
 		do
 			Result := input.processed and then
 						processed_date_time /= Void and then
 						processed_date_time >= input.processed_date_time
 		end
 
-	has_children: BOOLEAN is True
+	has_children: BOOLEAN = True
 
 feature {NONE}
 
-	action is
+	action
 		local
 			t: SIMPLE_TUPLE
 		do
@@ -153,18 +153,18 @@ feature {NONE}
 				output.last.date_time.is_equal (target.item.date_time)
 		end
 
-	start is
+	start
 		do
 			Precursor
 		end
 
-	do_process is
+	do_process
 			-- Execute the function.
 		do
 			do_all
 		end
 
-	pre_process is
+	pre_process
 		do
 			if not output.is_empty then
 				output.wipe_out
@@ -178,7 +178,7 @@ feature {NONE}
 
 feature {MARKET_FUNCTION_EDITOR}
 
-	set_input (in: like input) is
+	set_input (in: like input)
 		require
 			in_not_void: in /= Void and in.output /= Void
 			ptype_not_void: in.trading_period_type /= Void
@@ -191,7 +191,7 @@ feature {MARKET_FUNCTION_EDITOR}
 			not_processed: not processed
 		end
 
-	reset_parameters is
+	reset_parameters
 		do
 			input.reset_parameters
 		end
@@ -202,12 +202,12 @@ feature {MARKET_FUNCTION_EDITOR}
 
 feature {NONE} -- Implementation
 
-	make_output is
+	make_output
 		do
 			create output.make (target.count)
 		end
 
-	initialize_operators is
+	initialize_operators
 			-- Initialize all operators that are not Void - default:
 			-- initialize `operator' if it's not Void.
 		do

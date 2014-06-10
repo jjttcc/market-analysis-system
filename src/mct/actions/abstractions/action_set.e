@@ -1,4 +1,4 @@
-indexing
+note
 	description: "A uniquely labeled set of event-response actions"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -17,7 +17,7 @@ create
 feature {NONE} -- Initialization
 
 	make (label, id: STRING;
-			assigned_actions: ARRAY [PROCEDURE [ANY, TUPLE]]) is
+			assigned_actions: ARRAY [PROCEDURE [ANY, TUPLE]])
 		require
 			args_exist: label /= Void and id /= Void and
 				assigned_actions /= Void
@@ -43,7 +43,7 @@ feature -- Access
 	actions: LINKED_SET [PROCEDURE [ANY, TUPLE]]
 			-- The action set
 
-	action_array: ARRAY [PROCEDURE [ANY, TUPLE]] is
+	action_array: ARRAY [PROCEDURE [ANY, TUPLE]]
 			-- The action set as an array
 		local
 			l: LINEAR [PROCEDURE [ANY, TUPLE]]

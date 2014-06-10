@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Basic portfolio status report"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,11 +21,11 @@ creation
 
 feature {NONE} -- Initialization
 
-	make is do end
+	make do end
 
 feature -- Basic operations
 
-	execute is
+	execute
 		local
 			total_gain: REAL
 			trade: TRADE

@@ -1,8 +1,8 @@
-indexing
+note
 	description: "Extended interface to the GUI client"
 	author: "Jim Cochrane"
 	date: "$Date$";
-	note: "It is expected that, before `execute' is called, the first %
+	note1: "It is expected that, before `execute' is called, the first %
 		%character of the input of io_medium has been read."
 	revision: "$Revision$"
 	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
@@ -28,7 +28,7 @@ creation
 
 feature {NONE} -- Implementation
 
-	make_request_handlers is
+	make_request_handlers
 			-- Create the request handlers.
 		do
 			Precursor

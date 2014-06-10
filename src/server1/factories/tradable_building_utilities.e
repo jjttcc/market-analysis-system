@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Factory that manufactures TRADABLEs"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -25,7 +25,7 @@ deferred class TRADABLE_BUILDING_UTILITIES inherit
 
 feature {TRADABLE_FACTORY} -- Access
 
-	new_item (symbol: STRING): TRADABLE [BASIC_MARKET_TUPLE] is
+	new_item (symbol: STRING): TRADABLE [BASIC_MARKET_TUPLE]
 			-- A new tradable instance with symbol `symbol'
 		require
 			symbol_exists: symbol /= Void and then not symbol.is_empty
@@ -34,7 +34,7 @@ feature {TRADABLE_FACTORY} -- Access
 			result_exists: Result /= Void
 		end
 
-	tuple_factory: BASIC_TUPLE_FACTORY is
+	tuple_factory: BASIC_TUPLE_FACTORY
 			-- Factory that produces tuple types that match the type
 			-- of `new_item'
 		deferred
@@ -42,7 +42,7 @@ feature {TRADABLE_FACTORY} -- Access
 			result_exists: Result /= Void
 		end
 
-	index_vector (intraday: BOOLEAN): ARRAY [INTEGER] is
+	index_vector (intraday: BOOLEAN): ARRAY [INTEGER]
 			-- Index vector for setting up value setters for a TRADABLE
 		local
 			vector: ARRAYED_LIST [INTEGER]
@@ -83,7 +83,7 @@ feature {TRADABLE_FACTORY} -- Access
 
 feature {NONE} -- Hook routines
 
-	has_open_interest: BOOLEAN is
+	has_open_interest: BOOLEAN
 			-- Does the data entity being built have an open interest field?
 		deferred
 		end

@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A market function that takes two arguments or variables"
 	author: "Jim Cochrane"
@@ -27,7 +27,7 @@ creation {FACTORY, MARKET_FUNCTION_EDITOR}
 
 feature {NONE} -- Initialization
 
-	make (in1: like input1; in2: like input2; op: like operator)  is
+	make (in1: like input1; in2: like input2; op: like operator)
 		require
 			args_not_void: in1 /= Void and in2 /= Void
 			op_not_void: op /= Void
@@ -48,21 +48,21 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	trading_period_type: TIME_PERIOD_TYPE is
+	trading_period_type: TIME_PERIOD_TYPE
 		do
 			Result := input1.trading_period_type
 		ensure then
 			Result = input1.trading_period_type
 		end
 
-	short_description: STRING is
-		indexing
+	short_description: STRING
+		note
 			once_status: global
 		once
 			Result := "Indicator that operates on two data sequences"
 		end
 
-	full_description: STRING is
+	full_description: STRING
 		do
 			create Result.make (25)
 			Result.append (short_description)
@@ -72,14 +72,14 @@ feature -- Access
 			Result.append (input2.full_description)
 		end
 
-	children: LIST [MARKET_FUNCTION] is
+	children: LIST [MARKET_FUNCTION]
 		do
 			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 			Result.extend (input1)
 			Result.extend (input2)
 		end
 
-	leaf_functions: LIST [COMPLEX_FUNCTION] is
+	leaf_functions: LIST [COMPLEX_FUNCTION]
 		do
 			create {LINKED_LIST [COMPLEX_FUNCTION]} Result.make
 			check
@@ -89,14 +89,14 @@ feature -- Access
 			Result.append (input2.leaf_functions)
 		end
 
-	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE] is
+	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE]
 		do
 			Result := input1.innermost_input
 		end
 
 feature -- Status report
 
-	processed: BOOLEAN is
+	processed: BOOLEAN
 		do
 			Result := (input1.processed and input2.processed) and then
 				processed_date_time /= Void and then
@@ -104,11 +104,11 @@ feature -- Status report
 				processed_date_time >= input2.processed_date_time
 		end
 
-	has_children: BOOLEAN is True
+	has_children: BOOLEAN = True
 
 feature {NONE} -- Hook methods
 
-	action is
+	action
 		local
 			t: SIMPLE_TUPLE
 		do
@@ -127,12 +127,12 @@ feature {NONE} -- Hook methods
 			output.count = old (output.count) + 1
 		end
 
-	start is
+	start
 		do
 			Precursor
 		end
 
-	do_process is
+	do_process
 		do
 			if not (target1.is_empty or target2.is_empty) then
 				do_all
@@ -142,7 +142,7 @@ feature {NONE} -- Hook methods
 				target1.is_empty or target2.is_empty implies output.is_empty
 		end
 
-	pre_process is
+	pre_process
 		do
 			if not output.is_empty then
 				output.wipe_out
@@ -159,7 +159,7 @@ feature {NONE} -- Hook methods
 
 feature {FACTORY} -- Status setting
 
-	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE]) is
+	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE])
 			-- Both `input1' and `input2' will be changed.
 		do
 			processed_date_time := Void
@@ -170,7 +170,7 @@ feature {FACTORY} -- Status setting
 
 feature {MARKET_FUNCTION_EDITOR}
 
-	set_input1 (in: like input1) is
+	set_input1 (in: like input1)
 		require
 			not_void: in /= Void
 			output_not_void: in.output /= Void
@@ -186,7 +186,7 @@ feature {MARKET_FUNCTION_EDITOR}
 			not_processed: not processed
 		end
 
-	set_input2 (in: like input2) is
+	set_input2 (in: like input2)
 		require
 			not_void: in /= Void
 			output_not_void: in.output /= Void
@@ -202,7 +202,7 @@ feature {MARKET_FUNCTION_EDITOR}
 			not_processed: not processed
 		end
 
-	set_inputs (in1, in2: like input1) is
+	set_inputs (in1, in2: like input1)
 			-- Set input1 and input2.
 		require
 			not_void: in1 /= Void and in2 /= Void
@@ -221,7 +221,7 @@ feature {MARKET_FUNCTION_EDITOR}
 			not_processed: not processed
 		end
 
-	reset_parameters is
+	reset_parameters
 		do
 			input1.reset_parameters
 			input2.reset_parameters
@@ -233,14 +233,14 @@ feature {MARKET_FUNCTION_EDITOR}
 
 feature {NONE} -- Implementation
 
-	do_set_input1 (in: like input1) is
+	do_set_input1 (in: like input1)
 		do
 			input1 := in
 			set1 (in.output)
 			processed_date_time := Void
 		end
 
-	do_set_input2 (in: like input2) is
+	do_set_input2 (in: like input2)
 		do
 			input2 := in
 			set2 (in.output)

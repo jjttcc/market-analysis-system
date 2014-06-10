@@ -1,4 +1,4 @@
-indexing
+note
 	description:
 		"A market function that is also an sequence of market tuples. %
 		%Its purpose is to act as the innermost function in a composition %
@@ -15,9 +15,9 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 		rename
 			output as data
 		export {NONE}
-			copy, setup
+			copy
 		undefine
-			is_equal, copy, setup, out
+			is_equal, copy, out
 		redefine
 			data
 		end
@@ -39,7 +39,7 @@ creation {FACTORY}
 
 feature {NONE} -- Initialization
 
-	make (type: TIME_PERIOD_TYPE) is
+	make (type: TIME_PERIOD_TYPE)
 		do
 			trading_period_type := type
 			arrayed_list_make (300)
@@ -49,7 +49,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	data: MARKET_TUPLE_LIST [G] is
+	data: MARKET_TUPLE_LIST [G]
 			-- Contents - market tuple data
 		do
 			Result := Current
@@ -58,14 +58,14 @@ feature -- Access
 	trading_period_type: TIME_PERIOD_TYPE
 			-- Period type of `data'
 
-	short_description: STRING is
-		indexing
+	short_description: STRING
+		note
 			once_status: global
 		once
 			Result := "Simple Function"
 		end
 
-	full_description: STRING is
+	full_description: STRING
 		do
 			create Result.make (40)
 			Result.append (short_description)
@@ -74,33 +74,33 @@ feature -- Access
 			Result.append (" records")
 		end
 
-	parameters: LIST [FUNCTION_PARAMETER] is
+	parameters: LIST [FUNCTION_PARAMETER]
 -- !!!! indexing once_status: global??!!!
 		once
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 		end
 
-	processed_date_time: DATE_TIME is
+	processed_date_time: DATE_TIME
 -- !!!! indexing once_status: global??!!!
 		once
 			-- Very early date
 			create Result.make (1, 1, 1, 0, 0, 0)
 		end
 
-	children: LINKED_LIST [MARKET_FUNCTION] is
+	children: LINKED_LIST [MARKET_FUNCTION]
 -- !!!! indexing once_status: global??!!!
 		once
 			create Result.make
 		end
 
-	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE] is
+	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE]
 		do
 			Result := Current
 		end
 
 feature -- Status report
 
-	processed: BOOLEAN is
+	processed: BOOLEAN
 			-- Has this function been processed?
 		do
 			Result := True
@@ -111,11 +111,11 @@ feature -- Status report
 	loaded: BOOLEAN
 			-- Has `data' been loaded and post-processing completed?
 
-	has_children: BOOLEAN is False
+	has_children: BOOLEAN = False
 
 feature {FACTORY} -- Status setting
 
-	set_trading_period_type (arg: TIME_PERIOD_TYPE) is
+	set_trading_period_type (arg: TIME_PERIOD_TYPE)
 			-- Set trading_period_type to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -126,7 +126,7 @@ feature {FACTORY} -- Status setting
 				trading_period_type /= Void
 		end
 
-	finish_loading is
+	finish_loading
 			-- Notify this instance that the process of loading its
 			-- data is finished.
 			-- The class that loads the data into this object should
@@ -142,11 +142,11 @@ feature {FACTORY} -- Status setting
 
 feature {MARKET_FUNCTION} -- Status report
 
-	is_complex: BOOLEAN is False
+	is_complex: BOOLEAN = False
 
 feature {NONE} -- Basic operations
 
-	process is
+	process
 			-- Null action
 		do
 		end

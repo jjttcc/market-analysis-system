@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Configuration of environment/platform-dependent settings"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -38,7 +38,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (subscribers: ARRAY [ERROR_SUBSCRIBER]; cmdline: COMMAND_LINE) is
+	make (subscribers: ARRAY [ERROR_SUBSCRIBER]; cmdline: COMMAND_LINE)
 			-- Make with error `subscribers'.
 		require
 			cmdline_exists: cmdline /= Void
@@ -51,7 +51,7 @@ feature {NONE} -- Initialization
 			cu_make
 		end
 
-	initialize is
+	initialize
 		do
 			create settings.make (0)
 			create start_server_commands.make
@@ -84,7 +84,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	valid_portnumbers: LIST [STRING] is
+	valid_portnumbers: LIST [STRING]
 		do
 			Result := (settings @ Valid_port_numbers_specifier).split (
 				Valid_port_numbers_separator)
@@ -92,39 +92,39 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	server_report_portnumber: STRING is
+	server_report_portnumber: STRING
 		do
 			Result := settings @ Server_report_port_number_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	hostname: STRING is
+	hostname: STRING
 		do
 			Result := settings @ Hostname_specifier
 		ensure
 			not_void: Result /= Void
 		end
 
-	start_session_on_startup: BOOLEAN is
+	start_session_on_startup: BOOLEAN
 		do
 			(settings @ Start_session_specifier).to_lower
 			Result := equal (True_string, settings @ Start_session_specifier)
 		end
 
-	start_charts_on_startup: BOOLEAN is
+	start_charts_on_startup: BOOLEAN
 		do
 			(settings @ Start_charts_specifier).to_lower
 			Result := equal (True_string, settings @ Start_charts_specifier)
 		end
 
-	platform: MCT_PLATFORM is
+	platform: MCT_PLATFORM
 			-- The platform for which the executable was compiled
 		once
 			create Result
 		end
 
-	additional_settings_report: STRING is
+	additional_settings_report: STRING
 		do
 			Result := ""
 			from
@@ -180,13 +180,13 @@ feature -- Status report
 	terminate_sessions_on_exit: BOOLEAN
 			-- Should all owned MAS sessions be terminated on exit?
 
-	save_command_as_default_failed: BOOLEAN is
+	save_command_as_default_failed: BOOLEAN
 			-- Did the last call to `save_command_as_default ' fail?
 		do
 			Result := config_file.mark_as_default_failed
 		end
 
-	save_command_as_default_failure_reason: STRING is
+	save_command_as_default_failure_reason: STRING
 			-- Did the last call to `save_command_as_default ' fail?
 		do
 			Result := config_file.mark_as_default_failure_reason
@@ -194,7 +194,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_terminate_sessions_on_exit (arg: BOOLEAN) is
+	set_terminate_sessions_on_exit (arg: BOOLEAN)
 			-- Set `terminate_sessions_on_exit' to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -207,7 +207,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	save_command_as_default (cmd: MCT_COMMAND) is
+	save_command_as_default (cmd: MCT_COMMAND)
 			-- Save `cmd' in the configuration file as a default command.
 		do
 			config_file.mark_block_as_default (Command_name_specifier,
@@ -216,13 +216,13 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation - Hook routine implementations
 
-	key_index: INTEGER is 1
+	key_index: INTEGER = 1
 
-	value_index: INTEGER is 2
+	value_index: INTEGER = 2
 
-	configuration_type: STRING is "MAS Control Terminal"
+	configuration_type: STRING = "MAS Control Terminal"
 
-	print_settings is
+	print_settings
 			-- Print the contents of `settings' - for debugging.
 		local
 			keys: ARRAY [STRING]
@@ -244,7 +244,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 			print ("END settings contents " + line + "%N")
 		end
 
-	post_process_settings is
+	post_process_settings
 		do
 			check
 				env_specs_exist: environment_variable_set_specifications /=
@@ -310,7 +310,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 			remove_escape_characters
 		end
 
-	check_results is
+	check_results
 		do
 			check_for_empty_fields (<<Valid_port_numbers_specifier,
 				Hostname_specifier, Server_report_port_number_specifier,
@@ -335,7 +335,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 			end
 		end
 
-	cleanup is
+	cleanup
 		do
 			-- These data structures are no longer used - reclaim the
 			-- memory they were using:
@@ -345,7 +345,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 			environment_variable_append_specifications := Void
 		end
 
-	use_customized_setting (key, value: STRING): BOOLEAN is
+	use_customized_setting (key, value: STRING): BOOLEAN
 		do
 			if
 				config_file.in_block or config_file.at_end_of_block or
@@ -357,7 +357,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 			end
 		end
 
-	do_customized_setting (key, value: STRING) is
+	do_customized_setting (key, value: STRING)
 		do
 			if equal (key, User_definition_specifier) then
 				process_user_definition (value)
@@ -376,7 +376,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 			end
 		end
 
-	process_environment_variable (value: STRING; append: BOOLEAN) is
+	process_environment_variable (value: STRING; append: BOOLEAN)
 			-- If `append', process `value' as an "append-to" environment
 			-- variable specification; otherwise, process `value' as
 			-- a "set" environment variable specification.
@@ -388,7 +388,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 			end
 		end
 
-	set_environment_variable (value: STRING) is
+	set_environment_variable (value: STRING)
 			-- Use `Sub_field_separator' to split `value' in two and then
 			-- use the result to set the environment variable specified
 			-- by the left component.
@@ -408,7 +408,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 			end
 		end
 
-	append_to_environment_variable (value: STRING) is
+	append_to_environment_variable (value: STRING)
 			-- Use `Sub_field_separator' to split `value' in two and then
 			-- use the result to append to the environment variable specified
 			-- by the left component.
@@ -436,7 +436,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 			end
 		end
 
-	process_block (key, value: STRING) is
+	process_block (key, value: STRING)
 		require
 			in_or_at_end_of_block: config_file.in_block xor
 				config_file.at_end_of_block
@@ -464,14 +464,14 @@ feature {NONE} -- Implementation - Hook routine implementations
 			end
 		end
 
-	new_config_file: CONFIGURATION_FILE is
+	new_config_file: CONFIGURATION_FILE
 		do
 			create Result.make (Field_separator, platform)
 		end
 
 feature {NONE} -- Implementation - Utilities
 
-	replace_configuration_tokens (s: STRING) is
+	replace_configuration_tokens (s: STRING)
 			-- Replace all "configuration tokens" in `s'.
 		local
 			keys, values: ARRAY [STRING]
@@ -490,7 +490,7 @@ feature {NONE} -- Implementation - Utilities
 				Token_end_delimiter)
 		end
 
-	replace_command_string_tokens (c: EXTERNAL_COMMAND) is
+	replace_command_string_tokens (c: EXTERNAL_COMMAND)
 			-- Replace the tokens in `c's command_string with the specified
 			-- values.
 		do
@@ -500,7 +500,7 @@ feature {NONE} -- Implementation - Utilities
 			end
 		end
 
-	process_start_server_cmd (key, value: STRING) is
+	process_start_server_cmd (key, value: STRING)
 			-- Process a block-definition of a start-server command.
 		require
 			in_block: config_file.in_block
@@ -519,7 +519,7 @@ feature {NONE} -- Implementation - Utilities
 			end
 		end
 
-	make_start_server_cmd is
+	make_start_server_cmd
 			-- Make a 'start-server' command and add it to
 			-- `start_server_commands'.
 		require
@@ -540,7 +540,7 @@ feature {NONE} -- Implementation - Utilities
 			start_server_commands.extend (c)
 		end
 
-	process_user_definition (value: STRING) is
+	process_user_definition (value: STRING)
 			-- Process a user-defined variable definition
 		local
 			components: CHAIN [STRING]
@@ -562,7 +562,7 @@ feature {NONE} -- Implementation - Utilities
 			end
 		end
 
-	check_field (key: STRING) is
+	check_field (key: STRING)
 			-- If `settings @ key' is empty, append notification
 			-- for the condition to `error_report'.
 		require
@@ -577,7 +577,7 @@ feature {NONE} -- Implementation - Utilities
 			end
 		end
 
-	check_for_empty_fields (keys: ARRAY [STRING]) is
+	check_for_empty_fields (keys: ARRAY [STRING])
 			-- For each key, k, in `keys', if `settings @ k' is empty,
 			-- append notification for the condition to `error_report'.
 		require
@@ -588,7 +588,7 @@ feature {NONE} -- Implementation - Utilities
 			keys.linear_representation.do_all (agent check_field)
 		end
 
-	check_for_unreplaced_tokens (s: STRING) is
+	check_for_unreplaced_tokens (s: STRING)
 			-- Check `s' for tokens that were not replaced.
 		require
 			s_exists: s /= Void
@@ -618,7 +618,7 @@ feature {NONE} -- Implementation - Utilities
 			end
 		end
 
-	check_for_unreplaced_commands (c: EXTERNAL_COMMAND) is
+	check_for_unreplaced_commands (c: EXTERNAL_COMMAND)
 			-- Check `c's `command_string' for tokens that were not replaced.
 		require
 			c_valid: c /= Void and c.command_string /= Void
@@ -626,7 +626,7 @@ feature {NONE} -- Implementation - Utilities
 			check_for_unreplaced_tokens (c.command_string)
 		end
 
-	command_working_directory (s: STRING): STRING is
+	command_working_directory (s: STRING): STRING
 			-- Working directory, if any, specified in the raw command
 			-- string `s' - Void if none specified.  If one is specified
 			-- the components of `s' that make up the specification will
@@ -653,7 +653,7 @@ feature {NONE} -- Implementation - Utilities
 			end
 		end
 
-	new_termination_command: MCT_COMMAND is
+	new_termination_command: MCT_COMMAND
 		local
 			term_cmd_value: STRING
 		do
@@ -679,7 +679,7 @@ feature {NONE} -- Implementation - Utilities
 		end
 
 	new_managed_command (cmd_id, cmd_string: STRING):
-		MANAGED_EXTERNAL_COMMAND is
+		MANAGED_EXTERNAL_COMMAND
 			-- A new MANAGED_EXTERNAL_COMMAND, with the work_directory set, if
 			-- specified in `cmd_string'
 		do
@@ -692,7 +692,7 @@ feature {NONE} -- Implementation - Utilities
 		end
 
 	new_unmanaged_command (cmd_id, cmd_string: STRING):
-		UNMANAGED_EXTERNAL_COMMAND is
+		UNMANAGED_EXTERNAL_COMMAND
 			-- A new UNMANAGED_EXTERNAL_COMMAND, with the work_directory set,
 			-- if specified in `cmd_string'
 		do
@@ -704,7 +704,7 @@ feature {NONE} -- Implementation - Utilities
 				Result.debugging_on
 		end
 
-	initialize_external_command (cmd: EXTERNAL_COMMAND; cmd_id: STRING) is
+	initialize_external_command (cmd: EXTERNAL_COMMAND; cmd_id: STRING)
 			-- Initialize `cmd' and add it to `all_commands'.
 		require
 			args_exist: cmd /= Void and cmd_id /= Void
@@ -724,7 +724,7 @@ feature {NONE} -- Implementation - Utilities
 				cmd.debugging_on
 		end
 
-	add_to_all_commands (cmd: MCT_COMMAND) is
+	add_to_all_commands (cmd: MCT_COMMAND)
 			-- Add `cmd' to `all_commands'.
 		do
 			if all_commands = Void then
@@ -749,7 +749,7 @@ feature {NONE} -- Implementation
 	environment_variable_append_specifications: LIST [STRING]
 			-- Stored specifications for environment variable appends
 
-	report_back_appended (s: STRING): STRING is
+	report_back_appended (s: STRING): STRING
 			-- `s' + " " + report_back_option
 		do
 			Result := s + " " + report_back_option
@@ -758,13 +758,13 @@ feature {NONE} -- Implementation
 			definition: Result.is_equal (s + " " + report_back_option)
 		end
 
-	report_back_option: STRING is
+	report_back_option: STRING
 		once
 			Result := Report_back_flag + " " + process_host_name +
 				Host_port_separator.out + server_report_portnumber
 		end
 
-	required_specifiers: LINKED_LIST [STRING] is
+	required_specifiers: LINKED_LIST [STRING]
 			-- Configuration fields that are required
 		once
 			create Result.make
@@ -775,7 +775,7 @@ feature {NONE} -- Implementation
 			Result.object_comparison
 		end
 
-	dynamic_tokens: ARRAY [STRING] is
+	dynamic_tokens: ARRAY [STRING]
 			-- "<word>" tokens that are to be converted on the fly, rather
 			-- than converted on start-up - without the surrounding "<>"
 		once
@@ -791,7 +791,7 @@ feature {NONE} -- Implementation
 			-- User-defined values, one for each element
 			-- of `user_defined_variables'
 
-	do_platform_conversion is
+	do_platform_conversion
 			-- Perform any needed platform conversion.
 		do
 			settings.linear_representation.do_all (agent
@@ -800,14 +800,14 @@ feature {NONE} -- Implementation
 				agent convert_command_path)
 		end
 
-	remove_escape_characters is
+	remove_escape_characters
 			-- Remove all occurrences of `Escape_character' in `settings'.
 		do
 			settings.linear_representation.do_all (
 				agent remove_character (?, Escape_character @ 1))
 		end
 
-	convert_command_path (cmd: MCT_COMMAND) is
+	convert_command_path (cmd: MCT_COMMAND)
 			-- Call `platform.convert_path' on `cmd.command_string'.
 		local
 			extcmd: EXTERNAL_COMMAND
@@ -818,13 +818,13 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	remove_character (s: STRING; c: CHARACTER) is
+	remove_character (s: STRING; c: CHARACTER)
 			-- Remove all occurrences of `c' from `s'.
 		do
 			s.prune_all (c)
 		end
 
-	log_error (msg: STRING) is
+	log_error (msg: STRING)
 		do
 			Precursor (msg)
 			error_report.append (msg)

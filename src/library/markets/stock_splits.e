@@ -1,6 +1,6 @@
-indexing
+note
 	description:
-		"Abstraction for a table of stock split sequences, with the stock "
+		"Abstraction for a table of stock split sequences, with the stock",
 		"symbol as the key"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -14,7 +14,7 @@ deferred class
 
 feature -- Access
 
-	infix "@" (symbol: STRING): DYNAMIC_CHAIN [STOCK_SPLIT] is
+	infix "@" (symbol: STRING): DYNAMIC_CHAIN [STOCK_SPLIT]
 			-- Stock splits for the stock with `symbol' - Void if there
 			-- are no recorded splits for `symbol'
 		require

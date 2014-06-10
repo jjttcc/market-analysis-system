@@ -1,4 +1,4 @@
-indexing
+note
 	description: "Platform-dependent features for UNIX systems"
 	author: "Jim Cochrane"
 	date: "$Date$"
@@ -26,7 +26,7 @@ class MCT_PLATFORM inherit
 
 feature -- Access
 
-	Default_configuration_file_location: STRING is
+	Default_configuration_file_location: STRING
 			-- Default location (complete path) of the MCT configuration
 			-- file (with a directory separator on the end)
 		once
@@ -40,7 +40,7 @@ feature -- Access
 
 feature -- Basic operations
 
-	convert_path (s: STRING) is
+	convert_path (s: STRING)
 			-- Apply file-path modifications to `s'.
 		do
 			-- No conversion is needed for UNIX systems.
