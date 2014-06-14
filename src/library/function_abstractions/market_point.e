@@ -26,7 +26,7 @@ feature -- Initialization
 		do
 		end
 
-	set_x_y_date (x_value, y_value: REAL; d: DATE_TIME)
+	set_x_y_date (x_value, y_value: DOUBLE; d: DATE_TIME)
 		do
 			x := x_value
 			y := y_value
@@ -37,10 +37,10 @@ feature -- Initialization
 
 feature -- Access
 
-	x: REAL
+	x: DOUBLE
 			-- x coordinate
 
-	y: REAL
+	y: DOUBLE
 			-- y coordinate
 
 feature -- Status report
@@ -49,7 +49,7 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_x_y (x_value, y_value: REAL)
+	set_x_y (x_value, y_value: DOUBLE)
 			-- Set x and y coordinates.
 		do
 			x := x_value
@@ -68,7 +68,7 @@ feature -- Status setting
 			set: date_time = d
 		end
 
-	set_x (arg: REAL)
+	set_x (arg: DOUBLE)
 			-- Set x to `arg'.
 		do
 			x := arg
@@ -76,7 +76,7 @@ feature -- Status setting
 			-- x = arg
 		end
 
-	set_y (arg: REAL)
+	set_y (arg: DOUBLE)
 			-- Set y to `arg'.
 		do
 			y := arg

@@ -11,6 +11,7 @@ deferred class MAS_DB_SERVICES inherit
 	GENERAL_UTILITIES
 		export
 			{NONE} all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		end
 
 	TRADABLE_TYPE_VALUES

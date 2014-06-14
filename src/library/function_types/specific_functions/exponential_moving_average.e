@@ -51,7 +51,7 @@ feature {NONE} -- Basic operations
 			update_exp_inverse
 			check
 				exp_inv_correct:
-					rabs(1 - exp.value) - rabs(exp_inverse) <= .00001
+					dabs(1 - exp.value) - dabs(exp_inverse) <= .00001
 			end
 			Precursor
 		end
@@ -108,11 +108,11 @@ feature {NONE} -- Implementation
 			tgindex_gt_n: target.index > effective_n
 		local
 			t: SIMPLE_TUPLE
-			latest_value: REAL
+			latest_value: DOUBLE
 		do
 			check
 				exp_inv_correct:
-					rabs(1 - exp.value) - rabs(exp_inverse) <= .00001
+					dabs(1 - exp.value) - dabs(exp_inverse) <= .00001
 			end
 			exp.execute (Void)
 			operator.execute (target.item)

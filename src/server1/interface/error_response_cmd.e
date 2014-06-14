@@ -17,8 +17,11 @@ creation
 
 feature -- Basic operations
 
-	do_execute (msg: STRING)
+	do_execute (message: ANY)
+		local
+			msg: STRING
 		do
+			msg := message.out
 			put (concatenation (<<Error.out, message_component_separator,
 				msg, eom>>))
 		end

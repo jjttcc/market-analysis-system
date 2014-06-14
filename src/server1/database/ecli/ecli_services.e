@@ -91,6 +91,8 @@ feature -- Access
 		end
 
 	single_string_query_result (query: STRING): STRING
+	-- !!!!note: Experimental - even if this class compiles I need to
+	-- verify that I'm using the newest ECLI correctly.
 		local
 			stmt: ECLI_STATEMENT
 			ecli_result: ECLI_VARCHAR
@@ -118,7 +120,7 @@ feature -- Access
 			else
 				-- Create result set 'value holders'.
 				create ecli_result.make (Max_varchar_length)
-				if stmt.result_column_count /= 1 then
+				if stmt.result_columns_count /= 1 then
 					last_error := concatenation (<<
 						"Execution of statement:%N'",
 						stmt.sql, "' failed: too many columns in result - ",
@@ -128,10 +130,10 @@ feature -- Access
 					end
 					fatal_error := True
 				else
-					stmt.set_cursor (<<ecli_result>>)
+					-- !!!probably obsolete: stmt.set_cursor (<<ecli_result>>)
 					stmt.start
-					if not stmt.off and not stmt.cursor.item (1).is_null then
-						Result ?= stmt.cursor.item (1).item
+					if not stmt.off and not stmt.results.item(1).is_null then
+						Result ?= stmt.results.item(1)
 					end
 					if debugging then
 						if Result /= Void and then not Result.is_empty then
@@ -143,6 +145,64 @@ feature -- Access
 						end
 					end
 				end
+			end
+			stmt.close
+		end
+
+	old_single_string_query_result_remove (query: STRING): STRING
+			-- !!!!!!
+		local
+			stmt: ECLI_STATEMENT
+			ecli_result: ECLI_VARCHAR
+		do
+			fatal_error := False
+			create stmt.make (session)
+			stmt.set_immediate_execution_mode
+			stmt.set_sql (query)
+			if debugging then
+				io.error.print ("Executing database query '" + query + "'%N")
+			end
+			stmt.execute
+			if debugging then
+				debug_report (stmt)
+			end
+			if not stmt.is_ok then
+--				last_error := concatenation (<<
+--					"Execution of statement:%N'",
+--					stmt.sql, "' failed:%N", stmt.cli_state, ", ",
+--					stmt.diagnostic_message>>)
+--				if debugging then
+--					print_list (<<last_error, "%N">>)
+--				end
+--				fatal_error := True
+--			else
+--				-- Create result set 'value holders'.
+--				create ecli_result.make (Max_varchar_length)
+--				if stmt.result_column_count /= 1 then
+--					last_error := concatenation (<<
+--						"Execution of statement:%N'",
+--						stmt.sql, "' failed: too many columns in result - ",
+--						"expecting 1">>)
+--					if debugging then
+--						print_list (<<last_error, "%N">>)
+--					end
+--					fatal_error := True
+--				else
+--					stmt.set_cursor (<<ecli_result>>)
+--					stmt.start
+--					if not stmt.off and not stmt.cursor.item (1).is_null then
+--						Result ?= stmt.cursor.item (1).item
+--					end
+--					if debugging then
+--						if Result /= Void and then not Result.is_empty then
+--							io.error.print ("Database query gave result of '" +
+--								Result + "'%N")
+--						else
+--							io.error.print (
+--								"Database query gave empty result.%N")
+--						end
+--					end
+--				end
 			end
 			stmt.close
 		end
@@ -231,8 +291,9 @@ feature {NONE} -- Implementation
 				last_error := "Database session was not created."
 				raise (Void)
 			else
-				create Result.make (db_info.db_name, db_info.user_name,
-					db_info.password)
+				create Result.make_default
+				Result.set_login_strategy(create {ECLI_SIMPLE_LOGIN}.make(
+					db_info.db_name, db_info.user_name, db_info.password))
 			end
 		end
 
@@ -259,7 +320,8 @@ feature {NONE} -- Implementation
 				end
 				fatal_error := True
 			end
-			Result.set_cursor (value_holders)
+--!!!!!obsoleted and, hopefully, not needed:
+--Result.set_cursor (value_holders)
 			if debugging then
 				debug_report (Result)
 			end
@@ -298,17 +360,24 @@ feature {NONE} -- Implementation
 				else
 					-- Create result set 'value holders'.
 					create ecli_string.make (20)
-					check stmt.result_column_count > 0 end
-					-- Define the container of value holders.
-					stmt.set_cursor (<<ecli_string>>)
+					check stmt.result_columns_count > 0 end
+-- Define the container of value holders.
+--!!!!Appears to be obsolete and not needed - check!!!!:
+--stmt.set_cursor (<<ecli_string>>)
 					-- Iterate on result-set.
 					from
 						stmt.start
 					until
 						stmt.off
 					loop
-						if not stmt.cursor.item (1).is_null then
-							s ?= stmt.cursor.item (1).item
+--!!!!old!!!! - cleanup soon:
+--						if not stmt.cursor.item (1).is_null then
+--							s ?= stmt.cursor.item (1).item
+--							Result.extend (s)
+--						end
+--!!!!end old!!!!
+						if not stmt.results.item(1).is_null then
+							s ?= stmt.results.item(1)
 							Result.extend (s)
 						end
 						stmt.forth
@@ -464,7 +533,7 @@ feature {NONE} -- Implementation
 				io.error.print (tag + " has results.%N")
 			end
 			io.error.print ("Number of columns in result: " +
-				stmt.result_column_count.out + "%N")
+				stmt.result_columns_count.out + "%N")
 		end
 
 	Max_varchar_length: INTEGER = 254

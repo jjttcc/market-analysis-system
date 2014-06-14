@@ -195,7 +195,7 @@ feature {NONE} -- Hook routine implementation
 				if
 					target1.item.value <= target2.item.value and
 					(not crossover_in_effect or
-					rabs (target1.item.value - target2.item.value) >= epsilon)
+					dabs (target1.item.value - target2.item.value) >= epsilon)
 				then
 					if above_to_below and additional_condition then
 						generate_event (target1.item, event_description)
@@ -204,13 +204,13 @@ feature {NONE} -- Hook routine implementation
 					crossover_in_effect := True
 				else
 					crossover_in_effect := crossover_in_effect and
-					rabs (target1.item.value - target2.item.value) < epsilon
+					dabs (target1.item.value - target2.item.value) < epsilon
 				end
 			else
 				if
 					target1.item.value >= target2.item.value and
 					(not crossover_in_effect or
-					rabs (target1.item.value - target2.item.value) >= epsilon)
+					dabs (target1.item.value - target2.item.value) >= epsilon)
 				then
 					if below_to_above and additional_condition then
 						generate_event (target1.item, event_description)
@@ -219,7 +219,7 @@ feature {NONE} -- Hook routine implementation
 					crossover_in_effect := True
 				else
 					crossover_in_effect := crossover_in_effect and
-					rabs (target1.item.value - target2.item.value) < epsilon
+					dabs (target1.item.value - target2.item.value) < epsilon
 				end
 			end
 		end

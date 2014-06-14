@@ -69,7 +69,7 @@ feature {NONE}
 			-- open, highest high, lowest low, and close values, respectively,
 			-- from tuples.
 		local
-			h, l, o, c: REAL
+			h, l, o, c: DOUBLE
 			high: HIGH_PRICE
 			low: LOW_PRICE
 		do

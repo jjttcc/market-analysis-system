@@ -35,7 +35,7 @@ feature -- Access
 	previous_operator: LINEAR_COMMAND
 			-- Operator that operates on the previously calculated value
 
-	first_element_operator: RESULT_COMMAND [REAL]
+	first_element_operator: RESULT_COMMAND [DOUBLE]
 			-- Operator that produces the first element of the output.
 
 	direct_operators: LIST [COMMAND]

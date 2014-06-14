@@ -8,7 +8,7 @@ note
 
 deferred class LINEAR_COMMAND inherit
 
-	RESULT_COMMAND [REAL]
+	RESULT_COMMAND [DOUBLE]
 		export {MARKET_FUNCTION}
 			initialize
 		redefine

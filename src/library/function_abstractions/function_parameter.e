@@ -52,7 +52,7 @@ feature -- Comparison
 			Result := description < other.description
 		end
 
-	is_equal (other: FUNCTION_PARAMETER): BOOLEAN
+	is_equal (other: like Current): BOOLEAN
 		do
 			-- Redefined here to allow descendants to compare with other
 			-- FUNCTION_PARAMETERs instead of "like Current".

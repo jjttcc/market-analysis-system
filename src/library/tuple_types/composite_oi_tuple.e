@@ -21,16 +21,16 @@ creation
 
 feature -- Access
 
-	open_interest: REAL
+	open_interest: DOUBLE
 
 feature {COMPOSITE_TUPLE_FACTORY} -- Status setting
 
-	set_open_interest (arg: REAL)
+	set_open_interest (arg: DOUBLE)
 			-- Set open_interest to `arg'.
 		do
 			open_interest := arg
 		ensure
-			open_interest_set: rabs (open_interest - arg) < Epsilon
+			open_interest_set: dabs (open_interest - arg) < Epsilon
 		end
 
 end -- class COMPOSITE_OI_TUPLE

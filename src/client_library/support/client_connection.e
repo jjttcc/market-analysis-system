@@ -254,7 +254,7 @@ feature {NONE} -- Implementation
 		deferred
 		end
 
-	connection_failed_msg: STRING is 
+	connection_failed_msg: STRING
 		do
 			Result := "Connection to the " + server_type + "failed."
 			if socket.error /= Void and not socket.error.is_empty then

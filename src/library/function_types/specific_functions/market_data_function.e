@@ -105,7 +105,9 @@ feature {MARKET_FUNCTION_EDITOR}
 			in_not_void: in /= Void
 			in_ptype_not_void: in.trading_period_type /= Void
 		do
-			input.make_from_array (in)
+			if attached {ARRAY [BASIC_MARKET_TUPLE]} in as array then
+				input.make_from_array (array)
+			end
 			processed_date_time := input.processed_date_time
 		ensure then
 			input_copied_from_in: input.count = in.count

@@ -28,7 +28,7 @@ feature -- Initialization
 			set: start_point = p1
 		end
 
-	make_from_slope (startp: MARKET_POINT; s: REAL)
+	make_from_slope (startp: MARKET_POINT; s: DOUBLE)
 		require
 			startp.x > 0
 		do
@@ -44,16 +44,16 @@ feature -- Access
 	start_point: MARKET_POINT
 			-- The two points that define the line
 
-	start_y: REAL
+	start_y: DOUBLE
 			-- y value of the start point
 		do
 			Result := start_point.y
 		end
 
-	slope: REAL
+	slope: DOUBLE
 			-- Slope of the line
 
-	y_at (x: INTEGER): REAL
+	y_at (x: INTEGER): DOUBLE
 			-- y value at index (x-value) `x'
 		do
 			Result := (x - start_point.x) * slope + start_point.y
@@ -61,7 +61,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_slope (v: REAL)
+	set_slope (v: DOUBLE)
 			-- Set slope to `v'.
 		do
 			slope := v
@@ -69,7 +69,7 @@ feature -- Status setting
 			-- slope = v
 		end
 
-	set_start_y (v: REAL)
+	set_start_y (v: DOUBLE)
 			-- Set start_y to `v'.
 		do
 			start_point.set_y (v)

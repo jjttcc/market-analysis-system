@@ -89,7 +89,7 @@ feature -- Basic operations
 			ui_set: user_interface /= Void
 			op_maker_set: operator_maker /= Void
 		local
-			cmd: RESULT_COMMAND [REAL]
+			cmd: RESULT_COMMAND [DOUBLE]
 		do
 			set_ovf_input (f)
 			operator_maker.reset
@@ -107,9 +107,9 @@ feature -- Basic operations
 			ui_set: user_interface /= Void
 			op_maker_set: operator_maker /= Void
 		local
-			cmd: BINARY_OPERATOR [REAL, REAL]
+			cmd: BINARY_OPERATOR [DOUBLE, DOUBLE]
 			lc: LINEAR_COMMAND
-			rc: RESULT_COMMAND [REAL]
+			rc: RESULT_COMMAND [DOUBLE]
 		do
 			set_ovf_input (f)
 			operator_maker.reset
@@ -136,14 +136,14 @@ feature -- Basic operations
 
 	edit_configurable_nrf (f: CONFIGURABLE_N_RECORD_FUNCTION)
 			-- Edit a CONFIGURABLE_N_RECORD_FUNCTION function (which takes a
-			-- RESULT_COMMAND [REAL] and a LINEAR_COMMAND).
+			-- RESULT_COMMAND [DOUBLE] and a LINEAR_COMMAND).
 		require
 			ui_set: user_interface /= Void
 			op_maker_set: operator_maker /= Void
 		local
-			mainop: RESULT_COMMAND [REAL]
+			mainop: RESULT_COMMAND [DOUBLE]
 			prevop: LINEAR_COMMAND
-			firstop: RESULT_COMMAND [REAL]
+			firstop: RESULT_COMMAND [DOUBLE]
 			response: STRING
 		do
 			set_ovf_input (f)
@@ -183,7 +183,7 @@ feature -- Basic operations
 			ui_set: user_interface /= Void
 			op_maker_set: operator_maker /= Void
 		local
-			cmd: RESULT_COMMAND [REAL]
+			cmd: RESULT_COMMAND [DOUBLE]
 		do
 			set_ovf_input (f)
 			operator_maker.reset
@@ -210,7 +210,7 @@ feature -- Basic operations
 			ui_set: user_interface /= Void
 			op_maker_set: operator_maker /= Void
 		local
-			cmd: RESULT_COMMAND [REAL]
+			cmd: RESULT_COMMAND [DOUBLE]
 		do
 			set_tvf_input (f)
 			operator_maker.reset
@@ -223,12 +223,12 @@ feature -- Basic operations
 
 	edit_one_fn_bnc_n (f: STANDARD_MOVING_AVERAGE)
 			-- Edit a function that takes one market function,
-			-- a RESULT_COMMAND [REAL], and an n-value.
+			-- a RESULT_COMMAND [DOUBLE], and an n-value.
 		require
 			ui_set: user_interface /= Void
 			op_maker_set: operator_maker /= Void
 		local
-			cmd: RESULT_COMMAND [REAL]
+			cmd: RESULT_COMMAND [DOUBLE]
 		do
 			set_ovf_input (f)
 			operator_maker.reset
@@ -250,13 +250,13 @@ feature -- Basic operations
 
 	edit_ema (f: EXPONENTIAL_MOVING_AVERAGE)
 			-- Edit an EXPONENTIAL_MOVING_AVERAGE - that takes one market
-			-- function, a RESULT_COMMAND [REAL], an N_BASED_CALCULATION,
+			-- function, a RESULT_COMMAND [DOUBLE], an N_BASED_CALCULATION,
 			-- and an n-value.
 		require
 			ui_set: user_interface /= Void
 			op_maker_set: operator_maker /= Void
 		local
-			cmd: RESULT_COMMAND [REAL]
+			cmd: RESULT_COMMAND [DOUBLE]
 			exp: N_BASED_CALCULATION
 		do
 			set_ovf_input (f)
@@ -288,7 +288,7 @@ feature -- Basic operations
 			ui_set: user_interface /= Void
 			op_maker_set: operator_maker /= Void
 		local
-			y, slope: REAL
+			y, slope: DOUBLE
 			p: MARKET_POINT
 			date: DATE_TIME
 		do
@@ -309,7 +309,7 @@ feature -- Basic operations
 			ui_set: user_interface /= Void
 			op_maker_set: operator_maker /= Void
 		local
-			cmd: RESULT_COMMAND [REAL]
+			cmd: RESULT_COMMAND [DOUBLE]
 		do
 			set_abf_input (f)
 			operator_maker.reset

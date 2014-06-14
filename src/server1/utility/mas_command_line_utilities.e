@@ -11,6 +11,7 @@ class MAS_COMMAND_LINE_UTILITIES inherit
 	COMMAND_LINE_UTILITIES
 		export
 			{NONE} all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		redefine
 			eom
 		end

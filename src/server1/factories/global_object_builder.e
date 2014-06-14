@@ -10,8 +10,9 @@ note
 class GLOBAL_OBJECT_BUILDER inherit
 
 	EXCEPTIONS
-		export {NONE}
-			all
+		export
+			{NONE} all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		end
 
 	GLOBAL_APPLICATION

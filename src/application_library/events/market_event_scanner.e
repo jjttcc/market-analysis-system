@@ -8,14 +8,14 @@ note
 
 class MARKET_EVENT_SCANNER inherit
 
-	DATA_SCANNER
+	DATA_SCANNER [MARKET_EVENT]
 		rename
 			make as data_scanner_make, tuple_maker as parser
 		export {NONE}
 			data_scanner_make
 		redefine
-			product, parser, make_tuple, advance_to_next_record, input,
-			value_setters_used
+			product, make_tuple, advance_to_next_record, input,
+			value_setters_used, parser
 		end
 
 	EXCEPTIONS
@@ -35,7 +35,7 @@ feature
 			in_separators_not_void:
 				in.field_separator /= Void and in.record_separator /= Void
 		do
-			create parser.make (in)
+			create {MARKET_EVENT_PARSER} parser.make (in)
 			input := in
 			parser.set_field_separator (in.field_separator @ 1)
 		ensure
@@ -46,9 +46,9 @@ feature -- Access
 
 	product: LINKED_LIST [MARKET_EVENT]
 
-	parser: MARKET_EVENT_PARSER
-
 	input: INPUT_FILE
+
+	parser: MARKET_EVENT_PARSER
 
 feature {NONE} -- Hook method implementations
 

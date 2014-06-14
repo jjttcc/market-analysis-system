@@ -171,7 +171,7 @@ feature {NONE} -- Implementation
 
 	initialize_previous_operator_attached
 		local
-			l: LIST [COMMAND]
+			l: LIST [TREE_NODE]
 		do
 			previous_operator_attached := previous_operator = operator
 			if not previous_operator_attached then

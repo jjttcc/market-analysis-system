@@ -21,11 +21,11 @@ creation
 
 feature -- Access
 
-	volume: REAL
+	volume: DOUBLE
 
 feature {COMPOSITE_TUPLE_FACTORY}
 
-	set_volume (arg: REAL)
+	set_volume (arg: DOUBLE)
 		do
 			volume := arg
 		ensure
@@ -34,7 +34,7 @@ feature {COMPOSITE_TUPLE_FACTORY}
 
 feature {NONE}
 
-	adjust_volume_for_split (r: REAL)
+	adjust_volume_for_split (r: DOUBLE)
 		do
 			volume := (volume * r)
 		end

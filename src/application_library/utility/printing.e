@@ -9,8 +9,9 @@ note
 deferred class PRINTING inherit
 
 	GLOBAL_SERVICES
-		export {NONE}
-			all
+		export
+			{NONE} all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		end
 
 	GENERAL_UTILITIES

@@ -18,7 +18,7 @@ class UNARY_LINEAR_OPERATOR inherit
 			initialize
 		end
 
-	UNARY_OPERATOR [REAL, REAL]
+	UNARY_OPERATOR [DOUBLE, DOUBLE]
 		rename
 			operate as operate_unused, initialize as uo_initialize
 		undefine

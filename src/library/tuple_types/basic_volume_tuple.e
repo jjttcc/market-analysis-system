@@ -18,11 +18,11 @@ creation
 
 feature -- Access
 
-	volume: REAL
+	volume: DOUBLE
 
 feature {VALUE_SETTER, FACTORY}
 
-	set_volume (v: REAL)
+	set_volume (v: DOUBLE)
 			-- Set volume to `v'.
 		require
 			v >= 0
@@ -34,7 +34,7 @@ feature {VALUE_SETTER, FACTORY}
 
 feature {NONE}
 
-	adjust_volume_for_split (r: REAL)
+	adjust_volume_for_split (r: DOUBLE)
 		do
 			volume := (volume * r).floor
 		end

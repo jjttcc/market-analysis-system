@@ -8,28 +8,28 @@ note
 
 class SPLIT_SETTER inherit
 
-	REAL_SETTER
+	REAL_SETTER [STOCK_SPLIT]
 
 feature {NONE}
 
 	do_set (stream: INPUT_SEQUENCE; tuple: STOCK_SPLIT)
 		do
-			if stream.last_real <= 0 then
+			if stream.last_double <= 0 then
 				handle_input_error ("Numeric input value is <= 0: ",
-									stream.last_real.out)
+									stream.last_double.out)
 				-- conform to the postcondition:
 				tuple.set_value (0)
 			else
-				tuple.set_value (stream.last_real)
+				tuple.set_value (stream.last_double)
 			end
 		ensure then
-			value_set_to_last_real_if_valid:
-				stream.last_real > 0 implies
-					rabs (stream.last_real - tuple.value) < epsilon
-			error_if_last_real_le_0:
-				stream.last_real <= 0 implies error_occurred
+			value_set_to_last_double_if_valid:
+				stream.last_double > 0 implies
+					dabs (stream.last_double - tuple.value) < epsilon
+			error_if_last_double_le_0:
+				stream.last_double <= 0 implies error_occurred
 			error_implies_tuple_set_to_1:
-				error_occurred implies rabs (tuple.value - 1) < epsilon
+				error_occurred implies dabs (tuple.value - 1) < epsilon
 		end
 
 end -- class SPLIT_SETTER

@@ -48,15 +48,30 @@
 		<setting name="inlining_size" value="0"/>
 		<setting name="line_generation" value="false"/>
 		<external_include location="$ISE_EIFFEL/library/time/Clib"/>
+		<external_include location="${ECLI}/src/spec/C"/>
+		<external_include location="${ECLI}/src/spec/ise/linux/"/>
+<!--
 		<external_object location="${ISE_EIFFEL}/library/time/spec/${ISE_PLATFORM}/lib/libdatetime.a"/>
+-->
 		<external_object location="${ISE_EIFFEL}/library/net/spec/${ISE_PLATFORM}/lib/libnet.a"/>
-		<external_object location="${ECLI}/src/spec/ise/${ISE_PLATFORM}/libecli_c.a"/>
+		<external_object location="${ECLI}/src/spec/ise/linux/libecli_c.a"/>
 		<external_object location="/${MAS}/src/eiffel_library/support/spec/${ISE_PLATFORM}/lib/utilities.o"/>
 		<external_object location="${ISE_EIFFEL}/C_library/zlib/libz.a"/>
 		<external_object location="${MAS}/src/server1/spec/${ISE_PLATFORM}/lib/external_input_sequence.a"/>
 		<external_object location="-lodbc"/>
+		<external_object location="-lodbcinst"/>
+		<external_object location="-lpthread"/>
+		<external_object location="${EPOSIX}/lib/libeposix_ise.a"/>
+<!--
 		<external_object location="-L $(EPOSIX)/lib -leposix_ise"/>
+		<external_object location="-L $(EPOSIX)/lib -lcapi"/>
+		<external_object location="-L $(EPOSIX)/lib -lpapi"/>
+		<external_object location="-L $(EPOSIX)/lib -lsapi"/>
+		<external_object location="-L $(EPOSIX)/lib -lsupportc"/>
+-->
+<!--
 		<external_object location="${MAS_LINK_OPTIONS}"/>
+-->
 		<library name="base" location="$ISE_LIBRARY/library/base/base.ecf"/>
 		<cluster name="app_library" location="$MAS/src/application_library/">
 			<cluster name="dummies" location="$|dummies/"/>

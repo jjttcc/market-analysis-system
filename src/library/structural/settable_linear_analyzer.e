@@ -17,16 +17,20 @@ deferred class SETTABLE_LINEAR_ANALYZER inherit
 
 feature {FACTORY, COMMAND}
 
-	target: CHAIN [MARKET_TUPLE]
+	target: LIST [MARKET_TUPLE]
 
 feature -- Initialization
 
-	set (s: like target)
+	set (s: LIST [MARKET_TUPLE])
 			-- Make `s' the new target of iterations.
 		require
 			target_exists: s /= Void
 		do
-			target := s
+--!!!!Check if this "cast" works and look into the possible alternative of
+--!!!!changing the type of 'target', above!!!!:
+			if attached {MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]} s as mtl then
+				target := mtl
+			end
 		ensure
 			target = s
 			target /= Void

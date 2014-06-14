@@ -54,6 +54,15 @@ feature -- Basic operations
 				intraday_list.intraday)
 		end
 
+feature -- Status report
+
+	descendant_build_lists_precondition: BOOLEAN
+			-- Additional precondition for `build_lists' in descendant
+			-- classes
+		do
+			Result := True -- Redefine if needed.
+		end
+
 feature {NONE} -- Hook routines
 
 	build_lists
@@ -69,13 +78,6 @@ feature {NONE} -- Hook routines
 			intraday_not_set: (daily_list /= Void implies 
 				not daily_list.intraday) and (intraday_list /= Void implies 
 				not intraday_list.intraday)
-		end
-
-	descendant_build_lists_precondition: BOOLEAN
-			-- Additional precondition for `build_lists' in descendant
-			-- classes
-		do
-			Result := True -- Redefine if needed.
 		end
 
 end -- class LIST_BUILDER

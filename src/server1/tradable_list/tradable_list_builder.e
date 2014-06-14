@@ -9,7 +9,7 @@ note
 
 class TRADABLE_LIST_BUILDER inherit
 
-	FACTORY
+	FACTORY [TRADABLE_DISPENSER]
 
 	GLOBAL_SERVER_FACILITIES
 		export {NONE}
@@ -74,8 +74,14 @@ feature -- Basic operations
 						http_list_builder.intraday_list, indicators)
 					ilist := http_list_builder.intraday_list
 				elseif command_line_options.use_sockets then
-					create socket_list_builder.make (tradable_factory,
-						command_line_options.data_supplier_port_number)
+--!!!!Note: This creation command (1 arg):
+					create socket_list_builder.make (tradable_factory)
+--!!!!used to be (2 args):
+--create socket_list_builder.make (tradable_factory,
+--	command_line_options.data_supplier_port_number)
+--!!!!The first uses a "dummy" socket_list_builder while the 2nd uses
+--!!!!the "extended server" version.  Might want to switch to the
+--!!!!"extended server" classes soon.
 					socket_list_builder.execute
 					create list_handler.make (socket_list_builder.daily_list,
 						socket_list_builder.intraday_list, indicators)

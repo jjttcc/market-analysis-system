@@ -147,7 +147,7 @@ feature -- Access
 				not inputs.is_empty implies Result /= Void
 		end
 
-	target: CHAIN [MARKET_TUPLE]
+	target: LIST [MARKET_TUPLE]
 		do
 			if not inputs.is_empty then
 				Result := inputs.first.output
@@ -291,7 +291,7 @@ feature {NONE} -- Implementation
 			mf.reset_parameters
 		end
 
-	default_target: CHAIN [MARKET_TUPLE]
+	default_target: LIST [MARKET_TUPLE]
 -- !!!! indexing once_status: global??!!!
 		once
 			create {LINKED_LIST [MARKET_TUPLE]} Result.make

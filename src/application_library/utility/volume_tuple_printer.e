@@ -19,10 +19,15 @@ creation
 
 feature {NONE} -- Implementation
 
-	print_other_fields (t: VOLUME_TUPLE)
+	print_other_fields (t: MARKET_TUPLE)
+		local
+			vt: VOLUME_TUPLE
 		do
-			put (field_separator)
-			put (t.volume.out)
+			vt ?= t
+			if vt /= Void then
+				put (field_separator)
+				put (vt.volume.out)
+			end
 		end
 
 end -- VOLUME_TUPLE_PRINTER

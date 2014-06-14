@@ -12,14 +12,14 @@ deferred class VOLUME_TUPLE inherit
 
 feature -- Access
 
-	volume: REAL
+	volume: DOUBLE
 			-- Number of shares
 		deferred
 		end
 
 feature -- Element change
 
-	adjust_for_split (v: REAL)
+	adjust_for_split (v: DOUBLE)
 			-- Adjust prices for stock split by `v' by dividing each
 			-- price field by `v' and multiplying volume by `v'.
 		require
@@ -31,16 +31,16 @@ feature -- Element change
 			close.set_value (close.value / v)
 			adjust_volume_for_split (v)
 		ensure
-			new_open: rabs (open.value - old open.value / v) < epsilon
-			new_high: rabs (high.value - old high.value / v) < epsilon
-			new_low: rabs (low.value - old low.value / v) < epsilon
-			new_close: rabs (close.value - old close.value / v) < epsilon
-			new_volume: rabs (volume - old volume * v) < epsilon
+			new_open: dabs (open.value - old open.value / v) < epsilon
+			new_high: dabs (high.value - old high.value / v) < epsilon
+			new_low: dabs (low.value - old low.value / v) < epsilon
+			new_close: dabs (close.value - old close.value / v) < epsilon
+			new_volume: dabs (volume - old volume * v) < epsilon
 		end
 
 feature {NONE} -- Implementation
 
-	adjust_volume_for_split (r: REAL)
+	adjust_volume_for_split (r: DOUBLE)
 		deferred
 		end
 

@@ -8,7 +8,7 @@ note
 
 class CONFIGURABLE_DATE_SETTER inherit
 
-	STRING_SETTER
+	STRING_SETTER [MARKET_TUPLE]
 
 creation
 

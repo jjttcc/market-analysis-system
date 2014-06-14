@@ -63,7 +63,7 @@ feature -- Basic operations
 			end
 		end
 
-feature {NONE} -- Hook routine implementations
+feature -- Status report
 
 	descendant_build_lists_precondition: BOOLEAN
 		do

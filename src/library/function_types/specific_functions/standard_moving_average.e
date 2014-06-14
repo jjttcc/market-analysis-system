@@ -141,7 +141,7 @@ feature {NONE}
 			-- Intended to be redefined by descenants for more complex MAs.
 		local
 			t: SIMPLE_TUPLE
-			expired_value, latest_value: REAL
+			expired_value, latest_value: DOUBLE
 		do
 			operator.execute (target.i_th (target.index - n))
 			expired_value := operator.value
@@ -165,7 +165,7 @@ feature {NONE} -- Implementation
 	sum: LINEAR_SUM
 			-- Provides sum of first n elements.
 
-	last_sum: REAL
+	last_sum: DOUBLE
 			-- The last calculated sum
 
 invariant

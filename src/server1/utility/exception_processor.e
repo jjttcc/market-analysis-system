@@ -11,6 +11,7 @@ class EXCEPTION_PROCESSOR inherit
 	EXCEPTION_SERVICES
 		export
 			{NONE} all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		undefine
 			print
 		end

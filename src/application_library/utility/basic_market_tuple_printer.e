@@ -53,7 +53,7 @@ feature {NONE} -- Implementation
 			print_other_fields (t)
 		end
 
-	print_other_fields (t: BASIC_MARKET_TUPLE)
+	print_other_fields (t: MARKET_TUPLE)
 			-- Redefine for tuple printers that handle more than
 			-- date, open, high, low, close.  Be sure to print the
 			-- field_separator before the first 'other' field, and to

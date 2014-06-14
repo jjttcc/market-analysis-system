@@ -51,7 +51,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implmentation
 
-	calculate: REAL
+	calculate: DOUBLE
 			-- Perform the calculation based on n.
 		deferred
 		end

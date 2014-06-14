@@ -16,7 +16,7 @@ deferred class FUNCTION_PARAMETER_WITH_FUNCTION inherit
 
 feature {NONE} -- Initialization
 
-	make (f: MARKET_FUNCTION)
+	make (f: like function)
 		require
 			not_void: f /= Void
 		do
@@ -41,7 +41,7 @@ feature -- Access
 
 feature -- Comparison
 
-	is_equal (other: FUNCTION_PARAMETER): BOOLEAN
+	is_equal (other: like Current): BOOLEAN
 		local
 			fpwf: like Current
 		do

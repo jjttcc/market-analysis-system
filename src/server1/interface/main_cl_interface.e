@@ -76,6 +76,7 @@ feature -- Initialization
 		require
 			not_void: fb /= Void
 		do
+			create exception_processor.make
 			mai_initialize (fb)
 			initialize
 		end
@@ -84,6 +85,7 @@ feature -- Initialization
 		require
 			not_void: input_dev /= Void and output_dev /= Void and fb /= Void
 		do
+			create exception_processor.make
 			mai_initialize (fb)
 			initialize
 			set_input_device (input_dev)
@@ -177,7 +179,6 @@ feature -- Basic operations
 	main_menu
 			-- Display the main menu and respond to the user's commands.
 		local
-			exception_processor: expanded EXCEPTION_PROCESSOR
 			retried: BOOLEAN
 		do
 			if
@@ -502,7 +503,7 @@ feature {NONE} -- Implementation
 			-- the current tradable's target_period_type to it.
 		local
 			i: INTEGER
-			types: ARRAY [STRING]
+			types: ARRAYED_LIST [STRING]
 			per_type_choice: TIME_PERIOD_TYPE
 			t: TRADABLE [BASIC_MARKET_TUPLE]
 		do
@@ -749,5 +750,7 @@ feature {NONE} -- Implementation - attributes
 	last_period_types: ARRAYED_LIST [STRING]
 
 	last_tradable_for_period_types: TRADABLE [BASIC_MARKET_TUPLE]
+
+	exception_processor: EXCEPTION_PROCESSOR
 
 end -- class MAIN_CL_INTERFACE

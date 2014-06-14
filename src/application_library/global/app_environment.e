@@ -11,7 +11,8 @@ class APP_ENVIRONMENT inherit
 	EXECUTION_ENVIRONMENT
 		export
 			{NONE} all
-			{ANY} current_working_directory
+			{ANY} current_working_directory, deep_twin, is_deep_equal,
+				standard_is_equal
 		end
 
 	OPERATING_ENVIRONMENT

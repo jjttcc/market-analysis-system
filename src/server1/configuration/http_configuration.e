@@ -49,6 +49,7 @@ feature {NONE} -- Initialization
 			i: INTEGER
 		do
 			create settings.make (0)
+			create conversion_functions.make
 			initialize_common_settings
 			settings.extend ("", Host_specifier)
 			settings.extend ("", Path_specifier)
@@ -112,8 +113,6 @@ feature -- Access
 	post_processing_routine: FUNCTION [ANY, TUPLE [STRING], STRING]
 			-- Routine to be used to post process the retrieved data -
 			-- Void if the post-processing specification is invalid
-		local
-			conversion_functions: expanded TRADABLE_DATA_CONVERSION
 		do
 			if
 				post_process_command /= Void and then 
@@ -307,6 +306,8 @@ feature {NONE} -- Implementation - Hook routine implementations
 		end
 
 feature {NONE} -- Implementation
+
+	conversion_functions: TRADABLE_DATA_CONVERSION
 
 	add_ignored_day_of_week (wday: STRING)
 		local

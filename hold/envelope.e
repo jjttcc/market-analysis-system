@@ -25,7 +25,7 @@ creation
 
 feature -- Initialization
 
-	make (main_function: MARKET_FUNCTION; n: INTEGER; pos_factor: REAL) is
+	make (main_function: MARKET_FUNCTION; n: INTEGER; pos_factor: DOUBLE) is
 			-- `n' specifies the number of pairs of parallel functions.
 		do
 		ensure
@@ -41,7 +41,7 @@ feature -- Access
 			Result := first
 		end
 
-	position_factor: REAL
+	position_factor: DOUBLE
 			-- The value used to position each pair of parallel curves
 
 end -- class ENVELOPE

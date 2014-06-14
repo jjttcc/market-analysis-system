@@ -12,7 +12,7 @@ note
 
 class SIGN_ANALYZER inherit
 
-	BINARY_OPERATOR [BOOLEAN, REAL]
+	BINARY_OPERATOR [BOOLEAN, DOUBLE]
 		rename
 			make as bo_make_unused
 		export {NONE}
@@ -86,7 +86,7 @@ feature -- Status setting
 
 feature {NONE} -- Hook routine implementation
 
-	operate (v1, v2: REAL)
+	operate (v1, v2: DOUBLE)
 		do
 			value := False
 			from

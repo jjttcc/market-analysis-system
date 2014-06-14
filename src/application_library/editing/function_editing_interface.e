@@ -65,7 +65,7 @@ feature -- Constants
 
 feature -- Basic operations
 
-feature {APPLICATION_FUNCTION_EDITOR} -- Access
+feature -- Access
 
 	function_types: HASH_TABLE [ARRAYED_LIST [MARKET_FUNCTION], STRING]
 			-- Hash table of lists of function instances - each list contains
@@ -107,6 +107,8 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			l.extend (agent_based_function)
 			l.extend (market_data_function)
 		end
+
+feature {APPLICATION_FUNCTION_EDITOR} -- Access
 
 	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE]
 		do
@@ -299,7 +301,7 @@ feature {EDITING_INTERFACE}
 		local
 			selection: INTEGER
 			indicator: MARKET_FUNCTION
-			functions: LIST [MARKET_FUNCTION]
+			functions: LIST [TREE_NODE]
 			complex_func: COMPLEX_FUNCTION
 		do
 			from
@@ -336,14 +338,14 @@ feature {EDITING_INTERFACE}
 			end
 		end
 
-	edit_indicator_list (l: LIST [MARKET_FUNCTION])
+	edit_indicator_list (l: LIST [TREE_NODE])
 			-- Editing of indicators in `l'
 		require
 			not_void: l /= Void
 			readonly_or_saveable: readonly or ok_to_save
 		local
 			selection: INTEGER
-			indicator: MARKET_FUNCTION
+			indicator: TREE_NODE
 		do
 			from
 				selection := Null_value
@@ -354,8 +356,9 @@ feature {EDITING_INTERFACE}
 					names_from_function_list(l), "Select an indicator to edit")
 				if selection /= Exit_value then
 					indicator := l @ selection
-					check indicator /= Void end
-					edit_indicator (indicator)
+					if attached {MARKET_FUNCTION} indicator as i then
+						edit_indicator (i)
+					end
 				end
 			end
 		end
@@ -527,8 +530,7 @@ feature {NONE} -- Implementation
 			working_function_library := deep_clone (function_library)
 		end
 
-	names_from_function_list (l: LIST [MARKET_FUNCTION]):
-		ARRAYED_LIST [STRING]
+	names_from_function_list (l: LIST [TREE_NODE]): ARRAYED_LIST [STRING]
 			-- Name of each function in `l'
 		do
 			create Result.make (1)
@@ -987,7 +989,9 @@ feature {NONE} -- Implementation - indicator editing
 			children := editable_children (i)
 			has_children_to_edit := not children.is_empty
 			has_immediate_parameters := not i.immediate_parameters.is_empty
-			parameters := gensrt.sorted_set (i.parameters)
+			if attached {LIST [FUNCTION_PARAMETER]} i.parameters as params then
+				parameters := gensrt.sorted_set (params)
+			end
 			im_paramaters := gensrt.sorted_set (i.immediate_parameters)
 			if parameters.is_empty then
 				show_message ("Indicator " + i.name +

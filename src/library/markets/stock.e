@@ -159,7 +159,7 @@ feature {NONE} -- Implementation
 			prev_splt_date_le_first: not splits.isfirst implies
 				splits.i_th (splits.index - 1).date <= first.date_time.date
 		local
-			split_ratio: REAL
+			split_ratio: DOUBLE
 			saved_cursor: CURSOR
 		do
 			saved_cursor := splits.cursor
@@ -200,7 +200,7 @@ feature {NONE} -- Implementation
 					after implies last.date_time.date < splits.last.date
 				for_current_item_to_end_there_are_no_more_splits:
 					not after implies item.date_time.date >= splits.last.date
-				split_ratio_equals_1: rabs (split_ratio - 1) < epsilon
+				split_ratio_equals_1: dabs (split_ratio - 1) < epsilon
 			end
 		end
 

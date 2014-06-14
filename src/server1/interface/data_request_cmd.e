@@ -37,10 +37,12 @@ feature {NONE} -- Implementation - essential properties
 
 feature {NONE} -- Hook routine implementations
 
-	do_execute (msg: STRING)
+	do_execute (message: ANY)
 		local
+			msg: STRING
 			fields: LIST [STRING]
 		do
+			msg := message.out
 			parse_error := False
 			fields_parsed := False
 			target := msg -- set up for tokenization

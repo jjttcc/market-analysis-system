@@ -8,13 +8,13 @@ note
 
 class MARKET_TUPLE_DATA_SCANNER inherit
 
-	DATA_SCANNER
+	DATA_SCANNER [BASIC_MARKET_TUPLE]
 		rename
 			make as data_scanner_make
 		export {NONE}
 			data_scanner_make
 		redefine
-			product, tuple_maker, open_tuple, close_tuple,
+			product, open_tuple, close_tuple,
 			do_last_error_check, handle_last_error
 		end
 
@@ -47,8 +47,6 @@ feature
 feature -- Access
 
 	product: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
-
-	tuple_maker: BASIC_TUPLE_FACTORY
 
 feature {FACTORY} -- Status setting
 

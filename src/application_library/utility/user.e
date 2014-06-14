@@ -11,8 +11,9 @@ class USER inherit
 	APP_ENVIRONMENT
 		rename
 			mailer as app_env_mailer
-		export {NONE}
-			all
+		export
+			{NONE} all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		end
 
 	EXCEPTIONS

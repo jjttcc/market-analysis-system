@@ -8,7 +8,7 @@ note
 
 deferred class TUPLE_FACTORY inherit
 
-	FACTORY
+	FACTORY [MARKET_TUPLE]
 
 feature -- Access
 

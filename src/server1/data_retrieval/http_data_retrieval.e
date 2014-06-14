@@ -24,6 +24,7 @@ inherit
 	GENERAL_UTILITIES
 		export
 			{NONE} all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		end
 
 	TIMING_SERVICES

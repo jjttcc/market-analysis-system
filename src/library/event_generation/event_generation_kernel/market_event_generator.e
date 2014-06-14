@@ -56,33 +56,28 @@ feature -- Access
 
 	operators: LIST [COMMAND]
 		local
-			l: LIST [MARKET_FUNCTION]
+			l: LIST [TREE_NODE]
 		do
 			Result := immediate_operators
-			from
-				l := indicators
-				l.start
-			until
-				l.exhausted
-			loop
-				Result.append (l.item.operators)
-				l.forth
+			l := indicators
+			across l as item loop
+				if attached {MARKET_FUNCTION} item as e then
+					Result.append (e.operators)
+				end
 			end
 		end
 
-	parameters: LIST [FUNCTION_PARAMETER]
+	parameters: LIST [TREE_NODE]
+--	parameters: LIST [FUNCTION_PARAMETER]
 		local
-			l: LIST [MARKET_FUNCTION]
+			l: LIST [TREE_NODE]
 		do
-			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
-			from
-				l := indicators
-				l.start
-			until
-				l.exhausted
-			loop
-				Result.append (l.item.parameters)
-				l.forth
+			create {LINKED_LIST [TREE_NODE]} Result.make
+			l := indicators
+			across l as item loop
+				if attached {MARKET_FUNCTION} item as e then
+					Result.append (e.parameters)
+				end
 			end
 		end
 

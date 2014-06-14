@@ -11,6 +11,7 @@ deferred class TRADABLE_BUILDING_UTILITIES inherit
 	TRADABLE_FACTORY_CONSTANTS
 		export
 			{NONE} all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		end
 
 	APP_ENVIRONMENT
@@ -42,11 +43,14 @@ feature {TRADABLE_FACTORY} -- Access
 			result_exists: Result /= Void
 		end
 
-	index_vector (intraday: BOOLEAN): ARRAY [INTEGER]
+	index_vector (intraday: BOOLEAN): ARRAYED_LIST [INTEGER]
 			-- Index vector for setting up value setters for a TRADABLE
 		local
+-- !!!!Check - verify these changes are correct (they probably are)!!!
+--			vector: ARRAY [INTEGER]
 			vector: ARRAYED_LIST [INTEGER]
 		do
+--create {ARRAYED_LIST [INTEGER_32]} vector.make (0)
 			create vector.make (0)
 			if command_line_options.special_date_settings.valid then
 				vector.extend (Configurable_date_index)
@@ -78,7 +82,7 @@ feature {TRADABLE_FACTORY} -- Access
 			date_is_first: Result @ 1 = Date_index
 			time_is_second: intraday implies Result @ 2 = Time_index
 			open_interest_is_second: has_open_interest implies
-				Result.item (Result.upper) = OI_index
+				Result @ Result.upper = OI_index
 		end
 
 feature {NONE} -- Hook routines

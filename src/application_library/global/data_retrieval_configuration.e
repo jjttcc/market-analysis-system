@@ -12,6 +12,7 @@ deferred class DATA_RETRIEVAL_CONFIGURATION inherit
 	CONFIGURATION_UTILITIES
 		export
 			{NONE} all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		end
 
 	GENERAL_CONFIGURATION_CONSTANTS

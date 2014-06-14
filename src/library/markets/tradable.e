@@ -16,8 +16,10 @@ deferred class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 		export {NONE}
 			sf_make
 		redefine
-			sf_set_trading_period_type, finish_loading
+			sf_set_trading_period_type, finish_loading, new_filled_list
 		end
+
+inherit {NONE}
 
 	MATH_CONSTANTS
 		export {NONE}
@@ -39,6 +41,8 @@ deferred class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
 		undefine
 			is_equal, copy, out
 		end
+
+--	EXCEPTIONS
 
 feature -- Access
 
@@ -372,6 +376,15 @@ feature {NONE} -- Inapplicable
 				TRADABLE_sf_set_trading_period_type_not_called: False
 				-- That is, this routine should never be called
 			end
+		end
+
+	new_filled_list (n: INTEGER): like Current
+		local
+			e: EXCEPTIONS
+		do
+			create e
+			e.raise ("new_filled_list routine unexpectedly called (class " +
+				Current.generating_type + ")")
 		end
 
 invariant

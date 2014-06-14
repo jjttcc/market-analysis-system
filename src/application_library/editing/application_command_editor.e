@@ -70,12 +70,12 @@ feature -- Basic operations
 			cmd.set_operands (left, right)
 		end
 
-	edit_binary_real (cmd: BINARY_OPERATOR [ANY, REAL])
-			-- Edit a BINARY_OPERATOR that takes REAL operands.
+	edit_binary_real (cmd: BINARY_OPERATOR [ANY, DOUBLE])
+			-- Edit a BINARY_OPERATOR that takes DOUBLE operands.
 		require
 			ui_set: user_interface /= Void
 		local
-			left, right: RESULT_COMMAND [REAL]
+			left, right: RESULT_COMMAND [DOUBLE]
 		do
 			left ?= user_interface.command_selection_from_type (
 				user_interface.Real_result_cmd, cmd.generator +
@@ -94,7 +94,7 @@ feature -- Basic operations
 		require
 			ui_set: user_interface /= Void
 		local
-			uop: UNARY_OPERATOR [ANY, REAL]
+			uop: UNARY_OPERATOR [ANY, DOUBLE]
 		do
 			uop ?= c
 			check
@@ -143,9 +143,9 @@ feature -- Basic operations
 			edit_unaryop_real (cmd)
 		end
 
-	edit_mtlist_resultreal (c: UNARY_OPERATOR [REAL, REAL])
+	edit_mtlist_resultreal (c: UNARY_OPERATOR [DOUBLE, DOUBLE])
 			-- Edit `c's market tuple list and operator
-			-- (RESULT_COMMAND [REAL]).
+			-- (RESULT_COMMAND [DOUBLE]).
 		require
 			ui_set: user_interface /= Void
 		do
@@ -153,9 +153,9 @@ feature -- Basic operations
 			edit_unaryop_real (c)
 		end
 
-	edit_mtlist_resultreal_n (c: UNARY_OPERATOR [ANY, REAL])
+	edit_mtlist_resultreal_n (c: UNARY_OPERATOR [ANY, DOUBLE])
 			-- Edit `c's market tuple list, operator (
-			-- RESULT_COMMAND [REAL]), and n-value.
+			-- RESULT_COMMAND [DOUBLE]), and n-value.
 		require
 			ui_set: user_interface /= Void
 		local
@@ -170,8 +170,8 @@ feature -- Basic operations
 			end
 		end
 
-	edit_resultreal_n (c: UNARY_OPERATOR [ANY, REAL])
-			-- Edit `c's operator (RESULT_COMMAND [REAL]), and n-value.
+	edit_resultreal_n (c: UNARY_OPERATOR [ANY, DOUBLE])
+			-- Edit `c's operator (RESULT_COMMAND [DOUBLE]), and n-value.
 		require
 			ui_set: user_interface /= Void
 		do
@@ -210,13 +210,13 @@ feature -- Basic operations
 				"an indicator for " + cmd.generator + "'s input").output)
 		end
 
-	edit_unaryop (cmd: UNARY_OPERATOR [ANY, REAL])
-			-- Edit a UNARY_OPERATOR that takes a RESULT_COMMAND [REAL]
+	edit_unaryop (cmd: UNARY_OPERATOR [ANY, DOUBLE])
+			-- Edit a UNARY_OPERATOR that takes a RESULT_COMMAND [DOUBLE]
 			-- operand.
 		require
 			ui_set: user_interface /= Void
 		local
-			rr_cmd: RESULT_COMMAND [REAL]
+			rr_cmd: RESULT_COMMAND [DOUBLE]
 		do
 			rr_cmd ?= user_interface.command_selection_from_type (
 				user_interface.Real_result_cmd, cmd.generator +
@@ -227,13 +227,13 @@ feature -- Basic operations
 			cmd.set_operand (rr_cmd)
 		end
 
-	edit_unaryop_real (cmd: UNARY_OPERATOR [REAL, REAL])
-			-- Edit a UNARY_OPERATOR that returns a REAL value and
-			-- takes a RESULT_COMMAND [REAL] operand.
+	edit_unaryop_real (cmd: UNARY_OPERATOR [DOUBLE, DOUBLE])
+			-- Edit a UNARY_OPERATOR that returns a DOUBLE value and
+			-- takes a RESULT_COMMAND [DOUBLE] operand.
 		require
 			ui_set: user_interface /= Void
 		local
-			rr_cmd: RESULT_COMMAND [REAL]
+			rr_cmd: RESULT_COMMAND [DOUBLE]
 		do
 			rr_cmd ?= user_interface.command_selection_from_type (
 				user_interface.Real_result_cmd, cmd.generator +
@@ -264,7 +264,7 @@ feature -- Basic operations
 	edit_offset (cmd: SETTABLE_OFFSET_COMMAND)
 			-- Edit a SETTABLE_OFFSET_COMMAND.
 		local
-			unop: UNARY_OPERATOR [ANY, REAL]
+			unop: UNARY_OPERATOR [ANY, DOUBLE]
 			offset: INTEGER
 		do
 			unop ?= cmd
@@ -305,7 +305,7 @@ feature -- Basic operations
 			-- Edit a NUMERIC_CONDITIONAL_COMMAND.
 		local
 			boolop: RESULT_COMMAND [BOOLEAN]
-			result_cmd: RESULT_COMMAND [REAL]
+			result_cmd: RESULT_COMMAND [DOUBLE]
 		do
 			-- Obtain and set cmd's boolean operator.
 			boolop ?= user_interface.command_selection_from_type (
@@ -338,7 +338,7 @@ feature -- Basic operations
 		require
 			ui_set: user_interface /= Void
 		local
-			left, right: RESULT_COMMAND [REAL]
+			left, right: RESULT_COMMAND [DOUBLE]
 			sign_spec_vector: ARRAY [ARRAY [INTEGER]]
 			choices: LIST [PAIR [STRING, BOOLEAN]]
 			pair: PAIR [STRING, BOOLEAN]
@@ -472,7 +472,7 @@ feature -- Basic operations
 			assertion_loop: LOOP_WITH_ASSERTIONS
 			init: COMMAND
 			termination: RESULT_COMMAND [BOOLEAN]
-			body: RESULT_COMMAND [REAL]
+			body: RESULT_COMMAND [DOUBLE]
 		do
 			init ?= user_interface.command_selection_from_type (
 				user_interface.Any_cmd, cmd.generator +
@@ -499,7 +499,7 @@ feature -- Basic operations
 	edit_value_at_index_command (cmd: VALUE_AT_INDEX_COMMAND)
 			-- Edit a VALUE_AT_INDEX_COMMAND.
 		local
-			nvc: RESULT_COMMAND [REAL]
+			nvc: RESULT_COMMAND [DOUBLE]
 		do
 			nvc ?= user_interface.command_selection_from_type (
 				user_interface.Real_result_cmd, cmd.generator +
@@ -534,7 +534,7 @@ feature -- Basic operations
 			-- Edit the assertion operators of `cmd'.
 		local
 			loop_invariant: RESULT_COMMAND [BOOLEAN]
-			loop_variant: RESULT_COMMAND [REAL]
+			loop_variant: RESULT_COMMAND [DOUBLE]
 		do
 			loop_invariant ?= user_interface.command_selection_from_type (
 				user_interface.Boolean_result_cmd, cmd.generator +

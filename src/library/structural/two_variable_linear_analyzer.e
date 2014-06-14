@@ -16,6 +16,7 @@ class TWO_VARIABLE_LINEAR_ANALYZER inherit
 		export
 			{MARKET_FUNCTION_EDITOR} all
 			{NONE} set_unused
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		redefine
 			forth, start
 		select

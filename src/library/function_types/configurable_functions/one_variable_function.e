@@ -104,7 +104,9 @@ feature -- Access
 
 feature {FACTORY} -- Element change
 
-	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE])
+--!!!!!Check change - was:
+--	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE])
+	set_innermost_input (in: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE])
 		do
 			processed_date_time := Void
 			if input.is_complex then
@@ -143,7 +145,8 @@ feature {NONE}
 			operator.execute (target.item)
 			create t.make (target.item.date_time, target.item.end_date,
 						operator.value)
-			output.extend (t)
+--!!!!!!TO-DO: Find the best way to fix the compiler error caused by:
+--!!!!			output.extend (t)
 			if debugging then
 				print_status_report
 			end

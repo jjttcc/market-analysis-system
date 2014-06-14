@@ -8,7 +8,7 @@ note
 
 class SPLIT_SYMBOL_SETTER inherit
 
-	VALUE_SETTER
+	VALUE_SETTER [STOCK_SPLIT]
 
 creation
 

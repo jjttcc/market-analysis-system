@@ -27,10 +27,12 @@ creation
 
 feature {NONE} -- Basic operations
 
-	do_execute (msg: STRING)
+	do_execute (arg: ANY)
 		local
+			msg: STRING
 			ptypes: LIST [STRING]
 		do
+			msg := arg.out
 			-- `msg' is expected to contain (only) the market symbol
 			if tradables.symbols.has (msg) then
 				ptypes := tradables.period_type_names_for (msg)

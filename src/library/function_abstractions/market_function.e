@@ -10,7 +10,7 @@ note
 
 deferred class MARKET_FUNCTION inherit
 
-	FACTORY
+	FACTORY [MARKET_TUPLE_LIST [MARKET_TUPLE]]
 		rename
 			product as output, execute as process
 		redefine
@@ -81,7 +81,7 @@ feature -- Access
 		deferred
 		end
 
-	functions: LIST [MARKET_FUNCTION]
+	functions: LIST [TREE_NODE]
 		do
 			Result := descendants
 			Result.extend (Current)
@@ -92,7 +92,9 @@ feature -- Access
 			l: LIST [MARKET_FUNCTION]
 		do
 			create {LINKED_SET [COMMAND]} Result.make
-			Result.append (immediate_operators)
+			if attached {SEQUENCE [COMMAND]} immediate_operators as ops then
+				Result.append (ops)
+			end
 			l := children
 			if l /= Void then
 				from l.start until l.exhausted loop
@@ -228,25 +230,30 @@ feature {NONE} -- Implementation
 			-- Parameters of Current, excluding `operator_parameters'
 		local
 			parameter_set: LINKED_SET [FUNCTION_PARAMETER]
-			fl: LIST [MARKET_FUNCTION]
+			flist: LIST [TREE_NODE]
 		do
 			create Result.make
 			create parameter_set.make
-			from
-				fl := functions
-				fl.start
-			until
-				fl.exhausted
-			loop
-				parameter_set.fill (fl.item.immediate_direct_parameters)
-				fl.forth
+			flist := functions
+--from
+--	flist.start
+--until
+--	flist.exhausted
+--loop
+--	parameter_set.fill (flist.item.immediate_direct_parameters)
+--	flist.forth
+--end
+			across flist as function loop
+				if attached {MARKET_FUNCTION} function as f then
+					parameter_set.fill(f.immediate_direct_parameters)
+				end
 			end
 			Result.append (parameter_set)
 		ensure
 			result_exists: Result /= Void
 		end
 
-	immediate_operators: LIST [COMMAND]
+	immediate_operators: LIST [TREE_NODE]
 			-- All operators that belong directly to this function, but not
 			-- to its descendants
 		do
@@ -280,18 +287,15 @@ feature {NONE} -- Implementation
 	immediate_operator_parameters: LIST [FUNCTION_PARAMETER]
 			-- Parameters of `immediate_operators'
 		local
-			ops: LIST [COMMAND]
+			ops: LIST [TREE_NODE]
 		do
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 			ops := immediate_operators
 			if ops /= Void then
-				from
-					ops.start
-				until
-					ops.exhausted
-				loop
-					prepare_operator_for_editing (ops.item, Result)
-					ops.forth
+				across ops as op loop
+					if attached {COMMAND} op as cmd then
+						prepare_operator_for_editing(cmd, Result)
+					end
 				end
 			end
 		ensure

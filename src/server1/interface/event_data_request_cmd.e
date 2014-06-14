@@ -34,8 +34,9 @@ class EVENT_DATA_REQUEST_CMD inherit
 			make as mer_make
 		export
 			{NONE} all
+			{ANY} is_interested_in
 		redefine
-			event_cache
+			event_cache, notify
 		end
 
 	PERIOD_TYPE_FACILITIES
@@ -62,11 +63,13 @@ feature {NONE} -- Initialization
 
 feature -- Basic operations
 
-	do_execute (msg: STRING)
+	do_execute (message: ANY)
 		local
+			msg: STRING
 			fields: LIST [STRING]
 			d: DATE
 		do
+			msg := message.out
 			parse_error := False
 			target := msg -- set up for tokenization
 			fields := tokens (message_component_separator)
@@ -106,6 +109,13 @@ feature -- Basic operations
 			end
 			if not parse_error then
 				send_response
+			end
+		end
+
+	notify (e: TYPED_EVENT)
+		do
+			if attached {MARKET_EVENT} e as mktev then
+				event_cache.extend (mktev)
 			end
 		end
 

@@ -19,30 +19,30 @@ creation
 
 feature -- Initialization
 
-	make (d: DATE_TIME; end_dt: DATE; v: REAL)
+	make (d: DATE_TIME; end_dt: DATE; v: DOUBLE)
 		do
 			date_time := d
 			value := v
 			end_date := end_dt
 		ensure
 			dates_set: date_time = d and end_date = end_dt
-			-- value_set: rabs (value - v) < epsilon
+			-- value_set: dabs (value - v) < epsilon
 		end
 
 feature -- Access
 
-	value: REAL
+	value: DOUBLE
 
 	end_date: DATE
 
 feature {MARKET_FUNCTION} -- Status setting
 
-	set_value (v: REAL)
+	set_value (v: DOUBLE)
 			-- Set value to `v'.
 		do
 			value := v
 		ensure
-			-- value_set: rabs (value - v) < epsilon
+			-- value_set: dabs (value - v) < epsilon
 		end
 
 	set_end_date (arg: DATE)

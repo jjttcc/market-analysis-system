@@ -37,7 +37,7 @@ feature -- Access
 							%on a data sequence")
 		end
 
-	operator: BINARY_OPERATOR [REAL, REAL]
+	operator: BINARY_OPERATOR [DOUBLE, DOUBLE]
 			-- Operator that performs the accumulation of the value for
 			-- the current period with that for the previous period -
 			-- usually will be ADDITION

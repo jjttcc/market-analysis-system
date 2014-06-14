@@ -18,7 +18,8 @@ class TIME_PERIOD_TYPE inherit
 			is_equal
 		end
 
-creation {PERIOD_TYPE_FACILITIES}
+--!!!!!!: creation {PERIOD_TYPE_FACILITIES}
+creation
 
 	make
 

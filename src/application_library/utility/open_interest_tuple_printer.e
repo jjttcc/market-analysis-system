@@ -19,11 +19,16 @@ creation
 
 feature {NONE} -- Implementation
 
-	print_other_fields (t: OPEN_INTEREST_TUPLE)
+	print_other_fields (t: MARKET_TUPLE)
+		local
+			oit: OPEN_INTEREST_TUPLE
 		do
-			Precursor (t)
-			put (field_separator)
-			put (t.open_interest.out)
+			oit ?= t
+			if oit /= Void then
+				Precursor (oit)
+				put (field_separator)
+				put (oit.open_interest.out)
+			end
 		end
 
 end -- OPEN_INTEREST_TUPLE_PRINTER

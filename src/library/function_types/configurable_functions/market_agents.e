@@ -108,7 +108,7 @@ feature {NONE} -- Algorithm implementations used by agents
 	n_based_accumulation (f: AGENT_BASED_FUNCTION; n: INTEGER;
 		calculation: FUNCTION [ANY, TUPLE [DOUBLE, INTEGER,
 		ARRAYED_LIST [DOUBLE]], DOUBLE]; accum_op, drop_off_op:
-		BINARY_OPERATOR [REAL, REAL])
+		BINARY_OPERATOR [DOUBLE, DOUBLE])
 			-- An "accumulation" - whose input is `f.inputs.first.output' -
 			-- based on applying the specified function, `calculation', to
 			-- n-sized subsets of the elements of the input (for example,
@@ -125,7 +125,7 @@ feature {NONE} -- Algorithm implementations used by agents
 			f_output_empty: f.output /= Void and f.output.is_empty
 		local
 			ml: LIST [MARKET_TUPLE]
-			extraction_operator: RESULT_COMMAND [REAL]
+			extraction_operator: RESULT_COMMAND [DOUBLE]
 			current_value, latest_extracted_value, initial_value: DOUBLE
 			values: ARRAYED_LIST [DOUBLE]
 		do
@@ -198,7 +198,7 @@ feature {NONE} -- Algorithm implementations used by agents
 
 feature {NONE} -- COMMAND-based utility routines
 
-	binary_double_operation (op: BINARY_OPERATOR [REAL, REAL];
+	binary_double_operation (op: BINARY_OPERATOR [DOUBLE, DOUBLE];
 		x, y: DOUBLE): DOUBLE
 		require
 			op_exists: op /= Void
@@ -291,7 +291,7 @@ feature {NONE} -- Utilities
 			-- Sum of squares of sum / n, using `values'
 		local
 			avg, sos: DOUBLE
-			math: expanded SINGLE_MATH
+			math: expanded DOUBLE_MATH
 		do
 			avg := sum / n
 			sos := sum_of_squares (values.count + 1 - n, n, avg, values)

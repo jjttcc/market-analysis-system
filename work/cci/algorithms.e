@@ -12,10 +12,10 @@ class ALGORITHMS inherit
 
 feature -- experiment
 
-	mdtp (tp, matp: ARRAY [REAL]; n, current_period_index: INTEGER): REAL is
+	mdtp (tp, matp: ARRAY [DOUBLE]; n, current_period_index: INTEGER): DOUBLE is
 			-- Mean Deviation of Typical Price
 		local
-			sum: REAL
+			sum: DOUBLE
 			i: INTEGER
 		do
 			print ("(matp[" + current_period_index.out + "]: " +
@@ -32,10 +32,10 @@ feature -- experiment
 			Result := sum / n
 		end
 
-	mdtp2 (tp: ARRAY [REAL]; n, current_period_index: INTEGER): REAL is
+	mdtp2 (tp: ARRAY [DOUBLE]; n, current_period_index: INTEGER): DOUBLE is
 			-- Mean Deviation of Typical Price - calculates matp itself
 		local
-			sum, matp: REAL
+			sum, matp: DOUBLE
 			i: INTEGER
 		do
 			from
@@ -64,7 +64,7 @@ feature -- experiment
 
 	test_matp is
 		local
-			tp, matp: ARRAY [REAL]
+			tp, matp: ARRAY [DOUBLE]
 			n, curidx: INTEGER
 		once
 			tp := <<14.9990, 14.8102, 14.6529, 14.5833, 14.6811, 14.2249,

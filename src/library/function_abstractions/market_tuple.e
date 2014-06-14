@@ -25,7 +25,7 @@ feature -- Access
 			Result := date_time.date
 		end
 
-	value: REAL
+	value: DOUBLE
 			-- Main value of the tuple
 		deferred
 		end

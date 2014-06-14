@@ -13,13 +13,13 @@ deferred class STOCK_SPLIT_SEQUENCE inherit
 
 	INPUT_RECORD_SEQUENCE
 
-	DATA_SCANNER
+	DATA_SCANNER [DYNAMIC_CHAIN [STOCK_SPLIT]]
 		rename
 			make as ds_make_unused
 		export
 			{NONE} all
 		redefine
-			close_tuple, product, tuple_maker, add_tuple
+			close_tuple, product, tuple_maker, add_tuple, set_tuple_maker
 		end
 
 feature -- Access
@@ -29,6 +29,20 @@ feature -- Access
 			product.search (symbol)
 			if product.found then
 				Result := product.found_item
+			end
+		end
+
+feature -- Element change
+
+--!!!!!!!!!????????:
+--	set_tuple_maker (arg: FACTORY[STOCK_SPLIT])
+	set_tuple_maker (arg: FACTORY [DYNAMIC_CHAIN [STOCK_SPLIT]])
+			-- Set tuple_maker to `arg'.
+		do
+			if attached {STOCK_SPLIT_FACTORY} arg as ssf then
+				tuple_maker := ssf
+			else
+				-- !!!??????!!!throw exception???
 			end
 		end
 
@@ -66,8 +80,11 @@ feature {NONE} -- Implementation - access
 	current_symbol: STRING
 			-- Symbol for split currently being scanned
 
+--	tuple_maker: FACTORY [STOCK_SPLIT]
+--	tuple_maker: FACTORY [DYNAMIC_CHAIN [STOCK_SPLIT]]
 	tuple_maker: STOCK_SPLIT_FACTORY
 
+--	product: HASH_TABLE [STOCK_SPLIT, STRING]
 	product: HASH_TABLE [DYNAMIC_CHAIN [STOCK_SPLIT], STRING]
 
 feature {NONE} -- Implementation - utility
@@ -81,28 +98,32 @@ feature {NONE} -- Implementation - utility
 
 	make_value_setters
 		do
-			create {LINKED_LIST [VALUE_SETTER]} value_setters.make
-			add_value_setters (value_setters, index_vector)
+--!!!!!!FIX!!!!!:
+--			create {LINKED_LIST [VALUE_SETTER [STOCK_SPLIT]]} value_setters.make
+--!!!!!!FIX!!!!!:
+--			add_value_setters (value_setters, index_vector)
 		end
 
-	add_value_setters (vs: LIST [VALUE_SETTER];
+	add_value_setters (vs: LIST [VALUE_SETTER [MARKET_TUPLE]];
 						i_vector: ARRAY [INTEGER])
 			-- i_vector indicates which value_setters to insert into
 			-- vs, in the order specified, using the xxx_index constants.
 		require
 			vs /= Void
 		local
-			value_setter_vector: ARRAY [VALUE_SETTER]
-			setter: VALUE_SETTER
+			value_setter_vector: ARRAY [VALUE_SETTER [MARKET_TUPLE]]
+			date_setter: DATE_SETTER
+			splitsym_setter: SPLIT_SYMBOL_SETTER
+			split_setter: SPLIT_SETTER
 			i: INTEGER
 		do
 			create value_setter_vector.make (1, Last_index)
-			create {DATE_SETTER} setter.make
-			value_setter_vector.put (setter, Date_index)
-			create {SPLIT_SYMBOL_SETTER} setter.make (Current)
-			value_setter_vector.put (setter, Symbol_index)
-			create {SPLIT_SETTER} setter
-			value_setter_vector.put (setter, Split_index)
+			create date_setter.make
+			value_setter_vector.put (date_setter, Date_index)
+			create splitsym_setter.make (Current)
+			value_setter_vector.put (splitsym_setter, Symbol_index)
+			create split_setter
+			value_setter_vector.put (split_setter, Split_index)
 			from
 				i := 1
 			until
@@ -115,7 +136,8 @@ feature {NONE} -- Implementation - utility
 
 feature {NONE} -- Implementation - hooks
 
-	close_tuple (t: STOCK_SPLIT)
+--!!!!!!!!!????????:
+	close_tuple (t: DYNAMIC_CHAIN [STOCK_SPLIT])
 			-- Add the new tuple to the list at `product' @ `current_symbol',
 			-- with `current_symbol' converted to lower case; create a
 			-- list and place it into `product' if not
@@ -123,18 +145,45 @@ feature {NONE} -- Implementation - hooks
 		local
 			l: DYNAMIC_CHAIN [STOCK_SPLIT]
 		do
+-- !!!!"Fixed" to compile, but is likely wrong - when time, analyze
+-- !!!!it and really fix it.
 			current_symbol.to_lower
 			if not product.has (current_symbol) then
 				create {LINKED_LIST [STOCK_SPLIT]} l.make
 				product.put (l, clone (current_symbol))
 			else
-				l := product @ current_symbol
+--!!!!!!FIX!!!!!:
+--				l := product @ current_symbol
 			end
-			l.extend (t)
+--				l.extend (t)	-- (old)
+				l.extend (t.first)
 		ensure then
 			tuple_in_product: product.has (current_symbol) and
-				(product @ current_symbol).has (t)
+				(product @ current_symbol).has (t.first)
 		end
+
+--	old_close_tuple (t: STOCK_SPLIT)
+--			-- Add the new tuple to the list at `product' @ `current_symbol',
+--			-- with `current_symbol' converted to lower case; create a
+--			-- list and place it into `product' if not
+--			-- product.has (current_symbol)
+--		local
+--			l: DYNAMIC_CHAIN [STOCK_SPLIT]
+--		do
+--			if attached {STOCK_SPLIT} t as split then
+--				current_symbol.to_lower
+--				if not product.has (current_symbol) then
+--					create {LINKED_LIST [STOCK_SPLIT]} l.make
+--					product.put (l, clone (current_symbol))
+--				else
+--					l := product @ current_symbol
+--				end
+--				l.extend (split)
+--			end
+--		ensure then
+--			tuple_in_product: product.has (current_symbol) and
+--				(product @ current_symbol).has (t)
+--		end
 
 feature {NONE} -- Innapplicable
 
@@ -142,7 +191,7 @@ feature {NONE} -- Innapplicable
 		do
 		end
 
-	add_tuple (t: ANY)
+	add_tuple (t: DYNAMIC_CHAIN [STOCK_SPLIT])
 		do
 		end
 

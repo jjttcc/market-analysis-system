@@ -21,7 +21,7 @@ create
 
 feature {NONE} -- Initialization
 
-	make (main_op, accum_op, post_op: RESULT_COMMAND [REAL];
+	make (main_op, accum_op, post_op: RESULT_COMMAND [DOUBLE];
 			main_var, accum_var: NUMERIC_VALUE_COMMAND)
 		require
 			args_exist: accum_op /= Void and main_op /= Void and
@@ -43,7 +43,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	main_operator: RESULT_COMMAND [REAL]
+	main_operator: RESULT_COMMAND [DOUBLE]
 			-- Operator used to apply a configurable calculation to
 			-- each field of each tuple of each component
 			--@@Document that this op. needs to include
@@ -53,7 +53,7 @@ feature -- Access
 			-- The "variable" that holds the current input field value,
 			-- to be used for `main_operator's calculation
 
-	post_processing_operator: RESULT_COMMAND [REAL]
+	post_processing_operator: RESULT_COMMAND [DOUBLE]
 			-- Operator to be used for any needed post-processing for the
 			-- current field of the current tuple
 
@@ -63,7 +63,7 @@ feature -- Access
 feature {NONE} -- Implementation - Hook routine implementations
 
 	operator_for_current_component (field_extractor_name: STRING):
-			RESULT_COMMAND [REAL]
+			RESULT_COMMAND [DOUBLE]
 		do
 			Result := main_operator
 		end
@@ -75,7 +75,7 @@ feature {NONE} -- Implementation - Hook routine implementations
 		end
 
 	post_processing_operator_for_field (field_extractor_name: STRING):
-		RESULT_COMMAND [REAL]
+		RESULT_COMMAND [DOUBLE]
 			-- Operator to be used for any needed post-processing for the
 			-- current field of the current tuple (possibly specialized
 			-- with `field_extractor_name')

@@ -15,7 +15,7 @@ class STORABLE_LIST [G] inherit
 		rename
 			make as ll_make
 		redefine
-			copy
+			copy, new_chain
 		end
 
 	STORABLE
@@ -37,7 +37,7 @@ feature -- Initialization
 			not_void: fname /= Void
 		do
 			persistent_file_name := fname
-			ll_make
+--			ll_make
 		ensure
 			persistent_file_name = fname
 		end
@@ -75,6 +75,16 @@ feature -- Utility
 				persistent_file_name, False))
 			independent_store (outfile)
 			outfile.close
+		end
+
+feature {NONE} -- Implementation
+
+	new_chain: like Current
+			-- A newly created instance of the same type.
+			-- This feature may be redefined in descendants so as to
+			-- produce an adequately allocated and initialized object.
+		do
+			create Result.make (persistent_file_name)
 		end
 
 end -- STORABLE_LIST

@@ -13,6 +13,7 @@ deferred class EDITING_INTERFACE inherit
 	GENERAL_UTILITIES
 		export
 			{NONE} all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		end
 
 feature -- Access
@@ -106,7 +107,7 @@ feature -- Access
 		deferred
 		end
 
-	real_selection (msg: STRING): REAL
+	real_selection (msg: STRING): DOUBLE
 			-- User-selected real value
 		deferred
 		end

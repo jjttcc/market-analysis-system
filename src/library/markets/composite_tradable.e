@@ -21,7 +21,7 @@ deferred class COMPOSITE_TRADABLE inherit
 
 feature {NONE} -- Initialization
 
-	make (accum_op: RESULT_COMMAND [REAL])
+	make (accum_op: RESULT_COMMAND [DOUBLE])
 		require
 			arg_exists: accum_op /= Void
 		do
@@ -50,7 +50,7 @@ feature -- Access
 			-- make up Current
 			--@@@Check on whether VOLUME_TUPLE is the right type.
 
-	accumulation_operator: RESULT_COMMAND [REAL]
+	accumulation_operator: RESULT_COMMAND [DOUBLE]
 			-- Operator used to "accumulate" the value of the current field
 			-- of the current tuple
 			--@@@There may be a need for each element of `components' to
@@ -162,7 +162,7 @@ feature {NONE} -- Implementation
 			-- resulting output value and put this value into the associated
 			-- field of `current_tuple'.
 		local
-			post_operator: RESULT_COMMAND [REAL]
+			post_operator: RESULT_COMMAND [DOUBLE]
 		do
 			post_operator := post_processing_operator (field_extractor.name)
 			initialize_accumulation_operator
@@ -209,7 +209,7 @@ feature {NONE} -- Implementation - Hook routines
 			-- `components.item'.  The result will be stored in
 			-- `accumulation_operator.value'.
 		local
-			operator: RESULT_COMMAND [REAL]
+			operator: RESULT_COMMAND [DOUBLE]
 			variable: NUMERIC_VALUE_COMMAND
 		do
 			operator := operator_for_current_component (field_extractor.name)
@@ -228,7 +228,7 @@ feature {NONE} -- Implementation - Hook routines
 		end
 
 	operator_for_current_component (field_extractor_name: STRING):
-		RESULT_COMMAND [REAL]
+		RESULT_COMMAND [DOUBLE]
 			-- Operator for `component.item', possibly specialized with
 			-- `field_extractor_name'
 		deferred
@@ -251,7 +251,7 @@ feature {NONE} -- Implementation - Hook routines
 		end
 
 	post_processing_operator (field_extractor_name: STRING):
-		RESULT_COMMAND [REAL]
+		RESULT_COMMAND [DOUBLE]
 			-- Operator to be used for any needed post-processing for the
 			-- current field of the current tuple (possibly specialized
 			-- with `field_extractor_name')
@@ -339,7 +339,7 @@ feature {NONE} -- Implementation - Utility queries
 		end
 
 	field_setters: HASH_TABLE [PROCEDURE [ANY, TUPLE [
-		BASIC_VOLUME_TUPLE, REAL]], STRING]
+		BASIC_VOLUME_TUPLE, DOUBLE]], STRING]
 			-- Tuple field setters, corresponding to the tuple extractors
 			-- (open, high, low, etc.) - The key is the name of the
 			-- extractor.

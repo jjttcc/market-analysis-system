@@ -32,11 +32,16 @@ r: RANDOM
 f: FIBONACCI
 th_ex: THREAD_EXPERIMENTS
 
-	read_command_for (medium: COMPRESSED_SOCKET): POLL_COMMAND
+--!!!!was:	read_command_for (medium: COMPRESSED_SOCKET): POLL_COMMAND
+	read_command_for (medium: SOCKET): POLL_COMMAND
 		local
 			sock_acc: MAS_SOCKET_ACCEPTOR
 		do
-			create sock_acc.make (medium, factory_builder)
+			if attached {COMPRESSED_SOCKET} medium as socket then
+				create sock_acc.make (socket, factory_builder)
+			else
+				-- !!!!!raise an exception???!!!
+			end
 			create {SOCKET_BASED_POLL_COMMAND} Result.make (sock_acc)
 		end
 

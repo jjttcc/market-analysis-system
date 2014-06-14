@@ -38,7 +38,7 @@ deferred class N_RECORD_LINEAR_COMMAND inherit
 			index_is_target_based
 		end
 
-	UNARY_OPERATOR [REAL, REAL]
+	UNARY_OPERATOR [DOUBLE, DOUBLE]
 		rename
 			initialize as uo_initialize
 		export {NONE}
@@ -70,7 +70,7 @@ feature -- Access
 			Result := n - index_offset
 		end
 
-	operand: RESULT_COMMAND [REAL]
+	operand: RESULT_COMMAND [DOUBLE]
 			-- Operand that determines which field in each tuple to
 			-- examine for the highest value
 

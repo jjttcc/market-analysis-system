@@ -34,7 +34,7 @@ class MINUS_N_COMMAND inherit
 			children
 		end
 
-	UNARY_OPERATOR [REAL, REAL]
+	UNARY_OPERATOR [DOUBLE, DOUBLE]
 		rename
 			initialize as uo_initialize, operate as operate_unused
 		export {NONE}

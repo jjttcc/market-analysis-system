@@ -16,7 +16,7 @@ creation
 
 feature {NONE}
 
-	calculate: REAL
+	calculate: DOUBLE
 		do
 			Result := 2 / (n + 1)
 		end

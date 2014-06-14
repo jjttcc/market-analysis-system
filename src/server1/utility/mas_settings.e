@@ -8,13 +8,18 @@ note
 
 class MAS_SETTINGS inherit
 
+	ANY
+		redefine
+			default_create
+		end
+
 creation
 
-	make
+	default_create
 
 feature {NONE} -- Initialization
 
-	make
+	default_create
 		local
 			gs: expanded GLOBAL_SERVER_FACILITIES
 		do

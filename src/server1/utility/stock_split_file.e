@@ -27,8 +27,8 @@ class STOCK_SPLIT_FILE inherit
 			advance_to_next_record as if_advance_to_next_record,
 			last_error_fatal as last_error_fatal_unused
 		export
-			{NONE} all
-			{ANY} file_name
+			{STOCK_SPLIT_FILE} all
+			{ANY} file_name, file_readable, exists
 		select
 			if_advance_to_next_field, if_advance_to_next_record
 		end
@@ -49,8 +49,8 @@ feature {NONE} -- Initialization
 			end
 			field_separator := field_sep
 			record_separator := record_sep
-			file_name := input_file_name
-			open_file (file_name)
+			set_name(input_file_name)
+			open_file(file_name)
 			create product.make (100)
 			create tuple_maker
 			make_value_setters

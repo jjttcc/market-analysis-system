@@ -19,7 +19,7 @@ inherit
 			process_socket
 		redefine
 			server_socket, accepted_socket, prepare_for_persistent_connection,
-			interface, initialize_for_execution
+			initialize_for_execution
 		end
 
 	MA_COMMUNICATION_PROTOCOL
@@ -62,7 +62,9 @@ feature -- Access
 	accepted_socket: COMPRESSED_SOCKET
 			-- The socket that will be used for input and output
 
-	interface: MAIN_APPLICATION_INTERFACE
+--!!!!solution to compiler type error - don't redefine 'interface' - check
+--if it is correct
+--!!!!!	interface: MAIN_APPLICATION_INTERFACE
 
 	factory_builder: GLOBAL_OBJECT_BUILDER
 			-- Builder of objects used by for input processing

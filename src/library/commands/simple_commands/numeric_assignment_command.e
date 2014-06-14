@@ -10,7 +10,7 @@ note
 
 class NUMERIC_ASSIGNMENT_COMMAND inherit
 
-	UNARY_OPERATOR [REAL, REAL]
+	UNARY_OPERATOR [DOUBLE, DOUBLE]
 		rename
 			operand as main_operator
 		redefine
@@ -28,7 +28,7 @@ create
 
 feature -- Initialization
 
-	make (main_op: RESULT_COMMAND [REAL]; target_op: NUMERIC_VALUE_COMMAND)
+	make (main_op: RESULT_COMMAND [DOUBLE]; target_op: NUMERIC_VALUE_COMMAND)
 		require
 			args_exist: main_op /= Void and target_op /= Void
 		do
@@ -66,7 +66,7 @@ feature -- Element change
 
 feature -- Basic operations
 
-	operate (v: REAL)
+	operate (v: DOUBLE)
 		do
 			value := v
 			target.set_value (value)

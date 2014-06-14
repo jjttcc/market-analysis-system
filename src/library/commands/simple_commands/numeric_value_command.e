@@ -20,7 +20,10 @@ class NUMERIC_VALUE_COMMAND inherit
 
 	FUNCTION_PARAMETER
 		export
+--!!!!!fix for:
+--"feature of qualified call is not available to client class" error
 			{NONE} all
+			{ANY} infix "<"
 		select
 			is_equal
 		end
@@ -36,12 +39,12 @@ creation
 
 feature
 
-	make (r: REAL)
+	make (r: DOUBLE)
 		do
 			value := r
 			is_editable := True
 		ensure
-			set: rabs (value - r) < epsilon
+			set: dabs (value - r) < epsilon
 			editable: is_editable
 		end
 
@@ -74,12 +77,12 @@ feature -- Status report
 
 feature -- Status setting
 
-	set_value (arg: REAL)
+	set_value (arg: DOUBLE)
 			-- Set value to `arg'.
 		do
 			value := arg
 		ensure
-			value_set: rabs (value - arg) < epsilon
+			value_set: dabs (value - arg) < epsilon
 		end
 
 feature -- Basic operations

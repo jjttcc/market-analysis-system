@@ -14,7 +14,7 @@ class PRICE inherit
 
 feature
 
-	value: REAL
+	value: DOUBLE
 			-- price value as a real number - for example,
 			-- 3.75 when whole_part = 3 and fraction = .75
 			-- (For now, this is an attribute that holds the price's
@@ -29,7 +29,7 @@ feature -- Comparison
 
 feature -- Status setting
 
-	set_value (v: REAL)
+	set_value (v: DOUBLE)
 		do
 			value := v
 		end

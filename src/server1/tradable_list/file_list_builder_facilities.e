@@ -83,7 +83,7 @@ feature -- Basic operations
 			end
 		end
 
-feature {NONE} -- Hook routine implementations
+feature -- Status report
 
 	descendant_build_lists_precondition: BOOLEAN
 		do
@@ -147,7 +147,7 @@ feature {NONE} -- Implementation
 		do
 			strutil.set_target (clone (fname))
 			if strutil.target.has ('.') then
-				strutil.head ('.')
+				strutil.keep_head ('.')
 			end
 			Result := strutil.target
 		end

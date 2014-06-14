@@ -17,6 +17,8 @@ class HTTP_LOADING_FILE_TRADABLE_LIST inherit
 	FILE_BASED_TRADABLE_LIST
 		rename
 			make as fbtl_make
+		export
+			{ANY} target_tradable, cached_item
 		redefine
 			load_target_tradable, target_tradable_out_of_date,
 			append_new_data

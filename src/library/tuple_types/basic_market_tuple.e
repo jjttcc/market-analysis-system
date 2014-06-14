@@ -48,7 +48,7 @@ feature -- Access
 	low: PRICE
 			-- lowest price
 
-	value: REAL
+	value: DOUBLE
 		do
 			Result := close.value
 		end
@@ -103,7 +103,7 @@ feature -- Status setting
 
 feature {VALUE_SETTER, FACTORY} -- Status setting
 
-	set (o, h, l, c: REAL)
+	set (o, h, l, c: DOUBLE)
 			-- Set the open, high, low, and close values.
 		require
 			h_l_c_valid: h >= l and l <= c and c <= h
@@ -124,7 +124,7 @@ feature {VALUE_SETTER, FACTORY} -- Status setting
 			o_lt_0_not_open_available: o <= 0 implies not open_available
 		end
 
-	set_open (p: REAL)
+	set_open (p: DOUBLE)
 			-- Set open to `p'.
 		require
 			argument_valid:
@@ -137,7 +137,7 @@ feature {VALUE_SETTER, FACTORY} -- Status setting
 			open_available: open_available
 		end
 
-	set_close (p: REAL)
+	set_close (p: DOUBLE)
 			-- Set close to `p'.
 		require
 			argument_valid:
@@ -149,7 +149,7 @@ feature {VALUE_SETTER, FACTORY} -- Status setting
 			close_set: close.value = p
 		end
 
-	set_high (p: REAL)
+	set_high (p: DOUBLE)
 			-- Set high to `p'.
 		require
 			argument_valid:
@@ -161,7 +161,7 @@ feature {VALUE_SETTER, FACTORY} -- Status setting
 			high_set: high.value = p
 		end
 
-	set_low (p: REAL)
+	set_low (p: DOUBLE)
 			-- Set low to `p'.
 		require
 			argument_valid:

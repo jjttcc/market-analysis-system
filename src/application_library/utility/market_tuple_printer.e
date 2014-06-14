@@ -178,22 +178,26 @@ feature {NONE} -- Implementation
 	print_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE])
 		local
 			first, last, i: INTEGER
+			bmt_list: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]
 		do
-			first := first_index (l)
-			last := last_index (l)
-			if last >= first then
-				debug ("data_update_bug")
-					print_requested_start_end_dates
-					print_start_end (l, first, last)
-				end
-				from
-					i := first
-				until
-					i = last + 1
-				loop
-					print_fields (l @ i)
-					put (record_separator)
-					i := i + 1
+			bmt_list ?= l
+			if bmt_list /= Void then
+				first := first_index (bmt_list)
+				last := last_index (bmt_list)
+				if last >= first then
+					debug ("data_update_bug")
+						print_requested_start_end_dates
+						print_start_end (bmt_list, first, last)
+					end
+					from
+						i := first
+					until
+						i = last + 1
+					loop
+						print_fields (bmt_list @ i)
+						put (record_separator)
+						i := i + 1
+					end
 				end
 			end
 		end
@@ -206,30 +210,34 @@ feature {NONE} -- Implementation
 				print_end_time /= Void implies print_end_date /= Void
 		local
 			first, last, i: INTEGER
+			bmt_list: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]
 		do
-			if print_start_time /= Void then
-				first := first_date_time_index (l)
-			else
-				first := first_index (l)
-			end
-			if print_end_time /= Void then
-				last := last_date_time_index (l)
-			else
-				last := last_index (l)
-			end
-			if last >= first then
-				debug ("data_update_bug")
-					print_requested_start_end_dates
-					print_start_end (l, first, last)
+			bmt_list ?= l
+			if bmt_list /= Void then
+				if print_start_time /= Void then
+					first := first_date_time_index (bmt_list)
+				else
+					first := first_index (bmt_list)
 				end
-				from
-					i := first
-				until
-					i = last + 1
-				loop
-					print_fields_with_time (l @ i)
-					put (record_separator)
-					i := i + 1
+				if print_end_time /= Void then
+					last := last_date_time_index (bmt_list)
+				else
+					last := last_index (bmt_list)
+				end
+				if last >= first then
+					debug ("data_update_bug")
+						print_requested_start_end_dates
+						print_start_end (bmt_list, first, last)
+					end
+					from
+						i := first
+					until
+						i = last + 1
+					loop
+						print_fields_with_time (bmt_list @ i)
+						put (record_separator)
+						i := i + 1
+					end
 				end
 			end
 		end

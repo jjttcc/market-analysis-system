@@ -51,7 +51,7 @@ feature -- Initialization
 
 feature -- Access
 
-	index_operator: RESULT_COMMAND [REAL]
+	index_operator: RESULT_COMMAND [DOUBLE]
 
 	children: LIST [COMMAND]
 		do
@@ -61,7 +61,7 @@ feature -- Access
 
 feature -- Element change
 
-	set_index_operator (arg: RESULT_COMMAND [REAL])
+	set_index_operator (arg: RESULT_COMMAND [DOUBLE])
 			-- Set `index_operator' to `arg'.
 		require
 			arg_not_void: arg /= Void

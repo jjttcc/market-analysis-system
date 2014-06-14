@@ -10,7 +10,7 @@ note
 
 deferred class MARKET_EVENT_FACTORY inherit
 
-	FACTORY
+	FACTORY [MARKET_EVENT]
 		redefine
 			product
 		end

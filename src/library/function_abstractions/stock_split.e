@@ -22,7 +22,7 @@ class STOCK_SPLIT inherit
 
 feature -- Access
 
-	value: REAL
+	value: DOUBLE
 			-- value of the split
 
 	date: DATE
@@ -40,22 +40,22 @@ feature -- Status report
 	is_equal (other: like Current): BOOLEAN
 		do
 			Result := other.date.is_equal (date) and
-						rabs (value - other.value) < epsilon
+						dabs (value - other.value) < epsilon
 		ensure then
 			date_value_equal: Result = other.date.is_equal (date) and
-						rabs (value - other.value) < epsilon
+						dabs (value - other.value) < epsilon
 		end
 
 feature {VALUE_SETTER}
 
-	set_value (v: REAL)
+	set_value (v: DOUBLE)
 			-- Set value to `v'.
 		require
 			gt_0: v > 0
 		do
 			value := v
 		ensure
-			value_set: rabs (value - v) < epsilon
+			value_set: dabs (value - v) < epsilon
 		end
 
 end -- class STOCK_SPLIT

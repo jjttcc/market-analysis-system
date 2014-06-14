@@ -21,7 +21,7 @@ class N_BASED_UNARY_OPERATOR inherit
 			initialize
 		end
 
-	UNARY_OPERATOR [REAL, REAL]
+	UNARY_OPERATOR [DOUBLE, DOUBLE]
 		rename
 			initialize as uo_initialize
 		undefine
@@ -64,7 +64,7 @@ feature {FACTORY} -- Initialization
 
 feature {NONE} -- Implmentation
 
-	calculate: REAL
+	calculate: DOUBLE
 			-- Perform the calculation based on n.
 		do
 			operand.execute (Void)

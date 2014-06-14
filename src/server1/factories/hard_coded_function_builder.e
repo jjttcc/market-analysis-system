@@ -9,7 +9,7 @@ note
 
 class HARD_CODED_FUNCTION_BUILDER inherit
 
-	FACTORY
+	FACTORY [LIST[MARKET_FUNCTION]]
 		redefine
 			product
 		end
@@ -153,7 +153,7 @@ feature {NONE} -- Hard-coded market function building procedures
 				operator_type: STRING): N_RECORD_ONE_VARIABLE_FUNCTION
 			-- A momentum function
 		local
-			operator: BINARY_OPERATOR [REAL, REAL]
+			operator: BINARY_OPERATOR [DOUBLE, DOUBLE]
 			close: BASIC_NUMERIC_COMMAND
 			close_minus_n: MINUS_N_COMMAND
 		do
@@ -178,7 +178,7 @@ feature {NONE} -- Hard-coded market function building procedures
 			-- RS:  (average n up closes ) / (average n down closes)
 		local
 			one, one_hundred: NUMERIC_VALUE_COMMAND
-			outer_div, inner_div, add, sub: BINARY_OPERATOR [REAL, REAL]
+			outer_div, inner_div, add, sub: BINARY_OPERATOR [DOUBLE, DOUBLE]
 			positive_average, negative_average: BASIC_LINEAR_COMMAND
 			pos_ema, neg_ema: EXPONENTIAL_MOVING_AVERAGE
 		do
@@ -455,7 +455,7 @@ feature {NONE} -- Hard-coded market function building procedures
 		local
 			agents: expanded MARKET_AGENTS
 			l: LINKED_LIST [MARKET_FUNCTION]
-			log2, bnc: RESULT_COMMAND [REAL]
+			log2, bnc: RESULT_COMMAND [DOUBLE]
 		do
 			create {BASIC_NUMERIC_COMMAND} bnc
 			create {LOG2} log2.make (bnc)
@@ -492,10 +492,10 @@ feature {NONE} -- Hard-coded market function building procedures
 		local
 			one, zero: NUMERIC_VALUE_COMMAND
 			exp: N_BASED_UNARY_OPERATOR
-			div, sub: BINARY_OPERATOR [REAL, REAL]
+			div, sub: BINARY_OPERATOR [DOUBLE, DOUBLE]
 			main_op: NUMERIC_CONDITIONAL_COMMAND
 			n_cmd: N_VALUE_COMMAND
-			relational_op: BINARY_OPERATOR [BOOLEAN, REAL]
+			relational_op: BINARY_OPERATOR [BOOLEAN, DOUBLE]
 			offset_minus_1, offset_0: SETTABLE_OFFSET_COMMAND
 			close: BASIC_NUMERIC_COMMAND
 			fname: STRING

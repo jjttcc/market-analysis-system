@@ -60,11 +60,11 @@ feature {NONE} -- Implementation
 			strutil.set_target (clone (fname))
 			if strutil.target.has (Directory_separator) then
 				-- Strip directory path from the file name:
-				strutil.tail (Directory_separator)
+				strutil.keep_tail (Directory_separator)
 			end
 			if strutil.target.has ('.') then
 				-- Strip off "suffix":
-				strutil.head ('.')
+				strutil.keep_head ('.')
 			end
 			Result := strutil.target
 		end

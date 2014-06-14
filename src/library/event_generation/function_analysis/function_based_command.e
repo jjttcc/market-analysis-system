@@ -152,7 +152,7 @@ feature -- Basic operations
 			end
 		end
 
-	prepare_for_editing (l: LIST [FUNCTION_PARAMETER])
+	prepare_for_editing (l: LIST [TREE_NODE])
 		do
 			input.parameters.do_all (agent l.extend)
 		end

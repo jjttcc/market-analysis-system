@@ -8,7 +8,7 @@ note
 
 class DATE_SETTER inherit
 
-	INTEGER_SETTER
+	INTEGER_SETTER [MARKET_TUPLE]
 
 creation
 

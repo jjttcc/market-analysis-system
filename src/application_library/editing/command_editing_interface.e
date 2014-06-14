@@ -207,14 +207,14 @@ feature -- Constants
 	Boolean_result_cmd: STRING = "RESULT_COMMAND [BOOLEAN]"
 			-- Name of result command with a BOOLEAN generic parameter
 
-	Real_result_cmd: STRING = "RESULT_COMMAND [REAL]"
-			-- Name of result command with a REAL generic parameter
+	Real_result_cmd: STRING = "RESULT_COMMAND [DOUBLE]"
+			-- Name of result command with a DOUBLE generic parameter
 
-	Binary_boolean_real_cmd: STRING = "BINARY_OPERATOR [BOOLEAN, REAL]"
-			-- Name of binary command with BOOLEAN, REAL generic parameters
+	Binary_boolean_real_cmd: STRING = "BINARY_OPERATOR [BOOLEAN, DOUBLE]"
+			-- Name of binary command with BOOLEAN, DOUBLE generic parameters
 
-	Binary_real_real_cmd: STRING = "BINARY_OPERATOR [REAL, REAL]"
-			-- Name of binary command with REAL, REAL generic parameters
+	Binary_real_real_cmd: STRING = "BINARY_OPERATOR [DOUBLE, DOUBLE]"
+			-- Name of binary command with DOUBLE, DOUBLE generic parameters
 
 	N_based_calculation: STRING = "N_BASED_CALCULATION"
 			-- Name of N_BASED_CALCULATION
@@ -357,14 +357,14 @@ feature {NONE} -- Implementation
 	Numeric_value,		-- NUMERIC_VALUE_COMMAND - needs value to be set
 	Other,				-- Classes that need no initialization
 	Mtlist_resultreal,  -- Classes that need a market tuple list and a
-						-- RESULT_COMMAND [REAL]
+						-- RESULT_COMMAND [DOUBLE]
 	Mtlist_resultreal_n,-- Classes that need a market tuple list, a
-						-- RESULT_COMMAND [REAL], and an n-value
+						-- RESULT_COMMAND [DOUBLE], and an n-value
 	Minus_n,			-- MINUS_N_COMMAND
-						-- RESULT_COMMAND [REAL], and an n-value
+						-- RESULT_COMMAND [DOUBLE], and an n-value
 	N_command,			-- Classes that (only) need an n-value
 	Mtlist,				-- Classes that (only) need a market tuple list
-	Resultreal_n,		-- Classes that need a RESULT_COMMAND [REAL] and
+	Resultreal_n,		-- Classes that need a RESULT_COMMAND [DOUBLE] and
 						-- an n-value
 	Settable_offset,	-- SETTABLE_OFFSET_COMMAND
 	Sign_analyzer_cmd,	-- SIGN_ANALYZER
@@ -710,10 +710,10 @@ feature {NONE} -- Implementation
 		local
 			nvc: NUMERIC_VALUE_COMMAND
 			bin_bool_op: BINARY_OPERATOR [ANY, BOOLEAN]
-			bin_real_op: BINARY_OPERATOR [ANY, REAL]
+			bin_real_op: BINARY_OPERATOR [ANY, DOUBLE]
 			un_bool_op: UNARY_OPERATOR [BOOLEAN, BOOLEAN]
-			unop_real: UNARY_OPERATOR [ANY, REAL]
-			unop_real_real: UNARY_OPERATOR [REAL, REAL]
+			unop_real: UNARY_OPERATOR [ANY, DOUBLE]
+			unop_real_real: UNARY_OPERATOR [DOUBLE, DOUBLE]
 			offset_cmd: SETTABLE_OFFSET_COMMAND
 			conditional: NUMERIC_CONDITIONAL_COMMAND
 			sign_an: SIGN_ANALYZER

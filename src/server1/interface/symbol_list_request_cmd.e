@@ -21,10 +21,12 @@ creation
 
 feature {NONE} -- Basic operations
 
-	do_execute (msg: STRING)
+	do_execute (message: ANY)
 		local
+			msg: STRING
 			symbols: LIST [STRING]
 		do
+			msg := message.out
 			put_ok
 			symbols := tradables.symbols
 			if not symbols.is_empty then

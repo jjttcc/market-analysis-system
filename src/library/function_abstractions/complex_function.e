@@ -19,7 +19,7 @@ feature -- Access
 
 	output: MARKET_TUPLE_LIST [MARKET_TUPLE]
 
-	operator: RESULT_COMMAND [REAL]
+	operator: RESULT_COMMAND [DOUBLE]
 			-- Operator that will perform the main work of the function.
 			-- Descendant classes may choose not to use this attribute for
 			-- efficiency.
@@ -35,10 +35,15 @@ feature -- Access
 			at_least_one: Result /= Void and then Result.count >= 1
 		end
 
-	parameters: LIST [FUNCTION_PARAMETER]
+	parameters: LIST [TREE_NODE]
+--	parameters: LIST [FUNCTION_PARAMETER]
 		do
-			Result := clone (direct_parameters)
-			Result.append (operator_parameters)
+			if attached {LIST[TREE_NODE]} direct_parameters as params then
+				Result := clone(parameters)
+			end
+			if attached {LIST[TREE_NODE]} operator_parameters as params then
+				Result.append(params)
+			end
 		end
 
 	direct_operators: LIST [COMMAND]
@@ -141,7 +146,7 @@ feature {MARKET_FUNCTION} -- Status report
 
 feature {NONE} -- Implementation
 
-	immediate_operators: LIST [COMMAND]
+	immediate_operators: LIST [TREE_NODE]
 		local
 			direct_ops: LIST [COMMAND]
 		do
@@ -161,7 +166,12 @@ feature {NONE} -- Implementation
 				direct_ops.exhausted
 			loop
 				Result.extend (direct_ops.item)
-				Result.append (direct_ops.item.descendants)
+				if
+					attached {SEQUENCE [COMMAND]}
+						direct_ops.item.descendants as desc
+				then
+					Result.append (desc)
+				end
 				direct_ops.forth
 			end
 		end

@@ -35,7 +35,7 @@ creation
 
 feature -- Initialization
 
-	make (p1: MARKET_POINT; sl: REAL; in: like input)
+	make (p1: MARKET_POINT; sl: DOUBLE; in: like input)
 			-- Make the line with p1 as the start point, sl as the slope.
 		require
 			not_void: p1 /= Void and in /= Void

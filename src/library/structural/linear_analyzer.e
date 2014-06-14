@@ -18,7 +18,7 @@ deferred class
 
 feature {FACTORY, COMMAND}
 
-	target: CHAIN [MARKET_TUPLE]
+	target: LIST [MARKET_TUPLE]
 			-- The target sequence to be processed
 		deferred
 		end

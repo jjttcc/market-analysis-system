@@ -50,6 +50,6 @@ feature {NONE} -- Implementation
 
 feature {NONE}
 
-	target: LIST [BASIC_MARKET_TUPLE]
+	target: LIST [MARKET_TUPLE]
 
 end -- class HIGHEST_VALUE

@@ -9,7 +9,7 @@ note
 
 class TRADABLE_FACTORY inherit
 
-	FACTORY
+	FACTORY [TRADABLE[BASIC_MARKET_TUPLE]]
 		redefine
 			product
 		end
@@ -310,7 +310,7 @@ feature {NONE} -- Implementation
 			tm_not_void: tuple_maker /= Void
 		end
 
-	index_vector: ARRAY [INTEGER]
+	index_vector: ARRAYED_LIST [INTEGER]
 			-- Index vector for value setters
 		do
 			if open_interest then
@@ -322,7 +322,7 @@ feature {NONE} -- Implementation
 			at_least_one: Result.count > 0
 		end
 
-	value_setters: LINKED_LIST [VALUE_SETTER]
+	value_setters: LINKED_LIST [VALUE_SETTER [BASIC_MARKET_TUPLE]]
 		do
 			if
 				cached_value_setters = Void or
@@ -337,8 +337,8 @@ feature {NONE} -- Implementation
 			at_least_one: Result.count > 0
 		end
 
-	add_value_setters (vs: LINKED_LIST [VALUE_SETTER];
-						i_vector: ARRAY [INTEGER])
+	add_value_setters (vs: LINKED_LIST [VALUE_SETTER [MARKET_TUPLE]];
+						i_vector: ARRAYED_LIST [INTEGER])
 			-- i_vector indicates which value_setters to insert into
 			-- vs, in the order specified, using the xxx_index constants.
 			-- For example, i_vector = << Date_index, Close_index >>
@@ -346,32 +346,43 @@ feature {NONE} -- Implementation
 		require
 			vs /= Void
 		local
-			value_setter_vector: ARRAY [VALUE_SETTER]
-			setter: VALUE_SETTER
+--			value_setter_vector: ARRAY [VALUE_SETTER [BASIC_MARKET_TUPLE]]
+			value_setter_vector: ARRAY [VALUE_SETTER [MARKET_TUPLE]]
+			date_setter: DATE_SETTER
+			configurable_date_setter: CONFIGURABLE_DATE_SETTER
+			time_setter: TIME_SETTER
+			open_setter: OPEN_SETTER
+			high_setter: HIGH_SETTER
+			low_setter: LOW_SETTER
+			close_setter: CLOSE_SETTER
+			volume_setter: VOLUME_SETTER
+			open_interest_setter: OPEN_INTEREST_SETTER
+--!!!!			setter: VALUE_SETTER [BASIC_MARKET_TUPLE]
 			i: INTEGER
 			gsf: expanded GLOBAL_SERVER_FACILITIES
 		do
 			if value_setter_vector = Void then
 				create value_setter_vector.make (1, Last_index)
-				create {DATE_SETTER} setter.make
-				value_setter_vector.put (setter, Date_index)
-				create {CONFIGURABLE_DATE_SETTER} setter.make (
+				create date_setter.make
+				value_setter_vector.put (date_setter, Date_index)
+				create configurable_date_setter.make (
 					gsf.command_line_options.special_date_settings)
-				value_setter_vector.put (setter, Configurable_date_index)
-				create {TIME_SETTER} setter.make
-				value_setter_vector.put (setter, Time_index)
-				create {OPEN_SETTER} setter
-				value_setter_vector.put (setter, Open_index)
-				create {HIGH_SETTER} setter
-				value_setter_vector.put (setter, High_index)
-				create {LOW_SETTER} setter
-				value_setter_vector.put (setter, Low_index)
-				create {CLOSE_SETTER} setter
-				value_setter_vector.put (setter, Close_index)
-				create {VOLUME_SETTER} setter.make
-				value_setter_vector.put (setter, Volume_index)
-				create {OPEN_INTEREST_SETTER} setter
-				value_setter_vector.put (setter, OI_index)
+				value_setter_vector.put (configurable_date_setter,
+					Configurable_date_index)
+				create time_setter.make
+				value_setter_vector.put (time_setter, Time_index)
+				create open_setter
+				value_setter_vector.put (open_setter, Open_index)
+				create high_setter
+				value_setter_vector.put (high_setter, High_index)
+				create low_setter
+				value_setter_vector.put (low_setter, Low_index)
+				create close_setter
+				value_setter_vector.put (close_setter, Close_index)
+				create volume_setter.make
+				value_setter_vector.put (volume_setter, Volume_index)
+				create open_interest_setter
+				value_setter_vector.put (open_interest_setter, OI_index)
 			end
 			from
 				i := 1
@@ -409,7 +420,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	cached_value_setters: LINKED_LIST [VALUE_SETTER]
+	cached_value_setters: LINKED_LIST [VALUE_SETTER [BASIC_MARKET_TUPLE]]
 
 	check_for_open_interest
 			-- Check if `input' has an open interest field.

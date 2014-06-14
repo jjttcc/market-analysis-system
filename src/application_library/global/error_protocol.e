@@ -15,6 +15,7 @@ inherit
 	GENERAL_CONFIGURATION_CONSTANTS
 		export
 			{NONE} all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		end
 
 	GENERAL_UTILITIES

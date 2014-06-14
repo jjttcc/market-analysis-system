@@ -27,7 +27,7 @@ class COMPRESSED_SOCKET inherit
 
 creation
 
-	make, make_server_by_port
+	make, make_server_by_port, make_from_descriptor_and_address
 
 feature -- Access
 

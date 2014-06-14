@@ -19,7 +19,7 @@ class SETTABLE_OFFSET_COMMAND inherit
 			initialize
 		end
 
-	UNARY_OPERATOR [REAL, REAL]
+	UNARY_OPERATOR [DOUBLE, DOUBLE]
 		rename
 			operate as operate_unused, initialize as uo_initialize
 		undefine

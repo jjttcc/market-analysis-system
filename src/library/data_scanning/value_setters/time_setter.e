@@ -8,7 +8,7 @@ note
 
 class TIME_SETTER inherit
 
-	STRING_SETTER
+	STRING_SETTER [MARKET_TUPLE]
 
 creation
 
