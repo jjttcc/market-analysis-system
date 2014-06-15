@@ -76,7 +76,8 @@ feature -- Access
 			-- comparison.  If left_target_type is Void, the event's time
 			-- stamp will be used, rather than that of one of its components.
 
-	indicators: LIST [TREE_NODE]
+--	indicators: LIST [TREE_NODE]
+	indicators: LIST [FUNCTION_PARAMETER]
 		do
 			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 			Result.append (left_analyzer.indicators)

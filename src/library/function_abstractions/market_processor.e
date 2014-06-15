@@ -12,7 +12,7 @@ deferred class MARKET_PROCESSOR inherit
 
 feature -- Access
 
-	functions: LIST [TREE_NODE]
+	functions: LIST [FUNCTION_PARAMETER]
 			-- All functions used directly or indirectly by this market
 			-- processor, including itself, if it is a function
 		deferred
@@ -20,8 +20,8 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	parameters: LIST [TREE_NODE]
---	parameters: LIST [FUNCTION_PARAMETER]
+--	parameters: LIST [TREE_NODE]
+	parameters: LIST [FUNCTION_PARAMETER]
 			-- Changeable parameters for `functions'
 		deferred
 		ensure

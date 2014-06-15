@@ -338,14 +338,42 @@ feature {EDITING_INTERFACE}
 			end
 		end
 
-	edit_indicator_list (l: LIST [TREE_NODE])
+--
+fooedit_indicator_list (l: LIST [MARKET_FUNCTION])
+	-- Editing of indicators in `l'
+require
+	not_void: l /= Void
+	readonly_or_saveable: readonly or ok_to_save
+local
+	selection: INTEGER
+	indicator: MARKET_FUNCTION
+do
+	from
+		selection := Null_value
+	until
+		selection = Exit_value
+	loop
+		selection := list_selection_with_backout (
+			names_from_function_list(l), "Select an indicator to edit")
+		if selection /= Exit_value then
+			indicator := l @ selection
+			check indicator /= Void end
+			edit_indicator (indicator)
+		end
+	end
+end
+
+--
+
+	edit_indicator_list (l: LIST [FUNCTION_PARAMETER])
 			-- Editing of indicators in `l'
 		require
 			not_void: l /= Void
 			readonly_or_saveable: readonly or ok_to_save
 		local
 			selection: INTEGER
-			indicator: TREE_NODE
+--!!!!indicator: TREE_NODE
+			indicator: FUNCTION_PARAMETER
 		do
 			from
 				selection := Null_value
@@ -530,7 +558,7 @@ feature {NONE} -- Implementation
 			working_function_library := deep_clone (function_library)
 		end
 
-	names_from_function_list (l: LIST [TREE_NODE]): ARRAYED_LIST [STRING]
+	names_from_function_list (l: LIST [FUNCTION_PARAMETER]): ARRAYED_LIST [STRING]
 			-- Name of each function in `l'
 		do
 			create Result.make (1)

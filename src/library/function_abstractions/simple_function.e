@@ -81,13 +81,13 @@ feature -- Access
 			Result.append (" records")
 		end
 
-	parameters: LIST [TREE_NODE]
---	parameters: LIST [FUNCTION_PARAMETER]
+--	parameters: LIST [TREE_NODE]
+	parameters: LIST [FUNCTION_PARAMETER]
 -- !!!! indexing once_status: global??!!!
 		once
 --!!!!!			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 --!!!!will this work???!!!:
-			create {LINKED_LIST [TREE_NODE]} Result.make
+			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 		end
 
 	processed_date_time: DATE_TIME

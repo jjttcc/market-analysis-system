@@ -56,27 +56,33 @@ feature -- Access
 
 	operators: LIST [COMMAND]
 		local
-			l: LIST [TREE_NODE]
+			l: LIST [FUNCTION_PARAMETER]
 		do
 			Result := immediate_operators
 			l := indicators
 			across l as item loop
 				if attached {MARKET_FUNCTION} item as e then
 					Result.append (e.operators)
+				else
+print ("DEBUG/14.05 conversion error: item not attached [MEG.operators]%N")
 				end
 			end
 		end
 
-	parameters: LIST [TREE_NODE]
---	parameters: LIST [FUNCTION_PARAMETER]
+--	parameters: LIST [TREE_NODE]
+	parameters: LIST [FUNCTION_PARAMETER]
 		local
-			l: LIST [TREE_NODE]
+--			l: LIST [TREE_NODE]
+			l: LIST [FUNCTION_PARAMETER]
 		do
-			create {LINKED_LIST [TREE_NODE]} Result.make
+			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 			l := indicators
 			across l as item loop
+--?????!!!!???:
 				if attached {MARKET_FUNCTION} item as e then
 					Result.append (e.parameters)
+				else
+print ("DEBUG/14.05 conversion error: item not attached [parameters]%N")
 				end
 			end
 		end

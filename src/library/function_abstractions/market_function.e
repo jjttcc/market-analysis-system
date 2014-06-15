@@ -21,8 +21,18 @@ deferred class MARKET_FUNCTION inherit
 
 	TREE_NODE
 		redefine
-			name, copy_of_children, descendant_comparison_is_by_objects
+			name, copy_of_children, descendant_comparison_is_by_objects,
+			descendants
 		end
+
+--!!!!!experiment:
+	FUNCTION_PARAMETER
+		rename
+			description as short_description
+		undefine
+			is_equal
+		end
+--!!!!![end experiment]
 
 feature -- Access
 
@@ -81,7 +91,7 @@ feature -- Access
 		deferred
 		end
 
-	functions: LIST [TREE_NODE]
+	functions: LIST [MARKET_FUNCTION]
 		do
 			Result := descendants
 			Result.extend (Current)
@@ -138,6 +148,37 @@ feature -- Access
 	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE]
 			-- The innermost input sequence to be processed
 		deferred
+		end
+
+--	saved_descendants: LIST [MARKET_FUNCTION]
+--		do
+--			if attached {LIST [MARKET_FUNCTION]} Precursor as p then
+--				Result := p
+--			else
+--print ("DEBUG/14.05 conversion error: [p] not attached [MF.operators]%N")
+--			end
+--		end
+
+	descendants: LIST [MARKET_FUNCTION]
+		local
+			l: LIST [TREE_NODE]
+			i: INTEGER
+		do
+			l := Precursor
+			i := l.count
+			from
+				create {LINKED_LIST [MARKET_FUNCTION]} Result.make
+				l.start
+			until
+				l.exhausted
+			loop
+				if attached {MARKET_FUNCTION} l.item as mf then
+					Result.extend (mf)
+				else
+print ("DEBUG/14.05 conversion error: [p] not attached [MF.descendants]%N")
+				end
+				l.forth
+			end
 		end
 
 feature -- Status report
@@ -322,6 +363,38 @@ feature {NONE} -- Implementation
 		end
 
 	name_implementation: STRING
+
+--!!!!!experiment:
+feature
+
+	current_value: STRING
+		do
+			Result := output.out
+		end
+
+	value_type_description: STRING
+		do
+			Result := "[to-be-defined]"
+		end
+
+	current_value_equals (v: STRING): BOOLEAN
+		do
+--!!!!![cheat]!!!!
+			Result := True
+		end
+
+	valid_value (v: STRING): BOOLEAN
+		do
+--!!!!![cheat]!!!!
+			Result := True
+		end
+
+	change_value (v: STRING)
+		do
+--!!!!![cheat]!!!!
+		end
+
+--!!!!![end experiment]
 
 invariant
 

@@ -35,15 +35,15 @@ feature -- Access
 			at_least_one: Result /= Void and then Result.count >= 1
 		end
 
-	parameters: LIST [TREE_NODE]
---	parameters: LIST [FUNCTION_PARAMETER]
+--	parameters: LIST [TREE_NODE]
+	parameters: LIST [FUNCTION_PARAMETER]
 		do
-			if attached {LIST[TREE_NODE]} direct_parameters as params then
-				Result := clone(parameters)
-			end
-			if attached {LIST[TREE_NODE]} operator_parameters as params then
-				Result.append(params)
-			end
+--!!!!!			if attached {LIST[TREE_NODE]} direct_parameters as params then
+				Result := clone(direct_parameters)
+--!!!!!			end
+--!!!!!			if attached {LIST[TREE_NODE]} operator_parameters as params then
+				Result.append(operator_parameters)
+--!!!!!			end
 		end
 
 	direct_operators: LIST [COMMAND]

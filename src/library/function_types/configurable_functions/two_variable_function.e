@@ -38,9 +38,17 @@ feature {NONE} -- Initialization
 				in1.trading_period_type.is_equal (in2.trading_period_type)
 		do
 			create output.make (in1.output.count)
+			set_operator (op)
 			set_input1 (in1)
 			set_input2 (in2)
-			set_operator (op)
+
+print("processed_constraint1: " + (processed implies input1.processed and input2.processed).out + "%N")
+print("inputs_not_void: " + (input1 /= Void and input2 /= Void).out + "%N")
+print("input_target_relation: " + (input1.output = target1 and input2.output = target2).out + "%N")
+print("no_missing_periods: " + (processed implies not missing_periods (target1, target2)).out + "%N")
+print("inputs_trading_period_types_equal: " + (input1.trading_period_type.is_equal (input2.trading_period_type)).out + "%N")
+print("has_two_children: " + (Has_children and children.count = 2).out + "%N")
+
 		ensure
 			output_not_void: output /= Void
 			set: input1 = in1 and input2 = in2 and operator = op
@@ -196,6 +204,10 @@ feature {MARKET_FUNCTION_EDITOR}
 			ptype_not_void: in.trading_period_type /= Void
 		do
 			do_set_input2 (in)
+if target2 /= in.output then
+	print ("TVF.set_input2: target2 /= in.output%N")
+	print ("[in " + Current.generating_type + "]%N")
+end
 		ensure
 			input_set: input2 = in and input2 /= Void
 			target_set: target2 = in.output

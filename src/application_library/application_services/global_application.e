@@ -8,7 +8,8 @@ note
 
 class GLOBAL_APPLICATION inherit
 
-	EXCEPTIONS
+--!!!!old:	EXCEPTIONS
+	EXCEPTION_SERVICES
 		export
 			{NONE} all
 			{ANY} deep_twin, is_deep_equal, standard_is_equal
@@ -318,7 +319,8 @@ feature {NONE} -- Implementation
 						%%Nlibrary file (", meaning(exception), "):%N",
 						full_path_name, "%N", file_errinfo>>)
 				end
-				die (-1)
+				handle_exception ("")
+--!!!!!old: die (-1)
 			else
 				create storable
 				mflist ?= storable.retrieve_by_name (full_path_name)
@@ -357,7 +359,8 @@ feature {NONE} -- Implementation
 						%analysis library (", meaning(exception),
 							").%N", file_errinfo>>)
 				end
-				die (-1)
+				handle_exception ("")
+--!!!!old: die (-1)
 			else
 				create storable
 				meg_list ?= storable.retrieve_by_name (full_path_name)
@@ -394,7 +397,8 @@ feature {NONE} -- Implementation
 						%registrants (", meaning(exception),
 						").%N", file_errinfo>>)
 				end
-				die (-1)
+				handle_exception ("")
+--!!!!!old: die (-1)
 			else
 				create storable
 				reg_list ?= storable.retrieve_by_name (full_path_name)
