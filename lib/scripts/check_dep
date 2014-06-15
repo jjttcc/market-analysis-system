@@ -6,6 +6,8 @@ chkprg=search_dependencies
 resultfile=/tmp/$Pname.$$
 Result=0
 
+PATH=$PATH:$(dirname $0)
+
 usage() {
 	echo "Usage: $Pname dependency_spec_file"
 }
