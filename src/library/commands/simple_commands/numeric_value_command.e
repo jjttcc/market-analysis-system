@@ -20,8 +20,6 @@ class NUMERIC_VALUE_COMMAND inherit
 
 	FUNCTION_PARAMETER
 		export
---!!!!!fix for:
---"feature of qualified call is not available to client class" error
 			{NONE} all
 			{ANY} infix "<"
 		select

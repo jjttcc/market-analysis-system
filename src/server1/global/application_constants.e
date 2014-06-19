@@ -38,7 +38,7 @@ feature -- Default settings
 	Default_http_config_file_name: STRING = "mas_httprc"
 			-- Default name for http configuration file
 
-	Default_mailer: STRING = "elm"
+	Default_mailer: STRING = "mutt"
 			-- Default mailer program
 
 	Default_mailer_subject_flag: STRING = "-s"

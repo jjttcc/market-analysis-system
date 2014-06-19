@@ -22,7 +22,7 @@
 -- DERIVATIVE_INSTRUMENT, uncomment that line.
 --&#9;&#9;&#9;assertion (no): DERIVATIVE_INSTRUMENT;</description>
 		<root class="MA_SERVER" feature="make"/>
-		<option trace="false" profile="false" debug="true" warning="true" void_safety="none">
+		<option trace="false" profile="false" debug="true" warning="true" cat_call_detection="false" void_safety="none">
 			<debug name="__unnamed_debug__" enabled="false"/>
 			<debug name="compression" enabled="false"/>
 			<debug name="data_request" enabled="false"/>
@@ -44,7 +44,7 @@
 		<setting name="dynamic_runtime" value="false"/>
 		<setting name="exception_trace" value="false"/>
 		<setting name="inlining" value="true"/>
-		<setting name="inlining_size" value="0"/>
+		<setting name="inlining_size" value="15"/>
 		<setting name="line_generation" value="false"/>
 		<external_include location="$ISE_EIFFEL/library/time/Clib"/>
 		<external_include location="${ECLI}/src/spec/C"/>

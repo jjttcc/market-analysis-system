@@ -10,7 +10,7 @@ note
 
 deferred class MARKET_FUNCTION inherit
 
-	FACTORY [MARKET_TUPLE_LIST [MARKET_TUPLE]]
+	GENERIC_FACTORY [MARKET_TUPLE_LIST [MARKET_TUPLE]]
 		rename
 			product as output, execute as process
 		redefine
@@ -21,18 +21,16 @@ deferred class MARKET_FUNCTION inherit
 
 	TREE_NODE
 		redefine
-			name, copy_of_children, descendant_comparison_is_by_objects,
-			descendants
+			name, copy_of_children, descendant_comparison_is_by_objects
+--!!!!		, descendants
 		end
 
---!!!!!experiment:
 	FUNCTION_PARAMETER
 		rename
 			description as short_description
 		undefine
 			is_equal
 		end
---!!!!![end experiment]
 
 feature -- Access
 
@@ -150,6 +148,7 @@ feature -- Access
 		deferred
 		end
 
+--!!!!!!
 --	saved_descendants: LIST [MARKET_FUNCTION]
 --		do
 --			if attached {LIST [MARKET_FUNCTION]} Precursor as p then
@@ -159,27 +158,28 @@ feature -- Access
 --			end
 --		end
 
-	descendants: LIST [MARKET_FUNCTION]
-		local
-			l: LIST [TREE_NODE]
-			i: INTEGER
-		do
-			l := Precursor
-			i := l.count
-			from
-				create {LINKED_LIST [MARKET_FUNCTION]} Result.make
-				l.start
-			until
-				l.exhausted
-			loop
-				if attached {MARKET_FUNCTION} l.item as mf then
-					Result.extend (mf)
-				else
-print ("DEBUG/14.05 conversion error: [p] not attached [MF.descendants]%N")
-				end
-				l.forth
-			end
-		end
+--!!!!!!!!!!!!
+--	descendants: LIST [MARKET_FUNCTION]
+--		local
+--			l: LIST [TREE_NODE]
+--			i: INTEGER
+--		do
+--			l := Precursor
+--			i := l.count
+--			from
+--				create {LINKED_LIST [MARKET_FUNCTION]} Result.make
+--				l.start
+--			until
+--				l.exhausted
+--			loop
+--				if attached {MARKET_FUNCTION} l.item as mf then
+--					Result.extend (mf)
+--				else
+--print ("DEBUG/14.05 conversion error: [p] not attached [MF.descendants]%N")
+--				end
+--				l.forth
+--			end
+--		end
 
 feature -- Status report
 
@@ -267,13 +267,14 @@ feature {MARKET_FUNCTION}
 
 feature {NONE} -- Implementation
 
-	direct_parameters: LINKED_LIST [FUNCTION_PARAMETER]
+	direct_parameters: like parameters
 			-- Parameters of Current, excluding `operator_parameters'
 		local
 			parameter_set: LINKED_SET [FUNCTION_PARAMETER]
-			flist: LIST [TREE_NODE]
+--!!!!!![14.05]: cleanup??!!!
+			flist: like functions
 		do
-			create Result.make
+			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 			create parameter_set.make
 			flist := functions
 --from
@@ -284,16 +285,22 @@ feature {NONE} -- Implementation
 --	parameter_set.fill (flist.item.immediate_direct_parameters)
 --	flist.forth
 --end
-			across flist as function loop
-				if attached {MARKET_FUNCTION} function as f then
-					parameter_set.fill(f.immediate_direct_parameters)
-				end
+
+--!!!!before Jan 16, 12:00:
+--			across flist as function loop
+--				if attached {MARKET_FUNCTION} function as f then
+--					parameter_set.fill(f.immediate_direct_parameters)
+--				end
+--			end
+			across flist as ic loop
+				parameter_set.fill(ic.item.immediate_direct_parameters)
 			end
 			Result.append (parameter_set)
 		ensure
 			result_exists: Result /= Void
 		end
 
+--!!!!!![14.05]: cleanup??!!!
 	immediate_operators: LIST [TREE_NODE]
 			-- All operators that belong directly to this function, but not
 			-- to its descendants
@@ -329,13 +336,14 @@ feature {NONE} -- Implementation
 			-- Parameters of `immediate_operators'
 		local
 			ops: LIST [TREE_NODE]
+--!!!!!![14.05]: cleanup??!!!
 		do
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 			ops := immediate_operators
 			if ops /= Void then
-				across ops as op loop
-					if attached {COMMAND} op as cmd then
-						prepare_operator_for_editing(cmd, Result)
+				across ops as cursor loop
+					if attached {COMMAND} cursor.item as cmd then
+						prepare_operator_for_editing (cmd, Result)
 					end
 				end
 			end
@@ -352,7 +360,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	copy_of_children: LIST [MARKET_FUNCTION]
+	copy_of_children: like children
 		do
 			Result := clone (children)
 		end
@@ -364,7 +372,6 @@ feature {NONE} -- Implementation
 
 	name_implementation: STRING
 
---!!!!!experiment:
 feature
 
 	current_value: STRING
@@ -372,29 +379,25 @@ feature
 			Result := output.out
 		end
 
-	value_type_description: STRING
-		do
-			Result := "[to-be-defined]"
-		end
+	value_type_description: STRING = "[MARKET_FUNCTION - to-be-defined]"
 
 	current_value_equals (v: STRING): BOOLEAN
 		do
---!!!!![cheat]!!!!
-			Result := True
+			Result := current_value.is_equal (v)
 		end
 
 	valid_value (v: STRING): BOOLEAN
 		do
---!!!!![cheat]!!!!
+--!!!!!Should this be always valid???!!!!
 			Result := True
 		end
 
 	change_value (v: STRING)
 		do
---!!!!![cheat]!!!!
+			--!!!!!Should this really do nothing???!!!!
+			do_nothing
 		end
 
---!!!!![end experiment]
 
 invariant
 

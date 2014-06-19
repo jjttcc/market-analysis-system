@@ -10,7 +10,7 @@ note
 
 class MARKET_EVENT_PARSER inherit
 
-	FACTORY [MARKET_EVENT_FACTORY]
+	FACTORY
 		redefine
 			product
 		end

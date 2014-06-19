@@ -10,7 +10,9 @@ class MARKET_EVENT_SCANNER inherit
 
 	DATA_SCANNER [MARKET_EVENT]
 		rename
-			make as data_scanner_make, tuple_maker as parser
+			make as data_scanner_make, tuple_maker as parser,
+			tuple_maker_execute as parser_execute, tuple_maker_product as
+			parser_product
 		export {NONE}
 			data_scanner_make
 		redefine
@@ -114,5 +116,15 @@ feature {NONE} -- Hook method implementations
 feature {NONE} -- Implementation
 
 	Field_count: INTEGER = 4
+
+feature -- Inapplicable
+
+	parser_execute
+		do
+		end
+
+	parser_product: MARKET_EVENT
+		do
+		end
 
 end -- class MARKET_EVENT_SCANNER

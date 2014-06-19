@@ -10,7 +10,7 @@ class BASIC_MARKET_TUPLE_PRINTER inherit
 
 	MARKET_TUPLE_PRINTER
 		redefine
-			print_fields, print_fields_with_time
+			print_fields, print_fields_with_time, tuple_type_anchor
 		end
 
 creation
@@ -19,7 +19,12 @@ creation
 
 feature {NONE} -- Implementation
 
-	print_fields (t: BASIC_MARKET_TUPLE)
+	tuple_type_anchor: BASIC_MARKET_TUPLE
+		do
+			do_nothing
+		end
+
+	print_fields (t: like tuple_type_anchor)
 		do
 			print_date (t.end_date, 'y', 'm', 'd')
 			put (field_separator)
@@ -35,7 +40,7 @@ feature {NONE} -- Implementation
 			print_other_fields (t)
 		end
 
-	print_fields_with_time (t: BASIC_MARKET_TUPLE)
+	print_fields_with_time (t: like tuple_type_anchor)
 		do
 			print_date (t.end_date, 'y', 'm', 'd')
 			put (field_separator)
@@ -53,7 +58,7 @@ feature {NONE} -- Implementation
 			print_other_fields (t)
 		end
 
-	print_other_fields (t: MARKET_TUPLE)
+	print_other_fields (t: like tuple_type_anchor)
 			-- Redefine for tuple printers that handle more than
 			-- date, open, high, low, close.  Be sure to print the
 			-- field_separator before the first 'other' field, and to

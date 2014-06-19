@@ -10,7 +10,7 @@ class OPEN_INTEREST_TUPLE_PRINTER inherit
 
 	VOLUME_TUPLE_PRINTER
 		redefine
-			print_other_fields
+			print_other_fields, tuple_type_anchor
 		end
 
 creation
@@ -19,16 +19,21 @@ creation
 
 feature {NONE} -- Implementation
 
-	print_other_fields (t: MARKET_TUPLE)
+	tuple_type_anchor: OPEN_INTEREST_TUPLE
+		do
+			do_nothing
+		end
+
+	print_other_fields (t: like tuple_type_anchor)
 		local
 			oit: OPEN_INTEREST_TUPLE
 		do
-			oit ?= t
-			if oit /= Void then
-				Precursor (oit)
+--!!!![14.05]:			oit ?= t
+--!!!![14.05]:			if oit /= Void then
+				Precursor (t)
 				put (field_separator)
-				put (oit.open_interest.out)
-			end
+				put (t.open_interest.out)
+--!!!![14.05]:			end
 		end
 
 end -- OPEN_INTEREST_TUPLE_PRINTER

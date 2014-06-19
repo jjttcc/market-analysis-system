@@ -46,11 +46,8 @@ feature {TRADABLE_FACTORY} -- Access
 	index_vector (intraday: BOOLEAN): ARRAYED_LIST [INTEGER]
 			-- Index vector for setting up value setters for a TRADABLE
 		local
--- !!!!Check - verify these changes are correct (they probably are)!!!
---			vector: ARRAY [INTEGER]
 			vector: ARRAYED_LIST [INTEGER]
 		do
---create {ARRAYED_LIST [INTEGER_32]} vector.make (0)
 			create vector.make (0)
 			if command_line_options.special_date_settings.valid then
 				vector.extend (Configurable_date_index)

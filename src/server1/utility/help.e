@@ -9,9 +9,6 @@ note
 class HELP inherit
 
 	APPLICATION_HELP
-		rename
-			make as arr_make
-		end
 
 creation
 
@@ -23,8 +20,9 @@ feature -- Initialization
 		local
 			s: STRING
 		do
-			arr_make (Edit_event_generators,
-				Compound_event_generator_left_target_type)
+			-- (Was changed from arr_make(n1, n2) - See PERIOD_TYPE_FACILITIES
+			-- for info on the bug/reason.)
+			create contents.make_empty
 			s :=
 "%NSelect tradable: Select a tradable out of the current list for viewing.%N%
 %View data: View the selected tradable's data, or one or more technical%N%
@@ -38,7 +36,7 @@ feature -- Initialization
 %Edit event registrants: Add, remove, view, or edit registrants for%N%
 %   notification of events detected during market analysis.%N%
 %End client session: Exit this command-line client session.%N"
-			put (s, Main)
+			contents.force(s, Main)
 			s :=
 "%NView market data: View data of the selected trading period for the %
 %current %N   tradable.%N%
@@ -47,7 +45,7 @@ feature -- Initialization
 %View name: View the name of the currently selected tradable.%N%
 %Change data period type: Change the type of trading period (daily, weekly, %N%
 %    etc.) to use for the current tradable.%N"
-			put (s, View_data)
+			contents.force(s, View_data)
 			s :=
 "%NAdd registrants: Add one or more registrants (users or log files) who %N%
 %   will receive notification of market analysis events.%N%
@@ -59,19 +57,19 @@ feature -- Initialization
 %   registered for an event type will receive notification of all events %N%
 %   for that type that are detected by the system during a market %N%
 %   analysis run.)%N"
-			put (s, Edit_event_registrants)
+			contents.force(s, Edit_event_registrants)
 			s :=
 "%NUser: Create a registrant that is a user with an email address.%N%
 %Log file: Create a registrant that is a log file.  (Not recommended at %N%
 %   this point, since a bug related to saving the configuration for the %N%
 %   log file will cause a core dump.)%N"
-			put (s, Add_registrants)
+			contents.force(s, Add_registrants)
 			s :=
 "%NRemove event type: Select an event type registered to the current %N%
 %   registrant and remove it from the registrant's list of event types.%N%
 %Add event types: Select one or more event types and register them to %N%
 %   the current registrant.%N"
-			put (s, Edit_registrant)
+			contents.force(s, Edit_registrant)
 			s :=
 "%NPrint indicator: Print the result of processing the data for the current %N%
 %   tradable using the selected indicator.%N%
@@ -79,11 +77,11 @@ feature -- Initialization
 %   indicator.%N%
 %View long description: View a detailed description of the currently %N%
 %   selected indicator.%N"
-			put (s, View_indicator)
+			contents.force(s, View_indicator)
 			s := "(This will soon be help for setting CEG time extensions)%N"
-			put (s, Compound_event_generator_time_extensions)
+			contents.force(s, Compound_event_generator_time_extensions)
 			s := "(This will soon be help for setting CEG left target type)%N"
-			put (s, Compound_event_generator_left_target_type)
+			contents.force(s, Compound_event_generator_left_target_type)
 		end
 
 feature -- Access
@@ -97,5 +95,16 @@ feature -- Access
 	View_indicator: INTEGER = 9
 	Compound_event_generator_time_extensions: INTEGER = 11
 	Compound_event_generator_left_target_type: INTEGER = 12
+
+feature -- Access
+
+	infix "@" (i: INTEGER): STRING
+		do
+			Result := contents @ i
+		end
+
+feature {NONE} -- Implementation
+
+	contents: ARRAY [STRING]
 
 end -- class HELP

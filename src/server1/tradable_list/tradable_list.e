@@ -281,7 +281,8 @@ feature {NONE} -- Implementation
 		do
 			load_data
 		ensure
-			target_tradable_set: not fatal_error = (target_tradable /= Void)
+			target_tradable_set: not fatal_error implies
+				(target_tradable /= Void)
 		end
 
 	load_data

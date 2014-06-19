@@ -171,6 +171,7 @@ feature {NONE} -- Implementation
 
 	initialize_previous_operator_attached
 		local
+--!!!!!![14.05]: cleanup??!!!
 			l: LIST [TREE_NODE]
 		do
 			previous_operator_attached := previous_operator = operator

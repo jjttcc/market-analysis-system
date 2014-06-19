@@ -10,7 +10,7 @@ class VOLUME_TUPLE_PRINTER inherit
 
 	BASIC_MARKET_TUPLE_PRINTER
 		redefine
-			print_other_fields
+			print_other_fields, tuple_type_anchor
 		end
 
 creation
@@ -19,15 +19,20 @@ creation
 
 feature {NONE} -- Implementation
 
-	print_other_fields (t: MARKET_TUPLE)
+	tuple_type_anchor: VOLUME_TUPLE
+		do
+			do_nothing
+		end
+
+	print_other_fields (t: like tuple_type_anchor)
 		local
 			vt: VOLUME_TUPLE
 		do
-			vt ?= t
-			if vt /= Void then
+--!!!![14.05]:			vt ?= t
+--!!!![14.05]:			if vt /= Void then
 				put (field_separator)
-				put (vt.volume.out)
-			end
+				put (t.volume.out)
+--!!!![14.05]:			end
 		end
 
 end -- VOLUME_TUPLE_PRINTER

@@ -9,7 +9,7 @@ note
 
 class TRADABLE_FACTORY inherit
 
-	FACTORY [TRADABLE[BASIC_MARKET_TUPLE]]
+	GENERIC_FACTORY [TRADABLE[BASIC_MARKET_TUPLE]]
 		redefine
 			product
 		end
@@ -357,7 +357,6 @@ feature {NONE} -- Implementation
 			close_setter: CLOSE_SETTER
 			volume_setter: VOLUME_SETTER
 			open_interest_setter: OPEN_INTEREST_SETTER
---!!!!			setter: VALUE_SETTER [BASIC_MARKET_TUPLE]
 			i: INTEGER
 			gsf: expanded GLOBAL_SERVER_FACILITIES
 		do

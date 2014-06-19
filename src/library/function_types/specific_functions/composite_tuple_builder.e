@@ -18,7 +18,7 @@ class COMPOSITE_TUPLE_BUILDER inherit
 			target as source_list, make as ovf_make
 		redefine
 			do_process, output, source_list, operator_used, input,
-			trading_period_type, make_output
+			trading_period_type, make_output, add_operator_result
 		end
 
 creation {FACTORY, MARKET_FUNCTION_EDITOR}
@@ -261,6 +261,17 @@ feature {NONE}
 
 	missing_data: BOOLEAN
 			-- Are there missing records in the input data?
+
+--!!!!Note: This procedure will probably never be called - check!!!!
+--!!!!If it is called, logic to set the new tuples attributes is probably
+--!!!needed.
+	add_operator_result
+		local
+			t: COMPOSITE_TUPLE
+		do
+			create t.make
+			output.extend (t)
+		end
 
 invariant
 

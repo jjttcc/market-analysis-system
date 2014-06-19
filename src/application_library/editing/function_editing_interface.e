@@ -301,7 +301,7 @@ feature {EDITING_INTERFACE}
 		local
 			selection: INTEGER
 			indicator: MARKET_FUNCTION
-			functions: LIST [TREE_NODE]
+			functions: LIST [MARKET_FUNCTION]
 			complex_func: COMPLEX_FUNCTION
 		do
 			from
@@ -372,7 +372,6 @@ end
 			readonly_or_saveable: readonly or ok_to_save
 		local
 			selection: INTEGER
---!!!!indicator: TREE_NODE
 			indicator: FUNCTION_PARAMETER
 		do
 			from

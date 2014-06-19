@@ -63,7 +63,7 @@ feature -- Access
 			-- The socket that will be used for input and output
 
 --!!!!solution to compiler type error - don't redefine 'interface' - check
---if it is correct
+--!!!!if this is correct (ec 14.05) - if so, delete this line:
 --!!!!!	interface: MAIN_APPLICATION_INTERFACE
 
 	factory_builder: GLOBAL_OBJECT_BUILDER

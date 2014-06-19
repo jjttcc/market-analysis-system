@@ -149,7 +149,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute (l: MARKET_TUPLE_LIST [MARKET_TUPLE])
+	execute (l: MARKET_TUPLE_LIST [like tuple_type_anchor])
 			-- Output each tuple in `l' to `output_medium'.  If `preface'
 			-- is not empty, output it first.  If `appendix' is not empty,
 			-- output it last.
@@ -175,34 +175,41 @@ feature -- Status report
 
 feature {NONE} -- Implementation
 
-	print_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE])
+	tuple_type_anchor: MARKET_TUPLE
+		do
+			do_nothing
+		end
+
+	print_tuples (l: MARKET_TUPLE_LIST [like tuple_type_anchor])
+		require
+			l_exists: l /= Void
 		local
 			first, last, i: INTEGER
-			bmt_list: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]
+			bmt_list: MARKET_TUPLE_LIST [like tuple_type_anchor]
 		do
-			bmt_list ?= l
-			if bmt_list /= Void then
-				first := first_index (bmt_list)
-				last := last_index (bmt_list)
+--!!!![14.05]			bmt_list := l
+--!!!![14.05]			if bmt_list /= Void then
+				first := first_index (l)
+				last := last_index (l)
 				if last >= first then
 					debug ("data_update_bug")
 						print_requested_start_end_dates
-						print_start_end (bmt_list, first, last)
+						print_start_end (l, first, last)
 					end
 					from
 						i := first
 					until
 						i = last + 1
 					loop
-						print_fields (bmt_list @ i)
+						print_fields (l @ i)
 						put (record_separator)
 						i := i + 1
 					end
 				end
-			end
+--!!!![14.05]			end
 		end
 
-	print_tuples_with_time (l: MARKET_TUPLE_LIST [MARKET_TUPLE])
+	print_tuples_with_time (l: MARKET_TUPLE_LIST [like tuple_type_anchor])
 		require
 			start_date_if_start_time:
 				print_start_time /= Void implies print_start_date /= Void
@@ -212,44 +219,44 @@ feature {NONE} -- Implementation
 			first, last, i: INTEGER
 			bmt_list: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]
 		do
-			bmt_list ?= l
-			if bmt_list /= Void then
+--!!!![14.05]			bmt_list ?= l
+--!!!![14.05]			if bmt_list /= Void then
 				if print_start_time /= Void then
-					first := first_date_time_index (bmt_list)
+					first := first_date_time_index (l)
 				else
-					first := first_index (bmt_list)
+					first := first_index (l)
 				end
 				if print_end_time /= Void then
-					last := last_date_time_index (bmt_list)
+					last := last_date_time_index (l)
 				else
-					last := last_index (bmt_list)
+					last := last_index (l)
 				end
 				if last >= first then
 					debug ("data_update_bug")
 						print_requested_start_end_dates
-						print_start_end (bmt_list, first, last)
+						print_start_end (l, first, last)
 					end
 					from
 						i := first
 					until
 						i = last + 1
 					loop
-						print_fields_with_time (bmt_list @ i)
+						print_fields_with_time (l @ i)
 						put (record_separator)
 						i := i + 1
 					end
 				end
-			end
+--!!!![14.05]			end
 		end
 
-	print_fields (t: MARKET_TUPLE)
+	print_fields (t: like tuple_type_anchor)
 		do
 			print_date (t.end_date, 'y', 'm', 'd')
 			put (field_separator)
 			put (t.value.out)
 		end
 
-	print_fields_with_time (t: MARKET_TUPLE)
+	print_fields_with_time (t: like tuple_type_anchor)
 		do
 			print_date (t.end_date, 'y', 'm', 'd')
 			put (field_separator)
@@ -292,7 +299,7 @@ feature {NONE} -- Implementation
 				time_field_separator))
 		end
 
-	first_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER
+	first_index (l: MARKET_TUPLE_LIST [like tuple_type_anchor]): INTEGER
 			-- First index for printing, according to `print_start_date'
 		do
 			if print_start_date /= Void and not l.is_empty then
@@ -314,7 +321,7 @@ feature {NONE} -- Implementation
 			result_ge_1: Result >= 1
 		end
 
-	first_date_time_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER
+	first_date_time_index (l: MARKET_TUPLE_LIST [like tuple_type_anchor]): INTEGER
 			-- First index for printing, according to `print_start_date' and
 			-- `print_start_time'
 		require
@@ -357,7 +364,7 @@ feature {NONE} -- Implementation
 			result_ge_1: Result >= 1
 		end
 
-	last_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER
+	last_index (l: MARKET_TUPLE_LIST [like tuple_type_anchor]): INTEGER
 			-- Last index for printing, according to print_end_date
 		local
 			util: expanded GENERAL_UTILITIES
@@ -393,7 +400,7 @@ feature {NONE} -- Implementation
 			void_date_result: print_end_date = Void implies Result = l.count
 		end
 
-	last_date_time_index (l: MARKET_TUPLE_LIST [MARKET_TUPLE]): INTEGER
+	last_date_time_index (l: MARKET_TUPLE_LIST [like tuple_type_anchor]): INTEGER
 			-- Last index for printing, according to print_end_date
 		local
 			util: expanded GENERAL_UTILITIES
@@ -467,12 +474,12 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Debugging tools
 
-	print_start_end (l: MARKET_TUPLE_LIST [MARKET_TUPLE];
+	print_start_end (l: MARKET_TUPLE_LIST [like tuple_type_anchor];
 		first, last: INTEGER)
 			-- Print the date/time of the starting and ending tuples,
 			-- according to first and last in `l'.
 		local
-			tuple: MARKET_TUPLE
+			tuple: like tuple_type_anchor
 		do
 			io.print ("   Sending data with start date: ")
 			if l.valid_index (first) then

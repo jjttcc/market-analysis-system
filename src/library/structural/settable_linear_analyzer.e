@@ -21,21 +21,6 @@ feature {FACTORY, COMMAND}
 
 feature -- Initialization
 
---	set (s: LIST [MARKET_TUPLE])
---			-- Make `s' the new target of iterations.
---		require
---			target_exists: s /= Void
---		do
-----!!!!Check if this "cast" works and look into the possible alternative of
-----!!!!changing the type of 'target', above!!!!:
---			if attached {MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]} s as mtl then
---				target := mtl
---			end
---		ensure
---			target = s
---			target /= Void
---		end
-
 	set (s: like target)
 			-- Make `s' the new target of iterations.
 		require

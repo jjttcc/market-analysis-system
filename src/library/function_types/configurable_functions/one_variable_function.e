@@ -139,14 +139,9 @@ feature -- Status report
 feature {NONE}
 
 	action
-		local
-			t: SIMPLE_TUPLE
 		do
 			operator.execute (target.item)
-			create t.make (target.item.date_time, target.item.end_date,
-						operator.value)
---!!!!!!TO-DO: Find the best way to fix the compiler error caused by:
---!!!!			output.extend (t)
+			add_operator_result
 			if debugging then
 				print_status_report
 			end
@@ -218,6 +213,15 @@ feature {NONE} -- Implementation
 				-- operator will set its target to new input.output.
 				operator.initialize (Current)
 			end
+		end
+
+	add_operator_result
+		local
+			t: SIMPLE_TUPLE
+		do
+			create t.make (target.item.date_time,
+				target.item.end_date, operator.value)
+			output.extend (t)
 		end
 
 invariant

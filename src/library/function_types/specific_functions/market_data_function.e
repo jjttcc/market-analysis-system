@@ -105,9 +105,13 @@ feature {MARKET_FUNCTION_EDITOR}
 			in_not_void: in /= Void
 			in_ptype_not_void: in.trading_period_type /= Void
 		do
-			if attached {ARRAY [BASIC_MARKET_TUPLE]} in as array then
-				input.make_from_array (array)
-			end
+--			if attached {ARRAY [BASIC_MARKET_TUPLE]} in as array then
+--				input.make_from_array (array)
+--			end
+			--!!!!check if this should be deep_twin [14.05]!!!!:
+			input := in.twin
+			output := input
+			--!!!![end check ...]
 			processed_date_time := input.processed_date_time
 		ensure then
 			input_copied_from_in: input.count = in.count

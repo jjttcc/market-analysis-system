@@ -14,8 +14,8 @@ class MARKET_TUPLE_DATA_SCANNER inherit
 		export {NONE}
 			data_scanner_make
 		redefine
-			product, open_tuple, close_tuple,
-			do_last_error_check, handle_last_error
+			product, open_tuple, close_tuple, do_last_error_check,
+			handle_last_error, tuple_maker
 		end
 
 	GENERAL_UTILITIES
@@ -48,6 +48,8 @@ feature -- Access
 
 	product: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
 
+	tuple_maker: BASIC_TUPLE_FACTORY
+
 feature {FACTORY} -- Status setting
 
 	set_product (arg: like product)
@@ -71,6 +73,16 @@ feature {NONE} -- Hook method implementations
 			t.begin_editing
 		ensure then
 			t.editing
+		end
+
+	tuple_maker_execute
+		do
+			tuple_maker.execute
+		end
+
+	tuple_maker_product: BASIC_MARKET_TUPLE
+		do
+			Result := tuple_maker.product
 		end
 
 	do_last_error_check (t: BASIC_MARKET_TUPLE)

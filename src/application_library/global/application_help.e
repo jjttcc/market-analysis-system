@@ -8,11 +8,15 @@ note
 
 deferred class APPLICATION_HELP inherit
 
-	ARRAY [STRING]
-
 feature -- Access
 
 	edit_event_generators: INTEGER = 1
 	edit_indicators: INTEGER = 2
+
+feature -- Access
+
+	infix "@" (i: INTEGER): STRING
+		deferred
+		end
 
 end -- class APPLICATION_HELP

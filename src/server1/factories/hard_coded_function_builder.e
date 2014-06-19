@@ -9,14 +9,10 @@ note
 
 class HARD_CODED_FUNCTION_BUILDER inherit
 
-	FACTORY [LIST[MARKET_FUNCTION]]
-		redefine
-			product
-		end
-
 	GLOBAL_SERVICES
 		export {NONE}
 			all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		end
 
 	MARKET_FUNCTION_EDITOR

@@ -27,12 +27,12 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 			make as arrayed_list_make
 		export
 			{NONE} all
-			{FACTORY, MARKET_FUNCTION_EDITOR} extend, first, last, i_th,
+			{FACTORY, MARKET_FUNCTION_EDITOR} first, last, i_th,
 				item, off
 			{MARKET_FUNCTION} make_from_array
 			{DATA_SCANNER, COMPOSITE_TUPLE_BUILDER} wipe_out
 			{ANY} is_empty, count, before, area_v2, extendible, valid_index,
-				readable, index, prunable
+				readable, index, prunable, extend
 		end
 
 creation {FACTORY}
@@ -41,7 +41,6 @@ creation {FACTORY}
 
 creation {ARRAYED_LIST}
 
---!!!To fix compiler error
 	arrayed_list_make
 
 feature {NONE} -- Initialization
@@ -81,12 +80,9 @@ feature -- Access
 			Result.append (" records")
 		end
 
---	parameters: LIST [TREE_NODE]
 	parameters: LIST [FUNCTION_PARAMETER]
 -- !!!! indexing once_status: global??!!!
 		once
---!!!!!			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
---!!!!will this work???!!!:
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 		end
 

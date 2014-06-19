@@ -9,11 +9,10 @@ note
 
 class TRADABLE_LIST_BUILDER inherit
 
-	FACTORY [TRADABLE_DISPENSER]
-
 	GLOBAL_SERVER_FACILITIES
-		export {NONE}
-			all
+		export
+			{NONE} all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		end
 
 creation

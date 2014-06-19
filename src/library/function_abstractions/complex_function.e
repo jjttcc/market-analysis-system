@@ -35,15 +35,10 @@ feature -- Access
 			at_least_one: Result /= Void and then Result.count >= 1
 		end
 
---	parameters: LIST [TREE_NODE]
 	parameters: LIST [FUNCTION_PARAMETER]
 		do
---!!!!!			if attached {LIST[TREE_NODE]} direct_parameters as params then
 				Result := clone(direct_parameters)
---!!!!!			end
---!!!!!			if attached {LIST[TREE_NODE]} operator_parameters as params then
 				Result.append(operator_parameters)
---!!!!!			end
 		end
 
 	direct_operators: LIST [COMMAND]
@@ -146,7 +141,7 @@ feature {MARKET_FUNCTION} -- Status report
 
 feature {NONE} -- Implementation
 
-	immediate_operators: LIST [TREE_NODE]
+	immediate_operators: LIST [COMMAND]
 		local
 			direct_ops: LIST [COMMAND]
 		do
@@ -171,6 +166,8 @@ feature {NONE} -- Implementation
 						direct_ops.item.descendants as desc
 				then
 					Result.append (desc)
+				else
+print ("!!!!!![14.05]: cast failed, line 170 of COMPLEX_FUNCTION%N")
 				end
 				direct_ops.forth
 			end

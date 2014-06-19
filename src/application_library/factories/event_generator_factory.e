@@ -8,7 +8,7 @@ note
 
 deferred class EVENT_GENERATOR_FACTORY inherit
 
-	FACTORY [MARKET_EVENT_GENERATOR]
+	GENERIC_FACTORY [MARKET_EVENT_GENERATOR]
 		redefine
 			product
 		end

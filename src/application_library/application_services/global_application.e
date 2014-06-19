@@ -320,7 +320,6 @@ feature {NONE} -- Implementation
 						full_path_name, "%N", file_errinfo>>)
 				end
 				handle_exception ("")
---!!!!!old: die (-1)
 			else
 				create storable
 				mflist ?= storable.retrieve_by_name (full_path_name)
@@ -360,7 +359,6 @@ feature {NONE} -- Implementation
 							").%N", file_errinfo>>)
 				end
 				handle_exception ("")
---!!!!old: die (-1)
 			else
 				create storable
 				meg_list ?= storable.retrieve_by_name (full_path_name)
@@ -398,7 +396,6 @@ feature {NONE} -- Implementation
 						").%N", file_errinfo>>)
 				end
 				handle_exception ("")
---!!!!!old: die (-1)
 			else
 				create storable
 				reg_list ?= storable.retrieve_by_name (full_path_name)

@@ -40,7 +40,8 @@ th_ex: THREAD_EXPERIMENTS
 			if attached {COMPRESSED_SOCKET} medium as socket then
 				create sock_acc.make (socket, factory_builder)
 			else
-				-- !!!!!raise an exception???!!!
+				raise ("cast of " + medium.generating_type + " failed " +
+					"in MA_SERVER, line 44")
 			end
 			create {SOCKET_BASED_POLL_COMMAND} Result.make (sock_acc)
 		end

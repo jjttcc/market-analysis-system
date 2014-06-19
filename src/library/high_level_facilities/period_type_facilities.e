@@ -216,7 +216,7 @@ feature -- Access
 		once
 			-- Force intraday_period_type_names to be created.
 			t := intraday_period_types
-			create Result.make (1, 1)
+			create Result.make_empty    -- (See intraday_period_type_names)
 			create duration.make (0, 0, 0, 0, 1, 0)
 			create tpt.make (duration)
 			Result := clone (intraday_period_type_names)
@@ -241,7 +241,10 @@ feature -- Access
 		note
 			once_status: global
 		once
-			create Result.make (1, 1)
+--!!!!Overcome an apparent bug running in estudio, where a failed 'check occurs:
+--			create Result.make (1, 1)
+-- make_empty does not trigger the bug:
+create Result.make_empty
 		ensure
 			exists: Result /= Void
 		end
@@ -393,13 +396,16 @@ feature -- Status report
 			ns_types := all_period_types
 			from
 				indexes := standard_period_type_indexes.linear_representation
-				create type_pairs.make (standard_period_type_indexes.lower,
-					standard_period_type_indexes.upper)
+--!!!!Overcome bug (See intraday_period_type_names) - replace:
+--create type_pairs.make (standard_period_type_indexes.lower,
+--	standard_period_type_indexes.upper)
+--     with:
+				create type_pairs.make_empty
 				indexes.start
 			until
 				indexes.exhausted
 			loop
-				type_pairs.put (create {PAIR [TIME_PERIOD_TYPE, INTEGER]}.make (
+				type_pairs.force(create {PAIR [TIME_PERIOD_TYPE, INTEGER]}.make(
 					period_types @ (period_type_names @ indexes.item),
 					indexes.item), indexes.item)
 				indexes.forth

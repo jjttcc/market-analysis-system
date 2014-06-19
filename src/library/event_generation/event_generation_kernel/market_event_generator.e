@@ -60,27 +60,24 @@ feature -- Access
 		do
 			Result := immediate_operators
 			l := indicators
-			across l as item loop
-				if attached {MARKET_FUNCTION} item as e then
-					Result.append (e.operators)
+			across l as cursor loop
+				if attached {MARKET_FUNCTION} cursor.item as f then
+					Result.append (f.operators)
 				else
 print ("DEBUG/14.05 conversion error: item not attached [MEG.operators]%N")
 				end
 			end
 		end
 
---	parameters: LIST [TREE_NODE]
 	parameters: LIST [FUNCTION_PARAMETER]
 		local
---			l: LIST [TREE_NODE]
 			l: LIST [FUNCTION_PARAMETER]
 		do
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 			l := indicators
-			across l as item loop
---?????!!!!???:
-				if attached {MARKET_FUNCTION} item as e then
-					Result.append (e.parameters)
+			across l as cursor loop
+				if attached {MARKET_FUNCTION} cursor.item as f then
+					Result.append (f.parameters)
 				else
 print ("DEBUG/14.05 conversion error: item not attached [parameters]%N")
 				end
@@ -88,6 +85,7 @@ print ("DEBUG/14.05 conversion error: item not attached [parameters]%N")
 		end
 
 	children: LIST [MARKET_EVENT_GENERATOR]
+--	children: LIST [like Current]	--!!!!!!????!!!!
 		do
 			-- Empty by default - redefine if needed.
 			create {LINKED_LIST [MARKET_EVENT_GENERATOR]} Result.make
