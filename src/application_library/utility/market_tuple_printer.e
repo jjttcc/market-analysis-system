@@ -185,28 +185,24 @@ feature {NONE} -- Implementation
 			l_exists: l /= Void
 		local
 			first, last, i: INTEGER
-			bmt_list: MARKET_TUPLE_LIST [like tuple_type_anchor]
 		do
---!!!![14.05]			bmt_list := l
---!!!![14.05]			if bmt_list /= Void then
-				first := first_index (l)
-				last := last_index (l)
-				if last >= first then
-					debug ("data_update_bug")
-						print_requested_start_end_dates
-						print_start_end (l, first, last)
-					end
-					from
-						i := first
-					until
-						i = last + 1
-					loop
-						print_fields (l @ i)
-						put (record_separator)
-						i := i + 1
-					end
+			first := first_index (l)
+			last := last_index (l)
+			if last >= first then
+				debug ("data_update_bug")
+					print_requested_start_end_dates
+					print_start_end (l, first, last)
 				end
---!!!![14.05]			end
+				from
+					i := first
+				until
+					i = last + 1
+				loop
+					print_fields (l @ i)
+					put (record_separator)
+					i := i + 1
+				end
+			end
 		end
 
 	print_tuples_with_time (l: MARKET_TUPLE_LIST [like tuple_type_anchor])
@@ -217,36 +213,32 @@ feature {NONE} -- Implementation
 				print_end_time /= Void implies print_end_date /= Void
 		local
 			first, last, i: INTEGER
-			bmt_list: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]
 		do
---!!!![14.05]			bmt_list ?= l
---!!!![14.05]			if bmt_list /= Void then
-				if print_start_time /= Void then
-					first := first_date_time_index (l)
-				else
-					first := first_index (l)
+			if print_start_time /= Void then
+				first := first_date_time_index (l)
+			else
+				first := first_index (l)
+			end
+			if print_end_time /= Void then
+				last := last_date_time_index (l)
+			else
+				last := last_index (l)
+			end
+			if last >= first then
+				debug ("data_update_bug")
+					print_requested_start_end_dates
+					print_start_end (l, first, last)
 				end
-				if print_end_time /= Void then
-					last := last_date_time_index (l)
-				else
-					last := last_index (l)
+				from
+					i := first
+				until
+					i = last + 1
+				loop
+					print_fields_with_time (l @ i)
+					put (record_separator)
+					i := i + 1
 				end
-				if last >= first then
-					debug ("data_update_bug")
-						print_requested_start_end_dates
-						print_start_end (l, first, last)
-					end
-					from
-						i := first
-					until
-						i = last + 1
-					loop
-						print_fields_with_time (l @ i)
-						put (record_separator)
-						i := i + 1
-					end
-				end
---!!!![14.05]			end
+			end
 		end
 
 	print_fields (t: like tuple_type_anchor)

@@ -52,6 +52,8 @@ feature -- Access
 
 	parser: MARKET_EVENT_PARSER
 
+	product_count: INTEGER do Result := product.count end
+
 feature {NONE} -- Hook method implementations
 
 	create_product

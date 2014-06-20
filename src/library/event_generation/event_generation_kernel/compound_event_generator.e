@@ -77,7 +77,11 @@ feature -- Access
 			-- stamp will be used, rather than that of one of its components.
 
 --	indicators: LIST [TREE_NODE]
-	indicators: LIST [FUNCTION_PARAMETER]
+--!!!!!Changed on Jun 19 from:
+--	indicators: LIST [FUNCTION_PARAMETER]
+--!!!!!to:
+	indicators: LIST [MARKET_FUNCTION]
+--!!!!!Check that this type is correct in all cases.
 		do
 			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
 			Result.append (left_analyzer.indicators)

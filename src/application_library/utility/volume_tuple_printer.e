@@ -25,14 +25,9 @@ feature {NONE} -- Implementation
 		end
 
 	print_other_fields (t: like tuple_type_anchor)
-		local
-			vt: VOLUME_TUPLE
 		do
---!!!![14.05]:			vt ?= t
---!!!![14.05]:			if vt /= Void then
-				put (field_separator)
-				put (t.volume.out)
---!!!![14.05]:			end
+			put (field_separator)
+			put (t.volume.out)
 		end
 
 end -- VOLUME_TUPLE_PRINTER

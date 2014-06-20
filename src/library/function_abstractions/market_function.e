@@ -22,7 +22,6 @@ deferred class MARKET_FUNCTION inherit
 	TREE_NODE
 		redefine
 			name, copy_of_children, descendant_comparison_is_by_objects
---!!!!		, descendants
 		end
 
 	FUNCTION_PARAMETER
@@ -148,39 +147,6 @@ feature -- Access
 		deferred
 		end
 
---!!!!!!
---	saved_descendants: LIST [MARKET_FUNCTION]
---		do
---			if attached {LIST [MARKET_FUNCTION]} Precursor as p then
---				Result := p
---			else
---print ("DEBUG/14.05 conversion error: [p] not attached [MF.operators]%N")
---			end
---		end
-
---!!!!!!!!!!!!
---	descendants: LIST [MARKET_FUNCTION]
---		local
---			l: LIST [TREE_NODE]
---			i: INTEGER
---		do
---			l := Precursor
---			i := l.count
---			from
---				create {LINKED_LIST [MARKET_FUNCTION]} Result.make
---				l.start
---			until
---				l.exhausted
---			loop
---				if attached {MARKET_FUNCTION} l.item as mf then
---					Result.extend (mf)
---				else
---print ("DEBUG/14.05 conversion error: [p] not attached [MF.descendants]%N")
---				end
---				l.forth
---			end
---		end
-
 feature -- Status report
 
 	processed: BOOLEAN
@@ -271,27 +237,11 @@ feature {NONE} -- Implementation
 			-- Parameters of Current, excluding `operator_parameters'
 		local
 			parameter_set: LINKED_SET [FUNCTION_PARAMETER]
---!!!!!![14.05]: cleanup??!!!
 			flist: like functions
 		do
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 			create parameter_set.make
 			flist := functions
---from
---	flist.start
---until
---	flist.exhausted
---loop
---	parameter_set.fill (flist.item.immediate_direct_parameters)
---	flist.forth
---end
-
---!!!!before Jan 16, 12:00:
---			across flist as function loop
---				if attached {MARKET_FUNCTION} function as f then
---					parameter_set.fill(f.immediate_direct_parameters)
---				end
---			end
 			across flist as ic loop
 				parameter_set.fill(ic.item.immediate_direct_parameters)
 			end
@@ -300,8 +250,7 @@ feature {NONE} -- Implementation
 			result_exists: Result /= Void
 		end
 
---!!!!!![14.05]: cleanup??!!!
-	immediate_operators: LIST [TREE_NODE]
+	immediate_operators: like operators
 			-- All operators that belong directly to this function, but not
 			-- to its descendants
 		do
@@ -314,7 +263,7 @@ feature {NONE} -- Implementation
 	operator_parameters: LIST [FUNCTION_PARAMETER]
 			-- Parameters belonging to `operators'
 		local
-			ops: LIST [COMMAND]
+			ops: like operators
 		do
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 			if operators /= Void then
@@ -335,8 +284,30 @@ feature {NONE} -- Implementation
 	immediate_operator_parameters: LIST [FUNCTION_PARAMETER]
 			-- Parameters of `immediate_operators'
 		local
+			ops: like operators
+		do
+			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
+			ops := immediate_operators
+			if ops /= Void then
+				from
+					ops.start
+				until
+					ops.exhausted
+				loop
+					prepare_operator_for_editing (ops.item, Result)
+					ops.forth
+				end
+			end
+		ensure
+			result_exists: Result /= Void
+		end
+
+--!!!!![14.05]It appears the old version, above, is OK; if so, delete this
+--!!!!!routine:
+	new_immediate_operator_parameters: LIST [FUNCTION_PARAMETER]
+			-- Parameters of `immediate_operators'
+		local
 			ops: LIST [TREE_NODE]
---!!!!!![14.05]: cleanup??!!!
 		do
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 			ops := immediate_operators
@@ -372,7 +343,7 @@ feature {NONE} -- Implementation
 
 	name_implementation: STRING
 
-feature
+feature {NONE} -- (from FUNCTION_PARAMETER)
 
 	current_value: STRING
 		do
@@ -388,13 +359,12 @@ feature
 
 	valid_value (v: STRING): BOOLEAN
 		do
---!!!!!Should this be always valid???!!!!
-			Result := True
+			Result := v /= Void and then not v.is_empty
 		end
 
 	change_value (v: STRING)
 		do
-			--!!!!!Should this really do nothing???!!!!
+			--!!!!![14.05]Should this really do nothing???!!!!
 			do_nothing
 		end
 

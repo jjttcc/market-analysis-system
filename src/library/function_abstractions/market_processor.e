@@ -20,8 +20,6 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
---!!!!!![14.05]: cleanup!!!!:
---	parameters: LIST [TREE_NODE]
 	parameters: LIST [FUNCTION_PARAMETER]
 			-- Changeable parameters for `functions'
 		deferred

@@ -44,11 +44,6 @@ feature
 		do
 			initialize_components (s)
 			factory_builder := fb
---!!!!!! Obsolete:
---			persistent_connection_interface :=
---				factory_builder.persistent_connection_interface
---			non_persistent_connection_interface :=
---				factory_builder.non_persistent_connection_interface
 		ensure
 			set: server_socket = s and factory_builder = fb
 		end

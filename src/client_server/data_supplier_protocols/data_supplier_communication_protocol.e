@@ -42,12 +42,10 @@ feature -- Server response IDs
 			-- Response indicating that there was a problem receiving or
 			-- parsing the client request
 
---!!!???:
 	invalid_symbol: INTEGER = 103
 			-- Response indicating that the server requested data for
 			-- a symbol that is not in the database
 
---!!!???:
 	warning: INTEGER = 104
 			-- Response indicating that a non-fatal error occurred
 

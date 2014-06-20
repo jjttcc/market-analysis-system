@@ -25,15 +25,10 @@ feature {NONE} -- Implementation
 		end
 
 	print_other_fields (t: like tuple_type_anchor)
-		local
-			oit: OPEN_INTEREST_TUPLE
 		do
---!!!![14.05]:			oit ?= t
---!!!![14.05]:			if oit /= Void then
-				Precursor (t)
-				put (field_separator)
-				put (t.open_interest.out)
---!!!![14.05]:			end
+			Precursor (t)
+			put (field_separator)
+			put (t.open_interest.out)
 		end
 
 end -- OPEN_INTEREST_TUPLE_PRINTER

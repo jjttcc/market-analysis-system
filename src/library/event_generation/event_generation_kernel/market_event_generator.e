@@ -14,6 +14,8 @@ deferred class MARKET_EVENT_GENERATOR inherit
 	MARKET_PROCESSOR
 		rename
 			functions as indicators
+		redefine
+			indicators
 		end
 
 	EVENT_GENERATOR
@@ -45,6 +47,10 @@ feature -- Access
 	event_type: EVENT_TYPE
 			-- The type of the generated events
 
+	indicators: LIST [MARKET_FUNCTION]
+		deferred
+		end
+
 	immediate_operators: LIST [COMMAND]
 			-- Operators used directly by this event generator
 		deferred
@@ -56,36 +62,37 @@ feature -- Access
 
 	operators: LIST [COMMAND]
 		local
-			l: LIST [FUNCTION_PARAMETER]
+			l: like indicators
 		do
 			Result := immediate_operators
-			l := indicators
-			across l as cursor loop
-				if attached {MARKET_FUNCTION} cursor.item as f then
-					Result.append (f.operators)
-				else
-print ("DEBUG/14.05 conversion error: item not attached [MEG.operators]%N")
-				end
+			from
+				l := indicators
+				l.start
+			until
+				l.exhausted
+			loop
+				Result.append (l.item.operators)
+				l.forth
 			end
 		end
 
 	parameters: LIST [FUNCTION_PARAMETER]
 		local
-			l: LIST [FUNCTION_PARAMETER]
+			l: like indicators
 		do
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
-			l := indicators
-			across l as cursor loop
-				if attached {MARKET_FUNCTION} cursor.item as f then
-					Result.append (f.parameters)
-				else
-print ("DEBUG/14.05 conversion error: item not attached [parameters]%N")
-				end
+			from
+				l := indicators
+				l.start
+			until
+				l.exhausted
+			loop
+				Result.append (l.item.parameters)
+				l.forth
 			end
 		end
 
 	children: LIST [MARKET_EVENT_GENERATOR]
---	children: LIST [like Current]	--!!!!!!????!!!!
 		do
 			-- Empty by default - redefine if needed.
 			create {LINKED_LIST [MARKET_EVENT_GENERATOR]} Result.make

@@ -50,6 +50,8 @@ feature -- Access
 
 	tuple_maker: BASIC_TUPLE_FACTORY
 
+	product_count: INTEGER do Result := product.count end
+
 feature {FACTORY} -- Status setting
 
 	set_product (arg: like product)
