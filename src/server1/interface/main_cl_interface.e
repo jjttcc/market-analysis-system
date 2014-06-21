@@ -209,7 +209,8 @@ feature -- Basic operations
 				initialize_current_tradable
 			end
 			from
-				end_client := False; exit_server := False
+				end_client := False
+				exit_server := current_tradable = Void
 			until
 				end_client or exit_server
 			loop
@@ -616,6 +617,8 @@ feature {NONE} -- Implementation - utilities
 	initialize_current_tradable
 		require
 			cpt_set: current_period_type /= Void
+		local
+			ptnames: ARRAYED_LIST [STRING]
 		do
 			if tradable_list_handler.is_empty then
 				current_tradable := Void
@@ -630,12 +633,18 @@ feature {NONE} -- Implementation - utilities
 				elseif current_tradable = Void then
 					-- No daily data, so use intraday data.
 					if not tradable_list_handler.error_occurred then
-						current_period_type := period_types @ (
-							tradable_list_handler.period_type_names_for (
-								tradable_list_handler.current_symbol) @ 1)
-						current_tradable := tradable_list_handler.item (
-							--@@@Check if 'update' (False) should be True:
-							current_period_type, False)
+						ptnames := tradable_list_handler.period_type_names_for (
+							tradable_list_handler.current_symbol)
+						if not ptnames.empty then
+							current_period_type := period_types @ (ptnames @ 1)
+							current_tradable := tradable_list_handler.item (
+								--@@@Check if 'update' (False) should be True:
+								current_period_type, False)
+						else
+							log_errors (<<"Error occurred for '",
+								tradable_list_handler.current_symbol, "'%N">>)
+							terminate (Error_exit_status)
+						end
 					end
 				end
 			end

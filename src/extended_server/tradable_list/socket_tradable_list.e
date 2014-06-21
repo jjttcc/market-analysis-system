@@ -1,8 +1,8 @@
 note
 	description:
-		"TRADABLE_LISTs that obtain their input data from files"
-		"(fix - change to:)"
-		"TRADABLE_LISTs that obtain their input data from sockets"
+		"TRADABLE_LISTs that obtain their input data from files %
+		%(fix - change to:) %
+		%TRADABLE_LISTs that obtain their input data from sockets"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
