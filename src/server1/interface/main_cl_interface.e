@@ -210,7 +210,7 @@ feature -- Basic operations
 			end
 			from
 				end_client := False
-				exit_server := current_tradable = Void
+				exit_server := False
 			until
 				end_client or exit_server
 			loop
