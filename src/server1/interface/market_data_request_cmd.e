@@ -70,7 +70,7 @@ feature {NONE}
 					tuple_list := t.tuple_list (trading_period_type.name)
 				end
 				if t /= Void and t.has_open_interest then
-					print_preface := concatenation(<<clone(print_preface),
+					print_preface := concatenation(<<print_preface.twin,
 						Open_interest_flag>>)
 				end
 			elseif
@@ -80,7 +80,7 @@ feature {NONE}
 				tuple_list := tradables.tuple_list (market_symbol,
 					trading_period_type, update_retrieved_tradable)
 				if tradables.last_tradable.has_open_interest then
-					print_preface := concatenation(<<clone(print_preface),
+					print_preface := concatenation(<<print_preface.twin,
 						Open_interest_flag>>)
 				end
 				session.set_last_tradable (tradables.last_tradable)

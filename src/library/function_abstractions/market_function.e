@@ -69,7 +69,7 @@ feature -- Access
 			-- Changeable parameters for this function, exluding those
 			-- of `descendants'
 		do
-			Result := clone (immediate_direct_parameters)
+			Result := immediate_direct_parameters.twin
 			Result.append (immediate_operator_parameters)
 		ensure
 			result_exists: Result /= Void
@@ -333,7 +333,7 @@ feature {NONE} -- Implementation
 
 	copy_of_children: like children
 		do
-			Result := clone (children)
+			Result := children.twin
 		end
 
 	descendant_comparison_is_by_objects: BOOLEAN

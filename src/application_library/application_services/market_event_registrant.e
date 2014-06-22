@@ -158,7 +158,7 @@ feature -- Basic operations
 			-- since the history is stored separately (above) and the cache
 			-- does not need to be persistent.
 			event_cache.wipe_out
-			event_history.clear_all
+			event_history.wipe_out
 		end
 
 feature {NONE} -- Hook routines
@@ -212,7 +212,7 @@ feature {NONE} -- Implementation
 		local
 			tag: STRING
 		do
-			tag := clone (e.tag)
+			tag := e.tag.twin
 			tag.to_upper
 			Result := concatenation (<<"Event for: ", tag>>)
 			if

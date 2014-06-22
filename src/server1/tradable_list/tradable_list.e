@@ -98,7 +98,7 @@ feature -- Access
 			-- The symbol of each tradable
 		do
 			if symbol_list_clone = Void then
-				symbol_list_clone := clone (symbol_list)
+				symbol_list_clone := symbol_list.twin
 			end
 			Result := symbol_list_clone
 		end
@@ -157,7 +157,7 @@ feature -- Status setting
 			-- Turn tradable caching off.
 		do
 			if caching_on then
-				cache.clear_all
+				cache.wipe_out
 				cache_index_queue.make (0)
 			end
 		ensure
@@ -254,7 +254,7 @@ feature -- Basic operations
 	clear_cache
 			-- Empty the tradable cache.
 		do
-			cache.clear_all
+			cache.wipe_out
 			cache_index_queue.wipe_out
 			if count > 0 then
 				start; back
@@ -403,7 +403,7 @@ feature {NONE} -- Implementation
 			until
 				s_list.exhausted
 			loop
-				s := clone (s_list.item)
+				s := s_list.item.twin
 				s.to_lower
 				list.extend (s)
 				s_list.forth

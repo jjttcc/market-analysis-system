@@ -168,7 +168,7 @@ feature {NONE} -- Implementation
 				end
 			end
 			if do_clone then
-				Result := deep_clone (Result)
+				Result := Result.deep_twin
 				if editing_needed then
 					edit_object (Result, tag)
 				end

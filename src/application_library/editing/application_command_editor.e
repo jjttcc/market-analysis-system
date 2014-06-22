@@ -343,13 +343,13 @@ feature -- Basic operations
 			choices: LIST [PAIR [STRING, BOOLEAN]]
 			pair: PAIR [STRING, BOOLEAN]
 		do
-			create sign_spec_vector.make (1, 6)
-			sign_spec_vector.put (<<-1, 1>>, 1)
-			sign_spec_vector.put (<<1, -1>>, 2)
-			sign_spec_vector.put (<<-1, 0>>, 3)
-			sign_spec_vector.put (<<1, 0>>, 4)
-			sign_spec_vector.put (<<0, -1>>, 5)
-			sign_spec_vector.put (<<0, 1>>, 6)
+			create sign_spec_vector.make_empty
+			sign_spec_vector.force (<<-1, 1>>, 1)
+			sign_spec_vector.force (<<1, -1>>, 2)
+			sign_spec_vector.force (<<-1, 0>>, 3)
+			sign_spec_vector.force (<<1, 0>>, 4)
+			sign_spec_vector.force (<<0, -1>>, 5)
+			sign_spec_vector.force (<<0, 1>>, 6)
 			left ?= user_interface.command_selection_from_type (
 				user_interface.Real_result_cmd, cmd.generator +
 				user_interface.name_for (cmd) + "'s left operand", False)

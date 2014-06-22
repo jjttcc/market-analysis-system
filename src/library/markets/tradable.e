@@ -221,7 +221,7 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 			--be more efficient to process just the newly arrived data and
 			--only the least number of existing composite records needed for
 			--the result to be correct (i.e., possible optimization).
-			tuple_lists.clear_all
+			tuple_lists.wipe_out
 			initialize_tuple_lists
 		end
 
@@ -342,7 +342,7 @@ feature {NONE}
 		do
 			ctf := make_ctf
 			if not is_empty then
-				start_date_time := clone (first.date_time)
+				start_date_time := first.date_time.twin
 				adjust_start_time (start_date_time, type)
 			else
 				create start_date_time.make_now

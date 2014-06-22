@@ -37,15 +37,15 @@ feature -- Access
 		local
 			i: INTEGER
 		do
-			create {ARRAY [EVENT_TYPE]} Result.make (1,
-				market_event_generation_library.count)
+			create {ARRAY [EVENT_TYPE]} Result.make_empty
 			from
 				i := 1
 				market_event_generation_library.start
 			until
 				market_event_generation_library.exhausted
 			loop
-				Result.put (market_event_generation_library.item.event_type, i)
+				Result.force (market_event_generation_library.item.event_type,
+					i)
 				market_event_generation_library.forth
 				i := i + 1
 			end
@@ -55,8 +55,7 @@ feature -- Access
 			-- All event types known to the system in a hash table - key
 			-- is the event type ID.
 		do
-			create Result.make (
-				market_event_generation_library.count)
+			create Result.make (market_event_generation_library.count)
 			from
 				market_event_generation_library.start
 			until

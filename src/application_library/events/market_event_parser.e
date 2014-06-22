@@ -77,7 +77,7 @@ feature -- Basic operations
 					field_separator)
 			elseif type_name.is_equal (Market_event_pair) then
 				create {EVENT_PAIR_FACTORY} product.make (input,
-					clone (Current), field_separator)
+					Current.twin, field_separator)
 			else
 				set_error
 				-- Cannot fulfill the postcondition.

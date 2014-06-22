@@ -74,7 +74,7 @@ feature
 				end
 				market_event_registrants.forth
 			end
-			event_locks.clear_all
+			event_locks.wipe_out
 			unregister_for_termination (Current)
 		end
 
@@ -129,7 +129,7 @@ feature
 				end
 				market_event_registrants.forth
 			end
-			event_locks.clear_all
+			event_locks.wipe_out
 		ensure then
 			no_locks: event_locks.is_empty
 		end

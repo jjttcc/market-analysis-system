@@ -101,7 +101,7 @@ feature -- Access
 	uppercase_symbol: STRING
 			-- `symbol' in all upper-case
 		do
-			Result := clone (symbol)
+			Result := symbol.twin
 			Result.to_upper
 		end
 

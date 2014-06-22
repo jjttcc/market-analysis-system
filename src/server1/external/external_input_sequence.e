@@ -328,17 +328,17 @@ feature {NONE} -- Implementation
 			if app_directory /= Void then
 				create dir.make (app_directory)
 				if dir.exists and dir.is_writable then
-					Result := clone (app_directory)
+					Result := app_directory.twin
 					Result.extend (directory_separator)
 				end
 			end
 			create dir.make (current_working_directory)
 			if dir.is_writable then
 				if Result = Void then
-					Result := clone (current_working_directory)
+					Result := current_working_directory.twin
 				else
 					Result.append (concatenation(<<path_separator,
-						clone (current_working_directory)>>))
+						current_working_directory.twin>>))
 				end
 				Result.extend (directory_separator)
 			end

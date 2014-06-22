@@ -195,7 +195,7 @@ feature -- Access
 			l.extend (numeric_value_command)
 
 			-- Add all commands.
-			l := clone (command_instances)
+			l := command_instances.twin
 			Result.extend (l, Any_cmd)
 		end
 

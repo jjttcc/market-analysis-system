@@ -35,13 +35,13 @@ feature {NONE} -- Implementation
 	turn_caching_off
 		do
 			Precursor
-			file_status_cache.clear_all
+			file_status_cache.wipe_out
 		end
 
 	clear_cache
 		do
 			Precursor
-			file_status_cache.clear_all
+			file_status_cache.wipe_out
 		end
 
 	add_to_cache (t: TRADABLE [BASIC_MARKET_TUPLE]; idx: INTEGER)
@@ -53,8 +53,7 @@ feature {NONE} -- Implementation
 						not input_medium.is_closed
 				end
 				file_status_cache.force (create {TRADABLE_FILE_STATUS}.make (
-					clone (input_medium.name), input_medium.count),
-					idx)
+					input_medium.name.twin, input_medium.count), idx)
 			end
 		ensure then
 			status_added_if_caching_on: caching_on implies equal (

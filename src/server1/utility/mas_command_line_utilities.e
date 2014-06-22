@@ -148,7 +148,7 @@ feature {NONE} -- Implementation - utility routines
 				elseif last_string.count > 0 and last_string @ 1 = '!' then
 					cmd := last_string.substring (2, last_string.count)
 				else
-					cmd := clone (last_string)
+					cmd := last_string.twin
 				end
 				check
 					cmd_exists: cmd /= Void

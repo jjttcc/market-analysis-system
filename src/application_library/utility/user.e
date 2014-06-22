@@ -175,7 +175,7 @@ feature {NONE} -- Implementation
 				if not tmpdir.exists then
 					create tmpdir.make (".")
 				end
-				fname := clone (s)
+				fname := s.twin
 				fname.append_integer (s.hash_code)
 				fname.prepend_character (Directory_separator)
 				fname.prepend_string (tmpdir.name)

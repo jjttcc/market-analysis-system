@@ -536,7 +536,7 @@ feature {NONE} -- Implementation
 
 	initialize_working_list
 		do
-			working_event_registrants := deep_clone (market_event_registrants)
+			working_event_registrants := market_event_registrants.deep_twin
 		end
 
 feature {NONE} -- Implementation of hook routines

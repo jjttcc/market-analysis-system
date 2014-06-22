@@ -158,7 +158,7 @@ feature {NONE} -- Implementation - hooks
 			current_symbol.to_lower
 			if not product.has (current_symbol) then
 				create {LINKED_LIST [STOCK_SPLIT]} l.make
-				product.put (l, clone (current_symbol))
+				product.put (l, current_symbol.twin)
 			else
 				l := product @ current_symbol
 			end

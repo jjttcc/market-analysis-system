@@ -219,7 +219,7 @@ feature -- Access
 			create Result.make_empty    -- (See intraday_period_type_names)
 			create duration.make (0, 0, 0, 0, 1, 0)
 			create tpt.make (duration)
-			Result := clone (intraday_period_type_names)
+			Result := intraday_period_type_names.twin
 			Result.force (tpt.daily_name, daily)
 			Result.force (tpt.weekly_name, weekly)
 			Result.force (tpt.monthly_name, monthly)

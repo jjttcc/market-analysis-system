@@ -58,20 +58,20 @@ feature {NONE} -- Basic operations
 		local
 			i: INTEGER
 		do
-			create Result.make (1, ptypes.count * 2 - 1)
+			create Result.make_empty
 			from
 				ptypes.start
 				i := 1
 			until
 				ptypes.islast
 			loop
-				Result.put (ptypes.item, i)
+				Result.force (ptypes.item, i)
 				i := i + 1
-				Result.put (message_record_separator, i)
+				Result.force (message_record_separator, i)
 				i := i + 1
 				ptypes.forth
 			end
-			Result.put (ptypes.item, i)
+			Result.force (ptypes.item, i)
 		end
 
 	error_context (msg: STRING): STRING

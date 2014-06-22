@@ -151,7 +151,7 @@ feature -- Access
 
 	stock_name_query: STRING
 		do
-			Result := clone (settings @ Stock_name_query_specifier)
+			Result := (settings @ Stock_name_query_specifier).twin
 			-- Replace the <symbol> and <uppersymbol> tokens with
 			-- `symbol' and uppercase (`symbol').
 			replace_tokens (Result, <<symbol_token, upper_symbol_token>>,
@@ -165,7 +165,7 @@ feature -- Access
 		require
 			ok_to_use_this_spec: using_daily_stock_data_command
 		do
-			Result := clone (settings @ Daily_stock_data_command_specifier)
+			Result := (settings @ Daily_stock_data_command_specifier).twin
 			if eod_start_date /= Void and eod_end_date /= Void then
 				-- Replace the <symbol> token and date tokens with the
 				-- `symbol' and the corresponding components of eod_start_date
@@ -244,7 +244,7 @@ feature -- Access
 		require
 			ok_to_use_this_spec: using_intraday_stock_data_command
 		do
-			Result := clone (settings @ Intraday_stock_data_command_specifier)
+			Result := (settings @ Intraday_stock_data_command_specifier).twin
 			if intraday_start_date /= Void and intraday_end_date /= Void then
 				-- Replace the <symbol> token and date tokens with the
 				-- `symbol' and the corresponding components of
@@ -360,7 +360,7 @@ feature -- Access
 
 	derivative_name_query: STRING
 		do
-			Result := clone (settings @ Derivative_name_query_specifier)
+			Result := (settings @ Derivative_name_query_specifier).twin
 			-- Replace the <symbol> and <uppersymbol> tokens with
 			-- `symbol' and uppercase (`symbol').
 			replace_tokens (Result, <<symbol_token, upper_symbol_token>>,
@@ -374,8 +374,8 @@ feature -- Access
 		require
 			ok_to_use_this_spec: using_daily_derivative_data_command
 		do
-			Result := clone (
-				settings @ Daily_derivative_data_command_specifier)
+			Result := (
+				settings @ Daily_derivative_data_command_specifier).twin
 			if eod_start_date /= Void and eod_end_date /= Void then
 				-- Replace the <symbol> token and date tokens with the
 				-- `symbol' and the corresponding components of eod_start_date
@@ -448,8 +448,8 @@ feature -- Access
 		require
 			ok_to_use_this_spec: using_intraday_derivative_data_command
 		do
-			Result := clone (
-				settings @ Intraday_derivative_data_command_specifier)
+			Result := (
+				settings @ Intraday_derivative_data_command_specifier).twin
 			if intraday_start_date /= Void and intraday_end_date /= Void then
 				-- Replace the <symbol> token and date tokens with the
 				-- `symbol' and the corresponding components of

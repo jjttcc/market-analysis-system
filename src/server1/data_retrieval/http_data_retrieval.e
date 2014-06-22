@@ -134,7 +134,7 @@ feature {NONE} -- Basic operations
 					-- latest date in the current data set so that there
 					-- is no overlap between the current data set and
 					-- freshly retrieved data.  Clone to prevent side effects.
-					alternate_start_date := clone (latest_date)
+					alternate_start_date := latest_date.twin
 					alternate_start_date.day_add (1)
 				end
 			end

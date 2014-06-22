@@ -85,7 +85,7 @@ feature -- Element change
 		require
 			arg_not_void: arg /= Void
 		do
-			field_separator := clone (arg)
+			field_separator := arg.twin
 		ensure
 			field_separator_set: field_separator.is_equal (arg) and
 				field_separator /= Void

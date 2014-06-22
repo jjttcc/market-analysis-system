@@ -361,27 +361,27 @@ feature {NONE} -- Implementation
 			gsf: expanded GLOBAL_SERVER_FACILITIES
 		do
 			if value_setter_vector = Void then
-				create value_setter_vector.make (1, Last_index)
+				create value_setter_vector.make_empty
 				create date_setter.make
-				value_setter_vector.put (date_setter, Date_index)
+				value_setter_vector.force (date_setter, Date_index)
 				create configurable_date_setter.make (
 					gsf.command_line_options.special_date_settings)
-				value_setter_vector.put (configurable_date_setter,
+				value_setter_vector.force (configurable_date_setter,
 					Configurable_date_index)
 				create time_setter.make
-				value_setter_vector.put (time_setter, Time_index)
+				value_setter_vector.force (time_setter, Time_index)
 				create open_setter
-				value_setter_vector.put (open_setter, Open_index)
+				value_setter_vector.force (open_setter, Open_index)
 				create high_setter
-				value_setter_vector.put (high_setter, High_index)
+				value_setter_vector.force (high_setter, High_index)
 				create low_setter
-				value_setter_vector.put (low_setter, Low_index)
+				value_setter_vector.force (low_setter, Low_index)
 				create close_setter
-				value_setter_vector.put (close_setter, Close_index)
+				value_setter_vector.force (close_setter, Close_index)
 				create volume_setter.make
-				value_setter_vector.put (volume_setter, Volume_index)
+				value_setter_vector.force (volume_setter, Volume_index)
 				create open_interest_setter
-				value_setter_vector.put (open_interest_setter, OI_index)
+				value_setter_vector.force (open_interest_setter, OI_index)
 			end
 			from
 				i := 1

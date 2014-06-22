@@ -37,10 +37,8 @@ feature -- Initialization
 		do
 			create sign_change_spec.make
 			if init_sign_spec then
-				create a.make (1, 2)
 				a := <<1, -1>>
 				sign_change_spec.extend (a)
-				create a.make (1, 2)
 				a := <<-1, 1>>
 				sign_change_spec.extend (a)
 			end

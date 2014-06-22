@@ -37,7 +37,7 @@ feature -- Access
 
 	parameters: LIST [FUNCTION_PARAMETER]
 		do
-				Result := clone(direct_parameters)
+				Result := direct_parameters.twin
 				Result.append(operator_parameters)
 		end
 

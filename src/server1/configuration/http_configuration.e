@@ -78,7 +78,7 @@ feature -- Access
 			-- redesign will be needed.
 		do
 			if cached_path = Void then
-				cached_path := clone (original_path)
+				cached_path := original_path.twin
 				replace_tokens_using_dates (cached_path, eod_start_date,
 					eod_end_date, False)
 			end
@@ -89,7 +89,7 @@ feature -- Access
 			-- Same as `path', but with `alt_sd' used as the start date
 			-- instead of `start_date' (not cached)
 		do
-			Result := clone (original_path)
+			Result := original_path.twin
 			replace_tokens_using_dates (Result, alt_sd, eod_end_date, False)
 		end
 

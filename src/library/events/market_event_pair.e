@@ -95,11 +95,11 @@ feature -- Access
 		local
 			left_guts, right_guts: ARRAY [STRING]
 		do
-			create Result.make (1, 2)
+			create Result.make_empty
 			left_guts := left.guts
 			right_guts := right.guts
-			Result.put ("MEP", 1)
-			Result.put (type.id.out, 2)
+			Result.force ("MEP", 1)
+			Result.force (type.id.out, 2)
 			append_to_array (Result, left_guts, 3)
 			append_to_array (Result, right_guts, Result.count + 1)
 		end

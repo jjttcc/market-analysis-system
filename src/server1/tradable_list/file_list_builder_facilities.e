@@ -145,7 +145,7 @@ feature {NONE} -- Implementation
 			-- `fname' without its extension ('.' and all characters that
 			-- follow it)
 		do
-			strutil.set_target (clone (fname))
+			strutil.set_target (fname.twin)
 			if strutil.target.has ('.') then
 				strutil.keep_head ('.')
 			end

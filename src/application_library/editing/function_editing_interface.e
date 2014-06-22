@@ -146,8 +146,8 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 	function_selection_from_library (msg: STRING): MARKET_FUNCTION
 			-- User-selected MARKET_FUNCTION from the function library
 		do
-			Result := deep_clone (market_function_selection (msg,
-				agent valid_root_function))
+			Result := (market_function_selection (msg,
+				agent valid_root_function)).twin
 			set_complex_function_inputs (Result)
 			edit_function (Result, msg)
 		end
@@ -554,7 +554,7 @@ feature {NONE} -- Implementation
 
 	initialize_working_list
 		do
-			working_function_library := deep_clone (function_library)
+			working_function_library := function_library.deep_twin
 		end
 
 	names_from_function_list (l: LIST [FUNCTION_PARAMETER]): ARRAYED_LIST [STRING]

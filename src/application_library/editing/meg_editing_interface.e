@@ -278,7 +278,7 @@ feature {NONE} -- Implementation
 	function_choice_clone (msg: STRING): MARKET_FUNCTION
 			-- A clone of a user-selected member of `function_library'
 		do
-			Result := deep_clone (function_choice (msg))
+			Result := (function_choice (msg)).deep_twin
 			if editable (Result) then
 				function_editor.initialize_function (Result)
 			end
@@ -304,7 +304,7 @@ feature {NONE} -- Implementation
 			names: LIST [STRING]
 		do
 			--Ask the user for the name of the new event type.
-			names := deep_clone (event_type_names)
+			names := event_type_names.deep_twin
 			names.compare_objects
 			Result := new_event_type_name_selection (names)
 		end
@@ -463,7 +463,7 @@ feature {NONE} -- Implementation
 
 	initialize_working_list
 		do
-			working_meg_library := deep_clone (market_event_generation_library)
+			working_meg_library := market_event_generation_library.deep_twin
 		end
 
 	help: APPLICATION_HELP

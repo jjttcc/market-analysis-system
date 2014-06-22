@@ -123,7 +123,7 @@ feature -- Access
 		local
 			wk_msg: STRING
 		do
-			wk_msg := clone (msg)
+			wk_msg := msg.twin
 			from
 				Result := string_selection (wk_msg)
 				Result.left_adjust

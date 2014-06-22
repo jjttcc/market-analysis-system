@@ -52,7 +52,7 @@ feature -- Duplication
 	copy (other: like Current)
 		do
 			Precursor {LINKED_LIST} (other)
-			persistent_file_name := clone (other.persistent_file_name)
+			persistent_file_name := other.persistent_file_name.twin
 		end
 
 feature -- Utility

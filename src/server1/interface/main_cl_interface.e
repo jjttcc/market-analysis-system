@@ -635,7 +635,7 @@ feature {NONE} -- Implementation - utilities
 					if not tradable_list_handler.error_occurred then
 						ptnames := tradable_list_handler.period_type_names_for (
 							tradable_list_handler.current_symbol)
-						if not ptnames.empty then
+						if not ptnames.is_empty then
 							current_period_type := period_types @ (ptnames @ 1)
 							current_tradable := tradable_list_handler.item (
 								--@@@Check if 'update' (False) should be True:
@@ -711,7 +711,7 @@ feature {NONE} -- Implementation - utilities
 			sorted_period_types: LIST [TIME_PERIOD_TYPE ]
 		do
 			-- Clone to prevent side effects.
-			sorted_period_types := clone (period_types_in_order)
+			sorted_period_types := period_types_in_order.twin
 			from
 				sorted_period_types.start
 			until

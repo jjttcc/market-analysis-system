@@ -49,7 +49,7 @@ feature -- Basic operations
 					not source_list.item.date_time.date.is_equal (
 						source_list.i_th (source_list.index - 1).date_time.date)
 				then
-					current_date := clone (source_list.item.date_time)
+					current_date := source_list.item.date_time.twin
 					adjust_intraday_start_time (
 						current_date, trading_period_type)
 				end

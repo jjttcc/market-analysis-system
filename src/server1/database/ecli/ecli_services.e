@@ -149,64 +149,6 @@ feature -- Access
 			stmt.close
 		end
 
-	old_single_string_query_result_remove (query: STRING): STRING
-			-- !!!!!!
-		local
-			stmt: ECLI_STATEMENT
-			ecli_result: ECLI_VARCHAR
-		do
-			fatal_error := False
-			create stmt.make (session)
-			stmt.set_immediate_execution_mode
-			stmt.set_sql (query)
-			if debugging then
-				io.error.print ("Executing database query '" + query + "'%N")
-			end
-			stmt.execute
-			if debugging then
-				debug_report (stmt)
-			end
-			if not stmt.is_ok then
---				last_error := concatenation (<<
---					"Execution of statement:%N'",
---					stmt.sql, "' failed:%N", stmt.cli_state, ", ",
---					stmt.diagnostic_message>>)
---				if debugging then
---					print_list (<<last_error, "%N">>)
---				end
---				fatal_error := True
---			else
---				-- Create result set 'value holders'.
---				create ecli_result.make (Max_varchar_length)
---				if stmt.result_column_count /= 1 then
---					last_error := concatenation (<<
---						"Execution of statement:%N'",
---						stmt.sql, "' failed: too many columns in result - ",
---						"expecting 1">>)
---					if debugging then
---						print_list (<<last_error, "%N">>)
---					end
---					fatal_error := True
---				else
---					stmt.set_cursor (<<ecli_result>>)
---					stmt.start
---					if not stmt.off and not stmt.cursor.item (1).is_null then
---						Result ?= stmt.cursor.item (1).item
---					end
---					if debugging then
---						if Result /= Void and then not Result.is_empty then
---							io.error.print ("Database query gave result of '" +
---								Result + "'%N")
---						else
---							io.error.print (
---								"Database query gave empty result.%N")
---						end
---					end
---				end
-			end
-			stmt.close
-		end
-
 	stock_data: STOCK_DATA
 -- !!!! indexing once_status: global??!!! [probaly not, but check]
 		once
@@ -529,8 +471,8 @@ feature {NONE} -- Implementation
 				io.error.print (tag + " execution failed: " +
 					stmt.diagnostic_message + "%N")
 			end
-			if stmt.has_results then
-				io.error.print (tag + " has results.%N")
+			if stmt.has_result_set then
+				io.error.print (tag + " has_result_set.%N")
 			end
 			io.error.print ("Number of columns in result: " +
 				stmt.result_columns_count.out + "%N")

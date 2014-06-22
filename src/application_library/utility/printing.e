@@ -85,7 +85,7 @@ feature -- Basic operations
 		do
 			if not l.is_empty then
 				-- clone to allow concurrent printing
-				printer := clone (tuple_printers @ l.first.generator)
+				printer := (tuple_printers @ l.first.generator).twin
 			else
 				printer := tuple_printers.linear_representation @ 1
 			end

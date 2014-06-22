@@ -57,7 +57,7 @@ feature {NONE} -- Implementation
 			-- and suffix ('.' and all characters that follow it) of the
 			-- file name are removed.  `fname' is not changed.
 		do
-			strutil.set_target (clone (fname))
+			strutil.set_target (fname.twin)
 			if strutil.target.has (Directory_separator) then
 				-- Strip directory path from the file name:
 				strutil.keep_tail (Directory_separator)
