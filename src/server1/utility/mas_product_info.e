@@ -32,7 +32,7 @@ feature -- Access
 		local
 			s: STRING
 		once
-			Result := <<"1", "7", "1", "[es5.1">>
+			Result := <<"1", "8", "1" + "[es14.05">>
 			s := Result @ Result.upper
 			debug ("multi_threaded_version")
 				s.append ("MT")
