@@ -37,7 +37,9 @@ feature -- Initialization
 			not_void: fname /= Void
 		do
 			persistent_file_name := fname
---			ll_make
+--!![14.05]!!!!This:
+			ll_make
+--!!!!!!!!!!was commented out in version 1.7.1 (and perhaps earlier) - Why???!!!
 		ensure
 			persistent_file_name = fname
 		end

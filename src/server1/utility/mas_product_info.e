@@ -3,7 +3,7 @@ note
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
+	licensing: "Copyright 1998 - 2014: Jim Cochrane - %
 		%Released under the Eiffel Forum License; see file forum.txt"
 
 class MAS_PRODUCT_INFO inherit
@@ -31,6 +31,7 @@ feature -- Access
 			once_status: global
 		local
 			s: STRING
+			t: TIME
 		once
 			Result := <<"1", "8", "1" + "[es14.05">>
 			s := Result @ Result.upper
@@ -40,6 +41,7 @@ feature -- Access
 			debug ("non_multi_threaded_version")
 				s.append ("ST")
 			end
+--!!!s.append ((create {TIME} make_now).out)
 			s.append ("]")
 		end
 
@@ -48,7 +50,8 @@ feature -- Access
 		note
 			once_status: global
 		once
-			create Result.make (2006, 5, 9)
+--!!!!!![14.05]!!!For debugging purposes [for now], use current date.
+			create Result.make_now
 		end
 
 	release_description: STRING
@@ -63,7 +66,7 @@ feature -- Access
 		note
 			once_status: global
 		once
-			Result := "Copyright 1998 - 2004: Jim Cochrane"
+			Result := "Copyright 1998 - 2014: Jim Cochrane"
 		end
 
 	license_information: STRING
