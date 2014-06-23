@@ -1,0 +1,16 @@
+EIFGENs/
+doc/ec_options
+eifgens/
+.*.sw[op]
+indicators_persist*
+generators_persist*
+mas_dbrc
+src/eiffel_library
+Makefile
+*.o
+*.orig
+*.csv
+*.txt
+src/server1/spec/
+src/server1/test/mas.melted
+tags
