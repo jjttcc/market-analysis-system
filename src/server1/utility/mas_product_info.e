@@ -31,7 +31,6 @@ feature -- Access
 			once_status: global
 		local
 			s: STRING
-			t: TIME
 		once
 			Result := <<"1", "8", "1" + "[es14.05">>
 			s := Result @ Result.upper
@@ -41,7 +40,8 @@ feature -- Access
 			debug ("non_multi_threaded_version")
 				s.append ("ST")
 			end
---!!!s.append ((create {TIME} make_now).out)
+			s.append (" @" + date_time.time.formatted_out(
+				"hh:mi:ss"))
 			s.append ("]")
 		end
 
@@ -51,7 +51,7 @@ feature -- Access
 			once_status: global
 		once
 --!!!!!![14.05]!!!For debugging purposes [for now], use current date.
-			create Result.make_now
+			Result := date_time.date
 		end
 
 	release_description: STRING
@@ -93,6 +93,21 @@ feature -- Access
 %DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THIS PACKAGE.%N%N%
 %This software is OSI Certified Open Source Software.  OSI Certified is%N%
 %a certification mark of the Open Source Initiative."
+		end
+
+feature {NONE} -- Implementation
+
+--!!!!For debugging/development - temporarily use a "time stamp" file to
+--!!!!determine/report the compile time.
+	time_stamp_file: PLAIN_TEXT_FILE
+		once
+			create Result.make_open_read("/tmp/mas_stamp")
+		end
+
+	date_time: DATE_TIME
+		once
+			create Result.make_from_epoch(time_stamp_file.change_date)
+			Result.hour_add(-5)	-- UTC -> CDT
 		end
 
 end -- class MAS_PRODUCT_INFO
