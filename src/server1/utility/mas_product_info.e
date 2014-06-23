@@ -40,8 +40,7 @@ feature -- Access
 			debug ("non_multi_threaded_version")
 				s.append ("ST")
 			end
-			s.append (" @" + date_time.time.formatted_out(
-				"hh:mi:ss"))
+			s.append (" @" + formatted_compile_date_time)
 			s.append ("]")
 		end
 
@@ -50,8 +49,7 @@ feature -- Access
 		note
 			once_status: global
 		once
---!!!!!![14.05]!!!For debugging purposes [for now], use current date.
-			Result := date_time.date
+			create Result.make(2014, 6, 23)
 		end
 
 	release_description: STRING
@@ -97,17 +95,12 @@ feature -- Access
 
 feature {NONE} -- Implementation
 
---!!!!For debugging/development - temporarily use a "time stamp" file to
---!!!!determine/report the compile time.
-	time_stamp_file: PLAIN_TEXT_FILE
+	formatted_compile_date_time: STRING
 		once
-			create Result.make_open_read("/tmp/mas_stamp")
-		end
-
-	date_time: DATE_TIME
-		once
-			create Result.make_from_epoch(time_stamp_file.change_date)
-			Result.hour_add(-5)	-- UTC -> CDT
+			Result :=
+			-- start: compile-time
+				"2014-06-22 22:28:52"
+			-- end: compile-time
 		end
 
 end -- class MAS_PRODUCT_INFO
