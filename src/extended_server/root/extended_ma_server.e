@@ -36,7 +36,7 @@ feature {NONE} -- Initialization
 
 	compile_this
 		local
-			-- "proprietary" components that are not currently used.
+			-- components that are not currently used.
 			composite_tradable: COMPOSITE_TRADABLE
 			basic_composite_tradable: BASIC_COMPOSITE_TRADABLE
 		do
