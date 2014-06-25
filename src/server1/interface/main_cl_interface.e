@@ -642,7 +642,8 @@ feature {NONE} -- Implementation - utilities
 								current_period_type, False)
 						else
 							log_errors (<<"Error occurred for '",
-								tradable_list_handler.current_symbol, "'%N">>)
+								tradable_list_handler.current_symbol,
+								": No valid period types found.", "'%N">>)
 							terminate (Error_exit_status)
 						end
 					end

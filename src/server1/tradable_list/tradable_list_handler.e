@@ -138,6 +138,8 @@ feature -- Access
 						g.command_line_options.allow_non_standard_period_types
 					then
 						create std_types.make
+						std_types.compare_objects
+						target_set.compare_objects
 						std_types.fill (standard_period_types)
 						-- Since "non-standard" period types are not allowed,
 						-- remove from `target_set' all period types that
