@@ -1,11 +1,11 @@
 note
-	description: "Root class for the extended version of the %
-		%Market Analysis Server"
-	author: "Jim Cochrane"
-	date: "$Date$";
-	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
-		%License to be determined - will be non-public"
+    description: "Root class for the extended version of the %
+        %Market Analysis Server"
+    author: "Jim Cochrane"
+    date: "$Date$";
+    revision: "$Revision$"
+    copyright: "Copyright (c) 1998-2014, Jim Cochrane"
+    license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
 class EXTENDED_MA_SERVER inherit
 

@@ -1,13 +1,6 @@
 note
-	description:
-		"A command that responds to a client request for market data %
-		%delimited by a start date-time and an end date-time"
-	author: "Jim Cochrane"
-	date: "$Date$";
-	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
-		%License to be determined - will be non-public"
-
+    copyright: "Copyright (c) 1998-2014, Jim Cochrane"
+    license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 class TIME_DELIMITED_MARKET_DATA_REQUEST_CMD inherit
 
 	MARKET_DATA_REQUEST_CMD

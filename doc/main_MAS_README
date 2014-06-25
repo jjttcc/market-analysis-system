@@ -199,8 +199,9 @@ window.
 %hdg1License
 
 The Market Analysis System is copyrighted free software, released under
-the Eiffel Forum License.  See the file forum.txt for the contents of
-the license.
+the GNU General Public License, version 2, which can be found online at:
+%par
+http://www.gnu.org/licenses/gpl-2.0.html
 %par
 This software is OSI Certified Open Source Software.  OSI Certified is
 a certification mark of the Open Source Initiative.

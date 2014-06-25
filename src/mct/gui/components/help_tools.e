@@ -5,8 +5,8 @@ note
 	revision: "$Revision$"
 	note1: "This class is currently not used.  If that continues to be the %
 		%case, it should be obsoleted and moved."
-	licensing: "Copyright 2004: Jim Cochrane - %
-		%License to be determined"
+    copyright: "Copyright (c) 1998-2014, Jim Cochrane"
+    license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
 class HELP_TOOLS inherit
 

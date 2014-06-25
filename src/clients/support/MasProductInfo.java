@@ -1,9 +1,9 @@
 /**
-	author: "Jim Cochrane"
-	date: "$Date$";
-	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2005: Jim Cochrane - %
-		%Released under the Eiffel Forum License; see file forum.txt"
+   author: "Jim Cochrane"
+   date: "$Date$";
+   revision: "$Revision$"
+   copyright: "Copyright (c) 1998-2014, Jim Cochrane"
+   license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 */
 
 package support;
@@ -47,6 +47,6 @@ public class MasProductInfo extends ProductInfo {
 	}
 
 	public String license_information() {
-		return "License: To be defined";
+		return "License: GPL version 2";
 	}
 }

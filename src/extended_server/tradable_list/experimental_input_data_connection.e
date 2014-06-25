@@ -4,8 +4,8 @@ note
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
-		%License to be determined"
+    copyright: "Copyright (c) 1998-2014, Jim Cochrane"
+    license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
 class EXPERIMENTAL_INPUT_DATA_CONNECTION inherit
 

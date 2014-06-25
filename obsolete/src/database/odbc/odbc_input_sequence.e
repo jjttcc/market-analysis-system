@@ -3,8 +3,8 @@ indexing
 	author: "Eirik Mangseth"
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2003: Eirik Mangseth and Jim Cochrane - %
-		%Released under the Eiffel Forum License; see file forum.txt"
+    copyright: "Copyright (c) 1998-2014, Eirik Mangseth and Jim Cochrane"
+    license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
 class ODBC_INPUT_SEQUENCE inherit
 

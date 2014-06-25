@@ -3,8 +3,8 @@ note
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2014: Jim Cochrane - %
-		%Released under the Eiffel Forum License; see file forum.txt"
+    copyright: "Copyright (c) 1998-2014, Jim Cochrane"
+    license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
 class MAS_PRODUCT_INFO inherit
 
@@ -72,25 +72,8 @@ feature -- Access
 			once_status: global
 		once
 			Result :=
-"Eiffel Forum License, version 1%N%N%
-%Permission is hereby granted to use, copy, modify and/or distribute%N%
-%this package, provided that:%N%N%
-%  - copyright notices are retained unchanged.%N%N%
-%  - any distribution of this package, whether modified or not,%N%
-%    includes this file.%N%N%
-%Permission is hereby also granted to distribute binary programs which%N%
-%depend on this package, provided that:%N%N%
-%  - if the binary program depends on a modified version of this%N%
-%    package, you must publicly release the modified version of this%N%
-%    package.%N%N%
-%THIS PACKAGE IS PROVIDED %"AS IS%" AND WITHOUT WARRANTY. ANY EXPRESS%N%
-%OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED%N%
-%WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE%N%
-%DISCLAIMED. IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR%N%
-%ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL%N%
-%DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THIS PACKAGE.%N%N%
-%This software is OSI Certified Open Source Software.  OSI Certified is%N%
-%a certification mark of the Open Source Initiative."
+"GNU General Public License, version 2%N%N%
+%[http://www.gnu.org/licenses/gpl-2.0.html]"
 		end
 
 feature {NONE} -- Implementation

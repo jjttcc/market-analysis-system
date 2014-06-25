@@ -4,7 +4,6 @@ files:
 
       doc        - Documentation directory
       src        - Source code for MAL and applications that use it
-      forum.txt  - Eiffel Forum Freeware License text
 
 Directory src contains the directories:
 

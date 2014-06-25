@@ -1,16 +1,16 @@
 note
-	description:
-		"FILE_BASED_TRADABLE_LISTs that originally obtain their tradable %
-		%data via an http GET request and cache the data by saving it to a %
-		%file.  The file is then read for processing by MAS, as with a %
-		%FILE_TRADABLE_LIST.  Once data for a tradable has been retrieved %
-		%via the http, no new retrieval is done for that tradable until %
-		%cached data is out of date according to user-configured settings"
-	author: "Jim Cochrane"
-	date: "$Date$";
-	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
-		%License to be determined - will be non-public"
+    description:
+        "FILE_BASED_TRADABLE_LISTs that originally obtain their tradable %
+        %data via an http GET request and cache the data by saving it to a %
+        %file.  The file is then read for processing by MAS, as with a %
+        %FILE_TRADABLE_LIST.  Once data for a tradable has been retrieved %
+        %via the http, no new retrieval is done for that tradable until %
+        %cached data is out of date according to user-configured settings"
+    author: "Jim Cochrane"
+    date: "$Date$";
+    revision: "$Revision$"
+    copyright: "Copyright (c) 1998-2014, Jim Cochrane"
+    license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
 class EXTENDED_HTTP_LOADING_FILE_TRADABLE_LIST inherit
 

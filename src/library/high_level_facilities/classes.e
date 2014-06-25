@@ -5,8 +5,8 @@ note
 		%can probably be cleanly moved to the ma_library cluster."
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
-		%Released under the Eiffel Forum License; see file forum.txt"
+    copyright: "Copyright (c) 1998-2014, Jim Cochrane"
+    license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
 deferred class
 

@@ -4,8 +4,8 @@ note
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
-	licensing: "Copyright 1998 - 2004: Jim Cochrane - %
-		%License to be determined - will be non-public"
+    copyright: "Copyright (c) 1998-2014, Jim Cochrane"
+    license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
 class EXTENDED_PRODUCT_INFO inherit
 
@@ -53,14 +53,9 @@ feature -- Access
 		note
 			once_status: global
 		once
-			Result := "To be determined%
-%%N%N%
-%THIS PACKAGE IS PROVIDED %"AS IS%" AND WITHOUT WARRANTY. ANY EXPRESS%N%
-%OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED%N%
-%WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE%N%
-%DISCLAIMED. IN NO EVENT SHALL THE AUTHORS BE LIABLE TO ANY PARTY FOR%N%
-%ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL%N%
-%DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THIS PACKAGE."
+			Result :=
+"GNU General Public License, version 2%N%N%
+%[http://www.gnu.org/licenses/gpl-2.0.html]"
 		end
 
 end
