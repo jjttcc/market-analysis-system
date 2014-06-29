@@ -19,7 +19,7 @@ class MACL_COMMAND_LINE inherit
 			{NONE} all
 		end
 
-creation
+create
 
 	make
 
@@ -295,15 +295,15 @@ feature {NONE} -- Implementation queries
 
 feature {NONE} -- Implementation - Constants
 
-	Output_file_error: STRING
+	Output_file_error: STRING =
 		"Output file for -r option was not specified.%N"
 
 	Input_file_error: STRING = "Input file for -i option was not specified.%N"
 
-	Too_many_input_files_error: STRING
+	Too_many_input_files_error: STRING =
 		"Input file (-i option) was specified more than once.%N"
 
-	Too_many_output_files_error: STRING
+	Too_many_output_files_error: STRING =
 		"Output file (-r option) was specified more than once.%N"
 
 	Hostname_error: STRING = "Host name for -h option was not specified.%N"

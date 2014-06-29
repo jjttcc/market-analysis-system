@@ -14,6 +14,7 @@ class MACL inherit
 			print as output_message
 		export
 			{NONE} all
+			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		redefine
 			output_device
 		end
@@ -72,6 +73,7 @@ feature {NONE} -- Initialization
 
 	initialize
 		do
+			create command_line.make
 			not_verbose_reporting := True
 			output_device := io.output
 			if command_line.error_occurred then
@@ -234,7 +236,7 @@ feature {NONE} -- Attribute redefinitions
 
 feature {NONE} -- Implementation
 
-	command_line: expanded MACL_COMMAND_LINE
+	command_line: MACL_COMMAND_LINE
 
 	connection: CONNECTION
 
@@ -252,8 +254,7 @@ feature {NONE} -- Implementation
 
 	application_name: STRING = "client"
 
-	Abnormal_termination_message: STRING
-		"%NUnexpected exception occurred.%N"
+	Abnormal_termination_message: STRING = "%NUnexpected exception occurred.%N"
 
 	Invalid_input_message: STRING
 		do
