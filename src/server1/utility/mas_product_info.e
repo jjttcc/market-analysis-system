@@ -71,9 +71,8 @@ feature -- Access
 		note
 			once_status: global
 		once
-			Result :=
-"GNU General Public License, version 2%N%N%
-%[http://www.gnu.org/licenses/gpl-2.0.html]"
+			Result := "GNU General Public License, version 2%N%N%
+				%[http://www.gnu.org/licenses/gpl-2.0.html]"
 		end
 
 feature {NONE} -- Implementation
@@ -82,7 +81,7 @@ feature {NONE} -- Implementation
 		once
 			Result :=
 			-- start: compile-time
-				"2014-06-24 13:30:18"
+				"2014-06-29 01:46:13"
 			-- end: compile-time
 		end
 

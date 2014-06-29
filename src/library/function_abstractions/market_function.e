@@ -302,26 +302,6 @@ feature {NONE} -- Implementation
 			result_exists: Result /= Void
 		end
 
---!!!!![14.05]It appears the old version, above, is OK; if so, delete this
---!!!!!routine:
-	new_immediate_operator_parameters: LIST [FUNCTION_PARAMETER]
-			-- Parameters of `immediate_operators'
-		local
-			ops: LIST [TREE_NODE]
-		do
-			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
-			ops := immediate_operators
-			if ops /= Void then
-				across ops as cursor loop
-					if attached {COMMAND} cursor.item as cmd then
-						prepare_operator_for_editing (cmd, Result)
-					end
-				end
-			end
-		ensure
-			result_exists: Result /= Void
-		end
-
 	prepare_operator_for_editing (op: COMMAND; l: LIST [FUNCTION_PARAMETER])
 			-- If `op' is editable, prepare it for editing
 			-- (as a FUNCTION_PARAMETER).

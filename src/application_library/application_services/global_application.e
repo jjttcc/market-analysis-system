@@ -8,7 +8,6 @@ note
 
 class GLOBAL_APPLICATION inherit
 
---!!!!old:	EXCEPTIONS
 	EXCEPTION_SERVICES
 		export
 			{NONE} all

@@ -141,10 +141,6 @@ feature {MARKET_FUNCTION} -- Status report
 
 feature {NONE} -- Implementation
 
---!!!!![14.05]: I replaced this earlier with the new_immediate_operators
---version, below, but it now seems OK.  (I can't remember what went wrong
---before - it might not have compiled, or perhaps a catcall was detected, or
---....)   It needs to be tested and, if OK, delete the "new" version.
 	immediate_operators: LIST [COMMAND]
 		local
 			direct_ops: LIST [COMMAND]
@@ -166,39 +162,6 @@ feature {NONE} -- Implementation
 			loop
 				Result.extend (direct_ops.item)
 				Result.append (direct_ops.item.descendants)
-				direct_ops.forth
-			end
-		end
-
---!!!!!Delete this if the old version above is OK:
-	new_immediate_operators: LIST [COMMAND]
-		local
-			direct_ops: LIST [COMMAND]
-		do
-			create {LINKED_LIST [COMMAND]} Result.make
-			direct_ops := direct_operators
-			from
-				direct_ops.start
-			invariant
-				result_contains_previous_direct_op_and_descendants:
-					direct_ops.valid_index (direct_ops.index - 1) implies
-					Result.has (direct_ops @ (direct_ops.index - 1)) and
-					(direct_ops @ (direct_ops.index - 1)).descendants.for_all (
-						agent Result.has (?))
-			variant
-				direct_ops.count - direct_ops.index + 1
-			until
-				direct_ops.exhausted
-			loop
-				Result.extend (direct_ops.item)
-				if
-					attached {SEQUENCE [COMMAND]}
-						direct_ops.item.descendants as desc
-				then
-					Result.append (desc)
-				else
-print ("!!!!!![14.05]: cast failed, line 170 of COMPLEX_FUNCTION%N")
-				end
 				direct_ops.forth
 			end
 		end

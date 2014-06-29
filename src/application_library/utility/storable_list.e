@@ -40,6 +40,8 @@ feature -- Initialization
 --!![14.05]!!!!This:
 			ll_make
 --!!!!!!!!!!was commented out in version 1.7.1 (and perhaps earlier) - Why???!!!
+--!!!!!!!!!!after thorough testing, if ll_make appears to cause no
+--!!!!!!!!!!problems, remove these comments.
 		ensure
 			persistent_file_name = fname
 		end
