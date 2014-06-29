@@ -140,6 +140,7 @@ feature -- Status report
 feature {NONE} -- Implemenation
 
 	four_digit_year (s: STRING): STRING
+			-- 4-digit year from a "2-digit" string
 		do
 			if s.to_integer > 50 then
 				Result := "19" + s
@@ -162,6 +163,58 @@ feature {NONE} -- Implemenation
 	expected_fs_occurrences: INTEGER = 5
 
 	converted_yahoo_line (l: STRING): STRING
+			-- Converted yahoo stock data record - new format
+			-- example yahoo data:
+			-- 2014-07-17,71.00,71.60,69.62,70.69,11537300,70.69
+			-- Note: They added a field at the end, which appears to be
+			-- the split-adjusted close.  This is reflected in the
+			-- above example.
+		require
+			l_exists: l /= Void
+		local
+			day, month, year: STRING
+			fs_count: INTEGER
+			date: LIST [STRING]
+			su: expanded STRING_UTILITIES
+			date_util: expanded DATE_TIME_SERVICES
+		do
+			if l.is_empty or else not (l @ 1).is_digit then
+				Result := ""
+			else
+				su.set_target (l.substring (1, l.index_of (
+					yahoo_field_separator, 1) - 1))
+				date := su.tokens ("-")
+				year := date @ 1
+				month := date @ 2
+				day := date @ 3
+				fs_count := l.occurrences (yahoo_field_separator)
+				if fs_count = expected_fs_occurrences then
+					Result := year + month + day + l.substring (
+						l.index_of (yahoo_field_separator, 1), l.count) + "%N"
+				elseif fs_count > expected_fs_occurrences then
+					Result := year + month + day + l.substring (l.index_of (
+						yahoo_field_separator, 1), l.last_index_of (
+						yahoo_field_separator, l.count) - 1) + "%N"
+				else
+					check
+						not_enough_fields: fs_count < expected_fs_occurrences
+					end
+					--@@ Report the error.
+				end
+				if output_field_separator /= yahoo_field_separator then
+					Result.replace_substring_all (yahoo_field_separator.out,
+						output_field_separator.out)
+				end
+			end
+		ensure
+			exists: Result /= Void
+			empty_if_not_valid: l.is_empty or not (l @ 1).is_digit implies
+				Result.is_empty
+		end
+
+	converted_yahoo_line_old_format (l: STRING): STRING
+			-- [Note: This converts the old yahoo format - apparently, no
+			-- longer used.  Keep it around in case it comes back.]
 			-- Converted yahoo stock data record - example yahoo data:
 			-- 17-Jul-02,71.00,71.60,69.62,70.69,11537300,70.69
 			-- Note: They have recently added a field at the end, which
