@@ -18,7 +18,7 @@ class HTTP_LOADING_FILE_TRADABLE_LIST inherit
 		rename
 			make as fbtl_make
 		export
-			{ANY} target_tradable, cached_item
+			{ANY} cached_item
 		redefine
 			load_target_tradable, target_tradable_out_of_date,
 			append_new_data
@@ -75,6 +75,8 @@ feature -- Access
 	file_names: LIST [STRING]
 			-- Names of all files with tradable data to be processed
 
+feature {NONE} -- Implementation
+
 	load_target_tradable
 		do
 			parameters.set_symbol (current_symbol)
@@ -94,8 +96,6 @@ feature -- Access
 		ensure then
 			good_if_no_error: not fatal_error implies target_tradable /= Void
 		end
-
-feature {NONE} -- Implementation
 
 	file_names_from_symbols: LIST [STRING]
 		require
