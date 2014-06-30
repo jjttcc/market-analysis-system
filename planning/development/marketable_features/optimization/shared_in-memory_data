@@ -1,0 +1,21 @@
+If multiple server processes are used - for, e.g., better response when
+there are many clients and/or load-balancing: When the processes are
+running on the same machine, consider using a shared-memory cache of data
+for tradables that have so far been input/used.  One possible form for this
+cached data is text format - essentially storing the data in in-memory
+files to do away with disk reads during subsequent inputs of a tradable
+(that is, when the tradable has been "ousted" from the post-processed cache
+its original/input text version is kept in shared memory so that the next
+time it is requested its data can be "input" without any disk activity).
+Also, part of this shared-memory cache could be compressed - e.g., the last
+<n> tradables that have been accessed within the last <n> minutes are
+uncompressed, while the rest are compressed.  This requires, I believe, an
+abstraction for a (possibly-compressed) in-memory and/or shared-memory
+file, such as, perhaps, SHARED_MEMORY_INPUT_FILE or
+SHARED_MEMORY_OPTIMIZED_INPUT_FILE (inheriting from the appropriate class
+in the INPUT_MEDIUM hierarchy).
+
+Another possibility, which might provide better performance (because
+re-parsing/inputting tradable data will not occur), is to have the
+post-processed data for tradables (which, I think, resides in the
+TRADABLE_LIST structure) in shared memory.
