@@ -8,6 +8,7 @@ use Data::Dumper;
 use Carp;
 use boolean;
 use constant LOOKUPF_LIST_FILE => 'lookup_files';
+use constant USAGE => 'usage: lookup [-h | -l | -r <pattern> | <keyword>]';
 
 my $options = {};
 
@@ -46,6 +47,7 @@ sub processed_options {
     my $args = [];
     for my $a (@ARGV) {
         given ($a) {
+            when (/^-+h/) { say USAGE; exit 0 }
             when (/^-+l/) { $opts->{list_keys} = true}
             when (/^-+r/) { $opts->{match_regex} = true}
             when (/^-/) { say "Illegal option: $a" }
