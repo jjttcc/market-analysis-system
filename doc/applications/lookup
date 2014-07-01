@@ -38,8 +38,6 @@ sub main {
             }
         }
     }
-#print "ltbl: ", Dumper($lookup_tbl);
-#print "# of entries: ", scalar keys %$lookup_tbl, "\n";
 }
 
 # (User-supplied-options, remaining-args)
