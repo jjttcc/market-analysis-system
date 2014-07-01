@@ -1,0 +1,132 @@
+#!/usr/bin/env perl
+# Look up a definition from the *_grammar files.
+
+use Modern::Perl;
+use Moose;
+use IO::File;
+use Data::Dumper;
+use Carp;
+use boolean;
+use constant LOOKUPF_LIST_FILE => 'lookup_files';
+
+my $options = {};
+
+main();
+
+sub main {
+    my $lookup_tbl = {};
+    $lookup_tbl = table_from_grammar_files();
+    my ($options, $args) = processed_options();
+    my @keys = @$args;
+    if ($options->{list_keys}) {
+        my @keylist = sort keys %$lookup_tbl;
+        for my $k (@keylist) {
+            say $k;
+        }
+    } else {
+        for my $key (@keys) {
+            if ($options->{match_regex}) {
+                for my $k (keys %$lookup_tbl) {
+                    if ($k =~ /$key/) {
+                        say "$k:\t", $lookup_tbl->{$k};
+                    }
+                }
+            } else {
+                if ($lookup_tbl->{$key}) {
+                    say "$key:\t", $lookup_tbl->{$key};
+                }
+            }
+        }
+    }
+#print "ltbl: ", Dumper($lookup_tbl);
+#print "# of entries: ", scalar keys %$lookup_tbl, "\n";
+}
+
+# (User-supplied-options, remaining-args)
+sub processed_options {
+    my $opts = {};
+    my $args = [];
+    for my $a (@ARGV) {
+        given ($a) {
+            when (/^-+l/) { $opts->{list_keys} = true}
+            when (/^-+r/) { $opts->{match_regex} = true}
+            when (/^-/) { say "Illegal option: $a" }
+            default { push @$args, $a }
+        }
+    }
+    ($opts, $args);
+}
+
+sub table_from_grammar_files {
+    use File::Find;
+    my %lookup_files = lookup_files();
+    my @files;
+    find(sub { if ($lookup_files{$_}) { push @files, $_ } }, '.');
+    my @lines = ();
+    for my $fname (@files) {
+        my $f = IO::File->new();
+        if ($f->open('<' . $fname)) {
+            push @lines, <$f>;
+        } else {
+            croak "Failed to open $fname for reading";
+        }
+        $f->close();
+    }
+    chomp @lines;
+    table_from_lines(\@lines);
+}
+
+sub lookup_files {
+    my $f = IO::File->new();
+    my @lines = ();
+    if ($f->open('<' . LOOKUPF_LIST_FILE)) {
+        push @lines, <$f>;
+    } else {
+        croak "Failed to open ", LOOKUPF_LIST_FILE, " for reading";
+    }
+    $f->close();
+    chomp @lines;
+    map { $_ => true } @lines;
+}
+
+sub table_from_lines {
+    my ($lines) = @_;
+
+    my $result;
+    my $duplicates = 0;
+    my ($indef, $current_key, $current_value);
+    for my $l (@$lines) {
+        given ($l) {
+            when (/^\s*$/) {
+                if ($indef) {
+                    $result->{$current_key} = $current_value;
+                    $indef = false;
+                }
+            }
+            when (/.->/) {
+                if ($indef) {
+                    $result->{$current_key} = $current_value;
+                }
+                $indef = true;
+                my @parts = split(/\s*->\s*/, $l);
+                $current_key = $parts[0];
+                $current_value = $parts[1];
+                if ($result->{$current_key}) {
+                    my $problem = "duplicate key: $current_key";
+                    $problem .= "\nold value: '" . $result->{$current_key};
+                    $problem .= "'\nnew value: '" . $current_value . "'";
+                    carp $problem;
+                    ++$duplicates;
+                }
+            }
+            default {
+                if ($indef) {
+                    $l =~ /^\s*(.*?)\s*$/;
+                    $current_value .= ' ' . $1;
+                }
+            }
+        }
+    }
+    if ($duplicates > 0) { carp "$duplicates duplicates"; }
+    $result;
+}
