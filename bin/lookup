@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Look up the BNF entry for the specified key-word.
+# vi: expandtab
+
+grammar_dir=/home/development/jtc/applications/finance/doc/applications
+cd $grammar_dir || {
+    echo "Failed to cd to $grammar_dir" >&2
+    exit 3
+}
+./lookup $@
