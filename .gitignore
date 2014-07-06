@@ -14,3 +14,4 @@ Makefile
 src/server1/spec/
 src/server1/test/mas.melted
 tags
+src/clients/ruby/

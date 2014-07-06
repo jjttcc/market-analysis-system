@@ -28,6 +28,7 @@ feature {NONE} -- Initialization
 		local
 			platform: expanded PLATFORM_DEPENDENT_OBJECTS
 			cl_dummy: MAS_COMMAND_LINE
+			psm: POSIX_SHARED_MEMORY
 		do
 			-- Force the platform's command-line to be an "extended" one.
 			cl_dummy := platform.command_line_cell (extended_command_line).item

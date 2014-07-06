@@ -32,7 +32,7 @@ feature -- Access
 		local
 			s: STRING
 		once
-			Result := <<"1", "8", "1" + "[es14.05">>
+			Result := <<"1", "8", "2" + "[es14.05">>
 			s := Result @ Result.upper
 			debug ("multi_threaded_version")
 				s.append ("MT")
@@ -81,7 +81,7 @@ feature {NONE} -- Implementation
 		once
 			Result :=
 			-- start: compile-time
-				"2014-06-29 01:46:13"
+				"2014-07-06 04:59:34"
 			-- end: compile-time
 		end
 

@@ -83,7 +83,8 @@ feature -- Basic operations
 				d := date_from_string (fields @ 2)
 				if d = Void then
 					report_error (Error, <<"Invalid start-date specification %
-						%for trading signals request: ", fields @ 2>>)
+						%for trading signals request: ", fields @ 2,
+						" (format: " + date_format + ")">>)
 					parse_error := True
 				else
 					create analysis_start_date.make_by_date (d)
@@ -93,7 +94,8 @@ feature -- Basic operations
 				d := date_from_string (fields @ 3)
 				if d = Void then
 					report_error (Error, <<"Invalid end-date specification %
-						%for trading signals request: ", fields @ 3>>)
+						%for trading signals request: ", fields @ 3,
+						" (format: " + date_format + ")">>)
 					parse_error := True
 				else
 					if (fields @ 3).is_equal (Now) then
@@ -323,5 +325,11 @@ feature {NONE}
 		end
 
 	name: STRING = "Event-data request command"
+
+	date_format: STRING
+		once
+			Result := "yyyy" + date_field_separator + "mm" +
+				date_field_separator + "dd"
+		end
 
 end -- class EVENT_DATA_REQUEST_CMD
