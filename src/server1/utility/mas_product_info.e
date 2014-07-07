@@ -49,7 +49,7 @@ feature -- Access
 		note
 			once_status: global
 		once
-			create Result.make(2014, 6, 23)
+			create Result.make(2014, 7, 6)
 		end
 
 	release_description: STRING
@@ -81,7 +81,7 @@ feature {NONE} -- Implementation
 		once
 			Result :=
 			-- start: compile-time
-				"2014-07-06 04:59:34"
+				"2014-07-06 18:56:56"
 			-- end: compile-time
 		end
 
