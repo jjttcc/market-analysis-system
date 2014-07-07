@@ -57,6 +57,7 @@
 		<external_object location="-lodbc"/>
 		<external_object location="-lodbcinst"/>
 		<external_object location="-lpthread"/>
+		<external_object location="-lrt"/>
 		<external_object location="${EPOSIX}/lib/libeposix_ise.a"/>
 		<library name="base" location="$ISE_LIBRARY/library/base/base.ecf"/>
 		<cluster name="app_library" location="$MAS/src/application_library/">
