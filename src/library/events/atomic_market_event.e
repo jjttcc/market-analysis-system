@@ -11,8 +11,6 @@ class ATOMIC_MARKET_EVENT inherit
 	MARKET_EVENT
 		rename
 			tag as symbol
-		redefine
-			is_equal
 		end
 
 creation
@@ -117,13 +115,6 @@ feature -- Status setting
 		end
 
 feature -- Status report
-
-	is_equal (other: like Current): BOOLEAN
-		do
-			Result := Precursor (other) and symbol.is_equal (other.symbol)
-		ensure then
-			Result implies equal (symbol, other.symbol)
-		end
 
 invariant
 

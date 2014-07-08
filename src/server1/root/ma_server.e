@@ -32,7 +32,6 @@ r: RANDOM
 f: FIBONACCI
 th_ex: THREAD_EXPERIMENTS
 
---!!!!was:	read_command_for (medium: COMPRESSED_SOCKET): POLL_COMMAND
 	read_command_for (medium: SOCKET): POLL_COMMAND
 		local
 			sock_acc: MAS_SOCKET_ACCEPTOR
