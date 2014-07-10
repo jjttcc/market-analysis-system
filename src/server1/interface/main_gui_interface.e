@@ -12,7 +12,8 @@ class MAIN_GUI_INTERFACE inherit
 
 	NON_PERSISTENT_CONNECTION_INTERFACE
 		redefine
-			io_medium, set_message_body
+			io_medium, set_message_body, setup_command,
+				command_type_anchor, session, session_anchor
 		end
 
 	MAIN_APPLICATION_INTERFACE
@@ -21,6 +22,8 @@ class MAIN_GUI_INTERFACE inherit
 		redefine
 			event_generator_builder, function_builder
 		end
+
+inherit {NONE}
 
 	GUI_COMMUNICATION_PROTOCOL
 		rename
@@ -57,6 +60,11 @@ feature -- Access
 
 	io_medium: COMPRESSED_SOCKET
 
+	session: like session_anchor
+		do
+			Result := Precursor
+		end
+
 	event_generator_builder: CL_BASED_MEG_EDITING_INTERFACE
 
 	function_builder: CL_BASED_FUNCTION_EDITING_INTERFACE
@@ -78,34 +86,59 @@ feature {NONE} -- Hook routine implementations
 			Result := c = eom @ 1
 		end
 
+	command_type_anchor: MAS_REQUEST_COMMAND
+		do
+		end
+
+	session_anchor: MAS_SESSION
+		do
+		end
+
+	setup_command(cmd: like command_type_anchor)
+		do
+--!!!!!!!socket-enh - in-progress
+cmd.close_connection := True
+			Precursor(cmd)
+		end
+
 feature {NONE} -- Implementation
 
 	make_request_handlers
 			-- Create the request handlers.
 		local
 			rh: like request_handlers
+			cmd: MAS_REQUEST_COMMAND
 		do
 			create rh.make (0)
-			rh.extend (create {MARKET_DATA_REQUEST_CMD}.make (
-				tradable_list_handler), market_data_request)
-			rh.extend ( create {INDICATOR_DATA_REQUEST_CMD}.make (
-				tradable_list_handler), indicator_data_request)
-			rh.extend ( create {ALL_INDICATORS_REQUEST_CMD}.make (
-				tradable_list_handler), all_indicators_request)
-			rh.extend (create {TRADING_PERIOD_TYPE_REQUEST_CMD}.make (
-				tradable_list_handler), trading_period_type_request)
-			rh.extend (create {SYMBOL_LIST_REQUEST_CMD}.make (
-				tradable_list_handler), market_list_request)
-			rh.extend (create {INDICATOR_LIST_REQUEST_CMD}.make (
-				tradable_list_handler), indicator_list_request)
-			rh.extend (create {MAS_LOGIN_REQUEST_CMD}.make (
-				tradable_list_handler,
-				global_configuration.auto_data_update_on), login_request)
-			rh.extend (create {EVENT_LIST_REQUEST_CMD}.make (
-				tradable_list_handler), event_list_request)
-			rh.extend (create {EVENT_DATA_REQUEST_CMD}.make (
-				tradable_list_handler), event_data_request)
-			rh.extend (create {ERROR_RESPONSE_CMD}.make, error)
+			create {MARKET_DATA_REQUEST_CMD} cmd.make (tradable_list_handler)
+			rh.extend (cmd , market_data_request)
+			create {INDICATOR_DATA_REQUEST_CMD} cmd.make (
+							tradable_list_handler)
+			rh.extend (cmd , indicator_data_request)
+			create {ALL_INDICATORS_REQUEST_CMD} cmd.make (
+							tradable_list_handler)
+			rh.extend (cmd , all_indicators_request)
+			create {TRADING_PERIOD_TYPE_REQUEST_CMD} cmd.make (
+							tradable_list_handler)
+			rh.extend (cmd , trading_period_type_request)
+			create {SYMBOL_LIST_REQUEST_CMD} cmd.make (
+							tradable_list_handler)
+			rh.extend (cmd , market_list_request)
+			create {INDICATOR_LIST_REQUEST_CMD} cmd.make (
+							tradable_list_handler)
+			rh.extend (cmd , indicator_list_request)
+			create {MAS_LOGIN_REQUEST_CMD} cmd.make (
+							tradable_list_handler,
+				global_configuration.auto_data_update_on)
+			rh.extend (cmd , login_request)
+			create {EVENT_LIST_REQUEST_CMD} cmd.make (
+							tradable_list_handler)
+			rh.extend (cmd , event_list_request)
+			create {EVENT_DATA_REQUEST_CMD} cmd.make (
+							tradable_list_handler)
+			rh.extend (cmd , event_data_request)
+			create {ERROR_RESPONSE_CMD} cmd.make
+			rh.extend (cmd, error)
 			request_handlers := rh
 		ensure
 			rh_set: request_handlers /= Void and not request_handlers.is_empty

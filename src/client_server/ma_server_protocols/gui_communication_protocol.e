@@ -59,9 +59,15 @@ feature -- Server response IDs
 	error: INTEGER = 101
 			-- Response indicating that there was a problem receiving or
 			-- parsing the client request
+--!!!!!socket-enh: REMINDER: Create a "will-close" code for each error code
 
 	ok: INTEGER = 102
 			-- Response indicating that no errors occurred
+
+	ok_will_close: INTEGER = 201
+			-- Response indicating that no errors occurred and that the
+			-- active medium (e.g., socket) will be closed immediately after
+			-- this response is sent
 
 	invalid_symbol: INTEGER = 103
 			-- Response indicating that the server requested data for

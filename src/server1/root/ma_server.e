@@ -37,15 +37,20 @@ th_ex: THREAD_EXPERIMENTS
 			sock_acc: MAS_SOCKET_ACCEPTOR
 		do
 			if attached {COMPRESSED_SOCKET} medium as socket then
-				create sock_acc.make (socket, factory_builder)
+				create sock_acc.make (socket, factory_builder, poller)
+--!!!!!socket-enh
+sock_acc.close_after_each_response := False
+--sock_acc.close_after_each_response := True
 			else
 				raise ("cast of " + medium.generating_type + " failed " +
-					"in MA_SERVER, line 44")
+					"in MA_SERVER.read_command_for")
 			end
-			create {SOCKET_BASED_POLL_COMMAND} Result.make (sock_acc)
+			create {LISTENING_SOCKET_POLL_COMMAND} Result.make(sock_acc)
 		end
 
 	make_current_media
+		local
+			new_socket: COMPRESSED_SOCKET
 		do
 			create {LINKED_LIST [SOCKET]} current_media.make
 			from
@@ -53,9 +58,10 @@ th_ex: THREAD_EXPERIMENTS
 			until
 				command_line_options.port_numbers.exhausted
 			loop
-				current_media.extend (
-					create {COMPRESSED_SOCKET}.make_server_by_port (
-					command_line_options.port_numbers.item))
+				create new_socket.make_server_by_port (
+					command_line_options.port_numbers.item)
+				new_socket.set_reuse_address
+				current_media.extend (new_socket)
 				command_line_options.port_numbers.forth
 			end
 		end
