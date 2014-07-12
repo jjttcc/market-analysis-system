@@ -35,7 +35,9 @@ feature -- Initialization
 %   to be processed in market analysis.%N%
 %Edit event registrants: Add, remove, view, or edit registrants for%N%
 %   notification of events detected during market analysis.%N%
-%End client session: Exit this command-line client session.%N"
+%End client session: Exit this command-line client session.%N%
+%%NNote:  Set env. var. MAS_NO_CLOSE to force sockets to stay open%N%
+%after each response is sent to the client. (Default is always close.)%N"
 			contents.force(s, Main)
 			s :=
 "%NView market data: View data of the selected trading period for the %

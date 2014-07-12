@@ -59,15 +59,10 @@ feature -- Server response IDs
 	error: INTEGER = 101
 			-- Response indicating that there was a problem receiving or
 			-- parsing the client request
---!!!!!socket-enh: REMINDER: Create a "will-close" code for each error code
 
 	ok: INTEGER = 102
-			-- Response indicating that no errors occurred
-
-	ok_will_close: INTEGER = 201
-			-- Response indicating that no errors occurred and that the
-			-- active medium (e.g., socket) will be closed immediately after
-			-- this response is sent
+			-- Response indicating that no errors occurred (and the active
+			-- medium/socket will be closed)
 
 	invalid_symbol: INTEGER = 103
 			-- Response indicating that the server requested data for
@@ -79,6 +74,23 @@ feature -- Server response IDs
 	invalid_period_type: INTEGER = 105
 			-- Response indicating that the server requested data for
 			-- a period type that is not in the database
+
+	error_will_not_close: INTEGER = 201
+			-- Response indicating that there was a problem receiving or
+			-- parsing the client request and that the active medium
+			-- (e.g., socket) will be kept open after this response is sent
+
+	ok_will_not_close: INTEGER = 202
+			-- "will-not-close" version of 'ok'
+
+	invalid_symbol_will_not_close: INTEGER = 203
+			-- "will-not-close" version of 'invalid_symbol'
+
+	warning_will_not_close: INTEGER = 204
+			-- "will-not-close" version of 'warning'
+
+	invalid_period_type_will_not_close: INTEGER = 205
+			-- "will-not-close" version of 'invalid_period_type'
 
 feature -- Server response strings
 

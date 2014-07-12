@@ -52,9 +52,9 @@ feature {NONE}
             once_status: global
         do
             if close_connection then
-                Result := ok_will_close.out + message_component_separator
-            else
                 Result := ok.out + message_component_separator
+            else
+                Result := ok_will_not_close.out + message_component_separator
             end
         end
 

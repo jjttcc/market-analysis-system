@@ -67,6 +67,21 @@ feature -- Access
 			Result := get (env_names.mailer_subject_flag_name)
 		end
 
+	no_close_after_each_send: BOOLEAN
+			-- Should the server refrain from closing the socket connection
+			-- after each send (response)?
+		note
+			once_status: global
+		local
+			no_close_val: STRING
+		once
+			Result := False
+			no_close_val := get (env_names.no_close_name)
+			if no_close_val /= Void then
+				Result := True
+			end
+		end
+
 	file_name_with_app_directory (fname: STRING; use_absolute_path: BOOLEAN):
 		STRING
 			-- A full path name constructed from `app_directory' and `fname' -

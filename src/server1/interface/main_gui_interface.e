@@ -28,19 +28,11 @@ inherit {NONE}
 	GUI_COMMUNICATION_PROTOCOL
 		rename
 			message_component_separator as message_field_separator
-		export
-			{NONE} all
 		end
 
 	GLOBAL_SERVER_FACILITIES
-		export
-			{NONE} all
-		end
 
 	GENERAL_UTILITIES
-		export
-			{NONE} all
-		end
 
 creation
 
@@ -95,9 +87,12 @@ feature {NONE} -- Hook routine implementations
 		end
 
 	setup_command(cmd: like command_type_anchor)
+		local
+			appenv: expanded APP_ENVIRONMENT
 		do
 --!!!!!!!socket-enh - in-progress
-cmd.close_connection := True
+			cmd.close_connection := not appenv.no_close_after_each_send
+print("cmd.close_connection: " + cmd.close_connection.out + "%N")
 			Precursor(cmd)
 		end
 

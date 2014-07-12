@@ -54,4 +54,12 @@ feature -- Access
 			Result := "MAS_MAILER_SUBJECT_FLAG"
 		end
 
+	no_close_name: STRING
+			-- Name of the environment variable, which, if set, will cause
+			-- the server to refrain from closing the socket after each
+			-- send (i.e., after a response to a client request)
+		do
+			Result := "MAS_NO_CLOSE"
+		end
+
 end -- APP_ENVIRONMENT_VARIABLE_NAMES

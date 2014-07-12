@@ -9,29 +9,28 @@ note
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
     --settings: vim: expandtab:
 
-class MAS_SOCKET_ACCEPTOR
+class MAS_SOCKET_PROCESSOR
 
 inherit
 
-    SOCKET_ACCEPTOR
+    SERVER_SOCKET_PROCESSOR
         rename
             persistent_connection_flag as Console_flag
         undefine
             process_socket
         redefine
-            server_socket, accepted_socket, prepare_for_persistent_connection,
-            initialize_for_execution, post_process
-        end
-
-    MA_COMMUNICATION_PROTOCOL
-        export
-            {NONE} all
+            server_socket, target_socket, prepare_for_persistent_connection,
+            post_process
         end
 
     THREAD
         rename
             launch as process_socket
         end
+
+inherit {NONE}
+
+    MA_COMMUNICATION_PROTOCOL
 
 creation
 
@@ -41,14 +40,20 @@ feature
 
     make (s: COMPRESSED_SOCKET; fb: GLOBAL_OBJECT_BUILDER; p: MEDIUM_POLLER)
         require
-            not_void: s /= Void and fb /= Void
+            not_void: s /= Void and fb /= Void and p /= Void
+        local
+            app_constants: expanded APPLICATION_CONSTANTS
         do
-            initialize_components (s)
+            initialize
+			server_socket := s
             factory_builder := fb
             poller := p
+            create connection_cache.make(
+                app_constants.default_connection_cache_size)
         ensure
             set: server_socket = s and factory_builder = fb and poller = p
-        end
+		end
+
 
 feature -- Access
 
@@ -56,7 +61,7 @@ feature -- Access
             -- The socket used for establishing a connection and creating
             -- accepted_socket
 
-    accepted_socket: COMPRESSED_SOCKET
+    target_socket: COMPRESSED_SOCKET
             -- The socket that will be used for input and output
 
     factory_builder: GLOBAL_OBJECT_BUILDER
@@ -81,7 +86,7 @@ feature {NONE} -- Hook routine Implementations
 
     prepare_for_persistent_connection
         do
-            accepted_socket.set_compression (False)
+            target_socket.set_compression (False)
         end
 
     connection_termination_character: CHARACTER
@@ -93,13 +98,12 @@ feature {NONE} -- Hook routine Implementations
             Result := constants.End_of_file_character
         end
 
-    initialize_for_execution
+    initialize_interfaces
         do
             persistent_connection_interface :=
                 factory_builder.persistent_connection_interface
             non_persistent_connection_interface :=
                 factory_builder.non_persistent_connection_interface
-            Precursor
         end
 
     post_process
@@ -112,9 +116,14 @@ feature {NONE} -- Hook routine Implementations
 print("post_process: closing socket%N")
                 Precursor
             else
-                create poll_cmd.make(accepted_socket, poller)
+--!!!!!!!REMINDER: Need to add target_socket to cache somewhere.
+                create poll_cmd.make(target_socket, poller)
             end
         end
+
+feature {NONE} -- Implementation
+
+    connection_cache: CONNECTION_CACHE
 
 feature {NONE} -- Unused
 
