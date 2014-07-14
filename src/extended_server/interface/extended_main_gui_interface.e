@@ -36,14 +36,10 @@ feature {NONE} -- Implementation
 			Precursor
 			create {TIME_DELIMITED_MARKET_DATA_REQUEST_CMD} cmd.make(
 					tradable_list_handler)
---!!!!!!!socket-enh - in-progress
-cmd.close_connection := True
 			request_handlers.extend(cmd, time_delimited_market_data_request)
 
 			create {TIME_DELIMITED_INDICATOR_DATA_REQUEST_CMD} cmd.make(
 					tradable_list_handler)
---!!!!!!!socket-enh - in-progress
-cmd.close_connection := True
 			request_handlers.extend(cmd, time_delimited_indicator_data_request)
 		end
 

@@ -11,9 +11,13 @@ note
 class MAIN_GUI_INTERFACE inherit
 
 	NON_PERSISTENT_CONNECTION_INTERFACE
+		rename
+			-- Prevent conflict with Error in GUI_COMMUNICATION_PROTOCOL:
+			error as interface_error
 		redefine
 			io_medium, set_message_body, setup_command,
-				command_type_anchor, session, session_anchor
+				command_type_anchor, session, session_anchor,
+				interface_error
 		end
 
 	MAIN_APPLICATION_INTERFACE
@@ -63,6 +67,14 @@ feature -- Access
 
 feature -- Status setting
 
+	set_close_socket
+			-- Set state such that the target command in the next call to
+			-- `setup_command' routine will be informed that the socket used
+			-- for communication will be closed after execution.
+		do
+			close_socket_this_time := True
+		end
+
 	post_process_io_medium
 		do
 			event_generator_builder.set_input_device (io_medium)
@@ -91,12 +103,33 @@ feature {NONE} -- Hook routine implementations
 			appenv: expanded APP_ENVIRONMENT
 		do
 --!!!!!!!socket-enh - in-progress
-			cmd.close_connection := not appenv.no_close_after_each_send
+			if close_socket_this_time then
+--!!!!!!!socket-enh
+print("I [" + Current.out + "] was told to set close_connection for " + cmd.out + "%N")
+				cmd.close_connection := True
+				-- Ensure close_connection is not set next time (unless
+				-- specifically ordered by again calling `set_close_socket').
+				close_socket_this_time := False
+			else
+				cmd.close_connection := not appenv.no_close_after_each_send
+			end
 print("cmd.close_connection: " + cmd.close_connection.out + "%N")
 			Precursor(cmd)
 		end
 
+	interface_error: INTEGER
+		local
+			app_env: expanded APP_ENVIRONMENT
+		do
+			Result := error
+			if app_env.no_close_after_each_send then
+				Result := error_will_not_close
+			end
+		end
+
 feature {NONE} -- Implementation
+
+	close_socket_this_time: BOOLEAN
 
 	make_request_handlers
 			-- Create the request handlers.
@@ -133,7 +166,7 @@ feature {NONE} -- Implementation
 							tradable_list_handler)
 			rh.extend (cmd , event_data_request)
 			create {ERROR_RESPONSE_CMD} cmd.make
-			rh.extend (cmd, error)
+			rh.extend (cmd, interface_error)
 			request_handlers := rh
 		ensure
 			rh_set: request_handlers /= Void and not request_handlers.is_empty

@@ -1,7 +1,7 @@
 note
 
     description:
-        "SOCKET_ACCEPTORs dedicated to processing MAS requrests"
+        "SERVER_SOCKET_PROCESSORs dedicated to processing MAS requests"
     author: "Jim Cochrane"
     date: "$Date$";
     revision: "$Revision$"
@@ -41,18 +41,16 @@ feature
     make (s: COMPRESSED_SOCKET; fb: GLOBAL_OBJECT_BUILDER; p: MEDIUM_POLLER)
         require
             not_void: s /= Void and fb /= Void and p /= Void
-        local
-            app_constants: expanded APPLICATION_CONSTANTS
         do
+print("I am the MAS_SOCKET_PROCESSOR and I'm very much hoping that there")
+print("is only%None of me.  Is this true?%N")
             initialize
-			server_socket := s
+            server_socket := s
             factory_builder := fb
             poller := p
-            create connection_cache.make(
-                app_constants.default_connection_cache_size)
         ensure
             set: server_socket = s and factory_builder = fb and poller = p
-		end
+        end
 
 
 feature -- Access
@@ -100,26 +98,72 @@ feature {NONE} -- Hook routine Implementations
 
     initialize_interfaces
         do
-            persistent_connection_interface :=
-                factory_builder.persistent_connection_interface
-            non_persistent_connection_interface :=
-                factory_builder.non_persistent_connection_interface
+            if persistent_connection_interface = Void then
+                persistent_connection_interface :=
+                    factory_builder.persistent_connection_interface
+            end
+            if non_persistent_connection_interface = Void then
+                non_persistent_connection_interface :=
+                    factory_builder.non_persistent_connection_interface
+            end
         end
 
     post_process
             -- Perform any processing needed after calling `do_execute'.
         local
             poll_cmd: CONNECTED_SOCKET_POLL_COMMAND
+            sock_proc: CONNECTED_SOCKET_PROCESSOR
+            app_constants: expanded APPLICATION_CONSTANTS
         do
             if close_after_each_response then
 --!!!!!!!!
 print("post_process: closing socket%N")
                 Precursor
             else
---!!!!!!!REMINDER: Need to add target_socket to cache somewhere.
-                create poll_cmd.make(target_socket, poller)
+                if connection_cache = Void then
+                    create connection_cache.make(
+                        app_constants.default_connection_cache_size)
+--!!!!!Forced artificial test:
+create connection_cache.make(1)
+                end
+                create sock_proc.make(target_socket, factory_builder, poller)
+                create poll_cmd.make(sock_proc, poller)
+                connection_cache.add(poll_cmd)
             end
         end
+
+--!!!![socket-enh]!!!!!!!Put this in the right place:
+log_socket_error(msg: STRING)
+do
+    io.error.print(msg)
+end
+
+    perform_specific_error_processing
+        do
+--!!!!!!!!!TBD:
+io.error.print("MAS_SOCKET_PROCESSOR.perform_specific_error_processing...%N")
+        end
+
+------------------------------------------------------------------------
+--    read_command_for (medium: SOCKET): POLL_COMMAND
+--        local
+--            sock_proc: MAS_SOCKET_PROCESSOR
+--            appenv: expanded APP_ENVIRONMENT
+--        do
+--            if attached {COMPRESSED_SOCKET} medium as socket then
+--                create sock_proc.make (socket, factory_builder, poller)
+----!!!!!socket-enh
+--            sock_proc.close_after_each_response :=
+--                not appenv.no_close_after_each_send
+--            -- (sock_proc.close_after_each_response is true iff the "no-close"
+--            -- environment variable is not set.)
+--            else
+--                raise ("cast of " + medium.generating_type + " failed " +
+--                    "in MA_SERVER.read_command_for")
+--            end
+--            create {LISTENING_SOCKET_POLL_COMMAND} Result.make(sock_proc)
+--        end
+------------------------------------------------------------------------
 
 feature {NONE} -- Implementation
 

@@ -199,8 +199,8 @@ feature {NONE}
 							symbol>>)
 					end
 				else
-					report_error (Warning, <<"No requested trading signal %
-						%types were valid">>)
+					report_error (warning_string,
+						<<"No requested trading signal % %types were valid">>)
 				end
 			else
 				put_ok

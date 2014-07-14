@@ -34,21 +34,21 @@ th_ex: THREAD_EXPERIMENTS
 
 	read_command_for (medium: SOCKET): POLL_COMMAND
 		local
-			sock_acc: MAS_SOCKET_PROCESSOR
+			sock_proc: MAS_SOCKET_PROCESSOR
 			appenv: expanded APP_ENVIRONMENT
 		do
 			if attached {COMPRESSED_SOCKET} medium as socket then
-				create sock_acc.make (socket, factory_builder, poller)
+				create sock_proc.make (socket, factory_builder, poller)
 --!!!!!socket-enh
-			sock_acc.close_after_each_response :=
+			sock_proc.close_after_each_response :=
 				not appenv.no_close_after_each_send
-			-- (sock_acc.close_after_each_response is true iff the "no-close"
+			-- (sock_proc.close_after_each_response is true iff the "no-close"
 			-- environment variable is not set.)
 			else
 				raise ("cast of " + medium.generating_type + " failed " +
 					"in MA_SERVER.read_command_for")
 			end
-			create {LISTENING_SOCKET_POLL_COMMAND} Result.make(sock_acc)
+			create {LISTENING_SOCKET_POLL_COMMAND} Result.make(sock_proc)
 		end
 
 	make_current_media

@@ -1,7 +1,9 @@
 note
 
     description:
-        "Cache of connections..."
+        "Bounded cache of CONNECTED_SOCKET_POLL_COMMANDs with associated open %
+        %sockets, used to limit the number of simultaneous open TCP socket %
+        %connections"
     author: "Jim Cochrane"
     date: "$Date$";
     revision: "$Revision$"
@@ -20,8 +22,13 @@ feature -- Initialization
     make(lim: INTEGER)
             -- Create the cache such that it's allowed to hold no more than
             -- 'limit' connection.
+        require
+            sane_limit: lim >= 1
         do
             create contents.make(lim)
+print("debug/CONNECTION_CACHE: limit: " + limit.out + "%N")
+        ensure
+            promised_limit: limit = lim
         end
 
 feature -- Access
@@ -43,9 +50,8 @@ feature -- Element change
                 oldest := contents.item
                 -- Remove the oldest item:
                 contents.remove
---!!!!!!!!!!!!!!!!!!
---                oldest.set_close___
---!!!!!!!!!!!!!!!!!!
+print("CONNECTION_CACHE calling cleanup on " + oldest.out + "%N")
+                oldest.cleanup
             end
             contents.put(cmd)
         end

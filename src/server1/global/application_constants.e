@@ -44,7 +44,6 @@ feature -- Default settings
 	Default_mailer_subject_flag: STRING = "-s"
 			-- Default subject flag for mailer program
 
-	Default_connection_cache_size: INTEGER = 2	-- Temporary, for testing
---	Default_connection_cache_size: INTEGER = 20	--socket-enh: tune?!!!!!!!!!!
+	Default_connection_cache_size: INTEGER = 20	--socket-enh: tune?!!!!!!!!!!
 
 end -- APPLICATION_CONSTANTS

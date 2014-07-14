@@ -46,6 +46,19 @@ feature -- Status setting
 
 feature {NONE}
 
+    error_string: STRING
+            -- "error" message ID and field separator
+        note
+            once_status: global
+        do
+            if close_connection then
+                Result := error.out + message_component_separator
+            else
+                Result := error_will_not_close.out +
+                    message_component_separator
+            end
+        end
+
     ok_string: STRING
             -- "OK" message ID and field separator
         note
@@ -55,6 +68,45 @@ feature {NONE}
                 Result := ok.out + message_component_separator
             else
                 Result := ok_will_not_close.out + message_component_separator
+            end
+        end
+
+    invalid_sym_string: STRING
+            -- "invalid symbol" message ID and field separator
+        note
+            once_status: global
+        do
+            if close_connection then
+                Result := invalid_symbol.out + message_component_separator
+            else
+                Result := invalid_symbol_will_not_close.out +
+                    message_component_separator
+            end
+        end
+
+    warning_string: STRING
+            -- "warning" message ID and field separator
+        note
+            once_status: global
+        do
+            if close_connection then
+                Result := warning.out + message_component_separator
+            else
+                Result := warning_will_not_close.out +
+                    message_component_separator
+            end
+        end
+
+    invalid_period_string: STRING
+            -- "invalid period" message ID and field separator
+        note
+            once_status: global
+        do
+            if close_connection then
+                Result := invalid_period_type.out + message_component_separator
+            else
+                Result := invalid_period_type_will_not_close.out +
+                    message_component_separator
             end
         end
 

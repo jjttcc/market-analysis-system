@@ -22,7 +22,7 @@ feature -- Basic operations
 			msg: STRING
 		do
 			msg := message.out
-			put (concatenation (<<Error.out, message_component_separator,
+			put (concatenation (<<error_string, message_component_separator,
 				msg, eom>>))
 		end
 
