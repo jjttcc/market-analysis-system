@@ -43,8 +43,6 @@ feature -- Initialization
         require
             not_void: s /= Void and fb /= Void and p /= Void
         do
-print("I am a CONNECTED_SOCKET_PROCESSOR and there could be more than")
-print(" one of me.%N")
             initialize
             target_socket := s
             factory_builder := fb
@@ -74,13 +72,8 @@ feature {CONNECTED_SOCKET_POLL_COMMAND}
             pcmd_not_void: pcmd /= Void
         do
             if is_non_persistent_connection then
---!!!!!![socket-enh]
-print("set_cleanup_after_execution called by " + pcmd.out + "%N")
                 post_process_cleanup_target := pcmd
                 if non_persistent_connection_interface = Void then
---!!!!!![socket-enh]
-print("set_cleanup_after_execution: 'non_persistent_connection_interface' ")
-print("was Void - fixing...%N")
                     initialize_interfaces
                 end
                 -- Tell this interface to (once) operate in "socket will be

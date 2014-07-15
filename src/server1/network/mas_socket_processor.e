@@ -42,8 +42,6 @@ feature
         require
             not_void: s /= Void and fb /= Void and p /= Void
         do
-print("I am the MAS_SOCKET_PROCESSOR and I'm very much hoping that there")
-print("is only%None of me.  Is this true?%N")
             initialize
             server_socket := s
             factory_builder := fb
@@ -123,8 +121,6 @@ feature {NONE} -- Hook routine Implementations
                 not is_non_persistent_connection or
                 close_after_each_response
             then
---!!!!!!!![socket-enh]
-print("post_process: closing socket%N")
                 Precursor
             else
                 check

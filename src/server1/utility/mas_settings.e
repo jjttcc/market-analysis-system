@@ -133,6 +133,22 @@ feature -- Access
 			exists: Result /= Void
 		end
 
+	connection_cache_size: STRING
+			-- Report - size of connection cache
+		local
+			cache_size: INTEGER
+			env: expanded APP_ENVIRONMENT
+			app_constants: expanded APPLICATION_CONSTANTS
+		do
+			cache_size := env.connection_cache_size
+			if cache_size <= 0 then
+				cache_size := app_constants.default_connection_cache_size
+			end
+			Result := "Socket connection cache size: " + cache_size.out
+		ensure
+			exists: Result /= Void
+		end
+
 	miscellaneous_report: STRING
 			-- Report on miscellaneous information
 		local
@@ -143,6 +159,7 @@ feature -- Access
 			if command_line.allow_non_standard_period_types then
 				Result := Result + "%NNon-standard period types allowed."
 			end
+			Result := Result + "%N" + connection_cache_size
 		end
 
 	ports_report: STRING

@@ -59,7 +59,6 @@ feature -- Basic operations
 		do
 			socket_processor.process_socket
             if socket_processor.interface.logged_out then
-print("CONNECTED_SOCKET_POLL_COMMAND.execute - logged-out, final_cleanup...%N")
                 final_cleanup
             else
                 if socket_processor.error_occurred then
@@ -80,8 +79,6 @@ feature {CONNECTED_SOCKET_PROCESSOR}
     final_cleanup
             -- Clean up for good: remove from poller queue and close the socket.
         do
-print("CONNECTED_SOCKET_POLL_COMMAND.final_cleanup was called")
-print(" - removing from poller and closing socket.%N")
             poller.remove_read_command(Current)
             socket.close
             expired := True

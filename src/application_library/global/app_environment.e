@@ -92,7 +92,7 @@ feature -- Access
         once
             Result := 0
             sz := get (env_names.connection_cache_size_name)
-            if sz.is_integer then
+            if sz /= Void and then sz.is_integer then
                 Result := sz.to_integer
             end
         end

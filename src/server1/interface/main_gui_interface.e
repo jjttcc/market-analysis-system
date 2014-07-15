@@ -102,10 +102,7 @@ feature {NONE} -- Hook routine implementations
 		local
 			appenv: expanded APP_ENVIRONMENT
 		do
---!!!!!!!socket-enh - in-progress
 			if close_socket_this_time then
---!!!!!!!socket-enh
-print("I [" + Current.out + "] was told to set close_connection for " + cmd.out + "%N")
 				cmd.close_connection := True
 				-- Ensure close_connection is not set next time (unless
 				-- specifically ordered by again calling `set_close_socket').
@@ -113,7 +110,6 @@ print("I [" + Current.out + "] was told to set close_connection for " + cmd.out 
 			else
 				cmd.close_connection := not appenv.no_close_after_each_send
 			end
-print("cmd.close_connection: " + cmd.close_connection.out + "%N")
 			Precursor(cmd)
 		end
 

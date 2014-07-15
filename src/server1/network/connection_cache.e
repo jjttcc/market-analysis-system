@@ -26,7 +26,6 @@ feature -- Initialization
             sane_limit: lim >= 1
         do
             create contents.make(lim)
-print("debug/CONNECTION_CACHE: limit: " + limit.out + "%N")
         ensure
             promised_limit: limit = lim
         end
@@ -50,7 +49,6 @@ feature -- Element change
             create remove_list.make
             across contents.linear_representation as i loop
                 if i.item.expired then
-print(i.item.out + " is expired - removing from connection cache.%N")
                     remove_list.force(i.item)
                 end
             end
@@ -61,8 +59,6 @@ print(i.item.out + " is expired - removing from connection cache.%N")
                 oldest := contents.item
                 -- Remove the oldest item:
                 contents.remove
---!!!!!!!![socket-enh]!!!!!!
-print("CONNECTION_CACHE calling cleanup on " + oldest.out + "%N")
                 oldest.cleanup
             end
             contents.put(cmd)
