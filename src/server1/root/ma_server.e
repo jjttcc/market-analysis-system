@@ -39,7 +39,6 @@ th_ex: THREAD_EXPERIMENTS
 		do
 			if attached {COMPRESSED_SOCKET} medium as socket then
 				create sock_proc.make (socket, factory_builder, poller)
---!!!!!socket-enh
 			sock_proc.close_after_each_response :=
 				not appenv.no_close_after_each_send
 			-- (sock_proc.close_after_each_response is true iff the "no-close"

@@ -66,7 +66,7 @@ class MAIN_CL_INTERFACE inherit
 			print
 		end
 
-creation
+create
 
 	make_io, make
 
@@ -123,6 +123,10 @@ feature -- Access
 	function_builder: CL_BASED_FUNCTION_EDITING_INTERFACE
 
 	event_registrar: EVENT_REGISTRATION
+
+feature -- Status report
+
+	logged_out: BOOLEAN = False
 
 feature -- Status setting
 

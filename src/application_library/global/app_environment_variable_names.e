@@ -62,4 +62,12 @@ feature -- Access
 			Result := "MAS_NO_CLOSE"
 		end
 
+	connection_cache_size_name: STRING
+			-- Name of the environment variable, which, if set, will cause
+			-- the server to refrain from closing the socket after each
+			-- send (i.e., after a response to a client request)
+		do
+			Result := "MAS_CONN_CACHE_SIZE"
+		end
+
 end -- APP_ENVIRONMENT_VARIABLE_NAMES

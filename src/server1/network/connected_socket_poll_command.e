@@ -44,39 +44,37 @@ feature -- Access
 
     socket: SOCKET
 
---!!!!!socket-enhancement: check if this is needed:
     poller: MEDIUM_POLLER
 
 	socket_processor: CONNECTED_SOCKET_PROCESSOR
 
+feature -- Status report
+
+    expired: BOOLEAN
+            -- Is Current no longer in use?
+
 feature -- Basic operations
 
---!!!!!!refactor???
 	execute (arg: ANY)
 		do
---print("CONNECTED_SOCKET_POLL_COMMAND.execute calling " +
---"socket_processor.process_socket%N")
 			socket_processor.process_socket
-            if socket_processor.error_occurred then
-                -- Assume no further processing of 'socket' is appropriate.
-                poller.remove_read_command(Current)
+            if socket_processor.interface.logged_out then
+print("CONNECTED_SOCKET_POLL_COMMAND.execute - logged-out, final_cleanup...%N")
+                final_cleanup
+            else
+                if socket_processor.error_occurred then
+                    -- Assume no further processing of 'socket' is appropriate.
+                    poller.remove_read_command(Current)
+                end
             end
---!!!!!!!!!!???socket-enh:            poller.remove_read_command(Current)
 		end
 
     cleanup
             -- Cleanup before removal/destruction.
         do
             socket_processor.set_cleanup_after_execution(Current)
---!!!!!!!!!old!!!!!!!!!!!
---            poller.remove_read_command(Current)
---            socket.close
---!!!!!!!!!end: old!!!!!!!!!!!
         end
 
---!!!!!!![socket-enh]Note: refactoring needed: new CONNECTED_SOCKET_PROCESSOR
---!!!!!!!class in eiffel_library and in finance/mas:
---!!!!!!!!CONNECTED_SOCKET_PROCESSOR -> MAS_CONNECTED_SOCKET_PROCESSOR
 feature {CONNECTED_SOCKET_PROCESSOR}
 
     final_cleanup
@@ -86,6 +84,7 @@ print("CONNECTED_SOCKET_POLL_COMMAND.final_cleanup was called")
 print(" - removing from poller and closing socket.%N")
             poller.remove_read_command(Current)
             socket.close
+            expired := True
         end
 
 end

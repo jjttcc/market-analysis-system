@@ -45,11 +45,23 @@ feature -- Element change
             -- Add 'cmd' to the cache.
         local
             oldest: CONNECTED_SOCKET_POLL_COMMAND
+            remove_list: LINKED_LIST [CONNECTED_SOCKET_POLL_COMMAND]
         do
+            create remove_list.make
+            across contents.linear_representation as i loop
+                if i.item.expired then
+print(i.item.out + " is expired - removing from connection cache.%N")
+                    remove_list.force(i.item)
+                end
+            end
+            if not remove_list.is_empty then
+                across remove_list as i loop contents.prune(i.item) end
+            end
             if contents.full then
                 oldest := contents.item
                 -- Remove the oldest item:
                 contents.remove
+--!!!!!!!![socket-enh]!!!!!!
 print("CONNECTION_CACHE calling cleanup on " + oldest.out + "%N")
                 oldest.cleanup
             end

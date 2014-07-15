@@ -20,7 +20,8 @@ inherit
         undefine
             process_socket
         redefine
-            target_socket, post_process, non_persistent_connection_interface
+            target_socket, post_process, non_persistent_connection_interface,
+            termination_required
         end
 
     THREAD
@@ -38,17 +39,10 @@ creation
 
 feature -- Initialization
 
---!!!![socket-enh]!!!!!!!Put this in the right place:
-log_socket_error(msg: STRING)
-do
-    io.error.print(msg)
-end
-
     make(s: COMPRESSED_SOCKET; fb: GLOBAL_OBJECT_BUILDER; p: MEDIUM_POLLER)
         require
             not_void: s /= Void and fb /= Void and p /= Void
         do
---!!!!reminder: refactor [socket-enh]
 print("I am a CONNECTED_SOCKET_PROCESSOR and there could be more than")
 print(" one of me.%N")
             initialize
@@ -79,18 +73,20 @@ feature {CONNECTED_SOCKET_POLL_COMMAND}
         require
             pcmd_not_void: pcmd /= Void
         do
+            if is_non_persistent_connection then
 --!!!!!![socket-enh]
 print("set_cleanup_after_execution called by " + pcmd.out + "%N")
-            post_process_cleanup_target := pcmd
-            if non_persistent_connection_interface = Void then
+                post_process_cleanup_target := pcmd
+                if non_persistent_connection_interface = Void then
 --!!!!!![socket-enh]
 print("set_cleanup_after_execution: 'non_persistent_connection_interface' ")
 print("was Void - fixing...%N")
-                initialize_interfaces
+                    initialize_interfaces
+                end
+                -- Tell this interface to (once) operate in "socket will be
+                -- closed after (response) command execution" mode.
+                non_persistent_connection_interface.set_close_socket
             end
-            -- Tell this interface to (once) operate in "socket will be
-            -- closed after (response) command execution" mode.
-            non_persistent_connection_interface.set_close_socket
         ensure
             ppct_set: post_process_cleanup_target = pcmd
         end
@@ -99,7 +95,8 @@ print("was Void - fixing...%N")
 
 feature {NONE} -- Hook routine Implementations
 
---!!!!reminder: refactor [socket-enh]
+    termination_required: BOOLEAN = False
+
     connection_termination_character: CHARACTER
         note
             once_status: global
@@ -109,22 +106,24 @@ feature {NONE} -- Hook routine Implementations
             Result := constants.End_of_file_character
         end
 
---!!!!reminder: refactor [socket-enh]
     initialize_interfaces
         local
             non_pint: NON_PERSISTENT_CONNECTION_INTERFACE
         do
-            if persistent_connection_interface = Void then
-                persistent_connection_interface :=
-                    factory_builder.persistent_connection_interface
-            end
-            if non_persistent_connection_interface = Void then
-                non_pint := factory_builder.non_persistent_connection_interface
-                if attached {MAIN_GUI_INTERFACE} non_pint as gui_if then
---!!!!!remove: non_persistent_connection_interface := gui_if
-                    -- Avoid possible race condition with respect to this
-                    -- interface object and other POLL_COMMANDs/SOCKETs:
-                    non_persistent_connection_interface := gui_if.twin
+            if is_non_persistent_connection then
+                if non_persistent_connection_interface = Void then
+                    non_pint :=
+                        factory_builder.non_persistent_connection_interface
+                    if attached {MAIN_GUI_INTERFACE} non_pint as gui_if then
+                        -- Avoid possible race condition with respect to this
+                        -- interface object and other POLL_COMMANDs/SOCKETs:
+                        non_persistent_connection_interface := gui_if.twin
+                    end
+                end
+            else
+                if persistent_connection_interface = Void then
+                    persistent_connection_interface :=
+                        factory_builder.persistent_connection_interface
                 end
             end
         end
@@ -136,15 +135,8 @@ feature {NONE} -- Hook routine Implementations
             end
         end
 
-    perform_specific_error_processing
-        do
---!!!!!!!!! - remove this procedure, I think - !!!!!!!!!!!!!!!!!!
-io.error.print("CONNECTED_SOCKET_PROCESSOR.perform_specific_error_processing...%N")
-        end
-
 feature {NONE} -- Unused
 
---!!!!reminder: refactor [socket-enh]
     Message_date_field_separator: STRING = ""
 
     Message_time_field_separator: STRING = ""
