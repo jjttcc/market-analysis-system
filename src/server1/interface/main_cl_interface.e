@@ -686,7 +686,8 @@ feature {NONE} -- Implementation - utilities
 				ms.email_report + "%N" +
 				ms.local_host_name_report + "%N" +
 				ms.ports_report + "%N%N" +
-				ms.miscellaneous_report + "%N"
+				ms.miscellaneous_report + "%N" +
+				ms.close_socket_report + "%N"
 		end
 
 	make_lock (name: STRING): FILE_LOCK

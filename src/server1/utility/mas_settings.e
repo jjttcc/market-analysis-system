@@ -162,6 +162,21 @@ feature -- Access
 			Result := Result + "%N" + connection_cache_size
 		end
 
+	close_socket_report: STRING
+			-- Report on status of no_close_after_each_send query
+		local
+			env: expanded APP_ENVIRONMENT
+		do
+			if env.no_close_after_each_send then
+				Result := "Socket connection will NOT be closed after each" +
+					" request/response exchange"
+			else
+				Result := "Socket connection will be closed after each" +
+					" request/response exchange"
+			end
+		end
+
+
 	ports_report: STRING
 			-- Report on all port numbers being used
 		do
