@@ -12,13 +12,15 @@ class MA_SERVER inherit
 		rename
 			report_errors as report_back
 		redefine
-			report_back, current_media, read_command_for, initialize
+			report_back, current_media, read_command_for, initialize,
+			post_listen
 		end
 
+	CLEANUP_SERVICE
+
+inherit {NONE}
+
 	GLOBAL_SERVER_FACILITIES
-		export
-			{NONE} all
-		end
 
 creation
 
@@ -38,11 +40,12 @@ th_ex: THREAD_EXPERIMENTS
 			appenv: expanded APP_ENVIRONMENT
 		do
 			if attached {COMPRESSED_SOCKET} medium as socket then
-				create sock_proc.make (socket, factory_builder, poller)
-			sock_proc.close_after_each_response :=
+				create sock_proc.make (socket, factory_builder, poller,
+					Current)
+				sock_proc.close_after_each_response :=
 				not appenv.no_close_after_each_send
-			-- (sock_proc.close_after_each_response is true iff the "no-close"
-			-- environment variable is not set.)
+				-- (sock_proc.close_after_each_response is true iff the
+				-- "no-close" environment variable is not set.)
 			else
 				raise ("cast of " + medium.generating_type + " failed " +
 					"in MA_SERVER.read_command_for")
@@ -119,6 +122,11 @@ th_ex: THREAD_EXPERIMENTS
 		do
 			-- Force the startup time to be created at "start-up'.
 			d := gsf.startup_date_time
+		end
+
+	post_listen
+		do
+			perform_cleanup
 		end
 
 feature {NONE} -- Implementation

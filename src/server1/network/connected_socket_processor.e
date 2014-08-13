@@ -20,7 +20,7 @@ inherit
         undefine
             process_socket
         redefine
-            target_socket, post_process, non_persistent_connection_interface,
+            target_socket, non_persistent_connection_interface,
             termination_required
         end
 
@@ -64,28 +64,6 @@ feature -- Access
 
     non_persistent_connection_interface: MAIN_GUI_INTERFACE
 
-feature {CONNECTED_SOCKET_POLL_COMMAND}
-
-    set_cleanup_after_execution(pcmd: CONNECTED_SOCKET_POLL_COMMAND)
-            -- Set post_process_cleanup_target for final cleanup.
-        require
-            pcmd_not_void: pcmd /= Void
-        do
-            if is_non_persistent_connection then
-                post_process_cleanup_target := pcmd
-                if non_persistent_connection_interface = Void then
-                    initialize_interfaces
-                end
-                -- Tell this interface to (once) operate in "socket will be
-                -- closed after (response) command execution" mode.
-                non_persistent_connection_interface.set_close_socket
-            end
-        ensure
-            ppct_set: post_process_cleanup_target = pcmd
-        end
-
-    post_process_cleanup_target: CONNECTED_SOCKET_POLL_COMMAND
-
 feature {NONE} -- Hook routine Implementations
 
     termination_required: BOOLEAN = False
@@ -118,13 +96,6 @@ feature {NONE} -- Hook routine Implementations
                     persistent_connection_interface :=
                         factory_builder.persistent_connection_interface
                 end
-            end
-        end
-
-    post_process
-        do
-            if post_process_cleanup_target /= Void then
-                post_process_cleanup_target.final_cleanup
             end
         end
 

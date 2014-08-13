@@ -45,21 +45,28 @@ feature -- Element change
         local
             oldest: CONNECTED_SOCKET_POLL_COMMAND
             remove_list: LINKED_LIST [CONNECTED_SOCKET_POLL_COMMAND]
+            cnts_copy: LIST [CONNECTED_SOCKET_POLL_COMMAND]
         do
             create remove_list.make
-            across contents.linear_representation as i loop
+            cnts_copy := contents.linear_representation
+            across cnts_copy as i loop
                 if i.item.expired then
                     remove_list.force(i.item)
                 end
             end
             if not remove_list.is_empty then
-                across remove_list as i loop contents.prune(i.item) end
+                contents.wipe_out
+                across cnts_copy as i loop
+                    -- Put back all elements except for those marked expired.
+                    if not remove_list.has(i.item) then
+                        contents.put(i.item)
+                    end
+                end
             end
             if contents.full then
                 oldest := contents.item
                 -- Remove the oldest item:
                 contents.remove
-                oldest.cleanup
             end
             contents.put(cmd)
         end

@@ -32,7 +32,7 @@ feature -- Access
 		local
 			s: STRING
 		once
-			Result := <<"1", "8", "2" + "[es14.05">>
+			Result := <<"1", "8", "3" + "[es14.05">>
 			s := Result @ Result.upper
 			debug ("multi_threaded_version")
 				s.append ("MT")
@@ -49,7 +49,7 @@ feature -- Access
 		note
 			once_status: global
 		once
-			create Result.make(2014, 7, 6)
+			create Result.make(2014, 8, 13)
 		end
 
 	release_description: STRING
@@ -81,7 +81,7 @@ feature {NONE} -- Implementation
 		once
 			Result :=
 			-- start: compile-time
-				"2014-08-10 01:01:50"
+				"2014-08-13 14:19:34"
 			-- end: compile-time
 		end
 

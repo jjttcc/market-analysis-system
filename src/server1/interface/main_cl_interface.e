@@ -128,6 +128,8 @@ feature -- Status report
 
 	logged_out: BOOLEAN = False
 
+	execution_error_occurred: BOOLEAN = False
+
 feature -- Status setting
 
 	set_input_device (arg: IO_MEDIUM)

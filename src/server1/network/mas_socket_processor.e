@@ -38,18 +38,21 @@ creation
 
 feature
 
-    make (s: COMPRESSED_SOCKET; fb: GLOBAL_OBJECT_BUILDER; p: MEDIUM_POLLER)
+    make (s: COMPRESSED_SOCKET; fb: GLOBAL_OBJECT_BUILDER; p: MEDIUM_POLLER;
+            connected_cleanup_svc: CLEANUP_SERVICE)
         require
-            not_void: s /= Void and fb /= Void and p /= Void
+            not_void: s /= Void and fb /= Void and p /= Void and
+                connected_cleanup_svc /= Void
         do
             initialize
             server_socket := s
             factory_builder := fb
             poller := p
+            connected_cleanup_service := connected_cleanup_svc
         ensure
             set: server_socket = s and factory_builder = fb and poller = p
+            ccs_set: connected_cleanup_service = connected_cleanup_svc
         end
-
 
 feature -- Access
 
@@ -136,6 +139,7 @@ feature {NONE} -- Hook routine Implementations
                 end
                 create sock_proc.make(target_socket, factory_builder, poller)
                 create poll_cmd.make(sock_proc, poller)
+                connected_cleanup_service.register_for_cleanup(poll_cmd)
                 connection_cache.add(poll_cmd)
             end
         end
@@ -143,6 +147,8 @@ feature {NONE} -- Hook routine Implementations
 feature {NONE} -- Implementation
 
     connection_cache: CONNECTION_CACHE
+
+    connected_cleanup_service: CLEANUP_SERVICE
 
 feature {NONE} -- Unused
 

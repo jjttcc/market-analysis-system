@@ -19,24 +19,26 @@ inherit
             socket
         end
 
+    CLEANABLE
+
 create
 
     make
 
 feature {NONE} -- Initialization
 
-	make (sproc: like socket_processor; p: MEDIUM_POLLER)
-		require
-			s_not_void: sproc /= Void
-			tgt_socket_not_void: sproc.target_socket /= Void
+    make(sproc: like socket_processor; p: MEDIUM_POLLER)
+        require
+            s_not_void: sproc /= Void
+            tgt_socket_not_void: sproc.target_socket /= Void
         do
-			socket_processor := sproc
-			pc_make (socket_processor.target_socket)
+            socket_processor := sproc
+            pc_make(socket_processor.target_socket)
             poller := p
             poller.put_read_command(Current)
         ensure
-			socket_processor = sproc
-			socket = socket_processor.target_socket
+            socket_processor = sproc
+            socket = socket_processor.target_socket
             poller = p
         end
 
@@ -46,7 +48,7 @@ feature -- Access
 
     poller: MEDIUM_POLLER
 
-	socket_processor: CONNECTED_SOCKET_PROCESSOR
+    socket_processor: CONNECTED_SOCKET_PROCESSOR
 
 feature -- Status report
 
@@ -55,33 +57,33 @@ feature -- Status report
 
 feature -- Basic operations
 
-	execute (arg: ANY)
-		do
-			socket_processor.process_socket
+    execute(arg: ANY)
+        do
+            socket_processor.process_socket
             if socket_processor.interface.logged_out then
-                final_cleanup
+                expired := True
             else
-                if socket_processor.error_occurred then
+                if socket_processor.error_occurred or socket.was_error then
                     -- Assume no further processing of 'socket' is appropriate.
-                    poller.remove_read_command(Current)
+                    expired := True
                 end
             end
-		end
-
-    cleanup
-            -- Cleanup before removal/destruction.
-        do
-            socket_processor.set_cleanup_after_execution(Current)
         end
 
-feature {CONNECTED_SOCKET_PROCESSOR}
+feature {CLEANUP_SERVICE}
 
-    final_cleanup
+    cleanup(cleaner: CLEANUP_SERVICE)
             -- Clean up for good: remove from poller queue and close the socket.
         do
-            poller.remove_read_command(Current)
-            socket.close
-            expired := True
+            if expired then
+                poller.remove_read_command(Current)
+                if not socket.is_closed then
+                    socket.close
+                end
+                -- Once the cleanup is complete, this object (Current) will
+                -- no longer be used and should not be cleaned up again.
+                cleaner.unregister_for_cleanup(Current)
+            end
         end
 
 end
