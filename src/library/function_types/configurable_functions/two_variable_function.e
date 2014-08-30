@@ -13,7 +13,7 @@ inherit
 
 	COMPLEX_FUNCTION
 		redefine
-			set_innermost_input, reset_parameters
+			set_innermost_input, reset_parameters, flag_as_modified
 		end
 
 	TWO_VARIABLE_LINEAR_ANALYZER
@@ -106,6 +106,19 @@ feature -- Status report
 
 	has_children: BOOLEAN = True
 
+feature -- Status setting
+
+	flag_as_modified
+		do
+			processed_date_time := Void
+--!!!!!CHECK CORRECTNESS:
+			input1.flag_as_modified
+			input2.flag_as_modified
+--!!!!![END CHECK]
+		ensure then
+			modified: not processed
+		end
+
 feature {NONE} -- Hook methods
 
 	action
@@ -144,6 +157,8 @@ feature {NONE} -- Hook methods
 
 	pre_process
 		do
+--!!!!!!!print("[tvf]params count: " + parameters.count.out + "%N")
+--!!!!!!!print("[tvf]params unique: " + parameter_unames_unique.out + "%N")
 			if not output.is_empty then
 				output.wipe_out
 			end
@@ -196,10 +211,6 @@ feature {MARKET_FUNCTION_EDITOR}
 			ptype_not_void: in.trading_period_type /= Void
 		do
 			do_set_input2 (in)
-if target2 /= in.output then
-	print ("TVF.set_input2: target2 /= in.output%N")
-	print ("[in " + Current.generating_type + "]%N")
-end
 		ensure
 			input_set: input2 = in and input2 /= Void
 			target_set: target2 = in.output
@@ -227,6 +238,7 @@ end
 
 	reset_parameters
 		do
+--!!!!!!!print("tvf.reset_parameters called%N")
 			input1.reset_parameters
 			input2.reset_parameters
 		end

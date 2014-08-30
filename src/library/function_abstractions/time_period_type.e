@@ -18,7 +18,7 @@ class TIME_PERIOD_TYPE inherit
 			is_equal
 		end
 
-create {PERIOD_TYPE_FACILITIES, TRADABLE}
+create
 
 	make
 

@@ -169,6 +169,16 @@ feature -- Status report
 			Result := gs.debug_state.market_functions
 		end
 
+feature -- Status setting
+
+--!!!!!!!This procedure may need to move up to MARKET_PROCESSOR.!!!!!
+	flag_as_modified
+			-- If this function is modifiable, flag it as having been modified;
+			-- otherwise, do nothing.
+		do
+			-- [Redefine if needed]
+		end
+
 feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Element change
 
 	set_name (n: STRING)
@@ -347,7 +357,6 @@ feature {NONE} -- (from FUNCTION_PARAMETER)
 			--!!!!![14.05]Should this really do nothing???!!!!
 			do_nothing
 		end
-
 
 invariant
 

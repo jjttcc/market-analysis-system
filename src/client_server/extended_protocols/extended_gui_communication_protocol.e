@@ -3,6 +3,7 @@ note
 	description:
 		"Constants specifying components of the TA server protocol %
 		%for servicing GUIs"
+	notes: "Obsolete"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -10,16 +11,9 @@ note
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
 class EXTENDED_GUI_COMMUNICATION_PROTOCOL inherit
-
 	GUI_COMMUNICATION_PROTOCOL
 
+--!!!!!!!This class is obsolete - needs to be removed or hidden!!!!!!!
 feature -- Client request IDs
-
-	time_delimited_market_data_request: INTEGER = 12
-			-- Time-delimited request for data for a specified tradable
-
-	time_delimited_indicator_data_request: INTEGER = 13
-			-- Time-delimited request for indicator data for a
-			-- specified tradable
 
 end

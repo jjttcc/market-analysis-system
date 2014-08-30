@@ -15,23 +15,23 @@ class GUI_COMMUNICATION_PROTOCOL inherit
 
 feature -- Client request IDs
 
-	market_data_request: INTEGER = 1
-			-- Request for data for a specified market
+	tradable_data_request: INTEGER = 1
+			-- Request for data for a specified tradable
 
 	indicator_data_request: INTEGER = 2
 			-- Request for data for a specified indicator for a
-			-- specified market
+			-- specified tradable
 
 	trading_period_type_request: INTEGER = 3
 			-- Request for a list of all valid trading period types for a
-			-- specified market
+			-- specified tradable
 
-	market_list_request: INTEGER = 4
-			-- Request for a list of all available markets
+	tradable_list_request: INTEGER = 4
+			-- Request for a list of all available tradables
 
 	indicator_list_request: INTEGER = 5
 			-- Request for a list of all available indicators for a
-			-- specified market
+			-- specified tradable
 
 	login_request: INTEGER = 6
 			-- Login request from GUI client - to be responded to
@@ -44,15 +44,29 @@ feature -- Client request IDs
 			-- Logout request from GUI client
 
 	event_data_request: INTEGER = 9
-			-- Request for a list of market events - trading signals, sorted
+			-- Request for a list of tradable events - trading signals, sorted
 			-- by date, increasing
 
 	event_list_request: INTEGER = 10
-			-- Request for a list of all market event types valid for
+			-- Request for a list of all tradable event types valid for
 			-- a particular tradable and trading-period type
 
 	all_indicators_request: INTEGER = 11
 			-- Request for a list of all known indicators
+
+	time_delimited_tradable_data_request: INTEGER = 12
+			-- Time-delimited request for data for a specified tradable
+
+	time_delimited_indicator_data_request: INTEGER = 13
+			-- Time-delimited request for indicator data for a
+			-- specified tradable
+
+	indicator_parameters_request: INTEGER = 14
+			-- Request for parameter settings for a specified indicator
+			-- (!!!!!!!for a specified tradable????!!!!)
+
+	event_parameters_request: INTEGER = 15
+			-- Request for parameter settings for a event type (...???!!!)
 
 feature -- Server response IDs
 

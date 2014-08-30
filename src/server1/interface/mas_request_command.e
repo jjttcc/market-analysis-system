@@ -8,12 +8,16 @@ note
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
     --settings: vim: expandtab:
 
-deferred class MAS_REQUEST_COMMAND inherit
+deferred class MAS_REQUEST_COMMAND
+
+inherit
 
     IO_BASED_CLIENT_REQUEST_COMMAND
         redefine
             session
         end
+
+inherit {NONE}
 
     GUI_COMMUNICATION_PROTOCOL
         export

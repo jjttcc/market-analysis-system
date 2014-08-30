@@ -9,13 +9,13 @@ note
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
 class EXTENDED_MAIN_GUI_INTERFACE inherit
-
 	MAIN_GUI_INTERFACE
 		redefine
 			make_request_handlers
 		end
 
-	EXTENDED_GUI_COMMUNICATION_PROTOCOL
+inherit {NONE}
+	GUI_COMMUNICATION_PROTOCOL
 		rename
 			message_component_separator as message_field_separator
 		export
@@ -36,7 +36,7 @@ feature {NONE} -- Implementation
 			Precursor
 			create {TIME_DELIMITED_MARKET_DATA_REQUEST_CMD} cmd.make(
 					tradable_list_handler)
-			request_handlers.extend(cmd, time_delimited_market_data_request)
+			request_handlers.extend(cmd, time_delimited_tradable_data_request)
 
 			create {TIME_DELIMITED_INDICATOR_DATA_REQUEST_CMD} cmd.make(
 					tradable_list_handler)

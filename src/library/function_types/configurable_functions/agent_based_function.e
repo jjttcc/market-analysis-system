@@ -13,7 +13,7 @@ class AGENT_BASED_FUNCTION inherit
 	COMPLEX_FUNCTION
 		redefine
 			set_innermost_input, reset_parameters, operator_used,
-			immediate_direct_parameters
+			immediate_direct_parameters, flag_as_modified
 		end
 
 	LINEAR_ANALYZER
@@ -168,6 +168,20 @@ feature -- Status report
 	operator_used: BOOLEAN
 		do
 			Result := operator /= Void
+		end
+
+feature -- Status setting
+
+	flag_as_modified
+		do
+			processed_date_time := Void
+--!!!!!CHECK CORRECTNESS:
+			across inputs as i_iter loop
+				i_iter.item.flag_as_modified
+			end
+--!!!!![END CHECK]
+		ensure then
+			modified: not processed
 		end
 
 feature {NONE}

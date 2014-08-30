@@ -42,8 +42,6 @@ inherit {NONE}
 			is_equal, copy, out
 		end
 
---	EXCEPTIONS
-
 feature -- Access
 
 	symbol: STRING
