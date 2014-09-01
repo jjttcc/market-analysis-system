@@ -172,8 +172,6 @@ feature {NONE}
 
     pre_process
         do
---!!!!!print("[ovf]params count: " + parameters.count.out + "%N")
---!!!!!print("[ovf]params unique: " + parameter_unames_unique.out + "%N")
             if not output.is_empty then
                 output.wipe_out
             end
@@ -201,7 +199,6 @@ feature {MARKET_FUNCTION_EDITOR}
 
     reset_parameters
         do
---!!!!!print("ovf.reset_parameters called%N")
             input.reset_parameters
         end
 

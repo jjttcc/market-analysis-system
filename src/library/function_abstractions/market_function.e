@@ -171,7 +171,6 @@ feature -- Status report
 
 feature -- Status setting
 
---!!!!!!!This procedure may need to move up to MARKET_PROCESSOR.!!!!!
 	flag_as_modified
 			-- If this function is modifiable, flag it as having been modified;
 			-- otherwise, do nothing.

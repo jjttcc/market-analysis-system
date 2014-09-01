@@ -157,8 +157,6 @@ feature {NONE} -- Hook methods
 
 	pre_process
 		do
---!!!!!!!print("[tvf]params count: " + parameters.count.out + "%N")
---!!!!!!!print("[tvf]params unique: " + parameter_unames_unique.out + "%N")
 			if not output.is_empty then
 				output.wipe_out
 			end
@@ -238,7 +236,6 @@ feature {MARKET_FUNCTION_EDITOR}
 
 	reset_parameters
 		do
---!!!!!!!print("tvf.reset_parameters called%N")
 			input1.reset_parameters
 			input2.reset_parameters
 		end

@@ -42,10 +42,6 @@ feature -- Status report
             -- Is each parameter's `unique_name' unique?
         local
             name_used, nused2: HASH_TABLE [INTEGER, STRING]
-fparaml: LINEAR [FUNCTION_PARAMETER]
-kl: LINEAR [STRING]
-i: INTEGER
-cursor: hash_table_iteration_cursor [INTEGER, STRING]
         do
             create name_used.make(parameters.count)
             Result := parameters.for_all(agent (fp: FUNCTION_PARAMETER;
@@ -61,51 +57,10 @@ cursor: hash_table_iteration_cursor [INTEGER, STRING]
                         end
                     end
                     (?, name_used))
-if not Result then
-print("<<<<false result - parame count: " + parameters.count.out + ">>>>%N")
-print("current.out, parma.out: " + Current.out + "%N" + parameters.out + "%N")
-from
-    i := 1
-    create nused2.make(parameters.count)
-    from
-        fparaml := parameters.linear_representation
-        fparaml.start
-    until
-        fparaml.after
-    loop
-print("params " + i.out + ": " + fparaml.item.unique_name + ": '")
-        if nused2.has(fparaml.item.unique_name) then
-            nused2[fparaml.item.unique_name] :=
-                nused2[fparaml.item.unique_name] + 1
-        else
-            nused2.put(1, fparaml.item.unique_name)
-        end
-print(nused2[fparaml.item.unique_name].out + "'%N")
-        fparaml.forth
-i := i + 1
-    end
-print("nused2 count: " + nused2.count.out + "%N")
-cursor := nused2.new_cursor
-cursor.start
-until
-cursor.after
-loop
-    print(cursor.key + ": " + cursor.item.out + "%N")
-cursor.forth
-end
---!!!!!!!Temporary debugging fakeout:
---!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Result := True
---!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!handle_assertion_violation
-end
         end
 
 invariant
 
---!!!!???!!![if valid, remove "parameters /= Void implies" from ...unique_names]
     parameters_exist: parameters /= Void
-
---!!!!!!Possible change of plan - parameter_unique_names may not!!!!!!!!!!!!!
---!!!!!!need to be true!!!!!!!!!!!!
---    parameter_unique_names: parameters /= Void implies parameter_unames_unique
 
 end -- class MARKET_PROCESSOR

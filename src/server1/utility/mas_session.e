@@ -63,6 +63,7 @@ feature -- Access
             end
         ensure
             result_exists: Result /= Void
+            result_mapped: indicator_to_parameters_map[i.name] = Result
         end
 
     login_date: DATE_TIME
@@ -110,36 +111,32 @@ feature -- Basic operations
             params := i.parameters
             update_occurred := False
             if reference_params.count /= params.count then
-                --!!!!Note: It's unlikely that this condition will ever
-                --!!!!occur; but if it does, it might be better to
-                --!!!!rebuild 'reference_params' as new list, using 'params',
-                --!!!!rather than re-using the existing
-                --!!!!('reference_params') list.
-                reference_params := synchronized_session_params(i, params,
-                    reference_params)
-            end
-            reference_cursor := reference_params.new_cursor
-            param_cursor := params.new_cursor
-            from
-                reference_cursor.start
-                param_cursor.start
-            invariant
-                reference_cursor.after = param_cursor.after
-            until
-                reference_cursor.after
-            loop
-                update_occurred := update_parameter(
-                        param_cursor.item, reference_cursor.item) or else
-                    update_occurred
-                reference_cursor.forth
-                param_cursor.forth
-                check
-                    names_match: reference_cursor.item.unique_name ~
-                        param_cursor.item.unique_name
+                -- Old reference param list no longer valid - discard it:
+                indicator_to_parameters_map.force(Void, i.name)
+            else
+                reference_cursor := reference_params.new_cursor
+                param_cursor := params.new_cursor
+                from
+                    reference_cursor.start
+                    param_cursor.start
+                invariant
+                    reference_cursor.after = param_cursor.after
+                until
+                    reference_cursor.after
+                loop
+                    update_occurred := update_parameter(
+                            param_cursor.item, reference_cursor.item) or else
+                        update_occurred
+                    reference_cursor.forth
+                    param_cursor.forth
+                    check
+                        names_match: reference_cursor.item.unique_name ~
+                            param_cursor.item.unique_name
+                    end
                 end
-            end
-            if update_occurred then
-                i.flag_as_modified
+                if update_occurred then
+                    i.flag_as_modified
+                end
             end
         end
 
@@ -147,42 +144,6 @@ feature {NONE}
 
     indicator_to_parameters_map: HASH_TABLE [LIST
         [SESSION_FUNCTION_PARAMETER], STRING]
-
-    synchronized_session_params(i: MARKET_FUNCTION; new_params: LIST
-        [FUNCTION_PARAMETER]; ref_params: LIST [SESSION_FUNCTION_PARAMETER]):
-                LIST [SESSION_FUNCTION_PARAMETER]
-            -- Create a fresh session-function-parameters list, using
-            -- ref_params, such that Result mirrors (same order, matching
-            -- unique names) new_params - create a new parameter for any
-            -- element of new_params not in ref_params; force the new list to
-            -- be associated with i.name in indicator_to_parameters_map.
-        require
-            args: i /= Void and then new_params /= Void and then
-                ref_params /= Void
-        local
-            fp_tbl: HASH_TABLE [SESSION_FUNCTION_PARAMETER, STRING]
-            fp: SESSION_FUNCTION_PARAMETER
-        do
-            create fp_tbl.make(ref_params.count)
-            across ref_params as rp loop
-                fp_tbl.put(rp.item, rp.item.unique_name)
-            end
-            create {ARRAYED_LIST [SESSION_FUNCTION_PARAMETER]} Result.make(
-                new_params.count)
-            across new_params as new_p loop
-                fp := fp_tbl[new_p.item.unique_name]
-                if fp /= Void then
-                    Result.extend(fp)
-                else
-                    Result.extend(create {SESSION_FUNCTION_PARAMETER}.make(
-                        new_p.item))
-                end
-            end
-            indicator_to_parameters_map.force(Result, i.name)
-        ensure
-            result_mapped: parameters_for_indicator(i) = Result
-            synched_count: Result.count = new_params.count
-        end
 
     update_parameter(dest_param, src_param: FUNCTION_PARAMETER): BOOLEAN
             -- Ensure dest_param is up to date with src_param; return true if
