@@ -82,10 +82,7 @@ feature {NONE}
             -- `analysis_start_date' and `analysis_end_date'.
         require
             settings_not_void: parameters /= Void
-        local
-            response: STRING
         do
-            --fill/format 'response' from 'parameters'
             put_ok
             send_parameter_report
             put(eom)

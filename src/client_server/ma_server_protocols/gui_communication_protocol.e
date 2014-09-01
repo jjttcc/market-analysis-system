@@ -63,10 +63,18 @@ feature -- Client request IDs
 
 	indicator_parameters_request: INTEGER = 14
 			-- Request for parameter settings for a specified indicator
-			-- (!!!!!!!for a specified tradable????!!!!)
 
 	event_parameters_request: INTEGER = 15
-			-- Request for parameter settings for a event type (...???!!!)
+			-- Request for parameter settings for a specified event type
+			-- (...???!!!)
+
+	indicator_parameters_set_request: INTEGER = 16
+			-- Request to set new values for each of a specified set of
+			-- parameters for a specified indicator
+
+	event_parameters_set_request: INTEGER = 17
+			-- Request to set new values for each of a specified set of
+			-- parameters for a specified event type
 
 feature -- Server response IDs
 

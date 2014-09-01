@@ -166,6 +166,9 @@ feature {NONE} -- Implementation
             create {INDICATOR_PARAMETERS_REQUEST_CMD} cmd.make (
                             tradable_list_handler)
             rh.extend (cmd , indicator_parameters_request)
+            create {MODIFY_INDICATOR_PARAMETERS_REQUEST_CMD} cmd.make (
+                            tradable_list_handler)
+            rh.extend (cmd , indicator_parameters_set_request)
 
             create {ERROR_RESPONSE_CMD} cmd.make
             rh.extend (cmd, interface_error)

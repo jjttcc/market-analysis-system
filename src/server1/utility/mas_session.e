@@ -44,7 +44,7 @@ feature -- Access
 
     parameters_for_indicator(i: MARKET_FUNCTION):
         LIST [SESSION_FUNCTION_PARAMETER]
-            -- The FUNCTION_PARAMETERs associated with the indicator `i'
+            -- The SESSION_FUNCTION_PARAMETERs associated with the indicator `i'
         require
             indicator_valid: i /= Void
         local
@@ -59,6 +59,7 @@ feature -- Access
                     Result.extend(create {SESSION_FUNCTION_PARAMETER}.make(
                         p.item))
                 end
+                indicator_to_parameters_map.force(Result, i.name)
             end
         ensure
             result_exists: Result /= Void
@@ -97,7 +98,7 @@ feature -- Element change
 feature -- Basic operations
 
     prepare_indicator(i: MARKET_FUNCTION)
-            -- Prepare indicator `i' for processing.  [!!!!experiment...!!!!!]
+            -- Prepare indicator `i' for processing.
         local
             params: LIST [FUNCTION_PARAMETER]
             reference_params: LIST [SESSION_FUNCTION_PARAMETER]
@@ -109,6 +110,11 @@ feature -- Basic operations
             params := i.parameters
             update_occurred := False
             if reference_params.count /= params.count then
+                --!!!!Note: It's unlikely that this condition will ever
+                --!!!!occur; but if it does, it might be better to
+                --!!!!rebuild 'reference_params' as new list, using 'params',
+                --!!!!rather than re-using the existing
+                --!!!!('reference_params') list.
                 reference_params := synchronized_session_params(i, params,
                     reference_params)
             end
@@ -122,8 +128,9 @@ feature -- Basic operations
             until
                 reference_cursor.after
             loop
-                update_occurred := update_occurred or else
-                    update_parameter(param_cursor.item, reference_cursor.item)
+                update_occurred := update_parameter(
+                        param_cursor.item, reference_cursor.item) or else
+                    update_occurred
                 reference_cursor.forth
                 param_cursor.forth
                 check
@@ -190,6 +197,8 @@ feature {NONE}
                 not dest_param.current_value_equals(
                     src_param.current_value)
             then
+
+
                 dest_param.change_value(src_param.current_value)
                 Result := True
             end
