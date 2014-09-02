@@ -1,7 +1,7 @@
 note
     description:
-        "Objects that perform processing on market data using one or %
-        %more MARKET_FUNCTIONs and COMMANDs"
+        "Objects that perform processing on tradable (e.g., stock or %
+        %commodity) data using one or more FUNCTION_PARAMETERs and COMMANDs"
     author: "Jim Cochrane"
     date: "$Date$";
     revision: "$Revision$"
@@ -9,7 +9,7 @@ note
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
     -- vim: expandtab
 
-deferred class MARKET_PROCESSOR inherit
+deferred class TRADABLE_PROCESSOR inherit
 
 feature -- Access
 
@@ -63,4 +63,4 @@ invariant
 
     parameters_exist: parameters /= Void
 
-end -- class MARKET_PROCESSOR
+end -- class TRADABLE_PROCESSOR

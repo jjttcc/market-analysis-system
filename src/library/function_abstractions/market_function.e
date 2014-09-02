@@ -17,7 +17,7 @@ deferred class MARKET_FUNCTION inherit
 			output
 		end
 
-	MARKET_PROCESSOR
+	TRADABLE_PROCESSOR
 
 	TREE_NODE
 		redefine

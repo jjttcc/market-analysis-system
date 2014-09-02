@@ -11,7 +11,7 @@ note
 
 deferred class MARKET_EVENT_GENERATOR inherit
 
-	MARKET_PROCESSOR
+	TRADABLE_PROCESSOR
 		rename
 			functions as indicators
 		redefine

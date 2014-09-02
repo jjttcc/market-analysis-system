@@ -29,9 +29,9 @@ feature {NONE} -- Initialization
 			description := param.description
 			value_type_description := param.value_type_description
 		ensure
-			set: current_value = param.current_value and name = param.name and
-				unique_name = param.unique_name and description =
-				param.description and value_type_description =
+			set: current_value ~ param.current_value and name ~ param.name and
+				unique_name ~ param.unique_name and description ~
+				param.description and value_type_description ~
 				param.value_type_description
 		end
 

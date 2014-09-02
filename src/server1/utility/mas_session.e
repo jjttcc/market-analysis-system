@@ -124,15 +124,15 @@ feature -- Basic operations
                 until
                     reference_cursor.after
                 loop
+                    check
+                        names_match: reference_cursor.item.unique_name ~
+                            param_cursor.item.unique_name
+                    end
                     update_occurred := update_parameter(
                             param_cursor.item, reference_cursor.item) or else
                         update_occurred
                     reference_cursor.forth
                     param_cursor.forth
-                    check
-                        names_match: reference_cursor.item.unique_name ~
-                            param_cursor.item.unique_name
-                    end
                 end
                 if update_occurred then
                     i.flag_as_modified
