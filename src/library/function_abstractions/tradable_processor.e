@@ -13,6 +13,11 @@ deferred class TRADABLE_PROCESSOR inherit
 
 feature -- Access
 
+    name: STRING
+            -- Identifying name
+        deferred
+        end
+
     functions: LIST [FUNCTION_PARAMETER]
             -- All functions used directly or indirectly by this market
             -- processor, including itself, if it is a function
@@ -57,6 +62,15 @@ feature -- Status report
                         end
                     end
                     (?, name_used))
+        end
+
+feature -- Status setting
+
+    flag_as_modified
+			-- If this function is modifiable, flag it as having been modified;
+			-- otherwise, do nothing.
+        do
+			-- [Redefine if needed]
         end
 
 invariant

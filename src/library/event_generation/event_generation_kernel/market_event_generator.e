@@ -25,7 +25,7 @@ deferred class MARKET_EVENT_GENERATOR inherit
 
 	TREE_NODE
 		redefine
-			children
+			children, name
 		end
 
 	GLOBAL_SERVICES
@@ -96,6 +96,11 @@ feature -- Access
 		do
 			-- Empty by default - redefine if needed.
 			create {LINKED_LIST [MARKET_EVENT_GENERATOR]} Result.make
+		end
+
+	name: STRING
+		do
+			Result := event_type.name
 		end
 
 feature -- Status report

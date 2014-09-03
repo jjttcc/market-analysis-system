@@ -21,7 +21,7 @@ feature {NONE} -- Initialization
         do
             create start_dates.make(1)
             create end_dates.make(1)
-            create indicator_to_parameters_map.make(0)
+            create processor_to_parameters_map.make(0)
             caching_on := True
         ensure
             dates_not_void: start_dates /= Void and end_dates /= Void
@@ -42,28 +42,28 @@ feature -- Access
     caching_on: BOOLEAN
             -- Is market data being cached?
 
-    parameters_for_indicator(i: MARKET_FUNCTION):
+    parameters_for_processor(p: TRADABLE_PROCESSOR):
         LIST [SESSION_FUNCTION_PARAMETER]
-            -- The SESSION_FUNCTION_PARAMETERs associated with the indicator `i'
+            -- The SESSION_FUNCTION_PARAMETERs associated with the processor `p'
         require
-            indicator_valid: i /= Void
+            processor_valid: p /= Void
         local
             parameters: LIST [FUNCTION_PARAMETER]
         do
-            Result := indicator_to_parameters_map[i.name]
+            Result := processor_to_parameters_map[p.name]
             if Result = Void then
-                parameters := i.parameters
+                parameters := p.parameters
                 create {ARRAYED_LIST [SESSION_FUNCTION_PARAMETER]} Result.make(
                     parameters.count)
-                across parameters as p loop
+                across parameters as pcursor loop
                     Result.extend(create {SESSION_FUNCTION_PARAMETER}.make(
-                        p.item))
+                        pcursor.item))
                 end
-                indicator_to_parameters_map.force(Result, i.name)
+                processor_to_parameters_map.force(Result, p.name)
             end
         ensure
             result_exists: Result /= Void
-            result_mapped: indicator_to_parameters_map[i.name] = Result
+            result_mapped: processor_to_parameters_map[p.name] = Result
         end
 
     login_date: DATE_TIME
@@ -98,8 +98,8 @@ feature -- Element change
 
 feature -- Basic operations
 
-    prepare_indicator(i: MARKET_FUNCTION)
-            -- Prepare indicator `i' for processing.
+    prepare_processor(p: TRADABLE_PROCESSOR)
+            -- Prepare processor `p' for processing.
         local
             params: LIST [FUNCTION_PARAMETER]
             reference_params: LIST [SESSION_FUNCTION_PARAMETER]
@@ -107,12 +107,12 @@ feature -- Basic operations
                 INDEXABLE_ITERATION_CURSOR [FUNCTION_PARAMETER]
             update_occurred: BOOLEAN
         do
-            reference_params := parameters_for_indicator(i)
-            params := i.parameters
+            reference_params := parameters_for_processor(p)
+            params := p.parameters
             update_occurred := False
             if reference_params.count /= params.count then
                 -- Old reference param list no longer valid - discard it:
-                indicator_to_parameters_map.force(Void, i.name)
+                processor_to_parameters_map.force(Void, p.name)
             else
                 reference_cursor := reference_params.new_cursor
                 param_cursor := params.new_cursor
@@ -135,14 +135,14 @@ feature -- Basic operations
                     param_cursor.forth
                 end
                 if update_occurred then
-                    i.flag_as_modified
+                    p.flag_as_modified
                 end
             end
         end
 
 feature {NONE}
 
-    indicator_to_parameters_map: HASH_TABLE [LIST
+    processor_to_parameters_map: HASH_TABLE [LIST
         [SESSION_FUNCTION_PARAMETER], STRING]
 
     update_parameter(dest_param, src_param: FUNCTION_PARAMETER): BOOLEAN
@@ -170,6 +170,6 @@ feature {NONE}
 invariant
 
     dates_exist: start_dates /= Void and end_dates /= Void
-    map_exists: indicator_to_parameters_map /= Void
+    map_exists: processor_to_parameters_map /= Void
 
 end -- class MAS_SESSION

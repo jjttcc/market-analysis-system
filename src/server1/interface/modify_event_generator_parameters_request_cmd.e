@@ -1,6 +1,6 @@
 note
     description: "Commands that respond to a request to modify a set of %
-        %parameters for a specified indicator"
+        %parameters for a specified event generator"
     author: "Jim Cochrane"
     date: "$Date$";
     revision: "$Revision$"
@@ -8,10 +8,15 @@ note
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
     -- vim: expandtab
 
-class MODIFY_INDICATOR_PARAMETERS_REQUEST_CMD inherit
+class MODIFY_EVENT_GENERATOR_PARAMETERS_REQUEST_CMD inherit
     TRADABLE_REQUEST_COMMAND
         rename
             set_name as set_command_name, name as command_name
+        end
+
+    GLOBAL_APPLICATION
+        export
+            {NONE} all
         end
 
 inherit {NONE}
@@ -39,7 +44,7 @@ feature -- Basic operations
         do
             msg := message.out
             -- Expected format:
-            -- <ind-name>\t<param-idx1>:<value1>,<param-idx2>:<value2>,...
+            -- <eg-name>\t<param-idx1>:<value1>,<param-idx2>:<value2>,...
             parse_error := False
             target := msg -- set up for tokenization
             fields := tokens(message_component_separator)
@@ -48,7 +53,7 @@ feature -- Basic operations
                 parse_error := True
             end
             if not parse_error then
-                processor_name := fields @ 1
+                tradable_processor_name := fields @ 1
                 process_parameter_specs(fields)
                 if not parse_error then
                     send_response
@@ -60,8 +65,9 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-    processor_name: STRING
-            -- Name of the indicator for which parameters are to be retrieved
+    tradable_processor_name: STRING
+            -- Name of the TRADABLE_PROCESSOR for which parameters are to
+            -- be retrieved
 
     parse_error: BOOLEAN
             -- Did a parse error occur?
@@ -74,15 +80,31 @@ feature {NONE}
 
     process_parameter_specs(fields: LIST [STRING])
         require
-            ind_name_set: processor_name /= Void
+            proc_name_set: tradable_processor_name /= Void
             has_params: fields.count >= param_specs_index
         local
-            ind: MARKET_FUNCTION
             param_specs, param_spec: LIST [STRING]
             param_index: INTEGER
+
+            egfound: BOOLEAN
+            eg_cursor: INDEXABLE_ITERATION_CURSOR [MARKET_EVENT_GENERATOR]
         do
-            ind := tradables.indicator_with_name(processor_name)
-            parameters := session.parameters_for_processor(ind)
+
+--!!!!![Check diff and add note about sim. to
+--!!!!!!EVENT_GENERATOR_PARAMETERS_REQUEST_CMD - re. refactoring]
+            eg_cursor := market_event_generation_library.new_cursor
+            from eg_cursor.start until egfound or eg_cursor.after loop
+                if eg_cursor.item.name ~ tradable_processor_name then
+                    egfound := True
+                    parameters := session.parameters_for_processor(
+                        eg_cursor.item)
+                end
+                eg_cursor.forth
+            end
+
+
+--!!!!![Check diff and add note about sim. to
+--!!!!!!MODIFY_INDICATOR_PARAMETERS_REQUEST_CMD - re. refactoring]
             target := fields[param_specs_index]
             param_specs := tokens(message_sub_field_separator)
             across param_specs as spec loop
@@ -119,7 +141,7 @@ feature {NONE}
             put(eom)
         end
 
-    name: STRING = "Indicator parameters set request"
+    name: STRING = "Event generator parameters set request"
 
     param_specs_index: INTEGER = 2
 

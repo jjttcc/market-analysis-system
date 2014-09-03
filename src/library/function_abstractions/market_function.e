@@ -169,15 +169,6 @@ feature -- Status report
 			Result := gs.debug_state.market_functions
 		end
 
-feature -- Status setting
-
-	flag_as_modified
-			-- If this function is modifiable, flag it as having been modified;
-			-- otherwise, do nothing.
-		do
-			-- [Redefine if needed]
-		end
-
 feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Element change
 
 	set_name (n: STRING)

@@ -8,10 +8,15 @@ note
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
     -- vim: expandtab
 
-class INDICATOR_PARAMETERS_REQUEST_CMD inherit
+class EVENT_GENERATOR_PARAMETERS_REQUEST_CMD inherit
     TRADABLE_REQUEST_COMMAND
         rename
             set_name as set_command_name, name as command_name
+        end
+
+    GLOBAL_APPLICATION
+        export
+            {NONE} all
         end
 
 inherit {NONE}
@@ -46,7 +51,7 @@ feature -- Basic operations
                 parse_error := True
             end
             if not parse_error then
-                indicator_name := fields @ 1
+                tradable_processor_name := fields @ 1
                 retrieve_parameters
                 send_response
             end
@@ -54,8 +59,9 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-    indicator_name: STRING
-            -- Name of the indicator for which parameters are to be retrieved
+    tradable_processor_name: STRING
+            -- Name of the TRADABLE_PROCESSOR for which parameters are to
+            -- be retrieved
 
     parse_error: BOOLEAN
             -- Did a parse error occur?
@@ -66,12 +72,38 @@ feature {NONE}
 
     retrieve_parameters
         require
-            ind_name_set: indicator_name /= Void
+            processor_name_set: tradable_processor_name /= Void
         local
-            i: MARKET_FUNCTION
+            egfound: BOOLEAN
+            eg_cursor: INDEXABLE_ITERATION_CURSOR [MARKET_EVENT_GENERATOR]
         do
-            i := tradables.indicator_with_name(indicator_name)
-            parameters := session.parameters_for_processor(i)
+            eg_cursor := market_event_generation_library.new_cursor
+            from eg_cursor.start until egfound or eg_cursor.after loop
+                if eg_cursor.item.name ~ tradable_processor_name then
+                    egfound := True
+                    parameters := session.parameters_for_processor(
+                        eg_cursor.item)
+                end
+                eg_cursor.forth
+            end
+        ensure
+            parameters_set: parameters /= Void
+        end
+
+    retrieve_parameters_version1
+        require
+            processor_name_set: tradable_processor_name /= Void
+        local
+            egfound: BOOLEAN
+            eg_cursor: INDEXABLE_ITERATION_CURSOR [MARKET_EVENT_GENERATOR]
+        do
+            eg_cursor := market_event_generation_library.new_cursor
+            from eg_cursor.start until egfound or eg_cursor.after loop
+                if eg_cursor.item.name ~ tradable_processor_name then
+                    egfound := True
+                    parameters := eg_cursor.item.parameters
+                end
+            end
         ensure
             parameters_set: parameters /= Void
         end
@@ -110,6 +142,6 @@ feature {NONE}
                 (?))
         end
 
-    name: STRING = "Indicator parameters request"
+    name: STRING = "Event-generator parameters request"
 
 end
