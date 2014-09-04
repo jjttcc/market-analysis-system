@@ -9,14 +9,16 @@ client_data_req -> mkt_data_req | ind_data_req | symbol_list_req |
                      ind_list_req | trad_pertyp_req | change_session_req |
                      event_data_req | event_list_req | logout_req |
                      all_ind_req | param_req | param_set_req |
-					 time_delimited_mkt_data_req | time_delimited_ind_data_req
+                     time_delimited_mkt_data_req | time_delimited_ind_data_req |
+                     object_info_req
 compress_flag   -> "<@z@>"
 mkt_data_req    -> mkt_symbol mfs trad_per_type
 event_data_req  -> mkt_symbol mfs start_date mfs end_date mfs event_id_list
 ind_data_req    -> indID mfs mkt_symbol mfs trad_per_type
 all_ind_req     -> <null>
-param_req       -> ind_name
-param_set_req   -> To Be Defined!!!
+param_req       -> processor_name
+param_set_req   -> processor_name mfs { param_spec subfs ... }
+object_info_req -> object_type mfs object_name
 trad_pertyp_req -> mkt_symbol
 login_req       -> { login_spec mfs ... }
 login_spec      -> start_date_spec | end_date_spec
@@ -32,29 +34,37 @@ error_msg       -> ta_string
 mkt_symbol      -> ta_string
 srvr_data       -> mkt_data | ind_data | symbol_list | ind_list |
                      trad_per_types | event_list | event_data |
-                     ind_param_list | <null>
+                     param_list | object_info | <null>
 mkt_data        -> { [open_int_flag] mkt_tuple "\n" ... }
 open_int_flag   -> "oi"
 ind_data        -> { ind_tuple "\n" ... }
 ind_tuple       -> datetime dfs ta_real
 symbol_list     -> { symbol "\n" ... }
 ind_list        -> { ind_name "\n" ... }
-ind_param_list  -> To Be Defined
+param_list      -> { param_info "\n" ... }
+param_info      -> param_name "\t" param_value "\t" param_type_desc
+param_type_desc -> "integer value" | "real value"
+object_info     -> To Be Defined
 event_list      -> { event_specifier "\n" ... }
 event_data      -> { event_tuple "\n" ... }
 event_tuple     -> datetime dfs eventID dfs event_type
 event_type      -> "b" | "s" | "n" | "o"
 trad_per_types  -> { trad_per_type "\n" ... }
 event_id_list   -> { eventID dfs ... }+
-event_specifier -> event_name dfs eventID
+event_specifier -> event_type_name dfs eventID
+param_spec      -> param_id key_val_fs param_value
 mkt_fields      -> { ta_real dfs ... }+ [ dfs volume [ dfs open_interest ] ]
 trad_per_type   -> "daily" | "weekly" | "monthly" | "quarterly" | "yearly" |
                      "hourly" | "1-minute" | "2-minute" | "5-minute" |
                      "10-minute" | "15-minute" | "20-minute" | "30-minute"
+processor_name  -> ind_name | event_type_name
 ind_name        -> ta_string
-event_name      -> ta_string
-indID           -> natural_integer
-eventID         -> natural_integer
+event_type_name -> ta_string
+param_name      -> ta_string
+param_value     -> ta_string
+indID           -> positive_integer
+eventID         -> positive_integer
+param_id        -> positive_integer
 volume          -> ta_real
 open_interest   -> ta_real
 session_key     -> natural_integer
@@ -76,6 +86,7 @@ hour            -> digit digit
 minute          -> digit digit
 second          -> digit digit
 natural_integer -> +('0'..'9')
+positive_integer-> ('1'..'9') [+('0'..'9')]
 ta_real         -> +('0'..'9') '.' *('0'..'9')
 digit           -> ('0'..'9')
 end_of_message  -> ''
@@ -84,6 +95,8 @@ ta_char         -> Any character other than tab or newline
 <null>          -> Empty string (0-length contents)
 mfs             -> "\t"
 dfs             -> "\t"
+subfs           -> ","
+key_val_fs      -> ":"
 
 
 Definitions:
@@ -150,7 +163,7 @@ ind_list_req:       ind_list
 ind_data_req:       ind_data
 trad_pertyp_req:    trad_per_types
 all_ind_req:        ind_list
-param_req:          ind_param_list
+param_req:          param_list
 param_set_req:      <null>
 event_list_req:     event_list
 event_data_req:     event_data
@@ -160,19 +173,6 @@ Notes:
 
 See shared_protocol_grammar for the definition of components not
 defined in this file.
-
-!!!The grammars for param_set_req and ind_param_list are not yet defined.
-'ind_param_list' will probably be a list of function parameters, where
-each element of the list includes the FP's name (which serves
-as a unique key) and the FP's full description, including its type.
-There needs to be enough information for the user to know what he is
-editing.  The 'param_set_req' will probably consist of the 'ind_name' (key
-to the indicator being edited), the FP's name to ID the FP, and the new
-value for the FP.  (It may also include the period type, to specify that
-only the indicator for that period type should be changed; if so, an "all"
-period type should probably be included to specify that the specified
-indicators for all period types be changed.)
-Remove this note when the definition for these terms are complete.
 
 The construct "symbol1<>symbol2" means that there is no white space separating
 symbol1 and symbol2.
@@ -214,3 +214,5 @@ until it receives a request from the client.  Usually this will be a
 symbol_list_req, followed by a ind_list_req; but if the client is a new window
 (possibly in a new thread) in an existing process, it may already have a copy
 of the list of markets and of the list of indicators.
+
+# vim: expandtab

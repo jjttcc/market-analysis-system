@@ -9,9 +9,9 @@ note
     -- vim: expandtab
 
 class INDICATOR_PARAMETERS_REQUEST_CMD inherit
-    TRADABLE_REQUEST_COMMAND
-        rename
-            set_name as set_command_name, name as command_name
+    PARAMETER_BASED_REQUEST_CMD
+        redefine
+            iteration, set_iteration
         end
 
 inherit {NONE}
@@ -26,90 +26,27 @@ creation
 
     make
 
-feature -- Access
-
-    expected_field_count: INTEGER = 1
-
-feature -- Basic operations
-
-    do_execute(message: ANY)
-        local
-            msg: STRING
-            fields: LIST [STRING]
-        do
-            msg := message.out
-            parse_error := False
-            target := msg -- set up for tokenization
-            fields := tokens(message_component_separator)
-            if fields.count < expected_field_count then
-                report_error(Error, <<"Fields count wrong for ", name, ".">>)
-                parse_error := True
-            end
-            if not parse_error then
-                indicator_name := fields @ 1
-                retrieve_parameters
-                send_response
-            end
-        end
-
-feature {NONE} -- Implementation
-
-    indicator_name: STRING
-            -- Name of the indicator for which parameters are to be retrieved
-
-    parse_error: BOOLEAN
-            -- Did a parse error occur?
-
-    parameters: LIST [FUNCTION_PARAMETER]
-
 feature {NONE}
 
     retrieve_parameters
-        require
-            ind_name_set: indicator_name /= Void
         local
             i: MARKET_FUNCTION
         do
-            i := tradables.indicator_with_name(indicator_name)
+            i := tradables.indicator_with_name(tradable_processor_name)
             parameters := session.parameters_for_processor(i)
-        ensure
-            parameters_set: parameters /= Void
-        end
-
-    send_response
-            -- Run market analysis on for `symbol' for all event types
-            -- specified in `requested_event_types' between
-            -- `analysis_start_date' and `analysis_end_date'.
-        require
-            settings_not_void: parameters /= Void
-        do
-            put_ok
-            send_parameter_report
-            put(eom)
         end
 
     iteration: INTEGER
 
-    send_parameter_report
-            -- Send the report, from `parameters', to the client.
-        require
-            parameters_set: parameters /= Void
+    set_iteration(i: INTEGER)
         do
-            iteration := 1
-            parameters.do_all(agent (param: FUNCTION_PARAMETER)
-                do
-                    put(concatenation(<<param.unique_name,
-                        message_component_separator, param.current_value,
-                        message_component_separator,
-                        param.value_type_description>>))
-                    if iteration < parameters.count then
-                        put(message_record_separator)
-                    end
-                    iteration := iteration + 1
-                end
-                (?))
+            iteration := i
         end
 
     name: STRING = "Indicator parameters request"
+
+invariant
+
+    params_not_modified: not modify_parameters
 
 end

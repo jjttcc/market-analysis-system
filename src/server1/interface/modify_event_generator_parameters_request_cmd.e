@@ -9,9 +9,9 @@ note
     -- vim: expandtab
 
 class MODIFY_EVENT_GENERATOR_PARAMETERS_REQUEST_CMD inherit
-    TRADABLE_REQUEST_COMMAND
-        rename
-            set_name as set_command_name, name as command_name
+    PARAMETER_BASED_REQUEST_CMD
+        redefine
+            modify_parameters
         end
 
     GLOBAL_APPLICATION
@@ -31,118 +31,20 @@ creation
 
     make
 
-feature -- Access
-
-    expected_field_count: INTEGER = 2
-
-feature -- Basic operations
-
-    do_execute(message: ANY)
-        local
-            msg: STRING
-            fields: LIST [STRING]
-        do
-            msg := message.out
-            -- Expected format:
-            -- <eg-name>\t<param-idx1>:<value1>,<param-idx2>:<value2>,...
-            parse_error := False
-            target := msg -- set up for tokenization
-            fields := tokens(message_component_separator)
-            if fields.count < expected_field_count then
-                report_error(Error, <<"Fields count wrong for ", name, ".">>)
-                parse_error := True
-            end
-            if not parse_error then
-                tradable_processor_name := fields @ 1
-                process_parameter_specs(fields)
-                if not parse_error then
-                    send_response
-                else
-                    report_error(Error, <<error_msg>>)
-                end
-            end
-        end
-
 feature {NONE} -- Implementation
 
-    tradable_processor_name: STRING
-            -- Name of the TRADABLE_PROCESSOR for which parameters are to
-            -- be retrieved
-
-    parse_error: BOOLEAN
-            -- Did a parse error occur?
-
-    error_msg: STRING
-
-    parameters: LIST [FUNCTION_PARAMETER]
+    modify_parameters: BOOLEAN = True
 
 feature {NONE}
 
-    process_parameter_specs(fields: LIST [STRING])
-        require
-            proc_name_set: tradable_processor_name /= Void
-            has_params: fields.count >= param_specs_index
+    retrieve_parameters
         local
-            param_specs, param_spec: LIST [STRING]
-            param_index: INTEGER
-
-            egfound: BOOLEAN
-            eg_cursor: INDEXABLE_ITERATION_CURSOR [MARKET_EVENT_GENERATOR]
+            meg: MARKET_EVENT_GENERATOR
         do
-
---!!!!![Check diff and add note about sim. to
---!!!!!!EVENT_GENERATOR_PARAMETERS_REQUEST_CMD - re. refactoring]
-            eg_cursor := market_event_generation_library.new_cursor
-            from eg_cursor.start until egfound or eg_cursor.after loop
-                if eg_cursor.item.name ~ tradable_processor_name then
-                    egfound := True
-                    parameters := session.parameters_for_processor(
-                        eg_cursor.item)
-                end
-                eg_cursor.forth
-            end
-
-
---!!!!![Check diff and add note about sim. to
---!!!!!!MODIFY_INDICATOR_PARAMETERS_REQUEST_CMD - re. refactoring]
-            target := fields[param_specs_index]
-            param_specs := tokens(message_sub_field_separator)
-            across param_specs as spec loop
-                target := spec.item
-                param_spec := tokens(message_key_value_separator)
-                if param_spec[1].is_integer then
-                    param_index := param_spec[1].to_integer
-                    if parameters.valid_index(param_index) then
-                        parameters[param_index].change_value(param_spec[2])
-                    else
-                        parse_error := True
-                        error_msg := "id/index field is out of range: " +
-                            param_spec[1] + " [1.." + parameters.count.out + "]"
-                    end
-                else
-                    parse_error := True
-                    error_msg := "id/index field is not an integer: " +
-                        param_spec[1]
-                end
-            end
-        ensure
-            parameters_set: parameters /= Void
-        end
-
-    send_response
-            -- Run market analysis on for `symbol' for all event types
-            -- specified in `requested_event_types' between
-            -- `analysis_start_date' and `analysis_end_date'.
-        require
-            settings_not_void: parameters /= Void
-        do
-            put_ok
-            --!!!!Send what here? Anything?!!!!!!!
-            put(eom)
+            meg := event_generator_with_name(tradable_processor_name)
+            parameters := session.parameters_for_processor(meg)
         end
 
     name: STRING = "Event generator parameters set request"
-
-    param_specs_index: INTEGER = 2
 
 end

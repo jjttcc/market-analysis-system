@@ -29,7 +29,7 @@ feature -- Access
 
 	name: STRING = "y-value for the left-most point"
 
-	value_type_description: STRING = "floating point value"
+	value_type_description: STRING = "real value"
 
 	current_value_equals (v: STRING): BOOLEAN
 		do

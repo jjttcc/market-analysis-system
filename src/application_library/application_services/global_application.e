@@ -212,7 +212,24 @@ feature -- Access
 				Result.extend (etypes.item.name)
 				etypes.forth
 			end
-	end
+		end
+
+	event_generator_with_name(name: STRING): MARKET_EVENT_GENERATOR
+			-- MARKET_EVENT_GENERATOR with the specified `name'
+		local
+            egfound: BOOLEAN
+            eg_cursor: INDEXABLE_ITERATION_CURSOR [MARKET_EVENT_GENERATOR]
+		do
+            eg_cursor := market_event_generation_library.new_cursor
+            from eg_cursor.start until egfound or eg_cursor.after loop
+                if eg_cursor.item.name ~ name then
+                    egfound := True
+                    Result := eg_cursor.item
+                end
+                eg_cursor.forth
+            end
+
+		end
 
 feature -- Basic operations
 
