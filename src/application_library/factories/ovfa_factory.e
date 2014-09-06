@@ -26,7 +26,7 @@ feature -- Access
 
 	product: ONE_VARIABLE_FUNCTION_ANALYZER
 
-	function: MARKET_FUNCTION
+	function: TRADABLE_FUNCTION
 			-- The function to be associated with the new OVFA
 
 	period_type: TIME_PERIOD_TYPE
@@ -40,7 +40,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_function (arg: MARKET_FUNCTION)
+	set_function (arg: TRADABLE_FUNCTION)
 			-- Set function to `arg'.
 		require
 			arg_not_void: arg /= Void

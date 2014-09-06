@@ -46,9 +46,9 @@ feature -- Access
 			Result.append (input.full_description)
 		end
 
-	children: LIST [MARKET_FUNCTION]
+	children: LIST [TRADABLE_FUNCTION]
 		do
-			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
+			create {LINKED_LIST [TRADABLE_FUNCTION]} Result.make
 			Result.extend (input)
 		end
 

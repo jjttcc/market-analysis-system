@@ -48,11 +48,11 @@ feature -- Initialization
 
 feature -- Access
 
-	input: MARKET_FUNCTION
+	input: TRADABLE_FUNCTION
 
-	indicators: LIST [MARKET_FUNCTION]
+	indicators: LIST [TRADABLE_FUNCTION]
 		do
-			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
+			create {LINKED_LIST [TRADABLE_FUNCTION]} Result.make
 			Result.extend (input)
 		end
 

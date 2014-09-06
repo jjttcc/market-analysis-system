@@ -14,7 +14,7 @@ class START_Y_FUNCTION_PARAMETER inherit
 			function
 		end
 
-creation {MARKET_FUNCTION}
+creation {TRADABLE_FUNCTION}
 
 	make
 

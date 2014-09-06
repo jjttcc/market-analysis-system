@@ -398,7 +398,7 @@ feature {NONE} -- Implementation
 		require
 			not_void: t /= Void
 		local
-			flst: LIST [MARKET_FUNCTION]
+			flst: LIST [TRADABLE_FUNCTION]
 		do
 			if open_interest then
 				-- t is a derivative instrument - all functions are valid,

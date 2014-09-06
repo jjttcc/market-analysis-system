@@ -1,6 +1,6 @@
 note
 	description:
-		"A MARKET_LINE that can be analyzed as a MARKET_FUNCTION"
+		"A MARKET_LINE that can be analyzed as a TRADABLE_FUNCTION"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

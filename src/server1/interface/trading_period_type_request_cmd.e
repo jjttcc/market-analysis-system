@@ -15,7 +15,6 @@ class TRADING_PERIOD_TYPE_REQUEST_CMD inherit
 			error_context
 		end
 
-
 	GLOBAL_SERVICES
 		export
 			{NONE} all

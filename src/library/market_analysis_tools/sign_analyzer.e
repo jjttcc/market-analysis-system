@@ -17,7 +17,7 @@ class SIGN_ANALYZER inherit
 			make as bo_make_unused
 		export {NONE}
 			bo_make_unused
-				{MARKET_FUNCTION}
+				{TRADABLE_FUNCTION}
 			initialize
 		end
 

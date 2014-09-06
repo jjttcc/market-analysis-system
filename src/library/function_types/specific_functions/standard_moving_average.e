@@ -110,7 +110,7 @@ feature {NONE} -- Basic operations
 
 feature {MARKET_FUNCTION_EDITOR}
 
-	set_input (in: MARKET_FUNCTION)
+	set_input (in: TRADABLE_FUNCTION)
 		do
 			Precursor (in)
 			sum.set (in.output)

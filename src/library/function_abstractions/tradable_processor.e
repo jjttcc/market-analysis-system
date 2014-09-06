@@ -11,12 +11,9 @@ note
 
 deferred class TRADABLE_PROCESSOR inherit
 
-feature -- Access
+    TREE_NODE
 
-    name: STRING
-            -- Identifying name
-        deferred
-        end
+feature -- Access
 
     functions: LIST [FUNCTION_PARAMETER]
             -- All functions used directly or indirectly by this market
@@ -46,7 +43,7 @@ feature -- Status report
     parameter_unames_unique: BOOLEAN
             -- Is each parameter's `unique_name' unique?
         local
-            name_used, nused2: HASH_TABLE [INTEGER, STRING]
+            name_used: HASH_TABLE [INTEGER, STRING]
         do
             create name_used.make(parameters.count)
             Result := parameters.for_all(agent (fp: FUNCTION_PARAMETER;

@@ -24,7 +24,7 @@ feature {NONE} -- Basic operations
 	do_execute (message: ANY)
 		local
 			msg: STRING
-			indicators: SEQUENCE [MARKET_FUNCTION]
+			indicators: SEQUENCE [TRADABLE_FUNCTION]
 		do
 			msg := message.out
 			-- `msg' is expected to be empty - if it's not, ignore the error,

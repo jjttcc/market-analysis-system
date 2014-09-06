@@ -176,7 +176,6 @@ feature {NONE} -- Implemenation
 			fs_count: INTEGER
 			date: LIST [STRING]
 			su: expanded STRING_UTILITIES
-			date_util: expanded DATE_TIME_SERVICES
 		do
 			if l.is_empty or else not (l @ 1).is_digit then
 				Result := ""

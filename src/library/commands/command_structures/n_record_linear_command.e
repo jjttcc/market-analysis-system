@@ -104,7 +104,7 @@ feature -- Status report
 			Result := True
 		end
 
-feature {MARKET_FUNCTION} -- Initialization
+feature {TRADABLE_FUNCTION} -- Initialization
 
 	initialize (arg: N_RECORD_STRUCTURE)
 		local

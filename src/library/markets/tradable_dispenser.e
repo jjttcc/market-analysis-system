@@ -133,7 +133,7 @@ feature -- Access
             all_valid: Result.for_all (agent valid_period_type (symbol, ?))
         end
 
-    indicators: SEQUENCE [MARKET_FUNCTION]
+    indicators: SEQUENCE [TRADABLE_FUNCTION]
             -- All indicators currently known to the system
         deferred
         end
@@ -150,7 +150,7 @@ feature -- Access
     last_tradable: TRADABLE [BASIC_MARKET_TUPLE]
             -- Last tradable accessed
 
-    indicator_with_name(n: STRING): MARKET_FUNCTION
+    indicator_with_name(n: STRING): TRADABLE_FUNCTION
             -- Element of `indicators' with name `n'
         deferred
         end

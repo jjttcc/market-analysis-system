@@ -8,7 +8,7 @@ note
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-deferred class MARKET_FUNCTION inherit
+deferred class TRADABLE_FUNCTION inherit
 
 	GENERIC_FACTORY [MARKET_TUPLE_LIST [MARKET_TUPLE]]
 		rename
@@ -18,11 +18,11 @@ deferred class MARKET_FUNCTION inherit
 		end
 
 	TRADABLE_PROCESSOR
-
-	TREE_NODE
 		redefine
 			name, copy_of_children, descendant_comparison_is_by_objects
 		end
+--!!!!!!!!!!!!!!!!!!!!!!!!!!
+--	TREE_NODE
 
 	FUNCTION_PARAMETER
 		rename
@@ -83,12 +83,12 @@ feature -- Access
 		deferred
 		end
 
-	children: LIST [MARKET_FUNCTION]
+	children: LIST [TRADABLE_FUNCTION]
 			-- This function's children, if this is a composite function
 		deferred
 		end
 
-	functions: LIST [MARKET_FUNCTION]
+	functions: LIST [TRADABLE_FUNCTION]
 		do
 			Result := descendants
 			Result.extend (Current)
@@ -96,7 +96,7 @@ feature -- Access
 
 	operators: LIST [COMMAND]
 		local
-			l: LIST [MARKET_FUNCTION]
+			l: LIST [TRADABLE_FUNCTION]
 		do
 			create {LINKED_SET [COMMAND]} Result.make
 			if attached {SEQUENCE [COMMAND]} immediate_operators as ops then
@@ -201,14 +201,14 @@ feature -- Basic operations
 			processed: processed
 		end
 
-feature {MARKET_FUNCTION, MARKET_FUNCTION_EDITOR}
+feature {TRADABLE_FUNCTION, MARKET_FUNCTION_EDITOR}
 
 	is_complex: BOOLEAN
 			-- Is the run-time type a complex function?
 		deferred
 		end
 
-feature {MARKET_FUNCTION_EDITOR, MARKET_FUNCTION}
+feature {MARKET_FUNCTION_EDITOR, TRADABLE_FUNCTION}
 
 	reset_parameters
 			-- Reset the cached parameter list to ensure it is up to date
@@ -219,7 +219,7 @@ feature {MARKET_FUNCTION_EDITOR, MARKET_FUNCTION}
 			-- Default to null action - redefine as needed.
 		end
 
-feature {MARKET_FUNCTION}
+feature {TRADABLE_FUNCTION}
 
 	immediate_direct_parameters: LIST [FUNCTION_PARAMETER]
 			-- Parameters of Current, excluding `operator_parameters' and
@@ -330,7 +330,7 @@ feature {NONE} -- (from FUNCTION_PARAMETER)
 			Result := output.out
 		end
 
-	value_type_description: STRING = "[MARKET_FUNCTION - to-be-defined]"
+	value_type_description: STRING = "[TRADABLE_FUNCTION - to-be-defined]"
 
 	current_value_equals (v: STRING): BOOLEAN
 		do
@@ -356,4 +356,4 @@ invariant
 		processed implies processed_date_time /= Void
 	operators_not_void: operators /= Void
 
-end -- class MARKET_FUNCTION
+end -- class TRADABLE_FUNCTION

@@ -80,10 +80,10 @@ feature -- Access
 --!!!!!Changed on Jun 19 from:
 --	indicators: LIST [FUNCTION_PARAMETER]
 --!!!!!to:
-	indicators: LIST [MARKET_FUNCTION]
+	indicators: LIST [TRADABLE_FUNCTION]
 --!!!!!Check that this type is correct in all cases.
 		do
-			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
+			create {LINKED_LIST [TRADABLE_FUNCTION]} Result.make
 			Result.append (left_analyzer.indicators)
 			Result.append (right_analyzer.indicators)
 		end

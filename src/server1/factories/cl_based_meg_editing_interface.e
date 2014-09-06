@@ -280,7 +280,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	function_choice (msg: STRING): MARKET_FUNCTION
+	function_choice (msg: STRING): TRADABLE_FUNCTION
 		do
 			Result := function_library @ list_selection (function_names,
 					concatenation (<<"Select the ", msg>>))

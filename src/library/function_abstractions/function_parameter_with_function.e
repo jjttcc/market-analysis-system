@@ -27,7 +27,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	function: MARKET_FUNCTION
+	function: TRADABLE_FUNCTION
 			-- The function that this parameter applies to
 
 	description: STRING

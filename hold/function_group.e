@@ -8,7 +8,7 @@ indexing
 
 class FUNCTION_GROUP inherit
 
-	LINKED_LIST [MARKET_FUNCTION]
+	LINKED_LIST [TRADABLE_FUNCTION]
 		export {NONE}
 			all
 		end

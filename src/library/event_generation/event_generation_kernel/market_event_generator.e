@@ -15,7 +15,8 @@ deferred class MARKET_EVENT_GENERATOR inherit
 		rename
 			functions as indicators
 		redefine
-			indicators
+			indicators,
+children, name
 		end
 
 	EVENT_GENERATOR
@@ -23,10 +24,11 @@ deferred class MARKET_EVENT_GENERATOR inherit
 			product
 		end
 
-	TREE_NODE
-		redefine
-			children, name
-		end
+--!!!!!!!!
+--	TREE_NODE
+--		redefine
+--			children, name
+--		end
 
 	GLOBAL_SERVICES
 		export {NONE}
@@ -47,7 +49,7 @@ feature -- Access
 	event_type: EVENT_TYPE
 			-- The type of the generated events
 
-	indicators: LIST [MARKET_FUNCTION]
+	indicators: LIST [TRADABLE_FUNCTION]
 		deferred
 		end
 

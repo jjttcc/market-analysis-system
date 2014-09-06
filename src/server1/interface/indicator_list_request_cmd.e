@@ -28,7 +28,7 @@ feature {NONE} -- Hook routine implementations
 
 	send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE])
 		local
-			ilist: LIST [MARKET_FUNCTION]
+			ilist: LIST [TRADABLE_FUNCTION]
 		do
 			put_ok
 			ilist := t.indicators

@@ -222,9 +222,9 @@ feature {NONE}
 			end
 		end
 
-	edit_indicator_menu (indicators: LIST [MARKET_FUNCTION])
+	edit_indicator_menu (indicators: LIST [TRADABLE_FUNCTION])
 		local
-			indicator: MARKET_FUNCTION
+			indicator: TRADABLE_FUNCTION
 			finished: BOOLEAN
 			parameter: FUNCTION_PARAMETER
 			parameters: LIST [FUNCTION_PARAMETER]
@@ -315,7 +315,7 @@ feature {NONE}
 			-- Menu for viewing market and market function data
 		local
 			finished: BOOLEAN
-			indicator: MARKET_FUNCTION
+			indicator: TRADABLE_FUNCTION
 		do
 			from
 			until
@@ -362,7 +362,7 @@ feature {NONE}
 			time: TIME
 			date_time: DATE_TIME
 			finished, set_date: BOOLEAN
-			indicator: MARKET_FUNCTION
+			indicator: TRADABLE_FUNCTION
 		do
 			create date.make_now
 			create time.make_now
@@ -517,7 +517,7 @@ feature {NONE}
 						" overhead bytes used%N", used, " bytes used%N">>)
 		end
 
-	view_indicator_menu (indicator: MARKET_FUNCTION)
+	view_indicator_menu (indicator: TRADABLE_FUNCTION)
 			-- Menu for viewing market function data
 		local
 			finished: BOOLEAN
@@ -622,8 +622,8 @@ feature {NONE}
 						current_period_type)
 		end
 
-	indicator_selection (indicators: LIST [MARKET_FUNCTION]):
-				MARKET_FUNCTION
+	indicator_selection (indicators: LIST [TRADABLE_FUNCTION]):
+				TRADABLE_FUNCTION
 			-- User-selected indicator
 		require
 			not_trdble_empty: not current_tradable.indicators.is_empty

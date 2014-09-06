@@ -15,7 +15,7 @@ deferred class FUNCTION_EDITING_INTERFACE inherit
 			{NONE} all
 		end
 
-	OBJECT_EDITING_INTERFACE [MARKET_FUNCTION]
+	OBJECT_EDITING_INTERFACE [TRADABLE_FUNCTION]
 		rename
 			object_selection_from_type as function_selection_from_type,
 			object_types as function_types, edit_object as edit_function,
@@ -26,7 +26,7 @@ deferred class FUNCTION_EDITING_INTERFACE inherit
 			editor, function_types, edit_function
 		end
 
-	STORABLE_SERVICES [MARKET_FUNCTION]
+	STORABLE_SERVICES [TRADABLE_FUNCTION]
 		rename
 			real_list as function_library,
 			working_list as working_function_library,
@@ -57,8 +57,8 @@ feature -- Access
 
 feature -- Constants
 
-	Market_function: STRING = "MARKET_FUNCTION"
-			-- Name of MARKET_FUNCTION
+	Market_function: STRING = "TRADABLE_FUNCTION"
+			-- Name of TRADABLE_FUNCTION
 
 	Complex_function: STRING = "COMPLEX_FUNCTION"
 			-- Name of COMPLEX_FUNCTION
@@ -67,13 +67,13 @@ feature -- Basic operations
 
 feature -- Access
 
-	function_types: HASH_TABLE [ARRAYED_LIST [MARKET_FUNCTION], STRING]
+	function_types: HASH_TABLE [ARRAYED_LIST [TRADABLE_FUNCTION], STRING]
 			-- Hash table of lists of function instances - each list contains
 			-- instances of all classes whose type conforms to the Hash
 			-- table key.
 -- !!!! indexing once_status: global??!!!
 		local
-			l: ARRAYED_LIST [MARKET_FUNCTION]
+			l: ARRAYED_LIST [TRADABLE_FUNCTION]
 		once
 			create Result.make (0)
 			make_instances
@@ -115,9 +115,9 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			Result := user_function_selection (function_instances, msg).output
 		end
 
-	function_selection (msg: STRING; l: LIST [MARKET_FUNCTION];
-		backout_allowed: BOOLEAN): MARKET_FUNCTION
-			-- User-selected MARKET_FUNCTION from the 'l' - if
+	function_selection (msg: STRING; l: LIST [TRADABLE_FUNCTION];
+		backout_allowed: BOOLEAN): TRADABLE_FUNCTION
+			-- User-selected TRADABLE_FUNCTION from the 'l' - if
 			-- `backout_allowed', the user is allowed to "back out" -
 			-- not choose a function - in which case Result is Void.
 		local
@@ -143,8 +143,8 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			end
 		end
 
-	function_selection_from_library (msg: STRING): MARKET_FUNCTION
-			-- User-selected MARKET_FUNCTION from the function library
+	function_selection_from_library (msg: STRING): TRADABLE_FUNCTION
+			-- User-selected TRADABLE_FUNCTION from the function library
 		do
 			Result := (market_function_selection (msg,
 				agent valid_root_function)).twin
@@ -153,10 +153,10 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 		end
 
 	market_function_selection (msg: STRING; validity_checker:
-		FUNCTION [ANY, TUPLE [MARKET_FUNCTION], BOOLEAN]): MARKET_FUNCTION
-			-- User-selected MARKET_FUNCTION from the function library
+		FUNCTION [ANY, TUPLE [TRADABLE_FUNCTION], BOOLEAN]): TRADABLE_FUNCTION
+			-- User-selected TRADABLE_FUNCTION from the function library
 		local
-			l: LINKED_LIST [MARKET_FUNCTION]
+			l: LINKED_LIST [TRADABLE_FUNCTION]
 		do
 			create l.make
 			if validity_checker = Void then
@@ -220,7 +220,7 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 
 feature {EDITING_INTERFACE}
 
-	initialize_function (f: MARKET_FUNCTION)
+	initialize_function (f: TRADABLE_FUNCTION)
 			-- Set function parameters - operands, etc.
 		local
 			ema: EXPONENTIAL_MOVING_AVERAGE
@@ -294,14 +294,14 @@ feature {EDITING_INTERFACE}
 			end
 		end
 
-	view_indicator_list (l: LIST [MARKET_FUNCTION])
+	view_indicator_list (l: LIST [TRADABLE_FUNCTION])
 			-- Allow user to view indicators from `l'.
 		require
 			not_void: l /= Void
 		local
 			selection: INTEGER
-			indicator: MARKET_FUNCTION
-			functions: LIST [MARKET_FUNCTION]
+			indicator: TRADABLE_FUNCTION
+			functions: LIST [TRADABLE_FUNCTION]
 			complex_func: COMPLEX_FUNCTION
 		do
 			from
@@ -339,14 +339,14 @@ feature {EDITING_INTERFACE}
 		end
 
 --
-fooedit_indicator_list (l: LIST [MARKET_FUNCTION])
+fooedit_indicator_list (l: LIST [TRADABLE_FUNCTION])
 	-- Editing of indicators in `l'
 require
 	not_void: l /= Void
 	readonly_or_saveable: readonly or ok_to_save
 local
 	selection: INTEGER
-	indicator: MARKET_FUNCTION
+	indicator: TRADABLE_FUNCTION
 do
 	from
 		selection := Null_value
@@ -383,7 +383,7 @@ end
 					names_from_function_list(l), "Select an indicator to edit")
 				if selection /= Exit_value then
 					indicator := l @ selection
-					if attached {MARKET_FUNCTION} indicator as i then
+					if attached {TRADABLE_FUNCTION} indicator as i then
 						edit_indicator (i)
 					end
 				end
@@ -427,10 +427,10 @@ feature {NONE} -- Implementation
 	:
 				INTEGER = unique
 			-- Constants identifying initialization routines required for
-			-- the different MARKET_FUNCTION types
+			-- the different TRADABLE_FUNCTION types
 
 	initialization_map: HASH_TABLE [INTEGER, STRING]
-			-- Mapping of MARKET_FUNCTION names to
+			-- Mapping of TRADABLE_FUNCTION names to
 			-- initialization classifications
 -- !!!! indexing once_status: global??!!!
 		local
@@ -526,11 +526,11 @@ feature {NONE} -- Implementation
 
 	help: APPLICATION_HELP
 
-	working_function_library: STORABLE_LIST [MARKET_FUNCTION]
+	working_function_library: STORABLE_LIST [TRADABLE_FUNCTION]
 			-- List of indicators used for editing until the user saves
 			-- the current changes
 
-	edit_function (o: MARKET_FUNCTION; msg: STRING)
+	edit_function (o: TRADABLE_FUNCTION; msg: STRING)
 			-- Set `o's name to value obtained from user.
 		local
 			spiel: STRING
@@ -611,11 +611,11 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	editable_children (indicator: MARKET_FUNCTION):
-				LINKED_LIST [MARKET_FUNCTION]
+	editable_children (indicator: TRADABLE_FUNCTION):
+				LINKED_LIST [TRADABLE_FUNCTION]
 			-- Children of `indicator' that have parameters
 		local
-			c: LIST [MARKET_FUNCTION]
+			c: LIST [TRADABLE_FUNCTION]
 		do
 			create Result.make
 			c := indicator.children
@@ -633,7 +633,7 @@ feature {NONE} -- Implementation
 			not_void: Result /= Void
 		end
 
-	valid_root_function (f: MARKET_FUNCTION): BOOLEAN
+	valid_root_function (f: TRADABLE_FUNCTION): BOOLEAN
 			-- Is `f' allowed to be used as a root function?
 		local
 			l: LINEAR [MARKET_TUPLE]
@@ -664,7 +664,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	set_complex_function_inputs (f: MARKET_FUNCTION)
+	set_complex_function_inputs (f: TRADABLE_FUNCTION)
 		require
 			f_is_complex: f.is_complex
 		local
@@ -674,7 +674,7 @@ feature {NONE} -- Implementation
 			tvf: TWO_VARIABLE_FUNCTION
 			abf: AGENT_BASED_FUNCTION
 			mfl: MARKET_FUNCTION_LINE
-			chosen_functions: LINKED_SET [MARKET_FUNCTION]
+			chosen_functions: LINKED_SET [TRADABLE_FUNCTION]
 			operators: LINKED_SET [COMMAND]
 			f_changed: BOOLEAN
 			leaf_msg, no_function_msg, it_they_msg: STRING
@@ -757,7 +757,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	initialize_linear_commands (functions: LIST [MARKET_FUNCTION];
+	initialize_linear_commands (functions: LIST [TRADABLE_FUNCTION];
 		commands: TRAVERSABLE_SUBSET [COMMAND]; parent_name: STRING)
 			-- For each function f in `flist': For each
 			-- command c in f.operators, if c is a LINEAR_COMMAND,
@@ -769,7 +769,7 @@ feature {NONE} -- Implementation
 				functions.count > 0
 			parent_name_exists: parent_name /= Void
 		local
-			f: MARKET_FUNCTION
+			f: TRADABLE_FUNCTION
 			lc: LINEAR_COMMAND
 			ys: STRING
 		do
@@ -803,7 +803,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	name_for (o: MARKET_FUNCTION): STRING
+	name_for (o: TRADABLE_FUNCTION): STRING
 		do
 			Result := ""
 		end
@@ -873,7 +873,7 @@ feature {NONE} -- Implementation - indicator editing
 
 	create_new_indicator
 		local
-			f: MARKET_FUNCTION
+			f: TRADABLE_FUNCTION
 		do
 			inspect
 				character_choice ("Use an existing indicator as the " +
@@ -895,8 +895,8 @@ feature {NONE} -- Implementation - indicator editing
 
 	remove_indicator
 		local
-			indicator: MARKET_FUNCTION
-			l: LIST [MARKET_FUNCTION]
+			indicator: TRADABLE_FUNCTION
+			l: LIST [TRADABLE_FUNCTION]
 			finished: BOOLEAN
 		do
 			from
@@ -998,13 +998,13 @@ feature {NONE} -- Implementation - indicator editing
 -- bug is fixed, these changes need to be undone - calls to edit_parameter_menu
 -- put back, etc.  (Use an svn diff between rev. 4335 and rev. 4338 to see
 -- what changed.)
-	edit_indicator (i: MARKET_FUNCTION)
+	edit_indicator (i: TRADABLE_FUNCTION)
 			-- Edit indicator `i'.
 		require
 			not_void: i /= Void
 		local
 			has_children_to_edit, has_immediate_parameters: BOOLEAN
-			children: LIST [MARKET_FUNCTION]
+			children: LIST [TRADABLE_FUNCTION]
 			quit: BOOLEAN
 			parameters, im_paramaters: LIST [FUNCTION_PARAMETER]
 			target_parameters: LIST [FUNCTION_PARAMETER]
@@ -1107,10 +1107,10 @@ feature {NONE} -- Implementation - indicator editing
 			end
 		end
 
-	remove_from_working_copy (f: MARKET_FUNCTION)
+	remove_from_working_copy (f: TRADABLE_FUNCTION)
 			-- Remove all occurrences of `f' from `working_function_library'.
 		local
-			l: STORABLE_LIST [MARKET_FUNCTION]
+			l: STORABLE_LIST [TRADABLE_FUNCTION]
 		do
 			l := working_function_library
 			from

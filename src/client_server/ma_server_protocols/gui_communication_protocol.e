@@ -65,8 +65,8 @@ feature -- Client request IDs
 			-- Request for parameter settings for a specified indicator
 
 	event_parameters_request: INTEGER = 15
-			-- Request for parameter settings for a specified event type
-			-- (...???!!!)
+			-- Request for parameter settings for a specified
+			-- event-generator type
 
 	indicator_parameters_set_request: INTEGER = 16
 			-- Request to set new values for each of a specified set of
@@ -75,6 +75,10 @@ feature -- Client request IDs
 	event_parameters_set_request: INTEGER = 17
 			-- Request to set new values for each of a specified set of
 			-- parameters for a specified event type
+
+	object_info_request: INTEGER = 18
+			-- Request for information on one or more objects (e.g.,
+			-- indicators, event-generators)
 
 feature -- Server response IDs
 

@@ -11,7 +11,7 @@ note
 
 class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 
-	MARKET_FUNCTION
+	TRADABLE_FUNCTION
 		rename
 			output as data
 		export
@@ -29,7 +29,7 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 			{NONE} all
 			{FACTORY, MARKET_FUNCTION_EDITOR} first, last, i_th,
 				item, off
-			{MARKET_FUNCTION} make_from_array
+			{TRADABLE_FUNCTION} make_from_array
 			{DATA_SCANNER, COMPOSITE_TUPLE_BUILDER} wipe_out
 			{ANY} is_empty, count, before, area_v2, extendible, valid_index,
 				readable, index, prunable, extend
@@ -93,7 +93,7 @@ feature -- Access
 			create Result.make (1, 1, 1, 0, 0, 0)
 		end
 
-	children: LINKED_LIST [MARKET_FUNCTION]
+	children: LINKED_LIST [TRADABLE_FUNCTION]
 -- !!!! indexing once_status: global??!!!
 		once
 			create Result.make
@@ -146,7 +146,7 @@ feature {FACTORY} -- Status setting
 			loaded: loaded
 		end
 
-feature {MARKET_FUNCTION} -- Status report
+feature {TRADABLE_FUNCTION} -- Status report
 
 	is_complex: BOOLEAN = False
 

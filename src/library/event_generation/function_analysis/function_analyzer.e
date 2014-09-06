@@ -1,7 +1,7 @@
 note
 	description:
 		"Event generators whose events are based on analysis of %
-		%MARKET_FUNCTION data"
+		%TRADABLE_FUNCTION data"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

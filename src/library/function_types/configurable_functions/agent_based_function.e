@@ -29,7 +29,7 @@ feature {NONE} -- Initialization
 			key_exists: key /= Void
 		do
 			if ins = Void then
-				create {LINKED_LIST [MARKET_FUNCTION]} inputs.make
+				create {LINKED_LIST [TRADABLE_FUNCTION]} inputs.make
 			else
 				inputs := ins
 			end
@@ -100,9 +100,9 @@ feature -- Access
 			end
 		end
 
-	children: LIST [MARKET_FUNCTION]
+	children: LIST [TRADABLE_FUNCTION]
 		do
-			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
+			create {LINKED_LIST [TRADABLE_FUNCTION]} Result.make
 			from
 				inputs.start
 			until
@@ -264,7 +264,7 @@ feature {MARKET_FUNCTION_EDITOR} -- Element change
 			immediate_direct_parameters.extend (p)
 		end
 
-	add_input (f: MARKET_FUNCTION)
+	add_input (f: TRADABLE_FUNCTION)
 			-- Add `f' to `inputs'.
 		require
 			f_exists: f /= Void
@@ -277,7 +277,7 @@ feature {MARKET_FUNCTION_EDITOR} -- Element change
 
 feature {MARKET_FUNCTION_EDITOR, MARKET_AGENTS}
 
-	inputs: LIST [MARKET_FUNCTION]
+	inputs: LIST [TRADABLE_FUNCTION]
 			-- All inputs to be used for processing
 
 feature {MARKET_FUNCTION_EDITOR} -- Removal
@@ -300,7 +300,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	reset_market_function_parameters (mf: MARKET_FUNCTION)
+	reset_market_function_parameters (mf: TRADABLE_FUNCTION)
 		do
 			mf.reset_parameters
 		end

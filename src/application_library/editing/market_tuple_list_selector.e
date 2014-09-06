@@ -1,6 +1,6 @@
 note
 	description:
-		"Interface for selecting a MARKET_FUNCTION's market tuple list"
+		"Interface for selecting a TRADABLE_FUNCTION's market tuple list"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -19,9 +19,9 @@ feature -- Access
 		end
 
 	market_function_selection (msg: STRING;
-		validity_checker: FUNCTION [ANY, TUPLE [MARKET_FUNCTION], BOOLEAN]):
-		MARKET_FUNCTION
-			-- User-selected MARKET_FUNCTION from the function library,
+		validity_checker: FUNCTION [ANY, TUPLE [TRADABLE_FUNCTION], BOOLEAN]):
+		TRADABLE_FUNCTION
+			-- User-selected TRADABLE_FUNCTION from the function library,
 			-- filtered with `validity_checker' if it's not Void.
 		deferred
 		ensure

@@ -34,7 +34,7 @@ feature -- Access
 			-- be explicitly set to 0 before the creation/editing of a new
 			-- operator "tree".
 
-	market_function: MARKET_FUNCTION
+	market_function: TRADABLE_FUNCTION
 			-- Default market function to use for those commands that need it
 
 	market_tuple_selector: MARKET_TUPLE_LIST_SELECTOR
@@ -262,7 +262,7 @@ feature -- Status setting
 			left_offset_set: left_offset = arg and left_offset >= 0
 		end
 
-	set_market_function (arg: MARKET_FUNCTION)
+	set_market_function (arg: TRADABLE_FUNCTION)
 			-- Set market_function to `arg'.
 		require
 			arg_not_void: arg /= Void
@@ -323,7 +323,7 @@ feature {APPLICATION_COMMAND_EDITOR} -- Access
 			end
 		end
 
-	market_function_selection (msg: STRING): MARKET_FUNCTION
+	market_function_selection (msg: STRING): TRADABLE_FUNCTION
 		do
 			check
 				mf_not_void: market_function /= Void or

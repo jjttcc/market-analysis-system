@@ -113,7 +113,7 @@ feature -- Basic operations
 			-- by calling `print_tuples' on `output' of each of t's
 			-- indicators.
 		local
-			f: MARKET_FUNCTION
+			f: TRADABLE_FUNCTION
 		do
 			from
 				t.indicators.start
@@ -127,7 +127,7 @@ feature -- Basic operations
 			end
 		end
 
-	print_indicator (i: MARKET_FUNCTION)
+	print_indicator (i: TRADABLE_FUNCTION)
 			-- Print the fields of each tuple of indicator `i'.  If
 			-- `preface' is not empty, print it first.  If `appendix' is
 			-- not empty, print it at the end.
@@ -218,7 +218,7 @@ feature {NONE} -- Implementation
 			not_empty: Result /= Void and not Result.is_empty
 		end
 
-	print_mf_info (f: MARKET_FUNCTION)
+	print_mf_info (f: TRADABLE_FUNCTION)
 		require
 			not_void: f /= Void
 		do

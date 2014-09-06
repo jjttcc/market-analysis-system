@@ -1,7 +1,7 @@
 note
 	description:
 		"An empty class whose purpose is to allow access to some hidden %
-		%features of MARKET_FUNCTION by inheriting from this class"
+		%features of TRADABLE_FUNCTION by inheriting from this class"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

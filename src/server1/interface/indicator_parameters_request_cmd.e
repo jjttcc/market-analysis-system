@@ -30,7 +30,7 @@ feature {NONE}
 
     retrieve_parameters
         local
-            i: MARKET_FUNCTION
+            i: TRADABLE_FUNCTION
         do
             i := tradables.indicator_with_name(tradable_processor_name)
             parameters := session.parameters_for_processor(i)

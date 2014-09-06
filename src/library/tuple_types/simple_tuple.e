@@ -35,7 +35,7 @@ feature -- Access
 
 	end_date: DATE
 
-feature {MARKET_FUNCTION} -- Status setting
+feature {TRADABLE_FUNCTION} -- Status setting
 
 	set_value (v: DOUBLE)
 			-- Set value to `v'.

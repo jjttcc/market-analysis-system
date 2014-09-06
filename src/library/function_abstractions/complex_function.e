@@ -10,7 +10,7 @@ note
 
 deferred class COMPLEX_FUNCTION inherit
 
-	MARKET_FUNCTION
+	TRADABLE_FUNCTION
 		redefine
 			immediate_operators
 		end
@@ -135,7 +135,7 @@ feature {NONE} -- Hook methods
 			end
 		end
 
-feature {MARKET_FUNCTION} -- Status report
+feature {TRADABLE_FUNCTION} -- Status report
 
 	is_complex: BOOLEAN = True
 

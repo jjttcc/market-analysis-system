@@ -18,7 +18,7 @@ ind_data_req    -> indID mfs mkt_symbol mfs trad_per_type
 all_ind_req     -> <null>
 param_req       -> processor_name
 param_set_req   -> processor_name mfs { param_spec subfs ... }
-object_info_req -> object_type mfs object_name
+object_info_req -> object_list
 trad_pertyp_req -> mkt_symbol
 login_req       -> { login_spec mfs ... }
 login_spec      -> start_date_spec | end_date_spec
@@ -44,6 +44,12 @@ ind_list        -> { ind_name "\n" ... }
 param_list      -> { param_info "\n" ... }
 param_info      -> param_name "\t" param_value "\t" param_type_desc
 param_type_desc -> "integer value" | "real value"
+object_list     -> { object_spec "\n" ... }
+object_spec     -> object_type "," object_name [ "," object_opts ]
+object_type     -> "indicator" | "event-generator"
+object_opts     -> obj_opt_list
+obj_opt_list    -> { obj_opt ";" ... }
+obj_opt         -> "detail" | "debug" | "html"
 object_info     -> To Be Defined
 event_list      -> { event_specifier "\n" ... }
 event_data      -> { event_tuple "\n" ... }
@@ -62,6 +68,7 @@ ind_name        -> ta_string
 event_type_name -> ta_string
 param_name      -> ta_string
 param_value     -> ta_string
+object_name     -> ta_string
 indID           -> positive_integer
 eventID         -> positive_integer
 param_id        -> positive_integer

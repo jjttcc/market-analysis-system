@@ -1,6 +1,6 @@
 note
 	description:
-		"An instance of each instantiable MARKET_FUNCTION class that can %
+		"An instance of each instantiable TRADABLE_FUNCTION class that can %
 		%be used to construct a technical indicator"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -13,7 +13,7 @@ note
 
 class MARKET_FUNCTIONS inherit
 
-	CLASSES [MARKET_FUNCTION]
+	CLASSES [TRADABLE_FUNCTION]
 		rename
 			instances as function_instances,
 			description as function_description, 
@@ -34,7 +34,7 @@ feature -- Initialization
 	make_instances
 			-- Ensure that all "once" data are created.
 		local
-			i_and_d: ARRAYED_LIST [PAIR [MARKET_FUNCTION, STRING]]
+			i_and_d: ARRAYED_LIST [PAIR [TRADABLE_FUNCTION, STRING]]
 			fn: ARRAYED_LIST [STRING]
 		do
 			i_and_d := instances_and_descriptions
@@ -43,51 +43,51 @@ feature -- Initialization
 
 feature -- Access
 
-	instances_and_descriptions: ARRAYED_LIST [PAIR [MARKET_FUNCTION, STRING]]
-			-- An instance and description of each MARKET_FUNCTION class
+	instances_and_descriptions: ARRAYED_LIST [PAIR [TRADABLE_FUNCTION, STRING]]
+			-- An instance and description of each TRADABLE_FUNCTION class
 -- !!!! indexing once_status: global??!!!
 		once
 			create Result.make (0)
-			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+			Result.extend (create {PAIR [TRADABLE_FUNCTION, STRING]}.make (
 				one_variable_function,
 				"Function that operates one input sequence"))
-			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+			Result.extend (create {PAIR [TRADABLE_FUNCTION, STRING]}.make (
 				n_record_one_variable_function,
 				"Function that operates one input sequence and %
 				%operates on n records of that sequence at a time"))
-			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+			Result.extend (create {PAIR [TRADABLE_FUNCTION, STRING]}.make (
 				two_variable_function,
 				"Function that operates on two input sequences"))
-			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+			Result.extend (create {PAIR [TRADABLE_FUNCTION, STRING]}.make (
 				standard_moving_average,
 				"Function that provides an n-period moving average %
 				%of an input sequence"))
-			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+			Result.extend (create {PAIR [TRADABLE_FUNCTION, STRING]}.make (
 				exponential_moving_average,
 				"Function that provides an n-period exponential %
 				%moving average of an input sequence"))
-			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+			Result.extend (create {PAIR [TRADABLE_FUNCTION, STRING]}.make (
 				accumulation, "Function that accumulates its values"))
-			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+			Result.extend (create {PAIR [TRADABLE_FUNCTION, STRING]}.make (
 				configurable_n_record_function,
 				"N-period function that can be configured by choosing %
 				%previous and first-element operators"))
-			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+			Result.extend (create {PAIR [TRADABLE_FUNCTION, STRING]}.make (
 				market_function_line, "Function that behaves as a trend line"))
-			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+			Result.extend (create {PAIR [TRADABLE_FUNCTION, STRING]}.make (
 				agent_based_function,
 				"Function that uses a selectable procedure to do %
 				%its calculation"))
-			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+			Result.extend (create {PAIR [TRADABLE_FUNCTION, STRING]}.make (
 				market_data_function,
 				"Function that takes basic market data (with close, %
 				%high, volume, etc.) as input and %
 				%whose output is simply its input"))
-			Result.extend (create {PAIR [MARKET_FUNCTION, STRING]}.make (
+			Result.extend (create {PAIR [TRADABLE_FUNCTION, STRING]}.make (
 				stock, "Represents a dummy function that does not take input"))
 		end
 
-	function_instances: ARRAYED_LIST [MARKET_FUNCTION]
+	function_instances: ARRAYED_LIST [TRADABLE_FUNCTION]
 -- !!!! indexing once_status: global??!!!
 		once
 			Result := Precursor
@@ -177,9 +177,9 @@ feature -- Access - an instance of each market function
 		local
 			commands: expanded COMMANDS
 			agents: expanded MARKET_AGENTS
-			flst: LIST [MARKET_FUNCTION]
+			flst: LIST [TRADABLE_FUNCTION]
 		once
-			create {LINKED_LIST [MARKET_FUNCTION]} flst.make
+			create {LINKED_LIST [TRADABLE_FUNCTION]} flst.make
 			flst.extend (stock)
 			create Result.make (agents.Sma_key,
 				commands.addition, flst)

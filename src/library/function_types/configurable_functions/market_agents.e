@@ -331,13 +331,13 @@ feature {NONE} -- Utilities
 			end
 		end
 
-	has_elements (l: LIST [MARKET_FUNCTION]; n: INTEGER): BOOLEAN
+	has_elements (l: LIST [TRADABLE_FUNCTION]; n: INTEGER): BOOLEAN
 			-- Does `l' have at least `n' elements?
 		do
 			Result := l /= Void and then l.count >= n
 		end
 
-	output_not_empty (f: MARKET_FUNCTION): BOOLEAN
+	output_not_empty (f: TRADABLE_FUNCTION): BOOLEAN
 			-- Is `f.output' not empty?
 		do
 			Result := not f.output.is_empty

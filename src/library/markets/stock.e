@@ -65,7 +65,7 @@ feature -- Access
 
 feature -- Status report
 
-	valid_indicator (f: MARKET_FUNCTION): BOOLEAN
+	valid_indicator (f: TRADABLE_FUNCTION): BOOLEAN
 		do
 			Result := valid_stock_processor (f)
 		ensure then

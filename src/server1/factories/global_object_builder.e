@@ -155,7 +155,7 @@ feature {NONE} -- Administrative
 			-- append them to `function_library'.
 		local
 			hc_function_factory: HARD_CODED_FUNCTION_BUILDER
-			f: MARKET_FUNCTION
+			f: TRADABLE_FUNCTION
 			lock: FILE_LOCK
 			env: expanded APP_ENVIRONMENT
 		do
@@ -199,7 +199,7 @@ feature {NONE} -- Administrative
 			-- Delete all functions from the persistent `function_library'
 			-- whose name matches an element of `fnames'
 		local
-			fl: LINKED_LIST [MARKET_FUNCTION]
+			fl: LINKED_LIST [TRADABLE_FUNCTION]
 		do
 			from
 				fnames.start
@@ -226,8 +226,8 @@ feature {NONE} -- Administrative
 			-- Delete all hard-coded functions from the persistent
 			-- `function_library'.
 		local
-			l: LIST [MARKET_FUNCTION]
-			fl: LINKED_LIST [MARKET_FUNCTION]
+			l: LIST [TRADABLE_FUNCTION]
+			fl: LINKED_LIST [TRADABLE_FUNCTION]
 			hc_function_factory: HARD_CODED_FUNCTION_BUILDER
 		do
 			create hc_function_factory.make

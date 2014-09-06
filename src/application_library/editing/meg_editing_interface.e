@@ -275,7 +275,7 @@ feature {NONE} -- Implementation
 			-- ONE_VARIABLE_FUNCTION_ANALYZER
 		end
 
-	function_choice_clone (msg: STRING): MARKET_FUNCTION
+	function_choice_clone (msg: STRING): TRADABLE_FUNCTION
 			-- A clone of a user-selected member of `function_library'
 		do
 			Result := (function_choice (msg)).deep_twin
@@ -284,7 +284,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	operator_choice (function: MARKET_FUNCTION; exclude_list: LIST [COMMAND]):
+	operator_choice (function: TRADABLE_FUNCTION; exclude_list: LIST [COMMAND]):
 				RESULT_COMMAND [BOOLEAN]
 			-- User's choice of operator
 		do
@@ -404,7 +404,7 @@ feature {NONE} -- Hook methods
 		deferred
 		end
 
-	function_choice (msg: STRING): MARKET_FUNCTION
+	function_choice (msg: STRING): TRADABLE_FUNCTION
 			-- User's choice of a member of `function_library'
 		deferred
 		ensure
@@ -429,7 +429,7 @@ feature {NONE} -- Hook methods
 
 feature {NONE} -- Implementation
 
-	editable (f: MARKET_FUNCTION): BOOLEAN
+	editable (f: TRADABLE_FUNCTION): BOOLEAN
 			-- Is `f' editable in this context?
 		local
 			line: MARKET_FUNCTION_LINE

@@ -36,7 +36,7 @@ feature -- Access
 
 	product: TWO_VARIABLE_FUNCTION_ANALYZER
 
-	left_function, right_function: MARKET_FUNCTION
+	left_function, right_function: TRADABLE_FUNCTION
 			-- Left and right functions to be associated with the new TVFA
 
 	period_type: TIME_PERIOD_TYPE
@@ -57,7 +57,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_functions (left, right: MARKET_FUNCTION)
+	set_functions (left, right: TRADABLE_FUNCTION)
 			-- Set function to `arg'.
 		require
 			not_void: left /= Void and right /= Void

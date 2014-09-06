@@ -1,0 +1,258 @@
+# Commodity Channel Index
+# Below, for reference, is an implementation of an algorithm to calculate
+# the Mean Deviation of Typical Price (MDTP), written in Eiffel.  It was
+# used as a model for the development of the MDTP component of the command
+# tree for CCI defined in this file.
+
+#	mdtp (tp: ARRAY [REAL]; n, current_period_index: INTEGER): REAL is
+#			-- Mean Deviation of Typical Price - calculates matp itself
+#		local
+#			sum, matp: REAL
+#			i: INTEGER
+#		do
+#			from
+#				from
+#					i := current_period_index - n + 1
+#					matp := 0
+#				until
+#					i = current_period_index + 1
+#				loop
+#					matp := matp + tp @ i
+#					i := i + 1
+#				end
+#				matp := matp / n
+#				print ("(matp[" + current_period_index.out + "]: " +
+#					matp.out + "%N")
+#				sum := 0
+#				i := current_period_index - n + 1
+#			until
+#				i = current_period_index + 1
+#			loop
+#				sum := sum + (tp @ i - matp).abs
+#				i := i + 1
+#			end
+#			Result := sum / n
+#		end
+
+# An indicator for Typical Price, which is used by the CCI indicator, is
+# first defined.
+e
+c
+n
+ONE_VARIABLE_FUNCTION
+c
+Typical Price
+No Input Function
+y
+DIVISION
+c
+ADDITION
+c
+HIGH_PRICE
+c
+ADDITION
+c
+LOW_PRICE
+c
+CLOSING_PRICE
+c
+NUMERIC_VALUE_COMMAND
+c
+3
+s
+# Beginning of the Commodity Channel Index definition
+# Note that indentation is used to attempt to make the command-tree
+# structure apparent.
+c
+n
+N_RECORD_ONE_VARIABLE_FUNCTION
+c
+Commodity Channel Index
+Typical Price
+y
+DIVISION
+   e
+   CCI
+   SUBTRACTION
+      e
+      tp - matp
+      BASIC_NUMERIC_COMMAND
+      c
+      NUMERIC_VALUED_COMMAND_WRAPPER
+      c
+      COMMAND_SEQUENCE
+         c
+         y
+         NUMERIC_ASSIGNMENT_COMMAND
+            e
+            Set current index value
+            NUMERIC_VALUE_COMMAND
+            e
+            Current period index
+            n
+            0
+            INDEX_EXTRACTOR
+            e
+            Get current period index
+            BASIC_LINEAR_COMMAND
+            c
+            Typical Price
+            y
+         n
+         y
+         NUMERIC_ASSIGNMENT_COMMAND
+            e
+            matp := sum(TP, n) / n
+            NUMERIC_VALUE_COMMAND
+            e
+            matp
+            n
+            0
+            DIVISION
+               e
+               sum(TP, n) / n
+               NUMERIC_VALUED_COMMAND_WRAPPER
+               c
+               COMMAND_SEQUENCE
+                  c
+                  y
+                  NUMERIC_ASSIGNMENT_COMMAND
+                     e
+                     i := (current index - n) + 1
+                     NUMERIC_VALUE_COMMAND
+                     e
+                     i
+                     n
+                     0
+                     ADDITION
+                        c
+                        SUBTRACTION
+                           c
+                           shared NUMERIC_VALUE_COMMAND ({Current period index})
+                           c
+                           N_VALUE_COMMAND
+                           e
+                           n
+                           5
+                        NUMERIC_VALUE_COMMAND
+                           e
+                           one
+                           n
+                           1
+                  n
+                  y
+                  VALUE_AT_INDEX_COMMAND
+                     c
+                     shared NUMERIC_VALUE_COMMAND ({i})
+                     c
+                     Typical Price
+                     y
+                     LINEAR_SUM
+                        e
+                        sum(TP, n)
+                        5
+                        Typical Price
+                        y
+                        BASIC_NUMERIC_COMMAND
+                        c
+                  y
+                  n
+               shared N_VALUE_COMMAND (n)
+               c
+         y
+         n
+   MULTIPLICATION
+	  c
+# [MDTP:]
+      DIVISION
+         e
+         mdtp
+         LOOP_COMMAND
+            c
+            COMMAND_SEQUENCE
+               e
+               Loop initialization sequence
+               y
+               NUMERIC_ASSIGNMENT_COMMAND
+                  e
+                  sum := 0
+                  NUMERIC_VALUE_COMMAND
+                  e
+                  sum
+                  n
+                  0
+                  NUMERIC_VALUE_COMMAND
+                  e
+                  zero
+                  n
+                  0
+               n
+               n
+            EQ_OPERATOR
+               e
+               i = current period index + 1
+               shared NUMERIC_VALUE_COMMAND ({i})
+               c
+               ADDITION
+                  e
+                  Current index + 1
+                  shared NUMERIC_VALUE_COMMAND ({Current period index})
+                  c
+                  shared NUMERIC_VALUE_COMMAND ({one})
+                  c
+            NUMERIC_VALUED_COMMAND_WRAPPER
+            c
+            COMMAND_SEQUENCE
+               e
+               Loop body
+               y
+               NUMERIC_ASSIGNMENT_COMMAND
+                  e
+                  sum := sum + abs(tp @ i - matp)
+                  shared NUMERIC_VALUE_COMMAND ({sum})
+                  c
+                  ADDITION
+                     c
+                     shared NUMERIC_VALUE_COMMAND ({sum})
+                     c
+                     ABSOLUTE_VALUE
+                        e
+                        abs(tp @ i - matp)
+                        SUBTRACTION
+                           c
+                           VALUE_AT_INDEX_COMMAND
+                              e
+                              tp @ i
+                              shared NUMERIC_VALUE_COMMAND ({i})
+                              c
+                              Typical Price
+                              y
+                              BASIC_NUMERIC_COMMAND
+                              c
+                           shared NUMERIC_VALUE_COMMAND ({matp})
+                           c
+               y
+               y
+               NUMERIC_ASSIGNMENT_COMMAND
+                  e
+                  i := i + 1
+                  shared NUMERIC_VALUE_COMMAND ({i})
+                  c
+                  ADDITION
+                     c
+                     shared NUMERIC_VALUE_COMMAND ({i})
+                     c
+                     shared NUMERIC_VALUE_COMMAND ({one})
+                     c
+               n
+         shared N_VALUE_COMMAND (n)
+         c
+      NUMERIC_VALUE_COMMAND
+      e
+      Multiplier constant
+      y
+      0.015
+5
+s
+-
+x

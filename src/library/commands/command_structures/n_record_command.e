@@ -10,7 +10,7 @@ deferred class N_RECORD_COMMAND inherit
 
 	RESULT_COMMAND [DOUBLE]
 		export
-			{MARKET_FUNCTION} initialize
+			{TRADABLE_FUNCTION} initialize
 		redefine
 			initialize
 		end
@@ -31,7 +31,7 @@ feature -- Initialization
 			set: n = i
 		end
 
-feature {MARKET_FUNCTION}
+feature {TRADABLE_FUNCTION}
 
 	initialize (arg: ANY)
 			-- If `arg' conforms to N_RECORD_STRUCTURE, set `n' to arg.n.

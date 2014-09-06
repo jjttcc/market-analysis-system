@@ -290,7 +290,7 @@ feature {NONE} -- Implementation
 			-- Menu for viewing market and market function data
 		local
 			finished: BOOLEAN
-			indicator: MARKET_FUNCTION
+			indicator: TRADABLE_FUNCTION
 		do
 			if tradable_list_handler.is_empty then
 				print ("There are currently no tradables to view.%N")
@@ -382,7 +382,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	view_indicator_menu (indicator: MARKET_FUNCTION)
+	view_indicator_menu (indicator: TRADABLE_FUNCTION)
 			-- Menu for viewing market function data
 		local
 			finished: BOOLEAN
@@ -567,8 +567,8 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	indicator_selection (indicators: LIST [MARKET_FUNCTION]):
-				MARKET_FUNCTION
+	indicator_selection (indicators: LIST [TRADABLE_FUNCTION]):
+				TRADABLE_FUNCTION
 			-- User-selected indicator by number - Void if user chooses 0
 		require
 			not_void_or_empty: indicators /= Void and not indicators.is_empty

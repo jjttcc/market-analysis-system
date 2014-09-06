@@ -1,5 +1,5 @@
 note
-	description: "A linear command that gets its input from a MARKET_FUNCTION"
+	description: "A linear command that gets its input from a TRADABLE_FUNCTION"
 	note1: "@@This class has recently been modified to be used for indicators %
 		%in addition to its original use by ONE_VARIABLE_FUNCTION_ANALYZER.%
 		%Although this new functionality has been tested successfully, it %
@@ -50,7 +50,7 @@ feature -- Initialization
 	initialize (a: LINEAR_ANALYZER)
 		local
 			analyzer: ONE_VARIABLE_FUNCTION_ANALYZER
-			function: MARKET_FUNCTION
+			function: TRADABLE_FUNCTION
 		do
 			analyzer ?= a
 			if analyzer /= Void then
@@ -83,7 +83,7 @@ feature -- Initialization
 				not target.is_empty and then
 				start_date_time < target.item.date_time
 			then
-				-- Ensure the postcondition when `a' is a MARKET_FUNCTION.
+				-- Ensure the postcondition when `a' is a TRADABLE_FUNCTION.
 				start_date_time := target.item.date_time
 			end
 		ensure then
@@ -98,7 +98,7 @@ feature -- Initialization
 
 feature -- Access
 
-	input: MARKET_FUNCTION
+	input: TRADABLE_FUNCTION
 
 	 start_date_time: DATE_TIME
 
@@ -160,7 +160,7 @@ feature -- Basic operations
 feature {NONE} -- Implementation
 
 	function_based: BOOLEAN
-			-- Is the input based on a MARKET_FUNCTION (as opposed to a
+			-- Is the input based on a TRADABLE_FUNCTION (as opposed to a
 			-- ONE_VARIABLE_FUNCTION_ANALYZER?
 
 	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE]

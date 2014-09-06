@@ -23,7 +23,7 @@ creation
 feature {NONE} -- Initialization
 
     make (daily_list, intraday_list: TRADABLE_LIST;
-            inds: SEQUENCE [MARKET_FUNCTION])
+            inds: SEQUENCE [TRADABLE_FUNCTION])
         require
             one_not_void: intraday_list /= Void or daily_list /= Void
             inds_exist: inds /= Void
@@ -181,14 +181,14 @@ feature -- Access
             Result := symbol_list.item
         end
 
-    indicators: SEQUENCE [MARKET_FUNCTION]
+    indicators: SEQUENCE [TRADABLE_FUNCTION]
 
-    indicator_with_name(n: STRING): MARKET_FUNCTION
+    indicator_with_name(n: STRING): TRADABLE_FUNCTION
         do
             if indicator_map_by_name = Void then
                 create indicator_map_by_name.make(indicators.count)
                 -- Build name -> indicator map.
-                indicators.do_all(agent (ind: MARKET_FUNCTION)
+                indicators.do_all(agent (ind: TRADABLE_FUNCTION)
                     do
                         indicator_map_by_name.put(ind, ind.name)
                     end
@@ -300,7 +300,7 @@ feature {NONE} -- Implementation
             -- All "standard" period types (e.g., excluding 3-minute,
             -- 4-minute, etc. types)
 
-    indicator_map_by_name: HASH_TABLE [MARKET_FUNCTION, STRING]
+    indicator_map_by_name: HASH_TABLE [TRADABLE_FUNCTION, STRING]
 
     list_for (period_type: TIME_PERIOD_TYPE): TRADABLE_LIST
             -- The tradable list that holds data for `period_type'

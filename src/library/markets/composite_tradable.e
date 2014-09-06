@@ -70,7 +70,7 @@ feature -- Access
 
 feature -- Status report
 
-	valid_indicator (f: MARKET_FUNCTION): BOOLEAN
+	valid_indicator (f: TRADABLE_FUNCTION): BOOLEAN
 		do
 			--@@@To be determined
 		ensure then

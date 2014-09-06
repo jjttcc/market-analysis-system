@@ -160,7 +160,7 @@ feature {NONE} -- Implementation of hook methods
 			end
 		end
 
-	accepted_by_user (c: MARKET_FUNCTION): BOOLEAN
+	accepted_by_user (c: TRADABLE_FUNCTION): BOOLEAN
 		do
 			print_list (<<"Select:%N     Print description of ",
 						c.generator + name_for (c), "? (d)%N",

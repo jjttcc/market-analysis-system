@@ -87,7 +87,7 @@ feature -- Access
 				meg_list.has (eg_maker.product)
 		end
 
-	function_library: STORABLE_LIST [MARKET_FUNCTION]
+	function_library: STORABLE_LIST [TRADABLE_FUNCTION]
 			-- All defined market functions - Side effect:
 			-- create_stock_function_library is called (once) to fill
 			-- stock_function_library with valid (for a stock) members
@@ -315,10 +315,10 @@ feature -- Constants
 
 feature {NONE} -- Implementation
 
-	retrieved_function_library: STORABLE_LIST [MARKET_FUNCTION]
+	retrieved_function_library: STORABLE_LIST [TRADABLE_FUNCTION]
 		local
 			storable: STORABLE
-			mflist: STORABLE_LIST [MARKET_FUNCTION]
+			mflist: STORABLE_LIST [TRADABLE_FUNCTION]
 			retrieval_failed: BOOLEAN
 			app_env: expanded APP_ENVIRONMENT
 			full_path_name: STRING
@@ -424,14 +424,14 @@ feature {NONE} -- Implementation
 			retry
 		end
 
-	stock_function_library: LIST [MARKET_FUNCTION]
+	stock_function_library: LIST [TRADABLE_FUNCTION]
 			-- Members of `function_library' that are valid for stocks
 -- !!!! indexing once_status: global??!!!
 		once
-			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
+			create {LINKED_LIST [TRADABLE_FUNCTION]} Result.make
 		end
 
-	create_stock_function_library (l: LIST [MARKET_FUNCTION])
+	create_stock_function_library (l: LIST [TRADABLE_FUNCTION])
 			-- Create `stock_function_library' and place all members of
 			-- `l' that are `valid_stock_processor's into it.
 		do

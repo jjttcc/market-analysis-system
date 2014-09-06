@@ -21,7 +21,7 @@ creation
 
 feature -- Initialization
 
-	make (all_indicators: SEQUENCE [MARKET_FUNCTION])
+	make (all_indicators: SEQUENCE [TRADABLE_FUNCTION])
 		require
 			all_indicators_exists: all_indicators /= Void
 		do
@@ -34,7 +34,7 @@ feature -- Access
 
 	product: TRADABLE_DISPENSER
 
-    indicators: SEQUENCE [MARKET_FUNCTION]
+    indicators: SEQUENCE [TRADABLE_FUNCTION]
 
 feature -- Basic operations
 

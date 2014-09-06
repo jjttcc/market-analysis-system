@@ -56,11 +56,11 @@ feature -- Access
 		deferred
 		end
 
-	indicators: LIST [MARKET_FUNCTION]
+	indicators: LIST [TRADABLE_FUNCTION]
 			-- Technical indicators that will process the data from
 			-- `tuple_list' (`target_period_type'.name)
 
-	indicator_groups: HASH_TABLE [LIST [MARKET_FUNCTION], STRING]
+	indicator_groups: HASH_TABLE [LIST [TRADABLE_FUNCTION], STRING]
 			-- Groupings of `indicators'
 			-- Each group has a unique name
 
@@ -160,7 +160,7 @@ feature -- Status report
 			valid_if_in_period_types: Result = period_types.has (t.name)
 		end
 
-	valid_indicator (f: MARKET_FUNCTION): BOOLEAN
+	valid_indicator (f: TRADABLE_FUNCTION): BOOLEAN
 			-- Is `f' a valid indicator for this tradable type?
 		do
 			Result := True
@@ -225,7 +225,7 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 
 feature -- Element change
 
-	add_indicator (f: MARKET_FUNCTION)
+	add_indicator (f: TRADABLE_FUNCTION)
 			-- Add `f' to `indicators' and set its inner input value
 			-- to tuple_list (target_period_type.name).
 		require
@@ -243,7 +243,7 @@ feature -- Element change
 
 feature -- Removal
 
-	remove_indicator (f: MARKET_FUNCTION)
+	remove_indicator (f: TRADABLE_FUNCTION)
 			-- Remove `f' from `indicators'.
 		do
 			indicators.prune (f)
@@ -280,7 +280,7 @@ feature {NONE} -- Initialization
 	tradable_initialize
 			-- Establish the class invariant.
 		do
-			create {LINKED_LIST [MARKET_FUNCTION]} indicators.make
+			create {LINKED_LIST [TRADABLE_FUNCTION]} indicators.make
 			create indicator_groups.make (0)
 			create tuple_lists.make (0)
 			sf_make (Void)

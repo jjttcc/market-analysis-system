@@ -57,12 +57,12 @@ feature -- Initialization
 
 feature -- Access
 
-	input1, input2: MARKET_FUNCTION
+	input1, input2: TRADABLE_FUNCTION
 			-- The two market functions to be analyzed
 
-	indicators: LIST [MARKET_FUNCTION]
+	indicators: LIST [TRADABLE_FUNCTION]
 		do
-			create {LINKED_LIST [MARKET_FUNCTION]} Result.make
+			create {LINKED_LIST [TRADABLE_FUNCTION]} Result.make
 			Result.extend (input1)
 			Result.extend (input2)
 		end

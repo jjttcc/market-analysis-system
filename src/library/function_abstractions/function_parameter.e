@@ -37,7 +37,7 @@ feature -- Access
     unique_name: STRING
             -- Unique (if possible - not guaranteed) name for the parameter -
             -- i.e., unique among parameters belonging to a particular
-            -- MARKET_FUNCTION
+            -- TRADABLE_FUNCTION
         do
             Result := description
         end

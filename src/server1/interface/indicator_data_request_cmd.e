@@ -45,7 +45,7 @@ feature {NONE} -- Hook routine implementations
 
     send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE])
         local
-            indicator: MARKET_FUNCTION
+            indicator: TRADABLE_FUNCTION
         do
             if
                 indicator_id < 1 or indicator_id > t.indicators.count

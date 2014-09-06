@@ -56,16 +56,16 @@ feature -- Access
 	operator_maker: COMMAND_EDITING_INTERFACE
 			-- Interface used to obtain operator selections from user
 
-	last_selected_ovf_input: MARKET_FUNCTION
+	last_selected_ovf_input: TRADABLE_FUNCTION
 			-- Last input function chosen in `set_ovf_input'
 
-	last_selected_abf_input: MARKET_FUNCTION
+	last_selected_abf_input: TRADABLE_FUNCTION
 			-- Last input function chosen in `set_abf_input'
 
-	last_selected_left_tvf_input: MARKET_FUNCTION
+	last_selected_left_tvf_input: TRADABLE_FUNCTION
 			-- Last left input function chosen in `set_tvf_input'
 
-	last_selected_right_tvf_input: MARKET_FUNCTION
+	last_selected_right_tvf_input: TRADABLE_FUNCTION
 			-- Last right input function chosen in `set_tvf_input'
 
 feature -- Status setting

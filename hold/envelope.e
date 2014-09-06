@@ -4,7 +4,7 @@ indexing
 		%curves parallel to a curve.  A common example is Bollinger bands.";
 	detailed_description:
 		"Each curve in the set of symmetrical curves, as well as the original %
-		%curve, is represented as a MARKET_FUNCTION.  position_factor %
+		%curve, is represented as a TRADABLE_FUNCTION.  position_factor %
 		%specifies ... "
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -25,7 +25,7 @@ creation
 
 feature -- Initialization
 
-	make (main_function: MARKET_FUNCTION; n: INTEGER; pos_factor: DOUBLE) is
+	make (main_function: TRADABLE_FUNCTION; n: INTEGER; pos_factor: DOUBLE) is
 			-- `n' specifies the number of pairs of parallel functions.
 		do
 		ensure
@@ -36,7 +36,7 @@ feature -- Initialization
 
 feature -- Access
 
-	primary_function: MARKET_FUNCTION is
+	primary_function: TRADABLE_FUNCTION is
 		do
 			Result := first
 		end
