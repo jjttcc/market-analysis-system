@@ -64,7 +64,7 @@ feature {NONE} -- Basic operations
             end
         end
 
-feature {NONE} -- Implementation
+feature {NONE} -- Implementation - attributes
 
     object_separator: CHARACTER = '%/0x1A/' -- Ctrl+Z
 
@@ -96,25 +96,7 @@ feature {NONE} -- Implementation
 
     opts_html: STRING = "html"
 
-    level: INTEGER
-            -- Current level with respect to object-component hierarchy
-
-    tab_size: INTEGER = 3
-
-    indent_space: STRING
-        local
-            indent: STRING
-        do
-            create indent.make_filled(' ', tab_size)
-            Result := ""
-            across 1 |..| level as x loop
-                Result := Result + indent
-            end
-        ensure
-            result_exists: Result /= Void
-        end
-
-feature {NONE}
+feature {NONE} -- Implementation
 
     add_response_for_processor(fields: LIST [STRING])
         require
@@ -166,7 +148,7 @@ feature {NONE}
                 end
             end
             if not parse_error then
-                response := response + report_for(processor)
+                response := response + block(report_for(processor))
             end
         ensure
             response /= Void
@@ -189,16 +171,16 @@ feature {NONE}
         do
             Result := "%N" + indented(proc.name + ":")
             Result := Result + increment_level
-            Result := Result + period_type_report(proc)
-            Result := Result + functions_report(proc)
-            Result := Result + operators_report(proc)
-            Result := Result + parameters_report(proc)
+            Result := Result + block(period_type_report(proc))
+            Result := Result + block(functions_report(proc))
+            Result := Result + block(operators_report(proc))
+            Result := Result + block(parameters_report(proc))
             if (detailed or debugging) and proc.children.count > 0 then
-                Result := Result + indented(proc.children.count.out +
-                    " children:")
+                Result := Result + block(indented(proc.children.count.out +
+                    " children:"))
                 Result := Result + increment_level
                 across proc.children as chcursor loop
-                    Result := Result + report_for(chcursor.item)
+                    Result := Result + block(report_for(chcursor.item))
                 end
                 Result := Result + decrement_level
             end
@@ -215,7 +197,7 @@ feature {NONE}
                pluralized("function", proc.functions.count) + ":")
             Result := Result + increment_level
             across proc.functions as fcursor loop
-                Result := Result + function_parameter_report(fcursor.item)
+                Result := Result + function_parameter_report(fcursor.item, True)
             end
             Result := Result + decrement_level
         ensure
@@ -233,7 +215,7 @@ feature {NONE}
             i := 1
             Result := Result + increment_level
             if debugging then
-                Result := Result + indented(proc.operators.out)
+                Result := Result + block(code(proc.operators.out))
             end
             across proc.operators as fcursor loop
                 Result := Result + command_report(fcursor.item, i)
@@ -252,30 +234,38 @@ feature {NONE}
                 pluralized("parameter", proc.parameters.count) + ":")
             Result := Result + increment_level
             across proc.parameters as fcursor loop
-                Result := Result + function_parameter_report(fcursor.item)
+                Result := Result + function_parameter_report(fcursor.item,
+                    False)
             end
             Result := Result + decrement_level
         ensure
             result_exists: Result /= Void
         end
 
-    function_parameter_report(f: FUNCTION_PARAMETER): STRING
+    function_parameter_report(f: FUNCTION_PARAMETER;
+                              debug_code: BOOLEAN): STRING
         require
             f_exists: f /= Void
         do
             Result := ""
-            if detailed or debugging then
-                Result := Result + indented("name: " + f.name)
+            Result := Result + block(indented(f.name))
+            Result := Result + increment_level
+            Result := Result + block(indented("unique-name: " + f.unique_name))
+            if not f.current_value.is_empty then
+                Result := Result + block(indented("value: " + f.current_value))
             end
-            Result := Result + indented("unique-name: " + f.unique_name)
-            Result := Result + indented("value: " + f.current_value)
             if detailed or debugging then
-                Result := Result + indented("value type: " +
-                    f.value_type_description)
+                Result := Result + block(indented("value type: " +
+                    f.value_type_description))
             end
             if debugging then
-                Result := Result + indented(f.out)
+                if debug_code then
+                    Result := Result + block(code(f.out))
+                else
+                    Result := Result + block(f.out)
+                end
             end
+            Result := Result + decrement_level
         ensure
             result_exists: Result /= Void
         end
@@ -284,12 +274,16 @@ feature {NONE}
         do
             Result := ""
             if c = Void then
-                Result := Result + indented("(Operator " +
-                    opnum.out + " is Void)")
-            else
-                Result := Result + indented("name: " + c.name)
                 if debugging then
-                    Result := Result + indented(c.out)
+                    Result := Result + block(indented("(Operator " +
+                        opnum.out + " is Void)"))
+                end
+            else
+                Result := Result + block(indented(c.name))
+                if debugging then
+                    Result := Result + increment_level
+                    Result := Result + block(code(c.out))
+                    Result := Result + decrement_level
                 end
             end
         ensure
@@ -303,10 +297,33 @@ feature {NONE}
         do
             Result := ""
             if attached {FUNCTION_ANALYZER} proc as fana then
-                Result := indented("period type: " + fana.period_type.name)
+                Result := indented("period type: " +
+                    fana.period_type.name)
                 if debugging then
-                    Result := Result + indented(fana.period_type.out)
+                    Result := Result + block(code(fana.period_type.out))
                 end
+            else
+                Result := indented("(No period type)")
+            end
+        ensure
+            result_exists: Result /= Void
+        end
+
+feature {NONE} -- formatting/html
+
+    level: INTEGER
+            -- Current level with respect to object-component hierarchy
+
+    tab_size: INTEGER = 3
+
+    indent_space: STRING
+        local
+            indent: STRING
+        do
+            create indent.make_filled(' ', tab_size)
+            Result := ""
+            across 1 |..| level as x loop
+                Result := Result + indent
             end
         ensure
             result_exists: Result /= Void
@@ -330,29 +347,91 @@ feature {NONE}
             end
         end
 
-list_on: STRING = "%N<ul><li>"
-list_off: STRING = "%N</li></ul>"
+    css_class_base: STRING = "masinfo"
+
+    list_start: STRING
+        do
+            Result := "%N<ul class='" + current_class + "'>"
+        end
+
+    list_end: STRING
+        do
+            Result := "%N</ul class='" + current_class + "'>"
+        end
+
+    list_item_open: STRING
+        do
+            Result := "%N<li class='" + current_class + "'>"
+        end
+
+    list_item_closed: STRING
+        do
+            Result := "%N</li class='" + current_class + "'>"
+        end
+
+    outer_block_open: STRING
+        do
+            Result := "%N<div class='" + current_class + "'>"
+        end
+
+    outer_block_closed: STRING
+        do
+            Result := "%N</div class='" + current_class + "'>"
+        end
+
+    code_item_open: STRING
+        do
+            Result := "<pre class='" + current_class + "'>"
+        end
+
+    code_item_closed: STRING
+        do
+            Result := "</pre class='" + current_class + "'>"
+        end
 
     increment_level: STRING
         do
             Result := ""
             if html_on then
-                Result := Result + list_on
-print("Added " + list_on + " to Result%N")
-            else
-                level := level + 1
+                Result := Result + list_start
             end
+            level := level + 1
         end
 
     decrement_level: STRING
         do
             Result := ""
             if html_on then
-                Result := Result + list_off
-print("Added " + list_off + " to Result%N")
-            else
-                level := level - 1
+                Result := Result + list_end
             end
+            level := level - 1
+        end
+
+    block(content: STRING): STRING
+            -- If formatting is enabled: `content' embedded in a format
+            -- block; otherwise `content', unmodified
+        do
+            Result := content
+            if html_on then
+                if level > 0 then
+                    Result := list_item_open + content + list_item_closed
+                else
+                    Result := outer_block_open + content + outer_block_closed
+                end
+            end
+        end
+
+    code(content: STRING): STRING
+        do
+            Result := content
+            if html_on then
+                Result := code_item_open + content + code_item_closed
+            end
+        end
+
+    current_class: STRING
+        do
+            Result := css_class_base + level.out
         end
 
 invariant
