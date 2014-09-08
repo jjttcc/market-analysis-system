@@ -33,19 +33,7 @@ creation
     make
 
 feature {NONE} -- Basic operations
---message_component_separator: STRING = "%T"
---message_record_separator: STRING = "%N"
---message_sub_field_separator:STRING = ","
 
---object_info_req:  object_list
---object_list:  { object_spec "\n" ... }
---object_spec:  object_type "," object_name
---object_type:  "indicator" | "event-generator"
---object_name:  ta_string
-
-
-    -- Expected message format:
-    -- <ind-name>\t<param-idx1>:<value1>,<param-idx2>:<value2>,...
     do_execute(message: ANY)
         local
             msg: STRING
@@ -61,11 +49,11 @@ feature {NONE} -- Basic operations
             across records as record loop
                 detailed := False
                 debugging := False
-                current_indent := 0
+                html_on := False
+                level := 0
                 target := record.item
                 fields := tokens(message_sub_field_separator)
                 add_response_for_processor(fields)
-                response.right_adjust
                 response := response + object_separator.out
             end
             if not parse_error then
@@ -78,7 +66,7 @@ feature {NONE} -- Basic operations
 
 feature {NONE} -- Implementation
 
-    object_separator: CHARACTER = '%/0x1A/'
+    object_separator: CHARACTER = '%/0x1A/' -- Ctrl+Z
 
     parse_error: BOOLEAN
             -- Did a parse error occur?
@@ -108,19 +96,22 @@ feature {NONE} -- Implementation
 
     opts_html: STRING = "html"
 
-    current_indent: INTEGER
+    level: INTEGER
+            -- Current level with respect to object-component hierarchy
 
     tab_size: INTEGER = 3
 
-    indents(n: INTEGER): STRING
+    indent_space: STRING
         local
-            i: INTEGER
+            indent: STRING
         do
+            create indent.make_filled(' ', tab_size)
             Result := ""
-            i := tab_size * n
-            across 1 |..| i as x from loop
-                Result := Result + " "
+            across 1 |..| level as x loop
+                Result := Result + indent
             end
+        ensure
+            result_exists: Result /= Void
         end
 
 feature {NONE}
@@ -196,24 +187,22 @@ feature {NONE}
         require
             proc_exists: proc /= Void
         do
---!!!!Might need a 'recursion_on' flag to keep from reporting on the same
---!!!!components (such as operators and parameters) more than once.
-            Result := indented(proc.name + ":%N")
-            current_indent := current_indent + tab_size
+            Result := "%N" + indented(proc.name + ":")
+            Result := Result + increment_level
             Result := Result + period_type_report(proc)
             Result := Result + functions_report(proc)
             Result := Result + operators_report(proc)
             Result := Result + parameters_report(proc)
-            if detailed or debugging and proc.children.count > 0 then
+            if (detailed or debugging) and proc.children.count > 0 then
                 Result := Result + indented(proc.children.count.out +
-                    " children:%N")
-                current_indent := current_indent + tab_size
+                    " children:")
+                Result := Result + increment_level
                 across proc.children as chcursor loop
                     Result := Result + report_for(chcursor.item)
                 end
-                current_indent := current_indent - tab_size
+                Result := Result + decrement_level
             end
-            current_indent := current_indent - tab_size
+            Result := Result + decrement_level
         ensure
             result_exists: Result /= Void
         end
@@ -222,12 +211,13 @@ feature {NONE}
         require
             proc_exists: proc /= Void
         do
-            Result := indented(proc.functions.count.out + " functions:%N")
---            current_indent := current_indent + tab_size
+            Result := indented(proc.functions.count.out + " " +
+               pluralized("function", proc.functions.count) + ":")
+            Result := Result + increment_level
             across proc.functions as fcursor loop
                 Result := Result + function_parameter_report(fcursor.item)
             end
---            current_indent := current_indent - tab_size
+            Result := Result + decrement_level
         ensure
             result_exists: Result /= Void
         end
@@ -238,22 +228,18 @@ feature {NONE}
         local
             i: INTEGER
         do
-            Result := indented(proc.operators.count.out + " operators:%N")
---            current_indent := current_indent + tab_size
+            Result := indented(proc.operators.count.out + " " +
+                   pluralized("operator", proc.operators.count) + ":")
             i := 1
+            Result := Result + increment_level
             if debugging then
                 Result := Result + indented(proc.operators.out)
             end
             across proc.operators as fcursor loop
-                if fcursor.item /= Void then
-                    Result := Result + command_report(fcursor.item)
-                else
-                    Result := Result + indented(indents(1) + "(Operator " +
-                        i.out + " is Void)%N")
-                end
+                Result := Result + command_report(fcursor.item, i)
                 i := i + 1
             end
---            current_indent := current_indent - tab_size
+            Result := Result + decrement_level
         ensure
             result_exists: Result /= Void
         end
@@ -262,11 +248,13 @@ feature {NONE}
         require
             proc_exists: proc /= Void
         do
-            Result := indented(proc.parameters.count.out + " parameters:%N")
-            current_indent := current_indent + tab_size
+            Result := indented(proc.parameters.count.out + " " +
+                pluralized("parameter", proc.parameters.count) + ":")
+            Result := Result + increment_level
             across proc.parameters as fcursor loop
                 Result := Result + function_parameter_report(fcursor.item)
             end
+            Result := Result + decrement_level
         ensure
             result_exists: Result /= Void
         end
@@ -277,13 +265,13 @@ feature {NONE}
         do
             Result := ""
             if detailed or debugging then
-                Result := Result + indented("name: " + f.name + "%N")
+                Result := Result + indented("name: " + f.name)
             end
-            Result := Result + indented("unique-name: " + f.unique_name + "%N")
-            Result := Result + indented("value: " + f.current_value + "%N")
+            Result := Result + indented("unique-name: " + f.unique_name)
+            Result := Result + indented("value: " + f.current_value)
             if detailed or debugging then
                 Result := Result + indented("value type: " +
-                    f.value_type_description + "%N")
+                    f.value_type_description)
             end
             if debugging then
                 Result := Result + indented(f.out)
@@ -292,16 +280,18 @@ feature {NONE}
             result_exists: Result /= Void
         end
 
-    command_report(c: COMMAND): STRING
-        require
-            c_exists: c /= Void
+    command_report(c: COMMAND; opnum: INTEGER): STRING
         do
             Result := ""
-            Result := Result + indented("name: " + c.name + "%N")
-            if debugging then
-                Result := Result + indented(c.out)
+            if c = Void then
+                Result := Result + indented("(Operator " +
+                    opnum.out + " is Void)")
+            else
+                Result := Result + indented("name: " + c.name)
+                if debugging then
+                    Result := Result + indented(c.out)
+                end
             end
---!!!!!append children???? - under what conditions????!!!!!
         ensure
             result_exists: Result /= Void
         end
@@ -313,8 +303,7 @@ feature {NONE}
         do
             Result := ""
             if attached {FUNCTION_ANALYZER} proc as fana then
-                Result := indented("period type: " + fana.period_type.name +
-                    "%N")
+                Result := indented("period type: " + fana.period_type.name)
                 if debugging then
                     Result := Result + indented(fana.period_type.out)
                 end
@@ -325,20 +314,49 @@ feature {NONE}
 
     indented(s: STRING): STRING
         local
-            i: INTEGER
-            indent: STRING
+            indentation: STRING
+            fields: LIST [STRING]
         do
-            indent := ""
-            from
-                i := 1
-            until
-                i > current_indent
-            loop
-                indent := indent + " "
-                i := i + 1
+            Result := ""
+            indentation := indent_space
+            target := s
+            fields := tokens("%N")
+            across fields as f loop
+                -- (Skip lines that are all white space.)
+                if not f.item.is_whitespace then
+                    f.item.right_adjust
+                    Result := Result + indentation + f.item + "%N"
+                end
             end
-            Result := indent + s
-            Result.replace_substring_all("%N", "%N" + indent)
         end
+
+list_on: STRING = "%N<ul><li>"
+list_off: STRING = "%N</li></ul>"
+
+    increment_level: STRING
+        do
+            Result := ""
+            if html_on then
+                Result := Result + list_on
+print("Added " + list_on + " to Result%N")
+            else
+                level := level + 1
+            end
+        end
+
+    decrement_level: STRING
+        do
+            Result := ""
+            if html_on then
+                Result := Result + list_off
+print("Added " + list_off + " to Result%N")
+            else
+                level := level - 1
+            end
+        end
+
+invariant
+
+    sane_level: level >= 0
 
 end

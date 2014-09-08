@@ -50,7 +50,9 @@ object_type     -> "indicator" | "event-generator"
 object_opts     -> obj_opt_list
 obj_opt_list    -> { obj_opt ";" ... }
 obj_opt         -> "detail" | "debug" | "html"
-object_info     -> To Be Defined
+object_info     -> { object_desc obj_separator ... }
+obj_separator   -> Ctrl+Z
+object_desc     -> <free-text-except-for-Ctrl+Z>
 event_list      -> { event_specifier "\n" ... }
 event_data      -> { event_tuple "\n" ... }
 event_tuple     -> datetime dfs eventID dfs event_type

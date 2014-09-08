@@ -21,8 +21,6 @@ deferred class TRADABLE_FUNCTION inherit
 		redefine
 			name, copy_of_children, descendant_comparison_is_by_objects
 		end
---!!!!!!!!!!!!!!!!!!!!!!!!!!
---	TREE_NODE
 
 	FUNCTION_PARAMETER
 		rename
