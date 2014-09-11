@@ -328,7 +328,10 @@ feature {NONE} -- (from FUNCTION_PARAMETER)
 			Result := output.out
 		end
 
-	value_type_description: STRING = "[TRADABLE_FUNCTION - to-be-defined]"
+	value_type_description: STRING
+		do
+			Result := output.generating_type
+		end
 
 	current_value_equals (v: STRING): BOOLEAN
 		do
@@ -342,7 +345,6 @@ feature {NONE} -- (from FUNCTION_PARAMETER)
 
 	change_value (v: STRING)
 		do
-			--!!!!![14.05]Should this really do nothing???!!!!
 			do_nothing
 		end
 

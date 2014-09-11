@@ -1,7 +1,7 @@
 note
 	description:
-		"A market function that takes the result of another market function %
-		%as input"
+		"A tradable function that takes the result of another tradable %
+		%function as input"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

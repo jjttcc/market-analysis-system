@@ -50,6 +50,7 @@ feature {NONE} -- Basic operations
                 detailed := False
                 debugging := False
                 html_on := False
+                recursive := False
                 level := 0
                 target := record.item
                 fields := tokens(message_sub_field_separator)
@@ -90,11 +91,17 @@ feature {NONE} -- Implementation - attributes
     html_on: BOOLEAN
             -- Is the response to be in html format?
 
+    recursive: BOOLEAN
+            -- Is the response to include a recursive report of the
+            -- object/function tree?
+
     opts_detail: STRING = "detail"
 
     opts_debug: STRING = "debug"
 
     opts_html: STRING = "html"
+
+    opts_recursive: STRING = "recursive"
 
 feature {NONE} -- Implementation
 
@@ -125,6 +132,8 @@ feature {NONE} -- Implementation
                             detailed := True
                         elseif opt.item ~ opts_debug then
                             debugging := True
+                        elseif opt.item ~ opts_recursive then
+                            recursive := True
                         elseif opt.item ~ opts_html then
                             html_on := True
                         end
@@ -148,7 +157,7 @@ feature {NONE} -- Implementation
                 end
             end
             if not parse_error then
-                response := response + block(report_for(processor))
+                response := response + block(report_for(processor, False))
             end
         ensure
             response /= Void
@@ -164,27 +173,35 @@ feature {NONE} -- Implementation
             put(eom)
         end
 
-    report_for(proc: TRADABLE_PROCESSOR): STRING
+    report_for(proc: TRADABLE_PROCESSOR; suppress_header: BOOLEAN): STRING
             -- Information about `proc'
         require
             proc_exists: proc /= Void
         do
-            Result := "%N" + indented(proc.name + ":")
-            Result := Result + increment_level
-            Result := Result + block(period_type_report(proc))
+            Result := ""
+            if not suppress_header then
+                Result := "%N" + heading(proc.name, True)
+                Result := Result + increment_level
+                Result := Result + block(period_type_report(proc))
+            end
             Result := Result + block(functions_report(proc))
             Result := Result + block(operators_report(proc))
             Result := Result + block(parameters_report(proc))
-            if (detailed or debugging) and proc.children.count > 0 then
+            if
+                not recursive and (detailed or debugging) and
+                proc.children.count > 0
+            then
                 Result := Result + block(indented(proc.children.count.out +
                     " children:"))
                 Result := Result + increment_level
                 across proc.children as chcursor loop
-                    Result := Result + block(report_for(chcursor.item))
+                    Result := Result + block(report_for(chcursor.item, False))
                 end
                 Result := Result + decrement_level
             end
-            Result := Result + decrement_level
+            if not suppress_header then
+                Result := Result + decrement_level
+            end
         ensure
             result_exists: Result /= Void
         end
@@ -192,14 +209,24 @@ feature {NONE} -- Implementation
     functions_report(proc: TRADABLE_PROCESSOR): STRING
         require
             proc_exists: proc /= Void
+        local
+            fcount: INTEGER
+            tmp: STRING
         do
-            Result := indented(proc.functions.count.out + " " +
-               pluralized("function", proc.functions.count) + ":")
-            Result := Result + increment_level
+            tmp := ""
+            Result := ""
             across proc.functions as fcursor loop
-                Result := Result + function_parameter_report(fcursor.item, True)
+                if fcursor.item /= proc then
+                    tmp := tmp + function_parameter_report(fcursor.item,
+                        True, recursive)
+                    fcount := fcount + 1
+                end
             end
-            Result := Result + decrement_level
+            if fcount > 0 then
+                Result := indented(fcount.out + " " +
+                                   pluralized("function", fcount) + ":")
+                Result := Result + increment_level + tmp + decrement_level
+            end
         ensure
             result_exists: Result /= Void
         end
@@ -215,7 +242,7 @@ feature {NONE} -- Implementation
             i := 1
             Result := Result + increment_level
             if debugging then
-                Result := Result + block(code(proc.operators.out))
+                Result := Result + block(code("[", proc.operators.out, "]"))
             end
             across proc.operators as fcursor loop
                 Result := Result + command_report(fcursor.item, i)
@@ -235,34 +262,59 @@ feature {NONE} -- Implementation
             Result := Result + increment_level
             across proc.parameters as fcursor loop
                 Result := Result + function_parameter_report(fcursor.item,
-                    False)
+                                                             False, False)
             end
             Result := Result + decrement_level
         ensure
             result_exists: Result /= Void
         end
 
-    function_parameter_report(f: FUNCTION_PARAMETER;
-                              debug_code: BOOLEAN): STRING
+    function_parameter_report(f: FUNCTION_PARAMETER; as_function: BOOLEAN;
+                              recurse: BOOLEAN): STRING
         require
             f_exists: f /= Void
+        local
+            fname: STRING
         do
             Result := ""
-            Result := Result + block(indented(f.name))
+            if f.name.is_empty then
+                fname := f.unique_name
+            else
+                fname := f.name
+            end
+            if fname ~ f.unique_name.substring(1, fname.count) then
+                -- Include the name only if it differs from the beginning
+                -- of f.unique_name.
+                fname := ""
+            else
+                fname := fname + ": "
+            end
+            Result := Result + block(heading(fname + f.unique_name,
+                                     as_function))
             Result := Result + increment_level
-            Result := Result + block(indented("unique-name: " + f.unique_name))
-            if not f.current_value.is_empty then
+            if not as_function and then not f.current_value.is_empty then
                 Result := Result + block(indented("value: " + f.current_value))
             end
-            if detailed or debugging then
-                Result := Result + block(indented("value type: " +
-                    f.value_type_description))
+            if
+                (not as_function or debugging) and
+                f.value_type_description /~ f.generating_type
+            then
+                Result := Result + block(indented("type: " +
+                                         f.value_type_description))
             end
-            if debugging then
-                if debug_code then
-                    Result := Result + block(code(f.out))
+            if
+                debugging and not f.out.is_empty and
+                f.out.count < max_output_size
+            then
+                if as_function then
+                    Result := Result + block(code("[", f.out, "]"))
                 else
-                    Result := Result + block(f.out)
+                    Result := Result + block("[" + f.out + "]")
+                end
+            end
+            if recurse and (detailed or as_function) then
+                if attached {COMPLEX_FUNCTION} f as proc then
+                    Result := Result + report_for(proc, True)
                 end
             end
             Result := Result + decrement_level
@@ -282,7 +334,7 @@ feature {NONE} -- Implementation
                 Result := Result + block(indented(c.name))
                 if debugging then
                     Result := Result + increment_level
-                    Result := Result + block(code(c.out))
+                    Result := Result + block(code("[", c.out, "]"))
                     Result := Result + decrement_level
                 end
             end
@@ -300,10 +352,11 @@ feature {NONE} -- Implementation
                 Result := indented("period type: " +
                     fana.period_type.name)
                 if debugging then
-                    Result := Result + block(code(fana.period_type.out))
+                    Result := Result + block(code("[",
+                        fana.period_type.out, "]"))
                 end
             else
-                Result := indented("(No period type)")
+                Result := indented("period type: [None]")
             end
         ensure
             result_exists: Result /= Void
@@ -315,6 +368,8 @@ feature {NONE} -- formatting/html
             -- Current level with respect to object-component hierarchy
 
     tab_size: INTEGER = 3
+
+    max_output_size: INTEGER = 1024
 
     indent_space: STRING
         local
@@ -345,6 +400,22 @@ feature {NONE} -- formatting/html
                     Result := Result + indentation + f.item + "%N"
                 end
             end
+        end
+
+    heading(s: STRING; strong: BOOLEAN): STRING
+        local
+            h: STRING
+        do
+            if level = 0 then
+                h := "h3"
+            else
+                if strong then
+                    h := "strong"
+                else
+                    h := "em"
+                end
+            end
+            Result := indented("<" + h + ">" + s + "</" + h + ">")
         end
 
     css_class_base: STRING = "masinfo"
@@ -421,11 +492,16 @@ feature {NONE} -- formatting/html
             end
         end
 
-    code(content: STRING): STRING
+    code(prefx, content, suffx: STRING): STRING
+        require
+            args_exist: prefx /= Void and then content /= Void and then
+                suffx /= Void
         do
             Result := content
+            Result.right_adjust
+            Result := prefx + Result + suffx
             if html_on then
-                Result := code_item_open + content + code_item_closed
+                Result := code_item_open + Result + code_item_closed
             end
         end
 
