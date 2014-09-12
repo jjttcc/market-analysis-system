@@ -49,7 +49,7 @@ object_spec     -> object_type "," object_name [ "," object_opts ]
 object_type     -> "indicator" | "event-generator"
 object_opts     -> obj_opt_list
 obj_opt_list    -> { obj_opt ";" ... }
-obj_opt         -> "detail" | "debug" | "html" | "recursive"
+obj_opt         -> "html" | "recursive" | "full-recursion"| "debug"
 object_info     -> { object_desc obj_separator ... }
 obj_separator   -> Ctrl+Z
 object_desc     -> <free-text-excluding-Ctrl+Z-and-Tab>

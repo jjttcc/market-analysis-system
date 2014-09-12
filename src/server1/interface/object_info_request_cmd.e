@@ -47,10 +47,11 @@ feature {NONE} -- Basic operations
             error_msg := ""
             response := ""
             across records as record loop
-                detailed := False
+                create reported.make_equal(10)
                 debugging := False
                 html_on := False
                 recursive := False
+                full_recursion := False
                 level := 0
                 target := record.item
                 fields := tokens(message_sub_field_separator)
@@ -65,7 +66,7 @@ feature {NONE} -- Basic operations
             end
         end
 
-feature {NONE} -- Implementation - attributes
+feature {NONE} -- Implementation - attributes and constants
 
     object_separator: CHARACTER = '%/0x1A/' -- Ctrl+Z
 
@@ -82,11 +83,8 @@ feature {NONE} -- Implementation - attributes
 
     generator_tag: STRING = "event-generator"
 
-    detailed: BOOLEAN
-            -- Is response more detailed than normal?
-
     debugging: BOOLEAN
-            -- The most detailed response?
+            -- Has debug-level detail been requested?
 
     html_on: BOOLEAN
             -- Is the response to be in html format?
@@ -95,6 +93,10 @@ feature {NONE} -- Implementation - attributes
             -- Is the response to include a recursive report of the
             -- object/function tree?
 
+    full_recursion: BOOLEAN
+            -- Is the response to include a full recursive report (i.e.,
+            -- all redundant branches included) of the object/function tree?
+
     opts_detail: STRING = "detail"
 
     opts_debug: STRING = "debug"
@@ -102,6 +104,11 @@ feature {NONE} -- Implementation - attributes
     opts_html: STRING = "html"
 
     opts_recursive: STRING = "recursive"
+
+    opts_recursive_full: STRING = "full-recursion"
+
+    reported: HASH_TABLE [LIST [ANY], TYPE [ANY]]
+            -- Record of objects that have already been reported
 
 feature {NONE} -- Implementation
 
@@ -128,14 +135,15 @@ feature {NONE} -- Implementation
                     target := fields[3]
                     opt_fields := tokens(";")
                     across opt_fields as opt loop
-                        if opt.item ~ opts_detail then
-                            detailed := True
-                        elseif opt.item ~ opts_debug then
-                            debugging := True
+                        if opt.item ~ opts_html then
+                            html_on := True
                         elseif opt.item ~ opts_recursive then
                             recursive := True
-                        elseif opt.item ~ opts_html then
-                            html_on := True
+                        elseif opt.item ~ opts_recursive_full then
+                            recursive := True
+                            full_recursion := True
+                        elseif opt.item ~ opts_debug then
+                            debugging := True
                         end
                     end
                 end
@@ -187,18 +195,6 @@ feature {NONE} -- Implementation
             Result := Result + block(functions_report(proc))
             Result := Result + block(operators_report(proc))
             Result := Result + block(parameters_report(proc))
-            if
-                not recursive and (detailed or debugging) and
-                proc.children.count > 0
-            then
-                Result := Result + block(indented(proc.children.count.out +
-                    " children:"))
-                Result := Result + increment_level
-                across proc.children as chcursor loop
-                    Result := Result + block(report_for(chcursor.item, False))
-                end
-                Result := Result + decrement_level
-            end
             if not suppress_header then
                 Result := Result + decrement_level
             end
@@ -210,21 +206,34 @@ feature {NONE} -- Implementation
         require
             proc_exists: proc /= Void
         local
-            fcount: INTEGER
+            fcount, rep_fcount: INTEGER
             tmp: STRING
         do
             tmp := ""
             Result := ""
             across proc.functions as fcursor loop
                 if fcursor.item /= proc then
-                    tmp := tmp + function_parameter_report(fcursor.item,
-                        True, recursive)
+                    if was_not_reported(fcursor.item) then
+                        tmp := tmp + function_parameter_report(fcursor.item,
+                                                               True, recursive)
+                        rep_fcount := rep_fcount + 1
+                    elseif level < 2 then
+                        -- Top level and fcursor.item was already reported,
+                        -- so don't recurse.
+                        tmp := tmp + function_parameter_report(fcursor.item,
+                                                               True, False)
+                        rep_fcount := rep_fcount + 1
+                    end
                     fcount := fcount + 1
                 end
             end
             if fcount > 0 then
                 Result := indented(fcount.out + " " +
                                    pluralized("function", fcount) + ":")
+                if fcount > rep_fcount then
+                    --("Abbreviate" redundant branch.)
+                    tmp := tmp + block("...")
+                end
                 Result := Result + increment_level + tmp + decrement_level
             end
         ensure
@@ -290,7 +299,7 @@ feature {NONE} -- Implementation
                 fname := fname + ": "
             end
             Result := Result + block(heading(fname + f.unique_name,
-                                     as_function))
+                                             as_function))
             Result := Result + increment_level
             if not as_function and then not f.current_value.is_empty then
                 Result := Result + block(indented("value: " + f.current_value))
@@ -312,10 +321,8 @@ feature {NONE} -- Implementation
                     Result := Result + block("[" + f.out + "]")
                 end
             end
-            if recurse and (detailed or as_function) then
-                if attached {COMPLEX_FUNCTION} f as proc then
-                    Result := Result + report_for(proc, True)
-                end
+            if recurse and as_function then
+                Result := Result + recursive_report_for(f)
             end
             Result := Result + decrement_level
         ensure
@@ -360,6 +367,59 @@ feature {NONE} -- Implementation
             end
         ensure
             result_exists: Result /= Void
+        end
+
+    recursive_report_for(fp: FUNCTION_PARAMETER): STRING
+            -- If 'fp' is eligible for a recursive report, the result of
+            -- calling report_for(fp, True); otherwise, an empty string
+            -- (The purpose of this function is to ensure that recursive
+            -- function reports are not redundant - i.e., that an object
+            -- that would otherwise be reported more than once [as a descendant
+            -- in the function tree] is only reported the first time it is seen
+            -- as a descendant.  The goal is to prevent wasted space, time,
+            -- and user readability.)
+        require
+            needed_items_exist: reported /= Void and fp /= Void
+        local
+            not_reported: BOOLEAN
+        do
+            Result := ""
+            not_reported := was_not_reported(fp)
+            if not_reported then
+                -- (If `full_recursion', never mark an object as "reported".)
+                if not full_recursion then set_reported(fp) end
+                if attached {COMPLEX_FUNCTION} fp as proc then
+                    Result := Result + report_for(proc, True)
+                end
+            end
+        ensure
+            not_void: Result /= Void
+            reported_side_effect: not full_recursion = not was_not_reported(fp)
+        end
+
+    set_reported(fp: FUNCTION_PARAMETER)
+            -- Mark `fp' as "reported".
+        require
+            needed_items_exist: reported /= Void and fp /= Void
+        local
+            replist: LIST [ANY]
+        do
+            replist := reported[fp.generating_type]
+            if replist = Void then
+                create {LINKED_LIST [ANY]} replist.make
+                reported.extend(replist, fp.generating_type)
+            end
+            replist.extend(fp)
+        ensure
+            as_promised: not was_not_reported(fp)
+        end
+
+    was_not_reported(object: ANY): BOOLEAN
+        local
+            replist: LIST [ANY]
+        do
+            replist := reported[object.generating_type]
+            Result := replist = Void or else not replist.has(object)
         end
 
 feature {NONE} -- formatting/html
@@ -510,8 +570,18 @@ feature {NONE} -- formatting/html
             Result := css_class_base + level.out
         end
 
+    objid(o: ANY): STRING
+            -- id extracted from 'o.out' (for debugging)
+        require
+            o: o /= Void
+        local
+        do
+            Result := o.out.hash_code.out
+        end
+
 invariant
 
     sane_level: level >= 0
+    reported_objcomp: reported /= Void implies reported.object_comparison
 
 end

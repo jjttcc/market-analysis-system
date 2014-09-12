@@ -139,7 +139,10 @@ feature -- Access
 	out: STRING
 		local
 			l: LINEAR [MARKET_TUPLE]
+verbose_version: BOOLEAN
 		do
+			if verbose_version then
+--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			l := linear_representation
 			create Result.make (0)
 			from
@@ -150,6 +153,10 @@ feature -- Access
 				Result.append ("date/time: " + l.item.date_time.out +
 					", value: " + l.item.value.out + "%N")
 				l.forth
+			end
+--!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			else
+				Result := Precursor
 			end
 		end
 
