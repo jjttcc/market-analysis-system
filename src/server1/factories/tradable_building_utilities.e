@@ -26,7 +26,7 @@ deferred class TRADABLE_BUILDING_UTILITIES inherit
 
 feature {TRADABLE_FACTORY} -- Access
 
-	new_item (symbol: STRING): TRADABLE [BASIC_MARKET_TUPLE]
+	new_item (symbol: STRING): TRADABLE [BASIC_TRADABLE_TUPLE]
 			-- A new tradable instance with symbol `symbol'
 		require
 			symbol_exists: symbol /= Void and then not symbol.is_empty

@@ -57,9 +57,9 @@ class EVENT_REGISTRATION inherit
 			print
 		end
 
-	STORABLE_SERVICES [MARKET_EVENT_REGISTRANT]
+	STORABLE_SERVICES [TRADABLE_EVENT_REGISTRANT]
 		rename
-			real_list as market_event_registrants,
+			real_list as tradable_event_registrants,
 			working_list as working_event_registrants,
 			retrieve_persistent_list as force_event_registrant_retrieval,
 			prompt_for_char as character_choice,
@@ -162,7 +162,7 @@ feature {NONE} -- Implementation
 	add_registrants
 		local
 			finished: BOOLEAN
-			new_registrant: MARKET_EVENT_REGISTRANT
+			new_registrant: TRADABLE_EVENT_REGISTRANT
 		do
 			from
 			until
@@ -199,7 +199,7 @@ feature {NONE} -- Implementation
 
 	remove_registrants
 		local
-			r: MARKET_EVENT_REGISTRANT
+			r: TRADABLE_EVENT_REGISTRANT
 		do
 			if not working_event_registrants.is_empty then
 				print ("Select registrant to remove:%N")
@@ -216,7 +216,7 @@ feature {NONE} -- Implementation
 
 	view_registrants
 		local
-			r: MARKET_EVENT_REGISTRANT
+			r: TRADABLE_EVENT_REGISTRANT
 		do
 			if not working_event_registrants.is_empty then
 				print ("Select registrant to view:%N")
@@ -231,7 +231,7 @@ feature {NONE} -- Implementation
 
 	edit_registrants
 		local
-			r: MARKET_EVENT_REGISTRANT
+			r: TRADABLE_EVENT_REGISTRANT
 		do
 			if not working_event_registrants.is_empty then
 				print ("Select registrant to edit:%N")
@@ -350,10 +350,10 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	registrant_selection: MARKET_EVENT_REGISTRANT
+	registrant_selection: TRADABLE_EVENT_REGISTRANT
 		local
 			i: INTEGER
-			regs: LIST [MARKET_EVENT_REGISTRANT]
+			regs: LIST [TRADABLE_EVENT_REGISTRANT]
 			c: CHARACTER
 			abort: BOOLEAN
 		do
@@ -390,7 +390,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	event_type_selection (r: MARKET_EVENT_REGISTRANT): EVENT_TYPE
+	event_type_selection (r: TRADABLE_EVENT_REGISTRANT): EVENT_TYPE
 		local
 			i: INTEGER
 			types: CHAIN [EVENT_TYPE]
@@ -434,7 +434,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	display_registrant (r: MARKET_EVENT_REGISTRANT)
+	display_registrant (r: TRADABLE_EVENT_REGISTRANT)
 		local
 			l: LINEAR [EVENT_TYPE]
 		do
@@ -453,7 +453,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	edit_registrant (r: MARKET_EVENT_REGISTRANT)
+	edit_registrant (r: TRADABLE_EVENT_REGISTRANT)
 		local
 			finished: BOOLEAN
 			t: EVENT_TYPE
@@ -509,7 +509,7 @@ feature {NONE} -- Implementation
 
 	help: HELP
 
-	working_event_registrants: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
+	working_event_registrants: STORABLE_LIST [TRADABLE_EVENT_REGISTRANT]
 
 	main_msg: STRING
 		note
@@ -536,7 +536,7 @@ feature {NONE} -- Implementation
 
 	initialize_working_list
 		do
-			working_event_registrants := market_event_registrants.deep_twin
+			working_event_registrants := tradable_event_registrants.deep_twin
 		end
 
 feature {NONE} -- Implementation of hook routines

@@ -36,7 +36,7 @@ feature -- Access
     end_dates: HASH_TABLE [DATE, STRING]
             -- End dates - one (or 0) per time-period type
 
-    last_tradable: TRADABLE [BASIC_MARKET_TUPLE]
+    last_tradable: TRADABLE [BASIC_TRADABLE_TUPLE]
             -- Last tradable accessed
 
     caching_on: BOOLEAN
@@ -72,7 +72,7 @@ feature -- Access
 
 feature -- Element change
 
-    set_last_tradable (arg: TRADABLE [BASIC_MARKET_TUPLE])
+    set_last_tradable (arg: TRADABLE [BASIC_TRADABLE_TUPLE])
             -- Set last_tradable to `arg'.
         do
             last_tradable := arg

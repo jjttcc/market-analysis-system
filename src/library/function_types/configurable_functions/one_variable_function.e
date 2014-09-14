@@ -1,6 +1,6 @@
 note
     description:
-        "A market function that takes one argument or variable"
+        "A tradable function that takes one argument or variable"
     author: "Jim Cochrane"
     date: "$Date$";
     revision: "$Revision$"
@@ -22,7 +22,7 @@ class ONE_VARIABLE_FUNCTION inherit
             action, start
         end
 
-creation {FACTORY, MARKET_FUNCTION_EDITOR}
+creation {FACTORY, TRADABLE_FUNCTION_EDITOR}
 
     make
 
@@ -89,7 +89,7 @@ feature -- Access
             end
         end
 
-    innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE]
+    innermost_input: SIMPLE_FUNCTION [TRADABLE_TUPLE]
         do
             if input.is_complex then
                 Result := input.innermost_input
@@ -102,7 +102,7 @@ feature -- Access
 
 feature {FACTORY} -- Element change
 
-    set_innermost_input (in: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE])
+    set_innermost_input (in: SIMPLE_FUNCTION [BASIC_TRADABLE_TUPLE])
         do
             processed_date_time := Void
             if input.is_complex then
@@ -182,7 +182,7 @@ feature {NONE}
             input_processed: input.processed
         end
 
-feature {MARKET_FUNCTION_EDITOR}
+feature {TRADABLE_FUNCTION_EDITOR}
 
     set_input (in: like input)
         require
@@ -202,7 +202,7 @@ feature {MARKET_FUNCTION_EDITOR}
             input.reset_parameters
         end
 
-feature {MARKET_FUNCTION_EDITOR}
+feature {TRADABLE_FUNCTION_EDITOR}
 
     input: TRADABLE_FUNCTION
 

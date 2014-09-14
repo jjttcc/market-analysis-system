@@ -1,15 +1,15 @@
 note
 	description:
-		"A MARKET_TUPLE that functions as a point in a line"
+		"A TRADABLE_TUPLE that functions as a point in a line"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-class MARKET_POINT inherit
+class TRADABLE_POINT inherit
 
-	MARKET_TUPLE
+	TRADABLE_TUPLE
 		rename
 			value as y
 		redefine
@@ -84,4 +84,4 @@ feature -- Status setting
 			-- y = arg
 		end
 
-end -- class MARKET_POINT
+end -- class TRADABLE_POINT

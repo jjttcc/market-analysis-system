@@ -1,6 +1,6 @@
 note
 	description:
-		"A market function that provides a concept of an n-length %
+		"A tradable function that provides a concept of an n-length %
 		%sub-list of the main input list."
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -22,7 +22,7 @@ class N_RECORD_ONE_VARIABLE_FUNCTION inherit
 			set_n
 		end
 
-creation {FACTORY, MARKET_FUNCTION_EDITOR}
+creation {FACTORY, TRADABLE_FUNCTION_EDITOR}
 
 	make
 
@@ -67,7 +67,7 @@ feature -- Access
 	effective_offset: INTEGER
 			-- Offset used to produce the effective_n value
 
-feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
+feature {FACTORY, TRADABLE_FUNCTION_EDITOR} -- Status setting
 
 	set_effective_offset (arg: INTEGER)
 			-- Set effective_offset to `arg'.
@@ -77,7 +77,8 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
 			effective_offset_set: effective_offset = arg
 		end
 
-feature {N_RECORD_FUNCTION_PARAMETER, MARKET_FUNCTION_EDITOR} -- Status setting
+feature {N_RECORD_FUNCTION_PARAMETER, TRADABLE_FUNCTION_EDITOR}
+			-- Status setting
 
 	set_n (value: INTEGER)
 		do
@@ -125,7 +126,7 @@ feature {NONE}
 			Result := True
 		end
 
-	target: ARRAYED_LIST [MARKET_TUPLE]
+	target: ARRAYED_LIST [TRADABLE_TUPLE]
 
 	immediate_direct_parameters: LIST [FUNCTION_PARAMETER]
 		do

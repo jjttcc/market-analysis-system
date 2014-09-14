@@ -44,7 +44,7 @@ feature {NONE} -- Implementation
 			file_status_cache.wipe_out
 		end
 
-	add_to_cache (t: TRADABLE [BASIC_MARKET_TUPLE]; idx: INTEGER)
+	add_to_cache (t: TRADABLE [BASIC_TRADABLE_TUPLE]; idx: INTEGER)
 		do
 			Precursor (t, idx)
 			if caching_on then

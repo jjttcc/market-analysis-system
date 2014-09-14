@@ -1,7 +1,7 @@
 note
 	description:
 		"Abstraction that allows the user to edit, create, and remove %
-		%MARKET_FUNCTIONs"
+		%TRADABLE_FUNCTIONs"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -10,7 +10,7 @@ note
 
 deferred class FUNCTION_EDITING_INTERFACE inherit
 
-	MARKET_FUNCTIONS
+	TRADABLE_FUNCTIONS
 		export
 			{NONE} all
 		end
@@ -41,7 +41,7 @@ deferred class FUNCTION_EDITING_INTERFACE inherit
 			synchronize_lists
 		end
 
-	MARKET_TUPLE_LIST_SELECTOR
+	TRADABLE_TUPLE_LIST_SELECTOR
 
 	GLOBAL_APPLICATION
 		rename
@@ -53,14 +53,14 @@ deferred class FUNCTION_EDITING_INTERFACE inherit
 feature -- Access
 
 	editor: APPLICATION_FUNCTION_EDITOR
-			-- Editor used to set MARKET_FUNCTIONs' operands and parameters
+			-- Editor used to set TRADABLE_FUNCTIONs' operands and parameters
 
 feature -- Constants
 
-	Market_function: STRING = "TRADABLE_FUNCTION"
+	tradable_function: STRING = "TRADABLE_FUNCTION"
 			-- Name of TRADABLE_FUNCTION
 
-	Complex_function: STRING = "COMPLEX_FUNCTION"
+	complex_function: STRING = "COMPLEX_FUNCTION"
 			-- Name of COMPLEX_FUNCTION
 
 feature -- Basic operations
@@ -79,7 +79,7 @@ feature -- Access
 			make_instances
 
 			create l.make (8)
-			Result.extend (l, Market_function)
+			Result.extend (l, tradable_function)
 			l.extend (two_variable_function)
 			l.extend (one_variable_function)
 			l.extend (n_record_one_variable_function)
@@ -87,13 +87,13 @@ feature -- Access
 			l.extend (exponential_moving_average)
 			l.extend (accumulation)
 			l.extend (configurable_n_record_function)
-			l.extend (market_function_line)
+			l.extend (tradable_function_line)
 			l.extend (agent_based_function)
-			l.extend (market_data_function)
+			l.extend (tradable_data_function)
 			l.extend (stock)
 
 			create l.make (6)
-			Result.extend (l, Complex_function)
+			Result.extend (l, complex_function)
 			l.extend (two_variable_function)
 			l.extend (one_variable_function)
 			l.extend (n_record_one_variable_function)
@@ -101,16 +101,16 @@ feature -- Access
 			l.extend (exponential_moving_average)
 			l.extend (accumulation)
 			l.extend (configurable_n_record_function)
-			-- @@Added this MARKET_FUNCTION_LINE here on 2003/05/17,
+			-- @@Added this TRADABLE_FUNCTION_LINE here on 2003/05/17,
 			-- assuming it not being there was an oversight - check this.
-			l.extend (market_function_line)
+			l.extend (tradable_function_line)
 			l.extend (agent_based_function)
-			l.extend (market_data_function)
+			l.extend (tradable_data_function)
 		end
 
 feature {APPLICATION_FUNCTION_EDITOR} -- Access
 
-	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE]
+	tradable_tuple_list_selection (msg: STRING): CHAIN [TRADABLE_TUPLE]
 		do
 			Result := user_function_selection (function_instances, msg).output
 		end
@@ -146,13 +146,13 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 	function_selection_from_library (msg: STRING): TRADABLE_FUNCTION
 			-- User-selected TRADABLE_FUNCTION from the function library
 		do
-			Result := (market_function_selection (msg,
+			Result := (tradable_function_selection (msg,
 				agent valid_root_function)).twin
 			set_complex_function_inputs (Result)
 			edit_function (Result, msg)
 		end
 
-	market_function_selection (msg: STRING; validity_checker:
+	tradable_function_selection (msg: STRING; validity_checker:
 		FUNCTION [ANY, TUPLE [TRADABLE_FUNCTION], BOOLEAN]): TRADABLE_FUNCTION
 			-- User-selected TRADABLE_FUNCTION from the function library
 		local
@@ -210,7 +210,7 @@ feature {APPLICATION_FUNCTION_EDITOR} -- Access
 			result_not_void: Result /= Void
 		end
 
-	dummy_tradable: TRADABLE [BASIC_MARKET_TUPLE]
+	dummy_tradable: TRADABLE [BASIC_TRADABLE_TUPLE]
 			-- A tradable to be used as dummy input
 		do
 			Result ?= function_with_generator ("STOCK")
@@ -225,7 +225,7 @@ feature {EDITING_INTERFACE}
 		local
 			ema: EXPONENTIAL_MOVING_AVERAGE
 			sma: STANDARD_MOVING_AVERAGE
-			mfl: MARKET_FUNCTION_LINE
+			mfl: TRADABLE_FUNCTION_LINE
 			ovf: ONE_VARIABLE_FUNCTION
 			accum: ACCUMULATION
 			conf_nrf: CONFIGURABLE_N_RECORD_FUNCTION
@@ -252,7 +252,7 @@ feature {EDITING_INTERFACE}
 				check
 					f_is_a_line: mfl /= Void
 				end
-				editor.edit_market_function_line (mfl)
+				editor.edit_tradable_function_line (mfl)
 			when One_fn_op_n then
 				nrovf ?= f
 				check
@@ -410,17 +410,17 @@ end
 
 feature {NONE} -- Implementation
 
-	One_fn_op,			-- Takes one market function and an operator.
-	Accumulation_key,	-- Takes one market function and two operators.
-	One_fn_op_n,		-- Takes one market function, an operator, and an
+	One_fn_op,			-- Takes one tradable function and an operator.
+	Accumulation_key,	-- Takes one tradable function and two operators.
+	One_fn_op_n,		-- Takes one tradable function, an operator, and an
 						-- n-value.
 	Two_cplx_fn_op,		-- Takes two complex functions and an operator.
-	One_fn_bnc_n,		-- Takes one market function, a BASIC_NUMERIC_COMMAND,
+	One_fn_bnc_n,		-- Takes one tradable function, a BASIC_NUMERIC_COMMAND,
 						-- and an n-value.
 	ema_function,	    -- EXPONENTIAL_MOVING_AVERAGE function - takes one
-						-- market function, a RESULT_COMMAND [REAL],
+						-- tradable function, a RESULT_COMMAND [REAL],
 						-- an N_BASED_CALCULATION, and an n-value.
-	Mkt_fnctn_line,		-- a MARKET_FUNCTION_LINE.
+	Mkt_fnctn_line,		-- a TRADABLE_FUNCTION_LINE.
 	Configurable_nrfn,	-- CONFIGURABLE_N_RECORD_FUNCTION
 	Agent_based_fn,		-- AGENT_BASED_FUNCTION
 	Other				-- Classes that need no initialization
@@ -472,12 +472,12 @@ feature {NONE} -- Implementation
 				valid_name: function_names.has (name)
 			end
 			Result.extend (Configurable_nrfn, name)
-			name := market_function_line.generator
+			name := tradable_function_line.generator
 			check
 				valid_name: function_names.has (name)
 			end
 			Result.extend (Mkt_fnctn_line, name)
-			name := market_data_function.generator
+			name := tradable_data_function.generator
 			check
 				valid_name: function_names.has (name)
 			end
@@ -636,21 +636,21 @@ feature {NONE} -- Implementation
 	valid_root_function (f: TRADABLE_FUNCTION): BOOLEAN
 			-- Is `f' allowed to be used as a root function?
 		local
-			l: LINEAR [MARKET_TUPLE]
+			l: LINEAR [TRADABLE_TUPLE]
 			cf: COMPLEX_FUNCTION
-			mdf: MARKET_DATA_FUNCTION
+			mdf: TRADABLE_DATA_FUNCTION
 		do
 			cf ?= f
 			mdf ?= f
 			if cf /= Void and mdf = Void then
 				-- To be a root function `f' is required to be complex, but
-				-- not a MARKET_DATA_FUNCTION, since a MARKET_DATA_FUNCTION
+				-- not a TRADABLE_DATA_FUNCTION, since a TRADABLE_DATA_FUNCTION
 				-- (which simply outputs its input) would not be useful 
 				-- as a root function.
 				Result := True
 				l := f.required_tuple_types.linear_representation
 				-- `f' is valid only if all of its required tuple types
-				-- don't have additional queries (compared to MARKET_TUPLE)
+				-- don't have additional queries (compared to TRADABLE_TUPLE)
 				-- in their interface.  This prevents, for example, a
 				-- run-time type error caused by trying to access the
 				-- (non-existent) high field of a SIMPLE_TUPLE (which will be
@@ -673,7 +673,7 @@ feature {NONE} -- Implementation
 			ovf: ONE_VARIABLE_FUNCTION
 			tvf: TWO_VARIABLE_FUNCTION
 			abf: AGENT_BASED_FUNCTION
-			mfl: MARKET_FUNCTION_LINE
+			mfl: TRADABLE_FUNCTION_LINE
 			chosen_functions: LINKED_SET [TRADABLE_FUNCTION]
 			operators: LINKED_SET [COMMAND]
 			f_changed: BOOLEAN
@@ -715,7 +715,7 @@ feature {NONE} -- Implementation
 							editor.last_selected_ovf_input)
 						f_changed := True
 					else
-						-- l.item is a MARKET_FUNCTION_LINE and does
+						-- l.item is a TRADABLE_FUNCTION_LINE and does
 						-- not need its input function set.
 						show_message (l.item.name + no_function_msg)
 					end
@@ -736,7 +736,7 @@ feature {NONE} -- Implementation
 								editor.last_selected_abf_input)
 							f_changed := True
 						else
-							-- l.item is a MARKET_DATA_FUNCTION, which does
+							-- l.item is a TRADABLE_DATA_FUNCTION, which does
 							-- not need its input function set.
 							show_message (l.item.name + no_function_msg)
 						end
@@ -883,7 +883,7 @@ feature {NONE} -- Implementation - indicator editing
 				f := function_selection_from_library ("the root function")
 				dirty := True
 			when 'n', 'N' then
-				f := function_selection_from_type (market_function,
+				f := function_selection_from_type (tradable_function,
 					"root function", True)
 				dirty := True
 			when 'q', 'Q' then

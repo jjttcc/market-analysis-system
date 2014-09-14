@@ -8,11 +8,11 @@ note
 
 class HIGH_SETTER inherit
 
-	REAL_SETTER [BASIC_MARKET_TUPLE]
+	REAL_SETTER [BASIC_TRADABLE_TUPLE]
 
 feature {NONE}
 
-	do_set (stream: INPUT_SEQUENCE; tuple: BASIC_MARKET_TUPLE)
+	do_set (stream: INPUT_SEQUENCE; tuple: BASIC_TRADABLE_TUPLE)
 		do
 			if stream.last_double < epsilon then
 				handle_le_0_error ("highest price")

@@ -8,7 +8,7 @@ indexing
 
 class STOCK_INDEX inherit
 
-	TRADABLE [BASIC_MARKET_TUPLE]
+	TRADABLE [BASIC_TRADABLE_TUPLE]
 		redefine
 			symbol, short_description
 		end

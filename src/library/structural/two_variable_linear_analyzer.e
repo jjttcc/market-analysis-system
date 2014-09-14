@@ -14,7 +14,7 @@ class TWO_VARIABLE_LINEAR_ANALYZER inherit
 			target as target1, -- x in "z = f(x, y)"
 			set as set_unused
 		export
-			{MARKET_FUNCTION_EDITOR} all
+			{TRADABLE_FUNCTION_EDITOR} all
 			{NONE} set_unused
 			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		redefine
@@ -28,13 +28,13 @@ class TWO_VARIABLE_LINEAR_ANALYZER inherit
 			target as target2, -- y in "z = f(x, y)"
 			set as set_unused
 		export
-			{MARKET_FUNCTION_EDITOR} all
+			{TRADABLE_FUNCTION_EDITOR} all
 			{NONE} set_unused
 		redefine
 			forth, start
 		end
 
-feature {MARKET_FUNCTION_EDITOR} -- Hook routines
+feature {TRADABLE_FUNCTION_EDITOR} -- Hook routines
 
 	forth
 		do
@@ -55,7 +55,7 @@ feature {MARKET_FUNCTION_EDITOR} -- Hook routines
 					target1.item.date_time.is_equal (target2.item.date_time)
 		end
 
-feature {MARKET_FUNCTION_EDITOR} -- Implementation
+feature {TRADABLE_FUNCTION_EDITOR} -- Implementation
 
 	set1 (t: like target1)
 			-- Replacement for `set' - set `target1'.
@@ -69,9 +69,9 @@ feature {MARKET_FUNCTION_EDITOR} -- Implementation
 			target2 := t
 		end
 
-feature {MARKET_FUNCTION_EDITOR} -- Utility routines
+feature {TRADABLE_FUNCTION_EDITOR} -- Utility routines
 
-	missing_periods (l1, l2: LINEAR [MARKET_TUPLE]): BOOLEAN
+	missing_periods (l1, l2: LINEAR [TRADABLE_TUPLE]): BOOLEAN
 			-- Are there missing periods in l1 and l2 with
 			-- respect to each other?
 		require
@@ -106,12 +106,12 @@ feature {MARKET_FUNCTION_EDITOR} -- Utility routines
 			void_gives_false: (l1 = Void and l2 = Void) implies (Result = False)
 		end
 
-	line_up (t1, t2: LINEAR [MARKET_TUPLE])
+	line_up (t1, t2: LINEAR [TRADABLE_TUPLE])
 			-- Line up t1 and t2 so that they start on the same time period.
 		require
 			not_empty: not t1.is_empty and not t2.is_empty
 		local
-			l1, l2: LINEAR [MARKET_TUPLE]
+			l1, l2: LINEAR [TRADABLE_TUPLE]
 		do
 			t1.start; t2.start
 			from

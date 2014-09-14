@@ -1,13 +1,13 @@
 note
 	description:
-		"A MARKET_LINE that can be analyzed as a TRADABLE_FUNCTION"
+		"A TRADABLE_LINE that can be analyzed as a TRADABLE_FUNCTION"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-class MARKET_FUNCTION_LINE inherit
+class TRADABLE_FUNCTION_LINE inherit
 
 	ONE_VARIABLE_FUNCTION
 		rename
@@ -18,13 +18,13 @@ class MARKET_FUNCTION_LINE inherit
 			action, operator_used, start, immediate_direct_parameters
 		end
 
-	MARKET_LINE
+	TRADABLE_LINE
 		rename
 			make_from_2_points as ml_make_from_2_points
 		export
 			{NONE} make_from_slope, ml_make_from_2_points
-			{SLOPE_FUNCTION_PARAMETER, MARKET_FUNCTION_EDITOR} set_slope
-			{START_Y_FUNCTION_PARAMETER, MARKET_FUNCTION_EDITOR} set_start_y
+			{SLOPE_FUNCTION_PARAMETER, TRADABLE_FUNCTION_EDITOR} set_slope
+			{START_Y_FUNCTION_PARAMETER, TRADABLE_FUNCTION_EDITOR} set_start_y
 		undefine
 			is_equal, copy
 		end
@@ -35,7 +35,7 @@ creation
 
 feature -- Initialization
 
-	make (p1: MARKET_POINT; sl: DOUBLE; in: like input)
+	make (p1: TRADABLE_POINT; sl: DOUBLE; in: like input)
 			-- Make the line with p1 as the start point, sl as the slope.
 		require
 			not_void: p1 /= Void and in /= Void
@@ -49,7 +49,7 @@ feature -- Initialization
 			-- slope = sl
 		end
 
-	make_from_2_points (p1, p2: MARKET_POINT; in: like input)
+	make_from_2_points (p1, p2: TRADABLE_POINT; in: like input)
 			-- Make the line with p1 as the start point; obtain the slope
 			-- from p1 and p2.
 		require
@@ -75,7 +75,7 @@ feature {NONE} -- Implemetation
 
 	action
 		local
-			t: MARKET_POINT
+			t: TRADABLE_POINT
 		do
 			create t.make
 			t.set_x_y_date (target.index, y_at (target.index),
@@ -99,4 +99,4 @@ invariant
 
 	start_point_x_gt_0: start_point.x = 1
 
-end -- class MARKET_FUNCTION_LINE
+end -- class TRADABLE_FUNCTION_LINE

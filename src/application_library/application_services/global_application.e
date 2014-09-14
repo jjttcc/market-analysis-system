@@ -39,13 +39,13 @@ feature -- Access
 			create {ARRAY [EVENT_TYPE]} Result.make_empty
 			from
 				i := 1
-				market_event_generation_library.start
+				tradable_event_generation_library.start
 			until
-				market_event_generation_library.exhausted
+				tradable_event_generation_library.exhausted
 			loop
-				Result.force (market_event_generation_library.item.event_type,
+				Result.force (tradable_event_generation_library.item.event_type,
 					i)
-				market_event_generation_library.forth
+				tradable_event_generation_library.forth
 				i := i + 1
 			end
 		end
@@ -54,24 +54,24 @@ feature -- Access
 			-- All event types known to the system in a hash table - key
 			-- is the event type ID.
 		do
-			create Result.make (market_event_generation_library.count)
+			create Result.make (tradable_event_generation_library.count)
 			from
-				market_event_generation_library.start
+				tradable_event_generation_library.start
 			until
-				market_event_generation_library.exhausted
+				tradable_event_generation_library.exhausted
 			loop
-				Result.extend (market_event_generation_library.item.event_type,
-					market_event_generation_library.item.event_type.id)
-				market_event_generation_library.forth
+				Result.extend (tradable_event_generation_library.item.event_type,
+					tradable_event_generation_library.item.event_type.id)
+				tradable_event_generation_library.forth
 			end
 		end
 
 	create_event_generator (eg_maker: EVENT_GENERATOR_FACTORY;
 				event_type_name: STRING;
-				meg_list: STORABLE_LIST [MARKET_EVENT_GENERATOR])
-			-- Create a new MARKET_EVENT_GENERATOR and a new associated
+				meg_list: STORABLE_LIST [TRADABLE_EVENT_GENERATOR])
+			-- Create a new TRADABLE_EVENT_GENERATOR and a new associated
 			-- EVENT_TYPE (with `event_type_name') and add the new
-			-- MARKET_EVENT_GENERATOR  to `meg_list'.
+			-- TRADABLE_EVENT_GENERATOR  to `meg_list'.
 		require
 			not_void: eg_maker /= Void and event_type_name /= Void and
 				meg_list /= Void
@@ -88,7 +88,7 @@ feature -- Access
 		end
 
 	function_library: STORABLE_LIST [TRADABLE_FUNCTION]
-			-- All defined market functions - Side effect:
+			-- All defined tradable functions - Side effect:
 			-- create_stock_function_library is called (once) to fill
 			-- stock_function_library with valid (for a stock) members
 			-- of function_library.
@@ -99,37 +99,37 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	market_event_generation_library: STORABLE_LIST [MARKET_EVENT_GENERATOR]
+	tradable_event_generation_library: STORABLE_LIST [TRADABLE_EVENT_GENERATOR]
 			-- All defined event generators - Side effect:
-			-- create_stock_market_event_generation_library is called (once)
-			-- to fill stock_market_event_generation_library with valid
+			-- create_stock_tradable_event_generation_library is called (once)
+			-- to fill stock_tradable_event_generation_library with valid
 			-- (for a stock) members of function_library.
 -- !!!! indexing once_status: global??!!!
 		once
-			Result := retrieved_market_event_generation_library
+			Result := retrieved_tradable_event_generation_library
 		ensure
 			not_void: Result /= Void
 		end
 
-	market_event_registrants: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
+	tradable_event_registrants: STORABLE_LIST [TRADABLE_EVENT_REGISTRANT]
 			-- All defined event registrants
 -- !!!! indexing once_status: global??!!!
 		once
-			Result := retrieved_market_event_registrants
+			Result := retrieved_tradable_event_registrants
 		ensure
 			not_void: Result /= Void
 		end
 
-	active_event_generators: LIST [MARKET_EVENT_GENERATOR]
+	active_event_generators: LIST [TRADABLE_EVENT_GENERATOR]
 			-- Event generators in which at least one event registrant
 			-- is interested.
 		local
-			registrants: LIST [MARKET_EVENT_REGISTRANT]
-			generators: LIST [MARKET_EVENT_GENERATOR]
+			registrants: LIST [TRADABLE_EVENT_REGISTRANT]
+			generators: LIST [TRADABLE_EVENT_GENERATOR]
 		do
-			create {LINKED_LIST [MARKET_EVENT_GENERATOR]} Result.make
-			registrants := market_event_registrants
-			generators := market_event_generation_library
+			create {LINKED_LIST [TRADABLE_EVENT_GENERATOR]} Result.make
+			registrants := tradable_event_registrants
+			generators := tradable_event_generation_library
 			from
 				registrants.start
 			until
@@ -159,15 +159,15 @@ feature -- Access
 			not_void: Result /= Void
 		end
 
-	meg_names (meg_lib: LIST [MARKET_EVENT_GENERATOR]):
+	meg_names (meg_lib: LIST [TRADABLE_EVENT_GENERATOR]):
 				ARRAYED_LIST [STRING]
 			-- Names of all elements of `meg_lib' if not Void; otherwise,
-			-- of `market_event_generation_library', in the same order
+			-- of `tradable_event_generation_library', in the same order
 		local
-			meg_library: LIST [MARKET_EVENT_GENERATOR]
+			meg_library: LIST [TRADABLE_EVENT_GENERATOR]
 		do
 			if meg_lib = Void then
-				meg_library := market_event_generation_library
+				meg_library := tradable_event_generation_library
 			else
 				meg_library := meg_lib
 			end
@@ -214,13 +214,13 @@ feature -- Access
 			end
 		end
 
-	event_generator_with_name(name: STRING): MARKET_EVENT_GENERATOR
-			-- MARKET_EVENT_GENERATOR with the specified `name'
+	event_generator_with_name(name: STRING): TRADABLE_EVENT_GENERATOR
+			-- TRADABLE_EVENT_GENERATOR with the specified `name'
 		local
             egfound: BOOLEAN
-            eg_cursor: INDEXABLE_ITERATION_CURSOR [MARKET_EVENT_GENERATOR]
+            eg_cursor: INDEXABLE_ITERATION_CURSOR [TRADABLE_EVENT_GENERATOR]
 		do
-            eg_cursor := market_event_generation_library.new_cursor
+            eg_cursor := tradable_event_generation_library.new_cursor
             from eg_cursor.start until egfound or eg_cursor.after loop
                 if eg_cursor.item.name ~ name then
                     egfound := True
@@ -241,19 +241,19 @@ feature -- Basic operations
 		end
 
 	force_meg_library_retrieval
-			-- Force market event generator library to be re-retrieved by deep
-			-- copying `retrieved_market_event_generation_library' into it.
+			-- Force tradable event generator library to be re-retrieved by deep
+			-- copying `retrieved_tradable_event_generation_library' into it.
 		do
-			deep_copy_list (market_event_generation_library,
-				retrieved_market_event_generation_library)
+			deep_copy_list (tradable_event_generation_library,
+				retrieved_tradable_event_generation_library)
 		end
 
 	force_event_registrant_retrieval
 			-- Force event registrants to be re-retrieved by deep copying
-			-- `retrieved_market_event_registrants' into it.
+			-- `retrieved_tradable_event_registrants' into it.
 		do
-			deep_copy_list (market_event_registrants,
-				retrieved_market_event_registrants)
+			deep_copy_list (tradable_event_registrants,
+				retrieved_tradable_event_registrants)
 		end
 
 feature -- Constants
@@ -290,7 +290,7 @@ feature -- Constants
 	future_date: DATE
 			-- A date some time in the future - used to implement an
 			-- "eternal now" (a date that will always be larger than any
-			-- realistic market tuple date)
+			-- realistic tradable tuple date)
 		note
 			once_status: global
 		once
@@ -303,7 +303,7 @@ feature -- Constants
 	future_date_time: DATE_TIME
 			-- A date/time some time in the future - used to implement an
 			-- "eternal now" (a date/time that will always be larger than any
-			-- realistic market tuple date)
+			-- realistic tradable tuple date)
 		note
 			once_status: global
 		once
@@ -339,7 +339,7 @@ feature {NONE} -- Implementation
 				create storable
 				mflist ?= storable.retrieve_by_name (full_path_name)
 				if mflist = Void then
-					create {STORABLE_MARKET_FUNCTION_LIST} mflist.make (
+					create {STORABLE_TRADABLE_FUNCTION_LIST} mflist.make (
 						indicators_file_name)
 				end
 				Result := mflist
@@ -352,12 +352,12 @@ feature {NONE} -- Implementation
 			retry
 		end
 
-	retrieved_market_event_generation_library:
-				STORABLE_LIST [MARKET_EVENT_GENERATOR]
+	retrieved_tradable_event_generation_library:
+				STORABLE_LIST [TRADABLE_EVENT_GENERATOR]
 			-- All defined event generators
 		local
 			storable: STORABLE
-			meg_list: STORABLE_LIST [MARKET_EVENT_GENERATOR]
+			meg_list: STORABLE_LIST [TRADABLE_EVENT_GENERATOR]
 			retrieval_failed: BOOLEAN
 			app_env: expanded APP_ENVIRONMENT
 			full_path_name: STRING
@@ -383,18 +383,18 @@ feature {NONE} -- Implementation
 				end
 				Result := meg_list
 			end
-			create_stock_market_event_generation_library (Result)
+			create_stock_tradable_event_generation_library (Result)
 		rescue
 			retrieval_failed := True
 			retry
 		end
 
-	retrieved_market_event_registrants:
-				STORABLE_LIST [MARKET_EVENT_REGISTRANT]
+	retrieved_tradable_event_registrants:
+				STORABLE_LIST [TRADABLE_EVENT_REGISTRANT]
 			-- All defined event registrants
 		local
 			storable: STORABLE
-			reg_list: STORABLE_LIST [MARKET_EVENT_REGISTRANT]
+			reg_list: STORABLE_LIST [TRADABLE_EVENT_REGISTRANT]
 			retrieval_failed: BOOLEAN
 			app_env: expanded APP_ENVIRONMENT
 			full_path_name: STRING
@@ -444,42 +444,43 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	stock_market_event_generation_library: LIST [MARKET_EVENT_GENERATOR]
-			-- Members of `market_event_generation_library' that are valid
+	stock_tradable_event_generation_library: LIST [TRADABLE_EVENT_GENERATOR]
+			-- Members of `tradable_event_generation_library' that are valid
 			-- for stocks
 -- !!!! indexing once_status: global??!!!
 		once
-			create {LINKED_LIST [MARKET_EVENT_GENERATOR]} Result.make
+			create {LINKED_LIST [TRADABLE_EVENT_GENERATOR]} Result.make
 		end
 
-	create_stock_market_event_generation_library (
-		l: LIST [MARKET_EVENT_GENERATOR])
-			-- Create `stock_market_event_generation_library' and place all
+	create_stock_tradable_event_generation_library (
+		l: LIST [TRADABLE_EVENT_GENERATOR])
+			-- Create `stock_tradable_event_generation_library' and place all
 			-- members of `l' that are `valid_stock_processor's into it.
 		do
-			stock_market_event_generation_library.wipe_out
+			stock_tradable_event_generation_library.wipe_out
 			from l.start until l.exhausted loop
 				if valid_stock_processor (l.item) then
-					stock_market_event_generation_library.extend (l.item)
+					stock_tradable_event_generation_library.extend (l.item)
 				end
 				l.forth
 			end
 		end
 
 	new_event_type (name: STRING;
-		meg_library: STORABLE_LIST [MARKET_EVENT_GENERATOR]): EVENT_TYPE
+		meg_library: STORABLE_LIST [TRADABLE_EVENT_GENERATOR]): EVENT_TYPE
 			-- Create a new EVENT_TYPE with name `name' and a unique ID -
 			-- and ID that does not occur in `meg_library', or if
 			-- `meg_library' is Void, that does not occur in
-			-- `market_event_generation_library'.
-			-- Note: A new MARKET_EVENT_GENERATOR should be created with
-			-- this new event type and added to market_event_generation_library
-			-- before the next event type is created.
+			-- `tradable_event_generation_library'.
+			-- Note: A new TRADABLE_EVENT_GENERATOR should be created with
+			-- this new event type and added to
+			-- tradable_event_generation_library before the next event type
+			-- is created.
 		require
 			not_void: name /= Void and meg_library /= Void
 		local
 			unique_id: INTEGER
-			l: LIST [MARKET_EVENT_GENERATOR]
+			l: LIST [TRADABLE_EVENT_GENERATOR]
 		do
 			l := meg_library
 			unique_id := maximum_id_value (l) + 1
@@ -488,7 +489,7 @@ feature {NONE} -- Implementation
 			new_type: not event_types_by_key.has (Result.id)
 		end
 
-	maximum_id_value (l: LIST [MARKET_EVENT_GENERATOR]): INTEGER
+	maximum_id_value (l: LIST [TRADABLE_EVENT_GENERATOR]): INTEGER
 			-- The largest EVENT_TYPE ID value in `l'
 		do
 			from

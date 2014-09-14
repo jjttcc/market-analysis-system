@@ -15,7 +15,7 @@ class EVENT_USER inherit
 			u_make
 		end
 
-	MARKET_EVENT_REGISTRANT
+	TRADABLE_EVENT_REGISTRANT
 		rename
 			make as er_make
 		export {NONE}
@@ -77,7 +77,7 @@ feature -- Basic operations
 			-- if notification failed.
 		local
 			msg: STRING
-			e: MARKET_EVENT
+			e: TRADABLE_EVENT
 		do
 			if not email_addresses.is_empty and mailer /= Void then
 				create msg.make (event_cache.count * 120)

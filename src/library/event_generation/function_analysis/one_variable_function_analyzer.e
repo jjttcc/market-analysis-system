@@ -1,6 +1,6 @@
 note
 	description:
-		"Market analyzer that analyzes one market function"
+		"Analyzer that analyzes one tradable function"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -58,7 +58,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_innermost_function (f: SIMPLE_FUNCTION [MARKET_TUPLE])
+	set_innermost_function (f: SIMPLE_FUNCTION [TRADABLE_TUPLE])
 			-- Set the innermost function, which contains the basic
 			-- data to be analyzed.
 		do
@@ -92,7 +92,7 @@ feature -- Basic operations
 
 	execute
 		do
-			create {LINKED_LIST [MARKET_EVENT]} product.make
+			create {LINKED_LIST [TRADABLE_EVENT]} product.make
 			if current_tradable /= Void then
 				if not input.processed then
 					input.process
@@ -118,11 +118,11 @@ feature {NONE} -- Hook routine implementation
 			end
 		end
 
-feature {MARKET_FUNCTION_EDITOR}
+feature {TRADABLE_FUNCTION_EDITOR}
 
 	wipe_out
 		local
-			dummy_tradable: TRADABLE [BASIC_MARKET_TUPLE]
+			dummy_tradable: TRADABLE [BASIC_TRADABLE_TUPLE]
 		do
 			create {STOCK} dummy_tradable.make ("dummy", Void, Void)
 			dummy_tradable.set_trading_period_type (

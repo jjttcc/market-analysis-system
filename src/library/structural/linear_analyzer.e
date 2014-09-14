@@ -1,6 +1,6 @@
 note
 	description: "Objects that provide services for processing a sequential %
-		%structure of market tuples."
+		%structure of tradable tuples."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -18,7 +18,7 @@ deferred class
 
 feature {FACTORY, COMMAND}
 
-	target: LIST [MARKET_TUPLE]
+	target: LIST [TRADABLE_TUPLE]
 			-- The target sequence to be processed
 		deferred
 		end
@@ -46,7 +46,7 @@ feature {NONE} -- Status report
 			not_off: not target.off
 		end;
 
-	item_test (v: MARKET_TUPLE): BOOLEAN
+	item_test (v: TRADABLE_TUPLE): BOOLEAN
 			-- Test to be applied to item `v'
 			-- (default: False)
 		do
@@ -166,7 +166,7 @@ feature {NONE} -- Element change
 			invariant_satisfied: invariant_value
 		end;
 
-	item_action (v: MARKET_TUPLE)
+	item_action (v: TRADABLE_TUPLE)
 			-- Action to be applied to item `v'
 			-- (Default: do nothing.)
 		do

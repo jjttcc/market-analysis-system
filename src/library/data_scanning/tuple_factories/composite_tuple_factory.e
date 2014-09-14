@@ -1,7 +1,7 @@
 note
 	description:
-		"Abstraction for objects that create a market tuple based on %
-		%the values in a list of market tuples";
+		"Abstraction for objects that create a tradable tuple based on %
+		%the values in a list of tradable tuples";
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -24,12 +24,12 @@ feature -- Access
 
 	product: COMPOSITE_TUPLE
 
-	tuplelist: LIST [BASIC_MARKET_TUPLE]
+	tuplelist: LIST [BASIC_TRADABLE_TUPLE]
 			-- List of tuples from which to create a composite tuple
 
 feature -- Status setting
 
-	set_tuplelist (arg: LIST [BASIC_MARKET_TUPLE])
+	set_tuplelist (arg: LIST [BASIC_TRADABLE_TUPLE])
 			-- Set tuplelist to `arg'.
 		require
 			arg /= Void
@@ -64,7 +64,7 @@ feature -- Basic operations
 
 feature {NONE}
 
-	do_main_work (tuples: LIST [BASIC_MARKET_TUPLE])
+	do_main_work (tuples: LIST [BASIC_TRADABLE_TUPLE])
 			-- Set `product's open, high, low, and close values from the
 			-- open, highest high, lowest low, and close values, respectively,
 			-- from tuples.
@@ -113,7 +113,7 @@ feature {NONE}
 			-- product.close = close from last element of tuples
 		end
 
-	do_auxiliary_work (tuples: LIST [MARKET_TUPLE])
+	do_auxiliary_work (tuples: LIST [TRADABLE_TUPLE])
 			-- Hook method to be redefined by descendants
 		require
 			product_not_void: product /= Void

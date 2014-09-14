@@ -1,14 +1,14 @@
 note
-	description: "DATA_SCANNER that scans MARKET_EVENT fields"
+	description: "DATA_SCANNER that scans TRADABLE_EVENT fields"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-class MARKET_EVENT_SCANNER inherit
+class TRADABLE_EVENT_SCANNER inherit
 
-	DATA_SCANNER [MARKET_EVENT]
+	DATA_SCANNER [TRADABLE_EVENT]
 		rename
 			make as data_scanner_make, tuple_maker as parser,
 			tuple_maker_execute as parser_execute, tuple_maker_product as
@@ -37,7 +37,7 @@ feature
 			in_separators_not_void:
 				in.field_separator /= Void and in.record_separator /= Void
 		do
-			create {MARKET_EVENT_PARSER} parser.make (in)
+			create {TRADABLE_EVENT_PARSER} parser.make (in)
 			input := in
 			parser.set_field_separator (in.field_separator @ 1)
 		ensure
@@ -46,11 +46,11 @@ feature
 
 feature -- Access
 
-	product: LINKED_LIST [MARKET_EVENT]
+	product: LINKED_LIST [TRADABLE_EVENT]
 
 	input: INPUT_FILE
 
-	parser: MARKET_EVENT_PARSER
+	parser: TRADABLE_EVENT_PARSER
 
 	product_count: INTEGER do Result := product.count end
 
@@ -58,7 +58,7 @@ feature {NONE} -- Hook method implementations
 
 	create_product
 		do
-			create {LINKED_LIST [MARKET_EVENT]} product.make
+			create {LINKED_LIST [TRADABLE_EVENT]} product.make
 		end
 
 	make_tuple
@@ -125,8 +125,8 @@ feature -- Inapplicable
 		do
 		end
 
-	parser_product: MARKET_EVENT
+	parser_product: TRADABLE_EVENT
 		do
 		end
 
-end -- class MARKET_EVENT_SCANNER
+end -- class TRADABLE_EVENT_SCANNER

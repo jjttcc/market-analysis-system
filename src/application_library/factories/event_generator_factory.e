@@ -1,5 +1,5 @@
 note
-	description: "Factory class that manufactures MARKET_EVENT_GENERATORs"
+	description: "Factory class that manufactures TRADABLE_EVENT_GENERATORs"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -8,7 +8,7 @@ note
 
 deferred class EVENT_GENERATOR_FACTORY inherit
 
-	GENERIC_FACTORY [MARKET_EVENT_GENERATOR]
+	GENERIC_FACTORY [TRADABLE_EVENT_GENERATOR]
 		redefine
 			product
 		end
@@ -17,7 +17,7 @@ deferred class EVENT_GENERATOR_FACTORY inherit
 
 feature -- Access
 
-	product: MARKET_EVENT_GENERATOR
+	product: TRADABLE_EVENT_GENERATOR
 			-- Result of execution
 
 	event_type: EVENT_TYPE

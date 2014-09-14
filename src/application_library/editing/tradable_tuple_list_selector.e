@@ -1,6 +1,6 @@
 note
 	description:
-		"Interface for selecting a TRADABLE_FUNCTION's market tuple list"
+		"Interface for selecting a TRADABLE_FUNCTION's tradable tuple list"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -9,16 +9,16 @@ note
 
 deferred class
 
-	MARKET_TUPLE_LIST_SELECTOR
+	TRADABLE_TUPLE_LIST_SELECTOR
 
 feature -- Access
 
-	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE]
-			-- User-selected list of market tuples
+	tradable_tuple_list_selection (msg: STRING): CHAIN [TRADABLE_TUPLE]
+			-- User-selected list of tradable tuples
 		deferred
 		end
 
-	market_function_selection (msg: STRING;
+	tradable_function_selection (msg: STRING;
 		validity_checker: FUNCTION [ANY, TUPLE [TRADABLE_FUNCTION], BOOLEAN]):
 		TRADABLE_FUNCTION
 			-- User-selected TRADABLE_FUNCTION from the function library,
@@ -28,4 +28,4 @@ feature -- Access
 			result_not_void: Result /= Void
 		end
 
-end -- MARKET_TUPLE_LIST_SELECTOR
+end -- TRADABLE_TUPLE_LIST_SELECTOR

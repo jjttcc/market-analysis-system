@@ -8,7 +8,7 @@ note
 
 class VOLUME_TUPLE_PRINTER inherit
 
-	BASIC_MARKET_TUPLE_PRINTER
+	BASIC_TRADABLE_TUPLE_PRINTER
 		redefine
 			print_other_fields, tuple_type_anchor
 		end

@@ -33,7 +33,7 @@ feature -- Access
 
 	start_date_time: DATE_TIME
 			-- Date/time specifying which trading period to begin the
-			-- analysis of market data
+			-- analysis of tradable data
 		deferred
 		end
 

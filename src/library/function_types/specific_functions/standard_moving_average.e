@@ -32,7 +32,7 @@ class STANDARD_MOVING_AVERAGE inherit
 
 	COMMAND_EDITOR -- To allow editing of `sum'
 
-creation {FACTORY, MARKET_FUNCTION_EDITOR}
+creation {FACTORY, TRADABLE_FUNCTION_EDITOR}
 
 	make
 
@@ -108,7 +108,7 @@ feature {NONE} -- Basic operations
 			end
 		end
 
-feature {MARKET_FUNCTION_EDITOR}
+feature {TRADABLE_FUNCTION_EDITOR}
 
 	set_input (in: TRADABLE_FUNCTION)
 		do
@@ -125,7 +125,7 @@ feature {MARKET_FUNCTION_EDITOR}
 
 	set_operator (op: like operator)
 			-- operator will extract the appropriate field (close, high,
-			-- open, etc.) from the market tuples being averaged, according
+			-- open, etc.) from the tradable tuples being averaged, according
 			-- to its type.
 		do
 			Precursor (op)

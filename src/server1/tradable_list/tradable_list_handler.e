@@ -38,13 +38,13 @@ feature {NONE} -- Initialization
         local
             ptypes: expanded PERIOD_TYPE_FACILITIES
         do
-            daily_market_list := daily_list
-            intraday_market_list := intraday_list
+            daily_tradable_list := daily_list
+            intraday_tradable_list := intraday_list
             indicators := inds
             standard_period_types := ptypes.standard_period_types
         ensure
-            lists_set: daily_market_list = daily_list and
-                intraday_market_list = intraday_list
+            lists_set: daily_tradable_list = daily_list and
+                intraday_tradable_list = intraday_list
             indicators_set: indicators = inds
         end
 
@@ -58,10 +58,10 @@ feature -- Access
         end
 
     tradable (symbol: STRING; period_type: TIME_PERIOD_TYPE; update: BOOLEAN):
-                TRADABLE [BASIC_MARKET_TUPLE]
+                TRADABLE [BASIC_TRADABLE_TUPLE]
         local
             l: TRADABLE_LIST
-            t: TRADABLE [BASIC_MARKET_TUPLE]
+            t: TRADABLE [BASIC_TRADABLE_TUPLE]
         do
             last_tradable := Void
             reset_error_state
@@ -105,21 +105,21 @@ feature -- Access
     symbols: LIST [STRING]
         do
             reset_error_state
-            if daily_market_list /= Void then
-                Result := daily_market_list.symbols
-            elseif intraday_market_list /= Void then
-                Result := intraday_market_list.symbols
+            if daily_tradable_list /= Void then
+                Result := daily_tradable_list.symbols
+            elseif intraday_tradable_list /= Void then
+                Result := intraday_tradable_list.symbols
             end
         ensure then
-            correct_count: daily_market_list /= Void implies
-                Result.count = daily_market_list.count and
-                intraday_market_list /= Void implies
-                    Result.count = intraday_market_list.count
+            correct_count: daily_tradable_list /= Void implies
+                Result.count = daily_tradable_list.count and
+                intraday_tradable_list /= Void implies
+                    Result.count = intraday_tradable_list.count
         end
 
     period_type_names_for (symbol: STRING): ARRAYED_LIST [STRING]
         local
-            t: TRADABLE [BASIC_MARKET_TUPLE]
+            t: TRADABLE [BASIC_TRADABLE_TUPLE]
             target_set: PART_SORTED_SET [TIME_PERIOD_TYPE]
             std_types: LINKED_SET [TIME_PERIOD_TYPE]
             g: expanded GLOBAL_SERVER_FACILITIES
@@ -127,12 +127,12 @@ feature -- Access
             reset_error_state
             create target_set.make
             create Result.make (0)
-            if intraday_market_list /= Void then
-                intraday_market_list.search_by_symbol (symbol)
-                if not intraday_market_list.fatal_error then
-                    t := intraday_market_list.item
+            if intraday_tradable_list /= Void then
+                intraday_tradable_list.search_by_symbol (symbol)
+                if not intraday_tradable_list.fatal_error then
+                    t := intraday_tradable_list.item
                 end
-                if not intraday_market_list.fatal_error then
+                if not intraday_tradable_list.fatal_error then
                     target_set.fill (t.period_types.linear_representation)
                     if
                         not
@@ -153,12 +153,12 @@ feature -- Access
                         "retrieving intraday period types for ", symbol>>)
                 end
             end
-            if not error_occurred and daily_market_list /= Void then
-                daily_market_list.search_by_symbol (symbol)
-                if not daily_market_list.fatal_error then
-                    t := daily_market_list.item
+            if not error_occurred and daily_tradable_list /= Void then
+                daily_tradable_list.search_by_symbol (symbol)
+                if not daily_tradable_list.fatal_error then
+                    t := daily_tradable_list.item
                 end
-                if not daily_market_list.fatal_error then
+                if not daily_tradable_list.fatal_error then
                     target_set.fill (t.period_types.linear_representation)
                 else
                     error_occurred := True
@@ -206,10 +206,10 @@ feature -- Status report
 
     is_empty: BOOLEAN
         do
-            if daily_market_list /= Void then
-                Result := daily_market_list.is_empty
+            if daily_tradable_list /= Void then
+                Result := daily_tradable_list.is_empty
             else
-                Result := intraday_market_list.is_empty
+                Result := intraday_tradable_list.is_empty
             end
         end
 
@@ -226,9 +226,9 @@ feature -- Status report
 
     caching_on: BOOLEAN
         do
-            Result := (daily_market_list = Void or else
-                daily_market_list.caching_on) and (intraday_market_list = Void
-                or else intraday_market_list.caching_on)
+            Result := (daily_tradable_list = Void or else
+                daily_tradable_list.caching_on) and (intraday_tradable_list = Void
+                or else intraday_tradable_list.caching_on)
         end
 
 feature -- Cursor movement
@@ -256,41 +256,41 @@ feature -- Basic operations
     clear_caches
             -- Clear the cache of all lists.
         do
-            if daily_market_list /= Void then
-                daily_market_list.clear_cache
+            if daily_tradable_list /= Void then
+                daily_tradable_list.clear_cache
             end
-            if intraday_market_list /= Void then
-                intraday_market_list.clear_cache
+            if intraday_tradable_list /= Void then
+                intraday_tradable_list.clear_cache
             end
             symbol_list := Void
         end
 
     turn_caching_off
         do
-            if daily_market_list /= Void then
-                daily_market_list.turn_caching_off
+            if daily_tradable_list /= Void then
+                daily_tradable_list.turn_caching_off
             end
-            if intraday_market_list /= Void then
-                intraday_market_list.turn_caching_off
+            if intraday_tradable_list /= Void then
+                intraday_tradable_list.turn_caching_off
             end
         end
 
     turn_caching_on
         do
-            if daily_market_list /= Void then
-                daily_market_list.turn_caching_on
+            if daily_tradable_list /= Void then
+                daily_tradable_list.turn_caching_on
             end
-            if intraday_market_list /= Void then
-                intraday_market_list.turn_caching_on
+            if intraday_tradable_list /= Void then
+                intraday_tradable_list.turn_caching_on
             end
         end
 
 feature {NONE} -- Implementation
 
-    daily_market_list: TRADABLE_LIST
+    daily_tradable_list: TRADABLE_LIST
             -- Tradables whose base data period-type is daily
 
-    intraday_market_list: TRADABLE_LIST
+    intraday_tradable_list: TRADABLE_LIST
             -- Tradables whose base data period-type is intraday
 
     symbol_list: LIST [STRING]
@@ -306,50 +306,50 @@ feature {NONE} -- Implementation
             -- The tradable list that holds data for `period_type'
         do
             if period_type.intraday then
-                Result := intraday_market_list
+                Result := intraday_tradable_list
             else
-                Result := daily_market_list
+                Result := daily_tradable_list
             end
         end
 
     both_lists_valid: BOOLEAN
             -- Are both lists non-void and nonempty?
         do
-            Result := daily_market_list /= Void and then
-                not daily_market_list.is_empty and then
-                intraday_market_list /= Void and then
-                not intraday_market_list.is_empty
+            Result := daily_tradable_list /= Void and then
+                not daily_tradable_list.is_empty and then
+                intraday_tradable_list /= Void and then
+                not intraday_tradable_list.is_empty
         ensure
-            definition: Result = (daily_market_list /= Void and then
-                not daily_market_list.is_empty and then
-                intraday_market_list /= Void and then
-                not intraday_market_list.is_empty)
+            definition: Result = (daily_tradable_list /= Void and then
+                not daily_tradable_list.is_empty and then
+                intraday_tradable_list /= Void and then
+                not intraday_tradable_list.is_empty)
         end
 
     reset_error_state
             -- Reset internal error state to no errors.
         do
             error_occurred := False
-            if daily_market_list /= Void then
-                daily_market_list.clear_error
+            if daily_tradable_list /= Void then
+                daily_tradable_list.clear_error
             end
-            if intraday_market_list /= Void then
-                intraday_market_list.clear_error
+            if intraday_tradable_list /= Void then
+                intraday_tradable_list.clear_error
             end
         end
 
 invariant
 
     both_lists_not_void:
-        not (daily_market_list = Void and intraday_market_list = Void)
+        not (daily_tradable_list = Void and intraday_tradable_list = Void)
     counts_equal_if_both_valid: both_lists_valid implies
-        daily_market_list.count = intraday_market_list.count
-    consistent_caching: daily_market_list /= Void and
-        intraday_market_list /= Void implies
-        daily_market_list.caching_on = intraday_market_list.caching_on
+        daily_tradable_list.count = intraday_tradable_list.count
+    consistent_caching: daily_tradable_list /= Void and
+        intraday_tradable_list /= Void implies
+        daily_tradable_list.caching_on = intraday_tradable_list.caching_on
     standard_period_types_exists: standard_period_types /= Void
-    -- for_all i member_of 1 .. daily_market_list.count it_holds
-    --    (daily_market_list.symbols @ i).is_equal (
-    --       intraday_market_list.symbols @ i)
+    -- for_all i member_of 1 .. daily_tradable_list.count it_holds
+    --    (daily_tradable_list.symbols @ i).is_equal (
+    --       intraday_tradable_list.symbols @ i)
 
 end -- class TRADABLE_LIST_HANDLER

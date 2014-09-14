@@ -18,7 +18,7 @@ creation
 
 feature -- Initialization
 
-	make (t: BASIC_MARKET_TUPLE) is
+	make (t: BASIC_TRADABLE_TUPLE) is
 		require
 			not_void: t /= Void
 		do
@@ -32,7 +32,7 @@ feature -- Access
 	type: INTEGER
 			-- Type of candle, such as doji, long white, etc.
 
-	tuple: BASIC_MARKET_TUPLE
+	tuple: BASIC_TRADABLE_TUPLE
 			-- Tuple interpreted by this candle
 
 feature -- Status report

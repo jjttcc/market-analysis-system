@@ -1,6 +1,6 @@
 note
 	description:
-		"A market event coordinator that generates market events for a %
+		"A market event coordinator that generates tradable events for a %
 		%list of tradables"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -79,7 +79,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	initialize (eg: MARKET_EVENT_GENERATOR)
+	initialize (eg: TRADABLE_EVENT_GENERATOR)
 			-- Set the "tradable" of `eg' from `tradables'.
 		do
 			eg.set_tradable_from_dispenser (tradables)

@@ -8,7 +8,7 @@ note
 
 class DATE_SETTER inherit
 
-	INTEGER_SETTER [MARKET_TUPLE]
+	INTEGER_SETTER [TRADABLE_TUPLE]
 
 creation
 
@@ -22,7 +22,7 @@ feature -- Initialization
 
 feature {NONE}
 
-	do_set (stream: INPUT_SEQUENCE; tuple: MARKET_TUPLE)
+	do_set (stream: INPUT_SEQUENCE; tuple: TRADABLE_TUPLE)
 			-- Expected format for date:  yyyymmdd
 			-- Redefine in descendant for different formats.
 		local

@@ -17,7 +17,7 @@ deferred class COMPLEX_FUNCTION inherit
 
 feature -- Access
 
-	output: MARKET_TUPLE_LIST [MARKET_TUPLE]
+	output: TRADABLE_TUPLE_LIST [TRADABLE_TUPLE]
 
 	operator: RESULT_COMMAND [DOUBLE]
 			-- Operator that will perform the main work of the function.
@@ -82,7 +82,7 @@ feature -- Basic operations
 			end
 		end
 
-feature {MARKET_FUNCTION_EDITOR} -- Status setting
+feature {TRADABLE_FUNCTION_EDITOR} -- Status setting
 
 	set_operator (op: like operator)
 		require

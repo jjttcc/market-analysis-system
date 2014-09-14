@@ -5,13 +5,13 @@ note
 	author: "Jim Cochrane"
 	date: "$Date$";
 	note1: "`make_instances' must be called before using any of the %
-		%market-function-instance queries: one_variable_function, %
+		%tradable-function-instance queries: one_variable_function, %
 		%two_variable_function, etc."
 	revision: "$Revision$"
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-class MARKET_FUNCTIONS inherit
+class TRADABLE_FUNCTIONS inherit
 
 	CLASSES [TRADABLE_FUNCTION]
 		rename
@@ -27,7 +27,7 @@ class MARKET_FUNCTIONS inherit
 			{NONE} all
 		end
 
-	MARKET_FUNCTION_EDITOR
+	TRADABLE_FUNCTION_EDITOR
 
 feature -- Initialization
 
@@ -73,14 +73,14 @@ feature -- Access
 				"N-period function that can be configured by choosing %
 				%previous and first-element operators"))
 			Result.extend (create {PAIR [TRADABLE_FUNCTION, STRING]}.make (
-				market_function_line, "Function that behaves as a trend line"))
+				tradable_function_line, "Function that behaves as a trend line"))
 			Result.extend (create {PAIR [TRADABLE_FUNCTION, STRING]}.make (
 				agent_based_function,
 				"Function that uses a selectable procedure to do %
 				%its calculation"))
 			Result.extend (create {PAIR [TRADABLE_FUNCTION, STRING]}.make (
-				market_data_function,
-				"Function that takes basic market data (with close, %
+				tradable_data_function,
+				"Function that takes basic tradable data (with close, %
 				%high, volume, etc.) as input and %
 				%whose output is simply its input"))
 			Result.extend (create {PAIR [TRADABLE_FUNCTION, STRING]}.make (
@@ -103,7 +103,7 @@ feature -- Access
 			Result.count = function_instances.count
 		end
 
-feature -- Access - an instance of each market function
+feature -- Access - an instance of each tradable function
 
 -- !!!! Use indexing once_status: global??!!! for these features:
 
@@ -159,9 +159,9 @@ feature -- Access - an instance of each market function
 			create Result.make (stock, commands.addition, commands.volume, 1)
 		end
 
-	market_function_line: MARKET_FUNCTION_LINE
+	tradable_function_line: TRADABLE_FUNCTION_LINE
 		local
-			point1, point2: MARKET_POINT
+			point1, point2: TRADABLE_POINT
 			earlier, later: DATE_TIME
 		once
 			create point1.make
@@ -185,7 +185,7 @@ feature -- Access - an instance of each market function
 				commands.addition, flst)
 		end
 
-	market_data_function: MARKET_DATA_FUNCTION
+	tradable_data_function: TRADABLE_DATA_FUNCTION
 		once
 			create Result.make (stock)
 		end
@@ -198,4 +198,4 @@ feature -- Access - an instance of each market function
 			Result.set_function_name ("No Input Function")
 		end
 
-end -- MARKET_FUNCTIONS
+end -- TRADABLE_FUNCTIONS

@@ -16,7 +16,7 @@ deferred class TRADABLE_PROCESSOR inherit
 feature -- Access
 
     functions: LIST [FUNCTION_PARAMETER]
-            -- All functions used directly or indirectly by this market
+            -- All functions used directly or indirectly by this tradable
             -- processor, including itself, if it is a function
         deferred
         ensure
@@ -31,7 +31,7 @@ feature -- Access
         end
 
     operators: LIST [COMMAND]
-            -- All operators used directly or indirectly by this market
+            -- All operators used directly or indirectly by this tradable
             -- processor, including those used by `functions'
         deferred
         ensure

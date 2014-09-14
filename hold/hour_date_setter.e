@@ -12,7 +12,7 @@ class HOUR_DATE_SETTER inherit
 
 feature {NONE}
 
-	do_set (stream: BILINEAR_INPUT_SEQUENCE; tuple: MARKET_TUPLE) is
+	do_set (stream: BILINEAR_INPUT_SEQUENCE; tuple: TRADABLE_TUPLE) is
 		do
 			--Stub
 			if stream.last_integer < 0 then

@@ -172,9 +172,6 @@ feature {NONE} -- Implementation
         end
 
     send_response
-            -- Run market analysis on for `symbol' for all event types
-            -- specified in `requested_event_types' between
-            -- `analysis_start_date' and `analysis_end_date'.
         do
             put_ok
             put(response)
@@ -330,6 +327,8 @@ feature {NONE} -- Implementation
         end
 
     command_report(c: COMMAND; opnum: INTEGER): STRING
+        local
+            cmd_name: STRING
         do
             Result := ""
             if c = Void then
@@ -338,7 +337,11 @@ feature {NONE} -- Implementation
                         opnum.out + " is Void)"))
                 end
             else
-                Result := Result + block(indented(c.name))
+                cmd_name := c.name
+                if cmd_name = Void or else cmd_name.is_empty then
+                    cmd_name := c.user_friendly_name
+                end
+                Result := Result + block(indented(cmd_name))
                 if debugging then
                     Result := Result + increment_level
                     Result := Result + block(code("[", c.out, "]"))

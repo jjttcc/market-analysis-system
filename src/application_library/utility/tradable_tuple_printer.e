@@ -6,7 +6,7 @@ note
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-class MARKET_TUPLE_PRINTER inherit
+class TRADABLE_TUPLE_PRINTER inherit
 
 	COMMAND
 
@@ -149,7 +149,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	execute (l: MARKET_TUPLE_LIST [like tuple_type_anchor])
+	execute (l: TRADABLE_TUPLE_LIST [like tuple_type_anchor])
 			-- Output each tuple in `l' to `output_medium'.  If `preface'
 			-- is not empty, output it first.  If `appendix' is not empty,
 			-- output it last.
@@ -175,12 +175,12 @@ feature -- Status report
 
 feature {NONE} -- Implementation
 
-	tuple_type_anchor: MARKET_TUPLE
+	tuple_type_anchor: TRADABLE_TUPLE
 		do
 			do_nothing
 		end
 
-	print_tuples (l: MARKET_TUPLE_LIST [like tuple_type_anchor])
+	print_tuples (l: TRADABLE_TUPLE_LIST [like tuple_type_anchor])
 		require
 			l_exists: l /= Void
 		local
@@ -205,7 +205,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	print_tuples_with_time (l: MARKET_TUPLE_LIST [like tuple_type_anchor])
+	print_tuples_with_time (l: TRADABLE_TUPLE_LIST [like tuple_type_anchor])
 		require
 			start_date_if_start_time:
 				print_start_time /= Void implies print_start_date /= Void
@@ -291,7 +291,7 @@ feature {NONE} -- Implementation
 				time_field_separator))
 		end
 
-	first_index (l: MARKET_TUPLE_LIST [like tuple_type_anchor]): INTEGER
+	first_index (l: TRADABLE_TUPLE_LIST [like tuple_type_anchor]): INTEGER
 			-- First index for printing, according to `print_start_date'
 		do
 			if print_start_date /= Void and not l.is_empty then
@@ -313,7 +313,7 @@ feature {NONE} -- Implementation
 			result_ge_1: Result >= 1
 		end
 
-	first_date_time_index (l: MARKET_TUPLE_LIST [like tuple_type_anchor]): INTEGER
+	first_date_time_index (l: TRADABLE_TUPLE_LIST [like tuple_type_anchor]): INTEGER
 			-- First index for printing, according to `print_start_date' and
 			-- `print_start_time'
 		require
@@ -356,7 +356,7 @@ feature {NONE} -- Implementation
 			result_ge_1: Result >= 1
 		end
 
-	last_index (l: MARKET_TUPLE_LIST [like tuple_type_anchor]): INTEGER
+	last_index (l: TRADABLE_TUPLE_LIST [like tuple_type_anchor]): INTEGER
 			-- Last index for printing, according to print_end_date
 		local
 			util: expanded GENERAL_UTILITIES
@@ -392,7 +392,8 @@ feature {NONE} -- Implementation
 			void_date_result: print_end_date = Void implies Result = l.count
 		end
 
-	last_date_time_index (l: MARKET_TUPLE_LIST [like tuple_type_anchor]): INTEGER
+	last_date_time_index (l:
+				TRADABLE_TUPLE_LIST [like tuple_type_anchor]): INTEGER
 			-- Last index for printing, according to print_end_date
 		local
 			util: expanded GENERAL_UTILITIES
@@ -466,7 +467,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Debugging tools
 
-	print_start_end (l: MARKET_TUPLE_LIST [like tuple_type_anchor];
+	print_start_end (l: TRADABLE_TUPLE_LIST [like tuple_type_anchor];
 		first, last: INTEGER)
 			-- Print the date/time of the starting and ending tuples,
 			-- according to first and last in `l'.
@@ -503,4 +504,4 @@ feature {NONE} -- Debugging tools
 			io.print ("%N")
 		end
 
-end -- MARKET_TUPLE_PRINTER
+end -- TRADABLE_TUPLE_PRINTER

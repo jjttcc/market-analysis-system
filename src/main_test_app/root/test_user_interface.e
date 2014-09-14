@@ -44,7 +44,7 @@ feature -- Access
 
 	input_file_names: LIST [STRING]
 
-	current_tradable: TRADABLE [BASIC_MARKET_TUPLE]
+	current_tradable: TRADABLE [BASIC_TRADABLE_TUPLE]
 		do
 			Result := tradable_list.item
 		end
@@ -147,7 +147,7 @@ feature {NONE}
 		end
 
 	main_edit_indicator_menu
-			-- Menu for editing technical indicators (market functions)
+			-- Menu for editing technical indicators (tradable functions)
 		local
 			finished: BOOLEAN
 		do
@@ -182,15 +182,15 @@ feature {NONE}
 		end
 
 	edit_event_generator_indicator_menu
-			-- Menu for editing market functions owned by event generators
+			-- Menu for editing tradable functions owned by event generators
 		local
-			analyzer: MARKET_EVENT_GENERATOR
-			analyzers: LIST [MARKET_EVENT_GENERATOR]
+			analyzer: TRADABLE_EVENT_GENERATOR
+			analyzers: LIST [TRADABLE_EVENT_GENERATOR]
 			finished: BOOLEAN
 			names: ARRAYED_LIST [STRING]
 		do
 			from
-				analyzers := market_event_generation_library
+				analyzers := tradable_event_generation_library
 				create names.make (analyzers.count)
 				from
 					analyzers.start
@@ -312,7 +312,7 @@ feature {NONE}
 
 
 	view_menu
-			-- Menu for viewing market and market function data
+			-- Menu for viewing tradable and tradable function data
 		local
 			finished: BOOLEAN
 			indicator: TRADABLE_FUNCTION
@@ -518,7 +518,7 @@ feature {NONE}
 		end
 
 	view_indicator_menu (indicator: TRADABLE_FUNCTION)
-			-- Menu for viewing market function data
+			-- Menu for viewing tradable function data
 		local
 			finished: BOOLEAN
 		do

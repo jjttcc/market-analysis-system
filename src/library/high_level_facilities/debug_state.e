@@ -19,22 +19,22 @@ feature -- Initialization
 	make_false
 			-- Set all BOOLEAN queries to false.
 		do
-			market_functions := False
+			tradable_functions := False
 			event_processing := False
 			data_retrieval := False
 		ensure
-			all_false: not market_functions and not event_processing and
+			all_false: not tradable_functions and not event_processing and
 				not data_retrieval
 		end
 
 	make_true
 			-- Set all BOOLEAN queries to true.
 		do
-			market_functions := True
+			tradable_functions := True
 			event_processing := True
 			data_retrieval := True
 		ensure
-			all_true: market_functions and event_processing and
+			all_true: tradable_functions and event_processing and
 				data_retrieval
 		end
 
@@ -43,14 +43,14 @@ feature {NONE} -- Initialization
 	make
 		do
 		ensure
-			all_false: not market_functions and not event_processing and
+			all_false: not tradable_functions and not event_processing and
 				not data_retrieval
 		end
 
 feature -- Access
 
-	market_functions: BOOLEAN
-			-- Is debugging on for MARKET_FUNCTIONs?
+	tradable_functions: BOOLEAN
+			-- Is debugging on for TRADABLE_FUNCTIONs?
 
 	event_processing: BOOLEAN
 			-- Is debugging on for event processing?
@@ -60,12 +60,12 @@ feature -- Access
 
 feature -- Element change
 
-	set_market_functions (arg: BOOLEAN)
-			-- Set `market_functions' to `arg'.
+	set_tradable_functions (arg: BOOLEAN)
+			-- Set `tradable_functions' to `arg'.
 		do
-			market_functions := arg
+			tradable_functions := arg
 		ensure
-			market_functions_set: market_functions = arg
+			tradable_functions_set: tradable_functions = arg
 		end
 
 	set_event_processing (arg: BOOLEAN)

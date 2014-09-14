@@ -11,7 +11,7 @@ class MARKET_AGENTS inherit
 
 	GENERAL_UTILITIES
 
-	MARKET_FUNCTION_EDITOR
+	TRADABLE_FUNCTION_EDITOR
 
 feature -- Access
 
@@ -124,7 +124,7 @@ feature {NONE} -- Algorithm implementations used by agents
 		require
 			f_output_empty: f.output /= Void and f.output.is_empty
 		local
-			ml: LIST [MARKET_TUPLE]
+			ml: LIST [TRADABLE_TUPLE]
 			extraction_operator: RESULT_COMMAND [DOUBLE]
 			current_value, latest_extracted_value, initial_value: DOUBLE
 			values: ARRAYED_LIST [DOUBLE]
@@ -267,7 +267,6 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Utilities
 
---@@These can perhaps go into a separate class (perhaps MARKET_UTILITIES).
 	sum_of_squares (starti, n: INTEGER; avg: DOUBLE;
 			values: ARRAYED_LIST [DOUBLE]): DOUBLE
 		require

@@ -26,7 +26,7 @@ feature -- Access
 
 	product: COMPOUND_EVENT_GENERATOR
 
-	left_generator, right_generator: MARKET_EVENT_GENERATOR
+	left_generator, right_generator: TRADABLE_EVENT_GENERATOR
 			-- The left and right generators to be contained by the new CEG
 
 	left_target_type: EVENT_TYPE
@@ -37,7 +37,7 @@ feature -- Access
 
 feature -- Status setting
 
-	set_generators (left, right: MARKET_EVENT_GENERATOR)
+	set_generators (left, right: TRADABLE_EVENT_GENERATOR)
 			-- Set left and right generators to `left' and `right'.
 		require
 			not_void: left /= Void and right /= Void

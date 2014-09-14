@@ -1,6 +1,6 @@
 note
 	description: "Services for loading and saving event histories for %
-		%MARKET_EVENT_REGISTRANTs - intended to be used via inheritance"
+		%TRADABLE_EVENT_REGISTRANTs - intended to be used via inheritance"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -24,16 +24,16 @@ feature
 	last_error: STRING
 			-- Description of the last error that occurred
 
-	load_market_event_histories
-			-- Load event history for all MARKET_EVENT_REGISTRANTs.
+	load_tradable_event_histories
+			-- Load event history for all TRADABLE_EVENT_REGISTRANTs.
 		local
-			l: LIST [MARKET_EVENT_REGISTRANT]
+			l: LIST [TRADABLE_EVENT_REGISTRANT]
 			lock: FILE_LOCK
 		do
 			error_occurred := False
 			register_for_termination (Current)
 			make_event_locks
-			l := market_event_registrants
+			l := tradable_event_registrants
 			from
 				l.start
 			until
@@ -54,25 +54,25 @@ feature
 			on_error: error_occurred implies last_error /= Void
 		end
 
-	save_market_event_histories
-			-- Save event history for all MARKET_EVENT_REGISTRANTs.
+	save_tradable_event_histories
+			-- Save event history for all TRADABLE_EVENT_REGISTRANTs.
 		local
 			l: FILE_LOCK
 		do
 			from
-				market_event_registrants.start
+				tradable_event_registrants.start
 			until
-				market_event_registrants.exhausted
+				tradable_event_registrants.exhausted
 			loop
 				l := event_locks.item (
-					market_event_registrants.item.hfile_name)
+					tradable_event_registrants.item.hfile_name)
 				-- Don't save the history for the current registrant
 				-- unless it was successfully locked.
 				if l.locked then
-					market_event_registrants.item.save_history
+					tradable_event_registrants.item.save_history
 					l.unlock
 				end
-				market_event_registrants.forth
+				tradable_event_registrants.forth
 			end
 			event_locks.wipe_out
 			unregister_for_termination (Current)
@@ -87,21 +87,21 @@ feature
 		do
 			if event_locks = Void then
 				create {HASH_TABLE [FILE_LOCK, STRING]} event_locks.make (
-					market_event_registrants.count)
+					tradable_event_registrants.count)
 			end
 			check
 				locks_empty: event_locks.is_empty
 			end
 			from
-				market_event_registrants.start
+				tradable_event_registrants.start
 			until
-				market_event_registrants.exhausted
+				tradable_event_registrants.exhausted
 			loop
-				hfname := market_event_registrants.item.hfile_name
+				hfname := tradable_event_registrants.item.hfile_name
 				l := make_lock (env.file_name_with_app_directory (hfname,
 					False))
 				event_locks.put (l, hfname)
-				market_event_registrants.forth
+				tradable_event_registrants.forth
 			end
 		end
 
@@ -118,16 +118,16 @@ feature
 			l: FILE_LOCK
 		do
 			from
-				market_event_registrants.start
+				tradable_event_registrants.start
 			until
-				market_event_registrants.exhausted
+				tradable_event_registrants.exhausted
 			loop
 				l := event_locks.item (
-					market_event_registrants.item.hfile_name)
+					tradable_event_registrants.item.hfile_name)
 				if l.locked then
 					l.unlock
 				end
-				market_event_registrants.forth
+				tradable_event_registrants.forth
 			end
 			event_locks.wipe_out
 		ensure then

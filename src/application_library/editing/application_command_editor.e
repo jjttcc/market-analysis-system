@@ -144,7 +144,7 @@ feature -- Basic operations
 		end
 
 	edit_mtlist_resultreal (c: UNARY_OPERATOR [DOUBLE, DOUBLE])
-			-- Edit `c's market tuple list and operator
+			-- Edit `c's tradable tuple list and operator
 			-- (RESULT_COMMAND [DOUBLE]).
 		require
 			ui_set: user_interface /= Void
@@ -154,7 +154,7 @@ feature -- Basic operations
 		end
 
 	edit_mtlist_resultreal_n (c: UNARY_OPERATOR [ANY, DOUBLE])
-			-- Edit `c's market tuple list, operator (
+			-- Edit `c's tradable tuple list, operator (
 			-- RESULT_COMMAND [DOUBLE]), and n-value.
 		require
 			ui_set: user_interface /= Void
@@ -195,7 +195,7 @@ feature -- Basic operations
 		end
 
 	edit_mtlist (c: COMMAND)
-			-- Edit `c's market tuple list target.
+			-- Edit `c's tradable tuple list target.
 		require
 			ui_set: user_interface /= Void
 		local
@@ -205,8 +205,8 @@ feature -- Basic operations
 			check
 				c_is_valid_type: cmd /= Void
 			end
-			user_interface.set_use_market_function_selection (False)
-			cmd.set (user_interface.market_function_selection (
+			user_interface.set_use_tradable_function_selection (False)
+			cmd.set (user_interface.tradable_function_selection (
 				"an indicator for " + cmd.generator + "'s input").output)
 		end
 
@@ -412,9 +412,9 @@ feature -- Basic operations
 			-- Edit a FUNCTION_BASED_COMMAND.
 		do
 			-- Always allow the user to select a FUNCTION_BASED_COMMAND's
-			-- market function.
-			user_interface.set_use_market_function_selection (True)
-			cmd.set_input (user_interface.market_function_selection (
+			-- tradable function.
+			user_interface.set_use_tradable_function_selection (True)
+			cmd.set_input (user_interface.tradable_function_selection (
 				"an indicator for " + cmd.generator + "'s input"))
 			edit_unaryop_real (cmd)
 		end

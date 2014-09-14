@@ -1,5 +1,5 @@
 note
-	description: "Builder of a list of hard-coded market functions"
+	description: "Builder of a list of hard-coded tradable functions"
 	note1: "Hard-coded standard indicators"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -15,7 +15,7 @@ class HARD_CODED_FUNCTION_BUILDER inherit
 			{ANY} deep_twin, is_deep_equal, standard_is_equal
 		end
 
-	MARKET_FUNCTION_EDITOR
+	TRADABLE_FUNCTION_EDITOR
 		export {NONE}
 			all
 		end
@@ -62,7 +62,7 @@ feature -- Basic operations
 	execute
 		local
 			l: LINKED_LIST [TRADABLE_FUNCTION]
-			f: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
+			f: SIMPLE_FUNCTION [BASIC_TRADABLE_TUPLE]
 			cf1, cf2: COMPLEX_FUNCTION
 		do
 			f := innermost_function
@@ -90,11 +90,11 @@ feature -- Basic operations
 			l.extend (wma (f, WMA_n, "Weighted Moving Average"))
 			l.extend (standard_deviation (f, SD_n, "Standard Deviation"))
 			l.extend (market_data (f, "Market Data"))
-			l.extend (market_function_line (f, "Line"))
+			l.extend (tradable_function_line (f, "Line"))
 			product := l
 		end
 
-feature {NONE} -- Hard-coded market function building procedures
+feature {NONE} -- Hard-coded tradable function building procedures
 
 	simple_ma (f: TRADABLE_FUNCTION; n: INTEGER; name: STRING):
 						STANDARD_MOVING_AVERAGE
@@ -420,8 +420,8 @@ feature {NONE} -- Hard-coded market function building procedures
 			initialized: Result /= Void and Result.name = name
 		end
 
-	market_data (f: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]; name: STRING):
-						MARKET_DATA_FUNCTION
+	market_data (f: SIMPLE_FUNCTION [BASIC_TRADABLE_TUPLE]; name: STRING):
+						TRADABLE_DATA_FUNCTION
 			-- Make a function that simply gives the closing price of
 			-- each tuple.
 		do
@@ -464,11 +464,11 @@ feature {NONE} -- Hard-coded market function building procedures
 			Result.set_name (name)
 		end
 
-	market_function_line (f: TRADABLE_FUNCTION; name: STRING):
-				MARKET_FUNCTION_LINE
+	tradable_function_line (f: TRADABLE_FUNCTION; name: STRING):
+				TRADABLE_FUNCTION_LINE
 			-- Dummy line
 		local
-			p1, p2: MARKET_POINT
+			p1, p2: TRADABLE_POINT
 			earlier, later: DATE_TIME
 		do
 			create earlier.make (1998, 1, 1, 0, 0, 0)

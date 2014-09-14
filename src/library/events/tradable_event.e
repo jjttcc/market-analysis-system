@@ -1,13 +1,13 @@
 note
 	description:
-		"An event associated with a market such as a stock or bond"
+		"An event associated with a tradable such as a stock or bond"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-deferred class MARKET_EVENT inherit
+deferred class TRADABLE_EVENT inherit
 
 	TYPED_EVENT
 
@@ -25,7 +25,7 @@ deferred class MARKET_EVENT inherit
 
 feature -- Access
 
-	components: LIST [MARKET_EVENT]
+	components: LIST [TRADABLE_EVENT]
 			-- Contained events - Current if atomic
 		deferred
 		end
@@ -60,4 +60,4 @@ invariant
 
 	components_not_void: components /= Void
 
-end -- class MARKET_EVENT
+end -- class TRADABLE_EVENT

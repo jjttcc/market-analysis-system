@@ -8,7 +8,7 @@ note
 
 class CONFIGURABLE_DATE_SETTER inherit
 
-	STRING_SETTER [MARKET_TUPLE]
+	STRING_SETTER [TRADABLE_TUPLE]
 
 creation
 
@@ -111,7 +111,7 @@ feature -- Element change
 
 feature {NONE}
 
-	do_set (stream: INPUT_SEQUENCE; tuple: MARKET_TUPLE)
+	do_set (stream: INPUT_SEQUENCE; tuple: TRADABLE_TUPLE)
 		local
 			date_util: expanded DATE_TIME_SERVICES
 			date: DATE

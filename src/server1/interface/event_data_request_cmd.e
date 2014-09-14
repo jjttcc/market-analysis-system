@@ -117,7 +117,7 @@ feature -- Basic operations
 
     notify (e: TYPED_EVENT)
         do
-            if attached {MARKET_EVENT} e as mktev then
+            if attached {TRADABLE_EVENT} e as mktev then
                 event_cache.extend (mktev)
             end
         end
@@ -142,13 +142,13 @@ feature {NONE} -- Implementation
     event_coordinator: TRADABLE_EVENT_COORDINATOR
             -- Coordinator for events to be processed
 
-    tradable_pair: PAIR [TRADABLE [BASIC_MARKET_TUPLE],
-        TRADABLE [BASIC_MARKET_TUPLE]]
+    tradable_pair: PAIR [TRADABLE [BASIC_TRADABLE_TUPLE],
+        TRADABLE [BASIC_TRADABLE_TUPLE]]
             -- Intraday and non-intraday tradables for `symbol'
 
     event_dispatcher: EVENT_DISPATCHER
 
-    event_cache: PART_SORTED_TWO_WAY_LIST [MARKET_EVENT]
+    event_cache: PART_SORTED_TWO_WAY_LIST [TRADABLE_EVENT]
 
 feature {NONE}
 
@@ -207,7 +207,7 @@ feature {NONE}
                 put_ok
                 -- Make sure current parameter settings are used:
                 event_coordinator.event_generators.do_all(agent(
-                    proc: MARKET_EVENT_GENERATOR)
+                    proc: TRADABLE_EVENT_GENERATOR)
                         do session.prepare_processor(proc) end
                     (?))
                 event_coordinator.execute
@@ -276,14 +276,14 @@ feature {NONE}
             pair_not_void: tradable_pair /= Void
         end
 
-    valid_event_generators: LINKED_LIST [MARKET_EVENT_GENERATOR]
+    valid_event_generators: LINKED_LIST [TRADABLE_EVENT_GENERATOR]
             -- Event generators specified in `requested_event_types' that
             -- are valid for `tradable_pair'
         require
             pair_set: tradable_pair /= Void
         local
-            l: LIST [MARKET_EVENT_GENERATOR]
-            t: TRADABLE [BASIC_MARKET_TUPLE]
+            l: LIST [TRADABLE_EVENT_GENERATOR]
+            t: TRADABLE [BASIC_TRADABLE_TUPLE]
         do
             create Result.make
             t := tradable_pair.right
@@ -292,10 +292,10 @@ feature {NONE}
             end
             if t /= Void then
                 from
-                    l := market_event_generation_library
+                    l := tradable_event_generation_library
                     if not t.has_open_interest then
-                        -- Only market-event generators for stocks are valid.
-                        l := stock_market_event_generation_library
+                        -- Only tradable-event generators for stocks are valid.
+                        l := stock_tradable_event_generation_library
                     end
                     l.start
                 until
@@ -311,8 +311,8 @@ feature {NONE}
             end
         end
 
-    pair_for_current_symbol: PAIR [TRADABLE [BASIC_MARKET_TUPLE],
-            TRADABLE [BASIC_MARKET_TUPLE]]
+    pair_for_current_symbol: PAIR [TRADABLE [BASIC_TRADABLE_TUPLE],
+            TRADABLE [BASIC_TRADABLE_TUPLE]]
         do
             create Result.make (tradables.tradable (symbol,
                 --@@@Check if 'update' (False) should be true:

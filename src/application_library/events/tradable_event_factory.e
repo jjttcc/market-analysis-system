@@ -1,16 +1,16 @@
 note
 	description:
-		"Factory that parses an input sequence and creates a MARKET_EVENT with %
-		%the result"
+		"Factory that parses an input sequence and creates a %
+		%TRADABLE_EVENT with the result"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-deferred class MARKET_EVENT_FACTORY inherit
+deferred class TRADABLE_EVENT_FACTORY inherit
 
-	GENERIC_FACTORY [MARKET_EVENT]
+	GENERIC_FACTORY [TRADABLE_EVENT]
 		redefine
 			product
 		end
@@ -35,9 +35,9 @@ deferred class MARKET_EVENT_FACTORY inherit
 feature -- Access
 
 	input: ITERABLE_INPUT_SEQUENCE
-			-- Input data from which to create MARKET_EVENTs
+			-- Input data from which to create TRADABLE_EVENTs
 
-	product: MARKET_EVENT
+	product: TRADABLE_EVENT
 
 	error_occurred: BOOLEAN
 			-- Did an error occur on the last call to execute?
@@ -97,4 +97,4 @@ feature {NONE} -- Implementation
 			end
 		end
 
-end -- class MARKET_EVENT_FACTORY
+end -- class TRADABLE_EVENT_FACTORY

@@ -1,5 +1,5 @@
 note
-	description: "Numeric commands that operate on a market tuple that is %
+	description: "Numeric commands that operate on a tradable tuple that is %
 		%passed in as an argument to the execute feature"
 	note1: "An instance of this class can be safely shared within a command %
 		%tree."
@@ -20,12 +20,12 @@ feature -- Access
 
 	root_suppliers: SET [ANY]
 		local
-			tuples: expanded MARKET_TUPLES
+			tuples: expanded TRADABLE_TUPLES
 		do
 			create {LINKED_SET [ANY]} Result.make
-			-- This class actually depends on a MARKET_TUPLE, but a
-			-- MARKET_TUPLE is not instantiable and a SIMPLE_TUPLE
-			-- conforms to MARKET_TUPLE with respect to the
+			-- This class actually depends on a TRADABLE_TUPLE, but a
+			-- TRADABLE_TUPLE is not instantiable and a SIMPLE_TUPLE
+			-- conforms to TRADABLE_TUPLE with respect to the
 			-- intended semantics of this feature.
 			Result.extend (tuples.simple_tuple)
 		end
@@ -36,7 +36,7 @@ feature -- Status report
 
 feature -- Basic operations
 
-	execute (arg: MARKET_TUPLE)
+	execute (arg: TRADABLE_TUPLE)
 			-- Sets its value from arg's value
 			-- Can be redefined by ancestors.
 		do

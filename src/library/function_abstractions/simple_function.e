@@ -1,6 +1,6 @@
 note
 	description:
-		"A market function that is also an sequence of market tuples. %
+		"A tradable function that is also an sequence of tradable tuples. %
 		%Its purpose is to act as the innermost function in a composition %
 		%of functions."
 	author: "Jim Cochrane"
@@ -9,7 +9,7 @@ note
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
+class SIMPLE_FUNCTION [G->TRADABLE_TUPLE] inherit
 
 	TRADABLE_FUNCTION
 		rename
@@ -22,12 +22,12 @@ class SIMPLE_FUNCTION [G->MARKET_TUPLE] inherit
 			data
 		end
 
-	MARKET_TUPLE_LIST [G]
+	TRADABLE_TUPLE_LIST [G]
 		rename
 			make as arrayed_list_make
 		export
 			{NONE} all
-			{FACTORY, MARKET_FUNCTION_EDITOR} first, last, i_th,
+			{FACTORY, TRADABLE_FUNCTION_EDITOR} first, last, i_th,
 				item, off
 			{TRADABLE_FUNCTION} make_from_array
 			{DATA_SCANNER, COMPOSITE_TUPLE_BUILDER} wipe_out
@@ -55,8 +55,8 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	data: MARKET_TUPLE_LIST [G]
-			-- Contents - market tuple data
+	data: TRADABLE_TUPLE_LIST [G]
+			-- Contents - tradable tuple data
 		do
 			Result := Current
 		end
@@ -99,7 +99,7 @@ feature -- Access
 			create Result.make
 		end
 
-	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE]
+	innermost_input: SIMPLE_FUNCTION [TRADABLE_TUPLE]
 		do
 			Result := Current
 		end

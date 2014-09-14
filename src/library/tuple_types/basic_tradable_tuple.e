@@ -1,15 +1,15 @@
 note
 	description:
-		"Minimum data set needed for charting and analysis of a market"
+		"Minimum data set needed for charting and analysis of a tradable"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-class BASIC_MARKET_TUPLE inherit
+class BASIC_TRADABLE_TUPLE inherit
 
-	MARKET_TUPLE
+	TRADABLE_TUPLE
 		redefine
 			has_additional_queries
 		end
@@ -200,4 +200,4 @@ invariant
 	open_na_value: not open_available implies open.value < 0
 	price_relationships: not editing implies price_relationships_correct
 
-end -- class BASIC_MARKET_TUPLE
+end -- class BASIC_TRADABLE_TUPLE

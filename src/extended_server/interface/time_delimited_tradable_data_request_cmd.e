@@ -1,9 +1,9 @@
 note
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
-class TIME_DELIMITED_MARKET_DATA_REQUEST_CMD inherit
+class TIME_DELIMITED_TRADABLE_DATA_REQUEST_CMD inherit
 
-	MARKET_DATA_REQUEST_CMD
+	TRADABLE_DATA_REQUEST_CMD
 		undefine
 			set_print_parameters, parse_remainder,
 			additional_field_constraints_fulfilled,

@@ -1,6 +1,6 @@
 note
 	description:
-		"A line whose two defining points are MARKET_POINTs"
+		"A line whose two defining points are TRADABLE_POINTs"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -9,7 +9,7 @@ note
 
 class
 
-	MARKET_LINE
+	TRADABLE_LINE
 
 creation
 
@@ -17,7 +17,7 @@ creation
 
 feature -- Initialization
 
-	make_from_2_points (p1, p2: MARKET_POINT)
+	make_from_2_points (p1, p2: TRADABLE_POINT)
 		require
 			p1_left_of_p2: p1.x < p2.x
 			p1x_gt_0: p1.x >= 0
@@ -28,7 +28,7 @@ feature -- Initialization
 			set: start_point = p1
 		end
 
-	make_from_slope (startp: MARKET_POINT; s: DOUBLE)
+	make_from_slope (startp: TRADABLE_POINT; s: DOUBLE)
 		require
 			startp.x > 0
 		do
@@ -41,7 +41,7 @@ feature -- Initialization
 
 feature -- Access
 
-	start_point: MARKET_POINT
+	start_point: TRADABLE_POINT
 			-- The two points that define the line
 
 	start_y: DOUBLE
@@ -79,7 +79,7 @@ feature -- Status setting
 
 feature {NONE} -- Implementation
 
-	calculate_slope (other_point: MARKET_POINT)
+	calculate_slope (other_point: TRADABLE_POINT)
 			-- Slope of the line
 		do
 			slope := (other_point.y - start_point.y) /
@@ -90,4 +90,4 @@ invariant
 
 	start_point_x_ge_0: start_point.x >= 0
 
-end -- class MARKET_LINE
+end -- class TRADABLE_LINE

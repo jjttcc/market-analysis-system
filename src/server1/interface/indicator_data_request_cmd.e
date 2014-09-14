@@ -43,7 +43,7 @@ feature {NONE} -- Hook routine implementations
             end
         end
 
-    send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE])
+    send_response_for_tradable (t: TRADABLE [BASIC_TRADABLE_TUPLE])
         local
             indicator: TRADABLE_FUNCTION
         do

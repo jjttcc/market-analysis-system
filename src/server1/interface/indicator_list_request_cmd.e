@@ -26,7 +26,7 @@ feature {NONE} -- Hook routine implementations
 
 	period_type_index: INTEGER = 2
 
-	send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE])
+	send_response_for_tradable (t: TRADABLE [BASIC_TRADABLE_TUPLE])
 		local
 			ilist: LIST [TRADABLE_FUNCTION]
 		do

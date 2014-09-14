@@ -1,5 +1,5 @@
 note
-	description: "A market event factory that makes a MARKET_EVENT_PAIR"
+	description: "A tradable event factory that makes a TRADABLE_EVENT_PAIR"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -8,7 +8,7 @@ note
 
 class EVENT_PAIR_FACTORY inherit
 
-	MARKET_EVENT_FACTORY
+	TRADABLE_EVENT_FACTORY
 		redefine
 			product
 		end
@@ -33,20 +33,20 @@ feature -- Initialization
 
 feature -- Access
 
-	parser: MARKET_EVENT_PARSER
+	parser: TRADABLE_EVENT_PARSER
 			-- Parser used to create the appropriate event type according
 			-- to the input
 
-	product: MARKET_EVENT_PAIR
+	product: TRADABLE_EVENT_PAIR
 
 feature -- Basic operations
 
 	execute
-			-- Scan input and create an MARKET_EVENT_PAIR from it.
+			-- Scan input and create an TRADABLE_EVENT_PAIR from it.
 			-- If a fatal error is encountered while scanning, an exception
 			-- is thrown and error_occurred is set to True.
 		local
-			left, right: MARKET_EVENT
+			left, right: TRADABLE_EVENT
 			st: SIGNAL_TYPES
 		do
 			create st.initialize_signal_type
@@ -60,7 +60,7 @@ feature -- Basic operations
 				right.name>>), current_event_type, st.Buy_signal)
 		end
 
-	next_event: MARKET_EVENT
+	next_event: TRADABLE_EVENT
 		do
 			-- Execute parser to make the appropriate kind of factory
 			-- according to the type spec. in the input.

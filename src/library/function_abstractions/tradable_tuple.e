@@ -1,7 +1,7 @@
 note
 	description:
-		"Basic abstraction for a market-related value (or tuple of values) %
-		%that has an associated date/time."
+		"Basic abstraction for a value (or tuple of values) for a tradable %
+		%(e.g., stock or derivative) that has an associated date/time."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -10,7 +10,7 @@ note
 
 deferred class
 
-	MARKET_TUPLE
+	TRADABLE_TUPLE
 
 feature -- Access
 
@@ -51,7 +51,7 @@ feature -- Status report
 
 	has_additional_queries: BOOLEAN
 			-- Does the run-time type of Current have additional query
-			-- features besides the ones in the ancestor, MARKET_TUPLE?
+			-- features besides the ones in the ancestor, TRADABLE_TUPLE?
 		do
 		end
 
@@ -73,4 +73,4 @@ invariant
 		date_time /= Void and not is_intraday implies
 			date_time.time.is_equal (midnight)
 
-end -- class MARKET_TUPLE
+end -- class TRADABLE_TUPLE

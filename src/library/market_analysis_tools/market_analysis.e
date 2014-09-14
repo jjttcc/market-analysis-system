@@ -11,7 +11,7 @@ class MARKET_ANALYSIS inherit
 
 feature -- Access
 
-	slope (c: CHAIN [MARKET_TUPLE]): DOUBLE
+	slope (c: CHAIN [TRADABLE_TUPLE]): DOUBLE
 			-- Approximation of slope or rate of change of `c' at its
 			-- current index
 		require
@@ -20,15 +20,15 @@ feature -- Access
 			Result := slope_at (c, c.index)
 		end
 
-	slope_at (c: CHAIN [MARKET_TUPLE]; i: INTEGER): DOUBLE
+	slope_at (c: CHAIN [TRADABLE_TUPLE]; i: INTEGER): DOUBLE
 			-- Approximation of slope or rate of change of `c' at the point
 			-- (list element) specified by `i'
 		require
 			c.valid_index (i)
 		local
-			line1, line2: MARKET_LINE
-			p1, p2, p3: MARKET_POINT
-			mt: MARKET_TUPLE
+			line1, line2: TRADABLE_LINE
+			p1, p2, p3: TRADABLE_POINT
+			mt: TRADABLE_TUPLE
 		do
 			create p1; create p2; create p3
 			if i > 1 then

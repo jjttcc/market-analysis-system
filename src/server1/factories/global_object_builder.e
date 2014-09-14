@@ -52,7 +52,7 @@ feature -- Access
 			-- Object in charge of event generation and dispatch
 
 	dispatcher: EVENT_DISPATCHER
-			-- Event dispatcher used in market event analysis
+			-- Event dispatcher used in tradable event analysis
 
 --!!!!Redesign may be needed:
 	persistent_connection_interface: PERSISTENT_CONNECTION_INTERFACE
@@ -132,20 +132,20 @@ feature {NONE} -- Implementation
 		end
 
 	register_event_registrants
-			-- Register global `market_event_registrants' to `dispatcher'
+			-- Register global `tradable_event_registrants' to `dispatcher'
 		require
 			dispatcher_not_void: dispatcher /= Void
 		do
 			from
-				market_event_registrants.start
+				tradable_event_registrants.start
 			until
-				market_event_registrants.exhausted
+				tradable_event_registrants.exhausted
 			loop
-				dispatcher.register (market_event_registrants.item)
-				market_event_registrants.forth
+				dispatcher.register (tradable_event_registrants.item)
+				tradable_event_registrants.forth
 			end
 		ensure
-			dispatcher.registrants.count = market_event_registrants.count
+			dispatcher.registrants.count = tradable_event_registrants.count
 		end
 
 feature {NONE} -- Administrative

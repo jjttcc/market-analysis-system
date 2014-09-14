@@ -34,11 +34,11 @@ feature -- Access
 			-- be explicitly set to 0 before the creation/editing of a new
 			-- operator "tree".
 
-	market_function: TRADABLE_FUNCTION
-			-- Default market function to use for those commands that need it
+	tradable_function: TRADABLE_FUNCTION
+			-- Default tradable function to use for those commands that need it
 
-	market_tuple_selector: MARKET_TUPLE_LIST_SELECTOR
-			-- Interface that provides selection of a market tuple list
+	tradable_tuple_selector: TRADABLE_TUPLE_LIST_SELECTOR
+			-- Interface that provides selection of a tradable tuple list
 
 	command_types: HASH_TABLE [ARRAYED_LIST [COMMAND], STRING]
 			-- Hash table of lists of command instances - each list contains
@@ -244,11 +244,11 @@ feature -- Constants
 
 feature -- Status report
 
-	use_market_function_selection: BOOLEAN
-			-- Will `market_function_selection' be used to ask the user
-			-- for a selection?  If (False or market_tuple_selector is
-			-- Void) and market_function is not Void,
-			-- `market_function' will be used.
+	use_tradable_function_selection: BOOLEAN
+			-- Will `tradable_function_selection' be used to ask the user
+			-- for a selection?  If (False or tradable_tuple_selector is
+			-- Void) and tradable_function is not Void,
+			-- `tradable_function' will be used.
 
 feature -- Status setting
 
@@ -262,36 +262,36 @@ feature -- Status setting
 			left_offset_set: left_offset = arg and left_offset >= 0
 		end
 
-	set_market_function (arg: TRADABLE_FUNCTION)
-			-- Set market_function to `arg'.
+	set_tradable_function (arg: TRADABLE_FUNCTION)
+			-- Set tradable_function to `arg'.
 		require
 			arg_not_void: arg /= Void
 		do
-			market_function := arg
+			tradable_function := arg
 		ensure
-			market_function_set: market_function = arg and
-				market_function /= Void
+			tradable_function_set: tradable_function = arg and
+				tradable_function /= Void
 		end
 
-	set_market_tuple_selector (arg: MARKET_TUPLE_LIST_SELECTOR)
-			-- Set market_tuple_selector to `arg'.
+	set_tradable_tuple_selector (arg: TRADABLE_TUPLE_LIST_SELECTOR)
+			-- Set tradable_tuple_selector to `arg'.
 		require
 			arg_not_void: arg /= Void
 		do
-			market_tuple_selector := arg
+			tradable_tuple_selector := arg
 		ensure
-			market_tuple_selector_set: market_tuple_selector = arg and
-				market_tuple_selector /= Void
+			tradable_tuple_selector_set: tradable_tuple_selector = arg and
+				tradable_tuple_selector /= Void
 		end
 
-	set_use_market_function_selection (
-				arg: like use_market_function_selection)
-			-- Set use_market_function_selection to `arg'.
+	set_use_tradable_function_selection (
+				arg: like use_tradable_function_selection)
+			-- Set use_tradable_function_selection to `arg'.
 		do
-			use_market_function_selection := arg
+			use_tradable_function_selection := arg
 		ensure
-			use_market_function_selection:
-				use_market_function_selection = arg
+			use_tradable_function_selection:
+				use_tradable_function_selection = arg
 		end
 
 feature -- Miscellaneous
@@ -307,36 +307,36 @@ feature -- Miscellaneous
 
 feature {APPLICATION_COMMAND_EDITOR} -- Access
 
-	market_tuple_list_selection (msg: STRING): CHAIN [MARKET_TUPLE]
+	tradable_tuple_list_selection (msg: STRING): CHAIN [TRADABLE_TUPLE]
 		do
 			check
-				mf_not_void: market_function /= Void or
-					market_tuple_selector /= Void
+				mf_not_void: tradable_function /= Void or
+					tradable_tuple_selector /= Void
 			end
-			if market_tuple_selector /= Void and
-				use_market_function_selection or market_function = Void
+			if tradable_tuple_selector /= Void and
+				use_tradable_function_selection or tradable_function = Void
 			then
-				Result := market_tuple_selector.market_tuple_list_selection (
-							msg)
+				Result :=
+					tradable_tuple_selector.tradable_tuple_list_selection(msg)
 			else
-				Result := market_function.output
+				Result := tradable_function.output
 			end
 		end
 
-	market_function_selection (msg: STRING): TRADABLE_FUNCTION
+	tradable_function_selection (msg: STRING): TRADABLE_FUNCTION
 		do
 			check
-				mf_not_void: market_function /= Void or
-					market_tuple_selector /= Void
+				mf_not_void: tradable_function /= Void or
+					tradable_tuple_selector /= Void
 			end
 			if
-				market_tuple_selector /= Void and
-				use_market_function_selection or market_function = Void
+				tradable_tuple_selector /= Void and
+				use_tradable_function_selection or tradable_function = Void
 			then
-				Result := market_tuple_selector.market_function_selection (
+				Result := tradable_tuple_selector.tradable_function_selection (
 							msg, Void)
 			else
-				Result := market_function
+				Result := tradable_function
 			end
 		end
 
@@ -356,14 +356,14 @@ feature {NONE} -- Implementation
 	Unary_real,			-- unary operator with real result
 	Numeric_value,		-- NUMERIC_VALUE_COMMAND - needs value to be set
 	Other,				-- Classes that need no initialization
-	Mtlist_resultreal,  -- Classes that need a market tuple list and a
+	Mtlist_resultreal,  -- Classes that need a tradable tuple list and a
 						-- RESULT_COMMAND [DOUBLE]
-	Mtlist_resultreal_n,-- Classes that need a market tuple list, a
+	Mtlist_resultreal_n,-- Classes that need a tradable tuple list, a
 						-- RESULT_COMMAND [DOUBLE], and an n-value
 	Minus_n,			-- MINUS_N_COMMAND
 						-- RESULT_COMMAND [DOUBLE], and an n-value
 	N_command,			-- Classes that (only) need an n-value
-	Mtlist,				-- Classes that (only) need a market tuple list
+	Mtlist,				-- Classes that (only) need a tradable tuple list
 	Resultreal_n,		-- Classes that need a RESULT_COMMAND [DOUBLE] and
 						-- an n-value
 	Settable_offset,	-- SETTABLE_OFFSET_COMMAND

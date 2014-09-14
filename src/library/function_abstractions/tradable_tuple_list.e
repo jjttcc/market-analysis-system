@@ -1,13 +1,13 @@
 note
 	description:
-		"A list of objects that conform to MARKET_TUPLE"
+		"A list of objects that conform to TRADABLE_TUPLE"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-class MARKET_TUPLE_LIST [G->MARKET_TUPLE] inherit
+class TRADABLE_TUPLE_LIST [G->TRADABLE_TUPLE] inherit
 
 	ARRAYED_LIST [G]
 		redefine
@@ -249,4 +249,4 @@ invariant
 	sorted_by_date_time: -- sorted_by_date_time
 	--   (The above call is too inefficient to execute.)
 
-end -- class MARKET_TUPLE_LIST
+end -- class TRADABLE_TUPLE_LIST

@@ -1,6 +1,6 @@
 note
 	description:
-		"A complex function whose input consists of market data and whose %
+		"A complex function whose input consists of tradable data and whose %
 		%output is simply its input"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -8,14 +8,14 @@ note
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-class MARKET_DATA_FUNCTION inherit
+class TRADABLE_DATA_FUNCTION inherit
 
 	COMPLEX_FUNCTION
 		redefine
 			set_innermost_input, output, operator_used, process
 		end
 
-creation {FACTORY, MARKET_FUNCTION_EDITOR}
+creation {FACTORY, TRADABLE_FUNCTION_EDITOR}
 
 	make
 
@@ -34,7 +34,7 @@ feature -- Access
 		note
 			once_status: global
 		once
-			Result := "Indicator whose input is basic market data and %
+			Result := "Indicator whose input is basic tradable data and %
 				%whose output is simply its input"
 		end
 
@@ -58,7 +58,7 @@ feature -- Access
 			Result.extend (Current)
 		end
 
-	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE]
+	innermost_input: SIMPLE_FUNCTION [TRADABLE_TUPLE]
 		do
 			Result := input
 		end
@@ -84,7 +84,7 @@ feature {NONE} -- Inapplicable
 
 	pre_process do end
 
-feature {MARKET_FUNCTION_EDITOR}
+feature {TRADABLE_FUNCTION_EDITOR}
 
 	set_input, make (in: like input)
 		require else
@@ -114,9 +114,9 @@ feature {MARKET_FUNCTION_EDITOR}
 			processed_date_time_not_void: processed_date_time /= Void
 		end
 
-feature {MARKET_FUNCTION_EDITOR}
+feature {TRADABLE_FUNCTION_EDITOR}
 
-	input: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
+	input: SIMPLE_FUNCTION [BASIC_TRADABLE_TUPLE]
 
 invariant
 
@@ -125,4 +125,4 @@ invariant
 	output_is_input: output = input
 	has_child: has_children and children.count = 1
 
-end -- class MARKET_DATA_FUNCTION
+end -- class TRADABLE_DATA_FUNCTION

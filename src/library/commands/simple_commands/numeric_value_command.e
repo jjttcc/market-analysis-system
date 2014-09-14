@@ -53,7 +53,7 @@ feature -- Access
 	name: STRING
 		do
 			Result := Precursor
-			if Result.is_empty then
+			if Result = Void or else Result.is_empty then
 				Result := Default_name
 			else
 				Result := "{" + Result + "}"

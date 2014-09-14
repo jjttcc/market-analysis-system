@@ -1,14 +1,14 @@
 note
-	description: "A simple, atomic market event"
+	description: "A simple, atomic tradable event"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-class ATOMIC_MARKET_EVENT inherit
+class ATOMIC_TRADABLE_EVENT inherit
 
-	MARKET_EVENT
+	TRADABLE_EVENT
 		rename
 			tag as symbol
 		end
@@ -38,15 +38,15 @@ feature {NONE} -- Initialization
 feature -- Access
 
 	symbol: STRING
-			-- Symbol that identifies the market associated with the event
+			-- Symbol that identifies the tradable associated with the event
 
 	time_stamp: DATE_TIME
 
 	description: STRING
 
-	components: LIST [MARKET_EVENT]
+	components: LIST [TRADABLE_EVENT]
 		do
-			create {ARRAYED_LIST [MARKET_EVENT]} Result.make (0)
+			create {ARRAYED_LIST [TRADABLE_EVENT]} Result.make (0)
 			Result.extend (Current)
 		ensure then
 			Result.count = 1 and Result @ 1 = Current
@@ -120,4 +120,4 @@ invariant
 
 	symbol_not_void: symbol /= Void
 
-end -- class ATOMIC_MARKET_EVENT
+end -- class ATOMIC_TRADABLE_EVENT

@@ -33,7 +33,7 @@ inherit {NONE}
 feature {NONE} -- Implementation - essential properties
 
     market_symbol: STRING
-            -- Symbol for the selected market
+            -- Symbol for the selected tradable
 
     trading_period_type: TIME_PERIOD_TYPE
             -- Selected trading period type
@@ -132,7 +132,7 @@ feature {NONE} -- Hook routines
                 additional_post_parse_constraints_fulfilled
         end
 
-    send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE])
+    send_response_for_tradable (t: TRADABLE [BASIC_TRADABLE_TUPLE])
             -- Use `t' to obtain the requested data and send them
             -- back to the client.
         require
@@ -160,7 +160,7 @@ feature {NONE} -- Implementation
             symbol_exists: market_symbol /= Void
             additional_constraints: additional_post_parse_constraints_fulfilled
         local
-            tradable: TRADABLE [BASIC_MARKET_TUPLE]
+            tradable: TRADABLE [BASIC_TRADABLE_TUPLE]
         do
             tradable := cached_tradable (market_symbol, trading_period_type)
             if tradable = Void then

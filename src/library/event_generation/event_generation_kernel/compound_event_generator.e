@@ -9,9 +9,9 @@ note
 		%(left events) in the following manner:  A time interval is created %
 		%by adding `before_extension' (which will be negative) and %
 		%`after_extension' to each right event's time stamp and creating a %
-		%MARKET_EVENT_PAIR for each intersection of a left event %
+		%TRADABLE_EVENT_PAIR for each intersection of a left event %
 		%with the interval formed from a right event, and setting the %
-		%MARKET_EVENT_PAIR's left and right components to the left and right %
+		%TRADABLE_EVENT_PAIR's left and right components to the left and right %
 		%events that formed the intersection."
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,7 +21,7 @@ note
 
 class COMPOUND_EVENT_GENERATOR inherit
 
-	MARKET_EVENT_GENERATOR
+	TRADABLE_EVENT_GENERATOR
 		redefine
 			children
 		end
@@ -37,7 +37,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (la, ra: MARKET_EVENT_GENERATOR; ev_type: EVENT_TYPE;
+	make (la, ra: TRADABLE_EVENT_GENERATOR; ev_type: EVENT_TYPE;
 			sig_type: INTEGER)
 		require
 			not_void: la /= Void and ra /= Void
@@ -60,7 +60,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	left_analyzer, right_analyzer: MARKET_EVENT_GENERATOR
+	left_analyzer, right_analyzer: TRADABLE_EVENT_GENERATOR
 			-- Contained function analyzers
 
 	before_extension, after_extension: DATE_TIME_DURATION
@@ -93,9 +93,9 @@ feature -- Access
 			create {LINKED_LIST [COMMAND]} Result.make
 		end
 
-	children: LIST [MARKET_EVENT_GENERATOR]
+	children: LIST [TRADABLE_EVENT_GENERATOR]
 		do
-			create {LINKED_LIST [MARKET_EVENT_GENERATOR]} Result.make
+			create {LINKED_LIST [TRADABLE_EVENT_GENERATOR]} Result.make
 			Result.extend (left_analyzer)
 			Result.extend (right_analyzer)
 		end
@@ -160,8 +160,8 @@ feature -- Status setting
 			right_analyzer.set_tradable_from_dispenser (d)
 		end
 
-	set_tradable_from_pair (p: PAIR [TRADABLE [BASIC_MARKET_TUPLE],
-			TRADABLE [BASIC_MARKET_TUPLE]])
+	set_tradable_from_pair (p: PAIR [TRADABLE [BASIC_TRADABLE_TUPLE],
+			TRADABLE [BASIC_TRADABLE_TUPLE]])
 		do
 			left_analyzer.set_tradable_from_pair (p)
 			right_analyzer.set_tradable_from_pair (p)
@@ -176,9 +176,9 @@ feature -- Basic operations
 			-- the execution of left_analyzer, generate a compound event
 			-- made of this pair of left and right events.
 		local
-			left_events, right_events: CHAIN [MARKET_EVENT]
+			left_events, right_events: CHAIN [TRADABLE_EVENT]
 		do
-			create {LINKED_LIST [MARKET_EVENT]} product.make
+			create {LINKED_LIST [TRADABLE_EVENT]} product.make
 			left_analyzer.execute
 			right_analyzer.execute
 			left_events := left_analyzer.product
@@ -196,13 +196,13 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	target_date (e: MARKET_EVENT): DATE_TIME
+	target_date (e: TRADABLE_EVENT): DATE_TIME
 			-- The time stamp of the component of `e' that matches
 			-- left_target_type
 		require
 			left_target_type /= Void
 		local
-			l: LIST [MARKET_EVENT]
+			l: LIST [TRADABLE_EVENT]
 		do
 			from
 				l := e.components
@@ -235,7 +235,7 @@ feature {NONE} -- Implementation
 		end
 
 	three_way_comparison (rt_intrvl: INTERVAL [DATE_TIME];
-				left: MARKET_EVENT): INTEGER
+				left: TRADABLE_EVENT): INTEGER
 			-- Comparison of `rt_intrvl' to the target time of event `left'.
 			-- Result is -1 if `rt_intrvl' comes before `left', 0 if it
 			-- intersects with `left', and 1 if it comes after `left'.
@@ -265,7 +265,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	generate_events (e: MARKET_EVENT; l: CHAIN [MARKET_EVENT])
+	generate_events (e: TRADABLE_EVENT; l: CHAIN [TRADABLE_EVENT])
 			-- Generate an event from each event in `l' that intersects with
 			-- `e's extended interval.
 		require
@@ -303,7 +303,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	extended_event_interval (e: MARKET_EVENT): INTERVAL [DATE_TIME]
+	extended_event_interval (e: TRADABLE_EVENT): INTERVAL [DATE_TIME]
 			-- The interval formed from `e's time stamp plus
 			-- `before_extension' and `e's time stamp plus after_extension
 		require
@@ -313,19 +313,19 @@ feature {NONE} -- Implementation
 							e.time_stamp + after_extension)
 		end
 
-	generate_event_pair (left, right: MARKET_EVENT)
-			-- Generate a MARKET_EVENT_PAIR with left and right elements set
+	generate_event_pair (left, right: TRADABLE_EVENT)
+			-- Generate a TRADABLE_EVENT_PAIR with left and right elements set
 			-- to `left' and `right', respectively and add it to `product'.
 		require
 			product_not_void: product /= Void
 		local
-			e: MARKET_EVENT_PAIR
+			e: TRADABLE_EVENT_PAIR
 		do
 			create e.make (left, right, "Event pair", event_type, signal_type)
 			product.extend (e)
 		end
 
-feature {MARKET_FUNCTION_EDITOR}
+feature {TRADABLE_FUNCTION_EDITOR}
 
 	wipe_out
 		do

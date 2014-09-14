@@ -1,15 +1,15 @@
 note
 	description:
-		"A market event that contains a left/right pair of market events"
+		"A tradable event that contains a left/right pair of tradable events"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-class MARKET_EVENT_PAIR inherit
+class TRADABLE_EVENT_PAIR inherit
 
-	MARKET_EVENT
+	TRADABLE_EVENT
 		redefine
 			is_equal
 		end
@@ -20,7 +20,7 @@ creation
 
 feature {NONE} -- Initialization
 
-	make (l, r: MARKET_EVENT; nm: STRING; tp: EVENT_TYPE; sig_type: INTEGER)
+	make (l, r: TRADABLE_EVENT; nm: STRING; tp: EVENT_TYPE; sig_type: INTEGER)
 		require
 			not_void: l /= Void and r /= Void and nm /= Void and tp /= Void
 		do
@@ -36,7 +36,7 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	left, right: MARKET_EVENT
+	left, right: TRADABLE_EVENT
 			-- left and right elements of the pair
 
 	tag: STRING
@@ -81,9 +81,9 @@ feature -- Access
 			Result.append (right.description)
 		end
 
-	components: LIST [MARKET_EVENT]
+	components: LIST [TRADABLE_EVENT]
 		do
-			create {ARRAYED_LIST [MARKET_EVENT]} Result.make (2)
+			create {ARRAYED_LIST [TRADABLE_EVENT]} Result.make (2)
 			Result.append (left.components)
 			Result.append (right.components)
 		ensure then
@@ -139,7 +139,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	append_date_time (e: MARKET_EVENT; s: STRING)
+	append_date_time (e: TRADABLE_EVENT; s: STRING)
 			-- Append e's date (and time, if not void) to s; if e's date
 			-- and time are void, append its date_time instead.
 		do
@@ -163,4 +163,4 @@ invariant
 	l_r_not_void: left /= Void and right /= Void
 	time_stamp_latest: time_stamp = left.time_stamp.max (right.time_stamp)
 
-end -- class MARKET_EVENT_PAIR
+end -- class TRADABLE_EVENT_PAIR

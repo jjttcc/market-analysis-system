@@ -20,15 +20,15 @@ feature -- Access
 
 	root_suppliers: SET [ANY]
 		local
-			tuples: expanded MARKET_TUPLES
+			tuples: expanded TRADABLE_TUPLES
 		do
 			create {LINKED_SET [ANY]} Result.make
-			Result.extend (tuples.basic_market_tuple)
+			Result.extend (tuples.basic_tradable_tuple)
 		end
 
 feature -- Basic operations
 
-	execute (arg: BASIC_MARKET_TUPLE)
+	execute (arg: BASIC_TRADABLE_TUPLE)
 		do
 			value := arg.low.value
 		ensure then

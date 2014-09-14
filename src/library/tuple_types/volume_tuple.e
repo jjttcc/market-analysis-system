@@ -1,5 +1,5 @@
 note
-	description: "A basic market tuple with a volume feature";
+	description: "A basic tradable tuple with a volume feature";
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -8,7 +8,7 @@ note
 
 deferred class VOLUME_TUPLE inherit
 
-	BASIC_MARKET_TUPLE
+	BASIC_TRADABLE_TUPLE
 
 feature -- Access
 

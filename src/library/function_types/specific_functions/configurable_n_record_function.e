@@ -34,13 +34,13 @@ class CONFIGURABLE_N_RECORD_FUNCTION inherit
 			short_description, start, initialize_operators, target, action
 		end
 
-creation {FACTORY, MARKET_FUNCTION_EDITOR}
+creation {FACTORY, TRADABLE_FUNCTION_EDITOR}
 
 	make
 
 feature -- Access
 
-	target: ARRAYED_LIST [MARKET_TUPLE]
+	target: ARRAYED_LIST [TRADABLE_TUPLE]
 
 	short_description: STRING
 		do
@@ -71,7 +71,7 @@ feature {NONE} -- Basic operations
 	start
 		local
 			t: SIMPLE_TUPLE
-			tuple: MARKET_TUPLE
+			tuple: TRADABLE_TUPLE
 		do
 			check
 				output_empty: output.is_empty
@@ -137,7 +137,7 @@ feature {NONE} -- Basic operations
 			Precursor
 		end
 
-feature {MARKET_FUNCTION_EDITOR}
+feature {TRADABLE_FUNCTION_EDITOR}
 
 	set_n (value: INTEGER)
 		do

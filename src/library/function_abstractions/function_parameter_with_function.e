@@ -1,6 +1,6 @@
 note
 	description:
-		"A market function parameter that refers back to its owning function"
+		"A tradable function parameter that refers back to its owning function"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

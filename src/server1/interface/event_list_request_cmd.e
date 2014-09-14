@@ -1,6 +1,6 @@
 note
 	description: "A command that responds to an event list request - %
-		%a request for a list of all valid market event types for the %
+		%a request for a list of all valid tradable event types for the %
 		%specified tradable and period type"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -32,7 +32,7 @@ feature {NONE} -- Hook routine implementations
 
 	period_type_index: INTEGER = 2
 
-	send_response_for_tradable (t: TRADABLE [BASIC_MARKET_TUPLE])
+	send_response_for_tradable (t: TRADABLE [BASIC_TRADABLE_TUPLE])
 		do
 			put_ok
 			find_and_put_event_list (t)
@@ -46,20 +46,20 @@ feature {NONE} -- Hook routine implementations
 
 feature {NONE} -- Basic operations
 
-	find_and_put_event_list (t: TRADABLE [BASIC_MARKET_TUPLE])
+	find_and_put_event_list (t: TRADABLE [BASIC_TRADABLE_TUPLE])
 			-- Find list of all event types valid for `t' and
 			-- `trading_period_type' and "put" them.
 		local
-			l, eglist: LIST [MARKET_EVENT_GENERATOR]
-			meg: MARKET_EVENT_GENERATOR
+			l, eglist: LIST [TRADABLE_EVENT_GENERATOR]
+			meg: TRADABLE_EVENT_GENERATOR
 		do
 			from
-				l := market_event_generation_library
+				l := tradable_event_generation_library
 				if not t.has_open_interest then
-					-- Only market-event generators for stocks are valid.
-					l := stock_market_event_generation_library
+					-- Only tradable-event generators for stocks are valid.
+					l := stock_tradable_event_generation_library
 				end
-				create {ARRAYED_LIST [MARKET_EVENT_GENERATOR]} eglist.make (
+				create {ARRAYED_LIST [TRADABLE_EVENT_GENERATOR]} eglist.make (
 					l.count)
 				l.start
 			until

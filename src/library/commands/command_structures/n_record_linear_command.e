@@ -1,5 +1,5 @@
 note
-	description: "Linear commands that process n market tuples at a time"
+	description: "Linear commands that process n tradable tuples at a time"
 	note1:
 		"By default, the execute routine will process the last n trading %
 		%periods from the current period (that is, from the current %
@@ -51,7 +51,7 @@ deferred class N_RECORD_LINEAR_COMMAND inherit
 
 feature {NONE} -- Initialization
 
-	make (t: LIST [MARKET_TUPLE]; i: like n)
+	make (t: LIST [TRADABLE_TUPLE]; i: like n)
 		require
 			t_not_void: t /= Void
 			i_gt_0: i > 0
@@ -170,7 +170,7 @@ feature {NONE} -- Implementation
 	index_offset: INTEGER
 			-- Offset from current cursor/index - used for iteration
 
-	target: LIST [MARKET_TUPLE]
+	target: LIST [TRADABLE_TUPLE]
 
 	initial_index_offset: INTEGER
 		require

@@ -1,5 +1,5 @@
 note
-	description: "Enumerated 'market-event-generator editing' choices"
+	description: "Enumerated 'tradable-event-generator editing' choices"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

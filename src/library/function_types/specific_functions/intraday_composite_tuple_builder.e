@@ -19,7 +19,7 @@ class INTRADAY_COMPOSITE_TUPLE_BUILDER inherit
 			{NONE} all
 		end
 
-creation {FACTORY, MARKET_FUNCTION_EDITOR}
+creation {FACTORY, TRADABLE_FUNCTION_EDITOR}
 
 	make
 
@@ -28,7 +28,7 @@ feature -- Basic operations
 	do_process
 			-- Make a list of COMPOSITE_TUPLE
 		local
-			src_sublist: ARRAYED_LIST [BASIC_MARKET_TUPLE]
+			src_sublist: ARRAYED_LIST [BASIC_TRADABLE_TUPLE]
 			current_date: DATE_TIME
 		do
 			from

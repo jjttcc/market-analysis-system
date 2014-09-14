@@ -135,7 +135,7 @@ feature {NONE} -- Implementation
             cmd: MAS_REQUEST_COMMAND
         do
             create rh.make (0)
-            create {MARKET_DATA_REQUEST_CMD} cmd.make (tradable_list_handler)
+            create {TRADABLE_DATA_REQUEST_CMD} cmd.make (tradable_list_handler)
             rh.extend (cmd , tradable_data_request)
             create {INDICATOR_DATA_REQUEST_CMD} cmd.make (
                             tradable_list_handler)

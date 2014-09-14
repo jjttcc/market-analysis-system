@@ -1,6 +1,6 @@
 note
 	description:
-		"A market function that uses an agent for its calculations and %
+		"A tradable function that uses an agent for its calculations and %
 		%that takes a list of arguments"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -18,7 +18,7 @@ class AGENT_BASED_FUNCTION inherit
 
 	LINEAR_ANALYZER
 
-creation {FACTORY, MARKET_FUNCTION_EDITOR}
+creation {FACTORY, TRADABLE_FUNCTION_EDITOR}
 
 	make
 
@@ -137,7 +137,7 @@ feature -- Access
 
 	immediate_direct_parameters: LINKED_LIST [FUNCTION_PARAMETER]
 
-	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE]
+	innermost_input: SIMPLE_FUNCTION [TRADABLE_TUPLE]
 		do
 			if not inputs.is_empty then
 				Result := inputs.first.innermost_input
@@ -147,7 +147,7 @@ feature -- Access
 				not inputs.is_empty implies Result /= Void
 		end
 
-	target: LIST [MARKET_TUPLE]
+	target: LIST [TRADABLE_TUPLE]
 		do
 			if not inputs.is_empty then
 				Result := inputs.first.output
@@ -212,7 +212,7 @@ feature {NONE}
 
 feature {FACTORY} -- Element change
 
-	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE])
+	set_innermost_input (in: SIMPLE_FUNCTION [TRADABLE_TUPLE])
 		do
 			processed_date_time := Void
 			if
@@ -233,7 +233,7 @@ feature {FACTORY} -- Element change
 			output.wipe_out
 		end
 
-feature {MARKET_FUNCTION_EDITOR} -- Element change
+feature {TRADABLE_FUNCTION_EDITOR} -- Element change
 
 	set_calculator_key (arg: STRING)
 			-- Set `calculator_key' to `arg' and add the associated `params'.
@@ -255,7 +255,7 @@ feature {MARKET_FUNCTION_EDITOR} -- Element change
 
 	reset_parameters
 		do
-			inputs.do_all (agent reset_market_function_parameters)
+			inputs.do_all (agent reset_tradable_function_parameters)
 		end
 
 	add_parameter (p: FUNCTION_PARAMETER)
@@ -275,12 +275,12 @@ feature {MARKET_FUNCTION_EDITOR} -- Element change
 			added: inputs.last = f
 		end
 
-feature {MARKET_FUNCTION_EDITOR, MARKET_AGENTS}
+feature {TRADABLE_FUNCTION_EDITOR, MARKET_AGENTS}
 
 	inputs: LIST [TRADABLE_FUNCTION]
 			-- All inputs to be used for processing
 
-feature {MARKET_FUNCTION_EDITOR} -- Removal
+feature {TRADABLE_FUNCTION_EDITOR} -- Removal
 
 	clear_inputs
 			-- Remove all elements of `inputs'.
@@ -300,15 +300,15 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	reset_market_function_parameters (mf: TRADABLE_FUNCTION)
+	reset_tradable_function_parameters (mf: TRADABLE_FUNCTION)
 		do
 			mf.reset_parameters
 		end
 
-	default_target: LIST [MARKET_TUPLE]
+	default_target: LIST [TRADABLE_TUPLE]
 -- !!!! indexing once_status: global??!!!
 		once
-			create {LINKED_LIST [MARKET_TUPLE]} Result.make
+			create {LINKED_LIST [TRADABLE_TUPLE]} Result.make
 		end
 
 invariant

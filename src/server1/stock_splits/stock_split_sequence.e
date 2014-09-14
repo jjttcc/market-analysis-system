@@ -115,14 +115,14 @@ feature {NONE} -- Implementation - utility
 			add_value_setters (value_setters, index_vector)
 		end
 
-	add_value_setters (vs: LIST [VALUE_SETTER [MARKET_TUPLE]];
+	add_value_setters (vs: LIST [VALUE_SETTER [TRADABLE_TUPLE]];
 						i_vector: ARRAY [INTEGER])
 			-- i_vector indicates which value_setters to insert into
 			-- vs, in the order specified, using the xxx_index constants.
 		require
 			vs /= Void
 		local
-			value_setter_vector: ARRAY [VALUE_SETTER [MARKET_TUPLE]]
+			value_setter_vector: ARRAY [VALUE_SETTER [TRADABLE_TUPLE]]
 			date_setter: DATE_SETTER
 			splitsym_setter: SPLIT_SYMBOL_SETTER
 			split_setter: SPLIT_SETTER

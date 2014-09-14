@@ -10,7 +10,7 @@ note
 
 deferred class FUNCTION_ANALYZER inherit
 
-	MARKET_EVENT_GENERATOR
+	TRADABLE_EVENT_GENERATOR
 
 	GENERAL_UTILITIES
 		export
@@ -21,7 +21,7 @@ feature -- Access
 
 	start_date_time: DATE_TIME
 			-- Date/time specifying which trading period to begin the
-			-- analysis of market data
+			-- analysis of tradable data
 
 	operator: RESULT_COMMAND [BOOLEAN]
 			-- Operator used to analyze each tuple - evaluation to True
@@ -32,8 +32,8 @@ feature -- Access
 			-- will be analyzed - daily, weekly, etc. - that is,
 			-- `current_tradable'.`tuple_list' (`period_type'.name).
 
-	current_tradable: TRADABLE [BASIC_MARKET_TUPLE]
-			-- The market whose data is to be analyzed
+	current_tradable: TRADABLE [BASIC_TRADABLE_TUPLE]
+			-- The tradable whose data is to be analyzed
 
 	immediate_operators: LIST [COMMAND]
 		do
@@ -73,7 +73,7 @@ feature -- Status setting
 			-- for `period_type'.
 		local
 			s: STRING
-			t: TRADABLE [BASIC_MARKET_TUPLE]
+			t: TRADABLE [BASIC_TRADABLE_TUPLE]
 		do
 			current_tradable := Void
 			--@@@Check if 'update' (True) should be False:
@@ -99,10 +99,10 @@ feature -- Status setting
 			end
 		end
 
-	set_tradable_from_pair (p: PAIR [TRADABLE [BASIC_MARKET_TUPLE],
-			TRADABLE [BASIC_MARKET_TUPLE]])
+	set_tradable_from_pair (p: PAIR [TRADABLE [BASIC_TRADABLE_TUPLE],
+			TRADABLE [BASIC_TRADABLE_TUPLE]])
 		local
-			t: TRADABLE [BASIC_MARKET_TUPLE]
+			t: TRADABLE [BASIC_TRADABLE_TUPLE]
 		do
 			current_tradable := Void
 			if p.left /= Void and p.left.valid_period_type (period_type) then
@@ -121,11 +121,11 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	generate_event (tuple: MARKET_TUPLE; description: STRING)
+	generate_event (tuple: TRADABLE_TUPLE; description: STRING)
 		require
 			not_void: tuple /= Void and description /= Void
 		local
-			event: ATOMIC_MARKET_EVENT
+			event: ATOMIC_TRADABLE_EVENT
 		do
 			check
 				tuple.date_time /= Void and tuple.end_date /= Void
@@ -144,7 +144,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	do_set_tradable (t: TRADABLE [BASIC_MARKET_TUPLE])
+	do_set_tradable (t: TRADABLE [BASIC_TRADABLE_TUPLE])
 		require
 			valid_period_type: t /= Void and t.valid_period_type (period_type)
 		do
@@ -156,7 +156,7 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Hook routines
 
-	set_innermost_function (f: SIMPLE_FUNCTION [MARKET_TUPLE])
+	set_innermost_function (f: SIMPLE_FUNCTION [TRADABLE_TUPLE])
 		require
 			not_void: f /= Void
 			tradable_set: current_tradable /= Void

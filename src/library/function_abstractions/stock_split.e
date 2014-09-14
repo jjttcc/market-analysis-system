@@ -8,7 +8,7 @@ note
 
 class STOCK_SPLIT inherit
 
-	MARKET_TUPLE
+	TRADABLE_TUPLE
 		redefine
 			is_equal, has_additional_queries
 		end

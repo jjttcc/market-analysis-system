@@ -26,7 +26,7 @@ class FUNCTION_BASED_COMMAND inherit
 	
 	ONE_VARIABLE_LINEAR_ANALYZER
 
-	MARKET_FUNCTION_EDITOR
+	TRADABLE_FUNCTION_EDITOR
 
 creation
 
@@ -163,7 +163,7 @@ feature {NONE} -- Implementation
 			-- Is the input based on a TRADABLE_FUNCTION (as opposed to a
 			-- ONE_VARIABLE_FUNCTION_ANALYZER?
 
-	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE]
+	innermost_input: SIMPLE_FUNCTION [TRADABLE_TUPLE]
 			-- Innermost input sequence of `input' - used for efficiency
 
 	synchronize_target_with_innermost_input

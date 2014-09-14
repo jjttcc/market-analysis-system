@@ -27,7 +27,7 @@ class EXPONENTIAL_MOVING_AVERAGE inherit
 			{NONE} all
 		end
 
-creation {FACTORY, MARKET_FUNCTION_EDITOR}
+creation {FACTORY, TRADABLE_FUNCTION_EDITOR}
 
 	make
 
@@ -81,7 +81,7 @@ feature {NONE} -- Initialization
 			target_set: target = in.output
 		end
 
-feature {MARKET_FUNCTION_EDITOR} -- Status setting
+feature {TRADABLE_FUNCTION_EDITOR} -- Status setting
 
 	set_exponential (e: N_BASED_CALCULATION)
 		require

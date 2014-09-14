@@ -30,11 +30,11 @@ feature -- Initialization
 	make (use_mktfnc_selection: BOOLEAN)
 		do
 			create editor.make (Current)
-			use_market_function_selection := use_mktfnc_selection
+			use_tradable_function_selection := use_mktfnc_selection
 		ensure
 			editor_exists: editor /= Void
 			mfsa_set:
-				use_market_function_selection = use_mktfnc_selection
+				use_tradable_function_selection = use_mktfnc_selection
 		end
 
 feature -- Basic operations

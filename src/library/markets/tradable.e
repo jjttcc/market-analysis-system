@@ -6,7 +6,7 @@ note
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-deferred class TRADABLE [G->BASIC_MARKET_TUPLE] inherit
+deferred class TRADABLE [G->BASIC_TRADABLE_TUPLE] inherit
 
 	SIMPLE_FUNCTION [G]
 		rename
@@ -70,7 +70,7 @@ feature -- Access
 			Result := indicator_groups.current_keys
 		end
 
-	tuple_list (period_type: STRING): SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
+	tuple_list (period_type: STRING): SIMPLE_FUNCTION [BASIC_TRADABLE_TUPLE]
 			-- List associated with `period_type' whose tuples are
 			-- made from the base data
 		require
@@ -197,7 +197,7 @@ feature -- Status setting
 			set_target_period_type (target_period_type)
 		end
 
-feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
+feature {FACTORY, TRADABLE_FUNCTION_EDITOR} -- Status setting
 
 	set_trading_period_type (arg: TIME_PERIOD_TYPE)
 		require
@@ -322,7 +322,7 @@ feature {NONE} -- Initialization
 
 feature {NONE}
 
-	tuple_lists: HASH_TABLE [SIMPLE_FUNCTION [BASIC_MARKET_TUPLE], STRING]
+	tuple_lists: HASH_TABLE [SIMPLE_FUNCTION [BASIC_TRADABLE_TUPLE], STRING]
 			-- Lists whose tuples are made from the base data (e.g., weekly,
 			-- monthy, if base is daily)
 

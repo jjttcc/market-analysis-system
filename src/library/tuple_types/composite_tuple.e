@@ -10,7 +10,7 @@ note
 
 class COMPOSITE_TUPLE inherit
 
-	BASIC_MARKET_TUPLE
+	BASIC_TRADABLE_TUPLE
 		export {COMPOSITE_TUPLE_FACTORY}
 			begin_editing, end_editing, set, set_open, set_close, set_high,
 			set_low
@@ -24,10 +24,10 @@ creation
 
 feature -- Access
 
-	first: MARKET_TUPLE
+	first: TRADABLE_TUPLE
 			-- First (chronologically) tuple used to create Current
 
-	last: MARKET_TUPLE
+	last: TRADABLE_TUPLE
 			-- Last (chronologically) tuple used to create Current
 
 	end_date: DATE
@@ -37,7 +37,7 @@ feature -- Access
 
 feature {COMPOSITE_TUPLE_FACTORY} -- Status setting
 
-	set_first (arg: MARKET_TUPLE)
+	set_first (arg: TRADABLE_TUPLE)
 			-- Set first to `arg'.
 		require
 			arg /= Void
@@ -47,7 +47,7 @@ feature {COMPOSITE_TUPLE_FACTORY} -- Status setting
 			first_set: first = arg and first /= Void
 		end
 
-	set_last (arg: MARKET_TUPLE)
+	set_last (arg: TRADABLE_TUPLE)
 			-- Set last to `arg'.
 		require
 			arg /= Void

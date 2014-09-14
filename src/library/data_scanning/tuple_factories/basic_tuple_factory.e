@@ -1,5 +1,5 @@
 note
-	description: "Tuple factory that produces a BASIC_MARKET_TUPLE";
+	description: "Tuple factory that produces a BASIC_TRADABLE_TUPLE";
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -22,6 +22,6 @@ feature -- Basic operations
 
 feature -- Access
 
-	product: BASIC_MARKET_TUPLE
+	product: BASIC_TRADABLE_TUPLE
 
 end -- class BASIC_TUPLE_FACTORY

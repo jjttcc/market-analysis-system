@@ -1,6 +1,6 @@
 note
     description:
-        "A changeable parameter for a market function, such as n for an %
+        "A changeable parameter for a tradable function, such as n for an %
         %n-period moving average."
     author: "Jim Cochrane"
     date: "$Date$";

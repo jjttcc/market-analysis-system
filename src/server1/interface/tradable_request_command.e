@@ -32,7 +32,7 @@ feature {NONE} -- Initialization
 feature -- Access
 
     tradables: TRADABLE_DISPENSER
-            -- Dispenser of available market lists
+            -- Dispenser of available tradable lists
 
 feature -- Status setting
 
@@ -81,7 +81,7 @@ feature {NONE} -- Implementation
         end
 
     cached_tradable (symbol: STRING; period_type: TIME_PERIOD_TYPE):
-                TRADABLE [BASIC_MARKET_TUPLE]
+                TRADABLE [BASIC_TRADABLE_TUPLE]
             -- The tradable corresponding to `symbol' and `period_type' -
             -- `session.last_tradable' is used, if it matches; otherwise
             -- tradables.tradable (symbol, period_type,

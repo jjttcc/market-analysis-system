@@ -20,7 +20,7 @@ feature -- Access
 
 	root_suppliers: SET [ANY]
 		local
-			tuples: expanded MARKET_TUPLES
+			tuples: expanded TRADABLE_TUPLES
 		do
 			create {LINKED_SET [ANY]} Result.make
 			-- This class actually depends on a OPEN_INTEREST_TUPLE, but a

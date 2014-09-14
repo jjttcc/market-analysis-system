@@ -1,5 +1,5 @@
 note
-	description: "Enumerated 'market-function menu' choices"
+	description: "Enumerated 'tradable-function menu' choices"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

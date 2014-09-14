@@ -1,12 +1,12 @@
 note
-	description: "Abstraction for a registrant of MARKET_EVENTs"
+	description: "Abstraction for a registrant of TRADABLE_EVENTs"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-deferred class MARKET_EVENT_REGISTRANT inherit
+deferred class TRADABLE_EVENT_REGISTRANT inherit
 
 	EVENT_REGISTRANT_WITH_HISTORY
 		rename
@@ -51,9 +51,9 @@ feature {NONE} -- Initialization
 
 feature -- Access
 
-	event_history: HASH_TABLE [MARKET_EVENT, STRING]
+	event_history: HASH_TABLE [TRADABLE_EVENT, STRING]
 
-	event_cache: LINKED_LIST [MARKET_EVENT]
+	event_cache: LINKED_LIST [TRADABLE_EVENT]
 
 	field_separator: STRING
 			-- Field separator for history file
@@ -87,7 +87,7 @@ feature -- Basic operations
 	load_history
 		local
 			hfile: INPUT_FILE
-			scanner: MARKET_EVENT_SCANNER
+			scanner: TRADABLE_EVENT_SCANNER
 			exception_occurred: BOOLEAN
 			env: expanded APP_ENVIRONMENT
 		do
@@ -171,7 +171,7 @@ feature {NONE} -- Hook routines
 
 feature {NONE} -- Implementation
 
-	event_guts (e: MARKET_EVENT; separator: STRING): STRING
+	event_guts (e: TRADABLE_EVENT; separator: STRING): STRING
 		local
 			guts: ARRAY [STRING]
 			i: INTEGER
@@ -191,7 +191,7 @@ feature {NONE} -- Implementation
 			Result.append (guts @ i)
 		end
 
-	fill_event_history (l: LIST [MARKET_EVENT])
+	fill_event_history (l: LIST [TRADABLE_EVENT])
 			-- Create `event_history' and fill it with the contents of `l'.
 		do
 			from
@@ -205,7 +205,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	event_information (e: MARKET_EVENT): STRING
+	event_information (e: TRADABLE_EVENT): STRING
 			-- Reporting information extracted from `e'
 		require
 			e_not_void: e /= Void
@@ -238,4 +238,4 @@ invariant
 
 	separators_set: field_separator /= Void and record_separator /= Void
 
-end -- MARKET_EVENT_REGISTRANT
+end -- TRADABLE_EVENT_REGISTRANT

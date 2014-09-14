@@ -35,7 +35,7 @@ feature {NONE}
 
     retrieve_parameters
         local
-            meg: MARKET_EVENT_GENERATOR
+            meg: TRADABLE_EVENT_GENERATOR
         do
             meg := event_generator_with_name(tradable_processor_name)
             parameters := session.parameters_for_processor(meg)

@@ -1,14 +1,14 @@
 note
-	description: "DATA_SCANNER that scans MARKET_TUPLE fields"
+	description: "DATA_SCANNER that scans TRADABLE_TUPLE fields"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-class MARKET_TUPLE_DATA_SCANNER inherit
+class TRADABLE_TUPLE_DATA_SCANNER inherit
 
-	DATA_SCANNER [BASIC_MARKET_TUPLE]
+	DATA_SCANNER [BASIC_TRADABLE_TUPLE]
 		rename
 			make as data_scanner_make
 		export {NONE}
@@ -46,7 +46,7 @@ feature
 
 feature -- Access
 
-	product: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
+	product: SIMPLE_FUNCTION [BASIC_TRADABLE_TUPLE]
 
 	tuple_maker: BASIC_TUPLE_FACTORY
 
@@ -70,7 +70,7 @@ feature {NONE} -- Hook method implementations
 		do
 		end
 
-	open_tuple (t: BASIC_MARKET_TUPLE)
+	open_tuple (t: BASIC_TRADABLE_TUPLE)
 		do
 			t.begin_editing
 		ensure then
@@ -82,12 +82,12 @@ feature {NONE} -- Hook method implementations
 			tuple_maker.execute
 		end
 
-	tuple_maker_product: BASIC_MARKET_TUPLE
+	tuple_maker_product: BASIC_TRADABLE_TUPLE
 		do
 			Result := tuple_maker.product
 		end
 
-	do_last_error_check (t: BASIC_MARKET_TUPLE)
+	do_last_error_check (t: BASIC_TRADABLE_TUPLE)
 		do
 			if not discard_current_tuple then
 				-- If t.date_time is Void, the date_time error has already
@@ -99,7 +99,7 @@ feature {NONE} -- Hook method implementations
 			end
 		end
 
-	close_tuple (t: BASIC_MARKET_TUPLE)
+	close_tuple (t: BASIC_TRADABLE_TUPLE)
 		do
 			t.end_editing
 		ensure then
@@ -132,7 +132,7 @@ feature {NONE} -- Hook method implementations
 
 feature {NONE} -- Implementation
 
-	check_and_fix_prices (t: BASIC_MARKET_TUPLE)
+	check_and_fix_prices (t: BASIC_TRADABLE_TUPLE)
 			-- Check `t's prices and fix them if they are not valid.
 		local
 			s: STRING
@@ -164,7 +164,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	check_date_time (t: BASIC_MARKET_TUPLE)
+	check_date_time (t: BASIC_TRADABLE_TUPLE)
 		require
 			t_exists: t /= Void
 		local
@@ -193,8 +193,8 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Hook routines
 
-	auxiliary_check_date_time (t: BASIC_MARKET_TUPLE)
+	auxiliary_check_date_time (t: BASIC_TRADABLE_TUPLE)
 		do
 		end
 
-end -- class MARKET_TUPLE_DATA_SCANNER
+end -- class TRADABLE_TUPLE_DATA_SCANNER

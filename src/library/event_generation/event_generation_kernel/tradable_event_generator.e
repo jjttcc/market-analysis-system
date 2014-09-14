@@ -1,7 +1,7 @@
 note
 	description:
 		"An abstraction for the generation of events based on analysis %
-		%of market data"
+		%of data for a tradable (stock, or commodity, or etc.)"
 	constraints: "`tradables' must be set before `execute' is called."
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -9,7 +9,7 @@ note
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-deferred class MARKET_EVENT_GENERATOR inherit
+deferred class TRADABLE_EVENT_GENERATOR inherit
 
 	TRADABLE_PROCESSOR
 		rename
@@ -35,7 +35,7 @@ children, name
 			all
 		end
 
-	MARKET_FUNCTION_EDITOR
+	TRADABLE_FUNCTION_EDITOR
 		export {NONE}
 			all
 		end
@@ -44,7 +44,7 @@ children, name
 
 feature -- Access
 
-	product: CHAIN [MARKET_EVENT]
+	product: CHAIN [TRADABLE_EVENT]
 
 	event_type: EVENT_TYPE
 			-- The type of the generated events
@@ -94,10 +94,10 @@ feature -- Access
 			end
 		end
 
-	children: LIST [MARKET_EVENT_GENERATOR]
+	children: LIST [TRADABLE_EVENT_GENERATOR]
 		do
 			-- Empty by default - redefine if needed.
-			create {LINKED_LIST [MARKET_EVENT_GENERATOR]} Result.make
+			create {LINKED_LIST [TRADABLE_EVENT_GENERATOR]} Result.make
 		end
 
 	name: STRING
@@ -130,8 +130,8 @@ feature -- Status setting
 		deferred
 		end
 
-	set_tradable_from_pair (p: PAIR [TRADABLE [BASIC_MARKET_TUPLE],
-		TRADABLE [BASIC_MARKET_TUPLE]])
+	set_tradable_from_pair (p: PAIR [TRADABLE [BASIC_TRADABLE_TUPLE],
+		TRADABLE [BASIC_TRADABLE_TUPLE]])
 			-- Set the tradable whose data is to be used for processing from
 			-- the appropriate member of `p'.  If no member of `p' is valid
 			-- for this event generator (for example, its members are Void
@@ -157,7 +157,7 @@ feature -- Status setting
 		deferred
 		end
 
-feature {MARKET_FUNCTION_EDITOR}
+feature {TRADABLE_FUNCTION_EDITOR}
 
 	wipe_out
 			-- Ensure that data is cleared before storage.
@@ -168,4 +168,4 @@ invariant
 
 	event_type_not_void: event_type /= Void
 
-end -- class MARKET_EVENT_GENERATOR
+end -- class TRADABLE_EVENT_GENERATOR

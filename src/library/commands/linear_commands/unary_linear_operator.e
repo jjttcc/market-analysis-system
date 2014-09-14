@@ -1,6 +1,6 @@
 note
 	description: "Unary operators that use their operand to process the %
-		%current item of a linear structure of market tuples"
+		%current item of a linear structure of tradable tuples"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

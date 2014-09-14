@@ -9,7 +9,7 @@ note
 
 class TRADABLE_FACTORY inherit
 
-	GENERIC_FACTORY [TRADABLE[BASIC_MARKET_TUPLE]]
+	GENERIC_FACTORY [TRADABLE[BASIC_TRADABLE_TUPLE]]
 		redefine
 			product
 		end
@@ -56,7 +56,7 @@ feature -- Initialization
 
 feature -- Access
 
-	product: TRADABLE [BASIC_MARKET_TUPLE]
+	product: TRADABLE [BASIC_TRADABLE_TUPLE]
 			-- Result of execution
 
 	input: INPUT_RECORD_SEQUENCE
@@ -121,7 +121,7 @@ feature -- Status setting
 			symbol_set: symbol /= Void and symbol = arg
 		end
 
-	set_product (arg: TRADABLE [BASIC_MARKET_TUPLE])
+	set_product (arg: TRADABLE [BASIC_TRADABLE_TUPLE])
 			-- Set `product' to `arg', to be updated by `execute' instead
 			-- of creating a new product.
 		require
@@ -206,7 +206,7 @@ feature -- Basic operations
 			-- effect - the tradable's data will be intraday according to
 			-- the value of `intraday' the first time that execute is called.
 		local
-			scanner: MARKET_TUPLE_DATA_SCANNER
+			scanner: TRADABLE_TUPLE_DATA_SCANNER
 			intraday_scanner: INTRADAY_TUPLE_DATA_SCANNER
 		do
 			error_occurred := False
@@ -322,7 +322,7 @@ feature {NONE} -- Implementation
 			at_least_one: Result.count > 0
 		end
 
-	value_setters: LINKED_LIST [VALUE_SETTER [BASIC_MARKET_TUPLE]]
+	value_setters: LINKED_LIST [VALUE_SETTER [BASIC_TRADABLE_TUPLE]]
 		do
 			if
 				cached_value_setters = Void or
@@ -337,7 +337,7 @@ feature {NONE} -- Implementation
 			at_least_one: Result.count > 0
 		end
 
-	add_value_setters (vs: LINKED_LIST [VALUE_SETTER [MARKET_TUPLE]];
+	add_value_setters (vs: LINKED_LIST [VALUE_SETTER [TRADABLE_TUPLE]];
 						i_vector: ARRAYED_LIST [INTEGER])
 			-- i_vector indicates which value_setters to insert into
 			-- vs, in the order specified, using the xxx_index constants.
@@ -346,8 +346,8 @@ feature {NONE} -- Implementation
 		require
 			vs /= Void
 		local
---			value_setter_vector: ARRAY [VALUE_SETTER [BASIC_MARKET_TUPLE]]
-			value_setter_vector: ARRAY [VALUE_SETTER [MARKET_TUPLE]]
+--			value_setter_vector: ARRAY [VALUE_SETTER [BASIC_TRADABLE_TUPLE]]
+			value_setter_vector: ARRAY [VALUE_SETTER [TRADABLE_TUPLE]]
 			date_setter: DATE_SETTER
 			configurable_date_setter: CONFIGURABLE_DATE_SETTER
 			time_setter: TIME_SETTER
@@ -393,7 +393,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	add_indicators (t: TRADABLE [BASIC_MARKET_TUPLE])
+	add_indicators (t: TRADABLE [BASIC_TRADABLE_TUPLE])
 			-- Add `flst' to `t'.
 		require
 			not_void: t /= Void
@@ -419,7 +419,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	cached_value_setters: LINKED_LIST [VALUE_SETTER [BASIC_MARKET_TUPLE]]
+	cached_value_setters: LINKED_LIST [VALUE_SETTER [BASIC_TRADABLE_TUPLE]]
 
 	check_for_open_interest
 			-- Check if `input' has an open interest field.

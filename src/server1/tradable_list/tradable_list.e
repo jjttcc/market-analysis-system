@@ -10,7 +10,7 @@ note
 
 deferred class TRADABLE_LIST inherit
 
-	BILINEAR [TRADABLE [BASIC_MARKET_TUPLE]]
+	BILINEAR [TRADABLE [BASIC_TRADABLE_TUPLE]]
 		redefine
 			compare_references, compare_objects,
 			changeable_comparison_criterion			
@@ -63,7 +63,7 @@ feature -- Access
 			Result := symbol_list.count
 		end
 
-	item: TRADABLE [BASIC_MARKET_TUPLE]
+	item: TRADABLE [BASIC_TRADABLE_TUPLE]
 			-- The current tradable.  `fatal_error' will be True if an error
 			-- occurs.
 		do
@@ -232,7 +232,7 @@ feature -- Basic operations
 			-- If new data is available for `item' (the current tradable),
 			-- load the new data into `item'.
 		local
-			t: TRADABLE [BASIC_MARKET_TUPLE]
+			t: TRADABLE [BASIC_TRADABLE_TUPLE]
 		do
 			--@@@Note: Synchronization may be needed here in threaded version.
 			t := item -- Force `item' and `target_tradable' to be "up to date".
@@ -330,7 +330,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	add_to_cache (t: TRADABLE [BASIC_MARKET_TUPLE]; idx: INTEGER)
+	add_to_cache (t: TRADABLE [BASIC_TRADABLE_TUPLE]; idx: INTEGER)
 			-- Add 't' with its 'idx' to the cache if caching_on.  If not
 			-- caching_on do nothing.
 		require
@@ -351,7 +351,7 @@ feature {NONE} -- Implementation
 			t_added_if_caching_on: caching_on implies cache @ idx = t
 		end
 
-	cached_item (i: INTEGER): TRADABLE [BASIC_MARKET_TUPLE]
+	cached_item (i: INTEGER): TRADABLE [BASIC_TRADABLE_TUPLE]
 			-- The cached item with index 'i' - Void if not in cache
 		do
 			Result := cache @ i
@@ -441,14 +441,14 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation - attributes
 
-	cache: HASH_TABLE [TRADABLE [BASIC_MARKET_TUPLE], INTEGER]
+	cache: HASH_TABLE [TRADABLE [BASIC_TRADABLE_TUPLE], INTEGER]
 			-- Cache of tradable/index for efficiency
 
 	cache_index_queue: BOUNDED_QUEUE [INTEGER]
 
 	old_index: INTEGER
 
-	target_tradable: TRADABLE [BASIC_MARKET_TUPLE]
+	target_tradable: TRADABLE [BASIC_TRADABLE_TUPLE]
 			-- The current tradable - used to produce `item'
 
 	symbol_list: LIST [STRING]

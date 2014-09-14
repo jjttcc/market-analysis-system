@@ -22,7 +22,7 @@ creation
 
 feature -- Initialization
 
-	make (t: LIST [MARKET_TUPLE]; o: like operand; i: like n)
+	make (t: LIST [TRADABLE_TUPLE]; o: like operand; i: like n)
 		require
 			not_void: t /= Void and o /= Void
 			i_gt_0: i > 0
@@ -50,6 +50,6 @@ feature {NONE} -- Implementation
 
 feature {NONE}
 
-	target: LIST [MARKET_TUPLE]
+	target: LIST [TRADABLE_TUPLE]
 
 end -- class HIGHEST_VALUE

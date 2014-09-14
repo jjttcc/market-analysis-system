@@ -1,6 +1,6 @@
 note
 	description:
-		"Abstraction that allows the user to build MARKET_FUNCTIONs from %
+		"Abstraction that allows the user to build TRADABLE_FUNCTIONs from %
 		%the command line"
 	author: "Jim Cochrane"
 	date: "$Date$";

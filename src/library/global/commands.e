@@ -40,7 +40,7 @@ feature -- Access
 
 	instances_and_descriptions: ARRAYED_LIST [PAIR [COMMAND, STRING]]
 			-- An instance and description of each COMMAND class used
-			-- in indicator or market-analyzer creation
+			-- in indicator or tradable-analyzer creation
 -- !!!! indexing once_status: global??!!!
 		once
 			create Result.make (0)
@@ -238,7 +238,7 @@ feature -- Access
 			Result.extend (create {PAIR [COMMAND, STRING]}.make (
 				function_based_command,
 				"Operator that processes a sequence of records %
-				%obtained from a%Nmarket function - only used by %
+				%obtained from a%Ntradable function - only used by %
 				%ONE_VARIABLE_FUNCTION_ANALYZER"))
 		end
 
@@ -280,7 +280,7 @@ feature -- Access - an instance of each command
 	basic_linear_command: BASIC_LINEAR_COMMAND
 		once
 			create Result.make (
-				default_market_tuple_list)
+				default_tradable_tuple_list)
 		end
 
 	basic_numeric_command: BASIC_NUMERIC_COMMAND
@@ -345,7 +345,7 @@ feature -- Access - an instance of each command
 	highest_value: HIGHEST_VALUE
 		once
 			create Result.make (
-				default_market_tuple_list, basic_numeric_command, 1)
+				default_tradable_tuple_list, basic_numeric_command, 1)
 		end
 
 	high_price: HIGH_PRICE
@@ -372,7 +372,7 @@ feature -- Access - an instance of each command
 
 	linear_sum: LINEAR_SUM
 		once
-			create Result.make (default_market_tuple_list,
+			create Result.make (default_tradable_tuple_list,
 				basic_numeric_command, 1)
 		end
 
@@ -445,7 +445,7 @@ feature -- Access - an instance of each command
 
 	lowest_value: LOWEST_VALUE
 		once
-			create Result.make (default_market_tuple_list,
+			create Result.make (default_tradable_tuple_list,
 				basic_numeric_command, 1)
 		end
 
@@ -468,7 +468,7 @@ feature -- Access - an instance of each command
 	minus_n_command: MINUS_N_COMMAND
 		once
 			create Result.make (
-				default_market_tuple_list, basic_numeric_command, 1)
+				default_tradable_tuple_list, basic_numeric_command, 1)
 		end
 
 	multiplication: MULTIPLICATION
@@ -556,7 +556,7 @@ feature -- Access - an instance of each command
 	settable_offset_command: SETTABLE_OFFSET_COMMAND
 		once
 			create Result.make (
-				default_market_tuple_list, basic_numeric_command)
+				default_tradable_tuple_list, basic_numeric_command)
 		end
 
 	sign_analyzer: SIGN_ANALYZER
@@ -568,7 +568,7 @@ feature -- Access - an instance of each command
 	slope_analyzer: SLOPE_ANALYZER
 		once
 			create Result.make (
-				default_market_tuple_list)
+				default_tradable_tuple_list)
 		end
 
 	square_root: SQUARE_ROOT
@@ -589,13 +589,13 @@ feature -- Access - an instance of each command
 
 	unary_linear_operator: UNARY_LINEAR_OPERATOR
 		once
-			create Result.make (default_market_tuple_list,
+			create Result.make (default_tradable_tuple_list,
 				numeric_value_command)
 		end
 
 	value_at_index_command: VALUE_AT_INDEX_COMMAND
 		once
-			create Result.make (default_market_tuple_list,
+			create Result.make (default_tradable_tuple_list,
 				numeric_value_command, numeric_value_command)
 		end
 
@@ -611,12 +611,12 @@ feature -- Access - an instance of each command
 
 feature {NONE} -- Implementation
 
-	default_market_tuple_list: LIST [MARKET_TUPLE]
-			-- Default list of MARKET_TUPLE to provide to the make routines
+	default_tradable_tuple_list: LIST [TRADABLE_TUPLE]
+			-- Default list of TRADABLE_TUPLE to provide to the make routines
 			-- of those COMMANDs that require such
 -- !!!! indexing once_status: global??!!!
 		once
-			create {LINKED_LIST [MARKET_TUPLE]} Result.make
+			create {LINKED_LIST [TRADABLE_TUPLE]} Result.make
 		end
 
 end -- COMMANDS

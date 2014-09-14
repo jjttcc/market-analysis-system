@@ -1,6 +1,6 @@
 note
 	description:
-		"A function that outputs an array of market tuples.  Specifications %
+		"A function that outputs an array of tradable tuples.  Specifications %
 		%for function input are provided by descendant classes."
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -10,7 +10,7 @@ note
 
 deferred class TRADABLE_FUNCTION inherit
 
-	GENERIC_FACTORY [MARKET_TUPLE_LIST [MARKET_TUPLE]]
+	GENERIC_FACTORY [TRADABLE_TUPLE_LIST [TRADABLE_TUPLE]]
 		rename
 			product as output, execute as process
 		redefine
@@ -52,7 +52,7 @@ feature -- Access
 		deferred
 		end
 
-	output: MARKET_TUPLE_LIST [MARKET_TUPLE]
+	output: TRADABLE_TUPLE_LIST [TRADABLE_TUPLE]
 			-- y of function "y = f(x)"
 		deferred
 		end
@@ -109,15 +109,15 @@ feature -- Access
 			end
 		end
 
-	required_tuple_types: SET [MARKET_TUPLE]
-			-- One instance of each MARKET_TUPLE descendant used by Current
+	required_tuple_types: SET [TRADABLE_TUPLE]
+			-- One instance of each TRADABLE_TUPLE descendant used by Current
 			-- or one of its operators
 		local
 			ops: LIST [COMMAND]
 			suppliers: LINEAR [ANY]
-			tuple: MARKET_TUPLE
+			tuple: TRADABLE_TUPLE
 		do
-			create {LINKED_SET [MARKET_TUPLE]} Result.make
+			create {LINKED_SET [TRADABLE_TUPLE]} Result.make
 			from
 				ops := operators
 				ops.start
@@ -140,7 +140,7 @@ feature -- Access
 			end
 		end
 
-	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE]
+	innermost_input: SIMPLE_FUNCTION [TRADABLE_TUPLE]
 			-- The innermost input sequence to be processed
 		deferred
 		end
@@ -164,10 +164,10 @@ feature -- Status report
 		local
 			gs: expanded GLOBAL_SERVICES
 		do
-			Result := gs.debug_state.market_functions
+			Result := gs.debug_state.tradable_functions
 		end
 
-feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Element change
+feature {FACTORY, TRADABLE_FUNCTION_EDITOR} -- Element change
 
 	set_name (n: STRING)
 			-- Set the function's name to n.
@@ -179,7 +179,7 @@ feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Element change
 			is_set: name = n and name /= Void
 		end
 
-	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE])
+	set_innermost_input (in: SIMPLE_FUNCTION [TRADABLE_TUPLE])
 			-- If the run-time type is a complex function, set the innermost
 			-- input attribute to `in', else do nothing.
 		require
@@ -199,14 +199,14 @@ feature -- Basic operations
 			processed: processed
 		end
 
-feature {TRADABLE_FUNCTION, MARKET_FUNCTION_EDITOR}
+feature {TRADABLE_FUNCTION, TRADABLE_FUNCTION_EDITOR}
 
 	is_complex: BOOLEAN
 			-- Is the run-time type a complex function?
 		deferred
 		end
 
-feature {MARKET_FUNCTION_EDITOR, TRADABLE_FUNCTION}
+feature {TRADABLE_FUNCTION_EDITOR, TRADABLE_FUNCTION}
 
 	reset_parameters
 			-- Reset the cached parameter list to ensure it is up to date

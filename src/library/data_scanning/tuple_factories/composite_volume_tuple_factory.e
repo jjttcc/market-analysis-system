@@ -1,6 +1,6 @@
 note
 	description: "Composite tuple factory that includes the sum of the %
-		%volume of all elements in the market tuple list";
+		%volume of all elements in the tradable tuple list";
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -16,7 +16,7 @@ class COMPOSITE_VOLUME_TUPLE_FACTORY inherit
 
 feature {NONE}
 
-	do_auxiliary_work (tuples: LIST [MARKET_TUPLE])
+	do_auxiliary_work (tuples: LIST [TRADABLE_TUPLE])
 			-- Set product's volume to sum of all volumes in `tuples'.
 		local
 			operator: VOLUME

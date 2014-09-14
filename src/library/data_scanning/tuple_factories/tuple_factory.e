@@ -1,5 +1,5 @@
 note
-	description: "Abstraction of market tuple manufacturer";
+	description: "Abstraction of tradable tuple manufacturer";
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -8,11 +8,11 @@ note
 
 deferred class TUPLE_FACTORY inherit
 
-	GENERIC_FACTORY [MARKET_TUPLE]
+	GENERIC_FACTORY [TRADABLE_TUPLE]
 
 feature -- Access
 
-	product: MARKET_TUPLE
+	product: TRADABLE_TUPLE
 
 feature -- Basic operations
 

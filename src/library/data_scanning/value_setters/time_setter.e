@@ -8,7 +8,7 @@ note
 
 class TIME_SETTER inherit
 
-	STRING_SETTER [MARKET_TUPLE]
+	STRING_SETTER [TRADABLE_TUPLE]
 
 creation
 
@@ -22,7 +22,7 @@ feature -- Initialization
 
 feature {NONE}
 
-	do_set (stream: INPUT_SEQUENCE; tuple: MARKET_TUPLE)
+	do_set (stream: INPUT_SEQUENCE; tuple: TRADABLE_TUPLE)
 			-- Expected format for time:  hh:mm or hh:mm:ss
 		local
 			time: TIME

@@ -1,6 +1,6 @@
 note
 	description:
-		"Abstraction that determines the type of a MARKET_EVENT being read %
+		"Abstraction that determines the type of a TRADABLE_EVENT being read %
 		%from an input sequence"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -8,7 +8,7 @@ note
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-class MARKET_EVENT_PARSER inherit
+class TRADABLE_EVENT_PARSER inherit
 
 	FACTORY
 		redefine
@@ -40,7 +40,7 @@ feature {NONE} -- Initialization
 feature -- Access
 
 	input: ITERABLE_INPUT_SEQUENCE
-			-- File containing input data from which to parse MARKET_EVENTs
+			-- File containing input data from which to parse TRADABLE_EVENTs
 
 	last_error: STRING
 			-- Information on error, if any, that occurred during the last
@@ -52,7 +52,7 @@ feature -- Access
 	field_separator: CHARACTER
 			-- Field separator for parsing/scanning
 
-	product: MARKET_EVENT_FACTORY
+	product: TRADABLE_EVENT_FACTORY
 
 feature -- Status setting
 
@@ -72,10 +72,10 @@ feature -- Basic operations
 			last_error.wipe_out
 			error_occurred := False
 			read_type
-			if type_name.is_equal (Atomic_market_event) then
+			if type_name.is_equal (atomic_tradable_event) then
 				create {ATOMIC_EVENT_FACTORY} product.make (input,
 					field_separator)
-			elseif type_name.is_equal (Market_event_pair) then
+			elseif type_name.is_equal (tradable_event_pair) then
 				create {EVENT_PAIR_FACTORY} product.make (input,
 					Current.twin, field_separator)
 			else
@@ -120,14 +120,18 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Implementation
 
-	Atomic, Pair: INTEGER = unique
+	atomic, pair: INTEGER = unique
 
-	Atomic_market_event: STRING = "AME"
+	atomic_tradable_event: STRING = "ATE"
+	--!!!!!!!Check re. dependency - used to be:
+	--Atomic_market_event: STRING = "AME"
 
-	Market_event_pair: STRING = "MEP"
+	tradable_event_pair: STRING = "TEP"
+	--!!!!!!!Check re. dependency - used to be:
+	-- Market_event_pair: STRING = "MEP"
 
 invariant
 
 	not_void: type_name /= Void and last_error /= Void and input /= Void
 
-end -- class MARKET_EVENT_PARSER
+end -- class TRADABLE_EVENT_PARSER

@@ -9,7 +9,7 @@ note
 
 class EVENT_LOG_FILE inherit
 
-	MARKET_EVENT_REGISTRANT
+	TRADABLE_EVENT_REGISTRANT
 		rename
 			make as er_make
 		export {NONE}
@@ -89,7 +89,7 @@ feature -- Basic operations
 
 	perform_notify
 		local
-			e: MARKET_EVENT
+			e: TRADABLE_EVENT
 		do
 			logfile.open_append
 			from

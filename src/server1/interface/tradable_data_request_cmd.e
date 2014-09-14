@@ -1,13 +1,13 @@
 note
 	description:
-		"A command that responds to a client request for market data"
+		"A command that responds to a client request for tradable data"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-class MARKET_DATA_REQUEST_CMD inherit
+class TRADABLE_DATA_REQUEST_CMD inherit
 
 	DATA_REQUEST_CMD
 		redefine
@@ -49,12 +49,12 @@ feature {NONE} -- Hook routine implementations
 feature {NONE}
 
 	create_and_send_response
-			-- Obtain the market corresponding to `market_symbol' and
-			-- dispatch the data for that market for `trading_period_type'
+			-- Obtain the tradable corresponding to `market_symbol' and
+			-- dispatch the data for that tradable for `trading_period_type'
 			-- to the client.
 		local
-			tuple_list: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
-			t: TRADABLE [BASIC_MARKET_TUPLE]
+			tuple_list: SIMPLE_FUNCTION [BASIC_TRADABLE_TUPLE]
+			t: TRADABLE [BASIC_TRADABLE_TUPLE]
 			print_preface: STRING
 		do
 			debug ("data_update_bug")
@@ -102,4 +102,4 @@ feature {NONE} -- Implementation - constants
 
 	error_context_prefix: STRING = "retrieving data for "
 
-end -- class MARKET_DATA_REQUEST_CMD
+end -- class TRADABLE_DATA_REQUEST_CMD

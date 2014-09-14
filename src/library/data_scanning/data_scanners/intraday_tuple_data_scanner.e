@@ -1,5 +1,5 @@
 note
-	description: "MARKET_TUPLE_DATA_SCANNER for intraday data"
+	description: "TRADABLE_TUPLE_DATA_SCANNER for intraday data"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -8,7 +8,7 @@ note
 
 class INTRADAY_TUPLE_DATA_SCANNER inherit
 
-	MARKET_TUPLE_DATA_SCANNER
+	TRADABLE_TUPLE_DATA_SCANNER
 		redefine
 			auxiliary_check_date_time
 		end
@@ -25,7 +25,7 @@ feature -- Access
 
 feature {NONE} -- Implementation
 
-	auxiliary_check_date_time (t: BASIC_MARKET_TUPLE)
+	auxiliary_check_date_time (t: BASIC_TRADABLE_TUPLE)
 		local
 			duration: DATE_TIME_DURATION
 			ptypes: expanded PERIOD_TYPE_FACILITIES

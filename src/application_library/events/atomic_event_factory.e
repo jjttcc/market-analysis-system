@@ -1,7 +1,7 @@
 note
 	description:
 		"Factory that parses an input sequence and creates an %
-		%ATOMIC_MARKET_EVENT with the result"
+		%ATOMIC_TRADABLE_EVENT with the result"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -10,7 +10,7 @@ note
 
 class ATOMIC_EVENT_FACTORY inherit
 
-	MARKET_EVENT_FACTORY
+	TRADABLE_EVENT_FACTORY
 		export
 			{ANY} event_types
 		redefine
@@ -36,7 +36,7 @@ feature -- Initialization
 
 feature -- Access
 
-	product: ATOMIC_MARKET_EVENT
+	product: ATOMIC_TRADABLE_EVENT
 
 feature -- Status setting
 
@@ -51,7 +51,7 @@ feature -- Status setting
 feature -- Basic operations
 
 	execute
-			-- Scan input and create an ATOMIC_MARKET_EVENT from it.
+			-- Scan input and create an ATOMIC_TRADABLE_EVENT from it.
 			-- If a fatal error is encountered while scanning, an exception
 			-- is thrown and error_occurred is set to True.
 		local

@@ -9,7 +9,7 @@ note
 deferred class COMPOSITE_TRADABLE inherit
 
 	--@@Check wether the generic parameter should be VOLUME_TUPLE,
-	-- BASIC_MARKET_TUPLE, or something else.
+	-- BASIC_TRADABLE_TUPLE, or something else.
 	TRADABLE [VOLUME_TUPLE]
 		export {ANY}
 			valid_stock_processor
@@ -112,7 +112,7 @@ feature {NONE} -- Implementation
 	make_data
 			-- Use `components' to create Current's `data'.
 		local
-			first_input_sequence: MARKET_TUPLE_LIST [MARKET_TUPLE]
+			first_input_sequence: TRADABLE_TUPLE_LIST [TRADABLE_TUPLE]
 		do
 			arrayed_list_make (0)
 			if

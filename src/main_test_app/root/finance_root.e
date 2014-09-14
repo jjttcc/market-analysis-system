@@ -39,7 +39,7 @@ feature -- Initialization
 	make
 		local
 			ui: TEST_USER_INTERFACE
-			functions: MARKET_FUNCTIONS -- For test compile
+			functions: TRADABLE_FUNCTIONS -- For test compile
 		do
 			create functions
 			create ui

@@ -1,5 +1,5 @@
 note
-	description: "An instance of each instantiable MARKET_TUPLE class"
+	description: "An instance of each instantiable TRADABLE_TUPLE class"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	note1: "@@This class does not depend on any specialized classes and %
@@ -8,9 +8,9 @@ note
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-class MARKET_TUPLES inherit
+class TRADABLE_TUPLES inherit
 
-	CLASSES [MARKET_TUPLE]
+	CLASSES [TRADABLE_TUPLE]
 		rename
 			instances as tuple_instances, description as tuple_description, 
 			instance_with_generator as tuple_with_generator,
@@ -21,10 +21,11 @@ class MARKET_TUPLES inherit
 
 feature -- Access
 
-	instances_and_descriptions: ARRAYED_LIST [PAIR [MARKET_TUPLE, STRING]]
-			-- An instance and description of each effective MARKET_TUPLE class
+	instances_and_descriptions: ARRAYED_LIST [PAIR [TRADABLE_TUPLE, STRING]]
+			-- An instance and description of each effective
+			-- TRADABLE_TUPLE class
 		local
-			pair: PAIR [MARKET_TUPLE, STRING]
+			pair: PAIR [TRADABLE_TUPLE, STRING]
 			now: DATE_TIME
 -- !!!! indexing once_status: global??!!!
 		once
@@ -35,86 +36,86 @@ feature -- Access
 			create pair.make (create {SIMPLE_TUPLE}.make (now, now.date, 0),
 				"Single-value tuple")
 			Result.put_i_th (pair, Simple_tuple_index)
-			create pair.make (create {MARKET_POINT}.make,
-				"Market tuple that functions as a point in a line")
-			Result.put_i_th (pair, Market_point_index)
-			create pair.make (create {BASIC_MARKET_TUPLE}.make,
-				"Market tuple with date-time, open, high, low, close fields")
-			Result.put_i_th (pair, Basic_market_tuple_index)
+			create pair.make (create {TRADABLE_POINT}.make,
+				"Tradable tuple that functions as a point in a line")
+			Result.put_i_th (pair, tradable_point_index)
+			create pair.make (create {BASIC_TRADABLE_TUPLE}.make,
+				"Tradable tuple with date-time, open, high, low, close fields")
+			Result.put_i_th (pair, Basic_tradable_tuple_index)
 			create pair.make (create {BASIC_VOLUME_TUPLE}.make,
-				 "Market tuple with date-time, open, high, low, close, %
+				 "Tradable tuple with date-time, open, high, low, close, %
 				 %volume fields")
 			Result.put_i_th (pair, Basic_volume_tuple_index)
 			create pair.make (create {BASIC_OPEN_INTEREST_TUPLE}.make,
-				 "Market tuple with date-time, open, high, low, close, %
+				 "Tradable tuple with date-time, open, high, low, close, %
 				 %volume, open-interest fields")
 			Result.put_i_th (pair, Basic_open_interest_tuple_index)
 			create pair.make (create {COMPOSITE_TUPLE}.make,
-				"Market tuple with date-time, open, high, low, close fields %
+				"Tradable tuple with date-time, open, high, low, close fields %
 				%that is composed of smaller-duration tuples")
 			Result.put_i_th (pair, Composite_tuple_index)
 			create pair.make (create {COMPOSITE_VOLUME_TUPLE}.make,
-				"Market tuple with date-time, open, high, low, close, %
+				"Tradable tuple with date-time, open, high, low, close, %
 				%volume fields that is composed of smaller-duration tuples")
 			Result.put_i_th (pair, Composite_volume_tuple_index)
 			create pair.make (create {COMPOSITE_OI_TUPLE}.make,
-				"Market tuple with date-time, open, high, low, close, %
+				"Tradable tuple with date-time, open, high, low, close, %
 				%volume, and open-interest fields that is composed of %
 				%smaller-duration tuples")
 			Result.put_i_th (pair, Composite_oi_tuple_index)
 		end
 
-	tuple_instances: ARRAYED_LIST [MARKET_TUPLE]
+	tuple_instances: ARRAYED_LIST [TRADABLE_TUPLE]
 -- !!!! indexing once_status: global??!!!
 		once
 			Result := Precursor
 		end
 
-	stock_split: MARKET_TUPLE
+	stock_split: TRADABLE_TUPLE
 		do
 			Result := (instances_and_descriptions @ Stock_split_index).left
 		end
 
-	simple_tuple: MARKET_TUPLE
+	simple_tuple: TRADABLE_TUPLE
 		do
 			Result := (instances_and_descriptions @ Simple_tuple_index).left
 		end
 
-	market_point: MARKET_TUPLE
+	tradable_point: TRADABLE_TUPLE
 		do
-			Result := (instances_and_descriptions @ Market_point_index).left
+			Result := (instances_and_descriptions @ tradable_point_index).left
 		end
 
-	basic_market_tuple: MARKET_TUPLE
+	basic_tradable_tuple: TRADABLE_TUPLE
 		do
 			Result := (instances_and_descriptions @
-				Basic_market_tuple_index).left
+				Basic_tradable_tuple_index).left
 		end
 
-	basic_volume_tuple: MARKET_TUPLE
+	basic_volume_tuple: TRADABLE_TUPLE
 		do
 			Result := (instances_and_descriptions @
 				Basic_volume_tuple_index).left
 		end
 
-	basic_open_interest_tuple: MARKET_TUPLE
+	basic_open_interest_tuple: TRADABLE_TUPLE
 		do
 			Result := (instances_and_descriptions @
 				Basic_open_interest_tuple_index).left
 		end
 
-	composite_tuple: MARKET_TUPLE
+	composite_tuple: TRADABLE_TUPLE
 		do
 			Result := (instances_and_descriptions @ Composite_tuple_index).left
 		end
 
-	composite_volume_tuple: MARKET_TUPLE
+	composite_volume_tuple: TRADABLE_TUPLE
 		do
 			Result := (instances_and_descriptions @
 				Composite_volume_tuple_index).left
 		end
 
-	composite_oi_tuple: MARKET_TUPLE
+	composite_oi_tuple: TRADABLE_TUPLE
 		do
 			Result := (instances_and_descriptions @
 				Composite_oi_tuple_index).left
@@ -124,9 +125,9 @@ feature -- Access
 
 	Simple_tuple_index: INTEGER = 2
 
-	Market_point_index: INTEGER = 3
+	tradable_point_index: INTEGER = 3
 
-	Basic_market_tuple_index: INTEGER = 4
+	Basic_tradable_tuple_index: INTEGER = 4
 
 	Basic_volume_tuple_index: INTEGER = 5
 

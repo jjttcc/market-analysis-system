@@ -1,6 +1,6 @@
 note
 	description:
-		"Market analyzer that analyzes two market functions, input1 and %
+		"Analyzer that analyzes two tradable functions, input1 and %
 		%input2, generating an event if input1 crosses (below-to-above, %
 		%above-to-below, or both, depending on configuration) input2 with %
 		%an optional additional condition provided by an operator"
@@ -58,7 +58,7 @@ feature -- Initialization
 feature -- Access
 
 	input1, input2: TRADABLE_FUNCTION
-			-- The two market functions to be analyzed
+			-- The two tradable functions to be analyzed
 
 	indicators: LIST [TRADABLE_FUNCTION]
 		do
@@ -117,7 +117,7 @@ feature -- Status setting
 			both: above_to_below and below_to_above
 		end
 
-	set_innermost_function (f: SIMPLE_FUNCTION [MARKET_TUPLE])
+	set_innermost_function (f: SIMPLE_FUNCTION [TRADABLE_TUPLE])
 			-- Set the innermost function, which contains the basic
 			-- data to be analyzed.
 		do
@@ -143,7 +143,7 @@ feature -- Basic operations
 
 	execute
 		do
-			create {LINKED_LIST [MARKET_EVENT]} product.make
+			create {LINKED_LIST [TRADABLE_EVENT]} product.make
 			if current_tradable /= Void then
 				if operator /= Void then set_operator_target end
 				if not input1.processed then
@@ -232,7 +232,7 @@ feature {NONE} -- Implementation
 	crossover_in_effect: BOOLEAN
 			-- Is the last crossover still in effect?
 
-	operator_target: CHAIN [MARKET_TUPLE]
+	operator_target: CHAIN [TRADABLE_TUPLE]
 			-- Target for `operator' to process.
 
 	additional_condition: BOOLEAN
@@ -291,11 +291,11 @@ feature {NONE} -- Implementation
 			right_tgt2: not use_left_function implies operator_target = target2
 		end
 
-feature {MARKET_FUNCTION_EDITOR}
+feature {TRADABLE_FUNCTION_EDITOR}
 
 	wipe_out
 		local
-			dummy_tradable: TRADABLE [BASIC_MARKET_TUPLE]
+			dummy_tradable: TRADABLE [BASIC_TRADABLE_TUPLE]
 		do
 			create {STOCK} dummy_tradable.make ("dummy", Void, Void)
 			dummy_tradable.set_trading_period_type (

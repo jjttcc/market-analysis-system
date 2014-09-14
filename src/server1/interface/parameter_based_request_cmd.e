@@ -136,9 +136,6 @@ feature {NONE}
         end
 
     send_response
-            -- Run market analysis on for `symbol' for all event types
-            -- specified in `requested_event_types' between
-            -- `analysis_start_date' and `analysis_end_date'.
         require
             settings_not_void: parameters /= Void
         do

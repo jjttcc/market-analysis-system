@@ -1,7 +1,7 @@
 note
 	description:
 		"Abstraction that allows the user to edit, build, and remove %
-		%market event generators"
+		%market (tradable) event generators"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -18,9 +18,9 @@ deferred class MEG_EDITING_INTERFACE inherit
 
 	EDITING_INTERFACE
 
-	STORABLE_SERVICES [MARKET_EVENT_GENERATOR]
+	STORABLE_SERVICES [TRADABLE_EVENT_GENERATOR]
 		rename
-			real_list as market_event_generation_library,
+			real_list as tradable_event_generation_library,
 			working_list as working_meg_library,
 			retrieve_persistent_list as force_meg_library_retrieval,
 			prompt_for_char as character_choice,
@@ -37,13 +37,13 @@ deferred class MEG_EDITING_INTERFACE inherit
 
 feature -- Access
 
-	last_event_generator: MARKET_EVENT_GENERATOR
-			-- The last MARKET_EVENT_GENERATOR that was built
+	last_event_generator: TRADABLE_EVENT_GENERATOR
+			-- The last TRADABLE_EVENT_GENERATOR that was built
 
 feature {NONE} -- Implementation
 
 	do_edit
-			-- Menu for editing market event generators
+			-- Menu for editing tradable event generators
 		local
 			selection: INTEGER
 		do
@@ -75,10 +75,10 @@ feature {NONE} -- Implementation
 
 	remove_event_generator
 			-- Allow user to remove a member of
-			-- `market_event_generation_library'.
+			-- `tradable_event_generation_library'.
 		local
 			selection: INTEGER
-			meg: MARKET_EVENT_GENERATOR
+			meg: TRADABLE_EVENT_GENERATOR
 		do
 			from
 				selection := Null_value
@@ -109,7 +109,7 @@ feature {NONE} -- Implementation
 
 	view_event_generator
 			-- Allow user to view a member of the
-			-- `market_event_generation_library'.
+			-- `tradable_event_generation_library'.
 		local
 			selection: INTEGER
 		do
@@ -121,21 +121,21 @@ feature {NONE} -- Implementation
 				selection := eg_selection (" to view")
 				if selection /= Exit_value then
 					display_event_generator (
-						market_event_generation_library @ selection)
+						tradable_event_generation_library @ selection)
 				end
 			end
 		end
 
 	edit_event_generator_indicator
 			-- Edit the indicators for elements of the
-			-- `market_event_generation_library'.
+			-- `tradable_event_generation_library'.
 		local
 			selection: INTEGER
 		do
 			from
 				-- Make function_editor read-only and ensure its
 				-- edit_indicator_list precondition - readonly because
-				-- it will be saved as part of the market event generator
+				-- it will be saved as part of the tradable event generator
 				-- list, not the indicator list.
 				function_editor.set_save_state (False)
 				selection := Null_value
@@ -156,7 +156,7 @@ feature {NONE} -- Implementation
 
 	create_new_event_generator
 			-- Create a new event generator and add it to 
-			-- market_event_generation_library.
+			-- tradable_event_generation_library.
 		do
 			last_event_generator := Void
 			inspect
@@ -175,12 +175,12 @@ feature {NONE} -- Implementation
 
 	create_new_compound_event_generator
 			-- Create a new compound event generator and add it to 
-			-- market_event_generation_library.
+			-- tradable_event_generation_library.
 		local
 			eg_maker: COMPOUND_GENERATOR_FACTORY
-			left, right: MARKET_EVENT_GENERATOR
+			left, right: TRADABLE_EVENT_GENERATOR
 		do
-			if market_event_generation_library.is_empty then
+			if tradable_event_generation_library.is_empty then
 				show_message ("Can't create compound market analyzer - %
 					%persistent analyzer list is empty.")
 				error_occurred := True
@@ -216,10 +216,10 @@ feature {NONE} -- Implementation
 
 	create_new_simple_event_generator
 			-- Create a new atomic event generator and add it to 
-			-- market_event_generation_library.
+			-- tradable_event_generation_library.
 		do
 			inspect
-				one_or_two_market_function_selection
+				one_or_two_tradable_function_selection
 			when One_value then
 				create_new_one_variable_function_analyzer
 			when Two_value then
@@ -229,7 +229,7 @@ feature {NONE} -- Implementation
 
 	create_new_one_variable_function_analyzer
 			-- Create a new one-variable function analyzer and add it to 
-			-- market_event_generation_library.
+			-- tradable_event_generation_library.
 		local
 			fa_maker: OVFA_FACTORY
 		do
@@ -251,7 +251,7 @@ feature {NONE} -- Implementation
 
 	create_new_two_variable_function_analyzer
 			-- Create a new two-variable function analyzer and add it to 
-			-- market_event_generation_library.
+			-- tradable_event_generation_library.
 		local
 			fa_maker: TVFA_FACTORY
 			op: RESULT_COMMAND [BOOLEAN]
@@ -289,7 +289,7 @@ feature {NONE} -- Implementation
 			-- User's choice of operator
 		do
 			operator_maker.set_left_offset (0) -- Important.
-			operator_maker.set_market_function (function)
+			operator_maker.set_tradable_function (function)
 			operator_maker.set_exclude_list (exclude_list)
 			Result ?= operator_maker.command_selection_from_type (
 						operator_maker.Boolean_result_cmd,
@@ -347,10 +347,10 @@ feature {NONE} -- Implementation
 
 feature {NONE} -- Hook methods
 
-	event_generator_selection (msg: STRING): MARKET_EVENT_GENERATOR
+	event_generator_selection (msg: STRING): TRADABLE_EVENT_GENERATOR
 			-- User's event generator selection
 		require
-			meg_library_not_empty: not market_event_generation_library.is_empty
+			meg_library_not_empty: not tradable_event_generation_library.is_empty
 		deferred
 		end
 
@@ -372,7 +372,7 @@ feature {NONE} -- Hook methods
 				Result = Compound_eg_type_value
 		end
 
-	one_or_two_market_function_selection: INTEGER
+	one_or_two_tradable_function_selection: INTEGER
 		deferred
 		ensure
 			valid_result: Result = One_value or Result = Two_value
@@ -415,7 +415,7 @@ feature {NONE} -- Hook methods
 		deferred
 		end
 
-	display_event_generator (eg: MARKET_EVENT_GENERATOR)
+	display_event_generator (eg: TRADABLE_EVENT_GENERATOR)
 			-- Print the contents of `eg'.
 		deferred
 		end
@@ -432,10 +432,10 @@ feature {NONE} -- Implementation
 	editable (f: TRADABLE_FUNCTION): BOOLEAN
 			-- Is `f' editable in this context?
 		local
-			line: MARKET_FUNCTION_LINE
+			line: TRADABLE_FUNCTION_LINE
 		do
-			-- Currently it only makes sense to edit MARKET_FUNCTION_LINEs
-			-- in the context of market event generator creation/editing.
+			-- Currently it only makes sense to edit TRADABLE_FUNCTION_LINEs
+			-- in the context of tradable event generator creation/editing.
 			line ?= f
 			Result := line /= Void
 		end
@@ -463,7 +463,7 @@ feature {NONE} -- Implementation
 
 	initialize_working_list
 		do
-			working_meg_library := market_event_generation_library.deep_twin
+			working_meg_library := tradable_event_generation_library.deep_twin
 		end
 
 	help: APPLICATION_HELP
@@ -472,7 +472,7 @@ feature {NONE} -- Implementation
 
 	function_editor: FUNCTION_EDITING_INTERFACE
 
-	working_meg_library: STORABLE_LIST [MARKET_EVENT_GENERATOR]
+	working_meg_library: STORABLE_LIST [TRADABLE_EVENT_GENERATOR]
 
 	use_left_function: BOOLEAN
 			-- For a TWO_VARIABLE_FUNCTION_ANALYZER, if it uses an

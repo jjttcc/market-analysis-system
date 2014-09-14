@@ -59,7 +59,7 @@ class MAIN_CL_INTERFACE inherit
 			print
 		end
 
-	MARKET_FUNCTION_EDITOR
+	TRADABLE_FUNCTION_EDITOR
 		export
 			{NONE} all
 		undefine
@@ -97,7 +97,7 @@ feature -- Initialization
 
 feature -- Access
 
-	current_tradable: TRADABLE [BASIC_MARKET_TUPLE]
+	current_tradable: TRADABLE [BASIC_TRADABLE_TUPLE]
 
 	current_period_type: TIME_PERIOD_TYPE
 			-- Current data period type to be processed
@@ -287,7 +287,7 @@ feature -- Basic operations
 feature {NONE} -- Implementation
 
 	view_menu
-			-- Menu for viewing market and market function data
+			-- Menu for viewing tradable and tradable function data
 		local
 			finished: BOOLEAN
 			indicator: TRADABLE_FUNCTION
@@ -363,7 +363,7 @@ feature {NONE} -- Implementation
 			elseif tradable_list_handler.is_empty then
 				print ("%NNo tradables to analyze - tradable list is empty.%N")
 			else
-				-- Ensure that the market event generators and event
+				-- Ensure that the tradable event generators and event
 				-- registrants currently in persistent store are used
 				-- for the market analysis (in case they were updated by
 				-- a separate process).
@@ -375,15 +375,15 @@ feature {NONE} -- Implementation
 					active_event_generators)
 				factory_builder.make_dispatcher
 				event_coordinator.set_dispatcher (factory_builder.dispatcher)
-				load_market_event_histories
+				load_tradable_event_histories
 				if error_occurred then log_errors (<<last_error, "%N">>) end
 				event_coordinator.execute
-				save_market_event_histories
+				save_tradable_event_histories
 			end
 		end
 
 	view_indicator_menu (indicator: TRADABLE_FUNCTION)
-			-- Menu for viewing market function data
+			-- Menu for viewing tradable function data
 		local
 			finished: BOOLEAN
 		do
@@ -431,7 +431,7 @@ feature {NONE} -- Implementation
 		local
 			symbol: STRING
 			symbols: LIST [STRING]
-			old_tradable: TRADABLE [BASIC_MARKET_TUPLE]
+			old_tradable: TRADABLE [BASIC_TRADABLE_TUPLE]
 			err: STRING
 		do
 			old_tradable := current_tradable
@@ -512,7 +512,7 @@ feature {NONE} -- Implementation
 			i: INTEGER
 			types: ARRAYED_LIST [STRING]
 			per_type_choice: TIME_PERIOD_TYPE
-			t: TRADABLE [BASIC_MARKET_TUPLE]
+			t: TRADABLE [BASIC_TRADABLE_TUPLE]
 		do
 			if not tradable_list_handler.is_empty then
 				from
@@ -766,7 +766,7 @@ feature {NONE} -- Implementation - attributes
 
 	last_period_types: ARRAYED_LIST [STRING]
 
-	last_tradable_for_period_types: TRADABLE [BASIC_MARKET_TUPLE]
+	last_tradable_for_period_types: TRADABLE [BASIC_TRADABLE_TUPLE]
 
 	exception_processor: EXCEPTION_PROCESSOR
 

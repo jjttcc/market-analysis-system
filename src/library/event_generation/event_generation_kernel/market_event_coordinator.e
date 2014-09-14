@@ -1,7 +1,7 @@
 note
 	description:
-		"An event coordinator that uses market event generators to generate %
-		%market events and passes a queue of the generated events to a %
+		"An event coordinator that uses tradable event generators to generate %
+		%tradable events and passes a queue of the generated events to a %
 		%dispatcher"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -18,11 +18,11 @@ deferred class MARKET_EVENT_COORDINATOR inherit
 
 feature -- Access
 
-	event_generators: LINEAR [MARKET_EVENT_GENERATOR]
+	event_generators: LINEAR [TRADABLE_EVENT_GENERATOR]
 
 	start_date_time: DATE_TIME
 			-- Date and time that the generators are to begin their
-			-- analysis - that is, for each market, only the market's
+			-- analysis - that is, for each tradable, only the tradable's
 			-- data whose date/time >= `start_date_time' will be processed.
 
 feature -- Status setting
@@ -38,7 +38,7 @@ feature -- Status setting
 			date_time_set: start_date_time = d
 		end
 
-	set_event_generators (arg: LINEAR [MARKET_EVENT_GENERATOR])
+	set_event_generators (arg: LINEAR [TRADABLE_EVENT_GENERATOR])
 			-- Set event_generators to `arg', call `set_start_date_time'
 			-- on each one with `start_date_time', and do any other
 			-- initialization needed on each event generator.

@@ -1,5 +1,5 @@
 note
-	description: "Signal types for market events"
+	description: "Signal types for tradable events"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

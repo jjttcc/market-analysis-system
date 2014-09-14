@@ -111,7 +111,7 @@ feature -- Status report
 			-- 	sp.i_th (i-1).date < sp.i_th (i).date)
 		end
 
-feature {FACTORY, MARKET_FUNCTION_EDITOR} -- Status setting
+feature {FACTORY, TRADABLE_FUNCTION_EDITOR} -- Status setting
 
 	finish_loading
 		do

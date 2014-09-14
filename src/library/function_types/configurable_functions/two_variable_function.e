@@ -1,6 +1,6 @@
 note
 	description:
-		"A market function that takes two arguments or variables"
+		"A tradable function that takes two arguments or variables"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -21,7 +21,7 @@ inherit
 			action, start
 		end
 
-creation {FACTORY, MARKET_FUNCTION_EDITOR}
+creation {FACTORY, TRADABLE_FUNCTION_EDITOR}
 
 	make
 
@@ -89,7 +89,7 @@ feature -- Access
 			Result.append (input2.leaf_functions)
 		end
 
-	innermost_input: SIMPLE_FUNCTION [MARKET_TUPLE]
+	innermost_input: SIMPLE_FUNCTION [TRADABLE_TUPLE]
 		do
 			Result := input1.innermost_input
 		end
@@ -172,7 +172,7 @@ feature {NONE} -- Hook methods
 
 feature {FACTORY} -- Status setting
 
-	set_innermost_input (in: SIMPLE_FUNCTION [MARKET_TUPLE])
+	set_innermost_input (in: SIMPLE_FUNCTION [TRADABLE_TUPLE])
 			-- Both `input1' and `input2' will be changed.
 		do
 			processed_date_time := Void
@@ -181,7 +181,7 @@ feature {FACTORY} -- Status setting
 			output.wipe_out
 		end
 
-feature {MARKET_FUNCTION_EDITOR}
+feature {TRADABLE_FUNCTION_EDITOR}
 
 	set_input1 (in: like input1)
 		require
@@ -240,7 +240,7 @@ feature {MARKET_FUNCTION_EDITOR}
 			input2.reset_parameters
 		end
 
-feature {MARKET_FUNCTION_EDITOR}
+feature {TRADABLE_FUNCTION_EDITOR}
 
 	input1, input2: COMPLEX_FUNCTION
 

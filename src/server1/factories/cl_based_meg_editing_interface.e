@@ -1,6 +1,6 @@
 note
 	description:
-		"Builder/editor of MARKET_EVENT_GENERATORs using a command-line %
+		"Builder/editor of TRADABLE_EVENT_GENERATORs using a command-line %
 		%interface"
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -64,7 +64,7 @@ feature -- Initialization
 			-- Satisfy invariant (editor is currently not used.)
 			create editor
 			create function_editor.make (Void)
-			operator_maker.set_market_tuple_selector (function_editor)
+			operator_maker.set_tradable_tuple_selector (function_editor)
 			register_for_termination (Current)
 		ensure
 			editor_exists: editor /= Void
@@ -194,7 +194,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	event_generator_selection (msg: STRING): MARKET_EVENT_GENERATOR
+	event_generator_selection (msg: STRING): TRADABLE_EVENT_GENERATOR
 			-- User's event generator selection
 		local
 			finished: BOOLEAN
@@ -202,13 +202,13 @@ feature {NONE} -- Implementation
 			if meg_names (working_meg_library).count = 0 then
 				finished := True
 			else
-				Result := market_event_generation_library @ list_selection (
+				Result := tradable_event_generation_library @ list_selection (
 					meg_names (working_meg_library), concatenation (
 						<<"Select a market analyzer for ", msg>>))
 			end
 		end
 
-	one_or_two_market_function_selection: INTEGER
+	one_or_two_tradable_function_selection: INTEGER
 		local
 			c: CHARACTER
 		do
@@ -477,7 +477,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	display_event_generator (eg: MARKET_EVENT_GENERATOR)
+	display_event_generator (eg: TRADABLE_EVENT_GENERATOR)
 			-- Print the contents of `eg'.
 		local
 			compound_eg: COMPOUND_EVENT_GENERATOR

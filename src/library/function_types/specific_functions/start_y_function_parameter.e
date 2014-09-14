@@ -1,6 +1,6 @@
 note
 	description:
-		"Changeable start_y parameter for MARKET_FUNCTION_LINE"
+		"Changeable start_y parameter for TRADABLE_FUNCTION_LINE"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -20,7 +20,7 @@ creation {TRADABLE_FUNCTION}
 
 feature -- Access
 
-	function: MARKET_FUNCTION_LINE
+	function: TRADABLE_FUNCTION_LINE
 
 	current_value: STRING
 		do

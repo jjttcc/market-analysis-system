@@ -52,7 +52,7 @@ feature -- Access
 				implies Result.has (previous_operator)
 		end
 
-feature {MARKET_FUNCTION_EDITOR} -- Status setting
+feature {TRADABLE_FUNCTION_EDITOR} -- Status setting
 
 	set_operators (op: like operator; pop: like previous_operator;
 				fop: like first_element_operator)

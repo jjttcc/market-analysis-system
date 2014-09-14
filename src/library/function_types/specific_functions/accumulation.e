@@ -1,6 +1,6 @@
 note
 	description:
-		"Market function that accumulates values by, when calculating the %
+		"Tradable function that accumulates values by, when calculating the %
 		%current value for a period, using the previously calculated value"
 	note1:
 		"`previous_operator' has some special constraints - See note in %
@@ -24,7 +24,7 @@ class ACCUMULATION inherit
 
 	COMMAND_EDITOR -- To allow editing of `previous_operator'
 
-creation {FACTORY, MARKET_FUNCTION_EDITOR}
+creation {FACTORY, TRADABLE_FUNCTION_EDITOR}
 
 	make
 
@@ -42,7 +42,7 @@ feature -- Access
 			-- the current period with that for the previous period -
 			-- usually will be ADDITION
 
-feature {MARKET_FUNCTION_EDITOR} -- Status setting
+feature {TRADABLE_FUNCTION_EDITOR} -- Status setting
 
 	set_required_operators (op: like operator; pop: like previous_operator;
 				fop: like first_element_operator)

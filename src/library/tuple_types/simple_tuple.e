@@ -8,7 +8,7 @@ note
 
 class SIMPLE_TUPLE inherit
 
-	MARKET_TUPLE
+	TRADABLE_TUPLE
 		redefine
 			end_date
 		end

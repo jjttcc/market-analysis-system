@@ -34,7 +34,7 @@ feature {NONE} -- Implementation
 			cmd: MAS_REQUEST_COMMAND
 		do
 			Precursor
-			create {TIME_DELIMITED_MARKET_DATA_REQUEST_CMD} cmd.make(
+			create {TIME_DELIMITED_TRADABLE_DATA_REQUEST_CMD} cmd.make(
 					tradable_list_handler)
 			request_handlers.extend(cmd, time_delimited_tradable_data_request)
 

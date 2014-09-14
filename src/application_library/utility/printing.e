@@ -69,7 +69,7 @@ feature -- Status setting
 
 feature -- Basic operations
 
-	print_tuples (l: MARKET_TUPLE_LIST [MARKET_TUPLE])
+	print_tuples (l: TRADABLE_TUPLE_LIST [TRADABLE_TUPLE])
 			-- If `preface' is not empty, first print it; then print the
 			-- fields of each tuple in `l'.  If `print_start_date' is not
 			-- void, print all elements of `l' >= that date; otherwise,
@@ -81,7 +81,7 @@ feature -- Basic operations
 		require
 			l_not_void: l /= Void
 		local
-			printer: MARKET_TUPLE_PRINTER
+			printer: TRADABLE_TUPLE_PRINTER
 		do
 			if not l.is_empty then
 				-- clone to allow concurrent printing
@@ -108,7 +108,7 @@ feature -- Basic operations
 			printer.execute (l)
 		end
 
-	print_indicators (t: TRADABLE [BASIC_MARKET_TUPLE])
+	print_indicators (t: TRADABLE [BASIC_TRADABLE_TUPLE])
 			-- Print the fields of each tuple of each indicator of `t'.
 			-- by calling `print_tuples' on `output' of each of t's
 			-- indicators.
@@ -136,13 +136,13 @@ feature -- Basic operations
 			print_tuples (i.output)
 		end
 
-	print_composite_lists (t: TRADABLE [BASIC_MARKET_TUPLE])
+	print_composite_lists (t: TRADABLE [BASIC_TRADABLE_TUPLE])
 			-- Print the fields of each tuple of each composite list of `t'
 			-- by calling `print_tuples' for each tuple_list of `t'.
 		local
 			names: ARRAY [STRING]
 			i: INTEGER
-			l: MARKET_TUPLE_LIST [MARKET_TUPLE]
+			l: TRADABLE_TUPLE_LIST [TRADABLE_TUPLE]
 		do
 			from
 				names := t.period_types.current_keys
@@ -168,18 +168,18 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	tuple_printers: HASH_TABLE [MARKET_TUPLE_PRINTER, STRING]
+	tuple_printers: HASH_TABLE [TRADABLE_TUPLE_PRINTER, STRING]
 		local
 			st: SIMPLE_TUPLE
-			bmt: BASIC_MARKET_TUPLE
+			bmt: BASIC_TRADABLE_TUPLE
 			bvt: BASIC_VOLUME_TUPLE
 			ct: COMPOSITE_TUPLE
 			cvt: COMPOSITE_VOLUME_TUPLE
 			boit: BASIC_OPEN_INTEREST_TUPLE
 			coit: COMPOSITE_OI_TUPLE
-			point: MARKET_POINT
-			mtprinter: MARKET_TUPLE_PRINTER
-			bmtprinter: BASIC_MARKET_TUPLE_PRINTER
+			point: TRADABLE_POINT
+			mtprinter: TRADABLE_TUPLE_PRINTER
+			bmtprinter: BASIC_TRADABLE_TUPLE_PRINTER
 			vtprinter: VOLUME_TUPLE_PRINTER
 			oitprinter: OPEN_INTEREST_TUPLE_PRINTER
 -- !!!! indexing once_status: global??!!!
@@ -212,7 +212,7 @@ feature {NONE} -- Implementation
 			Result.extend (vtprinter, cvt.generator)
 			Result.extend (oitprinter, boit.generator)
 			Result.extend (oitprinter, coit.generator)
-			-- MARKET_POINTs are printed by MARKET_TUPLE_PRINTERs (for now).
+			-- TRADABLE_POINTs are printed by TRADABLE_TUPLE_PRINTERs (for now).
 			Result.extend (mtprinter, point.generator)
 		ensure
 			not_empty: Result /= Void and not Result.is_empty

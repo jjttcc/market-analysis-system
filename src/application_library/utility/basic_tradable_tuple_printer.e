@@ -6,9 +6,9 @@ note
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
 
-class BASIC_MARKET_TUPLE_PRINTER inherit
+class BASIC_TRADABLE_TUPLE_PRINTER inherit
 
-	MARKET_TUPLE_PRINTER
+	TRADABLE_TUPLE_PRINTER
 		redefine
 			print_fields, print_fields_with_time, tuple_type_anchor
 		end
@@ -19,7 +19,7 @@ creation
 
 feature {NONE} -- Implementation
 
-	tuple_type_anchor: BASIC_MARKET_TUPLE
+	tuple_type_anchor: BASIC_TRADABLE_TUPLE
 		do
 			do_nothing
 		end
@@ -67,4 +67,4 @@ feature {NONE} -- Implementation
 			put (field_separator)
 		end
 
-end -- BASIC_MARKET_TUPLE_PRINTER
+end -- BASIC_TRADABLE_TUPLE_PRINTER

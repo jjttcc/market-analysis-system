@@ -3,7 +3,7 @@ note
 	%of COMPOSITE_TUPLE instances"
 	detailed_description:
 		"This class builds a list of composite tuples from a list of %
-		%market tuples, using a duration to determine how many source %
+		%tradable tuples, using a duration to determine how many source %
 		%tuples to use to create a composite tuple."
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -21,7 +21,7 @@ class COMPOSITE_TUPLE_BUILDER inherit
 			trading_period_type, make_output, add_operator_result
 		end
 
-creation {FACTORY, MARKET_FUNCTION_EDITOR}
+creation {FACTORY, TRADABLE_FUNCTION_EDITOR}
 
 	make
 
@@ -62,7 +62,7 @@ feature -- Access
 
 	trading_period_type: TIME_PERIOD_TYPE
 
-	source_list: MARKET_TUPLE_LIST [BASIC_MARKET_TUPLE]
+	source_list: TRADABLE_TUPLE_LIST [BASIC_TRADABLE_TUPLE]
 			-- Tuples used to manufacture output
 
 	tuple_maker: COMPOSITE_TUPLE_FACTORY
@@ -80,8 +80,8 @@ feature -- Status report
 			not output.is_empty
 			-- output is sorted by date/time
 		local
-			previous: MARKET_TUPLE
-			output_list: MARKET_TUPLE_LIST [MARKET_TUPLE]
+			previous: TRADABLE_TUPLE
+			output_list: TRADABLE_TUPLE_LIST [TRADABLE_TUPLE]
 		do
 			Result := True
 			output_list := output.data
@@ -158,7 +158,7 @@ feature -- Basic operations
 	do_process
 			-- Make a list of COMPOSITE_TUPLE
 		local
-			src_sublist: ARRAYED_LIST [BASIC_MARKET_TUPLE]
+			src_sublist: ARRAYED_LIST [BASIC_TRADABLE_TUPLE]
 			current_date: DATE_TIME
 		do
 			from
@@ -213,7 +213,7 @@ feature -- Basic operations
 
 feature {NONE}
 
-	input: SIMPLE_FUNCTION [BASIC_MARKET_TUPLE]
+	input: SIMPLE_FUNCTION [BASIC_TRADABLE_TUPLE]
 
 	make_output
 		do

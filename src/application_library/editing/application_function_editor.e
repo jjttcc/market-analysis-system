@@ -1,6 +1,6 @@
 note
 	description:
-		"Editor of MARKET_FUNCTIONs to be used in a MAL application"
+		"Editor of TRADABLE_FUNCTIONs to be used in a MAL application"
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"
@@ -9,7 +9,7 @@ note
 
 class APPLICATION_FUNCTION_EDITOR inherit
 
-	MARKET_FUNCTION_EDITOR
+	TRADABLE_FUNCTION_EDITOR
 		export
 			{NONE} all
 		end
@@ -42,10 +42,10 @@ feature -- Initialization
 			user_interface := ui
 			operator_maker := om
 			operator_maker.set_exclude_list (exclude_cmds)
-			operator_maker.set_market_tuple_selector (user_interface)
+			operator_maker.set_tradable_tuple_selector (user_interface)
 		ensure
 			set: user_interface = ui and operator_maker = om
-			mts_set: operator_maker.market_tuple_selector = user_interface
+			mts_set: operator_maker.tradable_tuple_selector = user_interface
 		end
 
 feature -- Access
@@ -84,7 +84,7 @@ feature -- Status setting
 feature -- Basic operations
 
 	edit_one_fn_op (f: ONE_VARIABLE_FUNCTION)
-			-- Edit a function that takes one market function and an operator.
+			-- Edit a function that takes one tradable function and an operator.
 		require
 			ui_set: user_interface /= Void
 			op_maker_set: operator_maker /= Void
@@ -177,7 +177,7 @@ feature -- Basic operations
 		end
 
 	edit_one_fn_op_n (f: N_RECORD_ONE_VARIABLE_FUNCTION)
-			-- Edit a function that takes one market function, an operator,
+			-- Edit a function that takes one tradable function, an operator,
 			-- and an n-value.
 		require
 			ui_set: user_interface /= Void
@@ -222,7 +222,7 @@ feature -- Basic operations
 		end
 
 	edit_one_fn_bnc_n (f: STANDARD_MOVING_AVERAGE)
-			-- Edit a function that takes one market function,
+			-- Edit a function that takes one tradable function,
 			-- a RESULT_COMMAND [DOUBLE], and an n-value.
 		require
 			ui_set: user_interface /= Void
@@ -249,7 +249,7 @@ feature -- Basic operations
 		end
 
 	edit_ema (f: EXPONENTIAL_MOVING_AVERAGE)
-			-- Edit an EXPONENTIAL_MOVING_AVERAGE - that takes one market
+			-- Edit an EXPONENTIAL_MOVING_AVERAGE - that takes one tradable
 			-- function, a RESULT_COMMAND [DOUBLE], an N_BASED_CALCULATION,
 			-- and an n-value.
 		require
@@ -282,14 +282,14 @@ feature -- Basic operations
 			edit_n (f)
 		end
 
-	edit_market_function_line (f: MARKET_FUNCTION_LINE)
-			-- Edit a MARKET_FUNCTION_LINE.
+	edit_tradable_function_line (f: TRADABLE_FUNCTION_LINE)
+			-- Edit a TRADABLE_FUNCTION_LINE.
 		require
 			ui_set: user_interface /= Void
 			op_maker_set: operator_maker /= Void
 		local
 			y, slope: DOUBLE
-			p: MARKET_POINT
+			p: TRADABLE_POINT
 			date: DATE_TIME
 		do
 			-- It doesn't matter what date is used here.
@@ -324,7 +324,7 @@ feature -- Basic operations
 			-- Set the input function for the ONE_VARIABLE_FUNCTION `f'.
 		do
 			last_selected_ovf_input :=
-				user_interface.market_function_selection (
+				user_interface.tradable_function_selection (
 				concatenation (<<f.name, "'s (", f.generator,
 				") input function">>), Void)
 			f.set_input (last_selected_ovf_input)
@@ -354,7 +354,7 @@ feature -- Basic operations
 			key_choices: LIST [STRING]
 		do
 			last_selected_abf_input :=
-				user_interface.market_function_selection (
+				user_interface.tradable_function_selection (
 				concatenation (<<f.name, "'s (", f.generator,
 				") input function">>), Void)
 			f.clear_inputs
@@ -409,7 +409,7 @@ feature {NONE} -- Implementation
 		end
 
 	exclude_cmds: LIST [COMMAND]
-			-- Commands not allowed as operators for market functions
+			-- Commands not allowed as operators for tradable functions
 -- !!!! indexing once_status: global??!!!
 		once
 			create {LINKED_LIST [COMMAND]} Result.make

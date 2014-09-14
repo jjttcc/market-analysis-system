@@ -202,10 +202,10 @@ feature {NONE} -- Implementation
 		local
 			file_name: STRING
 		do
-			if input_file /= Void then
-				log_errors (<<Too_many_input_files_error>>)
-			elseif option_in_contents ('i') then
-				if contents.item.count > 2 then
+			if option_in_contents ('i') then
+				if input_file /= Void then
+					log_errors (<<Too_many_input_files_error>>)
+				elseif contents.item.count > 2 then
 					input_from_file := True
 					create file_name.make (contents.item.count - 2)
 					file_name.append (contents.item.substring (

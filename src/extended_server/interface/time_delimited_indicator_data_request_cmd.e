@@ -4,9 +4,9 @@ note
 		%delimited by a start date-time and an end date-time"
 	note1: "The default value of false is kept for `update_retrieved_tradable' %
 		%to cut down on unecessary processing, since > 99%% of the time an %
-		%indicator request will be accompanied by a market data request - %
+		%indicator request will be accompanied by a tradable data request - %
 		%`update_retrieved_tradable' is true in %
-		%TIME_DELIMITED_MARKET_DATA_REQUEST_CMD."
+		%TIME_DELIMITED_TRADABLE_DATA_REQUEST_CMD."
 	author: "Jim Cochrane"
 	date: "$Date$";
 	revision: "$Revision$"

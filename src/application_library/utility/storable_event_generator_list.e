@@ -1,6 +1,6 @@
 note
 	description:
-		"A storable list of MARKET_EVENT_GENERATORs that wipes out each %
+		"A storable list of TRADABLE_EVENT_GENERATORs that wipes out each %
 		%generator before saving it to persistent store."
 	author: "Jim Cochrane"
 	date: "$Date$";
@@ -10,12 +10,12 @@ note
 
 class STORABLE_EVENT_GENERATOR_LIST inherit
 
-	STORABLE_LIST [MARKET_EVENT_GENERATOR]
+	STORABLE_LIST [TRADABLE_EVENT_GENERATOR]
 		redefine
 			save
 		end
 
-	MARKET_FUNCTION_EDITOR
+	TRADABLE_FUNCTION_EDITOR
 		undefine
 			copy, is_equal
 		end

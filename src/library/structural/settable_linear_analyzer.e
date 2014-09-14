@@ -17,7 +17,7 @@ deferred class SETTABLE_LINEAR_ANALYZER inherit
 
 feature {FACTORY, COMMAND}
 
-	target: LIST [MARKET_TUPLE]
+	target: LIST [TRADABLE_TUPLE]
 
 feature -- Initialization
 
