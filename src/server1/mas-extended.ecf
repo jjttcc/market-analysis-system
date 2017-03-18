@@ -28,7 +28,7 @@
 		<setting name="inlining" value="true"/>
 		<setting name="inlining_size" value="15"/>
 		<setting name="line_generation" value="false"/>
-		<external_include location="$ISE_EIFFEL/library/time/Clib"/>
+		<external_include location="${ISE_EIFFEL}/library/time/spec/include"/>
 		<external_include location="${ECLI}/src/spec/C"/>
 		<external_include location="${ECLI}/src/spec/ise/linux/"/>
 		<external_object location="${ISE_EIFFEL}/library/net/spec/${ISE_PLATFORM}/lib/libnet.a"/>
@@ -60,14 +60,14 @@
 			<cluster name="data_supplier_protocols" location="$|data_supplier_protocols/"/>
 			<cluster name="extended_protocols" location="$|extended_protocols/"/>
 		</cluster>
-		<cluster name="ds_container" location="$GOBO/library/structure/container/"/>
-		<cluster name="ds_date" location="$GOBO/library/time/date/"/>
-		<cluster name="ds_dispenser" location="$GOBO/library/structure/dispenser/"/>
-		<cluster name="ds_list" location="$GOBO/library/structure/list/"/>
-		<cluster name="ds_sort" location="$GOBO/library/structure/sort/"/>
-		<cluster name="ds_support" location="$GOBO/library/structure/support/"/>
-		<cluster name="ds_table" location="$GOBO/library/structure/table/"/>
-		<cluster name="ds_tmzone" location="$GOBO/library/time/time_zone"/>
+		<cluster name="ds_container" location="$GOBO/library/structure/src/container/"/>
+		<cluster name="ds_date" location="$GOBO/library/time/src/date/"/>
+		<cluster name="ds_dispenser" location="$GOBO/library/structure/src/dispenser/"/>
+		<cluster name="ds_list" location="$GOBO/library/structure/src/list/"/>
+		<cluster name="ds_sort" location="$GOBO/library/structure/src/sort/"/>
+		<cluster name="ds_support" location="$GOBO/library/structure/src/support/"/>
+		<cluster name="ds_table" location="$GOBO/library/structure/src/table/"/>
+		<cluster name="ds_tmzone" location="$GOBO/library/time/src/time_zone"/>
 		<cluster name="ecli_src" location="$ECLI/src/">
 			<cluster name="abstract" location="$|abstract/"/>
 			<cluster name="ecli_spec" location="$|spec/">
@@ -109,7 +109,7 @@
 		<cluster name="eposix_stdc" location="$EPOSIX/src/standardc/"/>
 		<cluster name="eposix_support" location="$EPOSIX/src/support/"/>
 		<cluster name="eposix_sus" location="$EPOSIX/src/sus/"/>
-		<cluster name="gobo_math" location="$GOBO/library/math/decimal/"/>
+		<cluster name="gobo_math" location="$GOBO/library/math/src/decimal/"/>
 		<cluster name="ise" location="$ISE_EIFFEL/library/">
 			<cluster name="date" location="$|time/">
 				<cluster name="date_format" location="$|format/">
@@ -117,7 +117,7 @@
 				</cluster>
 			</cluster>
 			<cluster name="time" location="$|time/classic/"/>
-			<cluster name="clock" location="$GOBO/library/time/clock/"/>
+			<cluster name="clock" location="$GOBO/library/time/src/clock/"/>
 			<cluster name="net" location="$|net/">
 				<cluster name="http_resources" location="$|transfer/resources/"/>
 				<cluster name="http_addresses" location="$|transfer/addresses/"/>
@@ -129,14 +129,14 @@
 				<cluster name="polling_implementation" location="$|polling/implementation/"/>
 			</cluster>
 		</cluster>
-		<cluster name="kl_basic" location="$GOBO/library/kernel/basic/"/>
-		<cluster name="kl_elks" location="$GOBO/library/free_elks/"/>
-		<cluster name="kl_io" location="$GOBO/library/kernel/io/"/>
-		<cluster name="kl_kernel" location="$GOBO/library/kernel/"/>
-		<cluster name="kl_kernel_spec" location="$GOBO/library/kernel/spec/ise/"/>
-		<cluster name="kl_misc" location="$GOBO/library/kernel/misc/"/>
-		<cluster name="kl_support" location="$GOBO/library/kernel/support/"/>
-		<cluster name="kl_unicode" location="$GOBO/library/kernel/unicode/"/>
+		<cluster name="kl_basic" location="$GOBO/library/kernel/src/basic/"/>
+		<cluster name="kl_elks" location="$GOBO/library/free_elks/src/"/>
+		<cluster name="kl_io" location="$GOBO/library/kernel/src/io/"/>
+		<cluster name="kl_kernel" location="$GOBO/library/kernel/src"/>
+		<cluster name="kl_kernel_spec" location="$GOBO/library/kernel/src/spec/ise/"/>
+		<cluster name="kl_misc" location="$GOBO/library/kernel/src/misc/"/>
+		<cluster name="kl_support" location="$GOBO/library/kernel/src/support/"/>
+		<cluster name="kl_unicode" location="$GOBO/library/kernel/src/unicode/"/>
 		<cluster name="ma_library" location="$MAS/src/library/">
 			<cluster name="function_abstractions" location="$|function_abstractions/">
 				<class_option class="MARKET_TUPLE_LIST">
@@ -207,9 +207,9 @@
 			<cluster name="ext_utility" location="$|utility"/>
 			<cluster name="ext_tradable_list" location="$|tradable_list"/>
 		</cluster>
-		<cluster name="ut_command" location="$GOBO/library/pattern/command/"/>
-		<cluster name="ut_error" location="$GOBO/library/utility/error/"/>
-		<cluster name="ut_formatter" location="$GOBO/library/utility/formatter/"/>
-		<cluster name="ut_support" location="$GOBO/library/utility/support/"/>
+		<cluster name="ut_command" location="$GOBO/library/pattern/src/command/"/>
+		<cluster name="ut_error" location="$GOBO/library/utility/src/error/"/>
+		<cluster name="ut_formatter" location="$GOBO/library/utility/src/formatter/"/>
+		<cluster name="ut_support" location="$GOBO/library/utility/src/support/"/>
 	</target>
 </system>
