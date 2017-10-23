@@ -1,3 +1,6 @@
 In here go scripts that implement the external data retrieval component
-used by the mas EXTERNAL_INPUT_SEQUENCE to retrieve market data from an
-outside source (such as the free yahoo.com stock quotes).
+used by the mas EXTERNAL_INPUT_SEQUENCE (or, as of October 2017, the
+extension to the web-based [-w option to mas] retrieval mechanism that
+uses an external script for the retrieval instead of the existing
+Eiffel(MAS)-based mechanism) to retrieve market data from an outside
+source (such as the free yahoo.com stock quotes).
