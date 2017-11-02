@@ -71,6 +71,8 @@
 		<cluster name="ecli_src" location="$ECLI/src/">
 			<cluster name="abstract" location="$|abstract/"/>
 			<cluster name="ecli_spec" location="$|spec/">
+		<cluster name="gobo_support" location="$GOBO/library/string/src/support/"/>
+		<cluster name="gobo_set" location="$GOBO/library/structure/src/set/"/>
 				<cluster name="ecli_spec_ise" location="$|ise/"/>
 			</cluster>
 			<cluster name="ecli_data" location="$|data/"/>

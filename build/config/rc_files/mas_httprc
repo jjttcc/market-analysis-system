@@ -1,4 +1,5 @@
-# Sample http configuration file - set up for yahoo.com
+# Sample http configuration file - set up for quotemedia.com (used to be
+# yahoo.com, but yahoo discontinued its free historical data service).
 # (Currently, only end-of-day data retrieval is available.  Intraday may be
 # added later.)
 
@@ -9,9 +10,9 @@
 # NOTE: This specification does not apply to the month settings specified
 # in this file, which always start at 1; rather it specifies how the date
 # settings are translated into the "HTTP GET" request for retrieving the
-# specified range of data.  Note that the chart.yahoo.com site expects (as
-# of Sep. 2002) months to start at zero and thus months_start_at_zero
-# should be set to true if you are using yahoo's site.
+# specified range of data.  Note that, like yahoo, quotemedia expects (as
+# months to start at zero and thus months_start_at_zero should be set to
+# true for this site.
 # (Change "true" below to "false" or simply delete the "months_start_at_zero"
 # specification below, since the default is false, to specify that months
 # start at one.)
@@ -24,7 +25,7 @@ eod_start_date	now - 4 years
 eod_end_date	now
 
 # The host component of the http URL used to retrieve market data
-host	ichart.yahoo.com
+host	app.quotemedia.com
 
 # If a proxy needs to be used - for example, to get through a firewall -,
 # the following two settings need to be uncommented and the correct values
@@ -33,7 +34,7 @@ host	ichart.yahoo.com
 #proxy_port_number	8002
 
 # The path component of the http URL used to retrieve market data
-path	table.csv?s=<symbol>&a=<startmonth>&b=<startday>&c=<startyear>&d=<endmonth>&e=<endday>&f=<endyear>&g=d&q=q&y=0&z=<symbol>&x=.csv
+path	quotetools/getHistoryDownload.csv?&webmasterId=501&startDay=<startday>&startMonth=<startmonth>&startYear=<startyear>&endDay=<endday>&endMonth=<endmonth>&endYear=<endyear>&isRanged=true&symbol=<symbol>
 
 # Path of the file that contains the list of symbols for the tradables to
 # be downloaded.  (In this case it's expected to be in the current
@@ -48,6 +49,9 @@ output_field_separator	,
 # converting it into an expected format.  In this case, the specification
 # is for a conversion component called "yahoo", which, as of July 2002, is
 # the only internal conversion component available; more may be added later.
+# (Note: After the switch to quotemedia, yahoo is still used since yahoo's
+# format is compatible, as far as this algorithm is concerned, with
+# quotemedia's.
 post_process_command	yahoo
 #post_process_command	[none]
 
