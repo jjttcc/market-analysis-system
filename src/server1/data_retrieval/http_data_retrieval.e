@@ -36,6 +36,7 @@ feature {NONE} -- Initialization
 
     initialize
         do
+perform_external_query := true	--!!!!!!!!!
             create parameters.make
             create url.http_make (parameters.host, "")
             if parameters.proxy_used then
@@ -63,6 +64,7 @@ feature {NONE} -- Attributes
     Default_file_extension: STRING = "txt"
             -- Default value for `file_extension'
 
+	-- !!!!suggestion (2018-04-06) - remove:
     perform_external_query: BOOLEAN
 
 feature {NONE} -- Basic operations
@@ -92,6 +94,7 @@ feature {NONE} -- Basic operations
                 print ("url.address: " + url.address + "%N")
             end
             if perform_external_query then
+				-- !!!!suggestion (2018-04-06) - remove:
                 perform_external_http_retrieval
             else
                 perform_http_retrieval
@@ -372,6 +375,9 @@ feature {NONE} -- Implementation
             ex: expanded EXCEPTION_SERVICES
         do
             if not http_request.error then
+print ("http_request.addr: host/path: '" + http_request.address.host + "/" +
+http_request.address.path + "'%N")
+print ("http_request.address: '" + http_request.address.out + "'%N")
                 http_request.open
                 if not http_request.error then
                     create result_string.make (0)
@@ -384,6 +390,7 @@ feature {NONE} -- Implementation
                         http_request.read
                         result_string.append_string (http_request.last_packet)
                     end
+print ("result_string: '" + result_string + "%N")
                     if http_request.error then
                         print ("Error occurred initiating transfer: " +
                             http_request.error_text (http_request.error_code) +
@@ -420,6 +427,8 @@ feature {NONE} -- Implementation
             end
         end
 
+	-- !!!!!!suggestion (2018-04-06) - remove this and external_webrequest
+	-- !!!!!!(replaced by similar algorithm in FILE_TRADABLE_LIST)
     perform_external_http_retrieval
             -- Replacement for `perform_http_retrieval' that uses an external
             -- program (implemented in `external_webrequest') to query the
@@ -436,12 +445,13 @@ feature {NONE} -- Implementation
             -- implement a user-specified invocation of this alternate data-
             -- retrieval mechanism instead of the Eiffel-based one.
         local
-            result_string: STRING
+            result_string, http_address: STRING
             ex: expanded EXCEPTION_SERVICES
         do
+			http_address := "https://" + parameters.host + "/" +
+				parameters.path
             create result_string.make_empty
-            result_string.append_string(external_webrequest(
-                http_request.address.out))
+            result_string.append_string(external_webrequest(http_address))
             convert_and_save_result (result_string)
             add_timing_data ("Retrieving data for " + parameters.symbol)
         ensure

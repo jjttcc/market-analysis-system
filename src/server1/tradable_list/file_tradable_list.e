@@ -18,6 +18,8 @@ class FILE_TRADABLE_LIST inherit
 	FILE_BASED_TRADABLE_LIST
 		rename
 			make as parent_make
+		redefine
+			retrieve_tradable_data
 		end
 
 creation
@@ -50,25 +52,22 @@ feature -- Access
 	file_names: LIST [STRING]
 			-- Names of all files with tradable data to be processed
 
+	external_data_service_active: BOOLEAN = True
+
 feature {NONE} -- Implementation
 
-	symbol_from_file_name (fname: STRING): STRING
-			-- Tradable symbol extracted from `fname' - directory component
-			-- and suffix ('.' and all characters that follow it) of the
-			-- file name are removed.  `fname' is not changed.
-		do
-			strutil.set_target (fname.twin)
-			if strutil.target.has (Directory_separator) then
-				-- Strip directory path from the file name:
-				strutil.keep_tail (Directory_separator)
+    retrieve_tradable_data (symbol: STRING)
+        local
+            cmd: POSIX_EXEC_PROCESS
+        do
+            create cmd.make("/tmp/retrieve_tradable_data.rb", <<symbol>>)
+            cmd.execute
+            cmd.wait_for (True)
+			if cmd.exit_code /= 0 then
+				fatal_error := True
+                log_errors(<<"Retrieval of data for " + symbol + " failed",
+					" (exit code: " + cmd.exit_code.out + ")%N">>)
 			end
-			if strutil.target.has ('.') then
-				-- Strip off "suffix":
-				strutil.keep_head ('.')
-			end
-			Result := strutil.target
-		end
-
-	strutil: expanded STRING_UTILITIES
+        end
 
 end -- class FILE_TRADABLE_LIST

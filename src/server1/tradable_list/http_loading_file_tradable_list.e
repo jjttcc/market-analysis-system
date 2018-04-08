@@ -75,6 +75,8 @@ feature -- Access
 	file_names: LIST [STRING]
 			-- Names of all files with tradable data to be processed
 
+	external_data_service_active: BOOLEAN = False
+
 feature {NONE} -- Implementation
 
 	load_target_tradable

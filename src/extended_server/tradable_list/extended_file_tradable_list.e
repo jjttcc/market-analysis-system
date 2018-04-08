@@ -18,6 +18,8 @@ class EXTENDED_FILE_TRADABLE_LIST inherit
 	EXTENDED_FILE_BASED_TRADABLE_LIST
 		rename
 			make as tl_make1
+        undefine
+            retrieve_tradable_data
 		select
 			tl_make1
 		end

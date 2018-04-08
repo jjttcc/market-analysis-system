@@ -1,0 +1,22 @@
+#!/bin/bash
+
+seconds=60
+if [ $# -gt 0 -a "$1" -gt 0 ] 2>/dev/null; then
+    seconds=$1
+fi
+
+run_ctags() {
+  if [ ! -e ./tags ]; then
+    x=notags
+  else
+    x=$(find . -name '*.e' -newer tags)
+  fi
+  if [ "$x" ]; then
+    ctags -R .
+  fi
+}
+
+while :; do
+  run_ctags
+  sleep $seconds
+done

@@ -16,6 +16,8 @@ class STOCK_SPLIT_FILE inherit
 	STOCK_SPLIT_SEQUENCE
 		rename
 			make as sss_make_unused, name as file_name
+		undefine
+			open_for_reading
 		select
 			last_error_fatal
 		end

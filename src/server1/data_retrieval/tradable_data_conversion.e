@@ -55,7 +55,8 @@ feature -- Access
             -- Table of available conversion routines, keyed by "specifier"
         once
             create Result.make (1)
-            Result.extend (agent converted_yahoo_data, yahoo_specifier)
+--!!!!!!! orig:Result.extend (agent converted_yahoo_data, yahoo_specifier)
+            Result.extend (agent converted_forward_yahoo_data, yahoo_specifier)
             Result.extend (agent null_conversion, null_specifier)
         end
 
@@ -115,6 +116,43 @@ feature {NONE} -- Conversion functions
                     loop
                         Result.append (converted_yahoo_line (l.item))
                         l.back
+                    end
+                end
+            end
+        end
+
+--!!!!!!!!fix/cleanup or remove!!!!!!!!!!!
+    converted_forward_yahoo_data (source_data: STRING): STRING
+            -- 'source_data' in the "yahoo" format - except not reversed
+            -- (i.e., first data line is for the earliest date) -
+            -- converted into MAS format
+        local
+            su: expanded STRING_UTILITIES
+            l: ARRAYED_LIST [STRING]
+i: INTEGER
+        do
+i := 1
+            if source_data /= Void and then not source_data.is_empty then
+                su.set_target (source_data)
+                l := su.tokens ("%N")
+                create Result.make (source_data.count)
+                -- l @ 1 will contain the header
+                if l.count > 2 then
+                    from
+                        l.start
+                        l.forth  -- Skip header line.
+                        -- Cursor should be at the 2nd line.
+                    until
+                        l.after or l.item.count < 3
+                    loop
+print ("l @ " + i.out + ": " + l.item + "%N")
+if l.item /= Void then
+                        Result.append (converted_yahoo_line (l.item))
+else
+print ("[l @ " + i.out + " is Void]%N")
+ end
+                        l.forth
+i := i + 1
                     end
                 end
             end
