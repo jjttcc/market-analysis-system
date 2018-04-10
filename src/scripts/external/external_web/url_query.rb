@@ -12,6 +12,8 @@ class URL_Query
   attr_reader :query, :filter_function
 
   # Execute 'query' and output response to 'output_file'.
+  # 'skip_lines' specifies which lines to exclude, where skip_lines[1]
+  # indicates the first line of the response.
   # precondition: query != nil && ! output_file.closed? && ! skip_lines.nil?
   def output_response(output_file, skip_lines = {})
     open(query) do |f|
@@ -42,37 +44,42 @@ class URL_Query
     end
   end
 
-  # Execute 'query' and output response, reversed, to 'output_file'.
-  def output_reversed_response(output_file, skip_lines)
+  # Execute 'query' and return the response, reversed line-by-line, as an
+  # array.
+  # 'skip_lines' specifies which lines to exclude, where skip_lines[1]
+  # indicates the first line of the (unreversed) response.
+  # precondition: query != nil && ! skip_lines.nil?
+  def reversed_response(skip_lines)
     if query then
       open(query) do |f|
+        i = 1
         f.each_line do |l|
-          @response_lines << l.chomp
+          if ! skip_lines[i] then
+            @response_lines << l.chomp
+          end
+          i += 1
         end
       end
     end
     result = []
-    if ! skip_lines[response_lines.count-1] then
-      if @filter_function != nil then
-        result << @filter_function.call(response_lines[-1])
-      else
-        result << response_lines[-1]
-      end
-    end
     if @filter_function != nil then
-      (0 .. response_lines.count - 2).reverse_each do |i|
-        if ! skip_lines[i] then
-          result << @filter_function.call(response_lines[i])
-        end
+      (0 .. response_lines.count - 1).reverse_each do |i|
+        result << @filter_function.call(response_lines[i])
       end
     else
-      (0 .. response_lines.count - 2).reverse_each do |i|
-        if ! skip_lines[i] then
-          result << response_lines[i]
-        end
+      (0 .. response_lines.count - 1).reverse_each do |i|
+        result << response_lines[i]
       end
     end
-    result.join("\n")
+    result
+  end
+
+  # Execute 'query' and output response, reversed, to 'output_file'.
+  # 'skip_lines' specifies which lines to exclude, where skip_lines[1]
+  # indicates the first line of the response.
+  # precondition: query != nil && ! output_file.closed? && ! skip_lines.nil?
+  def output_reversed_response(output_file, skip_lines)
+    output_file.write(reversed_response(skip_lines).join("\n") + "\n")
   end
 
   private

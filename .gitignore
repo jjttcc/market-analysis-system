@@ -11,6 +11,9 @@ Makefile
 *.orig
 *.csv
 *.txt
+*.foo
+*.try*
+*.old
 src/server1/spec/
 src/server1/test/mas.melted
 tags
@@ -33,4 +36,9 @@ hold/
 *tmp
 work/java/
 work/releases/
-scripts
+/scripts/
+/src/scripts/*
+!/src/scripts/external/
+/src/server1/test/test_*
+test*-wk
+test*fails
