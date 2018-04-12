@@ -20,8 +20,23 @@ PATH_SUFFIX = '.us&i=d'
 https://stooq.com/q/d/l/?s=<symbol>.us&i=d
 =end
 
-def url(symbol:, startdate:, enddate:)
-  # (stooq doesn't use dates, apparently, so they are discared here.)
-puts "discarding dates - #{startdate}, #{enddate}"
-  PROTOCOL + '://' + HOST + '/' + PATH_PREFIX + symbol + PATH_SUFFIX
+class RTConfiguration
+
+  attr_reader :filter
+
+  def url(symbol:, startdate:, enddate:)
+    PROTOCOL + '://' + HOST + '/' + PATH_PREFIX + symbol + PATH_SUFFIX
+  end
+
+  def initialize
+    @filter = lambda do |line, lineno|
+      result = ""
+      if lineno >= 10 || line[0] =~ /\d/ then
+        result = line.delete("-\r")
+      else
+        # "exclude" lines starting with a non-number by returning ""
+      end
+      result
+    end
+  end
 end

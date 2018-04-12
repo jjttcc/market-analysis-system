@@ -22,16 +22,21 @@ class URL_Query
       first_line = f.readline
       if first_line && ! skip_lines[current_line_index] then
         if @filter_function != nil then
-          first_line << @filter_function.call(first_line)
+          first_line << @filter_function.call(first_line, current_line_index)
         end
-        output_file.write(first_line)
+        if ! first_line.nil? then
+          output_file.write(first_line)
+        end
       end
       if ! f.eof? then
         current_line_index += 1
         f.each_line do |l|
           if @filter_function != nil then
             if ! skip_lines[current_line_index] then
-              output_file.write(@filter_function.call(l))
+              filtered_line = @filter_function.call(l, current_line_index)
+              if ! filtered_line.empty? then
+                output_file.write(filtered_line)
+              end
             end
           else
             if ! skip_lines[current_line_index] then
@@ -62,9 +67,11 @@ class URL_Query
       end
     end
     result = []
+    current_line_index = 1
     if @filter_function != nil then
       (0 .. response_lines.count - 1).reverse_each do |i|
-        result << @filter_function.call(response_lines[i])
+        result << @filter_function.call(response_lines[i], current_line_index)
+        current_line_index += 1
       end
     else
       (0 .. response_lines.count - 1).reverse_each do |i|

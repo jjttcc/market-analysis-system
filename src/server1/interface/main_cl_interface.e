@@ -430,7 +430,7 @@ feature {NONE} -- Implementation
 			-- selected tradable.
 		local
 			symbol: STRING
-			symbols: LIST [STRING]
+			symbols: DYNAMIC_LIST [STRING]
 			old_tradable: TRADABLE [BASIC_TRADABLE_TUPLE]
 			err: STRING
 		do

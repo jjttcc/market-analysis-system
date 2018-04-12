@@ -122,6 +122,23 @@ feature -- Access
                 equal (Result, fname)
         end
 
+    data_retrieval_script_path: STRING
+        note
+            once_status: global
+        once
+            if app_directory = Void then
+                Result := "." + Directory_separator.out
+            else
+                Result := app_directory + Directory_separator.out
+            end
+            Result := Result + "scripts" + Directory_separator.out +
+                data_retrieval_script_name
+        ensure
+            Result /= Void and not Result.is_empty
+        end
+
+    data_retrieval_script_name: STRING = "retrieve_tradable_data.rb"
+
 feature {NONE} -- Implementation
 
     env_names: APP_ENVIRONMENT_VARIABLE_NAMES

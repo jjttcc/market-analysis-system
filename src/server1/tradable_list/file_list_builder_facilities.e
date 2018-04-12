@@ -20,7 +20,7 @@ deferred class FILE_LIST_BUILDER_FACILITIES inherit
 
 feature -- Initialization
 
-	make (file_names: LIST [STRING]; factory: TRADABLE_FACTORY;
+	make (file_names: DYNAMIC_LIST [STRING]; factory: TRADABLE_FACTORY;
 		daily_ext, intra_ext: STRING)
 			-- Initialize file-name lists and tradable factories.  A separate
 			-- tradable factory for intraday data is used for efficiency.
@@ -51,10 +51,10 @@ feature -- Access
 
 	intraday_list: FILE_TRADABLE_LIST
 
-	daily_file_names: LIST [STRING]
+	daily_file_names: DYNAMIC_LIST [STRING]
 			-- File names for daily data
 
-	intraday_file_names: LIST [STRING]
+	intraday_file_names: DYNAMIC_LIST [STRING]
 			-- File names for intraday data
 
 	intraday_extension: STRING
@@ -92,14 +92,15 @@ feature -- Status report
 
 feature {NONE} -- Implementation
 
-	new_tradable_list (fnames: LIST [STRING]; factory: TRADABLE_FACTORY):
+	new_tradable_list (fnames: DYNAMIC_LIST [STRING];
+				factory: TRADABLE_FACTORY):
 		FILE_TRADABLE_LIST
 			-- A new FILE_TRADABLE_LIST
 		do
 			create Result.make (fnames, factory)
 		end
 
-	make_file_name_lists (file_names: LIST [STRING])
+	make_file_name_lists (file_names: DYNAMIC_LIST [STRING])
 		local
 			l: PART_SORTED_TWO_WAY_LIST [STRING]
 			t: HASH_TABLE [BOOLEAN, STRING]

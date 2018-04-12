@@ -36,7 +36,6 @@ feature {NONE} -- Initialization
 
     initialize
         do
-perform_external_query := true	--!!!!!!!!!
             create parameters.make
             create url.http_make (parameters.host, "")
             if parameters.proxy_used then
@@ -64,9 +63,6 @@ feature {NONE} -- Attributes
     Default_file_extension: STRING = "txt"
             -- Default value for `file_extension'
 
-	-- !!!!suggestion (2018-04-06) - remove:
-    perform_external_query: BOOLEAN
-
 feature {NONE} -- Basic operations
 
     retrieve_data
@@ -93,12 +89,7 @@ feature {NONE} -- Basic operations
                 print ("url.path: " + url.path + "%N")
                 print ("url.address: " + url.address + "%N")
             end
-            if perform_external_query then
-				-- !!!!suggestion (2018-04-06) - remove:
-                perform_external_http_retrieval
-            else
-                perform_http_retrieval
-            end
+			perform_http_retrieval
         ensure
             output_file_exists_if_successful: not retrieval_failed and
                 converted_result /= Void and then
@@ -202,7 +193,7 @@ feature {NONE} -- Status report
                 output_file_path, ".%N">>)
         end
 
-    symbols_from_file: LIST [STRING]
+    symbols_from_file: DYNAMIC_LIST [STRING]
             -- List of symbols read from the specified input file.
         require
             parameters_exist: parameters /= Void
@@ -348,36 +339,12 @@ feature {NONE} -- Hook routines
 
 feature {NONE} -- Implementation
 
-    external_webrequest(path: STRING): STRING
-        local
-            cmd: POSIX_EXEC_PROCESS
-        do
-            create cmd.make_capture_output("/tmp/getdata.rb", <<path>>)
-            cmd.execute
-            create Result.make(512)
-            from
-                cmd.stdout.read_string (512)
-            until
-                cmd.stdout.end_of_input
-            loop
-                Result.append(cmd.stdout.last_string)
-                cmd.stdout.read_string (512)
-            end
-            -- close captured io
-            cmd.stdout.close
-            -- wait for process
-            cmd.wait_for (True)
-        end
-
     perform_http_retrieval
         local
             result_string: STRING
             ex: expanded EXCEPTION_SERVICES
         do
             if not http_request.error then
-print ("http_request.addr: host/path: '" + http_request.address.host + "/" +
-http_request.address.path + "'%N")
-print ("http_request.address: '" + http_request.address.out + "'%N")
                 http_request.open
                 if not http_request.error then
                     create result_string.make (0)
@@ -390,7 +357,6 @@ print ("http_request.address: '" + http_request.address.out + "'%N")
                         http_request.read
                         result_string.append_string (http_request.last_packet)
                     end
-print ("result_string: '" + result_string + "%N")
                     if http_request.error then
                         print ("Error occurred initiating transfer: " +
                             http_request.error_text (http_request.error_code) +
@@ -425,41 +391,6 @@ print ("result_string: '" + result_string + "%N")
                 ex.last_exception_status.set_description (
                     http_request.error_text (http_request.error_code))
             end
-        end
-
-	-- !!!!!!suggestion (2018-04-06) - remove this and external_webrequest
-	-- !!!!!!(replaced by similar algorithm in FILE_TRADABLE_LIST)
-    perform_external_http_retrieval
-            -- Replacement for `perform_http_retrieval' that uses an external
-            -- program (implemented in `external_webrequest') to query the
-            -- historical data server instead of using the Eiffel
-            -- network/http library classes.
-            -- NOTE: This implementation has been tested in the sense of
-            -- changing the code to call this procedure instead of
-            -- `perform_http_retrieval' and getting the expected results
-            -- during a test run, but it is not finished. Completing the
-            -- implementation would require some refactoring (possible
-            -- example: Putting this routine and `external_webrequest' into a
-            -- descendant class that is instantiated instead of
-            -- HTTP_DATA_RETRIEVAL) and small changes to other classes to
-            -- implement a user-specified invocation of this alternate data-
-            -- retrieval mechanism instead of the Eiffel-based one.
-        local
-            result_string, http_address: STRING
-            ex: expanded EXCEPTION_SERVICES
-        do
-			http_address := "https://" + parameters.host + "/" +
-				parameters.path
-            create result_string.make_empty
-            result_string.append_string(external_webrequest(http_address))
-            convert_and_save_result (result_string)
-            add_timing_data ("Retrieving data for " + parameters.symbol)
-        ensure
-            output_file_exists_if_successful: not retrieval_failed and
-                converted_result /= Void and then
-                not converted_result.is_empty implies output_file_exists
-        rescue
-            -- !!!Deal with exception from external_webrequest
         end
 
     set_proxy

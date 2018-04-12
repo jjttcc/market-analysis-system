@@ -109,10 +109,10 @@ feature -- Access -- settings
 	daily_extension: STRING
 			-- File-name extension for daily data
 
-	file_names: LIST [STRING]
+	file_names: DYNAMIC_LIST [STRING]
 			-- Market data input file names
 
-	symbol_list: LIST [STRING]
+	symbol_list: DYNAMIC_LIST [STRING]
 			-- Market data input symbols
 		do
 			if symbol_list_implementation = Void and use_db then
@@ -657,7 +657,7 @@ feature {NONE} -- Implementation queries
 
 	non_std_period_types_option: STRING = "nonstd"
 
-	symbol_list_implementation: LIST [STRING]
+	symbol_list_implementation: DYNAMIC_LIST [STRING]
 
 	main_setup_procedures: LINKED_LIST [PROCEDURE [ANY, TUPLE []]]
 			-- List of the set_... procedures that are called

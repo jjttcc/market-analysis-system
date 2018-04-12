@@ -1,4 +1,13 @@
 #!/usr/bin/env ruby
+#!!!!To-do: If the target file exists (<symbol>.txt), check if its first
+# and/or last dates do not cover the entire requested date range and, if
+# that's the case, grab the data and fill in only the missing
+# dates/records.
+#!!!!Possible enhancement: Check for file: <symbol>.txt.gz (after checking
+# for <symbol>.txt and not finding it) and uncompress it; then proceed as
+# usual.  As well, provide a "compress" command (perhaps this file with a
+# different name) to be called by the server when it's OK to compress the
+# file.
 
 require_relative 'url_query'
 require_relative 'retrieve_tradable_config'
@@ -8,22 +17,19 @@ def usage
 end
 
 def abort(msg)
-  puts msg
+  $stderr.puts msg
   usage
   exit 42
 end
 
 def valid_date(d)
-$stderr.puts "vd - d: #{d}"
   d =~ /\d+/ || d =~ /now/
 end
 
 def retrieve(symbol, startdate, enddate)
-  url = url(symbol: symbol, startdate: startdate, enddate: enddate)
-  puts "URL: #{url}"
-  #(!!!lambda { ...} should probably be defined in retrieve_tradable_config!!!)
-  q = URL_Query.new(url, lambda {|line| line.delete("-\r")})
-  p "q: #{q}"
+  config = RTConfiguration.new
+  url = config.url(symbol: symbol, startdate: startdate, enddate: enddate)
+  q = URL_Query.new(url, config.filter)
   filename = "#{symbol}.txt"
   myfancy_file = File.open(filename, "w")
   q.output_response(myfancy_file, {1 => true})
@@ -32,7 +38,6 @@ end
 symbols = []
 i = 0
 while i < ARGV.count do
-  puts "arg #{i}: #{ARGV[i]}"
   case ARGV[i]
   when /^-s/ then
     i += 1
@@ -56,8 +61,6 @@ while i < ARGV.count do
   i += 1
 end
 #!!!!!!!!!!!to-do: Convert "now" to the current date!!!!!!!!
-puts "symbols: #{symbols}"
-puts "startdate, enddate: #{startdate}, #{enddate}"
 symbols.each do |s|
   retrieve(s, startdate, enddate)
 end

@@ -75,7 +75,7 @@ feature -- Basic operations
 
 feature {NONE} -- Implementation
 
-	list_from_query (q: STRING): LIST [STRING]
+	list_from_query (q: STRING): DYNAMIC_LIST [STRING]
 			-- List of STRING from query `q' with 1-column result
 		do
 		end

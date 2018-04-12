@@ -102,7 +102,7 @@ feature -- Access
             end
         end
 
-    symbols: LIST [STRING]
+    symbols: DYNAMIC_LIST [STRING]
         do
             reset_error_state
             if daily_tradable_list /= Void then
@@ -199,6 +199,14 @@ feature -- Access
 
 feature -- Status report
 
+    expandable: BOOLEAN
+        do
+            Result := (daily_tradable_list /= Void implies
+                        daily_tradable_list.expandable) and
+                (intraday_tradable_list /= Void implies
+                        intraday_tradable_list.expandable)
+        end
+
     after: BOOLEAN
         do
             Result := symbol_list = Void or else symbol_list.after
@@ -285,6 +293,24 @@ feature -- Basic operations
             end
         end
 
+    attempt_to_add (symbol: STRING; t: TIME_PERIOD_TYPE)
+        local
+            exceptions: expanded EXCEPTIONS
+        do
+            if daily_tradable_list /= Void then
+                daily_tradable_list.add_tradable_for(symbol, t)
+                if daily_tradable_list.fatal_error then
+                    exceptions.raise("Attempt to add " + symbol + " failed.")
+                end
+            end
+            if intraday_tradable_list /= Void then
+                intraday_tradable_list.add_tradable_for(symbol, t)
+                if intraday_tradable_list.fatal_error then
+                    exceptions.raise("Attempt to add " + symbol + " failed.")
+                end
+            end
+        end
+
 feature {NONE} -- Implementation
 
     daily_tradable_list: TRADABLE_LIST
@@ -293,7 +319,7 @@ feature {NONE} -- Implementation
     intraday_tradable_list: TRADABLE_LIST
             -- Tradables whose base data period-type is intraday
 
-    symbol_list: LIST [STRING]
+    symbol_list: DYNAMIC_LIST [STRING]
             -- List of all tradable symbols - used for iteration
 
     standard_period_types: LINKED_LIST [TIME_PERIOD_TYPE]

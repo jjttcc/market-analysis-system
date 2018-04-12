@@ -24,7 +24,7 @@ feature {NONE} -- Basic operations
 	do_execute (message: ANY)
 		local
 			msg: STRING
-			symbols: LIST [STRING]
+			symbols: DYNAMIC_LIST [STRING]
 		do
 			msg := message.out
 			put_ok

@@ -6,12 +6,14 @@ note
     revision: "$Revision$"
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
+    --settings: vim: expandtab:
 
 deferred class FILE_BASED_TRADABLE_LIST inherit
 
     INPUT_MEDIUM_BASED_TRADABLE_LIST
         redefine
-            start, forth, finish, back, remove_current_item, input_medium
+            start, forth, finish, back, remove_current_item, input_medium,
+            expandable
         end
 
     TIMING_SERVICES
@@ -21,9 +23,16 @@ deferred class FILE_BASED_TRADABLE_LIST inherit
 
 feature -- Access
 
-    file_names: LIST [STRING]
+    file_names: DYNAMIC_LIST [STRING]
             -- Names of all files with tradable data to be processed
         deferred
+        end
+
+feature -- Status report
+
+    expandable: BOOLEAN
+        do
+            Result := external_data_service_active
         end
 
     external_data_service_active: BOOLEAN
@@ -70,13 +79,15 @@ feature {NONE} -- Implementation
     initialize_input_medium
         local
             file: INPUT_FILE
+            symbol: STRING
         do
             create {OPTIMIZED_INPUT_FILE} file.make (file_names.item)
             input_medium := file
             if file.exists then
                 file.open_read
             elseif external_data_service_active then
-                retrieve_tradable_data(symbol_from_file_name(file.name))
+                symbol := symbol_from_file_name(file.name)
+                retrieve_tradable_data(symbol)
                 if not fatal_error then
                     -- Now that the file actually exists, "remake" and open it:
                     create {OPTIMIZED_INPUT_FILE} file.make (file_names.item)
@@ -84,11 +95,13 @@ feature {NONE} -- Implementation
                     if file.exists then
                         file.open_read
                     else
-                        --!!!!!To-do: Log unlikely error!!!
+                        log_errors(<<"Failed to create file for ",
+                            symbol, " - file: ", file_names.item>>)
+                        fatal_error := True
                     end
                 end
             else
-                log_errors (<<"Failed to open input file ",
+                log_errors(<<"Failed to open input file ",
                     file_names.item, " - file does not exist.%N">>)
                 fatal_error := True
             end

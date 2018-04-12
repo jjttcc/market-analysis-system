@@ -70,7 +70,7 @@ feature {NONE} -- Implementation
 
     report_server_error
         do
-            report_error (warning_string, <<"Server error: ",
+            report_error(warning_string, <<"Server error: ",
                 tradables.last_error>>)
         end
 
@@ -89,24 +89,41 @@ feature {NONE} -- Implementation
             -- of `symbol' or `period_type' is not valid.
         require
             not_void: symbol /= Void and period_type /= Void
+        local
+            add_attempt_failed: BOOLEAN
         do
-            Result := session.last_tradable
-            if
-                ignore_tradable_cache or else Result = Void or
-                (not (Result.symbol.is_equal (symbol) and
-                Result.period_types.has (period_type.name)))
-            then
+            if add_attempt_failed then
                 Result := Void
-                if tradables.valid_period_type (symbol, period_type) then
-                    Result := tradables.tradable (symbol, period_type,
-                        update_retrieved_tradable)
+                session.set_last_tradable(Result)
+            else
+                Result := session.last_tradable
+                if
+                    ignore_tradable_cache or else Result = Void or
+                    (not (Result.symbol.is_equal (symbol) and
+                    Result.period_types.has (period_type.name)))
+                then
+                    Result := Void
+                    if tradables.valid_period_type(symbol, period_type) then
+                        Result := tradables.tradable(symbol, period_type,
+                            update_retrieved_tradable)
+                    elseif not tradables.symbols.has(symbol) then
+                        -- symbol is not in the "list" - try to add it.
+                        tradables.attempt_to_add(symbol, period_type)
+                        Result := tradables.tradable(symbol, period_type,
+                            update_retrieved_tradable)
+                    end
+                    session.set_last_tradable(Result)
                 end
-                session.set_last_tradable (Result)
             end
         ensure
             last_tradable_set: session.last_tradable = Result
             matches_period_type: Result /= Void implies
-                Result.period_types.has (period_type.name)
+                Result.period_types.has(period_type.name)
+        rescue
+            -- tradable.attempt_to_add failed - not-found response will be
+            -- sent.
+            add_attempt_failed := True
+            retry
         end
 
 invariant

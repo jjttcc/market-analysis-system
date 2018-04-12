@@ -94,7 +94,7 @@ feature -- Access
 	symbol: STRING
 			-- Current symbol for which data is to be obtained
 
-	symbols: LIST [STRING]
+	symbols: DYNAMIC_LIST [STRING]
 			-- The symbol of each tradable available to this input sequence
 
 	intraday_data_available: BOOLEAN

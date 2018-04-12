@@ -83,7 +83,7 @@ feature -- Access
             not_void_if_no_error: not error_occurred implies Result /= Void
         end
 
-    symbols: LIST [STRING]
+    symbols: DYNAMIC_LIST [STRING]
             -- The symbol of each tradable
         deferred
         ensure
@@ -159,6 +159,11 @@ feature -- Access
             -- Description of last error
 
 feature -- Status report
+
+    expandable: BOOLEAN
+            -- Can new "tradable"s be added to the list of available tradables?
+        deferred
+        end
 
     error_occurred: BOOLEAN
             -- Did an error occur during the last operation?
@@ -270,6 +275,16 @@ feature -- Basic operations
         deferred
         ensure
             caching_on: caching_on
+        end
+
+    attempt_to_add (symbol: STRING; t: TIME_PERIOD_TYPE)
+            -- Attempt to add a new tradable for `symbol' to the list of
+            -- tradables.  Raise an exception if the attempt fails.
+        require
+            args_exist: symbol /= Void and t /= Void
+            expandable: expandable
+            symbol_not_known: not symbols.has(symbol)
+        deferred
         end
 
 invariant

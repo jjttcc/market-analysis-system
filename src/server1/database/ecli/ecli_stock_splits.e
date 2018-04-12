@@ -37,6 +37,10 @@ creation
 
 	make
 
+feature -- Access
+
+    record_error_limit: INTEGER = 0
+
 feature {NONE} -- Initialization
 
 	make (statement: ECLI_STATEMENT)

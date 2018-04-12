@@ -52,6 +52,8 @@ feature -- Access
 
 	product_count: INTEGER do Result := product.count end
 
+    record_error_limit: INTEGER = 100
+
 feature {FACTORY} -- Status setting
 
 	set_product (arg: like product)

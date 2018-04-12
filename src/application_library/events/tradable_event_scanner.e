@@ -54,6 +54,8 @@ feature -- Access
 
 	product_count: INTEGER do Result := product.count end
 
+    record_error_limit: INTEGER = 0
+
 feature {NONE} -- Hook method implementations
 
 	create_product

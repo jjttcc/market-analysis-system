@@ -22,7 +22,7 @@ deferred class MAS_DB_SERVICES inherit
 feature -- Access
 
 
-	stock_symbols: LIST [STRING]
+	stock_symbols: DYNAMIC_LIST [STRING]
 			-- All stock symbols available in the database
 		require
 			connected: connected
@@ -36,7 +36,7 @@ feature -- Access
 			still_connected: connected
 		end
 
-	derivative_symbols: LIST [STRING]
+	derivative_symbols: DYNAMIC_LIST [STRING]
 			-- All derivative-instrument symbols available in the database
 		require
 			connected: connected
@@ -232,7 +232,7 @@ feature -- Access
 	is_stock_symbol (s: STRING): BOOLEAN
 			-- Is `s' a symbol for a stock?
 		local
-			symbols: LIST [STRING]
+			symbols: DYNAMIC_LIST [STRING]
 		do
 			if stock_symbol_table = Void then
 				symbols := stock_symbols
@@ -259,7 +259,7 @@ feature -- Access
 	is_derivative_symbol (s: STRING): BOOLEAN
 			-- Is `s' a symbol for a derivative instrument?
 		local
-			symbols: LIST [STRING]
+			symbols: DYNAMIC_LIST [STRING]
 		do
 			if derivative_symbol_table = Void then
 				symbols := derivative_symbols
@@ -479,7 +479,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	list_from_query (q: STRING): LIST [STRING]
+	list_from_query (q: STRING): DYNAMIC_LIST [STRING]
 			-- List of STRING from query `q' with 1-column result
 		require
 			not_void: q /= Void

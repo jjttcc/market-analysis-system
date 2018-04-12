@@ -39,6 +39,10 @@ creation
 
 	make
 
+feature -- Access
+
+    record_error_limit: INTEGER = 0
+
 feature {NONE} -- Initialization
 
 	make (field_sep, record_sep, input_file_name: STRING)

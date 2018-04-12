@@ -19,7 +19,7 @@ creation
 
 feature -- Initialization
 
-	make (symbols: LIST [STRING]; factory: TRADABLE_FACTORY)
+	make (symbols: DYNAMIC_LIST [STRING]; factory: TRADABLE_FACTORY)
 			-- Initialize symbol_list and tradable factories.  A separate
 			-- tradable factory for intraday data is used for efficiency.
 		require
@@ -41,7 +41,7 @@ feature -- Access
 
 	intraday_list: DB_TRADABLE_LIST
 
-	symbol_list: LIST [STRING]
+	symbol_list: DYNAMIC_LIST [STRING]
 
 feature -- Basic operations
 

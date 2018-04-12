@@ -128,7 +128,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-    input_entity_names: LIST [STRING]
+    input_entity_names: DYNAMIC_LIST [STRING]
 
 invariant
 

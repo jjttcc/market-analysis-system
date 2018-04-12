@@ -283,7 +283,7 @@ feature {NONE} -- Implementation - string constants
 
     symbol_not_found_prefix: STRING = "Symbol "
 
-    symbol_not_found_suffix: STRING = " not in database."
+    symbol_not_found_suffix: STRING = " not found."
 
     invalid_period_type_prefix: STRING = "Invalid period type: "
 

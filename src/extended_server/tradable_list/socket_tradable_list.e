@@ -24,7 +24,7 @@ create
 
 feature {SOCKET_LIST_BUILDER} -- Initialization
 
-	make (the_symbols: LIST [STRING]; factory: TRADABLE_FACTORY;
+	make (the_symbols: DYNAMIC_LIST [STRING]; factory: TRADABLE_FACTORY;
 			conn: INPUT_DATA_CONNECTION)
 		do
 			parent_make (the_symbols, factory)

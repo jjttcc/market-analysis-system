@@ -5,6 +5,7 @@ note
 	revision: "$Revision$"
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
+    -- vim: expandtab
 
 class MAS_COMMAND_LINE_UTILITIES inherit
 
@@ -132,6 +133,10 @@ feature {NONE} -- Implementation - Access
 
 	output_time_field_separator: STRING = ":"
 
+feature {NONE} -- Status report
+
+	lax_security: BOOLEAN
+
 feature {NONE} -- Implementation - utility routines
 
 	execute_shell_command
@@ -142,11 +147,16 @@ feature {NONE} -- Implementation - utility routines
 		local
 			cmd: STRING
 		do
-			if is_console then
+			if lax_security or is_console then
 				if last_string = Void then
 					cmd := ""
 				elseif last_string.count > 0 and last_string @ 1 = '!' then
-					cmd := last_string.substring (2, last_string.count)
+					if not is_console and last_string.count = 1 then
+						print ("shell cannot be invoked via network " +
+							"connection.%N")
+					else
+						cmd := last_string.substring (2, last_string.count)
+					end
 				else
 					cmd := last_string.twin
 				end
@@ -156,7 +166,9 @@ feature {NONE} -- Implementation - utility routines
 				if cmd.is_empty then
 					print ("Type exit to return to main program.%N")
 				end
-				system (cmd)
+				if cmd /= Void then
+					system (cmd)
+				end
 			else
 				print ("Invalid selection%N")
 			end

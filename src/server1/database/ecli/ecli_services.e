@@ -269,7 +269,7 @@ feature {NONE} -- Implementation
 			end
 		end
 
-	list_from_query (q: STRING): LIST [STRING]
+	list_from_query (q: STRING): DYNAMIC_LIST [STRING]
 		local
 			stmt: ECLI_STATEMENT
 			ecli_string: ECLI_VARCHAR

@@ -52,7 +52,7 @@ feature -- Initialization
 		require
 			valid_factory: factory /= Void
 		local
-			l: LIST [STRING]
+			l: DYNAMIC_LIST [STRING]
 		do
 			http_initialize
 			if file_ext /= Void then file_extension := file_ext end
@@ -72,7 +72,7 @@ feature -- Initialization
 
 feature -- Access
 
-	file_names: LIST [STRING]
+	file_names: DYNAMIC_LIST [STRING]
 			-- Names of all files with tradable data to be processed
 
 	external_data_service_active: BOOLEAN = False
@@ -99,7 +99,7 @@ feature {NONE} -- Implementation
 			good_if_no_error: not fatal_error implies target_tradable /= Void
 		end
 
-	file_names_from_symbols: LIST [STRING]
+	file_names_from_symbols: DYNAMIC_LIST [STRING]
 		require
 			symbols_set: symbols /= Void
 		do

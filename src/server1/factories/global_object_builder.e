@@ -195,7 +195,7 @@ feature {NONE} -- Administrative
 			end
 		end
 
-	remove_functions (fnames: LIST [STRING])
+	remove_functions (fnames: DYNAMIC_LIST [STRING])
 			-- Delete all functions from the persistent `function_library'
 			-- whose name matches an element of `fnames'
 		local
