@@ -29,10 +29,13 @@ end
 def retrieve(symbol, startdate, enddate)
   config = RTConfiguration.new
   url = config.url(symbol: symbol, startdate: startdate, enddate: enddate)
-  q = URL_Query.new(url, config.filter)
+  q = URL_Query.new(url, config.bad_data_expr, config.filter)
   filename = "#{symbol}.txt"
   myfancy_file = File.open(filename, "w")
   q.output_response(myfancy_file, {1 => true})
+  if q.fatal_error then
+    raise q.error_message
+  end
 end
 
 symbols = []
@@ -61,6 +64,16 @@ while i < ARGV.count do
   i += 1
 end
 #!!!!!!!!!!!to-do: Convert "now" to the current date!!!!!!!!
+failed = false
 symbols.each do |s|
-  retrieve(s, startdate, enddate)
+  begin
+    retrieve(s, startdate, enddate)
+  rescue Exception => e
+    failed = true
+  end
+end
+if failed then
+  exit 1
+else
+  exit 0
 end
