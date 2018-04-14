@@ -32,7 +32,7 @@ feature -- Access
         local
             s: STRING
         once
-            Result := <<"1", "8", "5" + "[es17.01">>
+            Result := <<"1", "8", "6" + "[es17.01">>
             s := Result @ Result.upper
             debug ("multi_threaded_version")
                 s.append ("MT")
@@ -49,7 +49,7 @@ feature -- Access
         note
             once_status: global
         once
-            create Result.make(2017, 11, 1)
+            create Result.make(2018, 4, 14)
         end
 
     release_description: STRING
@@ -64,7 +64,7 @@ feature -- Access
         note
             once_status: global
         once
-            Result := "Copyright 1998 - 2017: Jim Cochrane"
+            Result := "Copyright 1998 - 2018: Jim Cochrane"
         end
 
     license_information: STRING
@@ -81,7 +81,7 @@ feature {NONE} -- Implementation
         once
             Result :=
             -- start: compile-time
-                "2018-04-12 02:59:03"
+                "2018-04-14 00:09:02"
             -- end: compile-time
         end
 

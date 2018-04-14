@@ -34,6 +34,8 @@ def retrieve(symbol, startdate, enddate)
   myfancy_file = File.open(filename, "w")
   q.output_response(myfancy_file, {1 => true})
   if q.fatal_error then
+    myfancy_file.close
+    File.unlink(filename)
     raise q.error_message
   end
 end
