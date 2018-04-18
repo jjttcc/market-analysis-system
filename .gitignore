@@ -42,3 +42,4 @@ work/releases/
 /src/server1/test/test_*
 test*-wk
 test*fails
+save/
