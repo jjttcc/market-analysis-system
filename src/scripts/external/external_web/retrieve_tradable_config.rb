@@ -18,7 +18,7 @@ class RTConfiguration
   end
 
   def initialize
-    @bad_data_expr = Regexp.new("No\s*data")
+    @bad_data_expr = Regexp.new("No\s*data|.*Exceeded.*limit.*")
     @filter = lambda do |line, lineno|
       result = ""
       if lineno >= 10 || line[0] =~ /\d/ then
