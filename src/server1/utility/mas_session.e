@@ -49,8 +49,6 @@ feature -- Access
             processor_valid: p /= Void
         local
             parameters: LIST [FUNCTION_PARAMETER]
-            sorter: expanded GENERIC_SORTING [SESSION_FUNCTION_PARAMETER,
-                STRING]
         do
             Result := processor_to_parameters_map[p.name]
             if Result = Void then
@@ -59,11 +57,10 @@ feature -- Access
                     parameters.count)
                 across parameters as pcursor loop
                     Result.extend(create {SESSION_FUNCTION_PARAMETER}.make(
-                        pcursor.item, p))
+                        pcursor.item))
                 end
                 processor_to_parameters_map.force(Result, p.name)
             end
-            Result := sorter.sorted_list(Result)
         ensure
             result_exists: Result /= Void
             result_mapped: processor_to_parameters_map[p.name] = Result

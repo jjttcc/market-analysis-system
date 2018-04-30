@@ -1,5 +1,0 @@
-lud=/home3/development/jtc/git_to_svn_conversion/finance/doc/applications
-
-lu() {
-    cd $lud >/dev/null && ./lookup $@ 2>/tmp/luerr && cd - >/dev/null
-}

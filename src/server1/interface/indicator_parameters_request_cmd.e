@@ -30,10 +30,10 @@ feature {NONE}
 
     retrieve_parameters
         local
-            indicator: TRADABLE_FUNCTION
+            i: TRADABLE_FUNCTION
         do
-            indicator := tradables.indicator_with_name(tradable_processor_name)
-            parameters := session.parameters_for_processor(indicator)
+            i := tradables.indicator_with_name(tradable_processor_name)
+            parameters := session.parameters_for_processor(i)
         end
 
     iteration: INTEGER

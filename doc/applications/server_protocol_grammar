@@ -9,8 +9,8 @@ client_data_req -> mkt_data_req | ind_data_req | symbol_list_req |
                      ind_list_req | trad_pertyp_req | change_session_req |
                      event_data_req | event_list_req | logout_req |
                      all_ind_req | param_req | param_set_req |
-                     time_delimited_mkt_data_req |
-                     time_delimited_ind_data_req | object_info_req
+                     time_delimited_mkt_data_req | time_delimited_ind_data_req |
+                     object_info_req
 compress_flag   -> "<@z@>"
 mkt_data_req    -> mkt_symbol mfs trad_per_type
 event_data_req  -> mkt_symbol mfs start_date mfs end_date mfs event_id_list
@@ -138,9 +138,9 @@ trad_pertyp_req:    Request for all trading-period types available for the
 all_ind_req:        Request for all indicators known to the server
 
 param_req:          Request for a list of changeable parameters for the
-                    indicator with the specified name (The name is a
-                    unique key - one of the "ind_name"s returned in
-                    response to an 'all_ind_req'.)
+                    indicator with the specified name (The name is a unique
+                    key - one of the "ind_name"s returned in response to
+                    an 'all_ind_req'.)
 
 param_set_req:      Request to change the settings for the specified
                     parameter with the specified period type ("all" to
@@ -149,9 +149,8 @@ param_set_req:      Request to change the settings for the specified
 
 change_session_req: Not used - May become obsolete.
 
-event_list_req:     Request for all event types available for the
-                    specified trading-period type of the specified
-                    tradable
+event_list_req:     Request for all event types available for the specified
+                    trading-period type of the specified tradable
 
 event_data_req:     Request for the data resulting from the analysis of
                     the specified event types applied to the specified
@@ -184,26 +183,17 @@ Notes:
 See shared_protocol_grammar for the definition of components not
 defined in this file.
 
-The construct "symbol1<>symbol2" means that there is no white space
-separating symbol1 and symbol2.
+The construct "symbol1<>symbol2" means that there is no white space separating
+symbol1 and symbol2.
 
-param_list (response to param_req), which is a multi-line response
-(one line per parameter), is sorted on the parameter name (which will
-be unique).  In other words, it's as if the UNIX command
-"sort -t '<tab>' -k 1" (where <tab> is a tab character) is run on the
-response before it is sent to the client.  The client must keep track
-of this order and number each line/parameter, since this sequence
-(line) number will be the index (param_id) of the parameter required
-in the param_set_req (parameter set/change request) from the client.
+The optional token compress_flag specifies that the data sent by the server
+in response to this particular request is to be compressed with the zlib
+compression library.
 
-The optional token compress_flag specifies that the data sent by the
-server in response to this particular request is to be compressed with
-the zlib compression library.
-
-open_int_flag indicates that the data sent by the server in response
-to a mkt_data_req includes an open-interest field. If this string does
-not occur at the beginning of the data sent by the server (mkt_data),
-this means there is no open-interest field.
+open_int_flag indicates that the data sent by the server in response to
+a mkt_data_req includes an open-interest field.  If this string does not
+occur at the beginning of the data sent by the server (mkt_data), this
+means there is no open-interest field.
 
 All tokens are constructed from a stream of ASCII characters.
 
@@ -211,28 +201,27 @@ Date components must follow the usual rules for dates.
 
 end_of_message is the Control-G (bell) character.
 
-symbol_list_req is null because the msgID alone gives enough
-information with respect to this request.
+symbol_list_req is null because the msgID alone gives enough information
+with respect to this request.
 
-msgID is an integer identifying the type of message. For the server,
-the types of messages are those containing data in response to a
-client request (srvr_data) and those containing error message
-information (error_msg). See "Client-Request Definitions:", above for
-a description of the different types of client requests.
+msgID is an integer identifying the type of message.  For the server,
+the types of messages are those containing data in response to a client
+request (srvr_data) and those containing error message information
+(error_msg).  See "Client-Request Definitions:", above for a description
+of the different types of client requests.
 
-A client market data request always includes the symbol for the
-desired market and the desired trading period type. A client indicator
-data request always includes the indicator ID, the symbol for the
-desired market, and the desired trading period type.
+A client market data request always includes the symbol for the desired
+market and the desired trading period type.  A client indicator data request
+always includes the indicator ID, the symbol for the desired market, and the
+desired trading period type.
 
 The alternatives in the event_type specification specify the following:
 "b": buy signal; "s": sell signal; "n": neutral signal; "o": other
 
-When a client first connects with a server, the server will not send
-anything until it receives a request from the client. Usually this
-will be a symbol_list_req, followed by a ind_list_req; but if the
-client is a new window (possibly in a new thread) in an existing
-process, it may already have a copy of the list of markets and of the
-list of indicators.
+When a client first connects with a server, the server will not send anything
+until it receives a request from the client.  Usually this will be a
+symbol_list_req, followed by a ind_list_req; but if the client is a new window
+(possibly in a new thread) in an existing process, it may already have a copy
+of the list of markets and of the list of indicators.
 
 # vim: expandtab

@@ -38,16 +38,6 @@ feature -- Access
             not_void: Result /= Void
         end
 
-    position_of_parameter (p: FUNCTION_PARAMETER): INTEGER
-            -- Position of `p' in `parameters'
-        local
-            params: LIST [FUNCTION_PARAMETER]
-        do
-            params := parameters
-            params.compare_objects
-            Result := params.index_of(p, 1)
-        end
-
 feature -- Status report
 
     parameter_unames_unique: BOOLEAN
