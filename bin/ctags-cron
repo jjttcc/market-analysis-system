@@ -1,22 +1,46 @@
 #!/bin/bash
+# settings: vim: expandtab
 
-seconds=60
+progname=$(basename $0)
+seconds=22
 if [ $# -gt 0 -a "$1" -gt 0 ] 2>/dev/null; then
     seconds=$1
 fi
 
-run_ctags() {
-  if [ ! -e ./tags ]; then
-    x=notags
-  else
-    x=$(find . -name '*.e' -newer tags)
-  fi
-  if [ "$x" ]; then
-    ctags -R .
-  fi
+source_files() {
+    find ./src ./src/eiffel_library/ -name '*.e'
 }
 
+run_ctags() {
+    files=$(source_files)
+    if [ -z "$files" ]; then return; fi
+    if [ ! -e ./tags ]; then
+        x=notags
+    else
+        x=$(find $files -newer tags)
+    fi
+    if [ "$x" ]; then
+        if ctags -o ntags $files; then
+            mv ./ntags ./tags
+        else
+            echo "[$progname] ctags failed" >&2
+        fi
+    fi
+}
+
+if [ -z "$LIMIT" ]; then
+    :
+elif [ "$LIMIT" -lt 0 ]; then
+    LIMIT=
+fi
+i=1
 while :; do
-  run_ctags
-  sleep $seconds
+    run_ctags
+    if [ -z "$LIMIT" ]; then
+        :
+    elif [ $i -ge "$LIMIT" ]; then
+        break
+    fi
+    sleep $seconds
+    ((++i))
 done

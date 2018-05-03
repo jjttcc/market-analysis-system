@@ -21,13 +21,12 @@ src/clients/ruby/
 doc/applications/lookup.pl
 *_hide*/
 hide_*/
-curfiles
 curdirs
 mas_httprc
-m*files
 mk2*
 current-*
 *-files*
+[a-z]*files*
 *remove
 *.ecf.*
 src/server1/test/artifacts/
@@ -42,3 +41,4 @@ work/releases/
 /src/server1/test/test_*
 test*-wk
 test*fails
+save/

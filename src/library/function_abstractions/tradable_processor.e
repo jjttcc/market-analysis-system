@@ -12,6 +12,9 @@ note
 deferred class TRADABLE_PROCESSOR inherit
 
     TREE_NODE
+        redefine
+            direct_components
+        end
 
 feature -- Access
 
@@ -36,6 +39,13 @@ feature -- Access
         deferred
         ensure
             not_void: Result /= Void
+        end
+
+    direct_components: CHAIN [ANY]
+        do
+            create {LINKED_LIST [ANY]} Result.make
+            Result.append(functions)
+            Result.append(operators)
         end
 
 feature -- Status report
@@ -68,6 +78,13 @@ feature -- Status setting
 			-- otherwise, do nothing.
         do
 			-- [Redefine if needed]
+        end
+
+feature -- Element change
+
+    append_to_name (suffix, separator: STRING)
+        do
+            --!!!!!!!!!!!!<To-Be-Defined>
         end
 
 invariant
