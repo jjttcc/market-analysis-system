@@ -9,9 +9,13 @@ note
     -- vim: expandtab
 
 class MODIFY_INDICATOR_PARAMETERS_REQUEST_CMD inherit
+
     PARAMETER_BASED_REQUEST_CMD
+        rename
+            tradable_processor as indicator,
+            set_tradable_processor as set_indicator
         redefine
-            modify_parameters
+            modify_parameters, indicator
         end
 
 
@@ -31,16 +35,28 @@ feature {NONE} -- Implementation
 
     modify_parameters: BOOLEAN = True
 
+feature {NONE} -- Hook method implementations
+
+    object_type: STRING
+        do
+            Result := "indicator"
+        end
+
 feature {NONE}
 
-    retrieve_parameters
-        local
-            ind: TRADABLE_FUNCTION
+    set_indicator
         do
-            ind := tradables.indicator_with_name(tradable_processor_name)
-            parameters := session.parameters_for_processor(ind)
+            indicator := tradables.indicator_with_name(
+                tradable_processor_name)
+        end
+
+    retrieve_parameters
+        do
+            parameters := session.parameters_for_processor(indicator)
         end
 
     name: STRING = "Indicator parameters set request"
+
+    indicator: TRADABLE_FUNCTION
 
 end

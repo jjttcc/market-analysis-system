@@ -9,9 +9,13 @@ note
     -- vim: expandtab
 
 class MODIFY_EVENT_GENERATOR_PARAMETERS_REQUEST_CMD inherit
+
     PARAMETER_BASED_REQUEST_CMD
+        rename
+            tradable_processor as event_generator,
+            set_tradable_processor as set_event_generator
         redefine
-            modify_parameters
+            modify_parameters, event_generator
         end
 
     GLOBAL_APPLICATION
@@ -35,16 +39,28 @@ feature {NONE} -- Implementation
 
     modify_parameters: BOOLEAN = True
 
+feature {NONE} -- Hook method implementations
+
+    object_type: STRING
+        do
+            Result := "event generator"
+        end
+
 feature {NONE}
 
-    retrieve_parameters
-        local
-            meg: TRADABLE_EVENT_GENERATOR
+    set_event_generator
         do
-            meg := event_generator_with_name(tradable_processor_name)
-            parameters := session.parameters_for_processor(meg)
+            event_generator := event_generator_with_name(
+                tradable_processor_name)
+        end
+
+    retrieve_parameters
+        do
+            parameters := session.parameters_for_processor(event_generator)
         end
 
     name: STRING = "Event generator parameters set request"
+
+    event_generator: TRADABLE_EVENT_GENERATOR
 
 end

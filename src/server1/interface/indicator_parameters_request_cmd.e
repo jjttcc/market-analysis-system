@@ -9,12 +9,17 @@ note
     -- vim: expandtab
 
 class INDICATOR_PARAMETERS_REQUEST_CMD inherit
+
     PARAMETER_BASED_REQUEST_CMD
+        rename
+            tradable_processor as indicator,
+            set_tradable_processor as set_indicator
         redefine
-            iteration, set_iteration
+            iteration, set_iteration, indicator
         end
 
 inherit {NONE}
+
     STRING_UTILITIES
         rename
             make as su_make_unused
@@ -28,12 +33,15 @@ creation
 
 feature {NONE}
 
-    retrieve_parameters
-        local
-            i: TRADABLE_FUNCTION
+    set_indicator
         do
-            i := tradables.indicator_with_name(tradable_processor_name)
-            parameters := session.parameters_for_processor(i)
+            indicator := tradables.indicator_with_name(
+                tradable_processor_name)
+        end
+
+    retrieve_parameters
+        do
+            parameters := session.parameters_for_processor(indicator)
         end
 
     iteration: INTEGER
@@ -44,6 +52,15 @@ feature {NONE}
         end
 
     name: STRING = "Indicator parameters request"
+
+    indicator: TRADABLE_FUNCTION
+
+feature {NONE} -- Hook method implementations
+
+    object_type: STRING
+        do
+            Result := "indicator"
+        end
 
 invariant
 

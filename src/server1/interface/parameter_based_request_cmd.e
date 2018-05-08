@@ -8,6 +8,7 @@ note
     -- vim: expandtab
 
 deferred class PARAMETER_BASED_REQUEST_CMD inherit
+
     TRADABLE_REQUEST_COMMAND
         rename
             set_name as set_command_name, name as command_name
@@ -40,14 +41,19 @@ feature -- Basic operations
             end
             if not parse_error then
                 tradable_processor_name := fields @ 1
-                retrieve_parameters
-                if not parse_error then
-                    if modify_parameters then
-                        process_parameter_specs(fields)
+                set_tradable_processor
+                if tradable_processor /= Void then
+                    retrieve_parameters
+                    if not parse_error then
+                        if modify_parameters then
+                            process_parameter_specs(fields)
+                        end
+                        send_response
+                    else
+                        report_error(Error, <<error_msg>>)
                     end
-                    send_response
                 else
-                    report_error(Error, <<error_msg>>)
+                    report_error(invalid_object_name, <<invalid_obj_msg>>)
                 end
             end
         end
@@ -65,7 +71,10 @@ feature {NONE} -- Implementation
         end
 
     tradable_processor_name: STRING
-            -- Name of the processor for which parameters are to be retrieved
+            -- The name of `tradable_processor'
+
+    tradable_processor: TRADABLE_PROCESSOR
+            -- The processor for which parameters are to be retrieved
 
     parse_error: BOOLEAN
             -- Did a parse error occur?
@@ -96,14 +105,33 @@ feature {PARAMETER_BASED_REQUEST_CMD} -- Implementation
         do
         end
 
+    invalid_obj_msg: STRING
+        do
+            Result := "Invalid " + object_type + " name: " +
+                tradable_processor_name
+        end
+
+feature {NONE} -- Hook methods
+
+    object_type: STRING
+            -- The type of `tradable_processor'
+        deferred
+        end
+
 feature {NONE}
 
     retrieve_parameters
         require
-            proc_name_set: tradable_processor_name /= Void
+            proc_set: tradable_processor /= Void
         deferred
         ensure
             parameters_set: parameters /= Void
+        end
+
+    set_tradable_processor
+        require
+            proc_name_set: tradable_processor_name /= Void
+        deferred
         end
 
     process_parameter_specs(fields: LIST [STRING])

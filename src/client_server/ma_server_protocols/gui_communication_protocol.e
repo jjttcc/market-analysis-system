@@ -91,15 +91,19 @@ feature -- Server response IDs
 			-- medium/socket will be closed)
 
 	invalid_symbol: INTEGER = 103
-			-- Response indicating that the server requested data for
+			-- Response indicating that the client requested data for
 			-- a symbol that is not in the database
 
 	warning: INTEGER = 104
 			-- Response indicating that a non-fatal error occurred
 
 	invalid_period_type: INTEGER = 105
-			-- Response indicating that the server requested data for
+			-- Response indicating that the client requested data for
 			-- a period type that is not in the database
+
+	invalid_object_name: INTEGER = 106
+			-- Response indicating that the client specified a name (such
+			-- as an indicator name) that does not exist
 
 	error_will_not_close: INTEGER = 201
 			-- Response indicating that there was a problem receiving or
@@ -117,6 +121,9 @@ feature -- Server response IDs
 
 	invalid_period_type_will_not_close: INTEGER = 205
 			-- "will-not-close" version of 'invalid_period_type'
+
+	invalid_object_name_will_not_close: INTEGER = 206
+			-- "will-not-close" version of 'invalid_object_name'
 
 feature -- Server response strings
 
