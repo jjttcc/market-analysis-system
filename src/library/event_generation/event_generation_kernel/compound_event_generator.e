@@ -23,7 +23,8 @@ class COMPOUND_EVENT_GENERATOR inherit
 
 	TRADABLE_EVENT_GENERATOR
 		redefine
-			children
+			children, append_to_name, parent_implementation,
+			initialize_from_parent
 		end
 
 	GENERAL_UTILITIES
@@ -167,6 +168,23 @@ feature -- Status setting
 			right_analyzer.set_tradable_from_pair (p)
 		end
 
+	initialize_from_parent(p: TREE_NODE)
+		do
+			parent_implementation := p
+		ensure then
+			parent = p
+		end
+
+feature -- Element change
+
+--!!!!!<atn>!!!!!
+	append_to_name(suffix, sep: STRING) do
+io.error.print("append_to_name called with '" + suffix + "'" +
+" [" + generating_type+ "]%N")
+		left_analyzer.append_to_name(suffix, sep)
+		right_analyzer.append_to_name(suffix, sep)
+	end
+
 feature -- Basic operations
 
 	execute
@@ -195,6 +213,8 @@ feature -- Basic operations
 		end
 
 feature {NONE} -- Implementation
+
+	parent_implementation: TREE_NODE
 
 	target_date (e: TRADABLE_EVENT): DATE_TIME
 			-- The time stamp of the component of `e' that matches

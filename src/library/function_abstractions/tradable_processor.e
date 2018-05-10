@@ -80,13 +80,6 @@ feature -- Status setting
 			-- [Redefine if needed]
         end
 
-feature -- Element change
-
-    append_to_name (suffix, separator: STRING)
-        do
-            --!!!!!!!!!!!!<To-Be-Defined>
-        end
-
 invariant
 
     parameters_exist: parameters /= Void

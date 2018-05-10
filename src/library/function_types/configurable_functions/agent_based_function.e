@@ -32,6 +32,7 @@ feature {NONE} -- Initialization
 				create {LINKED_LIST [TRADABLE_FUNCTION]} inputs.make
 			else
 				inputs := ins
+--!!!!inputs.do_all...  i.initialize_from_parent(Current)... end!!!!!
 			end
 			if op /= Void then
 				set_operator (op)
@@ -269,10 +270,12 @@ feature {TRADABLE_FUNCTION_EDITOR} -- Element change
 		require
 			f_exists: f /= Void
 		do
-			inputs.extend (f)
+			inputs.extend(f)
+			f.initialize_from_parent(Current)
 		ensure
 			one_more: inputs.count = old inputs.count + 1
 			added: inputs.last = f
+			i_am_parent: f.parent = Current
 		end
 
 feature {TRADABLE_FUNCTION_EDITOR, MARKET_AGENTS}

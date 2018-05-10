@@ -39,8 +39,10 @@ feature -- Initialization
 		do
 			set (tgt)
 			operand := op
+			operand.initialize_from_parent(Current)
 		ensure
 			set: target = tgt and operand = op
+			parent_set: operand.parent = Current
 		end
 
 	initialize (arg: LINEAR_ANALYZER)

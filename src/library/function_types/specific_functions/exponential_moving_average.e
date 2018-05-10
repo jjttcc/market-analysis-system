@@ -68,10 +68,12 @@ feature {NONE} -- Initialization
 			check operator_used end
 			exp := e
 			exp.set_n (i)
+			exp.initialize_from_parent(Current)
 			create sum.make (in.output, op, i)
+			sum.initialize_from_parent(Current)	--<-!!!!!Check this!!!!
 			create output.make (in.output.count)
 			nrovf_set_input (in)
-			nrovf_set_operator (op)
+			operator := op
 			nrovf_set_n (i)
 			check n = i end
 		ensure
@@ -79,6 +81,8 @@ feature {NONE} -- Initialization
 			e_n_set_to_i: e.n = i
 			exp_set: exp = e
 			target_set: target = in.output
+			parents_set: input.parent = Current and exp.parent = Current and
+				sum.parent = Current and operator.parent = Current
 		end
 
 feature {TRADABLE_FUNCTION_EDITOR} -- Status setting

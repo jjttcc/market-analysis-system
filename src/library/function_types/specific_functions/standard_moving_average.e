@@ -60,11 +60,15 @@ feature {NONE} -- Initialization
 	make (in: like input; op: like operator; i: INTEGER)
 		do
 			check operator_used end
-			create sum.make (in.output, op, i)
-			create output.make (in.output.count)
-			nrovf_set_input (in)
-			nrovf_set_operator (op)
-			nrovf_set_n (i)
+			create sum.make(in.output, op, i)
+			sum.initialize_from_parent(Current)
+			create output.make(in.output.count)
+			nrovf_set_input(in)
+			operator := op
+			nrovf_set_n(i)
+		ensure then
+			parents_set: input.parent = Current and sum.parent = Current and
+				operator.parent = Current
 		end
 
 feature {NONE} -- Basic operations

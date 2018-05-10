@@ -40,6 +40,7 @@ feature -- Initialization
 			i_gt_0: i > 0
 		do
 			operand := op
+			operand.initialize_from_parent(Current)
 			-- operand must be set before calling n_make, which calls set_n.
 			n_make (i)
 		ensure

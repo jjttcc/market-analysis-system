@@ -10,6 +10,9 @@ note
 class ONE_VARIABLE_FUNCTION_ANALYZER inherit
 
 	FUNCTION_ANALYZER
+		redefine
+			parent_implementation, initialize_from_parent
+		end
 
 	ONE_VARIABLE_LINEAR_ANALYZER
 		redefine
@@ -28,7 +31,7 @@ feature -- Initialization
 			not_void: in /= Void and op /= Void and ev_type /= Void and
 						per_type /= Void
 		do
-			set_input (in)
+			set_input(in)
 			create start_date_time.make_now
 			operator := op
 			-- EVENT_TYPE instances have a one-to-one correspondence to
@@ -73,7 +76,8 @@ feature -- Status setting
 			in_not_void: in /= Void and in.output /= Void
 		do
 			input := in
-			set (input.output)
+			set(input.output)
+			input.initialize_from_parent(Current)
 		ensure
 			input_set_to_in: input = in
 		end
@@ -87,6 +91,27 @@ feature -- Status setting
 		ensure
 			offset_set: left_offset = arg and left_offset >= 0
 		end
+
+	initialize_from_parent(p: TREE_NODE)
+		do
+			parent_implementation := p
+		ensure then
+			parent = p
+		end
+
+feature -- Element change
+
+--!!!!!<atn>!!!!!
+	append_to_name(suffix, sep: STRING) do
+io.error.print("append_to_name called with '" + suffix + "'" +
+" [" + generating_type+ "]%N")
+		if operator /= Void then
+			operator.append_to_name(suffix, sep)
+		end
+		if input /= Void then
+			input.append_to_name(suffix, sep)
+		end
+	end
 
 feature -- Basic operations
 
@@ -138,6 +163,10 @@ feature {TRADABLE_FUNCTION_EDITOR}
 feature -- Implementation
 
 	event_name: STRING = "Single-indicator event"
+
+feature {NONE} -- Implementation
+
+	parent_implementation: TREE_NODE
 
 invariant
 

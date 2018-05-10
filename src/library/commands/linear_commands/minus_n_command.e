@@ -57,12 +57,14 @@ feature -- Initialization
 			i_gt_0: i > 0
 		do
 			operand := op
+			operand.initialize_from_parent(Current)
 			set (tgt)
 			n := i
 		ensure then
 			op_n_set: operand = op and n = i
 			target_set: target = tgt
 			adjustment_0: n_adjustment = 0
+			parent_set: operand.parent = Current
 		end
 
 	initialize (arg: N_RECORD_STRUCTURE)

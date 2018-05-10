@@ -6,13 +6,14 @@ note
     revision: "$Revision$"
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
-    -- vim: expandtab
+    -- settings: vim: expandtab
 
 class ONE_VARIABLE_FUNCTION inherit
 
     COMPLEX_FUNCTION
         redefine
-            set_innermost_input, reset_parameters, flag_as_modified
+            set_innermost_input, reset_parameters, flag_as_modified,
+            append_to_name
         end
 
     SETTABLE_LINEAR_ANALYZER
@@ -100,6 +101,17 @@ feature -- Access
             exists: Result /= Void
         end
 
+feature {FACTORY, TRADABLE_FUNCTION_EDITOR} -- Element change
+
+    append_to_name (suffix, separator: STRING)
+        do
+io.error.print("append_to_name called with '" + suffix + "'" +
+" [" + generating_type+ "]%N")
+            name_suffix := separator.twin + suffix.twin
+--!!!!!!!??????Should this happen?:!!!!
+            input.append_to_name(suffix, separator)
+        end
+
 feature {FACTORY} -- Element change
 
     set_innermost_input (in: SIMPLE_FUNCTION [BASIC_TRADABLE_TUPLE])
@@ -107,6 +119,7 @@ feature {FACTORY} -- Element change
             processed_date_time := Void
             if input.is_complex then
                 input.set_innermost_input (in)
+--!!!!in.initialize_from_parent(Current)?? - guess: NO!!!!!
             else
                 set_input (in)
                 -- Allow all linear commands in the operator hierarchy to
@@ -190,11 +203,13 @@ feature {TRADABLE_FUNCTION_EDITOR}
             ptype_not_void: in.trading_period_type /= Void
         do
             input := in
-            set (input.output)
+            input.initialize_from_parent(Current)
+            set(input.output)
             processed_date_time := Void
         ensure
             input_set_to_in: input = in
             not_processed: not processed
+            parent_set: input.parent = Current
         end
 
     reset_parameters

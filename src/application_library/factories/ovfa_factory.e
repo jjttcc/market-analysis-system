@@ -90,6 +90,7 @@ feature -- Basic operations
 		do
 			create product.make (function, operator, event_type,
 				signal_type, period_type)
+            function.initialize_from_parent(product)
 			if left_offset > 0 then
 				product.set_left_offset (left_offset)
 				debug ("editing")

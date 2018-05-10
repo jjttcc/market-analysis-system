@@ -157,6 +157,12 @@ feature {COMPOSITE_TUPLE_BUILDER} -- Basic operations
 		do
 		end
 
+feature {FACTORY, TRADABLE_FUNCTION_EDITOR} -- Element change
+
+	append_to_name(suffix, separator: STRING)
+		do
+		end
+
 invariant
 
 	period_type_set_when_loaded: loaded implies (trading_period_type /= Void)

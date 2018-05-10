@@ -107,6 +107,8 @@ feature -- Basic operations
 		do
 			create product.make (left_function, right_function, event_type,
 				signal_type, period_type)
+            left_function.initialize_from_parent(product)
+            right_function.initialize_from_parent(product)
 			if operator /= Void then
 				product.set_operator (operator)
 				product.set_function_for_operation (use_left_function)

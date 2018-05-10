@@ -465,6 +465,11 @@ feature {NONE} -- Implementation
 
 	Buffer_init_size: INTEGER = 15000
 
+	parent_implementation: TREE_NODE
+		do
+			Result := Current
+		end
+
 feature {NONE} -- Debugging tools
 
 	print_start_end (l: TRADABLE_TUPLE_LIST [like tuple_type_anchor];

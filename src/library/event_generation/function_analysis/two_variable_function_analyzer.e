@@ -13,6 +13,9 @@ note
 class TWO_VARIABLE_FUNCTION_ANALYZER inherit
 
 	FUNCTION_ANALYZER
+		redefine
+			parent_implementation, initialize_from_parent
+		end
 
 	TWO_VARIABLE_LINEAR_ANALYZER
 		redefine
@@ -139,6 +142,31 @@ feature -- Status setting
 			use_left_function = left and use_right_function /= left
 		end
 
+	initialize_from_parent(p: TREE_NODE)
+		do
+			parent_implementation := p
+		ensure then
+			parent = p
+		end
+
+feature -- Element change
+
+
+--!!!!!<atn>!!!!!
+	append_to_name(suffix, sep: STRING) do
+io.error.print("append_to_name called with '" + suffix + "'" +
+" [" + generating_type+ "]%N")
+		if operator /= Void then
+			operator.append_to_name(suffix, sep)
+		end
+		if input1 /= Void then
+			input1.append_to_name(suffix, sep)
+		end
+		if input2 /= Void then
+			input2.append_to_name(suffix, sep)
+		end
+	end
+
 feature -- Basic operations
 
 	execute
@@ -259,7 +287,8 @@ feature {NONE} -- Implementation
 			output_not_void: in.output /= Void
 		do
 			input1 := in
-			set1 (in.output)
+			set1(in.output)
+			input1.initialize_from_parent(Current)
 		ensure
 			input_set: input1 = in and input1 /= Void
 			target_set: target1 = in.output
@@ -272,6 +301,7 @@ feature {NONE} -- Implementation
 		do
 			input2 := in
 			set2 (in.output)
+			input2.initialize_from_parent(Current)
 		ensure
 			input_set: input2 = in and input2 /= Void
 			target_set: target2 = in.output
@@ -290,6 +320,8 @@ feature {NONE} -- Implementation
 			left_tgt1: use_left_function implies operator_target = target1
 			right_tgt2: not use_left_function implies operator_target = target2
 		end
+
+	parent_implementation: TREE_NODE
 
 feature {TRADABLE_FUNCTION_EDITOR}
 

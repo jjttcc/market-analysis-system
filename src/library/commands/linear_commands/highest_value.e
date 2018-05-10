@@ -31,6 +31,7 @@ feature -- Initialization
 			set_operand (o)
 		ensure
 			set: target = t and operand = o and n = i
+			parent_set: operand.parent = Current
 		end
 
 feature {NONE} -- Implementation
