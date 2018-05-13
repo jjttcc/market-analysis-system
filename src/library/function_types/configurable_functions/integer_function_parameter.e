@@ -10,6 +10,9 @@ note
 class INTEGER_FUNCTION_PARAMETER inherit
 
 	FUNCTION_PARAMETER
+		redefine
+			set_name
+		end
 
 creation {TRADABLE_FUNCTION, TRADABLE_FUNCTION_EDITOR}
 
@@ -17,19 +20,23 @@ creation {TRADABLE_FUNCTION, TRADABLE_FUNCTION_EDITOR}
 
 feature {NONE} -- Initialization
 
-	make (v: INTEGER)
+	make (v: INTEGER; o: TREE_NODE)
 		require
 			valid_args: v > 0
 		do
 			value := v
+			name := "integer-value"
+			owner := o
 		ensure
-			set: value = v
+			set: value = v and owner = o
 		end
 
 feature -- Access
 
 	value: INTEGER
 			-- The value of the parameter
+
+	owner: TREE_NODE
 
 feature -- Access
 
@@ -38,7 +45,7 @@ feature -- Access
 			Result := value.out
 		end
 
-	name: STRING = "integer-value"
+	name: STRING
 
 	description: STRING
 		do
@@ -57,6 +64,13 @@ feature -- Element change
 	change_value (new_value: STRING)
 		do
 			value := new_value.to_integer
+		end
+
+	set_name (n: STRING)
+		do
+			name := n.twin
+		ensure then
+			name_set: equal(name, n)
 		end
 
 feature -- Basic operations

@@ -53,11 +53,11 @@ feature -- Access
 			create Result.make (0)
 			create fp_set.make
 			fp_set.extend (create {INTEGER_FUNCTION_PARAMETER}.make (
-				Sma_fp_default))
+				Sma_fp_default, Void))
 			Result.put (fp_set, Sma_key)
 			create fp_set.make
 			fp_set.extend (create {INTEGER_FUNCTION_PARAMETER}.make (
-				Standard_deviation_fp_default))
+				Standard_deviation_fp_default, Void))
 			Result.put (fp_set, Standard_deviation_key)
 		ensure
 			result_exists: Result /= Void

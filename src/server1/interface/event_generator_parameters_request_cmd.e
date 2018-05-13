@@ -45,6 +45,11 @@ feature {NONE}
 
     retrieve_parameters
         do
+--!!!!!unique-stored-names TO-DO: for shared objects/parameters (i.e.,
+--!!!same object/reference used by > 1 component), make sure that
+--!!!the shared param is only reported to the user once, instead of once
+--!!!for each time it is referenced.  (And - include indication to user
+--!!!that it is shared?!!!!
 --With respect to the list of parameters being retrieved and reported
 --back to the client:
 --    If there are parameters with duplicate names and different ids,

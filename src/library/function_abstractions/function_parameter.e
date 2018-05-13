@@ -25,7 +25,7 @@ feature -- Access
         deferred
         end
 
-    name: STRING
+    name: STRING assign set_name
             -- The name of the parameter
         deferred
         end
@@ -53,6 +53,16 @@ feature -- Access
         deferred
         end
 
+    verbose_name: STRING
+        do
+            Result := unique_name
+        end
+
+    owner: TREE_NODE
+            -- Owner associated with this FUNCTION_PARAMETER
+        deferred
+        end
+
 feature -- Comparison
 
     infix "<" (other: FUNCTION_PARAMETER): BOOLEAN
@@ -76,6 +86,12 @@ feature -- Element change
         deferred
         ensure
             current_value_equals (new_value)
+        end
+
+    set_name (n: STRING)
+        require
+            existence: n /= Void
+        do
         end
 
 feature -- Basic operations

@@ -22,6 +22,8 @@ class NUMERIC_VALUE_COMMAND inherit
 		export
 			{NONE} all
 			{ANY} infix "<"
+		undefine
+			set_name, verbose_name
 		select
 			is_equal
 		end
@@ -67,6 +69,11 @@ feature -- Access
 			else
 				Result := name + " (Numeric value)"
 			end
+		end
+
+	owner: TREE_NODE
+		do
+			Result := Current
 		end
 
 feature -- Status report

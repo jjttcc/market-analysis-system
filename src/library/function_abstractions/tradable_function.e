@@ -21,14 +21,16 @@ deferred class TRADABLE_FUNCTION inherit
     TRADABLE_PROCESSOR
         redefine
             name, copy_of_children, descendant_comparison_is_by_objects,
-			parent_implementation, initialize_from_parent
+            initialize_from_parent
         end
 
     FUNCTION_PARAMETER
         rename
             description as short_description
         undefine
-            is_equal
+            is_equal, verbose_name
+        redefine
+            set_name
         end
 
 feature -- Access
@@ -147,10 +149,16 @@ feature -- Access
         deferred
         end
 
+--!!!!!Probably remove this or replace it with verbose_name:!!!!
     full_name: STRING
             -- `name' and additional elaboration, if any
         do
             Result := name
+        end
+
+    owner: TREE_NODE
+        do
+            Result := Current
         end
 
 feature -- Status report
@@ -177,22 +185,25 @@ feature -- Status report
 
 feature -- Status setting
 
-	initialize_from_parent(p: TREE_NODE)
-		do
-			parent_implementation := p
-		ensure then
-			parent = p
-		end
+    initialize_from_parent(p: TREE_NODE)
+        do
+            if parents_implementation = Void then
+                create {LINKED_LIST [TREE_NODE]} parents_implementation.make
+            end
+            parents_implementation.extend(p)
+        ensure then
+            p_is_a_parent: parents.has(p)
+        end
 
 feature {FACTORY, TRADABLE_FUNCTION_EDITOR} -- Element change
 
     set_name (n: STRING)
             -- Set the function's name to n.
-        require
+        require else
             not_void: n /= Void
         do
             name_implementation := n.twin
-        ensure
+        ensure then
             is_set: name = n and name /= Void
         end
 
@@ -337,8 +348,6 @@ feature {NONE} -- Implementation
         end
 
     name_implementation: STRING
-
-	parent_implementation: TREE_NODE
 
 feature {NONE} -- (from FUNCTION_PARAMETER)
 

@@ -21,7 +21,7 @@ feature {NONE} -- Initialization
         do
             create start_dates.make(1)
             create end_dates.make(1)
-            create processor_to_parameters_map.make(0)
+            create params_for_proc.make(0)
             caching_on := True
         ensure
             dates_not_void: start_dates /= Void and end_dates /= Void
@@ -49,21 +49,29 @@ feature -- Access
             processor_valid: p /= Void
         local
             parameters: LIST [FUNCTION_PARAMETER]
+            pname_occurrences: HASH_TABLE [INTEGER, STRING]
         do
-            Result := processor_to_parameters_map[p.name]
+            Result := params_for_proc[p.name]
             if Result = Void then
                 parameters := p.parameters
+                create pname_occurrences.make(parameters.count)
                 create {ARRAYED_LIST [SESSION_FUNCTION_PARAMETER]} Result.make(
                     parameters.count)
                 across parameters as pcursor loop
                     Result.extend(create {SESSION_FUNCTION_PARAMETER}.make(
-                        pcursor.item))
+                        pcursor.item, pname_occurrences))
+                    if pname_occurrences.has(pcursor.item.unique_name) then
+                        pname_occurrences[pcursor.item.unique_name] :=
+                            pname_occurrences[pcursor.item.unique_name] + 1
+                    else
+                        pname_occurrences[pcursor.item.unique_name] := 1
+                    end
                 end
-                processor_to_parameters_map.force(Result, p.name)
+                params_for_proc.force(Result, p.name)
             end
         ensure
             result_exists: Result /= Void
-            result_mapped: processor_to_parameters_map[p.name] = Result
+            result_mapped: params_for_proc[p.name] = Result
         end
 
     login_date: DATE_TIME
@@ -112,7 +120,7 @@ feature -- Basic operations
             update_occurred := False
             if reference_params.count /= params.count then
                 -- Old reference param list no longer valid - discard it:
-                processor_to_parameters_map.force(Void, p.name)
+                params_for_proc.force(Void, p.name)
             else
                 reference_cursor := reference_params.new_cursor
                 param_cursor := params.new_cursor
@@ -125,12 +133,12 @@ feature -- Basic operations
                     reference_cursor.after
                 loop
                     check
+--!!!!!!!!!!!!!This check:  - is probably no longer valid!!!!!!
                         names_match: reference_cursor.item.unique_name ~
                             param_cursor.item.unique_name
                     end
-                    update_occurred := update_parameter(
-                            param_cursor.item, reference_cursor.item) or else
-                        update_occurred
+                    update_occurred := update_parameter(param_cursor.item,
+                        reference_cursor.item) or else update_occurred
                     reference_cursor.forth
                     param_cursor.forth
                 end
@@ -142,7 +150,7 @@ feature -- Basic operations
 
 feature {NONE}
 
-    processor_to_parameters_map: HASH_TABLE [LIST
+    params_for_proc: HASH_TABLE [LIST
         [SESSION_FUNCTION_PARAMETER], STRING]
 
     update_parameter(dest_param, src_param: FUNCTION_PARAMETER): BOOLEAN
@@ -170,6 +178,6 @@ feature {NONE}
 invariant
 
     dates_exist: start_dates /= Void and end_dates /= Void
-    map_exists: processor_to_parameters_map /= Void
+    map_exists: params_for_proc /= Void
 
 end -- class MAS_SESSION

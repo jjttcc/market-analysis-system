@@ -15,7 +15,8 @@ class TRADABLE_FUNCTION_LINE inherit
 		export
 			{NONE} ovf_make
 		redefine
-			action, operator_used, start, immediate_direct_parameters
+			action, operator_used, start, immediate_direct_parameters,
+			who_am_i__parent
 		end
 
 	TRADABLE_LINE
@@ -61,6 +62,14 @@ feature -- Initialization
 		ensure
 			set: start_point = p1
 		end
+
+feature {TREE_NODE} -- Implementation
+
+    who_am_i__parent (child: TREE_NODE): STRING
+        do
+            Result := "[" + generating_type.out + "]"
+Result := "[tfl/" + hash_code.out + "(TBI)] "
+        end
 
 feature {NONE} -- Implemetation
 

@@ -13,7 +13,7 @@ class ONE_VARIABLE_FUNCTION inherit
     COMPLEX_FUNCTION
         redefine
             set_innermost_input, reset_parameters, flag_as_modified,
-            append_to_name
+            append_to_name, who_am_i__parent, processor_type
         end
 
     SETTABLE_LINEAR_ANALYZER
@@ -100,6 +100,8 @@ feature -- Access
         ensure then
             exists: Result /= Void
         end
+
+    processor_type: STRING = "one-var func"
 
 feature {FACTORY, TRADABLE_FUNCTION_EDITOR} -- Element change
 
@@ -209,7 +211,7 @@ feature {TRADABLE_FUNCTION_EDITOR}
         ensure
             input_set_to_in: input = in
             not_processed: not processed
-            parent_set: input.parent = Current
+            parents_set: input.parents.has(Current)
         end
 
     reset_parameters
@@ -220,6 +222,24 @@ feature {TRADABLE_FUNCTION_EDITOR}
 feature {TRADABLE_FUNCTION_EDITOR}
 
     input: TRADABLE_FUNCTION
+
+feature {TREE_NODE} -- Implementation
+
+    who_am_i__parent (child: TREE_NODE): STRING
+        do
+            Result := ""
+            if child = input then
+                Result := who_am_i_intro + "input function"
+            elseif child = operator then
+                Result := who_am_i_intro + "operator"
+            end
+            if not Result.empty then
+                Result := Result + recursive_who_am_i
+            else
+                -- Since Result is empty, assume Current is not its parent
+                -- and leave it empty.
+            end
+        end
 
 feature {NONE} -- Implementation
 

@@ -13,7 +13,7 @@ class AGENT_BASED_FUNCTION inherit
 	COMPLEX_FUNCTION
 		redefine
 			set_innermost_input, reset_parameters, operator_used,
-			immediate_direct_parameters, flag_as_modified
+			immediate_direct_parameters, flag_as_modified, who_am_i__parent
 		end
 
 	LINEAR_ANALYZER
@@ -261,7 +261,12 @@ feature {TRADABLE_FUNCTION_EDITOR} -- Element change
 
 	add_parameter (p: FUNCTION_PARAMETER)
 			-- Add `p' to `parameters'.
+			-- Recommendation: Make sure Current's name has been initialized
+			-- (by calling `set_name') before calling `add_parameter'.
 		do
+			if name /= Void then
+				p.name := "value for " + name.twin
+			end
 			immediate_direct_parameters.extend (p)
 		end
 
@@ -275,7 +280,7 @@ feature {TRADABLE_FUNCTION_EDITOR} -- Element change
 		ensure
 			one_more: inputs.count = old inputs.count + 1
 			added: inputs.last = f
-			i_am_parent: f.parent = Current
+			i_am_parent: f.parents.has(Current)
 		end
 
 feature {TRADABLE_FUNCTION_EDITOR, MARKET_AGENTS}
@@ -290,6 +295,14 @@ feature {TRADABLE_FUNCTION_EDITOR} -- Removal
 		do
 			inputs.wipe_out
 		end
+
+feature {TREE_NODE} -- Implementation
+
+    who_am_i__parent (child: TREE_NODE): STRING
+        do
+            Result := "[" + generating_type.out + "]"
+Result := "[abf/" + hash_code.out + "] "
+        end
 
 feature {NONE} -- Implementation
 

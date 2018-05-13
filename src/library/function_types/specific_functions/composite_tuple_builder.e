@@ -18,7 +18,8 @@ class COMPOSITE_TUPLE_BUILDER inherit
 			target as source_list, make as ovf_make
 		redefine
 			do_process, output, source_list, operator_used, input,
-			trading_period_type, make_output, add_operator_result
+			trading_period_type, make_output, add_operator_result,
+			who_am_i__parent
 		end
 
 creation {FACTORY, TRADABLE_FUNCTION_EDITOR}
@@ -210,6 +211,14 @@ feature -- Basic operations
 			times_correct: output.count > 0 implies times_correct and
 				output.first.date_time.date.is_equal (start_date.date)
 		end
+
+feature {TREE_NODE} -- Implementation
+
+    who_am_i__parent (child: TREE_NODE): STRING
+        do
+            Result := "[" + generating_type.out + "]"
+Result := "[ctb/" + hash_code.out + "(TBI)] "
+        end
 
 feature {NONE}
 

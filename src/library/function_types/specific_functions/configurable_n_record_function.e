@@ -19,7 +19,7 @@ class CONFIGURABLE_N_RECORD_FUNCTION inherit
 		export
 			{NONE} nrovf_make_unused
 		undefine
-			forth, do_process, direct_operators
+			forth, do_process, direct_operators, who_am_i__parent
 		redefine
 			set_n, short_description, start, initialize_operators, target,
 			strict_n_count, action
@@ -31,7 +31,8 @@ class CONFIGURABLE_N_RECORD_FUNCTION inherit
 		undefine
 			immediate_direct_parameters, set_operator
 		redefine
-			short_description, start, initialize_operators, target, action
+			short_description, start, initialize_operators, target, action,
+			who_am_i__parent
 		end
 
 creation {FACTORY, TRADABLE_FUNCTION_EDITOR}
@@ -148,6 +149,14 @@ feature {TRADABLE_FUNCTION_EDITOR}
 			end
 			first_element_operator.initialize (Current)
 		end
+
+feature {TREE_NODE} -- Implementation
+
+    who_am_i__parent (child: TREE_NODE): STRING
+        do
+            Result := "[" + generating_type.out + "]"
+Result := "[cnrf/" + hash_code.out + "(TBI)] "
+        end
 
 feature {NONE} -- Implementation
 

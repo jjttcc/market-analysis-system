@@ -12,7 +12,7 @@ class SETTABLE_OFFSET_COMMAND inherit
 		export {NONE}
 			offset
 		undefine
-			children
+			children, who_am_i__parent
 		redefine
 			initialize
 		select

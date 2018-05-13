@@ -14,7 +14,8 @@ class N_RECORD_ONE_VARIABLE_FUNCTION inherit
 		rename
 			make as ovf_make
 		redefine
-			do_process, target, short_description, immediate_direct_parameters
+			do_process, target, short_description, immediate_direct_parameters,
+			who_am_i__parent
 		end
 
 	N_RECORD_STRUCTURE
@@ -90,6 +91,14 @@ feature {N_RECORD_FUNCTION_PARAMETER, TRADABLE_FUNCTION_EDITOR}
 		ensure then
 			not_processed: not processed
 		end
+
+feature {TREE_NODE} -- Implementation
+
+    who_am_i__parent (child: TREE_NODE): STRING
+        do
+            Result := "[" + generating_type.out + "]"
+Result := "[nrovf/" + hash_code.out + "] "
+        end
 
 feature {NONE} -- Basic operations
 

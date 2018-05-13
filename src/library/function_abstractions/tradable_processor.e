@@ -12,6 +12,8 @@ note
 deferred class TRADABLE_PROCESSOR inherit
 
     TREE_NODE
+        rename
+            node_type as processor_type
         redefine
             direct_components
         end

@@ -19,7 +19,7 @@ class SIMPLE_FUNCTION [G->TRADABLE_TUPLE] inherit
 		undefine
 			is_equal, copy, out
 		redefine
-			data
+			data, initialize_from_parent
 		end
 
 	TRADABLE_TUPLE_LIST [G]
@@ -118,6 +118,21 @@ feature -- Status report
 			-- Has `data' been loaded and post-processing completed?
 
 	has_children: BOOLEAN = False
+
+feature -- Status setting
+
+    initialize_from_parent(p: TREE_NODE)
+        do
+            if parents_implementation = Void then
+                create {LINKED_LIST [TREE_NODE]} parents_implementation.make
+			else
+				parents_implementation.wipe_out
+            end
+            parents_implementation.extend(p)
+        ensure then
+            p_is_a_parent: parents.has(p)
+			only_one: parents.count = 1
+        end
 
 feature {FACTORY} -- Status setting
 

@@ -11,7 +11,7 @@ deferred class FUNCTION_PARAMETER_WITH_FUNCTION inherit
 
 	FUNCTION_PARAMETER
 		redefine
-			description, is_equal
+			description, is_equal, verbose_name
 		end
 
 feature {NONE} -- Initialization
@@ -30,6 +30,11 @@ feature -- Access
 	function: TRADABLE_FUNCTION
 			-- The function that this parameter applies to
 
+	owner: TRADABLE_FUNCTION
+		do
+			Result := function
+		end
+
 	description: STRING
 		do
 			if function.name /= Void then
@@ -38,6 +43,11 @@ feature -- Access
 				Result := name
 			end
 		end
+
+    verbose_name: STRING
+        do
+            Result := function.verbose_name
+        end
 
 feature -- Comparison
 

@@ -15,7 +15,7 @@ inherit
     COMPLEX_FUNCTION
         redefine
             set_innermost_input, reset_parameters, flag_as_modified,
-            append_to_name
+            append_to_name, who_am_i__parent, processor_type
         end
 
     TWO_VARIABLE_LINEAR_ANALYZER
@@ -95,6 +95,8 @@ feature -- Access
         do
             Result := input1.innermost_input
         end
+
+	processor_type: STRING = "two-var func"
 
 feature -- Status report
 
@@ -257,6 +259,26 @@ feature {TRADABLE_FUNCTION_EDITOR}
 feature {TRADABLE_FUNCTION_EDITOR}
 
     input1, input2: COMPLEX_FUNCTION
+
+feature {TREE_NODE} -- Implementation
+
+    who_am_i__parent (child: TREE_NODE): STRING
+        do
+            Result := ""
+			if child = input1 then
+				Result := who_am_i_intro + " 1st input function"
+			elseif child = input2 then
+				Result := who_am_i_intro + " 2nd input function"
+			elseif child = operator then
+				Result := who_am_i_intro + " operator"
+			end
+            if not Result.empty then
+                Result := Result + recursive_who_am_i
+            else
+                -- Since Result is empty, assume Current is not its parent
+                -- and leave it empty.
+            end
+        end
 
 feature {NONE} -- Implementation
 
