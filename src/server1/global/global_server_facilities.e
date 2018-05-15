@@ -33,7 +33,6 @@ feature -- Access
 
 	database_services: MAS_DB_SERVICES
 			-- Database services
---@@@Change to once per process?
 		local
 			platform_factory: expanded PLATFORM_DEPENDENT_OBJECTS
 		once
@@ -42,7 +41,6 @@ feature -- Access
 
 	database_configuration: DATABASE_CONFIGURATION
 			-- Database configuration settings
---@@@Change to once per process?
 		once
 			create Result.make
 		end

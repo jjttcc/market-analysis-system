@@ -15,7 +15,7 @@ class TWO_VARIABLE_FUNCTION_ANALYZER inherit
 
     FUNCTION_ANALYZER
         redefine
-            initialize_from_parent, who_am_i__parent
+            initialize_from_parent 
         end
 
     TWO_VARIABLE_LINEAR_ANALYZER
@@ -152,24 +152,6 @@ feature -- Status setting
         ensure then
             p_is_a_parent: parents.has(p)
         end
-
-feature -- Element change
-
-
---!!!!!<atn>!!!!!
-    append_to_name(suffix, sep: STRING) do
-io.error.print("append_to_name called with '" + suffix + "'" +
-" [" + generating_type+ "]%N")
-        if operator /= Void then
-            operator.append_to_name(suffix, sep)
-        end
-        if input1 /= Void then
-            input1.append_to_name(suffix, sep)
-        end
-        if input2 /= Void then
-            input2.append_to_name(suffix, sep)
-        end
-    end
 
 feature -- Basic operations
 
@@ -342,14 +324,6 @@ feature {TRADABLE_FUNCTION_EDITOR}
             target2 := input2.output
             product := Void
             current_tradable := Void
-        end
-
-feature {TREE_NODE} -- Implementation
-
-    who_am_i__parent (child: TREE_NODE): STRING
-        do
-            Result := "[" + generating_type.out + "]"
-Result := "[tvfa/" + hash_code.out + "(TBI)] "
         end
 
 feature -- Implementation

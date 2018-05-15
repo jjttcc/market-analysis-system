@@ -45,7 +45,6 @@ feature -- Access
 
 	instances_and_descriptions: ARRAYED_LIST [PAIR [TRADABLE_FUNCTION, STRING]]
 			-- An instance and description of each TRADABLE_FUNCTION class
--- !!!! indexing once_status: global??!!!
 		once
 			create Result.make (0)
 			Result.extend (create {PAIR [TRADABLE_FUNCTION, STRING]}.make (
@@ -88,13 +87,11 @@ feature -- Access
 		end
 
 	function_instances: ARRAYED_LIST [TRADABLE_FUNCTION]
--- !!!! indexing once_status: global??!!!
 		once
 			Result := Precursor
 		end
 
 	function_names: ARRAYED_LIST [STRING]
--- !!!! indexing once_status: global??!!!
 		once
 			Result := names
 		ensure
@@ -104,8 +101,6 @@ feature -- Access
 		end
 
 feature -- Access - an instance of each tradable function
-
--- !!!! Use indexing once_status: global??!!! for these features:
 
 	one_variable_function: ONE_VARIABLE_FUNCTION
 		local

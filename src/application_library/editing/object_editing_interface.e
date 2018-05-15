@@ -43,7 +43,6 @@ feature -- Access
             end
             obj_list := valid_types_exclude (object_types @ type, exclude_list)
             Result := user_object_selection (obj_list, desc)
-            configure_object (Result, desc)
             current_objects.extend (Result)
             if initialization_needed then
                 initialize_object (Result)
@@ -188,14 +187,6 @@ feature {NONE} -- Implementation
             -- Set object parameters.  (Use `description', if appropriate.)
         require
             editor_set: editor /= Void
-            arg_not_void: arg /= Void
-        deferred
-        end
-
-    configure_object (arg: G; description: STRING)
-            -- Configure object, if needed.  (Use `description',
-            -- if appropriate.)
-        require
             arg_not_void: arg /= Void
         deferred
         end

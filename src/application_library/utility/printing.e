@@ -182,7 +182,6 @@ feature {NONE} -- Implementation
 			bmtprinter: BASIC_TRADABLE_TUPLE_PRINTER
 			vtprinter: VOLUME_TUPLE_PRINTER
 			oitprinter: OPEN_INTEREST_TUPLE_PRINTER
--- !!!! indexing once_status: global??!!!
 		once
 			create st.make (Void, Void, 0)
 			create bmt.make

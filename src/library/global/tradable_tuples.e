@@ -27,7 +27,6 @@ feature -- Access
 		local
 			pair: PAIR [TRADABLE_TUPLE, STRING]
 			now: DATE_TIME
--- !!!! indexing once_status: global??!!!
 		once
 			create Result.make_filled (Largest_index)
 			create now.make_now
@@ -66,7 +65,6 @@ feature -- Access
 		end
 
 	tuple_instances: ARRAYED_LIST [TRADABLE_TUPLE]
--- !!!! indexing once_status: global??!!!
 		once
 			Result := Precursor
 		end

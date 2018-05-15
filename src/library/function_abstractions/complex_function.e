@@ -13,7 +13,7 @@ deferred class COMPLEX_FUNCTION inherit
 
     TRADABLE_FUNCTION
         redefine
-            immediate_operators, full_name
+            immediate_operators
         end
 
 feature -- Access
@@ -55,16 +55,6 @@ feature -- Access
                 operator /= Void implies Result.has (operator)
         end
 
-    full_name: STRING
-        do
-            Result := name
-            if name_suffix /= Void then
-                Result := Result + name_suffix
-            end
-        end
-
-    name_suffix: STRING
-
 feature -- Status report
 
     operator_used: BOOLEAN
@@ -104,15 +94,6 @@ feature {TRADABLE_FUNCTION_EDITOR} -- Status setting
         ensure
             op_set: operator = op and operator /= Void
             parents_set: operator.parents.has(Current)
-        end
-
-feature {FACTORY, TRADABLE_FUNCTION_EDITOR} -- Element change
-
-    append_to_name (suffix, separator: STRING)
-        do
-io.error.print("append_to_name called with '" + suffix + "'" +
-" [" + generating_type+ "]%N")
-            name_suffix := separator.twin + suffix.twin
         end
 
 feature {NONE} -- Hook methods

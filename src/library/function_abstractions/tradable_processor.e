@@ -52,8 +52,8 @@ feature -- Access
 
 feature -- Status report
 
-    parameter_unames_unique: BOOLEAN
-            -- Is each parameter's `unique_name' unique?
+    parameter_vnames_unique: BOOLEAN
+            -- Is each parameter's `verbose_name' unique?
         local
             name_used: HASH_TABLE [INTEGER, STRING]
         do
@@ -62,12 +62,12 @@ feature -- Status report
                 nm_u: HASH_TABLE [INTEGER, STRING]): BOOLEAN
                     do
                         Result := True
-                        if nm_u.has(fp.unique_name) then
+                        if nm_u.has(fp.verbose_name) then
                             Result := False
-                            nm_u.put((nm_u @ fp.unique_name) + 1,
-                                fp.unique_name)
+                            nm_u.put((nm_u @ fp.verbose_name) + 1,
+                                fp.verbose_name)
                         else
-                            nm_u.put(1, fp.unique_name)
+                            nm_u.put(1, fp.verbose_name)
                         end
                     end
                     (?, name_used))

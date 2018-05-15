@@ -187,7 +187,6 @@ feature {NONE} -- Implementation
 			else
 				create eg_maker.make
 				left := event_generator_selection ("left component")
---!!!!!<markedit>: in progress...
 				if left /= Void then
 					right := event_generator_selection ("right component")
 					eg_maker.set_generators (left, right)
@@ -237,7 +236,6 @@ feature {NONE} -- Implementation
 			create fa_maker.make
 			fa_maker.set_function (
 				function_choice_clone ("technical indicator"))
---!!!!!<markedit>: in progress...
 			fa_maker.set_operator (operator_choice (fa_maker.function,
 				one_var_exclude_cmds))
 			fa_maker.set_period_type (period_type_choice)
@@ -264,7 +262,6 @@ feature {NONE} -- Implementation
 					function_choice_clone ("right technical indicator"))
 			fa_maker.set_period_type (period_type_choice)
 			fa_maker.set_crossover_specification (above_below_choice (fa_maker))
---!!!!!<markedit>: in progress...
 			op := two_var_function_operator_selection (fa_maker)
 			if op /= Void then
 				fa_maker.set_operator (op, use_left_function)
@@ -282,7 +279,6 @@ feature {NONE} -- Implementation
 			-- A clone of a user-selected member of `function_library'
 		do
 			Result := (function_choice (msg)).deep_twin
-			function_editor.configure_function (Result, msg)
 			if editable (Result) then
 				function_editor.initialize_function (Result)
 			end
@@ -447,7 +443,6 @@ feature {NONE} -- Implementation
 	one_var_exclude_cmds: LIST [COMMAND]
 			-- Commands not allowed as operators for one-variable
 			-- function analyzers
--- !!!! indexing once_status: global??!!!
 		once
 			Result := operator_maker.command_types @
 				operator_maker.N_record_cmd
@@ -456,7 +451,6 @@ feature {NONE} -- Implementation
 	two_var_exclude_cmds: LIST [COMMAND]
 			-- Commands not allowed as operators for two-variable
 			-- function analyzers
--- !!!! indexing once_status: global??!!!
 		once
 			create {LINKED_LIST [COMMAND]} Result.make
 			Result.append (operator_maker.command_types @

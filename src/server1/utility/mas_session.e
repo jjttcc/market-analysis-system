@@ -60,11 +60,11 @@ feature -- Access
                 across parameters as pcursor loop
                     Result.extend(create {SESSION_FUNCTION_PARAMETER}.make(
                         pcursor.item, pname_occurrences))
-                    if pname_occurrences.has(pcursor.item.unique_name) then
-                        pname_occurrences[pcursor.item.unique_name] :=
-                            pname_occurrences[pcursor.item.unique_name] + 1
+                    if pname_occurrences.has(pcursor.item.verbose_name) then
+                        pname_occurrences[pcursor.item.verbose_name] :=
+                            pname_occurrences[pcursor.item.verbose_name] + 1
                     else
-                        pname_occurrences[pcursor.item.unique_name] := 1
+                        pname_occurrences[pcursor.item.verbose_name] := 1
                     end
                 end
                 params_for_proc.force(Result, p.name)
@@ -132,11 +132,6 @@ feature -- Basic operations
                 until
                     reference_cursor.after
                 loop
-                    check
---!!!!!!!!!!!!!This check:  - is probably no longer valid!!!!!!
-                        names_match: reference_cursor.item.unique_name ~
-                            param_cursor.item.unique_name
-                    end
                     update_occurred := update_parameter(param_cursor.item,
                         reference_cursor.item) or else update_occurred
                     reference_cursor.forth
@@ -157,7 +152,7 @@ feature {NONE}
             -- Ensure dest_param is up to date with src_param; return true if
             -- dest_param was updated.
         require
-            params_match: dest_param.unique_name ~ src_param.unique_name
+            params_match: dest_param.verbose_name ~ src_param.verbose_name
             same_type: dest_param.value_type_description ~
                 src_param.value_type_description
         do

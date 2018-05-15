@@ -108,7 +108,6 @@ feature {TRADABLE_FUNCTION_EDITOR}
             in_ptype_not_void: in.trading_period_type /= Void
         do
             input := in.twin
---!!!!!<markedit>!!!!! Should this be here?:!!!!!
             input.initialize_from_parent(Current)
             output := input
             processed_date_time := input.processed_date_time

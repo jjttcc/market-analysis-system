@@ -11,7 +11,7 @@ deferred class FUNCTION_PARAMETER_WITH_FUNCTION inherit
 
 	FUNCTION_PARAMETER
 		redefine
-			description, is_equal, verbose_name
+			description, is_equal
 		end
 
 feature {NONE} -- Initialization
@@ -43,11 +43,6 @@ feature -- Access
 				Result := name
 			end
 		end
-
-    verbose_name: STRING
-        do
-            Result := function.verbose_name
-        end
 
 feature -- Comparison
 

@@ -22,7 +22,6 @@ deferred class FUNCTION_EDITING_INTERFACE inherit
             object_types as function_types, edit_object as edit_function,
             user_object_selection as user_function_selection,
             initialize_object as initialize_function,
-            configure_object as configure_function,
             current_objects as current_functions
         redefine
             editor, function_types, edit_function
@@ -73,7 +72,6 @@ feature -- Access
             -- Hash table of lists of function instances - each list contains
             -- instances of all classes whose type conforms to the Hash
             -- table key.
--- !!!! indexing once_status: global??!!!
         local
             l: ARRAYED_LIST [TRADABLE_FUNCTION]
         once
@@ -296,13 +294,6 @@ feature {EDITING_INTERFACE}
             end
         end
 
-    configure_function (f: TRADABLE_FUNCTION; desc: STRING)
-        do
-            if desc /= Void and then not desc.is_empty then
-                f.append_to_name(desc, " - ")
-            end
-        end
-
     view_indicator_list (l: LIST [TRADABLE_FUNCTION])
             -- Allow user to view indicators from `l'.
         require
@@ -441,7 +432,6 @@ feature {NONE} -- Implementation
     initialization_map: HASH_TABLE [INTEGER, STRING]
             -- Mapping of TRADABLE_FUNCTION names to
             -- initialization classifications
--- !!!! indexing once_status: global??!!!
         local
             name: STRING
         once

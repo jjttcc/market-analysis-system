@@ -56,7 +56,6 @@ feature {NONE} -- Hook routine implementations
 		do
 			connection.initiate_connection
 			if connection.last_communication_succeeded then
-print ("conn.connected: " + connection.connected.out + "%N")
 				if not target_tradable.data.is_empty then
 					-- Set `latest_date_time' to tradable's last
 					-- date-time + 1 sec.
@@ -73,7 +72,6 @@ print ("conn.connected: " + connection.connected.out + "%N")
 			else
 				-- Report error - Failed to connect.!!!!!
 			end
-print ("tgt t out of date result: " + Result.out + "%N")
 		ensure then
 			not_out_of_date_if_failed:
 				not connection.last_communication_succeeded implies not Result
@@ -81,7 +79,6 @@ print ("tgt t out of date result: " + Result.out + "%N")
 
 	append_new_data
 		do
---!!! data has already been read into i_med:			setup_input_medium
 			check
 				input_medium.readable
 			end
@@ -115,38 +112,21 @@ feature {NONE} -- Implementation
 
 	initialize_input_medium
 		do
---!!!If INPUT_DATA_CONNECTION is modified so that `request_data_for'
---"initiates" the connection, then this `initialize_input_medium'
---implementation should be replaced by
---`possible_replacement___initialize_input_medium', below.
 			connection.initiate_connection
 			if not connection.last_communication_succeeded then
 				fatal_error := True
---!!!!Where/when should this error be reported?:
-print ("Error occurred connecting to data supplier:%N" +
-connection.error_report + "%N")
+				--!!!!Where/when should this error be reported?:
+				print ("Error occurred connecting to data supplier:%N" +
+						connection.error_report + "%N")
 			else
 				input_medium := connection.socket
 				connection.request_data_for (current_symbol, intraday, Void)
 				if not connection.last_communication_succeeded then
 					fatal_error := True
---!!!!Where/when should this error be reported?:
-print ("Error occurred requesting data:%N" +
-connection.error_report + "%N")
+					--!!!!Where/when should this error be reported?:
+					print ("Error occurred requesting data:%N" +
+							connection.error_report + "%N")
 				end
-			end
-		end
-
-	possible_replacement___initialize_input_medium
---!!!!A possible replacement for the above `initialize_input_medium'
-		do
-			input_medium := connection.socket
-			connection.request_data_for (current_symbol, intraday, Void)
-			if not connection.last_communication_succeeded then
-				fatal_error := True
---!!!!Where/when should this error be reported?:
-print ("Error occurred requesting data:%N" +
-connection.error_report + "%N")
 			end
 		end
 

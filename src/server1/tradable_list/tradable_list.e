@@ -459,7 +459,6 @@ feature {NONE} -- Implementation
 
     initial_cache_size: INTEGER
             -- The initial size of the tradable cache
--- !!!! indexing once_status: global??!!!
         local
             gsf: expanded GLOBAL_SERVER_FACILITIES
         once

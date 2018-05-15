@@ -14,7 +14,7 @@ class N_BASED_UNARY_OPERATOR inherit
 		rename
 			make as n_make
 		undefine
-			children, who_am_i__parent
+			children
 		redefine
 			initialize
 		select

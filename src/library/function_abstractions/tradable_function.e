@@ -28,7 +28,7 @@ deferred class TRADABLE_FUNCTION inherit
         rename
             description as short_description
         undefine
-            is_equal, verbose_name
+            is_equal
         redefine
             set_name
         end
@@ -147,13 +147,6 @@ feature -- Access
     innermost_input: SIMPLE_FUNCTION [TRADABLE_TUPLE]
             -- The innermost input sequence to be processed
         deferred
-        end
-
---!!!!!Probably remove this or replace it with verbose_name:!!!!
-    full_name: STRING
-            -- `name' and additional elaboration, if any
-        do
-            Result := name
         end
 
     owner: TREE_NODE

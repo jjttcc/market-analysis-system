@@ -23,7 +23,7 @@ class NUMERIC_VALUE_COMMAND inherit
 			{NONE} all
 			{ANY} infix "<"
 		undefine
-			set_name, verbose_name
+			set_name
 		select
 			is_equal
 		end

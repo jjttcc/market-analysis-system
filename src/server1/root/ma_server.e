@@ -30,7 +30,6 @@ feature {NONE} -- Hook routine implementations
 
 -- @@Temporary - make these math classes available in the IDE until
 -- operators using them are implemented:
-r: RANDOM
 f: FIBONACCI
 th_ex: THREAD_EXPERIMENTS
 
@@ -72,7 +71,6 @@ th_ex: THREAD_EXPERIMENTS
 		end
 
 	additional_read_commands: LINEAR [POLL_COMMAND]
--- !!!! indexing once_status: global??!!!
 		local
 			cmds: LINKED_LIST [POLL_COMMAND]
 		once
@@ -152,7 +150,6 @@ feature {NONE} -- Implementation
 		end
 
 	factory_builder: GLOBAL_OBJECT_BUILDER
--- !!!! indexing once_status: global??!!!
 		once
 			create Result.make
 		end

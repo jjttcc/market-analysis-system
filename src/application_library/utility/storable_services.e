@@ -88,9 +88,7 @@ feature {NONE} -- Implementation
             changed_and_ok_to_save: dirty and ok_to_save
             not_aborted: not abort_edit
         do
---!!!!!<markedit - ensure unique names...>
             real_list.copy (working_list)
-check_for_duplicate_names (real_list)
             real_list.save
             show_message ("The changes have been saved.")
             deep_copy_list (working_list, real_list)
@@ -228,12 +226,9 @@ check_for_duplicate_names (real_list)
                 until
                     node_list.off
                 loop
-log_error("==== calling cfnnc for " + node_list.item.name + " ====[%N")
-log_error(node_list.item.out + "]N")
                     check_for_node_name_conflict (node_list.item)
                     node_list.forth
                 end
---!!!!!<markedit>: in progress...
             end
         end
 
@@ -264,15 +259,11 @@ log_error(node_list.item.out + "]N")
                         i := 1; name := curnode.name
                         if table.has (name) then
                             i := (table.at(name)) + 1
---log_error("cfnnc, duplicates (" + i.out + ") found for " + name + "%N")
                         end
                         table.force (i, name)
---log_error("cfnnc, i: " + i.out + ", name: " + name + ", type: " +
---curnode.generating_type + ", tblsz: " + table.count.out + "%N")
                     end
                 (?, node_name_table))
             key_list := node_name_table.current_keys
-log_error("KEY_LIST count: " + key_list.count.out + "%N")
             key_list.do_all (
                 agent (curname: STRING; table: HASH_TABLE[INTEGER,STRING])
                     local

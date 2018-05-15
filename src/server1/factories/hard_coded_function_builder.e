@@ -66,7 +66,6 @@ feature -- Basic operations
             f: SIMPLE_FUNCTION [BASIC_TRADABLE_TUPLE]
             cf1, cf2: COMPLEX_FUNCTION
         do
---!!!!!<markedit>!!!!!
             f := innermost_function
             create l.make
             l.extend (simple_ma (f, Simple_MA_n, "Simple Moving Average"))
@@ -139,9 +138,7 @@ feature {NONE} -- Hard-coded tradable function building procedures
             cmd2: BASIC_LINEAR_COMMAND
         do
             create cmd1.make (f1.output)
-            cmd1.append_to_name(" (subtraction's left operand)", "")
             create cmd2.make (f2.output)
-            cmd1.append_to_name(" (subtraction's right operand)", "")
             create sub.make (cmd1, cmd2)
             create Result.make (f1, f2, sub)
             Result.set_name (name)

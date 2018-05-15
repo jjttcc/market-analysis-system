@@ -162,16 +162,21 @@ feature {NONE} -- Implementation
 			socket_exists: socket /= Void
 			connected: connected
 		local
-sdb: SOCKET_DEBUGGER
+			sdb: SOCKET_DEBUGGER
 		do
-create sdb.make_with_socket (socket)
+			create sdb.make_with_socket (socket)
 			last_communication_succeeded := False
 			server_response := ""
---!!!!:
---print ("socket report before request:%N" + sdb.report (Void) + "%N")
---print ("sending request: '" + r + "'%N")
+			debug
+				print ("socket report before request:%N" +
+					sdb.report (Void) + "%N")
+				print ("sending request: '" + r + "'%N")
+			end
 			socket.put_string (r)
---print ("socket report after request:%N" + sdb.report (Void) + "%N")
+			debug
+				print ("socket report after request:%N" +
+					sdb.report (Void) + "%N")
+			end
 			if socket.socket_ok then
 				last_communication_succeeded := True
 				if wait_for_response then
@@ -314,10 +319,6 @@ feature {NONE} -- Hook routines
 					"Timed out waiting for server response."
 				last_communication_succeeded := False
 			end
---!!!:
-if s /= Void then
---print ("sendreq - s: '" + s + "'%N")
-end
 		ensure
 			still_connected_if_no_error:
 				last_communication_succeeded implies connected

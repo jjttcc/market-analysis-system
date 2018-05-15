@@ -205,7 +205,6 @@ feature {NONE} -- Implementation
 		end
 
 	make_ctf: COMPOSITE_TUPLE_FACTORY
--- !!!! indexing once_status: global??!!! [probaly not, but check]
 		once
 			create {COMPOSITE_VOLUME_TUPLE_FACTORY} Result
 		end

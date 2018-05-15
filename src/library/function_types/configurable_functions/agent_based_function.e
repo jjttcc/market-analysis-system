@@ -13,7 +13,7 @@ class AGENT_BASED_FUNCTION inherit
 	COMPLEX_FUNCTION
 		redefine
 			set_innermost_input, reset_parameters, operator_used,
-			immediate_direct_parameters, flag_as_modified, who_am_i__parent
+			immediate_direct_parameters, flag_as_modified
 		end
 
 	LINEAR_ANALYZER
@@ -32,7 +32,13 @@ feature {NONE} -- Initialization
 				create {LINKED_LIST [TRADABLE_FUNCTION]} inputs.make
 			else
 				inputs := ins
---!!!!inputs.do_all...  i.initialize_from_parent(Current)... end!!!!!
+				-- Tell each input: "I am your father!" (or mother?):
+				inputs.do_all
+					(agent (inp: TRADABLE_FUNCTION; current_object: TREE_NODE)
+						do
+							inp.initialize_from_parent(current_object)
+						end
+					(?, Current))
 			end
 			if op /= Void then
 				set_operator (op)
@@ -50,10 +56,7 @@ feature -- Access
 
 	agent_table: MARKET_AGENTS
 			-- Table of available "market-agents"
--- !!!! indexing once_status: global??!!!
 		once
-			--@@If the application is made multi-threaded, this should be
-			--"once-per-thread".
 			create Result
 		end
 
@@ -296,14 +299,6 @@ feature {TRADABLE_FUNCTION_EDITOR} -- Removal
 			inputs.wipe_out
 		end
 
-feature {TREE_NODE} -- Implementation
-
-    who_am_i__parent (child: TREE_NODE): STRING
-        do
-            Result := "[" + generating_type.out + "]"
-Result := "[abf/" + hash_code.out + "] "
-        end
-
 feature {NONE} -- Implementation
 
 	initialize_operators
@@ -322,7 +317,6 @@ feature {NONE} -- Implementation
 		end
 
 	default_target: LIST [TRADABLE_TUPLE]
--- !!!! indexing once_status: global??!!!
 		once
 			create {LINKED_LIST [TRADABLE_TUPLE]} Result.make
 		end

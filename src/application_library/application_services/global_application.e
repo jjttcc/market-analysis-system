@@ -92,7 +92,6 @@ feature -- Access
 			-- create_stock_function_library is called (once) to fill
 			-- stock_function_library with valid (for a stock) members
 			-- of function_library.
--- !!!! indexing once_status: global??!!!
 		once
 			Result := retrieved_function_library
 		ensure
@@ -104,7 +103,6 @@ feature -- Access
 			-- create_stock_tradable_event_generation_library is called (once)
 			-- to fill stock_tradable_event_generation_library with valid
 			-- (for a stock) members of function_library.
--- !!!! indexing once_status: global??!!!
 		once
 			Result := retrieved_tradable_event_generation_library
 		ensure
@@ -113,7 +111,6 @@ feature -- Access
 
 	tradable_event_registrants: STORABLE_LIST [TRADABLE_EVENT_REGISTRANT]
 			-- All defined event registrants
--- !!!! indexing once_status: global??!!!
 		once
 			Result := retrieved_tradable_event_registrants
 		ensure
@@ -426,7 +423,6 @@ feature {NONE} -- Implementation
 
 	stock_function_library: LIST [TRADABLE_FUNCTION]
 			-- Members of `function_library' that are valid for stocks
--- !!!! indexing once_status: global??!!!
 		once
 			create {LINKED_LIST [TRADABLE_FUNCTION]} Result.make
 		end
@@ -447,7 +443,6 @@ feature {NONE} -- Implementation
 	stock_tradable_event_generation_library: LIST [TRADABLE_EVENT_GENERATOR]
 			-- Members of `tradable_event_generation_library' that are valid
 			-- for stocks
--- !!!! indexing once_status: global??!!!
 		once
 			create {LINKED_LIST [TRADABLE_EVENT_GENERATOR]} Result.make
 		end

@@ -19,7 +19,7 @@ deferred class N_RECORD_LINEAR_COMMAND inherit
 		export {NONE}
 			nrc_make_unused
 		undefine
-			children, who_am_i__parent
+			children
 		redefine
 			initialize, set_n
 		select
@@ -32,7 +32,7 @@ deferred class N_RECORD_LINEAR_COMMAND inherit
 		export {NONE}
 			lc_initialize
 		undefine
-			children, who_am_i__parent
+			children
 		redefine
 			forth, start, exhausted, invariant_value, target, action, index,
 			index_is_target_based

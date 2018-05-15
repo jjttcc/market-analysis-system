@@ -34,10 +34,10 @@ feature -- Access
         deferred
         end
 
-    unique_name: STRING
-            -- Unique (if possible - not guaranteed) name for the parameter -
-            -- i.e., unique among parameters belonging to a particular
-            -- TRADABLE_FUNCTION
+    verbose_name: STRING
+            -- "verbose" (hopefully unique [i.e., unique among parameters
+            -- belonging to a particular TRADABLE_FUNCTION] but not
+            -- guaranteed) name for the parameter
         do
             Result := description
         end
@@ -51,11 +51,6 @@ feature -- Access
             -- Does `v' match the current value according to the
             -- internal type of the value?
         deferred
-        end
-
-    verbose_name: STRING
-        do
-            Result := unique_name
         end
 
     owner: TREE_NODE

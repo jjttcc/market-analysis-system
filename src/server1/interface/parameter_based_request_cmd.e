@@ -183,7 +183,7 @@ feature {NONE}
             set_iteration(1)
             parameters.do_all(agent (param: FUNCTION_PARAMETER)
                 do
-                    put(concatenation(<<param.unique_name,
+                    put(concatenation(<<param.verbose_name,
                         message_component_separator, param.current_value,
                         message_component_separator,
                         param.value_type_description>>))

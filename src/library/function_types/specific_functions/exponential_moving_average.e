@@ -18,8 +18,7 @@ class EXPONENTIAL_MOVING_AVERAGE inherit
         rename
             make as sma_make
         redefine
-            action, set_n, short_description, direct_operators, do_process,
-            who_am_i__parent
+            action, set_n, short_description, direct_operators, do_process
         end
 
     MATH_CONSTANTS
@@ -72,7 +71,7 @@ feature {NONE} -- Initialization
             exp.set_n (i)
             exp.initialize_from_parent(Current)
             create sum.make (in.output, op, i)
-            sum.initialize_from_parent(Current) --<-!!!!!Check this!!!!
+            sum.initialize_from_parent(Current)
             create output.make (in.output.count)
             nrovf_set_input (in)
             operator := op
@@ -104,14 +103,6 @@ feature {TRADABLE_FUNCTION_EDITOR} -- Status setting
         do
             Precursor (value)
             exp.initialize (Current)
-        end
-
-feature {TREE_NODE} -- Implementation
-
-    who_am_i__parent (child: TREE_NODE): STRING
-        do
-            Result := "[" + generating_type.out + "]"
-Result := "[ema/" + hash_code.out + "(TBI)] "
         end
 
 feature {NONE} -- Implementation

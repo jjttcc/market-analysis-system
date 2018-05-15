@@ -45,32 +45,6 @@ feature {NONE}
 
     retrieve_parameters
         do
---!!!!!unique-stored-names TO-DO: for shared objects/parameters (i.e.,
---!!!same object/reference used by > 1 component), make sure that
---!!!the shared param is only reported to the user once, instead of once
---!!!for each time it is referenced.  (And - include indication to user
---!!!that it is shared?!!!!
---With respect to the list of parameters being retrieved and reported
---back to the client:
---    If there are parameters with duplicate names and different ids,
---    that is a bug - the names should not be duplicated.
---    If there are parameters with the same id (i.e., referencing the same
---    object), that seems to be a bug with 2 different possibilities:
---      - If these "same-reference" parameters are supposed to be shared,
---        only one of them should be sent to the client; if the client
---        changes it (via MODIFY_*REQUEST_CMD), that one object changes
---        and the change is seen by all objects that refer to it - this
---        is why it is shared, i.e., to share its value.
---      - If these "same-reference" parameters are not supposed to be
---        shared, there is either a bug in the code causing this
---        incorrect sharing, or the user has mistakenly specified that
---        it be shared when creating the owning analyzer/indicator; the
---        first case is a bug to be fixed, the 2nd case seems to be user
---        error, although there may (or may not) be user-interface
---        changes possible that make it less likely for the user to make
---        this mistake.
---    The above also applies to indicator parameter commmands, of course.
--- (Todo: Look at ind: Slope of MACD Signal Line Trend)
             parameters := session.parameters_for_processor(event_generator)
         end
 

@@ -12,7 +12,7 @@ class SESSION_FUNCTION_PARAMETER inherit
 
     FUNCTION_PARAMETER
         redefine
-            unique_name
+            verbose_name
         end
 
 creation {MAS_SESSION}
@@ -36,10 +36,10 @@ feature -- Access
 
     current_value: STRING
 
-    name, unique_name: STRING
+    name, verbose_name: STRING
         do
             if saved_name = Void then
-                saved_name := source_parameter.unique_name
+                saved_name := source_parameter.verbose_name
                 if occurrences_for[saved_name] > 1 then
                     saved_name := unique_param_name(saved_name)
                 end
@@ -108,7 +108,7 @@ feature {NONE} -- Implementation
                 tag := ""
             end
             ancs := param.owner.ancestors
-            Result := param.unique_name + tag + " (" + ancs.count.out +
+            Result := param.verbose_name + tag + " (" + ancs.count.out +
                 " ancestors):\n"
             ancs.linear_representation.do_all
                 (agent (node: TREE_NODE; report: STRING)

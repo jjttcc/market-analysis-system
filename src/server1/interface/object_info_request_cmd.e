@@ -284,18 +284,18 @@ feature {NONE} -- Implementation
         do
             Result := ""
             if f.name.is_empty then
-                fname := f.unique_name
+                fname := f.verbose_name
             else
                 fname := f.name
             end
-            if fname ~ f.unique_name.substring(1, fname.count) then
+            if fname ~ f.verbose_name.substring(1, fname.count) then
                 -- Include the name only if it differs from the beginning
-                -- of f.unique_name.
+                -- of f.verbose_name.
                 fname := ""
             else
                 fname := fname + ": "
             end
-            Result := Result + block(heading(fname + f.unique_name,
+            Result := Result + block(heading(fname + f.verbose_name,
                                              as_function))
             Result := Result + increment_level
             if not as_function and then not f.current_value.is_empty then

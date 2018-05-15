@@ -24,8 +24,7 @@ class COMPOUND_EVENT_GENERATOR inherit
 
     TRADABLE_EVENT_GENERATOR
         redefine
-            children, append_to_name, initialize_from_parent,
-            who_am_i__parent
+            children, initialize_from_parent
         end
 
     GENERAL_UTILITIES
@@ -178,16 +177,6 @@ feature -- Status setting
         ensure then
             p_is_a_parent: parents.has(p)
         end
-
-feature -- Element change
-
---!!!!!<atn>!!!!!
-    append_to_name(suffix, sep: STRING) do
-io.error.print("append_to_name called with '" + suffix + "'" +
-" [" + generating_type+ "]%N")
-        left_analyzer.append_to_name(suffix, sep)
-        right_analyzer.append_to_name(suffix, sep)
-    end
 
 feature -- Basic operations
 
@@ -345,14 +334,6 @@ feature {NONE} -- Implementation
         do
             create e.make (left, right, "Event pair", event_type, signal_type)
             product.extend (e)
-        end
-
-feature {TREE_NODE} -- Implementation
-
-    who_am_i__parent (child: TREE_NODE): STRING
-        do
-            Result := "[" + generating_type.out + "]"
-Result := "[ceg/" + hash_code.out + "(TBI)] "
         end
 
 feature {TRADABLE_FUNCTION_EDITOR}

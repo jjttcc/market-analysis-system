@@ -19,7 +19,7 @@ class ACCUMULATION inherit
 		export
 			{NONE} set_operators_unused
 		redefine
-			operator, start, short_description, who_am_i__parent
+			operator, start, short_description 
 		end
 
 	COMMAND_EDITOR -- To allow editing of `previous_operator'
@@ -61,14 +61,6 @@ feature {TRADABLE_FUNCTION_EDITOR} -- Status setting
 			first_element_operator_set: first_element_operator = fop and
 				first_element_operator /= Void
 		end
-
-feature {TREE_NODE} -- Implementation
-
-    who_am_i__parent (child: TREE_NODE): STRING
-        do
-            Result := "[" + generating_type.out + "]"
-Result := "[accum/" + hash_code.out + "(TBI)] "
-        end
 
 feature {NONE} -- Initialization
 

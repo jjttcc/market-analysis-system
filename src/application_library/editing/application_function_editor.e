@@ -358,7 +358,7 @@ feature -- Basic operations
 				concatenation (<<f.name, "'s (", f.generator,
 				") input function">>), Void)
 			f.clear_inputs
-			f.add_input (last_selected_abf_input)
+			f.add_input(last_selected_abf_input)
 			create key_selection.make
 			keys := f.agent_table.keys.linear_representation
 			keys.do_all (agent append_string_boolean_pair (key_selection, ?,
@@ -371,7 +371,7 @@ feature -- Basic operations
 					user_interface.show_message ("Please choose a procedure.")
 				end
 			end
-			f.set_calculator_key (key_choices @ 1)
+			f.set_calculator_key(key_choices @ 1)
 		end
 
 feature {NONE} -- Implementation
@@ -410,7 +410,6 @@ feature {NONE} -- Implementation
 
 	exclude_cmds: LIST [COMMAND]
 			-- Commands not allowed as operators for tradable functions
--- !!!! indexing once_status: global??!!!
 		once
 			create {LINKED_LIST [COMMAND]} Result.make
 		end

@@ -19,7 +19,7 @@ class MINUS_N_COMMAND inherit
         export {NONE}
             nrc_make_unused
         undefine
-            children, who_am_i__parent
+            children
         redefine
             initialize
         select
@@ -32,7 +32,7 @@ class MINUS_N_COMMAND inherit
         export {NONE}
             loc_initialize
         undefine
-            children, who_am_i__parent
+            children
         end
 
     UNARY_OPERATOR [DOUBLE, DOUBLE]

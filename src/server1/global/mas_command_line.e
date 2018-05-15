@@ -325,7 +325,6 @@ feature {NONE} -- Implementation
 					contents.item @ 3 = option_component_separator
 				then
 					portnum := contents.item.substring (4, contents.item.count)
---!!!Check
 					if portnum.is_integer then
 						use_sockets := True
 						data_supplier_port_number := portnum.to_integer

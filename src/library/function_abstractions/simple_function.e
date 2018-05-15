@@ -81,20 +81,17 @@ feature -- Access
 		end
 
 	parameters: LIST [FUNCTION_PARAMETER]
--- !!!! indexing once_status: global??!!!
 		once
 			create {LINKED_LIST [FUNCTION_PARAMETER]} Result.make
 		end
 
 	processed_date_time: DATE_TIME
--- !!!! indexing once_status: global??!!!
 		once
 			-- Very early date
 			create Result.make (1, 1, 1, 0, 0, 0)
 		end
 
 	children: LINKED_LIST [TRADABLE_FUNCTION]
--- !!!! indexing once_status: global??!!!
 		once
 			create Result.make
 		end
@@ -169,12 +166,6 @@ feature {COMPOSITE_TUPLE_BUILDER} -- Basic operations
 
 	process
 			-- Null action
-		do
-		end
-
-feature {FACTORY, TRADABLE_FUNCTION_EDITOR} -- Element change
-
-	append_to_name(suffix, separator: STRING)
 		do
 		end
 

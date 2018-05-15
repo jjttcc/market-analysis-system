@@ -18,7 +18,6 @@ deferred class COMMAND_EDITING_INTERFACE inherit
             object_types as command_types, edit_object as edit_command,
             user_object_selection as user_command_selection,
             initialize_object as initialize_command,
-            configure_object as configure_command,
             current_objects as current_commands
         redefine
             editor, command_types, descendant_reset, edit_command
@@ -45,7 +44,6 @@ feature -- Access
             -- Hash table of lists of command instances - each list contains
             -- instances of all classes whose type conforms to the Hash
             -- table key.
--- !!!! indexing once_status: global??!!!
         local
             l: ARRAYED_LIST [COMMAND]
         once
@@ -384,7 +382,6 @@ feature {NONE} -- Implementation
 
     initialization_map: HASH_TABLE [INTEGER, STRING]
             -- Mapping of COMMAND names to initialization classifications
--- !!!! indexing once_status: global??!!!
         local
             name: STRING
         once
@@ -849,13 +846,6 @@ feature {NONE} -- Implementation
                     c_is_a_value_at_idx: value_at_idx /= Void
                 end
                 editor.edit_value_at_index_command (value_at_idx)
-            end
-        end
-
-    configure_command (c: COMMAND; desc: STRING)
-        do
-            if desc /= Void and then not desc.empty then
-                c.append_to_name (desc, " - ")
             end
         end
 
