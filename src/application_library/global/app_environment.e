@@ -97,6 +97,33 @@ feature -- Access
             end
         end
 
+    debug_level: INTEGER
+            -- Level for control of debugging output:
+            --   0 or not set => none
+            --   1            => basic
+            --   2            => verbose
+            --   3            => extremely verbose
+            -- If the <debug_level_name> environment variable is set to
+            -- a value that cannot be converted to a non-negative integer,
+            -- the result will be 0.
+            -- 0 if the associated environment variable is not set.
+        note
+            once_status: global
+        local
+            value: STRING
+        once
+            Result := 0
+            value := get (env_names.debug_level_name)
+            if value /= Void then
+                if value.is_integer then
+                    Result := value.to_integer
+                    if Result < 0 then
+                        Result := 0
+                    end
+                end
+            end
+        end
+
     file_name_with_app_directory (fname: STRING; use_absolute_path: BOOLEAN):
         STRING
             -- A full path name constructed from `app_directory' and `fname' -

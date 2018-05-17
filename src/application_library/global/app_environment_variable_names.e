@@ -70,4 +70,11 @@ feature -- Access
 			Result := "MAS_CONN_CACHE_SIZE"
 		end
 
+	debug_level_name: STRING
+			-- Name of environment variable that specifies a debug level
+			-- for debugging output - expected to be a non-negative integer
+		do
+			Result := "MAS_DEBUG_LEVEL"
+		end
+
 end -- APP_ENVIRONMENT_VARIABLE_NAMES

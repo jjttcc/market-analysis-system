@@ -14,7 +14,8 @@ class N_RECORD_ONE_VARIABLE_FUNCTION inherit
 		rename
 			make as ovf_make
 		redefine
-			do_process, target, short_description, immediate_direct_parameters
+			do_process, target, short_description, immediate_direct_parameters,
+			processor_type
 		end
 
 	N_RECORD_STRUCTURE
@@ -66,6 +67,11 @@ feature -- Access
 
 	effective_offset: INTEGER
 			-- Offset used to produce the effective_n value
+
+    processor_type: STRING
+		do
+			Result := "n-record one-var func"
+		end
 
 feature {FACTORY, TRADABLE_FUNCTION_EDITOR} -- Status setting
 

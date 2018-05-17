@@ -18,7 +18,8 @@ class EXPONENTIAL_MOVING_AVERAGE inherit
         rename
             make as sma_make
         redefine
-            action, set_n, short_description, direct_operators, do_process
+            action, set_n, short_description, direct_operators, do_process,
+            processor_type
         end
 
     MATH_CONSTANTS
@@ -44,6 +45,8 @@ feature -- Access
 
     exp: N_BASED_CALCULATION
             -- The so-called exponential (weighting value)
+
+    processor_type: STRING = "EMA"
 
 feature {NONE} -- Basic operations
 

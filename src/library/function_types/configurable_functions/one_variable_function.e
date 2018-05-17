@@ -101,7 +101,10 @@ feature -- Access
             exists: Result /= Void
         end
 
-    processor_type: STRING = "one-var func"
+    processor_type: STRING
+        do
+            Result := "one-var func"
+        end
 
 feature {FACTORY} -- Element change
 

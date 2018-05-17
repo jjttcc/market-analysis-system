@@ -29,7 +29,7 @@ class CONFIGURABLE_N_RECORD_FUNCTION inherit
 		export
 			{NONE} set_operator
 		undefine
-			immediate_direct_parameters, set_operator
+			immediate_direct_parameters, set_operator, processor_type
 		redefine
 			short_description, start, initialize_operators, target, action
 		end

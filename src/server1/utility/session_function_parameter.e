@@ -128,6 +128,58 @@ feature {NONE} -- Implementation
             Result.replace_substring_all("%N", "\n")
         end
 
+    tree_summary (param: FUNCTION_PARAMETER; inttag: INTEGER_REF): STRING
+            -- param's name and important details
+            -- level: child/indent level - 0 => root
+            -- If `inttag' is not Void, include it in the name.
+        local
+            node: TWO_WAY_TREE [TREE_NODE]
+            tag, n: STRING
+        do
+            if inttag /= Void then
+                tag := "[" + inttag.out + "]"
+            else
+                tag := ""
+            end
+            node := param.owner.ancestors
+            Result := param.verbose_name + tag + " (" + node.count.out +
+                " ancestors):\n"
+            Result := Result + tree_info(node, 1)
+        end
+
+    tree_info (node: TWO_WAY_TREE [TREE_NODE]; level: INTEGER): STRING
+            -- ....
+            -- level: child/indent level - 0 => root
+        local
+            ancs: TWO_WAY_TREE [TREE_NODE]
+            margin: STRING
+            app: expanded APP_ENVIRONMENT
+        do
+            create margin.make_filled(' ', level * TAB_SIZE)
+            Result := node.item.name
+            if Result.empty then
+                Result := node.item.node_type
+            end
+            if app.debug_level > 1 then
+                Result := Result + " (" + node.item.out + ")"
+                if app.debug_level < 3 then
+                    -- (Throw away all but the chars up to the 1st newline.)
+                    Result := Result.substring(1, Result.index_of('%N', 1) - 1)
+                else
+                    Result.replace_substring_all("%N", "\n" + margin)
+                end
+            end
+            Result := margin + Result
+            from
+                node.child_start
+            until
+                node.child_off
+            loop
+                Result := Result + "\n" + tree_info(node.child, level + 1)
+                node.child_forth
+            end
+        end
+
     MAX_NAME_TRIES: INTEGER = 5
 
     unique_param_name(oldname: STRING): STRING
@@ -137,6 +189,7 @@ feature {NONE} -- Implementation
             curname: STRING
             tag: INTEGER_REF
             exc: expanded EXCEPTION
+            app: expanded APP_ENVIRONMENT
         do
             Result := Void
             tag := Void
@@ -145,7 +198,11 @@ feature {NONE} -- Implementation
             until
                 Result /= Void or tries = MAX_NAME_TRIES
             loop
-                curname := summary(source_parameter, tag)
+                if app.debug_level > 0 then
+                    curname := tree_summary(source_parameter, tag)
+                else
+                    curname := summary(source_parameter, tag)
+                end
                 if not occurrences_for.has(curname) then
                     occurrences_for[oldname] := occurrences_for[oldname] - 1
                     occurrences_for[curname] := 1
@@ -159,7 +216,11 @@ feature {NONE} -- Implementation
             if Result = Void then
                 randomness.forth
                 tag.set_item(randomness.item)
-                curname := summary(source_parameter, tag)
+                if app.debug_level > 0 then
+                    curname := tree_summary(source_parameter, tag)
+                else
+                    curname := summary(source_parameter, tag)
+                end
                 if not occurrences_for.has(curname) then
                     occurrences_for[oldname] := occurrences_for[oldname] - 1
                     occurrences_for[curname] := 1
@@ -172,5 +233,7 @@ feature {NONE} -- Implementation
                 exc.raise
             end
         end
+
+    TAB_SIZE: INTEGER = 3
 
 end

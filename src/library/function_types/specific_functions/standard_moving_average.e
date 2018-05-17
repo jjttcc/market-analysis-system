@@ -14,7 +14,7 @@ class STANDARD_MOVING_AVERAGE inherit
     N_RECORD_ONE_VARIABLE_FUNCTION
         redefine
             set_operator, action, set_input, set_n, do_process, make,
-            short_description, direct_operators
+            short_description, direct_operators, processor_type
         select
             set_operator, set_input, set_n, make
         end
@@ -26,7 +26,7 @@ class STANDARD_MOVING_AVERAGE inherit
             set_n as nrovf_set_n, set_operator as nrovf_set_operator,
             set_input as nrovf_set_input, make as nrovf_make
         undefine
-            direct_operators
+            direct_operators, processor_type
         redefine
             action, do_process, short_description
         end
@@ -54,6 +54,11 @@ feature -- Access
             Result.extend (sum)
         ensure then
             has_sum: Result.has (sum)
+        end
+
+    processor_type: STRING
+        do
+            Result := "SMA"
         end
 
 feature {NONE} -- Initialization

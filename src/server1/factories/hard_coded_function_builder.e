@@ -577,7 +577,6 @@ feature {NONE} -- Functions currently not used
 
     print_ancestors(tn: TREE_NODE)
     local
-        ancs: TWO_WAY_TREE [TREE_NODE]
         tag: STRING
      do
         tag:= tn.name

@@ -148,7 +148,10 @@ feature -- Status setting
             if parents_implementation = Void then
                 create {LINKED_LIST [TREE_NODE]} parents_implementation.make
             end
-            parents_implementation.extend(p)
+            -- Prevent adding the same parent twice.
+            if not is_parent(p) then
+                parents_implementation.extend(p)
+            end
         ensure then
             p_is_a_parent: parents.has(p)
         end

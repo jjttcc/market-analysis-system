@@ -19,7 +19,7 @@ class ACCUMULATION inherit
 		export
 			{NONE} set_operators_unused
 		redefine
-			operator, start, short_description 
+			operator, start, short_description, processor_type
 		end
 
 	COMMAND_EDITOR -- To allow editing of `previous_operator'
@@ -41,6 +41,8 @@ feature -- Access
 			-- Operator that performs the accumulation of the value for
 			-- the current period with that for the previous period -
 			-- usually will be ADDITION
+
+    processor_type: STRING = "accumulation"
 
 feature {TRADABLE_FUNCTION_EDITOR} -- Status setting
 
