@@ -12,7 +12,7 @@ deferred class ONE_VARIABLE_LINEAR_ANALYZER inherit
 
 	SETTABLE_LINEAR_ANALYZER
 		redefine
-			start
+			start, exhausted
 		end
 
 feature -- Access
@@ -35,6 +35,19 @@ feature -- Access
 			-- Date/time specifying which trading period to begin the
 			-- analysis of tradable data
 		deferred
+		end
+
+	end_date_time: DATE_TIME
+			-- Date/time specifying which trading period to end the
+			-- analysis of tradable data
+		deferred
+		end
+
+feature {NONE} -- Hook routine implementations
+
+	exhausted: BOOLEAN
+		do
+			Result := Precursor or else target.item.date_time > end_date_time
 		end
 
 feature {NONE} -- Basic operations

@@ -20,7 +20,7 @@ class TWO_VARIABLE_FUNCTION_ANALYZER inherit
 
     TWO_VARIABLE_LINEAR_ANALYZER
         redefine
-            start, action
+            start, action, exhausted
         end
 
     MATH_CONSTANTS
@@ -42,6 +42,7 @@ feature -- Initialization
             set_input1 (in1)
             set_input2 (in2)
             create start_date_time.make_now
+            create end_date_time.make_now
             -- EVENT_TYPE instances have a one-to-one correspondence to
             -- FUNTION_ANALYZER instances.  Thus this is the appropriate
             -- place to create this new EVENT_TYPE instance.
@@ -57,6 +58,7 @@ feature -- Initialization
             both_directions: above_to_below and below_to_above
             use_right: use_right_function
             -- start_date_set_to_now: start_date_time is set to current time
+            -- end_date_set_to_now: end_date_time is set to current time
         end
 
 feature -- Access
@@ -176,6 +178,11 @@ feature -- Basic operations
         end
 
 feature {NONE} -- Hook routine implementation
+
+    exhausted: BOOLEAN
+        do
+			Result := Precursor or else target1.item.date_time > end_date_time
+        end
 
     start
         do
@@ -336,7 +343,7 @@ feature -- Implementation
 invariant
 
     input_not_void: input1 /= Void and input1 /= Void
-    date_not_void: start_date_time /= Void
+    dates_not_void: start_date_time /= Void and end_date_time /= Void
     above_or_below: below_to_above or above_to_below
     left_xor_right_function: use_left_function xor use_right_function
 

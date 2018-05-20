@@ -23,6 +23,10 @@ feature -- Access
 			-- Date/time specifying which trading period to begin the
 			-- analysis of tradable data
 
+	end_date_time: DATE_TIME
+			-- Date/time specifying which trading period to end the
+			-- analysis of tradable data
+
 	operator: RESULT_COMMAND [BOOLEAN]
 			-- Operator used to analyze each tuple - evaluation to True
 			-- will result in an event being generated.
@@ -56,6 +60,14 @@ feature -- Status setting
 		ensure then
 			start_date_time_set: start_date_time = d and
 									start_date_time /= Void
+		end
+
+	set_end_date_time (d: DATE_TIME)
+		do
+			end_date_time := d
+		ensure then
+			end_date_time_set: end_date_time = d and
+									end_date_time /= Void
 		end
 
 	set_operator (arg: RESULT_COMMAND [BOOLEAN])

@@ -119,6 +119,14 @@ feature -- Status setting
             right_analyzer.set_start_date_time (d)
         end
 
+    set_end_date_time (d: DATE_TIME)
+            -- Set `left_analyzer' and `right_analyzer' `end_date_time's
+            -- to `d'.
+        do
+            left_analyzer.set_end_date_time (d)
+            right_analyzer.set_end_date_time (d)
+        end
+
     set_before_extension (arg: DATE_TIME_DURATION)
             -- Set before_extension to -`arg'.
         require

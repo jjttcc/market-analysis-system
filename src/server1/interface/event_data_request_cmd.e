@@ -105,6 +105,7 @@ feature -- Basic operations
                         d := future_date
                     end
                     create analysis_end_date.make_by_date (d)
+                    analysis_end_date.set_time(create {TIME}.make(23, 59, 59))
                 end
             end
             if not parse_error then
@@ -271,6 +272,17 @@ feature {NONE}
             -- event generators and coordinators currently don't use an
             -- end date, so just set the start date.
             event_coordinator.set_start_date_time (analysis_start_date)
+            --@@TO-DO: For proper backtesting, the end date needs to
+            --@@be applied to the underlying tradable - i.e., stock or
+            --@@commodity.  For example, to get trading signals that would
+            --@@have occurred on 2012-06-29, the latest data available for
+            --@@the underlying stock/tradable needs to be for that date, to
+            --@@duplicate what actually would have occurred if the analysis
+            --@@had been run on that date, for which no future data would,
+            --@@of course, have been available.  (The end-date is currently
+            --@@only applied to the result of the "analyzer"s' processing of
+            --@@the data.)
+            event_coordinator.set_end_date_time (analysis_end_date)
             event_coordinator.set_event_generators (valid_event_generators)
         ensure
             pair_not_void: tradable_pair /= Void

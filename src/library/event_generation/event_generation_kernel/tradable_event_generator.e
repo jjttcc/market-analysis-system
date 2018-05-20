@@ -151,6 +151,13 @@ feature -- Status setting
         deferred
         end
 
+    set_end_date_time (d: DATE_TIME)
+            -- Set the date and time to end the analysis to `d'.
+        require
+            not_void: d /= Void
+        deferred
+        end
+
 feature {TRADABLE_FUNCTION_EDITOR}
 
     wipe_out

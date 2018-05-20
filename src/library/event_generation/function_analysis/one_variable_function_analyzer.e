@@ -34,6 +34,7 @@ feature -- Initialization
         do
             set_input(in)
             create start_date_time.make_now
+            create end_date_time.make_now
             operator := op
             -- EVENT_TYPE instances have a one-to-one correspondence to
             -- FUNTION_ANALYZER instances.  Thus this is the appropriate
@@ -43,11 +44,12 @@ feature -- Initialization
             period_type := per_type
         ensure
             set: input = in and operator = op and start_date_time /= Void and
-                event_type /= Void and event_type = ev_type and
-                signal_type = sig_type
+                end_date_time /= Void and event_type /= Void and
+                event_type = ev_type and signal_type = sig_type
             period_type_set: period_type = per_type
             left_offset_0: left_offset = 0
             -- start_date_set_to_now: start_date_time is set to current time
+            -- end_date_set_to_now: end_date_time is set to current time
         end
 
 feature -- Access
@@ -161,7 +163,7 @@ invariant
 
     operator_not_void: operator /= Void
     input_not_void: input /= Void
-    date_not_void: start_date_time /= Void
+    dates_not_void: start_date_time /= Void and end_date_time /= Void
     offset_not_negative: left_offset >= 0
 
 end -- class ONE_VARIABLE_FUNCTION_ANALYZER

@@ -152,7 +152,6 @@ feature {NONE}
             -- Ensure dest_param is up to date with src_param; return true if
             -- dest_param was updated.
         require
-            params_match: dest_param.verbose_name ~ src_param.verbose_name
             same_type: dest_param.value_type_description ~
                 src_param.value_type_description
         do
