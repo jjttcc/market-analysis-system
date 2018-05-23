@@ -256,10 +256,6 @@ feature {NONE} -- Hard-coded tradable function building procedures
             create outerdiv.make (minus_n, k)
             create Result.make (f, outerdiv, n)
             Result.set_name (name)
-print_ancestors(one)
-print_ancestors(two)
-print_ancestors(outerdiv)
-print_ancestors(ncmd)
         end
 
     obsolete_rsi (f: TRADABLE_FUNCTION; n: INTEGER; name: STRING):
