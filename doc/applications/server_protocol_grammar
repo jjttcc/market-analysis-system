@@ -1,111 +1,114 @@
 BNF Grammar for the Protocol Between the Server and a GUI Client
 
 
-message         -> msgID mfs msg end_of_message
-msg             -> client_req | server_response
-client_req      -> session_key mfs client_req_spec | login_req
-client_req_spec -> [compress_flag] client_data_req
-client_data_req -> mkt_data_req | ind_data_req | symbol_list_req |
+message            -> msgID mfs msg end_of_message
+msg                -> client_req | server_response
+client_req         -> session_key mfs client_req_spec | login_req
+client_req_spec    -> [compress_flag] client_data_req
+client_data_req    -> mkt_data_req | ind_data_req | symbol_list_req |
                      ind_list_req | trad_pertyp_req | change_session_req |
                      event_data_req | event_list_req | logout_req |
-                     all_ind_req | param_req | param_set_req |
-                     time_delimited_mkt_data_req | time_delimited_ind_data_req |
-                     object_info_req
-compress_flag   -> "<@z@>"
-mkt_data_req    -> mkt_symbol mfs trad_per_type
-event_data_req  -> mkt_symbol mfs start_date mfs end_date mfs event_id_list
-ind_data_req    -> indID mfs mkt_symbol mfs trad_per_type
-all_ind_req     -> <null>
-param_req       -> processor_name
-param_set_req   -> processor_name mfs { param_spec subfs ... }
-object_info_req -> object_list
-trad_pertyp_req -> mkt_symbol
-login_req       -> { login_spec mfs ... }
-login_spec      -> start_date_spec | end_date_spec
-logout_req      -> <null>
-start_date_spec -> "start_date" mfs trad_per_type mfs date_spec
-end_date_spec   -> "end_date" mfs trad_per_type mfs date_spec
-date_spec       -> date_with_sep | "0" | "now" [ now_modifier ]
-now_modifier    -> "-" natural_integer now_mod_type
-now_mod_type    -> "days" | "months"
-server_response -> srvr_data | error_msg | login_response
-login_response  -> session_key [ mfs session_state ]
-error_msg       -> ta_string
-mkt_symbol      -> ta_string
-srvr_data       -> mkt_data | ind_data | symbol_list | ind_list |
+                     all_ind_req | ind_param_req | evgen_param_req | ind_param_set_req |
+                     event_param_set_req | time_delimited_mkt_data_req |
+                     time_delimited_ind_data_req | object_info_req
+compress_flag      -> "<@z@>"
+mkt_data_req       -> mkt_symbol mfs trad_per_type
+event_data_req     -> mkt_symbol mfs start_date mfs end_date mfs evgen_list
+ind_data_req       -> indID mfs mkt_symbol mfs trad_per_type
+all_ind_req        -> <null>
+ind_param_req      -> processor_name
+evgen_param_req    -> processor_name mfs trad_per_type
+ind_param_set_req  -> ind_name mfs { param_spec subfs ... }
+event_param_set_req-> event_gen_name mfs trad_per_type mfs { param_spec subfs ... }
+object_info_req    -> object_list
+trad_pertyp_req    -> mkt_symbol
+login_req          -> { login_spec mfs ... }
+login_spec         -> start_date_spec | end_date_spec
+logout_req         -> <null>
+start_date_spec    -> "start_date" mfs trad_per_type mfs date_spec
+end_date_spec      -> "end_date" mfs trad_per_type mfs date_spec
+date_spec          -> date_with_sep | "0" | "now" [ now_modifier ]
+now_modifier       -> "-" natural_integer now_mod_type
+now_mod_type       -> "days" | "months"
+server_response    -> srvr_data | error_msg | login_response
+login_response     -> session_key [ mfs session_state ]
+error_msg          -> ta_string
+mkt_symbol         -> ta_string
+srvr_data          -> mkt_data | ind_data | symbol_list | ind_list |
                      trad_per_types | event_list | event_data |
                      param_list | object_info | <null>
-mkt_data        -> { [open_int_flag] mkt_tuple "\n" ... }
-open_int_flag   -> "oi"
-ind_data        -> { ind_tuple "\n" ... }
-ind_tuple       -> datetime dfs ta_real
-symbol_list     -> { symbol "\n" ... }
-ind_list        -> { ind_name "\n" ... }
-param_list      -> { param_info "\n" ... }
-param_info      -> param_name "\t" param_value "\t" param_type_desc
-param_type_desc -> "integer value" | "real value"
-object_list     -> { object_spec "\n" ... }
-object_spec     -> object_type "," object_name [ "," object_opts ]
-object_type     -> "indicator" | "event-generator"
-object_opts     -> obj_opt_list
-obj_opt_list    -> { obj_opt ";" ... }
-obj_opt         -> "html" | "recursive" | "full-recursion"| "debug"
-object_info     -> { object_desc obj_separator ... }
-obj_separator   -> Ctrl+Z
-object_desc     -> <free-text-excluding-Ctrl+Z-and-Tab>
-event_list      -> { event_specifier "\n" ... }
-event_data      -> { event_tuple "\n" ... }
-event_tuple     -> datetime dfs eventID dfs event_type
-event_type      -> "b" | "s" | "n" | "o"
-trad_per_types  -> { trad_per_type "\n" ... }
-event_id_list   -> { eventID dfs ... }+
-event_specifier -> event_type_name dfs eventID
-param_spec      -> param_id key_val_fs param_value
-mkt_fields      -> { ta_real dfs ... }+ [ dfs volume [ dfs open_interest ] ]
-trad_per_type   -> "daily" | "weekly" | "monthly" | "quarterly" | "yearly" |
+mkt_data           -> { [open_int_flag] mkt_tuple "\n" ... }
+open_int_flag      -> "oi"
+ind_data           -> { ind_tuple "\n" ... }
+ind_tuple          -> datetime dfs ta_real
+symbol_list        -> { symbol "\n" ... }
+ind_list           -> { ind_name "\n" ... }
+param_list         -> { param_info "\n" ... }
+param_info         -> param_name "\t" param_value "\t" param_type_desc
+param_type_desc    -> "integer value" | "real value"
+object_list        -> { object_spec "\n" ... }
+object_spec        -> object_type "," object_name [ "," object_opts ]
+object_type        -> "indicator" | "event-generator"
+object_opts        -> obj_opt_list
+obj_opt_list       -> { obj_opt ";" ... }
+obj_opt            -> "html" | "recursive" | "full-recursion"| "debug"
+object_info        -> { object_desc obj_separator ... }
+obj_separator      -> Ctrl+Z
+object_desc        -> <free-text-excluding-Ctrl+Z-and-Tab>
+event_list         -> { event_specifier "\n" ... }
+event_data         -> { event_tuple "\n" ... }
+event_tuple        -> datetime dfs eventID dfs event_type
+event_type         -> "b" | "s" | "n" | "o"
+trad_per_types     -> { trad_per_type "\n" ... }
+evgen_list         -> { evgen_key dfs ... }+
+evgen_key          -> eventID ":" trad_per_type
+event_specifier    -> event_gen_name dfs eventID
+param_spec         -> param_id key_val_fs param_value
+mkt_fields         -> { ta_real dfs ... }+ [ dfs volume [ dfs open_interest ] ]
+trad_per_type      -> "daily" | "weekly" | "monthly" | "quarterly" | "yearly" |
                      "hourly" | "1-minute" | "2-minute" | "5-minute" |
                      "10-minute" | "15-minute" | "20-minute" | "30-minute"
-processor_name  -> ind_name | event_type_name
-ind_name        -> ta_string
-event_type_name -> ta_string
-param_name      -> ta_string
-param_value     -> ta_string
-object_name     -> ta_string
-indID           -> positive_integer
-eventID         -> positive_integer
-param_id        -> positive_integer
-volume          -> ta_real
-open_interest   -> ta_real
-session_key     -> natural_integer
-session_state   -> no_open_spec
-no_open_spec    -> "no_open"
-true_or_false   -> 'T' | 'F'
-msgID           -> natural_integer
-symbol_list_req -> <null>
-ind_list_req    -> mkt_symbol mfs trad_per_type
-event_list_req  -> mkt_symbol mfs trad_per_type
-start_date      -> date_spec
-end_date        -> date_spec
-date            -> year<>month<>day
-time            -> hour<>minute [<>second ]
-year            -> digit digit digit digit
-month           -> digit digit
-day             -> digit digit
-hour            -> digit digit
-minute          -> digit digit
-second          -> digit digit
-natural_integer -> +('0'..'9')
-positive_integer-> ('1'..'9') [+('0'..'9')]
-ta_real         -> +('0'..'9') '.' *('0'..'9')
-digit           -> ('0'..'9')
-end_of_message  -> ''
-ta_string       -> +(ta_char)
-ta_char         -> Any character other than tab or newline
-<null>          -> Empty string (0-length contents)
-mfs             -> "\t"
-dfs             -> "\t"
-subfs           -> ","
-key_val_fs      -> ":"
+processor_name     -> ind_name | event_gen_name
+ind_name           -> ta_string
+event_gen_name     -> ta_string
+param_name         -> ta_string
+param_value        -> ta_string
+object_name        -> ta_string
+indID              -> positive_integer
+eventID            -> positive_integer
+param_id           -> positive_integer
+volume             -> ta_real
+open_interest      -> ta_real
+session_key        -> natural_integer
+session_state      -> no_open_spec
+no_open_spec       -> "no_open"
+true_or_false      -> 'T' | 'F'
+msgID              -> natural_integer
+symbol_list_req    -> <null>
+ind_list_req       -> mkt_symbol mfs trad_per_type
+event_list_req     -> mkt_symbol mfs trad_per_type
+start_date         -> date_spec
+end_date           -> date_spec
+date               -> year<>month<>day
+time               -> hour<>minute [<>second ]
+year               -> digit digit digit digit
+month              -> digit digit
+day                -> digit digit
+hour               -> digit digit
+minute             -> digit digit
+second             -> digit digit
+natural_integer    -> +('0'..'9')
+positive_integer   -> ('1'..'9') [+('0'..'9')]
+ta_real            -> +('0'..'9') '.' *('0'..'9')
+digit              -> ('0'..'9')
+end_of_message     -> ''
+ta_string          -> +(ta_char)
+ta_char            -> Any character other than tab or newline
+<null>             -> Empty string (0-length contents)
+mfs                -> "\t"
+dfs                -> "\t"
+subfs              -> ","
+key_val_fs         -> ":"
 
 
 Definitions:
@@ -137,23 +140,30 @@ trad_pertyp_req:    Request for all trading-period types available for the
 
 all_ind_req:        Request for all indicators known to the server
 
-param_req:          Request for a list of changeable parameters for the
+ind_param_req:      Request for a list of changeable parameters for the
                     indicator with the specified name (The name is a unique
-                    key - one of the "ind_name"s returned in response to
-                    an 'all_ind_req'.)
+                    key - one of the "ind_name"s returned in response to an
+                    'all_ind_req' or 'ind_list_req'.)
 
-param_set_req:      Request to change the settings for the specified
-                    parameter with the specified period type ("all" to
-                    change the parameter for all period types) to the
-                    specified values
+evgen_param_req:    Request for a list of changeable parameters for the
+                    event-generator with the specified name and period type.
+
+ind_param_set_req:  Request to change the settings for the specified
+                    parameters of the specified indicator to the specified
+                    values
+
+event_param_set_req:
+                    Request to change the settings for the specified
+                    parameters of the specified event-generator (with the
+                    specified period type) to the specified values
 
 change_session_req: Not used - May become obsolete.
 
-event_list_req:     Request for all event types available for the specified
-                    trading-period type of the specified tradable
+event_list_req:     Request for all event generators available for the
+                    specified trading-period type of the specified tradable
 
-event_data_req:     Request for the data resulting from the analysis of
-                    the specified event types applied to the specified
+event_data_req:     Request for the data resulting from the analysis using
+                    the specified event generators applied to the specified
                     tradable within the specified date range
 
 logout_req:         Request to end the current login session
@@ -172,7 +182,8 @@ ind_list_req:       ind_list
 ind_data_req:       ind_data
 trad_pertyp_req:    trad_per_types
 all_ind_req:        ind_list
-param_req:          param_list
+ind_param_req:      param_list
+evgen_param_req:    param_list
 param_set_req:      <null>
 event_list_req:     event_list
 event_data_req:     event_data

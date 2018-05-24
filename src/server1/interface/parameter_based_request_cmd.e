@@ -25,7 +25,7 @@ inherit {NONE}
 feature -- Basic operations
 
     -- Expected message format:
-    -- <ind-name>\t<param-idx1>:<value1>,<param-idx2>:<value2>,...
+    -- <ind-name>\t[per-type\t]<param-idx1>:<value1>,<param-idx2>:<value2>,...
     do_execute(message: ANY)
         local
             msg: STRING
@@ -86,13 +86,36 @@ feature {NONE} -- Implementation
     expected_field_count: INTEGER
         do
             if modify_parameters then
-                Result := 2
+                if requires_period_type then
+                    Result := 3
+                else
+                    Result := 2
+                end
             else
                 Result := 1
             end
         end
 
-    param_specs_index: INTEGER = 2
+    default_param_specs_index: INTEGER = 2
+
+    period_type_index: INTEGER = 2
+
+feature {NONE} -- Hook routines
+
+    requires_period_type: BOOLEAN
+            -- Does this parameter-based command require a period type?
+        do
+            Result := False
+        end
+
+    set_period_type(pertype: STRING)
+            -- Set the period-type (name) attribute (in descendant class).
+            -- If `pertype' is invalid, set parse_error to true and
+            -- `error_msg' to a description of the error.
+        require
+            need_pertype: requires_period_type
+        do
+        end
 
 feature {PARAMETER_BASED_REQUEST_CMD} -- Implementation
 
@@ -136,29 +159,37 @@ feature {NONE}
 
     process_parameter_specs(fields: LIST [STRING])
         require
-            has_params: fields.count >= param_specs_index
+            has_params: fields.count >= default_param_specs_index
         local
             param_specs, param_spec: LIST [STRING]
-            param_index: INTEGER
+            param_index, parmspecs_index: INTEGER
         do
-            target := fields[param_specs_index]
-            param_specs := tokens(message_sub_field_separator)
-            across param_specs as spec loop
-                target := spec.item
-                param_spec := tokens(message_key_value_separator)
-                if param_spec[1].is_integer then
-                    param_index := param_spec[1].to_integer
-                    if parameters.valid_index(param_index) then
-                        parameters[param_index].change_value(param_spec[2])
+            parmspecs_index := default_param_specs_index
+            if requires_period_type then
+                set_period_type(fields[period_type_index])
+                parmspecs_index := parmspecs_index + 1
+            end
+            if not parse_error then
+                target := fields[parmspecs_index]
+                param_specs := tokens(message_sub_field_separator)
+                across param_specs as spec loop
+                    target := spec.item
+                    param_spec := tokens(message_key_value_separator)
+                    if param_spec[1].is_integer then
+                        param_index := param_spec[1].to_integer
+                        if parameters.valid_index(param_index) then
+                            parameters[param_index].change_value(param_spec[2])
+                        else
+                            parse_error := True
+                            error_msg := "id/index field is out of range: " +
+                                param_spec[1] + " [1.." +
+                                parameters.count.out + "]"
+                        end
                     else
                         parse_error := True
-                        error_msg := "id/index field is out of range: " +
-                            param_spec[1] + " [1.." + parameters.count.out + "]"
+                        error_msg := "id/index field is not an integer: " +
+                            param_spec[1]
                     end
-                else
-                    parse_error := True
-                    error_msg := "id/index field is not an integer: " +
-                        param_spec[1]
                 end
             end
         end
