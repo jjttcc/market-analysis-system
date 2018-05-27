@@ -43,6 +43,9 @@ feature -- Basic operations
                 tradable_processor_name := fields @ 1
                 set_tradable_processor
                 if tradable_processor /= Void then
+                    if requires_period_type then
+                        set_period_type(fields[period_type_index])
+                    end
                     retrieve_parameters
                     if not parse_error then
                         if modify_parameters then
@@ -86,13 +89,12 @@ feature {NONE} -- Implementation
     expected_field_count: INTEGER
         do
             if modify_parameters then
-                if requires_period_type then
-                    Result := 3
-                else
-                    Result := 2
-                end
+                Result := 2
             else
                 Result := 1
+            end
+            if requires_period_type then
+                Result := Result + 1
             end
         end
 
@@ -114,6 +116,14 @@ feature {NONE} -- Hook routines
             -- `error_msg' to a description of the error.
         require
             need_pertype: requires_period_type
+        do
+        ensure
+            existence: period_type /= Void
+        end
+
+    period_type: TIME_PERIOD_TYPE
+            -- The period-type for the request, if `requires_period_type' -
+            -- otherwise, Void
         do
         end
 
@@ -146,6 +156,7 @@ feature {NONE}
     retrieve_parameters
         require
             proc_set: tradable_processor /= Void
+            period_type: requires_period_type implies period_type /= Void
         deferred
         ensure
             parameters_set: parameters /= Void
@@ -160,13 +171,13 @@ feature {NONE}
     process_parameter_specs(fields: LIST [STRING])
         require
             has_params: fields.count >= default_param_specs_index
+            period_type: requires_period_type implies period_type /= Void
         local
             param_specs, param_spec: LIST [STRING]
             param_index, parmspecs_index: INTEGER
         do
             parmspecs_index := default_param_specs_index
             if requires_period_type then
-                set_period_type(fields[period_type_index])
                 parmspecs_index := parmspecs_index + 1
             end
             if not parse_error then

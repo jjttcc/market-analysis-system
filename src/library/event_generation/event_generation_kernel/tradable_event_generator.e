@@ -43,6 +43,11 @@ feature -- Access
     event_type: EVENT_TYPE
             -- The type of the generated events
 
+    period_type: TIME_PERIOD_TYPE
+            -- The period-type to be used for analysis
+        deferred
+        end
+
     indicators: LIST [TRADABLE_FUNCTION]
         deferred
         end
@@ -156,6 +161,15 @@ feature -- Status setting
         require
             not_void: d /= Void
         deferred
+        end
+
+    set_period_type (ptype: TIME_PERIOD_TYPE)
+            -- Set the period-type for analysis to `ptype'.
+        require
+            existence: ptype /= Void
+        deferred
+        ensure
+            type_set: period_type = ptype
         end
 
 feature {TRADABLE_FUNCTION_EDITOR}

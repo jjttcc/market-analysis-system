@@ -16,7 +16,7 @@ class MODIFY_EVENT_GENERATOR_PARAMETERS_REQUEST_CMD inherit
             set_tradable_processor as set_event_generator
         redefine
             modify_parameters, event_generator, requires_period_type,
-            set_period_type
+            set_period_type, period_type
         end
 
     GLOBAL_APPLICATION
@@ -25,6 +25,7 @@ class MODIFY_EVENT_GENERATOR_PARAMETERS_REQUEST_CMD inherit
         end
 
 inherit {NONE}
+
     STRING_UTILITIES
         rename
             make as su_make_unused
@@ -40,15 +41,7 @@ feature {NONE} -- Implementation
 
     modify_parameters: BOOLEAN = True
 
-    period_type: STRING
-
-    period_type_valid(pname: STRING): BOOLEAN
-            -- Is `typename' a valid period-type name?
-        local
-            ptype_tools: expanded PERIOD_TYPE_FACILITIES
-        do
-            Result := ptype_tools.period_types.has(pname)
-        end
+    period_type: TIME_PERIOD_TYPE
 
 feature {NONE} -- Hook method implementations
 
@@ -59,14 +52,19 @@ feature {NONE} -- Hook method implementations
 
     requires_period_type: BOOLEAN = True
 
-    set_period_type(pertype: STRING)
+    set_period_type(ptype_name: STRING)
             -- Set the period-type (name) attribute (in descendant class).
+        local
+            ptype_tools: expanded PERIOD_TYPE_FACILITIES
         do
-            period_type := pertype
-            if not period_type_valid(period_type) then
+            if not ptype_tools.period_types.has(ptype_name) then
                 parse_error := True
-                error_msg := "Invalid period type: " + pertype
+                error_msg := "Invalid period type: " + ptype_name
+            else
+                period_type := ptype_tools.period_types[ptype_name]
             end
+        ensure then
+            set_if_no_error: not parse_error implies period_type /= Void
         end
 
 feature {NONE}
@@ -79,7 +77,8 @@ feature {NONE}
 
     retrieve_parameters
         do
-            parameters := session.parameters_for_processor(event_generator)
+            parameters := session.parameters_for_processor(event_generator,
+                period_type)
         end
 
     name: STRING = "Event generator parameters set request"

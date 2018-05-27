@@ -89,6 +89,11 @@ feature -- Access
             Result.append (right_analyzer.indicators)
         end
 
+    period_type: TIME_PERIOD_TYPE
+        do
+            Result := left_analyzer.period_type
+        end
+
     immediate_operators: LIST [COMMAND]
         do
             create {LINKED_LIST [COMMAND]} Result.make
@@ -175,6 +180,13 @@ feature -- Status setting
             left_analyzer.set_tradable_from_pair (p)
             right_analyzer.set_tradable_from_pair (p)
         end
+
+    set_period_type (ptype: TIME_PERIOD_TYPE)
+        do
+            left_analyzer.set_period_type(ptype)
+            right_analyzer.set_period_type(ptype)
+        end
+
 
     initialize_from_parent(p: TREE_NODE)
         do

@@ -54,7 +54,7 @@ feature {NONE} -- Hook routine implementations
             else
                 t.set_target_period_type (trading_period_type)
                 indicator := t.indicators @ indicator_id
-                session.prepare_processor(indicator)
+                session.prepare_processor(indicator, Void)
                 if not indicator.processed then
                     indicator.process
                 end

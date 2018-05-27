@@ -41,7 +41,7 @@ feature {NONE}
 
     retrieve_parameters
         do
-            parameters := session.parameters_for_processor(indicator)
+            parameters := session.parameters_for_processor(indicator, Void)
         end
 
     iteration: INTEGER

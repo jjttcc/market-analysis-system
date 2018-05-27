@@ -7,6 +7,11 @@ note
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
     -- vim: expandtab
+--!!!!!<event-generator-add-period_type>: Document: The limitation that
+--!!!!!the same event-generator cannot be used more than once - with
+--!!!!!different settings (parameters and/or period-type) - in the same
+--!!!!!run (request/response cycle).  If such behavior is needed it can
+--!!!!!be approximated by making multiple runs ("event_data_req"s).
 
 class EVENT_DATA_REQUEST_CMD inherit
 
@@ -58,7 +63,7 @@ feature {NONE} -- Initialization
 
     make (dispenser: TRADABLE_DISPENSER)
         do
-            trc_make (dispenser)
+            trc_make(dispenser)
             mer_make
         end
 
@@ -73,43 +78,43 @@ feature -- Basic operations
             msg := message.out
             parse_error := False
             target := msg -- set up for tokenization
-            fields := tokens (message_component_separator)
+            fields := tokens(message_component_separator)
             if fields.count < 4 then
-                report_error (Error, <<"Fields count wrong for ",
+                report_error(Error, <<"Fields count wrong for ",
                     "trading-signal event request.">>)
                 parse_error := True
             end
             if not parse_error then
                 symbol := fields @ 1
-                d := date_from_string (fields @ 2)
+                d := date_from_string(fields @ 2)
                 if d = Void then
-                    report_error (Error, <<"Invalid start-date specification %
+                    report_error(Error, <<"Invalid start-date specification %
                         %for trading signals request: ", fields @ 2,
                         " (format: " + date_format + ")">>)
                     parse_error := True
                 else
-                    create analysis_start_date.make_by_date (d)
+                    create analysis_start_date.make_by_date(d)
                 end
             end
             if not parse_error then
-                d := date_from_string (fields @ 3)
+                d := date_from_string(fields @ 3)
                 if d = Void then
-                    report_error (Error, <<"Invalid end-date specification %
+                    report_error(Error, <<"Invalid end-date specification %
                         %for trading signals request: ", fields @ 3,
                         " (format: " + date_format + ")">>)
                     parse_error := True
                 else
-                    if (fields @ 3).is_equal (Now) then
+                    if (fields @ 3).is_equal(Now) then
                         -- Set "now" date to 2 years in the future.
                         --@@@(Check if this is needed here.)
                         d := future_date
                     end
-                    create analysis_end_date.make_by_date (d)
+                    create analysis_end_date.make_by_date(d)
                     analysis_end_date.set_time(create {TIME}.make(23, 59, 59))
                 end
             end
             if not parse_error then
-                create_event_types (fields)
+                create_event_types(fields)
             end
             if not parse_error then
                 send_response
@@ -119,7 +124,7 @@ feature -- Basic operations
     notify (e: TYPED_EVENT)
         do
             if attached {TRADABLE_EVENT} e as mktev then
-                event_cache.extend (mktev)
+                event_cache.extend(mktev)
             end
         end
 
@@ -134,7 +139,8 @@ feature {NONE} -- Implementation
     analysis_end_date: DATE_TIME
             -- End date for event processing
 
-    requested_event_types: HASH_TABLE [INTEGER, INTEGER]
+    requested_event_types: HASH_TABLE
+        [PAIR [INTEGER, TIME_PERIOD_TYPE], INTEGER]
             -- Event types to be processed
 
     parse_error: BOOLEAN
@@ -153,22 +159,48 @@ feature {NONE} -- Implementation
 
 feature {NONE}
 
+    event_spec_component_separator: STRING = ":"
+
     create_event_types (fields: LIST [STRING])
             -- Create `requested_event_types' from fields[4 .. fields.count].
         local
             i, id: INTEGER
             f: STRING
+            ptype: TIME_PERIOD_TYPE
+            s_tools: expanded STRING_UTILITIES
+            subfields: LIST [STRING]
         do
-            create requested_event_types.make (fields.count - 3)
+            create requested_event_types.make(fields.count - 3)
             from i := 4 until i > fields.count or parse_error loop
                 f := fields @ i
-                if not f.is_integer then
-                    report_error (Error, <<"Invalid event ID ",
-                        "for trading signals request - non-integer: ", f>>)
+                s_tools.set_target(f)
+                subfields := s_tools.tokens(event_spec_component_separator)
+                if subfields.count < 2 then
+                    report_error(Error, <<"Invalid event specification ",
+                        "for trading signals request (", f, ") - expected ",
+                        "<event-id>:<trad-per-type>">>)
                     parse_error := True
                 else
-                    id := f.to_integer
-                    requested_event_types.put (id, id)
+                    ptype := period_types[subfields[2]]
+                    if ptype = Void then
+                        report_error(Error, <<"Invalid period type ",
+                            "for trading signals request: ",
+                            subfields[2]>>)
+                        parse_error := True
+                    end
+                    if not subfields.first.is_integer then
+                        report_error(Error, <<"Invalid event ID ",
+                            "for trading signals request - non-integer: ",
+                            subfields.first>>)
+                        parse_error := True
+                    end
+                    if not parse_error then
+                        id := subfields.first.to_integer
+                        requested_event_types.put(
+                            create {PAIR [INTEGER, TIME_PERIOD_TYPE]}.make(id,
+                                ptype), id)
+            
+                    end
                 end
                 i := i + 1
             end
@@ -193,26 +225,44 @@ feature {NONE}
                 if
                     tradable_pair.left = Void and tradable_pair.right = Void
                 then
-                    if not tradables.symbols.has (symbol) then
-                        report_error (Invalid_symbol, <<"Symbol '",
+                    if not tradables.symbols.has(symbol) then
+                        report_error(Invalid_symbol, <<"Symbol '",
                             symbol, "' not in database.">>)
                     else
-                        report_error (Error, <<"No data found for symbol ",
+                        report_error(Error, <<"No data found for symbol ",
                             symbol>>)
                     end
                 else
-                    report_error (warning_string,
+                    report_error(warning_string,
                         <<"No requested trading signal % %types were valid">>)
                 end
             else
                 put_ok
                 -- Make sure current parameter settings are used:
                 event_coordinator.event_generators.do_all(agent(
-                    proc: TRADABLE_EVENT_GENERATOR)
-                        do session.prepare_processor(proc) end
-                    (?))
+                    proc: TRADABLE_EVENT_GENERATOR; event_info_for: HASH_TABLE
+                            [PAIR [INTEGER, TIME_PERIOD_TYPE], INTEGER])
+                        local
+                            period_type: TIME_PERIOD_TYPE
+                            id_pt_pair: PAIR [INTEGER, TIME_PERIOD_TYPE]
+                        do
+                            id_pt_pair := event_info_for[proc.event_type.id]
+                            check
+                                id_pt_pair /= Void
+                            end
+                            period_type := id_pt_pair.second
+                            proc.set_period_type(period_type)
+                            debug("event-generator-prepare")
+                                print("proc: " + proc.out + "%N")
+                                print("proc.event_type: " +
+                                    proc.event_type.out + "%N")
+                                print("period type: " + period_type.name + "%N")
+                            end
+                            session.prepare_processor(proc, period_type)
+                        end
+                    (?, requested_event_types))
                 event_coordinator.execute
-                put (eom)
+                put(eom)
             end
         end
 
@@ -229,11 +279,11 @@ feature {NONE}
                 until
                     event_cache.islast
                 loop
-                    put (concatenation (<<
-                        dt_util.formatted_date (event_cache.item.date,
+                    put(concatenation(<<
+                        dt_util.formatted_date(event_cache.item.date,
                             'y', 'm', 'd', ""),
                         message_component_separator,
-                        dt_util.formatted_time (event_cache.item.time,
+                        dt_util.formatted_time(event_cache.item.time,
                             'h', 'm', 's', ""),
                         message_component_separator,
                         event_cache.item.type.id,
@@ -242,11 +292,11 @@ feature {NONE}
                         message_record_separator>>))
                     event_cache.forth
                 end
-                put (concatenation (<<
-                    dt_util.formatted_date (event_cache.item.date,
+                put(concatenation(<<
+                    dt_util.formatted_date(event_cache.item.date,
                         'y', 'm', 'd', ""),
                     message_component_separator,
-                    dt_util.formatted_time (event_cache.item.time,
+                    dt_util.formatted_time(event_cache.item.time,
                         'h', 'm', 's', ""),
                     message_component_separator,
                     event_cache.item.type.id,
@@ -263,15 +313,15 @@ feature {NONE}
             tradable_pair := pair_for_current_symbol
             if event_coordinator = Void then
                 create event_dispatcher.make
-                event_dispatcher.register (Current)
-                create event_coordinator.make (tradable_pair)
-                event_coordinator.set_dispatcher (event_dispatcher)
+                event_dispatcher.register(Current)
+                create event_coordinator.make(tradable_pair)
+                event_coordinator.set_dispatcher(event_dispatcher)
             else
-                event_coordinator.make (tradable_pair)
+                event_coordinator.make(tradable_pair)
             end
             -- event generators and coordinators currently don't use an
             -- end date, so just set the start date.
-            event_coordinator.set_start_date_time (analysis_start_date)
+            event_coordinator.set_start_date_time(analysis_start_date)
             --@@TO-DO: For proper backtesting, the end date needs to
             --@@be applied to the underlying tradable - i.e., stock or
             --@@commodity.  For example, to get trading signals that would
@@ -282,8 +332,8 @@ feature {NONE}
             --@@of course, have been available.  (The end-date is currently
             --@@only applied to the result of the "analyzer"s' processing of
             --@@the data.)
-            event_coordinator.set_end_date_time (analysis_end_date)
-            event_coordinator.set_event_generators (valid_event_generators)
+            event_coordinator.set_end_date_time(analysis_end_date)
+            event_coordinator.set_event_generators(valid_event_generators)
         ensure
             pair_not_void: tradable_pair /= Void
         end
@@ -314,9 +364,9 @@ feature {NONE}
                     l.exhausted
                 loop
                     if
-                        requested_event_types.has (l.item.event_type.id)
+                        requested_event_types.has(l.item.event_type.id)
                     then
-                        Result.extend (l.item)
+                        Result.extend(l.item)
                     end
                     l.forth
                 end
@@ -326,10 +376,10 @@ feature {NONE}
     pair_for_current_symbol: PAIR [TRADABLE [BASIC_TRADABLE_TUPLE],
             TRADABLE [BASIC_TRADABLE_TUPLE]]
         do
-            create Result.make (tradables.tradable (symbol,
+            create Result.make(tradables.tradable(symbol,
                 --@@@Check if 'update' (False) should be true:
                 period_types @ (period_type_names @ Hourly), False),
-                tradables.tradable (symbol,
+                tradables.tradable(symbol,
                 --@@@Check if 'update' (False) should be true:
                 period_types @ (period_type_names @ Daily), False))
         ensure
@@ -338,7 +388,7 @@ feature {NONE}
 
     error_context (msg: STRING): STRING
         do
-            Result := concatenation (<<"running market analysis for ",
+            Result := concatenation(<<"running market analysis for ",
                 symbol>>)
         end
 

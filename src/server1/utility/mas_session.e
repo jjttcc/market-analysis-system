@@ -42,7 +42,7 @@ feature -- Access
     caching_on: BOOLEAN
             -- Is market data being cached?
 
-    parameters_for_processor(p: TRADABLE_PROCESSOR):
+    parameters_for_processor(p: TRADABLE_PROCESSOR; pertype: TIME_PERIOD_TYPE):
         LIST [SESSION_FUNCTION_PARAMETER]
             -- The SESSION_FUNCTION_PARAMETERs associated with the processor `p'
         require
@@ -50,8 +50,13 @@ feature -- Access
         local
             parameters: LIST [FUNCTION_PARAMETER]
             pname_occurrences: HASH_TABLE [INTEGER, STRING]
+            procname: STRING
         do
-            Result := params_for_proc[p.name]
+            procname := p.name
+            if pertype /= Void then
+                procname := procname + pertype.name
+            end
+            Result := params_for_proc[procname]
             if Result = Void then
                 parameters := p.parameters
                 create pname_occurrences.make(parameters.count)
@@ -67,11 +72,10 @@ feature -- Access
                         pname_occurrences[pcursor.item.verbose_name] := 1
                     end
                 end
-                params_for_proc.force(Result, p.name)
+                params_for_proc.force(Result, procname)
             end
         ensure
             result_exists: Result /= Void
-            result_mapped: params_for_proc[p.name] = Result
         end
 
     login_date: DATE_TIME
@@ -106,21 +110,28 @@ feature -- Element change
 
 feature -- Basic operations
 
-    prepare_processor(p: TRADABLE_PROCESSOR)
+    prepare_processor(p: TRADABLE_PROCESSOR; pertype: TIME_PERIOD_TYPE)
             -- Prepare processor `p' for processing.
+        require
+            p_exists: p /= Void
         local
             params: LIST [FUNCTION_PARAMETER]
             reference_params: LIST [SESSION_FUNCTION_PARAMETER]
             reference_cursor, param_cursor:
                 INDEXABLE_ITERATION_CURSOR [FUNCTION_PARAMETER]
             update_occurred: BOOLEAN
+            procname: STRING
         do
-            reference_params := parameters_for_processor(p)
+            procname := p.name
+            if pertype /= Void then
+                procname := procname + pertype.name
+            end
+            reference_params := parameters_for_processor(p, pertype)
             params := p.parameters
             update_occurred := False
             if reference_params.count /= params.count then
                 -- Old reference param list no longer valid - discard it:
-                params_for_proc.force(Void, p.name)
+                params_for_proc.force(Void, procname)
             else
                 reference_cursor := reference_params.new_cursor
                 param_cursor := params.new_cursor
@@ -145,8 +156,7 @@ feature -- Basic operations
 
 feature {NONE}
 
-    params_for_proc: HASH_TABLE [LIST
-        [SESSION_FUNCTION_PARAMETER], STRING]
+    params_for_proc: HASH_TABLE [LIST [SESSION_FUNCTION_PARAMETER], STRING]
 
     update_parameter(dest_param, src_param: FUNCTION_PARAMETER): BOOLEAN
             -- Ensure dest_param is up to date with src_param; return true if

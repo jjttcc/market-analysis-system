@@ -15,7 +15,8 @@ class EVENT_GENERATOR_PARAMETERS_REQUEST_CMD inherit
             tradable_processor as event_generator,
             set_tradable_processor as set_event_generator
         redefine
-            iteration, set_iteration, event_generator
+            iteration, set_iteration, event_generator, requires_period_type,
+            set_period_type, period_type
         end
 
     GLOBAL_APPLICATION
@@ -24,6 +25,7 @@ class EVENT_GENERATOR_PARAMETERS_REQUEST_CMD inherit
         end
 
 inherit {NONE}
+
     STRING_UTILITIES
         rename
             make as su_make_unused
@@ -35,6 +37,10 @@ creation
 
     make
 
+feature {NONE} -- Implementation
+
+    period_type: TIME_PERIOD_TYPE
+
 feature {NONE}
 
     set_event_generator
@@ -45,7 +51,8 @@ feature {NONE}
 
     retrieve_parameters
         do
-            parameters := session.parameters_for_processor(event_generator)
+            parameters := session.parameters_for_processor(event_generator,
+                period_type)
         end
 
     iteration: INTEGER
@@ -64,6 +71,23 @@ feature {NONE} -- Hook method implementations
     object_type: STRING
         do
             Result := "event generator"
+        end
+
+    requires_period_type: BOOLEAN = True
+
+    set_period_type(ptype_name: STRING)
+            -- Set the period-type (name) attribute (in descendant class).
+        local
+            ptype_tools: expanded PERIOD_TYPE_FACILITIES
+        do
+            if not ptype_tools.period_types.has(ptype_name) then
+                parse_error := True
+                error_msg := "Invalid period type: " + ptype_name
+            else
+                period_type := ptype_tools.period_types[ptype_name]
+            end
+        ensure then
+            set_if_no_error: not parse_error implies period_type /= Void
         end
 
 invariant
