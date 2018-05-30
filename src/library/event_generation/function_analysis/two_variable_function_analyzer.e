@@ -177,6 +177,24 @@ feature -- Basic operations
             end
         end
 
+    debugging_report
+        local
+            parms: LIST [FUNCTION_PARAMETER]
+            fp: FUNCTION_PARAMETER
+        do
+            print("analyzer: " + Current.out + "%N")
+            print("product.count: " + product.count.out + "%N")
+            print("period_type: " + period_type.name + "%N")
+            print("parameters:%N")
+            parms := parameters
+            from parms.start until parms.exhausted loop
+                fp := parms.item
+                print("value: " + fp.current_value + ", name: " +
+                    fp.verbose_name + "%N")
+                parms.forth
+            end
+        end
+
 feature {NONE} -- Hook routine implementation
 
     exhausted: BOOLEAN

@@ -7,11 +7,6 @@ note
     copyright: "Copyright (c) 1998-2014, Jim Cochrane"
     license:   "GPL version 2 - http://www.gnu.org/licenses/gpl-2.0.html"
     -- vim: expandtab
---!!!!!<event-generator-add-period_type>: Document: The limitation that
---!!!!!the same event-generator cannot be used more than once - with
---!!!!!different settings (parameters and/or period-type) - in the same
---!!!!!run (request/response cycle).  If such behavior is needed it can
---!!!!!be approximated by making multiple runs ("event_data_req"s).
 
 class EVENT_DATA_REQUEST_CMD inherit
 
@@ -23,6 +18,18 @@ class EVENT_DATA_REQUEST_CMD inherit
             error_context
         end
 
+    EVENT_REGISTRANT_WITH_CACHE
+        rename
+            make as mer_make
+        export
+            {NONE} all
+            {ANY} is_interested_in
+        redefine
+            event_cache, notify
+        end
+
+inherit {NONE}
+
     DATE_PARSING_UTILITIES
         export
             {NONE} all
@@ -33,16 +40,6 @@ class EVENT_DATA_REQUEST_CMD inherit
             make as su_make_unused
         export
             {NONE} all
-        end
-
-    EVENT_REGISTRANT_WITH_CACHE
-        rename
-            make as mer_make
-        export
-            {NONE} all
-            {ANY} is_interested_in
-        redefine
-            event_cache, notify
         end
 
     PERIOD_TYPE_FACILITIES
@@ -139,8 +136,7 @@ feature {NONE} -- Implementation
     analysis_end_date: DATE_TIME
             -- End date for event processing
 
-    requested_event_types: HASH_TABLE
-        [PAIR [INTEGER, TIME_PERIOD_TYPE], INTEGER]
+    requested_event_types: HASH_TABLE [PAIR [INTEGER,TIME_PERIOD_TYPE], STRING]
             -- Event types to be processed
 
     parse_error: BOOLEAN
@@ -198,7 +194,7 @@ feature {NONE}
                         id := subfields.first.to_integer
                         requested_event_types.put(
                             create {PAIR [INTEGER, TIME_PERIOD_TYPE]}.make(id,
-                                ptype), id)
+                                ptype), evgen_key(id, ptype))
             
                     end
                 end
@@ -240,25 +236,25 @@ feature {NONE}
                 put_ok
                 -- Make sure current parameter settings are used:
                 event_coordinator.event_generators.do_all(agent(
-                    proc: TRADABLE_EVENT_GENERATOR; event_info_for: HASH_TABLE
-                            [PAIR [INTEGER, TIME_PERIOD_TYPE], INTEGER])
+                    evgen: TRADABLE_EVENT_GENERATOR; event_info_for: HASH_TABLE
+                            [PAIR [INTEGER, TIME_PERIOD_TYPE], STRING])
                         local
                             period_type: TIME_PERIOD_TYPE
                             id_pt_pair: PAIR [INTEGER, TIME_PERIOD_TYPE]
                         do
-                            id_pt_pair := event_info_for[proc.event_type.id]
+                            period_type := evgen.period_type
+                            id_pt_pair := event_info_for[evgen_key(
+                                evgen.event_type.id, period_type)]
                             check
                                 id_pt_pair /= Void
                             end
-                            period_type := id_pt_pair.second
-                            proc.set_period_type(period_type)
                             debug("event-generator-prepare")
-                                print("proc: " + proc.out + "%N")
-                                print("proc.event_type: " +
-                                    proc.event_type.out + "%N")
+                                print("evgen: " + evgen.out + "%N")
+                                print("evgen.event_type: " +
+                                    evgen.event_type.out + "%N")
                                 print("period type: " + period_type.name + "%N")
                             end
-                            session.prepare_processor(proc, period_type)
+                            session.prepare_processor(evgen, period_type)
                         end
                     (?, requested_event_types))
                 event_coordinator.execute
@@ -345,45 +341,83 @@ feature {NONE}
             pair_set: tradable_pair /= Void
         local
             l: LIST [TRADABLE_EVENT_GENERATOR]
+            has_intraday, has_interday: BOOLEAN
+            generator_with_id: HASH_TABLE [TRADABLE_EVENT_GENERATOR, INTEGER]
             t: TRADABLE [BASIC_TRADABLE_TUPLE]
         do
             create Result.make
+            create generator_with_id.make(0)
+            has_intraday := tradable_pair.left /= Void
+            has_interday := tradable_pair.right /= Void
             t := tradable_pair.right
-            if t = Void then
-                t := tradable_pair.left
+            if t = Void then t := tradable_pair.left end
+            l := tradable_event_generation_library
+            if not t.has_open_interest then
+                -- Only tradable-event generators for stocks are valid.
+                l := stock_tradable_event_generation_library
             end
-            if t /= Void then
-                from
-                    l := tradable_event_generation_library
-                    if not t.has_open_interest then
-                        -- Only tradable-event generators for stocks are valid.
-                        l := stock_tradable_event_generation_library
+            -- populate generator_with_id with the "generator library":
+            l.do_all(agent(gen: TRADABLE_EVENT_GENERATOR;
+                    genw_id: HASH_TABLE [TRADABLE_EVENT_GENERATOR, INTEGER])
+                do
+                    if genw_id.has(gen.event_type.id) then
+                        --!!!!Report this error!!!
+                    else
+                        genw_id[gen.event_type.id] := gen
                     end
-                    l.start
-                until
-                    l.exhausted
-                loop
-                    if
-                        requested_event_types.has(l.item.event_type.id)
-                    then
-                        Result.extend(l.item)
-                    end
-                    l.forth
                 end
-            end
+            (?, generator_with_id))
+            requested_event_types.linear_representation.do_all(agent(
+                    id_ptype: PAIR [INTEGER, TIME_PERIOD_TYPE];
+                    genw_id: HASH_TABLE [TRADABLE_EVENT_GENERATOR, INTEGER];
+                    target_list: LINKED_LIST [TRADABLE_EVENT_GENERATOR])
+--!!!!to-do: Turn this into a feature/PROCEDURE:
+                local
+                    evgen: TRADABLE_EVENT_GENERATOR
+                    key: STRING
+                do
+                    key := evgen_key(id_ptype.left, id_ptype.right)
+                    evgen := session.cached_event_generators[key]
+                    if evgen = Void then
+                        debug("evgen-cache")
+                            print("<<<evgen '" + key + "' NOT in cache%N")
+                        end
+                        evgen := genw_id[id_ptype.left]
+                        if evgen = Void then
+                            --!!!!Report this error, please!!!!
+                        else
+                            evgen := evgen.twin
+                            evgen.set_period_type(id_ptype.right)
+                        end
+                        session.cached_event_generators[key] := evgen
+                    else
+                        debug("evgen-cache")
+                            print("<<<evgen - FOUND: '" + key + "[" +
+                                evgen.name + "]" + "' in cache>>>%N")
+                        end
+                    end
+                    target_list.extend(evgen)
+                end
+            (?, generator_with_id, Result))
         end
 
     pair_for_current_symbol: PAIR [TRADABLE [BASIC_TRADABLE_TUPLE],
             TRADABLE [BASIC_TRADABLE_TUPLE]]
         do
             create Result.make(tradables.tradable(symbol,
-                --@@@Check if 'update' (False) should be true:
-                period_types @ (period_type_names @ Hourly), False),
+--!!!!<evgen>Test with this new value for `update': False => True:
+--!!!!<evgen>(It might force unnecessary remote data request - check)
+                period_types @ (period_type_names @ Hourly), True),
                 tradables.tradable(symbol,
-                --@@@Check if 'update' (False) should be true:
-                period_types @ (period_type_names @ Daily), False))
+--!!!!<evgen>Test with this new value for `update': False => True:
+--!!!!<evgen>(It might force unnecessary remote data request - check)
+                period_types @ (period_type_names @ Daily), True))
         ensure
             not_void: Result /= Void
+            left_intraday: Result.left /= Void implies
+                Result.left.trading_period_type.intraday
+            right_interday: Result.right /= Void implies
+                not Result.right.trading_period_type.intraday
         end
 
     error_context (msg: STRING): STRING
@@ -399,5 +433,21 @@ feature {NONE}
             Result := "yyyy" + date_field_separator + "mm" +
                 date_field_separator + "dd"
         end
+
+    evgen_key (evgen_id: INTEGER; ptype: TIME_PERIOD_TYPE): STRING
+        require
+            existence: ptype /= Void
+        do
+            Result := evgen_id.out + ":" + ptype.name
+        ensure
+            existence: Result /= Void and Result.count > 0
+        end
+
+invariant
+
+    left_tradable_intraday: tradable_pair.left /= Void implies
+        tradable_pair.left.trading_period_type.intraday
+    right_tradable_interday: tradable_pair.right /= Void implies
+        not tradable_pair.right.trading_period_type.intraday
 
 end -- class EVENT_DATA_REQUEST_CMD

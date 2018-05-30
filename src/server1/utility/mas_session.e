@@ -22,6 +22,7 @@ feature {NONE} -- Initialization
             create start_dates.make(1)
             create end_dates.make(1)
             create params_for_proc.make(0)
+            create cached_event_generators.make(0)
             caching_on := True
         ensure
             dates_not_void: start_dates /= Void and end_dates /= Void
@@ -77,6 +78,9 @@ feature -- Access
         ensure
             result_exists: Result /= Void
         end
+
+    cached_event_generators: HASH_TABLE [TRADABLE_EVENT_GENERATOR, STRING]
+        -- key: event_type.id.out ":" period_type
 
     login_date: DATE_TIME
 
@@ -182,6 +186,7 @@ feature {NONE}
 invariant
 
     dates_exist: start_dates /= Void and end_dates /= Void
-    map_exists: params_for_proc /= Void
+    params_exist: params_for_proc /= Void
+    evgen_cache: cached_event_generators /= Void
 
 end -- class MAS_SESSION
