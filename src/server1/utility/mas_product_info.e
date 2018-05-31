@@ -81,7 +81,7 @@ feature {NONE} -- Implementation
         once
             Result :=
             -- start: compile-time
-                "2018-05-30 10:17:12"
+                "2018-05-31 11:41:55"
             -- end: compile-time
         end
 

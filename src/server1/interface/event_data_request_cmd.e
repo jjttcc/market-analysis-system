@@ -230,7 +230,7 @@ feature {NONE}
                     end
                 else
                     report_error(warning_string,
-                        <<"No requested trading signal % %types were valid">>)
+                        <<"No requested trading signal types were valid">>)
                 end
             else
                 put_ok
@@ -360,45 +360,14 @@ feature {NONE}
             l.do_all(agent(gen: TRADABLE_EVENT_GENERATOR;
                     genw_id: HASH_TABLE [TRADABLE_EVENT_GENERATOR, INTEGER])
                 do
-                    if genw_id.has(gen.event_type.id) then
-                        --!!!!Report this error!!!
-                    else
-                        genw_id[gen.event_type.id] := gen
+                    check
+                        not genw_id.has(gen.event_type.id)
                     end
+                    genw_id[gen.event_type.id] := gen
                 end
             (?, generator_with_id))
-            requested_event_types.linear_representation.do_all(agent(
-                    id_ptype: PAIR [INTEGER, TIME_PERIOD_TYPE];
-                    genw_id: HASH_TABLE [TRADABLE_EVENT_GENERATOR, INTEGER];
-                    target_list: LINKED_LIST [TRADABLE_EVENT_GENERATOR])
---!!!!to-do: Turn this into a feature/PROCEDURE:
-                local
-                    evgen: TRADABLE_EVENT_GENERATOR
-                    key: STRING
-                do
-                    key := evgen_key(id_ptype.left, id_ptype.right)
-                    evgen := session.cached_event_generators[key]
-                    if evgen = Void then
-                        debug("evgen-cache")
-                            print("<<<evgen '" + key + "' NOT in cache%N")
-                        end
-                        evgen := genw_id[id_ptype.left]
-                        if evgen = Void then
-                            --!!!!Report this error, please!!!!
-                        else
-                            evgen := evgen.twin
-                            evgen.set_period_type(id_ptype.right)
-                        end
-                        session.cached_event_generators[key] := evgen
-                    else
-                        debug("evgen-cache")
-                            print("<<<evgen - FOUND: '" + key + "[" +
-                                evgen.name + "]" + "' in cache>>>%N")
-                        end
-                    end
-                    target_list.extend(evgen)
-                end
-            (?, generator_with_id, Result))
+            requested_event_types.linear_representation.do_all(
+                agent configure_event_generator(?, generator_with_id, Result))
         end
 
     pair_for_current_symbol: PAIR [TRADABLE [BASIC_TRADABLE_TUPLE],
@@ -441,6 +410,39 @@ feature {NONE}
             Result := evgen_id.out + ":" + ptype.name
         ensure
             existence: Result /= Void and Result.count > 0
+        end
+
+    configure_event_generator (id_ptype: PAIR [INTEGER, TIME_PERIOD_TYPE];
+                genw_id: HASH_TABLE [TRADABLE_EVENT_GENERATOR, INTEGER];
+                target_list: LINKED_LIST [TRADABLE_EVENT_GENERATOR])
+            -- Find the event generator associated with id_ptype - If it's
+            -- not in the cache (session.cached_event_generators):
+            --   get it from genw_id and put a copy of it in the cache;
+            --   call set_period_type on this copy;
+            -- Put the result (the event-generator that is [now] in the
+            -- cache) in `target_list'.
+        local
+            evgen: TRADABLE_EVENT_GENERATOR
+            key: STRING
+        do
+            key := evgen_key(id_ptype.left, id_ptype.right)
+            evgen := session.cached_event_generators[key]
+            if evgen = Void then
+                debug("evgen-cache")
+                    print("<<<evgen '" + key + "' NOT in cache%N")
+                end
+                evgen := genw_id[id_ptype.left]
+                check evgen /= Void end
+                evgen := evgen.twin
+                evgen.set_period_type(id_ptype.right)
+                session.cached_event_generators[key] := evgen
+            else
+                debug("evgen-cache")
+                    print("<<<evgen - FOUND: '" + key + "[" +
+                        evgen.name + "]" + "' in cache>>>%N")
+                end
+            end
+            target_list.extend(evgen)
         end
 
 invariant
