@@ -37,8 +37,8 @@ feature -- Initialization
         do
             file_extension := ""
             file_names := fnames
-            first := file_names.first
             if file_names.count > 0 then
+                first := file_names.first
                 if first.has_substring(".") then
                     file_extension := first.substring(
                         first.substring_index(".", 1), first.count)
